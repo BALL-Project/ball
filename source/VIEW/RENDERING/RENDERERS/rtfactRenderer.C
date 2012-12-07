@@ -1,4 +1,5 @@
 #include <BALL/STRUCTURE/triangulatedSurface.h>
+#include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
@@ -97,12 +98,28 @@ namespace BALL
 			if(pickTask.hasResult())
 			{
 				//for all scene object
-				HashMap<RTpieCpp::InstanceHandle, GeometricObject*>::iterator geo = geometric_objects_.begin();
-				for (; geo != geometric_objects_.end(); ++geo)
+
+				if(geometric_objects_.empty())
 				{
-					if (pickTask.getInstance() == geo->first)
+					HashMap<RTpieCpp::MeshHandle, GeometricObject*>::iterator geo = geometric_objects_.begin();
+					for (; geo != geometric_objects_.end(); ++geo)
 					{
-						return geo->second;
+						if (pickTask.getMesh() == geo->first)
+						{
+							return geo->second;
+						}
+					}
+				}
+
+				if(geometric_objects_inst.empty())
+				{
+					HashMap<RTpieCpp::InstanceHandle, GeometricObject*>::iterator geo = geometric_objects_inst.begin();
+					for (; geo != geometric_objects_inst.end(); ++geo)
+					{
+						if (pickTask.getInstance() == geo->first)
+						{
+							return geo->second;
+						}
 					}
 				}
 			}
@@ -367,7 +384,27 @@ namespace BALL
 			// this function is not needed for this kind of raytracer
 		}
 
-		void RTfactRenderer::bufferRepresentation(const Representation& rep)
+		void transformMeshData(float *mat,
+											float const *vertices, int num_vertices,
+											float const *normals, int num_normals,
+											float *t_vertices, float *t_normals)
+		{
+				TMatrix4x4<float> m(mat);
+				float w;
+				for(int i = 0; i < num_vertices; i++)
+				{
+						TVector4<float> v = m * TVector4<float>(vertices[i*3], vertices[i*3+1], vertices[i*3+2], 1);
+						v.get(t_vertices[i*3], t_vertices[i*3+1], t_vertices[i*3+2], w);
+				}
+
+				for(int i = 0; i < num_normals; i++)
+				{
+						TVector4<float> v = m * TVector4<float>(normals[i*3], normals[i*3+1], normals[i*3+2], 0);
+						v.get(t_normals[i*3], t_normals[i*3+1], t_normals[i*3+2], w);
+				}
+		}
+
+		void RTfactRenderer::bufferRepresentationDynamic(const Representation& rep)
 		{
 			if (rep.getGeometricObjects().empty())
 				return;
@@ -413,6 +450,7 @@ namespace BALL
 
 			RTfactData rt_data;
 			rt_data.has_been_disabled = false;
+			float trafo[16];
 
 			Stage::RaytracingMaterial rt_material = scene_->getStage()->getRTMaterial();
 			if (rep.hasProperty("RTFact::Material"))
@@ -499,7 +537,7 @@ namespace BALL
 						    rt_data.object_handles.back().createInstance());
 					}
 
-					geometric_objects_[rt_data.instance_handles.back()] = *it;
+					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 
 					rtfact_needs_update_ = true;
 				}
@@ -552,7 +590,7 @@ namespace BALL
 						rt_data.instance_handles.back().setTransform(mat, NULL);
 					}
 
-					geometric_objects_[rt_data.instance_handles.back()] = *it;
+					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 
 					rtfact_needs_update_ = true;
 				}
@@ -580,7 +618,7 @@ namespace BALL
 					//
 					rt_data.object_handles.push_back(
 							sceneHandle.createGeometry());
-					geometric_objects_[rt_data.instance_handles.back()] = *it;
+					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 					rt_data.mesh_handles.push_back(
 							rt_data.object_handles.back().createMesh());
 					rt_data.mesh_handles.back().setPrimitives(
@@ -599,7 +637,8 @@ namespace BALL
 							rt_data.instance_handles.push_back(
 									rt_data.object_handles.back().createInstance());
 
-							transformTube(old_tube, rt_data.instance_handles.back());
+							transformTube(old_tube, trafo);
+							rt_data.instance_handles.back().setTransform(trafo, 0);
 						}
 
 					}
@@ -617,7 +656,7 @@ namespace BALL
 						Size last_geom_index = rt_data.object_handles.size() - 1;
 						rt_data.object_handles.push_back(
 								sceneHandle.createGeometry());
-						geometric_objects_[rt_data.instance_handles.back()] = *it;
+						geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
 						rt_data.mesh_handles.back().setPrimitives(
@@ -644,11 +683,13 @@ namespace BALL
 						if (!rep.isHidden()) {
 							rt_data.instance_handles.push_back(
 									rt_data.object_handles[last_geom_index].createInstance());
-              transformTube(new_tube_1, rt_data.instance_handles.back());
+							transformTube(new_tube_1, trafo);
+							rt_data.instance_handles.back().setTransform(trafo, 0);
 
 							rt_data.instance_handles.push_back(
 									rt_data.object_handles.back().createInstance());
-              transformTube(new_tube_2, rt_data.instance_handles.back());
+							transformTube(new_tube_2, trafo);
+							rt_data.instance_handles.back().setTransform(trafo, 0);
 						}
 					}
 
@@ -678,7 +719,7 @@ namespace BALL
 					//
 					rt_data.object_handles.push_back(
 							sceneHandle.createGeometry());
-					geometric_objects_[rt_data.instance_handles.back()] = *it;
+					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 					rt_data.mesh_handles.push_back(
 							rt_data.object_handles.back().createMesh());
 					rt_data.mesh_handles.back().setPrimitives(
@@ -696,7 +737,8 @@ namespace BALL
 							rt_data.instance_handles.push_back(
 									rt_data.object_handles.back().createInstance());
 
-							transformLine(old_line, rt_data.instance_handles.back());
+							transformLine(old_line, trafo);
+							rt_data.instance_handles.back().setTransform(trafo, 0);
 						}
 					}
 					else
@@ -713,7 +755,7 @@ namespace BALL
 						RTpieCpp::GeometryHandle& lastGeom = rt_data.object_handles.back();
 						rt_data.object_handles.push_back(
 								sceneHandle.createGeometry());
-						geometric_objects_[rt_data.instance_handles.back()] = *it;
+						geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
 						rt_data.mesh_handles.back().setPrimitives(
@@ -740,17 +782,405 @@ namespace BALL
 						if (!rep.isHidden()) {
 							rt_data.instance_handles.push_back(
 									lastGeom.createInstance());
-              transformLine(new_line_1, rt_data.instance_handles.back());
+							transformLine(new_line_1, trafo);
+							rt_data.instance_handles.back().setTransform(trafo, 0);
 
 							rt_data.instance_handles.push_back(
 									rt_data.object_handles.back().createInstance());
-              transformLine(new_line_2, rt_data.instance_handles.back());
+							transformLine(new_line_2, trafo);
+							rt_data.instance_handles.back().setTransform(trafo, 0);
 						}
 					}
 
 					rtfact_needs_update_ = true;
 
 				}
+			}
+
+			if (rtfact_needs_update_ && use_continuous_loop_)
+			  renderTask.setAccumulatePixels(true);
+
+			objects_[&rep] = rt_data;
+		}
+
+		void RTfactRenderer::bufferRepresentation(const Representation& rep)
+		{
+			if (rep.getGeometricObjects().empty())
+				return;
+
+			if (rep.isHidden())
+			{
+				if (rep.needsUpdate())
+				{
+					// if the representation has been changed while it was hidden, we need
+					// to recreate it from scratch the next time it is enabled
+					//
+					// NOTE: it is safe to call removeRepresentation even if the representation
+					//       has not yet been added
+					removeRepresentation(rep);
+				}
+				return;
+			}
+
+			if (objects_.find(&rep) != objects_.end())
+			{
+				// was the representation previously disabled and now just needs enabling?
+				if (objects_[&rep].has_been_disabled)
+				{
+					RTfactData& rt_data = objects_[&rep];
+
+					// iterate over all top group handles and add them to the root again to make them visible
+					for (Position i=0; i<rt_data.object_handles.size(); ++i)
+					{
+						rt_data.instance_handles.push_back(rt_data.object_handles[i].createInstance());
+					}
+
+					objects_[&rep].has_been_disabled = false;
+					rtfact_needs_update_ = true;
+
+					return;
+				}
+				else
+				{
+					// TODO: handle the update more gracefully!
+					removeRepresentation(rep);
+				}
+			}
+
+			RTfactData rt_data;
+			rt_data.has_been_disabled = false;
+
+			Stage::RaytracingMaterial rt_material = scene_->getStage()->getRTMaterial();
+			if (rep.hasProperty("RTFact::Material"))
+			{
+				NamedProperty rt_mat_property = rep.getProperty("RTFact::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+				rt_material = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
+			}
+
+			//
+			rt_data.object_handles.push_back(
+					sceneHandle.createGeometry());
+
+			std::list<GeometricObject*>::const_iterator it;
+			for (it =  rep.getGeometricObjects().begin();
+					 it != rep.getGeometricObjects().end();
+					 it++)
+			{
+
+				if (RTTI::isKindOf<Mesh>(**it))
+				{
+					Mesh const& mesh = *(const Mesh*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(mesh.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(mesh.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(mesh.triangle[0]));
+
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					convertMaterial(rt_material, rt_data.material_handles.back());
+
+					//
+					float const* colors = 0;
+					if (mesh.colors.size() > 1)
+					{
+						colors  = reinterpret_cast<float const*>(&(mesh.colors[0]));
+						rt_data.material_handles.back().setParamb("useVertexColor", true);
+
+						//colors conversion (rtfact accepts RGB)
+						float* rgbcolors = new float[3*mesh.colors.size()];
+						for(int i =0; i < mesh.colors.size(); i++)
+						{
+							rgbcolors[i * 3 + 0] = colors[i * 4 + 0];
+							rgbcolors[i * 3 + 1] = colors[i * 4 + 1];
+							rgbcolors[i * 3 + 2] = colors[i * 4 + 2];
+						}
+
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)mesh.triangle.size(),
+												indices, vertices, normals, rgbcolors, 0);
+
+						delete[] rgbcolors;
+					}
+					else
+					{
+						ColorRGBA const &c = (mesh.colors.size() == 1) ? mesh.colors[0] : ColorRGBA(1., 1., 1., 1.);
+
+						rt_data.material_handles.back().setParam3f(
+								"diffuseColor", float3(c.getRed(), c.getGreen(), c.getBlue()));
+						rt_data.material_handles.back().setParamb("useVertexColor", false);
+
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)mesh.triangle.size(),
+												indices, vertices, normals, 0, 0);
+					}
+
+					geometric_objects_[rt_data.mesh_handles.back()] = *it;
+
+					rtfact_needs_update_ = true;
+				}
+
+				if (RTTI::isKindOf<Sphere>(**it))
+				{
+					Sphere const& sphere = *(const Sphere*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(sphere_template_.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(sphere_template_.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(sphere_template_.triangle[0]));
+
+					ColorRGBA const& color = sphere.getColor();
+
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					convertMaterial(rt_material, rt_data.material_handles.back());
+					rt_data.material_handles.back().setParam3f(
+							"diffuseColor", float3(color.getRed(), color.getGreen(), color.getBlue()));
+					rt_data.material_handles.back().setParamb("useVertexColor", false);
+
+					//
+					rt_data.mesh_handles.push_back(
+							rt_data.object_handles.back().createMesh());
+					rt_data.mesh_handles.back().setAppearance(
+							rt_data.material_handles.back());
+
+					Vector3 const& sphere_pos = sphere.getPosition();
+					float radius = sphere.getRadius();
+
+					float mat[16] = {
+						radius, 0, 0, sphere_pos.x,
+						0, radius, 0, sphere_pos.y,
+						0, 0, radius, sphere_pos.z,
+						0, 0, 0, 1};
+					float* t_vertices = new float[3*sphere_template_.getNumberOfVertices()];
+					float* t_normals = new float[3*sphere_template_.getNumberOfNormals()];
+
+					transformMeshData(mat,
+														vertices, sphere_template_.getNumberOfVertices(),
+														normals, sphere_template_.getNumberOfNormals(),
+														t_vertices, t_normals);
+					geometric_objects_[rt_data.mesh_handles.back()] = *it;
+					rt_data.mesh_handles.back().setPrimitives(
+											(unsigned int)sphere_template_.triangle.size(),
+											indices, t_vertices, t_normals, 0, 0);
+
+					delete[] t_vertices;
+					delete[] t_normals;
+
+					rtfact_needs_update_ = true;
+				}
+
+				if (RTTI::isKindOf<TwoColoredTube>(**it))
+				{
+					TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(tube_template_.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(tube_template_.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(tube_template_.triangle[0]));
+
+					// we will produce two tubes using the same vertex/normal/color values, just with the correct offsets
+					ColorRGBA const& color1 = old_tube.getColor();
+					ColorRGBA const& color2 = old_tube.getColor2();
+
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					convertMaterial(rt_material, rt_data.material_handles.back());
+					rt_data.material_handles.back().setParam3f(
+							"diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+					rt_data.material_handles.back().setParamb("useVertexColor", false);
+
+					float mat[16];
+					float* t_vertices = new float[3*tube_template_.getNumberOfVertices()];
+					float* t_normals = new float[3*tube_template_.getNumberOfNormals()];
+
+					//
+					if (color1 == color2)
+					{
+						transformTube(old_tube, mat);
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+						transformMeshData(mat,
+															vertices, tube_template_.getNumberOfVertices(),
+															normals, tube_template_.getNumberOfNormals(),
+															t_vertices, t_normals);
+						geometric_objects_[rt_data.mesh_handles.back()] = *it;
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices, t_vertices, t_normals, 0, 0);
+					}
+					else
+					{
+						TwoColoredTube new_tube_1, new_tube_2;
+
+						//
+						new_tube_1.setVertex1(old_tube.getVertex1());
+						new_tube_1.setVertex2(old_tube.getMiddleVertex());
+						new_tube_1.setRadius(old_tube.getRadius());
+
+						//
+						new_tube_2.setVertex1(old_tube.getMiddleVertex());
+						new_tube_2.setVertex2(old_tube.getVertex2());
+						new_tube_2.setRadius(old_tube.getRadius());
+
+						//
+						transformTube(new_tube_1, mat);
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+						transformMeshData(mat,
+															vertices, tube_template_.getNumberOfVertices(),
+															normals, tube_template_.getNumberOfNormals(),
+															t_vertices, t_normals);
+						geometric_objects_[rt_data.mesh_handles.back()] = *it;
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices, t_vertices, t_normals, 0, 0);
+
+						//
+						rt_data.material_handles.push_back(
+								sceneHandle.createAppearance("PhongShader"));
+						convertMaterial(rt_material, rt_data.material_handles.back());
+						rt_data.material_handles.back().setParam3f(
+								"diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+						rt_data.material_handles.back().setParamb("useVertexColor", false);
+
+						//
+						transformTube(new_tube_2, mat);
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+						transformMeshData(mat,
+															vertices, tube_template_.getNumberOfVertices(),
+															normals, tube_template_.getNumberOfNormals(),
+															t_vertices, t_normals);
+						geometric_objects_[rt_data.mesh_handles.back()] = *it;
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices, t_vertices, t_normals, 0, 0);
+					}
+
+					delete[] t_vertices;
+					delete[] t_normals;
+
+					rtfact_needs_update_ = true;
+				}
+
+				if (RTTI::isKindOf<TwoColoredLine>(**it))
+				{
+					TwoColoredLine const& old_line = *(const TwoColoredLine*)*it;
+
+					float const* vertices = reinterpret_cast<float const*>(&(tube_template_.vertex[0]));
+					float const* normals  = reinterpret_cast<float const*>(&(tube_template_.normal[0]));
+					Index const* indices  = reinterpret_cast<Index const*>(&(tube_template_.triangle[0]));
+
+					// we will produce two tubes using the same vertex/normal/color values, just with the correct offsets
+					ColorRGBA const& color1 = old_line.getColor();
+					ColorRGBA const& color2 = old_line.getColor2();
+
+					//
+					rt_data.material_handles.push_back(
+					    sceneHandle.createAppearance("PhongShader"));
+					updateMaterialFromStage(rt_data.material_handles.back());
+					rt_data.material_handles.back().setParam3f(
+							"diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
+					rt_data.material_handles.back().setParamb("useVertexColor", false);
+
+					float mat[16];
+					float* t_vertices = new float[3*tube_template_.getNumberOfVertices()];
+					float* t_normals = new float[3*tube_template_.getNumberOfNormals()];
+
+					if (color1 == color2)
+					{
+						transformLine(old_line, mat);
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+						transformMeshData(mat,
+															vertices, tube_template_.getNumberOfVertices(),
+															normals, tube_template_.getNumberOfNormals(),
+															t_vertices, t_normals);
+						geometric_objects_[rt_data.mesh_handles.back()] = *it;
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices, t_vertices, t_normals, 0, 0);
+					}
+					else
+					{
+						TwoColoredLine new_line_1, new_line_2;
+
+						new_line_1.setVertex1(old_line.getVertex1());
+						new_line_1.setVertex2(old_line.getMiddleVertex());
+						//new_line_1.setRadius(LINE_RADIUS);//old_line.getRadius());
+
+						new_line_2.setVertex1(old_line.getMiddleVertex());
+						new_line_2.setVertex2(old_line.getVertex2());
+						//new_line_2.setRadius(LINE_RADIUS);//old_line.getRadius());
+
+						//
+						transformLine(new_line_1, mat);
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+						transformMeshData(mat,
+															vertices, tube_template_.getNumberOfVertices(),
+															normals, tube_template_.getNumberOfNormals(),
+															t_vertices, t_normals);
+						geometric_objects_[rt_data.mesh_handles.back()] = *it;
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices, t_vertices, t_normals, 0, 0);
+
+						//
+						rt_data.material_handles.push_back(
+								sceneHandle.createAppearance("PhongShader"));
+						convertMaterial(rt_material, rt_data.material_handles.back());
+						rt_data.material_handles.back().setParam3f(
+								"diffuseColor", float3(color2.getRed(), color2.getGreen(), color2.getBlue()));
+						rt_data.material_handles.back().setParamb("useVertexColor", false);
+
+						//
+						transformLine(new_line_2, mat);
+						rt_data.mesh_handles.push_back(
+								rt_data.object_handles.back().createMesh());
+						rt_data.mesh_handles.back().setAppearance(
+								rt_data.material_handles.back());
+						transformMeshData(mat,
+															vertices, tube_template_.getNumberOfVertices(),
+															normals, tube_template_.getNumberOfNormals(),
+															t_vertices, t_normals);
+						geometric_objects_[rt_data.mesh_handles.back()] = *it;
+						rt_data.mesh_handles.back().setPrimitives(
+												(unsigned int)tube_template_.triangle.size(),
+												indices, t_vertices, t_normals, 0, 0);
+
+					}
+
+					rtfact_needs_update_ = true;
+
+				}
+			}
+
+			if (!rep.isHidden()) {
+				rt_data.instance_handles.push_back(
+						rt_data.object_handles.back().createInstance());
 			}
 
 			if (rtfact_needs_update_ && use_continuous_loop_)
@@ -766,11 +1196,16 @@ namespace BALL
 				// TODO: find out if this also deletes the geometries and materials
 				RTfactData& rt_data = objects_[&rep];
 
+				for (Position i=0; i<rt_data.mesh_handles.size(); ++i)
+				{
+					geometric_objects_.erase(rt_data.mesh_handles[i]);
+				}
 				for (Position i=0; i<rt_data.instance_handles.size(); ++i)
 				{
-					geometric_objects_.erase(rt_data.instance_handles[i]);
+					geometric_objects_inst.erase(rt_data.instance_handles[i]);
 					rt_data.instance_handles[i].clear();
 				}
+
 				rt_data.instance_handles.clear();
 
 				rt_data.material_handles.clear();
@@ -794,6 +1229,9 @@ namespace BALL
 
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
 		{
+			if (!getMainControl())
+				return;
+
 			Stage const& stage = *(scene_->getStage());
 
 			// deactivate hidden representations (we need no reactivation code,
@@ -810,12 +1248,73 @@ namespace BALL
 					{
 					  rt_data.instance_handles[i].clear();
 					}
+
 					rt_data.instance_handles.clear();
 
 					it->second.has_been_disabled = true;
 
 					rtfact_needs_update_ = true;
 				}
+			}
+
+			//clipping planes
+			RepresentationManager& pm = getMainControl()->getRepresentationManager();
+			const vector<ClippingPlane*>& vc = pm.getClippingPlanes();
+			RepresentationList::const_iterator it = pm.getRepresentations().begin();
+			for (; it != pm.getRepresentations().end(); it++)
+			{
+			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > normals;
+			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > points;
+
+					const Representation& rep = **it;
+					RTfactData& rtfactData = objects_[&rep];
+
+					vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+					for (;plane_it != vc.end(); plane_it++)
+					{
+							ClippingPlane& plane = **plane_it;
+
+							if (!plane.getRepresentations().has(*it)) continue;
+							if (plane.isHidden()) continue;
+
+							std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
+							for(; iit != rtfactData.instance_handles.end(); iit++)
+							{
+
+									const Vector3& n(plane.getNormal());
+									const Vector3& p(plane.getPoint());
+
+									normals[*iit].push_back(n);
+									points[*iit].push_back(p);
+
+							}
+					}
+
+					std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
+					for(; iit != rtfactData.instance_handles.end(); iit++)
+					{
+							const std::vector<Vector3>& instanceNormals = normals[*iit];
+							const std::vector<Vector3>& instancePoints = points[*iit];
+							const int n = instanceNormals.size();
+
+							float* data = new float[n*6];
+
+							for(int i = 0; i < n; i++)
+							{
+									data[0*n + i] = instanceNormals[i].x;
+									data[1*n + i] = instanceNormals[i].y;
+									data[2*n + i] = instanceNormals[i].z;
+									data[3*n + i] = instancePoints[i].x;
+									data[4*n + i] = instancePoints[i].y;
+									data[5*n + i] = instancePoints[i].z;
+							}
+
+							iit->setCutPlane(n,
+									data+0*n, data+1*n, data+2*n,
+									data+3*n, data+4*n, data+5*n);
+
+					}
+
 			}
 
 			if (rtfact_needs_update_)
@@ -920,7 +1419,7 @@ namespace BALL
 			}
 		}
 
-		void RTfactRenderer::transformTube(const TwoColoredTube& tube, InstanceHandle& instance)
+		void RTfactRenderer::transformTube(const TwoColoredTube& tube, float *trafo)
 		{
 			Vector3 vec = tube.getVertex2() - tube.getVertex1();
 			const double len = vec.getLength();
@@ -941,15 +1440,12 @@ namespace BALL
 			temp.setTranslation(midpoint);
 			matrix = temp*matrix;
 
-			float trafo[16];
 			for (Position i=0; i<4; ++i)
 				for (Position j=0; j<4; ++j)
-					trafo[i*4+j] = matrix(j, i);
-
-			instance.setTransform(trafo, 0);
+					trafo[i*4+j] = matrix(i, j);
 		}
 
-		void RTfactRenderer::transformLine(const TwoColoredLine& line, InstanceHandle& instance)
+		void RTfactRenderer::transformLine(const TwoColoredLine& line, float *trafo)
 		{
 			Vector3 vec = line.getVertex2() - line.getVertex1();
 			const double len = vec.getLength();
@@ -970,12 +1466,9 @@ namespace BALL
 			temp.setTranslation(midpoint);
 			matrix = temp*matrix;
 
-			float trafo[16];
 			for (Position i=0; i<4; ++i)
 				for (Position j=0; j<4; ++j)
-					trafo[i*4+j] = matrix(i, j);
-
-			instance.setTransform(trafo, 0);
+					trafo[i*4+j] = matrix(j, i);
 		}
 
 		void RTfactRenderer::updateMaterialFromStage(AppearanceHandle& material)

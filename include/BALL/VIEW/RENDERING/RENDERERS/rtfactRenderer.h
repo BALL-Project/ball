@@ -30,6 +30,20 @@ namespace std
 	namespace tr1
 	{
     template <>
+    struct hash< RTpieCpp::MeshHandle > : public unary_function<RTpieCpp::MeshHandle, size_t> {
+    public:
+        union conv
+        {
+            size_t s;
+            const void  *p;
+        };
+        size_t operator()(const RTpieCpp::MeshHandle& x ) const throw() {
+            conv c;
+            c.p=x.get();
+            return c.s;
+        }
+    };
+    template <>
     struct hash< RTpieCpp::InstanceHandle > : public unary_function<RTpieCpp::InstanceHandle, size_t> {
     public:
         union conv
@@ -116,6 +130,8 @@ namespace BALL
 				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
 				                         std::list<GeometricObject*>& objects);
 
+
+
 				virtual void setSize(float width, float height);
 
 				virtual void setupStereo(float eye_separation, float focal_length);
@@ -129,6 +145,7 @@ namespace BALL
 				virtual void useContinuousLoop(bool use_loop);
 
 				void bufferRepresentation(const Representation& rep);
+				void bufferRepresentationDynamic(const Representation& rep);
 				void removeRepresentation(const Representation& rep);
 
 				void setLights(bool reset_all = false);
@@ -141,8 +158,8 @@ namespace BALL
 
 				void updateMaterialForRepresentation(Representation const* rep);
 
-				void transformTube(const TwoColoredTube& tube, RTpieCpp::InstanceHandle& instance);
-				void transformLine(const TwoColoredLine& line, RTpieCpp::InstanceHandle& instance);
+				void transformTube(const TwoColoredTube& tube, float *trafo);
+				void transformLine(const TwoColoredLine& line, float *trafo);
 
 				void updateMaterialFromStage(RTpieCpp::AppearanceHandle& material);
 				void convertMaterial(Stage::RaytracingMaterial const& rt_material, RTpieCpp::AppearanceHandle& material);
@@ -193,7 +210,8 @@ namespace BALL
 				//boost::shared_ptr<RTfact::Remote::Picking>  m_picking;
 
 				HashMap<Representation const*, RTfactData> objects_;
-				HashMap<RTpieCpp::InstanceHandle, GeometricObject*> geometric_objects_;
+				HashMap<RTpieCpp::InstanceHandle, GeometricObject*> geometric_objects_inst;
+				HashMap<RTpieCpp::MeshHandle, GeometricObject*> geometric_objects_;
 
 				Surface sphere_template_;
 				Surface tube_template_;
