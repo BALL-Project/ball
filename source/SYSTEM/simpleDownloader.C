@@ -156,49 +156,6 @@ namespace BALL
 			*result_ = reply_->readAll();
 			caller_->quit();
 		}
-
-		//Hack Thread
-		QFtpHackThread::QFtpHackThread(const QUrl& url, QIODevice* iodev, SimpleDownloader* parent)
-			: ftp_(0),
-			  helper_(0),
-			  url_(url),
-			  iodev_(iodev),
-				parent_(parent)
-		{
-		}
-
-		QFtpHackThread::~QFtpHackThread()
-		{
-			if(ftp_) ftp_->deleteLater();
-			if(helper_) helper_->deleteLater();
-		}
-
-		void QFtpHackThread::run()
-		{
-			ftp_ = new QFtp;
-			helper_ = new QFtpHackHelper(this);
-			connect(ftp_,    SIGNAL(done(bool)), helper_, SLOT(done(bool)));
-			
-			ftp_->connectToHost(url_.host(), url_.port(21));
-			ftp_->login();
-			ftp_->get(url_.path(), iodev_);
-			ftp_->close();
-
-			exec();
-		}
-
-		//Hack Helper
-		QFtpHackHelper::QFtpHackHelper(QFtpHackThread* th)
-			: th_(th)
-		{
-		}
-
-		void QFtpHackHelper::done( bool error)
-		{
-			if(error)
-				std::cout << "error while downloading" << std::endl;
-			th_->exit(error);
-		}
 	}
 
 	SimpleDownloader::SimpleDownloader(const String& url, unsigned int timeout)
@@ -211,42 +168,16 @@ namespace BALL
 	{
 	}
 
-	int SimpleDownloader::qftpDownloadHack_(QIODevice* iodev)
-	{
-		QCoreApplication* app = 0;
-		if(!QCoreApplication::instance()) {
-			int tmp = 0;
-			app = new QCoreApplication(tmp, 0);
-		}
-
-		SimpleDownloaderHelper::QFtpHackThread th_(url_, iodev, this);
-		th_.start();
-
-		if(!th_.wait(timeout_)) {
-			Log.error() << "Error while downloading file" << std::endl;
-		}
-
-		delete app;
-
-		return 0;
-	}
-
 	int SimpleDownloader::downloadToBuffer(std::vector<char>& array)
 	{
 		QByteArray tmp_array;
 
 		int result;
 
-		//This is only necessary as long as QNetworkAccessManager is buggy
-		if(url_.scheme() == "ftp")
-		{
-			QBuffer buf(&tmp_array);
-			result = qftpDownloadHack_(&buf);
-		} else {
-			SimpleDownloaderHelper::DLThread th(url_, &tmp_array, this);
+		SimpleDownloaderHelper::DLThread th(url_, &tmp_array, this);
 
-			result = download_(th);
-		}
+		result = download_(th);
+
 		array.resize(tmp_array.count());
 		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.count(), &array[0]);
 
@@ -255,18 +186,8 @@ namespace BALL
 
 	int SimpleDownloader::downloadToFile(const String& path)
 	{
-		//This is only necessary as long as QNetworkAccessManager is buggy
-		if(url_.scheme() == "ftp")
-		{
-			QFile file(path.c_str());
-			file.open(QIODevice::WriteOnly);
-			return qftpDownloadHack_(&file);
-		}
-		else
-		{
-			SimpleDownloaderHelper::DLThread th(url_, path, this);
-			return download_(th);
-		}
+		SimpleDownloaderHelper::DLThread th(url_, path, this);
+		return download_(th);
 	}
 
 	int SimpleDownloader::uploadStringToBuffer(const String& data, std::vector<char>& response)

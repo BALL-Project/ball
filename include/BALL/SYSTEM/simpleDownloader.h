@@ -7,7 +7,6 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QFile>
-#include <QtNetwork/QFtp>
 
 #include <QtNetwork/QNetworkReply>
 
@@ -142,7 +141,6 @@ namespace BALL
 
 		private:
 			int download_(SimpleDownloaderHelper::HelperThread& thread);
-			int qftpDownloadHack_(QIODevice* iodev);
 
 			QUrl url_;
 			unsigned int timeout_;
@@ -242,46 +240,6 @@ namespace BALL
 
 			private:
 				QFile file_;
-		};
-
-
-		// We need this due to a bug in QNetworkAccessManager that basically
-		// screws up the FTP download code. This should be fixed upstream with
-		// the advent of Qt5
-
-		class QFtpHackHelper;
-
-		class QFtpHackThread : public QThread
-		{
-			Q_OBJECT
-
-			public:
-				QFtpHackThread(const QUrl& url, QIODevice* iodev, SimpleDownloader* parent);
-				~QFtpHackThread();
-
-			protected:
-				void run();
-
-			private:
-				QFtp* ftp_;
-				QFtpHackHelper* helper_;
-				QUrl url_;
-				QIODevice* iodev_;
-				SimpleDownloader* parent_;
-		};
-
-		class QFtpHackHelper : public QObject
-		{
-			Q_OBJECT
-
-			public:
-				QFtpHackHelper(QFtpHackThread* th);
-
-			public slots:
-				void done(bool error);
-
-			private:
-				QFtpHackThread* th_;
 		};
 
 	}
