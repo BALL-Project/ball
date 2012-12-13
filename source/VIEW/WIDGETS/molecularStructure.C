@@ -23,7 +23,10 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
 
+#include <BALL/FORMAT/trajectoryFileFactory.h>
+#include <BALL/FORMAT/trajectoryFile.h>
 #include <BALL/FORMAT/DCDFile.h>
+
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/directory.h>
@@ -1403,7 +1406,7 @@ namespace BALL
 				// We update everything every so and so many steps.
 				Size steps = md_dialog_.getStepsBetweenRefreshs();
 
-				DCDFile* dcd = 0;
+				TrajectoryFile* trajectory_file = 0;
 				if (md_dialog_.getDCDFile().size() != 0)
 				{
 					// use an absolute filename
@@ -1414,9 +1417,8 @@ namespace BALL
 						name = String(md_dialog_.getDCDFile());
 					}
 
-					dcd = new DCDFile;
-					dcd->open(name, std::ios::out);
-					dcd->enableVelocityStorage();
+					trajectory_file = TrajectoryFileFactory::open(name, std::ios::out, "dcd");
+					static_cast<DCDFile*>(trajectory_file)->enableVelocityStorage();
 				}
 				// ============================= WITH MULTITHREADING ===================
 			#ifdef BALL_QT_HAS_THREADS
@@ -1425,7 +1427,7 @@ namespace BALL
 				{
 					delete thread;
 					delete mds;
-					if (dcd != 0) delete dcd;
+					if (trajectory_file != 0) delete trajectory_file;
 					setStatusbarText((String)tr("Could not lock Composites, is an other thread running?"), true);
 					return;
 				}
@@ -1433,14 +1435,14 @@ namespace BALL
 				thread->setMolecularDynamics(mds);
 				thread->setNumberOfSteps(md_dialog_.getNumberOfSteps());
 				thread->setNumberOfStepsBetweenUpdates(steps);
-				thread->setDCDFile(dcd);
+				thread->setTrajectoryFile(trajectory_file);
 				thread->setComposite(system);
 				thread->start(QThread::LowPriority);
 
 			#else
 				// ============================= WITHOUT MULTITHREADING =================
 				// iterate until done and refresh the screen every "steps" iterations
-				SnapShotManager manager(system, &getForceField(), dcd);
+				SnapShotManager manager(system, &getForceField(), trajectory_file);
 				manager.setFlushToDiskFrequency(10);
 				
 				bool ok = true;
@@ -1449,7 +1451,7 @@ namespace BALL
 					ok = mds->simulateIterations(steps, true);
 					getMainControl()->update(*system);
 					
-					if (dcd != 0) 
+					if (trajectory_file != 0) 
 					{
 						manager.takeSnapShot();
 					}
@@ -1461,7 +1463,7 @@ namespace BALL
 													 + String(ff.getRMSGradient())    + " "  + (String)tr("kJ/(mol A)"), true);
 				}
 
-				if (dcd) manager.flushToDisk();
+				if (trajectory_file) manager.flushToDisk();
 
 				if (!ok)
 				{
@@ -1479,18 +1481,19 @@ namespace BALL
 				// clean up
 				delete mds;
 
-				if (dcd != 0)
+				if (trajectory_file != 0)
 				{
-					dcd->close();
-					delete dcd;
+					trajectory_file->close();
+					delete trajectory_file;
 					Directory d;
+
 					// use an absolute filename
 					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
-					dcd = new DCDFile(name, File::MODE_IN);
+					trajectory_file = TrajectoryFileFactory::open(name, File::MODE_IN, "dcd");
 
 					NewTrajectoryMessage* message = new NewTrajectoryMessage;
 					message->setComposite(*system);
-					message->setTrajectoryFile(*dcd);
+					message->setTrajectoryFile(*trajectory_file);
 					notify_(message);
 				}
 			#endif
