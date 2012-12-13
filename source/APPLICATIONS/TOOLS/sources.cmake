@@ -12,7 +12,6 @@ SET(EXECUTABLES_LIST
 	CrystalGenerator
 	DBExporter
 	DBImporter
-	DCD2PDBSplitter
 	DockPoseClustering
 	DockResultMerger
 	EvenSplit
@@ -48,6 +47,7 @@ SET(EXECUTABLES_LIST
 	Split2ConnectedComponents
 	TaGRes
 	TaGRes-train
+	TrajectoryFile2PDBSplitter
 	Validator
 	VendorFinder
 	WaterFinder

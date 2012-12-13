@@ -2,14 +2,15 @@
 // vi: set ts=2:
 //
 
-// A very simple utility for splitting a dcd file into 
+// A very simple utility for splitting a trajectory file file into 
 // several pdb snapshots of a system
 // 
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/DCDFile.h>
+#include <BALL/FORMAT/trajectoryFile.h>
+#include <BALL/FORMAT/trajectoryFileFactory.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 
 #include <BALL/FORMAT/commandlineParser.h>
@@ -21,9 +22,9 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-	CommandlineParser parpars("DCD2PDBSplitter", "splits SnapShots into PDB files ", VERSION, String(__DATE__), "Convert, combine and store");
+	CommandlineParser parpars("TrajectoryFile2PDBSplitter", "splits SnapShots into PDB files ", VERSION, String(__DATE__), "Convert, combine and store");
 
-	parpars.registerParameter("i_dcd", "input dcd-file", INFILE, true);
+	parpars.registerParameter("i_traj", "input trajectory file", INFILE, true);
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
 
 	parpars.registerParameter("o", "output pdb-file name for first solution", STRING, true, "", true);
@@ -34,12 +35,12 @@ int main(int argc, char** argv)
 
 
 	// the manual
-	String man = "This tool splits SnapShots of a given DCDFile and the reference PDBFile into separate PDBFiles.\n\nParameters are the input SnapShots as DCDFile (-i_dcd), the corresponding reference pdb file that was originally used to create the DCDFile (-i_pdb) and a naming schema for the results (-o).\n\nOutput of this tool is a number of PDBFiles each containing one SnapShot.";
+	String man = "This tool splits SnapShots of a given TrajectoryFile and the reference PDBFile into separate PDBFiles.\n\nParameters are the input SnapShots as TrajectoryFile (-i_trja), the corresponding reference pdb file that was originally used to create the TrajectoryFile (-i_pdb) and a naming schema for the results (-o).\n\nOutput of this tool is a number of PDBFiles each containing one SnapShot.";
 
 	parpars.setToolManual(man);
 
 	// here we set the types of I/O files, for example sdf is also allowed
-	parpars.setSupportedFormats("i_dcd","dcd");
+	parpars.setSupportedFormats("i_traj","dcd, trr");
 	parpars.setSupportedFormats("i_pdb","pdb");
 	parpars.setSupportedFormats("o","pdb");
 
@@ -57,8 +58,8 @@ int main(int argc, char** argv)
 	pdb.read(sys);
 
 	SnapShot ss;
-	DCDFile dcd(parpars.get("i_dcd"));
-	Size num_ss = dcd.getNumberOfSnapShots();
+	TrajectoryFile *traj_file = TrajectoryFileFactory::open(parpars.get("i_traj"));
+	Size num_ss = traj_file->getNumberOfSnapShots();
 
 	for (Size i=0; i< num_ss; i++)
 	{
@@ -69,7 +70,7 @@ int main(int argc, char** argv)
 
 		Log << "   write SnapShot " << i << " as " << outfile_name << endl;
 
-		if (dcd.read(ss))
+		if (traj_file->read(ss))
 		{
 			System sys_temp(sys);
 			ss.applySnapShot(sys_temp);
@@ -83,6 +84,8 @@ int main(int argc, char** argv)
 			file << sys_temp;
 			file.close();
 		}
+		else
+			break;
 	}
 
 	Log << "done." << endl;
