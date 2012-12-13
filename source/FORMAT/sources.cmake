@@ -17,6 +17,7 @@ SET(SOURCES_LIST
 	KCFFile.C
 	lineBasedFile.C
 	MOLFile.C
+	molFileFactory.C
 	SDFile.C
 	MOL2File.C
 	NMRStarFile.C
@@ -29,11 +30,11 @@ SET(SOURCES_LIST
 	PDBRecords.C
 	pubchemDownloader.C
 	resourceFile.C
+	SCWRLRotamerFile.C
 	trajectoryFile.C
+	trajectoryFileFactory.C
 	TRRFile.C
 	XYZFile.C
-	SCWRLRotamerFile.C
-	molFileFactory.C
 )
 
 IF (BALL_HAS_QTSQL)
