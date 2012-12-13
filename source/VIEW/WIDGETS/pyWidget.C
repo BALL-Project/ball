@@ -23,7 +23,7 @@
 #include <QtGui/QPushButton>
 
 // currently doesnt work right
-#undef BALL_QT_HAS_THREADS
+#undef BALL_PYTHON_USE_THREADS
 
 namespace BALL
 {
@@ -132,7 +132,7 @@ namespace BALL
 			return Acceptable;
 		}
 
-#ifdef BALL_QT_HAS_THREADS
+#ifdef BALL_PYTHON_USE_THREADS
 		RunPythonThread::RunPythonThread()
 			: QThread(),
 			input(),
@@ -1144,7 +1144,7 @@ namespace BALL
 		String PyWidget::runCommand_(const String& text, bool& state)
 		{
 			String result;
-#ifndef BALL_QT_HAS_THREADS
+#ifndef BALL_PYTHON_USE_THREADS
 			result = PyInterpreter::run(text, state);
 #else
 			thread_->input = text;
