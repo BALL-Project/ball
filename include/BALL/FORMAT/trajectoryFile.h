@@ -71,7 +71,7 @@ namespace BALL
 		/** get the number of snapshots stored in this instance.
 				@return the number of snapshots of this instance
 		*/
-		Size getNumberOfSnapShots() const;
+		virtual Size getNumberOfSnapShots();
 
 		/** get the number of atoms coverd by each snapshot.
 				@return the number of atoms 
