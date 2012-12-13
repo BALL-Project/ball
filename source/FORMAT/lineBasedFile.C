@@ -117,8 +117,11 @@ namespace BALL
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::readLine");
 		}
-		static vector<char> buffer_data(BALL_MAX_LINE_LENGTH);
-		char* buffer = &(buffer_data[0]);
+
+		if (line_buffer_.empty())
+			line_buffer_.resize(BALL_MAX_LINE_LENGTH);
+
+		char* buffer = &(line_buffer_[0]);
 
 		getFileStream().getline(buffer, BALL_MAX_LINE_LENGTH);
 		line_.assign(buffer);
@@ -236,15 +239,18 @@ namespace BALL
 		if (getLine().size() >= (start + length))
 		{
 			const Size max_len = 16384;
-			static char buf[max_len + 1];
+
+			if (col_buffer_.empty())
+				col_buffer_.resize(max_len+1);
+
 			length = std::min(length, max_len);
 
 			// copy the specified string section into the buffer...
-			strncpy(buf, line_.c_str() + start, length);
-			buf[length] = '\0';
+			strncpy(&(col_buffer_[0]), line_.c_str() + start, length);
+			col_buffer_[length] = '\0';
 
 			// ...and try to parse it.
-			read = sscanf(buf, format, ptr);
+			read = sscanf(&(col_buffer_[0]), format, ptr);
 		}
 		else
 		{
