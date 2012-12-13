@@ -30,6 +30,8 @@ namespace BALL
 	{
 
 		public:
+			static const double to_angstrom;
+			static const double to_nanometer;
 
 		/** @name Type definitions
 		*/
@@ -190,6 +192,12 @@ namespace BALL
 		/// Initialize the file for usage
 		virtual bool init();
 
+		/** Read file header
+		 *  This function is actually a nop, since TRRFiles don't have file headers; 
+		 *  it is only provided for interface reasons.
+		 */
+		virtual bool readHeader();
+
 		/** Writes the next header that shall preceed the next
 				data block.
 				@param header the TRRHeader we want to write
@@ -214,6 +222,16 @@ namespace BALL
  				@return true, if a snapshot could be read, false otherwise.
 		*/
 		virtual bool read(SnapShot& snapshot);
+
+		/** Skip the next snapshot in the file
+ 				@return true, if a snapshot could be read, false otherwise.
+		*/
+		virtual bool skipFrame();
+
+		/** get the number of snapshots stored in this instance.
+				@return the number of snapshots of this instance
+		*/
+		virtual Size getNumberOfSnapShots();
 
 		/// Read the whole file into a SnapShotManager
 		virtual TRRFile& operator >> (SnapShotManager& ssm);
@@ -297,6 +315,8 @@ namespace BALL
 		BinaryFileAdaptor<char> adapt_char_;
 		BinaryFileAdaptor<float> adapt_float_;
 		BinaryFileAdaptor<double> adapt_double_;
+
+		Size old_file_size_;
 	};
 } // namespace BALL
 

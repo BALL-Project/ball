@@ -11,6 +11,9 @@ using namespace std;
 
 namespace BALL
 {
+	const double TRRFile::to_angstrom  = 10.;
+	const double TRRFile::to_nanometer = 10.;
+
   TRRFile::TRRFile()
 	 : TrajectoryFile(),
 		 header_(),
@@ -21,7 +24,8 @@ namespace BALL
 		 timestep_(0.002),
 		 box1_(),
 		 box2_(),
-		 box3_()
+		 box3_(),
+		 old_file_size_(0)
 	{
 		init();
 	}
@@ -36,7 +40,8 @@ namespace BALL
 			timestep_(0.002),
 			box1_(),
 			box2_(),
-			box3_()
+			box3_(),
+			old_file_size_(0)
 	{
 		if (!(open_mode & std::ios::binary))
 		{
@@ -62,6 +67,7 @@ namespace BALL
 		box1_ = Vector3();
 		box2_ = Vector3();
 		box3_ = Vector3();
+		old_file_size_ = 0;
 		TrajectoryFile::clear();
 	}
 
@@ -69,7 +75,8 @@ namespace BALL
 	{
 		return ((TrajectoryFile::operator == (file)) && (timestep_index_ == file.timestep_index_)
 						&& (timestep_ == file.timestep_) && (precision_ == file.precision_)
-						&& (box1_ == file.box1_) && (box2_ == file.box2_) && (box3_ == file.box3_)); 
+						&& (box1_ == file.box1_) && (box2_ == file.box2_) && (box3_ == file.box3_)
+						&& (old_file_size_ == file.old_file_size_)); 
 	}
 
 	bool TRRFile::hasVelocities() const
@@ -282,42 +289,42 @@ namespace BALL
 			// size in this case is stored in the form x1 y2 z3
 			if (precision_ == 4)
 			{
-				adapt_float_.setData( (float) box1_.x); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box2_.y); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box3_.z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box1_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box2_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box3_.z); *this << adapt_float_.getData();
 			}
 			else
 			{
-				adapt_double_.setData( (double) box1_.x); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box2_.y); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box3_.z); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box1_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box2_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box3_.z); *this << adapt_double_.getData();
 			}
 		}
 		else
 		{
 			if (precision_ == 4)
 			{
-				adapt_float_.setData( (float) box1_.x); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box1_.y); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box1_.z); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box2_.x); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box2_.y); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box2_.z); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box3_.x); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box3_.y); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) box3_.z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box1_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box1_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box1_.z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box2_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box2_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box2_.z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box3_.x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box3_.y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * box3_.z); *this << adapt_float_.getData();
 			}
 			else
 			{
-				adapt_double_.setData( (double) box1_.x); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box1_.y); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box1_.z); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box2_.x); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box2_.y); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box2_.z); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box3_.x); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box3_.y); *this << adapt_double_.getData();
-				adapt_double_.setData( (double) box3_.z); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box1_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box1_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box1_.z); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box2_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box2_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box2_.z); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box3_.x); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box3_.y); *this << adapt_double_.getData();
+				adapt_double_.setData( (double) to_nanometer * box3_.z); *this << adapt_double_.getData();
 			}
 		}
 
@@ -332,9 +339,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				adapt_float_.setData( (float) positions[actAtom].x); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) positions[actAtom].y); *this << adapt_float_.getData();
-				adapt_float_.setData( (float) positions[actAtom].z); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * positions[actAtom].x); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * positions[actAtom].y); *this << adapt_float_.getData();
+				adapt_float_.setData( (float) to_nanometer * positions[actAtom].z); *this << adapt_float_.getData();
 			}
 		}
 		else
@@ -347,9 +354,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				adapt_double_.setData( (float) positions[actAtom].x); *this << adapt_double_.getData();
-				adapt_double_.setData( (float) positions[actAtom].y); *this << adapt_double_.getData();
-				adapt_double_.setData( (float) positions[actAtom].z); *this << adapt_double_.getData();
+				adapt_double_.setData( (float) to_nanometer * positions[actAtom].x); *this << adapt_double_.getData();
+				adapt_double_.setData( (float) to_nanometer * positions[actAtom].y); *this << adapt_double_.getData();
+				adapt_double_.setData( (float) to_nanometer * positions[actAtom].z); *this << adapt_double_.getData();
 			}
 		}
 
@@ -363,9 +370,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					adapt_float_.setData( (float) velocities[actAtom].x); *this << adapt_float_.getData();
-					adapt_float_.setData( (float) velocities[actAtom].y); *this << adapt_float_.getData();
-					adapt_float_.setData( (float) velocities[actAtom].z); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) to_nanometer * velocities[actAtom].x); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) to_nanometer * velocities[actAtom].y); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) to_nanometer * velocities[actAtom].z); *this << adapt_float_.getData();
 				}
 			}
 			else
@@ -376,9 +383,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{	 
-					adapt_double_.setData( (float) velocities[actAtom].x); *this << adapt_double_.getData();
-					adapt_double_.setData( (float) velocities[actAtom].y); *this << adapt_double_.getData();
-					adapt_double_.setData( (float) velocities[actAtom].z); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) to_nanometer * velocities[actAtom].x); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) to_nanometer * velocities[actAtom].y); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) to_nanometer * velocities[actAtom].z); *this << adapt_double_.getData();
 				}
 			}
 		}
@@ -392,9 +399,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					adapt_float_.setData( (float) forces[actAtom].x); *this << adapt_float_.getData();
-					adapt_float_.setData( (float) forces[actAtom].y); *this << adapt_float_.getData();
-					adapt_float_.setData( (float) forces[actAtom].z); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) to_nanometer * forces[actAtom].x); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) to_nanometer * forces[actAtom].y); *this << adapt_float_.getData();
+					adapt_float_.setData( (float) to_nanometer * forces[actAtom].z); *this << adapt_float_.getData();
 				}
 			}
 			else
@@ -405,9 +412,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{
-					adapt_double_.setData( (float) forces[actAtom].x); *this << adapt_double_.getData();
-					adapt_double_.setData( (float) forces[actAtom].y); *this << adapt_double_.getData();
-					adapt_double_.setData( (float) forces[actAtom].z); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) to_nanometer * forces[actAtom].x); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) to_nanometer * forces[actAtom].y); *this << adapt_double_.getData();
+					adapt_double_.setData( (float) to_nanometer * forces[actAtom].z); *this << adapt_double_.getData();
 				}
 			}
 		}
@@ -424,6 +431,7 @@ namespace BALL
  		if (!readNextHeader(header_)) return false;
 
 		Size noa = header_.number_of_atoms;
+		snapshot.setNumberOfAtoms(noa);
 
 		// Try to figure out the precision.
 		precision_ = header_.position_data_size / (3*noa);
@@ -461,42 +469,42 @@ namespace BALL
 			// The information is stored in the short format.
 			if (precision_ == 4)
 			{
-				*this >> adapt_float_; box1_.x = adapt_float_.getData();
-				*this >> adapt_float_; box2_.y = adapt_float_.getData();
-				*this >> adapt_float_; box3_.z = adapt_float_.getData();
+				*this >> adapt_float_; box1_.x = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box2_.y = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box3_.z = adapt_float_.getData() * to_angstrom;
 			}
 			else
 			{
-				*this >> adapt_double_; box1_.x = adapt_double_.getData();
-				*this >> adapt_double_; box2_.y = adapt_double_.getData();
-				*this >> adapt_double_; box3_.z = adapt_double_.getData();
+				*this >> adapt_double_; box1_.x = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box2_.y = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box3_.z = adapt_double_.getData() * to_angstrom;
 			}
 		}
 		else
 		{
 			if (precision_ == 4)
 			{
-				*this >> adapt_float_; box1_.x = adapt_float_.getData();
-				*this >> adapt_float_; box1_.y = adapt_float_.getData();
-				*this >> adapt_float_; box1_.z = adapt_float_.getData();
-				*this >> adapt_float_; box2_.x = adapt_float_.getData();
-				*this >> adapt_float_; box2_.y = adapt_float_.getData();
-				*this >> adapt_float_; box2_.z = adapt_float_.getData();
-				*this >> adapt_float_; box3_.x = adapt_float_.getData();
-				*this >> adapt_float_; box3_.y = adapt_float_.getData();
-				*this >> adapt_float_; box3_.z = adapt_float_.getData();
+				*this >> adapt_float_; box1_.x = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box1_.y = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box1_.z = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box2_.x = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box2_.y = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box2_.z = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box3_.x = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box3_.y = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; box3_.z = adapt_float_.getData() * to_angstrom;
 			}
 			else
 			{
-				*this >> adapt_double_; box1_.x = adapt_double_.getData();
-				*this >> adapt_double_; box1_.y = adapt_double_.getData();
-				*this >> adapt_double_; box1_.z = adapt_double_.getData();
-				*this >> adapt_double_; box2_.x = adapt_double_.getData();
-				*this >> adapt_double_; box2_.y = adapt_double_.getData();
-				*this >> adapt_double_; box2_.z = adapt_double_.getData();
-				*this >> adapt_double_; box3_.x = adapt_double_.getData();
-				*this >> adapt_double_; box3_.y = adapt_double_.getData();
-				*this >> adapt_double_; box3_.z = adapt_double_.getData();
+				*this >> adapt_double_; box1_.x = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box1_.y = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box1_.z = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box2_.x = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box2_.y = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box2_.z = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box3_.x = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box3_.y = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; box3_.z = adapt_double_.getData() * to_angstrom;
 			}
 		}
 
@@ -527,9 +535,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				*this >> adapt_float_; positions[actAtom].x = adapt_float_.getData();
-				*this >> adapt_float_; positions[actAtom].y = adapt_float_.getData();
-				*this >> adapt_float_; positions[actAtom].z = adapt_float_.getData();
+				*this >> adapt_float_; positions[actAtom].x = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; positions[actAtom].y = adapt_float_.getData() * to_angstrom;
+				*this >> adapt_float_; positions[actAtom].z = adapt_float_.getData() * to_angstrom;
 			}
 			snapshot.setAtomPositions(positions);
 		}
@@ -542,9 +550,9 @@ namespace BALL
 
 			for (actAtom=0; actAtom<noa; actAtom++)
 			{
-				*this >> adapt_double_; positions[actAtom].x = adapt_double_.getData();
-				*this >> adapt_double_; positions[actAtom].y = adapt_double_.getData();
-				*this >> adapt_double_; positions[actAtom].z = adapt_double_.getData();
+				*this >> adapt_double_; positions[actAtom].x = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; positions[actAtom].y = adapt_double_.getData() * to_angstrom;
+				*this >> adapt_double_; positions[actAtom].z = adapt_double_.getData() * to_angstrom;
 			}
 			snapshot.setAtomPositions(positions);
 		}
@@ -557,9 +565,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					*this >> adapt_float_; velocities[actAtom].x = adapt_float_.getData();
-					*this >> adapt_float_; velocities[actAtom].y = adapt_float_.getData();
-					*this >> adapt_float_; velocities[actAtom].z = adapt_float_.getData();
+					*this >> adapt_float_; velocities[actAtom].x = adapt_float_.getData() * to_angstrom;
+					*this >> adapt_float_; velocities[actAtom].y = adapt_float_.getData() * to_angstrom;
+					*this >> adapt_float_; velocities[actAtom].z = adapt_float_.getData() * to_angstrom;
 
 				}
 					snapshot.setAtomVelocities(velocities);
@@ -572,9 +580,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{
-					*this >> adapt_double_; velocities[actAtom].x = adapt_double_.getData();
-					*this >> adapt_double_; velocities[actAtom].y = adapt_double_.getData();
-					*this >> adapt_double_; velocities[actAtom].z = adapt_double_.getData();
+					*this >> adapt_double_; velocities[actAtom].x = adapt_double_.getData() * to_angstrom;
+					*this >> adapt_double_; velocities[actAtom].y = adapt_double_.getData() * to_angstrom;
+					*this >> adapt_double_; velocities[actAtom].z = adapt_double_.getData() * to_angstrom;
 				}
 				snapshot.setAtomVelocities(velocities);
 			}
@@ -588,9 +596,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 			  {
-					*this >> adapt_float_; forces[actAtom].x = adapt_float_.getData();
-					*this >> adapt_float_; forces[actAtom].y = adapt_float_.getData();
-					*this >> adapt_float_; forces[actAtom].z = adapt_float_.getData();
+					*this >> adapt_float_; forces[actAtom].x = adapt_float_.getData() * to_angstrom;
+					*this >> adapt_float_; forces[actAtom].y = adapt_float_.getData() * to_angstrom;
+					*this >> adapt_float_; forces[actAtom].z = adapt_float_.getData() * to_angstrom;
 				}
 				snapshot.setAtomForces(forces);
 			}
@@ -602,9 +610,9 @@ namespace BALL
 
 				for (actAtom=0; actAtom<noa; actAtom++)
 				{
-					*this >> adapt_double_; forces[actAtom].x = adapt_double_.getData();
-					*this >> adapt_double_; forces[actAtom].y = adapt_double_.getData();
-					*this >> adapt_double_; forces[actAtom].z = adapt_double_.getData();
+					*this >> adapt_double_; forces[actAtom].x = adapt_double_.getData() * to_angstrom;
+					*this >> adapt_double_; forces[actAtom].y = adapt_double_.getData() * to_angstrom;
+					*this >> adapt_double_; forces[actAtom].z = adapt_double_.getData() * to_angstrom;
 				}
 				snapshot.setAtomForces(forces);
 			}
@@ -613,6 +621,203 @@ namespace BALL
 		timestep_index_++;
 
 		return true;
+	}
+
+	bool TRRFile::skipFrame()
+	{
+ 		if (!readNextHeader(header_)) return false;
+
+		Size noa = header_.number_of_atoms;
+
+		// Try to figure out the precision.
+		precision_ = header_.position_data_size / (3*noa);
+
+		if (!( (precision_ == 4) || (precision_ == 8) ))
+		{
+			Log.error() << "TRRFile::skipFrame(): "
+									<< "the TRR file header number "
+									<< header_.timestep_index
+									<< " is corrupt!"
+				          << endl;
+
+			return false;
+		}
+
+		// Now find out if the bounding box information is stored in
+		// short or long format.
+		Size bounding_box_block_length = header_.bounding_box_data_size / precision_;
+
+		if (!(   (bounding_box_block_length == 3) 
+				  || (bounding_box_block_length == 9)))
+		{
+			Log.error() << "TRRFile::read(): "
+									<< "the TRR file header number "
+									<< header_.timestep_index
+									<< " is corrupt!"
+									<< endl;
+
+			return false;
+		}
+
+		// Read the bounding box information.
+		if (bounding_box_block_length == 3)
+		{
+			// The information is stored in the short format.
+			if (precision_ == 4)
+			{
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+			}
+			else
+			{
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+			}
+		}
+		else
+		{
+			if (precision_ == 4)
+			{
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+			}
+			else
+			{
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+			}
+		}
+
+		// Now it is possible that there are vir_size and pres_size blocks.
+		// If so, we'll just discard the data there.
+		Size actAtom;
+
+		if ((header_.vir_size + header_.pres_size) != 0)
+		{
+			for (actAtom=0; actAtom<(header_.vir_size + header_.pres_size); actAtom++)
+			{
+				if (precision_ == 4)
+				{
+					*this >> adapt_double_;
+				}
+				else
+				{
+					*this >> adapt_float_;
+				}
+			}
+		}
+
+		// With this obstacle out of the way, we can now concentrate on the positions
+		// of the atoms in the system.
+		if (precision_ == 4)
+		{
+			for (actAtom=0; actAtom<noa; actAtom++)
+			{
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+				*this >> adapt_float_;
+			}
+		}
+		else
+		{
+			for (actAtom=0; actAtom<noa; actAtom++)
+			{
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+				*this >> adapt_double_;
+			}
+		}
+	
+		if (has_velocities_)
+		{
+			if (precision_ == 4)
+			{
+				for (actAtom=0; actAtom<noa; actAtom++)
+			  {
+					*this >> adapt_float_;
+					*this >> adapt_float_;
+					*this >> adapt_float_;
+
+				}
+			}
+			else
+		  {
+				for (actAtom=0; actAtom<noa; actAtom++)
+				{
+					*this >> adapt_double_;
+					*this >> adapt_double_;
+					*this >> adapt_double_;
+				}
+			}
+		}
+
+		if (has_forces_)
+		{
+			if (precision_ == 4)
+			{
+				for (actAtom=0; actAtom<noa; actAtom++)
+			  {
+					*this >> adapt_float_;
+					*this >> adapt_float_;
+					*this >> adapt_float_;
+				}
+			}
+			else
+		  {
+				for (actAtom=0; actAtom<noa; actAtom++)
+				{
+					*this >> adapt_double_;
+					*this >> adapt_double_;
+					*this >> adapt_double_;
+				}
+			}
+		}
+
+		return true;
+	}
+
+	Size TRRFile::getNumberOfSnapShots()
+	{
+		// do we have current information?
+		Size current_file_size = getSize();
+
+		if (current_file_size == old_file_size_)
+		{
+			return number_of_snapshots_;
+		}
+
+		// save position
+		Position old_ts_pos = tellg();
+
+		// rewind
+		seekg(0);
+		number_of_snapshots_ = 0;
+
+		while (skipFrame())
+			number_of_snapshots_++;
+
+		// and go back
+		seekg(old_ts_pos);
+
+		old_file_size_ = current_file_size;
+
+		return number_of_snapshots_;
 	}
 
 	TRRFile& TRRFile::operator >> (SnapShotManager& ssm)
@@ -649,6 +854,12 @@ namespace BALL
 		return true;
 	}
 
+	bool TRRFile::readHeader()
+	{
+		// TRRFiles don't have a common file header...
+		return true;
+	}
+
 	bool TRRFile::init()
 	{
 		if (sizeof(Size) != 4)
@@ -678,7 +889,7 @@ namespace BALL
 		// try to determine the endianness of the file
 
 		*this >> adapt_size_;
-		Log.info() << "first test" << std::endl;
+
 		this->reopen();
 		if (adapt_size_.getData() != 1993)
 		{
@@ -704,7 +915,12 @@ namespace BALL
 			}
 		}
 
-		this->reopen();
+		// read a first header to extract the number of atoms
+		reopen();
+		readNextHeader(header_);
+		number_of_atoms_ = header_.number_of_atoms;
+		reopen();
+
 		return true;
 	}
 }
