@@ -60,7 +60,7 @@ void validateParameters(CommandlineParser& params)
 	}
 }
 
-String getFileExtension(String& fileName)
+String getFileFormat(String& fileName)
 {
     // locate the first dot, from right to left
     int dotIndex = fileName.find_last_of('.');
@@ -71,18 +71,21 @@ String getFileExtension(String& fileName)
     return fileName.substr(dotIndex + 1, fileName.length() - dotIndex - 1);
 }
 
+String getOutputFileFormat(CommandlineParser& parameters)
+{
+	// give preference to the 'output_format' parameter,
+	// if not found, then use the format of the input file
+	String format = parameters.get("output_format");
+	if (format != CommandlineParser::NOT_FOUND)
+	{
+		return format;
+	}
+	String inputFile = parameters.get("i");
+	return getFileFormat(inputFile);
+}
+
 String getOutputFileName(CommandlineParser& parameters, int index)
 {
-	String inputFileName = parameters.get("i");
-	String extension = getFileExtension(inputFileName);
-    // check that we have a supported file extension
-    if (!(extension == "mol2" || extension == "sdf" || extension == "drf"))
-    {
-		Log.error() << "Error: Extension of file '" << inputFileName << "' not supported!" << endl;
-        exit(1);
-    }
-    // make things easier and append a dot to the extension
-    extension = '.' + extension;
 	String outputNamePattern = parameters.get("output_name_pattern");
 	String outputFileName;
 	if (outputNamePattern != CommandlineParser::NOT_FOUND)
@@ -92,6 +95,9 @@ String getOutputFileName(CommandlineParser& parameters, int index)
     }
     else
     {
+		String inputFileName = parameters.get("i");
+		String extension = '.' + getFileFormat(inputFileName);
+
 		// if invoked with -i ligands.sdf, output name will be ligands_<index>.sdf
 		outputFileName = inputFileName.before(extension) + "_" + String(index) + extension;
     }
@@ -106,6 +112,7 @@ int main(int argc, char* argv[])
     parpars.registerParameter("ligands_per_file", "max. number of ligands to output to a file", BALL::INT, false);
 	parpars.registerParameter("output_name_pattern", "pattern that will be used to generate the names of the output files, see notes and examples below.", BALL::STRING, false);
 	parpars.registerParameter("o", "output filenames; if none are specified, input filename postfixed with IDs will be used", OUTFILELIST, false);
+	parpars.registerParameter("output_format", "format of the output filenames, see notes and examples below.", BALL::STRING, false);
 	String man =
 			"LigandFileSplitter splits a molecule file into a given number of subsets.\n"
 			"Note that the molecules are not sorted in any way for this.\n\n"
@@ -117,11 +124,18 @@ int main(int argc, char* argv[])
 			"    The files will be named ligands_0.sdf, ligands_1.sdf ... ligands_N.sdf\n\n"
 			"$ LigandFileSplitter -i ligands.sdf -ligands_per_file 5 -output_name_pattern split_ligands-%d.sdf\n"
 			"    will split the input file ligands.sdf in as many files needed to fit at most 5 ligands per file.\n"
-			"    The files will be named split_ligands-0.sdf, split_ligands-1.sdf, ... , split_ligands-N.sdf\n\n"
+			"    The files will be named split_ligands-0.sdf, split_ligands-1.sdf, ... , split_ligands-N.sdf\n"
+			"    and they will have sdf format.\n\n"
+			"$ LigandFileSplitter -i ligands.sdf -output_name_pattern split_ligands.mol2_%d -output_format mol2 -no 100\n"
+			"    will split the input file ligands.sdf in 100 files using the following names:\n"
+			"    split_ligands.mol2_0, split_ligands.mol2_1, ... , split_ligands.mol2_99\n"
+			"    The output files will have mol2 format. If the 'output_format' parameter is not given, then the ouput files\n"
+			"    will have the same format as the input file (sdf).\n\n"
 			"NOTE:\n"
 			"    output_name_pattern accepts a printf-like pattern, expecting exactly one decimal integer placeholder, %d.\n"
 			"    The following are valid patterns: output_ligand.sdf_%d, split_%d.mol, %d_lig.drf\n"
-			"    The following are invalid patterns: output_%f.sdf, ligands.drf_%u, %d_lig_%d.mol, molecules.sdf";
+			"    The following are invalid patterns: output_%f.sdf, ligands.drf_%u, %d_lig_%d.mol, molecules.sdf\n"
+			"    If you want the output files to have a different format than the given input file, use the 'output_format' parameter.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
@@ -197,16 +211,27 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < no_splits; i++)
 	{
 		String filename;
+		GenericMolFile* output;
 		if ((int)output_files.size() > i)
 		{
 			filename = output_files[i];
+			// honor the use of "output_format"
+			String format = parpars.get("output_format");
+			if (format != CommandlineParser::NOT_FOUND)
+			{
+				output = MolFileFactory::open(filename, ios::out, format);
+			}
+			else
+			{
+				output = MolFileFactory::open(filename, ios::out, input);
+			}
+
 		}
 		else
 		{
             filename = getOutputFileName(parpars, i);
+			output = MolFileFactory::open(filename, ios::out, getOutputFileFormat(parpars));
 		}
-
-		GenericMolFile* output = MolFileFactory::open(filename, ios::out, input);
 
 		DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
 		if (drf_input && drf_output) drf_output->disableAutomaticResultCreation();
