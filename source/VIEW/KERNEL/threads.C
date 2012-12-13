@@ -16,6 +16,7 @@
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 #include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
+#include <BALL/FORMAT/trajectoryFile.h>
 #include <BALL/FORMAT/DCDFile.h>
 
 #include <QtGui/QApplication>
@@ -109,7 +110,7 @@ namespace BALL
 		SimulationThread::SimulationThread()
 			: BALLThread(),
 				steps_between_updates_(0),
-				dcd_file_(0)
+				trajectory_file_(0)
 		{
 			setTerminationEnabled(true);
 		}
@@ -123,12 +124,12 @@ namespace BALL
 
 		void SimulationThread::finish_()
 		{
-			if (dcd_file_ != 0)
+			if (trajectory_file_ != 0)
 			{
-				dcd_file_->close();
-				String filename = dcd_file_->getName();
-				delete dcd_file_;
-				dcd_file_ = 0;
+				trajectory_file_->close();
+				String filename = trajectory_file_->getName();
+				delete trajectory_file_;
+				trajectory_file_ = 0;
 				// we will reopen the file to prevent problems when a user runs an other sim
 				SnapShotManagerDataset* set = new SnapShotManagerDataset;
 				set->setName(filename);
@@ -202,8 +203,8 @@ namespace BALL
 			}
 			catch(Exception::GeneralException& e)
 			{
-				delete dcd_file_;
-				dcd_file_ = 0;
+				delete trajectory_file_;
+				trajectory_file_ = 0;
 
 				String txt = String(tr("Exception was thrown during minimization")) + ": " + __FILE__ + ": " + String(__LINE__) + " :\n" 
 											+ e.getMessage();
@@ -253,7 +254,7 @@ namespace BALL
 				}
 				ForceField& ff = *md_->getForceField();
 
-				SnapShotManager manager(ff.getSystem(), &ff, dcd_file_);
+				SnapShotManager manager(ff.getSystem(), &ff, trajectory_file_);
 				manager.setFlushToDiskFrequency(10);
 				bool ok = true;
 
@@ -275,10 +276,10 @@ namespace BALL
 
 
 					if (save_images_) exportSceneToPNG_();
-					if (dcd_file_) 		manager.takeSnapShot();
+					if (trajectory_file_) 		manager.takeSnapShot();
 				}
 
-				if (dcd_file_) manager.flushToDisk();
+				if (trajectory_file_) manager.flushToDisk();
 
  				output_(ff.getResults());
 				output_((String)tr("final RMS gradient") + "    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   " + (String)tr("after") 
@@ -298,11 +299,11 @@ namespace BALL
 											+ __FILE__ + ": " + String(__LINE__) + " \n" + e.getMessage();
 				output_(txt, true);
 
-				if (dcd_file_ != 0)
+				if (trajectory_file_ != 0)
 				{
-					dcd_file_->close();
-					delete dcd_file_;
-					dcd_file_ = 0;
+					trajectory_file_->close();
+					delete trajectory_file_;
+					trajectory_file_ = 0;
 				}
 
 				finish_();
