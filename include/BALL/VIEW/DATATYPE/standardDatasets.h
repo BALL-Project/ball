@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardDatasets.h,v 1.1.4.1 2007-03-25 21:25:42 oliver Exp $
-//
 
 #ifndef BALL_VIEW_DATATYPE_STANDARDDATASETS_H
 #define BALL_VIEW_DATATYPE_STANDARDDATASETS_H
@@ -34,6 +32,8 @@
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
+
+#include <boost/shared_ptr.hpp>
 
 namespace BALL
 {
@@ -189,7 +189,7 @@ class BALL_VIEW_EXPORT TrajectoryController
 	protected:
 	void deleteDataset_(Dataset* set);
 
-	SnapshotVisualisationDialog* 	dialog_;
+	HashMap<SnapShotManager*, boost::shared_ptr<SnapshotVisualisationDialog> > dialogs_per_ssm_;
 };
 
 /////////////////////////////////////////////////////////////////////////////
