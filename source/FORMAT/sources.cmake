@@ -20,6 +20,7 @@ SET(SOURCES_LIST
 	lineBasedFile.C
 	molDB.C
 	MOLFile.C
+	molFileFactory.C
 	MOPACInputFile.C
 	MOPACOutputFile.C
 	SDFile.C
@@ -36,11 +37,11 @@ SET(SOURCES_LIST
 	PDBRecords.C
 	pubchemDownloader.C
 	resourceFile.C
+	SCWRLRotamerFile.C
 	trajectoryFile.C
+	trajectoryFileFactory.C
 	TRRFile.C
 	XYZFile.C
-	SCWRLRotamerFile.C
-	molFileFactory.C
 )
 
 IF (BALL_HAS_QTSQL)
