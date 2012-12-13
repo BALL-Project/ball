@@ -14,7 +14,7 @@ namespace BALL
 	class MolecularDynamics;
 	class Composite;
 	class DockingAlgorithm;
-	class DCDFile;
+	class TrajectoryFile;
 
 namespace VIEW
 {
@@ -179,10 +179,10 @@ namespace VIEW
 				{ steps_between_updates_ = steps;}
 
 			///
-			void setDCDFile(DCDFile* file) {dcd_file_ = file;}
+			void setTrajectoryFile(TrajectoryFile* file) {trajectory_file_ = file;}
 
 			///
-			DCDFile* getDCDFile() { return dcd_file_;}
+			TrajectoryFile* getTrajectoryFile() { return trajectory_file_;}
 
 			protected:
 	
@@ -192,8 +192,8 @@ namespace VIEW
 			/// Notifies the main thread to delete the simulating thread
 			void finish_();
 
-			Size 					steps_between_updates_;
-			DCDFile*   		dcd_file_;
+			Size 					        steps_between_updates_;
+			TrajectoryFile*   		trajectory_file_;
 		};
 
 
