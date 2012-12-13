@@ -16,7 +16,8 @@
 #include <BALL/VIEW/DIALOGS/fieldLinesDialog.h>
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
 
-#include <BALL/FORMAT/DCDFile.h>
+#include <BALL/FORMAT/trajectoryFile.h>
+#include <BALL/FORMAT/trajectoryFileFactory.h>
 #include <BALL/FORMAT/DSN6File.h>
 #include <BALL/FORMAT/CCP4File.h>
 #include <BALL/FORMAT/amiraMeshFile.h>
@@ -778,18 +779,17 @@ namespace BALL
 		String TrajectoryController::type = "Trajectory";
 		
 		TrajectoryController::TrajectoryController()
-			: DatasetController(),
-				dialog_(0)
+			: DatasetController()
 		{
 			type_ = type;
 			file_formats_.push_back("dcd");
+			file_formats_.push_back("trr");
 			setIdentifier("TrajectoryController");
 			registerThis();
 		}
 
 		TrajectoryController::TrajectoryController(TrajectoryController& dc)
-			: DatasetController(dc),
-				dialog_(0)
+			: DatasetController(dc)
 		{
 			setIdentifier("TrajectoryController");
 			registerThis();
@@ -811,6 +811,9 @@ namespace BALL
 			SnapShotManager* data = getData(set);
 			if (data == 0) return;
 			delete data;
+
+			if (dialogs_per_ssm_.has(data))
+				dialogs_per_ssm_.erase(dialogs_per_ssm_.find(data));
 		}
 
 
@@ -826,16 +829,16 @@ namespace BALL
 			System* system = getMainControl()->getSelectedSystem();
 			if (system == 0) return 0;
 
-			DCDFile* dcd = new DCDFile(filename, std::ios::in);
+			TrajectoryFile* trajectory_file = TrajectoryFileFactory::open(filename, std::ios::in);
 
-			if (dcd->getNumberOfAtoms() != system->countAtoms())
+			if (trajectory_file->getNumberOfAtoms() != system->countAtoms())
 			{
 				setStatusbarText(tr("Number of atoms do not match. Aborting..."));
-				delete dcd;
+				delete trajectory_file;
 				return 0;
 			}
 
-			SnapShotManager* manager = new SnapShotManager(system, 0, dcd);
+			SnapShotManager* manager = new SnapShotManager(system, 0, trajectory_file);
 
 			String name = getNameFromFileName_(filename);
 
@@ -882,13 +885,6 @@ namespace BALL
 
 		bool TrajectoryController::visualizeTrajectory()
 		{
-			if (dialog_ != 0) 
-			{
-				dialog_->hide();
-				delete dialog_;
-				dialog_ = 0;
-			}
-
 			SnapShotManager* ssm = getData(getSelectedDataset());
 			if (ssm == 0) 
 			{
@@ -896,9 +892,19 @@ namespace BALL
 				return false;
 			}
 
-			dialog_ = new SnapshotVisualisationDialog(getDatasetControl());
-			dialog_->setSnapShotManager(ssm);
-			dialog_->show();
+			if (!dialogs_per_ssm_.has(ssm))
+			{
+				boost::shared_ptr<SnapshotVisualisationDialog> dialog(new SnapshotVisualisationDialog(getDatasetControl()));
+
+				dialog->setSnapShotManager(ssm);
+				dialog->show();
+
+				dialogs_per_ssm_[ssm] = dialog;
+			}
+			else
+			{
+				dialogs_per_ssm_[ssm]->show();
+			}
 
 			return true;
 		}
