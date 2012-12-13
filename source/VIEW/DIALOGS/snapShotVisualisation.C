@@ -384,7 +384,7 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 		return;
 	}
 
-	snap_shot_manager_->clearBuffer();
+//	snap_shot_manager_->clearBuffer();
   tmp_.setNum(snap_shot_manager_->getTrajectoryFile()->getNumberOfSnapShots());
 	numberOfSnapshots->setText(tmp_);
 	endSnapshot->setText(tmp_);
@@ -498,6 +498,7 @@ void SnapshotVisualisationDialog::show()
 	}
 	QDialog::show();
 	snap_shot_manager_->applyFirstSnapShot();
+	unlockComposites();
 }
 
 void SnapshotVisualisationDialog::closeEvent(QCloseEvent*)
