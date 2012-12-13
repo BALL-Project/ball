@@ -21,7 +21,7 @@ class TrajectoryFile
 				virtual void clear();
 				bool operator == (const TrajectoryFile&) const;
 
-				Size getNumberOfSnapShots() const;
+				Size getNumberOfSnapShots();
 				Size getNumberOfAtoms() const;
 
 				virtual bool readHeader();

@@ -73,7 +73,7 @@ namespace BALL
 		return false;
 	}
 
-	Size TrajectoryFile::getNumberOfSnapShots() const
+	Size TrajectoryFile::getNumberOfSnapShots()
 	{
 		return number_of_snapshots_;
 	}
