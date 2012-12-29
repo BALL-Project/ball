@@ -92,6 +92,18 @@ namespace BALL
 						/// The materials
 						std::vector<RTpieCpp::AppearanceHandle> material_handles;
 
+						/// Cut-plane geometries
+						std::vector<RTpieCpp::GeometryHandle> cutPlanes;
+
+						/// Cut-plane meshes
+						std::vector<RTpieCpp::MeshHandle> cutPlaneMeshes;
+
+						/// Cut-plane instances
+						std::vector<RTpieCpp::InstanceHandle> cutPlaneInstances;
+
+						/// Cut-planes material
+						RTpieCpp::AppearanceHandle cutPlaneShader;
+
 						/// Mark previously disabled representations
 						bool has_been_disabled;
 				};

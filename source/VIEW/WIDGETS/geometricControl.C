@@ -22,8 +22,8 @@
 
 #include <QtGui/QFileDialog>
 #include <QtGui/QMenuBar>
-#include <QtGui/QToolTip> 
-#include <QtGui/QInputDialog> 
+#include <QtGui/QToolTip>
+#include <QtGui/QInputDialog>
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/analyticalGeometry.h>
@@ -48,7 +48,7 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new GeometricControl " << this << std::endl;
 		#endif
-			
+
 			listview->setObjectName("MolecularControlList");
 			listview->headerItem()->setText(0, tr("[visible] Index"));
 			listview->headerItem()->setText(1, tr("Model"));
@@ -67,31 +67,31 @@ namespace BALL
 									"6." + (String)tr("column") + ": " + (String)tr("number of used molecular entities, number of geometric objects") + ". ";
 
 			listview->setToolTip(txt.c_str());
-			
+
 			registerWidget(this);
 
 			clipping_plane_context_menu_.addAction(tr("Hide/Show"), this, SLOT(hideShowClippingPlane()));
-			clipping_plane_context_menu_.addAction(tr("Flip"), this, SLOT(flipClippingPlane()));	
-			clipping_plane_context_menu_.addAction(tr("Set to position..."), this, SLOT(setClippingPosition()));	
-			clipping_plane_context_menu_.addAction(tr("Set to x axis"), this, SLOT(setClippingPlaneX()));	
-			clipping_plane_context_menu_.addAction(tr("Set to y axis"), this, SLOT(setClippingPlaneY()));	
-			clipping_plane_context_menu_.addAction(tr("Set to z axis"), this, SLOT(setClippingPlaneZ()));	
-			clipping_plane_context_menu_.addAction(tr("Clip <-> Cap"), this, SLOT(flipClippingCapping()));	
-			clipping_plane_context_menu_.addAction(tr("Select Representations"), this, SLOT(selectClipRepresentations()));	
+			clipping_plane_context_menu_.addAction(tr("Flip"), this, SLOT(flipClippingPlane()));
+			clipping_plane_context_menu_.addAction(tr("Set to position..."), this, SLOT(setClippingPosition()));
+			clipping_plane_context_menu_.addAction(tr("Set to x axis"), this, SLOT(setClippingPlaneX()));
+			clipping_plane_context_menu_.addAction(tr("Set to y axis"), this, SLOT(setClippingPlaneY()));
+			clipping_plane_context_menu_.addAction(tr("Set to z axis"), this, SLOT(setClippingPlaneZ()));
+			clipping_plane_context_menu_.addAction(tr("Clip <-> Cap"), this, SLOT(flipClippingCapping()));
+			clipping_plane_context_menu_.addAction(tr("Select Representations"), this, SLOT(selectClipRepresentations()));
 		}
 
 		GeometricControl::~GeometricControl()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << this << " of class GeometricControl" << std::endl;
-			#endif 
+			#endif
 		}
 
 		void GeometricControl::addRepresentation(Representation& rep)
 		{
-			if (representation_to_item_.has(&rep)) 
+			if (representation_to_item_.has(&rep))
 			{
-				Log.error() << (String)tr("Tried to add an already inserted Representation in ") 
+				Log.error() << (String)tr("Tried to add an already inserted Representation in ")
 										<< __FILE__ << " " << __LINE__ << std::endl;
 				return;
 			}
@@ -105,14 +105,14 @@ namespace BALL
 			delete representation_to_item_[&rep];
 
 			item_to_representation_.erase(representation_to_item_[&rep]);
-			representation_to_item_.erase(&rep);		
+			representation_to_item_.erase(&rep);
 		}
 
 		void GeometricControl::updateRepresentation(Representation& rep)
 		{
 			if (getMainControl()->isBusy()) return;
 
-			const HashMap<Representation*, QTreeWidgetItem*>::Iterator to_find = 
+			const HashMap<Representation*, QTreeWidgetItem*>::Iterator to_find =
 				representation_to_item_.find(&rep);
 
 			if (to_find == representation_to_item_.end()) return;
@@ -180,7 +180,7 @@ namespace BALL
 			}
 
 			if (!RTTI::isKindOf<RepresentationMessage> (*message)) return;
-			
+
 			Representation* rep =	(RTTI::castTo<RepresentationMessage> (*message))->getRepresentation();
 			if (rep == 0) return;
 
@@ -198,7 +198,7 @@ namespace BALL
 				case RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL:
 					addRepresentation(*rep);
 					return;
-			
+
 				case RepresentationMessage::REMOVE:
 					removeRepresentation(*rep);
 					return;
@@ -223,9 +223,9 @@ namespace BALL
 
 			Representation* rep = 0;
 			ClippingPlane* plane = 0;
-			
+
 			if (item_to_representation_.has(context_item_)) rep = item_to_representation_[context_item_];
-			else if (item_to_plane_.has(context_item_))     plane = item_to_plane_[context_item_]; 
+			else if (item_to_plane_.has(context_item_))     plane = item_to_plane_[context_item_];
 
 			context_menu_.clear();
 			context_menu_actions_.clear();
@@ -236,7 +236,7 @@ namespace BALL
 			addItem_((String)tr("Duplicate"), SLOT(duplicate()));
 			addItem_((String)tr("Move"), SLOT(enterMoveMode()));
 
-			if (rep->getModelType() == MODEL_PROXIMITY_LIGHT)
+			if (rep && rep->getModelType() == MODEL_PROXIMITY_LIGHT)
 			{
 				addItem_((String)tr("Setup Proximity Light"), SLOT(setupProximityLight()));
 			}
@@ -246,8 +246,8 @@ namespace BALL
 				context_menu_.addSeparator();
 				addItem_((String)tr("Save Surface"), SLOT(saveSurface()));
 				addItem_((String)tr("Select Atoms"), SLOT(selectAtoms()));
-				addItem_((String)tr("Modify Model"), SLOT(modifyRepresentation_()));	
-				addItem_((String)tr("Modify Representation"), SLOT(show()), modify_rep_dialog_);	
+				addItem_((String)tr("Modify Model"), SLOT(modifyRepresentation_()));
+				addItem_((String)tr("Modify Representation"), SLOT(show()), modify_rep_dialog_);
 				addItem_((String)tr("Rename"), SLOT(renameRepresentation()));
 				context_menu_.addSeparator();
 				Size acs = context_menu_actions_.size() - 1;
@@ -261,7 +261,7 @@ namespace BALL
 
 					for (Position p = all_pos + 1; p <= acs; p++)
 					{
-						context_menu_actions_[p]->setEnabled(false); 
+						context_menu_actions_[p]->setEnabled(false);
 					}
 					return;
 				}
@@ -276,12 +276,12 @@ namespace BALL
 				{
 					for (Position p = 1; p <= acs; p++)
 					{
-						context_menu_actions_[p]->setEnabled(false); 
+						context_menu_actions_[p]->setEnabled(false);
 					}
 				}
 
 				// not modifyable
-				if (rep->getModelType() >= MODEL_LABEL)
+				if (rep && rep->getModelType() >= MODEL_LABEL)
 				{
 					context_menu_actions_[6]->setEnabled(false);
 				}
@@ -321,7 +321,7 @@ namespace BALL
 			ignore_change_ = true;
 			if (rep.isHidden()) new_item->setCheckState(0, Qt::Unchecked);
 			ignore_change_ = false;
-			
+
 			listview->setItemSelected(new_item, true);
  			deselectOtherControls_();
 			updateSelection();
@@ -330,7 +330,7 @@ namespace BALL
 		void GeometricControl::deleteCurrentItems()
 		{
 			if (getMainControl()->getRepresentationManager().updateRunning() ||
-			    creating_representations_) 
+			    creating_representations_)
 			{
 				setStatusbarText((String)tr("Could not delete Representation while update is running!"), true);
 				return;
@@ -367,9 +367,9 @@ namespace BALL
 			if (state != representation.isHidden()) return;
 
 			representation.setHidden(!state);
-			if (!representation.isHidden()) 
+			if (!representation.isHidden())
 			{
-				representation.update(false); 
+				representation.update(false);
 			}
 			else
 			{
@@ -388,7 +388,7 @@ namespace BALL
 			buildContextMenu();
 			context_menu_.popup(mapToGlobal(pos));
 		}
-		
+
 
 		void GeometricControl::modifyRepresentation_()
 		{
@@ -427,12 +427,12 @@ namespace BALL
 			modify_rep_dialog_->setRepresentation(rep);
 			notify_(new RepresentationMessage(*rep, RepresentationMessage::SELECTED));
 
-			if (rep == 0 || !getMainControl()->getRepresentationManager().has(*rep)) 
+			if (rep == 0 || !getMainControl()->getRepresentationManager().has(*rep))
 			{
-				return; 
+				return;
 			}
 
-			if (rep->getComposites().size() > 0) 
+			if (rep->getComposites().size() > 0)
 			{
 				String name;
 				const Composite* c_ptr = *rep->getComposites().begin();
@@ -456,7 +456,7 @@ namespace BALL
 				{
 					name = ac->getProperty("FROM_FILE").getString() + "->" + name;
 				}
-				
+
 				name.trimRight("->");
 
 				if (rep->getComposites().size() > 1) name += "...";
@@ -478,7 +478,7 @@ namespace BALL
 				if (item_to_representation_.has(*sel_it))
 					selection.push_back(item_to_representation_[*sel_it]);
 			}
-			
+
 			return selection;
 		}
 
@@ -502,7 +502,7 @@ namespace BALL
 		void GeometricControl::focus()
 		{
 			list<Representation*> reps = getHighlightedRepresentations();
-			if (reps.size() == 1) 
+			if (reps.size() == 1)
 			{
 				getMainControl()->getRepresentationManager().focusRepresentation(**reps.begin());
 				return;
@@ -525,7 +525,7 @@ namespace BALL
 		{
 			GenericControl::initializeWidget(main_control);
 
-			menu_clipping_plane_ = insertMenuEntry(MainControl::DISPLAY_CREATE, tr("Clipping Plane"), 
+			menu_clipping_plane_ = insertMenuEntry(MainControl::DISPLAY_CREATE, tr("Clipping Plane"),
 			                                       this, SLOT(createNewClippingPlane()), "Shortcut|Display|Create|ClippingPlane",
 																						 QKeySequence(), tr("Add an OpenGL Clipping Plane to the Scene"),
 																						 UIOperationMode::MODE_ADVANCED);
@@ -535,7 +535,7 @@ namespace BALL
 																					 SLOT(loadSurface()), "Shortcut|Display|Create|Surface",
 																					 QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
-			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, tr("Modify Representation"), modify_rep_dialog_, 
+			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, tr("Modify Representation"), modify_rep_dialog_,
 			                                  SLOT(show()), "Shortcut|Display|Modify Representation", QKeySequence(),
 																				tr(""), UIOperationMode::MODE_ADVANCED);
 
@@ -698,10 +698,10 @@ namespace BALL
 
 			Vector3 vv = camera.getViewVector();
 			if (!Maths::isZero(vv.getSquareLength())) vv.normalize();
-	
+
 			Vector3 n(vv + -camera.getRightVector() + camera.getLookUpVector());
 			if (!Maths::isZero(n.getSquareLength())) n.normalize();
-		
+
 			plane->setNormal(n);
 			plane->setPoint(camera.getLookAtPosition() + vv * 10);
 
@@ -753,7 +753,7 @@ namespace BALL
 					ignore_change_ = true;
 					new_item->setCheckState(0, Qt::Checked);
 
-					if (!plane->isActive()) 
+					if (!plane->isActive())
 					{
 						ignore_change_ = true;
 						new_item->setCheckState(0, Qt::Unchecked);
@@ -814,7 +814,7 @@ namespace BALL
 		{
 			if (col != 0) return;
 
-			if (ignore_change_) 
+			if (ignore_change_)
 			{
 				ignore_change_ = false;
 				return;
@@ -835,7 +835,7 @@ namespace BALL
 
 			ClippingPlane* plane = 0;
 			Representation* rep  = 0;
-			
+
 			if 			(item_to_plane_.has(item)) 					plane = item_to_plane_[item];
 			else if (item_to_representation_.has(item))	rep   = item_to_representation_[item];
 
@@ -886,7 +886,7 @@ namespace BALL
 			QString qresult = QFileDialog::getSaveFileName(
 												0,
 												tr("Export Surface"),
-												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + 
+												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) +
 												 "surface.dat").c_str(),
 												"*.*");
 

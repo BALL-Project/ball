@@ -858,6 +858,11 @@ namespace BALL
 				rt_material = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
 			}
 
+			rt_data.cutPlaneShader = sceneHandle.createAppearance("PhongShader");
+			rt_data.cutPlaneShader.setParam3f("diffuseColor", float3(0.0f, 0.0, 1.0f));
+			rt_data.cutPlaneShader.setParam3f("ambientIntensity", float3(.0f, .0f, .0f));
+			rt_data.cutPlaneShader.setParamf("transparency", 0.8f);
+
 			//
 			rt_data.object_handles.push_back(
 					sceneHandle.createGeometry());
@@ -1227,6 +1232,31 @@ namespace BALL
 			renderTask.setAccumulatePixels(use_loop);
 		}
 
+		// line x plane intersection
+		void intersection(Vector3 p, Vector3 d, // line = point + direction
+										 Vector3 o, Vector3 n, // plane = origin + normal
+										 Vector3* op, int& on)
+		{
+				float c = - o * n;
+				float dn = d * n;
+				if(dn == 0.0f)
+						return on;
+				float t = - (n * p + c) / dn;
+				if(t >= 0.0f && t <= 1.0f)
+				{
+						op[on++] = p + t * d;
+				}
+		}
+
+		struct PlanarPointsCompare {
+				Vector3 orig, norm;
+				PlanarPointsCompare(Vector3 _orig, Vector3 _norm) : norm(_norm), orig(_orig) {}
+				bool operator() (const Vector3 &a, const Vector3 &b) {
+						Vector3 v = (a - orig) % (b - orig);
+						return (v * norm) < 0;
+				}
+		};
+
 		void RTfactRenderer::renderToBufferImpl(FrameBufferPtr buffer)
 		{
 			if (!getMainControl())
@@ -1268,6 +1298,7 @@ namespace BALL
 
 					const Representation& rep = **it;
 					RTfactData& rtfactData = objects_[&rep];
+					bool cappingEnabled = false;
 
 					vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
 					for (;plane_it != vc.end(); plane_it++)
@@ -1288,6 +1319,8 @@ namespace BALL
 									points[*iit].push_back(p);
 
 							}
+
+							cappingEnabled = plane.cappingEnabled();
 					}
 
 					std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
@@ -1309,9 +1342,95 @@ namespace BALL
 									data[5*n + i] = instancePoints[i].z;
 							}
 
-							iit->setCutPlane(n,
+							iit->setCutPlanes(cappingEnabled, n,
 									data+0*n, data+1*n, data+2*n,
 									data+3*n, data+4*n, data+5*n);
+
+
+							//visualization
+							float min[3];
+							float max[3];
+							iit->getBounds(min, max);
+
+							rtfactData.cutPlaneInstances.clear();
+							rtfactData.cutPlaneMeshes.clear();
+							rtfactData.cutPlanes.clear();
+
+							for(int j = 0; j < n; j++)
+							{
+									int m = 0;
+									Vector3 p[6];
+
+									//
+									intersection(Vector3(min[0], min[1], min[2]), Vector3(max[0]-min[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(min[0], min[1], min[2]), Vector3(0, max[1]-min[1], 0), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(min[0], min[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(max[0], max[1], max[2]), Vector3(min[0]-max[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(max[0], max[1], max[2]), Vector3(0, min[1]-max[1], 0), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(max[0], max[1], max[2]), Vector3(0, 0, min[2]-max[2]), instancePoints[j], instanceNormals[j], p, m);
+
+									intersection(Vector3(max[0], max[1], min[2]), Vector3(min[0]-max[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(max[0], max[1], min[2]), Vector3(0, min[1]-max[1], 0), instancePoints[j], instanceNormals[j], p, m);
+
+									intersection(Vector3(min[0], min[1], max[2]), Vector3(max[0]-min[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(min[0], min[1], max[2]), Vector3(0, max[1]-min[1], 0), instancePoints[j], instanceNormals[j], p, m);
+
+									intersection(Vector3(max[0], min[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
+									intersection(Vector3(min[0], max[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
+
+									//
+									PlanarPointsCompare cmp(p[0], instanceNormals[0]);
+									std::sort(p, p + m, cmp);
+
+									//
+									RTfact::RTpie::int32* CUTPLANE_INDICES = new RTfact::RTpie::int32[3*m];
+									float* CUTPLANE_POSITIONS = new float[3 * 3 * (m-2)];
+									float* CUTPLANE_NORMALS = new float[3 * 3 * (m-2)];
+
+									for(int i = 0; i < m-2; i++)
+									{
+											CUTPLANE_POSITIONS[i*3*3 + 0] = p[0].x;
+											CUTPLANE_POSITIONS[i*3*3 + 1] = p[0].y;
+											CUTPLANE_POSITIONS[i*3*3 + 2] = p[0].z;
+
+											CUTPLANE_POSITIONS[i*3*3 + 3] = p[i+1].x;
+											CUTPLANE_POSITIONS[i*3*3 + 4] = p[i+1].y;
+											CUTPLANE_POSITIONS[i*3*3 + 5] = p[i+1].z;
+
+											CUTPLANE_POSITIONS[i*3*3 + 6] = p[i+2].x;
+											CUTPLANE_POSITIONS[i*3*3 + 7] = p[i+2].y;
+											CUTPLANE_POSITIONS[i*3*3 + 8] = p[i+2].z;
+									}
+
+									for(int i = 0; i < 3*(m-2); i++)
+									{
+											CUTPLANE_INDICES[i] = i;
+											CUTPLANE_NORMALS[i*3 + 0] = instanceNormals[0].x;
+											CUTPLANE_NORMALS[i*3 + 1] = instanceNormals[0].y;
+											CUTPLANE_NORMALS[i*3 + 2] = instanceNormals[0].z;
+									}
+
+									//
+									rtfactData.cutPlanes.push_back(sceneHandle.createGeometry());
+									rtfactData.cutPlaneMeshes.push_back(rtfactData.cutPlanes.back().createMesh());
+									rtfactData.cutPlaneMeshes.back().setPrimitives(
+													m-2,
+													CUTPLANE_INDICES,
+													CUTPLANE_POSITIONS,
+													CUTPLANE_NORMALS,
+													0, 0);
+									rtfactData.cutPlaneMeshes.back().setAppearance(rtfactData.cutPlaneShader);
+									rtfactData.cutPlaneInstances.push_back( rtfactData.cutPlanes.back().createInstance() );
+
+									float m1[16], m2[16];
+									iit->getTransform(m1, m2);
+									rtfactData.cutPlaneInstances.back().setTransform(m1,m2);
+
+									//
+									delete[] CUTPLANE_INDICES;
+									delete[] CUTPLANE_POSITIONS;
+									delete[] CUTPLANE_NORMALS;
+							}
 
 					}
 
