@@ -1348,7 +1348,7 @@ namespace BALL
 									a++;
 							}
 
-							iit->setCutPlanes(cappingEnabled, a,
+							iit->setCutPlanes(cappingEnabled, float3(0,0,1), a,
 									data+0*n, data+1*n, data+2*n,
 									data+3*n, data+4*n, data+5*n);
 
