@@ -861,7 +861,7 @@ namespace BALL
 			rt_data.cutPlaneShader = sceneHandle.createAppearance("PhongShader");
 			rt_data.cutPlaneShader.setParam3f("diffuseColor", float3(0.0f, 0.0, 1.0f));
 			rt_data.cutPlaneShader.setParam3f("ambientIntensity", float3(.0f, .0f, .0f));
-			rt_data.cutPlaneShader.setParamf("transparency", 0.8f);
+			rt_data.cutPlaneShader.setParamf("transparency", 0.7f);
 
 			//
 			rt_data.object_handles.push_back(
@@ -1240,7 +1240,7 @@ namespace BALL
 				float c = - o * n;
 				float dn = d * n;
 				if(dn == 0.0f)
-						return on;
+						return;
 				float t = - (n * p + c) / dn;
 				if(t >= 0.0f && t <= 1.0f)
 				{
@@ -1295,6 +1295,7 @@ namespace BALL
 			{
 			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > normals;
 			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > points;
+			    std::map< RTpieCpp::InstanceHandle, std::vector<bool> > active;
 
 					const Representation& rep = **it;
 					RTfactData& rtfactData = objects_[&rep];
@@ -1317,6 +1318,7 @@ namespace BALL
 
 									normals[*iit].push_back(n);
 									points[*iit].push_back(p);
+									active[*iit].push_back(plane.isActive());
 
 							}
 
@@ -1328,21 +1330,25 @@ namespace BALL
 					{
 							const std::vector<Vector3>& instanceNormals = normals[*iit];
 							const std::vector<Vector3>& instancePoints = points[*iit];
+							const std::vector<bool>& instanceActive = active[*iit];
 							const int n = instanceNormals.size();
 
 							float* data = new float[n*6];
 
+							int a = 0;
 							for(int i = 0; i < n; i++)
 							{
-									data[0*n + i] = instanceNormals[i].x;
-									data[1*n + i] = instanceNormals[i].y;
-									data[2*n + i] = instanceNormals[i].z;
-									data[3*n + i] = instancePoints[i].x;
-									data[4*n + i] = instancePoints[i].y;
-									data[5*n + i] = instancePoints[i].z;
+									if(!instanceActive[i]) continue;
+									data[0*n + a] = instanceNormals[i].x;
+									data[1*n + a] = instanceNormals[i].y;
+									data[2*n + a] = instanceNormals[i].z;
+									data[3*n + a] = instancePoints[i].x;
+									data[4*n + a] = instancePoints[i].y;
+									data[5*n + a] = instancePoints[i].z;
+									a++;
 							}
 
-							iit->setCutPlanes(cappingEnabled, n,
+							iit->setCutPlanes(cappingEnabled, a,
 									data+0*n, data+1*n, data+2*n,
 									data+3*n, data+4*n, data+5*n);
 
@@ -1358,6 +1364,8 @@ namespace BALL
 
 							for(int j = 0; j < n; j++)
 							{
+									if(instanceActive[j]) continue;
+
 									int m = 0;
 									Vector3 p[6];
 
