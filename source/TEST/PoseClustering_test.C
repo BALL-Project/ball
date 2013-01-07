@@ -180,6 +180,41 @@ CHECK(PoseClustering::Option::RMSD_THRESHOLD)
 RESULT
 
 
+CHECK(PoseClustering::Option::CLUSTER_METHOD)
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
+	cs2.resetScoring();
+	PoseClustering pc;
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
+
+	//Option::ClusterMethod::TRIVIAL_COMPLETE_LINKAGE
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::ClusterMethod::TRIVIAL_COMPLETE_LINKAGE);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 7)
+
+	//Option::ClusterMethod::SLINK_SIBSON
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::ClusterMethod::SLINK_SIBSON);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 5)
+
+	//Option::ClusterMethod::CLINK_DEFAYS
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::ClusterMethod::CLINK_DEFAYS);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 12)
+
+RESULT
+
+
 CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
 	System sys;
@@ -198,7 +233,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 15)
+	TEST_EQUAL(pc.getNumberOfClusters(), 18)
 
 	//TODO: HEAVY_ATOMS, add implementation and tests 
 
@@ -210,7 +245,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 15)
+	TEST_EQUAL(pc.getNumberOfClusters(), 18)
 
 	// Option::RMSD_LEVEL_OF_DETAIL::ALL_ATOMS
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::ALL_ATOMS);
@@ -219,7 +254,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 15)
+	TEST_EQUAL(pc.getNumberOfClusters(), 18)
 RESULT
 
 
@@ -251,7 +286,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::PROPERTY_BASED_ATOM_BIJECTION);
 	pc.setConformationSet(&cs2);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 18)
+	TEST_EQUAL(pc.getNumberOfClusters(), 19)
 RESULT
 
 

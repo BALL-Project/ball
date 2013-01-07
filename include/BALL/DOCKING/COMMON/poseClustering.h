@@ -53,7 +53,16 @@ namespace BALL
 			The complete linkage algorithm guarantees a minimal cluster
 		 	distance (max RMSD between all pairs of two clusters) of RMSD_THRESHOLD.
 
+			We offer two algorithms via the option CLUSTER_METHOD:
+			 - SLINK_SIBSON as described in 
+			            R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
+                  The Computer Journal. 16, Nr. 1, British Computer Society, 1973, S. 30-34
+			 - CLINK_DEFAYS as described in 
+									D. Defays: An efficient algorithm for a complete link method. 
+                  The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
 	*/
+
+
   class BALL_EXPORT PoseClustering
 	{
 		public:
@@ -63,9 +72,9 @@ namespace BALL
 			/// Option names
 			struct BALL_EXPORT Option
 			{
-				/* * the clustering method
+				/** the clustering method
 				*/
-				//static const String CLUSTER_METHOD;
+				static const String CLUSTER_METHOD;
 
 				/** the threshold for minimal required cluster distance
 				*/
@@ -79,7 +88,7 @@ namespace BALL
 			/// Default values for options
 			struct BALL_EXPORT Default
 			{
-				//static const String CLUSTER_METHOD;
+				static const Index CLUSTER_METHOD;
 				static const float RMSD_THRESHOLD;
 				static const Index RMSD_LEVEL_OF_DETAIL;
 			};
@@ -93,10 +102,16 @@ namespace BALL
 				PROPERTY_BASED_ATOM_BIJECTION
 			};
 
+			enum BALL_EXPORT ClusterMethod
+			{
+				TRIVIAL_COMPLETE_LINKAGE,
+				SLINK_SIBSON,
+				CLINK_DEFAYS
+			};
 
 			BALL_CREATE(PoseClustering);
 
-			/**	Constructors and Descructor */
+			/**	Constructors and Destructor */
 			//@{
 
 			/// Default constructor. 
@@ -127,7 +142,7 @@ namespace BALL
 			/// 
 			void setConformationSet(ConformationSet* new_set)
 			{
-				current_set_               = new_set;
+				current_set_ = new_set;
 			}
 
 			/// 
@@ -169,6 +184,8 @@ namespace BALL
 			/// returns a ConformationSet containing one structure per cluster
 			boost::shared_ptr<ConformationSet> getReducedConformationSet() const;
 
+			void printClusterRMSDs();
+
 			//@}
 
 			/** @name Public Attributes
@@ -184,14 +201,33 @@ namespace BALL
 
 		protected:
 
+			// trivial complete linkage implementation
+			// with O(n^2) space request
+			bool trivialCompute_();
+
+			// space efficient (SLINK or CLINK) clustering
+			bool linearSpaceCompute_();
+
+			//	implementation of a single linkage clustering as described in 
+			//       R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
+			//       The Computer Journal. 16, Nr. 1, British Computer Society, 1973, S. 30-34
+			void slinkInner_(int current_level);
+
+			// implementation of a complete linkage clustering as described in 
+			// 					D. Defays: An efficient algorithm for a complete link method. 
+      //          The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
+			void clinkInner_(int current_level);
+
 			// distance between cluster i and cluster j
 			float getRMSD_(Index i, Index j);
 
 			//
-			float getRMSD_(System* si, System* sj);
+			float getRMSD_();
 
+			//
 			void printCluster_(Index i);
 
+			//
 			void printClusters_();
 
 			///
@@ -205,6 +241,26 @@ namespace BALL
 
 			/// the RMSD definition used for clustering
 			Index                           rmsd_level_of_detail_;
+
+			// ------ data structures for slink and clink 
+
+			// stores the distance at which this indexed element has longer 
+			// the largest index of its cluster
+			vector<double> lambda;
+
+			// the index of the cluster representative at merge-time 
+			// (element with largest index)
+			vector<int>    pi;
+
+			vector<double> mu;
+
+			// We cache the atom bijection for faster
+			// RMSD computation; this is possible, since the system topology does
+			// not change
+			AtomBijection   atom_bijection_;
+
+			System system_i_;
+			System system_j_;
 
 	}; //class PoseClustering
 } //namesspace BALL

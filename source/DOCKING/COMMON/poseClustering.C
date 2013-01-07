@@ -2,25 +2,28 @@
 // vi: set ts=2:
 //
 
-#include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/DOCKING/COMMON/poseClustering.h>
+#include <BALL/STRUCTURE/structureMapper.h>
 
 using namespace std;
 
 namespace BALL
 {
-	//const String PoseClustering::Option::CLUSTER_METHOD     = "cluster_method";
+	const String PoseClustering::Option::CLUSTER_METHOD  = "cluster_method";
+	const Index  PoseClustering::Default::CLUSTER_METHOD = PoseClustering::ClusterMethod::CLINK_DEFAYS;
 
-	const String PoseClustering::Option::RMSD_LEVEL_OF_DETAIL = "rmsd_level_of_detail";
-	const Index PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::C_ALPHA;
+	const String PoseClustering::Option::RMSD_LEVEL_OF_DETAIL  = "rmsd_level_of_detail";
+	const Index  PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::C_ALPHA;
 
 	const String PoseClustering::Option::RMSD_THRESHOLD = "pose_clustering_rmsd_threshold";
   const float PoseClustering::Default::RMSD_THRESHOLD = 3;
+
 
 	PoseClustering::PoseClustering()
 	{
 		setDefaultOptions();
 	}
+
 
 	PoseClustering::PoseClustering(ConformationSet* poses, float rmsd)
 	{
@@ -28,29 +31,73 @@ namespace BALL
 		current_set_ = poses;
 	}
 
+
 	PoseClustering::~PoseClustering()
 	{
 	}
 
+
 	bool PoseClustering::compute()
 	{
-		// naive implementation of Complete-linkage clustering
-		// a faster implementation would be  
-		// D. Defays (1977). "An efficient algorithm for a complete link method". 
-		// The Computer Journal (British Computer Society) 20 (4): 364–366.
-
-		// 
-		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
-
 		if (!current_set_)
 		{
 			Log.info() << "No valid ConformationSet given." << endl;
 			return false;
 		}
 
-		// in the beginning each pose is a cluster	
+		// precompute the atom bijection
+		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
+
+		system_i_ = System(current_set_->getSystem());
+		system_j_ = System(current_set_->getSystem());
+
+		StructureMapper mapper(system_i_, system_j_);
+
+		switch (rmsd_level_of_detail_)
+		{
+			case PoseClustering::C_ALPHA:
+				atom_bijection_.assignCAlphaAtoms(system_i_, system_j_);
+				break;
+			case PoseClustering::BACKBONE:
+				atom_bijection_.assignBackboneAtoms(system_i_, system_j_);
+				break;
+			case PoseClustering::ALL_ATOMS:
+				mapper.calculateDefaultBijection();
+				atom_bijection_ = mapper.getBijection();
+				break;
+			case PoseClustering::PROPERTY_BASED_ATOM_BIJECTION:
+				atom_bijection_.assignAtomsByProperty(system_i_, system_j_);
+				break;
+			case PoseClustering::HEAVY_ATOMS:
+			default:
+				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
+		}
+
+		if (options.getInteger(Option::CLUSTER_METHOD) ==  ClusterMethod::TRIVIAL_COMPLETE_LINKAGE)
+		{
+			return trivialCompute_();
+		}
+		else if (   (options.getInteger(Option::CLUSTER_METHOD) == ClusterMethod::SLINK_SIBSON)
+				     || (options.getInteger(Option::CLUSTER_METHOD) == ClusterMethod::CLINK_DEFAYS))
+		{
+			return linearSpaceCompute_();
+		}
+		else
+		{
+			Log.error() << "Unknown parameter for option CLUSTER_METHOD " << options.get(Option::CLUSTER_METHOD) << endl;
+			return false;
+		}
+
+		return true;
+	}
+
+	bool PoseClustering::trivialCompute_()
+	{
+		// in the beginning each pose is a cluster
+		// this causes O(n^2) space!!	
 		pairwise_scores_.resize(current_set_->size(), current_set_->size());
 
+		// clean up old clusters
 		clusters_.clear();
 
 		// compute all pairwise RMSDs
@@ -63,8 +110,6 @@ namespace BALL
 		set<Index>* min_cluster_a = NULL;
 		set<Index>* min_cluster_b = NULL;
 
-		System sys_i(current_set_->getSystem());
-		System sys_j(current_set_->getSystem());
 		Size num_conf = current_set_->size();
 		SnapShot sn_i;
 		SnapShot sn_j;
@@ -77,13 +122,13 @@ namespace BALL
 			clusters_.push_back(new_set);
 			// compute the rmsd
 			sn_i = (*current_set_)[i];
-			sn_i.applySnapShot(sys_i);
+			sn_i.applySnapShot(system_i_);
 			pairwise_scores_(i,i) = 0;
 			for (Size j=i+1; j<num_conf; j++)
 			{
 				sn_j = (*current_set_)[j];
-				sn_j.applySnapShot(sys_j);
-				float rmsd = getRMSD_(&sys_i, &sys_j);
+				sn_j.applySnapShot(system_j_);
+				float rmsd = getRMSD_();
 				pairwise_scores_(i,j) = rmsd;
 				pairwise_scores_(j,i) = rmsd;
 
@@ -100,7 +145,6 @@ namespace BALL
 		// iterate as long as the maximal cluster distance 
 		// gets lower than the RMSD_THRESHOLD
 		float rmsd_cutoff = options.getReal(Option::RMSD_THRESHOLD);
-//cout << " \n\nRMSD cutoff: " << rmsd_cutoff  << " " << min_max_cluster_dist  << endl;
 
 		bool hit = (clusters_.size() > 1);
 		while ((min_max_cluster_dist < rmsd_cutoff) && hit)
@@ -196,14 +240,208 @@ namespace BALL
 
 //cout << "Final num of clusters " << clusters_.size() << endl;
 //printClusters_();
+	//	printClusterRMSDs();
 
 		return true;
+	}
+
+	bool PoseClustering::linearSpaceCompute_()
+	{
+		float threshold = options.getReal(Option::RMSD_THRESHOLD);
+
+		// we will need arrays pi, lambda, and mu
+		lambda.resize(current_set_->size());
+		pi.resize(current_set_->size());
+		mu.resize(current_set_->size());
+
+		// and initialize them for the first point
+		pi[0] = 0;
+		lambda[0] = numeric_limits<double>::max();
+
+		for (Size current_level=1; current_level < current_set_->size(); ++current_level)
+		{
+			pi[current_level] = current_level;
+			lambda[current_level] = numeric_limits<double>::max();
+
+			(*current_set_)[current_level].applySnapShot(system_i_);
+
+			for (Size j=0; j<current_level; ++j)
+			{
+				(*current_set_)[j].applySnapShot(system_j_);
+
+				// note: we don't need the rmsd matrix here - that's the whole point: the algorithm
+				//       only requires O(n) data, not (O(n^2))
+				mu[j] = getRMSD_();
+			}
+
+			if (options.getInteger(Option::CLUSTER_METHOD) == SLINK_SIBSON)
+			{
+				slinkInner_(current_level);
+			}
+			else //(options.getInteger(Option::CLUSTER_METHOD) == CLINK_DEFAYS)
+			{
+				clinkInner_(current_level);
+			}
+		}
+		// convert lambda, pi, and mu to clusters datastructure
+		clusters_.clear();
+
+		// we need a helper for the clusters
+		std::vector<std::set<Index> > cluster_helper;
+
+		// first, each point is its own cluster
+		for (Position i=0; i<current_set_->size(); ++i)
+		{
+			cluster_helper.push_back(std::set<Index>());
+			cluster_helper.back().insert(i);
+		}
+
+		// now, join clusters if needed
+		for (Position current_cluster=0; current_cluster < cluster_helper.size(); ++current_cluster)
+		{
+			if (BALL_REAL_LESS_OR_EQUAL(lambda[current_cluster], threshold, 1e-5))
+			{
+				// merge this cluster with its destination
+				cluster_helper[pi[current_cluster]].insert(cluster_helper[current_cluster].begin(), cluster_helper[current_cluster].end());
+
+				// save some memory
+				cluster_helper[current_cluster].clear();
+			}
+			else
+			{
+				// this cluster is done => put it into the result
+				clusters_.push_back(cluster_helper[current_cluster]);
+
+				// save some memory
+				cluster_helper[current_cluster].clear();
+			}
+		}
+//printClusterRMSDs();
+		return true;
+	}
+
+
+	void PoseClustering::slinkInner_(int current_level)
+	{
+		for (int i=0; i<current_level; ++i)
+		{
+			if (BALL_REAL_GREATER_OR_EQUAL(lambda[i], mu[i], 1e-5))
+			{
+				mu[pi[i]] = min(mu[pi[i]], lambda[i]);
+				lambda[i] = mu[i];
+				pi[i] = current_level;
+			}
+			else
+			{
+				mu[pi[i]] = min(mu[pi[i]], mu[i]);
+			}
+		}
+
+		for (int i=0; i<current_level; ++i)
+		{
+			if (BALL_REAL_GREATER_OR_EQUAL(lambda[i], lambda[pi[i]], 1e-5))
+				pi[i] = current_level;
+		}
+
+	}
+
+
+	void PoseClustering::clinkInner_(int current_level)
+	{
+		for (int i=0; i<current_level; ++i)
+		{
+			if (BALL_REAL_LESS(lambda[i], mu[i], 1e-5))
+			{
+				mu[pi[i]] = max(mu[pi[i]], mu[i]);
+				mu[i] = numeric_limits<double>::max();
+			}
+		}
+
+		int a = current_level-1;
+		for (int i=0; i<current_level; ++i)
+		{
+			int j = (current_level-1)-i;
+
+			if (BALL_REAL_GREATER_OR_EQUAL(lambda[j], mu[pi[j]], 1e-5))
+			{
+				if (BALL_REAL_LESS(mu[j], mu[a], 1e-5))
+				{
+					a = j;
+				}
+			}
+			else
+			{
+				mu[j] = numeric_limits<double>::max();
+			}
+		}
+
+		int    b = pi[a];
+		double c = lambda[a];
+
+		pi[a] = current_level;
+		lambda[a] = mu[a];
+
+		int d;
+		double e;
+
+		while ((a < current_level-1) && (b < current_level-1))
+		{
+			d = pi[b];
+			e = lambda[b];
+			pi[b] = current_level;
+			lambda[b] = c;
+			b = d;
+			c = e;
+		}
+
+		if ((a < current_level - 1) && (b == current_level-1))
+		{
+			pi[b] = current_level;
+			lambda[b] = c;
+		}
+
+		for (int i=0; i<current_level; ++i)
+		{
+			if (pi[pi[i]] == current_level)
+			{
+				if (BALL_REAL_GREATER_OR_EQUAL(lambda[i], lambda[pi[i]], 1e-5))
+					pi[i] = current_level;
+			}
+		}
+	}
+
+
+	void PoseClustering::printClusterRMSDs()
+	{
+		for (Position i=0; i<clusters_.size(); ++i)
+		{
+			std::cout << "Cluster " << i << " for method " << options.getInteger(PoseClustering::Option::CLUSTER_METHOD) << std::endl;
+
+			std::set<Index>& current_cluster = clusters_[i];
+
+			for (std::set<Index>::iterator it_j=current_cluster.begin(); it_j!=current_cluster.end(); ++it_j)
+			{
+				(*current_set_)[*it_j].applySnapShot(system_i_);
+
+				for (std::set<Index>::iterator it_k=current_cluster.begin(); it_k!=current_cluster.end(); ++it_k)
+				{
+					(*current_set_)[*it_k].applySnapShot(system_j_);
+
+					std::cout << getRMSD_() << " ";
+				}
+
+				std::cout << std::endl;
+			}
+
+			std::cout << "=======================================" << std::endl << std::endl;
+		}
 	}
 
 	const System& PoseClustering::getSystem() const
 	{
 		return current_set_->getSystem();
 	}
+
 
 	System& PoseClustering::getSystem()
 	{
@@ -219,6 +457,7 @@ namespace BALL
 		return clusters_[i];
 	}
 
+
 	set<Index>& PoseClustering::getCluster(Index i)
 	{
 		if (i >= (Index) clusters_.size())
@@ -227,6 +466,7 @@ namespace BALL
 		return clusters_[i];
 	}
 
+
 	Size PoseClustering::getClusterSize(Index i) const
 	{
 		if (i >= (Index)clusters_.size())
@@ -234,6 +474,7 @@ namespace BALL
 
 		return clusters_[i].size();
 	}
+
 
 	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i) const
 	{
@@ -259,11 +500,14 @@ namespace BALL
 
 	void PoseClustering::setDefaultOptions()
 	{
+		options.setDefault(PoseClustering::Option::CLUSTER_METHOD,
+		                   PoseClustering::Default::CLUSTER_METHOD);
+
 		options.setDefaultReal(PoseClustering::Option::RMSD_THRESHOLD,
-											 PoseClustering::Default::RMSD_THRESHOLD);
+		                       PoseClustering::Default::RMSD_THRESHOLD);
 
 		options.setDefault(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL,
-											     PoseClustering::Default::RMSD_LEVEL_OF_DETAIL);
+		                   PoseClustering::Default::RMSD_LEVEL_OF_DETAIL);
 	}
 
 
@@ -339,36 +583,12 @@ namespace BALL
 		return rmsd;
 	}
 
-	float PoseClustering::getRMSD_(System* si, System* sj)
+	float PoseClustering::getRMSD_()
 	{
 		float rmsd = 0.;
-		StructureMapper mapper(*si, *sj);
 
-		AtomBijection temp_atom_bijection;
-		switch (rmsd_level_of_detail_)
-		{
-			case PoseClustering::C_ALPHA:
-				temp_atom_bijection.assignCAlphaAtoms(*si, *sj);
-				rmsd = mapper.calculateRMSD(temp_atom_bijection);
-				break;
-			case PoseClustering::BACKBONE:
-				temp_atom_bijection.assignBackboneAtoms(*si, *sj);
-				rmsd = mapper.calculateRMSD(temp_atom_bijection);
-				break;
-			case PoseClustering::ALL_ATOMS:
-				mapper.calculateDefaultBijection();
-				//temp_atom_bijection = mapper_.getBijection();
-				rmsd = mapper.calculateRMSD();
-				break;
-			case PoseClustering::PROPERTY_BASED_ATOM_BIJECTION:
-				temp_atom_bijection.assignAtomsByProperty(*si, *sj);
-				rmsd = mapper.calculateRMSD(temp_atom_bijection);
-				break;
-
-			case PoseClustering::HEAVY_ATOMS:
-			default:
-				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
-		}
+		StructureMapper mapper(system_i_, system_j_);
+		rmsd = mapper.calculateRMSD(atom_bijection_);
 
 		return rmsd;
 	}
