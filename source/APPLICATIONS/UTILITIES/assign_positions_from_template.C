@@ -86,9 +86,8 @@ int main(int argc, char** argv)
 		Log.error() << "could not find chain " << argv[4] << " in file " << argv[3] << "." << endl;
 			return 2;
 	}
-
-
-  // map chains onto each other to find the best transformation
+	
+	// map chains onto each other to find the best transformation
 	// TODO: we have to handle amino acids differently from small molecules	
 	Log << "Mapping ";
 
@@ -191,10 +190,12 @@ int main(int argc, char** argv)
 		Eigen::Matrix3f rot = eigen_solver_original.eigenvectors() * eigen_solver_new.eigenvectors().transpose();
 
 		// convert it into a BALL transformation
-		Matrix4x4 trans_mat(rot(0,0), rot(0,1), rot(0,2), -origin_to_template.x,
-				                rot(1,0), rot(1,1), rot(1,2), -origin_to_template.y,
-												rot(2,0), rot(2,1), rot(2,2), -origin_to_template.z,
-												0,        0,        0,        1                    );
+		Matrix4x4 trans_mat(
+			rot(0,0), rot(0,1), rot(0,2), -origin_to_template.x,
+			rot(1,0), rot(1,1), rot(1,2), -origin_to_template.y,
+			rot(2,0), rot(2,1), rot(2,2), -origin_to_template.z,
+			       0,        0,        0,        1
+		);
 		TransformationProcessor transform(trans_mat);
 
 		// move the molecule back to its the center position of the template
