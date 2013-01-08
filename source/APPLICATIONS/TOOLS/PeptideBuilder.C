@@ -25,9 +25,9 @@ int main (int argc, char **argv)
 	CommandlineParser parpars("PeptideBuilder", "build a peptide  ", VERSION, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input torsion-file", INFILE, true);
 	parpars.registerParameter("o", "peptide output pdb-file", OUTFILE, true);
-	parpars.registerParameter("peptide_name", "name of the peptide", STRING, true);
+	parpars.registerParameter("peptide_name", "name of the peptide", STRING, false);
 
-	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi and psi angles shall be given in degree.";
+	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.";
 
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i", "txt");
@@ -52,8 +52,12 @@ int main (int argc, char **argv)
 
 		if ((aa_torsion.countFields(" ")>0) && (aa_torsion(0,1) != "#"))
 		{
+			fields.clear();
+			aa_torsion.split(fields);
+
 			// split and check
-			if (aa_torsion.split(fields) != 3)
+			if (   (fields.size()<3)
+					|| ((fields.size()>3) && (fields[3] != "#") && (fields[4] != "#") ))
 			{
 				Log.error() << "Error in while reading file " << parpars.get("i") << " in line " << aa_torsion << endl;
 			}
@@ -61,7 +65,12 @@ int main (int argc, char **argv)
 			String aa = fields[0];
 			float phi = fields[1].toFloat();
 			float psi = fields[2].toFloat();
-			char  test_aa = aa.toChar();
+			float omega = 0.;
+
+			if ((fields.size()>4) && (fields[3] != "#"))
+				omega = fields[3].toFloat();
+
+			char test_aa = aa.toChar();
 
 			if (Peptides::IsOneLetterCode(test_aa))
 			{
@@ -76,7 +85,7 @@ int main (int argc, char **argv)
 			}
 
 			// append the peptide 
-			pb->addAminoAcid(aa, Angle(phi, false), Angle(psi, false));
+			pb->addAminoAcid(aa, Angle(phi, false), Angle(psi, false), Angle(omega, false));
 		}
 	}
 
@@ -85,10 +94,26 @@ int main (int argc, char **argv)
 
   cout << "a peptide was build: " <<  Peptides::GetSequence(*prot) << endl;
 
+
+
+	for (ResidueIterator res_it= prot->beginResidue(); +res_it; ++res_it)
+	{
+		cout << res_it->getName() << " " << res_it->getTorsionPhi().toDegree() << " " << res_it->getTorsionPsi().toDegree() << " " << res_it->getTorsionOmega().toDegree()  << endl;
+	}
+
 	// give sensible names	
 	String pep_name = parpars.get("peptide_name");
   pb->setChainName(pep_name);
   pb->setProteinName(pep_name);
+
+  // normalize the names
+  prot->apply(fdb.normalize_names);
+
+  // build the missing bonds
+  prot->apply(fdb.build_bonds);
+
+  // add missing hydrogens
+  prot->apply(fdb.add_hydrogens);
 
 	// store	
 	PDBFile out_file(parpars.get("o"), std::ios::out);
