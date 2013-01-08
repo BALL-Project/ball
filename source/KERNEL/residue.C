@@ -118,7 +118,7 @@ namespace BALL
 		// the C-terminus
 		return !isCTerminal() && hasProperty(PROPERTY__AMINO_ACID);
 	}
-	
+
 	Angle Residue::getTorsionPsi() const
 	{
 		Angle result(0.0);
@@ -211,7 +211,7 @@ namespace BALL
 						break;
 					}
 				}
-				
+
 				if ((N != 0) && (C != 0) && (CA != 0) && (last_C != 0))
 				{
 					result = calculateTorsionAngle(*last_C, *N, *CA, *C);
@@ -224,6 +224,66 @@ namespace BALL
 			else
 			{
 				Log.error() << "No previous residue!" << endl;
+			}
+		}
+
+		return result;
+	}
+
+	bool Residue::hasTorsionOmega() const
+	{
+		// instance must have a parent chain
+		if (getChain() == 0)
+		{
+			return false;
+		}
+		// at least 2 residues are needed to create an angle
+		if (getChain()->countResidues() < 2)
+		{
+			return false;
+		}
+		// the torsion angle phi is not defined for
+		// the N-terminus
+		return  !isCTerminal() && hasProperty(PROPERTY__AMINO_ACID);
+	}
+
+	Angle Residue::getTorsionOmega() const
+	{
+		Angle result(0.0);
+		if (hasTorsionOmega())
+		{
+			const Residue* next = getNext(RTTI::getDefault<Residue>());
+			if (next != 0)
+			{
+				const Atom* C = 0;
+				const Atom* CA = 0;
+				AtomConstIterator it;
+				for (it = beginAtom(); +it; ++it)
+				{
+					if (it->getName() == "C")  C  = &*it;
+					if (it->getName() == "CA") CA = &*it;
+				}
+
+				const Atom* next_N = 0;
+				const Atom* next_CA = 0;
+				for (it = next->beginAtom(); +it; ++it)
+				{
+					if (it->getName() == "N")  next_N  = &*it;
+					if (it->getName() == "CA") next_CA  = &*it;
+				}
+
+				if ((C != 0) && (CA != 0) && (next_N != 0) && (next_CA != 0))
+				{
+					result = calculateTorsionAngle(*CA, *C, *next_N, *next_CA);
+				}
+				else
+				{
+					Log.error() << "Atoms not found:" << CA << "/" << C << "/" << next_N << "/" << next_CA  << " in residue " << getFullName() << " " << getID() << endl;
+				}
+			}
+			else
+			{
+				Log.error() << "No next residue!" << endl;
 			}
 		}
 

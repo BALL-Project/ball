@@ -204,6 +204,16 @@ namespace BALL
 		*/
 		Angle getTorsionPsi() const;
 
+		/**	Check whether the torsion angle omega is defined.
+				@return bool
+		*/
+		bool hasTorsionOmega() const;
+
+		/**	Calculate the torsion angle psi.
+				@return Angle - the torsion angle phi
+		*/
+		Angle getTorsionOmega() const;
+
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
 				@return  Protein* - mutable pointer to the parent protein
