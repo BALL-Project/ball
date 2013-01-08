@@ -58,8 +58,15 @@ int main (int argc, char **argv)
 	rmsd_levels.push_back("ALL_ATOMS");
 	parpars.setParameterRestrictions("rmsd_scope", rmsd_levels);
 
+	// choice of cluster algorithm  
+	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON) ", STRING, false, "CLINK_DEFAYS");
+	list<String> cluster_algs;
+	cluster_algs.push_back("CLINK_DEFAYS");
+	cluster_algs.push_back("SLINK_SIBSON");
+	parpars.setParameterRestrictions("alg", cluster_algs);
+
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using a complete linkage algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb) and a naming schema for the results (-o). Optional parameters are the minimal rmsd between the final clusters  (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter (-o_dcd)\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), the algorithm (-alg) and a naming schema for the results (-o). Optional parameters are the minimal rmsd between the final clusters  (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter (-o_dcd)\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
 
 	parpars.setToolManual(man);
 
@@ -101,6 +108,15 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
 		else if (scope == "ALL_ATOMS")
 			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
+	}
+
+	if (parpars.has("alg"))
+	{
+		String alg = parpars.get("alg");
+		if (alg == "CLINK_DEFAYS")
+			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
+		else if (alg == "SLINK_SIBSON")
+			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 	}
 
 	pc.setConformationSet(&cs);
