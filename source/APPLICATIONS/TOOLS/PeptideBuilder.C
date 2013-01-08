@@ -25,9 +25,9 @@ int main (int argc, char **argv)
 	CommandlineParser parpars("PeptideBuilder", "build a peptide  ", VERSION, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input torsion-file", INFILE, true);
 	parpars.registerParameter("o", "peptide output pdb-file", OUTFILE, true);
-	parpars.registerParameter("peptide_name", "name of the peptide", STRING, false);
+	//parpars.registerParameter("peptide_name", "name of the peptide", STRING, false);
 
-	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.";
+	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.\nExample:\n# aa   phi    psi   omega\nA    -180    140\nC    -180    180\nG    -90    -140\nP    -65    -40       0   # cis\nT    -120    -90\nP    -78     146     180  # trans";
 
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i", "txt");
@@ -92,14 +92,15 @@ int main (int argc, char **argv)
   // now build the peptide 
   Protein* prot = pb->construct();
 
-  cout << "a peptide was build: " <<  Peptides::GetSequence(*prot) << endl;
+  cout << " a peptide "  << Peptides::GetSequence(*prot) << endl;
+  cout << " was build";
 
-
-
+/*
 	for (ResidueIterator res_it= prot->beginResidue(); +res_it; ++res_it)
 	{
 		cout << res_it->getName() << " " << res_it->getTorsionPhi().toDegree() << " " << res_it->getTorsionPsi().toDegree() << " " << res_it->getTorsionOmega().toDegree()  << endl;
 	}
+*/
 
 	// give sensible names	
 	String pep_name = parpars.get("peptide_name");
@@ -120,6 +121,7 @@ int main (int argc, char **argv)
 	out_file << *prot;
 	out_file.close();
 
+	cout << " and stored as " << parpars.get("o") << endl;
 	return 0;
 }
 
