@@ -1,8 +1,7 @@
-/* Molecular File Converter.C
-*
-* Copyright (C) 2011 Anna Dehof
-*
-*/
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/genericMolFile.h>
