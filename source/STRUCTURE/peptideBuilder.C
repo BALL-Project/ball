@@ -223,21 +223,18 @@ namespace BALL
 				String type = (i-1)->getType();
 				type.toUpper();
 
-				// special case: this residue is a proline
+				// special case: residue is a proline
 				type = i->getType();
 				type.toUpper();
-
 				is_proline_ = (type == "PRO") ? true : false;
 
 				Residue* residue2 = createResidue_(i->getType(), id);
 
-				insert_(*residue2,*residueold);
+				insert_(*residue2, *residueold);
 				chain->insert(*residue2);
 
-				//set the torsion angle 
-				// TODO: angle of the peptide bond (omega)
-
-				transform_(i->getPhi(),(i-1)->getPsi(),*residueold,*residue2);
+				// set the torsion angle 
+				transform_(i->getPhi(), (i-1)->getPsi(),*residueold, *residue2);
 				peptide_(*residueold,*residue2);
 
 				// set the peptide bond angle omega
@@ -252,7 +249,7 @@ namespace BALL
 			// read the names for a unique nomenclature 
 			protein->apply(fragment_db_->normalize_names);
 
-			// Add missing bonds and atoms (including side chains!)
+			// add missing bonds and atoms (including side chains!)
 			ReconstructFragmentProcessor rfp(*fragment_db_);
 			protein->apply(rfp);
 			protein->apply(fragment_db_->build_bonds);
@@ -267,16 +264,17 @@ namespace BALL
 			PDBAtom* carbona = new PDBAtom(PTE[Element::C], "CA");
 			PDBAtom* carbon = new PDBAtom(PTE[Element::C], "C");
 
-			//put CA into the starting position 
+			// put CA into the starting position 
 			carbona->setPosition(Vector3( 0.00, 0.00, 0.0));
-			//insert N and C 
+
+			// insert N and C 
 			nitrogen->setPosition(Vector3(-1 * BOND_LENGTH_N_CA, 0.00,  0.00));
 			carbon->setPosition
 				(Vector3(BOND_LENGTH_C_CA * (cos(Constants::PI * 71./180.)),
 								 0.00,
 								 BOND_LENGTH_C_CA * (sin(Constants::PI * 71. / 180.))));
 
-			//insert atomes into residue/chain/protein
+			// insert atomes into residue/chain/protein
 			res->insert(*nitrogen);
 			res->insert(*carbona);
 			res->insert(*carbon);
@@ -302,7 +300,7 @@ namespace BALL
 
 			Vector3 rot_axis;    // axis  for the torsion angle
 
-			//set C-N-bond 
+			// set C-N-bond 
 			pcarbon->createBond(*pnitrogen_n)->setOrder(Bond::ORDER__SINGLE);;
 
 
@@ -320,8 +318,8 @@ namespace BALL
 			Matrix4x4 mat;
 			mat.setRotation(Angle(-1. * 30.* Constants::PI/180.), normaxis);
 
-			newpos = mat * newpos;          // rotation
-			newpos = newpos *  BOND_LENGTH_N_C; // scaling of the bond length
+			newpos = mat * newpos;               // rotation
+			newpos = newpos *  BOND_LENGTH_N_C;  // scaling of the bond length
 			newpos = newpos + pcarbon->getPosition();
 
 			// positioning of the nitrogen
@@ -334,7 +332,7 @@ namespace BALL
 			Vector3 NN_NCA_axis = pcarbona_n->getPosition() - pnitrogen_n->getPosition();
 			CA_C_axis = pcarbon->getPosition() - pcarbona->getPosition();
 
-			//current angle for C
+			// current angle for C
 			Angle current(acos(NN_C_axis * NN_NCA_axis /
 										 (NN_C_axis.getLength() * NN_NCA_axis.getLength() )));
 
@@ -348,7 +346,7 @@ namespace BALL
 			}
 			else
 			{
-				if (current > (float)(Constants::PI+1e-2) )
+				if (current > (float)(Constants::PI+1e-2))
 				{
 				  // is this line really correct???
 					current = Angle(-120. * 120. * Constants::PI / 180.) - current;
@@ -393,14 +391,14 @@ namespace BALL
 			transmat.rotate(Angle(-1. * current), rot_axis);
 			transformation.setTransformation(transmat);
 
-			//translate to 0|0|0
+			// translate to 0|0|0
 			toOrigin = pnitrogen_n->getPosition();
 			translation.setTranslation(((float)(-1.))*toOrigin);
 					resnew.apply(translation);
-			//set torsion angles
+			// set torsion angles
 			 resnew.apply(transformation);
 
-			 //translate back
+			// translate back
 			translation.setTranslation(toOrigin);
 			resnew.apply(translation);
 
@@ -461,18 +459,17 @@ namespace BALL
 		void PeptideBuilder::transform_
 			(const Angle& phi, const Angle& psi, Residue& resold, Residue& resnew)
 		{
-			// Parameter omega obviously not used!!!
 			Matrix4x4 psimat;   // rotation matrix
 			Matrix4x4 phimat;   //    "
-			Vector3 psiaxis;    // rotation axis for the torsion angles
-			Vector3 phiaxis;
+			Vector3   psiaxis;  // rotation axis for the torsion angles
+			Vector3   phiaxis;
 			TranslationProcessor translation;
 
 
-			PDBAtom* pcarbon = getAtomByName_(resold, "C");
-			PDBAtom* pcarbona = getAtomByName_(resold, "CA");
+			PDBAtom* pcarbon     = getAtomByName_(resold, "C");
+			PDBAtom* pcarbona    = getAtomByName_(resold, "CA");
 			PDBAtom* pnitrogen_n = getAtomByName_(resnew, "N");
-			PDBAtom* pcarbona_n = getAtomByName_(resnew, "CA");
+			PDBAtom* pcarbona_n  = getAtomByName_(resnew, "CA");
 			PDBAtom* pcarbon_n   = getAtomByName_(resnew, "C");
 			PDBAtom* pnitrogen   = getAtomByName_(resold, "N");
 			Angle currentpsi;
