@@ -212,6 +212,13 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD)
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 12)
 
+	//Option::ClusterMethod::CENTER_OF_GRAVITY_CLINK
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::ClusterMethod::CENTER_OF_GRAVITY_CLINK);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 13)
+
 RESULT
 
 

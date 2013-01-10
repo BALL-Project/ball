@@ -29,6 +29,10 @@
   #include <BALL/DATATYPE/string.h>
 #endif
 
+#ifndef BALL_MATHS_VECTOR3_H
+#       include <BALL/MATHS/vector3.h>
+#endif
+
 #include <Eigen/Core>
 #include <boost/shared_ptr.hpp>
 #include <set>
@@ -59,7 +63,11 @@ namespace BALL
                   The Computer Journal. 16, Nr. 1, British Computer Society, 1973, S. 30-34
 			 - CLINK_DEFAYS as described in 
 									D. Defays: An efficient algorithm for a complete link method. 
-                  The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
+                  The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366.
+			 - CENTER_OF_GRAVITY_CLINK:
+		 							first CLINK is applied to the centers of the poses, the resulting clusters 
+									are then subjected to CLINK_DEFAYS.
+							 		Please note that this a heuristic!		
 	*/
 
 
@@ -106,7 +114,8 @@ namespace BALL
 			{
 				TRIVIAL_COMPLETE_LINKAGE,
 				SLINK_SIBSON,
-				CLINK_DEFAYS
+				CLINK_DEFAYS,
+				CENTER_OF_GRAVITY_CLINK
 			};
 
 			BALL_CREATE(PoseClustering);
@@ -197,6 +206,7 @@ namespace BALL
 			/** reset the options to default values
 			*/
 			void setDefaultOptions();
+
 			//@}
 
 		protected:
@@ -206,7 +216,7 @@ namespace BALL
 			bool trivialCompute_();
 
 			// space efficient (SLINK or CLINK) clustering
-			bool linearSpaceCompute_();
+			bool linearSpaceCompute_(bool full_rmsd = true);
 
 			//	implementation of a single linkage clustering as described in 
 			//       R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
@@ -218,17 +228,23 @@ namespace BALL
       //          The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
 			void clinkInner_(int current_level);
 
+			// run clink on the centers of gravity (CENTER_OF_GRAVITY_CLINK)
+			bool centerOfGravityClink_();
+
 			// distance between cluster i and cluster j
-			float getRMSD_(Index i, Index j);
+			float getRMSD_(Index i, Index j, bool full_rmsd = true);
 
 			//
-			float getRMSD_();
+			float getRMSD_(bool full_rmsd = true);
 
 			//
 			void printCluster_(Index i);
 
 			//
 			void printClusters_();
+
+			//
+			void clear_();
 
 			///
 			Eigen::MatrixXd                 pairwise_scores_;
@@ -246,21 +262,27 @@ namespace BALL
 
 			// stores the distance at which this indexed element has longer 
 			// the largest index of its cluster
-			vector<double> lambda;
+			vector<double>    lambda_;
 
 			// the index of the cluster representative at merge-time 
 			// (element with largest index)
-			vector<int>    pi;
+			vector<int>       pi_;
 
-			vector<double> mu;
+			vector<double>    mu_;
+
+
+			// ----- data structure for CENTER_OF_GRAVITY_CLINK
+			// the geometric center of mass
+			vector<Vector3>   com_;
+
 
 			// We cache the atom bijection for faster
 			// RMSD computation; this is possible, since the system topology does
 			// not change
-			AtomBijection   atom_bijection_;
+			AtomBijection     atom_bijection_;
 
-			System system_i_;
-			System system_j_;
+			System            system_i_;
+			System            system_j_;
 
 	}; //class PoseClustering
 } //namesspace BALL
