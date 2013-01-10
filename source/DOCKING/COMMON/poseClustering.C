@@ -10,7 +10,7 @@ using namespace std;
 namespace BALL
 {
 	const String PoseClustering::Option::CLUSTER_METHOD  = "cluster_method";
-	const Index  PoseClustering::Default::CLUSTER_METHOD = PoseClustering::ClusterMethod::CLINK_DEFAYS;
+	const Index  PoseClustering::Default::CLUSTER_METHOD = PoseClustering::CLINK_DEFAYS;
 
 	const String PoseClustering::Option::RMSD_LEVEL_OF_DETAIL  = "rmsd_level_of_detail";
 	const Index  PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::C_ALPHA;
@@ -73,12 +73,12 @@ namespace BALL
 				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
 		}
 
-		if (options.getInteger(Option::CLUSTER_METHOD) ==  ClusterMethod::TRIVIAL_COMPLETE_LINKAGE)
+		if (options.getInteger(Option::CLUSTER_METHOD) ==  PoseClustering::TRIVIAL_COMPLETE_LINKAGE)
 		{
 			return trivialCompute_();
 		}
-		else if (   (options.getInteger(Option::CLUSTER_METHOD) == ClusterMethod::SLINK_SIBSON)
-				     || (options.getInteger(Option::CLUSTER_METHOD) == ClusterMethod::CLINK_DEFAYS))
+		else if (   (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::SLINK_SIBSON)
+					 || (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::CLINK_DEFAYS))
 		{
 			return linearSpaceCompute_();
 		}
