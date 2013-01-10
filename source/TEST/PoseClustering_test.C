@@ -104,7 +104,7 @@ CHECK(compute())
 	TEST_EQUAL(pc.getNumberOfClusters(), 0)
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 7)
-
+//pc.printClusterRMSDs();
 	TEST_EQUAL(pc.getClusterSize(0), 2)
 	std::set<Index> c0 = pc.getCluster(0);
 	TEST_EQUAL((c0.find(0)!=c0.end()), true)
@@ -191,26 +191,101 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD)
 	PoseClustering pc;
 	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
 
-	//Option::ClusterMethod::TRIVIAL_COMPLETE_LINKAGE
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-
+	//Option::TRIVIAL_COMPLETE_LINKAGE
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 7)
 
-	//Option::ClusterMethod::SLINK_SIBSON
+	//Option::SLINK_SIBSON
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 5)
 
-	//Option::ClusterMethod::CLINK_DEFAYS
+	//Option::CLINK_DEFAYS
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 12)
+
+RESULT
+
+
+CHECK(PoseClustering::Option::RMSD_TYPE)
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
+	cs2.resetScoring();
+	PoseClustering pc;
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
+
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
+
+	// SNAPSHOT_RMSD
+	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+>>>>>>> Implemeted a cluster heuristic CENTER_OF_GRAVITY_CLINK
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 12)
+
+
+	// CENTER_OF_MASS_DISTANCE
+	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
+	pc.setConformationSet(&cs2);
+
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 5)
+
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 40.00);
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+
+	// TODO
+	// RIGID_RMSD
+	/*
+	pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD)	
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 20)
+
+	boost::shared_ptr<ConformationSet> cs3 = pc.getReducedConformationSet();
+	TEST_EQUAL(cs3->size(),  pc.getNumberOfClusters())
+
+	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs3->getSystem().getProtein(0)->countAtoms())
+ 	*/
+RESULT
+
+
+CHECK(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK)
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering2_test.dcd));
+	cs2.resetScoring();
+	PoseClustering pc;
+	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
+	pc.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, true);
+
+	pc.setConformationSet(&cs2);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 20)
+
+	boost::shared_ptr<ConformationSet> cs3 = pc.getReducedConformationSet();
+	TEST_EQUAL(cs3->size(),  pc.getNumberOfClusters())
+
+	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs3->getSystem().getProtein(0)->countAtoms())
 
 	//Option::ClusterMethod::CENTER_OF_GRAVITY_CLINK
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CENTER_OF_GRAVITY_CLINK);

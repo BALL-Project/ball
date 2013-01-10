@@ -5,6 +5,7 @@
 #include <BALL/DOCKING/COMMON/poseClustering.h>
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/DOCKING/COMMON/conformationSet.h>
 
 #include <BALL/FORMAT/commandlineParser.h>
@@ -28,9 +29,9 @@ int main (int argc, char **argv)
 	// - CLI switch
 	// - description
 	// - Inputfile
-	// - required
-	parpars.registerParameter("i_dcd", "input dcd-file", INFILE, true);
+	parpars.registerParameter("i_dcd", "input dcd-file", INFILE, false);
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
+	parpars.registerParameter("i_transformations", "input transformation file for rigid rmsd clustering", INFILE, false);
 
 	// we register an output file parameter 
 	// - description
@@ -59,12 +60,23 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_scope", rmsd_levels);
 
 	// choice of cluster algorithm  
-	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON, CENTER_OF_GRAVITY_CLINK) ", STRING, false, "CLINK_DEFAYS");
+	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
 	list<String> cluster_algs;
 	cluster_algs.push_back("CLINK_DEFAYS");
 	cluster_algs.push_back("SLINK_SIBSON");
-	cluster_algs.push_back("CENTER_OF_GRAVITY_CLINK");
+	cluster_algs.push_back("TRIVIAL_COMPLETE_LINKAGE");
 	parpars.setParameterRestrictions("alg", cluster_algs);
+
+	// choice of rmsd type
+	parpars.registerParameter("rmsd_type", "RMSD type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, false, "SNAPSHOT_RMSD");
+	list<String> rmsd_types;
+	rmsd_types.push_back("SNAPSHOT_RMSD");
+	rmsd_types.push_back("RIGID_RMSD");
+	rmsd_types.push_back("CENTER_OF_MASS_DISTANCE");
+	parpars.setParameterRestrictions("rmsd_type", rmsd_types);
+
+	// register bool parameter for using pre-clustering
+	parpars.registerFlag("use_preclustering", "Switch on preclustering");
 
   // the manual
 	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), the algorithm (-alg) and a naming schema for the results (-o). Optional parameters are (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
@@ -74,6 +86,7 @@ int main (int argc, char **argv)
 	// here we set the types of I/O files
 	parpars.setSupportedFormats("i_dcd","dcd");
 	parpars.setSupportedFormats("i_pdb","pdb");
+	parpars.setSupportedFormats("i_transformations","txt");
 	parpars.setSupportedFormats("o","dcd");
 	parpars.setSupportedFormats("o_dcd","dcd");
 
@@ -89,7 +102,11 @@ int main (int argc, char **argv)
 
 	ConformationSet cs;
 	cs.setup(sys);
-	cs.readDCDFile(parpars.get("i_dcd"));
+
+	if (parpars.has("i_dcd"))
+	{
+		cs.readDCDFile(parpars.get("i_dcd"));
+	}
 	cs.resetScoring();
 
 	PoseClustering pc;
@@ -109,6 +126,8 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
 		else if (scope == "ALL_ATOMS")
 			pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
+		else
+			Log.info() << "Unknown value " << scope  << " for option rmsd_scope." << endl;
 	}
 
 	if (parpars.has("alg"))
@@ -118,8 +137,35 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
 		else if (alg == "SLINK_SIBSON")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
-		else if (alg == "CENTER_OF_GRAVITY_CLINK")
-			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CENTER_OF_GRAVITY_CLINK);
+		else if (alg == "TRIVIAL_COMPLETE_LINKAGE")
+			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+		else
+			Log.info() << "Unknown value " << alg  << " for option alg." << endl;
+	}
+
+	if (parpars.has("rmsd_type"))
+	{
+		String type = parpars.get("rmsd_type");
+		if (type == "SNAPSHOT_RMSD")
+			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+		else if (type == "RIGID_RMSD")
+			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+		else if (type == "CENTER_OF_MASS_DISTANCE")
+			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
+		else
+			Log.info() << "Unknown value " << type  << " for option rmsd_type." << endl;
+
+	}
+
+	if (parpars.has("use_preclustering"))
+	{
+		bool use_preclustering = parpars.get("use_preclustering").toBool();
+		pc.options.setBool(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, use_preclustering);
+	}
+
+	if (parpars.has("i_transformations"))
+	{
+		pc.setBaseSystemAndTransformations(sys, parpars.get("i_transformations"));
 	}
 
 	pc.setConformationSet(&cs);
@@ -134,16 +180,21 @@ int main (int argc, char **argv)
 	{
 		Log << "   Cluster " << i << " has " << pc.getClusterSize(i) << " members." << endl;
 
-		boost::shared_ptr<ConformationSet> new_cs = pc.getClusterConformationSet(i);
+		if (parpars.has("rmsd_type") && parpars.get("rmsd_type") != "RIGID_RMSD")
+		{
+			boost::shared_ptr<ConformationSet> new_cs = pc.getClusterConformationSet(i);
 
-		String outfile_name = (i == 0) ? String(parpars.get("o"))
-			                             : String(parpars.get("o_dir")) + "/primary_"
-			                               + String(parpars.get("o_id"))  + "_cluster" + String(i)
-			                               + "_visible_dcd";
-		//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
+			String outfile_name = (i == 0) ? String(parpars.get("o"))
+				                             : String(parpars.get("o_dir")) + "/primary_"
+			 	                              + String(parpars.get("o_id"))  + "_cluster" + String(i)
+			 	                              + "_visible_dcd";
+			//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
 
-		new_cs->writeDCDFile(outfile_name);
+			new_cs->writeDCDFile(outfile_name);
+		}
 	}
+
+	pc.printClusterRMSDs();
 
 	if (parpars.has("o_dcd"))
 	{

@@ -6,11 +6,11 @@
 #define BALL_DOCKING_POSECLUSTERING_H
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-	#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_DOCKING_COMMON_CONFORMATIONSET_H
-  #include <BALL/DOCKING/COMMON/conformationSet.h>
+# include <BALL/DOCKING/COMMON/conformationSet.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
@@ -22,15 +22,19 @@
 #endif
 
 #ifndef BALL_KERNEL_SYSTEM_H
-  #include <BALL/KERNEL/system.h>
+# include <BALL/KERNEL/system.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
-  #include <BALL/DATATYPE/string.h>
+# include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
 #       include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+# include <BALL/MATHS/matrix44.h>
 #endif
 
 #include <Eigen/Core>
@@ -64,10 +68,6 @@ namespace BALL
 			 - CLINK_DEFAYS as described in 
 									D. Defays: An efficient algorithm for a complete link method. 
                   The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366.
-			 - CENTER_OF_GRAVITY_CLINK:
-		 							first CLINK is applied to the centers of the poses, the resulting clusters 
-									are then subjected to CLINK_DEFAYS.
-							 		Please note that this a heuristic!		
 	*/
 
 
@@ -91,6 +91,14 @@ namespace BALL
 				/** the level of detail when computing the RMSD
 				*/
 				static const String RMSD_LEVEL_OF_DETAIL;
+
+				/** the computation type of the cluster distance meassure
+				*/
+				static const String RMSD_TYPE;
+
+				/** flag indicating the use of a geometric center based pre-clink run
+				 */
+				static const String USE_CENTER_OF_MASS_PRECLINK;
 			};
 
 			/// Default values for options
@@ -99,6 +107,15 @@ namespace BALL
 				static const Index CLUSTER_METHOD;
 				static const float RMSD_THRESHOLD;
 				static const Index RMSD_LEVEL_OF_DETAIL;
+				static const Index RMSD_TYPE;
+				static const bool USE_CENTER_OF_MASS_PRECLINK; //TODO setDefaults!! add to tools
+			};
+
+			enum BALL_EXPORT RMSDType
+			{
+				SNAPSHOT_RMSD,
+				RIGID_RMSD,
+				CENTER_OF_MASS_DISTANCE
 			};
 
 			enum BALL_EXPORT RMSDLevelOfDetail
@@ -114,8 +131,7 @@ namespace BALL
 			{
 				TRIVIAL_COMPLETE_LINKAGE,
 				SLINK_SIBSON,
-				CLINK_DEFAYS,
-				CENTER_OF_GRAVITY_CLINK
+				CLINK_DEFAYS
 			};
 
 			BALL_CREATE(PoseClustering);
@@ -129,6 +145,9 @@ namespace BALL
 			/// Detailed constructor.
 			/// (TODO: really pass a pointer here?)
 			PoseClustering(ConformationSet* poses, float rmsd);
+
+			/// PoseClustering for a given set of rigid transformations of a base structure
+			PoseClustering(System const& base_system, String transformation_file_name);
 
 			///
 			virtual ~PoseClustering();
@@ -153,6 +172,12 @@ namespace BALL
 			{
 				current_set_ = new_set;
 			}
+
+			///
+			void setBaseSystemAndTransformations(System const& base_system, String transformation_file_name);
+
+			/// reads the poses given as transformations from a file
+			bool readTransformationsFromFile(String filename);
 
 			/// 
 			const ConformationSet* getConformationSet() const {return  current_set_;}
@@ -216,7 +241,7 @@ namespace BALL
 			bool trivialCompute_();
 
 			// space efficient (SLINK or CLINK) clustering
-			bool linearSpaceCompute_(bool full_rmsd = true);
+			bool linearSpaceCompute_(Index rmsd_type);
 
 			//	implementation of a single linkage clustering as described in 
 			//       R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
@@ -228,14 +253,20 @@ namespace BALL
       //          The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
 			void clinkInner_(int current_level);
 
-			// run clink on the centers of gravity (CENTER_OF_GRAVITY_CLINK)
+			// compute the center of masses
+			void computeCenterOfMasses_();
+
+			// run a pre clink on the centers of gravity 
 			bool centerOfGravityClink_();
 
 			// distance between cluster i and cluster j
-			float getRMSD_(Index i, Index j, bool full_rmsd = true);
+			float getClusterRMSD_(Index i, Index j, Index rmsd_type);
 
 			//
-			float getRMSD_(bool full_rmsd = true);
+			float getRMSD_(Index i, Index j, Index rmsd_type);
+
+			// 
+			float getRigidRMSD_(Eigen::Vector3f& t1, Eigen::Matrix3f& M1, Eigen::Vector3f& t2, Eigen::Matrix3f& M2);
 
 			//
 			void printCluster_(Index i);
@@ -246,11 +277,19 @@ namespace BALL
 			//
 			void clear_();
 
-			///
+			// only used by trivial clustering
 			Eigen::MatrixXd                 pairwise_scores_;
 
 			/// the ConformationSet we wish to cluster
 			ConformationSet*                current_set_;
+
+			// ----- data structures for transformation input (instead of snapshots)
+			std::vector<Eigen::Vector3f>    translations_;
+			std::vector<Eigen::Matrix3f>    rotations_;
+
+			Eigen::Matrix3f                 covariance_matrix_;
+
+			System                          base_system_;
 
 			/// the clusters
 			std::vector<std::set<Index> >   clusters_;
@@ -258,22 +297,28 @@ namespace BALL
 			/// the RMSD definition used for clustering
 			Index                           rmsd_level_of_detail_;
 
+			// flag indicating the use of transformation as input
+			// TODO switch to option
+			//bool                            input_type_transformation_;
+
 			// ------ data structures for slink and clink 
 
 			// stores the distance at which this indexed element has longer 
 			// the largest index of its cluster
-			vector<double>    lambda_;
+			std::vector<double>    lambda_;
 
 			// the index of the cluster representative at merge-time 
 			// (element with largest index)
-			vector<int>       pi_;
+			std::vector<int>       pi_;
 
-			vector<double>    mu_;
+			std::vector<double>    mu_;
 
 
 			// ----- data structure for CENTER_OF_GRAVITY_CLINK
 			// the geometric center of mass
-			vector<Vector3>   com_;
+			std::vector<Vector3>   com_;
+
+			// ----- generell datastructures
 
 
 			// We cache the atom bijection for faster
@@ -283,6 +328,9 @@ namespace BALL
 
 			System            system_i_;
 			System            system_j_;
+
+			// The number of poses to cluster
+			Size              num_poses_;
 
 	}; //class PoseClustering
 } //namesspace BALL
