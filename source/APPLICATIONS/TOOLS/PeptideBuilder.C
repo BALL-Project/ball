@@ -79,7 +79,7 @@ int main (int argc, char **argv)
 
 			// check 
 			// we need three letter code, angles should be given in degree (phi than psi)
-			if (not Peptides::IsThreeLetterCode(aa))
+			if (!Peptides::IsThreeLetterCode(aa))
 			{
 				Log.error() << "Error while reading line " << aa_torsion << " : amino acid shall be given in three letter code." << endl;
 			}
