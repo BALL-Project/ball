@@ -70,7 +70,7 @@ class Matrix4x4
 
   // float operator () (Position, Position) const;
   // float operator [] (Position) const;
- float operator [] (Position) /Numeric,NonLazy/;
+ float operator [] (Position) /Numeric/;
 %MethodCode
 	try
 	{
