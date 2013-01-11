@@ -58,13 +58,6 @@ CHECK([EXTRA] HashIndex getNextPrime(HashIndex l))
 	TEST_EQUAL(getNextPrime(5), 5)
 RESULT
 
-CHECK(HashIndex operator () (const T& t) const throw())
-	HashFunction<int> hf1;
-	TEST_EQUAL(hf1(123), 123)
-	HashFunction<String> hf2;
-	TEST_EQUAL(hf2("ABC"), 81)
-RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

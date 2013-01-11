@@ -59,14 +59,15 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_scope", rmsd_levels);
 
 	// choice of cluster algorithm  
-	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON) ", STRING, false, "CLINK_DEFAYS");
+	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON, CENTER_OF_GRAVITY_CLINK) ", STRING, false, "CLINK_DEFAYS");
 	list<String> cluster_algs;
 	cluster_algs.push_back("CLINK_DEFAYS");
 	cluster_algs.push_back("SLINK_SIBSON");
+	cluster_algs.push_back("CENTER_OF_GRAVITY_CLINK");
 	parpars.setParameterRestrictions("alg", cluster_algs);
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), the algorithm (-alg) and a naming schema for the results (-o). Optional parameters are the minimal rmsd between the final clusters  (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter (-o_dcd)\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), the algorithm (-alg) and a naming schema for the results (-o). Optional parameters are (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
 
 	parpars.setToolManual(man);
 
@@ -117,6 +118,8 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
 		else if (alg == "SLINK_SIBSON")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
+		else if (alg == "CENTER_OF_GRAVITY_CLINK")
+			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CENTER_OF_GRAVITY_CLINK);
 	}
 
 	pc.setConformationSet(&cs);
@@ -124,6 +127,8 @@ int main (int argc, char **argv)
 	pc.compute();
 
 	Size num_clusters = pc.getNumberOfClusters();
+
+	Log << "Computed " <<  num_clusters << " clusters, start writing..." << endl;
 
 	for (Size i = 0; i < num_clusters; i++)
 	{

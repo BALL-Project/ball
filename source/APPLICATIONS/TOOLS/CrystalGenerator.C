@@ -66,10 +66,11 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("to_uc_c", "to unit cell index c", INT, true);
 	parpars.setParameterRestrictions("from_uc_c", 0, 9);
   
-  String man = "Blubber";
+  String man = "TODO: Manual";
 	parpars.setToolManual(man);
 	
   parpars.setSupportedFormats("i","pdb");
+  parpars.setSupportedFormats("o","pdb");
 
 	parpars.parse(argc, argv);
    

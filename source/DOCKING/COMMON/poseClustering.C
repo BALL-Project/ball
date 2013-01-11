@@ -3,7 +3,9 @@
 //
 
 #include <BALL/DOCKING/COMMON/poseClustering.h>
+
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 using namespace std;
 
@@ -17,7 +19,6 @@ namespace BALL
 
 	const String PoseClustering::Option::RMSD_THRESHOLD = "pose_clustering_rmsd_threshold";
   const float PoseClustering::Default::RMSD_THRESHOLD = 3;
-
 
 	PoseClustering::PoseClustering()
 	{
@@ -81,6 +82,11 @@ namespace BALL
 					 || (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::CLINK_DEFAYS))
 		{
 			return linearSpaceCompute_();
+		}
+		else if (options.getInteger(Option::CLUSTER_METHOD) == CENTER_OF_GRAVITY_CLINK)
+		{
+			// cluster the centers of gravity
+			return centerOfGravityClink_();
 		}
 		else
 		{
@@ -245,33 +251,43 @@ namespace BALL
 		return true;
 	}
 
-	bool PoseClustering::linearSpaceCompute_()
+	bool PoseClustering::linearSpaceCompute_(bool full_rmsd)
 	{
 		float threshold = options.getReal(Option::RMSD_THRESHOLD);
 
 		// we will need arrays pi, lambda, and mu
-		lambda.resize(current_set_->size());
-		pi.resize(current_set_->size());
-		mu.resize(current_set_->size());
+		lambda_.resize(current_set_->size());
+		pi_.resize(current_set_->size());
+		mu_.resize(current_set_->size());
 
 		// and initialize them for the first point
-		pi[0] = 0;
-		lambda[0] = numeric_limits<double>::max();
+		pi_[0] = 0;
+		lambda_[0] = numeric_limits<double>::max();
 
 		for (Size current_level=1; current_level < current_set_->size(); ++current_level)
 		{
-			pi[current_level] = current_level;
-			lambda[current_level] = numeric_limits<double>::max();
+			pi_[current_level] = current_level;
+			lambda_[current_level] = numeric_limits<double>::max();
 
-			(*current_set_)[current_level].applySnapShot(system_i_);
+			if (full_rmsd)
+			{
+				(*current_set_)[current_level].applySnapShot(system_i_);
+			}
 
 			for (Size j=0; j<current_level; ++j)
 			{
-				(*current_set_)[j].applySnapShot(system_j_);
+				if (full_rmsd)
+				{
+					(*current_set_)[j].applySnapShot(system_j_);
 
-				// note: we don't need the rmsd matrix here - that's the whole point: the algorithm
-				//       only requires O(n) data, not (O(n^2))
-				mu[j] = getRMSD_();
+					// note: we don't need the rmsd matrix here - that's the whole point: the algorithm
+					//       only requires O(n) data, not (O(n^2))
+					mu_[j] = getRMSD_();
+				}
+				else
+				{
+					mu_[j] = getRMSD_(current_level, j, full_rmsd);
+				}
 			}
 
 			if (options.getInteger(Option::CLUSTER_METHOD) == SLINK_SIBSON)
@@ -290,7 +306,7 @@ namespace BALL
 		std::vector<std::set<Index> > cluster_helper;
 
 		// first, each point is its own cluster
-		for (Position i=0; i<current_set_->size(); ++i)
+		for (Position i=0; i < current_set_->size(); ++i)
 		{
 			cluster_helper.push_back(std::set<Index>());
 			cluster_helper.back().insert(i);
@@ -299,10 +315,10 @@ namespace BALL
 		// now, join clusters if needed
 		for (Position current_cluster=0; current_cluster < cluster_helper.size(); ++current_cluster)
 		{
-			if (BALL_REAL_LESS_OR_EQUAL(lambda[current_cluster], threshold, 1e-5))
+			if (BALL_REAL_LESS_OR_EQUAL(lambda_[current_cluster], threshold, 1e-5))
 			{
 				// merge this cluster with its destination
-				cluster_helper[pi[current_cluster]].insert(cluster_helper[current_cluster].begin(), cluster_helper[current_cluster].end());
+				cluster_helper[pi_[current_cluster]].insert(cluster_helper[current_cluster].begin(), cluster_helper[current_cluster].end());
 
 				// save some memory
 				cluster_helper[current_cluster].clear();
@@ -325,24 +341,23 @@ namespace BALL
 	{
 		for (int i=0; i<current_level; ++i)
 		{
-			if (BALL_REAL_GREATER_OR_EQUAL(lambda[i], mu[i], 1e-5))
+			if (BALL_REAL_GREATER_OR_EQUAL(lambda_[i], mu_[i], 1e-5))
 			{
-				mu[pi[i]] = min(mu[pi[i]], lambda[i]);
-				lambda[i] = mu[i];
-				pi[i] = current_level;
+				mu_[pi_[i]] = min(mu_[pi_[i]], lambda_[i]);
+				lambda_[i]  = mu_[i];
+				pi_[i]      = current_level;
 			}
 			else
 			{
-				mu[pi[i]] = min(mu[pi[i]], mu[i]);
+				mu_[pi_[i]] = min(mu_[pi_[i]], mu_[i]);
 			}
 		}
 
 		for (int i=0; i<current_level; ++i)
 		{
-			if (BALL_REAL_GREATER_OR_EQUAL(lambda[i], lambda[pi[i]], 1e-5))
-				pi[i] = current_level;
+			if (BALL_REAL_GREATER_OR_EQUAL(lambda_[i], lambda_[pi_[i]], 1e-5))
+				pi_[i] = current_level;
 		}
-
 	}
 
 
@@ -350,10 +365,10 @@ namespace BALL
 	{
 		for (int i=0; i<current_level; ++i)
 		{
-			if (BALL_REAL_LESS(lambda[i], mu[i], 1e-5))
+			if (BALL_REAL_LESS(lambda_[i], mu_[i], 1e-5))
 			{
-				mu[pi[i]] = max(mu[pi[i]], mu[i]);
-				mu[i] = numeric_limits<double>::max();
+				mu_[pi_[i]] = max(mu_[pi_[i]], mu_[i]);
+				mu_[i] = numeric_limits<double>::max();
 			}
 		}
 
@@ -362,52 +377,110 @@ namespace BALL
 		{
 			int j = (current_level-1)-i;
 
-			if (BALL_REAL_GREATER_OR_EQUAL(lambda[j], mu[pi[j]], 1e-5))
+			if (BALL_REAL_GREATER_OR_EQUAL(lambda_[j], mu_[pi_[j]], 1e-5))
 			{
-				if (BALL_REAL_LESS(mu[j], mu[a], 1e-5))
+				if (BALL_REAL_LESS(mu_[j], mu_[a], 1e-5))
 				{
 					a = j;
 				}
 			}
 			else
 			{
-				mu[j] = numeric_limits<double>::max();
+				mu_[j] = numeric_limits<double>::max();
 			}
 		}
 
-		int    b = pi[a];
-		double c = lambda[a];
+		int    b = pi_[a];
+		double c = lambda_[a];
 
-		pi[a] = current_level;
-		lambda[a] = mu[a];
+		pi_[a] = current_level;
+		lambda_[a] = mu_[a];
 
 		int d;
 		double e;
 
 		while ((a < current_level-1) && (b < current_level-1))
 		{
-			d = pi[b];
-			e = lambda[b];
-			pi[b] = current_level;
-			lambda[b] = c;
+			d = pi_[b];
+			e = lambda_[b];
+			pi_[b] = current_level;
+			lambda_[b] = c;
 			b = d;
 			c = e;
 		}
 
 		if ((a < current_level - 1) && (b == current_level-1))
 		{
-			pi[b] = current_level;
-			lambda[b] = c;
+			pi_[b] = current_level;
+			lambda_[b] = c;
 		}
 
 		for (int i=0; i<current_level; ++i)
 		{
-			if (pi[pi[i]] == current_level)
+			if (pi_[pi_[i]] == current_level)
 			{
-				if (BALL_REAL_GREATER_OR_EQUAL(lambda[i], lambda[pi[i]], 1e-5))
-					pi[i] = current_level;
+				if (BALL_REAL_GREATER_OR_EQUAL(lambda_[i], lambda_[pi_[i]], 1e-5))
+					pi_[i] = current_level;
 			}
 		}
+	}
+
+
+	bool PoseClustering::centerOfGravityClink_()
+	{
+		GeometricCenterProcessor center;
+		com_.resize(current_set_->size());
+		for (Size i=1; i < current_set_->size(); ++i)
+		{
+			(*current_set_)[i].applySnapShot(system_i_);
+			system_i_.apply(center);
+			com_[i] = center.getCenter();
+		}
+
+		// run the CLINK machinery
+		linearSpaceCompute_(false);
+
+	cout << " found " << getNumberOfClusters() << "  geometric center clusters." << endl;
+
+		// store the new clusters
+		std::vector<std::set<Index> >   temp_clusters;
+
+		PoseClustering inner_pc;
+		inner_pc.options = options;
+
+		// now iterate over all clusters 
+		for (Size i=0; i<getNumberOfClusters(); i++)
+		{
+			Size num_clusters = 1;
+			if (getClusterSize(i)>1)
+			{
+				boost::shared_ptr<ConformationSet> current_conformation_set = getClusterConformationSet(i);
+
+				// and run CLINK separately
+				inner_pc.clear_();
+				inner_pc.options.setInteger(Option::CLUSTER_METHOD, CLINK_DEFAYS);
+
+				inner_pc.setConformationSet(&*current_conformation_set);
+				inner_pc.compute();
+
+				// add what we have found
+				num_clusters = inner_pc.getNumberOfClusters();
+				for (Size j=0; j<num_clusters; ++j)
+				{
+					temp_clusters.push_back(inner_pc.getCluster(j));
+					//cout << "    " << i << " " << j << ": " << inner_pc.getClusterSize(j) << std::endl;
+				}
+				//cout << " cluster " << i << "( " << getClusterSize(i) << " ) was split into " << num_clusters << " clusters." << endl;
+			}
+			else
+			{
+				temp_clusters.push_back(getCluster(i));
+			}
+			//std::set<Index>& current_cluster = getCluster(i);
+		}
+		// switch the clusters
+		clusters_ = temp_clusters;
+		return true;
 	}
 
 
@@ -563,33 +636,46 @@ namespace BALL
 
 	//TODO shouldnt this method return double?
 	// distance between cluster i and cluster j
-	float PoseClustering::getRMSD_(Index i, Index j)
+	float PoseClustering::getRMSD_(Index i, Index j, bool full_rmsd)
 	{
 		// we have to compute the maximal distance
-		float rmsd =  std::numeric_limits<float>::max();
-		for (set<Index>::iterator conf_it_i = clusters_[i].begin();
+		float rmsd = std::numeric_limits<float>::max();
+
+		if (full_rmsd)
+		{
+			for (set<Index>::iterator conf_it_i = clusters_[i].begin();
 					conf_it_i !=  clusters_[i].end();
 					conf_it_i ++)
-		{
-			for (set<Index>::iterator conf_it_j = clusters_[j].begin();
-					conf_it_j !=  clusters_[j].end();
-					conf_it_j ++)
 			{
-				if (pairwise_scores_(*conf_it_i, *conf_it_j) < rmsd)
-					rmsd = pairwise_scores_(*conf_it_i, *conf_it_j);
+				for (set<Index>::iterator conf_it_j = clusters_[j].begin();
+						conf_it_j !=  clusters_[j].end();
+						conf_it_j ++)
+				{
+					if (pairwise_scores_(*conf_it_i, *conf_it_j) < rmsd)
+						rmsd = pairwise_scores_(*conf_it_i, *conf_it_j);
+				}
 			}
 		}
-
+		else
+		{
+			rmsd = com_[i].getDistance(com_[j]);
+		}
 		return rmsd;
 	}
 
-	float PoseClustering::getRMSD_()
+	float PoseClustering::getRMSD_(bool full_rmsd)
 	{
 		float rmsd = 0.;
 
-		StructureMapper mapper(system_i_, system_j_);
-		rmsd = mapper.calculateRMSD(atom_bijection_);
-
+		if (full_rmsd)
+		{
+			StructureMapper mapper(system_i_, system_j_);
+			rmsd = mapper.calculateRMSD(atom_bijection_);
+		}
+		else
+		{
+			Log.info() << "getRMSD_() for center of masses not yet implemented." << endl;
+		}
 		return rmsd;
 	}
 
@@ -608,5 +694,20 @@ namespace BALL
 		{
 			printCluster_(i);
 		}
+	}
+
+	void PoseClustering::clear_()
+	{
+		pairwise_scores_.setZero();
+		current_set_ = NULL;
+		clusters_.clear();
+		//rmsd_level_of_detail_;
+		lambda_.clear();
+		pi_.clear();
+		mu_.clear();
+		com_.clear();
+		//atom_bijection_;
+		//system_i_;
+		//system_j_;
 	}
 }
