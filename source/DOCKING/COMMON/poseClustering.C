@@ -20,7 +20,6 @@ namespace BALL
 	const String PoseClustering::Option::RMSD_THRESHOLD = "pose_clustering_rmsd_threshold";
   const float PoseClustering::Default::RMSD_THRESHOLD = 3;
 
-
 	PoseClustering::PoseClustering()
 	{
 		setDefaultOptions();
@@ -459,7 +458,7 @@ namespace BALL
 
 				// and run CLINK separately
 				inner_pc.clear_();
-				inner_pc.options.setInteger(Option::CLUSTER_METHOD, ClusterMethod::CLINK_DEFAYS);
+				inner_pc.options.setInteger(Option::CLUSTER_METHOD, CLINK_DEFAYS);
 
 				inner_pc.setConformationSet(&*current_conformation_set);
 				inner_pc.compute();
