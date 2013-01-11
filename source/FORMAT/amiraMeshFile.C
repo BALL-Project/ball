@@ -66,7 +66,7 @@ namespace BALL
     const size_t MAX_READ_SIZE = 2048;
 		//We read the first 2k bytes into memory to parse the header.
     //The fixed buffer size looks a bit like a hack, and it is one, but it gets the job done.
-    char buffer[MAX_READ_SIZE];
+    char buffer[MAX_READ_SIZE + 1];
 
     std::fstream::read(buffer, MAX_READ_SIZE);
     buffer[std::fstream::gcount()] = '\0'; //The following string routines prefer null-terminated strings
