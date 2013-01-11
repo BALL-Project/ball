@@ -444,7 +444,8 @@ IF (BALL_BUILD_QUEASY)
 	SET(QWT_LIBRARIES ${Qwt5_Qt4_LIBRARY})
 ENDIF ()
 
-OPTION(BALL_BUILD_BALLAXY "Build BALL-based galaxy tools" OFF)
+# always build the tools
+OPTION(BALL_BUILD_BALLAXY "Build BALL-based galaxy tools" ON)
 
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
