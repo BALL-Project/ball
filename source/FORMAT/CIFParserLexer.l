@@ -276,4 +276,7 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
  }
 %%
 
-
+void CIFParser_destroy()
+{
+	CIFParserlex_destroy();
+}
