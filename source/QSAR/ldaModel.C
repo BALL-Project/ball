@@ -102,14 +102,14 @@ namespace BALL
 				
 				for (int i = 0; i < mean_vectors_[c].rows(); i++) // calculate mean vector of each class
 				{
-					if (no_substances_c[i-1] == 0)
+					if (no_substances_c[i] == 0)
 					{
 						mean_vectors_[c].row(i).setConstant(std::numeric_limits<double>::infinity());  // set mean of classes NOT occurring for activitiy c to inf
 					}
 					
 					for (int j = 0; j < descriptor_matrix_.cols(); j++)
 					{
-						mean_vectors_[c](i, j) = mean_vectors_[c](i, j)/no_substances_c[i-1];
+						mean_vectors_[c](i, j) = mean_vectors_[c](i, j)/no_substances_c[i];
 					}
 				}
 				
