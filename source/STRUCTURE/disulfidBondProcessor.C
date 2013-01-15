@@ -129,11 +129,26 @@ namespace BALL
 
 					if (hydrogen1)
 					{
-						hydrogen1->destroy();
+						if(hydrogen1->isAutoDeletable())
+						{
+							delete hydrogen1;
+						}
+						else
+						{
+							hydrogen1->destroy();
+						}
 					}
+
 					if (hydrogen2)
 					{
-						hydrogen2->destroy();
+						if(hydrogen2->isAutoDeletable())
+						{
+							delete hydrogen2;
+						}
+						else
+						{
+							hydrogen2->destroy();
+						}
 					}
 
 					// add a bond 		
@@ -227,7 +242,14 @@ namespace BALL
 		if (bond && (atom1->getElement() == PTE[Element::S])
 			       && (atom2->getElement() == PTE[Element::S]))
 		{
-			bond->destroy();
+			if(bond->isAutoDeletable())
+			{
+				delete bond;
+			}
+			else
+			{
+				bond->destroy();
+			}
 			success = true;
 
 			// Unfortunately, use of FragmentDB to rebuild residues, i.e. add hydrogens
