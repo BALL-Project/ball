@@ -15,8 +15,7 @@
 #include <BALL/MOLMEC/AMBER/GAFFTypeProcessor.h>
 
 //defined in the lexer (GAFFCESParserLexer.l)
-extern void GAFFCESParser_initBuffer(const char* buf);
-extern void GAFFCESParser_delBuffer();
+extern void GAFFCESParser_destroy();
 extern int  GAFFCESParserparse();
 
 //#define DEBUG
@@ -538,6 +537,7 @@ namespace BALL
 	GAFFCESParser::~GAFFCESParser()
 	{
 		root.clear();
+		GAFFCESParser_destroy();
 	}
 
 

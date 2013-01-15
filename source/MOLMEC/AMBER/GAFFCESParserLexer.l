@@ -78,3 +78,8 @@ END_PROPERTY   "]"
 
 %%
 /*user defined routines*/
+
+void GAFFCESParser_destroy()
+{
+	GAFFCESParserlex_destroy();
+}
