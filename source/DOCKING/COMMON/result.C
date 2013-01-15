@@ -425,6 +425,7 @@ namespace BALL
 	}
 
 	Result::ResultData::ResultData()
+		: scoringmethod(UNKNOWN)
 	{
 		has_lig_id  = false;
 		has_rec_id  = false;
@@ -434,6 +435,7 @@ namespace BALL
 	}
 
 	Result::ResultData::ResultData(int result_type)
+		: scoringmethod(UNKNOWN)
 	{
 		has_lig_id  = false;
 		has_rec_id  = false;
