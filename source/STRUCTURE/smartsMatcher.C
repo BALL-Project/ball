@@ -20,15 +20,15 @@ using namespace std;
 
 namespace BALL
 {
-	SmartsMatcher::RecStructPool_* SmartsMatcher::pool_ = 0;
+	boost::shared_ptr<SmartsMatcher::RecStructPool_> SmartsMatcher::pool_;
 
 	SmartsMatcher::SmartsMatcher()
 		: has_user_sssr_(false),
 			depth_(0)
 	{
-		if (pool_ == 0)
+		if (!pool_)
 		{
-			pool_ = new RecStructPool_();
+			pool_ = boost::shared_ptr<RecStructPool_>(new RecStructPool_);
 		}
 	}
 
