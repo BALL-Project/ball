@@ -93,3 +93,8 @@ void SmilesParser_delBuffer()
 {
 	SmilesParser_delete_buffer(SmilesParser_buffer);
 }
+
+void SmilesParser_destroy()
+{
+	SmilesParserlex_destroy();
+}

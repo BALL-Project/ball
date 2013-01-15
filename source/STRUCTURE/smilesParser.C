@@ -10,6 +10,7 @@
 // defined in the lexer (smilesParserLexer.l)
 extern void SmilesParser_initBuffer(const char* buf);
 extern void SmilesParser_delBuffer();
+extern void SmilesParser_destroy();
 extern int SmilesParserparse();
 
 namespace BALL
@@ -98,6 +99,8 @@ namespace BALL
 		all_atoms_.clear();
 
 		system_.destroy();
+
+		SmilesParser_destroy();
 	}
 
 	const System& SmilesParser::getSystem() const
