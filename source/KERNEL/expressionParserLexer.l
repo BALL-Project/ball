@@ -73,3 +73,8 @@ void ExpressionParser_delBuffer()
 {
 	ExpressionParser_delete_buffer(ExpressionParser_buffer);
 }
+
+void ExpressionParser_destroy()
+{
+	ExpressionParserlex_destroy();
+}
