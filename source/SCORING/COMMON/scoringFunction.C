@@ -691,7 +691,9 @@ void ScoringFunction::setupReferenceLigand()
 	atoms_to_fragments_.clear();
 	// estimate depth of burial of the reference ligand
 	overlaps_ = 0;
-	createNonbondedPairVector(hashgrid_, overlaps_, 1);
+	AtomPairVector* tmp = createNonbondedPairVector(hashgrid_, overlaps_, 1);
+	delete tmp; // This vector is not used anywhere, delete it!
+
 	reference_neighbors_ = neighboring_target_atoms_;
 
 	//	if(use_static_lig_fragments_) createStaticLigandFragments();
