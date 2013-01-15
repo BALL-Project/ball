@@ -31,7 +31,7 @@ END_PROPERTY   "]"
 /*rules*/
 %%
 {INTEGER} {GAFFCESParserlval.number = atoi(yytext); return OPTIONAL_NUMBER;}
-{SYMBOL} 	{GAFFCESParserlval.text = strdup(yytext); return ATOMSTRING;}
+{SYMBOL} 	{GAFFCESParserlval.text = yytext; return ATOMSTRING;}
 
 {START_PROPERTY} {BEGIN(APS); return TK_APS_START;}
 
