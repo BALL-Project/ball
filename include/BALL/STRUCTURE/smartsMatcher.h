@@ -13,6 +13,8 @@
 #include <set>
 #include <map>
 
+#include <boost/shared_ptr.hpp>
+
 namespace BALL 
 {
 	// forward declaration
@@ -247,7 +249,7 @@ namespace BALL
 			};
 
 			/// the pool of rec struct objects
-			static RecStructPool_* pool_;
+			static boost::shared_ptr<RecStructPool_> pool_;
 
 			/// method for evaluation of ring edges, after the the smarts tree is matched to molcule
 			bool evaluateRingEdges_(const std::set<const Atom*>& matching, const std::map<const SPNode*, const Atom*>& mapping, const String& smarts);
