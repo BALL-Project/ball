@@ -11,6 +11,7 @@
 // defined in the lexer (CIFParserLexer.l)
 extern void CIFParser_initBuffer(const char* buf);
 extern void CIFParser_delBuffer();
+extern void CIFParser_destroy();
 extern int  CIFParserparse();
 extern void CIFParserLexer_reset();
 
@@ -46,6 +47,7 @@ namespace BALL
 
 	CIFFile::~CIFFile()
 	{
+		CIFParser_destroy();
 	}
 
 	bool CIFFile::write()
