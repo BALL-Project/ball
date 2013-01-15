@@ -142,3 +142,8 @@ void SmartsParser_delBuffer()
 {
 	SmartsParser_delete_buffer(SmartsParser_buffer);
 }
+
+void SmartsParser_destroy()
+{
+	SmartsParserlex_destroy();
+}

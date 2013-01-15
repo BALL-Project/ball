@@ -12,6 +12,7 @@
 // defined in the lexer (smartsParserLexer.l)
 extern void SmartsParser_initBuffer(const char* buf);
 extern void SmartsParser_delBuffer();
+extern void SmartsParser_destroy();
 extern int SmartsParserparse();
 
 using namespace std;
@@ -678,6 +679,8 @@ namespace BALL
 	SmartsParser::~SmartsParser()
 	{
 		clear();
+
+		SmartsParser_destroy();
 	}
 
 	void SmartsParser::clear()
