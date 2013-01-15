@@ -7,6 +7,7 @@
 // defined in the lexer (expressionParserLexer.l)
 extern void ExpressionParser_initBuffer(const char* buf);
 extern void ExpressionParser_delBuffer();
+extern void ExpressionParser_destroy();
 extern int ExpressionParserparse();
 
 namespace BALL
@@ -122,6 +123,8 @@ namespace BALL
 		{
 			delete syntax_tree_;
 		}
+
+		ExpressionParser_destroy();
 	}
 
 	const ExpressionParser::SyntaxTree& ExpressionParser::getSyntaxTree() const
