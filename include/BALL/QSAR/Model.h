@@ -246,9 +246,11 @@ namespace BALL
 				friend class Validation;
 				friend class RegressionValidation;
 				friend class ClassificationValidation;
+#ifdef BALL_HAS_LAPACK
 				friend class PCRModel;
 				friend class KPCRModel;
 				friend class FeatureSelection;
+#endif //BALL_HAS_LAPACK
 		};
 		
 		/** convenience function for creating a new Model object from a given model-file */
