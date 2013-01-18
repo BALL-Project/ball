@@ -102,18 +102,18 @@ datablock_content: data_items { CIF_DEBUG("P: content: data items ")
 	;
 
 data_items: tag optional_whitespace value {
-					CIF_DEBUG("P: data item with tag title " << $1 << " and value " << value_helper) 
+					CIF_DEBUG("P: data item with tag title " << $1 << " and value " << value_helper);
 							current_data_item.clear();
 							current_data_item.addPair($1, value_helper);
 						  value_helper = "";
 					}
 	|		tag TK_WHITESPACE {
-				CIF_DEBUG("Found data item with title " << $1)
+				CIF_DEBUG("Found data item with title " << $1);
 							current_data_item.clear();
 							current_data_item.addPair($1, "");
 				}
 	|   loop tag_list optional_whitespace loop_body optional_whitespace TK_STOP {
-					CIF_DEBUG("P: data item tag list loop body stop: ")
+					CIF_DEBUG("P: data item tag list loop body stop: ");
 					}
 	;
 
@@ -124,9 +124,9 @@ loop: TK_LOOP {
 
 
 tag_list: TK_WHITESPACE tag {
-				current_data_item.addTag($2); CIF_DEBUG("P:   tag " << $2)   }
+				current_data_item.addTag($2); CIF_DEBUG("P:   tag " << $2);   }
   | tag_list optional_whitespace tag {
-				current_data_item.addTag($3); CIF_DEBUG("P:   tag " << $3)  }
+				current_data_item.addTag($3); CIF_DEBUG("P:   tag " << $3);  }
 	;
 
 loop_body: value { 
@@ -242,7 +242,7 @@ double_quoted_string: TK_CLOSE_DOUBLE_QUOTE {
 textfield_line: /* empty */ {}
 							| TK_TEXTFIELD_LINE textfield_line { 
 								textfield_helper = string($1) + textfield_helper;
-								CIF_DEBUG("TextField line: " << $1 << " " << $2) } ;
+								CIF_DEBUG("TextField line: " << $1 << " " << $2); } ;
 
 %%
 /*        additional C code            */
