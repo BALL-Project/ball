@@ -16,6 +16,8 @@
 #include <openbabel/mol.h>
 #include <openbabel/builder.h>
 #include <openbabel/forcefield.h>
+#include <openbabel/plugin.h>
+#include <openbabel/obconversion.h>
 #include "version.h"
 
 
@@ -147,6 +149,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input file", INFILE, true);
 	parpars.registerParameter("o", "output file", OUTFILE, true);
 	parpars.registerParameter("ph", "pH-value for pH-dep. protonation", DOUBLE, false, "7.0");
+	parpars.registerParameter("ff", "Forcefield to use for optimization (any available OpenBabel plugin)", STRING, false, "MMFF94");
 	parpars.registerFlag("rm", "remove input file when finished");
 	parpars.registerFlag("k", "keep existing 3D coordinates (flag precedes '-kp')");
 	parpars.registerFlag("kp", "keep existing 3D coordinates but re-protonate compound in a pH dependent manner (flag is preceded by '-k')");
@@ -166,6 +169,11 @@ Supported formats are ") + MolFileFactory::getSupportedFormats() + String(".");
 	parpars.setOutputFormatSource("o","i");
 	parpars.parse(argc, argv);
 	
+	// Create a dummy OBConversion object, that loads the available plugins.
+	// If you know another, more elegant way to teach OpenBabel to do so
+	// be my guest
+	OpenBabel::OBConversion();
+
 	GenericMolFile* input = MolFileFactory::open(parpars.get("i"), ios::in);
 	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, input);
 	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
@@ -192,11 +200,34 @@ Supported formats are ") + MolFileFactory::getSupportedFormats() + String(".");
 		keep3DcoordsProtonate = true;
 	}
 	
-	OpenBabel::OBForceField* pFF = OpenBabel::OBForceField::FindForceField("MMFF94");
+	std::string ff = parpars.get("ff");
+	OpenBabel::OBPlugin* plugin = OpenBabel::OBPlugin::GetPlugin("forcefields", ff.c_str());
+
+	if(!plugin)
+	{
+		std::vector<std::string> forcefields;
+		OpenBabel::OBPlugin::ListAsVector("forcefields", ff.c_str(), forcefields);
+
+		cerr << "[Error:] No OpenBabel plugin containing the specified force field could be found. "
+		        "Available forcefields are:\n";
+
+		for(std::vector<std::string>::iterator it = forcefields.begin(); it != forcefields.end(); ++it)
+		{
+			std::cerr << "\t" << *it << "\n";
+		}
+
+		cerr << "Please make sure that the plugin is installed and BABEL_LIBDIR is set accordingly."
+		        "\nYo can verify this by typing \"obabel -L forcefields\"" << endl;
+
+		return 1;
+	}
+
+	OpenBabel::OBForceField* pFF = dynamic_cast<OpenBabel::OBForceField*>(plugin);
 	if (!pFF)
 	{
-		cerr << "[Error:] Openbabel MMFF force-field could not be found.\nPlease make sure to link this executable to plugin_forcefields.so, /otherwise the openbabel forcefield-plugins cannot be used!" << endl;
-		exit(1);
+		cerr << "[Error:] Could not convert the provided plugin to a OBForceField. This is most likely a problem with OpenBabel.\n"
+		        "If you can rule this out, please report a bug on the BALL bugtracker." << std::endl;
+		return 1;
 	}
 	
 	String mol_name;
