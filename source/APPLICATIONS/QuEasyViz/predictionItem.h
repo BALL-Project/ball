@@ -54,7 +54,7 @@ namespace BALL
 				PredictionItem(PredictionItem& item);
 				
 				/** Creates a PredictionItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
-				PredictionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
+				PredictionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view);
 
 				/** destructor */
 				~PredictionItem();
@@ -77,7 +77,7 @@ namespace BALL
 				DottedEdge* dottedEdge();
 
 				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(ofstream& out);
+				void writeConfigSection(std::ofstream& out);
 				
 				void addToPipeline();
 				void removeFromPipeline();

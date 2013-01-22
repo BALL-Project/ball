@@ -87,14 +87,14 @@ namespace BALL
 		}
 
 
-		FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
+		FeatureSelectionItem::FeatureSelectionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view)
 			: DataItem(view)
 		{
-			istringstream input;
+			std::istringstream input;
 			input.str(configfile_section);
 			FeatureSelectionConfiguration conf = ConfigIO::readFeatureSelectionConfiguration(&input);
 			
-			map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
+			std::map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 			if(it==filenames_map.end())
 			{
 				String m = "ModelItem \"";
@@ -138,12 +138,12 @@ namespace BALL
 			view_->data_scene->addItem(this);
 			if(item_positions!=0 && item_positions->size()>0)
 			{
-				pair<double,double> pos = item_positions->front();
+				std::pair<double,double> pos = item_positions->front();
 				item_positions->pop_front();
 				setPos(pos.first,pos.second);
 				if(item_positions->size()>0)
 				{
-					pair<double,double> pos = item_positions->front();
+					std::pair<double,double> pos = item_positions->front();
 					item_positions->pop_front();
 					model_item_->setPos(pos.first,pos.second);
 				}
@@ -301,10 +301,10 @@ namespace BALL
 		}
 
 
-		void FeatureSelectionItem::writeConfigSection(ofstream& out)
+		void FeatureSelectionItem::writeConfigSection(std::ofstream& out)
 		{
 			out << "[FeatureSelector]" << "\n";
-			if(done_) out<<"done = "<<done_<<endl;
+			if(done_) out<<"done = "<<done_<<std::endl;
 			out << "model_file = "<< inputModelItem()->savedAs().toStdString() << "\n";
 			out << "data_file = "<< inputModelItem()->inputDataItem()->savedAs().toStdString() << "\n";
 			out << "feature_selection_type = "<< getType() <<  "\n";
@@ -314,15 +314,15 @@ namespace BALL
 				if(s>=0)
 				{
 					String stat = modelItem()->getRegistryEntry()->getStatName(s);
-					if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<endl;
-					else out<< "regression_statistic = "<<stat.c_str()<<endl;
+					if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<std::endl;
+					else out<< "regression_statistic = "<<stat.c_str()<<std::endl;
 				}
 				out << "k_fold = "<< k() <<  "\n";
 				out<<"quality_increase_cutoff = "<<quality_increase_cutoff_<<"\n";
 			}
 			if(type_==0||type_==4||type_==5)
 			{
-				out<<"cor_threshold = "<<getCorThreshold()<<endl;
+				out<<"cor_threshold = "<<getCorThreshold()<<std::endl;
 			}
 			
 			if(opt_) out << "optimize_parameters = " << opt() << "\n";

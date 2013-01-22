@@ -46,7 +46,7 @@ namespace BALL
 			setWindowTitle("Coefficient Plotter");
 			
 			RegressionModel* model = (RegressionModel*)model_item_->model();
-			int no_y = model->getTrainingResult()->getColumnCount();
+			int no_y = model->getTrainingResult()->cols();
 			if(no_y>1)
 			{
 				activity_combobox_->addItem("All activities",-1);
@@ -68,9 +68,9 @@ namespace BALL
 			RegressionModel* model = (RegressionModel*)model_item_->model();
 			const Eigen::MatrixXd* coefficient_matrix = model->getTrainingResult();
 			
-			if(coefficient_matrix->Ncols()==0)
+			if(coefficient_matrix->cols()==0)
 			{
-				cout<<"Model must be trained before coefficients can be plotted!"<<endl;
+				std::cout << "Model must be trained before coefficients can be plotted!" << std::endl;
 				return;
 			}
 			
@@ -86,7 +86,7 @@ namespace BALL
 			
 			bool show_stddev=0;
 			const Eigen::MatrixXd* coeff_stddev = model->validation->getCoefficientStdErrors();
-			if(coeff_stddev!=NULL && coeff_stddev->Nrows()==coefficient_matrix->Nrows() && coeff_stddev->Ncols()==coefficient_matrix->Ncols())
+			if(coeff_stddev!=NULL && coeff_stddev->rows()==coefficient_matrix->rows() && coeff_stddev->cols()==coefficient_matrix->cols())
 			{
 				show_stddev=1;
 			}
@@ -94,15 +94,15 @@ namespace BALL
 			double min_y=1e10;
 			double max_y=-1e10;
 			double min_x=1;
-			double max_x=coefficient_matrix->Nrows();
-			const unsigned int size = coefficient_matrix->Nrows();
+			double max_x=coefficient_matrix->rows();
+			const unsigned int size = coefficient_matrix->rows();
 			
 			int start_matrixindex = selected_activity_+1;
 			int end_matrixindex = selected_activity_+1;
 			if(selected_activity_<0) // plot coefficients for all activities at once
 			{
 				start_matrixindex = 1;
-				end_matrixindex = coefficient_matrix->Ncols();
+				end_matrixindex = coefficient_matrix->cols();
 			}
 			for(int i=start_matrixindex; i<=end_matrixindex; i++)
 			{

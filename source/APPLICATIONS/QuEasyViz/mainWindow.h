@@ -269,7 +269,7 @@ namespace BALL
 				DataItemScene fs_list_scene_;
 				DataItemScene val_list_scene_;
 				
-				map<String,String> descriptor_explanations_;
+				std::map<String,String> descriptor_explanations_;
 				bool read_descriptor_explanations_;
 				
 				/** List of all dock-widget of the mainWindow. It is used for switching to/from fullscreen mode by hiding all dockwidgets */

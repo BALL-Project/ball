@@ -92,10 +92,10 @@ namespace BALL
 			{
 				unsigned int index = feature_combobox_->currentIndex();
 			
-				map<String,unsigned int>::iterator it=map_names_to_ID_.find(feature_combobox_->currentText().toStdString());
+				std::map<String,unsigned int>::iterator it=map_names_to_ID_.find(feature_combobox_->currentText().toStdString());
 				if(it==map_names_to_ID_.end())
 				{
-					cout<<"error: ID of feature to be deleted not found!"<<endl;
+					std::cout<<"error: ID of feature to be deleted not found!"<<std::endl;
 					return;
 				}		
 				
@@ -114,7 +114,7 @@ namespace BALL
 					features->erase(feature_ID);
 				}
 				
-				cout<<"deleting a feature: ID="<<feature_ID<<", name="<<feature_combobox_->currentText().toStdString()<<endl;
+				std::cout<<"deleting a feature: ID="<<feature_ID<<", name="<<feature_combobox_->currentText().toStdString()<<std::endl;
 				
 				feature_combobox_->removeItem(index);
 				
@@ -138,20 +138,20 @@ namespace BALL
 			const Eigen::MatrixXd* Y = model->getY();
 			
 			// try to read data
-			if(descriptor_matrix->Ncols()==0 || Y->Ncols()==0)
+			if(descriptor_matrix->cols()==0 || Y->cols()==0)
 			{
 				model->setDataSource(model_item_->inputDataItem()->data());
 				model->readTrainingData();
 			}
 			
-			if(descriptor_matrix->Ncols()==0)
+			if(descriptor_matrix->cols()==0)
 			{
-				cout<<"Data must be read into model before features can be plotted!"<<endl;
+				std::cout<<"Data must be read into model before features can be plotted!"<<std::endl;
 				return;
 			}
-			if(Y->Ncols()==0)
+			if(Y->cols()==0)
 			{
-				cout<<"Response variables must be read into model before features can be plotted!"<<endl;
+				std::cout<<"Response variables must be read into model before features can be plotted!"<<std::endl;
 				return;
 			}
 			
@@ -170,8 +170,8 @@ namespace BALL
 			double max_y=-1e10;
 			double min_x=1e10;
 			double max_x=-1e10;
-			const unsigned int no_compounds = descriptor_matrix->Nrows();
-			const unsigned int no_features = descriptor_matrix->Ncols();
+			const unsigned int no_compounds = descriptor_matrix->rows();
+			const unsigned int no_features = descriptor_matrix->cols();
 			
 			if(feature_combobox_->count()==0) // if combobox has not yet been set up
 			{
@@ -219,23 +219,23 @@ namespace BALL
 				if(feature_index==0) continue;
 				
 				// sort ascendingly according to activity value
-				std::multiset<pair<double,pair<double,unsigned int> > > values;
+				std::multiset<std::pair<double,std::pair<double,unsigned int> > > values;
 				for(unsigned int j=1; j<=no_compounds; j++)
 				{
 					double feature_value, response_value;
 					model->getUnnormalizedFeatureValue(j,feature_index,feature_value);
 					model->getUnnormalizedResponseValue(j,1,response_value);
-					values.insert(make_pair(feature_value,make_pair(response_value,j)));
+					values.insert(std::make_pair(feature_value, std::make_pair(response_value,j)));
 				}
 				
-				std::multiset<pair<double, pair<double, unsigned int> > >::iterator v_it = values.begin();
+				std::multiset<std::pair<double, std::pair<double, unsigned int> > >::iterator v_it = values.begin();
 				QwtPlotCurve* curve_i = new QwtPlotCurve;
 				double* x = new double[no_compounds];
 				double* y = new double[no_compounds];
 				
 				for(unsigned int j=1; j<=no_compounds; j++, ++v_it)
 				{
-					const pair<double,pair<double,unsigned int> >& p = *v_it;
+					const std::pair<double,std::pair<double,unsigned int> >& p = *v_it;
 					double x_ji = p.first;
 					double y_j = p.second.first;
 					x[j-1] = x_ji;

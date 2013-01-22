@@ -109,7 +109,7 @@ namespace BALL
 				QStringList labels;
 				labels << "# Tests" << "R^2" << "Q^2";
 
-				QTableWidget* table = new QTableWidget(item->resultOfRandTest()->Nrows(), 3, this);	
+				QTableWidget* table = new QTableWidget(item->resultOfRandTest()->rows(), 3, this);
 				table->verticalHeader()->hide();
 				table->setHorizontalHeaderLabels (labels);
 				table->setAlternatingRowColors(true);
@@ -118,21 +118,21 @@ namespace BALL
 				table->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 				table->horizontalHeader()->setResizeMode(2,QHeaderView::Stretch); 
 			
-				for (int i = 1; i <= item->resultOfRandTest()->Nrows();i++)
+				for (int i = 0; i < item->resultOfRandTest()->rows();i++)
 				{
 					value.setNum(i);
 					QTableWidgetItem* num_of_Test = new QTableWidgetItem(value);
-					table->setItem(i-1, 0, num_of_Test);
+					table->setItem(i, 0, num_of_Test);
 
-					num = (*(item->resultOfRandTest()))(i,item->resultOfRandTest()->Ncols()-1);
+					num = (*(item->resultOfRandTest()))(i,item->resultOfRandTest()->cols()-2);
 					value.setNum(num);
 					QTableWidgetItem* r = new QTableWidgetItem(value);
-					table->setItem(i-1, 1, r);
+					table->setItem(i, 1, r);
 
-					num = (*(item->resultOfRandTest()))(i,item->resultOfRandTest()->Ncols());
+					num = (*(item->resultOfRandTest()))(i,item->resultOfRandTest()->cols()-1);
 					value.setNum(num);
 					QTableWidgetItem* q = new QTableWidgetItem(value);
-					table->setItem(i-1, 2, q);
+					table->setItem(i, 2, q);
 				}
 
 				QScrollArea* scrollArea = new QScrollArea(this);

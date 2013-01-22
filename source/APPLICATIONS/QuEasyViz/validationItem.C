@@ -97,12 +97,12 @@ namespace BALL
 		}
 
 
-		ValidationItem::ValidationItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
+		ValidationItem::ValidationItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view)
 			: DataItem(view)
 		{
 			result_color_ = QColor(205,225,205);
 			type_ = -1;
-			istringstream input;
+			std::istringstream input;
 			input.str(configfile_section);
 			ValidationConfiguration conf = ConfigIO::readValidationConfiguration(&input);
 
@@ -110,10 +110,10 @@ namespace BALL
 			for(int i=0; i<no; i++)
 			{
 				String file_i = conf.external_predictions[i];
-				map<String,DataItem*>::iterator it = filenames_map.find(file_i);
+				std::map<String,DataItem*>::iterator it = filenames_map.find(file_i);
 				if(it==filenames_map.end())
 				{
-					cout<<file_i<<" can not be found!!"<<endl;
+					std::cout<<file_i<<" can not be found!!"<<std::endl;
 					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","PredictionItem of a nested cross validation fold could not be found!");
 				}
 				PredictionItem* pred_i = (PredictionItem*) it->second;
@@ -146,7 +146,7 @@ namespace BALL
 			validation_statistic_ = conf.statistic;
 			type_ = conf.val_type;
 			
-			map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
+			std::map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 			if(it==filenames_map.end())
 			{
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ValidationItem reading error","ModelItem for which the validation should be done can not be found!");
@@ -157,7 +157,7 @@ namespace BALL
 			addToPipeline();
 			if(item_positions!=0 && item_positions->size()>0)
 			{
-				pair<double,double> pos = item_positions->front();
+				std::pair<double,double> pos = item_positions->front();
 				item_positions->pop_front();
 				setPos(pos.first,pos.second);
 			}
@@ -333,26 +333,26 @@ namespace BALL
 				
 				// calculate&display average stddev
 				double mean_stddev=0;
-				Size rows=coeff_stddev_.getRowCount();
-				Size cols=coeff_stddev_.getColumnCount();
+				Size rows=coeff_stddev_.rows();
+				Size cols=coeff_stddev_.cols();
 
 				double epsilon = std::numeric_limits<double>::epsilon();
 
-				if(training_result->getColumnCount()==cols && training_result->getRowCount()==rows)
+				if(training_result->cols()==cols && training_result->rows()==rows)
 				{
-					for(unsigned int i=1; i<=rows;i++) // for each feature
+					for(unsigned int i=0; i<rows;i++) // for each feature
 					{
-						for(unsigned int j=1; j<=cols;j++) // for each activity
+						for(unsigned int j=0; j<cols;j++) // for each activity
 						{
 							double t_ij = (*training_result)(i,j);
 							double s_ij = coeff_stddev_(i,j);
 							
 							if(abs(t_ij) > epsilon && abs(s_ij) > epsilon)
 							{
-								cout<<s_ij/t_ij;
+								std::cout<<s_ij/t_ij;
 								mean_stddev += abs(s_ij/t_ij);
 							}
-							cout<<endl;
+							std::cout << std::endl;
 						}
 					}
 					coeff_stderr_ratio_ = mean_stddev/(rows*cols);
@@ -362,11 +362,11 @@ namespace BALL
 			else if(type_==4)
 			{
 				double mean_q2=0;
-				for(unsigned int i=1;i<=result_of_rand_test_.getRowCount();i++)
+				for(unsigned int i=0;i<result_of_rand_test_.rows();i++)
 				{
-					mean_q2+=result_of_rand_test_(i,2);
+					mean_q2+=result_of_rand_test_(i,1);
 				}
-				mean_q2/=result_of_rand_test_.getRowCount();
+				mean_q2/=result_of_rand_test_.rows();
 				setResultString(mean_q2);
 			}
 			else setResultString(q2_);
@@ -467,12 +467,12 @@ namespace BALL
 			validationResultDialog.exec();
 		}
 
-		void ValidationItem::writeConfigSection(ofstream& out)
+		void ValidationItem::writeConfigSection(std::ofstream& out)
 		{
 			out << "[Validator]" << "\n";
 			out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
 			out << "data_file = "<< modelItem()->inputDataItem()->savedAs().toStdString() << "\n";
-			out << "validation_type = "<<type_<<endl;
+			out << "validation_type = "<<type_<<std::endl;
 			
 			// for nested cross validation save the names of the prediction output-files in order to be able to restore the pipeline later
 			if(external_validations_.size()>0)
@@ -482,14 +482,14 @@ namespace BALL
 				{
 					out<<(*it)->savedAs().toStdString()<<" ";
 				}
-				out<<endl;
+				out<<std::endl;
 			}
 			int s = getValidationStatistic();
 			if(s>=0)
 			{
 				String stat = modelItem()->getRegistryEntry()->getStatName(s);
-				if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<endl;
-				else out<< "regression_statistic = "<<stat.c_str()<<endl;
+				if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<std::endl;
+				else out<< "regression_statistic = "<<stat.c_str()<<std::endl;
 			}
 			
 			if(type_>0) out << "k_fold = "<< k() <<  "\n";

@@ -604,7 +604,7 @@ namespace BALL
 
 		QString ModelConfigurationDialog::defaultValueToQString(double& value, int precision)
 		{
-			ostringstream stream;
+			std::ostringstream stream;
 			stream.precision(precision);
 			stream << value;
 			QString text(stream.str().c_str());
@@ -614,7 +614,7 @@ namespace BALL
 
 		QString ModelConfigurationDialog::defaultValueToQString(int& value)
 		{
-			ostringstream stream;
+			std::ostringstream stream;
 			stream.precision(0);
 			stream << value;
 			QString text(stream.str().c_str());

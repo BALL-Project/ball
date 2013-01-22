@@ -73,8 +73,8 @@ namespace BALL
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PartitioningItem:::execute() error","Wrong number of connected InputPartitionItems!");
 			}
 			
-			set<Edge*>::iterator it=out_edge_list_.begin();
-			for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
+			std::set<Edge*>::iterator it=out_edge_list_.begin();
+			for(std::list<std::pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
 			{	
 				QSARData* data = ((InputDataItem*)(*in_edge_list_.begin())->sourceNode())->data();
 				vector<QSARData*> sets = data->generateExternalSet(val_fraction_); // length==2
@@ -106,7 +106,7 @@ namespace BALL
 			if(done_) return 1;
 			
 			bool all_children_done=1;
-			for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
+			for(std::list<std::pair<InputPartitionItem*,InputPartitionItem*> >::iterator it=folds_.begin(); it!=folds_.end(); it++)
 			{
 				if(!it->first->isDone())
 				{
@@ -162,7 +162,7 @@ namespace BALL
 			id_ = ID;
 		}
 
-		void PartitioningItem::addFold(pair<InputPartitionItem*,InputPartitionItem*> fold)
+		void PartitioningItem::addFold(std::pair<InputPartitionItem*,InputPartitionItem*> fold)
 		{
 			folds_.push_back(fold);
 		}
@@ -170,7 +170,7 @@ namespace BALL
 
 		void PartitioningItem::removePartition(InputPartitionItem* partition)
 		{
-			for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it= folds_.begin(); it!=folds_.end(); it++)
+			for(std::list<std::pair<InputPartitionItem*,InputPartitionItem*> >::iterator it= folds_.begin(); it!=folds_.end(); it++)
 			{
 				if(it->first==partition)
 				{

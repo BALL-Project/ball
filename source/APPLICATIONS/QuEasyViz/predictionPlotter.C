@@ -133,12 +133,12 @@ namespace BALL
 				const list<Eigen::VectorXd >* results = (*p_it)->results();
 				if(results==0)
 				{
-					cout<<"Results must be read before plotting can be done!"<<endl;
+					std::cout<<"Results must be read before plotting can be done!"<<std::endl;
 					return;
 				}
 				if(p_data->getNoResponseVariables()==0)
 				{
-					cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<endl;
+					std::cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<std::endl;
 					return;
 				}
 				QwtSymbol symbol = data_symbol;
@@ -215,7 +215,7 @@ namespace BALL
 			
 			if(results==0)
 			{
-				cout<<"Results must be read before plotting can be done!"<<endl;
+				std::cout<<"Results must be read before plotting can be done!"<<std::endl;
 				return;
 			}
 			
@@ -287,13 +287,13 @@ namespace BALL
 			else if(val_item_) labels = ((ClassificationModel*)val_item_->modelItem()->model())->getClassLabels();
 			else
 			{
-				cout<<"no models found whose confusion matrix could be plotted!"<<endl;
+				std::cout<<"no models found whose confusion matrix could be plotted!"<<std::endl;
 				return;
 			}
 			
 			double min_exp=labels[0];
 			double max_exp=labels[labels.size()-1];
-			map<int,unsigned int> labels_map; // maps the class-IDs to the index in the above vector
+			std::map<int,unsigned int> labels_map; // maps the class-IDs to the index in the above vector
 			for(unsigned int i=0; i<labels.size(); i++)
 			{
 				labels_map[labels[i]] = i;
@@ -312,12 +312,12 @@ namespace BALL
 				const list<Eigen::VectorXd >* results = (*p_it)->results();
 				if(results==0)
 				{
-					cout<<"Results must be read before plotting can be done!"<<endl;
+					std::cout<<"Results must be read before plotting can be done!"<<std::endl;
 					return;
 				}
 				if(p_data->getNoResponseVariables()==0)
 				{
-					cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<endl;
+					std::cout<<"There are no response values in the input data to be plotted as 'expected' within an 'observed-vs-expected' plot !"<<std::endl;
 					return;
 				}
 				
@@ -353,20 +353,20 @@ namespace BALL
 			
 		// 	for(unsigned int a=0; a<4; a++) // for TP,..,FN
 		// 	{
-		// 		if(a==0) cout<<"TP:  ";
-		// 		else if(a==1) cout<<"FP:  ";
-		// 		else if(a==2) cout<<"TN:  ";
-		// 		else if(a==3) cout<<"FN:  ";
+		// 		if(a==0) std::cout<<"TP:  ";
+		// 		else if(a==1) std::cout<<"FP:  ";
+		// 		else if(a==2) std::cout<<"TN:  ";
+		// 		else if(a==3) std::cout<<"FN:  ";
 		// 		for(unsigned int i=0; i<TP.size(); i++) // for each class
 		// 		{
-		// 			if(a==0) cout<<TP[i]<<"  ";
-		// 			else if(a==1) cout<<FP[i]<<"  ";
-		// 			else if(a==2) cout<<TN[i]<<"  ";
-		// 			else if(a==3) cout<<FN[i]<<"  ";
+		// 			if(a==0) std::cout<<TP[i]<<"  ";
+		// 			else if(a==1) std::cout<<FP[i]<<"  ";
+		// 			else if(a==2) std::cout<<TN[i]<<"  ";
+		// 			else if(a==3) std::cout<<FN[i]<<"  ";
 		// 		}
-		// 		cout<<endl<<flush;
+		// 		std::cout<<std::endl<<flush;
 		// 	}	
-		// 	cout<<"sums: "<<TP[0]+FP[0]+TN[0]+FN[0]<<"  "<<TP[1]+FP[1]+TN[1]+FN[1]<<"  "<<TP[2]+FP[2]+TN[2]+FN[2]<<"  "<<TP[3]+FP[3]+TN[3]+FN[3]<<endl<<flush;
+		// 	std::cout<<"sums: "<<TP[0]+FP[0]+TN[0]+FN[0]<<"  "<<TP[1]+FP[1]+TN[1]+FN[1]<<"  "<<TP[2]+FP[2]+TN[2]+FN[2]<<"  "<<TP[3]+FP[3]+TN[3]+FN[3]<<std::endl<<flush;
 			
 			int min_y = 999999;
 			int max_y = -999999;

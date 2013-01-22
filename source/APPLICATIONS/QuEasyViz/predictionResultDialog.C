@@ -92,7 +92,7 @@ namespace BALL
 			}
 			else
 			{
-				for(Size act=0; act<results_->front().getSize(); act++)
+				for(Size act=0; act<results_->front().rows(); act++)
 				{
 					String p = "Prediction"+String(act);
 					labels<<p.c_str();
@@ -102,7 +102,7 @@ namespace BALL
 			compound_names_ = test_data->getSubstanceNames();
 			Size no_columns = 1;
 			if(no_y>=1) no_columns+=2*no_y;
-			else no_columns+=results_->front().getSize();
+			else no_columns+=results_->front().rows();
 			table_ = new QTableWidget(results_->size(), no_columns, this);
 			table_->verticalHeader()->hide();
 			table_->setHorizontalHeaderLabels (labels);
@@ -120,7 +120,7 @@ namespace BALL
 					vector<double>* e = 0;
 					if(show_expected) e = test_data->getActivity(i);
 					
-					for(unsigned int act=0; act<it->getSize(); act++)
+					for(unsigned int act=0; act<it->rows(); act++)
 					{
 						QTableWidgetItem* pred = new QTableWidgetItem(QString((((String)(*it)(1+act)).c_str())));
 						table_->setItem(i, 1+(1+show_expected)*act, pred);
@@ -182,7 +182,7 @@ namespace BALL
 			{
 				return;
 			}
-			ofstream out(file.fileName().toStdString().c_str());
+			std::ofstream out(file.fileName().toStdString().c_str());
 			
 			unsigned int no_rows=table_->rowCount();
 			unsigned int no_cols=table_->columnCount();
@@ -239,7 +239,7 @@ namespace BALL
 				if(!use_selection || write) out<<table_->horizontalHeaderItem(i)->text().toStdString()<<"\t";
 			
 			}	
-			out<<endl;
+			out<<std::endl;
 			
 			if(use_selection) col_it=selected_columns.begin();
 			
@@ -262,7 +262,7 @@ namespace BALL
 				}
 				if(wrote_item) 
 				{
-					out<<endl;
+					out<<std::endl;
 					if(use_selection) 
 					{
 						row_it++;

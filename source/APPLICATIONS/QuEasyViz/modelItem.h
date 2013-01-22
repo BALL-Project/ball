@@ -81,7 +81,7 @@ namespace BALL
 				ModelItem(ModelItem& item);
 				
 				/** Creates a ModelItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
-				ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
+				ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view);
 			
 				/** creates a model
 				* @param inputdata pointer to the item's InputDataItem
@@ -148,7 +148,7 @@ namespace BALL
 				void loadFromFile(String file);
 
 				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(ofstream& out);
+				void writeConfigSection(std::ofstream& out);
 
 				void addToPipeline();
 				void removeFromPipeline();

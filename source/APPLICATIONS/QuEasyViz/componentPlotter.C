@@ -69,7 +69,7 @@ namespace BALL
 			else setWindowTitle("Latent Variable Plotter");
 			
 			calculateComponents();
-			if(component_matrix_==NULL || component_matrix_->Ncols()==0)
+			if(component_matrix_==NULL || component_matrix_->cols()==0)
 			{
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ComponentPlotter error","No input data available, thus plot cannot be created!");
 			}
@@ -106,17 +106,17 @@ namespace BALL
 			
 			if(!model_item_->getRegistryEntry()->latent_variables)
 			{
-				cout<<"Plotting of components can only be done for models that create principle components or partial least squares components!"<<endl;
+				std::cout << "Plotting of components can only be done for models that create principle components or partial least squares components!" << std::endl;
 				return;
 			}
 			if(model_item_->inputDataItem()->data()==NULL)
 			{
-				cout<<"No input data! Thus creation of PCR/PLS components for plotting is not possible!"<<endl;
+				std::cout << "No input data! Thus creation of PCR/PLS components for plotting is not possible!" << std::endl;
 				return;
 			}
 			if(!plot_loadings_ && model_item_->inputDataItem()->data()->getNoResponseVariables()==0)
 			{
-				cout<<"There should be response variable(s) for plotting of PLS/PCR components"<<endl;
+				std::cout << "There should be response variable(s) for plotting of PLS/PCR components" << std::endl;
 				return;
 			}
 			
@@ -127,7 +127,7 @@ namespace BALL
 			if(!plot_loadings_)
 			{
 				component_matrix_ = lv_model->getLatentVariables();
-				if(component_matrix_->Ncols()==0||component_matrix_->Nrows()==0)
+				if(component_matrix_->cols()==0||component_matrix_->rows()==0)
 				{
 					model->setDataSource(model_item_->inputDataItem()->data());
 					model->readTrainingData();
@@ -135,7 +135,7 @@ namespace BALL
 					component_matrix_ = lv_model->getLatentVariables();
 				}
 				
-				no_components=component_matrix_->Ncols();
+				no_components=component_matrix_->cols();
 				if(no_components<2) return;
 				
 				unsigned int size = model_item_->model()->data->getNoSubstances();
@@ -154,7 +154,7 @@ namespace BALL
 			else
 			{
 				component_matrix_ = lv_model->getLoadings();
-				if(component_matrix_->Ncols()==0||component_matrix_->Nrows()==0)
+				if(component_matrix_->cols()==0||component_matrix_->rows()==0)
 				{
 					model->setDataSource(model_item_->inputDataItem()->data());
 					model->readTrainingData();
@@ -163,7 +163,7 @@ namespace BALL
 				}
 			}
 			
-			no_components=component_matrix_->Ncols();
+			no_components=component_matrix_->cols();
 			if(no_components<2) return;
 
 			if(component_one_combobox_->count()==0)
@@ -195,8 +195,8 @@ namespace BALL
 		{
 			qwt_plot_->clear();
 			
-			if(component_matrix_==NULL||component_matrix_->Ncols()==0) calculateComponents();
-			if(component_matrix_==NULL||component_matrix_->Ncols()<2) return; // only 1 component	
+			if(component_matrix_==NULL||component_matrix_->cols()==0) calculateComponents();
+			if(component_matrix_==NULL||component_matrix_->cols()<2) return; // only 1 component
 			
 			double min_y=1e10;
 			double max_y=-1e10;

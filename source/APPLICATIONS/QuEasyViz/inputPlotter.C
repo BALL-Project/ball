@@ -103,7 +103,7 @@ namespace BALL
 			
 			if(no==0)
 			{
-				cout<<"Activities must be read before they can be plotted!!"<<endl;
+				std::cout<<"Activities must be read before they can be plotted!!"<<std::endl;
 				return;
 			}
 			if(names->empty()) show_data_labels=0;
@@ -157,27 +157,27 @@ namespace BALL
 			
 			if(no==0)
 			{
-				cout<<"Activities must be read before they can be plotted!!"<<endl;
+				std::cout<<"Activities must be read before they can be plotted!!"<<std::endl;
 				return;
 			}
 			if(names->empty()) show_data_labels=0;
 			
-			std::multiset<pair<double,unsigned int> > act;
+			std::multiset<std::pair<double,unsigned int> > act;
 			for(unsigned int i=0; i<data_->getNoSubstances();i++)
 			{
 				vector<double>* y0 = data_->getActivity(i);
-				act.insert(make_pair((*y0)[selected_activity_],i));
+				act.insert(std::make_pair((*y0)[selected_activity_],i));
 				delete y0;
 			}
 				
 			double min_y=1e10;
 			double max_y=-1e10;
-			std::multiset<pair<double, unsigned int> >::iterator a_it = act.begin();
+			std::multiset<std::pair<double, unsigned int> >::iterator a_it = act.begin();
 			for(unsigned int i=0; i<data_->getNoSubstances();i++, ++a_it)
 			{
 				QwtPlotMarker* marker= new QwtPlotMarker;
 				marker->setSymbol(data_symbol);
-				const pair<double,unsigned int>& pair = *a_it;
+				const std::pair<double,unsigned int>& pair = *a_it;
 				double y=pair.first;
 				if(y<min_y) min_y=y;
 				if(y>max_y) max_y=y;

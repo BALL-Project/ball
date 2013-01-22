@@ -172,13 +172,13 @@ namespace BALL
 					{
 						DataItem* item = (DataItem*)(*it);
 						item->setPos((*it)->pos()+translation);
-						set<Edge*> edges=item->inEdges();
-						for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+						std::set<Edge*> edges=item->inEdges();
+						for(std::set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
 						{
 							(*it2)->adjust();
 						}
 						edges=((DataItem*)(*it))->outEdges();
-						for(set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
+						for(std::set<Edge*>::iterator it2=edges.begin(); it2!=edges.end();it2++)
 						{
 							(*it2)->adjust();
 						}
@@ -632,7 +632,7 @@ namespace BALL
 				test_part->addToPipeline();
 				
 				// add fold to PartitioningItem
-				partitioner->addFold(make_pair(train_part,test_part));
+				partitioner->addFold(std::make_pair(train_part,test_part));
 				
 				DataItem* source_item = train_part;
 				ModelItem* input_model=0;
@@ -683,7 +683,7 @@ namespace BALL
 					}
 					else
 					{
-						cout<<"item type not found!!"<<endl<<flush;
+						std::cout<<"item type not found!!"<<std::endl;
 					}
 					QPointF p0 = source_item->pos();
 					new_item->setPos(p0+getOffset(p0,new_item));

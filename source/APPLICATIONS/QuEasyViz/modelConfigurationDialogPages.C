@@ -53,7 +53,7 @@ namespace BALL
 			///create labels and line edits for every model parameter and print out the parameter name and the default value (read from the registry)
 			for (unsigned int i=0; i < parent->entry()->parameterNames.size(); i++)
 			{
-				ostringstream value;
+				std::ostringstream value;
 				value.precision(3);
 				value << parent->entry()->parameterDefaults[i];
 				QLabel* label = new QLabel(QString(parent->entry()->parameterNames[i].c_str()));

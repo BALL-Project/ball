@@ -60,7 +60,7 @@ namespace BALL
 				ValidationItem(ValidationItem& item);
 				
 				/** Creates a ValidationItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
-				ValidationItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
+				ValidationItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view);
 
 				/** standard destructor
 				*/
@@ -114,7 +114,7 @@ namespace BALL
 				double getR2();
 				
 				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(ofstream& out);
+				void writeConfigSection(std::ofstream& out);
 				
 				void setPartitioner(PartitioningItem* partitioner);
 
@@ -180,7 +180,7 @@ namespace BALL
 				double val_fraction_;
 				
 				/** in case of nested cross validation this member will contain pointers to the validations of the nested cross validation folds, so that the average quality statistic can be calculated */
-				list<ValidationItem*> external_validations_;
+				std::list<ValidationItem*> external_validations_;
 				
 				/** in case of nested cross validation this member will contain a pointer to the PartitioningItem used to create training- and validation-partitions */
 				PartitioningItem* partitioner_;

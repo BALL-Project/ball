@@ -53,7 +53,7 @@ namespace BALL
 				/** user has confirmed deleting a feature; do not show the dialog again if any more features are to be deleted */ 
 				bool deletion_confirmed_;
 				
-				map<String,unsigned int> map_names_to_ID_;
+				std::map<String,unsigned int> map_names_to_ID_;
 
 			
 				

@@ -85,15 +85,15 @@ namespace BALL
 		}
 
 
-		PredictionItem::PredictionItem(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
+		PredictionItem::PredictionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view)
 			: ValidationItem(7,view)
 		{
-			istringstream input;
+			std::istringstream input;
 			input.str(configfile_section);
 			PredictionConfiguration conf = ConfigIO::readPredictionConfiguration(&input);
 			validation_statistic_ = conf.statistic;
 			
-			map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
+			std::map<String,DataItem*>::iterator it = filenames_map.find(conf.model);
 			if(it==filenames_map.end())
 			{
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"PredictionItem reading error","ModelItem with which the prediction should be done can not be found!");
@@ -108,7 +108,7 @@ namespace BALL
 
 			if(item_positions!=0 && item_positions->size()>0)
 			{
-				pair<double,double> pos = item_positions->front();
+				std::pair<double,double> pos = item_positions->front();
 				item_positions->pop_front();
 				setPos(pos.first,pos.second);
 			}
@@ -123,7 +123,7 @@ namespace BALL
 			name_ = "Prediction for " + test_data_item_->name();
 			view_->data_scene->addItem(this);
 			addToPipeline();
-			filenames_map.insert(make_pair(conf.output,this));
+			filenames_map.insert(std::make_pair(conf.output,this));
 			setSavedAs(conf.output.c_str());
 			plotter_ = 0;
 			done_ = 0;
@@ -228,7 +228,7 @@ namespace BALL
 		}
 
 
-		void PredictionItem::writeConfigSection(ofstream& out)
+		void PredictionItem::writeConfigSection(std::ofstream& out)
 		{
 			out << "[Predictor]" << "\n";
 			out << "model_file = "<< modelItem()->savedAs().toStdString() << "\n";
@@ -238,8 +238,8 @@ namespace BALL
 			if(s>=0)
 			{
 				String stat = modelItem()->getRegistryEntry()->getStatName(s);
-				if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<endl;
-				else out<< "regression_statistic = "<<stat.c_str()<<endl;
+				if(!model_item_->getRegistryEntry()->regression) out<< "classification_statistic = "<<stat.c_str()<<std::endl;
+				else out<< "regression_statistic = "<<stat.c_str()<<std::endl;
 			}
 			out << "output = " << savedAs().toStdString() << "\n\n";
 		}
@@ -265,22 +265,22 @@ namespace BALL
 		{
 			ValidationItem::saveToFile(filename);
 			
-			ofstream out(filename.c_str(),ios::app);
-			out<<endl<<"[Predictions]"<<endl;
+			std::ofstream out(filename.c_str(), std::ios::app);
+			out<<std::endl<<"[Predictions]"<<std::endl;
 			
 			QSARData* test_data = test_data_item_->data();
 			bool print_expected = (test_data->getNoResponseVariables()>0);
-			int no_act = results_.front().getSize();
+			int no_act = results_.front().rows();
 			int no_cols = no_act;
 			if(print_expected)
 			{
 				no_cols*=2;
-				out<<"# format: predition0, expectation0, ..."<<endl;
+				out<<"# format: predition0, expectation0, ..."<<std::endl;
 			}
 					
-			out<<"expected_values = "<<print_expected<<endl;
-			out<<"dimensions = "<<results_.size()<<" "<<no_cols<<endl;
-			list<Eigen::VectorXd >::const_iterator it=results_.begin();
+			out<<"expected_values = "<<print_expected<<std::endl;
+			out<<"dimensions = "<<results_.size()<<" "<<no_cols<<std::endl;
+			std::list<Eigen::VectorXd >::const_iterator it=results_.begin();
 			for(unsigned int i=0; it!=results_.end(); i++, it++)
 			{	
 				vector<double>* e = 0;
@@ -291,7 +291,7 @@ namespace BALL
 					if(print_expected) out<<(*e)[act]<<"\t";
 				}
 				delete e;
-				out<<endl;
+				out<<std::endl;
 			}	
 		}
 
@@ -310,7 +310,7 @@ namespace BALL
 			q2_ = model_item_->model()->model_val->getCVRes();
 			if(q2_!=-1) setResultString(q2_);
 			
-			ifstream in(filename.c_str());
+			std::ifstream in(filename.c_str());
 			bool pred_section=0;
 			bool expected_values=0;
 			unsigned int no_rows = 0;

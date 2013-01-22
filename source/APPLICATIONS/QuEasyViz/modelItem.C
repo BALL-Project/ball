@@ -235,17 +235,17 @@ namespace BALL
 
 
 
-		ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view)
+		ModelItem::ModelItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view)
 			: DataItem(view)
 		{
-			istringstream input;
+			std::istringstream input;
 			input.str(configfile_section);
 			ModelConfiguration conf = ConfigIO::readModelConfiguration(&input);
 			
-			map<String,DataItem*>::iterator it = filenames_map.find(conf.data_file);
+			std::map<String,DataItem*>::iterator it = filenames_map.find(conf.data_file);
 			if(it==filenames_map.end())
 			{
-				cout<<"\""<<conf.data_file<<"\" not found!"<<endl;
+				std::cout<<"\""<<conf.data_file<<"\" not found!"<<std::endl;
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","InputDataItem for a model does not exist!");
 			}
 			input_ =  (InputDataItem*) it->second;
@@ -280,7 +280,7 @@ namespace BALL
 			addToPipeline();
 			if(item_positions!=0 && item_positions->size()>0)
 			{
-				pair<double,double> pos = item_positions->front();
+				std::pair<double,double> pos = item_positions->front();
 				item_positions->pop_front();
 				setPos(pos.first,pos.second);
 			}
@@ -288,10 +288,10 @@ namespace BALL
 			Edge* edge;
 			if(conf.descriptor_source_model!="")
 			{
-				map<String,DataItem*>::iterator it = filenames_map.find(conf.descriptor_source_model);
+				std::map<String,DataItem*>::iterator it = filenames_map.find(conf.descriptor_source_model);
 				if(it==filenames_map.end())
 				{
-					cout<<"\""<<conf.descriptor_source_model<<"\" not found!"<<endl;
+					std::cout<<"\""<<conf.descriptor_source_model<<"\" not found!"<<std::endl;
 					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"Model reading error","ModelItem from which the descriptor IDs are to be taken can not be found!");
 					return;
 				}
@@ -409,7 +409,7 @@ namespace BALL
 			model_->setDataSource(input_->data());
 			if(descriptor_source_model_!=NULL)
 			{
-				cout<<"copied "<<descriptor_source_model_->model()->getDescriptorIDs()->size()<<" descriptor IDs"<<endl;
+				std::cout<<"copied "<<descriptor_source_model_->model()->getDescriptorIDs()->size()<<" descriptor IDs"<<std::endl;
 				model_->copyDescriptorIDs(*descriptor_source_model_->model());
 			}
 			
@@ -437,7 +437,7 @@ namespace BALL
 		{
 			if(optimize_model_parameters && k_fold>=2)
 			{
-				cout<<"optimizing model parameters..."<<endl;
+				std::cout<<"optimizing model parameters..."<<std::endl;
 				model_->optimizeParameters(k_fold);	
 			}
 		}
@@ -447,7 +447,7 @@ namespace BALL
 		{
 			if(optimize_kernel_parameters && k_fold>=2)
 			{
-				cout<<"optimizing kernel parameters..."<<endl;
+				std::cout<<"optimizing kernel parameters..."<<std::endl;
 				/// search locally around current kernel parameters
 				KernelModel* km = (KernelModel*)model_;
 				km->kernel->gridSearch(grid_search_stepwidth, grid_search_steps,grid_search_recursions,k_fold);
@@ -462,7 +462,7 @@ namespace BALL
 			// If this ModelItem is the output of a feature selection, FeatureSelectionItem::execute() will set this->done_ to true.
 			// Thus if this ModelItem is the output of a feature selection and the pipeline has just been reloaded (done_==0), just check in order to set the correct pixmap in this case.	
 			bool only_fs=1;
-			for(set<Edge*>::iterator it=in_edge_list_.begin();it!=in_edge_list_.end();it++)
+			for(std::set<Edge*>::iterator it=in_edge_list_.begin();it!=in_edge_list_.end();it++)
 			{
 				if((*it)->sourceNode()->type()!=FeatureSelectionItem::Type)
 				{
@@ -485,7 +485,7 @@ namespace BALL
 			}
 			
 			// if this item's outgoing edges are connected to FeatureSelectionItems only, save time by not training this model
-			for(set<Edge*>::iterator it=out_edge_list_.begin();it!=out_edge_list_.end();it++)
+			for(std::set<Edge*>::iterator it=out_edge_list_.begin();it!=out_edge_list_.end();it++)
 			{
 				// if insignificant features are to be removed (FS-type 5), the model has to be trained first
 				if((*it)->destNode()->type()!=FeatureSelectionItem::Type || ((FeatureSelectionItem*)(*it)->destNode())->getType()==5)
@@ -699,7 +699,7 @@ namespace BALL
 			
 			if(!save_attribute_) // if this model was created by a feature selection, also set FeatureSelectionItem::done_ to true
 			{
-				for(set<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end();it++)
+				for(std::set<Edge*>::iterator it=in_edge_list_.begin(); it!=in_edge_list_.end();it++)
 				{
 					if((*it)->sourceNode()->type()==FeatureSelectionItem::Type)
 					{
@@ -719,7 +719,7 @@ namespace BALL
 		}
 
 
-		void ModelItem::writeConfigSection(ofstream& out)
+		void ModelItem::writeConfigSection(std::ofstream& out)
 		{
 			String parameter_string;
 			String tmp;
@@ -731,11 +731,11 @@ namespace BALL
 			bool hasKernel = getRegistryEntry()->kernel;
 			
 			out << "[ModelCreator]" << "\n";
-			if(isDone()) out << "done = "<<1<<endl;
+			if(isDone()) out << "done = "<<1<<std::endl;
 			out << "data_file = "<< inputDataItem()->savedAs().toStdString() << "\n";
 			if(descriptor_source_model_!=NULL) 
 			{
-				out<<"descriptor_source_model = " <<descriptor_source_model_->savedAs().toStdString()<<endl;
+				out<<"descriptor_source_model = " <<descriptor_source_model_->savedAs().toStdString()<<std::endl;
 			}
 			out << "model_no = "<< view_->data_scene->main_window->reg_->getModelNo(getRegistryEntry()->name_abreviation) << "\n";
 			out << "model_parameters = "<< parameter_string << "\n";
@@ -787,7 +787,7 @@ namespace BALL
 			if(model_==NULL) return;
 			
 			// for the moment, we can only plot regression coefficients...
-			if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
+			if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->cols()!=0)
 			{
 				if(plotter_ == NULL)
 				{
@@ -816,7 +816,7 @@ namespace BALL
 			
 			if(!b)
 			{
-				stringstream s; s.str(entry_->name);
+				std::stringstream s; s.str(entry_->name);
 				for(int i=0;s;i++) // insert line-break after every second word
 				{
 					String word; s >> word;
@@ -939,7 +939,7 @@ namespace BALL
 		{
 			if(model_==NULL) return;
 			
-			if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
+			if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->cols()!=0)
 			{
 				if(latent_variable_plotter_ == NULL)
 				{
@@ -954,7 +954,7 @@ namespace BALL
 		{
 			if(model_==NULL) return;
 			
-			if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->Ncols()!=0)
+			if(entry_->regression && ((RegressionModel*)model_)->getTrainingResult()->cols()!=0)
 			{
 				if(loading_plotter_ == NULL)
 				{

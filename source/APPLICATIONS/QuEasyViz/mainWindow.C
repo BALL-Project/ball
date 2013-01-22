@@ -211,7 +211,7 @@ namespace BALL
 
 		void MainWindow::Settings::readFromFile(String file)
 		{
-			ifstream test_existence(file.c_str());
+			std::ifstream test_existence(file.c_str());
 			if(!test_existence) return;
 			test_existence.close();	
 			
@@ -1229,7 +1229,7 @@ namespace BALL
 				for (Pipeline<SDFInputDataItem*>::iterator it = sdf_input_pipeline_.begin(); it != sdf_input_pipeline_.end(); it++)
 				{
 					String filename=directory+(*it)->savedAs().toStdString();
-					ifstream input(filename.c_str());
+					std::ifstream input(filename.c_str());
 					if(input) // read only existing input data files
 					{
 						input.close();
@@ -1242,7 +1242,7 @@ namespace BALL
 					if((*it)->isDone()) continue;
 					
 					String filename=directory+(*it)->savedAs().toStdString();
-					ifstream input(filename.c_str());
+					std::ifstream input(filename.c_str());
 					if(input) // read only existing input data files
 					{
 						input.close();
@@ -1252,7 +1252,7 @@ namespace BALL
 				for (Pipeline<InputPartitionItem*>::iterator it = partition_pipeline_.begin(); it != partition_pipeline_.end(); it++)
 				{
 					String filename=directory+(*it)->savedAs().toStdString();
-					ifstream input(filename.c_str());
+					std::ifstream input(filename.c_str());
 					if(input) // read only existing input data files
 					{
 						input.close();
@@ -1262,7 +1262,7 @@ namespace BALL
 				for (Pipeline<ModelItem*>::iterator it = model_pipeline_.begin(); it != model_pipeline_.end(); it++)
 				{
 					String filename=directory+(*it)->savedAs().toStdString();
-					ifstream input(filename.c_str());
+					std::ifstream input(filename.c_str());
 					if(input) // read only existing models
 					{
 						input.close();
@@ -1272,7 +1272,7 @@ namespace BALL
 				for (Pipeline<ValidationItem*>::iterator it = val_pipeline_.begin(); it != val_pipeline_.end(); it++)
 				{
 					String filename=directory+(*it)->savedAs().toStdString();
-					ifstream input(filename.c_str());
+					std::ifstream input(filename.c_str());
 					if(input) // read only existing validation-files
 					{
 						input.close();
@@ -1282,7 +1282,7 @@ namespace BALL
 				for (Pipeline<PredictionItem*>::iterator it = prediction_pipeline_.begin(); it != prediction_pipeline_.end(); it++)
 				{
 					String filename=directory+(*it)->savedAs().toStdString();
-					ifstream input(filename.c_str());
+					std::ifstream input(filename.c_str());
 					if(input) // read only existing validation-files
 					{
 						input.close();
@@ -1350,7 +1350,7 @@ namespace BALL
 			}
 			
 			timer.stop(); 
-			cout<<"Time for executing pipeline: "<<timer.getClockTime()<<endl;
+			std::cout<<"Time for executing pipeline: "<<timer.getClockTime()<<std::endl;
 
 			progress_bar_->reset();
 			if (!done)
@@ -1412,9 +1412,9 @@ namespace BALL
 						directory = settings.tmp_folder+settings.path_separator;
 					}
 					
-					if (!ifstream(configfile.c_str())) // find config-file if archive has been renamed
+					if (!std::ifstream(configfile.c_str())) // find config-file if archive has been renamed
 					{
-						ifstream archive_contents;
+						std::ifstream archive_contents;
 						string contents_file = directory+"/archive_contents.tmp";
 						archive_contents.open(contents_file.c_str());
 						
@@ -1440,7 +1440,7 @@ namespace BALL
 					}
 				}	
 				
-				ifstream file(configfile.c_str());
+				std::ifstream file(configfile.c_str());
 				if(!file)
 				{
 					string txt =  "config-file '";
@@ -1455,11 +1455,11 @@ namespace BALL
 				bool pred_section=0;
 				bool partitioner_section=0;
 				String section="";
-				map<String, DataItem*> filenames_map;
+				std::map<String, DataItem*> filenames_map;
 				InputDataItemIO input_reader(view_);
 				
 				/// first of all, read [ItemPositions] section:
-				list<pair<double,double> > item_positions;
+				list<std::pair<double,double> > item_positions;
 				bool within_pos_section=0;
 				for (int i=0;!file.eof();i++)
 				{
@@ -1477,7 +1477,7 @@ namespace BALL
 					else if (within_pos_section)
 					{
 						double x = line.getField(0).toDouble(); double y = line.getField(1).toDouble();
-						item_positions.push_back(make_pair(x,y));
+						item_positions.push_back(std::make_pair(x,y));
 					}
 				}
 				
@@ -1533,7 +1533,7 @@ namespace BALL
 				if (archive)
 				{	
 					string file = directory+"archive_contents.tmp";
-					ifstream in(file.c_str());
+					std::ifstream in(file.c_str());
 					String files="";
 					while (in)
 					{
@@ -1556,7 +1556,7 @@ namespace BALL
 			if (archive)
 			{	
 				string file = directory+"archive_contents.tmp";
-				ifstream in(file.c_str());
+				std::ifstream in(file.c_str());
 				String files="";
 				while(in)
 				{
@@ -1599,10 +1599,10 @@ namespace BALL
 			
 			if (archive!="" && settings.tmp_folder!="") 
 				configfile = settings.tmp_folder + settings.path_separator + String(configfile.substr(s+1));
-			ofstream out(configfile.c_str());
+			std::ofstream out(configfile.c_str());
 			
-			ostringstream positions;
-			positions<<"[ItemPositions]"<<endl;
+			std::ostringstream positions;
+			positions<<"[ItemPositions]"<<std::endl;
 			
 			int counter = 0;
 			
@@ -1684,19 +1684,19 @@ namespace BALL
 				}
 				
 				// save the item's own position!
-				positions<<item->x()<<"  "<<item->y()<<endl;
+				positions<<item->x()<<"  "<<item->y()<<std::endl;
 				
 				if(type==FeatureSelectionItem::Type) 
 				{
 					FeatureSelectionItem* fs_item = (FeatureSelectionItem*) item;
-					positions<<fs_item->modelItem()->x()<<"  "<<fs_item->modelItem()->y()<<endl;
+					positions<<fs_item->modelItem()->x()<<"  "<<fs_item->modelItem()->y()<<std::endl;
 				}
 				
 				value++;
 				setProgressValue(value);
 			}
 			
-			out<<positions.str().c_str()<<endl;
+			out<<positions.str().c_str()<<std::endl;
 			out.close();
 			
 			/// save item data to files
@@ -1751,7 +1751,7 @@ namespace BALL
 			}
 			
 			String script = file_prefix+".csh";
-			ofstream out(script.c_str());
+			std::ofstream out(script.c_str());
 			
 			String prog="";
 			if (settings.tools_path!="")
@@ -1762,19 +1762,19 @@ namespace BALL
 				
 			if (settings.send_email && settings.email_address!="")
 			{	
-				out<<"setenv start_time `date`"<<endl;
+				out<<"setenv start_time `date`"<<std::endl;
 			}
-			out<<"cd "<<directory<<endl;
-			out<<prog<<" "<<configfile<<endl<<endl;
+			out<<"cd "<<directory<<std::endl;
+			out<<prog<<" "<<configfile<<std::endl<<std::endl;
 			
 			if (archive)
 			{
-				out<<"tar -cz "<<short_file_prefix<<"* -f "<<short_file_prefix<<".tar.gz"<<endl;
-				out<<"rm -f "<<short_file_prefix<<"*.dat "<<short_file_prefix<<"*.mod "<<short_file_prefix<<"*.conf "<<script<<endl<<endl;	
+				out<<"tar -cz "<<short_file_prefix<<"* -f "<<short_file_prefix<<".tar.gz"<<std::endl;
+				out<<"rm -f "<<short_file_prefix<<"*.dat "<<short_file_prefix<<"*.mod "<<short_file_prefix<<"*.conf "<<script<<std::endl<<std::endl;
 			}
 			if (settings.send_email && settings.email_address!="")
 			{
-				out<<"echo \"Subject: "<<short_file_prefix<<" is ready!\\"<<endl<<"Process '"<<script<<"' is ready!\\"<<endl<<"Start Time: $start_time\\"<<endl<<"End time: `date`\\"<<endl<<"\\"<<endl<<" \" | sendmail "<<settings.email_address<<endl;
+				out<<"echo \"Subject: "<<short_file_prefix<<" is ready!\\"<<std::endl<<"Process '"<<script<<"' is ready!\\"<<std::endl<<"Start Time: $start_time\\"<<std::endl<<"End time: `date`\\"<<std::endl<<"\\"<<std::endl<<" \" | sendmail "<<settings.email_address<<std::endl;
 			}
 				
 			out.close();
@@ -1799,7 +1799,7 @@ namespace BALL
 
 		int MainWindow::chooseValidationStatisticDialog(ModelItem* modelitem)
 		{
-			const map<unsigned int,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
+			const std::map<unsigned int,String>* statistics = modelitem->getRegistryEntry()->getStatistics();
 			
 			// if there is just one registered statistic, don't bother the user with a useless question! 
 			if (statistics->size()==1)
@@ -1814,7 +1814,7 @@ namespace BALL
 			QLabel label(tr("Desired quality statistic"));
 			QComboBox statistic_box;
 				
-			for (map<unsigned int,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
+			for (std::map<unsigned int,String>::const_iterator it=statistics->begin(); it!=statistics->end(); ++it)
 			{
 				statistic_box.addItem(it->second.c_str(),it->first);
 			}
@@ -1865,10 +1865,10 @@ namespace BALL
 				if (abs_filename=="") 
 					abs_filename=filename;
 			
-				ifstream in(abs_filename.c_str());
+				std::ifstream in(abs_filename.c_str());
 				if (!in)
 				{
-					cout << "Error: feature-description file '" << abs_filename << "' not found!" << endl;
+					std::cout << "Error: feature-description file '" << abs_filename << "' not found!" << std::endl;
 					return;
 				}
 				string name;
@@ -1882,7 +1882,7 @@ namespace BALL
 					
 					name = line.before("\t");
 					explanation = line.after("\t");
-					descriptor_explanations_.insert(make_pair(name,explanation));
+					descriptor_explanations_.insert(std::make_pair(name,explanation));
 				}
 			}
 			
@@ -1895,7 +1895,7 @@ namespace BALL
 			if (!read_descriptor_explanations_) 
 				readDescriptorExplanations();
 			
-			map<String,String>::iterator it = descriptor_explanations_.find(descriptor_name);
+			std::map<String,String>::iterator it = descriptor_explanations_.find(descriptor_name);
 			
 			if (it!=descriptor_explanations_.end()) 
 				return &it->second;

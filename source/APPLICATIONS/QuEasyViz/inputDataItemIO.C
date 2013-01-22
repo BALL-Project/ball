@@ -37,7 +37,7 @@ namespace BALL
 			view_ = view;
 		}
 
-		void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, ofstream& out, ostringstream& item_positions, const String& directory)
+		void InputDataItemIO::writeConfigSection(SDFInputDataItem* sd_item, std::ofstream& out, std::ostringstream& item_positions, const String& directory)
 		{
 			String activity_string;
 			String tmp;
@@ -49,7 +49,7 @@ namespace BALL
 				activity_string += " "+ String(*a_it);
 			}
 			out << "[InputReader]" << "\n";
-			if(sd_item->isDone()) out<<"done = "<<1<<endl;
+			if(sd_item->isDone()) out<<"done = "<<1<<std::endl;
 			
 			QDir qdir(directory.c_str());
 			String rel_filename = (qdir.relativeFilePath(sd_item->filename())).toStdString();
@@ -62,7 +62,7 @@ namespace BALL
 			
 			QPointF pos = sd_item->pos();
 			// save position of this item to given stream
-			item_positions<<pos.x()<<"  "<<pos.y()<<endl;
+			item_positions<<pos.x()<<"  "<<pos.y()<<std::endl;
 			
 			list<CSVInputDataItem*>* csv_items = sd_item->getConnectedCSVItems();
 			for(list<CSVInputDataItem*>::iterator it=csv_items->begin(); it!=csv_items->end(); it++)
@@ -76,7 +76,7 @@ namespace BALL
 				
 				QPointF pos = (*it)->pos();
 				// save position of appended CSV-item to given stream
-				item_positions<<pos.x()<<"  "<<pos.y()<<endl;
+				item_positions<<pos.x()<<"  "<<pos.y()<<std::endl;
 				
 				written_csv_.insert(*it);
 			}
@@ -85,7 +85,7 @@ namespace BALL
 		}
 
 
-		void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, ofstream& out, const String& directory)
+		void InputDataItemIO::writeConfigSection(CSVInputDataItem* csv_item, std::ofstream& out, const String& directory)
 		{
 			// if csv_item has been written to a config section because it is connected to a SDFInputDataItem, do nothing!
 			if(written_csv_.find(csv_item)!=written_csv_.end()) return;
@@ -93,7 +93,7 @@ namespace BALL
 			QDir qdir(directory.c_str());
 			String rel_filename = (qdir.relativeFilePath(csv_item->filename())).toStdString();
 			out << "[InputReader]" << "\n";
-			if(csv_item->isDone()) out<<"done = "<<1<<endl;
+			if(csv_item->isDone()) out<<"done = "<<1<<std::endl;
 			out << "csv_file = " << rel_filename<<"\n";
 			out << "csv_separator = "<<"\""<<csv_item->getSeperator()<<"\"\n";
 			out << "csv_desc_labels = "<<csv_item->getDescriptorLabels()<<"\n";
@@ -109,10 +109,10 @@ namespace BALL
 		}
 
 
-		void InputDataItemIO::writeConfigSection(PartitioningItem* item, ofstream& out, ostringstream& item_positions)
+		void InputDataItemIO::writeConfigSection(PartitioningItem* item, std::ofstream& out, std::ostringstream& item_positions)
 		{
 			out << "[InputPartitioner]" << "\n";
-			if(item->isDone()) out<<"done = "<<1<<endl;
+			if(item->isDone()) out<<"done = "<<1<<std::endl;
 			out << "input_file = " << item->getInputItem()->savedAs().toStdString()<<"\n";
 			out << "ID = "<<item->getID()<<"\n";
 			out << "val_fraction = " << item->getValFraction()<<"\n";
@@ -121,26 +121,26 @@ namespace BALL
 			
 			if(item_positions!=NULL)
 			{
-				item_positions<<item->pos().x()<<" "<<item->pos().y()<<endl;
-				for(list<pair<InputPartitionItem*,InputPartitionItem*> >::iterator it= item->folds_.begin(); it!=item->folds_.end(); it++)
+				item_positions<<item->pos().x()<<" "<<item->pos().y()<<std::endl;
+				for(std::list<std::pair<InputPartitionItem*,InputPartitionItem*> >::iterator it= item->folds_.begin(); it!=item->folds_.end(); it++)
 				{
 					QPointF p = it->first->pos();
-					item_positions<<p.x()<<" "<<p.y()<<endl;
+					item_positions<<p.x()<<" "<<p.y()<<std::endl;
 					p = it->second->pos();
-					item_positions<<p.x()<<" "<<p.y()<<endl;
+					item_positions<<p.x()<<" "<<p.y()<<std::endl;
 				}
 			}
 		}
 
 
-		void InputDataItemIO::readPartitionerSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions)
+		void InputDataItemIO::readPartitionerSection(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions)
 		{
-			istringstream input;
+			std::istringstream input;
 			input.str(configfile_section);	
 			InputPartitioningConfiguration conf = ConfigIO::readInputPartitioningConfiguration(&input);
 				
 			InputDataItem* input_item;
-			map<String, DataItem*>::iterator it=filenames_map.find(conf.input_file);
+			std::map<String, DataItem*>::iterator it=filenames_map.find(conf.input_file);
 			if(it==filenames_map.end())
 			{
 				throw BALL::Exception::GeneralException(__FILE__,__LINE__,"InputPartitioner reading error","InputItem from which partitions are to be created could not be found!!");
@@ -151,7 +151,7 @@ namespace BALL
 			partitioner->addToPipeline();
 			if(item_positions!=0 && item_positions->size()>0)
 			{
-				pair<double,double> pos = item_positions->front();
+				std::pair<double,double> pos = item_positions->front();
 				item_positions->pop_front();
 				partitioner->setPos(pos.first,pos.second);
 			}
@@ -166,7 +166,7 @@ namespace BALL
 				filenames_map.insert(make_pair(train_part->savedAs().toStdString(),train_part));
 				if(item_positions!=0 && item_positions->size()>0)
 				{
-					pair<double,double> pos = item_positions->front();
+					std::pair<double,double> pos = item_positions->front();
 					item_positions->pop_front();
 					train_part->setPos(pos.first,pos.second);
 				}
@@ -179,20 +179,20 @@ namespace BALL
 				filenames_map.insert(make_pair(test_part->savedAs().toStdString(),test_part));
 				if(item_positions!=0 && item_positions->size()>0)
 				{
-					pair<double,double> pos = item_positions->front();
+					std::pair<double,double> pos = item_positions->front();
 					item_positions->pop_front();
 					test_part->setPos(pos.first,pos.second);
 				}
 				Edge* e1 = new Edge(partitioner,test_part);
 				view_->scene()->addItem(e1);
 				
-				partitioner->addFold(make_pair(train_part,test_part));
-			}	
+				partitioner->addFold(std::make_pair(train_part,test_part));
+			}
 		}
 
-		void InputDataItemIO::readConfigSection(String& configfile_section, map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, const String& directory)
+		void InputDataItemIO::readConfigSection(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, const String& directory)
 		{
-			istringstream input;
+			std::istringstream input;
 			input.str(configfile_section);
 			
 			String line;
@@ -231,7 +231,7 @@ namespace BALL
 					sd_item->setNonNumericClassNames(conf.nonnumeric_class_names);
 					if(item_positions!=0 && item_positions->size()>0)
 					{
-						pair<double,double> pos = item_positions->front();
+						std::pair<double,double> pos = item_positions->front();
 						item_positions->pop_front();
 						sd_item->setPos(pos.first,pos.second);
 						sd_item->setCenterDataFlag(conf.center_data);
@@ -292,7 +292,7 @@ namespace BALL
 					csv_item->addToPipeline();
 					if(item_positions!=0 && item_positions->size()>0)
 					{
-						pair<double,double> pos = item_positions->front();
+						std::pair<double,double> pos = item_positions->front();
 						item_positions->pop_front();
 						csv_item->setPos(pos.first,pos.second);
 					}

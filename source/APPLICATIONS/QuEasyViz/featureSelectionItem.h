@@ -48,7 +48,7 @@ namespace BALL
 				FeatureSelectionItem(FeatureSelectionItem& fs_item); 
 				
 				/** Creates a FeatureSelectionItem from the geiven config-file section, registers it in the view and in the Pipeline-QSets of MainWindow and creates edges */
-				FeatureSelectionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, list<pair<double,double> >* item_positions, DataItemView* view);
+				FeatureSelectionItem(String& configfile_section, std::map<String, DataItem*>& filenames_map, std::list<std::pair<double,double> >* item_positions, DataItemView* view);
 
 				/** start features selection */
 				bool execute();
@@ -74,7 +74,7 @@ namespace BALL
 				int type() const { return Type; }
 				
 				/** generates the config-file section for the current model and appends it to out */
-				void writeConfigSection(ofstream& out);
+				void writeConfigSection(std::ofstream& out);
 				
 				void addToPipeline();
 				void removeFromPipeline();
