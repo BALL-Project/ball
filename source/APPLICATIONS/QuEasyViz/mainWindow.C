@@ -1408,7 +1408,7 @@ namespace BALL
 					if (settings.tmp_folder!="")
 					{
 						int s = configfile.find_last_of(settings.path_separator);
-						configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
+						configfile = settings.tmp_folder + settings.path_separator + String(configfile.substr(s+1));
 						directory = settings.tmp_folder+settings.path_separator;
 					}
 					
@@ -1598,7 +1598,7 @@ namespace BALL
 			String directory = configfile.substr(0,s+1); // name of folder
 			
 			if (archive!="" && settings.tmp_folder!="") 
-				configfile = settings.tmp_folder+settings.path_separator+configfile.substr(s+1);
+				configfile = settings.tmp_folder + settings.path_separator + String(configfile.substr(s+1));
 			ofstream out(configfile.c_str());
 			
 			ostringstream positions;
