@@ -83,7 +83,7 @@ void LibsvmModel::train()
 		//free(prob->y); free(prob->x);
 		#ifdef LIBSVM_VERSION
 			svm_free_and_destroy_model((::svm_model**)&svm_train_result_);			
-		#elif
+		#else
 			svm_destroy_model((::svm_model*)svm_train_result_);
 		#endif
 	}
