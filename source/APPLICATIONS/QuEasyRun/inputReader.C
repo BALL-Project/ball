@@ -26,7 +26,7 @@ using namespace BALL::QSAR;
 using namespace BALL;
 
 
-void startInputReading(ifstream& in, String data_path, QSARData* q, String* data_filename)
+void startInputReading(std::ifstream& in, String data_path, QSARData* q, String* data_filename)
 {
 	InputConfiguration conf = ConfigIO::readInputConfiguration(&in);
 		
@@ -68,7 +68,7 @@ void startInputReading(ifstream& in, String data_path, QSARData* q, String* data
 	{
 		if(conf.csv_file.size()==0 || conf.csv_file[0]=="")
 		{
-			cout<<"Error: sd-file and/or csv-table must be specified within config-file!"<<endl;
+			std::cout<<"Error: sd-file and/or csv-table must be specified within config-file!"<< std::endl;
 			return;
 		}
 		q->readCSVFile(conf.csv_file[0].c_str(),conf.csv_no_response[0],conf.csv_desc_labels[0],conf.csv_compound_labels[0],conf.csv_separator[0].c_str(),0,conf.nonnumeric_class_names);
@@ -77,7 +77,7 @@ void startInputReading(ifstream& in, String data_path, QSARData* q, String* data
 	// now obsolete 
 	if(conf.validation_fraction>0)
 	{
-		cout<<"conf.validation_fraction is obsolete. Use InputPartitioner(-section) instead!"<<endl;
+		std::cout<<"conf.validation_fraction is obsolete. Use InputPartitioner(-section) instead!"<<std::endl;
 	}
 		
 	if(conf.center_data)

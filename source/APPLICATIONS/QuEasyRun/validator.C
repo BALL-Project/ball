@@ -27,7 +27,7 @@ using namespace BALL::QSAR;
 using namespace BALL;
 
 
-void startValidation(ifstream& in, QSARData* q, String* data_filename)
+void startValidation(std::ifstream& in, QSARData* q, String* data_filename)
 {
 	ValidationConfiguration conf = ConfigIO::readValidationConfiguration(&in);
 		
@@ -44,14 +44,14 @@ void startValidation(ifstream& in, QSARData* q, String* data_filename)
 	Model* m;
 	String model_type;
 		
-	ifstream model_input(conf.model.c_str()); // read model-abbreviation
+	std::ifstream model_input(conf.model.c_str()); // read model-abbreviation
 	if(!model_input)
 	{
-		cout<<"Error: Model-file '"<<conf.model<<"' does not exist!!"<<endl;
+		std::cout<<"Error: Model-file '"<<conf.model<<"' does not exist!!"<<std::endl;
 		return;
 	}
-	getline(model_input,model_type);
-	getline(model_input,model_type);
+	std::getline(model_input,model_type);
+	std::getline(model_input,model_type);
 	model_type = model_type.getField(0,"\t");
 	model_input.close();
 		
@@ -119,14 +119,14 @@ int main(int argc, char* argv[])
 { 
 	if(argc<2)
 	{
-		cout<<"Please specify configuration file!"<<endl; 
+		std::cout<<"Please specify configuration file!"<<std::endl;
 		return 0;
 	}
 	
 	ifstream in(argv[1]);
 	if(!in)
 	{
-		cout<<"Configuration file '"<<argv[1]<<"' not found!"<<endl;
+		std::cout<<"Configuration file '"<<argv[1]<<"' not found!"<<std::endl;
 		return 0;
 	}
 	
@@ -136,7 +136,7 @@ int main(int argc, char* argv[])
 	{
 		for(int j=0;!in.eof();j++) // skip everthing until the beginning of the next Validator-section
 		{
-			getline(in,line);
+			std::getline(in,line);
 			if(!line.hasPrefix("[Validator]")) continue;
 			else break;
 		}

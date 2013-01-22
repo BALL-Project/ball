@@ -63,14 +63,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 #endif
 	if(argc<2)
 	{
-		cout<<"Please specify configuration file!"<<endl; 
+		std::cout<<"Please specify configuration file!"<<std::endl;
 		return 0;
 	}
 	
-	ifstream in(argv[1]);
+	std::ifstream in(argv[1]);
 	if(!in)
 	{
-		cout<<"Configuration file '"<<argv[1]<<"' not found!"<<endl;
+		std::cout<<"Configuration file '"<<argv[1]<<"' not found!"<<std::endl;
 		return 0;
 	}
 	
@@ -134,7 +134,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
-			cout<<e.getName()<<" : "<<e.getMessage()<<endl;
+			std::cout<<e.getName()<<" : "<<e.getMessage()<<std::endl;
 			continue;
 		}
 	}

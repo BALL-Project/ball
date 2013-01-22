@@ -26,7 +26,7 @@
 using namespace BALL::QSAR;
 using namespace BALL;
 
-void startModelCreation(ifstream& in, QSARData* q, String* data_filename)
+void startModelCreation(std::ifstream& in, QSARData* q, String* data_filename)
 {
 	ModelConfiguration conf = ConfigIO::readModelConfiguration(&in);
 		
@@ -45,7 +45,7 @@ void startModelCreation(ifstream& in, QSARData* q, String* data_filename)
 	}
 	else
 	{
-		cout<<"[ModelCreator debug-info:] QSARData object for file "<<conf.data_file<<" already in memory; not reading it again."<<endl;		
+		std::cout << "[ModelCreator debug-info:] QSARData object for file "<<conf.data_file<<" already in memory; not reading it again." << std::endl;
 	}
 	Registry reg;
 	Model* model;
@@ -60,7 +60,7 @@ void startModelCreation(ifstream& in, QSARData* q, String* data_filename)
 	{
 		if(conf.kernel_type==0 || conf.kernel_par1==0)
 		{
-			cout<<"For kernel based model, kernel-type and kernel-parameter(s) must be specified!"<<endl;
+			std::cout<<"For kernel based model, kernel-type and kernel-parameter(s) must be specified!"<< std::endl;
 			return;
 		}
 			
@@ -76,7 +76,7 @@ void startModelCreation(ifstream& in, QSARData* q, String* data_filename)
 	{
 		if(conf.k_fold==0)
 		{
-			cout<<"'k_fold' must be set if model parameters are to be optimized!"<<endl;
+			std::cout << "'k_fold' must be set if model parameters are to be optimized!" << std::endl;
 			return;
 		}
 		model->optimizeParameters(conf.k_fold);
@@ -85,12 +85,12 @@ void startModelCreation(ifstream& in, QSARData* q, String* data_filename)
 	{
 		if(conf.k_fold==0)
 		{
-			cout<<"'k_fold' must be set if grid search is to be done!"<<endl;
+			std::cout << "'k_fold' must be set if grid search is to be done!" << std::endl;
 			return;
 		}
 		if(conf.grid_search_stepwidth==0 && conf.kernel_type!=2)
 		{ 
-			cout<<"'grid_search_stepwidth' must be set if grid search is to be done!"<<endl;
+			std::cout << "'grid_search_stepwidth' must be set if grid search is to be done!" << std::endl;
 			return;
 		}
 		((KernelModel*)model)->kernel->gridSearch(conf.grid_search_stepwidth, conf.grid_search_steps, conf.grid_search_recursions, conf.k_fold);
@@ -105,7 +105,7 @@ void startModelCreation(ifstream& in, QSARData* q, String* data_filename)
 		}
 		catch(BALL::Exception::GeneralException e)
 		{ 
-			cout<<e.getMessage();
+			std::cout << e.getMessage();
 		}
 	}
 		

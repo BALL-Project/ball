@@ -26,7 +26,7 @@
 using namespace BALL::QSAR;
 using namespace BALL;
 
-void startFeatureSelection(ifstream& in, QSARData* q, String* data_filename)
+void startFeatureSelection(std::ifstream& in, QSARData* q, String* data_filename)
 {
 	FeatureSelectionConfiguration conf = ConfigIO::readFeatureSelectionConfiguration(&in);
 		
@@ -45,21 +45,21 @@ void startFeatureSelection(ifstream& in, QSARData* q, String* data_filename)
 	}
 	else
 	{
-		cout<<"[FeatureSelector debug-info:] QSARData object for file "<<conf.data_file<<" already in memory; not reading it again."<<endl;		
+		std::cout<<"[FeatureSelector debug-info:] QSARData object for file "<<conf.data_file<<" already in memory; not reading it again."<<std::endl;
 	}
 	
 	Registry reg;
 	Model* m;
 	String model_type;	
 		
-	ifstream model_input(conf.model.c_str()); // read model-abbreviation
+	std::ifstream model_input(conf.model.c_str()); // read model-abbreviation
 	if(!model_input)
 	{
-		cout<<"Error: Model-file '"<<conf.model<<"' does not exist!!"<<endl;
+		std::cout<<"Error: Model-file '"<<conf.model<<"' does not exist!!"<<std::endl;
 		return;
 	}
-	getline(model_input,model_type);
-	getline(model_input,model_type);
+	std::getline(model_input,model_type);
+	std::getline(model_input,model_type);
 	model_type = model_type.getField(0,"\t");
 	model_input.close();
 		
@@ -77,7 +77,7 @@ void startFeatureSelection(ifstream& in, QSARData* q, String* data_filename)
 	}
 			
 	
-	cout<<"  using "<<conf.statistic_name<<" to assess qualitiy of the model ... "<<endl;
+	std::cout<<"  using "<<conf.statistic_name<<" to assess qualitiy of the model ... "<<std::endl;
 	m->model_val->selectStat(conf.statistic);
 		
 	m->readFromFile(conf.model.c_str());
@@ -125,7 +125,7 @@ void startFeatureSelection(ifstream& in, QSARData* q, String* data_filename)
 		}
 		catch(BALL::Exception::GeneralException e)
 		{
-			cout<<e.getName()<<" : "<<e.getMessage()<<endl;
+			std::cout<<e.getName()<<" : "<<e.getMessage()<<std::endl;
 			return;
 		}
 	}
@@ -144,14 +144,14 @@ int main(int argc, char* argv[])
 { 
 	if(argc<2)
 	{
-		cout<<"Please specify configuration file!"<<endl; 
+		std::cout<<"Please specify configuration file!"<<std::endl;
 		return 0;
 	}
 	
-	ifstream in(argv[1]);
+	std::ifstream in(argv[1]);
 	if(!in)
 	{
-		cout<<"Configuration file '"<<argv[1]<<"' not found!"<<endl;
+		std::cout<<"Configuration file '"<<argv[1]<<"' not found!"<<std::endl;
 		return 0;
 	}
 	String line;
@@ -160,7 +160,7 @@ int main(int argc, char* argv[])
 	{
 		for(int j=0;!in.eof();j++) // skip everthing until the beginning of the next FeatureSelector-section
 		{
-			getline(in,line);
+			std::getline(in,line);
 			if(!line.hasPrefix("[FeatureSelector]")) continue;
 			else break;
 		}

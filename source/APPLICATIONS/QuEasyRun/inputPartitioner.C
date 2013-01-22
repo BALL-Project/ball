@@ -26,7 +26,7 @@
 using namespace BALL::QSAR;
 using namespace BALL;
 
-void startInputPartitioning(ifstream& in, QSARData* q, String* data_filename)
+void startInputPartitioning(std::ifstream& in, QSARData* q, String* data_filename)
 {
 	InputPartitioningConfiguration conf = ConfigIO::readInputPartitioningConfiguration(&in);
 		

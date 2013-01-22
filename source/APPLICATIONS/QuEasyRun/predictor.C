@@ -26,7 +26,7 @@ using namespace BALL::QSAR;
 using namespace BALL;
 
 
-void startPrediction(ifstream& in, QSARData* q, String* data_filename)
+void startPrediction(std::ifstream& in, QSARData* q, String* data_filename)
 {
 	PredictionConfiguration conf = ConfigIO::readPredictionConfiguration(&in);
 		
@@ -47,14 +47,14 @@ void startPrediction(ifstream& in, QSARData* q, String* data_filename)
 	Registry reg;
 	Model* m;
 	String model_type;
-	ifstream model_input(conf.model.c_str()); // read model-abbreviation
+	std::ifstream model_input(conf.model.c_str()); // read model-abbreviation
 	if(!model_input)
 	{
-		cout<<"Error: Model-file '"<<conf.model<<"' does not exist!!"<<endl;
+		std::cout<<"Error: Model-file '"<<conf.model<<"' does not exist!!"<<std::endl;
 		return;
 	}
-	getline(model_input,model_type);
-	getline(model_input,model_type);
+	std::getline(model_input,model_type);
+	std::getline(model_input,model_type);
 	model_type = model_type.getField(0,"\t");
 	model_input.close();
 		
@@ -78,17 +78,17 @@ void startPrediction(ifstream& in, QSARData* q, String* data_filename)
 	m->model_val->setCVRes(m->model_val->getFitRes());
 	m->model_val->saveToFile(conf.output);
 	
-	ofstream out(conf.output.c_str(),ios::app);
-	out<<endl<<"[Predictions]"<<endl;
+	std::ofstream out(conf.output.c_str(),std::ios::app);
+	out<<std::endl<<"[Predictions]"<<std::endl;
 	int no_act = q->getNoResponseVariables();
 	int no_cols = no_act;
 	if(conf.print_expected)
 	{
 		no_cols*=2;
-		out<<"# format: predition0, expectation0, ..."<<endl;
+		out<<"# format: predition0, expectation0, ..."<<std::endl;
 	}
-	out<<"expected_values = "<<conf.print_expected<<endl;
-	out<<"dimensions = "<<q->getNoSubstances()<<" "<<no_cols<<endl;
+	out<<"expected_values = "<<conf.print_expected<<std::endl;
+	out<<"dimensions = "<<q->getNoSubstances()<<" "<<no_cols<<std::endl;
 		
 	for(int i=0;i<q->getNoSubstances();i++)
 	{
@@ -98,16 +98,16 @@ void startPrediction(ifstream& in, QSARData* q, String* data_filename)
 		delete v;
 		
 		vector<double>* exp = q->getActivity(i); // get UNcentered response value vector
-		for(int j=1; j<=res.getSize();j++)
+		for(int j=0; j<res.rows();j++)
 		{
-			out<<res(j)<<"\t";
+			out<<res[j]<<"\t";
 			if(conf.print_expected)
 			{
-				out<<(*exp)[j-1]<<"\t";
+				out<<(*exp)[j]<<"\t";
 			}
 		}
 		delete exp;	
-		out<<endl;
+		out<<std::endl;
 	}
 	
 	if(created_data_object) delete q;
@@ -120,14 +120,14 @@ int main(int argc, char* argv[])
 {
 	if(argc<2)
 	{
-		cout<<"Please specify configuration file!"<<endl; 
+		std::cout<<"Please specify configuration file!"<<std::endl;
 		return 0;
 	}
 	
-	ifstream in(argv[1]);
+	std::ifstream in(argv[1]);
 	if(!in)
 	{
-		cout<<"Configuration file '"<<argv[1]<<"' not found!"<<endl;
+		std::cout<<"Configuration file '"<<argv[1]<<"' not found!"<<std::endl;
 		return 0;
 	}
 	
@@ -137,7 +137,7 @@ int main(int argc, char* argv[])
 	{
 		for(int j=0;!in.eof();j++) // skip everthing until the beginning of the next Validator-section
 		{
-			getline(in,line);
+			std::getline(in,line);
 			if(!line.hasPrefix("[Predictor]")) continue;
 			else break;
 		}
