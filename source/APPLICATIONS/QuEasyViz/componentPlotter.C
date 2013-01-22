@@ -32,6 +32,8 @@
 
 #include <QColor>
 
+#include <BALL/QSAR/regressionModel.h>
+
 using namespace BALL::QSAR;
 
 namespace BALL
