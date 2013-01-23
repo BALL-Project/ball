@@ -4,6 +4,7 @@
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 
+#include <iterator>
 #include <map>
 
 namespace BALL

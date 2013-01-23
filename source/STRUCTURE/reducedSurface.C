@@ -7,6 +7,8 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/DATATYPE/hashGrid.h>
 
+#include <iterator>
+
 namespace BALL
 {
 
