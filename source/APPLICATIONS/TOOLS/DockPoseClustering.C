@@ -216,6 +216,7 @@ int main (int argc, char **argv)
 	}
 
 	// print
+	pc.printClusters();
 	pc.printClusterRMSDs();
 
 	if (parpars.has("o_dcd"))

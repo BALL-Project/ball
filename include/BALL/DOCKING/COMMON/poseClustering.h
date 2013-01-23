@@ -235,6 +235,20 @@ namespace BALL
 
 			//@}
 
+			/** Compute the root mean square deviation due to a rigid transformation of a point cloud (here, atoms)
+			 *  @param t_ab difference vector between the transformations to be compared
+			 *  @param M_ab difference of the rotation matrices between the transformations to be compared
+			 *  @param covariance_matrix the covariance matrix of the atom positions
+			 */
+			static float getRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_ab, Eigen::Matrix3f const& covariance_matrix);
+
+			/** Compute the covariance matrix for the given system
+			 */
+			static Eigen::Matrix3f computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail = C_ALPHA);
+
+			void printClusters();
+
+
 		protected:
 
 			// trivial complete linkage implementation
@@ -266,14 +280,8 @@ namespace BALL
 			//
 			float getRMSD_(Index i, Index j, Index rmsd_type);
 
-			// 
-			float getRigidRMSD_(Eigen::Vector3f& t1, Eigen::Matrix3f& M1, Eigen::Vector3f& t2, Eigen::Matrix3f& M2);
-
 			//
 			void printCluster_(Index i);
-
-			//
-			void printClusters_();
 
 			void printVariables_(int a, int b, double c, int d, double e, int current_level);
 

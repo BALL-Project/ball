@@ -53,40 +53,49 @@ namespace BALL
 	{
 	}
 
+	Eigen::Matrix3f PoseClustering::computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail)
+	{
+		GeometricCenterProcessor center;
+		system.apply(center);
+
+		Eigen::Matrix3f covariance_matrix = Matrix3f::Zero();
+
+		Vector3f base_com((Eigen::Vector3f() << center.getCenter().x, center.getCenter().y, center.getCenter().z).finished());
+
+		for (AtomConstIterator at_it = system.beginAtom(); +at_it; ++at_it)
+		{
+			if (    (rmsd_level_of_detail == ALL_ATOMS)
+				  || ((rmsd_level_of_detail == C_ALPHA)  && (at_it->getName() == "CA"))
+					|| ((rmsd_level_of_detail == BACKBONE) && (    (at_it->getName() == "CA")
+					                                             || (at_it->getName() == "C")
+																											 || (at_it->getName() == "O")
+																											 || (at_it->getName() == "N")
+																											 || (at_it->getName() == "H")))
+					|| ((rmsd_level_of_detail == PROPERTY_BASED_ATOM_BIJECTION)
+					                                        && (at_it->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
+			{
+				Vector3 const& pos = at_it->getPosition();
+
+				covariance_matrix.selfadjointView<Eigen::Upper>().rankUpdate(Eigen::Vector3f(pos.x, pos.y, pos.z) - base_com);
+			}
+		}
+
+		covariance_matrix /= system.countAtoms();
+
+		return covariance_matrix;
+	}
+
 	void PoseClustering::setBaseSystemAndTransformations(System const& base_system, String transformation_file_name)
 	{
 		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
 
 		base_system_ = System(base_system);
 
-		GeometricCenterProcessor center;
-		base_system_.apply(center);
+		covariance_matrix_ = computeCovarianceMatrix(base_system, rmsd_level_of_detail_);
 
-		covariance_matrix_ = Matrix3f::Zero();
-
-		Vector3f base_com((Eigen::Vector3f() << center.getCenter().x, center.getCenter().y, center.getCenter().z).finished());
-
-		for (AtomIterator at_it = base_system_.beginAtom(); +at_it; ++at_it)
-		{
-			if (    (rmsd_level_of_detail_ == ALL_ATOMS)
-				  || ((rmsd_level_of_detail_ == C_ALPHA)  && (at_it->getName() == "CA"))
-					|| ((rmsd_level_of_detail_ == BACKBONE) && (    (at_it->getName() == "CA")
-					                                             || (at_it->getName() == "C")
-																											 || (at_it->getName() == "O")
-																											 || (at_it->getName() == "N")
-																											 || (at_it->getName() == "H")))
-					|| ((rmsd_level_of_detail_ == PROPERTY_BASED_ATOM_BIJECTION)
-					                                        && (at_it->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
-			{
-				Vector3& pos = at_it->getPosition();
-
-				covariance_matrix_.selfadjointView<Eigen::Upper>().rankUpdate(Eigen::Vector3f(pos.x, pos.y, pos.z) - base_com);
-			}
-		}
-
-		covariance_matrix_ /= base_system_.countAtoms();
 
 		/// TEST TEST TEST
+		/// TODO: move to test
 		/*
 		TransformationProcessor tp;
 		Matrix4x4 bm;
@@ -319,7 +328,6 @@ namespace BALL
 		// iterate as long as the maximal cluster distance 
 		// gets lower than the RMSD_THRESHOLD
 		float rmsd_cutoff = options.getReal(Option::RMSD_THRESHOLD);
-
 		bool hit = (clusters_.size() > 1);
 		while ((min_max_cluster_dist < rmsd_cutoff) && hit)
 		{
@@ -413,7 +421,7 @@ namespace BALL
 		swap(clusters_, temp_clusters);
 
 //cout << "Final num of clusters " << clusters_.size() << endl;
-//printClusters_();
+//printClusters();
 	//	printClusterRMSDs();
 
 		return true;
@@ -663,7 +671,7 @@ cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLU
 		// store results
 
 cout << " found " << getNumberOfClusters() << "  geometric center clusters." << endl;
-printClusters_();
+printClusters();
 printClusterRMSDs();
 cout <<  endl << endl << " Weiter gehts " << endl;
 
@@ -731,7 +739,7 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 		}
 		// switch the clusters
 		clusters_ = temp_clusters;
-		printClusters_();
+		printClusters();
 
 		return true;
 	}
@@ -942,6 +950,19 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 	}
 
 
+	float PoseClustering::getRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_ab, Eigen::Matrix3f const& covariance_matrix)
+	{
+		// based on the given transformation we can simply compute the rmsd
+		// 
+		//              2 |-----------------------------------------------------------
+		//              - |              2    1    (   t           /        t \   )
+		//                | || t_(a,b) ||  +  - tr ( M   M  * sum (x_i x_i     )  )
+		// rmsd(a,b) =    |                   n    (           i   \          /   )
+		//                |
+
+		return sqrt(t_ab.squaredNorm() + ((M_ab.transpose() * M_ab) * covariance_matrix.selfadjointView<Eigen::Upper>()).trace());
+	}
+
 	// compute the RMSD between two "poses", 
 	//    i.e. snapshots, transformations, or center of masses
 	float PoseClustering::getRMSD_(Index i, Index j, Index rmsd_type)
@@ -950,18 +971,10 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 
 		if (rmsd_type == PoseClustering::RIGID_RMSD)
 		{
-			// based on the given transformation we can simply compute the rmsd
-			// 
-			//              2 |-----------------------------------------------------------
-			//              - |              2    1    (   t           /        t \   )
-			//                | || t_(a,b) ||  +  - tr ( M   M  * sum (x_i x_i     )  )
-			// rmsd(a,b) =    |                   n    (           i   \          /   )
-			//                |
-
 			Eigen::Vector3f t_ab = (translations_[j] - translations_[i]);
 			Eigen::Matrix3f M_ab = (rotations_[j] - rotations_[i]);
 
-			rmsd = sqrt(t_ab.squaredNorm() + ((M_ab.transpose() * M_ab) * covariance_matrix_.selfadjointView<Eigen::Upper>()).trace());
+			rmsd = getRigidRMSD(t_ab, M_ab, covariance_matrix_);
 
 //			std::cout << t_ab.squaredNorm() << " " << rmsd << std::endl;
 
@@ -978,6 +991,7 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 			rmsd = com_[i].getDistance(com_[j]);
 		}
 
+		//std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
 		return rmsd;
 	}
 
@@ -990,7 +1004,7 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 		cout << "+++++++++++++++++++" << endl;
 	}
 
-	void PoseClustering::printClusters_()
+	void PoseClustering::printClusters()
 	{
 		cout << "\n\n    FINAL CLUSTERS     \n\n" << endl;
 		for (Size i = 0; i < clusters_.size(); i++)
