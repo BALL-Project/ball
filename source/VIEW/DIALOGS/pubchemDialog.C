@@ -19,6 +19,7 @@
 #include <QtGui/QMessageBox>
 
 #include <QtCore/QUrl>
+#include <QtCore/QFile>
 
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkAccessManager>
