@@ -742,8 +742,10 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 
 	void PoseClustering::printClusterRMSDs()
 	{
+		Index rmsd_type = options.getInteger(PoseClustering::Option::RMSD_TYPE);
+
 		cout << endl <<  "For method " << options.getInteger(PoseClustering::Option::CLUSTER_METHOD)
-		     << " and RMSDtype " << options.getInteger(PoseClustering::Option::RMSD_TYPE) << " we get: " << endl;
+		     << " and RMSDtype " << rmsd_type << " we get: " << endl;
 
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
@@ -754,13 +756,19 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 
 			for (std::set<Index>::iterator it_j=current_cluster.begin(); it_j!=current_cluster.end(); ++it_j)
 			{
-				(*current_set_)[*it_j].applySnapShot(system_i_);
+				if (rmsd_type == SNAPSHOT_RMSD)
+				{
+					(*current_set_)[*it_j].applySnapShot(system_i_);
+				}
 
 				for (std::set<Index>::iterator it_k=current_cluster.begin(); it_k!=current_cluster.end(); ++it_k)
 				{
-					(*current_set_)[*it_k].applySnapShot(system_j_);
+					if (rmsd_type == SNAPSHOT_RMSD)
+					{
+						(*current_set_)[*it_k].applySnapShot(system_j_);
+					}
 
-					cout << getRMSD_(*it_j, *it_k, options.getInteger(Option::RMSD_TYPE)) << " ";
+					cout << getRMSD_(*it_j, *it_k, rmsd_type) << " ";
 				}
 
 				cout << endl;
