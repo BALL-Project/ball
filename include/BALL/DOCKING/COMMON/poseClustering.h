@@ -69,7 +69,7 @@ namespace BALL
 									D. Defays: An efficient algorithm for a complete link method. 
                   The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366.
 	*/
-
+   // TODO add TIRVIAL_COMPLETE_LINKAGE
 
   class BALL_EXPORT PoseClustering
 	{
@@ -108,7 +108,8 @@ namespace BALL
 				static const float RMSD_THRESHOLD;
 				static const Index RMSD_LEVEL_OF_DETAIL;
 				static const Index RMSD_TYPE;
-				static const bool USE_CENTER_OF_MASS_PRECLINK; //TODO setDefaults!! add to tools
+				static const bool USE_CENTER_OF_MASS_PRECLINK; //TODO setDefaults!! //rename 
+				static const String INDEX_PROPERTY_NAME;
 			};
 
 			enum BALL_EXPORT RMSDType
@@ -257,7 +258,7 @@ namespace BALL
 			void computeCenterOfMasses_();
 
 			// run a pre clink on the centers of gravity 
-			bool centerOfGravityClink_();
+			bool centerOfGravityPreCluster_();
 
 			// distance between cluster i and cluster j
 			float getClusterRMSD_(Index i, Index j, Index rmsd_type);
@@ -273,6 +274,8 @@ namespace BALL
 
 			//
 			void printClusters_();
+
+			void printVariables_(int a, int b, double c, int d, double e, int current_level);
 
 			//
 			void clear_();

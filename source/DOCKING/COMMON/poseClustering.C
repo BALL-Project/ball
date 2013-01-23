@@ -28,9 +28,9 @@ namespace BALL
 	const String PoseClustering::Option::RMSD_TYPE = "pose_clustering_rmsd_type";
 	const Index PoseClustering::Default::RMSD_TYPE = PoseClustering::SNAPSHOT_RMSD;
 
+	// TODO: change name to USE_CENTER_OF_MASS_CLUSTERING
 	const String PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK = "pose_clustering_use_center_of_mass_preclink";
 	const bool   PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK = false;
-
 
 	PoseClustering::PoseClustering()
 	{
@@ -70,12 +70,12 @@ namespace BALL
 		{
 			if (    (rmsd_level_of_detail_ == ALL_ATOMS)
 				  || ((rmsd_level_of_detail_ == C_ALPHA)  && (at_it->getName() == "CA"))
-					|| ((rmsd_level_of_detail_ == BACKBONE) && (    (at_it->getName() == "CA") 
+					|| ((rmsd_level_of_detail_ == BACKBONE) && (    (at_it->getName() == "CA")
 					                                             || (at_it->getName() == "C")
 																											 || (at_it->getName() == "O")
 																											 || (at_it->getName() == "N")
 																											 || (at_it->getName() == "H")))
-					|| ((rmsd_level_of_detail_ == PROPERTY_BASED_ATOM_BIJECTION) 
+					|| ((rmsd_level_of_detail_ == PROPERTY_BASED_ATOM_BIJECTION)
 					                                        && (at_it->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
 			{
 				Vector3& pos = at_it->getPosition();
@@ -127,13 +127,13 @@ namespace BALL
 		bm.m14 = 0.07; bm.m24 = 1.; bm.m34 = 3.1;
 		m << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
 		rotations_.push_back(m);
-		std::cout << "rigid rmsd: " << getRMSD_(0, 1, PoseClustering::RIGID_RMSD) << std::endl;
+		cout << "rigid rmsd: " << getRMSD_(0, 1, PoseClustering::RIGID_RMSD) << endl;
 
 		tp.setTransformation(bm);
 		S2.apply(tp);
 
 		StructureMapper mapme(S, S2);
-		std::cout << "atom rmsd: " << mapme.calculateRMSD() << std::endl;
+		cout << "atom rmsd: " << mapme.calculateRMSD() << endl;
 		rotations_.clear();
 
 		exit(1);
@@ -146,6 +146,7 @@ namespace BALL
 
 	bool PoseClustering::compute()
 	{
+	cout << " Call Compute () " << endl;
 		if (!current_set_)
 		{
 			Log.info() << "No valid ConformationSet given." << endl;
@@ -200,7 +201,7 @@ namespace BALL
 		if (options.getBool(Option::USE_CENTER_OF_MASS_PRECLINK))
 		{
 			// cluster the centers of gravity
-			return centerOfGravityClink_();
+			return centerOfGravityPreCluster_();
 		}
 
 		// decide which algorithm to apply
@@ -264,6 +265,10 @@ namespace BALL
 
 		// compute all pairwise RMSDs
 		Index rmsd_type = options.getInteger(Option::RMSD_TYPE);
+		if (rmsd_type == PoseClustering::CENTER_OF_MASS_DISTANCE)
+		{
+			computeCenterOfMasses_();
+		}
 
 		// for the next step we need to determine the minimal maximal 
 		// distance between two clusters
@@ -429,6 +434,8 @@ namespace BALL
 		pi_.resize(num_poses_);
 		mu_.resize(num_poses_);
 
+//cout << " num poses: " << num_poses_ << endl;
+
 		// and initialize them for the first point
 		pi_[0] = 0;
 		lambda_[0] = numeric_limits<double>::max();
@@ -440,7 +447,7 @@ namespace BALL
 			{
 				double percentage = current_level / (double)num_poses_;
 				percentage *= 100. * percentage;
-std::cout << current_level << " " << num_poses_ << " " << percentage << std::endl;
+//std::cout << current_level << " " << num_poses_ << " " << percentage << std::endl;
 			}
 			// END TEST
 
@@ -462,7 +469,7 @@ std::cout << current_level << " " << num_poses_ << " " << percentage << std::end
 				// note: we don't need the rmsd matrix here - that's the whole point: the algorithm
 				//       only requires O(n) data, not (O(n^2))
 				mu_[j] = getRMSD_(current_level, j, rmsd_type);
-				std::cout << current_level << " <=> " << j << " " << pi_[j] << ": " << mu_[j] << " " << lambda_[j] << std::endl;
+//std::cout << current_level << " <=> " << j << " " << pi_[j] << ": " << mu_[j] << " " << lambda_[j]  << " " << rmsd_type << std::endl;
 			}
 
 			if (options.getInteger(Option::CLUSTER_METHOD) == SLINK_SIBSON)
@@ -476,8 +483,10 @@ std::cout << current_level << " " << num_poses_ << " " << percentage << std::end
 		}
 		// convert lambda, pi, and mu to clusters datastructure
 		clusters_.clear();
-for (int i=0; i<pi_.size(); ++i)
-	std::cout << i << " " << pi_[i] << " " << lambda_[i] << std::endl;
+
+//for (int i=0; i<pi_.size(); ++i)
+//	std::cout << i << " " << pi_[i] << " " << lambda_[i] << std::endl;
+
 		// we need a helper for the clusters
 		std::vector<std::set<Index> > cluster_helper;
 
@@ -548,7 +557,10 @@ for (int i=0; i<pi_.size(); ++i)
 			}
 		}
 
+		// step 4
 		int a = current_level-1;
+
+		// step 5
 		for (int i=0; i<current_level; ++i)
 		{
 			int j = (current_level-1)-i;
@@ -566,6 +578,9 @@ for (int i=0; i<pi_.size(); ++i)
 			}
 		}
 
+		//printVariables_(a, -5, -5., -5, -5, current_level);
+
+		// step 6
 		int    b = pi_[a];
 		double c = lambda_[a];
 
@@ -575,6 +590,9 @@ for (int i=0; i<pi_.size(); ++i)
 		int d;
 		double e;
 
+		//printVariables_(a, b, c, -5, -5, current_level);
+
+		// step 7
 		while ((a < current_level-1) && (b < current_level-1))
 		{
 			d = pi_[b];
@@ -591,6 +609,9 @@ for (int i=0; i<pi_.size(); ++i)
 			lambda_[b] = c;
 		}
 
+		//printVariables_(a, b, c, d, e, current_level);
+
+		// step 8
 		for (int i=0; i<current_level; ++i)
 		{
 			if (pi_[pi_[i]] == current_level)
@@ -599,6 +620,11 @@ for (int i=0; i<pi_.size(); ++i)
 					pi_[i] = current_level;
 			}
 		}
+
+		/*	cout << "------------------------------" << endl;
+		printVariables_(a, b, c, d, e, current_level);
+		cout << "------------------------------" << endl;
+		*/
 	}
 
 
@@ -606,7 +632,7 @@ for (int i=0; i<pi_.size(); ++i)
 	{
 		GeometricCenterProcessor center;
 		com_.resize(num_poses_);
-		for (Size i=1; i < num_poses_; ++i)
+		for (Size i=0; i < num_poses_; ++i)
 		{
 			(*current_set_)[i].applySnapShot(system_i_);
 			system_i_.apply(center);
@@ -615,36 +641,63 @@ for (int i=0; i<pi_.size(); ++i)
 	}
 
 
-	bool PoseClustering::centerOfGravityClink_()
+	bool PoseClustering::centerOfGravityPreCluster_()
 	{
+cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLUSTER_METHOD) << " " << CLINK_DEFAYS << endl;
+		// store the old options
+		Options old_options = options;
+
+		// run a pre-clustering
+		// with basically the same options
+		// but center of mass distance as rmsd
+		options.set(Option::RMSD_TYPE, CENTER_OF_MASS_DISTANCE);
+		// and no additional pre clustering
+		options.set(Option::USE_CENTER_OF_MASS_PRECLINK, false);
+		compute();
+
 		// precompute all center of masses
-		computeCenterOfMasses_();
-
+		//computeCenterOfMasses_();
 		// run the CLINK machinery
-		linearSpaceCompute_(CENTER_OF_MASS_DISTANCE);
+		//linearSpaceCompute_(CENTER_OF_MASS_DISTANCE);
 
-		//cout << " found " << getNumberOfClusters() << "  geometric center clusters." << endl;
+		// store results
+
+cout << " found " << getNumberOfClusters() << "  geometric center clusters." << endl;
+printClusters_();
+printClusterRMSDs();
+cout <<  endl << endl << " Weiter gehts " << endl;
 
 		// store the new clusters
 		std::vector<std::set<Index> >   temp_clusters;
 
-		PoseClustering inner_pc;
-		inner_pc.options = options;
+		// reset the options
+		options = old_options;
 
+		PoseClustering inner_pc;
+		Size num_clusters = 0;
 		// now iterate over all clusters 
 		for (Size i=0; i<getNumberOfClusters(); i++)
 		{
-			Size num_clusters = 1;
+cout << "       " << i << endl;
 			if (getClusterSize(i)>1)
 			{
+				// temporarily convert the set to a vector for quicker access
+				std::vector<Index> current_cluster_vector(getClusterSize(i));
+				Position current_cluster=0;
+				for (std::set<Index>::iterator clust_it = clusters_[i].begin(); clust_it != clusters_[i].end(); ++clust_it, current_cluster++)
+				{
+					current_cluster_vector[current_cluster] = *clust_it;
+				}
+
 				boost::shared_ptr<ConformationSet> current_conformation_set = getClusterConformationSet(i);
 
-				// and run CLINK separately on each pre cluster as described by the options
+				// run a clustering separately on each pre cluster as described by the options
 				inner_pc.clear_();
 
-				// TODO: or should we ensure the following?
-				//inner_pc.options.setInteger(Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
-				//inner_pc.options.setInteger(Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+				// set the original Option::RMSD_TYPE
+				inner_pc.options = options;
+
+				inner_pc.options.set(Option::USE_CENTER_OF_MASS_PRECLINK, false);
 
 				inner_pc.setConformationSet(&*current_conformation_set);
 				inner_pc.compute();
@@ -653,10 +706,22 @@ for (int i=0; i<pi_.size(); ++i)
 				num_clusters = inner_pc.getNumberOfClusters();
 				for (Size j=0; j<num_clusters; ++j)
 				{
-					temp_clusters.push_back(inner_pc.getCluster(j));
+					// convert the indices
+					std::set<Index> temp_indices = inner_pc.getCluster(j);
+					std::set<Index> converted_indices;
+
+					for (std::set<Index>::iterator ind_it = temp_indices.begin(); ind_it != temp_indices.end(); ++ind_it)
+					{
+						converted_indices.insert(current_cluster_vector[*ind_it]);
+					}
+
+					temp_clusters.push_back(converted_indices);
 					//cout << "    " << i << " " << j << ": " << inner_pc.getClusterSize(j) << std::endl;
 				}
+cout << "++++++++++++++++++++++++++++++***" << endl;
+				inner_pc.printClusterRMSDs();
 				//cout << " cluster " << i << "( " << getClusterSize(i) << " ) was split into " << num_clusters << " clusters." << endl;
+cout << "***++++++++++++++++++++++++++++++***" << endl;
 			}
 			else
 			{
@@ -666,18 +731,21 @@ for (int i=0; i<pi_.size(); ++i)
 		}
 		// switch the clusters
 		clusters_ = temp_clusters;
+		printClusters_();
+
 		return true;
 	}
 
 
 	void PoseClustering::printClusterRMSDs()
 	{
-		std::cout << "For method " << options.getInteger(PoseClustering::Option::CLUSTER_METHOD)
-				        << " and RMSDtype " << options.getInteger(PoseClustering::Option::RMSD_TYPE) << " we get " << std::endl;
+		cout << endl <<  "For method " << options.getInteger(PoseClustering::Option::CLUSTER_METHOD)
+		     << " and RMSDtype " << options.getInteger(PoseClustering::Option::RMSD_TYPE) << " we get: " << endl;
 
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
-			std::cout << "Cluster " << i << std::endl;
+			cout << "=======================================" << endl;
+			cout << "    Cluster " << i << endl;
 
 			std::set<Index>& current_cluster = clusters_[i];
 
@@ -689,13 +757,13 @@ for (int i=0; i<pi_.size(); ++i)
 				{
 					(*current_set_)[*it_k].applySnapShot(system_j_);
 
-					std::cout << getRMSD_(*it_j, *it_k, options.getInteger(Option::RMSD_TYPE)) << " ";
+					cout << getRMSD_(*it_j, *it_k, options.getInteger(Option::RMSD_TYPE)) << " ";
 				}
 
-				std::cout << std::endl;
+				cout << endl;
 			}
 
-			std::cout << "=======================================" << std::endl << std::endl;
+			cout << "=======================================" << endl << endl;
 		} //next cluster
 	}
 
@@ -795,6 +863,7 @@ for (int i=0; i<pi_.size(); ++i)
 				 conf_it != clusters_[i].end(); conf_it++)
 		{
 			System conf(new_set->getSystem());
+
 			SnapShot sn = (*current_set_)[*conf_it];
 			sn.applySnapShot(conf);
 			new_set->add(0, conf);
@@ -930,8 +999,37 @@ for (int i=0; i<pi_.size(); ++i)
 		}
 	}
 
+
+	void PoseClustering::printVariables_(int a, int b, double c, int d, double e, int current_level)
+	{
+		cout << "***************************" << endl;
+		cout << " a:" << a << " b:" << b << " c:" << c << " d:" << d << " e:" << e << " cl: " << current_level << endl;
+		cout << " pi:" << endl;
+		for (int i=0; i < current_level +1; ++i)
+		{
+			cout << "(i," << pi_[i] <<  ") ";
+		}
+		cout << endl;
+		cout << " lambda:" << endl;
+		for (int i=0; i < current_level+1; ++i)
+		{
+			cout << "(i," << lambda_[i] <<  ") ";
+		}
+		cout << endl;
+		cout << " mu:" << endl;
+		for (int i=0; i < current_level; ++i)
+		{
+			cout << "(i," << mu_[i] <<  ") ";
+		}
+		cout << endl;
+
+		cout << "******************" << endl;
+	}
+
+
 	void PoseClustering::clear_()
 	{
+		// Note: options should not be reset
 		pairwise_scores_.setZero();
 		current_set_ = NULL;
 		translations_.clear();

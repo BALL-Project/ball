@@ -29,8 +29,8 @@ int main (int argc, char **argv)
 	// - CLI switch
 	// - description
 	// - Inputfile
-	parpars.registerParameter("i_dcd", "input dcd-file", INFILE, false);
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
+	parpars.registerParameter("i_dcd", "input dcd-file or", INFILE, false);
 	parpars.registerParameter("i_transformations", "input transformation file for rigid rmsd clustering", INFILE, false);
 
 	// we register an output file parameter 
@@ -49,6 +49,13 @@ int main (int argc, char **argv)
 	parpars.registerParameter("rmsd_cutoff", "minimal rmsd between the final clusters (default 5.0) ", DOUBLE, false, 5.0);
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
+	// choice of cluster algorithm  
+	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
+	list<String> cluster_algs;
+	cluster_algs.push_back("CLINK_DEFAYS");
+	cluster_algs.push_back("SLINK_SIBSON");
+	cluster_algs.push_back("TRIVIAL_COMPLETE_LINKAGE");
+	parpars.setParameterRestrictions("alg", cluster_algs);
 
 	// choice of atom rmsd scope 
 	parpars.registerParameter("rmsd_scope", "atoms to be considered for rmsd score (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
@@ -59,16 +66,9 @@ int main (int argc, char **argv)
 	rmsd_levels.push_back("ALL_ATOMS");
 	parpars.setParameterRestrictions("rmsd_scope", rmsd_levels);
 
-	// choice of cluster algorithm  
-	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
-	list<String> cluster_algs;
-	cluster_algs.push_back("CLINK_DEFAYS");
-	cluster_algs.push_back("SLINK_SIBSON");
-	cluster_algs.push_back("TRIVIAL_COMPLETE_LINKAGE");
-	parpars.setParameterRestrictions("alg", cluster_algs);
 
 	// choice of rmsd type
-	parpars.registerParameter("rmsd_type", "RMSD type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, false, "SNAPSHOT_RMSD");
+	parpars.registerParameter("rmsd_type", "rmsd type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, false, "SNAPSHOT_RMSD");
 	list<String> rmsd_types;
 	rmsd_types.push_back("SNAPSHOT_RMSD");
 	rmsd_types.push_back("RIGID_RMSD");
@@ -105,11 +105,36 @@ int main (int argc, char **argv)
 
 	if (parpars.has("i_dcd"))
 	{
+		if (parpars.has("rmsd_type") && (parpars.get("rmsd_type") == "RIGID_RMSD"))
+		{
+			Log << "Trajectory input file cannot be used with rmsd_type 'RIGID_RMSD'. Abort!" << endl;
+			//TODO Implement an automatic converstion from dcd to transformation!
+			return 0;
+		}
+
 		cs.readDCDFile(parpars.get("i_dcd"));
 	}
+
 	cs.resetScoring();
 
 	PoseClustering pc;
+
+	if (parpars.has("i_transformations"))
+	{
+		if (parpars.has("rmsd_type"))
+		{
+			if (parpars.get("rmsd_type") != "RIGID_RMSD")
+			{
+				Log << "Transformation input file can only be used with rmsd_type 'RIGID_RMSD'. Abort!" << endl;
+				return 0;
+			}
+		}
+		else
+		{
+			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+		}
+		pc.setBaseSystemAndTransformations(sys, parpars.get("i_transformations"));
+	}
 
 	if (parpars.has("rmsd_cutoff"))
 	{
@@ -163,10 +188,6 @@ int main (int argc, char **argv)
 		pc.options.setBool(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, use_preclustering);
 	}
 
-	if (parpars.has("i_transformations"))
-	{
-		pc.setBaseSystemAndTransformations(sys, parpars.get("i_transformations"));
-	}
 
 	pc.setConformationSet(&cs);
 
@@ -194,6 +215,7 @@ int main (int argc, char **argv)
 		}
 	}
 
+	// print
 	pc.printClusterRMSDs();
 
 	if (parpars.has("o_dcd"))
