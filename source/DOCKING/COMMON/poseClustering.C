@@ -360,19 +360,14 @@ namespace BALL
 			// did we end up in a single cluster?
 			hit = false;
 			// and update the pairwise rmsd scores 
-			for (set<Index>::iterator conf_it = min_cluster_a->begin();
-					conf_it !=  min_cluster_a->end();
-					conf_it++)
+			for (Size j=0; j < clusters_.size(); j++)
 			{
-				for (Size j=0; j < clusters_.size(); j++)
+				if ((min_cluster_a_idx != (Index)j) && (clusters_[j].size() > 0))
 				{
-					if ((*conf_it != (Index)j) && (clusters_[j].size() > 0))
-					{
-						hit = true;
-						float rmsd = getClusterRMSD_(*conf_it, j, rmsd_type);
-						pairwise_scores_(*conf_it, j) = rmsd;
-						pairwise_scores_(j, *conf_it) = rmsd;
-					}
+					hit = true;
+					float rmsd = getClusterRMSD_(min_cluster_a_idx, j, rmsd_type);
+					pairwise_scores_(min_cluster_a_idx, j) = rmsd;
+					pairwise_scores_(j, min_cluster_a_idx) = rmsd;
 				}
 			}
 
@@ -907,12 +902,13 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 
 
 	// distance between cluster i and cluster j
-	// this method is used by the trivial clustering
+	// this method is used by the trivial complete linkage clustering and computes
+	// the maximum distance between cluster members
 	float PoseClustering::getClusterRMSD_(Index i, Index j, Index rmsd_type)
 	{
 		// we have to compute the maximal distance
-		float rmsd = std::numeric_limits<float>::max();
-		float temp_rmsd = std::numeric_limits<float>::min();
+		float rmsd = std::numeric_limits<float>::min();
+		float temp_rmsd = std::numeric_limits<float>::max();
 		Index cluster_method = options.getInteger(Option::CLUSTER_METHOD);
 
 		for (set<Index>::iterator conf_it_i = clusters_[i].begin();
@@ -942,7 +938,7 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 					Log.info() << "getRMSD() for current option setting not yet implemented!" << __FILE__ <<  " " << __LINE__ << endl;
 				}
 
-				if (temp_rmsd < rmsd)
+				if (temp_rmsd > rmsd)
 					rmsd = temp_rmsd;
 			}
 		}
