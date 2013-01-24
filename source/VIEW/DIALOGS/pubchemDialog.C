@@ -19,7 +19,8 @@
 #include <QtGui/QMessageBox>
 
 #include <QtCore/QUrl>
-#include <QtCore/QFile>
+#include <QtCore/QDir>
+#include <QtCore/QTemporaryFile>
 
 #include <QtNetwork/QNetworkProxy>
 #include <QtNetwork/QNetworkAccessManager>
@@ -229,15 +230,11 @@ namespace BALL
 
 			SDFile sdf;
 
-			String fname;
-			File::createTemporaryFilename(fname, ".sdf");
+			QTemporaryFile outfile(QDir::tempPath() + "/XXXXXX.sdf");
 
-			// Write the received data into a buffer
-			QFile outfile(fname.c_str());
-
-			if(!outfile.open(QIODevice::WriteOnly)) {
+			if(!outfile.open()) {
 				QMessageBox::critical ( this, tr ( "Download failed" ),
-				                        tr ( "Could not open download destination (%1) for query %2").arg(fname.c_str()).arg(ui_->pubchem_label->displayText()));
+				                        tr ( "Could not open download destination (%1) for query %2").arg(outfile.fileName()).arg(ui_->pubchem_label->displayText()));
 				ui_->search_button->setEnabled ( true );
 				ui_->progress_bar->hide();
 
@@ -247,7 +244,7 @@ namespace BALL
 			outfile.close();
 
 			// now, try to read the SD File
-			sdf.open(fname, std::ios::in);
+			sdf.open(outfile.fileName().toStdString(), std::ios::in);
 
 			// iterate over the molecules in the SD File and build a system for each
 			Size count = 0;
@@ -287,7 +284,6 @@ namespace BALL
 			}
 
 			sdf.close();
-			File::remove (fname);
 
 			QTreeWidgetItem* new_query_result = new QTreeWidgetItem ( ( QTreeWidget* ) 0,
 			        QStringList ( ui_->pubchem_label->displayText()
