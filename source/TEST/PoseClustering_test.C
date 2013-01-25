@@ -192,28 +192,28 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD)
 	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
 
 	//Option::ClusterMethod::TRIVIAL_COMPLETE_LINKAGE
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::ClusterMethod::TRIVIAL_COMPLETE_LINKAGE);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 7)
 
 	//Option::ClusterMethod::SLINK_SIBSON
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::ClusterMethod::SLINK_SIBSON);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 5)
 
 	//Option::ClusterMethod::CLINK_DEFAYS
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::ClusterMethod::CLINK_DEFAYS);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 12)
 
 	//Option::ClusterMethod::CENTER_OF_GRAVITY_CLINK
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::ClusterMethod::CENTER_OF_GRAVITY_CLINK);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CENTER_OF_GRAVITY_CLINK);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
@@ -233,8 +233,8 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	PoseClustering pc;
 
 	// Option::RMSD_LEVEL_OF_DETAIL::C_ALPHA
-	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::C_ALPHA);
-	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::C_ALPHA)
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::C_ALPHA);
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::C_ALPHA)
 	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
 	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), 6.00)
 
@@ -246,8 +246,8 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 
 
 	// Option::RMSD_LEVEL_OF_DETAIL::BACKBONE;
-	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::BACKBONE);
-	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::BACKBONE)
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::BACKBONE)
 	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
 
 	pc.setConformationSet(&cs2);
@@ -255,8 +255,8 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL)
 	TEST_EQUAL(pc.getNumberOfClusters(), 18)
 
 	// Option::RMSD_LEVEL_OF_DETAIL::ALL_ATOMS
-	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::ALL_ATOMS);
-	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::RMSDLevelOfDetail::ALL_ATOMS)
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::ALL_ATOMS)
 	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
 
 	pc.setConformationSet(&cs2);
@@ -290,7 +290,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	cs2.resetScoring();
 
 	PoseClustering pc;
-	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::RMSDLevelOfDetail::PROPERTY_BASED_ATOM_BIJECTION);
+	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::PROPERTY_BASED_ATOM_BIJECTION);
 	pc.setConformationSet(&cs2);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 19)
