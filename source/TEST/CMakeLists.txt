@@ -68,10 +68,14 @@ FOREACH(group ${BALL_TESTS})
 	ENDFOREACH()
 ENDFOREACH()
 
-# Set the timeout for ScoringFunction_test to 2h
+# Set the timeout of some tests to 2h
 # This is needed for the memcheck running on the CI server
 # which takes _very_ long
-SET_TESTS_PROPERTIES ( ScoringFunction_test PROPERTIES TIMEOUT 7200)
+SET_TESTS_PROPERTIES (
+	ScoringFunction_test
+	AssignBondOrderProcessor_test
+	PROPERTIES TIMEOUT 7200
+)
 
 IF (BALL_HAS_VIEW)
 	FOREACH(test ${VIEW_TESTS})
