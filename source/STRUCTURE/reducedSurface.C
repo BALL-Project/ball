@@ -1213,7 +1213,7 @@ namespace BALL
 	{
 		for (Position direction = 0; direction < 3; direction++)
 		{
-			for (Position extreme = 0; extreme < 1; extreme++)
+			for (Position extreme = 0; extreme < 2; extreme++)
 			{
 				RSFace* face = findFace(direction, extreme);
 
@@ -1230,7 +1230,7 @@ namespace BALL
 	{
 		for (Position direction = 0; direction < 3; direction++)
 		{
-			for (Position extrem = 0; extrem < 1; extrem++)
+			for (Position extrem = 0; extrem < 2; extrem++)
 			{
 				RSEdge* edge = findEdge(direction,extrem);
 

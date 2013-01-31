@@ -31,7 +31,8 @@ int main (int argc, char **argv)
 	// - Inputfile
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
 	parpars.registerParameter("i_dcd", "input dcd-file or", INFILE, false);
-	parpars.registerParameter("i_transformations", "input transformation file for rigid rmsd clustering", INFILE, false);
+	//TODO offer the alternatives in a more elegant way!
+	parpars.registerParameter("i_transformations", "input transformation file for rigid rmsd clustering ", INFILE, false);
 
 	// we register an output file parameter 
 	// - description
@@ -79,7 +80,7 @@ int main (int argc, char **argv)
 	parpars.registerFlag("use_preclustering", "Switch on preclustering");
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), the algorithm (-alg) and a naming schema for the results (-o). Optional parameters are (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff) and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type, and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
 
 	parpars.setToolManual(man);
 
@@ -105,13 +106,15 @@ int main (int argc, char **argv)
 
 	if (parpars.has("i_dcd"))
 	{
+		/*
+		//TODO fix, when solution found for "dcd or transformation alternativ" problem
 		if (parpars.has("rmsd_type") && (parpars.get("rmsd_type") == "RIGID_RMSD"))
 		{
 			Log << "Trajectory input file cannot be used with rmsd_type 'RIGID_RMSD'. Abort!" << endl;
-			//TODO Implement an automatic converstion from dcd to transformation!
+			//TODO Implement an automatic conversion from dcd to transformation file format!
 			return 0;
 		}
-
+		*/
 		cs.readDCDFile(parpars.get("i_dcd"));
 	}
 
@@ -174,7 +177,15 @@ int main (int argc, char **argv)
 		if (type == "SNAPSHOT_RMSD")
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
 		else if (type == "RIGID_RMSD")
+		{
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+			if (!parpars.has("i_transformations"))
+			{
+				//TODO: add functionality to convert snapshots to transformations
+				Log << "RIGID_RMSD can only be used when given a transformation file (-i_transformations) . Abort!" << endl;
+				return  0;
+			}
+		}
 		else if (type == "CENTER_OF_MASS_DISTANCE")
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
 		else

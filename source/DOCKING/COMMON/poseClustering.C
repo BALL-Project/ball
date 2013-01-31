@@ -5,6 +5,7 @@
 #include <BALL/DOCKING/COMMON/poseClustering.h>
 
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/STRUCTURE/RMSDMinimizer.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 
@@ -33,6 +34,9 @@ namespace BALL
 	const bool   PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK = false;
 
 	PoseClustering::PoseClustering()
+		: current_set_(0),
+			has_rigid_transformations_(false),
+			delete_conformation_set_(false)
 	{
 		setDefaultOptions();
 	}
@@ -42,25 +46,54 @@ namespace BALL
 	{
 		options[Option::RMSD_THRESHOLD] = rmsd;
 		current_set_ = poses;
+		has_rigid_transformations_ = false;
+		delete_conformation_set_   = false;
+
+		base_system_ = poses->getSystem();
 	}
 
 	PoseClustering::PoseClustering(System const& base_system, String transformation_file_name)
 	{
+		has_rigid_transformations_ = false;
+		delete_conformation_set_   = false;
+
 		setBaseSystemAndTransformations(base_system, transformation_file_name);
 	}
 
 	PoseClustering::~PoseClustering()
 	{
+		if (delete_conformation_set_)
+			delete current_set_;
 	}
 
 	Eigen::Matrix3f PoseClustering::computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail)
 	{
-		GeometricCenterProcessor center;
-		system.apply(center);
-
 		Eigen::Matrix3f covariance_matrix = Matrix3f::Zero();
 
-		Vector3f base_com((Eigen::Vector3f() << center.getCenter().x, center.getCenter().y, center.getCenter().z).finished());
+		Vector3f base_com(0, 0, 0);
+
+		// note: we need two loops: one to compute the center of mass, the other for the covariance matrix
+		Size num_points = 0;
+		for (AtomConstIterator at_it = system.beginAtom(); +at_it; ++at_it)
+		{
+			if (    (rmsd_level_of_detail == ALL_ATOMS)
+				  || ((rmsd_level_of_detail == C_ALPHA)  && (at_it->getName() == "CA"))
+					|| ((rmsd_level_of_detail == BACKBONE) && (    (at_it->getName() == "CA")
+					                                             || (at_it->getName() == "C")
+																											 || (at_it->getName() == "O")
+																											 || (at_it->getName() == "N")
+																											 || (at_it->getName() == "H")))
+					|| ((rmsd_level_of_detail == PROPERTY_BASED_ATOM_BIJECTION)
+					                                        && (at_it->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
+			{
+				Vector3 const& pos = at_it->getPosition();
+				base_com += ((Eigen::Vector3f() << pos.x, pos.y, pos.z).finished());
+				++num_points;
+			}
+		}
+
+		base_com /= num_points;
+
 
 		for (AtomConstIterator at_it = system.beginAtom(); +at_it; ++at_it)
 		{
@@ -80,89 +113,58 @@ namespace BALL
 			}
 		}
 
-		covariance_matrix /= system.countAtoms();
+		covariance_matrix /= num_points;
+
+		// for efficiency, we have only computed the upper triangle so far
+		covariance_matrix(1,0) = covariance_matrix(0,1);
+		covariance_matrix(2,0) = covariance_matrix(0,2);
+		covariance_matrix(2,1) = covariance_matrix(1,2);
 
 		return covariance_matrix;
 	}
 
+	void PoseClustering::setConformationSet(ConformationSet* new_set)
+	{
+		if (delete_conformation_set_)
+			delete current_set_;
+		has_rigid_transformations_ = false;
+
+		current_set_ = new_set;
+	}
+
+
 	void PoseClustering::setBaseSystemAndTransformations(System const& base_system, String transformation_file_name)
 	{
+		// clear any potential pointers to old poses	
+		if (delete_conformation_set_)
+			delete current_set_;
+		current_set_ = NULL;
+
+		has_rigid_transformations_ = true;
+
 		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
 
 		base_system_ = System(base_system);
 
+		base_conformation_.takeSnapShot(base_system_);
+
 		covariance_matrix_ = computeCovarianceMatrix(base_system, rmsd_level_of_detail_);
 
-
-		/// TEST TEST TEST
-		/// TODO: move to test
-		/*
-		TransformationProcessor tp;
-		Matrix4x4 bm;
-		bm.setTranslation(-center.getCenter());
-		tp.setTransformation(bm);
-
-		System S(base_system);
-		S.apply(tp);
-
-		System S2(base_system);
-		S2.apply(tp);
-		
-		Vector3 axis(3., 1., 4.);
-		axis.normalize();
-
-		bm.setRotation(Angle(2.19), axis);
-		bm.m14 = 1.0; bm.m24 = 2.0; bm.m34 = 4.5;
-
-		Eigen::Vector3f t(1.0, 2.0, 4.5);
-		t*=0.;
-		Eigen::Matrix3f m;
-		m << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
-
-		translations_.push_back(t);
-		rotations_.push_back(m);
-
-		tp.setTransformation(bm);
-		S.apply(tp);
-
-		bm.setIdentity();
-		translations_.push_back(Eigen::Vector3f(0.07, 1., 3.1));
-		translations_.push_back(Eigen::Vector3f(0, 0, 0));
-
-		axis = Vector3(1., 2., 1.);
-		axis.normalize();
-		
-		bm.setRotation(Angle(1.), axis);
-		bm.m14 = 0.07; bm.m24 = 1.; bm.m34 = 3.1;
-		m << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
-		rotations_.push_back(m);
-		cout << "rigid rmsd: " << getRMSD_(0, 1, PoseClustering::RIGID_RMSD) << endl;
-
-		tp.setTransformation(bm);
-		S2.apply(tp);
-
-		StructureMapper mapme(S, S2);
-		cout << "atom rmsd: " << mapme.calculateRMSD() << endl;
-		rotations_.clear();
-
-		exit(1);
-		*/
-		/// END TEST END TEST END TEST
-
-		bool success = readTransformationsFromFile(transformation_file_name);
+		readTransformationsFromFile_(transformation_file_name);
 	}
 
 
 	bool PoseClustering::compute()
 	{
-	cout << " Call Compute () " << endl;
-		if (!current_set_)
+		int rmsd_type = options.getInteger(Option::RMSD_TYPE);
+
+		if (has_rigid_transformations_ && (rmsd_type != PoseClustering::RIGID_RMSD))
+			//!current_set_ && (rmsd_type != PoseClustering::RIGID_RMSD))
 		{
 			Log.info() << "No valid ConformationSet given." << endl;
 			return false;
 		}
 
-		int rmsd_type = options.getInteger(Option::RMSD_TYPE);
 		if (rmsd_type == PoseClustering::RIGID_RMSD)
 		{
 			num_poses_ = translations_.size();
@@ -178,35 +180,9 @@ namespace BALL
 			}
 		}
 
-		// precompute the atom bijection
-		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
+		precomputeAtomBijection_();
 
-		system_i_ = System(current_set_->getSystem());
-		system_j_ = System(current_set_->getSystem());
-
-		StructureMapper mapper(system_i_, system_j_);
-
-		switch (rmsd_level_of_detail_)
-		{
-			case PoseClustering::C_ALPHA:
-				atom_bijection_.assignCAlphaAtoms(system_i_, system_j_);
-				break;
-			case PoseClustering::BACKBONE:
-				atom_bijection_.assignBackboneAtoms(system_i_, system_j_);
-				break;
-			case PoseClustering::ALL_ATOMS:
-				mapper.calculateDefaultBijection();
-				atom_bijection_ = mapper.getBijection();
-				break;
-			case PoseClustering::PROPERTY_BASED_ATOM_BIJECTION:
-				atom_bijection_.assignAtomsByProperty(system_i_, system_j_);
-				break;
-			case PoseClustering::HEAVY_ATOMS:
-			default:
-				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
-		}
-
-		// do we have a preclink scenario 
+		// do we have a pre clustering scenario 
 		if (options.getBool(Option::USE_CENTER_OF_MASS_PRECLINK))
 		{
 			// cluster the centers of gravity
@@ -233,8 +209,15 @@ namespace BALL
 	}
 
 
-	bool PoseClustering::readTransformationsFromFile(String filename)
+	bool PoseClustering::readTransformationsFromFile_(String filename)
 	{
+		translations_.clear();
+		rotations_.clear();
+		if (delete_conformation_set_)
+			delete current_set_;
+
+		current_set_ = NULL;
+
 		LineBasedFile file(filename, std::ios::in);
 		vector<String> fields;
 		while (file.LineBasedFile::readLine())
@@ -246,12 +229,11 @@ namespace BALL
 			{
 				fields.clear();
 				current_transformation.split(fields);
-				translations_.push_back((Vector3f() << fields[5].toFloat(), fields[9].toFloat(), fields[13].toFloat()).finished());
-				rotations_.push_back((Matrix3f() << fields[2].toFloat(),   fields[3].toFloat(),  fields[4].toFloat(),
-				                                    fields[6].toFloat(),   fields[7].toFloat(),  fields[8].toFloat(),
-																		        fields[10].toFloat(),  fields[11].toFloat(), fields[12].toFloat()).finished());
+				translations_.push_back((Vector3f() << fields[6].toFloat(), fields[10].toFloat(), fields[14].toFloat()).finished());
+				rotations_.push_back((Matrix3f() << fields[3].toFloat(),   fields[4].toFloat(),  fields[5].toFloat(),
+				                                    fields[7].toFloat(),   fields[8].toFloat(),  fields[9].toFloat(),
+																		        fields[11].toFloat(),  fields[12].toFloat(), fields[13].toFloat()).finished());
 
-				//TODO should we build the ConformationSet here? 
 			}
 			else
 			{
@@ -267,6 +249,7 @@ namespace BALL
 	{
 		// in the beginning each pose is a cluster
 		// this causes O(n^2) space!!	
+		num_poses_ = getNumberOfPoses();
 		pairwise_scores_.resize(num_poses_, num_poses_);
 
 		// clean up old clusters
@@ -643,10 +626,51 @@ namespace BALL
 		}
 	}
 
+	// precompute the atom bijection
+	void PoseClustering::precomputeAtomBijection_()
+	{
+		int rmsd_type = options.getInteger(Option::RMSD_TYPE);
+
+		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
+
+		if (rmsd_type == PoseClustering::RIGID_RMSD)
+		{
+			system_i_ = System(base_system_);
+			system_j_ = System(base_system_);
+		}
+		else
+		{
+			system_i_ = System(current_set_->getSystem());
+			system_j_ = System(current_set_->getSystem());
+		}
+
+		StructureMapper mapper(system_i_, system_j_);
+
+		switch (rmsd_level_of_detail_)
+		{
+			case PoseClustering::C_ALPHA:
+				atom_bijection_.assignCAlphaAtoms(system_i_, system_j_);
+				break;
+			case PoseClustering::BACKBONE:
+				atom_bijection_.assignBackboneAtoms(system_i_, system_j_);
+				break;
+			case PoseClustering::ALL_ATOMS:
+				mapper.calculateDefaultBijection();
+				atom_bijection_ = mapper.getBijection();
+				break;
+			case PoseClustering::PROPERTY_BASED_ATOM_BIJECTION:
+				atom_bijection_.assignAtomsByProperty(system_i_, system_j_);
+				break;
+			case PoseClustering::HEAVY_ATOMS:
+			default:
+				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
+		}
+	}
+
 
 	bool PoseClustering::centerOfGravityPreCluster_()
 	{
-cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLUSTER_METHOD) << " " << CLINK_DEFAYS << endl;
+//cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLUSTER_METHOD) << " " << CLINK_DEFAYS << endl;
 		// store the old options
 		Options old_options = options;
 
@@ -665,11 +689,6 @@ cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLU
 
 		// store results
 
-cout << " found " << getNumberOfClusters() << "  geometric center clusters." << endl;
-printClusters();
-printClusterRMSDs();
-cout <<  endl << endl << " Weiter gehts " << endl;
-
 		// store the new clusters
 		std::vector<std::set<Index> >   temp_clusters;
 
@@ -681,7 +700,6 @@ cout <<  endl << endl << " Weiter gehts " << endl;
 		// now iterate over all clusters 
 		for (Size i=0; i<getNumberOfClusters(); i++)
 		{
-cout << "       " << i << endl;
 			if (getClusterSize(i)>1)
 			{
 				// temporarily convert the set to a vector for quicker access
@@ -721,10 +739,10 @@ cout << "       " << i << endl;
 					temp_clusters.push_back(converted_indices);
 					//cout << "    " << i << " " << j << ": " << inner_pc.getClusterSize(j) << std::endl;
 				}
-cout << "++++++++++++++++++++++++++++++***" << endl;
-				inner_pc.printClusterRMSDs();
+//cout << "++++++++++++++++++++++++++++++***" << endl;
+//				inner_pc.printClusterRMSDs();
 				//cout << " cluster " << i << "( " << getClusterSize(i) << " ) was split into " << num_clusters << " clusters." << endl;
-cout << "***++++++++++++++++++++++++++++++***" << endl;
+//cout << "***++++++++++++++++++++++++++++++***" << endl;
 			}
 			else
 			{
@@ -734,7 +752,7 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 		}
 		// switch the clusters
 		clusters_ = temp_clusters;
-		printClusters();
+		//printClusters();
 
 		return true;
 	}
@@ -778,15 +796,35 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 		} //next cluster
 	}
 
+
 	const System& PoseClustering::getSystem() const
 	{
-		return current_set_->getSystem();
+		if (current_set_)
+		{
+			return current_set_->getSystem();
+		}
+		else
+		{
+			// TODO: do we have to make sure, that the system is in 
+			// the initial conformation state?
+			// // apply the reference state
+			//base_conformation_.applySnapShot(base_system_);
+
+			return base_system_;
+		}
 	}
 
 
 	System& PoseClustering::getSystem()
 	{
-		return current_set_->getSystem();
+		if (current_set_)
+		{
+			return current_set_->getSystem();
+		}
+		else
+		{
+			return base_system_;
+		}
 	}
 
 
@@ -822,19 +860,43 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 		if (i >= (Index)clusters_.size())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
-		boost::shared_ptr<System> new_system(new System(current_set_->getSystem()));
+		boost::shared_ptr<System> new_system(new System(getSystem()));
 
-		// TODO translate cluster i to conformationsetindex
 		// as cluster representative we simply take the first cluster member
 		// this is a very simple heuristic :-)
 		// TODO: find the median?
 
-		// we simply take the first
+		// take the first
 		Index conf_set_idx = *(clusters_[i].begin());
 
-		SnapShot sn = (*current_set_)[conf_set_idx];
+		if (has_rigid_transformations_ && !current_set_)
+		{
+			GeometricCenterProcessor center;
+			new_system->apply(center);
+			Vector3 toOrigin = center.getCenter().negate();
 
-		sn.applySnapShot(*(new_system.get()));
+			TranslationProcessor translation;
+			translation.setTranslation(toOrigin);
+			new_system->apply(translation);
+
+			// apply transformation and rotation	
+			TransformationProcessor transformation;
+			transformation.setTransformation(Matrix4x4(rotations_[conf_set_idx](0,0), rotations_[conf_set_idx](0,1), rotations_[conf_set_idx](0,2), translations_[conf_set_idx](0),
+			                                           rotations_[conf_set_idx](1,0), rotations_[conf_set_idx](1,1), rotations_[conf_set_idx](1,2), translations_[conf_set_idx](1),
+			                                           rotations_[conf_set_idx](2,0), rotations_[conf_set_idx](2,1), rotations_[conf_set_idx](2,2), translations_[conf_set_idx](2),
+			                                           0, 0, 0, 1));
+			new_system->apply(transformation);
+
+			// move back to its original center
+			translation.setTranslation(toOrigin.negate());
+			new_system->apply(translation);
+		}
+		else
+		{
+			SnapShot sn = (*current_set_)[conf_set_idx];
+
+			sn.applySnapShot(*(new_system.get()));
+		}
 		return new_system;
 	}
 
@@ -858,11 +920,17 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 	}
 
 
-	boost::shared_ptr<ConformationSet> PoseClustering::getClusterConformationSet(Index i) const
+	boost::shared_ptr<ConformationSet> PoseClustering::getClusterConformationSet(Index i)
 	{
 		if (i >= (Index)clusters_.size())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
+		if (current_set_==NULL)
+		{
+			// originally we were given transformations, not snapshots
+			// lets create some
+			convertTransformations2Snaphots_();
+		}
 		// create a new ConformationSet
 		boost::shared_ptr<ConformationSet> new_set(new ConformationSet());
 
@@ -884,15 +952,21 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 	}
 
 
-	boost::shared_ptr<ConformationSet> PoseClustering::getReducedConformationSet() const
+	boost::shared_ptr<ConformationSet> PoseClustering::getReducedConformationSet()
 	{
 		if (clusters_.size()==0)
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
-		// create a new ConformationSet
-		boost::shared_ptr<ConformationSet> new_set(new ConformationSet());
+		if (current_set_==NULL)
+		{
+			// originally we were given transformations, not snapshots
+			// lets create some
+			convertTransformations2Snaphots_();
+		}
 
-		new_set->setup(current_set_->getSystem());
+		// create the set to be returned
+		boost::shared_ptr<ConformationSet> new_set(new ConformationSet());
+		new_set->setup(getSystem());
 		new_set->setParent(current_set_);
 
 		// iterate over all clusters
@@ -986,6 +1060,8 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 		else if (rmsd_type == PoseClustering::SNAPSHOT_RMSD)
 		{
 			// we are were given Conformations that have been applied to sys_i and sys_j
+			// TODO: we should probably use RMSDMinimizer instead!
+			//       or even better, merge StructureMapper and RMSDMinimizer
 			StructureMapper mapper(system_i_, system_j_);
 			rmsd = mapper.calculateRMSD(atom_bijection_);
 		}
@@ -997,6 +1073,95 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 
 		//std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
 		return rmsd;
+	}
+
+	void PoseClustering::convertTransformations2Snaphots_()
+	{
+		if (current_set_ != NULL)
+		{
+			Log.info() << "Warning: previous snapshots are overwritten!" << __FILE__ << " " << __LINE__ << endl;
+		}
+		else
+		{
+			// create a new ConformationSet
+			current_set_ =  new ConformationSet();
+			delete_conformation_set_= true;
+
+			//Note: we cannot use getSystem here, since
+			// we use the existence of current_set_ to distinguish
+			// the SnapShot from the Transformation setting
+			current_set_->setup(base_system_);
+		}
+
+		// pre compute some general transformations
+		System new_template_system(base_system_);
+		// apply the reference state
+		base_conformation_.applySnapShot(new_template_system);
+
+		// compute the translation vector to the origin
+		GeometricCenterProcessor center;
+		new_template_system.apply(center);
+		Vector3 toOrigin = center.getCenter().negate();
+		// move to origin
+		TranslationProcessor translation;
+		translation.setTranslation(toOrigin);
+		new_template_system.apply(translation);
+
+		TransformationProcessor transformation;
+
+		// create one snapshot for each transformation
+		for (Size i=0; i<translations_.size(); i++)
+		{
+			// create a copy
+			System new_system(new_template_system);
+			// apply transformation and rotation
+			transformation.setTransformation(Matrix4x4(rotations_[i](0,0), rotations_[i](0,1), rotations_[i](0,2), translations_[i](0) - toOrigin.x,
+			                                           rotations_[i](1,0), rotations_[i](1,1), rotations_[i](1,2), translations_[i](1) - toOrigin.y,
+			                                           rotations_[i](2,0), rotations_[i](2,1), rotations_[i](2,2), translations_[i](2) - toOrigin.z,
+			                                           0, 0, 0, 1));
+
+			new_system.apply(transformation);
+
+			// add the conformation
+			current_set_->add(0, new_system);
+		}
+	}
+
+	void PoseClustering::convertSnaphots2Transformations_()
+	{
+		// just to be sure...
+		translations_.clear();
+		rotations_.clear();
+		num_poses_ = getNumberOfPoses();
+
+		precomputeAtomBijection_();
+
+		System transformed_system(current_set_->getSystem());
+		base_system_ = current_set_->getSystem();
+
+		// we iterate over all the snapshots
+		for (Position current_snap = 0; current_snap < num_poses_; ++current_snap)
+		{
+			// apply the snapshot
+			(*current_set_)[current_snap].applySnapShot(transformed_system);
+
+			// compute the best mapping of the base system to the transformed one
+			RMSDMinimizer::Result transform = RMSDMinimizer::computeTransformation(atom_bijection_);
+			Matrix4x4& bm = transform.first;
+
+			// convert the contained matrix to Eigen translation vector & rotation matrix
+			Eigen::Vector3f translation;
+			translation << bm.m14, bm.m24, bm.m34;
+
+			translations_.push_back(translation);
+
+			Eigen::Matrix3f rotation;
+			rotation << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
+
+			rotations_.push_back(rotation);
+		}
+
+		has_rigid_transformations_ = true;
 	}
 
 
@@ -1049,11 +1214,16 @@ cout << "***++++++++++++++++++++++++++++++***" << endl;
 	{
 		// Note: options should not be reset
 		pairwise_scores_.setZero();
+		if (delete_conformation_set_)
+			delete current_set_;
+		has_rigid_transformations_ = false;
+		delete_conformation_set_ = false;
 		current_set_ = NULL;
 		translations_.clear();
 		rotations_.clear();
 		covariance_matrix_.setZero();
 		base_system_.clear();
+		base_conformation_.clear();
 		clusters_.clear();
 		//rmsd_level_of_detail_; 
 		lambda_.clear();

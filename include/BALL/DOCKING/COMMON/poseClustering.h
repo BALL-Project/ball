@@ -61,15 +61,16 @@ namespace BALL
 			The complete linkage algorithm guarantees a minimal cluster
 		 	distance (max RMSD between all pairs of two clusters) of RMSD_THRESHOLD.
 
-			We offer two algorithms via the option CLUSTER_METHOD:
+			We offer three algorithms via the option CLUSTER_METHOD:
+			 - TRIVIAL_COMPLETE_LINKAGE: a naive implementation, that guarantees an optimal final partition
 			 - SLINK_SIBSON as described in 
 			            R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
                   The Computer Journal. 16, Nr. 1, British Computer Society, 1973, S. 30-34
 			 - CLINK_DEFAYS as described in 
 									D. Defays: An efficient algorithm for a complete link method. 
                   The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366.
+				 			Please note, that this implementation does not guarantee to find the best final clustering!
 	*/
-   // TODO add TIRVIAL_COMPLETE_LINKAGE
 
   class BALL_EXPORT PoseClustering
 	{
@@ -169,16 +170,12 @@ namespace BALL
 			//@{
 
 			/// 
-			void setConformationSet(ConformationSet* new_set)
-			{
-				current_set_ = new_set;
-			}
+			void setConformationSet(ConformationSet* new_set);
 
-			///
+			/// reads the poses given as transformations from a file and update the covariance matrix 	
+			/// Note: the given system will be taken as reference, e.g. all transformations 
+			//       will be applied upon the current conformation
 			void setBaseSystemAndTransformations(System const& base_system, String transformation_file_name);
-
-			/// reads the poses given as transformations from a file
-			bool readTransformationsFromFile(String filename);
 
 			/// 
 			const ConformationSet* getConformationSet() const {return  current_set_;}
@@ -193,31 +190,31 @@ namespace BALL
 			System& getSystem();
 
 			///
+			Size getNumberOfPoses() const {return (has_rigid_transformations_ ? translations_.size(): current_set_->size());}
+			//Size getNumberOfPoses() const {return ((current_set_ && (current_set_->size()>1)) ? current_set_->size() : translations_.size());}
+
+			///
 			Size getNumberOfClusters() const {return clusters_.size();}
 
-			/// return indices of all SnapShots of the original ConformationSet assigned to cluster i
+			/// returns indices of all poses assigned to cluster i
+			/// Note: enumeration starts with 0
 			const std::set<Index>& getCluster(Index i) const;
 
-			///
+			/// returns indices of all poses assigned to cluster i
+			/// Note: enumeration starts with 0
 			std::set<Index>& getCluster(Index i);
 
-			///
+			/// returns the size of cluster i
 			Size getClusterSize(Index i) const;
 
-			/// TODO statt System&  besser nur den Index des Median im Orginal ConformationSet?
-			//const System& getClusterRepresentative(Index i) const;
-
-			/// TODO statt System& besser nur den Index des Median im Orginal ConformationSet?
-			//System& getClusterRepresentative(Index i);
-
-			/// 
+			/// returns the first conformation of cluster i as system 
 			boost::shared_ptr<System> getClusterRepresentative(Index i) const;
 
 			/// returns cluster i as ConformationSet
-			boost::shared_ptr<ConformationSet> getClusterConformationSet(Index i) const;
+			boost::shared_ptr<ConformationSet> getClusterConformationSet(Index i);
 
 			/// returns a ConformationSet containing one structure per cluster
-			boost::shared_ptr<ConformationSet> getReducedConformationSet() const;
+			boost::shared_ptr<ConformationSet> getReducedConformationSet();
 
 			void printClusterRMSDs();
 
@@ -246,6 +243,7 @@ namespace BALL
 			 */
 			static Eigen::Matrix3f computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail = C_ALPHA);
 
+			///
 			void printClusters();
 
 
@@ -271,18 +269,34 @@ namespace BALL
 			// compute the center of masses
 			void computeCenterOfMasses_();
 
+			// precompute an atom bijection for faster access
+			void precomputeAtomBijection_();
+
 			// run a pre clink on the centers of gravity 
 			bool centerOfGravityPreCluster_();
 
 			// distance between cluster i and cluster j
 			float getClusterRMSD_(Index i, Index j, Index rmsd_type);
 
-			//
+			// reads the poses given as transformations from a file
+			// Note: the previously given system will be taken
+			//       as untransformed reference, e.g. all transformations 
+			//       will be applied upon the current conformation
+			bool readTransformationsFromFile_(String filename);
+
+			// compute the RMSD between two "poses"  
 			float getRMSD_(Index i, Index j, Index rmsd_type);
+
+			// 
+			void convertTransformations2Snaphots_();
+
+			// 
+			void convertSnaphots2Transformations_();
 
 			//
 			void printCluster_(Index i);
 
+			// 
 			void printVariables_(int a, int b, double c, int d, double e, int current_level);
 
 			//
@@ -300,7 +314,10 @@ namespace BALL
 
 			Eigen::Matrix3f                 covariance_matrix_;
 
+			// TODO: maybe use a const - ptr instead?
 			System                          base_system_;
+			// the reference state
+			SnapShot                        base_conformation_;
 
 			/// the clusters
 			std::vector<std::set<Index> >   clusters_;
@@ -309,11 +326,10 @@ namespace BALL
 			Index                           rmsd_level_of_detail_;
 
 			// flag indicating the use of transformation as input
-			// TODO switch to option
-			//bool                            input_type_transformation_;
+			bool                            has_rigid_transformations_;
 
 			// ------ data structures for slink and clink 
-
+			bool                            delete_conformation_set_;
 			// stores the distance at which this indexed element has longer 
 			// the largest index of its cluster
 			std::vector<double>    lambda_;
@@ -337,9 +353,11 @@ namespace BALL
 			// not change
 			AtomBijection     atom_bijection_;
 
+			// helper dummies to speed up snapshot application
 			System            system_i_;
 			System            system_j_;
 
+			// TODO get rid - use getNumberOfPoses() instead
 			// The number of poses to cluster
 			Size              num_poses_;
 
