@@ -99,7 +99,7 @@ String getOutputFileName(CommandlineParser& parameters, int index)
 		String extension = '.' + getFileFormat(inputFileName);
 
 		// if invoked with -i ligands.sdf, output name will be ligands_<index>.sdf
-		outputFileName = inputFileName.before(extension) + "_" + String(index) + extension;
+		outputFileName = inputFileName.before(extension) + String("_") + String(index) + extension;
     }
 	return outputFileName;
 }
