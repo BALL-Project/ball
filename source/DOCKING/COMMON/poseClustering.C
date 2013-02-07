@@ -12,6 +12,8 @@
 // TEST
 #include <BALL/MATHS/angle.h>
 
+#include <stack>
+
 using namespace std;
 using namespace Eigen;
 
@@ -32,6 +34,9 @@ namespace BALL
 	// TODO: change name to USE_CENTER_OF_MASS_CLUSTERING
 	const String PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK = "pose_clustering_use_center_of_mass_preclink";
 	const bool   PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK = false;
+
+	const String PoseClustering::Option::FULL_CLUSTER_DENDOGRAM = "pose_clustering_full_cluster_dendogram";
+	const bool   PoseClustering::Default::FULL_CLUSTER_DENDOGRAM = false;
 
 	PoseClustering::PoseClustering()
 		: current_set_(0),
@@ -195,9 +200,13 @@ namespace BALL
 			return trivialCompute_();
 		}
 		else if (   (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::SLINK_SIBSON)
-					 || (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::CLINK_DEFAYS))
+		         || (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::CLINK_DEFAYS))
 		{
 			return linearSpaceCompute_(options.getInteger(Option::RMSD_TYPE));
+		}
+		else if (options.getInteger(Option::CLUSTER_METHOD) == NEAREST_NEIGHBOR_CHAIN)
+		{
+			return nearestNeighborChainCompute_();
 		}
 		else
 		{
@@ -255,6 +264,9 @@ namespace BALL
 		// clean up old clusters
 		clusters_.clear();
 
+		// reset the cluster tree
+		cluster_tree_.clear();
+
 		// compute all pairwise RMSDs
 		Index rmsd_type = options.getInteger(Option::RMSD_TYPE);
 		if (rmsd_type == PoseClustering::CENTER_OF_MASS_DISTANCE)
@@ -279,6 +291,12 @@ namespace BALL
 			set<Index> new_set;
 			new_set.insert((Index) i);
 			clusters_.push_back(new_set);
+
+			// and add it into the tree
+			ClusterTreeNode v = boost::add_vertex(cluster_tree_);
+			cluster_tree_[v].poses.insert((Index) i);
+
+			// TODO: continue with the cluster tree... add center if required ...
 
 			// compute the rmsd
 			if (rmsd_type == PoseClustering::SNAPSHOT_RMSD)
@@ -614,6 +632,139 @@ namespace BALL
 	}
 
 
+	void PoseClustering::nearestNeighborChainCompute_()
+	{
+		// clean up old clusters
+		clusters_.clear();
+
+		num_poses_ = getNumberOfPoses();
+		Index rmsd_type = options.getInteger(PoseClustering::Option::RMSD_TYPE);
+		float rmsd_cutoff = options.getReal(Option::RMSD_THRESHOLD);
+
+		Index current_cluster = 0;
+		Index nearest_cluster = 0;
+		set<Index>* min_cluster_a = NULL;
+		set<Index>* min_cluster_b = NULL;
+
+		float min_cluster_dist = std::numeric_limits<float>::max();
+
+		// all clusters in the dendogramm
+		// //TODO switch to dendogramm
+		//std::vector<std::set<Index> >  all_clusters;
+		// the active clusters (by indices)
+		std::set<Index>                indices_of_active_clusters;
+
+		// stack of clusters by indices (storing nearest neighbor chains)
+		std::stack<Index>              cluster_stack;
+
+		// in the beginning each pose is a cluster itself
+		for (Size i=0; i<num_poses_; i++)
+		{
+			// add as new cluster
+			set<Index> new_set;
+			new_set.insert((Index) i);
+			//all_clusters.push_back(new_set);
+			indices_of_active_clusters.push_back((Index) i);
+			clusters_.push_back(new_set);
+		}
+
+		initWardDistance_();
+
+		// TODO: always compute full dendogram or stop at RMSD_THRESHOLD?
+		// while there is more than one final cluster
+		while (   (indices_of_active_clusters.size() > 1)
+			     && (min_cluster_dist > rmsd_cutoff))
+		{
+			cout << " Stack size: " << cluster_stack.size() <<  " " << min_cluster_dist << endl;
+			min_cluster_dist = std::numeric_limits<float>::max();
+
+			// if stack is empty add randomly
+			if (cluster_stack.size() == 0)
+			{
+				cluster_stack.push_back((Index)indices_of_active_clusters.first());
+			}
+			current_cluster = cluster_stack.top();
+
+			// Compute the distances to all other clusters
+			// TODO: can this be guaranteed?
+			//      If there may be multiple equal nearest neighbors to a cluster, the algorithm requires a consistent 
+			//      tie-breaking rule: for instance, in this case, the nearest neighbor may be chosen, among the clusters 
+			//       at equal minimum distance from current_cluster, by numbering the clusters arbitrarily and choosing 
+			//       the one with the smallest index
+			for (std::set<Index>::iterator clust_it = indices_of_active_clusters.begin();
+					 clust_it != indices_of_active_clusters.end(); ++clust_it)
+			{
+				// check all pairs between all_clusters[*clust_it] and all_clusters[current_cluster]
+				if (*clust_it != current_cluster)
+				{
+					//TODO use WARD!!!
+					float rmsd = getClusterRMSD_(current_cluster, *clust_it, rmsd_type);
+					if (min_cluster_dist > rmsd)
+					{
+						nearest_cluster = *clust_it;
+						min_cluster_dist = rmsd;
+					}
+				}
+			}
+			// have we seen this cluster before
+			if (cluster_stack.has(nearest_cluster))
+			{
+				cluster_stack.pop();
+				cluster_stack.erase(nearest_cluster);
+
+				min_cluster_a = &clusters_[nearest_cluster];
+				min_cluster_b = &clusters_[current_cluster];
+
+				// merge
+				std::set<Index> temp_set;
+				std::set_union(min_cluster_a->begin(), min_cluster_a->end(),
+				              min_cluster_b->begin(), min_cluster_b->end(),
+				              std::inserter(temp_set, temp_set.begin()));
+				// put it back
+				min_cluster_a->swap(temp_set);
+				min_cluster_b->clear();
+				indices_of_active_clusters.erase(min_cluster_b);
+
+				// push that index
+				cluster_stack.push_back(min_cluster_a);
+			}
+			else
+			{
+				cluster_stack.push_back(i);
+			}
+		}
+
+		// copy final clusters into the general cluster data structure
+		// collect all final clusters
+		std::vector<std::set<Index> >   temp_clusters;
+
+		for (Size i = 0; i < clusters_.size(); i++)
+		{
+			if (clusters_[i].size() >0)
+				temp_clusters.push_back(clusters_[i]);
+		}
+
+		swap(clusters_, temp_clusters);
+
+		return;
+	}
+
+	void PoseClustering::initWardDistance_()
+	{
+		computeCenterOfMasses_();
+	}
+
+	float PoseClustering::updateWardDistance_(Index i, Index j)
+	{
+	}
+
+	float PoseClustering::getWardDistance_(Index i, Index j)
+	{
+		//TODO: is that correct??
+		return  sqrt( (com_[i] - com_[j]).squaredNorm() ) / ( 1./clusters_[i].size()  + 1./clusters_[j].size());
+	}
+
+
 	void PoseClustering::computeCenterOfMasses_()
 	{
 		GeometricCenterProcessor center;
@@ -917,6 +1068,9 @@ namespace BALL
 
 		options.setDefault(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK,
 				               PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK);
+
+		options.setDefault(PoseClustering::Option::FULL_CLUSTER_DENDOGRAM,
+				               PoseClustering::Default::FULL_CLUSTER_DENDOGRAM);
 	}
 
 
@@ -1007,7 +1161,6 @@ namespace BALL
 				}
 				else if (cluster_method == TRIVIAL_COMPLETE_LINKAGE)
 				{
-					//if (pairwise_scores_(*conf_it_i, *conf_it_j) < rmsd)
 					temp_rmsd = pairwise_scores_(*conf_it_i, *conf_it_j);
 				}
 				else if (   (cluster_method == PoseClustering::CLINK_DEFAYS)

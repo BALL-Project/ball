@@ -38,7 +38,11 @@
 #endif
 
 #include <Eigen/Core>
+
 #include <boost/shared_ptr.hpp>
+#include <boost/variant.hpp>
+#include <boost/graph/adjacency_list.hpp>
+
 #include <set>
 
 namespace BALL
@@ -100,6 +104,11 @@ namespace BALL
 				/** flag indicating the use of a geometric center based pre-clink run
 				 */
 				static const String USE_CENTER_OF_MASS_PRECLINK;
+
+				/** flag indicating the computation of a full cluster dendogram 
+				 */
+				static const String FULL_CLUSTER_DENDOGRAM;
+
 			};
 
 			/// Default values for options
@@ -109,8 +118,9 @@ namespace BALL
 				static const float RMSD_THRESHOLD;
 				static const Index RMSD_LEVEL_OF_DETAIL;
 				static const Index RMSD_TYPE;
-				static const bool USE_CENTER_OF_MASS_PRECLINK; //TODO setDefaults!! //rename 
-				static const String INDEX_PROPERTY_NAME;
+				static const bool USE_CENTER_OF_MASS_PRECLINK;
+				static const bool FULL_CLUSTER_DENDOGRAM;
+				static const String INDEX_PROPERTY_NAME; // TODO setDefaultOptions() etc
 			};
 
 			enum BALL_EXPORT RMSDType
@@ -133,8 +143,43 @@ namespace BALL
 			{
 				TRIVIAL_COMPLETE_LINKAGE,
 				SLINK_SIBSON,
-				CLINK_DEFAYS
+				CLINK_DEFAYS,
+				NEAREST_NEIGHBOR_CHAIN
 			};
+
+			class BALL_EXPORT RigidTransformation
+			{
+				public:
+					Eigen::Vector3f translation;
+					Eigen::Matrix3f rotation;
+			};
+
+			class BALL_EXPORT ClusterProperties
+			{
+				public:
+					/** The poses contained in this cluster.
+					 */
+					std::set<Index> poses;
+
+					/** The center of the cluster.
+					 *  Depending on the type of transformations we allow,
+					 *  this is either stored as a rigid transformation or
+					 *  as the 3N-dimensional vector given by the atom
+					 *  coordinates.
+					 */
+					boost::variant<Eigen::VectorXf, RigidTransformation> center;
+
+					/** The value at which this cluster is merged with its sibling.
+					 */
+					float merged_at;
+			};
+
+			typedef boost::adjacency_list<boost::vecS,
+			                              boost::vecS,
+			                              boost::directedS,
+			                              ClusterProperties> ClusterTree;
+
+			typedef typename ClusterTree::vertex_descriptor ClusterTreeNode;
 
 			BALL_CREATE(PoseClustering);
 
@@ -266,6 +311,18 @@ namespace BALL
       //          The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
 			void clinkInner_(int current_level);
 
+			// implememtation of the nearest neighbor chain clustering algorithms 
+			// as described in:
+			//          Murtagh, Fionn (1983): "A survey of recent advances in hierarchical clustering algorithms", 
+			//          The Computer Journal 26 (4): 354–359
+			void nearestNeighborChainCompute_();
+
+			void initWardDistance_();
+
+			float updateWardDistance_(Index i, Index j);
+
+			float getWardDistance_(Index i, Index j);
+
 			// compute the center of masses
 			void computeCenterOfMasses_();
 
@@ -308,6 +365,13 @@ namespace BALL
 			/// the ConformationSet we wish to cluster
 			ConformationSet*                current_set_;
 
+			/// the clusters: sets of pose indices 
+			std::vector<std::set<Index> >   clusters_;
+
+			/// the RMSD definition used for clustering
+			Index                           rmsd_level_of_detail_;
+
+
 			// ----- data structures for transformation input (instead of snapshots)
 			std::vector<Eigen::Vector3f>    translations_;
 			std::vector<Eigen::Matrix3f>    rotations_;
@@ -316,20 +380,19 @@ namespace BALL
 
 			// TODO: maybe use a const - ptr instead?
 			System                          base_system_;
+
 			// the reference state
 			SnapShot                        base_conformation_;
-
-			/// the clusters
-			std::vector<std::set<Index> >   clusters_;
-
-			/// the RMSD definition used for clustering
-			Index                           rmsd_level_of_detail_;
 
 			// flag indicating the use of transformation as input
 			bool                            has_rigid_transformations_;
 
-			// ------ data structures for slink and clink 
+			// do we need to delete the conformation set, that was
+			// created by converting transformations to snapshots
 			bool                            delete_conformation_set_;
+
+			// ------ data structures for slink and clink 
+
 			// stores the distance at which this indexed element has longer 
 			// the largest index of its cluster
 			std::vector<double>    lambda_;
@@ -342,11 +405,14 @@ namespace BALL
 
 
 			// ----- data structure for CENTER_OF_GRAVITY_CLINK
+
 			// the geometric center of mass
 			std::vector<Vector3>   com_;
 
-			// ----- generell datastructures
+			// ----- data structures for WARD distance
+			//std::vector<Vector3>   cluster_coms_;
 
+			// ----- general data structures
 
 			// We cache the atom bijection for faster
 			// RMSD computation; this is possible, since the system topology does
@@ -361,6 +427,8 @@ namespace BALL
 			// The number of poses to cluster
 			Size              num_poses_;
 
+			/// The tree built during hierarchical clustering
+			ClusterTree       cluster_tree_;
 	}; //class PoseClustering
 } //namesspace BALL
 
