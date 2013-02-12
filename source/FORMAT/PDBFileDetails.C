@@ -328,6 +328,15 @@ namespace BALL
 			current_chain_->setName(chain_ID_);
 		}
 		
+		// make sure we read only the first location if alternate
+		// locations are present to avoid invalid structures due
+		// to duplicate atoms
+		if(   (record.alternate_location_indicator == ' ' )
+		   || (record.alternate_location_indicator == alternate_location_indicator_))
+		{
+			return true;
+		}
+
 		if (residue_name_ != (const char*)record.residue.name
 				|| (record.residue.sequence_number != residue_sequence_number_)
 				|| (record.residue.insertion_code != insertion_code_))
@@ -353,51 +362,45 @@ namespace BALL
 			current_residue_->setInsertionCode(insertion_code_);
 		}
 
-		// make sure we read only the first location if alternate
-		// locations are present to avoid invalid structures due
-		// to duplicate atoms
-		if ((record.alternate_location_indicator == ' ' )
-				|| (record.alternate_location_indicator == alternate_location_indicator_))
+		current_PDB_atom_ = new PDBAtom;
+		current_residue_->insert(*current_PDB_atom_);
+		PDB_atom_map_[record.serial_number] = current_PDB_atom_;
+
+		current_PDB_atom_->setName(getAtomName(record.atom_name));
+		current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(record.atom_name));
+		current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(record.atom_name));
+		current_PDB_atom_->setAlternateLocationIndicator(record.alternate_location_indicator);
+		current_PDB_atom_->setOccupancy(record.occupancy);
+		current_PDB_atom_->setTemperatureFactor(record.temperature_factor);
+		current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
+		current_PDB_atom_->setPosition(Vector3(record.orthogonal_vector[0], record.orthogonal_vector[1], record.orthogonal_vector[2]));
+
+		// Figuring out the element is nto entirely trivial: it *should* be in columns 77-78.
+		// However, some codes abuse cols. 77-80 for partial charges. We support this format w/ the
+		// option PARTIAL_CHARGES for reading and writing.
+		if (parse_partial_charges_)
 		{
-			current_PDB_atom_ = new PDBAtom;
-			current_residue_->insert(*current_PDB_atom_);
-			PDB_atom_map_[record.serial_number] = current_PDB_atom_;
-			
-			current_PDB_atom_->setName(getAtomName(record.atom_name));
-			current_PDB_atom_->setRemotenessIndicator(getAtomRemotenessIndicator(record.atom_name));
-			current_PDB_atom_->setBranchDesignator(getAtomBranchDesignator(record.atom_name));
-			current_PDB_atom_->setAlternateLocationIndicator(record.alternate_location_indicator);
-			current_PDB_atom_->setOccupancy(record.occupancy);
-			current_PDB_atom_->setTemperatureFactor(record.temperature_factor);
-			current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
-			current_PDB_atom_->setPosition(Vector3(record.orthogonal_vector[0], record.orthogonal_vector[1], record.orthogonal_vector[2]));
-			// Figuring out the element is nto entirely trivial: it *should* be in columns 77-78.
-			// However, some codes abuse cols. 77-80 for partial charges. We support this format w/ the 
-			// option PARTIAL_CHARGES for reading and writing.
-			if (parse_partial_charges_)
+			// ????
+		}
+		else
+		{
+			char element_symbol[3];
+			element_symbol[0] = record.element_symbol[0];
+			element_symbol[1] = record.element_symbol[1];
+			element_symbol[2] = '\0';
+			current_PDB_atom_->setElement(PTE[PDBFile::getAtomElementSymbol(record.atom_name, element_symbol)]);
+			current_PDB_atom_->setFormalCharge(0);
+			try
 			{
-				// ????
+				if (record.charge[1] == '+' || record.charge[1] == '-')
+				{
+					current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
+				}
 			}
-			else
+			catch (Exception::InvalidFormat&)
 			{
-				char element_symbol[3];
-				element_symbol[0] = record.element_symbol[0];
-				element_symbol[1] = record.element_symbol[1];
-				element_symbol[2] = '\0';
-				current_PDB_atom_->setElement(PTE[PDBFile::getAtomElementSymbol(record.atom_name, element_symbol)]);
-				current_PDB_atom_->setFormalCharge(0);
-				try	
-				{
-					if (record.charge[1] == '+' || record.charge[1] == '-')
-					{
-						current_PDB_atom_->setFormalCharge(String(record.charge).toInt());
-					}
-				}
-				catch (Exception::InvalidFormat&)
-				{
-				}
-				current_PDB_atom_->setCharge((float)current_PDB_atom_->getFormalCharge());
 			}
+			current_PDB_atom_->setCharge((float)current_PDB_atom_->getFormalCharge());
 		}
 		
 		return true;
