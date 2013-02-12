@@ -7,6 +7,7 @@ SET(SOURCES_LIST
 	assignBondOrderProcessor.C
 	atomBijection.C
 	atomTyper.C
+	binaryFingerprintMethods.C
 	bindingPocketProcessor.C
 	buildBondsProcessor.C
 	connectedComponentsProcessor.C
