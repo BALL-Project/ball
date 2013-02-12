@@ -16,6 +16,8 @@ SET(EXECUTABLES_LIST
 	DockResultMerger
 	EvenSplit
 	FeatureSelector
+	FingerprintSimilarityClustering
+	FingerprintSimilaritySearch
 	GalaxyConfigGenerator
 	GridBuilder
 	IMGDock
