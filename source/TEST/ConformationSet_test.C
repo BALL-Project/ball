@@ -30,7 +30,7 @@ RESULT
 
 CHECK(readDCDFile())
 		ConformationSet cs;
-		cs.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering_test.dcd));
+		cs.readDCDFile(BALL_TEST_DATA_PATH(ConformationSet_test.dcd));
 		cs.resetScoring();
 		TEST_EQUAL(cs.size(), 10)
 RESULT
@@ -38,22 +38,22 @@ RESULT
 CHECK(writeDCDFile(const String& filename, const Size num = 0))
 		ConformationSet cs;
 
-		PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+		PDBFile pdb(BALL_TEST_DATA_PATH(ConformationSet_test.pdb));
 		System sys;
 		pdb.read(sys);
 		cs.setup(sys);
 
-		cs.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering_test.dcd));
+		cs.readDCDFile(BALL_TEST_DATA_PATH(ConformationSet_test.dcd));
 		cs.resetScoring();
 		String tmp_filename;
 		NEW_TMP_FILE(tmp_filename)
 
 		cs.writeDCDFile(tmp_filename);
-		TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_test.dcd))
+		TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(ConformationSet_test.dcd))
 RESULT
 
 CHECK(setup())
-	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	PDBFile pdb(BALL_TEST_DATA_PATH(ConformationSet_test.pdb));
 	System sys;
 	pdb.read(sys);
 
