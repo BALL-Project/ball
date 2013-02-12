@@ -316,7 +316,7 @@ namespace BALL
 
 	String MolFileFactory::getSupportedFormats()
 	{
-		String formats = "mol2, sdf, drf, pdb, ac, ent, brk, hin, mol, xyz, mol2.gz, sdf.gz, drf.gz, pdb.gz, ac.gz, ent.gz, brk.gz, hin.gz, mol.gz, xyz.gz";
+		String formats = "mol2,sdf,drf,pdb,ac,ent,brk,hin,mol,xyz,mol2.gz,sdf.gz,drf.gz,pdb.gz,ac.gz,ent.gz,brk.gz,hin.gz,mol.gz,xyz.gz";
 		return formats;
 	}
 
