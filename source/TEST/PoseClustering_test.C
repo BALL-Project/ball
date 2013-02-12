@@ -302,7 +302,6 @@ CHECK(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK)
 	pc.setConformationSet(&cs2);
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
->>>>>>> Implemeted a cluster heuristic CENTER_OF_GRAVITY_CLINK
 
 	pc.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, true);
 
