@@ -18,11 +18,17 @@
 
 #include "version.h"
 
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/stream.hpp>
+
 #include <map>
 #include <vector>
 
 
 using namespace BALL;
+using namespace boost;
 using namespace std;
 
 
@@ -160,11 +166,34 @@ bool readFingerprints(const String& input_file, vector<vector<unsigned short> >&
 			return false;
 		}
 		
-		LineBasedFile lbf(input_file, File::MODE_IN);
-		
-		readFingerprintsCSV(lbf, mol_features, mol_identifiers);
-		
-		lbf.close();
+		if (input_file.hasSuffix(".gz"))
+		{
+			String tmp_unzipped;
+			File::createTemporaryFilename(tmp_unzipped);
+			LineBasedFile unzipped(tmp_unzipped, File::MODE_OUT);
+			File zipped(input_file, File::MODE_IN | File::MODE_BINARY);
+			
+			iostreams::filtering_streambuf<iostreams::input> gzip_in;
+			gzip_in.push(iostreams::gzip_decompressor());
+			gzip_in.push(zipped);
+			iostreams::copy(gzip_in, unzipped);
+			
+			zipped.close();
+			
+			unzipped.reopen(File::MODE_IN);
+			readFingerprintsCSV(unzipped, mol_features, mol_identifiers);
+			unzipped.close();
+			
+			File::remove(tmp_unzipped);
+		}
+		else
+		{
+			LineBasedFile lbf(input_file, File::MODE_IN);
+			
+			readFingerprintsCSV(lbf, mol_features, mol_identifiers);
+			
+			lbf.close();
+		}
 	}
 	else
 	{
@@ -264,7 +293,7 @@ $ FingerprintSimilaritySearch -t target.sdf -q query.sdf -o results -fp_tag FPRI
 $ FingerprintSimilaritySearch -t target.sdf -q query.smi -o results -fp_tag FPRINT -f 1 -id_tag NAME -fp_col 2\n\
   tries to extract fingerprints as binary bitstrings (-f 1) from tag <FPRINT> and compound IDs from tag <NAME> of target.sdf\n\
   and fingerprints as binary bitstrings of space separated query file from column 2 (-fp_col 2).\n\
-  A similarity search is performed for all query molecules against all target molecules and pairs with similarity above Tanimoto cutoff 0.7 are written to outfile (results).\n\n";
+  A similarity search is performed for all query molecules against all target molecules and pairs with similarity above Tanimoto cutoff 0.7 are written to outfile (results).";
 	
 	parpars.setToolManual(man);
 	parpars.parse(argc, argv);

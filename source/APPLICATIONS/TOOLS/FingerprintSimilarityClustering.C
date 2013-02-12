@@ -16,6 +16,10 @@
 #include "version.h"
 
 #include <boost/unordered_map.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/stream.hpp>
 
 #include <locale>
 #include <map>
@@ -296,11 +300,34 @@ bool readFingerprints(const String& input_file, vector<vector<unsigned short> >&
 			return false;
 		}
 		
-		LineBasedFile lbf(input_file, File::MODE_IN);
-		
-		readFingerprintsCSV(lbf, mol_features, mol_identifiers);
-		
-		lbf.close();
+		if (input_file.hasSuffix(".gz"))
+		{
+			String tmp_unzipped;
+			File::createTemporaryFilename(tmp_unzipped);
+			LineBasedFile unzipped(tmp_unzipped, File::MODE_OUT);
+			File zipped(input_file, File::MODE_IN | File::MODE_BINARY);
+			
+			iostreams::filtering_streambuf<iostreams::input> gzip_in;
+			gzip_in.push(iostreams::gzip_decompressor());
+			gzip_in.push(zipped);
+			iostreams::copy(gzip_in, unzipped);
+			
+			zipped.close();
+			
+			unzipped.reopen(File::MODE_IN);
+			readFingerprintsCSV(unzipped, mol_features, mol_identifiers);
+			unzipped.close();
+			
+			File::remove(tmp_unzipped);
+		}
+		else
+		{
+			LineBasedFile lbf(input_file, File::MODE_IN);
+			
+			readFingerprintsCSV(lbf, mol_features, mol_identifiers);
+			
+			lbf.close();
+		}
 	}
 	else
 	{
@@ -373,7 +400,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", INT, false, -1);
 	parpars.registerParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, false, " ");
 	parpars.registerParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, false, " ");
-	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, "0.7");
+	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, 0.7);
 	parpars.registerParameter("cc", "Clustering size cutoff [default: 1000]", INT, false, 1000);
 	parpars.registerParameter("l", "Number of fingerprints to read", INT, false, "0");
 	parpars.registerFlag("sdf_out", "If input file has SD format, this flag activates writing of clustering information as new tags in a copy of the input SD file.");
@@ -382,14 +409,26 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("t","smi, smi.gz, csv, csv.gz, txt, txt.gz, sdf, sdf.gz");
 	parpars.setParameterRestrictions("f", 1, 2);
 	
-	String man = String("This tool performs a fast and deterministic semi-hierarchical clustering of input compounds encoded as 2D binary fingerprints.\n\n\
+	String man = "This tool performs a fast and deterministic semi-hierarchical clustering of input compounds encoded as 2D binary fingerprints.\n\n\
 The method is a multistep workflow which first reduces the number of input fingerprints by removing duplicates. This unique set is forwarded to connected\n\
 components decomposition by calculating all pairwise Tanimoto similarities and application of a similarity cutoff value. As a third step, all connected components\n\
 which exceed a predefined size are hierarchically clustered using the average linkage clustering criterion. The Kelley method is applied on every hierarchical clustering\n\
 to determine a level for cluster selection. Finally, the fingerprint duplicates are remapped onto the final clusters which contain their representatives. \n\n\
 For every final cluster a medoid is calulated. For a single cluster multiple medoids are possible because fingerprint duplicates of a medoid are also marked as medoid.\n\n\
 For every compound the output yields a cluster ID, a medoid tag where '1' indicates the cluster medoid(s) and the average similarity of the compound to all other \n\
-cluster members. If the output format is SD, these properties are added as new tags.");
+cluster members. If the output format is SD, these properties are added as new tags.\n\n\
+======================================================================================================================================================\n\n\
+Examples:\n\n\
+$ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME\n\
+  tries to read fingerprints as binary bitstrings (-f 1) from tag <FPRINT> and compound IDs from tag <NAME> of target.sdf input file.\n\
+  The clustering workflow described is executed on the input molecules with default values.\n\n\
+$ FingerprintSimilarityClustering -t target.csv -fp_col 3 -f 2 -id_col 1\n\
+  tries to read fingerprints as comma separated integer feature list (-f 2) from column 3 and IDs from column 1 out of a space separated CSV file.\n\
+  The clustering workflow described is executed on the input molecules with default values.\n\n\
+$ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME -tp\n\
+  Same as first example but executed in parallel mode.\n\n\
+$ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME -tc 0.5 -cc 50\n\
+  Same as first example but using modified parameters for similarity network generation (tc 0.5) and size of connected components to be clustered (-cc 50).";
 	
 	parpars.setToolManual(man);
 	parpars.parse(argc, argv);
