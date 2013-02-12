@@ -293,6 +293,7 @@ SET(BALL_STRUCTURE_TESTS
 	AnalyticalSES_test
 	AssignBondOrderProcessor_test
 	AtomBijection_test
+	BinaryFingerprintMethods_test
 	BindingPocketProcessor_test
 	ConnectedComponentsProcessor_test
 	DisulfidBondProcessor_test
