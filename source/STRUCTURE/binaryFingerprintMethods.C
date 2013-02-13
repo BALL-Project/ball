@@ -791,7 +791,7 @@ void BinaryFingerprintMethods::calculateCommonCounts_M_N(const InvertedIndex* ii
 	// ###########################################################################################################################
 	// STEP 1:   Make both feature_skip_lists pointing to FeatureLists with same FeatureID.
 	//
-	//           Blocks are sorted from highest to lowest FeatureID and terminated with default feature ( FeatureID = 0 )!!!
+	//           InvertedIndices are sorted from highest to lowest FeatureID and terminated with default feature ( FeatureID = 0 )!!!
 	//           If feature_skip_lists posess no (more) common feature, b1 and b2 finally point to the default (last) 
 	//           feature at the end of every feature_skip_lists.
 	// ###########################################################################################################################
@@ -813,14 +813,14 @@ void BinaryFingerprintMethods::calculateCommonCounts_M_N(const InvertedIndex* ii
 	if (ii1 != ii2)
 	{
 		// ###########################################################################################################################
-		// OUTER LOOP :           Repeat until one of the blocks reached the end and no more common features 
-		//                        between Block 1 and Block2 exist. A blocks end is indicated via a terminating 
-		//                        feature_skip_list with FeatureID 0.
+		// OUTER LOOP :           Repeat until one of the InvertedIndices reached the end and no more common features 
+		//                        between InvertedIndex 1 and InvertedIndex 2 exist. A InvertedIndices end is indicated  
+		//                        via a terminating feature_skip_list with FeatureID 0.
 		// ###########################################################################################################################
 		while (f1->feature_id && f2->feature_id)
 		{
 			// #####################################################################################################
-			// INNER LOOP 1:   Iterate over all molecules in Block_1 with the current FeatureID
+			// INNER LOOP 1:   Iterate over all molecules in InvertedIndex 1 with the current FeatureID
 			// #####################################################################################################
 			ii1_position = f1->block_positions;
 			
@@ -830,10 +830,10 @@ void BinaryFingerprintMethods::calculateCommonCounts_M_N(const InvertedIndex* ii
 				
 				
 				// #####################################################################################################
-				// INNER LOOP 1.1.:   Iterate over all molecules in Block_2 with the current FeatureID and 
+				// INNER LOOP 1.1.:   Iterate over all molecules in InvertedIndex 2 with the current FeatureID and 
 				//                    incerement common counts matrix for every molecule pair.
 				//
-				//                    Molecules are only represented by their position in the corresponding Block
+				//                    Molecules are only represented by their position in the corresponding InvertedIndex
 				// #####################################################################################################
 				ii2_position = f2->block_positions;
 				
@@ -946,7 +946,7 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesNearestNeighbours(const unsig
 	
 	if (ii1!=ii2)
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -971,50 +971,14 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesNearestNeighbours(const unsig
 					nn_sim[ii2_molecules_base + v] = coeff;
 					nn_list[ii2_molecules_base + v] = tmp_molecule_id;
 				}
-				
-				/*
-				if (fabs(coeff - nn_sim[tmp_molecule_id]) <= precision_)
-				{
-					if (ii2_molecules_base + v < nn_list[tmp_molecule_id]) 
-					{
-						nn_sim[tmp_molecule_id] = coeff;
-						nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-					}
-				}
-				else
-				{
-					if (coeff > nn_sim[tmp_molecule_id])
-					{
-						nn_sim[tmp_molecule_id] = coeff;
-						nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-					}
-				}
-				
-				if (fabs(coeff - nn_sim[ii2_molecules_base + v]) <= precision_)
-				{
-					if (tmp_molecule_id < nn_list[ii2_molecules_base + v])
-					{
-						nn_sim[ii2_molecules_base + v] = coeff;
-						nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-					}
-				}
-				else
-				{
-					if (coeff > nn_sim[ii2_molecules_base + v])
-					{
-						nn_sim[ii2_molecules_base + v] = coeff;
-						nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-					}
-				}
-				*/
 			}
 		}
 	}
-	// When comparing identical blocks ( i==j ) only inter-block pairs of different molecules should be considered
+	// When comparing identical InvertedIndices ( i==j ) only inter-InvertedIndex pairs of different molecules should be considered
 	// Therefore the inner loop variable is everytime set to ( outer-loop-variable + 1 )
 	else
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1039,42 +1003,6 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesNearestNeighbours(const unsig
 					nn_sim[ii2_molecules_base + v] = coeff;
 					nn_list[ii2_molecules_base + v] = tmp_molecule_id;
 				}
-				
-				/*
-				if (fabs(coeff - nn_sim[tmp_molecule_id]) <= precision_)
-				{
-					if (ii2_molecules_base + v < nn_list[tmp_molecule_id]) 
-					{
-						nn_sim[tmp_molecule_id] = coeff;
-						nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-					}
-				}
-				else
-				{
-					if (coeff > nn_sim[tmp_molecule_id])
-					{
-						nn_sim[tmp_molecule_id] = coeff;
-						nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-					}
-				}
-				
-				if (fabs(coeff - nn_sim[ii2_molecules_base + v]) <= precision_)
-				{
-					if (tmp_molecule_id < nn_list[ii2_molecules_base + v])
-					{
-						nn_sim[ii2_molecules_base + v] = coeff;
-						nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-					}
-				}
-				else
-				{
-					if (coeff > nn_sim[ii2_molecules_base + v])
-					{
-						nn_sim[ii2_molecules_base + v] = coeff;
-						nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-					}
-				}
-				*/
 			}
 		}
 	}
@@ -1102,7 +1030,7 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesStoredMatrix(const unsigned i
 	
 	if (ii1!=ii2)
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1130,11 +1058,11 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesStoredMatrix(const unsigned i
 			}
 		}
 	}
-	// When comparing identical blocks ( i==j ) only inter-block pairs of different molecules should be considered
+	// When comparing identical InvertedIndices ( i==j ) only inter-InvertedIndex pairs of different molecules should be considered
 	// Therefore the inner loop variable is everytime set to ( outer-loop-variable + 1 )
 	else
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1190,7 +1118,7 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesConnectedComponents(const uns
 	
 	if (ii1!=ii2)
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1221,42 +1149,6 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesConnectedComponents(const uns
 							nn_sim[ii2_molecules_base + v] = coeff;
 							nn_list[ii2_molecules_base + v] = tmp_molecule_id;
 						}
-						
-						/*
-						if (fabs(coeff - nn_sim[tmp_molecule_id]) <= precision_)
-						{
-							if (ii2_molecules_base + v < nn_list[tmp_molecule_id])
-							{
-								nn_sim[tmp_molecule_id] = coeff;
-								nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-							}
-						}
-						else
-						{
-							if (coeff > nn_sim[tmp_molecule_id])
-							{
-								nn_sim[tmp_molecule_id] = coeff;
-								nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-							}
-						}
-						
-						if (fabs(coeff - nn_sim[ii2_molecules_base + v]) <= precision_)
-						{
-							if (tmp_molecule_id < nn_list[ii2_molecules_base + v])
-							{
-								nn_sim[ii2_molecules_base + v] = coeff;
-								nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-							}
-						}
-						else
-						{
-							if (coeff > nn_sim[ii2_molecules_base + v])
-							{
-								nn_sim[ii2_molecules_base + v] = coeff;
-								nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-							}
-						}
-						*/
 					}
 					
 					++edge_count;
@@ -1267,11 +1159,11 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesConnectedComponents(const uns
 			}
 		}
 	}
-	// When comparing identical blocks ( i==j ) only inter-block pairs of different molecules should be considered
+	// When comparing identical InvertedIndices ( i==j ) only inter-InvertedIndex pairs of different molecules should be considered
 	// Therefore the inner loop variable is everytime set to ( outer-loop-variable + 1 )
 	else
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1302,42 +1194,6 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesConnectedComponents(const uns
 							nn_sim[ii2_molecules_base + v] = coeff;
 							nn_list[ii2_molecules_base + v] = tmp_molecule_id;
 						}
-						
-						/*
-						if (fabs(coeff - nn_sim[tmp_molecule_id]) <= precision_)
-						{
-							if (ii2_molecules_base + v < nn_list[tmp_molecule_id])
-							{
-								nn_sim[tmp_molecule_id] = coeff;
-								nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-							}
-						}
-						else
-						{
-							if (coeff > nn_sim[tmp_molecule_id])
-							{
-								nn_sim[tmp_molecule_id] = coeff;
-								nn_list[tmp_molecule_id] = ii2_molecules_base + v;
-							}
-						}
-						
-						if (fabs(coeff - nn_sim[ii2_molecules_base + v]) <= precision_)
-						{
-							if (tmp_molecule_id < nn_list[ii2_molecules_base + v])
-							{
-								nn_sim[ii2_molecules_base + v] = coeff;
-								nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-							}
-						}
-						else
-						{
-							if (coeff > nn_sim[ii2_molecules_base + v])
-							{
-								nn_sim[ii2_molecules_base + v] = coeff;
-								nn_list[ii2_molecules_base + v] = tmp_molecule_id;
-							}
-						}
-						*/
 					}
 					
 					++edge_count;
@@ -1372,7 +1228,7 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesMedoids(const unsigned int ii
 	
 	if (ii1!=ii2)
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1393,11 +1249,11 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesMedoids(const unsigned int ii
 			}
 		}
 	}
-	// When comparing identical blocks ( i==j ) only inter-block pairs of different molecules should be considered
+	// When comparing identical InvertedIndices ( i==j ) only inter-InvertedIndex pairs of different molecules should be considered
 	// Therefore the inner loop variable is everytime set to ( outer-loop-variable + 1 )
 	else
 	{
-		// Iterate over all inter-block molecule pairs to calculate similarities
+		// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 		for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 		{
 			cc_matrix_row = cc_matrix[u+1];
@@ -1437,7 +1293,7 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesThread(const unsigned int thr
 			bzero(cc_matrix[m], cc_matrix_size_);
 		}
 		
-		// Calculate indices of next block pair to compare
+		// Calculate indices of next InvertedIndex pair to compare
 		arrayToUpperTriangluarMatrix(row_index, col_index, index);
 		
 		// Calculate common counts
@@ -1567,22 +1423,6 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 						thread_data_[0].uint_array[i] = thread_data_[j].uint_array[i];
 						thread_data_[0].float_array[i] = thread_data_[j].float_array[i];
 					}
-					
-					/*
-					if (fabs(thread_data_[j].float_array[i] - thread_data_[0].float_array[i]) <= precision_)
-					{
-						if (thread_data_[j].uint_array[i] < thread_data_[0].uint_array[i])
-						{
-							thread_data_[0].uint_array[i] = thread_data_[j].uint_array[i];
-							thread_data_[0].float_array[i] = thread_data_[j].float_array[i];
-						}
-					}
-					else
-					{
-						thread_data_[0].uint_array[i] = thread_data_[j].uint_array[i];
-						thread_data_[0].float_array[i] = thread_data_[j].float_array[i];
-					}
-					*/
 				}
 			}
 		}
@@ -1776,7 +1616,7 @@ void BinaryFingerprintMethods::cutoffSearchSimilarities(const unsigned int query
 	unsigned int ii1_molecules_base = query_index * blocksize_;
 	unsigned int ii2_molecules_base = lib_index * blocksize_;
 	
-	// Iterate over all inter-block molecule pairs to calculate similarities
+	// Iterate over all inter-InvertedIndex molecule pairs to calculate similarities
 	for (unsigned int u=0; u!=ii1->n_molecules; ++u)
 	{
 		cc_matrix_row = cc_matrix[u+1];
@@ -2039,25 +1879,6 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 				avg_sim_max = dprec_sim_matrix_[i];
 				medoid_index = i;
 			}
-			
-			/*
-			if (fabs(sim_matrix_[i] - avg_sim_max) <= precision_)
-			{
-				if (selection[i] < medoid_id)
-				{
-					avg_sim_max = sim_matrix_[i];
-					medoid_index = i;
-				}
-			}
-			else
-			{
-				if (sim_matrix_[i] > avg_sim_max)
-				{
-					avg_sim_max = sim_matrix_[i];
-					medoid_index = i;
-				}
-			}
-			*/
 		}
 	}
 	
@@ -2130,7 +1951,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 			leaf_clusters_.push_back(cluster);
 		}
 		
-		// Set active blocks size
+		// Set active InvertedIndices size
 		active_iids_size_ = 100;
 		
 		if (nn_data.empty())
@@ -2528,42 +2349,6 @@ void BinaryFingerprintMethods::calculateParallelSimilaritiesActivesThread(const 
 						current_nns[active_2_base + k] = active_1_base + j;
 						current_nn_sim_s[active_2_base + k] = sim;
 					}
-					
-					/*
-					if (fabs(sim - current_nn_sim_s[active_1_base + j]) <= precision_)
-					{
-						if (vec_actives_[active_2_base + k]->c_id < vec_actives_[current_nns[active_1_base + j]]->c_id) 
-						{
-							current_nns[active_1_base + j] = active_2_base + k;
-							current_nn_sim_s[active_1_base + j] = sim;
-						}
-					}
-					else
-					{
-						if (sim > current_nn_sim_s[active_1_base + j])
-						{
-							current_nns[active_1_base + j] = active_2_base + k;
-							current_nn_sim_s[active_1_base + j] = sim;
-						}
-					}
-					
-					if (fabs(sim - current_nn_sim_s[active_2_base + k]) <= precision_)
-					{
-						if (vec_actives_[active_1_base + j]->c_id < vec_actives_[current_nns[active_2_base + k]]->c_id) 
-						{
-							current_nns[active_2_base + k] = active_1_base + j;
-							current_nn_sim_s[active_2_base + k] = sim;
-						}
-					}
-					else
-					{
-						if (sim > current_nn_sim_s[active_2_base + k])
-						{
-							current_nns[active_2_base + k] = active_1_base + j;
-							current_nn_sim_s[active_2_base + k] = sim;
-						}
-					}
-					*/
 				}
 			}
 		}
@@ -2608,42 +2393,6 @@ void BinaryFingerprintMethods::calculateParallelSimilaritiesActivesThread(const 
 						current_nns[active_2_base + k] = active_1_base + j;
 						current_nn_sim_s[active_2_base + k] = sim;
 					}
-					
-					/*
-					if (fabs(sim - current_nn_sim_s[active_1_base + j]) <= precision_)
-					{
-						if (vec_actives_[active_2_base + k]->c_id < vec_actives_[current_nns[active_1_base + j]]->c_id) 
-						{
-							current_nns[active_1_base + j] = active_2_base + k;
-							current_nn_sim_s[active_1_base + j] = sim;
-						}
-					}
-					else
-					{
-						if (sim > current_nn_sim_s[active_1_base + j])
-						{
-							current_nns[active_1_base + j] = active_2_base + k;
-							current_nn_sim_s[active_1_base + j] = sim;
-						}
-					}
-					
-					if (fabs(sim - current_nn_sim_s[active_2_base + k]) <= precision_)
-					{
-						if (vec_actives_[active_1_base + j]->c_id < vec_actives_[current_nns[active_2_base + k]]->c_id) 
-						{
-							current_nns[active_2_base + k] = active_1_base + j;
-							current_nn_sim_s[active_2_base + k] = sim;
-						}
-					}
-					else
-					{
-						if (sim > current_nn_sim_s[active_2_base + k])
-						{
-							current_nns[active_2_base + k] = active_1_base + j;
-							current_nn_sim_s[active_2_base + k] = sim;
-						}
-					}
-					*/
 				}
 			}
 		}
@@ -2747,25 +2496,6 @@ void BinaryFingerprintMethods::calculateParallelSimilaritiesThread(const unsigne
 					tmp_nn = j;
 					current_sim = sim;
 				}
-				
-				/*
-				if (fabs(sim - current_sim) <= precision_)
-				{
-					if (vec_inactives_[j]->c_id < vec_inactives_[tmp_nn]->c_id)
-					{
-						tmp_nn = j;
-						current_sim = sim;
-					}
-				}
-				else
-				{
-					if (sim > current_sim)
-					{
-						tmp_nn = j;
-						current_sim = sim;
-					}
-				}
-				*/
 				
 				sim_matrix[i][j] = 0.0;
 			}
@@ -2908,7 +2638,7 @@ void BinaryFingerprintMethods::averageLinkageParallel(Cluster*& root)
 		
 		
 		// ----------------------------------------------------------------------
-		// Create feature blocks for active and inactive clusters
+		// Create InvertedIndices for active and inactive clusters
 		// ----------------------------------------------------------------------
 		
 		// Create feature blocks for inactive clusters,
@@ -2923,7 +2653,7 @@ void BinaryFingerprintMethods::averageLinkageParallel(Cluster*& root)
 		}
 		createInvertedIndices(tmp, lib_iindices_);
 		
-		// Create feature blocks from active clusters
+		// Create feature InvertedIndices from active clusters
 		tmp.clear();
 		unsigned int count = 0;
 		for (unsigned int i=0; i!=vec_actives_.size(); ++i)
@@ -3074,7 +2804,7 @@ void BinaryFingerprintMethods::averageLinkageParallel(Cluster*& root)
 	// is not reached.
 	// ----------------------------------------------------------------------
 	
-	// Step 1: create feature blocks for every cluster
+	// Step 1: create feature InvertedIndices for every cluster
 	tmp.clear();
 	lib_iindices_.clear();
 	
@@ -3252,88 +2982,6 @@ void BinaryFingerprintMethods::NNChainCore(Cluster*& root)
 				// ------------------------------
 			}
 		}
-		
-		/*
-		if (current_nn_sim_ < nn_chain_tip_->predecessor_sim)
-		{
-			// NNChain tip and its predecessor are reciprocal nearest neighbours
-			
-			// ------------------------------
-			// NNChain size         >= 2
-			// Active Clusters size >= 1
-			// ------------------------------
-			
-			// Merge RNN pair
-			mergeClusters(nn_chain_tip_, nn_chain_tip_->predecessor, nn_chain_tip_->predecessor_sim_sum);
-			
-			// ------------------------------
-			// NNChain size         >= 0
-			// Active Clusters size >= 2
-			// ------------------------------
-			
-			if (nn_chain_size_ < 2)
-			{
-				if (nn_chain_size_ == 1)
-				{
-					// ------------------------------
-					// NNChain size         == 1
-					// Active Clusters size >= 2
-					// ------------------------------
-					
-					nextNearestNeighbour();
-					moveNearestNeighbour();
-					
-					// ------------------------------
-					// NNChain size         == 2
-					// Active Clusters size >= 1
-					// ------------------------------
-				}
-				else
-				{
-					// ------------------------------
-					// NNChain size         == 0
-					// Active Clusters size >= 2
-					// ------------------------------
-					
-					initNNChain();
-					
-					// ------------------------------
-					// NNChain size         == 1
-					// Active Clusters size >= 1
-					// ------------------------------
-					
-					nextNearestNeighbour();
-					moveNearestNeighbour();
-					
-					// ------------------------------
-					// NNChain size         == 2
-					// Active Clusters size >= 0
-					// ------------------------------
-				}
-			}
-			
-			// ------------------------------
-			// NNChain size         >= 2
-			// Active Clusters size >= 0
-			// ------------------------------
-		}
-		else
-		{
-			// NNChain tip and its predecessor are not reciprocal nearest neighbours
-			
-			// ------------------------------
-			// NNChain size         >= 2
-			// Active Clusters size >= 1
-			// ------------------------------
-			
-			moveNearestNeighbour();
-			
-			// ------------------------------
-			// NNChain size         >= 3
-			// Active Clusters size >= 0
-			// ------------------------------
-		}
-		*/
 		
 		// ------------------------------
 		// NNChain size         >= 2
@@ -3706,7 +3354,7 @@ void BinaryFingerprintMethods::switchStorageMethod()
 	
 	destroyThreadData();
 	
-	// Free memory from blocks
+	// Free memory
 	BOOST_FOREACH(Cluster *c, vec_actives_)
 	{
 		BOOST_FOREACH(InvertedIndex *ii, c->c_members)

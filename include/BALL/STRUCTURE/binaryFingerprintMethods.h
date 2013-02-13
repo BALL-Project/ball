@@ -49,7 +49,7 @@ namespace BALL
 		can additionally be returned. \n
 		\link BinaryFingerprintMethods::averageLinkageClustering Hierarchical Clustering \endlink: \n
 		A set of input molecules is hierarhically clustered according to the average linkage criterion. Two different algorithms are implemented
-		to make efficient use of the inverted index algorithm and the available hardware resources. Both methods are based on Reciprocal Nearest
+		to make efficient use of the inverted index algorithm and the available hardware resources. Both methods are based on %Reciprocal Nearest
 		Neighbours. The \link BinaryFingerprintMethods::averageLinkageParallel parallel variant \endlink is used to handle large input library sizes. 
 		If the similarity matrix for the remaining clusters or possibly all input molecules fit into main memory, the matrix is calculated and 
 		the \link BinaryFingerprintMethods::NNChainCore Nearest Neighbour Chain algorithm \endlink is used. \n 
@@ -57,7 +57,11 @@ namespace BALL
 		and the created clusters are returned. \n
 		\link BinaryFingerprintMethods::calculateSelectionMedoid Calculate Medoid \endlink : \n
 		For a set of input molecules the Medoid is calculated. The medoid is the molecule with the highest averaged similarity to all other molecules.
-		Additionally, the method returns the averaged pairwise similarities for every molecule in the input set. \n
+		Additionally, the method returns the averaged pairwise similarities for every molecule in the input set. \n \n
+		Citations:\n
+		Clustering Algorithms: F. Murtagh, Compstat Lectures vol. 4, 1985, Physica-Verlag Würzburg-Wien. (Volume titel: Multidimensional clustering algorithms). \n
+		Similarity Update: G. Lance and W. Williams, Comput J. (1967), 9, 373-380. (doi: 10.1093/comjnl/9.4.373).\n
+		Cutoff Selection: L.A. Kelley, S.P. Gardner and M.J. Sutcliffe, %Protein Eng. (1996), 9, 1063-1065. (doi: 10.1093/protein/9.11.1063).
 	 */
 	class BALL_EXPORT BinaryFingerprintMethods
 	{
@@ -203,11 +207,6 @@ namespace BALL
 			
 			
 			/** 
-			 * @name Static Public Member Functions
-			 */
-			//@{
-			
-			/** 
 			 * Wrapper for different binary fingerprint parsers which returns a vector of integer features.
 			 * The returned features lie in the interval [1, max_feature_id + 1]. Thus, no feature has ID = 0 which is important for inverted index implementation.
 			 * @param fprint The fingerprint as a separated list of integer features.
@@ -217,8 +216,6 @@ namespace BALL
 			 * @return True if feature list has been parsed successful.
 			 */
 			static bool parseBinaryFingerprint(const String& fprint, std::vector<unsigned short>& features, unsigned int fp_type, const char* delim=",");
-			
-			//@}
 			
 			
 			/** 
