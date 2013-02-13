@@ -795,8 +795,8 @@ RESULT
 
 CHECK(averageLinkageClustering( RNN_SWITCHED ))
 	Options options;
-	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 35);
-	options.setDefaultInteger(BinaryFingerprintMethods::Option::N_THREADS, 1);
+	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 2);
+	options.setDefaultInteger(BinaryFingerprintMethods::Option::N_THREADS, 4);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::MAX_CLUSTERS, 100);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::VERBOSITY, 0);
 	
