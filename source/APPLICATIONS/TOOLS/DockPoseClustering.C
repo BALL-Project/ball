@@ -51,11 +51,12 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
 	// choice of cluster algorithm  
-	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
+	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
 	list<String> cluster_algs;
 	cluster_algs.push_back("CLINK_DEFAYS");
-	cluster_algs.push_back("SLINK_SIBSON");
 	cluster_algs.push_back("TRIVIAL_COMPLETE_LINKAGE");
+	cluster_algs.push_back("NEAREST_NEIGHBOR_CHAIN_WARD");
+	cluster_algs.push_back("SLINK_SIBSON");
 	parpars.setParameterRestrictions("alg", cluster_algs);
 
 	// choice of atom rmsd scope 
@@ -80,7 +81,7 @@ int main (int argc, char **argv)
 	parpars.registerFlag("use_preclustering", "Switch on preclustering");
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using the SLINK or CLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type, and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set using a CLINK or SLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type, and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
 
 	parpars.setToolManual(man);
 
@@ -167,6 +168,8 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 		else if (alg == "TRIVIAL_COMPLETE_LINKAGE")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+		else if (alg == " NEAREST_NEIGHBOR_CHAIN_WARD")
+			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 		else
 			Log.info() << "Unknown value " << alg  << " for option alg." << endl;
 	}
@@ -187,7 +190,10 @@ int main (int argc, char **argv)
 			}
 		}
 		else if (type == "CENTER_OF_MASS_DISTANCE")
+		{
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
+			Log << "Parameter rmsd_scope will be ignored!" << endl;
+		}
 		else
 			Log.info() << "Unknown value " << type  << " for option rmsd_type." << endl;
 

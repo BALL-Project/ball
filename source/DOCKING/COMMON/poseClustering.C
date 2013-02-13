@@ -10,9 +10,12 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 
 // TEST
-#include <BALL/MATHS/angle.h>
+//#include <BALL/MATHS/angle.h>
 
 #include <stack>
+
+#include <boost/graph/iteration_macros.hpp>
+#include <boost/graph/graphviz.hpp>
 
 using namespace std;
 using namespace Eigen;
@@ -31,12 +34,11 @@ namespace BALL
 	const String PoseClustering::Option::RMSD_TYPE = "pose_clustering_rmsd_type";
 	const Index PoseClustering::Default::RMSD_TYPE = PoseClustering::SNAPSHOT_RMSD;
 
-	// TODO: change name to USE_CENTER_OF_MASS_CLUSTERING
 	const String PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK = "pose_clustering_use_center_of_mass_preclink";
 	const bool   PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK = false;
 
-	const String PoseClustering::Option::FULL_CLUSTER_DENDOGRAM = "pose_clustering_full_cluster_dendogram";
-	const bool   PoseClustering::Default::FULL_CLUSTER_DENDOGRAM = false;
+	//const String PoseClustering::Option::FULL_CLUSTER_DENDOGRAM = "pose_clustering_full_cluster_dendogram";
+	//const bool   PoseClustering::Default::FULL_CLUSTER_DENDOGRAM = false;
 
 	PoseClustering::PoseClustering()
 		: current_set_(0),
@@ -71,6 +73,7 @@ namespace BALL
 			delete current_set_;
 	}
 
+
 	Eigen::Matrix3f PoseClustering::computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail)
 	{
 		Eigen::Matrix3f covariance_matrix = Matrix3f::Zero();
@@ -81,15 +84,7 @@ namespace BALL
 		Size num_points = 0;
 		for (AtomConstIterator at_it = system.beginAtom(); +at_it; ++at_it)
 		{
-			if (    (rmsd_level_of_detail == ALL_ATOMS)
-				  || ((rmsd_level_of_detail == C_ALPHA)  && (at_it->getName() == "CA"))
-					|| ((rmsd_level_of_detail == BACKBONE) && (    (at_it->getName() == "CA")
-					                                             || (at_it->getName() == "C")
-																											 || (at_it->getName() == "O")
-																											 || (at_it->getName() == "N")
-																											 || (at_it->getName() == "H")))
-					|| ((rmsd_level_of_detail == PROPERTY_BASED_ATOM_BIJECTION)
-					                                        && (at_it->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
+			if (!isExcludedByLevelOfDetail_(&*at_it, rmsd_level_of_detail))
 			{
 				Vector3 const& pos = at_it->getPosition();
 				base_com += ((Eigen::Vector3f() << pos.x, pos.y, pos.z).finished());
@@ -99,18 +94,9 @@ namespace BALL
 
 		base_com /= num_points;
 
-
 		for (AtomConstIterator at_it = system.beginAtom(); +at_it; ++at_it)
 		{
-			if (    (rmsd_level_of_detail == ALL_ATOMS)
-				  || ((rmsd_level_of_detail == C_ALPHA)  && (at_it->getName() == "CA"))
-					|| ((rmsd_level_of_detail == BACKBONE) && (    (at_it->getName() == "CA")
-					                                             || (at_it->getName() == "C")
-																											 || (at_it->getName() == "O")
-																											 || (at_it->getName() == "N")
-																											 || (at_it->getName() == "H")))
-					|| ((rmsd_level_of_detail == PROPERTY_BASED_ATOM_BIJECTION)
-					                                        && (at_it->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
+			if (!isExcludedByLevelOfDetail_(&*at_it, rmsd_level_of_detail))
 			{
 				Vector3 const& pos = at_it->getPosition();
 
@@ -127,6 +113,7 @@ namespace BALL
 
 		return covariance_matrix;
 	}
+
 
 	void PoseClustering::setConformationSet(ConformationSet* new_set)
 	{
@@ -185,6 +172,8 @@ namespace BALL
 			}
 		}
 
+		// precompute the atom bijection, that handles the 
+		// option RMSD_LEVEL_OF_DETAIL
 		precomputeAtomBijection_();
 
 		// do we have a pre clustering scenario 
@@ -204,7 +193,7 @@ namespace BALL
 		{
 			return linearSpaceCompute_(options.getInteger(Option::RMSD_TYPE));
 		}
-		else if (options.getInteger(Option::CLUSTER_METHOD) == NEAREST_NEIGHBOR_CHAIN)
+		else if (options.getInteger(Option::CLUSTER_METHOD) == NEAREST_NEIGHBOR_CHAIN_WARD)
 		{
 			return nearestNeighborChainCompute_();
 		}
@@ -295,6 +284,7 @@ namespace BALL
 			// and add it into the tree
 			ClusterTreeNode v = boost::add_vertex(cluster_tree_);
 			cluster_tree_[v].poses.insert((Index) i);
+			cluster_tree_[v].size = 1;
 
 			// TODO: continue with the cluster tree... add center if required ...
 
@@ -632,56 +622,68 @@ namespace BALL
 	}
 
 
-	void PoseClustering::nearestNeighborChainCompute_()
+	bool PoseClustering::nearestNeighborChainCompute_()
 	{
+		// we might need the number of atoms to which our RMSDs apply later on
+		// this number depends on the choice of RMSD_LEVEL_OF_DETAIL
+		Index rmsd_level_of_detail = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
+
+		number_of_selected_atoms_ = 0;
+		for (AtomConstIterator at_it = current_set_->getSystem().beginAtom(); +at_it; ++at_it)
+		{
+			if (!isExcludedByLevelOfDetail_(&*at_it, rmsd_level_of_detail))
+			{
+				++number_of_selected_atoms_;
+			}
+		}
+
 		// clean up old clusters
 		clusters_.clear();
 
+		// reset the cluster tree
+		cluster_tree_.clear();
+
 		num_poses_ = getNumberOfPoses();
 		Index rmsd_type = options.getInteger(PoseClustering::Option::RMSD_TYPE);
-		float rmsd_cutoff = options.getReal(Option::RMSD_THRESHOLD);
-
-		Index current_cluster = 0;
-		Index nearest_cluster = 0;
-		set<Index>* min_cluster_a = NULL;
-		set<Index>* min_cluster_b = NULL;
 
 		float min_cluster_dist = std::numeric_limits<float>::max();
 
-		// all clusters in the dendogramm
-		// //TODO switch to dendogramm
-		//std::vector<std::set<Index> >  all_clusters;
-		// the active clusters (by indices)
-		std::set<Index>                indices_of_active_clusters;
+		// the active clusters (as nodes in the cluster tree)
+		std::set<ClusterTreeNode> active_clusters;
 
-		// stack of clusters by indices (storing nearest neighbor chains)
-		std::stack<Index>              cluster_stack;
+		// stack of clusters (as nodes in the cluster tree) storing nearest neighbor chains
+		std::stack<ClusterTreeNode> cluster_stack;
 
 		// in the beginning each pose is a cluster itself
 		for (Size i=0; i<num_poses_; i++)
 		{
-			// add as new cluster
-			set<Index> new_set;
-			new_set.insert((Index) i);
-			//all_clusters.push_back(new_set);
-			indices_of_active_clusters.push_back((Index) i);
-			clusters_.push_back(new_set);
+			// add it as a new cluster to the tree
+			ClusterTreeNode v = boost::add_vertex(cluster_tree_);
+			cluster_tree_[v].poses.insert((Index) i);
+			cluster_tree_[v].size = 1;
+			cluster_tree_[v].merged_at = 0.;
+
+			active_clusters.insert(v);
 		}
 
-		initWardDistance_();
+cout << active_clusters.size() << " " << cluster_stack.size() << std::endl;
 
-		// TODO: always compute full dendogram or stop at RMSD_THRESHOLD?
+		initWardDistance_(rmsd_type);
+
+		ClusterTreeNode current_cluster, nearest_cluster;
+
 		// while there is more than one final cluster
-		while (   (indices_of_active_clusters.size() > 1)
-			     && (min_cluster_dist > rmsd_cutoff))
+		while (active_clusters.size() > 1)
 		{
-			cout << " Stack size: " << cluster_stack.size() <<  " " << min_cluster_dist << endl;
+cout << " Stack size: " << cluster_stack.size() <<  endl;
 			min_cluster_dist = std::numeric_limits<float>::max();
+			nearest_cluster = 0;
 
 			// if stack is empty add randomly
 			if (cluster_stack.size() == 0)
 			{
-				cluster_stack.push_back((Index)indices_of_active_clusters.first());
+				// we simply take the first
+				cluster_stack.push(*(active_clusters.begin()));
 			}
 			current_cluster = cluster_stack.top();
 
@@ -691,51 +693,94 @@ namespace BALL
 			//      tie-breaking rule: for instance, in this case, the nearest neighbor may be chosen, among the clusters 
 			//       at equal minimum distance from current_cluster, by numbering the clusters arbitrarily and choosing 
 			//       the one with the smallest index
-			for (std::set<Index>::iterator clust_it = indices_of_active_clusters.begin();
-					 clust_it != indices_of_active_clusters.end(); ++clust_it)
+			for (std::set<ClusterTreeNode>::iterator clust_it = active_clusters.begin();
+					 clust_it != active_clusters.end(); ++clust_it)
 			{
 				// check all pairs between all_clusters[*clust_it] and all_clusters[current_cluster]
 				if (*clust_it != current_cluster)
 				{
-					//TODO use WARD!!!
-					float rmsd = getClusterRMSD_(current_cluster, *clust_it, rmsd_type);
-					if (min_cluster_dist > rmsd)
+					float rmsd = computeWardDistance_(current_cluster, *clust_it, rmsd_type);
+
+					if (BALL_REAL_GREATER(min_cluster_dist, rmsd, 1e-5))
 					{
 						nearest_cluster = *clust_it;
 						min_cluster_dist = rmsd;
+	cout << "    ++++ new min:" << rmsd << endl;
 					}
 				}
 			}
-			// have we seen this cluster before
-			if (cluster_stack.has(nearest_cluster))
-			{
-				cluster_stack.pop();
-				cluster_stack.erase(nearest_cluster);
 
-				min_cluster_a = &clusters_[nearest_cluster];
-				min_cluster_b = &clusters_[current_cluster];
+			// have we put this cluster to the stack before ?
+			// due to the reducibility of Ward's distance, this would imply that the cluster
+			// was our predecessor.
+			if (cluster_stack.size() == 1) // we don't have a predecessor => just push
+			{
+				cluster_stack.push(nearest_cluster);
+				continue;
+			}
+
+			// look at the predecessor
+			cluster_stack.pop(); // already saved in current_cluster
+
+			ClusterTreeNode predecessor = cluster_stack.top();
+			if (predecessor == nearest_cluster)
+			{
+				cluster_stack.pop(); // pop the predecessor
+
+				// add a new parent node to the tree
+				ClusterTreeNode new_parent = boost::add_vertex(cluster_tree_);
+
+				// add an edge from the parent to both children
+				boost::add_edge(new_parent, current_cluster, cluster_tree_);
+				boost::add_edge(new_parent, nearest_cluster, cluster_tree_);
+
+				// remember the value at which these were merged
+				// NOTE: min_cluster_dist is the Ward distance, which is quadratic in the
+				//       rmsds. We can, e.g., store RMSDs of the centroids, or the square root
+				//       of the Ward distance. What we *will* store here, is the square root
+				//       of the Ward distance per atom, i.e., the square root of the 
+				//       squared average distance from the centroid per atom
+				cluster_tree_[new_parent].merged_at = sqrt(min_cluster_dist / number_of_selected_atoms_);
+
+				cluster_tree_[new_parent].size =    cluster_tree_[current_cluster].size
+					                                + cluster_tree_[nearest_cluster].size;
+
+				// TODO: here, we could decide if we want to merge the sets from our
+				//       children and explictly store them => save runtime, pay memory
+				//       (this would look similar to the following...)
+				/*
+				min_cluster_a = &clusters_[current_cluster];
+				min_cluster_b = &clusters_[nearest_cluster];
 
 				// merge
 				std::set<Index> temp_set;
 				std::set_union(min_cluster_a->begin(), min_cluster_a->end(),
 				              min_cluster_b->begin(), min_cluster_b->end(),
 				              std::inserter(temp_set, temp_set.begin()));
-				// put it back
-				min_cluster_a->swap(temp_set);
-				min_cluster_b->clear();
-				indices_of_active_clusters.erase(min_cluster_b);
+				*/
 
-				// push that index
-				cluster_stack.push_back(min_cluster_a);
+				// Note: this needs to be done before clearing and swapping!
+				updateWardDistance_(new_parent, current_cluster, nearest_cluster, rmsd_type);
+
+				// make the old clusters inactive and add the new one
+				active_clusters.erase(current_cluster);
+				active_clusters.erase(nearest_cluster);
+				active_clusters.insert(new_parent);
+
+				// push that cluster index onto the stack
+				cluster_stack.push(current_cluster);
 			}
 			else
 			{
-				cluster_stack.push_back(i);
+				cluster_stack.push(current_cluster);
+				cluster_stack.push(nearest_cluster);
 			}
 		}
 
 		// copy final clusters into the general cluster data structure
 		// collect all final clusters
+		// TODO!!!
+		/*
 		std::vector<std::set<Index> >   temp_clusters;
 
 		for (Size i = 0; i < clusters_.size(); i++)
@@ -745,23 +790,199 @@ namespace BALL
 		}
 
 		swap(clusters_, temp_clusters);
+		*/
 
-		return;
+		return true;
 	}
 
-	void PoseClustering::initWardDistance_()
+
+	void PoseClustering::initWardDistance_(Index rmsd_type)
 	{
-		computeCenterOfMasses_();
+		Index rmsd_level_of_detail = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
+
+		Index num_atoms = 0;
+
+		if (rmsd_type == SNAPSHOT_RMSD)
+		{
+			// for snapshot-based rmsds, we will need a copy of the system later on
+			system_i_ = System(current_set_->getSystem());
+
+			// and the number of atoms used for rmsd computation
+			for (AtomConstIterator atom_it = system_i_.beginAtom(); +atom_it; ++atom_it)
+			{
+				if (!isExcludedByLevelOfDetail_(&(*atom_it), rmsd_level_of_detail))
+				{
+					++num_atoms;
+				}
+			}
+		}
+
+		if (rmsd_type == CENTER_OF_MASS_DISTANCE)
+		{
+			// precompute centers of mass
+			computeCenterOfMasses_();
+		}
+
+		// iterate over all nodes in the graph (for now, only the leaves)
+		BGL_FORALL_VERTICES(v, cluster_tree_, ClusterTree)
+		{
+			// get the index of the snapshot stored in the node
+			// (there is exactly one pose in each node, so this works...)
+			Index snapshot_index = *(cluster_tree_[v].poses.begin());
+
+			switch (rmsd_type)
+			{
+				case RIGID_RMSD:
+					cluster_tree_[v].center = RigidTransformation(translations_[snapshot_index],
+							                                             rotations_[snapshot_index]);
+					break;
+				case SNAPSHOT_RMSD:
+			  {
+					(*current_set_)[snapshot_index].applySnapShot(system_i_);
+
+					Eigen::VectorXf center(3*number_of_selected_atoms_);
+
+					// consider the choice of option RMSD_LEVEL_OF_DETAIL
+					Index current_atom = 0;
+					for (AtomConstIterator atom_it = system_i_.beginAtom(); +atom_it; ++atom_it)
+					{
+						if (!isExcludedByLevelOfDetail_(&(*atom_it), rmsd_level_of_detail))
+						{
+							Vector3 const& current_pos = atom_it->getPosition();
+
+							center[3*current_atom  ] = current_pos.x;
+							center[3*current_atom+1] = current_pos.y;
+							center[3*current_atom+2] = current_pos.z;
+
+							current_atom++;
+						}
+					}
+
+					cluster_tree_[v].center = center;
+					break;
+				}
+				case CENTER_OF_MASS_DISTANCE:
+				{
+					// CENTER_OF_MASS_DISTANCE ignores the option RMSD_LEVEL_OF_DETAIL 
+					// NOTE: it would look nicer to center the translations, such that com_[0] == 0
+					//       however, this is not really necessary, as we just look at differences of
+					//       positions, which are independent of this constant shift
+					RigidTransformation com_transform;
+					(com_transform.translation  << com_[snapshot_index].x,
+					                               com_[snapshot_index].y,
+																				 com_[snapshot_index].z).finished();
+
+					com_transform.rotation = Eigen::Matrix3f::Zero();
+
+					cluster_tree_[v].center = com_transform;
+					break;
+				}
+				default:
+					Log.info() << "initWardDistance_(): unknown rmsd score type " << __FILE__ <<  " " << __LINE__ << endl;
+			}
+		}
 	}
 
-	float PoseClustering::updateWardDistance_(Index i, Index j)
+
+	void PoseClustering::updateWardDistance_(ClusterTreeNode parent, ClusterTreeNode i, ClusterTreeNode j, Index rmsd_type)
 	{
+		Size cluster_size_a  = cluster_tree_[i].size;
+		Size cluster_size_b  = cluster_tree_[j].size;
+		Size cluster_size_ab = cluster_tree_[parent].size;
+
+		switch (rmsd_type)
+		{
+			case RIGID_RMSD:
+			{
+				RigidTransformation& transform_i = boost::get<RigidTransformation>(cluster_tree_[i].center);
+				RigidTransformation& transform_j = boost::get<RigidTransformation>(cluster_tree_[j].center);
+
+				Eigen::Vector3f new_translation = (  (transform_i.translation * cluster_size_a)
+																					 + (transform_j.translation * cluster_size_b)
+																					)/cluster_size_ab;
+
+				Eigen::Matrix3f new_rotation    = (  (transform_i.rotation * cluster_size_a)
+																					 + (transform_j.rotation * cluster_size_b)
+																					)/cluster_size_ab;
+
+				cluster_tree_[parent].center = RigidTransformation(new_translation, new_rotation);
+
+				break;
+			}
+			case SNAPSHOT_RMSD:
+			{
+				Eigen::VectorXf& cluster_a = boost::get<Eigen::VectorXf>(cluster_tree_[i].center);
+				Eigen::VectorXf& cluster_b = boost::get<Eigen::VectorXf>(cluster_tree_[j].center);
+
+				Eigen::VectorXf new_centroid = (cluster_a * cluster_size_a + cluster_b * cluster_size_b) / cluster_size_ab;
+
+				cluster_tree_[parent].center = new_centroid;
+
+				break;
+			}
+			case CENTER_OF_MASS_DISTANCE:
+			{
+				RigidTransformation& transform_i = boost::get<RigidTransformation>(cluster_tree_[i].center);
+				RigidTransformation& transform_j = boost::get<RigidTransformation>(cluster_tree_[j].center);
+
+				Eigen::Vector3f new_translation = (  (transform_i.translation * cluster_size_a)
+																					 + (transform_j.translation * cluster_size_b)
+																					)/cluster_size_ab;
+
+				cluster_tree_[parent].center = RigidTransformation(new_translation, Matrix3f::Zero());
+
+				break;
+			}
+			default:
+				Log.info() << "updateWardDistance_(): unknown rmsd score type " << __FILE__ <<  " " << __LINE__ << endl;
+		}
 	}
 
-	float PoseClustering::getWardDistance_(Index i, Index j)
+
+	float PoseClustering::computeWardDistance_(ClusterTreeNode i, ClusterTreeNode j, Index rmsd_type)
 	{
-		//TODO: is that correct??
-		return  sqrt( (com_[i] - com_[j]).squaredNorm() ) / ( 1./clusters_[i].size()  + 1./clusters_[j].size());
+		Size cluster_size_a = cluster_tree_[i].size;
+		Size cluster_size_b = cluster_tree_[j].size;
+
+		float result = -1.;
+
+		switch (rmsd_type)
+		{
+			// TODO: check if the formulas are correct
+			case RIGID_RMSD:
+			{
+				RigidTransformation& transform_i = boost::get<RigidTransformation>(cluster_tree_[i].center);
+				RigidTransformation& transform_j = boost::get<RigidTransformation>(cluster_tree_[j].center);
+
+				result =  pow(getRigidRMSD(transform_i.translation - transform_j.translation,
+																	 transform_j.rotation    - transform_j.rotation,
+																	 covariance_matrix_), 2) / ( 1./cluster_size_a  + 1./cluster_size_b)
+							   * number_of_selected_atoms_;
+				break;
+			}
+			case SNAPSHOT_RMSD:
+			{
+				Eigen::VectorXf& cluster_a = boost::get<Eigen::VectorXf>(cluster_tree_[i].center);
+				Eigen::VectorXf& cluster_b = boost::get<Eigen::VectorXf>(cluster_tree_[j].center);
+
+				result = (cluster_a - cluster_b).squaredNorm() / ( 1./cluster_size_a + 1./cluster_size_b);
+
+				break;
+			}
+			case CENTER_OF_MASS_DISTANCE:
+			{
+				RigidTransformation& transform_i = boost::get<RigidTransformation>(cluster_tree_[i].center);
+				RigidTransformation& transform_j = boost::get<RigidTransformation>(cluster_tree_[j].center);
+
+				result = (transform_i.translation - transform_j.translation).squaredNorm() / ( 1./cluster_size_a  + 1./cluster_size_b)
+				         *number_of_selected_atoms_;
+				break;
+			}
+			default:
+				Log.info() << "getWardDistance_(): unknown rmsd score type " << __FILE__ <<  " " << __LINE__ << endl;
+		}
+
+		return result;
 	}
 
 
@@ -776,6 +997,7 @@ namespace BALL
 			com_[i] = center.getCenter();
 		}
 	}
+
 
 	// precompute the atom bijection
 	void PoseClustering::precomputeAtomBijection_()
@@ -832,13 +1054,6 @@ namespace BALL
 		// and no additional pre clustering
 		options.set(Option::USE_CENTER_OF_MASS_PRECLINK, false);
 		compute();
-
-		// precompute all center of masses
-		//computeCenterOfMasses_();
-		// run the CLINK machinery
-		//linearSpaceCompute_(CENTER_OF_MASS_DISTANCE);
-
-		// store results
 
 		// store the new clusters
 		std::vector<std::set<Index> >   temp_clusters;
@@ -909,6 +1124,25 @@ namespace BALL
 	}
 
 
+	bool PoseClustering::isExcludedByLevelOfDetail_(Atom const* atom, Index rmsd_level_of_detail)
+	{
+		bool result = true;
+		if (    (rmsd_level_of_detail == ALL_ATOMS)
+			  || ((rmsd_level_of_detail == C_ALPHA)  && (atom->getName() == "CA"))
+				|| ((rmsd_level_of_detail == BACKBONE) && (    (atom->getName() == "CA")
+					                                             || (atom->getName() == "C")
+																											 || (atom->getName() == "O")
+																											 || (atom->getName() == "N")
+																											 || (atom->getName() == "H")))
+					|| (   (rmsd_level_of_detail == PROPERTY_BASED_ATOM_BIJECTION)
+					    && (atom->hasProperty("ATOMBIJECTION_RMSD_SELECTION"))))
+		{
+			result = false;
+		}
+		return result;
+	}
+
+
 	void PoseClustering::printClusterRMSDs()
 	{
 		Index rmsd_type = options.getInteger(PoseClustering::Option::RMSD_TYPE);
@@ -923,12 +1157,21 @@ namespace BALL
 
 			std::set<Index>& current_cluster = clusters_[i];
 
+			cout << "     ";
+			for (std::set<Index>::iterator it_k=current_cluster.begin(); it_k!=current_cluster.end(); ++it_k)
+			{
+				cout << *it_k << "   ";
+			}
+			cout << endl;
+
 			for (std::set<Index>::iterator it_j=current_cluster.begin(); it_j!=current_cluster.end(); ++it_j)
 			{
 				if (rmsd_type == SNAPSHOT_RMSD)
 				{
 					(*current_set_)[*it_j].applySnapShot(system_i_);
 				}
+
+				cout << " " <<  *it_j << " | ";
 
 				for (std::set<Index>::iterator it_k=current_cluster.begin(); it_k!=current_cluster.end(); ++it_k)
 				{
@@ -947,6 +1190,20 @@ namespace BALL
 		} //next cluster
 	}
 
+	void PoseClustering::exportClusterTree(std::ostream& out)
+	{
+		boost::write_graphviz(out, cluster_tree_, ClusterTreeWriter_(&cluster_tree_));
+	}
+
+	void PoseClustering::ClusterTreeWriter_::operator() (std::ostream& out, const ClusterTreeNode& v) const
+	{
+		out << "[label=\"";
+		if ((*cluster_tree_)[v].poses.size() > 0)
+			out << *((*cluster_tree_)[v].poses.begin());
+		else
+			out << (*cluster_tree_)[v].merged_at;
+		out << "\"]";
+	}
 
 	const System& PoseClustering::getSystem() const
 	{
@@ -1069,8 +1326,8 @@ namespace BALL
 		options.setDefault(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK,
 				               PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK);
 
-		options.setDefault(PoseClustering::Option::FULL_CLUSTER_DENDOGRAM,
-				               PoseClustering::Default::FULL_CLUSTER_DENDOGRAM);
+//		options.setDefault(PoseClustering::Option::FULL_CLUSTER_DENDOGRAM,
+//				               PoseClustering::Default::FULL_CLUSTER_DENDOGRAM);
 	}
 
 
@@ -1194,6 +1451,7 @@ namespace BALL
 		return sqrt(t_ab.squaredNorm() + ((M_ab.transpose() * M_ab) * covariance_matrix.selfadjointView<Eigen::Upper>()).trace());
 	}
 
+
 	// compute the RMSD between two "poses", 
 	//    i.e. snapshots, transformations, or center of masses
 	float PoseClustering::getRMSD_(Index i, Index j, Index rmsd_type)
@@ -1227,6 +1485,7 @@ namespace BALL
 		//std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
 		return rmsd;
 	}
+
 
 	void PoseClustering::convertTransformations2Snaphots_()
 	{
@@ -1280,6 +1539,7 @@ namespace BALL
 		}
 	}
 
+
 	void PoseClustering::convertSnaphots2Transformations_()
 	{
 		// just to be sure...
@@ -1318,7 +1578,7 @@ namespace BALL
 	}
 
 
-	void PoseClustering::printCluster_(Index i)
+	void PoseClustering::printCluster_(Index i) const
 	{
 		cout << "++++ cluster " << i << " ++++" << endl;
 		std::copy(clusters_[i].begin(), clusters_[i].end(), std::ostream_iterator<Index>(std::cout, " "));
@@ -1326,7 +1586,8 @@ namespace BALL
 		cout << "+++++++++++++++++++" << endl;
 	}
 
-	void PoseClustering::printClusters()
+
+	void PoseClustering::printClusters() const
 	{
 		cout << "\n\n    FINAL CLUSTERS     \n\n" << endl;
 		for (Size i = 0; i < clusters_.size(); i++)
@@ -1378,7 +1639,7 @@ namespace BALL
 		base_system_.clear();
 		base_conformation_.clear();
 		clusters_.clear();
-		//rmsd_level_of_detail_; 
+		//rmsd_level_of_detail_;
 		lambda_.clear();
 		pi_.clear();
 		mu_.clear();
@@ -1387,5 +1648,6 @@ namespace BALL
 		//system_i_;
 		//system_j_;
 		num_poses_ = 0;
+		number_of_selected_atoms_ = 0;
 	}
 }

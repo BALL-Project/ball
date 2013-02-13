@@ -56,24 +56,40 @@ namespace BALL
 	    This class computes clusters of docking poses given as a 
 			conformation set using a complete linkage algorithm.
 
-			The class assumes
-			   - a pairwise protein-protein docking 
+			The class assumes the following setup 
+			   - a pairwise rigid protein-protein docking 
 				 - all receptor-ligand poses have already been mapped onto each other
-				 such that "receptors" are kept fixed
-				 - the conformation set only contains the "ligands".
+					 such that the "receptors" are kept fixed
+				 - the given pose set only contains the "ligands"
 			
-			The complete linkage algorithm guarantees a minimal cluster
+			The complete linkage algorithms guarantee a minimal cluster
 		 	distance (max RMSD between all pairs of two clusters) of RMSD_THRESHOLD.
 
-			We offer three algorithms via the option CLUSTER_METHOD:
-			 - TRIVIAL_COMPLETE_LINKAGE: a naive implementation, that guarantees an optimal final partition
+			We offer several algorithms via the option CLUSTER_METHOD:
+			
+		   - TRIVIAL_COMPLETE_LINKAGE: a naive implementation, that guarantees an optimal final partition.
+			 - CLINK_DEFAYS as described in 
+			            D. Defays: An efficient algorithm for a complete link method. 
+                  The Computer Journal. 20, 4, British Computer Society, 1977, p. 364-366.
+				 Please note, that this implementation does not guarantee to find the best final clustering!
+			 - NEAREST_NEIGHBOR_CHAIN_WARD as described in
+			            Murtagh, Fionn (1983): "A survey of recent advances in hierarchical clustering algorithms", 
+			            The Computer Journal 26 (4): 354–359	 
 			 - SLINK_SIBSON as described in 
 			            R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
-                  The Computer Journal. 16, Nr. 1, British Computer Society, 1973, S. 30-34
-			 - CLINK_DEFAYS as described in 
-									D. Defays: An efficient algorithm for a complete link method. 
-                  The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366.
-				 			Please note, that this implementation does not guarantee to find the best final clustering!
+                  The Computer Journal. 16, 1, British Computer Society, 1973, p. 30-34
+
+		  The underlying scoring can be either pure center of masses or RMSD. See option RMSD_TYPE.
+			If RMSD_TYPE is set to CENTER_OF_MASS_DISTANCE, the option RMSD_LEVEL_OF_DETAIL will be ignored.
+
+		  The scope of the scoring (the atoms to be considered) can be defined via the option RMSD_LEVEL_OF_DETAIL.
+			If set to PROPERTY_BASED_ATOM_BIJECTION, all atoms having assigned a property named "ATOMBIJECTION_RMSD_SELECTION"
+			are considered. This allows focusing on, e.g. binding pockets. See BALL::Expression.
+
+			The minimal rmsd between the final clusters can be defined via option RMSD_THRESHOLD.
+
+			The poses can be given as ConformationSet or as transformation file, i.e. translation and rotation of each pose.
+			Depending on this choice, the option RMSD_TYPE has to be set to SNAPSHOT_RMSD or RIGID_RMSD.
 	*/
 
   class BALL_EXPORT PoseClustering
@@ -107,8 +123,7 @@ namespace BALL
 
 				/** flag indicating the computation of a full cluster dendogram 
 				 */
-				static const String FULL_CLUSTER_DENDOGRAM;
-
+				//static const String FULL_CLUSTER_DENDOGRAM;
 			};
 
 			/// Default values for options
@@ -119,8 +134,7 @@ namespace BALL
 				static const Index RMSD_LEVEL_OF_DETAIL;
 				static const Index RMSD_TYPE;
 				static const bool USE_CENTER_OF_MASS_PRECLINK;
-				static const bool FULL_CLUSTER_DENDOGRAM;
-				static const String INDEX_PROPERTY_NAME; // TODO setDefaultOptions() etc
+				//static const bool FULL_CLUSTER_DENDOGRAM;
 			};
 
 			enum BALL_EXPORT RMSDType
@@ -144,12 +158,19 @@ namespace BALL
 				TRIVIAL_COMPLETE_LINKAGE,
 				SLINK_SIBSON,
 				CLINK_DEFAYS,
-				NEAREST_NEIGHBOR_CHAIN
+				NEAREST_NEIGHBOR_CHAIN_WARD
 			};
 
 			class BALL_EXPORT RigidTransformation
 			{
 				public:
+					RigidTransformation() {};
+
+					RigidTransformation(Eigen::Vector3f const& new_trans, Eigen::Matrix3f const& new_rot)
+						: translation(new_trans),
+						  rotation(new_rot)
+					{}
+
 					Eigen::Vector3f translation;
 					Eigen::Matrix3f rotation;
 			};
@@ -161,11 +182,17 @@ namespace BALL
 					 */
 					std::set<Index> poses;
 
+					/** The number of poses contained in this cluster.
+					 */
+					Size size;
+
 					/** The center of the cluster.
 					 *  Depending on the type of transformations we allow,
 					 *  this is either stored as a rigid transformation or
 					 *  as the 3N-dimensional vector given by the atom
-					 *  coordinates.
+					 *  coordinates. The special case of using only the center
+					 *  of mass is achieved by setting the rotation matrix to
+					 *  identity.
 					 */
 					boost::variant<Eigen::VectorXf, RigidTransformation> center;
 
@@ -263,6 +290,8 @@ namespace BALL
 
 			void printClusterRMSDs();
 
+			void exportClusterTree(std::ostream& out);
+
 			//@}
 
 			/** @name Public Attributes
@@ -289,10 +318,25 @@ namespace BALL
 			static Eigen::Matrix3f computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail = C_ALPHA);
 
 			///
-			void printClusters();
+			void printClusters() const;
 
 
 		protected:
+			
+			/** A nested class used for exporting cluster trees to graphviz format
+			 */
+			class ClusterTreeWriter_
+			{
+				public:
+					ClusterTreeWriter_(ClusterTree const* cluster_tree)
+						: cluster_tree_(cluster_tree)
+					{ }
+
+					void operator() (std::ostream& out, const ClusterTreeNode& v) const;
+
+				protected:
+					ClusterTree const* cluster_tree_;
+			};
 
 			// trivial complete linkage implementation
 			// with O(n^2) space request
@@ -303,25 +347,25 @@ namespace BALL
 
 			//	implementation of a single linkage clustering as described in 
 			//       R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
-			//       The Computer Journal. 16, Nr. 1, British Computer Society, 1973, S. 30-34
+			//       The Computer Journal. 16, 1, British Computer Society, 1973, p. 30-34
 			void slinkInner_(int current_level);
 
-			// implementation of a complete linkage clustering as described in 
+			//  implementation of a complete linkage clustering as described in 
 			// 					D. Defays: An efficient algorithm for a complete link method. 
-      //          The Computer Journal. 20, Nr. 4, British Computer Society, 1977, S. 364-366. 
+      //          The Computer Journal. 20, 4, British Computer Society, 1977, p. 364-366. 
 			void clinkInner_(int current_level);
 
-			// implememtation of the nearest neighbor chain clustering algorithms 
+			// implememtation of the nearest neighbor chain clustering algorithm 
 			// as described in:
 			//          Murtagh, Fionn (1983): "A survey of recent advances in hierarchical clustering algorithms", 
 			//          The Computer Journal 26 (4): 354–359
-			void nearestNeighborChainCompute_();
+			bool nearestNeighborChainCompute_();
 
-			void initWardDistance_();
+			void initWardDistance_(Index rmsd_type);
 
-			float updateWardDistance_(Index i, Index j);
+			void updateWardDistance_(ClusterTreeNode parent, ClusterTreeNode i, ClusterTreeNode j, Index rmsd_type);
 
-			float getWardDistance_(Index i, Index j);
+			float computeWardDistance_(ClusterTreeNode i, ClusterTreeNode j, Index rmsd_type);
 
 			// compute the center of masses
 			void computeCenterOfMasses_();
@@ -331,6 +375,9 @@ namespace BALL
 
 			// run a pre clink on the centers of gravity 
 			bool centerOfGravityPreCluster_();
+
+			// check the given atom wrt choice of option RMSD_LEVEL_OF_DETAIL
+			bool static isExcludedByLevelOfDetail_(Atom const* atom, Index rmsd_level_of_detail);
 
 			// distance between cluster i and cluster j
 			float getClusterRMSD_(Index i, Index j, Index rmsd_type);
@@ -351,7 +398,7 @@ namespace BALL
 			void convertSnaphots2Transformations_();
 
 			//
-			void printCluster_(Index i);
+			void printCluster_(Index i) const;
 
 			// 
 			void printVariables_(int a, int b, double c, int d, double e, int current_level);
@@ -404,13 +451,13 @@ namespace BALL
 			std::vector<double>    mu_;
 
 
+			// ----- data structures for Ward
+			Size                   number_of_selected_atoms_;
+
 			// ----- data structure for CENTER_OF_GRAVITY_CLINK
 
 			// the geometric center of mass
 			std::vector<Vector3>   com_;
-
-			// ----- data structures for WARD distance
-			//std::vector<Vector3>   cluster_coms_;
 
 			// ----- general data structures
 
