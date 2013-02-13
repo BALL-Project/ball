@@ -1449,14 +1449,14 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesThread(const unsigned int thr
 }
 
 
-bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& m_indices, vector<pair<unsigned int, float> >& nn_data)
+bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& selection, vector<pair<unsigned int, float> >& nn_data)
 {
 	if (verbosity_ > 5)
 	{
 		Log << "++ Setting up data structures" << endl;
 	}
 	
-	unsigned int n_molecules = m_indices.size();
+	unsigned int n_molecules = selection.size();
 	
 	// Create inverted indices for library and query molecules
 	//vector<pair<unsigned short*, unsigned int> > tmp;
@@ -1466,8 +1466,8 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 		//for (unsigned int i=0; i!=lib_features_->size(); ++i)
 		for (unsigned int i=0; i!=n_molecules; ++i)
 		{
-// 			tmp.push_back(make_pair((*lib_features_)[m_indices[i]], 0));
-			tmp.push_back(make_pair(&(*lib_features_)[m_indices[i]], 0));
+// 			tmp.push_back(make_pair((*lib_features_)[selection[i]], 0));
+			tmp.push_back(make_pair(&(*lib_features_)[selection[i]], 0));
 		}
 		createInvertedIndices(tmp, lib_iindices_);
 	}
@@ -1608,7 +1608,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 }
 
 
-bool BinaryFingerprintMethods::checkInputData(const vector<unsigned int>& m_indices) const
+bool BinaryFingerprintMethods::checkInputData(const vector<unsigned int>& selection) const
 {
 	if (lib_features_ == NULL)
 	{
@@ -1618,7 +1618,7 @@ bool BinaryFingerprintMethods::checkInputData(const vector<unsigned int>& m_indi
 		return false;
 	}
 	
-	if (m_indices.size() == 0)
+	if (selection.size() == 0)
 	{
 		Log.error() << "-- FAILED: No molecule indices specified for calculation." << endl;
 		Log.error() << "--" << endl;
@@ -1627,7 +1627,7 @@ bool BinaryFingerprintMethods::checkInputData(const vector<unsigned int>& m_indi
 	}
 	else
 	{
-		if (m_indices.size() > lib_features_->size())
+		if (selection.size() > lib_features_->size())
 		{
 			Log.error() << "-- FAILED: More molecules specified as contained in the input library." << endl;
 			Log.error() << "--" << endl;
@@ -1637,11 +1637,11 @@ bool BinaryFingerprintMethods::checkInputData(const vector<unsigned int>& m_indi
 		else
 		{
 			unsigned int max_index = 0;
-			for (unsigned int i=0; i!=m_indices.size(); ++i)
+			for (unsigned int i=0; i!=selection.size(); ++i)
 			{
-				if (m_indices[i] > max_index)
+				if (selection[i] > max_index)
 				{
-					max_index = m_indices[i];
+					max_index = selection[i];
 				}
 			}
 			
@@ -1659,7 +1659,7 @@ bool BinaryFingerprintMethods::checkInputData(const vector<unsigned int>& m_indi
 }
 
 
-bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& m_indices, 
+bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& selection, 
 						   vector<vector<unsigned int> >& ccs, 
 						   vector<vector<pair<unsigned int, float> > >& nn_data, 
 						   const float cutoff, 
@@ -1668,7 +1668,7 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& m
 	ccs.clear();
 	nn_data.clear();
 	
-	if (checkInputData(m_indices) == false)
+	if (checkInputData(selection) == false)
 	{
 		return false;
 	}
@@ -1677,9 +1677,9 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& m
 	store_nns_ = store_nns;
 	
 	// Create similarity graph and disjoint set for connected components calculation
-	SimilarityGraph sim_graph(m_indices.size());
-	rank.resize(m_indices.size());
-	parent.resize(m_indices.size());
+	SimilarityGraph sim_graph(selection.size());
+	rank.resize(selection.size());
+	parent.resize(selection.size());
 	ds = new DisjointSet(&rank[0], &parent[0]);
 	initialize_incremental_components(sim_graph, *ds);
 	incremental_components(sim_graph, *ds);
@@ -1691,7 +1691,7 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& m
 	pairwiseSimilaritiesBase = &BinaryFingerprintMethods::pairwiseSimilaritiesConnectedComponents;
 	
 	// Run pairwise similarity calculation
-	bool success = pairwiseSimilarities(m_indices, nn_data_tmp);
+	bool success = pairwiseSimilarities(selection, nn_data_tmp);
 	
 	if (success)
 	{
@@ -1990,14 +1990,14 @@ bool BinaryFingerprintMethods::cutoffSearch(const float cutoff, const String& ou
 }
 
 
-bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned int>& m_indices, unsigned int& medoid_index, vector<float>& avg_sims)
+bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned int>& selection, unsigned int& medoid_index, vector<float>& avg_sims)
 {
 	store_nns_ = false;
 	avg_sims.clear();
-	medoid_index = m_indices.size() + 1;
-	unsigned int n_molecules = m_indices.size();
+	medoid_index = selection.size() + 1;
+	unsigned int n_molecules = selection.size();
 	
-	if (checkInputData(m_indices) == false)
+	if (checkInputData(selection) == false)
 	{
 		return false;
 	}
@@ -2019,14 +2019,14 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 	
 	// Run pairwise similarity calculation
 	vector<pair<unsigned int, float> > nn_data_tmp;
-	bool success = pairwiseSimilarities(m_indices, nn_data_tmp);
+	bool success = pairwiseSimilarities(selection, nn_data_tmp);
 	
 	if (success)
 	{
 		float avg_sim_max = dprec_sim_matrix_[0] /= (n_molecules - 1);;
 		
 		medoid_index = 0;
-		unsigned int medoid_id = m_indices[0];
+		unsigned int medoid_id = selection[0];
 		
 		avg_sims.push_back(dprec_sim_matrix_[0]);
 		for (unsigned int i=1; i!=n_molecules; ++i)
@@ -2034,7 +2034,7 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 			dprec_sim_matrix_[i] /= (n_molecules - 1);
 			avg_sims.push_back(dprec_sim_matrix_[i]);
 			
-			if (checkSimilaritySwitch(dprec_sim_matrix_[i], avg_sim_max, m_indices[i], medoid_id))
+			if (checkSimilaritySwitch(dprec_sim_matrix_[i], avg_sim_max, selection[i], medoid_id))
 			{
 				avg_sim_max = dprec_sim_matrix_[i];
 				medoid_index = i;
@@ -2043,7 +2043,7 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 			/*
 			if (fabs(sim_matrix_[i] - avg_sim_max) <= precision_)
 			{
-				if (m_indices[i] < medoid_id)
+				if (selection[i] < medoid_id)
 				{
 					avg_sim_max = sim_matrix_[i];
 					medoid_index = i;
@@ -2067,12 +2067,12 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 }
 
 
-bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned int>& m_indices, 
+bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned int>& selection, 
 							vector<pair<unsigned int, float> >& nn_data,
 							map<unsigned int, vector<unsigned int> >& cluster_selection)
 {
 	cluster_selection.clear();
-	unsigned int n_molecules = m_indices.size();
+	unsigned int n_molecules = selection.size();
 	
 	if (n_molecules == 1)
 	{
@@ -2081,7 +2081,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		return true;
 	}
 	
-	if (checkInputData(m_indices) == false)
+	if (checkInputData(selection) == false)
 	{
 		return false;
 	}
@@ -2123,8 +2123,8 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 			
 			cluster->nn = NULL;
 			cluster->is_rnn = false;
-// 			cluster->leaf_members.push_back((*lib_features_)[m_indices[i]]);
-			cluster->leaf_members.push_back(&(*lib_features_)[m_indices[i]]);
+// 			cluster->leaf_members.push_back((*lib_features_)[selection[i]]);
+			cluster->leaf_members.push_back(&(*lib_features_)[selection[i]]);
 			
 			vec_actives_.push_back(cluster);
 			leaf_clusters_.push_back(cluster);
@@ -2142,7 +2142,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 			pairwiseSimilaritiesBase = &BinaryFingerprintMethods::pairwiseSimilaritiesNearestNeighbours;
 			
 			// Run pairwise similarity calculation
-			pairwiseSimilarities(m_indices, nn_data);
+			pairwiseSimilarities(selection, nn_data);
 		}
 		
 		for (unsigned int i=0; i!=n_molecules; ++i)
@@ -2186,7 +2186,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		
 		pairwiseSimilaritiesBase = &BinaryFingerprintMethods::pairwiseSimilaritiesStoredMatrix;
 		
-		pairwiseSimilarities(m_indices, nn_data);
+		pairwiseSimilarities(selection, nn_data);
 		
 		NNChainCore(root);
 	}

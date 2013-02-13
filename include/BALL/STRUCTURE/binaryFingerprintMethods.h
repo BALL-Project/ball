@@ -13,15 +13,18 @@
 #       include <BALL/DATATYPE/options.h>
 #endif
 
+
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/incremental_components.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/thread.hpp>
+#include <boost/unordered_set.hpp>
 
-#include <string>
+
+#include <map>
+#include <set>
 #include <vector>
-#include <list>
 
 
 namespace BALL 
@@ -60,6 +63,11 @@ namespace BALL
 	{
 		struct InvertedIndex;
 		
+		/**
+		 * @name Constant Definitions
+		 */
+		//@{
+		
 		typedef std::vector<InvertedIndex*> InvertedIndices;
 		typedef std::vector<std::vector<unsigned short> > FingerprintFeatures;
 		
@@ -67,6 +75,8 @@ namespace BALL
 		typedef boost::graph_traits<SimilarityGraph>::vertex_descriptor Vertex;
 		typedef boost::graph_traits<SimilarityGraph>::vertices_size_type VertexIndex;
 		typedef boost::disjoint_sets<Vertex*, VertexIndex*, boost::find_with_full_path_compression> DisjointSet;
+		
+		//@}
 		
 		public:
 			/**
@@ -132,7 +142,7 @@ namespace BALL
 			
 			
 			/**
-			* @name Constructors and destructors 
+			* @name Constructors and Destructors 
 			*/
 			//@{
 			
@@ -180,7 +190,7 @@ namespace BALL
 			//@}
 			
 			/** 
-			 * @name Assignment operator 
+			 * @name Assignment 
 			 */
 			//@{
 			
@@ -191,6 +201,30 @@ namespace BALL
 			
 			//@}
 			
+			
+			/** 
+			 * @name Static Public Member Functions
+			 */
+			//@{
+			
+			/** 
+			 * Wrapper for different binary fingerprint parsers which returns a vector of integer features.
+			 * The returned features lie in the interval [1, max_feature_id + 1]. Thus, no feature has ID = 0 which is important for inverted index implementation.
+			 * @param fprint The fingerprint as a separated list of integer features.
+			 * @param features A vector reference to return the fingerprint features. The vector will be cleaned first.
+			 * @param fp_type Fingerprint encoding: 1 = Binary Bitstring, 2 = Separated list of integer features
+			 * @param delim The delimiter character of the list.
+			 * @return True if feature list has been parsed successful.
+			 */
+			static bool parseBinaryFingerprint(const String& fprint, std::vector<unsigned short>& features, unsigned int fp_type, const char* delim=",");
+			
+			//@}
+			
+			
+			/** 
+			 * @name Accessors
+			 */
+			//@{
 			
 			/**
 			 * Add a target library containing binary fingerprints as feature lists.
@@ -223,65 +257,6 @@ namespace BALL
 			
 			
 			/**
-			 * Perform similarity search for molecules of a query library in a target library and keep pairs with similarity exceeding sim_cutoff.
-			 * @param sim_cutoff Similarity cutoff to apply for cutoff search, i.e. only keep similarities above cutoff.
-			 * @param file_name Output file name to store result pairs with similarities as space separated CSV file.
-			 */
-			bool cutoffSearch(const float sim_cutoff, const String& outfile_name);
-			
-			
-			/** 
-			 * Calculate similarity network of a virtual molecule library and return the connected components.
-			 * @param m_indices Indices of molecules in lib_features_ array for which connected components analysis should be performed.
-			 * @param ccs Data structure to return connected components. Eeach ccs member is a single connected component which stores the indices
-			 * (positions in the vector) of the connected component members in m_indices. 
-			 * @param nn_data If store_nns = true, nn_data will store the nearest neighbour information (index into m_indices and similarity)
-			 * for all connected component members.
-			 * @param sim_cutoff Similarity cutoff to apply for similarity network generation, i.e. only keep similarities above cutoff.
-			 * @param store_nns If true, the nearest neighbour and its similarity are stored during connected components calculation.
-			 */
-			bool connectedComponents(const std::vector<unsigned int>& m_indices, 
-						 std::vector<std::vector<unsigned int> >& ccs, 
-						 std::vector<std::vector<std::pair<unsigned int, float> > >& nn_data, 
-						 const float cutoff,
-						 const bool store_nns = false);
-			
-			
-			/** 
-			 * Average linkage clustering of a set of molecules.
-			 * @param m_indices Indices of molecules in lib_features_ vector for which connected components analysis should be performed
-			 * @param nn_data Nearest neighbour information for molecules in m_indices if already calculated, otherwise an empty vector.
-			 * @param cluster_selection Final clustering, i.e. a cluster ID is assigned to every leaf node.
-			 * @return True if clustering was successful, false otherwise.
-			 */
-			bool averageLinkageClustering(const std::vector<unsigned int>& m_indices, 
-						      std::vector<std::pair<unsigned int, float> >& nn_data, 
-						      std::map<unsigned int, std::vector<unsigned int> >& cluster_selection);
-			
-			
-			/** 
-			 * Calculation of the medoid of a a given compound set. Medoid has the highest average similarity to all other compounds.
-			 * @param m_indices Indices of molecules in lib_features_ vector for which the medoid should be calculated.
-			 * @param medoid_index Reference to return the index of the calculated medoid in the passed molecule indices (m_indices).
-			 * @param avg_sims Reference to vector which finally will store the average similarity of every molecule to all others in m_indices.
-			 * @return True if calculation has been successful, otherwise false.
-			 */
-			bool calculateSelectionMedoid(const std::vector<unsigned int>& m_indices, unsigned int& medoid_index, std::vector<float>& avg_sims);
-			
-			
-			/** 
-			 * Wrapper for different binary fingerprint parsers which returns a vector of integer features.
-			 * The returned features lie in the interval [1, max_feature_id + 1]. Thus, no feature has ID = 0 which is important for inverted index implementation.
-			 * @param fprint The fingerprint as a separated list of integer features.
-			 * @param features A vector reference to return the fingerprint features. The vector will be cleaned first.
-			 * @param fp_type Fingerprint encoding: 1 = Binary Bitstring, 2 = Separated list of integer features
-			 * @param delim The delimiter character of the list.
-			 * @return True if feature list has been parsed successful.
-			 */
-			static bool parseBinaryFingerprint(const String& fprint, std::vector<unsigned short>& features, unsigned int fp_type, const char* delim=",");
-			
-			
-			/**
 			 * Get const reference to options.
 			 * @return Const reference to options of BinaryFingerprintMethods.
 			 */
@@ -293,6 +268,62 @@ namespace BALL
 			 * @param verbosity verbosity level to use.
 			 */
 			void setVerbosityLevel(const int verbosity);
+			
+			//@}
+			
+			
+			/** 
+			 * @name Applications
+			 */
+			//@{
+			
+			/**
+			 * Perform similarity search for molecules of a query library in a target library and keep pairs with similarity exceeding sim_cutoff.
+			 * @param sim_cutoff Similarity cutoff to apply for cutoff search, i.e. only keep similarities above cutoff.
+			 * @param file_name Output file name to store result pairs with similarities as space separated CSV file.
+			 */
+			bool cutoffSearch(const float sim_cutoff, const String& outfile_name);
+			
+			
+			/** 
+			 * Calculate similarity network of a set of molecules defined by selection and return the connected components.
+			 * @param selection Indices of molecules in lib_features_ array for which connected components analysis should be performed.
+			 * @param ccs Data structure to return connected components. Eeach ccs member is a single connected component which stores the indices
+			 * (positions in the vector) of the connected component members in selection. 
+			 * @param nn_data If store_nns = true, nn_data will store the nearest neighbour information (index into selection and similarity)
+			 * for all connected component members.
+			 * @param sim_cutoff Similarity cutoff to apply for similarity network generation, i.e. only keep similarities above cutoff.
+			 * @param store_nns If true, the nearest neighbour and its similarity are stored during connected components calculation.
+			 */
+			bool connectedComponents(const std::vector<unsigned int>& selection, 
+						 std::vector<std::vector<unsigned int> >& ccs, 
+						 std::vector<std::vector<std::pair<unsigned int, float> > >& nn_data, 
+						 const float cutoff,
+						 const bool store_nns = false);
+			
+			
+			/** 
+			 * Average linkage clustering of a set of molecules defined by selection.
+			 * @param selection Indices of molecules in lib_features_ vector for which connected components analysis should be performed
+			 * @param nn_data Nearest neighbour information for molecules in selection if already calculated, otherwise an empty vector.
+			 * @param cluster_selection Final clustering, i.e. a cluster ID is assigned to every leaf node.
+			 * @return True if clustering was successful, false otherwise.
+			 */
+			bool averageLinkageClustering(const std::vector<unsigned int>& selection, 
+						      std::vector<std::pair<unsigned int, float> >& nn_data, 
+						      std::map<unsigned int, std::vector<unsigned int> >& cluster_selection);
+			
+			
+			/** 
+			 * Calculation of the medoid of a set of molecules defined by selection. Medoid has the highest average similarity to all other compounds.
+			 * @param selection Indices of molecules in lib_features_ vector for which the medoid should be calculated.
+			 * @param medoid_index Reference to return the index of the calculated medoid in the passed molecule indices (selection).
+			 * @param avg_sims Reference to vector which finally will store the average similarity of every molecule to all others in selection.
+			 * @return True if calculation has been successful, otherwise false.
+			 */
+			bool calculateSelectionMedoid(const std::vector<unsigned int>& selection, unsigned int& medoid_index, std::vector<float>& avg_sims);
+			
+			//@}
 			
 		private:
 			/**
@@ -438,27 +469,27 @@ namespace BALL
 			
 			
 			/**
-			 * Molecule feature vectors of input library.
+			 * Target input library stored as a vector of feature vectors.
 			 * A single feature vector is a strictly decreasing list of fingerprint feature IDs (> 0) and a terminating 0.
 			 */
 			const FingerprintFeatures* lib_features_;
 			
 			
 			/**
-			 * Inverted index data structures for library molecules.
+			 * Vector of pointers to InvertedIndices for library molecules.
 			 */
 			InvertedIndices lib_iindices_;
 			
 			
 			/**
-			 * Molecule feature vectors of query library.
+			 * Query input library stored as a vector of feature vectors
 			 * A single feature vector is a strictly decreasing list of fingerprint feature IDs (> 0) and a terminating 0.
 			 */
 			const FingerprintFeatures* query_features_;
 			
 			
 			/**
-			 * Inverted index data structures for query molecules.
+			 * Vector of pointers to InvertedIndices for query molecules.
 			 */
 			InvertedIndices query_iindices_;
 			
@@ -637,11 +668,11 @@ namespace BALL
 			
 			
 			/**
-			 * Check if input data (lib_features_ and m_indices) are valid. 
-			 * @param m_indices Indices to molecule feature vectors in lib_features_ which should be checked.
+			 * Check if input data (lib_features_ and selection) are valid. 
+			 * @param selection Indices to molecule feature vectors in lib_features_ which should be checked.
 			 * @return Returns true if data is consistent, false if there are inconsistencies.
 			 */
-			bool checkInputData(const std::vector<unsigned int>& m_indices) const;
+			bool checkInputData(const std::vector<unsigned int>& selection) const;
 			
 			
 			/**
@@ -834,12 +865,12 @@ namespace BALL
 			
 			
 			/**
-			 * Base function which runs all pairwise comparisons of molecules indexed by m_indices.
-			 * @param m_indices Indices of feature vectors in lib_features_ for which pairwise comparisons should be performed.
+			 * Base function which runs all pairwise comparisons of molecules indexed by selection.
+			 * @param selection Indices of feature vectors in lib_features_ for which pairwise comparisons should be performed.
 			 * @param nn_data If store_nns_ is true, nn_data will finally store nearest neighbour information for every molecule.
 			 * @return True if calculation was successful.
 			 */
-			bool pairwiseSimilarities(const std::vector<unsigned int>& m_indices, std::vector<std::pair<unsigned int, float> >& nn_data);
+			bool pairwiseSimilarities(const std::vector<unsigned int>& selection, std::vector<std::pair<unsigned int, float> >& nn_data);
 			
 			
 			/**
