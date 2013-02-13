@@ -331,8 +331,8 @@ namespace BALL
 		// make sure we read only the first location if alternate
 		// locations are present to avoid invalid structures due
 		// to duplicate atoms
-		if(   (record.alternate_location_indicator == ' ' )
-		   || (record.alternate_location_indicator == alternate_location_indicator_))
+		if(   (record.alternate_location_indicator != ' ' )
+		   && (record.alternate_location_indicator != alternate_location_indicator_))
 		{
 			return true;
 		}
