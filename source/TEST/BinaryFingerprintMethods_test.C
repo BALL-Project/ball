@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/SYSTEM/file.h>
 
-#include <unordered_map>
+#include <boost/unordered_map.hpp>
 
 /////////////////////////////////////////////////////////////
 // To be tested ...
@@ -20,6 +20,7 @@
 
 using namespace BALL;
 using namespace std;
+using namespace boost;
 
 START_TEST(BinaryFingerprintMethods)
 
