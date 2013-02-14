@@ -16,7 +16,7 @@
 namespace BALL
 {
 	template <>
-	HashIndex Hash(const std::pair<Atom*, Atom*>& item) throw()
+	HashIndex Hash(const std::pair<Atom*, Atom*>& item)
 	{
 		return Hash(static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(item.first)) / 2
 								+ static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(item.second)) / 2);
