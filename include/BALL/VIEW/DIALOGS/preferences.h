@@ -92,6 +92,10 @@ namespace BALL
 			*/
 			void removeEntry(PreferencesEntry *child);
 
+
+			void insertChildEntry(PreferencesEntry* parent, PreferencesEntry *child);
+			void insertChildEntry(const std::string& category, PreferencesEntry *child);
+
 			/** Fetch the preferences (the position) from the INIFile <tt>inifile</tt>.
 					This method will be called inside MainControl::show().
 					\param  inifile the INIFile that contains the needed information

@@ -48,6 +48,36 @@ namespace BALL
 			return (widget_stack->count() > 1);
 		}
 
+		void Preferences::insertChildEntry(const std::string& category, PreferencesEntry* child)
+		{
+			for(HashSet<PreferencesEntry*>::iterator it = entries_.begin(); it != entries_.end(); ++it) {
+				if((*it)->getINIFileSectionName() == String(category)) {
+					insertChildEntry(*it, child);
+				}
+			}
+		}
+
+		void Preferences::insertChildEntry(PreferencesEntry* parent, PreferencesEntry* child)
+		{
+			QWidget* parent_widget = dynamic_cast<QWidget*>(parent);
+			QWidget* child_widget  = dynamic_cast<QWidget*>(child);
+
+			if(!parent_widget && !child_widget) return;
+
+			if(!entries_.has(parent) || !widget_to_item_.has(parent_widget)) return;
+
+			if(widget_to_item_.has(child_widget)) return;
+
+			QStringList sl;
+			sl << child->getINIFileSectionName().c_str();
+			QTreeWidgetItem* new_item = new QTreeWidgetItem(widget_to_item_[parent_widget], sl);
+			item_to_entry_.insert(std::make_pair(new_item, child));
+			item_to_widget_.insert(std::make_pair(new_item, child_widget));
+			widget_to_item_.insert(std::make_pair(child_widget, new_item));
+			widget_stack->addWidget(child_widget);
+			entries_.insert(child);
+		}
+
 		void Preferences::insertEntry(PreferencesEntry *child)
 		{
 			if (!RTTI::isKindOf<QWidget>(*child)) 
@@ -61,12 +91,13 @@ namespace BALL
 
 			if (child->getStackPages().size() == 0) 
 			{
+				Log.error() << "No stack pages found" << std::endl;
 				return;
 			}
 
 			PreferencesEntry::StackPages::iterator it = child->getStackPages().begin();
- 			entries_.insert(child);
-   		widget_stack->addWidget((*it).first);
+			entries_.insert(child);
+			widget_stack->addWidget((*it).first);
 
 			// the parent listview entry
 			QStringList sl;
@@ -101,10 +132,17 @@ namespace BALL
 			if (!entries_.has(child)) return;
 
 			QWidget* widget = (dynamic_cast<QWidget*>(child));
+
+			if(!widget)
+			{
+				return;
+			}
+
 			removeItem_(widget_to_item_[widget], true);
+
+			widget_to_item_.erase(widget);
 			widget_stack->removeWidget(widget);
 			entries_.erase(child);
-			delete child;
 		}
 
 		void Preferences::fetchPreferences(INIFile& inifile)
@@ -176,10 +214,7 @@ namespace BALL
 			if (widget_stack->indexOf(child) != -1)
 			{
 				// show the child 
-				if (item->child(0) == 0) widget_stack->setCurrentWidget(child);
-				// or the empty page if the child is an empty node
-				else widget_stack->setCurrentIndex(0);
-
+				widget_stack->setCurrentWidget(child);
 				widget_stack->currentWidget()->show();
 
 				return;
@@ -204,8 +239,10 @@ namespace BALL
 			if (sel.size() == 0) return 0;
 			QTreeWidgetItem* item =  *sel.begin();
 
-			if (item->child(0) != 0) return widget_stack->widget(0);
-			
+			if(!item_to_widget_.has(item)) {
+				return widget_stack->widget(0);
+			}
+
 			return item_to_widget_[item];
 		}
 		
