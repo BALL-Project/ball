@@ -570,7 +570,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	Log.level(10) << "++ STEP 3: Average linkage clustering of connected components" << endl;
 	
 	vector<unsigned int> cl_indices;
-	vector<vector<unsigned int>> clusters;
+	vector<vector<unsigned int> > clusters;
 	map<unsigned int, vector<unsigned int> > cluster_selection;
 	map<unsigned int, vector<unsigned int> >::iterator cl_iter;
 	
