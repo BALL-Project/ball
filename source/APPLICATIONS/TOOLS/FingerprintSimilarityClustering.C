@@ -263,11 +263,14 @@ void writeConnectedComponents(const vector<unsigned int>& m_indices,
 	out << "# SRC_NODE_ID:    global internal (fingerprint unique) id of source node." << endl;
 	out << "# DST_NODE_INDEX: index of nearest neighbour within connected component vector." << endl;
 	out << "# TANIMOTO_SIM:   tanimoto similarity. If TANIMOTO_SIM == -1.0, no nearest neighbour information hass been calculated." << endl;
-	out << "SRC_NODE_ID DST_NODE_INDEX TANIMOTO_SIM" << endl;
+	out << "# CMPD_IDS:   Comma separated list of original compound id(s) which map onto this SRC_NODE_ID." << endl;
+	out << "SRC_NODE_ID DST_NODE_INDEX TANIMOTO_SIM CMPD_IDS" << endl;
 	
 	unordered_map<unsigned int, set<String> > mol_identifiers;
 	readMoleculeIdentifiers(mol_identifiers);
 	
+	String cids;
+	set<String>::iterator it;
 	multimap<unsigned int, unsigned int>::const_reverse_iterator iter;
 	for (iter=cc_sizes.rbegin(); iter!=cc_sizes.rend(); ++iter)
 	{
@@ -276,7 +279,15 @@ void writeConnectedComponents(const vector<unsigned int>& m_indices,
 		
 		for (unsigned int i=0; i!=cc.size(); ++i)
 		{
-			out << m_indices[cc[i]] << " " << m_indices[nnd[i].first] << " " << nnd[i].second << " " << endl;
+			it=mol_identifiers[m_indices[cc[i]]].begin();
+			
+			cids = *it;
+			for (++it; it!=mol_identifiers[m_indices[cc[i]]].end(); ++it)
+			{
+				cids += "," + *it;
+			}
+			
+			out << m_indices[cc[i]] << " " << m_indices[nnd[i].first] << " " << nnd[i].second << " " << cids << endl;
 		}
 		
 		out << "//" << endl; 
