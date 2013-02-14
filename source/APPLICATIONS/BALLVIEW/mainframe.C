@@ -44,7 +44,11 @@
 
 #include "ui_aboutDialog.h"
 
+#include <BALL/PLUGIN/pluginManager.h>
+#include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
+#include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
 
 #ifdef BALL_HAS_QTWEBKIT
 # include <BALL/VIEW/WIDGETS/HTMLBasedInterface.h>
@@ -104,13 +108,12 @@ namespace BALL
 		insertPopupMenuSeparator(DISPLAY, UIOperationMode::MODE_ADVANCED);
 		initPopupMenu(DISPLAY_VIEWPOINT);
 
-		new MolecularFileDialog(this, ((String)tr("MolecularFileDialog")).c_str());
-		new DownloadPDBFile(    this, ((String)tr("DownloadPDBFile")).c_str(), false);
-		new DownloadElectronDensity(this, ((String)tr("DownloadElectronDensity")).c_str(), false);
-		new PubChemDialog(      this, ((String)tr("PubChemDialog")).c_str());
-		new PluginDialog(       this, ((String)tr("PluginDialog")).c_str());
-		new UndoManagerDialog(  this, ((String)tr("UndoManagerDialog")).c_str());
- 		
+		new MolecularFileDialog    (this, "MolecularFileDialog");
+		new DownloadPDBFile        (this, "DownloadPDBFile", false);
+		new DownloadElectronDensity(this, "DownloadElectronDensity", false);
+		new PubChemDialog          (this, "PubChemDialog");
+		new UndoManagerDialog      (this, "UndoManagerDialog");
+
 		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, ((String)tr("Structures")).c_str()));
 		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, ((String)tr("Representations")).c_str()));
 		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, ((String)tr("Datasets")).c_str()));
@@ -156,6 +159,7 @@ namespace BALL
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(      this, ((String)tr("Logs")).c_str()));
 		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver( this, ((String)tr("FileObserver")).c_str()));
 
+		setupPluginHandlers_();
 		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, ((String)tr("3D View")).c_str());
 		setCentralWidget(scene_);
@@ -455,4 +459,10 @@ namespace BALL
 		}
 	}
 
+	void Mainframe::setupPluginHandlers_()
+	{
+		PluginManager& man = PluginManager::instance();
+		man.registerHandler(new InputDevPluginHandler());
+		man.registerHandler(new PluginDialog(getPreferences(), this));
+	}
 }

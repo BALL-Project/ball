@@ -54,6 +54,7 @@ namespace BALL
 
 		protected:
 			void changeEvent(QEvent* evt);
+			void setupPluginHandlers_();
 
 			Scene* scene_;
 	};
