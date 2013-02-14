@@ -1,11 +1,16 @@
 #ifndef BALL_PLUGIN_PLUGINMANAGER_H
 #define BALL_PLUGIN_PLUGINMANAGER_H
 
-#ifndef BALL_CONCEPT_PREFERENCESOBJECT_H
-# include <BALL/CONCEPT/preferencesObject.h>
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
 #endif
 
 #include <QtCore/QString>
+#include <QtCore/QStringList>
 #include <QtCore/QHash>
 #include <QtCore/QMutex>
 #include <QtCore/QReadWriteLock>
@@ -31,7 +36,6 @@ namespace BALL
 	 * for each new plugin type.
 	 */
 	class BALL_EXPORT PluginManager
-		: public PreferencesObject
 	{
 		public:
 
@@ -49,20 +53,23 @@ namespace BALL
 			 * located in the specified directoy dir.
 			 *
 			 * @param dir the directory to search for plugins.
+			 * @return true if the directory could successfully be loaded.
+			 *         false if it has already been loaded or is invalid.
 			 */
-			void addPluginDirectory(const QString& dir, bool autoactivate = false);
+			bool addPluginDirectory(const QString& dir);
 
 			/**
 			 * Tries to unload all plugins (files named like: pluginMyPlugin.$LIBRARY_SUFFIX)
 			 * located in the specified directoy dir.
 			 *
 			 * @param dir the directory to search for plugins to remove.
+			 * @return true if the plugin could be successfully removed.
 			 */
 			bool removePluginDirectory(const QString& dir);
 
 			/** Return a list of directories currently searched for plugins.
 			 */
-			vector<QString> getPluginDirectories() const;
+			std::vector<QString> getPluginDirectories() const;
 
 			/**
 			 * Loads the plugin specified by plugin_name.
@@ -161,20 +168,30 @@ namespace BALL
 			void registerHandler(PluginHandler* h);
 
 			// needed for storing this classes' preferences
-			virtual bool getValue(String&) const;
-			virtual bool setValue(const String&);
+			virtual bool getPluginDirectories(String& value) const;
+			virtual bool setPluginDirectories(const String&);
+
+			virtual QString getAutoActivatePlugins() const;
+			virtual bool setAutoActivatePlugins(const QString&);
+
+			void autoActivatePlugin(const QString& str);
+			void doNotAutoActivatePlugin(const QString& str);
 
 		protected:
 			static const char* BETWEEN_PLUGINDIR_SEPERATOR;
+
+			typedef std::map<QString, vector<BALLPlugin*> > PluginDirMap;
 
 			PluginManager();
 			PluginManager(const PluginManager&);
 			PluginManager& operator=(const PluginManager&);
 
-			std::map<QString, vector<BALLPlugin*> > loaded_plugin_dirs_;
+			bool unloadDirectoryPlugins_(PluginDirMap::iterator it);
+			PluginDirMap loaded_plugin_dirs_;
 
 			QHash<QString, QPluginLoader*> loaders_;
 			std::list<PluginHandler*> handlers_;
+			QStringList autoactivate_plugins_;
 
 			static boost::shared_ptr<PluginManager> manager_;
 

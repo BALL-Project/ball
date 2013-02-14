@@ -8,6 +8,14 @@
 #include <QtCore/QWriteLocker>
 #include <BALL/COMMON/logStream.h>
 
+#if defined(BALL_OS_WINDOWS)
+# define PLUGIN_MASK "plugin*.dll"
+#elif defined(BALL_OS_DARWIN)
+# define PLUGIN_MASK "plugin*.dylib"
+#else
+# define PLUGIN_MASK "plugin*.so"
+#endif
+
 namespace BALL
 {
 	const char* PluginManager::BETWEEN_PLUGINDIR_SEPERATOR  = "?";
@@ -16,9 +24,7 @@ namespace BALL
 	QMutex PluginManager::mutex_;
 
 	PluginManager::PluginManager()
-		: PreferencesObject()
 	{
-		setObjectName("PluginManager");
 	}
 
 	PluginManager::~PluginManager()
@@ -52,19 +58,18 @@ namespace BALL
 		return *manager_;
 	}
 
-	void PluginManager::addPluginDirectory(const QString& dir, bool autoactivate)
+	bool PluginManager::addPluginDirectory(const QString& dir)
 	{
 		std::map<QString, vector<BALLPlugin*> >::iterator to_load_it = loaded_plugin_dirs_.find(dir);
 		if (to_load_it == loaded_plugin_dirs_.end())
 		{
 			vector<BALLPlugin*> loaded_plugins;
-#if defined(BALL_OS_WINDOWS)
-			QDir plugin_dir(dir, "plugin*.dll", QDir::Name | QDir::IgnoreCase, QDir::Files);
-#elif defined(BALL_OS_DARWIN)
-			QDir plugin_dir(dir, "plugin*.dylib", QDir::Name | QDir::IgnoreCase, QDir::Files);
-#else
-			QDir plugin_dir(dir, "plugin*.so", QDir::Name | QDir::IgnoreCase, QDir::Files);
-#endif
+			QDir plugin_dir(dir, PLUGIN_MASK, QDir::Name | QDir::IgnoreCase, QDir::Files);
+
+			if(!plugin_dir.exists())
+			{
+				return false;
+			}
 
 			// collect the loaded plugins in this dir
 			foreach(QString it, plugin_dir.entryList())
@@ -73,37 +78,41 @@ namespace BALL
 				if (new_plugin)
 				{
 					loaded_plugins.push_back(new_plugin);
-					if (autoactivate)
-						startPlugin(new_plugin);
 				}
 			}
 
 			// and store the entry
 			loaded_plugin_dirs_[dir]=loaded_plugins;
+
+			return true;
 		}
+
+		return false;
+	}
+
+	bool PluginManager::unloadDirectoryPlugins_(PluginDirMap::iterator it)
+	{
+		if(it == loaded_plugin_dirs_.end()) {
+			return false;
+		}
+
+		vector<BALLPlugin*>::iterator to_unload = it->second.begin();
+		for (; to_unload != it->second.end(); ++to_unload)
+		{
+			unloadPlugin((*to_unload)->getName());
+		}
+
+		// and the directory itself
+		loaded_plugin_dirs_.erase(it);
+
+		return true;
 	}
 
 	bool PluginManager::removePluginDirectory(const QString& dir)
 	{
 		std::map<QString, vector<BALLPlugin*> >::iterator to_unload_it = loaded_plugin_dirs_.find(dir);
 
-		if (to_unload_it != loaded_plugin_dirs_.end())
-		{
-			// remove the corresponding plugins
-			vector<BALLPlugin*> to_unload = to_unload_it->second;
-			for (Size i=0; i<to_unload.size(); i++)
-			{
-				unloadPlugin(to_unload[i]->getName());
-			}
-
-			// and the directory itself
-			loaded_plugin_dirs_.erase(to_unload_it);
-		}
-		else
-		{
-			return false;
-		}
-		return true;
+		return unloadDirectoryPlugins_(to_unload_it);
 	}
 
 	vector<QString> PluginManager::getPluginDirectories() const
@@ -146,6 +155,11 @@ namespace BALL
 			loader_mutex_.lockForWrite();
 			loaders_.insert(plugin->getName(), loader);
 			loader_mutex_.unlock();
+
+			if(autoactivate_plugins_.contains(plugin->getName())) {
+				startPlugin(plugin);
+				plugin->activate();
+			}
 		}
 
 		return plugin;
@@ -176,6 +190,7 @@ namespace BALL
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.begin();
 		for (; it != loaders_.end(); ++it)
 		{
+			//Shutdown the plugin
 			stopPlugin(qobject_cast<BALLPlugin*>(it.value()->instance()));
 			//Delete the loader
 			it.value()->unload();
@@ -288,7 +303,7 @@ namespace BALL
 		return loaders_.size();
 	}
 
-	bool PluginManager::getValue(String& value) const
+	bool PluginManager::getPluginDirectories(String& value) const
 	{
 		if (!loaded_plugin_dirs_.empty())
 		{
@@ -309,7 +324,7 @@ namespace BALL
 		return true;
 	}
 
-	bool PluginManager::setValue(const String& value)
+	bool PluginManager::setPluginDirectories(const String& value)
 	{
 		std::vector<String> plugin_directories;
 
@@ -322,5 +337,29 @@ namespace BALL
 		}
 
 		return true;
+	}
+
+	QString PluginManager::getAutoActivatePlugins() const
+	{
+		return autoactivate_plugins_.join(";");
+	}
+
+	bool PluginManager::setAutoActivatePlugins(const QString& value)
+	{
+		autoactivate_plugins_ = value.split(";", QString::SkipEmptyParts);
+
+		return true;
+	}
+
+	void PluginManager::autoActivatePlugin(const QString& str)
+	{
+		if(!autoactivate_plugins_.contains(str)) {
+			autoactivate_plugins_.append(str);
+		}
+	}
+
+	void PluginManager::doNotAutoActivatePlugin(const QString& str)
+	{
+		autoactivate_plugins_.removeOne(str);
 	}
 }
