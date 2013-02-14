@@ -1,16 +1,30 @@
 #ifndef VIEWPLUGIN_H
 #define VIEWPLUGIN_H
 
+#include <BALL/VIEW/KERNEL/preferencesEntry.h>
+
 #include <QtCore/QString>
 #include <QtCore/QtPlugin>
 
+#include <QtGui/QDialog>
+
 class QPixmap;
-class QDialog;
 
 namespace BALL
 {
 	namespace VIEW
 	{
+		class ConfigDialog : public QDialog, public PreferencesEntry
+		{
+			public:
+				ConfigDialog(QWidget* parent, Qt::WindowFlags f)
+					: QDialog(parent, f)
+				{
+				}
+
+				virtual ~ConfigDialog() {};
+		};
+
 		class VIEWPlugin
 		{
 			public:
@@ -20,7 +34,7 @@ namespace BALL
 				virtual QString getDescription() const = 0;
 				virtual const QPixmap* getIcon() const = 0;
 
-				virtual QDialog* getConfigDialog() = 0;
+				virtual ConfigDialog* getConfigDialog() = 0;
 
 				virtual bool isActive() = 0;
 		};
