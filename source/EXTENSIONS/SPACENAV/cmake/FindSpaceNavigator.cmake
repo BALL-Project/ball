@@ -16,9 +16,13 @@
 IF(UNIX)
 	FIND_PATH(spnav_include
 		NAMES spnav.h
+		PATHS ${SPNAV_INCLUDE_DIR}
 	)
 
-	FIND_LIBRARY(spnav_lib spnav)
+	FIND_LIBRARY(spnav_lib
+		NAMES spnav
+		PATHS ${SPNAV_LIBRARY_DIR}
+	)
 
 	# Prepare the input for LIBFIND_PROCESS
 	SET(SPNAV_PROCESS_INCLUDES spnav_include)
@@ -29,5 +33,5 @@ IF(UNIX)
 	LIBFIND_PROCESS(SPNAV)
 ELSEIF(APPLE)
 	#TODO: Improve MacOS X code
-	FIND_LIBRARY(SPNAV_LIBRARY 3DConnexionClient)
+	FIND_LIBRARY(SPNAV_LIBRARIES 3DConnexionClient)
 ENDIF()
