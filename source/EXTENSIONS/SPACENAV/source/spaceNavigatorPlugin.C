@@ -40,7 +40,7 @@ namespace BALL
 			return &icon_;
 		}
 
-		QDialog* SpaceNavigatorPlugin::getConfigDialog()
+		ConfigDialog* SpaceNavigatorPlugin::getConfigDialog()
 		{
 			return NULL;
 		}

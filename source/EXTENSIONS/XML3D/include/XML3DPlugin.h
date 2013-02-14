@@ -31,7 +31,7 @@ namespace BALL
 				QString getName() const;
 				QString getDescription() const;
 
-				QDialog* getConfigDialog();
+				ConfigDialog* getConfigDialog();
 
 				bool isActive() { return is_active_; }
 

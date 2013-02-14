@@ -1,9 +1,12 @@
 PROJECT(SPACENAVIGATOR)
 
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
+
 FIND_PACKAGE(SpaceNavigator)
 
-IF(NOT SPNAV_LIBRARY)
-	MESSAGE(SEND_ERROR "Could not find SpaceNavigator libraries")
+IF(NOT SPNAV_FOUND)
+	MESSAGE(STATUS "Could not find SpaceNavigator libraries. Disabling the SpaceNavigator plugin")
+	RETURN()
 ENDIF()
 
 SET(DIRECTORY source)

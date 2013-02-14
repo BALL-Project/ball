@@ -50,7 +50,7 @@ namespace BALL
 			return &icon_;
 		}
 
-		QDialog* XML3DPlugin::getConfigDialog()
+		ConfigDialog* XML3DPlugin::getConfigDialog()
 		{
 			if(!settings_) {
 				settings_ = new XML3DSettings(this, receiver_);

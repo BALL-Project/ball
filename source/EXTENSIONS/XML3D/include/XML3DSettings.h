@@ -1,6 +1,8 @@
 #ifndef BALL_EXTENSIONS_XML3DSETTINGS_H
 #define BALL_EXTENSIONS_XML3DSETTINGS_H
 
+#include "XML3DPlugin.h"
+
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>
 #endif
@@ -12,7 +14,8 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include "XML3DPlugin.h"
+#include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
+
 #include <QtGui/QDialog>
 
 namespace BALL
@@ -20,9 +23,8 @@ namespace BALL
 	namespace VIEW
 	{
 		class XML3DSettings 
-			: public QDialog,
-				public Ui_XML3DSettingsData,
-				public PreferencesEntry
+			: public ConfigDialog,
+			  public Ui_XML3DSettingsData
 		{ 
 			Q_OBJECT
 

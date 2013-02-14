@@ -9,10 +9,9 @@ namespace BALL
 	namespace VIEW
 	{
 		XML3DSettings::XML3DSettings(XML3DPlugin* plugin, QWidget* parent, const char* name, Qt::WFlags fl)
-			: QDialog(parent, fl),
-				Ui_XML3DSettingsData(),
-				PreferencesEntry(),
-				plugin_(plugin)
+			: ConfigDialog(parent, fl),
+			  Ui_XML3DSettingsData(),
+			  plugin_(plugin)
 		{
 			setupUi(this);
 			setObjectName(name);

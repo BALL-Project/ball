@@ -35,7 +35,7 @@ namespace BALL
 			return &icon_;
 		}
 
-		QDialog* VRPNHDPlugin::getConfigDialog()
+		ConfigDialog* VRPNHDPlugin::getConfigDialog()
 		{
 			return NULL;
 		}
