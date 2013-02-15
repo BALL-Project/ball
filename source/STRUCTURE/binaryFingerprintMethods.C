@@ -1546,6 +1546,8 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 				ccs_tmp[ds->find_set(current_vertex)] = unordered_map<unsigned int, unsigned int>();
 			}
 			
+// 			ccs_tmp[ds->find_set(current_vertex)][current_vertex] = ccs_tmp[ds->find_set(current_vertex)].size();
+			ccs_tmp[ds->find_set(current_vertex)].insert(make_pair(current_vertex, 0));
 			ccs_tmp[ds->find_set(current_vertex)][current_vertex] = ccs_tmp[ds->find_set(current_vertex)].size();
 		}
 		
@@ -1567,7 +1569,6 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 			if (store_nns_)
 			{
 				nn_data.push_back(vector<pair<unsigned int, float> >(size_iter->first, make_pair(0, 0.0)));
-				
 				for (cc_iter=ccs_tmp[size_iter->second].begin(); cc_iter!=ccs_tmp[size_iter->second].end(); ++cc_iter)
 				{
 					ccs[ccs.size() - 1][cc_iter->second - 1] = cc_iter->first;
