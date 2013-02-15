@@ -162,7 +162,7 @@ namespace BALL
 		virtual int overflow(int c = -1);
 		//@}
 
-		BALL_EXPORT struct StreamStruct
+		struct BALL_EXPORT StreamStruct
 		{
 			std::ostream*				stream;
 			string							prefix;
