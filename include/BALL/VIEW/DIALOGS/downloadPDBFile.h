@@ -107,6 +107,7 @@ namespace BALL
 
 				QAction* menu_id_;
 				String   prefix_, suffix_;
+				String   biounit_suffix_;
 
 				// the current network reply
 				QNetworkReply* current_reply_;

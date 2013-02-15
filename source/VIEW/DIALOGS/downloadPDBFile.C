@@ -10,6 +10,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
+#include <fstream>
+#include <iostream>
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
+
 #include <QtGui/QLineEdit> 
 #include <QtGui/QRadioButton>
 #include <QtGui/QCheckBox>
@@ -44,6 +50,7 @@ namespace BALL
 				error_(false),
 				prefix_("http://www.rcsb.org/pdb/files/"),
 				suffix_(".pdb"),
+				biounit_suffix_(".pdb1.gz"),
 				current_reply_(0),
 				progress_bar_(0),
 				network_manager_(0)
@@ -98,7 +105,7 @@ namespace BALL
 			String id = ascii(pdbId->currentText());
 			String url = prefix_;
 			url += id;
-			url += suffix_;
+			url += (checkbox_biounit->isChecked()) ? biounit_suffix_ : suffix_;
 
 			if (progress_bar_)
 				delete(progress_bar_);
@@ -118,7 +125,8 @@ namespace BALL
 			String id = ascii(pdbId->currentText());
 			String url = prefix_;
 			url += id;
-			url += suffix_;
+			url += (checkbox_biounit->isChecked()) ? biounit_suffix_ : suffix_;
+			Log.info() << "Url: " << url << std::endl; 
 
 			if (current_reply_->error() != QNetworkReply::NoError)
 			{
@@ -133,17 +141,40 @@ namespace BALL
 
 				try {
 					String temp_filename = VIEW::createTemporaryFilename();
-
+					
 					QFile outfile(temp_filename.c_str());
 					outfile.open(QIODevice::ReadWrite);
 
 					outfile.write(current_reply_->readAll());
 					outfile.close();
-
-					PDBFile pdb_file(temp_filename);
-
-					pdb_file >> *system;
-					pdb_file.close();
+					
+					// if we download the biological unit, we have to decompress the pdb.gz file
+					if (checkbox_biounit->isChecked())
+					{
+						String unzipped_filename = VIEW::createTemporaryFilename();	
+						std::ifstream file(temp_filename.c_str(), std::ios_base::in | std::ios_base::binary);
+						boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+						in.push(boost::iostreams::gzip_decompressor());
+						in.push(file);
+					
+						PDBFile pdb_file(unzipped_filename, std::ios::out | std::ios::binary);
+						boost::iostreams::copy(in, pdb_file);
+						pdb_file.reopen(std::ios::in);
+						
+						// the individual units are organized as MODELs
+						// by default PDBFile only reads the first MODEL
+						pdb_file.selectAllModels();
+						pdb_file >> *system;
+						pdb_file.close();
+						
+						removeFile_(unzipped_filename);
+					}
+					else
+					{
+						PDBFile pdb_file(temp_filename);
+						pdb_file >> *system;
+						pdb_file.close();
+					}
 
 					removeFile_(temp_filename);
 

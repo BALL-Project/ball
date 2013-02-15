@@ -7,29 +7,26 @@
     <x>0</x>
     <y>0</y>
     <width>351</width>
-    <height>142</height>
+    <height>159</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Download a structure file from www.rcsb.org</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
      <y>21</y>
      <width>321</width>
-     <height>101</height>
+     <height>121</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="0">
-     <widget class="QLabel" name="textLabel1">
+    <item row="2" column="0" colspan="3">
+     <widget class="QLabel" name="progress_label">
       <property name="text">
-       <string>PDB ID</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       <string/>
       </property>
      </widget>
     </item>
@@ -52,14 +49,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="3">
-     <widget class="QLabel" name="progress_label">
-      <property name="text">
-       <string/>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QPushButton" name="download">
       <property name="enabled">
        <bool>false</bool>
@@ -84,7 +74,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QPushButton" name="button_abort">
       <property name="enabled">
        <bool>false</bool>
@@ -109,7 +99,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
+    <item row="3" column="2">
      <widget class="QPushButton" name="buttonClose">
       <property name="minimumSize">
        <size>
@@ -128,6 +118,23 @@
       </property>
       <property name="autoDefault">
        <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="textLabel1">
+      <property name="text">
+       <string>PDB ID</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QCheckBox" name="checkbox_biounit">
+      <property name="text">
+       <string>Biological Assembly</string>
       </property>
      </widget>
     </item>
