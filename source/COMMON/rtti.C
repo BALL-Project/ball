@@ -23,7 +23,12 @@
 #	endif
 #endif
 
-#if (defined(BALL_COMPILER_INTEL) || defined(BALL_COMPILER_LLVM))
+// LLVM/Clang always offers <cxxabi.h>
+#ifdef BALL_COMPILER_LLVM
+	#include <cxxabi.h>
+#endif
+
+#ifdef BALL_COMPILER_INTEL
 	// Declare the __cxa_demangle method for Intel's C++ compiler.
 	// Intel does not provide the cxxabi.h header G++ provides, so 
 	// this hack is somewhat rough.
@@ -38,8 +43,8 @@ namespace BALL
 
 	string streamClassName(const std::type_info& t)
 	{
-#if (defined(BALL_COMPILER_GXX) || defined(BALL_COMPILER_INTEL) || defined(BALL_COMPILER_LLVM))
-    #if (BALL_COMPILER_VERSION_MAJOR < 3)
+#if (defined(BALL_COMPILER_GXX) || defined(BALL_COMPILER_INTEL)|| defined(BALL_COMPILER_LLVM))
+    #if defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR < 3)
 			string s(t.name());
       s = GNUDemangling::demangle(s);
     #else
