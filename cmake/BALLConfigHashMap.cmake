@@ -1,6 +1,6 @@
 INCLUDE(CheckIncludeFileCXX)
 
-SET(CMAKE_REQUIRED_INCLUDES -I${BOOST_INCLUDE_DIRS})
+SET(CMAKE_REQUIRED_INCLUDES ${BOOST_INCLUDE_DIRS})
 CHECK_CXX_SOURCE_COMPILES(
 "#include <boost/unordered_map.hpp>
 int main(int, char**)
