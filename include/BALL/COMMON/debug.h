@@ -46,7 +46,7 @@
 		throw e;\
 	}\
 
-# ifdef BALL_COMPILER_GXX
+# if defined(BALL_COMPILER_GXX) || defined(BALL_COMPILER_LLVM)
 # include <execinfo.h>
 # include <cxxabi.h>
 

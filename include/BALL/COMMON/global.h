@@ -41,6 +41,11 @@
 # define BALL_HIDE __attribute__((visibility ("hidden")))
 # define BALL_VIEW_EXPORT __attribute__((visibility ("default")))
 # define BALL_EXTERN_VARIABLE extern __attribute__((visibility ("default")))
+# elif defined(BALL_COMPILER_LLVM)
+# define BALL_EXPORT __attribute__((visibility ("default")))
+# define BALL_HIDE __attribute__((visibility ("hidden")))
+# define BALL_VIEW_EXPORT __attribute__((visibility ("default")))
+# define BALL_EXTERN_VARIABLE extern __attribute__((visibility ("default")))
 #else
 # define BALL_EXPORT
 # define BALL_HIDE
@@ -54,6 +59,8 @@
 #if defined(BALL_COMPILER_MSVC) && (_MSC_VER >= 1300)
     #define BALL_DEPRECATED __declspec(deprecated)
 #elif defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR - 0 > 3 || (BALL_COMPILER_VERSION_MAJOR - 0 == 3 && BALL_COMPILER_VERSION_MINOR - 0 >= 2))
+    #define BALL_DEPRECATED __attribute__((deprecated))
+#elif defined(BALL_COMPILER_LLVM)
     #define BALL_DEPRECATED __attribute__((deprecated))
 #else
     #define BALL_DEPRECATED

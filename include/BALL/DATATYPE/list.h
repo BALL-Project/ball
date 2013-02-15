@@ -19,7 +19,7 @@
 
 #include <list>
 
-#ifdef BALL_COMPILER_GXX
+#ifdef BALL_COMPILER_GXX || BALL_COMPILER_LLVM
 #warning "This header file is deprecated and should not be used in new code! As a replacement for BALL::List the use of std::list is strongly suggested."
 #endif
 
