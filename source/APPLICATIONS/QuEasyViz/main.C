@@ -33,7 +33,7 @@ using namespace BALL::VIEW;
 
 void set_fpu (unsigned int mode)
 {
-#if defined(BALL_COMPILER_GXX) || defined(BALL_COMPILER_LLVM)
+#if defined(BALL_COMPILER_GXX) ||defined(BALL_COMPILER_LLVM)
 	asm ("fldcw %0" : : "m" (*&mode));
 #elif defined(BALL_COMPILER_MSVC)
 	// TODO: implement!
