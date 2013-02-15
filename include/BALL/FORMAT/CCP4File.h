@@ -113,12 +113,12 @@ namespace BALL
 			bool swap_bytes_;
 			
 			/// number of bytes used for storing symmetry operations
-			int offset_symops_;
+			Distance offset_symops_;
 			
 			/// how do columns, rows and sections correspond to specific axes: 0=x, 1=y, 2=z 
-			int col_axis_;
-			int row_axis_;
-			int sec_axis_;
+			Size col_axis_;
+			Size row_axis_;
+			Size sec_axis_;
 
 			/// the start coordinates in grid coordinates, i.e. indices
 			Vector3 start_;
@@ -142,7 +142,7 @@ namespace BALL
 			float deviation_sigma_;
 			
 			/// space group number
-			int space_group_;
+			Index space_group_;
 
 			/// geometry in cartesian coordinates
 			Vector3 origin_, xaxis_, yaxis_, zaxis_;

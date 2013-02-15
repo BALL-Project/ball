@@ -97,7 +97,7 @@ namespace BALL
 			return false;
 		}
 		// Currently only data_mode=2 is allowed, which stores density values as 4-byte float values	
-		int data_mode = readBinValueasInt_(header, 3);
+		Index data_mode = readBinValueasInt_(header, 3);
 		
 		if (data_mode != 2)
 		{
@@ -113,7 +113,7 @@ namespace BALL
 		}
 		
 		//check if file claims to have symmetry reocrds stored	
-		int size_of_symops = readBinValueasInt_(header, 23);
+		Size size_of_symops = readBinValueasInt_(header, 23);
 		if (size_of_symops != 0)
 		{
 			offset_symops_ = size_of_symops;
@@ -202,7 +202,7 @@ namespace BALL
 	bool CCP4File::readSymmetryRecords()
 	{
 		//check if file has special symmetry records
-		int offset = getSize() - int(4*(extent_.x*extent_.y*extent_.z));
+		Distance offset = getSize() - int(4*(extent_.x*extent_.y*extent_.z));
 		if (offset != offset_symops_)
 		{
 			if(offset == 0) 
@@ -226,7 +226,7 @@ namespace BALL
 		if(offset_symops_ != 0)
 		{
 			char sym_record[80];
-			int sym_lines = 0;
+			Size sym_lines = 0;
 			Log.info() << "CCP4File::readSymmetryRecords(): File has the following symmetry information stored:" << std::endl;
 			while (sym_lines < offset_symops_/80)
 			{
