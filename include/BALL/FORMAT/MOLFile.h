@@ -41,7 +41,7 @@ namespace BALL
 				@see PropertyManager::setProperty
 				@see PropertyManager::getProperty
 		*/
-		BALL_EXPORT struct Property
+		struct BALL_EXPORT Property
 		{
 			///
 			static const String ATOM_MASS_DIFFERENCE;
