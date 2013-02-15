@@ -140,9 +140,21 @@ namespace BALL
 		cell_dimension_.y = readBinValueasFloat_(header, 11);
 		cell_dimension_.z = readBinValueasFloat_(header, 12);
 		
-		alpha_ = Angle(readBinValueasFloat_(header, 13),false);
-		beta_	 = Angle(readBinValueasFloat_(header, 14),false);
-		gamma_ = Angle(readBinValueasFloat_(header, 15),false);
+		// Angle values of 0 don't make sense, set the Angles to 90 deg
+		if (		readBinValueasFloat_(header, 13) == 0
+				||	readBinValueasFloat_(header, 14) == 0
+				||	readBinValueasFloat_(header, 15) == 0)
+		{
+			alpha_ = Angle(90.,false);
+			beta_ = Angle(90.,false);
+			gamma_ = Angle(90.,false);
+		}
+		else
+		{
+			alpha_ = Angle(readBinValueasFloat_(header, 13),false);
+			beta_ = Angle(readBinValueasFloat_(header, 14),false);
+			gamma_ = Angle(readBinValueasFloat_(header, 15),false);
+		}	
 		
 		mean_density_ = readBinValueasFloat_(header, 21);
 		space_group_ = readBinValueasInt_(header, 22);
