@@ -1758,23 +1758,26 @@ bool BinaryFingerprintMethods::cutoffSearch(const float cutoff, const String& ou
 	
 	unsigned long n_comps = lib_iindices_.size();
 	unsigned int batch_size = n_comps / n_threads_;
-	unsigned int last_batch_size = batch_size + (n_comps % n_threads_);
+	unsigned int to_increment = n_comps - (batch_size * n_threads_);
 	
 	Timer* timer = new Timer();
 	timer->start();
 	
-	for (unsigned int i=0; i!=n_threads_-1; ++i)
+	for (unsigned int i=0; i!=n_threads_; ++i)
 	{
-		thread_data_[i].first = i * batch_size;
-		thread_data_[i].last = thread_data_[i].first + batch_size;
+		if (i < to_increment)
+		{
+			thread_data_[i].first = i * (batch_size + 1);
+			thread_data_[i].last = thread_data_[i].first + (batch_size + 1);
+		}
+		else
+		{
+			thread_data_[i].first = i * (batch_size);
+			thread_data_[i].last = thread_data_[i].first + (batch_size);
+		}
 		
 		threads_[i] = thread(bind(&BinaryFingerprintMethods::cutoffSearchThread, this, i));
 	}
-	
-	thread_data_[n_threads_ - 1].first = (n_threads_ - 1) * batch_size;
-	thread_data_[n_threads_ - 1].last = thread_data_[n_threads_ - 1].first + last_batch_size;
-	threads_[n_threads_ - 1] = thread(bind(&BinaryFingerprintMethods::cutoffSearchThread, this, n_threads_ - 1));
-	
 	
 	if (verbosity_ > 5)
 	{
