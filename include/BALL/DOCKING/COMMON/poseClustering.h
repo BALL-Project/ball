@@ -45,6 +45,9 @@
 
 #include <set>
 
+//#define POSECLUSTERING_DEBUG 1
+#undef POSECLUSTERING_DEBUG
+
 namespace BALL
 {
 	/** Pose Clustering 
@@ -62,34 +65,43 @@ namespace BALL
 					 such that the "receptors" are kept fixed
 				 - the given pose set only contains the "ligands"
 			
-			The complete linkage algorithms guarantee a minimal cluster
-		 	distance (max RMSD between all pairs of two clusters) of RMSD_THRESHOLD.
-
 			We offer several algorithms via the option CLUSTER_METHOD:
 			
 		   - TRIVIAL_COMPLETE_LINKAGE: a naive implementation, that guarantees an optimal final partition.
 			 - CLINK_DEFAYS as described in 
 			            D. Defays: An efficient algorithm for a complete link method. 
                   The Computer Journal. 20, 4, British Computer Society, 1977, p. 364-366.
-				 Please note, that this implementation does not guarantee to find the best final clustering!
+				 Please note that this implementation does not guarantee to find the best final clustering!
 			 - NEAREST_NEIGHBOR_CHAIN_WARD as described in
 			            Murtagh, Fionn (1983): "A survey of recent advances in hierarchical clustering algorithms", 
-			            The Computer Journal 26 (4): 354–359	 
+			            The Computer Journal 26 (4): 354–359	
+				 Note that this algorithm computes a full clustering.
 			 - SLINK_SIBSON as described in 
 			            R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
                   The Computer Journal. 16, 1, British Computer Society, 1973, p. 30-34
 
-		  The underlying scoring can be either pure center of masses or RMSD. See option RMSD_TYPE.
-			If RMSD_TYPE is set to CENTER_OF_MASS_DISTANCE, the option RMSD_LEVEL_OF_DETAIL will be ignored.
-
+		  
 		  The scope of the scoring (the atoms to be considered) can be defined via the option RMSD_LEVEL_OF_DETAIL.
-			If set to PROPERTY_BASED_ATOM_BIJECTION, all atoms having assigned a property named "ATOMBIJECTION_RMSD_SELECTION"
-			are considered. This allows focusing on, e.g. binding pockets. See BALL::Expression.
+			If the option is set to PROPERTY_BASED_ATOM_BIJECTION, arbitrary sets of atoms, e.g. binding pockets, 
+			can be used by assigning property named "ATOMBIJECTION_RMSD_SELECTION" to the respective atoms in the 
+			reference system.
+			See also BALL::Expression.
 
-			The minimal rmsd between the final clusters can be defined via option RMSD_THRESHOLD.
+			The minimal rmsd or ward distance between the final clusters can be defined via option DISTANCE_THRESHOLD.
+			In order to relate RMSD and ward distance, we use sqrt(ward_dist / number_of_selected_atoms)
+			for threshold extraction.
 
-			The poses can be given as ConformationSet or as transformation file, i.e. translation and rotation of each pose.
+			The nearest neighbor chain ward clustering in principle computes a full clustering. 
+			Option DISTANCE_THRESHOLD gives a ward distance that is automatically used to extract clusters. 
+			Further extractions with different thresholds are possible.
+
+			The complete linkage algorithms guarantee a minimal cluster distance (max RMSD between all pairs
+		 	of two clusters), specified with option DISTANCE_THRESHOLD.
+
+			The initial poses can be given as ConformationSet or as transformation file, i.e. translation and 
+			rotation of each pose.
 			Depending on this choice, the option RMSD_TYPE has to be set to SNAPSHOT_RMSD or RIGID_RMSD.
+			If RMSD_TYPE is set to CENTER_OF_MASS_DISTANCE, the option RMSD_LEVEL_OF_DETAIL will be ignored.
 	*/
 
   class BALL_EXPORT PoseClustering
@@ -107,7 +119,7 @@ namespace BALL
 
 				/** the threshold for minimal required cluster distance
 				*/
-				static const String RMSD_THRESHOLD;
+				static const String DISTANCE_THRESHOLD;
 
 				/** the level of detail when computing the RMSD
 				*/
@@ -130,7 +142,7 @@ namespace BALL
 			struct BALL_EXPORT Default
 			{
 				static const Index CLUSTER_METHOD;
-				static const float RMSD_THRESHOLD;
+				static const float DISTANCE_THRESHOLD;
 				static const Index RMSD_LEVEL_OF_DETAIL;
 				static const Index RMSD_TYPE;
 				static const bool USE_CENTER_OF_MASS_PRECLINK;
@@ -199,6 +211,11 @@ namespace BALL
 					/** The value at which this cluster is merged with its sibling.
 					 */
 					float merged_at;
+#ifdef POSECLUSTERING_DEBUG 
+					/** The cluster_idx assigend by last call of method extractClustersForThreshold 
+					 */
+					float current_cluster_id;
+#endif
 			};
 
 			typedef boost::adjacency_list<boost::vecS,
@@ -241,7 +258,7 @@ namespace BALL
 			*/
 			//@{
 
-			/// 
+			/// sets the poses to be clustered, the conformation set's reference system will the base system
 			void setConformationSet(ConformationSet* new_set);
 
 			/// reads the poses given as transformations from a file and update the covariance matrix 	
@@ -249,23 +266,22 @@ namespace BALL
 			//       will be applied upon the current conformation
 			void setBaseSystemAndTransformations(System const& base_system, String transformation_file_name);
 
-			/// 
+			/// returns the poses to be clustered as ConformationSet
 			const ConformationSet* getConformationSet() const {return  current_set_;}
 
-			/// 
+			/// returns the poses to be clustered as ConformationSet
 			ConformationSet* getConformationSet() {return  current_set_;}
 
-			///
+			/// returns the reference pose 
 			const System& getSystem() const;
 
-			///
+			/// returns the reference pose
 			System& getSystem();
 
-			///
+			/// returns the number of poses
 			Size getNumberOfPoses() const {return (has_rigid_transformations_ ? translations_.size(): current_set_->size());}
-			//Size getNumberOfPoses() const {return ((current_set_ && (current_set_->size()>1)) ? current_set_->size() : translations_.size());}
 
-			///
+			/// returns the number of clusters found
 			Size getNumberOfClusters() const {return clusters_.size();}
 
 			/// returns indices of all poses assigned to cluster i
@@ -288,10 +304,6 @@ namespace BALL
 			/// returns a ConformationSet containing one structure per cluster
 			boost::shared_ptr<ConformationSet> getReducedConformationSet();
 
-			void printClusterRMSDs();
-
-			void exportClusterTree(std::ostream& out);
-
 			//@}
 
 			/** @name Public Attributes
@@ -306,6 +318,9 @@ namespace BALL
 
 			//@}
 
+			/** @name	rigid transformation methods */
+			//@{
+
 			/** Compute the root mean square deviation due to a rigid transformation of a point cloud (here, atoms)
 			 *  @param t_ab difference vector between the transformations to be compared
 			 *  @param M_ab difference of the rotation matrices between the transformations to be compared
@@ -317,12 +332,40 @@ namespace BALL
 			 */
 			static Eigen::Matrix3f computeCovarianceMatrix(System const& system, Index rmsd_level_of_detail = C_ALPHA);
 
-			///
+			//@}
+
+			/** @name	methods given a full clustering */
+			//@{
+
+			/** Extract clusters wrt a threshold if a complete clustering was performed
+			 *  Note: the Ward distance does not equal the rmsd. 
+			 *  We use threshold = sqrt(ward_dist / number_of_selected_atoms).
+			 *  see NEAREST_NEIGHBOR_CHAIN_WARD
+			 */
+			std::vector<std::set<Index> > extractClustersForThreshold(float threshold);
+
+			/** returns the first n clusters if previously a complete clustering was performed
+			 *  see NEAREST_NEIGHBOR_CHAIN_WARD
+			 */
+			std::vector<std::set<Index> > extractNBestClusters(Size n);
+
+			/// exports the Ward cluster tree in TODO format
+			void exportWardClusterTree(std::ostream& out);
+
+			//@}
+
+
+			/// print the clusters as set of pose indices
+			/// Note: start counting with 0
 			void printClusters() const;
+
+			/// print clusters of pose indices with RMSD between clusters	
+			/// Note: start counting with 0
+			void printClusterRMSDs();
 
 
 		protected:
-			
+
 			/** A nested class used for exporting cluster trees to graphviz format
 			 */
 			class ClusterTreeWriter_
@@ -336,6 +379,27 @@ namespace BALL
 
 				protected:
 					ClusterTree const* cluster_tree_;
+			};
+
+			/** A nested class for our cluster tree node priorization
+			 */
+			class ClusterTreeNodeComparator
+			{
+				public:
+					ClusterTreeNodeComparator(ClusterTree& cluster_tree)
+						: cluster_tree_(&cluster_tree)
+					{}
+
+					bool operator() (ClusterTreeNode const first, ClusterTreeNode const second) const
+					{
+						float first_value  = (*cluster_tree_)[ first].merged_at;
+						float second_value = (*cluster_tree_)[second].merged_at;
+
+						return first_value < second_value;
+					}
+
+				protected:
+					ClusterTree* cluster_tree_;
 			};
 
 			// trivial complete linkage implementation
@@ -366,6 +430,8 @@ namespace BALL
 			void updateWardDistance_(ClusterTreeNode parent, ClusterTreeNode i, ClusterTreeNode j, Index rmsd_type);
 
 			float computeWardDistance_(ClusterTreeNode i, ClusterTreeNode j, Index rmsd_type);
+
+			std::set<Index> collectClusterBelow_(ClusterTreeNode const& v);
 
 			// compute the center of masses
 			void computeCenterOfMasses_();
@@ -476,6 +542,8 @@ namespace BALL
 
 			/// The tree built during hierarchical clustering
 			ClusterTree       cluster_tree_;
+			//  and its root
+			ClusterTreeNode   cluster_tree_root_;
 	}; //class PoseClustering
 } //namesspace BALL
 

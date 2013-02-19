@@ -48,8 +48,18 @@ CHECK(setDefaultOptions())
 	TEST_EQUAL(test_pc.options.getInteger(PoseClustering::Default::RMSD_LEVEL_OF_DETAIL),
 													 PoseClustering::Default::RMSD_LEVEL_OF_DETAIL)
 
-	TEST_REAL_EQUAL(test_pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD),
-													 PoseClustering::Default::RMSD_THRESHOLD)
+	TEST_REAL_EQUAL(test_pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD),
+													 PoseClustering::Default::DISTANCE_THRESHOLD)
+
+	TEST_EQUAL(test_pc.options.getInteger(PoseClustering::Option::CLUSTER_METHOD),
+		                   PoseClustering::Default::CLUSTER_METHOD)
+
+	TEST_EQUAL(test_pc.options.getInteger(PoseClustering::Option::RMSD_TYPE),
+		                   PoseClustering::Default::RMSD_TYPE)
+
+	TEST_EQUAL(test_pc.options.getBool(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK),
+				               PoseClustering::Default::USE_CENTER_OF_MASS_PRECLINK)
+
 RESULT
 
 
@@ -68,7 +78,7 @@ CHECK(PoseClustering(ConformationSet* poses, float rmsd) ... )
 	ConformationSet cs(sys);
 	PoseClustering pc(&cs, 5.00);
 
-	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), 5.00)
+	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), 5.00)
   TEST_EQUAL(pc.getConformationSet(), &cs)
 
 	for (AtomConstIterator pc_at_it = pc.getSystem().beginAtom(), sys_at_it = sys.beginAtom();
@@ -146,50 +156,64 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = SNAPSHOT_RMSD)
 
 	//               - TRIVIAL_COMPLETE_LINKAGE
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 100.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 100.00);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 3)
-	pc.printClusterRMSDs();
+	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+	//pc.printClusterRMSDs();
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 4.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 4.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 5)
 
 	//               - CLINK_DEFAYS
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 10.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 5)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 6.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 7)
 
 
 	//               - SLINK_SIBSON
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 6.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 6.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 3)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 50.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 50.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
 
-	//TODO
 	//               - NEAREST_NEIGHBOR_CHAIN_WARD	
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+
+	/*TODO: implement as tool!
 	// TEST
 	File f("test.gv", std::ios::out);
-	pc.exportClusterTree(f);
+	pc.exportWardClusterTree(f);
 	f.close();
-	// END TEST
-	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+	// END TEST	
+	// */
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 4.00);
-	pc.compute();
+	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(0.5);
+	TEST_EQUAL(clusters.size(), 8)
+	TEST_EQUAL(pc.getNumberOfClusters(), 8)
+
+	clusters = pc.extractClustersForThreshold(5.5);
+	TEST_EQUAL(clusters.size(), 3)
+	TEST_EQUAL(pc.getNumberOfClusters(), 3)
+	TEST_EQUAL(pc.getClusterSize(0),2)
+	TEST_EQUAL(pc.getClusterSize(1),4)
+	TEST_EQUAL(pc.getClusterSize(2),2)
+
+	clusters = pc.extractClustersForThreshold(68);
+	TEST_EQUAL(clusters.size(), 1)
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+	TEST_EQUAL(pc.getClusterSize(0), 8)
 RESULT
 
 
@@ -208,47 +232,51 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = CENTER_OF_MASS_DIS
 
 	//               - TRIVIAL_COMPLETE_LINKAGE
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 40.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 40.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 3.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 3.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 4)
-	pc.printClusterRMSDs();
+	//pc.printClusterRMSDs();
 
 	//               - CLINK_DEFAYS
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 40.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 40.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 5.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 5.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 4)
 
 	//               - SLINK_SIBSON
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 3.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 3.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 3)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 36.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 36.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
 
-	//TODO!!!
 	//               - NEAREST_NEIGHBOR_CHAIN_WARD
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 40.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+
+	pc.extractClustersForThreshold(2.4);
+	TEST_EQUAL(pc.getNumberOfClusters(), 3)
+
+	pc.extractClustersForThreshold(60);
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 3.00);
-	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 4)
+	pc.extractClustersForThreshold(64.3);
+	TEST_EQUAL(pc.getNumberOfClusters(), 1)
 
 RESULT
 
@@ -264,7 +292,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 
 	//               - TRIVIAL_COMPLETE_LINKAGE
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 15.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 20)
 	TEST_EQUAL(pc.getClusterSize(0), 2)
@@ -277,7 +305,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	TEST_EQUAL((c0.find(46)!=c0.end()), true)
 	TEST_EQUAL((c0.find(47)!=c0.end()), true)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 5.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 5.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 46)
 	TEST_EQUAL(pc.getClusterSize(28), 4)
@@ -288,36 +316,77 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	TEST_EQUAL((c35.find(52) != c35.end()), true)
 
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 3.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 3.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 52)
 
 	//               - CLINK_DEFAYS
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 40.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 40.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 14)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 5.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 5.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 52)
 
 	//               - SLINK_SIBSON
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 3.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 3.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 51)
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 36.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 36.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+
+	//               - NEAREST_NEIGHBOR_CHAIN_WARD	
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
+	pc.compute();
+	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+
+	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(15);
+//pc.printClusterRMSDs();
+
+	TEST_EQUAL(clusters.size(), 18)
+	TEST_EQUAL(pc.getNumberOfClusters(), 18)
+
+	TEST_EQUAL(pc.getClusterSize(0), 2)
+	TEST_EQUAL(pc.getClusterSize(3), 4)
+	TEST_EQUAL(pc.getClusterSize(7), 4)
+
+	c0 = pc.getCluster(5);
+	TEST_EQUAL(pc.getClusterSize(5), 6)
+
+	TEST_EQUAL((c0.find(0)!=c0.end()), true)
+	TEST_EQUAL((c0.find(7)!=c0.end()), true)
+	TEST_EQUAL((c0.find(8)!=c0.end()), true)
+	TEST_EQUAL((c0.find(19)!=c0.end()), true)
+	TEST_EQUAL((c0.find(46)!=c0.end()), true)
+	TEST_EQUAL((c0.find(47)!=c0.end()), true)
+
+	clusters = pc.extractClustersForThreshold(5.0);
+
+	TEST_EQUAL(pc.getNumberOfClusters(), 36)
+	TEST_EQUAL(pc.getClusterSize(13), 4)
+	std::set<Index> c1 = pc.getCluster(13);
+	TEST_EQUAL((c1.find(31) != c1.end()), true)
+	TEST_EQUAL((c1.find(32) != c1.end()), true)
+	TEST_EQUAL((c1.find(51) != c1.end()), true)
+	TEST_EQUAL((c1.find(52) != c1.end()), true)
+
+	clusters = pc.extractClustersForThreshold(1.5);
+
+	TEST_EQUAL(pc.getNumberOfClusters(), 53)
 
 RESULT
 
 
 CHECK(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK)
+	// --------- TRIVIAL_COMPLETE_LINKAGE  --  SNAPSHOT_RMSD
 	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
 	System sys;
 	pdb.read(sys);
@@ -328,12 +397,11 @@ CHECK(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK)
 
 	PoseClustering pc;
 	pc.setConformationSet(&cs2);
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
-
 	pc.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, true);
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 39.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 39.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 3)
 
@@ -342,9 +410,14 @@ CHECK(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK)
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
 	pc.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, false);
 
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 10);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 5)
+
+/* 
+  //TODO: split RMSD_TYPE into INPUT_TYPE (SNAP or RIGID) and 
+	//      find a way to combine RIGID with center of mass... DISTANCE_TYPE (RMSD, WARD, CENTER_OF_MASS)  
+	// --------- TRIVIAL_COMPLETE_LINKAGE  --  RIGID_RMSD
 
 	PDBFile pdb2(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
 	System sys2;
@@ -353,14 +426,30 @@ CHECK(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK)
 	PoseClustering pc2;
 	pc2.setBaseSystemAndTransformations(sys2, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
 	pc2.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
-	pc.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, true);
+	pc2.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, true);
 
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
-	pc.compute();
+	pc2.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+	pc2.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 10.00);
+	pc2.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 3)
 	TEST_EQUAL(pc.getClusterSize(2), 2)
 
+	// --------- NEAREST NEIGHBOR --  RIGID_RMSD
+
+	PoseClustering pc3;
+	pc3.setBaseSystemAndTransformations(sys2, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
+	pc3.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+	pc3.options.set(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, true);
+
+	//pc3.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc3.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 10.00);
+
+	pc3.compute();
+
+	TEST_EQUAL(pc3.getNumberOfClusters(), 3)
+	TEST_EQUAL(pc3.getClusterSize(2), 2)
+	pc3.printClusterRMSDs(); 
+	*/
 RESULT
 
 
@@ -477,7 +566,7 @@ CHECK(getReducedConformationSet())
 	pc.setConformationSet(&cs);
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 5.00);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 5.00);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 4)
 
@@ -492,7 +581,7 @@ CHECK(getReducedConformationSet())
 
 	StructureMapper mapper(sys3, sys0);
   mapper.calculateDefaultBijection();
-	// should be larger than PoseClustering::Option::RMSD_THRESHOLD
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD
   TEST_REAL_EQUAL(mapper.calculateRMSD(), 37.2132)
 
 	// RIGID
@@ -500,7 +589,7 @@ CHECK(getReducedConformationSet())
 	pc_rigid.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
 	pc_rigid.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 	pc_rigid.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc_rigid.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 15.00);
+	pc_rigid.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
 
 	pc_rigid.compute();
 	TEST_EQUAL(pc_rigid.getNumberOfClusters(), 20)
@@ -516,9 +605,36 @@ CHECK(getReducedConformationSet())
 
 	StructureMapper mapper_rigid(sys18, sys1);
   mapper_rigid.calculateDefaultBijection();
-	// should be larger than PoseClustering::Option::RMSD_THRESHOLD	
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	PRECISION(1e-1)
-	TEST_EQUAL(mapper_rigid.calculateRMSD() >= pc_rigid.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), true)
+	TEST_EQUAL(mapper_rigid.calculateRMSD() >= pc_rigid.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+	PRECISION(1e-5)
+
+	// NearestNeighborChain
+	PoseClustering pc_nnw;
+	pc_nnw.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
+	pc_nnw.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+	pc_nnw.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc_nnw.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
+
+	pc_nnw.compute();
+	TEST_EQUAL(pc_nnw.getNumberOfClusters(), 18)
+
+	boost::shared_ptr<ConformationSet> cs_nnw = pc_nnw.getReducedConformationSet();
+	TEST_EQUAL(cs_nnw->size(),  pc_nnw.getNumberOfClusters())
+	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs_nnw->getSystem().getProtein(0)->countAtoms())
+
+	System sys17(cs_nnw->getSystem());
+	(*cs_nnw)[17].applySnapShot(sys17);
+	System sys_nnw(cs3->getSystem());
+	(*cs_nnw)[0].applySnapShot(sys_nnw);
+
+	StructureMapper mapper_nnw(sys17, sys_nnw);
+  mapper_nnw.calculateDefaultBijection();
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
+	PRECISION(1e-1)
+	//TODO: not really what we want to do: Ward distance vs RMSD
+	TEST_EQUAL(mapper_nnw.calculateRMSD() >= pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	PRECISION(1e-5)
 
 RESULT
@@ -545,7 +661,7 @@ CHECK(getClusterRepresentative(Index i))
 
 	StructureMapper mapper(*sys3, *sys4);
   mapper.calculateDefaultBijection();
-	// should be larger than PoseClustering::Option::RMSD_THRESHOLD	
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	PRECISION(1e-1)
   TEST_REAL_EQUAL(mapper.calculateRMSD(), 53.895 )
 	PRECISION(1e-5)
@@ -555,7 +671,7 @@ CHECK(getClusterRepresentative(Index i))
 	pc_rigid.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
 	pc_rigid.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 	pc_rigid.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc_rigid.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 15.00);
+	pc_rigid.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
 
 	pc_rigid.compute();
 	TEST_EQUAL(pc_rigid.getNumberOfClusters(), 20)
@@ -567,9 +683,32 @@ CHECK(getClusterRepresentative(Index i))
 
 	StructureMapper mapper_rigid(*sys6, *sys19);
   mapper_rigid.calculateDefaultBijection();
-	// should be larger than PoseClustering::Option::RMSD_THRESHOLD
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD
 	PRECISION(1e-1)
-	TEST_EQUAL(mapper_rigid.calculateRMSD() >= pc_rigid.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), true)
+	TEST_EQUAL(mapper_rigid.calculateRMSD() >= pc_rigid.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+	PRECISION(1e-5)
+
+	// NearestNeighborChain
+	PoseClustering pc_nnw;
+	pc_nnw.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
+	pc_nnw.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+	pc_nnw.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc_nnw.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
+
+	pc_nnw.compute();
+	TEST_EQUAL(pc_nnw.getNumberOfClusters(), 18)
+
+	boost::shared_ptr<System> sys18 = pc_nnw.getClusterRepresentative(17);
+	TEST_EQUAL(sys18->getProtein(0)->countAtoms(), sys.getProtein(0)->countAtoms())
+	boost::shared_ptr<System> sys5 = pc_nnw.getClusterRepresentative(4);
+	TEST_EQUAL(sys5->getProtein(0)->countAtoms(), 454)
+
+	StructureMapper mapper_nnw(*sys5, *sys18);
+  mapper_nnw.calculateDefaultBijection();
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD
+	PRECISION(1e-1)
+	//TODO: not really what we want to do: Ward distance vs RMSD
+	TEST_EQUAL(mapper_nnw.calculateRMSD() >= pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	PRECISION(1e-5)
 
 RESULT
@@ -609,22 +748,22 @@ CHECK(getClusterConformationSet(Index i))
 
 	StructureMapper mapper(sys2, sys1);
   mapper.calculateDefaultBijection();
-	// should be larger than PoseClustering::Option::RMSD_THRESHOLD
-  TEST_EQUAL(mapper.calculateRMSD() > pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), true)
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD
+  TEST_EQUAL(mapper.calculateRMSD() > pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 
 	// same cluster
 	(*cs0)[0].applySnapShot(sys2);
-	// should be smaller than PoseClustering::Option::RMSD_THRESHOLD
+	// should be smaller than PoseClustering::Option::DISTANCE_THRESHOLD
 	PRECISION(1e-1)
   TEST_REAL_EQUAL(mapper.calculateRMSD(), 2.996)
 	PRECISION(1e-5)
-  TEST_EQUAL(mapper.calculateRMSD() < pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), true)
+  TEST_EQUAL(mapper.calculateRMSD() < pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 
 	// RIGID
 	PoseClustering pc_rigid(sys, BALL_TEST_DATA_PATH(PoseClustering_test.txt));
 	pc_rigid.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 	pc_rigid.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc_rigid.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 15.00);
+	pc_rigid.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
 
 	pc_rigid.compute();
 	TEST_EQUAL(pc_rigid.getNumberOfClusters(), 20)
@@ -648,9 +787,47 @@ CHECK(getClusterConformationSet(Index i))
 		StructureMapper mapper_rigid(sys1_r, sys2_r);
 		AtomBijection atom_bijection;
 		atom_bijection.assignCAlphaAtoms(sys1_r, sys2_r);
-		TEST_EQUAL(mapper_rigid.calculateRMSD() < pc_rigid.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), true)
+		TEST_EQUAL(mapper_rigid.calculateRMSD() < pc_rigid.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	}
 
+	// NearestNeighborChain
+	PoseClustering pc_nnw(&cs, 10.00);
+	pc_nnw.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc_nnw.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+
+	pc_nnw.compute();
+
+	boost::shared_ptr<ConformationSet> cs2_nnw = pc_nnw.getClusterConformationSet(2);
+	TEST_EQUAL(cs2_nnw->size(), 2)
+
+	boost::shared_ptr<ConformationSet> cs1_nnw = pc_nnw.getClusterConformationSet(1);
+	TEST_EQUAL(cs1_nnw->size(), 4)
+
+	boost::shared_ptr<ConformationSet> cs0_nnw = pc_nnw.getClusterConformationSet(0);
+	TEST_EQUAL(cs0_nnw->size(), 2)
+
+	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs2_nnw->getSystem().getProtein(0)->countAtoms())
+
+	// different clusters
+	System sys2_nnw(cs2_nnw->getSystem());
+	(*cs2_nnw)[1].applySnapShot(sys2_nnw);
+	System sys1_nnw(cs1_nnw->getSystem());
+	(*cs1_nnw)[2].applySnapShot(sys1_nnw);
+
+	StructureMapper mapper_nnw(sys2_nnw, sys1_nnw);
+  mapper_nnw.calculateDefaultBijection();
+	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
+	//TODO: not really what we want to do: Ward distance vs RMSD
+  TEST_EQUAL(mapper_nnw.calculateRMSD() > pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+
+	// same cluster
+	(*cs1_nnw)[0].applySnapShot(sys2_nnw);
+	// should be smaller than PoseClustering::Option::DISTANCE_THRESHOLD
+	PRECISION(1e-1)
+  TEST_REAL_EQUAL(mapper_nnw.calculateRMSD(), 2.996)
+	PRECISION(1e-5)
+	//TODO: not really what we want to do: Ward distance vs RMSD
+  TEST_EQUAL(mapper_nnw.calculateRMSD() < pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 RESULT
 
 
@@ -691,8 +868,8 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL for SNAPSHOT_RMSD)
 
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::C_ALPHA);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::C_ALPHA)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 25);
-	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), 25.00)
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
+	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), 25.00)
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
@@ -703,7 +880,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL for SNAPSHOT_RMSD)
 	// Option::RMSD_LEVEL_OF_DETAIL::BACKBONE;
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::BACKBONE)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 25);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
@@ -712,7 +889,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL for SNAPSHOT_RMSD)
 	// Option::RMSD_LEVEL_OF_DETAIL::ALL_ATOMS
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::ALL_ATOMS)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 25);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
@@ -742,13 +919,13 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL for RIGID_RMSD)
 	pc.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test2.txt));
 
 	// Option::RMSD_LEVEL_OF_DETAIL::C_ALPHA	
-	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD); //TRIVIAL_COMPLETE_LINKAGE);
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::C_ALPHA);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::C_ALPHA)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 25);
-	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::RMSD_THRESHOLD), 25.00)
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
+	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), 25.00)
 
 	pc.compute();
 
@@ -758,7 +935,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL for RIGID_RMSD)
 	// Option::RMSD_LEVEL_OF_DETAIL::BACKBONE;
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::BACKBONE)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 25);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
 	pc.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test2.txt));
 
 	pc.compute();
@@ -767,7 +944,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL for RIGID_RMSD)
 	// Option::RMSD_LEVEL_OF_DETAIL::ALL_ATOMS
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
 	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL), PoseClustering::ALL_ATOMS)
-	pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 25);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
 	pc.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test2.txt));
 
 	pc.compute();
@@ -781,9 +958,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	pdb.read(sys);
 
 	ConformationSet cs2;
-	cs2.setup(sys);
-	cs2.add(0, sys);
-
+	// the properties have to be defined in the base system 	
 	Selector sel;
 	sys.deselect();
 	Expression e("residue(ALA)");
@@ -794,6 +969,16 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	for ( ; it != selected_atoms.end(); ++it)
 	{
 		(*it)->setProperty("ATOMBIJECTION_RMSD_SELECTION", true);
+	}
+
+	cs2.setup(sys);
+	cs2.add(0, sys);
+
+	sys.apply(sel);
+	selected_atoms = sel.getSelectedAtoms();
+	it = selected_atoms.begin();
+	for ( ; it != selected_atoms.end(); ++it)
+	{
 		(*it)->setPosition((*it)->getPosition() + Vector3(100, 0, 0));
 	}
 	cs2.add(0, sys);
@@ -801,14 +986,15 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	TEST_EQUAL(sel.getNumberOfSelectedAtoms(), 31)
 
 	PoseClustering pc;
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,  PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
 	pc.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::PROPERTY_BASED_ATOM_BIJECTION);
-	pc.options.set(PoseClustering::Option::RMSD_THRESHOLD, 25);
-	//TODO: apply trivalClink instead of Clink
+	pc.options.set(PoseClustering::Option::DISTANCE_THRESHOLD, 99);//25);
 	pc.setConformationSet(&cs2);
+	TEST_EQUAL(pc.getNumberOfPoses(), 2)
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
 
-	pc.options.set(PoseClustering::Option::RMSD_THRESHOLD, 30);
+	pc.options.set(PoseClustering::Option::DISTANCE_THRESHOLD, 101);//30);
 	pc.compute();
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
 
@@ -816,35 +1002,71 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	pc_rigid.setBaseSystemAndTransformations(sys, BALL_TEST_DATA_PATH(PoseClustering_test2.txt));
 	pc_rigid.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 	pc_rigid.options.set(PoseClustering::Option::CLUSTER_METHOD,   PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-	pc_rigid.options.set(PoseClustering::Option::RMSD_THRESHOLD, 25);
+	pc_rigid.options.set(PoseClustering::Option::DISTANCE_THRESHOLD, 25);
+
 	pc_rigid.compute();
 	TEST_EQUAL(pc_rigid.getNumberOfClusters(), 2)
 
-	pc_rigid.options.set(PoseClustering::Option::RMSD_THRESHOLD, 30);
+	pc_rigid.options.set(PoseClustering::Option::DISTANCE_THRESHOLD, 30);
 	pc_rigid.compute();
 	TEST_EQUAL(pc_rigid.getNumberOfClusters(), 1)
 
-	//TODO
 	//               - NEAREST_NEIGHBOR_CHAIN_WARD	
 	PoseClustering pc_nncw;
 	pc_nncw.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 	pc_nncw.options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::PROPERTY_BASED_ATOM_BIJECTION);
-	pc_nncw.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 10.00);
-	pc_nncw.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+	pc_nncw.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc_nncw.setConformationSet(&cs2);
 
 	pc_nncw.compute();
-	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 3)
+	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 0)
 
-	pc_nncw.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, 4.00);
-	pc_nncw.compute();
-	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 5)
+	pc_nncw.extractClustersForThreshold(70);
+	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 2)
 
-	pc_nncw.printClusterRMSDs();
+	pc_nncw.extractClustersForThreshold(71);
+	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 1)
+
 RESULT
 
 
+CHECK(extractNBestClusters(Size n))
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs;
+	cs.setup(sys);
+	cs.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering_test2.dcd));
+	cs.resetScoring();
 
+	PoseClustering pc;
+	pc.setConformationSet(&cs);
+	pc.options.set(PoseClustering::Option::CLUSTER_METHOD,   PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 5.00);
+	pc.compute();
+
+	TEST_EQUAL(pc.getNumberOfClusters(), 4)
+
+	std::vector<std::set<Index> > result = pc.extractNBestClusters(4);
+	TEST_EQUAL(result.size(), 4)
+	TEST_EQUAL(pc.getNumberOfClusters(), 4)
+
+	// TODO: find out how to catch an error
+//	result = pc.extractNBestClusters(pc.getNumberOfPoses()+1);
+//	result = pc.extractNBestClusters(-1);
+	result = pc.extractNBestClusters(0);
+	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+
+	result = pc.extractNBestClusters(pc.getNumberOfPoses());
+	TEST_EQUAL(result.size(), 8)
+	TEST_EQUAL(pc.getNumberOfClusters(), 8)
+
+	result = pc.extractNBestClusters(1);
+	TEST_EQUAL(result.size(), 1)
+	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+
+RESULT
 
 
 /*

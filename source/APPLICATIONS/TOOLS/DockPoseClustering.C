@@ -143,7 +143,7 @@ int main (int argc, char **argv)
 	if (parpars.has("rmsd_cutoff"))
 	{
 		float rmsd = parpars.get("rmsd_cutoff").toInt();
-		pc.options.setReal(PoseClustering::Option::RMSD_THRESHOLD, rmsd);
+		pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, rmsd);
 	}
 
 	if (parpars.has("rmsd_scope"))

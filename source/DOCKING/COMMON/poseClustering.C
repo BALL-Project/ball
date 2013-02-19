@@ -13,6 +13,7 @@
 //#include <BALL/MATHS/angle.h>
 
 #include <stack>
+#include <queue>
 
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/graphviz.hpp>
@@ -28,8 +29,8 @@ namespace BALL
 	const String PoseClustering::Option::RMSD_LEVEL_OF_DETAIL  = "rmsd_level_of_detail";
 	const Index  PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::C_ALPHA;
 
-	const String PoseClustering::Option::RMSD_THRESHOLD = "pose_clustering_rmsd_threshold";
-  const float PoseClustering::Default::RMSD_THRESHOLD = 3;
+	const String PoseClustering::Option::DISTANCE_THRESHOLD = "pose_clustering_rmsd_threshold";
+  const float PoseClustering::Default::DISTANCE_THRESHOLD = 3;
 
 	const String PoseClustering::Option::RMSD_TYPE = "pose_clustering_rmsd_type";
 	const Index PoseClustering::Default::RMSD_TYPE = PoseClustering::SNAPSHOT_RMSD;
@@ -51,7 +52,7 @@ namespace BALL
 
 	PoseClustering::PoseClustering(ConformationSet* poses, float rmsd)
 	{
-		options[Option::RMSD_THRESHOLD] = rmsd;
+		options[Option::DISTANCE_THRESHOLD] = rmsd;
 		current_set_ = poses;
 		has_rigid_transformations_ = false;
 		delete_conformation_set_   = false;
@@ -115,6 +116,94 @@ namespace BALL
 	}
 
 
+	std::vector<std::set<Index> > PoseClustering::extractClustersForThreshold(float threshold)
+	{
+//	cout << " extract clusters for dist = " << threshold << endl;
+		clusters_.clear();
+
+		// for debug purposes, we might have to reset our cluster id
+#ifdef POSECLUSTERING_DEBUG
+		BGL_FORALL_VERTICES(current_vertex, cluster_tree_, ClusterTree)
+		{
+			cluster_tree_[current_vertex].current_cluster_id = -1;
+		}
+#endif
+
+		std::stack<ClusterTreeNode> stack;
+		ClusterTreeNode current_node;
+
+		if (cluster_tree_[cluster_tree_root_].merged_at < threshold)
+		{
+			clusters_.push_back(collectClusterBelow_(cluster_tree_root_));
+#ifdef POSECLUSTERING_DEBUG 
+			cluster_tree_[cluster_tree_root_].current_cluster_id = clusters_.size()-1;
+#endif
+		}
+		else
+		{
+			stack.push(cluster_tree_root_);
+
+			while (!stack.empty())
+			{
+				current_node = stack.top();
+			  stack.pop();
+
+				BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
+				{
+					if (cluster_tree_[child].merged_at < threshold)
+					{
+						clusters_.push_back(collectClusterBelow_(child));
+#ifdef POSECLUSTERING_DEBUG 
+						cluster_tree_[child].current_cluster_id = clusters_.size()-1;
+#endif
+					}
+					else
+					{
+						stack.push(child);
+					}
+				}
+			}
+		}
+		return clusters_;
+	}
+
+
+	std::vector<std::set<Index> > PoseClustering::extractNBestClusters(Size n)
+	{
+//cout << "extractNClusters  n=" << n << "/" << getNumberOfPoses() << endl;
+		if (n > (Index)getNumberOfPoses())
+			throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		clusters_.clear();
+
+		ClusterTreeNodeComparator comp(cluster_tree_);
+		std::priority_queue< ClusterTreeNode, std::vector<ClusterTreeNode>, ClusterTreeNodeComparator >  prio(comp);
+		ClusterTreeNode current_node;
+
+		prio.push(cluster_tree_root_);
+
+		while (   ((prio.size() + clusters_.size()) < n )
+				   && (!prio.empty()))
+		{
+			current_node = prio.top();
+			prio.pop();
+
+			BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
+			{
+				prio.push(child);
+			}
+		}
+		// get the clusters
+		while (!prio.empty())
+		{
+			clusters_.push_back(collectClusterBelow_(prio.top()));
+			prio.pop();
+		}
+
+		return clusters_;
+	}
+
+
 	void PoseClustering::setConformationSet(ConformationSet* new_set)
 	{
 		if (delete_conformation_set_)
@@ -148,10 +237,11 @@ namespace BALL
 
 	bool PoseClustering::compute()
 	{
-		int rmsd_type = options.getInteger(Option::RMSD_TYPE);
+		Index rmsd_type = options.getInteger(Option::RMSD_TYPE);
+//cout << " compute() t=" <<  true << "/f=" << false << " r="  << has_rigid_transformations_ << " t=" << rmsd_type << endl;
 
+		// TODO: why is that to be excluded??
 		if (has_rigid_transformations_ && (rmsd_type != PoseClustering::RIGID_RMSD))
-			//!current_set_ && (rmsd_type != PoseClustering::RIGID_RMSD))
 		{
 			Log.info() << "No valid ConformationSet given." << endl;
 			return false;
@@ -176,7 +266,7 @@ namespace BALL
 		// option RMSD_LEVEL_OF_DETAIL
 		precomputeAtomBijection_();
 
-		// do we have a pre clustering scenario 
+		// do we have a pre clustering scenario? 
 		if (options.getBool(Option::USE_CENTER_OF_MASS_PRECLINK))
 		{
 			// cluster the centers of gravity
@@ -184,7 +274,7 @@ namespace BALL
 		}
 
 		// decide which algorithm to apply
-		if (options.getInteger(Option::CLUSTER_METHOD) ==  PoseClustering::TRIVIAL_COMPLETE_LINKAGE)
+		if (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::TRIVIAL_COMPLETE_LINKAGE)
 		{
 			return trivialCompute_();
 		}
@@ -193,7 +283,7 @@ namespace BALL
 		{
 			return linearSpaceCompute_(options.getInteger(Option::RMSD_TYPE));
 		}
-		else if (options.getInteger(Option::CLUSTER_METHOD) == NEAREST_NEIGHBOR_CHAIN_WARD)
+		else if (options.getInteger(Option::CLUSTER_METHOD) == PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD)
 		{
 			return nearestNeighborChainCompute_();
 		}
@@ -317,8 +407,8 @@ namespace BALL
 		}
 
 		// iterate as long as the maximal cluster distance 
-		// gets lower than the RMSD_THRESHOLD
-		float rmsd_cutoff = options.getReal(Option::RMSD_THRESHOLD);
+		// gets lower than the DISTANCE_THRESHOLD
+		float rmsd_cutoff = options.getReal(Option::DISTANCE_THRESHOLD);
 		bool hit = (clusters_.size() > 1);
 		while ((min_max_cluster_dist < rmsd_cutoff) && hit)
 		{
@@ -387,7 +477,7 @@ namespace BALL
 								// store
 								min_cluster_a_idx = i;
 								min_cluster_b_idx = j;
-//	cout << "new min " << min_max_cluster_dist << " btw " << i << " " << j << endl;
+	//cout << "new min " << min_max_cluster_dist << " btw " << i << " " << j << endl;
 							}
 						}
 					}
@@ -416,7 +506,7 @@ namespace BALL
 
 	bool PoseClustering::linearSpaceCompute_(Index rmsd_type)
 	{
-		float threshold = options.getReal(Option::RMSD_THRESHOLD);
+		float threshold = options.getReal(Option::DISTANCE_THRESHOLD);
 
 		if (rmsd_type == PoseClustering::CENTER_OF_MASS_DISTANCE)
 		{
@@ -624,19 +714,17 @@ namespace BALL
 
 	bool PoseClustering::nearestNeighborChainCompute_()
 	{
-		// we might need the number of atoms to which our RMSDs apply later on
+		// we might need the number of atoms to which our ward distances apply later on
 		// this number depends on the choice of RMSD_LEVEL_OF_DETAIL
 		Index rmsd_level_of_detail = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
-
 		number_of_selected_atoms_ = 0;
-		for (AtomConstIterator at_it = current_set_->getSystem().beginAtom(); +at_it; ++at_it)
+		for (AtomConstIterator at_it = getSystem().beginAtom(); +at_it; ++at_it)
 		{
 			if (!isExcludedByLevelOfDetail_(&*at_it, rmsd_level_of_detail))
 			{
 				++number_of_selected_atoms_;
 			}
 		}
-
 		// clean up old clusters
 		clusters_.clear();
 
@@ -662,11 +750,14 @@ namespace BALL
 			cluster_tree_[v].poses.insert((Index) i);
 			cluster_tree_[v].size = 1;
 			cluster_tree_[v].merged_at = 0.;
+#ifdef POSECLUSTERING_DEBUG 
+			cluster_tree_[v].current_cluster_id = -1;
+#endif
 
 			active_clusters.insert(v);
 		}
 
-cout << active_clusters.size() << " " << cluster_stack.size() << std::endl;
+//cout << active_clusters.size() << " " << cluster_stack.size() << std::endl;
 
 		initWardDistance_(rmsd_type);
 
@@ -675,7 +766,7 @@ cout << active_clusters.size() << " " << cluster_stack.size() << std::endl;
 		// while there is more than one final cluster
 		while (active_clusters.size() > 1)
 		{
-cout << " Stack size: " << cluster_stack.size() <<  endl;
+//cout << "active clusters: " << active_clusters.size() << endl;
 			min_cluster_dist = std::numeric_limits<float>::max();
 			nearest_cluster = 0;
 
@@ -705,7 +796,6 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 					{
 						nearest_cluster = *clust_it;
 						min_cluster_dist = rmsd;
-	cout << "    ++++ new min:" << rmsd << endl;
 					}
 				}
 			}
@@ -730,6 +820,10 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 				// add a new parent node to the tree
 				ClusterTreeNode new_parent = boost::add_vertex(cluster_tree_);
 
+				// make this parent the new root of the cluster tree
+				// (the final root will be the last parent we add)
+				cluster_tree_root_ = new_parent;
+
 				// add an edge from the parent to both children
 				boost::add_edge(new_parent, current_cluster, cluster_tree_);
 				boost::add_edge(new_parent, nearest_cluster, cluster_tree_);
@@ -744,6 +838,11 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 
 				cluster_tree_[new_parent].size =    cluster_tree_[current_cluster].size
 					                                + cluster_tree_[nearest_cluster].size;
+#ifdef POSECLUSTERING_DEBUG 
+			 cluster_tree_[new_parent].current_cluster_id = -1;
+#endif
+
+//cout << " merged at: " << cluster_tree_[new_parent].merged_at << endl;
 
 				// TODO: here, we could decide if we want to merge the sets from our
 				//       children and explictly store them => save runtime, pay memory
@@ -777,20 +876,11 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 			}
 		}
 
-		// copy final clusters into the general cluster data structure
-		// collect all final clusters
-		// TODO!!!
-		/*
-		std::vector<std::set<Index> >   temp_clusters;
-
-		for (Size i = 0; i < clusters_.size(); i++)
-		{
-			if (clusters_[i].size() >0)
-				temp_clusters.push_back(clusters_[i]);
-		}
-
-		swap(clusters_, temp_clusters);
-		*/
+		// we automatically extract clusters if a reasonable threshold is provided.
+		// distance threshold equal zero prohibits that to save runtime 
+		float threshold = options.getReal(Option::DISTANCE_THRESHOLD);
+		if (BALL_REAL_GREATER_OR_EQUAL(threshold, 0.0, 1e-5))
+			extractClustersForThreshold(threshold);
 
 		return true;
 	}
@@ -948,14 +1038,13 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 
 		switch (rmsd_type)
 		{
-			// TODO: check if the formulas are correct
 			case RIGID_RMSD:
 			{
 				RigidTransformation& transform_i = boost::get<RigidTransformation>(cluster_tree_[i].center);
 				RigidTransformation& transform_j = boost::get<RigidTransformation>(cluster_tree_[j].center);
 
 				result =  pow(getRigidRMSD(transform_i.translation - transform_j.translation,
-																	 transform_j.rotation    - transform_j.rotation,
+																	 transform_i.rotation    - transform_j.rotation,
 																	 covariance_matrix_), 2) / ( 1./cluster_size_a  + 1./cluster_size_b)
 							   * number_of_selected_atoms_;
 				break;
@@ -980,6 +1069,38 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 			}
 			default:
 				Log.info() << "getWardDistance_(): unknown rmsd score type " << __FILE__ <<  " " << __LINE__ << endl;
+		}
+
+		return result;
+	}
+
+
+	std::set<Index> PoseClustering::collectClusterBelow_(ClusterTreeNode const& v)
+	{
+		// collect the respective leaves
+		std::set<Index> result;
+		std::stack<ClusterTreeNode> stack;
+		stack.push(v);
+
+		ClusterTreeNode current_node;
+
+		while (!stack.empty())
+		{
+			current_node = stack.top();
+			stack.pop();
+
+			BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
+			{
+				if (out_degree(child, cluster_tree_) == 0) // we found a leaf
+				{
+					// currently, each leaf represents one single pose
+					result.insert(*(cluster_tree_[child].poses.begin()));
+				}
+				else // something inbetween
+				{
+					stack.push(child);
+				}
+			}
 		}
 
 		return result;
@@ -1043,57 +1164,68 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 
 	bool PoseClustering::centerOfGravityPreCluster_()
 	{
-//cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLUSTER_METHOD) << " " << CLINK_DEFAYS << endl;
+//cout << " centerOfGravityPreCluster_() alg = " << options.getInteger(Option::CLUSTER_METHOD)
+//	   << " , r=" << has_rigid_transformations_ << " t=" << options.getInteger(Option::RMSD_TYPE) << endl;
 		// store the old options
 		Options old_options = options;
 
-		// run a pre-clustering
-		// with basically the same options
+		// run a pre-clustering with basically the same options
 		// but center of mass distance as rmsd
 		options.set(Option::RMSD_TYPE, CENTER_OF_MASS_DISTANCE);
 		// and no additional pre clustering
 		options.set(Option::USE_CENTER_OF_MASS_PRECLINK, false);
-		compute();
 
-		// store the new clusters
-		std::vector<std::set<Index> >   temp_clusters;
+		compute();
 
 		// reset the options
 		options = old_options;
 
+		// for the inner clustering, we use a second clusterer
 		PoseClustering inner_pc;
-		Size num_clusters = 0;
+
+		Size num_curr_clusters = 0;
+
+		// store the inner clusters temporarily
+		std::vector< std::set<Index> > temp_clusters;
+
 		// now iterate over all clusters 
 		for (Size i=0; i<getNumberOfClusters(); i++)
 		{
+//cout << " Inner compute no " << i << " of " <<  getNumberOfClusters() << " #members:" << getNumberOfClusters() << endl;
 			if (getClusterSize(i)>1)
 			{
-				// temporarily convert the set to a vector for quicker access
+				// temporarily convert the poses to be re-clustered to index set 0 ... getClusterSize(i)
 				std::vector<Index> current_cluster_vector(getClusterSize(i));
-				Position current_cluster=0;
-				for (std::set<Index>::iterator clust_it = clusters_[i].begin(); clust_it != clusters_[i].end(); ++clust_it, current_cluster++)
+				Position           temp_idx = 0;
+				for (std::set<Index>::iterator clust_it = clusters_[i].begin();
+						 clust_it != clusters_[i].end();
+						 ++clust_it, temp_idx++)
 				{
-					current_cluster_vector[current_cluster] = *clust_it;
+					current_cluster_vector[temp_idx] = *clust_it;
 				}
-
-				boost::shared_ptr<ConformationSet> current_conformation_set = getClusterConformationSet(i);
 
 				// run a clustering separately on each pre cluster as described by the options
 				inner_pc.clear_();
 
-				// set the original Option::RMSD_TYPE
+				// set the original options 
 				inner_pc.options = options;
+				// but with pre clink
+				inner_pc.options.setBool(Option::USE_CENTER_OF_MASS_PRECLINK, false);
 
-				inner_pc.options.set(Option::USE_CENTER_OF_MASS_PRECLINK, false);
-
+				// TODO: this is not run time efficient!!!
+				// we use the Snapshot interface to pass poses from pre to inner cluster run
+				inner_pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+				boost::shared_ptr<ConformationSet> current_conformation_set = getClusterConformationSet(i);
 				inner_pc.setConformationSet(&*current_conformation_set);
+
 				inner_pc.compute();
 
-				// add what we have found
-				num_clusters = inner_pc.getNumberOfClusters();
-				for (Size j=0; j<num_clusters; ++j)
+				// add each cluster of the current inner run
+				num_curr_clusters = inner_pc.getNumberOfClusters();
+//cout << "                split into " << num_curr_clusters << " inner clusters " << endl;
+				for (Size j=0; j<num_curr_clusters; ++j)
 				{
-					// convert the indices
+					// convert the indices back to original pose indices
 					std::set<Index> temp_indices = inner_pc.getCluster(j);
 					std::set<Index> converted_indices;
 
@@ -1102,22 +1234,24 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 						converted_indices.insert(current_cluster_vector[*ind_it]);
 					}
 
+					// add to the temp set 
 					temp_clusters.push_back(converted_indices);
-					//cout << "    " << i << " " << j << ": " << inner_pc.getClusterSize(j) << std::endl;
 				}
 //cout << "++++++++++++++++++++++++++++++***" << endl;
 //				inner_pc.printClusterRMSDs();
-				//cout << " cluster " << i << "( " << getClusterSize(i) << " ) was split into " << num_clusters << " clusters." << endl;
+//cout << " cluster " << i << "( " << getClusterSize(i) << " ) was split into " << num_curr_clusters 
+//      << " clusters." << endl;
 //cout << "***++++++++++++++++++++++++++++++***" << endl;
 			}
 			else
 			{
 				temp_clusters.push_back(getCluster(i));
 			}
-			//std::set<Index>& current_cluster = getCluster(i);
 		}
+
 		// switch the clusters
 		clusters_ = temp_clusters;
+
 		//printClusters();
 
 		return true;
@@ -1145,8 +1279,10 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 
 	void PoseClustering::printClusterRMSDs()
 	{
-		Index rmsd_type = options.getInteger(PoseClustering::Option::RMSD_TYPE);
-
+		Index rmsd_type   = options.getInteger(Option::RMSD_TYPE);
+#ifdef POSECLUSTERING_DEBUG 
+		Index cluster_alg = options.getInteger(Option::CLUSTER_METHOD);
+#endif
 		cout << endl <<  "For method " << options.getInteger(PoseClustering::Option::CLUSTER_METHOD)
 		     << " and RMSDtype " << rmsd_type << " we get: " << endl;
 
@@ -1154,6 +1290,20 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 		{
 			cout << "=======================================" << endl;
 			cout << "    Cluster " << i << endl;
+
+#ifdef POSECLUSTERING_DEBUG 
+			if (cluster_alg == NEAREST_NEIGHBOR_CHAIN_WARD)
+			{
+				// find the cluster node with this id
+				BGL_FORALL_VERTICES(current_node, cluster_tree_, ClusterTree)
+				{
+					if (cluster_tree_[current_node].current_cluster_id == i)
+					{
+						cout << "Merged at Ward distance: " << cluster_tree_[current_node].merged_at << std::endl;
+					}
+				}
+			}
+#endif
 
 			std::set<Index>& current_cluster = clusters_[i];
 
@@ -1190,7 +1340,7 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 		} //next cluster
 	}
 
-	void PoseClustering::exportClusterTree(std::ostream& out)
+	void PoseClustering::exportWardClusterTree(std::ostream& out)
 	{
 		boost::write_graphviz(out, cluster_tree_, ClusterTreeWriter_(&cluster_tree_));
 	}
@@ -1201,7 +1351,12 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 		if ((*cluster_tree_)[v].poses.size() > 0)
 			out << *((*cluster_tree_)[v].poses.begin());
 		else
+		{
 			out << (*cluster_tree_)[v].merged_at;
+#ifdef POSECLUSTERING_DEBUG
+		  out	<< "\t" << (*cluster_tree_)[v].current_cluster_id;
+#endif
+		}
 		out << "\"]";
 	}
 
@@ -1314,8 +1469,8 @@ cout << " Stack size: " << cluster_stack.size() <<  endl;
 		options.setDefault(PoseClustering::Option::CLUSTER_METHOD,
 		                   PoseClustering::Default::CLUSTER_METHOD);
 
-		options.setDefaultReal(PoseClustering::Option::RMSD_THRESHOLD,
-		                       PoseClustering::Default::RMSD_THRESHOLD);
+		options.setDefaultReal(PoseClustering::Option::DISTANCE_THRESHOLD,
+		                       PoseClustering::Default::DISTANCE_THRESHOLD);
 
 		options.setDefault(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL,
 		                   PoseClustering::Default::RMSD_LEVEL_OF_DETAIL);
