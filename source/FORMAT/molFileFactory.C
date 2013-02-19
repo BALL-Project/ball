@@ -77,35 +77,36 @@ namespace BALL
 		}
 		
 		GenericMolFile* gmf = 0;
-		if (filename.hasSuffix(".ac"))
+		if (filename.hasSuffix(".ac") || filename.hasSuffix(".AC"))
 		{
 			gmf = new AntechamberFile(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".pdb") || filename.hasSuffix(".ent") || filename.hasSuffix(".brk"))
+		else if(filename.hasSuffix(".pdb") || filename.hasSuffix(".ent") || filename.hasSuffix(".brk") ||
+			filename.hasSuffix(".PDB") || filename.hasSuffix(".ENT") || filename.hasSuffix(".BRK"))
 		{
 			gmf = new PDBFile(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".hin"))
+		else if(filename.hasSuffix(".hin") || filename.hasSuffix(".HIN"))
 		{
 			gmf = new HINFile(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".mol"))
+		else if(filename.hasSuffix(".mol") || filename.hasSuffix(".MOL"))
 		{
 			gmf = new MOLFile(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".sdf"))
+		else if(filename.hasSuffix(".sdf") || filename.hasSuffix(".SDF"))
 		{
 			gmf = new SDFile(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".mol2"))
+		else if(filename.hasSuffix(".mol2") || filename.hasSuffix(".MOL2"))
 		{
 			gmf = new MOL2File(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".xyz"))
+		else if(filename.hasSuffix(".xyz") || filename.hasSuffix(".XYZ"))
 		{
 			gmf = new XYZFile(filename, open_mode);
 		}
-		else if(filename.hasSuffix(".drf"))
+		else if(filename.hasSuffix(".drf") || filename.hasSuffix(".DRF"))
 		{
 			gmf = new DockResultFile(filename, open_mode);
 		}
@@ -333,6 +334,9 @@ namespace BALL
 		{
 			Log.error() << std::endl << "[Error:] Specified input file has unknown extension and its format could not be detected automatically!" << std::endl << std::endl;
 		}
+		
+		input.close();
+		
 		return NULL;
 	}
 }
