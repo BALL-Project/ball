@@ -22,12 +22,10 @@ namespace BALL
 
 	GenericMolFile* MolFileFactory::open(const String& name, File::OpenMode open_mode)
 	{
-		String tmp = name;
 		bool compression = false;
 		String filename = name;
-		String zipped_filename = "";
 
-		if (tmp.hasSuffix(".gz"))
+		if (name.hasSuffix(".gz"))
 		{
 			compression = true;
 		}
@@ -53,13 +51,12 @@ namespace BALL
 		if (compression)
 		{
 			compression = true;
-			zipped_filename = tmp;
 			String unzipped_filename;
-			if (tmp.hasSuffix(".gz"))
+			if (name.hasSuffix(".gz"))
 			{
-				tmp = tmp.before(".gz");
+				String tmp = name.before(".gz");
 				String ext = tmp.substr(tmp.find_last_of("."));
-				File::createTemporaryFilename(unzipped_filename,ext);
+				File::createTemporaryFilename(unzipped_filename, ext);
 			}
 			else // unknown extension
 			{
@@ -68,7 +65,7 @@ namespace BALL
 
 			if (open_mode == std::ios::in)
 			{
-				std::ifstream zipped_file(zipped_filename.c_str(), std::ios_base::in | std::ios_base::binary);
+				std::ifstream zipped_file(name.c_str(), std::ios_base::in | std::ios_base::binary);
 				boost::iostreams::filtering_istream in;
 				in.push(boost::iostreams::gzip_decompressor());
 				in.push(zipped_file);
@@ -77,44 +74,38 @@ namespace BALL
 			}
 
 			filename = unzipped_filename;
-			tmp = unzipped_filename.right(5);
 		}
-		else
-		{
-			tmp = filename.right(5);
-		}
-		tmp.toLower(0, 5);
-
+		
 		GenericMolFile* gmf = 0;
-		if (tmp.hasSuffix(".ac"))
+		if (filename.hasSuffix(".ac"))
 		{
 			gmf = new AntechamberFile(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".pdb") || tmp.hasSuffix(".ent") || tmp.hasSuffix(".brk"))
+		else if(filename.hasSuffix(".pdb") || filename.hasSuffix(".ent") || filename.hasSuffix(".brk"))
 		{
 			gmf = new PDBFile(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".hin"))
+		else if(filename.hasSuffix(".hin"))
 		{
 			gmf = new HINFile(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".mol"))
+		else if(filename.hasSuffix(".mol"))
 		{
 			gmf = new MOLFile(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".sdf"))
+		else if(filename.hasSuffix(".sdf"))
 		{
 			gmf = new SDFile(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".mol2"))
+		else if(filename.hasSuffix(".mol2"))
 		{
 			gmf = new MOL2File(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".xyz"))
+		else if(filename.hasSuffix(".xyz"))
 		{
 			gmf = new XYZFile(filename, open_mode);
 		}
-		else if(tmp.hasSuffix(".drf"))
+		else if(filename.hasSuffix(".drf"))
 		{
 			gmf = new DockResultFile(filename, open_mode);
 		}
@@ -143,7 +134,7 @@ namespace BALL
 			else
 			{
 				// Make sure that temporary output-file is compressed and then deleted when GenericMolFile is closed.
-				gmf->enableOutputCompression(zipped_filename);
+				gmf->enableOutputCompression(name);
 			}
 		}
 		return gmf;
