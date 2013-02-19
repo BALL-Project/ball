@@ -115,7 +115,7 @@ namespace BALL
 			{
 				gmf = detectFormat(filename);
 				// Make sure that temporary input-file is deleted when GenericMolFile is closed.
-				if (compression)
+				if (gmf && compression)
 				{
 					gmf->defineInputAsTemporary();
 				}
@@ -137,30 +137,8 @@ namespace BALL
 				gmf->enableOutputCompression(name);
 			}
 		}
-		return gmf;
-
-		/*
-		String tmp = name.right(5);
-		tmp.toLower(0, 5);
 		
-		if (tmp.hasSuffix(".ac")) {
-			return new AntechamberFile(name, open_mode);
-		} else if(tmp.hasSuffix(".pdb") || tmp.hasSuffix(".ent") || tmp.hasSuffix(".brk")) {
-			return new PDBFile(name, open_mode);
-		} else if(tmp.hasSuffix(".hin")) {
-			return new HINFile(name, open_mode);
-		} else if(tmp.hasSuffix(".mol")) {
-			return new MOLFile(name, open_mode);
-		} else if(tmp.hasSuffix(".sdf")) {
-			return new SDFile(name, open_mode);
-		} else if(tmp.hasSuffix(".mol2")) {
-			return new MOL2File(name, open_mode);
-		} else if(tmp.hasSuffix(".xyz")) {
-			return new XYZFile(name, open_mode);
-		} else {
-			return NULL;
-		}
-		*/
+		return gmf;
 	}
 
 	bool MolFileFactory::isFileExtensionSupported(String filename)
@@ -327,18 +305,22 @@ namespace BALL
 			}
 			if (line.hasPrefix("@<TRIPOS>MOLECULE"))
 			{
+				input.close();
 				return new MOL2File(name, std::ios::in);
 			}
 			else if (line.hasPrefix("$$$$") || line.hasPrefix("M  END"))
 			{
+				input.close();
 				return new SDFile(name, std::ios::in);
 			}
 			else if (line.hasPrefix("<dockingfile>"))
 			{
+				input.close();
 				return new DockResultFile(name, std::ios::in);
 			}
 			else if (line.hasPrefix("HEADER") || line.hasPrefix("ATOM") || line.hasPrefix("USER"))
 			{
+				input.close();
 				return new PDBFile(name, std::ios::in);
 			}
 		}
