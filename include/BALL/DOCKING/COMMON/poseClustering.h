@@ -129,10 +129,6 @@ namespace BALL
 				*/
 				static const String RMSD_TYPE;
 
-				/** flag indicating the use of a geometric center based pre-clink run
-				 */
-				static const String USE_CENTER_OF_MASS_PRECLINK;
-
 				/** flag indicating the computation of a full cluster dendogram 
 				 */
 				//static const String FULL_CLUSTER_DENDOGRAM;
@@ -185,6 +181,27 @@ namespace BALL
 
 					Eigen::Vector3f translation;
 					Eigen::Matrix3f rotation;
+			};
+
+			/** Data type for the poses.
+			 *  A pose can either be a rigid transformation (translation + rotation), or
+			 *  a SnapShot.
+			 */
+			class BALL_EXPORT PosePointer
+			{
+				public:
+					PosePointer(RigidTransformation const* new_trafo, SnapShot const* new_snap = 0)
+						: trafo(new_trafo),
+						  snap(new_snap)
+					{ }
+
+					PosePointer(SnapShot const* new_snap)
+						: trafo(0),
+							snap(new_snap)
+					{ }
+
+					RigidTransformation const* trafo;
+					SnapShot            const* snap;
 			};
 
 			class BALL_EXPORT ClusterProperties
@@ -261,6 +278,12 @@ namespace BALL
 			/// sets the poses to be clustered, the conformation set's reference system will the base system
 			void setConformationSet(ConformationSet* new_set);
 
+			/** Set a vector of PosePointers to be clustered
+			 *  Poses (RigidTransformations or SnapShots) can live outside of this class and will not be
+			 *  destroyed.
+			 */
+		  void setBaseSystemAndPoses(System const& base_system, std::vector<PosePointer> const& poses);
+
 			/// reads the poses given as transformations from a file and update the covariance matrix 	
 			/// Note: the given system will be taken as reference, e.g. all transformations 
 			//       will be applied upon the current conformation
@@ -279,7 +302,7 @@ namespace BALL
 			System& getSystem();
 
 			/// returns the number of poses
-			Size getNumberOfPoses() const {return (has_rigid_transformations_ ? translations_.size(): current_set_->size());}
+			Size getNumberOfPoses() const {return poses_.size();}
 
 			/// returns the number of clusters found
 			Size getNumberOfClusters() const {return clusters_.size();}
@@ -303,6 +326,21 @@ namespace BALL
 
 			/// returns a ConformationSet containing one structure per cluster
 			boost::shared_ptr<ConformationSet> getReducedConformationSet();
+
+			/** Refine a given clustering.
+			 *  This function can be used to refine a precomputed clustering further. An important
+			 *  use case would be to pre-cluster using an efficient rmsd implementation (e.g., center
+			 *  of mass or rigid rmsd), and then refine the resulting clusters with the general (i.e.,
+			 *  snapshot based) rmsd.
+			 *
+			 *  NOTE: This function requires that clusters have already been computed. In the case of
+			 *        a full hierarchical clustering, extractClustersForThreshold or extractNBestClusters
+			 *        must have been called previously.
+			 *
+			 *  @param refined_options The parameters for the refinment step.
+			 *
+			 */
+			bool refineClustering(Options const& refined_options);
 
 			//@}
 
@@ -407,7 +445,7 @@ namespace BALL
 			bool trivialCompute_();
 
 			// space efficient (SLINK or CLINK) clustering
-			bool linearSpaceCompute_(Index rmsd_type);
+			bool linearSpaceCompute_();
 
 			//	implementation of a single linkage clustering as described in 
 			//       R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 
@@ -439,9 +477,6 @@ namespace BALL
 			// precompute an atom bijection for faster access
 			void precomputeAtomBijection_();
 
-			// run a pre clink on the centers of gravity 
-			bool centerOfGravityPreCluster_();
-
 			// check the given atom wrt choice of option RMSD_LEVEL_OF_DETAIL
 			bool static isExcludedByLevelOfDetail_(Atom const* atom, Index rmsd_level_of_detail);
 
@@ -456,6 +491,9 @@ namespace BALL
 
 			// compute the RMSD between two "poses"  
 			float getRMSD_(Index i, Index j, Index rmsd_type);
+
+			// store pointers to the snapshots in the poses vector
+			void storeSnapShotReferences_();
 
 			// 
 			void convertTransformations2Snaphots_();
@@ -473,36 +511,39 @@ namespace BALL
 			void clear_();
 
 			// only used by trivial clustering
-			Eigen::MatrixXd                 pairwise_scores_;
+			Eigen::MatrixXd                  pairwise_scores_;
 
 			/// the ConformationSet we wish to cluster
-			ConformationSet*                current_set_;
+			ConformationSet*                 current_set_;
 
 			/// the clusters: sets of pose indices 
-			std::vector<std::set<Index> >   clusters_;
+			std::vector<std::set<Index> >    clusters_;
 
 			/// the RMSD definition used for clustering
-			Index                           rmsd_level_of_detail_;
+			Index                            rmsd_level_of_detail_;
 
 
-			// ----- data structures for transformation input (instead of snapshots)
-			std::vector<Eigen::Vector3f>    translations_;
-			std::vector<Eigen::Matrix3f>    rotations_;
+			// ----- unified access to the poses, independent of their type
+			//       (the poses are either stored in transformations_, or in current_set_)
+			std::vector<PosePointer>         poses_;
 
-			Eigen::Matrix3f                 covariance_matrix_;
+			// ----- data structure for transformation input (instead of snapshots)
+			std::vector<RigidTransformation> transformations_;
+
+			Eigen::Matrix3f                  covariance_matrix_;
 
 			// TODO: maybe use a const - ptr instead?
-			System                          base_system_;
+			System                           base_system_;
 
 			// the reference state
-			SnapShot                        base_conformation_;
+			SnapShot                         base_conformation_;
 
 			// flag indicating the use of transformation as input
-			bool                            has_rigid_transformations_;
+			bool                             has_rigid_transformations_;
 
 			// do we need to delete the conformation set, that was
 			// created by converting transformations to snapshots
-			bool                            delete_conformation_set_;
+			bool                             delete_conformation_set_;
 
 			// ------ data structures for slink and clink 
 
@@ -535,10 +576,6 @@ namespace BALL
 			// helper dummies to speed up snapshot application
 			System            system_i_;
 			System            system_j_;
-
-			// TODO get rid - use getNumberOfPoses() instead
-			// The number of poses to cluster
-			Size              num_poses_;
 
 			/// The tree built during hierarchical clustering
 			ClusterTree       cluster_tree_;
