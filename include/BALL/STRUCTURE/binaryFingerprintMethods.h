@@ -1023,10 +1023,9 @@ namespace BALL
 			
 			/**
 			 * Function creates a new cluster.
-			 * @param cluster_id ID of cluster to be created.
 			 * @return Pointer to newly formed cluster.
 			 */
-			Cluster* createCluster(const unsigned int cluster_id);
+			Cluster* createCluster();
 			
 			/**
 			 * Switch from RNN parallel stored data to Nearest Neighbour Chain stored matrix algorithm.

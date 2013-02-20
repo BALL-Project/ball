@@ -701,6 +701,11 @@ void BinaryFingerprintMethods::createInvertedIndices(const vector<pair<const vec
 
 void BinaryFingerprintMethods::calculateCommonCounts_1_1(const FeatureList* ii1, const FeatureList* ii2, unsigned short& cc)
 {
+	// ###########################################################################################################################
+	// For a general description of this method you can take a look 
+	// at the comparable function BinaryFingerprintMethods::calculateCommonCounts_M_N( ... )
+	// ###########################################################################################################################
+	
 	while (ii1->feature_id != ii2->feature_id)
 	{
 		if (ii1->feature_id > ii2->feature_id)
@@ -737,6 +742,11 @@ void BinaryFingerprintMethods::calculateCommonCounts_1_1(const FeatureList* ii1,
 
 void BinaryFingerprintMethods::calculateCommonCounts_1_N(const FeatureList* ii1, const FeatureList* ii2, unsigned short* cc_row)
 {
+	// ###########################################################################################################################
+	// For a general description of this method you can take a look 
+	// at the comparable function BinaryFingerprintMethods::calculateCommonCounts_M_N( ... )
+	// ###########################################################################################################################
+	
 	unsigned short* ii2_position;
 	
 	while (ii1->feature_id != ii2->feature_id)
@@ -1944,7 +1954,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		for (unsigned int i=0; i!=n_molecules; ++i)
 		{
 			// Create new singleton cluster
-			cluster = createCluster(i);
+			cluster = createCluster();
 			
 			cluster->nn = NULL;
 			cluster->is_rnn = false;
@@ -1998,7 +2008,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		for (unsigned int i=0; i!=n_molecules; ++i)
 		{
 			// Create new singleton cluster
-			cluster = createCluster(i);
+			cluster = createCluster();
 			
 			vec_actives_.push_back(cluster);
 			leaf_clusters_.push_back(cluster);
@@ -3372,11 +3382,11 @@ void BinaryFingerprintMethods::switchStorageMethod()
 }
 
 
-BinaryFingerprintMethods::Cluster* BinaryFingerprintMethods::createCluster(const unsigned int cluster_id)
+BinaryFingerprintMethods::Cluster* BinaryFingerprintMethods::createCluster()
 {
 	Cluster* cluster = new Cluster;
 	
-	cluster->c_id = cluster_id;
+	cluster->c_id = n_clusters_;
 	cluster->c_index = n_clusters_;
 	cluster->c_size = 1;
 	cluster->l_child = NULL;
@@ -3443,7 +3453,7 @@ void BinaryFingerprintMethods::finalizeClustering()
 BinaryFingerprintMethods::Cluster* BinaryFingerprintMethods::mergeClusters(Cluster* c1, Cluster* c2, double sim_sum)
 {
 	// CREATE NEW CLUSTER
-	Cluster* merged_cluster = createCluster(n_clusters_);
+	Cluster* merged_cluster = createCluster();
 	
 	merged_cluster->l_child = c1;
 	merged_cluster->r_child = c2;
