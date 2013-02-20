@@ -513,6 +513,19 @@ unsigned int BinaryFingerprintMethods::getQueryLibrarySize() const
 BALL_INLINE
 void BinaryFingerprintMethods::arrayToUpperTriangluarMatrix(LongSize& row, LongSize& col, const LongSize array_index) const
 {
+	/*
+	 *    UPPER TRIANGULAR MATRIX indexing, i.e. including diagonal => (n(n+1) / 2) elements
+	 *    Calculate row and column indices [0, n[ from cell index [0, (n(n+1) / 2)[.
+	 * 
+	 *     | 0  1  2  3  ... 
+	 *   ---------------
+	 *   0 | 0  1  3  6  
+	 *   1 | -  2  4  7
+	 *   2 | -  -  5  8
+	 *   3 | -  -  -  9
+	 * 
+	 */
+	
 	col = floor(sqrt(2 * array_index + 0.25) - 0.5);
 	row = array_index - ((col * col + col) / 2);
 }
@@ -521,6 +534,19 @@ void BinaryFingerprintMethods::arrayToUpperTriangluarMatrix(LongSize& row, LongS
 BALL_INLINE
 void BinaryFingerprintMethods::arrayToStrictUpperTriangularMatrix(LongSize& row, LongSize& col, const LongSize array_index) const
 {
+	/*
+	 *    STRICT UPPER TRIANGULAR MATRIX indexing, i.e. without diagonal => (n(n-1) / 2) elements.
+	 *    Calculate row and column indices [0, n[ from cell index [0, (n(n-1) / 2)[.
+	 * 
+	 *     | 0  1  2  3  ... 
+	 *   ---------------
+	 *   0 | -  0  1  3  
+	 *   1 | -  -  2  4
+	 *   2 | -  -  -  5
+	 *   3 | -  -  -  -
+	 * 
+	 */
+	
 	col = floor(sqrt(2*array_index + 0.25) + 0.5);
 	row = array_index - ((col*col - col) / 2);
 }
@@ -529,6 +555,19 @@ void BinaryFingerprintMethods::arrayToStrictUpperTriangularMatrix(LongSize& row,
 BALL_INLINE
 LongSize BinaryFingerprintMethods::strictUpperTriangularMatrixToArray(const LongSize row, const LongSize col) const
 {
+	/*
+	 *    STRICT UPPER TRIANGULAR MATRIX indexing, i.e. without diagonal => (n(n-1) / 2) elements.
+	 *    Calculate cell index [0, (n(n-1) / 2)[ from row and column indices [0, n[.
+	 * 
+	 *     | 0  1  2  3  ... 
+	 *   ---------------
+	 *   0 | -  0  1  3  
+	 *   1 | -  -  2  4
+	 *   2 | -  -  -  5
+	 *   3 | -  -  -  -
+	 * 
+	 */
+	
 	return ((col*col - col) / 2 + row);
 }
 
