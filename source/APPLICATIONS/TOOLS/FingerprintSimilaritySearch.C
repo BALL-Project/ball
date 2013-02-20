@@ -258,7 +258,7 @@ bool readFingerprints(const String& input_file, vector<vector<unsigned short> >&
 
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("FingerprintSimilaritySearch", "calculate similar molecules in a library", VERSION, String(__DATE__), "Preparation");
+	CommandlineParser parpars("FingerprintSimilaritySearch", "calculate similar molecules in a library", VERSION, String(__DATE__), "Chemoinformatics");
 	
 	parpars.registerParameter("t", "Target library input file", INFILE, true);
 	parpars.registerParameter("q", "Query library input file", INFILE, true);
@@ -269,8 +269,8 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, false, " ");
 	parpars.registerParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, false, " ");
 	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, "0.7");
+	parpars.registerParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, false, "1");
 	parpars.registerFlag("sdf_out", "If query file has SD format, this flag activates writing of nearest neighbours as a new CSV tag in a copy of the query SD file.");
-	parpars.registerFlag("tp", "Execute thread parallel version");
 	
 	parpars.setParameterRestrictions("f", 1, 2);
 	parpars.setSupportedFormats("t","smi, smi.gz, csv, csv.gz, txt, txt.gz, sdf, sdf.gz");
@@ -303,9 +303,24 @@ $ FingerprintSimilaritySearch -t target.sdf -q query.smi -o results -fp_tag FPRI
 	float sim_cutoff = parpars.get("tc").toFloat();
 	
 	unsigned int n_threads = 1;
-	if (parpars.has("tp"))
+	if (parpars.get("nt") != "1")
 	{
-		n_threads = SysInfo::getNumberOfProcessors();
+		if (parpars.get("nt") == "max")
+		{
+			n_threads = SysInfo::getNumberOfProcessors();
+		}
+		else
+		{
+			if (parpars.get("nt").toInt() > SysInfo::getNumberOfProcessors())
+			{
+				n_threads = SysInfo::getNumberOfProcessors();
+				Log.info() << "++ INFO: Specified number of threads exceeds available threads. Setting number to available threads." << endl;
+			}
+			else
+			{
+				n_threads = parpars.get("nt").toInt();
+			}
+		}
 	}
 	
 	if (parpars.get("fp_col") != "-1")

@@ -403,7 +403,7 @@ bool readFingerprints(const String& input_file, vector<vector<unsigned short> >&
 
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("FingerprintSimilarityClustering", "fast clustering of compounds using 2D binary fingerprints", VERSION, String(__DATE__), "Analysis");
+	CommandlineParser parpars("FingerprintSimilarityClustering", "fast clustering of compounds using 2D binary fingerprints", VERSION, String(__DATE__), "Chemoinformatics");
 	
 	parpars.registerParameter("t", "Target library input file", INFILE, true);
 	parpars.registerParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", INT, true, "1");
@@ -414,8 +414,8 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, 0.7);
 	parpars.registerParameter("cc", "Clustering size cutoff [default: 1000]", INT, false, 1000);
 	parpars.registerParameter("l", "Number of fingerprints to read", INT, false, "0");
+	parpars.registerParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, false, "1");
 	parpars.registerFlag("sdf_out", "If input file has SD format, this flag activates writing of clustering information as new tags in a copy of the input SD file.");
-	parpars.registerFlag("tp", "Execute thread parallel version");
 	
 	parpars.setSupportedFormats("t","smi, smi.gz, csv, csv.gz, txt, txt.gz, sdf, sdf.gz");
 	parpars.setParameterRestrictions("f", 1, 2);
@@ -436,8 +436,8 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 $ FingerprintSimilarityClustering -t target.csv -fp_col 3 -f 2 -id_col 1\n\
   tries to read fingerprints as comma separated integer feature list (-f 2) from column 3 and IDs from column 1 out of a space separated CSV file.\n\
   The clustering workflow described is executed on the input molecules with default values.\n\n\
-$ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME -tp\n\
-  Same as first example but executed in parallel mode.\n\n\
+$ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME -nt max\n\
+  Same as first example but executed in parallel mode using as many threads as available.\n\n\
 $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME -tc 0.5 -cc 50\n\
   Same as first example but using modified parameters for similarity network generation (tc 0.5) and size of connected components to be clustered (-cc 50).";
 	
@@ -456,9 +456,24 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	}
 	
 	unsigned int n_threads = 1;
-	if (parpars.has("tp"))
+	if (parpars.get("nt") != "1")
 	{
-		n_threads = SysInfo::getNumberOfProcessors();
+		if (parpars.get("nt") == "max")
+		{
+			n_threads = SysInfo::getNumberOfProcessors();
+		}
+		else
+		{
+			if (parpars.get("nt").toInt() > SysInfo::getNumberOfProcessors())
+			{
+				n_threads = SysInfo::getNumberOfProcessors();
+				Log.info() << "++ INFO: Specified number of threads exceeds available threads. Setting number to available threads." << endl;
+			}
+			else
+			{
+				n_threads = parpars.get("nt").toInt();
+			}
+		}
 	}
 	
 	if (parpars.get("fp_col") != "-1")
