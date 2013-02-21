@@ -60,7 +60,7 @@ namespace BALL
 
 	*/
 
-	class BALL_EXPORT RandomNumberGenerator
+	class BALL_EXPORT BALL_DEPRECATED RandomNumberGenerator
 	{
 
 		public:
