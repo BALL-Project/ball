@@ -1,5 +1,5 @@
-#ifndef VIEWPLUGIN_H
-#define VIEWPLUGIN_H
+#ifndef BALL_VIEW_PLUGIN_VIEWPLUGIN_H
+#define BALL_VIEW_PLUGIN_VIEWPLUGIN_H
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 
@@ -44,5 +44,4 @@ namespace BALL
 
 Q_DECLARE_INTERFACE(BALL::VIEW::VIEWPlugin, "org.ball-project.Plugin.VIEWPlugin/1.0")
 
-#endif //VIEWPLUGIN_H
-
+#endif // BALL_VIEW_PLUGIN_VIEWPLUGIN_H
