@@ -27,6 +27,8 @@ namespace BALL
 			// let the plugin create its widget
 			modular_widget_ = ptr->createModularWidget(main_control_);
 
+			modular_widget_->registerWidget(modular_widget_);
+
 			// and initialize it
 			modular_widget_->initializeWidget(*main_control_);
 
@@ -35,10 +37,9 @@ namespace BALL
 
 		bool ModularWidgetPluginHandler::specificShutdown_(BALLPlugin* plugin)
 		{
-			ModularWidgetPlugin* ptr = qobject_cast<ModularWidgetPlugin*>(plugin);
-
 			// finalize the widget
 			modular_widget_->finalizeWidget(*main_control_);
+			delete(modular_widget_);
 
 			return plugin->deactivate();
 		}
