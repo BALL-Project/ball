@@ -2,13 +2,12 @@
 // vi: set ts=2:
 //
 
-#include<BALL/FORMAT/ClustalFile.h>
+#include <BALL/FORMAT/ClustalFile.h>
 #include <BALL/STRUCTURE/peptideBuilder.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
-#ifndef BALL_STRUCTURE_PEPTIDES_H
+
 #include<BALL/STRUCTURE/peptides.h>
-#endif
-//defined in the lexer (ClustalParserLexer.l)
+
 
 extern int  ClustalParserparse();
 extern void ClustalParserLexer_reset();
@@ -16,14 +15,14 @@ extern void ClustalParserLexer_reset();
 namespace BALL
 {
 
-
 	ClustalFile::ClustalFile()
-			: File(),
+		: File(),
 			blocks_()
-	{ }
+	{
+	}
 
 	ClustalFile::ClustalFile(const String& filename, File::OpenMode open_mode)
-			: File(filename,open_mode),
+		: File(filename,open_mode),
 			blocks_()
 	{
 		File::open(filename, open_mode);
@@ -31,7 +30,8 @@ namespace BALL
 
 
 	ClustalFile::~ClustalFile()
-	{   }
+	{
+	}
 
 
 	///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
@@ -145,15 +145,11 @@ namespace BALL
 					return false;
 				}
 			}
-
 			num_of_aa_old = num_of_aa;
-
 		}
-
-
 		return true;
-
 	}
+
 
 	bool ClustalFile::read()
 	{
@@ -170,12 +166,10 @@ namespace BALL
 
 			//ClustalParserdebug = 1;
 			ClustalParserparse();
-
 		}
 		catch (Exception::ParseError& e)
 		{
 			Log.error() << "ClustalFile: Cannot read " << getName() << std::endl;
-
 		}
 
 		if (!hasValidBlocks())
@@ -183,11 +177,8 @@ namespace BALL
 			Log.error() << "Trying to read from invalid ClustalFile '" <<getName() << "'" << std::endl;
 			return false;
 		}
-
 		return true;
 	}
-
-
 
 
 	bool ClustalFile::write()
@@ -203,7 +194,7 @@ namespace BALL
 			return false;
 		}
 
-		getFileStream() << "CLUSTAL" <<endl;
+		getFileStream() << "CLUSTAL" << std::endl;
 
 		vector<Block>::iterator it;
 
@@ -213,7 +204,6 @@ namespace BALL
 		}
 
 		return true;
-
 	}
 
 
@@ -224,8 +214,6 @@ namespace BALL
 	}
 
 
-
-
 	std::vector<ClustalFile::Block> ClustalFile::getBlocks()
 	{
 		return blocks_;
@@ -234,7 +222,6 @@ namespace BALL
 
 	void ClustalFile::clear()
 	{
-
 		blocks_.clear();
 	}
 
@@ -244,7 +231,7 @@ namespace BALL
 
 		for (vector<Block>::iterator it = blocks_.begin(); it != blocks_.end(); it++)
 		{
-			cout<<"Block "<<i<<" contains: "<<endl;
+			std::cout << "Block " << i << " contains: " << std::endl;
 			it->dump();
 			++i;
 		}
@@ -253,7 +240,7 @@ namespace BALL
 
 	ClustalFile& ClustalFile::operator = (const ClustalFile& file)
 	{
-		state = file.state;
+		state   = file.state;
 		blocks_ = file.blocks_;
 		return *this;
 	}
@@ -262,13 +249,14 @@ namespace BALL
 
 
 	ClustalFile::Block::Block()
-			: seqs(),conserv_line()
+		: seqs(),
+		  conserv_line()
 	{ }
 
 	ClustalFile::Block::Block(const Block& bl)
-			: seqs(bl.seqs),conserv_line(bl.conserv_line)
+		: seqs(bl.seqs),
+			conserv_line(bl.conserv_line)
 	{ }
-
 
 	void ClustalFile::Block::reset()
 	{
@@ -288,43 +276,38 @@ namespace BALL
 
 	std::ostream& ClustalFile::Block::operator >> (std::ostream& os)
 	{
-
-
-		os << endl;
+		os << std::endl;
 
 		// shift all sequencelines into the stream
 		for (vector<SequenceLine>::iterator it = seqs.begin(); it != seqs.end(); it++)
 		{
-
 			*it >> os;
-
 		}
 
 		//shift the conservation line too
 
-		os << conserv_line << endl;
+		os << conserv_line << std::endl;
 
 		return os;
-
 	}
 
 	void ClustalFile::Block::dump(std::ostream& s) const
 	{
-		s<<"The block contains "<< seqs.size() <<" SequenceLines."<< endl <<"These are: "<< endl;
+		s << "The block contains " << seqs.size() << " SequenceLines." << std::endl <<"These are: " << std::endl;
 
 		for (unsigned int i=0; i < seqs.size(); i++)
 		{
-			s<<"SequenceLine 1:"<<endl;
+			s << "SequenceLine 1:" << std::endl;
 			seqs.at(i).dump(s);
 		}
 
 		if (conserv_line.isEmpty())
 		{
-			s<<"The Conserv_Line is empty."<<endl;
+			s << "The Conserv_Line is empty." << std::endl;
 		}
 		else
 		{
-			s<<"Conserv_Line: "<< conserv_line<<endl;
+			s << "Conserv_Line: " << conserv_line << std::endl;
 		}
 	}
 
@@ -359,22 +342,21 @@ namespace BALL
 
 	std::ostream& ClustalFile::SequenceLine::operator >> (std::ostream& os)
 	{
-		os << ident << "\t" << sequence << "\t" << length << endl;
+		os << ident << "\t" << sequence << "\t" << length << std::endl;
 
 		return os;
-
 	}
 
 	void ClustalFile::SequenceLine::dump(std::ostream& s) const
 	{
-		s <<"The ident is: "<< ident <<endl << "The sequence is: " << sequence<<endl << "The length is: "<<length<<endl;
+		s << "The ident is: " << ident << std::endl << "The sequence is: " << sequence << std::endl << "The length is: " << length << std::endl;
 	}
 
 	ClustalFile::SequenceLine& ClustalFile::SequenceLine::operator = (const SequenceLine& line)
 	{
-		ident= line.ident;
+		ident    = line.ident;
 		sequence = line.sequence;
-		length = line.length;
+		length   = line.length;
 		return *this;
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -423,7 +405,6 @@ namespace BALL
 				//iterate through the string to get the single characters
 				for (unsigned int j=0; j < (blocks_.at(b_i).seqs.at(s_i).length - b_i* 60); j++)
 				{
-
 					//  String three_letter;
 
 					//retrieve the next character
@@ -436,7 +417,6 @@ namespace BALL
 						{
 							/*three_letter*/
 							sequence += /*Peptides::ThreeLetterCode*/(check);
-
 						}
 						else
 						{
@@ -448,7 +428,6 @@ namespace BALL
 
 						//set the Property to Amino Acid
 						//  r->setProperty(Residue::Property::PROPERTY__AMINO_ACID);
-
 
 						//append Residue to the Protein
 						//  system.getProtein(p_counter)->append(*r);
@@ -466,7 +445,6 @@ namespace BALL
 
 				sequence ="";
 
-
 			}//end of iteration over all sequenceLines
 
 
@@ -477,20 +455,19 @@ namespace BALL
 		vector<String> sequences;
 
 		//retrieve sequences from sequences_per_line
-		int real_counter = 0;
+		Size real_counter = 0;
 
 		while (real_counter < names.size())
 		{
 			sequence="";
 
-			for (int i = real_counter; i < sequences_per_line.size(); i+=names.size())
+			for (Size i = real_counter; i < sequences_per_line.size(); i += names.size())
 			{
 				sequence += sequences_per_line.at(i);
 			}
 
 			sequences.push_back(sequence);
 			real_counter++;
-
 		}
 
 
@@ -511,7 +488,6 @@ namespace BALL
 			{
 				// each aminoacid is represented by a descriptor
 				BALL::Peptides::AminoAcidDescriptor* aad = new BALL::Peptides::AminoAcidDescriptor;
-
 
 				// define a glycin
 				aad->setAminoAcidType(Peptides::ThreeLetterCode(sequences.at(i).c_str() [j]));
@@ -539,9 +515,7 @@ namespace BALL
 			system.append(*prot);
 		}
 
-
 		return *this;
-
 	}
 
 
@@ -604,107 +578,9 @@ namespace BALL
 
 			}
 		}
-
 		return *this;
 	}
 
-
-
-
-	/**
-	 *reads a ClustalFile into an Alignment
-	 * Note: take care when using this feature, because Origin of all SequenceCharacters will not be setted correctly (will be 0) as well as residue pointer.
-	 * better: shift the file into a system and then shift the system into the alignment
-	 */
-	/*  ClustalFile& ClustalFile::operator >>(Alignment& alignment)
-	    {
-
-	    if(!hasValidBlocks())
-	    {
-	    throw Exception::InvalidArgument(__FILE__,__LINE__, "ClustalFile Error: Invalid File");
-	    }
-
-	//first reset Score
-	alignment.setScore(0);
-
-	//reset aligned_
-	alignment.setAligned(false);
-
-	//Check whether there are already sequences in the alignment
-	unsigned int old_width = alignment.getAlignmentMatrix().rows();
-
-	//iterate over all blocks to retrieve all SequenceLines
-	for(unsigned int b_it =0; b_it < blocks_.size(); b_it++)
-	{
-	//iterate over all SequenceLines of the block
-	for(unsigned int count = 0; count < blocks_.at(b_it).seqs.size(); count++)
-	{
-	String sequence = blocks_.at(b_it).seqs.at(count).sequence;
-
-	//if matrix is completley empty
-	if(old_width == 0 && count == 0)
-	{
-	//resize matrix
-	alignment.getAlignmentMatrix().conservativeResize(1, 1);
-
-	//intialize all newly created uninitialized entrys with Gaps
-	for( int i= 0; i< alignment.getAlignmentMatrix().rows(); i++)
-	{
-	alignment.getAlignmentMatrix()(i,0)= *(new SequenceCharacter('-', 0, SequenceCharacter::type::GAP, 0));
-	}
-	}
-
-	//check whether resizing is necessary
-	if(old_width + count >= alignment.getAlignmentMatrix().rows())
-	{
-
-	//resize matrix
-	alignment.getAlignmentMatrix().conservativeResize(old_width + count, Eigen::NoChange);
-
-	//initialize all characters left, with Gaps
-	for(int i= sequence.length(); i> alignment.getAlignmentMatrix().cols(); i--)
-	{
-	alignment.getAlignmentMatrix()(old_width + count, i) = *(new SequenceCharacter('-', 0, SequenceCharacter::type::GAP, 0));
-	}
-	}
-
-
-	//iterate over sequence
-	for(unsigned int i =0; i<sequence.length();i++)
-	{
-	char c = sequence[i];
-	SequenceCharacter seq_c;
-	seq_c.setType(SequenceCharacter::CHAR);
-	seq_c.setChar(c);
-
-	//check whether we have to resize the matrix
-	if (i >= alignment.getAlignmentMatrix().cols())
-	{
-	//      alignment.getAlignmentMatrix().conservativeResize(Eigen::NoChange, i);
-	//initialize the newly created empty cols with Gaps, except the ith row
-	for (unsigned int m =0; m<alignment.getAlignmentMatrix().rows(); m++)
-	{
-	if(m != old_width + count)
-	{
-	//alignment.getAlignmentMatrix()(m,i)= *(new SequenceCharacter('-', 0 , SequenceCharacter::type::GAP, 0));
-	}
-	}
-	}
-
-	//einfügen an passender Stelle
-	//      alignment.getAlignmentMatrix()(old_width + count, i)= seq_c;
-	}
-
-	}
-	}
-
-	return *this;
-	}
-	*/
-
-
 	struct ClustalFile::State ClustalFile::state;
-
-
 }
 
