@@ -172,21 +172,19 @@ namespace BALL
 	Eigen::Array<SequenceCharacter, 1, Eigen::Dynamic> Sequence::getArraySequence()
 	{
 		// initialize the array
-		Eigen::Array<SequenceCharacter, 1 , Eigen::Dynamic> seq;
+		Eigen::Array<SequenceCharacter, 1 , Eigen::Dynamic> seq(end().getCounter());
 
-		SequenceIterator it;
-		for(it = begin(); it != end(); it.next())
+		int index=0;
+		for(SequenceIterator it = begin(); it != end(); it.next(), index++)
 		{
-			// make room for the new character
-			seq.conservativeResize(seq.cols()+1);
-
 			// retrieve the current Sequencecharacter for each step
 			SequenceCharacter c;
 			c = it.getCharacter();
 
 			// store it in the array
-			seq(0, seq.cols()-1) = c;
+			seq(0, index) = c;
 		}
+
 		return seq;
 	}
 
