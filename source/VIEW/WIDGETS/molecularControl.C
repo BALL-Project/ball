@@ -1290,6 +1290,11 @@ namespace BALL
 			return selected_;
 		}
 
+		Composite* MolecularControl::getContextComposite()
+		{
+			return context_composite_;
+		}
+
 		void MolecularControl::createRepresentation() 
 		{
 			// make sure selection is send, to enter create Represenation Mode in DP
@@ -1857,6 +1862,11 @@ namespace BALL
 			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
+		}
+
+		QMenu& MolecularControl::getContextMenu()
+		{
+			return context_menu_;
 		}
 
 		bool MolecularControl::allowPaste_()

@@ -143,6 +143,10 @@ class BALL_VIEW_EXPORT MolecularControl
 	/** Non-mutable inspection of the selection.
 	*/
 	const std::list<Composite*>& getSelection() const;
+
+	/** Inspection of the entry for which a context menu was requested.
+	 */
+	Composite* getContextComposite();
 	
 	/** Message handling.
 			Overridden method from ConnectionObject to handle incoming messages.\par
@@ -191,6 +195,10 @@ class BALL_VIEW_EXPORT MolecularControl
 	
 	///
 	void showAngle(Atom* a1, Atom* a2, Atom* a3, Atom* a4 = 0);
+
+	/** Allow access to the context menu
+	 */
+	QMenu& getContextMenu();
 
 	public slots:
 		
