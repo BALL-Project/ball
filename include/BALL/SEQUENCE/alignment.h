@@ -9,6 +9,10 @@
 #include <BALL/SEQUENCE/sequenceCharacter.h>
 #endif
 
+#ifndef BALL_STRUCTURE_ATOMBIJECTION_H
+# include <BALL/STRUCTURE/atomBijection.h>
+#endif
+
 #ifndef BALL_FORMAT_PDBFILE_H
 #include<BALL/FORMAT/PDBFile.h>
 #endif
