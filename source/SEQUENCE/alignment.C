@@ -6,6 +6,8 @@
 #include<BALL/SEQUENCE/alignAlgorithm.h>
 #include<BALL/SEQUENCE/scoringFunction.h>
 
+using namespace std;
+
 namespace BALL
 {
 
