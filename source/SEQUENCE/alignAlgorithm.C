@@ -1,9 +1,14 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include<BALL/SEQUENCE/alignAlgorithm.h>
+
 #ifdef BALL_HAS_SEQAN
-#include <seqan/align.h>
-#include <seqan/score.h>
-#include <seqan/graph_align.h>
-#include <seqan/graph_msa.h>
+# include <seqan/align.h>
+# include <seqan/score.h>
+# include <seqan/graph_align.h>
+# include <seqan/graph_msa.h>
 #endif
 
 using namespace std;
