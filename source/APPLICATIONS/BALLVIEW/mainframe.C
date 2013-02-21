@@ -51,10 +51,6 @@
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
-#ifdef BALL_HAS_QTWEBKIT
-# include <BALL/VIEW/WIDGETS/HTMLBasedInterface.h>
-#endif
-
 using namespace std;
 //#define BALL_VIEW_DEBUG
 
@@ -216,24 +212,6 @@ namespace BALL
 
 
  		qApp->installEventFilter(this);
-
-#ifdef BALL_HAS_QTWEBKIT
-		HTMLBasedInterface* html_interface = new HTMLBasedInterface;
-		HTMLViewDock* html_view_dock = new HTMLViewDock(html_interface, this, ((String(tr("PresentaBALL")).c_str())));
-
-		if (UIOperationMode::instance().getMode() > UIOperationMode::MODE_ADVANCED)
-		{
-			html_view_dock->setFeatures(0);
-			html_view_dock->setMaximumWidth(730);
-			html_view_dock->setMinimumWidth(730);
-		}
-		else
-		{
-			html_view_dock->registerWidget(html_view_dock);
-		}
-		addDockWidget(Qt::LeftDockWidgetArea, html_view_dock);
-		html_view_dock->show();
-#endif
 
 		setStatusbarText((String)tr("Ready."));
 	}

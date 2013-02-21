@@ -1,4 +1,4 @@
-#include <BALL/VIEW/WIDGETS/HTMLBasedInterface.h>
+#include <HTMLBasedInterface.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
