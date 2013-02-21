@@ -133,26 +133,6 @@ namespace BALL
 
 		Path path;
 
-		// NOTE: disable the link to the BALL documentation until we can use webkit to correctly
-		//       display full HTML including remote links
-		String dirp = path.find("../doc/BALL/"); 
-
-		if (dirp != "")
-		{
-			HelpViewer* BALL_docu = new HelpViewer(this, ((String)tr("BALL Docu")).c_str());
-			addDockWidget(Qt::BottomDockWidgetArea, BALL_docu);
-
-			BALL_docu->setBaseDirectory(dirp);
-			BALL_docu->setWhatsThisEnabled(false);
-			BALL_docu->setProject("BALL");
-			BALL_docu->setDefaultPage("index.html");
-
-		}
-		else
-		{
-			Log.error() << "Please build the BALL documentation!" << std::endl;
-		}
-
 		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
 		new LabelDialog(        this, ((String)tr("LabelDialog")).c_str());
 		new MolecularStructure(	this, ((String)tr("MolecularStructure")).c_str());
