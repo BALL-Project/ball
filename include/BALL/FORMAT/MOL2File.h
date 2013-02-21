@@ -33,7 +33,7 @@ namespace BALL
 		public:
 
 		/// A class used for storing TRIPOS sets
-		BALL_EXPORT struct SetStruct
+		struct BALL_EXPORT SetStruct
 		{
 			String			name;
 			bool				is_static;
@@ -136,7 +136,7 @@ namespace BALL
 
 		bool containsAtomChilds_(AtomContainerConstIterator& frag_it);
 
-		BALL_EXPORT struct AtomStruct
+		struct BALL_EXPORT AtomStruct
 		{
 			String		name;
 			Vector3		position;
@@ -146,14 +146,14 @@ namespace BALL
 			float			charge;
 		};
 
-		BALL_EXPORT struct BondStruct
+		struct BALL_EXPORT BondStruct
 		{
 			Position	atom1;
 			Position	atom2;
 			String		type;
 		};
 
-		BALL_EXPORT struct MoleculeStruct
+		struct BALL_EXPORT MoleculeStruct
 		{
 			String			name;
 			Size				number_of_atoms;
@@ -166,7 +166,7 @@ namespace BALL
 			String			comment;
 		};
 
-		BALL_EXPORT struct SubstructureStruct
+		struct BALL_EXPORT SubstructureStruct
 		{
 			String			name;
 			Size				root_atom;
@@ -178,7 +178,7 @@ namespace BALL
 			String			comment;
 		};
 
-		BALL_EXPORT struct CommentStruct
+		struct BALL_EXPORT CommentStruct
 		{
 			String name;
 			String value;
