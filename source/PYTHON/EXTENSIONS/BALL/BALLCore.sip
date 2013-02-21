@@ -268,7 +268,7 @@
 
 // SOLVATION
 // %Include molecularSurfaceGrid.sip // ??
-// %Include ooiEnergy.sip
+%Include ooiEnergy.sip
 %Include poissonBoltzmann.sip
 
 // STRUCTURE
