@@ -17,6 +17,7 @@ namespace BALL
 			:t_(type::CHAR)
 	{
 		origin_=0;
+		character_=0;
 		res_=0;
 	}
 
@@ -180,7 +181,7 @@ namespace BALL
 	void SequenceCharacter::reset()
 	{
 		origin_    = NULL;
-		character_ = NULL;
+		character_ = 0;
 
 		//TODO: what happens to the type? 
 	}
