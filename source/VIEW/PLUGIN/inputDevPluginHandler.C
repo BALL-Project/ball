@@ -24,7 +24,7 @@ namespace BALL
 
 		bool InputDevPluginHandler::specificShutdown_(BALLPlugin* plugin)
 		{
-			return qobject_cast<BALLPlugin*>(plugin)->deactivate();
+			return plugin->deactivate();
 		}
 	}
 }
