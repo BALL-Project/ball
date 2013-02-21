@@ -30,13 +30,6 @@ namespace BALL
 	PluginManager::~PluginManager()
 	{
 		unloadAllPlugins();
-
-		std::list<PluginHandler*>::iterator ht = handlers_.begin();
-		for (; ht != handlers_.end(); ++ht)
-		{
-			delete *ht;
-		}
-		//unregisterThis();
 	}
 
 	PluginManager& PluginManager::instance()
@@ -187,6 +180,7 @@ namespace BALL
 
 	void PluginManager::unloadAllPlugins()
 	{
+		loader_mutex_.lockForWrite();
 		QHash<QString, QPluginLoader*>::iterator it = loaders_.begin();
 		for (; it != loaders_.end(); ++it)
 		{
@@ -197,6 +191,7 @@ namespace BALL
 			delete it.value();
 		}
 		loaders_.clear();
+		loader_mutex_.unlock();
 	}
 
 	QObject* PluginManager::getPluginInstance(const QString& plugin)
@@ -226,11 +221,70 @@ namespace BALL
 		return it.value()->instance();
 	}
 
+	void PluginManager::registerHandler(boost::shared_ptr<PluginHandler> h)
+	{
+		handler_mutex_.lockForWrite();
+		shared_handlers_.push_back(h);
+		handlers_.push_back(h.get());
+		handler_mutex_.unlock();
+	}
+
 	void PluginManager::registerHandler(PluginHandler* h)
 	{
 		handler_mutex_.lockForWrite();
 		handlers_.push_back(h);
 		handler_mutex_.unlock();
+	}
+
+	bool PluginManager::unregisterHandler(PluginHandler* h)
+	{
+		// First remove the handler from the list of PluginHandlers
+		handler_mutex_.lockForRead();
+		std::list<PluginHandler*>::iterator ht = std::find(handlers_.begin(), handlers_.end(), h);
+		handler_mutex_.unlock();
+
+		if(ht == handlers_.end())
+		{
+			return true;
+		}
+
+		handler_mutex_.lockForWrite();
+		handlers_.erase(ht);
+		handler_mutex_.unlock();
+
+		// Now stop all plugins that are run by this handler
+		QWriteLocker locker(&loader_mutex_);
+
+		QHash<QString, QPluginLoader*>::iterator it = loaders_.begin();
+		while(it != loaders_.end())
+		{
+			if (!it.value()->isLoaded())
+			{
+				++it;
+				continue;
+			}
+
+			BALLPlugin* plugin = qobject_cast<BALLPlugin*>(it.value()->instance());
+
+			if(!plugin || !h->isRunning(plugin))
+			{
+				++it;
+				continue;
+			}
+
+			if(!h->stopPlugin(plugin) || !stopPlugin(plugin))
+			{
+				return false;
+			}
+
+			//Delete the loader
+			it.value()->unload();
+			delete it.value();
+
+			it = loaders_.erase(it);
+		}
+
+		return true;
 	}
 
 	bool PluginManager::startPlugin(int plugin)

@@ -167,6 +167,36 @@ namespace BALL
 			 */
 			void registerHandler(PluginHandler* h);
 
+			/**
+			 * Register a new PluginHandler. This handler will then
+			 * be available for starting new plugins.
+			 *
+			 * This method is a convenience funtion that takes a boost
+			 * shared_ptr which is stored in the PluginManager and
+			 * hence destroyed once the PluginManager is unloaded.
+			 */
+			void registerHandler(boost::shared_ptr<PluginHandler> h);
+
+			/**
+			 * Unregister a PluginHandler.
+			 *
+			 * If the handler was not registered this function does nothing.
+			 * Otherwise all plugins for which the handler is responsible will be
+			 * unloaded and the handler will no longer be available.
+			 *
+			 * Every registered PluginHandler should call this function before it
+			 * is destroyed. Otherwise segmentation faults will happen!
+			 *
+			 * @warning All plugins run by this handler will be unloaded, even if there
+			 * are other handlers handling them!
+			 *
+			 * @param h the handler that should be unregistered
+			 *
+			 * @return true if the handler was unregistered successfully;
+			 *         false if there was an error during the deactivation of running plugins
+			 */
+			bool unregisterHandler(PluginHandler* h);
+
 			// needed for storing this classes' preferences
 			virtual bool getPluginDirectories(String& value) const;
 			virtual bool setPluginDirectories(const String&);
@@ -191,6 +221,8 @@ namespace BALL
 
 			QHash<QString, QPluginLoader*> loaders_;
 			std::list<PluginHandler*> handlers_;
+			std::list<boost::shared_ptr<PluginHandler> > shared_handlers_;
+
 			QStringList autoactivate_plugins_;
 
 			static boost::shared_ptr<PluginManager> manager_;
