@@ -70,7 +70,7 @@ namespace BALL
 			driver_->tearDown();
 
 			is_active_ = false;
-			return false;
+			return true;
 		}
 
 	}
