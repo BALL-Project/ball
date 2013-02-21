@@ -138,8 +138,11 @@ namespace BALL
 				return;
 			}
 
-			removeItem_(widget_to_item_[widget], true);
+			QTreeWidgetItem* item = widget_to_item_[widget];
+			removeItem_(item, true);
 
+			item_to_widget_.erase(item);
+			item_to_entry_.erase(item);
 			widget_to_item_.erase(widget);
 			widget_stack->removeWidget(widget);
 			entries_.erase(child);
