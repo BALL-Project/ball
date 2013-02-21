@@ -255,7 +255,7 @@ namespace BALL
 				seq += Peptides::OneLetterCode(resit->getName());
 			}
 		}
-		getFileStream() << "> " << protein.getName() << endl << seq << endl;
+		getFileStream() << "> " << protein.getName() << std::endl << seq << std::endl;
 	}
 
 
@@ -269,7 +269,7 @@ namespace BALL
 			// get the protein's sequence
 			String seq= Peptides::GetSequence(*it);
 
-			getFileStream()<< "> " << it->getName() <<endl << seq << endl;
+			getFileStream()<< "> " << it->getName() << std::endl << seq << std::endl;
 		}
 	}
 
