@@ -6,6 +6,7 @@
 #include <seqan/graph_msa.h>
 #endif
 
+using namespace std;
 
 namespace BALL
 {
