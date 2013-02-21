@@ -51,10 +51,15 @@ namespace BALL
 
 		bool VRPNHDPlugin::activate()
 		{
-			is_active_ = true;
+			is_active_ = startDriver();
+
+			if(!is_active)
+			{
+				return false;
+			}
 
 			receiver_->resetTracking();
-			return startDriver();
+			return true;
 		}
 
 		bool void VRPNHDPlugin::deactivate()

@@ -83,7 +83,12 @@ namespace BALL
 
 		bool XML3DPlugin::activate()
 		{
-			bool is_active_ = (bool)startDriver();
+			is_active_ = (startDriver() != 0);
+
+			if(!is_active_)
+			{
+				return false;
+			}
 
 			XMPPWidget* chat_widget = new XMPPWidget;
 			DockWidget* dock_widget = new DockWidget(MainControl::getInstance(0), "Chat Window");
@@ -93,13 +98,14 @@ namespace BALL
 
 			MainControl::getInstance(0)->addDockWidget(Qt::BottomDockWidgetArea, dock_widget);
 
-			return is_active_;
+			return true;
 		}
 
 		// TODO
 		bool XML3DPlugin::deactivate()
 		{
-			return is_active_ = false;
+			is_active_ = false;
+			return true;
 		}
 
 	}

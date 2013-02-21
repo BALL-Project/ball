@@ -28,7 +28,7 @@ namespace BALL
 
 				ConfigDialog* getConfigDialog();
 
-				bool isActive() { return is_active_; }
+				bool isActive() { return driver_ != 0; }
 
 				void setReceiver(QWidget* receiver);
 				InputDeviceDriver* startDriver();
@@ -39,7 +39,6 @@ namespace BALL
 			private:
 				QWidget* receiver_;
 				QPixmap icon_;
-				bool is_active_;
 				InputDeviceDriver* driver_;
 		};
 	}

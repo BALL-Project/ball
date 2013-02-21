@@ -10,9 +10,7 @@ namespace BALL
 	namespace VIEW
 	{
 		SpaceNavigatorPlugin::SpaceNavigatorPlugin()
-			: receiver_(), 
-				icon_(":pluginSpaceNavigator.png"),
-				is_active_(false)
+			: icon_(":pluginSpaceNavigator.png")
 		{
 		}
 
@@ -53,8 +51,6 @@ namespace BALL
 				return NULL;
 			}
 
-			is_active_ = true;
-
 			driver->setEnabled(true);
 			return driver;
 		}
@@ -62,14 +58,16 @@ namespace BALL
 		bool SpaceNavigatorPlugin::activate()
 		{
 			driver_ = startDriver();
-			return (bool)driver_;
+			return driver_ != 0;
 		}
 
 		bool SpaceNavigatorPlugin::deactivate()
 		{
 			driver_->tearDown();
 
-			is_active_ = false;
+			delete driver_;
+			driver_ = 0;
+
 			return true;
 		}
 
