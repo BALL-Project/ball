@@ -1719,7 +1719,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.info() << "not a chain!" << endl;
+					Log.info() << "not a chain!" << std::endl;
 				}
 			}
 			/*AtomContainer* test_ac = (dynamic_cast<AtomContainer*>(((MyTreeWidgetItem*)context_item_)->composite));
