@@ -46,6 +46,7 @@
 
 #include <BALL/PLUGIN/pluginManager.h>
 #include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
+#include <BALL/VIEW/PLUGIN/modularWidgetPluginHandler.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -443,6 +444,7 @@ namespace BALL
 	{
 		PluginManager& man = PluginManager::instance();
 		man.registerHandler(new InputDevPluginHandler());
+		man.registerHandler(new ModularWidgetPluginHandler(this));
 		man.registerHandler(new PluginDialog(getPreferences(), this));
 	}
 }
