@@ -37,6 +37,8 @@ namespace BALL
 
 	Sequence::Sequence(const String& name, const String& sequence_text)
 	{
+		name_ = name;
+
 		/// we build a dummy peptide with Peptidebuilder
 
 
