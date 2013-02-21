@@ -308,7 +308,7 @@ namespace BALL
 		newAlign.resize(seqan::length(rows(align)), aliLength);
 
 		//shift all Rows and Columns up to Position into newAlign
-		for (int i=0; i< alignment.rows(); i++)
+		for (unsigned int i=0; i<alignment.rows(); i++)
 		{
 			for (unsigned int j=0; j< position; j++)
 			{
