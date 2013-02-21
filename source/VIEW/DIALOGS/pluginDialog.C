@@ -202,6 +202,7 @@ namespace BALL
 
 		PluginDialog::~PluginDialog()
 		{
+			PluginManager::instance().unregisterHandler(this);
 			delete ui_;
 		}
 
@@ -380,6 +381,7 @@ namespace BALL
 			if(view_plugin->getConfigDialog() != 0 && preferences_ != 0)
 			{
 				unregisterChildEntry(view_plugin->getConfigDialog());
+				view_plugin->getConfigDialog()->setParent(0);
 			}
 
 			return true;
