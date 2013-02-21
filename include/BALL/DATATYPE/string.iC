@@ -841,9 +841,7 @@ bool String::isValid() const
 BALL_INLINE 
 std::istream& String::getline(std::istream& s,  char delimiter)
 {
-	static vector<char> line_buffer(8192);
-  s.getline(&(line_buffer[0]), 8191, delimiter);
-	set(&(line_buffer[0]));
+	std::getline(s, *this, delimiter);
 	
 	return s;
 }
