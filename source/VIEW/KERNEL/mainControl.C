@@ -840,6 +840,12 @@ namespace BALL
 			{
 				stopedSimulation_();
 			}
+
+			// enable the buttons of our preferences dialog again if everything important was done
+			if (!updateOfRepresentationRunning())
+			{
+				setPreferencesEnabled_(true);
+			}
 		}
 
 
