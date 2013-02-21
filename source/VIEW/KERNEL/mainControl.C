@@ -963,7 +963,7 @@ namespace BALL
 		{	
 			if (isBusy()) 
 			{
-				setStatusbarText((String)tr("Cant apply preferences while beeing busy!"), true);
+				setStatusbarText((String)tr("Cant apply preferences while being busy!"), true);
 				return;
 			}
 
