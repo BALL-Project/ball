@@ -1,6 +1,7 @@
 #include <BALL/VIEW/PLUGIN/modularWidgetPluginHandler.h>
 
 #include <BALL/PLUGIN/BALLPlugin.h>
+#include <BALL/PLUGIN/pluginManager.h>
 
 #include <BALL/VIEW/PLUGIN/modularWidgetPlugin.h>
 
@@ -13,6 +14,11 @@ namespace BALL
 		ModularWidgetPluginHandler::ModularWidgetPluginHandler(MainControl* parent)
 		{
 			main_control_ = parent;
+		}
+
+		ModularWidgetPluginHandler::~ModularWidgetPluginHandler()
+		{
+			PluginManager::instance().unregisterHandler(this);
 		}
 
 		bool ModularWidgetPluginHandler::canHandle(BALLPlugin* plugin) const
