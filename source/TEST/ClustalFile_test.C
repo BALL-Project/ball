@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClustalFile_test.C,2011/06/07$
-//
 // Author:
 //   Nikola Koch
 //
@@ -28,8 +26,8 @@ START_TEST(ClustalFile)
 
 using namespace BALL;
 
-	ClustalFile *fp= new ClustalFile();
-		
+ClustalFile *fp= new ClustalFile();
+
 //////////////////////////////////////// Constructor and Deconstructor Test ///////////////////////////////////////////////////
 
 CHECK(ClustalFile())
@@ -275,7 +273,7 @@ CHECK(operator >>(System& system))
 	cp>>s;
 	TEST_EQUAL(s.countProteins(), 3)
 	TEST_EQUAL(s.countResidues(), 289)
-		     
+
 RESULT
 
 cp.clear();
@@ -306,13 +304,12 @@ CHECK(operator << (Alignment& alignment))
 
 	p2->insert(*r3);
 	p2->insert(*r4);
-		
+
 	seq2.setOrigin(p2);
 	al.addSequence(seq2);
-	
+
 	al.insertGap(0,2);
 	al.setAligned(true);
-
 	cp << al;
 
 	ClustalFile::SequenceLine line1 = cp.getBlocks().at(0).getSequenceLine(0);
