@@ -110,9 +110,12 @@ CHECK(bool createModel(Alignment& alignment, Protein& query))
 	// compute RMSD before
 	GeometricCenterProcessor geo_center;
 	protein_copy->apply(geo_center);
-	TEST_EQUAL(geo_center.getCenter(), Vector3(7.96074e-06, 5.96418e-06, 1.1665e-05))
+
+	PRECISION(1e-3)
+
+	TEST_REAL_EQUAL((geo_center.getCenter() - Vector3(7.96074e-06, 5.96418e-06, 1.1665e-05)).getLength(), 0.)
 	S.apply(geo_center);
-	TEST_EQUAL(geo_center.getCenter(), Vector3(12.481, 89.3941, 10.8307))
+	TEST_REAL_EQUAL((geo_center.getCenter() - Vector3(12.481, 89.3941, 10.8307)).getLength(), 0.)
 
 	// create the model
   HomologyModeller hmp;
@@ -121,9 +124,10 @@ CHECK(bool createModel(Alignment& alignment, Protein& query))
 
 	// compute RMSD after
 	protein_copy->apply(geo_center);
-	TEST_EQUAL(geo_center.getCenter(), Vector3(12.4331, 88.7789, 10.7648))
+	TEST_REAL_EQUAL((geo_center.getCenter() - Vector3(12.4331, 88.7789, 10.7648)).getLength(), 0.)
 	S.apply(geo_center);
-	TEST_EQUAL(geo_center.getCenter(), Vector3(12.481, 89.3941, 10.8307))
+	TEST_REAL_EQUAL((geo_center.getCenter() - Vector3(12.481, 89.3941, 10.8307)).getLength(), 0.)
+	PRECISION(1e-5)
 
 
 RESULT
