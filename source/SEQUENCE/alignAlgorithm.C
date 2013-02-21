@@ -16,34 +16,11 @@ using namespace std;
 namespace BALL
 {
 	AlignAlgorithm::AlignAlgorithm()
-	//      alignment()
 	{   }
 
-
-	/*AlignAlgorithm::AlignAlgorithm(BALL::Alignment& alignment)
-	    :
-	                alignment(alignment)
-	{    }
-
-	AlignAlgorithm::AlignAlgorithm(AlignAlgorithm& align_algo)
-	{
-	        alignment=align_algo.alignment;
-	}
-	*/
 	AlignAlgorithm::~AlignAlgorithm()
 	{   }
 
-
-	/*      void AlignAlgorithm::setAlignment(BALL::Alignment& alignment)
-	      {
-	              alignment=alignment;
-	      }
-
-	      BALL::Alignment& AlignAlgorithm::getAlignment()
-	      {
-	              return alignment;
-	      }
-	*/
 
 	bool AlignAlgorithm::align(BALL::Alignment& alignment)
 	{
@@ -167,7 +144,6 @@ namespace BALL
 						//insert new Gap into new Alignment
 						newAlign(i,new_pos) = *(new SequenceCharacter('-', alignment.getAlignmentMatrix()(i,0).getOrigin(), SequenceCharacter::type::GAP, 0));
 					}
-
 				}
 
 				else
@@ -224,7 +200,6 @@ namespace BALL
 
 	bool AlignAlgorithm::alignFromSpecificPosition(Alignment& alignment, Position position)
 	{
-
 		//CHECK whether Position is valid
 		if ( position >= alignment.cols()-1)
 		{
@@ -361,7 +336,6 @@ namespace BALL
 						//insert new Gap into new Alignment
 						newAlign(i,new_pos) = *(new SequenceCharacter('-', alignment.getAlignmentMatrix()(i,0).getOrigin(), SequenceCharacter::type::GAP, 0));
 					}
-
 				}
 
 				else
