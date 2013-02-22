@@ -8,6 +8,7 @@ moc_*.C
 *.dh
 *.sw?
 *.orig
+*.pyc
 .Dependencies
 lib/*
 build/*
