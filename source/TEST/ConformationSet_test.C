@@ -49,7 +49,7 @@ CHECK(writeDCDFile(const String& filename, const Size num = 0))
 		NEW_TMP_FILE(tmp_filename)
 
 		cs.writeDCDFile(tmp_filename);
-		TEST_FILE_REGEXP(tmp_filename.c_str(), BALL_TEST_DATA_PATH(ConformationSet_test.dcd))
+		TEST_FILE(tmp_filename.c_str(), BALL_TEST_DATA_PATH(ConformationSet_test.dcd))
 RESULT
 
 CHECK(setup())
