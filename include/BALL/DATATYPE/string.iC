@@ -769,7 +769,7 @@ bool String::operator > (const String& s) const
 BALL_INLINE
 bool String::operator == (const String& string) const
 {
-	return (compare(string.c_str()) == 0);
+	return (compare(string) == 0);
 }
 
 BALL_INLINE 
@@ -841,6 +841,7 @@ bool String::isValid() const
 BALL_INLINE 
 std::istream& String::getline(std::istream& s,  char delimiter)
 {
+	clear();
 	std::getline(s, *this, delimiter);
 	
 	return s;
