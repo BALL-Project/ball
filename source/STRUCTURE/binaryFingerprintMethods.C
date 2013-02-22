@@ -1361,7 +1361,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 		Log << "++ Setting up data structures" << endl;
 	}
 	
-	unsigned int n_molecules = selection.size();
+	LongSize n_molecules = selection.size();
 	
 	// Create inverted indices for library and query molecules
 	//vector<pair<unsigned short*, unsigned int> > tmp;
@@ -1385,7 +1385,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 	}
 	
 	
-	unsigned long n_iids = lib_iindices_.size();
+	LongSize n_iids = lib_iindices_.size();
 	n_comparisons_ = (n_iids * n_iids + n_iids) / 2;
 	
 	unsigned int n_threads = n_threads_;
@@ -1433,11 +1433,9 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 		Log << "++ Calculations running" << endl;
 	}
 	
-	LongSize total_edge_count = 0;
 	for (unsigned int i=0; i!=n_threads; ++i)
 	{
 		threads_[i].join();
-		total_edge_count += thread_data_[i].first;
 	}
 	
 	timer->stop();
@@ -1445,7 +1443,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 	if (verbosity_ > 5)
 	{
 		LongSize total_comp = ((n_molecules * n_molecules) - n_molecules) / 2;
-		unsigned int comp_per_sec = (total_comp / timer->getClockTime());
+		LognSize comp_per_sec = (total_comp / timer->getClockTime());
 		
 		Log << "++ Calculations done ++" << endl;
 		Log << "++" << endl;
@@ -1805,9 +1803,9 @@ bool BinaryFingerprintMethods::cutoffSearch(const float cutoff, const String& ou
 		Log << "++ Start similarity calculations" << endl;
 	}
 	
-	unsigned long n_comps = lib_iindices_.size();
-	unsigned int batch_size = n_comps / n_threads_;
-	unsigned int to_increment = n_comps - (batch_size * n_threads_);
+	LongSize n_comps = lib_iindices_.size();
+	LongSize batch_size = n_comps / n_threads_;
+	LongSize to_increment = n_comps - (batch_size * n_threads_);
 	
 	Timer* timer = new Timer();
 	timer->start();
@@ -1842,8 +1840,8 @@ bool BinaryFingerprintMethods::cutoffSearch(const float cutoff, const String& ou
 	
 	if (verbosity_ > 5)
 	{
-		unsigned long total_comp = query_features_->size() * lib_features_->size();
-		unsigned int comp_per_sec = (total_comp / timer->getClockTime());
+		LongSize total_comp = query_features_->size() * lib_features_->size();
+		LongSize comp_per_sec = (total_comp / timer->getClockTime());
 		
 		Log << "++ Calculations done" << endl;
 		Log << "++" << endl;
@@ -1888,7 +1886,7 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 	store_nns_ = false;
 	avg_sims.clear();
 	medoid_index = selection.size() + 1;
-	unsigned int n_molecules = selection.size();
+	LongSize n_molecules = selection.size();
 	
 	if (checkInputData(selection) == false)
 	{
@@ -1946,7 +1944,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 							map<unsigned int, vector<unsigned int> >& cluster_selection)
 {
 	cluster_selection.clear();
-	unsigned int n_molecules = selection.size();
+	LongSize n_molecules = selection.size();
 	
 	if (n_molecules == 1)
 	{
