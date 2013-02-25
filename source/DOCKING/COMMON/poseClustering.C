@@ -120,6 +120,7 @@ namespace BALL
 	{
 //	cout << " extract clusters for dist = " << threshold << endl;
 		clusters_.clear();
+		cluster_scores_.clear();
 
 		// for debug purposes, we might have to reset our cluster id
 #ifdef POSECLUSTERING_DEBUG
@@ -135,6 +136,8 @@ namespace BALL
 		if (cluster_tree_[cluster_tree_root_].merged_at < threshold)
 		{
 			clusters_.push_back(collectClusterBelow_(cluster_tree_root_));
+			cluster_scores_.push_back(cluster_tree_[cluster_tree_root_].merged_at);
+
 #ifdef POSECLUSTERING_DEBUG 
 			cluster_tree_[cluster_tree_root_].current_cluster_id = clusters_.size()-1;
 #endif
@@ -153,6 +156,8 @@ namespace BALL
 					if (cluster_tree_[child].merged_at < threshold)
 					{
 						clusters_.push_back(collectClusterBelow_(child));
+						cluster_scores_.push_back(cluster_tree_[child].merged_at);
+
 #ifdef POSECLUSTERING_DEBUG 
 						cluster_tree_[child].current_cluster_id = clusters_.size()-1;
 #endif
@@ -175,6 +180,7 @@ namespace BALL
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
 		clusters_.clear();
+		cluster_scores_.clear();
 
 		ClusterTreeNodeComparator comp(cluster_tree_);
 		std::priority_queue< ClusterTreeNode, std::vector<ClusterTreeNode>, ClusterTreeNodeComparator >  prio(comp);
@@ -197,6 +203,7 @@ namespace BALL
 		while (!prio.empty())
 		{
 			clusters_.push_back(collectClusterBelow_(prio.top()));
+			cluster_scores_.push_back(cluster_tree_[prio.top()].merged_at);
 			prio.pop();
 		}
 
@@ -209,6 +216,7 @@ namespace BALL
 		if (delete_conformation_set_)
 			delete current_set_;
 		has_rigid_transformations_ = false;
+		transformations_.clear();
 
 		current_set_ = new_set;
 		base_system_ = new_set->getSystem();
@@ -219,13 +227,23 @@ namespace BALL
 	{
 		base_system_ = base_system;
 		poses_ = poses;
+
+		// make sure we don't have old transformations or poses flying around
+		transformations_.clear();
+		if (delete_conformation_set_)
+		{
+			delete current_set_;
+		}
+		current_set_ = 0;
 	}
 
 	void PoseClustering::setBaseSystemAndTransformations(System const& base_system, String transformation_file_name)
 	{
 		// clear any potential pointers to old poses	
 		if (delete_conformation_set_)
+		{
 			delete current_set_;
+		}
 		current_set_ = NULL;
 
 		has_rigid_transformations_ = true;
@@ -363,6 +381,7 @@ namespace BALL
 
 		// clean up old clusters
 		clusters_.clear();
+		cluster_scores_.clear();
 
 		// reset the cluster tree
 		cluster_tree_.clear();
@@ -382,12 +401,14 @@ namespace BALL
 		set<Index>* min_cluster_a = NULL;
 		set<Index>* min_cluster_b = NULL;
 
+		// in the beginning each pose is a cluster itself
 		for (Size i=0; i<num_poses; i++)
 		{
 			// add as new cluster
 			set<Index> new_set;
 			new_set.insert((Index) i);
 			clusters_.push_back(new_set);
+			cluster_scores_.push_back(0.);
 
 			// and add it into the tree
 			ClusterTreeNode v = boost::add_vertex(cluster_tree_);
@@ -448,11 +469,15 @@ namespace BALL
 
 			min_cluster_a->swap(temp_set);
 
+			// the max rmsd between all pairs in the new cluster 
+			// is the clusters score
+			cluster_scores_[min_cluster_a_idx] = min_max_cluster_dist;
+
 			// mark as merged
 			min_cluster_b->clear();
 			pairwise_scores_(min_cluster_b_idx, min_cluster_b_idx) = std::numeric_limits<float>::max();
 
-//cout << "found a new cluster by merging " << min_cluster_a_idx << " with " << min_cluster_b_idx << " with rmsd " << min_max_cluster_dist << endl;
+//cout << "found a new cluster by merging " << min_cluster_a_idx << " with " << min_cluster_b_idx << " with rmsd " << min_max_cluster_dist <<  " / " << rmsd_cutoff << endl;
 //printCluster_(min_cluster_a_idx);
 
 			// did we end up in a single cluster?
@@ -503,15 +528,20 @@ namespace BALL
 		}
 
 		// collect all final clusters
-		std::vector<std::set<Index> >   temp_clusters;
+		std::vector< std::set<Index> >   temp_clusters;
+		std::vector< float >             temp_cluster_scores;
 
 		for (Size i = 0; i < clusters_.size(); i++)
 		{
-			if (clusters_[i].size() >0)
+			if (clusters_[i].size() > 0)
+			{
 				temp_clusters.push_back(clusters_[i]);
+				temp_cluster_scores.push_back(cluster_scores_[i]);
+			}
 		}
 
 		swap(clusters_, temp_clusters);
+		swap(cluster_scores_, temp_cluster_scores);
 
 //cout << "Final num of clusters " << clusters_.size() << endl;
 //printClusters();
@@ -587,12 +617,14 @@ namespace BALL
 		}
 		// convert lambda, pi, and mu to clusters datastructure
 		clusters_.clear();
+		cluster_scores_.clear();
 
 //for (int i=0; i<pi_.size(); ++i)
 //	std::cout << i << " " << pi_[i] << " " << lambda_[i] << std::endl;
 
 		// we need a helper for the clusters
 		std::vector<std::set<Index> > cluster_helper;
+		std::vector<float> score_helper(num_poses);
 
 		// first, each point is its own cluster
 		for (Position i=0; i < num_poses; ++i)
@@ -609,6 +641,9 @@ namespace BALL
 				// merge this cluster with its destination
 				cluster_helper[pi_[current_cluster]].insert(cluster_helper[current_cluster].begin(), cluster_helper[current_cluster].end());
 
+				// store the value at which this was merged
+				score_helper[pi_[current_cluster]] = lambda_[current_cluster];
+//		std::cout << "merging into " << pi_[current_cluster] << " with " << lambda_[current_cluster] << std::endl;
 				// save some memory
 				cluster_helper[current_cluster].clear();
 			}
@@ -616,9 +651,10 @@ namespace BALL
 			{
 				// this cluster is done => put it into the result
 				clusters_.push_back(cluster_helper[current_cluster]);
-
 				// save some memory
 				cluster_helper[current_cluster].clear();
+
+				cluster_scores_.push_back(score_helper[current_cluster]);
 			}
 		}
 //printClusterRMSDs();
@@ -749,6 +785,7 @@ namespace BALL
 		}
 		// clean up old clusters
 		clusters_.clear();
+		cluster_scores_.clear();
 
 		// reset the cluster tree
 		cluster_tree_.clear();
@@ -1185,6 +1222,7 @@ namespace BALL
 		}
 	}
 
+
 	bool PoseClustering::refineClustering(Options const& refined_options)
 	{
 		if (getNumberOfClusters() == 0)
@@ -1208,16 +1246,18 @@ namespace BALL
 
 		// store the inner clusters temporarily
 		std::vector< std::set<Index> > temp_clusters;
+		std::vector< float >           temp_cluster_scores;
 
 		// now iterate over all clusters 
 		for (Size i=0; i<getNumberOfClusters(); i++)
 		{
-//cout << " Inner compute no " << i << " of " <<  getNumberOfClusters() << " #members:" << getNumberOfClusters() << endl;
+//cout << "\n Inner compute no " << i << " of " <<  getNumberOfClusters() << " #members:" << getClusterSize(i) << endl;
 
 			// if the cluster has only one element, there is no need to split it
 			if (getClusterSize(i)<=1)
 			{
 				temp_clusters.push_back(getCluster(i));
+				temp_cluster_scores.push_back(getClusterScore(i));
 			}
 			else // multiple-element cluster
 			{
@@ -1238,11 +1278,12 @@ namespace BALL
 				// run a clustering separately on each pre cluster as described by the options
 				inner_pc.clear_();
 
-				// set the original options 
+				// set the refinement options 
 				inner_pc.options = refined_options;
 
 				// set the poses for the inner pc
 				inner_pc.setBaseSystemAndPoses(base_system_, current_pose_vector);
+//cout << "       # given poses: " << current_pose_vector.size() << endl;
 
 				inner_pc.compute();
 
@@ -1262,6 +1303,7 @@ namespace BALL
 
 					// add to the temp set 
 					temp_clusters.push_back(converted_indices);
+					temp_cluster_scores.push_back(inner_pc.getClusterScore(j));
 				}
 //cout << "++++++++++++++++++++++++++++++***" << endl;
 //				inner_pc.printClusterRMSDs();
@@ -1272,7 +1314,8 @@ namespace BALL
 		}
 
 		// switch the clusters
-		clusters_ = temp_clusters;
+		clusters_       = temp_clusters;
+		cluster_scores_ = temp_cluster_scores;
 
 		//printClusters();
 
@@ -1305,13 +1348,17 @@ namespace BALL
 #ifdef POSECLUSTERING_DEBUG 
 		Index cluster_alg = options.getInteger(Option::CLUSTER_METHOD);
 #endif
-		cout << endl <<  "For method " << options.getInteger(PoseClustering::Option::CLUSTER_METHOD)
-		     << " and RMSDtype " << rmsd_type << " we get: " << endl;
+		/*
+		cout << endl <<  "For method " << options.getInteger(Option::CLUSTER_METHOD)
+		     << " and RMSDtype " << rmsd_type
+				 << " and cutoff " << options.getInteger(Option::DISTANCE_THRESHOLD)
+				 << " we get: " << endl;
+				 */
 
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
 			cout << "=======================================" << endl;
-			cout << "    Cluster " << i << endl;
+			cout << "    Cluster " << i << "(" << getClusterScore(i) << ")" << endl;
 
 #ifdef POSECLUSTERING_DEBUG 
 			if (cluster_alg == NEAREST_NEIGHBOR_CHAIN_WARD)
@@ -1361,6 +1408,7 @@ namespace BALL
 			cout << "=======================================" << endl << endl;
 		} //next cluster
 	}
+
 
 	void PoseClustering::exportWardClusterTree(std::ostream& out)
 	{
@@ -1421,19 +1469,61 @@ namespace BALL
 	}
 
 
-	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i) const
+	float PoseClustering::getClusterScore(Index i) const
 	{
-		if (i >= (Index)clusters_.size())
+		if (i >= (Index)cluster_scores_.size())
+				throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		return cluster_scores_[i];
+	}
+
+
+	float PoseClustering::getScore(System a, System b, Options options) const
+	{
+		// TODO
+		// basically call getRMSD_(Index i, j, rmsd_type)
+		float rmsd = 0.;
+		/*
+		Index rmsd_type = options.getInteger(Option::RMSD_TYPE);
+		if (rmsd_type == PoseClustering::RIGID_RMSD)
+		{
+			RigidTransformation const& trafo_i = *(poses_[i].trafo);
+			RigidTransformation const& trafo_j = *(poses_[j].trafo);
+
+			Eigen::Vector3f t_ab = (trafo_j.translation - trafo_i.translation);
+			Eigen::Matrix3f M_ab = (trafo_j.rotation    - trafo_i.rotation);
+
+			rmsd = getRigidRMSD(t_ab, M_ab, covariance_matrix_);
+
+			//			std::cout << t_ab.squaredNorm() << " " << rmsd << std::endl;
+
+		}
+		else if (rmsd_type == PoseClustering::SNAPSHOT_RMSD)
+		{
+			// we are were given Conformations that have been applied to sys_i and sys_j
+			// TODO: we should probably use RMSDMinimizer instead!
+			//       or even better, merge StructureMapper and RMSDMinimizer
+			StructureMapper mapper(system_i_, system_j_);
+			rmsd = mapper.calculateRMSD(atom_bijection_);
+		}
+		else if (rmsd_type == PoseClustering::CENTER_OF_MASS_DISTANCE)
+		{
+			// just query the center distance
+			rmsd = com_[i].getDistance(com_[j]);
+		}
+
+		std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
+		*/
+		return rmsd;
+	}
+
+
+	boost::shared_ptr<System> PoseClustering::getPose(Index i) const
+	{
+		if (i >= (Index)poses_.size())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
 		boost::shared_ptr<System> new_system(new System(getSystem()));
-
-		// as cluster representative we simply take the first cluster member
-		// this is a very simple heuristic :-)
-		// TODO: find the median?
-
-		// take the first
-		Index conf_set_idx = *(clusters_[i].begin());
 
 		if (has_rigid_transformations_)
 		{
@@ -1446,7 +1536,7 @@ namespace BALL
 			new_system->apply(translation);
 
 			// apply transformation and rotation	
-			RigidTransformation const& rigid_trafo = *(poses_[conf_set_idx].trafo);
+			RigidTransformation const& rigid_trafo = *(poses_[i].trafo);
 			Eigen::Matrix3f     const& rotation    = rigid_trafo.rotation;
 
 			TransformationProcessor transformation;
@@ -1462,9 +1552,25 @@ namespace BALL
 		}
 		else
 		{
-			poses_[conf_set_idx].snap->applySnapShot(*(new_system.get()));
+			poses_[i].snap->applySnapShot(*(new_system.get()));
 		}
 		return new_system;
+	}
+
+
+	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i) const
+	{
+		if (i >= (Index)clusters_.size())
+			throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		// as cluster representative we simply take the first cluster member
+		// this is a very simple heuristic :-)
+		// TODO: find the median?
+
+		// take the first
+		Index conf_set_idx = *(clusters_[i].begin());
+
+		return getPose(conf_set_idx);
 	}
 
 
@@ -1541,7 +1647,7 @@ namespace BALL
 		{
 			// and take the first  
 			System conf(new_set->getSystem());
-			
+
 			poses_[*clusters_[i].begin()].snap->applySnapShot(conf);
 
 			new_set->add(0, conf);
@@ -1584,7 +1690,8 @@ namespace BALL
 				}
 				else
 				{
-					Log.info() << "getRMSD() for current option setting not yet implemented!" << __FILE__ <<  " " << __LINE__ << endl;
+					Log.info() << "getRMSD() for current option setting not yet implemented! "
+					           << __FILE__ <<  " " << __LINE__ << endl;
 				}
 
 				if (temp_rmsd > rmsd)
@@ -1625,7 +1732,7 @@ namespace BALL
 
 			rmsd = getRigidRMSD(t_ab, M_ab, covariance_matrix_);
 
-//			std::cout << t_ab.squaredNorm() << " " << rmsd << std::endl;
+//			std::cout << t_ab << " " << M_ab << " " << rmsd << std::endl << covariance_matrix_ << std::endl;
 
 		}
 		else if (rmsd_type == PoseClustering::SNAPSHOT_RMSD)
@@ -1642,7 +1749,7 @@ namespace BALL
 			rmsd = com_[i].getDistance(com_[j]);
 		}
 
-		//std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
+//		std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
 		return rmsd;
 	}
 
@@ -1722,17 +1829,23 @@ namespace BALL
 		// just to be sure...
 		transformations_.clear();
 
+		// we will also need the covariance matrix
+		covariance_matrix_ = computeCovarianceMatrix(base_system_, options.getInteger(Option::RMSD_LEVEL_OF_DETAIL));
+
 		Size num_poses = getNumberOfPoses();
 
-		precomputeAtomBijection_();
+		system_i_ = base_system_;
+		system_j_ = base_system_;
+		poses_[0].snap->applySnapShot(system_i_);
 
-		System transformed_system(base_system_);
+		precomputeAtomBijection_();
+		computeCenterOfMasses_();
 
 		// we iterate over all the snapshots
 		for (Position current_snap = 0; current_snap < num_poses; ++current_snap)
 		{
-			// apply the snapshot
-			poses_[current_snap].snap->applySnapShot(transformed_system);
+			// apply the snapshot (we compute all transformations relative to system_i_)
+			poses_[current_snap].snap->applySnapShot(system_j_);
 
 			// compute the best mapping of the base system to the transformed one
 			RMSDMinimizer::Result transform = RMSDMinimizer::computeTransformation(atom_bijection_);
@@ -1741,9 +1854,16 @@ namespace BALL
 			// convert the contained matrix to Eigen translation vector & rotation matrix
 			RigidTransformation rd;
 
-			rd.translation << bm.m14, bm.m24, bm.m34;
+			// unfortunately, we cannot directly use the translation vector contained in the matrix:
+			// the way the transformation is set up, we will first move the second protein in the origin,
+			// then rotate it, and finally move it to the center of mass of the first protein. for our
+			// RIGID_RMSD-computation, however, we need the difference of the centers of mass, without
+			// the influence of the rotation
 
 			rd.rotation << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
+
+			Vector3 current_com = com_[current_snap] - com_[0];
+			rd.translation << current_com.x, current_com.y, current_com.z;
 
 			transformations_.push_back(rd);
 		}
@@ -1759,7 +1879,7 @@ namespace BALL
 
 	void PoseClustering::printCluster_(Index i) const
 	{
-		cout << "++++ cluster " << i << " ++++" << endl;
+		cout << "++++ cluster " << i << " score " << getClusterScore(i) << " ++++" << endl;
 		std::copy(clusters_[i].begin(), clusters_[i].end(), std::ostream_iterator<Index>(std::cout, " "));
 		cout << endl;
 		cout << "+++++++++++++++++++" << endl;
@@ -1818,6 +1938,7 @@ namespace BALL
 		base_system_.clear();
 		base_conformation_.clear();
 		clusters_.clear();
+		cluster_scores_.clear();
 		//rmsd_level_of_detail_;
 		lambda_.clear();
 		pi_.clear();

@@ -318,6 +318,15 @@ namespace BALL
 			/// returns the size of cluster i
 			Size getClusterSize(Index i) const;
 
+			/// returns the score of cluster i
+			float getClusterScore(Index i) const;
+
+			/// returns the score between two poses given as systems
+			float getScore(System a, System b, Options options) const;
+
+			/// returns the pose i as system
+			boost::shared_ptr<System> getPose(Index i) const;
+
 			/// returns the first conformation of cluster i as system 
 			boost::shared_ptr<System> getClusterRepresentative(Index i) const;
 
@@ -387,7 +396,8 @@ namespace BALL
 			 */
 			std::vector<std::set<Index> > extractNBestClusters(Size n);
 
-			/// exports the Ward cluster tree in TODO format
+			/** Export the cluster tree in graphviz format.
+ 			*/
 			void exportWardClusterTree(std::ostream& out);
 
 			//@}
@@ -517,7 +527,10 @@ namespace BALL
 			ConformationSet*                 current_set_;
 
 			/// the clusters: sets of pose indices 
-			std::vector<std::set<Index> >    clusters_;
+			std::vector< std::set<Index> >   clusters_;
+
+			/// the scores of the clusters 
+			std::vector< float >             cluster_scores_;
 
 			/// the RMSD definition used for clustering
 			Index                            rmsd_level_of_detail_;
@@ -558,7 +571,7 @@ namespace BALL
 			std::vector<double>    mu_;
 
 
-			// ----- data structures for Ward
+			// ----- data structures for nearest neighbor chain ward
 			Size                   number_of_selected_atoms_;
 
 			// ----- data structure for CENTER_OF_GRAVITY_CLINK

@@ -68,7 +68,6 @@ int main (int argc, char **argv)
 	rmsd_levels.push_back("ALL_ATOMS");
 	parpars.setParameterRestrictions("rmsd_scope", rmsd_levels);
 
-
 	// choice of rmsd type
 	parpars.registerParameter("rmsd_type", "rmsd type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, false, "SNAPSHOT_RMSD");
 	list<String> rmsd_types;
@@ -78,10 +77,23 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_type", rmsd_types);
 
 	// register bool parameter for using pre-clustering
-	parpars.registerFlag("use_preclustering", "Switch on preclustering");
+	parpars.registerFlag("use_refinement", "Apply a second clustering run with different options");
+
+	// refinement algorithm
+	parpars.registerParameter("refine_alg", "algorithm used for second clustering run (CLINK_DEFAYS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
+	parpars.setParameterRestrictions("refine_alg", cluster_algs);
+
+	// refinment rmsd type
+	parpars.registerParameter("refine_rmsd_type", "rmsd type used for second clustering run (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, false, "SNAPSHOT_RMSD");
+	parpars.setParameterRestrictions("refine_rmsd_type", rmsd_types);
+
+	// refinement rmsd scope
+	parpars.registerParameter("refine_rmsd_scope", "atoms to be considered for rmsd score in second clustering run (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
+	parpars.setParameterRestrictions("refine_rmsd_scope", rmsd_levels);
+
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using a CLINK or SLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type, and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a number of dcd files each containing one ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set using a CLINK or SLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type, and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a dcd file containing the reduced cluster ConformationSet.";
 
 	parpars.setToolManual(man);
 
@@ -108,7 +120,7 @@ int main (int argc, char **argv)
 	if (parpars.has("i_dcd"))
 	{
 		/*
-		//TODO fix, when solution found for "dcd or transformation alternativ" problem
+		//TODO fix, when solution found for the "dcd or transformation alternativ" problem
 		if (parpars.has("rmsd_type") && (parpars.get("rmsd_type") == "RIGID_RMSD"))
 		{
 			Log << "Trajectory input file cannot be used with rmsd_type 'RIGID_RMSD'. Abort!" << endl;
@@ -180,15 +192,7 @@ int main (int argc, char **argv)
 		if (type == "SNAPSHOT_RMSD")
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
 		else if (type == "RIGID_RMSD")
-		{
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
-			if (!parpars.has("i_transformations"))
-			{
-				//TODO: add functionality to convert snapshots to transformations
-				Log << "RIGID_RMSD can only be used when given a transformation file (-i_transformations) . Abort!" << endl;
-				return  0;
-			}
-		}
 		else if (type == "CENTER_OF_MASS_DISTANCE")
 		{
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
@@ -199,16 +203,63 @@ int main (int argc, char **argv)
 
 	}
 
-	if (parpars.has("use_preclustering"))
-	{
-		bool use_preclustering = parpars.get("use_preclustering").toBool();
-		pc.options.setBool(PoseClustering::Option::USE_CENTER_OF_MASS_PRECLINK, use_preclustering);
-	}
-
-
 	pc.setConformationSet(&cs);
 
 	pc.compute();
+
+	// do we need a second clustering run?
+	if (parpars.has("use_refinement"))
+	{
+		// get the options
+		Options refine_options = pc.options;
+		if (parpars.has("refine_rmsd_scope"))
+		{
+			String scope = parpars.get("refine_rmsd_scope");
+			if (scope == "C_ALPHA")
+				refine_options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::C_ALPHA);
+			else if (scope == "BACKBONE")
+				refine_options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::BACKBONE);
+			else if (scope == "ALL_ATOMS")
+				refine_options.set(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL, PoseClustering::ALL_ATOMS);
+			else
+				Log.info() << "Unknown value " << scope  << " for option refine_rmsd_scope." << endl;
+		}
+
+		if (parpars.has("refine_alg"))
+		{
+			String alg = parpars.get("refine_alg");
+			if (alg == "CLINK_DEFAYS")
+				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
+			else if (alg == "SLINK_SIBSON")
+				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
+			else if (alg == "TRIVIAL_COMPLETE_LINKAGE")
+				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
+			else if (alg == " NEAREST_NEIGHBOR_CHAIN_WARD")
+				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+			else
+				Log.info() << "Unknown value " << alg  << " for option refine_alg." << endl;
+		}
+
+		if (parpars.has("refine_rmsd_type"))
+		{
+			String type = parpars.get("refine_rmsd_type");
+			if (type == "SNAPSHOT_RMSD")
+				refine_options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+			else if (type == "RIGID_RMSD")
+				refine_options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
+			else if (type == "CENTER_OF_MASS_DISTANCE")
+			{
+				refine_options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
+				Log << "Parameter rmsd_scope will be ignored!" << endl;
+			}
+			else
+				Log.info() << "Unknown value " << type  << " for option refine_rmsd_type." << endl;
+		}
+
+		pc.refineClustering(refine_options);
+	}
+
+
 
 	Size num_clusters = pc.getNumberOfClusters();
 
