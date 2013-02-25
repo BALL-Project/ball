@@ -114,6 +114,7 @@ namespace BALL
 		void DownloadElectronDensity::slotDownload()
 		{
 				String id = ascii(entryId->currentText());
+				id.toLower();
 				String url = "";
 				String filename_onserver = ""; 
 				String temp_filename = VIEW::createTemporaryFilename(); 
