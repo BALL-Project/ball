@@ -322,7 +322,7 @@ namespace BALL
 			float getClusterScore(Index i) const;
 
 			/// returns the score between two poses given as systems
-			float getScore(System a, System b, Options options) const;
+			float getScore(const System sys_a, const System sys_b, Options options) const;
 
 			/// returns the pose i as system
 			boost::shared_ptr<System> getPose(Index i) const;

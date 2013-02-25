@@ -545,7 +545,7 @@ namespace BALL
 
 //cout << "Final num of clusters " << clusters_.size() << endl;
 //printClusters();
-	//	printClusterRMSDs();
+//printClusterRMSDs();
 
 		return true;
 	}
@@ -1184,24 +1184,14 @@ namespace BALL
 	// precompute the atom bijection
 	void PoseClustering::precomputeAtomBijection_()
 	{
-		int rmsd_type = options.getInteger(Option::RMSD_TYPE);
+		Index rmsd_level_of_detail = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
 
-		rmsd_level_of_detail_ = options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
-
-		if (rmsd_type == PoseClustering::RIGID_RMSD)
-		{
-			system_i_ = System(base_system_);
-			system_j_ = System(base_system_);
-		}
-		else
-		{
-			system_i_ = System(base_system_);
-			system_j_ = System(base_system_);
-		}
+		system_i_ = System(base_system_);
+		system_j_ = System(base_system_);
 
 		StructureMapper mapper(system_i_, system_j_);
 
-		switch (rmsd_level_of_detail_)
+		switch (rmsd_level_of_detail)
 		{
 			case PoseClustering::C_ALPHA:
 				atom_bijection_.assignCAlphaAtoms(system_i_, system_j_);
@@ -1478,42 +1468,87 @@ namespace BALL
 	}
 
 
-	float PoseClustering::getScore(System a, System b, Options options) const
+	float PoseClustering::getScore(System sys_a, System sys_b, Options temp_options) const
 	{
-		// TODO
-		// basically call getRMSD_(Index i, j, rmsd_type)
+		// basically reimplement getRMSD_(Index i, j, rmsd_type)
+		// but more general
 		float rmsd = 0.;
-		/*
-		Index rmsd_type = options.getInteger(Option::RMSD_TYPE);
+		Index rmsd_type            = temp_options.getInteger(Option::RMSD_TYPE);
+		Index rmsd_level_of_detail = temp_options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
+
+		// compute an atombijection
+		AtomBijection temp_atom_bijection;
+		StructureMapper mapper(sys_a, sys_b);
+
+		switch (rmsd_level_of_detail)
+		{
+			case PoseClustering::C_ALPHA:
+				temp_atom_bijection.assignCAlphaAtoms(sys_a, sys_b);
+				break;
+			case PoseClustering::BACKBONE:
+				temp_atom_bijection.assignBackboneAtoms(sys_a, sys_b);
+				break;
+			case PoseClustering::ALL_ATOMS:
+				mapper.calculateDefaultBijection();
+				temp_atom_bijection = mapper.getBijection();
+				break;
+			case PoseClustering::PROPERTY_BASED_ATOM_BIJECTION:
+				temp_atom_bijection.assignAtomsByProperty(sys_a, sys_b);
+				break;
+			case PoseClustering::HEAVY_ATOMS:
+			default:
+				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
+		}
+
+		// enter of masses
+		GeometricCenterProcessor center;
+		sys_a.apply(center);
+		Vector3 com_a = center.getCenter();
+
+		sys_b.apply(center);
+		Vector3 com_b = center.getCenter();
+
 		if (rmsd_type == PoseClustering::RIGID_RMSD)
 		{
-			RigidTransformation const& trafo_i = *(poses_[i].trafo);
-			RigidTransformation const& trafo_j = *(poses_[j].trafo);
+			// we will also need the covariance matrix
+			Eigen::Matrix3f temp_covariance_matrix = computeCovarianceMatrix(sys_a, rmsd_level_of_detail);
 
-			Eigen::Vector3f t_ab = (trafo_j.translation - trafo_i.translation);
-			Eigen::Matrix3f M_ab = (trafo_j.rotation    - trafo_i.rotation);
+			RMSDMinimizer::Result transform = RMSDMinimizer::computeTransformation(temp_atom_bijection);
+			Matrix4x4& bm = transform.first;
 
-			rmsd = getRigidRMSD(t_ab, M_ab, covariance_matrix_);
+			// convert the contained matrix to Eigen translation vector & rotation matrix
+			RigidTransformation rd_a;
 
-			//			std::cout << t_ab.squaredNorm() << " " << rmsd << std::endl;
+			// unfortunately, we cannot directly use the translation vector contained in the matrix:
+			// the way the transformation is set up, we will first move the second protein in the origin,
+			// then rotate it, and finally move it to the center of mass of the first protein. for our
+			// RIGID_RMSD-computation, however, we need the difference of the centers of mass, without
+			// the influence of the rotation
+
+			rd_a.rotation << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
+
+			Eigen::Vector3f eigen_com_a;
+			eigen_com_a << com_a.x, com_a.y, com_a.z;
+
+			Eigen::Vector3f eigen_com_b;
+			eigen_com_b << com_b.x, com_b.y, com_b.z;
+
+			Eigen::Vector3f t_ab = eigen_com_a - eigen_com_b;
+			Eigen::Matrix3f M_ab = rd_a.rotation - Eigen::Matrix3f::Identity();
+
+			rmsd = getRigidRMSD(t_ab, M_ab, temp_covariance_matrix);
 
 		}
 		else if (rmsd_type == PoseClustering::SNAPSHOT_RMSD)
 		{
-			// we are were given Conformations that have been applied to sys_i and sys_j
-			// TODO: we should probably use RMSDMinimizer instead!
-			//       or even better, merge StructureMapper and RMSDMinimizer
-			StructureMapper mapper(system_i_, system_j_);
-			rmsd = mapper.calculateRMSD(atom_bijection_);
+			rmsd = mapper.calculateRMSD(temp_atom_bijection);
 		}
 		else if (rmsd_type == PoseClustering::CENTER_OF_MASS_DISTANCE)
 		{
 			// just query the center distance
-			rmsd = com_[i].getDistance(com_[j]);
+			rmsd = com_a.getDistance(com_b);
 		}
 
-		std::cout << "rmsd between " << i << " " << j << ": " << rmsd << std::endl;
-		*/
 		return rmsd;
 	}
 
@@ -1537,12 +1572,13 @@ namespace BALL
 
 			// apply transformation and rotation	
 			RigidTransformation const& rigid_trafo = *(poses_[i].trafo);
-			Eigen::Matrix3f     const& rotation    = rigid_trafo.rotation;
+			Eigen::Matrix3f     const& rd_rotation    = rigid_trafo.rotation;
+			Eigen::Vector3f     const& rd_translation = rigid_trafo.translation;
 
 			TransformationProcessor transformation;
-			transformation.setTransformation(Matrix4x4(rotation(0,0), rotation(0,1), rotation(0,2), rotation(0),
-			                                           rotation(1,0), rotation(1,1), rotation(1,2), rotation(1),
-			                                           rotation(2,0), rotation(2,1), rotation(2,2), rotation(2),
+			transformation.setTransformation(Matrix4x4(rd_rotation(0,0), rd_rotation(0,1), rd_rotation(0,2), rd_translation(0),
+			                                           rd_rotation(1,0), rd_rotation(1,1), rd_rotation(1,2), rd_translation(1),
+			                                           rd_rotation(2,0), rd_rotation(2,1), rd_rotation(2,2), rd_translation(2),
 			                                           0, 0, 0, 1));
 			new_system->apply(transformation);
 
@@ -1693,7 +1729,7 @@ namespace BALL
 					Log.info() << "getRMSD() for current option setting not yet implemented! "
 					           << __FILE__ <<  " " << __LINE__ << endl;
 				}
-
+//				std::cout << "duddeldumm: " << *conf_it_i << " " << *conf_it_j << " " << temp_rmsd << std::endl;
 				if (temp_rmsd > rmsd)
 					rmsd = temp_rmsd;
 			}
@@ -1838,6 +1874,7 @@ namespace BALL
 		system_j_ = base_system_;
 		poses_[0].snap->applySnapShot(system_i_);
 
+		// TODO: return and parameters?
 		precomputeAtomBijection_();
 		computeCenterOfMasses_();
 
