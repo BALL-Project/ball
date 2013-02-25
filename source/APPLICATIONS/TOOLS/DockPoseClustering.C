@@ -40,9 +40,16 @@ int main (int argc, char **argv)
 	// - required
 	parpars.registerParameter("o", "output dcd-file name for first solution ", STRING, true, "", true);
 
-	parpars.registerParameter("o_id", "output id ", STRING, true, "", true);
+	parpars.registerParameter("o_type", "output type (dcd, index_list, or rmsd_matrix) ", STRING, false, "dcd");
+	list<String> output_types;
+	output_types.push_back("dcd");
+	output_types.push_back("index_list");
+	output_types.push_back("rmsd_matrix");
+	parpars.setParameterRestrictions("o_type", output_types);
 
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution ", STRING, true, "", true);
+	parpars.registerParameter("o_id", "output id ", STRING, false, "", true);
+
+	parpars.registerParameter("o_dir", "output directory for 2nd to last solution ", STRING, false, "", true);
 
 	parpars.registerParameter("o_dcd", "output directory for the reduced cluster set (one structure per final cluster) ", STRING, false, "", true);
 
@@ -77,7 +84,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_type", rmsd_types);
 
 	// register bool parameter for using pre-clustering
-	parpars.registerFlag("use_refinement", "Apply a second clustering run with different options");
+	parpars.registerFlag("use_refinement", "Apply a second clustering run with different options (-refine_alg <string>, -refine_rmsd_type <string>, and -refine_rmsd_scope <string>)");
 
 	// refinement algorithm
 	parpars.registerParameter("refine_alg", "algorithm used for second clustering run (CLINK_DEFAYS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
@@ -93,7 +100,7 @@ int main (int argc, char **argv)
 
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set using a CLINK or SLINK algorithm.\n\nParameters are the input ConformationSet (-i_dcd), one corresponding pdb file (-i_pdb), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type, and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd set the output directory for the reduced cluster set.\n\nOutput of this tool is a dcd file containing the reduced cluster ConformationSet.";
+	String man = "This tool computes clusters of docking poses given as conformation set or a list of rigid transformations.\n\nParameters are either the input ConformationSet (-i_dcd) and one corresponding pdb file (-i_pdb), or a transformation file (-i_transformations), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type (-rmsd_type), and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd sets the output directory for the reduced cluster set.\n\nOutput of this tool is a dcd file containing the reduced cluster ConformationSet.";
 
 	parpars.setToolManual(man);
 
@@ -108,6 +115,16 @@ int main (int argc, char **argv)
 
 	//////////////////////////////////////////////////
 
+	// first, a little sanity check
+	if (parpars.get("o_type") == "dcd")
+	{
+		if (!parpars.has("o_dir") || !parpars.has("o_id"))
+		{
+			Log << "Output type \"dcd\" requires setting the options \"o_dir\" \"o_id\"! Abort!" << endl;
+			return 1;
+		}
+	}
+
 	// read the input	
 	PDBFile pdb;
 	pdb.open(parpars.get("i_pdb"));
@@ -119,15 +136,6 @@ int main (int argc, char **argv)
 
 	if (parpars.has("i_dcd"))
 	{
-		/*
-		//TODO fix, when solution found for the "dcd or transformation alternativ" problem
-		if (parpars.has("rmsd_type") && (parpars.get("rmsd_type") == "RIGID_RMSD"))
-		{
-			Log << "Trajectory input file cannot be used with rmsd_type 'RIGID_RMSD'. Abort!" << endl;
-			//TODO Implement an automatic conversion from dcd to transformation file format!
-			return 0;
-		}
-		*/
 		cs.readDCDFile(parpars.get("i_dcd"));
 	}
 
@@ -203,7 +211,10 @@ int main (int argc, char **argv)
 
 	}
 
-	pc.setConformationSet(&cs);
+	if (parpars.has("-i_dcd"))
+	{
+		pc.setConformationSet(&cs);
+	}
 
 	pc.compute();
 
@@ -265,21 +276,36 @@ int main (int argc, char **argv)
 
 	Log << "Computed " <<  num_clusters << " clusters, start writing..." << endl;
 
-	for (Size i = 0; i < num_clusters; i++)
+	if (parpars.get("o_type") == "dcd")
 	{
-		Log << "   Cluster " << i << " has " << pc.getClusterSize(i) << " members." << endl;
-
-		if (parpars.has("rmsd_type") && parpars.get("rmsd_type") != "RIGID_RMSD")
+		for (Size i = 0; i < num_clusters; i++)
 		{
+			Log << "   Cluster " << i << " has " << pc.getClusterSize(i) << " members." << endl;
+
 			boost::shared_ptr<ConformationSet> new_cs = pc.getClusterConformationSet(i);
 
 			String outfile_name = (i == 0) ? String(parpars.get("o"))
-				                             : String(parpars.get("o_dir")) + "/primary_"
-			 	                              + String(parpars.get("o_id"))  + "_cluster" + String(i)
-			 	                              + "_visible_dcd";
+				: String(parpars.get("o_dir")) + "/primary_"
+				+ String(parpars.get("o_id"))  + "_cluster" + String(i)
+				+ "_visible.dcd";
 			//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
 
 			new_cs->writeDCDFile(outfile_name);
+		}
+	}
+	else
+	{
+		String outfile_name = String(parpars.get("o"));
+
+		File cluster_outfile(outfile_name, std::ios::out);
+
+		if (parpars.get("o_type") == "index_list")
+		{
+			pc.printClusters(cluster_outfile);
+		}
+		else
+		{
+			pc.printClusterRMSDs(cluster_outfile);
 		}
 	}
 
