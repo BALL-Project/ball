@@ -1332,7 +1332,7 @@ namespace BALL
 	}
 
 
-	void PoseClustering::printClusterRMSDs()
+	void PoseClustering::printClusterRMSDs(std::ostream& out)
 	{
 		Index rmsd_type   = options.getInteger(Option::RMSD_TYPE);
 #ifdef POSECLUSTERING_DEBUG 
@@ -1347,8 +1347,8 @@ namespace BALL
 
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
-			cout << "=======================================" << endl;
-			cout << "    Cluster " << i << "(" << getClusterScore(i) << ")" << endl;
+			out << "=======================================" << endl;
+			out << "    Cluster " << i << "(" << getClusterScore(i) << ")" << endl;
 
 #ifdef POSECLUSTERING_DEBUG 
 			if (cluster_alg == NEAREST_NEIGHBOR_CHAIN_WARD)
@@ -1358,7 +1358,7 @@ namespace BALL
 				{
 					if (cluster_tree_[current_node].current_cluster_id == i)
 					{
-						cout << "Merged at Ward distance: " << cluster_tree_[current_node].merged_at << std::endl;
+						out << "Merged at Ward distance: " << cluster_tree_[current_node].merged_at << std::endl;
 					}
 				}
 			}
@@ -1366,12 +1366,12 @@ namespace BALL
 
 			std::set<Index>& current_cluster = clusters_[i];
 
-			cout << "     ";
+			out << "     ";
 			for (std::set<Index>::iterator it_k=current_cluster.begin(); it_k!=current_cluster.end(); ++it_k)
 			{
-				cout << *it_k << "   ";
+				out << *it_k << "   ";
 			}
-			cout << endl;
+			out << endl;
 
 			for (std::set<Index>::iterator it_j=current_cluster.begin(); it_j!=current_cluster.end(); ++it_j)
 			{
@@ -1380,7 +1380,7 @@ namespace BALL
 					poses_[*it_j].snap->applySnapShot(system_i_);
 				}
 
-				cout << " " <<  *it_j << " | ";
+				out << " " <<  *it_j << " | ";
 
 				for (std::set<Index>::iterator it_k=current_cluster.begin(); it_k!=current_cluster.end(); ++it_k)
 				{
@@ -1389,13 +1389,13 @@ namespace BALL
 						poses_[*it_k].snap->applySnapShot(system_j_);
 					}
 
-					cout << getRMSD_(*it_j, *it_k, rmsd_type) << " ";
+					out << getRMSD_(*it_j, *it_k, rmsd_type) << " ";
 				}
 
-				cout << endl;
+				out << endl;
 			}
 
-			cout << "=======================================" << endl << endl;
+			out << "=======================================" << endl << endl;
 		} //next cluster
 	}
 
@@ -1914,21 +1914,21 @@ namespace BALL
 	}
 
 
-	void PoseClustering::printCluster_(Index i) const
+	void PoseClustering::printCluster_(Index i, std::ostream& out) const
 	{
-		cout << "++++ cluster " << i << " score " << getClusterScore(i) << " ++++" << endl;
-		std::copy(clusters_[i].begin(), clusters_[i].end(), std::ostream_iterator<Index>(std::cout, " "));
-		cout << endl;
-		cout << "+++++++++++++++++++" << endl;
+		out << "++++ cluster " << i << " score " << getClusterScore(i) << " ++++" << endl;
+		std::copy(clusters_[i].begin(), clusters_[i].end(), std::ostream_iterator<Index>(out, " "));
+		out << endl;
+		out << "+++++++++++++++++++" << endl;
 	}
 
 
-	void PoseClustering::printClusters() const
+	void PoseClustering::printClusters(std::ostream& out) const
 	{
-		cout << "\n\n    FINAL CLUSTERS     \n\n" << endl;
+		out << "\n\n    FINAL CLUSTERS     \n\n" << endl;
 		for (Size i = 0; i < clusters_.size(); i++)
 		{
-			printCluster_(i);
+			printCluster_(i, out);
 		}
 	}
 

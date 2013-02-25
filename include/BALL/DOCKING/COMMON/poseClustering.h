@@ -44,6 +44,7 @@
 #include <boost/graph/adjacency_list.hpp>
 
 #include <set>
+#include <iostream>
 
 //#define POSECLUSTERING_DEBUG 1
 #undef POSECLUSTERING_DEBUG
@@ -405,11 +406,11 @@ namespace BALL
 
 			/// print the clusters as set of pose indices
 			/// Note: start counting with 0
-			void printClusters() const;
+			void printClusters(std::ostream& out = std::cout) const;
 
 			/// print clusters of pose indices with RMSD between clusters	
 			/// Note: start counting with 0
-			void printClusterRMSDs();
+			void printClusterRMSDs(std::ostream& out = std::cout);
 
 
 		protected:
@@ -512,7 +513,7 @@ namespace BALL
 			void convertSnaphots2Transformations_();
 
 			//
-			void printCluster_(Index i) const;
+			void printCluster_(Index i, std::ostream& out = std::cout) const;
 
 			// 
 			void printVariables_(int a, int b, double c, int d, double e, int current_level);
