@@ -1443,7 +1443,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 	if (verbosity_ > 5)
 	{
 		LongSize total_comp = ((n_molecules * n_molecules) - n_molecules) / 2;
-		LognSize comp_per_sec = (total_comp / timer->getClockTime());
+		LongSize comp_per_sec = (total_comp / timer->getClockTime());
 		
 		Log << "++ Calculations done ++" << endl;
 		Log << "++" << endl;
