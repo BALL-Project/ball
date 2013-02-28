@@ -188,7 +188,7 @@ int main (int argc, char **argv)
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 		else if (alg == "TRIVIAL_COMPLETE_LINKAGE")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-		else if (alg == " NEAREST_NEIGHBOR_CHAIN_WARD")
+		else if (alg == "NEAREST_NEIGHBOR_CHAIN_WARD")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 		else
 			Log.info() << "Unknown value " << alg  << " for option alg." << endl;
@@ -245,7 +245,7 @@ int main (int argc, char **argv)
 				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 			else if (alg == "TRIVIAL_COMPLETE_LINKAGE")
 				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::TRIVIAL_COMPLETE_LINKAGE);
-			else if (alg == " NEAREST_NEIGHBOR_CHAIN_WARD")
+			else if (alg == "NEAREST_NEIGHBOR_CHAIN_WARD")
 				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 			else
 				Log.info() << "Unknown value " << alg  << " for option refine_alg." << endl;
