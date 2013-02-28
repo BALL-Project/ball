@@ -13,7 +13,7 @@
 # include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #endif
 
-#include <BALL/VIEW/UIC/ui_BALLaxyInterfacePreferences.h>
+#include <ui_BALLaxyInterfacePreferences.h>
 
 #include <QtGui/QWidget>
 

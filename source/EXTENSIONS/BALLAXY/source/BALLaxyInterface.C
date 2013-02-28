@@ -2,16 +2,20 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/FORMAT/molFileFactory.h>
 
 #include <QEventLoop>
 #include <QNetworkRequest>
@@ -22,6 +26,8 @@
 #include <QWebFrame>
 #include <QHttpMultiPart>
 #include <QSslError>
+
+#include <QtCore/QDebug>
 
 namespace BALL
 {
@@ -50,12 +56,22 @@ namespace BALL
 			connect(page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )),
 							this, SLOT(handleSslErrors(QNetworkReply*, const QList<QSslError> & ))); 
 
+
+			connect(page(), SIGNAL(unsupportedContent(QNetworkReply*)),
+					    this, SLOT(handleDownload(QNetworkReply*)));
+
+			page()->setForwardUnsupportedContent(true);
+
 			// Here, we can register python scripts with which we could interact with BALLView from the HTML side
 			Path p;
 			script_base_ = p.find("BALLaxyInterface/scripts") + "/";
 
-			context_separator_ = MolecularControl::getInstance(0)->getContextMenu().addSeparator();
-			context_action_    = MolecularControl::getInstance(0)->getContextMenu().addAction(tr("Send to ballaxy"), this, SLOT(sendToBallaxy()));
+			context_submenu_ = new QMenu(tr("Send to ballaxy"), this);
+			context_separator_      = MolecularControl::getInstance(0)->getContextMenu().addSeparator();
+			context_submenu_action_ = MolecularControl::getInstance(0)->getContextMenu().addMenu(context_submenu_);
+
+			context_action_pdb_  = context_submenu_->addAction(tr("as pdb"), this, SLOT(sendPDBToBallaxy()));
+			context_action_mol2_ = context_submenu_->addAction(tr("as mol2"), this, SLOT(sendMOL2ToBallaxy()));
 		}
 
 		BALLaxyInterface::~BALLaxyInterface()
@@ -66,7 +82,9 @@ namespace BALL
 			}
 
 			MolecularControl::getInstance(0)->getContextMenu().removeAction(context_separator_);
-			MolecularControl::getInstance(0)->getContextMenu().removeAction(context_action_);
+			context_submenu_->removeAction(context_action_pdb_);
+			context_submenu_->removeAction(context_action_mol2_);
+			MolecularControl::getInstance(0)->getContextMenu().removeAction(context_submenu_action_);
 		}
 
 		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base)
@@ -92,27 +110,28 @@ namespace BALL
 			action_registry_.insert(action->getName(), action);
 		}
 
-		bool BALLaxyInterface::uploadToBallaxy(AtomContainer* ac)
+		bool BALLaxyInterface::uploadToBallaxy(AtomContainer* ac, const String& format)
 		{
-			String tmp_pdb_filename;
-			File::createTemporaryFilename(tmp_pdb_filename);
-			PDBFile tmp_pdb_file(tmp_pdb_filename, std::ios::out);
+			String tmp_filename;
+			File::createTemporaryFilename(tmp_filename, format);
+
+			GenericMolFile* mol_file = MolFileFactory::open(tmp_filename, std::ios::out);
 
 			// currently, we can only handle Molecules and Systems
 			if (dynamic_cast<System*>(ac) != 0)
 			{
-				tmp_pdb_file << *dynamic_cast<System*>(ac);
-				tmp_pdb_file.close();
+				*mol_file << *dynamic_cast<System*>(ac);
+				mol_file->close();
 			}
 			else if (dynamic_cast<Molecule*>(ac) != 0)
 			{
-				tmp_pdb_file << *dynamic_cast<Molecule*>(ac);
-				tmp_pdb_file.close();
+				*mol_file << *dynamic_cast<Molecule*>(ac);
+				mol_file->close();
 			}
 			else
 			{
-				tmp_pdb_file.close();
-				File::remove(tmp_pdb_filename);
+				mol_file->close();
+				File::remove(tmp_filename);
 
 				return false;
 			}
@@ -143,21 +162,21 @@ namespace BALL
 			// also, find the input area
 			QWebElement text_field = galaxy_main_frame->findFirstElement("textarea");
 
-			std::ifstream input_stream(tmp_pdb_filename);
+			std::ifstream input_stream(tmp_filename);
 			std::string content((std::istreambuf_iterator<char>(input_stream)), std::istreambuf_iterator<char>());
 
 			text_field.setPlainText(content.c_str());
 
 			run_button.evaluateJavaScript("this.click()");
 
-			File::remove(tmp_pdb_filename);
+			File::remove(tmp_filename);
 
 			return true;
 		}
 
 		void BALLaxyInterface::handleLinkClicked(const QUrl& url)
 		{
-			if(!getMainControl()->isBusy())
+			if (!getMainControl()->isBusy())
 			{
 				load(url);
 			}
@@ -235,22 +254,92 @@ namespace BALL
 		// TODO: ask the user what to do (for the moment, we just ignore any ssl errors)
 		void BALLaxyInterface::handleSslErrors(QNetworkReply* reply, const QList<QSslError> &errors)
 		{
+			// TODO: reenable display of ssl errors
+			/*
 			Log.warn() << "Warning: got an ssl error: " << std::endl;
 			foreach (QSslError e, errors)
 			{
 				Log.warn() << ascii(e.errorString()) << std::endl;
 			}
+			*/
 
 			reply->ignoreSslErrors();
 		}
 
-		void BALLaxyInterface::sendToBallaxy()
+		void BALLaxyInterface::sendPDBToBallaxy()
 		{
 			AtomContainer* ac = dynamic_cast<AtomContainer*>(MolecularControl::getInstance(0)->getContextComposite());
 
 			if (ac)
 			{
-				uploadToBallaxy(ac);
+				uploadToBallaxy(ac, ".pdb");
+			}
+		}
+
+		void BALLaxyInterface::sendMOL2ToBallaxy()
+		{
+			AtomContainer* ac = dynamic_cast<AtomContainer*>(MolecularControl::getInstance(0)->getContextComposite());
+
+			if (ac)
+			{
+				uploadToBallaxy(ac, ".mol2");
+			}
+		}
+
+		void BALLaxyInterface::handleDownload(QNetworkReply* reply)
+		{
+			// if qt wants to signal that the user wants to download something,
+			// it generates an unsupportedContent-signal with the raw header
+			// "Content-Disposition" set
+			if (reply->hasRawHeader("Content-Disposition"))
+			{
+				// we need the filename to extract the type
+				String content_disposition = ascii(reply->rawHeader("Content-Disposition"));
+
+				// the string should have the format "attachment; filename"
+				if (content_disposition.hasPrefix("attachment;"))
+				{
+					String filename = content_disposition.after("attachment;");
+					std::vector<String> split;
+
+					filename.split(split, ".");
+
+					String extension = split.back();
+
+					if (MolFileFactory::isFileExtensionSupported(extension))
+					{
+						String tmp_filename;
+						File::createTemporaryFilename(tmp_filename, extension);
+
+						// write the data to a file
+						QFile outfile(tmp_filename.c_str());
+						outfile.open(QIODevice::WriteOnly);
+						outfile.write(reply->readAll());
+						outfile.close();
+
+						// and read it back
+						System* system = new System();
+
+						GenericMolFile* molfile = MolFileFactory::open(tmp_filename, std::ios::in);
+						*molfile >> *system;
+						molfile->close();
+
+						File::remove(tmp_filename);
+
+						getMainControl()->setStatusbarText(String("read ")
+								      + String(system->countAtoms()) + " atoms from BALLaxy", true);
+
+						if (system->getName() == "")
+						{
+							system->setName(filename);
+						}
+
+						getMainControl()->insert(*system, system->getName());
+
+						CompositeMessage* cm = new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA);
+						qApp->postEvent(parent(), new MessageEvent(cm));
+					}
+				}
 			}
 		}
 

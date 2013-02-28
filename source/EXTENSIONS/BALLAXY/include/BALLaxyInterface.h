@@ -6,6 +6,7 @@
 #endif
 
 #include <QtCore/QHash>
+#include <QtNetwork/QNetworkReply>
 
 namespace BALL
 {
@@ -46,10 +47,12 @@ namespace BALL
 
 				void registerAction(BALLaxyInterfaceAction* action);
 
-				bool uploadToBallaxy(AtomContainer* ac);
+				bool uploadToBallaxy(AtomContainer* ac, const String& format);
 
 			public slots:
-				void sendToBallaxy();
+				void sendPDBToBallaxy();
+				void sendMOL2ToBallaxy();
+				void handleDownload(QNetworkReply* request);
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
@@ -66,8 +69,12 @@ namespace BALL
 			private:
 				String script_base_;
 				QHash<QString, BALLaxyInterfaceAction*> action_registry_;
+
+				QMenu*   context_submenu_;
+				QAction* context_submenu_action_;
 				QAction* context_separator_;
-				QAction* context_action_;
+				QAction* context_action_pdb_;
+				QAction* context_action_mol2_;
 		};
 	}
 }
