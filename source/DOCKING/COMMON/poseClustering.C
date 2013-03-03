@@ -1102,9 +1102,9 @@ namespace BALL
 				RigidTransformation& transform_i = boost::get<RigidTransformation>(cluster_tree_[i].center);
 				RigidTransformation& transform_j = boost::get<RigidTransformation>(cluster_tree_[j].center);
 
-				result =  pow(getRigidRMSD(transform_i.translation - transform_j.translation,
-																	 transform_i.rotation    - transform_j.rotation,
-																	 covariance_matrix_), 2) / ( 1./cluster_size_a  + 1./cluster_size_b)
+				result =  getSquaredRigidRMSD(transform_i.translation - transform_j.translation,
+																	    transform_i.rotation    - transform_j.rotation,
+																	    covariance_matrix_) / ( 1./cluster_size_a  + 1./cluster_size_b)
 							   * number_of_selected_atoms_;
 				break;
 			}
@@ -1749,6 +1749,19 @@ namespace BALL
 		//                |
 
 		return sqrt(t_ab.squaredNorm() + ((M_ab.transpose() * M_ab) * covariance_matrix.selfadjointView<Eigen::Upper>()).trace());
+	}
+
+	float PoseClustering::getSquaredRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_ab, Eigen::Matrix3f const& covariance_matrix)
+	{
+		// based on the given transformation we can simply compute the rmsd
+		// 
+		//              2 |-----------------------------------------------------------
+		//              - |              2    1    (   t           /        t \   )
+		//                | || t_(a,b) ||  +  - tr ( M   M  * sum (x_i x_i     )  )
+		// rmsd(a,b) =    |                   n    (           i   \          /   )
+		//                |
+
+		return t_ab.squaredNorm() + ((M_ab.transpose() * M_ab) * covariance_matrix.selfadjointView<Eigen::Upper>()).trace();
 	}
 
 

@@ -241,7 +241,7 @@ namespace BALL
 			                              boost::directedS,
 			                              ClusterProperties> ClusterTree;
 
-			typedef typename ClusterTree::vertex_descriptor ClusterTreeNode;
+			typedef ClusterTree::vertex_descriptor ClusterTreeNode;
 
 			BALL_CREATE(PoseClustering);
 
@@ -375,6 +375,13 @@ namespace BALL
 			 *  @param covariance_matrix the covariance matrix of the atom positions
 			 */
 			static float getRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_ab, Eigen::Matrix3f const& covariance_matrix);
+
+			/** Compute the mean square deviation due to a rigid transformation of a point cloud (here, atoms)
+			 *  @param t_ab difference vector between the transformations to be compared
+			 *  @param M_ab difference of the rotation matrices between the transformations to be compared
+			 *  @param covariance_matrix the covariance matrix of the atom positions
+			 */
+			static float getSquaredRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_ab, Eigen::Matrix3f const& covariance_matrix);
 
 			/** Compute the covariance matrix for the given system
 			 */
