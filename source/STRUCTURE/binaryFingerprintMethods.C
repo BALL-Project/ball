@@ -1339,7 +1339,7 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesThread(const unsigned int thr
 		// Reset common counts matrix to 0
 		for (unsigned short m=0; m<=blocksize_; ++m)
 		{
-			bzero(cc_matrix[m], cc_matrix_size_);
+			memset(cc_matrix[m], '\0', cc_matrix_size_);
 		}
 		
 		// Calculate indices of next InvertedIndex pair to compare
@@ -1704,7 +1704,7 @@ void BinaryFingerprintMethods::cutoffSearchThread(const unsigned int thread_id)
 			// Reset common counts matrix to 0
 			for (unsigned short m=0; m != blocksize_ + 1; ++m)
 			{
-				bzero(cc_matrix[m], cc_matrix_size_);
+				memset(cc_matrix[m], '\0', cc_matrix_size_);
 			}
 			
 			// Calculate common counts
@@ -2217,7 +2217,7 @@ void BinaryFingerprintMethods::similarityMatrixFromClustersThread(const unsigned
 					}
 					else
 					{
-						bzero(cc_row, sizeof(unsigned short) * (ii2->n_molecules + 1));
+						memset(cc_row, '\0', sizeof(unsigned short) * (ii2->n_molecules + 1));
 						calculateCommonCounts_1_N(ii1->feature_skip_list, ii2->feature_skip_list, cc_row);
 						clusterSimilaritySum_1_N(ii1, ii2, cc_row, tmp_sum);
 					}
@@ -2230,7 +2230,7 @@ void BinaryFingerprintMethods::similarityMatrixFromClustersThread(const unsigned
 				{
 					if (ii2->n_molecules == 1)
 					{
-						bzero(cc_row, sizeof(unsigned short) * (ii1->n_molecules + 1));
+						memset(cc_row, '\0', sizeof(unsigned short) * (ii1->n_molecules + 1));
 						calculateCommonCounts_1_N(ii2->feature_skip_list, ii1->feature_skip_list, cc_row);
 						clusterSimilaritySum_1_N(ii2, ii1, cc_row, tmp_sum);
 					}
@@ -2238,7 +2238,7 @@ void BinaryFingerprintMethods::similarityMatrixFromClustersThread(const unsigned
 					{
 						for (unsigned int i=1; i<=ii1_n_molecules; ++i)
 						{
-							bzero(cc_matrix[i], sizeof(unsigned short) * (ii2->n_molecules + 1));
+							memset(cc_matrix[i], '\0', sizeof(unsigned short) * (ii2->n_molecules + 1));
 						}
 						
 						calculateCommonCounts_M_N(ii1, ii2, cc_matrix);
@@ -2368,7 +2368,7 @@ void BinaryFingerprintMethods::calculateParallelSimilaritiesActivesThread(const 
 					// Reset common counts matrix to 0
 					for (unsigned short m=0; m!=blocksize_ + 1; ++m)
 					{
-						bzero(cc_matrix[m], cc_matrix_size_);
+						memset(cc_matrix[m], '\0', cc_matrix_size_);
 					}
 					
 					// Calculate common counts
@@ -2412,7 +2412,7 @@ void BinaryFingerprintMethods::calculateParallelSimilaritiesActivesThread(const 
 					// Reset common counts matrix to 0
 					for (unsigned short m=0; m!=blocksize_ + 1; ++m)
 					{
-						bzero(cc_matrix[m], cc_matrix_size_);
+						memset(cc_matrix[m], '\0', cc_matrix_size_);
 					}
 					
 					// Calculate common counts
@@ -2518,7 +2518,7 @@ void BinaryFingerprintMethods::calculateParallelSimilaritiesThread(const unsigne
 				// Reset common counts matrix to 0
 				for (unsigned short m=0; m!=blocksize_ + 1; ++m)
 				{
-					bzero(cc_matrix[m], cc_matrix_size_);
+					memset(cc_matrix[m], '\0', cc_matrix_size_);
 				}
 				
 				// Calculate common counts
