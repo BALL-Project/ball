@@ -185,12 +185,12 @@ void DiffGridBasedScoring::updatePrecalculatedScore(Size set)
 {
 	if (grid_sets_.size() < set)
 	{
-		String s="ScoreGridSet no"; s += set+" has not been defined!";
+		String s = "ScoreGridSet no" + String(set) + " has not been defined!";
 		throw BALL::Exception::GeneralException(__FILE__, __LINE__, "DiffGridBasedScoring::updatePrecalculatedScore() error", s);
 	}
 	if (grid_sets_[set]->getHashGrid() == NULL)
 	{
-		String s="The HashGrid of ScoreGridSet no"; s += set+" has not been created yet!";
+		String s = "The HashGrid of ScoreGridSet no" + String(set) + " has not been created yet!";
 		throw BALL::Exception::GeneralException(__FILE__, __LINE__, "DiffGridBasedScoring::updatePrecalculatedScore() error", s);
 	}
 

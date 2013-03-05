@@ -627,7 +627,7 @@ namespace BALL
 			else
 			{
 				String mess = "feature-selection type \"";
-				mess += conf.feat_type+"\" is unknown!";
+				mess += String(conf.feat_type) + "\" is unknown!";
 				throw Exception::ConfigurationReadingError(__FILE__, __LINE__, mess.c_str());
 			}
 			

@@ -624,7 +624,7 @@ namespace BALL
 			}
 
 			GridBasedScoring* gbs = dynamic_cast<GridBasedScoring*>(scoring_function_);
-			if (gbs && gridSetID_ >= 0)
+			if (gbs != 0)
 			{
 				// enable only the relevant grid-set ...
 				vector<ScoreGridSet*>* gridsets = gbs->getScoreGridSets();
@@ -632,8 +632,14 @@ namespace BALL
 				for (Size i = 0; i < gridsets->size(); i++)
 				{
 					enabled_backup[i] = (*gridsets)[i]->isEnabled();
-					if (i == gridSetID_) (*gridsets)[i]->enable();
-					else (*gridsets)[i]->disable();
+					if (i == gridSetID_) 
+					{
+						(*gridsets)[i]->enable();
+					}
+					else 
+					{
+						(*gridsets)[i]->disable();
+					}
 				}
 
 				// ... calculate the score ...
