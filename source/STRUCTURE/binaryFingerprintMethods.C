@@ -2935,7 +2935,7 @@ void BinaryFingerprintMethods::NNChainCore(Cluster*& root)
 		// Find next nearest neighbour
 		nextNearestNeighbour();
 		
-		if (fabs(current_nn_sim_ < nn_chain_tip_->predecessor_sim) <= precision_)
+		if (fabs(current_nn_sim_ - nn_chain_tip_->predecessor_sim) <= precision_)
 		{
 			// NNChain tip and its predecessor are not reciprocal nearest neighbours
 			
