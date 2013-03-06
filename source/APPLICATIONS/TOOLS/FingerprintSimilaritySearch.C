@@ -263,9 +263,9 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("t", "Target library input file", INFILE, true);
 	parpars.registerParameter("q", "Query library input file", INFILE, true);
 	parpars.registerParameter("o", "Result output file", OUTFILE, true);
-	parpars.registerParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", INT, true, "1");
-	parpars.registerParameter("fp_col", "Column number for comma separated smiles input which contains the fingerprint", INT, false, "-1");
-	parpars.registerParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", INT, false, "-1");
+	parpars.registerParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", BALL::INT, true, "1");
+	parpars.registerParameter("fp_col", "Column number for comma separated smiles input which contains the fingerprint", BALL::INT, false, "-1");
+	parpars.registerParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", BALL::INT, false, "-1");
 	parpars.registerParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, false, " ");
 	parpars.registerParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, false, " ");
 	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, "0.7");
