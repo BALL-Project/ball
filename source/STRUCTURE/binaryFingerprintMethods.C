@@ -1425,7 +1425,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 	
 	for (unsigned int i=0; i!=n_threads; ++i)
 	{
-		threads_[i] = thread(bind(&BinaryFingerprintMethods::pairwiseSimilaritiesThread, this, i));
+		threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::pairwiseSimilaritiesThread, this, i));
 	}
 	
 	if (verbosity_ > 5)
@@ -1823,7 +1823,7 @@ bool BinaryFingerprintMethods::cutoffSearch(const float cutoff, const String& ou
 			thread_data_[i].last = thread_data_[i].first + (batch_size);
 		}
 		
-		threads_[i] = thread(bind(&BinaryFingerprintMethods::cutoffSearchThread, this, i));
+		threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::cutoffSearchThread, this, i));
 	}
 	
 	if (verbosity_ > 5)
@@ -2749,7 +2749,7 @@ void BinaryFingerprintMethods::averageLinkageParallel(Cluster*& root)
 			
 			for (unsigned int i=0; i!=n_threads_; ++i)
 			{
-				threads_[i] = thread(bind(&BinaryFingerprintMethods::calculateParallelSimilaritiesThread, this, i));
+				threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::calculateParallelSimilaritiesThread, this, i));
 			}
 			
 			for (unsigned int i=0; i!=n_threads_; ++i)
@@ -2785,7 +2785,7 @@ void BinaryFingerprintMethods::averageLinkageParallel(Cluster*& root)
 				thread_data_[i].uint_array[j] = 0;
 			}
 			
-			threads_[i] = thread(bind(&BinaryFingerprintMethods::calculateParallelSimilaritiesActivesThread, this, i));
+			threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::calculateParallelSimilaritiesActivesThread, this, i));
 		}
 		
 		for (unsigned int i=0; i!=n_threads_; ++i)
@@ -3395,7 +3395,7 @@ void BinaryFingerprintMethods::switchStorageMethod()
 	
 	for (unsigned int i=0; i!=n_threads_; ++i)
 	{
-		threads_[i] = thread(bind(&BinaryFingerprintMethods::similarityMatrixFromClustersThread, this, i));
+		threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::similarityMatrixFromClustersThread, this, i));
 	}
 	
 	for (unsigned int i=0; i!=n_threads_; ++i)
@@ -3567,7 +3567,7 @@ BinaryFingerprintMethods::Cluster* BinaryFingerprintMethods::mergeClusters(Clust
 				thread_data_[i].last = thread_data_[i].first + batch_size;
 			}
 			
-			threads_[i] = thread(bind(&BinaryFingerprintMethods::similarityUpdateAverageLinkageThread, this, i, merged_cluster));
+			threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::similarityUpdateAverageLinkageThread, this, i, merged_cluster));
 		}
 		
 		for (unsigned int i=0; i!=n_threads; ++i)
