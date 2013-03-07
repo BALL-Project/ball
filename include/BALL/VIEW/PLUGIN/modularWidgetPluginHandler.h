@@ -20,7 +20,7 @@ namespace BALL
 		/**
 		 * See PluginHandler for detailed documentation
 		 */
-		class ModularWidgetPluginHandler 
+		class BALL_VIEW_EXPORT ModularWidgetPluginHandler 
 			: public PluginHandler
 		{
 			public:

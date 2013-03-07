@@ -15,7 +15,7 @@ namespace BALL
 		/**
 		 * See PluginHandler for detailed documentation
 		 */
-		class InputDevPluginHandler : public PluginHandler
+		class BALL_VIEW_EXPORT InputDevPluginHandler : public PluginHandler
 		{
 			public:
 				virtual bool canHandle(BALLPlugin* plugin) const;
