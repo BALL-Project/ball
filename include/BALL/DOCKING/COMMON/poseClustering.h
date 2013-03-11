@@ -167,7 +167,8 @@ namespace BALL
 				TRIVIAL_COMPLETE_LINKAGE,
 				SLINK_SIBSON,
 				CLINK_DEFAYS,
-				NEAREST_NEIGHBOR_CHAIN_WARD
+				NEAREST_NEIGHBOR_CHAIN_WARD,
+				CLINK_ALTHAUS
 			};
 
 			class BALL_EXPORT RigidTransformation
@@ -464,6 +465,9 @@ namespace BALL
 
 			// space efficient (SLINK or CLINK) clustering
 			bool linearSpaceCompute_();
+
+			//
+			bool althausCompute_();
 
 			//	implementation of a single linkage clustering as described in 
 			//       R. Sibson: SLINK: an optimally efficient algorithm for the single-link cluster method. 

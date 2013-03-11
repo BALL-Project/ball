@@ -58,9 +58,10 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
 	// choice of cluster algorithm  
-	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
+	parpars.registerParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, CLINK_ALTHAUS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, false, "CLINK_DEFAYS");
 	list<String> cluster_algs;
 	cluster_algs.push_back("CLINK_DEFAYS");
+	cluster_algs.push_back("CLINK_ALTHAUS");
 	cluster_algs.push_back("TRIVIAL_COMPLETE_LINKAGE");
 	cluster_algs.push_back("NEAREST_NEIGHBOR_CHAIN_WARD");
 	cluster_algs.push_back("SLINK_SIBSON");
@@ -184,6 +185,8 @@ int main (int argc, char **argv)
 		String alg = parpars.get("alg");
 		if (alg == "CLINK_DEFAYS")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
+		else if (alg == "CLINK_ALTHAUS")
+			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_ALTHAUS);
 		else if (alg == "SLINK_SIBSON")
 			pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 		else if (alg == "TRIVIAL_COMPLETE_LINKAGE")
@@ -241,6 +244,8 @@ int main (int argc, char **argv)
 			String alg = parpars.get("refine_alg");
 			if (alg == "CLINK_DEFAYS")
 				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
+			else if (alg == "CLINK_ALTHAUS")
+				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_ALTHAUS);
 			else if (alg == "SLINK_SIBSON")
 				refine_options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::SLINK_SIBSON);
 			else if (alg == "TRIVIAL_COMPLETE_LINKAGE")

@@ -315,6 +315,9 @@ namespace BALL
 			case NEAREST_NEIGHBOR_CHAIN_WARD:
 				result = nearestNeighborChainCompute_();
 				break;
+			case CLINK_ALTHAUS:
+				result = althausCompute_();
+				break;
 			default:
 				Log.error() << "Unknown parameter for option CLUSTER_METHOD " << options.get(Option::CLUSTER_METHOD) << endl;
 				result = false;
@@ -581,7 +584,7 @@ namespace BALL
 			{
 				double percentage = current_level / (double)num_poses;
 				percentage *= 100. * percentage;
-//std::cout << current_level << " " << num_poses << " " << percentage << std::endl;
+std::cout << current_level << " " << num_poses << " " << percentage << std::endl;
 			}
 			// END TEST
 
@@ -767,6 +770,9 @@ namespace BALL
 		*/
 	}
 
+	bool PoseClustering::althausCompute_()
+	{
+	}
 
 	bool PoseClustering::nearestNeighborChainCompute_()
 	{
@@ -824,7 +830,7 @@ namespace BALL
 		// while there is more than one final cluster
 		while (active_clusters.size() > 1)
 		{
-//cout << "active clusters: " << active_clusters.size() << endl;
+cout << "active clusters: " << active_clusters.size() << endl;
 			min_cluster_dist = std::numeric_limits<float>::max();
 			nearest_cluster = 0;
 
