@@ -6,7 +6,7 @@
 #endif
 
 #include <QtCore/QUrl>
-#include <QtWebKit/QWebView>
+#include <QtWebKitWidgets/QWebView>
 
 namespace BALL
 {
