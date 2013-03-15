@@ -15,6 +15,8 @@
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
+#include <QtCore/QUrlQuery>
+
 namespace BALL
 {
 	namespace VIEW
@@ -243,14 +245,14 @@ namespace BALL
 
 		void HTMLBasedInterface::executeLink(const QUrl& url)
 		{
-			QString action_name = url.queryItemValue("action");
+			QString action_name = QUrlQuery(url).queryItemValue("action");
 			if(action_name == QString::null)
 			{
 				return;
 			}
 
-			QString method_type = url.queryItemValue("method");
-			QString parameters  = url.queryItemValue("parameters");
+			QString method_type = QUrlQuery(url).queryItemValue("method");
+			QString parameters  = QUrlQuery(url).queryItemValue("parameters");
 
 			//Ideally this if should be converted into another registry
 			if(method_type == "native")
@@ -259,12 +261,12 @@ namespace BALL
 
 				if(it != action_registry_.end())
 				{
-					(*it)->execute(url.queryItems());
+					(*it)->execute(QUrlQuery(url).queryItems());
 				}
 			}
 			else if(method_type == "" || method_type == "python")
 			{
-					executePython_(action_name, url.queryItems());
+					executePython_(action_name, QUrlQuery(url).queryItems());
 			}
 		}
 
