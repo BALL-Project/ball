@@ -232,7 +232,7 @@ namespace BALL
 			return 0;
 		}
 
-		PyObject* mod_name = PyString_FromString(name.toAscii().data());
+		PyObject* mod_name = PyString_FromString(name.toLatin1().data());
 
 		PyObject* module = 0;
 
@@ -243,7 +243,7 @@ namespace BALL
 		else
 		{
 			//This could leak the imported module. Need to check...
-			module = PyImport_ImportModule(name.toAscii().data());
+			module = PyImport_ImportModule(name.toLatin1().data());
 		}
 
 		Py_XDECREF(mod_name);
@@ -264,11 +264,11 @@ namespace BALL
 
 		if(mod == 0)
 		{
-			Log.error() << "Could not load module " << module.toAscii().data() << std::endl;
+			Log.error() << "Could not load module " << module.toStdString() << std::endl;
 			return false;
 		}
 
-		PyObject* func = PyObject_GetAttrString(mod, func_name.toAscii().data());
+		PyObject* func = PyObject_GetAttrString(mod, func_name.toLatin1().data());
 
 		if(!func || !PyCallable_Check(func))
 		{
@@ -292,15 +292,15 @@ namespace BALL
 				continue;
 			}
 
-			PyObject* val = PyString_FromString(it->second.toAscii().data());
+			PyObject* val = PyString_FromString(it->second.toLatin1().data());
 
 			if(!val)
 			{
-				Log.error() << "Could not create parameter" << it->first.toAscii().data() << "=" << it->second.toAscii().data() << " Skipping." << std::endl;
+				Log.error() << "Could not create parameter" << it->first.toStdString() << "=" << it->second.toStdString() << " Skipping." << std::endl;
 				continue;
 			}
 
-			PyDict_SetItemString(dict, it->first.toAscii().data(), val);
+			PyDict_SetItemString(dict, it->first.toLatin1().data(), val);
 		}
 
 		Py_DECREF(dict);

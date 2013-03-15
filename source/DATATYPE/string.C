@@ -145,7 +145,7 @@ namespace BALL
 
 	String::String(const QString& string)
 	{
-		assign(string.toAscii().data());
+		assign(string.toStdString());
 	}
 
 	String::String(const QByteArray& string)

@@ -302,10 +302,10 @@ namespace BALL
 			}
 			catch(Exception::FileNotFound)
 			{
-				Log.error() << "Could not execute action " << action.toAscii().data() << "\n No such file or directory." << std::endl;
+				Log.error() << "Could not execute action " << action.toStdString() << "\n No such file or directory." << std::endl;
 			}
 #else
-			Log.error() << "BALL is compiled without Python support. Action " << action.toAscii().data() << " could not be executed." << std::endl;
+			Log.error() << "BALL is compiled without Python support. Action " << action.toStdString() << " could not be executed." << std::endl;
 #endif
 		}
 

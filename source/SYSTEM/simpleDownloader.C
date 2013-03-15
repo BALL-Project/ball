@@ -119,7 +119,7 @@ namespace BALL
 
 			QSslError ssl_error;
 			foreach(ssl_error, errors) {
-				Log.error() << ssl_error.errorString().toAscii().data() << "\n";
+				Log.error() << ssl_error.errorString().toStdString() << "\n";
 			}
 
 			caller_->exit(-1);

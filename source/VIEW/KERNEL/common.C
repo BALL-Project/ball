@@ -312,7 +312,7 @@ namespace BALL
 
 		String ascii(const QString& str)
 		{
-			return str.toAscii().constData();
+			return str.toStdString();
 		}
 
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation

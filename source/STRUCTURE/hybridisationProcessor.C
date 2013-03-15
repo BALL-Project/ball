@@ -648,7 +648,7 @@ if (!openNbr)
 		if (!file.open(QFile::ReadOnly | QFile::Text)) 
 		{
 			Log.error() << "HybridisationProcessor: cannot read file " << filename << std::endl;
-			Log.error() << "Reason was: " << file.errorString().toAscii().constData() << std::endl;
+			Log.error() << "Reason was: " << file.errorString().toStdString() << std::endl;
 			return 1;
 		}
 
@@ -659,7 +659,7 @@ if (!openNbr)
 		{
 			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn 
 									<<  " of file " << filename << endl;
-			Log.error() << "Reason was: " << errorStr.toAscii().constData() << std::endl;
+			Log.error() << "Reason was: " << errorStr.toStdString() << std::endl;
 			return 1;
 		}
 		// get the root element...
@@ -678,7 +678,7 @@ if (!openNbr)
 			
 			if (smartstrings.length() == 1)
 			{
-				tmp.first = (smartstrings.item(0).toElement().firstChild().nodeValue()).toAscii().constData();	
+				tmp.first = (smartstrings.item(0).toElement().firstChild().nodeValue()).toStdString();
 			} 
 			else if (smartstrings.length() == 0)
 			{

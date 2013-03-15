@@ -253,7 +253,7 @@ namespace BALL
 				value += BETWEEN_SC_SEPERATOR;
 				value += ascii(QByteArray(it->first.c_str()).toPercentEncoding());
 				value += IN_SC_SEPERATOR;
-				value += ascii(it->second->shortcut().toString().toAscii().toPercentEncoding());
+				value += ascii(it->second->shortcut().toString().toLatin1().toPercentEncoding());
 			}
 
 			return true;

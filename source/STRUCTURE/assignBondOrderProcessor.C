@@ -646,7 +646,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 		if (!file.open(QFile::ReadOnly | QFile::Text))
 		{
 			Log.error() << "Error: cannot read file " << inifilename <<" " << __FILE__ << " " << __LINE__ << std::endl;
-			Log.error() << "Reason was: " << file.errorString().toAscii().constData() << std::endl;
+			Log.error() << "Reason was: " << file.errorString().toStdString() << std::endl;
 			return 1;
 		}
 
@@ -656,7 +656,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 					&errorColumn))
 		{
 			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn <<  " of file " << inifilename << endl;
-			Log.error() << "Reason was: " << errorStr.toAscii().constData() << std::endl;
+			Log.error() << "Reason was: " << errorStr.toStdString() << std::endl;
 			return 1;
 		}
 
@@ -679,21 +679,21 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 			{
 				// read the element type
 				QDomNode element = elementstrings.item(0);
-				tmp.first = element.firstChild().nodeValue().toAscii().constData();
+				tmp.first = element.firstChild().nodeValue().toLatin1().constData();
 
 				// read the SMARTS-string
 				QDomNodeList smartstring =  entries.item(i).toElement().elementsByTagName("smartstring");
 				if (smartstring.length() == 1)
 				{
-					tmp.second = smartstring.item(0).toElement().firstChild().nodeValue().toAscii().constData();
+					tmp.second = smartstring.item(0).toElement().firstChild().nodeValue().toLatin1().constData();
 				}
 				else if (smartstring.length() == 0)
 				{
-					Log.warn() << "In file " << inifilename << " : no SMARTS-string found for element " << element.firstChild().nodeValue().toAscii().constData() << endl;
+					Log.warn() << "In file " << inifilename << " : no SMARTS-string found for element " << element.firstChild().nodeValue().toStdString() << endl;
 				}
 				else
 				{
-					Log.error() <<  "Parse error in file " << inifilename << " : more than on3 SMARTS-string for element " << element.firstChild().nodeValue().toAscii().constData() << endl;
+					Log.error() <<  "Parse error in file " << inifilename << " : more than on3 SMARTS-string for element " << element.firstChild().nodeValue().toStdString() << endl;
 					return false;
 				}
 
@@ -712,7 +712,7 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 				}
 				else
 				{
-					Log.error() << "In file " << inifilename << " : no penalties found for element " << element.firstChild().nodeValue().toAscii().constData() << endl;
+					Log.error() << "In file " << inifilename << " : no penalties found for element " << element.firstChild().nodeValue().toLatin1().constData() << endl;
 					return false;
 				}
 			}
