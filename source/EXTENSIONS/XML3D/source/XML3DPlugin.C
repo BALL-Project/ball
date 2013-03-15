@@ -4,7 +4,7 @@
 #include <XML3DSettings.h>
 #include <XMPPWidget.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 # include <BALL/VIEW/WIDGETS/dockWidget.h>

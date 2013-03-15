@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <QtCore/QtPlugin>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 class QPixmap;
 
