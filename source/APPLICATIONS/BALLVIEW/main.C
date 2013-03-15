@@ -32,23 +32,23 @@
 #include <X11/Xlib.h>
 #endif
 
-void logMessages(QtMsgType type, const char *msg)
+void logMessages(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
-	BALL::String s(msg);
+	BALL::String s(message.toStdString());
 	if (s.hasPrefix("QTextBrowser")) return;
 
 	switch ( type ) {
 		case QtDebugMsg:
-				BALL::Log.info() << msg << std::endl;
+				BALL::Log.info() << message.toStdString() << " " << context.file << " " << context.line << " " << context.function << std::endl;
 				break;
 		case QtWarningMsg:
-				BALL::Log.warn() << msg << std::endl;
+				BALL::Log.warn() << message.toStdString() << " " << context.file << " " << context.line << " " << context.function << std::endl;
 				break;
 		case QtFatalMsg:
-				fprintf( stderr, "Fatal: %s\n", msg );
+				fprintf( stderr, "Fatal: %s\n", message.toLatin1().constData() );
 				abort();                    // deliberately core dump
 		case QtCriticalMsg:
-				fprintf( stderr, "Critical: %s\n", msg );
+				fprintf( stderr, "Critical: %s\n", message.toLatin1().constData() );
 				abort();                    // deliberately core dump
 	}
 }
@@ -71,7 +71,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
     XInitThreads();
 #endif
 
-	qInstallMsgHandler(logMessages);
+	qInstallMessageHandler(logMessages);
 
 	// *sigh* this is required as long as Qt does not correctly paint on OpenGL 2 contexts
 	//QGL::setPreferredPaintEngine(QPaintEngine::OpenGL);
