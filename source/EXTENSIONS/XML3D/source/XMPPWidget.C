@@ -10,7 +10,7 @@ namespace BALL
 
 		XMPPWidget* XMPPWidget::instance = NULL;
 
-		XMPPWidget::XMPPWidget(QWidget* parent, const char* name, Qt::WFlags fl)
+		XMPPWidget::XMPPWidget(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: QWidget(parent, fl),
 				Ui_XMPPWidget()
 		{

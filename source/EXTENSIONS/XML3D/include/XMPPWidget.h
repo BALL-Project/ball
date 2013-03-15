@@ -26,7 +26,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				XMPPWidget(QWidget* parent = 0, const char* name = "XMPPWidget", Qt::WFlags fl = 0);
+				XMPPWidget(QWidget* parent = 0, const char* name = "XMPPWidget", Qt::WindowFlags fl = 0);
 				static void unescapeHTML(String& text);
 
 				virtual bool eventFilter(QObject* object, QEvent* event);

@@ -32,7 +32,7 @@ namespace BALL
 
 				/// Constructor
 				XML3DSettings(XML3DPlugin* plugin, QWidget* parent = 0, 
-													 const char* name = "XML3DSettings", Qt::WFlags fl = 0);
+													 const char* name = "XML3DSettings", Qt::WindowFlags fl = 0);
 
 				/// Destructor
 				~XML3DSettings() {}
