@@ -48,7 +48,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			ColoringSettingsDialog( QWidget* parent = 0, const char* name = "ColoringSettings", Qt::WFlags fl = 0 );
+			ColoringSettingsDialog( QWidget* parent = 0, const char* name = "ColoringSettings", Qt::WindowFlags fl = 0 );
 
 			/// Destructor
 			virtual ~ColoringSettingsDialog() {}

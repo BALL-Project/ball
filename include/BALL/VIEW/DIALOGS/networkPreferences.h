@@ -36,7 +36,7 @@ namespace BALL
 			public:
 			
 				/// Default Constructor.
-				NetworkPreferences(QWidget *parent = NULL, const char *name = "NetworkPreferences", Qt::WFlags fl=0);
+				NetworkPreferences(QWidget *parent = NULL, const char *name = "NetworkPreferences", Qt::WindowFlags fl=0);
 				
 				/// Destructor.
 				virtual ~NetworkPreferences();

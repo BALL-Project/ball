@@ -49,7 +49,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		DownloadElectronDensity::DownloadElectronDensity(QWidget* parent, const char* name, bool, Qt::WFlags fl)
+		DownloadElectronDensity::DownloadElectronDensity(QWidget* parent, const char* name, bool, Qt::WindowFlags fl)
 			: QDialog(parent, fl),
 				Ui_DownloadElectronDensityData(),
 				ModularWidget(name),

@@ -13,7 +13,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WindowFlags fl)
 	: QWidget(parent, fl),
 		Ui_EditSettingsData(),
 		PreferencesEntry()

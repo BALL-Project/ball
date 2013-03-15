@@ -30,7 +30,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		StageSettings::StageSettings( QWidget* parent,  const char* name, Qt::WFlags fl )
+		StageSettings::StageSettings( QWidget* parent,  const char* name, Qt::WindowFlags fl )
 			: QWidget(parent, fl),
 				Ui_StageSettingsData(),
 				PreferencesEntry()

@@ -15,7 +15,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		GenerateCrystalDialog::GenerateCrystalDialog(QWidget* parent, const char* name, bool, Qt::WFlags fl)
+		GenerateCrystalDialog::GenerateCrystalDialog(QWidget* parent, const char* name, bool, Qt::WindowFlags fl)
 			: QDialog(parent, fl),
 			Ui_GenerateCrystalDialogData(),
 			ModularWidget(name),

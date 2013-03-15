@@ -39,7 +39,7 @@ namespace BALL
 		{
 		}
 
-		GridVisualizationDialog::GridVisualizationDialog(QWidget* parent,  const char* name, bool, Qt::WFlags fl)
+		GridVisualizationDialog::GridVisualizationDialog(QWidget* parent,  const char* name, bool, Qt::WindowFlags fl)
 			: QDialog(parent, fl),
 				Ui_GridVisualizationDialogData(),
 				grid_(0)

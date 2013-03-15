@@ -40,7 +40,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			MaterialSettings( QWidget* parent = 0, const char* name = "MaterialSettings", Qt::WFlags fl = 0 );
+			MaterialSettings( QWidget* parent = 0, const char* name = "MaterialSettings", Qt::WindowFlags fl = 0 );
 
 			/// Destructor
 			~MaterialSettings() {}

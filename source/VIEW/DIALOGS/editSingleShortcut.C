@@ -14,7 +14,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		EditSingleShortcut::EditSingleShortcut(QWidget* parent, const char* name, Qt::WFlags)
+		EditSingleShortcut::EditSingleShortcut(QWidget* parent, const char* name, Qt::WindowFlags)
 			: QDialog(parent),
 				Ui_EditSingleShortcutData(),
 				is_recording_(false),

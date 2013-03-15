@@ -15,7 +15,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		UndoManagerDialog::UndoManagerDialog( QWidget* parent, const char* name, Qt::WFlags fl )
+		UndoManagerDialog::UndoManagerDialog( QWidget* parent, const char* name, Qt::WindowFlags fl )
 			: QDialog(parent, fl),
 			  Ui_UndoManagerDialogData(),
 				ModularWidget(name),

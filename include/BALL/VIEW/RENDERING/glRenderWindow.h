@@ -41,8 +41,8 @@ namespace BALL
 			
 		public:
 			GLRenderWindow();
-			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
-			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
+			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = 0);
+			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = 0);
 
 			virtual ~GLRenderWindow();
 

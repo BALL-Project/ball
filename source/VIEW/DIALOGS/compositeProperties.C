@@ -17,7 +17,7 @@ namespace BALL
 	{
 
 CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent, 
-																				 const char* name, bool, Qt::WFlags fl )
+																				 const char* name, bool, Qt::WindowFlags fl )
     : QDialog(parent, fl),
 			Ui_CompositePropertiesData(),
 			composite_(composite)

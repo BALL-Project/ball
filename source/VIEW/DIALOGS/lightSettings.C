@@ -16,7 +16,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WindowFlags fl)
   : QWidget(parent, fl),
 		Ui_LightSettingsData(),
 		PreferencesEntry(),

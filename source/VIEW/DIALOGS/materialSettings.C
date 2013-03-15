@@ -16,7 +16,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: QWidget(parent, fl),
 				Ui_MaterialSettingsData(),
 				PreferencesEntry(),

@@ -15,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
+SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, Qt::WindowFlags fl )
 	: QDialog(parent, fl),
 		Ui_SetCameraData()
 {

@@ -15,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 	
-RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent, const char* name, bool, Qt::WFlags fl )
+RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent, const char* name, bool, Qt::WindowFlags fl )
 	: QDialog(parent, fl),
 		Ui_RaytraceableContourSurfaceDialogData(),
 		ModularWidget(name),

@@ -42,7 +42,7 @@ namespace BALL
 			public:
 
 				/// Constructor
-				EditSingleShortcut(QWidget* parent = NULL, const char* name = "EditSingleShortcut", Qt::WFlags fl = 0 );
+				EditSingleShortcut(QWidget* parent = NULL, const char* name = "EditSingleShortcut", Qt::WindowFlags fl = 0 );
 
 				QKeySequence const& getKeySequence() const { return new_sequence_; }
 

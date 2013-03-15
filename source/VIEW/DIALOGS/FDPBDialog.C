@@ -21,7 +21,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, Qt::WFlags fl)
+		FDPBDialog::FDPBDialog(QWidget* parent,  const char* name, bool modal, Qt::WindowFlags fl)
 			: QDialog(parent, fl),
 				Ui_FDPBDialogData(),
 				ModularWidget("FDPBDialog"),

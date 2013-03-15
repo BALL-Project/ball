@@ -62,7 +62,7 @@ namespace BALL
 
 			/// Constructor
 			FDPBDialog(QWidget* parent = 0, const char* name = "FDPBDialog",
-								 bool modal = FALSE, Qt::WFlags fl = 0);
+								 bool modal = false, Qt::WindowFlags fl = 0);
 
 			/// Destructor
 			virtual ~FDPBDialog();

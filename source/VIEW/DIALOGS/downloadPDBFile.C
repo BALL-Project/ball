@@ -42,7 +42,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WFlags fl)
+		DownloadPDBFile::DownloadPDBFile(QWidget* parent, const char* name, bool, Qt::WindowFlags fl)
 			: QDialog(parent, fl),
 				Ui_DownloadPDBFileData(),
 				ModularWidget(name),

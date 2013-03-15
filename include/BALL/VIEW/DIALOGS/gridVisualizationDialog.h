@@ -40,7 +40,7 @@ namespace BALL
 
 			///
 			GridVisualizationDialog(QWidget* parent = 0, const char* name = "GridVisualizationDialog", 
-															bool modal = FALSE, Qt::WFlags fl = 0);
+															bool modal = false, Qt::WindowFlags fl = 0);
 
 			///
 			~GridVisualizationDialog();

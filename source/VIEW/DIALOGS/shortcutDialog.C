@@ -15,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		ShortcutDialog::ShortcutDialog(QWidget* parent, const char* name, Qt::WFlags)
+		ShortcutDialog::ShortcutDialog(QWidget* parent, const char* name, Qt::WindowFlags)
 			: QWidget(parent),
 				Ui_ShortcutDialogData(),
 				ModularWidget(name),

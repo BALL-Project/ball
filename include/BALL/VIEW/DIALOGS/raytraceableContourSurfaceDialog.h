@@ -45,7 +45,7 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	BALL_EMBEDDABLE(RaytraceableContourSurfaceDialog, ModularWidget)
 
 	///
-	RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent = 0, const char* name = "RaytraceableContourSurfaceDialog", bool modal = FALSE, Qt::WFlags fl = 0);
+	RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent = 0, const char* name = "RaytraceableContourSurfaceDialog", bool modal = false, Qt::WindowFlags fl = 0);
 
 	///
 	~RaytraceableContourSurfaceDialog();

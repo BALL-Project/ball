@@ -45,7 +45,7 @@ namespace BALL
 			material_settings_ = mrd.material_settings_;
 		}
 
-		ModifyRepresentationDialog::ModifyRepresentationDialog( QWidget* parent,  const char* name, bool, Qt::WFlags fl )
+		ModifyRepresentationDialog::ModifyRepresentationDialog( QWidget* parent,  const char* name, bool, Qt::WindowFlags fl )
 			: QDialog(parent, fl),
 				Ui_ModifyRepresentationDialogData(),
 				ModularWidget(name),

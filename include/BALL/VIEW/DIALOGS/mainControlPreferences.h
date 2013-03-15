@@ -45,7 +45,7 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	
 	/// Default Constructor.
 	MainControlPreferences(QWidget *parent = NULL, const char *name = "MainControlPreferences", 
-												 Qt::WFlags fl=0);
+												 Qt::WindowFlags fl=0);
 
 	////Destructor.
 	virtual ~MainControlPreferences();

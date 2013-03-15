@@ -20,7 +20,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
+MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WindowFlags fl)
 	: QWidget(parent, fl),
 		Ui_MainControlPreferencesData(),
 		PreferencesEntry(),

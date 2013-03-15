@@ -123,7 +123,7 @@ namespace BALL
 		float Scene::animation_smoothness_ = 2;
 		float Scene::downsampling_factor_ = 1;
 
-		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(name),
 				system_origin_(0.0, 0.0, 0.0),
@@ -175,7 +175,7 @@ namespace BALL
 				registerWidget(this);
 			}
 
-		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
