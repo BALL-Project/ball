@@ -3,9 +3,6 @@
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-
-Q_EXPORT_PLUGIN2(pluginVRPNHD, BALL::VIEW::VRPNHDPlugin)
-
 namespace BALL
 {
 	namespace VIEW

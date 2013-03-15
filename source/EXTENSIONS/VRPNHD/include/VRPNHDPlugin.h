@@ -17,6 +17,7 @@ namespace BALL
 		class VRPNHDPlugin : public QObject, public BALLPlugin, public VIEWPlugin, public InputPlugin
 		{
 			Q_OBJECT
+			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.Input.VRPNHD")
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::InputPlugin)
 
 			public:

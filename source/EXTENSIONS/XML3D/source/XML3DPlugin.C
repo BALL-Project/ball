@@ -12,8 +12,6 @@
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-Q_EXPORT_PLUGIN2(pluginXML3D, BALL::VIEW::XML3DPlugin)
-
 // TODO: make settings changeable while driver already running
 namespace BALL
 {

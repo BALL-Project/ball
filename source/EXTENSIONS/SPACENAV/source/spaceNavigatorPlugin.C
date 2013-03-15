@@ -2,9 +2,6 @@
 
 #include <spaceNavigatorDriver.h>
 
-
-Q_EXPORT_PLUGIN2(pluginSpaceNavigator, BALL::VIEW::SpaceNavigatorPlugin)
-
 namespace BALL
 {
 	namespace VIEW
