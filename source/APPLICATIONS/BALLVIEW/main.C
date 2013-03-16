@@ -28,10 +28,6 @@
 
 #include <iostream>
 
-#ifdef Q_WS_X11
-#include <X11/Xlib.h>
-#endif
-
 void logMessages(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
 	BALL::String s(message.toStdString());
@@ -65,10 +61,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 {
 	int argc = __argc;
 	char** argv = __argv;
-#endif
-
-#ifdef Q_WS_X11
-    XInitThreads();
 #endif
 
 	qInstallMessageHandler(logMessages);
