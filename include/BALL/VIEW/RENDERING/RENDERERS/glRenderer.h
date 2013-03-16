@@ -25,10 +25,6 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifdef BALL_HAS_GLEW
-# include <GL/glew.h>
-#endif
-
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
 #endif
@@ -40,6 +36,8 @@
 #ifndef APIENTRY
 #define APIENTRY
 #endif
+
+#include <GL/glu.h>
 
 class QFont;
 

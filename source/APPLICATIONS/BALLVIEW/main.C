@@ -6,10 +6,6 @@
 #include <QtWidgets/QApplication>
 #include <BALL/CONFIG/config.h>
 
-#ifdef BALL_HAS_GLEW
-#	include <GL/glew.h>
-#endif
-
 #include <QtCore/QLocale>
 #include <QtCore/QTranslator>
 

@@ -2,8 +2,6 @@
 // vi: set ts=2:
 //
 
-#include <GL/glew.h>
-
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/COMMON/logStream.h>
