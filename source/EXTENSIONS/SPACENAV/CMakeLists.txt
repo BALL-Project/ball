@@ -67,3 +67,4 @@ INSTALL(TARGETS pluginSpaceNavigator
 )
 
 TARGET_LINK_LIBRARIES(pluginSpaceNavigator BALL VIEW ${SPNAV_LIBRARIES})
+QT5_USE_MODULES(pluginSpaceNavigator Core)

@@ -64,3 +64,4 @@ INSTALL(TARGETS pluginPresentaBALL
 )
 
 TARGET_LINK_LIBRARIES(pluginPresentaBALL BALL VIEW)
+QT5_USE_MODULES(pluginPresentaBALL WebKitWidgets)

@@ -38,7 +38,7 @@ SET(BALL_PACKAGE_VERSION_PATCH "79")
 # quick manual for most commands: http://www.cmake.org/cmake/help/cmake2.6docs.html
 # useful predefined variables: http://www.paraview.org/Wiki/CMake_Useful_Variables
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.7 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
@@ -265,46 +265,28 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTWEBKIT "Add support for QWebkit" ${BALL_HAS_VIEW})
-
-IF(NOT BALL_HAS_VIEW)
-	MESSAGE(WARNING "Warning: CMakes Qt4 find macro is too restrictive and requires UIC and RCC to be present. "
-	                "If you are building without the GUI part of Qt installed, you will need to create dummy files "
-	                "for both executables in the Qt prefix path.")
-ENDIF()
+OPTION(USE_QTSQL "Compile BALL's database adapaters (requires QtSql)" ON)
+OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
 
 FIND_PACKAGE(Qt5Core REQUIRED)
 FIND_PACKAGE(Qt5Xml)
 FIND_PACKAGE(Qt5Network)
 
 IF (BALL_HAS_VIEW)
-	FIND_PACKAGE(Qt5Widgets)
+	FIND_PACKAGE(Qt5Widgets REQUIRED)
 	FIND_PACKAGE(Qt5Test)
 	FIND_PACKAGE(Qt5OpenGL)
 	FIND_PACKAGE(Qt5PrintSupport)
 
 	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
 	IF(USE_QTWEBKIT)
-		FIND_PACKAGE(Qt5WebKit)
 		FIND_PACKAGE(Qt5WebKitWidgets)
 	ENDIF()
 ENDIF()
 
-IF(${USE_QTSQL})
+IF(USE_QTSQL)
 	FIND_PACKAGE(Qt5Sql)
 ENDIF()
-
-INCLUDE_DIRECTORIES(
-	${Qt5Core_INCLUDE_DIRS}
-	${Qt5Network_INCLUDE_DIRS}
-	${Qt5OpenGL_INCLUDE_DIRS}
-	${Qt5PrintSupport_INCLUDE_DIRS}
-	${Qt5Sql_INCLUDE_DIRS}
-	${Qt5Test_INCLUDE_DIRS}
-	${Qt5WebKit_INCLUDE_DIRS}
-	${Qt5Widgets_INCLUDE_DIRS}
-	${Qt5Xml_INCLUDE_DIRS}
-)
 
 SET(BALL_HAS_QTWEBKIT TRUE)
 IF(USE_QTWEBKIT AND NOT QT_QTWEBKIT_FOUND)
@@ -627,24 +609,16 @@ TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
                            ${Qt5Network_LIBRARIES}
                            ${Qt5Xml_LIBRARIES}
                            ${Qt5Sql_LIBRARIES})
+QT5_USE_MODULES(BALL Core Network Xml Sql)
 
 IF(BALL_HAS_VIEW)
 	TARGET_LINK_LIBRARIES(VIEW BALL
 	                      ${VIEW_DEP_LIBRARIES}
-	                      ${OPENGL_LIBRARIES}
-                        ${Qt5Core_LIBRARIES}
-                        ${Qt5Network_LIBRARIES}
-                        ${Qt5OpenGL_LIBRARIES}
-                        ${Qt5PrintSupport_LIBRARIES}
-                        ${Qt5Test_LIBRARIES}
-                        ${Qt5Widgets_LIBRARIES}
-                        ${Qt5Xml_LIBRARIES})
+	                      ${OPENGL_LIBRARIES})
+	QT5_USE_MODULES(VIEW Widgets Network OpenGL PrintSupport Test Xml)
 
 	IF(USE_QTWEBKIT)
-		TARGET_LINK_LIBRARIES(VIEW
-			${Qt5WebKit_LIBRARIES}
-			${Qt5WebKitWidgets_LIBRARIES}
-		)
+		QT5_USE_MODULES(VIEW WebKitWidgets)
 	ENDIF()
 ENDIF()
 
@@ -683,7 +657,7 @@ FOREACH(i ${UTILITIES_EXECUTABLES})
 	ADD_EXECUTABLE(${i} source/APPLICATIONS/UTILITIES/${i}.C)
 	TARGET_LINK_LIBRARIES(${i} BALL)
 	SET_PROPERTY(TARGET ${i} PROPERTY FOLDER UTILITIES)
-	SET_TARGET_PROPERTIES(${i} PROPERTIES COMPILE_FLAGS ${Qt5Core_EXECUTABLE_COMPILE_FLAGS})
+	QT5_USE_MODULES(${i} Core)
 ENDFOREACH(i)
 ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
 ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
@@ -701,7 +675,7 @@ INCLUDE(source/APPLICATIONS/MMFF94/BALLMMFF94.cmake)
 FOREACH(i ${MMFF94_EXECUTABLES})
 	ADD_EXECUTABLE(${i} source/APPLICATIONS/MMFF94/${i}.C)
 	TARGET_LINK_LIBRARIES(${i} BALL)
-	SET_TARGET_PROPERTIES(${i} PROPERTIES COMPILE_FLAGS ${Qt5Core_EXECUTABLE_COMPILE_FLAGS})
+	QT5_USE_MODULES(${i} Core)
 ENDFOREACH(i)
 ADD_CUSTOM_TARGET(MMFF94 EXCLUDE_FROM_ALL)
 ADD_DEPENDENCIES(MMFF94 ${MMFF94_EXECUTABLES})
