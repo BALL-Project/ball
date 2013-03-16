@@ -24,7 +24,7 @@ IF(BALL_PYTHON_SUPPORT)
 		BALL/pyConstant.C
 	)
 	ADD_SIP_PYTHON_MODULE(BALLCore BALLCoremodule BALL/BALLCore.sip BALL)
-	qt5_use_modules(BALLCoremodule Core)
+	QT5_USE_MODULES(BALLCoremodule Core)
 	
 	IF(BALL_HAS_VIEW)
 		SET(SIP_EXTRA_SOURCES
@@ -36,7 +36,7 @@ IF(BALL_PYTHON_SUPPORT)
 		# Add the VIEW python bindings
 		SET(SIP_INCLUDES ${PROJECT_SOURCE_DIR})
 		ADD_SIP_PYTHON_MODULE(VIEW VIEWmodule VIEW/VIEW.sip BALL VIEW)
-		qt5_use_modules(VIEWmodule Widgets)
+		QT5_USE_MODULES(VIEWmodule Widgets)
 	ENDIF()
 
 	# Install the BALL.py script
