@@ -403,6 +403,37 @@ namespace BALL
 				}
 		}
 
+		void setPrimitives(RTpieCpp::MeshHandle aMesh,
+				const RTfact::RTpie::uint32 aTriangleCount,
+				const RTfact::RTpie::int32* aIndices,
+				const float* aVertices,
+				const float* aNormals,
+				const float* aVertexColors,
+				const float* aTexCoords, bool reorder = true)
+    {
+				if(reorder)
+				{
+					//reorder
+					Index* reordered_indices = new Index[aTriangleCount*3];
+					for(int i = 0;  i < aTriangleCount; i++)
+					{
+							reordered_indices[i * 3 + 2] = aIndices[i * 3 + 0];
+							reordered_indices[i * 3 + 1] = aIndices[i * 3 + 1];
+							reordered_indices[i * 3 + 0] = aIndices[i * 3 + 2];
+					}
+
+					aMesh.setPrimitives(aTriangleCount,
+							reordered_indices, aVertices, aNormals, aVertexColors, aTexCoords);
+
+					delete[] reordered_indices;
+				}
+				else
+				{
+					aMesh.setPrimitives(aTriangleCount,
+							aIndices, aVertices, aNormals, aVertexColors, aTexCoords);
+				}
+    }
+
 		void RTfactRenderer::bufferRepresentationDynamic(const Representation& rep)
 		{
 			if (rep.getGeometricObjects().empty())
@@ -498,12 +529,9 @@ namespace BALL
 								sceneHandle.createGeometry());
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)mesh.triangle.size(),
-												indices,
-												vertices,
-												normals,
-												rgbcolors, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)mesh.triangle.size(),
+							indices, vertices, normals, rgbcolors, 0);
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 
@@ -521,12 +549,9 @@ namespace BALL
 								sceneHandle.createGeometry());
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)mesh.triangle.size(),
-												indices,
-												vertices,
-												normals,
-												0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)mesh.triangle.size(),
+							indices, vertices, normals, 0, 0);
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 					}
@@ -564,12 +589,9 @@ namespace BALL
 							sceneHandle.createGeometry());
 					rt_data.mesh_handles.push_back(
 							rt_data.object_handles.back().createMesh());
-					rt_data.mesh_handles.back().setPrimitives(
-											(unsigned int)sphere_template_.triangle.size(),
-											indices,
-											vertices,
-											normals,
-											0, 0);
+					setPrimitives(rt_data.mesh_handles.back(),
+						(unsigned int)sphere_template_.triangle.size(),
+						indices, vertices, normals, 0, 0);
 					rt_data.mesh_handles.back().setAppearance(
 							rt_data.material_handles.back());
 
@@ -620,12 +642,9 @@ namespace BALL
 					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 					rt_data.mesh_handles.push_back(
 							rt_data.object_handles.back().createMesh());
-					rt_data.mesh_handles.back().setPrimitives(
-											(unsigned int)tube_template_.triangle.size(),
-											indices,
-											vertices,
-											normals,
-											0, 0);
+					setPrimitives(rt_data.mesh_handles.back(),
+						(unsigned int)tube_template_.triangle.size(),
+						indices, vertices, normals, 0, 0, false);
 					rt_data.mesh_handles.back().setAppearance(
 							rt_data.material_handles.back());
 
@@ -658,12 +677,9 @@ namespace BALL
 						geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices,
-												vertices,
-												normals,
-												0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, vertices, normals, 0, 0, false);
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 
@@ -721,12 +737,9 @@ namespace BALL
 					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 					rt_data.mesh_handles.push_back(
 							rt_data.object_handles.back().createMesh());
-					rt_data.mesh_handles.back().setPrimitives(
-											(unsigned int)tube_template_.triangle.size(),
-											indices,
-											vertices,
-											normals,
-											0, 0);
+					setPrimitives(rt_data.mesh_handles.back(),
+						(unsigned int)tube_template_.triangle.size(),
+						indices, vertices, normals, 0, 0, false);
 					rt_data.mesh_handles.back().setAppearance(
 							rt_data.material_handles.back());
 
@@ -757,12 +770,9 @@ namespace BALL
 						geometric_objects_inst[rt_data.instance_handles.back()] = *it;
 						rt_data.mesh_handles.push_back(
 								rt_data.object_handles.back().createMesh());
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices,
-												vertices,
-												normals,
-												0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, vertices, normals, 0, 0, false);
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 
@@ -906,9 +916,9 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)mesh.triangle.size(),
-												indices, vertices, normals, rgbcolors, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)mesh.triangle.size(),
+							indices, vertices, normals, rgbcolors, 0);
 
 						delete[] rgbcolors;
 					}
@@ -925,9 +935,9 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)mesh.triangle.size(),
-												indices, vertices, normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)mesh.triangle.size(),
+							indices, vertices, normals, 0, 0);
 					}
 
 					geometric_objects_[rt_data.mesh_handles.back()] = *it;
@@ -975,9 +985,9 @@ namespace BALL
 														normals, sphere_template_.getNumberOfNormals(),
 														t_vertices, t_normals);
 					geometric_objects_[rt_data.mesh_handles.back()] = *it;
-					rt_data.mesh_handles.back().setPrimitives(
-											(unsigned int)sphere_template_.triangle.size(),
-											indices, t_vertices, t_normals, 0, 0);
+					setPrimitives(rt_data.mesh_handles.back(),
+						(unsigned int)sphere_template_.triangle.size(),
+						indices, t_vertices, t_normals, 0, 0);
 
 					delete[] t_vertices;
 					delete[] t_normals;
@@ -1022,9 +1032,9 @@ namespace BALL
 															normals, tube_template_.getNumberOfNormals(),
 															t_vertices, t_normals);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices, t_vertices, t_normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, t_vertices, t_normals, 0, 0, false);
 					}
 					else
 					{
@@ -1051,9 +1061,9 @@ namespace BALL
 															normals, tube_template_.getNumberOfNormals(),
 															t_vertices, t_normals);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices, t_vertices, t_normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, t_vertices, t_normals, 0, 0, false);
 
 						//
 						rt_data.material_handles.push_back(
@@ -1074,9 +1084,9 @@ namespace BALL
 															normals, tube_template_.getNumberOfNormals(),
 															t_vertices, t_normals);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices, t_vertices, t_normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, t_vertices, t_normals, 0, 0, false);
 					}
 
 					delete[] t_vertices;
@@ -1121,9 +1131,9 @@ namespace BALL
 															normals, tube_template_.getNumberOfNormals(),
 															t_vertices, t_normals);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices, t_vertices, t_normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, t_vertices, t_normals, 0, 0, false);
 					}
 					else
 					{
@@ -1148,9 +1158,9 @@ namespace BALL
 															normals, tube_template_.getNumberOfNormals(),
 															t_vertices, t_normals);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices, t_vertices, t_normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, t_vertices, t_normals, 0, 0, false);
 
 						//
 						rt_data.material_handles.push_back(
@@ -1171,9 +1181,9 @@ namespace BALL
 															normals, tube_template_.getNumberOfNormals(),
 															t_vertices, t_normals);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
-						rt_data.mesh_handles.back().setPrimitives(
-												(unsigned int)tube_template_.triangle.size(),
-												indices, t_vertices, t_normals, 0, 0);
+						setPrimitives(rt_data.mesh_handles.back(),
+							(unsigned int)tube_template_.triangle.size(),
+							indices, t_vertices, t_normals, 0, 0, false);
 
 					}
 
@@ -1347,12 +1357,14 @@ namespace BALL
 									a++;
 							}
 
+							//TODO: color from ballview configuration
 							iit->setCutPlanes(cappingEnabled, float3(0,0,1), a,
 									data+0*n, data+1*n, data+2*n,
 									data+3*n, data+4*n, data+5*n);
 
 
 							//visualization
+							//TODO: there is a bug somewhere (some intersections are in the origin)
 							float min[3];
 							float max[3];
 							iit->getBounds(min, max);
@@ -1420,18 +1432,20 @@ namespace BALL
 									//
 									rtfactData.cutPlanes.push_back(sceneHandle.createGeometry());
 									rtfactData.cutPlaneMeshes.push_back(rtfactData.cutPlanes.back().createMesh());
-									rtfactData.cutPlaneMeshes.back().setPrimitives(
-													m-2,
-													CUTPLANE_INDICES,
-													CUTPLANE_POSITIONS,
-													CUTPLANE_NORMALS,
-													0, 0);
+									setPrimitives(rtfactData.cutPlaneMeshes.back(),
+										m-2,
+										CUTPLANE_INDICES,
+										CUTPLANE_POSITIONS,
+										CUTPLANE_NORMALS,
+										0, 0);
 									rtfactData.cutPlaneMeshes.back().setAppearance(rtfactData.cutPlaneShader);
 									rtfactData.cutPlaneInstances.push_back( rtfactData.cutPlanes.back().createInstance() );
 
 									float m1[16], m2[16];
 									iit->getTransform(m1, m2);
 									rtfactData.cutPlaneInstances.back().setTransform(m1,m2);
+
+									rtfactData.cutPlaneInstances.back().setDropShadow(false);
 
 									//
 									delete[] CUTPLANE_INDICES;
