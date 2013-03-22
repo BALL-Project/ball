@@ -17,9 +17,7 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/DATATYPE/hashMap.h>
 
-
 #include <RTpieCpp/RayTracerHandle.hpp>
-#include <RTpie/Utils/TransformTools.hpp>
 #include <RTfact/Model/Image/BasicImage2D.hpp>
 #include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
 #include <RTfact/Utils/FPSMeter.hpp>

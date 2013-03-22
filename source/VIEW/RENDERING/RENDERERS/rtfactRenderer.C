@@ -4,11 +4,10 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 
-#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
-
+#include <RTfact/Config/Common.hpp>
 #include <RTfact/Config/Init.hpp>
 
-#include <RTpie/Utils/TransformTools.hpp>
+#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #include <QtGui/QImage>
 
