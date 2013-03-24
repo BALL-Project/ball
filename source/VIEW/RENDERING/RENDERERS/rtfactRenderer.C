@@ -1631,8 +1631,8 @@ namespace BALL
 			// shininess
 			material.setParamf("shininess", rt_material.shininess);
 
-			// transparency
-			material.setParamf("alpha", (100.f - rt_material.transparency) * 0.01f);
+			// transparency            
+            material.setParamf("transparency", rt_material.transparency * 0.01f);
 		}
 
 		std::vector<float> RTfactRenderer::intersectRaysWithGeometry(const std::vector<Vector3>& origins,
