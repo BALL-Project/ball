@@ -25,37 +25,39 @@
 #ifdef BALL_HAS_TR1_UNORDERED_MAP
 namespace std
 {
-	namespace tr1
-	{
+    namespace tr1
+    {
     template <>
-    struct hash< RTpieCpp::MeshHandle > : public unary_function<RTpieCpp::MeshHandle, size_t> {
+    struct hash< RTpieCpp::MeshHandle > : public unary_function<RTpieCpp::MeshHandle, size_t>
+    {
     public:
-        union conv
-        {
-            size_t s;
-            const void  *p;
-        };
-        size_t operator()(const RTpieCpp::MeshHandle& x ) const throw() {
-            conv c;
-            c.p=x.get();
-            return c.s;
-        }
+            union conv
+            {
+                size_t s;
+                const void  *p;
+            };
+            size_t operator()(const RTpieCpp::MeshHandle& x ) const throw() {
+                conv c;
+                c.p=x.get();
+                return c.s;
+            }
     };
     template <>
-    struct hash< RTpieCpp::InstanceHandle > : public unary_function<RTpieCpp::InstanceHandle, size_t> {
+    struct hash< RTpieCpp::InstanceHandle > : public unary_function<RTpieCpp::InstanceHandle, size_t>
+    {
     public:
-        union conv
-        {
-            size_t s;
-            const void  *p;
+            union conv
+            {
+                size_t s;
+                const void  *p;
+            };
+            size_t operator()(const RTpieCpp::InstanceHandle& x ) const throw() {
+                conv c;
+                c.p=x.get();
+                return c.s;
+            }
         };
-        size_t operator()(const RTpieCpp::InstanceHandle& x ) const throw() {
-            conv c;
-            c.p=x.get();
-            return c.s;
-        }
-    };
-	}
+    }
 }
 #endif // BALL_HAS_TR1_UNORDERED_MAP
 
@@ -184,68 +186,64 @@ namespace BALL
 				 *
 				 *  with the geometry that has been buffered by this renderer previously.
 				 */
-				virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins,
-																														 const std::vector<Vector3>& directions);
+                virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins, const std::vector<Vector3>& directions);
 
-				//@}
+                //@}
 
-			private:
+                private:
 
-				std::vector<RTpieCpp::LightHandle> lights_;
+                template<typename taPixelType>
+                void renderImpl(taPixelType* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch);
 
-				typedef RTfact::BasicImage2D<float>						t_ColorImage;
-				typedef RTfact::BasicImage2D<float>						t_DistanceImage;
-				typedef RTfact::Image2DFramebuffer<
-												t_ColorImage,
-												t_DistanceImage>							t_Framebuffer;
+                void renderImpl(float* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch)
+                {
+                }
 
-				typedef RTfact::BasicImage2D<unsigned char>		t_ByteColorImage;
-				typedef RTfact::BasicImage2D<unsigned char>		t_ByteDistanceImage;
-				typedef RTfact::Image2DFramebuffer<
-												t_ByteColorImage,
-												t_ByteDistanceImage>					t_ByteFramebuffer;
+                std::vector<RTpieCpp::LightHandle>                      lights_;
 
-				RTpieCpp::SceneHandle					sceneHandle;
-				RTpieCpp::RayTracerHandle			rayTracer;
-				RTpieCpp::CameraHandle				cameraHandle;
-				RTpieCpp::FrameBufferHandle		renderBuffer;
-				RTpieCpp::RenderTaskHandle		renderTask;
-				t_Framebuffer 								framebuffer;
-				t_ByteFramebuffer							byteFramebuffer;
+                typedef RTfact::BasicImage2D<float>                     t_ColorImage;
+                typedef RTfact::BasicImage2D<float>                     t_DistanceImage;
+                typedef RTfact::Image2DFramebuffer<
+                                                t_ColorImage,
+                                                t_DistanceImage>        t_Framebuffer;
 
+                typedef RTfact::BasicImage2D<unsigned char>             t_ByteColorImage;
+                typedef RTfact::BasicImage2D<unsigned char>             t_ByteDistanceImage;
+                typedef RTfact::Image2DFramebuffer<
+                                                t_ByteColorImage,
+                                                t_ByteDistanceImage>    t_ByteFramebuffer;
 
-				RTfact::FPSMeter fpsMeter;
-				RTpieCpp::PickTaskHandle pickTask;
-
-				//boost::shared_ptr<RTfact::Remote::Picking>  m_picking;
-
-				HashMap<Representation const*, RTfactData> objects_;
-				HashMap<RTpieCpp::InstanceHandle, GeometricObject*> geometric_objects_inst;
-				HashMap<RTpieCpp::MeshHandle, GeometricObject*> geometric_objects_;
-
-				Surface sphere_template_;
-				Surface tube_template_;
-
-				template<typename taPixelType>
-				void renderImpl(taPixelType* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch);
-
-				void renderImpl(float* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch)
-				{
-				}
-
-				bool rtfact_needs_update_;
-
-				Vector3 last_camera_position;
-				Vector3 last_camera_view_vec;
-				Vector3 last_camera_lookup;
-
-				float x_scale_;
-				float y_scale_;
-
-		};
+                RTpieCpp::SceneHandle                                   sceneHandle;
+                RTpieCpp::RayTracerHandle                               rayTracer;
+                RTpieCpp::CameraHandle                                  cameraHandle;
+                RTpieCpp::FrameBufferHandle                             renderBuffer;
+                RTpieCpp::RenderTaskHandle                              renderTask;
+                t_Framebuffer                                           framebuffer;
+                t_ByteFramebuffer                                       byteFramebuffer;
 
 
-	} // namespace VIEW
+                RTfact::FPSMeter                                        fpsMeter;
+                RTpieCpp::PickTaskHandle                                pickTask;
+
+                HashMap<Representation const*, RTfactData>              objects_;
+                HashMap<RTpieCpp::InstanceHandle, GeometricObject*>     geometric_objects_inst;
+                HashMap<RTpieCpp::MeshHandle, GeometricObject*>         geometric_objects_;
+
+                Surface                                                 sphere_template_;
+                Surface                                                 tube_template_;
+
+                bool                                                    rtfact_needs_update_;
+
+                Vector3                                                 last_camera_position;
+                Vector3                                                 last_camera_view_vec;
+                Vector3                                                 last_camera_lookup;
+
+                float                                                   x_scale_;
+                float                                                   y_scale_;
+
+        };
+
+    } // namespace VIEW
 } // namespace BALL
 
 #endif // BALL_VIEW_RENDERING_RTFACTRENDERER_H
