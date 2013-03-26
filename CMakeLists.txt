@@ -21,7 +21,6 @@ PROJECT("BALL")
 # CONTRIB_CUSTOM_DIR
 # STL_DEBUG
 # QT_DB_PLUGIN
-# MT_CUDA_BUILD_TYPE
 
 ########################################################
 ###    manual entries (edit this for new release)    ###
@@ -201,32 +200,56 @@ IF(USE_LIBSVM)
 ENDIF()
 
 ## CUDA
-SET(MT_ENABLE_CUDA OFF CACHE BOOL "Should CUDA support be enabled (version <= 2.1 currently supported).")
+SET(USE_CUDA OFF CACHE BOOL "Should CUDA support be enabled (version <= 2.1 currently supported)?")
 
-IF(MT_ENABLE_CUDA)
+IF(USE_CUDA)
 	FIND_PACKAGE(CUDA REQUIRED)
 ENDIF()
 
 ## TBB
-SET(MT_ENABLE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be enabled.")
+SET(USE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be enabled?")
+SET(REQUIRE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be required?")
 
-IF(MT_ENABLE_TBB)
-	FIND_PACKAGE(TBB REQUIRED)
-	INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
-	BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
-	LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
+## RTFact would require tbb... so check if it is required
+IF(REQUIRE_RTFACT)
+	SET(REQUIRE_TBB ON)
+ENDIF()
+
+IF(USE_TBB)
+	IF (REQUIRE_TBB)
+		FIND_PACKAGE(TBB REQUIRED)
+	ELSE()
+		FIND_PACKAGE(TBB)
+		IF (NOT TBB_FOUND)
+			MESSAGE(STATUS "Intel Threading Building Blocks not found!")
+		ENDIF()
+	ENDIF()
+
+	IF (TBB_FOUND)
+		INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
+		BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
+		LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
+	ENDIF()
 ENDIF()
 
 ## MPI
-OPTION(MT_ENABLE_MPI "Should MPI support be enabled.")
+OPTION(USE_MPI "Should MPI support be enabled?" ON)
+OPTION(REQUIRE_MPI "Should MPI support be required?" OFF)
 
-IF (MT_ENABLE_MPI)
-	FIND_PACKAGE(MPI REQUIRED)
+IF (USE_MPI)
+	IF (REQUIRE_MPI)
+		FIND_PACKAGE(MPI REQUIRED)
+	ELSE()
+		FIND_PACKAGE(MPI)
+	ENDIF()
 
-	ADD_DEFINITIONS(${MPI_COMPILE_FLAGS})
-	INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
+	IF (MPI_FOUND)
+		ADD_DEFINITIONS(${MPI_COMPILE_FLAGS})
+		INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
 
-	SET(BALL_HAS_MPI TRUE)
+		SET(BALL_HAS_MPI TRUE)
+	ENDIF()
+
 ENDIF()
 
 ## VIEW related options/settings/libraries
@@ -287,7 +310,9 @@ IF (BALL_HAS_VIEW)
 	## VIEW dependent options
 	OPTION(BALL_ENABLE_CG "Build against NVIDIA Cg library" OFF)
 	OPTION(BALL_REQUIRE_CG "Fail if NVIDIA Cg could not be detected" OFF)
-	OPTION(DISABLE_RTFACT "Explicitly disable RTfact" OFF)
+
+	OPTION(USE_RTFACT "Enable RTfact support" ON)
+	OPTION(REQUIRE_RTFACT "Require RTfact support" OFF)
 
 	## OpenGL
 	FIND_PACKAGE(OpenGL)
@@ -302,8 +327,13 @@ IF (BALL_HAS_VIEW)
 	ENDIF()
 
 	## RTfact
-	IF (NOT DISABLE_RTFACT)
-		FIND_PACKAGE(RTfact)
+	IF (USE_RTFACT)
+		IF (REQUIRE_RTFACT)
+			FIND_PACKAGE(RTfact REQUIRED)
+		ELSE()
+			FIND_PACKAGE(RTfact)
+		ENDIF()
+
 		IF (RTFACT_FOUND)
 			## RTfact requires TBB
 			IF (NOT CMAKE_COMPILER_IS_INTELCXX)
@@ -475,7 +505,7 @@ ENDIF()
 ## add library target
 ## warning: set BUILD_SHARED_LIBS to decide if library is shared or static (see above)! 
 ## We need the BUILD_SHARED_LIBS flag to set declspec flags for MSVC!
-IF (FOUND_CUDART AND MT_ENABLE_CUDA) # we need both conditions due to possible present cached entries
+IF (FOUND_CUDART AND USE_CUDA) # we need both conditions due to possible present cached entries
 	CUDA_ADD_LIBRARY(BALL ${BALL_sources} ${BALL_headers} ${Cuda_sources})
 	IF (BALL_HAS_VIEW)
 		CUDA_ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers} ${Cuda_sources})
