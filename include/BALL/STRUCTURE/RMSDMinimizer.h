@@ -25,11 +25,6 @@ namespace BALL
 			problem.
 			 \par
 	\ingroup StructureMapping
-	\remarks{
-		This code requires GSL (GNU Scientific Library) support to be enabled.
-		If you cannot compile/link code using RMSDMinimizer, please rerun configure
-		and enable GSL support (configure --help for details).
-	}
 	*/
 	class BALL_EXPORT RMSDMinimizer
 	{		
