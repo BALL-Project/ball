@@ -22,45 +22,6 @@
 #include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
 #include <RTfact/Utils/FPSMeter.hpp>
 
-#ifdef BALL_HAS_TR1_UNORDERED_MAP
-namespace std
-{
-    namespace tr1
-    {
-    template <>
-    struct hash< RTpieCpp::MeshHandle > : public unary_function<RTpieCpp::MeshHandle, size_t>
-    {
-    public:
-            union conv
-            {
-                size_t s;
-                const void  *p;
-            };
-            size_t operator()(const RTpieCpp::MeshHandle& x ) const throw() {
-                conv c;
-                c.p=x.get();
-                return c.s;
-            }
-    };
-    template <>
-    struct hash< RTpieCpp::InstanceHandle > : public unary_function<RTpieCpp::InstanceHandle, size_t>
-    {
-    public:
-            union conv
-            {
-                size_t s;
-                const void  *p;
-            };
-            size_t operator()(const RTpieCpp::InstanceHandle& x ) const throw() {
-                conv c;
-                c.p=x.get();
-                return c.s;
-            }
-        };
-    }
-}
-#endif // BALL_HAS_TR1_UNORDERED_MAP
-
 namespace BALL
 {
   namespace VIEW
