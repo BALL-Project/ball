@@ -153,6 +153,10 @@ namespace BALL
 
                 private:
 
+                static const float vectorDifferenceTolerance_;
+
+                bool doVectorsDiffer(const Vector3& vecA, const Vector3& vecB);
+
                 template<typename taPixelType>
                 void renderImpl(taPixelType* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch);
 

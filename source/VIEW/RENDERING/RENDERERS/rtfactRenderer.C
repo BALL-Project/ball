@@ -33,6 +33,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+        const float RTfactRenderer::vectorDifferenceTolerance_= 0.0f;
 
 		bool RTfactRenderer::hasFPScounter()
 		{
@@ -56,7 +57,7 @@ namespace BALL
 
 			renderTask = rayTracer.createRenderTask();
 			renderTask.setOverSamplingRate(1);
-			renderTask.setAccumulatePixels(true);
+            renderTask.setAccumulatePixels(false);
 			renderTask.setMaxDepth(20);
 
 			pickTask = rayTracer.createPickTask();
@@ -287,17 +288,36 @@ namespace BALL
 			view_vector.normalize();
 			Vector3 const& look_up = camera->getLookUpVector();
 
-			if (use_continuous_loop_)
-			{
-				if (   ((last_camera_position - position   ).getSquareLength() > 1e-5)
-						 ||((last_camera_view_vec - view_vector).getSquareLength() > 1e-5)
-						 ||((last_camera_lookup   - look_up    ).getSquareLength() > 1e-5))
-						renderTask.setAccumulatePixels(true);
-			}
+            if(use_continuous_loop_)
+            {
+                if (doVectorsDiffer( last_camera_position, position ))
+                {
+                    cameraHandle.setPosition( float3(position.x, position.y, position.z) );
+                    last_camera_position  = position;
+                }
 
-			cameraHandle.setPosition( float3(position.x, position.y, position.z) );
-			cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
-			cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
+                if (doVectorsDiffer( last_camera_view_vec, view_vector ))
+                {
+                    cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
+                    last_camera_view_vec  = view_vector;
+                }
+
+                if (doVectorsDiffer( last_camera_lookup, look_up ))
+                {
+                    cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
+                    last_camera_lookup    = look_up;
+                }
+            }
+            else
+            {
+                cameraHandle.setPosition( float3(position.x, position.y, position.z) );
+                cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
+                cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
+
+                last_camera_position  = position;
+                last_camera_view_vec  = view_vector;
+                last_camera_lookup    = look_up;
+            }
 
 			if (lights_.size() != stage_->getLightSources().size()) return;
 
@@ -332,9 +352,6 @@ namespace BALL
 						break;
 				}
 			}
-			last_camera_position  = position;
-			last_camera_view_vec  = view_vector;
-			last_camera_lookup    = look_up;
 		}
 
 		void RTfactRenderer::updateBackgroundColor()
@@ -806,9 +823,6 @@ namespace BALL
 				}
 			}
 
-			if (rtfact_needs_update_ && use_continuous_loop_)
-			  renderTask.setAccumulatePixels(true);
-
 			objects_[&rep] = rt_data;
 		}
 
@@ -1197,9 +1211,6 @@ namespace BALL
 						rt_data.object_handles.back().createInstance());
 			}
 
-			if (rtfact_needs_update_ && use_continuous_loop_)
-			  renderTask.setAccumulatePixels(true);
-
 			objects_[&rep] = rt_data;
 		}
 
@@ -1227,9 +1238,6 @@ namespace BALL
 				rt_data.mesh_handles.clear();
 
 				rtfact_needs_update_ = true;
-
-				if (use_continuous_loop_ && !rep.isHidden())
-					renderTask.setAccumulatePixels(true);
 
 				objects_.erase(&rep);
 			}
@@ -1530,11 +1538,6 @@ namespace BALL
 
 				framebuffer.postPaint();
 
-				if (use_continuous_loop_)
-				{
-					renderTask.setAccumulatePixels(true);
-				}
-
 			}
 		}
 
@@ -1668,8 +1671,13 @@ namespace BALL
 				origins.size(),
 				reinterpret_cast<float*>(&results[0]));
 
-			return results;
-		}
+            return results;
+        }
+
+        bool RTfactRenderer::doVectorsDiffer(const Vector3 &vecA, const Vector3 &vecB)
+        {
+            return ((vecA - vecB).getSquareLength() > vectorDifferenceTolerance_);
+        }
 
 	}
 }
