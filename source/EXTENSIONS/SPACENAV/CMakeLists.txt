@@ -1,5 +1,10 @@
 PROJECT(SPACENAVIGATOR)
 
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the SpaceNavigator plugin.")
+	RETURN()
+ENDIF()
+
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 FIND_PACKAGE(SpaceNavigator)

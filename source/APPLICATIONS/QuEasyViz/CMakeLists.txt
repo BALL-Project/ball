@@ -1,5 +1,10 @@
 PROJECT(QuEasyViz)
 
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(STATUS "BALL is configured not to build the VIEW components. Diabling QuEasyViz.")
+	RETURN()
+ENDIF()
+
 FIND_PACKAGE(Qwt5)
 
 IF(NOT Qwt5_Qt4_FOUND)

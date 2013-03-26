@@ -1,7 +1,12 @@
 PROJECT(PresentaBALL)
 
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the PresentaBALL plugin.")
+	RETURN()
+ENDIF()
+
 IF(NOT USE_QTWEBKIT)
-	MESSAGE(STATUS "QtWebkit support has not been enabled. Disabling the PresentaBALPresentaBALL plugin")
+	MESSAGE(STATUS "QtWebkit support has not been enabled. Disabling the PresentaBALL plugin.")
 	RETURN()
 ENDIF()
 

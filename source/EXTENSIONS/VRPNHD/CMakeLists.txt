@@ -1,5 +1,10 @@
 PROJECT(VRPNHD)
 
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the VRPNHD plugin.")
+	RETURN()
+ENDIF()
+
 FIND_PACKAGE(VRPN)
 
 ## VRPN

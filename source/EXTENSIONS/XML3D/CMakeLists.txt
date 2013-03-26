@@ -1,13 +1,18 @@
 PROJECT(XML3D)
 
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the XML3D plugin.")
+	RETURN()
+ENDIF()
+
 IF(NOT BALL_PYTHON_SUPPORT)
-	MESSAGE(STATUS "Python support has not been enabled. Disabling the XML3D plugin")
+	MESSAGE(STATUS "Python support has not been enabled. Disabling the XML3D plugin.")
 	RETURN()
 ENDIF()
 
 FIND_PACKAGE(Loudmouth)
 IF(NOT LIBLOUDMOUTH_FOUND)
-	MESSAGE(STATUS "libloudmouth not found. Disabling the XML3D plugin")
+	MESSAGE(STATUS "libloudmouth not found. Disabling the XML3D plugin.")
 	RETURN()
 ENDIF()
 INCLUDE_DIRECTORIES(${LIBLOUDMOUTH_INCLUDE_DIR} ${LIBLOUDMOUTH_PKGCONF_INCLUDE_DIRS})

@@ -233,37 +233,43 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(BALL_HAS_QTSQL "Compile BALL's database adapaters (requires QtSql)" OFF)
+OPTION(USE_QTSQL "Compile BALL's database adapaters (requires QtSql)" ON)
+OPTION(USE_QTWEBKIT "Add support for QWebkit" ${BALL_HAS_VIEW})
+
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(WARNING "Warning: CMakes Qt4 find macro is too restrictive and requires UIC and RCC to be present. "
+	                "If you are building without the GUI part of Qt installed, you will need to create dummy files "
+	                "for both executables in the Qt prefix path.")
+ENDIF()
 
 FIND_PACKAGE(Qt4 REQUIRED)
 
 SET(QT_USE_QTXML TRUE)
 SET(QT_USE_QTNETWORK TRUE)
-SET(QT_USE_QTSQL ${BALL_HAS_QTSQL})
-SET(QT_USE_QTOPENGL TRUE)
-SET(QT_USE_QTTEST TRUE)
+SET(QT_USE_QTSQL    ${USE_QTSQL})
 
-OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
-IF(USE_QTWEBKIT)
-	SET(QT_USE_QTWEBKIT TRUE)
-	SET(QT_USE_PHONON   TRUE)
-ENDIF()
+# Qt Dependencies for VIEW
+IF(BALL_HAS_VIEW)
+	SET(QT_USE_QTOPENGL   TRUE)
+	SET(QT_USE_QTTEST     TRUE)
 
-SET(QT_MIN_VERSION "4.4.0")
-
-IF (NOT BALL_HAS_VIEW)
+	IF(USE_QTWEBKIT)
+		SET(QT_USE_QTWEBKIT TRUE)
+		SET(QT_USE_PHONON   TRUE)
+	ENDIF()
+ELSE()
 	SET(QT_DONT_USE_QTGUI TRUE)
 ENDIF()
 
+
+SET(QT_MIN_VERSION "4.4.0")
+
 INCLUDE(${QT_USE_FILE})
 
-SET(BALL_HAS_QTWEBKIT FALSE)
-IF(USE_QTWEBKIT)
-	IF(NOT QT_QTWEBKIT_FOUND)
-		MESSAGE(FATAL_ERROR "QtWebkit is a required dependency. Aborting")
-	ELSE()
-		SET(BALL_HAS_QTWEBKIT TRUE)
-	ENDIF()
+SET(BALL_HAS_QTWEBKIT TRUE)
+IF(USE_QTWEBKIT AND NOT QT_QTWEBKIT_FOUND)
+	SET(BALL_HAS_QTWEBKIT FALSE)
+	MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
 ENDIF()
 
 MESSAGE(STATUS "QT qmake at ${QT_QMAKE_EXECUTABLE}")
