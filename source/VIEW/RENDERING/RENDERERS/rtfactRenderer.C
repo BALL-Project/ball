@@ -1381,9 +1381,10 @@ namespace BALL
 							rtfactData.cutPlaneMeshes.clear();
 							rtfactData.cutPlanes.clear();
 
-							for(int j = 0; j < n; j++)
-							{
-									if(instanceActive[j]) continue;
+                            //Add the geometry for drawing the clipping plane if it is visible but not active
+                            for(int j = 0; j < n; j++)
+                            {
+                                    if(instanceActive[j]) continue;
 
 									int m = 0;
 									Vector3 p[6];
