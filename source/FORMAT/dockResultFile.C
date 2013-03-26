@@ -673,6 +673,10 @@ namespace BALL
 
 			written_ligand_IDs_.clear();
 			file_->close();
+			
+			// Necessary to perform output compression if enabled
+			GenericMolFile::close();
+			
 			closed_ = true;
 		}
 
