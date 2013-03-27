@@ -1313,6 +1313,7 @@ namespace BALL
 			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > normals;
 			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > points;
 			    std::map< RTpieCpp::InstanceHandle, std::vector<bool> > active;
+                std::map< RTpieCpp::InstanceHandle, std::vector<ColorRGBA> > cappingColors;
 
 					const Representation& rep = **it;
 					RTfactData& rtfactData = objects_[&rep];
@@ -1323,7 +1324,8 @@ namespace BALL
 					{
 							ClippingPlane& plane = **plane_it;
 
-							if (!plane.getRepresentations().has(*it)) continue;
+                            //This line means if the clipping plane clips the given representation
+                            if (!plane.getRepresentations().has(*it)) continue;
 							if (plane.isHidden()) continue;
 
 							std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
@@ -1333,9 +1335,10 @@ namespace BALL
 									const Vector3& n(plane.getNormal());
 									const Vector3& p(plane.getPoint());
 
-									normals[*iit].push_back(n);
-									points[*iit].push_back(p);
-									active[*iit].push_back(plane.isActive());
+                                    normals[*iit].push_back(n);
+                                    points[*iit].push_back(p);
+                                    active[*iit].push_back(plane.isActive());
+                                    cappingColors[*iit].push_back(plane.getCappingColor());
 
 							}
 
@@ -1348,9 +1351,10 @@ namespace BALL
 							const std::vector<Vector3>& instanceNormals = normals[*iit];
 							const std::vector<Vector3>& instancePoints = points[*iit];
 							const std::vector<bool>& instanceActive = active[*iit];
+                            const std::vector<ColorRGBA>& instanceCappingColors = cappingColors[*iit];
 							const int n = instanceNormals.size();
 
-							float* data = new float[n*6];
+                            float* data = new float[n*9];
 
 							int a = 0;
 							for(int i = 0; i < n; i++)
@@ -1362,11 +1366,14 @@ namespace BALL
 									data[3*n + a] = instancePoints[i].x;
 									data[4*n + a] = instancePoints[i].y;
 									data[5*n + a] = instancePoints[i].z;
+                                    data[6*n + a] = instanceCappingColors[i].getRed();
+                                    data[7*n + a] = instanceCappingColors[i].getGreen();
+                                    data[8*n + a] = instanceCappingColors[i].getBlue();
 									a++;
 							}
 
 							//TODO: color from ballview configuration
-							iit->setCutPlanes(cappingEnabled, float3(0,0,1), a,
+                            iit->setCutPlanes(cappingEnabled, float3(data[6*n], data[7*n], data[8*n]), a,
 									data+0*n, data+1*n, data+2*n,
 									data+3*n, data+4*n, data+5*n);
 
