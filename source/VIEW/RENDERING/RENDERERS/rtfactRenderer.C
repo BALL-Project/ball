@@ -1612,7 +1612,7 @@ namespace BALL
 
 			for (Position i=0; i<4; ++i)
 				for (Position j=0; j<4; ++j)
-					trafo[i*4+j] = matrix(j, i);
+                    trafo[i*4+j] = matrix(i, j);
 		}
 
 		void RTfactRenderer::updateMaterialFromStage(AppearanceHandle& material)
