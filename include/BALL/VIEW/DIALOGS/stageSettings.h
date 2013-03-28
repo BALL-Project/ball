@@ -17,10 +17,6 @@
 # include <BALL/MATHS/vector3.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_RENDERSETUP_H
-# include <BALL/VIEW/RENDERING/renderSetup.h>
-#endif
-
 #ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
 # include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 #endif
@@ -68,9 +64,6 @@ namespace BALL
 			/// Apply the new values to the stage
 			void apply();
 
-			///
-			void getGLSettings();
-
 			/** Return the screen number of the control screen in our stereo setup.
 			 */
 			int getControlScreenNumber() const;
@@ -89,11 +82,11 @@ namespace BALL
 
 			/** Return the selected renderer for the control screen
 			 */
-			RenderSetup::RendererType getControlScreenRendererType() const;
+			QString getControlScreenRendererType() const;
 
 			/** Return the selected renderer for the stereo screens
 			 */
-			RenderSetup::RendererType getStereoScreensRendererType() const;
+			QString getStereoScreensRendererType() const;
 
 			/** Return the screen geometry for the left eye
        */
@@ -147,6 +140,9 @@ namespace BALL
 
 			///
 			void killIdentificationLabels_();
+
+			void rendererAdded(QString name);
+			void rendererRemoved(QString name);
 
 			private:
 			

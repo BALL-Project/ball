@@ -7,7 +7,7 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
-#include <BALL/VIEW/RENDERING/renderSetup.h>
+#include <BALL/VIEW/RENDERING/rendererFactory.h>
 
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLabel>
@@ -46,33 +46,21 @@ namespace BALL
 			setDefaultValues_();
 			setINIFileSectionName("STAGE");
 			setWidgetStackName("Display");
-			widget_stack->removeWidget(RTFact);
 			setWidgetStack(widget_stack);
 			registerWidgets_();
 			screenCountChanged(QApplication::desktop()->screenCount());
 			stereoModeChanged();
 
-			controlRenderer_comboBox->addItem(tr("OpenGL"));
-			controlRenderer_comboBox->setCurrentIndex(1);
-			stereoScreensRenderer_comboBox->addItem(tr("OpenGL"));
-			stereoScreensRenderer_comboBox->setCurrentIndex(1);
+			std::list<QString> renderers = RendererFactory::instance().getAvailableRenderers();
+			std::list<QString>::iterator it = renderers.begin();
+			std::list<QString>::iterator it_end = renderers.end();
 
-#ifndef BALL_HAS_RTFACT
-			radioButton_rtfact->setEnabled(false);
-#else
-			controlRenderer_comboBox->addItem(tr("RTfact"));
-			stereoScreensRenderer_comboBox->addItem(tr("RTfact"));
-			stereoScreensRenderer_comboBox->setCurrentIndex(2);
-#endif
-			radioButton_opengl->setChecked(true);
+			for(; it != it_end; ++it) {
+				controlRenderer_comboBox      ->addItem(*it);
+				stereoScreensRenderer_comboBox->addItem(*it);
+				preferredRenderer_comboBox    ->addItem(*it);
+			}
 
-			// TODO: this is the bad ms wischa hack!! Remove after the children are gone!
-			controlRenderer_comboBox->setCurrentIndex(2);
-			leftEyeScreen_comboBox->setCurrentIndex(2);
-			rightEyeScreen_comboBox->setCurrentIndex(2);
-			sideBySide_radioButton->setChecked(true);
-			stereoModeChanged();
-// END TODO
 			// signals and slots connections
 			connect( computeDefault_button, SIGNAL( clicked() ), this, SLOT( computeDefaultPressed() ) );
 			connect( eye_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( eyeDistanceChanged() ) );
@@ -97,8 +85,24 @@ namespace BALL
 
 			connect( leftEyeScreen_comboBox,    SIGNAL( currentIndexChanged(int) ), this, SLOT( stereoScreenChanged(int) ) );
 			connect( rightEyeScreen_comboBox,   SIGNAL( currentIndexChanged(int) ), this, SLOT( stereoScreenChanged(int) ) );
+
+			connect( &RendererFactory::instance(), SIGNAL( rendererAdded(QString) ), this, SLOT( rendererAdded(QString) ) );
+			connect( &RendererFactory::instance(), SIGNAL( rendererRemoved(QString) ), this, SLOT( rendererRemoved(QString) ) );
 		} 
 
+		void StageSettings::rendererAdded(QString name)
+		{
+				controlRenderer_comboBox      ->addItem(name);
+				stereoScreensRenderer_comboBox->addItem(name);
+				preferredRenderer_comboBox    ->addItem(name);
+		}
+
+		void StageSettings::rendererRemoved(QString name)
+		{
+				controlRenderer_comboBox      ->removeItem(controlRenderer_comboBox->findText(name));
+				stereoScreensRenderer_comboBox->removeItem(stereoScreensRenderer_comboBox->findText(name));
+				preferredRenderer_comboBox    ->removeItem(preferredRenderer_comboBox->findText(name));
+		}
 
 		bool StageSettings::setValueAllowed(QObject* widget)
 		{
@@ -219,7 +223,6 @@ namespace BALL
 
 			eyeDistanceChanged();
 			focalDistanceChanged();
-			getGLSettings();
 			
 			downsampling_slider->setSliderPosition(scene_->getDownsamplingFactor()*4.);
 			downsamplingSliderChanged();
@@ -271,36 +274,30 @@ namespace BALL
 			ClippingPlane::getCappingColor() = color;
 
 			scene_->setFPSEnabled(show_fps->isChecked());
-			scene_->setPreview(use_preview->isChecked());
 
 			// use vertex buffers ?
-			bool use_buffer = use_vertex_buffers->isChecked() && use_vertex_buffers->isEnabled();
-			GLRenderer& renderer = scene_->getGLRenderer();
-
-			if (use_buffer != renderer.vertexBuffersEnabled() &&
-					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
-			{
-				getMainControl()->setStatusbarText(tr("Because of change in usage of vertex buffer, all Representations have to be deleted!"), true);
-				// remove representations
-				RepresentationManager& pm = getMainControl()->getRepresentationManager();
-				Size nr = pm.getNumberOfRepresentations();
-				list<Representation*> reps = pm.getRepresentations();
-				for (Position p = 0; p < nr; p++)
-				{
-					getMainControl()->remove(**reps.begin());
-					reps.pop_front();
-				}
-			}
-
-			renderer.enableVertexBuffers(use_buffer);
-			renderer.setSmoothLines(smooth_lines_->isChecked());
-
+//			bool use_buffer = use_vertex_buffers->isChecked() && use_vertex_buffers->isEnabled();
+//			GLRenderer& renderer = scene_->getGLRenderer();
+//
+//			if (use_buffer != renderer.vertexBuffersEnabled() &&
+//					getMainControl()->getRepresentationManager().getNumberOfRepresentations() > 0)
+//			{
+//				getMainControl()->setStatusbarText(tr("Because of change in usage of vertex buffer, all Representations have to be deleted!"), true);
+//				// remove representations
+//				RepresentationManager& pm = getMainControl()->getRepresentationManager();
+//				Size nr = pm.getNumberOfRepresentations();
+//				list<Representation*> reps = pm.getRepresentations();
+//				for (Position p = 0; p < nr; p++)
+//				{
+//					getMainControl()->remove(**reps.begin());
+//					reps.pop_front();
+//				}
+//			}
+//
+//			renderer.enableVertexBuffers(use_buffer);
+//			renderer.setSmoothLines(smooth_lines_->isChecked());
 			scene_->setDownsamplingFactor(downsamplingfactor_label->text().toFloat());
-
-			if (radioButton_opengl->isChecked())
-				scene_->switchRenderer(RenderSetup::OPENGL_RENDERER);
-			else
-				scene_->switchRenderer(RenderSetup::RTFACT_RENDERER);
+			scene_->switchRenderer(preferredRenderer_comboBox->currentText());
 		}
 
 		Vector3 StageSettings::getTextureUpDirection_()
@@ -353,7 +350,6 @@ namespace BALL
 			color_button->setColor(QColor(0,0,0));
 			animation_smoothness->setValue(25);
 			show_lights_->setChecked(false);
-			smooth_lines_->setChecked(false);
 			fog_box->setChecked(false);
 			fog_slider->setValue(200);
 //			environment_map->setDisabled(true);
@@ -370,10 +366,6 @@ namespace BALL
 			focal_distance_slider->setValue(40);
 			swap_sss_button->setChecked(false);
 
-			if (use_vertex_buffers->isEnabled())
-			{
-				use_vertex_buffers->setChecked(true);
-			}
 			downsampling_slider->setValue(4);
 		}
 
@@ -528,32 +520,16 @@ namespace BALL
 			return result;
 		}
 
-		RenderSetup::RendererType StageSettings::getControlScreenRendererType() const
+		QString StageSettings::getControlScreenRendererType() const
 		{
-			RenderSetup::RendererType result = RenderSetup::OPENGL_RENDERER;
-
-			QString selected_renderer = controlRenderer_comboBox->currentText();
-
-			if (selected_renderer == "OpenGL")
-				result = RenderSetup::OPENGL_RENDERER;
-			else if (selected_renderer == "RTfact")
-				result = RenderSetup::RTFACT_RENDERER;
-
-			return result;
+			///@TODO: Fix this
+			return controlRenderer_comboBox->currentText();
 		}
 
-		RenderSetup::RendererType StageSettings::getStereoScreensRendererType() const
+		QString StageSettings::getStereoScreensRendererType() const
 		{
-			RenderSetup::RendererType result = RenderSetup::OPENGL_RENDERER;
-
-			QString selected_renderer = stereoScreensRenderer_comboBox->currentText();
-
-			if (selected_renderer == "OpenGL")
-				result = RenderSetup::OPENGL_RENDERER;
-			else if (selected_renderer == "RTfact")
-				result = RenderSetup::RTFACT_RENDERER;
-
-			return result;
+			///@TODO: Fix this
+			return stereoScreensRenderer_comboBox->currentText();
 		}
 
 		QRect StageSettings::getLeftEyeGeometry() const
@@ -680,37 +656,6 @@ namespace BALL
 				return;
 			}
 			downsamplingfactor_label->setText(createFloatString( (downsampling_slider->value()/4.0), 2).c_str()); 
-		}
-
-		// TODO: rewrite to allow more than one renderer
-		void StageSettings::getGLSettings()
-		{
-			GLRenderer& renderer = scene_->getGLRenderer();
-			if (renderer.getVendor() == "") return;
-			vendor_label->setText(renderer.getVendor().c_str());
-			version_label->setText(renderer.getOpenGLVersion().c_str());
-			renderer_label->setText(renderer.getRenderer().c_str());
-			extensions_list->clear();
-			vector<String> extensions = renderer.getExtensions();
-
-			for (Position p = 0; p < extensions.size(); p++)
-			{
-				new QListWidgetItem(extensions[p].c_str(), extensions_list);
-			}
-
-			if (!renderer.vertexBuffersSupported())
-			{
-				use_vertex_buffers->setEnabled(false);
-			}
-
-			smooth_lines_->setChecked(renderer.getSmoothLines());
-			use_vertex_buffers->setChecked(renderer.vertexBuffersEnabled());
-			
-			//TODO 
-			/*bool perspectiveProjection = renderer_->isPerspectiveProjection();
-			radioButton_perspectiveProjection->setChecked(perspectiveProjection);
-			radioButton_orthographicProjection->setChecked(!perspectiveProjection);*/
-
 		}
 
 	} // namespace VIEW
