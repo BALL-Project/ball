@@ -31,6 +31,8 @@
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
+#include <BALL/VIEW/RENDERING/renderSetup.h>
+#include <BALL/VIEW/RENDERING/sceneExporter.h>
 
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
@@ -61,14 +63,11 @@
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
 
-#include <BALL/VIEW/RENDERING/RENDERERS/bufferedRenderer.h>
+#include <BALL/VIEW/RENDERING/rendererFactory.h>
 
-#ifdef BALL_HAS_RTFACT
+#include <BALL/PLUGIN/pluginManager.h>
 
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
-
-#endif
 
 #include <QtCore/QMimeData>
 #include <QtWidgets/QMenuBar>
@@ -101,12 +100,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
-#ifdef BALL_HAS_RTFACT
-		typedef RTfactRenderer t_RaytracingRenderer;
-		typedef GLRenderWindow t_RaytracingWindow;
-#endif
-
 		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
 		Position Scene::vrml_nr_ = 100000;
@@ -128,25 +121,18 @@ namespace BALL
 				update_running_(false),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
-				renderers_(),
-				gl_renderer_(new GLRenderer),
-#ifdef BALL_HAS_RTFACT
-				rt_renderer_(new t_RaytracingRenderer()),
-#endif
 				light_settings_(new LightSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-#ifdef BALL_HAS_RTFACT
 				continuous_loop_(false),
-#endif
 				want_to_use_vertex_buffer_(false),
 				use_preview_(true),
 				show_fps_(false),
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
 				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
 				main_display_(new GLRenderWindow(this)),
-				main_renderer_(0),
+				main_renderer_(-1),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1),
 				mode_manager_(this)
@@ -158,8 +144,6 @@ namespace BALL
 				Log.error() << "new Scene (2) " << this << std::endl;
 #endif
 
-				registerRenderers_();
-
 				// the widget with the MainControl
 				registerWidget(this);
 
@@ -167,8 +151,6 @@ namespace BALL
 				setAcceptDrops(true);
 
 				init();
-				renderers_[main_renderer_]->resize(width(), height());
-				renderers_[main_renderer_]->start();
 
 				registerWidget(this);
 			}
@@ -180,22 +162,15 @@ namespace BALL
 				update_running_(false),
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage(*scene.stage_)),
-				renderers_(),
-				gl_renderer_(new GLRenderer()),
-#ifdef BALL_HAS_RTFACT
-				rt_renderer_(new t_RaytracingRenderer()),
-#endif
 				light_settings_(new LightSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
-#ifdef BALL_HAS_RTFACT
 				continuous_loop_(false),
-#endif
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
 				main_display_(new GLRenderWindow(this)),
-				main_renderer_(0),
+				main_renderer_(-1),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1),
 				mode_manager_(this)
@@ -206,7 +181,6 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 				Log.error() << "new Scene (3) " << this << std::endl;
 #endif
-				registerRenderers_();
 
 				setObjectName(name);
 
@@ -250,11 +224,13 @@ namespace BALL
 
 		void Scene::registerRenderers_()
 		{
-#ifndef BALL_HAS_RTFACT
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
-#else
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(rt_renderer_, main_display_, this, stage_)));
-#endif
+			Renderer* renderer = RendererFactory::instance().createRenderer(preferred_renderer_);
+
+			if(!renderer) {
+				Log.error() << "Could not create an instance of class " << preferred_renderer_.toStdString() << ". The plugin is not yet loaded." << std::endl;
+			}
+
+			renderers_.push_back(renderer->createRenderSetup(main_display_, this));
 		}
 
 		void Scene::clear()
@@ -360,10 +336,6 @@ namespace BALL
 			{
 				case DatasetMessage::UPDATE:
 				case DatasetMessage::REMOVE:
-					// TODO: change to a correct render setup call!
-					for (Position i=0; i<renderers_.size(); ++i)
-						renderers_[i]->removeGridTextures(*set->getData());
-					break;
 
 				default:
 					return;
@@ -495,21 +467,18 @@ namespace BALL
 
 		void Scene::init()
 		{
-			for (Position i=0; i<renderers_.size(); ++i)
+			main_display_->init();
+			GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(main_display_);
+			if (gt)
 			{
-				renderers_[i]->init();
-				GLRenderWindow* gt = dynamic_cast<GLRenderWindow*>(renderers_[i]->target);
-				if (gt)
-				{
-					gt->ignoreEvents(true);
-					gt->installEventFilter(this);
-				}
+				gt->ignoreEvents(true);
+				gt->installEventFilter(this);
 			}
 
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 		}
 
-		String Scene::createFPSInfo_(Renderer* renderer)
+		String Scene::createFPSInfo_(boost::shared_ptr<Renderer> renderer)
 		{
 			String fps_string;
 			float fps = -1;
@@ -783,7 +752,11 @@ namespace BALL
 		{
 			SetCamera set_camera(this);
 			set_camera.exec();
-			gl_renderer_->updateCamera();
+
+			for(size_t i = 0; i < renderers_.size(); ++i){
+				renderers_[i]->updateCamera();
+			}
+
 			updateGL();
 		}
 
@@ -818,17 +791,17 @@ namespace BALL
 			updateGL();
 		}
 
-		void Scene::resetRepresentationsForRenderer_(RenderSetup& rs)
+		void Scene::resetRepresentationsForRenderer_(boost::shared_ptr<RenderSetup> rs)
 		{
 			// TODO: reset all representations already buffered in the renderer
-			if (rs.receivesBufferUpdates())
+			if (rs->receivesBufferUpdates())
 			{
 				RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 				RepresentationList::const_iterator it = pm.getRepresentations().begin();
 				for (; it != pm.getRepresentations().end(); ++it)
 				{
-					rs.bufferRepresentation(**it);
+					rs->bufferRepresentation(**it);
 				}
 			}
 		}
@@ -1088,7 +1061,6 @@ namespace BALL
 		{
 			preferences.insertEntry(light_settings_);
 
-			stage_settings_->getGLSettings();
 			preferences.insertEntry(stage_settings_);
 
 			preferences.insertEntry(material_settings_);
@@ -1167,11 +1139,11 @@ namespace BALL
 
 			// currently, only the GLRenderer knows how to handle fog...
 			// TODO: Fog in other renderers!
-			for (Position i=0; i<renderers_.size(); ++i)
-			{
-				if (renderers_[i]->getRendererType() == RenderSetup::OPENGL_RENDERER)
-					dynamic_cast<GLRenderer*>(renderers_[i]->renderer)->setFogIntensity((float)stage_->getFogIntensity());
-			}
+//			for (Position i=0; i<renderers_.size(); ++i)
+//			{
+//				if (renderers_[i]->getRendererType() == RenderSetup::OPENGL_RENDERER)
+//					dynamic_cast<GLRenderer*>(renderers_[i]->renderer)->setFogIntensity((float)stage_->getFogIntensity());
+//			}
 
 			updateGL();
 
@@ -1314,12 +1286,8 @@ namespace BALL
 				shortcut_registry->registerShortcut("Shortcut|Display|Show_Coordinate_System|here", new_action);
 			}
 
-			insertMenuEntry(MainControl::DISPLAY, tr("Add new GL Window"), this, SLOT(addGlWindow()),
-			                "Shortcut|Display|Add_new_GL_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
-#ifdef BALL_HAS_RTFACT
-			insertMenuEntry(MainControl::DISPLAY, tr("Add new RTfact Window"), this, SLOT(addRTfactWindow()),
-			                "Shortcut|Display|Add_new_RTfact_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
-#endif
+			insertMenuEntry(MainControl::DISPLAY, tr("Add new Window"), this, SLOT(addWindow()),
+			                "Shortcut|Display|Add_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 			// ======================== Display->Animation ===============================================
 			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Record"), this,
 			                                           SLOT(dummySlot()), "Shortcut|Display|Animation|Record", QKeySequence(),
@@ -1504,7 +1472,6 @@ namespace BALL
 				toolbar_actions_view_controls_.push_back(screenshot_action);
 			}
 
-#ifdef BALL_HAS_RTFACT
 			toggle_continuous_loop_action_ = NULL;
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
@@ -1520,7 +1487,6 @@ namespace BALL
 				shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
 			}
 			// end of the toolbar entries
-#endif
 
 			description = "Shortcut|File|Print";
 			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description, QKeySequence(),
@@ -1657,11 +1623,7 @@ namespace BALL
 			}
 
 			renderer->makeCurrent();
-			// NOTE: GLRenderers currently render in the GUI thread!
-            if (RTTI::isKindOf<GLRenderer>(renderer->renderer))
-				renderer->renderToBuffer();
-			else
-				renderer->target->refresh();
+			renderer->updateTarget(); //Was: renderer->target->refresh();
 
 			renderer->setBufferReady(true);
 
@@ -1709,9 +1671,7 @@ namespace BALL
 			// find out if all renderers are ready
 			if (renderer->isReadyToSwap())
 			{
-				// paint all buffers
-                if (RTTI::isKindOf<GLRenderWindow>(renderer->target))
-					static_cast<GLRenderWindow*>(renderer->target)->safeBufferSwap();
+				renderer->swapBuffers();
 
 				if (renderer->isContinuous() && (renderer->getTimeToLive() != 0))
 				{
@@ -1724,9 +1684,7 @@ namespace BALL
 						render_it != dependent_renderers.end(); ++render_it)
 				{
 					(*render_it)->makeCurrent();
-
-                    if (RTTI::isKindOf<GLRenderWindow>((*render_it)->target))
-						static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
+					(*render_it)->swapBuffers();
 
 					if ((*render_it)->isContinuous() && ((*render_it)->getTimeToLive() != 0))
 					{
@@ -1755,7 +1713,6 @@ namespace BALL
 				{
 					if (*it == renderer)
 					{
-						delete((*it)->renderer);
 						delete((*it)->target);
 
 						renderers_.erase(it);
@@ -1885,7 +1842,11 @@ namespace BALL
 			//Quaternion rot  = new_trackrotation - old_trackrotation_;
 			//camera.rotate(new_trackrotation, system_origin_);
 			//old_trackrotation_ = new_trackrotation;
-			gl_renderer_->updateCamera();
+
+			for(size_t i = 0; i < renderers_.size(); ++i) {
+				renderers_[i]->updateCamera();
+			}
+
 			updateGL();
 		}
 
@@ -2212,6 +2173,7 @@ namespace BALL
 			// ok, we have to do this the hard way...
 
 			// What kind of renderer do we have to encapsulate?
+#if 0
             if (RTTI::isKindOf<GLRenderer>(renderers_[main_renderer_]->renderer))
 			{
 				// it's a GLRenderer => use tiling
@@ -2274,6 +2236,7 @@ namespace BALL
 
 				updateGL();
 			}
+#endif
 #endif
 
 			ok = true;
@@ -2377,9 +2340,6 @@ namespace BALL
 			renderers_[stereo_left_eye_]->wait(100);
 			renderers_[stereo_right_eye_]->wait(100);
 
-			delete(renderers_[stereo_left_eye_]->renderer);
-			delete(renderers_[stereo_right_eye_]->renderer);
-
 			// note: it is important to erase the right eye first, because then the index of the
 			// left eye will still be valid (being smaller than the erased right one)
 			if (stereo_right_eye_ != -1)
@@ -2393,10 +2353,10 @@ namespace BALL
 			delete(left_window);
 			delete(right_window);
 
-			gl_renderer_->setStereoMode(Renderer::NO_STEREO);
-			gl_renderer_->setSize(width(), height());
-
-			gl_renderer_->initPerspective();
+//			gl_renderer_->setStereoMode(Renderer::NO_STEREO);
+//			gl_renderer_->setSize(width(), height());
+//
+//			gl_renderer_->initPerspective();
 
 			setFullScreen(false);
 		}
@@ -2421,137 +2381,102 @@ namespace BALL
 			updateGL(); // TODO: update() or updateGL()???
 		}
 
-		void Scene::switchRenderer(RenderSetup::RendererType new_type)
+		void Scene::switchRenderer(const QString& new_type)
 		{
-			if (main_renderer_ >= renderers_.size())
+			preferred_renderer_ = new_type;
+
+			if (main_renderer_ >= (int)renderers_.size())
 			{
 				Log.warn() << "SwitchRenderer: invalid renderer requested";
 				return;
 			}
 
-			if (new_type == renderers_[main_renderer_]->getRendererType())
-				return; // nothing to see here....
-
 			// let's see if we support the requested type at all...
-#ifdef BALL_HAS_RTFACT
-			if (new_type != RenderSetup::OPENGL_RENDERER && new_type != RenderSetup::RTFACT_RENDERER)
-#else
-				if (new_type != RenderSetup::OPENGL_RENDERER)
-#endif
+			if (!RendererFactory::instance().hasRenderer(new_type))
+			{
+				Log.warn() << "Scene::switchRenderer(): Sorry, BALLView currently does not support renderers of type: " << new_type.toStdString() << std::endl;
+				return;
+			}
+
+			if(main_renderer_ >= 0)
+			{
+				if (new_type == renderers_[main_renderer_]->getRendererType())
+					return; // nothing to see here....
+
+				boost::shared_ptr<RenderSetup> main_renderer_ptr = renderers_[main_renderer_];
+
+				stopContinuousLoop();
+				if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 				{
-					Log.warn() << "Scene::switchRenderer(): Sorry, BALLView currently does not support renderers of this type!" << std::endl;
-					return;
+					// TODO: fix this
+					toggle_continuous_loop_action_->setEnabled(new_type == "RTFactRenderer");
 				}
 
-			// ok, we have some work to do...
-			boost::shared_ptr<RenderSetup> main_renderer_ptr = renderers_[main_renderer_];
+				// ok, we have some work to do...
+				main_renderer_ptr->stop();
 
-			stopContinuousLoop();
-#ifdef BALL_HAS_RTFACT
-			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
-			{
-				toggle_continuous_loop_action_->setEnabled(new_type == RenderSetup::RTFACT_RENDERER);
+				main_renderer_ptr->loop_mutex.lock();
+				main_renderer_ptr->wait_for_render.wakeAll();
+				main_renderer_ptr->loop_mutex.unlock();
+
+				main_renderer_ptr->wait(100);
+
+				renderers_.erase(renderers_.begin() + main_renderer_);
+
+				if (stereo_left_eye_  > main_renderer_) stereo_left_eye_--;
+				if (stereo_right_eye_ > main_renderer_) stereo_right_eye_--;
 			}
-#endif
-
-			main_renderer_ptr->stop();
-
-			main_renderer_ptr->loop_mutex.lock();
-			main_renderer_ptr->wait_for_render.wakeAll();
-			main_renderer_ptr->loop_mutex.unlock();
-
-			main_renderer_ptr->wait(100);
-
-			delete(main_renderer_ptr->renderer);
-
-			renderers_.erase(renderers_.begin() + main_renderer_);
 
 			main_display_->makeCurrent();
 
 			// now, create a new renderer
-			if (new_type == RenderSetup::OPENGL_RENDERER)
-			{
-				GLRenderer*   new_renderer = new GLRenderer;
-				new_renderer->init(*this);
-				new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
+			Renderer* new_renderer = RendererFactory::instance().createRenderer(new_type);
+			new_renderer->init(*this);
+			new_renderer->setFrameBufferFormat(main_display_->getFormat());
 
-				main_renderer_ptr = boost::shared_ptr<RenderSetup>(new RenderSetup(new_renderer, main_display_, this, stage_));
-			}
-			else if (new_type == RenderSetup::RTFACT_RENDERER)
-			{
-#ifdef BALL_HAS_RTFACT
-				t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
-				new_renderer->init(*this);
-				new_renderer->setFrameBufferFormat(main_display_->getFormat());
-
-				main_renderer_ptr = boost::shared_ptr<RenderSetup>(new RenderSetup(new_renderer, main_display_, this, stage_));
-#endif
-			}
-
+			boost::shared_ptr<RenderSetup> main_renderer_ptr = new_renderer->createRenderSetup(main_display_, this);
 			main_renderer_ptr->setReceiveBufferUpdates(true);
-			resetRepresentationsForRenderer_(*main_renderer_ptr);
 
-			if (stereo_left_eye_  > main_renderer_) stereo_left_eye_--;
-			if (stereo_right_eye_ > main_renderer_) stereo_right_eye_--;
+			main_renderer_ptr->init();
+			main_renderer_ptr->resize(width(), height());
+
+			resetRepresentationsForRenderer_(main_renderer_ptr);
 
 			renderers_.push_back(main_renderer_ptr);
+			renderers_.back()->start();
 			main_renderer_ = renderers_.size()-1;
-			// NOTE: *don't* try to start new_rs, since this is an automatic variable
-			//       that will be destroyed soon afterwards
-			renderers_[main_renderer_]->start();
 		}
 
-		void Scene::addGlWindow()
+		void Scene::addWindow()
+		{
+			addWindow(preferred_renderer_);
+		}
+
+		void Scene::addWindow(const QString& renderer_type)
 		{
 			GLRenderWindow* new_widget = new GLRenderWindow(0, ((String)tr("Scene")).c_str(), Qt::Window);
 			new_widget->init();
 			new_widget->makeCurrent();
 			new_widget->resize(width(), height());
 
+			new_widget->ignoreEvents(true);
 			new_widget->installEventFilter(this);
 
-			GLRenderer*   new_renderer = new GLRenderer;
-			new_renderer->init(*this);
-			new_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-
-			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
-			new_rs->setReceiveBufferUpdates(true);
-
-			resetRepresentationsForRenderer_(*new_rs);
-			new_widget->show();
-
-			renderers_.push_back(new_rs);
-			// NOTE: *don't* try to start new_rs, since this is an automatic variable
-			//       that will be destroyed soon afterwards
-			renderers_[renderers_.size()-1]->start();
-		}
-
-#ifdef BALL_HAS_RTFACT
-		void Scene::addRTfactWindow()
-		{
-			GLRenderWindow* new_widget = new GLRenderWindow(0, ((String)tr("Scene")).c_str(), Qt::Window);
-			new_widget->init();
-			new_widget->makeCurrent();
-			new_widget->resize(width(), height());
-
-			new_widget->installEventFilter(this);
-
-			t_RaytracingRenderer* new_renderer = new t_RaytracingRenderer();
+			Renderer* new_renderer = RendererFactory::instance().createRenderer(renderer_type);
 			new_renderer->init(*this);
 			new_renderer->setFrameBufferFormat(new_widget->getFormat());
 
-			boost::shared_ptr<RenderSetup> new_rs(new RenderSetup(new_renderer, new_widget, this, stage_));
+			boost::shared_ptr<RenderSetup> new_rs = new_renderer->createRenderSetup(new_widget, this);
 			new_rs->setReceiveBufferUpdates(true);
 
-			resetRepresentationsForRenderer_(*new_rs);
+			resetRepresentationsForRenderer_(new_rs);
 			new_widget->show();
 
 			renderers_.push_back(new_rs);
 			// NOTE: *don't* try to start new_rs, since this is an automatic variable
 			//       that will be destroyed soon afterwards
-			renderers_[renderers_.size()-1]->start();
+			renderers_.back()->start();
 		}
-#endif
 
 		void Scene::enterStereo()
 		{
@@ -2582,20 +2507,9 @@ namespace BALL
 			QRect left_geometry  = stage_settings_->getLeftEyeGeometry();
 			QRect right_geometry = stage_settings_->getRightEyeGeometry();
 
-			RenderSetup::RendererType control_renderer_type = stage_settings_->getControlScreenRendererType();
-			RenderSetup::RendererType stereo_renderer_type = stage_settings_->getStereoScreensRendererType();
+			QString control_renderer_type = stage_settings_->getControlScreenRendererType();
+			QString stereo_renderer_type = stage_settings_->getStereoScreensRendererType();
 
-#ifndef BALL_HAS_RTFACT
-			if (control_renderer_type == RenderSetup::RTFACT_RENDERER || stereo_renderer_type == RenderSetup::RTFACT_RENDERER)
-			{
-				QMessageBox *box = new QMessageBox;
-				box->setText("Stereo setup invalid");
-				box->setInformativeText("BALLView was compiled without RTfact support! Please run stereo setup again!");
-				box->show();
-
-				return;
-			}
-#endif
 			Renderer::StereoMode mode = stage_settings_->getStereoMode();
 
 			if (mode == Renderer::DUAL_VIEW_STEREO || mode == Renderer::TOP_BOTTOM_STEREO)
@@ -2619,40 +2533,22 @@ namespace BALL
 				Renderer* left_renderer;
 				Renderer* right_renderer;
 
-				if (stereo_renderer_type == RenderSetup::OPENGL_RENDERER)
-				{
-					left_widget->makeCurrent();
-					left_renderer = new GLRenderer;
-					left_renderer->init(*this);
-					left_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
-					static_cast<GLRenderer*>(left_renderer)->enableVertexBuffers(want_to_use_vertex_buffer_);
+				left_widget->makeCurrent();
+				left_renderer = RendererFactory::instance().createRenderer(stereo_renderer_type);
+				left_renderer->init(*this);
+				left_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
+				left_renderer->setFrameBufferFormat(left_widget->getFormat());
 
-					right_widget->makeCurrent();
-					right_renderer = new GLRenderer;
-					right_renderer->init(*this);
-					right_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
-					static_cast<GLRenderer*>(right_renderer)->enableVertexBuffers(want_to_use_vertex_buffer_);
-				}
-				else if (stereo_renderer_type == RenderSetup::RTFACT_RENDERER)
-				{
-#ifdef BALL_HAS_RTFACT
-					left_renderer = new t_RaytracingRenderer();
-					left_renderer->init(*this);
-					static_cast<t_RaytracingRenderer*>(left_renderer)->setFrameBufferFormat(left_widget->getFormat());
-
-					right_renderer = new t_RaytracingRenderer();
-					right_renderer->init(*this);
-					static_cast<t_RaytracingRenderer*>(right_renderer)->setFrameBufferFormat(right_widget->getFormat());
-#endif
-				} else {
-					Log.error() << "Unhandled renderer type!\n";
-					return;
-				}
+				right_widget->makeCurrent();
+				right_renderer = RendererFactory::instance().createRenderer(stereo_renderer_type);
+				right_renderer->init(*this);
+				right_renderer->setStereoMode(Renderer::DUAL_VIEW_STEREO);
+				right_renderer->setFrameBufferFormat(right_widget->getFormat());
 
 				left_widget->show();
 				right_widget->show();
 
-				left_renderer->setSize(left_widget->width(),   left_widget->height());
+				left_renderer ->setSize( left_widget->width(),  left_widget->height());
 				right_renderer->setSize(right_widget->width(), right_widget->height());
 
 				// we may need to account for differences in the frusta
@@ -2664,18 +2560,18 @@ namespace BALL
 				right_renderer->setStereoFrustumConversion(right_screen_size.width()  / right_geometry.width(),
                                                    right_screen_size.height() / right_geometry.height());
 
-				boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
+				boost::shared_ptr<RenderSetup> left_rs = left_renderer->createRenderSetup(left_widget, this);
 
-				resetRepresentationsForRenderer_(*left_rs);
+				resetRepresentationsForRenderer_(left_rs);
 				left_rs->setStereoMode(RenderSetup::LEFT_EYE);
 
 				renderers_.push_back(left_rs);
 				stereo_left_eye_ = renderers_.size()-1;
 				left_rs->start();
 
-				boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
+				boost::shared_ptr<RenderSetup> right_rs = right_renderer->createRenderSetup(right_widget, this);
 
-				resetRepresentationsForRenderer_(*right_rs);
+				resetRepresentationsForRenderer_(right_rs);
 				right_rs->setStereoMode(RenderSetup::RIGHT_EYE);
 
 				renderers_.push_back(right_rs);
@@ -2778,22 +2674,16 @@ namespace BALL
 			left_widget->resize(screen_geom.width() / 2, screen_geom.height());
 			left_widget->move(screen_geom.x(), screen_geom.y());
 
-#ifndef BALL_HAS_RTFACT
-			GLRenderer*   left_renderer = new GLRenderer;
-			left_renderer->init(*this);
-			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-#else
-			t_RaytracingRenderer*  left_renderer = new t_RaytracingRenderer();
+			Renderer* left_renderer = RendererFactory::instance().createRenderer(preferred_renderer_);
 			left_renderer->init(*this);
 			left_renderer->setFrameBufferFormat(left_widget->getFormat());
-#endif
 
 			left_widget->show();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
-			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
+			boost::shared_ptr<RenderSetup> left_rs = left_renderer->createRenderSetup(left_widget, this);
 
-			resetRepresentationsForRenderer_(*left_rs);
+			resetRepresentationsForRenderer_(left_rs);
 			left_rs->setStereoMode(RenderSetup::LEFT_EYE);
 
 			renderers_.push_back(left_rs);
@@ -2806,21 +2696,16 @@ namespace BALL
 			right_widget->resize(screen_geom.width() / 2, screen_geom.height());
 			right_widget->move(screen_geom.x() + screen_geom.width() / 2, screen_geom.y());
 
-#ifndef BALL_HAS_RTFACT
-			GLRenderer*   right_renderer = new GLRenderer;
-			right_renderer->init(*this);
-			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-#else
-			t_RaytracingRenderer*  right_renderer = new t_RaytracingRenderer();
+			Renderer* right_renderer = RendererFactory::instance().createRenderer(preferred_renderer_);
 			right_renderer->init(*this);
 			right_renderer->setFrameBufferFormat(right_widget->getFormat());
-#endif
+
 			right_widget->show();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
-			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
+			boost::shared_ptr<RenderSetup> right_rs = right_renderer->createRenderSetup(right_widget, this);
 
-			resetRepresentationsForRenderer_(*right_rs);
+			resetRepresentationsForRenderer_(right_rs);
 			right_rs->setStereoMode(RenderSetup::RIGHT_EYE);
 
 			renderers_.push_back(right_rs);
@@ -2867,22 +2752,16 @@ namespace BALL
 			left_widget->init();
 			left_widget->resize(left_screen->width(), left_screen->height());
 
-#ifndef BALL_HAS_RTFACT
-			GLRenderer*   left_renderer = new GLRenderer;
-			left_renderer->init(*this);
-			left_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-#else
-			t_RaytracingRenderer*  left_renderer = new t_RaytracingRenderer();
+			Renderer* left_renderer = RendererFactory::instance().createRenderer(preferred_renderer_);
 			left_renderer->init(*this);
 			left_renderer->setFrameBufferFormat(left_widget->getFormat());
-#endif
 
 			left_widget->showFullScreen();
 			left_renderer->setSize(left_widget->width(), left_widget->height());
 
-			boost::shared_ptr<RenderSetup> left_rs(new RenderSetup(left_renderer, left_widget, this, stage_));
+			boost::shared_ptr<RenderSetup> left_rs = left_renderer->createRenderSetup(left_widget, this);
 
-			resetRepresentationsForRenderer_(*left_rs);
+			resetRepresentationsForRenderer_(left_rs);
 			left_rs->setStereoMode(RenderSetup::LEFT_EYE);
 
 			renderers_.push_back(left_rs);
@@ -2895,22 +2774,16 @@ namespace BALL
 			right_widget->init();
 			right_widget->resize(right_screen->width(), right_screen->height());
 
-#ifndef BALL_HAS_RTFACT
-			GLRenderer*   right_renderer = new GLRenderer;
-			right_renderer->init(*this);
-			right_renderer->enableVertexBuffers(want_to_use_vertex_buffer_);
-#else
-			t_RaytracingRenderer*  right_renderer = new t_RaytracingRenderer();
+			Renderer* right_renderer = RendererFactory::instance().createRenderer(preferred_renderer_);
 			right_renderer->init(*this);
 			right_renderer->setFrameBufferFormat(right_widget->getFormat());
-#endif
 
 			right_widget->showFullScreen();
 			right_renderer->setSize(right_widget->width(), right_widget->height());
 
-			boost::shared_ptr<RenderSetup> right_rs(new RenderSetup(right_renderer, right_widget, this, stage_));
+			boost::shared_ptr<RenderSetup> right_rs = right_renderer->createRenderSetup(right_widget, this);
 
-			resetRepresentationsForRenderer_(*right_rs);
+			resetRepresentationsForRenderer_(right_rs);
 			right_rs->setStereoMode(RenderSetup::RIGHT_EYE);
 
 			renderers_.push_back(right_rs);
@@ -2973,15 +2846,16 @@ namespace BALL
 
 		void Scene::startContinuousLoop()
 		{
-#ifdef BALL_HAS_RTFACT
 			continuous_loop_ = true;
 
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
-				// TODO: OpenGL does *not* like the continuous loop
-				if (!renderers_[i]->isContinuous() && (renderers_[i]->getRendererType() != RenderSetup::OPENGL_RENDERER))
+				///@TODO: OpenGL does *not* like the continuous loop
+				/// fix this!
+				if (!renderers_[i]->isContinuous() && (renderers_[i]->getRendererType() != "GLRenderer"))
 				{
 					renderers_[i]->useContinuousLoop(true);
+
 					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 					{
 						toggle_continuous_loop_action_->setChecked(true);
@@ -2990,15 +2864,13 @@ namespace BALL
 					renderers_[i]->loop_mutex.lock();
 					renderers_[i]->wait_for_render.wakeAll();
 					renderers_[i]->loop_mutex.unlock();
-        }
+				}
 			}
 			setStatusbarText(tr("Switched continuous loop on"), true);
-#endif
 		}
 
 		void Scene::stopContinuousLoop()
 		{
-#ifdef BALL_HAS_RTFACT
 			continuous_loop_ = false;
 
 			for (Position i=0; i<renderers_.size(); ++i)
@@ -3013,12 +2885,10 @@ namespace BALL
 				}
 			}
 			setStatusbarText(tr("Switched continuous loop off"), true);
-#endif
 		}
 
 		void Scene::toggleContinuousLoop()
 		{
-#ifdef BALL_HAS_RTFACT
 			if (continuous_loop_)
 			{
 				stopContinuousLoop();
@@ -3027,7 +2897,6 @@ namespace BALL
 			{
 				startContinuousLoop();
 			}
-#endif
 		}
 
 		void Scene::applyStereoDefaults()
@@ -3332,30 +3201,6 @@ namespace BALL
 			stored_camera_ = getStage()->getCamera();
 		}
 
-		void Scene::setGLRenderer(GLRenderer& renderer)
-		{
-			delete gl_renderer_;
-			gl_renderer_ = &renderer;
-		}
-
-#ifdef BALL_HAS_RTFACT
-		Scene::RaytracingWindowPtr Scene::getWindow(WindowType aWindowType)
-		{
-			switch(aWindowType)
-			{
-				case CONTROL_WINDOW:
-				case LEFT_EYE_WINDOW:
-				case RIGHT_EYE_WINDOW:
-					return RaytracingWindowPtr(main_display_);
-					break;
-
-				default:
-					return RaytracingWindowPtr(main_display_);
-					break;
-			}
-		}
-#endif
-
 		void AnimationThread::mySleep(Size msec)
 		{
 			msleep(msec);
@@ -3493,12 +3338,10 @@ namespace BALL
 
 		void Scene::enterPickingMode()
 		{
-			gl_renderer_->enterPickingMode();
 		}
 
 		void Scene::exitPickingMode()
 		{
-			gl_renderer_->exitPickingMode();
 		}
 
 		void Scene::getClickedItems(const QPoint& p)

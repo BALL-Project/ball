@@ -4,42 +4,38 @@ class Scene
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/scene.h>
 %End
-	private:
-	Scene(const Scene&);
-
 	public:
-
 	static Size countInstances();
 	static Scene* getInstance(Position);
 
-	Scene() throw();
+	Scene();
 	Scene(const Scene&);
-	~Scene() throw();
+	~Scene();
 
 	void setCursor(String c);
 	void setElementCursor(int);
 
-	virtual void onNotify(Message*) throw();
-	virtual void initializeWidget(MainControl&) throw();
-	virtual void fetchPreferences(INIFile&) throw();
-	virtual void writePreferences(INIFile&) throw();
-	virtual void checkMenu(MainControl&) throw();
-	virtual bool isValid() const throw();
-	Stage* getStage() throw();
+	virtual void onNotify(Message*);
 	virtual bool exportScene(SceneExporter&) const;
+	virtual void initializeWidget(MainControl&);
+	virtual void fetchPreferences(INIFile&);
+	virtual void writePreferences(INIFile&);
+	virtual void checkMenu(MainControl&);
+	virtual bool isValid() const;
+	Stage* getStage();
 	Vector2 map3DToViewport(const Vector3& );
 	Vector3 mapViewportTo3D(const Vector2& );
 	Vector3 mapViewportTo3D(int , int );
 	void merge(Composite* , Composite* );
 	void deselect(bool );
 
-	void setCamera(const Camera&) throw();
-	static void setAnimationSmoothness(float) throw();
-	static float getAnimationSmoothness() throw();
-	void setDefaultLighting(bool /*update_GL*/ = true) throw();
-	void initializePreferencesTab(Preferences&) throw();
-	void finalizePreferencesTab(Preferences&) throw();
-	virtual void applyPreferences() throw();
+	void setCamera(const Camera&);
+	static void setAnimationSmoothness(float);
+	static float getAnimationSmoothness();
+	void setDefaultLighting(bool /*update_GL*/ = true);
+	void initializePreferencesTab(Preferences&);
+	void finalizePreferencesTab(Preferences&);
+	virtual void applyPreferences();
 
 	bool exportPNG(const String&);
 	virtual void setWidgetVisible(bool);
@@ -48,8 +44,7 @@ class Scene
 	void rotateClockwise(float /*degree*/);
 	void move(Vector3);
 	void moveComposites(PyCompositeList, Vector3);
-	void rotateComposites(PyCompositeList, float /*degree_right*/,
-		float /*degree_up*/, float de/*gree_clockwise*/ = 0);
+	void rotateComposites(PyCompositeList, float /*degree_right*/, float /*degree_up*/, float de/*gree_clockwise*/ = 0);
 	bool isAnimationRunning() const throw();
 	void setTurnPoint(const Vector3&);
 	const Vector3& getTurnPoint() const;
@@ -59,23 +54,23 @@ class Scene
 
 	public Q_SLOTS:
 
-	void createCoordinateSystem() throw();
-	void createCoordinateSystemAtOrigin() throw();
+	void createCoordinateSystem();
+	void createCoordinateSystemAtOrigin();
 	String exportPNG();
 	void exportPOVRay();
 	void exportNextPOVRay();
 	void printScene();
 	void showExportPNGDialog();
 	void showExportVRMLDialog();
-	virtual void switchShowWidget() throw();
-	void exitStereo() throw();
+	virtual void switchShowWidget();
+	void exitStereo();
 	void enterStereo();
-	void enterActiveStereo() throw();
-	void enterDualStereo() throw();
-	void clearRecordedAnimation() throw();
-	void startAnimation() throw();
-	void stopAnimation() throw();
-	void switchToLastMode() throw();
+	void enterActiveStereo();
+	void enterDualStereo();
+	void clearRecordedAnimation();
+	void startAnimation();
+	void stopAnimation();
+	void switchToLastMode();
 	void switchShowGrid();
 	void showInfos();
 	void setupViewVolume();
