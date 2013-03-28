@@ -499,12 +499,12 @@ namespace BALL
 			rt_data.has_been_disabled = false;
 			float trafo[16];
 
-			Stage::RaytracingMaterial rt_material = scene_->getStage()->getRTMaterial();
-			if (rep.hasProperty("RTFact::Material"))
+			Stage::Material rt_material = scene_->getStage()->getMaterial();
+			if (rep.hasProperty("Rendering::Material"))
 			{
-				NamedProperty rt_mat_property = rep.getProperty("RTFact::Material");
+				NamedProperty rt_mat_property = rep.getProperty("Rendering::Material");
 				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
-				rt_material = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
+				rt_material = *dynamic_cast<Stage::Material*>(mat_ptr.get());
 			}
 
 			std::list<GeometricObject*>::const_iterator it;
@@ -873,12 +873,12 @@ namespace BALL
 			RTfactData rt_data;
 			rt_data.has_been_disabled = false;
 
-			Stage::RaytracingMaterial rt_material = scene_->getStage()->getRTMaterial();
-			if (rep.hasProperty("RTFact::Material"))
+			Stage::Material rt_material = scene_->getStage()->getMaterial();
+			if (rep.hasProperty("Rendering::Material"))
 			{
-				NamedProperty rt_mat_property = rep.getProperty("RTFact::Material");
+				NamedProperty rt_mat_property = rep.getProperty("Rendering::Material");
 				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
-				rt_material = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
+				rt_material = *dynamic_cast<Stage::Material*>(mat_ptr.get());
 			}
 
 			rt_data.cutPlaneShader = sceneHandle.createAppearance("PhongShader");
@@ -1558,11 +1558,11 @@ namespace BALL
 
 				for (Position i=0; i<rt_data.material_handles.size(); ++i)
 				{
-					if (rep->hasProperty("RTFact::Material"))
+					if (rep->hasProperty("Rendering::Material"))
 					{
-						NamedProperty rt_mat_property = rep->getProperty("RTFact::Material");
+						NamedProperty rt_mat_property = rep->getProperty("Rendering::Material");
 						boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
-						convertMaterial(*dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get()), rt_data.material_handles[i]);
+						convertMaterial(*dynamic_cast<Stage::Material*>(mat_ptr.get()), rt_data.material_handles[i]);
 					}
 					else
 						updateMaterialFromStage(rt_data.material_handles[i]);
@@ -1625,12 +1625,12 @@ namespace BALL
 		void RTfactRenderer::updateMaterialFromStage(AppearanceHandle& material)
 		{
 
-			Stage::RaytracingMaterial const& rt_material = scene_->getStage()->getRTMaterial();
+			Stage::Material const& rt_material = scene_->getStage()->getMaterial();
 			convertMaterial(rt_material, material);
 
 		}
 
-		void RTfactRenderer::convertMaterial(Stage::RaytracingMaterial const& rt_material, AppearanceHandle& material)
+		void RTfactRenderer::convertMaterial(Stage::Material const& rt_material, AppearanceHandle& material)
 		{
 			// ambience
 			float red   = (float)rt_material.ambient_color.getRed()   * rt_material.ambient_intensity;

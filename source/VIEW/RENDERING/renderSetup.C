@@ -517,22 +517,13 @@ namespace BALL
 		}
 		void RenderSetup::updateMaterialForRepresentation(const Representation* rep)
 		{
-#ifdef BALL_HAS_RTFACT
-			if (RTTI::isKindOf<RTfactRenderer>(*renderer))
-			{
 			render_mutex_.lock();
 
-			makeCurrent();
-			
-			((RTfactRenderer*)renderer)->updateMaterialForRepresentation(rep);
-			
+			//makeCurrent();
+
+			renderer->updateMaterialForRepresentation(rep);
+
 			render_mutex_.unlock();
-			}
-			else
-			{
-				return;
-			}
-#endif
 		}
 		
 		void RenderSetup::updateBackgroundColor()

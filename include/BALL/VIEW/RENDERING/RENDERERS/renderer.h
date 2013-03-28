@@ -115,6 +115,11 @@ namespace BALL
 			 */
 			virtual void updateCamera(const Camera* camera = 0);
 
+			/**
+			 * Updates the material for the current representation
+			 */
+			virtual void updateMaterialForRepresentation(Representation const*) {};
+
 			/// Update the background color from the stage
 			virtual void updateBackgroundColor();
 

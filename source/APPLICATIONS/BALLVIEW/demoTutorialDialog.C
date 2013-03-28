@@ -205,7 +205,7 @@ void DemoTutorialDialog::initTutorials_()
 	else if  (tutorial_type_ == RAYTRACING_TUTORIAL)
 	{ 
 #ifdef BALL_HAS_RTFACT
-		Stage::RaytracingMaterial& rt_material = stage->getRTMaterial();
+		Stage::Material& rt_material = stage->getMaterial();
 
 		rt_material.ambient_color = ColorRGBA(255, 255, 255, 255);
 		rt_material.ambient_intensity = 0.;

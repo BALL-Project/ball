@@ -100,7 +100,7 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		Stage::RaytracingMaterial::RaytracingMaterial()
+		Stage::Material::Material()
 			: PersistentObject(),
 				ambient_color(ColorRGBA(255, 255, 255, 255)),
 				ambient_intensity(0.),
@@ -113,7 +113,7 @@ namespace BALL
 		{
 		}
 
-		void Stage::RaytracingMaterial::persistentWrite(PersistenceManager& pm, const char* name) const
+		void Stage::Material::persistentWrite(PersistenceManager& pm, const char* name) const
 			throw(Exception::GeneralException)
 		{
 			pm.writeObjectHeader(this, name);
@@ -132,7 +132,7 @@ namespace BALL
 			pm.writeObjectTrailer(name);
 		}
 		
-		void Stage::RaytracingMaterial::persistentRead(PersistenceManager& pm)
+		void Stage::Material::persistentRead(PersistenceManager& pm)
 			throw(Exception::GeneralException)
 		{
 			String color;
@@ -188,7 +188,7 @@ namespace BALL
 				diffuse_(stage.diffuse_),
 				ambient_(stage.ambient_),
 				shininess_(stage.shininess_),
-				rt_material_(stage.rt_material_)
+				material_(stage.material_)
 		{
 		}
 
@@ -206,7 +206,7 @@ namespace BALL
 			diffuse_  = 0.2;
 			ambient_  = 0.0;
 			shininess_ = 128.0;
-			rt_material_ = RaytracingMaterial();
+			material_ = Material();
 		}
 
 		bool Stage::operator == (const Stage& stage) const

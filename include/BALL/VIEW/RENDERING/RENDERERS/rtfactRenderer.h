@@ -135,7 +135,7 @@ namespace BALL
 				void transformLine(const TwoColoredLine& line, float *trafo);
 
 				void updateMaterialFromStage(RTpieCpp::AppearanceHandle& material);
-				void convertMaterial(Stage::RaytracingMaterial const& rt_material, RTpieCpp::AppearanceHandle& material);
+				void convertMaterial(Stage::Material const& rt_material, RTpieCpp::AppearanceHandle& material);
 
 				/** Raytracing-related functionality **/
 				//@{

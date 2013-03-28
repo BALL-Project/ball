@@ -1211,45 +1211,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox_11">
-       <property name="title">
-        <string>Renderer</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QRadioButton" name="radioButton_OpenGL">
-          <property name="text">
-           <string>OpenGL</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioButton_POVRay">
-          <property name="text">
-           <string>POVRay</string>
-          </property>
-          <property name="checked">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioButton_RTFact">
-          <property name="text">
-           <string>RTFact</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -1889,9 +1850,6 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox_Transparency">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="title">
         <string>Transparency</string>
        </property>
@@ -1965,9 +1923,6 @@
      </item>
      <item>
       <widget class="QCheckBox" name="update_directly_checkBox">
-       <property name="enabled">
-        <bool>false</bool>
-       </property>
        <property name="text">
         <string>automatic update</string>
        </property>
@@ -2002,9 +1957,6 @@
   <tabstop>specularity_color_button</tabstop>
   <tabstop>specularity_factor_slider</tabstop>
   <tabstop>shininess_factor_slider</tabstop>
-  <tabstop>radioButton_OpenGL</tabstop>
-  <tabstop>radioButton_POVRay</tabstop>
-  <tabstop>radioButton_RTFact</tabstop>
   <tabstop>transparency_factor_slider</tabstop>
   <tabstop>update_directly_checkBox</tabstop>
  </tabstops>

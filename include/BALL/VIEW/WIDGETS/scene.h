@@ -511,11 +511,9 @@ namespace BALL
 				void resetTracking() {tracking_initialized_ = false;}
 
 				// TODO: this pretty hacky!
-#ifdef BALL_HAS_RTFACT
-				void updateAllRTMaterials();
+				void updateAllMaterials();
 
-				void updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material);
-#endif
+				void updateMaterialForRepresentation(Representation* rep, const Stage::Material& new_material);
 
 				void lightsUpdated(bool redraw = false);
 

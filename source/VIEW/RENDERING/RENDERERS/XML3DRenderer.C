@@ -150,7 +150,7 @@ namespace BALL
 			return output;
 		}
 		
-		String XML3DRenderer::XML3DRaytracingMaterial(const Stage::RaytracingMaterial& input)
+		String XML3DRenderer::XML3DRaytracingMaterial(const Stage::Material& input)
 		{
 			String result;
       	
@@ -405,16 +405,16 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			rt_material_ = stage_->getRTMaterial();
+			rt_material_ = stage_->getMaterial();
 
 			vector<const Representation*>::iterator rit = representations_.begin();
 			for (; rit != representations_.end(); rit++)
 			{
-				if ((*rit)->hasProperty("RTFact::Material"))
+				if ((*rit)->hasProperty("Rendering::Material"))
 				{
-					NamedProperty rt_mat_property = (*rit)->getProperty("RTFact::Material");
+					NamedProperty rt_mat_property = (*rit)->getProperty("Rendering::Material");
 					boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
-					rt_material_ = *dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get());
+					rt_material_ = *dynamic_cast<Stage::Material*>(mat_ptr.get());
 				}
 
 				out << "<group ";

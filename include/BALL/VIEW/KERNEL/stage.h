@@ -241,14 +241,14 @@ namespace BALL
 
 			/** This class holds all material parameters passed on to a raytracer.
 			 */
-			class RaytracingMaterial
+			class Material
 				: public PersistentObject
 			{
 				public:
 
-					BALL_CREATE(RaytracingMaterial)
+					BALL_CREATE(Material)
 
-					RaytracingMaterial();
+					Material();
 
 					/** @name Persistence
 					 */
@@ -470,10 +470,10 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 			/// Gives access to the default material parameters
-			RaytracingMaterial& getRTMaterial() { return rt_material_; }
+			Material& getMaterial() { return material_; }
 
 			/// Gives access to the default material parameters, const version
-			const RaytracingMaterial& getRTMaterial() const { return rt_material_; }
+			const Material& getMaterial() const { return material_; }
 
 			protected:
 
@@ -510,7 +510,7 @@ namespace BALL
 			float 							shininess_;
 
 			// the current default materials used for raytracing
-			RaytracingMaterial  rt_material_;
+			Material  material_;
 		};
 
 	} // namespace VIEW

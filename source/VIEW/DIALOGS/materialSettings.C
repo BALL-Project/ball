@@ -40,17 +40,11 @@ namespace BALL
 
 			connect (update_directly_checkBox, SIGNAL(stateChanged(int)), this, SLOT (updateDirectlyBoxChanged()));
 		
-			connect (radioButton_OpenGL, SIGNAL(clicked()), this, SLOT (rendererChanged()));
-			connect (radioButton_POVRay, SIGNAL(clicked()), this, SLOT (rendererChanged()));
-			connect (radioButton_RTFact, SIGNAL(clicked()), this, SLOT (rendererChanged()));
-
 			connect( ambient_color_button, SIGNAL( clicked() ), this, SLOT( editAmbientColor() ) );
 			connect( specularity_color_button, SIGNAL(clicked()), this, SLOT( editSpecularityColor() ) );
 			connect( reflectiveness_color_button, SIGNAL(clicked()), this, SLOT( editReflectivenessColor() ) );
 
 			registerWidgets_();
-
-			rendererChanged();
 		}
 
 
@@ -60,41 +54,22 @@ namespace BALL
 //TODO what should happen, when this dialog is called for a specific representation in POVRay and OpenGL?
 //TODO So far OpenGL and POVRay do not make any use of transparency!
 			if (Scene::getInstance(0) && Scene::getInstance(0)->getStage())
-			{	
+			{
 				Stage& stage = *Scene::getInstance(0)->getStage();
 
-				//TODO really both??
-				if (radioButton_OpenGL->isChecked() || radioButton_POVRay->isChecked())
-				{
-					stage.setSpecularIntensity(specularity_factor_label->text().toFloat());
-					stage.setDiffuseIntensity(1. - reflectiveness_factor_label->text().toFloat());
-					stage.setAmbientIntensity( ambient_factor_label->text().toFloat());
-					stage.setShininess(	shininess_factor_label->text().toFloat() );
-				}
-				if (radioButton_OpenGL->isChecked()) // TODO is this correct? names indicate but who knows??
-				{
-					glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, (stage.getShininess()+0.1));
-					GLfloat values[4];
-					values[0] = values[1] = values[2] =  stage.getSpecularIntensity();
-					values[3] = 1.0;
-					glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  values);
-				}
-#ifdef BALL_HAS_RTFACT	
-				else if (radioButton_RTFact->isChecked())
-				{
 					// first, decide whether we have been called from the preferences or from the geometric control
-					Stage::RaytracingMaterial rt_material;
+					Stage::Material material;
 
-					rt_material.ambient_color  	 = VIEW::getColor(ambient_color_label);
-					rt_material.specular_color 	 = VIEW::getColor(specularity_color_label);
-					rt_material.reflective_color = VIEW::getColor(reflectiveness_color_label);
+					material.ambient_color    = VIEW::getColor(ambient_color_label);
+					material.specular_color   = VIEW::getColor(specularity_color_label);
+					material.reflective_color = VIEW::getColor(reflectiveness_color_label);
 
-					rt_material.ambient_intensity    = ambient_factor_label->text().toFloat();
-					rt_material.specular_intensity   = specularity_factor_label->text().toFloat();
-					rt_material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
+					material.ambient_intensity    = ambient_factor_label->text().toFloat();
+					material.specular_intensity   = specularity_factor_label->text().toFloat();
+					material.reflective_intensity = reflectiveness_factor_label->text().toFloat();
 
-					rt_material.shininess          = std::max(shininess_factor_label->text().toFloat(), 0.1f);
-					rt_material.transparency			 = transparency_factor_label->text().toFloat();
+					material.shininess    = std::max(shininess_factor_label->text().toFloat(), 0.1f);
+					material.transparency = transparency_factor_label->text().toFloat();
 
 					if (objectName() == "MaterialSettingsForRepresentation")
 					{
@@ -102,7 +77,7 @@ namespace BALL
 						// apply the values to this one
 						if (current_representation_)
 						{
-							Scene::getInstance(0)->updateRTMaterialForRepresentation(current_representation_, rt_material);
+							Scene::getInstance(0)->updateMaterialForRepresentation(current_representation_, material);
 						}
 						else
 							Log.error() << "MaterialSettings::apply(): Invalid representation selected!" << std::endl;
@@ -110,35 +85,29 @@ namespace BALL
 					else
 					{
 						// we have been called from the preferences and should set new default values for *all* representations
-						stage.getRTMaterial() = rt_material;
-						Scene::getInstance(0)->updateAllRTMaterials();
+						stage.getMaterial() = material;
+						Scene::getInstance(0)->updateAllMaterials();
 					}
 				}
-#endif
-			}
 		}
 
 		void MaterialSettings::setCurrentRepresentation(Representation* representation)
 		{
 			current_representation_ = representation;
 
-			// NOTE: this currently only works for RTfact! Sorry about that!
-			if (!radioButton_RTFact->isChecked())
-				return;
-
 			// update the sliders
-			Stage::RaytracingMaterial rt_material;
+			Stage::Material material;
 
-			if (representation->hasProperty("RTFact::Material"))
+			if (representation->hasProperty("Rendering::Material"))
 			{
-				NamedProperty rt_mat_property = representation->getProperty("RTFact::Material");
-				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
-				rt_material = *(dynamic_cast<Stage::RaytracingMaterial*>(mat_ptr.get()));
+				NamedProperty mat_property = representation->getProperty("Rendering::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = mat_property.getSmartObject();
+				material = *(dynamic_cast<Stage::Material*>(mat_ptr.get()));
 			}
 			else
 			{
 				Stage* stage = Scene::getInstance(0)->getStage();
-				rt_material = stage->getRTMaterial();
+				material = stage->getMaterial();
 			}
 
 			// remember the update-directly value
@@ -147,24 +116,24 @@ namespace BALL
 			update_directly_checkBox->setChecked(false);
 
 			// now set the values
-			setColor(ambient_color_label, rt_material.ambient_color);
-			setColor(reflectiveness_color_label, rt_material.reflective_color);
-			setColor(specularity_color_label, rt_material.specular_color);
+			setColor(ambient_color_label, material.ambient_color);
+			setColor(reflectiveness_color_label, material.reflective_color);
+			setColor(specularity_color_label, material.specular_color);
 
-			setLabel_(*ambient_factor_label, rt_material.ambient_intensity);
-			ambient_factor_slider->setValue(rt_material.ambient_intensity*(float)ambient_factor_slider->maximum());
+			setLabel_(*ambient_factor_label, material.ambient_intensity);
+			ambient_factor_slider->setValue(material.ambient_intensity*(float)ambient_factor_slider->maximum());
 
-			setLabel_(*specularity_factor_label, rt_material.specular_intensity);
-			specularity_factor_slider->setValue(rt_material.specular_intensity*(float)specularity_factor_slider->maximum());
+			setLabel_(*specularity_factor_label, material.specular_intensity);
+			specularity_factor_slider->setValue(material.specular_intensity*(float)specularity_factor_slider->maximum());
 
-			setLabel_(*reflectiveness_factor_label, rt_material.reflective_intensity);
-			reflectiveness_factor_slider->setValue(rt_material.reflective_intensity*(float)reflectiveness_factor_slider->maximum());
+			setLabel_(*reflectiveness_factor_label, material.reflective_intensity);
+			reflectiveness_factor_slider->setValue(material.reflective_intensity*(float)reflectiveness_factor_slider->maximum());
 
-			setLabel_(*shininess_factor_label, rt_material.shininess);
-			shininess_factor_slider->setValue(sqrt(rt_material.shininess*(float)shininess_factor_slider->maximum()));
+			setLabel_(*shininess_factor_label, material.shininess);
+			shininess_factor_slider->setValue(sqrt(material.shininess*(float)shininess_factor_slider->maximum()));
 
-			setLabel_(*transparency_factor_label, rt_material.transparency);
-			transparency_factor_slider->setValue(rt_material.transparency);
+			setLabel_(*transparency_factor_label, material.transparency);
+			transparency_factor_slider->setValue(material.transparency);
 
 			update_directly_checkBox->setChecked(do_update);
 		}
@@ -172,29 +141,26 @@ namespace BALL
 		void MaterialSettings::updateDefaultMaterialsFromStage()
 		{
 			Stage* stage = Scene::getInstance(0)->getStage();
-			Stage::RaytracingMaterial& rt_material = stage->getRTMaterial();
-
-			// set the renderer to RTfact, just to be on the safe side.
-			radioButton_RTFact->setChecked(true);
+			const Stage::Material& material = stage->getMaterial();
 
 			// now set the values
-			setColor(ambient_color_label, rt_material.ambient_color);
-			setColor(reflectiveness_color_label, rt_material.reflective_color);
-			setColor(specularity_color_label, rt_material.specular_color);
+			setColor(ambient_color_label, material.ambient_color);
+			setColor(reflectiveness_color_label, material.reflective_color);
+			setColor(specularity_color_label, material.specular_color);
 
-			ambient_factor_slider->setValue(rt_material.ambient_intensity);
+			ambient_factor_slider->setValue(material.ambient_intensity);
 			setValues_(*ambient_factor_slider, *ambient_factor_label, 1);
 
-			specularity_factor_slider->setValue(rt_material.specular_intensity);
+			specularity_factor_slider->setValue(material.specular_intensity);
 			setValues_(*specularity_factor_slider, *specularity_factor_label, 1);
 
-			reflectiveness_factor_slider->setValue(rt_material.reflective_intensity);
+			reflectiveness_factor_slider->setValue(material.reflective_intensity);
 			setValues_(*reflectiveness_factor_slider, *reflectiveness_factor_label, 1);
 
-			shininess_factor_slider->setValue(rt_material.shininess);
+			shininess_factor_slider->setValue(material.shininess);
 			setValues_(*shininess_factor_slider, *shininess_factor_label, 1);	
 
-			transparency_factor_slider->setValue(rt_material.transparency*100);
+			transparency_factor_slider->setValue(material.transparency*100);
 			setValues_(*transparency_factor_slider, *transparency_factor_label, 1);
 
 			if (update_directly_checkBox->isChecked())
@@ -309,22 +275,6 @@ namespace BALL
 			if (update_directly_checkBox->isChecked())
 				apply();
 		}
-	
-		void MaterialSettings::rendererChanged()
-		{
-			bool isOpenGL = radioButton_OpenGL->isChecked(); 
-			bool isPOVRay = radioButton_POVRay->isChecked();
-			bool isRTFact = radioButton_RTFact->isChecked();
-			groupBox_ambientIntensity->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));
-			groupBox_Reflectiveness->setDisabled(isOpenGL && (!isPOVRay) && (!isRTFact));	
-			groupBox_Transparency->setDisabled(((isOpenGL) || (isPOVRay)) && (!isRTFact));
-			if (isOpenGL || isPOVRay)
-			{
-				update_directly_checkBox->setChecked(false);
-			}
-			update_directly_checkBox->setDisabled(isOpenGL || isPOVRay);
-		}
 
-		
 	} // namespace VIEW
 } // namespace BALL

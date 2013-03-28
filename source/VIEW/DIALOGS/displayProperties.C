@@ -889,7 +889,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 				std::istringstream is(string_vector_properties[i].decodeBase64());
 
 				TextPersistenceManager tmp(is);
-				tmp.registerClass(RTTI::getStreamName<Stage::RaytracingMaterial>(), Stage::RaytracingMaterial::createDefault);
+				tmp.registerClass(RTTI::getStreamName<Stage::Material>(), Stage::Material::createDefault);
 
 				NamedProperty* prop = (NamedProperty*) tmp.readObject();
 

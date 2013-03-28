@@ -68,7 +68,6 @@ namespace BALL
 			virtual void editAmbientColor();
 			virtual void editSpecularityColor();
 			virtual void editReflectivenessColor();
-			virtual void rendererChanged();
 			private:
 
 			void setLabel_(QLabel& label, float value);

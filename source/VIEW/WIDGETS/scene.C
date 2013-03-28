@@ -1081,8 +1081,6 @@ namespace BALL
 
 			readLights_(inifile);
 			light_settings_->updateFromStage();
-
-			material_settings_->rendererChanged();
 		}
 
 		void Scene::initializePreferencesTab(Preferences &preferences)
@@ -3312,8 +3310,7 @@ namespace BALL
 				 */
 		}
 
-#ifdef BALL_HAS_RTFACT
-		void Scene::updateAllRTMaterials()
+		void Scene::updateAllMaterials()
 		{
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
@@ -3329,11 +3326,11 @@ namespace BALL
 			updateGL();
 		}
 
-		void Scene::updateRTMaterialForRepresentation(Representation* rep, const Stage::RaytracingMaterial& new_material)
+		void Scene::updateMaterialForRepresentation(Representation* rep, const Stage::Material& new_material)
 		{
-			rep->clearProperty("RTFact::Material");
-			boost::shared_ptr<PersistentObject> p(new Stage::RaytracingMaterial(new_material));
-			NamedProperty rt_mat_property("RTFact::Material", p);
+			rep->clearProperty("Rendering::Material");
+			boost::shared_ptr<PersistentObject> p(new Stage::Material(new_material));
+			NamedProperty rt_mat_property("Rendering::Material", p);
 
 			rep->setProperty(rt_mat_property);
 
@@ -3344,7 +3341,6 @@ namespace BALL
 
 			updateGL();
 		}
-#endif
 
 		void Scene::lightsUpdated(bool redraw)
 		{
