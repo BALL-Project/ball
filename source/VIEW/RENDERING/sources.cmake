@@ -8,6 +8,7 @@ SET(SOURCES_LIST
 	vertexBuffer.C
 	glRenderWindow.C
 	glOffscreenTarget.C
+	rendererPlugin.C
 	renderWindow.C
 	pixelFormat.C
 )
