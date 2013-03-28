@@ -1541,7 +1541,7 @@ namespace BALL
 				toggle_continuous_loop_action_ = new QAction(tr("Toggle continuous loop"), this);
 				toggle_continuous_loop_action_->setObjectName(toggle_continuous_loop_action_->text());
 				connect(toggle_continuous_loop_action_, SIGNAL(triggered()), this, SLOT(toggleContinuousLoop()));
-				toggle_continuous_loop_action_->setCheckable(true);
+                toggle_continuous_loop_action_->setCheckable(true);
 				toggle_continuous_loop_action_->setChecked(false);
 				toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
 				toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
@@ -2585,6 +2585,8 @@ namespace BALL
 			boost::shared_ptr<RenderSetup> main_renderer_ptr = renderers_[main_renderer_];
 
 			stopContinuousLoop();
+            toggle_continuous_loop_action_->setEnabled(new_type == RenderSetup::RTFACT_RENDERER);
+
 			main_renderer_ptr->stop();
 
 			main_renderer_ptr->loop_mutex.lock();
@@ -3110,15 +3112,12 @@ namespace BALL
 				if (!renderers_[i]->isContinuous() && (renderers_[i]->getRendererType() != RenderSetup::OPENGL_RENDERER))
 				{
 					renderers_[i]->useContinuousLoop(true);
+                    toggle_continuous_loop_action_->setChecked(true);
+
 					renderers_[i]->loop_mutex.lock();
 					renderers_[i]->wait_for_render.wakeAll();
 					renderers_[i]->loop_mutex.unlock();
-					// set the menu buttons correctly
-					//stop_continuous_loop_action_->setEnabled(true);
-					//start_continuous_loop_action_->setEnabled(false);
-					// set the icon
-					//toggle_continuous_loop_action_->setChecked(true);
-				}
+                }
 			}
 			setStatusbarText(tr("Switched continuous loop on"), true);
 #endif
@@ -3134,11 +3133,7 @@ namespace BALL
 				if (renderers_[i]->isContinuous())
 				{
 					renderers_[i]->useContinuousLoop(false);
-					// set the menu buttons correctly
-					//stop_continuous_loop_action_->setEnabled(false);
-					//start_continuous_loop_action_->setEnabled(true);
-					// set the icon
-					//toggle_continuous_loop_action_->setChecked(false);
+                    toggle_continuous_loop_action_->setChecked(false);
 				}
 			}
 			setStatusbarText(tr("Switched continuous loop off"), true);

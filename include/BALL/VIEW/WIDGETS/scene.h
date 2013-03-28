@@ -887,7 +887,7 @@ namespace BALL
 				QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 
 #ifdef BALL_HAS_RTFACT
-				QAction *start_continuous_loop_action_, *stop_continuous_loop_action_, *toggle_continuous_loop_action_;
+                QAction *toggle_continuous_loop_action_;
 #endif
 				QAction *switch_grid_;
 				QMenu* create_coordinate_system_;

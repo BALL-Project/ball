@@ -1245,8 +1245,8 @@ namespace BALL
 
 		void RTfactRenderer::useContinuousLoop(bool use_loop)
 		{
-			Renderer::useContinuousLoop(use_loop);
-			renderTask.setAccumulatePixels(use_loop);
+            Renderer::useContinuousLoop(use_loop);
+            renderTask.setAccumulatePixels(use_loop);
 		}
 
 		// line x plane intersection
