@@ -49,7 +49,13 @@ namespace BALL
 			/* RenderWindow methods */
 			virtual bool init();
 			virtual bool resize(const unsigned int width, const unsigned int height);
-			virtual void refresh();			
+			virtual void refresh();
+			virtual bool doNotResize() const;
+			virtual void prepareRendering();
+
+			/// Call swapBuffers() but first make sure the window is exposed
+			void safeBufferSwap();
+			virtual void swapBuffers() { safeBufferSwap(); }
 
 			// render the given text in the given color and size at window coordinates (x, y)
 			virtual void renderText(int x, int y, const String& text, const ColorRGBA& color, Size size = 16);
@@ -74,9 +80,6 @@ namespace BALL
 				{stereo_delta_ = delta;}
 			
 			void setupStereo(float eye_separation, float focal_length);
-			
-			/// Call swapBuffers() but first make sure the window is exposed
-			void safeBufferSwap();
 
 			/// Get the window's downsampling factor.
 			float getDownsamplingFactor() const

@@ -275,6 +275,12 @@ namespace BALL
 			 * 
 			 */
 			virtual bool doNotResize() const = 0;
+
+			/**
+			 * This method swaps the buffers of the render target if it uses double buffering.
+			 */
+			virtual void swapBuffers() = 0;
+
 		};
 
 	} //namespace VIEW
