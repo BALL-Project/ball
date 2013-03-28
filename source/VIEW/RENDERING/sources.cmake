@@ -13,6 +13,7 @@ SET(SOURCES_LIST
 	renderWindow.C
 	pixelFormat.C
 	sceneExporter.C
+	geometricObjectDispatcher.C
 )
 
 ADD_VIEW_SOURCES("VIEW/RENDERING" "${SOURCES_LIST}")
