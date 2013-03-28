@@ -95,6 +95,7 @@
 // VIEW/RENDERER
 %Include renderer.sip
 %Include POVRenderer.sip
+%Include SceneExporter.sip
 
 // VIEW/WIDGETS
 %Include modularWidget.sip

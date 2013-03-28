@@ -7,12 +7,12 @@
 #ifndef BALL_VIEW_RENDERING_RENDERERS_POVRENDERER_H
 #define BALL_VIEW_RENDERING_RENDERERS_POVRENDERER_H
 
-#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#ifndef BALL_VIEW_RENDERING_SCENEEXPORTER_H
+# include <BALL/VIEW/RENDERING/sceneExporter.h>
 #endif
 
-#ifndef BALL_SYSTEM_FILE_H
-# include <BALL/SYSTEM/file.h>
+#ifndef BALL_VIEW_RENDERING_GEOMETRICOBJECTDISPATCHER_H
+# include <BALL/VIEW/RENDERING/geometricObjectDispatcher.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -36,11 +36,9 @@ namespace BALL
 				be used to render the same scene externally.
 				\ingroup ViewRendering
 		*/
-		class BALL_VIEW_EXPORT POVRenderer : public Renderer
+		class BALL_VIEW_EXPORT POVRenderer : public SceneExporter, public GeometricObjectDispatcher
 		{
 			public:
-
-			BALL_CREATE(POVRenderer)
 
 			struct POVRendererClippingPlane
 			{
@@ -55,17 +53,12 @@ namespace BALL
 			//@{
 
 			/// Default constructor.
-			POVRenderer();
+			POVRenderer(std::ostream* strm);
 
 			/** Detailed constructor.
 			 		\param name The name of the file we will create
-			 		\exception BALL::Exception::FileNotFound
 			 */
 			POVRenderer(const String& name);
-			
-			// Only for Python
-			POVRenderer(const POVRenderer& renderer);
-
 
 			/// Destructor.
 			virtual ~POVRenderer();
@@ -77,23 +70,6 @@ namespace BALL
 			/** @name Accessors
 			 */
 			//@{
-
-			/** Sets the name of the file we will create.
-			 		\param name The file name
-			 		\exception BALL::Exception::FileNotFound
-			 */
-			void setFileName(const String& name);
-
-			/// Set a stream as output device
-			void setOstream(std::ostream& out_stream);
-
-			/// 
-			void setHumanReadable(bool state)
-				{ human_readable_ = state;}
-
-			///
-			bool isHumanReadable() const
-				{ return human_readable_;}
 
 			/** Converts a ColorRGBA into a String in POVRay format.
 			 */
@@ -107,7 +83,7 @@ namespace BALL
 			 */
 			String POVVector3(Vector3 input);
 
-			virtual bool renderOneRepresentation(const Representation& representation);
+			virtual bool exportOneRepresentation(const Representation* representation);
 
 			//@}
 			
@@ -115,47 +91,42 @@ namespace BALL
 			 */
 			//@{
 
-			using Renderer::init;
-
 			/** Start method. 
 			    This method creates the file and writes the header.
 			 */
-			virtual bool init(const Stage& stage, float width, float height);
-
-			/** Finish method.
-			 		This method writes the ending of the file and closes it.
-			 */
-			virtual bool finish();
-
-			void renderSphere_(const Sphere& sphere);
-			
-			void renderDisc_(const Disc& disc);
-
-			void renderTube_(const Tube& tube);
-
-			void renderTwoColoredTube_(const TwoColoredTube& tube);
-
-			void renderMesh_(const Mesh& mesh);
-
-			void renderTwoColoredLine_(const TwoColoredLine& line);
-
-			void renderLine_(const Line& line);
-
-			void renderPoint_(const Point& point);
-
-			// do nothing
-			void renderLabel_(const Label&);
-			
-			/// Render an illuminated line
-			virtual void renderMultiLine_(const MultiLine& line);
+			virtual bool init(const Stage* stage, float width, float height);
 
 			//@}
-
 			protected:
+				/**
+				 * Finish method.
+				 * This method writes the ending of the file and closes it.
+				 */
+				virtual bool finishImpl_();
+
+				void renderSphere_(const Sphere& sphere);
+
+				void renderDisc_(const Disc& disc);
+
+				void renderTube_(const Tube& tube);
+
+				void renderTwoColoredTube_(const TwoColoredTube& tube);
+
+				void renderMesh_(const Mesh& mesh);
+
+				void renderTwoColoredLine_(const TwoColoredLine& line);
+
+				void renderLine_(const Line& line);
+
+				void renderPoint_(const Point& point);
+
+				// do nothing
+				void renderLabel_(const Label&);
+
+				/// Render an illuminated line
+				virtual void renderMultiLine_(const MultiLine& line);
 
 				const ColorRGBA& getColor_(const GeometricObject& object);
-			
-				std::ostream* outfile_;
 				String trimFloatValue_(float value);
 				void storeColor_(const GeometricObject& object);
 				String getColorIndex_(const ColorRGBA& color);
@@ -163,16 +134,18 @@ namespace BALL
 				Vector3   origin_;
 				Matrix4x4 rotation_;
 				vector<ClippingPlane*> clipping_planes_;
-				bool human_readable_;
 
 				typedef HashMap<String, Size> ColorMap;
 				ColorMap color_map_;
 				vector<const Representation*> representations_;
 				HashSet<const Mesh*> wireframes_;
 				HashSet<String> color_strings_;
-				String font_file_;
 				double m_[12];
 				Position color_index_;
+
+				float width_;
+				float height_;
+				const Stage* stage_;
 		};
   
 	} // namespace BALL
