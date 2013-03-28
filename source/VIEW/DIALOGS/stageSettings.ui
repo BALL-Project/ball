@@ -6,21 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>739</width>
-    <height>458</height>
+    <width>898</width>
+    <height>676</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>StageSettings</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_12">
-   <item row="0" column="0">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
     <widget class="QStackedWidget" name="widget_stack">
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="Main">
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
@@ -155,6 +155,38 @@
           </widget>
          </item>
          <item>
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Projection Transformations:</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <widget class="QRadioButton" name="radioButton_perspectiveProjection">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>perspective projection</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="radioButton_orthographicProjection">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="text">
+               <string>orthographic projection</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
           <widget class="QGroupBox" name="lights_box">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -189,49 +221,13 @@
               </property>
              </widget>
             </item>
-            <item>
-             <widget class="QCheckBox" name="use_preview">
-              <property name="toolTip">
-               <string>Show the lightsources in the 3D view for easier positioning.</string>
-              </property>
-              <property name="text">
-               <string>Use faster preview models</string>
-              </property>
-              <property name="checked">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="smooth_lines_">
-              <property name="toolTip">
-               <string>Should simple lines be smoothed by OpenGL? Enabling this options can lead to cluttered wireframe and line representations.</string>
-              </property>
-              <property name="text">
-               <string>Smooth Lines</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="_6">
+        <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
           <widget class="QGroupBox" name="fog_box">
            <property name="toolTip">
@@ -309,82 +305,44 @@
            <property name="alignment">
             <set>Qt::AlignHCenter</set>
            </property>
-           <layout class="QGridLayout" name="gridLayout_8">
-            <item row="0" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
              <layout class="QHBoxLayout" name="horizontalLayout_6">
               <item>
-               <layout class="QVBoxLayout" name="verticalLayout_3">
-                <item>
-                 <widget class="QSlider" name="downsampling_slider">
-                  <property name="toolTip">
-                   <string>Smoothness of the interpolation between stored 3D positions.</string>
-                  </property>
-                  <property name="whatsThis">
-                   <string/>
-                  </property>
-                  <property name="minimum">
-                   <number>4</number>
-                  </property>
-                  <property name="maximum">
-                   <number>40</number>
-                  </property>
-                  <property name="value">
-                   <number>4</number>
-                  </property>
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="tickInterval">
-                   <number>50</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_4">
-                  <item>
-                   <widget class="QLabel" name="min_label_2">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="text">
-                     <string>min</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <spacer name="horizontalSpacer">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>148</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
-                  </item>
-                  <item>
-                   <widget class="QLabel" name="max_label_2">
-                    <property name="text">
-                     <string>max</string>
-                    </property>
-                    <property name="alignment">
-                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                    </property>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-               </layout>
+               <widget class="QSlider" name="downsampling_slider">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="toolTip">
+                 <string>Smoothness of the interpolation between stored 3D positions.</string>
+                </property>
+                <property name="whatsThis">
+                 <string/>
+                </property>
+                <property name="minimum">
+                 <number>4</number>
+                </property>
+                <property name="maximum">
+                 <number>40</number>
+                </property>
+                <property name="value">
+                 <number>4</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="tickInterval">
+                 <number>50</number>
+                </property>
+               </widget>
               </item>
               <item>
                <widget class="QLabel" name="downsamplingfactor_label">
                 <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
                   <horstretch>20</horstretch>
                   <verstretch>20</verstretch>
                  </sizepolicy>
@@ -397,6 +355,46 @@
                 </property>
                 <property name="text">
                  <string>1</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QLabel" name="min_label_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>min</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="horizontalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>148</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QLabel" name="max_label_2">
+                <property name="text">
+                 <string>max</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -522,16 +520,7 @@
             <property name="spacing">
              <number>6</number>
             </property>
-            <property name="leftMargin">
-             <number>9</number>
-            </property>
-            <property name="topMargin">
-             <number>9</number>
-            </property>
-            <property name="rightMargin">
-             <number>9</number>
-            </property>
-            <property name="bottomMargin">
+            <property name="margin">
              <number>9</number>
             </property>
             <item>
@@ -568,27 +557,9 @@
            <property name="title">
             <string>Rendering Method</string>
            </property>
-           <layout class="QGridLayout" name="gridLayout_7">
-            <item row="0" column="0">
-             <layout class="QHBoxLayout" name="horizontalLayout_8">
-              <item>
-               <widget class="QRadioButton" name="radioButton_opengl">
-                <property name="text">
-                 <string>OpenGl</string>
-                </property>
-                <property name="checked">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QRadioButton" name="radioButton_rtfact">
-                <property name="text">
-                 <string>Real time ray tracing (RTfact)</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
+             <widget class="QComboBox" name="preferredRenderer_comboBox"/>
             </item>
            </layout>
           </widget>
@@ -712,16 +683,7 @@
           <string>Font</string>
          </property>
          <layout class="QGridLayout" name="_4">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>4</number>
           </property>
           <property name="spacing">
@@ -800,16 +762,7 @@
           <string>Color</string>
          </property>
          <layout class="QGridLayout" name="_5">
-          <property name="leftMargin">
-           <number>4</number>
-          </property>
-          <property name="topMargin">
-           <number>4</number>
-          </property>
-          <property name="rightMargin">
-           <number>4</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>4</number>
           </property>
           <property name="spacing">
@@ -872,7 +825,7 @@
       </layout>
      </widget>
      <widget class="QWidget" name="VRSettings">
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
@@ -957,24 +910,14 @@
        <item>
         <widget class="QGroupBox" name="derived_values_box_">
          <property name="title">
-          <string>Update Automatically</string>
+          <string>View Properties</string>
          </property>
          <property name="checkable">
           <bool>false</bool>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
-          <item row="3" column="2">
-           <widget class="QLabel" name="TextLabel1_2_2_2">
-            <property name="text">
-             <string>max</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="TextLabel1_3_2_2">
+          <item row="3" column="1">
+           <widget class="QLabel" name="TextLabel1_3_2">
             <property name="text">
              <string>min</string>
             </property>
@@ -984,6 +927,16 @@
            <widget class="QLabel" name="label_11">
             <property name="text">
              <string>Focal distance</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="TextLabel1_2_2_2_2">
+            <property name="text">
+             <string>max</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
             </property>
            </widget>
           </item>
@@ -1019,45 +972,20 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1" colspan="2">
-           <widget class="QSlider" name="focal_distance_slider">
-            <property name="minimum">
-             <number>15</number>
-            </property>
-            <property name="maximum">
-             <number>6000</number>
-            </property>
-            <property name="singleStep">
-             <number>5</number>
-            </property>
-            <property name="pageStep">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>333</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="tickInterval">
-             <number>5</number>
+          <item row="1" column="1">
+           <widget class="QLabel" name="TextLabel1_3_2_2">
+            <property name="text">
+             <string>min</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="TextLabel1_2_2_2_2">
+          <item row="3" column="2">
+           <widget class="QLabel" name="TextLabel1_2_2_2">
             <property name="text">
              <string>max</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLabel" name="TextLabel1_3_2">
-            <property name="text">
-             <string>min</string>
             </property>
            </widget>
           </item>
@@ -1077,6 +1005,31 @@
             </property>
             <property name="value">
              <number>20</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickInterval">
+             <number>5</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QSlider" name="focal_distance_slider">
+            <property name="minimum">
+             <number>15</number>
+            </property>
+            <property name="maximum">
+             <number>6000</number>
+            </property>
+            <property name="singleStep">
+             <number>5</number>
+            </property>
+            <property name="pageStep">
+             <number>5</number>
+            </property>
+            <property name="value">
+             <number>333</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -1358,16 +1311,7 @@
                <bool>false</bool>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_15">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
+               <property name="margin">
                 <number>0</number>
                </property>
                <item>
@@ -1432,16 +1376,7 @@
                <property name="sizeConstraint">
                 <enum>QLayout::SetDefaultConstraint</enum>
                </property>
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
+               <property name="margin">
                 <number>0</number>
                </property>
                <item>
@@ -1774,258 +1709,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="OpenGL">
-      <layout class="QVBoxLayout" name="verticalLayout_8">
-       <item>
-        <layout class="QGridLayout">
-         <property name="leftMargin">
-          <number>9</number>
-         </property>
-         <property name="topMargin">
-          <number>9</number>
-         </property>
-         <property name="rightMargin">
-          <number>9</number>
-         </property>
-         <property name="bottomMargin">
-          <number>9</number>
-         </property>
-         <property name="spacing">
-          <number>6</number>
-         </property>
-         <item row="0" column="1">
-          <widget class="QLabel" name="vendor_label">
-           <property name="text">
-            <string>undefined</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="renderer_label">
-           <property name="text">
-            <string>undefined</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLabel" name="version_label">
-           <property name="text">
-            <string>undefined</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="textLabel1_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Version:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="textLabel1">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Vendor:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="textLabel1_2_3">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Renderer:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QListWidget" name="extensions_list">
-         <property name="toolTip">
-          <string>Extensions supported by your graphics card</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QCheckBox" name="use_vertex_buffers">
-           <property name="toolTip">
-            <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
-           </property>
-           <property name="text">
-            <string>Use OpenGL Vertex Buffer Objects</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox">
-           <property name="title">
-            <string>Projection Transformations:</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item>
-             <widget class="QRadioButton" name="radioButton_perspectiveProjection">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>perspective projection</string>
-              </property>
-              <property name="checked">
-               <bool>true</bool>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QRadioButton" name="radioButton_orthographicProjection">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="text">
-               <string>orthographic projection</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="RTFact">
-      <layout class="QVBoxLayout" name="verticalLayout_6">
-       <item>
-        <widget class="QGroupBox" name="groupBox_9">
-         <property name="title">
-          <string>Resolution</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="0">
-           <widget class="QLabel" name="textLabel1_51">
-            <property name="text">
-             <string>spheres detail level</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QSlider" name="sphere_points_slider">
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>5</number>
-            </property>
-            <property name="value">
-             <number>2</number>
-            </property>
-            <property name="sliderPosition">
-             <number>2</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QLabel" name="sphere_points_label">
-            <property name="text">
-             <string>3</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="textLabel1_52">
-            <property name="text">
-             <string>tube points</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QSlider" name="tube_points_slider">
-            <property name="minimum">
-             <number>12</number>
-            </property>
-            <property name="maximum">
-             <number>72</number>
-            </property>
-            <property name="singleStep">
-             <number>2</number>
-            </property>
-            <property name="value">
-             <number>20</number>
-            </property>
-            <property name="sliderPosition">
-             <number>20</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLabel" name="tube_points_label">
-            <property name="text">
-             <string>20</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>322</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -2050,9 +1733,6 @@
   <tabstop>resolution_factor</tabstop>
   <tabstop>slider_</tabstop>
   <tabstop>wheel_slider_</tabstop>
-  <tabstop>eye_distance_slider</tabstop>
-  <tabstop>extensions_list</tabstop>
-  <tabstop>use_vertex_buffers</tabstop>
  </tabstops>
  <includes>
   <include location="global">BALL/COMMON/global.h</include>
