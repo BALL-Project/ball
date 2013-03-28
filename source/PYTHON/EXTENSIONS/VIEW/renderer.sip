@@ -1,4 +1,4 @@
-class Renderer
+class Renderer /Abstract/
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>

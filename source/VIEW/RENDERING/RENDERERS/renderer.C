@@ -8,6 +8,7 @@
 //
 
 #include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#include <BALL/VIEW/RENDERING/renderSetup.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
@@ -32,87 +33,57 @@ namespace BALL
 	namespace VIEW
 	{
 
-		Renderer::Renderer()
-			: scene_(0),
-				stage_(0),
-				width_(0),
-				height_(0),
-				show_preview_(false),
-				volume_width_(0.),
-				show_light_sources_(false),
-				use_continuous_loop_(false),
-				stereo_frustum_conversion_width_(1),
-				stereo_frustum_conversion_height_(1),
-				stereo_(NO_STEREO)
+		Renderer::Renderer(const QString& name)
+			: offset_(0),
+			  stride_(0),
+			  scene_(0),
+			  stage_(0),
+			  width_(0),
+			  height_(0),
+			  show_preview_(false),
+			  volume_width_(0.),
+			  show_light_sources_(false),
+			  use_continuous_loop_(false),
+			  stereo_frustum_conversion_width_(1),
+			  stereo_frustum_conversion_height_(1),
+			  stereo_(NO_STEREO),
+			  name_(name)
 		{
 			stage_ = &RTTI::getDefault<Stage>();
 		}
 
-		Renderer::Renderer(const Renderer& renderer)
-		: scene_(renderer.scene_),
-			stage_(renderer.stage_),
-			width_(renderer.width_),
-			height_(renderer.height_),
-			show_preview_(renderer.show_preview_),
-			volume_width_(renderer.volume_width_),
-			show_light_sources_(renderer.show_light_sources_),
-			use_continuous_loop_(renderer.use_continuous_loop_),
-			stereo_frustum_conversion_width_(renderer.stereo_frustum_conversion_width_),
-			stereo_frustum_conversion_height_(renderer.stereo_frustum_conversion_height_),
-			stereo_(renderer.stereo_)
-		{}
-
-
-		bool Renderer::renderOneRepresentation(const Representation& representation)
+		bool Renderer::setFrameBufferFormat(const FrameBufferFormat& format)
 		{
-			if (representation.isHidden()) return true;
-
-			if (!representation.isValid())
+			if (supports(format))
 			{
-				Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", "Representation ")) << &representation 
-										<< (String)(qApp->translate("BALL::VIEW::Renderer", "not valid, so aborting.")) << std::endl;
-				return false;
+				bufferFormat = format;
+				formatUpdated();
+
+				return true;
 			}
 
-			list<GeometricObject*>::const_iterator it;
-			for (it =  representation.getGeometricObjects().begin();
-					 it != representation.getGeometricObjects().end();
-					 it++)
-			{
-				render_(*it);
-			}
-
-			return true;
+			return false;
 		}
 
-
-		void Renderer::render_(const GeometricObject* object)
+		const FrameBufferFormat& Renderer::getFrameBufferFormat() const
 		{
-			// most used geometric objects first
-            if 			(RTTI::isKindOf<Sphere>(object))  				renderSphere_(*(const 								Sphere*) object);
-            else if (RTTI::isKindOf<TwoColoredTube>(object)) renderTwoColoredTube_(*(const TwoColoredTube*) object);
-            else if (RTTI::isKindOf<Mesh>(object))   				renderMesh_(*(const   									Mesh*) object);
-            else if (RTTI::isKindOf<TwoColoredLine>(object)) renderTwoColoredLine_(*(const TwoColoredLine*) object);
-            else if (RTTI::isKindOf<Point>(object))  	 			renderPoint_(*(const  								 Point*) object);
-            else if (RTTI::isKindOf<Disc>(object))   				renderDisc_(*(const   									Disc*) object);
-            else if (RTTI::isKindOf<Line>(object))  	 				renderLine_(*(const   									Line*) object);
-            else if (RTTI::isKindOf<Tube>(object))  	 				renderTube_(*(const   									Tube*) object);
-            else if (RTTI::isKindOf<Box>(object))  					renderBox_(*(const   		 			 					 Box*) object);
-            else if (RTTI::isKindOf<SimpleBox>(object))  		renderSimpleBox_(*(const   		 		 SimpleBox*) object);
-            else if (RTTI::isKindOf<Label>(object))  	 			renderLabel_(*(const   				 				 Label*) object);
-            else if (RTTI::isKindOf<MultiLine>(object)) renderMultiLine_(*(const MultiLine*) object);
-            else if (RTTI::isKindOf<GridVisualisation>(object)) 	renderGridVisualisation_(*(const  GridVisualisation*) object);
-            else if (RTTI::isKindOf<QuadMesh>(object))   		 renderQuadMesh_(*(const   						QuadMesh*) object);
-			// ... add more types of GeometricObjects here
-			else
-			{
-				// unknown type of GeometricObject
-				Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", "unknown type of GeometricObject in" )) + " Renderer::render_: " 
-										<< typeid(object).name() << "  " << object << std::endl;
-				return;
-			}
+			return bufferFormat;
 		}
 
+		void Renderer::renderToBuffer(RenderTarget* renderTarget)
+		{
+			FrameBufferPtr buffer = renderTarget->getBuffer();
+			assert(buffer);
+
+			if (buffer->getFormat() != bufferFormat)
+			{
+				throw Exception::InvalidFormat(__FILE__, __LINE__, "Buffer with wrong framebuffer format supplied");
+			}
+
+			renderToBufferImpl( buffer );
+
+			renderTarget->releaseBuffer(buffer);
+		}
 
 		bool Renderer::hasStage() const
 		{ 
@@ -171,6 +142,35 @@ namespace BALL
 		{
 			Log.error() << (String)(qApp->translate("BALL::VIEW::Renderer", 
 						         "Renderer::setupStereo() not implemented for this kind of renderer yet!")) << std::endl;
+		}
+
+		Resolution Renderer::getSupportedResolution(
+			const Resolution &min, const Resolution &max,
+			const PixelFormat &format) const
+		{
+			if(!supports(format))
+			{
+                throw BALL::Exception::FormatUnsupported(__FILE__, __LINE__);
+			}
+			return max;
+		}
+
+		bool Renderer::supports(const FrameBufferFormat &format) const
+		{
+			return supports(format.getPixelFormat());
+		}
+
+		boost::shared_ptr<RenderSetup> Renderer::createRenderSetup(RenderTarget* target, Scene* scene)
+		{
+			return boost::shared_ptr<RenderSetup>(new RenderSetup(this, target, scene));
+		}
+
+		std::vector<float> Renderer::intersectRaysWithGeometry(const std::vector<Vector3>& origins,
+		                                                       const std::vector<Vector3>& directions)
+		{
+			Log.error() << "Sorry, intersectRaysWithGeometry() not implemented for this kind of renderer!" << std::endl;
+
+			return std::vector<float>();
 		}
 
 		// Convert 2D screen coordinate to 3D coordinate on the view plane

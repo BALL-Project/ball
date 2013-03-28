@@ -21,6 +21,10 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
+#ifndef BALL_VIEW_RENDERING_RENDERTARGET_H
+# include <BALL/VIEW/RENDERING/renderTarget.h>
+#endif
+
 class QImage;
 
 namespace BALL
@@ -43,316 +47,323 @@ namespace BALL
 		class ClippingPlane;
 		class GridVisualisation;
 		class QuadMesh;
+		class FrameBuffer;
+		class RenderTarget;
+		class RenderSetup;
+		class Resolution;
+		class PixelFormat;
 
 		/** Renderer is just a generic base class.
-		 		Derived classes are GLRenderer and POVRenderer.
-				Every renderer has a pointer to a Stage object, which contains the viewpoint,
-				the LightSource, etc. The renderer also knows the width and height, of the display, it shall
-				render.
-				\ingroup ViewRendering
-		*/
+			Derived classes are GLRenderer and POVRenderer.
+			Every renderer has a pointer to a Stage object, which contains the viewpoint,
+			the LightSource, etc. The renderer also knows the width and height, of the display, it shall
+			render.
+			\ingroup ViewRendering
+		 */
 		class BALL_VIEW_EXPORT Renderer
 		{
 			public:
+				///
+				enum StereoMode
+				{
+					NO_STEREO = 0,
 
-			///
- 			enum StereoMode
-			{
-				NO_STEREO = 0,
+					/// Stereo mode for shutter glasses
+					ACTIVE_STEREO,
 
-				/// Stereo mode for shutter glasses
-				ACTIVE_STEREO,
+					/// Stereo mode for output on two projectors
+					DUAL_VIEW_STEREO,
 
-				/// Stereo mode for output on two projectors
-				DUAL_VIEW_STEREO,
+					/// Stereo mode for output on two projectors with one display per head
+					DUAL_VIEW_DIFFERENT_DISPLAY_STEREO,
 
-				/// Stereo mode for output on two projectors with one display per head
-				DUAL_VIEW_DIFFERENT_DISPLAY_STEREO,
+					/// Stereo mode for top bottom views
+					TOP_BOTTOM_STEREO,
 
-				/// Stereo mode for top bottom views
-				TOP_BOTTOM_STEREO,
+					/// Line interlaced stereo
+					INTERLACED_STEREO
+				};
 
-				/// Line interlaced stereo
-				INTERLACED_STEREO
-			};
+				/**	@name	Constructors and Destructors
+				 */	
+				//@{
 
-			BALL_CREATE(Renderer)
+				/** Default Constructor.
+				 */
+				Renderer(const QString& name = "GenericRenderer");
 
-			/**	@name	Constructors and Destructors
-			*/
-			//@{
+				/** Destructor
+				 */
+				virtual ~Renderer() {}
 
-			/** Default Constructor.
-			*/
-			Renderer();
+				/** Explicit default initialization.
+				 */
+				virtual void clear(){}
 
-			/**	Copy constructor.
-			*/
-			Renderer(const Renderer& renderer);
+				/** Initialization routines.
+					This method is called by Scene::initializeGL.
+				 */
+				virtual bool init(Scene& scene);
 
-			/** Destructor
-			*/
-			virtual ~Renderer() {}
+				/** Initialisation with the Stage.
+					Called by Scene::exportScene().
+				 */
+				virtual bool init(const Stage& stage, float height, float width);
 
-			/** Explicit default initialization.
-			*/
-			virtual void clear(){}
+				/// Set the light sources according to the stage
+				virtual void setLights(bool reset_all = false);
 
-			/** Initialization routines.
-			 		This method is called by Scene::initializeGL.
-			*/
-			virtual bool init(Scene& scene);
+				/** Update the camera position either from a given Camera, or from the default Stage.
+				 */
+				virtual void updateCamera(const Camera* camera = 0);
 
-			/** Initialisation with the Stage.
-			 		Called by Scene::exportScene().
-			 */
-			virtual bool init(const Stage& stage, float height, float width);
+				/// Update the background color from the stage
+				virtual void updateBackgroundColor();
 
-			/// Set the light sources according to the stage
-			virtual void setLights(bool reset_all = false);
+				/// Setup an environment map
+				virtual void setupEnvironmentMap(const QImage& image);
 
-			/** Update the camera position either from a given Camera, or from the default Stage.
-			 */
-			virtual void updateCamera(const Camera* camera = 0);
+				/** Sets this renderer as a part of a stereo setup.
+				 *
+				 *  eye_separation denotes the distance along the right vector used
+				 *  by this "eye".
+				 */
+				virtual void setupStereo(float eye_separation, float focal_length);
 
-			/**
-			 * Updates the material for the current representation
-			 */
-			virtual void updateMaterialForRepresentation(Representation const*) {};
+				/** Render the current frame to the target's buffer using the \link Stage \endlink setup.
+				 *  Throws FrameBufferFormatException if the RenderTarget's format is not
+				 *  the one that you set before with setFrameBufferFormat().
+				 *  @throw Exception::InvalidFormat if the FrameBufferFormat is not supported by the renderer
+				 *  @throw Exception::NoBufferAvailable if the frame buffer was not correctly initialized
+				 */
+				void renderToBuffer(RenderTarget* renderTarget);
 
-			/// Update the background color from the stage
-			virtual void updateBackgroundColor();
+				/** Tries to choose a format for buffered rendering.
+				 *  @return true if the format could be set,
+				 *  @return false if it is not supported.
+				 */
+				bool setFrameBufferFormat(const FrameBufferFormat &format);
 
-			/// Setup an environment map
-			virtual void setupEnvironmentMap(const QImage& image);
+				/**
+				 * Updates the material for the current representation
+				 */
+				virtual void updateMaterialForRepresentation(const Representation*) {}
 
-			/** Sets this renderer as a part of a stereo setup.
-			 *
-			 *  eye_separation denotes the distance along the right vector used
-			 *  by this "eye".
-			 */
-			virtual void setupStereo(float eye_separation, float focal_length);
+				/** Decide between event based and (threaded) continuous loop rendering.
+				 */
+				virtual void useContinuousLoop(bool use_loop) 
+				{ 
+					// TODO: mutex for use_continuous_loop_ just to be on the safe side
+					use_continuous_loop_ = use_loop;
+				};
 
-			/** Decide between event based and (threaded) continuous loop rendering.
-			*/
-			virtual void useContinuousLoop(bool use_loop)
-			{
-				// TODO: mutex for use_continuous_loop_ just to be on the safe side
-				use_continuous_loop_ = use_loop;
-			};
+				/** Checks if a particular PixelFormat is supported by the renderer. */
+				virtual bool supports(const PixelFormat &format) const = 0;
 
-			/** Returns the mode of the render loop.
-			*/
-			bool isContinuous() { return use_continuous_loop_; }
+				/**
+				 * Creates a render setup that links this renderer to a render setup
+				 */
+				virtual boost::shared_ptr<RenderSetup> createRenderSetup(RenderTarget* target, Scene* scene);
 
-			/** Whether renderer has its own FPS counter.
-			 */
-			virtual bool hasFPScounter() { return false; }
+				/** Returns a supported resolution within the given limits.
+				 *  The x resolution will be between min.x and max.x and the y resolution
+				 *  will be between min.y and max.y.
+				 *  The returned resolution must be supported by the renderer with the
+				 *  requested PixelFormat.
+				 *  @throw Exception::FormatUnsupported if the FrameBufferFormat is not supported by the renderer
+				 */
+				virtual Resolution getSupportedResolution(
+						const Resolution &min, const Resolution &max,
+						const PixelFormat &format) const;
 
-			/** Internal renderer FPS if available, otherwise returns 0.
-			 */
-			virtual double getFPS() { return 0; }
+				/** Set an offset into the data buffer 
+				 */
+				virtual void setOffset(Size offset) {offset_ = offset;}
 
-			///
-			virtual bool finish();
-
-			/** Compute the 3D position on the view plane corresponding
-			 *  to point (x,y) on the view port
-			 */
-			virtual Vector3 mapViewportTo3D(Position x, Position y);
-
-			/** Compute the 2D position on the screen corresponding
-			 *  to the 3D point vec
-			 */
-			virtual Vector2 map3DToViewport(const Vector3& vec);
-
-			/** Pick all objects in the given screen rectangle.
-			 */
-			virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
-			                         std::list<GeometricObject*>& objects);
-
-			/** Return the frustum used by this renderer.
-			 */
-			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f,
-			                        float& top_f,  float& bottom_f);
-
-			//@}
-			/**	@name	Accessors
-			*/
-			//@{
-
-			/** Render a Representation.
-			*/
-			virtual bool renderOneRepresentation(const Representation& representation);
+				/** Set a stride for the data buffer
+				 */
+				virtual void setStride(Size stride) {stride_ = stride;}
 
 
-			/** Buffer a Representation for later rendering.
-			 */
-			virtual void bufferRepresentation(const Representation& /*rep*/) {};
+				virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins,
+						const std::vector<Vector3>& directions);
 
-			/** Remove a representation from the buffer.
-			 */
-			virtual void removeRepresentation(const Representation& /*rep*/) {};
+				/** Returns the mode of the render loop.
+				 */
+				bool isContinuous() { return use_continuous_loop_; }
 
-			/** Get the stage for the renderer (const)
-			 */
-			virtual const Stage& getStage() const
+				/** Whether renderer has its own FPS counter.
+				 */
+				virtual bool hasFPScounter() { return false; }
+
+				/** Internal renderer FPS if available, otherwise returns 0.
+				 */
+				virtual double getFPS() { return 0; }
+
+				///
+				virtual bool finish();
+
+				/** Compute the 3D position on the view plane corresponding
+				 *  to point (x,y) on the view port
+				 */
+				virtual Vector3 mapViewportTo3D(Position x, Position y);
+
+				/** Compute the 2D position on the screen corresponding
+				 *  to the 3D point vec
+				 */
+				virtual Vector2 map3DToViewport(const Vector3& vec);
+
+				/** Pick all objects in the given screen rectangle.
+				 */
+				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2, 
+						std::list<GeometricObject*>& objects);
+
+				/** Return the frustum used by this renderer.
+				 */
+				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, 
+						float& top_f,  float& bottom_f);
+
+				//@}
+				/**	@name	Accessors
+				 */
+				//@{
+				/** Render a Representation.
+				 */
+				virtual const QString& getName() const { return name_; }
+
+				/** Buffer a Representation for later rendering.
+				 */
+				virtual void bufferRepresentation(const Representation& /*rep*/) {};
+
+				/** Remove a representation from the buffer.
+				 */
+				virtual void removeRepresentation(const Representation& /*rep*/) {};
+
+				/** Get the stage for the renderer (const)
+				 */
+				virtual const Stage& getStage() const
 				{ return *stage_;}
 
-			/** Set the stage for the renderer
-			 */
-			virtual void setStage(const Stage& stage)
+				/** Set the stage for the renderer
+				 */
+				virtual void setStage(const Stage& stage)
 				{ stage_ = &stage;}
 
-			/// Test if a Stage was assigned to the Renderer
-			bool hasStage() const;
+				/// Test if a Stage was assigned to the Renderer
+				bool hasStage() const;
 
-			/// Set the size of the display
-			virtual void setSize(float width, float height) {width_ = width; height_ = height;}
+				/// Set the size of the display
+				virtual void setSize(float width, float height) {width_ = width; height_ = height;}
 
-			///
-			virtual float getWidth() const { return width_;}
+				///
+				virtual float getWidth() const { return width_;}
 
-			///
-			virtual float getHeight() const { return height_;}
+				///
+				virtual float getHeight() const { return height_;}
 
-			/** Decides whether the renderer should use a faster preview mode.
-			 *  Please note that not all renderers support previews and may choose
-			 *  just to ignore this setting.
-			 */
-			virtual void setPreviewMode(bool show_preview) { show_preview_ = show_preview; }
+				/** Decides whether the renderer should use a faster preview mode.
+				 *  Please note that not all renderers support previews and may choose
+				 *  just to ignore this setting.
+				 */
+				virtual void setPreviewMode(bool show_preview) { show_preview_ = show_preview; }
 
-			/** Decides whether to draw light sources explicitly.
-			 *  Please note that not all renderers support this feature and may choose
-			 *  just to ignore this setting.
-			 */
-			virtual void showLightSources(bool show_light_sources) { show_light_sources_ = show_light_sources; }
+				/** Decides whether to draw light sources explicitly.
+				 *  Please note that not all renderers support this feature and may choose
+				 *  just to ignore this setting.
+				 */
+				virtual void showLightSources(bool show_light_sources) { show_light_sources_ = show_light_sources; }
 
-			/** Render a ruler.
-			 *
-			 *  If supported by the renderer implementation, this function will produce
-			 *  a simple ruler that is rendered together with the other representations.
-			 *  The main use of this function is in the edit mode, where it can help to
-			 *  straighten-up structures and to correctly estimate angles and distances.
-			 */
-			virtual void renderRuler();
+				/** Render a ruler.
+				 *
+				 *  If supported by the renderer implementation, this function will produce
+				 *  a simple ruler that is rendered together with the other representations.
+				 *  The main use of this function is in the edit mode, where it can help to
+				 *  straighten-up structures and to correctly estimate angles and distances.
+				 */
+				virtual void renderRuler();
 
-			///
-			virtual void setStereoMode(StereoMode state);
+				///
+				virtual void setStereoMode(StereoMode state);
 
-			///
-			virtual StereoMode getStereoMode() const;
+				///
+				virtual StereoMode getStereoMode() const;
 
-			///
-			virtual void setStereoFrustumConversion(int width_factor, int height_factor);
+				///
+				virtual void setStereoFrustumConversion(int width_factor, int height_factor);
 
-			//@}
-			/**	@name Predicates
-			*/
-			//@{
+				//@}
+				/**	@name Predicates
+				 */
+				//@{
 
-			///
-			bool operator == (const Renderer& /*renderer*/) const
+				///
+				bool operator == (const Renderer& /*renderer*/) const
 				{ return true; }
 
-			/// Wrapper for the renderering of special GeometricObjects
-			virtual void render_(const GeometricObject* object);
-
 			protected:
+				/** Checks if a particular FrameBufferFormat is supported by the renderer.
+				 *  This checks the combination of pixel format and resolution.
+				 *  If this returns true, the renderer is able to write to a buffer in
+				 *  this format.
+				 */
+				virtual bool supports(const FrameBufferFormat &format) const;
 
-			///
-			virtual void renderClippingPlane_(const ClippingPlane&)
-				{Log.error() << "renderClippingPlane_ not implemented in derived Renderer class" << std::endl;}
-
-			// Render a text label
-			virtual void renderLabel_(const Label& /*label*/)
-				{Log.error() << "renderLabel_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a line
-			virtual void renderLine_(const Line& /*line*/)
-				{Log.error() << "renderLine_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render an illuminated line
-			virtual void renderMultiLine_(const MultiLine& /*line*/)
-				{Log.error() << "renderMultiLine_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a surface mesh
-			virtual void renderMesh_(const Mesh& /*mesh*/)
-				{Log.error() << "renderMesh_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a single point
- 			virtual void renderPoint_(const Point& /*point*/)
-				{Log.error() << "renderPoint_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a box
-			virtual void renderBox_(const Box& /*box*/)
-				{Log.error() << "renderBox_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a simple box (parallel to the axes)
-			virtual void renderSimpleBox_(const SimpleBox& /*box*/)
-				{Log.error() << "renderSimpleBox_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a sphere
-			virtual void renderSphere_(const Sphere& /*sphere*/)
-				{Log.error() << "renderSphere_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a disc
-			virtual void renderDisc_(const Disc& /*disc*/)
-				{Log.error() << "renderDisc_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a tube
-			virtual void renderTube_(const Tube& /*tube*/)
-				{Log.error() << "renderTube_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a line with two colors
-			virtual void renderTwoColoredLine_(const TwoColoredLine& /*two_colored_line*/)
-				{Log.error() << "renderTwoColoredLine_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a tube with two colors
-			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/)
-				{Log.error() << "renderTwoColoredTube_ not implemented in derived Renderer class" << std::endl;}
-
-			/// Render a grid
-			virtual void renderGridVisualisation_(const GridVisualisation&)
-				{Log.error() << "renderGridVisualisation_ not implemented in derived Renderer class" << std::endl;}
-			/// Render a quad mesh
-			virtual void renderQuadMesh_(const QuadMesh&)
-				{Log.error() << "renderQuadMesh_ not implemented in derived Renderer class" << std::endl;}
 				//@}
 
-			//_
-			Scene* scene_;
+				/** This is called once the FrameBufferFormat has been set so the renderer
+				 *  can perform any initialization steps that are needed.
+				 */
+				virtual void formatUpdated() = 0;
 
-			//_
-			const Stage*		stage_;
+				/** Render to the frame buffer.
+				 *  @pre The frame buffer's format is the one stored in bufferFormat and
+				 *       prepareBufferedRendering() has been called.
+				 */
+				virtual void renderToBufferImpl(boost::shared_ptr<FrameBuffer> buffer) = 0;            
 
-			//_The width of the render area
-			float 					width_;
+				/** Returns the current FrameBufferFormat. */
+				const FrameBufferFormat& getFrameBufferFormat() const;
 
-			//_The height of the render area
-			float 					height_;
+				Size offset_;
+				Size stride_;
 
-			//_
-			bool						show_preview_;
+				//_
+				Scene* scene_;
 
-			//_
-			float						volume_width_;
+				//_
+				const Stage*		stage_;
 
-			//_
-			bool						show_light_sources_;
+				//_The width of the render area
+				float 					width_;
 
-			//_
-			Camera					camera_;
+				//_The height of the render area
+				float 					height_;
 
-			// An offset added to camera position and look at
-			Vector3					camera_offset_;
+				//_
+				bool						show_preview_;
 
-			bool						use_continuous_loop_;
+				//_
+				float						volume_width_;
 
-			Size            stereo_frustum_conversion_width_;
-			Size            stereo_frustum_conversion_height_;
+				//_
+				bool						show_light_sources_;
 
-			StereoMode 			stereo_;
+				//_
+				Camera					camera_;
+
+				// An offset added to camera position and look at
+				Vector3					camera_offset_;
+
+				bool						use_continuous_loop_;
+
+				Size            stereo_frustum_conversion_width_;
+				Size            stereo_frustum_conversion_height_;
+
+				StereoMode 			stereo_;
+				QString name_;
+
+			private:
+				FrameBufferFormat bufferFormat;
 		};
 
 	} // namespace VIEW
