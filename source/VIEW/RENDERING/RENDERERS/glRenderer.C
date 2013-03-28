@@ -116,6 +116,14 @@ namespace BALL
 
 		void GLRenderer::clear()
 		{
+			glDisable(GL_BLEND);
+			glDisable(GL_LIGHTING);
+			glDisable(GL_LIGHT_MODEL_LOCAL_VIEWER);
+			glDisable(GL_RESCALE_NORMAL);
+			glDisable(GL_COLOR_MATERIAL);
+			glDisable(GL_DEPTH_TEST);
+			glDisable(GL_NORMALIZE);
+
 			name_to_object_.clear();
 			object_to_name_.clear();
 			all_names_ = 1;
