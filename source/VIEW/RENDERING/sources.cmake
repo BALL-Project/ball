@@ -4,9 +4,7 @@ INCLUDE(source/VIEW/RENDERING/RENDERERS/sources.cmake)
 SET(SOURCES_LIST
 	camera.C
 	rendererFactory.C
-	glDisplayList.C
 	renderSetup.C
-	vertexBuffer.C
 	glRenderWindow.C
 	glOffscreenTarget.C
 	rendererPlugin.C

@@ -4,10 +4,11 @@
 // $Id: glDisplayList.C,v 1.7.16.1 2007/03/25 21:57:01 oliver Exp $
 //
 
-#include <BALL/VIEW/RENDERING/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/rtti.h>
+
+#include <glDisplayList.h>
 
 using namespace std;
 
