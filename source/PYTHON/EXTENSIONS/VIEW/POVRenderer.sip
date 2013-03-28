@@ -1,14 +1,12 @@
 class POVRenderer
-	: Renderer
+	: SceneExporter
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
 %End
 	public:
-	POVRenderer() throw();
-	POVRenderer(const String&) throw(FileNotFound);
-	bool finish() throw();
-	void clear() throw();
+	POVRenderer(const String&);
+	void clear();
 
 	virtual bool init(const Stage&, float, float) throw();
 	void setFileName(const String&) throw(FileNotFound);

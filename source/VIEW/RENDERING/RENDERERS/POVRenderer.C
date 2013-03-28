@@ -25,7 +25,6 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 
-
 using std::endl;
 
 namespace BALL
@@ -35,28 +34,20 @@ namespace BALL
 
 #define BALLVIEW_POVRAY_LINE_RADIUS "BALL_LINE_RADIUS"
 
-		POVRenderer::POVRenderer()
-			: Renderer(),
-				outfile_(&std::cout),
-				human_readable_(true),
-				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
+		POVRenderer::POVRenderer(std::ostream* ostrm)
+			: SceneExporter(ostrm),
+			  width_(0.0f),
+			  height_(0.0f),
+			  stage_(0)
 		{
 		}
-
-		POVRenderer::POVRenderer(const POVRenderer& renderer)
-			: Renderer(renderer),
-				outfile_(&std::cout),
-				human_readable_(renderer.human_readable_)
-		{
-		}
-
 
 		POVRenderer::POVRenderer(const String& name)
-			: Renderer(),
-				human_readable_(true),
-				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
+			: SceneExporter(name),
+			  width_(0.0f),
+			  height_(0.0f),
+			  stage_(0)
 		{
-			outfile_ = new File(name, std::ios::out);
 		}
 
 		POVRenderer::~POVRenderer()
@@ -64,43 +55,23 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << this << " of class POVRenderer" << endl;
 			#endif
-
-				clear();
 		}
 
 		void POVRenderer::clear()
 		{
-            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
+			if (ostrm_ != 0 && RTTI::isKindOf<File>(ostrm_))
 			{
-				delete outfile_;
+				delete ostrm_;
 			}
 
-			outfile_ = &std::cout;
-			human_readable_ = true;
+			ostrm_ = &std::cout;
 
+			wireframes_.clear();
 			representations_.clear();
 			color_map_.clear();
+			color_strings_.clear();
 			color_index_ = 0;
 		}
-
-		void POVRenderer::setFileName(const String& name)
-		{
-            if (outfile_ == 0 || !RTTI::isKindOf<File>(outfile_))
-			{
-				outfile_ = new File();
-			}
-			(*(File*)outfile_).open(name, std::ios::out);
-		}
-
-		void POVRenderer::setOstream(std::ostream& out_stream)
-		{
-            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
-			{
-				delete outfile_;
-			}
-			outfile_ = &out_stream;
-		}
-
 
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
 		{
@@ -165,53 +136,51 @@ namespace BALL
 
 		// init must be called right before the rendering starts, since
 		// we need to fix the camera, light sources, etc...
-		bool POVRenderer::init(const Stage& stage, float width, float height)
+		bool POVRenderer::init(const Stage* stage, float width, float height)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Start the POVRender output..." << endl;
 			#endif
 
-			wireframes_.clear();
-			representations_.clear();
-			color_map_.clear();
-			color_strings_.clear();
-			color_index_ = 0;
+			if(!ostrm_ || !ostrm_->good() || !stage) {
+				return false;
+			}
 
-			std::ostream& out = *outfile_;
+			clear();
 
-			if (!Renderer::init(stage, width, height)) return false;
+			width_ = width;
+			height_ = height;
+			stage_ = stage;
 
-			if (human_readable_)
+			std::ostream& out = *ostrm_;
+
+			out << "// POVRay file created by the BALL POVRenderer" << endl << endl
+			    << "// Width of the original scene: "  << width_  << endl
+			    << "// Height of the original scene: " << height_ << endl
+			    << "// To render this scene, call povray (available from www.povray.org)"
+			    << " like this:\n//" << endl;
+
+			if (ostrm_ != 0 && RTTI::isKindOf<File>(ostrm_))
 			{
-				out	<< "// POVRay file created by the BALL POVRenderer" << endl << endl
-				    << "// Width of the original scene: " << width_ << endl
-				    << "// Height of the original scene: " << height_ << endl
-				    << "// To render this scene, call povray (available from www.povray.org)"
-					  << " like this:\n//" << endl;
-
-                if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
-				{
 					// Add a command line with the correct options to call POVRay to the header
 					// so we can just copy&paste this to render this file.
-					String infilename = FileSystem::baseName((*(File*)outfile_).getName());
+					String infilename = FileSystem::baseName((*(File*)ostrm_).getName());
 					String outfilename(infilename);
 					if (outfilename.hasSuffix(".pov"))
 					{
-						outfilename.getSubstring(-4) = ".png";
+							outfilename.getSubstring(-4) = ".png";
 					}
 					// +QR: highest quiality
 					// +A0.3 : antialiasing
 					// +FN: PNG format as the default
 					// +W/+H: width and height, taken from the widget.
-					out << "// povray +I" << infilename 
-							<< " +FN +O" << outfilename << " +Q9 +W" << width_ 
-							<< " +H" << height_ << " +A0.3\n//" << endl;
-				}
+					out << "// povray +I" << infilename
+					    << " +FN +O" << outfilename << " +Q9 +W" << width_
+					    << " +H" << height_ << " +A0.3\n//" << endl;
 			}
 
-		
 			out << "camera {" << std::setprecision(12) << endl;
-			out << "\t location " << POVVector3(stage.getCamera().getViewPoint()) << endl;
+			out << "\t location " << POVVector3(stage->getCamera().getViewPoint()) << endl;
 
 			Angle fovx(105, false);
 			float ratio = 1;
@@ -242,17 +211,14 @@ namespace BALL
 			out << "\t up y" << endl;
 			out << "\t right -" << ratio << "*x" << endl;
 			out << "\t angle " << fovx.toDegree() << endl;
-			out << "\t sky " << POVVector3(stage.getCamera().getLookUpVector()) << endl;
-			out << "\t look_at " << POVVector3(stage.getCamera().getLookAtPosition()) << endl;
+			out << "\t sky " << POVVector3(stage->getCamera().getLookUpVector()) << endl;
+			out << "\t look_at " << POVVector3(stage->getCamera().getLookAtPosition()) << endl;
 			out << "}" << std::setprecision(6) << endl << endl;
 
 			//
-			if (human_readable_)
-			{
-				out << "// look up: " << stage.getCamera().getLookUpVector() << endl;
-				out << "// look at: " << stage.getCamera().getLookAtPosition() << endl;
-				out << "// view point: " << stage.getCamera().getViewPoint() << endl;
-			}
+			out << "// look up: " << stage->getCamera().getLookUpVector() << endl;
+			out << "// look at: " << stage->getCamera().getLookAtPosition() << endl;
+			out << "// view point: " << stage->getCamera().getViewPoint() << endl;
 
 			// Set the light sources
 			list<LightSource>::const_iterator it = stage_->getLightSources().begin();
@@ -334,7 +300,7 @@ namespace BALL
 			out << "#declare BALL_WIRE_RADIUS 					= 0.01;" << std::endl;
 			out << "#declare BALL_LINE_RADIUS 					= 0.02;" << std::endl;
 			out << "// enter the path to your desired font here: " << std::endl;
-			out << "#declare BALLLabelFont              = \"" << font_file_ << "\";" << std::endl;
+			out << "#declare BALLLabelFont              = \"" << QFont("Arial", 16., QFont::Bold).rawName().toStdString() << "\";" << std::endl;
 			out << std::endl;
 						
 			out << "#macro Sphere(Position, Radius, Color)" << endl;
@@ -392,9 +358,9 @@ namespace BALL
 			return true;
 		}
 
-		bool POVRenderer::finish()
+		bool POVRenderer::finishImpl_()
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			// write all colors
 			ColorMap::ConstIterator cit = color_map_.begin();
@@ -512,9 +478,9 @@ namespace BALL
 			} // all Representations
 
 
-            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
+			if (ostrm_ != 0 && RTTI::isKindOf<File>(ostrm_))
 			{
-				(*(File*)outfile_).close();
+				(*(File*)ostrm_).close();
 			}
 
 			return true;
@@ -522,21 +488,27 @@ namespace BALL
 
 		void POVRenderer::renderSphere_(const Sphere& sphere)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			const ColorRGBA& color = getColor_(sphere);
 
-			if ((Size) color.getAlpha() == 255) out << "Sphere(";
-			else 																out << "SphereT(";
+			if ((Size) color.getAlpha() == 255)
+			{
+				out << "Sphere(";
+			}
+			else
+			{
+				out << "SphereT(";
+			}
 
-		  out << POVVector3(sphere.getPosition()) << ", "
-					<< sphere.getRadius() << ", "
-					<< getColorIndex_(color) << ")" << endl;
+			out << POVVector3(sphere.getPosition()) << ", "
+			    << sphere.getRadius() << ", "
+			    << getColorIndex_(color) << ")" << endl;
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			const ColorRGBA& color = getColor_(disc);
 
@@ -559,7 +531,7 @@ namespace BALL
 
 		void POVRenderer::renderLine_(const Line& line)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			const ColorRGBA& color = getColor_(line);
 
@@ -578,7 +550,7 @@ namespace BALL
 
 		void POVRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			// we have found a two colored tube
 			const ColorRGBA& color1 = tube.getColor();
@@ -615,7 +587,7 @@ namespace BALL
 
 		void POVRenderer::renderTube_(const Tube& tube)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			String p1 = POVVector3(tube.getVertex1());
 			String p2 = POVVector3(tube.getVertex2());
@@ -634,7 +606,7 @@ namespace BALL
 
 		void POVRenderer::renderPoint_(const Point& point)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			const ColorRGBA& color = getColor_(point);
 
@@ -649,7 +621,7 @@ namespace BALL
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			const ColorRGBA& color1 = tube.getColor();
 			const ColorRGBA& color2 = tube.getColor2();
@@ -697,7 +669,7 @@ namespace BALL
 				return;
 			}
 
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 
 			// is this a mesh in wireframe mode?
@@ -841,27 +813,27 @@ namespace BALL
 			
 			return object.getColor();
 		}
-		
-		bool POVRenderer::renderOneRepresentation(const Representation& representation)
-		{
-			if (representation.isHidden()) return true;
 
-			if (!representation.isValid())
+		bool POVRenderer::exportOneRepresentation(const Representation* representation)
+		{
+			if (representation->isHidden()) return true;
+
+			if (!representation->isValid())
 			{
-				Log.error() << "Representation " << &representation 
+				Log.error() << "Representation " << representation
 										<< "not valid, so aborting." << std::endl;
 				return false;
 			}	
 
 			list<GeometricObject*>::const_iterator it;
 
-			for (it =  representation.getGeometricObjects().begin();
-					 it != representation.getGeometricObjects().end();
-					 it++)
+			for (it =  representation->getGeometricObjects().begin();
+			     it != representation->getGeometricObjects().end();
+			     it++)
 			{
 				(**it).getColors(color_strings_);
 
-				if (representation.getDrawingMode() == DRAWING_MODE_WIREFRAME)
+				if (representation->getDrawingMode() == DRAWING_MODE_WIREFRAME)
 				{
 					wireframes_.insert((Mesh*) *it);
 				}
@@ -874,7 +846,7 @@ namespace BALL
 				color_index_++;
 			}
 
-			representations_.push_back(&representation);
+			representations_.push_back(representation);
 
 			return true;
 		}
@@ -889,7 +861,7 @@ namespace BALL
 
 		void POVRenderer::renderLabel_(const Label& label)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			out << "text{ ttf BALLLabelFont, \"" << label.getExpandedText() << "\",0.2, 0" << std::endl;
 			out << "  texture{ pigment{color rgb" << 	POVColorRGBA(label.getColor()) << " }"<< std::endl;
@@ -910,7 +882,7 @@ namespace BALL
 
 		void POVRenderer::renderMultiLine_(const MultiLine& line)
 		{
-			std::ostream& out = *outfile_;
+			std::ostream& out = *ostrm_;
 
 			String last;
 			HashSet<Position> used;

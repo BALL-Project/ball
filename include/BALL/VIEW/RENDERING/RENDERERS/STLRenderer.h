@@ -3,12 +3,12 @@
 #ifndef BALL_VIEW_RENDERING_RENDERERS_STLRENDERER_H
 #define BALL_VIEW_RENDERING_RENDERERS_STLRENDERER_H
 
-#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#ifndef BALL_VIEW_RENDERING_SCENEEXPORTER_H
+# include <BALL/VIEW/RENDERING/sceneExporter.h>
 #endif
 
-#ifndef BALL_SYSTEM_FILE_H
-# include <BALL/SYSTEM/file.h>
+#ifndef BALL_VIEW_RENDERING_GEOMETRICOBJECTDISPATCHER_H
+# include <BALL/VIEW/RENDERING/geometricObjectDispatcher.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -23,6 +23,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class ColorRGBA;
 
 /** STLRenderer class.
 		Representation of all primitives as Meshes in stl 
@@ -33,7 +34,7 @@ namespace BALL
 */
 
 class BALL_VIEW_EXPORT STLRenderer 
-	: public Renderer
+	: public SceneExporter, public GeometricObjectDispatcher
 {
 	public:
 
@@ -41,12 +42,8 @@ class BALL_VIEW_EXPORT STLRenderer
 	 */
 	//@{
 
-	/// Default constructor.
-	STLRenderer();
-
 	/** Detailed constructor.
 			\param name The name of the file we will create
-			\exception BALL::Exception::FileNotFound
 	 */
 	STLRenderer(const String& name);
 	
@@ -61,13 +58,6 @@ class BALL_VIEW_EXPORT STLRenderer
 	 */
 	//@{
 
-	/** Sets the name of the file we will create.
-			\param name The file name
-			\exception BALL::Exception::FileNotFound
-	 */
-	void setFileName(const String& name);
-
-
 	/** Converts a Vector3 into a String in VRML format as stl works in the same perspektive.
 	 */
 	String VRMLVector3(Vector3 input);
@@ -80,17 +70,21 @@ class BALL_VIEW_EXPORT STLRenderer
 	/** Start method. 
 			This method creates the file and writes the header.
 	 */
-	virtual bool init(const Stage& stage);
+	virtual bool init(const Stage* stage, float width, float height);
 
-	/** Finish method.
-			This method writes the ending of the file and closes it.
-	 */
-	virtual bool finish();
+	bool exportOneRepresentation(const Representation* representation);
 
 	//@}
 
+	protected:
+	/**
+	 * Finish method.
+	 * This method writes the ending of the file and closes it.
+	 */
+	bool finishImpl_();
+
 	void renderSphere_(const Sphere& sphere);
-	
+
 	void renderMesh_(const Mesh& mesh);
 
 	void renderTube_(const Tube& tube);
@@ -109,16 +103,10 @@ class BALL_VIEW_EXPORT STLRenderer
 	void outfinish_(const String& data)
 		{out_(data); current_indent_ -= 1;}
 
-	Size width, height;
-
-	protected:
-
 	void header_(const Vector3& translation, const ColorRGBA& color, 
 							 const String& rotation = "");
-		
-	void footer_();
 
-	File outfile_;
+	void footer_();
 
 	Vector3   origin_;
 	Matrix4x4 rotation_;

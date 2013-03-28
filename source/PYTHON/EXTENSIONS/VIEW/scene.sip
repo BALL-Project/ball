@@ -13,19 +13,20 @@ class Scene
 	static Scene* getInstance(Position);
 
 	Scene() throw();
+	Scene(const Scene&);
 	~Scene() throw();
 
 	void setCursor(String c);
 	void setElementCursor(int);
 
 	virtual void onNotify(Message*) throw();
-	virtual bool exportScene(Renderer&) const throw();
 	virtual void initializeWidget(MainControl&) throw();
 	virtual void fetchPreferences(INIFile&) throw();
 	virtual void writePreferences(INIFile&) throw();
 	virtual void checkMenu(MainControl&) throw();
 	virtual bool isValid() const throw();
 	Stage* getStage() throw();
+	virtual bool exportScene(SceneExporter&) const;
 	Vector2 map3DToViewport(const Vector3& );
 	Vector3 mapViewportTo3D(const Vector2& );
 	Vector3 mapViewportTo3D(int , int );

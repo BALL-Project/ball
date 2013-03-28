@@ -173,13 +173,62 @@ namespace BALL
 				registerWidget(this);
 			}
 
+		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
+			:	QWidget(parent_widget, w_flags),
+				ModularWidget(scene),
+				system_origin_(scene.system_origin_),
+				update_running_(false),
+				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
+				stage_(new Stage(*scene.stage_)),
+				renderers_(),
+				gl_renderer_(new GLRenderer()),
+#ifdef BALL_HAS_RTFACT
+				rt_renderer_(new t_RaytracingRenderer()),
+#endif
+				light_settings_(new LightSettings(this)),
+				material_settings_(new MaterialSettings(this)),
+				animation_thread_(0),
+				stop_animation_(false),
+#ifdef BALL_HAS_RTFACT
+				continuous_loop_(false),
+#endif
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
+				main_display_(new GLRenderWindow(this)),
+				main_renderer_(0),
+				stereo_left_eye_(-1),
+				stereo_right_eye_(-1),
+				mode_manager_(this)
+			{
+				initializeMembers_();
+
+				stage_settings_=new StageSettings(this);
+#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new Scene (3) " << this << std::endl;
+#endif
+				registerRenderers_();
+
+				setObjectName(name);
+
+				// the widget with the MainControl
+				ModularWidget::registerWidget(this);
+				setAcceptDrops(true);
+
+				init();
+
+				resize((Size) scene.renderers_[main_renderer_]->renderer->getWidth(),
+				       (Size) scene.renderers_[main_renderer_]->renderer->getHeight());
+
+				renderers_[main_renderer_]->resize(width(), height());
+				renderers_[main_renderer_]->start();
+			}
+
 		Scene::~Scene()
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
 #endif
 			delete stage_;
-			delete gl_renderer_;
 
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
@@ -216,6 +265,20 @@ namespace BALL
 			animation_points_.clear();
 
 			// TODO: clear the render setups
+		}
+
+		void Scene::set(const Scene& scene)
+		{
+			stage_ = scene.stage_;
+			system_origin_.set(scene.system_origin_);
+
+			// TODO: copy the render setups
+		}
+
+		const Scene& Scene::operator = (const Scene& scene)
+		{
+			set(scene);
+			return *this;
 		}
 
 		bool Scene::isValid() const
@@ -920,9 +983,9 @@ namespace BALL
 			notify_(new RepresentationMessage(*rp, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL));
 		}
 
-		bool Scene::exportScene(Renderer &er) const
+		bool Scene::exportScene(SceneExporter& er) const
 		{
-			if (er.init(*stage_, (float) width(), (float) height()))
+			if (er.init(stage_, (float) width(), (float) height()))
 			{
 				MainControl *main_control = MainControl::getMainControl(this);
 				RepresentationManager& rman = main_control->getRepresentationManager();
@@ -943,7 +1006,7 @@ namespace BALL
 				RepresentationList::const_iterator it = rman.getRepresentations().begin();
 				for (; it != rman.getRepresentations().end(); it++)
 				{
-					if (!er.renderOneRepresentation(**it))
+					if (!er.exportOneRepresentation(*it))
 					{
 						getMainControl()->setStatusbarText((String)tr("Error rendering representation..."));
 						return false;
@@ -1453,6 +1516,7 @@ namespace BALL
 				toggle_continuous_loop_action_->setChecked(false);
 				toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
 				toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
+				toggle_continuous_loop_action_->setShortcut(QKeySequence(Qt::Key_Space));
 				shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
 			}
 			// end of the toolbar entries
@@ -1903,12 +1967,15 @@ namespace BALL
 			QString string;
 			MolecularInformation info;
 
+			GeometricObject* object = 0;
 			list<GeometricObject*>::iterator git = objects.begin();
 			for (; git != objects.end(); git++)
 			{
 				// do we have a composite?
 				Composite* composite = (Composite*) (**git).getComposite();
 				if (composite == 0) continue;
+
+				object = *git;
 
 				info.visit(*composite);
 				QString this_string(info.getName().c_str());
@@ -2221,14 +2288,14 @@ namespace BALL
 
 		void Scene::exportNextPOVRay()
 		{
-			String filename = String((String)tr("BALLView_pov_") + String(pov_nr_) +".pov");
+			String filename = String("BALLView_pov_" + String(pov_nr_) +".pov");
 
 			POVRenderer pr(filename);
 			bool result = exportScene(pr);
 			pov_nr_ ++;
 
-			if (result) setStatusbarText((String)tr("Saved POVRay to ") + filename);
-			else setStatusbarText((String)tr("Could not save POVRay to ") + filename);
+			if (result) setStatusbarText(tr("Saved POVRay to ") + filename.c_str());
+			else setStatusbarText(tr("Could not save POVRay to ") + filename.c_str());
 		}
 
 		void Scene::exportPOVRay()
@@ -2261,11 +2328,11 @@ namespace BALL
 
 			if (!ok)
 			{
-				setStatusbarText((String)tr("Could not export POV to ") + result, true);
+				setStatusbarText(tr("Could not export POV to ") + result.c_str(), true);
 			}
 			else
 			{
-				setStatusbarText((String)tr("Exported POV to ") + result);
+				setStatusbarText(tr("Exported POV to ") + result.c_str());
 				setWorkingDirFromFilename_(result);
 			}
 		}
@@ -2493,6 +2560,7 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
+			int control_screen_index = stage_settings_->getControlScreenNumber();
 			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
 			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
@@ -2674,6 +2742,7 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
+			int control_screen_index = stage_settings_->getControlScreenNumber();
 			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
 			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
@@ -2697,6 +2766,7 @@ namespace BALL
 				return;
 			}
 
+			QDesktopWidget* desktop = QApplication::desktop();
 			QRect screen_geom = QApplication::desktop()->screenGeometry(left_screen_index);
 
 			QWidget* left_screen = QApplication::desktop()->screen(left_screen_index);
@@ -2777,6 +2847,7 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
+			int control_screen_index = stage_settings_->getControlScreenNumber();
 			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
 			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
@@ -3090,6 +3161,7 @@ namespace BALL
 
 		void Scene::setWidgetVisible(bool state)
 		{
+			// only for Python needed
 			QWidget::setVisible(state);
 		}
 
