@@ -6,7 +6,6 @@
 #define BALL_VIEW_RENDERING_RENDERERS_RTFACTRENDERER_H
 
 #define BALLVIEW_RTFACTRENDERER_THROW(exceptionName, message) (throw BALL::Exception::##exceptionName##(__FILE__, __LINE__, message))
-#include <BALL/VIEW/RENDERING/RENDERERS/raytracingRenderer.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
@@ -21,6 +20,8 @@
 #include <RTfact/Model/Image/BasicImage2D.hpp>
 #include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
 #include <RTfact/Utils/FPSMeter.hpp>
+
+#include <BALL/CONFIG/config.h>
 
 namespace boost
 {
@@ -68,7 +69,7 @@ namespace BALL
 			\ingroup ViewRendering
 			*/
 		class BALL_VIEW_EXPORT RTfactRenderer
-			: public RaytracingRenderer
+			: public Renderer
 		{
 			public:
 
@@ -106,12 +107,7 @@ namespace BALL
 						bool has_been_disabled;
 				};
 
-				/// Default Constructor.
-				RTfactRenderer()
-					: RaytracingRenderer(),
-						rtfact_needs_update_(false)
-				{
-				}
+				RTfactRenderer();
 
 				/// Destructor
 				virtual ~RTfactRenderer()
@@ -136,6 +132,10 @@ namespace BALL
 				{
 				}
 
+				bool supports(const PixelFormat&) const;
+
+				virtual boost::shared_ptr<RenderSetup> createRenderSetup(RenderTarget* target, Scene* scene);
+
 				virtual GeometricObject* pickObject(Position x, Position y);
 				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
 				                         std::list<GeometricObject*>& objects);
@@ -149,7 +149,6 @@ namespace BALL
 				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 				virtual void setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f);
 
-				virtual void prepareBufferedRendering(const Stage& stage);
 				virtual void renderToBufferImpl(FrameBufferPtr buffer);
 
 				virtual void useContinuousLoop(bool use_loop);

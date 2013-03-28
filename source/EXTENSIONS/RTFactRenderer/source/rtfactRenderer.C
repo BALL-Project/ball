@@ -7,7 +7,8 @@
 #include <RTfact/Config/Common.hpp>
 #include <RTfact/Config/Init.hpp>
 
-#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
+#include <rtfactRenderer.h>
+#include <rtfactRenderSetup.h>
 
 #include <QtGui/QImage>
 
@@ -34,6 +35,12 @@ namespace BALL
 	namespace VIEW
 	{
 		const float RTfactRenderer::vectorDifferenceTolerance_= 0.0f;
+
+		RTfactRenderer::RTfactRenderer()
+			: Renderer("RTFactRenderer"),
+			  rtfact_needs_update_(false)
+		{
+		}
 
 		bool RTfactRenderer::hasFPScounter()
 		{
@@ -127,6 +134,16 @@ namespace BALL
 			}
 
 			return NULL;
+		}
+
+		bool RTfactRenderer::supports(const PixelFormat &format) const
+		{
+			return ((format == PixelFormat::RGBA_32) || (format == PixelFormat::RGBF_96));
+		}
+
+		boost::shared_ptr<RenderSetup> RTfactRenderer::createRenderSetup(RenderTarget* target, Scene* scene)
+		{
+			return boost::shared_ptr<RenderSetup>(new RTfactRenderSetup(this, target, scene));
 		}
 
 		// TODO: this should be done in parallel, or directly in the ray tracer
@@ -395,11 +412,6 @@ namespace BALL
 			sceneHandle.setEnvironmentTexture(imageHandle);
 
 			delete[] (rtfact_env_map);
-		}
-
-		void RTfactRenderer::prepareBufferedRendering(const Stage& stage)
-		{
-			// this function is not needed for this kind of raytracer
 		}
 
 		void transformMeshData(float *mat,
