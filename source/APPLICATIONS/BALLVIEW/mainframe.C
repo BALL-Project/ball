@@ -37,6 +37,7 @@
 #include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
 #include <BALL/VIEW/PLUGIN/modularWidgetPluginHandler.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
+#include <BALL/VIEW/RENDERING/rendererFactory.h>
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 
@@ -400,5 +401,6 @@ namespace BALL
 		handler.reset(new ModularWidgetPluginHandler(this));
 		man.registerHandler(handler);
 		man.registerHandler(new PluginDialog(getPreferences(), this));
+		man.registerHandler(&RendererFactory::instance());
 	}
 }
