@@ -179,10 +179,31 @@ namespace BALL
 			return smooth_lines_;
 		}
 
+		void GLRenderer::setMaterial_(const Stage::Material& material)
+		{
+			GLfloat shin[] = { material.shininess };
+			GLfloat spec[] = {
+				material.specular_intensity * (float)material.specular_color.getRed(),
+				material.specular_intensity * (float)material.specular_color.getGreen(),
+				material.specular_intensity * (float)material.specular_color.getBlue(),
+				material.specular_intensity * (float)material.specular_color.getAlpha()
+			};
+			GLfloat ambient[] = {
+				material.ambient_intensity * (float)material.ambient_color.getRed(),
+				material.ambient_intensity * (float)material.ambient_color.getGreen(),
+				material.ambient_intensity * (float)material.ambient_color.getBlue(),
+				material.ambient_intensity * (float)material.ambient_color.getAlpha()
+			};
+
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   ambient);
+		}
+
 		bool GLRenderer::init(const Stage& stage, float width, float height)
 		{
 			Renderer::init(stage, width, height);
-			
+
 			// Force OpenGL to normalize transformed normals to be of unit
 			// length before using the normals in OpenGL's lighting equations
 			// While this corrects potential lighting problems introduced by scaling,
@@ -238,18 +259,8 @@ namespace BALL
 			// set the background color according to the stage
 			updateBackgroundColor();
 
-			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+			glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
 			glEnable(GL_COLOR_MATERIAL);
-			
-			GLfloat diff[] = {0.4, 0.4, 0.4, 1.0};
-			GLfloat shin[] = {76.8};
-			GLfloat spec[] = {0.774597, 0.774597, 0.774597, 1.0};
-			GLfloat ambient[] = {0.25, 0.25, 0.25, 1.0};
-
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
-			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  diff);
-			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  ambient);
 
 			// if displaylists were already calculated, return
 			if (GL_spheres_list_ != 0) return true;
@@ -870,6 +881,17 @@ namespace BALL
 		void GLRenderer::renderRepresentation_(const Representation& representation, bool for_display_list)
 		{
 			model_type_ = representation.getModelType();
+
+			if (representation.hasProperty("Rendering::Material"))
+			{
+				NamedProperty rt_mat_property = representation.getProperty("Rendering::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+				setMaterial_(*dynamic_cast<Stage::Material*>(mat_ptr.get()));
+			}
+			else
+			{
+				setMaterial_(stage_->getMaterial());
+			}
 
 			// accelerate things a little by calling getGeometricObjects() only once
 			const list<GeometricObject*>& geometric_objects = representation.getGeometricObjects();

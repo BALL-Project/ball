@@ -277,6 +277,8 @@ namespace BALL
 
 			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 
+			void updateMaterialForRepresentation(Representation const* rep) { bufferRepresentation(*rep); }
+
 	protected:
 
 			/** Maps the current viewplane to screen coordinates.
@@ -414,6 +416,8 @@ namespace BALL
 			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
 			void setupGridClipPlanes_(const GridVisualisation& slice);
 
+			// Sets the current OpenGL material
+			void setMaterial_(const Stage::Material& mat);
 			///
 			DrawingMode 					drawing_mode_;
 
