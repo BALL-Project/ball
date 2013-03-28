@@ -460,8 +460,6 @@ namespace BALL
 				/// Try to setup an environment map for all renderers that support it
 				void setupEnvironmentMap(const QImage& image);
 
-				Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
-
 				void updateGL();
 				///
 				void initializePreferencesTab(Preferences &preferences);

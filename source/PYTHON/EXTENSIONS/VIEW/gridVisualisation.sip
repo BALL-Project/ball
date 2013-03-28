@@ -22,8 +22,6 @@ class GridVisualisation
 	void setPoint(const Vector3&);
 	void setGrid(const RegularData3D*);
 	const RegularData3D* getGrid() const;
-	Position getTexture() const;
-	void setTexture(Position );
 	void setDotSize(Size);
 	Size getDotSize() const;
 
@@ -41,7 +39,6 @@ class GridVisualisation
 	sipRes = PyString_FromString(String(String("GridVisualisation ")
 		+ " { "
 		+ "   Grid: " + String((long int)sipCpp->getGrid())
-		+ "   Texture: " + String(sipCpp->getTexture())
 		+ " }").c_str());
 %End
 
@@ -50,7 +47,6 @@ class GridVisualisation
 	sipRes = PyString_FromString(String(String("GridVisualisation ")
 		+ " { "
 		+ "   Grid: " + String((long int)sipCpp->getGrid())
-		+ "   Texture: " + String(sipCpp->getTexture())
 		+ " }").c_str());
 %End
 };

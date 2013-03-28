@@ -3107,23 +3107,6 @@ namespace BALL
 			}
 		}
 
-		Position Scene::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
-		{
-			// NOTE: this implementation has a slight disadvantage:
-			//       if you want 3d textures for stereo with different
-			//       half images, you need to ensure that this function
-			//       is called *after* switching to stereo!
-			//
-			// TODO: - change this to something more sensible!
-			//       - call something in RenderSetup instead!
-			Position texname = 0;
-
-			for (Position i=0; i<renderers_.size(); ++i)
-				texname = renderers_[i]->prepareGridTextures(grid, map);
-
-			return texname;
-		}
-
 		void Scene::switchShowGrid()
 		{
 			// TODO: maybe we want this to be local to the targets?
