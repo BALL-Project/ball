@@ -12,6 +12,7 @@ SET(SOURCES_LIST
 	rendererPlugin.C
 	renderWindow.C
 	pixelFormat.C
+	sceneExporter.C
 )
 
 ADD_VIEW_SOURCES("VIEW/RENDERING" "${SOURCES_LIST}")
