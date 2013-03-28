@@ -36,7 +36,6 @@ namespace BALL
 				Vertex Buffer Objects can drasticaly increase drawing speed for triangulated surfaces
 				(up to 5 fold) compared with OpenGL display lists.
 				To ensure a maximum of platform independence we use method pointers in the source file.
-				These must be initialised by calling MeshBuffer::initGL() (See below).
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT MeshBuffer //: protected QOpenGLFunctions
@@ -55,11 +54,6 @@ namespace BALL
 
 			///
 			virtual ~MeshBuffer();
-
-			/** Initialise the GL needed methods.
-			    Call this method one time after having a valid GL context (e.g. in GLRenderer::init).
-			*/
-			static bool initGL();
 
 			///
 			const MeshBuffer& operator = (const MeshBuffer& buffer);

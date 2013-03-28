@@ -2,7 +2,12 @@
 // vi: set ts=2:
 //
 
-#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/MATHS/vector2.h>
+#include <BALL/MATHS/plane3.h>
+#include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/SYSTEM/timer.h>
+
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -24,27 +29,14 @@
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
-#include <BALL/SYSTEM/timer.h>
-#include <BALL/KERNEL/atom.h>
-
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include <QtGui/QImage>
+#include <QtGui/QOpenGLContext>
 
-#include <BALL/MATHS/vector2.h>
-#include <BALL/MATHS/plane3.h>
-#include <BALL/MATHS/analyticalGeometry.h>
-
-#ifndef BALL_HAS_GLEW
- #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
- #include <GL/gl.h>
- #include <GL/glx.h>
- #include <GL/glext.h>
-#endif
-
-#ifdef BALL_HAS_GLEW
-# include <BALL/VIEW/RENDERING/vertexBuffer.h>
-#endif
+#include <glRenderer.h>
+#include <glRenderSetup.h>
+#include <vertexBuffer.h>
 
 using namespace std;
 
@@ -82,7 +74,7 @@ namespace BALL
 #endif
 
 		GLRenderer::GLRenderer()
-			: Renderer(),
+			: Renderer("GLRenderer"),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
 				near_(1.5),
@@ -127,11 +119,9 @@ namespace BALL
 			object_to_name_.clear();
 			all_names_ = 1;
 
-			delete[] GL_spheres_list_;
-			delete[] GL_boxes_list_;
-			delete[] GL_tubes_list_;
-
-			GL_spheres_list_ = GL_boxes_list_ = GL_tubes_list_ = NULL;
+			if (GL_spheres_list_) delete[] GL_spheres_list_;
+			if (GL_boxes_list_)   delete[] GL_boxes_list_;
+			if (GL_tubes_list_)   delete[] GL_tubes_list_;
 
 			DisplayListHashMap::Iterator it = display_lists_.begin();
 			for (; it != display_lists_.end(); it++)
@@ -141,12 +131,11 @@ namespace BALL
 			display_lists_.clear();
 
 			orthographic_zoom_ = 10.f;
+		}
 
-			if(GLU_quadric_obj_ != 0)
-			{
-					gluDeleteQuadric(GLU_quadric_obj_);
-					GLU_quadric_obj_ = 0;
-			}
+		boost::shared_ptr<RenderSetup> GLRenderer::createRenderSetup(RenderTarget* target, Scene* scene)
+		{
+			return boost::shared_ptr<RenderSetup>(new GLRenderSetup(this, target, scene));
 		}
 
 		void GLRenderer::setAntialiasing(bool state)
@@ -210,6 +199,8 @@ namespace BALL
 		bool GLRenderer::init(const Stage& stage, float width, float height)
 		{
 			Renderer::init(stage, width, height);
+
+			enableVertexBuffers(true);
 
 			// Force OpenGL to normalize transformed normals to be of unit
 			// length before using the normals in OpenGL's lighting equations
@@ -2163,21 +2154,9 @@ namespace BALL
 			return display_lists_.has(&rep);
 		}
 
-		bool GLRenderer::isExtensionSupported(const String& extension) const
+		bool GLRenderer::isExtensionSupported(const char* extension) const
 		{
-			// Extension names should not have spaces
-			if (extension == "" || extension.hasSubstring(" ")) return false;
-
-			// Get Extensions String
-			if (glGetString(GL_EXTENSIONS) == 0)
-			{
-				return false;
-			}
-
-			String supported_extensions = (const char*) glGetString(GL_EXTENSIONS);
-			if (supported_extensions.hasSubstring(extension)) return true;
-
-			return false;
+			return QOpenGLContext::currentContext()->hasExtension(extension);
 		}
 
 		String GLRenderer::getVendor()
@@ -2240,15 +2219,11 @@ namespace BALL
 			}
 			use_vertex_buffer_ = state;
 
-			if (use_vertex_buffer_) MeshBuffer::initGL();
-
 			return true;
-#endif
 		}
 
 		void GLRenderer::clearVertexBuffersFor(Representation& rep)
 		{
-#ifdef BALL_HAS_GLEW
 			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
 			if (vit == rep_to_buffers_.end()) return;
 
@@ -2261,14 +2236,12 @@ namespace BALL
 
 			meshes.clear();
 			rep_to_buffers_.erase(vit);
-#endif
 		}
 
 		void GLRenderer::drawBuffered(const Representation& rep)
 		{
 			if (rep.isHidden()) return;
 
-#ifdef BALL_HAS_GLEW
 			// if we have vertex buffers for this Representation, draw them
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
@@ -2286,7 +2259,6 @@ namespace BALL
 					}
 				}
 			}
-#endif
 
 			// if we have a displaylist for this Representation, draw it
 			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
@@ -2312,11 +2284,7 @@ namespace BALL
 
 		bool GLRenderer::vertexBuffersSupported() const
 		{
-#ifdef BALL_HAS_GLEW
 			return isExtensionSupported("GL_ARB_vertex_buffer_object");
-#else
-			return false;
-#endif
 		}
 
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
@@ -2460,9 +2428,10 @@ namespace BALL
 						 BYTES_PER_TEXEL * width * height * z;
 		}
 
-		Position GLRenderer::createTextureFromGrid(const RegularData3D& grid, const ColorMap& map)
+		Position GLRenderer::createTextureFromGrid(const GridVisualisation& vis)
 		{
-			if (!isExtensionSupported("GL_EXT_texture3D")) return 0;
+			const RegularData3D& grid = *vis.getGrid();
+			const ColorMap& map = *vis.getColorMap().get();
 
 			// prevent warning and error if not using GLEW:
 			Position texname = 0;
@@ -2549,10 +2518,15 @@ namespace BALL
 
 		void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		{
+			GLuint texname;
 			if (!grid_to_texture_.has(vol.getGrid()))
-				return;
+			{
+				texname = createTextureFromGrid(vol);
+				grid_to_texture_[vol.getGrid()] = texname;
+			} else {
+				texname = grid_to_texture_[vol.getGrid()];
+			}
 
-			Position texname = grid_to_texture_[vol.getGrid()];
 			if (texname == 0)
 			{
 				scene_->setStatusbarText((String)qApp->translate("BALL::VIEW::GLRenderer", "Graphics card does not support 3D textures. Abort"), true);
@@ -2576,6 +2550,7 @@ namespace BALL
 			glDisable(GL_CULL_FACE);
 
 			////////////////////////////////////////////////////////////////////////////////
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_3D, texname);
 			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
