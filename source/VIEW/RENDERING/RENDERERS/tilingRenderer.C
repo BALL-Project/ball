@@ -4,7 +4,6 @@
 
 #include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 
-#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 
@@ -61,11 +60,6 @@ namespace BALL
 			return real_renderer_->map3DToViewport(vec);
 		}
 
-		bool TilingRenderer::renderOneRepresentation(const Representation& representation)
-		{
-			return real_renderer_->renderOneRepresentation(representation);
-		}
-
 		void TilingRenderer::bufferRepresentation(const Representation& rep)
 		{
 			real_renderer_->bufferRepresentation(rep);
@@ -89,11 +83,6 @@ namespace BALL
 			real_renderer_->renderRuler();
 		}
 
-		void TilingRenderer::render_(const GeometricObject* object)
-		{
-			real_renderer_->render_(object);
-		}
-
 #ifdef BALL_COMPILER_MSVC
 // yes, it *is* *that* stupid...
 #undef near
@@ -102,6 +91,7 @@ namespace BALL
 
 		void TilingRenderer::renderToBuffer(RenderTarget* target)
 		{
+#if 0
             if (RTTI::isKindOf<GLRenderer>(real_renderer_))
 			{
 				GLRenderer* gl_renderer = static_cast<GLRenderer*>(real_renderer_);
@@ -185,6 +175,7 @@ namespace BALL
 				// restore the old viewport
 				glViewport(old_viewport[0], old_viewport[1], old_viewport[2], old_viewport[3]);
 			}
+#endif
 		}
 
 		void TilingRenderer::computeTilingSetup_()
