@@ -224,10 +224,10 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = SNAPSHOT_RMSD)
 	TEST_EQUAL(pc.getClusterSize(0), 2)
 	PRECISION(1e-4)
 	TEST_REAL_EQUAL(pc.getClusterScore(0), 1.86212)
-	TEST_EQUAL(pc.getClusterSize(1), 4)
-	TEST_REAL_EQUAL(pc.getClusterScore(1), 5.26936)
-	TEST_EQUAL(pc.getClusterSize(2),2)
-	TEST_REAL_EQUAL(pc.getClusterScore(2), 1.87944)
+	TEST_EQUAL(pc.getClusterSize(1), 2)
+	TEST_REAL_EQUAL(pc.getClusterScore(1), 1.87944)
+	TEST_EQUAL(pc.getClusterSize(2), 4)
+	TEST_REAL_EQUAL(pc.getClusterScore(2), 5.26936)
 
 	clusters = pc.extractClustersForThreshold(68);
 	TEST_EQUAL(clusters.size(), 1)
@@ -319,24 +319,24 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = CENTER_OF_MASS_DIS
 
 	pc.extractClustersForThreshold(2.4);
 	TEST_EQUAL(pc.getNumberOfClusters(), 3)
-	TEST_EQUAL(pc.getClusterSize(0), 2)
+	TEST_EQUAL(pc.getClusterSize(0), 4)
 	PRECISION(1e-3)
-	TEST_REAL_EQUAL(pc.getClusterScore(0),  1.54954e-05)
+	TEST_REAL_EQUAL(pc.getClusterScore(0),  2.34918)
 	PRECISION(1e-5)
 
-	TEST_REAL_EQUAL(pc.getClusterScore(1), 2.34918)
+	TEST_REAL_EQUAL(pc.getClusterScore(1), 1.09569e-05)
 	TEST_REAL_EQUAL(pc.getClusterScore(2), 0.945311)
 
-	pc.extractClustersForThreshold(60);
+	pc.extractClustersForThreshold(50.7);
 	TEST_EQUAL(pc.getNumberOfClusters(), 2)
-	TEST_EQUAL(pc.getClusterSize(0), 2)
+	TEST_EQUAL(pc.getClusterSize(0), 4)
 	PRECISION(1e-3)
-	TEST_REAL_EQUAL(pc.getClusterScore(0), 1.54954e-05)
-	TEST_REAL_EQUAL(pc.getClusterScore(1), 42.8763)
+	TEST_REAL_EQUAL(pc.getClusterScore(0), 50.6247)
+	TEST_REAL_EQUAL(pc.getClusterScore(1), 2.34918) 
 
-	pc.extractClustersForThreshold(64.3);
+	pc.extractClustersForThreshold(59);
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
-	TEST_REAL_EQUAL(pc.getClusterScore(0), 64.2998)
+	TEST_REAL_EQUAL(pc.getClusterScore(0), 58.395)
 	PRECISION(1e-5)
 RESULT
 
@@ -416,34 +416,34 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(15);
 //pc.printClusterRMSDs();
 
-	TEST_EQUAL(clusters.size(), 18)
-	TEST_EQUAL(pc.getNumberOfClusters(), 18)
+	TEST_EQUAL(clusters.size(), 20)
+	TEST_EQUAL(pc.getNumberOfClusters(), 20)
 
 	PRECISION(1e-3)
-	TEST_EQUAL(pc.getClusterSize(0), 2)
-	TEST_REAL_EQUAL(pc.getClusterScore(0), 4.03438)
-	TEST_EQUAL(pc.getClusterSize(3), 4)
-	TEST_REAL_EQUAL(pc.getClusterScore(3), 10.3887)
-	TEST_EQUAL(pc.getClusterSize(7), 4)
-	TEST_REAL_EQUAL(pc.getClusterScore(7), 14.8254)
+	TEST_EQUAL(pc.getClusterSize(0), 4)
+	TEST_REAL_EQUAL(pc.getClusterScore(0), 10.2837)
+	TEST_EQUAL(pc.getClusterSize(3), 2)
+	TEST_REAL_EQUAL(pc.getClusterScore(3), 5.3962)
+	TEST_EQUAL(pc.getClusterSize(7), 2)
+	TEST_REAL_EQUAL(pc.getClusterScore(7), 4.39475)
 
-	c0 = pc.getCluster(5);
-	TEST_EQUAL(pc.getClusterSize(5), 6)
-	TEST_REAL_EQUAL(pc.getClusterScore(5), 9.53159)
+	std::set<Index> c19 = pc.getCluster(19);
+	TEST_EQUAL(pc.getClusterSize(19), 6)
+	TEST_REAL_EQUAL(pc.getClusterScore(19), 9.53159)
 	PRECISION(1e-5)
 
-	TEST_EQUAL((c0.find(0)!=c0.end()), true)
-	TEST_EQUAL((c0.find(7)!=c0.end()), true)
-	TEST_EQUAL((c0.find(8)!=c0.end()), true)
-	TEST_EQUAL((c0.find(19)!=c0.end()), true)
-	TEST_EQUAL((c0.find(46)!=c0.end()), true)
-	TEST_EQUAL((c0.find(47)!=c0.end()), true)
+	TEST_EQUAL((c19.find(0)  != c19.end()), true)
+	TEST_EQUAL((c19.find(7)  != c19.end()), true)
+	TEST_EQUAL((c19.find(8)  != c19.end()), true)
+	TEST_EQUAL((c19.find(19) != c19.end()), true)
+	TEST_EQUAL((c19.find(46) != c19.end()), true)
+	TEST_EQUAL((c19.find(47) != c19.end()), true)
 
 	clusters = pc.extractClustersForThreshold(5.0);
 
 	TEST_EQUAL(pc.getNumberOfClusters(), 36)
-	TEST_EQUAL(pc.getClusterSize(13), 4)
-	std::set<Index> c1 = pc.getCluster(13);
+	TEST_EQUAL(pc.getClusterSize(20), 4)
+	std::set<Index> c1 = pc.getCluster(20);
 	TEST_EQUAL((c1.find(31) != c1.end()), true)
 	TEST_EQUAL((c1.find(32) != c1.end()), true)
 	TEST_EQUAL((c1.find(51) != c1.end()), true)
@@ -552,13 +552,13 @@ CHECK(PoseClustering::refineClustering)
 	pc3.compute();
 
 	TEST_EQUAL(pc3.getNumberOfClusters(), 23)
-	TEST_EQUAL(pc3.getClusterSize(2), 2)
+	TEST_EQUAL(pc3.getClusterSize(2), 4)
 	refined_options = pc3.options;
 	refined_options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 5);
 	pc3.refineClustering(refined_options);
 
 	TEST_EQUAL(pc3.getNumberOfClusters(), 30)
-	TEST_EQUAL(pc3.getClusterSize(2), 2)
+	TEST_EQUAL(pc3.getClusterSize(2), 4)
 
 RESULT
 
@@ -737,7 +737,7 @@ CHECK(getReducedConformationSet())
 	pc_nnw.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
 
 	pc_nnw.compute();
-	TEST_EQUAL(pc_nnw.getNumberOfClusters(), 18)
+	TEST_EQUAL(pc_nnw.getNumberOfClusters(), 20)
 
 	boost::shared_ptr<ConformationSet> cs_nnw = pc_nnw.getReducedConformationSet();
 	TEST_EQUAL(cs_nnw->size(),  pc_nnw.getNumberOfClusters())
@@ -753,7 +753,10 @@ CHECK(getReducedConformationSet())
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	//TODO: not really what we want to do: Ward distance vs RMSD
 	TEST_EQUAL(mapper_nnw.calculateRMSD() >= pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
-	TEST_REAL_EQUAL(pc_nnw.getScore(sys17, sys_nnw, pc_nnw.options), 99.05)
+
+	PRECISION(1e-3)
+	TEST_REAL_EQUAL(pc_nnw.getScore(sys17, sys_nnw, pc_nnw.options), 96.12)
+	PRECISION(1e-5)
 
 RESULT
 
@@ -829,7 +832,7 @@ CHECK(getClusterRepresentative(Index i))
 	pc_nnw.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 15.00);
 
 	pc_nnw.compute();
-	TEST_EQUAL(pc_nnw.getNumberOfClusters(), 18)
+	TEST_EQUAL(pc_nnw.getNumberOfClusters(), 20)
 
 	boost::shared_ptr<System> sys18 = pc_nnw.getClusterRepresentative(17);
 	TEST_EQUAL(sys18->getProtein(0)->countAtoms(), sys.getProtein(0)->countAtoms())
@@ -837,7 +840,7 @@ CHECK(getClusterRepresentative(Index i))
 	TEST_EQUAL(sys5->getProtein(0)->countAtoms(), 454)
 
 	PRECISION(1e-1)
-	TEST_REAL_EQUAL(pc_nnw.getScore(*sys18, *sys5, pc_nnw.options), 88.8203)
+	TEST_REAL_EQUAL(pc_nnw.getScore(*sys18, *sys5, pc_nnw.options), 73.7363)
 	PRECISION(1e-5)
 
 RESULT
@@ -931,22 +934,22 @@ CHECK(getClusterConformationSet(Index i))
 
 	pc_nnw.compute();
 
-	boost::shared_ptr<ConformationSet> cs2_nnw = pc_nnw.getClusterConformationSet(2);
-	TEST_EQUAL(cs2_nnw->size(), 2)
-
-	boost::shared_ptr<ConformationSet> cs1_nnw = pc_nnw.getClusterConformationSet(1);
-	TEST_EQUAL(cs1_nnw->size(), 4)
-
 	boost::shared_ptr<ConformationSet> cs0_nnw = pc_nnw.getClusterConformationSet(0);
 	TEST_EQUAL(cs0_nnw->size(), 2)
+
+	boost::shared_ptr<ConformationSet> cs1_nnw = pc_nnw.getClusterConformationSet(1);
+	TEST_EQUAL(cs1_nnw->size(), 2)
+
+	boost::shared_ptr<ConformationSet> cs2_nnw = pc_nnw.getClusterConformationSet(2);
+	TEST_EQUAL(cs2_nnw->size(), 4)
 
 	TEST_EQUAL(sys.getProtein(0)->countAtoms(), cs2_nnw->getSystem().getProtein(0)->countAtoms())
 
 	// different clusters
 	System sys2_nnw(cs2_nnw->getSystem());
-	(*cs2_nnw)[1].applySnapShot(sys2_nnw);
+	(*cs2_nnw)[2].applySnapShot(sys2_nnw);
 	System sys1_nnw(cs1_nnw->getSystem());
-	(*cs1_nnw)[2].applySnapShot(sys1_nnw);
+	(*cs1_nnw)[1].applySnapShot(sys1_nnw);
 
 	StructureMapper mapper_nnw(sys2_nnw, sys1_nnw);
   mapper_nnw.calculateDefaultBijection();
@@ -961,10 +964,10 @@ CHECK(getClusterConformationSet(Index i))
 	(*cs1_nnw)[0].applySnapShot(sys2_nnw);
 	// should be smaller than PoseClustering::Option::DISTANCE_THRESHOLD
 	PRECISION(1e-1)
-  TEST_REAL_EQUAL(mapper_nnw.calculateRMSD(), 2.996)
+  TEST_REAL_EQUAL(mapper_nnw.calculateRMSD(), 2.84235)
 	//TODO: not really what we want to do: Ward distance vs RMSD
   TEST_EQUAL(mapper_nnw.calculateRMSD() < pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
-	TEST_REAL_EQUAL(pc_nnw.getScore(sys2_nnw, sys1_nnw, pc_nnw.options), 2.97102)
+	TEST_REAL_EQUAL(pc_nnw.getScore(sys2_nnw, sys1_nnw, pc_nnw.options), 2.675794)
 	PRECISION(1e-5)
 
 RESULT

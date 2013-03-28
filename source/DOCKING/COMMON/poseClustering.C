@@ -772,6 +772,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 	bool PoseClustering::althausCompute_()
 	{
+		return false;
 	}
 
 	bool PoseClustering::nearestNeighborChainCompute_()
@@ -801,10 +802,11 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		float min_cluster_dist = std::numeric_limits<float>::max();
 
 		// the active clusters (as nodes in the cluster tree)
-		std::set<ClusterTreeNode> active_clusters;
+		std::vector<ClusterTreeNode> active_clusters;
+		active_clusters.reserve(num_poses);
 
-		// stack of clusters (as nodes in the cluster tree) storing nearest neighbor chains
-		std::stack<ClusterTreeNode> cluster_stack;
+		// stack of clusters (as indices into the active_clutser-vector) storing nearest neighbor chains
+		std::deque<Index> cluster_stack;
 
 		// in the beginning each pose is a cluster itself
 		for (Size i=0; i<num_poses; i++)
@@ -818,29 +820,37 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 			cluster_tree_[v].current_cluster_id = -1;
 #endif
 
-			active_clusters.insert(v);
+			active_clusters.push_back(v);
 		}
 
 //cout << active_clusters.size() << " " << cluster_stack.size() << std::endl;
 
 		initWardDistance_(rmsd_type);
 
-		ClusterTreeNode current_cluster, nearest_cluster;
+		Index current_cluster, nearest_cluster;
+
+		Size num_active_clusters = num_poses;
 
 		// while there is more than one final cluster
-		while (active_clusters.size() > 1)
+		while (num_active_clusters > 1)
 		{
-cout << "active clusters: " << active_clusters.size() << endl;
+			// TEST
+		//	if (num_active_clusters % 1000 == 0)
+			{
+//				cout << "active clusters: " << num_active_clusters << " (" << 100.*num_active_clusters / (double)num_poses << ")" <<endl;
+			}
+			// END TEST
+
 			min_cluster_dist = std::numeric_limits<float>::max();
-			nearest_cluster = 0;
+			nearest_cluster = num_active_clusters - 1;
 
 			// if stack is empty add randomly
-			if (cluster_stack.size() == 0)
+			if (cluster_stack.empty())
 			{
 				// we simply take the first
-				cluster_stack.push(*(active_clusters.begin()));
+				cluster_stack.push_back(0);
 			}
-			current_cluster = cluster_stack.top();
+			current_cluster = cluster_stack.back();
 
 			// Compute the distances to all other clusters
 			// TODO: can this be guaranteed?
@@ -848,17 +858,17 @@ cout << "active clusters: " << active_clusters.size() << endl;
 			//      tie-breaking rule: for instance, in this case, the nearest neighbor may be chosen, among the clusters 
 			//       at equal minimum distance from current_cluster, by numbering the clusters arbitrarily and choosing 
 			//       the one with the smallest index
-			for (std::set<ClusterTreeNode>::iterator clust_it = active_clusters.begin();
-					 clust_it != active_clusters.end(); ++clust_it)
+			for (Index i=0; i<(Index)num_active_clusters; ++i)
 			{
 				// check all pairs between all_clusters[*clust_it] and all_clusters[current_cluster]
-				if (*clust_it != current_cluster)
+				if (i != current_cluster)
 				{
-					float rmsd = computeWardDistance_(current_cluster, *clust_it, rmsd_type);
+					float rmsd = computeWardDistance_(active_clusters[current_cluster], active_clusters[i], rmsd_type);
 
-					if (BALL_REAL_GREATER(min_cluster_dist, rmsd, 1e-5))
+					// for stability, make sure that "really" smaller cases are always taken...
+					if (BALL_REAL_LESS(rmsd, min_cluster_dist, 1e-5))
 					{
-						nearest_cluster = *clust_it;
+						nearest_cluster = i;
 						min_cluster_dist = rmsd;
 					}
 				}
@@ -869,17 +879,20 @@ cout << "active clusters: " << active_clusters.size() << endl;
 			// was our predecessor.
 			if (cluster_stack.size() == 1) // we don't have a predecessor => just push
 			{
-				cluster_stack.push(nearest_cluster);
+				cluster_stack.push_back(nearest_cluster);
 				continue;
 			}
 
 			// look at the predecessor
-			cluster_stack.pop(); // already saved in current_cluster
+			cluster_stack.pop_back(); // already saved in current_cluster
 
-			ClusterTreeNode predecessor = cluster_stack.top();
+			Index predecessor = cluster_stack.back();
 			if (predecessor == nearest_cluster)
 			{
-				cluster_stack.pop(); // pop the predecessor
+				cluster_stack.pop_back(); // pop the predecessor
+
+				ClusterTreeNode current_node = active_clusters[current_cluster];
+				ClusterTreeNode nearest_node = active_clusters[nearest_cluster];
 
 				// add a new parent node to the tree
 				ClusterTreeNode new_parent = boost::add_vertex(cluster_tree_);
@@ -889,8 +902,8 @@ cout << "active clusters: " << active_clusters.size() << endl;
 				cluster_tree_root_ = new_parent;
 
 				// add an edge from the parent to both children
-				boost::add_edge(new_parent, current_cluster, cluster_tree_);
-				boost::add_edge(new_parent, nearest_cluster, cluster_tree_);
+				boost::add_edge(new_parent, current_node, cluster_tree_);
+				boost::add_edge(new_parent, nearest_node, cluster_tree_);
 
 				// remember the value at which these were merged
 				// NOTE: min_cluster_dist is the Ward distance, which is quadratic in the
@@ -900,20 +913,20 @@ cout << "active clusters: " << active_clusters.size() << endl;
 				//       squared average distance from the centroid per atom
 				cluster_tree_[new_parent].merged_at = sqrt(min_cluster_dist / number_of_selected_atoms_);
 
-				cluster_tree_[new_parent].size =    cluster_tree_[current_cluster].size
-					                                + cluster_tree_[nearest_cluster].size;
+				cluster_tree_[new_parent].size =    cluster_tree_[current_node].size
+					                                + cluster_tree_[nearest_node].size;
 #ifdef POSECLUSTERING_DEBUG 
 			 cluster_tree_[new_parent].current_cluster_id = -1;
 #endif
-
+//cout << cluster_tree_[new_parent].size << " " << num_poses << std::endl;
 //cout << " merged at: " << cluster_tree_[new_parent].merged_at << endl;
 
 				// TODO: here, we could decide if we want to merge the sets from our
 				//       children and explictly store them => save runtime, pay memory
 				//       (this would look similar to the following...)
 				/*
-				min_cluster_a = &clusters_[current_cluster];
-				min_cluster_b = &clusters_[nearest_cluster];
+				min_cluster_a = &clusters_[current_node];
+				min_cluster_b = &clusters_[nearest_node];
 
 				// merge
 				std::set<Index> temp_set;
@@ -923,20 +936,42 @@ cout << "active clusters: " << active_clusters.size() << endl;
 				*/
 
 				// Note: this needs to be done before clearing and swapping!
-				updateWardDistance_(new_parent, current_cluster, nearest_cluster, rmsd_type);
+				updateWardDistance_(new_parent, current_node, nearest_node, rmsd_type);
 
 				// make the old clusters inactive and add the new one
-				active_clusters.erase(current_cluster);
-				active_clusters.erase(nearest_cluster);
-				active_clusters.insert(new_parent);
+				// 
+				// in order to avoid unnecessary erases from the middle of the vector, we
+				// do the following:
+				//
+				// =====x====y=====k
+				//
+				// x and y are supposed to be erased, and we want to attach a new element behind k.
+				// instead, we now put k in x, and the new thing in y, and remove the last element => O(1)
+				//
+				// NOTE: this might invalidate our consistent tie breaking rule!
+				//
+				active_clusters[std::max(current_cluster, nearest_cluster)] = active_clusters.back();
+				active_clusters[std::min(current_cluster, nearest_cluster)] = new_parent;
 
-				// push that cluster index onto the stack
-				cluster_stack.push(current_cluster);
+				// stupidly, we have to update all references to the formerly last element in the stack
+				for (std::deque<Index>::iterator s_it = cluster_stack.begin(); s_it != cluster_stack.end(); ++s_it)
+				{
+					if (*s_it == num_active_clusters-1)
+					{
+						*s_it = std::max(current_cluster, nearest_cluster);
+					}
+				}
+
+				active_clusters.pop_back();
+
+				num_active_clusters--;
+
+				cluster_stack.push_back(std::min(current_cluster, nearest_cluster));
 			}
 			else
 			{
-				cluster_stack.push(current_cluster);
-				cluster_stack.push(nearest_cluster);
+				cluster_stack.push_back(current_cluster);
+				cluster_stack.push_back(nearest_cluster);
 			}
 		}
 
@@ -1144,26 +1179,33 @@ cout << "active clusters: " << active_clusters.size() << endl;
 	{
 		// collect the respective leaves
 		std::set<Index> result;
-		std::stack<ClusterTreeNode> stack;
-		stack.push(v);
 
-		ClusterTreeNode current_node;
-
-		while (!stack.empty())
+		// is v itself a leaf?
+		if (out_degree(v, cluster_tree_) == 0)
 		{
-			current_node = stack.top();
-			stack.pop();
-
-			BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
+			result.insert(*(cluster_tree_[v].poses.begin()));
+		}
+		else
+		{
+			std::stack<ClusterTreeNode> stack;
+			stack.push(v);
+			ClusterTreeNode current_node;
+			while (!stack.empty())
 			{
-				if (out_degree(child, cluster_tree_) == 0) // we found a leaf
+				current_node = stack.top();
+				stack.pop();
+
+				BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
 				{
-					// currently, each leaf represents one single pose
-					result.insert(*(cluster_tree_[child].poses.begin()));
-				}
-				else // something inbetween
-				{
-					stack.push(child);
+					if (out_degree(child, cluster_tree_) == 0) // we found a leaf
+					{
+						// currently, each leaf represents one single pose
+						result.insert(*(cluster_tree_[child].poses.begin()));
+					}
+					else // something inbetween
+					{
+						stack.push(child);
+					}
 				}
 			}
 		}
