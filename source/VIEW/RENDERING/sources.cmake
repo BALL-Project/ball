@@ -3,6 +3,7 @@ INCLUDE(source/VIEW/RENDERING/RENDERERS/sources.cmake)
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	camera.C
+	rendererFactory.C
 	glDisplayList.C
 	renderSetup.C
 	vertexBuffer.C
