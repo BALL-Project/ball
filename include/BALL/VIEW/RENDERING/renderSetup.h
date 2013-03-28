@@ -5,22 +5,27 @@
 #ifndef BALL_VIEW_RENDERING_RENDERSETUP_H
 #define BALL_VIEW_RENDERING_RENDERSETUP_H
 
-#ifndef BALL_VIEW_RENDERING_GLRENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+	#include <BALL/VIEW/KERNEL/common.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_RENDERTARGET_H
-# include <BALL/VIEW/RENDERING/renderTarget.h>
+#ifndef BALL_VIEW_RENDERING_CAMERA_H
+	#include <BALL/VIEW/RENDERING/camera.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_GLRENDERWINDOW_H
-# include <BALL/VIEW/RENDERING/glRenderWindow.h>
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+	#include <BALL/DATATYPE/regularData3D.h>
 #endif
 
 #ifndef BALL_SYSTEM_MUTEX_H
 # include <BALL/SYSTEM/mutex.h>
 #endif
 
+#ifndef BALL_MATHS_VECTOR2_H
+	#include <BALL/MATHS/vector2.h>
+#endif
+
+#include <QtCore/QEvent>
 #include <QtCore/QThread>
 #include <QtCore/QWaitCondition>
 
@@ -31,10 +36,15 @@
 class QImage;
 
 namespace BALL {
+
 	namespace VIEW {
 
 		class ColorMap;
+		class GeometricObject;
+		class Renderer;
+		class Representation;
 		class Scene;
+		class RenderTarget;
 
 		/** This class encapsulates a (renderer, target) pair for Scene.
 		 *
@@ -45,43 +55,13 @@ namespace BALL {
 			:	public QThread, public boost::enable_shared_from_this<RenderSetup>
 		{
 			public:
-				RenderSetup(Renderer* r, RenderTarget* t, Scene* scene, const Stage* stage);
-
-				RenderSetup(const RenderSetup& rs);
+				RenderSetup(Renderer* r, RenderTarget* t, Scene* scene);
 
 				virtual ~RenderSetup();
 
-				const RenderSetup& operator = (const RenderSetup& rs);
-
 				// TODO: this should be boost smart pointers!
-				Renderer* 			renderer;
-				RenderTarget*		target;
-
-				/** The type of the encapsulated renderer
-				 */
-				enum RendererType
-				{
-					/// A fallback
-					UNKNOWN_RENDERER = 0,
-
-					/// Standard OpenGL renderer
-					OPENGL_RENDERER,
-
-					/// Renders into a POVRay file
-					POV_RENDERER,
-
-					/// (unused)
-					VRML_RENDERER,
-
-					/// Renders into an STL file
-					STL_RENDERER,
-
-					/// Used for offscreen rendering
-					TILING_RENDERER,
-
-					/// RTfact renderer (depends on the RTfact library)
-					RTFACT_RENDERER
-				};
+				boost::shared_ptr<Renderer> renderer;
+				RenderTarget* target;
 
 				enum STEREO_SETUP {
 					NONE,
@@ -118,7 +98,7 @@ namespace BALL {
 
 				/** Returns the type of the encapsulated renderer.
 				 */
-				RendererType getRendererType() { return renderer_type_; }
+				const QString& getRendererType() const;
 
 				/** Prevent updating of rendering buffers.
 				 *
@@ -198,20 +178,6 @@ namespace BALL {
 				/** Setup an environment map if supported by the Renderer.
 				 */
 				void setupEnvironmentMap(const QImage& image);
-
-				/** Send a grid texture to the renderer.
-				 *  
-				 *  If the current renderer can not handle this kind of object,
-				 *  this is a noop.
-				 */
-				Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
-
-				/** Remove a grid texture from the renderer.
-				 *  
-				 *  If the current renderer can not handle this kind of object,
-				 *  this is a noop.
-				 */
-				void removeGridTextures(const RegularData3D& grid);
 
 				/** Compute the 3D position on the view plane corresponding
 				 *  to point (x,y) on the view port
@@ -302,6 +268,8 @@ namespace BALL {
 				/// Returns true iff bufferIsReady() holds for this renderer and all dependent ones
 				bool isReadyToSwap();
 
+				void swapBuffers();
+
 				///
 				void setBufferReady(bool is_ready) { buffer_is_ready_ = is_ready; }
 
@@ -311,11 +279,16 @@ namespace BALL {
 				///
 				void makeDependentOn(boost::shared_ptr<RenderSetup>& partner) { keep_in_sync_.push_back(partner); }
 
+				virtual void updateTarget() {}
+
 			protected:
+				RenderSetup(const RenderSetup&);
+				RenderSetup* operator=(const RenderSetup&);
+
 				// does the hard work and can be called from a continuous loop as well as from event-based rendering
 				void renderToBuffer_();
-
-				void initType_();
+				virtual void doRender_() { renderToBuffer_(); }
+				virtual void startRunning_() { }
 
 				bool rendering_paused_;
 				bool receive_updates_;
@@ -332,20 +305,11 @@ namespace BALL {
 				bool use_continuous_loop_;
 
 				Scene* scene_;
-				Stage const* stage_;
 
 				// locks the renderer during updates and rendering
 				mutable Mutex render_mutex_;
 				
 				bool show_ruler_;
-
-				// This pointer is used to avoid uneccessary RTTI calls and casting. If the target is not a
-				// GLRenderWindow or one of its derived classes, this pointer will simply be NULL
-				GLRenderWindow* gl_target_;
-				
-				// This pointer is used to avoid uneccessary RTTI calls and casting. If the renderer is not a
-				// GLRenderer or one of its derived classes, this pointer will simply be NULL
-				GLRenderer* gl_renderer_;
 
 				// The number of render operations to perform before destruction
 				int ttl_;
@@ -358,9 +322,6 @@ namespace BALL {
 				std::deque<boost::shared_ptr<RenderSetup> > keep_in_sync_;
 
 				bool buffer_is_ready_;
-
-				// the type of the encapsulated renderer
-				RendererType renderer_type_;
 		};
 
 		/** This class is used for communication of render events over thread boundaries.

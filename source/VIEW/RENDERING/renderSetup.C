@@ -1,31 +1,16 @@
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 
-#include <BALL/VIEW/RENDERING/RENDERERS/bufferedRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
-#include <BALL/VIEW/RENDERING/glRenderWindow.h>
+#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-
-#include <BALL/SYSTEM/timer.h> 
-#ifdef BALL_HAS_RTFACT
-#include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
-
-#define USE_TBB
-#ifdef USE_TBB
-# include <tbb/task_scheduler_init.h>
-#endif
-#endif
-
-#include <QtWidgets/QApplication>
+#include <QtCore/QCoreApplication>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		RenderSetup::RenderSetup(Renderer* r, RenderTarget* t, Scene* scene, const Stage* stage)
+		RenderSetup::RenderSetup(Renderer* r, RenderTarget* t, Scene* scene)
 			: QThread(),
 				renderer(r),
 				target(t),
@@ -38,7 +23,6 @@ namespace BALL
 				stereo_setup_(NONE),
 				use_continuous_loop_(false),
 				scene_(scene),
-				stage_(stage),
 				render_mutex_(true),
 				show_ruler_(false),
 				ttl_(-1),
@@ -46,91 +30,21 @@ namespace BALL
 				export_after_ttl_filename_(),
 				buffer_is_ready_(true)
 		{
-			initType_();
-
-			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
-			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
-		}
-
-		RenderSetup::RenderSetup(const RenderSetup& rs)
-			: QThread(),
-				renderer(rs.renderer),
-				target(rs.target),
-				rendering_paused_(rs.rendering_paused_),
-				receive_updates_(rs.receive_updates_),
-				use_offset_(rs.use_offset_),
-				about_to_quit_(false),
-				camera_(rs.camera_),
-				camera_offset_(rs.camera_offset_),
-				stereo_setup_(rs.stereo_setup_),
-				use_continuous_loop_(rs.use_continuous_loop_),
-				scene_(rs.scene_),
-				stage_(rs.stage_),
-				render_mutex_(true),
-				show_ruler_(rs.show_ruler_),
-				ttl_(rs.ttl_),
-				export_after_ttl_(rs.export_after_ttl_),
-				export_after_ttl_filename_(rs.export_after_ttl_filename_),
-				buffer_is_ready_(rs.buffer_is_ready_),
-				renderer_type_(rs.renderer_type_)
-		{
-			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
-			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 		}
 
 		RenderSetup::~RenderSetup()
 		{
 		}
 
-		const RenderSetup& RenderSetup::operator = (const RenderSetup& rs)
-		{
-			if (&rs == this) return *this;
-
-			render_mutex_.lock();
-
-			renderer = rs.renderer;
-			target = rs.target;
-			rendering_paused_ = rs.rendering_paused_;
-			receive_updates_ = rs.receive_updates_;
-			use_offset_ = rs.use_offset_;
-			about_to_quit_ = rs.about_to_quit_;
-			camera_ = rs.camera_;
-			camera_offset_ = rs.camera_offset_;
-			stereo_setup_ = rs.stereo_setup_;
-			use_continuous_loop_ = rs.use_continuous_loop_;
-			scene_ = rs.scene_;
-			stage_ = rs.stage_;
-			ttl_ = rs.ttl_;
-			export_after_ttl_ = rs.export_after_ttl_;
-			export_after_ttl_filename_ = rs.export_after_ttl_filename_;
-
-			show_ruler_ = rs.show_ruler_;
-
-			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
-			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
-
-			buffer_is_ready_ = rs.buffer_is_ready_;
-			renderer_type_   = rs.renderer_type_;
-
-			render_mutex_.unlock();
-
-			return *this;
-		}
-
 		void RenderSetup::init()
 		{
 			render_mutex_.lock();
-
-			initType_();
 
 			// Yes, this seems inconsistent... but we need to start with a ready (albeit empty)
 			// buffer to boot the system
 			buffer_is_ready_ = true;
 
 			makeCurrent();
-
-			gl_target_   = dynamic_cast<GLRenderWindow*>(target);
-			gl_renderer_ = dynamic_cast<GLRenderer*>(renderer);
 
 			// initialize the rendering target
 			target->init();
@@ -142,20 +56,11 @@ namespace BALL
 				throw Exception::GeneralException(__FILE__, __LINE__);
 			}			
 
-			if (gl_renderer_)
-				gl_renderer_->enableVertexBuffers(scene_->useVertexBuffers());
-
 			render_mutex_.unlock();
 		}
 
 		void RenderSetup::resize(Size width, Size height)
 		{
-			// prevent resizing of full screen Windows because they are
-			// most probably stereo half images
-			// TODO: Move this to the doNotResize call (reimplement in GLRenderWindow)
-			if (gl_target_ && gl_target_->isFullScreen())
-				return;
-
 			if(target->doNotResize()) {
 				return;
 			}
@@ -172,16 +77,14 @@ namespace BALL
 			}
 
 			renderer->setSize(width, height);
-            if (RTTI::isKindOf<BufferedRenderer>(renderer))
+
+			if(!renderer->setFrameBufferFormat(target->getFormat()))
 			{
-				if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
-				{
-					Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << std::endl;
+				Log.error() << "Raytracing render does not support window framebuffer format. Seems to be configuration error" << std::endl;
 
-					render_mutex_.unlock();
+				render_mutex_.unlock();
 
-					throw Exception::GeneralException(__FILE__, __LINE__);
-				}
+				throw Exception::GeneralException(__FILE__, __LINE__);
 			}
 
 			render_mutex_.unlock();
@@ -192,8 +95,7 @@ namespace BALL
 
 			render_mutex_.lock();
 
-			if (gl_target_)
-				gl_target_->safeBufferSwap();
+			target->swapBuffers();
 
 			render_mutex_.unlock();
 		}
@@ -213,12 +115,7 @@ namespace BALL
 				eye_separation *= (stereo_setup_ == LEFT_EYE) ? -1. : 1.;
 				eye_separation *= stage.swapSideBySideStereo() ? -1. : 1.;
 
-#ifndef BALL_HAS_RTFACT
 				renderer->setupStereo(eye_separation, stage.getFocalDistance());
-#else
-				//target->setupStereo(eye_separation, stage.getFocalDistance());
-				renderer->setupStereo(eye_separation, stage.getFocalDistance());
-#endif
 
 				//delta *= stage.swapSideBySideStereo() ? -1. : 1.;
 
@@ -268,69 +165,26 @@ namespace BALL
 
 		void RenderSetup::makeCurrent()
 		{
-			if (gl_target_ && 
-				   (QGLContext::currentContext() != gl_target_->context()))
-				gl_target_->makeCurrent();
-			else
-				target->prepareRendering();
+			target->prepareRendering();
 		}
 
 		void RenderSetup::run()
 		{
-			render_mutex_.lock();
-#ifdef USE_TBB
-			boost::shared_ptr<tbb::task_scheduler_init> scheduler;
+			lock();
 
-			if (!gl_renderer_)
-			{
-				const char* num_threads_s = getenv("BALL_NUM_RENDER_THREADS");
+			startRunning_();
 
-				Index num_threads = tbb::task_scheduler_init::automatic;
-				if (num_threads_s != 0)
-					num_threads = atoi(num_threads_s);
-
-				printf("Using %d render threads\n", num_threads);
-				scheduler = boost::shared_ptr<tbb::task_scheduler_init>(new tbb::task_scheduler_init(num_threads));
-			}
-#endif
-			if (gl_target_)
-				gl_target_->ignoreEvents(true);
-			Timer t;
-
-			Size current_frame = 0;
-			double fps = 0.;
 			// to be stopped from the outside, someone needs to call useContinuousLoop(false)
-			render_mutex_.unlock();
+			unlock();
 
 			while (!about_to_quit_)
 			{
-				t.start();
-				// NOTE: GLRenderers currently *have* to render in the GUI thread!
-				if (!gl_renderer_)
-					renderToBuffer_();
-				t.stop();
+				doRender_();
 
-				fps += t.getClockTime();
-
-				//For GLRenderers this message is not useful and plain annoying
-/*
-				if (!gl_renderer_)
-				{
-					if (current_frame % 10 == 0)
-					{
-						fps = 10./fps;
-						printf("########## Average rendering FPS = %.2lf  #########\n", fps);
-
-						fps = 0.;
-					}
-				}
-*/
 				loop_mutex.lock();
-				QApplication::instance()->postEvent(scene_, new RenderToBufferFinishedEvent(shared_from_this()));
+				QCoreApplication::instance()->postEvent(scene_, new RenderToBufferFinishedEvent(shared_from_this()));
 				wait_for_render.wait(&loop_mutex);
 				loop_mutex.unlock();
-				t.reset();
-				current_frame++;
 			}
 		}
 
@@ -344,7 +198,12 @@ namespace BALL
 				result &= (*render_it)->bufferIsReady();
 			}
 		
-			return result;	
+			return result;
+		}
+
+		void RenderSetup::swapBuffers()
+		{
+			target->swapBuffers();
 		}
 
 		void RenderSetup::renderToBuffer()
@@ -375,24 +234,7 @@ namespace BALL
 
 			updateCamera();
 
-            if (RTTI::isKindOf<BufferedRenderer>(renderer))
-			{
-				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
-			} 
-            else if (RTTI::isKindOf<GLRenderer>(renderer))
-			{
-				GLRenderer* current_gl_renderer = static_cast<GLRenderer*>(renderer);
-				// TODO: what do we do here? should we push the gl calls somewhere else, i.e. in the GUI thread?
-				// cannot call update here, because it calls updateGL
-				current_gl_renderer->renderToBuffer(target, GLRenderer::DISPLAY_LISTS_RENDERING);
-
-				glFlush();
-			}
-            else if (RTTI::isKindOf<TilingRenderer>(renderer))
-			{
-				static_cast<TilingRenderer*>(renderer)->renderToBuffer(target);
-				glFlush();
-			}
+			renderer->renderToBuffer(target);
 
 			if (show_ruler_)
 				renderer->renderRuler();
@@ -405,23 +247,24 @@ namespace BALL
 
 		bool RenderSetup::exportPNG(const String& filename)
 		{
+
 			// is the target a glRenderWindow?
-			if (gl_target_)
-			{
-				// Yes => grab its frame buffer
-				render_mutex_.lock();
-
-				makeCurrent();
-				QImage image(gl_target_->grabFrameBuffer(true));
-
-				render_mutex_.unlock();
-
-				bool ok = image.save(filename.c_str(), "PNG");
-
-				return ok;
-			}
-			else
-			{
+//			if (gl_target_)
+//			{
+//				// Yes => grab its frame buffer
+//				render_mutex_.lock();
+//
+//				makeCurrent();
+//				QImage image(gl_target_->grabFrameBuffer(true));
+//
+//				render_mutex_.unlock();
+//
+//				bool ok = image.save(filename.c_str(), "PNG");
+//
+//				return ok;
+//			}
+//			else
+//			{
 				// let's see...
 
 				// Nope. Let's try to export the buffer directly
@@ -473,7 +316,7 @@ namespace BALL
 				target->releaseBuffer(buffer);
 
 				return ok;
-			}
+//			}
 		}
 
 		void RenderSetup::bufferRepresentation(const Representation& rep)
@@ -509,22 +352,23 @@ namespace BALL
 			render_mutex_.lock();
 
 			makeCurrent();
-				
+
 			renderer->setLights(reset_all);
 
 			render_mutex_.unlock();
 		}
+
 		void RenderSetup::updateMaterialForRepresentation(const Representation* rep)
 		{
 			render_mutex_.lock();
 
-			//makeCurrent();
+			makeCurrent();
 
 			renderer->updateMaterialForRepresentation(rep);
 
 			render_mutex_.unlock();
 		}
-		
+
 		void RenderSetup::updateBackgroundColor()
 		{
 			render_mutex_.lock();
@@ -547,34 +391,9 @@ namespace BALL
 			render_mutex_.unlock();
 		}
 
-		Position RenderSetup::prepareGridTextures(const RegularData3D& grid, const ColorMap& map)
+		const QString& RenderSetup::getRendererType() const
 		{
-			Position texname = 0;
-
-            if (RTTI::isKindOf<GLRenderer>(renderer))
-			{
-				render_mutex_.lock();
-
-				makeCurrent();
-
-				texname = ((GLRenderer*)renderer)->createTextureFromGrid(grid, map);
-
-				render_mutex_.unlock();
-			}
-
-			return texname;
-		}
-
-		void RenderSetup::removeGridTextures(const RegularData3D& grid)
-		{
-            if (RTTI::isKindOf<GLRenderer>(renderer))
-			{
-				MutexLocker ml(&render_mutex_);
-
-				makeCurrent();
-
-				((GLRenderer*)renderer)->removeTextureFor_(grid);
-			}
+			return renderer->getName();
 		}
 
 		Vector3 RenderSetup::mapViewportTo3D(Position x, Position y)
@@ -611,29 +430,12 @@ namespace BALL
 
 		void RenderSetup::projectionModeChanged()
 		{
+			/*
             if (RTTI::isKindOf<GLRenderer>(renderer))
 			{
 				static_cast<GLRenderer*>(renderer)->initPerspective();
 			}
-		}
-
-		void RenderSetup::initType_()
-		{
-			// set the type variable
-            if (RTTI::isKindOf<GLRenderer>(renderer))
-				renderer_type_ = OPENGL_RENDERER;
-            else if (RTTI::isKindOf<POVRenderer>(renderer))
-				renderer_type_ = POV_RENDERER;
-            else if (RTTI::isKindOf<STLRenderer>(renderer))
-				renderer_type_ = STL_RENDERER;
-            else if (RTTI::isKindOf<TilingRenderer>(renderer))
-				renderer_type_ = TILING_RENDERER;
-#ifdef BALL_HAS_RTFACT
-            else if (RTTI::isKindOf<RTfactRenderer>(renderer))
-				renderer_type_ = RTFACT_RENDERER;
-#endif
-			else
-				renderer_type_ = UNKNOWN_RENDERER;
+			*/
 		}
 	}
 }
