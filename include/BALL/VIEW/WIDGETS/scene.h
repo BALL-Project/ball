@@ -9,10 +9,6 @@
 # include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_RENDERERSGLRENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
@@ -23,10 +19,6 @@
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERWINDOW_H
 # include <BALL/VIEW/RENDERING/glRenderWindow.h>
-#endif
-
-#ifndef BALL_VIEW_RENDERING_RENDERSETUP_H
-# include <BALL/VIEW/RENDERING/renderSetup.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_EDITSETTINGS_H
@@ -51,14 +43,6 @@
 
 #include <boost/shared_ptr.hpp>
 
-#ifdef BALL_HAS_RTFACT
-
-#ifndef BALL_VIEW_RENDERING_RAYTRACINGRENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/raytracingRenderer.h>
-#endif
-
-#endif // BALL_HAS_RTFACT
-
 class QMouseEvent;
 class QRubberBand;
 class QMenu;
@@ -75,7 +59,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-		class ColorMap;
 		class InteractionMode;
 		class Preferences;
 		class LightSettings;
@@ -85,6 +68,7 @@ namespace BALL
 		class ClippingPlane;
 		class CompositeMessage;
 		class ControlSelectionMessage;
+		class RendererFactory;
 		class RepresentationMessage;
 		class DatasetMessage;
 		class SceneMessage;
@@ -92,7 +76,10 @@ namespace BALL
 		class TransformationEvent6D;
 		class MotionTrackingEvent;
 		class ButtonEvent;
+		class RenderSetup;
 		class RenderToBufferFinishedEvent;
+
+		class SceneExporter;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -141,11 +128,6 @@ namespace BALL
 		{
 			friend class AnimationThread;
 			friend class RenderSetup;
-
-#ifdef BALL_HAS_RTFACT
-      typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;
-      typedef boost::shared_ptr<RenderWindow> RaytracingWindowPtr;
-#endif
 
 			Q_OBJECT
 
@@ -220,7 +202,7 @@ namespace BALL
 
 				/** This method exports the content of the Scene to an external Renderer.
 				*/
-				virtual bool exportScene(Renderer &er) const;
+				virtual bool exportScene(SceneExporter &er) const;
 
 				String getBondOrderString_(Index order);
 
@@ -381,22 +363,6 @@ namespace BALL
 				///
 				static bool showLightSourcesEnabled()
 				{ return show_light_sources_;}
-
-				///
-				GLRenderer& getGLRenderer()
-				{ return *gl_renderer_;}
-
-#ifdef BALL_HAS_RTFACT
-				///
-				RaytracingRenderer& getRaytracingRenderer()
-				{ return *rt_renderer_;}
-#endif
-
-				/** Set a new GLRenderer.
-					This method is intended for users, that what to
-					overload the behaviour of the GLRenderer.
-					*/
-				void setGLRenderer(GLRenderer& renderer);
 
 				///
 				static bool stereoBufferSupportTest();
@@ -564,15 +530,12 @@ namespace BALL
 				virtual void switchShowWidget();
 
 				///
-				void switchRenderer(RenderSetup::RendererType new_type);
+				void switchRenderer(const QString& new_type);
+
+				void addWindow();
 
 				///
-				void addGlWindow();
-
-#ifdef BALL_HAS_RTFACT
-				///
-				void addRTfactWindow();
-#endif
+				void addWindow(const QString& renderer_type);
 
 				///
 				void exitStereo();
@@ -628,9 +591,6 @@ namespace BALL
 				///
 				void applyStereoDefaults();
 
-#ifdef BALL_HAS_RTFACT
-				RaytracingWindowPtr getWindow(WindowType aWindowType);
-#endif
 
 				void createNewMolecule();
 				void saturateWithHydrogens();
@@ -662,7 +622,7 @@ namespace BALL
 				/** Rebuffer all representations for the current renderer_.
 				 *  Note: this function does not yet clear the old state of the renderer.
 				 */
-				virtual void resetRepresentationsForRenderer_(RenderSetup& rs);
+				virtual void resetRepresentationsForRenderer_(boost::shared_ptr<RenderSetup> rs);
 
 				///
 				virtual void dropEvent(QDropEvent* e);
@@ -845,16 +805,14 @@ namespace BALL
 				void registerRenderers_();
 
 				/// Estimate current fps and convert into a string
-				String createFPSInfo_(Renderer* renderer);
+				String createFPSInfo_(boost::shared_ptr<Renderer> renderer);
 
 				// Menu entry IDs
 				QAction *no_stereo_action_, *enter_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
 				QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
 				QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 
-#ifdef BALL_HAS_RTFACT
-                QAction *toggle_continuous_loop_action_;
-#endif
+				QAction *toggle_continuous_loop_action_;
 				QAction *switch_grid_;
 				QMenu* create_coordinate_system_;
 
@@ -872,12 +830,8 @@ namespace BALL
 				Camera stored_camera_;
 
 				std::vector<boost::shared_ptr<RenderSetup> > renderers_;
-				GLRenderer* gl_renderer_;
 
-#ifdef BALL_HAS_RTFACT
-				RaytracingRenderer* rt_renderer_;
-				RaytracingWindowPtr rt_window_;
-#endif
+				boost::shared_ptr<RenderWindow> rt_window_;
 
 				static float mouse_sensitivity_;
 				static float mouse_wheel_sensitivity_;
@@ -899,9 +853,7 @@ namespace BALL
 				std::list<Camera> animation_points_;
 				AnimationThread* animation_thread_;
 				bool stop_animation_;
-#ifdef BALL_HAS_RTFACT
 				bool continuous_loop_;
-#endif
 				bool want_to_use_vertex_buffer_;
 				bool use_preview_;
 
@@ -921,7 +873,7 @@ namespace BALL
 
 				GLRenderWindow* main_display_;
 				/// The index of the renderer responsible for the main display
-				Position main_renderer_;
+				int main_renderer_;
 
 				Index stereo_left_eye_;
 				Index stereo_right_eye_;
@@ -931,6 +883,9 @@ namespace BALL
 				QPicture overlay_;
 				bool has_overlay_;
 				InteractionModeManager mode_manager_;
+
+				RendererFactory* renderer_factory_;
+				QString preferred_renderer_;
 		};
 
 
