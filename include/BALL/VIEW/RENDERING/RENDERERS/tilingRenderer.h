@@ -82,10 +82,6 @@ namespace BALL
 				/**	@name	Accessors
 				*/
 				//@{
-				
-				/** Render a Representation.
-				*/
-				virtual bool renderOneRepresentation(const Representation& representation);
 
 				/** Buffer a Representation for later rendering.
 				*/
@@ -114,9 +110,6 @@ namespace BALL
 				
 				///
 				virtual void renderToBuffer(RenderTarget* target);
-
-				/// Wrapper for the renderering of special GeometricObjects
-				virtual void render_(const GeometricObject* object);
 
 			protected:
 				void computeTilingSetup_();
