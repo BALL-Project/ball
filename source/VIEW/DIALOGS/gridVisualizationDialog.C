@@ -10,7 +10,6 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 #include <BALL/DATATYPE/regularData3D.h>
@@ -158,19 +157,19 @@ namespace BALL
 			list[1] = mid_color;
 			list[2] = max_color;
 	
-			ColorMap cm(list, 3);
-			cm.setMinMaxColors(min_min_color, max_max_color);
-			cm.setAlphaBlending(true);
-			cm.setNumberOfColors(gridColorWidget->getNumLevels());
-			cm.setRange(min_value, max_value);
+			boost::shared_ptr<ColorMap> cm = boost::shared_ptr<ColorMap>(new ColorMap(list, 3));
+			cm->setMinMaxColors(min_min_color, max_max_color);
+			cm->setAlphaBlending(true);
+			cm->setNumberOfColors(gridColorWidget->getNumLevels());
+			cm->setRange(min_value, max_value);
 
 			std::vector<Vector4> interpolation_points(3);
 			interpolation_points[0] = Vector4(0.);
 			interpolation_points[1] = Vector4( (mid_value - min_value) / (max_value - min_value));
 			interpolation_points[2] = Vector4(1.);
 			
-			cm.setInterpolationBoundaries(interpolation_points);
-			cm.createMap();
+			cm->setInterpolationBoundaries(interpolation_points);
+			cm->createMap();
 
 			vector<float> values;
 
@@ -201,26 +200,9 @@ namespace BALL
 
 			const RegularData3D& grid = *grid_;
 
-			Position texname = Scene::getInstance(0)->prepareGridTextures(grid, cm);
-
-			if (texname == 0)
-			{
-				reject();
-				getMainControl()->setStatusbarText(tr("Setting up of 3D textures failed!"));
-				return;
-			}
-
-			if (texname == 0)
-			{
-				reject();
-				getMainControl()->setStatusbarText(tr("Your computer does not support 3D textures, aborting..."), true);
-				return;
-			}
-				
-
 			GridVisualisation& vol = *new GridVisualisation;
 			vol.setGrid(grid_);
-			vol.setTexture(texname);
+			vol.setColorMap(cm);
 
 			Vector3 origin = grid.getOrigin();
 			RegularData3D::IndexType s = grid.getSize();
@@ -242,9 +224,9 @@ namespace BALL
 				Vector3 point = origin + (vol.x + vol.y + vol.z) / 2.0;
 				vol.setPoint(point);
 				rep->setModelType(MODEL_GRID_SLICE);
-  			rep->setProperty("RENDER_DIRECT");
+				rep->setProperty("RENDER_DIRECT");
 				Vector3 normal = Scene::getInstance(0)->getStage()->getCamera().getViewVector();
-		    normal.normalize();
+				normal.normalize();
 				vol.setNormal(normal);
 			}
 			else if (mode_box->currentIndex() == 1)
@@ -258,7 +240,7 @@ namespace BALL
 			{
 				vol.slices = slices_spin->value();
 				rep->setProperty("DONT_CLIP");
-  			rep->setProperty("RENDER_DIRECT");
+				rep->setProperty("RENDER_DIRECT");
 				vol.type = GridVisualisation::SLICES;
 			}
 

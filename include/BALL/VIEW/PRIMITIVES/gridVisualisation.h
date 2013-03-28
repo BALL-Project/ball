@@ -15,10 +15,14 @@
 # include <BALL/DATATYPE/regularData3D.h>
 #endif
 
+#include <boost/shared_ptr.hpp>
+
 namespace BALL
 {
 	namespace VIEW
 	{
+		class ColorMap;
+
 		/** GridVisualisation 
 				\ingroup ViewPrimitives
 		*/
@@ -41,19 +45,10 @@ namespace BALL
 
 			BALL_CREATE(GridVisualisation)
 
-			///
-			GridVisualisation();
-
-			///
-			GridVisualisation(const GridVisualisation& plane);
-
 			/** Destructor
 			*/
-			virtual ~GridVisualisation(){};
+			virtual ~GridVisualisation();
 
-			///
-			const GridVisualisation& operator = (const GridVisualisation& plane);
-			
 			///
 			const Vector3& getNormal() const { return normal_;}
 
@@ -73,10 +68,10 @@ namespace BALL
 			const RegularData3D* getGrid() const { return grid_;}
 
 			///
-			Position getTexture() const { return texture_;}
+			boost::shared_ptr<ColorMap> getColorMap() const { return cm_;}
 
 			///
-			void setTexture(Position texture) { texture_ = texture;}
+			void setColorMap(boost::shared_ptr<ColorMap> cm) { cm_ = cm;}
 
 			///
 			void setDotSize(Size dot_size) { dot_size_ = dot_size;}
@@ -95,7 +90,7 @@ namespace BALL
 
 			Vector3 normal_;
 			Vector3 point_;
-			Position texture_;
+			boost::shared_ptr<ColorMap> cm_;
 			const RegularData3D* grid_;
 			Size dot_size_;
 		};

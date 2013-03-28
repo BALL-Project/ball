@@ -10,31 +10,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		GridVisualisation::GridVisualisation()
-				: GeometricObject(),
-				  normal_(Vector3(1.)),
-					point_(),
-					texture_(0),
-					grid_(0)
+		GridVisualisation::~GridVisualisation()
 		{
 		}
-
-					
-		GridVisualisation::GridVisualisation(const GridVisualisation& rp)
-				: GeometricObject(rp),
-					normal_(rp.normal_),
-					point_(rp.point_)
-		{
-		}
-
-
-		const GridVisualisation& GridVisualisation::operator = (const GridVisualisation& plane)
-		{
-			normal_ = plane.normal_;
-			point_  = plane.point_;
-			return *this;
-		}
-
 
 	} // namespace VIEW
 } // namespace BALL
