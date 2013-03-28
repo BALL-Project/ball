@@ -403,13 +403,11 @@ namespace BALL
 					if (menu)
 						menu = menu->addMenu(tr("&Animation"));
 					break;
-#ifdef BALL_HAS_RTFACT	
 				case DISPLAY_CONTINUOUSLOOP:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
 						menu = menu->addMenu("&Continuous Loop");
 					break;
-#endif
 				case MOLECULARMECHANICS:
 					menu = addMenu(tr("&Molecular Mechanics"), UIOperationMode::MODE_ADVANCED);
 					break;
