@@ -2583,7 +2583,9 @@ namespace BALL
 			boost::shared_ptr<RenderSetup> main_renderer_ptr = renderers_[main_renderer_];
 
 			stopContinuousLoop();
-            toggle_continuous_loop_action_->setEnabled(new_type == RenderSetup::RTFACT_RENDERER);
+#ifdef BALL_HAS_RTFACT
+			toggle_continuous_loop_action_->setEnabled(new_type == RenderSetup::RTFACT_RENDERER);
+#endif
 
 			main_renderer_ptr->stop();
 
