@@ -207,7 +207,7 @@ IF(USE_CUDA)
 ENDIF()
 
 ## TBB
-SET(USE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be enabled?")
+SET(USE_TBB ON CACHE BOOL "Should Intel Threading Building Blocks support be enabled?")
 SET(REQUIRE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be required?")
 
 ## RTFact would require tbb... so check if it is required
