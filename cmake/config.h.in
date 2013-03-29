@@ -301,7 +301,7 @@
 
 #cmakedefine BALL_HAS_QTWEBKIT
 
-// Glew
+// gsl
 #cmakedefine BALL_HAS_GSL
 
 // Glew
@@ -309,6 +309,9 @@
 
 // MPI
 #cmakedefine BALL_HAS_MPI
+
+// TBB
+#cmakedefine BALL_HAS_TBB
 
 // RTfact
 #cmakedefine BALL_HAS_RTFACT

@@ -35,6 +35,9 @@ namespace BALL
 	const String PoseClustering::Option::RMSD_TYPE = "pose_clustering_rmsd_type";
 	const Index PoseClustering::Default::RMSD_TYPE = PoseClustering::SNAPSHOT_RMSD;
 
+	const String PoseClustering::Option::RUN_PARALLEL  = "pose_clustering_run_parallel";
+	const bool   PoseClustering::Default::RUN_PARALLEL = true;
+
 	//const String PoseClustering::Option::FULL_CLUSTER_DENDOGRAM = "pose_clustering_full_cluster_dendogram";
 	//const bool   PoseClustering::Default::FULL_CLUSTER_DENDOGRAM = false;
 
@@ -799,13 +802,15 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 		Index rmsd_type = options.getInteger(PoseClustering::Option::RMSD_TYPE);
 
+		bool run_parallel = options.getBool(PoseClustering::Option::RUN_PARALLEL);
+
 		float min_cluster_dist = std::numeric_limits<float>::max();
 
 		// the active clusters (as nodes in the cluster tree)
 		std::vector<ClusterTreeNode> active_clusters;
 		active_clusters.reserve(num_poses);
 
-		// stack of clusters (as indices into the active_clutser-vector) storing nearest neighbor chains
+		// stack of clusters (as indices into the active_cluster-vector) storing nearest neighbor chains
 		std::deque<Index> cluster_stack;
 
 		// in the beginning each pose is a cluster itself
@@ -835,9 +840,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		while (num_active_clusters > 1)
 		{
 			// TEST
-		//	if (num_active_clusters % 1000 == 0)
+			if (num_active_clusters % 1000 == 0)
 			{
-//				cout << "active clusters: " << num_active_clusters << " (" << 100.*num_active_clusters / (double)num_poses << ")" <<endl;
+				cout << "active clusters: " << num_active_clusters << " (" << 100.*num_active_clusters / (double)num_poses << ")" <<endl;
 			}
 			// END TEST
 
@@ -858,6 +863,20 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 			//      tie-breaking rule: for instance, in this case, the nearest neighbor may be chosen, among the clusters 
 			//       at equal minimum distance from current_cluster, by numbering the clusters arbitrarily and choosing 
 			//       the one with the smallest index
+#ifdef BALL_HAS_TBB
+			if (run_parallel)
+			{
+				std::cout << "Parallel computation...";
+				ComputeNearestClusterTask_ root_task(this, active_clusters, current_cluster, rmsd_type);
+				tbb::parallel_reduce(tbb::blocked_range<size_t>(0, num_active_clusters), root_task);
+				std::cout << "...done." << std::endl;
+
+				nearest_cluster = root_task.getMinIndex();
+				min_cluster_dist = root_task.getMinValue();
+			}
+			else
+			{
+#endif
 			for (Index i=0; i<(Index)num_active_clusters; ++i)
 			{
 				// check all pairs between all_clusters[*clust_it] and all_clusters[current_cluster]
@@ -873,6 +892,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 					}
 				}
 			}
+#ifdef BALL_HAS_TBB
+			}
+#endif
 
 			// have we put this cluster to the stack before ?
 			// due to the reducibility of Ward's distance, this would imply that the cluster
@@ -956,7 +978,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				// stupidly, we have to update all references to the formerly last element in the stack
 				for (std::deque<Index>::iterator s_it = cluster_stack.begin(); s_it != cluster_stack.end(); ++s_it)
 				{
-					if (*s_it == num_active_clusters-1)
+					if (*s_it == (Index)(num_active_clusters-1))
 					{
 						*s_it = std::max(current_cluster, nearest_cluster);
 					}
@@ -1453,6 +1475,64 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		boost::write_graphviz(out, cluster_tree_, ClusterTreeWriter_(&cluster_tree_));
 	}
 
+#ifdef BALL_HAS_TBB
+	PoseClustering::ComputeNearestClusterTask_::ComputeNearestClusterTask_(PoseClustering* parent,
+	                                           const std::vector<ClusterTreeNode>& active_clusters, 
+					                                   Position current_cluster, Index rmsd_type)
+		: parent_(parent),
+		  active_clusters_(active_clusters),
+			current_cluster_(current_cluster),
+			rmsd_type_(rmsd_type),
+			my_min_value_(std::numeric_limits<float>::max())
+	{
+	}
+
+	PoseClustering::ComputeNearestClusterTask_::ComputeNearestClusterTask_(PoseClustering::ComputeNearestClusterTask_& cnct, tbb::split)
+	  : parent_(cnct.parent_),
+		  active_clusters_(cnct.active_clusters_),
+		  current_cluster_(cnct.current_cluster_),
+			rmsd_type_(cnct.rmsd_type_),
+			my_min_value_(std::numeric_limits<float>::max())
+	{
+	}
+
+	void PoseClustering::ComputeNearestClusterTask_::join(ComputeNearestClusterTask_ const& cnct)
+	{
+		if (my_min_value_ > cnct.my_min_value_)
+		{
+			my_min_value_ = cnct.my_min_value_;
+			my_min_index_ = cnct.my_min_index_;	
+		}
+	}
+
+	void PoseClustering::ComputeNearestClusterTask_::operator() (const tbb::blocked_range<size_t>& r)
+	{
+		// we use a local variable to squeeze out a little more efficiency, if possible
+		float    min_value = my_min_value_;
+		Position min_index = my_min_index_;
+
+		size_t end = r.end();
+		for (size_t i = r.begin(); i != end; ++i)
+		{
+			// check all pairs between all_clusters[*clust_it] and all_clusters[current_cluster]
+			if (i != current_cluster_)
+			{
+				float rmsd = parent_->computeWardDistance_(active_clusters_[current_cluster_], active_clusters_[i], rmsd_type_);
+
+				// for stability, make sure that "really" smaller cases are always taken...
+				if (BALL_REAL_LESS(rmsd, min_value, 1e-5))
+				{
+					min_index = i;
+					min_value = rmsd;
+				}
+			}
+		}
+
+		my_min_index_ = min_index;
+		my_min_value_ = min_value;
+	}
+#endif
+
 	void PoseClustering::ClusterTreeWriter_::operator() (std::ostream& out, const ClusterTreeNode& v) const
 	{
 		out << "[label=\"";
@@ -1671,6 +1751,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 		options.setDefault(PoseClustering::Option::RMSD_TYPE,
 		                   PoseClustering::Default::RMSD_TYPE);
+
+		options.setDefault(PoseClustering::Option::RUN_PARALLEL,
+				               PoseClustering::Default::RUN_PARALLEL);
 
 //		options.setDefault(PoseClustering::Option::FULL_CLUSTER_DENDOGRAM,
 //				               PoseClustering::Default::FULL_CLUSTER_DENDOGRAM);

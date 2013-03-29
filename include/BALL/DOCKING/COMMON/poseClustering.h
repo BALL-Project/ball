@@ -46,6 +46,11 @@
 #include <set>
 #include <iostream>
 
+#ifdef BALL_HAS_TBB
+# include <tbb/parallel_reduce.h>
+# include <tbb/blocked_range.h>
+#endif
+
 //#define POSECLUSTERING_DEBUG 1
 #undef POSECLUSTERING_DEBUG
 
@@ -103,6 +108,9 @@ namespace BALL
 			rotation of each pose.
 			Depending on this choice, the option RMSD_TYPE has to be set to SNAPSHOT_RMSD or RIGID_RMSD.
 			If RMSD_TYPE is set to CENTER_OF_MASS_DISTANCE, the option RMSD_LEVEL_OF_DETAIL will be ignored.
+
+			By setting the option RUN_PARALLEL to true, the user can request parallel execution. This will be performed
+			if the execution environment is enabled (BALL_HAS_TBB), and if the algorithm supports it.
 	*/
 
   class BALL_EXPORT PoseClustering
@@ -130,6 +138,10 @@ namespace BALL
 				*/
 				static const String RMSD_TYPE;
 
+				/** flag for requesting parallel execution
+				 */
+				static const String RUN_PARALLEL;
+
 				/** flag indicating the computation of a full cluster dendogram 
 				 */
 				//static const String FULL_CLUSTER_DENDOGRAM;
@@ -142,6 +154,7 @@ namespace BALL
 				static const float DISTANCE_THRESHOLD;
 				static const Index RMSD_LEVEL_OF_DETAIL;
 				static const Index RMSD_TYPE;
+				static const bool  RUN_PARALLEL;
 				static const bool USE_CENTER_OF_MASS_PRECLINK;
 				//static const bool FULL_CLUSTER_DENDOGRAM;
 			};
@@ -422,6 +435,54 @@ namespace BALL
 
 
 		protected:
+
+#ifdef BALL_HAS_TBB
+			/** A nested class used for parallel execution of the nearest neighbour chain algorithm.
+			 */
+			class ComputeNearestClusterTask_
+			{
+				public:
+					/// Default constructor.
+					ComputeNearestClusterTask_(PoseClustering* parent,
+					                           const std::vector<ClusterTreeNode>& active_clusters, 
+					                           Position current_cluster, 
+																		 Index rmsd_type);
+
+					/// Splitting constructor.
+					ComputeNearestClusterTask_(ComputeNearestClusterTask_& cnct, tbb::split);
+
+					/// Join two partial results
+					void join(ComputeNearestClusterTask_ const& cnct);
+
+					/// The minimum computation
+					void operator() (const tbb::blocked_range<size_t>& r);
+
+					/// Return the minimum index
+					Position getMinIndex() {return my_min_index_;}
+
+					/// Return the minimum value
+					float getMinValue() {return my_min_value_;}
+
+				protected:
+					// the PoseClustering instance that called us
+					PoseClustering* parent_;
+
+					// the array we work on
+					const std::vector<ClusterTreeNode>& active_clusters_;
+
+					// the cluster to compare to everything else
+					Position current_cluster_;
+
+					// the kind of rmsd computation desired
+					Index rmsd_type_;
+
+					// the minimum index in our own block
+					Position my_min_index_;
+
+					// the minimum value in our own block
+					float my_min_value_;
+			};
+#endif
 
 			/** A nested class used for exporting cluster trees to graphviz format
 			 */
