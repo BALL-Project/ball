@@ -99,8 +99,8 @@ int main (int argc, char **argv)
 	parpars.registerParameter("refine_rmsd_scope", "atoms to be considered for rmsd score in second clustering run (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
 	parpars.setParameterRestrictions("refine_rmsd_scope", rmsd_levels);
 
-	// parallel execution, if algorithm supports it
-	parpars.registerFlag("run_parallel", "try parallel excecution, if supported by the algorithm", true);
+	// force serial execution, even if the algorithm supports parallel runs
+	parpars.registerFlag("run_serial", "force serial excecution, even if parallel execution would be supported by the algorithm", false);
 
   // the manual
 	String man = "This tool computes clusters of docking poses given as conformation set or a list of rigid transformations.\n\nParameters are either the input ConformationSet (-i_dcd) and one corresponding pdb file (-i_pdb), or a transformation file (-i_transformations), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type (-rmsd_type), and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd sets the output directory for the reduced cluster set.\n\nOutput of this tool is a dcd file containing the reduced cluster ConformationSet.";
@@ -216,13 +216,13 @@ int main (int argc, char **argv)
 
 	}
 
-	if (parpars.has("run_parallel"))
+	if (parpars.has("run_serial"))
 	{
-		pc.options.set(PoseClustering::Option::RUN_PARALLEL, true);
+		pc.options.set(PoseClustering::Option::RUN_PARALLEL, false);
 	}
 	else
 	{
-		pc.options.set(PoseClustering::Option::RUN_PARALLEL, false);
+		pc.options.set(PoseClustering::Option::RUN_PARALLEL, true);
 	}
 
 	if (parpars.has("-i_dcd"))
