@@ -22,6 +22,43 @@
 #include <RTfact/Model/Framebuffer/Image2DFramebuffer.hpp>
 #include <RTfact/Utils/FPSMeter.hpp>
 
+namespace boost
+{
+	template <>
+	struct hash< RTpieCpp::MeshHandle >
+	{
+		public:
+			union conv
+			{
+				size_t s;
+				const void  *p;
+			};
+
+			size_t operator()(const RTpieCpp::MeshHandle& x ) const throw() {
+				conv c;
+				c.p=x.get();
+				return c.s;
+			}
+	};
+
+	template <>
+	struct hash< RTpieCpp::InstanceHandle >
+	{
+		public:
+			union conv
+			{
+				size_t s;
+				const void  *p;
+			};
+
+			size_t operator()(const RTpieCpp::InstanceHandle& x ) const throw() {
+				conv c;
+				c.p=x.get();
+				return c.s;
+			}
+	};
+}
+
 namespace BALL
 {
   namespace VIEW
