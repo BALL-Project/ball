@@ -866,10 +866,10 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 #ifdef BALL_HAS_TBB
 			if (run_parallel)
 			{
-				std::cout << "Parallel computation...";
+//				std::cout << "Parallel computation...";
 				ComputeNearestClusterTask_ root_task(this, active_clusters, current_cluster, rmsd_type);
 				tbb::parallel_reduce(tbb::blocked_range<size_t>(0, num_active_clusters), root_task);
-				std::cout << "...done." << std::endl;
+//				std::cout << "...done." << std::endl;
 
 				nearest_cluster = root_task.getMinIndex();
 				min_cluster_dist = root_task.getMinValue();
