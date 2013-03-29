@@ -1418,7 +1418,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
 			out << "=======================================" << endl;
-			out << "    Cluster " << i << "(" << getClusterScore(i) << ")" << endl;
+			out << "    Cluster " << i << "(Ward cluster score: " << getClusterScore(i) << ")" << endl;
 
 #ifdef POSECLUSTERING_DEBUG 
 			if (cluster_alg == NEAREST_NEIGHBOR_CHAIN_WARD)
