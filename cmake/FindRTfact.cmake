@@ -8,15 +8,15 @@ SET(RTFACT_POSSIBLE_ROOT_DIRS
 	$ENV{RTFACT_ROOT_DIR}
 )
 
-## First, try to find the required header files (RTremote/Renderer.hpp)
+## First, try to find the required header files (RTpie/IRayTracer.hpp)
 FIND_PATH(RTFACT_INCLUDE_PATH
-	NAMES RTremote/Renderer.hpp
+	NAMES RTpie/IRayTracer.hpp
 	PATHS ${RTFACT_POSSIBLE_ROOT_DIRS}
 	PATH_SUFFIXES include
 	DOC "RTfact header include dir")
 
 IF (NOT RTFACT_INCLUDE_PATH)
-	MESSAGE(STATUS "Could not find RTfact header file (RTremote/Renderer.hpp)! Real time ray tracing will be disabled!")
+	MESSAGE(STATUS "Could not find RTfact header file (RTpie/IRayTracer.hpp)! Real time ray tracing will be disabled!")
 ELSE()
 	SET(RTFACT_INCLUDE_DIR ${RTFACT_INCLUDE_PATH} CACHE STRING "Full path to the RTfact headers")
 
