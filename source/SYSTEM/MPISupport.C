@@ -153,7 +153,7 @@ namespace BALL
 	void MPISupport::sendSystem(const System& system, bool broadcast, int receiver)
 	{
 		// First, convert the System into a string using the XDRManager
-		ostringstream persistent_system;
+		std::ostringstream persistent_system;
 		XDRPersistenceManager pm(persistent_system);
 		pm << system;
 
@@ -163,7 +163,7 @@ namespace BALL
 
 	System* MPISupport::receiveSystem(bool broadcast, int source)
 	{
-		istringstream is;
+		std::istringstream is;
 		receivePersistenceStream_(is, TAG_SYSTEM, broadcast, source);
 		XDRPersistenceManager pm(is);
 
@@ -177,7 +177,7 @@ namespace BALL
 	void MPISupport::sendOptions(const Options& options, bool broadcast, int receiver)
 	{
 		// First, convert the Options into a string using the XDRManager
-		ostringstream persistent_options;
+		std::ostringstream persistent_options;
 		//XDRPersistenceManager pm(persistent_options);
 		TextPersistenceManager pm(persistent_options);
 		options.write(pm);
@@ -188,7 +188,7 @@ namespace BALL
 
 	Options* MPISupport::receiveOptions(bool broadcast, int source)
 	{
-		istringstream is;
+		std::istringstream is;
 		receivePersistenceStream_(is, TAG_OPTIONS, broadcast, source);
 		//XDRPersistenceManager pm(is);
 		TextPersistenceManager pm(is);
@@ -300,7 +300,7 @@ namespace BALL
 	}
 
 	
-	void MPISupport::sendPersistenceStream_(const ostringstream& stream, int tag, bool broadcast, int receiver)
+	void MPISupport::sendPersistenceStream_(const std::ostringstream& stream, int tag, bool broadcast, int receiver)
 	{
 		// should we broadcast or send directed?
 		if (broadcast)
@@ -375,8 +375,8 @@ namespace BALL
 
 		// Prepare the Text - Stuff...
 		// TODO: This should work _much_ more efficiently somehow...
-		ostringstream received_stream;
-		std::copy(streambuf.begin(), streambuf.end(), ostream_iterator<char>(received_stream));
+		std::ostringstream received_stream;
+		std::copy(streambuf.begin(), streambuf.end(), std::ostream_iterator<char>(received_stream));
 		in.str(received_stream.str());
 	}
 
