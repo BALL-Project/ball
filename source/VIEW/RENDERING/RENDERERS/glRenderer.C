@@ -2187,6 +2187,11 @@ namespace BALL
 
 		String GLRenderer::getOpenGLVersion()
 		{
+			if (runningOnVirtualBox())
+			{
+				return (String)qApp->translate("BALL::VIEW::GLRenderer","<Unable to get OpenGL version on Virtual Box probably due to driver bug>");
+			}
+
 			if (glGetString(GL_VERSION) == 0) return "";
 			return (char*)glGetString(GL_VERSION);
 		}
@@ -2203,6 +2208,11 @@ namespace BALL
 
 			exts.split(string_vector);
 			return string_vector;
+		}
+
+		bool GLRenderer::runningOnVirtualBox()
+		{
+			return (getVendor() == "Humper") && (getRenderer() == "Chromium");
 		}
 
 		bool GLRenderer::enableVertexBuffers(bool state)

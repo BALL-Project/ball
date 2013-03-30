@@ -246,6 +246,9 @@ namespace BALL
 			vector<String> getExtensions();
 
 			///
+			bool runningOnVirtualBox();
+
+			///
 			bool enableVertexBuffers(bool state);
 
 			///
