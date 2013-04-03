@@ -328,7 +328,7 @@ void LightSettings::getValues_(Index current)
 	setDirection_(dir);
 	setAttenuation_(att);
 	
-	typeSelected();
+	typeSelected_(light.getType());
 	
 	if (light.getType() == LightSource::AMBIENT) ambient->setChecked(true);
 	if (light.getType() == LightSource::POSITIONAL) point->setChecked(true);
@@ -339,7 +339,10 @@ void LightSettings::getValues_(Index current)
 
 void LightSettings::clearFields_()
 {
+	ignore_ = true;
 	lights_list->clear();
+	ignore_ = false;
+
 	position_x->clear();
 	position_y->clear();
 	position_z->clear();
