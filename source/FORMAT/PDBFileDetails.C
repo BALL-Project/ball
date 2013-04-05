@@ -901,7 +901,7 @@ namespace BALL
 	{
 		if (!(current_protein_->hasProperty("CRYSTALINFO")))
 		{
-			boost::shared_ptr<CrystalInfo> temp_ptr(new CrystalInfo());
+			boost::shared_ptr<PersistentObject> temp_ptr(new CrystalInfo());
 			current_protein_->setProperty(NamedProperty("CRYSTALINFO", temp_ptr));
 		}
 
