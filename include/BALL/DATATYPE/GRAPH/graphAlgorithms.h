@@ -177,7 +177,7 @@ namespace BALL
 			typename GraphTraits<UndirectedGraph>::NeighbourIterator ai, bi, ai_end;
 			UndoEliminateOperation<UndirectedGraph> result(graph, vertex);
 
-			for (tie(ai, ai_end) = adjacent_vertices(vertex, graph); ai != ai_end; ++ai)
+			for (boost::tie(ai, ai_end) = adjacent_vertices(vertex, graph); ai != ai_end; ++ai)
 			{
 				result.getNeighbours().push_back(boost::get(boost::vertex_index, graph, *ai));
 
