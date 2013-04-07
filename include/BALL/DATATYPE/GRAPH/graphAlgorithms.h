@@ -150,7 +150,7 @@ namespace BALL
 		{
 			typename GraphTraits<UndirectedGraph>::NeighbourIterator ai, bi, ai_end;
 
-			for (tie(ai, ai_end) = adjacent_vertices(vertex, graph); ai != ai_end; ++ai)
+			for (boost::tie(ai, ai_end) = adjacent_vertices(vertex, graph); ai != ai_end; ++ai)
 			{
 				bi = ai; ++bi;
 				for (; bi != ai_end; ++bi)
