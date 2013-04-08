@@ -449,9 +449,9 @@ namespace BALL
 					RTfact::RTpie::int32* converted_indices = new RTfact::RTpie::int32[aTriangleCount*3];
 					for(int i = 0;  i < aTriangleCount; i++)
 					{
-							reordered_indices[i * 3 + 0] = aIndices[i * 3 + 0];
-							reordered_indices[i * 3 + 1] = aIndices[i * 3 + 1];
-							reordered_indices[i * 3 + 2] = aIndices[i * 3 + 2];
+							converted_indices[i * 3 + 0] = aIndices[i * 3 + 0];
+							converted_indices[i * 3 + 1] = aIndices[i * 3 + 1];
+							converted_indices[i * 3 + 2] = aIndices[i * 3 + 2];
 					}
 
 					aMesh.setPrimitives(aTriangleCount,
