@@ -446,8 +446,16 @@ namespace BALL
 				}
 				else
 				{
+					RTfact::RTpie::int32* converted_indices = new RTfact::RTpie::int32[aTriangleCount*3];
+					for(int i = 0;  i < aTriangleCount; i++)
+					{
+							reordered_indices[i * 3 + 0] = aIndices[i * 3 + 0];
+							reordered_indices[i * 3 + 1] = aIndices[i * 3 + 1];
+							reordered_indices[i * 3 + 2] = aIndices[i * 3 + 2];
+					}
+
 					aMesh.setPrimitives(aTriangleCount,
-							aIndices, aVertices, aNormals, aVertexColors, aTexCoords);
+							converted_indices, aVertices, aNormals, aVertexColors, aTexCoords);
 				}
     }
 
@@ -1418,7 +1426,7 @@ namespace BALL
 									std::sort(p, p + m, cmp);
 
 									//
-									RTfact::RTpie::int32* CUTPLANE_INDICES = new RTfact::RTpie::int32[3*m];
+									Index* CUTPLANE_INDICES = new Index[3*m];
 									float* CUTPLANE_POSITIONS = new float[3 * 3 * (m-2)];
 									float* CUTPLANE_NORMALS = new float[3 * 3 * (m-2)];
 
