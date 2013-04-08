@@ -422,16 +422,16 @@ namespace BALL
 
 		void setPrimitives(RTpieCpp::MeshHandle aMesh,
 				const RTfact::RTpie::uint32 aTriangleCount,
-				const RTfact::RTpie::int32* aIndices,
+				const Index* aIndices,
 				const float* aVertices,
 				const float* aNormals,
 				const float* aVertexColors,
 				const float* aTexCoords, bool reorder = true)
-    {
+		{
 				if(reorder)
 				{
 					//reorder
-					Index* reordered_indices = new Index[aTriangleCount*3];
+					RTfact::RTpie::int32* reordered_indices = new RTfact::RTpie::int32[aTriangleCount*3];
 					for(int i = 0;  i < aTriangleCount; i++)
 					{
 							reordered_indices[i * 3 + 2] = aIndices[i * 3 + 0];
