@@ -109,9 +109,8 @@ namespace BALL
 		const_cast<AtomContainer&>(fragment).apply(bpp);
 
 		// and a hash grid containing all atoms
-		HashGrid3<Atom const*> atom_grid(bpp.getLower()-Vector3(max_radius+epsilon), 
-				bpp.getUpper()-bpp.getLower()+Vector3(max_radius+epsilon), 
-				2*max_radius+epsilon);
+		Vector3 grid_origin = bpp.getLower() - Vector3(max_radius + epsilon);
+		HashGrid3<Atom const*> atom_grid(grid_origin, bpp.getUpper() - grid_origin + Vector3(max_radius + epsilon), 2 * max_radius + epsilon);
 
 		for (AtomConstIterator at_it = fragment.beginAtom(); +at_it; ++at_it)
 		{
