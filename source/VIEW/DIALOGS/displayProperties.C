@@ -894,6 +894,15 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 
 				NamedProperty* prop = (NamedProperty*) tmp.readObject();
 
+				// needed for compatibility with older versions
+				if (prop->getName() == "RTFact::Material")
+				{
+					boost::shared_ptr<PersistentObject> p(new Stage::Material(*reinterpret_cast<Stage::RaytracingMaterial*>(prop->getSmartObject().get())));
+					NamedProperty* prop_tmp = new NamedProperty("Rendering::Material", p);
+					delete (prop);
+					prop = prop_tmp;
+				}
+
 				rep->setProperty(*prop);
 			}
 		}
