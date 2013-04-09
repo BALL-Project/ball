@@ -241,7 +241,7 @@ namespace BALL
 
 			/** This class holds all material parameters passed on to a raytracer.
 			 */
-			class Material
+			class BALL_VIEW_EXPORT Material
 				: public PersistentObject
 			{
 				public:
@@ -279,6 +279,14 @@ namespace BALL
 
 					float     shininess;	
 					float     transparency;
+			};
+
+			// needed for backwards compatibilty of project files
+			class BALL_VIEW_EXPORT RaytracingMaterial : public Material
+			{
+				public:
+
+					BALL_CREATE(RaytracingMaterial)
 			};
 
 			/**	@name	Constructors and Destructors

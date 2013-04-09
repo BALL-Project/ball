@@ -890,6 +890,7 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 
 				TextPersistenceManager tmp(is);
 				tmp.registerClass(RTTI::getStreamName<Stage::Material>(), Stage::Material::createDefault);
+				tmp.registerClass(RTTI::getStreamName<Stage::RaytracingMaterial>(), Stage::RaytracingMaterial::createDefault);
 
 				NamedProperty* prop = (NamedProperty*) tmp.readObject();
 
