@@ -323,7 +323,7 @@ namespace BALL
 								{
 									NamedProperty rt_mat_property = rep->getProperty("Rendering::Material");
 									boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
-									rt_material = *dynamic_cast<Stage::Material*>(mat_ptr.get());
+									Stage::Material rt_material = *dynamic_cast<Stage::Material*>(mat_ptr.get());
 									
 									updateMaterialForRepresentation(rep, rt_material);
 								}
