@@ -328,7 +328,7 @@ namespace BALL
 									updateMaterialForRepresentation(rep, rt_material);
 								}
 								else
-									updateMaterialForRepresentation(rep);
+									updateMaterialForRepresentation(rep, stage_->getMaterial());
 #endif
 							}
 
