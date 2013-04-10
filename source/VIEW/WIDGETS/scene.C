@@ -315,7 +315,22 @@ namespace BALL
 						if (pm.startRendering(rep))
 						{
 							for (Position i=0; i<renderers_.size(); ++i)
+							{
 								renderers_[i]->bufferRepresentation(*rep);
+#ifdef BALL_OS_WINDOWS
+								// this is an ugly hack, but on Windows representations currently don't get their materials straigt
+								if (rep->hasProperty("Rendering::Material"))
+								{
+									NamedProperty rt_mat_property = rep->getProperty("Rendering::Material");
+									boost::shared_ptr<PersistentObject> mat_ptr = rt_mat_property.getSmartObject();
+									rt_material = *dynamic_cast<Stage::Material*>(mat_ptr.get());
+									
+									updateMaterialForRepresentation(rep, rt_material);
+								}
+								else
+									updateMaterialForRepresentation(rep);
+#endif
+							}
 
 							pm.finishedRendering(rep);
 						}
