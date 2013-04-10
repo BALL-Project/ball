@@ -1239,8 +1239,8 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
 			mpi.sendOptions(options);
 
 			// and the systems
-			mpi.sendSystem(system1_);
-			mpi.sendSystem(system2_);
+			mpi.sendSystem(*system1_);
+			mpi.sendSystem(*system2_);
 
 			// now scatter the angles.
 			mpi.distributeDatapoints(rotAng.phi_,   our_phi);
@@ -1416,11 +1416,11 @@ std::cout << "I have " << rotation_num << " rotations" << std::endl;
 		delete(O);
 
 		System *S = mpi.receiveSystem();
-		system1_.set(*S, true);
+		system1_->set(*S, true);
 		delete(S);
 
 		S = mpi.receiveSystem();
-		system2_.set(*S, true);
+		system2_->set(*S, true);
 		delete(S);
 
 		/** Now receive the angles **/
@@ -1497,8 +1497,8 @@ std::cout << "I have " << rotation_num << " rotations" << std::endl;
 		peak_set_.clear();
 
 		// note: the backuped systems are systems after pre-translation.
-		system_backup_a_ = system1_;  // after pre-translation
-		system_backup_b_ = system2_;  // after pre-translation
+		system_backup_a_ = *system1_;  // after pre-translation
+		system_backup_b_ = *system2_;  // after pre-translation
 
 		// TODO: Use a vector
 		Peak_* top_n_peaks = new Peak_[options.getInteger(Option::TOP_N)];
@@ -1521,10 +1521,10 @@ std::cout << "I have " << rotation_num << " rotations" << std::endl;
 				Log << "rotation = " << phi << ";" << theta << ";" << psi << endl;
 			}
 
-			system2_ = system_backup_b_;
+			system2_ = &system_backup_b_;
 
 			detailed_timer.reset();
-			changeProteinOrientation_( system2_, Vector3( phi, theta, psi ) );
+			changeProteinOrientation_( *system2_, Vector3( phi, theta, psi ) );
 
 			if (verbosity > 10)
 			{
