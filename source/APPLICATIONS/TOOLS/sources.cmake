@@ -15,6 +15,7 @@ SET(EXECUTABLES_LIST
 	DockPoseClustering
 	DockResultMerger
 	EvenSplit
+	ExtractClustersFromWardTree
 	FeatureSelector
 	FingerprintSimilarityClustering
 	FingerprintSimilaritySearch

@@ -102,6 +102,9 @@ int main (int argc, char **argv)
 	// force serial execution, even if the algorithm supports parallel runs
 	parpars.registerFlag("run_serial", "force serial excecution, even if parallel execution would be supported by the algorithm", false);
 
+	// write the final cluster tree in boost::serialize format, if it was computed
+	parpars.registerParameter("o_cluster_tree", "output file containing the cluster tree in boost::serialize format (if the tree was computed) ", STRING, false, "", true);
+
   // the manual
 	String man = "This tool computes clusters of docking poses given as conformation set or a list of rigid transformations.\n\nParameters are either the input ConformationSet (-i_dcd) and one corresponding pdb file (-i_pdb), or a transformation file (-i_transformations), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type (-rmsd_type), and the scope/level of detail of the rmsd computation (-rmsd_scope). The optional parameter -o_dcd sets the output directory for the reduced cluster set.\n\nOutput of this tool is a dcd file containing the reduced cluster ConformationSet.";
 
@@ -113,6 +116,7 @@ int main (int argc, char **argv)
 	parpars.setSupportedFormats("i_transformations","txt");
 	parpars.setSupportedFormats("o","dcd");
 	parpars.setSupportedFormats("o_dcd","dcd");
+	parpars.setSupportedFormats("o_cluster_tree","dat");
 
 	parpars.parse(argc, argv);
 
@@ -126,6 +130,13 @@ int main (int argc, char **argv)
 			Log << "Output type \"dcd\" requires setting the options \"o_dir\" \"o_id\"! Abort!" << endl;
 			return 1;
 		}
+	}
+
+	if (     parpars.has("o_cluster_tree")
+			&& (!parpars.has("alg") || parpars.get("alg") != "NEAREST_NEIGHBOR_CHAIN_WARD"))
+	{
+		Log << "Output of cluster tree requires Ward algorithm! Abort!" << endl;
+		return 1;
 	}
 
 	// read the input	
@@ -328,6 +339,13 @@ int main (int argc, char **argv)
 	// print
 	pc.printClusters();
 	pc.printClusterRMSDs();
+
+	if (parpars.has("o_cluster_tree"))
+	{
+		File cluster_out(parpars.get("o_cluster_tree"), std::ios::out);
+		pc.serializeWardClusterTree(cluster_out, true);
+		cluster_out.close();
+	}
 
 	if (parpars.has("o_dcd"))
 	{

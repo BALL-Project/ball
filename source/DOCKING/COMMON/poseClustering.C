@@ -15,8 +15,20 @@
 #include <stack>
 #include <queue>
 
+#include <boost/version.hpp>
+
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/graphviz.hpp>
+#include <boost/graph/adj_list_serialize.hpp>
+
+#include <boost/archive/binary_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+
+#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+
+#include <boost/serialization/set.hpp>
+#include <boost/serialization/variant.hpp>
 
 using namespace std;
 using namespace Eigen;
@@ -38,8 +50,6 @@ namespace BALL
 	const String PoseClustering::Option::RUN_PARALLEL  = "pose_clustering_run_parallel";
 	const bool   PoseClustering::Default::RUN_PARALLEL = true;
 
-	//const String PoseClustering::Option::FULL_CLUSTER_DENDOGRAM = "pose_clustering_full_cluster_dendogram";
-	//const bool   PoseClustering::Default::FULL_CLUSTER_DENDOGRAM = false;
 
 	PoseClustering::PoseClustering()
 		: current_set_(0),
@@ -63,6 +73,7 @@ namespace BALL
 		base_system_ = poses->getSystem();
 	}
 
+
 	PoseClustering::PoseClustering(System const& base_system, String transformation_file_name)
 	{
 		has_rigid_transformations_ = false;
@@ -70,6 +81,7 @@ namespace BALL
 
 		setBaseSystemAndTransformations(base_system, transformation_file_name);
 	}
+
 
 	PoseClustering::~PoseClustering()
 	{
@@ -119,9 +131,10 @@ namespace BALL
 	}
 
 
-	std::vector<std::set<Index> > PoseClustering::extractClustersForThreshold(float threshold)
+	std::vector<std::set<Index> > PoseClustering::extractClustersForThreshold(float threshold, Size min_size)
 	{
 //	cout << " extract clusters for dist = " << threshold << endl;
+
 		clusters_.clear();
 		cluster_scores_.clear();
 
@@ -136,18 +149,20 @@ namespace BALL
 		std::stack<ClusterTreeNode> stack;
 		ClusterTreeNode current_node;
 
-		if (cluster_tree_[cluster_tree_root_].merged_at < threshold)
+		ClusterTreeNode cluster_tree_root = cluster_tree_[boost::graph_bundle];
+
+		if (cluster_tree_[cluster_tree_root].merged_at < threshold)
 		{
-			clusters_.push_back(collectClusterBelow_(cluster_tree_root_));
-			cluster_scores_.push_back(cluster_tree_[cluster_tree_root_].merged_at);
+			clusters_.push_back(collectClusterBelow_(cluster_tree_root));
+			cluster_scores_.push_back(cluster_tree_[cluster_tree_root].merged_at);
 
 #ifdef POSECLUSTERING_DEBUG 
-			cluster_tree_[cluster_tree_root_].current_cluster_id = clusters_.size()-1;
+			cluster_tree_[cluster_tree_root].current_cluster_id = clusters_.size()-1;
 #endif
 		}
 		else
 		{
-			stack.push(cluster_tree_root_);
+			stack.push(cluster_tree_root);
 
 			while (!stack.empty())
 			{
@@ -172,13 +187,34 @@ namespace BALL
 				}
 			}
 		}
+
+		if (min_size > 1)
+		{
+			std::vector< std::set<Index> >::iterator iter = clusters_.begin();
+			std::vector< float >::iterator score_iter = cluster_scores_.begin();
+
+			while (iter != clusters_.end())
+			{
+        if ((*iter).size() < min_size)
+				{
+					 iter = clusters_.erase(iter);
+					 score_iter = cluster_scores_.erase(score_iter);
+        }
+        else
+        {
+           ++iter;
+					 ++score_iter;
+        }
+			}
+		}
+
 		return clusters_;
 	}
 
 
-	std::vector<std::set<Index> > PoseClustering::extractNBestClusters(Size n)
+	std::vector<std::set<Index> > PoseClustering::extractNBestClusters(Size n, Size min_size)
 	{
-//cout << "extractNClusters  n=" << n << "/" << getNumberOfPoses() << endl;
+//cout << "extractNBestClusters  n=" << n << "/" << getNumberOfPoses() << endl;
 		if (n > getNumberOfPoses())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
@@ -189,7 +225,9 @@ namespace BALL
 		std::priority_queue< ClusterTreeNode, std::vector<ClusterTreeNode>, ClusterTreeNodeComparator >  prio(comp);
 		ClusterTreeNode current_node;
 
-		prio.push(cluster_tree_root_);
+		ClusterTreeNode cluster_tree_root = cluster_tree_[boost::graph_bundle];
+
+		prio.push(cluster_tree_root);
 
 		while (   ((prio.size() + clusters_.size()) < n )
 				   && (!prio.empty()))
@@ -205,8 +243,12 @@ namespace BALL
 		// get the clusters
 		while (!prio.empty())
 		{
-			clusters_.push_back(collectClusterBelow_(prio.top()));
-			cluster_scores_.push_back(cluster_tree_[prio.top()].merged_at);
+			std::set<Index> new_cluster = collectClusterBelow_(prio.top());
+			if (new_cluster.size() >= min_size)
+			{
+				clusters_.push_back(new_cluster);
+				cluster_scores_.push_back(cluster_tree_[prio.top()].merged_at);
+			}
 			prio.pop();
 		}
 
@@ -226,6 +268,7 @@ namespace BALL
 		storeSnapShotReferences_();
 	}
 
+
 	void PoseClustering::setBaseSystemAndPoses(System const& base_system, std::vector<PosePointer> const& poses)
 	{
 		base_system_ = base_system;
@@ -239,6 +282,7 @@ namespace BALL
 		}
 		current_set_ = 0;
 	}
+
 
 	void PoseClustering::setBaseSystemAndTransformations(System const& base_system, String transformation_file_name)
 	{
@@ -288,7 +332,7 @@ namespace BALL
 				// but we don't have them... so let's produce some...
 				convertTransformations2Snaphots_();
 			}
-		} 
+		}
 		else if (rmsd_type == RIGID_RMSD)
 		{
 			// obviously, we need transforms
@@ -329,6 +373,7 @@ namespace BALL
 		return result;
 	}
 
+
 	bool PoseClustering::readTransformationsFromFile_(String filename)
 	{
 		poses_.clear();
@@ -350,7 +395,7 @@ namespace BALL
 			{
 				fields.clear();
 				current_transformation.split(fields);
-				
+
 				RigidTransformation rd;
 
 				rd.translation << fields[6].toFloat(), fields[10].toFloat(), fields[14].toFloat();
@@ -921,7 +966,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 				// make this parent the new root of the cluster tree
 				// (the final root will be the last parent we add)
-				cluster_tree_root_ = new_parent;
+				cluster_tree_[boost::graph_bundle] = new_parent;
 
 				// add an edge from the parent to both children
 				boost::add_edge(new_parent, current_node, cluster_tree_);
@@ -1469,11 +1514,75 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		} //next cluster
 	}
 
-
-	void PoseClustering::exportWardClusterTree(std::ostream& out)
+	void PoseClustering::exportWardClusterTreeToGraphViz(std::ostream& out)
 	{
 		boost::write_graphviz(out, cluster_tree_, ClusterTreeWriter_(&cluster_tree_));
 	}
+
+	void PoseClustering::serializeWardClusterTree(std::ostream& out, bool binary)
+	{
+		if (binary)
+		{
+			boost::archive::binary_oarchive oa(out);
+			oa << cluster_tree_;
+		}
+		else
+		{
+			boost::archive::text_oarchive oa(out);
+			oa << cluster_tree_;
+		}
+	}
+
+	void PoseClustering::deserializeWardClusterTree(std::istream& in, bool binary)
+	{
+		if (binary)
+		{
+			boost::archive::binary_iarchive ia(in);
+			ia >> cluster_tree_;
+		}
+		else
+		{
+			boost::archive::text_iarchive ia(in);
+			ia >> cluster_tree_;
+		}
+
+		// unfortunately, old versions of boost don't serialize / deserialize graph_bundle properties... *sigh*
+		// so, be nice to them...
+#if BOOST_VERSION < 105100
+		// iterate over all nodes in the graph and find the one which has no in_edges
+		// this would be much simpler if boost would store in_degrees for directed graphs... we don't want a bidirectional graph, though
+		HashMap<ClusterTreeNode, Size> in_degrees;
+		BGL_FORALL_VERTICES(current_vertex, cluster_tree_, ClusterTree)
+		{
+			boost::graph_traits<ClusterTree>::out_edge_iterator e, e_end;
+
+			for (boost::tie(e, e_end) = boost::out_edges(current_vertex, cluster_tree_); e != e_end; ++e)
+			{
+				ClusterTreeNode target = boost::target(*e, cluster_tree_);
+				if (in_degrees.find(target) == in_degrees.end())
+				{
+					in_degrees[target] = 1;
+				}
+				else
+				{
+					in_degrees[target]++;
+				}
+			}
+		}
+
+		// now, iterate over tree again to find the one node without a parent
+		BGL_FORALL_VERTICES(current_vertex, cluster_tree_, ClusterTree)
+		{
+			if (in_degrees[current_vertex] == 0)
+			{
+				cluster_tree_[boost::graph_bundle] = current_vertex;
+				break;
+			}
+		}
+#endif
+
+	}
+
 
 #ifdef BALL_HAS_TBB
 	PoseClustering::ComputeNearestClusterTask_::ComputeNearestClusterTask_(PoseClustering* parent,
@@ -1501,7 +1610,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		if (my_min_value_ > cnct.my_min_value_)
 		{
 			my_min_value_ = cnct.my_min_value_;
-			my_min_index_ = cnct.my_min_index_;	
+			my_min_index_ = cnct.my_min_index_;
 		}
 	}
 
@@ -1532,6 +1641,16 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		my_min_value_ = min_value;
 	}
 #endif
+
+	template <class Archive>
+	void PoseClustering::ClusterProperties::serialize(Archive& ar, const unsigned int /*version*/)
+	{
+		ar & poses;
+		ar & size;
+		//		TODO: handle serialization of eigen matrix
+//		ar & center;
+		ar & merged_at;
+	}
 
 	void PoseClustering::ClusterTreeWriter_::operator() (std::ostream& out, const ClusterTreeNode& v) const
 	{
@@ -1605,6 +1724,8 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		Index rmsd_level_of_detail = temp_options.getInteger(Option::RMSD_LEVEL_OF_DETAIL);
 
 		// compute an atombijection
+		// Note: we cannot use precomputeAtomBijection as we might have 
+		// different systems sys_a and sys_b given
 		AtomBijection temp_atom_bijection;
 		StructureMapper mapper(sys_a, sys_b);
 
@@ -1628,7 +1749,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				Log.info() << "Option RMSDLevelOfDetaill::HEAVY_ATOMS not yet implemented" << endl;
 		}
 
-		// enter of masses
+		// center of masses
 		GeometricCenterProcessor center;
 		sys_a.apply(center);
 		Vector3 com_a = center.getCenter();
@@ -1675,6 +1796,69 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		{
 			// just query the center distance
 			rmsd = com_a.getDistance(com_b);
+		}
+
+		return rmsd;
+	}
+
+
+	float PoseClustering::computeCompleteLinkageRMSD(Index i, Options temp_options, bool initialize)
+	{
+		if (i >= (Index)cluster_scores_.size())
+			throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		// we have to compute the maximal RMSD between all pairs in the cluster i
+
+		float rmsd = 0.;
+		Index rmsd_type            = temp_options.getInteger(Option::RMSD_TYPE);
+
+		// do we have to recompute the atombijection?
+		if (initialize)
+		{
+			// prepare whatever has to be prepared...
+			if ( (rmsd_type == SNAPSHOT_RMSD) || (rmsd_type == CENTER_OF_MASS_DISTANCE) )
+			{
+				// obviously, we need snapshots
+				if (poses_[0].snap == 0)
+				{
+					// but we don't have them... so let's produce some...
+					convertTransformations2Snaphots_();
+				}
+			}
+			else if (rmsd_type == RIGID_RMSD)
+			{
+				// obviously, we need transforms
+				if (poses_[0].trafo == 0)
+				{
+					// but we don't have them... so let's produce some...
+					convertSnaphots2Transformations_();
+				}
+			}
+
+			// precompute the atom bijection, that handles the 
+			// option RMSD_LEVEL_OF_DETAIL
+			precomputeAtomBijection_();
+		}
+
+		// now do the pairwise checking
+		for (set<Index>::iterator conf_it_i = clusters_[i].begin();
+				 conf_it_i != clusters_[i].end(); conf_it_i++)
+		{
+			poses_[*conf_it_i].snap->applySnapShot(system_i_);
+
+			for (set<Index>::iterator conf_it_j = conf_it_i; conf_it_j != clusters_[i].end(); conf_it_j++)
+			{
+				if (conf_it_i != conf_it_j)
+				{
+					if (rmsd_type == SNAPSHOT_RMSD)
+					{
+						poses_[*conf_it_j].snap->applySnapShot(system_j_);
+					}
+
+					float temp_rmsd = getRMSD_(*conf_it_i, *conf_it_j, rmsd_type);
+					rmsd = std::max(rmsd, temp_rmsd);
+				}
+			}
 		}
 
 		return rmsd;

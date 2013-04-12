@@ -222,6 +222,11 @@ namespace BALL
 			class BALL_EXPORT ClusterProperties
 			{
 				public:
+					/** Serialization method
+					 */
+					template <class Archive>
+					void serialize(Archive& ar, const unsigned int version);
+
 					/** The poses contained in this cluster.
 					 */
 					std::set<Index> poses;
@@ -253,7 +258,9 @@ namespace BALL
 			typedef boost::adjacency_list<boost::vecS,
 			                              boost::vecS,
 			                              boost::directedS,
-			                              ClusterProperties> ClusterTree;
+			                              ClusterProperties,
+																		boost::no_property,
+																		unsigned int> ClusterTree;
 
 			typedef ClusterTree::vertex_descriptor ClusterTreeNode;
 
@@ -339,6 +346,12 @@ namespace BALL
 			/// returns the score between two poses given as systems
 			float getScore(const System sys_a, const System sys_b, Options options) const;
 
+			/// returns the complete linkage RMSD of cluster i
+			float computeCompleteLinkageRMSD(Index i, Options options, bool initialize = true);
+
+			/// returns the complete linkage RMSD of a pose set
+			//float computeCompleteLinkageRMSD(boost::shared_ptr<ConformationSet> cluster, Option options) const;
+
 			/// returns the pose i as system
 			boost::shared_ptr<System> getPose(Index i) const;
 
@@ -411,16 +424,24 @@ namespace BALL
 			 *  We use threshold = sqrt(ward_dist / number_of_selected_atoms).
 			 *  see NEAREST_NEIGHBOR_CHAIN_WARD
 			 */
-			std::vector<std::set<Index> > extractClustersForThreshold(float threshold);
+			std::vector<std::set<Index> > extractClustersForThreshold(float threshold, Size min_size = 0);
 
 			/** returns the first n clusters if previously a complete clustering was performed
 			 *  see NEAREST_NEIGHBOR_CHAIN_WARD
 			 */
-			std::vector<std::set<Index> > extractNBestClusters(Size n);
+			std::vector<std::set<Index> > extractNBestClusters(Size n, Size min_size = 0);
+
+			/** Export the cluster tree to boost::serialize format.
+ 			*/
+			void serializeWardClusterTree(std::ostream& out, bool binary = false);
+
+			/** Import the cluster tree from boost::serialize format.
+ 			*/
+			void deserializeWardClusterTree(std::istream& in, bool binary = false);
 
 			/** Export the cluster tree in graphviz format.
  			*/
-			void exportWardClusterTree(std::ostream& out);
+			void exportWardClusterTreeToGraphViz(std::ostream& out);
 
 			//@}
 
@@ -665,8 +686,6 @@ namespace BALL
 
 			/// The tree built during hierarchical clustering
 			ClusterTree       cluster_tree_;
-			//  and its root
-			ClusterTreeNode   cluster_tree_root_;
 	}; //class PoseClustering
 } //namesspace BALL
 
