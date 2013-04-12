@@ -1324,6 +1324,11 @@ namespace BALL
                 std::map< RTpieCpp::InstanceHandle, std::vector<ColorRGBA> > cappingColors;
 
 					const Representation& rep = **it;
+
+					// has this representation been buffered already?
+					if (objects_.find(&rep) == objects_.end())
+						continue;
+
 					RTfactData& rtfactData = objects_[&rep];
 					bool cappingEnabled = false;
 
