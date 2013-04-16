@@ -39,10 +39,10 @@ int main (int argc, char **argv)
 	// - required
 	// - default value
 	// - hidden in galaxy
-	parpars.registerParameter("o_out", "output file name ", STRING, false, "", true);
+	parpars.registerParameter("o_out", "output file name ", STRING, true, "", true);
 
 	// we register the output type
-	parpars.registerParameter("o_type", "output type (gv, index_list) ", STRING, false, "index_list");
+	parpars.registerParameter("o_type", "output type (gv, index_list) ", STRING, true, "index_list");
 	list<String> output_types;
 	output_types.push_back("gv");
 	output_types.push_back("index_list");
@@ -65,7 +65,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("min_size", 1, 10000);
 
   // the manual
-	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i_out), the cutoff type (-cutoff_type)... . The optional parameter -min_size allows to filter outliers.\n\nOutput of this tool is either an index list of the clusters or a gv of the extracted cluster tree.";
+	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i) of the serialized cluster tree, the output filename (-o_out), the output type (-o_type). The optional parameter -min_size allows to filter for cluster of a minimal size, parameter -cutoff_type defines the way to cut the cluster tree (either by ward distance or by a target number of clusters) using paramter -cut_value.\n\nOutput of this tool is the extracted cluster tree, either as index list or as graph visualization (gv).";
 
 	parpars.setToolManual(man);
 
@@ -86,8 +86,15 @@ int main (int argc, char **argv)
 	// this only works for Nearest neighbor chain ward trees...
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 
-	// import
+	// import a binary file
 	pc.deserializeWardClusterTree(tree, true);
+
+	int min_cluster_size = 0;
+	if (parpars.has("min_size"))
+	{
+		min_cluster_size = parpars.get("min_size").toInt();
+	}
+	Log << "  Use min_size = " << min_cluster_size << endl;
 
 
 	float cut_value = 5;
@@ -95,32 +102,32 @@ int main (int argc, char **argv)
 	{
 		cut_value = parpars.get("cut_value").toFloat();
 	}
-	else
-	{
-		Log << "Assume default value of " << cut_value << " for parameter cut_value!" << endl;
-	}
+	Log << "  Use cut_value = " << cut_value << endl;
 
-	int min_cluster_size = 0;
-	if (parpars.has("min_size"))
-	{
-		min_cluster_size = parpars.get("min_size").toInt();
-	}
 
 	float num_clusters_to_extract = 5.;
 	int   max_ward_dist = 5;
-	std::vector<std::set<Index> > clusters;
+
+	//std::vector<std::set<Index> > clusters;
+
 	if (parpars.has("cutoff_type"))
 	{
 		String type = parpars.get("cutoff_type");
+		Log << "  Use cutoff_type = " << type << endl;
+
 		if (type == "ward_distance")
 		{
 			max_ward_dist = cut_value;
-			clusters = pc.extractClustersForThreshold(max_ward_dist, min_cluster_size);
+
+			//clusters = 
+			pc.extractClustersForThreshold(max_ward_dist, min_cluster_size);
 		}
 		else if (type == "num_clusters")
 		{
 			num_clusters_to_extract = cut_value;
-			clusters = pc.extractNBestClusters(num_clusters_to_extract, min_cluster_size);
+
+			//clusters = 
+			pc.extractNBestClusters(num_clusters_to_extract, min_cluster_size);
 		}
 		else
 		{
@@ -129,7 +136,7 @@ int main (int argc, char **argv)
 		}
 	}
 
-	Log << "Extracted " <<  clusters.size() << " clusters, start writing..." << endl;
+	Log << "Extracted " << pc.getNumberOfClusters()  << " clusters, start writing... ";
 
 	String outfile_name = String(parpars.get("o_out"));
 
@@ -138,6 +145,8 @@ int main (int argc, char **argv)
 		File cluster_outfile(outfile_name, std::ios::out);
 
 		pc.printClusters(cluster_outfile);
+
+		Log << outfile_name << endl;
 	}
 	else if (parpars.get("o_type") == "gv")
 	{
@@ -145,6 +154,9 @@ int main (int argc, char **argv)
 
 		pc.exportWardClusterTreeToGraphViz(gv_outfile);
 		gv_outfile.close();
+
+		Log << outfile_name << endl;
+		Log << "For drawing the graph use, e.g. \n\tdot -Tps -o  tree.gv " << outfile_name << endl;
 	}
 	else
 	{
@@ -153,6 +165,6 @@ int main (int argc, char **argv)
 
 	Log << "done." << endl;
 
-	return 0;
+return 0;
 }
 
