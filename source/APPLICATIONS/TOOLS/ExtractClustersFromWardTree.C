@@ -127,7 +127,8 @@ int main (int argc, char **argv)
 			num_clusters_to_extract = cut_value;
 
 			//clusters = 
-			pc.extractNBestClusters(num_clusters_to_extract, min_cluster_size);
+			pc.extractNBestClusters(num_clusters_to_extract);
+			pc.filterClusters(min_cluster_size);
 		}
 		else
 		{

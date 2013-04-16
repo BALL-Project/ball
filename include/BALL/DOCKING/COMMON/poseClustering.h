@@ -426,10 +426,15 @@ namespace BALL
 			 */
 			std::vector<std::set<Index> > extractClustersForThreshold(float threshold, Size min_size = 0);
 
-			/** returns the first n clusters if previously a complete clustering was performed
+			/** returns the first up to n clusters if previously a complete clustering was performed
 			 *  see NEAREST_NEIGHBOR_CHAIN_WARD
 			 */
-			std::vector<std::set<Index> > extractNBestClusters(Size n, Size min_size = 0);
+			std::vector<std::set<Index> > extractNBestClusters(Size n);
+
+			/** filters the current cluster set wrt to a minimal cluster size
+			 *  see NEAREST_NEIGHBOR_CHAIN_WARD
+			 */
+			std::vector<std::set<Index> > filterClusters(Size min_size = 1);
 
 			/** Export the cluster tree to boost::serialize format.
  			*/

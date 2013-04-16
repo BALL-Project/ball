@@ -171,7 +171,9 @@ namespace BALL
 
 				BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
 				{
-					if (cluster_tree_[child].merged_at < threshold)
+					// is child itself a leaf?
+					if (   (cluster_tree_[child].merged_at < threshold)
+						  || (out_degree(child, cluster_tree_) == 0) )
 					{
 						clusters_.push_back(collectClusterBelow_(child));
 						cluster_scores_.push_back(cluster_tree_[child].merged_at);
@@ -212,11 +214,16 @@ namespace BALL
 	}
 
 
-	std::vector<std::set<Index> > PoseClustering::extractNBestClusters(Size n, Size min_size)
+	// up to n best clusters
+	std::vector<std::set<Index> > PoseClustering::extractNBestClusters(Size n)
 	{
-//cout << "extractNBestClusters  n=" << n << "/" << getNumberOfPoses() << endl;
+ //cout << "extractNBestClusters  n=" << n << "/" << getNumberOfPoses() << endl;
+
+		// we cannot rely on getNumberOfPoses() as we may have been given a tree...
+		/*
 		if (n > getNumberOfPoses())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
+		*/
 
 		clusters_.clear();
 		cluster_scores_.clear();
@@ -229,22 +236,39 @@ namespace BALL
 
 		prio.push(cluster_tree_root);
 
-		while (   ((prio.size() + clusters_.size()) < n )
-				   && (!prio.empty()))
+		// read ahead
+		current_node = prio.top();
+
+		// first we look out for the first n best clusters
+		// we traverse the tree from the root in descending order
+		// of merged_at values
+		while ( (prio.size() + clusters_.size() < n ) &&
+					 (!prio.empty()) //&& (out_degree(current_node, cluster_tree_) > 0)
+					)
 		{
-			current_node = prio.top();
 			prio.pop();
 
 			BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
 			{
-				prio.push(child);
+				if (out_degree(child, cluster_tree_) > 0)
+					prio.push(child);
+				else
+				{
+						std::set<Index> new_cluster;
+						new_cluster.insert(*(cluster_tree_[current_node].poses.begin()));
+						clusters_.push_back(new_cluster);
+						cluster_scores_.push_back(cluster_tree_[current_node].merged_at);
+				}
 			}
+			current_node = prio.top();
 		}
-		// get the clusters
+
+		// then we collect all clusters that pass the min_size filter
+		// --> we may end up with less than n clusters
 		while (!prio.empty())
 		{
 			std::set<Index> new_cluster = collectClusterBelow_(prio.top());
-			if (new_cluster.size() >= min_size)
+			//if (new_cluster.size() >= min_size)
 			{
 				clusters_.push_back(new_cluster);
 				cluster_scores_.push_back(cluster_tree_[prio.top()].merged_at);
@@ -255,6 +279,26 @@ namespace BALL
 		return clusters_;
 	}
 
+
+	std::vector<std::set<Index> > PoseClustering::filterClusters(Size min_size)
+	{
+		std::vector< std::set<Index> >   temp_clusters;
+		std::vector< float >             temp_cluster_scores;
+
+		for (Size i = 0; i < clusters_.size(); i++)
+		{
+			if (clusters_[i].size() >= min_size)
+			{
+				temp_clusters.push_back(clusters_[i]);
+				temp_cluster_scores.push_back(cluster_scores_[i]);
+			}
+		}
+
+		swap(clusters_, temp_clusters);
+		swap(cluster_scores_, temp_cluster_scores);
+
+		return clusters_;
+	}
 
 	void PoseClustering::setConformationSet(ConformationSet* new_set)
 	{
@@ -1570,7 +1614,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 			}
 		}
 
-		// now, iterate over tree again to find the one node without a parent
+		// now, iterate over the tree again to find the one node without a parent
 		BGL_FORALL_VERTICES(current_vertex, cluster_tree_, ClusterTree)
 		{
 			if (in_degrees[current_vertex] == 0)

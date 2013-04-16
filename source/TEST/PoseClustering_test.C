@@ -205,7 +205,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = SNAPSHOT_RMSD)
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+	TEST_EQUAL(pc.getNumberOfClusters(), 8)
 
 	// TEST
 	/*
@@ -317,7 +317,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = CENTER_OF_MASS_DIS
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+	TEST_EQUAL(pc.getNumberOfClusters(), 8)
 
 	pc.extractClustersForThreshold(2.4);
 	TEST_EQUAL(pc.getNumberOfClusters(), 3)
@@ -413,7 +413,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+	TEST_EQUAL(pc.getNumberOfClusters(), 55)
 
 	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(15);
 //pc.printClusterRMSDs();
@@ -1163,7 +1163,7 @@ CHECK(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL::PROPERTY_BASED_ATOM_BIJECTIO
 	pc_nncw.setConformationSet(&cs2);
 
 	pc_nncw.compute();
-	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 0)
+	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 2)
 
 	pc_nncw.extractClustersForThreshold(70);
 	TEST_EQUAL(pc_nncw.getNumberOfClusters(), 2)
@@ -1242,9 +1242,14 @@ CHECK(extractNBestClusters(Size n, Size i))
 	TEST_EQUAL(result.size(), 4)
 	TEST_EQUAL(pc.getNumberOfClusters(), 4)
 
-	result = pc.extractNBestClusters(4, 3);
+	result = pc.extractNBestClusters(4);
+	TEST_EQUAL(result.size(), 4)
+	TEST_EQUAL(pc.getNumberOfClusters(), 4)
+
+	result = pc.filterClusters(3);
 	TEST_EQUAL(result.size(), 1)
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
+
 
 	// TODO: find out how to catch an error in tests
 //	result = pc.extractNBestClusters(pc.getNumberOfPoses()+1);
@@ -1256,7 +1261,11 @@ CHECK(extractNBestClusters(Size n, Size i))
 	TEST_EQUAL(result.size(), 8)
 	TEST_EQUAL(pc.getNumberOfClusters(), 8)
 
-	result = pc.extractNBestClusters(pc.getNumberOfPoses(), 2);
+	result = pc.extractNBestClusters(pc.getNumberOfPoses());
+	TEST_EQUAL(result.size(), 8)
+	TEST_EQUAL(pc.getNumberOfClusters(), 8)
+
+	result = pc.filterClusters(2);
 	TEST_EQUAL(result.size(), 0)
 	TEST_EQUAL(pc.getNumberOfClusters(), 0)
 
@@ -1281,7 +1290,7 @@ CHECK(extractClustersForThreshold(Size n, Size i))
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+	TEST_EQUAL(pc.getNumberOfClusters(), 55)
 
 	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(15);
 	TEST_EQUAL(clusters.size(), 20)
@@ -1430,7 +1439,7 @@ CHECK(deserialize/serialize WardClusterTree(std::ostream& out))
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0.00);
 	pc.compute();
-	TEST_EQUAL(pc.getNumberOfClusters(), 0)
+	TEST_EQUAL(pc.getNumberOfClusters(), 55)
 
 	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(15);
 	TEST_EQUAL(clusters.size(), 20)
