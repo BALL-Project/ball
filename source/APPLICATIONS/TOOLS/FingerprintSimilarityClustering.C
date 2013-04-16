@@ -401,6 +401,72 @@ bool readFingerprints(const String& input_file, vector<vector<unsigned short> >&
 }
 
 
+bool connectedComponentsMemoryEstimation(const unsigned int n_items, const unsigned int n_threads, const unsigned int b_size)
+{
+	LongIndex threaded_nn_data_size = (n_threads + 1) * n_items * ( sizeof(unsigned int) + sizeof(float) );
+	LongIndex cc_matrices_size = n_threads * sizeof(unsigned short) * b_size * (b_size + 1);
+	LongIndex mem_Bytes = threaded_nn_data_size + cc_matrices_size;
+	LongIndex total_mem = SysInfo::getTotalMemory();
+	
+	bool proceed = true;
+	if (total_mem == -1 || mem_Bytes / (double)total_mem > 0.5)
+	{
+		Log << "\n++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++" << endl;
+		Log << "++ WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING" << endl;
+		Log << "++" << endl;
+		Log << "++ The application will use at least >> " << (mem_Bytes / 1.074e+9) << " GB << of memory" << endl;
+		Log << "++ DO YOU WANT TO PROCEED AT YOUR OWN RISK? [yes | no]" << endl;
+		Log << "++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++\n" << endl;
+		
+		String proceed = "no";
+		getline(cin, proceed);
+		
+		String decision = "no";
+		getline(cin, decision);
+		
+		if (decision != "yes")
+		{
+			proceed = false;
+		}
+	}
+	
+	return proceed;
+}
+
+
+bool clusteringMemoryEstimation(const LongSize cc_max, const unsigned int n_threads, const unsigned int b_size)
+{
+	LongIndex cluster_data_size = (2 * cc_max - 1)  * 100;
+	LongIndex thread_data_size = (n_threads + 1) * cc_max * ( sizeof(unsigned int) + sizeof(float) );
+	thread_data_size += n_threads * sizeof(unsigned short) * b_size * (b_size + 1);
+	thread_data_size += (n_threads) * 100 * cc_max * sizeof(double);
+	LongIndex mem_Bytes = cluster_data_size + thread_data_size;
+	LongIndex total_mem = SysInfo::getTotalMemory();
+	
+	bool proceed = true;
+	if (total_mem == -1 || mem_Bytes / (double)total_mem > 0.5)
+	{
+		Log << "\n++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++" << endl;
+		Log << "++ WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING WARNING" << endl;
+		Log << "++" << endl;
+		Log << "++ The largest connected component has >> " << cc_max << " members <<" << endl;
+		Log << "++ Clustering of this component using current settings will use at least >> " << (mem_Bytes / 1.074e+9) << " GB << of memory" << endl;
+		Log << "++ DO YOU WANT TO PROCEED AT YOUR OWN RISK? [yes | no]" << endl;
+		Log << "++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++ ++\n" << endl;
+		
+		String decision = "no";
+		getline(cin, decision);
+		
+		if (decision != "yes")
+		{
+			proceed = false;
+		}
+	}
+	
+	return proceed;
+}
+
+
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("FingerprintSimilarityClustering", "fast clustering of compounds using 2D binary fingerprints", VERSION, String(__DATE__), "Chemoinformatics");
@@ -559,6 +625,19 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 		m_indices.push_back(i);
 	}
 	
+	
+	// MAKE ESTIMATION FOR SYSTEM RESOURCE DEMANDS
+	bool proceed = connectedComponentsMemoryEstimation(m_indices.size(), n_threads, options.getInteger(BinaryFingerprintMethods::Option::BLOCKSIZE));
+	if (!proceed)
+	{
+		Log << "++" << endl;
+		Log << "++ DONE" << endl;
+		Log << "++" << endl;
+		
+		return 0;
+	}
+	
+	
 	BinaryFingerprintMethods bfm(options, mol_features);
 	bool success = bfm.connectedComponents(m_indices, ccs, nn_data, sim_cutoff, true);
 	
@@ -583,6 +662,18 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	
 	Log.level(10) << "++ --------------------------------------------------------" << endl;
 	Log.level(10) << "++ STEP 3: Average linkage clustering of connected components" << endl;
+	
+	// MAKE ESTIMATION FOR SYSTEM RESOURCE DEMANDS
+	LongSize cc_max = cc_sizes.rbegin()->first;
+	proceed = clusteringMemoryEstimation(cc_max, n_threads, options.getInteger(BinaryFingerprintMethods::Option::BLOCKSIZE));
+	if (!proceed)
+	{
+		Log << "++" << endl;
+		Log << "++ DONE" << endl;
+		Log << "++" << endl;
+		
+		return 0;
+	}
 	
 	vector<unsigned int> cl_indices;
 	vector<vector<unsigned int> > clusters;
@@ -777,9 +868,9 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	}
 	
 	
-	Log.level(10) << "++" << endl;
-	Log.level(10) << "++ DONE" << endl;
-	Log.level(10) << "++" << endl;
+	Log << "++" << endl;
+	Log << "++ DONE" << endl;
+	Log << "++" << endl;
 	
 	return 0;
 }
