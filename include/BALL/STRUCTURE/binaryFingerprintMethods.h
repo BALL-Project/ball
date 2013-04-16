@@ -545,6 +545,7 @@ namespace BALL
 			 * This value is decreased during calculations and finally 0 to indicate that all calculations have been performed!
 			 */
 			LongSize n_comparisons_;
+			LongSize n_comparisons_backup_;
 			
 			
 			/**

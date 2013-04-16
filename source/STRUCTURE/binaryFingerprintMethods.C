@@ -1334,12 +1334,26 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesThread(const unsigned int thr
 	LongSize index;
 	LongSize row_index, col_index;
 	
+	unsigned int count = 0;
 	while (getNextComparisonIndex(index))
 	{
 		// Reset common counts matrix to 0
 		for (unsigned short m=0; m<=blocksize_; ++m)
 		{
 			memset(cc_matrix[m], '\0', cc_matrix_size_);
+		}
+		
+		if (thread_id == 0)
+		{
+			if (count == 100 && verbosity_ > 0)
+			{
+				double perc = 100.0 * double((n_comparisons_backup_ - index) /  double(n_comparisons_backup_));
+				
+				cerr << "\r++ Status: " << perc << " %          ";
+				count = 0;
+			}
+			
+			++count;
 		}
 		
 		// Calculate indices of next InvertedIndex pair to compare
@@ -1350,6 +1364,11 @@ void BinaryFingerprintMethods::pairwiseSimilaritiesThread(const unsigned int thr
 		
 		// Calculate similarities
 		(this->*pairwiseSimilaritiesBase)(row_index, col_index, t_data);
+	}
+	
+	if (thread_id == 0 && verbosity_ > 0)
+	{
+		cerr << endl;
 	}
 }
 
@@ -1387,6 +1406,7 @@ bool BinaryFingerprintMethods::pairwiseSimilarities(const vector<unsigned int>& 
 	
 	LongSize n_iids = lib_iindices_.size();
 	n_comparisons_ = (n_iids * n_iids + n_iids) / 2;
+	n_comparisons_backup_ = n_comparisons_;
 	
 	unsigned int n_threads = n_threads_;
 	if (n_comparisons_ < n_threads_)
@@ -1985,7 +2005,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		// ----------------------------------------------------------------------
 		if (verbosity_ >= 10)
 		{
-			Log << "++ RNN parallel method stored data" << endl;
+			Log << "++ RNN parallel method (stored data)" << endl;
 		}
 		
 		for (unsigned int i=0; i!=n_molecules; ++i)
@@ -2036,7 +2056,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		// ----------------------------------------------------------------------
 		if (verbosity_ >= 10)
 		{
-			Log << "++ NNChain method(stored matrix" << endl;
+			Log << "++ NNChain method (stored matrix)" << endl;
 		}
 		
 		// NN Chain from scratch. First calculate pairwise similarity matrix.
@@ -2886,7 +2906,7 @@ void BinaryFingerprintMethods::NNChainCore(Cluster*& root)
 {
 	if (verbosity_ >= 10)
 	{
-		Log.info() << "++ Starting NNChain calculations" << endl;
+		Log << "++ Starting NNChain calculations" << endl;
 	}
 	
 	if (threads_ == NULL)
@@ -3234,7 +3254,7 @@ void BinaryFingerprintMethods::switchStorageMethod()
 {
 	if (verbosity_ >= 10)
 	{
-		Log << "++ switch to stored matrix method" << endl;
+		Log << "++ Switch to stored matrix method" << endl;
 	}
 	
 	// Create cluster indices to address the similarity matrix
