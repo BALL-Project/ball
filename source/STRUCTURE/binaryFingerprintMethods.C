@@ -2884,171 +2884,90 @@ void BinaryFingerprintMethods::averageLinkageParallel(Cluster*& root)
 
 void BinaryFingerprintMethods::NNChainCore(Cluster*& root)
 {
+	if (verbosity_ >= 10)
+	{
+		Log.info() << "++ Starting NNChain calculations" << endl;
+	}
+	
 	if (threads_ == NULL)
 	{
 		createThreadData(blocksize_, 0, 0);
 	}
 	
-	if (vec_actives_.size() > 2)
+	if (vec_actives_.size() == 0)
 	{
-		initNNChain();
-		nextNearestNeighbour();
-		moveNearestNeighbour();
-	}
-	else
-	{
-		if (vec_actives_.size() == 2)
-		{
-			initNNChain();
-			nextNearestNeighbour();
-			moveNearestNeighbour();
-			finalizeNNChain(root);
-		}
-		else
-		{
-			if (vec_actives_.size() == 1)
-			{
-				root = *vec_actives_.begin();
-				vec_actives_.clear();
-			}
-			else
-			{
-				root = NULL;
-			}
-		}
-		
+		root = NULL;
 		return;
 	}
 	
+	// Indicates if rnn found
+	bool rnn;
 	
-	// ------------------------------
-	// NNChain size         == 2
-	// Active Clusters size >= 1
-	// ------------------------------
-	while (vec_actives_.size())
+	// Empty NNChain at the beginning
+	nn_chain_size_ = 0;
+	
+	// Counting available clusters
+	unsigned int n_clusters = vec_actives_.size();
+	
+	// While there are clusters to merge
+	while (n_clusters > 1)
 	{
-		// ------------------------------
-		// NNChain size         >= 2
-		// Active Clusters size >= 1
-		// ------------------------------
-		
-		// Find next nearest neighbour
-		nextNearestNeighbour();
-		
-		if (fabs(current_nn_sim_ - nn_chain_tip_->predecessor_sim) <= precision_)
+		// Check if NNChain is empty
+		if (nn_chain_size_ == 0)
 		{
-			// NNChain tip and its predecessor are not reciprocal nearest neighbours
+			// Yes - so initialize
+			nn_chain_tip_ = *vec_actives_.rbegin();
+			nn_chain_tip_->predecessor = NULL;
+			nn_chain_tip_->predecessor_sim = -1.0;
+			nn_chain_tip_->predecessor_sim_sum = -1.0;
 			
-			// ------------------------------
-			// NNChain size         >= 2
-			// Active Clusters size >= 1
-			// ------------------------------
-			
-			moveNearestNeighbour();
-			
-			// ------------------------------
-			// NNChain size         >= 3
-			// Active Clusters size >= 0
-			// ------------------------------
+			nn_chain_size_ = 1;
+			vec_actives_.pop_back();
 		}
-		else
+		
+		rnn = false;
+		
+		while (!rnn)
 		{
-			if (current_nn_sim_ < nn_chain_tip_->predecessor_sim)
+			// Find nearest neighbour to nn_chain_tip_
+			nextNearestNeighbour();
+			
+			// Check if nn_chain_tip_ is more similar to nearest neighbour than to its predecessor
+			if (fabs(current_nn_sim_ - nn_chain_tip_->predecessor_sim) <= precision_)
 			{
-				// NNChain tip and its predecessor are reciprocal nearest neighbours
-				
-				// ------------------------------
-				// NNChain size         >= 2
-				// Active Clusters size >= 1
-				// ------------------------------
-				
-				// Merge RNN pair
-				mergeClusters(nn_chain_tip_, nn_chain_tip_->predecessor, nn_chain_tip_->predecessor_sim_sum);
-				
-				// ------------------------------
-				// NNChain size         >= 0
-				// Active Clusters size >= 2
-				// ------------------------------
-				
-				if (nn_chain_size_ < 2)
-				{
-					if (nn_chain_size_ == 1)
-					{
-						// ------------------------------
-						// NNChain size         == 1
-						// Active Clusters size >= 2
-						// ------------------------------
-						
-						nextNearestNeighbour();
-						moveNearestNeighbour();
-						
-						// ------------------------------
-						// NNChain size         == 2
-						// Active Clusters size >= 1
-						// ------------------------------
-					}
-					else
-					{
-						// ------------------------------
-						// NNChain size         == 0
-						// Active Clusters size >= 2
-						// ------------------------------
-						
-						initNNChain();
-						
-						// ------------------------------
-						// NNChain size         == 1
-						// Active Clusters size >= 1
-						// ------------------------------
-						
-						nextNearestNeighbour();
-						moveNearestNeighbour();
-						
-						// ------------------------------
-						// NNChain size         == 2
-						// Active Clusters size >= 0
-						// ------------------------------
-					}
-				}
-				
-				// ------------------------------
-				// NNChain size         >= 2
-				// Active Clusters size >= 0
-				// ------------------------------
+				// Equally similar - so append to NNChain
+				moveNearestNeighbour();
 			}
 			else
 			{
-				// NNChain tip and its predecessor are not reciprocal nearest neighbours
-				
-				// ------------------------------
-				// NNChain size         >= 2
-				// Active Clusters size >= 1
-				// ------------------------------
-				
-				moveNearestNeighbour();
-				
-				// ------------------------------
-				// NNChain size         >= 3
-				// Active Clusters size >= 0
-				// ------------------------------
+				if (current_nn_sim_ < nn_chain_tip_->predecessor_sim)
+				{
+					// Less similar - thus RNN pair at the head of the NNChain
+					rnn = true;
+				}
+				else
+				{
+					// More similar - so append to NNChain
+					moveNearestNeighbour();
+				}
 			}
 		}
 		
-		// ------------------------------
-		// NNChain size         >= 2
-		// Active Clusters size >= 0
-		// ------------------------------
+		// Merge RNN pair heading the NNChain
+		mergeClusters(nn_chain_tip_, nn_chain_tip_->predecessor, nn_chain_tip_->predecessor_sim_sum);
+		
+		// One cluster less to merge ...
+		n_clusters -= 1;
 	}
 	
-	// ------------------------------
-	// NNChain size         >= 2
-	// Active Clusters size == 0
-	// ------------------------------
-	
-	// Finalize NNChain
-	finalizeNNChain(root);
+	// Done. 
+	// Root cluster is the last remaining cluster
+	root = vec_actives_[0];
+	vec_actives_.clear();
 	
 	destroyThreadData();
+	
+	return;
 }
 
 
@@ -3249,17 +3168,6 @@ void BinaryFingerprintMethods::enumerateClusterMembers(Cluster* cl, unsigned int
 }
 
 
-void BinaryFingerprintMethods::initNNChain()
-{
-	nn_chain_tip_ = *vec_actives_.rbegin();
-	nn_chain_tip_->predecessor = NULL;
-	nn_chain_tip_->predecessor_sim_sum = -1.0;
-	
-	nn_chain_size_ = 1;
-	vec_actives_.pop_back();
-}
-
-
 void BinaryFingerprintMethods::nextNearestNeighbour()
 {
 	current_nn_sim_ = -1.0;
@@ -3319,51 +3227,6 @@ void BinaryFingerprintMethods::moveNearestNeighbour()
 	++nn_chain_size_;
 	
 	vec_actives_.erase(current_nn_);
-}
-
-
-void BinaryFingerprintMethods::finalizeNNChain(Cluster*& root)
-{
-	// ------------------------------
-	// NNChain size         >= 2
-	// Active Clusters size == 0
-	// ------------------------------
-	nextNearestNeighbour();
-	mergeClusters(nn_chain_tip_, nn_chain_tip_->predecessor, nn_chain_tip_->predecessor_sim_sum);
-	
-	// ------------------------------
-	// NNChain size         >= 0
-	// Active Clusters size == 1
-	// ------------------------------
-	
-	while (nn_chain_size_!=0)
-	{
-		// ------------------------------
-		// NNChain size         >= 1
-		// Active Clusters size == 1
-		// ------------------------------
-		nextNearestNeighbour();
-		moveNearestNeighbour();
-		
-		// ------------------------------
-		// NNChain size         >= 2
-		// Active Clusters size == 0
-		// ------------------------------
-		mergeClusters(nn_chain_tip_, nn_chain_tip_->predecessor, nn_chain_tip_->predecessor_sim_sum);
-		
-		// ------------------------------
-		// NNChain size         >= 0
-		// Active Clusters size == 1
-		// ------------------------------
-	}
-	
-	// ------------------------------
-	// NNChain size         == 0
-	// Active Clusters size == 1
-	// ------------------------------
-	
-	root = *vec_actives_.begin();
-	vec_actives_.clear();
 }
 
 

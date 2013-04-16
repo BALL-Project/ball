@@ -986,12 +986,6 @@ namespace BALL
 			void enumerateClusterMembers(Cluster* cl, unsigned int cluster_id);
 			
 			
-			/** 
-			 * Nearest Neighbour Chain Algorithm: Initialize by moving a random cluster from the set of active clusters to the tip of the NNChain.
-			 */
-			void initNNChain();
-			
-			
 			/**
 			 * Nearest Neighbour Chain Algorithm: Calculate the nearest neighbour of the nn_chain_tip_ within the set of active clusters.
 			 */
@@ -1002,13 +996,6 @@ namespace BALL
 			 * Nearest Neighbour Chain Algorithm: Append nearest neighbour of current the nn_chain_tip_ to Nearest Neighbour Chain.
 			 */
 			void moveNearestNeighbour();
-			
-			
-			/**
-			 * Nearest Neighbour Chain Algorithm: No clusters outside the chain left. Merge chain down and finish clustering.
-			 * @param Cluster* Pointer to return the root cluster.
-			 */
-			void finalizeNNChain(Cluster*& root);
 			
 			
 			/**
