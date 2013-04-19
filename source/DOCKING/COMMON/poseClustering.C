@@ -1131,9 +1131,6 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 		if (rmsd_type == SNAPSHOT_RMSD)
 		{
-			// for snapshot-based rmsds, we will need a copy of the system later on
-			system_i_ = base_system_;
-
 			// and the number of atoms used for rmsd computation
 			for (AtomConstIterator atom_it = system_i_.beginAtom(); +atom_it; ++atom_it)
 			{

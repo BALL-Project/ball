@@ -167,18 +167,6 @@ int main (int argc, char **argv)
 
 	if (parpars.has("i_trans"))
 	{
-		if (parpars.has("rmsd_type"))
-		{
-			if (parpars.get("rmsd_type") != "RIGID_RMSD")
-			{
-				Log << "Transformation input file can only be used with rmsd_type 'RIGID_RMSD'. Abort!" << endl;
-				return 0;
-			}
-		}
-		else
-		{
-			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
-		}
 		pc.setBaseSystemAndTransformations(sys, parpars.get("i_trans"));
 	}
 
