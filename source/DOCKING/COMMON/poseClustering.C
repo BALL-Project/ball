@@ -640,7 +640,7 @@ namespace BALL
 
 //cout << "Final num of clusters " << clusters_.size() << endl;
 //printClusters();
-//printClusterRMSDs();
+//printClusterScores();
 
 		return true;
 	}
@@ -752,7 +752,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				cluster_scores_.push_back(score_helper[current_cluster]);
 			}
 		}
-//printClusterRMSDs();
+//printClusterScores();
 		return true;
 	}
 
@@ -1455,7 +1455,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 					temp_cluster_scores.push_back(inner_pc.getClusterScore(j));
 				}
 //cout << "++++++++++++++++++++++++++++++***" << endl;
-//				inner_pc.printClusterRMSDs();
+//				inner_pc.printClusterScores();
 //cout << " cluster " << i << "( " << getClusterSize(i) << " ) was split into " << num_curr_clusters 
 //      << " clusters." << endl;
 //cout << "***++++++++++++++++++++++++++++++***" << endl;
@@ -1491,7 +1491,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	}
 
 
-	void PoseClustering::printClusterRMSDs(std::ostream& out)
+	void PoseClustering::printClusterScores(std::ostream& out)
 	{
 		Index rmsd_type   = options.getInteger(Option::RMSD_TYPE);
 #ifdef POSECLUSTERING_DEBUG 
@@ -1507,7 +1507,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
 			out << "=======================================" << endl;
-			out << "    Cluster " << i << "(Ward cluster score: " << getClusterScore(i) << ")" << endl;
+			out << "    Cluster " << i << "(cluster score: " << getClusterScore(i) << ")" << endl;
 
 #ifdef POSECLUSTERING_DEBUG 
 			if (cluster_alg == NEAREST_NEIGHBOR_CHAIN_WARD)

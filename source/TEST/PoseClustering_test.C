@@ -162,7 +162,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = SNAPSHOT_RMSD)
 	TEST_EQUAL(pc.getNumberOfClusters(), 1)
 	TEST_REAL_EQUAL(pc.getClusterScore(0), 60.6787)
 
-	//pc.printClusterRMSDs();
+	//pc.printClusterScores();
 
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 4.00);
 	pc.compute();
@@ -271,7 +271,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = CENTER_OF_MASS_DIS
 	TEST_EQUAL(pc.getClusterScore(1) < 3., true)
 	TEST_EQUAL(pc.getClusterScore(2) < 3., true)
 	TEST_EQUAL(pc.getClusterScore(3) < 3., true)
-	//pc.printClusterRMSDs();
+	//pc.printClusterScores();
 
 	//               - CLINK_DEFAYS
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::CLINK_DEFAYS);
@@ -416,7 +416,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	TEST_EQUAL(pc.getNumberOfClusters(), 55)
 
 	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(15);
-//pc.printClusterRMSDs();
+//pc.printClusterScores();
 
 	TEST_EQUAL(clusters.size(), 20)
 	TEST_EQUAL(pc.getNumberOfClusters(), 20)

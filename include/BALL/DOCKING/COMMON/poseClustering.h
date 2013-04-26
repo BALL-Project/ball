@@ -457,7 +457,7 @@ namespace BALL
 
 			/// print clusters of pose indices with RMSD between clusters	
 			/// Note: start counting with 0
-			void printClusterRMSDs(std::ostream& out = std::cout);
+			void printClusterScores(std::ostream& out = std::cout);
 
 
 		protected:
@@ -470,7 +470,7 @@ namespace BALL
 				public:
 					/// Default constructor.
 					ComputeNearestClusterTask_(PoseClustering* parent,
-					                           const std::vector<ClusterTreeNode>& active_clusters, 
+					                           const std::vector<ClusterTreeNode>& active_clusters,
 					                           Position current_cluster, 
 																		 Index rmsd_type);
 
