@@ -130,7 +130,6 @@ var MsgTypeDataSet = {
 		};
 
 function onJSMessage(i, j) { //i = Message Class, j = Message Type
-	//alert("next_step:" + current_step); 
 	switch (current_step)
 	{
 	  case 1: // Create a peptide
@@ -146,7 +145,6 @@ function onJSMessage(i, j) { //i = Message Class, j = Message Type
 	  {
 		  if (i != MsgClass.SCENE) return;
 		  document.getElementById('button1').disabled=false;
-		  //alert("current_step:" + current_step);  
 		  break;
 	  }
 	  case 3: // Hierarchy
@@ -221,7 +219,7 @@ function onJSActionSignal(i) { //i = ActionType
 	}
 	current_action = i;
 
-	alert("Action Type " + i);
+	// alert("Action Type " + i);
 	switch (current_step)
 	{
 	  case 11: // optimizing = 2

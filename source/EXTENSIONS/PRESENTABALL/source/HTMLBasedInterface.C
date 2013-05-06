@@ -126,8 +126,9 @@ namespace BALL
 					connect(action, SIGNAL(triggered()), signalMapper, SLOT(map()));
 					signalMapper->setMapping(action, i);
 					connect(signalMapper, SIGNAL(mapped(int)), this, SIGNAL(fireJSActionSignal(int)));
+					#ifdef BALL_VIEW_DEBUG
 					Log.info() << "Connected <" << action->text().toStdString() << "> action to JSActionSignal " << i << std::endl;
-					
+					#endif
 				}
 			}
 			//add us (the object of HTMLBasedInterface) to JavaScript runtime of currently loaded page
@@ -147,14 +148,11 @@ namespace BALL
 
 		void HTMLBasedInterface::onNotify(Message* message)
 		{
-			//Log.info() << "In onNotify()" << std::endl;
-			
 			//Try to cast message to the type, that you want to handle
 			CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 			RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 			SceneMessage* smsg = RTTI::castTo<SceneMessage>(*message);
 			DatasetMessage* dmsg = RTTI::castTo<DatasetMessage>(*message);			
-			//Log.info() << cmsg << std::endl;
 			
 			
 			if (cmsg == 0)
@@ -174,7 +172,9 @@ namespace BALL
 						{
 							emit fireJSMessage(3, (int) dmsg->getType()); //DataMessage = 3
 
+							#ifdef BALL_VIEW_DEBUG
 							Log.info() << "DataMessage fired to JS" << std::endl;
+							#endif
 						}
 					}
 					else
@@ -182,14 +182,18 @@ namespace BALL
 
 						emit fireJSMessage(2, (int) smsg->getType()); //SceneMessage = 2
 
+						#ifdef BALL_VIEW_DEBUG
 						Log.info() << "SceneMessage fired to JS" << std::endl;
+						#endif
 					}
 				}
 				else
 				{
 					emit fireJSMessage(1, (int) rmsg->getType()); // RepresentationMessage = 1
 
+					#ifdef BALL_VIEW_DEBUG
 					Log.info() << "RepresentationMessage fired to JS" << std::endl;
+					#endif
 				}
 			}
 			else
@@ -198,7 +202,9 @@ namespace BALL
 				// fire a Qt signal that can be handled by the website 
 				emit fireJSMessage(0, (int) cmsg->getType()); // CompositeMessage = 0
 
+				#ifdef BALL_VIEW_DEBUG
 				Log.info() << "CompositeMessage fired to JS" << std::endl;
+				#endif
 			}
 
 
