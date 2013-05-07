@@ -384,6 +384,7 @@ def addPlane(plane_specifier, height, boundary, bottom = True):
   getMainControl().insert(r)
   getMainControl().update(r)
 
+###################### PRESENTABALL: #######################
 def selectByExpression(expression):
   getMainControl().clearSelection()
   getMolecularControl().applySelector(String(expression)) 
@@ -403,7 +404,8 @@ def setViewPoint(view_point, look_at, look_up):
   camera.setLookUpVector(getVectorFromURLString(look_up))
   setCamera(camera)
   Scene.getInstance(0).applyStereoDefaults()
-
+  # trigger an update
+  getMainControl().update(getRepresentations()[0])
 
 def selectByExpressionAndSetViewPoint(expression, view_point, look_at, look_up):
   setViewPoint(view_point, look_at, look_up)
@@ -417,21 +419,44 @@ def toggleRepresentationByName(name):
       rep.setHidden(not rep.isHidden())
       getMainControl().update(rep)
 
+def toggleRepresentationsByNames(names):
+  reps = getRepresentations()
+  rep_names = names.split(",")
+  #for name in rep_names:
+  #  print "++"+name + "++"
+  for rep in reps:
+    if rep.getName() in rep_names:
+      rep.setHidden(not rep.isHidden())
+      #print "switch rep", rep.getName(), rep.isHidden()
+      getMainControl().update(rep)
 
 def toggleSelectionByExpression(expression):
   if (len(getSelection()) == 0):
     getMolecularControl().applySelector(String(expression))
   else:
     getMainControl().clearSelection()
-    
+
 def showOnlyRepresentationByName(name):
+  showOnlyRepresentationsByNames(name)
+
+def showOnlyRepresentationsByNames(names):
   reps = getRepresentations()
-  
+  rep_names = names.split(",")
+
   for rep in reps:
-    print rep.getName()," ",name, rep.getName() == name
-    if rep.getName() == name:
+    print rep.getName()," ",rep.getName() in rep_names
+    if rep.getName() in rep_names:
       rep.setHidden(False)
     else:
       rep.setHidden(True)
-  getMainControl().update(rep)
+    getMainControl().update(rep)
+
+# for debugging
+def listRepresentations():
+  print "available representations:"
+  reps = getRepresentations()
+  for rep in reps:
+    print rep.getName()
+  print "-------------"
+
 
