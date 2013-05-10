@@ -1379,7 +1379,7 @@ CHECK(serializeWardClusterTree(std::ostream& out))
 	//pc.extractClustersForThreshold(2.4); //0.5
 	pc.serializeWardClusterTree(temp_tree);
 
-	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_wardtree.dat))
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_wardtree.dat))
 RESULT
 
 
@@ -1539,11 +1539,42 @@ CHECK(deserialize/serialize WardClusterTree(std::ostream& out))
 RESULT
 
 
-/*
-CHECK convertTransformations2Snaphots_();
-CHECK convertSnaphots2Transformations_();
+//CHECK convertTransformations2Snaphots_();
 
-*/
+CHECK (convertSnaphots2Transformations())
+	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
+	System sys;
+	pdb.read(sys);
+	ConformationSet cs2;
+	cs2.setup(sys);
+	cs2.readDCDFile(BALL_TEST_DATA_PATH(PoseClustering_test2.dcd));
+	cs2.resetScoring();
+	PoseClustering pc(&cs2, 10.00);
+
+	pc.convertSnaphots2Transformations();
+
+	String filename;
+	NEW_TMP_FILE(filename)
+	LineBasedFile file(filename, std::ios::out);
+
+	std::vector< PoseClustering::PosePointer > poses = pc.getPoses();
+	for (Size i=0; i<poses.size(); i++)
+	{
+		Eigen::Matrix3f const & rot    = poses[i].trafo->rotation;
+		Eigen::Vector3f const & transl = poses[i].trafo->translation;
+		file << "A A " << " 0.0 "
+			   << rot(0) << " " << rot(1) << " " << rot(2) << " " << transl[0] << " "
+				 << rot(3) << " " << rot(4) << " " << rot(5) << " " << transl[1] << " "
+				 << rot(6) << " " << rot(7) << " " << rot(8) << " " << transl[2]
+				 << std::endl;
+	}
+
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_transformFile.dat))
+
+
+RESULT
+
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

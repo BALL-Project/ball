@@ -374,7 +374,7 @@ namespace BALL
 			if (poses_[0].snap == 0)
 			{
 				// but we don't have them... so let's produce some...
-				convertTransformations2Snaphots_();
+				convertTransformations2Snaphots();
 			}
 		}
 		else if (rmsd_type == RIGID_RMSD)
@@ -383,7 +383,7 @@ namespace BALL
 			if (poses_[0].trafo == 0)
 			{
 				// but we don't have them... so let's produce some...
-				convertSnaphots2Transformations_();
+				convertSnaphots2Transformations();
 			}
 		}
 
@@ -1866,7 +1866,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				if (poses_[0].snap == 0)
 				{
 					// but we don't have them... so let's produce some...
-					convertTransformations2Snaphots_();
+					convertTransformations2Snaphots();
 				}
 			}
 			else if (rmsd_type == RIGID_RMSD)
@@ -1875,7 +1875,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				if (poses_[0].trafo == 0)
 				{
 					// but we don't have them... so let's produce some...
-					convertSnaphots2Transformations_();
+					convertSnaphots2Transformations();
 				}
 			}
 
@@ -1997,7 +1997,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		{
 			// originally we were given transformations, not snapshots
 			// lets create some
-			convertTransformations2Snaphots_();
+			convertTransformations2Snaphots();
 		}
 		// create a new ConformationSet
 		boost::shared_ptr<ConformationSet> new_set(new ConformationSet());
@@ -2029,7 +2029,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		{
 			// originally we were given transformations, not snapshots
 			// lets create some
-			convertTransformations2Snaphots_();
+			convertTransformations2Snaphots();
 		}
 
 		// create the set to be returned
@@ -2172,7 +2172,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		}
 	}
 
-	void PoseClustering::convertTransformations2Snaphots_()
+	void PoseClustering::convertTransformations2Snaphots()
 	{
 		if (current_set_ != NULL)
 		{
@@ -2232,7 +2232,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	}
 
 
-	void PoseClustering::convertSnaphots2Transformations_()
+	void PoseClustering::convertSnaphots2Transformations()
 	{
 		// just to be sure...
 		transformations_.clear();

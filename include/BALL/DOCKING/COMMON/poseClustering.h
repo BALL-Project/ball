@@ -142,9 +142,6 @@ namespace BALL
 				 */
 				static const String RUN_PARALLEL;
 
-				/** flag indicating the computation of a full cluster dendogram 
-				 */
-				//static const String FULL_CLUSTER_DENDOGRAM;
 			};
 
 			/// Default values for options
@@ -156,7 +153,6 @@ namespace BALL
 				static const Index RMSD_TYPE;
 				static const bool  RUN_PARALLEL;
 				static const bool USE_CENTER_OF_MASS_PRECLINK;
-				//static const bool FULL_CLUSTER_DENDOGRAM;
 			};
 
 			enum BALL_EXPORT RMSDType
@@ -346,6 +342,12 @@ namespace BALL
 			/// returns the score between two poses given as systems
 			float getScore(const System sys_a, const System sys_b, Options options) const;
 
+			/// convert the poses to SnapShots
+			void convertTransformations2Snaphots();
+
+			/// convert the poses to rigid transformations
+			void convertSnaphots2Transformations();
+
 			/// returns the complete linkage RMSD of cluster i
 			float computeCompleteLinkageRMSD(Index i, Options options, bool initialize = true);
 
@@ -354,6 +356,9 @@ namespace BALL
 
 			/// returns the pose i as system
 			boost::shared_ptr<System> getPose(Index i) const;
+
+			/// returns poses as PosePointer
+			std::vector<PosePointer> const&  getPoses() const {return poses_;}
 
 			/// returns the first conformation of cluster i as system 
 			boost::shared_ptr<System> getClusterRepresentative(Index i) const;
@@ -471,7 +476,7 @@ namespace BALL
 					/// Default constructor.
 					ComputeNearestClusterTask_(PoseClustering* parent,
 					                           const std::vector<ClusterTreeNode>& active_clusters,
-					                           Position current_cluster, 
+					                           Position current_cluster,
 																		 Index rmsd_type);
 
 					/// Splitting constructor.
@@ -603,12 +608,6 @@ namespace BALL
 
 			// store pointers to the snapshots in the poses vector
 			void storeSnapShotReferences_();
-
-			// 
-			void convertTransformations2Snaphots_();
-
-			// 
-			void convertSnaphots2Transformations_();
 
 			//
 			void printCluster_(Index i, std::ostream& out = std::cout) const;
