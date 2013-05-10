@@ -52,6 +52,7 @@ SET(EXECUTABLES_LIST
 	TaGRes
 	TaGRes-train
 	TrajectoryFile2PDBSplitter
+	Trajectory2RigidTransformation
 	Validator
 	VendorFinder
 	WaterFinder
