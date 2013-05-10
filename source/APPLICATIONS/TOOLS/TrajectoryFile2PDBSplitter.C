@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-// A very simple utility for splitting a trajectory file file into 
+// A very simple utility for splitting a trajectory file into 
 // several pdb snapshots of a system
 // 
 
@@ -35,14 +35,14 @@ int main(int argc, char** argv)
 
 
 	// the manual
-	String man = "This tool splits SnapShots of a given TrajectoryFile and the reference PDBFile into separate PDBFiles.\n\nParameters are the input SnapShots as TrajectoryFile (-i_trja), the corresponding reference pdb file that was originally used to create the TrajectoryFile (-i_pdb) and a naming schema for the results (-o).\n\nOutput of this tool is a number of PDBFiles each containing one SnapShot.";
+	String man = "This tool splits SnapShots of a given TrajectoryFile and the reference PDBFile into separate PDBFiles.\n\nParameters are the input SnapShots as TrajectoryFile (-i_traj), the corresponding reference pdb file that was originally used to create the TrajectoryFile (-i_pdb) and a naming schema for the results (-o).\n\nOutput of this tool is a number of PDBFiles each containing one SnapShot.";
 
 	parpars.setToolManual(man);
 
-	// here we set the types of I/O files, for example sdf is also allowed
-	parpars.setSupportedFormats("i_traj","dcd, trr");
-	parpars.setSupportedFormats("i_pdb","pdb");
-	parpars.setSupportedFormats("o","pdb");
+	// here we set the types of I/O files
+	parpars.setSupportedFormats("i_traj", "dcd, trr");
+	parpars.setSupportedFormats("i_pdb",  "pdb");
+	parpars.setSupportedFormats("o",      "pdb");
 
 	//TODO
 	//parpars.setSupportedFormats("o",MolFileFactory::getSupportedFormats());
