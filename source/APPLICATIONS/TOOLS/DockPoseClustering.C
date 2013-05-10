@@ -318,7 +318,7 @@ int main (int argc, char **argv)
 			String outfile_name = (i == 0) ? String(parpars.get("o"))
 				: String(parpars.get("o_dir")) + "/primary_"
 				+ String(parpars.get("o_id"))  + "_cluster" + String(i)
-				+ "_visible.dcd";
+				+ "_visible_dcd";
 			//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
 
 			new_cs->writeDCDFile(outfile_name);
