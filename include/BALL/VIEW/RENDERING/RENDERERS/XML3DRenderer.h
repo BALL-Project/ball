@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XML3DRenderer.h,v 1.12.16.1 2007/03/25 21:26:13 oliver Exp $
-//
 
 #ifndef BALL_VIEW_RENDERING_RENDERERS_XML3DRENDERER_H
 #define BALL_VIEW_RENDERING_RENDERERS_XML3DRENDERER_H
@@ -83,6 +81,8 @@ namespace BALL
 			/** @name Accessors
 			 */
 			//@{
+
+			virtual void setSize(float width, float height);
 
 			/** Sets the name of the file we will create.
 			 		\param name The file name
@@ -201,6 +201,12 @@ namespace BALL
 				Surface tube_template_;
 
 				Stage::Material rt_material_;
+
+				Index current_sphere_number_;
+				Index current_tube_number_;
+
+				float fov_x_;
+				float fov_y_;
 		};
   
 	} // namespace BALL

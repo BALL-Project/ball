@@ -1,8 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XML3DRenderer.C,v 1.22.16.3 2007/04/18 21:06:17 amoll Exp $
-//
 
 #include <BALL/VIEW/RENDERING/RENDERERS/XML3DRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -92,6 +90,31 @@ namespace BALL
 			representations_.clear();
 			color_map_.clear();
 			color_index_ = 0;
+		}
+
+		void XML3DRenderer::setSize(float width, float height)
+		{
+			// this should really be done in the camera...
+			float x_scale, y_scale;
+			if (width > height)
+			{
+				x_scale = width / (height * 2);
+				y_scale = 0.5;
+			}
+			else
+			{
+				x_scale = 0.5;
+				y_scale = height / (width * 2);
+			}
+
+			float nearf =  1.5f;
+			float left  = -2.f*x_scale;
+			float right =  2.f*x_scale;
+			float bot   = -2.f*y_scale;
+			float top   =  2.f*y_scale;
+
+			fov_x_ = 2*atan( (right-left)/(2*nearf) );
+			fov_y_ = 2*atan( (top-bot)/(2*nearf) );
 		}
 
 		void XML3DRenderer::setFileName(const String& name)
@@ -237,11 +260,16 @@ namespace BALL
 				Log.info() << "Start the XML3DRender output..." << endl;
 			#endif
 
+			setSize(width, height);
+
 			wireframes_.clear();
 			representations_.clear();
 			color_map_.clear();
 			color_strings_.clear();
 			color_index_ = 0;
+
+			current_sphere_number_ = 0;
+			current_tube_number_ = 0;
 
     // prepare the sphere template
       TriangulatedSphere sphere_template;
@@ -360,9 +388,18 @@ namespace BALL
 			out << " orientation=\""<< final_rotation_axis.x << " "
 															<< final_rotation_axis.y << " "
 															<< final_rotation_axis.z << " "
-															<< final_rotation_angle << "\"" ;
+															<< final_rotation_angle << "\"";
 			
 			out << " fieldOfView=\"" << 1.2 << "\"";
+			out << " fieldOfViewX=\"" << fov_x_ << "\"";
+			out << " fieldOfViewY=\"" << fov_y_ << "\"";
+
+			Vector3 look_at_vector = stage.getCamera().getLookAtPosition();
+			out << " lookAtVector=\"" << look_at_vector.x << " "
+				                      << look_at_vector.y << " "
+									  << look_at_vector.z << "\"";
+
+
 			out << " >";
 			out << "</view>\n" << endl;
 			
@@ -391,7 +428,14 @@ namespace BALL
 					out << "<float3 name=\"attenuation\">" << attenuation.x << " " << attenuation.y << " " << attenuation.z << "</float3> ";
 					out << "</lightshader>" << endl;
 					out << "<group transform=\"lighttransform" << i << "\" >" << endl;
-					out << "<light shader=\"#point" << i << "\" id=\"mypoint" << i << "\" />" << endl;
+					out << "<light shader=\"#point" << i << "\" id=\"mypoint" << i << "\"";
+					
+					if (it->isRelativeToCamera())
+					{
+						out << " relativeToCamera=\"true\"";
+					}
+					
+					out << " />" << endl;
 					out << "</group>" << endl;
 				}
 				
@@ -430,14 +474,6 @@ namespace BALL
 				}
 				out << "</group>" << endl;
 			}
-
-
-
-
-
-
-
-
 
 			//close xml3d environment
 			out << "		</xml3d>" << endl;
@@ -490,12 +526,10 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-
-
       Vector3 const& sphere_pos = sphere.getPosition();
       float radius = sphere.getRadius();
 			
-			//define a shader for each Tube elment
+			//define a shader for each sphere
 
       ColorRGBA const& color = sphere.getColor();
 			out << "<shader id=\"" << &sphere << "shader\" script=\"urn:xml3d:shader:phong\" >" << endl;
@@ -504,14 +538,14 @@ namespace BALL
       
       out << "</shader>" << endl;
 			
-			//define a transform for each Tube element
+			//define a transform for each sphere
 			out << "<transform ";
 			out << "id=\"" << &sphere_pos << "\" ";
 			out << "translation=\"" << sphere_pos.x << " " << sphere_pos.y << " " << sphere_pos.z << "\" ";  
 			out << "scale=\"" << radius << " " << radius << " " << radius << "\" ";  
 			out << "/>" << endl;
 			
-			out << "<group ";
+			out << "<group id=\"Sphere_" << current_sphere_number_++ << "\" ";
 			out << "transform=\"#" << &sphere_pos << "\" "; 
 			out << "shader=\"#" << &sphere << "shader\" >" << endl; 
 			
@@ -597,8 +631,6 @@ namespace BALL
 			// *Not implmented yet*
 		}
 
-
-
 		void XML3DRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 		{
 			std::ostream& out = *outfile_;
@@ -614,8 +646,8 @@ namespace BALL
 				out << "</shader>" << endl;
 				createTubeTransform_(tube);
 
-				out << "<group ";
-				out << "transform=\"#" << &tube << "trafo\" "; 
+				out << "<group id=\"Tube_" << current_tube_number_++ << "\" ";
+				out << "transform=\"#" << &tube << "trafo\" ";
 				out << "shader=\"#" << &tube << "shader\" >" << endl; 
 				
 				// Start a triangle env	
@@ -683,7 +715,7 @@ namespace BALL
 				createTubeTransform_(new_tube_1);
 				createTubeTransform_(new_tube_2);
 				
-				out << "<group ";
+				out << "<group id=\"Tube_" << current_tube_number_ << "_1\" ";
 				out << "transform=\"#" << &new_tube_1 << "trafo\" "; 
 				out << "shader=\"#" << &new_tube_1 << "shader\" >" << endl; 
 				
@@ -729,7 +761,7 @@ namespace BALL
 				out << "</group>" << endl; 
 				
 				// the second tube
-				out << "<group ";
+				out << "<group id=\"Tube_" << current_tube_number_++ << "_2\" ";
 				out << "transform=\"#" << &new_tube_2 << "trafo\" "; 
 				out << "shader=\"#" << &new_tube_2 << "shader\" >" << endl; 
 				
@@ -932,8 +964,7 @@ namespace BALL
 		
 		void XML3DRenderer::createTubeTransform_(const TwoColoredTube& tube)
 		{
-		
-     	Vector3 vec = tube.getVertex2() - tube.getVertex1();
+			Vector3 vec = tube.getVertex2() - tube.getVertex1();
       const double len = vec.getLength();
       const double angle = acos(vec.z / len); // the denominator accounts for the non-normalized rotation axis
       const float radius = tube.getRadius();
@@ -946,13 +977,12 @@ namespace BALL
       matrix.rotate(Angle(-angle), vec.y, -vec.x, 0);
 
       Matrix4x4 temp;
-      temp.setScale(radius, radius, len);
-      matrix*=temp;
+     // temp.setScale(radius, radius, len);
+     // matrix*=temp;
 
       temp.setTranslation(midpoint);
       matrix = temp*matrix;
 
-			
 			std::ostream& out = *outfile_;
 			
 			out << "<transform ";
