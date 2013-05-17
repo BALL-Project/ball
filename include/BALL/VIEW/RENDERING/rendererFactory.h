@@ -20,7 +20,7 @@ namespace BALL
 		/**
 		 * See PluginHandler for detailed documentation
 		 */
-		class RendererFactory : public QObject, public PluginHandler
+		class BALL_VIEW_EXPORT RendererFactory : public QObject, public PluginHandler
 		{
 			Q_OBJECT
 
