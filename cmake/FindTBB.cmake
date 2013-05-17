@@ -101,7 +101,7 @@ set (TBB_FOUND "NO")
 
 #-- Find TBB install dir and set ${_TBB_INSTALL_DIR} and cached ${TBB_INSTALL_DIR}
 # first: use CMake variable TBB_INSTALL_DIR
-if (TBB_INSTALL_DIR)
+if (TBB_INSTALL_DIR)    
     set (_TBB_INSTALL_DIR ${TBB_INSTALL_DIR})
 endif (TBB_INSTALL_DIR)
 # second: use environment variable
@@ -156,33 +156,68 @@ mark_as_advanced(TBB_INCLUDE_DIR)
 #-- Look for libraries
 # GvdB: $ENV{TBB_ARCH_PLATFORM} is set by the build script tbbvars[.bat|.sh|.csh]
 if (NOT $ENV{TBB_ARCH_PLATFORM} STREQUAL "")
-    set (TBB_LIBRARY_DIR "${_TBB_INSTALL_DIR}/$ENV{TBB_ARCH_PLATFORM}/lib")
+    set (_TBB_ARCH_PLATFORM $ENV{TBB_ARCH_PLATFORM})    
 else (NOT $ENV{TBB_ARCH_PLATFORM} STREQUAL "")
     # HH: deprecated
     message(STATUS "[Warning] FindTBB.cmake: The use of TBB_ARCHITECTURE and TBB_COMPILER is deprecated and may not be supported in future versions. Please set $ENV{TBB_ARCH_PLATFORM} (using tbbvars.[bat|csh|sh]).")
-    set (TBB_LIBRARY_DIR "${_TBB_INSTALL_DIR}/${_TBB_ARCHITECTURE}/${_TBB_COMPILER}/lib")
+    set (_TBB_ARCH_PLATFORM "${_TBB_ARCHITECTURE}/${_TBB_COMPILER}")
 endif (NOT $ENV{TBB_ARCH_PLATFORM} STREQUAL "")
 
+# In RTfact contrib, the path to libraries is lib/x64/vc10 but in the original TBB distribution it is lib/intel64/vc10
+# Changing it in either is not possible, so we have to replace it here and put both into search paths
+set (TBB_LIBRARY_DIR "${_TBB_INSTALL_DIR}/lib/${_TBB_ARCH_PLATFORM}")
 
-find_library(TBB_LIBRARY        ${_TBB_LIB_NAME}        ${TBB_LIBRARY_DIR} NO_DEFAULT_PATH)
+find_library(TBB_LIBRARY
+            NAMES ${_TBB_LIB_NAME}
+            PATHS ${TBB_LIBRARY_DIR}
+            NO_DEFAULT_PATH)
+            
 IF (NOT TBB_LIBRARY)
-	find_library(TBB_LIBRARY        ${_TBB_LIB_NAME}        ${TBB_LIBRARY_DIR})
-ENDIF()
+	find_library(TBB_LIBRARY
+                NAMES ${_TBB_LIB_NAME}
+                PATHS ${TBB_LIBRARY_DIR})
+ENDIF(NOT TBB_LIBRARY)
 
-find_library(TBB_MALLOC_LIBRARY ${_TBB_LIB_MALLOC_NAME} ${TBB_LIBRARY_DIR} NO_DEFAULT_PATH)
+find_library(TBB_MALLOC_LIBRARY
+            NAMES ${_TBB_LIB_MALLOC_NAME}
+            PATHS ${TBB_LIBRARY_DIR}
+            NO_DEFAULT_PATH)
+            
 IF (NOT TBB_MALLOC_LIBRARY)
-	find_library(TBB_MALLOC_LIBRARY ${_TBB_LIB_MALLOC_NAME} ${TBB_LIBRARY_DIR})
-ENDIF()
-#TBB_CORRECT_LIB_DIR(TBB_LIBRARY)
-#TBB_CORRECT_LIB_DIR(TBB_MALLOC_LIBRARY)
+	find_library(TBB_MALLOC_LIBRARY
+                NAMES ${_TBB_LIB_MALLOC_NAME}
+                PATHS ${TBB_LIBRARY_DIR})
+ENDIF(NOT TBB_MALLOC_LIBRARY)
+
+GET_FILENAME_COMPONENT( _TBB_LIBRARY_NAME ${TBB_LIBRARY} NAME )
+GET_FILENAME_COMPONENT( _TBB_LIBRARY_PATH ${TBB_LIBRARY} PATH )
+SET(TBB_LIBRARY ${_TBB_LIBRARY_NAME})
+SET(TBB_LIBRARY_PATH ${_TBB_LIBRARY_PATH})
+GET_FILENAME_COMPONENT( _TBB_MALLOC_LIBRARY_NAME ${TBB_MALLOC_LIBRARY} NAME )
+SET(TBB_MALLOC_LIBRARY ${_TBB_MALLOC_LIBRARY_NAME})
+
 mark_as_advanced(TBB_LIBRARY TBB_MALLOC_LIBRARY)
 
 #-- Look for debug libraries
-find_library(TBB_LIBRARY_DEBUG        ${_TBB_LIB_DEBUG_NAME}        ${TBB_LIBRARY_DIR} NO_DEFAULT_PATH)
-find_library(TBB_MALLOC_LIBRARY_DEBUG ${_TBB_LIB_MALLOC_DEBUG_NAME} ${TBB_LIBRARY_DIR} NO_DEFAULT_PATH)
+find_library(TBB_LIBRARY_DEBUG
+             NAMES ${_TBB_LIB_DEBUG_NAME}
+             PATHS ${TBB_LIBRARY_DIR}
+             NO_DEFAULT_PATH)
+
+find_library(TBB_MALLOC_LIBRARY_DEBUG
+             NAMES ${_TBB_LIB_MALLOC_DEBUG_NAME}
+             PATHS ${TBB_LIBRARY_DIR}
+             NO_DEFAULT_PATH)
 #TBB_CORRECT_LIB_DIR(TBB_LIBRARY_DEBUG)
 #TBB_CORRECT_LIB_DIR(TBB_MALLOC_LIBRARY_DEBUG)
 mark_as_advanced(TBB_LIBRARY_DEBUG TBB_MALLOC_LIBRARY_DEBUG)
+
+GET_FILENAME_COMPONENT( _TBB_LIBRARY_DEBUG_NAME ${TBB_LIBRARY_DEBUG} NAME )
+GET_FILENAME_COMPONENT( _TBB_LIBRARY_DEBUG_PATH ${TBB_LIBRARY} PATH )
+SET(TBB_LIBRARY_DEBUG ${_TBB_LIBRARY_DEBUG_NAME})
+SET(TBB_LIBRARY_DEBUG_PATH ${_TBB_LIBRARY_DEBUG_PATH})
+GET_FILENAME_COMPONENT( _TBB_MALLOC_LIBRARY_DEBUG_NAME ${TBB_MALLOC_LIBRARY_DEBUG} NAME )
+SET(TBB_MALLOC_LIBRARY_DEBUG ${_TBB_MALLOC_LIBRARY_DEBUG_NAME})
 
 
 if (TBB_INCLUDE_DIR)
@@ -193,10 +228,18 @@ if (TBB_INCLUDE_DIR)
 
     if (TBB_LIBRARY)
         set (TBB_FOUND "YES")
-        set (TBB_LIBRARIES ${TBB_LIBRARY} ${TBB_MALLOC_LIBRARY} ${TBB_LIBRARIES})
-        set (TBB_DEBUG_LIBRARIES ${TBB_LIBRARY_DEBUG} ${TBB_MALLOC_LIBRARY_DEBUG} ${TBB_DEBUG_LIBRARIES})
+   	#On Windows, we always should have both debug and release libraries. On other platforms, the debug libraries are often not present.
+	if(WIN32 OR (TBB_LIBRARY_DEBUG AND TBB_MALLOC_LIBRARY_DEBUG))
+	   set (_TBB_LIBRARIES optimized ${TBB_LIBRARY} optimized ${TBB_MALLOC_LIBRARY} debug ${TBB_LIBRARY_DEBUG} debug ${TBB_MALLOC_LIBRARY_DEBUG} ${TBB_LIBRARIES})
+	#and if not, use just the release ones
+	else()
+	  set (_TBB_LIBRARIES general ${TBB_LIBRARY} ${TBB_MALLOC_LIBRARY})
+	endif()
+        set (TBB_LIBRARIES ${_TBB_LIBRARIES} CACHE STRING "Intel TBB Libraries")
         set (TBB_INCLUDE_DIRS ${TBB_INCLUDE_DIR} CACHE PATH "TBB include directory" FORCE)
-        set (TBB_LIBRARY_DIRS ${TBB_LIBRARY_DIR} CACHE PATH "TBB library directory" FORCE)
+        set (_TBB_LIBRARY_DIRS ${TBB_LIBRARY_PATH} ${TBB_LIBRARY_DEBUG_PATH})
+        list(REMOVE_DUPLICATES _TBB_LIBRARY_DIRS)
+        set (TBB_LIBRARY_DIRS ${_TBB_LIBRARY_DIRS} CACHE PATH "TBB library directories" FORCE)
         mark_as_advanced(TBB_INCLUDE_DIRS TBB_LIBRARY_DIRS TBB_LIBRARIES TBB_DEBUG_LIBRARIES)
 	message(STATUS "Found Intel TBB: major version ${TBB_VERSION_MAJOR}")
     endif (TBB_LIBRARY)
