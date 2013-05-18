@@ -30,7 +30,7 @@ namespace BALL
 				void finishedExecution();
 		};
 
-		class BALL_VIEW_EXPORT HTMLBasedInterface : public HTMLView, public ModularWidget
+		class HTMLBasedInterface : public HTMLView, public ModularWidget
 		{
 			Q_OBJECT
 			BALL_EMBEDDABLE(HTMLBasedInterface, ModularWidget)
