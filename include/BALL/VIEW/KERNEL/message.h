@@ -594,8 +594,11 @@ class BALL_VIEW_EXPORT RepresentationMessage: public Message
 		/// Finished the update of a Representation
 		FINISHED_UPDATE,
 
-		/// Add a Representation to GeometricControl, but dont update in Scene
-		ADD_TO_GEOMETRIC_CONTROL
+		/// Add a Representation to GeometricControl, but don't update in Scene
+		ADD_TO_GEOMETRIC_CONTROL,
+
+		/// Update properties of Representation in GeometricControl, but don't update in Scene
+		UPDATE_PROPERTIES
 	};
 
 	///
