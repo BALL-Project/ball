@@ -92,7 +92,7 @@ namespace BALL
 
 			/** Update a Representation.
 			*/
-			virtual void updateRepresentation(Representation& rep);
+			virtual void updateRepresentation(Representation& rep, bool force=false);
 			
 			/** Mutable inspection of the selection.
 			*/

@@ -108,9 +108,9 @@ namespace BALL
 			representation_to_item_.erase(&rep);
 		}
 
-		void GeometricControl::updateRepresentation(Representation& rep)
+		void GeometricControl::updateRepresentation(Representation& rep, bool force)
 		{
-			if (getMainControl()->isBusy()) return;
+			if (!force && getMainControl()->isBusy()) return;
 
 			const HashMap<Representation*, QTreeWidgetItem*>::Iterator to_find =
 				representation_to_item_.find(&rep);
@@ -205,6 +205,10 @@ namespace BALL
 
 				case RepresentationMessage::UPDATE:
 					updateRepresentation(*rep);
+					return;
+
+				case RepresentationMessage::UPDATE_PROPERTIES:
+					updateRepresentation(*rep, true);
 					return;
 
 				default:
