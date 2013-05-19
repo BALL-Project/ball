@@ -650,6 +650,7 @@ void RepresentationManager::finishedUpdate_(Representation* rep)
 	{
 		// no it wasnt, so update all widgets, that this Representation was rebuild
  		main_control_->notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE));
+		main_control_->notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE_PROPERTIES));
 	}
 	else
 	{

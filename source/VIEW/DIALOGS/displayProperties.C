@@ -905,8 +905,9 @@ void DisplayProperties::createRepresentation(String data_string, const vector<co
 
 				rep->setProperty(*prop);
 			}
+		
+			notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE_PROPERTIES));
 		}
-
 	}
 	catch(...)
 	{
