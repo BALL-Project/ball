@@ -1,4 +1,5 @@
 #include <HTMLBasedInterface.h>
+#include <PresentaBALLSettings.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
@@ -31,11 +32,11 @@ namespace BALL
 				ModularWidget(name)
 		{
 			page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+
+			settings_ = new PresentaBALLSettings(this);
 			
 			//create SignalMapper for Scene actions
 			signalMapper = new QSignalMapper(this);
-			
-
 			
 			// make us available in Javascript, even after a new url has been loaded
 			connect(page()->mainFrame(), SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(exposeQObjectToJavascript()));
@@ -43,6 +44,23 @@ namespace BALL
 			connect(this, SIGNAL(linkClicked(const QUrl&)), this, SLOT(handleLinkClicked(const QUrl&)));
 			connect(this, SIGNAL(urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
 			
+			restoreDefaults();
+
+			ModularWidget::registerWidget(this);
+		}
+
+		HTMLBasedInterface::~HTMLBasedInterface()
+		{
+			for(QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.begin(); it != action_registry_.end(); ++it)
+			{
+				delete it.value();
+			}
+
+			ModularWidget::unregisterThis();
+		}
+
+		void HTMLBasedInterface::restoreDefaults()
+		{
 			Path p;
 			String s;
 			
@@ -68,7 +86,7 @@ namespace BALL
 
 			if (!s.isEmpty())
 			{
-			  setUrl(QUrl::fromLocalFile(QString(s.c_str()) + "/index.html"));
+				setIndexHTML((s + "/index.html").c_str());
 			}
 			else
 			{
@@ -76,18 +94,27 @@ namespace BALL
 			}
 
 			script_base_ = p.find("HTMLBasedInterface/scripts") + "/";
-			
-
-			ModularWidget::registerWidget(this);
-			
 		}
 
-		HTMLBasedInterface::~HTMLBasedInterface()
+		void HTMLBasedInterface::applyPreferences()
 		{
-			for(QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.begin(); it != action_registry_.end(); ++it)
+			setIndexHTML(ascii(settings_->getIndexHTMLLocation()));
+		}
+
+		void HTMLBasedInterface::setIndexHTML(const String& index_html)
+		{
+			if (index_html != index_html_)
 			{
-				delete it.value();
+				index_html_ = index_html;
+				setUrl(QUrl::fromLocalFile(index_html_.c_str()));
+
+				settings_->setIndexHTMLLocation(index_html_.c_str());
 			}
+		}
+
+		String const& HTMLBasedInterface::getIndexHTML()
+		{
+			return index_html_;
 		}
 
 		void HTMLBasedInterface::registerAction(HTMLInterfaceAction* action)
@@ -280,6 +307,11 @@ namespace BALL
 #else
 			Log.error() << "BALL is compiled without Python support. Action " << action.toAscii().data() << " could not be executed." << std::endl;
 #endif
+		}
+
+		PresentaBALLSettings* HTMLBasedInterface::getSettings()
+		{
+			return settings_;
 		}
 
 	}

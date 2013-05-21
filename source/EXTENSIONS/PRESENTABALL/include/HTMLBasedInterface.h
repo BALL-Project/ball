@@ -12,6 +12,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class PresentaBALLSettings;
+
 		class HTMLInterfaceAction : public QObject
 		{
 			Q_OBJECT
@@ -40,7 +42,16 @@ namespace BALL
 				virtual ~HTMLBasedInterface();
 
 				void registerAction(HTMLInterfaceAction* action);
-				virtual void onNotify(Message* message); 
+				virtual void onNotify(Message* message);
+
+				virtual void setIndexHTML(String const& index_html);
+				String const& getIndexHTML();
+
+				virtual void restoreDefaults();
+
+				virtual void applyPreferences();
+
+				PresentaBALLSettings* getSettings();
 
 			signals:
 				
@@ -61,8 +72,10 @@ namespace BALL
 
 			private:
 				QSignalMapper *signalMapper;
+				String index_html_;
 				String script_base_;
 				QHash<QString, HTMLInterfaceAction*> action_registry_;
+				PresentaBALLSettings* settings_;
 		};
 	}
 }

@@ -10,7 +10,8 @@ namespace BALL
 	{
 		PresentaBALLPlugin::PresentaBALLPlugin()
 			: icon_(":pluginPresentaBALL.png"),
-				is_active_(false)
+				is_active_(false),
+				settings_(0)
 		{
 		}
 
@@ -35,13 +36,16 @@ namespace BALL
 
 		ConfigDialog* PresentaBALLPlugin::getConfigDialog()
 		{
-			return 0;
+			return settings_;
 		}
 
 		ModularWidget* PresentaBALLPlugin::createModularWidget(MainControl* main_control)
 		{
-			HTMLBasedInterface* html_interface = new HTMLBasedInterface(main_control);
-			HTMLViewDock*       html_view      = new HTMLViewDock(html_interface, main_control, String(tr("PresentaBALL")).c_str());
+			html_interface_ = new HTMLBasedInterface(main_control);
+
+			HTMLViewDock* html_view = new HTMLViewDock(html_interface_, main_control, String(tr("PresentaBALL")).c_str());
+
+			settings_ = html_interface_->getSettings();
 
 			if (UIOperationMode::instance().getMode() > UIOperationMode::MODE_ADVANCED)
 			{

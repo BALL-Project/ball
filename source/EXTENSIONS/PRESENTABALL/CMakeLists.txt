@@ -13,10 +13,12 @@ ENDIF()
 SET(DIRECTORY source)
 ### list all filenames of the directory here ###
 SET(UI_SOURCES_LIST
+	${DIRECTORY}/PresentaBALLSettings.ui
 )
 
 SET(SOURCES_LIST
 	${DIRECTORY}/PresentaBALLPlugin.C
+	${DIRECTORY}/PresentaBALLSettings.C
 	${DIRECTORY}/HTMLBasedInterface.C
 )
 
@@ -28,6 +30,7 @@ SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/PresentaBALLPlugin.h
+	${DIRECTORY}/PresentaBALLSettings.h
 	${DIRECTORY}/HTMLBasedInterface.h
 )
 

@@ -5,6 +5,7 @@
 #include <QtGui/QPixmap>
 
 #include <HTMLBasedInterface.h>
+#include <PresentaBALLSettings.h>
 
 #include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
@@ -43,6 +44,8 @@ namespace BALL
 			private:
 				QPixmap icon_;
 				bool is_active_;
+				HTMLBasedInterface* html_interface_;
+				PresentaBALLSettings* settings_;
 		};
 	}
 }
