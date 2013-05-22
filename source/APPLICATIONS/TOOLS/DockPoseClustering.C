@@ -244,7 +244,7 @@ int main (int argc, char **argv)
 		pc.options.set(PoseClustering::Option::RUN_PARALLEL, true);
 	}
 
-	if (parpars.has("-i_dcd"))
+	if (parpars.has("i_dcd"))
 	{
 		pc.setConformationSet(&cs);
 	}
