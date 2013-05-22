@@ -2,6 +2,10 @@
 // vi: set ts=2:
 //
 
+// A utility for clustering docking poses
+//
+// 
+
 #include <BALL/DOCKING/COMMON/poseClustering.h>
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -32,7 +36,7 @@ int main (int argc, char **argv)
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
 	parpars.registerParameter("i_dcd", "input dcd-file or", INFILE, false);
 	//TODO offer the alternatives in a more elegant way!
-	parpars.registerParameter("i_transformations", "input transformation file for rigid rmsd clustering ", INFILE, false);
+	parpars.registerParameter("i_trans", "input transformation file for rigid rmsd clustering ", INFILE, false);
 
 	// we register an output file parameter 
 	// - CLI switch
@@ -110,14 +114,14 @@ int main (int argc, char **argv)
 
 
   // the manual
-	String man = "This tool computes clusters of docking poses given as conformation set or a list of rigid transformations.\n\nParameters are either the input ConformationSet (-i_dcd) and one corresponding pdb file (-i_pdb), or a transformation file (-i_transformations), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type (-rmsd_type), and the type of atoms used for scoring a pose (-scope). The optional parameter -o_red_dcd sets the output file for the reduced cluster set (one representative per cluster). The optional parameter -o_cluster_tree specifies the output file for storing the cluster tree.\n\nOutput of this tool depends in the choice of the output parameters.";
+	String man = "This tool computes clusters of docking poses given as conformation set or a list of rigid transformations.\n\nParameters are either the input ConformationSet (-i_dcd) and one corresponding pdb file (-i_pdb), or a transformation file (-i_trans), and a naming schema for the results (-o). Optional parameters are the algorithm (-alg), the minimal rmsd between the final clusters (-rmsd_cutoff), the rmsd type (-rmsd_type), and the type of atoms used for scoring a pose (-scope). The optional parameter -o_red_dcd sets the output file for the reduced cluster set (one representative per cluster). The optional parameter -o_cluster_tree specifies the output file for storing the cluster tree.\n\nOutput of this tool depends in the choice of the output parameters.";
 
 	parpars.setToolManual(man);
 
 	// here we set the types of I/O files
 	parpars.setSupportedFormats("i_dcd","dcd");
 	parpars.setSupportedFormats("i_pdb","pdb");
-	parpars.setSupportedFormats("i_transformations","txt");
+	parpars.setSupportedFormats("i_trans","txt");
 	parpars.setSupportedFormats("o","dcd");
 	parpars.setSupportedFormats("o_red_dcd","dcd");
 	parpars.setSupportedFormats("o_cluster_tree","dat");
@@ -161,7 +165,7 @@ int main (int argc, char **argv)
 
 	PoseClustering pc;
 
-	if (parpars.has("i_transformations"))
+	if (parpars.has("i_trans"))
 	{
 		if (parpars.has("rmsd_type"))
 		{
@@ -175,7 +179,7 @@ int main (int argc, char **argv)
 		{
 			pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 		}
-		pc.setBaseSystemAndTransformations(sys, parpars.get("i_transformations"));
+		pc.setBaseSystemAndTransformations(sys, parpars.get("i_trans"));
 	}
 
 	if (parpars.has("rmsd_cutoff"))
@@ -300,8 +304,6 @@ int main (int argc, char **argv)
 
 		pc.refineClustering(refine_options);
 	}
-
-
 
 	Size num_clusters = pc.getNumberOfClusters();
 
