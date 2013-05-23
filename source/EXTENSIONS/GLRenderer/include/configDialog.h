@@ -8,7 +8,7 @@ namespace Ui
 	class OpenGLSettings;
 }
 
-class GLConfigDialog : public BALL::VIEW::ConfigDialog
+class BALL_PLUGIN_EXPORT GLConfigDialog : public BALL::VIEW::ConfigDialog
 {
 	Q_OBJECT
 

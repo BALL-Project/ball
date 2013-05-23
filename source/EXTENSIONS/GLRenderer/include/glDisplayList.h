@@ -28,7 +28,7 @@ namespace BALL
 		defintion of display lists for further information concerning display lists.
 		\ingroup ViewRendering
 */
-class BALL_VIEW_EXPORT GLDisplayList
+class BALL_PLUGIN_EXPORT GLDisplayList
 {
 	public:
 
@@ -65,7 +65,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			defined inside another definition of a display list.
 			\see         GeneralException			
 	*/
-	class BALL_VIEW_EXPORT NestedDisplayList:	public Exception::GeneralException
+	class NestedDisplayList:	public Exception::GeneralException
 	{
 		public:
 
@@ -77,7 +77,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			allocated but there is no more memory available.
 			\see         GeneralException			
 	*/
-	class BALL_VIEW_EXPORT NoDisplayListAvailable:	public Exception::GeneralException
+	class NoDisplayListAvailable:	public Exception::GeneralException
 	{
 		public:
 
@@ -89,7 +89,7 @@ class BALL_VIEW_EXPORT GLDisplayList
 			is tried to be redefined without being destroyed before.
 			\see         GeneralException			
 	*/
-	class BALL_VIEW_EXPORT DisplayListRedeclaration:	public Exception::GeneralException
+	class DisplayListRedeclaration:	public Exception::GeneralException
 	{
 		public:
 

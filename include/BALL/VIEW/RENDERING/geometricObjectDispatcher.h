@@ -1,6 +1,8 @@
 #ifndef BALL_VIEW_RENDERING_GEOMETRICOBJECTDISPATCHER_H
 #define BALL_VIEW_RENDERING_GEOMETRICOBJECTDISPATCHER_H
 
+#include <BALL/COMMON/global.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -22,7 +24,7 @@ namespace BALL
 		class QuadMesh;
 		class GeometricObject;
 
-		class GeometricObjectDispatcher
+		class BALL_VIEW_EXPORT GeometricObjectDispatcher
 		{
 			protected:
 				virtual void render_(const GeometricObject*);
