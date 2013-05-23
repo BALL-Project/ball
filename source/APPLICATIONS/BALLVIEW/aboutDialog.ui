@@ -587,11 +587,9 @@
    <item>
     <widget class="QLabel" name="TextLabel1">
      <property name="text">
-      <string notr="true">Stefan Nickels
-Sabine C. Mueller
+			 <string notr="true">Anna Katharina Dehof
+Stefan Nickels
 Daniel Stöckel
-Wolfgang Herget
-Anna Katharina Dehof
 Oliver Kohlbacher
 Hans-Peter Lenhof
 Andreas Hildebrandt</string>
