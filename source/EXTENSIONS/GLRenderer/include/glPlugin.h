@@ -16,7 +16,7 @@ namespace BALL {
 
 class GLConfigDialog;
 
-class GLPlugin : public QObject, public BALL::BALLPlugin, public BALL::VIEW::VIEWPlugin, public BALL::VIEW::RendererPlugin
+class BALL_PLUGIN_EXPORT GLPlugin : public QObject, public BALL::BALLPlugin, public BALL::VIEW::VIEWPlugin, public BALL::VIEW::RendererPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.Renderer.GLRenderer")

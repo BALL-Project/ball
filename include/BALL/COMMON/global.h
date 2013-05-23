@@ -36,6 +36,11 @@
 #	else
 #		define BALL_VIEW_EXPORT __declspec(dllimport)
 #	endif
+#	ifdef BALL_PLUGIN_BUILD_DLL
+#		define BALL_PLUGIN_EXPORT __declspec(dllexport)
+#	else
+#		define BALL_PLUGIN_EXPORT __declspec(dllimport)
+#	endif
 #elif defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR > 4 || (BALL_COMPILER_VERSION_MAJOR == 4 && BALL_COMPILER_VERSION_MINOR >= 3))
 # define BALL_EXPORT __attribute__((visibility ("default")))
 # define BALL_HIDE __attribute__((visibility ("hidden")))

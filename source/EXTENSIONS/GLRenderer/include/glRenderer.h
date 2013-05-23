@@ -70,7 +70,7 @@ namespace BALL
 		 		Renderer which provides hardware accelerated OPENGL rendering.
 				\ingroup ViewRendering
 		*/
-		class BALL_VIEW_EXPORT GLRenderer
+		class BALL_PLUGIN_EXPORT GLRenderer
 			: public Renderer, public GeometricObjectDispatcher
 		{
 			friend class Scene;

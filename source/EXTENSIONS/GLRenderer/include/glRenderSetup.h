@@ -7,7 +7,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class GLRenderSetup : public RenderSetup
+		class BALL_PLUGIN_EXPORT GLRenderSetup : public RenderSetup
 		{
 			public:
 				GLRenderSetup(Renderer* renderer, RenderTarget* target, Scene* scene)
@@ -18,6 +18,9 @@ namespace BALL
 				void updateTarget();
 
 			protected:
+				GLRenderSetup(const GLRenderSetup&);
+				GLRenderSetup* operator=(const GLRenderSetup&);
+
 				void doRender_() { }
 		};
 	}
