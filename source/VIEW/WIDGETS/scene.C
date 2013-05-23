@@ -2586,7 +2586,10 @@ namespace BALL
 
 			stopContinuousLoop();
 #ifdef BALL_HAS_RTFACT
-			toggle_continuous_loop_action_->setEnabled(new_type == RenderSetup::RTFACT_RENDERER);
+			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+			{
+				toggle_continuous_loop_action_->setEnabled(new_type == RenderSetup::RTFACT_RENDERER);
+			}
 #endif
 
 			main_renderer_ptr->stop();
@@ -3114,12 +3117,15 @@ namespace BALL
 				if (!renderers_[i]->isContinuous() && (renderers_[i]->getRendererType() != RenderSetup::OPENGL_RENDERER))
 				{
 					renderers_[i]->useContinuousLoop(true);
-                    toggle_continuous_loop_action_->setChecked(true);
+					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+					{
+						toggle_continuous_loop_action_->setChecked(true);
+					}
 
 					renderers_[i]->loop_mutex.lock();
 					renderers_[i]->wait_for_render.wakeAll();
 					renderers_[i]->loop_mutex.unlock();
-                }
+        }
 			}
 			setStatusbarText(tr("Switched continuous loop on"), true);
 #endif
@@ -3135,7 +3141,10 @@ namespace BALL
 				if (renderers_[i]->isContinuous())
 				{
 					renderers_[i]->useContinuousLoop(false);
-                    toggle_continuous_loop_action_->setChecked(false);
+					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
+					{
+						toggle_continuous_loop_action_->setChecked(false);
+					}
 				}
 			}
 			setStatusbarText(tr("Switched continuous loop off"), true);
