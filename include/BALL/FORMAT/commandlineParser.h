@@ -53,6 +53,12 @@ namespace BALL
 			static const String NOT_FOUND;
 			static const list<String> EMTPY_LIST;
 
+			// - CLI switch
+			// - description
+			// - parameter type
+			// - required
+			// - default value
+			// - hidden in galaxy
 			void registerParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool hidden = false);
 
 			void registerFlag(String name, String description, bool default_gui_value = false);
@@ -127,8 +133,12 @@ namespace BALL
 		private:
 
 			void replaceExcapedCharacters_(String& parameter_value);
+
 			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true, bool hidden=false);
+
 			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true);
+
+
 			void validateRegisteredFilesHaveFormats();
 
 			/** Throws an exception if the given parameter name is not allowed to be used. */
