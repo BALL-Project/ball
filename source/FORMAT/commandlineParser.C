@@ -57,12 +57,13 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 	excaped_chars_.push_back(make_pair("__tc__","\t"));
 
 	// init the blacklist
-	// "write_par", "par", "help", "ini"
+	// "write_par", "par", "help", "ini", "env"
 	// write_ini is allowed to be used, but some tools might ignore it
 	reserved_params_.insert("write_par");
 	reserved_params_.insert("par");
 	reserved_params_.insert("help");
 	reserved_params_.insert("ini");
+	reserved_params_.insert("env");
 }
 
 void CommandlineParser::checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool perform_check, bool hidden)
@@ -267,6 +268,8 @@ void CommandlineParser::parse(int argc, char* argv[])
 	checkAndRegisterParameter("par", "read parameters from parameter-xml-file", INFILE, false, "", false);
 	setSupportedFormats("par", "xml");
 	setSupportedFormats("write_par", "xml");
+
+	checkAndRegisterParameter("env", "set runtime environment (default cmdline) ", STRING, false, "cmdline", false);
 
 	validateRegisteredFilesHaveFormats();
 

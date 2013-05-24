@@ -38,6 +38,9 @@ namespace BALL
 			However, if, although this is not necessary, parameters (other than -par) 
 			are specified on the command-line, their values will automatically overload 
 			those stored in the xml-file. 
+
+			The parameter '-env' allows to differentiate between command line ('cmdline') 
+			behaviour and special adaptions to workflow systems like galaxy or knime.
 	*/
 	class BALL_EXPORT CommandlineParser
 	{
