@@ -2,17 +2,9 @@
 // vi: set ts=2:
 //
 
-/* SplitConnectedComponents.C
-*  2011 Anna Dehof
-*/
-
-// ----------------------------------------------------
-// $Maintainer: Anna Dehof $
-// $Authors:    Anna Dehof $
-// ----------------------------------------------------
-
-// TODO: maintainer notwendig?
-// TODO: ifdefs notwendig?
+//  SplitConnectedComponents.C
+//  A tool for splitting into connected components 
+//
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
@@ -24,34 +16,23 @@
 using namespace std;
 using namespace BALL;
 
-// TODO notwendig?
-void usage (const char *progname);
-
 int main (int argc, char **argv)
 {
-	// instantiate CommandlineParser object supplying
-	// - tool name
-	// - short description
-	// - version string
-	// - build date
-	// - category
 	CommandlineParser parpars("Split2ConnectedComponents", "splits a molecular file into its connected components", "bla", String(__DATE__), "Preparation");
 
-	// we register an input file parameter 
-	// - CLI switch
-	// - description
-	// - Inputfile
-	// - required
 	parpars.registerParameter("i", "input mol2-file", INFILE, true);
 
-	// we register an output file parameter 
-	// - CLI switch
-	// - description
-	// - Outputfile
-	// - required
 	parpars.registerParameter("o", "output mol2-file name for first solution", STRING, true);
-	parpars.registerParameter("o_id", "output id", STRING, true);
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, true);
+
+	// parameters for galaxy for handling multiple output files
+	parpars.registerParameter("o_id", "output id", STRING, false);
+	// need to be hidden in command line mode
+	parpars.setParameterAsAdvanced("o_id");
+
+	// parameters for galaxy for handling multiple output files
+	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, false);
+	// need to be hidden in command line mode
+	parpars.setParameterAsAdvanced("o_dir");
 
 	// register String parameter for supplying max number of solutions
 	parpars.registerParameter("min_atoms", "ignore connected components with less than minimal number of atoms", INT, false, 4);
@@ -61,7 +42,7 @@ int main (int argc, char **argv)
 
 	// here we set the types of I/O files
 	parpars.setSupportedFormats("i","mol2");
-	//parpars.setSupportedFormats("o","mol2"); //TODO
+	parpars.setSupportedFormats("o","mol2");
 
 	parpars.parse(argc, argv);
 
@@ -71,11 +52,15 @@ int main (int argc, char **argv)
 	System system;
 	f0 >> system;
 
+	// called as command line or e.g. via galaxy?
+	bool is_cmd =    !parpars.has("env")
+			          || ((parpars.has("env") && parpars.get("env")=="cmdline"));
+
 	// create the processor
 	ConnectedComponentsProcessor ccp;
 	ccp.splitIntoMolecules(system);
 
-	int min_atoms = 0;
+	Size min_atoms = 0;
 
 	// do we have to consider a minimal number of atoms?
 	if (parpars.has("min_atoms"))
@@ -88,28 +73,43 @@ int main (int argc, char **argv)
 	int i = 0;
 
 	// write all connected components into individual files
-	for (MoleculeIterator m_it = system.beginMolecule(); +m_it; ++m_it)
+	for (MoleculeIterator m_it = system.beginMolecule(); +m_it; ++m_it, ++i)
 	{
 		if (m_it->countAtoms() > min_atoms)
 		{
-			String outfile_name = (i == 0) ? String(parpars.get("o"))
-				:   String(parpars.get("o_dir")) + "/primary_"
-					+ String(parpars.get("o_id"))  + "_solution" + String(i)
-					+ "_visible_mol2";
+			// create the output name
+			String outfile_name = String(parpars.get("o")) + "_solution_" + String(i) + ".mol2";
 
+			if (parpars.has("o_dir"))
+			{
+				outfile_name =  String(parpars.get("o_dir")) + "/" + outfile_name;
+			}
+
+			// NOTE: Galaxy requires this strange naming convention 
+			//       including the fact, that zero-th element has a different name
+			if (!is_cmd)
+			{
+				outfile_name = (i == 0) ? String(parpars.get("o"))
+												:   String(parpars.get("o_dir")) + "/primary_"
+													+ String(parpars.get("o_id"))  + "_solution_" + String(i)
+													+ "_visible_mol2";
+			}
 			Log << "   Writing connected component " << String(i) << " as " << outfile_name << endl;
 
 			//	GenericMolFile* outfile = MolFileFactory::open(outfile_name, ios::out);
 			MOL2File outfile(outfile_name, ios::out);
-			//TODO 
-			//if (!outfile)	
+			if (outfile.bad())
+			{
+				Log.error() << "cannot write file " << outfile_name << endl;
+				return 2;
+			}
+
 			outfile << *m_it;
 			outfile.close();
 		}
 	}
 
 	Log << "done." << endl;
-
 
 	return 0;
 }
