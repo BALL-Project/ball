@@ -144,6 +144,13 @@ int main (int argc, char **argv)
 				//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
 				//	GenericMolFile* outfile = MolFileFactory::open(outfile_name, ios::out);
 				MOL2File outfile(outfile_name, ios::out);
+
+				if (outfile.bad())
+				{
+					Log.error() << endl << "cannot write file " << outfile_name << endl;
+					return 2;
+				}
+
 				system.beginMolecule()->setProperty("BOA_Constructor_penalty", abop.getTotalPenalty(i));
 
 				outfile << system;
