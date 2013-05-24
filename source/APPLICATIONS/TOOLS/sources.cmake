@@ -37,6 +37,7 @@ SET(EXECUTABLES_LIST
 	PDBDownload
 	PeptideBuilder
 	PocketDetector
+	PoseIndices2PDB
 	Predictor
 	PropertyModifier
 	PropertyPlotter
