@@ -29,10 +29,15 @@ int main(int argc, char** argv)
 
 	parpars.registerParameter("o", "output pdb-file name for first solution", STRING, true, "", true);
 
-	parpars.registerParameter("o_id", "output id", STRING, true, "", true);
+	// parameters for galaxy for handling multiple output files
+	parpars.registerParameter("o_id", "output id", STRING, false, "", true);
+	// need to be hidden in command line mode
+	parpars.setParameterAsAdvanced("o_id");
 
-	parpars.registerParameter("o_dir", "output directory for 2nd to last pdb file", STRING, true, "", true);
-
+	// parameters for galaxy for handling multiple output files
+	parpars.registerParameter("o_dir", "output directory for 2nd to last pdb file", STRING, false, "", true);
+	// need to be hidden in command line mode
+	parpars.setParameterAsAdvanced("o_dir");
 
 	// the manual
 	String man = "This tool splits SnapShots of a given TrajectoryFile and the reference PDBFile into separate PDBFiles.\n\nParameters are the input SnapShots as TrajectoryFile (-i_traj), the corresponding reference pdb file that was originally used to create the TrajectoryFile (-i_pdb) and a naming schema for the results (-o).\n\nOutput of this tool is a number of PDBFiles each containing one SnapShot.";
@@ -61,13 +66,30 @@ int main(int argc, char** argv)
 	TrajectoryFile *traj_file = TrajectoryFileFactory::open(parpars.get("i_traj"));
 	Size num_ss = traj_file->getNumberOfSnapShots();
 
+	// called as command line or e.g. via galaxy?
+	bool is_cmd =    !parpars.has("env")
+			          || ((parpars.has("env") && parpars.get("env")=="cmdline"));
+
 	for (Size i=0; i< num_ss; i++)
 	{
-		String outfile_name = (i == 0) ? String(parpars.get("o"))
+		// create the output name
+		String outfile_name = String(parpars.get("o"))
+													+ "_snapshot_" + String(i) + ".pdb";
+
+		if (parpars.has("o_dir"))
+		{
+			outfile_name =  String(parpars.get("o_dir")) + "/" + outfile_name;
+		}
+
+		// NOTE: Galaxy requires this strange naming convention 
+		//       including the fact, that zero-th element has a different name
+		if (!is_cmd)
+		{
+			outfile_name = (i == 0) ? String(parpars.get("o"))
 				                               :   String(parpars.get("o_dir")) + "/primary_"
 				                                 + String(parpars.get("o_id"))  + "_snapshot" + String(i)
 				                                 + "_visible_pdb";
-
+		}
 		Log << "   write SnapShot " << i << " as " << outfile_name << endl;
 
 		if (traj_file->read(ss))
@@ -78,7 +100,7 @@ int main(int argc, char** argv)
 			PDBFile file(outfile_name, ios::out);
 			if (file.bad())
 			{
-				Log.error() << "cannot write PDB file " << outfile_name << endl;
+				Log.error() << "cannot write file " << outfile_name << endl;
 				return 2;
 			}
 			file << sys_temp;
