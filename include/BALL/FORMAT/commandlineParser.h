@@ -59,6 +59,9 @@ namespace BALL
 
 			void registerAdvancedParameters(Options& options);
 
+			// exclude parameter from showing in help mode e.g. galaxy specific multi-output parameter
+			void setParameterAsAdvanced(String name);
+
 			/** Register the minimal and maximal allowed value for a numerical parameter. */
 			void setParameterRestrictions(String par_name, double min_value, double max_value);
 

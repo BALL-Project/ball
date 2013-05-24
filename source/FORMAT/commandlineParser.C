@@ -174,6 +174,10 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 	}
 }
 
+void CommandlineParser::setParameterAsAdvanced(String name)
+{
+	registered_parameters_[name].advanced = true;
+}
 
 void CommandlineParser::setParameterRestrictions(String par_name, double min_value, double max_value)
 {
