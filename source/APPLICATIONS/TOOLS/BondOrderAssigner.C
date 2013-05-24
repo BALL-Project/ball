@@ -36,9 +36,15 @@ int main (int argc, char **argv)
 	// - required
 	parpars.registerParameter("o", "output mol2-file name for first solution", STRING, true, "", true);
 
-	parpars.registerParameter("o_id", "output id", STRING, true, "", true);
+	// parameters for galaxy for handling multiple output files
+	parpars.registerParameter("o_id", "output id", STRING, false, "", true);
+	// need to be hidden in command line mode
+	parpars.setParameterAsAdvanced("o_id");
 
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, true, "", true);
+	// parameters for galaxy for handling multiple output files
+	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, false, "", true);
+	// need to be hidden in command line mode
+	parpars.setParameterAsAdvanced("o_dir");
 
 	// register String parameter for supplying max number of solutions
 	parpars.registerParameter("max_sol", "maximal number of assignments solutions to compute", INT, false, 25);
@@ -129,18 +135,35 @@ int main (int argc, char **argv)
 	}
 	else
 	{
+		// called as command line or e.g. via galaxy?
+		bool is_cmd =    !parpars.has("env")
+			            || ((parpars.has("env") && parpars.get("env")=="cmdline"));
+
 		//Log << "Found " << num_of_sols << " solutions:" << endl;
 		for (Size i=0; (i<num_of_sols) && (non_opt || (abop.getTotalPenalty(0)==abop.getTotalPenalty(i))); i++)
 		{
-			Log << "   Solution " << i << " has penalty " << abop.getTotalPenalty(i) << endl;
+			Log << "   Solution " << i << " has penalty " << abop.getTotalPenalty(i) << " ... ";
 
 			// apply the solution
 			if (abop.apply(i))
 			{
-				String outfile_name = (i == 0) ? String(parpars.get("o"))
+				// create the output name
+				String outfile_name = String(parpars.get("o")) + "solution_"
+															+ String(i) + ".mol2";
+				if (parpars.has("o_dir"))
+				{
+					outfile_name =  String(parpars.get("o_dir")) + "/" + outfile_name;
+				}
+
+				// NOTE: Galaxy requires this strange naming convention 
+				//       including the fact, that zero-th element has a different name
+				if (!is_cmd)
+				{
+					outfile_name = (i == 0) ? String(parpars.get("o"))
 				                               :   String(parpars.get("o_dir")) + "/primary_"
-				                                 + String(parpars.get("o_id"))  + "_solution" + String(i)
+				                                 + String(parpars.get("o_id"))  + "_solution_" + String(i)
 				                                 + "_visible_mol2";
+				}
 				//Log << "   Writing solution " << String(i) << " as " << outfile_name << endl;
 				//	GenericMolFile* outfile = MolFileFactory::open(outfile_name, ios::out);
 				MOL2File outfile(outfile_name, ios::out);
