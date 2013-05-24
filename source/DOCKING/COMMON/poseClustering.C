@@ -2172,6 +2172,51 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		}
 	}
 
+
+	void PoseClustering::applyTransformation2System(Index i, System& target_system)
+	{
+		// Please note, for efficiency reasons this code is copied 
+		// from function convertTransformations2Snaphots() below
+
+		if (i < (Index) poses_.size())
+		{
+			// compute the translation vector to the origin
+			GeometricCenterProcessor center;
+			target_system.apply(center);
+			Vector3 toOrigin = center.getCenter().negate();
+
+			// move to origin
+			TranslationProcessor translation;
+			translation.setTranslation(toOrigin);
+			target_system.apply(translation);
+
+			TransformationProcessor transformation;
+
+			RigidTransformation const& rigid_trafo = *(poses_[i].trafo);
+
+			Eigen::Vector3f const&     rd_translation = rigid_trafo.translation;
+			Eigen::Matrix3f const&     rd_rotation    = rigid_trafo.rotation;
+
+			// apply transformation and rotation
+			// NOTE: transformations given as input are always relative to the original pose
+			//       thus substraction of toOrigin is correct and more efficient than
+			//       the intuitive action sequence 
+			//             <toOrigin, pose rotate, negation of toOrigin, pose translation> !
+
+			transformation.setTransformation(Matrix4x4(rd_rotation(0,0), rd_rotation(0,1), rd_rotation(0,2), rd_translation(0) - toOrigin.x,
+						rd_rotation(1,0), rd_rotation(1,1), rd_rotation(1,2), rd_translation(1) - toOrigin.y,
+						rd_rotation(2,0), rd_rotation(2,1), rd_rotation(2,2), rd_translation(2) - toOrigin.z,
+						0, 0, 0, 1));
+
+			target_system.apply(transformation);
+		}
+		else
+		{
+			throw(Exception::OutOfRange(__FILE__, __LINE__));
+		}
+	}
+
+
 	void PoseClustering::convertTransformations2Snaphots()
 	{
 		if (current_set_ != NULL)
@@ -2213,7 +2258,10 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 			// create a copy
 			System new_system(new_template_system);
+
 			// apply transformation and rotation
+			// NOTE: transformations given as input are always relative to the original pose
+			//       thus substraction of toOrigin is correct!
 			transformation.setTransformation(Matrix4x4(rd_rotation(0,0), rd_rotation(0,1), rd_rotation(0,2), rd_translation(0) - toOrigin.x,
 			                                           rd_rotation(1,0), rd_rotation(1,1), rd_rotation(1,2), rd_translation(1) - toOrigin.y,
 			                                           rd_rotation(2,0), rd_rotation(2,1), rd_rotation(2,2), rd_translation(2) - toOrigin.z,

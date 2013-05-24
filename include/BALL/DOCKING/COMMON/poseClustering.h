@@ -342,6 +342,9 @@ namespace BALL
 			/// returns the score between two poses given as systems
 			float getScore(const System sys_a, const System sys_b, Options options) const;
 
+			/// apply a transformation to a given system
+			void applyTransformation2System(Index i, System& target_system);
+
 			/// convert the poses to SnapShots
 			void convertTransformations2Snaphots();
 
