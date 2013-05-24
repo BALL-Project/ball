@@ -66,16 +66,19 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 	reserved_params_.insert("env");
 }
 
-void CommandlineParser::checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool perform_check, bool hidden)
+void CommandlineParser::checkAndRegisterParameter(String name, String description,
+                                                  ParameterType type, bool mandatory,
+																									String default_value, bool perform_check,
+																									bool hidden)
 {
 	checkParameterName(name, perform_check);
 
 	ParameterDescription pardes;
-	pardes.name = name;
+	pardes.name        = name;
 	pardes.description = description;
-	pardes.mandatory = mandatory;
-	pardes.type = type;
-	pardes.hidden = hidden;
+	pardes.mandatory   = mandatory;
+	pardes.type        = type;
+	pardes.hidden      = hidden;
 
 	registered_parameters_.insert(make_pair(name, pardes));
 	original_parameter_order_.push_back(registered_parameters_.find(name));
@@ -105,13 +108,17 @@ void CommandlineParser::checkAndRegisterParameter(String name, String descriptio
 	if (size > max_parname_length_) max_parname_length_ = size;
 }
 
-void CommandlineParser::registerParameter(String name, String description, ParameterType type, bool mandatory, String default_value, bool hidden)
+void CommandlineParser::registerParameter(String name, String description,
+                                          ParameterType type, bool mandatory,
+																					String default_value, bool hidden)
 {
 	// add parameter and check if the parameter name is valid
 	checkAndRegisterParameter(name, description, type, mandatory, default_value, true, hidden);
 }
 
-void CommandlineParser::checkAndRegisterFlag(String name, String description, bool default_gui_value, bool perform_check)
+void CommandlineParser::checkAndRegisterFlag(String name, String description,
+                                             bool default_gui_value,
+																						 bool perform_check)
 {
 	checkParameterName(name, perform_check);
 
@@ -119,14 +126,18 @@ void CommandlineParser::checkAndRegisterFlag(String name, String description, bo
 	pardes.name = name;
 	pardes.description = description;
 	pardes.mandatory = false;
+
 	list<String> values;
 	values.push_back("0");
 	values.push_back("1");
+
 	pardes.type = BALL::INT;
+
 	registered_flags_.insert(make_pair(name, pardes));
 	registered_flags_.find(name)->second.allowed_values = values;
 	original_flag_order_.push_back(registered_flags_.find(name));
-	if (name.size() > max_flagname_length_) max_flagname_length_ = name.size();
+	if (name.size() > max_flagname_length_)
+		max_flagname_length_ = name.size();
 	if (default_gui_value)
 	{
 		list<String> alist;
@@ -140,21 +151,22 @@ void CommandlineParser::registerFlag(String name, String description, bool defau
 	checkAndRegisterFlag(name, description, default_gui_value, true);
 }
 
-
 void CommandlineParser::registerAdvancedParameters(Options& options)
 {
-	if (options.getName().hasPrefix("ReferenceArea") ||
-		options.getName().hasPrefix("PharmacophoreConstraint") )
+	if (   options.getName().hasPrefix("ReferenceArea")
+			|| options.getName().hasPrefix("PharmacophoreConstraint") )
 	{
 		return;
 	}
+
 	String category = options.getName();
-	if (category != "" && category != "Docking-Settings")
+	if ((category != "") && category != "Docking-Settings")
 	{
 		for (Options::ConstIterator it = options.begin(); it != options.end(); it++)
 		{
 			const String& name = it->first;
 			checkParameterName(name, true);
+
 			const ParameterDescription* pardes = options.getParameterDescription(name);
 			if (!pardes)
 			{
@@ -168,7 +180,8 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 		}
 	}
 
-	for(StringHashMap<Options*>::Iterator it = options.beginSubcategories(); it != options.endSubcategories(); it++)
+	for (StringHashMap<Options*>::Iterator it = options.beginSubcategories();
+			 it != options.endSubcategories(); it++)
 	{
 		registerAdvancedParameters(*it->second);
 	}
@@ -517,7 +530,7 @@ void CommandlineParser::copyAdvancedParametersToOptions(Options& options)
 		ParameterDescription& p = (*it)->second;
 
 		if (!p.advanced) continue;
-		
+
 		map<String, list<String> >::iterator search_it = parameter_map_.find(p.name);
 		if (search_it != parameter_map_.end())
 		{
@@ -547,7 +560,7 @@ void CommandlineParser::printHelp(set<String>* parameter_names, bool show_manual
 			continue;
 		}
 		cout<<"   ";
-		if (!parameter_names && p.mandatory) cout<<"*  "; 
+		if (!parameter_names && p.mandatory) cout<<"*  ";
 		else cout<<"   ";
 		cout<<"-"<<p.name;
 		String n = "";
@@ -665,7 +678,7 @@ void CommandlineParser::checkParameterName(const String& name, bool perform_chec
 {
 	if (perform_check && reserved_params_.count(name) != 0)
 		{
-			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"registerParameter error","The parameter [" + name + "] is part of the reserved parameters. Reserved parameters are: [write_par, par, help, ini]");
+			throw BALL::Exception::GeneralException(__FILE__,__LINE__,"registerParameter error","The parameter [" + name + "] is part of the reserved parameters. Reserved parameters are: [write_par, par, help, ini, env]");
 		}
 }
 
