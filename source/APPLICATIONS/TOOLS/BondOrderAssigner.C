@@ -58,14 +58,15 @@ int main (int argc, char **argv)
 	//parpars.registerFlag("add_hyd", "add hydrogens as well", false);
 
 	// choice of penalty table 
-	parpars.registerParameter("scr_pen", "penalty table", STRING, false, "Antechamber");
+	parpars.registerParameter("scr_pen", "penalty table (Antechamber, BALL)", STRING, false, "Antechamber");
 	list<String> ini_files;
 	ini_files.push_back("Antechamber");
 	ini_files.push_back("BALL");
 	parpars.setParameterRestrictions("scr_pen", ini_files);
 
   // the manual
-	String man = "This tool computes optimal and sub-optimal bond order assignments based on an atomic penalty function for a given ligand in mol2 file format.\n\nOptional parameters are the maximal number of solutions to be computed ('-max_sol'), the penalty table specifiying the atomic penalty rules ('-scr_pen'), a flag indicating if sub-optimal solutions should be computed as well ('-non_opt') and a flag indicating if hydrogens should be computed as well ('-add_hyd').\n\nOutput of this tool is a number of mol2 files each containing one bond order assignment.\n\nTo upload an input file please use the upload tool (Get Data -> Upload File).\n\n**Further information and help** can be found in our wiki http://ball-trac.bioinf.uni-sb.de/wiki/ballaxy/BOAConstructor_Help.\n\nPlease cite the following: Dehof, A.K., Rurainski, A., Bui, Q.B.A., Boecker, S., Lenhof, H.-P. & Hildebrandt, A. (2011). Automated Bond Order Assignment as an Optimization Problem. Bioinformatics, 2011";
+	String man = String("This tool computes optimal and sub-optimal bond order assignments based on an atomic penalty function for a given ligand in mol2 file format.\n\nOptional parameters are the maximal number of solutions to be computed ('-max_sol'), the penalty table specifiying the atomic penalty rules ('-scr_pen'),and a flag indicating if sub-optimal solutions should be computed as well ('-non_opt')") + // and a flag indicating if hydrogens should be computed as well ('-add_hyd')
+	".\n\nOutput of this tool is a number of mol2 files each containing one bond order assignment.\n\nTo upload an input file please use the upload tool (Get Data -> Upload File).\n\n**Further information and help** can be found in our wiki http://ball-trac.bioinf.uni-sb.de/wiki/ballaxy/BOAConstructor_Help.\n\nPlease cite the following: Dehof, A.K., Rurainski, A., Bui, Q.B.A., Boecker, S., Lenhof, H.-P. & Hildebrandt, A. (2011). Automated Bond Order Assignment as an Optimization Problem. Bioinformatics, 2011";
 
 	parpars.setToolManual(man);
 
@@ -90,7 +91,7 @@ int main (int argc, char **argv)
 	if (parpars.has("max_sol"))
 	{
 		int max_sol = parpars.get("max_sol").toInt();
-		//cout << "   limit number of solutions to " << max_sol << endl;
+		Log << "  Limit number of solutions to " << max_sol << endl;
 		abop.options.setInteger(AssignBondOrderProcessor::Option::MAX_NUMBER_OF_SOLUTIONS, String(max_sol).toInt());
 	}
 
@@ -98,8 +99,8 @@ int main (int argc, char **argv)
 	if (parpars.has("non_opt"))
 	{
 		non_opt = parpars.get("non_opt").toBool();
-		//if (non_opt)
-		//	cout << "   Compute also non-optimal solutions." << endl;
+		if (non_opt)
+			Log << "  Compute also non-optimal solutions." << endl;
 		abop.options.setBool(AssignBondOrderProcessor::Option::COMPUTE_ALSO_NON_OPTIMAL_SOLUTIONS, non_opt);
 	}
 
@@ -114,17 +115,24 @@ int main (int argc, char **argv)
 	if (parpars.has("scr_pen"))
 	{
 		String penalty_table = parpars.get("scr_pen");
-		//cout << "   Use penalty table " << penalty_table << endl;
 		if (penalty_table == "Antechamber")
+		{
+			Log << "  Use Antechamber scoring function" << endl;
 			abop.options[AssignBondOrderProcessor::Option::INIFile] = "/bond_lengths/BondOrderGAFF.xml";
+		}
 		else
+		{
+			Log << "  Use BALL scoring function" << endl;
 			abop.options[AssignBondOrderProcessor::Option::INIFile] = "/bond_lengths/BondOrder.xml";
+		}
 	}
 
 	// set the solver
-	//abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
 	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
-	abop.options.dump();
+	//Log << "parameters are: " << endl;
+	//abop.options.dump();
+	Log << "run ..." << endl;
+
 	system.apply(abop);
 	Size num_of_sols = abop.getNumberOfComputedSolutions();
 
@@ -178,6 +186,8 @@ int main (int argc, char **argv)
 
 				outfile << system;
 				outfile.close();
+
+				Log << "wrote file " << outfile_name << endl;
 			}
 		}
 	}
