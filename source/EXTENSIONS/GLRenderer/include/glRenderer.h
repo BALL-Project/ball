@@ -467,7 +467,7 @@ namespace BALL
 			GLDisplayList* 				sphere_list_;
 			GLDisplayList  				line_list_;
 			GLuint 								line_texture_bind_;
-			GLubyte  							line_tex_[128][128][4];
+			GLubyte*  						line_tex_;
 
 			// naming of geometric objects
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;
@@ -480,7 +480,7 @@ namespace BALL
 			DisplayListHashMap 			display_lists_;
 			MeshBufferHashMap 			rep_to_buffers_;
 			Name 										all_names_;
-			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
+			GLuint* 								object_buffer_;
 			Vector3 								normal_vector_;
 
 			RenderMode 							render_mode_;

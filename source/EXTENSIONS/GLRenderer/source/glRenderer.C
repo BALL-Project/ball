@@ -44,6 +44,8 @@ using namespace std;
 //   #define BALL_BENCHMARKING
 
 #define BYTES_PER_TEXEL 4
+#define TEXTURE_SIZE 128  // including border
+#define NUM_CHANNELS 4
 
 namespace BALL
 {
@@ -97,13 +99,17 @@ namespace BALL
 				drawed_other_object_(false),
 				drawed_mesh_(false),
 				GLU_quadric_obj_(0),
-				orthographic_zoom_(10.f)
+				orthographic_zoom_(10.f),
+				line_tex_(new GLubyte[TEXTURE_SIZE * TEXTURE_SIZE * NUM_CHANNELS]),
+				object_buffer_(new GLuint[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS])
 		{
 		}
 
 		GLRenderer::~GLRenderer()
 		{
 			clear();
+			delete[] line_tex_;
+			delete[] object_buffer_;
 		}
 
 		void GLRenderer::clear()
@@ -2378,7 +2384,6 @@ namespace BALL
 
 		void GLRenderer::generateIlluminationTexture_(float ka, float kd, float kr, float shininess)
 		{
-			const int TEXTURE_SIZE = 128;  // including border
 			enum { R = 0, G = 1, B = 2, A = 3 };
 
 		//   			assert( 0. <= ka && ka <= 1. );
@@ -2414,10 +2419,11 @@ namespace BALL
 					Index c = (Index)(intensity * 255);
 		//   					assert( 0 <= c && c <= 255 );
 
-					line_tex_[i][j][R] = (GLubyte) c;
-					line_tex_[i][j][G] = (GLubyte) c;
-					line_tex_[i][j][B] = (GLubyte) c;
-					line_tex_[i][j][A] = 127;
+					unsigned int lineTexIndex = i * TEXTURE_SIZE * NUM_CHANNELS  + j * NUM_CHANNELS;
+					line_tex_[lineTexIndex + R] = (GLubyte) c;
+					line_tex_[lineTexIndex + G] = (GLubyte) c;
+					line_tex_[lineTexIndex + B] = (GLubyte) c;
+					line_tex_[lineTexIndex + A] = 127;
 				}
 			}
 		}
