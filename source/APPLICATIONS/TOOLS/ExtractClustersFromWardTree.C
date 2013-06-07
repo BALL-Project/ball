@@ -157,7 +157,7 @@ int main (int argc, char **argv)
 		gv_outfile.close();
 
 		Log << outfile_name << endl;
-		Log << "For drawing the graph use, e.g. \n\tdot -Tps -o  tree.gv " << outfile_name << endl;
+		Log << "For drawing the graph use, e.g. \n\tdot -Tps -o  tree.ps " << outfile_name << endl;
 	}
 	else
 	{
