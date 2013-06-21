@@ -43,16 +43,19 @@
 #	endif
 #elif defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR > 4 || (BALL_COMPILER_VERSION_MAJOR == 4 && BALL_COMPILER_VERSION_MINOR >= 3))
 # define BALL_EXPORT __attribute__((visibility ("default")))
+# define BALL_PLUGIN_EXPORT __attribute__((visibility ("default")))
 # define BALL_HIDE __attribute__((visibility ("hidden")))
 # define BALL_VIEW_EXPORT __attribute__((visibility ("default")))
 # define BALL_EXTERN_VARIABLE extern __attribute__((visibility ("default")))
 # elif defined(BALL_COMPILER_LLVM)
 # define BALL_EXPORT __attribute__((visibility ("default")))
+# define BALL_PLUGIN_EXPORT __attribute__((visibility ("default")))
 # define BALL_HIDE __attribute__((visibility ("hidden")))
 # define BALL_VIEW_EXPORT __attribute__((visibility ("default")))
 # define BALL_EXTERN_VARIABLE extern __attribute__((visibility ("default")))
 #else
 # define BALL_EXPORT
+# define BALL_PLUGIN_EXPORT
 # define BALL_HIDE
 # define BALL_VIEW_EXPORT
 # define BALL_EXTERN_VARIABLE extern
