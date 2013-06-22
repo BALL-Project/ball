@@ -64,7 +64,7 @@ namespace BALL
 			{
 				line_.split(split);
 
-				if (!split.size() == 13)
+				if (split.size() != 13)
 				{
 					rotamer_library.clear();		
 					throw(Exception::ParseError(__FILE__, __LINE__, "Invalid Format in backbone dependent SCWRL rotamer file!", ""));
