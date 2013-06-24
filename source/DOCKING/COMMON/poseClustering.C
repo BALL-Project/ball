@@ -1857,7 +1857,6 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 			Eigen::Matrix3f M_ab = rd_a.rotation - Eigen::Matrix3f::Identity();
 
 			rmsd = getRigidRMSD(t_ab, M_ab, temp_covariance_matrix);
-
 		}
 		else if (rmsd_type == PoseClustering::SNAPSHOT_RMSD)
 		{
