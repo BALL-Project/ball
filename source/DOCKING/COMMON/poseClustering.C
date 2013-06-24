@@ -217,7 +217,7 @@ namespace BALL
 	// up to n best clusters
 	std::vector<std::set<Index> > PoseClustering::extractNBestClusters(Size n)
 	{
- //cout << "extractNBestClusters  n=" << n << "/" << getNumberOfPoses() << endl;
+//cout << "extractNBestClusters  n=" << n << "/" << getNumberOfPoses() << endl;
 
 		// we cannot rely on getNumberOfPoses() as we may have been given a tree...
 		/*
@@ -267,19 +267,29 @@ namespace BALL
 			}
 			current_node = prio.top();
 		}
+//cout << "found clusters: " << clusters_.size() << " size prio: " << prio.size() << " check min_size filter..." << endl;
 
 		// then we collect all clusters that pass the min_size filter
 		// --> we may end up with less than n clusters
 		while (!prio.empty())
 		{
+			// no leaves have been added to the priority queue
 			std::set<Index> new_cluster = collectClusterBelow_(prio.top());
-			//if (new_cluster.size() >= min_size)
+
+/*for (std::set<Index>::iterator s_it = new_cluster.begin(); s_it !=  new_cluster.end(); ++s_it)
+	cout << *s_it << " ";
+cout << endl;
+*/
+			if (new_cluster.size() > 0) //= min_size)
 			{
 				clusters_.push_back(new_cluster);
 				cluster_scores_.push_back(cluster_tree_[prio.top()].merged_at);
 			}
 			prio.pop();
+//cout << clusters_.size() << " " << prio.size() << endl;
 		}
+
+//cout << "after min size filter we finally get: " << clusters_.size() << endl;
 
 		return clusters_;
 	}
@@ -287,18 +297,27 @@ namespace BALL
 
 	std::vector<std::set<Index> > PoseClustering::filterClusters(Size min_size)
 	{
+//cout << "Got " << clusters_.size() << " clusters and min_size= " << min_size << endl;
 		std::vector< std::set<Index> >   temp_clusters;
 		std::vector< float >             temp_cluster_scores;
 
+//int c_counter = 0;
 		for (Size i = 0; i < clusters_.size(); i++)
 		{
 			if (clusters_[i].size() >= min_size)
 			{
+/*
+c_counter++;
+cout << "  ++ " << c_counter << " (" << clusters_[i].size() << "): ";
+for (std::set<Index>::iterator s_it = clusters_[i].begin(); s_it !=  clusters_[i].end(); ++s_it)
+	cout << *s_it << " ";
+cout << endl;
+*/
+
 				temp_clusters.push_back(clusters_[i]);
 				temp_cluster_scores.push_back(cluster_scores_[i]);
 			}
 		}
-
 		swap(clusters_, temp_clusters);
 		swap(cluster_scores_, temp_cluster_scores);
 
