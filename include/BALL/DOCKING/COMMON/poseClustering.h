@@ -294,7 +294,7 @@ namespace BALL
 			//@{
 
 			/// sets the poses to be clustered, the conformation set's reference system will the base system
-			void setConformationSet(ConformationSet* new_set);
+			void setConformationSet(ConformationSet* new_set, bool precompute_atombijection = false);
 
 			/** Set a vector of PosePointers to be clustered
 			 *  Poses (RigidTransformations or SnapShots) can live outside of this class and will not be
@@ -312,6 +312,15 @@ namespace BALL
 
 			/// returns the poses to be clustered as ConformationSet
 			ConformationSet* getConformationSet() {return  current_set_;}
+
+			/// returns the poses as rigid transformations
+			const std::vector<RigidTransformation> & getRigidTransformations() const {return transformations_;}
+
+			/// returns the centers of mass-vector (non-empty only for CENTER_OF_MASS_DISTANCE)
+			std::vector<Vector3> & getCentersOfMass() {return com_;}
+
+			/// returns the centers of mass-vector, const version (non-empty only for CENTER_OF_MASS_DISTANCE)
+			std::vector<Vector3> const & getCentersOfMass() const {return com_;}
 
 			/// returns the reference pose 
 			const System& getSystem() const;
@@ -341,6 +350,12 @@ namespace BALL
 
 			/// returns the score between two poses given as systems
 			float getScore(const System sys_a, const System sys_b, Options options) const;
+
+			/// returns a reference to the cached AtomBijection
+			AtomBijection& getAtomBijection() {return atom_bijection_;}
+
+			/// returns a const reference to the cached AtomBijection
+			AtomBijection const& getAtomBijection() const {return atom_bijection_;}
 
 			/// apply a transformation to a given system
 			void applyTransformation2System(Index i, System& target_system);

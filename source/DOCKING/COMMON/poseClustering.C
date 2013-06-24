@@ -324,7 +324,7 @@ cout << endl;
 		return clusters_;
 	}
 
-	void PoseClustering::setConformationSet(ConformationSet* new_set)
+	void PoseClustering::setConformationSet(ConformationSet* new_set, bool precompute_atombijection)
 	{
 		if (delete_conformation_set_)
 			delete current_set_;
@@ -334,6 +334,9 @@ cout << endl;
 		current_set_ = new_set;
 		base_system_ = new_set->getSystem();
 		storeSnapShotReferences_();
+
+		if (precompute_atombijection)
+			precomputeAtomBijection_();
 	}
 
 
