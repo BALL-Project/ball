@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 
 	String default_format = "mol2";
 	if (parpars.has("f")) default_format = parpars.get("f");
-	GenericMolFile* input = MolFileFactory::open(parpars.get("i"), ios::in);
+	GenericMolFile* input  = MolFileFactory::open(parpars.get("i"), ios::in);
 	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, default_format);
 	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
 	if (drf_output)
