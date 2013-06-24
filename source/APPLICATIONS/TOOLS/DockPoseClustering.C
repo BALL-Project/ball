@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-// A utility for clustering docking poses
+// A tool for clustering docking poses
 //
 // 
 
