@@ -35,6 +35,7 @@ SET(EXECUTABLES_LIST
 	PartialChargesCopy
 	PDBCutter
 	PDBDownload
+	PDBRMSDCalculator
 	PeptideBuilder
 	PocketDetector
 	PoseIndices2PDB
