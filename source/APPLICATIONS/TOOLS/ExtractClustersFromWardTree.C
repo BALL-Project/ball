@@ -137,14 +137,13 @@ int main (int argc, char **argv)
 		}
 	}
 
-	Log << "Extracted " << pc.getNumberOfClusters()  << " clusters, start writing... ";
+	Log << endl << "Extracted " << pc.getNumberOfClusters()  << " clusters, start writing... ";
 
 	String outfile_name = String(parpars.get("o_out"));
 
 	if (parpars.get("o_type") == "index_list")
 	{
 		File cluster_outfile(outfile_name, std::ios::out);
-
 		pc.printClusters(cluster_outfile);
 
 		Log << outfile_name << endl;
@@ -157,7 +156,7 @@ int main (int argc, char **argv)
 		gv_outfile.close();
 
 		Log << outfile_name << endl;
-		Log << "For drawing the graph use, e.g. \n\tdot -Tps -o  tree.ps " << outfile_name << endl;
+		Log << "For drawing the graph use, e.g. \n\tdot -Tps -o tree.ps " << outfile_name << endl;
 	}
 	else
 	{

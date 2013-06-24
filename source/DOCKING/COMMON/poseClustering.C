@@ -248,16 +248,21 @@ namespace BALL
 		{
 			prio.pop();
 
+			// check all children
 			BGL_FORALL_ADJ(current_node, child, cluster_tree_, ClusterTree)
 			{
+				// no leaf, traverse further
 				if (out_degree(child, cluster_tree_) > 0)
-					prio.push(child);
-				else
 				{
-						std::set<Index> new_cluster;
-						new_cluster.insert(*(cluster_tree_[current_node].poses.begin()));
-						clusters_.push_back(new_cluster);
-						cluster_scores_.push_back(cluster_tree_[current_node].merged_at);
+					prio.push(child);
+				}
+				else // a leaf --> store as "cluster"
+				{
+					//std::set<Index> new_cluster = collectClusterBelow_(child);
+					std::set<Index> new_cluster;
+					new_cluster.insert(*(cluster_tree_[child].poses.begin()));
+					clusters_.push_back(new_cluster);
+					cluster_scores_.push_back(cluster_tree_[current_node].merged_at);
 				}
 			}
 			current_node = prio.top();
