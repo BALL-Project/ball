@@ -110,12 +110,21 @@ namespace BALL
 			{
 				case COLORING_ELEMENT:
 				{
-					table = element_table_; 
-					if (table->rowCount() > 0)
+					table = element_table_;
+					colors.resize(table->rowCount());
+                    
+					for (Position p=0; p<(Position)table->rowCount(); p++)
 					{
-						colors.push_back(table->item(table->rowCount() - 1, 1)->backgroundColor());
+						// NOTE: do not remove the scope here; there is a class member Element flying around somewhere...
+						BALL::Element const& e = PTE_::getElement(ascii(table->item(p, 0)->text()));
+						
+						if ((e.getAtomicNumber() > 0) && (e.getAtomicNumber() < table->rowCount()))
+						{
+							colors[e.getAtomicNumber()] = table->item(p, 1)->backgroundColor();
+						}
 					}
-					break;
+						
+					return colors;
 				}
 				case COLORING_RESIDUE_INDEX: 	table = residue_table_; break;
 				case COLORING_CHAIN: 					table = chain_table_  ; break;
