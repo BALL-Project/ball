@@ -34,6 +34,7 @@
 #include "ui_aboutDialog.h"
 
 #include <BALL/PLUGIN/pluginManager.h>
+#include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
 #include <BALL/VIEW/PLUGIN/modularWidgetPluginHandler.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
@@ -49,7 +50,7 @@ namespace BALL
 	using namespace std;
 	using namespace BALL::VIEW;
 
-	Mainframe::Mainframe(QWidget* parent, const char* name)
+	Mainframe::Mainframe(QWidget* parent, const char* name, const QStringList& load_plugins, const QString& preferred_renderer)
 		:	MainControl(parent, name, ".BALLView"),
 			scene_(0),
 			save_project_action_(0),
@@ -134,8 +135,11 @@ namespace BALL
 		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver( this, ((String)tr("FileObserver")).c_str()));
 
 		setupPluginHandlers_();
+		loadPlugins_(load_plugins);
+
 		Scene::stereoBufferSupportTest();
-		scene_ = new Scene(this, ((String)tr("3D View")).c_str());
+		scene_ = new Scene(this, ((String)tr("3D View")).c_str(), 0);
+		scene_->switchRenderer(preferred_renderer);
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 
@@ -387,6 +391,20 @@ namespace BALL
 				{
 					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
 				}
+			}
+		}
+	}
+
+	void Mainframe::loadPlugins_(const QStringList& plugins)
+	{
+		PluginManager& man = PluginManager::instance();
+
+		for(QStringList::const_iterator it = plugins.begin(); it != plugins.end(); ++it)
+		{
+			BALLPlugin* plugin = man.loadPlugin(*it);
+			if(plugin) {
+				man.startPlugin(plugin);
+				plugin->activate();
 			}
 		}
 	}

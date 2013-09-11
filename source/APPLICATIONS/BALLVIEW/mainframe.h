@@ -30,7 +30,7 @@ namespace BALL
 		BALL_EMBEDDABLE(Mainframe, MainControl)
 
 		///
-		Mainframe(QWidget* parent = 0, const char* name = 0);
+		Mainframe(QWidget* parent = 0, const char* name = 0, const QStringList& load_plugins = QStringList(), const QString& preferred_renderer = QString("GLRenderer"));
 
 		///
 		virtual ~Mainframe();
@@ -54,6 +54,7 @@ namespace BALL
 		protected:
 			void changeEvent(QEvent* evt);
 			void setupPluginHandlers_();
+			void loadPlugins_(const QStringList& load_plugins);
 
 			Scene* scene_;
 			QAction* save_project_action_;
