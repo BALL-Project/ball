@@ -68,7 +68,6 @@ namespace BALL
 		class ClippingPlane;
 		class CompositeMessage;
 		class ControlSelectionMessage;
-		class RendererFactory;
 		class RepresentationMessage;
 		class DatasetMessage;
 		class SceneMessage;
@@ -882,7 +881,6 @@ namespace BALL
 				bool has_overlay_;
 				InteractionModeManager mode_manager_;
 
-				RendererFactory* renderer_factory_;
 				QString preferred_renderer_;
 		};
 
