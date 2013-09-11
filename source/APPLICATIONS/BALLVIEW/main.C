@@ -59,16 +59,35 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	QApplication application(argc, argv);
 
-	QStringList arguments = application.arguments();
-	QStringList::const_iterator arg_it;
-
+	QString preferred_renderer;
+	QStringList plugins_to_load;
 	bool kiosk_mode = false;
-	for (arg_it = arguments.constBegin(); arg_it != arguments.constEnd(); ++arg_it)
+
+	QStringList arguments = application.arguments();
+	QStringList::const_iterator arg_it = arguments.constBegin();
+
+	while (arg_it != arguments.constEnd())
 	{
 		if (arg_it->toLocal8Bit() == "-kiosk")
 		{
 			kiosk_mode = true;
+		} else if (arg_it->toLocal8Bit() == "-plugins") {
+			++arg_it;
+			if(arg_it == arguments.constEnd()) {
+				std::cerr << "Expected plugin list after -plugins option" << std::endl;
+				return -1;
+			}
+			plugins_to_load = arg_it->split(":");
+		} else if (arg_it->toLocal8Bit() == "-renderer") {
+			++arg_it;
+			if(arg_it == arguments.constEnd()) {
+				std::cerr << "Expected renderer name after -renderer option" << std::endl;
+				return -1;
+			}
+			preferred_renderer = *arg_it;
 		}
+
+		++arg_it;
 	}
 
 	if (kiosk_mode)
@@ -138,7 +157,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	// =============== initialize Mainframe ============================================
 	// Create the mainframe.
-	BALL::Mainframe mainframe(0, "Mainframe");
+	BALL::Mainframe mainframe(0, "Mainframe", plugins_to_load, preferred_renderer);
 
 	// can we use the users homedir as working dir?
 	if (home_dir != "")
@@ -166,6 +185,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		else if (argument == "-kiosk")
 		{
 			// the kiosk mode has already been handled
+			continue;
+		}
+		else if (argument == "-renderer" || argument == "-plugins")
+		{
+			++i;
 			continue;
 		}
 

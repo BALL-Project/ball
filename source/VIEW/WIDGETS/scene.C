@@ -114,7 +114,7 @@ namespace BALL
 		float Scene::animation_smoothness_ = 2;
 		float Scene::downsampling_factor_ = 1;
 
-		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
+		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags, const QString& preferred_renderer)
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(name),
 				system_origin_(0.0, 0.0, 0.0),
@@ -135,7 +135,8 @@ namespace BALL
 				main_renderer_(-1),
 				stereo_left_eye_(-1),
 				stereo_right_eye_(-1),
-				mode_manager_(this)
+				mode_manager_(this),
+				preferred_renderer_(preferred_renderer)
 			{
 				initializeMembers_();
 
@@ -3200,6 +3201,10 @@ namespace BALL
 
 		void Scene::initializeMembers_()
 		{
+			if(preferred_renderer_ != QString()) {
+				preferred_renderer_ = "GLRenderer";
+			}
+
 			current_atom_ = 0;
 			current_bond_ = 0;
 			edit_settings_ = 0;
