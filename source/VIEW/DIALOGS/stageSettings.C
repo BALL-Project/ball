@@ -297,7 +297,10 @@ namespace BALL
 //			renderer.enableVertexBuffers(use_buffer);
 //			renderer.setSmoothLines(smooth_lines_->isChecked());
 			scene_->setDownsamplingFactor(downsamplingfactor_label->text().toFloat());
-			scene_->switchRenderer(preferredRenderer_comboBox->currentText());
+
+			if(preferredRenderer_comboBox->currentIndex() != -1) {
+				scene_->switchRenderer(preferredRenderer_comboBox->currentText());
+			}
 		}
 
 		Vector3 StageSettings::getTextureUpDirection_()
