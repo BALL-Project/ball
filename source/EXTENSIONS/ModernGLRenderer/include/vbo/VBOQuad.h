@@ -10,7 +10,7 @@ class VBOQuad
 	: public VBObject
 {
 	public:
-		virtual void render();
+		virtual void render_();
 };
 
 #endif // VBOQUAD_H

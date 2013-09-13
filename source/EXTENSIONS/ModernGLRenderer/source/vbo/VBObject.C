@@ -140,5 +140,24 @@ void VBObject::setNumberOfElements ( unsigned int number )
 	n_elements_ = number;
 }
 
+void VBObject::render()
+{
+	if(n_elements_ == 0) {
+		return;
+	}
 
+	bindIndices();
+
+	for(std::map< GLuint, Buffer >::const_iterator iter = buffers_.begin(); iter != buffers_.end(); iter++)
+	{
+		enableAttribute(iter->first);
+	}
+
+	render_();
+
+	for(std::map< GLuint, Buffer >::const_iterator iter = buffers_.begin(); iter != buffers_.end(); iter++)
+	{
+		disableAttribute(iter->first);
+	}
+}
 

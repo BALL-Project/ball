@@ -147,7 +147,7 @@ class VBObject
 		 *
 		 * @return void
 		 **/
-		virtual void render() = 0;
+		void render();
 
 		/**
 		 * @brief Create a buffer with 4 elements per attribute.
@@ -308,6 +308,13 @@ class VBObject
 		 * @return Buffer The generated buffer.
 		 **/
 		Buffer createBuffer(size_t size, unsigned int elements);
+
+		/**
+		 * @brief VBO type specific renderin implementation.
+		 * This method must be reimplemented by subclasseses
+		 * and contains the actual rendering calls.
+		 */
+		virtual void render_() = 0;
 
 		/**
 		 * @brief Is the VBObject initialized?

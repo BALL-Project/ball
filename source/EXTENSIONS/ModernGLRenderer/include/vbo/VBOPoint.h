@@ -10,7 +10,8 @@ class VBOPoint
 	: public VBObject
 {
 	public:
-		virtual void render();
+		virtual void render_();
+		virtual void bindIndices();
 };
 
 #endif // VBOPOINT_H

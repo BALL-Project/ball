@@ -10,7 +10,7 @@ class VBOTriangle
 	: public VBObject
 {
 	public:
-		virtual void render();
+		virtual void render_();
 };
 
 #endif // VBOTRIANGLE_H

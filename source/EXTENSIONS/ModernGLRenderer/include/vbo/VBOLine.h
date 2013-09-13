@@ -10,7 +10,8 @@ class VBOLine
 	: public VBObject
 {
 	public:
-		virtual void render();
+		virtual void render_();
+		virtual void bindIndices();
 };
 
 #endif // VBOLINE_H
