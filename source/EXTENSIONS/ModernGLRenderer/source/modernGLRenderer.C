@@ -167,14 +167,9 @@ bool ModernGLRenderer::checkTransparencySupport_()
 		missing_extensions += "\tGL_ARB_texture_rectangle\n";
 	}
 
-	if(!glewIsSupported("GL_ARB_texture_float"))
+	if(!glewIsSupported("GL_ARB_texture_float") && !glewIsSupported("GL_NV_float_buffer"))
 	{
-		missing_extensions += "\tGL_ARB_texture_float\n";
-	}
-
-	if(!glewIsSupported("GL_NV_float_buffer"))
-	{
-		missing_extensions += "\tGL_NV_float_buffer\n";
+		missing_extensions += "\tGL_ARB_texture_float or GL_NV_float_buffer\n";
 	}
 
 	if(!glewIsSupported("GL_NV_depth_buffer_float") && !glewIsSupported("GL_ARB_depth_buffer_float"))

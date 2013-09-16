@@ -349,7 +349,11 @@ void Transparent::setupRenderTargets(unsigned int w, unsigned int h)
 		glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, GL_CLAMP);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_FLOAT_RG32_NV, w, h, 0, GL_RGB, GL_FLOAT, 0);
+		if(GL_ARB_texture_float) {
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RG32F, w, h, 0, GL_RG, GL_FLOAT, 0);
+		} else {
+			glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_FLOAT_RG32_NV, w, h, 0, GL_RG, GL_FLOAT, 0);
+		}
 
 		glBindTexture(GL_TEXTURE_RECTANGLE_ARB, g_dualFrontBlenderTexId[i]);
 		glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, GL_CLAMP);
