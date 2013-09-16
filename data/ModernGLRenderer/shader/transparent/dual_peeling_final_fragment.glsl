@@ -1,4 +1,5 @@
 #version 120
+#extension GL_ARB_texture_rectangle : enable
 
 
 //2D texture of the SSAO component.
@@ -10,7 +11,6 @@ uniform sampler2D volume_map;
 //2D texture of the volume.
 uniform sampler2D normal_map;
 
-#extension GL_ARB_texture_rectangle : enable
 uniform sampler2DRect FrontBlenderTex;
 uniform sampler2DRect BackBlenderTex;
 
