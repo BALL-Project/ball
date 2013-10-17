@@ -29,7 +29,7 @@ int main (int argc, char **argv)
 	// - version string
 	// - build date
 	// - category
-	CommandlineParser parpars("PDBRNMDockPoseClustering", "computes RMSD between protein poses ", VERSION, String(__DATE__), "Docking");
+	CommandlineParser parpars("PDBRMSDCalculator", "computes RMSD between protein poses ", VERSION, String(__DATE__), "Docking");
 
 	// we register an input file parameter 
 	// - CLI switch
@@ -45,7 +45,7 @@ int main (int argc, char **argv)
 	input_types.push_back("rigid_transformations");
 	parpars.setParameterRestrictions("i_type", input_types);
 
-	parpars.registerParameter("o", "output file name", STRING, false, "", true);
+	parpars.registerParameter("o", "output file name", OUTFILE, false, "", true);
 
 	// choice of atom rmsd scope 
 	parpars.registerParameter("scope", "atoms to be considered for scoreing a pose (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
