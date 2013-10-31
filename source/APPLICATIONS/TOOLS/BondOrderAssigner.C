@@ -34,7 +34,7 @@ int main (int argc, char **argv)
 	// - description
 	// - Outputfile
 	// - required
-	parpars.registerParameter("o", "output mol2-file name for first solution", STRING, true, "", true);
+	parpars.registerParameter("o", "output mol2-file name for first solution", OUTFILE, true, "", true);
 
 	// parameters for galaxy for handling multiple output files
 	parpars.registerParameter("o_id", "output id", STRING, false, "", true);
