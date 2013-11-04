@@ -47,9 +47,9 @@ int main (int argc, char **argv)
 	// - hidden in galaxy
 	parpars.registerParameter("o", "output file name for first solution ", STRING, true, "", true);
 
-	parpars.registerParameter("o_id", "output id ", STRING, false, "", true);
+	parpars.registerParameter("o_id", "output id ", GALAXY_OPT_OUTID, false, "", true);
 
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution (if needed) ", STRING, false, "", true);
+	parpars.registerParameter("o_dir", "output directory for 2nd to last solution (if needed) ", GALAXY_OPT_OUTDIR, false, "", true);
 
 	parpars.registerParameter("o_type", "output type (dcd, index_list, or score_matrix) ", STRING, false, "dcd");
 	list<String> output_types;
