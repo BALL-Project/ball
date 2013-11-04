@@ -180,6 +180,17 @@ void ParamFile::writeSection(String section_name, String section_description, St
 			type = "float";
 			is_list = true;
 		}
+		else if (d_it->second.type==GALAXY_OPT_OUTDIR)
+		{
+			type = "string";
+			tag = "galaxy_opt_outdir";
+		}
+		else if (d_it->second.type==GALAXY_OPT_OUTID)
+		{
+			type = "string";
+			tag = "galaxy_opt_outid";
+		}
+
 
 		if (d_it->second.mandatory)
 		{
@@ -393,6 +404,14 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 							else if (tags.hasSubstring("output file"))
 							{
 								pd.type=OUTFILE;
+							}
+							else if (tags.hasSubstring("galaxy_opt_outdir"))
+							{
+								pd.type=GALAXY_OPT_OUTDIR;
+							}
+							else if (tags.hasSubstring("galaxy_opt_outid"))
+							{
+								pd.type=GALAXY_OPT_OUTID;
 							}
 							else
 							{

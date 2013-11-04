@@ -53,10 +53,16 @@ int main(int argc, char* argv[])
 
 	paramfile.readSection(tool_name, tool_description, tool_version, manual, category, parameter_descriptions, parameter_values);
 
+	bool allows_multiple_outputs = false;
+
 	for (list<pair<String,ParameterDescription> >::iterator it=parameter_descriptions.begin();
 		it!=parameter_descriptions.end(); it++)
 	{
 		parameter_map.insert(make_pair(it->first, it));
+		if (it->second.type == GALAXY_OPT_OUTDIR || it->second.type == GALAXY_OPT_OUTID)
+		{
+			allows_multiple_outputs = true;
+		}
 	}
 
 	// write tool-name, id, short description to tool_suite.xml file (if specified)
@@ -84,6 +90,10 @@ int main(int argc, char* argv[])
 		}
 		xml.writeAttribute("name", tool_name.c_str());
 		xml.writeAttribute("version", tool_version.c_str());
+		if (allows_multiple_outputs)
+		{
+			xml.writeAttribute("force_history_refresh", "true");
+		}
 		xml.writeStartElement("description");
 		xml.writeCharacters(tool_description.trim().c_str());
 		xml.writeEndElement();
@@ -103,11 +113,17 @@ int main(int argc, char* argv[])
 	list<String> input_files;
 	list<String> input_parameters;
 	String command = tool_name;
-	command += " \n";
+	command += " \n\t-env galaxy\n";
 	for (list<pair<String,ParameterDescription> >::iterator it=parameter_descriptions.begin();
 		it!=parameter_descriptions.end(); it++)
 	{
-		if (it->first == "par" || it->first == "write_par" || it->first == "help" || it->first == "write_ini" || (tool_name=="PocketDetector" && it->first=="mol_out") || parameters_to_ignore.find(it->first) != parameters_to_ignore.end() || it->second.advanced)
+		if (    it->first == "par"  || it->first == "write_par" 
+		     || it->first == "help" || it->first == "write_ini"
+		     || (tool_name=="PocketDetector" && it->first=="mol_out") 
+		     || parameters_to_ignore.find(it->first) != parameters_to_ignore.end()
+		     || (it->second.advanced && 
+			  !(  it->second.type == GALAXY_OPT_OUTDIR
+			    ||it->second.type == GALAXY_OPT_OUTID)))	
 		{
 			continue;
 		}
@@ -161,7 +177,23 @@ int main(int argc, char* argv[])
 
 		if (it->second.name != "quiet")
 		{
-			if (it->second.type != INFILELIST)
+			if (it->second.type == GALAXY_OPT_OUTDIR)
+			{
+				command += "#if str( $__new_file_path__ ) != '' and str( $__new_file_path__ ) != 'None' :\n";
+				command += "   -" + it->first + " \"$__new_file_path__\"\n";
+				command += "#end if\n";
+			}
+			else if (it->second.type == GALAXY_OPT_OUTID)
+			{
+				String id_name = it->first.before("_id") + ".id";
+
+				command += "#if str( $";
+				command += id_name + String(" ) != '' ");
+				command += String(" and str( $") + id_name + String(" ) != 'None' :\n");
+				command += "   -" + it->first + " \"$" + id_name + "\"\n";
+				command += "#end if\n";
+			}
+			else if (it->second.type != INFILELIST)
 			{
 				command += "#if str( $";
 				command += it->first + String(" ) != '' ");
@@ -173,7 +205,7 @@ int main(int argc, char* argv[])
 					{
 						par_name = "o";
 					}
-					command += "   -" + par_name + " \"$" + it->first + "\"\n";
+						command += "   -" + par_name + " \"$" + it->first + "\"\n";
 				}
 				else
 				{
@@ -227,6 +259,10 @@ int main(int argc, char* argv[])
 	else xml.writeAttribute("id",search_it->second.c_str());
 	xml.writeAttribute("name",tool_name.c_str());
 	xml.writeAttribute("version",tool_version.c_str());
+	if (allows_multiple_outputs)
+	{
+		xml.writeAttribute("force_history_refresh", "true");
+	}
 	xml.writeStartElement("requirements");
 	xml.writeStartElement("requirement");
 	xml.writeAttribute("type", "package");
