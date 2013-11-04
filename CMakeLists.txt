@@ -417,9 +417,9 @@ IF (WIN32)
 ENDIF()
 
 
-OPTION(USE_OPEN_EYE_BABLE "Build BALL with support for OpenEye/OpenBabel" ON)
+OPTION(USE_OPEN_EYE_BABEL "Build BALL with support for OpenEye/OpenBabel" ON)
 
-IF(USE_OPEN_EYE_BABLE)
+IF(USE_OPEN_EYE_BABEL)
 	INCLUDE(cmake/BALLConfigOpenEye_Babel.cmake)
 ENDIF()
 
