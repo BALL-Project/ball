@@ -64,7 +64,7 @@ int main (int argc, char **argv)
 	ini_files.push_back("BALL");
 	parpars.setParameterRestrictions("scr_pen", ini_files);
 
-  // the manual
+	// the manual
 	String man = String("This tool computes optimal and sub-optimal bond order assignments based on an atomic penalty function for a given ligand in mol2 file format.\n\nOptional parameters are the maximal number of solutions to be computed ('-max_sol'), the penalty table specifiying the atomic penalty rules ('-scr_pen'),and a flag indicating if sub-optimal solutions should be computed as well ('-non_opt')") + // and a flag indicating if hydrogens should be computed as well ('-add_hyd')
 	".\n\nOutput of this tool is a number of mol2 files each containing one bond order assignment.\n\nTo upload an input file please use the upload tool (Get Data -> Upload File).\n\n**Further information and help** can be found in our wiki http://ball-trac.bioinf.uni-sb.de/wiki/ballaxy/BOAConstructor_Help.\n\nPlease cite the following: Dehof, A.K., Rurainski, A., Bui, Q.B.A., Boecker, S., Lenhof, H.-P. & Hildebrandt, A. (2011). Automated Bond Order Assignment as an Optimization Problem. Bioinformatics, 2011";
 
@@ -156,8 +156,7 @@ int main (int argc, char **argv)
 			if (abop.apply(i))
 			{
 				// create the output name
-				String outfile_name = String(parpars.get("o")) + "solution_"
-															+ String(i) + ".mol2";
+				String outfile_name = String(parpars.get("o")) + "solution_" + String(i) + ".mol2";
 				if (parpars.has("o_dir"))
 				{
 					outfile_name =  String(parpars.get("o_dir")) + "/" + outfile_name;
