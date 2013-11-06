@@ -22,15 +22,15 @@ int main (int argc, char **argv)
 
 	parpars.registerParameter("i", "input mol2-file", INFILE, true);
 
-	parpars.registerParameter("o", "output mol2-file name for first solution", STRING, true);
+	parpars.registerParameter("o", "output mol2-file name for first solution", OUTFILE, true);
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_id", "output id", STRING, false);
+	parpars.registerParameter("o_id", "output id", GALAXY_OPT_OUTID, false, "$o.id", true);
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", STRING, false);
+	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", GALAXY_OPT_OUTDIR, false, "$__new_file_path__", true);
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dir");
 
@@ -90,9 +90,9 @@ int main (int argc, char **argv)
 			if (!is_cmd)
 			{
 				outfile_name = (i == 0) ? String(parpars.get("o"))
-												:   String(parpars.get("o_dir")) + "/primary_"
-													+ String(parpars.get("o_id"))  + "_solution_" + String(i)
-													+ "_visible_mol2";
+				                        :   String(parpars.get("o_dir")) + "/primary_"
+				                        + String(parpars.get("o_id"))  + "_solution" + String(i)
+				                        + "_visible_mol2";
 			}
 			Log << "   Writing connected component " << String(i) << " as " << outfile_name << endl;
 
