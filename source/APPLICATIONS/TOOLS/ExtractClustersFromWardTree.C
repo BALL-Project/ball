@@ -30,7 +30,7 @@ int main (int argc, char **argv)
 	// - description
 	// - parameter type
 	// - required
-	parpars.registerParameter("i", "input cluster-file", INFILE, true);
+	parpars.registerParameter("i", "input serialized cluster file", INFILE, true);
 
 	// we register an output file parameter 
 	// - CLI switch
@@ -39,7 +39,7 @@ int main (int argc, char **argv)
 	// - required
 	// - default value
 	// - hidden in galaxy
-	parpars.registerParameter("o_out", "output file name ", STRING, true, "", true);
+	parpars.registerParameter("o_out", "output file name ", OUTFILE, true, "", true);
 
 	// we register the output type
 	parpars.registerParameter("o_type", "output type (gv, index_list) ", STRING, true, "index_list");
