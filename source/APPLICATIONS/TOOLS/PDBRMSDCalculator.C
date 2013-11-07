@@ -36,7 +36,7 @@ int main (int argc, char **argv)
 	// - description
 	// - Inputfile
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
-	parpars.registerParameter("i_query", "second molecule input file", INFILE, false);
+	parpars.registerParameter("i_query", "molecule(s) to compare input file", INFILE, false);
 
 	parpars.registerParameter("i_type", "query type (pdb, dcd, or transformation file (rigid_transformations) ", STRING, false, "pdb");
 	list<String> input_types;
@@ -69,7 +69,7 @@ int main (int argc, char **argv)
 
 
 	// the manual
-	String man = "This tool computes the RMSD between proteins.\n\nParameters are either the second input file (i_query) whose type has to be specified (i_type) and can be either a single pdb, a dcd or a transformation file. Optional parameters are the rmsd type (-rmsd_type), and the type of atoms used for scoring a pose (-scope).\n\nOutput of this tool is a either the rmsd (in the pdb-pdb case) or a file (-o) containing the RMSD between the first pose and all other poses.";
+	String man = "This tool computes the RMSD between proteins.\n\nParameters are either a second input file (i_query) who's type has to be specified (i_type) and can be either a single pdb, a dcd or a transformation file. Optional parameters are the rmsd type (-rmsd_type), and the type of atoms used for scoring a pose (-scope).\n\nOutput of this tool is a either the rmsd (in the pdb-pdb case) or a file (-o) containing the RMSD between the first pose and all other poses.";
 
 	parpars.setToolManual(man);
 
@@ -136,7 +136,6 @@ int main (int argc, char **argv)
 				Log.info() << "Unknown value " << scope  << " for option scope." << endl;
 		}
 
-
 		// we have basically two scenarios: pdb vs pdb or pdb vs list of poses (DCD or transformation).
 		//   PDB
 		if (query_type == "pdb")
@@ -179,18 +178,18 @@ int main (int argc, char **argv)
 		}
 
 		bool file_output = false;
-		File* rmsd_outfile = NULL;
+		File rmsd_outfile;
 		if (parpars.has("o"))
 		{
 			String outfile_name = String(parpars.get("o"));
-			rmsd_outfile->open(outfile_name, std::ios::out);
+			rmsd_outfile.open(outfile_name, std::ios::out);
 			file_output = true;
 		}
 
 		// do the computations	
 		if (type == "RIGID_RMSD")
 		{
-			// TODO need 	the Atommapping etc??
+			// TODO need the Atommapping etc??
 			Size num_poses = pc.getNumberOfPoses();
 
 			Eigen::Matrix3f covariance_matrix = pc.computeCovarianceMatrix(sys, pc.options.getInteger(PoseClustering::Option::RMSD_LEVEL_OF_DETAIL));
@@ -213,7 +212,7 @@ int main (int argc, char **argv)
 				t.stop();
 	//} 
 			if (file_output)
-				*rmsd_outfile << "RMSD for " << i << " : " << result << endl;
+				rmsd_outfile << "RMSD for " << i << " : " << result << endl;
 			else
 				Log << "RMSD for " << i << " : " << result << endl;
 			}
@@ -266,7 +265,7 @@ int main (int argc, char **argv)
 				t.stop();
 	//}
 				if (file_output)
-					*rmsd_outfile << "RMSD for " << " " << i << " : " << rmsd << endl;
+					rmsd_outfile << "RMSD for " << " " << i << " : " << rmsd << endl;
 				else
 					Log << "RMSD for " << " " << i << " : " << rmsd << endl;
 			}
@@ -285,7 +284,7 @@ int main (int argc, char **argv)
 				t.stop();
 
 				if (file_output)
-					*rmsd_outfile << "RMSD for " << " " << i << " : " << rmsd << endl;
+					rmsd_outfile << "RMSD for " << " " << i << " : " << rmsd << endl;
 				else
 					Log << "RMSD for " << i << ": " << rmsd << endl;
 			}
@@ -293,7 +292,8 @@ int main (int argc, char **argv)
 
 		if (file_output)
 		{
-			rmsd_outfile->close();
+
+			rmsd_outfile.close();
 		}
 	}
 	else
