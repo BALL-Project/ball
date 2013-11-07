@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<toolbox>
+        <section name="Get Data" id="Get Data">
+                <tool file="BALL/PDBDownload.xml"/>
+                <tool file="data_source/upload.xml"/>
+                <tool file="BALL/CombiLibGenerator.xml"/>
+                <tool file="BALL/DBImporter.xml"/>
+                <tool file="BALL/DBExporter.xml"/>
+                <tool file="BALL/VendorFinder.xml"/>
+        </section>
+
+        <section name="Structure Creation" id="Structure Creation">
+                <tool file="BALL/PeptideBuilder.xml"/>
+                <tool file="BALL-NMR/CreateFromSmiles-galaxy.xml"/>
+                <tool file="BALL/CrystalGenerator.xml"/>
+        </section>
+
+        <section name="BOA Constructor" id="BOA Constructor">
+                <tool file="BALL/BondOrderAssigner.xml"/>
+                <tool file="BALL/Split2ConnectedComponents.xml"/>
+        </section>
+
+        <section name="Convert, combine and store" id="Convert, combine and store">
+                <tool file="BALL/MolecularFileConverter.xml"/>
+                <!--tool file="BALL/Converter.xml"/-->
+                <tool file="BALL/MolCombine.xml"/>
+                <tool file="BALL/MolDepict.xml"/>
+        </section>
+
+        <section name="Graph/Display Molecules" id="plots">
+                <tool file="BALL-NMR/VisualizeStructureDiagram-galaxy.xml"/>
+        </section>
+
+        <section name="Preparation" id="Preparation">
+                <tool file="BALL/WaterFinder.xml"/>
+                <tool file="BALL/ProteinProtonator.xml"/>
+                <tool file="BALL/Split2ConnectedComponents.xml"/>
+		<tool file="BALL/BondOrderAssigner.xml"/>
+                <tool file="BALL/Ligand3DGenerator.xml"/>
+                <tool file="BALL/LigandFileSplitter.xml"/>
+                <tool file="BALL/EvenSplit.xml"/>
+                <tool file="BALL/MolFilter.xml"/>
+                <tool file="BALL/PDBCutter.xml"/>
+                <tool file="BALL/PartialChargesCopy.xml"/>
+                <tool file="BALL/PropertyModifier.xml"/>
+                <tool file="BALL/BindingDBCleaner.xml"/>
+        </section>
+
+        <section name="Checks and evaluations" id="Checks and evaluations">
+                <tool file="BALL/LigCheck.xml"/>
+                <tool file="BALL/ProteinCheck.xml"/>
+        </section>
+
+        <section name="Analysis" id="Analysis">
+                <tool file="BALL/PropertyPlotter.xml"/>
+                <tool file="BALL/PDBRMSDCalculator.xml"/>
+                <tool file="BALL/RMSDCalculator.xml"/>
+                <tool file="BALL/ScoreAnalyzer.xml"/>
+                <tool file="BALL/SimilarityAnalyzer.xml"/>
+        </section>
+
+        <section name="Docking" id="Docking">
+                <tool file="BALL/DockResultMerger.xml"/>
+                <tool file="BALL/PocketDetector.xml"/>
+                <tool file="BALL/IMGDock.xml"/>
+                <tool file="BALL/GridBuilder.xml"/>
+                <tool file="BALL/ConstraintsFinder.xml"/>
+                <tool file="BALL/InteractionConstraintDefiner.xml"/>
+                <tool file="BALL/SpatialConstraintDefiner.xml"/>
+        </section>
+	
+	<section name="Rescoring" id="Rescoring">
+                <tool file="BALL/TaGRes.xml"/>
+                <tool file="BALL/TaGRes-train.xml"/>
+                <tool file="BALL/AntitargetRescorer.xml"/>
+                <tool file="BALL/SimpleRescorer.xml"/>
+                <tool file="BALL/SLICK.xml"/>
+        </section>
+
+        <section name="NMR NightShift" id="NMR">
+                <tool file="BALL-NMR/FeatureGenerator-galaxy.xml"/>
+                <tool file="BALL-NMR/DownloadNMRPredictData-galaxy.xml"/>
+                <tool file="BALL-NMR/RestrictPDB2BMRBMapping-galaxy.xml"/>
+                <tool file="BALL-NMR/ComputeNMRDescriptorDB-galaxy.xml"/>
+                <tool file="BALL-NMR/TrainNMRShiftModel-galaxy.xml"/>
+                <tool file="BALL-NMR/PredictNMRShifts-galaxy.xml"/>
+                <tool file="BALL-NMR/Spinster-galaxy.xml"/>
+        </section>
+
+        <section name="Clustering" id="Clustering">
+                <tool file="BALL/Trajectory2RigidTransformation.xml"/>
+                <tool file="BALL/PDBRMSDCalculator.xml"/>
+                <tool file="BALL/DockPoseClustering.xml"/>
+                <tool file="BALL/ExtractClustersFromWardTree.xml"/>
+                <tool file="BALL/TrajectoryFile2PDBSplitter.xml"/>
+                <tool file="BALL/PoseIndices2PDB.xml"/>
+        </section>
+				
+	<section name="QuEasy (QSAR)" id="QuEasy (QSAR)">
+                <tool file="BALL/FeatureSelector.xml"/>
+                <tool file="BALL/InputReader.xml"/>
+                <tool file="BALL/Predictor.xml"/>
+                <tool file="BALL/AutoModel.xml"/>
+                <tool file="BALL/InputPartitioner.xml"/>
+                <tool file="BALL/Validator.xml"/>
+                <tool file="BALL/MolPredictor.xml"/>
+                <tool file="BALL/ModelCreator.xml"/>
+        </section>
+
+        <section name="Chemoinformatics" id="Chemoinformatics">
+                <tool file="BALL/FingerprintSimilaritySearch.xml"/>
+                <tool file="BALL/FingerprintSimilarityClustering.xml"/>
+        </section>
+</toolbox>
+
