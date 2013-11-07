@@ -61,7 +61,7 @@ namespace BALL
 			// - hidden in galaxy
 			void registerParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool hidden = false);
 
-			void registerFlag(String name, String description, bool default_gui_value = false);
+			void registerFlag(String name, String description, bool default_gui_value = false, bool hidden = false);
 
 			void registerAdvancedParameters(Options& options);
 
@@ -136,7 +136,7 @@ namespace BALL
 
 			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true, bool hidden=false);
 
-			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true);
+			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true, bool hidden=false);
 
 
 			void validateRegisteredFilesHaveFormats();

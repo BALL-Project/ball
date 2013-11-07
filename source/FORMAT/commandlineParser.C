@@ -118,14 +118,15 @@ void CommandlineParser::registerParameter(String name, String description,
 
 void CommandlineParser::checkAndRegisterFlag(String name, String description,
                                              bool default_gui_value,
-																						 bool perform_check)
+																						 bool perform_check, bool hidden)
 {
 	checkParameterName(name, perform_check);
 
 	ParameterDescription pardes;
 	pardes.name = name;
 	pardes.description = description;
-	pardes.mandatory = false;
+	pardes.mandatory   = false;
+	pardes.hidden      = hidden;
 
 	list<String> values;
 	values.push_back("0");
@@ -136,6 +137,7 @@ void CommandlineParser::checkAndRegisterFlag(String name, String description,
 	registered_flags_.insert(make_pair(name, pardes));
 	registered_flags_.find(name)->second.allowed_values = values;
 	original_flag_order_.push_back(registered_flags_.find(name));
+
 	if (name.size() > max_flagname_length_)
 		max_flagname_length_ = name.size();
 	if (default_gui_value)
@@ -146,9 +148,9 @@ void CommandlineParser::checkAndRegisterFlag(String name, String description,
 	}
 }
 
-void CommandlineParser::registerFlag(String name, String description, bool default_gui_value)
+void CommandlineParser::registerFlag(String name, String description, bool default_gui_value, bool hidden)
 {
-	checkAndRegisterFlag(name, description, default_gui_value, true);
+	checkAndRegisterFlag(name, description, default_gui_value, true, hidden);
 }
 
 void CommandlineParser::registerAdvancedParameters(Options& options)
