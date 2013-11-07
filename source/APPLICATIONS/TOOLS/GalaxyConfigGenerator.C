@@ -119,17 +119,17 @@ int main(int argc, char* argv[])
 	{
 		if (    it->first == "par"  || it->first == "write_par" 
 		     || it->first == "help" || it->first == "write_ini"
-		     || (tool_name=="PocketDetector" && it->first=="mol_out") 
+		     || (tool_name=="PocketDetector" && it->first=="mol_out")
 		     || parameters_to_ignore.find(it->first) != parameters_to_ignore.end()
-		     || (it->second.advanced && 
+		     || (it->second.advanced &&
 			  !(  it->second.type == GALAXY_OPT_OUTDIR
-			    ||it->second.type == GALAXY_OPT_OUTID)))	
+			    ||it->second.type == GALAXY_OPT_OUTID)))
 		{
 			continue;
 		}
 
 		// Galaxy does not support a dynamic number of output files, yet.
-		// Anne: Au contraire: see BondOrderAssigner
+		// Anne: Au contraire: see  e.g.BondOrderAssigner
 		if (tool_name == "LigandFileSplitter" && it->first == "o")
 		{
 			// use a pre-set number of output-files, i.e. 15
