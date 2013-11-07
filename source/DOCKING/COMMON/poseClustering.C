@@ -1531,7 +1531,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		for (Position i=0; i<clusters_.size(); ++i)
 		{
 			out << "=======================================" << endl;
-			out << "    Cluster " << i << "(cluster score: " << getClusterScore(i) << ")" << endl;
+			out << "=   Cluster " << i << " (cluster score: " << getClusterScore(i) << ")" << endl;
 
 #ifdef POSECLUSTERING_DEBUG 
 			if (cluster_alg == NEAREST_NEIGHBOR_CHAIN_WARD)
@@ -2368,7 +2368,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 	void PoseClustering::printClusters(std::ostream& out) const
 	{
-		out << "\n\n    FINAL CLUSTERS     \n\n" << endl;
+		out << "+\n+\n+    FINAL CLUSTERS     \n+\n+" << endl;
 		for (Size i = 0; i < clusters_.size(); i++)
 		{
 			printCluster_(i, out);
