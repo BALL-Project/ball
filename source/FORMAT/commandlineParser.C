@@ -41,8 +41,8 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 	strftime (buffer, 150, "%Y-%m-%d, %X (%Z)", ptm);
 	start_time_ = String(buffer);
 
-	// For the moment, register Galaxy's char-excapes here.
-	// If necessary, we could create a function to allow switching to other char-excape schemes ...
+	// For the moment, register Galaxy's char-escapes here.
+	// If necessary, we could create a function to allow switching to other char-escape schemes ...
 	excaped_chars_.push_back(make_pair("__gt__",">"));
 	excaped_chars_.push_back(make_pair("__lt__","<"));
 	excaped_chars_.push_back(make_pair("__sq__","'"));
@@ -417,7 +417,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 		exit(0);
 	}
 
-	// Do not complain about missing parameters if the user just wants to write ini-file w/ default values.
+	// Do not complain about missing parameters if the user just wants to write ini-file/default values.
 	if (parameter_map_.find("write_ini") != parameter_map_.end())
 	{
 		return;
