@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/commandlineParser.h>
 
-#include "version.h";
+#include "version.h"
 
 using namespace BALL;
 
@@ -60,13 +60,13 @@ int main(int argc, char* argv[])
 	{
 		// if file does not exist: complain and abort
 		Log.error() << "error opening " << parpars.get("i") << " for input." << std::endl;
-		return 2;
+		exit(2);
 	}
 	if (!out_file)
 	{
 		// if file does not exist: complain and abort
 		Log.error() << "error opening " << parpars.get("o") << " for output." << std::endl;
-		return 2;
+		exit(2);
 	}
 
 	// create a system and read the contents of the molecular file
