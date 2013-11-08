@@ -261,7 +261,7 @@ int main(int argc, char* argv[])
 	xml.writeAttribute("version",tool_version.c_str());
 	if (allows_multiple_outputs)
 	{
-		xml.writeAttribute("force_history_refresh", "true");
+		xml.writeAttribute("force_history_refresh", "True");
 	}
 	xml.writeStartElement("requirements");
 	xml.writeStartElement("requirement");
@@ -275,6 +275,14 @@ int main(int argc, char* argv[])
 	xml.writeStartElement("command");
 //	xml.writeAttribute("interpreter","bash");
 	xml.writeCDATA(command.c_str()); // Do not use writeCharacters() here, because it would excape the "-" signs within the repeat-sections, which chetah needs!
+	xml.writeEndElement();
+
+	/// Tell galaxy to use exit codes instead of stderr to recognize failures
+	xml.writeStartElement("stdio");
+	xml.writeStartElement("exit_code");
+	xml.writeAttribute("range", "1:");
+	xml.writeAttribute("level", "fatal");
+	xml.writeEndElement();
 	xml.writeEndElement();
 
 	/// Write input section
