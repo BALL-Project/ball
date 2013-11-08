@@ -1,22 +1,3 @@
-/* buriedPolar.C
- *
- * Copyright (C) 2011 Marcel Schumann
- *
- * This program free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
- *
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, see <http://www.gnu.org/licenses/>.
- */
-
-// $Id: buriedPolar.C,v 1.4 2006/05/21 17:38:39 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 // ----------------------------------------------------
 // $Maintainer: Marcel Schumann $
