@@ -28,15 +28,15 @@ int main(int argc, char** argv)
 	parpars.registerParameter("i_trans", "input tranformation file", INFILE, true);
 	parpars.registerParameter("i_pdb",   "input reference pdb file", INFILE, true);
 
-	parpars.registerParameter("o", "output file name prefix for resulting pdb files", STRING, true, "", true);
+	parpars.registerParameter("o", "output file name prefix for resulting pdb files", OUTFILE, true, "", true);
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_id", "output file name prefix for 2nd to last pdb file (overwrites -o)", STRING, false, "", true);
+	parpars.registerParameter("o_id", "output file name prefix for 2nd to last pdb file", GALAXY_OPT_OUTID, false, "$o.id", true);
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_dir", "output directory for 2nd to last pdb file", STRING, false, "", true);
+	parpars.registerParameter("o_dir", "output directory for 2nd to last pdb file", GALAXY_OPT_OUTDIR, false, "$__new_file_path__", true);
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dir");
 
