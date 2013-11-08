@@ -13,7 +13,7 @@ using namespace BALL;
 int main(int argc, char* argv[])
 {
 	// instantiate CommandlineParser object
-	CommandlineParser parpars("MolecularFileConverter", "converts molecular file-formats", "bla", String(__DATE__), "File conversion");
+	CommandlineParser parpars("MolecularFileConverter", "converts molecular file-formats", VERSION, String(__DATE__), "File conversion");
 	parpars.registerParameter("i",  "input file",    INFILE,  true);
 	parpars.registerParameter("of", "output format", STRING,  false);
 	parpars.registerParameter("o",  "output file",   OUTFILE, true);
