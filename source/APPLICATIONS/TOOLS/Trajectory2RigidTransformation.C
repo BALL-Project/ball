@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 	parpars.registerParameter("i_dcd", "input trajectory file", INFILE, true);
 	parpars.registerParameter("i_pdb",  "input pdb-file", INFILE, true);
 
-	parpars.registerParameter("o", "output dat-file name for the rigid transformations", STRING, true, "", true);
+	parpars.registerParameter("o", "output dat-file name for the rigid transformations", OUTFILE, true, "", true);
 
 	// the manual
 	String man = "This tool converts SnapShots of a given TrajectoryFile and the reference PDBFile into a rigid transformation file.\n\nParameters are the input SnapShots as TrajectoryFile (-i_dcd), the corresponding reference pdb file that was originally used to create the TrajectoryFile (-i_pdb) and a naming schema for the resulting transformation file (-o).\n\nOutput of this tool is a file storing each given SnapShot as rigid transformation per line.";
