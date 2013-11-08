@@ -277,12 +277,19 @@ int main(int argc, char* argv[])
 	xml.writeCDATA(command.c_str()); // Do not use writeCharacters() here, because it would excape the "-" signs within the repeat-sections, which chetah needs!
 	xml.writeEndElement();
 
-	/// Tell galaxy to use exit codes instead of stderr to recognize failures
+	/// Tell galaxy to use exit codes instead of stderr to recognize failures...
 	xml.writeStartElement("stdio");
 	xml.writeStartElement("exit_code");
 	xml.writeAttribute("range", "1:");
 	xml.writeAttribute("level", "fatal");
 	xml.writeEndElement();
+	
+	/// ... and to recognize stderr as warnings, at least 
+	xml.writeStartElement("regex");
+	xml.writeAttribute("match", "*");
+	xml.writeAttribute("level", "warning");
+	xml.writeEndElement();
+
 	xml.writeEndElement();
 
 	/// Write input section
