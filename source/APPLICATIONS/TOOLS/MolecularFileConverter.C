@@ -18,16 +18,13 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("of", "output format", STRING,  false);
 	parpars.registerParameter("o",  "output file",   OUTFILE, true);
 
-
-	// TODO: was machen wir mit der of option?
-
 	// the available formats
 	String supp_formats = MolFileFactory::getSupportedFormats();
 
 	// the manual
 	String man = String("This tool converts different molecular file formats.\nSupported formats are ") + supp_formats + String(".");
-	// TODO welcher wollen wir anbieten in BOA?
-	// Marcels allgemeiner Converter kann: mol2, sdf, drf, pdb, ac, ent, brk, hin, mol, xyz, 
+
+	// we support: mol2, sdf, drf, pdb, ac, ent, brk, hin, mol, xyz, 
 	// mol2.gz, sdf.gz, drf.gz, pdb.gz, ac.gz, ent.gz, brk.gz, hin.gz, mol.gz, xyz.gz.
 	parpars.setToolManual(man);
 
@@ -80,6 +77,7 @@ int main(int argc, char* argv[])
 	{
 		out_file->write(S);
 		out_file->close();
+		Log.info() << "Wrote converted file " << parpars.get("o") << std::endl;
 	}
 
 	delete in_file;
