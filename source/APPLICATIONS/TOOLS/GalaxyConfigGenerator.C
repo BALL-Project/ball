@@ -283,13 +283,6 @@ int main(int argc, char* argv[])
 	xml.writeAttribute("range", "1:");
 	xml.writeAttribute("level", "fatal");
 	xml.writeEndElement();
-	
-	/// ... and to recognize stderr as warnings, at least 
-	xml.writeStartElement("regex");
-	xml.writeAttribute("match", "*");
-	xml.writeAttribute("level", "warning");
-	xml.writeEndElement();
-
 	xml.writeEndElement();
 
 	/// Write input section
