@@ -15,12 +15,12 @@ class XYZFile
 %End
   public:
   XYZFile();
-  XYZFile(const String&, OpenMode openmode = std::ios::in) throw(FileNotFound);
-  ~XYZFile() throw();
-  virtual bool write(const System&) throw(File::CannotWrite);
-	virtual bool write(const Molecule&) throw(File::CannotWrite);
-  virtual bool read(System&) throw(ParseError);
-	virtual Molecule* read() throw(ParseError);
+  XYZFile(const String&, OpenMode openmode = std::ios::in);
+  ~XYZFile();
+  virtual bool write(const System&);
+	virtual bool write(const Molecule&);
+  virtual bool read(System&);
+	virtual Molecule* read();
 	const String& getComment();
 	private:
 		XYZFile(const XYZFile&);
