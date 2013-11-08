@@ -8,6 +8,7 @@
 // BALL includes
 #include <BALL/kernel.h>
 #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+#include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
@@ -363,6 +364,16 @@ cout << endl;
 		// Do we have bonds in the molecule at all?
 		if (ac.countBonds() == 0)
 			return Processor::CONTINUE;
+
+		// check if single connected component, otherwise treedecomposition crashes
+		ConnectedComponentsProcessor ccp;
+		ac.apply(ccp);
+		if (ccp.getNumberOfConnectedComponents() > 1)
+		{
+			Log.error() << "Error: Given AtomContainer contains more than one connected component, but only one is expected! Abort. " <<
+			               __FILE__ << " " << __LINE__<< std::endl;
+			return Processor::ABORT;
+		}
 
 		// Is the processor in a valid state?
 		if (readOptions_() && valid_)
