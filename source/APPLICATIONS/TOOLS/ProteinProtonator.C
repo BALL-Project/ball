@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 // ----------------------------------------------------
 // $Maintainer: Marcel Schumann $
 // $Authors: Marcel Schumann $
@@ -53,7 +57,10 @@ int main(int argc, char* argv[])
 	
 	Protein protein;
 	pdb_input->read(protein);
-	
+
+/*	
+ 	//  !!!! this functionality in now covered by the tool AddMissingAtoms!
+  
 	FragmentDB fragdb;
 	fragdb.setFilename("fragments/Fragments.db");
 	fragdb.init();
@@ -64,7 +71,8 @@ int main(int argc, char* argv[])
 	Log.enableOutput();
 	
 	fragdb.destroy();
-	
+*/
+
 	// If the input protein already has hydrogens, then delete them first.
 	for (AtomIterator it=protein.beginAtom(); it!=protein.endAtom(); it++)
 	{
@@ -116,100 +124,6 @@ int main(int argc, char* argv[])
 	{
 		Log.level(20)<<"protein protonation failed."<<endl;
 	}
-	
-	
-	/*
-	GenericMolFile* input = MolFileFactory::open(parpars.get("i"), ios::in);
-	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, input);
-	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
-	if (drf_output)
-	{
-		drf_output->setToolInfo(parpars.getStartCommand(), parpars.getStartTime());
-	}
-
-	Molecule* mol;
-	int no_written = 0;
-	int no_ignored = 0;
-	double pH = 7.4;
-	if (parpars.get("ph") != CommandlineParser::NOT_FOUND)
-	{
-		pH = parpars.get("ph").toDouble();
-	}
-	PDBFile* pdb_input = dynamic_cast<PDBFile*>(input);
-	FragmentDB* fragdb = 0;
-	if (pdb_input)
-	{
-		fragdb = new FragmentDB;
-		fragdb->setFilename("fragments/Fragments.db");
-		fragdb->init();
-	}
-
-
-	for (Size i=1; (mol = input->read()); i++)
-	{
-		Protein* protein = dynamic_cast<Protein*>(mol);
-		if (protein && pdb_input)
-		{
-			Log.disableOutput();
-			protein->apply(fragdb->normalize_names);
-			protein->apply(fragdb->build_bonds);
-			Log.enableOutput();
-		}
-
-		// If the input protein already has hydrogens, then delete them first.
-		for (AtomIterator it = mol->beginAtom(); +it; it++)
-		{
-			if (it->getElement().getSymbol() == "H") it->select();
-			else it->deselect();
-		}
-		mol->removeSelected();
-
-		OpenBabel::OBMol* obmol = MolecularSimilarity::createOBMol(*mol,0,1);
-
-		obmol->DeleteHydrogens();
-		obmol->SetDimension(3);
-		obmol->AddConformer(obmol->GetCoordinates());
-
-		// Add hydrogens for the specified ph-value
-		obmol->AddHydrogens(false, true, pH);
-
-		// Fetch final 3D coordinates
-		if (!protein)
-		{
-			delete mol;
-			mol = MolecularSimilarity::createMolecule(*obmol);
-		}
-		else
-		{
-			// Steal only the newly created hydrogens and put them into the correct residues.
-			// Set Hydrogen-names according to NMRSTAR-convention.
-			// (Openbabel by default created new chains+residues for new hydrogens in a protein and names all hydrogens 'H')
-			copyHydrogens(obmol,protein);
-		}
-
-		bool b = output->write(*mol);
-		if (b) no_written++;
-		else no_ignored++;
-		delete mol;
-		delete obmol;
-		if (no_written%5 == 0)
-		{
-			Log.level(20)<<"\r"<<no_written<<" molecules";
-			Log.flush();
-		}
-	}
-
-	Log.level(20)<<"\r";
-	if (no_ignored > 0) Log.level(20)<<"ignored "<<no_ignored<<" identical molecules!"<<endl;
-	Log.level(20)<<"wrote "<<no_written<<" molecules."<<endl;
-
-	input->close();
-	output->close();
-
-	if (fragdb) delete fragdb;
-	delete input;
-	delete output;
-	*/
 }
 
 
