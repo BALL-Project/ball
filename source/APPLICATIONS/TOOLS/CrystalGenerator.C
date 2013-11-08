@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	// - version string
 	// - build date
 	// - category
-	CommandlineParser parpars("X-Ray CrystalGenerator", "creates crystals", "bla", String(__DATE__), "Structure Creation");
+	CommandlineParser parpars("X-Ray CrystalGenerator", "creates crystals", "VERSION", String(__DATE__), "Structure Creation");
 	
   parpars.registerParameter("i",  "input pdb file",    INFILE,  true);
 	parpars.registerParameter("o",  "output pdb file",   OUTFILE, true);
