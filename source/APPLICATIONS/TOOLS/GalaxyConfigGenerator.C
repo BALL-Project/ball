@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
 	}
 
 	// If the job does not fail, Galaxy will only display a few lines of the tool's output, so make sure to show the relevant (i.e. the last) lines.
-	command += " | tail -n 5\n";
+//	command += " | tail -n 5\n";
 
 	// Sort inputs in such a way that input-files come first, and other input-parameters later.
 	// It just looks nicer in the webinterface ...
