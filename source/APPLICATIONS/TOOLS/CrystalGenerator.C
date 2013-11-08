@@ -20,6 +20,8 @@
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/SYSTEM/path.h>
 
+#include "version.h"
+
 using namespace std;
 using namespace BALL;
 

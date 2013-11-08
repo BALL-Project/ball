@@ -8,6 +8,8 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/commandlineParser.h>
 
+#include "version.h";
+
 using namespace BALL;
 
 int main(int argc, char* argv[])
