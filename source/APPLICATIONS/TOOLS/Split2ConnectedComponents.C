@@ -18,7 +18,7 @@ using namespace BALL;
 
 int main (int argc, char **argv)
 {
-	CommandlineParser parpars("Split2ConnectedComponents", "splits a molecular file into its connected components", "bla", String(__DATE__), "Preparation");
+	CommandlineParser parpars("Split2ConnectedComponents", "splits a molecular file into its connected components", VERSION, String(__DATE__), "Preparation");
 
 	parpars.registerParameter("i", "input mol2-file", INFILE, true);
 
