@@ -27,7 +27,7 @@ int main (int argc, char **argv)
 	parpars.registerParameter("o", "peptide output pdb-file", OUTFILE, true);
 	//parpars.registerParameter("peptide_name", "name of the peptide", STRING, false);
 
-	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.\nExample:\n# aa   phi    psi   omega\nA    -180    140\nC    -180    180\nG    -90    -140\nP    -65    -40       0   # cis\nT    -120    -90\nP    -78     146     180  # trans";
+	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.\n\nExample:\n\n# aa   phi    psi   omega\n\nA    -180    140\n\nC    -180    180\n\nG    -90    -140\n\nP    -65    -40       0   # cis\n\nT    -120    -90\n\nP    -78     146     180  # trans";
 
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i", "txt");
@@ -56,16 +56,30 @@ int main (int argc, char **argv)
 			aa_torsion.split(fields);
 
 			// split and check
-			if (   (fields.size()<3)
-					|| ((fields.size()>3) && (fields[3] != "#") && (fields[4] != "#") ))
+			// either expect a line
+			//    G
+			//    A    -180    140
+			// or
+			//    A    -180    140   180 # some comment
+			if (   (fields.size() != 1)
+					&& (   (fields.size()<3)
+					    || ((fields.size()>3) && (fields[3] != "#") && (fields[4] != "#")) ))
 			{
 				Log.error() << "Error in while reading file " << parpars.get("i") << " in line " << aa_torsion << endl;
 			}
 
 			String aa = fields[0];
-			float phi = fields[1].toFloat();
-			float psi = fields[2].toFloat();
+
+			// assume a helix if no angles given
+			float phi = 300;
+			float psi = 310;
 			float omega = 0.;
+
+			if (fields.size()>1)
+			{
+				phi = fields[1].toFloat();
+				psi = fields[2].toFloat();
+			}
 
 			if ((fields.size()>4) && (fields[3] != "#"))
 				omega = fields[3].toFloat();
