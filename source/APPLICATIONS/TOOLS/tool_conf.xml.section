@@ -4,6 +4,8 @@
 		<tool file="data_source/upload.xml"/>	
 		<tool file="BALL/PDBDownload.xml"/>		
 		<tool file="BALL/MolecularFileConverter.xml"/>
+		<tool file="BALL/Split2ConnectedComponents.xml"/>
+		<tool file="BALL/MolCombine.xml"/>
 		<tool file="BALL/CombiLibGenerator.xml"/>	
 		<tool file="BALL/DBImporter.xml"/>	
 		<tool file="BALL/DBExporter.xml"/>
@@ -25,6 +27,7 @@
 	<section name="Graph/Display Molecules" id="plots">
 		<tool file="BALL-NMR/VisualizeStructureDiagram-galaxy.xml"/>
 		<!-- tool file="BALL/MolDepict.xml"/-->	
+		<!-- tool file="BALL/GenerateXML3D.xml"/-->	
 	</section> 
 
  	<section name="Preparation" id="Preparation">	
@@ -32,8 +35,6 @@
 		<tool file="BALL/WaterFinder.xml"/>
 		<tool file="BALL/AddMissingAtoms.xml"/>
 		<tool file="BALL/ProteinProtonator.xml"/>
-		<tool file="BALL/Split2ConnectedComponents.xml"/>
-		<tool file="BALL/MolCombine.xml"/>
 		<tool file="BALL/BondOrderAssigner.xml"/>
 		<tool file="BALL/Ligand3DGenerator.xml"/>
 		<tool file="BALL/LigandFileSplitter.xml"/>
