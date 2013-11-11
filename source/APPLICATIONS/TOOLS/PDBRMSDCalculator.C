@@ -141,7 +141,7 @@ int main (int argc, char **argv)
 		if (query_type == "pdb")
 		{
 			PDBFile pdb2;
-			pdb2.open(parpars.get("i_pdb"));
+			pdb2.open(parpars.get("i_query"));
 			System sys_query;
 			pdb2.read(sys_query);
 
