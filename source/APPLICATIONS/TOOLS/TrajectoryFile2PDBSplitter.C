@@ -27,15 +27,15 @@ int main(int argc, char** argv)
 	parpars.registerParameter("i_traj", "input trajectory file", INFILE, true);
 	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
 
-	parpars.registerParameter("o", "output pdb-file name for first solution", STRING, true, "", true);
+	parpars.registerParameter("o", "output pdb-file for first solution", OUTFILE, true, "", true);
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_id", "output id", STRING, false, "", true);
+	parpars.registerParameter("o_id", "output id", GALAXY_OPT_OUTID, false, "$o.id", true);
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_dir", "output directory for 2nd to last pdb file", STRING, false, "", true);
+	parpars.registerParameter("o_dir", "output directory for 2nd to last pdb file", GALAXY_OPT_OUTDIR, false, "$__new_file_path__", true);
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dir");
 
@@ -45,12 +45,9 @@ int main(int argc, char** argv)
 	parpars.setToolManual(man);
 
 	// here we set the types of I/O files
-	parpars.setSupportedFormats("i_traj", "dcd, trr");
+	parpars.setSupportedFormats("i_traj", "dcd");
 	parpars.setSupportedFormats("i_pdb",  "pdb");
 	parpars.setSupportedFormats("o",      "pdb");
-
-	//TODO
-	//parpars.setSupportedFormats("o",MolFileFactory::getSupportedFormats());
 
 	parpars.parse(argc, argv);
 
@@ -73,9 +70,7 @@ int main(int argc, char** argv)
 	for (Size i=0; i< num_ss; i++)
 	{
 		// create the output name
-		String outfile_name = String(parpars.get("o"))
-													+ "_snapshot_" + String(i) + ".pdb";
-
+		String outfile_name = String(parpars.get("o")) + "_snapshot_" + String(i) + ".pdb";
 		if (parpars.has("o_dir"))
 		{
 			outfile_name =  String(parpars.get("o_dir")) + "/" + outfile_name;
