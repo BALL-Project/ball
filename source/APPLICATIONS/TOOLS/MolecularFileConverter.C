@@ -22,12 +22,12 @@ int main(int argc, char* argv[])
 
 	// the available formats
 	String supp_formats = MolFileFactory::getSupportedFormats();
+	// we support: mol2, sdf, drf, pdb, ac, ent, brk, hin, mol, xyz, 
+	// mol2.gz, sdf.gz, drf.gz, pdb.gz, ac.gz, ent.gz, brk.gz, hin.gz, mol.gz, xyz.gz.
 
 	// the manual
 	String man = String("This tool converts different molecular file formats.\nSupported formats are ") + supp_formats + String(".");
 
-	// we support: mol2, sdf, drf, pdb, ac, ent, brk, hin, mol, xyz, 
-	// mol2.gz, sdf.gz, drf.gz, pdb.gz, ac.gz, ent.gz, brk.gz, hin.gz, mol.gz, xyz.gz.
 	parpars.setToolManual(man);
 
 	parpars.setSupportedFormats("i", supp_formats);
