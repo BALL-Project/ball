@@ -45,6 +45,7 @@ SET(EXECUTABLES_LIST
 	PropertyModifier
 	PropertyPlotter
 	ProteinCheck
+	RemoveWater
 	RMSDCalculator
 	ScoreAnalyzer
 	SideChainGridBuilder
