@@ -33,9 +33,9 @@
 #include<BALL/SEQUENCE/sequence.h>
 #endif
 
-#ifndef BALL_SEQUENCE_ALIGNMENT_H
-#include<BALL/SEQUENCE/alignment.h>
-#endif
+//#ifndef BALL_SEQUENCE_ALIGNMENT_H
+//#include<BALL/SEQUENCE/alignment.h>
+//#endif
 
 
 #include<string>
@@ -53,8 +53,8 @@ namespace BALL
 			FastaFile();
 
 			/**
-			 *Detailed Constructor
-			 *@param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file default is
+			 * Detailed Constructor
+			 * @param trim_whitespaces sets whether leading and trailing whitespaces shall be removed while reading the file default is
 			 */
 			FastaFile(const BALL::String& filename, BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false);
 
@@ -80,7 +80,7 @@ namespace BALL
 			/**
 			* read a FastaFile into an Alignment
 			*/
-			void read(Alignment& align);
+		// TODO!!!!!	void read(Alignment& align);
 
 			/**
 			* writes a Protein into a Fastafile
@@ -88,15 +88,14 @@ namespace BALL
 			void write(const Protein& protein);
 
 			/**
-			*writes a Molecule into a Fastafile
+			* writes a Molecule into a Fastafile
 			*/
 			void write(const Molecule& molecule);
 
 			/**
-			*writes a System into a Fastafile
+			* writes a System into a Fastafile
 			*/
 			void write(const System& system);
-
 
 			////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
 

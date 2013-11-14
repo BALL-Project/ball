@@ -1,11 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FastaFile_test.C,2011/06/06$
-//
-// Author:
-//   Nikola Koch
-//
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
@@ -29,12 +24,11 @@ START_TEST(FastaFile)
 
 using namespace BALL;
 
-	FastaFile *fp= new FastaFile();
-		
-//////////////////////////////////////// Constructor and Deconstructor Test ///////////////////////////////////////////////////
+FastaFile *fp= new FastaFile();
+
 
 CHECK(FastaFile())
-	TEST_NOT_EQUAL(fp,0);
+	TEST_NOT_EQUAL(fp, 0);
 RESULT
 
 
@@ -43,123 +37,175 @@ CHECK(~FastaFile())
 RESULT
 
 
-
-//Checks whether Exception is thrown if filename is invalid
 CHECK(FastaFile(const BALL::String& filename,BALL::File::OpenMode open_mode=std::ios::in, bool trim_whitespaces=false))
+	FastaFile fasta(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+	TEST_EQUAL(fasta.isValid(), true)
+	fasta.close();
 
-
-	FastaFile *fp;
-TEST_EXCEPTION(Exception::FileNotFound, fp= new FastaFile("x"))
-	TEST_EXCEPTION(Exception::FileNotFound, fp=new FastaFile("abscdf"))
+	FastaFile fasta2(BALL_TEST_DATA_PATH(FastaFile_test2.fasta));
+	TEST_EQUAL(fasta2.isValid(), true)
+	fasta2.close();
 RESULT
 
-
-	fp=new FastaFile();
-
-	////////////////////open the File ///////////////////////////
+String rs("AGTACGTAGTAGCTGCTGCTACGTGCGCTAGCTAGTACGTCACGACGTAGATGCTAGCTGACTCGATGC");
 
 
-	String* seq=new String();
-	
-//////////////////////////////////////////////////////////////////// Reading Tests //////////////////////////////////////////////////77
+CHECK( read(Protein& protein) )
+	FastaFile fasta;
+	fasta.open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+	Protein prot;
+	fasta.read(prot);
+	fasta.close();
 
-	Protein *pp = new Protein();
+	String seq = Peptides::GetSequence(prot);
+	TEST_EQUAL(seq, rs);
 
-	System *sp = new System();
-	String *rs= new String("AGTACGTAGTAGCTGCTGCTACGTGCGCTAGCTAGTACGTCACGACGTAGATGCTAGCTGACTCGATGC");
-
-CHECK(read (Protein& protein))
-
-	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
-
-
-	fp->read(*pp);
-
-	 *seq = Peptides::GetSequence(*pp);
-	
-	TEST_EQUAL(*seq,*rs);
-
+	fasta.open(BALL_TEST_DATA_PATH(FastaFile_test2.fasta));
+	Protein prot2;
+	fasta.read(prot2);
+	fasta.close();
+	TEST_EQUAL(prot2.countChains(), 2)
 RESULT
-
 
 
 CHECK(read(System& system))
+	FastaFile fasta;
+	fasta.open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+	System system;
+	fasta.read(system);
+	fasta.close();
+	TEST_EQUAL(system.countResidues(), rs.length())
+	TEST_EQUAL(system.countProteins(), 1)
 
-	seq->destroy();
-	
-	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+	fasta.open(BALL_TEST_DATA_PATH(FastaFile_test2.fasta));
+	System system2;
+	fasta.read(system2);
+	TEST_EQUAL(system2.countChains(), 2)
+	TEST_EQUAL(system2.countProteins(), 1)
+	fasta.close();
 
-	fp->read(*sp);
-
-	//Get the Sequence out of the System	
-	for(ProteinIterator it = sp->beginProtein(); +it; ++it) {
-    	*seq = Peptides::GetSequence(*it);
-	}
-
-	
-        TEST_EQUAL(*seq, *rs);
+	fasta.open(BALL_TEST_DATA_PATH(FastaFile_test2.fasta));
+	fasta.read(system);
+	TEST_EQUAL(system.countProteins(), 2)
+	fasta.close();
 RESULT
 
-//delete no more needed pointer
-	
-	delete pp;
-//	delete mp;
-	
-	
-	delete sp;
-
-
-
-
-	//instantiate new ones
-	 Protein *np=new Protein();
-  
 
 CHECK(operator>>(Protein& protein))
-
-	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
-
-
-        fp->read(*np);
-        *seq=Peptides::GetSequence(*np);
-        TEST_EQUAL(*seq, *rs)
+	FastaFile fasta(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+  Protein prot;
+	fasta >> prot;
+	fasta.close();
+  TEST_EQUAL(prot.countResidues(), rs.length())
+	TEST_EQUAL(Peptides::GetSequence(prot), rs)
+	TEST_EQUAL(prot.countChains(), 1)
 RESULT
 
 
- System s;
-
-        
 CHECK(operator>>(System& system))
-
-	seq->destroy();
-	fp->open(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
-
-	*fp >> s;
-
-         for(ProteinIterator it = s.beginProtein(); +it; ++it) {
-         *seq = Peptides::GetSequence(*it);
-        }
-        TEST_EQUAL(*seq, *rs)
-RESULT          
+  System s;
+	FastaFile fasta(BALL_TEST_DATA_PATH(FastaFile_test2.fasta));
+	fasta >> s;
+	TEST_EQUAL(s.countChains(), 2)
+RESULT
 
 
+CHECK(operator == (const FastaFile& f))
+	FastaFile fasta1(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+	FastaFile fasta2(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+  TEST_EQUAL(fasta1 == fasta2, true)
+RESULT
 
 
+CHECK(operator != (const FastaFile& f))
+	FastaFile fasta1(BALL_TEST_DATA_PATH(FastaFile_test1.fasta));
+	FastaFile fasta3(BALL_TEST_DATA_PATH(FastaFile_test2.fasta));
+	TEST_EQUAL(fasta1 != fasta3, true)
+RESULT
 
 
+String filename;
+NEW_TMP_FILE(filename)
+CHECK( write(Protein& protein))
+	Protein* p = new Protein("TESTPROTEIN AGT");
+	Chain* chain = new Chain("TESTCHAIN AGT");
+
+	Residue* res1 = new Residue("ALA",0);
+	Residue* res2 = new Residue("GLY",1);
+	Residue* res3 = new Residue("THR",2);
+
+	res1->setProperty(Residue::PROPERTY__AMINO_ACID);
+	res2->setProperty(Residue::PROPERTY__AMINO_ACID);
+	res3->setProperty(Residue::PROPERTY__AMINO_ACID);
+
+	chain->insert(*res1);
+	chain->insert(*res2);
+	chain->insert(*res3);
+
+	p->insert(*chain);
+	TEST_EQUAL(p->countChains(),1)
+	TEST_EQUAL(p->countResidues(),3)
+	FastaFile f(filename, std::ios::out);
+	f.write(*p);
+	f.close();
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(FastaFile_test3.fasta))
+RESULT
 
 
+CHECK( write(System& system))
+	System S;
+	Protein* p = new Protein("TESTPROTEIN AGT");
+	Chain* chain = new Chain("TESTCHAIN AGT");
 
-/** TODO test the write function
-                void write(Protein& protein);
-                        void write(Molecule& molecule);
-                        void write(System& system);
-*/
-                ////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
+	Residue* res1 = new Residue("ALA",0);
+	Residue* res2 = new Residue("GLY",1);
+	Residue* res3 = new Residue("THR",2);
 
-						
+	res1->setProperty(Residue::PROPERTY__AMINO_ACID);
+	res2->setProperty(Residue::PROPERTY__AMINO_ACID);
+	res3->setProperty(Residue::PROPERTY__AMINO_ACID);
 
-/////////////////////////////////////////////////////////////
-/////
+	chain->insert(*res1);
+	chain->insert(*res2);
+	chain->insert(*res3);
+
+	p->insert(*chain);
+	TEST_EQUAL(p->countChains(),1)
+	TEST_EQUAL(p->countResidues(),3)
+	S.insert(*p);
+	FastaFile f(filename, std::ios::out);
+	f.write(S);
+	f.close();
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(FastaFile_test3.fasta))
+RESULT
+
+
+CHECK( write(Molelcule& mol))
+	Molecule* m = new Protein("TESTPROTEIN AGT");
+	Chain* chain = new Chain("TESTCHAIN AGT");
+
+	Residue* res1 = new Residue("ALA",0);
+	Residue* res2 = new Residue("GLY",1);
+	Residue* res3 = new Residue("THR",2);
+
+	res1->setProperty(Residue::PROPERTY__AMINO_ACID);
+	res2->setProperty(Residue::PROPERTY__AMINO_ACID);
+	res3->setProperty(Residue::PROPERTY__AMINO_ACID);
+
+	chain->insert(*res1);
+	chain->insert(*res2);
+	chain->insert(*res3);
+
+	m->insert(*chain);
+
+	//TEST_EQUAL(m->countChains(),1)
+	//TEST_EQUAL(m->countResidues(),3)
+
+	FastaFile f(filename, std::ios::out);
+	f.write(*m);
+	f.close();
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(FastaFile_test3.fasta))
+
+RESULT
 
 END_TEST

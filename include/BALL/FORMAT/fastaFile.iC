@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-BALL_INLINE 
+BALL_INLINE
 FastaFile& FastaFile::operator >> (Protein& protein)
 {
   read(protein);
@@ -10,36 +10,36 @@ FastaFile& FastaFile::operator >> (Protein& protein)
 }
 
 
-BALL_INLINE 
+BALL_INLINE
 FastaFile& FastaFile::operator >> (System& system)
 {
   read(system);
-  
+
   return *this;
 }
 
 
-BALL_INLINE 
+BALL_INLINE
 FastaFile& FastaFile::operator << (const Molecule& molecule)
 {
   write(molecule);
-  
+
   return *this;
 }
 
-BALL_INLINE 
+BALL_INLINE
 FastaFile& FastaFile::operator << (const Protein& protein)
 {
   write(protein);
-  
+
   return *this;
 }
 
-BALL_INLINE 
+BALL_INLINE
 FastaFile& FastaFile::operator << (const System& system)
 {
   write(system);
-  
+
   return *this;
 }
 

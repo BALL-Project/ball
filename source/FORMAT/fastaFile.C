@@ -4,13 +4,10 @@
 
 #include <BALL/FORMAT/fastaFile.h>
 #include <BALL/KERNEL/residueIterator.h>
-#include <BALL/STRUCTURE/peptideBuilder.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 
 namespace BALL
 {
-	///////////////////////////////////////////// Constructor und Deconstructor //////////////////////////////////////////////////////////////
-
 	FastaFile::FastaFile()
 	{
 	}
@@ -19,8 +16,6 @@ namespace BALL
 			: LineBasedFile::LineBasedFile(filename, open_mode, trim_whitespaces)
 	{
 	}
-
-	/////////////////////////////////////////////////// Operators ///////////////////////////////////////////
 
 	bool FastaFile::operator == (const FastaFile& f)
 	{
@@ -33,220 +28,127 @@ namespace BALL
 	}
 
 
-	///////////////////////////////////////////////////////////// Reading and Writing /////////////////////////////////////////
-
-	/**
-	*reads a FastaFile into a protein
-	*@throws InvalidArgument if a file holding more than one sequence is to be read
+	/*
+	* reads a FastaFile into a protein
+	* @throws InvalidArgument if a file holding more than one sequence is to be read
 	*/
 	void FastaFile::read(Protein& protein)
 	{
-		//counter to denote lines
-		int i=0;
-
-		//read the first line
+		// read the first line
 		if (!readLine())
-			throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
+			throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current line");
 
 		// extract the current line
 		String& current_str_l = getLine();
 
-		// store the Sequence
+		// sequence characters
 		String sequence_text;
 
-		// store the name of the protein
+		// name of the protein
 		String name;
 
-		// iterate over all lines of the file
-		while (gotoLine(i) && readLine())
-		{
-			//extract current line of the Sequence
-			current_str_l = this->getLine();
-
-			//extract the first character of the current line to check whether it is a comment or a headline
-			char c= current_str_l.toChar();
-
-			if ((c =='>') || (c == ';'))
-			{
-				//check whether currentline is the first line, else there is more than one 
-				//Sequence in the FastaFile and we can not read it into a protein
-				if (i==0)
-				{
-					//retrieve the name of the protein. It starts right after '>' and ends before the first whitespace
-					unsigned int counter =  0;
-
-					while (counter < current_str_l.length() )
-					{
-						if (current_str_l(counter) == ' ' || current_str_l(counter) == '\t' )
-						{
-							break;
-						}
-						else
-						{
-							name += current_str_l(counter);
-							counter++;
-						}
-					}
-				}
-				else
-				{
-					throw BALL::Exception::InvalidArgument(__FILE__,__LINE__, "The file holds more than one sequence for a protein. Either split the file or load it into a System");
-				}
-			}
-			else  // and now the sequence_text
-			{
-				//iterate through the string to get the single characters
-				for (unsigned int j=0; j<current_str_l.length(); j++)
-				{
-					char check = current_str_l[j];
-
-					//check whether the next character is a valid AS and if it is change it to three letter code
-					if (Peptides::IsOneLetterCode(check))
-					{
-						sequence_text += check;
-					}
-					else // TODO handle nucleic acid
-					{
-						throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FastaFile");
-					}
-				}
-			}
-
-			//increment the counter
-			++i;
-		}
-
-		Sequence sequence(name, sequence_text);
-		protein = *(dynamic_cast<Protein*>(sequence.getOrigin()));
-	}
-
-
-	/**
-	 *reads a FastaFile into a System
-	 */
-	//TODO check whether it is a protein or a nucleic acid
-	void FastaFile::read(System& system)
-	{
-		//counter to denote the lines
-		int i=0;
-
-		//counter to denote the protein
-		int p_ct=0;
-
-		//read the first line
-		if (! readLine())
-		{
-			throw Exception::InvalidArgument(__FILE__,__LINE__, "could not read the current Line");
-		}
-
-		//extract the first line
-		String& current_str_l = getLine();
-
-		//vector to store the Sequences
-		vector<String> sequences;
-
-		//String to store the name of the proteins
-		vector<String> names;
-
-		//String to store the current sequence text
-		String sequence;
+		readLine();
 
 		// iterate over all lines of the file
-		// Note: can contain several sequences
-		while (gotoLine(i) && readLine())
+		while (!eof())
 		{
-			//extract current line of the Sequence
-			current_str_l = this->getLine();
+			// extract current line of the sequence
+			current_str_l = getLine().trim();
 
-			//check whether the current line is a > then start a new Protein
+			// extract the first character of the current line to check whether it is a comment or a headline
 			char c = current_str_l.toChar();
 
-			// check whether it is a headline or a comment
-			if (( c =='>') || (c == ';'))
+			// skip the comment
+			if ((c == ';'))
 			{
-				//retrieve the name of the protein. It starts right after '>' and ends before the first whitespace
-				unsigned int counter =  0;
-				String name;
+				// nothing to do 
+				readLine();
+			}
+			// a fasta header line
+			else if ((c == '>'))
+			{
+				vector<String> fields;
 
-				while (counter < current_str_l.length() )
+				if (current_str_l.countFields(" ")>0)
 				{
-					if (current_str_l(counter) == ' ' || current_str_l(counter) == '\t' )
+					fields.clear();
+					current_str_l.split(fields);
+					name = fields[0]; //TODO: is there a leading "> symbol" ??
+				}
+				readLine();
+			}
+			else  // or we have the sequence text
+			{
+				c = current_str_l.toChar();
+				sequence_text = "";
+				while (!eof() && ( (c != ';') && (c != '>')))
+				{
+					// iterate through the string to get the single characters
+					for (unsigned int j=0; j<current_str_l.length(); j++)
 					{
-						break;
+						char check = current_str_l[j];
+
+						// check whether the next character is a valid AS and if it is change it to three letter code
+						if (Peptides::IsOneLetterCode(check))
+						{
+							sequence_text += check;
+						}
+						else // TODO handle nucleic acid
+						{
+							throw Exception::InvalidArgument(__FILE__,__LINE__, "There is no OneLetterCode in the FastaFile");
+						}
+					}
+
+					readLine();
+					if (!eof())
+					{
+						current_str_l = getLine();
+						c = current_str_l.toChar();
 					}
 					else
 					{
-						name += current_str_l(counter);
-						counter++;
+						c = ' ';
 					}
 				}
-
-				//insert name
-				names.push_back(name);
-
-				//add last sequence to sequences vector if it is not the very first sequence
-				if (p_ct > 0)
-				{
-					sequences.push_back(sequence);
-				}
-
-				//increment counter
-				p_ct++;
-
-				//reset Sequence
-				sequence = "";
+				// create a chain	
+				Sequence sequence(name, sequence_text);
+				Chain* chain = (dynamic_cast<Protein*>(sequence.getOrigin())->getChain(0));
+				protein.append(*chain);
 			}
-			else // the sequence
-			{
-				String tmp;
-
-				//iterate through the string to get the single characters
-				for (unsigned int j=0; j<current_str_l.length(); j++)
-				{
-					char check = current_str_l[j];
-
-					//check whether the next character is a valid AS and if it is change it to three letter code
-					if (Peptides::IsOneLetterCode(check))
-					{
-						tmp += check;
-					}
-					else // TODO handle nucleic acid
-					{
-						throw Exception::InvalidArgument(__FILE__,__LINE__, "No OneLetterCode in the FastaFile");
-					}
-				}
-				sequence +=tmp;
-			}
-			//increment the counter
-			++i;
-		} // end of for all lines
-
-		//add the lastly retrieved sequence
-		sequences.push_back(sequence);
-
-		// now create the corresponding sequence objects including some "dummy" proteins 
-
-		if (sequences.size() != names.size())
-		{
-			throw Exception::InvalidArgument(__FILE__,__LINE__, "Not the same number of names and sequences in the FastaFile!");
-		}
-
-		//iterate over all proteins of the fastafile
-		for (unsigned int i=0; i<sequences.size(); i++)
-		{
-			Sequence sequence(names.at(i), sequences.at(i).c_str());
-			system.append(*dynamic_cast<Protein*>(sequence.getOrigin()));
 		}
 	}
 
 
-	/**
-	* writes a Protein into a Fastafile
+	/*
+	 * reads a FastaFile into a System
+	 */
+	void FastaFile::read(System& system)
+	{
+		Protein* new_protein = new Protein;
+		read(*new_protein);
+		system.append(*new_protein);
+	}
+
+
+	/*
+	*  writes a Protein into a Fastafile
 	*/
 	void FastaFile::write(const Protein& protein)
 	{
-		ResidueConstIterator resit = protein.beginResidue();
-		String seq;
+		if (!isOpen() || getOpenMode() != std::ios::out)
+		{
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
+		}
+
+		ChainConstIterator resit = protein.beginChain();
+		for (; +resit ; ++resit)
+		{
+			// get the protein's sequence
+			String seq= Peptides::GetSequence(*resit);
+			getFileStream()<< "> " << protein.getName() + ":" + resit->getName() << std::endl << seq << std::endl;
+		}
+
+		/*String seq;
 
 		for (; +resit ; ++resit)
 		{
@@ -256,34 +158,51 @@ namespace BALL
 			}
 		}
 		getFileStream() << "> " << protein.getName() << std::endl << seq << std::endl;
+		*/
 	}
 
-
-	/**
-	*writes a System into a Fastafile
+	/* 
+	* write a molecule into a Fastafile
 	*/
-	void FastaFile::write(const System& system)
+	void FastaFile::write(const Molecule& mol)
 	{
-		for (ProteinConstIterator it = system.beginProtein(); +it; ++it)
+		if (RTTI::isKindOf<Protein>(mol))
 		{
-			// get the protein's sequence
-			String seq= Peptides::GetSequence(*it);
+			Protein* prot = RTTI::castTo<Protein>(mol);
+			prot->setName(mol.getName());
 
-			getFileStream()<< "> " << it->getName() << std::endl << seq << std::endl;
+			write(*prot);
+		}
+		else if (RTTI::isKindOf<NucleicAcid>(mol))
+		{
+			// TODO
+			Log.warn() << "FastaFile::write(const Molecule& mol): export of nucleic acids not implemented yet!" << std::endl;
 		}
 	}
 
+	/* 
+	* write a system into a Fastafile
+	*/
+	void FastaFile::write(const System& system)
+	{
+		if (!isOpen() || getOpenMode() != std::ios::out)
+		{
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
+		}
 
-	////////////////////////////////////////////////// Misc ////////////////////////////////////////////////////
+		for (ProteinConstIterator it = system.beginProtein(); +it; ++it)
+		{
+			write(*it);
+		}
+	}
 
-	/**
-	 *clear method
+	/*
+	 * clear method
 	 */
 	void FastaFile::clear()
 	{
 		LineBasedFile::clear();
 	}
-
 
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
