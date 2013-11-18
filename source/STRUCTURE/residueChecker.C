@@ -55,12 +55,12 @@ namespace BALL
 		return tests_.getBit((Position)t);
 	}
 
-	void ResidueChecker::enable(ResidueChecker::TestType t) 
+	void ResidueChecker::enable(ResidueChecker::TestType t, bool enable)
 	{
-		tests_.setBit((Position)t);
+		tests_.setBit((Position)t, enable);
 	}
-	
-	void ResidueChecker::disable(ResidueChecker::TestType t) 
+
+	void ResidueChecker::disable(ResidueChecker::TestType t)
 	{
 		tests_.setBit((Position)t, false);
 	}

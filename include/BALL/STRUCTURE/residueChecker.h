@@ -196,7 +196,7 @@ namespace BALL
 
 		/**	Enable a specific test
 		*/
-		void enable(TestType t) ;
+		void enable(TestType t, bool enable = true) ;
 
 		/**	Disable a specific test
 		*/
