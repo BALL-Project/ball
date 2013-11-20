@@ -30,71 +30,71 @@ namespace BALL
 			//////////////////////////////////Constructors and Deconstructor//////////////////////////////////////////
 
 			/**
-			 *Default Constructor
+			 * Default Constructor
 			 */
 			Sequence();
 
 			/**
-			 *Detailed Constructor
-			 *@param name the name of the Sequence
-			 *@param origin the composite from which the sequence originates
+			 * Detailed Constructor
+			 * @param name the name of the Sequence
+			 * @param origin the composite from which the sequence originates
 			 */
 			Sequence(const String& name, AtomContainer* origin);
 
 			/**
-			 *Detailed Constructor
-			 *@param name_ the name of the Sequence
-			 *@param sequence  the sequence given in one letter code
+			 * Detailed Constructor
+			 * @param name the name of the Sequence
+			 * @param sequence  the sequence given in one letter code
 			 */
 			Sequence(const String& name, const String& sequence);
 
 			/**
-			 *Copy Constructor
+			 * Copy Constructor
 			 */
 			Sequence(const Sequence& seq);
 
 			/**
-			 *Deconstrcutor
+			 * Deconstrcutor
 			 **/
 			~Sequence();
 
 			/////////////////////////////////////Getter and Setter/////////////////////////////////////////////////////////////
 
 			/**
-			 * @param name_ the new name_ to be set
-			 * @throws Exception::GeneralException if an invalid name_ was specified
+			 * @param name the new name to be set
+			 * @throws Exception::GeneralException if an invalid name was specified
 			 */
 			void setName(const String& name);
 
 			/**
-			 *@return the name_ of the sequence
+			 * @return the name of the sequence
 			 */
 			String getName()const;
 
 			/**
-			 *@param origin_ the origin_ which is to be setted
+			 *@param origin the origin which is to be setted
 			 */
 			void setOrigin(AtomContainer* origin);
 
 			/**
-			 *@return the origin_ of the Sequence
+			 * @return the origin of the Sequence
 			 */
 			AtomContainer* getOrigin() const;
 
 			///////////////////////////////////////////////////////////// Operators //////////////////////////////////////////////////////////////////////
 
 			/**
-			 *operator==
+			 * operator==
 			 */
 			bool operator== (const Sequence& seq);
 
 			/**
-			 *operator!=
+			 * operator!=
 			 */
 			bool operator!= (const Sequence& seq);
 
 			/**
-			 *assignment operator
+			 * assignment operator
 			 */
 			Sequence& operator= (const Sequence& seq);
 
@@ -102,28 +102,28 @@ namespace BALL
 			/////////////////////////////////////////////////Misc///////////////////////////////////////////
 
 			/**
-			 *@return a SequenceIterator which points to the first character of the Sequence
+			 * @return a SequenceIterator which points to the first character of the Sequence
 			 */
 			SequenceIterator begin();
 
 			/**
-			 *@return a SequenceIterator which points to exactly one position after the last character of the Sequence
+			 * @return a SequenceIterator which points to exactly one position after the last character of the Sequence
 			 */
 			SequenceIterator end();
 
 			/**
-			 *@return String which contains the Sequence
+			 * @return String which contains the Sequence
 			 **/
 			String getStringSequence();
 
 			/**
-			*@return an Eigen Array of SequenceCharacters containing the Sequence
+			* @return an Eigen Array of SequenceCharacters containing the Sequence
 			*/
 			Eigen::Array< SequenceCharacter, 1, Eigen::Dynamic> getArraySequence();
 
 		private:
 
-			String name_;
+			String         name_;
 			AtomContainer* origin_;
 	};
 }
