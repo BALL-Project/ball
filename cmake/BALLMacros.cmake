@@ -6,16 +6,22 @@
 ### minor modifications (marked with ## BALL ###)
 ###
 MACRO(QT4_WRAP_UI_BALL outfiles )
-  QT4_EXTRACT_OPTIONS(ui_files ui_options ${ARGN})
+  # since 2.8.12 qt4_extract_options has an additional argument
+  # copied fix from OpenMS
+  IF(${CMAKE_VERSION} VERSION_LESS "2.8.12")
+      QT4_EXTRACT_OPTIONS(ui_files ui_options ${ARGN})
+  ELSE()
+      QT4_EXTRACT_OPTIONS(ui_files ui_options ui_target ${ARGN})
+  ENDIF()
 
-	### BALL ###
+  ### BALL ###
   # create output directory (will not exist for out-of-source builds)
   FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/)
 
   FOREACH (it ${ui_files})
     GET_FILENAME_COMPONENT(outfile ${it} NAME_WE)
     GET_FILENAME_COMPONENT(infile ${it} ABSOLUTE)
-		### BALL ###
+    ### BALL ###
     SET(outfile ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/ui_${outfile}.h)
     ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
       COMMAND ${QT_UIC_EXECUTABLE}
