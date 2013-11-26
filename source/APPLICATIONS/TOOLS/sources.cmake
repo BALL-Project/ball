@@ -7,6 +7,9 @@ SET(EXECUTABLES_LIST
 	AutoModel
 	BindingDBCleaner
 	BondOrderAssigner
+	CalculateBindingFreeEnergy
+	CalculateEnergy
+	CalculateSolvationFreeEnergy
 	CombiLibGenerator
 	ConstraintsFinder
 	Converter
