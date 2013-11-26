@@ -3,11 +3,12 @@
 //
 
 #include <BALL/FORMAT/PDBFile.h>
-#include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
-
 #include <BALL/STRUCTURE/peptides.h>
+
+#include <BALL/FORMAT/commandlineParser.h>
+
 #include "version.h"
 
 using namespace BALL;
