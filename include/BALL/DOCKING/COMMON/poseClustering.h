@@ -378,8 +378,11 @@ namespace BALL
 			/// returns poses as PosePointer
 			std::vector<PosePointer> const&  getPoses() const {return poses_;}
 
-			/// returns the first conformation of cluster i as system 
-			boost::shared_ptr<System> getClusterRepresentative(Index i) const;
+			/// returns the "central cluster" conformation of cluster i as system 
+			boost::shared_ptr<System> getClusterRepresentative(Index i);
+
+			/// returns the index of the cluster representative
+			Index findClusterRepresentative(Index i);
 
 			/// returns cluster i as ConformationSet
 			boost::shared_ptr<ConformationSet> getClusterConformationSet(Index i);

@@ -1973,19 +1973,50 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	}
 
 
-	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i) const
+	Index PoseClustering::findClusterRepresentative(Index i)
 	{
 		if (i >= (Index)clusters_.size())
 			throw(Exception::OutOfRange(__FILE__, __LINE__));
 
-		// as cluster representative we simply take the first cluster member
-		// this is a very simple heuristic :-)
-		// TODO: find the median?
+		Index rmsd_type = options.getInteger(Option::RMSD_TYPE);
+
+		// as cluster representative we simply compute the pose that 
+		// has the smallest deviation from all other cluster members
 
 		// take the first
-		Index conf_set_idx = *(clusters_[i].begin());
+		//Index conf_set_idx = *(clusters_[i].begin());
 
-		return getPose(conf_set_idx);
+		//std::set<Index> current_cluster = clusters_[i];
+
+		Index current_best = std::numeric_limits<Index>::max();
+		float min_distance = std::numeric_limits<float>::max();
+
+		for (set<Index>::iterator current_pose = clusters_[i].begin(); current_pose != clusters_[i].end(); current_pose++)
+		{
+			float sum_dist = 0;
+			for (set<Index>::iterator to_test_pose = clusters_[i].begin(); to_test_pose != clusters_[i].end(); to_test_pose++)
+			{
+				if (*current_pose != *to_test_pose)
+				{
+					sum_dist += getRMSD_(*current_pose, *to_test_pose, rmsd_type);
+				}
+			}
+			if (min_distance > sum_dist)
+			{
+				min_distance  = sum_dist;
+				current_best = *current_pose;
+			}
+		}
+		return current_best;
+	}
+
+
+	boost::shared_ptr<System> PoseClustering::getClusterRepresentative(Index i)
+	{
+		if (i >= (Index)clusters_.size())
+			throw(Exception::OutOfRange(__FILE__, __LINE__));
+
+		return getPose(findClusterRepresentative(i));
 	}
 
 
@@ -2063,10 +2094,10 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		// iterate over all clusters
 		for (Size i=0; i<clusters_.size(); i++)
 		{
-			// and take the first  
 			System conf(new_set->getSystem());
 
-			poses_[*clusters_[i].begin()].snap->applySnapShot(conf);
+			// get the cluster Representative
+			poses_[findClusterRepresentative(i)].snap->applySnapShot(conf);
 
 			new_set->add(0, conf);
 		}
@@ -2359,7 +2390,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 	void PoseClustering::printCluster_(Index i, std::ostream& out) const
 	{
-		out << "++++ cluster " << i << " score " << getClusterScore(i) << " ++++" << endl;
+		out << "++++ cluster " << i << " score " << getClusterScore(i) << " #members "  << clusters_[i].size() << " ++++" << endl;
 		std::copy(clusters_[i].begin(), clusters_[i].end(), std::ostream_iterator<Index>(out, " "));
 		out << endl;
 		out << "+++++++++++++++++++" << endl;
