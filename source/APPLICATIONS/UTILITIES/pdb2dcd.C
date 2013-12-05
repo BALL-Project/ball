@@ -19,18 +19,41 @@ int main(int argc, char** argv)
 
 	if (argc == 1)
 	{
-		Log.info() << "Usage:" << argv[0] << " <PDB infile>* " << endl;
+		Log.info() << "Usage:" << argv[0] << " [-ipdblistfile=...] [<PDB infile>*] " << endl;
 		Log.info() << "Converts all given PDBFiles into snapshots of a DCDFile." << endl;
 		return 1;
 	}
 
-	String filename;
 	SnapShot snapshot;
 	DCDFile dcd_file("out.dcd", ios::out | ios::binary);
 
-	for (int i = 1; i < argc; ++i)
+	std::vector<String> filenames;
+	if ((argc == 2) && String(argv[1]).hasPrefix("-ipdblistfile"))
 	{
-		filename = argv[i];
+		String first_arg(argv[1]);
+
+		if (first_arg.hasPrefix("-ipdblistfile="))
+		{
+			LineBasedFile listfile(first_arg.after("="), std::ios::in);
+
+			while (listfile.readLine())
+			{
+				filenames.push_back(listfile.getLine());
+			}
+		}
+	}
+	else
+	{
+		for (int i = 1; i < argc; ++i)
+		{
+			filenames.push_back(String(argv[i]));
+		}
+	}
+
+	for (Position i=0; i<filenames.size(); ++i)
+	{
+		String& filename = filenames[i];
+
 		Log.info() << "Reading file " << filename;
 		PDBFile file(filename);
 		if (file.bad())
