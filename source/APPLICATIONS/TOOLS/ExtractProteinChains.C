@@ -68,12 +68,12 @@ int main(int argc, char* argv[])
 	{
 		chain_id = parpars.get("chain_id");
 	}
-	else if ( is_cmd && (parpars.get("o_dir") == "$__new_file_path__"))
+/*	else if ( is_cmd && (parpars.get("o_dir") == "$__new_file_path__"))
 	{
 		Log.error() << endl << "unspecified parameter o_dir. Abort." << endl;
 		return 2;
 	}
-
+*/
 
 	int export_counter = 0;
 	ChainConstIterator c_it = sys.beginChain();
@@ -82,8 +82,7 @@ int main(int argc, char* argv[])
 		if ((chain_id == "") || (chain_id == c_it->getName()))
 		{
 			// create the output name
-			//String outfile_name = String(parpars.get("o")) + "chain_" + String(export_counter) + ".pdb";
-			String outfile_name = String(parpars.get("o"));
+			String outfile_name = String(parpars.get("o")) + "chain_" + String(export_counter) + ".pdb";
 
 			//TODO this is a temporary hack :-(
 			// are we given a parameter o_dir

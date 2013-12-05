@@ -108,7 +108,7 @@ int main(int argc, char** argv)
 																+ "_clust_" + cluster_id
 																+ "_pose_" + String(pose_id) + ".pdb";
 
-					if (parpars.has("o_dir"))
+					if (parpars.has("o_dir") && is_cmd && (parpars.get("o_dir") != "$__new_file_path__"))
 					{
 						outfile_name =  String(parpars.get("o_dir")) + "/" + outfile_name;
 					}
