@@ -20,6 +20,7 @@ SET(EXECUTABLES_LIST
 	DockResultMerger
 	EvenSplit
 	ExtractClustersFromWardTree
+	ExtractProteinChains
 	ExtractProteinSequence
 	FeatureSelector
 	FingerprintSimilarityClustering
