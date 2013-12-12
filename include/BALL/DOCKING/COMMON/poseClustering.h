@@ -648,6 +648,8 @@ namespace BALL
 			/// the clusters: sets of pose indices 
 			std::vector< std::set<Index> >   clusters_;
 
+			std::vector< Index >   cluster_representatives_;
+
 			/// the scores of the clusters 
 			std::vector< float >             cluster_scores_;
 

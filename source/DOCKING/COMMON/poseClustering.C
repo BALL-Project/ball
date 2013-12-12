@@ -136,6 +136,7 @@ namespace BALL
 //	cout << " extract clusters for dist = " << threshold << endl;
 
 		clusters_.clear();
+		cluster_representatives_.clear();
 		cluster_scores_.clear();
 
 		// for debug purposes, we might have to reset our cluster id
@@ -226,6 +227,7 @@ namespace BALL
 		*/
 
 		clusters_.clear();
+		cluster_representatives_.clear();
 		cluster_scores_.clear();
 
 		ClusterTreeNodeComparator comp(cluster_tree_);
@@ -320,6 +322,7 @@ cout << endl;
 		}
 		swap(clusters_, temp_clusters);
 		swap(cluster_scores_, temp_cluster_scores);
+		cluster_representatives_.clear();
 
 		return clusters_;
 	}
@@ -503,6 +506,7 @@ cout << endl;
 
 		// clean up old clusters
 		clusters_.clear();
+		cluster_representatives_.clear();
 		cluster_scores_.clear();
 
 		// reset the cluster tree
@@ -739,6 +743,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		}
 		// convert lambda, pi, and mu to clusters datastructure
 		clusters_.clear();
+		cluster_representatives_.clear();
 		cluster_scores_.clear();
 
 //for (int i=0; i<pi_.size(); ++i)
@@ -911,6 +916,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		}
 		// clean up old clusters
 		clusters_.clear();
+		cluster_representatives_.clear();
 		cluster_scores_.clear();
 
 		// reset the cluster tree
@@ -1489,6 +1495,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		// switch the clusters
 		clusters_       = temp_clusters;
 		cluster_scores_ = temp_cluster_scores;
+		cluster_representatives_.clear();
 
 		//printClusters();
 
@@ -2086,6 +2093,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 			convertTransformations2Snaphots();
 		}
 
+		cluster_representatives_.clear();
+		cluster_representatives_.resize(clusters_.size());
+
 		// create the set to be returned
 		boost::shared_ptr<ConformationSet> new_set(new ConformationSet());
 		new_set->setup(getSystem());
@@ -2097,8 +2107,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 			System conf(new_set->getSystem());
 
 			// get the cluster Representative
-			poses_[findClusterRepresentative(i)].snap->applySnapShot(conf);
-
+			Index current_representative = findClusterRepresentative(i);
+			poses_[current_representative].snap->applySnapShot(conf);
+			cluster_representatives_[i] = current_representative;
 			new_set->add(0, conf);
 		}
 
@@ -2390,7 +2401,12 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 	void PoseClustering::printCluster_(Index i, std::ostream& out) const
 	{
-		out << "++++ cluster " << i << " score " << getClusterScore(i) << " #members "  << clusters_[i].size() << " ++++" << endl;
+		out << "++++ cluster " << i << " score " << getClusterScore(i) << " members "  << clusters_[i].size();
+
+		if (cluster_representatives_.size() <= i)
+				out  << " rep " << cluster_representatives_[i];
+	  out << " ++++" << endl;
+
 		std::copy(clusters_[i].begin(), clusters_[i].end(), std::ostream_iterator<Index>(out, " "));
 		out << endl;
 		out << "+++++++++++++++++++" << endl;
@@ -2449,6 +2465,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		base_system_.clear();
 		base_conformation_.clear();
 		clusters_.clear();
+		cluster_representatives_.clear();
 		cluster_scores_.clear();
 		//rmsd_level_of_detail_;
 		lambda_.clear();
