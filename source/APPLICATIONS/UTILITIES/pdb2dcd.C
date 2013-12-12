@@ -54,7 +54,7 @@ int main(int argc, char** argv)
 	{
 		String& filename = filenames[i];
 
-		Log.info() << "Reading file " << filename;
+		Log.info() << "Reading file " << filename << " " << i;
 		PDBFile file(filename);
 		if (file.bad())
 		{
