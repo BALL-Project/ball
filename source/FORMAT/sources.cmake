@@ -29,7 +29,6 @@ SET(SOURCES_LIST
 	paramFile.C
 	parameters.C
 	parameterSection.C
-	paramFile.C
 	PDBdefs.C
 	PDBFileGeneral.C
 	PDBFileDetails.C
