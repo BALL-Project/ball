@@ -951,7 +951,8 @@ namespace BALL
 		if (GetIntersection(plane1,plane2,line))
 		{
 			TVector3<T> diff(s1.p-line.p);
-			T x1, x2;
+			T x1 = 0;
+			T x2 = 0;
 			if (SolveQuadraticEquation(line.d*line.d, -diff*line.d*2, diff*diff-r1_square, x1,x2) > 0)
 			{
 				p1 = line.p+x1*line.d;
