@@ -120,7 +120,7 @@ namespace BALL
 			  
 					If 'parameter_names' is specified, only information those parameters is shown. 
 			*/
-			void printHelp(std::set<String>* parameter_names = 0, bool show_manual = true);
+			void printHelp(const std::set<String>& parameter_names = std::set<String>(), bool show_manual = true);
 
 			void printToolInfo();
 
@@ -132,7 +132,7 @@ namespace BALL
 
 		private:
 
-			void replaceExcapedCharacters_(String& parameter_value);
+			void replaceEscapedCharacters_(String& parameter_value);
 
 			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true, bool hidden=false);
 
@@ -147,8 +147,8 @@ namespace BALL
 			/** blacklisted param names */
 			std::set<String> reserved_params_;
 
-			/** map excaped characters to the original characters */
-			std::list<std::pair<String, String> > excaped_chars_;
+			/** map escaped characters to the original characters */
+			std::list<std::pair<String, String> > escaped_chars_;
 			std::map<String, list<String> > parameter_map_;
 			std::map<String, ParameterDescription> registered_parameters_;
 

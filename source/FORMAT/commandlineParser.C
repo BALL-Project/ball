@@ -14,7 +14,9 @@ using namespace std;
 const String BALL::CommandlineParser::NOT_FOUND = "parameter_not_found";
 const list<String> BALL::CommandlineParser::EMTPY_LIST(0);
 
-CommandlineParser::CommandlineParser(String tool_name, String tool_description, String tool_version, String build_date, String category)
+CommandlineParser::CommandlineParser
+  (String tool_name, String tool_description, 
+   String tool_version, String build_date, String category)
 {
 	max_parname_length_ = 0;
 	max_flagname_length_ = 0;
@@ -43,18 +45,18 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 
 	// For the moment, register Galaxy's char-escapes here.
 	// If necessary, we could create a function to allow switching to other char-escape schemes ...
-	excaped_chars_.push_back(make_pair("__gt__",">"));
-	excaped_chars_.push_back(make_pair("__lt__","<"));
-	excaped_chars_.push_back(make_pair("__sq__","'"));
-	excaped_chars_.push_back(make_pair("__dq__","\""));
-	excaped_chars_.push_back(make_pair("__ob__","["));
-	excaped_chars_.push_back(make_pair("__cb__","]"));
-	excaped_chars_.push_back(make_pair("__oc__","{"));
-	excaped_chars_.push_back(make_pair("__cc__","}"));
-	excaped_chars_.push_back(make_pair("__at__","@"));
-	excaped_chars_.push_back(make_pair("__cn__","\n"));
-	excaped_chars_.push_back(make_pair("__cr__","\r"));
-	excaped_chars_.push_back(make_pair("__tc__","\t"));
+	escaped_chars_.push_back(make_pair("__gt__", ">"));
+	escaped_chars_.push_back(make_pair("__lt__", "<"));
+	escaped_chars_.push_back(make_pair("__sq__", "i'"));
+	escaped_chars_.push_back(make_pair("__dq__", "\""));
+	escaped_chars_.push_back(make_pair("__ob__", "["));
+	escaped_chars_.push_back(make_pair("__cb__", "]"));
+	escaped_chars_.push_back(make_pair("__oc__", "{"));
+	escaped_chars_.push_back(make_pair("__cc__", "}"));
+	escaped_chars_.push_back(make_pair("__at__", "@"));
+	escaped_chars_.push_back(make_pair("__cn__", "\n"));
+	escaped_chars_.push_back(make_pair("__cr__", "\r"));
+	escaped_chars_.push_back(make_pair("__tc__", "\t"));
 
 	// init the blacklist
 	// "write_par", "par", "help", "ini", "env"
@@ -66,10 +68,9 @@ CommandlineParser::CommandlineParser(String tool_name, String tool_description, 
 	reserved_params_.insert("env");
 }
 
-void CommandlineParser::checkAndRegisterParameter(String name, String description,
-                                                  ParameterType type, bool mandatory,
-																									String default_value, bool perform_check,
-																									bool hidden)
+void CommandlineParser::checkAndRegisterParameter
+  (String name, String description, ParameterType type, bool mandatory,
+   String default_value, bool perform_check, bool hidden)
 {
 	checkParameterName(name, perform_check);
 
@@ -105,12 +106,16 @@ void CommandlineParser::checkAndRegisterParameter(String name, String descriptio
 	{
 		size += 9;
 	}
-	if (size > max_parname_length_) max_parname_length_ = size;
+	if (size > max_parname_length_) 
+  {
+		max_parname_length_ = size;
+	}
 }
 
-void CommandlineParser::registerParameter(String name, String description,
-                                          ParameterType type, bool mandatory,
-																					String default_value, bool hidden)
+void CommandlineParser::registerParameter
+  (String name, String description,
+   ParameterType type, bool mandatory,
+	 String default_value, bool hidden)
 {
 	// add parameter and check if the parameter name is valid
 	checkAndRegisterParameter(name, description, type, mandatory, default_value, true, hidden);
@@ -139,7 +144,9 @@ void CommandlineParser::checkAndRegisterFlag(String name, String description,
 	original_flag_order_.push_back(registered_flags_.find(name));
 
 	if (name.size() > max_flagname_length_)
+	{
 		max_flagname_length_ = name.size();
+	}
 	if (default_gui_value)
 	{
 		list<String> alist;
@@ -153,6 +160,7 @@ void CommandlineParser::registerFlag(String name, String description, bool defau
 	checkAndRegisterFlag(name, description, default_gui_value, true, hidden);
 }
 
+/// TODO: figure out the meaning of the hard-coded prefixes and remove them!
 void CommandlineParser::registerAdvancedParameters(Options& options)
 {
 	if (   options.getName().hasPrefix("ReferenceArea")
@@ -247,36 +255,17 @@ void CommandlineParser::setOutputFormatSource(String output_parname, String inpu
 
 void CommandlineParser::printToolInfo()
 {
-	cout<<endl;
-	Size length = tool_name_.size()+tool_description_.size()+6;
-	cout<<" "; for (Size i = 0; i < length; i++) cout<<"="; cout<<endl; 
-	cout<<"| "<<tool_name_<<" -- "<<tool_description_<<" |"<<endl;
-	cout<<"|"; for (Size i = 0; i < length; i++) cout<<"="; cout<<"|"<<endl; 
-	cout<<"|"; for (Size i = 0; i < length; i++) cout<<" "; 
-	cout<<"|"<<endl;
-
-	int n = length-tool_version_.size()-11;
-	cout<<"| Version: "<<tool_version_;
-	for (int i = 0; i < n; i++) cout<<" "; 
-	cout<<" |"<<endl;
-
-	cout<<"| build date: "<<build_date_;
-	n = length-build_date_.size()-14;
-	for (int i = 0; i < n; i++) cout<<" "; 
-	cout<<" |"<<endl;
-
-	n = length-hostname_.size()-18;
-	cout<<"| execution host: "<<hostname_;
-	for (int i = 0; i < n; i++) cout<<" "; 
-	cout<<" |"<<endl;
-
-	n = length-start_time_.size()-18;
-	cout<<"| execution time: "<<start_time_;
-	for (int i = 0; i < n; i++) cout<<" "; 
-	cout<<" |"<<endl;
-
-	cout<<" "; for (Size i = 0; i < length; i++) cout<<"-"; 
-	cout<<endl<<endl;
+	Size length = tool_name_.size() + tool_description_.size() + 6;
+	Log << endl;
+	Log << " " << String('=', length) << endl; 
+	Log << "| " << tool_name_ << " -- " << tool_description_ << " |" << endl;
+	Log << "|" << String('=', length) << "|" << endl; 
+	Log << "|" << String(' ', length) << "|" << endl;
+	Log << "| Version: " << tool_version_ << String(' ', length - tool_version_.size() - 11) << " |" << endl;
+	Log << "| build date: "<< build_date_ << String(' ', length - build_date_.size() - 14) <<" |" << endl;
+	Log << "| execution host: " << hostname_ << String(' ', length - hostname_.size() - 18) << " |" << endl;
+  Log << "| execution time: " << start_time_ << String(' ', length - start_time_.size() - 18) << " |" << endl;
+	Log << " " << String('-', length) << endl << endl; 
 }
 
 
@@ -352,7 +341,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 		{
 			if (name_read) // command line parameter
 			{
-				replaceExcapedCharacters_(token);
+				replaceEscapedCharacters_(token);
 
 				map<String, list<String> >::iterator it = parameter_map_.find(current_par_name);
 				if (it != parameter_map_.end())
@@ -494,14 +483,17 @@ void CommandlineParser::parse(int argc, char* argv[])
 
 		pf.writeSection(tool_name_, tool_description_, tool_version_, tool_manual_, tool_category_, descriptions, parameter_map_);
 		pf.close();
-		Log << "Tool-parameter file has been written to '"<<write_par<<"'. Goodbye!"<<endl;
+		Log << "Tool-parameter file has been written to '" << write_par << "'. Goodbye!" << endl;
 		exit(0);
 	}
 
 	set<String> missing_parameters;
 	for (map < String, ParameterDescription > :: iterator it = registered_parameters_.begin(); it != registered_parameters_.end(); it++)
 	{
-		if (it->second.mandatory == false) continue;
+		if (it->second.mandatory == false) 
+  	{
+			continue;
+		}
 		if (parameter_map_.find(it->second.name) == parameter_map_.end())
 		{
 			missing_parameters.insert(it->first);
@@ -510,15 +502,15 @@ void CommandlineParser::parse(int argc, char* argv[])
 	if (missing_parameters.size() > 0)
 	{
 		Log.error() << "[Error:] The following mandatory parameters are missing:" << endl;
-		printHelp(&missing_parameters, false);
+		printHelp(missing_parameters, false);
 		exit(1);
 	}
 }
 
 
-void CommandlineParser::replaceExcapedCharacters_(String& parameter_value)
+void CommandlineParser::replaceEscapedCharacters_(String& parameter_value)
 {
-	for (list<pair<String, String> >::iterator it = excaped_chars_.begin(); it != excaped_chars_.end(); it++)
+	for (list<pair<String, String> >::iterator it = escaped_chars_.begin(); it != escaped_chars_.end(); it++)
 	{
 		parameter_value.substituteAll(it->first, it->second);
 	}
@@ -547,76 +539,77 @@ void CommandlineParser::copyAdvancedParametersToOptions(Options& options)
 }
 
 
-void CommandlineParser::printHelp(set<String>* parameter_names, bool show_manual)
+void CommandlineParser::printHelp(const set<String>& parameter_names, bool show_manual)
 {
-	if (!parameter_names && registered_parameters_.size() > 0)
+	if (parameter_names.size() == 0 && registered_parameters_.size() > 0)
 	{
-		cout<<"Available parameters are ('*' indicates mandatory parameters): "<<endl;
+		Log << "Available parameters are ('*' indicates mandatory parameters): " << endl;
 	}
 
 	for (list<MapIterator>::iterator it = original_parameter_order_.begin(); it != original_parameter_order_.end(); it++)
 	{
 		ParameterDescription& p = (*it)->second;
-		if ((parameter_names && parameter_names->find(p.name) == parameter_names->end()) || p.advanced)
+		if (((parameter_names.size() > 0) && parameter_names.find(p.name) == parameter_names.end()) || p.advanced)
 		{
 			continue;
 		}
-		cout<<"   ";
-		if (!parameter_names && p.mandatory) cout<<"*  ";
-		else cout<<"   ";
-		cout<<"-"<<p.name;
+		Log << "   ";
+		if ((parameter_names.size() == 0) && p.mandatory) 
+		{
+			Log<<"*  ";
+		}
+		else 
+		{
+		  Log << "   ";
+		}
+		Log << "-" << p.name;
 		String n = "";
 		if (p.type == INFILE)
 		{
-			n=" <in.file>";
+			n = " <in.file>";
 		}
 		else if (p.type == OUTFILE)
 		{
-			n=" <out.file>";
+			n = " <out.file>";
 		}
 		else if (p.type == BALL::INT)
 		{
-			n=" <int>";
+			n = " <int>";
 		}
 		else if (p.type == DOUBLE)
 		{
-			n=" <double>";
+			n = " <double>";
 		}
 		else if (p.type == STRING)
 		{
-			n=" <string>";
+			n = " <string>";
 		}
-		cout<<n;
+		Log<<n;
 		Size space_size = max_parname_length_+4-p.name.size()-n.size();
 		for (Size j = 0; j < space_size; j++)
 		{
-			cout<<" ";
+			Log << " ";
 		}
-		cout<<p.description<<endl;
+		Log << p.description << endl;
 	}
-	if (!parameter_names && registered_flags_.size() > 0)
+	if (parameter_names.size() == 0 && registered_flags_.size() > 0)
 	{
-		cout<<endl<<"Available flags are: "<<endl;
+		Log << endl << "Available flags are: " << endl;
 	}
 	for (list<MapIterator>::iterator it = original_flag_order_.begin(); it != original_flag_order_.end(); it++)
 	{
 		ParameterDescription& p = (*it)->second;
-		if (parameter_names && parameter_names->find(p.name) == parameter_names->end())
+		if (parameter_names.size() > 0 && parameter_names.find(p.name) == parameter_names.end())
 		{
 			continue;
 		}
-		cout<<"      "<<"-"<<p.name;
-		Size space_size = max_flagname_length_+4-p.name.size();
-		for (Size j = 0; j < space_size; j++)
-		{
-			cout<<" ";
-		}
-		cout<<p.description<<endl;
+		Log << "      " << "-" << p.name << String(' ', max_flagname_length_ + 4 - p.name.size())
+        << p.description << endl;
 	}
-	cout<<endl;
+	Log << endl;
 	if (show_manual && tool_manual_ != "")
 	{
-		cout<<endl<<tool_manual_<<endl<<endl<<endl;
+		Log << endl << tool_manual_ << endl << endl << endl;
 	}
 }
 
