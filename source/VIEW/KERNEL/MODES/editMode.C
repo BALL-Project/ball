@@ -709,6 +709,10 @@ namespace BALL
 			{
 				add_action->setEnabled(false);
 			}
+			else
+			{
+				add_action->setEnabled(true);
+			}
 		}
 
 		void EditMode::activatedOrderItem_(QAction* action)
