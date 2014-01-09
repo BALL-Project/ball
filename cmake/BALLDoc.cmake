@@ -30,15 +30,15 @@ IF (DOXYGEN_FOUND)
 	## doc
 	ADD_CUSTOM_TARGET(doc ${AUTO_BUILD_DOC}
 										COMMAND ${CMAKE_COMMAND} -E echo ""
-										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation";
-										COMMAND ${CMAKE_COMMAND} -E echo "";   
+										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation"
+										COMMAND ${CMAKE_COMMAND} -E echo ""   
 										COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html
 										COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile
-										COMMAND ${CMAKE_COMMAND} -E echo "";
-										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-										COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created.";
-										COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html/index.html' in a web browser.";
+										COMMAND ${CMAKE_COMMAND} -E echo ""
+										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+										COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created."
+										COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html/index.html' in a web browser."
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMENT "Build the doxygen documentation"
 										COMPONENT "${COMPONENT_DOCUMENTATION_HTML}"
@@ -58,17 +58,17 @@ IF (DOXYGEN_FOUND)
 	## doc_tidy
 	ADD_CUSTOM_TARGET(doc_tidy
 										COMMAND ${CMAKE_COMMAND} -E echo ""
-										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation";
-										COMMAND ${CMAKE_COMMAND} -E echo "";   
+										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation"
+										COMMAND ${CMAKE_COMMAND} -E echo ""   
 										COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html
 										COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile
-										COMMAND ${CMAKE_COMMAND} -E echo "Running tidy...";
+										COMMAND ${CMAKE_COMMAND} -E echo "Running tidy..."
 										COMMAND ${CMAKE_COMMAND} -E chdir doc/html tidy -m -i -asxml -q -bare -clean *htm* 2>/dev/null | true
-										COMMAND ${CMAKE_COMMAND} -E echo "Finshed Tunning tidy...";
-										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-										COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created.";
-										COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html/index.html' in a web browser.";
+										COMMAND ${CMAKE_COMMAND} -E echo "Finshed Tunning tidy..."
+										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+										COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created."
+										COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html/index.html' in a web browser."
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMENT "Build the doxygen documentation"
 										VERBATIM)
@@ -78,15 +78,15 @@ IF (DOXYGEN_FOUND)
 		## doc_dot target
 		ADD_CUSTOM_TARGET(doc_dot
 											COMMAND ${CMAKE_COMMAND} -E echo ""
-											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-											COMMAND ${CMAKE_COMMAND} -E echo "Creating DOT html documentation";
-											COMMAND ${CMAKE_COMMAND} -E echo "";   
+											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+											COMMAND ${CMAKE_COMMAND} -E echo "Creating DOT html documentation"
+											COMMAND ${CMAKE_COMMAND} -E echo ""   
 											COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html-dot
 											COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile_dot
-											COMMAND ${CMAKE_COMMAND} -E echo "";
-											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-											COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created.";
-											COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html-dot/index.html' in a web browser.";
+											COMMAND ${CMAKE_COMMAND} -E echo ""
+											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+											COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created."
+											COMMAND ${CMAKE_COMMAND} -E echo "You can now open 'doc/html-dot/index.html' in a web browser."
 											COMMAND ${CMAKE_COMMAND} -E echo ""
 											COMMENT "Build the doxygen documentation"
 											VERBATIM)
@@ -104,19 +104,19 @@ IF (LATEX_COMPILER AND DVIPS_CONVERTER)
 	# doc_tutorials target
 	ADD_CUSTOM_TARGET(doc_tutorial ${AUTO_BUILD_DOC}
 										COMMAND ${CMAKE_COMMAND} -E echo ""
-										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
-										COMMAND ${CMAKE_COMMAND} -E echo "Creating BALL pdf tutorial";
-										COMMAND ${CMAKE_COMMAND} -E echo "";   
+										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+										COMMAND ${CMAKE_COMMAND} -E echo "Creating BALL pdf tutorial"
+										COMMAND ${CMAKE_COMMAND} -E echo ""   
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${BIBTEX_COMPILER} tutorial
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${MAKEINDEX_COMPILER} tutorial.idx
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
 										COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/tutorial.pdf doc/tutorial.pdf
-										COMMAND ${CMAKE_COMMAND} -E echo "";
-										COMMAND ${CMAKE_COMMAND} -E echo "The BALL tutorial in PDF format has been successfully created:"; 
-										COMMAND ${CMAKE_COMMAND} -E echo "doc/tutorial.pdf"; 
-										COMMAND ${CMAKE_COMMAND} -E echo ""; 
+										COMMAND ${CMAKE_COMMAND} -E echo ""
+										COMMAND ${CMAKE_COMMAND} -E echo "The BALL tutorial in PDF format has been successfully created:" 
+										COMMAND ${CMAKE_COMMAND} -E echo "doc/tutorial.pdf" 
+										COMMAND ${CMAKE_COMMAND} -E echo "" 
 										COMMENT "Build the BALL pdf tutorial"
 										VERBATIM)
 
