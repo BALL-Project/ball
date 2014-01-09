@@ -32,14 +32,15 @@ namespace BALL
 		void SCWRLRotamerFile::operator >> (RotamerLibrary& rotamer_library)
 		{
 			// Ok, this is stupid, but at least better and faster than what we used to do.
-			// We first try to read the file as a backbone dependent version. If this fails,
-			// we try the backbone independent variant before we barf.
+			// We first try to read the file as a backbone-dependent version. If this fails,
+			// we try the backbone-independent variant before we barf.
 
-			try {
-				readSCWRLBackboneDependentLibraryFile_(rotamer_library);
+			try 
+			{
+				readSCWRLBackboneDependentLibraryFile(rotamer_library);
 			} catch (...) { // ok, it was not a backbone dependent library. But is it indep?
 				rewind();
-				readSCWRLBackboneIndependentLibraryFile_(rotamer_library);
+				readSCWRLBackboneIndependentLibraryFile(rotamer_library);
 			}
 
 			if (!rotamer_library.validate())
@@ -50,7 +51,7 @@ namespace BALL
 			return;
 		}
 
-		void SCWRLRotamerFile::readSCWRLBackboneDependentLibraryFile_(RotamerLibrary& rotamer_library)
+		void SCWRLRotamerFile::readSCWRLBackboneDependentLibraryFile(RotamerLibrary& rotamer_library)
 		{
 			rotamer_library.setBackboneDependent(true);
 
@@ -60,11 +61,10 @@ namespace BALL
 			double probability(0);
 		
 			std::vector<String> split;
-			while(readLine()) 
+			while (readLine()) 
 			{
 				line_.split(split);
-
-				if (split.size() != 13)
+				if (split.size() != 17)
 				{
 					rotamer_library.clear();		
 					throw(Exception::ParseError(__FILE__, __LINE__, "Invalid Format in backbone dependent SCWRL rotamer file!", ""));
@@ -105,7 +105,7 @@ namespace BALL
 			return;
 		}
 
-		void SCWRLRotamerFile::readSCWRLBackboneIndependentLibraryFile_(RotamerLibrary& rotamer_library)
+		void SCWRLRotamerFile::readSCWRLBackboneIndependentLibraryFile(RotamerLibrary& rotamer_library)
 		{
 			rotamer_library.setBackboneDependent(false);
 
