@@ -34,19 +34,22 @@ class BALL_EXPORT MolFileFactory
 		* @return a pointer to a subclass of GenericMolFile, NULL if none is appropriate. Be aware, that
 		*         the file handle has not been checked for validity and that you have to delete it yourself
 		*/
-		static GenericMolFile* open(const String& name, File::OpenMode open_mode = std::ios::in);
-
-		/** When trying to open a file in write-mode, this function can be used to pass along a desired default-format. If the given filename does not have a supported extension, the specified default format will be used. */
-		static GenericMolFile* open(const String& name, File::OpenMode open_mode, String default_format);
-
-		/** When trying to open a file in write-mode, this function can be used to pass along a desired default-format. If the given filename does not have a supported extension, the format of 'default_format_file' will be used. */
-		static GenericMolFile* open(const String& name, File::OpenMode open_mode, GenericMolFile* default_format_file);
 
 		/** Return a comma-separated string containing the file-extensions that are supported by MolFileFactory */
 		static String getSupportedFormats();
 
 		/** Return true if the extension of the specified filename is supported; otherwise return false. */
 		static bool isFileExtensionSupported(String filename);
+
+		static GenericMolFile* open(const String& name, File::OpenMode open_mode = std::ios::in);
+
+		/** When trying to open a file in write-mode, this function can be used to pass along a desired default-format. If the given filename does not have a supported extension and/or forced is set, the specified default format will be used. */
+    static GenericMolFile* open(const String& name, File::OpenMode open_mode, String default_format, bool forced = false);
+
+		/** When trying to open a file in write-mode, this function can be used to pass along a desired default-format. If the given filename does not have a supported extension, the format of 'default_format_file' will be used. */
+		static GenericMolFile* open(const String& name, File::OpenMode open_mode, GenericMolFile* default_format_file);
+
+
 
 	private:
 
