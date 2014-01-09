@@ -185,7 +185,7 @@ int main(int argc, char* argv[])
 			}
 			else if (it->second.type == GALAXY_OPT_OUTID)
 			{
-				String id_name = it->first.before("_id") + ".id";
+				String id_name = it->first.before("_id") + String(".id");
 
 				command += "#if str( $";
 				command += id_name + String(" ) != '' ");
