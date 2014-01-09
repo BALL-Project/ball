@@ -50,19 +50,15 @@ namespace BALL
 		// TODO output operator????
 		//@}
 
+		/** Backbone depend read md method
+		 *  @throw Exception::ParseError if a syntax error encouncountered
+		 */
+		void readSCWRLBackboneDependentLibraryFile(RotamerLibrary& library);
 
-		protected:
-
-			/** Backbone dependent read method
-			 *  @throw Exception::ParseError if a syntax error was encountered
-			 */
-			void readSCWRLBackboneDependentLibraryFile_(RotamerLibrary& library);
-
-			/** Backbone independent read method
-			 *  @throw Exception::ParseError if a syntax error was encountered
-			 */
-			void readSCWRLBackboneIndependentLibraryFile_(RotamerLibrary& library);
-
+		/** Backbone independ readead method
+		 *  @throw Exception::ParseError if a syntax error encouncountered
+		 */
+		void readSCWRLBackboneIndependentLibraryFile(RotamerLibrary& library);
 	};
 } // namespace BALL
 
