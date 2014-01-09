@@ -35,7 +35,7 @@ SET(EXECUTABLES_LIST
 	LigCheck
 	ModelCreator
 	MolCombine
-	MolecularFileConverter
+	#MolecularFileConverter
 	MolFilter
 	MolPredictor
 	PartialChargesCopy

@@ -93,18 +93,21 @@ int main(int argc, char* argv[])
 	int no_ignored = 0;
 	while ((mol = input->read()))
 	{
+	 
 		bool b = output->write(*mol);
 		if (b) no_written++;
 		else no_ignored++;
 		delete mol;
 		
-		vector<String> single_molecule_formats = {"pdb", "pdb.gz", "ac", "ac.gz", "brk", "brk.gz", "mol", "mol.gz"};
+		String smf[] = {"pdb", "pdb.gz", "ac", "ac.gz", "brk", "brk.gz", "mol", "mol.gz"};
+		set<String> single_molecule_formats (smf,smf+8);
 		
-		if (find(single_molecule_formats.begin(), single_molecule_formats.end(), output_format) != single_molecule_formats.end())
+		if (single_molecule_formats.count(output_format) > 0)
 		{
+			
 			if (no_written > 0)
 			{
-				Log.error() << "Output format " << output_format << " only supports one molecule per file. Only first molecule written." << endl;
+				Log.error() << "Output format " << output_format << " only writes one molecule per file. Only first molecule written.\nYou can use LigandFileSplitter to split input file first." << endl;
 				input->close();
 				output->close();
 
