@@ -11,19 +11,59 @@
 using namespace BALL;
 using namespace std;
 
+void validateParameters(CommandlineParser& params)
+{
+	String formats = MolFileFactory::getSupportedFormats();
+	vector<String> v;
+	formats.split(v,",");
+	
+	String input_format = params.get("if");
+	String output_format = params.get("of");
+	bool correct_input_format = false;
+	bool correct_output_format = false;
+	for (Size i=0; i<v.size(); i++)
+	{
+		if (input_format == v[i])
+		{
+			correct_input_format = true;
+		}
+		if (output_format == v[i])
+		{
+			correct_output_format = true;
+		}
+	}
+	if (!correct_input_format)
+	{
+		Log.error() << "Input file format " << input_format << " is not supported\nSupported formats are " << formats << endl;
+		exit(1);
+	}
+	
+	if (!correct_output_format)
+	{
+		Log.error() << "Output file format " << output_format << " is not supported\nSupported formats are " << formats << endl;
+		exit(1);
+	}
+}  
+
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Converter", "interconvert molecular file-formats", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("f", "output format", STRING);
+	parpars.registerParameter("i", "input filename", INFILE, true);
+	parpars.registerParameter("if", "input format", STRING, true);
+	parpars.registerParameter("o", "output filename", OUTFILE, true);
+	parpars.registerParameter("of", "output format", STRING, true);
 	parpars.registerFlag("rm", "remove input file when finished");
-	String man = String("This tool can be used to convert between different molecular file-formats.\nSupported formats are ") + MolFileFactory::getSupportedFormats() + String(".");
+	
+	// the available formats
+	String formats = MolFileFactory::getSupportedFormats();
+	// we support: mol2, sdf, drf, pdb, ac, ent, brk, hin, mol, xyz, 
+	// mol2.gz, sdf.gz, drf.gz, pdb.gz, ac.gz, ent.gz, brk.gz, hin.gz, mol.gz, xyz.gz.
+	
+	String man = String("This tool can be used to convert between different molecular file-formats.\nSupported formats are ") + formats + String(". File extensions of input and output filenames are ignored.");
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("o",MolFileFactory::getSupportedFormats());
-
-	String formats = MolFileFactory::getSupportedFormats();
+	
 	vector<String> v;
 	formats.split(v,",");
 	list<String> format_list;
@@ -31,14 +71,17 @@ int main(int argc, char* argv[])
 	{
 		format_list.push_back(v[i]);
 	}
-	parpars.setParameterRestrictions("f",format_list);
-
+	parpars.setParameterRestrictions("if",format_list);
+	parpars.setParameterRestrictions("of",format_list);
 	parpars.parse(argc, argv);
-
-	String default_format = "mol2";
-	if (parpars.has("f")) default_format = parpars.get("f");
-	GenericMolFile* input  = MolFileFactory::open(parpars.get("i"), ios::in);
-	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, default_format);
+	
+	validateParameters(parpars);
+	
+	//String default_format = "mol2";
+	String input_format = parpars.get("if");
+	String output_format = parpars.get("of");
+	GenericMolFile* input  = MolFileFactory::open(parpars.get("i"), ios::in, input_format, true);
+	GenericMolFile* output = MolFileFactory::open(parpars.get("o"), ios::out, output_format, true);
 	DockResultFile* drf_output = dynamic_cast<DockResultFile*>(output);
 	if (drf_output)
 	{
@@ -54,6 +97,24 @@ int main(int argc, char* argv[])
 		if (b) no_written++;
 		else no_ignored++;
 		delete mol;
+		
+		vector<String> single_molecule_formats = {"pdb", "pdb.gz", "ac", "ac.gz", "brk", "brk.gz", "mol", "mol.gz"};
+		
+		if (find(single_molecule_formats.begin(), single_molecule_formats.end(), output_format) != single_molecule_formats.end())
+		{
+			if (no_written > 0)
+			{
+				Log.error() << "Output format " << output_format << " only supports one molecule per file. Only first molecule written." << endl;
+				input->close();
+				output->close();
+
+				delete input;
+				delete output;
+
+				exit(1);
+			}
+		}
+		
 		if (no_written%50 == 0)
 		{
 			Log.level(5) << "\r" << no_written << "molecules";
@@ -74,5 +135,6 @@ int main(int argc, char* argv[])
 	if (parpars.has("rm"))
 	{
 		File::remove(parpars.get("i"));
+		Log.level(20) << parpars.get("i") << " removed." << endl;
 	}
 }
