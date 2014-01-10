@@ -53,8 +53,8 @@ int main(int argc, char* argv[])
 	Size no_invalid = 0;
 	for (Molecule* mol = input->read(); mol; mol = input->read(), total++)
 	{
-		bool found = 0;
-		bool prop_id = 0;
+        bool found = false;
+        int prop_id = 0;
 		int target_no = 1;
 
 		for (NamedPropertyIterator it = mol->beginNamedProperty();
@@ -96,26 +96,35 @@ int main(int argc, char* argv[])
 					if (use_IC50)
 					{
 						String name = "Enzymologic: pIC50 nM";
-						if (prop_id > 0) name += " "+String(prop_id);
+                        if (prop_id > 0)
+                        {
+                            name += " "+String(prop_id);
+                        }
 						mol->setProperty(name, -log10(value));
 					}
 					else if (use_Ki)
 					{
 						String name = "Enzymologic: pKi nM";
-						if (prop_id > 0) name += " "+String(prop_id);
+                        if (prop_id > 0)
+                        {
+                            name += " " + String(prop_id);
+                        }
 						mol->setProperty(name, -log10(value));
 					}
 
 					String name = "binding_free_energy";
-					if (prop_id > 0) name += " "+String(prop_id);
+                    if (prop_id > 0)
+                    {
+                        name += " " + String(prop_id);
+                    }
 					float free_energy = 1.987*298.15*log(1e-09*value)*4.184/1000;
 					mol->setProperty(name, free_energy);
 
 					// remove compounds with completely senseless binding-affinity data
 					if (free_energy > -125 && free_energy < 0 && !BALL::Maths::isNan(free_energy) && BALL::Maths::isFinite(free_energy))
 					{
-						found = 1;
-						prop_id++;
+                        found = true;
+                        prop_id++;
 						no_acitivities_found++;
 					}
 					break;
