@@ -90,7 +90,7 @@ namespace BALL
 		*/
 		Quaternion quat;
 
-		quat.set(axis, a);
+        quat.fromAxisAngle(axis, a);
 
 		Matrix4x4 rotation;
 
@@ -127,18 +127,24 @@ namespace BALL
 			Atom* partner = it->getPartner(*probe);
 
 			if (partner == block)
-			if (probe == start)
-				continue;
-			else
-			{
-				cerr << "error: rotation axis is part of a ring" << endl;
-				exit(-1);
-			}
+            {
+                if (probe == start)
+                {
+                    continue;
+                }
+                else
+                {
+                    Log.error() << "error: rotation axis is part of a ring" << endl;
+                    exit(-1);
+                }
+            }
 
 			/** test if partner has not already been discoverd or is not block
 			*/
 			if (!hs.has(partner))
+            {
 				collectAtoms(partner, block, start, hs);
+            }
 		}
 	}
 
@@ -166,6 +172,7 @@ namespace BALL
 		/** if dihedral atoms are defined
 		*/
 		if (at3 != 0 && at4 != 0)
+        {
 			if (at1->isBoundTo(*nail_))
 			{
 				dihedral_heavy_ = at3;
@@ -176,6 +183,7 @@ namespace BALL
 				dihedral_heavy_ = at4;
 				dihedral_lite_ = at3;
 			}
+        }
 	}
 
 	Angle RotateBond::getDihedral()
