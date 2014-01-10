@@ -4152,8 +4152,10 @@ namespace BALL
 			{
 				ait->getPosition() += Vector3(random(rng), random(rng), random(rng));
 			}
-			ms->chooseMMFF94();
-
+			
+			Position current_ff_id = ms->getForceFieldID();
+			ms->chooseForceField(current_ff_id);
+			
 			MinimizationDialog& md = ms->getMinimizationDialog();
 			md.storeValues();
 			md.setMaxIterations(30);

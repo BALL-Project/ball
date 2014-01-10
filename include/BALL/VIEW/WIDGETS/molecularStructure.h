@@ -171,6 +171,10 @@ namespace BALL
 			*/
 			ForceField& getForceField();
 
+      /** Get the force_field_id of the currently selected ForceField
+      */
+      Position getForceFieldID();
+
 			/** Get the instance of the AMBER forcefield.
 					The forcefield will be created, when this function is called the first time.
 			*/

@@ -1172,6 +1172,12 @@ namespace BALL
 				chooseForceField(AMBER_FF);
 			}
 		}
+    
+    
+    Position MolecularStructure::getForceFieldID()
+    {
+      return force_field_id_;
+    }
 
 
 		void MolecularStructure::writePreferences(INIFile& inifile)
