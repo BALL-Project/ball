@@ -4,6 +4,7 @@
 
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/dockResultFile.h>
+#include <BALL/FORMAT/PDBFile.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/FORMAT/commandlineParser.h>
 #include "version.h"
@@ -93,8 +94,22 @@ int main(int argc, char* argv[])
 	int no_ignored = 0;
 	while ((mol = input->read()))
 	{
-	 
-		bool b = output->write(*mol);
+		bool b;
+		if (output_format == "pdb")
+		{
+			PDBInfo *pdbi = new PDBInfo();
+			System* mol_sys = new System();
+			pdbi->setName(mol->getName());
+			String compnd_line = String(80, PDB::FORMAT_COMPND, 1, mol->getName().c_str());
+			pdbi->getSkippedRecords().push_back(String("COMPND") + compnd_line);
+			mol_sys->insert(*mol);
+			b = (dynamic_cast<PDBFile*>(output))->write(*mol_sys, *pdbi);
+		}
+		else
+		{
+			b = output->write(*mol);
+		}
+		
 		if (b) no_written++;
 		else no_ignored++;
 		delete mol;
