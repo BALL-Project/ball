@@ -7,6 +7,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/STRUCTURE/residueChecker.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 using namespace BALL;
 using namespace std;
