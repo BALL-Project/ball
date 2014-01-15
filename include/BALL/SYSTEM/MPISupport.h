@@ -187,17 +187,17 @@ namespace BALL
 			/** Combine datapoints from all processes of the communicator.
 			 *  Exactly one process has to accept the data by calling 
 			 *  acceptCombinedDatapoints instead of combineDatapoints.
+			 *  If the required memory cannot be allocated, an Exception::OutOfMemory is thrown.
 			 **/
 			template <typename valuetype>
-			void combineDatapoints(const std::vector<valuetype>& our_share)
-				throw(Exception::OutOfMemory);
+			void combineDatapoints(const std::vector<valuetype>& our_share);
 
 			/** Accept datapoints that are combined from all processes of the
 			 *  communicator. 
+			 *  If the required memory cannot be allocated, an Exception::OutOfMemory is thrown.
 			 */
 			template <typename valuetype>
-			void acceptCombinedDatapoints(std::vector<valuetype>& combined_set, std::vector<valuetype>& our_share)
-				throw(Exception::OutOfMemory);
+			void acceptCombinedDatapoints(std::vector<valuetype>& combined_set, std::vector<valuetype>& our_share);
 
 			/** Distribute input of type datatype as evenly as possible over the
 			 *  processes in the communicator. Returns the datapoints
