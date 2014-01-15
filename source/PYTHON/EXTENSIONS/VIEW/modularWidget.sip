@@ -22,18 +22,18 @@ class ModularWidget
 	static Size countInstances();
 	static ModularWidget* getInstance(Position);
 
-  ModularWidget(const char* = "<ModularWidget>")	throw();
-	ModularWidget(const ModularWidget&) throw();
+  ModularWidget(const char* = "<ModularWidget>");
+	ModularWidget(const ModularWidget&);
  	~ModularWidget() throw();
 				
-	virtual void destroy() throw();
-	virtual void clear() throw();
+//	virtual void destroy();
+	virtual void clear();
 
 	static void registerWidget(ModularWidget*) throw(NullPointer);
 //	virtual void initializeWidget(MainControl&);
 // 	virtual void finalizeWidget(MainControl&);
 	virtual void checkMenu(MainControl&) throw();
-//	virtual void initializePreferencesTab(Preferences&)	throw();
+//	virtual void initializePreferencesTab(Preferences&);
 //	virtual void finalizePreferencesTab(Preferences&)	throw();
 	virtual void applyPreferences() throw();
   virtual void fetchPreferences(INIFile&) throw();
