@@ -255,17 +255,41 @@ void CommandlineParser::setOutputFormatSource(String output_parname, String inpu
 
 void CommandlineParser::printToolInfo()
 {
-	Size length = tool_name_.size() + tool_description_.size() + 6;
+  String tool = "| " + tool_name_ + " -- " + tool_description_;
+  String version = "| Version: " + tool_version_;
+  String build = "| build date: " + build_date_;
+  String host = "| execution host: " + hostname_;
+  String time = "| execution time: " + start_time_;
+
+  Size max_len = tool.size();
+  
+  if (max_len < version.size())
+  {
+    max_len = version.size();
+  }
+  if (max_len < build.size())
+  {
+    max_len = build.size();
+  }
+  if (max_len < host.size())
+  {
+    max_len = host.size();
+  }
+  if (max_len < time.size())
+  {
+    max_len = time.size();
+  }
+
 	Log << endl;
-	Log << " " << String('=', length) << endl; 
-	Log << "| " << tool_name_ << " -- " << tool_description_ << " |" << endl;
-	Log << "|" << String('=', length) << "|" << endl; 
-	Log << "|" << String(' ', length) << "|" << endl;
-	Log << "| Version: " << tool_version_ << String(' ', length - tool_version_.size() - 11) << " |" << endl;
-	Log << "| build date: "<< build_date_ << String(' ', length - build_date_.size() - 14) <<" |" << endl;
-	Log << "| execution host: " << hostname_ << String(' ', length - hostname_.size() - 18) << " |" << endl;
-  Log << "| execution time: " << start_time_ << String(' ', length - start_time_.size() - 18) << " |" << endl;
-	Log << " " << String('-', length) << endl << endl; 
+	Log << " " << String('=', max_len) << endl; 
+	Log << tool << String(' ', max_len - tool.size()) << " |" << endl;
+	Log << "|" << String('=', max_len) << "|" << endl; 
+	Log << "|" << String(' ', max_len) << "|" << endl;
+	Log << version << String(' ', max_len - version.size()) << " |" << endl;
+	Log << build   << String(' ', max_len - build.size()) <<" |" << endl;
+	Log << host    << String(' ', max_len - host.size()) << " |" << endl;
+  Log << time    << String(' ', max_len - time.size()) << " |" << endl;
+	Log << " "     << String('-', max_len) << endl << endl; 
 }
 
 
