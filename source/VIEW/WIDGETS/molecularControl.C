@@ -329,6 +329,9 @@ namespace BALL
 
 					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					{
+						Composite* composite_ptr;
+						vector<Composite*> roots;
+						
 						bool was_enabled = !ignore_messages_;
 						selected_.clear();
 						enableUpdates_(false);
@@ -337,22 +340,32 @@ namespace BALL
 						QTreeWidgetItemIterator qit(listview);
 						while (*qit != 0)
 						{
+							composite_ptr = (*(MyTreeWidgetItem*)*qit).composite;
+							
 							if (listview->isItemExpanded(*qit))
 							{
-								open_items.insert((*(MyTreeWidgetItem*)*qit).composite);
+								open_items.insert(composite_ptr);
 							}
 
 							if (listview->isItemSelected(*qit))
 							{
-								highlighted.insert((*(MyTreeWidgetItem*)*qit).composite);
+								highlighted.insert(composite_ptr);
+							}
+							
+				
+							if ((*qit)->parent() == NULL)
+							{
+								roots.push_back(composite_ptr);
 							}
 
 							qit++;
 						}
 
-						Composite& root = composite_message->getComposite()->getRoot();
-						removeComposite(root);
-						addComposite(root);
+						for (Position i=0; i!=roots.size(); ++i)
+						{
+							removeComposite(*roots[i]);
+							addComposite(*roots[i]);
+						}
 
 						list<QTreeWidgetItem*> item_list;
 						qit = QTreeWidgetItemIterator(listview);
