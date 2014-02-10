@@ -1249,21 +1249,52 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 			if (atom_data_sets_.size() > i)
 			{	
 				bool identical_sequences = true;
-				std::vector<NMRAtomData> atom_data = atom_data_sets_[0].atom_data;
+				std::vector<NMRAtomData> const& atom_data = atom_data_sets_[i].atom_data;
 				String residue_sequence = monomeric_polymers_[i].residue_sequence;
-				
+				bool is_dna = monomeric_polymers_[i].polymer_class == "DNA";	
+				bool is_rna = monomeric_polymers_[i].polymer_class == "RNA";	
+
 				for (Position j=0; identical_sequences && (j<atom_data.size()); j++)
 				{
-					if (   (  atom_data[j].residue_seq_code != POSITION_VALUE_NA ) 
-							&& (  atom_data[j].residue_seq_code - 1 < residue_sequence.size())
-							&& (   residue_sequence[atom_data[j].residue_seq_code - 1] 
-							    != Peptides::OneLetterCode(atom_data[j].residue_label))
-						 )
+					if (atom_data[j].residue_seq_code == POSITION_VALUE_NA)
 					{
 						identical_sequences = false;
-						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." 
-						           << residue_sequence[atom_data[j].residue_seq_code - 1] 
-											 << " != "  << Peptides::OneLetterCode(atom_data[j].residue_label) << endl;
+						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: invalid residue sequence code" << std::endl;
+					}
+
+					if (atom_data[j].residue_seq_code - 1 >= residue_sequence.size())
+					{
+						identical_sequences = false;
+						Log.warn() << "NMRStarFile::getResidueSequence(): Warning: residue sequence code " << atom_data[j].residue_seq_code 
+						           << " is larger than the sequence length (" << residue_sequence.size() << ")" << std::endl;
+					}
+
+					// now check if the residue information is consistent
+					char current_letter = residue_sequence[atom_data[j].residue_seq_code - 1];
+
+					if (current_letter == 'X') // this case is handled like a wildcard character
+						continue;
+
+					// currently, we treat polymers of type DNA or RNA differently. all else is considered a protein
+					if (is_dna || is_rna)
+					{
+						if (current_letter != atom_data[j].residue_label)
+						{
+							identical_sequences = false;
+							Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." 
+								         << residue_sequence[atom_data[j].residue_seq_code - 1] 
+											   << " != "  << Peptides::OneLetterCode(atom_data[j].residue_label) << endl;
+						}
+					}
+					else
+					{
+						if (current_letter != Peptides::OneLetterCode(atom_data[j].residue_label))
+						{
+							identical_sequences = false;
+							Log.warn() << "NMRStarFile::getResidueSequence(): Warning: Inconsistent residue sequence information." 
+								         << residue_sequence[atom_data[j].residue_seq_code - 1] 
+											   << " != "  << Peptides::OneLetterCode(atom_data[j].residue_label) << endl;
+						}
 					}
 				}
 		
