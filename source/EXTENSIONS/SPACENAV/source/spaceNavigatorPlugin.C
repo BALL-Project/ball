@@ -10,7 +10,8 @@ namespace BALL
 	namespace VIEW
 	{
 		SpaceNavigatorPlugin::SpaceNavigatorPlugin()
-			: icon_(":pluginSpaceNavigator.png")
+			: icon_(":pluginSpaceNavigator.png"),
+			  driver_(0)
 		{
 		}
 
