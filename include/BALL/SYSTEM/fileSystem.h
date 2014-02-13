@@ -97,6 +97,11 @@ namespace BALL
 		*/
 		static String baseName(const String& filename);
 
+		/** Return the extension of a file of present.
+				If file has no extension an empty String is returned.
+		*/
+		static String fileExtension(const String& filename);
+
 		/** Return the path to a file.
 				This method returns the path to a file, i.e. everything up to
 				and including the last occurence of  \link FileSystem::PATH_SEPARATOR PATH_SEPARATOR \endlink .

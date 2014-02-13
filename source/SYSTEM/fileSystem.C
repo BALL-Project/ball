@@ -214,6 +214,19 @@ namespace BALL
 		}
 	}
 
+	String FileSystem::fileExtension(const String& filename)
+	{
+		String base_name = baseName(filename);
+		Position idx = (Position)base_name.find_last_of(".");
+
+		if (idx != String::EndPos && (idx + 1) < base_name.size())
+		{
+			return base_name(idx + 1);
+		}
+
+		return "";
+	}
+
 	String FileSystem::path(const String& filename)
 	{
 		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);

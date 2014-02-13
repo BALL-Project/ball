@@ -68,6 +68,15 @@ CHECK(baseName(const String& filename))
 	TEST_EQUAL(FileSystem::baseName("test"), "test")
 RESULT
 
+CHECK(fileExtension(const String& filename))
+	String filename = "test" + PS + "basename.sfx";
+	TEST_EQUAL(FileSystem::fileExtension(filename), "sfx")
+	TEST_EQUAL(FileSystem::fileExtension(PS), "")
+	TEST_EQUAL(FileSystem::fileExtension(PS + "."), "")
+	TEST_EQUAL(FileSystem::fileExtension(""), "")
+	TEST_EQUAL(FileSystem::fileExtension("test"), "")
+RESULT
+
 CHECK(path(const String& filename))
 	String filename = PS + "test" + PS + PS + "TEST" + PS + "basename.sfx";
 	TEST_EQUAL(FileSystem::path(filename), PS + "test" + PS + PS + "TEST" + PS)
