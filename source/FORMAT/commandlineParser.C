@@ -63,6 +63,7 @@ CommandlineParser::CommandlineParser
 	// write_ini is allowed to be used, but some tools might ignore it
 	reserved_params_.insert("write_par");
 	reserved_params_.insert("par");
+	reserved_params_.insert("h");
 	reserved_params_.insert("help");
 	reserved_params_.insert("ini");
 	reserved_params_.insert("env");
@@ -255,30 +256,30 @@ void CommandlineParser::setOutputFormatSource(String output_parname, String inpu
 
 void CommandlineParser::printToolInfo()
 {
-  String tool = "| " + tool_name_ + " -- " + tool_description_;
-  String version = "| Version: " + tool_version_;
-  String build = "| build date: " + build_date_;
-  String host = "| execution host: " + hostname_;
-  String time = "| execution time: " + start_time_;
+	String tool = "| " + tool_name_ + " -- " + tool_description_;
+	String version = "| Version: " + tool_version_;
+	String build = "| build date: " + build_date_;
+	String host = "| execution host: " + hostname_;
+	String time = "| execution time: " + start_time_;
 
-  Size max_len = tool.size();
-  
-  if (max_len < version.size())
-  {
-    max_len = version.size();
-  }
-  if (max_len < build.size())
-  {
-    max_len = build.size();
-  }
-  if (max_len < host.size())
-  {
-    max_len = host.size();
-  }
-  if (max_len < time.size())
-  {
-    max_len = time.size();
-  }
+	Size max_len = tool.size();
+
+	if (max_len < version.size())
+	{
+		max_len = version.size();
+	}
+	if (max_len < build.size())
+	{
+		max_len = build.size();
+	}
+	if (max_len < host.size())
+	{
+		max_len = host.size();
+	}
+	if (max_len < time.size())
+	{
+		max_len = time.size();
+	}
 
 	Log << endl;
 	Log << " " << String('=', max_len) << endl; 
@@ -288,13 +289,14 @@ void CommandlineParser::printToolInfo()
 	Log << version << String(' ', max_len - version.size()) << " |" << endl;
 	Log << build   << String(' ', max_len - build.size()) <<" |" << endl;
 	Log << host    << String(' ', max_len - host.size()) << " |" << endl;
-  Log << time    << String(' ', max_len - time.size()) << " |" << endl;
+	Log << time    << String(' ', max_len - time.size()) << " |" << endl;
 	Log << " "     << String('-', max_len) << endl << endl; 
 }
 
 
 void CommandlineParser::parse(int argc, char* argv[])
 {
+	checkAndRegisterFlag("h", "show help about parameters and flags of this program", false, false);
 	checkAndRegisterFlag("help", "show help about parameters and flags of this program", false, false);
 	checkAndRegisterParameter("write_par", "write xml parameter file for this tool", OUTFILE, false, "", false);
 	checkAndRegisterParameter("par", "read parameters from parameter-xml-file", INFILE, false, "", false);
@@ -351,7 +353,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 					if (registered_parameters_.find(current_par_name) != registered_parameters_.end())
 					{
 						Log.error()<<"No value specified for '"<<current_par_name<<"', but it is a parameter not a flag!!\n"
-							         <<"Use '-help' to display information about available parameters and flags."<<endl;
+									 <<"Use '-help' to display information about available parameters and flags."<<endl;
 					}
 					else
 					{
@@ -424,7 +426,7 @@ void CommandlineParser::parse(int argc, char* argv[])
 
 
 	// Do not complain about missing parameters if the user just wants to see the help page.
-	if (parameter_map_.find("help") != parameter_map_.end())
+	if (parameter_map_.find("help") != parameter_map_.end() || parameter_map_.find("h") != parameter_map_.end())
 	{
 		printHelp();
 		exit(0);
