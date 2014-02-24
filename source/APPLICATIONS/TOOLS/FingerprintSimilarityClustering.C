@@ -31,6 +31,13 @@ using namespace boost;
 using namespace std;
 
 
+typedef map<unsigned int, map<unsigned int, vector<unsigned int> > > ClusterMap;
+typedef map<unsigned int, map<unsigned int, vector<unsigned int> > >::iterator ClusterMapIterator;
+typedef map<unsigned int, map<unsigned int, vector<unsigned int> > >::reverse_iterator ClusterMapReverseIterator;
+typedef map<unsigned int, vector<pair<unsigned int, float> > > NNData;
+
+
+
 // Format of fingerprint: 1 = Comma separated list of integer features, 2 = Fixed sized binay string
 unsigned int fprint_format;
 
@@ -249,6 +256,7 @@ void readMoleculeIdentifiers(unordered_map<unsigned int, set<String> >& mol_iden
 }
 
 
+
 void writeConnectedComponents(const vector<unsigned int>& m_indices, 
 			      const vector<vector<unsigned int> >& ccs,
 			      const multimap<unsigned int, unsigned int>& cc_sizes,
@@ -268,7 +276,7 @@ void writeConnectedComponents(const vector<unsigned int>& m_indices,
 	
 	unordered_map<unsigned int, set<String> > mol_identifiers;
 	readMoleculeIdentifiers(mol_identifiers);
-	
+
 	String cids;
 	set<String>::iterator it;
 	multimap<unsigned int, unsigned int>::const_reverse_iterator iter;
@@ -280,20 +288,71 @@ void writeConnectedComponents(const vector<unsigned int>& m_indices,
 		for (unsigned int i=0; i!=cc.size(); ++i)
 		{
 			it=mol_identifiers[m_indices[cc[i]]].begin();
-			
+
 			cids = *it;
 			for (++it; it!=mol_identifiers[m_indices[cc[i]]].end(); ++it)
 			{
 				cids += "," + *it;
 			}
-			
+
 			out << m_indices[cc[i]] << " " << m_indices[nnd[i].first] << " " << nnd[i].second << " " << cids << endl;
 		}
 		
-		out << "//" << endl; 
+		out << "//" << endl;
 	}
 	
 	out.close();
+}
+
+void writeConnectedComponents(const vector<unsigned int>& m_indices,
+							  const ClusterMap& clmap,
+							  const NNData& nn,
+							  const float sim_cutoff)
+{
+	File out("FFC_2_connected_components.txt", File::MODE_OUT);
+
+	out << "# FFC CONNECTED COMPONENTS" << endl;
+	out << "# at similarity cutoff: " << sim_cutoff << endl;
+	out << "# Connected components are separated by a '//' prefixed line." << endl;
+	out << "# SRC_NODE_ID:    global internal (fingerprint unique) id of source node." << endl;
+	out << "# DST_NODE_INDEX: index of nearest neighbour within connected component vector." << endl;
+	out << "# TANIMOTO_SIM:   tanimoto similarity. If TANIMOTO_SIM == -1.0, no nearest neighbour information hass been calculated." << endl;
+	out << "# CMPD_IDS:   Comma separated list of original compound id(s) which map onto this SRC_NODE_ID." << endl;
+	out << "SRC_NODE_INDEX DST_NODE_INDEX TANIMOTO_SIM CMPD_IDS" << endl;
+
+	unordered_map<unsigned int, set<String> > mol_identifiers;
+	readMoleculeIdentifiers(mol_identifiers);
+
+	set<String>::iterator it;
+	ClusterMap::const_reverse_iterator clmap_iter = clmap.rbegin();
+	for (; clmap_iter!=clmap.rend(); ++clmap_iter)
+	{
+		map<unsigned int, vector<unsigned int> >::const_iterator iter;
+		for (iter=clmap_iter->second.begin(); iter!=clmap_iter->second.end(); ++iter)
+		{
+			vector<unsigned int> cc = iter->second;
+			vector<pair<unsigned int, float> > nn_tmp = (nn.find(iter->first))->second;
+
+			for (unsigned int i=0; i!=cc.size(); ++i)
+			{
+				it = mol_identifiers[m_indices[cc[i]]].begin();
+
+				String cids = *it;
+				for (++it; it!=mol_identifiers[m_indices[cc[i]]].end(); ++it)
+				{
+					cids += "," + *it;
+				}
+
+				out << m_indices[cc[i]] << " " << m_indices[nn_tmp[i].first] << " " << nn_tmp[i].second << " " << cids << endl;
+			}
+
+			out << "//" << endl;
+		}
+	}
+
+	out.close();
+
+	return;
 }
 
 
@@ -467,6 +526,21 @@ bool clusteringMemoryEstimation(const LongSize cc_max, const unsigned int n_thre
 }
 
 
+unsigned int getIDMin(vector<unsigned int>& ids)
+{
+	unsigned int min = UINT_MAX;
+	for (unsigned int i=0; i!=ids.size(); ++i)
+	{
+		if (ids[i] < min)
+		{
+			min = ids[i];
+		}
+	}
+
+	return min;
+}
+
+
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("FingerprintSimilarityClustering", "fast clustering of compounds using 2D binary fingerprints", VERSION, String(__DATE__), "Chemoinformatics");
@@ -587,7 +661,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	
 	
 	Options options;
-	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 820);
+	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 500);
 	options.setDefaultReal(BinaryFingerprintMethods::Option::SIM_CUTOFF, sim_cutoff);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::N_THREADS, n_threads);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::MAX_CLUSTERS, 1000);
@@ -613,19 +687,17 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	
 	Log.level(10) << "++ --------------------------------------------------------" << endl;
 	Log.level(10) << "++ STEP 2: Connected components decomposition" << endl;
-	
+
 	vector<unsigned int> m_indices;
 	vector<vector<unsigned int> > ccs;
-	multimap<unsigned int, unsigned int> cc_sizes;
-	vector<vector<pair<unsigned int, float> > > nn_data;
-	
+	vector<vector<pair<unsigned int, float> > > nn_tmp;
+
 	// Add all input molecules for connected component calculation
 	for (unsigned int i=0; i!=mol_features.size(); ++i)
 	{
 		m_indices.push_back(i);
 	}
-	
-	
+
 	// MAKE ESTIMATION FOR SYSTEM RESOURCE DEMANDS
 	bool proceed = connectedComponentsMemoryEstimation(m_indices.size(), n_threads, options.getInteger(BinaryFingerprintMethods::Option::BLOCKSIZE));
 	if (!proceed)
@@ -633,169 +705,245 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 		Log << "++" << endl;
 		Log << "++ DONE" << endl;
 		Log << "++" << endl;
-		
+
 		return 0;
 	}
-	
-	
+
+
 	BinaryFingerprintMethods bfm(options, mol_features);
-	bool success = bfm.connectedComponents(m_indices, ccs, nn_data, sim_cutoff, true);
-	
+
+	bool success = bfm.connectedComponents(m_indices, ccs, nn_tmp, sim_cutoff, true);
+
 	if (!success)
 	{
 		Log.error() << "-- FAILED: fast compound clustering was not successful." << endl;
 		Log.error() << endl;
-		
+
 		return 1;
 	}
-	
-	// Determine sizes of connected components
+
+
+	// Store connected components in final cluster data structure
+	// Additionally map the nearest neighbour data appropriately.
+
+	ClusterMap clmap;
+	NNData nn;
+
 	for (unsigned int i=0; i!=ccs.size(); ++i)
 	{
-		cc_sizes.insert(make_pair(ccs[i].size(), i));
+		unsigned int size = ccs[i].size();
+		unsigned int idmin = getIDMin(ccs[i]);
+
+		// Insert connected components into ClusterMap
+		map<unsigned int, vector<unsigned int> >& sizemap = clmap[size];
+		sizemap[idmin] = ccs[i];
+
+		// Insert nearest neighbour data
+		nn.insert(make_pair(idmin, nn_tmp[i]));
 	}
-	
-	writeConnectedComponents(m_indices, ccs, cc_sizes, nn_data, sim_cutoff);
-	
+
+	// Write connected components to file
+	writeConnectedComponents(m_indices, clmap, nn, sim_cutoff);
+
+	ccs.clear();
+	nn_tmp.clear();
+
+
 	// ------------------------------------------------------------------------------------------
 	// Clustering of connected components
-	
+
 	Log.level(10) << "++ --------------------------------------------------------" << endl;
 	Log.level(10) << "++ STEP 3: Average linkage clustering of connected components" << endl;
-	
+
 	// MAKE ESTIMATION FOR SYSTEM RESOURCE DEMANDS
-	LongSize cc_max = cc_sizes.rbegin()->first;
+	LongSize cc_max = clmap.rbegin()->first;
 	proceed = clusteringMemoryEstimation(cc_max, n_threads, options.getInteger(BinaryFingerprintMethods::Option::BLOCKSIZE));
 	if (!proceed)
 	{
 		Log << "++" << endl;
 		Log << "++ DONE" << endl;
 		Log << "++" << endl;
-		
+
 		return 0;
 	}
-	
+
+	ClusterMap tmp_clmap;
 	vector<unsigned int> cl_indices;
-	vector<vector<unsigned int> > clusters;
 	map<unsigned int, vector<unsigned int> > cluster_selection;
-	map<unsigned int, vector<unsigned int> >::iterator cl_iter;
-	
-	multimap<unsigned int, unsigned int>::iterator iter;
-	for (iter=cc_sizes.begin(); iter!=cc_sizes.end(); ++iter)
+
+	// Connected components that will be clustered must subseqeuntly be removed from the main ClusterMap clmap.
+	// The corresponding keys are stored here:
+	map<unsigned int, vector<unsigned int> > remove;
+
+	for (ClusterMapIterator size_iter=clmap.begin(); size_iter!=clmap.end(); ++size_iter)
 	{
-		if (iter->first > size_cutoff)
+		for (map<unsigned int, vector<unsigned int> >::iterator cl_iter=size_iter->second.begin(); cl_iter!=size_iter->second.end(); ++cl_iter)
 		{
-			for (unsigned int i=0; i!=ccs[iter->second].size(); ++i)
+			if (size_iter->first > size_cutoff)
 			{
-				cl_indices.push_back(m_indices[ccs[iter->second][i]]);
-			}
-			
-			Log.level(10) << "++ CONNECTED COMPONENT SIZE: " << iter->first << endl;
-			bfm.averageLinkageClustering(cl_indices, nn_data[iter->second], cluster_selection);
-			Log.level(10) << "++"  << endl;
-			
-			for (cl_iter=cluster_selection.begin(); cl_iter!=cluster_selection.end(); ++cl_iter)
-			{
-				clusters.push_back(vector<unsigned int>());
-				for (unsigned int i=0; i!=cl_iter->second.size(); ++i)
+				vector<unsigned int>& tmp_cl = cl_iter->second;
+
+				for (unsigned int i=0; i!=tmp_cl.size(); ++i)
 				{
-					clusters[clusters.size() - 1].push_back(cl_indices[cl_iter->second[i]]);
+					cl_indices.push_back(m_indices[tmp_cl[i]]);
 				}
+
+				Log.level(10) << "++ CONNECTED COMPONENT SIZE: " << size_iter->first << endl;
+				bfm.averageLinkageClustering(cl_indices, nn[cl_iter->first], cluster_selection);
+				Log.level(10) << "++"  << endl;
+
+				// Retrieve every cluster
+				for (map<unsigned int, vector<unsigned int> >::iterator sel_iter=cluster_selection.begin(); sel_iter!=cluster_selection.end(); ++sel_iter)
+				{
+					unsigned int idmin = UINT_MAX;
+
+					for (unsigned int i=0; i!=sel_iter->second.size(); ++i)
+					{
+						tmp_cl.push_back(cl_indices[sel_iter->second[i]]);
+
+						if (tmp_cl[tmp_cl.size() - 1] < idmin)
+						{
+							idmin = tmp_cl[tmp_cl.size() - 1];
+						}
+					}
+
+					// Insert clusters into tmp_map
+					map<unsigned int, vector<unsigned int> >& sizemap = tmp_clmap[tmp_cl.size()];
+					sizemap[idmin] = tmp_cl;
+
+					tmp_cl.clear();
+
+					// To be removed ...
+					vector<unsigned int>& tmp = remove[size_iter->first];
+					tmp.push_back(cl_iter->first);
+				}
+
+				cl_indices.clear();
 			}
-			
-			cl_indices.clear();
-			cluster_selection.clear();
-			nn_data[iter->second].clear();
-		}
-		else
-		{
-			nn_data[iter->second].clear();
-			clusters.push_back(vector<unsigned int>());
-			
-			for (unsigned int i=0; i!=ccs[iter->second].size(); ++i)
-			{
-				clusters[clusters.size() -1 ].push_back(m_indices[ccs[iter->second][i]]);
-			}
+
+			nn.erase(cl_iter->first);
 		}
 	}
-	
+
+	// Update main ClusterMap clmap in two steps:
+	// Step 1: remove connected components that were clustered
+	for (map<unsigned int, vector<unsigned int> >::iterator it=remove.begin(); it!=remove.end(); ++it)
+	{
+		map<unsigned int, vector<unsigned int> >& tmp = clmap[it->first];
+		for (unsigned int i=0; i!=it->second.size(); ++i)
+		{
+			tmp.erase(it->second[i]);
+		}
+
+		if (tmp.empty())
+		{
+			clmap.erase(it->first);
+		}
+	}
+
+	// Step 2: insert new clusters
+	for (ClusterMap::iterator it=tmp_clmap.begin(); it!=tmp_clmap.end(); ++it)
+	{
+		map<unsigned int, vector<unsigned int> >& tmp = clmap[it->first];
+		tmp.insert(it->second.begin(), it->second.end());
+	}
+
+	// Clean up
+	tmp_clmap.clear();
+
+
 	// ------------------------------------------------------------------------------------------
 	// Calculate Medoid of every cluster
-	
+
 	Log.level(10) << "++ --------------------------------------------------------" << endl;
 	Log.level(10) << "++ STEP 4: Calculate medoids for every cluster" << endl;
-	
+
 	bfm.setVerbosityLevel(0);
-	
+
 	unsigned int medoid_index;
-	vector<float> tmp;
-	vector<unsigned int> medoids;
-	vector<vector<float> > avg_sims;
-	
-	for (unsigned int i=0; i!=clusters.size(); ++i)
+	vector<float> tmp_avg_sims;
+	map<unsigned int, pair<unsigned int, vector<float> > > medoids_avg_sims;
+
+	for (ClusterMap::iterator size_iter=clmap.begin(); size_iter!=clmap.end(); ++size_iter)
 	{
-		if (bfm.calculateSelectionMedoid(clusters[i], medoid_index, tmp))
+		for (map<unsigned int, vector<unsigned int> >::iterator cl_iter=size_iter->second.begin(); cl_iter!=size_iter->second.end(); ++cl_iter)
 		{
-			medoids.push_back(clusters[i][medoid_index]);
-			avg_sims.push_back(tmp);
-		}
-		else
-		{
-			Log.error() << "-- WARNING: medoid calculation failed for unkown reason" << endl;
+			if (bfm.calculateSelectionMedoid(cl_iter->second, medoid_index, tmp_avg_sims))
+			{
+				medoids_avg_sims[cl_iter->first] = make_pair(medoid_index, tmp_avg_sims);
+				tmp_avg_sims.clear();
+			}
+			else
+			{
+				Log.error() << "-- WARNING: medoid calculation failed for unkown reason" << endl;
+			}
 		}
 	}
-	
-	
+
+
 	// ------------------------------------------------------------------------------------------
 	// Remap fingerprint duplicates
-	
+
 	Log.level(10) << "++ --------------------------------------------------------" << endl;
 	Log.level(10) << "++ STEP 5: Remap fingerprint duplicates" << endl;
-	
-	
-	String identifier;
+
+
 	unordered_map<unsigned int, set<String> > identifiers;
-	map<String, pair<unsigned int, pair<unsigned int, float> > > cluster_annotation;
-	
 	readMoleculeIdentifiers(identifiers);
-	
-	float avg_sim;
+
+	// Store final cluster information
+	map<String, pair<unsigned int, pair<unsigned int, float> > > final_clusters;
+
 	unsigned int is_medoid;
-	for (unsigned int i=0; i!=clusters.size(); ++i)
+	unsigned int cluster_id = 1;
+	for (ClusterMap::iterator size_iter=clmap.begin(); size_iter!=clmap.end(); ++size_iter)
 	{
-		if (clusters[i].size() == 1)
+		//typedef map<unsigned int, map<unsigned int, vector<unsigned int> > > ClusterMap;
+		for (map<unsigned int, vector<unsigned int> >::iterator cl_iter=size_iter->second.begin(); cl_iter!=size_iter->second.end(); ++cl_iter)
 		{
-			is_medoid = 1;
-			avg_sim = 1.0;
-			
-			for (set<String>::iterator id_iter=identifiers[clusters[i][0]].begin();id_iter!=identifiers[clusters[i][0]].end(); ++id_iter)
+			if (cl_iter->second.size() == 1)
 			{
-				cluster_annotation[*id_iter] = make_pair(i+1, make_pair(is_medoid, avg_sim));
-			}
-		}
-		else
-		{
-			for (unsigned int j=0; j!=clusters[i].size(); ++j)
-			{
-				if (clusters[i][j] == medoids[i])
+				// Singleton cluster
+
+				is_medoid = 1;
+				float avg_sim = 1.0;
+
+				for (set<String>::iterator id_iter=identifiers[cl_iter->second[0]].begin(); id_iter!=identifiers[cl_iter->second[0]].end(); ++id_iter)
 				{
-					is_medoid = 1;
-				}
-				else
-				{
-					is_medoid = 0;
-				}
-				
-				avg_sim = avg_sims[i][j];
-				
-				for (set<String>::iterator id_iter=identifiers[clusters[i][j]].begin();id_iter!=identifiers[clusters[i][j]].end(); ++id_iter)
-				{
-					cluster_annotation[*id_iter] = make_pair(i+1, make_pair(is_medoid, avg_sim));
+					final_clusters[*id_iter] = make_pair(cluster_id, make_pair(is_medoid, avg_sim));
 				}
 			}
+			else
+			{
+				medoid_index = medoids_avg_sims[cl_iter->first].first;
+				tmp_avg_sims = medoids_avg_sims[cl_iter->first].second;
+
+				for (unsigned int i=0; i!=cl_iter->second.size(); ++i)
+				{
+					if (i == medoid_index)
+					{
+						is_medoid = 1;
+					}
+					else
+					{
+						is_medoid = 0;
+					}
+
+					for (set<String>::iterator id_iter=identifiers[cl_iter->second[i]].begin(); id_iter!=identifiers[cl_iter->second[i]].end(); ++id_iter)
+					{
+						final_clusters[*id_iter] = make_pair(cluster_id, make_pair(is_medoid, tmp_avg_sims[i]));
+					}
+				}
+			}
+
+			++cluster_id;
+			cl_iter->second.clear();
 		}
+
+		size_iter->second.clear();
 	}
-	
+
+
 	// ------------------------------------------------------------------------------------------
 	// Write final clustering
 	
@@ -819,11 +967,11 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 		{
 			identifier = mol->getProperty(id_tag).getString();
 			
-			if (cluster_annotation.find(identifier)!=cluster_annotation.end())
+			if (final_clusters.find(identifier)!=final_clusters.end())
 			{
-				mol->setProperty(cluster_tag, cluster_annotation[identifier].first);
-				mol->setProperty(medoid_tag, cluster_annotation[identifier].second.first);
-				mol->setProperty(avg_sim_tag, cluster_annotation[identifier].second.second);
+				mol->setProperty(cluster_tag, final_clusters[identifier].first);
+				mol->setProperty(medoid_tag, final_clusters[identifier].second.first);
+				mol->setProperty(avg_sim_tag, final_clusters[identifier].second.second);
 			}
 			else
 			{
@@ -858,16 +1006,16 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 		out << "# AverageSim:    Average similarity of fingerprint to all others in cluster." << endl;
 		out << "MolID ClusterID ClusterMedoid AverageSim" << endl;
 		
-		map<String, pair<unsigned int, pair<unsigned int, float> > >::iterator final_it = cluster_annotation.begin();
-		for (; final_it!=cluster_annotation.end(); ++final_it)
+		map<String, pair<unsigned int, pair<unsigned int, float> > >::iterator final_it = final_clusters.begin();
+		for (; final_it!=final_clusters.end(); ++final_it)
 		{
 			out << final_it->first << " " << final_it->second.first << " " << final_it->second.second.first << " " << final_it->second.second.second << endl;
 		}
 		
 		out.close();
 	}
-	
-	
+
+
 	Log << "++" << endl;
 	Log << "++ DONE" << endl;
 	Log << "++" << endl;
