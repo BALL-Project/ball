@@ -390,7 +390,7 @@ $ FingerprintSimilaritySearch -t target.sdf -q query.smi -o results -fp_tag FPRI
 	
 	
 	Options options;
-	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 820);
+	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 500);
 	options.setDefaultReal(BinaryFingerprintMethods::Option::SIM_CUTOFF, sim_cutoff);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::N_THREADS, n_threads);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::VERBOSITY, 6);
