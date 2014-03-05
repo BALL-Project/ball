@@ -260,6 +260,7 @@ SET(BALL_FORMATS_TESTS
 	Bruker2DFile_test
 	CCP4File_test
 	DockResultFile_test
+	HMOFile_test
 	INIFile_test
 	JCAMPFile_test
 	KCFFile_test

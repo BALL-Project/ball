@@ -96,6 +96,7 @@
 // FORMAT
 %Include DCDFile.sip
 %Include HINFile.sip
+%Include HMOFile.sip
 %Include INIFile.sip
 // %Include JCAMPFile.sip
 %Include KCFFile.sip

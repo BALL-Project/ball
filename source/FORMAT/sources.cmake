@@ -14,6 +14,7 @@ SET(SOURCES_LIST
 #	GAMESSLogFile.C
 	genericMolFile.C
 	HINFile.C
+	HMOFile.C
 	INIFile.C
 	JCAMPFile.C
 	KCFFile.C
