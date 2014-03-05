@@ -9,7 +9,7 @@
 // module definition file
 //
 
-%Module BALLCore
+%Module(name=BALLCore, all_raise_py_exception=True)
 
 %ModuleHeaderCode
 #include <BALLPyMacros.h>

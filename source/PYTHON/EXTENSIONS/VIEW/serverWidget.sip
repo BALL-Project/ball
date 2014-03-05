@@ -18,17 +18,25 @@ class ServerWidget
 	~ServerWidget() throw();
 	virtual void clear() throw();
 
-	class NotCompositeObject
-		:	GeneralException
+	%Exception ServerWidget::NotCompositeObject(GeneralException) /PyName=ServerWidget_NotCompositeObject/
 	{
 %TypeHeaderCode
-	#include <BALL/VIEW/KERNEL/serverWidget.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+#include <BALL/VIEW/KERNEL/serverWidget.h>
+using namespace BALL;
+using namespace BALL::VIEW;
+using namespace BALL::Exception;
 %End
-		public:
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
 
-			NotCompositeObject(const char*, int) throw();
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_ServerWidget_NotCompositeObject, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
 	};
 
 	void activate()	throw();

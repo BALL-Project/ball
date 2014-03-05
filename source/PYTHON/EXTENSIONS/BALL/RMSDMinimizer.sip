@@ -8,18 +8,42 @@ class RMSDMinimizer
 %End
 
 	public:
-		class IncompatibleCoordinateSets
-			: GeneralException
+		%Exception RMSDMinimizer::IncompatibleCoordinateSets(GeneralException) /PyName=RMSDMinimizer_IncompatibleCoordinateSets/
 		{
-			public:
-				IncompatibleCoordinateSets(const char*, int, Size, Size);
+%TypeHeaderCode
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
+%End
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_RMSDMinimizer_IncompatibleCoordinateSets, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
 		};
 
-		class TooFewCoordinates
-			: GeneralException
+		%Exception RMSDMinimizer::TooFewCoordinates(GeneralException) /PyName=RMSDMinimizer_TooFewCoordinates/
 		{
-			public:
-				TooFewCoordinates(const char*, int, Size);
+%TypeHeaderCode
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
+%End
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_RMSDMinimizer_TooFewCoordinates, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
 		};
 
 		typedef vector<Vector3> PointVector;

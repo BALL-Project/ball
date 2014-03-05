@@ -1,10 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id$
-//
 
-class GeneralException 
+%Exception GeneralException(SIP_Exception) /PyName=GeneralException, Default/
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/string.h>
@@ -12,531 +10,377 @@ class GeneralException
 	using namespace BALL;
 	using namespace BALL::Exception;
 %End
-	
-	public:
-	GeneralException();
-	GeneralException
-    (const char*, int);
-	
-	GeneralException
-    (const char*, int,	
-     const String&,
-     const String&);
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
 
-	GeneralException(const GeneralException&);
-	~GeneralException();
-	const char* getName() const;
-	const char* getMessage() const;
-	int getLine() const;
-	const char* getFile() const;
-
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
-%End
-
-};  
-
-
-class IndexUnderflow 
- 	: GeneralException
-{
-%TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
-%End
-  public:
-  IndexUnderflow(const char*, int, Index index = 0, Size size = 0);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_GeneralException, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class SizeUnderflow 
-  : GeneralException
+%Exception IndexUnderflow(GeneralException) /PyName=IndexUnderflow/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-  public:
-  SizeUnderflow(const char*, int, Size size = 0);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
-%End
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
 
-};
-
-
-class IndexOverflow 
-  : GeneralException
-{
-%TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
-%End
-	public:
-	IndexOverflow(const char*, int, Index index = 0, Size size = 0);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_IndexUnderflow, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class InvalidRange 
-	: GeneralException
+%Exception SizeUnderflow(GeneralException) /PyName=SizeUnderflow/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	InvalidRange(const char*, int, float);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_SizeUnderflow, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class InvalidFormat 
-	: GeneralException
+%Exception IndexOverflow(GeneralException) /PyName=IndexOverflow/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	InvalidFormat(const char*, int, const String&);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_IndexOverflow, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class IllegalSelfOperation
-	: GeneralException
+%Exception InvalidRange(GeneralException) /PyName=InvalidRange/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	IllegalSelfOperation(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_InvalidRange, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class NullPointer 
-	: GeneralException
+%Exception InvalidFormat(GeneralException) /PyName=InvalidFormat/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	NullPointer(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_InvalidFormat, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class InvalidIterator
-	: GeneralException
+%Exception IllegalSelfOperation(GeneralException) /PyName=IllegalSelfOperation/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	InvalidIterator(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_IllegalSelfOperation, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class IncompatibleIterators
-	: GeneralException
+%Exception NullPointer(GeneralException) /PyName=NullPointer/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	IncompatibleIterators(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_NullPointer, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class NotImplemented
-	: GeneralException
+%Exception InvalidIterator(GeneralException) /PyName=InvalidIterator/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	NotImplemented(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_InvalidIterator, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class InvalidOption
-	: GeneralException
+%Exception IncompatibleIterators(GeneralException) /PyName=IncompatibleIterators/
 {
 %TypeHeaderCode
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-		InvalidOption(const char* file, int line, String option);
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
 
-		SIP_PYOBJECT __repr__();
-%MethodCode
-	if(sipCpp == 0)
-	{
-		sipRes = PyString_FromString("");
-	}
-	else
-	{
-		sipRes = PyString_FromString(String(String(sipCpp->getName())
-		         + " in line " + String(sipCpp->getLine()) + " of "
-		         + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-	}
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_IncompatibleIterators, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class TooManyErrors
-	: GeneralException
+%Exception NotImplemented(GeneralException) /PyName=NotImplemented/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	TooManyErrors(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_NotImplemented, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-
-class OutOfMemory
-	: GeneralException
+%Exception InvalidOption(GeneralException) /PyName=InvalidOption/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	OutOfMemory(const char*, int, Size size = 0);
-	~OutOfMemory() throw();
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_InvalidOption, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class OutOfGrid
-  : GeneralException
+%Exception TooManyErrors(GeneralException) /PyName=TooManyErrors/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	OutOfGrid(const char*, int)
-    throw();
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_TooManyErrors, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
+%Exception OutOfMemory(GeneralException) /PyName=OutOfMemory/
+{
+%TypeHeaderCode
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
+%End
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_OutOfMemory, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
+};
+
+%Exception OutOfGrid(GeneralException) /PyName=OutOfGrid/
+{
+%TypeHeaderCode
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
+%End
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_OutOfGrid, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
+};
   
-class BufferOverflow 
-	: GeneralException
+%Exception BufferOverflow(GeneralException) /PyName=BufferOverflow/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	BufferOverflow(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_BufferOverflow, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class DivisionByZero 
-	: GeneralException
+%Exception DivisionByZero(GeneralException) /PyName=DivisionByZero/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	DivisionByZero(const char*, int);
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_DivisionByZero, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class FileNotFound 
- : GeneralException
+%Exception FileNotFound(GeneralException) /PyName=FileNotFound/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-  public:
-  FileNotFound(const char*, int, const String&);
-  String getFilename() const;
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_FileNotFound, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class ParseError
-	: GeneralException
+%Exception ParseError(GeneralException) /PyName=ParseError/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-	#include <BALL/COMMON/exception.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-	public:
-	ParseError(const char*, int, const String&,
- 	  				 const String&)
-							throw();
- 	SIP_PYOBJECT __repr__();
-%MethodCode
-  if (sipCpp == 0)
-  {
-    sipRes = PyString_FromString("");
-  }
-  else
-  {
-    sipRes = PyString_FromString(String(String(sipCpp->getName())
-					+ " in line " + String(sipCpp->getLine()) + " of "
-          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
-  }
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_ParseError, detail.c_str());
+    SIP_UNBLOCK_THREADS
 %End
 };
 
-class TooManyBonds
- : GeneralException
+%Exception TooManyBonds(GeneralException) /PyName=TooManyBonds/
 {
 %TypeHeaderCode
-	#include <BALL/DATATYPE/string.h>
-  #include <BALL/COMMON/exception.h>
-  using namespace BALL;
-  using namespace BALL::Exception;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
 %End
-  public:
-  TooManyBonds(const char*, int, const String) throw();
-};
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
 
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_TooManyBonds, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
+};
 
 /// creates a crash under windows:
 class GlobalExceptionHandler

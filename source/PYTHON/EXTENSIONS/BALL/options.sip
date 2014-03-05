@@ -1,21 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id$
-//
 
-class IllegalKey
-	:	GeneralException
+%Exception StringHashMapString::IllegalKey(GeneralException) /PyName=StringHashMapString_IllegalKey/
 {
 %TypeHeaderCode
-	#include <BALL/COMMON/exception.h>
-	#include <BALL/DATATYPE/stringHashMap.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
-	typedef StringHashMap<String>::IllegalKey IllegalKey;
+#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/exception.h>
+using namespace BALL;
+using namespace BALL::Exception;
+typedef StringHashMap<String> StringHashMapString;
 %End
-	public:
-	IllegalKey(const char*, int);
+%RaiseCode
+		String detail = 
+			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+																				 + ": " + sipExceptionRef.getMessage();
+
+    SIP_BLOCK_THREADS
+    PyErr_SetString(sipException_StringHashMapString_IllegalKey, detail.c_str());
+    SIP_UNBLOCK_THREADS
+%End
 };
 
 class Options
@@ -56,7 +60,7 @@ class Options
 	// methods inherited from HashMap<String, String>
 	// String& operator [] (const String&) throw();
 
-	const String& operator [] (const String&) const	throw(IllegalKey);
+	const String& operator [] (const String&) const	throw(StringHashMapString::IllegalKey);
 %MethodCode
   sipRes = new String(sipCpp->operator [] (*a0));
 %End

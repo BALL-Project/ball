@@ -11,6 +11,7 @@ class FragmentDB
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 	using namespace BALL;
 	typedef UnaryProcessor<Fragment> FragmentProcessor;
+	typedef StringHashMap<String> StringHashMapString;
 %End
   public:
   enum FragmentTypes 
@@ -44,7 +45,7 @@ class FragmentDB
   Molecule* getMoleculeCopy(const String&) const;
   Residue* getResidueCopy(const String&) const;
 	const StringHashMap<String>& getNamingStandard(const String&) const
-		throw(IllegalKey);
+		throw(StringHashMapString::IllegalKey);
 	vector<String> getAvailableNamingStandards() const;
   const String& getDefaultNamingStandard() const;
 	// BAUSTELLE
