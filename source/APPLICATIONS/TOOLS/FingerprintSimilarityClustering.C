@@ -37,29 +37,30 @@ typedef map<unsigned int, map<unsigned int, vector<unsigned int> > >::reverse_it
 typedef map<unsigned int, vector<pair<unsigned int, float> > > NNData;
 
 
-
-// Format of fingerprint: 1 = Comma separated list of integer features, 2 = Fixed sized binay string
+// Fingerprint format
+// 1: Comma separated list of integer features
+// 2: Fixed-length binay string
 unsigned int fprint_format;
 
-// Format of fingerprint: 1 = Comma separated list of integer features, 2 = Fixed sized binay string
+// Fingerprint length
 unsigned int fixed_size_len;
 
-// Limit of molecules to be read
+// Limit number of molecules to read
 unsigned int limit;
 
-// Column number which contains the fingerprint
+// Column number of the fingerprint
 int fp_col;
 
-// Column number which contains a identifier of the compounds
+// Column number of a ompound identifier
 int id_col;
 
-// True if input library file is in SD format
+// True iff input library file is in SD format
 bool is_lib_sdf;
 
-// SDF tag which contains the fingerprint
+// SDF tag of the fingerprint
 String fp_tag;
 
-// SDF tag which contains a identifier of the compounds
+// SDF tag of a ompound identifier
 String id_tag;
 
 
@@ -771,7 +772,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	vector<unsigned int> cl_indices;
 	map<unsigned int, vector<unsigned int> > cluster_selection;
 
-	// Connected components that will be clustered must subseqeuntly be removed from the main ClusterMap clmap.
+	// Connected components that will be clustered must subsequently be removed from the main ClusterMap (clmap).
 	// The corresponding keys are stored here:
 	map<unsigned int, vector<unsigned int> > remove;
 
@@ -783,6 +784,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 			{
 				vector<unsigned int>& tmp_cl = cl_iter->second;
 
+				cl_indices.clear();
 				for (unsigned int i=0; i!=tmp_cl.size(); ++i)
 				{
 					cl_indices.push_back(m_indices[tmp_cl[i]]);
@@ -797,6 +799,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 				{
 					unsigned int idmin = UINT_MAX;
 
+					tmp_cl.clear();
 					for (unsigned int i=0; i!=sel_iter->second.size(); ++i)
 					{
 						tmp_cl.push_back(cl_indices[sel_iter->second[i]]);
@@ -810,20 +813,17 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 					// Insert clusters into tmp_map
 					map<unsigned int, vector<unsigned int> >& sizemap = tmp_clmap[tmp_cl.size()];
 					sizemap[idmin] = tmp_cl;
-
-					tmp_cl.clear();
-
-					// To be removed ...
-					vector<unsigned int>& tmp = remove[size_iter->first];
-					tmp.push_back(cl_iter->first);
 				}
 
-				cl_indices.clear();
+				// Store just processed connected component as remove candidate from main clmap
+				vector<unsigned int>& tmp = remove[size_iter->first];
+				tmp.push_back(cl_iter->first);
 			}
 
 			nn.erase(cl_iter->first);
 		}
 	}
+
 
 	// Update main ClusterMap clmap in two steps:
 	// Step 1: remove connected components that were clustered
@@ -898,9 +898,9 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	unsigned int cluster_id = 1;
 	for (ClusterMap::iterator size_iter=clmap.begin(); size_iter!=clmap.end(); ++size_iter)
 	{
-		//typedef map<unsigned int, map<unsigned int, vector<unsigned int> > > ClusterMap;
 		for (map<unsigned int, vector<unsigned int> >::iterator cl_iter=size_iter->second.begin(); cl_iter!=size_iter->second.end(); ++cl_iter)
 		{
+
 			if (cl_iter->second.size() == 1)
 			{
 				// Singleton cluster
@@ -958,7 +958,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 		GenericMolFile* tmp_out = MolFileFactory::open("FFC_3_final_clustering.sdf", File::MODE_OUT);
 		SDFile* out_sdf = dynamic_cast<SDFile*>(tmp_out);
 		
-		String tmp_nn, identifier;
+		String identifier;
 		String cluster_tag = fp_tag + "_ClusterID";
 		String medoid_tag = fp_tag + "_ClusterMedoid";
 		String avg_sim_tag = fp_tag + "_AverageSim";
