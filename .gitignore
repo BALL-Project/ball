@@ -9,6 +9,9 @@ moc_*.C
 *.sw?
 *.orig
 *.pyc
+*.aux
+*.bbl
+*.blg
 .Dependencies
 lib/*
 build/*
