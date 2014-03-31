@@ -998,7 +998,7 @@ namespace BALL
 
 		///
 		BALL_EXPORT
-		friend std::istream& getline(std::istream& s,  String& string,  char delimiter = '\n');
+		friend std::istream& getline(std::istream& s,  String& string,  char delimiter);
 
 		//@}
 
