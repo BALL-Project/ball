@@ -76,5 +76,7 @@ void ExpressionParser_delBuffer()
 
 void ExpressionParser_destroy()
 {
+#ifdef BALL_HAS_YYLEX_DESTROY
 	ExpressionParserlex_destroy();
+#endif
 }

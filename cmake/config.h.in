@@ -242,6 +242,9 @@
 // Define the argument type for xdr_u_hyper (64 bit)
 #cmakedefine BALL_XDR_UINT64_TYPE @BALL_XDR_UINT64_TYPE@
 
+// flex
+#cmakedefine BALL_HAS_YYLEX_DESTROY
+
 // boost
 
 // defined if we have boost::system support

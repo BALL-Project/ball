@@ -81,5 +81,7 @@ END_PROPERTY   "]"
 
 void GAFFCESParser_destroy()
 {
+#ifdef BALL_HAS_YYLEX_DESTROY
 	GAFFCESParserlex_destroy();
+#endif
 }

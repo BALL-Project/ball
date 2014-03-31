@@ -96,5 +96,7 @@ void SmilesParser_delBuffer()
 
 void SmilesParser_destroy()
 {
+#ifdef BALL_HAS_YYLEX_DESTROY
 	SmilesParserlex_destroy();
+#endif
 }

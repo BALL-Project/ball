@@ -278,5 +278,7 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 void CIFParser_destroy()
 {
+#ifdef BALL_HAS_YYLEX_DESTROY
 	CIFParserlex_destroy();
+#endif
 }

@@ -145,5 +145,7 @@ void SmartsParser_delBuffer()
 
 void SmartsParser_destroy()
 {
+#ifdef BALL_HAS_YYLEX_DESTROY
 	SmartsParserlex_destroy();
+#endif
 }

@@ -120,6 +120,18 @@ FIND_PACKAGE(FLEX)
 IF (NOT FLEX_FOUND)
 	MESSAGE(SEND_ERROR "Could not find flex scanner generator!")
 ENDIF()
+## Figure out if the used flex version supports ...lex_destroy()
+MESSAGE(STATUS "Checking for yylex_destroy support in flex")
+STRING(REGEX REPLACE "^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$" "\\1;\\2;\\3"
+	FLEX_VERSION_NUMERIC ${FLEX_VERSION})
+LIST(GET FLEX_VERSION_NUMERIC 2 FLEX_PATCH_LEVEL)
+IF (FLEX_PATCH_LEVEL GREATER 8)
+	MESSAGE(STATUS "Checking for yylex_destroy support in flex - found")
+	SET(BALL_HAS_YYLEX_DESTROY TRUE)
+ELSE()
+	MESSAGE(STATUS "Checking for yylex_destroy support in flex - Not found")
+	SET(BALL_HAS_YYLEX_DESTROY FALSE)
+ENDIF()
 
 ## Third-party libraries ##
 
