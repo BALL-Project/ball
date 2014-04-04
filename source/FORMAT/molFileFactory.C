@@ -61,7 +61,7 @@ namespace BALL
       try
       {
         string s;
-        ok = std::getline(in,s);
+        ok = bool(std::getline(in,s));
       }
       catch (const boost::iostreams::gzip_error& e)
       {

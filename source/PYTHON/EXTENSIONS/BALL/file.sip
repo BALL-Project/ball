@@ -22,14 +22,14 @@ class File
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
 
-/*
-	const File::OpenMode BALL_File__IN = File::MODE_IN;
-	const File::OpenMode BALL_File__OUT = File::MODE_OUT;
-	const File::OpenMode BALL_File__APP = File::MODE_APP;
-	const File::OpenMode BALL_File__BINARY = File::MODE_BINARY;
-	const File::OpenMode BALL_File__ATE = File::MODE_ATE;
-	const File::OpenMode BALL_File__TRUNC = File::MODE_TRUNC;
-*/
+	/*
+	const File::OpenMode MODE_IN     = std::ios::in;
+	const File::OpenMode MODE_OUT    = std::ios::out;
+	const File::OpenMode MODE_APP    = std::ios::app;
+	const File::OpenMode MODE_BINARY = std::ios::binary;
+	const File::OpenMode MODE_ATE    = std::ios::ate;
+	const File::OpenMode MODE_TRUNC  = std::ios::trunc;
+	*/
 
 %End
   public:
@@ -44,7 +44,8 @@ class File
 	};
 
 
-	enum {
+	/*
+	unsigned enum {
 		MODE_IN,
 		MODE_OUT,
 		MODE_APP,
@@ -52,6 +53,7 @@ class File
 		MODE_ATE,
 		MODE_TRUNC
 	};
+	*/
 
 
   File();
