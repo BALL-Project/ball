@@ -33,7 +33,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-        const float RTfactRenderer::vectorDifferenceTolerance_= 0.0f;
+		const float RTfactRenderer::vectorDifferenceTolerance_= 0.0f;
 
 		bool RTfactRenderer::hasFPScounter()
 		{

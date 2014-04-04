@@ -242,7 +242,7 @@ namespace BALL
 
 				renderers_[i]->wait(1000);
 				//	NOTE: This is problematic, since we have some smart pointers
-				//	delete renderers_[i].renderer;
+				//delete(renderers_[i]->renderer);
 				delete(renderers_[i]->target);
 			}
 
@@ -254,7 +254,7 @@ namespace BALL
 #ifndef BALL_HAS_RTFACT
 			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(gl_renderer_, main_display_, this, stage_)));
 #else
-			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(&*rt_renderer_, main_display_, this, stage_)));
+			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(rt_renderer_, main_display_, this, stage_)));
 #endif
 		}
 

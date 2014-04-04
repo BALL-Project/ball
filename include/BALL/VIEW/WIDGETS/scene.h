@@ -909,7 +909,7 @@ namespace BALL
 				GLRenderer* gl_renderer_;
 
 #ifdef BALL_HAS_RTFACT
-				RaytracingRendererPtr rt_renderer_;
+				RaytracingRenderer* rt_renderer_;
 				RaytracingWindowPtr rt_window_;
 #endif
 
