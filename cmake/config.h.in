@@ -211,6 +211,19 @@
 // Defines whether the c++ std lib implementation supports rvalue references in the std::string class
 #cmakedefine BALL_STD_STRING_HAS_RVALUE_REFERENCES
 
+// Defines whether the compiler supports c++11-style noexcept statements
+#cmakedefine BALL_HAS_NOEXCEPT
+
+// for convencience
+#ifdef BALL_HAS_NOEXCEPT
+# define BALL_NOEXCEPT noexcept
+#else
+# define BALL_NOEXCEPT
+#endif
+
+// Defines whether the compiler supports c++11-style const iterators in string
+#cmakedefine BALL_HAS_STD_STRING_CONST_ITERATORS
+
 // Defines whether we can overload functions with LongIndex and LongSize safely
 #cmakedefine BALL_ALLOW_LONG64_TYPE_OVERLOADS
 

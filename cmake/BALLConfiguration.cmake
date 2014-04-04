@@ -221,6 +221,12 @@ INCLUDE(cmake/BALLConfigExternTemplates.cmake)
 ## Check for rvalue reference
 INCLUDE(cmake/BALLConfigRValueReferences.cmake)
 
+## Check for the presence of C++11 noexcept
+INCLUDE(cmake/BALLConfigNoexcept.cmake)
+
+## Check for the presence of C++11-style const iterators in string
+INCLUDE(cmake/BALLConfigStdStringConstIterators.cmake)
+
 ## Test whether vsnprintf is available
 CHECK_FUNCTION_EXISTS(vsnprintf BALL_HAVE_VSNPRINTF)
 
