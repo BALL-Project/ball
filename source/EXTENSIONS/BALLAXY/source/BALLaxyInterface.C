@@ -162,7 +162,7 @@ namespace BALL
 			// also, find the input area
 			QWebElement text_field = galaxy_main_frame->findFirstElement("textarea");
 
-			std::ifstream input_stream(tmp_filename);
+			std::ifstream input_stream(tmp_filename.c_str());
 			std::string content((std::istreambuf_iterator<char>(input_stream)), std::istreambuf_iterator<char>());
 
 			text_field.setPlainText(content.c_str());
