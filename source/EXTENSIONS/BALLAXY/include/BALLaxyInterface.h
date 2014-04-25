@@ -14,7 +14,7 @@ namespace BALL
 
 	namespace VIEW
 	{
-		class BALL_VIEW_EXPORT BALLaxyInterfaceAction : public QObject
+		class BALLaxyInterfaceAction : public QObject
 		{
 			Q_OBJECT
 
@@ -32,7 +32,7 @@ namespace BALL
 				void finishedExecution();
 		};
 
-		class BALL_VIEW_EXPORT BALLaxyInterface : public HTMLView, public Embeddable
+		class BALLaxyInterface : public HTMLView, public Embeddable
 		{
 			Q_OBJECT
 
