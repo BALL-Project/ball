@@ -25,8 +25,8 @@ namespace BALL
 		}
 
 		// make protected members public for testing
-		PDBFile::writeRawRecord_;
-		PDBFile::writeRecord_;
+		using PDBFile::writeRawRecord_;
+		using PDBFile::writeRecord_;
 	};
 	
 
