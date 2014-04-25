@@ -199,6 +199,9 @@
 // This is useful for e.g. an efficient HashGrid implementation
 #cmakedefine BALL_HAS_GNU_SLIST
 
+// Defines whether the compiler supports c++0x-style initializer lists
+#cmakedefine BALL_HAS_INITIALIZER_LISTS
+
 // Defines whether the extern keyword for templates is supported by the compiler.
 // We can use this to speed up compilation and to reduce some warnings in under
 // MSVC.
@@ -223,6 +226,16 @@
 
 // Defines whether the compiler supports c++11-style const iterators in string
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATORS
+
+// Defines whether the c++ std lib implementation supports const_iterators in insert, replace, ...
+#cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
+
+// Defines whether the c++ std lib implementation supports shrink_to_fit in string
+#cmakedefine BALL_HAS_STD_STRING_SHRINK_TO_FIT
+
+// Defines whether the c++ std lib implementation supports front/back in string
+#cmakedefine BALL_HAS_STD_STRING_FRONT_BACK
+
 
 // Defines whether we can overload functions with LongIndex and LongSize safely
 #cmakedefine BALL_ALLOW_LONG64_TYPE_OVERLOADS

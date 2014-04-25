@@ -154,7 +154,7 @@ namespace BALL
 	}
 
 	String::String(const char* char_ptr, Index from, Size len)
- 	 : string()
+ 	 : str_()
 	{
  	 validateCharPtrRange_(from, len, char_ptr);
  	 if (len > 0)
@@ -180,7 +180,7 @@ namespace BALL
 	}
  
 	String::String(Size buffer_size, const char* format, ... )
-		: string() 
+		: str_() 
 	{
 		if (buffer_size <= 0)
 		{
@@ -213,7 +213,7 @@ namespace BALL
 #else
 	String::String(std::strstream& s)
 #endif
-		: string("")
+		: str_("")
 	{
 		s >> (*this);
 	}
@@ -243,13 +243,23 @@ namespace BALL
 
 	#undef BALL_STRING_DEFINE_CONSTRUCTOR_METHOD
 
+	String::operator string&()
+	{
+		return str_;
+	}
+
+	String::operator string const&() const
+	{
+		return str_;
+	}
+
 	String::~String()
 	{
 	}
 
 	void String::set(const String& s)
 	{
-		std::string::operator = (s);
+		str_ = s;
 	}
 
 	void String::set(const String& s, Index from, Size len)
@@ -1128,7 +1138,7 @@ namespace BALL
 		return result;
 	}
 
-	int String::compare(const String& s, Index from) const
+	int String::compare(const String& s, Index from) const 
 	{
 		validateIndex_(from);
 
@@ -1289,6 +1299,7 @@ namespace BALL
 		return result;
 	}
 
+	/*
 	istream& getline(istream& s, String& str, char delimiter)
 	{
 		char c;
@@ -1306,6 +1317,7 @@ namespace BALL
 
 		return s;
 	}
+	*/
 
 	void String::dump(ostream &s, Size depth) const
 	{
@@ -1803,8 +1815,9 @@ String String::decodeBase64()
   return out;
 }
 
+} // namespace BALL
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
 #	endif
 
-} // namespace BALL

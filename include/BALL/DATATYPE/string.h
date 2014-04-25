@@ -59,7 +59,6 @@ namespace BALL
 			\ingroup String
 	*/
  	class BALL_EXPORT String
-		: public string
 	{
 		///
 		friend class Substring;
@@ -98,6 +97,10 @@ namespace BALL
 				requiring indices.
 		*/
 		static const Size EndPos;
+
+		/** Constant with a value of the greatest posible value for an element of type size_t.
+		 */
+		static const size_t npos = -1;
 
 		//@}
 		/**	@name	Predefined character classes
@@ -256,14 +259,18 @@ namespace BALL
 		/// Construct a String from a double value
 		String(double d);
 
+		/// Cast the String to a std::string reference
+		operator string&();
+
+		/// Cast the String to a std::string reference, const version
+		operator string const&() const;
+
 		/// Destructor
 		virtual ~String();
 
 		/// Clear the string (reset to the empty string)
 		void destroy();
 
-		/// Clears the string (same as destroy)
-		virtual void clear();
 		//@}
 
 		/**	@name	Assignment methods 
@@ -852,23 +859,35 @@ namespace BALL
 		 */
 		int compare(char c, Index from = 0) const;
 
-		///
-		bool operator == (const String& string) const;
+		/** Equality operator.
+		 */ 
+		BALL_EXPORT
+		friend bool operator == (const String& s1, const String& s2);
 
-		///
-		bool operator != (const String& string) const;
+		/** Inequality operator.
+		 */ 
+		BALL_EXPORT
+		friend bool operator != (const String& s1, const String& s2);
 
-		///
-		bool operator < (const String& string) const;
+		/** Less than comparison
+		 */ 
+		BALL_EXPORT
+		friend bool operator < (const String& s1, const String& s2);
 
-		///
-		bool operator <= (const String& string) const;
+		/** Less than or equal comparison
+		 */ 
+		BALL_EXPORT
+		friend bool operator <= (const String& s1, const String& s2);
 
-		///
-		bool operator >= (const String& string) const;
+		/** Greater than comparison
+		 */ 
+		BALL_EXPORT
+		friend bool operator > (const String& s1, const String& s2);
 
-		///
-		bool operator > (const String& string) const;
+		/** Greater than or equal comparison
+		 */ 
+		BALL_EXPORT
+		friend bool operator >= (const String& s1, const String& s2);
 
 		/** Equality operator.
 		 *	@exception Exception::NullPointer if <tt>char_ptr == NULL</tt>
@@ -997,13 +1016,363 @@ namespace BALL
 		std::istream& getline(std::istream& s = std::cin, char delimiter = '\n');
 
 		///
-		BALL_EXPORT
-		friend std::istream& getline(std::istream& s,  String& string,  char delimiter);
+//		BALL_EXPORT
+//		friend std::istream& getline(std::istream& s,  String& string,  char delimiter);
 
 		//@}
 
 		/// Constant empty string.
 		static const String EMPTY;
+
+		/**@ std::string compatibility layer
+		 */
+	  //@{
+
+		/** name typedefs
+		 */
+		//@{
+		typedef string::value_type             valuetype;
+		typedef string::traits_type            traits_type;
+		typedef string::allocator_type         allocator_type;
+		typedef string::reference              reference;
+		typedef string::const_reference        const_reference;
+		typedef string::pointer                pointer;
+		typedef string::const_pointer          const_pointer;
+		typedef string::iterator               iterator;
+		typedef string::const_iterator         const_iterator;
+		typedef string::reverse_iterator       reverse_iterator;
+		typedef string::const_reverse_iterator const_reverse_iterator;
+		typedef string::difference_type        difference_type;
+		typedef string::size_type              size_type;
+		//@}
+
+		/** @name Iterators
+		 */
+		//@{
+
+		///
+		iterator begin() BALL_NOEXCEPT;
+		///
+		const_iterator begin() const BALL_NOEXCEPT;
+		///
+		iterator end() BALL_NOEXCEPT;
+		///
+		const_iterator end() const BALL_NOEXCEPT;
+		///
+		reverse_iterator rbegin() BALL_NOEXCEPT;
+		///
+		const_reverse_iterator rbegin() const BALL_NOEXCEPT;
+		///
+		reverse_iterator rend() BALL_NOEXCEPT;
+		///
+		const_reverse_iterator rend() const BALL_NOEXCEPT;
+
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATORS
+		///
+		const_iterator cbegin() const BALL_NOEXCEPT;
+		///
+		const_iterator cend() const BALL_NOEXCEPT;
+		///
+		const_reverse_iterator crbegin() const BALL_NOEXCEPT;
+		///
+		const_reverse_iterator crend() const BALL_NOEXCEPT;
+#endif
+
+		//@}
+
+		/** @name Capacity
+		 */
+		//@{
+
+		///
+		size_t size() const BALL_NOEXCEPT;
+		///
+		size_t length() const BALL_NOEXCEPT;
+		///
+		size_t max_size() const BALL_NOEXCEPT;
+		///
+		void resize(size_t n);
+		///
+		void resize(size_t n, char c);
+		///
+		size_t capacity() const BALL_NOEXCEPT;
+		///
+		void reserve(size_t n = 0);
+		///
+		void clear() BALL_NOEXCEPT;
+		///
+		bool empty() const BALL_NOEXCEPT;
+
+#ifdef BALL_HAS_STD_STRING_SHRINK_TO_FIT
+		///
+		void shrink_to_fit();
+#endif
+		//@}
+
+		/** @name Element Access
+		 */
+		//@{
+
+		///
+		char& operator[] (size_t pos);
+		///
+		const char& operator[] (size_t pos) const;
+		///
+		char& at(size_t pos);
+		///
+		const char& at(size_t pos) const;
+
+#ifdef BALL_HAS_STD_STRING_FRONT_BACK
+		///
+		char& front();
+		///
+		const char& front() const;
+		///
+		char& back();
+		///
+		const char& back() const;
+#endif
+
+		//@}
+
+		/** @name Modifiers
+		 */
+		//@{
+		///
+		String& operator += (const String& str);
+		///
+		String& operator += (const string& str);
+		///
+		String& operator += (const char* s);
+		///
+		String& operator += (char c);
+#ifdef BALL_HAS_INITIALIZER_LISTS
+		///
+		String& operator += (std::initializer_list<char> il);
+#endif
+		///
+		String& append(const String& str);
+		///
+		String& append(const string& str);
+		///
+		String& append(const string& str, size_t subpos, size_t sublen);
+		///
+		String& append(const char* s);
+		///
+		String& append(const char* s, size_t n);
+		///
+		String& append(size_t n, char c);
+		///
+		template <class InputIterator>
+		String& append(InputIterator first, InputIterator last);
+#ifdef BALL_HAS_INITIALIZER_LISTS
+		///
+		String& append(std::initializer_list<char> li);
+#endif
+		///
+		void push_back(char c);
+		///
+		String& assign(const String& str);
+		///
+		String& assign(const string& str);
+		///
+		String& assign(const string& str, size_t subpos, size_t sublen);
+		///
+		String& assign(const char* s);
+		///
+		String& assign(const char* s, size_t n);
+		///
+		String& assign(size_t n, char c);
+		///
+		template <class InputIterator>
+		String& assign(InputIterator first, InputIterator last);
+#ifdef BALL_HAS_INITIALIZER_LISTS
+		///
+		String& assign(std::initializer_list<char> li);
+#endif
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
+		///
+		String& assign(string&& str) BALL_NOEXCEPT;
+#endif
+
+		///
+		String& insert(size_t pos, const string& str);
+		///
+		String& insert(size_t pos, const string& str, size_t subpos, size_t sublen);
+		///
+		String& insert(size_t pos, const char* s);
+		///
+		String& insert(size_t pos, const char* s, size_t n);
+		///
+		String& insert(size_t pos, size_t n, char c);
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
+		///
+		iterator insert(const_iterator p, size_t n, char c);
+		///
+		iterator insert(const_iterator p, char c);
+#else
+		///
+		void insert(iterator p, size_t n, char c);
+		///
+		iterator insert(iterator p, char c);
+#endif
+		///
+		template <class InputIterator>
+		iterator insert(iterator p, InputIterator first, InputIterator last);
+#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS)
+		///
+		String& insert(const_iterator p, std::initializer_list<char> li);
+#endif
+
+		///
+		String& erase(size_t pos = 0, size_t len = npos);
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
+		///
+		iterator erase(const_iterator p);
+		///
+		iterator erase(const_iterator first, const_iterator last);
+#else
+		///
+		iterator erase(iterator p);
+		///
+		iterator erase(iterator first, iterator last);
+#endif
+
+		///
+		String& replace(size_t pos, size_t len, const string& str);
+		///
+		String& replace(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen);
+		///
+		String& replace(size_t pos, size_t len, const char* s);
+		///
+		String& replace(size_t pos, size_t len, const char* s, size_t n);
+		///
+		String& replace(size_t pos, size_t len, size_t n, char c);
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
+		///
+		String& replace(const_iterator i1, const_iterator i2, const string& str);
+		///
+		String& replace(const_iterator i1, const_iterator i2, const char* s);
+		///
+		String& replace(const_iterator i1, const_iterator i2, const char* s, size_t n);
+		///
+		String& replace(const_iterator i1, const_iterator i2, size_t n, char c);
+		///
+		template <class InputIterator>
+		String& replace(const_iterator i1, const_iterator i2, InputIterator first, InputIterator last);
+#else
+		///
+		String& replace(iterator i1, iterator i2, const string& str);
+		///
+		String& replace(iterator i1, iterator i2, const char* s);
+		///
+		String& replace(iterator i1, iterator i2, const char* s, size_t n);
+		///
+		String& replace(iterator i1, iterator i2, size_t n, char c);
+		///
+		template <class InputIterator>
+		String& replace(iterator i1, iterator i2, InputIterator first, InputIterator last);
+#endif
+#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS)
+		///
+		String& replace(const_iterator i1, const_iterator i2, std::initializer_list<char> li);
+#endif
+
+		///
+		void swap(string& str);
+
+#ifdef BALL_HAS_STD_STRING_FRONT_BACK
+		///
+		void pop_back();
+#endif
+		//@}
+
+		/** @name String Operations
+		 */
+		//@{
+
+		///
+		const char* c_str() const BALL_NOEXCEPT;
+		///
+		const char* data() const BALL_NOEXCEPT;
+		///
+		allocator_type get_allocator() const BALL_NOEXCEPT;
+		///
+		size_t copy(char* s, size_t len, size_t pos = 0) const;
+
+		///
+		size_t find(const string& str, size_t pos = 0) const BALL_NOEXCEPT;
+		///
+		size_t find(const char* s, size_t pos = 0) const;
+		///
+		size_t find(const char* s, size_t pos, size_t n) const;
+		///
+		size_t find(char c, size_t pos = 0) const BALL_NOEXCEPT;
+
+		///
+		size_t rfind(const string& str, size_t pos = npos) const BALL_NOEXCEPT;
+		///
+		size_t rfind(const char* s, size_t pos = npos) const;
+		///
+		size_t rfind(const char* s, size_t pos, size_t n) const;
+		///
+		size_t rfind(char c, size_t pos = npos) const BALL_NOEXCEPT;
+		
+		///
+		size_t find_first_of(const string& str, size_t pos = 0) const BALL_NOEXCEPT;
+		///
+		size_t find_first_of(const char* s, size_t pos = 0) const;
+		///
+		size_t find_first_of(const char* s, size_t pos, size_t n) const;
+		///
+		size_t find_first_of(char c, size_t pos = 0) const BALL_NOEXCEPT;
+
+		///
+		size_t find_last_of(const string& str, size_t pos = npos) const BALL_NOEXCEPT;
+		///
+		size_t find_last_of(const char* s, size_t pos = npos) const;
+		///
+		size_t find_last_of(const char* s, size_t pos, size_t n) const;
+		///
+		size_t find_last_of(char c, size_t pos = npos) const BALL_NOEXCEPT;
+
+		///
+		size_t find_first_not_of(const string& str, size_t pos = 0) const BALL_NOEXCEPT;
+		///
+		size_t find_first_not_of(const char* s, size_t pos = 0) const;
+		///
+		size_t find_first_not_of(const char* s, size_t pos, size_t n) const;
+		///
+		size_t find_first_not_of(char c, size_t pos = 0) const BALL_NOEXCEPT;
+
+		///
+		size_t find_last_not_of(const string& str, size_t pos = npos) const BALL_NOEXCEPT;
+		///
+		size_t find_last_not_of(const char* s, size_t pos = npos) const;
+		///
+		size_t find_last_not_of(const char* s, size_t pos, size_t n) const;
+		///
+		size_t find_last_not_of(char c, size_t pos = npos) const BALL_NOEXCEPT;
+
+		///
+		string substr(size_t pos = 0, size_t len = npos) const;
+
+		///
+		int compare(const string& str) const BALL_NOEXCEPT;
+		///
+		int compare(size_t pos, size_t len, const string& str) const;
+		///
+		int compare(size_t pos, size_t len, const string& str, size_t subpos, size_t sublen) const;
+		///
+		//int compare(const char* s) const;
+		///
+		int compare(size_t pos, size_t len, const char* s) const;
+		///
+		int compare(size_t pos, size_t len, const char* s, size_t n) const;
+
+		//@}
+		
+	  //@}
 
 		protected:
 	
@@ -1022,6 +1391,9 @@ namespace BALL
 		static void valudateCharPtrIndex_(Index& index);
 		
 		private:
+
+		/// The encapsulated std::string
+		string str_;
 
 		static int compareAscendingly_(const char* a,  const char* b);
 
@@ -1125,11 +1497,17 @@ namespace BALL
 		*/
 		//@{
 
-		/** Convert a substring to a string.
+		/** Convert a substring to a String.
 	   *	Return a copy of the substring's contents.
 		 *  @exception Substring::UnboundSubstring if this Substring is not correctly bound
 		 */
 		operator String() const;
+
+		/** Convert a substring to a std::string.
+	   *	Return a copy of the substring's contents.
+		 *  @exception Substring::UnboundSubstring if this Substring is not correctly bound
+		 */
+		//explicit operator string() const;
 
 		/** Convert a substring to a string.
 		 *	Return a copy of the substring's contents.
@@ -1380,11 +1758,141 @@ namespace BALL
 		//_@}
 	};
 	
+	// non-member functions of String
+
+	/** Equality operator.
+	 */ 
+	BALL_EXPORT
+	bool operator == (const String& s1, const String& s2);
+
+	/** Inequality operator.
+	 */ 
+	BALL_EXPORT
+	bool operator != (const String& s1, const String& s2);
+
+	/** Less than comparison
+	 */ 
+	BALL_EXPORT
+	bool operator < (const String& s1, const String& s2);
+
+	/** Less than or equal comparison
+	 */ 
+	BALL_EXPORT
+	bool operator <= (const String& s1, const String& s2);
+
+	/** Greater than comparison
+	 */ 
+	BALL_EXPORT
+	bool operator > (const String& s1, const String& s2);
+
+	/** Greater than or equal comparison
+	 */ 
+	BALL_EXPORT
+	bool operator >= (const String& s1, const String& s2);
+
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (const String& s1, const string& s2);
+		
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (const string& s1, const String& s2);
+
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (const String& s1, const String& s2);
+		
+	/// Concatenates a string and a C type string
+	BALL_EXPORT
+	String operator + (const String& s1, const char* char_ptr);
+
+	/// Concatenates a C type string and a string
+	BALL_EXPORT
+	String operator + (const char* char_ptr, const String& s);
+
+	/// Concatenates a string and a character
+	BALL_EXPORT
+	String operator + (const String& s, char c);
+		
+	/// Concatenates a character and a string
+	BALL_EXPORT
+	String operator + (char c, const String& s);
+
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (String&& s1, const string& s2);
+	
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (String&& s1, const String& s2);
+	
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (String&& s1, String&& s2);
+
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (const String& s1, string&& s2);
+
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (string&& s1, const String& s2);
+
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (const string& s1, String&& s2);
+
+	///	Concatenates two strings
+	BALL_EXPORT
+	String operator + (const String& s1, String&& s2);
+
+	/// Concatenates a string and a C type string
+	BALL_EXPORT
+	String operator + (String&& s1, const char* char_ptr);
+
+	/// Concatenates a C type string and a string
+	BALL_EXPORT
+	String operator + (const char* char_ptr, String&& s);
+
+	/// Concatenates a string and a character
+	BALL_EXPORT
+	String operator + (String&& s, char c);
+		
+	/// Concatenates a character and a string
+	BALL_EXPORT
+	String operator + (char c, String&& s);
+#endif
+} // namespace BALL
+
+namespace std
+{
+	// Non-member functions for string
+
+	///
+	istream& operator>> (istream& is, BALL::String& str);
+
+	///
+	ostream& operator<< (ostream& os, BALL::String const& str);
+
+	///
+	istream& getline(istream& is, BALL::String& str, char delim);
+	///
+	istream& getline(istream& is, BALL::String& str);
+
+
+#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
+	///
+	istream& getline(istream& is, BALL::String&& str, char delim);
+	///
+	istream& getline(istream& is, BALL::String&& str);
+#endif
+}
+
 	//@}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
 #	endif
-} // namespace BALL
 
 #endif // BALL_DATATYPE_STRING_H

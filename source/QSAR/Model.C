@@ -57,7 +57,7 @@ namespace BALL
 
 		const string* Model::getType()
 		{
-			return &type_;
+			return &((string&)type_);
 		}
 
 

@@ -221,12 +221,6 @@ class String
   int compare(const char*, int from = 0) const;
   int compare(const char*, int, int) const;
   int compare(char, int from = 0) const;
-  bool operator == (const String&) const;
-  bool operator != (const String&) const;
-  bool operator < (const String&) const;
-  bool operator <= (const String&) const;
-  bool operator >= (const String&) const;
-  bool operator > (const String&) const;
   // friend bool operator == (const char* char_ptr, const String&);
   // friend bool operator != (const char* char_ptr, const String&);
   // friend bool operator < (const char* char_ptr, const String&);
@@ -314,3 +308,10 @@ SIP_PYOBJECT __repr__();
   return 0;
 %End
 };
+
+bool operator == (const String& s1, const String& s2);
+bool operator != (const String& s1, const String& s2);
+bool operator <  (const String& s1, const String& s2);
+bool operator <= (const String& s1, const String& s2);
+bool operator >= (const String& s1, const String& s2);
+bool operator >  (const String& s1, const String& s2);
