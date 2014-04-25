@@ -29,7 +29,7 @@ namespace BALL
 	 *  \ingroup Format
 	 *
 	 */
-	class HMOFile 
+	class BALL_EXPORT HMOFile 
 		: public LineBasedFile
 	{
 		public:
