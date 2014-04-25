@@ -2282,12 +2282,12 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		return result;
 	}
 
-	bool NMRStarFile::operator == (const NMRStarFile& f)  
+	bool NMRStarFile::operator == (const NMRStarFile& f) const 
 	{
 		return File::operator == (f);
 	}
 
-	bool NMRStarFile::operator != (const NMRStarFile& f)  
+	bool NMRStarFile::operator != (const NMRStarFile& f) const 
 	{
 		return !(*this == f);
 	}

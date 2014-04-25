@@ -867,12 +867,12 @@ namespace BALL
 			/** Equality operator.
 			    Test if both instances point to the same file.
 			 */
-			bool operator == (const NMRStarFile& f);
+			bool operator == (const NMRStarFile& f) const;
 
 			/** Inequality operator
 			    Test if both instances point to different files.
 			 */
-			bool operator != (const NMRStarFile& f);
+			bool operator != (const NMRStarFile& f) const;
 
 			/** Clear the object.
 			 */

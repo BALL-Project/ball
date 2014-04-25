@@ -382,8 +382,8 @@ class NMRStarFile
 			bool hasCshifts();
 			bool hasNshifts();
 
-			bool operator == (const NMRStarFile& );
-			bool operator != (const NMRStarFile& );
+			bool operator == (const NMRStarFile& ) const;
+			bool operator != (const NMRStarFile& ) const;
 	
 			void clear(); 
 
