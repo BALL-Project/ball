@@ -593,7 +593,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	limit = parpars.get("l").toInt();
 	if (limit == 0)
 	{
-		limit = Limits<unsigned int>::max();
+		limit = std::numeric_limits<unsigned int>::max();
 	}
 	
 	unsigned int n_threads = 1;
