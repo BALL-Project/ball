@@ -1,5 +1,7 @@
 #include <BALL/STRUCTURE/logP.h>
 
+using namespace std;
+
 namespace BALL
 {
 	LogP::LogP()
