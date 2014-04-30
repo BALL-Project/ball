@@ -1538,7 +1538,7 @@ void String::swap(string& str)
 	str_.swap(str);
 }
 
-#ifdef BALL_HAS_STD_STRING_FRONT_BACK
+#ifdef BALL_HAS_STD_STRING_POP_BACK
 BALL_INLINE
 void String::pop_back()
 {
