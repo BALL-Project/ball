@@ -1222,8 +1222,6 @@ namespace BALL
 				Bond& bond = *bit;
 				if (bond.getType() == Bond::TYPE__HYDROGEN) hbonds++; 
 			}
-
-			hbonds /= 2;
 			
 			setStatusbarText(String(tr("Calculated")) + " " + String(hbonds) + (String)tr(" H-bonds"), true);
 		}
