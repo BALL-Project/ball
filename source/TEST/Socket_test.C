@@ -60,6 +60,7 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 	{
 		sleepFor(100);
 		port = server.getPort();
+		++retries;
 	}
 
 	TEST_NOT_EQUAL(port, 0);
@@ -94,6 +95,7 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 	{
 		sleepFor(100);
 		port = server.getPort();
+		++retries;
 	}
 
 	TEST_NOT_EQUAL(port, 0);
