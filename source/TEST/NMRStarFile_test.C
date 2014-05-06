@@ -356,7 +356,7 @@ CHECK(BALLToBMRBMapper)
 	NMRStarFile::BALLToBMRBMapper mapper2(chain2, nmr_file2, "dockerin");
 	
 	TEST_EQUAL(*mapper2.getChain() == chain2, true)	
-	TEST_EQUAL(*mapper.getNMRStarFile() == nmr_file2, true)
+	TEST_EQUAL(*mapper2.getNMRStarFile() == nmr_file2, true)
 	TEST_EQUAL(mapper2.getNMRAtomDataSet() != NULL, true)
 
 	mapper2.setChain(chain);
