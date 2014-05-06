@@ -181,4 +181,5 @@ ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
 	## Clang should use c++-11 - mode 
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+	SET(CF_BALL_ADDCXX_FLAGS "-std=c++11" ${CF_BALL_ADDCXX_FLAGS})
 ENDIF()
