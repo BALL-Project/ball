@@ -757,7 +757,7 @@ CHECK(getReducedConformationSet())
 	TEST_EQUAL(mapper_nnw.calculateRMSD() >= pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 
 	PRECISION(1e-3)
-	TEST_REAL_EQUAL(pc_nnw.getScore(sys17, sys_nnw, pc_nnw.options), 96.12)
+	TEST_REAL_EQUAL(pc_nnw.getScore(sys17, sys_nnw, pc_nnw.options), 98.7483)
 	PRECISION(1e-5)
 
 RESULT
@@ -1383,7 +1383,7 @@ CHECK(serializeWardClusterTree(std::ostream& out))
 RESULT
 
 
-CHECK(deserializeWardClusterTree(std::ostream& out))
+CHECK(deserializeWardClusterTree(std::istream& out))
 	File tree(BALL_TEST_DATA_PATH(PoseClustering_wardtree.dat));
 	PoseClustering pc;
 	pc.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
@@ -1391,7 +1391,6 @@ CHECK(deserializeWardClusterTree(std::ostream& out))
 	pc.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0);
 
 	pc.deserializeWardClusterTree(tree);
-
 	std::vector<std::set<Index> > clusters = pc.extractClustersForThreshold(0.5);
 	TEST_EQUAL(clusters.size(), 6)
 	TEST_EQUAL(pc.getNumberOfClusters(), 6)
