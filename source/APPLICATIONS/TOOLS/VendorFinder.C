@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input file containing compounds", INFILE, true);
 	parpars.registerParameter("d", "database name", STRING, true);
 	parpars.registerParameter("u", "database username", STRING, true);
-	parpars.registerParameter("h", "database host", STRING, true);
+	parpars.registerParameter("host", "database host", STRING, true);
 	parpars.registerParameter("port", "database port", BALL::INT, false, "3306");
 	parpars.registerParameter("p", "database password", STRING, true);
 	parpars.registerParameter("o", "output text file", OUTFILE);
@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 
 	String user = parpars.get("u");
 	String db_name = parpars.get("d");
-	String host = parpars.get("h");
+	String host = parpars.get("host");
 	String password = parpars.get("p");
 	int port = 3306;
 	if (parpars.get("port") != CommandlineParser::NOT_FOUND)

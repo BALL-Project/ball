@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("target", "target/dataset name whose molecules should be exported", STRING);
 	parpars.registerParameter("d", "database name", STRING, true);
 	parpars.registerParameter("u", "database username", STRING, true);
-	parpars.registerParameter("h", "database host", STRING, true);
+	parpars.registerParameter("host", "database host", STRING, true);
 	parpars.registerParameter("port", "database port", BALL::INT, false, "3306");
 	//parpars.registerParameter("id", "molecule ID property-tag name", STRING);
 	parpars.registerParameter("p", "database password", STRING, true);
@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 
 	String user = parpars.get("u");
 	String db_name = parpars.get("d");
-	String host = parpars.get("h");
+	String host = parpars.get("host");
 	String password = parpars.get("p");
 	int port = 3306;
 	String id_tag = "";

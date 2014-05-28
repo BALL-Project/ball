@@ -44,9 +44,9 @@ GridBasedScoring* createScoringFunction(AtomContainer* receptor, AtomContainer* 
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("SideChainGridBuilder", "build side chain grid", VERSION, String(__DATE__), "Docking");
-	parpars.registerParameter("ini", "parameter file", INFILE, true);
+	parpars.registerParameter("param", "parameter file", INFILE, true);
 	parpars.registerParameter("d", "output directory", STRING, true);
-	parpars.setSupportedFormats("ini", "ini");
+	parpars.setSupportedFormats("param", "ini");
 	parpars.setToolManual("This tool precalculates a side chain grid.");
 
 	parpars.parse(argc, argv);
@@ -56,13 +56,13 @@ int main(int argc, char* argv[])
 	Options option;
 	list<Constraint*> constraints;
 
-	if (parpars.get("ini") == CommandlineParser::NOT_FOUND)
+	if (parpars.get("param") == CommandlineParser::NOT_FOUND)
 	{
 		cout<<"[Error:] ini file must be given" << std::endl;
 		exit (1);
 	}
 
-	String inifile = parpars.get("ini");
+	String inifile = parpars.get("param");
 	DockingAlgorithm::readOptionFile(inifile, option, constraints);
 	String scoring_type = option.get("scoring_type");
 	String grid_file = option.get("grid_file");
