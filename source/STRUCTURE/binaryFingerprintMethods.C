@@ -1717,7 +1717,7 @@ void BinaryFingerprintMethods::cutoffSearchThread(const unsigned int thread_id)
 	unsigned short** cc_matrix = t_data->cc_matrix;
 	File outfile(t_data->outfile_name, File::MODE_OUT);
 	
-	for (unsigned int i=t_data->first; i!=t_data->last; ++i)
+	for (unsigned int i=t_data->first; i<=t_data->last; ++i)
 	{
 		for (unsigned int j=0; j!=query_iindices_.size(); ++j)
 		{
@@ -1830,18 +1830,27 @@ bool BinaryFingerprintMethods::cutoffSearch(const float cutoff, const String& ou
 	Timer* timer = new Timer();
 	timer->start();
 	
+	unsigned int current_index = 0;
 	for (unsigned int i=0; i!=n_threads_; ++i)
 	{
+		// Set lib_iindices start index for thread i
+		thread_data_[i].first = current_index;
+
+		// Increment index for lib_iindides depending on thread number
 		if (i < to_increment)
 		{
-			thread_data_[i].first = i * (batch_size + 1);
-			thread_data_[i].last = thread_data_[i].first + (batch_size + 1);
+			current_index += batch_size;
 		}
 		else
 		{
-			thread_data_[i].first = i * (batch_size);
-			thread_data_[i].last = thread_data_[i].first + (batch_size);
+			current_index += batch_size - 1;
 		}
+
+		// Set lib_iindices end index for thread i
+		thread_data_[i].last = current_index;
+
+		// Increment index for lib_iindides
+		++current_index;
 		
 		threads_[i] = thread(boost::bind(&BinaryFingerprintMethods::cutoffSearchThread, this, i));
 	}
