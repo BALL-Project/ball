@@ -270,6 +270,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, false, " ");
 	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, "0.7");
 	parpars.registerParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, false, "1");
+	parpars.registerParameter("bs", "Block size [default: 500]", BALL::INT, false, "500");
 	parpars.registerFlag("sdf_out", "If query file has SD format, this flag activates writing of nearest neighbours as a new CSV tag in a copy of the query SD file.");
 	
 	parpars.setParameterRestrictions("f", 1, 2);
@@ -301,7 +302,8 @@ $ FingerprintSimilaritySearch -t target.sdf -q query.smi -o results -fp_tag FPRI
 	// Set read and parameters
 	fprint_format = parpars.get("f").toInt();
 	float sim_cutoff = parpars.get("tc").toFloat();
-	
+	unsigned int bs = parpars.get("bs").toInt();
+
 	unsigned int n_threads = 1;
 	if (parpars.get("nt") != "1")
 	{
@@ -388,9 +390,8 @@ $ FingerprintSimilaritySearch -t target.sdf -q query.smi -o results -fp_tag FPRI
 	}
 	Log.level(10) << "++" << endl;
 	
-	
 	Options options;
-	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, 500);
+	options.setDefaultInteger(BinaryFingerprintMethods::Option::BLOCKSIZE, bs);
 	options.setDefaultReal(BinaryFingerprintMethods::Option::SIM_CUTOFF, sim_cutoff);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::N_THREADS, n_threads);
 	options.setDefaultInteger(BinaryFingerprintMethods::Option::VERBOSITY, 6);
