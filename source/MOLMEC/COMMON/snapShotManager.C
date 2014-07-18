@@ -602,7 +602,6 @@ namespace BALL
 		trajectory_file_ptr_->reopen();
 		trajectory_file_ptr_->readHeader();
 		Size number = trajectory_file_ptr_->getNumberOfSnapShots();
-		trajectory_file_ptr_->reopen();
 		for (Size count = 0; count < number; ++count)
 		{
 			SnapShot buffer;
