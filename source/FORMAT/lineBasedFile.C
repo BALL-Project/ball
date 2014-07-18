@@ -117,14 +117,7 @@ namespace BALL
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::readLine");
 		}
-
-		if (line_buffer_.empty())
-			line_buffer_.resize(BALL_MAX_LINE_LENGTH);
-
-		char* buffer = &(line_buffer_[0]);
-
-		getFileStream().getline(buffer, BALL_MAX_LINE_LENGTH);
-		line_.assign(buffer);
+		line_.getline(getFileStream());
 		if (trim_whitespaces_) line_.trim();
 		++line_number_;
 		return !eof();
