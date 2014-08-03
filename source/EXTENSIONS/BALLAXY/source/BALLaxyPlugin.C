@@ -44,7 +44,7 @@ namespace BALL
 			BALLaxyInterface* ballaxy_interface = new BALLaxyInterface(main_control);
 			HTMLViewDock*     ballaxy_view      = new HTMLViewDock(ballaxy_interface, main_control, String(tr("BALLaxy")).c_str());
 
-			preferences_->applyPreferences();
+			preferences_->storeValues();
 
 			main_control->addDockWidget(Qt::BottomDockWidgetArea, ballaxy_view);
 
