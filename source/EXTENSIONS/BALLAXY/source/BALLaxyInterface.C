@@ -326,14 +326,16 @@ namespace BALL
 					String filename = content_disposition.after("attachment;");
 					std::vector<String> split;
 
+					// remove potential quotes introduced by the web server
+					filename.substituteAll("\"", "");
+					filename.substituteAll("\'", "");
+
 					filename.split(split, ".");
 
 					String extension = split.back();
-
 					if (MolFileFactory::isFileExtensionSupported(extension))
 					{
-						String tmp_filename;
-						File::createTemporaryFilename(tmp_filename, extension);
+						String tmp_filename = VIEW::createTemporaryFilename() + extension;
 
 						// write the data to a file
 						QFile outfile(tmp_filename.c_str());
@@ -362,6 +364,11 @@ namespace BALL
 
 						CompositeMessage* cm = new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA);
 						qApp->postEvent(parent(), new MessageEvent(cm));
+					}
+					else
+					{
+						Log.error() << "BALLaxy plugin: cannot download file of unsupported extension " 
+												<< extension << std::endl;
 					}
 				}
 			}
