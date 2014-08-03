@@ -118,9 +118,7 @@ namespace BALL
 
 		bool BALLaxyInterface::uploadToBallaxy(AtomContainer* ac, const String& format)
 		{
-			String tmp_filename;
-			File::createTemporaryFilename(tmp_filename, format);
-
+			String tmp_filename = VIEW::createTemporaryFilename() + format;
 			GenericMolFile* mol_file = MolFileFactory::open(tmp_filename, std::ios::out);
 
 			// currently, we can only handle Molecules and Systems
