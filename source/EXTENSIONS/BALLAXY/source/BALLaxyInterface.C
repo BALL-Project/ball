@@ -54,8 +54,10 @@ namespace BALL
 //			connect(this, SIGNAL( urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
 
 			connect(page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )),
-							this, SLOT(handleSslErrors(QNetworkReply*, const QList<QSslError> & ))); 
+					    this, SLOT(handleSslErrors(QNetworkReply*, const QList<QSslError> & )));
 
+//			connect(page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)),
+//							this, SLOT(networkAccessFinished(QNetworkReply*)));
 
 			connect(page(), SIGNAL(unsupportedContent(QNetworkReply*)),
 					    this, SLOT(handleDownload(QNetworkReply*)));
@@ -294,6 +296,20 @@ namespace BALL
 		{
 			load_page_mutex_.unlock();
 		}
+
+		void BALLaxyInterface::networkAccessFinished(QNetworkReply* reply)
+		{
+			/*
+				Log.info() << "nam: " << ascii(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString()) << std::endl;
+				Log.info() << "redirect: " << ascii(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toString()) << std::endl;
+				Log.info() << "error: " << reply->error() << std::endl;
+
+				QString data(reply->readAll());
+				Log.info() << "data: " << ascii(data) << std::endl;
+			*/
+		}
+
+
 		void BALLaxyInterface::handleDownload(QNetworkReply* reply)
 		{
 			// if qt wants to signal that the user wants to download something,

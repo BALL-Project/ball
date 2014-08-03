@@ -54,6 +54,7 @@ namespace BALL
 				void sendMOL2ToBallaxy();
 				void handleDownload(QNetworkReply* request);
 				void loadFinished(bool ok);
+				void networkAccessFinished(QNetworkReply *);
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
