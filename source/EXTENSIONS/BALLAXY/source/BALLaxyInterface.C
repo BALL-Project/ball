@@ -60,6 +60,8 @@ namespace BALL
 			connect(page(), SIGNAL(unsupportedContent(QNetworkReply*)),
 					    this, SLOT(handleDownload(QNetworkReply*)));
 
+			connect(this, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
+
 			page()->setForwardUnsupportedContent(true);
 
 			// Here, we can register python scripts with which we could interact with BALLView from the HTML side
@@ -89,8 +91,12 @@ namespace BALL
 
 		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base)
 		{
-			ballaxy_base_.setUrl(ballaxy_base.c_str());
-			setUrl(ballaxy_base_.toString());
+			if (load_page_mutex_.tryLock(500)) {
+				ballaxy_base_.setUrl(ballaxy_base.c_str());
+				setUrl(ballaxy_base_.toString());
+			} else {
+				Log.warn() << "BALLaxyInterface: could not set new base url due to a timeout. Try again." << std::endl;
+			}
 		}
 
 		void BALLaxyInterface::registerAction(BALLaxyInterfaceAction* action)
@@ -286,6 +292,10 @@ namespace BALL
 			}
 		}
 
+		void BALLaxyInterface::loadFinished(bool ok)
+		{
+			load_page_mutex_.unlock();
+		}
 		void BALLaxyInterface::handleDownload(QNetworkReply* reply)
 		{
 			// if qt wants to signal that the user wants to download something,
