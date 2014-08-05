@@ -91,13 +91,49 @@ namespace BALL
 			MolecularControl::getInstance(0)->getContextMenu().removeAction(context_submenu_action_);
 		}
 
-		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base)
+		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base, String const& email, String const& password)
 		{
-			if (load_page_mutex_.tryLock(500)) {
-				ballaxy_base_.setUrl(ballaxy_base.c_str());
-				setUrl(ballaxy_base_.toString());
-			} else {
-				Log.warn() << "BALLaxyInterface: could not set new base url due to a timeout. Try again." << std::endl;
+			ballaxy_base_.setUrl(ballaxy_base.c_str());
+			load(ballaxy_base_.toString());
+			QEventLoop loop;
+			QObject::connect(this, SIGNAL(loadFinished(bool)), &loop, SLOT(quit()));
+
+			// should we try to login?
+			if (email != "" && password != "")
+			{
+				// find main frame
+				QWebFrame* page_main_frame   = page()->mainFrame();
+				QWebFrame* galaxy_main_frame = page_main_frame;
+
+				if (galaxy_main_frame->frameName() != "galaxy_main") // try its children
+				{
+					foreach(QWebFrame* child_frame, page_main_frame->childFrames())
+					{
+						if (child_frame->frameName() == "galaxy_main")
+						{
+							galaxy_main_frame = child_frame;
+						}
+					}
+				}
+
+				QString login_url = ballaxy_base_.toString().endsWith("/") ? "user/login" : "/user/login";
+				galaxy_main_frame->load(QUrl(ballaxy_base_.toString()+login_url));
+
+				QEventLoop loop;
+				QObject::connect(this, SIGNAL(loadFinished(bool)), &loop, SLOT(quit()));
+				loop.exec();
+
+				// now, find the email field in the page
+				QWebElement email_field = galaxy_main_frame->findFirstElement("input[name=email]");
+				email_field.setAttribute("value", email.c_str());
+
+				// and repeat for the password
+				QWebElement password_field = galaxy_main_frame->findFirstElement("input[name=password]");
+				password_field.setAttribute("value", password.c_str());
+
+				// find the login - button
+				QWebElement login_button = galaxy_main_frame->findFirstElement("input[name=login_button]");
+				login_button.evaluateJavaScript("this.click()");
 			}
 		}
 
@@ -268,7 +304,6 @@ namespace BALL
 				Log.warn() << ascii(e.errorString()) << std::endl;
 			}
 			*/
-
 			reply->ignoreSslErrors();
 		}
 
@@ -294,19 +329,16 @@ namespace BALL
 
 		void BALLaxyInterface::loadFinished(bool ok)
 		{
-			load_page_mutex_.unlock();
 		}
 
 		void BALLaxyInterface::networkAccessFinished(QNetworkReply* reply)
 		{
-			/*
 				Log.info() << "nam: " << ascii(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString()) << std::endl;
 				Log.info() << "redirect: " << ascii(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toString()) << std::endl;
 				Log.info() << "error: " << reply->error() << std::endl;
 
 				QString data(reply->readAll());
 				Log.info() << "data: " << ascii(data) << std::endl;
-			*/
 		}
 
 
@@ -335,7 +367,7 @@ namespace BALL
 					String extension = split.back();
 					if (MolFileFactory::isFileExtensionSupported(extension))
 					{
-						String tmp_filename = VIEW::createTemporaryFilename() + extension;
+						String tmp_filename = VIEW::createTemporaryFilename() + "." + extension;
 
 						// write the data to a file
 						QFile outfile(tmp_filename.c_str());

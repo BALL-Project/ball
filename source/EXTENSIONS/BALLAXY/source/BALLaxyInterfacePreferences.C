@@ -40,7 +40,7 @@ namespace BALL
 			BALLaxyInterface* bi = BALLaxyInterface::getInstance(0);
 			if (bi == 0) return;
 
-			bi->setBALLaxyBaseUrl(ascii(url_edit->text()));
+			bi->setBALLaxyBaseUrl(ascii(url_edit->text()), ascii(login_edit->text()), ascii(password_edit->text()));
 		}
 
 		QUrl BALLaxyInterfacePreferences::getBALLaxyBaseUrl()

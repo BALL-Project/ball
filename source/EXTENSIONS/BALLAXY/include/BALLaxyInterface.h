@@ -43,7 +43,7 @@ namespace BALL
 
 				virtual ~BALLaxyInterface();
 
-				void setBALLaxyBaseUrl(String const& ballaxy_base);
+				void setBALLaxyBaseUrl(String const& ballaxy_base, String const& email, String const& password);
 
 				void registerAction(BALLaxyInterfaceAction* action);
 
@@ -77,8 +77,6 @@ namespace BALL
 				QAction* context_separator_;
 				QAction* context_action_pdb_;
 				QAction* context_action_mol2_;
-
-				QMutex   load_page_mutex_;
 		};
 	}
 }
