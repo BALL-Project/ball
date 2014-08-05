@@ -167,9 +167,14 @@ namespace BALL
 		{
 			//Shutdown the plugin
 			stopPlugin(qobject_cast<BALLPlugin*>(it.value()->instance()));
+			
+			// NOTE: unloading crashes BALLView, for some reason!
+			//       it is not really crucial to unload the plugins, but we should have
+			//       a look at this anyhow
 			//Delete the loader
-			it.value()->unload();
-			delete it.value();
+//			it.value()->unload();
+//			delete it.value();
+
 			loaders_.erase(it);
 
 			return true;

@@ -53,6 +53,8 @@ namespace BALL
 				void sendPDBToBallaxy();
 				void sendMOL2ToBallaxy();
 				void handleDownload(QNetworkReply* request);
+				void loadFinished(bool ok);
+				void networkAccessFinished(QNetworkReply *);
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
@@ -75,6 +77,8 @@ namespace BALL
 				QAction* context_separator_;
 				QAction* context_action_pdb_;
 				QAction* context_action_mol2_;
+
+				QMutex   load_page_mutex_;
 		};
 	}
 }

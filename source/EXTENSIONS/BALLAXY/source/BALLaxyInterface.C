@@ -54,11 +54,15 @@ namespace BALL
 //			connect(this, SIGNAL( urlChanged(const QUrl&)), this, SLOT(executeLink(const QUrl&)));
 
 			connect(page()->networkAccessManager(), SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )),
-							this, SLOT(handleSslErrors(QNetworkReply*, const QList<QSslError> & ))); 
+					    this, SLOT(handleSslErrors(QNetworkReply*, const QList<QSslError> & )));
 
+//			connect(page()->networkAccessManager(), SIGNAL(finished(QNetworkReply*)),
+//							this, SLOT(networkAccessFinished(QNetworkReply*)));
 
 			connect(page(), SIGNAL(unsupportedContent(QNetworkReply*)),
 					    this, SLOT(handleDownload(QNetworkReply*)));
+
+			connect(this, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 
 			page()->setForwardUnsupportedContent(true);
 
@@ -89,8 +93,12 @@ namespace BALL
 
 		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base)
 		{
-			ballaxy_base_.setUrl(ballaxy_base.c_str());
-			setUrl(ballaxy_base_.toString());
+			if (load_page_mutex_.tryLock(500)) {
+				ballaxy_base_.setUrl(ballaxy_base.c_str());
+				setUrl(ballaxy_base_.toString());
+			} else {
+				Log.warn() << "BALLaxyInterface: could not set new base url due to a timeout. Try again." << std::endl;
+			}
 		}
 
 		void BALLaxyInterface::registerAction(BALLaxyInterfaceAction* action)
@@ -112,9 +120,7 @@ namespace BALL
 
 		bool BALLaxyInterface::uploadToBallaxy(AtomContainer* ac, const String& format)
 		{
-			String tmp_filename;
-			File::createTemporaryFilename(tmp_filename, format);
-
+			String tmp_filename = VIEW::createTemporaryFilename() + format;
 			GenericMolFile* mol_file = MolFileFactory::open(tmp_filename, std::ios::out);
 
 			// currently, we can only handle Molecules and Systems
@@ -286,6 +292,24 @@ namespace BALL
 			}
 		}
 
+		void BALLaxyInterface::loadFinished(bool ok)
+		{
+			load_page_mutex_.unlock();
+		}
+
+		void BALLaxyInterface::networkAccessFinished(QNetworkReply* reply)
+		{
+			/*
+				Log.info() << "nam: " << ascii(reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toString()) << std::endl;
+				Log.info() << "redirect: " << ascii(reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toString()) << std::endl;
+				Log.info() << "error: " << reply->error() << std::endl;
+
+				QString data(reply->readAll());
+				Log.info() << "data: " << ascii(data) << std::endl;
+			*/
+		}
+
+
 		void BALLaxyInterface::handleDownload(QNetworkReply* reply)
 		{
 			// if qt wants to signal that the user wants to download something,
@@ -302,14 +326,16 @@ namespace BALL
 					String filename = content_disposition.after("attachment;");
 					std::vector<String> split;
 
+					// remove potential quotes introduced by the web server
+					filename.substituteAll("\"", "");
+					filename.substituteAll("\'", "");
+
 					filename.split(split, ".");
 
 					String extension = split.back();
-
 					if (MolFileFactory::isFileExtensionSupported(extension))
 					{
-						String tmp_filename;
-						File::createTemporaryFilename(tmp_filename, extension);
+						String tmp_filename = VIEW::createTemporaryFilename() + extension;
 
 						// write the data to a file
 						QFile outfile(tmp_filename.c_str());
@@ -338,6 +364,11 @@ namespace BALL
 
 						CompositeMessage* cm = new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA);
 						qApp->postEvent(parent(), new MessageEvent(cm));
+					}
+					else
+					{
+						Log.error() << "BALLaxy plugin: cannot download file of unsupported extension " 
+												<< extension << std::endl;
 					}
 				}
 			}

@@ -41,7 +41,7 @@ namespace BALL
 				virtual ~BALLaxyInterfacePreferences();
 
 				///
-				void applyPreferences();
+				virtual void storeValues();
 
 				///
 				void getSettings();

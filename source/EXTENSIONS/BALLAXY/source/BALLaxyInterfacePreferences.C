@@ -35,7 +35,7 @@ namespace BALL
 			#endif 
 		}
 
-		void BALLaxyInterfacePreferences::applyPreferences()
+		void BALLaxyInterfacePreferences::storeValues()
 		{
 			BALLaxyInterface* bi = BALLaxyInterface::getInstance(0);
 			if (bi == 0) return;

@@ -177,9 +177,6 @@ namespace BALL
 
 		bool trim_whitespaces_;
 
-		/// buffer for the line
-		vector<char> line_buffer_;
-
 		/// buffer for column parsing
 		vector<char> col_buffer_;
 
