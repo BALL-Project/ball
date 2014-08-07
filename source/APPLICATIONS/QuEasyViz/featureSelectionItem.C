@@ -134,7 +134,7 @@ namespace BALL
 			view_->data_scene->addItem(edge2);
 			
 			setSavedAs(conf.output.c_str());
-			filenames_map.insert(make_pair(conf.output,model_item_));
+			filenames_map.insert(std::make_pair(conf.output,model_item_));
 			setPixmap(findPixmap("feature_selection"));
 			
 			done_ = 0;

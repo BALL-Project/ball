@@ -143,7 +143,7 @@ namespace BALL
 				InputPartitionItem* train_part = new InputPartitionItem(0,partitioner);
 				view_->scene()->addItem(train_part);
 				train_part->addToPipeline();
-				filenames_map.insert(make_pair(train_part->savedAs().toStdString(),train_part));
+				filenames_map.insert(std::make_pair(train_part->savedAs().toStdString(),train_part));
 				if(item_positions!=0 && item_positions->size()>0)
 				{
 					std::pair<double,double> pos = item_positions->front();
@@ -156,7 +156,7 @@ namespace BALL
 				InputPartitionItem* test_part = new InputPartitionItem(1,partitioner);
 				view_->scene()->addItem(test_part);
 				test_part->addToPipeline();
-				filenames_map.insert(make_pair(test_part->savedAs().toStdString(),test_part));
+				filenames_map.insert(std::make_pair(test_part->savedAs().toStdString(),test_part));
 				if(item_positions!=0 && item_positions->size()>0)
 				{
 					std::pair<double,double> pos = item_positions->front();
@@ -222,7 +222,7 @@ namespace BALL
 				{
 					QMessageBox::critical(view_,"Error reading SD-input",e.getMessage());
 				}
-				filenames_map.insert(make_pair(conf.output,sd_item));
+				filenames_map.insert(std::make_pair(conf.output,sd_item));
 			}
 
 			try
@@ -259,7 +259,7 @@ namespace BALL
 						csv_item->setAppend(false);
 						csv_item->setCenterDataFlag(conf.center_data);
 						csv_item->setCenterResponseFlag(conf.center_y);
-						if(i==0) filenames_map.insert(make_pair(conf.output,csv_item));
+						if(i==0) filenames_map.insert(std::make_pair(conf.output,csv_item));
 					}
 					csv_item->setNonNumericClassNames(conf.nonnumeric_class_names);
 					csv_item->setXLabelFlag(conf.csv_desc_labels[i]);

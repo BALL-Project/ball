@@ -284,7 +284,7 @@ namespace BALL
 			save_attribute_ = 1;
 			setName(QString(entry_->name_abreviation.c_str()));
 			
-			filenames_map.insert(make_pair(conf.output,this));
+			filenames_map.insert(std::make_pair(conf.output,this));
 			setSavedAs(conf.output.c_str());
 		}
 

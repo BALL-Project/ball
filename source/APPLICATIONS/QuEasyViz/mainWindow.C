@@ -1851,8 +1851,8 @@ namespace BALL
 					std::cout << "Error: feature-description file '" << abs_filename << "' not found!" << std::endl;
 					return;
 				}
-				string name;
-				string explanation;
+				String name;
+				String explanation;
 				while(in)
 				{
 					String line; 
