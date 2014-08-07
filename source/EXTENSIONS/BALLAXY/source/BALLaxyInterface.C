@@ -6,6 +6,7 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/SYSTEM/fileSystem.h>
+#include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -26,6 +27,7 @@
 #include <QWebFrame>
 #include <QHttpMultiPart>
 #include <QSslError>
+#include <QWriteLocker>
 
 #include <QtCore/QDebug>
 
@@ -93,10 +95,12 @@ namespace BALL
 
 		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base, String const& email, String const& password)
 		{
+			QWriteLocker lock(&page_lock_);
 			ballaxy_base_.setUrl(ballaxy_base.c_str());
 			load(ballaxy_base_.toString());
 			QEventLoop loop;
 			QObject::connect(this, SIGNAL(loadFinished(bool)), &loop, SLOT(quit()));
+			loop.exec();
 
 			// should we try to login?
 			if (email != "" && password != "")
@@ -115,6 +119,9 @@ namespace BALL
 						}
 					}
 				}
+
+				if (!galaxy_main_frame)
+					return;
 
 				QString login_url = ballaxy_base_.toString().endsWith("/") ? "user/login" : "/user/login";
 				galaxy_main_frame->load(QUrl(ballaxy_base_.toString()+login_url));

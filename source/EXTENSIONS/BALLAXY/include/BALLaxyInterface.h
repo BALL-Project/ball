@@ -7,6 +7,7 @@
 
 #include <QtCore/QHash>
 #include <QtNetwork/QNetworkReply>
+#include <QReadWriteLock>
 
 namespace BALL
 {
@@ -77,6 +78,8 @@ namespace BALL
 				QAction* context_separator_;
 				QAction* context_action_pdb_;
 				QAction* context_action_mol2_;
+
+				QReadWriteLock page_lock_;
 		};
 	}
 }
