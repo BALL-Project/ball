@@ -56,3 +56,9 @@ INCLUDE(include/BALL/SYSTEM/sources.cmake)
 
 INCLUDE(source/XRAY/sources.cmake)
 INCLUDE(include/BALL/XRAY/sources.cmake)
+
+##
+# Artificially, temporarily added for LigStruct
+# by pbrach
+INCLUDE(source/APPLICATIONS/LigStruct/sources.cmake)
+INCLUDE(source/APPLICATIONS/LigStruct/sources.cmake)

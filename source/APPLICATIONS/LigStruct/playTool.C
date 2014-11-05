@@ -2,117 +2,86 @@
 // vi: set ts=2:
 //
 
-// A small program for adding hydrogens to a PDB file (which usually comes
-// without hydrogen information) and minimizing all hydrogens by means of a
-// StrangLBFGS minimizer.
+#include <BALL/FORMAT/molFileFactory.h>
+#include <BALL/FORMAT/commandlineParser.h>
 
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/selector.h>
-#include <BALL/FORMAT/PDBFile.h>
-#include <BALL/MOLMEC/AMBER/amber.h>
-#include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
-#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
-#include <BALL/MOLMEC/MINIMIZATION/strangLBFGS.h>
-#include <BALL/MOLMEC/MINIMIZATION/shiftedLVMM.h>
-#include <BALL/STRUCTURE/fragmentDB.h>
-#include <BALL/STRUCTURE/residueChecker.h>
-#include <BALL/DATATYPE/string.h>
-#include <BALL/SYSTEM/path.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
+#include <BALL/KERNEL/molecule.h>
 
-using namespace std;
+#include <BALL/FORMAT/SDFile.h>
+
+#include <openbabel/obconversion.h>
+#include <openbabel/mol.h>
+#include <openbabel/shared_ptr.h>
+#include "testHeader.h"
+
+using namespace OpenBabel;
 using namespace BALL;
+using namespace std;
 
-int main(int argc, char** argv)
+shared_ptr<OBMol> GetMol(const std::string &filename)
 {
-	if ((argc < 3) || (argc > 4))
-	{
-		Log << "Usage:" << argv[0] << " <PDB infile> <PDB outfile> [<amber parameter file>]" << endl;
-		return 1;
-	}
+  // Create the OBMol object.
+  shared_ptr<OBMol> mol(new OBMol);
 
-	Log << "Loading " << argv[1] << "..." << endl;
-	PDBFile infile(argv[1]);
-	if (!infile)
+  // Create the OBConversion object.
+  OBConversion conv;
+  OBFormat *format = conv.FormatFromExt(filename.c_str());
+  if (!format || !conv.SetInFormat(format)) {
+    std::cout << "Could not find input format for file " << filename << std::endl;
+    return mol;
+  }
+
+  // Open the file.
+  std::ifstream ifs(filename.c_str());
+  if (!ifs) {
+    std::cout << "Could not open " << filename << " for reading." << std::endl;
+    return mol;
+  }
+  // Read the molecule.
+  if (!conv.Read(mol.get(), &ifs)) {
+    std::cout << "Could not read molecule from file " << filename << std::endl;
+    return mol;
+  }
+
+  return mol;
+}
+/// ################# M A I N #################
+int main(int argc, char* argv[])
+{
+	CommandlineParser parpars("Molecule2Fragments", "cut a molecule along its bonds, generating fragments", 0.1, String(__DATE__), "Preparation");
+	parpars.registerParameter("i", "input SDF", INFILE, true);
+	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+
+	parpars.setSupportedFormats("i","sdf");
+	parpars.setSupportedFormats("o","sdf");
+	parpars.setOutputFormatSource("o","i");
+
+	String manual = "...just playing...";
+	parpars.setToolManual(manual);
+
+	parpars.parse(argc, argv);
+
+	SDFile input(parpars.get("i"), ios::in);
+	if (!input)
 	{
-		// if file does not exist: complain and abort
-		Log.error() << "error opening " << argv[1] << " for input." << endl;
+		Log.error() << "Cannot open SDF input file " << parpars.get("i") << endl;
 		return 2;
 	}
 
-	System system;
-	infile >> system;
-	Log << "done." << endl;
+	Molecule ball_mol;
+	input >> ball_mol;
+	input.close();
 
-	Log << "Initializing FragmentDB..." << endl;
-	FragmentDB db("");
-	Log << "done." << endl;
 
-	Log << "Normalizing names..." << endl;
-	system.apply(db.normalize_names);
-	Log << "done." << endl;
-	
-	Log << "Adding hydrogens..." << endl;
-	system.apply(db.add_hydrogens);
-	Log << "  ...added " << db.add_hydrogens.getNumberOfInsertedAtoms() 
-			<< " atoms" << endl;
-	Log << "done." << endl;
+	// write the optimized structure to a file whose
+	// name is given as the second command line argument
+	String outfile_name = String(parpars.get("o"));
+	SDFile outfile(outfile_name, ios::out);
+	outfile << ball_mol;
+	outfile.close();
 
-	Log << "Building Bonds..." << endl;
-	system.apply(db.build_bonds);
-	Log << "done." << endl;
-	
-
-	Log << "Applying ResidueChecker..." << endl << endl;
-	ResidueChecker check;
-	system.apply(check);
-	Log << "done." << endl;
-
-	Log << "Initializing force field..." << endl;
-	AmberFF amber_ff;
-	if (argc == 4)
-	{
-		Path path;
-		String tmp = path.find(argv[3]);
-		if (tmp == "") tmp = argv[3];
-		amber_ff.options.set(AmberFF::Option::FILENAME, tmp);
-	}
-	amber_ff.setup(system);
-	Log << "done." << endl;
-	Log << "Selecting H atoms..." << endl;
-	Selector h_select("element(H)");
-	system.apply(h_select);
-	Log << "done." << endl;
-	Log << "Starting minimizer: " << endl << endl;
-	
-	// We choose the L-BFGS minimizer
-	
-	/*
-	SteepestDescentMinimizer sdm(amber_ff);
-	sdm.setEnergyOutputFrequency(1);
-	sdm.minimize(1000);
-	*/
-	
-	/*
-	ConjugateGradientMinimizer cgm(amber_ff);
-	cgm.setEnergyOutputFrequency(1);
-	cgm.minimize(1000);
-	*/
-	
-	/*
-	ShiftedLVMMMinimizer sm(amber_ff);
-	sm.setEnergyOutputFrequency(1);
-	sm.minimize(1000);
-	*/
-	
-	StrangLBFGSMinimizer bfgsm(amber_ff);
-	bfgsm.setEnergyOutputFrequency(1);
-	bfgsm.minimize(1000);
-	
-	Log << "Writing " << argv[2] << "..." << endl;
-	PDBFile outfile(argv[2], std::ios::out);
-	outfile << system;
-	Log << "done." << endl;
-
-	return 0;
+	Log << "wrote file " << outfile_name << endl;
 }
+
 

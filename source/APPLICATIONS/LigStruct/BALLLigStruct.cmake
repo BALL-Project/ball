@@ -1,3 +1,8 @@
+####################################
+# Set here which BINARIES to compile
+# by pbrach
+####################################
+
 ### the directory name
 SET(DIRECTORY source/APPLICATIONS/LigStruct)
 
