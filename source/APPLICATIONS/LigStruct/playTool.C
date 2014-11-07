@@ -131,7 +131,7 @@ int main(int argc, char* argv[])
 	// create ring fragments
 	vector<OBBond*> for_deletion;
   FOR_BONDS_OF_MOL(b, rings2)
-    if (b->IsRotor() && !b->IsInRing())
+    if (b->IsRotor()) // && !b->IsInRing()) // in babel ring bonds are never rotors!!!!
       for_deletion.push_back(&(*b));
   for(vector<OBBond*>::iterator it=for_deletion.begin(); it!=for_deletion.end(); ++it)
     rings2.DeleteBond(*it);
@@ -143,6 +143,7 @@ int main(int argc, char* argv[])
 //	for(vector<OBAtom*>::iterator it2=atm_deletion.begin(); it2!=atm_deletion.end(); ++it2)
 //		rings2.DeleteAtom(*it2);
 	
+	// iterate over ALL BONDS:
 	OBBondIterator rb_it;
 	obMol->BeginBond(rb_it);
 	int bondcnt = 0;
@@ -151,16 +152,11 @@ int main(int argc, char* argv[])
 		OBBond* bn = *rb_it;
 		if ((*rb_it)->IsInRing())
 		{
-			cout<< "adding worked "<<rings.AddBond(**rb_it);
-			cout<<" ring bond: "<< bn->GetBeginAtom()->GetType() << bn->GetBeginAtom()->GetIndex()<<" - " << bn->GetEndAtom()->GetType()<< bn->GetEndAtom()->GetIndex()<< endl;
-			
+			rings.AddBond(**rb_it);
 			bondcnt++;
-			cout<< "total number of bonds in ring file: "<<rings.NumBonds()<<endl;
 		}
 	}
-	cout << "total ring-bonds: "<<bondcnt << endl;
-	cout<<endl;
-	
+
 
 //	// write files in babel style:
 //	OBConversion conv;
@@ -174,13 +170,12 @@ int main(int argc, char* argv[])
 //	ring_file.close();
 //	ring_file2.close();
 	
-	cout <<endl;
-	
 	Molecule* ball_mol2 = MolecularSimilarity::createMolecule(rings2, true);
 	ConnectedComponentsProcessor conpro;
 	ball_mol2->apply(conpro);
 	vector<Molecule> fragments;
-	conpro.getAllComponents(fragments);
+	//conpro.getAllComponents(fragments);
+	conpro.getMinAtomsComponents(fragments, 2);
 	
 	// write output:
 	String outfile_name = String(parpars.get("o"));
