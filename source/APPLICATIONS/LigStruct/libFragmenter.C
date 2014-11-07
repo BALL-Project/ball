@@ -25,9 +25,6 @@ void writeMolVec(vector<Molecule> &input, SDFile* handle)
 	}
 }
 
-
-// (from http://openbabel.org/api/2.3.0/obconformersearch_default_8cpp-example.shtml)
-
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
@@ -45,12 +42,8 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 	// START of CODE#############################################################
-
-	// read input molecule:
-	//shared_ptr<OBMol> obMol = getMol(parpars.get("i"));
 	
-	OBMol obMol;
-	
+	OBMol obMol; // working molecule
 	
 	// Read open-babel molecule as input:
 	OBConversion conv;
@@ -99,7 +92,6 @@ int main(int argc, char* argv[])
 		delete ball_mol;
 		obMol.Clear();
 	}
-	
 	outfile.close();
 	ifs.close();
 }
