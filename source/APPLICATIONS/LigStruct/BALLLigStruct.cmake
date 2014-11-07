@@ -10,6 +10,7 @@ SET(DIRECTORY source/APPLICATIONS/LigStruct)
 SET(EXECUTABLES_LIST
 	playTool
 	testTool
+	libFragmenter
 )
 
 
