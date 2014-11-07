@@ -22,6 +22,16 @@ using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
+/// ################# H E L P E R    F U N C T I O N S #################
+// Write several result molecules to one file
+void writeMolVec(vector<Molecule> &input, SDFile* handle)
+{
+	for(int i = 0; i < input.size(); i++)
+	{
+		(*handle) << input[i];
+	}
+}
+
 shared_ptr<OBMol> getMol(const std::string &filename)
 {
   // Create the OBMol object.
@@ -94,7 +104,7 @@ int main(int argc, char* argv[])
 	cout << "Number of rotables: "<<obMol->NumRotors()<<endl;
 	cout <<endl;
 	
-	// NUM of ring atoms and its atoms:
+	// Iterate over ring-atoms:
 	OBAtomIterator at_it;
 	obMol->BeginAtom(at_it);
 	int num_ring_atms = 0;
@@ -111,30 +121,27 @@ int main(int argc, char* argv[])
 		}
 		else
 		{
-//			cout<<"going to delete..."<<endl;
-//			rings2.DeleteAtom(at);
 			cout <<"NORMAL Atm: "<< at->GetType()<<at->GetIndex()<< endl;
 		}
 	}
 	cout << "Number of ring atoms: "<<num_ring_atms<<endl;
 	cout<<endl;
 	
-	//Ring bonds:
+	// Deletion of certain bonds to
+	// create ring fragments
 	vector<OBBond*> for_deletion;
   FOR_BONDS_OF_MOL(b, rings2)
-    if (!b->IsInRing())
+    if (b->IsRotor() && !b->IsInRing())
       for_deletion.push_back(&(*b));
-  for(vector<OBBond*>::iterator it=for_deletion.begin(); it!=for_deletion.end(); ++it) {
+  for(vector<OBBond*>::iterator it=for_deletion.begin(); it!=for_deletion.end(); ++it)
     rings2.DeleteBond(*it);
-  }
-	
-	vector<OBAtom*> atm_deletion;
-	FOR_ATOMS_OF_MOL(at, rings2)
-			if (!at->IsInRing())
-				atm_deletion.push_back(&(*at));
-	for(vector<OBAtom*>::iterator it2=atm_deletion.begin(); it2!=atm_deletion.end(); ++it2) {
-    rings2.DeleteAtom(*it2);
-	}
+	// delete non ring atoms:
+//	vector<OBAtom*> atm_deletion;
+//	FOR_ATOMS_OF_MOL(at, rings2)
+//			if (!at->IsInRing())
+//				atm_deletion.push_back(&(*at));
+//	for(vector<OBAtom*>::iterator it2=atm_deletion.begin(); it2!=atm_deletion.end(); ++it2)
+//		rings2.DeleteAtom(*it2);
 	
 	OBBondIterator rb_it;
 	obMol->BeginBond(rb_it);
@@ -154,29 +161,31 @@ int main(int argc, char* argv[])
 	cout << "total ring-bonds: "<<bondcnt << endl;
 	cout<<endl;
 	
-	
-	OBConversion conv;
-  conv.SetOutFormat("sdf");
-	ofstream ring_file;
-	ofstream ring_file2;
-	ring_file.open (String(parpars.get("o")+"found_rings.sdf"));
-	ring_file2.open (String(parpars.get("o")+"2found_rings.sdf"));
-	conv.Write(&rings, &ring_file);
-	conv.Write(&rings2, &ring_file2);
-	ring_file.close();
-	ring_file2.close();
+
+//	// write files in babel style:
+//	OBConversion conv;
+//  conv.SetOutFormat("sdf");
+//	ofstream ring_file;
+//	ofstream ring_file2;
+//	ring_file.open (String(parpars.get("o")+"found_rings.sdf"));
+//	ring_file2.open (String(parpars.get("o")+"2found_rings.sdf"));
+//	conv.Write(&rings, &ring_file);
+//	conv.Write(&rings2, &ring_file2);
+//	ring_file.close();
+//	ring_file2.close();
 	
 	cout <<endl;
 	
 	Molecule* ball_mol2 = MolecularSimilarity::createMolecule(rings2, true);
 	ConnectedComponentsProcessor conpro;
 	ball_mol2->apply(conpro);
+	vector<Molecule> fragments;
+	conpro.getAllComponents(fragments);
 	
-	// write the optimized structure to a file whose
-	// name is given as the second command line argument
+	// write output:
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
-	outfile << ball_mol;
+	writeMolVec(fragments, &outfile);
 	outfile.close();
 
 	Log << "wrote file " << outfile_name << endl;
