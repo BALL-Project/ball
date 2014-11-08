@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/commandlineParser.h>
 
@@ -15,8 +14,6 @@
 #include <openbabel/mol.h>
 #include <openbabel/shared_ptr.h>
 #include <openbabel/ring.h>
-
-#include "testHeader.h"
 
 using namespace OpenBabel;
 using namespace BALL;

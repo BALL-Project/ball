@@ -8,7 +8,6 @@
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 
 #include <openbabel/mol.h>
-#include <openbabel/shared_ptr.h>
 #include <openbabel/obconversion.h>
 #include <openbabel/rotor.h>
 
@@ -77,6 +76,8 @@ int main(int argc, char* argv[])
 		torlib=parpars.get("l");
 		rot_li.Init( torlib );
 	}
+	
+	int cntr=0;
 	while ( conv.Read(&obMol, &ifs) )
 	{
 		// init ring and rotable information:
@@ -115,7 +116,9 @@ int main(int argc, char* argv[])
 		writeMolVec(fragments, &outfile);
 		delete ball_mol;
 		obMol.Clear();
+		cntr++;
 	}
 	outfile.close();
 	ifs.close();
+	Log << "read "<< cntr<<" structures " << outfile_name << endl;
 }

@@ -11,7 +11,8 @@ SET(DIRECTORY source/APPLICATIONS/LigStruct)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-	testHeader.C
+	splitMolecule.C
 )	
+#FILE(GLOB SOURCES_LIST "source/APPLICATIONS/LigStruct/*.C")
 
 ADD_BALL_SOURCES("APPLICATIONS/LigStruct" "${SOURCES_LIST}")
