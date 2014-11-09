@@ -4,13 +4,16 @@
 
 #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/FORMAT/SDFile.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h> // for element
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/FORMAT/SDFile.h>
-
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
+#include <BALL/STRUCTURE/molecularSimilarity.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/bond.h>
+
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
 #include <openbabel/shared_ptr.h>
@@ -28,6 +31,7 @@ using namespace BALL;
 using namespace std;
 
 /// ################# H E L P E R    F U N C T I O N S #################
+// check if the atom is a rigid one:
 bool isAtomRigid(OBAtom* atm)
 {
 /// TODO: add OBRotorList object to use custom torlib!
@@ -42,6 +46,42 @@ bool isAtomRigid(OBAtom* atm)
 				return true;
 		}
 		return false;
+	}
+}
+
+// TODO
+// cant get the bond of the last fragment of a test molecule deleted
+// is suppose we are somehow loosing the atom on the other side and  thus 
+// cant delete it any more.
+void clearExternalBonds(Molecule* mol)
+{
+	Atom::BondIterator bit;
+	AtomIterator ait;
+
+//	BALL_FOREACH_INTERBOND(*mol, ait, bit)
+//	{
+//		bit->destroy();
+//	}
+	for (ait = mol->beginAtom(); !ait.isEnd(); ait++)
+	{
+		for (bit=ait->beginBond(); !bit.isEnd(); bit++)
+		{
+			Atom* at1 = bit->getFirstAtom();
+			Atom* at2 = bit->getSecondAtom();
+			
+			cout<< at1->getElement().getSymbol() <<" - " <<at2->getElement().getSymbol()<<endl;
+
+			
+			if ( at2->getParent() != mol) 
+			{
+				at1->destroyBond(*at2);
+			}
+			
+			if (at1->getParent()!= mol)
+			{
+				at2->destroyBond(*at1);
+			}
+		}
 	}
 }
 
@@ -85,20 +125,20 @@ int main(int argc, char* argv[])
 	// create 2 empty disjoint sets:
 	std::vector <int> fixed_rank(num_atoms);
 	std::vector <int> fixed_parent(num_atoms);
-	DisjointSet dset_fixed(&fixed_rank[0], &fixed_parent[0]);
+	DisjointSet dset_rigid(&fixed_rank[0], &fixed_parent[0]);
 	
 	std::vector <int> linker_rank(num_atoms);
 	std::vector <int> linker_parent(num_atoms);
 	DisjointSet dset_linker(&linker_rank[0], &linker_parent[0]);
 	
-	std::vector <bool> fixed_ids(num_atoms, 0);
-	std::vector <bool> rotab_ids(num_atoms, 0);
+	std::vector <bool> is_rigid(num_atoms, 0); // bitVec indicating rigid atoms
+	std::vector <bool> is_linker(num_atoms, 0); // bitVec indicating linker atoms
 	
 	// init ring and rotable information:
 	obMol.FindRingAtomsAndBonds();
 /// TODO: add OBRotorList object to use custom torlib!
 
-	// iterate over all bonds, split into 2 groups of fragments:
+	/// iterate over all bonds and split into 2 groups of fragments:
 	OBBondIterator b_it = obMol.BeginBonds();
 	std::vector< std::pair<int, int> > connections;
 	for (; b_it != obMol.EndBonds(); b_it++)
@@ -108,15 +148,15 @@ int main(int argc, char* argv[])
 		// for all rotable bonds:
 		if ( (*b_it)->IsRotor() )
 		{
-			if( !rotab_ids[id1] )
+			if( !is_linker[id1] )
 			{
 				dset_linker.make_set(id1); 
-				rotab_ids[id1]=1;
+				is_linker[id1]=1;
 			}
-			if( !rotab_ids[id2] )
+			if( !is_linker[id2] )
 			{
 				dset_linker.make_set(id2); 
-				rotab_ids[id2]=1;
+				is_linker[id2]=1;
 			}
 			dset_linker.union_set(id1, id2);
 			
@@ -129,73 +169,120 @@ int main(int argc, char* argv[])
 		// for all fixed bonds:
 		else
 		{
-			if( !fixed_ids[id1] )
+			if( !is_rigid[id1] )
 			{
-				dset_fixed.make_set(id1); 
-				fixed_ids[id1]=1;
+				dset_rigid.make_set(id1); 
+				is_rigid[id1]=1;
 			}
-			if( !fixed_ids[id2] )
+			if( !is_rigid[id2] )
 			{
-				dset_fixed.make_set(id2); 
-				fixed_ids[id2]=1;
+				dset_rigid.make_set(id2); 
+				is_rigid[id2]=1;
 			}
-			dset_fixed.union_set(id1,id2);
+			dset_rigid.union_set(id1,id2);
 		}
 	}
+
+	/// convert from Babel to BALL:
+	Molecule* ball_rigid_mol = MolecularSimilarity::createMolecule(obMol, true);
+	Molecule* ball_linker_mol = new Molecule(*ball_rigid_mol); // make a copy
+	ball_rigid_mol->setName("original_rigid");
+	ball_linker_mol->setName("original_linker");
 	
-	cout<<endl;
+	///	iterate over all atoms, sorting out the fragments
+	std::vector <int> link_groups(num_atoms, -1);
+	std::vector <int> fixe_groups(num_atoms, -1);
+	std::vector <Molecule*> fragments;
+	
+	int frag_id=0;
+	int parent_id = -1;
+	
+	/// create fixed fragments:
 	for(int i = 0 ; i < num_atoms; i++)
 	{
-		int pare = -1;
-		if (fixed_ids[i])
+		if ( ! is_rigid[i] ) // loop only over rigid atoms:
 		{
-			pare = dset_fixed.find_set(i);
-			cout << "Atom:"<< i<<" "<<obMol.GetAtomById(i)->GetType()<< " is fixed, "<<pare<<endl;
-			if(rotab_ids[i])
-				cout<<"also linker atom!"<<endl;
+			ball_rigid_mol->remove(*ball_rigid_mol->getAtom(0));
+			continue;
+		}
+
+		/// Atom is a fixed one:
+		Atom* atm = ball_rigid_mol->getAtom(0);
+
+		parent_id = dset_rigid.find_set(i);
+		// if fragment does not exist, create it:
+		if(fixe_groups[parent_id]<0)
+		{
+			fixe_groups[parent_id] = frag_id;
+			Molecule* dummy = new Molecule();
+			dummy->insert(*atm);
+			dummy->setName("Fragment_"+toString(frag_id));
+			dummy->setProperty("isRigid", true);
+			frag_id++;
+			fragments.push_back(dummy);
 		}
 		else
 		{
-			pare = dset_linker.find_set(i);
-			cout << "Atom:"<< i<<" "<<obMol.GetAtomById(i)->GetType()<< " is linker, "<<pare<<endl;
+			fragments[ fixe_groups[parent_id] ]->insert(*atm);
 		}
 	}
-	std::vector< std::pair<int, int> >::iterator it;
-	cout << endl;
-	cout << "Intra fragment Bonds:"<<endl;
-	for(it=connections.begin(); it != connections.end();it++)
+	
+	/// create linker fragments:
+	for(int i = 0 ; i < num_atoms; i++)
 	{
-		cout << it->first<< " - "<< it->second<< endl;
+		if(!is_linker[i]) // loop only over linker atoms
+		{
+			ball_linker_mol->remove(*ball_linker_mol->getAtom(0));
+			continue;
+		}
+		Atom* atm = ball_linker_mol->getAtom(0);
+		parent_id = dset_linker.find_set(i);
+		
+		// if the atoms fragment does not exist, create it:
+		if(link_groups[parent_id]<0)
+		{
+			link_groups[parent_id] = frag_id;
+			Molecule* dummy = new Molecule();
+			dummy->insert(*atm);
+			dummy->setName("Fragment_"+toString(frag_id));
+			frag_id++;
+			dummy->setProperty("isRigid", false);
+			
+			fragments.push_back(dummy);
+		}
+		// atom is part of existing fragment:
+		else
+		{
+			fragments[ link_groups[parent_id] ]->insert(*atm);
+		}
 	}
-	// convert from Babel to BALL:
-	Molecule* ball_mol2 = MolecularSimilarity::createMolecule(obMol, true);
+	
+	/// iterate over all connections and assign connections to fragments:
+	//	std::vector< std::pair<int, int> >::iterator it;
+	//	cout << endl;
+	//	cout << "Intra fragment Bonds:"<<endl;
+	//	for(it=connections.begin(); it != connections.end();it++)
+	//	{
+	//		cout << it->first<< " - "<< it->second<< endl;
+	//	}
 
-	// write output:
+	/// write output:
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
-	outfile << *ball_mol2;
-	Log << "wrote file " << outfile_name << endl;
+	for(int i = 0; i < fragments.size(); i++)
+	{
+		clearExternalBonds(fragments[i]);
+		//cout<<"fragment "<<i << " #bonds: "<<fragments[i]->countBonds()<<endl;
+		outfile << *fragments[i];
+	}
+	
+	Log << "wrote " << fragments.size() <<" fragments to file " << outfile_name << endl;
 	
 	// clean up:
-	delete ball_mol2;
+	fragments.clear();
+	delete ball_rigid_mol;
+	delete ball_linker_mol;
 	outfile.close();
-	
-	// END of program------------------------------------------
-	vector <int> rank(5,0);
-	vector <int> parent(5,0);
-	DisjointSet dset(&rank[0], &parent[0]);
-	
-	dset.make_set(2);
-	dset.make_set(3);
-	dset.union_set(2,3);
-	//dset.make_set(2);
-	cout<<endl;
-	for (int i =0; i <5 ;i++)
-	{
-		cout<< i << " p: "<<parent[i]<<" r:"<< rank[i]<< " finder: "<< dset.find_set(i)<<endl;
-	}
-	cout<<dset.find_set(1);
-	
 }
 
 /// Apply ConComp Processor:
