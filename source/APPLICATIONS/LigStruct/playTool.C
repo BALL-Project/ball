@@ -18,6 +18,7 @@
 #include <openbabel/rotor.h>
 
 #include <vector>
+#include <unordered_set>
 #include <utility> // for 'pair'
 
 //#include <boost/pending/disjoint_sets.hpp>
@@ -90,6 +91,9 @@ int main(int argc, char* argv[])
 	std::vector <int> linker_parent(num_atoms);
 	DisjointSet dset_linker(&linker_rank[0], &linker_parent[0]);
 	
+	std::vector <bool> fixed_ids(num_atoms, 0);
+	std::vector <bool> rotab_ids(num_atoms, 0);
+	
 	// init ring and rotable information:
 	obMol.FindRingAtomsAndBonds();
 /// TODO: add OBRotorList object to use custom torlib!
@@ -99,35 +103,62 @@ int main(int argc, char* argv[])
 	std::vector< std::pair<int, int> > connections;
 	for (; b_it != obMol.EndBonds(); b_it++)
 	{
+		int id1 = (*b_it)->GetBeginAtom()->GetId();
+		int id2 = (*b_it)->GetEndAtom()->GetId();
 		// for all rotable bonds:
 		if ( (*b_it)->IsRotor() )
 		{
-/// TODO: Problems when Idx was already added? (possible by serveral bonds to one atom)
-			dset_linker.make_set((*b_it)->GetBeginAtom()->GetId());
-			dset_linker.make_set((*b_it)->GetEndAtom()->GetId());
-			dset_linker.union_set((*b_it)->GetBeginAtom()->GetId(),(*b_it)->GetEndAtom()->GetId());
+			if( !rotab_ids[id1] )
+			{
+				dset_linker.make_set(id1); 
+				rotab_ids[id1]=1;
+			}
+			if( !rotab_ids[id2] )
+			{
+				dset_linker.make_set(id2); 
+				rotab_ids[id2]=1;
+			}
+			dset_linker.union_set(id1, id2);
 			
 			// rotables are also connecting the fragments, find the connections:
 			if( isAtomRigid((*b_it)->GetBeginAtom()) || isAtomRigid((*b_it)->GetEndAtom()) )
 			{
-				connections.push_back( make_pair((*b_it)->GetBeginAtom()->GetId(), (*b_it)->GetEndAtom()->GetId()) );
+				connections.push_back( make_pair( id1, id2) );
 			}
 		}
 		// for all fixed bonds:
 		else
 		{
-/// TODO: Problems when Idx was already added? (possible by serveral bonds to one atom)
-			dset_fixed.make_set((*b_it)->GetBeginAtom()->GetId());
-			dset_fixed.make_set((*b_it)->GetEndAtom()->GetId());
-			dset_fixed.union_set((*b_it)->GetBeginAtom()->GetId(),(*b_it)->GetEndAtom()->GetId());
+			if( !fixed_ids[id1] )
+			{
+				dset_fixed.make_set(id1); 
+				fixed_ids[id1]=1;
+			}
+			if( !fixed_ids[id2] )
+			{
+				dset_fixed.make_set(id2); 
+				fixed_ids[id2]=1;
+			}
+			dset_fixed.union_set(id1,id2);
 		}
 	}
 	
+	cout<<endl;
 	for(int i = 0 ; i < num_atoms; i++)
 	{
-		int linkerP = dset_linker.find_set(i);
-		int rigidP = dset_fixed.find_set(i);
-		cout << "Atom:"<< i<<" "<<obMol.GetAtomById(i)->GetType()<< " linker: "<<linkerP<< " fixed: "<< rigidP<<endl;
+		int pare = -1;
+		if (fixed_ids[i])
+		{
+			pare = dset_fixed.find_set(i);
+			cout << "Atom:"<< i<<" "<<obMol.GetAtomById(i)->GetType()<< " is fixed, "<<pare<<endl;
+			if(rotab_ids[i])
+				cout<<"also linker atom!"<<endl;
+		}
+		else
+		{
+			pare = dset_linker.find_set(i);
+			cout << "Atom:"<< i<<" "<<obMol.GetAtomById(i)->GetType()<< " is linker, "<<pare<<endl;
+		}
 	}
 	std::vector< std::pair<int, int> >::iterator it;
 	cout << endl;
@@ -148,6 +179,23 @@ int main(int argc, char* argv[])
 	// clean up:
 	delete ball_mol2;
 	outfile.close();
+	
+	// END of program------------------------------------------
+	vector <int> rank(5,0);
+	vector <int> parent(5,0);
+	DisjointSet dset(&rank[0], &parent[0]);
+	
+	dset.make_set(2);
+	dset.make_set(3);
+	dset.union_set(2,3);
+	//dset.make_set(2);
+	cout<<endl;
+	for (int i =0; i <5 ;i++)
+	{
+		cout<< i << " p: "<<parent[i]<<" r:"<< rank[i]<< " finder: "<< dset.find_set(i)<<endl;
+	}
+	cout<<dset.find_set(1);
+	
 }
 
 /// Apply ConComp Processor:
