@@ -1,59 +1,35 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/FORMAT/molFileFactory.h>
+
 #include <BALL/FORMAT/commandlineParser.h>
-
-#include <BALL/STRUCTURE/defaultProcessors.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/STRUCTURE/molecularSimilarity.h>
 
-#include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
-#include <openbabel/shared_ptr.h>
-#include <openbabel/ring.h>
+#include <openbabel/canon.h>
+#include <openbabel/graphsym.h>
+
+#include <vector>
+#include <map>
+
+#include <boost/pending/disjoint_sets.hpp>
 
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
-/// ################# H E L P E R    F U N C T I O N S #################
-shared_ptr<OBMol> getMol(const std::string &filename)
-{
-  // Create the OBMol object.
-  shared_ptr<OBMol> mol(new OBMol);
-
-  // Create the OBConversion object.
-  OBConversion conv;
-  OBFormat *format = conv.FormatFromExt(filename.c_str());
-  if (!format || !conv.SetInFormat(format)) {
-    std::cout << "Could not find input format for file " << filename << std::endl;
-    return mol;
-  }
-
-  // Open the file.
-  std::ifstream ifs(filename.c_str());
-  if (!ifs) {
-    std::cout << "Could not open " << filename << " for reading." << std::endl;
-    return mol;
-  }
-  // Read the molecule.
-  if (!conv.Read(mol.get(), &ifs)) {
-    std::cout << "Could not read molecule from file " << filename << std::endl;
-    return mol;
-  }
-
-  return mol;
-}
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Molecule2Fragments", "cut a molecule along its bonds, generating fragments", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
-
+	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setOutputFormatSource("o","i");
@@ -62,41 +38,56 @@ int main(int argc, char* argv[])
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
-
-	SDFile input(parpars.get("i"), ios::in);
-	if (!input)
-	{
-		Log.error() << "Cannot open SDF input file " << parpars.get("i") << endl;
-		return 2;
-	}
-
-	shared_ptr<OBMol> obMol = getMol(parpars.get("i"));
-	Molecule ball_mol;
-	input >> ball_mol;
-	input.close();
-
+	// ######## START ####################################################
+	OBMol obMol; // working molecule
 	
-	// write files in babel style:
+	// Read open-babel molecule as input:
 	OBConversion conv;
-	conv.SetOutFormat("sdf");
-	ofstream ob_file;
-	ob_file.open (String(parpars.get("o")+"_babel_.sdf"));
-	conv.Write(&(*obMol), &ob_file);
-	ob_file.close();
+	OBFormat *format = conv.FormatFromExt(parpars.get("i"));
 	
-	// write BALL like:
-	Molecule* ball_conv = MolecularSimilarity::createMolecule(*obMol, true);
+	if (!format || !conv.SetInFormat(format))
+		cout << "Could not find input format for file " << parpars.get("i") << endl;
 
-	// write output:
+	ifstream ifs(parpars.get("i")); // open file
+	
+	if (!ifs)
+		cout << "Could not open " << parpars.get("i") << " for reading." << endl;
+	
+	conv.Read(&obMol, &ifs); // actual 'read' command
+	ifs.close();
+	// --------------------did parameter parsing----------------------------------
+	
+	int num_atoms = obMol.NumAtoms();
+///======================Fragment     M A T C H I N G ==========================
+
+	Molecule* ball_mol = MolecularSimilarity::createMolecule(obMol, true);
+	
+	OBGraphSym grsym(&obMol);
+	std::vector<unsigned int> sym;
+	grsym.GetSymmetry(sym);
+	
+	std::vector<unsigned int> clabels;
+	CanonicalLabels(&obMol, sym, clabels);
+	
+	cout<< "canonical labels "<<endl;
+	for(int i=0; i<clabels.size(); i++)
+		cout<<(i+1) << " - "<< clabels[i]<<endl;
+	
+	Molecule new_mol;
+	std::vector <Atom*> aList;
+	for(int i=0; i<clabels.size(); i++)
+	{
+		aList.push_back( ball_mol->getAtom(clabels[i]-1) );
+	}
+	for(int i=0; i<clabels.size(); i++)
+		new_mol.insert(*aList[i]);
+	
+	/// write output:
 	String outfile_name = String(parpars.get("o"));
-	SDFile outfile1(outfile_name+"_backconv_.sdf", ios::out);
-	SDFile outfile2(outfile_name+"_original_.sdf", ios::out);
-
-	outfile1<< *ball_conv;
-	outfile2<< ball_mol;
+	SDFile outfile(outfile_name, ios::out);
+	outfile << new_mol;
 	
-	outfile1.close();
-	outfile2.close();
+	Log << "wrote canonical to file " << outfile_name << endl;
 
-	Log << "wrote file " << outfile_name << endl;
+	delete ball_mol;
 }

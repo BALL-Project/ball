@@ -4,7 +4,6 @@
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
-//#include <BALL/KERNEL/PTE.h> // for element
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/bond.h>
@@ -41,10 +40,7 @@ bool isAtomRigid(OBAtom* atm)
 	}
 }
 
-// TODO
-// cant get the bond of the last fragment of a test molecule deleted
-// is suppose we are somehow loosing the atom on the other side and  thus 
-// cant delete it any more.
+// cut bonds that are shared with atoms from other fragments:
 void clearExternalBonds(Molecule* mol)
 {
 	Atom::BondIterator bit;
@@ -60,15 +56,10 @@ void clearExternalBonds(Molecule* mol)
 //		{
 //			Atom* at1 = bit->getFirstAtom();
 //			Atom* at2 = bit->getSecondAtom();
-			
-//			//cout<< at1->getElement().getSymbol() <<" - " <<at2->getElement().getSymbol()<<endl;
-
-			
 //			if ( at2->getParent() != mol) 
 //			{
 //				at1->destroyBond(*at2);
 //			}
-			
 //			if (at1->getParent()!= mol)
 //			{
 //				at2->destroyBond(*at1);
