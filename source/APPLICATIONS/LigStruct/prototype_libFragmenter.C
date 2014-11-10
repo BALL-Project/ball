@@ -9,7 +9,6 @@
 
 #include <openbabel/mol.h>
 #include <openbabel/obconversion.h>
-#include <openbabel/rotor.h>
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -31,11 +30,9 @@ int main(int argc, char* argv[])
 	CommandlineParser parpars("libFragmenter", "cut a molecule along its rotable bonds, generating fragments", 0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
-	parpars.registerParameter("l", "location of custom torsion lib (*.txt)", INFILE, false);
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setSupportedFormats("l","smi,txt");
 
 	String manual = "For creating a fragment library.";
 	parpars.setToolManual(manual);
@@ -68,15 +65,6 @@ int main(int argc, char* argv[])
 	vector<Molecule> fragments;
 	Molecule* ball_mol;
 	
-	String torlib="";
-	OBRotorList rot_li;
-	OBRotorIterator rot;
-	if (parpars.has("l"))
-	{
-		torlib=parpars.get("l");
-		rot_li.Init( torlib );
-	}
-	
 	int cntr=0;
 	while ( conv.Read(&obMol, &ifs) )
 	{
@@ -87,20 +75,9 @@ int main(int argc, char* argv[])
 		fragments.clear();
 		
 		// Delete rotor-bonds to create fragments (of rings and rigid-groups)
-		if (torlib!="")
-		{
-			rot_li.Setup(obMol);
-			
-			rot = rot_li.BeginRotors();
-			for(; rot != rot_li.EndRotors(); rot++)
-				for_deletion.push_back( (*rot)->GetBond() );
-		}
-		else
-		{
-			FOR_BONDS_OF_MOL(b, obMol)
-				if (b->IsRotor()) // && !b->IsInRing()) // in babel ring bonds are never rotors!!!!
-					for_deletion.push_back(&(*b));
-		}
+		FOR_BONDS_OF_MOL(b, obMol)
+			if (b->IsRotor()) // && !b->IsInRing()) // in babel ring bonds are never rotors!!!!
+				for_deletion.push_back(&(*b));
 		
 		for(it=for_deletion.begin(); it!=for_deletion.end(); ++it)
 			obMol.DeleteBond(*it);
@@ -120,5 +97,5 @@ int main(int argc, char* argv[])
 	}
 	outfile.close();
 	ifs.close();
-	Log << "read "<< cntr<<" structures " << outfile_name << endl;
+	Log << "read "<< cntr<<" input structures, wrote "<< fragments.size()<<" fragments to: " << outfile_name << endl;
 }
