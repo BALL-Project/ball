@@ -5,8 +5,10 @@
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/STRUCTURE/UCK.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 #include <openbabel/obconversion.h>
@@ -17,6 +19,7 @@
 #include <vector>
 #include <map>
 
+#include <boost/unordered_map.hpp>
 #include <boost/pending/disjoint_sets.hpp>
 
 using namespace OpenBabel;
@@ -65,15 +68,27 @@ void copyMoleculeProperies(Molecule &orig, Molecule &cop)
 	cop.setName(orig.getName());
 }
 
+void setCoordinates(Molecule* query, Molecule* templat)
+{
+	AtomIterator qit = query->beginAtom();
+	AtomIterator tit = templat->beginAtom();
+	for (; qit != query->endAtom(); qit++, tit++)
+	{
+		qit->setPosition( tit->getPosition() );
+	}
+}
+
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	parpars.registerParameter("l", "in SDF fragmentLib", INFILE, true);
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
+	parpars.setSupportedFormats("l","sdf");
 	parpars.setOutputFormatSource("o","i");
 
 	String manual = "...just playing...";
@@ -101,6 +116,7 @@ int main(int argc, char* argv[])
 	obMol.FindRingAtomsAndBonds(); // find rings
 
 	// --------------------did parameter parsing----------------------------------
+///#######################    F R A G M E N T I N G    #######################
 	/// convert from Babel to BALL:
 	Molecule* ball_mol = MolecularSimilarity::createMolecule(obMol, true);
 	ball_mol->setName("original_mol");
@@ -248,15 +264,12 @@ int main(int argc, char* argv[])
 		cout<<endl;
 	}
 
-///======================Fragment     M A T C H I N G ==========================
+///#######################    M A T C H I N G    #######################
 /// Continue here with:
-/// vector< int > connections
-/// map < int , pair< int, int> map_connect
+/// list < pair< Atom*, Atom*> connections
 /// vector< Molecule*> fragments
 	
-
-	///--------------------------------------------------
- /// make atomlists of the fragments canonical:
+///---------------make atomlists of the fragments canonical---------------------
 	std::vector< Molecule* >::iterator it;
 	Molecule* new_mol;
 	for(it=fragments.begin(); it != fragments.end(); it++)
@@ -284,8 +297,47 @@ int main(int argc, char* argv[])
 		
 		delete new_mol;
 	}
+
+///-------------------match queryFragments to libFragments----------------------
+	// Load fragment lib:
+	boost::unordered_map <BALL::String, Molecule*> fragmentLib;
 	
-	/// write output:
+	String libfile_name = String(parpars.get("l"));
+	SDFile libFile(libfile_name, ios::in);
+	
+	Molecule* tmp_mol;
+	tmp_mol = libFile.read();
+	
+	// read fragmentLib:
+	while(tmp_mol)
+	{
+		BALL::String key = tmp_mol->getProperty("key").getString();
+		fragmentLib[key] = tmp_mol;
+		
+		tmp_mol = libFile.read();
+	}
+
+
+	std::vector< Molecule* >::iterator it2;
+	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
+	{
+		// for all rigid fragments, match these against the lib:
+		if( (*it2)->getProperty("isRigid").getBool() )
+		{
+			UCK keyGen(**it2, true, 5);
+			Molecule* templat = fragmentLib[ keyGen.getUCK() ];
+			
+			if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
+				setCoordinates(*it2, templat);
+			else
+				cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
+		}
+	}
+	
+	
+	
+///#######################    A S S E M B L E   3 D    #######################
+///-------------------------------write output----------------------------------
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
 	for(int i = 0; i < fragments.size(); i++)
@@ -294,8 +346,13 @@ int main(int argc, char* argv[])
 	}
 	
 	Log << "wrote " << fragments.size() <<" fragments to file " << outfile_name << endl;
-	
+///---------------------------------Clean up------------------------------------
 	// clean up:
 	delete ball_mol;
 	outfile.close();
+	
+	// clean db
+	boost::unordered_map <BALL::String, Molecule*>::iterator map_it;
+	for(map_it = fragmentLib.begin(); map_it!=fragmentLib.end(); map_it++)
+		delete map_it->second;
 }
