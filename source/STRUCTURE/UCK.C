@@ -161,7 +161,7 @@ namespace BALL
 			found_atom = false;
 			
 			weight_ += atit1->getElement().getAtomicWeight();
-			v.push_back(atit1->getName());	// add atom-name to label-list
+			v.push_back(atit1->getElement().getSymbol());	// add atom-name to label-list
 			Size dest = 0;
 			// find bonds from current atom to all other atoms and store them in e
 			for(AtomConstIterator atit2 = mol.beginAtom(); atit2 != mol.endAtom(); ++atit2)
