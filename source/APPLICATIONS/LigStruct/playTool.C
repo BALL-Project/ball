@@ -101,6 +101,9 @@ int main(int argc, char* argv[])
 	obMol.FindRingAtomsAndBonds(); // find rings
 
 	// --------------------did parameter parsing----------------------------------
+	/// convert from Babel to BALL:
+	Molecule* ball_mol = MolecularSimilarity::createMolecule(obMol, true);
+	ball_mol->setName("original_mol");
 	
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
 	int num_atoms = obMol.NumAtoms();
@@ -119,7 +122,10 @@ int main(int argc, char* argv[])
 
 	/// iterate over all bonds and split into 2 groups of fragments:
 	OBBondIterator b_it = obMol.BeginBonds();
-	std::vector< int > connections(num_atoms, -1);
+	
+	//std::vector< int > connections(num_atoms, -1);
+	std::list< pair<Atom*, Atom*> > connections;
+	std::map< Atom*, int> atm_to_pos;
 	
 	for (; b_it != obMol.EndBonds(); b_it++)
 	{
@@ -146,8 +152,9 @@ int main(int argc, char* argv[])
 			// rotables to a rigid fragment define connection points:
 			if( isAtomRigid((*b_it)->GetBeginAtom()) || isAtomRigid((*b_it)->GetEndAtom()) )
 			{
-				connections[id1] = id2;
-				connections[id2] = id1;
+				Atom* atm1 = ball_mol->getAtom(id1);
+				Atom* atm2 = ball_mol->getAtom(id2);
+				connections.push_back(make_pair(atm1, atm2));
 			}
 		}
 		// for all fixed bonds:
@@ -166,10 +173,6 @@ int main(int argc, char* argv[])
 			dset_rigid.union_set(id1,id2);
 		}
 	}
-
-	/// convert from Babel to BALL:
-	Molecule* ball_mol = MolecularSimilarity::createMolecule(obMol, true);
-	ball_mol->setName("original_mol");
 	
 	///	iterate over all atoms, sorting out the  fixed and linker fragments
 	std::vector <int> link_groups(num_atoms, -1); // map parent id to vector pos in variable 'fragments'
@@ -182,6 +185,9 @@ int main(int argc, char* argv[])
 	for(int i = 0 ; i < num_atoms; i++)
 	{
 		Atom* atm = ball_mol->getAtom(0);
+		
+		// TODO: remove as atm_to_pos is only for debugging:
+		atm_to_pos[atm]=i;
 		// atom is linker, extend a linker fragment
 		if ( is_linker[i] )
 		{
@@ -193,9 +199,6 @@ int main(int argc, char* argv[])
 				link_groups[parent_id] = fragments.size();
 				Molecule* dummy = new Molecule();
 				
-				if(connections[i] != -1) // remap connections
-					map_connect[i]=make_pair( fragments.size(), 0 );
-				
 				dummy->insert(*atm);
 				dummy->setName("Fragment_"+toString(fragments.size()));
 				dummy->setProperty("isRigid", false);
@@ -205,9 +208,6 @@ int main(int argc, char* argv[])
 			// atom is part of existing fragment:
 			else
 			{
-				if(connections[i] != -1) // remap connections
-					map_connect[i]=make_pair( fragments.size()-1, fragments[ link_groups[parent_id] ]->countAtoms() );
-				
 				fragments[ link_groups[parent_id] ]->insert(*atm);
 			}
 		}
@@ -220,10 +220,7 @@ int main(int argc, char* argv[])
 			{
 				rigid_groups[parent_id] = fragments.size();
 				Molecule* dummy = new Molecule();
-
-				if(connections[i] != -1)// remap connections
-					map_connect[i]=make_pair( fragments.size(), 0);
-
+				
 				dummy->insert(*atm);
 				dummy->setName("Fragment_"+toString(fragments.size()));
 				dummy->setProperty("isRigid", true);
@@ -231,9 +228,6 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
-				if(connections[i] != -1)// remap connections
-					map_connect[i]=make_pair( fragments.size()-1, fragments[ rigid_groups[parent_id] ]->countAtoms() );
-				
 				fragments[ rigid_groups[parent_id] ]->insert(*atm);
 			}
 		}
@@ -242,14 +236,15 @@ int main(int argc, char* argv[])
 	/// iterate over all connections and assign connections to fragments:
 	cout << endl;
 	cout << "following inter fragment bonds exist:"<<endl;
-	for(int i = 0; i < num_atoms; i++)
+	list< pair<Atom*, Atom*> >::iterator coit;
+	for(coit=connections.begin(); coit!=connections.end(); coit++)
 	{
-		if(connections[i] == -1)
-			continue;
-		
-		int n = connections[i];
-		cout<< "Fragment "<<map_connect[i].first<<" atm "<<map_connect[i].second;
-		cout<< " to Fragment "<< map_connect[n].first<<" atm "<<map_connect[n].second;
+		Atom* atm1 = coit->first;
+		Atom* atm2 = coit->second;
+		cout<<((Molecule*)atm1->getParent())->getName();
+		cout<<" atm "<<atm_to_pos[atm1];
+		cout<< " to "<< ((Molecule*)atm2->getParent())->getName();
+		cout<<" atm "<<atm_to_pos[atm2];
 		cout<<endl;
 	}
 
@@ -259,7 +254,9 @@ int main(int argc, char* argv[])
 /// map < int , pair< int, int> map_connect
 /// vector< Molecule*> fragments
 	
-	std::vector< OBMol* > conv_frags;
+
+	///--------------------------------------------------
+ /// make atomlists of the fragments canonical:
 	std::vector< Molecule* >::iterator it;
 	Molecule* new_mol;
 	for(it=fragments.begin(); it != fragments.end(); it++)
