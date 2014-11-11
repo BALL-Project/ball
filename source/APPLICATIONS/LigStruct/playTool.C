@@ -54,6 +54,17 @@ void clearExternalBonds(Molecule* mol)
 	}
 }
 
+// Copy properties from an original molecule to a copy molecule
+void copyMoleculeProperies(Molecule &orig, Molecule &cop)
+{
+	NamedPropertyIterator  it;
+	for(it = orig.beginNamedProperty (); it !=orig.endNamedProperty(); it++)
+	{
+		cop.setProperty(*it);
+	}
+	cop.setName(orig.getName());
+}
+
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
@@ -242,20 +253,6 @@ int main(int argc, char* argv[])
 		cout<<endl;
 	}
 
-	/// write output:
-	String outfile_name = String(parpars.get("o"));
-	SDFile outfile(outfile_name, ios::out);
-	for(int i = 0; i < fragments.size(); i++)
-	{
-		clearExternalBonds(fragments[i]);
-		outfile << *fragments[i];
-	}
-	
-	Log << "wrote " << fragments.size() <<" fragments to file " << outfile_name << endl;
-	
-	// clean up:
-	delete ball_mol;
-	outfile.close();
 ///======================Fragment     M A T C H I N G ==========================
 /// Continue here with:
 /// vector< int > connections
@@ -264,8 +261,10 @@ int main(int argc, char* argv[])
 	
 	std::vector< OBMol* > conv_frags;
 	std::vector< Molecule* >::iterator it;
+	Molecule* new_mol;
 	for(it=fragments.begin(); it != fragments.end(); it++)
 	{
+		clearExternalBonds(*it);
 		OBMol* temp = MolecularSimilarity::createOBMol(**it, true);
 		
 		OBGraphSym grsym(temp);
@@ -274,9 +273,32 @@ int main(int argc, char* argv[])
 		
 		std::vector<unsigned int> clabels;
 		CanonicalLabels(temp, sym, clabels);
+		
+		new_mol = new Molecule;
+		std::vector <Atom*> aList(num_atoms);
+		for(int i=0; i<clabels.size(); i++)
+			aList[clabels[i]-1]=( (*it)->getAtom(i) );
+		
+		for(int i=0; i<clabels.size(); i++)
+			new_mol->append(*aList[i]);
 
-		//conv_frags.push_back(temp);
+		copyMoleculeProperies(**it, *new_mol);
+		(*it)->swap(*new_mol);
+		
+		delete new_mol;
 	}
 	
+	/// write output:
+	String outfile_name = String(parpars.get("o"));
+	SDFile outfile(outfile_name, ios::out);
+	for(int i = 0; i < fragments.size(); i++)
+	{
+		outfile << *fragments[i];
+	}
 	
+	Log << "wrote " << fragments.size() <<" fragments to file " << outfile_name << endl;
+	
+	// clean up:
+	delete ball_mol;
+	outfile.close();
 }
