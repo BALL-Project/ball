@@ -6,9 +6,13 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
+#include <BALL/STRUCTURE/UCK.h>
 
 #include <openbabel/mol.h>
 #include <openbabel/obconversion.h>
+#include <openbabel/canon.h>
+#include <openbabel/graphsym.h>
+
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -88,8 +92,42 @@ int main(int argc, char* argv[])
 		ConnectedComponentsProcessor conpro;
 		ball_mol->apply(conpro);
 		conpro.getMinAtomsComponents(fragments, 2);
+///----------------------Refine Fragments---------------------------
+/// CANONICAL Rows:
+		vector<Molecule>::iterator fit;
+		for(fit = fragments.begin(); fit!=fragments.end(); fit++)
+		{
+			// get babel mol:
+			OBMol* temp = MolecularSimilarity::createOBMol(*fit, true);
+			
+			// get helper for canonicalisation:
+			OBGraphSym grsym(temp);
+			std::vector<unsigned int> sym;
+			grsym.GetSymmetry(sym);
+			
+			// get mapping for canonical labels:
+			std::vector<unsigned int> clabels;
+			CanonicalLabels(temp, sym, clabels);
+			
+			Molecule* new_mol = new Molecule;
+			std::vector <Atom*> aList( (*fit).countAtoms() );
+			for(int i=0; i<clabels.size(); i++)
+			{
+				aList[clabels[i]-1]=( (*fit).getAtom(i) );
+			}
+
+			for(int i=0; i<clabels.size(); i++)
+				new_mol->append(*aList[i]);
+			
+			(*fit).swap(*new_mol);
+			
+/// generate UCK Keys:
+			UCK keyGen(*fit, true, 5);
+			
+			(*fit).setProperty("key", keyGen.getUCK());
+		}
 		
-		// write to output:
+/// write to output-------------------------------------------------------------
 		writeMolVec(fragments, &outfile);
 		delete ball_mol;
 		obMol.Clear();

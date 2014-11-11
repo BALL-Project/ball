@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
 	{
 		aList[clabels[i]-1]=( ball_mol->getAtom(i) );
 	}
-	cout<<endl;
+
 	
 	for(int i=0; i<clabels.size(); i++)
 		new_mol.append(*aList[i]);
@@ -90,6 +90,7 @@ int main(int argc, char* argv[])
 	SDFile outfile(outfile_name, ios::out);
 	outfile << new_mol;
 	
+	cout<<endl;
 	Log << "wrote canonical to file " << outfile_name << endl;
 
 	delete ball_mol;
