@@ -172,9 +172,6 @@ namespace BALL
 
 				if(atit1->getBond(*atit2) != 0)
 				{
-//					mol.getAtom(count);
-//					mol.getAtom(dest);
-//					std::cout<<"got atoms "<<count<<" "<<dest<<std::endl;
 					e.push_back(make_pair(count, dest));
 				}
 				++dest;
@@ -228,10 +225,9 @@ namespace BALL
 				else	// an edge to another node is found, so compute lambda_d-1 of the child and store the resulting string
 							// in vector lam
 				{
-					///
-//					std::cout<<" test befor seg fault"<<endl;
-//					std::cout<<"i: "<<i << " partner: "<<it->second<<endl;
-					const Bond* bnd = m.getAtom(i)->getBond(it->second);
+					/// modified by pbrach, Nov.2014, take bond-order into account
+					const Atom* atm = m.getAtom(it->second);
+					const Bond* bnd = m.getAtom(i)->getBond(*atm);
 					String lam_str="";
 					if (bnd)
 					{
@@ -247,8 +243,10 @@ namespace BALL
 					}
 					else
 					{
-						std::cout<< "did not get bond for: "<< i << " "<< it->second<<endl;
-						lam_str = lambda("", e, v, it->second, d-1, m);
+						std::cout<< "WARNING: UCK running on molecule "<< m.getName();
+						std::cout<<"did not get bond for: "<< (i+1) << " "<< (it->second+1);
+						std::cout<<endl;
+						lam_str = lambda("", e, v, it->second, d-1, m); /// original call!
 					}
 					lam->push_back(eraseDoubleLabels(d, v[i], lam_str));
 				}
