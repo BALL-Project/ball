@@ -13,6 +13,7 @@
 #include <openbabel/canon.h>
 #include <openbabel/graphsym.h>
 
+#include <set>
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -28,6 +29,20 @@ void writeMolVec(vector<Molecule> &input, SDFile* handle)
 	}
 }
 
+// --unique keys Write several result molecules to one file
+void uniqueWriteMolVec(vector<Molecule> &input, SDFile* handle, set< String >& used)
+{
+	for(int i = 0; i < input.size(); i++)
+	{
+		// check that the key was not already used:
+		String key = input[i].getProperty("key").getString();
+		if( used.find(key) == used.end() )
+		{
+			(*handle) << input[i];
+			used.insert(key);
+		}
+	}
+}
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
@@ -70,6 +85,7 @@ int main(int argc, char* argv[])
 	Molecule* ball_mol;
 	
 	int cntr=0;
+	set< String > used; // used fragment keys
 	while ( conv.Read(&obMol, &ifs) )
 	{
 		// init ring and rotable information:
@@ -128,12 +144,12 @@ int main(int argc, char* argv[])
 		}
 		
 /// write to output-------------------------------------------------------------
-		writeMolVec(fragments, &outfile);
+		uniqueWriteMolVec(fragments, &outfile,used);
 		delete ball_mol;
 		obMol.Clear();
 		cntr++;
 	}
 	outfile.close();
 	ifs.close();
-	Log << "read "<< cntr<<" input structures, wrote "<< fragments.size()<<" fragments to: " << outfile_name << endl;
+	Log << "read "<< cntr<<" input structures, wrote fragments to: " << outfile_name << endl;
 }
