@@ -90,7 +90,7 @@ namespace BALL
 		
 		/* compute lambda-map
 		*/
-		String lambda(String lambda_d, const PairVector& e, const std::vector<String>& v, Size pos, Size d);
+		String lambda(String lambda_d, const PairVector& e, const std::vector<String>& v, Size pos, Size d, const Molecule &m);
 		
 		/* construct final UCK as follows:
 		*  chemical_formula-lexicographically ordered collection of strings pair(a,b)

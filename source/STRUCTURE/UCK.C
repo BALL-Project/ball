@@ -6,6 +6,8 @@
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/atom.h>
 
 #include <QtCore/QCryptographicHash>
 
@@ -170,6 +172,9 @@ namespace BALL
 
 				if(atit1->getBond(*atit2) != 0)
 				{
+//					mol.getAtom(count);
+//					mol.getAtom(dest);
+//					std::cout<<"got atoms "<<count<<" "<<dest<<std::endl;
 					e.push_back(make_pair(count, dest));
 				}
 				++dest;
@@ -200,7 +205,7 @@ namespace BALL
 		return x;
 	}
 	
-	String UCK::lambda(String lambda_d, const PairVector& e, const vector<String>& v, Size i, Size d)
+	String UCK::lambda(String lambda_d, const PairVector& e, const vector<String>& v, Size i, Size d, const Molecule& m)
 	{
 		lambda_d = v[i]; // fix label
 		vector<String>* lam;
@@ -223,7 +228,29 @@ namespace BALL
 				else	// an edge to another node is found, so compute lambda_d-1 of the child and store the resulting string
 							// in vector lam
 				{
-					lam->push_back(eraseDoubleLabels(d, v[i], lambda("", e, v, it->second, d-1)));
+					///
+//					std::cout<<" test befor seg fault"<<endl;
+//					std::cout<<"i: "<<i << " partner: "<<it->second<<endl;
+					const Bond* bnd = m.getAtom(i)->getBond(it->second);
+					String lam_str="";
+					if (bnd)
+					{
+						String bo_str= "";
+						if (bnd->getOrder()==2)
+							bo_str="=";
+						else if(bnd->getOrder()==3)
+							bo_str="#";
+						else if(bnd->getOrder()==4)
+							bo_str="-";
+	
+						lam_str = lambda("", e, v, it->second, d-1, m)+bo_str;
+					}
+					else
+					{
+						std::cout<< "did not get bond for: "<< i << " "<< it->second<<endl;
+						lam_str = lambda("", e, v, it->second, d-1, m);
+					}
+					lam->push_back(eraseDoubleLabels(d, v[i], lam_str));
 				}
 			}
 			sort(lam->begin(), lam->end()); // lexicographically order the lambda_d-1 -labels
@@ -309,7 +336,7 @@ namespace BALL
 		
 		for(Size i=0; i!=v.size(); ++i)
 		{
-			lambda_map.push_back(lambda("", e, v, i, depth_));
+			lambda_map.push_back(lambda("", e, v, i, depth_, m));
 		}
 		
 		makePathMatrix(e, sp, v.size());
