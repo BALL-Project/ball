@@ -7,6 +7,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 #include <openbabel/obconversion.h>
@@ -74,13 +75,12 @@ int main(int argc, char* argv[])
 		cout<<(i+1) << " - "<< clabels[i]<<endl;
 	
 	Molecule new_mol;
-	std::vector <Atom*> aList;
+	std::vector <Atom*> aList(num_atoms);
 	for(int i=0; i<clabels.size(); i++)
 	{
-		aList.push_back( ball_mol->getAtom(clabels[i]-1) );
+		aList[clabels[i]-1]=( ball_mol->getAtom(i) );
 	}
-	for(int i=0; i<clabels.size(); i++)
-		new_mol.insert(*aList[i]);
+	cout<<endl;
 	
 	/// write output:
 	String outfile_name = String(parpars.get("o"));
