@@ -49,6 +49,8 @@ int main(int argc, char* argv[])
 	CommandlineParser parpars("libFragmenter", "cut a molecule along its rotable bonds, generating fragments", 0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	
+	parpars.registerFlag("-unique", "only output one fragment for each topology");
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
@@ -144,7 +146,12 @@ int main(int argc, char* argv[])
 		}
 		
 /// write to output-------------------------------------------------------------
-		uniqueWriteMolVec(fragments, &outfile,used);
+		
+		if(parpars.has("-unique"))
+			uniqueWriteMolVec(fragments, &outfile,used);
+		else
+			writeMolVec(fragments, &outfile);
+		
 		delete ball_mol;
 		obMol.Clear();
 		cntr++;
