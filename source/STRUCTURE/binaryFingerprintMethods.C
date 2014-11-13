@@ -10,7 +10,7 @@
 #include <BALL/SYSTEM/timer.h>
 
 #include <boost/foreach.hpp>
-
+#include <boost/unordered_map.hpp>
 
 using namespace std;
 using namespace boost;
@@ -1604,13 +1604,13 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 	{
 		
 		// STEP 1: Get connected components and member indices
-		unordered_map<unsigned int, unordered_map<unsigned int, unsigned int> > ccs_tmp;
-		unordered_map<unsigned int, unordered_map<unsigned int, unsigned int> >::iterator ccs_iter;
+		boost::unordered_map<unsigned int, boost::unordered_map<unsigned int, unsigned int> > ccs_tmp;
+		boost::unordered_map<unsigned int, boost::unordered_map<unsigned int, unsigned int> >::iterator ccs_iter;
 		BOOST_FOREACH(Vertex current_vertex, vertices(sim_graph))
 		{
 			if (ccs_tmp.find(ds->find_set(current_vertex)) == ccs_tmp.end())
 			{
-				ccs_tmp[ds->find_set(current_vertex)] = unordered_map<unsigned int, unsigned int>();
+				ccs_tmp[ds->find_set(current_vertex)] = boost::unordered_map<unsigned int, unsigned int>();
 			}
 			
 // 			ccs_tmp[ds->find_set(current_vertex)][current_vertex] = ccs_tmp[ds->find_set(current_vertex)].size();
@@ -1628,7 +1628,7 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 		}
 		
 		// STEP 3: Write information in return data structures
-		unordered_map<unsigned int, unsigned int>::iterator cc_iter;
+		boost::unordered_map<unsigned int, unsigned int>::iterator cc_iter;
 		for (size_iter=cc_sizes.begin(); size_iter!=cc_sizes.end(); ++size_iter)
 		{
 			ccs.push_back(vector<unsigned int>(size_iter->first, 0));
