@@ -80,14 +80,15 @@ int main(int argc, char* argv[])
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
 	
-	// Read all molecules.
+	
 	vector<OBBond*> for_deletion;
 	vector<OBBond*>::iterator it;
 	vector<Molecule> fragments;
 	Molecule* ball_mol;
-	
 	int cntr=0;
 	set< String > used; // used fragment keys
+	
+	// Read all molecules.
 	while ( conv.Read(&obMol, &ifs) )
 	{
 		// init ring and rotable information:
@@ -105,7 +106,7 @@ int main(int argc, char* argv[])
 			obMol.DeleteBond(*it);
 		
 		
-		// get everything that is larger than 2 molecules (convert to BALL for that)
+		// get everything that has at least 2 molecules (convert to BALL for that)
 		ball_mol = MolecularSimilarity::createMolecule(obMol, true);
 		ConnectedComponentsProcessor conpro;
 		ball_mol->apply(conpro);

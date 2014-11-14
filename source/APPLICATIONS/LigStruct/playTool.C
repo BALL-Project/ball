@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/forEach.h>
@@ -17,7 +16,6 @@
 #include <openbabel/graphsym.h>
 
 #include <vector>
-#include <map>
 
 #include <boost/unordered_map.hpp>
 #include <boost/pending/disjoint_sets.hpp>
@@ -136,13 +134,12 @@ int main(int argc, char* argv[])
 	std::vector <bool> is_rigid(num_atoms, 0); // bitVec indicating rigid atoms
 	std::vector <bool> is_linker(num_atoms, 0); // bitVec indicating linker atoms
 
-	/// iterate over all bonds and split into 2 groups of fragments:
+	/// iterate over all bonds and split into rigid and linker fragments:
 	OBBondIterator b_it = obMol.BeginBonds();
-	
-	//std::vector< int > connections(num_atoms, -1);
 	std::list< pair<Atom*, Atom*> > connections;
 	std::map< Atom*, int> atm_to_pos;
 	
+	cout<<"Creating fragments from your queryStructure..."<<endl;
 	for (; b_it != obMol.EndBonds(); b_it++)
 	{
 		OBAtom* atm1 = (*b_it)->GetBeginAtom();
@@ -153,17 +150,26 @@ int main(int argc, char* argv[])
 		// for all rotable bonds:
 		if ( (*b_it)->IsRotor() )
 		{
-			if( !(is_linker[id1] || isAtomRigid(atm1)) ) // do not double assign (deletes disjointset-parent status)
+			cout<<"Rotor: "<<atm1->GetType()<<" - "<<atm2->GetType();
+			bool isRigid_atm1 = isAtomRigid(atm1);
+			bool isRigid_atm2 = isAtomRigid(atm2);
+			if( !(is_linker[id1] || isRigid_atm1) ) // do not double assign (deletes disjointset-parent status)
 			{
-				dset_linker.make_set(id1); 
+				dset_linker.make_set(id1);
 				is_linker[id1]=1;
 			}
-			if( !(is_linker[id2] || isAtomRigid(atm2)) ) // do not double assign (deletes disjointset-parent status)
+			if( !(is_linker[id2] || isRigid_atm2) ) // do not double assign (deletes disjointset-parent status)
 			{
-				dset_linker.make_set(id2); 
+				dset_linker.make_set(id2);
 				is_linker[id2]=1;
 			}
-			dset_linker.union_set(id1, id2);
+			// add union atoms if both are not fixed:
+			if( !(isRigid_atm1 || isRigid_atm2) )// both need to be linker atoms (checked via isAtomRigid(atm) )
+			{
+				cout<<" bond added! ";
+				dset_linker.union_set(id1, id2);
+			}
+			cout<<endl;
 			
 			// rotables to a rigid fragment define connection points:
 			if( isAtomRigid((*b_it)->GetBeginAtom()) || isAtomRigid((*b_it)->GetEndAtom()) )
@@ -195,7 +201,6 @@ int main(int argc, char* argv[])
 	std::vector <int> rigid_groups(num_atoms, -1); // map parent id to vector pos in variable 'fragments'
 	std::vector <Molecule*> fragments;
 	
-	std::map< int, pair<int,int> > map_connect; // key: original id, value: (fragment, new id)
 	int parent_id = -1;
 	// loop over the atoms, sort fragments out
 	for(int i = 0 ; i < num_atoms; i++)
@@ -263,39 +268,48 @@ int main(int argc, char* argv[])
 		cout<<" atm "<<atm_to_pos[atm2];
 		cout<<endl;
 	}
+	cout<<endl;
 
 ///#######################    M A T C H I N G    #######################
-/// Continue here with:
-/// list < pair< Atom*, Atom*> connections
-/// vector< Molecule*> fragments
-	
 ///---------------make atomlists of the fragments canonical---------------------
+	cout<<"Canonicalising the atomlists..."<<endl;
 	std::vector< Molecule* >::iterator it;
 	Molecule* new_mol;
 	for(it=fragments.begin(); it != fragments.end(); it++)
 	{
+		cout<<(*it)->getName()<< " has #atoms: "<<(*it)->countAtoms()<<endl;
+		cout<<"DEBUG: "<<endl;
 		clearExternalBonds(*it);
+		cout<<" cut xt-Bonds <"<<endl;
 		OBMol* temp = MolecularSimilarity::createOBMol(**it, true);
+		cout<<" made OBMol < "<<endl;
 		
 		OBGraphSym grsym(temp);
 		std::vector<unsigned int> sym;
 		grsym.GetSymmetry(sym);
+		cout<<" made graphSym < "<<endl;
 		
 		std::vector<unsigned int> clabels;
 		CanonicalLabels(temp, sym, clabels);
+		cout<<" calculated Labels < "<<endl;
 		
 		new_mol = new Molecule;
 		std::vector <Atom*> aList(num_atoms);
 		for(int i=0; i<clabels.size(); i++)
 			aList[clabels[i]-1]=( (*it)->getAtom(i) );
+		cout<<" correct atom-List < "<<endl;
 		
 		for(int i=0; i<clabels.size(); i++)
 			new_mol->append(*aList[i]);
 
+		cout<<" correct molecule < "<<endl;
+		
 		copyMoleculeProperies(**it, *new_mol);
 		(*it)->swap(*new_mol);
 		
+		cout<<" updated original < "<<endl;
 		delete new_mol;
+		cout<<" DONE "<<endl;
 	}
 
 ///-------------------match queryFragments to libFragments----------------------
@@ -303,12 +317,13 @@ int main(int argc, char* argv[])
 	boost::unordered_map <BALL::String, Molecule*> fragmentLib;
 	
 	String libfile_name = String(parpars.get("l"));
+		cout<<"Reading fragmentLib from: "<< libfile_name<<" ..."<<endl;
 	SDFile libFile(libfile_name, ios::in);
 	
 	Molecule* tmp_mol;
 	tmp_mol = libFile.read();
 	
-	// read fragmentLib:
+	// read in fragmentLib and create hash-map from that:
 	while(tmp_mol)
 	{
 		BALL::String key = tmp_mol->getProperty("key").getString();
@@ -318,6 +333,8 @@ int main(int argc, char* argv[])
 	}
 
 
+	// get coordinates for rigid fragments
+	cout<<"Assigning template coordinates to rigid fragments..."<<endl;
 	std::vector< Molecule* >::iterator it2;
 	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
 	{
@@ -337,6 +354,9 @@ int main(int argc, char* argv[])
 	
 	
 ///#######################    A S S E M B L E   3 D    #######################
+/// ??? Nothing so far
+
+/// #######################    F I N I S H    #######################
 ///-------------------------------write output----------------------------------
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
