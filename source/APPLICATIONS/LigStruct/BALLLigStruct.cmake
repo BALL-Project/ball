@@ -12,6 +12,7 @@ SET(EXECUTABLES_LIST
 	testTool
 	prototype_libFragmenter
 	prototype_queryFragmenter
+	connectionFragmenter
 )
 
 
