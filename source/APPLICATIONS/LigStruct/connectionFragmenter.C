@@ -118,10 +118,10 @@ void addToLenghts(OBBond* bnd, boost::unordered_map <String, vector<double> >& l
 	key2 += bnd->GetBeginAtom()->GetType() ;
 	double len = bnd->GetLength();
 	
-	if(len < 0.7 || len > 3.5)
+	if(len < 0.6 || len > 3.5)
 		cout<< "WARNING found dist of: "<< len << " for "<< key1<<endl;
 	
-	if(lengths.find(key1) == lengths.end() && lengths.find(key2) == lengths.end())
+	if( (lengths.find(key1) == lengths.end()) && (lengths.find(key2) == lengths.end()) )
 	{
 		vector<double> tmp(4,0);
 		tmp[0] = len; // sum
@@ -132,19 +132,19 @@ void addToLenghts(OBBond* bnd, boost::unordered_map <String, vector<double> >& l
 	}
 	else
 	{
-		vector<double> tmp;
+		vector<double>* tmp;
 		
 		if(lengths.find(key1) != lengths.end())
-			tmp = lengths[key1];
+			tmp = &(lengths[key1]);
 		else
-			tmp = lengths[key2];
+			tmp = &(lengths[key2]);
 			
-		tmp[3] = tmp[3] + 1.;
-		tmp[0] = tmp[0] + len;
-		if(len < tmp[1])
-			tmp[1] = len;
-		if(len > tmp[2])
-			tmp[2] = len;
+		tmp->at(3) = tmp->at(3) + 1.;
+		tmp->at(0) = tmp->at(0) + len;
+		if(len < (*tmp)[1])
+			(*tmp)[1] = len;
+		if(len > (*tmp)[2])
+			(*tmp)[2] = len;
 	}
 }
 /// ################# M A I N #################
@@ -269,7 +269,8 @@ int main(int argc, char* argv[])
 	boost::unordered_map< String, vector<double> >::iterator mit = lengths.begin();
 	for(; mit != lengths.end(); mit++)
 	{
-		cout <<mit->first<<" avg:"<< mit->second[0] / mit->second[3];
-		cout <<" min:"<< mit->second[1]<<" max:" << mit->second[2]<<endl;
+		cout <<mit->first<<" avg:"<< (mit->second[0] / mit->second[3]);
+		cout <<" min:"<< mit->second[1]<<" max:" << mit->second[2];
+		cout << " found:"<< mit->second[3]<<endl;
 	}
 }
