@@ -161,8 +161,8 @@ namespace BALL
 			streampos current_pos = tellg();
 			String current_line = getLine();
 			Position current_line_number = line_number_;
-
 			readLine();
+
 			while(good() && (getLine().trim() == ""))
 			{
 				readLine();
