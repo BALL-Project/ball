@@ -19,10 +19,10 @@
 #include <openbabel/canon.h>
 #include <openbabel/graphsym.h>
 
-#include <set>
 #include <util.h>
 #include <algorithm>
 #include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -38,61 +38,68 @@ void writeMolVec(vector<Molecule> &input, SDFile* handle)
 	}
 }
 
+
 // compare element+bondorder annotations:
-bool compare(String& a, String& b)
+bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 {
-	return a < b;
+	return a.first < b.first;
 }
 // find all direct neighbours
 // 
 Molecule* getConnection(OBAtom* atm, Molecule* mol)
 {
+//	cout<<"working with atom: "<<atm<<" and molecule "<< mol <<endl;
 	Molecule * workMol = new Molecule;
 	String key = "";
 	
 	int id_main = atm->GetId();
+//	cout<<"copy atom "<<endl;
 	Atom* mainAtm = new Atom(*(mol->getAtom(id_main)), true);
 	
 	key = mainAtm->getElement().getSymbol();
 
 	workMol->insert(*mainAtm);
 	
-	vector< String > elements;
+	vector< pair<String,Atom*> > elements;
 	OBBondIterator bit = atm->BeginBonds();
+
 	for(; bit != atm->EndBonds(); bit++ )
 	{
 		OBBond* bnd = *bit;
 		unsigned int bnd_od = bnd->GetBondOrder();
 		char* elem;
 		Atom* tmp;
-		
 		if (bnd->GetBeginAtom() != atm)
 		{
 			elem = bnd->GetBeginAtom()->GetType();
+//			cout<<"new atom: "<<bnd->GetBeginAtom()->GetId()<<endl;
 			tmp = new Atom(*mol->getAtom(bnd->GetBeginAtom()->GetId()));
-			workMol->insert(*tmp);
 		}
 		else
 		{
+//			cout<<"new ENDatom: "<<bnd->GetEndAtom()->GetId()<<endl;
+//			cout<<"mol has "<<mol->countAtoms()<<" atoms"<<endl;
+//			cout<<"atm pointer: "<< mol->getAtom(bnd->GetEndAtom()->GetId()) <<endl;
 			elem = bnd->GetEndAtom()->GetType();
-			tmp = new Atom(*mol->getAtom(bnd->GetEndAtom()->GetId()));
-			workMol->insert(*tmp);
+			tmp = new Atom( *mol->getAtom(bnd->GetEndAtom()->GetId()) );
 		}
+
+		Bond* tmp_bnd = new Bond();
+		tmp_bnd->setOrder(bnd_od);
+//		cout<<"creating artificial bond with BO: "<<bnd_od<<endl;
+		mainAtm->createBond(*tmp_bnd, *tmp);
 		
-		Bond tmp_bnd;
-		tmp_bnd.setOrder(bnd_od);
-		mainAtm->createBond(tmp_bnd, *tmp);
-		
-		elements.push_back( String(*elem) + String(bnd_od) );
+		elements.push_back( make_pair(String(*elem) + String(bnd_od), tmp) );
 	}
 	
 	// sort identifers
-	sort(elements.begin(), elements.end());
+	sort(elements.begin(), elements.end(), compare);
 	
-	vector< String >::iterator el_it = elements.begin();
+	vector< pair<String, Atom*> >::iterator el_it = elements.begin();
 	for(; el_it !=elements.end(); el_it++)
 	{
-		key += (*el_it);
+		key += ((*el_it).first);
+		workMol->insert( *((*el_it).second) );
 	}
 	
 	workMol->setProperty("key", key);
@@ -112,7 +119,7 @@ void addToLenghts(OBBond* bnd, boost::unordered_map <String, vector<double> >& l
 	double len = bnd->GetLength();
 	
 	if(len < 0.7 || len > 3.5)
-		cout<< "WARNING found dist of: "<< len << " for "<< key1<<"/"<<key2<<endl;
+		cout<< "WARNING found dist of: "<< len << " for "<< key1<<endl;
 	
 	if(lengths.find(key1) == lengths.end() && lengths.find(key2) == lengths.end())
 	{
@@ -182,7 +189,7 @@ int main(int argc, char* argv[])
 	vector<Molecule> connections;
 	Molecule* ball_mol;
 	int cntr=0;
-	set< String > used; // used fragment keys
+	boost::unordered_set< String > used; // used fragment keys
 	boost::unordered_map <String, vector<double> > lengths;
 	
 	// Read all molecules.
@@ -194,13 +201,13 @@ int main(int argc, char* argv[])
 		rotors.clear();
 		connections.clear();
 		
-		// Delete rotor-bonds to create fragments (of rings and rigid-groups)
-		FOR_BONDS_OF_MOL(b, obMol)
-			if (b->IsRotor()) // && !b->IsInRing()) // in babel ring bonds are never rotors!!!!
+		// get only rotor-bonds for connections
+		FOR_BONDS_OF_MOL(b, obMol){
+			if (b->IsRotor()) 
 				rotors.push_back(&(*b));
+		}
 		
-		
-		ball_mol = MolecularSimilarity::createMolecule(obMol, true);
+		ball_mol = MolecularSimilarity::createMolecule(obMol, false);
 		vector<OBBond*>::iterator it;
 		for(it=rotors.begin(); it!=rotors.end(); ++it)
 		{
@@ -209,6 +216,7 @@ int main(int argc, char* argv[])
 			
 			addToLenghts(bnd, lengths);
 
+//			cout<<"going to get connections"<<endl;
 			Molecule* new_mol1 = getConnection(bnd->GetBeginAtom(), ball_mol);
 			Molecule* new_mol2 = getConnection(bnd->GetEndAtom(), ball_mol);
 			
@@ -216,25 +224,27 @@ int main(int argc, char* argv[])
 			String key2 = new_mol2->getProperty("key").getString();
 			
 			//3) filter out if already known connections
-			if(parpars.has("-unique"))
+			if(parpars.has("unique"))
 			{
-					if( used.find(key1) == used.end() )
-					{
-						//4) create the connections
-						used.insert(key1);
-						connections.push_back(*new_mol1);
-					}
-					else
-						delete new_mol1;
-					
-					if( used.find(key2) == used.end() )
-					{
-						//4) create the connections
-						used.insert(key2);
-						connections.push_back(*new_mol2);
-					}
-					else
-						delete new_mol2;
+				if( used.find(key1) == used.end() )
+				{
+					//4) create the connections
+					used.insert(key1);
+					connections.push_back(*new_mol1);
+				}
+				else{
+					delete new_mol1;
+				}
+				
+				if( used.find(key2) == used.end() )
+				{
+					//4) create the connections
+					used.insert(key2);
+					connections.push_back(*new_mol2);
+				}
+				else{
+					delete new_mol2;
+				}
 			}
 			else
 			{
@@ -247,7 +257,6 @@ int main(int argc, char* argv[])
 /// write to output-------------------------------------------------------------
 		
 		writeMolVec(connections, &outfile);
-		
 		delete ball_mol;
 		obMol.Clear();
 		cntr++;
@@ -257,7 +266,6 @@ int main(int argc, char* argv[])
 	Log << "read "<< cntr<<" input structures, wrote fragments to: " << outfile_name << endl;
 	
 	// print results of standard lengths calculation:
-	cout<<"Covalent bond legths: "<<endl;
 	boost::unordered_map< String, vector<double> >::iterator mit = lengths.begin();
 	for(; mit != lengths.end(); mit++)
 	{
