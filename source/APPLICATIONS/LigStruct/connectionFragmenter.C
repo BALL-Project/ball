@@ -9,15 +9,11 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/STRUCTURE/connectedComponentsProcessor.h>
-#include <BALL/STRUCTURE/UCK.h>
 
 #include <openbabel/mol.h>
 #include <openbabel/bond.h>
 #include <openbabel/atom.h>
 #include <openbabel/obconversion.h>
-#include <openbabel/canon.h>
-#include <openbabel/graphsym.h>
 
 #include <util.h>
 #include <algorithm>
