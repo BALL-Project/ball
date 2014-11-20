@@ -35,8 +35,15 @@ bool allMatch(Molecule* li1, Molecule* li2)
 		bool b = false;
 		
 		AtomIterator at2 = li2->beginAtom();
+		Atom* cloAtm = 0;
+		double closest= 1000;
 		for (; +at2; at2++)
 		{
+			if(at1->getDistance(*at2) < closest){
+				closest = at1->getDistance(*at2);
+				cloAtm  = &*at2;
+			}
+			
 			if (at1->getDistance(*at2) < 0.8){ // epsilon set to 0.8 A
 				b = true;
 				
@@ -45,6 +52,7 @@ bool allMatch(Molecule* li1, Molecule* li2)
 		}
 		if (!b)
 			return false;
+		cout<< "closest: "<< at1->getElement().getSymbol()<<" - "<< cloAtm->getElement().getSymbol()<< ": "<<closest <<endl;
 	}
 	return true;
 }
@@ -158,7 +166,7 @@ void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2)
   TransformationProcessor transformer(rot_matrix);
 	mol2->apply(transformer);
 
-	// remove the two connection atoms, they are redundant now:
+	// remove the two connection partner atoms, they are redundant now:
 	mol1->remove(*aTarget);
 	mol2->remove(*bTarget);
 }
@@ -209,8 +217,10 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 	}
 	
 	/// try to assign the unique atom if one exists:
+	cout<<"element map: "<<el_map.size()<<endl;
 	if (el_map.size() != 1)
 	{
+		cout<<"using a unique"<<endl;
 		vector< Atom* > unique_atm;
 		vector< int > unique_pos;
 		vector< String > unique_names;
@@ -262,16 +272,17 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 		// only one unique does exist, set it and continue with the last step
 		else
 		{
+			cout<<"ONE UNIQUE was assigned: "<< unique_atm[0]->getElement().getSymbol()<< " " << templ->getAtom(unique_pos[0])->getElement().getSymbol()<<endl;
 			frag2 = unique_atm[0]->getPosition();
 			tem2 = templ->getAtom(unique_pos[0])->getPosition();
 		}
 	}
+	
 	/// all atoms have same element and order:
 	/// this means we may choose one match arbitrarily and then test the 
 	/// assignment for a second one iteratively
 	/// OR: it might be that in the previous step we found already a single unique
 	/// atom mapping
-	
 	if( frag2.isZero() ) // if frag2 was not yet initialized, arbitrarily choose
 											 // the two second atoms to as matching pair
 	{
@@ -290,12 +301,16 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 
 	dummy_frag = new Molecule(ref_frag, true);
 	
-	// test loop:
+	// assignment search loop (because a canonical ordering is not always possible for star-graphs)
 	AtomIterator ati = templ->beginAtom();
-	ati++; ati++; // we used first and second atom already...
+	ati++; // we used first atom already
 	for(; ati != templ->endAtom(); ati++ )
 	{
 		tem3 = ati->getPosition();
+		
+		if(tem2 == tem3) // it's possible that our unique assignment did set these coordinates already for tmp2
+			continue;      // in that case cycle!
+		
 		result = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
 		TransformationProcessor transformer(result);
 		dummy_frag->apply(transformer);
@@ -396,11 +411,22 @@ int main(int argc, char* argv[])
 	Molecule* templ1 = connections[key1];
 	Molecule* templ2 = connections[key2];
 
+	// it could be that we get two identical connection templates
+	bool identicalTemplates = false;
+	if (templ1 == templ2)
+	{
+		// in this case we need to create a copy
+		templ2 = new Molecule(*templ1,true);
+	}
 	cout<< "found templates: "<< templ1 <<" "<<templ1->countAtoms() <<" - "<<templ2<<" "<<templ2->countAtoms()<<endl;
 	cout<<"......done!"<<endl<<endl;
 	
 	cout<<"creating connected template..."<<endl;
 	///3) connect the two templates to one new template
+//	Matrix4x4 mov;
+//	mov.setRotation(Angle(30),Vector3(1,1,1));
+//	TransformationProcessor tp = TransformationProcessor( mov );
+//	templ1->apply( tp );
 	mergeTemplates(templ1, pos1, templ2, pos2);
 	cout<<"......done!"<<endl<<endl;
 	
@@ -444,4 +470,7 @@ int main(int argc, char* argv[])
 	///6) write output:
 	SDFile outfile("/Users/pbrach/Desktop/tests/rigid-rigid/test1_result.sdf", ios::out);
 	outfile << *frag1;
+	
+	if(identicalTemplates)
+		delete templ2;
 }
