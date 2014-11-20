@@ -35,15 +35,9 @@ bool allMatch(Molecule* li1, Molecule* li2)
 		bool b = false;
 		
 		AtomIterator at2 = li2->beginAtom();
-		Atom* cloAtm = 0;
-		double closest= 1000;
+
 		for (; +at2; at2++)
 		{
-			if(at1->getDistance(*at2) < closest){
-				closest = at1->getDistance(*at2);
-				cloAtm  = &*at2;
-			}
-			
 			if (at1->getDistance(*at2) < 0.8){ // epsilon set to 0.8 A
 				b = true;
 				
@@ -52,7 +46,6 @@ bool allMatch(Molecule* li1, Molecule* li2)
 		}
 		if (!b)
 			return false;
-		cout<< "closest: "<< at1->getElement().getSymbol()<<" - "<< cloAtm->getElement().getSymbol()<< ": "<<closest <<endl;
 	}
 	return true;
 }
@@ -217,10 +210,8 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 	}
 	
 	/// try to assign the unique atom if one exists:
-	cout<<"element map: "<<el_map.size()<<endl;
 	if (el_map.size() != 1)
 	{
-		cout<<"using a unique"<<endl;
 		vector< Atom* > unique_atm;
 		vector< int > unique_pos;
 		vector< String > unique_names;
@@ -272,7 +263,6 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 		// only one unique does exist, set it and continue with the last step
 		else
 		{
-			cout<<"ONE UNIQUE was assigned: "<< unique_atm[0]->getElement().getSymbol()<< " " << templ->getAtom(unique_pos[0])->getElement().getSymbol()<<endl;
 			frag2 = unique_atm[0]->getPosition();
 			tem2 = templ->getAtom(unique_pos[0])->getPosition();
 		}
