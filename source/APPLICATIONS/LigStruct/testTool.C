@@ -14,8 +14,8 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-#include <openbabel/obconversion.h>
-#include <openbabel/mol.h>
+//#include <openbabel/obconversion.h>
+//#include <openbabel/mol.h>
 
 #include <vector>
 #include <util.h>
@@ -32,17 +32,23 @@ using namespace std;
 /// ------ can be found
 bool allMatch(Molecule* li1, Molecule* li2)
 {
+	int cnt2= 0;
+
 	AtomIterator at1 = li1->beginAtom();
 	for (; +at1 ; at1++)
 	{
 		bool b = false;
+		int cnt = 0;
+		
 		AtomIterator at2 = li2->beginAtom();
 		for (; +at2; at2++)
 		{
-			if (at1->getDistance(*at2) < 0.2){ // epsilon set to 0.2 A
+			if (at1->getDistance(*at2) < 0.8){ // epsilon set to 0.8 A
 				b = true;
+				
 				break;
 			}
+			cnt++;
 		}
 		if (!b)
 			return false;
