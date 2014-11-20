@@ -14,9 +14,6 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-//#include <openbabel/obconversion.h>
-//#include <openbabel/mol.h>
-
 #include <vector>
 #include <util.h>
 #include <algorithm>
@@ -32,13 +29,10 @@ using namespace std;
 /// ------ can be found
 bool allMatch(Molecule* li1, Molecule* li2)
 {
-	int cnt2= 0;
-
 	AtomIterator at1 = li1->beginAtom();
 	for (; +at1 ; at1++)
 	{
 		bool b = false;
-		int cnt = 0;
 		
 		AtomIterator at2 = li2->beginAtom();
 		for (; +at2; at2++)
@@ -48,7 +42,6 @@ bool allMatch(Molecule* li1, Molecule* li2)
 				
 				break;
 			}
-			cnt++;
 		}
 		if (!b)
 			return false;
@@ -116,12 +109,6 @@ int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
 	// also add the partner atom for the new bond:
 	elements.push_back( make_pair( String(partner->getElement().getSymbol())+ String(1), partner) );
 	
-	if (elements.size() < 3)
-	{
-		cout<<"ERROR: cant connect to this atom, only 1 neighbor atom! currently I need at last 2"<<endl;
-		exit(EXIT_FAILURE);
-	}
-	
 	// sort identifers, but keep central atom as first:
 	sort( elements.begin(), elements.end(), compare);
 	
@@ -147,7 +134,6 @@ int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
 	{
 		key += ((*el_it).first);
 	}
-
 	return pos;
 }
 
@@ -155,70 +141,30 @@ int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
 /// the final template will only contain 6 atoms, 3 for each end
 /// starting at position 0 and 3 with the molecules that are to be
 /// connected, and then the ordered next two neighbors
-void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2) //, vector<Atom*>& result)
+void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2)
 {
 	Atom* aTarget = mol1->getAtom(pos1);
 	Atom* bTarget = mol2->getAtom(pos2);
-	
-	// move template 1 to origin (central atom at origin)
+
+	// got no time to take care of the possible sign errors thus simply use 3-point-matching:
 	Vector3& ptA1 = mol1->getAtom(0)->getPosition();
-	TranslationProcessor translateA(-ptA1);
-	mol1->apply(translateA);
-	
-	Vector3& a = aTarget->getPosition();
+	Vector3& ptA2 = mol1->getAtom(pos1)->getPosition();
+	Vector3& ptB1 = mol2->getAtom(pos2)->getPosition();
+	Vector3& ptB2 = mol2->getAtom(0)->getPosition();
 
-	// move template 2 to origin with partner atom at origin
-	Vector3& ptB2 = bTarget->getPosition();
-	TranslationProcessor translateB(-ptB2);
-	mol2->apply(translateB);
-	Vector3& b = mol2->getAtom(0)->getPosition();
+	Matrix4x4 rot_matrix = StructureMapper::matchPoints(ptB1, ptB2, Vector3(), ptA1, ptA2, Vector3());
 	
-	// calc transformation to map the templates:
-	Angle angl = a.getAngle(b); // negative rot-angle
-	Vector3 rot_ax = a % b; // rotation axis
-	rot_ax.normalize();
-	Matrix4x4 rot_matrix;
-	rot_matrix.rotate(-angl, rot_ax); // rotation matrix
-
 	// transfrom the 2nd template
   TransformationProcessor transformer(rot_matrix);
 	mol2->apply(transformer);
 
-	// Transfer fitted coordinates to 'result' vector
-//	result.push_back( mol1->getAtom(0) ); // central atom 1
-//	AtomIterator ati = mol1->beginAtom(); ati++;
-//	for( ; ati != mol1->endAtom() && result.size() < 3; ati++)
-//	{
-//		if(*ati != *aTarget)
-//			result.push_back(&*ati);
-//	}
-	
 	// remove the two connection atoms, they are redundant now:
 	mol1->remove(*aTarget);
 	mol2->remove(*bTarget);
-	/// a final result, if we use it this way:
-	// Transfer fitted coordinates to 'result' vector
-//	result.push_back( mol2->getAtom(0) ); // central atom 2
-//	ati = mol2->beginAtom(); ati++;
-//	for( ; ati != mol2->endAtom() && result.size() < 6; ati++)
-//	{
-//		if(*ati != *bTarget)
-//			result.push_back(&*ati);
-//	}
-
-	
-	/// DEBUG:
-	// transfer all atoms to mol1 and write to DEBUG file
-//	Molecule new_mol;
-//	for(int i = 0; i<result.size(); i++)
-//	{
-//		new_mol.insert(*result[i]);
-//	}
-//	SDFile outfile("/Users/pbrach/Desktop/tests/rigid-rigid/test1_debug.sdf", ios::out);
-//	outfile << new_mol;
-//	outfile.close();
 }
 
+
+/// Helper to get a single key component
 String getBondName(Atom* atm, Atom* partner)
 {
 	String name = atm->getElement().getSymbol();
@@ -244,6 +190,15 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 	// set the two center atoms:
 	frag1 = site[0]->getPosition();
 	tem1  = templ->getAtom(0)->getPosition();
+	
+	/// simple solution for only one neighbor:
+	if(site.size() == 2)
+	{
+		// got no time to take care of the possible sign errors thus simply use 3-point-matching:
+		frag2 = site[1]->getPosition();
+		tem2  = templ->getAtom(1)->getPosition();
+		return StructureMapper::matchPoints(frag1, frag2, Vector3(), tem1, tem2, Vector3());
+	}
 	
 	/// see if some atoms differ in element and order:
 	// find the unique elements, via their 'bondName'
@@ -366,11 +321,13 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("attachFragments", " connect two fragments", 0.1, String(__DATE__), "Assembly");
-//	parpars.registerParameter("i", "input SDF", INFILE, true);
+	parpars.registerParameter("i1", "input SDF", INFILE, true);
+	parpars.registerParameter("i2", "input SDF", INFILE, true);
 //	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	parpars.registerParameter("l", "output SDF", INFILE, true);
 	
-//	parpars.setSupportedFormats("i","sdf");
+	parpars.setSupportedFormats("i1","sdf");
+	parpars.setSupportedFormats("i2","sdf");
 //	parpars.setSupportedFormats("o","sdf");
 	parpars.setSupportedFormats("l","sdf");
 //	parpars.setOutputFormatSource("o","i");
@@ -390,14 +347,37 @@ int main(int argc, char* argv[])
 	
 	// the second fragment is connected to the first one by a single bond
 	// between the two first atoms
-	SDFile fragments("/Users/pbrach/Desktop/tests/rigid-rigid/test1.sdf", ios::in);
-	Molecule* frag1 = fragments.read();
-	Molecule* frag2 = fragments.read();
-	fragments.close();
+	SDFile fragment1(parpars.get("i1"), ios::in);
+	SDFile fragment2(parpars.get("i2"), ios::in);
+	Molecule* frag1 = fragment1.read();
+	Molecule* frag2 = fragment2.read();
+	fragment1.close();
+	fragment2.close();
 	
-	Atom* con1 = frag1->getAtom(1);
-	Atom* con2 = frag2->getAtom(6);
-	// test1, connection between: frag1-atom2 sp2 ; frag2-atom7 sp3
+	// Search for Tritium to find the connection site:
+	AtomIterator ati = frag1->beginAtom();
+	Atom* con1;
+	Atom* con2;
+	for (; +ati; ++ati)
+	{
+		if( ati->getElement().getSymbol() == "?"){
+			con1 = ati->beginBond()->getBoundAtom( *ati);
+			con1->getBond(*ati)->destroy();
+			frag1->remove(*ati);
+			cout<<"Connect1: "<<con1->getElement().getSymbol()<<endl;
+		}
+	}
+	
+	ati = frag2->beginAtom();
+	for (; +ati; ++ati)
+	{
+		if( ati->getElement().getSymbol() == "?"){
+			con2 = ati->beginBond()->getBoundAtom( *ati);
+			con2->getBond(*ati)->destroy();
+			frag2->remove(*ati);
+			cout<<"Connect2: "<<con2->getElement().getSymbol()<<endl;
+		}
+	}
 
 ///===========find connection site and match against conection library==========
 	cout<<"searching sites..."<<endl<<endl;
@@ -416,8 +396,6 @@ int main(int argc, char* argv[])
 	Molecule* templ1 = connections[key1];
 	Molecule* templ2 = connections[key2];
 
-	SDFile outfile2("/Users/pbrach/Desktop/tests/rigid-rigid/test1_template2.sdf", ios::out);
-	outfile2 << *templ2;
 	cout<< "found templates: "<< templ1 <<" "<<templ1->countAtoms() <<" - "<<templ2<<" "<<templ2->countAtoms()<<endl;
 	cout<<"......done!"<<endl<<endl;
 	

@@ -212,7 +212,6 @@ int main(int argc, char* argv[])
 			
 			addToLenghts(bnd, lengths);
 
-//			cout<<"going to get connections"<<endl;
 			Molecule* new_mol1 = getConnection(bnd->GetBeginAtom(), ball_mol);
 			Molecule* new_mol2 = getConnection(bnd->GetEndAtom(), ball_mol);
 			
