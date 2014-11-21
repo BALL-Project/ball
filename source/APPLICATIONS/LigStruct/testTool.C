@@ -163,32 +163,57 @@ int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
 	return pos;
 }
 
+
+
+/// get transformation vector to move atom 2 so that it has the correct distance
+/// to atom 1
+Vector3 getDiffVec(Atom* atm1, Atom* atm2, boost::unordered_map <String, float > std_bonds)
+{
+	String key = atm1->getElement().getSymbol();
+	key += atm2->getElement().getSymbol();
+	float bond_len = std_bonds[key];
+	
+	Vector3 diff_vec = atm1->getPosition() - atm2->getPosition();
+	float diff_len = diff_vec.getLength() - bond_len;
+	
+	diff_vec.normalize();
+	return (diff_vec * diff_len);
+}
+
+
+
 /// ------- merge two connection templates to a final template
 /// the final template will only contain 6 atoms, 3 for each end
 /// starting at position 0 and 3 with the molecules that are to be
 /// connected, and then the ordered next two neighbors
-void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2)
+void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2, boost::unordered_map<String, float> std_bonds)
 {
 	Atom* aTarget = mol1->getAtom(pos1);
 	Atom* bTarget = mol2->getAtom(pos2);
+	Atom* atm1 = mol1->getAtom(0);
+	Atom* atm2 = mol2->getAtom(0);
 
 	// got no time to take care of the possible sign errors thus simply use 3-point-matching:
-	Vector3& ptA1 = mol1->getAtom(0)->getPosition();
-	Vector3& ptA2 = mol1->getAtom(pos1)->getPosition();
-	Vector3& ptB1 = mol2->getAtom(pos2)->getPosition();
-	Vector3& ptB2 = mol2->getAtom(0)->getPosition();
+	Vector3& ptA1 = atm1->getPosition();
+	Vector3& ptA2 = aTarget->getPosition();
+	Vector3& ptB1 = bTarget->getPosition();
+	Vector3& ptB2 = atm2->getPosition();
 
 	Matrix4x4 rot_matrix = StructureMapper::matchPoints(ptB1, ptB2, Vector3(), ptA1, ptA2, Vector3());
 	
 	// transfrom the 2nd template
-  TransformationProcessor transformer(rot_matrix);
+	TransformationProcessor transformer(rot_matrix);
 	mol2->apply(transformer);
+	
+	// fix bond length
+	Vector3 bond_fix = getDiffVec(atm1, atm2, std_bonds);
+	TranslationProcessor t_later(bond_fix);
+	mol2->apply(t_later);
 
 	// remove the two connection partner atoms, they are redundant now:
 	mol1->remove(*aTarget);
 	mol2->remove(*bTarget);
 }
-
 
 /// Helper to get a single key component
 String getBondName(Atom* atm, Atom* partner)
@@ -507,7 +532,7 @@ int main(int argc, char* argv[])
 	
 	cout<<"creating connected template..."<<endl;
 	///3) connect the two templates to one new template
-	mergeTemplates(templ1, pos1, templ2, pos2);
+	mergeTemplates(templ1, pos1, templ2, pos2, std_bonds);
 	cout<<"......done!"<<endl<<endl;
 	
 	cout<<"calculating transformations for fragments to to the connected template..."<<endl;
