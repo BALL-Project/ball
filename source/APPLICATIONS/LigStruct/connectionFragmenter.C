@@ -107,11 +107,13 @@ void addToLenghts(OBBond* bnd, boost::unordered_map <String, vector<double> >& l
 {
 	String key1 ="";
 	String key2 ="";
-	key1 += bnd->GetBeginAtom()->GetType();
-	key1 += bnd->GetEndAtom()->GetType();
+	char a = *(bnd->GetBeginAtom()->GetType());
+	char b = *(bnd->GetEndAtom()->GetType());
+	key1 += a;
+	key1 += b;
 	
-	key2 += bnd->GetEndAtom()->GetType() ;
-	key2 += bnd->GetBeginAtom()->GetType() ;
+	key2 += b;//bnd->GetEndAtom()->GetType() ;
+	key2 += a;//bnd->GetBeginAtom()->GetType() ;
 	double len = bnd->GetLength();
 	
 	if(len < 0.6 || len > 3.5)
@@ -180,6 +182,8 @@ int main(int argc, char* argv[])
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
 	
+	File bondFile(outfile_name+"bondlen.txt", ios::out);
+	
 	
 	vector<OBBond*> rotors;
 	vector<Molecule> connections;
@@ -195,7 +199,7 @@ int main(int argc, char* argv[])
 		obMol.FindRingAtomsAndBonds();
 		
 		rotors.clear();
-		connections.clear();
+//		connections.clear();
 		
 		// get only rotor-bonds for connections
 		FOR_BONDS_OF_MOL(b, obMol){
@@ -203,7 +207,7 @@ int main(int argc, char* argv[])
 				rotors.push_back(&(*b));
 		}
 		
-		ball_mol = MolecularSimilarity::createMolecule(obMol, false);
+//		ball_mol = MolecularSimilarity::createMolecule(obMol, false);
 		vector<OBBond*>::iterator it;
 		for(it=rotors.begin(); it!=rotors.end(); ++it)
 		{
@@ -212,49 +216,49 @@ int main(int argc, char* argv[])
 			
 			addToLenghts(bnd, lengths);
 
-			Molecule* new_mol1 = getConnection(bnd->GetBeginAtom(), ball_mol);
-			Molecule* new_mol2 = getConnection(bnd->GetEndAtom(), ball_mol);
+//			Molecule* new_mol1 = getConnection(bnd->GetBeginAtom(), ball_mol);
+//			Molecule* new_mol2 = getConnection(bnd->GetEndAtom(), ball_mol);
 			
-			String key1 = new_mol1->getProperty("key").getString();
-			String key2 = new_mol2->getProperty("key").getString();
+//			String key1 = new_mol1->getProperty("key").getString();
+//			String key2 = new_mol2->getProperty("key").getString();
 			
-			//3) filter out if already known connections
-			if(parpars.has("unique"))
-			{
-				if( used.find(key1) == used.end() )
-				{
-					//4) create the connections
-					used.insert(key1);
-					connections.push_back(*new_mol1);
-				}
-				else{
-					delete new_mol1;
-				}
+//			//3) filter out if already known connections
+//			if(parpars.has("unique"))
+//			{
+//				if( used.find(key1) == used.end() )
+//				{
+//					//4) create the connections
+//					used.insert(key1);
+//					connections.push_back(*new_mol1);
+//				}
+//				else{
+//					delete new_mol1;
+//				}
 				
-				if( used.find(key2) == used.end() )
-				{
-					//4) create the connections
-					used.insert(key2);
-					connections.push_back(*new_mol2);
-				}
-				else{
-					delete new_mol2;
-				}
-			}
-			else
-			{
-				//4) create the connections
-				connections.push_back(*new_mol1);
-				connections.push_back(*new_mol2);
-			}
+//				if( used.find(key2) == used.end() )
+//				{
+//					//4) create the connections
+//					used.insert(key2);
+//					connections.push_back(*new_mol2);
+//				}
+//				else{
+//					delete new_mol2;
+//				}
+//			}
+//			else
+//			{
+//				//4) create the connections
+//				connections.push_back(*new_mol1);
+//				connections.push_back(*new_mol2);
+//			}
 		}
-		//5) write all connections out
+//		//5) write all connections out
 /// write to output-------------------------------------------------------------
 		
-		writeMolVec(connections, &outfile);
-		delete ball_mol;
-		obMol.Clear();
-		cntr++;
+//		writeMolVec(connections, &outfile);
+//		delete ball_mol;
+//		obMol.Clear();
+//		cntr++;
 	}
 	outfile.close();
 	ifs.close();
@@ -264,8 +268,10 @@ int main(int argc, char* argv[])
 	boost::unordered_map< String, vector<double> >::iterator mit = lengths.begin();
 	for(; mit != lengths.end(); mit++)
 	{
-		cout <<mit->first<<" avg:"<< (mit->second[0] / mit->second[3]);
-		cout <<" min:"<< mit->second[1]<<" max:" << mit->second[2];
-		cout << " found:"<< mit->second[3]<<endl;
+		// type-ids, avg-length, min-length, max-length, number-of-occurences
+		bondFile <<mit->first<<" "<< (mit->second[0] / mit->second[3]);
+		bondFile <<" "<< mit->second[1]<<" " << mit->second[2];
+		bondFile << " "<< mit->second[3]<<endl;
 	}
+	bondFile.close();
 }

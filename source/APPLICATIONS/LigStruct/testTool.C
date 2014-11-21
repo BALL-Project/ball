@@ -4,6 +4,8 @@
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/SYSTEM/file.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/molecule.h>
@@ -79,6 +81,29 @@ void readConnections(boost::unordered_map <String, Molecule* >& con, String& fil
 bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 {
 	return a.first < b.first;
+}
+
+
+/// read std Bonds from file:
+/// ---------------------------------------
+void readStdBonds(boost::unordered_map <String, float >& bonds, String bonds_name)
+{
+	LineBasedFile bondFile(bonds_name, ios::in);
+	
+	while( bondFile.readLine() )
+	{
+		String st_ar[2];
+		bondFile.getLine().split(st_ar, 2);
+		
+		bonds[st_ar[0]] = st_ar[1].toFloat();
+		
+		// generate also the reversed label, if both differ
+		if( (st_ar[0])[0] != (st_ar[0])[1] ){
+			String altKey = (st_ar[0])[1];
+			altKey += (st_ar[0])[0];
+			bonds[altKey] = st_ar[1].toFloat();
+		}
+	}
 }
 
 
@@ -322,14 +347,15 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 	return result;
 }
 
-/// ################# M A I N #################
+///################################# M A I N ###################################
+///#############################################################################
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("attachFragments", " connect two fragments", 0.1, String(__DATE__), "Assembly");
-	parpars.registerParameter("i1", "input SDF", INFILE, true);
-	parpars.registerParameter("i2", "input SDF", INFILE, true);
+	parpars.registerParameter("i1", "input SDF, with tritium connected to the connection site", INFILE, true);
+	parpars.registerParameter("i2", "input SDF, with tritium connected to the other connection site", INFILE, true);
 //	parpars.registerParameter("o", "output SDF", OUTFILE, true);
-	parpars.registerParameter("l", "output SDF", INFILE, true);
+	parpars.registerParameter("l", "lib of connection sites in SDF", INFILE, true);
 	
 	parpars.setSupportedFormats("i1","sdf");
 	parpars.setSupportedFormats("i2","sdf");
@@ -345,10 +371,15 @@ int main(int argc, char* argv[])
 ///======================read all sturctures/templates =========================
 	cout<<"Loading connection lib ";
 	boost::unordered_map <String, Molecule* > connections;
-	String conLib_name = parpars.get("l"); // "/Users/pbrach/Desktop/tests/rigid-rigid/OUT_connections.sdf";
+	String conLib_name = parpars.get("l");
 	cout<<" from: "<<conLib_name<<endl;
 	readConnections(connections, conLib_name);
 	cout<<" done! got "<< connections.size()<<" templates" <<endl;
+	
+	cout<<"Loading standard bondlengths "<<endl;
+	boost::unordered_map <String, float > std_bonds;
+	String bonds_name = "/Users/pbrach/Desktop/tests/rigid-rigid/std_bond_1letter.txt";
+	readStdBonds(std_bonds, bonds_name);
 	
 	// the second fragment is connected to the first one by a single bond
 	// between the two first atoms
@@ -384,7 +415,76 @@ int main(int argc, char* argv[])
 		}
 	}
 
-///===========find connection site and match against conection library==========
+///===========find connection site and match against conection library=========
+
+	///0) Check for trivial cases of one being a single atom or both being single atoms
+	if(frag1->countAtoms() == 1 || frag2->countAtoms() == 1)
+	{
+		Molecule* single_frag = 0;
+		Atom* atm1 = 0;
+		Atom* atm2 = 0;
+		Bond* bnd = new Bond();
+		bnd->setOrder(1);
+		// both are one atom sized:
+		if( frag1->countAtoms() + frag2->countAtoms() == 2)
+		{
+			atm1 = frag1->getAtom(0);
+			atm2 = frag2->getAtom(0);
+			single_frag = frag1;
+			
+			String bond_key = atm1->getElement().getSymbol();
+			bond_key += atm2->getElement().getSymbol();
+			
+			atm1->setPosition(Vector3(0,0,0));
+			atm2->setPosition(Vector3(std_bonds[bond_key],0,0));
+			
+			single_frag->insert(*atm2);
+			atm1->createBond(*bnd, *atm2);
+			
+			SDFile outfile("/Users/pbrach/Desktop/tests/rigid-rigid/test1_result.sdf", ios::out);
+			outfile << *single_frag;
+			return 0;
+		}
+		// frag 1 is single
+		else if(frag1->countAtoms() == 1)
+		{
+			// insert the single atom into frag2
+			atm1 = con2;
+			atm2 = con1;
+			single_frag = frag2;
+		}
+		// frag 2 is single
+		else
+		{
+			// insert the single atom into frag1
+			atm1 = con1;
+			atm2 = con2;
+			single_frag = frag1;
+		}
+		vector< Atom* > site; String key;
+		
+		int pos = getSite(atm1, site, atm2, key);
+		Molecule* templ = new Molecule(*connections[key]);
+		
+		atm2->setPosition( templ->getAtom(pos)->getPosition() );
+		templ->remove(*templ->getAtom(pos));
+		
+		// rotate the single_frag so that it aligns with the template:
+		Matrix4x4 trans = align(site, templ);
+		TransformationProcessor transformer(trans);
+		single_frag->apply(transformer);
+		
+		// take position from the template and insert to the single frag
+		
+		single_frag->insert(*atm2);
+		atm1->createBond(*bnd, *atm2);
+		
+		// write output and return early:
+		SDFile outfile("/Users/pbrach/Desktop/tests/rigid-rigid/test1_result.sdf", ios::out);
+		outfile << *single_frag;
+		return 0;
+	}
+	
 	cout<<"searching sites..."<<endl<<endl;
 	///1) find connection sites from the two atom pointers:
 	vector< Atom* > site1, site2;
@@ -398,25 +498,15 @@ int main(int argc, char* argv[])
 	
 	cout<<"searching templates..."<<endl;
 	///2) find the corresponding templates
-	Molecule* templ1 = connections[key1];
-	Molecule* templ2 = connections[key2];
+	// create working_copies to keep the originals save!
+	Molecule* templ1 = new Molecule(*connections[key1]);
+	Molecule* templ2 = new Molecule(*connections[key2]);
 
-	// it could be that we get two identical connection templates
-	bool identicalTemplates = false;
-	if (templ1 == templ2)
-	{
-		// in this case we need to create a copy
-		templ2 = new Molecule(*templ1,true);
-	}
-	cout<< "found templates: "<< templ1 <<" "<<templ1->countAtoms() <<" - "<<templ2<<" "<<templ2->countAtoms()<<endl;
+	cout<< "found templates: "<< connections[key1] <<" "<<templ1->countAtoms() <<" - "<<connections[key2]<<" "<<templ2->countAtoms()<<endl;
 	cout<<"......done!"<<endl<<endl;
 	
 	cout<<"creating connected template..."<<endl;
 	///3) connect the two templates to one new template
-//	Matrix4x4 mov;
-//	mov.setRotation(Angle(30),Vector3(1,1,1));
-//	TransformationProcessor tp = TransformationProcessor( mov );
-//	templ1->apply( tp );
 	mergeTemplates(templ1, pos1, templ2, pos2);
 	cout<<"......done!"<<endl<<endl;
 	
@@ -461,6 +551,6 @@ int main(int argc, char* argv[])
 	SDFile outfile("/Users/pbrach/Desktop/tests/rigid-rigid/test1_result.sdf", ios::out);
 	outfile << *frag1;
 	
-	if(identicalTemplates)
-		delete templ2;
+	delete templ1;
+	delete templ2;
 }
