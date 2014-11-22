@@ -13,6 +13,7 @@ SET(EXECUTABLES_LIST
 	prototype_libFragmenter
 	prototype_queryFragmenter
 	connectionFragmenter
+	connectionRMSDFilter
 )
 
 

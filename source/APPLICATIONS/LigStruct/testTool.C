@@ -15,6 +15,9 @@
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/MATHS/angle.h>
+#include <BALL/MATHS/vector3.h>
+#include <BALL/MATHS/matrix44.h>
 
 #include <vector>
 #include <util.h>

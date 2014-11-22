@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/DATATYPE/string.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 #include <openbabel/mol.h>
@@ -44,12 +45,10 @@ bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 // 
 Molecule* getConnection(OBAtom* atm, Molecule* mol)
 {
-//	cout<<"working with atom: "<<atm<<" and molecule "<< mol <<endl;
 	Molecule * workMol = new Molecule;
 	String key = "";
 	
 	int id_main = atm->GetId();
-//	cout<<"copy atom "<<endl;
 	Atom* mainAtm = new Atom(*(mol->getAtom(id_main)), true);
 	
 	key = mainAtm->getElement().getSymbol();
@@ -68,24 +67,28 @@ Molecule* getConnection(OBAtom* atm, Molecule* mol)
 		if (bnd->GetBeginAtom() != atm)
 		{
 			elem = bnd->GetBeginAtom()->GetType();
-//			cout<<"new atom: "<<bnd->GetBeginAtom()->GetId()<<endl;
 			tmp = new Atom(*mol->getAtom(bnd->GetBeginAtom()->GetId()));
 		}
 		else
 		{
-//			cout<<"new ENDatom: "<<bnd->GetEndAtom()->GetId()<<endl;
-//			cout<<"mol has "<<mol->countAtoms()<<" atoms"<<endl;
-//			cout<<"atm pointer: "<< mol->getAtom(bnd->GetEndAtom()->GetId()) <<endl;
 			elem = bnd->GetEndAtom()->GetType();
 			tmp = new Atom( *mol->getAtom(bnd->GetEndAtom()->GetId()) );
 		}
 
 		Bond* tmp_bnd = new Bond();
 		tmp_bnd->setOrder(bnd_od);
-//		cout<<"creating artificial bond with BO: "<<bnd_od<<endl;
 		mainAtm->createBond(*tmp_bnd, *tmp);
 		
-		elements.push_back( make_pair(String(*elem) + String(bnd_od), tmp) );
+		String element = String(elem);
+		if(element.hasPrefix("Br") || element.hasPrefix("Cl") || element.hasPrefix("Se") || 
+			 element.hasPrefix("Si") || element.hasPrefix("Se"))
+		{
+			element = element(0,2);
+		}
+		else
+			element = element(0,1);
+
+		elements.push_back( make_pair(element + String(bnd_od), tmp) );
 	}
 	
 	// sort identifers
@@ -199,7 +202,7 @@ int main(int argc, char* argv[])
 		obMol.FindRingAtomsAndBonds();
 		
 		rotors.clear();
-//		connections.clear();
+		connections.clear();
 		
 		// get only rotor-bonds for connections
 		FOR_BONDS_OF_MOL(b, obMol){
@@ -207,58 +210,58 @@ int main(int argc, char* argv[])
 				rotors.push_back(&(*b));
 		}
 		
-//		ball_mol = MolecularSimilarity::createMolecule(obMol, false);
+		ball_mol = MolecularSimilarity::createMolecule(obMol, false);
 		vector<OBBond*>::iterator it;
 		for(it=rotors.begin(); it!=rotors.end(); ++it)
 		{
 			//1) get the two sub-mols per bond
 			OBBond* bnd = (*it);
 			
-			addToLenghts(bnd, lengths);
+//			addToLenghts(bnd, lengths);
 
-//			Molecule* new_mol1 = getConnection(bnd->GetBeginAtom(), ball_mol);
-//			Molecule* new_mol2 = getConnection(bnd->GetEndAtom(), ball_mol);
+			Molecule* new_mol1 = getConnection(bnd->GetBeginAtom(), ball_mol);
+			Molecule* new_mol2 = getConnection(bnd->GetEndAtom(), ball_mol);
 			
-//			String key1 = new_mol1->getProperty("key").getString();
-//			String key2 = new_mol2->getProperty("key").getString();
+			String key1 = new_mol1->getProperty("key").getString();
+			String key2 = new_mol2->getProperty("key").getString();
 			
-//			//3) filter out if already known connections
-//			if(parpars.has("unique"))
-//			{
-//				if( used.find(key1) == used.end() )
-//				{
-//					//4) create the connections
-//					used.insert(key1);
-//					connections.push_back(*new_mol1);
-//				}
-//				else{
-//					delete new_mol1;
-//				}
+			//3) filter out if already known connections
+			if(parpars.has("unique"))
+			{
+				if( used.find(key1) == used.end() )
+				{
+					//4) create the connections
+					used.insert(key1);
+					connections.push_back(*new_mol1);
+				}
+				else{
+					delete new_mol1;
+				}
 				
-//				if( used.find(key2) == used.end() )
-//				{
-//					//4) create the connections
-//					used.insert(key2);
-//					connections.push_back(*new_mol2);
-//				}
-//				else{
-//					delete new_mol2;
-//				}
-//			}
-//			else
-//			{
-//				//4) create the connections
-//				connections.push_back(*new_mol1);
-//				connections.push_back(*new_mol2);
-//			}
+				if( used.find(key2) == used.end() )
+				{
+					//4) create the connections
+					used.insert(key2);
+					connections.push_back(*new_mol2);
+				}
+				else{
+					delete new_mol2;
+				}
+			}
+			else
+			{
+				//4) create the connections
+				connections.push_back(*new_mol1);
+				connections.push_back(*new_mol2);
+			}
 		}
-//		//5) write all connections out
+		//5) write all connections out
 /// write to output-------------------------------------------------------------
 		
-//		writeMolVec(connections, &outfile);
-//		delete ball_mol;
-//		obMol.Clear();
-//		cntr++;
+		writeMolVec(connections, &outfile);
+		delete ball_mol;
+		obMol.Clear();
+		cntr++;
 	}
 	outfile.close();
 	ifs.close();
