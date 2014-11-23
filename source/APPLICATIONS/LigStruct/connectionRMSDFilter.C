@@ -153,8 +153,8 @@ float star_align(Molecule* mol1, Molecule* mol2)
 	TransformationProcessor transformer;
 	
 	// set the two center atoms (which are always the first atoms):
-	Vector3& frag1 = mol1->getAtom(0)->getPosition();
-	Vector3& tem1  = mol2->getAtom(0)->getPosition();
+	Vector3 frag1 = mol1->getAtom(0)->getPosition();
+	Vector3 tem1  = mol2->getAtom(0)->getPosition();
 	
 	/// 1.) simple solutions for only one or two neighbors
 	int num_atoms = mol1->countAtoms();
@@ -228,12 +228,16 @@ float star_align(Molecule* mol1, Molecule* mol2)
 	///    Here we have all we need and my return early
 	if (unique_atm.size() > 1)
 	{
-		// assign positions:
+		Atom* selectionA1 = mol1->getAtom(0);
+		frag1 = selectionA1->getPosition(); 
 		frag2 = unique_atm[0]->getPosition();
-		frag2 = unique_atm[1]->getPosition();
+		frag3 = unique_atm[1]->getPosition();
+		
+		Atom* selectionB1 = mol2->getAtom(0);
+		tem1  = selectionB1->getPosition();
 		tem2 = getMatchingAtom( mol2, unique_atm[0] )->getPosition();
 		tem3 = getMatchingAtom( mol2, unique_atm[1] )->getPosition();
-				
+		
 		// get RMSD:
 		trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
 		transformer.setTransformation(trans_matrix);
@@ -295,6 +299,7 @@ float star_align(Molecule* mol1, Molecule* mol2)
 	Atom* selectionA1 = mol1->getAtom(0);
 	Atom* selectionA2 = mol1->getAtom(1);
 	Atom* selectionA3 = mol1->getAtom(2);
+	
 	Atom* selectionB1 = mol2->getAtom(0);
 	Atom* selectionB2 = 0;
 	Atom* selectionB3 = 0;
@@ -320,15 +325,15 @@ float star_align(Molecule* mol1, Molecule* mol2)
 				frag3 = selectionA3->getPosition(); tem3  = selectionB3->getPosition();
 					
 				trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
-					transformer.setTransformation(trans_matrix);
-					mol1->apply(transformer);
-					
-					rmsd = getBestRMSD(mol1, mol2);
-					if (rmsd < best_rmsd)
-						best_rmsd = rmsd;
-				}
+				transformer.setTransformation(trans_matrix);
+				mol1->apply(transformer);
+				
+				rmsd = getBestRMSD(mol1, mol2);
+				if (rmsd < best_rmsd)
+					best_rmsd = rmsd;
 			}
 		}
+	}
 	return best_rmsd;
 }
 
@@ -345,57 +350,57 @@ bool comparator(pair<int, Molecule*>& a, pair<int, Molecule*>& b)
 
 /// Find Bins depending on an RMSD threshold
 /// ----------------------------------------------------------------------------
-void getBins(vector< pair<int, Molecule*> >& bins, vector<Molecule*> mols)
+void getBins(vector< pair<int, Molecule*> >& bins, vector<Molecule*>& mols)
 {
-	float THRESHOLD = 0.2;
+	const float THRESHOLD = 0.2;
 	/// align each molecule with each other, if they are identical insert to map:
 	boost::unordered_map< Molecule*, int > local_bins;
 	
-	if(mols.size() <2){ // check if we have more than one template available
+	// check if we have more than one template available
+	if(mols.size() <2){
 		if(mols.size() == 1)
 		{
 			bins.push_back( make_pair(1, mols[0]) );
+		}
+		else{
+			Log<<"ERROR: got a key without any molecule!"<<endl;
+			exit(EXIT_FAILURE);
 		}
 		return;
 	}
 	
 	vector<Molecule*>::iterator it1, it2;
-	boost::unordered_map< Molecule*, int >::iterator entry_exists;
 	for(it1 = mols.begin(); it1 != mols.end(); it1++)
 	{
+		// do not test molecules AS FISRT molecule that were already replaced
+		if( local_bins.find(*it1) != local_bins.end() )
+			continue;
+		
+		// create a 'bin' for this molecule
+		local_bins[*it1] += 1;
+		
 		for(it2 = it1 + 1; it2 != mols.end(); it2++)
 		{
-			if(*it1 == *it2) // this case occurs, if both pointer were replaced by a group representative
+			// do not test molecules AS SECOND molecule that were already replaced
+			if( local_bins.find(*it2) != local_bins.end() )
 				continue;
 			
-			Molecule* mol1 = *it1;
-			Molecule* mol2 = *it2;
-			
-			// align mol2 to match mol1 (special alignment for star-molecules)
-			float rmsd = star_align(mol2, mol1);
-//			cout<<mol1 << " :: "<< mol2 << " "<< rmsd<<endl;
-			// get RMSD:
+			// align mol2 to match mol1 (special alignment for star-molecules) and get RMSD
+			float rmsd = star_align(*it2, *it1);
 			if ( rmsd < THRESHOLD)
 			{
+				delete *it2;
 				*it2 = *it1; // replace pointer by the group representative
 				
-				entry_exists = local_bins.find(*it1);
-				if(entry_exists == local_bins.end())
-					local_bins[*it1] += 2;
-				else
-					local_bins[*it1] += 1;
+				local_bins[*it1] += 1;
 			}
 		}
-		entry_exists = local_bins.find(*it1);
-		if(entry_exists == local_bins.end())
-			local_bins[*it1] += 1;
 	}
-//	cout<<"local bins: "<<local_bins.size()<<endl;
+
 	// transform local bins to result 'bins':
 	boost::unordered_map< Molecule*, int >::iterator it = local_bins.begin();
 	for(; it != local_bins.end(); it++)
 	{
-//		cout<<"pushing: "<<(*it).second<<" "<<(*it).first<<endl;
 		bins.push_back( make_pair((*it).second, (*it).first) );
 	}
 }
@@ -422,6 +427,8 @@ int main(int argc, char* argv[])
 	
 	boost::unordered_map <String, vector<Molecule*> > connection_classes;
 	
+	Log << "Reading input connections from:"<<endl;
+	Log << String(parpars.get("i"))<<endl;
 	SDFile infile(parpars.get("i"), ios::in); // OPEN IN-FILE
 	Molecule* work_frag =	infile.read();
 	while ( work_frag )
@@ -434,6 +441,7 @@ int main(int argc, char* argv[])
 	Log << "Read "<< connection_classes.size()<< " connection classes" << endl;
 	
 	infile.close();
+	Log << "done reading."<<endl;
 	
 	
 ///2.) Loop over all classes to find the 'best representative':
@@ -450,10 +458,14 @@ int main(int argc, char* argv[])
 		sort(bins.begin(), bins.end(), comparator);
 		
 		///2.3) write most frequent molecule to outfile
-		vector< pair<int, Molecule*> >::iterator bi = bins.begin();
-		
 		Log<<" bin "<<(bins[0].second)->getProperty("key").getString()<<" contains: "<<bins[0].first<<endl;
 		outfile<< *(bins[0].second);
+		
+		///2.4) free memory:
+		//connection_classes.erase(cla_it);
+		for (int i = 0; i < bins.size(); i++){
+			delete bins[i].second;
+		}
 	}
 	Log <<endl<<"wrote " << connection_classes.size()<<" structures"<<endl;
 	outfile.close();
