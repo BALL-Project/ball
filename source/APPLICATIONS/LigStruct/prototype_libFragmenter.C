@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
-	parpars.registerFlag("-unique", "only output one fragment for each topology");
+	parpars.registerFlag("unique", "only output one fragment for each topology");
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
@@ -126,7 +126,7 @@ int main(int argc, char* argv[])
 			
 			// get mapping for canonical labels:
 			std::vector<unsigned int> clabels;
-			CanonicalLabels(temp, sym, clabels);
+			CanonicalLabels(temp, sym, clabels, OBBitVec(), 10);
 			
 			Molecule* new_mol = new Molecule;
 			std::vector <Atom*> aList( (*fit).countAtoms() );
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
 		
 /// write to output-------------------------------------------------------------
 		
-		if(parpars.has("-unique"))
+		if(parpars.has("unique"))
 			uniqueWriteMolVec(fragments, &outfile,used);
 		else
 			writeMolVec(fragments, &outfile);

@@ -354,7 +354,8 @@ void getBins(vector< pair<int, Molecule*> >& bins, vector<Molecule*>& mols)
 {
 	const float THRESHOLD = 0.2;
 	/// align each molecule with each other, if they are identical insert to map:
-	boost::unordered_map< Molecule*, int > local_bins;
+//	boost::unordered_map< Molecule*, int > local_bins;
+	map< Molecule*, int > local_bins;
 	
 	// check if we have more than one template available
 	if(mols.size() <2){
@@ -398,7 +399,8 @@ void getBins(vector< pair<int, Molecule*> >& bins, vector<Molecule*>& mols)
 	}
 
 	// transform local bins to result 'bins':
-	boost::unordered_map< Molecule*, int >::iterator it = local_bins.begin();
+//	boost::unordered_map< Molecule*, int >::iterator it = local_bins.begin();
+	map< Molecule*, int >::iterator it = local_bins.begin();
 	for(; it != local_bins.end(); it++)
 	{
 		bins.push_back( make_pair((*it).second, (*it).first) );
@@ -425,7 +427,8 @@ int main(int argc, char* argv[])
 
 ///1.) Read all molecules and sort to their respective connection-class:
 	
-	boost::unordered_map <String, vector<Molecule*> > connection_classes;
+	map <String, vector<Molecule*> > connection_classes;
+	//boost::unordered_map <String, vector<Molecule*> > connection_classes;
 	
 	Log << "Reading input connections from:"<<endl;
 	Log << String(parpars.get("i"))<<endl;
@@ -447,7 +450,8 @@ int main(int argc, char* argv[])
 ///2.) Loop over all classes to find the 'best representative':
 ///
 	SDFile outfile(String(parpars.get("o")), ios::out);// OPEN OUT-FILE
-	boost::unordered_map <String, vector<Molecule*> >::iterator cla_it = connection_classes.begin();
+//	boost::unordered_map <String, vector<Molecule*> >::iterator cla_it = connection_classes.begin();
+	map <String, vector<Molecule*> >::iterator cla_it = connection_classes.begin();
 	for(; cla_it != connection_classes.end(); cla_it++)
 	{
 		///2.1) Get sets of identical molecules

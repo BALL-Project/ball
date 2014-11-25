@@ -3,12 +3,25 @@
 //
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/SYSTEM/file.h>
+
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/DATATYPE/string.h>
+
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PTE.h>
+
 #include <BALL/STRUCTURE/UCK.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
+#include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/MATHS/angle.h>
+#include <BALL/MATHS/vector3.h>
+#include <BALL/MATHS/matrix44.h>
 
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
@@ -25,7 +38,58 @@ using namespace BALL;
 using namespace std;
 
 /// ################# H E L P E R    F U N C T I O N S #################
-// check if the atom is a rigid one:
+
+// TODO: maybe change this
+/// Delete empty fragments and check that all were empty
+void checkAndDeleteFragments(vector <Molecule*> frags)
+{
+	int empty = 0;
+	for (vector <Molecule*>::iterator i = frags.begin(); i != frags.end(); i++)
+	{
+		if( (*i)->countAtoms() == 0)
+			delete (*i);
+		else
+			empty++;
+	}
+	if( empty != 0 )
+		Log << "WARNING: There are still " << empty <<" unconnected fragments!"<<endl;
+}
+
+
+// TODO: remove this DEBUG function
+// Write several result molecules to one file
+void writeMolVec(vector<Molecule* >& input, SDFile* handle)
+{
+	for(int i = 0; i < input.size(); i++)
+	{
+		(*handle) << *input[i];
+	}
+}
+
+
+// get the position of an atom in the molcule list:
+const int getAtomPosition(Atom* atm, Molecule* mol)
+{
+	AtomIterator ati = mol->beginAtom();
+	for (int i = 0; +ati; ati++, i++)
+	{
+		if(&*ati == atm)
+			return i;
+	}
+	return -1;
+}
+
+
+/// empty 'fromMol' and append the atoms to 'toMol'
+void transferMolecule( Molecule* toMol, Molecule* fromMol)
+{
+	int num_atm = fromMol->countAtoms();
+	for(int i = 0; i < num_atm; i++)
+		toMol->insert( *fromMol->beginAtom() ); // insert auto removes from its old parent
+}
+
+
+/// check if the atom is a rigid one:
 bool isAtomRigid(OBAtom* atm)
 {
 /// TODO: add OBRotorList object to use custom torlib!
@@ -76,52 +140,137 @@ void setCoordinates(Molecule* query, Molecule* templat)
 	}
 }
 
-/// ################# M A I N #################
-int main(int argc, char* argv[])
+
+
+
+///####################### L O A D I N G ##############################
+void getLibraryPathes(vector<String>& result_pathes, String config_path)
 {
-	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input SDF", INFILE, true);
-	parpars.registerParameter("o", "output SDF", OUTFILE, true);
-	parpars.registerParameter("l", "in SDF fragmentLib", INFILE, true);
+	LineBasedFile configFile(config_path, ios::in);
 	
-	parpars.setSupportedFormats("i","sdf");
-	parpars.setSupportedFormats("o","sdf");
-	parpars.setSupportedFormats("l","sdf");
-	parpars.setOutputFormatSource("o","i");
+	String tmp="";
+	while( configFile.readLine() )
+	{
+		tmp = configFile.getLine();
+		if(tmp.hasPrefix("#"))
+			continue;
+		
+		if(tmp.hasPrefix("fragments=")){
+			tmp = tmp.after("fragments=");
+			result_pathes[0] = tmp.trim();
+		}
+		else if(tmp.hasPrefix("bondlenths=")){
+			tmp = tmp.after("bondlenths=");
+			result_pathes[1] = tmp.trim();
+		}
+		else if(tmp.hasPrefix("connections=")){
+			tmp = tmp.after("connections=");
+			result_pathes[2] = tmp.trim();
+		}
+		else
+			continue;
+	}
+}
 
-	String manual = "...just playing...";
-	parpars.setToolManual(manual);
 
-	parpars.parse(argc, argv);
-	// ######## START ####################################################
-	OBMol obMol; // working molecule
+void readFragmentLib(String& path, boost::unordered_map <BALL::String, Molecule*>& fragmentLib)
+{
+	fragmentLib.clear();
+	SDFile libFile(path, ios::in);
 	
-	// Read open-babel molecule as input:
+	Molecule* tmp_mol;
+	tmp_mol = libFile.read();
+	
+	// read in fragmentLib and create hash-map from that:
+	while(tmp_mol)
+	{
+		String key = tmp_mol->getProperty("key").getString();
+		fragmentLib[key] = tmp_mol;
+		
+		tmp_mol = libFile.read();
+	}
+	libFile.close();
+}
+
+
+void readConnectionLib(String& path, boost::unordered_map <String, Molecule* >& con)
+{
+	con.clear();
+	
+	SDFile handle(path, ios::in); //open the lib file as sdf-file
+	
+	// read all lib molecules and save them with their key:
+	Molecule* tmp_mol;
+	tmp_mol = handle.read(); // first entry
+	
+	int cnt = 0;
+	while(tmp_mol)
+	{
+		BALL::String key = tmp_mol->getProperty("key").getString();
+		con[key] = tmp_mol;
+		
+		tmp_mol = handle.read();
+		cnt++;
+	}
+	
+	handle.close();
+}
+
+
+/// read std Bonds from file:
+/// ---------------------------------------
+void readBondLib(String& path, boost::unordered_map <String, float >& bonds)
+{
+	LineBasedFile bondFile(path, ios::in);
+	
+	while( bondFile.readLine() )
+	{
+		String st_ar[2];
+		bondFile.getLine().split(st_ar, 2);
+		
+		bonds[st_ar[0]] = st_ar[1].toFloat();
+		
+		// generate also the reversed label, if both differ
+		if( (st_ar[0])[0] != (st_ar[0])[1] ){
+			String altKey = (st_ar[0])[1];
+			altKey += (st_ar[0])[0];
+			bonds[altKey] = st_ar[1].toFloat();
+		}
+	}
+}
+
+
+void readOBMolecule(const String& path, OBMol& mol)
+{
+	// Read open-babel molecule:
 	OBConversion conv;
-	OBFormat *format = conv.FormatFromExt(parpars.get("i"));
+	OBFormat *format = conv.FormatFromExt(path);
 	
 	if (!format || !conv.SetInFormat(format))
-		cout << "Could not find input format for file " << parpars.get("i") << endl;
+		cout << "Could not find input format for file " << path << endl;
 
-	ifstream ifs(parpars.get("i")); // open file
+	ifstream ifs(path); // open file
 	
 	if (!ifs)
-		cout << "Could not open " << parpars.get("i") << " for reading." << endl;
+		cout << "Could not open " << path << " for reading." << endl;
 	
-	conv.Read(&obMol, &ifs); // actual 'read' command
+	conv.Read(&mol, &ifs); // actual 'read' command
 	ifs.close();
-	
-	obMol.FindRingAtomsAndBonds(); // find rings
+}
 
-	// --------------------did parameter parsing----------------------------------
-///#######################    F R A G M E N T I N G    #######################
-	/// convert from Babel to BALL:
-	Molecule* ball_mol = MolecularSimilarity::createMolecule(obMol, true);
-	ball_mol->setName("original_mol");
-	
+
+
+
+///####################### F R A G M E N T I N G ##############################
+void assignFragments(OBMol& ob_mol, 
+										 Molecule& ball_mol, 
+										 vector <Molecule*>& rigid_fragments, 
+										 vector <Molecule*>& linker_fragments, 
+										 list< pair<Atom*, Atom*> >& connections)
+{
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
-	int num_atoms = obMol.NumAtoms();
-	
+	int num_atoms = ob_mol.NumAtoms();
+
 	// create 2 empty disjoint sets:
 	std::vector <int> fixed_rank(num_atoms);
 	std::vector <int> fixed_parent(num_atoms);
@@ -135,22 +284,23 @@ int main(int argc, char* argv[])
 	std::vector <bool> is_linker(num_atoms, 0); // bitVec indicating linker atoms
 
 	/// iterate over all bonds and split into rigid and linker fragments:
-	OBBondIterator b_it = obMol.BeginBonds();
-	std::list< pair<Atom*, Atom*> > connections;
-	std::map< Atom*, int> atm_to_pos;
+	OBBondIterator b_it = ob_mol.BeginBonds();
+	std::map< Atom*, int> atm_to_pos; // DEBUG
 	
-	cout<<"Creating fragments from your queryStructure..."<<endl;
-	for (; b_it != obMol.EndBonds(); b_it++)
+//	Log <<"Creating fragments from your queryStructure..."<<endl;
+	for (; b_it != ob_mol.EndBonds(); b_it++)
 	{
+//		Log << "getting OB Atoms and IDs" << endl;
 		OBAtom* atm1 = (*b_it)->GetBeginAtom();
 		OBAtom* atm2 =  (*b_it)->GetEndAtom();
 		int id1 = atm1->GetId();
 		int id2 = atm2->GetId();
 
+//		Log << "is Bond rotor?" << endl;
 		// for all rotable bonds:
 		if ( (*b_it)->IsRotor() )
 		{
-			cout<<"Rotor: "<<atm1->GetType()<<" - "<<atm2->GetType();
+//			cout<<"Rotor: "<<atm1->GetType()<<" - "<<atm2->GetType();
 			bool isRigid_atm1 = isAtomRigid(atm1);
 			bool isRigid_atm2 = isAtomRigid(atm2);
 			if( !(is_linker[id1] || isRigid_atm1) ) // do not double assign (deletes disjointset-parent status)
@@ -166,22 +316,24 @@ int main(int argc, char* argv[])
 			// add union atoms if both are not fixed:
 			if( !(isRigid_atm1 || isRigid_atm2) )// both need to be linker atoms (checked via isAtomRigid(atm) )
 			{
-				cout<<" bond added! ";
+//				cout<<" bond added! ";
 				dset_linker.union_set(id1, id2);
 			}
-			cout<<endl;
+//			cout<<endl;
 			
 			// rotables to a rigid fragment define connection points:
 			if( isAtomRigid((*b_it)->GetBeginAtom()) || isAtomRigid((*b_it)->GetEndAtom()) )
 			{
-				Atom* atm1 = ball_mol->getAtom(id1);
-				Atom* atm2 = ball_mol->getAtom(id2);
+//				Log << "found a connection" <<endl;
+				Atom* atm1 = ball_mol.getAtom(id1);
+				Atom* atm2 = ball_mol.getAtom(id2);
 				connections.push_back(make_pair(atm1, atm2));
 			}
 		}
 		// for all fixed bonds:
 		else
 		{
+//			Log << " Got a fixed bond!"<<endl;
 			if( !is_rigid[id1] ) // do not double assign (deletes disjointset-parent status)
 			{
 				dset_rigid.make_set(id1); 
@@ -199,14 +351,13 @@ int main(int argc, char* argv[])
 	///	iterate over all atoms, sorting out the  fixed and linker fragments
 	std::vector <int> link_groups(num_atoms, -1); // map parent id to vector pos in variable 'fragments'
 	std::vector <int> rigid_groups(num_atoms, -1); // map parent id to vector pos in variable 'fragments'
-	std::vector <Molecule*> fragments;
 	
+//	Log<< "I am going over to fragment assignment:"<<endl;
 	int parent_id = -1;
 	// loop over the atoms, sort fragments out
 	for(int i = 0 ; i < num_atoms; i++)
 	{
-		Atom* atm = ball_mol->getAtom(0);
-		
+		Atom* atm = ball_mol.getAtom(0); // simply pick the atoms from the top
 		// TODO: remove as atm_to_pos is only for debugging:
 		atm_to_pos[atm]=i;
 		// atom is linker, extend a linker fragment
@@ -217,19 +368,19 @@ int main(int argc, char* argv[])
 			// if the atoms fragment does not exist, create it:
 			if(link_groups[parent_id]<0)
 			{
-				link_groups[parent_id] = fragments.size();
+				link_groups[parent_id] = linker_fragments.size();
 				Molecule* dummy = new Molecule();
 				
 				dummy->insert(*atm);
-				dummy->setName("Fragment_"+toString(fragments.size()));
+				dummy->setName("Fragment_"+toString(linker_fragments.size()));
 				dummy->setProperty("isRigid", false);
 				
-				fragments.push_back(dummy);
+				linker_fragments.push_back(dummy);
 			}
 			// atom is part of existing fragment:
 			else
 			{
-				fragments[ link_groups[parent_id] ]->insert(*atm);
+				linker_fragments[ link_groups[parent_id] ]->insert(*atm);
 			}
 		}
 		// Atom is a rigid, extend a rigid fragment
@@ -239,102 +390,94 @@ int main(int argc, char* argv[])
 			// if fragment does not exist, create it:
 			if(rigid_groups[parent_id]<0)
 			{
-				rigid_groups[parent_id] = fragments.size();
+				rigid_groups[parent_id] = rigid_fragments.size();
 				Molecule* dummy = new Molecule();
 				
 				dummy->insert(*atm);
-				dummy->setName("Fragment_"+toString(fragments.size()));
+				dummy->setName("Fragment_"+toString(rigid_fragments.size()));
 				dummy->setProperty("isRigid", true);
-				fragments.push_back(dummy);
+				rigid_fragments.push_back(dummy);
 			}
 			else
 			{
-				fragments[ rigid_groups[parent_id] ]->insert(*atm);
+				rigid_fragments[ rigid_groups[parent_id] ]->insert(*atm);
 			}
 		}
+//		cout<<"END OF LOOP"<<endl;
 	}
 	
-	/// iterate over all connections and assign connections to fragments:
-	cout << endl;
-	cout << "following inter fragment bonds exist:"<<endl;
-	list< pair<Atom*, Atom*> >::iterator coit;
-	for(coit=connections.begin(); coit!=connections.end(); coit++)
-	{
-		Atom* atm1 = coit->first;
-		Atom* atm2 = coit->second;
-		cout<<((Molecule*)atm1->getParent())->getName();
-		cout<<" atm "<<atm_to_pos[atm1];
-		cout<< " to "<< ((Molecule*)atm2->getParent())->getName();
-		cout<<" atm "<<atm_to_pos[atm2];
-		cout<<endl;
-	}
-	cout<<endl;
+	/// iterate over all connections and present them to the user
+//	cout << endl;
+//	cout << "following inter fragment bonds exist:"<<endl;
+//	list< pair<Atom*, Atom*> >::iterator coit;
+//	for(coit=connections.begin(); coit!=connections.end(); coit++)
+//	{
+//		Atom* atm1 = coit->first;
+//		Atom* atm2 = coit->second;
+//		cout<<((Molecule*)atm1->getParent())->getName();
+//		cout<<" atm "<<atm_to_pos[atm1];
+//		cout<< " to "<< ((Molecule*)atm2->getParent())->getName();
+//		cout<<" atm "<<atm_to_pos[atm2];
+//		cout<<endl;
+//	}
+//	cout<<endl;
+}
 
-///#######################    M A T C H I N G    #######################
+
+
+
+///####################### M A T C H I N G ##############################
 ///---------------make atomlists of the fragments canonical---------------------
-	cout<<"Canonicalising the atomlists..."<<endl;
+void canonicalize(vector <Molecule*>& fragments)
+{
+	
+	int num_atoms = -1;// obMol.NumAtoms();
+//	cout<<"Canonicalising the atomlists..."<<endl;
 	std::vector< Molecule* >::iterator it;
 	Molecule* new_mol;
 	for(it=fragments.begin(); it != fragments.end(); it++)
 	{
-		cout<<(*it)->getName()<< " has #atoms: "<<(*it)->countAtoms()<<endl;
-		cout<<"DEBUG: "<<endl;
+		num_atoms = (*it)->countAtoms();
+//		cout<<(*it)->getName()<< " has #atoms: "<<(*it)->countAtoms()<<endl;
+//		cout<<"DEBUG: "<<endl;
 		clearExternalBonds(*it);
-		cout<<" cut xt-Bonds <"<<endl;
+//		cout<<" cut xt-Bonds <"<<endl;
 		OBMol* temp = MolecularSimilarity::createOBMol(**it, true);
-		cout<<" made OBMol < "<<endl;
+//		cout<<" made OBMol < "<<endl;
 		
 		OBGraphSym grsym(temp);
 		std::vector<unsigned int> sym;
 		grsym.GetSymmetry(sym);
-		cout<<" made graphSym < "<<endl;
+//		cout<<" made graphSym < "<<endl;
 		
 		std::vector<unsigned int> clabels;
 		CanonicalLabels(temp, sym, clabels);
-		cout<<" calculated Labels < "<<endl;
+//		cout<<" calculated Labels < "<<endl;
 		
 		new_mol = new Molecule;
 		std::vector <Atom*> aList(num_atoms);
 		for(int i=0; i<clabels.size(); i++)
 			aList[clabels[i]-1]=( (*it)->getAtom(i) );
-		cout<<" correct atom-List < "<<endl;
+//		cout<<" correct atom-List < "<<endl;
 		
 		for(int i=0; i<clabels.size(); i++)
 			new_mol->append(*aList[i]);
 
-		cout<<" correct molecule < "<<endl;
+//		cout<<" correct molecule < "<<endl;
 		
 		copyMoleculeProperies(**it, *new_mol);
 		(*it)->swap(*new_mol);
 		
-		cout<<" updated original < "<<endl;
+//		cout<<" updated original < "<<endl;
 		delete new_mol;
-		cout<<" DONE "<<endl;
+//		cout<<" DONE "<<endl;
 	}
+}
 
 ///-------------------match queryFragments to libFragments----------------------
-	// Load fragment lib:
-	boost::unordered_map <BALL::String, Molecule*> fragmentLib;
-	
-	String libfile_name = String(parpars.get("l"));
-		cout<<"Reading fragmentLib from: "<< libfile_name<<" ..."<<endl;
-	SDFile libFile(libfile_name, ios::in);
-	
-	Molecule* tmp_mol;
-	tmp_mol = libFile.read();
-	
-	// read in fragmentLib and create hash-map from that:
-	while(tmp_mol)
-	{
-		BALL::String key = tmp_mol->getProperty("key").getString();
-		fragmentLib[key] = tmp_mol;
-		
-		tmp_mol = libFile.read();
-	}
-
-
+void matchFragments(boost::unordered_map <BALL::String, Molecule*>& fragmentLib, vector<Molecule*>& fragments)
+{
 	// get coordinates for rigid fragments
-	cout<<"Assigning template coordinates to rigid fragments..."<<endl;
 	std::vector< Molecule* >::iterator it2;
 	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
 	{
@@ -350,29 +493,575 @@ int main(int argc, char* argv[])
 				cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
 		}
 	}
-	
-	
-	
-///#######################    A S S E M B L E   3 D    #######################
-/// ??? Nothing so far
+}
 
-/// #######################    F I N I S H    #######################
+
+
+///####################### 3 D    A S S E M B L Y ##############################
+	
+/// ------ check if for every atom in list1 a matching atom in list2 
+/// ------ can be found
+bool allMatch(Molecule* li1, Molecule* li2)
+{
+	AtomIterator at1 = li1->beginAtom();
+	for (; +at1 ; at1++)
+	{
+		bool b = false;
+		
+		AtomIterator at2 = li2->beginAtom();
+
+		for (; +at2; at2++)
+		{
+			if (at1->getDistance(*at2) < 0.8){ // epsilon set to 0.8 A
+				b = true;
+				
+				break;
+			}
+		}
+		if (!b)
+			return false;
+	}
+	return true;
+}
+
+
+// compare element+bondorder annotations:
+bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
+{
+	return a.first < b.first;
+}
+
+
+/// ------- get connection site
+/// 'atm' the atom spanning the site and 'partner' the atom
+/// on the other side of the bond that is to be formed.
+/// 
+int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
+{
+	key = atm->getElement().getSymbol();
+	
+	// insert central atom as first:
+	site.push_back(atm);
+	
+	// determine the key and the order for atoms
+	Atom::BondIterator b_it = atm->beginBond();
+	vector< pair<String,Atom*> > elements;
+	
+	for(; b_it != atm->endBond(); b_it++)
+	{
+		Atom* tmp_atm = b_it->getBoundAtom(*atm); // get neighbors
+		
+		String elem = tmp_atm->getElement().getSymbol();
+		elem += String(b_it->getOrder());
+		
+		elements.push_back( make_pair( elem, tmp_atm) );
+	}
+	
+	// also add the partner atom for the new bond:
+	elements.push_back( make_pair( String(partner->getElement().getSymbol())+ String(1), partner) );
+	
+	// sort identifers, but keep central atom as first:
+	sort( elements.begin(), elements.end(), compare);
+	
+	// set the next two atoms that are NOT the partner
+	// as additional points for a 3 point match site:
+	int pos = -1;
+	for(int i = 0; i < elements.size(); i++)
+	{
+		Atom* tmp = elements[i].second;
+
+		if(tmp != partner)
+			site.push_back(tmp);
+		
+		if(tmp == partner)
+		{
+			pos = i+1;
+		}
+	}
+	
+	// create the key:
+	vector< pair<String, Atom*> >::iterator el_it = elements.begin();
+	for(; el_it !=elements.end(); el_it++)
+	{
+		key += ((*el_it).first);
+	}
+	return pos;
+}
+
+
+/// get transformation vector to move atom 2 so that it has the correct distance
+/// to atom 1
+Vector3 getDiffVec(Atom* atm1, Atom* atm2, boost::unordered_map <String, float > std_bonds)
+{
+	String key = atm1->getElement().getSymbol();
+	key += atm2->getElement().getSymbol();
+	float bond_len = std_bonds[key];
+	
+	Vector3 diff_vec = atm1->getPosition() - atm2->getPosition();
+	float diff_len = diff_vec.getLength() - bond_len;
+	
+	diff_vec.normalize();
+	return (diff_vec * diff_len);
+}
+
+
+/// ------- merge two connection templates to a final template
+/// the final template will only contain 6 atoms, 3 for each end
+/// starting at position 0 and 3 with the molecules that are to be
+/// connected, and then the ordered next two neighbors
+void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2, boost::unordered_map<String, float> std_bonds)
+{
+	Atom* aTarget = mol1->getAtom(pos1);
+	Atom* bTarget = mol2->getAtom(pos2);
+	Atom* atm1 = mol1->getAtom(0);
+	Atom* atm2 = mol2->getAtom(0);
+
+	// got no time to take care of the possible sign errors thus simply use 3-point-matching:
+	Vector3& ptA1 = atm1->getPosition();
+	Vector3& ptA2 = aTarget->getPosition();
+	Vector3& ptB1 = bTarget->getPosition();
+	Vector3& ptB2 = atm2->getPosition();
+
+	Matrix4x4 rot_matrix = StructureMapper::matchPoints(ptB1, ptB2, Vector3(), ptA1, ptA2, Vector3());
+	
+	// transfrom the 2nd template
+	TransformationProcessor transformer(rot_matrix);
+	mol2->apply(transformer);
+	
+	// fix bond length
+	Vector3 bond_fix = getDiffVec(atm1, atm2, std_bonds);
+	TranslationProcessor t_later(bond_fix);
+	mol2->apply(t_later);
+
+	// remove the two connection partner atoms, they are redundant now:
+	mol1->remove(*aTarget);
+	mol2->remove(*bTarget);
+}
+
+/// Helper to get a single key component
+String getBondName(Atom* atm, Atom* partner)
+{
+	String name = atm->getElement().getSymbol();
+	name += atm->getBond(*partner)->getOrder();
+	return name;
+}
+
+/// TODO: improve! use the already better version of 'align' from connectionRMSDFilter
+/// (Structurally) align a connection site to a template and return the 
+/// transformation matrix
+/// 
+/// What it does: finds a transformation from 'site' to 'templ', that 
+/// fits all atoms in both sets. For that a 3 point match searched that fulfills
+/// the condition
+/// 
+/// NOTE: 'all atoms fit' currently means only that positions match, order 
+///       and element are neglected for now, but this seems to be still a good
+///       approximation.
+Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
+{
+	Matrix4x4 result;
+	Vector3 frag1, frag2, frag3, tem1, tem2, tem3;
+	
+	// set the two center atoms:
+	frag1 = site[0]->getPosition();
+	tem1  = templ->getAtom(0)->getPosition();
+	
+	/// simple solution for only one neighbor:
+	if(site.size() == 2)
+	{
+		// got no time to take care of the possible sign errors thus simply use 3-point-matching:
+		frag2 = site[1]->getPosition();
+		tem2  = templ->getAtom(1)->getPosition();
+		return StructureMapper::matchPoints(frag1, frag2, Vector3(), tem1, tem2, Vector3());
+	}
+	
+	/// see if some atoms differ in element and order:
+	// find the unique elements, via their 'bondName'
+	boost::unordered_map<String, int> el_map;
+	for (int i = 1; i < site.size(); i++)
+	{
+		el_map[ getBondName(site[i], site[0]) ] += 1;
+	}
+	
+	/// try to assign the unique atom if one exists:
+	if (el_map.size() != 1)
+	{
+		vector< Atom* > unique_atm;
+		vector< int > unique_pos;
+		vector< String > unique_names;
+		boost::unordered_map<String, int>::iterator mit = el_map.begin();
+		
+		// find all unique identifiers:
+		for (; mit != el_map.end(); mit++)
+		{
+			if(mit->second == 1)
+				unique_names.push_back(mit->first);
+		}
+		
+		/// a not yet captured case, but examples for this are probably very rare,
+		/// because the connection to the partner is excluded, thus for all carbons
+		/// we either have 3 identical bonds or at least one bond that is unique.
+		if(unique_names.size() < 1)
+		{
+			cout<<"ERROR: currently we can't handle cases where different but"<<endl;
+			cout<<" not unique bonds to a central atom exist"<<endl<<endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		/// get all unique atoms (element+order) and positions 
+		/// (for the matches in the template)
+		for(int j = 0; j < unique_names.size(); j++)
+		{
+			for (int i = 1; i < site.size(); i++)
+			{
+				if ( getBondName(site[i], site[0]) == unique_names[j])
+				{
+					unique_atm.push_back(site[i]);
+					unique_pos.push_back(i);
+				}
+			}
+		}
+		
+		// Find mapping using the found unique atoms.
+		// Take the first two, get matrix and return early:
+		if(unique_atm.size() >= 2)
+		{
+			frag2 = unique_atm[0]->getPosition();
+			frag3 = unique_atm[1]->getPosition();
+			
+			tem2 = templ->getAtom(unique_pos[0])->getPosition();
+			tem3 = templ->getAtom(unique_pos[1])->getPosition();
+			
+			return StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
+		}
+		// only one unique does exist, set it and continue with the last step
+		else
+		{
+			frag2 = unique_atm[0]->getPosition();
+			tem2 = templ->getAtom(unique_pos[0])->getPosition();
+		}
+	}
+	
+	/// all atoms have same element and order:
+	/// this means we may choose one match arbitrarily and then test the 
+	/// assignment for a second one iteratively
+	/// OR: it might be that in the previous step we found already a single unique
+	/// atom mapping
+	if( frag2.isZero() ) // if frag2 was not yet initialized, arbitrarily choose
+											 // the two second atoms to as matching pair
+	{
+		frag2 = site[1]->getPosition();
+		tem2  = templ->getAtom(1)->getPosition();
+	}
+	
+	frag3 = site[2]->getPosition();
+	
+	/// test all remaining assignments:
+	// create test molecules:
+	Molecule* dummy_frag;
+	Molecule ref_frag;
+	for(int i = 0; i < site.size(); i++)
+		ref_frag.insert( *(new Atom (*site[i])) );
+
+	dummy_frag = new Molecule(ref_frag, true);
+	
+	// assignment search loop (because a canonical ordering is not always possible for star-graphs)
+	AtomIterator ati = templ->beginAtom();
+	ati++; // we used first atom already
+	for(; ati != templ->endAtom(); ati++ )
+	{
+		tem3 = ati->getPosition();
+		
+		if(tem2 == tem3) // it's possible that our unique assignment did set these coordinates already for tmp2
+			continue;      // in that case cycle!
+		
+		result = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
+		TransformationProcessor transformer(result);
+		dummy_frag->apply(transformer);
+		
+		if ( allMatch(dummy_frag, templ) )
+		{
+			delete dummy_frag;
+			return result;
+		}
+		else
+		{
+			delete dummy_frag;
+			dummy_frag = new Molecule(ref_frag, true);
+		}
+	}
+	
+	cout<<"ERROR: could not match"<<endl;
+	exit(EXIT_FAILURE);
+	return result;
+}
+
+
+/// Handle connections where at least one fragment contains only one atom
+void handleSimpleConnections( Atom* atm1, Atom* atm2,
+															boost::unordered_map <String, float >& bondLib,
+															boost::unordered_map <String, Molecule* >& connectLib)
+{
+	Molecule* frag1 = (Molecule*)atm1->getParent();
+	Molecule* frag2 = (Molecule*)atm2->getParent();
+	Molecule* single_frag;
+	
+	Atom* con1=atm1;
+	Atom* con2=atm2;
+	Bond* bnd = new Bond();
+	bnd->setOrder(1);
+	
+	String bond_key = atm1->getElement().getSymbol();
+	bond_key += atm2->getElement().getSymbol();
+	
+	// both fragments have just one atom
+	if( frag1->countAtoms() + frag2->countAtoms() == 2)
+	{
+		atm1->setPosition(Vector3(0,0,0));
+		atm2->setPosition(Vector3(bondLib[bond_key],0,0));
+
+		frag1->insert(*atm2);
+		return; // return early
+	}
+	// frag 1 is single
+	else if(frag1->countAtoms() == 1)
+	{
+		// insert the single atom1 into frag2
+		con1 = atm2;
+		con2 = atm1;
+		single_frag = frag2;
+	}
+	// frag 2 is single
+	else
+	{
+		// insert the single atom2 into frag1
+		con1 = atm1;
+		con2 = atm2;
+		single_frag = frag1;
+	}
+	
+	vector< Atom* > site; String key;
+	
+	int pos = getSite(con1, site, con2, key);
+	Molecule* templ = new Molecule(*connectLib[key]);
+	
+	con2->setPosition( templ->getAtom(pos)->getPosition() );
+	templ->remove(*templ->getAtom(pos));
+	
+	// rotate the single_frag so that it aligns with the template:
+	Matrix4x4 trans = align(site, templ);
+	TransformationProcessor transformer(trans);
+	single_frag->apply(transformer);
+	
+	single_frag->insert(*con2);
+	con1->createBond(*bnd, *con2);
+}
+
+
+///  connectFragments, thereby merge connected fragments
+///----------------------------------------------------------------------------
+void connectFragments(Molecule* mol,
+											list< pair<Atom*, Atom*> >& connections,
+											boost::unordered_map <String, Molecule* >& connectLib,
+											boost::unordered_map <String, float >& bondLib)
+{
+	list< pair<Atom*, Atom*> >::iterator con_it = connections.begin();
+	
+	Atom* anchor_atom = 0;
+	for(; con_it != connections.end(); con_it++)
+	{
+		Atom* con1 = (*con_it).first;
+		Atom* con2 = (*con_it).second;
+		anchor_atom = con1;
+		
+		Molecule* frag1 = (Molecule*)con1->getParent();
+		Molecule* frag2 = (Molecule*)con2->getParent();
+		
+//		cout<<"Connecting Atoms "<<con1<< " and "<< con2<<endl;
+//		cout<<"Connecting Fragments "<<frag1<< " and "<< frag2<<endl;
+		
+		///0) Check for trivial cases of one being a single atom or both being single atoms
+		if(frag1->countAtoms() == 1 || frag2->countAtoms() == 1)
+		{
+			handleSimpleConnections(con1, con2, bondLib, connectLib);
+		}
+		
+//		cout<<"searching sites..."<<endl<<endl;
+		///1) find connection sites from the two atom pointers:
+		vector< Atom* > site1, site2;
+		String key1, key2;
+		int pos1 = getSite(con1, site1, con2, key1);
+		int pos2 = getSite(con2, site2, con1, key2);
+		
+//		cout<<"site key1: "<<key1<<endl;
+//		cout<<"site key2: "<<key2<<endl<<endl;
+//		cout<<"......done!"<<endl<<endl;
+		
+//		cout<<"searching templates..."<<endl;
+		///2) find the corresponding templates
+		// create working_copies to keep the originals save!
+		Molecule* templ1 = new Molecule(*connectLib[key1]);
+		Molecule* templ2 = new Molecule(*connectLib[key2]);
+	
+//		cout<< "found templates: "<< connectLib[key1] <<" "<<templ1->countAtoms() <<" - "<<connectLib[key2]<<" "<<templ2->countAtoms()<<endl;
+//		cout<<"......done!"<<endl<<endl;
+		
+//		cout<<"creating connected template..."<<endl;
+		///3) connect the two templates to one new template
+		mergeTemplates(templ1, pos1, templ2, pos2, bondLib);
+//		cout<<"......done!"<<endl<<endl;
+		
+//		cout<<"calculating transformations for fragments to the connected template..."<<endl;
+		///4) rotate both sites to match the template
+		Matrix4x4 trans1 = align(site1, templ1);
+		Matrix4x4 trans2 = align(site2, templ2);
+//		cout<<"......done!"<<endl<<endl;
+		
+//		cout<<"applying the transformations to both fragments..."<<endl;
+		TransformationProcessor transformer;
+		transformer.setTransformation(trans1);
+		frag1->apply(transformer);
+		
+		transformer.setTransformation(trans2);
+		frag2->apply(transformer);
+//		cout<<"......done!"<<endl<<endl;
+		
+		
+//		cout<<"writing correct molecule type..."<<endl;
+		///5) finishing molecule connection on data-type level:
+		// form new bond:
+		Bond* bnd = new Bond;
+		bnd->setOrder(1);
+		con1->createBond( *bnd,*(con2) );
+		
+		// transfer atoms to frag1:
+		transferMolecule(frag1, frag2);
+//		cout<<"......done!"<<endl<<endl;
+		
+		///6) clean up:
+		delete templ1;
+		delete templ2;
+	}
+	
+	// move atoms from the last fragment back to 'mol'
+	transferMolecule(mol, (Molecule*)anchor_atom->getParent() );
+}
+
+
+
+/// ################# M A I N #################
+int main(int argc, char* argv[])
+{
+	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
+	parpars.registerParameter("i", "input SDF", INFILE, true);
+	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	
+	parpars.registerParameter("c", "location of conf file", INFILE, false);
+	parpars.setSupportedFormats("c","conf");
+	
+	parpars.setSupportedFormats("i","sdf");
+	parpars.setSupportedFormats("o","sdf");
+	parpars.setOutputFormatSource("o","i");
+
+	String manual = "...just playing...";
+	parpars.setToolManual(manual);
+
+	parpars.parse(argc, argv);
+///####################### LOAD  L I B s #################################
+	// Load all template libs:
+	vector <String> libPathes(3); //0=fragments, 1=bondlenths, 2=connections
+	if ( parpars.has("c") )
+	{
+		getLibraryPathes(libPathes, parpars.get("c"));
+	}
+	else
+	{
+		getLibraryPathes(libPathes, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/playtool.conf");
+	}
+	Log<<"Configuration is:"<<endl;
+	Log<<"FRAGMENTS are in:"<<endl<<libPathes[0]<<endl;
+	Log<<"BONDS are in:"<<endl<<libPathes[1]<<endl;
+	Log<<"CONNECTIONS are in:"<<endl<<libPathes[2]<<endl;
+	
+	boost::unordered_map <String, Molecule*> fragmentLib;
+	boost::unordered_map <String, float > bondLib;
+	boost::unordered_map <String, Molecule* > connectLib;
+
+	Log << "loading template libs...";
+	readFragmentLib(libPathes[0], fragmentLib);
+	readBondLib(libPathes[1], bondLib);
+	readConnectionLib(libPathes[2], connectLib);
+	Log <<"done!"<<endl<<endl;
+	
+
+/// F R A G M E N T I N G
+	Log << "Reading query molecule..."<<endl;
+	OBMol ob_mol; // input query molecule
+	Molecule* ball_mol = 0;
+	readOBMolecule(parpars.get("i"), ob_mol);
+	ball_mol = MolecularSimilarity::createMolecule(ob_mol, true);// convert from Babel to BALL molecule
+	Log << "......done!"<<endl<<endl;
+	
+	vector <Molecule*> rigid_fragments;
+	vector <Molecule*> linker_fragments;
+	list< pair<Atom*, Atom*> > connections;
+	
+//	ob_mol.FindRingAtomsAndBonds(); // find rings, theoretically this is necessary... but probably also called inside ob_mol
+	
+	// TODO: remove the 'isRigid'-flag, and the molecule name (no purpose anymore)
+	Log << "Fragmenting the input molecule..."<<endl;
+	assignFragments(ob_mol, *ball_mol, rigid_fragments, linker_fragments, connections);
+	Log << "......done!"<<endl<<endl;
+
+	
+	
+/// M A T C H I N G
+	Log << "Matching fragments against FragmentLib..."<<endl;
+	canonicalize(rigid_fragments);
+	canonicalize(linker_fragments);
+	
+	matchFragments(fragmentLib, rigid_fragments);
+	Log << "......done!"<<endl<<endl;
+	
+///// A S S E M B L E   3 D
+	if( ball_mol->countAtoms() > 0 )
+	{
+		Log << "ERROR: not all atoms were correctly fragmented!!!"<< endl;
+		exit(EXIT_FAILURE);
+	}
+	Log << "Connecting 3D fragments..."<<endl;
+	connectFragments(ball_mol, connections, connectLib, bondLib);
+	Log << "......done!"<<endl<<endl;
+	
+	// memory clean up (the fragment entries should now all be empty)
+	checkAndDeleteFragments(rigid_fragments);
+	checkAndDeleteFragments(linker_fragments);
+	rigid_fragments.clear();
+	linker_fragments.clear();
+
+/// F I N I S H
 ///-------------------------------write output----------------------------------
 	String outfile_name = String(parpars.get("o"));
 	SDFile outfile(outfile_name, ios::out);
-	for(int i = 0; i < fragments.size(); i++)
-	{
-		outfile << *fragments[i];
-	}
-	
-	Log << "wrote " << fragments.size() <<" fragments to file " << outfile_name << endl;
+	outfile << *ball_mol;
+
+	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
 ///---------------------------------Clean up------------------------------------
 	// clean up:
 	delete ball_mol;
 	outfile.close();
 	
 	// clean db
+	Log << "Removing loaded libs from memory..."<<endl;
 	boost::unordered_map <BALL::String, Molecule*>::iterator map_it;
 	for(map_it = fragmentLib.begin(); map_it!=fragmentLib.end(); map_it++)
 		delete map_it->second;
+	
+	// bonds are of primitive type and on the stack
+	
+	for(map_it = connectLib.begin(); map_it != connectLib.end(); map_it++)
+		delete map_it->second;
+	
+	Log << "......done!"<<endl;
 }
+
