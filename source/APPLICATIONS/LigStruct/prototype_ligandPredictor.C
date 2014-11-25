@@ -952,9 +952,9 @@ void connectFragments(Molecule* mol,
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input SDF", INFILE, true);
-	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	CommandlineParser parpars("StructurePrediction", " generate 3D coordinates for a query", 0.1, String(__DATE__), "Prediction");
+	parpars.registerParameter("i", "query molecule as SDF", INFILE, true);
+	parpars.registerParameter("o", "output molecule with 3D coordinates SDF", OUTFILE, true);
 	
 	parpars.registerParameter("c", "location of conf file", INFILE, false);
 	parpars.setSupportedFormats("c","conf");
@@ -963,7 +963,7 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setOutputFormatSource("o","i");
 
-	String manual = "...just playing...";
+	String manual = "...currently only predicting structures that consist of rigid fragments...";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
