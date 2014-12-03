@@ -15,6 +15,7 @@ SET(EXECUTABLES_LIST
 	connectionFragmenter
 	connectionRMSDFilter
 	prototype_ligandPredictor
+	combiPredictor
 )
 
 
