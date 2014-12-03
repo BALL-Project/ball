@@ -973,7 +973,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		getLibraryPathes(libPathes, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/libraries.conf");
+		getLibraryPathes(libPathes, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
 	}
 	Log<<"Configuration is:"<<endl;
 	Log<<"FRAGMENTS are in:"<<endl<<libPathes[0]<<endl;
