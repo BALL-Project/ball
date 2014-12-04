@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("o", "output molecule with 3D coordinates SDF", OUTFILE, true);
 	parpars.registerParameter("l", "library configuration file", INFILE, false);
 	
-	parpars.setSupportedFormats("i","conf");
+	parpars.setSupportedFormats("i","smi");
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setSupportedFormats("l","conf");
 	parpars.setOutputFormatSource("i","o");
@@ -57,32 +57,13 @@ int main(int argc, char* argv[])
 
 	boost::unordered_map <String, TemplateCoord*> newFragmentLib;
 	Log << "loading template libs...";
+	//readFragmentLib(libPathes[0], fragmentLib);
 	readNewFragmentLib(libPathes[0], newFragmentLib);
 	readBondLib(libPathes[1], bondLib);
 	readConnectionLib(libPathes[2], connectLib);
 	Log <<"done!"<<endl<<endl;
 	
-	Log << "Hit enter to exit"<<endl;
-	int a;
-	cin >>a;
 	
-//	readNewFragmentLib(String("/Users/pbrach/OUT.txt"), newFragmentLib);
-	
-//	boost::unordered_map <String, TemplateCoord*>::iterator ito = newFragmentLib.begin();
-//	Log<< " FOund "<< newFragmentLib.size() << " templates"<<endl;
-//	for (; ito != newFragmentLib.end(); ito++)
-//	{
-//		Log<<endl;
-//		Log << ito->first<<endl;
-//		TemplateCoord* tmp = ito->second;
-//		for (int i = 0; i< tmp->size(); i++)
-//		{
-//			Log <<i <<" "<< (*tmp)[i] <<endl;
-//		}
-//	}
-
-	
-	exit(0);
 /// F R A G M E N T I N G
 	Log << "Reading query molecule..."<<endl;
 	OBMol ob_mol; // input query molecule
