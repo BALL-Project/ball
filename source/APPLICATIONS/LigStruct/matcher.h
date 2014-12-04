@@ -1,38 +1,6 @@
 #ifndef MATCHER_H
 #define MATCHER_H
 
-//#include <BALL/FORMAT/commandlineParser.h>
-//#include <BALL/FORMAT/SDFile.h>
-//#include <BALL/FORMAT/lineBasedFile.h>
-//#include <BALL/SYSTEM/file.h>
-
-//#include <BALL/KERNEL/forEach.h>
-//#include <BALL/DATATYPE/string.h>
-
-//#include <BALL/KERNEL/atomContainer.h>
-//#include <BALL/KERNEL/molecule.h>
-//#include <BALL/KERNEL/bond.h>
-//#include <BALL/KERNEL/atom.h>
-//#include <BALL/KERNEL/PTE.h>
-
-//#include <BALL/STRUCTURE/UCK.h>
-//#include <BALL/STRUCTURE/molecularSimilarity.h>
-//#include <BALL/STRUCTURE/structureMapper.h>
-//#include <BALL/STRUCTURE/geometricTransformations.h>
-//#include <BALL/MATHS/angle.h>
-//#include <BALL/MATHS/vector3.h>
-//#include <BALL/MATHS/matrix44.h>
-
-//#include <openbabel/obconversion.h>
-//#include <openbabel/mol.h>
-//#include <openbabel/canon.h>
-//#include <openbabel/graphsym.h>
-
-//#include <vector>
-
-//#include <boost/unordered_map.hpp>
-//#include <boost/pending/disjoint_sets.hpp>
-
 #include "basic.h"
 
 ///####################### M A T C H I N G ##############################
