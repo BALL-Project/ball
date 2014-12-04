@@ -116,7 +116,6 @@ void assignFragments(OBMol& ob_mol,
 				
 				dummy->insert(*atm);
 //				dummy->setName("Fragment_"+toString(linker_fragments.size()));
-//				dummy->setProperty("isRigid", false);
 				
 				linker_fragments.push_back(dummy);
 			}
@@ -138,7 +137,6 @@ void assignFragments(OBMol& ob_mol,
 				
 				dummy->insert(*atm);
 //				dummy->setName("Fragment_"+toString(rigid_fragments.size()));
-//				dummy->setProperty("isRigid", true);
 				rigid_fragments.push_back(dummy);
 			}
 			else

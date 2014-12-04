@@ -476,17 +476,15 @@ void matchFragments(boost::unordered_map <BALL::String, Molecule*>& fragmentLib,
 	std::vector< Molecule* >::iterator it2;
 	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
 	{
-		// for all rigid fragments, match these against the lib:
-		if( (*it2)->getProperty("isRigid").getBool() )
-		{
-			UCK keyGen(**it2, true, 5);
-			Molecule* templat = fragmentLib[ keyGen.getUCK() ];
-			
-			if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
-				setCoordinates(*it2, templat);
-			else
-				cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
-		}
+		// for all fragments, match these against the lib:
+		UCK keyGen(**it2, true, 5);
+		Molecule* templat = fragmentLib[ keyGen.getUCK() ];
+		
+		if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
+			setCoordinates(*it2, templat);
+		else
+			cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
+		
 	}
 }
 

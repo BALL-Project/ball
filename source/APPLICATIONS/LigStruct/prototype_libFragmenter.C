@@ -7,6 +7,7 @@
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 #include <BALL/STRUCTURE/UCK.h>
+#include <BALL/MATHS/vector3.h>
 
 #include <openbabel/mol.h>
 #include <openbabel/obconversion.h>
@@ -20,17 +21,31 @@ using namespace BALL;
 using namespace std;
 
 /// ################# H E L P E R    F U N C T I O N S #################
+void writePositionLines(Molecule& mol, LineBasedFile* handle)
+{
+	(*handle) <<"key "<< mol.getProperty("key").getString() <<endl;
+	(*handle) << String(mol.countAtoms()) << endl;
+	
+	AtomIterator ati = mol.beginAtom();
+	for(; +ati; ati++)
+	{
+		(*handle) << String(ati->getPosition().x) << " ";
+		(*handle) << String(ati->getPosition().y) << " ";
+		(*handle) << String(ati->getPosition().z) << endl;
+	}
+}
+
 // Write several result molecules to one file
-void writeMolVec(vector<Molecule> &input, SDFile* handle)
+void writeMolVec(vector<Molecule> &input, LineBasedFile* handle)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
-		(*handle) << input[i];
+		writePositionLines(input[i], handle);
 	}
 }
 
 // --unique keys Write several result molecules to one file
-void uniqueWriteMolVec(vector<Molecule> &input, SDFile* handle, set< String >& used)
+void uniqueWriteMolVec(vector<Molecule> &input, LineBasedFile* handle, set< String >& used)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
@@ -38,7 +53,7 @@ void uniqueWriteMolVec(vector<Molecule> &input, SDFile* handle, set< String >& u
 		String key = input[i].getProperty("key").getString();
 		if( used.find(key) == used.end() )
 		{
-			(*handle) << input[i];
+			writePositionLines(input[i], handle);
 			used.insert(key);
 		}
 	}
@@ -78,7 +93,7 @@ int main(int argc, char* argv[])
 	
 	// open output file:
 	String outfile_name = String(parpars.get("o"));
-	SDFile outfile(outfile_name, ios::out);
+	LineBasedFile outfile(outfile_name, ios::out);
 	
 	
 	vector<OBBond*> for_deletion;

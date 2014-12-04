@@ -14,6 +14,7 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
+	/// ------ S E T    P A R S E R -------
 	CommandlineParser parpars("3D structure generation of ligands", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Prediction");
 	parpars.registerParameter("i", "combiLib as CONF file", INFILE, false);
 	parpars.registerParameter("o", "output molecule with 3D coordinates SDF", OUTFILE, true);
@@ -34,16 +35,16 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 
-///L O A D    L I B s
+/// L O A D    L I B s
 	// Load all template libs:
 	vector <String> libPathes(3); //0=fragments, 1=bondlenths, 2=connections
-	if ( parpars.has("c") )
+	if ( parpars.has("l") )
 	{
 		getLibraryPathes(libPathes, parpars.get("l"));
 	}
 	else
 	{
-		getLibraryPathes(libPathes, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/libraries.conf");
+		getLibraryPathes(libPathes, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
 	}
 	Log<<"Configuration is:"<<endl;
 	Log<<"FRAGMENTS are in:"<<endl<<libPathes[0]<<endl;
@@ -54,13 +55,34 @@ int main(int argc, char* argv[])
 	boost::unordered_map <String, float > bondLib;
 	boost::unordered_map <String, Molecule* > connectLib;
 
+	boost::unordered_map <String, TemplateCoord*> newFragmentLib;
 	Log << "loading template libs...";
-	readFragmentLib(libPathes[0], fragmentLib);
+	readNewFragmentLib(libPathes[0], newFragmentLib);
 	readBondLib(libPathes[1], bondLib);
 	readConnectionLib(libPathes[2], connectLib);
 	Log <<"done!"<<endl<<endl;
 	
+	Log << "Hit enter to exit"<<endl;
+	int a;
+	cin >>a;
 	
+//	readNewFragmentLib(String("/Users/pbrach/OUT.txt"), newFragmentLib);
+	
+//	boost::unordered_map <String, TemplateCoord*>::iterator ito = newFragmentLib.begin();
+//	Log<< " FOund "<< newFragmentLib.size() << " templates"<<endl;
+//	for (; ito != newFragmentLib.end(); ito++)
+//	{
+//		Log<<endl;
+//		Log << ito->first<<endl;
+//		TemplateCoord* tmp = ito->second;
+//		for (int i = 0; i< tmp->size(); i++)
+//		{
+//			Log <<i <<" "<< (*tmp)[i] <<endl;
+//		}
+//	}
+
+	
+	exit(0);
 /// F R A G M E N T I N G
 	Log << "Reading query molecule..."<<endl;
 	OBMol ob_mol; // input query molecule
@@ -83,7 +105,7 @@ int main(int argc, char* argv[])
 	canonicalize(rigid_fragments);
 	canonicalize(linker_fragments);
 	
-	matchFragments(fragmentLib, rigid_fragments);
+	matchRigidFragments(fragmentLib, rigid_fragments);
 	Log << "......done!"<<endl<<endl;
 	
 	

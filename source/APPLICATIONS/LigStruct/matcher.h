@@ -8,6 +8,9 @@
 using namespace OpenBabel;
 using namespace BALL;
 
+/** Generate a canonical order of atoms
+ * 
+ */
 void canonicalize(std::vector <Molecule*>& fragments)
 {
 	
@@ -55,23 +58,22 @@ void canonicalize(std::vector <Molecule*>& fragments)
 }
 
 ///-------------------match queryFragments to libFragments----------------------
-void matchFragments(boost::unordered_map <BALL::String, Molecule*>& fragmentLib, vector<Molecule*>& fragments)
+void matchRigidFragments(
+		boost::unordered_map <BALL::String, Molecule*>& fragmentLib, 
+		vector<Molecule*>& fragments)
 {
 	// get coordinates for rigid fragments
 	std::vector< Molecule* >::iterator it2;
 	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
 	{
-		// for all rigid fragments, match these against the lib:
-		if( (*it2)->getProperty("isRigid").getBool() )
-		{
-			UCK keyGen(**it2, true, 5);
-			Molecule* templat = fragmentLib[ keyGen.getUCK() ];
+		// for all fragments, match these against the lib:
+		UCK keyGen(**it2, true, 5);
+		Molecule* templat = fragmentLib[ keyGen.getUCK() ];
 			
-			if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
-				setCoordinates(*it2, templat);
-			else
-				cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
-		}
+		if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
+			setCoordinates(*it2, templat);
+		else
+			cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
 	}
 }
 

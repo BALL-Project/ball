@@ -40,6 +40,45 @@
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
+
+/// ################# H E L P E R    T Y P E #################
+
+
+/**
+ * @brief The TemplateCoord class is a simple array wrapper for BALL::Vector3
+ * 
+ * To efficiently save coordinates without much overhead
+ */
+class TemplateCoord
+{
+	
+public:
+	TemplateCoord(Size n)
+	{
+		_size = n;
+		positions = new Vector3[n];
+	}
+	
+	~TemplateCoord()
+	{
+		delete[] positions;
+	}
+	
+	Vector3& operator[](Size idx)
+	{
+		return *(positions + idx);
+	}
+
+	const Size& size()
+	{
+		return _size;
+	}
+
+private:
+	Size _size;
+	Vector3 *positions;
+};
+
 /// ################# H E L P E R    F U N C T I O N S #################
 
 // TODO: maybe change this
@@ -175,7 +214,6 @@ void getLibraryPathes(vector<String>& result_pathes, String config_path)
 	}
 }
 
-
 void readFragmentLib(String& path, boost::unordered_map <BALL::String, Molecule*>& fragmentLib)
 {
 	fragmentLib.clear();
@@ -194,6 +232,56 @@ void readFragmentLib(String& path, boost::unordered_map <BALL::String, Molecule*
 	}
 	libFile.close();
 }
+
+
+/**
+ * @brief Reads the template coordinates for all fragments
+ * @param path
+ * @param fragmentLib
+ */
+void readNewFragmentLib(const String& path, boost::unordered_map <BALL::String, TemplateCoord*>& fragmentLib)
+{
+	fragmentLib.clear();
+	LineBasedFile libFile(path, ios::in);
+	
+	// read in fragmentLib and create hash-map from that:
+//	Log << "Starting loop"<<endl;
+	while( libFile.readLine() )
+	{
+//		Log << "loop iter"<<endl;
+		String line = libFile.getLine();
+		TemplateCoord* tmp_frag=0;
+		if ( line.hasPrefix("key "))
+		{
+			// get key:
+			String key = line.after("key ");
+			
+			// get number of positions:
+			libFile.readLine();
+			Size size = libFile.getLine().toUnsignedInt();
+			Log<< "Got: "<< key << " with Atoms: "<< size<<endl;
+			// get positions:
+			tmp_frag = new TemplateCoord(size);
+			Size i;
+			for(libFile.readLine(), i = 0; i < size; libFile.readLine(), i++)
+			{
+				String coords[3];
+				libFile.getLine().split(coords, 3);
+				Vector3& vec = (*tmp_frag)[i];
+				vec.set(coords[0].toFloat(), coords[1].toFloat(), coords[2].toFloat());
+//				Log<< vec<<endl;
+//				vec = (*tmp_frag)[i];
+//				Log<< vec<<endl;
+			}
+			
+			// append to hash map
+			fragmentLib[key] = tmp_frag;
+		}
+	}
+	libFile.close();
+}
+
+
 
 
 void readConnectionLib(String& path, boost::unordered_map <String, Molecule* >& con)
@@ -263,3 +351,19 @@ void readOBMolecule(const String& path, OBMol& mol)
 
 
 #endif // BASIC_H
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
