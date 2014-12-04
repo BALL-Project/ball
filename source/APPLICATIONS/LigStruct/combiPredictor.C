@@ -105,7 +105,7 @@ int main(int argc, char* argv[])
 	canonicalize(rigid_fragments);
 	canonicalize(linker_fragments);
 	
-	matchRigidFragments(fragmentLib, rigid_fragments);
+	matchRigidFragments(newFragmentLib, rigid_fragments);
 	Log << "......done!"<<endl<<endl;
 	
 	

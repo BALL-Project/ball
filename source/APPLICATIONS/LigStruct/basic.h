@@ -172,13 +172,12 @@ void copyMoleculeProperies(Molecule &orig, Molecule &cop)
 	cop.setName(orig.getName());
 }
 
-void setCoordinates(Molecule* query, Molecule* templat)
+void setCoordinates(Molecule* query, TemplateCoord* templat)
 {
 	AtomIterator qit = query->beginAtom();
-	AtomIterator tit = templat->beginAtom();
-	for (; qit != query->endAtom(); qit++, tit++)
+	for (int i = 0 ; i < templat->size(); i++, qit++)
 	{
-		qit->setPosition( tit->getPosition() );
+		qit->setPosition( (*templat)[i]);
 	}
 }
 
