@@ -1,262 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/FORMAT/commandlineParser.h>
-#include <BALL/FORMAT/SDFile.h>
-#include <BALL/FORMAT/lineBasedFile.h>
-#include <BALL/SYSTEM/file.h>
 
-#include <BALL/KERNEL/forEach.h>
-#include <BALL/DATATYPE/string.h>
-
-#include <BALL/KERNEL/atomContainer.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PTE.h>
-
-#include <BALL/STRUCTURE/UCK.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/STRUCTURE/structureMapper.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/MATHS/angle.h>
-#include <BALL/MATHS/vector3.h>
-#include <BALL/MATHS/matrix44.h>
-
-#include <openbabel/obconversion.h>
-#include <openbabel/mol.h>
-#include <openbabel/canon.h>
-#include <openbabel/graphsym.h>
-
-#include <vector>
-
-#include <boost/unordered_map.hpp>
-#include <boost/pending/disjoint_sets.hpp>
+#include "basic.h"
+#include "matcher.h"
 
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
-/// ################# H E L P E R    F U N C T I O N S #################
-
-// TODO: maybe change this
-/// Delete empty fragments and check that all were empty
-void checkAndDeleteFragments(vector <Molecule*> frags)
-{
-	int empty = 0;
-	for (vector <Molecule*>::iterator i = frags.begin(); i != frags.end(); i++)
-	{
-		if( (*i)->countAtoms() == 0)
-			delete (*i);
-		else
-			empty++;
-	}
-	if( empty != 0 )
-		Log << "WARNING: There are still " << empty <<" unconnected fragments!"<<endl;
-}
-
-
-// TODO: remove this DEBUG function
-// Write several result molecules to one file
-void writeMolVec(vector<Molecule* >& input, SDFile* handle)
-{
-	for(int i = 0; i < input.size(); i++)
-	{
-		(*handle) << *input[i];
-	}
-}
-
-
-// get the position of an atom in the molcule list:
-const int getAtomPosition(Atom* atm, Molecule* mol)
-{
-	AtomIterator ati = mol->beginAtom();
-	for (int i = 0; +ati; ati++, i++)
-	{
-		if(&*ati == atm)
-			return i;
-	}
-	return -1;
-}
-
-
-/// empty 'fromMol' and append the atoms to 'toMol'
-void transferMolecule( Molecule* toMol, Molecule* fromMol)
-{
-	int num_atm = fromMol->countAtoms();
-	for(int i = 0; i < num_atm; i++)
-		toMol->insert( *fromMol->beginAtom() ); // insert auto removes from its old parent
-}
-
-
-/// check if the atom is a rigid one:
-bool isAtomRigid(OBAtom* atm)
-{
-/// TODO: add OBRotorList object to use custom torlib!
-	if (atm->IsInRing())
-		return true;
-	else
-	{
-		OBBondIterator b_it = atm->BeginBonds();
-		for(; b_it!=atm->EndBonds(); b_it++)
-		{
-			if( ! (*b_it)->IsRotor() )
-				return true;
-		}
-		return false;
-	}
-}
-
-// cut bonds that are shared with atoms from other fragments:
-void clearExternalBonds(Molecule* mol)
-{
-	Atom::BondIterator bit;
-	AtomIterator ait;
-
-	BALL_FOREACH_INTERBOND(*mol, ait, bit)
-	{
-		bit->destroy();
-	}
-}
-
-// Copy properties from an original molecule to a copy molecule
-void copyMoleculeProperies(Molecule &orig, Molecule &cop)
-{
-	NamedPropertyIterator  it;
-	for(it = orig.beginNamedProperty (); it !=orig.endNamedProperty(); it++)
-	{
-		cop.setProperty(*it);
-	}
-	cop.setName(orig.getName());
-}
-
-void setCoordinates(Molecule* query, Molecule* templat)
-{
-	AtomIterator qit = query->beginAtom();
-	AtomIterator tit = templat->beginAtom();
-	for (; qit != query->endAtom(); qit++, tit++)
-	{
-		qit->setPosition( tit->getPosition() );
-	}
-}
-
-
-
-
-///####################### L O A D I N G ##############################
-void getLibraryPathes(vector<String>& result_pathes, String config_path)
-{
-	LineBasedFile configFile(config_path, ios::in);
-	
-	String tmp="";
-	while( configFile.readLine() )
-	{
-		tmp = configFile.getLine();
-		if(tmp.hasPrefix("#"))
-			continue;
-		
-		if(tmp.hasPrefix("fragments=")){
-			tmp = tmp.after("fragments=");
-			result_pathes[0] = tmp.trim();
-		}
-		else if(tmp.hasPrefix("bondlenths=")){
-			tmp = tmp.after("bondlenths=");
-			result_pathes[1] = tmp.trim();
-		}
-		else if(tmp.hasPrefix("connections=")){
-			tmp = tmp.after("connections=");
-			result_pathes[2] = tmp.trim();
-		}
-		else
-			continue;
-	}
-}
-
-
-void readFragmentLib(String& path, boost::unordered_map <BALL::String, Molecule*>& fragmentLib)
-{
-	fragmentLib.clear();
-	SDFile libFile(path, ios::in);
-	
-	Molecule* tmp_mol;
-	tmp_mol = libFile.read();
-	
-	// read in fragmentLib and create hash-map from that:
-	while(tmp_mol)
-	{
-		String key = tmp_mol->getProperty("key").getString();
-		fragmentLib[key] = tmp_mol;
-		
-		tmp_mol = libFile.read();
-	}
-	libFile.close();
-}
-
-
-void readConnectionLib(String& path, boost::unordered_map <String, Molecule* >& con)
-{
-	con.clear();
-	
-	SDFile handle(path, ios::in); //open the lib file as sdf-file
-	
-	// read all lib molecules and save them with their key:
-	Molecule* tmp_mol;
-	tmp_mol = handle.read(); // first entry
-	
-	int cnt = 0;
-	while(tmp_mol)
-	{
-		BALL::String key = tmp_mol->getProperty("key").getString();
-		con[key] = tmp_mol;
-		
-		tmp_mol = handle.read();
-		cnt++;
-	}
-	
-	handle.close();
-}
-
-
-/// read std Bonds from file:
-/// ---------------------------------------
-void readBondLib(String& path, boost::unordered_map <String, float >& bonds)
-{
-	LineBasedFile bondFile(path, ios::in);
-	
-	while( bondFile.readLine() )
-	{
-		String st_ar[2];
-		bondFile.getLine().split(st_ar, 2);
-		
-		bonds[st_ar[0]] = st_ar[1].toFloat();
-		
-		// generate also the reversed label, if both differ
-		if( (st_ar[0])[0] != (st_ar[0])[1] ){
-			String altKey = (st_ar[0])[1];
-			altKey += (st_ar[0])[0];
-			bonds[altKey] = st_ar[1].toFloat();
-		}
-	}
-}
-
-
-void readOBMolecule(const String& path, OBMol& mol)
-{
-	// Read open-babel molecule:
-	OBConversion conv;
-	OBFormat *format = conv.FormatFromExt(path);
-	
-	if (!format || !conv.SetInFormat(format))
-		cout << "Could not find input format for file " << path << endl;
-
-	ifstream ifs(path); // open file
-	
-	if (!ifs)
-		cout << "Could not open " << path << " for reading." << endl;
-	
-	conv.Read(&mol, &ifs); // actual 'read' command
-	ifs.close();
-}
 
 
 
@@ -420,75 +172,6 @@ void assignFragments(OBMol& ob_mol,
 
 
 
-
-///####################### M A T C H I N G ##############################
-///---------------make atomlists of the fragments canonical---------------------
-void canonicalize(vector <Molecule*>& fragments)
-{
-	
-	int num_atoms = -1;// obMol.NumAtoms();
-//	cout<<"Canonicalising the atomlists..."<<endl;
-	std::vector< Molecule* >::iterator it;
-	Molecule* new_mol;
-	for(it=fragments.begin(); it != fragments.end(); it++)
-	{
-		num_atoms = (*it)->countAtoms();
-//		cout<<(*it)->getName()<< " has #atoms: "<<(*it)->countAtoms()<<endl;
-//		cout<<"DEBUG: "<<endl;
-		clearExternalBonds(*it);
-//		cout<<" cut xt-Bonds <"<<endl;
-		OBMol* temp = MolecularSimilarity::createOBMol(**it, true);
-//		cout<<" made OBMol < "<<endl;
-		
-		OBGraphSym grsym(temp);
-		std::vector<unsigned int> sym;
-		grsym.GetSymmetry(sym);
-//		cout<<" made graphSym < "<<endl;
-		
-		std::vector<unsigned int> clabels;
-		CanonicalLabels(temp, sym, clabels);
-//		cout<<" calculated Labels < "<<endl;
-		
-		new_mol = new Molecule;
-		std::vector <Atom*> aList(num_atoms);
-		for(int i=0; i<clabels.size(); i++)
-			aList[clabels[i]-1]=( (*it)->getAtom(i) );
-//		cout<<" correct atom-List < "<<endl;
-		
-		for(int i=0; i<clabels.size(); i++)
-			new_mol->append(*aList[i]);
-
-//		cout<<" correct molecule < "<<endl;
-		
-		copyMoleculeProperies(**it, *new_mol);
-		(*it)->swap(*new_mol);
-		
-//		cout<<" updated original < "<<endl;
-		delete new_mol;
-//		cout<<" DONE "<<endl;
-	}
-}
-
-///-------------------match queryFragments to libFragments----------------------
-void matchFragments(boost::unordered_map <BALL::String, Molecule*>& fragmentLib, vector<Molecule*>& fragments)
-{
-	// get coordinates for rigid fragments
-	std::vector< Molecule* >::iterator it2;
-	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
-	{
-		// for all rigid fragments, match these against the lib:
-		if( (*it2)->getProperty("isRigid").getBool() )
-		{
-			UCK keyGen(**it2, true, 5);
-			Molecule* templat = fragmentLib[ keyGen.getUCK() ];
-			
-			if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
-				setCoordinates(*it2, templat);
-			else
-				cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
-		}
-	}
-}
 
 
 
@@ -947,20 +630,23 @@ void connectFragments(Molecule* mol,
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("StructurePrediction", " generate 3D coordinates for a query", 0.1, String(__DATE__), "Prediction");
-	parpars.registerParameter("i", "query molecule as SDF", INFILE, true);
+	CommandlineParser parpars("3D structure generation of ligands", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Prediction");
+	parpars.registerParameter("i", "combiLib as CONF file", INFILE, false);
 	parpars.registerParameter("o", "output molecule with 3D coordinates SDF", OUTFILE, true);
+	parpars.registerParameter("l", "library configuration file", INFILE, false);
 	
-	parpars.registerParameter("c", "location of conf file", INFILE, false);
-	parpars.setSupportedFormats("c","conf");
-	
-	parpars.setSupportedFormats("i","sdf");
+	parpars.setSupportedFormats("i","conf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","i");
+	parpars.setSupportedFormats("l","conf");
+	parpars.setOutputFormatSource("i","o");
 
-	String manual = "...currently only predicting structures that consist of rigid fragments...";
+	String manual = 
+			"Generate a valid (not optimized) 3D structure for structures of an"
+			"entire combinatorial library which is defined in a CONF file (either "
+			"containing SIMLES for each group or giving the paths multi line SMILES "
+			"files).";
+	
 	parpars.setToolManual(manual);
-
 	parpars.parse(argc, argv);
 	
 
@@ -969,7 +655,7 @@ int main(int argc, char* argv[])
 	vector <String> libPathes(3); //0=fragments, 1=bondlenths, 2=connections
 	if ( parpars.has("c") )
 	{
-		getLibraryPathes(libPathes, parpars.get("c"));
+		getLibraryPathes(libPathes, parpars.get("l"));
 	}
 	else
 	{
@@ -1003,9 +689,6 @@ int main(int argc, char* argv[])
 	vector <Molecule*> linker_fragments;
 	list< pair<Atom*, Atom*> > connections;
 	
-//	ob_mol.FindRingAtomsAndBonds(); // find rings, theoretically this is necessary... but probably also called inside ob_mol
-	
-	// TODO: remove the 'isRigid'-flag, and the molecule name (no purpose anymore)
 	Log << "Fragmenting the input molecule..."<<endl;
 	assignFragments(ob_mol, *ball_mol, rigid_fragments, linker_fragments, connections);
 	Log << "......done!"<<endl<<endl;
