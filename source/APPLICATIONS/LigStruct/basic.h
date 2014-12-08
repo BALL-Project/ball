@@ -42,7 +42,7 @@ using namespace BALL;
 using namespace std;
 
 /// ################# H E L P E R    T Y P E #################
-
+typedef vector< Atom*> Fragment;
 
 /**
  * @brief The TemplateCoord class is a simple array wrapper for BALL::Vector3
@@ -78,6 +78,155 @@ private:
 	Size _size;
 	Vector3 *positions;
 };
+
+
+//namespace BALL
+//{
+//	/**
+//	 * TODO: Warning, when aligning we will probably get errors because we still
+//	 *       have bonds to the ofther fragments, thus the 'site'-generation might
+//	 *       not work properly
+//	 * 
+//	 * @brief The SubMolecule class
+//	 */
+//	class SubMolecule: public Molecule
+//	{
+	
+//	public:
+//		SubMolecule(vector< Atom* >* frag)
+//		{
+//			atomList = frag;
+			
+//			vector< Atom* >::iterator fit = frag->begin();
+//			for(; fit != frag->end(); fit++)
+//			{
+//				insertWithoutRemoving(**fit);
+				
+//				// TODO: remove all bonds lead outside of the SubMolecule (hacking hacking....)
+				
+//			}
+//		}
+		
+//		/** 
+//		 * Delete instance without deleting the contained atoms!
+//		 * 
+//		 * Do not declare as virtual, otherwise the Super-Destructor will be called
+//		 * deleting all atoms... although they shall be reused!
+//		 */
+//		~SubMolecule()
+//		{
+//			atomList = 0;
+			
+//			// Do everything what the Super destructors SHOULD do, even in our case:
+//			PropertyManager::destroy();
+//			if ( ((Composite*)this)->parent_ != 0)
+//			{
+//				this->parent_->removeChild(*this);
+//			}
+			
+//			/// from Composite::clear()
+//			///
+//	//		// do NOT delete the contained atoms:
+//	//		for (Composite* composite_ptr = first_child_; composite_ptr != 0; )
+//	//		{
+//	//			Composite* next_ptr = composite_ptr->next_;
+			
+//	//			if (composite_ptr->isAutoDeletable())
+//	//			{
+//	//				delete composite_ptr;
+//	//			} 
+//	//			else
+//	//			{
+//	//				composite_ptr->previous_ = composite_ptr->next_ = composite_ptr->parent_ = 0;
+//	//				composite_ptr->clear();
+//	//			}
+				
+//	//			composite_ptr = next_ptr;
+//	//		}
+	
+//			// clear pointers
+//			first_child_ = last_child_ = 0;
+	
+//			// clear properties
+//			BALL_BIT_CLEAR_ALL(properties_);
+	
+//			// update counters and selection
+//			number_of_children_ = 0;
+//			number_of_selected_children_ = 0;
+//			number_of_children_containing_selection_ = 0;
+//			contains_selection_ = selected_;
+//			updateSelection_();
+	
+//			// update modification time stamp
+//			stamp(MODIFICATION);
+//		}
+		
+//		Size countAtoms() const
+//		{
+//			return atomList->size();
+//		}
+		
+//		Atom& operator[](Position idx)
+//		{
+//			return *(atomList->at(idx));
+//		}
+	
+//		// 
+//		// (Do not delete the atomList at destruction)
+//		vector< Atom* >* atomList;
+		
+//	private:
+//		/**
+//		 * @brief insertWithoutRemoving, copied and modified from 
+//		 * Composite::appendChild(). Modification: we append the atom but do not
+//		 * delete it from its parent.
+//		 * @param atm
+//		 */
+//		void insertWithoutRemoving(Atom& atm)
+//		{
+//			// if it is already the last child, everything is done
+//			if (&atm == last_child_)
+//			{
+//				return;
+//			}
+			
+//			// its the first child
+//			if (last_child_ == 0)
+//			{
+//				first_child_ = last_child_ = &atm;
+//			} 
+//			else 
+//			{
+//				// append it to the list of children
+//				last_child_->next_ = &atm;
+//				atm.previous_ = last_child_;
+//				last_child_ = &atm;
+//			}
+	
+//			/// We just host the atom, but do not want to adopt it:
+//			++number_of_children_;
+	
+//			/// Should not be seen as modification:
+//	//		// update modification time stamp
+//	//		last_child_->stamp(MODIFICATION);
+		
+//			/// Do not think selection plays a role for what we do:
+//	//		// update selection counters
+//	//		if (atm.containsSelection())
+//	//		{
+//	//			number_of_children_containing_selection_++;
+				
+//	//			if (atm.selected_)
+//	//			{
+//	//				number_of_selected_children_++;
+//	//			}
+				
+//	//			// recursively update the nodes` states
+//	//			updateSelection_();
+//	//		}
+//		}
+//	};
+//}
 
 /// ################# H E L P E R    F U N C T I O N S #################
 

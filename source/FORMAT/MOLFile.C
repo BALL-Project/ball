@@ -293,15 +293,15 @@ namespace BALL
 				}
 				
 				// store the remaining information as named properties
-				atom->setProperty(Property::ATOM_MASS_DIFFERENCE, atom_struct.mass_difference);
-				atom->setProperty(Property::ATOM_HYDROGEN_COUNT, atom_struct.hydrogen_count);
-				atom->setProperty(Property::ATOM_STEREO_CARE_BOX, atom_struct.stereo_care_box);
-				atom->setProperty(Property::ATOM_VALENCE, atom_struct.valence);
-				atom->setProperty(Property::ATOM_H0_DESIGNATOR, atom_struct.H0_designator);
-				atom->setProperty(Property::ATOM_REACTION_COMPONENT_TYPE, atom_struct.reaction_component_type);
-				atom->setProperty(Property::ATOM_REACTION_COMPONENT_NUMBER, atom_struct.reaction_component_number);
-				atom->setProperty(Property::ATOM_INVERSION_RETENTION, atom_struct.inversion_retention);
-				atom->setProperty(Property::ATOM_EXACT_CHANGE, atom_struct.exact_change);
+//				atom->setProperty(Property::ATOM_MASS_DIFFERENCE, atom_struct.mass_difference);
+//				atom->setProperty(Property::ATOM_HYDROGEN_COUNT, atom_struct.hydrogen_count);
+//				atom->setProperty(Property::ATOM_STEREO_CARE_BOX, atom_struct.stereo_care_box);
+//				atom->setProperty(Property::ATOM_VALENCE, atom_struct.valence);
+//				atom->setProperty(Property::ATOM_H0_DESIGNATOR, atom_struct.H0_designator);
+//				atom->setProperty(Property::ATOM_REACTION_COMPONENT_TYPE, atom_struct.reaction_component_type);
+//				atom->setProperty(Property::ATOM_REACTION_COMPONENT_NUMBER, atom_struct.reaction_component_number);
+//				atom->setProperty(Property::ATOM_INVERSION_RETENTION, atom_struct.inversion_retention);
+//				atom->setProperty(Property::ATOM_EXACT_CHANGE, atom_struct.exact_change);
 			}
 
 			// read the bond block
@@ -365,9 +365,9 @@ namespace BALL
 				}
 
 				// store remaining stuff as named properties	
-				bond->setProperty(Property::BOND_STEREO, bond_struct.stereo);
-				bond->setProperty(Property::BOND_TOPOLOGY, bond_struct.topology);
-				bond->setProperty(Property::BOND_REACTING_CENTER_STATUS, bond_struct.reacting_center_status);
+//				bond->setProperty(Property::BOND_STEREO, bond_struct.stereo);
+//				bond->setProperty(Property::BOND_TOPOLOGY, bond_struct.topology);
+//				bond->setProperty(Property::BOND_REACTING_CENTER_STATUS, bond_struct.reacting_center_status);
 			}
 
 			// skip the atom list block

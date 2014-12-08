@@ -87,4 +87,34 @@ void matchRigidFragments(
 }
 
 
+/// Old Matcher................
+void setCoordinates(Molecule* query, Molecule* templat)
+{
+	AtomIterator qit = query->beginAtom();
+	AtomIterator tit = templat->beginAtom();
+	for (; qit != query->endAtom(); qit++, tit++)
+	{
+		qit->setPosition( tit->getPosition() );
+	}
+}
+
+/// Old Matcher................
+void matchRigidFragments(boost::unordered_map <BALL::String, Molecule*>& fragmentLib, vector<Molecule*>& fragments)
+{
+	// get coordinates for rigid fragments
+	std::vector< Molecule* >::iterator it2;
+	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
+	{
+		// for all fragments, match these against the lib:
+		UCK keyGen(**it2, true, 5);
+		Molecule* templat = fragmentLib[ keyGen.getUCK() ];
+		
+		if(templat && (templat->countAtoms() == (*it2)->countAtoms()) )
+			setCoordinates(*it2, templat);
+		else
+			cout<<"Warning: could not find a template for "<< (*it2)->getName()<<endl;
+		
+	}
+}
+
 #endif // MATCHER_H

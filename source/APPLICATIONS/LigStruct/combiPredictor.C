@@ -46,26 +46,28 @@ int main(int argc, char* argv[])
 	{
 		getLibraryPathes(libPathes, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
 	}
-	Log<<"Configuration is:"<<endl;
 	Log<<"FRAGMENTS are in:"<<endl<<libPathes[0]<<endl;
 	Log<<"BONDS are in:"<<endl<<libPathes[1]<<endl;
-	Log<<"CONNECTIONS are in:"<<endl<<libPathes[2]<<endl;
+	Log<<"CONNECTIONS are in:"<<endl<<libPathes[2]<<endl<<endl;
 	
-	boost::unordered_map <String, Molecule*> fragmentLib;
+//	boost::unordered_map <String, Molecule*> fragmentLib;
+	boost::unordered_map <String, TemplateCoord*> lineFragmentLib;
 	boost::unordered_map <String, float > bondLib;
 	boost::unordered_map <String, Molecule* > connectLib;
-
-	boost::unordered_map <String, TemplateCoord*> newFragmentLib;
+	
 	Log << "loading template libs...";
-	//readFragmentLib(libPathes[0], fragmentLib);
-	readNewFragmentLib(libPathes[0], newFragmentLib);
+//	readFragmentLib(libPathes[0], fragmentLib);
+	readNewFragmentLib(libPathes[0], lineFragmentLib);
 	readBondLib(libPathes[1], bondLib);
 	readConnectionLib(libPathes[2], connectLib);
 	Log <<"done!"<<endl<<endl;
 	
+//	Log<<"num of read fragments: "<<fragmentLib.size()<<endl;
+
 	
 /// F R A G M E N T I N G
-	Log << "Reading query molecule..."<<endl;
+
+	Log << "Reading query molecule...";
 	OBMol ob_mol; // input query molecule
 	Molecule* ball_mol = 0;
 	readOBMolecule(parpars.get("i"), ob_mol);
@@ -76,27 +78,29 @@ int main(int argc, char* argv[])
 	vector <Molecule*> linker_fragments;
 	list< pair<Atom*, Atom*> > connections;
 	
-	Log << "Fragmenting the input molecule..."<<endl;
+	Log << "Fragmenting the input molecule...";
 	assignFragments(ob_mol, *ball_mol, rigid_fragments, linker_fragments, connections);
 	Log << "......done!"<<endl<<endl;
 	
 	
 /// M A T C H I N G
-	Log << "Matching fragments against FragmentLib..."<<endl;
+	Log << "Matching fragments against FragmentLib...";
 	canonicalize(rigid_fragments);
 	canonicalize(linker_fragments);
 	
-	matchRigidFragments(newFragmentLib, rigid_fragments);
+//	matchRigidFragments(fragmentLib, rigid_fragments);
+	matchRigidFragments(lineFragmentLib, rigid_fragments);
 	Log << "......done!"<<endl<<endl;
 	
-	
-///// A S S E M B L E   3 D
 	if( ball_mol->countAtoms() > 0 )
 	{
 		Log << "ERROR: not all atoms were correctly fragmented!!!"<< endl;
 		exit(EXIT_FAILURE);
 	}
-	Log << "Connecting 3D fragments..."<<endl;
+	
+	
+///// A S S E M B L E   3 D
+	Log << "Connecting 3D fragments...";
 	connectFragments(ball_mol, connections, connectLib, bondLib);
 	Log << "......done!"<<endl<<endl;
 	
@@ -120,15 +124,16 @@ int main(int argc, char* argv[])
 	outfile.close();
 	
 	// clean db
-	Log << "Removing loaded libs from memory..."<<endl;
-	boost::unordered_map <BALL::String, Molecule*>::iterator map_it;
-	for(map_it = fragmentLib.begin(); map_it!=fragmentLib.end(); map_it++)
-		delete map_it->second;
+	Log << "Removing loaded libs from memory...";
+	boost::unordered_map <BALL::String, TemplateCoord*>::iterator tmp_it;
+	for(tmp_it = lineFragmentLib.begin(); tmp_it!=lineFragmentLib.end(); tmp_it++)
+		delete tmp_it->second;
 	
 	// bonds are of primitive type and on the stack
 	
-	for(map_it = connectLib.begin(); map_it != connectLib.end(); map_it++)
-		delete map_it->second;
+	boost::unordered_map <BALL::String, Molecule*>::iterator mit;
+	for(mit = connectLib.begin(); mit != connectLib.end(); mit++)
+		delete mit->second;
 	
 	Log << "......done!"<<endl;
 }
