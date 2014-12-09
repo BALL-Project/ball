@@ -64,7 +64,8 @@ int main(int argc, char* argv[])
 	
 //	Log<<"num of read fragments: "<<fragmentLib.size()<<endl;
 
-	
+	readGroups("/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/example_combi1.conf");
+	exit(EXIT_SUCCESS);
 /// F R A G M E N T I N G
 
 	Log << "Reading query molecule...";
