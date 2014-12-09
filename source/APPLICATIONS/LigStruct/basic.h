@@ -44,7 +44,6 @@ using namespace BALL;
 using namespace std;
 
 /// ################# H E L P E R    T Y P E #################
-typedef vector< Atom*> Fragment;
 
 /**
  * @brief The TemplateCoord class is a simple array wrapper for BALL::Vector3
@@ -88,6 +87,11 @@ struct GroupFragment
 	list< pair< unsigned int, Atom*> > connections;
 	Molecule* molecule;
 };
+
+/// Typedefs:
+typedef vector<GroupFragment*> GroupFragmentList;
+typedef boost::unordered_map< int, GroupFragmentList* > CombiLib;
+
 
 /// ################# H E L P E R    F U N C T I O N S #################
 
@@ -367,13 +371,13 @@ void readOBMolecule(const String& path, OBMol& mol)
  * @param smiles
  * @param frag
  */
-void smilesToGroupFragment(OBConversion& conv, String& smiles, GroupFragment* frag)
+GroupFragment* smilesToGroupFragment(OBConversion& conv, String& smiles)
 {
 	// get the obmol SMILES input:
 	OBMol ob_mol;
 	conv.ReadString( &ob_mol, smiles );
 	
-	frag = new GroupFragment();
+	GroupFragment* frag = new GroupFragment();
 	list< pair<int, OBAtom*> > con_lst;
 	
 	// find r-group connections:
@@ -408,6 +412,8 @@ void smilesToGroupFragment(OBConversion& conv, String& smiles, GroupFragment* fr
 		
 		frag->connections.push_back(  make_pair( group_id, atm_ptr )  );
 	}
+	
+	return frag;
 }
 
 
@@ -418,76 +424,86 @@ void smilesToGroupFragment(OBConversion& conv, String& smiles, GroupFragment* fr
 */
 void readGroups(const String& path)
 {
-	/// Init the Babel-String readeR:
+	typedef vector<GroupFragment*> GroupFragmentList;
+	typedef boost::unordered_map< int, GroupFragmentList* > CombiLib;
+	typedef boost::unordered_map< int, GroupFragmentList* >::iterator CombiLibIterator;
+	/// Init the Babel-String reader:
 	OBConversion conv;
+	conv.SetInFormat("smi");
 	
-	if ( !conv.SetInFormat("smi")){
-		cout << "Could not set input format to SMILES" << endl;
-		exit(EXIT_FAILURE);
-	}
-	
-	
-	/// Read line file
+	/// Read combiLib from line file
 	LineBasedFile combiLibFile(path, ios::in);
+	CombiLib input_lib;
+	GroupFragmentList* tmp_lst;
+	GroupFragment* tmp_frag;
 	
-	// read in combi lib:
-	vector< GroupFragment* > empty_vec;
-	vector< vector< GroupFragment* > > groups(1, empty_vec );
-	
-	bool in_group = false;
-	int gr_num;
 	while( combiLibFile.readLine() )
 	{
+		Log << "LINE: "<<combiLibFile.getLine()<<endl;
+		
+		// ignore comments and empty lines
 		if ( combiLibFile.getLine().hasPrefix("#") || combiLibFile.getLine().isEmpty() )
 			continue;
 		
-		// set the scaffold (always take the last defined scaffold)
+		/// scaffold (takes the last defined scaffold)
 		if ( combiLibFile.getLine().hasPrefix("scaffold:"))
 		{
 			// get the scaffold SMILES
 			String str = String(combiLibFile.getLine().after("scaffold:")).trim();
-			GroupFragment* tmp_frag;
 			
-			smilesToGroupFragment(conv, str, tmp_frag);
+			// generate a new GroupFragment (on heap) from the SMILES
+			tmp_frag = smilesToGroupFragment(conv, str);
 			
-			groups[0][0] = tmp_frag;
+			///TODO: check for existing scaffold (0) and replace existing, avoid mem-leak
+			///			if( input_lib[0] == 0)
+			tmp_lst = new GroupFragmentList;
+			tmp_lst->push_back(tmp_frag);
+			input_lib[0] = tmp_lst;
 		}
 		
-		// a new group:
+		/// a new group:
 		if ( combiLibFile.getLine().hasPrefix("group_"))
 		{
 			// get group number:
-			String num = String(combiLibFile.getLine().after("group_")).trimRight(":").trim();
-			gr_num = num.toUnsignedInt();
-			groups.push_back( empty_vec );
+			String str_num = String(combiLibFile.getLine().after("group_")).trim().trimRight(":");
+			int group_id = str_num.toUnsignedInt();
+			
+			// create new groupfragmentlist for the group:
+			///TODO: check for existing scaffold (0) and replace existing, avoid mem-leak
+			tmp_lst = new GroupFragmentList;
+			input_lib[group_id] = tmp_lst;
 		}
-		// apend the smiles
+		/// append group-Fragment to current group
 		else
 		{
-//			groups[gr_num].push_back();
+			GroupFragment* tmp_frag = smilesToGroupFragment( conv, combiLibFile.getLine().trim() );
+			tmp_lst->push_back(tmp_frag);
 		}
 
 	}
-	combiLibFile.close();
-	
-	
 
+	//Test: iterate whole lib
+	CombiLibIterator it = input_lib.begin();
+	for(; it != input_lib.end(); it++)
+	{
+		cout<<endl<<"Group ID: "<<(*it).first<<endl;
+		
+		tmp_lst = (*it).second;
+		for(int i = 0; i< tmp_lst->size(); i++)
+		{
+			tmp_frag = (*tmp_lst)[i];
+			cout<<"Molecule "<< i <<" #atoms: "<<tmp_frag->molecule->countAtoms()<<endl;
+		}
+	}
+	combiLibFile.close(); // close combiLib file
 }
 
 #endif // BASIC_H
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
+
+
