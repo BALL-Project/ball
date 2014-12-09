@@ -13,6 +13,7 @@
 #include <BALL/DATATYPE/string.h>
 
 #include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -422,7 +423,7 @@ GroupFragment* smilesToGroupFragment(OBConversion& conv, String& smiles)
 * @brief readGroups
 * @param path
 */
-void readGroups(const String& path)
+void readGroups(CombiLib& input_lib, const String& path)
 {
 	typedef vector<GroupFragment*> GroupFragmentList;
 	typedef boost::unordered_map< int, GroupFragmentList* > CombiLib;
@@ -433,20 +434,21 @@ void readGroups(const String& path)
 	
 	/// Read combiLib from line file
 	LineBasedFile combiLibFile(path, ios::in);
-	CombiLib input_lib;
 	GroupFragmentList* tmp_lst;
+	
+	int group_id = -1;
 	GroupFragment* tmp_frag;
 	
 	while( combiLibFile.readLine() )
 	{
-		Log << "LINE: "<<combiLibFile.getLine()<<endl;
-		
-		// ignore comments and empty lines
+		/// ignore comments and empty lines
 		if ( combiLibFile.getLine().hasPrefix("#") || combiLibFile.getLine().isEmpty() )
+		{
 			continue;
+		}
 		
 		/// scaffold (takes the last defined scaffold)
-		if ( combiLibFile.getLine().hasPrefix("scaffold:"))
+		else if ( combiLibFile.getLine().hasPrefix("scaffold:"))
 		{
 			// get the scaffold SMILES
 			String str = String(combiLibFile.getLine().after("scaffold:")).trim();
@@ -454,48 +456,80 @@ void readGroups(const String& path)
 			// generate a new GroupFragment (on heap) from the SMILES
 			tmp_frag = smilesToGroupFragment(conv, str);
 			
-			///TODO: check for existing scaffold (0) and replace existing, avoid mem-leak
-			///			if( input_lib[0] == 0)
+			// if we have another scaffold, delete it and use the new one:
+			if(input_lib.find(0) != input_lib.end())
+			{
+				Log<<"INPUT-WARNING: overwriting a former scaffold, using now: "<<str
+					 <<endl<<"Remember that only one scaffold per combi-lib configuration"
+					 <<" file should be specified. If more scaffolds occur, the last one"
+					 <<" is used"<<endl;
+				delete input_lib[0];
+			}
+
 			tmp_lst = new GroupFragmentList;
 			tmp_lst->push_back(tmp_frag);
 			input_lib[0] = tmp_lst;
 		}
 		
-		/// a new group:
-		if ( combiLibFile.getLine().hasPrefix("group_"))
+		/// create a new group:
+		else if ( combiLibFile.getLine().hasPrefix("group_"))
 		{
 			// get group number:
 			String str_num = String(combiLibFile.getLine().after("group_")).trim().trimRight(":");
-			int group_id = str_num.toUnsignedInt();
+			group_id = str_num.toUnsignedInt();
+			if(group_id == 0)
+			{
+				Log<<"INPUT-ERROR: r-group id 0 is forbidden. Please use a integer "
+						 "between 1 and INT-MAX."<<endl;
+				exit(EXIT_FAILURE);
+			}
 			
 			// create new groupfragmentlist for the group:
 			///TODO: check for existing scaffold (0) and replace existing, avoid mem-leak
 			tmp_lst = new GroupFragmentList;
 			input_lib[group_id] = tmp_lst;
 		}
+		
 		/// append group-Fragment to current group
 		else
 		{
 			GroupFragment* tmp_frag = smilesToGroupFragment( conv, combiLibFile.getLine().trim() );
-			tmp_lst->push_back(tmp_frag);
-		}
-
-	}
-
-	//Test: iterate whole lib
-	CombiLibIterator it = input_lib.begin();
-	for(; it != input_lib.end(); it++)
-	{
-		cout<<endl<<"Group ID: "<<(*it).first<<endl;
-		
-		tmp_lst = (*it).second;
-		for(int i = 0; i< tmp_lst->size(); i++)
-		{
-			tmp_frag = (*tmp_lst)[i];
-			cout<<"Molecule "<< i <<" #atoms: "<<tmp_frag->molecule->countAtoms()<<endl;
+			
+			bool found = false;
+			list< pair< unsigned int, Atom*> >::iterator it = tmp_frag->connections.begin();
+			
+			// make sure that the fragment realy contains the needed connection:
+			for(; it != tmp_frag->connections.end(); it++)
+				found = (found || ( (*it).first == group_id ) );
+			if (found)
+			{
+				tmp_lst->push_back(tmp_frag);
+			}
+			else
+			{
+				Log<<"INPUT-ERROR: the r-group SMILES "<< combiLibFile.getLine().trim() 
+					 <<" belongs to the r-group block "<< group_id
+					 <<" but that group number was not found in the SMILES"<<endl;
+				Log<<endl;
+				Log<<"Please re-check your combi-lib configuration file."<<endl;
+				exit(EXIT_FAILURE);
+			}
 		}
 	}
 	combiLibFile.close(); // close combiLib file
+//	//Test: iterate whole lib
+//	CombiLibIterator it = input_lib.begin();
+//	for(; it != input_lib.end(); it++)
+//	{
+//		cout<<endl<<"Group ID: "<<(*it).first<<endl;
+		
+//		tmp_lst = (*it).second;
+//		for(int i = 0; i< tmp_lst->size(); i++)
+//		{
+//			tmp_frag = (*tmp_lst)[i];
+//			cout<<"Molecule "<< i <<" #atoms: "<<tmp_frag->molecule->countAtoms()<<endl;
+//		}
+//	}
 }
 
 #endif // BASIC_H

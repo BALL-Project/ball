@@ -55,16 +55,17 @@ int main(int argc, char* argv[])
 	boost::unordered_map <String, float > bondLib;
 	boost::unordered_map <String, Molecule* > connectLib;
 	
-	Log << "loading template libs...";
+	Log << "loading template libs..."<<endl;
 //	readFragmentLib(libPathes[0], fragmentLib);
 	readNewFragmentLib(libPathes[0], lineFragmentLib);
 	readBondLib(libPathes[1], bondLib);
 	readConnectionLib(libPathes[2], connectLib);
-	Log <<"done!"<<endl<<endl;
+	Log <<" - done - "<<endl<<endl;
 	
 //	Log<<"num of read fragments: "<<fragmentLib.size()<<endl;
 
-	readGroups("/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/example_combi1.conf");
+	CombiLib in_lib;
+	readGroups(in_lib, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/example_combi1.conf");
 	exit(EXIT_SUCCESS);
 /// F R A G M E N T I N G
 
