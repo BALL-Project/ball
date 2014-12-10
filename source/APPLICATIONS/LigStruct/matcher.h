@@ -47,8 +47,6 @@ void canonicalize(std::vector <Molecule*>& fragments)
 			new_mol->append(*aList[i]);
 
 //		cout<<" correct molecule < "<<endl;
-		
-		copyMoleculeProperies(**it, *new_mol);
 		(*it)->swap(*new_mol);
 		
 //		cout<<" updated original < "<<endl;
