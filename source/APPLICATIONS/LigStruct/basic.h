@@ -170,7 +170,7 @@ bool isAtomRigid(OBAtom* atm)
 	else
 	{
 		OBBondIterator b_it = atm->BeginBonds();
-		for(; b_it!=atm->EndBonds(); b_it++)
+		for(;  b_it != atm->EndBonds();  b_it++)
 		{
 			if( ! (*b_it)->IsRotor() )
 				return true;
