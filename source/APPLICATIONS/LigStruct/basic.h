@@ -68,12 +68,26 @@ public:
 	
 	Vector3& operator[](Size idx)
 	{
-		return *(positions + idx);
+		return positions[idx];
 	}
 
 	const Size& size()
 	{
 		return _size;
+	}
+	
+	/**
+	 * Apply coordinates of this to the input BALL::AtomContainer
+	 * @brief setCoordinates
+	 * @param mol
+	 */
+	void transferCoordinates(AtomContainer* mol)
+	{
+		AtomIterator qit = mol->beginAtom();
+		for (int i = 0 ; i < _size; i++, qit++)
+		{
+			qit->setPosition( (positions[i]) );
+		}
 	}
 
 private:
@@ -81,17 +95,22 @@ private:
 	Vector3 *positions;
 };
 
-struct PredictorConfig
-{
-	String fragment_lib_path;
-	String bondlenth_lib_path;
-	String connection_lib_path;
-};
-
 struct GroupFragment
 {
-	list< Bond* > rotor_lst;
+	// intra connections
+	list< Fragment* > linker_lst; // all bonds within a linker are rotable
+	list< Bond* > rotor_lst;      // all intra fragment bonds of the molecule
+	// for each fragment, the list of bonds to other fragments
+	boost::unordered_map< Fragment*, list<Bond*> > fragment_connections;
+	
+//	// alternative connections per fragment mapping (perhaps faster and more memory efficient than map?)
+//	vector< Fragment* > fragment_idx;
+//	vector< list<Bond*> > fragment_connections;
+	
+	// inter connections
 	list< pair< unsigned int, Atom*> > connections;
+	
+	// data:
 	Molecule* molecule;
 };
 
@@ -161,7 +180,7 @@ bool isAtomRigid(OBAtom* atm)
 }
 
 // cut bonds that are shared with atoms from other fragments:
-void clearExternalBonds(Molecule* mol)
+void clearExternalBonds(AtomContainer* mol)
 {
 	Atom::BondIterator bit;
 	AtomIterator ait;
@@ -169,15 +188,6 @@ void clearExternalBonds(Molecule* mol)
 	BALL_FOREACH_INTERBOND(*mol, ait, bit)
 	{
 		bit->destroy();
-	}
-}
-
-void setCoordinates(Molecule* query, TemplateCoord* templat)
-{
-	AtomIterator qit = query->beginAtom();
-	for (int i = 0 ; i < templat->size(); i++, qit++)
-	{
-		qit->setPosition( (*templat)[i]);
 	}
 }
 

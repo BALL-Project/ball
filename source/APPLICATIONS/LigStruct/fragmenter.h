@@ -10,8 +10,8 @@ using namespace std;
 ///####################### F R A G M E N T I N G ##############################
 void assignFragments(OBMol& ob_mol, 
 										 Molecule& ball_mol, 
-										 vector <Molecule*>& rigid_fragments, 
-										 vector <Molecule*>& linker_fragments, 
+										 vector <Fragment*>& rigid_fragments, 
+										 vector <Fragment*>& linker_fragments, 
 										 list< pair<Atom*, Atom*> >& connections)
 {
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
@@ -112,7 +112,7 @@ void assignFragments(OBMol& ob_mol,
 			if(link_groups[parent_id]<0)
 			{
 				link_groups[parent_id] = linker_fragments.size();
-				Molecule* dummy = new Molecule();
+				Fragment* dummy = new Fragment();
 				
 				dummy->insert(*atm);
 //				dummy->setName("Fragment_"+toString(linker_fragments.size()));
@@ -133,7 +133,7 @@ void assignFragments(OBMol& ob_mol,
 			if(rigid_groups[parent_id]<0)
 			{
 				rigid_groups[parent_id] = rigid_fragments.size();
-				Molecule* dummy = new Molecule();
+				Fragment* dummy = new Fragment();
 				
 				dummy->insert(*atm);
 //				dummy->setName("Fragment_"+toString(rigid_fragments.size()));

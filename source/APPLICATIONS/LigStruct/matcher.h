@@ -11,13 +11,13 @@ using namespace BALL;
 /** Generate a canonical order of atoms
  * 
  */
-void canonicalize(std::vector <Molecule*>& fragments)
+void canonicalize(std::vector <Fragment*>& fragments)
 {
 	
 	int num_atoms = -1;// obMol.NumAtoms();
 //	cout<<"Canonicalising the atomlists..."<<endl;
-	std::vector< Molecule* >::iterator it;
-	Molecule* new_mol;
+	std::vector< Fragment* >::iterator it;
+	Fragment* new_frag;
 	for(it=fragments.begin(); it != fragments.end(); it++)
 	{
 		num_atoms = (*it)->countAtoms();
@@ -37,20 +37,20 @@ void canonicalize(std::vector <Molecule*>& fragments)
 		CanonicalLabels(temp, sym, clabels);
 //		cout<<" calculated Labels < "<<endl;
 		
-		new_mol = new Molecule;
+		new_frag = new Fragment;
 		std::vector <Atom*> aList(num_atoms);
 		for(int i=0; i<clabels.size(); i++)
 			aList[clabels[i]-1]=( (*it)->getAtom(i) );
 //		cout<<" correct atom-List < "<<endl;
 		
 		for(int i=0; i<clabels.size(); i++)
-			new_mol->append(*aList[i]);
+			new_frag->append(*aList[i]);
 
 //		cout<<" correct molecule < "<<endl;
-		(*it)->swap(*new_mol);
+		(*it)->swap(*new_frag);
 		
 //		cout<<" updated original < "<<endl;
-		delete new_mol;
+		delete new_frag;
 //		cout<<" DONE "<<endl;
 	}
 }
@@ -58,10 +58,10 @@ void canonicalize(std::vector <Molecule*>& fragments)
 ///-------------------match queryFragments to libFragments----------------------
 void matchRigidFragments(
 		boost::unordered_map <BALL::String, TemplateCoord*>& fragmentLib, 
-		vector<Molecule*>& fragments)
+		vector<Fragment*>& fragments)
 {
 	// get coordinates for rigid fragments
-	std::vector< Molecule* >::iterator it2;
+	std::vector< Fragment* >::iterator it2;
 	for(it2=fragments.begin(); it2 != fragments.end(); it2++)
 	{
 		// for all fragments, match these against the lib:
@@ -69,7 +69,7 @@ void matchRigidFragments(
 		TemplateCoord* templat = fragmentLib[ keyGen.getUCK() ];
 			
 		if(templat && (templat->size() == (*it2)->countAtoms()) )
-			setCoordinates(*it2, templat);
+			templat->transferCoordinates(*it2);
 		else
 		{
 			cout<<"Warning: could not find a template for ";

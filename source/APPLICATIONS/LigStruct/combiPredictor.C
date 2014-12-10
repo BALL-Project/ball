@@ -4,9 +4,7 @@
 
 #include "basic.h"
 #include "inout.h"
-#include "matcher.h"
-#include "fragmenter.h"
-#include "assembler.h"
+#include "structureAssembler.h"
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -36,39 +34,27 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 
-/// L O A D    L I B s
+/// I N I T    A S S E M B L E R
+	StructureAssembler assem;
 	// Load all template libs:
-	PredictorConfig tool_config;
 	if ( parpars.has("l") )
 	{
-		getLibraryPathes(tool_config, parpars.get("l"));
+		assem.setLibsFromConfig( parpars.get("l") );
 	}
 	else
 	{
 		String pth = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf";
-		getLibraryPathes(tool_config, pth);
+		assem.setLibsFromConfig(pth);
 	}
-	Log<<"FRAGMENTS are in:"<<endl<<tool_config.fragment_lib_path<<endl;
-	Log<<"BONDS are in:"<<endl<<tool_config.bondlenth_lib_path<<endl;
-	Log<<"CONNECTIONS are in:"<<endl<<tool_config.connection_lib_path<<endl<<endl;
-	
-//	boost::unordered_map <String, Molecule*> fragmentLib;
-	boost::unordered_map <String, TemplateCoord*> lineFragmentLib;
-	boost::unordered_map <String, float > bondLib;
-	boost::unordered_map <String, Molecule* > connectLib;
-	
-	Log << "loading template libs..."<<endl;
-	readNewFragmentLib (tool_config.fragment_lib_path, lineFragmentLib);
-	readBondLib        (tool_config.bondlenth_lib_path, bondLib);
-	readConnectionLib  (tool_config.connection_lib_path, connectLib);
-	Log <<" - done - "<<endl<<endl;
+
 	
 	
 /// F R A G M E N T I N G
 
 	Log << "Reading combi-lib..."<<endl;
 	CombiLib in_lib;
-	readGroups(in_lib, "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/example_combi1.conf");
+	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/example_combi1.conf";
+	readGroups(in_lib, combi_path, assem);
 	Log <<" - done - "<<endl<<endl;
 	
 	
@@ -116,18 +102,6 @@ int main(int argc, char* argv[])
 	// clean up:
 //	delete ball_mol;
 	outfile.close();
-	
-	// clean db
-	Log << "Removing loaded libs from memory...";
-	boost::unordered_map <BALL::String, TemplateCoord*>::iterator tmp_it;
-	for(tmp_it = lineFragmentLib.begin(); tmp_it!=lineFragmentLib.end(); tmp_it++)
-		delete tmp_it->second;
-	
-	// bonds are of primitive type and on the stack
-	
-	boost::unordered_map <BALL::String, Molecule*>::iterator mit;
-	for(mit = connectLib.begin(); mit != connectLib.end(); mit++)
-		delete mit->second;
 	
 	Log << "......done!"<<endl;
 }

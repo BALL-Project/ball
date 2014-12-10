@@ -2,7 +2,7 @@
 #define INOUT_H
 
 #include "basic.h"
-#include "fragmenter.h"
+#include "structureAssembler.h"
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -16,151 +16,6 @@ void writeMolVec(vector<Molecule* >& input, SDFile* handle)
 	for(int i = 0; i < input.size(); i++)
 	{
 		(*handle) << *input[i];
-	}
-}
-
-
-void getLibraryPathes(PredictorConfig& pathes, String config_path)
-{
-	LineBasedFile configFile(config_path, ios::in);
-	
-	String tmp="";
-	while( configFile.readLine() )
-	{
-		tmp = configFile.getLine();
-		if(tmp.hasPrefix("#"))
-			continue;
-		
-		if(tmp.hasPrefix("fragments=")){
-			tmp = tmp.after("fragments=");
-			pathes.fragment_lib_path = tmp.trim();
-		}
-		else if(tmp.hasPrefix("bondlenths=")){
-			tmp = tmp.after("bondlenths=");
-			pathes.bondlenth_lib_path = tmp.trim();
-		}
-		else if(tmp.hasPrefix("connections=")){
-			tmp = tmp.after("connections=");
-			pathes.connection_lib_path = tmp.trim();
-		}
-		else
-			continue;
-	}
-}
-
-void readFragmentLib(String& path, boost::unordered_map <BALL::String, Molecule*>& fragmentLib)
-{
-	fragmentLib.clear();
-	SDFile libFile(path, ios::in);
-	
-	Molecule* tmp_mol;
-	tmp_mol = libFile.read();
-	
-	// read in fragmentLib and create hash-map from that:
-	while(tmp_mol)
-	{
-		String key = tmp_mol->getProperty("key").getString();
-		fragmentLib[key] = tmp_mol;
-		
-		tmp_mol = libFile.read();
-	}
-	libFile.close();
-}
-
-
-/**
- * @brief Reads the template coordinates for all fragments
- * @param path
- * @param fragmentLib
- */
-void readNewFragmentLib(const String& path, boost::unordered_map <BALL::String, TemplateCoord*>& fragmentLib)
-{
-	fragmentLib.clear();
-	LineBasedFile libFile(path, ios::in);
-	
-	// read in fragmentLib and create hash-map from that:
-	String key;
-	while( libFile.readLine() )
-	{
-		TemplateCoord* tmp_frag=0;
-		if ( libFile.getLine().hasPrefix("key "))
-		{
-			// get key:
-			key = libFile.getLine().after("key ");
-			
-			// get number of positions:
-			libFile.readLine();
-			Size size = libFile.getLine().toUnsignedInt();
-			
-			// get positions:
-			tmp_frag = new TemplateCoord(size);
-			Size i;
-			for(i = 0; i < size; i++)
-			{
-				libFile.readLine();
-				String coords[3];
-				libFile.getLine().split(coords, 3);
-				Vector3& vec = (*tmp_frag)[i];
-				vec.set(coords[0].toFloat(), coords[1].toFloat(), coords[2].toFloat());
-			}
-			
-			// append to hash map
-			fragmentLib[key] = tmp_frag;
-		}
-		else
-		{
-			Log << "WARNING: missed in the template coordinate lib file a line!!!"<<endl;
-		}
-	}
-	libFile.close();
-}
-
-
-
-
-void readConnectionLib(String& path, boost::unordered_map <String, Molecule* >& con)
-{
-	con.clear();
-	
-	SDFile handle(path, ios::in); //open the lib file as sdf-file
-	
-	// read all lib molecules and save them with their key:
-	Molecule* tmp_mol;
-	tmp_mol = handle.read(); // first entry
-	
-	int cnt = 0;
-	while(tmp_mol)
-	{
-		BALL::String key = tmp_mol->getProperty("key").getString();
-		con[key] = tmp_mol;
-		
-		tmp_mol = handle.read();
-		cnt++;
-	}
-	
-	handle.close();
-}
-
-
-/// read std Bonds from file:
-/// ---------------------------------------
-void readBondLib(String& path, boost::unordered_map <String, float >& bonds)
-{
-	LineBasedFile bondFile(path, ios::in);
-	
-	while( bondFile.readLine() )
-	{
-		String st_ar[2];
-		bondFile.getLine().split(st_ar, 2);
-		
-		bonds[st_ar[0]] = st_ar[1].toFloat();
-		
-		// generate also the reversed label, if both differ
-		if( (st_ar[0])[0] != (st_ar[0])[1] ){
-			String altKey = (st_ar[0])[1];
-			altKey += (st_ar[0])[0];
-			bonds[altKey] = st_ar[1].toFloat();
-		}
 	}
 }
 
@@ -192,7 +47,7 @@ void readOBMolecule(const String& path, OBMol& mol)
  * @param smiles
  * @param frag
  */
-GroupFragment* smilesToGroupFragment(OBConversion& conv, String& smiles)
+GroupFragment* smilesToGroupFragment(OBConversion& conv, StructureAssembler& assem, String& smiles)
 {
 	// get the obmol SMILES input:
 	OBMol ob_mol;
@@ -217,7 +72,7 @@ GroupFragment* smilesToGroupFragment(OBConversion& conv, String& smiles)
 		}
 	}
 	
-	// Delete unnecessary atoms:
+	// Delete unnecessary pseudo atoms (r-group definitions in SMILES)
 	for(int i = 0; i < for_deletion.size(); i++)
 		ob_mol.DeleteAtom( for_deletion[i], true);
 	
@@ -234,6 +89,9 @@ GroupFragment* smilesToGroupFragment(OBConversion& conv, String& smiles)
 		frag->connections.push_back(  make_pair( group_id, atm_ptr )  );
 	}
 	
+	// assign coordinates
+	assem.assembleStructure(frag->molecule);
+	
 	return frag;
 }
 
@@ -243,7 +101,7 @@ GroupFragment* smilesToGroupFragment(OBConversion& conv, String& smiles)
 * @brief readGroups
 * @param path
 */
-void readGroups(CombiLib& input_lib, const String& path)
+void readGroups(CombiLib& input_lib, const String& path, StructureAssembler& assem)
 {
 	typedef vector<GroupFragment*> GroupFragmentList;
 	typedef boost::unordered_map< int, GroupFragmentList* > CombiLib;
@@ -274,7 +132,7 @@ void readGroups(CombiLib& input_lib, const String& path)
 			String str = String(combiLibFile.getLine().after("scaffold:")).trim();
 			
 			// generate a new GroupFragment (on heap) from the SMILES
-			tmp_frag = smilesToGroupFragment(conv, str);
+			tmp_frag = smilesToGroupFragment(conv, assem, str);
 			
 			// if we have another scaffold, delete it and use the new one:
 			if(input_lib.find(0) != input_lib.end())
@@ -297,6 +155,8 @@ void readGroups(CombiLib& input_lib, const String& path)
 			// get group number:
 			String str_num = String(combiLibFile.getLine().after("group_")).trim().trimRight(":");
 			group_id = str_num.toUnsignedInt();
+			
+			// group ids must be > 0 because 0 is used for the scaffold
 			if(group_id == 0)
 			{
 				Log<<"INPUT-ERROR: r-group id 0 is forbidden. Please use a integer "
@@ -305,15 +165,14 @@ void readGroups(CombiLib& input_lib, const String& path)
 			}
 			
 			// create new groupfragmentlist for the group:
-			///TODO: check for existing scaffold (0) and replace existing, avoid mem-leak
 			tmp_lst = new GroupFragmentList;
 			input_lib[group_id] = tmp_lst;
 		}
 		
-		/// append group-Fragment to current group
+		/// append a group-Fragment to current group
 		else
 		{
-			GroupFragment* tmp_frag = smilesToGroupFragment( conv, combiLibFile.getLine().trim() );
+			GroupFragment* tmp_frag = smilesToGroupFragment( conv, assem, combiLibFile.getLine().trim() );
 			
 			bool found = false;
 			list< pair< unsigned int, Atom*> >::iterator it = tmp_frag->connections.begin();
@@ -337,18 +196,5 @@ void readGroups(CombiLib& input_lib, const String& path)
 		}
 	}
 	combiLibFile.close(); // close combiLib file
-//	//Test: iterate whole lib
-//	CombiLibIterator it = input_lib.begin();
-//	for(; it != input_lib.end(); it++)
-//	{
-//		cout<<endl<<"Group ID: "<<(*it).first<<endl;
-		
-//		tmp_lst = (*it).second;
-//		for(int i = 0; i< tmp_lst->size(); i++)
-//		{
-//			tmp_frag = (*tmp_lst)[i];
-//			cout<<"Molecule "<< i <<" #atoms: "<<tmp_frag->molecule->countAtoms()<<endl;
-//		}
-//	}
 }
 #endif // INOUT_H
