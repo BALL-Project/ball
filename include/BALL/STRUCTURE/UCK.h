@@ -13,7 +13,7 @@
 
 namespace BALL
 {
-	class Molecule;
+	class AtomContainer;
 
 	/** Unique Chemical Key.
 			Implements the UCK algorithm for computing a unique key for a given chemical structure.
@@ -35,11 +35,11 @@ namespace BALL
 		
 		/* constructor
 		*/
-		UCK(const Molecule& mol, Size d=3);
+		UCK(const AtomContainer& mol, Size d=3);
 		
 		/* constructor added originally in CADDSuite
 		 */
-		UCK(const Molecule& mol, bool ignore_hydrogens, Size d=3);
+		UCK(const AtomContainer& mol, bool ignore_hydrogens, Size d=3);
 
 		/* copy constructor
 		*/
@@ -73,11 +73,11 @@ namespace BALL
 		
 		/* computes the uck
 		*/
-		void makeUCK(const Molecule& m);
+		void makeUCK(const AtomContainer& m);
 		
 		/* construct graph-representation of the molecule read
 		*/
-		void getGraph(std::vector<String>& v, PairVector& e, const Molecule& mol);
+		void getGraph(std::vector<String>& v, PairVector& e, const AtomContainer& mol);
 		
 		/* Floyd's Algorithm
 		*  find shortest paths between all pairs of nodes
@@ -90,7 +90,7 @@ namespace BALL
 		
 		/* compute lambda-map
 		*/
-		String lambda(String lambda_d, const PairVector& e, const std::vector<String>& v, Size pos, Size d, const Molecule &m);
+		String lambda(String lambda_d, const PairVector& e, const std::vector<String>& v, Size pos, Size d, const AtomContainer &m);
 		
 		/* construct final UCK as follows:
 		*  chemical_formula-lexicographically ordered collection of strings pair(a,b)

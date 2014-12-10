@@ -4,7 +4,7 @@
 
 #include <BALL/STRUCTURE/UCK.h>
 
-#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/AtomContainer.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atom.h>
@@ -29,7 +29,7 @@ namespace BALL
 	}
 	
 	//constructor
-	UCK::UCK(const Molecule& mol, Size d)
+	UCK::UCK(const AtomContainer& mol, Size d)
 		:	depth_(d),
 			weight_(0.0),
 			ignore_hydrogens_(false)
@@ -41,7 +41,7 @@ namespace BALL
 	}
 
 	//constructor (originally included in CADDSuite)
-	UCK::UCK(const Molecule& mol, bool ignore_hydrogens, Size d)
+	UCK::UCK(const AtomContainer& mol, bool ignore_hydrogens, Size d)
 		:	depth_(d),
 			weight_(0.0)
 	{
@@ -132,7 +132,7 @@ namespace BALL
 		return;
 	}
 
-	void UCK::getGraph(vector<String>& v, PairVector& e, const Molecule& mol)
+	void UCK::getGraph(vector<String>& v, PairVector& e, const AtomContainer& mol)
 	{
 		weight_ = 0.0;
 		Size count = 0;
@@ -202,7 +202,7 @@ namespace BALL
 		return x;
 	}
 	
-	String UCK::lambda(String lambda_d, const PairVector& e, const vector<String>& v, Size i, Size d, const Molecule& m)
+	String UCK::lambda(String lambda_d, const PairVector& e, const vector<String>& v, Size i, Size d, const AtomContainer& m)
 	{
 		lambda_d = v[i]; // fix label
 		vector<String>* lam;
@@ -324,7 +324,7 @@ namespace BALL
 		return;
 	}
 
-	void UCK::makeUCK(const Molecule& m)
+	void UCK::makeUCK(const AtomContainer& m)
 	{
 		vector<String> v, pairs, lambda_map;
 		PairVector e; // edge set
