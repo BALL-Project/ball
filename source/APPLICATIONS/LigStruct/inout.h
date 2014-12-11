@@ -90,7 +90,7 @@ GroupFragment* smilesToGroupFragment(OBConversion& conv, StructureAssembler& ass
 	}
 	
 	// assign coordinates
-	assem.assembleStructure(frag->molecule);
+	assem.assembleStructure(frag, &ob_mol);
 	
 	return frag;
 }

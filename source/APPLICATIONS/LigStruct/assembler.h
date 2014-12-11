@@ -9,6 +9,12 @@ using namespace std;
 
 ///####################### 3 D    A S S E M B L Y ##############################
 	
+
+void buildLinker(vector< Fragment* >& linker_lst)
+{
+	
+}
+
 /// ------ check if for every atom in list1 a matching atom in list2 
 /// ------ can be found
 bool allMatch(Molecule* li1, Molecule* li2)

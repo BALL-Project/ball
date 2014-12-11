@@ -7,12 +7,32 @@ using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
+
+/// check if the atom is a rigid one:
+bool isAtomRigid(OBAtom* atm)
+{
+/// TODO: add OBRotorList object to use custom torlib!
+	if (atm->IsInRing())
+		return true;
+	else
+	{
+		OBBondIterator b_it = atm->BeginBonds();
+		for(;  b_it != atm->EndBonds();  b_it++)
+		{
+			if( ! (*b_it)->IsRotor() )
+				return true;
+		}
+		return false;
+	}
+}
+
+
 ///####################### F R A G M E N T I N G ##############################
-void assignFragments(OBMol& ob_mol, 
-										 Molecule& ball_mol, 
-										 vector <Fragment*>& rigid_fragments, 
-										 vector <Fragment*>& linker_fragments, 
-										 list< pair<Atom*, Atom*> >& connections)
+void fragmentMolecule(OBMol& ob_mol, 
+											Molecule& ball_mol, 
+											vector <Fragment*>& rigid_fragments, 
+											vector <Fragment*>& linker_fragments, 
+											list< pair<Atom*, Atom*> >& connections)
 {
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
 	int num_atoms = ob_mol.NumAtoms();
@@ -29,23 +49,20 @@ void assignFragments(OBMol& ob_mol,
 	std::vector <bool> is_rigid(num_atoms, 0); // bitVec indicating rigid atoms
 	std::vector <bool> is_linker(num_atoms, 0); // bitVec indicating linker atoms
 
-	/// iterate over all bonds and split into rigid and linker fragments:
+	/** 
+	 * iterate over all bonds and split into rigid and linker fragments:
+	 */
 	OBBondIterator b_it = ob_mol.BeginBonds();
-	
-//	Log <<"Creating fragments from your queryStructure..."<<endl;
 	for (; b_it != ob_mol.EndBonds(); b_it++)
 	{
-//		Log << "getting OB Atoms and IDs" << endl;
 		OBAtom* atm1 = (*b_it)->GetBeginAtom();
 		OBAtom* atm2 =  (*b_it)->GetEndAtom();
 		int id1 = atm1->GetId();
 		int id2 = atm2->GetId();
 
-//		Log << "is Bond rotor?" << endl;
 		// for all rotable bonds:
 		if ( (*b_it)->IsRotor() )
 		{
-//			cout<<"Rotor: "<<atm1->GetType()<<" - "<<atm2->GetType();
 			bool isRigid_atm1 = isAtomRigid(atm1);
 			bool isRigid_atm2 = isAtomRigid(atm2);
 			if( !(is_linker[id1] || isRigid_atm1) ) // do not double assign (deletes disjointset-parent status)
@@ -61,15 +78,12 @@ void assignFragments(OBMol& ob_mol,
 			// add union atoms if both are not fixed:
 			if( !(isRigid_atm1 || isRigid_atm2) )// both need to be linker atoms (checked via isAtomRigid(atm) )
 			{
-//				cout<<" bond added! ";
 				dset_linker.union_set(id1, id2);
 			}
-//			cout<<endl;
 			
 			// rotables to a rigid fragment define connection points:
 			if( isAtomRigid((*b_it)->GetBeginAtom()) || isAtomRigid((*b_it)->GetEndAtom()) )
 			{
-//				Log << "found a connection" <<endl;
 				Atom* atm1 = ball_mol.getAtom(id1);
 				Atom* atm2 = ball_mol.getAtom(id2);
 				connections.push_back(make_pair(atm1, atm2));
@@ -78,7 +92,6 @@ void assignFragments(OBMol& ob_mol,
 		// for all fixed bonds:
 		else
 		{
-//			Log << " Got a fixed bond!"<<endl;
 			if( !is_rigid[id1] ) // do not double assign (deletes disjointset-parent status)
 			{
 				dset_rigid.make_set(id1); 
@@ -93,11 +106,12 @@ void assignFragments(OBMol& ob_mol,
 		}
 	}
 	
-	///	iterate over all atoms, sorting out the  fixed and linker fragments
+	/**
+	 * iterate over all atoms, sorting out the  fixed and linker fragments
+	 */
 	std::vector <int> link_groups(num_atoms, -1); // map parent id to vector pos in variable 'fragments'
 	std::vector <int> rigid_groups(num_atoms, -1); // map parent id to vector pos in variable 'fragments'
 	
-//	Log<< "I am going over to fragment assignment:"<<endl;
 	int parent_id = -1;
 	// loop over the atoms, sort fragments out
 	for(int i = 0 ; i < num_atoms; i++)
@@ -108,14 +122,13 @@ void assignFragments(OBMol& ob_mol,
 		{
 			parent_id = dset_linker.find_set(i);
 			
-			// if the atoms fragment does not exist, create it:
+			// if the fragment does not exist, create it:
 			if(link_groups[parent_id]<0)
 			{
 				link_groups[parent_id] = linker_fragments.size();
 				Fragment* dummy = new Fragment();
 				
 				dummy->insert(*atm);
-//				dummy->setName("Fragment_"+toString(linker_fragments.size()));
 				
 				linker_fragments.push_back(dummy);
 			}
@@ -136,7 +149,6 @@ void assignFragments(OBMol& ob_mol,
 				Fragment* dummy = new Fragment();
 				
 				dummy->insert(*atm);
-//				dummy->setName("Fragment_"+toString(rigid_fragments.size()));
 				rigid_fragments.push_back(dummy);
 			}
 			else
@@ -144,22 +156,7 @@ void assignFragments(OBMol& ob_mol,
 				rigid_fragments[ rigid_groups[parent_id] ]->insert(*atm);
 			}
 		}
-//		cout<<"END OF LOOP"<<endl;
 	}
-	
-//	//iterate over all connections and present them to the user
-//	cout << endl;
-//	cout << "following inter fragment bonds exist:"<<endl;
-//	list< pair<Atom*, Atom*> >::iterator coit;
-//	for(coit=connections.begin(); coit!=connections.end(); coit++)
-//	{
-//		Atom* atm1 = coit->first;
-//		Atom* atm2 = coit->second;
-//		cout<<((Molecule*)atm1->getParent())->getName();
-//		cout<< " to "<< ((Molecule*)atm2->getParent())->getName();
-//		cout<<endl;
-//	}
-//	cout<<endl;
 }
 
 

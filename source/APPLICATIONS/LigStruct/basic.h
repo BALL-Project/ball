@@ -66,7 +66,12 @@ public:
 		delete[] positions;
 	}
 	
-	Vector3& operator[](Size idx)
+	Vector3& operator[](Index idx)
+	{
+		return positions[idx];
+	}
+	
+	Vector3& get(Index idx)
 	{
 		return positions[idx];
 	}
@@ -95,11 +100,16 @@ private:
 	Vector3 *positions;
 };
 
+
+// TODO: optimize the data strcuture, implement initialzier which sets map
+//       and vector allocations to reasonable initial values
 struct GroupFragment
 {
 	// intra connections
-	list< Fragment* > linker_lst; // all bonds within a linker are rotable
+	vector< Fragment* > linker_lst; // all bonds within a linker are rotable
+	vector< Fragment* > rigid_lst; // all matchable fragments
 	list< Bond* > rotor_lst;      // all intra fragment bonds of the molecule
+	list< pair< Atom*, Atom*> > frag_con2;
 	// for each fragment, the list of bonds to other fragments
 	boost::unordered_map< Fragment*, list<Bond*> > fragment_connections;
 	
@@ -161,23 +171,7 @@ void transferMolecule( Molecule* toMol, Molecule* fromMol)
 }
 
 
-/// check if the atom is a rigid one:
-bool isAtomRigid(OBAtom* atm)
-{
-/// TODO: add OBRotorList object to use custom torlib!
-	if (atm->IsInRing())
-		return true;
-	else
-	{
-		OBBondIterator b_it = atm->BeginBonds();
-		for(;  b_it != atm->EndBonds();  b_it++)
-		{
-			if( ! (*b_it)->IsRotor() )
-				return true;
-		}
-		return false;
-	}
-}
+
 
 // cut bonds that are shared with atoms from other fragments:
 void clearExternalBonds(AtomContainer* mol)

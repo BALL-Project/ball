@@ -30,7 +30,7 @@ public:
 	 * @brief assembleStructure
 	 * @param mol
 	 */
-	void assembleStructure(Molecule* mol);
+	void assembleStructure(Molecule* mol, OBMol *ob_mol);
 	
 	/**
 	 * Same as the variant for BALL::Molecule but also assigns the internal 
@@ -39,7 +39,7 @@ public:
 	 * @brief assembleStructure
 	 * @param mol
 	 */
-	void assembleStructure(GroupFragment* gmol);
+	void assembleStructure(GroupFragment* gmol, OBMol* ob_mol);
 
 	/**
 	 * @brief setLibsFromConfig reads a config file that indicates locations of
@@ -57,10 +57,10 @@ private:
 	BondLengthMap bond_lib;
 	ConnectionMap connect_lib;
 	
-	void assemble_ (Molecule* mol, 
-									boost::unordered_map< Fragment*, list<Bond*> > fragment_connections,
-									list< Fragment* > linker_lst,
-									list< Bond* > rotor_lst);
+	void assemble_ (Molecule* mol, OBMol *ob_mol, 
+									list<pair<Atom *, Atom *> > &connections,
+									vector<Fragment *> &linker_lst,
+									vector<Fragment *> &rigid_lst);
 	
 	/*
 	 * Reads the standard bond lengths from a lib file
@@ -78,11 +78,9 @@ private:
 	void readFragmentLib();
 	
 	/*
-	 * !Brocken, TODO: convert from 'BALL::Molecule' to 'TemplateCoord'
-	 * !Deprecated: former FragmentLib reader for fragmentLibs that are in SDF
-	 * Format
+	 * ragmentLib reader for fragmentLibs that are in SDF Format
 	 */
-	void readOldFragmentLib(boost::unordered_map <String, Molecule*>& fragmentLib);
+	void readSDFFragmentLib();
 	
 	/*
 	 * Get all needed library information from a config file

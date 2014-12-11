@@ -42,25 +42,38 @@ void StructureAssembler::setLibsFromConfig(const String& path)
 }
 
 
-void StructureAssembler::assembleStructure(GroupFragment* gmol)
+void StructureAssembler::assembleStructure(GroupFragment* gmol, OBMol* ob_mol)
 {
-	assembleStructure(gmol->molecule);
+	assemble_(gmol->molecule, ob_mol, gmol->frag_con2, gmol->linker_lst, gmol->rigid_lst);
 }
 
-void StructureAssembler::assembleStructure(Molecule* mol)
+void StructureAssembler::assembleStructure(Molecule* mol, OBMol* ob_mol)
 {
+	list< pair < Atom*, Atom* > > dummy_connections;
+	vector< Fragment* > dummy_linker;
+	vector< Fragment* > dummy_rigids;
+//	list< Bond* > dummy_rotors;
 	
+	assemble_(mol, ob_mol, dummy_connections, dummy_linker, dummy_rigids);
 }
 
 /*
  * Private underlying method to the public assembly methods
  */
-void StructureAssembler::assemble_ (Molecule* mol, 
-								boost::unordered_map< Fragment*, list<Bond*> > fragment_connections,
-								list< Fragment* > linker_lst,
-								list< Bond* > rotor_lst)
+void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
+																		list< pair < Atom*, Atom* > >& connections,
+																		vector< Fragment* >& linker_lst, vector<Fragment *> &rigid_lst)
 {
+	// TODO: do the following: 
+	fragmentMolecule(*ob_mol, *mol, rigid_lst, linker_lst, connections);
 	
+	// canonicalize and match rigid fragments:
+	canonicalize(rigid_lst);
+	matchRigidFragments(fragment_lib, rigid_lst);
+	
+	
+	/// TODO:!!
+	// build linker fragments from standard torsions
 }
 
 
@@ -157,22 +170,33 @@ void StructureAssembler::readFragmentLib()
 
 
 
-
-void StructureAssembler::readOldFragmentLib(boost::unordered_map <String, Molecule*>& fragmentLib)
+void StructureAssembler::readSDFFragmentLib()
 {
-	fragmentLib.clear();
+	fragment_lib.clear();
 	SDFile libFile(fragment_lib_path, ios::in);
 	
 	Molecule* tmp_mol;
+	TemplateCoord* tmp_frag=0;
 	tmp_mol = libFile.read();
 	
 	// read in fragmentLib and create hash-map from that:
 	while(tmp_mol)
 	{
-		String key = tmp_mol->getProperty("key").getString();
-		fragmentLib[key] = tmp_mol;
+		String key = tmp_mol->getProperty("key").getString(); // get key:
 		
-		tmp_mol = libFile.read();
+		Size size = tmp_mol->countAtoms();
+		tmp_frag = new TemplateCoord(size);
+		fragment_lib[key] = tmp_frag; // add template to the lib
+		
+		Index i = 0;
+		for (AtomIterator it = tmp_mol->beginAtom(); +it; ++i, ++it)
+		{
+			tmp_frag->get(i).set( it->getPosition() );
+		}
+		
+		delete tmp_mol; // free memory
+		
+		tmp_mol = libFile.read(); //read for next iteration
 	}
 	libFile.close();
 }
