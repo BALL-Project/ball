@@ -81,20 +81,31 @@ float getBestRMSD(AtomContainer* mol1, AtomContainer* mol2)
 	return result;
 }
 
-void swapAtoms(Atom* a, Atom* b)
+
+/*
+ * Swap two Atom-Pointer
+ * 
+ * C++ speciality: swapping two pointers without assigning the content
+ * (which is problematic with BALL::Atom as bonds get lost)
+ * So this actually changes the pointers adress by simply using references to
+ * pointers
+ */
+void swapAtoms(Atom*& a, Atom*& b)
 {
 	Atom* tmp = a;
 	a = b;
 	b = tmp;
 }
 
-void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec, int i, float rmsd, float* global_rmsd)
+
+void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec,
+											 int i, float loc_rmsd, float* global_rmsd)
 {
 	if( i == atm_vec.size() )
 	{
-		if( (*global_rmsd) > rmsd)
+		if( (*global_rmsd) > loc_rmsd)
 		{
-			*global_rmsd = rmsd;
+			*global_rmsd = loc_rmsd;
 		}
 		return;
 	}
@@ -105,13 +116,18 @@ void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec,
 		for(int j = i; j < atm_vec.size(); j++)
 		{
 			bnd2 = atm_vec[j]->getBond(*atm_vec[0]);
+			// this is more for correctness than for speed
 			if( (bnd1->getOrder() == bnd2->getOrder() ) 
-					&& (ati->getElement() == atm_vec[j]->getElement() ) )
+					&& ( ati->getElement() == atm_vec[j]->getElement() ) )
 			{
 			//TODO: square dist would also be okay... manually implement getDist
 				float plus_rmsd = ati->getDistance( *atm_vec[j] );
+				
 				swapAtoms(atm_vec[i], atm_vec[j]);
-				recurPermutations(center1, ++ati, atm_vec, ++i, (rmsd + plus_rmsd), global_rmsd);
+
+				AtomIterator ati2 = ati;
+				recurPermutations( center1, ++ati2, atm_vec, (i+1), (loc_rmsd + plus_rmsd), global_rmsd);
+				
 				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap
 			}
 		} // endl loop
@@ -126,16 +142,17 @@ void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec,
  * The central atom is not tested, because it is the translation 
  * center and thus should always have distance 0
  */
-float getMinRMSD(AtomContainer mol1, AtomContainer mol2)
+float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 {
+	
 	// create a vector to allow easy swapping of atoms
 	vector<Atom*> atm_vec;
-	for(AtomIterator ati = mol2.beginAtom(); +ati; ++ati)
+	for(AtomIterator ati = mol2->beginAtom(); +ati; ++ati)
 		atm_vec.push_back( &*ati );
 	
 	float g_rmsd = numeric_limits<float>::max();
-	AtomIterator ati = mol1.beginAtom(); ++ati;  // start with second atom (first is central atom)
-	recurPermutations(mol1.getAtom(0), ati, atm_vec, 1, 0, &g_rmsd);
+	AtomIterator ati = mol1->beginAtom(); ++ati;  // start with second atom (first is central atom)
+	recurPermutations( mol1->getAtom(0), ati, atm_vec, 1, 0, &g_rmsd);
 	
 	return g_rmsd;
 }
@@ -264,7 +281,7 @@ float star_align(Molecule* mol1, Molecule* mol2)
 		transformer.setTransformation(trans_matrix);
 		mol1->apply(transformer);
 		
-		return getBestRMSD(mol1, mol2);
+		return getMinRMSD( mol1, mol2);
 	}
 	/// 2.) At least 3 neighbors are given, see if unique atoms exist in mol1
 	vector< Atom* > unique_atm;
@@ -312,7 +329,7 @@ float star_align(Molecule* mol1, Molecule* mol2)
 		transformer.setTransformation(trans_matrix);
 		mol1->apply(transformer);
 		
-		return getBestRMSD(mol1, mol2);
+		return getMinRMSD(mol1, mol2);
 	}
 
 	///3.) Just one unique atom was found, here we need to test some transformations
@@ -354,7 +371,7 @@ float star_align(Molecule* mol1, Molecule* mol2)
 				transformer.setTransformation(trans_matrix);
 				mol1->apply(transformer);
 				
-				rmsd = getBestRMSD(mol1, mol2);
+				rmsd = getMinRMSD(mol1, mol2);
 				if (rmsd < best_rmsd)
 					best_rmsd = rmsd;
 			}
@@ -397,7 +414,7 @@ float star_align(Molecule* mol1, Molecule* mol2)
 				transformer.setTransformation(trans_matrix);
 				mol1->apply(transformer);
 				
-				rmsd = getBestRMSD(mol1, mol2);
+				rmsd = getMinRMSD(mol1, mol2);
 				if (rmsd < best_rmsd)
 					best_rmsd = rmsd;
 			}
@@ -417,7 +434,7 @@ bool comparator(pair<int, Molecule*>& a, pair<int, Molecule*>& b)
 
 
 
-/// Find Bins depending on an RMSD threshold
+/// Find Bins for a class of connection keys depending on an RMSD threshold
 /// ----------------------------------------------------------------------------
 void getBins(vector< pair<int, Molecule*> >& bins, vector<Molecule*>& mols)
 {
