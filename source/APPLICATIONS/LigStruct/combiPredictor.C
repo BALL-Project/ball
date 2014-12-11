@@ -58,27 +58,6 @@ int main(int argc, char* argv[])
 	Log <<" - done - "<<endl<<endl;
 	
 	
-	Log << "Fragmenting the input molecule...";
-//	assignFragments(ob_mol, *ball_mol, rigid_fragments, linker_fragments, connections);
-	Log << "......done!"<<endl<<endl;
-	
-	
-/// M A T C H I N G
-	Log << "Matching fragments against FragmentLib...";
-//	canonicalize(rigid_fragments);
-//	canonicalize(linker_fragments);
-	
-//	matchRigidFragments(fragmentLib, rigid_fragments);
-//	matchRigidFragments(lineFragmentLib, rigid_fragments);
-	Log << "......done!"<<endl<<endl;
-	
-//	if( ball_mol->countAtoms() > 0 )
-//	{
-//		Log << "ERROR: not all atoms were correctly fragmented!!!"<< endl;
-//		exit(EXIT_FAILURE);
-//	}
-	
-	
 ///// A S S E M B L E   3 D
 	Log << "Connecting 3D fragments...";
 //	connectFragments(ball_mol, connections, connectLib, bondLib);

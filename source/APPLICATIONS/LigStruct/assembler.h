@@ -17,7 +17,7 @@ void buildLinker(vector< Fragment* >& linker_lst)
 
 /// ------ check if for every atom in list1 a matching atom in list2 
 /// ------ can be found
-bool allMatch(Molecule* li1, Molecule* li2)
+bool allMatch(AtomContainer* li1, AtomContainer* li2)
 {
 	AtomIterator at1 = li1->beginAtom();
 	for (; +at1 ; at1++)
@@ -125,7 +125,7 @@ Vector3 getDiffVec(Atom* atm1, Atom* atm2, boost::unordered_map <String, float >
 /// the final template will only contain 6 atoms, 3 for each end
 /// starting at position 0 and 3 with the molecules that are to be
 /// connected, and then the ordered next two neighbors
-void mergeTemplates(Molecule* mol1, int pos1, Molecule* mol2, int pos2, boost::unordered_map<String, float> std_bonds)
+void mergeTemplates(AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2, boost::unordered_map<String, float> std_bonds)
 {
 	Atom* aTarget = mol1->getAtom(pos1);
 	Atom* bTarget = mol2->getAtom(pos2);
@@ -173,7 +173,7 @@ String getBondName(Atom* atm, Atom* partner)
 /// NOTE: 'all atoms fit' currently means only that positions match, order 
 ///       and element are neglected for now, but this seems to be still a good
 ///       approximation.
-Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
+Matrix4x4 align(vector< Atom* >& site, AtomContainer* templ)
 {
 	Matrix4x4 result;
 	Vector3 frag1, frag2, frag3, tem1, tem2, tem3;
@@ -316,11 +316,11 @@ Matrix4x4 align(vector< Atom* >& site, Molecule* templ)
 /// Handle connections where at least one fragment contains only one atom
 void handleSimpleConnections( Atom* atm1, Atom* atm2,
 															boost::unordered_map <String, float >& bondLib,
-															boost::unordered_map <String, Molecule* >& connectLib)
+															boost::unordered_map <String, Fragment* >& connectLib)
 {
-	Molecule* frag1 = (Molecule*)atm1->getParent();
-	Molecule* frag2 = (Molecule*)atm2->getParent();
-	Molecule* single_frag;
+	Fragment* frag1 = (Fragment*)atm1->getParent();
+	Fragment* frag2 = (Fragment*)atm2->getParent();
+	Fragment* single_frag;
 	
 	Atom* con1=atm1;
 	Atom* con2=atm2;
@@ -359,7 +359,7 @@ void handleSimpleConnections( Atom* atm1, Atom* atm2,
 	vector< Atom* > site; String key;
 	
 	int pos = getSite(con1, site, con2, key);
-	Molecule* templ = new Molecule(*connectLib[key]);
+	AtomContainer* templ = new AtomContainer(*connectLib[key]);
 	
 	con2->setPosition( templ->getAtom(pos)->getPosition() );
 	templ->remove(*templ->getAtom(pos));
@@ -374,24 +374,102 @@ void handleSimpleConnections( Atom* atm1, Atom* atm2,
 }
 
 
-///  connectFragments, thereby merge connected fragments
-///----------------------------------------------------------------------------
-void connectFragments(Molecule* mol,
-											list< pair<Atom*, Atom*> >& connections,
-											boost::unordered_map <String, Molecule* >& connectLib,
+
+/**  
+ * connectFragments connects the two given fragments (by their child atoms)
+ * in such a way, that molecule1 (given by 'atm1') retains its position,
+ * whereas molecule 2 is transformed to fit the connection.
+ */
+void connectFragments(Atom* atm1, Atom* atm2,
+											boost::unordered_map <String, Fragment* >& connectLib,
+											boost::unordered_map <String, float >& bondLib)
+{
+	Fragment* frag1 = (Fragment*)atm1->getParent();
+	Fragment* frag2 = (Fragment*)atm2->getParent();
+	
+//	cout<<"Connecting Atoms "<<con1<< " and "<< con2<<endl;
+//	cout<<"Connecting Fragments "<<frag1<< " and "<< frag2<<endl;
+	
+	///0) Check for trivial cases of one being a single atom or both being single atoms
+	if(frag1->countAtoms() == 1 || frag2->countAtoms() == 1)
+	{
+		// TODO: remove merging
+		handleSimpleConnections(atm1, atm2, bondLib, connectLib);
+	}
+	
+//	cout<<"searching sites..."<<endl<<endl;
+	///1) find connection sites from the two atom pointers:
+	vector< Atom* > site1, site2;
+	String key1, key2;
+	int pos1 = getSite(atm1, site1, atm2, key1);
+	int pos2 = getSite(atm2, site2, atm1, key2);
+	
+//	cout<<"site key1: "<<key1<<endl;
+//	cout<<"site key2: "<<key2<<endl<<endl;
+//	cout<<"......done!"<<endl<<endl;
+	
+//	cout<<"searching templates..."<<endl;
+	///2) find the corresponding templates
+	// create working_copies to keep the originals save!
+	AtomContainer* templ1 = new AtomContainer(*connectLib[key1]);
+	AtomContainer* templ2 = new AtomContainer(*connectLib[key2]);
+	
+//	cout<< "found templates: "<< connectLib[key1] <<" "<<templ1->countAtoms() <<" - "<<connectLib[key2]<<" "<<templ2->countAtoms()<<endl;
+//	cout<<"......done!"<<endl<<endl;
+	
+//	cout<<"creating connected template..."<<endl;
+	///3) connect the two templates to one new template
+	mergeTemplates(templ1, pos1, templ2, pos2, bondLib);
+//	cout<<"......done!"<<endl<<endl;
+	
+//	cout<<"calculating transformations for fragments to the connected template..."<<endl;
+	///4) rotate both sites to match the template
+	Matrix4x4 trans1 = align(site1, templ1);
+	Matrix4x4 trans2 = align(site2, templ2);
+//	cout<<"......done!"<<endl<<endl;
+	
+//	cout<<"applying the transformations to both fragments..."<<endl;
+	TransformationProcessor transformer;
+	transformer.setTransformation(trans1);
+	frag1->apply(transformer);
+	
+	transformer.setTransformation(trans2);
+	frag2->apply(transformer);
+//	cout<<"......done!"<<endl<<endl;
+	
+	
+//	cout<<"writing correct molecule type..."<<endl;
+	///5) finishing molecule connection on data-type level:
+	// form new bond:
+	Bond* bnd = new Bond;
+	bnd->setOrder(1);
+	atm1->createBond( *bnd,*(atm2) );
+	
+	///6) clean up:
+	delete templ1;
+	delete templ2;
+}
+
+
+/**  
+ * connectAllFragments transforms all fragments reachable from the 'connections'
+ * list in such a way that they are correctly connected
+ */
+void connectAllFragments(list< pair<Atom*, Atom*> >& connections,
+											boost::unordered_map <String, Fragment* >& connectLib,
 											boost::unordered_map <String, float >& bondLib)
 {
 	list< pair<Atom*, Atom*> >::iterator con_it = connections.begin();
 	
-	Atom* anchor_atom = 0;
+//	Atom* anchor_atom = 0;
 	for(; con_it != connections.end(); con_it++)
 	{
 		Atom* con1 = (*con_it).first;
 		Atom* con2 = (*con_it).second;
-		anchor_atom = con1;
+//		anchor_atom = con1;
 		
-		Molecule* frag1 = (Molecule*)con1->getParent();
-		Molecule* frag2 = (Molecule*)con2->getParent();
+		Fragment* frag1 = (Fragment*)con1->getParent();
+		Fragment* frag2 = (Fragment*)con2->getParent();
 		
 //		cout<<"Connecting Atoms "<<con1<< " and "<< con2<<endl;
 //		cout<<"Connecting Fragments "<<frag1<< " and "<< frag2<<endl;
@@ -416,8 +494,8 @@ void connectFragments(Molecule* mol,
 //		cout<<"searching templates..."<<endl;
 		///2) find the corresponding templates
 		// create working_copies to keep the originals save!
-		Molecule* templ1 = new Molecule(*connectLib[key1]);
-		Molecule* templ2 = new Molecule(*connectLib[key2]);
+		AtomContainer* templ1 = new AtomContainer(*connectLib[key1]);
+		AtomContainer* templ2 = new AtomContainer(*connectLib[key2]);
 	
 //		cout<< "found templates: "<< connectLib[key1] <<" "<<templ1->countAtoms() <<" - "<<connectLib[key2]<<" "<<templ2->countAtoms()<<endl;
 //		cout<<"......done!"<<endl<<endl;
@@ -451,16 +529,13 @@ void connectFragments(Molecule* mol,
 		con1->createBond( *bnd,*(con2) );
 		
 		// transfer atoms to frag1:
-		transferMolecule(frag1, frag2);
+//		transferMolecule(frag1, frag2);
 //		cout<<"......done!"<<endl<<endl;
 		
 		///6) clean up:
 		delete templ1;
 		delete templ2;
 	}
-	
-	// move atoms from the last fragment back to 'mol'
-	transferMolecule(mol, (Molecule*)anchor_atom->getParent() );
 }
 
 

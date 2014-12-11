@@ -78,7 +78,9 @@ private:
 	void readFragmentLib();
 	
 	/*
-	 * ragmentLib reader for fragmentLibs that are in SDF Format
+	 * fragment_lib reader for fragmentLibs that are in SDF Format, converts
+	 * the data to unordered_map <String, TemplateCoord*> for efficient internal
+	 * representation
 	 */
 	void readSDFFragmentLib();
 	

@@ -64,16 +64,17 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 																		list< pair < Atom*, Atom* > >& connections,
 																		vector< Fragment* >& linker_lst, vector<Fragment *> &rigid_lst)
 {
-	// TODO: do the following: 
 	fragmentMolecule(*ob_mol, *mol, rigid_lst, linker_lst, connections);
 	
-	// canonicalize and match rigid fragments:
+	// canonicalize and match rigid fragments
 	canonicalize(rigid_lst);
 	matchRigidFragments(fragment_lib, rigid_lst);
 	
-	
-	/// TODO:!!
 	// build linker fragments from standard torsions
+	buildLinker(linker_lst);
+	
+	// connect the individual fragments
+	connectAllFragments(connections, connect_lib, bond_lib);
 }
 
 
@@ -182,7 +183,7 @@ void StructureAssembler::readSDFFragmentLib()
 	// read in fragmentLib and create hash-map from that:
 	while(tmp_mol)
 	{
-		String key = tmp_mol->getProperty("key").getString(); // get key:
+		String key = tmp_mol->getProperty("key").getString(); // get key
 		
 		Size size = tmp_mol->countAtoms();
 		tmp_frag = new TemplateCoord(size);
