@@ -25,6 +25,8 @@
 #include <vector>
 #include <util.h>
 #include <algorithm>
+#include <limits>
+
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 
@@ -42,36 +44,103 @@ void writeMolVec(vector<Molecule> &input, SDFile* handle)
 	}
 }
 
-/// try all atom pair assignments to get the best rmsd
-/// (do not test the central atom, because it is the translation center and
-///  thus should always be 0 anyways)
-/// ----------------------------------------------------------------------------
-/*
- * Bond Order and element should fit before
- * one even tries to get an rmsd???
- * 
- * 
+/* 
+ * try all atom pair assignments (where atom and bond type match) to get the 
+ * best rmsd. (do not test the central atom, because it is the translation 
+ * center and thus should always have distance 0)
  */
-float getBestRMSD(Molecule* li1, Molecule* li2)
+float getBestRMSD(AtomContainer* mol1, AtomContainer* mol2)
 {
+	Atom* center1 = mol1->getAtom(0);
+	Atom* center2 = mol2->getAtom(0);
+	Bond* bnd1 = 0;
+	Bond* bnd2 = 0;
+	
 	float result = 0;
-	AtomIterator at1 = li1->beginAtom();
-	for (++at1; +at1 ; at1++)
+	AtomIterator at1 = mol1->beginAtom();
+	for (++at1; +at1 ; at1++) // leave out first atom (is center atom)
 	{
-		float smallest = 1000;
+		float smallest = numeric_limits<float>::max();
+		bnd1 = at1->getBond(*center1);
 		
-		AtomIterator at2 = li2->beginAtom();
-		for (++at2; +at2; at2++)
+		AtomIterator at2 = mol2->beginAtom();
+		for (++at2; +at2; at2++) // leave out first atom (is center atom)
 		{
-			float dist = at1->getDistance(*at2);
-			if ( dist < smallest)
-				smallest = dist;
+			bnd2 = at2->getBond(*center2);
+			if( (bnd1->getOrder() == bnd2->getOrder() ) 
+					&& (at1->getElement() == at2->getElement() ) )
+			{
+				float dist = at1->getDistance(*at2);
+				if ( dist < smallest)
+					smallest = dist;
+			}
 		}
 		result += smallest;
 	}
-	result /= li1->countAtoms();
+	result /= mol1->countAtoms();
 	return result;
 }
+
+void swapAtoms(Atom* a, Atom* b)
+{
+	Atom* tmp = a;
+	a = b;
+	b = tmp;
+}
+
+void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec, int i, float rmsd, float* global_rmsd)
+{
+	if( i == atm_vec.size() )
+	{
+		if( (*global_rmsd) > rmsd)
+		{
+			*global_rmsd = rmsd;
+		}
+		return;
+	}
+	else
+	{
+		Bond* bnd1 = ati->getBond(*center1);
+		Bond* bnd2;
+		for(int j = i; j < atm_vec.size(); j++)
+		{
+			bnd2 = atm_vec[j]->getBond(*atm_vec[0]);
+			if( (bnd1->getOrder() == bnd2->getOrder() ) 
+					&& (ati->getElement() == atm_vec[j]->getElement() ) )
+			{
+			//TODO: square dist would also be okay... manually implement getDist
+				float plus_rmsd = ati->getDistance( *atm_vec[j] );
+				swapAtoms(atm_vec[i], atm_vec[j]);
+				recurPermutations(center1, ++ati, atm_vec, ++i, (rmsd + plus_rmsd), global_rmsd);
+				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap
+			}
+		} // endl loop
+	}
+}
+
+/* 
+ * Get the minimal RMSD between two molecules by testing all meaningful
+ * mappings of mol1 to mol2. Atom element and bond type need to match and 
+ * the mapping is an unambigious projection. 
+ * 
+ * The central atom is not tested, because it is the translation 
+ * center and thus should always have distance 0
+ */
+float getMinRMSD(AtomContainer mol1, AtomContainer mol2)
+{
+	// create a vector to allow easy swapping of atoms
+	vector<Atom*> atm_vec;
+	for(AtomIterator ati = mol2.beginAtom(); +ati; ++ati)
+		atm_vec.push_back( &*ati );
+	
+	float g_rmsd = numeric_limits<float>::max();
+	AtomIterator ati = mol1.beginAtom(); ++ati;  // start with second atom (first is central atom)
+	recurPermutations(mol1.getAtom(0), ati, atm_vec, 1, 0, &g_rmsd);
+	
+	return g_rmsd;
+}
+
+
 
 /// Helper to get a single key component
 String getBondName(Atom& atm)
@@ -118,15 +187,15 @@ bool compatible(Atom* at1,Atom* at2)
 }
 
 /// Structurally align a star-graph molecule (one central atom with any 
-/// number of direct neighbors, but no neighbors of dist 2).
+/// number of direct neighbors, but without neighbors of dist 2).
 /// 
 /// Currently we are only interested in the optimal RMSD but one could also
-/// change the method to yield the optimal transformation matrix. The problem
-/// here is, that for such molecules a unique ordering for the atoms can not
-/// always be achived (e.g.: center atoms with 4 identical neighbors and bond 
-/// types)
+/// change the method to yield the optimal transformation matrix. 
 /// 
-/// ----------------------------------------------------------------------------
+/// The problem here is, that for such molecules a unique ordering for the 
+/// atoms can not always be achived (e.g.: center atoms with 4 identical 
+/// neighbors and bond types) 
+/// 
 /// My current primitive solution is:
 //1.) Catch simple cases of: 1 central atom and 1 neighbor, or 2 neighbors
 //    (here we directly know the optimal transformation)
