@@ -48,10 +48,11 @@ bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 }
 
 
-/// ------- get connection site
-/// 'atm' the atom spanning the site and 'partner' the atom
-/// on the other side of the bond that is to be formed.
-/// 
+/**
+ * get connection site
+ * 'atm' the atom spanning the site and 'partner' the atom
+ * on the other side of the bond that is to be formed.
+ */
 int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
 {
 	key = atm->getElement().getSymbol();
@@ -320,57 +321,54 @@ void handleSimpleConnections( Atom* atm1, Atom* atm2,
 {
 	Fragment* frag1 = (Fragment*)atm1->getParent();
 	Fragment* frag2 = (Fragment*)atm2->getParent();
-	Fragment* single_frag;
 	
-	Atom* con1=atm1;
-	Atom* con2=atm2;
+	// create a new bond between the two atoms:
 	Bond* bnd = new Bond();
 	bnd->setOrder(1);
+	atm1->createBond(*bnd, *atm2);
 	
-	String bond_key = atm1->getElement().getSymbol();
-	bond_key += atm2->getElement().getSymbol();
+	vector< Atom* > site; String site_key; int pos = -1; AtomContainer* templ;
 	
-	// both fragments have just one atom
+	// both fragments have just one atom:
+	// keep atom1 and move atom2 in just one direction about the std bond length
 	if( frag1->countAtoms() + frag2->countAtoms() == 2)
 	{
-		atm1->setPosition(Vector3(0,0,0));
-		atm2->setPosition(Vector3(bondLib[bond_key],0,0));
+		String bond_key = atm1->getElement().getSymbol();
+		bond_key += atm2->getElement().getSymbol();
+		
+		atm2->setPosition( atm1->getPosition() );
+		atm2->getPosition().x += bondLib[bond_key];
 
-		frag1->insert(*atm2);
 		return; // return early
 	}
-	// frag 1 is single
-	else if(frag1->countAtoms() == 1)
+	// frag 2 is a single atom
+	else if(frag2->countAtoms() == 1)
 	{
-		// insert the single atom1 into frag2
-		con1 = atm2;
-		con2 = atm1;
-		single_frag = frag2;
+		pos = getSite(atm1, site, atm2, site_key);
+		templ = new AtomContainer(*connectLib[site_key]);
+		
+		atm2->setPosition( templ->getAtom(pos)->getPosition() );
+		templ->remove( *templ->getAtom(pos) );
+		
+		// rotate the single_frag so that it aligns with the template
+		Matrix4x4 trans = align(site, templ);
+		TransformationProcessor transformer(trans);
+		frag1->apply(transformer);
 	}
-	// frag 2 is single
+	// frag 1 is a single atom (should seldomly occur)
 	else
 	{
-		// insert the single atom2 into frag1
-		con1 = atm1;
-		con2 = atm2;
-		single_frag = frag1;
+		pos = getSite(atm2, site, atm1, site_key);
+		templ = new AtomContainer(*connectLib[site_key]);
+		
+		atm1->setPosition( templ->getAtom(pos)->getPosition() );
+		templ->remove( *templ->getAtom(pos) );
+
+		// rotate the single_frag so that it aligns with the template
+		Matrix4x4 trans = align(site, templ);
+		TransformationProcessor transformer(trans);
+		frag2->apply(transformer);
 	}
-	
-	vector< Atom* > site; String key;
-	
-	int pos = getSite(con1, site, con2, key);
-	AtomContainer* templ = new AtomContainer(*connectLib[key]);
-	
-	con2->setPosition( templ->getAtom(pos)->getPosition() );
-	templ->remove(*templ->getAtom(pos));
-	
-	// rotate the single_frag so that it aligns with the template:
-	Matrix4x4 trans = align(site, templ);
-	TransformationProcessor transformer(trans);
-	single_frag->apply(transformer);
-	
-	single_frag->insert(*con2);
-	con1->createBond(*bnd, *con2);
 }
 
 
