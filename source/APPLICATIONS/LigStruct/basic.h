@@ -35,6 +35,7 @@
 #include <openbabel/graphsym.h>
 
 #include <vector>
+#include <limits>
 
 #include <boost/unordered_map.hpp>
 #include <boost/pending/disjoint_sets.hpp>

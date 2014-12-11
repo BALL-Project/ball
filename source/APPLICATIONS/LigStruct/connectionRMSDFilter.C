@@ -44,43 +44,6 @@ void writeMolVec(vector<Molecule> &input, SDFile* handle)
 	}
 }
 
-/* 
- * try all atom pair assignments (where atom and bond type match) to get the 
- * best rmsd. (do not test the central atom, because it is the translation 
- * center and thus should always have distance 0)
- */
-float getBestRMSD(AtomContainer* mol1, AtomContainer* mol2)
-{
-	Atom* center1 = mol1->getAtom(0);
-	Atom* center2 = mol2->getAtom(0);
-	Bond* bnd1 = 0;
-	Bond* bnd2 = 0;
-	
-	float result = 0;
-	AtomIterator at1 = mol1->beginAtom();
-	for (++at1; +at1 ; at1++) // leave out first atom (is center atom)
-	{
-		float smallest = numeric_limits<float>::max();
-		bnd1 = at1->getBond(*center1);
-		
-		AtomIterator at2 = mol2->beginAtom();
-		for (++at2; +at2; at2++) // leave out first atom (is center atom)
-		{
-			bnd2 = at2->getBond(*center2);
-			if( (bnd1->getOrder() == bnd2->getOrder() ) 
-					&& (at1->getElement() == at2->getElement() ) )
-			{
-				float dist = at1->getDistance(*at2);
-				if ( dist < smallest)
-					smallest = dist;
-			}
-		}
-		result += smallest;
-	}
-	result /= mol1->countAtoms();
-	return result;
-}
-
 
 /*
  * Swap two Atom-Pointer

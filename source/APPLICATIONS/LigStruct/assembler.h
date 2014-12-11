@@ -9,14 +9,19 @@ using namespace std;
 
 ///####################### 3 D    A S S E M B L Y ##############################
 	
-
+/**
+ *
+ * @brief buildLinker a flexible linker fragment
+ * @param linker_lst
+ */
 void buildLinker(vector< Fragment* >& linker_lst)
 {
 	
 }
 
-/// ------ check if for every atom in list1 a matching atom in list2 
-/// ------ can be found
+/* 
+ * ------ check if for every atom in list1 a matching atom in list2 can be found
+ */
 bool allMatch(AtomContainer* li1, AtomContainer* li2)
 {
 	AtomIterator at1 = li1->beginAtom();
@@ -41,14 +46,16 @@ bool allMatch(AtomContainer* li1, AtomContainer* li2)
 }
 
 
-// compare element+bondorder annotations:
+/*
+ * compare element+bondorder annotations:
+ */
 bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 {
 	return a.first < b.first;
 }
 
 
-/**
+/*
  * get connection site
  * 'atm' the atom spanning the site and 'partner' the atom
  * on the other side of the bond that is to be formed.
@@ -106,8 +113,10 @@ int getSite(Atom* atm, vector< Atom* >& site, Atom* partner, String& key)
 }
 
 
-/// get transformation vector to move atom 2 so that it has the correct distance
-/// to atom 1
+/* 
+ * get transformation vector to move atom 2 so that it has the correct distance
+ * to atom 1
+ */
 Vector3 getDiffVec(Atom* atm1, Atom* atm2, boost::unordered_map <String, float > std_bonds)
 {
 	String key = atm1->getElement().getSymbol();
@@ -122,11 +131,14 @@ Vector3 getDiffVec(Atom* atm1, Atom* atm2, boost::unordered_map <String, float >
 }
 
 
-/// ------- merge two connection templates to a final template
-/// the final template will only contain 6 atoms, 3 for each end
-/// starting at position 0 and 3 with the molecules that are to be
-/// connected, and then the ordered next two neighbors
-void mergeTemplates(AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2, boost::unordered_map<String, float> std_bonds)
+/*
+ * ------- merge two connection templates to a final template
+ * the final template will only contain 6 atoms, 3 for each end
+ * starting at position 0 and 3 with the molecules that are to be
+ * connected, and then the ordered next two neighbors
+ */
+void mergeTemplates(AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2,
+										boost::unordered_map<String, float> std_bonds)
 {
 	Atom* aTarget = mol1->getAtom(pos1);
 	Atom* bTarget = mol2->getAtom(pos2);
@@ -163,17 +175,18 @@ String getBondName(Atom* atm, Atom* partner)
 	return name;
 }
 
-/// TODO: improve! use the already better version of 'align' from connectionRMSDFilter
-/// (Structurally) align a connection site to a template and return the 
-/// transformation matrix
-/// 
-/// What it does: finds a transformation from 'site' to 'templ', that 
-/// fits all atoms in both sets. For that a 3 point match searched that fulfills
-/// the condition
-/// 
-/// NOTE: 'all atoms fit' currently means only that positions match, order 
-///       and element are neglected for now, but this seems to be still a good
-///       approximation.
+/** TODO: improve! use the already better version of 'align' from connectionRMSDFilter
+ * (Structurally) align a connection site to a template and return the 
+ * transformation matrix
+ * 
+ * What it does: finds a transformation from 'site' to 'templ', that 
+ * fits all atoms in both sets. For that a 3 point match searched that fulfills
+ * the condition
+ * 
+ * NOTE: 'all atoms fit' currently means only that positions match, order 
+ *       and element are neglected for now, but this seems to be still a good
+ *       approximation.
+ */
 Matrix4x4 align(vector< Atom* >& site, AtomContainer* templ)
 {
 	Matrix4x4 result;
@@ -186,13 +199,12 @@ Matrix4x4 align(vector< Atom* >& site, AtomContainer* templ)
 	/// simple solution for only one neighbor:
 	if(site.size() == 2)
 	{
-		// got no time to take care of the possible sign errors thus simply use 3-point-matching:
 		frag2 = site[1]->getPosition();
 		tem2  = templ->getAtom(1)->getPosition();
 		return StructureMapper::matchPoints(frag1, frag2, Vector3(), tem1, tem2, Vector3());
 	}
 	
-	/// see if some atoms differ in element and order:
+	/// see if some atoms differ in element and order
 	// find the unique elements, via their 'bondName'
 	boost::unordered_map<String, int> el_map;
 	for (int i = 1; i < site.size(); i++)
@@ -314,7 +326,9 @@ Matrix4x4 align(vector< Atom* >& site, AtomContainer* templ)
 }
 
 
-/// Handle connections where at least one fragment contains only one atom
+/*
+ * Handle connections where at least one fragment contains only one atom
+ */
 void handleSimpleConnections( Atom* atm1, Atom* atm2,
 															boost::unordered_map <String, float >& bondLib,
 															boost::unordered_map <String, Fragment* >& connectLib)
@@ -391,12 +405,12 @@ void connectFragments(Atom* atm1, Atom* atm2,
 	///0) Check for trivial cases of one being a single atom or both being single atoms
 	if(frag1->countAtoms() == 1 || frag2->countAtoms() == 1)
 	{
-		// TODO: remove merging
 		handleSimpleConnections(atm1, atm2, bondLib, connectLib);
 	}
 	
 //	cout<<"searching sites..."<<endl<<endl;
-	///1) find connection sites from the two atom pointers:
+	///1) find connection sites from the two atom pointers
+	///   (pos1/2 tells us where in a connection template the connected atom lies)
 	vector< Atom* > site1, site2;
 	String key1, key2;
 	int pos1 = getSite(atm1, site1, atm2, key1);
@@ -459,7 +473,6 @@ void connectAllFragments(list< pair<Atom*, Atom*> >& connections,
 {
 	list< pair<Atom*, Atom*> >::iterator con_it = connections.begin();
 	
-//	Atom* anchor_atom = 0;
 	for(; con_it != connections.end(); con_it++)
 	{
 		Atom* con1 = (*con_it).first;
@@ -525,9 +538,6 @@ void connectAllFragments(list< pair<Atom*, Atom*> >& connections,
 		Bond* bnd = new Bond;
 		bnd->setOrder(1);
 		con1->createBond( *bnd,*(con2) );
-		
-		// transfer atoms to frag1:
-//		transferMolecule(frag1, frag2);
 //		cout<<"......done!"<<endl<<endl;
 		
 		///6) clean up:
