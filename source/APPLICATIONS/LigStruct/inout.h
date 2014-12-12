@@ -1,8 +1,13 @@
 #ifndef INOUT_H
 #define INOUT_H
 
+#ifndef BASIC_H
 #include "basic.h"
+#endif
+
+#ifndef STRCUTUREASSEMBLER_H
 #include "structureAssembler.h"
+#endif
 
 using namespace OpenBabel;
 using namespace BALL;

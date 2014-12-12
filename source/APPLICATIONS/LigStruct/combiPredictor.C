@@ -2,9 +2,14 @@
 // vi: set ts=2:
 //
 
-#include "basic.h"
+//#include "basic.h"
+#ifndef INOUT_H
 #include "inout.h"
+#endif
+
+#ifndef STRCUTUREASSEMBLER_H
 #include "structureAssembler.h"
+#endif
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -47,7 +52,6 @@ int main(int argc, char* argv[])
 		assem.setLibsFromConfig(pth);
 	}
 
-	
 	
 /// F R A G M E N T I N G
 

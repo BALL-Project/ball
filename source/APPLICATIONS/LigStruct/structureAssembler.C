@@ -1,4 +1,10 @@
+#ifndef STRCUTUREASSEMBLER_H
 #include "structureAssembler.h"
+#endif
+
+#ifndef MATCHER_H
+#include "matcher.h"
+#endif
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -71,10 +77,10 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 	matchRigidFragments(fragment_lib, rigid_lst);
 	
 	// build linker fragments from standard torsions
-	buildLinker(linker_lst);
+	AssemblerFunctions::buildLinker(linker_lst);
 	
 	// connect the individual fragments
-	connectAllFragments(connections, connect_lib, bond_lib);
+	AssemblerFunctions::connectFragments(new Atom, new Atom, this->connect_lib, this->bond_lib);
 }
 
 

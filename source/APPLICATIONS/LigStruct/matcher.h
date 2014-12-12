@@ -1,9 +1,24 @@
 #ifndef MATCHER_H
 #define MATCHER_H
 
+#ifndef BASIC_H
 #include "basic.h"
+#endif
 
 ///####################### M A T C H I N G ##############################
+
+// cut bonds that are shared with atoms from other fragments:
+void clearExternalBonds(AtomContainer* mol)
+{
+	Atom::BondIterator bit;
+	AtomIterator ait;
+
+	BALL_FOREACH_INTERBOND(*mol, ait, bit)
+	{
+		bit->destroy();
+	}
+}
+
 /** 
  * Generate a canonical order of atoms to be able to transfer the coordinates
  * 
@@ -20,7 +35,12 @@ void canonicalize(std::vector <Fragment*>& fragments)
 		num_atoms = (*it)->countAtoms();
 //		cout<<(*it)->getName()<< " has #atoms: "<<(*it)->countAtoms()<<endl;
 //		cout<<"DEBUG: "<<endl;
+		
+		/// TODO: remove and find alternative
 		clearExternalBonds(*it);
+		
+		
+		
 //		cout<<" cut xt-Bonds <"<<endl;
 		OBMol* temp = MolecularSimilarity::createOBMol(**it, true);
 //		cout<<" made OBMol < "<<endl;

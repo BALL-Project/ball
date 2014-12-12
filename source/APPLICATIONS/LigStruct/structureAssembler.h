@@ -1,18 +1,25 @@
 #ifndef STRCUTUREASSEMBLER_H
 #define STRCUTUREASSEMBLER_H
 
+#ifndef BASIC_H
 #include "basic.h"
+#endif
+
+#ifndef FRAGMENTER_H
 #include "fragmenter.h"
+#endif
+
+#ifdef MATCHER_H
 #include "matcher.h"
+#endif
+
+#ifndef ASSEMBLER_H
 #include "assembler.h"
+#endif
 
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
-
-typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// String == UCK key
-typedef boost::unordered_map <String, float >         BondLengthMap;
-typedef boost::unordered_map <String, Fragment* >     ConnectionMap;
 
 class StructureAssembler
 {

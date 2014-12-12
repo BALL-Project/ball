@@ -126,72 +126,57 @@ struct GroupFragment
 };
 
 /// Typedefs:
+
+// Standard Data:
+typedef vector<Atom*> AtmVec;
+
 typedef vector<GroupFragment*> GroupFragmentList;
 typedef boost::unordered_map< int, GroupFragmentList* > CombiLib;
 
+// Lib Data:
+typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// String == UCK key
+typedef boost::unordered_map <String, float >         BondLengthMap;
+typedef boost::unordered_map <String, Fragment* >     ConnectionMap;
 
-/// ################# H E L P E R    F U N C T I O N S #################
+///// ################# H E L P E R    F U N C T I O N S #################
 
-// TODO: maybe change this
-/// Delete empty fragments and check that all were empty
-void checkAndDeleteFragments(vector <Molecule*> frags)
-{
-	int empty = 0;
-	for (vector <Molecule*>::iterator i = frags.begin(); i != frags.end(); i++)
-	{
-		if( (*i)->countAtoms() == 0)
-			delete (*i);
-		else
-			empty++;
-	}
-	if( empty != 0 )
-		Log << "WARNING: There are still " << empty <<" unconnected fragments!"<<endl;
-}
-
-
-
-// get the position of an atom in the molcule list:
-const int getAtomPosition(Atom* atm, Molecule* mol)
-{
-	AtomIterator ati = mol->beginAtom();
-	for (int i = 0; +ati; ati++, i++)
-	{
-		if(&*ati == atm)
-			return i;
-	}
-	return -1;
-}
-
-
-/// empty 'fromMol' and append the atoms to 'toMol'
-void transferMolecule( AtomContainer* toMol, AtomContainer* fromMol)
-{
-	int num_atm = fromMol->countAtoms();
-	for(int i = 0; i < num_atm; i++)
-		toMol->insert( *fromMol->beginAtom() ); // insert auto removes from its old parent
-}
+//// TODO: maybe change this
+///// Delete empty fragments and check that all were empty
+//void checkAndDeleteFragments(vector <Molecule*> frags)
+//{
+//	int empty = 0;
+//	for (vector <Molecule*>::iterator i = frags.begin(); i != frags.end(); i++)
+//	{
+//		if( (*i)->countAtoms() == 0)
+//			delete (*i);
+//		else
+//			empty++;
+//	}
+//	if( empty != 0 )
+//		Log << "WARNING: There are still " << empty <<" unconnected fragments!"<<endl;
+//}
 
 
 
+//// get the position of an atom in the molcule list:
+//const int getAtomPosition(Atom* atm, Molecule* mol)
+//{
+//	AtomIterator ati = mol->beginAtom();
+//	for (int i = 0; +ati; ati++, i++)
+//	{
+//		if(&*ati == atm)
+//			return i;
+//	}
+//	return -1;
+//}
 
-// cut bonds that are shared with atoms from other fragments:
-void clearExternalBonds(AtomContainer* mol)
-{
-	Atom::BondIterator bit;
-	AtomIterator ait;
 
-	BALL_FOREACH_INTERBOND(*mol, ait, bit)
-	{
-		bit->destroy();
-	}
-}
+///// empty 'fromMol' and append the atoms to 'toMol'
+//void transferMolecule( AtomContainer* toMol, AtomContainer* fromMol)
+//{
+//	int num_atm = fromMol->countAtoms();
+//	for(int i = 0; i < num_atm; i++)
+//		toMol->insert( *fromMol->beginAtom() ); // insert auto removes from its old parent
+//}
 
 #endif // BASIC_H
-
-
-
-
-
-
-
-

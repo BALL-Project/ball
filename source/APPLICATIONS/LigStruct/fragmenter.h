@@ -1,7 +1,9 @@
 #ifndef FRAGMENTER_H
 #define FRAGMENTER_H
 
+#ifndef BASIC_H
 #include "basic.h"
+#endif
 
 using namespace OpenBabel;
 using namespace BALL;
