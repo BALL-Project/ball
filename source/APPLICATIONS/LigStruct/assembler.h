@@ -9,41 +9,366 @@ using namespace std;
 
 ///####################### 3 D    A S S E M B L Y ##############################
 	
-/**
- *
- * @brief buildLinker a flexible linker fragment
- * @param linker_lst
- */
-void buildLinker(vector< Fragment* >& linker_lst)
+
+bool compatible(Atom* at1,Atom* at2)
 {
-	
+	return ( 
+					 ( at1->getElement()            == at2->getElement() ) && 
+					 ( at1->beginBond()->getOrder() == at2->beginBond()->getOrder()) 
+				 );
 }
 
-/* 
- * ------ check if for every atom in list1 a matching atom in list2 can be found
+/*
+ * Swap two Atom-Pointer by simply using references to pointers.
+ * 
+ * Dereferencing Atom-pointer and re-assigning will delete the atom bonds, 
+ * only static content is copied AND: that operation would be far more 
+ * expensive, because all contained fields would be copied individually)
  */
-bool allMatch(AtomContainer* li1, AtomContainer* li2)
+void swapAtoms(Atom*& a, Atom*& b)
 {
-	AtomIterator at1 = li1->beginAtom();
-	for (; +at1 ; at1++)
-	{
-		bool b = false;
-		
-		AtomIterator at2 = li2->beginAtom();
+	Atom* tmp = a;
+	a = b;
+	b = tmp;
+}
 
-		for (; +at2; at2++)
+/*
+ * Sets the 'global_sq_dist' the the lowest value found. All permutations are
+ * tested and 'global_sq_dist' is only updated if a permutation yields a lower
+ * sum of square distances.
+ * 
+ * Thus 'global_sq_dist' needs to initially point to a float that is set to
+ * numeric_limits<float>::max() in the surronding recursion wrapper.
+ */
+void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec,
+											 int i, float loc_sq_dist, float* global_sq_dist)
+{
+	// end recursion case: 
+	// everything was permuted so check how good the square dist was and perhaps
+	// update the global sq_dist
+	if( i == atm_vec.size() )
+	{
+		if( (*global_sq_dist) > loc_sq_dist)
 		{
-			if (at1->getDistance(*at2) < 0.8){ // epsilon set to 0.8 A
-				b = true;
+			*global_sq_dist = loc_sq_dist;
+		}
+		return;
+	}
+	// recursion case:
+	// test all remaining possible pertubations/mappings of atoms from mol2 
+	// (the vectorentry) to the next atom of mol1 (the atom iterator)
+	else
+	{
+		float sq_dist_update;// the square distance for the current atom pair
+		for(int j = i; j < atm_vec.size(); j++)
+		{
+			// test if element and bondtype fit for this assignment
+			// (this is rather for correctness than for speed)
+			if(  compatible( &*ati, atm_vec[j] )  )
+			{
+				sq_dist_update = ati->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
 				
+				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
+
+				AtomIterator ati2 = ati; // create new atom iterator for next recursion
+				recurPermutations( center1, ++ati2, atm_vec, (i+1), (loc_sq_dist + sq_dist_update), global_sq_dist);
+				
+				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
+			}
+		} // end for-loop
+	}
+}
+
+/**
+ * ONLY for star like molecules!!!
+ *
+ * Get the minimal RMSD between two molecules by testing all meaningful
+ * mappings of mol1 to mol2. Atom element and bond type need to match and 
+ * the mapping is an unambigious projection (each atom of mol1 may only be once 
+ * assigned to an atom of mol2 per mapping and the other way around).
+ * 
+ * The central atom is not tested, because it is the translation 
+ * center and thus should always have distance 0
+ */
+float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
+{
+	
+	// create a vector to allow easy swapping of atoms
+	vector<Atom*> atm_vec;
+	for(AtomIterator ati = mol2->beginAtom(); +ati; ++ati)
+		atm_vec.push_back( &*ati );
+	
+	// the 'sum of all square distances' for the best (minimal) permutation:
+	float min_sq_dist = numeric_limits<float>::max(); 
+	
+	AtomIterator ati = mol1->beginAtom(); ++ati;  // start with second atom (first is central atom)
+	recurPermutations( mol1->getAtom(0), ati, atm_vec, 1, 0, &min_sq_dist);
+	
+	min_sq_dist = sqrt( min_sq_dist / (float)(atm_vec.size() - 1) );
+	return min_sq_dist;
+}
+
+
+
+
+/// Find the atom in 'mol', that has same element and bond order as 'atm'
+/// ----------------------------------------------------------------------------
+Atom* getMatchingAtom(Molecule* mol, Atom* atm)
+{
+	String elem = atm->getElement().getSymbol();
+	short bo = atm->beginBond()->getOrder(); //should have only one bond
+
+	AtomIterator ati = mol->beginAtom();
+	ati++; // first atom is the center atom, which we never want
+	for(; +ati; ++ati)
+	{
+		if(ati->getElement().getSymbol() == elem && ati->beginBond()->getOrder() == bo)
+			return &*ati;
+	}
+	
+//	// DEBUG:
+//	ati = mol->beginAtom();
+//	cout <<endl<< "I am Searching for: " <<elem<<" BO:"<< bo<<endl;
+//	for( ; +ati; ati++)
+//	{
+//		cout<< ati->getElement().getSymbol()<< " "<< ati->beginBond()->getOrder()<<endl;
+//	}
+//	cout<<"Key: "<<mol->getProperty("key").getString()<<endl;
+//	cout<<"Key: "<<((Molecule*)atm->getParent())->getProperty("key").getString()<<endl;
+//	// DEBUG END
+	
+	cout<<"ERROR: could not find a partner Atom"<<endl;
+	exit(EXIT_FAILURE);
+}
+
+
+
+
+/** 
+ * Structurally align a star-graph molecule: one central atom with any number 
+ * of direct neighbors, but without second degree neighbors (of dist 2).
+ * 
+ * The problem here is, that it is not in all cases possible to calculate for 
+ * star molecules an unique ordering on the atoms. 
+ * (e.g.: center atoms with 4 identical neighbors and bond types) 
+ * 
+ * In these problematic cases we simply have to try all 3-point-mappings and
+ * check the resulting RMSD (after transformation). In the end we use the
+ * transformation giving the lowest RMSD.
+ */
+/*
+ * My current solution is:
+ *   1.) Catch trivial cases of: 1 central atom and 1 neighbor, or 2 neighbors
+ *       (here we directly know the optimal transformation)
+ *   
+ *   2.) Find unique atoms. If two could be found, solve the second trivial case
+ *   
+ *   3.) Selection of first neighbor:
+ *       Check if a single unique atom exists, if so use it otherwise select 
+ *       the first neighbor atom (second atom entry) 
+ *   
+ *       Find in the other molecule the first atom with identical Element+BO
+ *   
+ *   4.) Selection of second neighbor:
+ *       Check if another unique atom exists among the remaining atoms. If so
+ *       use it (and the respecctive partner in mol2) and you are done. 
+ *   
+ *       Otherwise, select any not selected atom from mol1 and try all possible 
+ *       pairings with the remaining atoms in mol2. Select the pairing that 
+ *       yields the lowest RMSD.
+ */
+float starAlign(Molecule* mol1, Molecule* mol2)
+{
+	Vector3 frag2, frag3, tem2, tem3; //the vectors to calc the transformaion
+	Matrix4x4 trans_matrix;
+	TransformationProcessor transformer;
+	
+	// set the two center atoms (which are always the first atoms):
+	Vector3 frag1 = mol1->getAtom(0)->getPosition();
+	Vector3 tem1  = mol2->getAtom(0)->getPosition();
+	
+	/// 1.) simple solutions for only one or two neighbors
+	int num_atoms = mol1->countAtoms();
+	if(num_atoms < 4)
+	{
+		if(num_atoms == 2) /// WARNING: could not yet test this case!!!
+		{
+			// position 0 has always the center, leaves pos 1 as the only possible partner
+			frag2 = mol1->getAtom(1)->getPosition();
+			tem2  = mol2->getAtom(1)->getPosition();
+			
+			// create dummys to use the 3 point matching
+			frag3 = Vector3();
+			tem3  = Vector3();
+		}
+		else if(num_atoms == 3)
+		{
+			// get correct atom assignment:
+			Atom *temp_atA2, *temp_atA3, *temp_atB2, *temp_atB3;
+			
+			temp_atA2 = mol1->getAtom(1);
+			temp_atB2 = getMatchingAtom(mol2, temp_atA2);
+			
+			temp_atA3 = mol1->getAtom(2);
+			// the respective remaining atom in mol2 is the one we need for 'temp_atB3'
+			temp_atB3 = mol2->getAtom(2);
+			if(temp_atB3 == temp_atB2)
+				temp_atB3 = mol2->getAtom(1);
+			
+			// get positions:
+			frag2 = temp_atA2->getPosition();
+			frag3 = temp_atA3->getPosition();
+			tem2  = temp_atB2->getPosition();
+			tem3  = temp_atB3->getPosition();
+		}
+		// got no time to take care of the possible sign errors thus simply use 3-point-matching:
+		trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
+		transformer.setTransformation(trans_matrix);
+		mol1->apply(transformer);
+		
+		return getMinRMSD( mol1, mol2);
+	}
+	/// 2.) At least 3 neighbors are given, see if unique atoms exist in mol1
+	vector< Atom* > unique_atm;
+	AtomIterator atmi = mol1->beginAtom();
+	for (atmi++; atmi != mol1->endAtom(); atmi++)
+	{
+//		cout<<endl;
+		bool isUnique = true;
+		AtomIterator atmk = mol1->beginAtom();
+		for(atmk++; +atmk; atmk++)
+		{
+//			cout<<atmi->getElement().getSymbol()<<" - "<<atmk->getElement().getSymbol();
+//			cout<<" | "<<atmi->beginBond()->getOrder() <<" - "<<atmk->beginBond()->getOrder()<<endl;
+			if( atmi->getElement() == atmk->getElement() 
+					&& atmi->beginBond()->getOrder() == atmk->beginBond()->getOrder()
+					&& &*atmi != &*atmk)
+			{
+				isUnique = false;
 				break;
 			}
 		}
-		if (!b)
-			return false;
+		if(isUnique)
+		{
+//			cout<<atmi->getElement().getSymbol()<<" is unique"<<endl;
+			unique_atm.push_back(&*atmi);
+		}
 	}
-	return true;
+//	cout<<"num uniques: "<<unique_atm.size()<<endl;
+	///2.) ideal case of at lasttwo unique ones. 
+	///    Here we have all we need and my return early
+	if (unique_atm.size() > 1)
+	{
+		Atom* selectionA1 = mol1->getAtom(0);
+		frag1 = selectionA1->getPosition(); 
+		frag2 = unique_atm[0]->getPosition();
+		frag3 = unique_atm[1]->getPosition();
+		
+		Atom* selectionB1 = mol2->getAtom(0);
+		tem1  = selectionB1->getPosition();
+		tem2 = getMatchingAtom( mol2, unique_atm[0] )->getPosition();
+		tem3 = getMatchingAtom( mol2, unique_atm[1] )->getPosition();
+		
+		// get RMSD:
+		trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
+		transformer.setTransformation(trans_matrix);
+		mol1->apply(transformer);
+		
+		return getMinRMSD(mol1, mol2);
+	}
+
+	///3.) Just one unique atom was found, here we need to test some transformations
+	///    to find the best one. Try all possibilities for the third atom:
+	if (unique_atm.size() == 1) { 
+		// if at least one mol1 atom was unique, it is curcial to use it:
+		Atom* uniqueA = unique_atm[0];
+		Atom* uniqueB = getMatchingAtom( mol2, uniqueA );
+		
+		// get next non unique atom from mol1:
+		Atom* sel=0;
+		AtomIterator ato = mol1->beginAtom();
+		for(ato++; +ato; ato++)
+		{
+			if(&*ato != uniqueA){
+				sel = &*ato;
+				break;
+			}
+		}
+		
+		// test all possible assignments of the selected third atom of mol1
+		// to an atom of mol2
+		float best_rmsd = numeric_limits<float>::max();
+		
+		ato = mol2->beginAtom();
+		for(ato++; +ato; ato++)
+		{
+			float rmsd = numeric_limits<float>::max();
+			if(&*ato != uniqueB)
+			{
+				Atom* selectionA1 = mol1->getAtom(0);Atom* selectionB1 = mol2->getAtom(0);
+				frag1 = selectionA1->getPosition(); tem1  = selectionB1->getPosition();
+				frag2 = uniqueA->getPosition();
+				tem2  = uniqueB->getPosition();
+				frag3 = sel->getPosition();
+				tem3  = ato->getPosition();
+				
+				trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
+				transformer.setTransformation(trans_matrix);
+				mol1->apply(transformer);
+				
+				rmsd = getMinRMSD(mol1, mol2);
+				if (rmsd < best_rmsd)
+					best_rmsd = rmsd;
+			}
+		}
+		return best_rmsd;
+	}
+	///4.) No unique atom was found. Here we have to check every possible
+	///    assignment for the two remaining atoms...
+	// if at least one mol1 atom was unique, it is curcial to use it:
+	float best_rmsd = 100;
+	Atom* selectionA1 = mol1->getAtom(0);
+	Atom* selectionA2 = mol1->getAtom(1);
+	Atom* selectionA3 = mol1->getAtom(2);
+	
+	Atom* selectionB1 = mol2->getAtom(0);
+	Atom* selectionB2 = 0;
+	Atom* selectionB3 = 0;
+	
+	// test all possible assignments to 'selectionA2'
+	AtomIterator ati = mol2->beginAtom();
+	for(ati++; +ati; ati++)
+	{
+		selectionB2 = &*ati;
+		if( compatible(selectionA2, selectionB2) )
+		{
+			// test all possible assignments to 'selectionA3'
+			AtomIterator ato = mol2->beginAtom();
+			for(ato++; +ato; ato++)
+			{
+				selectionB3 = &*ato;
+				if(selectionB2 == selectionB3)
+					continue;
+				
+				float rmsd = 1000;
+				frag1 = selectionA1->getPosition(); tem1  = selectionB1->getPosition();
+				frag2 = selectionA2->getPosition(); tem2  = selectionB2->getPosition();
+				frag3 = selectionA3->getPosition(); tem3  = selectionB3->getPosition();
+					
+				trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
+				transformer.setTransformation(trans_matrix);
+				mol1->apply(transformer);
+				
+				rmsd = getMinRMSD(mol1, mol2);
+				if (rmsd < best_rmsd)
+					best_rmsd = rmsd;
+			}
+		}
+	}
+	return best_rmsd;
 }
+
+
 
 
 /*
@@ -131,6 +456,21 @@ Vector3 getDiffVec(Atom* atm1, Atom* atm2, boost::unordered_map <String, float >
 }
 
 
+
+
+
+/**
+ *
+ * @brief buildLinker a flexible linker fragment
+ * @param linker_lst
+ */
+void buildLinker(vector< Fragment* >& linker_lst)
+{
+	
+}
+
+
+
 /*
  * ------- merge two connection templates to a final template
  * the final template will only contain 6 atoms, 3 for each end
@@ -175,7 +515,7 @@ String getBondName(Atom* atm, Atom* partner)
 	return name;
 }
 
-/** TODO: improve! use the already better version of 'align' from connectionRMSDFilter
+/**
  * (Structurally) align a connection site to a template and return the 
  * transformation matrix
  * 
@@ -183,9 +523,6 @@ String getBondName(Atom* atm, Atom* partner)
  * fits all atoms in both sets. For that a 3 point match searched that fulfills
  * the condition
  * 
- * NOTE: 'all atoms fit' currently means only that positions match, order 
- *       and element are neglected for now, but this seems to be still a good
- *       approximation.
  */
 Matrix4x4 align(vector< Atom* >& site, AtomContainer* templ)
 {
@@ -308,7 +645,7 @@ Matrix4x4 align(vector< Atom* >& site, AtomContainer* templ)
 		TransformationProcessor transformer(result);
 		dummy_frag->apply(transformer);
 		
-		if ( allMatch(dummy_frag, templ) )
+		if ( 0.2 > getMinRMSD(dummy_frag, templ) )
 		{
 			delete dummy_frag;
 			return result;

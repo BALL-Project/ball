@@ -46,12 +46,11 @@ void writeMolVec(vector<Molecule> &input, SDFile* handle)
 
 
 /*
- * Swap two Atom-Pointer
+ * Swap two Atom-Pointer by simply using references to pointers.
  * 
- * C++ speciality: swapping two pointers without assigning the content
- * (which is problematic with BALL::Atom as bonds get lost)
- * So this actually changes the pointers adress by simply using references to
- * pointers
+ * Dereferencing Atom-pointer and re-assigning will delete the atom bonds, 
+ * only static content is copied AND: that operation would be far more 
+ * expensive, because all contained fields would be copied individually)
  */
 void swapAtoms(Atom*& a, Atom*& b)
 {
@@ -60,47 +59,63 @@ void swapAtoms(Atom*& a, Atom*& b)
 	b = tmp;
 }
 
-
+/*
+ * Sets the 'global_sq_dist' the the lowest value found. All permutations are
+ * tested and 'global_sq_dist' is only updated if a permutation yields a lower
+ * sum of square distances.
+ * 
+ * Thus 'global_sq_dist' needs to initially point to a float that is set to
+ * numeric_limits<float>::max() in the surronding recursion wrapper.
+ */
 void recurPermutations(Atom* center1, AtomIterator& ati, vector<Atom*>& atm_vec,
-											 int i, float loc_rmsd, float* global_rmsd)
+											 int i, float loc_sq_dist, float* global_sq_dist)
 {
+	// end recursion case: 
+	// everything was permuted so check how good the square dist was and perhaps
+	// update the global sq_dist
 	if( i == atm_vec.size() )
 	{
-		if( (*global_rmsd) > loc_rmsd)
+		if( (*global_sq_dist) > loc_sq_dist)
 		{
-			*global_rmsd = loc_rmsd;
+			*global_sq_dist = loc_sq_dist;
 		}
 		return;
 	}
+	// recursion case:
+	// test all remaining possible pertubations/mappings of atoms from mol2 
+	// (the vectorentry) to the next atom of mol1 (the atom iterator)
 	else
 	{
 		Bond* bnd1 = ati->getBond(*center1);
 		Bond* bnd2;
+		float sq_dist_update;// the square distance for the current atom pair
 		for(int j = i; j < atm_vec.size(); j++)
 		{
 			bnd2 = atm_vec[j]->getBond(*atm_vec[0]);
-			// this is more for correctness than for speed
+			
+			// test if element and bondtype fit for this assignment
+			// (this is rather for correctness than for speed)
 			if( (bnd1->getOrder() == bnd2->getOrder() ) 
 					&& ( ati->getElement() == atm_vec[j]->getElement() ) )
 			{
-			//TODO: square dist would also be okay... manually implement getDist
-				float plus_rmsd = ati->getDistance( *atm_vec[j] );
+				sq_dist_update = ati->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
 				
-				swapAtoms(atm_vec[i], atm_vec[j]);
+				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
 
-				AtomIterator ati2 = ati;
-				recurPermutations( center1, ++ati2, atm_vec, (i+1), (loc_rmsd + plus_rmsd), global_rmsd);
+				AtomIterator ati2 = ati; // create new atom iterator for next recursion
+				recurPermutations( center1, ++ati2, atm_vec, (i+1), (loc_sq_dist + sq_dist_update), global_sq_dist);
 				
-				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap
+				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
 			}
-		} // endl loop
+		} // end for-loop
 	}
 }
 
-/* 
+/**
  * Get the minimal RMSD between two molecules by testing all meaningful
  * mappings of mol1 to mol2. Atom element and bond type need to match and 
- * the mapping is an unambigious projection. 
+ * the mapping is an unambigious projection (each atom of mol1 may only be once 
+ * assigned to an atom of mol2 per mapping and the other way around).
  * 
  * The central atom is not tested, because it is the translation 
  * center and thus should always have distance 0
@@ -113,11 +128,14 @@ float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 	for(AtomIterator ati = mol2->beginAtom(); +ati; ++ati)
 		atm_vec.push_back( &*ati );
 	
-	float g_rmsd = numeric_limits<float>::max();
-	AtomIterator ati = mol1->beginAtom(); ++ati;  // start with second atom (first is central atom)
-	recurPermutations( mol1->getAtom(0), ati, atm_vec, 1, 0, &g_rmsd);
+	// the 'sum of all square distances' for the best (minimal) permutation:
+	float min_sq_dist = numeric_limits<float>::max(); 
 	
-	return g_rmsd;
+	AtomIterator ati = mol1->beginAtom(); ++ati;  // start with second atom (first is central atom)
+	recurPermutations( mol1->getAtom(0), ati, atm_vec, 1, 0, &min_sq_dist);
+	
+	min_sq_dist = sqrt( min_sq_dist / (float)(atm_vec.size() - 1) );
+	return min_sq_dist;
 }
 
 
@@ -145,16 +163,16 @@ Atom* getMatchingAtom(Molecule* mol, Atom* atm)
 			return &*ati;
 	}
 	
-	// DEBUG:
-	ati = mol->beginAtom();
-	cout <<endl<< "I am Searching for: " <<elem<<" BO:"<< bo<<endl;
-	for( ; +ati; ati++)
-	{
-		cout<< ati->getElement().getSymbol()<< " "<< ati->beginBond()->getOrder()<<endl;
-	}
-	cout<<"Key: "<<mol->getProperty("key").getString()<<endl;
-	cout<<"Key: "<<((Molecule*)atm->getParent())->getProperty("key").getString()<<endl;
-	// DEBUG END
+//	// DEBUG:
+//	ati = mol->beginAtom();
+//	cout <<endl<< "I am Searching for: " <<elem<<" BO:"<< bo<<endl;
+//	for( ; +ati; ati++)
+//	{
+//		cout<< ati->getElement().getSymbol()<< " "<< ati->beginBond()->getOrder()<<endl;
+//	}
+//	cout<<"Key: "<<mol->getProperty("key").getString()<<endl;
+//	cout<<"Key: "<<((Molecule*)atm->getParent())->getProperty("key").getString()<<endl;
+//	// DEBUG END
 	
 	cout<<"ERROR: could not find a partner Atom"<<endl;
 	exit(EXIT_FAILURE);
