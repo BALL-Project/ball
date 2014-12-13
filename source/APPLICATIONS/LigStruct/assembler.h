@@ -27,6 +27,11 @@ public:
 	 * connectFragments connects the two given fragments (by their child atoms)
 	 * in such a way, that molecule1 (given by 'atm1') retains its position,
 	 * whereas molecule 2 is transformed to fit the connection.
+	 * 
+	 * Precondition: 
+	 * atm1 and atm2 need to belong to separate BALL::AtomContainer. Between
+	 * both atoms (and thus between their respective AtomContainer) the bond
+	 * needs to already exist.
 	 */
 	static void connectFragments(Atom* atm1, Atom* atm2,ConnectionMap& connectLib,
 															 BondLengthMap& bondLib);
@@ -43,17 +48,8 @@ public:
 	 * check the resulting RMSD (after transformation). In the end we use the
 	 * transformation giving the lowest RMSD.
 	 */
-	static Matrix4x4 starAlign(AtmVec &mol1, AtomContainer *mol2);
-	
-	/**
-	 * (Structurally) align a connection site to a template and return the 
-	 * transformation matrix
-	 * 
-	 * What it does: finds a transformation from 'site' to 'templ', that 
-	 * fits all atoms in both sets. For that a 3 point match searched that 
-	 * fulfills the condition
-	 */
-	static Matrix4x4 align(AtmVec& site, AtomContainer* templ);
+	static void starAlign(AtmVec& mol1, AtomContainer* mol2, Matrix4x4& trans_matrix);
+	static void starAlign(AtomContainer* mol1, AtmVec& mol2, Matrix4x4& trans_matrix);
 	
 	/**
 	 * ONLY for star like molecules!!!
@@ -89,6 +85,7 @@ private:
 	 */
 	static void getUniqueAtoms(AtomContainer* mol1, AtmVec& unique_atms);
 	static void getUniqueAtoms(AtmVec &mol1, AtmVec& unique_atms);
+	
 	/*
 	 * Check if two atoms of a star-molecule are identical in their element and
 	 * the bond order to the central atom.
@@ -116,11 +113,11 @@ private:
 	static Atom* getMatchingAtom(AtomContainer *mol, Atom* atm);
 
 	/*
- * get connection site
- * 'atm' the central atom spanning the site and 'partner' the atom
- * of the other fragment to whom a bond is to be formed.
- */
-	static int getSite(Atom* atm, AtmVec& site, Atom* partner, String& key);
+	 * From an atom (given by 'atm') determine the site and the key for the site.
+	 * The site contains the given atom at position 0 and all other direct 
+	 * neighbors of 'atm' sorted according to their element and bondorder
+	 */
+	static void getSite(Atom* atm, Atom *partner, AtmVec& site, String& key);
 
 	/* 
 	 * get transformation vector to move atom 2 so that it has the correct 
