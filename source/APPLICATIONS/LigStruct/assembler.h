@@ -48,8 +48,12 @@ public:
 	 * check the resulting RMSD (after transformation). In the end we use the
 	 * transformation giving the lowest RMSD.
 	 */
-	static void starAlign(AtmVec& mol1, AtomContainer* mol2, Matrix4x4& trans_matrix);
-	static void starAlign(AtomContainer* mol1, AtmVec& mol2, Matrix4x4& trans_matrix);
+	static void starAlign(AtmVec& vec1, AtmVec& vec2, Matrix4x4& trans_matrix);
+	
+	/**
+	 * @brief bondAlign aligns two atom
+	 */
+	static void bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2, Matrix4x4& trans_matr);
 	
 	/**
 	 * ONLY for star like molecules!!!
@@ -63,17 +67,18 @@ public:
 	 * center and thus should always have distance 0
 	 */
 	static float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2);
-	static float getMinRMSD(AtmVec* mol1, AtomContainer* mol2);
+	static float getMinRMSD(AtmVec* vec1, AtomContainer* mol2);
 	
 	
 	
 private:
-	/*
-	 * Handle connections where at least one fragment contains only one atom
-	 */
-	static void handleSimpleConnections( Atom* atm1, Atom* atm2,
-																boost::unordered_map <String, float >& bondLib,
-																boost::unordered_map <String, Fragment* >& connectLib);
+	static void getRemaining(AtmVec& site, AtomContainer& templ, AtmVec& result);
+//	/*
+//	 * Handle connections where at least one fragment contains only one atom
+//	 */
+//	static void handleSimpleConnections( Atom* atm1, Atom* atm2,
+//																boost::unordered_map <String, float >& bondLib,
+//																boost::unordered_map <String, Fragment* >& connectLib);
 	
 	/*
 	 * compare ("element+bondorder",Atom*)-pairs according to the string part
@@ -125,15 +130,15 @@ private:
 	 */
 	static Vector3 getDiffVec(Atom* atm1, Atom* atm2, BondLengthMap std_bonds);
 
-	/*
-	 * merge two connection templates to a final template
-	 * 
-	 * the final template will only contain 6 atoms, 3 for each end starting at 
-	 * position 0 and 3 with the molecules that are to be connected, and then the
-	 * ordered next two neighbors
-	 */
-	static void mergeTemplates(AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2,
-														 boost::unordered_map<String, float> std_bonds);
+//	/*
+//	 * merge two connection templates to a final template
+//	 * 
+//	 * the final template will only contain 6 atoms, 3 for each end starting at 
+//	 * position 0 and 3 with the molecules that are to be connected, and then the
+//	 * ordered next two neighbors
+//	 */
+//	static void mergeTemplates(AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2,
+//														 boost::unordered_map<String, float> std_bonds);
 
 	/*
 	 *  Helper to get a single key component
