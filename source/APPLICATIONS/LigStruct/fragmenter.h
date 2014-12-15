@@ -13,7 +13,6 @@ using namespace std;
 /// check if the atom is a rigid one:
 bool isAtomRigid(OBAtom* atm)
 {
-/// TODO: add OBRotorList object to use custom torlib!
 	if (atm->IsInRing())
 		return true;
 	else
@@ -59,8 +58,8 @@ void fragmentMolecule(OBMol& ob_mol,
 	{
 		OBAtom* atm1 = (*b_it)->GetBeginAtom();
 		OBAtom* atm2 =  (*b_it)->GetEndAtom();
-		int id1 = atm1->GetId();
-		int id2 = atm2->GetId();
+		int id1 = atm1->GetId()-1;
+		int id2 = atm2->GetId()-1;
 
 		// for all rotable bonds:
 		if ( (*b_it)->IsRotor() )
@@ -144,6 +143,7 @@ void fragmentMolecule(OBMol& ob_mol,
 		else
 		{
 			parent_id = dset_rigid.find_set(i);
+			
 			// if fragment does not exist, create it:
 			if(rigid_groups[parent_id]<0)
 			{

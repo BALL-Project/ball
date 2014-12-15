@@ -405,7 +405,7 @@ void AssemblerFunctions::bondAlign(Atom* atA1, Atom* atA2,
 	Vector3& vB2 = atB2->getPosition();
 	
 	// map the second pair onto the first pair:
-	trans_matr = StructureMapper::matchPoints( vB1, vB2, Vector3(), vA1, vA2, Vector3() );
+	trans_matr = twoPointMatch( vB1, vB2, vA1, vA2 );
 }
 
 /**
@@ -469,7 +469,15 @@ float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
  */
 void AssemblerFunctions::getRemaining(AtmVec& site, AtomContainer& templ, AtmVec& result)
 {
+	AtmVec vec2;
+	fromMoleculeToAtmVec(templ, vec2);
 	
+	// the 'sum of all square distances' for the best (minimal) permutation:
+	float min_sq_dist = numeric_limits<float>::max(); 
+	
+	AtmVec::iterator ati = site.begin(); ++ati;  // start with second atom (first is central atom)
+	AtmVec::iterator end1 = site.end();
+	matchPermutaions( ati, end1, vec2, 1, 0, &min_sq_dist, result);
 }
 
 /*

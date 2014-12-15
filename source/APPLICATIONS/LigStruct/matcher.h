@@ -86,7 +86,19 @@ void matchRigidFragments(
 		TemplateCoord* templat = fragmentLib[ keyGen.getUCK() ];
 			
 		if(templat && (templat->size() == (*it2)->countAtoms()) )
+		{
 			templat->transferCoordinates(*it2);
+			// DEBUG
+			cout<<"Found template for:"<<endl;
+			AtomIterator ati = (*it2)->beginAtom();
+			for(; +ati; ++ati)
+			{
+				cout << ati->getElement().getSymbol();
+			}
+			cout<<endl;
+			cout << "key: "<<keyGen.getUCK()<<endl;
+			// DEBUG
+		}
 		else
 		{
 			cout<<"Warning: could not find a template for ";

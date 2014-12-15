@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 
 	Log << "Reading combi-lib..."<<endl;
 	CombiLib in_lib;
-	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/example_combi1.conf";
+	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/test.conf";
 	readGroups(in_lib, combi_path, assem);
 	Log <<" - done - "<<endl<<endl;
 	
@@ -67,15 +67,11 @@ int main(int argc, char* argv[])
 /// F I N I S H
 /// write output
 	String outfile_name = String(parpars.get("o"));
-	SDFile outfile(outfile_name, ios::out);
-//	outfile << *ball_mol;
-	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
+//	SDFile outfile(outfile_name, ios::out);
+
+//	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
 	
 /// Clean up
-	// clean up:
-//	delete ball_mol;
-	outfile.close();
-	
-	Log << "......done!"<<endl;
+//	outfile.close();
 }
 

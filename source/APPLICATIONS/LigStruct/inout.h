@@ -95,6 +95,7 @@ GroupFragment* smilesToGroupFragment(OBConversion& conv, StructureAssembler& ass
 	}
 	
 	// assign coordinates
+	cout << "Assembling: "<<smiles<<endl;
 	assem.assembleStructure(frag, &ob_mol);
 	
 	return frag;
@@ -136,7 +137,7 @@ void readGroups(CombiLib& input_lib, const String& path, StructureAssembler& ass
 			// get the scaffold SMILES
 			String str = String(combiLibFile.getLine().after("scaffold:")).trim();
 			
-			// generate a new GroupFragment (on heap) from the SMILES
+			// generate a new GroupFragment (on heap) from SMILES
 			tmp_frag = smilesToGroupFragment(conv, assem, str);
 			
 			// if we have another scaffold, delete it and use the new one:

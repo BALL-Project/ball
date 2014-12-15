@@ -41,7 +41,7 @@ void StructureAssembler::setLibsFromConfig(const String& path)
 	libraryPathesFromConfig(path);
 	
 	// read lib files:
-//		readOldFragmentLib();
+//	readSDFFragmentLib();
 	readFragmentLib();
 	readBondLib();
 	readConnectionLib();
@@ -70,12 +70,25 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 																		list< pair < Atom*, Atom* > >& connections,
 																		vector< Fragment* >& linker_lst, vector<Fragment *> &rigid_lst)
 {
+	cout<<"Fragmenting molecule"<<endl;
+	OBAtom* at = ob_mol->GetAtom(1);
+	cout<<at->GetType()<<endl;//DEBUG
+	cout <<at->GetHyb()<<endl;
+	OBBondIterator obit = at->BeginBonds();
+	for (; obit != at->EndBonds(); ++obit)
+	{
+		cout<< (*obit)->GetBO()<<endl;
+	}
 	fragmentMolecule(*ob_mol, *mol, rigid_lst, linker_lst, connections);
+	cout<<"Rigid: "<<rigid_lst.size()<<" inker:"<<linker_lst.size()<<endl;
 	
 	// canonicalize and match rigid fragments
+	cout<<"canonicalizing rigid fragments"<<endl;
 	canonicalize(rigid_lst);
+	cout<<"matching rigid fragments"<<endl;
 	matchRigidFragments(fragment_lib, rigid_lst);
 	
+	cout<<"building linker frgaments"<<endl;
 	// build every linker fragment from standard torsions
 	vector< Fragment* >::iterator lit = linker_lst.begin();
 	for(; lit != linker_lst.end(); ++lit)
@@ -83,6 +96,7 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 		AssemblerFunctions::buildLinker(**lit, connect_lib);
 	}
 	
+	cout<<"connecting the frgaments"<<endl;
 	// connect the individual fragments
 	list< pair < Atom*, Atom* > >::iterator cit = connections.begin();
 	for(; cit != connections.end(); ++cit)
@@ -142,6 +156,8 @@ void StructureAssembler::readConnectionLib()
 
 void StructureAssembler::readFragmentLib()
 {
+	//DEBUG:
+	cout<<"reading fragment lib from: "<<fragment_lib_path<<endl;
 	fragment_lib.clear();
 	LineBasedFile libFile(fragment_lib_path, ios::in);
 	
