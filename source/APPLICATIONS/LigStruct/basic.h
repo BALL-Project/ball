@@ -11,6 +11,7 @@
 
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/DATATYPE/forEach.h>
 
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/fragment.h>

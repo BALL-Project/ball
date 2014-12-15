@@ -76,11 +76,19 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 	canonicalize(rigid_lst);
 	matchRigidFragments(fragment_lib, rigid_lst);
 	
-	// build linker fragments from standard torsions
-	AssemblerFunctions::buildLinker(linker_lst);
+	// build every linker fragment from standard torsions
+	vector< Fragment* >::iterator lit = linker_lst.begin();
+	for(; lit != linker_lst.end(); ++lit)
+	{
+		AssemblerFunctions::buildLinker(**lit, connect_lib);
+	}
 	
 	// connect the individual fragments
-	AssemblerFunctions::connectFragments(new Atom, new Atom, this->connect_lib, this->bond_lib);
+	list< pair < Atom*, Atom* > >::iterator cit = connections.begin();
+	for(; cit != connections.end(); ++cit)
+	{
+		AssemblerFunctions::connectFragments(cit->first, cit->second, connect_lib, bond_lib);
+	}
 }
 
 

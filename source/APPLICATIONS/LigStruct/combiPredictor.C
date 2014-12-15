@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 	}
 
 	
-/// F R A G M E N T I N G
+/// I N I T I A L    R - G R O U P    A S S E M B L Y
 
 	Log << "Reading combi-lib..."<<endl;
 	CombiLib in_lib;
@@ -61,17 +61,7 @@ int main(int argc, char* argv[])
 	readGroups(in_lib, combi_path, assem);
 	Log <<" - done - "<<endl<<endl;
 	
-	
-///// A S S E M B L E   3 D
-	Log << "Connecting 3D fragments...";
-//	connectFragments(ball_mol, connections, connectLib, bondLib);
-	Log << "......done!"<<endl<<endl;
-	
-	// memory clean up (the fragment entries should now all be empty)
-//	checkAndDeleteFragments(rigid_fragments);
-//	checkAndDeleteFragments(linker_fragments);
-//	rigid_fragments.clear();
-//	linker_fragments.clear();
+
 	
 	
 /// F I N I S H

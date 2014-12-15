@@ -5,6 +5,8 @@
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 #endif
+
+
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
@@ -12,9 +14,124 @@ using namespace std;
 /**
  * buildLinker
  */
-void AssemblerFunctions::buildLinker(vector< Fragment* >& linker_lst)
+void AssemblerFunctions::buildLinker(Fragment& linker_frag, 
+																		 ConnectionMap& link_lib)
 {
+	/// Init the very first atom:
+	Atom* at1 = &*linker_frag.beginAtom();
+	at1->setPosition( Vector3() ); // init to (0, 0, 0)
+
+	// iterate (recursive) over all internal (intra) bonds of the fragment, until
+	// all bonds are selected (this algo won't work with cycles!!!)
+	for( Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
+	{
+		Atom* partner = bit->getBoundAtom(*at1); 
+		
+		if( partner->getParent() == &linker_frag ) // restrict to intra-fragment-bonds!
+			recurLinkerConnect( partner, &linker_frag, link_lib);
+	}
+}
+
+/*
+ * recurLinkerConnect
+ */
+void AssemblerFunctions::recurLinkerConnect(Atom* at, Composite * const parent, ConnectionMap& link_lib)
+{
+	for( Atom::BondIterator bit = at->beginBond(); +bit; ++bit)
+	{
+		if( !(bit->isSelected()) )
+		{
+			//0.) get partner atom, check if it is an intra bond, iff yes: select bond
+			Atom* partner = bit->getBoundAtom(*at);
+			
+			if (partner->getParent() != parent) // restrict to intra-fragment-bonds!
+				continue;
+			
+			bit->select();
+			
+			//1.) getSelectedSite from 'at'
+			AtmVec site;
+			String key;
+			getSelectedSite(at, partner, site, key);
+			
+			//2.) connect single Atom 'partner' to site
+			connectAtomToSite(site, *(link_lib[key]), partner);
+			
+			//3.) descend recursion with partner
+			recurLinkerConnect(partner, parent, link_lib);
+		}
+		
+	}// end loop
+}
+
+
+/*
+ * connectSingle
+ */ 
+void AssemblerFunctions::connectAtomToSite(AtmVec& site, AtomContainer& temp, Atom* partner)
+{
+	//1.) align templ with site
+	Matrix4x4 tr_matr;
+	TransformationProcessor tr_proc;
+	starAlign( site, temp, tr_matr );
 	
+	tr_proc.setTransformation(tr_matr);
+	temp.apply(tr_proc);
+	
+	//2.) determine remaining atoms. take the first of these that is compatible with 'partner'
+	AtmVec unassigned_atoms;
+	getRemaining(site, temp, unassigned_atoms);
+	
+	Atom* tmp = getMatchingAtom(unassigned_atoms, partner);
+	partner->setPosition( tmp->getPosition() );
+}
+
+/*
+ * getSelectedSite
+ * 
+ * key codes for the complete template (all connected atoms of the fragment)
+ * 
+ * site contains only neighbors with selected bonds
+ */
+void AssemblerFunctions::getSelectedSite(Atom* atm, Atom *partner, AtmVec& site, String& key)
+{
+	// insert central atom for the site and the key
+	site.push_back(atm);
+	key = atm->getElement().getSymbol();
+	
+	Composite* parent = atm->getParent();
+	
+	// structure to sort the neighbors according to their names (element+BO)
+	vector< pair<String,Atom*> > names_neighbors;
+	
+	// add all neighbors to 'elements' (central atom is not contained)
+	for(Atom::BondIterator b_it = atm->beginBond(); +b_it; b_it++)
+	{
+		Atom* tmp_atm = b_it->getBoundAtom(*atm); // get neighbors of central 'atm'
+		
+		if(tmp_atm->getParent() == parent) // restrict to atoms in this fragment
+		{
+			String elem = tmp_atm->getElement().getSymbol();
+			elem += String(b_it->getOrder());
+			
+			names_neighbors.push_back( make_pair( elem, tmp_atm) );
+		}
+	}
+	
+	// sort identifers of neighbors
+	vector< pair<String, Atom*> >::iterator name_it = names_neighbors.begin();
+	sort( name_it, names_neighbors.end(), compare );
+	
+	// create the key, and add sorted neighbors to the site
+	for(name_it = names_neighbors.begin(); name_it !=names_neighbors.end(); name_it++)
+	{
+		key += ( (*name_it).first );
+
+		if( ! (*name_it).second->getBond(*atm)->isSelected() ) // Do not include the partner atom into the site
+			continue;
+		
+		site.push_back( (*name_it).second );
+	}
 }
 
 /**  
@@ -27,8 +144,8 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	///1) get connection sites of the two atoms and the corresponding templates
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
-	getSite(atm1, atm2, site_frag1, key1);
-	getSite(atm2, atm1, site_frag2, key2);
+	getSite(atm1, site_frag1, key1);
+	getSite(atm2, site_frag2, key2);
 	
 	AtomContainer* templ1 = connectLib[key1];
 	AtomContainer* templ2 = connectLib[key2];
@@ -41,7 +158,7 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	for(AtomIterator ati = templ1->beginAtom(); +ati; ++ati)
 		vec_temp1.push_back(&*ati);
 	
-	starAlign( site_frag1, vec_temp1, trans_matr );
+	starAlign( site_frag1, *templ1, trans_matr );
 	transformer.setTransformation( trans_matr );
 	
 	templ1->apply( transformer );
@@ -56,7 +173,7 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	for(AtomIterator ati = templ2->beginAtom(); +ati; ++ati)
 		vec_temp2.push_back(&*ati);
 	
-	starAlign( site_frag2, vec_temp2, trans_matr );
+	starAlign( site_frag2, *templ2, trans_matr );
 	transformer.setTransformation( trans_matr );
 	
 	frag2->apply( transformer );
@@ -78,25 +195,16 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	frag2->apply(t_later);
 }
 
-/**
- * append all atoms in result that 'remain'. Meaning atoms of templ that do not
- * optimally match with any atom in site
- */
-void AssemblerFunctions::getRemaining(AtmVec& site, AtomContainer& templ, AtmVec& result)
-{
-	
-}
-
 /** 
  * starAlign, finds:
  * - transformation matrix that fits best
  * 
  * preconditions:
  * - vec1 and vec2 are of at least size 1
- * - vec1 and vec2 containt at pos 0 the central atom of a star molecule
+ * - vec1 and vec2 contain at pos 0 the central atom of a star molecule
  * - vec1 may be smaller than vec2 (but not the other way around)
  */
-void AssemblerFunctions::starAlign(AtmVec& vec1, AtmVec &vec2, Matrix4x4& trans_matrix)
+void AssemblerFunctions::starAlign(AtmVec& vec1, AtomContainer &mol2, Matrix4x4& trans_matrix)
 {
 	
 }
@@ -307,17 +415,17 @@ float AssemblerFunctions::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 {
 	AtmVec vec1;
 	AtmVec vec2;
-	fromMoleculetoAtmVec(*mol1, vec1);
-	fromMoleculetoAtmVec(*mol2, vec2);
+	fromMoleculeToAtmVec(*mol1, vec1);
+	fromMoleculeToAtmVec(*mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
 	
-	AtmVec::iterator ati = vec1->begin(); ++ati;  // start with second atom (first is central atom)
-	AtmVec::iterator end1 = vec1->end();
+	AtmVec::iterator ati = vec1.begin(); ++ati;  // start with second atom (first is central atom)
+	AtmVec::iterator end1 = vec1.end();
 	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
 	
-	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
+	min_sq_dist = sqrt( min_sq_dist / (float)(vec1.size() - 1) );
 	return min_sq_dist;
 }
 
@@ -327,7 +435,7 @@ float AssemblerFunctions::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtomContainer* mol2)
 {
 	AtmVec vec2;
-	fromMoleculetoAtmVec(*mol2, vec2);
+	fromMoleculeToAtmVec(*mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
@@ -353,6 +461,65 @@ float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
 	
 	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
 	return min_sq_dist;
+}
+
+/*
+ * append all atoms in result that 'remain'. Meaning atoms of templ that do not
+ * optimally match with any atom in site
+ */
+void AssemblerFunctions::getRemaining(AtmVec& site, AtomContainer& templ, AtmVec& result)
+{
+	
+}
+
+/*
+ * matchPermutaions
+ */
+void AssemblerFunctions::matchPermutaions(AVIter& ati1, AVIter& end1, 
+																					AtmVec& atm_vec, int i, 
+																					float loc_sq_dist, float* global_sq_dist,
+																					AtmVec& result)
+{
+	// end recursion case: 
+	// everything was permuted so check how good the square dist was and perhaps
+	// update the global sq_dist
+	if( ati1 == end1 )
+	{
+		if( (*global_sq_dist) > loc_sq_dist)
+		{
+			*global_sq_dist = loc_sq_dist;
+			
+			// insert into cleared result vector
+			result.clear();
+			for(int k = i; k < atm_vec.size(); k++)
+				result.push_back( atm_vec[k] );
+		}
+		return;
+	}
+	// recursion case:
+	// test all remaining possible pertubations/mappings of atoms from mol2 
+	// (the vectorentry) to the next atom of mol1 (the atom iterator)
+	else
+	{
+		float sq_dist_update;// the square distance for the current atom pair
+		for(int j = i; j < atm_vec.size(); j++)
+		{
+			// test if element and bondtype fit for this assignment
+			// (this is rather for correctness than for speed)
+			if(  atomsCompatible( *ati1, atm_vec[j] )  )
+			{
+				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
+				
+				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
+				
+				AtmVec::iterator ati2 = ati1; // create new atom iterator for next recursion
+				matchPermutaions( ++ati2, end1, atm_vec, (i+1), (loc_sq_dist + sq_dist_update),
+													global_sq_dist, result);
+				
+				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
+			}
+		} // end for-loop
+	}
 }
 
 /*
@@ -412,11 +579,13 @@ void AssemblerFunctions::fromMoleculeToAtmVec(AtomContainer& in_mol, AtmVec& out
 /*
  * getSite
  */
-void AssemblerFunctions::getSite(Atom* atm, Atom* partner, AtmVec &site, String& key)
+void AssemblerFunctions::getSite(Atom* atm, AtmVec &site, String& key)
 {
 	// insert central atom for the site and the key
 	site.push_back(atm);
 	key = atm->getElement().getSymbol();
+	
+	Composite* parent = atm->getParent();
 	
 	// structure to sort the neighbors according to their names (element+BO)
 	vector< pair<String,Atom*> > names_neighbors;
@@ -428,7 +597,7 @@ void AssemblerFunctions::getSite(Atom* atm, Atom* partner, AtmVec &site, String&
 		
 		String elem = tmp_atm->getElement().getSymbol();
 		elem += String(b_it->getOrder());
-		
+			
 		names_neighbors.push_back( make_pair( elem, tmp_atm) );
 	}
 	
@@ -441,7 +610,7 @@ void AssemblerFunctions::getSite(Atom* atm, Atom* partner, AtmVec &site, String&
 	{
 		key += ( (*name_it).first );
 		
-		if( (*name_it).second == partner) // Do not include the partner atom into the site
+		if( (*name_it).second->getParent() != parent) // Don't include partner atoms into the site
 			continue;
 		
 		site.push_back( (*name_it).second );
@@ -606,7 +775,7 @@ void AssemblerFunctions::swapAtoms(Atom*& a, Atom*& b)
 }
 
 /* 
- * getMatchingAtom
+ * getMatchingAtom(1)
  */
 Atom* AssemblerFunctions::getMatchingAtom(AtomContainer* mol, Atom* atm)
 {
@@ -625,6 +794,25 @@ Atom* AssemblerFunctions::getMatchingAtom(AtomContainer* mol, Atom* atm)
 	exit(EXIT_FAILURE);
 }
 
+/* 
+ * getMatchingAtom(2)
+ */
+Atom* AssemblerFunctions::getMatchingAtom(AtmVec& mol, Atom* atm)
+{
+	const String& elem = atm->getElement().getSymbol();
+	short bo = atm->beginBond()->getOrder(); //should have only one bond
+
+	AVIter ati = mol.begin();
+	ati++; // first atom is the center atom, which we never want
+	for(; ati != mol.end(); ++ati)
+	{
+		if( (*ati)->getElement().getSymbol() == elem && (*ati)->beginBond()->getOrder() == bo )
+			return *ati;
+	}
+	
+	cout<<"ERROR: could not find a partner Atom"<<endl;
+	exit(EXIT_FAILURE);
+}
 /*
  * getBondName
  */
@@ -633,5 +821,17 @@ String AssemblerFunctions::getBondName(Atom* atm, Atom* partner)
 	String name = atm->getElement().getSymbol();
 	name += atm->getBond(*partner)->getOrder();
 	return name;
+}
+
+/*
+ * twoPointMatch
+ * TODO: reimplement more efficiently
+ */
+Matrix4x4 AssemblerFunctions::twoPointMatch(const Vector3& v1, 
+																									 const Vector3& v2, 
+																									 const Vector3& u1,
+																									 const Vector3& u2)
+{
+	return StructureMapper::matchPoints(v1, v2, Vector3(), u1, u2, Vector3());
 }
 
