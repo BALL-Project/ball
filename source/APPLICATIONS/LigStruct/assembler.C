@@ -2,6 +2,9 @@
 #include "assembler.h"
 #endif
 
+#ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H
+#include <BALL/MOLMEC/COMMON/atomVector.h>
+#endif
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
@@ -302,19 +305,19 @@ void AssemblerFunctions::bondAlign(Atom* atA1, Atom* atA2,
  */
 float AssemblerFunctions::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 {
-	
-	// create a vector to allow easy swapping of atoms
-	AtmVec atm_vec;
-	for(AtomIterator ati = mol2->beginAtom(); +ati; ++ati)
-		atm_vec.push_back( &*ati );
+	AtmVec vec1;
+	AtmVec vec2;
+	fromMoleculetoAtmVec(*mol1, vec1);
+	fromMoleculetoAtmVec(*mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
 	
-	AtomIterator ati = mol1->beginAtom(); ++ati;  // start with second atom (first is central atom)
-	sqdistForPermutations( mol1->getAtom(0), ati, atm_vec, 1, 0, &min_sq_dist);
+	AtmVec::iterator ati = vec1->begin(); ++ati;  // start with second atom (first is central atom)
+	AtmVec::iterator end1 = vec1->end();
+	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
 	
-	min_sq_dist = sqrt( min_sq_dist / (float)(atm_vec.size() - 1) );
+	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
 	return min_sq_dist;
 }
 
@@ -323,11 +326,30 @@ float AssemblerFunctions::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
  */
 float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtomContainer* mol2)
 {
+	AtmVec vec2;
+	fromMoleculetoAtmVec(*mol2, vec2);
+	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
 	
-	AtomIterator ati = mol2->beginAtom(); ++ati;  // start with second atom (first is central atom)
-	sqdistForPermutations( mol2->getAtom(0), ati, *vec1, 1, 0, &min_sq_dist);
+	AtmVec::iterator ati = vec1->begin(); ++ati;  // start with second atom (first is central atom)
+	AtmVec::iterator end1 = vec1->end();
+	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
+	
+	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
+	return min_sq_dist;
+}
+
+/**
+ * getMinRMSD (3)
+ */
+float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
+{
+	float min_sq_dist = numeric_limits<float>::max();
+	
+	AtmVec::iterator ati = vec1->begin(); ++ati;
+	AtmVec::iterator end1 = vec1->end();
+	sqdistPerPermutation( ati, end1, *vec2, 1, 0, &min_sq_dist);
 	
 	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
 	return min_sq_dist;
@@ -336,14 +358,13 @@ float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtomContainer* mol2)
 /*
  * sqdistForPermutations
  */
-void AssemblerFunctions::sqdistForPermutations(
-		Atom* center1, AtomIterator& ati, AtmVec& atm_vec, int i, 
-		float loc_sq_dist, float* global_sq_dist)
+void AssemblerFunctions::sqdistPerPermutation(AVIter& ati1, AVIter& end1,
+							AtmVec& atm_vec, int i, float loc_sq_dist, float* global_sq_dist)
 {
 	// end recursion case: 
 	// everything was permuted so check how good the square dist was and perhaps
 	// update the global sq_dist
-	if( i == atm_vec.size() )
+	if( ati1 == end1 )
 	{
 		if( (*global_sq_dist) > loc_sq_dist)
 		{
@@ -361,14 +382,14 @@ void AssemblerFunctions::sqdistForPermutations(
 		{
 			// test if element and bondtype fit for this assignment
 			// (this is rather for correctness than for speed)
-			if(  atomsCompatible( &*ati, atm_vec[j] )  )
+			if(  atomsCompatible( *ati1, atm_vec[j] )  )
 			{
-				sq_dist_update = ati->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
+				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
 				
 				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
 				
-				AtomIterator ati2 = ati; // create new atom iterator for next recursion
-				sqdistForPermutations( center1, ++ati2, atm_vec, (i+1), (loc_sq_dist + sq_dist_update), global_sq_dist);
+				AtmVec::iterator ati2 = ati1; // create new atom iterator for next recursion
+				sqdistPerPermutation( ++ati2, end1, atm_vec, (i+1), (loc_sq_dist + sq_dist_update), global_sq_dist);
 				
 				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
 			}
@@ -376,44 +397,17 @@ void AssemblerFunctions::sqdistForPermutations(
 	}
 }
 
-///*
-// * merge two connection templates to a final template
-// * 
-// * the final template will only contain 6 atoms, 3 for each end
-// * starting at position 0 and 3 with the molecules that are to be
-// * connected, and then the ordered next two neighbors
-// */
-//void AssemblerFunctions::mergeTemplates(
-//		AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2,
-//										boost::unordered_map<String, float> std_bonds)
-//{
-//	Atom* aTarget = mol1->getAtom(pos1);
-//	Atom* bTarget = mol2->getAtom(pos2);
-//	Atom* atm1 = mol1->getAtom(0);
-//	Atom* atm2 = mol2->getAtom(0);
-
-//	// got no time to take care of the possible sign errors thus simply use 3-point-matching:
-//	Vector3& ptA1 = atm1->getPosition();
-//	Vector3& ptA2 = aTarget->getPosition();
-//	Vector3& ptB1 = bTarget->getPosition();
-//	Vector3& ptB2 = atm2->getPosition();
-
-//	Matrix4x4 rot_matrix = StructureMapper::matchPoints(ptB1, ptB2, Vector3(), ptA1, ptA2, Vector3());
+/*
+ * fromMoleculeToAtmVec
+ */
+void AssemblerFunctions::fromMoleculeToAtmVec(AtomContainer& in_mol, AtmVec& out_vec)
+{
+	for(AtomIterator ati = in_mol.beginAtom(); +ati; ++ati)
+	{
+		out_vec.push_back(&*ati);
+	}
 	
-//	// transfrom the 2nd template
-//	TransformationProcessor transformer(rot_matrix);
-//	mol2->apply(transformer);
-	
-//	// fix bond length
-//	Vector3 bond_fix = getDiffVec(atm1, atm2, std_bonds);
-//	TranslationProcessor t_later(bond_fix);
-//	mol2->apply(t_later);
-
-//	// remove the two connection partner atoms, they are redundant now:
-//	mol1->remove(*aTarget);
-//	mol2->remove(*bTarget);
-//}
-
+}
 
 /*
  * getSite

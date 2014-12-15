@@ -68,10 +68,13 @@ public:
 	 */
 	static float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2);
 	static float getMinRMSD(AtmVec* vec1, AtomContainer* mol2);
+	static float getMinRMSD(AtmVec* vec1, AtmVec* vec2);
 	
 	
 	
 private:
+	static void fromMoleculeToAtmVec(AtomContainer &in_mol, AtmVec& out_vec);
+	
 	static void getRemaining(AtmVec& site, AtomContainer& templ, AtmVec& result);
 //	/*
 //	 * Handle connections where at least one fragment contains only one atom
@@ -110,7 +113,7 @@ private:
  * Thus 'global_sq_dist' needs to initially point to a float that is set to
  * numeric_limits<float>::max() in the surronding recursion wrapper.
  */
-	static void sqdistForPermutations(Atom* center1, AtomIterator& ati, AtmVec& atm_vec, int i, float loc_sq_dist, float* global_sq_dist);
+	static void sqdistPerPermutation(AVIter &ati, AVIter& end, AtmVec& atm_vec, int i, float loc_sq_dist, float* global_sq_dist);
 
 	/* 
 	 * Find the first atom in 'mol', that has same element and bond order as 'atm'
@@ -129,16 +132,6 @@ private:
 	 * distance to atom 1
 	 */
 	static Vector3 getDiffVec(Atom* atm1, Atom* atm2, BondLengthMap std_bonds);
-
-//	/*
-//	 * merge two connection templates to a final template
-//	 * 
-//	 * the final template will only contain 6 atoms, 3 for each end starting at 
-//	 * position 0 and 3 with the molecules that are to be connected, and then the
-//	 * ordered next two neighbors
-//	 */
-//	static void mergeTemplates(AtomContainer* mol1, int pos1, AtomContainer* mol2, int pos2,
-//														 boost::unordered_map<String, float> std_bonds);
 
 	/*
 	 *  Helper to get a single key component
