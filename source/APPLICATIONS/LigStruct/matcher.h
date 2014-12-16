@@ -19,16 +19,16 @@
 //	}
 //}
 
-String printInlineMol(Composite* mol)
-{
+//String printInlineMol(Composite* mol)
+//{
 	
-	String tmp = "";
-	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
-	{
-		tmp += ati->getElement().getSymbol();
-	}
-	return tmp;
-}
+//	String tmp = "";
+//	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
+//	{
+//		tmp += ati->getElement().getSymbol();
+//	}
+//	return tmp;
+//}
 
 /** 
  * Generate a canonical order of atoms to be able to transfer the coordinates

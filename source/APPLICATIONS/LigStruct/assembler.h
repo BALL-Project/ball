@@ -133,7 +133,7 @@ private:
 	static void getSite(Atom* atm, AtmVec& site, String& key);
 
 	
-	static void getSelectedSite(Atom* atm, Atom *partner, AtmVec& site, String& key);
+	static void getSelectedSite(Atom* atm, AtmVec& site, String& key);
 	static void recurLinkerConnect(Atom* at, Composite * const parent, ConnectionMap& link_lib);
 	static void connectAtomToSite(AtmVec& site, AtomContainer& temp, Atom* partner);
 	
@@ -151,8 +151,8 @@ private:
 	/* 
 	 * Find the first atom in 'mol', that has same element and bond order as 'atm'
 	 */
-	static Atom* getMatchingAtom(AtomContainer *mol, Atom* atm);
-	static Atom* getMatchingAtom(AtmVec& mol, Atom* atm);
+	static Atom* getMatchingAtom(Atom *center,AtomContainer *mol, Atom* atm);
+	static Atom* getMatchingAtom(Atom *center, AtmVec& mol, Atom* atm);
 	
 	/*
 	 * Check if two atoms of a star-molecule are identical in their element and

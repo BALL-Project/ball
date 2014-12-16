@@ -110,7 +110,7 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 	list< pair < Atom*, Atom* > >::iterator cit = connections.begin();
 	for(; cit != connections.end(); ++cit)
 	{
-		cout<< "connecting: "<<printInlineMol(cit->first->getParent()) << " - " << printInlineMol( cit->second->getParent() ) <<endl; //DEBUG
+//		cout<< "connecting: "<<printInlineMol(cit->first->getParent()) << " - " << printInlineMol( cit->second->getParent() ) <<endl; //DEBUG
 		AssemblerFunctions::connectFragments(cit->first, cit->second, connect_lib, bond_lib);
 	}
 	SDFile debugfile2("/Users/pbrach/debug_file2.sdf", ios::out);
