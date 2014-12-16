@@ -70,23 +70,30 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 																		list< pair < Atom*, Atom* > >& connections,
 																		vector< Fragment* >& linker_lst, vector<Fragment *> &rigid_lst)
 {
-	cout<<"Fragmenting molecule"<<endl;
-	OBAtom* at = ob_mol->GetAtom(1);
-	cout<<at->GetType()<<endl;//DEBUG
-	cout <<at->GetHyb()<<endl;
-	OBBondIterator obit = at->BeginBonds();
-	for (; obit != at->EndBonds(); ++obit)
-	{
-		cout<< (*obit)->GetBO()<<endl;
-	}
+//	// DEBUG
+//	OBAtom* at = ob_mol->GetAtom(1);
+//	cout<<at->GetType()<<endl;
+//	cout <<at->GetHyb()<<endl;
+//	OBBondIterator obit = at->BeginBonds();
+//	for (; obit != at->EndBonds(); ++obit)
+//	{
+//		cout<< (*obit)->GetBO()<<endl;
+//	}
+//	//DEBUG
 	fragmentMolecule(*ob_mol, *mol, rigid_lst, linker_lst, connections);
-	cout<<"Rigid: "<<rigid_lst.size()<<" inker:"<<linker_lst.size()<<endl;
+	cout<<"rigids: "<<rigid_lst.size()<<" inker:"<<linker_lst.size()<<endl;
 	
 	// canonicalize and match rigid fragments
 	cout<<"canonicalizing rigid fragments"<<endl;
 	canonicalize(rigid_lst);
 	cout<<"matching rigid fragments"<<endl;
 	matchRigidFragments(fragment_lib, rigid_lst);
+	for(int i = 0; i< rigid_lst.size(); i++)
+	{
+		mol->append( *(rigid_lst[i]) );
+	}
+	SDFile debugfile("/Users/pbrach/debug_file.sdf", ios::out);
+	debugfile << *mol;
 	
 	cout<<"building linker frgaments"<<endl;
 	// build every linker fragment from standard torsions
