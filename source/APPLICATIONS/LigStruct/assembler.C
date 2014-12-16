@@ -354,7 +354,53 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	/// Case 3) No unique atom exists. Find best assignment for two neighbors
 	else 
 	{
+		float best_rmsd = numeric_limits<float>::max();
+		Atom* site2_atm = site[1];
+		Atom* site3_atm = site[2];
 		
+		Vector3& sit1 = site[0]->getPosition();
+		Vector3& sit2 = site2_atm->getPosition();
+		Vector3& sit3 = site3_atm->getPosition();
+		
+		Vector3& tem1 = templ.beginAtom()->getPosition();
+		Atom* tem_2_atm = 0;
+		Atom* tem_3_atm = 0;
+		
+		// test all possible assignments to 'selectionA2'
+		AtomIterator ati = templ.beginAtom();
+		Matrix4x4 temp_trans; TransformationProcessor transformer;
+		for(ati++; +ati; ati++)
+		{
+			tem_2_atm = &*ati;
+			if( atomsCompatible(site2_atm, tem_2_atm) )
+			{
+				Vector3& tem2 = tem_2_atm->getPosition(); //assign first neighbor
+				
+				// test all possible assignments to 'selectionA3'
+				AtomIterator ato = templ.beginAtom();
+				for(ato++; +ato; ato++)
+				{
+					tem_3_atm = &*ato;
+					if( (tem_2_atm != tem_3_atm) && (atomsCompatible(site3_atm, tem_3_atm)) )
+					{
+						float rmsd = numeric_limits<float>::max();
+						AtomContainer test_mol( templ ); //SPEEDUP: efficient storing of original coordinates (FlexibleMolecule, ConformationSet, AtmVec-Overloading)
+						Vector3& tem3 = tem_3_atm->getPosition(); //assign second neighbor
+						
+						temp_trans = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
+						transformer.setTransformation(temp_trans);
+						test_mol.apply(transformer);
+						
+						rmsd = getMinRMSD(&site, &test_mol);
+						if (rmsd < best_rmsd)
+						{
+							best_rmsd = rmsd;
+							trans_matrix = trans_matrix;
+						}
+					}
+				}
+			}
+		}// loop-end
 	}
 }
 
@@ -954,7 +1000,17 @@ Atom* AssemblerFunctions::getMatchingAtom(AtomContainer* mol, Atom* atm)
 			return &*ati;
 	}
 	
-	cout<<"ERROR: could not find a partner Atom"<<endl;
+	cout<<"ERROR: could not find a partner Atom!"<<endl;
+	cout<<"Was looking for: "<<atm->getElement().getSymbol()<<"-"
+		 << atm->beginBond()->getOrder()<<endl<<endl;
+	cout<<"Molecule contained:"<<endl;
+	for(AtomIterator at = mol->beginAtom(); +at; ++at)
+	{
+		cout<<at->getElement().getSymbol();
+		cout<<at->beginBond()->getOrder();
+		cout<<", ";
+	}
+	cout<<endl;
 	exit(EXIT_FAILURE);
 }
 
@@ -974,7 +1030,17 @@ Atom* AssemblerFunctions::getMatchingAtom(AtmVec& mol, Atom* atm)
 			return *ati;
 	}
 	
-	cout<<"ERROR: could not find a partner Atom"<<endl;
+	cout<<"ERROR: could not find a partner Atom!"<<endl;
+	cout<<"Was looking for: "<<atm->getElement().getSymbol()<<"-"
+		 << atm->beginBond()->getOrder()<<endl<<endl;
+	cout<<"Molecule contained:"<<endl;
+	for(AVIter at = mol.begin(); at != mol.end(); ++at)
+	{
+		cout<<(*at)->getElement().getSymbol();
+		cout<<(*at)->beginBond()->getOrder();
+		cout<<" ";
+	}
+	cout<<endl;
 	exit(EXIT_FAILURE);
 }
 /*
