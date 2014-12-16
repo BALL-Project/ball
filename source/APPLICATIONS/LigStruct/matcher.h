@@ -7,16 +7,27 @@
 
 ///####################### M A T C H I N G ##############################
 
-// cut bonds that are shared with atoms from other fragments:
-void clearExternalBonds(AtomContainer* mol)
-{
-	Atom::BondIterator bit;
-	AtomIterator ait;
+//	// cut bonds that are shared with atoms from other fragments:
+//void clearExternalBonds(AtomContainer* mol)
+//{
+//	Atom::BondIterator bit;
+//	AtomIterator ait;
 
-	BALL_FOREACH_INTERBOND(*mol, ait, bit)
+//	BALL_FOREACH_INTERBOND(*mol, ait, bit)
+//	{
+//		bit->destroy();
+//	}
+//}
+
+String printInlineMol(Composite* mol)
+{
+	
+	String tmp = "";
+	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
 	{
-		bit->destroy();
+		tmp += ati->getElement().getSymbol();
 	}
+	return tmp;
 }
 
 /** 
@@ -83,16 +94,16 @@ void matchRigidFragments(
 //			cout << "key: "<<keyGen.getUCK()<<endl;
 //			// DEBUG - end
 		}
-		else
+		else // print error msg, showing element-list and key of the not matchable molecule
 		{
-//			cout<<"Warning: could not find a template for "; // DEUBG
+			cout<<"Warning: could not find a template for ";
 			AtomIterator ati = (*it2)->beginAtom();
 			for(; +ati; ++ati)
 			{
 				cout << ati->getElement().getSymbol();
 			}
 			cout<<endl;
-//			cout << "key: "<<keyGen.getUCK()<<endl; // DEUBG
+			cout << "key: "<<keyGen.getUCK()<<endl;
 		}
 	}
 }

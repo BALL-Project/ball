@@ -49,7 +49,7 @@ public:
 	 * transformation giving the lowest RMSD.
 	 */
 //	static void starAlign(AtmVec& vec1, AtmVec& vec2, Matrix4x4& trans_matrix);
-	static void starAlign(AtmVec& vec1, AtomContainer& mol2, Matrix4x4& trans_matrix);
+	static void starAlign(AtmVec& site, AtomContainer& templ, Matrix4x4& trans_matrix);
 	
 	/**
 	 * @brief bondAlign aligns two atom
@@ -74,6 +74,13 @@ public:
 	
 	
 private:
+	
+	/*
+	 * alignCase3 is the same as starAlign BUT has a precondition extension:
+	 * - 'site' and 'templ' are of at least size 3
+	 */
+	static void alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix);
+	
 	/*
 	 * Fill an AtmVec with atom-pointers from an AtomContainer
 	 */
@@ -158,7 +165,12 @@ private:
 	 */
 	static void swapAtoms(Atom*& a, Atom*& b);
 	
-	static Matrix4x4 twoPointMatch(const Vector3& v1, const Vector3& v2, 
-																 const Vector3& u1, const Vector3& u2);
+	/*
+	 * Mapps:
+	 *   - n1 onto w1
+	 *   - n2 on the ray given by w1 - w2
+	 */
+	static Matrix4x4 twoPointMatch(const Vector3& n1, const Vector3& n2, 
+																 const Vector3& w1, const Vector3& w2);
 };
 #endif // ASSEMBLER_H

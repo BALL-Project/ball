@@ -88,28 +88,34 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 	canonicalize(rigid_lst);
 	cout<<"matching rigid fragments"<<endl;
 	matchRigidFragments(fragment_lib, rigid_lst);
+	// DEBUG - start
 	for(int i = 0; i< rigid_lst.size(); i++)
 	{
 		mol->append( *(rigid_lst[i]) );
 	}
 	SDFile debugfile("/Users/pbrach/debug_file.sdf", ios::out);
 	debugfile << *mol;
+	debugfile.close();
+	// DEBUG - end
 	
-	cout<<"building linker frgaments"<<endl;
-	// build every linker fragment from standard torsions
-	vector< Fragment* >::iterator lit = linker_lst.begin();
-	for(; lit != linker_lst.end(); ++lit)
-	{
-		AssemblerFunctions::buildLinker(**lit, connect_lib);
-	}
-	
-	cout<<"connecting the frgaments"<<endl;
+//	cout<<"building linker frgaments"<<endl;
+//	// build every linker fragment from standard torsions
+//	vector< Fragment* >::iterator lit = linker_lst.begin();
+//	for(; lit != linker_lst.end(); ++lit)
+//	{
+//		AssemblerFunctions::buildLinker(**lit, connect_lib);
+//	}
+
 	// connect the individual fragments
 	list< pair < Atom*, Atom* > >::iterator cit = connections.begin();
 	for(; cit != connections.end(); ++cit)
 	{
+		cout<< "connecting: "<<printInlineMol(cit->first->getParent()) << " - " << printInlineMol( cit->second->getParent() ) <<endl; //DEBUG
 		AssemblerFunctions::connectFragments(cit->first, cit->second, connect_lib, bond_lib);
 	}
+	SDFile debugfile2("/Users/pbrach/debug_file2.sdf", ios::out);
+	debugfile2 << *mol;
+	debugfile2.close();
 }
 
 

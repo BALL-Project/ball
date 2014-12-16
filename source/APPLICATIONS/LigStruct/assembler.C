@@ -11,6 +11,16 @@ using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
+String printInlineMol(AtmVec& mol)
+{
+	
+	String tmp = "";
+	for(AVIter ati = mol.begin(); ati != mol.end(); ++ati)
+	{
+		tmp += (*ati)->getElement().getSymbol();
+	}
+	return tmp;
+}
 /**
  * buildLinker
  */
@@ -142,21 +152,25 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 																					BondLengthMap& bondLib)
 {
 	///1) get connection sites of the two atoms and the corresponding templates
+	cout<<"Step1"<<endl;
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
 	getSite(atm1, site_frag1, key1);
 	getSite(atm2, site_frag2, key2);
 	
+//	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
+//	cout<< "Site2: "<< printInlineMol(site_frag2)<<endl;
 	AtomContainer* templ1 = connectLib[key1];
 	AtomContainer* templ2 = connectLib[key2];
 
 	Matrix4x4 trans_matr;
 	TransformationProcessor transformer;
 	
-	///3) transfrom templ1 to match with frag1 (keep frag1 as it was)
-	AtmVec vec_temp1;
-	for(AtomIterator ati = templ1->beginAtom(); +ati; ++ati)
-		vec_temp1.push_back(&*ati);
+	///2) transfrom templ1 to match with frag1 (keep frag1 as it was)
+	cout<<"Step3"<<endl;
+//	AtmVec vec_temp1;
+//	for(AtomIterator ati = templ1->beginAtom(); +ati; ++ati)
+//		vec_temp1.push_back(&*ati);
 	
 	starAlign( site_frag1, *templ1, trans_matr );
 	transformer.setTransformation( trans_matr );
@@ -166,12 +180,13 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	AtmVec remain_tmp1;
 	getRemaining(site_frag1, *templ1, remain_tmp1);
 	
-	///4) transfrom frag2 to match with templ2
+	///3) transfrom frag2 to match with templ2
+	cout<<"Step4"<<endl;
 	AtomContainer* frag2 = (AtomContainer*)atm2->getParent();
 	
-	AtmVec vec_temp2;
-	for(AtomIterator ati = templ2->beginAtom(); +ati; ++ati)
-		vec_temp2.push_back(&*ati);
+//	AtmVec vec_temp2;
+//	for(AtomIterator ati = templ2->beginAtom(); +ati; ++ati)
+//		vec_temp2.push_back(&*ati);
 	
 	starAlign( site_frag2, *templ2, trans_matr );
 	transformer.setTransformation( trans_matr );
@@ -181,32 +196,166 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	AtmVec remain_tmp2;
 	getRemaining(site_frag2, *templ2, remain_tmp2);
 	
-	///5) transfrom the connection bond determined for temp2 to the one determined
+	///4) transfrom the connection bond determined for temp2 to the one determined
 	///   for temp1.
-	bondAlign(atm1, remain_tmp1[0], remain_tmp2[0], atm2, trans_matr);
+	cout<<"Step5"<<endl;
+	bondAlign(atm1, getMatchingAtom(remain_tmp1, atm2), 
+						getMatchingAtom(remain_tmp2, atm1), atm2, 
+						trans_matr);
 	transformer.setTransformation( trans_matr );
 	
 	frag2->apply( transformer );
 	
 	///6) set bond length to standard length
+	cout<<"Step6"<<endl;
 	Vector3 bond_fix = getDiffVec(atm1, atm2, bondLib);
+	cout<<"bond fix: "<<bond_fix<<endl;
 	TranslationProcessor t_later(bond_fix);
 	
 	frag2->apply(t_later);
+	cout<<"Finished"<<endl;
 }
 
 /** 
  * starAlign, finds:
- * - transformation matrix that fits best
+ * - matrix that transforms 'templ' onto 'site'
+ * - the transformation is selected that fits best
  * 
  * preconditions:
- * - vec1 and vec2 are of at least size 1
- * - vec1 and vec2 contain at pos 0 the central atom of a star molecule
- * - vec1 may be smaller than vec2 (but not the other way around)
+ * - 'site' and 'templ' are of at least size 1
+ * - 'site' and 'templ' contain at pos 0 the central atom of a star molecule
+ * - 'site' may be smaller than 'templ' (but not the other way around)
  */
-void AssemblerFunctions::starAlign(AtmVec& vec1, AtomContainer &mol2, Matrix4x4& trans_matrix)
+void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix)
 {
+	/// Case 1) 'site' has size 1, thus we can only translate the center 
+	if ( site.size() == 1)
+	{
+		Vector3 transl = site[0]->getPosition() - templ.beginAtom()->getPosition();
+		trans_matrix.setTranslation(transl);
+	}
+	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
+	else if ( site.size() == 2)
+	{
+		Vector3& sit1 = site[0]->getPosition();
+		Vector3& sit2 = site[1]->getPosition();
+		float sq_dist12 = sit1.getSquareDistance( sit2 ); // get dist to single neighbor in site
+		
+		AtomIterator ati = templ.beginAtom();
+		Vector3& tem1 = ati->getPosition();
+		Vector3 tem2;
+		
+		// Find a compatible atom in 'templ' that has the most similar sq_distance to sq_dist12
+		float min_diff = numeric_limits<float>::max();
+		for(++ati; +ati; ++ati) // SPEEDUP: theoretically it should be sufficiently effective if only take the first matching atom
+		{
+			if( atomsCompatible(site[1], &*ati ) ) // at least 1 will be compatible
+			{
+				// calc dist:
+				float diff = tem1.getSquareDistance( ati->getPosition() ) - sq_dist12;
+				if( abs(diff) < min_diff)
+					tem2.set( ati->getPosition() );
+			}
+		}
+		trans_matrix = twoPointMatch(tem1, tem2, sit1, sit2);
+	}
+	/// Case 3) 'site' has at least 2 neighbors
+	else
+	{
+		alignCase3(site, templ, trans_matrix);
+	}
+}
+
+/*
+ * alignCase3, finds:
+ * - matrix that transforms 'templ' onto 'site'
+ * - the transformation is selected that fits best
+ * 
+ * precondition extension to starAlign:
+ * - 'site' and 'templ' are of at least size 3
+ */
+void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix)
+{
+	// find all unique atoms in 'site' (according to BO to cental atom and element type)
+	AtmVec unique_atms;
+	unique_atms.reserve(8);
+	getUniqueAtoms(site, unique_atms);
 	
+	/// Case 1) al least two unique atoms, straight computation of transformation
+	if( unique_atms.size() > 1 )
+	{
+		Vector3& sit1 = site[0]->getPosition(); 
+		Vector3& sit2 = unique_atms[0]->getPosition();
+		Vector3& sit3 = unique_atms[1]->getPosition();
+		
+		Vector3& tem1 = templ.beginAtom()->getPosition();
+		Vector3& tem2 = getMatchingAtom( &templ, unique_atms[0] )->getPosition();
+		Vector3& tem3 = getMatchingAtom( &templ, unique_atms[1] )->getPosition();
+		
+		// get transformation:
+		trans_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
+	}
+	
+	
+	/// Case 2) Only one unique atm exists, use this one and find best assignment 
+	///         for a second neighbor from 'site'
+	else if( unique_atms.size() == 1)
+	{
+		// if at least one mol1 atom was unique, it is curcial to use it:
+		Vector3& sit1 = site[0]->getPosition();
+		Vector3& sit2 = unique_atms[0]->getPosition();
+		// get next non unique atom from site:
+		Atom* site3_atm = 0;
+		for(int i = 1; i < site.size(); ++i)
+		{
+			if( site[i] != unique_atms[0] )
+			{
+				site3_atm = site[i];
+				break;
+			}
+		}
+		Vector3& sit3 = site3_atm->getPosition();
+		
+		Vector3& tem1 = templ.beginAtom()->getPosition();
+		Atom* tem2_atm = getMatchingAtom( &templ, unique_atms[0] );
+		Vector3& tem2 = tem2_atm->getPosition();
+		
+		// test all possible assignments of an 'templ'-atm to the 'site3_atm'
+		float best_rmsd = numeric_limits<float>::max();
+		Matrix4x4 test_matrix; TransformationProcessor transformer;
+		
+		AtomIterator ati = templ.beginAtom();
+		for(ati++; +ati; ati++)
+		{
+			float rmsd = numeric_limits<float>::max();
+			if(&*ati != tem2_atm) // all atoms that are not yet assigned
+			{
+				Vector3& tem3 = ati->getPosition();
+				
+				// get transformation and apply it for RMSD-testing:
+				test_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
+				transformer.setTransformation(test_matrix);
+				
+				// test transformation with a dummy_molecule:
+				AtomContainer test_mol( templ ); //SPEEDUP: efficient storing of original coordinates (FlexibleMolecule, ConformationSet, AtmVec-Overloading)
+				test_mol.apply(transformer);
+				rmsd = getMinRMSD(&site, &test_mol);
+				if (rmsd < best_rmsd)
+				{
+					best_rmsd = rmsd;
+					trans_matrix.set( test_matrix );
+				}
+				
+			}
+		} // loop-end
+	}
+	
+	
+	/// Case 3) No unique atom exists. Find best assignment for two neighbors
+	else 
+	{
+		
+	}
 }
 
 //Atom *AssemblerFunctions::starAlign(AtmVec& mol1, Atom* partner, AtomContainer* mol2, Matrix4x4& trans_matrix)
@@ -749,7 +898,14 @@ Vector3 AssemblerFunctions::getDiffVec(Atom* atm1, Atom* atm2, BondLengthMap std
 	Vector3 diff_vec = atm1->getPosition() - atm2->getPosition();
 	float diff_len = diff_vec.getLength() - bond_len;
 	
-	diff_vec.normalize();
+	if( diff_vec.isZero() )
+	{
+		Log<<"ERROR: distance between connection site seems to be zero"<<endl;
+	}
+	else
+	{
+		diff_vec.normalize();
+	}
 	return (diff_vec * diff_len);
 }
 
@@ -835,11 +991,11 @@ String AssemblerFunctions::getBondName(Atom* atm, Atom* partner)
  * twoPointMatch
  * TODO: reimplement more efficiently
  */
-Matrix4x4 AssemblerFunctions::twoPointMatch(const Vector3& v1, 
-																									 const Vector3& v2, 
-																									 const Vector3& u1,
-																									 const Vector3& u2)
+Matrix4x4 AssemblerFunctions::twoPointMatch(const Vector3& n1, 
+																									 const Vector3& n2, 
+																									 const Vector3& w1,
+																									 const Vector3& w2)
 {
-	return StructureMapper::matchPoints(v1, v2, Vector3(), u1, u2, Vector3());
+	return StructureMapper::matchPoints(n1, n2, Vector3(), w1, w2, Vector3());
 }
 
