@@ -108,11 +108,37 @@ void StructureAssembler::assemble_ (Molecule* mol, OBMol* ob_mol,
 
 	// connect the individual fragments
 	list< pair < Atom*, Atom* > >::iterator cit = connections.begin();
-	for(; cit != connections.end(); ++cit)
-	{
-//		cout<< "connecting: "<<printInlineMol(cit->first->getParent()) << " - " << printInlineMol( cit->second->getParent() ) <<endl; //DEBUG
-		AssemblerFunctions::connectFragments(cit->first, cit->second, connect_lib, bond_lib);
-	}
+//	int cnt = 1;
+//	for(; cit != connections.end(); ++cit)
+//	{
+////		cout<< "connecting: "<<printInlineMol(cit->first->getParent()) << " - " << printInlineMol( cit->second->getParent() ) <<endl; //DEBUG
+//		AssemblerFunctions::connectFragments( cit->first, cit->second, connect_lib, bond_lib);
+//		SDFile tmp_out("/Users/pbrach/in_between_"+String(cnt)+".sdf", ios::out);
+//		tmp_out << *mol;
+//		tmp_out.close();
+//		++cnt;
+//	}
+	
+	AssemblerFunctions::connectFragments( cit->second, cit->first, connect_lib, bond_lib);
+	
+	SDFile tmp_out("/Users/pbrach/in_between_1.sdf", ios::out);
+	tmp_out << *mol;
+	tmp_out.close();
+	
+	++cit;
+	AssemblerFunctions::connectFragments( cit->first, cit->second, connect_lib, bond_lib);
+	
+	SDFile tmp_out2("/Users/pbrach/in_between_2.sdf", ios::out);
+	tmp_out2 << *mol;
+	tmp_out2.close();
+	
+	++cit;
+	AssemblerFunctions::connectFragments( cit->first, cit->second, connect_lib, bond_lib);
+	SDFile tmp_out3("/Users/pbrach/in_between_3.sdf", ios::out);
+	tmp_out3 << *mol;
+	tmp_out3.close();
+	
+	
 	SDFile debugfile2("/Users/pbrach/debug_file2.sdf", ios::out);
 	debugfile2 << *mol;
 	debugfile2.close();

@@ -174,19 +174,19 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
 	getSite(atm1, site_frag1, key1);
-	
-	
-	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
 	getSite(atm2, site_frag2, key2);
-	cout<< "Site2: "<< printInlineMol(site_frag2)<<endl;
 	
+	AtomContainer* templ1 = new AtomContainer( *connectLib[key1] );
+	AtomContainer* templ2 = new AtomContainer( *connectLib[key2] );
+	
+	// DEBUG
+	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
+	cout<< "Site2: "<< printInlineMol(site_frag2)<<endl;
 	cout<< "key1: "<< key1<<endl;
 	cout<< "key2: "<< key2<<endl;
-	AtomContainer* templ1 = connectLib[key1];
-	AtomContainer* templ2 = connectLib[key2];
-	
 	cout<< "tmp1: "<< printInlineMol(templ1)<<endl;
 	cout<< "tmp2: "<< printInlineMol(templ2)<<endl;
+	// DEBUG - end
 
 	Matrix4x4 trans_matr;
 	TransformationProcessor transformer;
@@ -198,27 +198,24 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	transformer.setTransformation( trans_matr );
 	
 	templ1->apply( transformer );
+	
 	AtmVec remain_tmp1;
 	getRemaining(site_frag1, *templ1, remain_tmp1);
-
 	
 	///3) transfrom templ2 to match with frag2
 	cout<<"####Step3"<<endl;
 	AtomContainer* frag2 = (AtomContainer*)atm2->getParent();
-	cout<<"    got partent"<<endl;
-//	AtmVec vec_temp2;
-//	for(AtomIterator ati = templ2->beginAtom(); +ati; ++ati)
-//		vec_temp2.push_back(&*ati);
+//	cout<<"    got partent"<<endl;
 	
 	starAlign( site_frag2, *templ2, trans_matr );
-	cout<<"    aligned"<<endl;
+//	cout<<"    aligned"<<endl;
 	transformer.setTransformation( trans_matr );
 	templ2->apply( transformer );
-	cout<<"    transformed"<<endl;
+//	cout<<"    transformed"<<endl;
 	
 	AtmVec remain_tmp2;
 	getRemaining(site_frag2, *templ2, remain_tmp2);
-	cout<<"    got remaining"<<endl;
+//	cout<<"    got remaining"<<endl;
 	
 	///4) transfrom the connection bond determined for temp2 to the one determined
 	///   for temp1.
@@ -229,11 +226,24 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	String elem1 = atm1->getElement().getSymbol();
 	short bo1    = atm1->getBond(*atm2)->getOrder();
 	cout<<"Step4:bond align"<<endl;
-	bondAlign(atm1, 
-						getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2), 
-						getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1), 
-						atm2, 
-						trans_matr);
+	Atom* atm1_partner = getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2);
+	Atom* atm2_partner = getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1);
+	
+	//DEBUG
+	SDFile tmp_out("/Users/pbrach/SITE_"+String((unsigned long)atm1)+".sdf", ios::out);
+	tmp_out << *((AtomContainer*)atm1->getParent());
+	tmp_out << *templ1;
+	Molecule dummy1; dummy1.insert(*(new Atom(*atm1_partner)));
+	tmp_out << dummy1;
+	
+	tmp_out << *((AtomContainer*)atm2->getParent());
+	tmp_out << *templ2;
+	Molecule dummy2; dummy2.insert(*(new Atom(*atm2_partner)));
+	tmp_out << dummy2;
+	tmp_out.close();
+	//DEBUG - END
+	
+	bondAlign(atm1, atm1_partner, atm2_partner, atm2, trans_matr);
 	
 	transformer.setTransformation( trans_matr );
 	frag2->apply( transformer );
@@ -246,6 +256,8 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	
 	frag2->apply(t_later);
 	cout<<endl<<endl<<" -   F i n i s h e d   - "<<endl;
+	delete templ1;
+	delete templ2;
 }
 
 /** 
@@ -270,7 +282,7 @@ void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
-//		cout<<"Align: got case2"<<endl;
+		cout<<"Align: got case2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		float sq_dist12 = sit1.getSquareDistance( sit2 ); // get dist to single neighbor in site
@@ -279,11 +291,13 @@ void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4
 		Vector3& tem1 = ati->getPosition();
 		Vector3 tem2;
 		
+		const Element& elem = site[1]->getElement();
+		short     bo = site[1]->getBond( *site[0] )->getOrder();
 		// Find a compatible atom in 'templ' that has the most similar sq_distance to sq_dist12
 		float min_diff = numeric_limits<float>::max();
 		for(++ati; +ati; ++ati) // SPEEDUP: theoretically it should be sufficiently effective if only take the first matching atom
 		{
-			if( atomsCompatible(site[1], &*ati ) ) // at least 1 will be compatible
+			if( ati->getElement() == elem && ati->beginBond()->getOrder() == bo) // at least 1 will be compatible
 			{
 				// calc dist:
 				float diff = tem1.getSquareDistance( ati->getPosition() ) - sq_dist12;
@@ -318,7 +332,7 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	getUniqueAtoms(site, unique_atms);
 //	cout<<"got them"<<endl;
 	
-	/// Case 1) al least two unique atoms, straight computation of transformation
+	/// Case 1) at least two unique atoms, straight computation of transformation
 	if( unique_atms.size() > 1 )
 	{
 		cout<<"align3case: subcase 1"<<endl;
@@ -693,7 +707,7 @@ void AssemblerFunctions::getSite(Atom* atm, AtmVec &site, String& key)
 		
 		String elem = tmp_atm->getElement().getSymbol();
 		elem += String(b_it->getOrder());
-		cout<<"Names "<<elem<<endl;
+//		cout<<"Names "<<elem<<endl;
 		names_neighbors.push_back( make_pair( elem, tmp_atm) );
 	}
 	
@@ -707,14 +721,7 @@ void AssemblerFunctions::getSite(Atom* atm, AtmVec &site, String& key)
 		key += (*name_it).first;
 		
 		if( (*name_it).second->getParent() == parent) 
-		{
 			site.push_back( (*name_it).second );
-//			cout<<"PUSHING "<<(*name_it).first<<endl;//(*name_it).second->getElement().getSymbol()<<(*name_it).second->beginBond()->getOrder()<<endl;
-		}
-		else
-		{
-//			cout<<"NOT PUSH "<<(*name_it).first<<endl;//(*name_it).second->getElement().getSymbol()<<(*name_it).second->beginBond()->getOrder()<<endl;
-		}
 	}
 }
 
