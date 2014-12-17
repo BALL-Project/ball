@@ -18,7 +18,8 @@ String printInlineMol(Composite* mol)
 	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
 	{
 		tmp += ati->getElement().getSymbol();
-		tmp += String(ati->beginBond()->getOrder());
+		if( &*ati != &*((AtomContainer*)mol)->beginAtom())
+			tmp += String(ati->getBond( *((AtomContainer*)mol)->beginAtom() )->getOrder());
 	}
 	return tmp;
 }
@@ -27,10 +28,12 @@ String printInlineMol(AtmVec& mol)
 {
 	
 	String tmp = "";
+	Atom* center = *mol.begin();
 	for(AVIter ati = mol.begin(); ati != mol.end(); ++ati)
 	{
 		tmp += (*ati)->getElement().getSymbol();
-		tmp += String((*ati)->beginBond()->getOrder());
+		if( *ati != center )
+			tmp += String((*ati)->getBond( *center )->getOrder());
 	}
 	return tmp;
 }
@@ -105,7 +108,9 @@ void AssemblerFunctions::connectAtomToSite(AtmVec& site, AtomContainer& temp, At
 	AtmVec unassigned_atoms;
 	getRemaining(site, temp, unassigned_atoms);
 	
-	Atom* tmp = getMatchingAtom( site[0], unassigned_atoms, partner );
+	String elem = partner->getElement().getSymbol();
+	short bo = partner->getBond( *site[0])->getOrder();
+	Atom* tmp = getMatchingAtom( &*temp.beginAtom(), unassigned_atoms, elem, bo );
 	partner->setPosition( tmp->getPosition() );
 }
 
@@ -165,7 +170,7 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 																					BondLengthMap& bondLib)
 {
 	///1) get connection sites of the two atoms and the corresponding templates
-	cout<<"Step1"<<endl;
+	cout<<"####Step1"<<endl;
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
 	getSite(atm1, site_frag1, key1);
@@ -187,32 +192,18 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	TransformationProcessor transformer;
 	
 	///2) transfrom templ1 to match with frag1 (keep frag1 as it was)
-	cout<<"Step3"<<endl;
-//	AtmVec vec_temp1;
-//	for(AtomIterator ati = templ1->beginAtom(); +ati; ++ati)
-//		vec_temp1.push_back(&*ati);
+	cout<<"####Step2"<<endl;
 	
 	starAlign( site_frag1, *templ1, trans_matr );
 	transformer.setTransformation( trans_matr );
 	
 	templ1->apply( transformer );
-
 	AtmVec remain_tmp1;
 	getRemaining(site_frag1, *templ1, remain_tmp1);
-	cout<<endl<<"molecule: "<<endl;
-	for(AtomIterator ati = templ1->beginAtom(); +ati; ++ati)
-	{
-		cout<<ati->getElement().getSymbol()<<ati->beginBond()->getOrder()<<endl;
-	}
-	
-	cout<<endl<<"remain: "<<endl;
-	for(AVIter ati = remain_tmp1.begin(); ati!=remain_tmp1.end(); ++ati)
-	{
-		cout<<(*ati)->getElement().getSymbol()<<(*ati)->beginBond()->getOrder()<<endl;
-	}
+
 	
 	///3) transfrom templ2 to match with frag2
-	cout<<"Step4"<<endl;
+	cout<<"####Step3"<<endl;
 	AtomContainer* frag2 = (AtomContainer*)atm2->getParent();
 	cout<<"    got partent"<<endl;
 //	AtmVec vec_temp2;
@@ -231,24 +222,30 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	
 	///4) transfrom the connection bond determined for temp2 to the one determined
 	///   for temp1.
-	cout<<"Step5"<<endl;
+	cout<<"####Step4"<<endl;
+	String elem2 = atm2->getElement().getSymbol();
+	short bo2    = atm2->getBond(*atm1)->getOrder();
+	
+	String elem1 = atm1->getElement().getSymbol();
+	short bo1    = atm1->getBond(*atm2)->getOrder();
+	cout<<"Step4:bond align"<<endl;
 	bondAlign(atm1, 
-						getMatchingAtom( atm1, remain_tmp1, atm2), 
-						getMatchingAtom( atm2, remain_tmp2, atm1), 
+						getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2), 
+						getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1), 
 						atm2, 
 						trans_matr);
-	transformer.setTransformation( trans_matr );
 	
+	transformer.setTransformation( trans_matr );
 	frag2->apply( transformer );
 	
-	///6) set bond length to standard length
-	cout<<"Step6"<<endl;
+	///5) set bond length to standard length
+	cout<<"####Step5"<<endl;
 	Vector3 bond_fix = getDiffVec(atm1, atm2, bondLib);
 	cout<<"bond fix: "<<bond_fix<<endl;
 	TranslationProcessor t_later(bond_fix);
 	
 	frag2->apply(t_later);
-	cout<<"Finished"<<endl;
+	cout<<endl<<endl<<" -   F i n i s h e d   - "<<endl;
 }
 
 /** 
@@ -266,12 +263,14 @@ void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4
 	/// Case 1) 'site' has size 1, thus we can only translate the center 
 	if ( site.size() == 1)
 	{
+//		cout<<"Align: got case1"<<endl;
 		Vector3 transl = site[0]->getPosition() - templ.beginAtom()->getPosition();
 		trans_matrix.setTranslation(transl);
 	}
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
+//		cout<<"Align: got case2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		float sq_dist12 = sit1.getSquareDistance( sit2 ); // get dist to single neighbor in site
@@ -297,7 +296,7 @@ void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4
 	/// Case 3) 'site' has at least 2 neighbors
 	else
 	{
-		cout<<"Align: got case3"<<endl;
+//		cout<<"Align: got case3"<<endl;
 		alignCase3(site, templ, trans_matrix);
 	}
 }
@@ -315,9 +314,9 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	// find all unique atoms in 'site' (according to BO to cental atom and element type)
 	AtmVec unique_atms;
 	unique_atms.reserve(8);
-	cout<<"getUnique"<<endl;
+//	cout<<"getUnique"<<endl;
 	getUniqueAtoms(site, unique_atms);
-	cout<<"got them"<<endl;
+//	cout<<"got them"<<endl;
 	
 	/// Case 1) al least two unique atoms, straight computation of transformation
 	if( unique_atms.size() > 1 )
@@ -328,12 +327,18 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 		Vector3& sit3 = unique_atms[1]->getPosition();
 		
 		Vector3& tem1 = templ.beginAtom()->getPosition();
-		cout<<"before getMatching"<<endl;
-		cout<<&*templ.beginAtom()<<" "<<&templ <<" "<<unique_atms[0]<<endl;
-		Vector3& tem2 = getMatchingAtom( site[0], &templ, unique_atms[0] )->getPosition();
-		Vector3& tem3 = getMatchingAtom( site[0], &templ, unique_atms[1] )->getPosition();
-		cout<<tem1<<endl;
-		cout<<tem2<<endl;
+//		cout<<"before getMatching"<<endl;
+//		cout<<&*templ.beginAtom()<<" "<<&templ <<" "<<unique_atms[0]<<endl;
+		
+		String elem2 = unique_atms[0]->getElement().getSymbol();
+		short    bo2 = unique_atms[0]->getBond( *site[0] )->getOrder();
+		String elem1 = unique_atms[1]->getElement().getSymbol();
+		short    bo1 = unique_atms[1]->getBond( *site[0] )->getOrder();
+		
+		Vector3& tem2 = getMatchingAtom( &*templ.beginAtom(), &templ, elem2, bo2 )->getPosition();
+		Vector3& tem3 = getMatchingAtom( &*templ.beginAtom(), &templ, elem1, bo1 )->getPosition();
+//		cout<<tem1<<endl;
+//		cout<<tem2<<endl;
 		// get transformation:
 		trans_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
 	}
@@ -359,7 +364,9 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 		Vector3& sit3 = site3_atm->getPosition();
 		
 		Vector3& tem1 = templ.beginAtom()->getPosition();
-		Atom* tem2_atm = getMatchingAtom(&*templ.beginAtom(), &templ, unique_atms[0] );
+		String elem = unique_atms[0]->getElement().getSymbol();
+		short    bo = unique_atms[0]->getBond( *site[0] )->getOrder();
+		Atom* tem2_atm = getMatchingAtom(&*templ.beginAtom(), &templ, elem, bo );
 		Vector3& tem2 = tem2_atm->getPosition();
 		
 		// test all possible assignments of an 'templ'-atm to the 'site3_atm'
@@ -446,188 +453,6 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	}
 }
 
-//Atom *AssemblerFunctions::starAlign(AtmVec& mol1, Atom* partner, AtomContainer* mol2, Matrix4x4& trans_matrix)
-//{
-//	AtomContainer mol2_copy(*mol2); /// We need a copy if we test several transformations
-	
-//	Vector3 frag2, frag3, tem2, tem3; //the vectors to calc the transformaion
-//	TransformationProcessor transformer;
-	
-//	// set the two center atoms (which are always the first atoms):
-//	Vector3& frag1 = mol1[0]->getPosition();
-//	Vector3& tem1  = mol2_copy->beginAtom()->getPosition();
-	
-//	/// 0.) simple solutions for only one or two neighbors
-//	// the site (mol1) does not contain the connection atom and thus has one atom less than in mol2
-//	int num_atoms = mol1.size();
-	
-//	/// 0.2) TODO: Case of no neighbor?!
-//	if(num_atoms == 2)
-//	{
-//		///0.1) only the center and another atom exists in the mother fragment.
-//		///     in this case simply use that other atom on the frag1 side.
-//		///     For frag2 find the atom matching that atom. Return the remaining atom in frag2 as partner
-//		if(num_atoms == 2) /// WARNING: could not yet test this case!!!
-//		{
-//			// position 0 has always the center, leaves pos 1 as the only possible partner
-//			frag2 = mol1[1]->getPosition();
-//			tem2  = mol2_copy->getAtom(1)->getPosition();
-			
-//			// create dummys to use the 3 point matching
-//			frag3 = Vector3();
-//			tem3  = Vector3();
-//		}
-//		/// TODO: there has to be a decision which mapping is better for the two alternatives!!!
-//		/// (if both non-central-atoms are identical, otherwise the current solution is okay)
-		
-//		///0.2) Beside the center atom, 2 others exist. perhaps this is not really a simple case.
-//		///     remove this part and fit the surronding if-clause!
-//		else if(num_atoms == 3)
-//		{
-//			/// MAL GANZ IM ERNST: das geht so alles nit!!!! damüssma nomma ran!
-//			// get correct atom assignment:
-//			Atom *temp_atA2, *temp_atA3, *temp_atB2, *temp_atB3;
-			
-//			temp_atA2 = mol1[1];
-//			temp_atB2 = getMatchingAtom(mol2_copy, temp_atA2);
-			
-//			temp_atA3 = mol1[2];
-//			// the respective remaining atom in mol2 is the one we need for 'temp_atB3'
-//			temp_atB3 = mol2_copy->getAtom(2);
-//			if(temp_atB3 == temp_atB2)
-//				temp_atB3 = mol2_copy->getAtom(1);
-			
-//			// get positions:
-//			frag2 = temp_atA2->getPosition();
-//			frag3 = temp_atA3->getPosition();
-//			tem2  = temp_atB2->getPosition();
-//			tem3  = temp_atB3->getPosition();
-//		}
-//		trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
-		
-//		///TODO: find the real one that is compatible with 'partner'
-//		return mol2->getAtom(3);
-//	}
-	
-//	/// 1.) More than 1 neighbor is given. Find all unique atoms in mol1
-//	/// TODO: remember to include the partner atom in the uniqueness search!
-//	AtmVec unique_atms;
-//	unique_atms.reserve(8);
-//	getUniqueAtoms(mol1, unique_atms);
-
-//	///2.) Case of at last two unique atoms beside the central atom. In this case 
-//	/// we may simply use these and are done!
-//	if (unique_atms.size() > 1)
-//	{
-//		frag1 = mol1[0]->getPosition(); 
-//		frag2 = unique_atms[0]->getPosition();
-//		frag3 = unique_atms[1]->getPosition();
-		
-//		tem1 = mol2_copy->getAtom(0)->getPosition();
-//		tem2 = getMatchingAtom( mol2_copy, unique_atms[0] )->getPosition();
-//		tem3 = getMatchingAtom( mol2_copy, unique_atms[1] )->getPosition();
-		
-//		// get transformation:
-//		trans_matrix = StructureMapper::matchPoints(frag1, frag2, frag3, tem1, tem2, tem3);
-		
-//		return;
-//	}
-
-//	///3.) Just one unique atom was found, here we need to test some transformations
-//	///    to find the best match for the second neighbor atom.
-//	if (unique_atms.size() == 1) { 
-//		// if at least one mol1 atom was unique, it is curcial to use it:
-//		Atom* uniqueA = unique_atms[0];
-//		Atom* uniqueB = getMatchingAtom( mol2_copy, uniqueA );
-		
-//		// get next non unique atom from mol1:
-//		Atom* sel=0;
-//		AtmVec::iterator ato = mol1.begin();
-//		for(ato++; ato!=mol1.end(); ato++)
-//		{
-//			if(*ato != uniqueA){
-//				sel = *ato;
-//				break;
-//			}
-//		}
-		
-//		// test all possible assignments of the selected neighbor atom of mol1
-//		// to an atom of mol2
-//		float best_rmsd = numeric_limits<float>::max();
-		
-//		AtomIterator ati = mol2_copy->beginAtom();
-//		for(ati++; +ati; ati++)
-//		{
-//			float rmsd = numeric_limits<float>::max();
-//			if(&*ati != uniqueB)
-//			{
-//				Atom* selectionA1 = mol1[0];Atom* selectionB1 = mol2_copy->getAtom(0);
-//				frag1 = selectionA1->getPosition(); tem1  = selectionB1->getPosition();
-//				frag2 = uniqueA->getPosition();
-//				tem2  = uniqueB->getPosition();
-//				frag3 = sel->getPosition();
-//				tem3  = ati->getPosition();
-				
-//				trans_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, frag1, frag2, frag3);
-//				transformer.setTransformation(trans_matrix);
-//				mol2_copy->apply(transformer);
-				
-//				rmsd = getMinRMSD(&mol1, mol2_copy);
-//				if (rmsd < best_rmsd)
-//					best_rmsd = rmsd;
-//			}
-//		}
-//		return;
-//	}
-//	///4.) No unique atom was found. Here we have to check every possible
-//	///    assignment for the two remaining atoms...
-//	float best_rmsd = numeric_limits<float>::max();
-//	Atom* selectionA1 = mol1[0];
-//	Atom* selectionA2 = mol1[1];
-//	Atom* selectionA3 = mol1[2];
-	
-//	Atom* selectionB1 = mol2_copy->getAtom(0);
-//	Atom* selectionB2 = 0;
-//	Atom* selectionB3 = 0;
-	
-//	// test all possible assignments to 'selectionA2'
-//	AtomIterator ati = mol2_copy->beginAtom();
-//	Matrix4x4 best_trans;
-//	for(ati++; +ati; ati++)
-//	{
-//		selectionB2 = &*ati;
-//		if( atomsCompatible(selectionA2, selectionB2) )
-//		{
-//			// test all possible assignments to 'selectionA3'
-//			AtomIterator ato = mol2_copy->beginAtom();
-//			for(ato++; +ato; ato++)
-//			{
-//				selectionB3 = &*ato;
-//				if( (selectionB2 == selectionB3) || !(atomsCompatible(selectionA3, selectionB3)) )
-//					continue;
-				
-//				float rmsd = numeric_limits<float>::max();
-//				frag1 = selectionA1->getPosition(); tem1  = selectionB1->getPosition();
-//				frag2 = selectionA2->getPosition(); tem2  = selectionB2->getPosition();
-//				frag3 = selectionA3->getPosition(); tem3  = selectionB3->getPosition();
-					
-//				trans_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, frag1, frag2, frag3);
-//				transformer.setTransformation(trans_matrix);
-//				mol2_copy->apply(transformer);
-				
-//				rmsd = getMinRMSD(&mol1, mol2_copy);
-//				if (rmsd < best_rmsd)
-//				{
-//					best_rmsd = rmsd;
-//					best_trans = trans_matrix;
-//				}
-//			}
-//		}
-//	}
-//	trans_matrix = best_trans;
-//	return;
-//}
-
 /**
  * bondAlign
  */
@@ -701,9 +526,10 @@ float AssemblerFunctions::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
 }
 
 /*
- * append all atoms in result that 'remain'. Meaning atoms of templ that do not
- * optimally match with any atom in site
+ * append all atoms in 'result' that remain. Meaning atoms of 'templ' that do not
+ * optimally match with any atom in 'site'
  */
+/// TODO: the recursion can be made nicer if using indices and 'site'
 void AssemblerFunctions::getRemaining(AtmVec& site, AtomContainer& templ, AtmVec& result)
 {
 	AtmVec vec2;
@@ -714,18 +540,36 @@ void AssemblerFunctions::getRemaining(AtmVec& site, AtomContainer& templ, AtmVec
 	
 	AtmVec::iterator ati = site.begin(); ++ati;  // start with second atom (first is central atom)
 	AtmVec::iterator end1 = site.end();
-	matchPermutaions( ati, end1, vec2, 1, 0, &min_sq_dist, result);
+	matchPermutaions(*site[0], ati, end1, vec2, 1, 0, &min_sq_dist, result);
+	
+	
+	// D E B U G :
+	cout<<endl<<"'getRemaining':"<<endl;
+	cout<<"templ    : "<<printInlineMol(&templ)<<endl;
+	cout<<"site     : "<<printInlineMol(site)<<endl;
+	cout<<"remainder: ";
+	for(AVIter at = result.begin(); at != result.end(); ++at)
+	{
+		Atom* atm = *at;
+		Atom* center = &*templ.beginAtom();
+		cout<< atm->getElement().getSymbol();
+		if(atm != center )
+			cout<< atm->getBond( *center )->getOrder();
+	}
+	cout<<endl;
+	cout<<"sq dist: "<< min_sq_dist <<endl<<endl;
 }
 
 /*
  * matchPermutaions
  */
-void AssemblerFunctions::matchPermutaions(AVIter& ati1, AVIter& end1, 
+void AssemblerFunctions::matchPermutaions(Atom& center,
+																					AVIter& ati1, AVIter& end1, 
 																					AtmVec& atm_vec, int i, 
 																					float loc_sq_dist, float* global_sq_dist,
 																					AtmVec& result)
 {
-	cout<<i;
+//	cout<<i;
 	// end recursion case: 
 	// everything was permuted so check how good the square dist was and perhaps
 	// update the global sq_dist
@@ -739,8 +583,8 @@ void AssemblerFunctions::matchPermutaions(AVIter& ati1, AVIter& end1,
 			result.clear();
 			for(int k = i; k < atm_vec.size(); ++k)
 				result.push_back( atm_vec[k] );
-			cout<<endl<<"SD: "<<  loc_sq_dist<<endl;
-			cout<<printInlineMol(atm_vec)<<endl;
+//			cout<<endl<<"SD: "<<  loc_sq_dist<<endl;
+//			cout<<printInlineMol(atm_vec)<<endl;
 			
 		}
 		return;
@@ -755,16 +599,17 @@ void AssemblerFunctions::matchPermutaions(AVIter& ati1, AVIter& end1,
 		{
 			// test if element and bondtype fit for this assignment
 			// (this is rather for correctness than for speed)
-			if(  atomsCompatible( *ati1, atm_vec[j] )  )
+			if( (*ati1)->getElement().getSymbol() == atm_vec[j]->getElement().getSymbol() &&
+					(*ati1)->getBond( center )->getOrder()  == atm_vec[j]->beginBond()->getOrder() )
 			{
-				cout<<" MATCH "<<(*ati1)->beginBond()->getOrder()<<" - "<<atm_vec[j]->beginBond()->getOrder()<<endl;
+//				cout<<" MATCH "<<(*ati1)->beginBond()->getOrder()<<" - "<<atm_vec[j]->beginBond()->getOrder()<<endl;
 				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
 				
 				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
 				
 				AtmVec::iterator ati2 = ati1; // create new atom iterator for next recursion
 				
-				matchPermutaions( ++ati2, end1, atm_vec, (i+1), (loc_sq_dist + sq_dist_update),
+				matchPermutaions( center, ++ati2, end1, atm_vec, (i+1), (loc_sq_dist + sq_dist_update),
 													global_sq_dist, result);
 				
 				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
@@ -864,79 +709,18 @@ void AssemblerFunctions::getSite(Atom* atm, AtmVec &site, String& key)
 		if( (*name_it).second->getParent() == parent) 
 		{
 			site.push_back( (*name_it).second );
-			cout<<"PUSHING "<<(*name_it).first<<endl;//(*name_it).second->getElement().getSymbol()<<(*name_it).second->beginBond()->getOrder()<<endl;
+//			cout<<"PUSHING "<<(*name_it).first<<endl;//(*name_it).second->getElement().getSymbol()<<(*name_it).second->beginBond()->getOrder()<<endl;
 		}
 		else
 		{
-			cout<<"NOT PUSH "<<(*name_it).first<<endl;//(*name_it).second->getElement().getSymbol()<<(*name_it).second->beginBond()->getOrder()<<endl;
+//			cout<<"NOT PUSH "<<(*name_it).first<<endl;//(*name_it).second->getElement().getSymbol()<<(*name_it).second->beginBond()->getOrder()<<endl;
 		}
 	}
 }
 
-///*
-// * handleSimpleConnections
-// */
-//void AssemblerFunctions::handleSimpleConnections( Atom* atm1, Atom* atm2,
-//															boost::unordered_map <String, float >& bondLib,
-//															boost::unordered_map <String, Fragment* >& connectLib)
-//{
-//	Fragment* frag1 = (Fragment*)atm1->getParent();
-//	Fragment* frag2 = (Fragment*)atm2->getParent();
-	
-//	Matrix4x4 trans;
-//	// create a new bond between the two atoms:
-//	Bond* bnd = new Bond();
-//	bnd->setOrder(1);
-//	atm1->createBond(*bnd, *atm2);
-	
-//	AtmVec site; String site_key; int pos = -1; AtomContainer* templ;
-	
-//	// both fragments have just one atom:
-//	// keep atom1 and move atom2 in just one direction about the std bond length
-//	if( frag1->countAtoms() + frag2->countAtoms() == 2)
-//	{
-//		String bond_key = atm1->getElement().getSymbol();
-//		bond_key += atm2->getElement().getSymbol();
-		
-//		atm2->setPosition( atm1->getPosition() );
-//		atm2->getPosition().x += bondLib[bond_key];
-
-//		return; // return early
-//	}
-//	// frag 2 is a single atom
-//	else if(frag2->countAtoms() == 1)
-//	{
-//		pos = getSiteWithPos(atm1, site, atm2, site_key);
-//		templ = new AtomContainer(*connectLib[site_key]);
-		
-//		atm2->setPosition( templ->getAtom(pos)->getPosition() );
-//		templ->remove( *templ->getAtom(pos) );
-		
-//		// rotate the single_frag so that it aligns with the template
-//		starAlign(site, templ, trans);
-//		TransformationProcessor transformer(trans);
-//		frag1->apply(transformer);
-//	}
-//	// frag 1 is a single atom (should seldomly occur)
-//	else
-//	{
-//		pos = getSiteWithPos(atm2, site, atm1, site_key);
-//		templ = new AtomContainer(*connectLib[site_key]);
-		
-//		atm1->setPosition( templ->getAtom(pos)->getPosition() );
-//		templ->remove( *templ->getAtom(pos) );
-
-//		// rotate the single_frag so that it aligns with the template
-//		starAlign(site, templ, trans);
-//		TransformationProcessor transformer(trans);
-//		frag2->apply(transformer);
-//	}
-//}
-
 /*
  * getUniqueAtoms
  */
-///TODO: test!!!
 void AssemblerFunctions::getUniqueAtoms(AtomContainer* mol1, AtmVec& unique_atms)
 {
 	AtomIterator atmi = mol1->beginAtom();
@@ -962,7 +746,6 @@ void AssemblerFunctions::getUniqueAtoms(AtomContainer* mol1, AtmVec& unique_atms
 /*
  * getUniqueAtoms
  */
-///TODO: test!!!
 void AssemblerFunctions::getUniqueAtoms(AtmVec& mol1, AtmVec& unique_atms)
 {
 	AtmVec::iterator atmi = mol1.begin();
@@ -1038,30 +821,60 @@ void AssemblerFunctions::swapAtoms(Atom*& a, Atom*& b)
 }
 
 /* 
+ * getMatchingAtomAll(3)
+ */
+Atom* AssemblerFunctions::getMatchingAtomAll(Atom *center, AtmVec& mol, String& elem, short bo)
+{
+	cout<<"in getMatchingAll 3"<<endl;
+
+	AVIter ati = mol.begin();
+	for(; ati != mol.end(); ++ati)
+	{
+//		cout<< (*ati)->getElement().getSymbol()<<(*ati)->getBond( *center )->getOrder()<<" ";
+//		cout<<((*ati)->getElement().getSymbol() == elem)<<" ";
+//		cout<< ( (*ati)->getBond( *center )->getOrder() == bo )<<endl;
+		if( (*ati)->getElement().getSymbol() == elem && (*ati)->getBond( *center )->getOrder() == bo )
+			return *ati;
+	}
+	
+	cout<<"ERROR: could not find a partner for: "<<elem<<bo<<endl<<endl;
+	cout<<"Molecule had:"<<endl;
+	for(AVIter at = mol.begin(); at != mol.end(); ++at)
+	{
+		cout<<(*at)->getElement().getSymbol();
+		if(*at != center)
+			cout<<(*at)->getBond( *center )->getOrder();
+		cout<<" ";
+	}
+	cout<<endl;
+	exit(EXIT_FAILURE);
+}
+
+/* 
  * getMatchingAtom(2)
  */
-Atom* AssemblerFunctions::getMatchingAtom(Atom *center, AtmVec& mol, Atom* atm)
+Atom* AssemblerFunctions::getMatchingAtom(Atom *center, AtmVec& mol, String& elem, short bo)
 {
 	cout<<"in getMatching 2"<<endl;
-	const String& elem = atm->getElement().getSymbol();
-	short bo = atm->getBond(*center)->getOrder(); //should have only one bond
 
 	AVIter ati = mol.begin();
 	ati++; // first atom is the center atom, which we never want
 	for(; ati != mol.end(); ++ati)
 	{
-		if( (*ati)->getElement().getSymbol() == elem && (*ati)->getBond( **mol.begin() )->getOrder() == bo )
+		cout<< (*ati)->getElement().getSymbol()<<(*ati)->getBond( *center )->getOrder()<<" ";
+		cout<<((*ati)->getElement().getSymbol() == elem)<<" ";
+		cout<< ( (*ati)->getBond( *center )->getOrder() == bo )<<endl;
+		if( (*ati)->getElement().getSymbol() == elem && (*ati)->getBond( *center )->getOrder() == bo )
 			return *ati;
 	}
 	
-	cout<<"ERROR: could not find a partner Atom!"<<endl;
-	cout<<"Was looking for: "<<elem<<"-"<<bo<<endl<<endl;
-	cout<<"Molecule contained:"<<endl;
+	cout<<"ERROR: could not find a partner for: "<<elem<<bo<<endl<<endl;
+	cout<<"Molecule had:"<<endl;
 	for(AVIter at = mol.begin(); at != mol.end(); ++at)
 	{
 		cout<<(*at)->getElement().getSymbol();
-		if(*at != *mol.begin())
-			cout<<(*at)->getBond( **mol.begin() )->getOrder();
+		if(*at != center)
+			cout<<(*at)->getBond( *center )->getOrder();
 		cout<<" ";
 	}
 	cout<<endl;
@@ -1071,18 +884,15 @@ Atom* AssemblerFunctions::getMatchingAtom(Atom *center, AtmVec& mol, Atom* atm)
 /* 
  * getMatchingAtom(1)
  */
-Atom* AssemblerFunctions::getMatchingAtom(Atom* center, AtomContainer* mol, Atom* atm)
+Atom* AssemblerFunctions::getMatchingAtom(Atom* center, AtomContainer* mol, String &elem,  short bo)
 {
 	cout<<"in getMatching 1"<<endl;
-	const String& elem = atm->getElement().getSymbol();
-	cout<<atm->getBond(*center)<<endl;
-	short bo = atm->getBond(*center)->getOrder(); //should have only one bond
 
 	AtomIterator ati = mol->beginAtom();
 	ati++; // first atom is the center atom, which we never want
 	for(; +ati; ++ati)
 	{
-		if( ati->getElement().getSymbol() == elem && ati->getBond( *mol->beginAtom() )->getOrder() == bo )
+		if( ati->getElement().getSymbol() == elem && ati->getBond( *center )->getOrder() == bo )
 			return &*ati;
 	}
 	
@@ -1092,8 +902,8 @@ Atom* AssemblerFunctions::getMatchingAtom(Atom* center, AtomContainer* mol, Atom
 	for(AtomIterator at = mol->beginAtom(); +at; ++at)
 	{
 		cout<<at->getElement().getSymbol();
-		if(&*at != &*mol->beginAtom())
-			cout<<at->getBond( *mol->beginAtom() )->getOrder();
+		if(&*at != center )
+			cout<<at->getBond( *center )->getOrder();
 		cout<<", ";
 	}
 	cout<<endl;
