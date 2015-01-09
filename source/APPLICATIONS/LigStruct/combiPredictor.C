@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	parpars.setOutputFormatSource("i","o");
 
 	String manual = 
-			"Generate a valid (not optimized) 3D structure for structures of an"
+			"Generate a valid (not optimized) 3D structure for structures of an "
 			"entire combinatorial library which is defined in a CONF file (either "
 			"containing SIMLES for each group or giving the paths multi line SMILES "
 			"files).";

@@ -435,7 +435,8 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 		for(ati++; +ati; ati++)
 		{
 			tem_2_atm = &*ati;
-			if( atomsCompatible(site2_atm, tem_2_atm) )
+			///TODO: 'atomsCompatible' won't work, use with a site atom, replace!
+			if( atomsCompatible(site2_atm, tem_2_atm) ) 
 			{
 				Vector3& tem2 = tem_2_atm->getPosition(); //assign first neighbor
 				
@@ -444,6 +445,7 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 				for(ato++; +ato; ato++)
 				{
 					tem_3_atm = &*ato;
+					///TODO: 'atomsCompatible' won't work, use with a site atom, replace!
 					if( (tem_2_atm != tem_3_atm) && (atomsCompatible(site3_atm, tem_3_atm)) )
 					{
 						float rmsd = numeric_limits<float>::max();
@@ -659,6 +661,7 @@ void AssemblerFunctions::sqdistPerPermutation(AVIter& ati1, AVIter& end1,
 		{
 			// test if element and bondtype fit for this assignment
 			// (this is rather for correctness than for speed)
+			///TODO: illegal use of 'atomsCompatible'
 			if(  atomsCompatible( *ati1, atm_vec[j] )  )
 			{
 				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
@@ -707,7 +710,6 @@ void AssemblerFunctions::getSite(Atom* atm, AtmVec &site, String& key)
 		
 		String elem = tmp_atm->getElement().getSymbol();
 		elem += String(b_it->getOrder());
-//		cout<<"Names "<<elem<<endl;
 		names_neighbors.push_back( make_pair( elem, tmp_atm) );
 	}
 	
@@ -726,7 +728,7 @@ void AssemblerFunctions::getSite(Atom* atm, AtmVec &site, String& key)
 }
 
 /*
- * getUniqueAtoms
+ * getUniqueAtoms (1)
  */
 void AssemblerFunctions::getUniqueAtoms(AtomContainer* mol1, AtmVec& unique_atms)
 {
@@ -751,7 +753,7 @@ void AssemblerFunctions::getUniqueAtoms(AtomContainer* mol1, AtmVec& unique_atms
 }
 
 /*
- * getUniqueAtoms
+ * getUniqueAtoms (2)
  */
 void AssemblerFunctions::getUniqueAtoms(AtmVec& mol1, AtmVec& unique_atms)
 {
@@ -808,6 +810,8 @@ bool AssemblerFunctions::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 
 /*
  * atomsCompatible
+ * TODO: improve this version. Perhaps by using selections for sites and 
+ * restricting to bonds that are selected?
  */
 bool AssemblerFunctions::atomsCompatible(Atom* at1,Atom* at2)
 {
@@ -858,7 +862,7 @@ Atom* AssemblerFunctions::getMatchingAtomAll(Atom *center, AtmVec& mol, String& 
 }
 
 /* 
- * getMatchingAtom(2)
+ * getMatchingAtom(1)
  */
 Atom* AssemblerFunctions::getMatchingAtom(Atom *center, AtmVec& mol, String& elem, short bo)
 {
@@ -889,7 +893,7 @@ Atom* AssemblerFunctions::getMatchingAtom(Atom *center, AtmVec& mol, String& ele
 }
 
 /* 
- * getMatchingAtom(1)
+ * getMatchingAtom(2)
  */
 Atom* AssemblerFunctions::getMatchingAtom(Atom* center, AtomContainer* mol, String &elem,  short bo)
 {
