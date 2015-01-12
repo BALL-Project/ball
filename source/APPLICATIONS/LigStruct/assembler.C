@@ -173,23 +173,28 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	cout<<"####Step1"<<endl;
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
+	cout<<"####Step1 - Site1"<<endl;
 	getSite(atm1, site_frag1, key1);
+	cout<<"####Step1 - Site2"<<endl;
 	getSite(atm2, site_frag2, key2);
 	
+	cout<<"####Step1 - C-Lib lookup 1: "<<key1<<endl;
 	AtomContainer* templ1 = new AtomContainer( *connectLib[key1] );
+	cout<<"####Step1 - C-Lib lookup 2: "<<key2<<endl;
 	AtomContainer* templ2 = new AtomContainer( *connectLib[key2] );
 	
-	// DEBUG
-	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
-	cout<< "Site2: "<< printInlineMol(site_frag2)<<endl;
-	cout<< "key1: "<< key1<<endl;
-	cout<< "key2: "<< key2<<endl;
-	cout<< "tmp1: "<< printInlineMol(templ1)<<endl;
-	cout<< "tmp2: "<< printInlineMol(templ2)<<endl;
-	// DEBUG - end
+//	// DEBUG
+//	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
+//	cout<< "Site2: "<< printInlineMol(site_frag2)<<endl;
+//	cout<< "key1: "<< key1<<endl;
+//	cout<< "key2: "<< key2<<endl;
+//	cout<< "tmp1: "<< printInlineMol(templ1)<<endl;
+//	cout<< "tmp2: "<< printInlineMol(templ2)<<endl;
+//	// DEBUG - end
 
 	Matrix4x4 trans_matr;
 	TransformationProcessor transformer;
+	cout<<"####Step1 - done"<<endl;
 	
 	///2) transfrom templ1 to match with frag1 (keep frag1 as it was)
 	cout<<"####Step2"<<endl;
@@ -229,33 +234,34 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	Atom* atm1_partner = getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2);
 	Atom* atm2_partner = getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1);
 	
-	//DEBUG
-	SDFile tmp_out("/Users/pbrach/SITE_"+String((unsigned long)atm1)+".sdf", ios::out);
-	tmp_out << *((AtomContainer*)atm1->getParent());
-	tmp_out << *templ1;
-	Molecule dummy1; dummy1.insert(*(new Atom(*atm1_partner)));
-	tmp_out << dummy1;
+//	//DEBUG
+//	SDFile tmp_out("/Users/pbrach/SITE_"+String((unsigned long)atm1)+".sdf", ios::out);
+//	tmp_out << *((AtomContainer*)atm1->getParent());
+//	tmp_out << *templ1;
+//	Molecule dummy1; dummy1.insert(*(new Atom(*atm1_partner)));
+//	tmp_out << dummy1;
 	
-	tmp_out << *((AtomContainer*)atm2->getParent());
-	tmp_out << *templ2;
-	Molecule dummy2; dummy2.insert(*(new Atom(*atm2_partner)));
-	tmp_out << dummy2;
-	tmp_out.close();
-	//DEBUG - END
-	
+//	tmp_out << *((AtomContainer*)atm2->getParent());
+//	tmp_out << *templ2;
+//	Molecule dummy2; dummy2.insert(*(new Atom(*atm2_partner)));
+//	tmp_out << dummy2;
+//	tmp_out.close();
+//	//DEBUG - END
+	cout<<"found partner"<<endl;
 	bondAlign(atm1, atm1_partner, atm2_partner, atm2, trans_matr);
-	
+	cout<<"aligned"<<endl;
 	transformer.setTransformation( trans_matr );
 	frag2->apply( transformer );
+	cout<<"transformed"<<endl;
 	
 	///5) set bond length to standard length
 	cout<<"####Step5"<<endl;
 	Vector3 bond_fix = getDiffVec(atm1, atm2, bondLib);
-	cout<<"bond fix: "<<bond_fix<<endl;
+//	cout<<"bond fix: "<<bond_fix<<endl;
 	TranslationProcessor t_later(bond_fix);
 	
 	frag2->apply(t_later);
-	cout<<endl<<endl<<" -   F i n i s h e d   - "<<endl;
+//	cout<<endl<<endl<<" -   F i n i s h e d   - "<<endl;
 	delete templ1;
 	delete templ2;
 }
@@ -282,7 +288,7 @@ void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
-		cout<<"Align: got case2"<<endl;
+//		cout<<"Align: got case2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		float sq_dist12 = sit1.getSquareDistance( sit2 ); // get dist to single neighbor in site
@@ -335,7 +341,7 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	/// Case 1) at least two unique atoms, straight computation of transformation
 	if( unique_atms.size() > 1 )
 	{
-		cout<<"align3case: subcase 1"<<endl;
+//		cout<<"align3case: subcase 1"<<endl;
 		Vector3& sit1 = site[0]->getPosition(); 
 		Vector3& sit2 = unique_atms[0]->getPosition();
 		Vector3& sit3 = unique_atms[1]->getPosition();

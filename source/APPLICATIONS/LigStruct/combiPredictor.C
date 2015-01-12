@@ -67,11 +67,11 @@ int main(int argc, char* argv[])
 /// F I N I S H
 /// write output
 	String outfile_name = String(parpars.get("o"));
-//	SDFile outfile(outfile_name, ios::out);
+	SDFile outfile(outfile_name, ios::out);
 
-//	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
+	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
 	
 /// Clean up
-//	outfile.close();
+	outfile.close();
 }
 

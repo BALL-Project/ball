@@ -42,7 +42,7 @@ void StructureAssembler::setLibsFromConfig(const String& path)
 	
 	// read lib files:
 //	readSDFFragmentLib();
-	readFragmentLib();
+//	readFragmentLib();
 	readBondLib();
 	readConnectionLib();
 }

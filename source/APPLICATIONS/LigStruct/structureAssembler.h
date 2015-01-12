@@ -55,14 +55,14 @@ public:
 	 */
 	void setLibsFromConfig(const String& path);
 
+	CoordinateMap fragment_lib;
+	BondLengthMap bond_lib;
+	ConnectionMap connect_lib;
 private:
 	String fragment_lib_path;
 	String bondlenth_lib_path;
 	String connection_lib_path;
 	
-	CoordinateMap fragment_lib;
-	BondLengthMap bond_lib;
-	ConnectionMap connect_lib;
 	
 	void assemble_ (Molecule* mol, OBMol *ob_mol, 
 									list<pair<Atom *, Atom *> > &connections,
@@ -88,6 +88,9 @@ private:
 	 * fragment_lib reader for fragmentLibs that are in SDF Format, converts
 	 * the data to unordered_map <String, TemplateCoord*> for efficient internal
 	 * representation
+	 * 
+	 * TODO: this is possibly very helpful for testing of input fragment libraries
+	 * possibly remove this method
 	 */
 	void readSDFFragmentLib();
 	
