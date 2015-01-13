@@ -25,13 +25,46 @@
 
 
 #include <vector>
+#include <set>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/STRUCTURE/smartsMatcher.h>
 
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
+bool isRotableBond(Bond &bnd)
+{
+	if( bnd.getOrder() > 1 || bnd.hasProperty("InRing"))
+		return false;
+	else
+		return true;
+}
 
+bool isRigidAtom(Atom &atm)
+{
+	// if the atom is in a ring it is rigid
+	if( atm.hasProperty("InRing") )// TODO: perhaps also test if this prop is true?
+		 return true; 
+	
+	// if any neighboring bond is non single bond, the atom is rigid
+	for(Atom::BondIterator bit = atm.beginBond(); +bit ; ++bit)
+	{
+		if( bit->getOrder() > 1 )
+			return true;
+	}
+	
+	// if the atom has only one connection that leads to a rigid atom, it self is considered rigid
+	if( atm.countBonds() == 1 )
+	{
+		if ( isRigidAtom( * atm.beginBond()->getBoundAtom( atm )) ) //TODO: this recursion is not pretty/efficient
+			return true;
+		else
+			return false;
+	}
+	
+	return false;
+}
 
 /// ################# M A I N #################
 int main(int argc, char* argv[])
@@ -67,11 +100,15 @@ int main(int argc, char* argv[])
 	{
 		if( ati->hasProperty("InRing") )
 		{
-			cout<<ati->getElement().getSymbol()<< " ring atom"<<endl;
+			cout<<ati->getElement().getSymbol()<< " ring atom - rigid"<<endl;
 		}
 		else
 		{
-			cout<<ati->getElement().getSymbol()<< " not in ring"<<endl;
+			cout<<ati->getElement().getSymbol()<< " not in ring - ";
+			if( isRigidAtom(*ati) )
+				cout<<"rigid"<<endl;
+			else
+				cout<<"flexi"<<endl;
 		}
 	}
 	
