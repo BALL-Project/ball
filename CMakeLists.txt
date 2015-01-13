@@ -670,8 +670,8 @@ ENDIF()
 
 ###### add LigStruct targets ########
 # by pbrach
-INCLUDE(source/APPLICATIONS/LigStruct/sources.cmake)
-INCLUDE(source/APPLICATIONS/LigStruct/includes.cmake)
+INCLUDE(source/APPLICATIONS/LigStruct/sources/sources.cmake)
+INCLUDE(source/APPLICATIONS/LigStruct/sources/includes.cmake)
 
 SET(LIGSTRUCT_EXECUTABLES)
 INCLUDE(source/APPLICATIONS/LigStruct/BALLLigStruct.cmake)

@@ -7,14 +7,13 @@
 ###################################################
 
 ### the directory name ###
-SET(DIRECTORY source/APPLICATIONS/LigStruct)
+SET(DIRECTORY source/APPLICATIONS/LigStruct/sources)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-	splitMolecule.C
 	assembler.C
 	structureAssembler.C
 )	
 #FILE(GLOB SOURCES_LIST "source/APPLICATIONS/LigStruct/*.C")
 
-ADD_BALL_SOURCES("APPLICATIONS/LigStruct" "${SOURCES_LIST}")
+ADD_BALL_SOURCES("APPLICATIONS/LigStruct/sources" "${SOURCES_LIST}")

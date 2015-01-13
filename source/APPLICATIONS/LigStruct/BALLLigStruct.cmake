@@ -8,13 +8,12 @@ SET(DIRECTORY source/APPLICATIONS/LigStruct)
 
 ### list all filenames of the directory here ###
 SET(EXECUTABLES_LIST
-	playTool
-	testTool
-	prototype_libFragmenter
-	prototype_queryFragmenter
+	my_playTool
+	my_testTool
+	libFragmenter
 	connectionFragmenter
 	connectionRMSDFilter
-	prototype_ligandPredictor
+	ligandPredictor
 	combiPredictor
 )
 
