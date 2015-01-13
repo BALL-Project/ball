@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 #ifndef STRCUTUREASSEMBLER_H
-#include "structureAssembler.h"
+#include "sources/structureAssembler.h"
 #endif
 
 using namespace OpenBabel;

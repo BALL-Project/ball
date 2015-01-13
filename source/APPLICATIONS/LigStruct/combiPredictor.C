@@ -4,11 +4,11 @@
 
 //#include "basic.h"
 #ifndef INOUT_H
-#include "inout.h"
+#include "sources/inout.h"
 #endif
 
 #ifndef STRCUTUREASSEMBLER_H
-#include "structureAssembler.h"
+#include "sources/structureAssembler.h"
 #endif
 
 using namespace OpenBabel;
