@@ -29,6 +29,9 @@ StarAligner::~StarAligner()
 
 void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
 {
+	if(_delete_site)
+		delete _site;
+	
 	_delete_site = true;
 	_site = new AtmVec;
 	LigBase::toAtmVec(reference, *_site);
@@ -36,30 +39,42 @@ void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
 	_query = &query;
 }
 
+void StarAligner::setMolecules(AtmVec &ref_site, AtomContainer &query)
+{
+	if(_delete_site)
+		delete _site;
+	
+	_site = &ref_site;
+	_query = &query;
+}
+
 void StarAligner::align()
 {
+	cout<<"getting transfromamtion"<<endl;
 	_calculateOptimalTransformation();
 	
 	_transformer.setTransformation(_matrix);
 	
 	_query->apply(_transformer);
+	cout<<"applied transformation"<<endl;
 }
 
 
 void StarAligner::_calculateOptimalTransformation()
 {
+	cout<<"internal sitE: "<<_site<<endl;
 	AtmVec& site = *_site;
 	/// Case 1) 'site' has size 1, thus we can only translate the center 
 	if ( site.size() == 1)
 	{
-//		cout<<"Align: got case1"<<endl;
+		cout<<"Align: got case1"<<endl;
 		Vector3 transl = site[0]->getPosition() - _query->beginAtom()->getPosition();
 		_matrix.setTranslation(transl);
 	}
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
-//		cout<<"Align: got case2"<<endl;
+		cout<<"Align: got case2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		float sq_dist12 = sit1.getSquareDistance( sit2 ); // get dist to single neighbor in site
@@ -87,7 +102,7 @@ void StarAligner::_calculateOptimalTransformation()
 	/// Case 3) 'site' has at least 2 neighbors
 	else
 	{
-//		cout<<"Align: got case3"<<endl;
+		cout<<"Align: got case3"<<endl;
 		_alignCase3(site, *_query, _matrix);
 	}
 }
@@ -113,7 +128,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 	/// Case 1) at least two unique atoms, straight computation of transformation
 	if( unique_atms.size() > 1 )
 	{
-//		cout<<"align3case: subcase 1"<<endl;
+		cout<<"align3case: subcase 1"<<endl;
 		Vector3& sit1 = site[0]->getPosition(); 
 		Vector3& sit2 = unique_atms[0]->getPosition();
 		Vector3& sit3 = unique_atms[1]->getPosition();
@@ -140,6 +155,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 	///         for a second neighbor from 'site'
 	else if( unique_atms.size() == 1)
 	{
+		cout<<"align3case: subcase 2"<<endl;
 		// if at least one mol1 atom was unique, it is curcial to use it:
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = unique_atms[0]->getPosition();
@@ -195,6 +211,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 	/// Case 3) No unique atom exists. Find best assignment for two neighbors
 	else 
 	{
+		cout<<"align3case: subcase 3"<<endl;
 		float best_rmsd = numeric_limits<float>::max();
 		Atom* site2_atm = site[1];
 		Atom* site3_atm = site[2];

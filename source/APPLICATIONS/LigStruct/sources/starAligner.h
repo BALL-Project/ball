@@ -42,10 +42,7 @@ public:
 	void getRemainder(AtmVec& remainder);
 	
 	void setMolecules(AtomContainer& reference, AtomContainer& query);
-	void setMolecules(AtmVec& ref_site, AtomContainer& query)
-	{
-		
-	}
+	void setMolecules(AtmVec& ref_site, AtomContainer& query);
 	
 //	float align(AtomContainer& reference, AtomContainer& query);
 	

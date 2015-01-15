@@ -116,6 +116,7 @@ int main(int argc, char* argv[])
 			Atom* atm1 = tmp1->getAtom(connection_atoms[i]);
 			Atom* atm2 = tmp2->getAtom(connection_atoms[k]);
 			cout<<atm1<<" "<<atm2<<endl;
+			
 			// connect on datatype level:
 			Bond* bnd = new Bond();
 			bnd->setOrder(1);

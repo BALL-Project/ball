@@ -3,6 +3,7 @@
 //
 #include "moleculeConnector.h"
 #include "starAligner.h"
+#include "base.h"
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -57,15 +58,17 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	cout<<"####Step1"<<endl;
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
-	cout<<"####Step1 - Site1"<<endl;
+	
 	getSite(atm1, site_frag1, key1);
-	cout<<"####Step1 - Site2"<<endl;
+	cout<<"####Step1 - Site1: "<<site_frag1.size()<<endl;
+	
 	getSite(atm2, site_frag2, key2);
+	cout<<"####Step1 - Site2: "<<site_frag2.size()<<endl;
 	
 	cout<<"####Step1 - C-Lib lookup 1: "<<key1<<endl;
 	AtomContainer* templ1 = new AtomContainer( * _connections->at(key1) );
 	cout<<"####Step1 - C-Lib lookup 2: "<<key2<<endl;
-	AtomContainer* templ2 = new AtomContainer( * _connections->at(key1) );
+	AtomContainer* templ2 = new AtomContainer( * _connections->at(key2) );
 	
 //	// DEBUG
 //	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
@@ -81,17 +84,23 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	///2) transfrom templ1 to match with frag1 (keep frag1 as it was)
 	cout<<"####Step2"<<endl;
 	
+	cout<<"Got Site:"<<LigBase::printInlineMol(site_frag1)<<endl;
+	cout<<"Got Connection:"<<LigBase::printInlineMol(templ1)<<endl;
 	star_aligner.setMolecules(site_frag1, *templ1);
+	cout<<"####Step2: did set molecules"<<endl;
 	star_aligner.align();
+	cout<<"####Step2: did align"<<endl;
 	
 	AtmVec remain_tmp1;
 	star_aligner.getRemainder(remain_tmp1);
+	cout<<"####Step2: got remainder"<<endl;
 	
 	///3) transfrom templ2 to match with frag2
 	cout<<"####Step3"<<endl;
 	AtomContainer* frag2 = (AtomContainer*)atm2->getParent();
 //	cout<<"    got partent"<<endl;
 	
+//	cout<<
 	star_aligner.setMolecules( site_frag2, *templ2);
 	star_aligner.align();
 //	cout<<"    aligned"<<endl;
