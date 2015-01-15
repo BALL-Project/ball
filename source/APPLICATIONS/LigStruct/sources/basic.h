@@ -4,7 +4,6 @@
 #ifndef BASIC_H
 #define BASIC_H
 
-#include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/file.h>

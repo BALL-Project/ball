@@ -120,7 +120,9 @@ private:
 	/*
 	 * From an atom (given by 'atm') determine the site and the key for the site.
 	 * The site contains the given atom at position 0 and all other direct 
-	 * neighbors of 'atm' sorted according to their element and bondorder
+	 * neighbors of 'atm' sorted according to their element and bond order, except
+	 * for neighbors that belond to a different molecule/parent.
+	 * The site 'key' on the other hand also contains these foreign neighbors
 	 */
 	static void getSite(Atom* atm, AtmVec& site, String& key);
 
@@ -161,8 +163,8 @@ private:
 	
 	/*
 	 * Mapps:
-	 *   - n1 onto w1
-	 *   - n2 on the ray given by w1 - w2
+	 *   n1 onto w1
+	 *   n2 on the ray given by w1 - w2
 	 */
 	static Matrix4x4 twoPointMatch(const Vector3& n1, const Vector3& n2, 
 																 const Vector3& w1, const Vector3& w2);

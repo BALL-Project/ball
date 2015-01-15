@@ -179,7 +179,7 @@ void AssemblerFunctions::connectFragments(Atom* atm1, Atom* atm2,
 	getSite(atm2, site_frag2, key2);
 	
 	cout<<"####Step1 - C-Lib lookup 1: "<<key1<<endl;
-	AtomContainer* templ1 = new AtomContainer( *connectLib[key1] );
+	AtomContainer* templ1 = new AtomContainer( *connectLib[key1]);
 	cout<<"####Step1 - C-Lib lookup 2: "<<key2<<endl;
 	AtomContainer* templ2 = new AtomContainer( *connectLib[key2] );
 	
@@ -331,14 +331,14 @@ void AssemblerFunctions::starAlign(AtmVec& site, AtomContainer &templ, Matrix4x4
  */
 void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix)
 {
-	// find all unique atoms in 'site' (according to BO to cental atom and element type)
+	// find all unique atoms in 'site' (according to BO, cental atom and element)
 	AtmVec unique_atms;
 	unique_atms.reserve(8);
 //	cout<<"getUnique"<<endl;
 	getUniqueAtoms(site, unique_atms);
 //	cout<<"got them"<<endl;
 	
-	/// Case 1) at least two unique atoms, straight computation of transformation
+	/// SubCase 1) at least two unique atoms, straight computation of transformation
 	if( unique_atms.size() > 1 )
 	{
 //		cout<<"align3case: subcase 1"<<endl;
@@ -364,8 +364,8 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	}
 	
 	
-	/// Case 2) Only one unique atm exists, use this one and find best assignment 
-	///         for a second neighbor from 'site'
+	/// SubCase 2) Only one unique atm exists, use this one and find best 
+	///            assignment for a second neighbor from 'site'
 	else if( unique_atms.size() == 1)
 	{
 		// if at least one mol1 atom was unique, it is curcial to use it:
@@ -420,7 +420,7 @@ void AssemblerFunctions::alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x
 	}
 	
 	
-	/// Case 3) No unique atom exists. Find best assignment for two neighbors
+	/// SubCase 3) No unique atom exists. Find best assignment for two neighbors
 	else 
 	{
 		float best_rmsd = numeric_limits<float>::max();
