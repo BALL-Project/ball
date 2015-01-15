@@ -20,9 +20,6 @@ public:
 	
 	~StarAligner();
 	
-	void setMolecules(AtomContainer& reference, AtomContainer& query);
-	void setMolecules(AtmVec& ref_site, AtomContainer& query);
-
 	/**
 	 * @brief align, transforms the coordinates of the 'query' to match with the
 	 * 'reference'. The RMSD is returned.
@@ -30,9 +27,34 @@ public:
 	 */
 	void align();
 	
+	/**
+	 * @brief bondAlign aligns two atom pairs such that
+	 * A1 is moved onto B1 and A2 is rotated onto the ray B1-B2
+	 * 
+	 * The calculated transformation is applied to the query molecule
+	 */
+	void bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2);
+	
+	void getRemainder(AtmVec& remainder);
+	
+	void setMolecules(AtomContainer& reference, AtomContainer& query);
+	void setMolecules(AtmVec& ref_site, AtomContainer& query)
+	{
+		
+	}
+	
 //	float align(AtomContainer& reference, AtomContainer& query);
 	
 private:
+	bool _delete_site;
+	//	AtomContainer* _reference;
+	AtmVec* _site;
+	AtomContainer* _query;
+	AtmVec _remainder;
+	
+	Matrix4x4 _matrix;
+	TransformationProcessor _transformer;
+	float _best_rmsd;
 	
 	void _calculateOptimalTransformation();
 	void _alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix);
@@ -44,10 +66,6 @@ private:
 	 */
 	bool atomsCompatible(Atom* at1,Atom* at2);
 	
-	/**
-	 * @brief bondAlign aligns two atom
-	 */
-	void bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2, Matrix4x4& trans_matr);
 	
 	/*
 	 * Fill an AtmVec with atom-pointers from an AtomContainer
@@ -61,7 +79,6 @@ private:
 	 */
 	Atom* getMatchingAtom(Atom *center, AtomContainer *mol, String& elem, short bo);
 	Atom* getMatchingAtom(Atom *center, AtmVec& mol, String& elem, short bo);
-	Atom* getMatchingAtomAll(Atom *center, AtmVec& mol, String& elem, short bo);
 	
 	/**
 	 * ONLY for star like molecules!!!
@@ -107,16 +124,6 @@ private:
 	Matrix4x4 twoPointMatch(const Vector3& n1, const Vector3& n2, 
 													const Vector3& w1, const Vector3& w2);
 	
-	
-	
-//	AtomContainer* _reference;
-	AtmVec* _site;
-	AtomContainer* _query;
-	AtmVec _remainder;
-	
-	Matrix4x4 _matrix;
-	TransformationProcessor _transformer;
-	float _best_rmsd;
 };
 
 #endif // STARALIGNER_H

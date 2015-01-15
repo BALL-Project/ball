@@ -158,26 +158,4 @@ typedef boost::unordered_map <String, Fragment* >     ConnectionMap;
 //}
 
 
-
-//// get the position of an atom in the molcule list:
-//const int getAtomPosition(Atom* atm, Molecule* mol)
-//{
-//	AtomIterator ati = mol->beginAtom();
-//	for (int i = 0; +ati; ati++, i++)
-//	{
-//		if(&*ati == atm)
-//			return i;
-//	}
-//	return -1;
-//}
-
-
-///// empty 'fromMol' and append the atoms to 'toMol'
-//void transferMolecule( AtomContainer* toMol, AtomContainer* fromMol)
-//{
-//	int num_atm = fromMol->countAtoms();
-//	for(int i = 0; i < num_atm; i++)
-//		toMol->insert( *fromMol->beginAtom() ); // insert auto removes from its old parent
-//}
-
 #endif // BASIC_H

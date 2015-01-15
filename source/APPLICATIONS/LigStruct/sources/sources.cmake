@@ -11,17 +11,17 @@ SET(DIRECTORY source/APPLICATIONS/LigStruct/sources)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-	ligandStructureBase.C
-	starAligner.C
-	moleculeConnector.C
-	rmsdBinner.C
-	ioModule.C
-	fragmenter.C
+	assembler.C # TODO: remove
+	base.C
+	combiAssembler.C
 	clashResolver.C
 	fragmentBuilder.C
-	assembler.C # TODO: remove
+	fragmenter.C
+	ioModule.C
+	moleculeConnector.C
+	rmsdBinner.C
 	structureAssembler.C
-	combiAssembler.C
+	starAligner.C
 )	
 #FILE(GLOB SOURCES_LIST "source/APPLICATIONS/LigStruct/*.C")
 

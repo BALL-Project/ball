@@ -1,5 +1,6 @@
 
 #include "starAligner.h"
+#include "base.h"
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -12,6 +13,29 @@
 // using namespace BALL;
 // using namespace std;
 
+StarAligner::StarAligner()
+{
+	_delete_site = false;
+	_site = 0;
+	_query = 0;
+	_best_rmsd =99999;
+}
+
+StarAligner::~StarAligner()
+{
+	if(_delete_site)
+		delete _site;
+}
+
+void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
+{
+	_delete_site = true;
+	_site = new AtmVec;
+	LigBase::toAtmVec(reference, *_site);
+	
+	_query = &query;
+}
+
 void StarAligner::align()
 {
 	_calculateOptimalTransformation();
@@ -20,15 +44,11 @@ void StarAligner::align()
 	
 	_query->apply(_transformer);
 }
-	
-
-
-
 
 
 void StarAligner::_calculateOptimalTransformation()
 {
-	AtmVec site;
+	AtmVec& site = *_site;
 	/// Case 1) 'site' has size 1, thus we can only translate the center 
 	if ( site.size() == 1)
 	{
@@ -249,9 +269,7 @@ bool StarAligner::atomsCompatible(Atom* at1,Atom* at2)
 /**
  * bondAlign
  */
-void StarAligner::bondAlign(Atom* atA1, Atom* atA2, 
-																	 Atom* atB1, Atom* atB2, 
-																	 Matrix4x4& trans_matr)
+void StarAligner::bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2)
 {
 	Vector3& vA1 = atA1->getPosition();
 	Vector3& vA2 = atA2->getPosition();
@@ -260,7 +278,25 @@ void StarAligner::bondAlign(Atom* atA1, Atom* atA2,
 	Vector3& vB2 = atB2->getPosition();
 	
 	// map the second pair onto the first pair:
-	trans_matr = twoPointMatch( vB1, vB2, vA1, vA2 );
+	_matrix = twoPointMatch( vB1, vB2, vA1, vA2 );
+	
+	// apply the calculated transformation onto the 'query' molecule
+	_transformer.setTransformation(_matrix);
+	_query->apply(_transformer);
+}
+
+
+/**
+ * getRemainder
+ */
+void StarAligner::getRemainder(AtmVec &remainder)
+{
+	remainder.clear();
+	
+	for(AVIter ati = _remainder.begin(); ati != _remainder.end(); ++ati)
+	{
+		remainder.push_back( *ati );
+	}
 }
 
 /*
@@ -330,36 +366,6 @@ Atom* StarAligner::getMatchingAtom(Atom* center, AtomContainer* mol, String &ele
 		if(&*at != center )
 			cout<<at->getBond( *center )->getOrder();
 		cout<<", ";
-	}
-	cout<<endl;
-	exit(EXIT_FAILURE);
-}
-
-/* 
- * getMatchingAtomAll(3)
- */
-Atom* StarAligner::getMatchingAtomAll(Atom *center, AtmVec& mol, String& elem, short bo)
-{
-	cout<<"in getMatchingAll 3"<<endl;
-
-	AVIter ati = mol.begin();
-	for(; ati != mol.end(); ++ati)
-	{
-//		cout<< (*ati)->getElement().getSymbol()<<(*ati)->getBond( *center )->getOrder()<<" ";
-//		cout<<((*ati)->getElement().getSymbol() == elem)<<" ";
-//		cout<< ( (*ati)->getBond( *center )->getOrder() == bo )<<endl;
-		if( (*ati)->getElement().getSymbol() == elem && (*ati)->getBond( *center )->getOrder() == bo )
-			return *ati;
-	}
-	
-	cout<<"ERROR: could not find a partner for: "<<elem<<bo<<endl<<endl;
-	cout<<"Molecule had:"<<endl;
-	for(AVIter at = mol.begin(); at != mol.end(); ++at)
-	{
-		cout<<(*at)->getElement().getSymbol();
-		if(*at != center)
-			cout<<(*at)->getBond( *center )->getOrder();
-		cout<<" ";
 	}
 	cout<<endl;
 	exit(EXIT_FAILURE);
