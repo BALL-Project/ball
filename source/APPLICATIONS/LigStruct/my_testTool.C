@@ -2,10 +2,21 @@
 // vi: set ts=2:
 //
 
-#include "sources/structureAssembler.h"
-#include <BALL/FORMAT/commandlineParser.h>
+//#include "sources/structureAssembler.h"
+#include "sources/moleculeConnector.h"
+#include "sources/ioModule.h"
 
-using namespace OpenBabel;
+#include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/FORMAT/SDFile.h>
+
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atomIterator.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/bondIterator.h>
+#include <BALL/KERNEL/PTE.h>
+
+//using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
@@ -42,16 +53,19 @@ int main(int argc, char* argv[])
 ///====================== actual testing: =========================
 	
 	// Load all template libs:
-	StructureAssembler assem;
+	IOModule lib_reader;
 	if ( parpars.has("l") )
 	{
-		assem.setLibsFromConfig( parpars.get("l") );
+		lib_reader.libraryPathesFromConfig( parpars.get("l") );
 	}
 	else
 	{
 		String pth = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf";
-		assem.setLibsFromConfig(pth);
+		lib_reader.libraryPathesFromConfig( pth );
 	}
+	
+	lib_reader.readBondLib();
+	lib_reader.readConnectionLib();
 	
 	// read all test cases:
 	vector< Molecule* > test_cases;
@@ -86,6 +100,8 @@ int main(int argc, char* argv[])
 
 ///===========find connection site and match against conection library=========
 	SDFile out_file(parpars.get("o"), ios::out);
+	MoleculeConnector mcon;
+	mcon.setLibs(lib_reader.connect_lib, lib_reader.bond_lib);
 	
 	// connect: each test case with itself and all other test cases
 	for(int i=0; i < connection_atoms.size(); ++i)
@@ -107,7 +123,7 @@ int main(int argc, char* argv[])
 			
 			///CONNECT STUFF HERE
 			cout<<"connecting 2 fragments"<<endl;
-			AssemblerFunctions::connectFragments( atm1, atm2, assem.connect_lib, assem.bond_lib);
+			mcon.connect(atm1, atm2);
 			
 			// merge atoms:
 			tmp1->insert(*tmp2);

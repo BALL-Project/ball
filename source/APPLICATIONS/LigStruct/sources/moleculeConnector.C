@@ -25,6 +25,11 @@ MoleculeConnector::MoleculeConnector()
 	_bond_lengths = 0;
 }
 
+MoleculeConnector::~MoleculeConnector()
+{
+	
+}
+
 void MoleculeConnector::setConnectionLib(ConnectionMap &connectLib)
 {
 	_connections = &connectLib;
@@ -188,11 +193,11 @@ Vector3 MoleculeConnector::getDiffVec(Atom* atm1, Atom* atm2)
 
 
 /* 
- * getMatchingAtomAll(3)
+ * getMatchingAtomAll
  */
 Atom* MoleculeConnector::getMatchingAtomAll(Atom *center, AtmVec& mol, String& elem, short bo)
 {
-	cout<<"in getMatchingAll 3"<<endl;
+//	cout<<"in getMatchingAll"<<endl;
 
 	AVIter ati = mol.begin();
 	for(; ati != mol.end(); ++ati)

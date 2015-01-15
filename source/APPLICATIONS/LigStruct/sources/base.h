@@ -5,12 +5,12 @@
 #ifndef LIGANDSTRUCTUREBASE_H
 #define LIGANDSTRUCTUREBASE_H
 
-///// BALL: File IO
+/// BALL: File IO
 //#include <BALL/FORMAT/SDFile.h>
 //#include <BALL/FORMAT/lineBasedFile.h>
 //#include <BALL/SYSTEM/file.h>
 
-///// BALL: Macros
+/// BALL: Macros
 //#include <BALL/KERNEL/forEach.h>
 //#include <BALL/DATATYPE/forEach.h>
 
@@ -20,7 +20,7 @@
 //#include <BALL/MATHS/vector3.h>
 //#include <BALL/MATHS/matrix44.h>
 
-///// BALL: Atom, Bond, Element
+/// BALL: Atom, Bond, Element
 #include <BALL/KERNEL/atom.h>
 //#include <BALL/KERNEL/atomIterator.h>
 //#include <BALL/KERNEL/bond.h>
@@ -33,13 +33,13 @@
 //#include <BALL/KERNEL/fragment.h>
 //#include <BALL/KERNEL/molecule.h>
 
-///// BALL: Algorithms
+/// BALL: Algorithms
 //#include <BALL/STRUCTURE/UCK.h>
 //#include <BALL/STRUCTURE/molecularSimilarity.h>
 //#include <BALL/STRUCTURE/structureMapper.h>
 //#include <BALL/STRUCTURE/geometricTransformations.h>
 
-///// Open Babel
+/// Open Babel
 //#include <openbabel/obconversion.h>
 //#include <openbabel/mol.h>
 //#include <openbabel/canon.h>
@@ -49,8 +49,8 @@
 #include <vector>
 //#include <limits>
 
-///// BOOST
-//#include <boost/unordered_map.hpp>
+/// BOOST
+#include <boost/unordered_map.hpp>
 //#include <boost/pending/disjoint_sets.hpp>
 
 ///// Name Spaces
@@ -59,7 +59,59 @@ using namespace BALL;
 using namespace std;
 
 
+/**
+ * @brief The TemplateCoord class is a simple array wrapper for BALL::Vector3
+ * 
+ * To efficiently save coordinates without much overhead
+ */
+class TemplateCoord
+{
+	
+public:
+	TemplateCoord(Size n)
+	{
+		_size = n;
+		positions = new Vector3[n];
+	}
+	
+	~TemplateCoord()
+	{
+		delete[] positions;
+	}
+	
+	Vector3& operator[](Index idx)
+	{
+		return positions[idx];
+	}
+	
+	Vector3& get(Index idx)
+	{
+		return positions[idx];
+	}
 
+	const Size& size()
+	{
+		return _size;
+	}
+	
+	/**
+	 * Apply coordinates of this to the input BALL::AtomContainer
+	 * @brief setCoordinates
+	 * @param mol
+	 */
+	void transferCoordinates(AtomContainer* mol)
+	{
+		AtomIterator qit = mol->beginAtom();
+		for (int i = 0 ; i < _size; i++, qit++)
+		{
+			qit->setPosition( (positions[i]) );
+		}
+	}
+
+private:
+	Size _size;
+	Vector3 *positions;
+};
 
 /// Typedefs:
 
@@ -67,7 +119,10 @@ using namespace std;
 typedef vector<Atom*> AtmVec;
 typedef vector<Atom*>::iterator AVIter;
 
-
+// Lib Data:
+typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// String == UCK key
+typedef boost::unordered_map <String, float >         BondLengthMap;
+typedef boost::unordered_map <String, Fragment* >     ConnectionMap;
 
 
 class LigBase

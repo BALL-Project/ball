@@ -9,9 +9,9 @@
 #include <BALL/KERNEL/PTE.h>
 
 #include <BALL/STRUCTURE/structureMapper.h>
-// using namespace OpenBabel;
-// using namespace BALL;
-// using namespace std;
+
+#include <limits>
+
 
 StarAligner::StarAligner()
 {
@@ -91,10 +91,6 @@ void StarAligner::_calculateOptimalTransformation()
 		_alignCase3(site, *_query, _matrix);
 	}
 }
-
-
-
-
 
 
 /*
@@ -288,28 +284,42 @@ void StarAligner::bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2)
 
 /**
  * getRemainder
+ * 
+ * append all atoms in 'result' that remain. Meaning atoms of 'templ' that do not
+ * optimally match with any atom in 'site'
  */
-void StarAligner::getRemainder(AtmVec &remainder)
+/// TODO: the recursion can be made nicer if using indices and 'site'
+void StarAligner::getRemainder( AtmVec& remainder )
 {
-	remainder.clear();
+	AtmVec vec2;
+	LigBase::toAtmVec(*_query, vec2);
 	
-	for(AVIter ati = _remainder.begin(); ati != _remainder.end(); ++ati)
+	// the 'sum of all square distances' for the best (minimal) permutation:
+	float min_sq_dist = numeric_limits<float>::max(); 
+	
+	// start with second atom (the first one is the central atom)
+	AtmVec::iterator ati = _site->begin(); ++ati;
+	AtmVec::iterator end1 = _site->end();
+	matchPermutaions(*_site->at(0), ati, end1, vec2, 1, 0, &min_sq_dist, remainder);
+	
+	
+	// D E B U G :
+	cout<<endl<<"'getRemaining':"<<endl;
+	cout<<"templ    : "<<LigBase::printInlineMol(_query)<<endl;
+	cout<<"site     : "<<LigBase::printInlineMol(*_site)<<endl;
+	cout<<"remainder: ";
+	for(AVIter at = remainder.begin(); at != remainder.end(); ++at)
 	{
-		remainder.push_back( *ati );
+		Atom* atm = *at;
+		Atom* center = &*_query->beginAtom();
+		cout<< atm->getElement().getSymbol();
+		if(atm != center )
+			cout<< atm->getBond( *center )->getOrder();
 	}
+	cout<<endl;
+	cout<<"sq dist: "<< min_sq_dist <<endl<<endl;
 }
 
-/*
- * fromMoleculeToAtmVec
- */
-void StarAligner::fromMoleculeToAtmVec(AtomContainer& in_mol, AtmVec& out_vec)
-{
-	for(AtomIterator ati = in_mol.beginAtom(); +ati; ++ati)
-	{
-		out_vec.push_back(&*ati);
-	}
-	
-}
 
 /* 
  * getMatchingAtom(1)
@@ -379,8 +389,8 @@ float StarAligner::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 {
 	AtmVec vec1;
 	AtmVec vec2;
-	fromMoleculeToAtmVec(*mol1, vec1);
-	fromMoleculeToAtmVec(*mol2, vec2);
+	LigBase::toAtmVec(*mol1, vec1);
+	LigBase::toAtmVec(*mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
@@ -399,7 +409,7 @@ float StarAligner::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
 float StarAligner::getMinRMSD(AtmVec* vec1, AtomContainer* mol2)
 {
 	AtmVec vec2;
-	fromMoleculeToAtmVec(*mol2, vec2);
+	LigBase::toAtmVec(*mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
@@ -520,6 +530,7 @@ void StarAligner::sqdistPerPermutation(AVIter& ati1, AVIter& end1,
 	}
 }
 
+
 /*
  * swapAtoms
  */
@@ -530,6 +541,7 @@ void StarAligner::swapAtoms(Atom*& a, Atom*& b)
 	b = tmp;
 }
 
+
 /*
  * twoPointMatch
  * TODO: reimplement more efficiently
@@ -538,4 +550,63 @@ Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2,
 																		 const Vector3& w1, const Vector3& w2)
 {
 	return StructureMapper::matchPoints(n1, n2, Vector3(), w1, w2, Vector3());
+}
+
+
+/*
+ * matchPermutaions
+ */
+void StarAligner::matchPermutaions(Atom& center,
+																					AVIter& ati1, AVIter& end1, 
+																					AtmVec& atm_vec, int i, 
+																					float loc_sq_dist, float* global_sq_dist,
+																					AtmVec& result)
+{
+//	cout<<i;
+	// end recursion case: 
+	// everything was permuted so check how good the square dist was and perhaps
+	// update the global sq_dist
+	if( ati1 == end1 )
+	{
+		if( loc_sq_dist < (*global_sq_dist) )
+		{
+			*global_sq_dist = loc_sq_dist;
+			
+			// insert into cleared result vector
+			result.clear();
+			for(int k = i; k < atm_vec.size(); ++k)
+				result.push_back( atm_vec[k] );
+//			cout<<endl<<"SD: "<<  loc_sq_dist<<endl;
+//			cout<<printInlineMol(atm_vec)<<endl;
+			
+		}
+		return;
+	}
+	// recursion case:
+	// test all remaining possible pertubations/mappings of atoms from mol2 
+	// (the vectorentry) to the next atom of mol1 (the atom iterator)
+	else
+	{
+		float sq_dist_update;// the square distance for the current atom pair
+		for(int j = i; j < atm_vec.size(); j++)
+		{
+			// test if element and bondtype fit for this assignment
+			// (this is rather for correctness than for speed)
+			if( (*ati1)->getElement().getSymbol() == atm_vec[j]->getElement().getSymbol() &&
+					(*ati1)->getBond( center )->getOrder()  == atm_vec[j]->beginBond()->getOrder() )
+			{
+//				cout<<" MATCH "<<(*ati1)->beginBond()->getOrder()<<" - "<<atm_vec[j]->beginBond()->getOrder()<<endl;
+				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
+				
+				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
+				
+				AtmVec::iterator ati2 = ati1; // create new atom iterator for next recursion
+				
+				matchPermutaions( center, ++ati2, end1, atm_vec, (i+1), (loc_sq_dist + sq_dist_update),
+													global_sq_dist, result);
+				
+				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
+			}
+		} // end for-loop
+	}
 }

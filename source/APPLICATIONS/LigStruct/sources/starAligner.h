@@ -35,6 +35,10 @@ public:
 	 */
 	void bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2);
 	
+	/*
+	 * Get a list of atom-pointers of atoms that were not aligned (if 'query'
+	 * contained more atoms than 'site').
+	 */
 	void getRemainder(AtmVec& remainder);
 	
 	void setMolecules(AtomContainer& reference, AtomContainer& query);
@@ -65,12 +69,6 @@ private:
 	 * the bond order to the central atom.
 	 */
 	bool atomsCompatible(Atom* at1,Atom* at2);
-	
-	
-	/*
-	 * Fill an AtmVec with atom-pointers from an AtomContainer
-	 */
-	void fromMoleculeToAtmVec(AtomContainer &in_mol, AtmVec& out_vec);
 	
 	/* 
 	 * Find the first atom in 'mol', that has same element and bond order as 'atm'
@@ -123,6 +121,10 @@ private:
 	 */
 	Matrix4x4 twoPointMatch(const Vector3& n1, const Vector3& n2, 
 													const Vector3& w1, const Vector3& w2);
+	
+	// recursion for the 'getRemainder' function
+	void matchPermutaions(Atom &center, AVIter& ati1, AVIter& end1, AtmVec& atm_vec, 
+												int i, float loc_sq_dist, float* global_sq_dist, AtmVec& result);
 	
 };
 
