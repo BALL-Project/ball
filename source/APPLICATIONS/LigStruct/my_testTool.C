@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 ///====================== actual testing: =========================
 	
 	// Load all template libs:
-	LibraryReader lib_reader;
+	TemplateLibraryManager lib_reader;
 	if ( parpars.has("l") )
 	{
 		lib_reader.libraryPathesFromConfig( parpars.get("l") );

@@ -1,23 +1,15 @@
 #ifndef STRCUTUREASSEMBLER_H
 #define STRCUTUREASSEMBLER_H
 
-#ifndef BASIC_H
-#include "basic.h"
-#endif
-
-//#include "fragmenter.h"
-
 #ifdef MATCHER_H
 #include "matcher.h"
 #endif
 
-#ifndef ASSEMBLER_H
-#include "assembler.h"
-#endif
+#include "ioModule.h"
 
-using namespace OpenBabel;
-using namespace BALL;
-using namespace std;
+//using namespace OpenBabel;
+//using namespace BALL;
+//using namespace std;
 
 class StructureAssembler
 {
@@ -35,7 +27,7 @@ public:
 	 * @brief assembleStructure
 	 * @param mol
 	 */
-	void assembleStructure(Molecule* mol, OBMol *ob_mol);
+	void assembleStructure(Molecule* mol);
 	
 	/**
 	 * Same as the variant for BALL::Molecule but also assigns the internal 
@@ -44,21 +36,14 @@ public:
 	 * @brief assembleStructure
 	 * @param mol
 	 */
-	void assembleStructure(GroupFragment* gmol, OBMol* ob_mol);
+	void assembleStructure(GroupFragment* gmol);
 
-	CoordinateMap fragment_lib;
-	BondLengthMap bond_lib;
-	ConnectionMap connect_lib;
 private:
-	String fragment_lib_path;
-	String bondlenth_lib_path;
-	String connection_lib_path;
+	TemplateLibraryManager _libs;
 	
 	
-	void assemble_ (Molecule* mol, OBMol *ob_mol, 
-									list<pair<Atom *, Atom *> > &connections,
-									vector<Fragment *> &linker_lst,
-									vector<Fragment *> &rigid_lst);
+	void assemble_ (Molecule* mol, ConnectList &connections,
+									FragVec &linker_lst, FragVec &rigid_lst);
 	
 };
 #endif // STRCUTUREASSEMBLER_H

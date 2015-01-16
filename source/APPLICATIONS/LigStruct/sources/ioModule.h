@@ -13,20 +13,22 @@
 using namespace BALL;
 //using namespace std;
 
+/// T e m p l a t e L i b r a r y M a n a g e r
+/// ############################################################################
 /**
  * @brief The IOModule is a class to read, store and mange any library
  * 
  */
-class LibraryReader
+class TemplateLibraryManager
 {
 public:
 	
-	LibraryReader();
+	TemplateLibraryManager();
 	
-	~LibraryReader();
+	~TemplateLibraryManager();
 	
 	/**
-	 * @brief readAll reads all libs for which a path was set
+	 * @brief readAll reads all libs FOR WHICH A PATH WAS SET
 	 */
 	void readAll();
 	
@@ -60,21 +62,26 @@ public:
 	
 	CoordinateMap& getFragmentLib();
 	BondLengthMap& getBondLengthlib();
-	ConnectionMap& getConnectionsLib();
+	ConSiteMap& getConnectionsLib();
 	
 private:
 	CoordinateMap _fragment_lib;
 	BondLengthMap _bond_lib;
-	ConnectionMap _connect_lib;
+	ConSiteMap _connect_lib;
 	
 	String _fragment_lib_path;
 	String _bondlenth_lib_path;
 	String _connection_lib_path;
 };
 
-class CombiLibReader
+
+/// C o m b i L i b M a n a g e r
+/// ############################################################################
+class CombiLibManager
 {
 public:
+	CombiLibManager();
+	~CombiLibManager();
 	
 private:
 };

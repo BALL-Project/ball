@@ -2,15 +2,12 @@
 // vi: set ts=2:
 //
 
-//#include "basic.h"
-#ifndef INOUT_H
-#include "sources/inout.h"
-#endif
-
+#include "sources/base.h"
 #include "sources/structureAssembler.h"
-#include <BALL/FORMAT/commandlineParser.h>
 
-using namespace OpenBabel;
+#include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/FORMAT/SDFile.h>
+
 using namespace BALL;
 using namespace std;
 
@@ -38,39 +35,39 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 
-/// I N I T    A S S E M B L E R
-	StructureAssembler assem;
-	// Load all template libs:
-	if ( parpars.has("l") )
-	{
-//		assem.setLibsFromConfig( parpars.get("l") );
-	}
-	else
-	{
-		String pth = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf";
-//		assem.setLibsFromConfig(pth);
-	}
+///// I N I T    A S S E M B L E R
+//	StructureAssembler assem;
+//	// Load all template libs:
+//	if ( parpars.has("l") )
+//	{
+////		assem.setLibsFromConfig( parpars.get("l") );
+//	}
+//	else
+//	{
+//		String pth = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf";
+////		assem.setLibsFromConfig(pth);
+//	}
 
 	
-/// I N I T I A L    R - G R O U P    A S S E M B L Y
+///// I N I T I A L    R - G R O U P    A S S E M B L Y
 
-	Log << "Reading combi-lib..."<<endl;
-	CombiLib in_lib;
-	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/test.conf";
-	readGroups(in_lib, combi_path, assem);
-	Log <<" - done - "<<endl<<endl;
+//	Log << "Reading combi-lib..."<<endl;
+//	CombiLib in_lib;
+//	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/test.conf";
+//	readGroups(in_lib, combi_path, assem);
+//	Log <<" - done - "<<endl<<endl;
 	
 
 	
 	
-/// F I N I S H
-/// write output
-	String outfile_name = String(parpars.get("o"));
-	SDFile outfile(outfile_name, ios::out);
+///// F I N I S H
+///// write output
+//	String outfile_name = String(parpars.get("o"));
+//	SDFile outfile(outfile_name, ios::out);
 
-	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
+//	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
 	
-/// Clean up
-	outfile.close();
+///// Clean up
+//	outfile.close();
 }
 

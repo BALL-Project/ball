@@ -59,6 +59,8 @@ using namespace BALL;
 using namespace std;
 
 
+/// C l a s s   T e m p l a t e C o o r d
+/// ############################################################################
 /**
  * @brief The TemplateCoord class is a simple array wrapper for BALL::Vector3
  * 
@@ -99,9 +101,9 @@ public:
 	 * @brief setCoordinates
 	 * @param mol
 	 */
-	void transferCoordinates(AtomContainer* mol)
+	void transferCoordinates(AtomContainer& mol)
 	{
-		AtomIterator qit = mol->beginAtom();
+		AtomIterator qit = mol.beginAtom();
 		for (int i = 0 ; i < _size; i++, qit++)
 		{
 			qit->setPosition( (positions[i]) );
@@ -113,18 +115,49 @@ private:
 	Vector3 *positions;
 };
 
-/// Typedefs:
+/// C l a s s   G r o u p F r a g m e n t
+/// ############################################################################
+struct GroupFragment
+{
+	// intra connections
+	vector< Fragment* > linker_lst; // all bonds within a linker are rotable
+	vector< Fragment* > rigid_lst; // all matchable fragments
+	list< Bond* > rotor_lst;      // all intra fragment bonds of the molecule
+	list< pair< Atom*, Atom*> > frag_con2;
+	// for each fragment, the list of bonds to other fragments
+	boost::unordered_map< Fragment*, list<Bond*> > fragment_connections;
+	
+//	// alternative connections per fragment mapping (perhaps faster and more memory efficient than map?)
+//	vector< Fragment* > fragment_idx;
+//	vector< list<Bond*> > fragment_connections;
+	
+	// inter connections
+	list< pair< unsigned int, Atom*> > connections;
+	
+	// data:
+	Molecule* molecule;
+};
+
+/// T y p e   D e f i n i t i o n s
+/// ############################################################################
 
 // Standard Data:
-typedef vector<Atom*> AtmVec;
-typedef vector<Atom*>::iterator AVIter;
+typedef vector<Atom*>                AtmVec;
+typedef vector<Atom*>::iterator      AVIter;
+typedef vector <Fragment*>           FragVec;
+typedef vector <Fragment*>::iterator FGVIter;
+
+// Special Data:
+typedef list< pair<Atom*, Atom*> >   ConnectList;
 
 // Lib Data:
 typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// String == UCK key
 typedef boost::unordered_map <String, float >         BondLengthMap;
-typedef boost::unordered_map <String, Fragment* >     ConnectionMap;
+typedef boost::unordered_map <String, Fragment* >     ConSiteMap;
 
 
+/// C l a s s   L i g B a s e
+/// ############################################################################
 class LigBase
 {
 public:
@@ -138,7 +171,6 @@ public:
 	
 	// Translate the AtomContainer 'fromMol' into an AtmVec 'toMol'
 	static void toAtmVec( AtomContainer& fromMol, AtmVec& toMol);
-
 
 };
 

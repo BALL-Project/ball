@@ -15,32 +15,32 @@
 
 /// L i b r a r y R e a d e r
 /// ############################################################################
-LibraryReader::LibraryReader()
+TemplateLibraryManager::TemplateLibraryManager()
 {
 	
 }
 
-LibraryReader::~LibraryReader()
+TemplateLibraryManager::~TemplateLibraryManager()
 {
 	
 }
 
-CoordinateMap &LibraryReader::getFragmentLib()
+CoordinateMap &TemplateLibraryManager::getFragmentLib()
 {
 	return _fragment_lib;
 }
 
-BondLengthMap &LibraryReader::getBondLengthlib()
+BondLengthMap &TemplateLibraryManager::getBondLengthlib()
 {
 	return _bond_lib;
 }
 
-ConnectionMap &LibraryReader::getConnectionsLib()
+ConSiteMap &TemplateLibraryManager::getConnectionsLib()
 {
 	return _connect_lib;
 }
 
-void LibraryReader::readAll()
+void TemplateLibraryManager::readAll()
 {
 	// read lib files:
 //	readSDFFragmentLib();
@@ -54,7 +54,7 @@ void LibraryReader::readAll()
 		readConnectionLib();
 }
 
-void LibraryReader::readBondLib()
+void TemplateLibraryManager::readBondLib()
 {
 	LineBasedFile bondFile(_bondlenth_lib_path, ios::in);
 	
@@ -76,7 +76,7 @@ void LibraryReader::readBondLib()
 }
 
 
-void LibraryReader::readConnectionLib()
+void TemplateLibraryManager::readConnectionLib()
 {
 	_connect_lib.clear();
 	
@@ -99,7 +99,7 @@ void LibraryReader::readConnectionLib()
 }
 
 
-void LibraryReader::readFragmentLib()
+void TemplateLibraryManager::readFragmentLib()
 {
 	//DEBUG:
 	cout<<"reading fragment lib from: "<<_fragment_lib_path<<endl;
@@ -144,7 +144,7 @@ void LibraryReader::readFragmentLib()
 }
 
 
-void LibraryReader::readSDFFragmentLib()
+void TemplateLibraryManager::readSDFFragmentLib()
 {
 	_fragment_lib.clear();
 	SDFile libFile(_fragment_lib_path, ios::in);
@@ -176,7 +176,7 @@ void LibraryReader::readSDFFragmentLib()
 }
 
 
-void LibraryReader::libraryPathesFromConfig(const String& config_path)
+void TemplateLibraryManager::libraryPathesFromConfig(const String& config_path)
 {
 	LineBasedFile configFile(config_path, ios::in);
 	
@@ -205,5 +205,16 @@ void LibraryReader::libraryPathesFromConfig(const String& config_path)
 }
 
 
-/// L i b r a r y R e a d e r
+/// C o m b i L i b M a n a g e r
 /// ############################################################################
+
+
+CombiLibManager::CombiLibManager()
+{
+	
+}
+
+CombiLibManager::~CombiLibManager()
+{
+	
+}

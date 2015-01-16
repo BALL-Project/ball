@@ -1,9 +1,14 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #ifndef FRAGMENTBUILDER_H
 #define FRAGMENTBUILDER_H
 
+#include "base.h"
 
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/fragment.h>
 
-using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
@@ -17,7 +22,11 @@ public:
 	 * @brief buildLinker a flexible linker fragment
 	 * @param linker_lst
 	 */
-	void buildLinker(Fragment &linker_frag, ConnectionMap &link_lib);
+	void buildLinker(Fragment &linker_frag, ConSiteMap &link_lib);
+	
+private:
+	void recurLinkerConnect(Atom* at, Composite * const parent, ConSiteMap& link_lib);
+	void connectAtomToSite(AtmVec& site, AtomContainer& temp, Atom* partner);
 };
 
 

@@ -4,6 +4,7 @@
 #ifndef LIGSTRUC_FRAGMENTER_H
 #define LIGSTRUC_FRAGMENTER_H
 
+#include "base.h"
 
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/fragment.h>
@@ -23,8 +24,6 @@
 using namespace BALL;
 using namespace std;
 
-typedef vector <Fragment*> FragVec;
-typedef list< pair<Atom*, Atom*> > ConnectList;
 class MoleculeFragmenter
 {
 public:
@@ -72,7 +71,7 @@ private:
 	/// Fields:
 	AtomContainer* _molecule;
 	
-	vector< vector < Atom* > > _sssr;
+	vector< AtmVec > _sssr;
 	RingPerceptionProcessor _rpp;
 	
 	vector <bool> _is_InRing;

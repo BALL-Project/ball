@@ -11,8 +11,8 @@ SET(DIRECTORY source/APPLICATIONS/LigStruct/sources)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-	assembler.C # TODO: remove
 	base.C
+	canonicalizer.C
 	combiAssembler.C
 	clashResolver.C
 	fragmentBuilder.C

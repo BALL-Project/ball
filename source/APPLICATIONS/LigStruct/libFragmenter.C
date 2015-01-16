@@ -122,8 +122,6 @@ int main(int argc, char* argv[])
 	set< String > used; // used fragment keys
 	
 	// Read all molecules.
-	AtomIterator ati;
-	Atom::BondIterator bit;
 	MoleculeFragmenter molfrag;
 	tmp = in_file.read();
 	while ( tmp )

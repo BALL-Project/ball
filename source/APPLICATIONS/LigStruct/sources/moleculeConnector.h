@@ -16,7 +16,7 @@ using namespace BALL;
 using namespace std;
 
 typedef boost::unordered_map <String, float >     BondLengthMap;
-typedef boost::unordered_map <String, Fragment* > ConnectionMap;
+typedef boost::unordered_map <String, Fragment* > ConSiteMap;
 
 class MoleculeConnector
 {
@@ -25,9 +25,9 @@ public:
 	MoleculeConnector();
 	~MoleculeConnector();
 	
-	void setConnectionLib(ConnectionMap& connectLib);
+	void setConnectionLib(ConSiteMap& connectLib);
 	void setBondLengthLib(BondLengthMap& bondLib);
-	void setLibs(ConnectionMap& connectLib, BondLengthMap& bondLib);
+	void setLibs(ConSiteMap& connectLib, BondLengthMap& bondLib);
 /**  
  * connectFragments connects the two given fragments (by their child atoms)
  * in such a way, that molecule1 (given by 'atm1') retains its position,
@@ -42,7 +42,7 @@ public:
 
 private:
 	
-	ConnectionMap* _connections;
+	ConSiteMap* _connections;
 	BondLengthMap* _bond_lengths;
 	
 	/*
