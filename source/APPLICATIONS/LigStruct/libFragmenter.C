@@ -1,27 +1,35 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
+#include "sources/ioModule.h"
+#include "sources/fragmenter.h"
+
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/FORMAT/lineBasedFile.h>
+//#include <BALL/SYSTEM/file.h>
+
+#include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 #include <BALL/STRUCTURE/UCK.h>
-#include <BALL/MATHS/vector3.h>
+//#include <BALL/MATHS/vector3.h>
+#include <BALL/KERNEL/forEach.h>
+//#include <set>
+#include <vector>
 
 #include <openbabel/mol.h>
-#include <openbabel/obconversion.h>
 #include <openbabel/canon.h>
 #include <openbabel/graphsym.h>
-
-#include <set>
 
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
 /// ################# H E L P E R    F U N C T I O N S #################
-void writePositionLines(Molecule& mol, LineBasedFile* handle)
+void writePositionLines(AtomContainer& mol, LineBasedFile* handle)
 {
 	(*handle) <<"key "<< mol.getProperty("key").getString() <<endl;
 	(*handle) << String(mol.countAtoms()) << endl;
@@ -36,24 +44,48 @@ void writePositionLines(Molecule& mol, LineBasedFile* handle)
 }
 
 // Write several result molecules to one file
-void writeMolVec(vector<Molecule> &input, LineBasedFile* handle)
+void writeMolVec(vector<Fragment*> &input, LineBasedFile* handle)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
-		writePositionLines(input[i], handle);
+		writePositionLines(*input[i], handle);
+	}
+}
+
+// Write several result molecules to one file
+void writeMolVec(vector<Fragment*> &input, SDFile* handle)
+{
+	for(int i = 0; i < input.size(); i++)
+	{
+		handle->write(*input[i]);
 	}
 }
 
 // --unique keys Write several result molecules to one file
-void uniqueWriteMolVec(vector<Molecule> &input, LineBasedFile* handle, set< String >& used)
+void uniqueWriteMolVec(vector<Fragment*> &input, LineBasedFile* handle, set< String >& used)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
 		// check that the key was not already used:
-		String key = input[i].getProperty("key").getString();
+		String key = input[i]->getProperty("key").getString();
 		if( used.find(key) == used.end() )
 		{
-			writePositionLines(input[i], handle);
+			writePositionLines(*input[i], handle);
+			used.insert(key);
+		}
+	}
+}
+
+// --unique keys Write several result molecules to one file
+void uniqueWriteMolVec(vector<Fragment*> &input, SDFile* handle, set< String >& used)
+{
+	for(int i = 0; i < input.size(); i++)
+	{
+		// check that the key was not already used:
+		String key = input[i]->getProperty("key").getString();
+		if( used.find(key) == used.end() )
+		{
+			writePositionLines(*input[i], handle);
 			used.insert(key);
 		}
 	}
@@ -77,102 +109,78 @@ int main(int argc, char* argv[])
 	
 	// START of CODE#############################################################
 	
-	OBMol obMol; // working molecule
-	
-	// Read open-babel molecule as input:
-	OBConversion conv;
-	OBFormat *format = conv.FormatFromExt(parpars.get("i"));
-	
-	if (!format || !conv.SetInFormat(format))
-		cout << "Could not find input format for file " << parpars.get("i") << endl;
-
-	ifstream ifs(parpars.get("i")); // open file
-	
-	if (!ifs)
-		cout << "Could not open " << parpars.get("i") << " for reading." << endl;
+	SDFile in_file(parpars.get("i"), ios::in);
 	
 	// open output file:
-	String outfile_name = String(parpars.get("o"));
-	LineBasedFile outfile(outfile_name, ios::out);
+	SDFile outfile(parpars.get("o"), ios::out);
 	
-	
-	vector<OBBond*> for_deletion;
-	vector<OBBond*>::iterator it;
-	vector<Molecule> fragments;
-	Molecule* ball_mol;
+	vector<Fragment*> fragments;
+	vector<Fragment*> dummy;
+	list< pair< Atom*, Atom*> > dummy2;
+	Molecule* tmp;
 	int cntr=0;
 	set< String > used; // used fragment keys
 	
 	// Read all molecules.
-	while ( conv.Read(&obMol, &ifs) )
+	AtomIterator ati;
+	Atom::BondIterator bit;
+	MoleculeFragmenter molfrag;
+	tmp = in_file.read();
+	while ( tmp )
 	{
-		// init ring and rotable information:
-		obMol.FindRingAtomsAndBonds();
+		// get all rigid fragments from molecule 'tmp'
+		molfrag.setMolecule( *tmp );
+		molfrag.getMoleculeFragments(fragments, dummy, dummy2);
 		
-		for_deletion.clear();
-		fragments.clear();
-		
-		// Delete rotor-bonds to create fragments (of rings and rigid-groups)
-		FOR_BONDS_OF_MOL(b, obMol)
-			if (b->IsRotor()) // && !b->IsInRing()) // in babel ring bonds are never rotors!!!!
-				for_deletion.push_back(&(*b));
-		
-		for(it=for_deletion.begin(); it!=for_deletion.end(); ++it)
-			obMol.DeleteBond(*it);
-		
-		
-		// get everything that has at least 2 molecules (convert to BALL for that)
-		ball_mol = MolecularSimilarity::createMolecule(obMol, true);
-		ConnectedComponentsProcessor conpro;
-		ball_mol->apply(conpro);
-		conpro.getMinAtomsComponents(fragments, 2);
-///----------------------Refine Fragments---------------------------
-/// CANONICAL Rows:
-		vector<Molecule>::iterator fit;
+///----------------------Canonicalise Fragments---------------------------
+/// CANONICAL:
+		vector<Fragment*>::iterator fit;
 		for(fit = fragments.begin(); fit!=fragments.end(); fit++)
 		{
 			// get babel mol:
-			OBMol* temp = MolecularSimilarity::createOBMol(*fit, true);
+			OBMol* temp = MolecularSimilarity::createOBMol(**fit, true);
 			
 			// get helper for canonicalisation:
 			OBGraphSym grsym(temp);
-			std::vector<unsigned int> sym;
+			vector<unsigned int> sym;
 			grsym.GetSymmetry(sym);
 			
 			// get mapping for canonical labels:
-			std::vector<unsigned int> clabels;
-			CanonicalLabels(temp, sym, clabels, OBBitVec(), 10);
+			vector<unsigned int> clabels;
+			CanonicalLabels(temp, sym, clabels, OBBitVec(), 60);
 			
-			Molecule* new_mol = new Molecule;
-			std::vector <Atom*> aList( (*fit).countAtoms() );
+			Fragment* new_mol = new Fragment;
+			vector <Atom*> aList( (**fit).countAtoms() );
 			for(int i=0; i<clabels.size(); i++)
 			{
-				aList[clabels[i]-1]=( (*fit).getAtom(i) );
+				aList[clabels[i]-1]=( (**fit).getAtom(i) );
 			}
 
 			for(int i=0; i<clabels.size(); i++)
 				new_mol->append(*aList[i]);
 			
-			(*fit).swap(*new_mol);
+			(**fit).swap(*new_mol);
 			
-/// generate UCK Keys:
-			UCK keyGen(*fit, true, 5);
+/// UCK Keys:
+			UCK keyGen(**fit, true, 5);
 			
-			(*fit).setProperty("key", keyGen.getUCK());
+			(**fit).setProperty("key", keyGen.getUCK());
 		}
 		
 /// write to output-------------------------------------------------------------
 		
 		if(parpars.has("unique"))
-			uniqueWriteMolVec(fragments, &outfile,used);
+			uniqueWriteMolVec(fragments, &outfile, used);
 		else
 			writeMolVec(fragments, &outfile);
 		
-		delete ball_mol;
-		obMol.Clear();
+		// next iteration work:
+		delete tmp;
 		cntr++;
-	}
+		tmp = in_file.read();
+	} /// ------end while
+	
+	in_file.close();
 	outfile.close();
-	ifs.close();
-	Log << "read "<< cntr<<" input structures, wrote fragments to: " << outfile_name << endl;
+	Log << "read "<< cntr<<" input structures, wrote fragments to: " << parpars.get("o") << endl;
 }

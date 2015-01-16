@@ -24,6 +24,7 @@ using namespace BALL;
 using namespace std;
 
 typedef vector <Fragment*> FragVec;
+typedef list< pair<Atom*, Atom*> > ConnectList;
 class MoleculeFragmenter
 {
 public:
@@ -47,21 +48,21 @@ public:
 	bool isBridgingBond(Bond &bnd);
 	
 	void getMoleculeFragments(FragVec& rigid_fragments, FragVec& linker_fragments,
-														list< pair<Atom*, Atom*> >& connections);
+														ConnectList& connections);
+	
+//	void calculateRigidFragments(FragVec& rigid_fragments);
+//	void calculateLinkerFragments(FragVec& linker_fragments);
 	
 	
 	
 private:
-	
-	void calcRingProperties();
-	
 	/// Member Functions:
 	/*
 	 * clearProperties() removes all atom properties of the internal '_molecule'.
 	 * Properties are need in order to annotate atoms with the 'InRing' property,
 	 * but are also quite memory consuming.
 	 */
-	void clearProperties();
+	void extractAndClearProperties();
 	
 	/*
 	 * calculates a mapping for the internal '_molecule'
@@ -70,9 +71,12 @@ private:
 	
 	/// Fields:
 	AtomContainer* _molecule;
-	bool _properties_set; // flag indicating that 'InRing' properties were set
+	
 	vector< vector < Atom* > > _sssr;
 	RingPerceptionProcessor _rpp;
+	
+	vector <bool> _is_InRing;
+	boost::unordered_map< Bond*, bool > _is_BondInRing;
 	
 	vector < Atom* > _atom_list;
 	boost::unordered_map<Atom *, int> _atom_to_pos;

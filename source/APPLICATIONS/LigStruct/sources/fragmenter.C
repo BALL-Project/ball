@@ -17,33 +17,33 @@
 MoleculeFragmenter::MoleculeFragmenter()
 {
 	_molecule = 0;
-	_properties_set = false;
 }
 
 MoleculeFragmenter::~MoleculeFragmenter()
-{
-	if(_molecule != 0 && _properties_set)
-		clearProperties();
-}
+{}
 
 void MoleculeFragmenter::setMolecule(AtomContainer &in_mol)
 {
 	_atom_list.clear();
 	_atom_to_pos.clear();
-	if(_molecule != 0 && _properties_set)
-	{
-		clearProperties();
-	}
 	
 	_molecule = &in_mol;
-	calcRingProperties();
+	
+	// find ring atoms and bonds
+	_sssr.clear();
+	_rpp.calculateSSSR(_sssr, *_molecule);
+	
+	// remove properties, and save ring status internally
+	extractAndClearProperties();
+	
+	// calculate internal indices for atoms
 	calcAtomToPos();
 }
 
 bool MoleculeFragmenter::isRigidAtom(Atom &atm)
 {
 	// if the atom is in a ring it is rigid
-	if( atm.hasProperty("InRing") )// TODO: perhaps also test if this prop is true?
+	if( _is_InRing[ _atom_to_pos[&atm] ] )
 		 return true; 
 	
 	// if any neighboring bond is non single bond, the atom is rigid
@@ -68,7 +68,7 @@ bool MoleculeFragmenter::isRigidAtom(Atom &atm)
 bool MoleculeFragmenter::isRotableBond(Bond &bnd)
 {
 	// ring bonds or not single bonds: not rotable
-	if( bnd.getOrder() > 1 || bnd.hasProperty("InRing"))
+	if( bnd.getOrder() > 1 || _is_BondInRing[ &bnd ] )
 		return false;
 	
 	// if any of the binding partners is a terminal atom: not rotable
@@ -78,22 +78,21 @@ bool MoleculeFragmenter::isRotableBond(Bond &bnd)
 	return true;
 }
 
-
 bool MoleculeFragmenter::isBridgingBond(Bond &bnd)
 {
 	if( !isRotableBond(bnd) )
 		return false;
 	
-	bool atm1_fixed = isRigidAtom(* bnd.getFirstAtom() );
-	bool atm2_fixed = isRigidAtom(* bnd.getSecondAtom() );
+	bool is_fixed_atm1 = isRigidAtom(* bnd.getFirstAtom() );
+	bool is_fixed_atm2 = isRigidAtom(* bnd.getSecondAtom() );
 	
 	// rotable-bond between two fixed atoms: is a bridge
-	if( atm1_fixed && atm2_fixed)
+	if( is_fixed_atm1 && is_fixed_atm2 )
 		return true;
 	
 	// rotable-bond between a fixed and flexible atom: is a bridge
-	if( (atm1_fixed && !atm2_fixed) ||
-			(!atm1_fixed && atm2_fixed) )
+	if( (is_fixed_atm1 && !is_fixed_atm2 ) ||
+			(!is_fixed_atm1 && is_fixed_atm2 ) )
 		return true;
 	
 	// rotable-bond between two flexibles: NOT a bridge
@@ -102,10 +101,13 @@ bool MoleculeFragmenter::isBridgingBond(Bond &bnd)
 
 void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments, 
 																							FragVec &linker_fragments, 
-																							list<pair<Atom *, Atom *> > &connections)
+																							ConnectList &connections)
 {
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
 	int num_atoms = _molecule->countAtoms();
+	rigid_fragments.clear();
+	linker_fragments.clear();
+	connections.clear();
 	
 	/*
 	 * Init the fragment indexing strcutrues:
@@ -122,10 +124,8 @@ void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments,
 	vector <bool> is_rigid(num_atoms, 0); // bitVec indicating rigid atoms
 	vector <bool> is_linker(num_atoms, 0); // bitVec indicating linker atoms
 	
-
 	AtomIterator ati;
 	Atom::BondIterator bit;
-	
 	/*
 	 * iterate over all bonds and split into rigid and linker fragments:
 	 */
@@ -137,11 +137,12 @@ void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments,
 		int id1 = _atom_to_pos[atm1];
 		int id2 = _atom_to_pos[atm2];
 
-		// for all rotable bonds:
+		bool isRigid_atm1 = isRigidAtom(*atm1);
+		bool isRigid_atm2 = isRigidAtom(*atm2);
+		
+		// Case1) rotable bonds:
 		if ( isRotableBond(*bit) )
 		{
-			bool isRigid_atm1 = isRigidAtom(*atm1);
-			bool isRigid_atm2 = isRigidAtom(*atm2);
 			// do not double assign (deletes disjointset-parent status)
 			if( !(is_linker[id1] || isRigid_atm1) )
 			{
@@ -153,8 +154,8 @@ void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments,
 				dset_linker.make_set(id2);
 				is_linker[id2]=1;
 			}
-			// add union atoms if both are not fixed:
-			if( !(isRigid_atm1 || isRigid_atm2) )// both need to be linker atoms (checked via isAtomRigid(atm) )
+			// union atoms if both atoms are not linker:
+			if( !(isRigid_atm1 || isRigid_atm2) )
 			{
 				dset_linker.union_set(id1, id2);
 			}
@@ -166,19 +167,43 @@ void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments,
 			}
 		}
 		// for all fixed bonds:
+		// (note: terminal bonds are always fixed bonds, BUT their atoms may of
+		// course be linker atoms. We need to handle these cases)
 		else
 		{
-			if( !is_rigid[id1] )
+			// Case2) rigid bond, from rigid atoms:
+			if( isRigid_atm1 && isRigid_atm2)
 			{
-				dset_rigid.make_set(id1); 
-				is_rigid[id1]=1;
+				if( !is_rigid[id1] )
+				{
+					dset_rigid.make_set(id1); 
+					is_rigid[id1]=1;
+				}
+				if( !is_rigid[id2] )
+				{
+					dset_rigid.make_set(id2); 
+					is_rigid[id2]=1;
+				}
+				// always union rigid bonds (the atoms always belong to 1 rigid fragment)
+				dset_rigid.union_set(id1,id2);
 			}
-			if( !is_rigid[id2] )
+			// Case3) rigid bond between flexible atoms (e.g.: terminal bond in linker fragment)
+			else
 			{
-				dset_rigid.make_set(id2); 
-				is_rigid[id2]=1;
+				// do not double assign (deletes disjointset-parent status)
+				if( !(is_linker[id1] || isRigid_atm1) )
+				{
+					dset_linker.make_set(id1);
+					is_linker[id1]=1;
+				}
+				if( !(is_linker[id2] || isRigid_atm2) ) // do not double assign
+				{
+					dset_linker.make_set(id2);
+					is_linker[id2]=1;
+				}
+				// we assume that both are linker atoms
+				dset_linker.union_set(id1, id2);
 			}
-			dset_rigid.union_set(id1,id2);
 		}
 	}
 	
@@ -236,21 +261,33 @@ void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments,
 	}
 }
 
-void MoleculeFragmenter::calcRingProperties()
+void MoleculeFragmenter::extractAndClearProperties()
 {
-	_sssr.clear();
-	_rpp.calculateSSSR(_sssr, *_molecule);
-	_properties_set = true;
-}
-
-void MoleculeFragmenter::clearProperties()
-{
-	//clear properties via '_atom_list' it might be possible that '_molecule'
-	// is emptied. Fragmenting reassigns the atoms to specific fragments.
-	vector < Atom* >::iterator ati = _atom_list.begin();
-	for(; ati != _atom_list.end(); ++ati)
+	_is_BondInRing.clear();
+	_is_InRing.clear();
+	
+	// transfer and clear Bond-properties
+	AtomIterator ati0;
+	Atom::BondIterator bit;
+	BALL_FOREACH_BOND(*_molecule, ati0, bit)
 	{
-		(*ati)->PropertyManager::clear();
+		if( bit->hasProperty("InRing") )
+			_is_BondInRing[ &*bit ] = true;
+		else
+			_is_BondInRing[ &*bit ] = false;
+		
+		bit->PropertyManager::clear();
+	}
+	
+	// transfer and clear Atom-properties
+	for(AtomIterator ati = _molecule->beginAtom(); +ati; ++ati)
+	{
+		if( ati->hasProperty("InRing") )
+			_is_InRing.push_back(true);
+		else
+			_is_InRing.push_back(false);
+		
+		ati->PropertyManager::clear();
 	}
 }
 
