@@ -43,12 +43,12 @@ int main(int argc, char* argv[])
 	// Load all template libs:
 	if ( parpars.has("l") )
 	{
-		assem.setLibsFromConfig( parpars.get("l") );
+//		assem.setLibsFromConfig( parpars.get("l") );
 	}
 	else
 	{
 		String pth = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf";
-		assem.setLibsFromConfig(pth);
+//		assem.setLibsFromConfig(pth);
 	}
 
 	

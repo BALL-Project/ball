@@ -5,9 +5,7 @@
 #include "basic.h"
 #endif
 
-#ifndef FRAGMENTER_H
-#include "fragmenter.h"
-#endif
+//#include "fragmenter.h"
 
 #ifdef MATCHER_H
 #include "matcher.h"
@@ -48,13 +46,6 @@ public:
 	 */
 	void assembleStructure(GroupFragment* gmol, OBMol* ob_mol);
 
-	/**
-	 * @brief setLibsFromConfig reads a config file that indicates locations of
-	 *				all necessary libary files.
-	 * @param path to config file
-	 */
-	void setLibsFromConfig(const String& path);
-
 	CoordinateMap fragment_lib;
 	BondLengthMap bond_lib;
 	ConnectionMap connect_lib;
@@ -69,35 +60,5 @@ private:
 									vector<Fragment *> &linker_lst,
 									vector<Fragment *> &rigid_lst);
 	
-	/*
-	 * Reads the standard bond lengths from a lib file
-	 */
-	void readBondLib();
-	
-	/*
-	 * Read the connection site from a library file
-	 */
-	void readConnectionLib();
-	
-	/*
-	 * Reads the template coordinates for all fragments
-	 */
-	void readFragmentLib();
-	
-	/*
-	 * fragment_lib reader for fragmentLibs that are in SDF Format, converts
-	 * the data to unordered_map <String, TemplateCoord*> for efficient internal
-	 * representation
-	 * 
-	 * TODO: this is possibly very helpful for testing of input fragment libraries
-	 * possibly remove this method
-	 */
-	void readSDFFragmentLib();
-	
-	/*
-	 * Get all needed library information from a config file
-	 * that lists the paths to the respective lib files
-	 */
-	void libraryPathesFromConfig(const String& config_path);
 };
 #endif // STRCUTUREASSEMBLER_H

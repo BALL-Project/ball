@@ -5,6 +5,7 @@
 //#include "sources/structureAssembler.h"
 #include "sources/moleculeConnector.h"
 #include "sources/ioModule.h"
+#include "sources/base.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
@@ -19,18 +20,6 @@
 //using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
-
-// get the position of an atom in the molcule list:
-const int getAtomPosition(Atom* atm, Molecule* mol)
-{
-	AtomIterator ati = mol->beginAtom();
-	for (int i = 0; +ati; ati++, i++)
-	{
-		if(&*ati == atm)
-			return i;
-	}
-	return -1;
-}
 
 ///################################# M A I N ###################################
 ///#############################################################################
@@ -53,7 +42,7 @@ int main(int argc, char* argv[])
 ///====================== actual testing: =========================
 	
 	// Load all template libs:
-	IOModule lib_reader;
+	LibraryReader lib_reader;
 	if ( parpars.has("l") )
 	{
 		lib_reader.libraryPathesFromConfig( parpars.get("l") );
@@ -68,9 +57,9 @@ int main(int argc, char* argv[])
 	lib_reader.readConnectionLib();
 	
 	// read all test cases:
-	vector< Molecule* > test_cases;
+	vector< AtomContainer* > test_cases;
 	vector< int > connection_atoms;
-	Molecule* tmp;
+	AtomContainer* tmp;
 	SDFile molecules_file(parpars.get("i"), ios::in);
 	
 	tmp = molecules_file.read();
@@ -86,14 +75,13 @@ int main(int argc, char* argv[])
 			}
 		}
 		Atom* con_atm = mark_atm->beginBond()->getBoundAtom(*mark_atm);
-		int i = getAtomPosition(con_atm, tmp);
+		int i = LigBase::getAtomPosition(con_atm, tmp);
 				
 		connection_atoms.push_back(i); // remember connection atom
-//		con_atm->getBond(mark_atm)->destroy(); // remove bond to marker
 		tmp->remove(*mark_atm);               // remove marker
 		test_cases.push_back(tmp);           // remember the test molecule
 		
-		tmp = molecules_file.read(); // loop iteration
+		tmp = molecules_file.read(); // loop increase
 	}
 	molecules_file.close();
 	cout<<"done initializing and reading input"<<endl;
@@ -101,7 +89,7 @@ int main(int argc, char* argv[])
 ///===========find connection site and match against conection library=========
 	SDFile out_file(parpars.get("o"), ios::out);
 	MoleculeConnector mcon;
-	mcon.setLibs(lib_reader.connect_lib, lib_reader.bond_lib);
+	mcon.setLibs(lib_reader.getConnectionsLib(), lib_reader.getBondLengthlib());
 	
 	// connect: each test case with itself and all other test cases
 	for(int i=0; i < connection_atoms.size(); ++i)
@@ -109,9 +97,8 @@ int main(int argc, char* argv[])
 		for(int k=0; k < connection_atoms.size(); ++k)
 		{
 			cout<<"i: "<<i<<" "<<test_cases[i]<<", k: "<<k<<" "<<test_cases[k]<<endl;
-			AtomContainer* tmp1 = new AtomContainer( (*(AtomContainer*)(test_cases[i]) ) );
-			AtomContainer* tmp2 = new AtomContainer( (*(AtomContainer*)(test_cases[k]) ) );
-			
+			AtomContainer* tmp1 = new AtomContainer( (*(test_cases[i]) ) );
+			AtomContainer* tmp2 = new AtomContainer( (*(test_cases[k]) ) );
 			
 			Atom* atm1 = tmp1->getAtom(connection_atoms[i]);
 			Atom* atm2 = tmp2->getAtom(connection_atoms[k]);

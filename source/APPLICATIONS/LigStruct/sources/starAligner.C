@@ -18,7 +18,7 @@ StarAligner::StarAligner()
 	_delete_site = false;
 	_site = 0;
 	_query = 0;
-	_best_rmsd =99999;
+	_best_rmsd = 99999;
 }
 
 StarAligner::~StarAligner()

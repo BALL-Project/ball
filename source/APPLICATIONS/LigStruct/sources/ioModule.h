@@ -17,13 +17,13 @@ using namespace BALL;
  * @brief The IOModule is a class to read, store and mange any library
  * 
  */
-class IOModule
+class LibraryReader
 {
 public:
 	
-	IOModule();
+	LibraryReader();
 	
-	~IOModule();
+	~LibraryReader();
 	
 	/**
 	 * @brief readAll reads all libs for which a path was set
@@ -35,7 +35,6 @@ public:
 	 * that lists the paths to the respective lib files
 	 */
 	void libraryPathesFromConfig(const String& config_path);
-	
 	
 	/*
 	 * Reads the standard bond lengths from a lib file
@@ -56,23 +55,30 @@ public:
 	 * fragment_lib reader for fragmentLibs that are in SDF Format, converts
 	 * the data to unordered_map <String, TemplateCoord*> for efficient internal
 	 * representation
-	 * 
-	 * TODO: this is possibly very helpful for testing of input fragment libraries
-	 * possibly remove this method
 	 */
 	void readSDFFragmentLib();
-	CoordinateMap fragment_lib;
-	BondLengthMap bond_lib;
-	ConnectionMap connect_lib;
+	
+	CoordinateMap& getFragmentLib();
+	BondLengthMap& getBondLengthlib();
+	ConnectionMap& getConnectionsLib();
 	
 private:
-	String fragment_lib_path;
-	String bondlenth_lib_path;
-	String connection_lib_path;
-
+	CoordinateMap _fragment_lib;
+	BondLengthMap _bond_lib;
+	ConnectionMap _connect_lib;
 	
-	
-
+	String _fragment_lib_path;
+	String _bondlenth_lib_path;
+	String _connection_lib_path;
 };
+
+class CombiLibReader
+{
+public:
+	
+private:
+};
+
+
 
 #endif // IOMODULE_H

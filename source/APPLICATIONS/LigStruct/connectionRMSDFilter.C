@@ -495,7 +495,6 @@ int main(int argc, char* argv[])
 ///1.) Read all molecules and sort to their respective connection-class:
 	
 	map <String, vector<Molecule*> > connection_classes;
-	//boost::unordered_map <String, vector<Molecule*> > connection_classes;
 	
 	Log << "Reading input connections from:"<<endl;
 	Log << String(parpars.get("i"))<<endl;

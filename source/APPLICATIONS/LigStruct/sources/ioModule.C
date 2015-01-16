@@ -13,59 +13,74 @@
 // using namespace BALL;
 // using namespace std;
 
-
-IOModule::IOModule()
+/// L i b r a r y R e a d e r
+/// ############################################################################
+LibraryReader::LibraryReader()
 {
 	
 }
 
-IOModule::~IOModule()
+LibraryReader::~LibraryReader()
 {
 	
 }
 
-void IOModule::readAll()
+CoordinateMap &LibraryReader::getFragmentLib()
+{
+	return _fragment_lib;
+}
+
+BondLengthMap &LibraryReader::getBondLengthlib()
+{
+	return _bond_lib;
+}
+
+ConnectionMap &LibraryReader::getConnectionsLib()
+{
+	return _connect_lib;
+}
+
+void LibraryReader::readAll()
 {
 	// read lib files:
 //	readSDFFragmentLib();
-	if( fragment_lib_path != "")
+	if( _fragment_lib_path != "")
 		readFragmentLib();
 	
-	if( bondlenth_lib_path != "")
+	if( _bondlenth_lib_path != "")
 		readBondLib();
 	
-	if( connection_lib_path != "")
+	if( _connection_lib_path != "")
 		readConnectionLib();
 }
 
-void IOModule::readBondLib()
+void LibraryReader::readBondLib()
 {
-	LineBasedFile bondFile(bondlenth_lib_path, ios::in);
+	LineBasedFile bondFile(_bondlenth_lib_path, ios::in);
 	
 	while( bondFile.readLine() )
 	{
 		String st_ar[2];
 		bondFile.getLine().split(st_ar, 2);
 		
-		bond_lib[st_ar[0]] = st_ar[1].toFloat();
+		_bond_lib[st_ar[0]] = st_ar[1].toFloat();
 		
 		// generate also the reversed label, if both differ
 		if( (st_ar[0])[0] != (st_ar[0])[1] )
 		{
 			String altKey = (st_ar[0])[1];
 			altKey += (st_ar[0])[0];
-			bond_lib[altKey] = st_ar[1].toFloat();
+			_bond_lib[altKey] = st_ar[1].toFloat();
 		}
 	}
 }
 
 
-
-void IOModule::readConnectionLib()
+void LibraryReader::readConnectionLib()
 {
-	connect_lib.clear();
+	_connect_lib.clear();
 	
-	SDFile handle(connection_lib_path, ios::in); //open the lib file as sdf-file
+	SDFile handle(_connection_lib_path, ios::in); //open the lib file as sdf-file
 	
 	// read all lib molecules and save them with their key:
 	Fragment* tmp_mol;
@@ -75,7 +90,7 @@ void IOModule::readConnectionLib()
 	while(tmp_mol)
 	{
 		BALL::String key = tmp_mol->getProperty("key").getString();
-		connect_lib[key] = tmp_mol;
+		_connect_lib[key] = tmp_mol;
 		
 		tmp_mol = (Fragment*)handle.read();
 		cnt++;
@@ -84,14 +99,12 @@ void IOModule::readConnectionLib()
 }
 
 
-
-
-void IOModule::readFragmentLib()
+void LibraryReader::readFragmentLib()
 {
 	//DEBUG:
-	cout<<"reading fragment lib from: "<<fragment_lib_path<<endl;
-	fragment_lib.clear();
-	LineBasedFile libFile(fragment_lib_path, ios::in);
+	cout<<"reading fragment lib from: "<<_fragment_lib_path<<endl;
+	_fragment_lib.clear();
+	LineBasedFile libFile(_fragment_lib_path, ios::in);
 	
 	// read in fragmentLib and create hash-map from that:
 	String key;
@@ -120,7 +133,7 @@ void IOModule::readFragmentLib()
 			}
 			
 			// append to hash map
-			fragment_lib[key] = tmp_frag;
+			_fragment_lib[key] = tmp_frag;
 		}
 		else
 		{
@@ -131,12 +144,10 @@ void IOModule::readFragmentLib()
 }
 
 
-
-
-void IOModule::readSDFFragmentLib()
+void LibraryReader::readSDFFragmentLib()
 {
-	fragment_lib.clear();
-	SDFile libFile(fragment_lib_path, ios::in);
+	_fragment_lib.clear();
+	SDFile libFile(_fragment_lib_path, ios::in);
 	
 	Molecule* tmp_mol;
 	TemplateCoord* tmp_frag=0;
@@ -149,7 +160,7 @@ void IOModule::readSDFFragmentLib()
 		
 		Size size = tmp_mol->countAtoms();
 		tmp_frag = new TemplateCoord(size);
-		fragment_lib[key] = tmp_frag; // add template to the lib
+		_fragment_lib[key] = tmp_frag; // add template to the lib
 		
 		Index i = 0;
 		for (AtomIterator it = tmp_mol->beginAtom(); +it; ++i, ++it)
@@ -165,7 +176,7 @@ void IOModule::readSDFFragmentLib()
 }
 
 
-void IOModule::libraryPathesFromConfig(const String& config_path)
+void LibraryReader::libraryPathesFromConfig(const String& config_path)
 {
 	LineBasedFile configFile(config_path, ios::in);
 	
@@ -178,17 +189,21 @@ void IOModule::libraryPathesFromConfig(const String& config_path)
 		
 		if(tmp.hasPrefix("fragments=")){
 			tmp = tmp.after("fragments=");
-			fragment_lib_path = tmp.trim();
+			_fragment_lib_path = tmp.trim();
 		}
 		else if(tmp.hasPrefix("bondlenths=")){
 			tmp = tmp.after("bondlenths=");
-			bondlenth_lib_path = tmp.trim();
+			_bondlenth_lib_path = tmp.trim();
 		}
 		else if(tmp.hasPrefix("connections=")){
 			tmp = tmp.after("connections=");
-			connection_lib_path = tmp.trim();
+			_connection_lib_path = tmp.trim();
 		}
 		else
 			continue;
 	}
 }
+
+
+/// L i b r a r y R e a d e r
+/// ############################################################################

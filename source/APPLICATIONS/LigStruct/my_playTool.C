@@ -27,7 +27,6 @@
 #include <vector>
 #include <set>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-#include <BALL/STRUCTURE/smartsMatcher.h>
 
 using namespace OpenBabel;
 using namespace BALL;
