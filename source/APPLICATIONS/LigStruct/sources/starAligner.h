@@ -1,3 +1,7 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #ifndef STARALIGNER_H
 #define STARALIGNER_H
 

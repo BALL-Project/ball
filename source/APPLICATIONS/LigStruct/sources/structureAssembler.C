@@ -1,70 +1,53 @@
-#ifndef STRCUTUREASSEMBLER_H
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #include "structureAssembler.h"
-#endif
 
 #include <BALL/KERNEL/fragment.h>
-#include "canonicalizer.h"
+
 
 using namespace BALL;
 using namespace std;
 
-StructureAssembler::StructureAssembler(){}
-
-StructureAssembler::~StructureAssembler(){}
-
-void StructureAssembler::assembleStructure(GroupFragment* gmol)
+StructureAssembler::StructureAssembler( TemplateLibraryManager& libs )
+	: _libs( libs ), 
+		_matcher( libs.getFragmentLib() ),
+		_linker_builder( libs.getConnectionsLib() )
 {
-	assemble_(gmol->molecule, gmol->frag_con2, gmol->linker_lst, gmol->rigid_lst);
+	
+}
+	
+StructureAssembler::~StructureAssembler()
+{
+	
 }
 
-void StructureAssembler::assembleStructure(Molecule* mol)
+void StructureAssembler::assembleStructure(AtomContainer& mol)
 {
-	list< pair < Atom*, Atom* > > dummy_connections;
-	vector< Fragment* > dummy_linker;
-	vector< Fragment* > dummy_rigids;
-//	list< Bond* > dummy_rotors;
+	// create fragments from query molecule:
+	FragVec rigids, linker;
+	ConnectList connections;
 	
-	assemble_(mol, dummy_connections, dummy_linker, dummy_rigids);
-}
-
-/*
- * Private underlying method to the public assembly methods
- */
-void StructureAssembler::assemble_ (Molecule* mol, ConnectList& connections,
-																		FragVec& linker_lst, FragVec &rigid_lst)
-{
-//	fragmentMolecule(*ob_mol, *mol, rigid_lst, linker_lst, connections);
-	cout<<"rigids: "<<rigid_lst.size()<<" inker:"<<linker_lst.size()<<endl;
+	_fragmenter.setMolecule(mol);
+	_fragmenter.getMoleculeFragments(rigids, linker, connections);
 	
-	// canonicalize and match rigid fragments
-	Canonicalizer cano;
-//	for(FGVIter fit = rigid_lst.begin(); fit != rigid_lst.end(); ++fit)
-	for(Fragment*& fit: rigid_lst)
+	// canonicalize, generate UCK-key and match the rigid fragments
+	for( Fragment*& tmp: rigids )
 	{
-		cano.canonicalize( (AtomContainer*)fit );
+		_canoicalizer.canonicalize( tmp );
+		_matcher.matchFragment( *tmp );
 	}
-//	matchRigidFragments(fragment_lib, rigid_lst);
 	
-	// build every linker fragment from standard torsions
-	vector< Fragment* >::iterator lit = linker_lst.begin();
-	for(; lit != linker_lst.end(); ++lit)
+	// build linker fragments
+	for( Fragment*& tmp: linker )
 	{
-//		AssemblerFunctions::buildLinker(**lit, connect_lib);
+		// WARNING: not yet completely implemented, won't actually work!
+		_linker_builder.buildLinker( *tmp ); 
 	}
-
-	// connect the individual fragments
-	list< pair < Atom*, Atom* > >::iterator cit = connections.begin();
-//	int cnt = 1;
-//	for(; cit != connections.end(); ++cit)
-//	{
-//		AssemblerFunctions::connectFragments( cit->first, cit->second, connect_lib, bond_lib);
-//		SDFile tmp_out("/Users/pbrach/in_between_"+String(cnt)+".sdf", ios::out);
-//		tmp_out << *mol;
-//		tmp_out.close();
-//		++cnt;
-//	}
 	
-//	AssemblerFunctions::connectFragments( cit->second, cit->first, connect_lib, bond_lib);
+	// connect the ready made fragments to a single molecule
 }
+
 
 

@@ -14,7 +14,7 @@ using namespace std;
 
 class FragmentBuilder{
 public:
-	FragmentBuilder();
+	FragmentBuilder(ConSiteMap& connection_templates);
 	
 	~FragmentBuilder();
 	/**
@@ -22,11 +22,14 @@ public:
 	 * @brief buildLinker a flexible linker fragment
 	 * @param linker_lst
 	 */
-	void buildLinker(Fragment &linker_frag, ConSiteMap &link_lib);
+	void buildLinker(Fragment &linker_frag);
 	
 private:
-	void recurLinkerConnect(Atom* at, Composite * const parent, ConSiteMap& link_lib);
+	void recurLinkerConnect(Atom* at, Composite * const parent);
+	
 	void connectAtomToSite(AtmVec& site, AtomContainer& temp, Atom* partner);
+	
+	ConSiteMap& _connection_templates;
 };
 
 

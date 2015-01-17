@@ -1,11 +1,16 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+
 #ifndef STRCUTUREASSEMBLER_H
 #define STRCUTUREASSEMBLER_H
 
-#ifdef MATCHER_H
-#include "matcher.h"
-#endif
-
 #include "ioModule.h"
+#include "fragmenter.h"
+#include "fragmentBuilder.h"
+#include "moleculeConnector.h"
+#include "clashResolver.h"
+#include "canonicalizer.h"
 
 //using namespace OpenBabel;
 //using namespace BALL;
@@ -14,7 +19,7 @@
 class StructureAssembler
 {
 public:
-	StructureAssembler();
+	StructureAssembler( TemplateLibraryManager& libs );
 
 	~StructureAssembler();
 
@@ -27,23 +32,21 @@ public:
 	 * @brief assembleStructure
 	 * @param mol
 	 */
-	void assembleStructure(Molecule* mol);
+	void assembleStructure(AtomContainer& mol);
 	
-	/**
-	 * Same as the variant for BALL::Molecule but also assigns the internal 
-	 * conncetions between the internal fragments of the contained molecule.
-	 * 
-	 * @brief assembleStructure
-	 * @param mol
-	 */
-	void assembleStructure(GroupFragment* gmol);
-
 private:
-	TemplateLibraryManager _libs;
+	TemplateLibraryManager& _libs; // needed fragment libs
 	
+	// Tool-Classes needed for structure fragmenting and reassembly
+	MoleculeFragmenter _fragmenter;
+	Canonicalizer      _canoicalizer;
+	Matcher            _matcher;
+	FragmentBuilder    _linker_builder;
+	MoleculeConnector  _connector;
+	ClashResolver      _clash_resolver;
+
 	
-	void assemble_ (Molecule* mol, ConnectList &connections,
-									FragVec &linker_lst, FragVec &rigid_lst);
+	//
 	
 };
 #endif // STRCUTUREASSEMBLER_H

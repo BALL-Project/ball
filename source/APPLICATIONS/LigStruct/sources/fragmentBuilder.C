@@ -18,7 +18,8 @@
 /**
  * buildLinker
  */
-FragmentBuilder::FragmentBuilder()
+FragmentBuilder::FragmentBuilder( ConSiteMap& connection_templates )
+	:_connection_templates(connection_templates)
 {
 	
 }
@@ -28,7 +29,7 @@ FragmentBuilder::~FragmentBuilder()
 	
 }
 
-void FragmentBuilder::buildLinker(Fragment& linker_frag, ConSiteMap& link_lib)
+void FragmentBuilder::buildLinker(Fragment& linker_frag)
 {
 	/// Init the very first atom:
 	Atom* at1 = &*linker_frag.beginAtom();
@@ -41,7 +42,7 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag, ConSiteMap& link_lib)
 		Atom* partner = bit->getBoundAtom(*at1); 
 		
 		if( partner->getParent() == &linker_frag ) // restrict to intra-fragment-bonds!
-			recurLinkerConnect( partner, &linker_frag, link_lib);
+			recurLinkerConnect( partner, &linker_frag);
 	}
 }
 
@@ -49,7 +50,7 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag, ConSiteMap& link_lib)
  * P R I V A T E
  * recurLinkerConnect
  */
-void FragmentBuilder::recurLinkerConnect(Atom* at, Composite * const parent, ConSiteMap& link_lib)
+void FragmentBuilder::recurLinkerConnect(Atom* at, Composite * const parent)
 {
 	for( Atom::BondIterator bit = at->beginBond(); +bit; ++bit)
 	{
@@ -68,10 +69,10 @@ void FragmentBuilder::recurLinkerConnect(Atom* at, Composite * const parent, Con
 //				getSelectedSite(at, site, key);
 				
 				//2.) connect single Atom 'partner' to site
-				connectAtomToSite(site, *(link_lib[key]), partner);
+				connectAtomToSite(site, *(_connection_templates[key]), partner);
 				
 				//3.) descend recursion with partner
-				recurLinkerConnect(partner, parent, link_lib);
+				recurLinkerConnect(partner, parent);
 			}
 		}
 		
