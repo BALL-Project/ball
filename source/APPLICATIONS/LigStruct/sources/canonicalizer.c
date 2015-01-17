@@ -56,7 +56,7 @@ void Canonicalizer::canonicalize(AtomContainer *molecule)
 
 /// C l a s s   M a t c h e r
 /// ############################################################################
-Matcher::Matcher(CoordinateMap &coord_map):_coords(coord_map){}
+Matcher::Matcher(CoordinateMap &coord_map):_coord_lib(coord_map){}
 
 Matcher::~Matcher(){}
 
@@ -64,7 +64,7 @@ void Matcher::matchFragment(Fragment& fragment)
 {
 	// for all fragments, match these against the lib:
 	UCK keyGen( fragment, true, 5 );
-	TemplateCoord* templat = _coords[ keyGen.getUCK() ];
+	TemplateCoord* templat = _coord_lib[ keyGen.getUCK() ];
 		
 	if(templat && (templat->size() == fragment.countAtoms()) )
 	{
@@ -73,7 +73,13 @@ void Matcher::matchFragment(Fragment& fragment)
 	else // print error msg, showing element-list and key of the not matchable molecule
 	{
 		cout<<"Warning: could not find a template for: ";
-		cout<< LigBase::printInlineMol(&fragment);
+		cout<< LigBase::printInlineStarMol(&fragment);
 		cout<< "key: "<<keyGen.getUCK()<<endl;
 	}
+}
+
+const String Matcher::getUCK(AtomContainer &mol)
+{
+	UCK keyGen( mol, true, 5 );
+	return keyGen.getUCK();
 }

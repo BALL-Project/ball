@@ -36,8 +36,10 @@ public:
 	
 	void matchFragment(Fragment &fragment);
 	
+	static const String getUCK(AtomContainer & mol);
+	
 private:
-	CoordinateMap& _coords;
+	CoordinateMap& _coord_lib;
 };
 
 #endif // CANONICALIZER_H

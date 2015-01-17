@@ -16,6 +16,7 @@
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/atomContainer.h>
 
+#include <BALL/KERNEL/forEach.h>
 #include <vector>
 
 
@@ -23,7 +24,19 @@
 using namespace BALL;
 using namespace std;
 
-String LigBase::printInlineMol(Composite* mol)
+String LigBase::printMol(Composite *mol)
+{
+	
+	String tmp = "";
+	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
+	{
+		tmp += ati->getElement().getSymbol();
+		tmp += " " + String( ati->countBonds() );
+		tmp += "\n";
+	}
+	return tmp;
+}
+String LigBase::printInlineStarMol(Composite* mol)
 {
 	
 	String tmp = "";
@@ -37,7 +50,7 @@ String LigBase::printInlineMol(Composite* mol)
 }
 
 
-String LigBase::printInlineMol(AtmVec& mol)
+String LigBase::printInlineStarMol(AtmVec& mol)
 {
 	
 	String tmp = "";
@@ -68,3 +81,33 @@ void LigBase::toAtmVec(AtomContainer &fromMol, AtmVec &toMol)
 	for(AtomIterator ati = fromMol.beginAtom(); +ati; ++ati)
 		toMol.push_back(&*ati);
 }
+
+void LigBase::transferMolecule(AtomContainer *toMol, AtomContainer *fromMol)
+{
+	int num_atm = fromMol->countAtoms();
+	for(int i = 0; i < num_atm; i++)
+		toMol->insert( *fromMol->beginAtom() ); // insert auto removes from its old parent
+}
+
+void LigBase::clearExternalBonds(AtomContainer *mol)
+{
+	Atom::BondIterator bit;
+	AtomIterator ait;
+
+	BALL_FOREACH_INTERBOND(*mol, ait, bit)
+	{
+		bit->destroy();
+	}
+}
+
+void LigBase::copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop)
+{
+	NamedPropertyIterator  it;
+	for(it = orig.beginNamedProperty (); it !=orig.endNamedProperty(); it++)
+	{
+		cop.setProperty(*it);
+	}
+	cop.setName(orig.getName());
+}
+
+

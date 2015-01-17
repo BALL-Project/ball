@@ -167,14 +167,21 @@ class LigBase
 public:
 	
 	// generate a mini dump of a molecule
-	static String printInlineMol(Composite* mol);
-	static String printInlineMol(AtmVec& mol);
+	static String printMol(Composite* mol);
+	static String printInlineStarMol(Composite* mol);
+	static String printInlineStarMol(AtmVec& mol);
 	
 	// get the position of an atom in the molcule list:
 	static const int getAtomPosition(Atom* atm, AtomContainer *mol);
 	
 	// Translate the AtomContainer 'fromMol' into an AtmVec 'toMol'
 	static void toAtmVec( AtomContainer& fromMol, AtmVec& toMol);
+	
+	static void transferMolecule( AtomContainer* toMol, AtomContainer* fromMol);
+	
+	static void clearExternalBonds(AtomContainer* mol);
+	
+	static void copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop);
 
 };
 

@@ -84,8 +84,8 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	///2) transfrom templ1 to match with frag1 (keep frag1 as it was)
 	cout<<"####Step2"<<endl;
 	
-	cout<<"Got Site:"<<LigBase::printInlineMol(site_frag1)<<endl;
-	cout<<"Got Connection:"<<LigBase::printInlineMol(templ1)<<endl;
+	cout<<"Got Site:"<<LigBase::printInlineStarMol(site_frag1)<<endl;
+	cout<<"Got Connection:"<<LigBase::printInlineStarMol(templ1)<<endl;
 	star_aligner.setMolecules(site_frag1, *templ1);
 	cout<<"####Step2: did set molecules"<<endl;
 	star_aligner.align();
@@ -97,7 +97,9 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	
 	///3) transfrom templ2 to match with frag2
 	cout<<"####Step3"<<endl;
-	AtomContainer* frag2 = (AtomContainer*)atm2->getParent();
+	
+	// get all atoms that are in the same container as atm2:
+	AtomContainer* frag2 = (AtomContainer*) &atm2->getRoot();
 //	cout<<"    got partent"<<endl;
 	
 //	cout<<

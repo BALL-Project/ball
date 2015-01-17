@@ -35,6 +35,9 @@ public:
 	void assembleStructure(AtomContainer& mol);
 	
 private:
+	
+	void connectClashFree(Atom at1, Atom at2);
+	
 	TemplateLibraryManager& _libs; // needed fragment libs
 	
 	// Tool-Classes needed for structure fragmenting and reassembly

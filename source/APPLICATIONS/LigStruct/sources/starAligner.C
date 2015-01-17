@@ -325,8 +325,8 @@ void StarAligner::getRemainder( AtmVec& remainder )
 	
 	// D E B U G :
 	cout<<endl<<"'getRemaining':"<<endl;
-	cout<<"templ    : "<<LigBase::printInlineMol(_query)<<endl;
-	cout<<"site     : "<<LigBase::printInlineMol(*_site)<<endl;
+	cout<<"templ    : "<<LigBase::printInlineStarMol(_query)<<endl;
+	cout<<"site     : "<<LigBase::printInlineStarMol(*_site)<<endl;
 	cout<<"remainder: ";
 	for(AVIter at = remainder.begin(); at != remainder.end(); ++at)
 	{
