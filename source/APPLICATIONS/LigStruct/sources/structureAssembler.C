@@ -2,6 +2,7 @@
 #include "structureAssembler.h"
 #endif
 
+#include <BALL/KERNEL/fragment.h>
 #include "canonicalizer.h"
 
 using namespace BALL;
@@ -37,9 +38,10 @@ void StructureAssembler::assemble_ (Molecule* mol, ConnectList& connections,
 	
 	// canonicalize and match rigid fragments
 	Canonicalizer cano;
-	for(FGVIter fit = rigid_lst.begin(); fit != rigid_lst.end(); ++fit)
+//	for(FGVIter fit = rigid_lst.begin(); fit != rigid_lst.end(); ++fit)
+	for(Fragment*& fit: rigid_lst)
 	{
-		cano.canonicalize( (AtomContainer*)*fit );
+		cano.canonicalize( (AtomContainer*)fit );
 	}
 //	matchRigidFragments(fragment_lib, rigid_lst);
 	

@@ -9,7 +9,12 @@
 
 #include <BALL/DATATYPE/string.h>
 
-//using namespace OpenBabel;
+#include <BALL/FORMAT/SDFile.h>
+
+#include <openbabel/obconversion.h>
+#include <openbabel/mol.h>
+
+using namespace OpenBabel;
 using namespace BALL;
 //using namespace std;
 
@@ -38,19 +43,10 @@ public:
 	 */
 	void libraryPathesFromConfig(const String& config_path);
 	
-	/*
-	 * Reads the standard bond lengths from a lib file
-	 */
 	void readBondLib();
 	
-	/*
-	 * Read the connection site from a library file
-	 */
 	void readConnectionLib();
 	
-	/*
-	 * Reads the template coordinates for all fragments
-	 */
 	void readFragmentLib();
 	
 	/*
@@ -74,7 +70,6 @@ private:
 	String _connection_lib_path;
 };
 
-
 /// C o m b i L i b M a n a g e r
 /// ############################################################################
 class CombiLibManager
@@ -83,9 +78,44 @@ public:
 	CombiLibManager();
 	~CombiLibManager();
 	
+	void readCombiLib(const String& file_name);
+	
+	const vector<String>& operator[] (Index index);
+	
+	const Size size();
 private:
+	String      _scaffold;
+	CombiLibMap _lib;
 };
 
 
+/// S m i l e s P a r s e r
+/// ############################################################################
+class SmilesParser
+{
+public:
+	SmilesParser();
+	~SmilesParser();
+	
+	Molecule *fromSMILEStoMolecule(const String& smiles_string);
+	
+	GroupFragment* fromSMILEStoGroupfragment(const String& smiles_string);
+	
+private:
+	OBConversion _babel_conv;
+	OBMol        _babel_mol;
+};
+
+
+/// (static) L i g I O
+/// ############################################################################
+class LigIO
+{
+public:
+	static void writeMolVec(vector<Molecule* >& input, SDFile* handle);
+	
+	static void readOBMolecule(const String& path, OBMol& mol);
+
+};
 
 #endif // IOMODULE_H

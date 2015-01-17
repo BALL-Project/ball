@@ -148,10 +148,14 @@ typedef vector <Fragment*>           FragVec;
 typedef vector <Fragment*>::iterator FGVIter;
 
 // Special Data:
-typedef list< pair<Atom*, Atom*> >   ConnectList;
+typedef list< pair<Atom*, Atom*> > ConnectList;
+typedef vector<GroupFragment*>     GroupFragVec;
+typedef vector< String >           SMILESVec;
 
 // Lib Data:
-typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// String == UCK key
+typedef  boost::unordered_map < int, SMILESVec > CombiLibMap;
+//typedef boost::unordered_map< int, GroupFragVec* >    CombiLib; // key==group number, value==all groupfragment for that group
+typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// key == UCK key
 typedef boost::unordered_map <String, float >         BondLengthMap;
 typedef boost::unordered_map <String, Fragment* >     ConSiteMap;
 
