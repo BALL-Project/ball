@@ -47,6 +47,7 @@ void StarAligner::setMolecules(AtmVec &ref_site, AtomContainer &query)
 	if(_delete_site)
 		delete _site;
 	
+	_delete_site = false;
 	_site = &ref_site;
 	_query = &query;
 }

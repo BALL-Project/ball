@@ -98,16 +98,16 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	
 	// get all atoms that are in the same container as atm2:
 	AtomContainer* frag2 = (AtomContainer*) &atm2->getRoot();
-//	cout<<"    got partent"<<endl;
+	cout<<"    got partent"<<endl;
 	
 //	cout<<
 	_star_aligner.setMolecules( site_frag2, *templ2);
 	_star_aligner.align();
-//	cout<<"    aligned"<<endl;
+	cout<<"    aligned"<<endl;
 	
 	AtmVec remain_tmp2;
 	_star_aligner.getRemainder(remain_tmp2);
-//	cout<<"    got remaining"<<endl;
+	cout<<"    got remaining"<<endl;
 	
 	///4) transfrom the connection bond determined for temp2 to the one determined
 	///   for temp1.
@@ -136,6 +136,26 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	frag2->apply(t_later);
 	delete templ1;
 	delete templ2;
+	
+	/// 6) possible double bond correction:
+	checkAndCorrectDoubleBond( *atm1, *atm2, *frag2);
+}
+
+void MoleculeConnector::checkAndCorrectDoubleBond(Atom &atm1, Atom &atm2, AtomContainer &frag2)
+{
+	/// 1) check if any atom has a double bond neighbor
+	if( hasOneDoubleBond(atm1) )
+	{
+	}
+	else if( hasOneDoubleBond(atm2) )
+	{
+		
+	}
+}
+
+bool MoleculeConnector::hasOneDoubleBond( Atom &atm )
+{
+	return false;
 }
 
 
@@ -148,7 +168,7 @@ void MoleculeConnector::getSite(Atom* atm, AtmVec &site, String& key)
 	site.push_back(atm);
 	key = atm->getElement().getSymbol();
 	
-	Composite* parent = atm->getParent();
+	Composite* root = & atm->getRoot();
 	
 	// structure to sort the neighbors according to their names (element+BO)
 	vector< pair<String,Atom*> > names_neighbors;
@@ -172,7 +192,7 @@ void MoleculeConnector::getSite(Atom* atm, AtmVec &site, String& key)
 	{
 		key += (*name_it).first;
 		
-		if( (*name_it).second->getParent() == parent) 
+		if( & (*name_it).second->getRoot() == root) 
 			site.push_back( (*name_it).second );
 	}
 }
