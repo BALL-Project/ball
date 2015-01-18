@@ -71,7 +71,7 @@ void StarAligner::_calculateOptimalTransformation()
 	/// Case 1) 'site' has size 1, thus we can only translate the center 
 	if ( site.size() == 1)
 	{
-		cout<<"Align: got case1"<<endl;
+//		cout<<"Align: got case1"<<endl;
 		Vector3 transl = site[0]->getPosition() - _query->beginAtom()->getPosition();
 		_matrix.setTranslation(transl);
 	}
@@ -81,33 +81,35 @@ void StarAligner::_calculateOptimalTransformation()
 		cout<<"Align: got case2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
-		float sq_dist12 = sit1.getSquareDistance( sit2 ); // get dist to single neighbor in site
 		
 		AtomIterator ati = _query->beginAtom();
 		Vector3& tem1 = ati->getPosition();
-		Vector3 tem2;
+		Atom* tem2_atm;
+//		Vector3 tem2;
 		
 		const Element& elem = site[1]->getElement();
 		short bo = site[1]->getBond( *site[0] )->getOrder();
-		// Find a compatible atom in 'templ' that has the most similar sq_distance to sq_dist12
-		float min_diff = numeric_limits<float>::max();
-		for(++ati; +ati; ++ati) // SPEEDUP: theoretically it should be sufficiently effective if only take the first matching atom
+		
+		// Find a compatible atom in 'templ'
+		for(++ati; +ati; ++ati) 
 		{
 			if( ati->getElement() == elem && ati->beginBond()->getOrder() == bo) // at least 1 will be compatible
 			{
-				// calc dist:
-				float diff = tem1.getSquareDistance( ati->getPosition() ) - sq_dist12;
-				if( abs(diff) < min_diff)
-					tem2.set( ati->getPosition() );
+				tem2_atm = &*ati;
+//				tem2.set( ati->getPosition() );
 			}
 		}
-		_matrix = twoPointMatch(tem1, tem2, sit1, sit2);
+		if (bo == 2 && site[1]->countBonds() > 1)
+			_matrix = doubleBondCorrection( * _query->beginAtom(), * tem2_atm,
+																			*site[0], * site[1]);
+		else
+			_matrix = twoPointMatch(tem1, tem2_atm->getPosition(), sit1, sit2);
 	}
 	/// Case 3) 'site' has at least 2 neighbors
 	else
 	{
 		cout<<"Align: got case3"<<endl;
-		_alignCase3(site, *_query, _matrix);
+		_alignCase3(site);
 	}
 }
 
@@ -120,7 +122,7 @@ void StarAligner::_calculateOptimalTransformation()
  * precondition extension to starAlign:
  * - 'site' and 'templ' are of at least size 3
  */
-void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix)
+void StarAligner::_alignCase3(AtmVec& site)
 {
 	// find all unique atoms in 'site' (according to BO to cental atom and element type)
 	AtmVec unique_atms;
@@ -137,7 +139,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 		Vector3& sit2 = unique_atms[0]->getPosition();
 		Vector3& sit3 = unique_atms[1]->getPosition();
 		
-		Vector3& tem1 = templ.beginAtom()->getPosition();
+		Vector3& tem1 = _query->beginAtom()->getPosition();
 //		cout<<"before getMatching"<<endl;
 //		cout<<&*templ.beginAtom()<<" "<<&templ <<" "<<unique_atms[0]<<endl;
 		
@@ -146,12 +148,12 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 		String elem1 = unique_atms[1]->getElement().getSymbol();
 		short    bo1 = unique_atms[1]->getBond( *site[0] )->getOrder();
 		
-		Vector3& tem2 = getMatchingAtom( &*templ.beginAtom(), &templ, elem2, bo2 )->getPosition();
-		Vector3& tem3 = getMatchingAtom( &*templ.beginAtom(), &templ, elem1, bo1 )->getPosition();
+		Vector3& tem2 = getMatchingAtom( &*_query->beginAtom(), _query, elem2, bo2 )->getPosition();
+		Vector3& tem3 = getMatchingAtom( &*_query->beginAtom(), _query, elem1, bo1 )->getPosition();
 //		cout<<tem1<<endl;
 //		cout<<tem2<<endl;
 		// get transformation:
-		trans_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
+		_matrix = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
 	}
 	
 	
@@ -175,17 +177,17 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 		}
 		Vector3& sit3 = site3_atm->getPosition();
 		
-		Vector3& tem1 = templ.beginAtom()->getPosition();
+		Vector3& tem1 = _query->beginAtom()->getPosition();
 		String elem = unique_atms[0]->getElement().getSymbol();
 		short    bo = unique_atms[0]->getBond( *site[0] )->getOrder();
-		Atom* tem2_atm = getMatchingAtom(&*templ.beginAtom(), &templ, elem, bo );
+		Atom* tem2_atm = getMatchingAtom(&*_query->beginAtom(), _query, elem, bo );
 		Vector3& tem2 = tem2_atm->getPosition();
 		
 		// test all possible assignments of an 'templ'-atm to the 'site3_atm'
 		float best_rmsd = numeric_limits<float>::max();
 		Matrix4x4 test_matrix; TransformationProcessor transformer;
 		
-		AtomIterator ati = templ.beginAtom();
+		AtomIterator ati = _query->beginAtom();
 		for(ati++; +ati; ati++)
 		{
 			float rmsd = numeric_limits<float>::max();
@@ -198,13 +200,13 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 				transformer.setTransformation(test_matrix);
 				
 				// test transformation with a dummy_molecule:
-				AtomContainer test_mol( templ ); //SPEEDUP: efficient storing of original coordinates (FlexibleMolecule, ConformationSet, AtmVec-Overloading)
+				AtomContainer test_mol( *_query ); //SPEEDUP: efficient storing of original coordinates (FlexibleMolecule, ConformationSet, AtmVec-Overloading)
 				test_mol.apply(transformer);
 				rmsd = getMinRMSD(&site, &test_mol);
 				if (rmsd < best_rmsd)
 				{
 					best_rmsd = rmsd;
-					trans_matrix.set( test_matrix );
+					_matrix.set( test_matrix );
 				}
 				
 			}
@@ -224,12 +226,12 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 		Vector3& sit2 = site2_atm->getPosition();
 		Vector3& sit3 = site3_atm->getPosition();
 		
-		Vector3& tem1 = templ.beginAtom()->getPosition();
+		Vector3& tem1 = _query->beginAtom()->getPosition();
 		Atom* tem_2_atm = 0;
 		Atom* tem_3_atm = 0;
 		
 		// test all possible assignments to 'selectionA2'
-		AtomIterator ati = templ.beginAtom();
+		AtomIterator ati = _query->beginAtom();
 		Matrix4x4 temp_trans; TransformationProcessor transformer;
 		for(ati++; +ati; ati++)
 		{
@@ -240,7 +242,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 				Vector3& tem2 = tem_2_atm->getPosition(); //assign first neighbor
 				
 				// test all possible assignments to 'selectionA3'
-				AtomIterator ato = templ.beginAtom();
+				AtomIterator ato = _query->beginAtom();
 				for(ato++; +ato; ato++)
 				{
 					tem_3_atm = &*ato;
@@ -248,7 +250,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 					if( (tem_2_atm != tem_3_atm) && (atomsCompatible(site3_atm, tem_3_atm)) )
 					{
 						float rmsd = numeric_limits<float>::max();
-						AtomContainer test_mol( templ ); //SPEEDUP: efficient storing of original coordinates (FlexibleMolecule, ConformationSet, AtmVec-Overloading)
+						AtomContainer test_mol( *_query ); //SPEEDUP: efficient storing of original coordinates (FlexibleMolecule, ConformationSet, AtmVec-Overloading)
 						Vector3& tem3 = tem_3_atm->getPosition(); //assign second neighbor
 						
 						temp_trans = StructureMapper::matchPoints( tem1, tem2, tem3, sit1, sit2, sit3);
@@ -259,7 +261,7 @@ void StarAligner::_alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& tra
 						if (rmsd < best_rmsd)
 						{
 							best_rmsd = rmsd;
-							trans_matrix = trans_matrix;
+							_matrix.set( temp_trans );
 						}
 					}
 				}
@@ -571,6 +573,33 @@ Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2,
 																		 const Vector3& w1, const Vector3& w2)
 {
 	return StructureMapper::matchPoints(n1, n2, Vector3(), w1, w2, Vector3());
+}
+
+Matrix4x4 StarAligner::doubleBondCorrection(Atom &tem1, Atom &tem2,
+																						Atom &sit1, Atom &sit2)
+{
+	const Vector3& s1 = sit1.getPosition();
+	const Vector3& s2 = sit2.getPosition();
+	Atom* sit3 = 0;
+	for (Atom::BondIterator bit = sit2.beginBond(); +bit; ++bit)
+	{
+		sit3 = bit->getBoundAtom( sit2 );
+		if ( &sit1 != sit3)
+			break;
+	}
+	Vector3& s3 = sit3->getPosition();
+	
+	const Vector3& t1 = tem1.getPosition();
+	const Vector3& t2 = tem2.getPosition();
+	Atom* tem3 = 0;
+	for( Atom::BondIterator bit = tem1.beginBond(); +bit; ++bit)
+	{
+		tem3 = bit->getBoundAtom( tem1 );
+		if ( &tem1 != tem3 )
+			break;
+	}
+	Vector3& t3 = tem3->getPosition();
+	return StructureMapper::matchPoints(t1, t2, t3, s1, s2, s3);
 }
 
 

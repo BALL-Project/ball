@@ -62,7 +62,7 @@ private:
 	float _best_rmsd;
 	
 	void _calculateOptimalTransformation();
-	void _alignCase3(AtmVec& site, AtomContainer &templ, Matrix4x4& trans_matrix);
+	void _alignCase3(AtmVec& site);
 	
 	
 	/*
@@ -122,6 +122,13 @@ private:
 	 */
 	Matrix4x4 twoPointMatch(const Vector3& n1, const Vector3& n2, 
 													const Vector3& w1, const Vector3& w2);
+	
+	/*
+	 * Is a towPointMatching that respects the need for planarity of neighbors
+	 * connected to the bond if we are twoPointmatching a double bond.
+	 */
+	Matrix4x4 doubleBondCorrection(Atom &tem1, Atom &tem2, 
+																 Atom &sit1, Atom &sit2);
 	
 	// recursion for the 'getRemainder' function
 	void matchPermutaions(Atom &center, AVIter& ati1, AVIter& end1, AtmVec& atm_vec, 

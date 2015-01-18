@@ -16,6 +16,8 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/fragment.h>
 #include <boost/unordered_map.hpp>
+
+#include <BALL/STRUCTURE/geometricProperties.h>
 using namespace BALL;
 using namespace std;
 
@@ -109,7 +111,7 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	_star_aligner.getRemainder(remain_tmp2);
 	cout<<"    got remaining"<<endl;
 	
-	///4) transfrom the connection bond determined for temp2 to the one determined
+	///4) project the connection bond determined for temp2 on to the one determined
 	///   for temp1.
 	cout<<"####Step4"<<endl;
 	String elem2 = atm2->getElement().getSymbol();
@@ -139,6 +141,7 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	
 	/// 6) possible double bond correction:
 	checkAndCorrectDoubleBond( *atm1, *atm2, *frag2);
+//	BALL::calculateTorsionAngle();
 }
 
 void MoleculeConnector::checkAndCorrectDoubleBond(Atom &atm1, Atom &atm2, AtomContainer &frag2)
