@@ -38,21 +38,27 @@ int main(int argc, char* argv[])
 		lib_loader.libraryPathesFromConfig( parpars.get("c") );
 	else
 		lib_loader.libraryPathesFromConfig( "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
+	lib_loader.readAll();
 
 ///// A S S E M B L E   3 D
 	SDFile infile( parpars.get("i"), ios::in);
 	SDFile outfile(parpars.get("o"), ios::out);
 	
 	Molecule* tmp = infile.read();
-	
+	StructureAssembler lig_assembler( lib_loader );
+
 	while (tmp)
 	{
-		StructureAssembler lig_assembler( lib_loader );
+		cout<<"read mol starting assembly"<<endl;
 		lig_assembler.assembleStructure( *tmp );
+		cout<<"assembled structure"<<endl;
 		
 		outfile << *tmp;
+		cout<<"wrote structure"<<endl;
 		delete tmp;
+		cout<<"deleted old structure"<<endl;
 		tmp = infile.read();
+		cout<<"read new structure"<<endl;
 	}
 	
 /// F I N I S H

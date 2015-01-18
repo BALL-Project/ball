@@ -5,6 +5,7 @@
 #define MOLECULECONNECTOR_H
 
 #include "base.h"
+#include "starAligner.h"
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/fragment.h>
@@ -44,6 +45,7 @@ private:
 	
 	ConSiteMap* _connections;
 	BondLengthMap* _bond_lengths;
+	StarAligner _star_aligner;
 	
 	/*
 	 * From an atom (given by 'atm') determine the site and the key for the site.

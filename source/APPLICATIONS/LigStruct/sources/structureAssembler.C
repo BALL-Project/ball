@@ -31,7 +31,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	
 	_fragmenter.setMolecule(mol);
 	_fragmenter.getMoleculeFragments(rigids, linker, connections);
-	
+
 	// canonicalize, generate UCK-key and match the rigid fragments
 	for( Fragment*& tmp: rigids )
 	{
@@ -51,9 +51,19 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	{
 		connectClashFree( * atm_pair.first, * atm_pair.second );
 	}
+	
+	// re-insert all fragments into the original molecule
+	for(Fragment*& f : rigids)
+	{
+		mol.insert( *f );
+	}
+	for(Fragment*& f : linker)
+	{
+		mol.insert( *f );
+	}
 }
 
-void StructureAssembler::connectClashFree(Atom at1, Atom at2)
+void StructureAssembler::connectClashFree(Atom& at1, Atom& at2)
 {
 	//1.) select biggest molecule as 1st connection partner. 
 	//    REASON: we assume that our connection method keeps the first fragment 
