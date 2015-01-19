@@ -122,7 +122,7 @@ struct GroupFragment
 	// intra connections
 	vector< Fragment* > linker_lst; // all bonds within a linker are rotable
 	vector< Fragment* > rigid_lst; // all matchable fragments
-	list< Bond* > rotor_lst;      // all intra fragment bonds of the molecule
+	list< pair< Atom*, Atom*>  > rotor_lst;      // all intra fragment bonds of the molecule
 	list< pair< Atom*, Atom*> > frag_con2;
 	// for each fragment, the list of bonds to other fragments
 	boost::unordered_map< Fragment*, list<Bond*> > fragment_connections;
@@ -157,6 +157,7 @@ typedef  boost::unordered_map < int, SMILESVec > CombiLibMap;
 //typedef boost::unordered_map< int, GroupFragVec* >    CombiLib; // key==group number, value==all groupfragment for that group
 typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// key == UCK key
 typedef boost::unordered_map <String, float >         BondLengthMap;
+typedef boost::unordered_map <String, vector<float> > TorsionMap;
 typedef boost::unordered_map <String, Fragment* >     ConSiteMap;
 
 

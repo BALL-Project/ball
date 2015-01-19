@@ -36,7 +36,7 @@ public:
 	
 private:
 	
-	void connectClashFree(Atom &at1, Atom &at2);
+	void connectClashFree(Atom &at1, Atom &at2, ConnectList& connections);
 	
 	TemplateLibraryManager& _libs; // needed fragment libs
 	

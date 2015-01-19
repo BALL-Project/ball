@@ -587,19 +587,25 @@ Matrix4x4 StarAligner::doubleBondCorrection(Atom &tem1, Atom &tem2,
 		if ( &sit1 != sit3)
 			break;
 	}
-	Vector3& s3 = sit3->getPosition();
 	
 	const Vector3& t1 = tem1.getPosition();
 	const Vector3& t2 = tem2.getPosition();
 	Atom* tem3 = 0;
+	// get the 
 	for( Atom::BondIterator bit = tem1.beginBond(); +bit; ++bit)
 	{
 		tem3 = bit->getBoundAtom( tem1 );
 		if ( &tem1 != tem3 )
 			break;
 	}
-	Vector3& t3 = tem3->getPosition();
-	return StructureMapper::matchPoints(t1, t2, t3, s1, s2, s3);
+	if ( tem3 != 0 && sit3 != 0)
+	{
+		Vector3& s3 = sit3->getPosition();
+		Vector3& t3 = tem3->getPosition();
+		return StructureMapper::matchPoints(t1, t2, t3, s1, s2, s3);
+	}
+	else
+		return StructureMapper::matchPoints(t1, t2, Vector3(), s1, s2, Vector3());
 }
 
 

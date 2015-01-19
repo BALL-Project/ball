@@ -49,7 +49,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	// connect the ready made fragments to a single molecule
 	for( auto& atm_pair : connections )
 	{
-		connectClashFree( * atm_pair.first, * atm_pair.second );
+		connectClashFree( * atm_pair.first, * atm_pair.second, connections );
 	}
 	
 	// re-insert all fragments into the original molecule
@@ -64,7 +64,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	}
 }
 
-void StructureAssembler::connectClashFree(Atom& at1, Atom& at2)
+void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& connections)
 {
 	//1.) select biggest molecule as 1st connection partner. 
 	//    REASON: we assume that our connection method keeps the first fragment 
@@ -78,17 +78,25 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2)
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
 		_connector.connect( &at1, &at2 );
+		
+		// 2.) detect and resolve clashes:
+		_clash_resolver.setMolecule(at1, at2, connections);
+		if( _clash_resolver.detect() != 0 )
+			_clash_resolver.resolve();
+		
 		root_1->insert( *root_2 );
 	}
 	else
 	{
 		_connector.connect( &at2, &at1 );
+		
+		// 2.) detect and resolve clashes:
+		_clash_resolver.setMolecule(at1, at2, connections);
+		if( _clash_resolver.detect() != 0 )
+			_clash_resolver.resolve();
+		
 		root_2->insert( *root_1 );
 	}
-	
-	// 2.) detect and resolve any clashes:
-//	_clash_resolver
-	
 }
 
 
