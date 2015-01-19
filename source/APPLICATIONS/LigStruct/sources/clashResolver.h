@@ -7,6 +7,7 @@
 #include "base.h"
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/angle.h>
+#include <BALL/DATATYPE/hashSet.h>
 
 //using namespace OpenBabel;
 using namespace BALL;
@@ -38,8 +39,13 @@ private:
 	
 	bool doClash(Atom& atm1, Atom& atm2);
 	
+	/*
+	 * Keep positions of atoms connected to 'atm1' but rotate all atoms that
+	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
+	 * degree/radiant
+	 */
 	void rotate(Atom& atm1, Atom& atm2, Angle angle);
-	void setAtomsToRotate(Atom& start, Atom& block, AtmVec& result);
+	void setAtomsToRotate(Atom &start ,Atom &probe, Atom &block, HashSet<Atom *> &result);
 	
 	Atom* atm_large;
 	Atom* atm_small;

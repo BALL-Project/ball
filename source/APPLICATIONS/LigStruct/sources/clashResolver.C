@@ -4,6 +4,11 @@
 
 #include "clashResolver.h"
 #include <BALL/KERNEL/PTE.h>
+
+#include <BALL/MATHS/quaternion.h>
+#include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/MATHS/vector3.h>
+#include <BALL/MATHS/matrix44.h>
 ClashResolver::ClashResolver()
 {
 	_large_rotors = 0;
@@ -107,10 +112,94 @@ bool ClashResolver::doClash(Atom &atm1, Atom &atm2)
 	return false;
 }
 
+/* Originally this is from Jan Fuhrmann, Marcel Schumann 
+ * (found in BALL_DOCKING_GENETICDOCK_ROTATE_BOND)
+ */
+void ClashResolver::rotate(Atom &atm1, Atom &atm2, Angle angle)
+{
+	// get the atoms that are to be rotated:
+	HashSet<Atom *> to_rotate;
+	setAtomsToRotate(atm2, atm2, atm1, to_rotate);
+	
+	// setup the correct rotation matrix according to atm1 and atm2
+	Vector3& coord1 = atm1.getPosition();
+	Vector3& coord2 = atm2.getPosition();
+	
+	/** calculate rotation axis
+	*/
+	Vector3 v = coord2;
+
+	Matrix4x4 transformation(1, 0, 0, -v.x, 0, 1, 0, -v.y, 0, 0, 1, -v.z, 0, 0, 0, 1);
+
+	///calculate rotation
+	Vector3 axis = v - coord1;
+	Quaternion quat;
+	quat.fromAxisAngle(axis, angle);
+
+	Matrix4x4 rotation;
+	quat.getRotationMatrix(rotation);
+
+	transformation = rotation * transformation;
+
+	// apply the transfromations to selected atoms:
+	TransformationProcessor tfp(transformation); // translate to origin and rotate
+	TranslationProcessor tlp(v); // for backtranslation to original position
+	
+	for( Atom*& ati : to_rotate)
+	{
+		ati->apply(tfp);
+		ati->apply(tlp);
+	}
+}
+
+/* Originally this is from Jan Fuhrmann, Marcel Schumann 
+ * (found in BALL_DOCKING_GENETICDOCK_ROTATE_BOND)
+ */
+void ClashResolver::setAtomsToRotate(Atom &start, Atom &probe, Atom &block, HashSet<Atom *> &result)
+{
+	result.insert( &probe );
+
+	// get all partner atoms of probe
+	for (AtomBondConstIterator it = probe.beginBond(); +it ; it++)
+	{
+		Atom* partner = it->getPartner(probe);
+
+		if (partner == &block) // except for the first atom this should not happen 
+          {
+              if (&probe == &start) 
+              {
+                  continue;
+              }
+              else
+              {
+                  Log.error() << "error: rotation axis is part of a ring" << endl;
+                  exit(-1);
+              }
+          }
+
+		// recurse if the partner still needs to be explored
+		if (!result.has( partner))
+		{
+			setAtomsToRotate(start, *partner, block, result);
+		}
+	}
+}
+
 int ClashResolver::resolve()
 {
 	int clash_count = 0;
-	// first try the original connection
+	
+	AtomContainer orig_large( *_large_root );
+	AtomContainer orig_small( *_small_root );
+	
+	// first, try to rotate along the original connection
+	for( int i = 1; i < 10; ++i)
+	{
+		rotate( *atm_large, *atm_small, Angle(i*36.0, false));
+		clash_count = detectAll();
+		if( clash_count == 0)
+			return 0;
+	}
 	
 	// next try all rotors in the small fragment
 	
