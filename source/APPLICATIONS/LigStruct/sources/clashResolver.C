@@ -9,16 +9,20 @@
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
+
+#include <BALL/FORMAT/SDFile.h> //DEBUG
+#include <BALL/KERNEL/molecule.h> //DEBUG
 ClashResolver::ClashResolver()
 {
-	_large_rotors = 0;
-	_small_rotors = 0;
+	_large_rotors = new ConnectList();
+	_small_rotors = new ConnectList();
 }
 
 
 ClashResolver::~ClashResolver()
 {
-	
+	delete _large_rotors;
+	delete _small_rotors;
 }
 
 void ClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections)
@@ -26,11 +30,11 @@ void ClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections
 	atm_large = &atm1;
 	atm_small = &atm2;
 	
-	_large_parent = (AtomContainer* )&atm1.getRoot();
-	_large_root   = (AtomContainer* ) atm1.getParent();
+	_large_root = (AtomContainer* )&atm1.getRoot();
+	_small_root = (AtomContainer* )&atm2.getRoot();
 	
-	_small_parent = (AtomContainer* )&atm2.getRoot();
-	_small_root   = (AtomContainer* ) atm2.getParent();
+	_large_parent = (AtomContainer* ) atm1.getParent();
+	_small_parent = (AtomContainer* ) atm2.getParent();
 	
 	if(_small_root == _large_root)
 	{
@@ -38,6 +42,8 @@ void ClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections
 		exit(EXIT_FAILURE);
 	}
 	
+	_large_rotors->clear();
+	_small_rotors->clear();
 	for ( auto& p : connections)
 	{
 		if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
@@ -50,66 +56,100 @@ void ClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections
 int ClashResolver::detect()
 {
 	int clash_count = 0;
+	int small=1;
 	for(AtomIterator ati1 = _small_root->beginAtom(); +ati1; ++ati1)
 	{
+		int large=1;
 		for(AtomIterator ati2 = _large_root->beginAtom(); +ati2; ++ati2)
 		{
-			if ( doClash( *ati1, *ati2) )
-				++clash_count;
+			cout<<"loop: S"<<small<<" L"<<large<<endl;
+			if(  atom3Away(*ati1, *ati2)) // make sure that more than 2 bonds are between the atoms:
+			{
+				cout<<"Testing"<<endl;
+				if ( doClash( *ati1, *ati2) ){
+					++clash_count;
+//					cout<<"CLASH: S"<<small<<" L"<<large<<endl;
+				}
+			}
+			large++;
 		}
+		small++;
 	}
 	return clash_count;
 }
 
-int ClashResolver::detectAll()
+// TODO: this is just a quick primitive implementation. Coulb be solved nicely
+// in a recursive manner (takes a bit more time to write)
+bool ClashResolver::atom3Away(Atom& at1, Atom& at2)
 {
-	int clash_count = 0;
-	
-	// clashes between the two fragments
-	for(AtomIterator ati1 = _small_root->beginAtom(); +ati1; ++ati1)
+	for(Atom::BondIterator bit = at1.beginBond(); +bit; ++bit)
 	{
-		for(AtomIterator ati2 = _large_root->beginAtom(); +ati2; ++ati2)
-		{
-			if ( doClash( *ati1, *ati2) )
-				++clash_count;
-		}
+		if( bit->getBoundAtom(at1) == &at2 ) // single bond between at1 and at2
+			return false;
+		
+		if( bit->getBoundAtom(at1)->getBond(at2) != 0 )  // two bonds between them
+			return false;
 	}
 	
-	// clashes wihtin the large fragment
-	for(AtomIterator ati1 = _large_root->beginAtom(); +ati1; ++ati1)
-	{
-		AtomIterator ati2 = ati1;
-		for( ++ati2 ; +ati2; ++ati2)
-		{
-			if ( doClash( *ati1, *ati2) )
-				++clash_count;
-		}
-	}
-	
-	// clashes wihtin the small fragment
-	for(AtomIterator ati1 = _small_root->beginAtom(); +ati1; ++ati1)
-	{
-		AtomIterator ati2 = ati1;
-		for( ++ati2; +ati2; ++ati2)
-		{
-			if ( doClash( *ati1, *ati2) )
-				++clash_count;
-		}
-	}
-	
-	return clash_count;
+	return true;
 }
+
+//int ClashResolver::detectAll()
+//{
+//	int clash_count = 0;
+	
+//	// clashes between the two fragments
+//	for(AtomIterator ati1 = _small_root->beginAtom(); +ati1; ++ati1)
+//	{
+//		for(AtomIterator ati2 = _large_root->beginAtom(); +ati2; ++ati2)
+//		{
+//			if( ! ati1->getBond(*ati2) ){
+				
+//				if ( doClash( *ati1, *ati2) )
+//					++clash_count;
+//			}
+//		}
+//	}
+	
+//	// clashes wihtin the large fragment
+//	for(AtomIterator ati1 = _large_root->beginAtom(); +ati1; ++ati1)
+//	{
+//		AtomIterator ati2 = ati1;
+//		for( ++ati2 ; +ati2; ++ati2)
+//		{
+//			if( ! ati1->getBond(*ati2) ){
+//				if ( doClash( *ati1, *ati2) )
+//					++clash_count;
+//			}
+
+//		}
+//	}
+	
+//	// clashes wihtin the small fragment
+//	for(AtomIterator ati1 = _small_root->beginAtom(); +ati1; ++ati1)
+//	{
+//		AtomIterator ati2 = ati1;
+//		for( ++ati2; +ati2; ++ati2)
+//		{
+//			if ( doClash( *ati1, *ati2) )
+//				++clash_count;
+//		}
+//	}
+	
+//	return clash_count;
+//}
 
 bool ClashResolver::doClash(Atom &atm1, Atom &atm2)
 {
 	float dist = atm1.getDistance(atm2);
 	float ideal = atm1.getElement().getVanDerWaalsRadius() + atm2.getElement().getVanDerWaalsRadius();
-	float tolerance = 0.2;
+	float tolerance = 1.5;
 	
-	if (dist + tolerance < ideal)
-		return true;
+	if (dist + tolerance > ideal)
+		return false;
 	
-	return false;
+	cout<<"CLASH: ideal: "<<ideal<<" dist+tol: "<<dist+tolerance<<endl;
+	return true;
 }
 
 /* Originally this is from Jan Fuhrmann, Marcel Schumann 
@@ -164,24 +204,20 @@ void ClashResolver::setAtomsToRotate(Atom &start, Atom &probe, Atom &block, Hash
 	{
 		Atom* partner = it->getPartner(probe);
 
-		if (partner == &block) // except for the first atom this should not happen 
-          {
-              if (&probe == &start) 
-              {
-                  continue;
-              }
-              else
-              {
-                  Log.error() << "error: rotation axis is part of a ring" << endl;
-                  exit(-1);
-              }
-          }
+		if (partner == &block) // except for the first atom this should not happen
+		{
+			if (&probe == &start) 
+				continue;
+			else
+			{
+				Log.error() << "error: rotation axis is part of a ring" << endl;
+				exit(-1);
+			}
+		}
 
 		// recurse if the partner still needs to be explored
 		if (!result.has( partner))
-		{
 			setAtomsToRotate(start, *partner, block, result);
-		}
 	}
 }
 
@@ -189,21 +225,70 @@ int ClashResolver::resolve()
 {
 	int clash_count = 0;
 	
-	AtomContainer orig_large( *_large_root );
-	AtomContainer orig_small( *_small_root );
+//	AtomContainer orig_large( *_large_root );
+//	AtomContainer orig_small( *_small_root );
+	
+	SDFile debug_file0("/Users/pbrach/out.sdf",ios::out);
+	Molecule tmp_l(*_large_root);
+	Molecule tmp_s(*_small_root);
+	debug_file0<< tmp_l;
+	debug_file0<< tmp_s;
+	debug_file0.close();
 	
 	// first, try to rotate along the original connection
 	for( int i = 1; i < 10; ++i)
 	{
+		cout<<"rotation "<<i<<endl;
 		rotate( *atm_large, *atm_small, Angle(i*36.0, false));
-		clash_count = detectAll();
+		//DEBUG START
+		SDFile debug_file("/Users/pbrach/out_"+String(i)+".sdf",ios::out);
+		Molecule tmp_l(*_large_root);
+		Molecule tmp_s(*_small_root);
+		debug_file<< tmp_l;
+		debug_file<< tmp_s;
+		debug_file.close();
+		//DEBUG END
+		clash_count = detect();
+		cout<<" clashCount inter: "<<clash_count<<endl;
 		if( clash_count == 0)
 			return 0;
 	}
 	
 	// next try all rotors in the small fragment
+	for( auto& p : *_small_rotors)
+	{
+		Atom* at1 = p.first;
+		Atom* at2 = p.second;
+		for( int i = 1; i < 10; ++i)
+		{
+			rotate( *at1, *at2, Angle(i*36.0, false));
+
+			clash_count = detect(); // TODO DEBUG: here use 'detectAll'
+
+			if( clash_count == 0)
+				return 0;
+		}
+	}
 	
 	// at last try all rotors in the large one
+	for( auto& p : *_large_rotors)
+	{
+		Atom* at1 = p.first;
+		Atom* at2 = p.second;
+		for( int i = 1; i < 10; ++i)
+		{
+			cout<<"large rotation "<<i<<endl;
+			rotate( *at1, *at2, Angle(i*36.0, false));
+
+			clash_count = detect(); // TODO DEBUG: here use 'detectAll'
+
+			if( clash_count == 0)
+				return 0;
+			cout<<" clashCount inter: "<<clash_count<<endl;
+		}
+	}
 	
+	
+	exit(0);
 	return clash_count;
 }

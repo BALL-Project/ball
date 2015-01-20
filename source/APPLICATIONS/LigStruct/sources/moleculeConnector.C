@@ -55,82 +55,70 @@ void MoleculeConnector::setLibs(ConSiteMap &connectLib, BondLengthMap &bondLib)
 void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 {
 	///1) get connection sites of the two atoms and the corresponding templates
-	cout<<"####Step1"<<endl;
+//	cout<<"####Starting connection"<<endl;
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
 	
 	getSite(atm1, site_frag1, key1);
-	cout<<"####Step1 - Site1: "<<site_frag1.size()<<endl;
+//	cout<<"####Step1 - Site1: "<<site_frag1.size()<<endl;
 	
 	getSite(atm2, site_frag2, key2);
-	cout<<"####Step1 - Site2: "<<site_frag2.size()<<endl;
+//	cout<<"####Step1 - Site2: "<<site_frag2.size()<<endl;
 	
-	cout<<"####Step1 - C-Lib lookup 1: "<<key1<<endl;
+//	cout<<"####Step1 - C-Lib lookup 1: "<<key1<<endl;
 	AtomContainer* templ1 = new AtomContainer( * _connections->at(key1) );
-	cout<<"####Step1 - C-Lib lookup 2: "<<key2<<endl;
+//	cout<<"####Step1 - C-Lib lookup 2: "<<key2<<endl;
 	AtomContainer* templ2 = new AtomContainer( * _connections->at(key2) );
 	
-//	// DEBUG
-//	cout<< "Site1: "<< printInlineMol(site_frag1)<<endl;
-//	cout<< "Site2: "<< printInlineMol(site_frag2)<<endl;
-//	cout<< "key1: "<< key1<<endl;
-//	cout<< "key2: "<< key2<<endl;
-//	cout<< "tmp1: "<< printInlineMol(templ1)<<endl;
-//	cout<< "tmp2: "<< printInlineMol(templ2)<<endl;
-//	// DEBUG - end
-
-	cout<<"####Step1 - done"<<endl;
-	
 	///2) transfrom templ1 to match with frag1 (keep frag1 as it was)
-	cout<<"####Step2"<<endl;
+//	cout<<"####Step2"<<endl;
 	
-	cout<<"Got Site:"<<LigBase::printInlineStarMol(site_frag1)<<endl;
-	cout<<"Got Connection:"<<LigBase::printInlineStarMol(templ1)<<endl;
+//	cout<<"Got Site:"<<LigBase::printInlineStarMol(site_frag1)<<endl;
+//	cout<<"Got Connection:"<<LigBase::printInlineStarMol(templ1)<<endl;
 	_star_aligner.setMolecules(site_frag1, *templ1);
-	cout<<"####Step2: did set molecules"<<endl;
+//	cout<<"####Step2: did set molecules"<<endl;
 	_star_aligner.align();
-	cout<<"####Step2: did align"<<endl;
+//	cout<<"####Step2: did align"<<endl;
 	
 	AtmVec remain_tmp1;
 	_star_aligner.getRemainder(remain_tmp1);
-	cout<<"####Step2: got remainder"<<endl;
+//	cout<<"####Step2: got remainder"<<endl;
 	
 	///3) transfrom templ2 to match with frag2
-	cout<<"####Step3"<<endl;
+//	cout<<"####Step3"<<endl;
 	
 	// get all atoms that are in the same container as atm2:
 	AtomContainer* frag2 = (AtomContainer*) &atm2->getRoot();
-	cout<<"    got partent"<<endl;
+//	cout<<"    got partent"<<endl;
 	
-//	cout<<
 	_star_aligner.setMolecules( site_frag2, *templ2);
 	_star_aligner.align();
-	cout<<"    aligned"<<endl;
+//	cout<<"    aligned"<<endl;
 	
 	AtmVec remain_tmp2;
 	_star_aligner.getRemainder(remain_tmp2);
-	cout<<"    got remaining"<<endl;
+//	cout<<"    got remaining"<<endl;
 	
 	///4) project the connection bond determined for temp2 on to the one determined
 	///   for temp1.
-	cout<<"####Step4"<<endl;
+//	cout<<"####Step4"<<endl;
 	String elem2 = atm2->getElement().getSymbol();
 	short bo2    = atm2->getBond(*atm1)->getOrder();
 	
 	String elem1 = atm1->getElement().getSymbol();
 	short bo1    = atm1->getBond(*atm2)->getOrder();
-	cout<<"Step4:bond align"<<endl;
+//	cout<<"Step4:bond align"<<endl;
 	Atom* atm1_partner = getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2);
 	Atom* atm2_partner = getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1);
 	
-	cout<<"found partner"<<endl;
+//	cout<<"found partner"<<endl;
 	_star_aligner.setMolecules(*frag2, *frag2);
 	_star_aligner.bondAlign(atm1, atm1_partner, atm2_partner, atm2);
-	cout<<"aligned"<<endl;
-	cout<<"transformed"<<endl;
+//	cout<<"aligned"<<endl;
+//	cout<<"transformed"<<endl;
 	
 	///5) set bond length to standard length
-	cout<<"####Step5"<<endl;
+//	cout<<"####Step5"<<endl;
 	Vector3 bond_fix = getDiffVec(atm1, atm2);
 //	cout<<"bond fix: "<<bond_fix<<endl;
 	TranslationProcessor t_later(bond_fix);
@@ -139,26 +127,7 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	delete templ1;
 	delete templ2;
 	
-	/// 6) possible double bond correction:
-	checkAndCorrectDoubleBond( *atm1, *atm2, *frag2);
-//	BALL::calculateTorsionAngle();
-}
-
-void MoleculeConnector::checkAndCorrectDoubleBond(Atom &atm1, Atom &atm2, AtomContainer &frag2)
-{
-	/// 1) check if any atom has a double bond neighbor
-	if( hasOneDoubleBond(atm1) )
-	{
-	}
-	else if( hasOneDoubleBond(atm2) )
-	{
-		
-	}
-}
-
-bool MoleculeConnector::hasOneDoubleBond( Atom &atm )
-{
-	return false;
+//	cout<<"####done connnecting"<<endl;
 }
 
 

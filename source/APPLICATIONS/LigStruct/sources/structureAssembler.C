@@ -75,10 +75,13 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	AtomContainer* root_1 = (AtomContainer*) &at1.getRoot();
 	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
 	
+	cout<<endl<<endl<<"#### Connecting:"<<endl;
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
+		cout<<LigBase::printInlineMol(root_1)<<endl;
+		cout<<LigBase::printInlineMol(root_2)<<endl;
 		_connector.connect( &at1, &at2 );
-		
+
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at1, at2, connections);
 		if( _clash_resolver.detect() != 0 )
@@ -88,10 +91,15 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	}
 	else
 	{
+		cout<<LigBase::printInlineMol(root_2)<<endl;
+		cout<<LigBase::printInlineMol(root_1)<<endl;
 		_connector.connect( &at2, &at1 );
+		cout<<"after connectd:"<<endl;
+		cout<<LigBase::printInlineMol(root_1)<<endl;
+		cout<<LigBase::printInlineMol(root_2)<<endl;
 		
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at1, at2, connections);
+		_clash_resolver.setMolecule(at2, at1, connections);
 		if( _clash_resolver.detect() != 0 )
 			_clash_resolver.resolve();
 		

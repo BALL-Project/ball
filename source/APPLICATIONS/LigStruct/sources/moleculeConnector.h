@@ -42,10 +42,6 @@ public:
 	void connect(Atom* atm1, Atom* atm2);
 
 private:
-	
-	void checkAndCorrectDoubleBond( Atom& atm1, Atom& atm2, AtomContainer& frag2);
-	
-	bool hasOneDoubleBond( Atom& atm );
 	/*
 	 * From an atom (given by 'atm') determine the site and the key for the site.
 	 * The site contains the given atom at position 0 and all other direct 

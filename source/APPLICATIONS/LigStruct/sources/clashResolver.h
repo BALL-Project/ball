@@ -34,8 +34,10 @@ public:
 	
 	int resolve();
 	
-private:
 	int detectAll();
+private:
+	
+	bool atom3Away(Atom& at1, Atom& at2);
 	
 	bool doClash(Atom& atm1, Atom& atm2);
 	

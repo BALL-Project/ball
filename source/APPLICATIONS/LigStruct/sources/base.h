@@ -12,7 +12,6 @@
 
 /// BALL: Macros
 //#include <BALL/KERNEL/forEach.h>
-//#include <BALL/DATATYPE/forEach.h>
 
 /// BALL: Base Classes (String + Math)
 #include <BALL/DATATYPE/string.h>
@@ -168,9 +167,13 @@ class LigBase
 public:
 	
 	// generate a mini dump of a molecule
+	static String printInlineMol(Composite* mol);
 	static String printMol(Composite* mol);
+	
 	static String printInlineStarMol(Composite* mol);
 	static String printInlineStarMol(AtmVec& mol);
+	
+	static int countBondsAndOrder(Atom& atm);
 	
 	// get the position of an atom in the molcule list:
 	static const int getAtomPosition(Atom* atm, AtomContainer *mol);

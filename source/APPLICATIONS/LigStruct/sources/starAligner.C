@@ -54,19 +54,19 @@ void StarAligner::setMolecules(AtmVec &ref_site, AtomContainer &query)
 
 void StarAligner::align()
 {
-	cout<<"getting transfromamtion"<<endl;
+//	cout<<"getting transfromamtion"<<endl;
 	_calculateOptimalTransformation();
 	
 	_transformer.setTransformation(_matrix);
 	
 	_query->apply(_transformer);
-	cout<<"applied transformation"<<endl;
+//	cout<<"applied transformation"<<endl;
 }
 
 
 void StarAligner::_calculateOptimalTransformation()
 {
-	cout<<"internal sitE: "<<_site<<endl;
+//	cout<<"internal site: "<<_site<<endl;
 	AtmVec& site = *_site;
 	/// Case 1) 'site' has size 1, thus we can only translate the center 
 	if ( site.size() == 1)
@@ -78,7 +78,7 @@ void StarAligner::_calculateOptimalTransformation()
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
-		cout<<"Align: got case2"<<endl;
+//		cout<<"Align: got case2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		
@@ -108,7 +108,7 @@ void StarAligner::_calculateOptimalTransformation()
 	/// Case 3) 'site' has at least 2 neighbors
 	else
 	{
-		cout<<"Align: got case3"<<endl;
+//		cout<<"Align: got case3"<<endl;
 		_alignCase3(site);
 	}
 }
@@ -134,7 +134,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 	/// Case 1) at least two unique atoms, straight computation of transformation
 	if( unique_atms.size() > 1 )
 	{
-		cout<<"align3case: subcase 1"<<endl;
+//		cout<<"align3case: subcase 1"<<endl;
 		Vector3& sit1 = site[0]->getPosition(); 
 		Vector3& sit2 = unique_atms[0]->getPosition();
 		Vector3& sit3 = unique_atms[1]->getPosition();
@@ -161,7 +161,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 	///         for a second neighbor from 'site'
 	else if( unique_atms.size() == 1)
 	{
-		cout<<"align3case: subcase 2"<<endl;
+//		cout<<"align3case: subcase 2"<<endl;
 		// if at least one mol1 atom was unique, it is curcial to use it:
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = unique_atms[0]->getPosition();
@@ -217,7 +217,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 	/// Case 3) No unique atom exists. Find best assignment for two neighbors
 	else 
 	{
-		cout<<"align3case: subcase 3"<<endl;
+//		cout<<"align3case: subcase 3"<<endl;
 		float best_rmsd = numeric_limits<float>::max();
 		Atom* site2_atm = site[1];
 		Atom* site3_atm = site[2];
@@ -327,20 +327,20 @@ void StarAligner::getRemainder( AtmVec& remainder )
 	
 	
 	// D E B U G :
-	cout<<endl<<"'getRemaining':"<<endl;
-	cout<<"templ    : "<<LigBase::printInlineStarMol(_query)<<endl;
-	cout<<"site     : "<<LigBase::printInlineStarMol(*_site)<<endl;
-	cout<<"remainder: ";
-	for(AVIter at = remainder.begin(); at != remainder.end(); ++at)
-	{
-		Atom* atm = *at;
-		Atom* center = &*_query->beginAtom();
-		cout<< atm->getElement().getSymbol();
-		if(atm != center )
-			cout<< atm->getBond( *center )->getOrder();
-	}
-	cout<<endl;
-	cout<<"sq dist: "<< min_sq_dist <<endl<<endl;
+//	cout<<endl<<"'getRemaining':"<<endl;
+//	cout<<"templ    : "<<LigBase::printInlineStarMol(_query)<<endl;
+//	cout<<"site     : "<<LigBase::printInlineStarMol(*_site)<<endl;
+//	cout<<"remainder: ";
+//	for(AVIter at = remainder.begin(); at != remainder.end(); ++at)
+//	{
+//		Atom* atm = *at;
+//		Atom* center = &*_query->beginAtom();
+//		cout<< atm->getElement().getSymbol();
+//		if(atm != center )
+//			cout<< atm->getBond( *center )->getOrder();
+//	}
+//	cout<<endl;
+//	cout<<"sq dist: "<< min_sq_dist <<endl<<endl;
 }
 
 
@@ -349,15 +349,15 @@ void StarAligner::getRemainder( AtmVec& remainder )
  */
 Atom* StarAligner::getMatchingAtom(Atom *center, AtmVec& mol, String& elem, short bo)
 {
-	cout<<"in getMatching 2"<<endl;
+//	cout<<"in getMatching 2"<<endl;
 
 	AVIter ati = mol.begin();
 	ati++; // first atom is the center atom, which we never want
 	for(; ati != mol.end(); ++ati)
 	{
-		cout<< (*ati)->getElement().getSymbol()<<(*ati)->getBond( *center )->getOrder()<<" ";
-		cout<<((*ati)->getElement().getSymbol() == elem)<<" ";
-		cout<< ( (*ati)->getBond( *center )->getOrder() == bo )<<endl;
+//		cout<< (*ati)->getElement().getSymbol()<<(*ati)->getBond( *center )->getOrder()<<" ";
+//		cout<<((*ati)->getElement().getSymbol() == elem)<<" ";
+//		cout<< ( (*ati)->getBond( *center )->getOrder() == bo )<<endl;
 		if( (*ati)->getElement().getSymbol() == elem && (*ati)->getBond( *center )->getOrder() == bo )
 			return *ati;
 	}
@@ -380,7 +380,7 @@ Atom* StarAligner::getMatchingAtom(Atom *center, AtmVec& mol, String& elem, shor
  */
 Atom* StarAligner::getMatchingAtom(Atom* center, AtomContainer* mol, String &elem,  short bo)
 {
-	cout<<"in getMatching 1"<<endl;
+//	cout<<"in getMatching 1"<<endl;
 
 	AtomIterator ati = mol->beginAtom();
 	ati++; // first atom is the center atom, which we never want

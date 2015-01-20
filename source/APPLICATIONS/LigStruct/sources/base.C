@@ -24,9 +24,23 @@
 using namespace BALL;
 using namespace std;
 
+String LigBase::printInlineMol(Composite *mol)
+{
+	String tmp = "";
+	AtomIterator pre = ((AtomContainer*)mol)->endAtom();
+	--pre;
+	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
+	{
+		tmp += ati->getElement().getSymbol();
+		tmp += String( countBondsAndOrder(*ati ) );
+		if( ati != pre )
+			tmp += "-";
+	}
+	return tmp;
+}
+
 String LigBase::printMol(Composite *mol)
 {
-	
 	String tmp = "";
 	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
 	{
@@ -36,9 +50,9 @@ String LigBase::printMol(Composite *mol)
 	}
 	return tmp;
 }
+
 String LigBase::printInlineStarMol(Composite* mol)
 {
-	
 	String tmp = "";
 	for(AtomIterator ati = ((AtomContainer*)mol)->beginAtom(); +ati; ++ati)
 	{
@@ -62,6 +76,16 @@ String LigBase::printInlineStarMol(AtmVec& mol)
 			tmp += String((*ati)->getBond( *center )->getOrder());
 	}
 	return tmp;
+}
+
+int LigBase::countBondsAndOrder(Atom &atm)
+{
+	int cnt = 0;
+	for( Atom::BondIterator bit = atm.beginBond(); +bit; ++bit )
+	{
+		cnt += bit->getOrder();
+	}
+	return cnt;
 }
 
 const int LigBase::getAtomPosition(Atom *atm, AtomContainer *mol)
