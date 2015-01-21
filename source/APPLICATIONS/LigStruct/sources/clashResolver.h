@@ -26,15 +26,16 @@ public:
 	 */
 	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections);
 	
+	int resolve();
+	
 	/**
 	 * @brief detect
 	 * @return number of clashes counted
 	 */
 	int detect();
-	
-	int resolve();
-	
 	int detectAll();
+	int detectInMolecule(AtomContainer& ac);
+	int detectBetweenMolecules(AtomContainer& ac1, AtomContainer& ac2);
 private:
 	
 	bool atom3Away(Atom& at1, Atom& at2);
@@ -60,6 +61,9 @@ private:
 
 	ConnectList* _small_rotors;
 	ConnectList* _large_rotors;
+	
+	const float _tolerance;   // tolerance in Anstroem for vdw-dist violation
+	const int _max_rotations; // maximum number of bonds to rotate
 };
 
 #endif // CLASHRESOLVER_H

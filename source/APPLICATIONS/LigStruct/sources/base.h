@@ -74,6 +74,13 @@ public:
 		_size = n;
 		positions = new Vector3[n];
 	}
+
+	TemplateCoord(AtomContainer& mol)
+	{
+		_size = mol.countAtoms();
+		positions = new Vector3[_size];
+		setCoordinates( mol );
+	}
 	
 	~TemplateCoord()
 	{
@@ -106,6 +113,15 @@ public:
 		for (int i = 0 ; i < _size; i++, qit++)
 		{
 			qit->setPosition( (positions[i]) );
+		}
+	}
+	
+	void setCoordinates(AtomContainer& mol)
+	{
+		AtomIterator qit = mol.beginAtom();
+		for (int i = 0 ; i < _size; i++, qit++)
+		{
+			positions[i] = qit->getPosition();
 		}
 	}
 

@@ -94,9 +94,6 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		cout<<LigBase::printInlineMol(root_2)<<endl;
 		cout<<LigBase::printInlineMol(root_1)<<endl;
 		_connector.connect( &at2, &at1 );
-		cout<<"after connectd:"<<endl;
-		cout<<LigBase::printInlineMol(root_1)<<endl;
-		cout<<LigBase::printInlineMol(root_2)<<endl;
 		
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at2, at1, connections);
