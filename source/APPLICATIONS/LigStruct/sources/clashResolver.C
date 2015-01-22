@@ -15,7 +15,7 @@
 
 #include <limits>
 ClashResolver::ClashResolver(): 
-	_tolerance(1.1),
+	_tolerance(1.3),
 	_max_rotations(2)
 {
 	_large_rotors = new ConnectList();
@@ -135,7 +135,6 @@ bool ClashResolver::doClash(Atom &atm1, Atom &atm2)
 	if (dist + _tolerance > ideal)
 		return false;
 	
-//	cout<<"CLASH: ideal: "<<ideal<<" dist+tol: "<<dist+ _tolerance<<endl;
 	return true;
 }
 
@@ -209,19 +208,11 @@ void ClashResolver::setAtomsToRotate(Atom &start, Atom &probe, Atom &block, Hash
 }
 
 
-		//DEBUG START
-//	SDFile debug_file0("/Users/pbrach/out.sdf",ios::out);
-//	Molecule tmp_l(*_large_root);
-//	Molecule tmp_s(*_small_root);
-//	debug_file0<< tmp_l;
-//	debug_file0<< tmp_s;
-//	debug_file0.close();
-		//DEBUG END
 int ClashResolver::resolve()
 {
 	
-	cout<<" Starting resolver"<<endl;
-	cout<<" inter: "<<detect()<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
+//	cout<<" Starting resolver"<<endl;
+//	cout<<" inter: "<<detect()<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 	int current_count = 0;
 	
 	int best_cnt = numeric_limits<int>::max();
@@ -233,22 +224,25 @@ int ClashResolver::resolve()
 	for( int i = 1; i < 10; ++i)
 	{
 		rotate( *atm_large, *atm_small, Angle(36.0, false));
-
+		
 		current_count = detect();
 		if ( current_count < best_cnt)
 		{
 			best_cnt = current_count;
 			best_small.setCoordinates( *_small_root );
 		}
-		cout<<" clashCount first bridge, inter: "<<current_count<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
+//		cout<<" clashCount first bridge, inter: "<<current_count<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 		if( current_count == 0)
-			return 0;
+			return detectAll();
 	}
+
 	best_small.transferCoordinates( *_small_root );
+//	cout<<" final: clashCount first bridge, inter: "<<detect()<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 	
 	/*
 	 *  next try all rotors in the small fragment
 	 */
+	best_cnt = detect() + detectInMolecule( *_small_root);
 	HashSet< pair< Atom*, Atom* >* > used_best_rotors;
 	pair< Atom*, Atom* >* best_rotor=0;
 	for(int tries=0; tries < _max_rotations; tries++) // try optimise max. 2 bonds
@@ -256,14 +250,14 @@ int ClashResolver::resolve()
 		best_rotor = 0;
 		for( auto& p : *_small_rotors)
 		{
-			if( used_best_rotors.has( &p )) // cycle if we already selected that one
+			if( used_best_rotors.has( &p )) // cycle if we already selected that rotor
 				continue;
 			
 			for( int i = 1; i < 10; ++i)
 			{
 				rotate( * p.first, *p.second, Angle(36.0, false));
 				
-				current_count = detectAll();
+				current_count = detect() + detectInMolecule( *_small_root);
 				if ( current_count < best_cnt)
 				{
 					best_cnt = current_count;
@@ -271,30 +265,35 @@ int ClashResolver::resolve()
 					best_rotor = &p;
 				}
 				
-				cout<<" clashCount small bridges, inter: "<<current_count<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
+//				cout<<" clashCount small bridges, inter: "<<detect()<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 				if( current_count == 0)
-					return 0;
+					return detectAll(); 
 			}
 		}
 		if( best_rotor != 0)
 			used_best_rotors.insert( best_rotor );
 		best_small.transferCoordinates( *_small_root );
+//		cout<<" final: clashCount small bridges, inter: "<<detect()<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 	}
 	
 	/* 
 	 * at last try all rotors in the large one
 	 */
+	best_cnt = detect() + detectInMolecule( *_large_root);
 	TemplateCoord best_large ( * _large_root );
 	for(int tries=0; tries < _max_rotations; tries++) // try optimise max. 2 bonds
 	{
 		best_rotor = 0;
 		for( auto& p : *_large_rotors)
 		{
+			if( used_best_rotors.has( &p )) // cycle if we already selected that rotor
+				continue;
+			
 			for( int i = 1; i < 10; ++i)
 			{
 				rotate( *p.first, *p.second, Angle(36.0, false));
 				
-				current_count = detectAll();
+				current_count = detect() + detectInMolecule( *_large_root);
 				if ( current_count < best_cnt)
 				{
 					best_cnt = current_count;
@@ -302,15 +301,16 @@ int ClashResolver::resolve()
 					best_rotor = &p;
 				}
 				
-				cout<<" clashCount large bridges, inter: "<<current_count<<" large: ";
-				cout<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
+//				cout<<" clashCount large bridges, inter: "<<detect()<<" large: ";
+//				cout<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 				if( current_count == 0)
-					return 0;
+					return detectAll();
 			}
 		}
 		if( best_rotor != 0)
 			used_best_rotors.insert( best_rotor );
 		best_large.transferCoordinates( *_large_root );
+//		cout<<" final: clashCount large bridges, inter: "<<detect()<<" large: "<<detectInMolecule( *_large_root)<<" small: "<< detectInMolecule( *_small_root)<<endl;
 	}
 	
 	

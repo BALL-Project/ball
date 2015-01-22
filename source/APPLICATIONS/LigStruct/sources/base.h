@@ -112,7 +112,7 @@ public:
 		AtomIterator qit = mol.beginAtom();
 		for (int i = 0 ; i < _size; i++, qit++)
 		{
-			qit->setPosition( (positions[i]) );
+			qit->setPosition( positions[i] );
 		}
 	}
 	
