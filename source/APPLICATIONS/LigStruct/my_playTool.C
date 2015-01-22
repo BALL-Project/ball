@@ -97,13 +97,15 @@ int main(int argc, char* argv[])
 	}
 	
 	ClashResolver cresov;
+	atm1->createBond( *atm2 );
 	cresov.setMolecule(*atm1,*atm2, connections);
 	cout<<"Detecting... "<<cresov.detect()<<endl;
 	cout<<"Resolving..."<<endl;
 	cresov.resolve();
 	
+	((AtomContainer*)large)->append(*small);
 	outfile<< *large;
-	outfile<< *small;
+//	outfile<< *small;
 	Log << "......done!"<<endl;
 }
 
