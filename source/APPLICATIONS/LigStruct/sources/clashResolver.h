@@ -83,6 +83,9 @@ private:
 	 */ 
 	int resolveAll( const int& steps );
 	
+	int resolveAllRecur(const ConnectList::iterator& p, 
+											const ConnectList::iterator &p_end, 
+											Angle& angle, const int& steps );
 	/*
 	 * Rotate bonds in a fragment 'frag' to remove inter and intra clashes
 	 */

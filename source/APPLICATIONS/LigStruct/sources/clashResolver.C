@@ -219,10 +219,20 @@ int ClashResolver::resolve(bool conserve_large)
 			{
 				return detectInMolecule( *_small_root);
 			}
-			// as last resort try all bonds
+			// as last resort: try all combinations (exponential runtime)
 			else
 			{
-				return resolveAll( 3 );
+				int all_cnt = numeric_limits<int>::max();
+				for(int steps = 2; steps < 6; ++steps) // try from 180° to 72° rotations
+				{
+					all_cnt = resolveAll( steps );
+					if( all_cnt == 0 )
+					{
+						return 0;
+					}
+				}
+				// Could not solve all clashes even after eating a lot computation time
+				return all_cnt;
 			}
 		}
 		// this else is for the case that 'large' altering is not allowed
@@ -313,5 +323,68 @@ int ClashResolver::resolveFragment( AtomContainer& frag, ConnectList& clist )
 
 int ClashResolver::resolveAll( const int &steps)
 {
-	return 0;
+	// make a single list of all rotors:
+	ConnectList all_rotors;
+	all_rotors.push_back( make_pair( atm_large, atm_small ) );
+	all_rotors.insert(all_rotors.end(), _large_rotors->begin(), _large_rotors->end() );
+	all_rotors.insert(all_rotors.end(), _small_rotors->begin(), _small_rotors->end() );
+	
+	// calc the rotation angle to use, depending on the steps:
+	Angle rot_angle = Angle( 360.0 / (float)steps, false );
+	
+	return resolveAllRecur( all_rotors.begin(), all_rotors.end(), rot_angle, steps);
 }
+
+
+
+int ClashResolver::resolveAllRecur(const ConnectList::iterator &p, 
+																	 const ConnectList::iterator& p_end, 
+																	 Angle& angle, const int &steps )
+{
+	int current_cnt = numeric_limits<int>::max();
+	
+	for( int i = 0; i < steps-1; ++i )
+	{
+		rotate( * p->first, * p->second, angle);
+		
+		current_cnt = detectBetweenMolecules(*_large_root, *_small_root) 
+									+ detectInMolecule( *_large_root ) 
+									+ detectInMolecule( *_small_root );
+		
+		// this rotation solved ALL clashes
+		if( current_cnt == 0)
+		{
+			return 0;
+		}
+		// If the rotation did not work, try rotating the other bonds, if some
+		// a not rotated yet
+		else
+		{
+			ConnectList::iterator next_p = p; ++next_p;  
+			if( next_p != p_end )
+			{
+				current_cnt = resolveAllRecur( next_p, p_end, angle, steps);
+				
+				// some other rotation based on this rotation solved ALL clashes
+				if ( current_cnt == 0)
+				{
+					return 0;
+				}
+				// the other bonds could not create a solution with this rotation
+				else
+				{
+					continue; // try next rotation of this bond
+				}
+			}
+		}
+		
+	}
+	
+	return current_cnt;
+}
+
+
+
+
+
+
