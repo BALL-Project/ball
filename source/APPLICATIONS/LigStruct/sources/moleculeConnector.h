@@ -57,7 +57,7 @@ private:
 	 */
 	Vector3 getDiffVec(Atom* atm1, Atom* atm2);
 	
-	Atom* getMatchingAtomAll(Atom *center, AtmVec& mol, String& elem, short bo);
+	Atom* getMatchingAtomAll(Atom *center, AtmVec& mol, Element &elem, short bo);
 	
 	/*
 	 * compare ("element+bondorder",Atom*)-pairs according to the string part

@@ -55,7 +55,7 @@ private:
 	//	AtomContainer* _reference;
 	AtmVec* _site;
 	AtomContainer* _query;
-	AtmVec _remainder;
+//	AtmVec _remainder;
 	
 	Matrix4x4 _matrix;
 	TransformationProcessor _transformer;
@@ -77,7 +77,6 @@ private:
 	 * Precondition:
 	 */
 	Atom* getMatchingAtom(Atom *center, AtomContainer *mol, String& elem, short bo);
-	Atom* getMatchingAtom(Atom *center, AtmVec& mol, String& elem, short bo);
 	
 	/**
 	 * ONLY for star like molecules!!!

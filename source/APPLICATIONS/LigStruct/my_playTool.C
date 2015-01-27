@@ -31,7 +31,8 @@
 
 #include "sources/fragmenter.h"
 #include "sources/moleculeConnector.h"
-#include "sources/clashResolver.h"
+#include "sources/fragmentBuilder.h"
+#include "sources/ioModule.h"
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/MATHS/quaternion.h>
@@ -65,47 +66,16 @@ int main(int argc, char* argv[])
 	Log << "Reading molecule..."<<endl;
 	SDFile in_file(parpars.get("i"), ios::in);
 	SDFile outfile("/Users/pbrach/out.sdf", ios::out);
-	Molecule* large = in_file.read();
-	Molecule* small = in_file.read();
-
-	Atom* atm1 = large->getAtom(8);
-	Atom* atm2 = small->getAtom(8);
-	if(atm1->getElement().getSymbol() != "N")
-	{
-		cout<<"got wrong one!"<<endl;
-		exit(EXIT_FAILURE);
-	}
+	Molecule* mol = in_file.read();
 	
-	// determine a connection-list:
-	MoleculeFragmenter molfrag;
-	ConnectList connections;
-	Atom::BondIterator bit;
-	AtomIterator ait;
+	TemplateLibraryManager lib_manag;
+	lib_manag.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
+	lib_manag.readConnectionLib();
 	
-	molfrag.setMolecule(*large);
-	BALL_FOREACH_BOND(*large, ait, bit)
-	{
-		if( molfrag.isBridgingBond(*bit) )
-			connections.push_back( make_pair( bit->getFirstAtom(), bit->getSecondAtom()));
-	}
+	FragmentBuilder frag_builder(lib_manag.getConnectionsLib());
+	frag_builder.buildLinker( *(Fragment*)mol );
 	
-	molfrag.setMolecule(*small);
-	BALL_FOREACH_BOND(*small, ait, bit)
-	{
-		if( molfrag.isBridgingBond(*bit) )
-			connections.push_back( make_pair( bit->getFirstAtom(), bit->getSecondAtom()));
-	}
-	
-	ClashResolver cresov;
-	atm1->createBond( *atm2 );
-	cresov.setMolecule(*atm1,*atm2, connections);
-	cout<<"Detecting... "<<cresov.detect()<<endl;
-	cout<<"Resolving..."<<endl;
-	cresov.resolve();
-	
-	((AtomContainer*)large)->append(*small);
-	outfile<< *large;
-//	outfile<< *small;
+	outfile<< *mol;
 	Log << "......done!"<<endl;
 }
 

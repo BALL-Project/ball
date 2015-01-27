@@ -31,10 +31,38 @@ FragmentBuilder::~FragmentBuilder()
 
 void FragmentBuilder::buildLinker(Fragment& linker_frag)
 {
-	/// Init the very first atom:
-	Atom* at1 = &*linker_frag.beginAtom();
-	at1->setPosition( Vector3() ); // init to (0, 0, 0)
+	//0.) reset list of connected atoms:
+	_done.clear();
+	cout<<"Starting--"<<endl; //DEBUG
+	//1.) Start with an atom that is NOT at the end of the molecule
+	Atom* at1 = 0;
+	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
+	{
+		if( ati->countBonds() > 1)
+		{
+			at1 = &*ati;
+			break;
+		}
+	}
+	at1->setPosition( Vector3() ); // set first to (0, 0, 0)
 
+	cout<<"found start atom"<<endl; //DEBUG
+	
+	//1.) get the template for 'at1'
+	AtmVec site;
+	String key;
+	getSite(at1, site, key);
+	AtomContainer tmp( * _connection_templates[key] );
+	_aligner.setMolecules( site, tmp );
+	
+	cout<<"found template"<<endl; //DEBUG
+	
+	//2.) 'align' so that the templates central atom also lies at (0,0,0)
+	TranslationProcessor trpl( -(tmp.beginAtom()->getPosition()) );
+	tmp.apply(trpl);
+	
+	cout<<"translated template"<<endl; //DEBUG
+	
 	// iterate (recursive) over all internal (intra) bonds of the fragment, until
 	// all bonds are selected (this algo won't work with cycles!!!)
 	for( Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
@@ -42,7 +70,22 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
 		Atom* partner = bit->getBoundAtom(*at1); 
 		
 		if( partner->getParent() == &linker_frag ) // restrict to intra-fragment-bonds!
+		{
+			cout<<"getting position"<<endl; //DEBUG
+			_done.insert( partner );
+			
+			cout<<"inserted partner"<<endl; //DEBUG
+			getPositionFromTemplate(site, tmp, partner);
+			
+			cout<<"got pos"<<endl; //DEBUG
+			site.push_back( partner );
+			
+			cout<<"inserted partner to site"<<endl; //DEBUG
+			
 			recurLinkerConnect( partner, &linker_frag);
+			
+			cout<<"connected partners of partner"<<endl; //DEBUG
+		}
 	}
 }
 
@@ -50,57 +93,129 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
  * P R I V A T E
  * recurLinkerConnect
  */
-void FragmentBuilder::recurLinkerConnect(Atom* at, Composite * const parent)
+void FragmentBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 {
-	for( Atom::BondIterator bit = at->beginBond(); +bit; ++bit)
+	//1.) get the 'site' from 'atm'
+	AtmVec site;
+	String key;
+	getSite(atm, site, key);
+	
+	//2.) get the template and align it to the 'site':
+	AtomContainer tmp( * _connection_templates[key] );
+	_aligner.setMolecules( site, tmp );
+	_aligner.align();
+	
+	// iterate all bonds connected to 'atm'
+	for( Atom::BondIterator bit = atm->beginBond(); +bit; ++bit)
 	{
-		if( !(bit->isSelected()) )
+		//3.) get partner atom and...
+		Atom* partner = bit->getBoundAtom(*atm);
+		
+		// ...proceed if this atom was not yet handled
+		if( ! _done.has( partner ) )
 		{
-			//0.) get partner atom, check if it is an intra bond, iff yes: select bond
-			Atom* partner = bit->getBoundAtom(*at);
 			
-			if (partner->getParent() == parent) // restrict to intra-fragment-bonds!
+			// restrict to atoms of the same fragment
+			if (partner->getParent() == parent)
 			{
-				bit->select();
+				_done.insert( partner );
 				
-				//1.) getSelectedSite from 'at'
-				AtmVec site;
-				String key;
-//				getSelectedSite(at, site, key);
+				//4.) get a position for the partner from the template
+				getPositionFromTemplate(site, tmp, partner);
+				site.push_back( partner );
 				
-				//2.) connect single Atom 'partner' to site
-				connectAtomToSite(site, *(_connection_templates[key]), partner);
-				
-				//3.) descend recursion with partner
+				//5.) descend recursive with partner as next atom
 				recurLinkerConnect(partner, parent);
 			}
 		}
-		
 	}// end loop
+	
+}
+
+/*
+ * P R I V A T E
+ * connectAtomToSite
+ */ 
+void FragmentBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom* partner)
+{
+	//1.) determine remaining atoms.
+	cout<<"getting remainder for site size: "<< site.size()<<endl; //DEBUG
+	cout<<"template size: "<< temp.countAtoms()<<endl; //DEBUG
+	AtmVec unassigned_atoms;
+	_aligner.getRemainder( unassigned_atoms );
+	cout<<"got remainder: "<<unassigned_atoms.size()<<endl; //DEBUG
+	
+	//2.) find an atom matching to 'partner' in the remainder:
+	Atom* atm_tmp;
+	Element elem = partner->getElement();
+	short bo = partner->getBond( *site[0])->getOrder();
+	AVIter ati = unassigned_atoms.begin();
+	for(; ati != unassigned_atoms.end(); ++ati)
+	{
+		if( 
+			 (*ati)->getElement() == elem && 
+			 (*ati)->getBond( *temp.beginAtom() )->getOrder() == bo 
+			)
+		{
+			atm_tmp = *ati;
+			break;
+		}
+	}
+	cout<<"found matching within remainder"<<endl; //DEBUG
+	//3.) transfer position from the found remainder atom of the template to
+	//    the partner atom position:
+	partner->setPosition( atm_tmp->getPosition() );
+	cout<<"transfered position"<<endl; //DEBUG
 }
 
 
 /*
  * P R I V A T E
- * connectSingle
- */ 
-void FragmentBuilder::connectAtomToSite(AtmVec& site, AtomContainer& temp, Atom* partner)
+ * getSite
+ */
+void FragmentBuilder::getSite(Atom* atm, AtmVec &site, String& key)
 {
-	//1.) align templ with site
-	Matrix4x4 tr_matr;
-	TransformationProcessor tr_proc;
-//	starAlign( site, temp, tr_matr );
+	// insert central atom for the site and the key
+	site.push_back(atm);
+	key = atm->getElement().getSymbol();
 	
-	tr_proc.setTransformation(tr_matr);
-	temp.apply(tr_proc);
+	Composite* parent = atm->getParent();
 	
-	//2.) determine remaining atoms. take the first one that is compatible with 'partner'
-	AtmVec unassigned_atoms;
-//	getRemaining(site, temp, unassigned_atoms);
+	// structure to sort the neighbors according to their names (element+BO)
+	vector< pair<String,Atom*> > names_neighbors;
 	
-	String elem = partner->getElement().getSymbol();
-	short bo = partner->getBond( *site[0])->getOrder();
-	Atom* tmp;
-//	tmp = getMatchingAtom( &*temp.beginAtom(), unassigned_atoms, elem, bo );
-	partner->setPosition( tmp->getPosition() );
+	// add all neighbors to 'elements' (central atom is not contained)
+	for(Atom::BondIterator b_it = atm->beginBond(); +b_it; b_it++)
+	{
+		Atom* tmp_atm = b_it->getBoundAtom(*atm); // get neighbors of central 'atm'
+		
+		String elem = tmp_atm->getElement().getSymbol();
+		elem += String(b_it->getOrder());
+		names_neighbors.push_back( make_pair( elem, tmp_atm) );
+	}
+	
+	// sort identifers of neighbors
+	vector< pair<String, Atom*> >::iterator name_it = names_neighbors.begin();
+	sort( name_it, names_neighbors.end(), compare );
+	
+	// create the key, and add sorted neighbors to the site
+	for(name_it = names_neighbors.begin(); name_it !=names_neighbors.end(); name_it++)
+	{
+		key += name_it->first;
+		
+		if( 
+				(*name_it).second->getParent() == parent &&
+				_done.has( name_it->second )
+			) 
+			site.push_back( name_it->second );
+	}
+}
+
+/*
+ * P R I V A T E
+ * compare
+ */
+bool FragmentBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
+{
+	return a.first < b.first;
 }
