@@ -21,7 +21,7 @@ using namespace std;
  */
 class FragmentBuilder{
 public:
-	FragmentBuilder(ConSiteMap& connection_templates);
+	FragmentBuilder(ConSiteMap& connection_templates, BondLengthMap& bonds);
 	
 	~FragmentBuilder();
 	/**
@@ -43,7 +43,10 @@ private:
 	void getSite(Atom* atm, AtmVec &site, String& key);
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
 	
+	// input libs:
 	ConSiteMap& _connection_templates;
+	BondLengthMap& _bond_lengths;
+	
 	StarAligner _aligner;
 	HashSet< Atom* > _done;
 	

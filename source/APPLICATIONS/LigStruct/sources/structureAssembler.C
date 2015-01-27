@@ -13,7 +13,7 @@ using namespace std;
 StructureAssembler::StructureAssembler( TemplateLibraryManager& libs )
 	: _libs( libs ), 
 		_matcher( libs.getFragmentLib() ),
-		_linker_builder( libs.getConnectionsLib() )
+		_linker_builder( libs.getConnectionsLib(), libs.getBondLengthlib() )
 {
 	_connector.setLibs(libs.getConnectionsLib(), libs.getBondLengthlib());
 }

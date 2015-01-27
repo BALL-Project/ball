@@ -18,8 +18,9 @@
 /**
  * buildLinker
  */
-FragmentBuilder::FragmentBuilder( ConSiteMap& connection_templates )
-	:_connection_templates(connection_templates)
+FragmentBuilder::FragmentBuilder(ConSiteMap& connection_templates , BondLengthMap &bonds)
+	: _connection_templates(connection_templates),
+		_bond_lengths(bonds)
 {
 	
 }
@@ -31,6 +32,33 @@ FragmentBuilder::~FragmentBuilder()
 
 void FragmentBuilder::buildLinker(Fragment& linker_frag)
 {
+	int atom_cnt = linker_frag.countAtoms();
+	
+	// -1.) catch trivial cases:
+	if(atom_cnt<3)
+	{
+		if(atom_cnt == 0)
+		{
+			return;
+		}
+		else if(atom_cnt == 1)
+		{
+			linker_frag.beginAtom()->setPosition( Vector3() );
+			return;
+		}
+		else if (atom_cnt == 2)
+		{
+			Atom* at1 = linker_frag.getAtom(0); Atom* at2 = linker_frag.getAtom(1);
+			
+			String key = at1->getElement().getSymbol() + at2->getElement().getSymbol();
+			float b_len = _bond_lengths[key];
+			
+			at1->setPosition( Vector3() ); at2->setPosition( Vector3(0,0, b_len ) );
+			
+			return;
+		}
+	}
+	
 	//0.) reset list of connected atoms:
 	_done.clear();
 	
