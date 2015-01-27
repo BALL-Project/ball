@@ -306,7 +306,6 @@ void StarAligner::getRemainder( AtmVec& remainder )
 	
 	if(_site->size() > 1)
 	{
-		cout<<"assigning remainder: "<<_site->size()<<endl;// DEBUG
 		// start with second atom (the first one is the central atom)
 		AtmVec::iterator ati = _site->begin(); ++ati;
 		AtmVec::iterator end1 = _site->end();
@@ -315,7 +314,6 @@ void StarAligner::getRemainder( AtmVec& remainder )
 	}
 	else
 	{
-		cout<<"assigning remainder alternatively: "<<endl;// DEBUG
 		remainder.assign(++vec2.begin(), vec2.end());
 	}
 }

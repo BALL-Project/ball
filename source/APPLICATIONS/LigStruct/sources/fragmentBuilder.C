@@ -45,13 +45,15 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
 		}
 	}
 	at1->setPosition( Vector3() ); // set first to (0, 0, 0)
-
+	_done.insert( at1 );
 	cout<<"found start atom"<<endl; //DEBUG
 	
 	//1.) get the template for 'at1'
 	AtmVec site;
 	String key;
 	getSite(at1, site, key);
+	cout<<"at site: "<<key<<endl; //DEBUG
+	
 	AtomContainer tmp( * _connection_templates[key] );
 	_aligner.setMolecules( site, tmp );
 	
@@ -71,22 +73,20 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
 		
 		if( partner->getParent() == &linker_frag ) // restrict to intra-fragment-bonds!
 		{
-			cout<<"getting position"<<endl; //DEBUG
+			cout<<"---- iteration: "<<at1->getElement().getSymbol()<<"-"<<partner->getElement().getSymbol()<<endl; //DEBUG
 			_done.insert( partner );
-			
-			cout<<"inserted partner"<<endl; //DEBUG
+			cout<<"INSERTED: "<<partner<< " Name: "<<partner->getElement().getSymbol()<<endl;//DEBUG
 			getPositionFromTemplate(site, tmp, partner);
-			
-			cout<<"got pos"<<endl; //DEBUG
 			site.push_back( partner );
 			
-			cout<<"inserted partner to site"<<endl; //DEBUG
+			cout<<"found pos / inserted partner to site / RECURRING:"<<endl; //DEBUG
 			
 			recurLinkerConnect( partner, &linker_frag);
 			
-			cout<<"connected partners of partner"<<endl; //DEBUG
+			cout<<"connected sub-partners"<<endl; //DEBUG
 		}
 	}
+	cout<<"ALL partners connected"<<endl; //DEBUG
 }
 
 /*
@@ -95,16 +95,25 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
  */
 void FragmentBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 {
+	cout<<" ENTERED a RECUR "<<endl; //DEBUG
+	if( atm->countBonds() < 2 )
+	{
+		cout<<" done/terminal atom "<<atm->getElement().getSymbol()<<" RETURNING "<<endl; //DEBUG
+		return;
+	}
+	
 	//1.) get the 'site' from 'atm'
 	AtmVec site;
 	String key;
 	getSite(atm, site, key);
+	cout<<" got site "<<endl; //DEBUG
 	
 	//2.) get the template and align it to the 'site':
+	cout<<" seraching template for: "<<key<<endl; //DEBUG
 	AtomContainer tmp( * _connection_templates[key] );
+	cout<<" found template: "<<tmp.countAtoms()<<endl; //DEBUG
 	_aligner.setMolecules( site, tmp );
 	_aligner.align();
-	
 	// iterate all bonds connected to 'atm'
 	for( Atom::BondIterator bit = atm->beginBond(); +bit; ++bit)
 	{
@@ -114,22 +123,25 @@ void FragmentBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 		// ...proceed if this atom was not yet handled
 		if( ! _done.has( partner ) )
 		{
+			cout<<"---- iteration (recur)"<<atm->getElement().getSymbol()<<"-"<<partner->getElement().getSymbol()<<endl; //DEBUG
 			
 			// restrict to atoms of the same fragment
 			if (partner->getParent() == parent)
 			{
 				_done.insert( partner );
+				cout<<"INSERTED: "<<partner<< " Name: "<<partner->getElement().getSymbol()<<endl;//DEBUG
 				
 				//4.) get a position for the partner from the template
 				getPositionFromTemplate(site, tmp, partner);
 				site.push_back( partner );
+				cout<<"got pos, DESCENDING:"<<endl; //DEBUG
 				
 				//5.) descend recursive with partner as next atom
 				recurLinkerConnect(partner, parent);
 			}
 		}
 	}// end loop
-	
+	cout<<"connected ALL partners (in recurr) RETURNING"<<endl; //DEBUG
 }
 
 /*
