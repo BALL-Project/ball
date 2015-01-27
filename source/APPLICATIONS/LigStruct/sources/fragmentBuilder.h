@@ -47,6 +47,8 @@ private:
 	
 	void setBondTrans( Bond &bnd );
 	
+	bool isTerminalBond( Bond& bnd, Composite& parent);
+	
 	// input libs:
 	ConSiteMap& _connection_templates;
 	BondLengthMap& _bond_lengths;

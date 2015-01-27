@@ -105,8 +105,9 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
 	
 	// resolve all linker clashes:
 	if( atom_cnt > 3)
+	{
 		findRotors( linker_frag );
-//	cout<<"Found "<<_rotors.size()<<" chains"<<endl;
+	}
 }
 
 /*
@@ -278,7 +279,10 @@ void FragmentBuilder::findRotors(Fragment &linker_frag)
 		AtomBondIterator bit;
 		
 		BALL_FOREACH_INTRABOND(linker_frag, ati, bit)
-			setBondTrans( *bit);
+		{
+			if( ! isTerminalBond(*bit, linker_frag) )
+				setBondTrans( *bit);
+		}
 
 		return;
 	}
@@ -336,7 +340,6 @@ void FragmentBuilder::recurFindRotors(int previous_cnt, Bond& bnd,
 
 void FragmentBuilder::setBondTrans(Bond &bnd)
 {
-	// handle is awesome interface...
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();
 	
@@ -363,18 +366,26 @@ void FragmentBuilder::setBondTrans(Bond &bnd)
 	Vector3& p3 = at2->getPosition();
 	Vector3& p4 = at2_p->getPosition();
 	
-	cout<<endl<<"setting to trans:"<<endl;
-	cout<<p1<<endl;
-	cout<<p2<<endl;
-	cout<<p3<<endl;
-	cout<<p4<<endl;
 	Angle is_angle = getTorsionAngle(p1.x, p1.y, p1.z, 
 																	 p2.x, p2.y, p2.z, 
 																	 p3.x, p3.y, p3.z, 
 																	 p4.x, p4.y, p4.z );
 	
-	// ...and finally set the angle:
-	_cresolv.rotate(*at1, *at2, is_angle - Angle(Constants::PI));
+	_cresolv.rotate(*at1, *at2, Angle(Constants::PI)-is_angle);
+
+}
+
+bool FragmentBuilder::isTerminalBond(Bond &bnd, Composite &parent)
+{
+	Atom* at1 = bnd.getFirstAtom();
+	Atom* at2 = bnd.getSecondAtom();
+			
+	if( LigBase::countBondsInPartent(*at1, parent) == 1 )
+		return true;
+	else if (LigBase::countBondsInPartent(*at2, parent) == 1 )
+		return true;
+	else
+		return false;
 }
 
 ///*

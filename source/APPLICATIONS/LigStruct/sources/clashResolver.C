@@ -20,6 +20,15 @@ ClashResolver::ClashResolver(float tolerance, int max_rotors):
 {
 	_large_rotors = new ConnectList();
 	_small_rotors = new ConnectList();
+	
+	atm_large = 0;
+	atm_small = 0;
+	
+	_large_root = 0;
+	_small_root = 0;
+
+	_small_rotors = 0;
+	_large_rotors = 0;
 }
 
 
