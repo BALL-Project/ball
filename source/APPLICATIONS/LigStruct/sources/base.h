@@ -190,6 +190,7 @@ public:
 	static String printInlineStarMol(AtmVec& mol);
 	
 	static int countBondsAndOrder(Atom& atm);
+	static int countBondsInPartent(Atom& atm, const Composite &parent);
 	
 	// get the position of an atom in the molcule list:
 	static const int getAtomPosition(Atom* atm, AtomContainer *mol);

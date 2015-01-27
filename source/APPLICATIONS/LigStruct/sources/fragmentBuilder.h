@@ -6,10 +6,11 @@
 
 #include "base.h"
 #include "starAligner.h"
+#include "clashResolver.h"
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/fragment.h>
-
+#include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/DATATYPE/hashSet.h>
 
 using namespace BALL;
@@ -38,17 +39,25 @@ private:
 	
 	void getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom* partner);
 	
-	// TODO: currently this is exaclty the same as MoleculeConnector::getSite
-	// -> deduplicate this
 	void getSite(Atom* atm, AtmVec &site, String& key);
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
+	
+	void findRotors(Fragment &linker_frag);
+	void recurFindRotors(int previous_cnt, Bond& bnd, Atom &curr_atm, Composite *parent );
+	
+	void setBondTrans( Bond &bnd );
 	
 	// input libs:
 	ConSiteMap& _connection_templates;
 	BondLengthMap& _bond_lengths;
 	
-	StarAligner _aligner;
+	// helper structures
 	HashSet< Atom* > _done;
+	list< Bond* > _rotors;
+
+	// helper objects
+	StarAligner _aligner;
+	ClashResolver _cresolv; // for rotations
 	
 };
 

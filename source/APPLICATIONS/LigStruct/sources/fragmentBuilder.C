@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
-
+#include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/fragment.h>
 
 #include <BALL/MATHS/matrix44.h>
@@ -59,14 +59,14 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
 		}
 	}
 	
-	//0.) reset list of connected atoms:
+	//0.) reset list of connected atoms, and find rotors
 	_done.clear();
 	
 	//1.) Start with an atom that is NOT at the end of the molecule
 	Atom* at1 = 0;
 	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
 	{
-		if( ati->countBonds() > 1)
+		if( LigBase::countBondsInPartent(*ati, linker_frag) > 1)
 		{
 			at1 = &*ati;
 			break;
@@ -102,6 +102,11 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
 			recurLinkerConnect( partner, &linker_frag);
 		}
 	}
+	
+	// resolve all linker clashes:
+	if( atom_cnt > 3)
+		findRotors( linker_frag );
+//	cout<<"Found "<<_rotors.size()<<" chains"<<endl;
 }
 
 /*
@@ -110,7 +115,7 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
  */
 void FragmentBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 {
-	if( atm->countBonds() < 2 )
+	if( LigBase::countBondsInPartent(*atm, *parent) < 2 )
 	{
 		return;
 	}
@@ -233,3 +238,191 @@ bool FragmentBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 {
 	return a.first < b.first;
 }
+
+/*
+ * P R I V A T E
+ * findRotors
+ * A 'hub' is an atom that connects with more than two other atoms and thus may 
+ * connect 3 chains.
+ * 
+ * A 'chain' consist solely of atoms with one or two partners. It is terminated 
+ * by 'hubs' or 'terminal atoms'.
+ * 
+ * A 'link' is an atom from a chain being connected to exactly two other atoms
+ * 
+ * A 'terminal atom' is connected to a single atom and is only part of a 'chain'
+ * if it is connected to a 'link'. Is it connected to a hub it will be ignored
+ */
+void FragmentBuilder::findRotors(Fragment &linker_frag)
+{
+	_rotors.clear();
+	
+	//1.) find an atom that is a 'hub' to start the recursion from
+	Atom* at1 = 0;
+	int current_cnt = 0;
+	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
+	{
+		current_cnt = LigBase::countBondsInPartent(*ati, linker_frag);
+		if( current_cnt > 2)
+		{
+			at1 = &*ati;
+			break;
+		}
+	}
+	
+	//2.) if there was no hub found (we have only a single chain) solve trivially
+	//    (ignore the '_rotor' list, we simply set all to trans and are safe
+	if( at1 == 0)
+	{
+		AtomIterator ati;
+		AtomBondIterator bit;
+		
+		BALL_FOREACH_INTRABOND(linker_frag, ati, bit)
+			setBondTrans( *bit);
+
+		return;
+	}
+
+	//3.) for all connected atoms/bonds start the recursion
+	Atom* next = 0;
+	for(AtomBondIterator bit = at1->beginBond(); +bit; ++bit)
+	{
+		next = bit->getBoundAtom( *at1 );
+		recurFindRotors( current_cnt, *bit, *next, &linker_frag);
+	}
+}
+
+/*
+ * P R I V A T E
+ * recurFindRotors
+ */
+void FragmentBuilder::recurFindRotors(int previous_cnt, Bond& bnd, 
+																			Atom& curr_atm, Composite* parent)
+{
+	int current_cnt = LigBase::countBondsInPartent( curr_atm, *parent );
+	
+	// A terminal atom (thus also a terminal bond) was found: 
+	// TERMINATE recursion
+	if( current_cnt == 1)
+	{
+		return;
+	}
+	// A linker or hub atom was found: recurse
+	else
+	{
+		// bond is non terminal, because we alwas start from hubs and this atom is
+		// not terminal: so set the bond to 'trans'
+		setBondTrans( bnd );
+		
+		// if we also have a 'hub' (prev_cnt >2) add the bond to the rotors
+		if( previous_cnt > 2)
+		{
+			_rotors.push_back( &bnd );
+		}
+
+		// independent of hub or linker status: continue recursion with the remaining bonds
+		for( AtomBondIterator bit = curr_atm.beginBond(); +bit; ++bit)
+		{
+			if( &*bit != &bnd)
+			{
+				if( bit->getBoundAtom(curr_atm)->getParent() == parent)
+				{
+					recurFindRotors(current_cnt, *bit, *bit->getBoundAtom(curr_atm), parent);
+				}
+			}
+		}
+	}
+}
+
+void FragmentBuilder::setBondTrans(Bond &bnd)
+{
+	// handle is awesome interface...
+	Atom* at1 = bnd.getFirstAtom();
+	Atom* at2 = bnd.getSecondAtom();
+	
+	// find "the other bond" that is not bnd:
+	Atom* at1_p = 0;
+	for(AtomBondIterator bit = at1->beginBond(); +bit; ++bit)
+	{
+		if( &*bit != &bnd){
+			at1_p = bit->getBoundAtom( *at1 );
+			break;
+		}
+	}
+	Atom* at2_p = 0;
+	for(AtomBondIterator bit = at2->beginBond(); +bit; ++bit)
+	{
+		if( &*bit != &bnd){
+			at2_p = bit->getBoundAtom( *at2 );
+			break;
+		}
+	}
+	
+	Vector3& p1 = at1_p->getPosition();
+	Vector3& p2 = at1->getPosition();
+	Vector3& p3 = at2->getPosition();
+	Vector3& p4 = at2_p->getPosition();
+	
+	cout<<endl<<"setting to trans:"<<endl;
+	cout<<p1<<endl;
+	cout<<p2<<endl;
+	cout<<p3<<endl;
+	cout<<p4<<endl;
+	Angle is_angle = getTorsionAngle(p1.x, p1.y, p1.z, 
+																	 p2.x, p2.y, p2.z, 
+																	 p3.x, p3.y, p3.z, 
+																	 p4.x, p4.y, p4.z );
+	
+	// ...and finally set the angle:
+	_cresolv.rotate(*at1, *at2, is_angle - Angle(Constants::PI));
+}
+
+///*
+// * P R I V A T E
+// * recurFindRotors
+// */
+//void FragmentBuilder::recurFindRotors( int previous_cnt, 
+//																			 Bond& bnd, Atom& curr_atm, 
+//																			 list<Bond*>& temp, Composite* parent )
+//{
+//	int current_cnt = LigBase::countBondsInPartent( curr_atm, *parent );
+	
+//	// Another terminal atom was found:
+//	// TERMINATE elongation and recursion
+//	if( current_cnt == 1)
+//	{
+//		if( temp.size() != 0)
+//			_rotors.push_back( temp );
+//		return;
+//	}
+//	// A chain atom was found: extend current chain 'temp' and recurse
+//	// A hub atom was found: finish the temp list and recurse for all new neighbors
+//	else
+//	{
+//		// possibly add the new rotor (if its not from a terminal atom)
+//		if( previous_cnt > 1 )
+//			temp.push_back( &bnd );
+		
+//		// if we have a hub and got anything in 'temp' add it to the rotors
+//		if( current_cnt > 2 && temp.size() != 0)
+//			_rotors.push_back( temp );
+		
+//		// start new chains from the hub or chain-link
+//		for( AtomBondIterator bit = curr_atm.beginBond(); +bit; ++bit)
+//		{
+//			if( &*bit != &bnd && 
+//					bit->getBoundAtom(curr_atm)->getParent() == parent)
+//			{
+//				if(current_cnt > 2)
+//				{
+//					list< Bond* > new_tmp;
+//					recurFindRotors(current_cnt, *bit, *bit->getBoundAtom(curr_atm), new_tmp, parent);
+//				}
+//				else
+//				{
+//					recurFindRotors(current_cnt, *bit, *bit->getBoundAtom(curr_atm), temp, parent);
+//				}
+//			}
+//		}
+//	}
+//}

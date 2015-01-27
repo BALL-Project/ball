@@ -45,6 +45,13 @@ public:
 	 */
 	int detect();
 	
+	/**
+	 * Keep positions of atoms connected to 'atm1' but rotate all atoms that
+	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
+	 * degree/radiant
+	 */
+	void rotate(Atom& atm1, Atom& atm2, Angle angle);
+	
 private:
 	/// private Methods for detection
 	/*
@@ -90,14 +97,6 @@ private:
 	 * Rotate bonds in a fragment 'frag' to remove inter and intra clashes
 	 */
 	int resolveFragment(AtomContainer& frag , ConnectList &clist);
-	
-	
-	/*
-	 * Keep positions of atoms connected to 'atm1' but rotate all atoms that
-	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
-	 * degree/radiant
-	 */
-	void rotate(Atom& atm1, Atom& atm2, Angle angle);
 	
 	/*
 	 * 

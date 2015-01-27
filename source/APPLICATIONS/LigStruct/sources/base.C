@@ -88,6 +88,17 @@ int LigBase::countBondsAndOrder(Atom &atm)
 	return cnt;
 }
 
+int LigBase::countBondsInPartent(Atom &atm, const Composite &parent)
+{
+	int cnt = 0;
+	for( Atom::BondIterator bit = atm.beginBond(); +bit; ++bit )
+	{
+		if( bit->getBoundAtom( atm )->getParent() == &parent)
+			cnt++;
+	}
+	return cnt;
+}
+
 const int LigBase::getAtomPosition(Atom *atm, AtomContainer *mol)
 {
 	AtomIterator ati = mol->beginAtom();
