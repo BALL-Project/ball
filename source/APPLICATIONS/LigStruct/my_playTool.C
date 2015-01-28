@@ -31,7 +31,7 @@
 
 #include "sources/fragmenter.h"
 #include "sources/moleculeConnector.h"
-#include "sources/fragmentBuilder.h"
+#include "sources/linkerBuilder.h"
 #include "sources/ioModule.h"
 
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 	lib_manag.readConnectionLib();
 	lib_manag.readBondLib();
 	
-	FragmentBuilder frag_builder(lib_manag.getConnectionsLib(), lib_manag.getBondLengthlib());
+	LinkerBuilder frag_builder(lib_manag.getConnectionsLib(), lib_manag.getBondLengthlib());
 	frag_builder.buildLinker( *(Fragment*)mol );
 	
 	outfile<< *mol;

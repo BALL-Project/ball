@@ -15,7 +15,7 @@ SET(SOURCES_LIST
 	canonicalizer.C
 	combiAssembler.C
 	clashResolver.C
-	fragmentBuilder.C
+	linkerBuilder.C
 	fragmenter.C
 	ioModule.C
 	moleculeConnector.C

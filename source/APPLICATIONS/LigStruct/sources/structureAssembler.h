@@ -7,7 +7,7 @@
 
 #include "ioModule.h"
 #include "fragmenter.h"
-#include "fragmentBuilder.h"
+#include "linkerBuilder.h"
 #include "moleculeConnector.h"
 #include "clashResolver.h"
 #include "canonicalizer.h"
@@ -44,7 +44,7 @@ private:
 	MoleculeFragmenter _fragmenter;
 	Canonicalizer      _canoicalizer;
 	Matcher            _matcher;
-	FragmentBuilder    _linker_builder;
+	LinkerBuilder    _linker_builder;
 	MoleculeConnector  _connector;
 	ClashResolver      _clash_resolver;
 

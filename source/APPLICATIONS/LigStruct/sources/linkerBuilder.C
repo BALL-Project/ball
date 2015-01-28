@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include "fragmentBuilder.h"
+#include "linkerBuilder.h"
 #include "base.h"
 
 #include <BALL/KERNEL/atom.h>
@@ -18,19 +18,19 @@
 /**
  * buildLinker
  */
-FragmentBuilder::FragmentBuilder(ConSiteMap& connection_templates , BondLengthMap &bonds)
+LinkerBuilder::LinkerBuilder(ConSiteMap& connection_templates , BondLengthMap &bonds)
 	: _connection_templates(connection_templates),
 		_bond_lengths(bonds)
 {
 	
 }
 
-FragmentBuilder::~FragmentBuilder()
+LinkerBuilder::~LinkerBuilder()
 {
 	
 }
 
-void FragmentBuilder::buildLinker(Fragment& linker_frag)
+void LinkerBuilder::buildLinker(Fragment& linker_frag)
 {
 	int atom_cnt = linker_frag.countAtoms();
 	
@@ -114,7 +114,7 @@ void FragmentBuilder::buildLinker(Fragment& linker_frag)
  * P R I V A T E
  * recurLinkerConnect
  */
-void FragmentBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
+void LinkerBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 {
 	if( LigBase::countBondsInPartent(*atm, *parent) < 2 )
 	{
@@ -159,7 +159,7 @@ void FragmentBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
  * P R I V A T E
  * connectAtomToSite
  */ 
-void FragmentBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom* partner)
+void LinkerBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom* partner)
 {
 	//1.) determine remaining atoms.
 	AtmVec unassigned_atoms;
@@ -193,7 +193,7 @@ void FragmentBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp,
  * P R I V A T E
  * getSite
  */
-void FragmentBuilder::getSite(Atom* atm, AtmVec &site, String& key)
+void LinkerBuilder::getSite(Atom* atm, AtmVec &site, String& key)
 {
 	// insert central atom for the site and the key
 	site.push_back(atm);
@@ -235,7 +235,7 @@ void FragmentBuilder::getSite(Atom* atm, AtmVec &site, String& key)
  * P R I V A T E
  * compare
  */
-bool FragmentBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
+bool LinkerBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 {
 	return a.first < b.first;
 }
@@ -254,7 +254,7 @@ bool FragmentBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
  * A 'terminal atom' is connected to a single atom and is only part of a 'chain'
  * if it is connected to a 'link'. Is it connected to a hub it will be ignored
  */
-void FragmentBuilder::findRotors(Fragment &linker_frag)
+void LinkerBuilder::findRotors(Fragment &linker_frag)
 {
 	_rotors.clear();
 	
@@ -300,7 +300,7 @@ void FragmentBuilder::findRotors(Fragment &linker_frag)
  * P R I V A T E
  * recurFindRotors
  */
-void FragmentBuilder::recurFindRotors(int previous_cnt, Bond& bnd, 
+void LinkerBuilder::recurFindRotors(int previous_cnt, Bond& bnd, 
 																			Atom& curr_atm, Composite* parent)
 {
 	int current_cnt = LigBase::countBondsInPartent( curr_atm, *parent );
@@ -338,7 +338,11 @@ void FragmentBuilder::recurFindRotors(int previous_cnt, Bond& bnd,
 	}
 }
 
-void FragmentBuilder::setBondTrans(Bond &bnd)
+/*
+ * P R I V A T E
+ * setBondTrans
+ */
+void LinkerBuilder::setBondTrans(Bond &bnd)
 {
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();
@@ -375,7 +379,11 @@ void FragmentBuilder::setBondTrans(Bond &bnd)
 
 }
 
-bool FragmentBuilder::isTerminalBond(Bond &bnd, Composite &parent)
+/*
+ * P R I V A T E
+ * isTerminalBond
+ */
+bool LinkerBuilder::isTerminalBond(Bond &bnd, Composite &parent)
 {
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();

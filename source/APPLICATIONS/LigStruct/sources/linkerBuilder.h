@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef FRAGMENTBUILDER_H
-#define FRAGMENTBUILDER_H
+#ifndef LINKERBUILDER_H
+#define LINKERBUILDER_H
 
 #include "base.h"
 #include "starAligner.h"
@@ -17,14 +17,14 @@ using namespace BALL;
 using namespace std;
 
 /**
- * @brief The FragmentBuilder class
+ * @brief The LinkerBuilder class
  * A class for calculating coordinates for linker/flexible fragments
  */
-class FragmentBuilder{
+class LinkerBuilder{
 public:
-	FragmentBuilder(ConSiteMap& connection_templates, BondLengthMap& bonds);
+	LinkerBuilder(ConSiteMap& connection_templates, BondLengthMap& bonds);
 	
-	~FragmentBuilder();
+	~LinkerBuilder();
 	/**
 	 *
 	 * @brief buildLinker a flexible linker fragment
@@ -65,4 +65,4 @@ private:
 
 
 
-#endif // FRAGMENTBUILDER_H
+#endif // LINKERBUILDER_H
