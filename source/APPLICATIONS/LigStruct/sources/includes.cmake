@@ -8,10 +8,9 @@
 ### list all filenames of the directory here ###
 SET(GROUP LIGSTRUCT)
 
-FILE(GLOB HEADERS_LIST "source/APPLICATIONS/LigStruct/sources/*.h")
-
-
 SET(DIRECTORY source/APPLICATIONS/LigStruct/sources)
+
+FILE(GLOB HEADERS_LIST "${DIRECTORY}/*.h")
 
 ### add full path to the filenames ###
 SET(HEADERS)

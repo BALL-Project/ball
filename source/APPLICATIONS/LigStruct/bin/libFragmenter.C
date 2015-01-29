@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#include "sources/ioModule.h"
-#include "sources/fragmenter.h"
+#include "../sources/ioModule.h"
+#include "../sources/fragmenter.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>

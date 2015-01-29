@@ -257,6 +257,7 @@ IF (USE_MPI)
 
 ENDIF()
 
+
 ## VIEW related options/settings/libraries
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
@@ -656,7 +657,7 @@ IF(BALL_HAS_VIEW)
 ENDIF()
 
 ###### add Utility targets ########
-# TODO: recommend, by pbrach
+# TODO: re-commend, by pbrach
 #SET(UTILITIES_EXECUTABLES)
 #INCLUDE(source/APPLICATIONS/UTILITIES/BALLUtilities.cmake)
 #
@@ -670,22 +671,23 @@ ENDIF()
 
 ###### add LigStruct targets ########
 # by pbrach
+
+# Include LigStruct sources (library part) into the BALL lib:
 INCLUDE(source/APPLICATIONS/LigStruct/sources/sources.cmake)
 INCLUDE(source/APPLICATIONS/LigStruct/sources/includes.cmake)
 
-SET(LIGSTRUCT_EXECUTABLES)
-INCLUDE(source/APPLICATIONS/LigStruct/BALLLigStruct.cmake)
+# Add binaries (tests + tools:
+add_custom_target(LIGSTRUCT)
 
-FOREACH(i ${LIGSTRUCT_EXECUTABLES})
-	ADD_EXECUTABLE(${i} source/APPLICATIONS/LigStruct/${i}.C)
-	TARGET_LINK_LIBRARIES(${i} BALL)
-	SET_PROPERTY(TARGET ${i} PROPERTY FOLDER LIGSTRUCT)
-ENDFOREACH(i)
-ADD_CUSTOM_TARGET(LIGSTRUCT EXCLUDE_FROM_ALL)
-ADD_DEPENDENCIES(LIGSTRUCT ${LIGSTRUCT_EXECUTABLES})
+### Add bins and tests
+ADD_SUBDIRECTORY(source/APPLICATIONS/LigStruct/bin)
+ADD_SUBDIRECTORY(source/APPLICATIONS/LigStruct/tests)
+
+
+
 
 ####### add ballaxy project #########
-# TODO: recommend, by pbrach
+# TODO: re-commend, by pbrach
 #IF(BALL_BUILD_BALLAXY)
 #	ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
 #ENDIF()

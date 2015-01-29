@@ -3,9 +3,9 @@
 //
 
 //#include "sources/structureAssembler.h"
-#include "sources/moleculeConnector.h"
-#include "sources/ioModule.h"
-#include "sources/base.h"
+#include "../sources/moleculeConnector.h"
+#include "../sources/ioModule.h"
+#include "../sources/base.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>

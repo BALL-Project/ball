@@ -29,10 +29,10 @@
 #include <set>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
-#include "sources/fragmenter.h"
-#include "sources/moleculeConnector.h"
-#include "sources/linkerBuilder.h"
-#include "sources/ioModule.h"
+#include "../sources/fragmenter.h"
+#include "../sources/moleculeConnector.h"
+#include "../sources/linkerBuilder.h"
+#include "../sources/ioModule.h"
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/MATHS/quaternion.h>

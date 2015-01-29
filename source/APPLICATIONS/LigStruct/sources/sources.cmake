@@ -1,13 +1,6 @@
-###################################################
-# Please list all header source files here        #
-# (necessary to distinguish between binaries      #
-# and header-sources)                             #
-#                                                 #
-# by pbrach                                       #
-###################################################
 
 ### the directory name ###
-SET(DIRECTORY source/APPLICATIONS/LigStruct/sources)
+#SET(LIG_SOURCE_DIR source/APPLICATIONS/LigStruct/sources)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
@@ -23,6 +16,31 @@ SET(SOURCES_LIST
 	structureAssembler.C
 	starAligner.C
 )	
-#FILE(GLOB SOURCES_LIST "source/APPLICATIONS/LigStruct/*.C")
 
 ADD_BALL_SOURCES("APPLICATIONS/LigStruct/sources" "${SOURCES_LIST}")
+
+#####################################
+## Automatically find all sources 
+## from *.C files within the 
+## directory specified (first argument)
+##
+## 01-2015, by Philipp Brachvogel
+##
+#####################################
+
+#### the directory name
+#SET(LIG_SOURCE_PATH APPLICATIONS/LigStruct/sources)
+
+#### list all full filenames of the directory here ###
+#FILE(GLOB LIG_SOURCE_PATHES_LIST "source/${LIG_SOURCE_PATH}/*.C")
+
+#### remove absolute paths but KEEP the extension:
+#SET(LIG_SOURCES_LIST)
+
+#FOREACH(i ${LIG_SOURCE_PATHES_LIST})
+#    GET_FILENAME_COMPONENT(i ${i} NAME)
+#    LIST(APPEND LIG_SOURCES_LIST ${i})
+#ENDFOREACH()
+
+## add to global sources list
+#ADD_BALL_SOURCES("${LIG_SOURCE_PATH}" "${LIG_SOURCES_LIST}")

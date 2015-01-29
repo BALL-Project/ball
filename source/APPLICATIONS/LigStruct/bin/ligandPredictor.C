@@ -6,8 +6,8 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/file.h>
 
-#include "sources/ioModule.h"
-#include "sources/structureAssembler.h"
+#include "../sources/ioModule.h"
+#include "../sources/structureAssembler.h"
 
 using namespace BALL;
 using namespace std;
