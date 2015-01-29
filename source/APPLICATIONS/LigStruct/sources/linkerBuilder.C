@@ -72,41 +72,44 @@ void LinkerBuilder::buildLinker(Fragment& linker_frag)
 			break;
 		}
 	}
-	at1->setPosition( Vector3() ); // set first to (0, 0, 0)
+	// set the starting atom to a position of (0, 0, 0)
+	at1->setPosition( Vector3() ); 
 	_done.insert( at1 );
 	
-	//1.) get the template for 'at1'
+	//1.) get the connectionsite template for 'at1'
 	AtmVec site;
 	String key;
-	getSite(at1, site, key);
+	getSite( *at1, site, key);
 	
 	AtomContainer tmp( * _connection_templates[key] );
 	_aligner.setMolecules( site, tmp );
 		
-	//2.) 'align' so that the templates central atom also lies at (0,0,0)
-	TranslationProcessor trpl( -(tmp.beginAtom()->getPosition()) );
-	tmp.apply(trpl);
+	//2.) 'align'/translate so that the templates central atom also lies at (0,0,0)
+	//    (in this first case we only have 1 coordinate, no need for alignment)
+	TranslationProcessor transl_porcessor( -(tmp.beginAtom()->getPosition()) );
+	tmp.apply(transl_porcessor);
 	
-	// iterate (recursive) over all internal (intra) bonds of the fragment, until
-	// all bonds are selected (this algo won't work with cycles!!!)
+	// iterate over all internal bonds of the starting atom
+	// (repeat recusive on the partner side until all bonds were handled)
+	// WON'T WORK WITH CYCLES!
 	for( Atom::BondIterator bit = at1->beginBond(); +bit; ++bit)
 	{
-		Atom* partner = bit->getBoundAtom(*at1); 
+		Atom& partner = * bit->getBoundAtom(*at1); 
 		
-		if( partner->getParent() == &linker_frag ) // restrict to intra-fragment-bonds!
+		if( linker_frag.isParentOf( partner ) ) // restrict to intra-fragment-bonds!
 		{
-			_done.insert( partner );
+			_done.insert( &partner );
 			getPositionFromTemplate(site, tmp, partner);
-			site.push_back( partner );
+			site.push_back( &partner );
 			
-			recurLinkerConnect( partner, &linker_frag);
+			recurLinkerConnect( partner, linker_frag);
 		}
 	}
 	
 	// resolve all linker clashes:
 	if( atom_cnt > 3)
 	{
-		findRotors( linker_frag );
+		resolveLinkerClashes( linker_frag );
 	}
 }
 
@@ -114,9 +117,9 @@ void LinkerBuilder::buildLinker(Fragment& linker_frag)
  * P R I V A T E
  * recurLinkerConnect
  */
-void LinkerBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
+void LinkerBuilder::recurLinkerConnect(Atom& atm, const Composite& parent)
 {
-	if( LigBase::countBondsInPartent(*atm, *parent) < 2 )
+	if( LigBase::countBondsInPartent( atm, parent) < 2 )
 	{
 		return;
 	}
@@ -130,23 +133,21 @@ void LinkerBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 	AtomContainer tmp( * _connection_templates[key] );
 	_aligner.setMolecules( site, tmp );
 	_aligner.align();
-	// iterate all bonds connected to 'atm'
-	for( Atom::BondIterator bit = atm->beginBond(); +bit; ++bit)
+	
+	// 3.) iterate all bonds connected to 'atm'
+	for( Atom::BondIterator bit = atm.beginBond(); +bit; ++bit)
 	{
-		//3.) get partner atom and...
-		Atom* partner = bit->getBoundAtom(*atm);
+		Atom& partner = * bit->getBoundAtom( atm );
 		
-		// ...proceed if this atom was not yet handled
-		if( ! _done.has( partner ) )
+		if( ! _done.has( &partner ) )
 		{
-			// restrict to atoms of the same fragment
-			if (partner->getParent() == parent)
+			if ( parent.isParentOf( partner ) )
 			{
-				_done.insert( partner );
+				_done.insert( &partner );
 				
 				//4.) get a position for the partner from the template
 				getPositionFromTemplate(site, tmp, partner);
-				site.push_back( partner );
+				site.push_back( &partner );
 				
 				//5.) descend recursive with partner as next atom
 				recurLinkerConnect(partner, parent);
@@ -158,8 +159,11 @@ void LinkerBuilder::recurLinkerConnect(Atom* atm, const Composite * parent)
 /*
  * P R I V A T E
  * connectAtomToSite
+ * 
+ * 'site' connection site
+ * 'partner' is the atom to be set to a new coordinate
  */ 
-void LinkerBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom* partner)
+void LinkerBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom& partner)
 {
 	//1.) determine remaining atoms.
 	AtmVec unassigned_atoms;
@@ -168,8 +172,9 @@ void LinkerBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, A
 	
 	//2.) find an atom matching to 'partner' in the remainder:
 	Atom* atm_tmp;
-	Element elem = partner->getElement();
-	short bo = partner->getBond( *site[0])->getOrder();
+	Element elem = partner.getElement();
+	short bo = partner.getBond( *site[0])->getOrder();
+	
 	AVIter ati = unassigned_atoms.begin();
 	for(; ati != unassigned_atoms.end(); ++ati)
 	{
@@ -185,29 +190,28 @@ void LinkerBuilder::getPositionFromTemplate(AtmVec& site, AtomContainer& temp, A
 	
 	//3.) transfer position from the found remainder atom of the template to
 	//    the partner atom position:
-	partner->setPosition( atm_tmp->getPosition() );
+	partner.setPosition( atm_tmp->getPosition() );
 }
-
 
 /*
  * P R I V A T E
  * getSite
  */
-void LinkerBuilder::getSite(Atom* atm, AtmVec &site, String& key)
+void LinkerBuilder::getSite(Atom& atm, AtmVec &site, String& key)
 {
 	// insert central atom for the site and the key
-	site.push_back(atm);
-	key = atm->getElement().getSymbol();
+	site.push_back( &atm );
+	key = atm.getElement().getSymbol();
 	
-	Composite* parent = atm->getParent();
+	Composite& parent = * atm.getParent();
 	
 	// structure to sort the neighbors according to their names (element+BO)
 	vector< pair<String,Atom*> > names_neighbors;
 	
 	// add all neighbors to 'elements' (central atom is not contained)
-	for(Atom::BondIterator b_it = atm->beginBond(); +b_it; b_it++)
+	for(Atom::BondIterator b_it = atm.beginBond(); +b_it; b_it++)
 	{
-		Atom* tmp_atm = b_it->getBoundAtom(*atm); // get neighbors of central 'atm'
+		Atom* tmp_atm = b_it->getBoundAtom( atm ); // get neighbors of central 'atm'
 		
 		String elem = tmp_atm->getElement().getSymbol();
 		elem += String(b_it->getOrder());
@@ -224,7 +228,7 @@ void LinkerBuilder::getSite(Atom* atm, AtmVec &site, String& key)
 		key += name_it->first;
 		
 		if( 
-				(*name_it).second->getParent() == parent &&
+				parent.isParentOf( *name_it->second ) &&
 				_done.has( name_it->second )
 			) 
 			site.push_back( name_it->second );
@@ -254,7 +258,7 @@ bool LinkerBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
  * A 'terminal atom' is connected to a single atom and is only part of a 'chain'
  * if it is connected to a 'link'. Is it connected to a hub it will be ignored
  */
-void LinkerBuilder::findRotors(Fragment &linker_frag)
+void LinkerBuilder::resolveLinkerClashes(Fragment &linker_frag)
 {
 	_rotors.clear();
 	
@@ -292,7 +296,20 @@ void LinkerBuilder::findRotors(Fragment &linker_frag)
 	for(AtomBondIterator bit = at1->beginBond(); +bit; ++bit)
 	{
 		next = bit->getBoundAtom( *at1 );
-		recurFindRotors( current_cnt, *bit, *next, &linker_frag);
+		recurResolveLinker( current_cnt, *bit, *next, &linker_frag);
+	}
+	
+	//4.) check for clashes and resolve
+	
+	// hier wirds kurz ekelhaft bitte weggucken:
+	ConnectList temp;
+	for(list<Bond*>::iterator bit = _rotors.begin(); bit != _rotors.end(); ++bit)
+		temp.push_back( make_pair( (*bit)->getFirstAtom(), (*bit)->getSecondAtom()) );
+	
+	_cresolv.setMolecule(linker_frag, temp );
+	if(_cresolv.detect() != 0)
+	{
+		_cresolv.resolve();
 	}
 }
 
@@ -300,7 +317,7 @@ void LinkerBuilder::findRotors(Fragment &linker_frag)
  * P R I V A T E
  * recurFindRotors
  */
-void LinkerBuilder::recurFindRotors(int previous_cnt, Bond& bnd, 
+void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd, 
 																			Atom& curr_atm, Composite* parent)
 {
 	int current_cnt = LigBase::countBondsInPartent( curr_atm, *parent );
@@ -331,7 +348,7 @@ void LinkerBuilder::recurFindRotors(int previous_cnt, Bond& bnd,
 			{
 				if( bit->getBoundAtom(curr_atm)->getParent() == parent)
 				{
-					recurFindRotors(current_cnt, *bit, *bit->getBoundAtom(curr_atm), parent);
+					recurResolveLinker(current_cnt, *bit, *bit->getBoundAtom(curr_atm), parent);
 				}
 			}
 		}

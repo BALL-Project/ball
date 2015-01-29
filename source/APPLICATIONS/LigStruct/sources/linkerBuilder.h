@@ -35,15 +35,15 @@ public:
 	void buildLinker(Fragment &linker_frag);
 	
 private:
-	void recurLinkerConnect(Atom* at, const Composite *parent);
+	void recurLinkerConnect(Atom &at, const Composite &parent);
 	
-	void getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom* partner);
+	void getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom& partner);
 	
-	void getSite(Atom* atm, AtmVec &site, String& key);
+	void getSite(Atom& atm, AtmVec &site, String& key);
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
 	
-	void findRotors(Fragment &linker_frag);
-	void recurFindRotors(int previous_cnt, Bond& bnd, Atom &curr_atm, Composite *parent );
+	void resolveLinkerClashes(Fragment &linker_frag);
+	void recurResolveLinker(int previous_cnt, Bond& bnd, Atom &curr_atm, Composite *parent );
 	
 	void setBondTrans( Bond &bnd );
 	

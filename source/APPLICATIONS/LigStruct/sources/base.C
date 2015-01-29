@@ -93,7 +93,7 @@ int LigBase::countBondsInPartent(Atom &atm, const Composite &parent)
 	int cnt = 0;
 	for( Atom::BondIterator bit = atm.beginBond(); +bit; ++bit )
 	{
-		if( bit->getBoundAtom( atm )->getParent() == &parent)
+		if( parent.isParentOf( * bit->getBoundAtom( atm )) )
 			cnt++;
 	}
 	return cnt;

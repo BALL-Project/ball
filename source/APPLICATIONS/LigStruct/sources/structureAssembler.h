@@ -44,9 +44,9 @@ private:
 	MoleculeFragmenter _fragmenter;
 	Canonicalizer      _canoicalizer;
 	Matcher            _matcher;
-	LinkerBuilder    _linker_builder;
+	LinkerBuilder      _linker_builder;
 	MoleculeConnector  _connector;
-	ClashResolver      _clash_resolver;
+	ConnectionClashResolver _clash_resolver;
 
 	
 	//
