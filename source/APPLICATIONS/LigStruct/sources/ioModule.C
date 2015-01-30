@@ -371,11 +371,19 @@ GroupFragment *SmilesParser::fromSMILEStoGroupfragment(const String &smiles_stri
 /// (static) L i g I O
 /// ############################################################################
 /// 
-void LigIO::writeMolVec(vector<AtomContainer *> &input, SDFile *handle)
+void LigIO::writeMolVec(vector<AtomContainer *> &input, SDFile& handle)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
-		(*handle) << *input[i];
+		handle << *input[i];
+	}
+}
+
+void LigIO::writeMolVec(vector<AtomContainer*> &input, LineBasedFile& handle)
+{
+	for(int i = 0; i < input.size(); i++)
+	{
+		writePositionLines(*input[i], handle);
 	}
 }
 
@@ -395,4 +403,19 @@ void LigIO::readOBMolecule(const String &path, OBMol &mol)
 	
 	conv.Read(&mol, &ifs); // actual 'read' command
 	ifs.close();
+}
+
+
+void LigIO::writePositionLines(AtomContainer& mol, LineBasedFile& handle)
+{
+	handle <<"key "<< mol.getProperty("key").getString() <<endl;
+	handle << String(mol.countAtoms()) << endl;
+	
+	AtomIterator ati = mol.beginAtom();
+	for(; +ati; ati++)
+	{
+		handle << String(ati->getPosition().x) << " ";
+		handle << String(ati->getPosition().y) << " ";
+		handle << String(ati->getPosition().z) << endl;
+	}
 }

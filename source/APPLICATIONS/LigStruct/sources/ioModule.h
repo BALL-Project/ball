@@ -112,11 +112,14 @@ private:
 class LigIO
 {
 public:
-	static void writeMolVec(vector<AtomContainer* >& input, SDFile* handle);
-	
-//	static void
+	static void writeMolVec(vector<AtomContainer* >& input, SDFile &handle);
+	static void writeMolVec(vector<AtomContainer*>& input, LineBasedFile& handle);
 	
 	static void readOBMolecule(const String& path, OBMol& mol);
+	
+private:
+	
+	static void writePositionLines(AtomContainer& mol, LineBasedFile &handle);
 
 };
 
