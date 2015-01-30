@@ -30,7 +30,7 @@ LinkerBuilder::~LinkerBuilder()
 	
 }
 
-void LinkerBuilder::buildLinker(Fragment& linker_frag)
+void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 {
 	int atom_cnt = linker_frag.countAtoms();
 	
@@ -258,7 +258,7 @@ bool LinkerBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
  * A 'terminal atom' is connected to a single atom and is only part of a 'chain'
  * if it is connected to a 'link'. Is it connected to a hub it will be ignored
  */
-void LinkerBuilder::resolveLinkerClashes(Fragment &linker_frag)
+void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 {
 	_rotors.clear();
 	

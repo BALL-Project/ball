@@ -26,21 +26,21 @@ StructureAssembler::~StructureAssembler()
 void StructureAssembler::assembleStructure(AtomContainer& mol)
 {
 	// create fragments from query molecule:
-	FragVec rigids, linker;
+	ACVec rigids, linker;
 	ConnectList connections;
 	
 	_fragmenter.setMolecule(mol);
 	_fragmenter.getMoleculeFragments(rigids, linker, connections);
 
 	// canonicalize, generate UCK-key and match the rigid fragments
-	for( Fragment*& tmp: rigids )
+	for( AtomContainer*& tmp: rigids )
 	{
-		_canoicalizer.canonicalize( tmp );
+		_canoicalizer.canonicalize( *tmp );
 		_matcher.matchFragment( *tmp );
 	}
 	
 	// build linker fragments
-	for( Fragment*& tmp: linker )
+	for( AtomContainer*& tmp: linker )
 	{
 		// WARNING: not yet completely implemented, won't actually work!
 		_linker_builder.buildLinker( *tmp ); 
@@ -54,11 +54,11 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	
 	// re-insert all fragments into the original molecule
 	// TODO: perhaps it makes more sense to splice all atoms, or only insert the root of one fragment
-	for(Fragment*& f : rigids)
+	for(AtomContainer*& f : rigids)
 	{
 		mol.insert( *f );
 	}
-	for(Fragment*& f : linker)
+	for(AtomContainer*& f : linker)
 	{
 		mol.insert( *f );
 	}

@@ -371,7 +371,7 @@ GroupFragment *SmilesParser::fromSMILEStoGroupfragment(const String &smiles_stri
 /// (static) L i g I O
 /// ############################################################################
 /// 
-void LigIO::writeMolVec(vector<Molecule *> &input, SDFile *handle)
+void LigIO::writeMolVec(vector<AtomContainer *> &input, SDFile *handle)
 {
 	for(int i = 0; i < input.size(); i++)
 	{

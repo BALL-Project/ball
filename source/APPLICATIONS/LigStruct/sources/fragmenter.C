@@ -99,8 +99,8 @@ bool MoleculeFragmenter::isBridgingBond(Bond &bnd)
 	return false;
 }
 
-void MoleculeFragmenter::getMoleculeFragments(FragVec &rigid_fragments, 
-																							FragVec &linker_fragments, 
+void MoleculeFragmenter::getMoleculeFragments(ACVec &rigid_fragments, 
+																							ACVec &linker_fragments, 
 																							ConnectList &connections)
 {
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;

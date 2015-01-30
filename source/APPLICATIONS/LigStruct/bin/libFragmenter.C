@@ -4,6 +4,7 @@
 
 #include "../sources/ioModule.h"
 #include "../sources/fragmenter.h"
+#include "../sources/canonicalizer.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
@@ -44,7 +45,7 @@ void writePositionLines(AtomContainer& mol, LineBasedFile* handle)
 }
 
 // Write several result molecules to one file
-void writeMolVec(vector<Fragment*> &input, LineBasedFile* handle)
+void writeMolVec(vector<AtomContainer*> &input, LineBasedFile* handle)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
@@ -53,7 +54,7 @@ void writeMolVec(vector<Fragment*> &input, LineBasedFile* handle)
 }
 
 // Write several result molecules to one file
-void writeMolVec(vector<Fragment*> &input, SDFile* handle)
+void writeMolVec(vector<AtomContainer*> &input, SDFile* handle)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
@@ -62,7 +63,7 @@ void writeMolVec(vector<Fragment*> &input, SDFile* handle)
 }
 
 // --unique keys Write several result molecules to one file
-void uniqueWriteMolVec(vector<Fragment*> &input, LineBasedFile* handle, set< String >& used)
+void uniqueWriteMolVec(vector<AtomContainer*> &input, LineBasedFile* handle, set< String >& used)
 {
 	for(int i = 0; i < input.size(); i++)
 	{
@@ -109,76 +110,59 @@ int main(int argc, char* argv[])
 	
 	// START of CODE#############################################################
 	
+	// open input and output file:
 	SDFile in_file(parpars.get("i"), ios::in);
-	
-	// open output file:
 	SDFile outfile(parpars.get("o"), ios::out);
 	
-	vector<Fragment*> fragments;
-	vector<Fragment*> dummy;
+	vector<AtomContainer*> fragments;
+	vector<AtomContainer*> dummy;
 	list< pair< Atom*, Atom*> > dummy2;
 	Molecule* tmp;
-	int cntr=0;
+	int molecule_cnt=0;
+	int total_fragment_cnt=0;
+	int unique_fragment_cnt=0;
 	set< String > used; // used fragment keys
 	
-	// Read all molecules.
+	
 	MoleculeFragmenter molfrag;
+	Canonicalizer canoni;
 	tmp = in_file.read();
+	
+	// For each molecule:
 	while ( tmp )
 	{
 		// get all rigid fragments from molecule 'tmp'
 		molfrag.setMolecule( *tmp );
 		molfrag.getMoleculeFragments(fragments, dummy, dummy2);
 		
-///----------------------Canonicalise Fragments---------------------------
-/// CANONICAL:
-		vector<Fragment*>::iterator fit;
+		total_fragment_cnt += fragments.size();
+		
+		// for each fragment in the molecule:
+		vector<AtomContainer*>::iterator fit;
 		for(fit = fragments.begin(); fit!=fragments.end(); fit++)
 		{
-			// get babel mol:
-			OBMol* temp = MolecularSimilarity::createOBMol(**fit, true);
-			
-			// get helper for canonicalisation:
-			OBGraphSym grsym(temp);
-			vector<unsigned int> sym;
-			grsym.GetSymmetry(sym);
-			
-			// get mapping for canonical labels:
-			vector<unsigned int> clabels;
-			CanonicalLabels(temp, sym, clabels, OBBitVec(), 60);
-			
-			Fragment* new_mol = new Fragment;
-			vector <Atom*> aList( (**fit).countAtoms() );
-			for(int i=0; i<clabels.size(); i++)
-			{
-				aList[clabels[i]-1]=( (**fit).getAtom(i) );
-			}
-
-			for(int i=0; i<clabels.size(); i++)
-				new_mol->append(*aList[i]);
-			
-			(**fit).swap(*new_mol);
-			
-/// UCK Keys:
-			UCK keyGen(**fit, true, 5);
-			
-			(**fit).setProperty("key", keyGen.getUCK());
+			// canonicalise the atomlist & set UCK key
+			canoni.canonicalize( **fit );
+			(**fit).setProperty("key", Matcher::getUCK( **fit) );
 		}
 		
-/// write to output-------------------------------------------------------------
-		
+		// write to out file:
 		if(parpars.has("unique"))
 			uniqueWriteMolVec(fragments, &outfile, used);
 		else
 			writeMolVec(fragments, &outfile);
 		
-		// next iteration work:
+		// increase iteration:
 		delete tmp;
-		cntr++;
+		molecule_cnt++;
 		tmp = in_file.read();
-	} /// ------end while
+	}
 	
 	in_file.close();
 	outfile.close();
-	Log << "read "<< cntr<<" input structures, wrote fragments to: " << parpars.get("o") << endl;
+	Log << "read "<< molecule_cnt<<" input structures, giving a total of "
+			<< total_fragment_cnt <<" fragments and "<< unique_fragment_cnt
+			<< "unique fragments"<<endl;
+	
+	Log << " wrote fragments to: " << parpars.get("o") << endl;
 }

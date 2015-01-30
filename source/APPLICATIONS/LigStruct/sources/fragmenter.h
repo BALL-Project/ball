@@ -46,10 +46,10 @@ public:
 	 */
 	bool isBridgingBond(Bond &bnd);
 	
-	void getMoleculeFragments(FragVec& rigid_fragments, FragVec& linker_fragments,
+	void getMoleculeFragments(ACVec &rigid_fragments, ACVec &linker_fragments,
 														ConnectList& connections);
 	
-	void fragmentToSites(FragVec& connections, bool );
+	void fragmentToSites(ACVec& connections, bool );
 	
 	
 	

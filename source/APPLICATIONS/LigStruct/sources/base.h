@@ -157,10 +157,10 @@ struct GroupFragment
 /// ############################################################################
 
 // Standard Data:
-typedef vector<Atom*>                AtmVec;
-typedef vector<Atom*>::iterator      AVIter;
-typedef vector <Fragment*>           FragVec;
-typedef vector <Fragment*>::iterator FGVIter;
+typedef vector<Atom*>                     AtmVec;
+typedef vector<Atom*>::iterator           AVIter;
+typedef vector <AtomContainer*>           ACVec;
+typedef vector <AtomContainer*>::iterator ACVecIter;
 
 // Special Data:
 typedef list< pair<Atom*, Atom*> > ConnectList;

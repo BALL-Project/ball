@@ -20,7 +20,7 @@ public:
 	Canonicalizer();
 	~Canonicalizer();
 	
-	void canonicalize(AtomContainer* molecule);
+	void canonicalize(AtomContainer &molecule);
 	
 private:
 	// TODO: create OBGraphSym and OBmol as private member
@@ -34,7 +34,7 @@ public:
 	Matcher( CoordinateMap& coord_map );
 	~Matcher();
 	
-	void matchFragment(Fragment &fragment);
+	void matchFragment(AtomContainer &fragment);
 	
 	static const String getUCK(AtomContainer & mol);
 	

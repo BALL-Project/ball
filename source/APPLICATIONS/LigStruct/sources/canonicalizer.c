@@ -21,13 +21,13 @@ Canonicalizer::Canonicalizer(){}
 
 Canonicalizer::~Canonicalizer(){}
 
-void Canonicalizer::canonicalize(AtomContainer *molecule)
+void Canonicalizer::canonicalize(AtomContainer& molecule)
 {
 	using namespace OpenBabel;
 	
-	int num_atoms = molecule->countAtoms();
+	int num_atoms = molecule.countAtoms();
 
-	OBMol* temp = MolecularSimilarity::createOBMol(*molecule, true);
+	OBMol* temp = MolecularSimilarity::createOBMol( molecule, true);
 	
 	// get canonical labels:
 	OBGraphSym grsym(temp);
@@ -41,14 +41,14 @@ void Canonicalizer::canonicalize(AtomContainer *molecule)
 	AtomContainer* new_frag = new AtomContainer;
 	vector <Atom*> aList(num_atoms);
 	for( int i = 0; i < clabels.size(); i++)
-		aList[ clabels[i]-1 ] = molecule->getAtom(i);
+		aList[ clabels[i]-1 ] = molecule.getAtom(i);
 	
 	// insert in correct order into temporary atomContainer
 	for( int i = 0; i < clabels.size(); i++)
 		new_frag->append( *aList[i] );
 
 	// swap the temp with the original and delete the temp
-	molecule->swap(*new_frag);
+	molecule.swap(*new_frag);
 	delete new_frag;
 }
 
@@ -60,7 +60,7 @@ Matcher::Matcher(CoordinateMap &coord_map):_coord_lib(coord_map){}
 
 Matcher::~Matcher(){}
 
-void Matcher::matchFragment(Fragment& fragment)
+void Matcher::matchFragment(AtomContainer& fragment)
 {
 	// for all fragments, match these against the lib:
 	UCK keyGen( fragment, true, 5 );
