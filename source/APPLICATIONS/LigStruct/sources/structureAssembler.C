@@ -30,7 +30,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	ConnectList connections;
 	
 	_fragmenter.setMolecule(mol);
-	_fragmenter.getMoleculeFragments(rigids, linker, connections);
+	_fragmenter.fragment(rigids, linker, connections);
 
 	// canonicalize, generate UCK-key and match the rigid fragments
 	for( AtomContainer*& tmp: rigids )

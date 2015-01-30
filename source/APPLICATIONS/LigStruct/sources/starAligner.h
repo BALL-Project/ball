@@ -48,8 +48,20 @@ public:
 	void setMolecules(AtomContainer& reference, AtomContainer& query);
 	void setMolecules(AtmVec& ref_site, AtomContainer& query);
 	
-//	float align(AtomContainer& reference, AtomContainer& query);
-	
+	/**
+	 * ONLY for star like molecules!!!
+	 *
+	 * Get the minimal RMSD between two molecules by testing all meaningful
+	 * mappings of mol1 to mol2. Atom element and bond type need to match and 
+	 * the mapping is an unambigious projection (each atom of mol1 may only be once 
+	 * assigned to an atom of mol2 per mapping and the other way around).
+	 * 
+	 * The central atom is not tested, because it is the translation 
+	 * center and thus should always have distance 0
+	 */
+	float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2);
+	float getMinRMSD(AtmVec* vec1, AtomContainer* mol2);
+	float getMinRMSD(AtmVec* vec1, AtmVec* vec2);
 private:
 	bool _delete_site;
 	//	AtomContainer* _reference;
@@ -77,21 +89,6 @@ private:
 	 * Precondition:
 	 */
 	Atom* getMatchingAtom(Atom *center, AtomContainer *mol, String& elem, short bo);
-	
-	/**
-	 * ONLY for star like molecules!!!
-	 *
-	 * Get the minimal RMSD between two molecules by testing all meaningful
-	 * mappings of mol1 to mol2. Atom element and bond type need to match and 
-	 * the mapping is an unambigious projection (each atom of mol1 may only be once 
-	 * assigned to an atom of mol2 per mapping and the other way around).
-	 * 
-	 * The central atom is not tested, because it is the translation 
-	 * center and thus should always have distance 0
-	 */
-	float getMinRMSD(AtomContainer* mol1, AtomContainer* mol2);
-	float getMinRMSD(AtmVec* vec1, AtomContainer* mol2);
-	float getMinRMSD(AtmVec* vec1, AtmVec* vec2);
 	
 	/*
 	 * Creates a vector (on heap mem) containing all unique atoms of mol1

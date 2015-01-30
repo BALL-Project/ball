@@ -46,15 +46,17 @@ public:
 	 */
 	bool isBridgingBond(Bond &bnd);
 	
-	void getMoleculeFragments(ACVec &rigid_fragments, ACVec &linker_fragments,
+	void fragment(ACVec &rigid_fragments, ACVec &linker_fragments,
 														ConnectList& connections);
 	
-	void fragmentToSites(ACVec& connections, bool );
+	void fragmentToSites(boost::unordered_map< String, pair<float, int> >& bondLenths,
+											 vector< pair< String, AtomContainer*> >& connections, 
+											 bool restrict_to_bridges=false);
 	
 	
 	
 private:
-	/// Member Functions:
+	/// For FragmentLibs:
 	/*
 	 * clearProperties() removes all atom properties of the internal '_molecule'.
 	 * Properties are need in order to annotate atoms with the 'InRing' property,
@@ -66,6 +68,28 @@ private:
 	 * calculates a mapping for the internal '_molecule'
 	 */
 	void calcAtomToPos();
+	
+	/// For connectionLibs:
+	void addBondToConnectionsLib(Bond& bnd,
+															 boost::unordered_map< String, pair<float, int> >& bondLenths,
+															 vector< pair< String, AtomContainer*> > &connections);
+	
+	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
+	
+	/*
+	 * getSite
+	 */
+	AtomContainer* getSite(Atom* atm, String& key);
+	
+	/*
+	 * Add in such a way that we keep the average bond length
+	 */
+	void addLengthtoLib(
+			boost::unordered_map<String, pair<float, int> > & bondLengths, 
+			String bk1, String bk2, float len);
+	
+	
+	
 	
 	/// Fields:
 	AtomContainer* _molecule;

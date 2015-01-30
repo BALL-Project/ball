@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	{
 		// get all rigid fragments from molecule 'tmp'
 		molfrag.setMolecule( *tmp );
-		molfrag.getMoleculeFragments(fragments, dummy, dummy2);
+		molfrag.fragment(fragments, dummy, dummy2);
 		
 		total_fragment_cnt += fragments.size();
 		

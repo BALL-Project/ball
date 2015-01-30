@@ -14,6 +14,8 @@
 #include <BALL/KERNEL/forEach.h>
 
 #include <boost/pending/disjoint_sets.hpp>
+#include <boost/unordered_map.hpp>
+
 MoleculeFragmenter::MoleculeFragmenter()
 {
 	_molecule = 0;
@@ -99,9 +101,9 @@ bool MoleculeFragmenter::isBridgingBond(Bond &bnd)
 	return false;
 }
 
-void MoleculeFragmenter::getMoleculeFragments(ACVec &rigid_fragments, 
-																							ACVec &linker_fragments, 
-																							ConnectList &connections)
+void MoleculeFragmenter::fragment(ACVec &rigid_fragments, 
+																	ACVec &linker_fragments, 
+																	ConnectList &connections)
 {
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
 	int num_atoms = _molecule->countAtoms();
@@ -261,6 +263,34 @@ void MoleculeFragmenter::getMoleculeFragments(ACVec &rigid_fragments,
 	}
 }
 
+
+
+void MoleculeFragmenter::fragmentToSites(
+		boost::unordered_map<String, pair<float, int> > &bondLenths, 
+		vector<pair<String, AtomContainer *> > &connections, 
+		bool restrict_to_bridges)
+{
+//	bondLenths.clear();
+	connections.clear();
+	
+	AtomIterator ati;
+	AtomBondIterator bit;
+	if( restrict_to_bridges )
+	{
+		BALL_FOREACH_BOND(*_molecule, ati, bit)
+			if( isBridgingBond( *bit) )
+				addBondToConnectionsLib(*bit, bondLenths, connections);
+	}
+	else
+	{
+		BALL_FOREACH_BOND(*_molecule, ati, bit)
+			if( isRotableBond(*bit) )
+				addBondToConnectionsLib(*bit, bondLenths, connections);
+	}
+	
+}
+
+
 void MoleculeFragmenter::extractAndClearProperties()
 {
 	_is_BondInRing.clear();
@@ -301,3 +331,104 @@ void MoleculeFragmenter::calcAtomToPos()
 		pos++;
 	}
 }
+
+void MoleculeFragmenter::addBondToConnectionsLib(
+		Bond &bnd, 
+		boost::unordered_map<String, pair<float, int> > &bondLengths, 
+		vector< pair< String, AtomContainer*> > &connections)
+{
+	String key1, key2, bk1, bk2;
+	Atom* at1 = bnd.getFirstAtom();
+	Atom* at2 = bnd.getSecondAtom();
+	
+	// get site and add to the lib:
+	AtomContainer* site1 = getSite( at1, key1);
+	AtomContainer* site2 = getSite( at2, key2);
+	
+	connections.push_back( make_pair( key1, site1) );
+	connections.push_back( make_pair( key2, site2) );
+	
+	// get Bond Length and add to the lib:
+	bk1 = at1->getElement().getSymbol();
+	bk2 = at2->getElement().getSymbol();
+	
+	float len = at1->getDistance( *at2 );
+	
+	addLengthtoLib(bondLengths, bk1, bk2, len);
+}
+
+AtomContainer *MoleculeFragmenter::getSite(Atom *atm, String &key)
+{
+	AtomContainer* site = new AtomContainer;
+	// insert central atom for the site and the key
+	site->insert( *new Atom( *atm) );
+	key = atm->getElement().getSymbol();
+	
+	Composite* root = & atm->getRoot();
+	
+	// structure to sort the neighbors according to their names (element+BO)
+	vector< pair<String,Atom*> > names_neighbors;
+	
+	// add all neighbors to 'elements' (central atom is not contained)
+	for(Atom::BondIterator b_it = atm->beginBond(); +b_it; b_it++)
+	{
+		Atom* tmp_atm = b_it->getBoundAtom(*atm); // get neighbors of central 'atm'
+		
+		String elem = tmp_atm->getElement().getSymbol();
+		elem += String(b_it->getOrder());
+		names_neighbors.push_back( make_pair( elem, tmp_atm) );
+	}
+	
+	// sort identifers of neighbors
+	vector< pair<String, Atom*> >::iterator name_it = names_neighbors.begin();
+	sort( name_it, names_neighbors.end(), compare );
+	
+	// create the key, and add sorted neighbors to the site
+	for(name_it = names_neighbors.begin(); name_it !=names_neighbors.end(); name_it++)
+	{
+		key += (*name_it).first;
+		
+		if( root->isAncestorOf( *name_it->second ) ) 
+			site->insert( * new Atom( * name_it->second) );
+	}
+	
+	return site;
+}
+
+/*
+ * compare
+ */
+bool MoleculeFragmenter::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
+{
+	return a.first < b.first;
+}
+
+void MoleculeFragmenter::addLengthtoLib(
+		boost::unordered_map<String, pair<float, int> > &bondLengths, 
+		String bk1, String bk2, float len)
+{
+	String key1 = bk1+bk2;
+	if( bondLengths.find(key1) == bondLengths.end() )
+	{
+		bondLengths[key1]      = make_pair(len, 1);
+		bondLengths[bk2 + bk1] = make_pair(len, 1);
+	}
+	else
+	{
+		int cnt = bondLengths[key1].second;
+		float avg = bondLengths[key1].first;
+		
+		// incremental average: add the current lenght 'len' to the existing
+		// average
+		++cnt;
+		avg = avg + (len - avg) / (cnt);
+		
+		bondLengths[key1]      = make_pair( avg, cnt);
+		bondLengths[bk2 + bk1] = make_pair( avg, cnt);
+	}
+}
+
+
+
+
+

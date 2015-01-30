@@ -137,7 +137,7 @@ void MoleculeConnector::getSite(Atom* atm, AtmVec &site, String& key)
 	{
 		key += (*name_it).first;
 		
-		if( & (*name_it).second->getRoot() == root) 
+		if( root->isAncestorOf( *name_it->second ) ) 
 			site.push_back( (*name_it).second );
 	}
 }
