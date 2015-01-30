@@ -22,6 +22,7 @@ StarAligner::StarAligner()
 	_site = 0;
 	_query = 0;
 	_best_rmsd = numeric_limits<float>::max();
+	_got_transformation=false;
 }
 
 StarAligner::~StarAligner()
@@ -35,6 +36,7 @@ void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
 	if(_delete_site)
 		delete _site;
 	
+	_got_transformation=false;
 	_delete_site = true;
 	_site = new AtmVec;
 	LigBase::toAtmVec(reference, *_site);
@@ -47,6 +49,7 @@ void StarAligner::setMolecules(AtmVec &ref_site, AtomContainer &query)
 	if(_delete_site)
 		delete _site;
 	
+	_got_transformation=false;
 	_delete_site = false;
 	_site = &ref_site;
 	_query = &query;
@@ -59,6 +62,20 @@ void StarAligner::align()
 	_transformer.setTransformation(_matrix);
 	
 	_query->apply(_transformer);
+}
+
+float StarAligner::bestRMSD()
+{
+	if( !_got_transformation )
+		_calculateOptimalTransformation();
+	
+	_transformer.setTransformation(_matrix);
+	
+	AtomContainer temp( *_query );
+	temp.apply(_transformer);
+	
+	_best_rmsd = getMinRMSD(_site, &temp);
+	return _best_rmsd;
 }
 
 

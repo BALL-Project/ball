@@ -4,6 +4,7 @@
 
 #include "../sources/ioModule.h"
 #include "../sources/fragmenter.h"
+#include "../sources/rmsdBinner.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
@@ -40,12 +41,11 @@ int main(int argc, char* argv[])
 	LineBasedFile bondFile(parpars.get("o")+"_bondlen.sdf", ios::out);
 	
 	MoleculeFragmenter mol_fragger;
+	RMSDBinner binner(0.3, 100);
 	
 	int cnt = 0;
 	boost::unordered_map <String, pair<float, int> > lengths;
 	vector<pair<String, AtomContainer *> > temp_sites;
-	
-	HashSet<String> uniques;
 	
 	// Read all AtomContainers.
 	AtomContainer* tmp_mol = infile.read();
@@ -55,24 +55,27 @@ int main(int argc, char* argv[])
 		mol_fragger.setMolecule( *tmp_mol );
 		mol_fragger.fragmentToSites(lengths, temp_sites);
 		
-		// write out the sites for this molecule
 		vector<pair<String, AtomContainer *> >::iterator ita;
 		for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
 		{
-			if( !uniques.has(ita->first) )
-			{
-				uniques.insert(ita->first);
-				
-				ita->second->setProperty("key", ita->first);
-				outfile << * ita->second;
-			}
-			delete ita->second;
+			binner.addMolecule( ita->first, *ita->second );
 		}
 		
 		// prepare next iteration
 		delete tmp_mol;
 		tmp_mol = infile.read();
 		cnt++;
+	}
+	
+	// write out the filtered sites for this molecule:
+	map <String, vector< pair<AtomContainer*, int> > >::iterator it;
+	for(it = binner.begin(); it != binner.end(); ++it)
+	{
+		String key = it->first;
+		AtomContainer* ac = it->second[0].first;
+		ac->setProperty("key", key);
+		
+		LigIO::writeMol(*ac, outfile);
 	}
 	outfile.close();
 	Log << "read "<< cnt<<" input structures, wrote resulting fragments"<< endl;

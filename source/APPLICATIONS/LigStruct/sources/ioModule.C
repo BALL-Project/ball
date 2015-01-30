@@ -405,6 +405,16 @@ void LigIO::readOBMolecule(const String &path, OBMol &mol)
 	ifs.close();
 }
 
+void LigIO::writeMol(AtomContainer &mol, LineBasedFile &handle)
+{
+	writePositionLines(mol, handle);
+}
+
+void LigIO::writeMol(AtomContainer &mol, SDFile &handle)
+{
+	handle << mol;
+}
+
 
 void LigIO::writePositionLines(AtomContainer& mol, LineBasedFile& handle)
 {

@@ -31,6 +31,8 @@ public:
 	 */
 	void align();
 	
+	float bestRMSD();
+	
 	/**
 	 * @brief bondAlign aligns two atom pairs such that
 	 * A1 is moved onto B1 and A2 is rotated onto the ray B1-B2
@@ -71,6 +73,7 @@ private:
 	
 	Matrix4x4 _matrix;
 	TransformationProcessor _transformer;
+	bool _got_transformation;
 	float _best_rmsd;
 	
 	void _calculateOptimalTransformation();

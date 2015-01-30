@@ -117,8 +117,8 @@ public:
 	
 	static void readOBMolecule(const String& path, OBMol& mol);
 	
-private:
-	
+	static void writeMol(AtomContainer& mol, LineBasedFile &handle);
+	static void writeMol(AtomContainer& mol, SDFile &handle);
 	static void writePositionLines(AtomContainer& mol, LineBasedFile &handle);
 
 };
