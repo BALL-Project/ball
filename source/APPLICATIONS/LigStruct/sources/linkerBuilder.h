@@ -23,7 +23,7 @@ using namespace std;
 class LinkerBuilder{
 public:
 	LinkerBuilder(ConSiteMap& connection_templates, BondLengthMap& bonds);
-	
+	 
 	~LinkerBuilder();
 	/**
 	 *

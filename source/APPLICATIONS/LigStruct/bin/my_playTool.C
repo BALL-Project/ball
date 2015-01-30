@@ -62,12 +62,13 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 /// C O D E ##################################
-
+ 
 	Log << "Reading molecule..."<<endl;
 	SDFile in_file(parpars.get("i"), ios::in);
 	SDFile outfile("/Users/pbrach/out.sdf", ios::out);
 	Molecule* mol = in_file.read();
 	
+	cout<<"Predicting linker: "<<LigBase::printInlineMol(mol)<<endl;
 	TemplateLibraryManager lib_manag;
 	lib_manag.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
 	lib_manag.readConnectionLib();

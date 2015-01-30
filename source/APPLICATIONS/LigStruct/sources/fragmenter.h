@@ -49,8 +49,7 @@ public:
 	void getMoleculeFragments(FragVec& rigid_fragments, FragVec& linker_fragments,
 														ConnectList& connections);
 	
-//	void calculateRigidFragments(FragVec& rigid_fragments);
-//	void calculateLinkerFragments(FragVec& linker_fragments);
+	void fragmentToSites(FragVec& connections, bool );
 	
 	
 	

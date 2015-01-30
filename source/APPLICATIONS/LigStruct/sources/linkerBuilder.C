@@ -23,7 +23,7 @@ LinkerBuilder::LinkerBuilder(ConSiteMap& connection_templates , BondLengthMap &b
 		_bond_lengths(bonds)
 {
 	
-}
+} 
 
 LinkerBuilder::~LinkerBuilder()
 {
