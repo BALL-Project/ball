@@ -3,20 +3,14 @@
 //
 
 #include "rmsdBinner.h"
+#include "base.h"
+#include <BALL/STRUCTURE/structureMapper.h>
 
-RMSDBinner::RMSDBinner(StarAligner *aligner, float threshold, int limit):
+RMSDBinner::RMSDBinner(bool star_align, float threshold, int limit):
 	_threshold(threshold),
-	_variant_limit(limit)
-{
-	_star_aligner = aligner;
-}
-
-RMSDBinner::RMSDBinner(float threshold, int limit):
-	_threshold(threshold),
-	_variant_limit(limit)
-{
-	_star_aligner = 0;
-}
+	_variant_limit(limit),
+	_use_star_align(star_align)
+{}
 
 RMSDBinner::~RMSDBinner()
 {}
@@ -94,7 +88,6 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 			return;
 		}
 	}
-	
 	// must be a new shape: add to the list
 		bins.push_back( make_pair( &molecule, 1) );
 }
@@ -102,15 +95,30 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 
 float RMSDBinner::_getRMSD(AtomContainer &mol1, AtomContainer &mol2 )
 {
-	if( _star_aligner )
+	if( _use_star_align )
 	{
-		_star_aligner->setMolecules( mol1, mol2);
+		_star_aligner.setMolecules( mol1, mol2);
 	
-		return _star_aligner->bestRMSD();
+		return _star_aligner.bestRMSD();
 	}
 	else
 	{
-		return RMSDMinimizer::minimizeRMSD(mol1, mol2);
+		if(mol1.countAtoms() < 3)
+		{
+			_star_aligner.setMolecules(mol1, mol2);
+			
+			return _star_aligner.bestRMSD();
+		}
+		else
+		{
+			AtomBijection bj;
+
+			bj.assignTrivial(mol1, mol2);
+			
+			pair<Matrix4x4, double> rmsd = RMSDMinimizer::computeTransformation(bj);
+		
+			return (float)rmsd.second;
+		}
 	}
 }
 

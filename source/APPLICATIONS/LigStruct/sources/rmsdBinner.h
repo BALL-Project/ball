@@ -34,9 +34,7 @@ using namespace std;
 class RMSDBinner
 {
 public:
-	RMSDBinner(StarAligner* aligner, float threshold = 0.2, int limit=100 );
-	
-	RMSDBinner(float threshold = 0.2, int limit=100 );
+	RMSDBinner(bool star_align=true, float threshold = 0.2, int limit=100 );
 	
 	~RMSDBinner();
 	
@@ -75,13 +73,14 @@ private:
 	 *  P R I V A T E    F I E L D S
 	 * 
 	 */
-	StarAligner* _star_aligner; 
+	StarAligner _star_aligner; 
 	
 	float _threshold; // starting RMSD for different bins
 	map <String, vector< pair<AtomContainer*, int> > > _map_of_bins;
 	
 	int _variant_limit;
 	bool all_sorted;
+	bool _use_star_align;
 };
 
 #endif // RMSDBINNER_H

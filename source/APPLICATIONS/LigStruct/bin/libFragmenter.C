@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 	
 	MoleculeFragmenter molfrag;
 	Canonicalizer canoni;
-	RMSDBinner binner;
+	RMSDBinner binner(false);
 	
 	tmp = in_file.read();
 	
@@ -71,6 +71,7 @@ int main(int argc, char* argv[])
 			canoni.canonicalize( **fit );
 			
 			String key = Matcher::getUCK( **fit);
+			
 			binner.addMolecule(key, **fit);
 		}
 	
