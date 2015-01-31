@@ -361,21 +361,24 @@ AtomContainer *MoleculeFragmenter::getSite(Atom *atm, String &key)
 {
 	AtomContainer* site = new AtomContainer;
 	// insert central atom for the site and the key
-	site->insert( *new Atom( *atm) );
+	Atom* fst_at = new Atom( *atm);
+	site->insert( *fst_at );
 	key = atm->getElement().getSymbol();
 	
 	Composite* root = & atm->getRoot();
 	
 	// structure to sort the neighbors according to their names (element+BO)
 	vector< pair<String,Atom*> > names_neighbors;
-	
+
 	// add all neighbors to 'elements' (central atom is not contained)
 	for(Atom::BondIterator b_it = atm->beginBond(); +b_it; b_it++)
 	{
 		Atom* tmp_atm = b_it->getBoundAtom(*atm); // get neighbors of central 'atm'
 		
 		String elem = tmp_atm->getElement().getSymbol();
-		elem += String(b_it->getOrder());
+		
+		elem += String( b_it->getOrder() );
+		
 		names_neighbors.push_back( make_pair( elem, tmp_atm) );
 	}
 	
@@ -388,8 +391,19 @@ AtomContainer *MoleculeFragmenter::getSite(Atom *atm, String &key)
 	{
 		key += (*name_it).first;
 		
-		if( root->isAncestorOf( *name_it->second ) ) 
-			site->insert( * new Atom( * name_it->second) );
+		if( root->isAncestorOf( *name_it->second ) )
+		{
+			Atom* tmp_at = new Atom( * name_it->second);
+			
+			Bond* new_bnd = new Bond();
+			Bond* orig_bnd = atm->getBond( *name_it->second );
+			
+			new_bnd->setOrder( orig_bnd->getOrder() );
+			
+			tmp_at->createBond( *new_bnd, *fst_at);
+			
+			site->insert( *tmp_at );
+		}
 	}
 	
 	return site;

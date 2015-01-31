@@ -52,12 +52,16 @@ int main(int argc, char* argv[])
 	while ( tmp_mol )
 	{
 		// fragment to connection sites:
+//		cout<<"Binning: "<<LigBase::printInlineMol( tmp_mol )<<endl;
 		mol_fragger.setMolecule( *tmp_mol );
 		mol_fragger.fragmentToSites(lengths, temp_sites);
 		
 		vector<pair<String, AtomContainer *> >::iterator ita;
 		for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
 		{
+//			cout<<"key: "<<ita->first<<endl;
+//			cout<<"address: "<<ita->second<<endl;
+//			cout<<"address iter: "<<&*ita->second->beginAtom()<<endl;
 			binner.addMolecule( ita->first, *ita->second );
 		}
 		

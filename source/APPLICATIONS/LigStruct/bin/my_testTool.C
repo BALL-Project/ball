@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		String pth = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf";
+		String pth = "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf";
 		lib_reader.libraryPathesFromConfig( pth );
 	}
 	

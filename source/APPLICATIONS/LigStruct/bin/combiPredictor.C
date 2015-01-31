@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	
 	// setup template library manager:
 	TemplateLibraryManager template_man;
-	template_man.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/0_data/examples/libraries.conf");
+	template_man.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf");
 	template_man.readAll();
 	
 	// setup structureAssembler:

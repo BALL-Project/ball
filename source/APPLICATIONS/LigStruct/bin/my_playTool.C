@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
 	
 	cout<<"Predicting linker: "<<LigBase::printInlineMol(mol)<<endl;
 	TemplateLibraryManager lib_manag;
-	lib_manag.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/libraries.conf");
+	lib_manag.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf");
 	lib_manag.readConnectionLib();
 	lib_manag.readBondLib();
 	

@@ -65,12 +65,15 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 {
 	if(_variant_limit > 0)
 	{
-		// cut down if at least 100 entries exist, but if cutting down filter with the actual limit
+		// cut down if at least 100 entries exist. When you do, then filter with the actual limit
 		int limit = ( (_variant_limit*10) > 100) ? (_variant_limit*10) : 100;
 		
 		if ( bins.size() > limit )
+		{ 
 			filter2TopX( bins, _variant_limit);
+		}
 	}
+	
 	vector<pair<AtomContainer *, int> >::iterator bit;
 	
 	for( bit = bins.begin(); bit != bins.end(); ++bit)
@@ -85,12 +88,10 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 			bit->second += 1;
 			return;
 		}
-		// new shape: add to the list
-		else
-		{
-			bins.push_back( make_pair(&molecule,1) );
-		}
 	}
+	
+	// must be a new shape: add to the list
+		bins.push_back( make_pair( &molecule, 1) );
 }
 
 
