@@ -204,6 +204,8 @@ public:
 	
 	static void copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop);
 
+	// Remove Hydrogens
+	static void removeHydrogens(AtomContainer &tmp );
 };
 
 #endif // LIGANDSTRUCTUREBASE_H

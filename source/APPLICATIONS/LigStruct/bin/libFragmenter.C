@@ -57,6 +57,8 @@ int main(int argc, char* argv[])
 	// For each molecule:
 	while ( tmp )
 	{
+		LigBase::removeHydrogens( *tmp );
+
 		// some user info every 100 molecules:
 		if( molecule_cnt % 1000 == 0)
 		{

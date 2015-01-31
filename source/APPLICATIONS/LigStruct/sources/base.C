@@ -145,4 +145,28 @@ void LigBase::copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop)
 	cop.setName(orig.getName());
 }
 
+void LigBase::removeHydrogens(AtomContainer &tmp)
+{
+	AtmVec to_remove;
+	vector<Bond*> bnd_remove;
+	for(AtomIterator ati = tmp.beginAtom(); +ati; ++ati)
+	{
+		if(ati->getElement().getSymbol() == "H")
+		{
+			// remove (all) bond(s) to the atom:
+			for(AtomBondIterator bit = ati->beginBond(); +bit ;++bit)
+				bnd_remove.push_back( &*bit );
+			
+			to_remove.push_back( &*ati );
+		}
+	}
+	
+	// remove the hydrogens:
+	for(int i = 0; i<to_remove.size(); ++i)
+		tmp.remove( *to_remove[i] );
+	
+	for(int i = 0; i<bnd_remove.size(); ++i)
+		bnd_remove[i]->destroy();
+}
+
 
