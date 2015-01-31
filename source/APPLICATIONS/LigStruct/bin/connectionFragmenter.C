@@ -41,7 +41,8 @@ int main(int argc, char* argv[])
 	LineBasedFile bondFile(parpars.get("o")+"_bondlen.sdf", ios::out);
 	
 	MoleculeFragmenter mol_fragger;
-	RMSDBinner binner(0.3, 100);
+	StarAligner aligner;
+	RMSDBinner binner(&aligner, 0.3, 100);
 	
 	int cnt = 0;
 	boost::unordered_map <String, pair<float, int> > lengths;

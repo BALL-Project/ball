@@ -4,16 +4,23 @@
 
 #include "rmsdBinner.h"
 
-
-
-RMSDBinner::RMSDBinner(float threshold, int limit):_threshold(threshold), _variant_limit(limit)
+RMSDBinner::RMSDBinner(StarAligner *aligner, float threshold, int limit):
+	_threshold(threshold),
+	_variant_limit(limit)
 {
+	_star_aligner = aligner;
+}
+
+RMSDBinner::RMSDBinner(float threshold, int limit):
+	_threshold(threshold),
+	_variant_limit(limit)
+{
+	_star_aligner = 0;
 }
 
 RMSDBinner::~RMSDBinner()
-{
-	
-}
+{}
+
 
 void RMSDBinner::addMolecule(const String &key, AtomContainer &molecule)
 {
@@ -21,6 +28,7 @@ void RMSDBinner::addMolecule(const String &key, AtomContainer &molecule)
 	
 	insertMoleculeToLib( key, molecule);
 }
+
 
 map <String, vector< pair<AtomContainer*, int> > >::iterator RMSDBinner::begin()
 {
@@ -32,6 +40,7 @@ map <String, vector< pair<AtomContainer*, int> > >::iterator RMSDBinner::begin()
 	return _map_of_bins.begin();
 }
 
+
 map <String, vector< pair<AtomContainer*, int> > >::iterator RMSDBinner::end()
 {
 	if( !all_sorted )
@@ -41,7 +50,6 @@ map <String, vector< pair<AtomContainer*, int> > >::iterator RMSDBinner::end()
 	}
 	return _map_of_bins.end();
 }
-
 
 
 void RMSDBinner::insertMoleculeToLib(const String &key, AtomContainer &molecule)
@@ -58,7 +66,6 @@ void RMSDBinner::insertMoleculeToLib(const String &key, AtomContainer &molecule)
 		insertMoleculeIntoBins(_map_of_bins[key], molecule);
 	}
 }
-
 
 
 void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bins, AtomContainer &molecule)
@@ -78,10 +85,8 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 	
 	for( bit = bins.begin(); bit != bins.end(); ++bit)
 	{
-		_aligner.setMolecules( molecule, *bit->first);
-		
 		// not different enough: delete this instance
-		if( _aligner.bestRMSD() <= _threshold )
+		if( _getRMSD(molecule, *bit->first) <= _threshold )
 		{
 			delete &molecule;
 			
@@ -92,6 +97,21 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 	
 	// must be a new shape: add to the list
 		bins.push_back( make_pair( &molecule, 1) );
+}
+
+
+float RMSDBinner::_getRMSD(AtomContainer &mol1, AtomContainer &mol2 )
+{
+	if( _star_aligner )
+	{
+		_star_aligner->setMolecules( mol1, mol2);
+	
+		return _star_aligner->bestRMSD();
+	}
+	else
+	{
+		return RMSDMinimizer::minimizeRMSD(mol1, mol2);
+	}
 }
 
 
@@ -117,7 +137,6 @@ void RMSDBinner::filter2TopX(vector<pair<AtomContainer *, int> > &mol_list, cons
 	
 	mol_list.swap( new_list );
 }
-
 
 
 void RMSDBinner::sortAll()

@@ -1,5 +1,5 @@
 # CMake configuration for BALL (http://www.ball-project.org)
-#
+# 
 # This file is - on purpose - heavily based on the CMake configuration
 # of OpenMS (http://www.openms.de) to optimize synergy effects
 

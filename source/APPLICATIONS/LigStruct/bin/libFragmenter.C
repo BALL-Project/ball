@@ -5,6 +5,7 @@
 #include "../sources/ioModule.h"
 #include "../sources/fragmenter.h"
 #include "../sources/canonicalizer.h"
+#include "../sources/rmsdBinner.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
@@ -49,6 +50,8 @@ int main(int argc, char* argv[])
 	
 	MoleculeFragmenter molfrag;
 	Canonicalizer canoni;
+	RMSDBinner binner;
+	
 	tmp = in_file.read();
 	
 	// For each molecule:
@@ -66,20 +69,29 @@ int main(int argc, char* argv[])
 		{
 			// canonicalise the atomlist & set UCK key
 			canoni.canonicalize( **fit );
-			(**fit).setProperty("key", Matcher::getUCK( **fit) );
+			
+			String key = Matcher::getUCK( **fit);
+			binner.addMolecule(key, **fit);
 		}
-		
-		// write to out file:
-		LigIO::writeMolVec( fragments, outfile );
-		
+	
 		// increase iteration:
 		delete tmp;
 		molecule_cnt++;
 		tmp = in_file.read();
 	}
-	
 	in_file.close();
+	
+	// write to out file:
+	map <String, vector< pair<AtomContainer*, int> > >::iterator bin_it;
+	for(bin_it = binner.begin(); bin_it != binner.end(); ++bin_it)
+	{
+		AtomContainer& frag = * bin_it->second[0].first;
+		frag.setProperty("key", bin_it->first);
+		
+		LigIO::writeMol(frag, outfile);
+	}
 	outfile.close();
+	
 	Log << "read "<< molecule_cnt<<" input structures, giving a total of "
 			<< total_fragment_cnt <<" fragments and "<< unique_fragment_cnt
 			<< "unique fragments"<<endl;
