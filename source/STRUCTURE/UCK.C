@@ -243,9 +243,9 @@ namespace BALL
 					}
 					else
 					{
-						std::cout<< "WARNING: UCK running on molecule "<< m.getName();
-						std::cout<<"did not get bond for: "<< (i+1) << " "<< (it->second+1);
-						std::cout<<endl;
+//						std::cout<< "WARNING: UCK running on molecule "<< m.getName();
+//						std::cout<<"did not get bond for: "<< (i+1) << " "<< (it->second+1);
+//						std::cout<<endl;
 						lam_str = lambda("", e, v, it->second, d-1, m); /// original call!
 					}
 					lam->push_back(eraseDoubleLabels(d, v[i], lam_str));

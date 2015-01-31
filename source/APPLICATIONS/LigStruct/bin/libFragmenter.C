@@ -34,11 +34,11 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 	// START of CODE#############################################################
-	
+	Log<<" * Reading file..."<<endl<<endl;
 	// open input and output file:
 	SDFile in_file(parpars.get("i"), ios::in);
-	SDFile outfile(parpars.get("o"), ios::out);
-//	LineBasedFile outfile(parpars.get("o"), ios::out);
+//	SDFile outfile(parpars.get("o"), ios::out);
+	LineBasedFile outfile(parpars.get("o"), ios::out);
 	
 	ACVec fragments, dummy;
 	ConnectList dummy2;
@@ -57,6 +57,12 @@ int main(int argc, char* argv[])
 	// For each molecule:
 	while ( tmp )
 	{
+		// some user info every 100 molecules:
+		if( molecule_cnt % 1000 == 0)
+		{
+			cout << "\r" << flush;
+			cout << "   fragmented: "<< molecule_cnt<<" structures";
+		}
 		// get all rigid fragments from molecule 'tmp'
 		molfrag.setMolecule( *tmp );
 		molfrag.fragment(fragments, dummy, dummy2);
@@ -80,12 +86,18 @@ int main(int argc, char* argv[])
 		molecule_cnt++;
 		tmp = in_file.read();
 	}
+	cout << "\r" << flush;
+	cout << "                                         " << endl;
 	in_file.close();
+	
+	Log<<endl<<" * finished fragmenting a total of "<< molecule_cnt<<" structures. writing file..."<<endl<<endl;
 	
 	// write to out file:
 	map <String, vector< pair<AtomContainer*, int> > >::iterator bin_it;
 	for(bin_it = binner.begin(); bin_it != binner.end(); ++bin_it)
 	{
+		unique_fragment_cnt++;
+				
 		AtomContainer& frag = * bin_it->second[0].first;
 		frag.setProperty("key", bin_it->first);
 		
@@ -93,9 +105,9 @@ int main(int argc, char* argv[])
 	}
 	outfile.close();
 	
-	Log << "read "<< molecule_cnt<<" input structures, giving a total of "
+	Log << " * read "<< molecule_cnt<<" input structures, giving a total of "
 			<< total_fragment_cnt <<" fragments and "<< unique_fragment_cnt
-			<< "unique fragments"<<endl;
+			<< " unique fragments"<<endl<<endl;
 	
-	Log << " wrote fragments to: " << parpars.get("o") << endl;
+	Log << " * wrote fragments to: " << parpars.get("o") << endl;
 }
