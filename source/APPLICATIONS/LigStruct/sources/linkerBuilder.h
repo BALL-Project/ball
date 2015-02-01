@@ -39,6 +39,8 @@ private:
 	
 	void getPositionFromTemplate(AtmVec& site, AtomContainer& temp, Atom& partner);
 	
+	AtomContainer& loadTemplate( String& key );
+	
 	void getSite(Atom& atm, AtmVec &site, String& key);
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
 	

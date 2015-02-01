@@ -81,7 +81,7 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	String key;
 	getSite( *at1, site, key);
 	
-	AtomContainer tmp( * _connection_templates[key] );
+	AtomContainer& tmp = loadTemplate( key );
 	_aligner.setMolecules( site, tmp );
 		
 	//2.) 'align'/translate so that the templates central atom also lies at (0,0,0)
@@ -110,6 +110,20 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	if( atom_cnt > 3)
 	{
 		resolveLinkerClashes( linker_frag );
+	}
+}
+
+AtomContainer& LinkerBuilder::loadTemplate( String& key )
+{
+	if(_connection_templates.find(key) != _connection_templates.end())
+	{
+		return * _connection_templates[key];
+	}
+	else
+	{
+		cout<<"ERROR in linkerBuilder: could not find a connectionTemplate for: "
+				<< key<<endl;
+		exit(EXIT_FAILURE);
 	}
 }
 

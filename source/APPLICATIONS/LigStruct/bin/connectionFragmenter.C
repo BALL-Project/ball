@@ -47,6 +47,7 @@ int main(int argc, char* argv[])
 	AromaticityProcessor arproc;
 	
 	int cnt = 0;
+	int total_sites = 0;
 	boost::unordered_map <String, pair<float, int> > lengths;
 	vector<pair<String, AtomContainer *> > temp_sites;
 	
@@ -54,11 +55,21 @@ int main(int argc, char* argv[])
 	AtomContainer* tmp_mol = infile.read();
 	while ( tmp_mol )
 	{
+		// some user info every 1000 molecules:
+		if( cnt % 1000 == 0)
+		{
+			cout << "\r" << flush;
+			cout << "     fragmented: "<< cnt<<" structures to "<<total_sites<<" total sites, unique sites: "<<binner.size();
+		}
+		
+		// recognize aromatic bonds:
 		tmp_mol->apply(arproc);
 		
 		// fragment to connection sites:
 		mol_fragger.setMolecule( *tmp_mol );
 		mol_fragger.fragmentToSites(lengths, temp_sites);
+		
+		total_sites += temp_sites.size();
 		
 		vector<pair<String, AtomContainer *> >::iterator ita;
 		for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
@@ -71,6 +82,9 @@ int main(int argc, char* argv[])
 		tmp_mol = infile.read();
 		cnt++;
 	}
+	cout << "\r" << flush;
+	cout << "                                                                        " << endl;
+	infile.close();
 	
 	// write out the filtered sites for this molecule:
 	map <String, vector< pair<AtomContainer*, int> > >::iterator it;
@@ -83,7 +97,6 @@ int main(int argc, char* argv[])
 		LigIO::writeMol(*ac, outfile);
 	}
 	outfile.close();
-	Log << "read "<< cnt<<" input structures, wrote resulting fragments"<< endl;
 	
 	// print results of standard lengths calculation:
 	boost::unordered_map <String, pair<float, int> >::iterator mit;
@@ -92,6 +105,8 @@ int main(int argc, char* argv[])
 		bondFile <<mit->first<<" "<< mit->second.first<<endl ;
 	}
 	bondFile.close();
+	
+	Log << "fragmented "<< cnt<<" structures to "<<total_sites<<" sites, wrote "<<binner.size()<<" unique sites"<<endl;
 }
 
 

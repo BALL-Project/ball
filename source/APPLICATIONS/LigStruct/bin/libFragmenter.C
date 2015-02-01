@@ -59,16 +59,17 @@ int main(int argc, char* argv[])
 	Log<<" * fragmenting..."<<endl;
 	while ( tmp )
 	{
-		// normalize the structures:
-		LigBase::removeHydrogens( *tmp );
-		tmp->apply(arproc);
-
-		// some user info every 100 molecules:
+		// some user info every 1000 molecules:
 		if( molecule_cnt % 1000 == 0)
 		{
 			cout << "\r" << flush;
 			cout << "     fragmented: "<< molecule_cnt<<" structures"<<", unique fragments: "<<binner.size();
 		}
+		
+		// normalize the structures:
+		LigBase::removeHydrogens( *tmp );
+		tmp->apply(arproc);
+
 		// get all rigid fragments from molecule 'tmp'
 		molfrag.setMolecule( *tmp );
 		molfrag.fragment(fragments, dummy, dummy2);

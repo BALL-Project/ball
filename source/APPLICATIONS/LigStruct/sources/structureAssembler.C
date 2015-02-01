@@ -36,7 +36,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	for( AtomContainer*& tmp: rigids )
 	{
 		_canoicalizer.canonicalize( *tmp );
-		cout<<"        Fragment:"<<LigBase::printInlineMol( tmp)<<endl<<endl;
+//		cout<<"        Fragment:"<<LigBase::printInlineMol( tmp)<<endl<<endl;
 		
 		_matcher.matchFragment( *tmp );
 	}
