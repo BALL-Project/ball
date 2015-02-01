@@ -61,19 +61,21 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	getSite(atm1, site_frag1, key1);
 	getSite(atm2, site_frag2, key2);
 	
-	AtomContainer* templ1 = new AtomContainer( * _connections->at(key1) );
-	AtomContainer* templ2 = new AtomContainer( * _connections->at(key2) );
-	
+	AtomContainer* templ1;
+	AtomContainer* templ2;
+	loadTemplates(templ1, key1);
+	loadTemplates(templ2, key2);
+
 	//2) transfrom templ1 to match with frag1 (keep frag1 as it was)
 	_star_aligner.setMolecules(site_frag1, *templ1);
 	_star_aligner.align();
-	
+
 	AtmVec remain_tmp1;
 	_star_aligner.getRemainder(remain_tmp1);
-	
+
 	//3) transfrom templ2 to match with frag2
 	AtomContainer* frag2 = (AtomContainer*) &atm2->getRoot();
-	
+
 	_star_aligner.setMolecules( site_frag2, *templ2);
 	_star_aligner.align();
 	
@@ -101,6 +103,20 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	frag2->apply(t_later);
 	delete templ1;
 	delete templ2;
+}
+
+void MoleculeConnector::loadTemplates(AtomContainer*& tmp, String& key)
+{
+	if(_connections->find(key) != _connections->end() )
+	{
+		tmp = new AtomContainer( * _connections->at(key) );
+	}
+	else
+	{//TODO: implement as exception
+		cout<<"ERROR in moleculeConnector: could not find connectionTemplate for: "
+			  << key<<endl;
+		exit(EXIT_FAILURE);
+	}
 }
 
 

@@ -16,9 +16,6 @@
 using namespace BALL;
 using namespace std;
 
-typedef boost::unordered_map <String, float >     BondLengthMap;
-typedef boost::unordered_map <String, Fragment* > ConSiteMap;
-
 class MoleculeConnector
 {
 public:
@@ -42,6 +39,8 @@ public:
 	void connect(Atom* atm1, Atom* atm2);
 
 private:
+	void loadTemplates(AtomContainer*& tmp, String &key);
+	
 	/*
 	 * From an atom (given by 'atm') determine the site and the key for the site.
 	 * The site contains the given atom at position 0 and all other direct 

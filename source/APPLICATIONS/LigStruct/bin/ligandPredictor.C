@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
 		LigBase::removeHydrogens( *tmp );
 		tmp->apply(aroma_proc);
 		
-		cout<<"Molecule:"<<LigBase::printInlineMol( tmp)<<endl;
+//		cout<<"Molecule:"<<LigBase::printInlineMol( tmp)<<endl;
 		
 		cout<<"read mol starting assembly"<<endl;
 		lig_assembler.assembleStructure( *tmp );

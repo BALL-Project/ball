@@ -9,6 +9,7 @@
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/SYSTEM/file.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
@@ -24,7 +25,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
-	parpars.registerFlag("sdf", "output the lib in sdf format");
+	parpars.registerFlag("sdf", "output the lib in sdf AND lineBased format");
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
@@ -103,12 +104,15 @@ int main(int argc, char* argv[])
 	
 	// write to out file:
 	LineBasedFile* outfile = 0;
+	SDFile* out_sdf = 0;
 	
 	// open simple LineBased- or SDFile:
 	bool use_sdf = parpars.has("sdf");
 	if( use_sdf )
-		outfile = new SDFile(parpars.get("o"), ios::out);
-	
+	{
+		outfile = new LineBasedFile(parpars.get("o")+".line", ios::out);
+		out_sdf = new SDFile(parpars.get("o")+".sdf", ios::out);
+	}
 	else
 		outfile = new LineBasedFile(parpars.get("o"), ios::out);
 	
@@ -120,7 +124,10 @@ int main(int argc, char* argv[])
 		frag.setProperty("key", bin_it->first);
 		
 		if(use_sdf)
-			LigIO::writeMol(frag, * (SDFile*)outfile);
+		{
+			LigIO::writeMol(frag, * (LineBasedFile*)outfile);
+			LigIO::writeMol(frag, * (SDFile*)out_sdf);
+		}
 		else
 			LigIO::writeMol(frag, * (LineBasedFile*)outfile);
 	}
