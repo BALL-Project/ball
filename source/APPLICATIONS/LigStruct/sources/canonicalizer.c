@@ -72,9 +72,10 @@ void Matcher::matchFragment(AtomContainer& fragment)
 	}
 	else // print error msg, showing element-list and key of the not matchable molecule
 	{
-		cout<<"Warning: could not find a template for: ";
-		cout<< LigBase::printInlineStarMol(&fragment);
-		cout<< "key: "<<keyGen.getUCK()<<endl;
+		cout<<"ERROR: could not find a template for: ";
+		cout<< LigBase::printInlineMol(&fragment)<<endl;
+		cout<< "It's UCK-key: "<<keyGen.getUCK()<<endl;
+		exit(EXIT_FAILURE);
 	}
 }
 
