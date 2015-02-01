@@ -232,12 +232,15 @@ namespace BALL
 					if (bnd)
 					{
 						String bo_str= "";
+						
 						if (bnd->getOrder()==2)
 							bo_str="=";
 						else if(bnd->getOrder()==3)
 							bo_str="#";
 						else if(bnd->getOrder()==4)
 							bo_str="-";
+						else if(bnd->getOrder()==5)
+							bo_str="*";
 	
 						lam_str = lambda("", e, v, it->second, d-1, m)+bo_str;
 					}

@@ -12,9 +12,8 @@
 #include "clashResolver.h"
 #include "canonicalizer.h"
 
-//using namespace OpenBabel;
-//using namespace BALL;
-//using namespace std;
+using namespace BALL;
+using namespace std;
 
 class StructureAssembler
 {

@@ -10,6 +10,7 @@
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/DATATYPE/hashSet.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 #include <boost/unordered_map.hpp>
 
@@ -19,7 +20,7 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("libFragmenter", "cut a AtomContainer along its rotable bonds, generating fragments", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("connectionFragmenter", " fragments to connection sites", 0.5, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF and bond length file", OUTFILE, true);
 	
@@ -43,6 +44,7 @@ int main(int argc, char* argv[])
 	MoleculeFragmenter mol_fragger;
 	StarAligner aligner;
 	RMSDBinner binner(&aligner, 0.3, 100);
+	AromaticityProcessor arproc;
 	
 	int cnt = 0;
 	boost::unordered_map <String, pair<float, int> > lengths;
@@ -52,17 +54,15 @@ int main(int argc, char* argv[])
 	AtomContainer* tmp_mol = infile.read();
 	while ( tmp_mol )
 	{
+		tmp_mol->apply(arproc);
+		
 		// fragment to connection sites:
-//		cout<<"Binning: "<<LigBase::printInlineMol( tmp_mol )<<endl;
 		mol_fragger.setMolecule( *tmp_mol );
 		mol_fragger.fragmentToSites(lengths, temp_sites);
 		
 		vector<pair<String, AtomContainer *> >::iterator ita;
 		for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
 		{
-//			cout<<"key: "<<ita->first<<endl;
-//			cout<<"address: "<<ita->second<<endl;
-//			cout<<"address iter: "<<&*ita->second->beginAtom()<<endl;
 			binner.addMolecule( ita->first, *ita->second );
 		}
 		

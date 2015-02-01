@@ -109,7 +109,7 @@ void StarAligner::_calculateOptimalTransformation()
 				tem2_atm = &*ati;
 			}
 		}
-		if (bo == 2 && site[1]->countBonds() > 1)
+		if ( (bo == 2 || bo == 5) && site[1]->countBonds() > 1)
 			_matrix = doubleBondCorrection( * _query->beginAtom(), * tem2_atm,
 																			*site[0], * site[1]);
 		else

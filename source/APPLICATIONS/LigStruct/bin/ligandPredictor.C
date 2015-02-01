@@ -5,6 +5,7 @@
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/file.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 #include "../sources/ioModule.h"
 #include "../sources/structureAssembler.h"
@@ -46,9 +47,15 @@ int main(int argc, char* argv[])
 	
 	Molecule* tmp = infile.read();
 	StructureAssembler lig_assembler( lib_loader );
-
+	AromaticityProcessor aroma_proc;
+			
 	while (tmp)
 	{
+		LigBase::removeHydrogens( *tmp );
+		tmp->apply(aroma_proc);
+		
+		cout<<"Molecule:"<<LigBase::printInlineMol( tmp)<<endl;
+		
 		cout<<"read mol starting assembly"<<endl;
 		lig_assembler.assembleStructure( *tmp );
 		cout<<"assembled structure"<<endl;
@@ -56,15 +63,13 @@ int main(int argc, char* argv[])
 		outfile << *tmp;
 		cout<<"wrote structure"<<endl;
 		delete tmp;
-		cout<<"deleted old structure"<<endl;
 		tmp = infile.read();
-		cout<<"read new structure"<<endl;
 	}
 	
 /// F I N I S H
 	outfile.close();
 	infile.close();
 	
-	Log << "......done!"<<endl;
+	Log <<endl<< "......done!"<<endl;
 }
 

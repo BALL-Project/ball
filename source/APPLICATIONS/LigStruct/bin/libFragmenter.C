@@ -10,6 +10,7 @@
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 using namespace OpenBabel;
 using namespace BALL;
@@ -19,7 +20,7 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("libFragmenter", "cut a molecule along its rotable bonds, generating fragments", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("libFragmenter", "cut a molecule along its rotable bonds, generating fragments", 0.3, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
@@ -49,6 +50,7 @@ int main(int argc, char* argv[])
 	MoleculeFragmenter molfrag;
 	Canonicalizer canoni;
 	RMSDBinner binner(false);
+	AromaticityProcessor arproc;
 	
 	tmp = in_file.read();
 	
@@ -56,7 +58,9 @@ int main(int argc, char* argv[])
 	Log<<" * fragmenting..."<<endl;
 	while ( tmp )
 	{
+		// normalize the structures:
 		LigBase::removeHydrogens( *tmp );
+		tmp->apply(arproc);
 
 		// some user info every 100 molecules:
 		if( molecule_cnt % 1000 == 0)
