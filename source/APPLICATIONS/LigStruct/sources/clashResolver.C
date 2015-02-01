@@ -16,26 +16,20 @@
 #include <limits>
 ConnectionClashResolver::ConnectionClashResolver(float tolerance, int max_rotors): 
 	_tolerance(tolerance),
-	_max_rotations(max_rotors)
-{
-	_large_rotors = new ConnectList();
-	_small_rotors = new ConnectList();
-	
-	atm_large = 0;
-	atm_small = 0;
-	
-	_large_root = 0;
-	_small_root = 0;
-
-	_small_rotors = 0;
-	_large_rotors = 0;
-}
+	_max_rotations(max_rotors),
+	atm_large(0), 
+	atm_small(0), 
+	_large_root(0),
+	_small_root(0),
+	_large_rotors( new ConnectList() ),
+	_small_rotors( new ConnectList() )
+{}
 
 
 ConnectionClashResolver::~ConnectionClashResolver()
 {
-	delete _large_rotors;
-	delete _small_rotors;
+	delete _large_rotors; _large_rotors = 0;
+	delete _small_rotors; _small_rotors = 0;
 }
 
 void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections)
