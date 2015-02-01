@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
-	parpars.registerFlag("unique", "only output one fragment for each topology");
+	parpars.registerFlag("sdf", "output the lib in sdf format");
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
@@ -35,10 +35,9 @@ int main(int argc, char* argv[])
 	
 	// START of CODE#############################################################
 	Log<<" * Reading file..."<<endl<<endl;
-	// open input and output file:
+	
+	// open input file:
 	SDFile in_file(parpars.get("i"), ios::in);
-//	SDFile outfile(parpars.get("o"), ios::out);
-	LineBasedFile outfile(parpars.get("o"), ios::out);
 	
 	ACVec fragments, dummy;
 	ConnectList dummy2;
@@ -46,7 +45,6 @@ int main(int argc, char* argv[])
 	
 	int molecule_cnt=0;
 	int total_fragment_cnt=0;
-	int unique_fragment_cnt=0;
 	
 	MoleculeFragmenter molfrag;
 	Canonicalizer canoni;
@@ -55,6 +53,7 @@ int main(int argc, char* argv[])
 	tmp = in_file.read();
 	
 	// For each molecule:
+	Log<<" * fragmenting..."<<endl;
 	while ( tmp )
 	{
 		LigBase::removeHydrogens( *tmp );
@@ -63,7 +62,7 @@ int main(int argc, char* argv[])
 		if( molecule_cnt % 1000 == 0)
 		{
 			cout << "\r" << flush;
-			cout << "   fragmented: "<< molecule_cnt<<" structures";
+			cout << "     fragmented: "<< molecule_cnt<<" structures"<<", unique fragments: "<<binner.size();
 		}
 		// get all rigid fragments from molecule 'tmp'
 		molfrag.setMolecule( *tmp );
@@ -79,7 +78,7 @@ int main(int argc, char* argv[])
 			canoni.canonicalize( **fit );
 			
 			String key = Matcher::getUCK( **fit);
-			
+
 			binner.addMolecule(key, **fit);
 		}
 	
@@ -87,29 +86,42 @@ int main(int argc, char* argv[])
 		delete tmp;
 		molecule_cnt++;
 		tmp = in_file.read();
+	
 	}
 	cout << "\r" << flush;
-	cout << "                                         " << endl;
+	cout << "                                                                " << endl;
 	in_file.close();
 	
-	Log<<endl<<" * finished fragmenting a total of "<< molecule_cnt<<" structures. writing file..."<<endl<<endl;
+	Log <<endl<< " * read "<< molecule_cnt<<" input structures, giving a total of "
+			<< total_fragment_cnt <<" fragments and "<< binner.size()
+			<< " unique fragments"<<endl<<endl;
+
 	
 	// write to out file:
+	LineBasedFile* outfile = 0;
+	
+	// open simple LineBased- or SDFile:
+	bool use_sdf = parpars.has("sdf");
+	if( use_sdf )
+		outfile = new SDFile(parpars.get("o"), ios::out);
+	
+	else
+		outfile = new LineBasedFile(parpars.get("o"), ios::out);
+	
+	// write all 
 	map <String, vector< pair<AtomContainer*, int> > >::iterator bin_it;
 	for(bin_it = binner.begin(); bin_it != binner.end(); ++bin_it)
 	{
-		unique_fragment_cnt++;
-				
 		AtomContainer& frag = * bin_it->second[0].first;
 		frag.setProperty("key", bin_it->first);
 		
-		LigIO::writeMol(frag, outfile);
+		if(use_sdf)
+			LigIO::writeMol(frag, * (SDFile*)outfile);
+		else
+			LigIO::writeMol(frag, * (LineBasedFile*)outfile);
 	}
-	outfile.close();
+	outfile->close();
 	
-	Log << " * read "<< molecule_cnt<<" input structures, giving a total of "
-			<< total_fragment_cnt <<" fragments and "<< unique_fragment_cnt
-			<< " unique fragments"<<endl<<endl;
 	
-	Log << " * wrote fragments to: " << parpars.get("o") << endl;
+	Log << " * wrote unique fragments to: " << parpars.get("o") << endl;
 }

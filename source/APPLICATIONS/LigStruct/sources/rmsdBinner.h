@@ -52,6 +52,8 @@ public:
 	map <String, vector< pair<AtomContainer*, int> > >::iterator begin();
 	map <String, vector< pair<AtomContainer*, int> > >::iterator end();
 	
+	int size();
+	
 private:
 	
 	float _getRMSD(AtomContainer &mol1, AtomContainer &mol2 );

@@ -45,6 +45,11 @@ map <String, vector< pair<AtomContainer*, int> > >::iterator RMSDBinner::end()
 	return _map_of_bins.end();
 }
 
+int RMSDBinner::size()
+{
+	return _map_of_bins.size();
+}
+
 
 void RMSDBinner::insertMoleculeToLib(const String &key, AtomContainer &molecule)
 {
