@@ -266,6 +266,7 @@
 // QSAR
 //%Include descriptor.sip
 //%Include simpleDescriptors.sip
+%Include aromaticityProcessor.sip
 
 // SOLVATION
 // %Include molecularSurfaceGrid.sip // ??
