@@ -30,7 +30,7 @@ LinkerBuilder::~LinkerBuilder()
 	
 }
 
-void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
+ConnectList LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 {
 	int atom_cnt = linker_frag.countAtoms();
 	
@@ -39,12 +39,12 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	{
 		if(atom_cnt == 0)
 		{
-			return;
+			return ConnectList();
 		}
 		else if(atom_cnt == 1)
 		{
 			linker_frag.beginAtom()->setPosition( Vector3() );
-			return;
+			return ConnectList();
 		}
 		else if (atom_cnt == 2)
 		{
@@ -55,7 +55,7 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 			
 			at1->setPosition( Vector3() ); at2->setPosition( Vector3(0,0, b_len ) );
 			
-			return;
+			return ConnectList();
 		}
 	}
 	
@@ -109,7 +109,13 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	// resolve all linker clashes:
 	if( atom_cnt > 3)
 	{
-		resolveLinkerClashes( linker_frag );
+		return resolveLinkerClashes( linker_frag );
+	}
+	else
+	{
+		ConnectList tmp;
+		tmp.push_back( make_pair(at1, at1->getPartnerAtom(0) ) );
+		return tmp;
 	}
 }
 
@@ -272,7 +278,7 @@ bool LinkerBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
  * A 'terminal atom' is connected to a single atom and is only part of a 'chain'
  * if it is connected to a 'link'. Is it connected to a hub it will be ignored
  */
-void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
+ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 {
 	_rotors.clear();
 	
@@ -302,7 +308,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 				setBondTrans( *bit);
 		}
 
-		return;
+		return ConnectList();
 	}
 
 	//3.) for all connected atoms/bonds start the recursion
@@ -323,12 +329,16 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 //		(*bit)->setOrder(2);//DEBUG (show me the rotors as double bonds)
 	}
 	
-	cout<<"Linker Rotors: "<<temp.size()<<endl;
+//	cout<<"Linker Rotors: "<<temp.size()<<endl;
 	_cresolv.setMolecule(linker_frag, temp );
 	if(_cresolv.detect() != 0)
 	{
-		cout<<"LinkerBuilder: resolved to "<<_cresolv.resolve()<<endl;
+		cout<<endl<<"built linker: "<<endl;
+		cout<<LigBase::printInlineMol( &linker_frag)<<endl;
+		cout<<"  contains "<<_cresolv.resolve()<<" clashes."<<endl;
 	}
+	
+	return temp;
 }
 
 /*

@@ -39,7 +39,7 @@ ConnectionClashResolver::~ConnectionClashResolver()
 	delete _save_small; _save_small = 0;
 }
 
-void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections)
+void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections, ConnectList& more_rotors)
 {
 	atm_large = &atm1;
 	atm_small = &atm2;
@@ -75,7 +75,23 @@ void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &c
 			_all_rotors->push_back( p );
 		}
 	}
+	
+	for ( auto& p : more_rotors)
+	{
+		if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
+		{
+			_large_rotors->push_back( p );
+			_all_rotors->push_back( p );
+		}
+		else if( &p.first->getRoot() == _small_root && &p.second->getRoot() == _small_root)
+		{
+			_small_rotors->push_back( p );
+			_all_rotors->push_back( p );
+		}
+	}
 	_all_rotors->push_back( make_pair(&atm1,&atm2) );
+	
+	_max_rotations = _all_rotors->size() * 2;
 	
 }
 
@@ -240,33 +256,27 @@ int ConnectionClashResolver::resolve(bool conserve_large)
 	//1) CONNECTION rotation might solve the clashes
 	clash_cnt = resolveConnection();
 	
-	cout<<"Connections finished with: "<<clash_cnt<<endl;
+//	cout<<"Connections finished with: "<<clash_cnt<<endl;
 	if( clash_cnt == 0)
 		return detectInMolecule( *_small_root) + detectInMolecule( *_large_root); // + clash_cnt (which is 0)
 	
 	//2) SMALL FRAGMENT rotations might the solve the clashes:
 	clash_cnt = resolveFragment( *_small_root, *_small_rotors);
 	
-	cout<<"SMALL finished with: "<<clash_cnt<<endl;
+//	cout<<"SMALL finished with: "<<clash_cnt<<endl;
 	if( clash_cnt == 0 || conserve_large)
 		return clash_cnt + detectInMolecule( *_large_root);
 	
 	//3) LARGE FRAGMENT rotations might solve the clashes:
 	clash_cnt = resolveFragment( *_large_root, *_large_rotors);
-	cout<<"LARGE finished with: "<<clash_cnt<<endl;
+//	cout<<"LARGE finished with: "<<clash_cnt<<endl;
 	if( clash_cnt == 0)
 		return detectInMolecule( *_small_root);
 
 	//4) ALL rotations:
-	for(int steps = 2; steps < 6; ++steps) // try from 180° to 72° rotations
-	{
-		clash_cnt = resolveAll( steps );
-		cout<<"ALL "<<steps<<" finished with: "<<clash_cnt<<endl;
-		if( clash_cnt == 0 )
-			return 0;
-	}
+	clash_cnt = resolveAll( 6 );
+//	cout<<"ALL(6) finished with: "<<clash_cnt<<endl;
 	
-	// Could not solve all clashes even after eating a lot computation time
 	return clash_cnt;
 }
 
@@ -280,27 +290,23 @@ int ConnectionClashResolver::resolveConnection()
 	int best_cnt = detectBetweenMolecules( *_large_root, *_small_root);
 
 	// test 9 angles/rotations along the connecting bond, take the best one
-	for( int i = 1; i < 10; ++i)
+	for( int i = 1; i < 18; ++i)
 	{
-		rotate( *atm_large, *atm_small, Angle(36.0, false));
+		rotate( *atm_large, *atm_small, Angle(20.0, false));
 		
 		current_count = detectBetweenMolecules( *_large_root, *_small_root);
 		
 		if ( current_count < best_cnt)
 		{
-			cout<<"resolveConnection: Accepted "<<current_count<<endl;
+//			cout<<"resolveConnection: Accepted "<<current_count<<endl;
 			best_cnt = current_count;
 			_save_small->setCoordinates( *_small_root );
-		}
-		else
-		{
-			cout<<"resolveConnection: NOT Accepted "<<current_count<<endl;
 		}
 
 		// we could find a clash-free solution
 		if( current_count == 0)
 		{
-			cout<<"resolveConnection: found perfect solution "<<endl;
+//			cout<<"resolveConnection: found perfect solution "<<endl;
 			return 0;
 		}
 	}
@@ -315,55 +321,40 @@ int ConnectionClashResolver::resolveConnection()
  */
 int ConnectionClashResolver::resolveFragment( AtomContainer& frag, ConnectList& clist )
 {
-	HashSet< pair< Atom*, Atom* >* > used_rotors;
-	pair< Atom*, Atom* >*            best_rotor = 0;
-	
 	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) + detectInMolecule( frag );
 	int current_count = 0;
 	
 	for(int tries=0; tries < _max_rotations; tries++) // try optimise _max_rotations bonds
 	{
-		cout<<"resolveFragment: try "<< tries<<endl;
-		best_rotor = 0;
 		
 		for( auto& p : clist)
 		{
-			// cycle if we already selected that rotor
-			if( used_rotors.has( &p )) 
-				continue;
+			_save_large->transferCoordinates( *_large_root );
+			_save_small->transferCoordinates( *_small_root );
 			
-			// else: test 9 rotations for that rotor
-			for( int i = 1; i < 10; ++i)
+			// else: test 20 rotations for that rotor
+			for( int i = 1; i < 20; ++i)
 			{
-				rotate( *p.first, *p.second, Angle(36.0, false));
+				rotate( *p.first, *p.second, Angle(18.0, false));
 				current_count = detectBetweenMolecules(*_large_root, *_small_root)
 											+ detectInMolecule( frag );
 				
 				if ( current_count < best_cnt )
 				{
-					cout<<"resolveFragment: in try "<<tries<<" found better solution with "<<current_count<<" clashes"<<endl;
+//					cout<<"resolveFragment: in try "<<tries<<" found better solution with "<<current_count<<" clashes"<<endl;
 					best_cnt = current_count;
 					
 					_save_large->setCoordinates( *_large_root );
 					_save_small->setCoordinates( *_small_root );
-					
-					best_rotor = &p;
-				}
-				else
-				{
-					cout<<"resolveFragment: NOT accepted"<<endl;
 				}
 				
 				if( current_count == 0)
 				{
-					cout<<"resolveFragment: found optimal solution. try: "<<tries<<endl;
+//					cout<<"resolveFragment: found optimal solution. try: "<<tries<<endl;
 					return 0;
 				}
 			}
 		}
-		
-		if( best_rotor != 0)
-			used_rotors.insert( best_rotor );
 		
 		_save_large->transferCoordinates( *_large_root );
 		_save_small->transferCoordinates( *_small_root );
@@ -412,10 +403,11 @@ int ConnectionClashResolver::resolveAllRecur(const ConnectList::iterator &p,
 {
 	int current_cnt = numeric_limits<int>::max();
 	
-	for( int i = 0; i < steps-1; ++i )
+	for( int i = 0; i < steps; ++i )
 	{
 		// test a rotation:
-		rotate( * p->first, * p->second, angle);
+		if( i != 0)
+			rotate( * p->first, * p->second, angle);
 		
 		current_cnt = detectBetweenMolecules(*_large_root, *_small_root) 
 									+ detectInMolecule( *_large_root ) 
@@ -424,7 +416,7 @@ int ConnectionClashResolver::resolveAllRecur(const ConnectList::iterator &p,
 		// check if current solution is better than the previous:
 		if( current_cnt < best_cnt)
 		{
-			cout<<"resolveAll: stored a solution with only "<<current_cnt<<" clashes"<<endl;
+//			cout<<"resolveAll: stored a solution with only "<<current_cnt<<" clashes"<<endl;
 			best_cnt = current_cnt;
 			_save_large->setCoordinates( *_large_root );
 			_save_small->setCoordinates( *_small_root );
@@ -433,12 +425,12 @@ int ConnectionClashResolver::resolveAllRecur(const ConnectList::iterator &p,
 		// this rotation solved ALL clashes
 		if( current_cnt == 0)
 		{
-			cout<<"resolveAll: found optimal solution"<<endl;
+//			cout<<"resolveAll: found optimal solution"<<endl;
 			return 0;
 		}
 		
 		// If the rotation did not work, try rotating the other bonds, if some
-		// a not rotated yet
+		// are not rotated yet
 		else
 		{
 			// Did I reach the end yet ?
@@ -600,7 +592,7 @@ int ClashResolver::resolve()
 	HashSet< pair< Atom*, Atom* >* > used_rotors;
 	pair< Atom*, Atom* >*            best_rotor = 0;
 	
-	TemplateCoord best_large( *_molecule );
+	TemplateCoord best_conf( *_molecule );
 	
 	int best_cnt = detect();
 	int current_count = 0;
@@ -615,8 +607,10 @@ int ClashResolver::resolve()
 		for( auto& p : *_rotors)
 		{
 			// cycle if we already selected that rotor
-			if( used_rotors.has( &p )) 
+			if( used_rotors.has( &p ) )
 				continue;
+			
+			best_conf.transferCoordinates( *_molecule );
 			
 			// else: test 9 rotations for that rotor
 			for( int i = 1; i < 36; ++i)
@@ -628,7 +622,7 @@ int ClashResolver::resolve()
 				if ( current_count < best_cnt )
 				{
 					best_cnt = current_count;
-					best_large.setCoordinates( *_molecule );
+					best_conf.setCoordinates( *_molecule );
 					best_rotor = &p;
 				}
 				
@@ -638,18 +632,16 @@ int ClashResolver::resolve()
 		}
 		if( best_rotor != 0)
 			used_rotors.insert( best_rotor );
-		best_large.transferCoordinates( *_molecule );
+		best_conf.transferCoordinates( *_molecule );
 	}
 	
-	//2.) try optimal solution at 5 steps:
-//	current_count = resolveAll(5);
 	if(current_count < best_cnt)
 	{
 		best_cnt = current_count;
 	}
 	else
 	{
-		best_large.transferCoordinates( *_molecule );
+		best_conf.transferCoordinates( *_molecule );
 	}
 	return best_cnt;
 }

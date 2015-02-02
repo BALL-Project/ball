@@ -32,7 +32,7 @@ public:
 	 * @param atm1 part of the larger fragment
 	 * @param atm2 part of the smaller fragment
 	 */
-	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections);
+	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections, ConnectList &more_rotors);
 	
 	int resolve(bool conserve_large = false);
 	
@@ -116,8 +116,8 @@ private:
 	TemplateCoord* _save_large;
 	TemplateCoord* _save_small;
 	
-	const float _tolerance;   // tolerance in Anstroem for vdw-dist violation
-	const int _max_rotations; // maximum number of bonds to rotate
+	const float _tolerance; // tolerance in Anstroem for vdw-dist violation
+	int _max_rotations;     // maximum number of bonds to rotate
 };
 
 
@@ -126,7 +126,6 @@ private:
 class ClashResolver
 {
 public:
-//	ClashResolver();
 	ClashResolver( float tolerance = 1.2, int max_rotors = 20);
 	~ClashResolver();
 	

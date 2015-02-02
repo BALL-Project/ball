@@ -41,15 +41,16 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	}
 	
 	// build linker fragments
+	ConnectList linker_rotors;
 	for( AtomContainer*& tmp: linker )
 	{
-		_linker_builder.buildLinker( *tmp ); 
+		linker_rotors.splice(linker_rotors.end(), _linker_builder.buildLinker(*tmp) ); 
 	}
 	
 	// connect the ready-made fragments to a single molecule
 	for( auto& atm_pair : connections )
 	{
-		connectClashFree( * atm_pair.first, * atm_pair.second, connections );
+		connectClashFree( * atm_pair.first, * atm_pair.second, connections, linker_rotors);
 	}
 	
 	// re-insert all fragments into the original molecule
@@ -64,7 +65,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	}
 }
 
-void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& connections)
+void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& connections, ConnectList& linker_rotors)
 {
 	//1.) select biggest molecule as 1st connection partner. 
 	//    REASON: we assume that our connection method keeps the first fragment 
@@ -85,7 +86,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		_connector.connect( &at1, &at2 );
 
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at1, at2, connections);
+		_clash_resolver.setMolecule(at1, at2, connections, linker_rotors);
 		if( _clash_resolver.detect() != 0 )
 		{
 			cout<<"Resolving clash, got: "<<_clash_resolver.detect()<<endl;
@@ -102,7 +103,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		_connector.connect( &at2, &at1 );
 		
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at2, at1, connections);
+		_clash_resolver.setMolecule(at2, at1, connections, linker_rotors);
 		if( _clash_resolver.detect() != 0 )
 		{
 			cout<<"Resolving clash, got: "<<_clash_resolver.detect()<<endl;

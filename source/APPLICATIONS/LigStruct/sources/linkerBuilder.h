@@ -32,7 +32,7 @@ public:
 	 * cycles are normally not considered a flexible)
 	 * @param linker_lst
 	 */
-	void buildLinker(AtomContainer &linker_frag);
+	ConnectList buildLinker(AtomContainer &linker_frag);
 	
 private:
 	void recurLinkerConnect(Atom &at, const Composite &parent);
@@ -44,7 +44,7 @@ private:
 	void getSite(Atom& atm, AtmVec &site, String& key);
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
 	
-	void resolveLinkerClashes(AtomContainer &linker_frag);
+	ConnectList resolveLinkerClashes(AtomContainer &linker_frag);
 	void recurResolveLinker(int previous_cnt, Bond& bnd, Atom &curr_atm, int dist, Composite *parent );
 	
 	void setBondTrans( Bond &bnd );
