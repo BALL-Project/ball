@@ -45,7 +45,7 @@ private:
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
 	
 	void resolveLinkerClashes(AtomContainer &linker_frag);
-	void recurResolveLinker(int previous_cnt, Bond& bnd, Atom &curr_atm, Composite *parent );
+	void recurResolveLinker(int previous_cnt, Bond& bnd, Atom &curr_atm, int dist, Composite *parent );
 	
 	void setBondTrans( Bond &bnd );
 	

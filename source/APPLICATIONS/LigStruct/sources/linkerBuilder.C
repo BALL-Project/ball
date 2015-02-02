@@ -310,7 +310,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 	for(AtomBondIterator bit = at1->beginBond(); +bit; ++bit)
 	{
 		next = bit->getBoundAtom( *at1 );
-		recurResolveLinker( current_cnt, *bit, *next, &linker_frag);
+		recurResolveLinker( current_cnt, *bit, *next, 0, &linker_frag);
 	}
 	
 	//4.) check for clashes and resolve
@@ -318,12 +318,16 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 	// hier wirds kurz ekelhaft bitte weggucken:
 	ConnectList temp;
 	for(list<Bond*>::iterator bit = _rotors.begin(); bit != _rotors.end(); ++bit)
+	{
 		temp.push_back( make_pair( (*bit)->getFirstAtom(), (*bit)->getSecondAtom()) );
+//		(*bit)->setOrder(2);//DEBUG (show me the rotors as double bonds)
+	}
 	
+	cout<<"Linker Rotors: "<<temp.size()<<endl;
 	_cresolv.setMolecule(linker_frag, temp );
 	if(_cresolv.detect() != 0)
 	{
-		_cresolv.resolve();
+		cout<<"LinkerBuilder: resolved to "<<_cresolv.resolve()<<endl;
 	}
 }
 
@@ -332,7 +336,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
  * recurFindRotors
  */
 void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd, 
-																			Atom& curr_atm, Composite* parent)
+																			Atom& curr_atm, int dist, Composite* parent)
 {
 	int current_cnt = LigBase::countBondsInPartent( curr_atm, *parent );
 	
@@ -346,13 +350,29 @@ void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd,
 	else
 	{
 		// bond is non terminal, because we alwas start from hubs and this atom is
-		// not terminal: so set the bond to 'trans'
+		// not terminal (cnt>1): so set the bond to 'trans'
 		setBondTrans( bnd );
 		
-		// if we also have a 'hub' (prev_cnt >2) add the bond to the rotors
+		// if we also had a 'hub' (prev_cnt >2) add the bond to the rotors
 		if( previous_cnt > 2)
 		{
+			dist = 1;
 			_rotors.push_back( &bnd );
+		}
+		// current atom is a 'hub' 
+		// guarantees that we get on chains of lenght > 2 between two hubs
+		// two rotors before each hub.
+		else if( current_cnt > 2)
+		{
+			if( dist > 1)// prev. atom was no hub!
+				_rotors.push_back( &bnd );
+			
+			dist = 0;
+		}
+		//simple chain atom, increase dist to 'hub'
+		else if( current_cnt == 2 )
+		{
+			dist++;
 		}
 
 		// independent of hub or linker status: continue recursion with the remaining bonds
@@ -362,7 +382,7 @@ void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd,
 			{
 				if( bit->getBoundAtom(curr_atm)->getParent() == parent)
 				{
-					recurResolveLinker(current_cnt, *bit, *bit->getBoundAtom(curr_atm), parent);
+					recurResolveLinker(current_cnt, *bit, *bit->getBoundAtom(curr_atm), dist, parent);
 				}
 			}
 		}

@@ -13,7 +13,8 @@ using namespace std;
 StructureAssembler::StructureAssembler( TemplateLibraryManager& libs )
 	: _libs( libs ), 
 		_matcher( libs.getFragmentLib() ),
-		_linker_builder( libs.getConnectionsLib(), libs.getBondLengthlib() )
+		_linker_builder( libs.getConnectionsLib(), libs.getBondLengthlib() ),
+		_clash_resolver(1.3, 3)
 {
 	_connector.setLibs(libs.getConnectionsLib(), libs.getBondLengthlib());
 }
@@ -36,19 +37,16 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	for( AtomContainer*& tmp: rigids )
 	{
 		_canoicalizer.canonicalize( *tmp );
-//		cout<<"        Fragment:"<<LigBase::printInlineMol( tmp)<<endl<<endl;
-		
 		_matcher.matchFragment( *tmp );
 	}
 	
 	// build linker fragments
 	for( AtomContainer*& tmp: linker )
 	{
-		// WARNING: not yet completely implemented, won't actually work!
 		_linker_builder.buildLinker( *tmp ); 
 	}
 	
-	// connect the ready made fragments to a single molecule
+	// connect the ready-made fragments to a single molecule
 	for( auto& atm_pair : connections )
 	{
 		connectClashFree( * atm_pair.first, * atm_pair.second, connections );
@@ -78,6 +76,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
 	
 	cout<<endl<<endl<<"#### Connecting:"<<endl;
+	int c_cnt;
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
 		cout<<LigBase::printInlineMol(root_1)<<endl;
@@ -88,7 +87,11 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at1, at2, connections);
 		if( _clash_resolver.detect() != 0 )
-			_clash_resolver.resolve();
+		{
+			cout<<"Resolving clash, got: "<<_clash_resolver.detect()<<endl;
+			c_cnt = _clash_resolver.resolve();
+			cout<<"Resolving finished with: "<<c_cnt<<endl;
+		}
 		
 		root_1->insert( *root_2 );
 	}
@@ -101,7 +104,11 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at2, at1, connections);
 		if( _clash_resolver.detect() != 0 )
-			_clash_resolver.resolve();
+		{
+			cout<<"Resolving clash, got: "<<_clash_resolver.detect()<<endl;
+			c_cnt = _clash_resolver.resolve();
+			cout<<"Resolving finished with: "<<c_cnt<<endl;
+		}
 		
 		root_2->insert( *root_1 );
 	}

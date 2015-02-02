@@ -92,7 +92,7 @@ private:
 	
 	int resolveAllRecur(const ConnectList::iterator& p, 
 											const ConnectList::iterator &p_end, 
-											Angle& angle, const int& steps );
+											Angle& angle, const int& steps , int &best_cnt);
 	/*
 	 * Rotate bonds in a fragment 'frag' to remove inter and intra clashes
 	 */
@@ -105,12 +105,16 @@ private:
 	
 	Atom* atm_large;
 	Atom* atm_small;
-	
+	 
 	AtomContainer* _large_root;
 	AtomContainer* _small_root;
 
 	ConnectList* _small_rotors;
 	ConnectList* _large_rotors;
+	ConnectList* _all_rotors;
+	
+	TemplateCoord* _save_large;
+	TemplateCoord* _save_small;
 	
 	const float _tolerance;   // tolerance in Anstroem for vdw-dist violation
 	const int _max_rotations; // maximum number of bonds to rotate
