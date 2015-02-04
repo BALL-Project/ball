@@ -204,7 +204,7 @@
 %Include charmmTorsion.sip
 
 // MOLMEC/COMMON
-// assignTypes.h // ??
+%Include assignTypes.sip
 %Include atomVector.sip
 %Include chargeRuleProcessor.sip
 %Include forceField.sip
