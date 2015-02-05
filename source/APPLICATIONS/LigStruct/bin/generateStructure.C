@@ -34,7 +34,7 @@ int main(int argc, char* argv[])
 	
 
 ///L O A D    L I B s
-	TemplateLibraryManager lib_loader;
+	TemplateDatabaseManager lib_loader;
 	if ( parpars.has("c") )
 		lib_loader.libraryPathesFromConfig( parpars.get("c") );
 	else

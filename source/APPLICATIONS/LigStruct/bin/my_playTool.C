@@ -69,12 +69,12 @@ int main(int argc, char* argv[])
 	Molecule* mol = in_file.read();
 	
 	cout<<"Predicting linker: "<<LigBase::printInlineMol(mol)<<endl;
-	TemplateLibraryManager lib_manag;
+	TemplateDatabaseManager lib_manag;
 	lib_manag.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf");
-	lib_manag.readConnectionLib();
-	lib_manag.readBondLib();
+	lib_manag.readSiteTemplates();
+	lib_manag.readBondLenths();
 	
-	LinkerBuilder frag_builder(lib_manag.getConnectionsLib(), lib_manag.getBondLengthlib());
+	LinkerBuilder frag_builder(lib_manag.getSiteTemplates(), lib_manag.getBondLengthData());
 	frag_builder.buildLinker( *(Fragment*)mol );
 	
 	outfile<< *mol;

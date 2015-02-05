@@ -17,7 +17,6 @@
 #include <BALL/KERNEL/fragment.h>
 #include <boost/unordered_map.hpp>
 
-#include <BALL/STRUCTURE/geometricProperties.h>
 using namespace BALL;
 using namespace std;
 

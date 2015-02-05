@@ -8,15 +8,12 @@
 #include "base.h"
 
 #include <BALL/DATATYPE/string.h>
-
 #include <BALL/FORMAT/SDFile.h>
 
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
 
-using namespace OpenBabel;
 using namespace BALL;
-//using namespace std;
 
 /// T e m p l a t e L i b r a r y M a n a g e r
 /// ############################################################################
@@ -24,13 +21,13 @@ using namespace BALL;
  * @brief The IOModule is a class to read, store and mange any library
  * 
  */
-class TemplateLibraryManager
+class TemplateDatabaseManager
 {
 public:
 	
-	TemplateLibraryManager();
+	TemplateDatabaseManager();
 	
-	~TemplateLibraryManager();
+	~TemplateDatabaseManager();
 	
 	/**
 	 * @brief readAll reads all libs FOR WHICH A PATH WAS SET
@@ -43,31 +40,31 @@ public:
 	 */
 	void libraryPathesFromConfig(const String& config_path);
 	
-	void readBondLib();
+	void readBondLenths();
 	
-	void readConnectionLib();
+	void readSiteTemplates();
 	
-	void readFragmentLib();
+	void readRigidTemplates();
 	
 	/*
 	 * fragment_lib reader for fragmentLibs that are in SDF Format, converts
 	 * the data to unordered_map <String, TemplateCoord*> for efficient internal
 	 * representation
 	 */
-	void readSDFFragmentLib();
+	void readSDFRigidTemplates();
 	
-	CoordinateMap& getFragmentLib();
-	BondLengthMap& getBondLengthlib();
-	ConSiteMap& getConnectionsLib();
+	CoordinateMap& getRigidTemplates();
+	BondLengthMap& getBondLengthData();
+	ConSiteMap& getSiteTemplates();
 	
 private:
-	CoordinateMap _fragment_lib;
-	BondLengthMap _bond_lib;
-	ConSiteMap _connect_lib;
+	CoordinateMap _templates_rigids;
+	BondLengthMap _bondlengths;
+	ConSiteMap _templates_sites;
 	
-	String _fragment_lib_path;
-	String _bondlenth_lib_path;
-	String _connection_lib_path;
+	String _path_to_rigids;
+	String _path_to_bondlengths;
+	String _path_to_sites;
 };
 
 /// C o m b i L i b M a n a g e r
@@ -102,8 +99,8 @@ public:
 	GroupFragment* fromSMILEStoGroupfragment(const String& smiles_string);
 	
 private:
-	OBConversion _babel_conv;
-	OBMol        _babel_mol;
+	OpenBabel::OBConversion _babel_conv;
+	OpenBabel::OBMol        _babel_mol;
 };
 
 
@@ -112,14 +109,41 @@ private:
 class LigIO
 {
 public:
+	/**
+	 * @brief writeMolVec write vector of BALL::AtomContainer to a single SDFile
+	 * @param input
+	 * @param handle
+	 */
 	static void writeMolVec(vector<AtomContainer* >& input, SDFile &handle);
+	
+	/**
+	 * @brief writeMolVec write vector of BALL::AtomContainer to a single 
+	 * LineBasedFile. This will only write the molecule key and the coordinates to
+	 * save space and reading time.
+	 * 
+	 * @param input
+	 * @param handle
+	 */
 	static void writeMolVec(vector<AtomContainer*>& input, LineBasedFile& handle);
 	
-	static void readOBMolecule(const String& path, OBMol& mol);
-	
+	/**
+	 * @brief writeMol same as writeMolVec for a single file
+	 * @param mol
+	 * @param handle
+	 */
 	static void writeMol(AtomContainer& mol, LineBasedFile &handle);
+	
+	/**
+	 * @brief writeMol same as writeMolVec for a single file
+	 * @param mol
+	 * @param handle
+	 */
 	static void writeMol(AtomContainer& mol, SDFile &handle);
+	
+	
+private:
 	static void writePositionLines(AtomContainer& mol, LineBasedFile &handle);
+	static void readOBMolecule(const String& path, OpenBabel::OBMol& mol);
 
 };
 

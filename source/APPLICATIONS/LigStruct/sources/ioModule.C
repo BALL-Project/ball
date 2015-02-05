@@ -7,80 +7,79 @@
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/SDFile.h>
-
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
-
 #include <BALL/STRUCTURE/molecularSimilarity.h>
+
 
 /// L i b r a r y R e a d e r
 /// ############################################################################
-TemplateLibraryManager::TemplateLibraryManager()
+TemplateDatabaseManager::TemplateDatabaseManager()
 {
 	
 }
 
-TemplateLibraryManager::~TemplateLibraryManager()
+TemplateDatabaseManager::~TemplateDatabaseManager()
 {
 	
 }
 
-CoordinateMap &TemplateLibraryManager::getFragmentLib()
+CoordinateMap &TemplateDatabaseManager::getRigidTemplates()
 {
-	return _fragment_lib;
+	return _templates_rigids;
 }
 
-BondLengthMap &TemplateLibraryManager::getBondLengthlib()
+BondLengthMap &TemplateDatabaseManager::getBondLengthData()
 {
-	return _bond_lib;
+	return _bondlengths;
 }
 
-ConSiteMap &TemplateLibraryManager::getConnectionsLib()
+ConSiteMap &TemplateDatabaseManager::getSiteTemplates()
 {
-	return _connect_lib;
+	return _templates_sites;
 }
 
-void TemplateLibraryManager::readAll()
+void TemplateDatabaseManager::readAll()
 {
 	// read lib files:
 //	readSDFFragmentLib();
-	if( _fragment_lib_path != "")
-		readFragmentLib();
+	if( _path_to_rigids != "")
+		readRigidTemplates();
 	
-	if( _bondlenth_lib_path != "")
-		readBondLib();
+	if( _path_to_bondlengths != "")
+		readBondLenths();
 	
-	if( _connection_lib_path != "")
-		readConnectionLib();
+	if( _path_to_sites != "")
+		readSiteTemplates();
 }
 
-void TemplateLibraryManager::readBondLib()
+void TemplateDatabaseManager::readBondLenths()
 {
-	LineBasedFile bondFile(_bondlenth_lib_path, ios::in);
+	LineBasedFile bondFile(_path_to_bondlengths, ios::in);
 	
 	while( bondFile.readLine() )
 	{
 		String st_ar[2];
 		bondFile.getLine().split(st_ar, 2);
 		
-		_bond_lib[st_ar[0]] = st_ar[1].toFloat();
+		_bondlengths[st_ar[0]] = st_ar[1].toFloat();
 		
 		// generate also the reversed label, if both differ
 		if( (st_ar[0])[0] != (st_ar[0])[1] )
 		{
 			String altKey = (st_ar[0])[1];
 			altKey += (st_ar[0])[0];
-			_bond_lib[altKey] = st_ar[1].toFloat();
+			_bondlengths[altKey] = st_ar[1].toFloat();
 		}
 	}
 }
 
 
-void TemplateLibraryManager::readConnectionLib()
+void TemplateDatabaseManager::readSiteTemplates()
 {
-	_connect_lib.clear();
+	_templates_sites.clear();
 	
-	SDFile handle(_connection_lib_path, ios::in); //open the lib file as sdf-file
+	SDFile handle(_path_to_sites, ios::in); //open the lib file as sdf-file
 	
 	// read all lib molecules and save them with their key:
 	Fragment* tmp_mol;
@@ -90,7 +89,7 @@ void TemplateLibraryManager::readConnectionLib()
 	while(tmp_mol)
 	{
 		BALL::String key = tmp_mol->getProperty("key").getString();
-		_connect_lib[key] = tmp_mol;
+		_templates_sites[key] = tmp_mol;
 		
 		tmp_mol = (Fragment*)handle.read();
 		cnt++;
@@ -99,12 +98,12 @@ void TemplateLibraryManager::readConnectionLib()
 }
 
 
-void TemplateLibraryManager::readFragmentLib()
+void TemplateDatabaseManager::readRigidTemplates()
 {
 	//DEBUG:
-	cout<<"reading fragment lib from: "<<_fragment_lib_path<<endl;
-	_fragment_lib.clear();
-	LineBasedFile libFile(_fragment_lib_path, ios::in);
+	cout<<"reading fragment lib from: "<<_path_to_rigids<<endl;
+	_templates_rigids.clear();
+	LineBasedFile libFile(_path_to_rigids, ios::in);
 	
 	// read in fragmentLib and create hash-map from that:
 	String key;
@@ -133,7 +132,7 @@ void TemplateLibraryManager::readFragmentLib()
 			}
 			
 			// append to hash map
-			_fragment_lib[key] = tmp_frag;
+			_templates_rigids[key] = tmp_frag;
 		}
 		else
 		{
@@ -144,10 +143,10 @@ void TemplateLibraryManager::readFragmentLib()
 }
 
 
-void TemplateLibraryManager::readSDFFragmentLib()
+void TemplateDatabaseManager::readSDFRigidTemplates()
 {
-	_fragment_lib.clear();
-	SDFile libFile(_fragment_lib_path, ios::in);
+	_templates_rigids.clear();
+	SDFile libFile(_path_to_rigids, ios::in);
 	
 	Molecule* tmp_mol;
 	TemplateCoord* tmp_frag=0;
@@ -160,7 +159,7 @@ void TemplateLibraryManager::readSDFFragmentLib()
 		
 		Size size = tmp_mol->countAtoms();
 		tmp_frag = new TemplateCoord(size);
-		_fragment_lib[key] = tmp_frag; // add template to the lib
+		_templates_rigids[key] = tmp_frag; // add template to the lib
 		
 		Index i = 0;
 		for (AtomIterator it = tmp_mol->beginAtom(); +it; ++i, ++it)
@@ -176,7 +175,7 @@ void TemplateLibraryManager::readSDFFragmentLib()
 }
 
 
-void TemplateLibraryManager::libraryPathesFromConfig(const String& config_path)
+void TemplateDatabaseManager::libraryPathesFromConfig(const String& config_path)
 {
 	LineBasedFile configFile(config_path, ios::in);
 	
@@ -189,15 +188,15 @@ void TemplateLibraryManager::libraryPathesFromConfig(const String& config_path)
 		
 		if(tmp.hasPrefix("fragments=")){
 			tmp = tmp.after("fragments=");
-			_fragment_lib_path = tmp.trim();
+			_path_to_rigids = tmp.trim();
 		}
 		else if(tmp.hasPrefix("bondlenths=")){
 			tmp = tmp.after("bondlenths=");
-			_bondlenth_lib_path = tmp.trim();
+			_path_to_bondlengths = tmp.trim();
 		}
 		else if(tmp.hasPrefix("connections=")){
 			tmp = tmp.after("connections=");
-			_connection_lib_path = tmp.trim();
+			_path_to_sites = tmp.trim();
 		}
 		else
 			continue;
@@ -330,17 +329,17 @@ GroupFragment *SmilesParser::fromSMILEStoGroupfragment(const String &smiles_stri
 	_babel_conv.ReadString(&_babel_mol, smiles_string);
 	
 	GroupFragment* frag = new GroupFragment();
-	list< pair<int, OBAtom*> > con_lst;
+	list< pair<int, OpenBabel::OBAtom*> > con_lst;
 	
 	// find r-group connections:
-	vector<OBAtom*> for_deletion;
-	for(OBAtomIterator it = _babel_mol.BeginAtoms(); it != _babel_mol.EndAtoms(); it++)
+	vector<OpenBabel::OBAtom*> for_deletion;
+	for(OpenBabel::OBAtomIterator it = _babel_mol.BeginAtoms(); it != _babel_mol.EndAtoms(); it++)
 	{
 		// connection sites (r-groups) are marked with 'Du' in OB and the isotope 
 		// label carries the identifier of the r-group:
 		if(!strcmp( (*it)->GetType(), "Du") ) 
 		{
-			OBAtom* ptr = ( *(*it)->BeginBonds())->GetNbrAtom( *it );
+			OpenBabel::OBAtom* ptr = ( *(*it)->BeginBonds())->GetNbrAtom( *it );
 			int r_id = (*it)->GetIsotope();
 			
 			for_deletion.push_back( *it );
@@ -356,7 +355,7 @@ GroupFragment *SmilesParser::fromSMILEStoGroupfragment(const String &smiles_stri
 	frag->molecule = MolecularSimilarity::createMolecule(_babel_mol, true);
 	
 	// convert the Open babel connection list to the final connection list:
-	list< pair<int, OBAtom*> >::iterator iti = con_lst.begin();
+	list< pair<int, OpenBabel::OBAtom*> >::iterator iti = con_lst.begin();
 	for(; iti != con_lst.end(); iti++)
 	{
 		Atom* atm_ptr = frag->molecule->getAtom( (*iti).second->GetIdx() - 1 );
@@ -387,11 +386,11 @@ void LigIO::writeMolVec(vector<AtomContainer*> &input, LineBasedFile& handle)
 	}
 }
 
-void LigIO::readOBMolecule(const String &path, OBMol &mol)
+void LigIO::readOBMolecule(const String &path, OpenBabel::OBMol &mol)
 {
 	// Read open-babel molecule:
-	OBConversion conv;
-	OBFormat *format = conv.FormatFromExt(path);
+	OpenBabel::OBConversion conv;
+	OpenBabel::OBFormat *format = conv.FormatFromExt(path);
 	
 	if (!format || !conv.SetInFormat(format))
 		cout << "Could not find input format for file " << path << endl;

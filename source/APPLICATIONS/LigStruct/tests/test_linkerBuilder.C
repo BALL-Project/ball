@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 ///====================== actual testing: =========================
 	
 	// Load all template libs:
-	TemplateLibraryManager lib_reader;
+	TemplateDatabaseManager lib_reader;
 	if ( parpars.has("l") )
 	{
 		lib_reader.libraryPathesFromConfig( parpars.get("l") );
@@ -53,8 +53,8 @@ int main(int argc, char* argv[])
 		lib_reader.libraryPathesFromConfig( pth );
 	}
 	
-	lib_reader.readBondLib();
-	lib_reader.readConnectionLib();
+	lib_reader.readBondLenths();
+	lib_reader.readSiteTemplates();
 	
 	// read all test cases:
 	vector< AtomContainer* > test_cases;
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 ///===========find connection site and match against conection library=========
 	SDFile out_file(parpars.get("o"), ios::out);
 	MoleculeConnector mcon;
-	mcon.setLibs(lib_reader.getConnectionsLib(), lib_reader.getBondLengthlib());
+	mcon.setLibs(lib_reader.getSiteTemplates(), lib_reader.getBondLengthData());
 	
 	// connect: each test case with itself and all other test cases
 	for(int i=0; i < connection_atoms.size(); ++i)

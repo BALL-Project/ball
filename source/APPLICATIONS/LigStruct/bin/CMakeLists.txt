@@ -20,7 +20,7 @@ FOREACH(i ${LIGSTRUCT_BINS})
     add_executable(${i} ${i}.C)
     TARGET_LINK_LIBRARIES(${i} BALL) ### link with the super project
 ENDFOREACH(i)
-
+ 
 ### add LigStruct executable targets to the general LIGSTRUCT target:
 ADD_DEPENDENCIES(LIGSTRUCT ${LIGSTRUCT_BINS})
 

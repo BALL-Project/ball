@@ -18,7 +18,7 @@ using namespace std;
 class StructureAssembler
 {
 public:
-	StructureAssembler( TemplateLibraryManager& libs );
+	StructureAssembler( TemplateDatabaseManager& libs );
 
 	~StructureAssembler();
 
@@ -37,7 +37,7 @@ private:
 	
 	void connectClashFree(Atom &at1, Atom &at2, ConnectList& connections, ConnectList &linker_rotors);
 	
-	TemplateLibraryManager& _libs; // needed fragment libs
+	TemplateDatabaseManager& _libs; // needed fragment libs
 	
 	// Tool-Classes needed for structure fragmenting and reassembly
 	MoleculeFragmenter _fragmenter;

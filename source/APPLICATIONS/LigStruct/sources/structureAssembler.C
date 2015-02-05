@@ -10,13 +10,13 @@
 using namespace BALL;
 using namespace std;
 
-StructureAssembler::StructureAssembler( TemplateLibraryManager& libs )
+StructureAssembler::StructureAssembler( TemplateDatabaseManager& libs )
 	: _libs( libs ), 
-		_matcher( libs.getFragmentLib() ),
-		_linker_builder( libs.getConnectionsLib(), libs.getBondLengthlib() ),
+		_matcher( libs.getRigidTemplates() ),
+		_linker_builder( libs.getSiteTemplates(), libs.getBondLengthData() ),
 		_clash_resolver(1.3, 3)
 {
-	_connector.setLibs(libs.getConnectionsLib(), libs.getBondLengthlib());
+	_connector.setLibs(libs.getSiteTemplates(), libs.getBondLengthData());
 }
 	
 StructureAssembler::~StructureAssembler()
