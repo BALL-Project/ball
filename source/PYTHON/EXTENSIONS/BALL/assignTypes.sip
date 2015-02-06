@@ -15,13 +15,23 @@ class	AssignBaseProcessor
 	#include <BALL/MOLMEC/COMMON/assignTypes.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
+	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
-	//
+
+	public:
+
 		AssignBaseProcessor();
 
 		void setMaximumUnassignedAtoms(Size);
 		Size getMaximumUnassignedAtoms() const;
 		Size getNumberOfUnassignedAtoms() const;
+
+		virtual Processor::Result operator () (Atom& atom);
+%MethodCode
+	sipRes = sipCpp->operator () (*a0);
+%End
+
+		virtual ~AssignBaseProcessor();
 
 //		HashSet<const Atom*>& getUnassignedAtoms();
 };
@@ -35,10 +45,12 @@ class	AssignTypeProcessor
 	using namespace BALL::Exception;
 %End
 
-	AssignTypeProcessor(const AtomTypes&);
-	virtual Processor::Result operator () (Atom&);
+	public:
+
+		AssignTypeProcessor(const AtomTypes&);
+		virtual Processor::Result operator () (Atom&);
 %MethodCode
-  sipRes = sipCpp->operator () (*a0);
+		sipRes = sipCpp->operator () (*a0);
 %End
 };
 
@@ -51,10 +63,12 @@ class	AssignTypeNameProcessor
 	using namespace BALL::Exception;
 %End
 
-	AssignTypeNameProcessor(const String&, bool overwrite);
+	public:
 
-	virtual Processor::Result operator () (Atom& atom);
+		AssignTypeNameProcessor(const String&, bool overwrite);
+
+		virtual Processor::Result operator () (Atom& atom);
 %MethodCode
-	sipRes = sipCpp->operator () (*a0);
+		sipRes = sipCpp->operator () (*a0);
 %End
 };
