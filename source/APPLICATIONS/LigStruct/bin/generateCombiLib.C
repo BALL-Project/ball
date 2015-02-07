@@ -49,10 +49,11 @@ int main(int argc, char* argv[])
 
 	// setup combiLib manager
 	CombiLibManager combi_man;
-	combi_man.setCombiLib( parpars.get("i") );
+	LineBasedFile combi_file(parpars.get("i"), ios::in);
+	combi_man.setCombiLib( combi_file );
 			
 	// finally init the combiAssembler:
-	CombiAssembler combiner(assem);
+	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib());
 	
 ///// I N I T I A L    R - G R O U P    A S S E M B L Y
 

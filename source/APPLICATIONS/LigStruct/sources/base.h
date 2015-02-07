@@ -73,7 +73,7 @@ typedef vector <AtomContainer*>::iterator ACVecIter;
 typedef list< pair<Atom*, Atom*> > ConnectList;
 
 // Database types:
-typedef vector< vector<RFragment*>* > CombiLibMap; // key==group number, value==all groupfragment for that group
+typedef vector< vector<RFragment*> > CombiLibMap; // key==group number, value==all groupfragment for that group
 typedef boost::unordered_map <String, TemplateCoord*> RigidsMap;// key == UCK key
 typedef boost::unordered_map <String, float >         BondLengthMap;
 typedef boost::unordered_map <String, AtomContainer*> SiteMap;

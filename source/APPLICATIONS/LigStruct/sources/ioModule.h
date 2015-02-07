@@ -108,7 +108,7 @@ private:
 	void _parseCombiLibFile();
 	
 	LineBasedFile* _combilib_file;
-	RFragment      _scaffold;
+	RFragment*     _scaffold;
 	CombiLibMap    _lib;
 	
 	bool         _lib_is_generated;
