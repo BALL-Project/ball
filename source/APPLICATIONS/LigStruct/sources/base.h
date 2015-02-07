@@ -151,11 +151,11 @@ private:
 	Vector3 *positions;
 };
 
-/// C l a s s   G r o u p F r a g m e n t
+/// S t r u c t   G r o u p F r a g m e n t
 /// ############################################################################
 struct RFragment
 {
-	int group_id;
+	int group_id; //id 0 identifies the scaffold
 	AtomContainer* molecule;
 	
 	ConnectList rotor_lst; // all intra rotor bonds of this RFragment

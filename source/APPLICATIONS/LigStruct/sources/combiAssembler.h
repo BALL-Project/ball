@@ -13,16 +13,17 @@ namespace BALL
 class CombiAssembler
 {
 public:
-	CombiAssembler( StructureAssembler& single_assmbler );
+	CombiAssembler(RFragment* scaffold = 0, CombiLibMap* clib = 0);
 	
 	~CombiAssembler();
 	
-	void setCombiLib();
+	void setScaffold(RFragment& scaffold);
+	void setCombiLib(CombiLibMap& clib);
 	
 private:
 	
-	RFragment _scaffold;
-	vector< vector< RFragment> r_groups;
+	RFragment* _scaffold;
+	CombiLibMap* _r_groups;
 	
 	MoleculeConnector _connector;
 	ClashResolver _cresolv;

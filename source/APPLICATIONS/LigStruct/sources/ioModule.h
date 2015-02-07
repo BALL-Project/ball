@@ -79,7 +79,7 @@ public:
 	
 	Molecule *fromSMILEStoMolecule(const String& smiles_string);
 	
-	RFragment* fromSMILEStoRFragment(const String& smiles_string);
+	RFragment* fromSMILEStoRFragment(const String& smiles_string, const int& g_id = -1);
 	
 private:
 	OpenBabel::OBConversion _babel_conv;
@@ -97,21 +97,21 @@ public:
 	
 	void setCombiLib(LineBasedFile &combilib_file);
 	
-	String& getScaffold();
+	RFragment& getScaffold();
 	CombiLibMap& getCombiLib();
 	
-	void generateAllSMILES( list<String> out_SMILES);
-	void generateAllAtomContainer( list<AtomContainer> out_molecules);
+	void generateCombinationsSMILES( list<String>& out_SMILES);
+	void generateCombinationsAtomContainer(list<AtomContainer>& out_molecules);
 	
 private:
 	
 	void _parseCombiLibFile();
 	
 	LineBasedFile* _combilib_file;
-	String      _scaffold;
-	CombiLibMap _lib;
+	RFragment      _scaffold;
+	CombiLibMap    _lib;
 	
-	bool _lib_is_generated;
+	bool         _lib_is_generated;
 	SmilesParser _smi_parser;
 	boost::unordered_map< int, int > id_mapping;
 };

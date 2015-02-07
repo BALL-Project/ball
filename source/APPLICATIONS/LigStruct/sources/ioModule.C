@@ -214,7 +214,6 @@ CombiLibManager::CombiLibManager(LineBasedFile *combilib_file):
 
 CombiLibManager::~CombiLibManager()
 {
-	_scaffold = "";
 	// _combilib_file to be deleted out side of CombiLibManager
 	_combilib_file = 0;
 }
@@ -225,7 +224,7 @@ void CombiLibManager::setCombiLib(LineBasedFile &combilib_file)
 	_combilib_file = & combilib_file;
 }
 
-String &CombiLibManager::getScaffold()
+RFragment &CombiLibManager::getScaffold()
 {
 	if( !_lib_is_generated )
 	{
@@ -243,17 +242,36 @@ CombiLibMap &CombiLibManager::getCombiLib()
 	return _lib;
 }
 
-String& CombiLibManager::getScaffold()
-{
-	return _scaffold;
-}
 
-void CombiLibManager::generateAllSMILES(list<String> out_SMILES)
+void CombiLibManager::generateCombinationsSMILES(list<String>& out_SMILES)
 {
+	out_SMILES.clear();
 	
+	if( !_lib_is_generated )
+	{
+		_parseCombiLibFile();
+	}
+	// generate all combinations as AtomContainer:
+	list<AtomContainer> combi_molecules;
+	generateCombinationsAtomContainer(combi_molecules);
+	
+	// Use open babel to convert to SMILES:
+	list<AtomContainer>::iterator it = combi_molecules.begin();
+	for( ; it != combi_molecules.end(); ++it)
+	{
+		OpenBabel::OBMol* tmp = MolecularSimilarity::createOBMol( *it ,1,1);
+		
+		OpenBabel::OBConversion ba_conv;
+		ba_conv.SetOutFormat("smi");
+		
+		String tmp_SMILES = ba_conv.WriteString( tmp, 1 );
+		out_SMILES.push_back( tmp_SMILES );
+		
+		delete tmp; tmp = 0;
+	}
 }
 
-void CombiLibManager::generateAllAtomContainer(list<AtomContainer> out_molecules)
+void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer>& out_molecules)
 {
 	
 }
@@ -264,6 +282,11 @@ void CombiLibManager::_parseCombiLibFile()
 	{
 		// Some exception!
 		cout<<"CombiLibManader ERROR"<<endl; exit(EXIT_FAILURE);
+	}
+	else if( !_combilib_file)
+	{
+		// Some exception!
+		cout<<"CombiLibManader ERROR: file is null"<<endl; exit(EXIT_FAILURE);
 	}
 	
 	int group_id = -1;
@@ -356,19 +379,22 @@ Molecule *SmilesParser::fromSMILEStoMolecule(const String &smiles_string)
 	return MolecularSimilarity::createMolecule(_babel_mol, true);
 }
 
-RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string)
+RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string, 
+																							 const int &g_id)
 {
 	// get the obmol SMILES input:
 	_babel_conv.ReadString(&_babel_mol, smiles_string);
 	
 	RFragment* frag = new RFragment();
-	frag->group_id = -1;
+	frag->group_id = g_id;
 	
 	list< pair<int, OpenBabel::OBAtom*> > con_lst;
+	OpenBabel::OBAtom* group_atom = 0;
 	
-	// find all r-atoms:
+	// find all r-labels and their r-atoms:
 	vector<OpenBabel::OBAtom*> for_deletion;
-	for(OpenBabel::OBAtomIterator it = _babel_mol.BeginAtoms(); it != _babel_mol.EndAtoms(); it++)
+	OpenBabel::OBAtomIterator it = _babel_mol.BeginAtoms();
+	for(; it != _babel_mol.EndAtoms(); it++)
 	{
 		// connection sites (r-groups) are marked with 'Du' in OB and the isotope 
 		// label carries the identifier of the r-group:
@@ -377,12 +403,23 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string)
 			OpenBabel::OBAtom* ptr = ( *(*it)->BeginBonds())->GetNbrAtom( *it );
 			int r_id = (*it)->GetIsotope();
 			
+			if (r_id == g_id)
+				group_atom = ptr;
+			
 			for_deletion.push_back( *it );
 			con_lst.push_back(  make_pair( r_id, ptr )  );
 		}
 	}
 	
-	// Delete the r-labels (pseudo atoms to mark the r-atoms)
+	// ERROR, we should have found a specific group id but could not find it.
+	if( !group_atom && (g_id != -1) )
+	{
+		cout<<"ERROR in SMILESParser: could not find r-label with group_id "
+			  << g_id << " in SMILES " << smiles_string << endl;
+		exit(EXIT_FAILURE);
+	}
+	
+	// Delete the r-labels (which are only pseudo atoms for highlighting r-atoms)
 	for(int i = 0; i < for_deletion.size(); i++)
 		_babel_mol.DeleteAtom( for_deletion[i], true);
 	
@@ -394,9 +431,17 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string)
 	for(; iti != con_lst.end(); iti++)
 	{
 		Atom* atm_ptr = frag->molecule->getAtom( (*iti).second->GetIdx() - 1 );
-		unsigned int group_id = (*iti).first;
 		
-		frag->connections.push_back(  make_pair( group_id, atm_ptr )  );
+		if ( (*iti).second == group_atom)
+		{
+			frag->group_atom = atm_ptr;
+		}
+		else
+		{
+			unsigned int group_id = (*iti).first;
+			
+			frag->connections.push_back(  make_pair( group_id, atm_ptr )  );
+		}
 	}
 	
 	return frag;
