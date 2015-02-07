@@ -4,7 +4,6 @@
 
 #include "rmsdBinner.h"
 #include "base.h"
-#include <BALL/STRUCTURE/structureMapper.h>
 
 RMSDBinner::RMSDBinner(bool star_align, float threshold, int limit):
 	_threshold(threshold),

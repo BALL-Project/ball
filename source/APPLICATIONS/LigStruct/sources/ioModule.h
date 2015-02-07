@@ -9,6 +9,7 @@
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
@@ -53,36 +54,18 @@ public:
 	 */
 	void readSDFRigidTemplates();
 	
-	CoordinateMap& getRigidTemplates();
+	RigidsMap& getRigidTemplates();
 	BondLengthMap& getBondLengthData();
-	ConSiteMap& getSiteTemplates();
+	SiteMap& getSiteTemplates();
 	
 private:
-	CoordinateMap _templates_rigids;
+	RigidsMap _templates_rigids;
 	BondLengthMap _bondlengths;
-	ConSiteMap _templates_sites;
+	SiteMap _templates_sites;
 	
 	String _path_to_rigids;
 	String _path_to_bondlengths;
 	String _path_to_sites;
-};
-
-/// C o m b i L i b M a n a g e r
-/// ############################################################################
-class CombiLibManager
-{
-public:
-	CombiLibManager();
-	~CombiLibManager();
-	
-	void readCombiLib(const String& file_name);
-	
-	const vector<String>& operator[] (Index index);
-	
-	const Size size();
-private:
-	String      _scaffold;
-	CombiLibMap _lib;
 };
 
 
@@ -96,11 +79,41 @@ public:
 	
 	Molecule *fromSMILEStoMolecule(const String& smiles_string);
 	
-	GroupFragment* fromSMILEStoGroupfragment(const String& smiles_string);
+	RFragment* fromSMILEStoRFragment(const String& smiles_string);
 	
 private:
 	OpenBabel::OBConversion _babel_conv;
 	OpenBabel::OBMol        _babel_mol;
+};
+
+
+/// C o m b i L i b M a n a g e r
+/// ############################################################################
+class CombiLibManager
+{
+public:
+	CombiLibManager(LineBasedFile * combilib_file=0);
+	~CombiLibManager();
+	
+	void setCombiLib(LineBasedFile &combilib_file);
+	
+	String& getScaffold();
+	CombiLibMap& getCombiLib();
+	
+	void generateAllSMILES( list<String> out_SMILES);
+	void generateAllAtomContainer( list<AtomContainer> out_molecules);
+	
+private:
+	
+	void _parseCombiLibFile();
+	
+	LineBasedFile* _combilib_file;
+	String      _scaffold;
+	CombiLibMap _lib;
+	
+	bool _lib_is_generated;
+	SmilesParser _smi_parser;
+	boost::unordered_map< int, int > id_mapping;
 };
 
 

@@ -19,13 +19,13 @@ int main(int argc, char* argv[])
 	/// ------ S E T    P A R S E R -------
 	CommandlineParser parpars("3D structure generation of ligands", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Prediction");
 	parpars.registerParameter("i", "combiLib as CONF file", INFILE, false);
-//	parpars.registerParameter("o", "output molecule with 3D coordinates SDF", OUTFILE, true);
+	parpars.registerParameter("o", "output molecules with 3D coordinates in one SDF", OUTFILE, true);
 //	parpars.registerParameter("l", "library configuration file", INFILE, false);
 	
-	parpars.setSupportedFormats("i","smi");
+	parpars.setSupportedFormats("i","combi");
 //	parpars.setSupportedFormats("o","sdf");
 //	parpars.setSupportedFormats("l","conf");
-//	parpars.setOutputFormatSource("i","o");
+	parpars.setOutputFormatSource("i","o");
 
 	String manual = 
 			"Generate a valid (not optimized) 3D structure for structures of an "
@@ -35,8 +35,6 @@ int main(int argc, char* argv[])
 	
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);
-	
-	
 	
 	
 ///// I N I T    A S S E M B L E R
@@ -51,10 +49,10 @@ int main(int argc, char* argv[])
 
 	// setup combiLib manager
 	CombiLibManager combi_man;
-	combi_man.readCombiLib( parpars.get("i") );
+	combi_man.setCombiLib( parpars.get("i") );
 			
 	// finally init the combiAssembler:
-		
+	CombiAssembler combiner(assem);
 	
 ///// I N I T I A L    R - G R O U P    A S S E M B L Y
 

@@ -23,9 +23,9 @@ public:
 	MoleculeConnector();
 	~MoleculeConnector();
 	
-	void setConnectionLib(ConSiteMap& connectLib);
+	void setConnectionLib(SiteMap& connectLib);
 	void setBondLengthLib(BondLengthMap& bondLib);
-	void setLibs(ConSiteMap& connectLib, BondLengthMap& bondLib);
+	void setLibs(SiteMap& connectLib, BondLengthMap& bondLib);
 /**  
  * connectFragments connects the two given fragments (by their child atoms)
  * in such a way, that molecule1 (given by 'atm1') retains its position,
@@ -64,7 +64,7 @@ private:
 	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
 	
 	/// Class member:
-	ConSiteMap* _connections;
+	SiteMap* _connections;
 	BondLengthMap* _bond_lengths;
 	StarAligner _star_aligner;
 };

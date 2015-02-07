@@ -22,7 +22,7 @@ using namespace std;
  */
 class LinkerBuilder{
 public:
-	LinkerBuilder(ConSiteMap& connection_templates, BondLengthMap& bonds);
+	LinkerBuilder(SiteMap& connection_templates, BondLengthMap& bonds);
 	 
 	~LinkerBuilder();
 	/**
@@ -52,7 +52,7 @@ private:
 	bool isTerminalBond( Bond& bnd, Composite& parent);
 	
 	// input libs:
-	ConSiteMap& _connection_templates;
+	SiteMap& _connection_templates;
 	BondLengthMap& _bond_lengths;
 	
 	// helper structures

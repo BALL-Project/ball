@@ -56,7 +56,7 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 
 /// C l a s s   M a t c h e r
 /// ############################################################################
-Matcher::Matcher(CoordinateMap &coord_map):_coord_lib(coord_map){}
+Matcher::Matcher(RigidsMap &coord_map):_coord_lib(coord_map){}
 
 Matcher::~Matcher(){}
 

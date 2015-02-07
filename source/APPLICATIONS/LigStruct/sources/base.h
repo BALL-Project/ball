@@ -57,6 +57,27 @@
 using namespace BALL;
 using namespace std;
 
+struct RFragment;
+class TemplateCoord;
+
+/// T y p e   D e f i n i t i o n s
+/// ############################################################################
+
+// Standard Data:
+typedef vector<Atom*>                     AtmVec;
+typedef vector<Atom*>::iterator           AVIter;
+typedef vector <AtomContainer*>           ACVec;
+typedef vector <AtomContainer*>::iterator ACVecIter;
+
+// Special Data:
+typedef list< pair<Atom*, Atom*> > ConnectList;
+
+// Database types:
+typedef vector< vector<RFragment*>* > CombiLibMap; // key==group number, value==all groupfragment for that group
+typedef boost::unordered_map <String, TemplateCoord*> RigidsMap;// key == UCK key
+typedef boost::unordered_map <String, float >         BondLengthMap;
+typedef boost::unordered_map <String, AtomContainer*> SiteMap;
+
 
 /// C l a s s   T e m p l a t e C o o r d
 /// ############################################################################
@@ -132,48 +153,17 @@ private:
 
 /// C l a s s   G r o u p F r a g m e n t
 /// ############################################################################
-struct GroupFragment
+struct RFragment
 {
-	// intra connections
-	vector< AtomContainer* > linker_lst; // all bonds within a linker are rotable
-	vector< AtomContainer* > rigid_lst; // all matchable fragments
-	list< pair< Atom*, Atom*>  > rotor_lst;      // all intra fragment bonds of the molecule
-	list< pair< Atom*, Atom*> > frag_con2;
-	// for each fragment, the list of bonds to other fragments
-	boost::unordered_map< AtomContainer*, list<Bond*> > fragment_connections;
+	int group_id;
+	AtomContainer* molecule;
 	
-//	// alternative connections per fragment mapping (perhaps faster and more memory efficient than map?)
-//	vector< Fragment* > fragment_idx;
-//	vector< list<Bond*> > fragment_connections;
+	ConnectList rotor_lst; // all intra rotor bonds of this RFragment
 	
 	// inter connections
-	list< pair< unsigned int, Atom*> > connections;
-	
-	// data:
-	Molecule* molecule;
+	Atom* group_atom;
+	list< pair<int, Atom*> > r_atom_lst;
 };
-
-/// T y p e   D e f i n i t i o n s
-/// ############################################################################
-
-// Standard Data:
-typedef vector<Atom*>                     AtmVec;
-typedef vector<Atom*>::iterator           AVIter;
-typedef vector <AtomContainer*>           ACVec;
-typedef vector <AtomContainer*>::iterator ACVecIter;
-
-// Special Data:
-typedef list< pair<Atom*, Atom*> > ConnectList;
-typedef vector<GroupFragment*>     GroupFragVec;
-typedef vector< String >           SMILESVec;
-
-// Lib Data:
-typedef  boost::unordered_map < int, SMILESVec > CombiLibMap;
-//typedef boost::unordered_map< int, GroupFragVec* >    CombiLib; // key==group number, value==all groupfragment for that group
-typedef boost::unordered_map <String, TemplateCoord*> CoordinateMap;// key == UCK key
-typedef boost::unordered_map <String, float >         BondLengthMap;
-typedef boost::unordered_map <String, vector<float> > TorsionMap;
-typedef boost::unordered_map <String, AtomContainer* >     ConSiteMap;
 
 
 /// C l a s s   L i g B a s e

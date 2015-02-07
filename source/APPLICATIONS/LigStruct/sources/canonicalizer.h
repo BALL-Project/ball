@@ -31,7 +31,7 @@ private:
 class Matcher
 {
 public:
-	Matcher( CoordinateMap& coord_map );
+	Matcher( RigidsMap& coord_map );
 	~Matcher();
 	
 	void matchFragment(AtomContainer &fragment);
@@ -39,7 +39,7 @@ public:
 	static const String getUCK(AtomContainer & mol);
 	
 private:
-	CoordinateMap& _coord_lib;
+	RigidsMap& _coord_lib;
 };
 
 #endif // CANONICALIZER_H

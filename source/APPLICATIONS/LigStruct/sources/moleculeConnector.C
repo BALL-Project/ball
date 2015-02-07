@@ -32,7 +32,7 @@ MoleculeConnector::~MoleculeConnector()
 	
 }
 
-void MoleculeConnector::setConnectionLib(ConSiteMap &connectLib)
+void MoleculeConnector::setConnectionLib(SiteMap &connectLib)
 {
 	_connections = &connectLib;
 }
@@ -42,7 +42,7 @@ void MoleculeConnector::setBondLengthLib(BondLengthMap &bondLib)
 	_bond_lengths = &bondLib;
 }
 
-void MoleculeConnector::setLibs(ConSiteMap &connectLib, BondLengthMap &bondLib)
+void MoleculeConnector::setLibs(SiteMap &connectLib, BondLengthMap &bondLib)
 {
 	_connections = &connectLib;
 	_bond_lengths = &bondLib;

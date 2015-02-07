@@ -24,7 +24,7 @@ TemplateDatabaseManager::~TemplateDatabaseManager()
 	
 }
 
-CoordinateMap &TemplateDatabaseManager::getRigidTemplates()
+RigidsMap &TemplateDatabaseManager::getRigidTemplates()
 {
 	return _templates_rigids;
 }
@@ -34,7 +34,7 @@ BondLengthMap &TemplateDatabaseManager::getBondLengthData()
 	return _bondlengths;
 }
 
-ConSiteMap &TemplateDatabaseManager::getSiteTemplates()
+SiteMap &TemplateDatabaseManager::getSiteTemplates()
 {
 	return _templates_sites;
 }
@@ -207,16 +207,65 @@ void TemplateDatabaseManager::libraryPathesFromConfig(const String& config_path)
 /// C o m b i L i b M a n a g e r
 /// ############################################################################
 
-CombiLibManager::CombiLibManager(){}
+CombiLibManager::CombiLibManager(LineBasedFile *combilib_file):
+	_combilib_file(combilib_file),
+	_lib_is_generated(false)
+{}
 
 CombiLibManager::~CombiLibManager()
 {
 	_scaffold = "";
+	// _combilib_file to be deleted out side of CombiLibManager
+	_combilib_file = 0;
 }
 
-void CombiLibManager::readCombiLib(const String &file_name)
+void CombiLibManager::setCombiLib(LineBasedFile &combilib_file)
 {
-	LineBasedFile combilib_file(file_name, ios::in);
+	_lib_is_generated = false;
+	_combilib_file = & combilib_file;
+}
+
+String &CombiLibManager::getScaffold()
+{
+	if( !_lib_is_generated )
+	{
+		_parseCombiLibFile();
+	}
+	return _scaffold;
+}
+
+CombiLibMap &CombiLibManager::getCombiLib()
+{
+	if( !_lib_is_generated )
+	{
+		_parseCombiLibFile();
+	}
+	return _lib;
+}
+
+String& CombiLibManager::getScaffold()
+{
+	return _scaffold;
+}
+
+void CombiLibManager::generateAllSMILES(list<String> out_SMILES)
+{
+	
+}
+
+void CombiLibManager::generateAllAtomContainer(list<AtomContainer> out_molecules)
+{
+	
+}
+
+void CombiLibManager::_parseCombiLibFile()
+{
+	if (_combilib_file->isClosed())
+	{
+		// Some exception!
+		cout<<"CombiLibManader ERROR"<<endl; exit(EXIT_FAILURE);
+	}
+	
 	int group_id = -1;
 	SMILESVec* current_group = 0;
 	
@@ -287,25 +336,9 @@ void CombiLibManager::readCombiLib(const String &file_name)
 			exit(EXIT_FAILURE);
 		}
 	}
-	combilib_file.close(); // close combiLib file
+	
+	_lib_is_generated = true;
 }
-
-const vector<String>& CombiLibManager::operator[](int index)
-{
-	if( _lib.find(index) != _lib.end() )
-		return _lib[index];
-	else // TODO: throw exception
-	{
-		cout<<"ERROR: tried to access an invalid R-Group in a CombiLibManager instance"<<endl;
-		exit(EXIT_FAILURE);
-	}
-}
-
-const Size CombiLibManager::size()
-{
-	return _lib.size();
-}
-
 
 /// S m i l e s P a r s e r
 /// ############################################################################
@@ -323,15 +356,17 @@ Molecule *SmilesParser::fromSMILEStoMolecule(const String &smiles_string)
 	return MolecularSimilarity::createMolecule(_babel_mol, true);
 }
 
-GroupFragment *SmilesParser::fromSMILEStoGroupfragment(const String &smiles_string)
+RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string)
 {
 	// get the obmol SMILES input:
 	_babel_conv.ReadString(&_babel_mol, smiles_string);
 	
-	GroupFragment* frag = new GroupFragment();
+	RFragment* frag = new RFragment();
+	frag->group_id = -1;
+	
 	list< pair<int, OpenBabel::OBAtom*> > con_lst;
 	
-	// find r-group connections:
+	// find all r-atoms:
 	vector<OpenBabel::OBAtom*> for_deletion;
 	for(OpenBabel::OBAtomIterator it = _babel_mol.BeginAtoms(); it != _babel_mol.EndAtoms(); it++)
 	{
@@ -347,7 +382,7 @@ GroupFragment *SmilesParser::fromSMILEStoGroupfragment(const String &smiles_stri
 		}
 	}
 	
-	// Delete unnecessary pseudo atoms (r-group definitions in SMILES)
+	// Delete the r-labels (pseudo atoms to mark the r-atoms)
 	for(int i = 0; i < for_deletion.size(); i++)
 		_babel_mol.DeleteAtom( for_deletion[i], true);
 	

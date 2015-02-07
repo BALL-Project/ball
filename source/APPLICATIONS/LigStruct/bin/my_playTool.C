@@ -31,11 +31,15 @@
 
 #include "../sources/fragmenter.h"
 #include "../sources/moleculeConnector.h"
+#include "../sources/canonicalizer.h"
 #include "../sources/linkerBuilder.h"
 #include "../sources/ioModule.h"
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/MATHS/quaternion.h>
+#include <BALL/STRUCTURE/RMSDMinimizer.h>
+
+#include <BALL/STRUCTURE/geometricTransformations.h>
 using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
@@ -64,20 +68,27 @@ int main(int argc, char* argv[])
 /// C O D E ##################################
  
 	Log << "Reading molecule..."<<endl;
+	
 	SDFile in_file(parpars.get("i"), ios::in);
 	SDFile outfile("/Users/pbrach/out.sdf", ios::out);
-	Molecule* mol = in_file.read();
+	Molecule* mol1 = in_file.read();
+	Molecule* mol2 = in_file.read();
+		
+	Canonicalizer cani;
+	cani.canonicalize(*mol1);
+	cani.canonicalize(*mol2);
 	
-	cout<<"Predicting linker: "<<LigBase::printInlineMol(mol)<<endl;
-	TemplateDatabaseManager lib_manag;
-	lib_manag.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf");
-	lib_manag.readSiteTemplates();
-	lib_manag.readBondLenths();
+	AtomBijection bj;
+	bj.assignTrivial( *mol1, *mol2);
 	
-	LinkerBuilder frag_builder(lib_manag.getSiteTemplates(), lib_manag.getBondLengthData());
-	frag_builder.buildLinker( *(Fragment*)mol );
+	pair<Matrix4x4, double> rmsd = RMSDMinimizer::computeTransformation(bj);
+	cout<<"RMSD: "<<rmsd.second<<endl;
 	
-	outfile<< *mol;
+	TransformationProcessor super(rmsd.first);
+	mol1->apply(super);
+	
+	outfile<< *mol1;
+	outfile<< *mol2;
 	Log << "......done!"<<endl;
 }
 

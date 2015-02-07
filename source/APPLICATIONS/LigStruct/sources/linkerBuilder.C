@@ -18,7 +18,7 @@
 /**
  * buildLinker
  */
-LinkerBuilder::LinkerBuilder(ConSiteMap& connection_templates , BondLengthMap &bonds)
+LinkerBuilder::LinkerBuilder(SiteMap& connection_templates , BondLengthMap &bonds)
 	: _connection_templates(connection_templates),
 		_bond_lengths(bonds)
 {
