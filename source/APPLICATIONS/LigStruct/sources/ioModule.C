@@ -431,8 +431,8 @@ void CombiLibManager::_parseCombiLibFile()
 			if( id_mapping.find(g_id) == id_mapping.end() )
 			{
 				// create new groupfragmentlist for the group (r-groups start at 1)
-				_lib.push_back( vector<RFragment*>() );
 				id_mapping[g_id] = _lib.size();
+				_lib.push_back( vector<RFragment*>() );
 			}
 		}
 		
@@ -446,7 +446,7 @@ void CombiLibManager::_parseCombiLibFile()
 			if ( !str.hasSubstring( "[" + String(g_id) + "*]" )  )
 			{
 				Log<<"ERROR in CombiLibManager: the r-group SMILES "<< str <<" belongs to the "
-					 <<"r-group block "<< g_id <<" but that group number was not found "
+					 <<"r-group block "<< g_id <<" but that number was not present "
 					 <<"in the SMILES"<<endl<<"Please check your combi-file."<<endl;
 				exit(EXIT_FAILURE);
 			}
@@ -459,17 +459,18 @@ void CombiLibManager::_parseCombiLibFile()
 			for(; it != tmp->r_atom_lst.end(); ++it)
 			{
 				int r_id = (*it).id;
-				// create new r-groups for the r-atoms we found
-				if ( id_mapping.find(r_id) != id_mapping.end() )
+				
+				// create new r-groups for the r-atoms with new group ids
+				if ( id_mapping.find(r_id) == id_mapping.end() )
 				{
-					_lib.push_back( vector<RFragment*>() );
 					id_mapping[r_id] = _lib.size();
+					_lib.push_back( vector<RFragment*>() );
 				}
 				(*it).id = id_mapping[r_id];
 			}
 			
 			// add to combi lib:
-			_lib[g_id].push_back( tmp );
+			_lib[ id_mapping[g_id] ].push_back( tmp );
 		}
 
 		/// 'undefined line': throw error
@@ -486,7 +487,7 @@ void CombiLibManager::_parseCombiLibFile()
 	boost::unordered_map< int, int >::iterator it2;
 	for(it2 = id_mapping.begin(); it2 != id_mapping.end(); ++it2)
 	{
-		if( _lib[it2->first].size() == 0 )
+		if( _lib[it2->second].size() == 0 )
 		{
 			Log<<"ERROR in CombiLibManager: could not find a r-fragment for r-group "
 				 <<it2->first<< " but that r-group is referenced in the combi-file. "
