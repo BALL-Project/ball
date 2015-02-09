@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 //	parpars.registerParameter("l", "library configuration file", INFILE, false);
 	
 	parpars.setSupportedFormats("i","combi");
-//	parpars.setSupportedFormats("o","sdf");
+	parpars.setSupportedFormats("o","sdf");
 //	parpars.setSupportedFormats("l","conf");
 	parpars.setOutputFormatSource("i","o");
 
@@ -54,6 +54,14 @@ int main(int argc, char* argv[])
 			
 	// finally init the combiAssembler:
 	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib());
+	
+	list<String> combins;
+	combi_man.generateCombinationsSMILES(combins);
+	
+	for(list<String>::iterator it = combins.begin(); it != combins.end(); ++it)
+	{
+		cout<<*it<<endl;
+	}
 	
 ///// I N I T I A L    R - G R O U P    A S S E M B L Y
 

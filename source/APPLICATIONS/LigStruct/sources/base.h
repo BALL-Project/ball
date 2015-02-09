@@ -25,6 +25,7 @@
 //#include <BALL/KERNEL/bond.h>
 //#include <BALL/KERNEL/bondIterator.h>
 //#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/global.h>
 
 /// BALL: Molecule Container
 #include <BALL/CONCEPT/composite.h>
@@ -153,8 +154,63 @@ private:
 
 /// S t r u c t   G r o u p F r a g m e n t
 /// ############################################################################
-struct RFragment
+struct RAtom
 {
+	int id;
+	bool done;
+	Atom* atm;
+};
+
+class RFragment
+{
+public:
+	RFragment()
+	{
+		this->group_atom = 0;
+		this->group_id   = 0;
+		this->molecule   = 0;
+	}
+	
+	RFragment(const RFragment& other)
+	{
+		this->molecule = new AtomContainer();
+		
+		// clone atoms:
+		RAtom const * tmp_r = 0;
+		for(AtomIterator ati = this->molecule->beginAtom(); +ati; ++ati)
+		{
+			Atom* tmp_at = new Atom( *ati );
+			this->molecule->insert( *tmp_at );
+			
+			// check what kind of atom we are currently coping
+			// case group atom: transfer the group atom:
+			if( &*ati == other.group_atom)
+			{
+				this->group_atom = tmp_at;
+			}
+			// else check for r-atom
+			else
+			{
+				tmp_r = _isRAtom( other.r_atom_lst, &*ati);
+				if( tmp_r )
+				{
+					RAtom new_r;
+					new_r.atm = tmp_at;
+					new_r.id  = tmp_r->id;
+					new_r.done= tmp_r->done;
+					
+					this->r_atom_lst.push_back( new_r );
+				}
+			}
+		}
+		
+		// clone bonds
+		BALL::cloneBonds(*other.molecule, *this->molecule);
+		
+		group_id = other.group_id;
+		rotor_lst = other.rotor_lst;
+	}
+	
 	int group_id; //id 0 identifies the scaffold
 	AtomContainer* molecule;
 	
@@ -162,7 +218,20 @@ struct RFragment
 	
 	// inter connections
 	Atom* group_atom;
-	list< pair<int, Atom*> > r_atom_lst;
+	list< RAtom > r_atom_lst;
+
+private:
+	RAtom const* _isRAtom( const list< RAtom >& ilist, Atom* atom)
+	{
+		list< RAtom >::const_iterator it = ilist.begin();
+		for(; it != ilist.end(); ++it)
+		{
+			if( (*it).atm == atom )
+				return &*it;
+		}
+		
+		return 0;
+	}
 };
 
 

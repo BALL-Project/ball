@@ -9,6 +9,7 @@
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 
@@ -252,14 +253,14 @@ void CombiLibManager::generateCombinationsSMILES(list<String>& out_SMILES)
 		_parseCombiLibFile();
 	}
 	// generate all combinations as AtomContainer:
-	list<AtomContainer> combi_molecules;
+	list<AtomContainer*> combi_molecules;
 	generateCombinationsAtomContainer(combi_molecules);
 	
 	// Use open babel to convert to SMILES:
-	list<AtomContainer>::iterator it = combi_molecules.begin();
+	list<AtomContainer*>::iterator it = combi_molecules.begin();
 	for( ; it != combi_molecules.end(); ++it)
 	{
-		OpenBabel::OBMol* tmp = MolecularSimilarity::createOBMol( *it ,1,1);
+		OpenBabel::OBMol* tmp = MolecularSimilarity::createOBMol( **it ,1,1);
 		
 		OpenBabel::OBConversion ba_conv;
 		ba_conv.SetOutFormat("smi");
@@ -271,7 +272,7 @@ void CombiLibManager::generateCombinationsSMILES(list<String>& out_SMILES)
 	}
 }
 
-void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer>& out_molecules)
+void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& out_molecules)
 {
 	out_molecules.clear();
 	
@@ -279,6 +280,58 @@ void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer>& out
 	{
 		_parseCombiLibFile();
 	}
+	
+	// find a RAtom that is not yet 'done'
+	RAtom* ra = 0;
+	list< RAtom >::iterator it = _scaffold->r_atom_lst.begin();
+	for(; it != _scaffold->r_atom_lst.end(); ++it)
+	{
+		if( !(*it).done )
+			ra = &*it;
+//		_combineRecur(ra, out_molecules);
+	}
+	
+	// check for end recursion case:
+	if( it == _scaffold->r_atom_lst.end())
+	{
+		// make a copy of the current molecule in _scaffold, push it to the 
+		// result list and return
+		out_molecules.push_back( new AtomContainer(* _scaffold->molecule) );
+		return;
+	}
+	// recursion case:
+	else
+	{
+		vector<RFragment*>& group = _lib[ra->id];
+		vector<RFragment*>::iterator it2;
+		for(it2 = group.begin(); it2 != group.end(); ++it2)
+		{
+			RFragment* tmp = *it2;
+			Bond* bnd;
+			
+			//1.) extend r_atom_lst with the new rFragments ratoms
+//			_scaffold->r_atom_lst;
+//			list< RAtom* > tmp_rlist();
+			//2.) connect the molecule to the scaffold and create a bond
+			AtomContainer* tmp_ac = new AtomContainer(*tmp->molecule);
+			_scaffold->molecule->insert( *tmp_ac );
+			bnd = ra->atm->createBond( *tmp->group_atom );
+			
+			//3.) recurr deeper
+			generateCombinationsAtomContainer(out_molecules);
+			
+			//4.) delete bond, and remove inserted molecule
+			bnd->destroy();
+			_scaffold->molecule->remove( *tmp_ac );
+			
+			//5.) remove the added r_atom from the list again
+		}
+	}
+	
+}
+
+void CombiLibManager::_combineRecur()
+{
 }
 
 void CombiLibManager::_parseCombiLibFile()
@@ -323,8 +376,10 @@ void CombiLibManager::_parseCombiLibFile()
 				Log<<"ERROR CombiLibManager: found second scaffold definition: "<<str
 					 <<endl<<"Remember that only one scaffold per combi-lib configuration"
 					 <<" file should be specified."<<endl;
+				exit(EXIT_FAILURE);
 			}
 			_scaffold = _smi_parser.fromSMILEStoRFragment(str, 0);
+			_lib.push_back( vector<RFragment*>() );
 			_lib[0].push_back(_scaffold);
 		}
 		
@@ -337,6 +392,10 @@ void CombiLibManager::_parseCombiLibFile()
 						<<"definition, which is not allowed. Please fix your combi-file"<<endl;
 				exit(EXIT_FAILURE);
 			}
+			
+			// set old id:
+			old_id = g_id;
+			
 			// get group number:
 			String str_num = String(_combilib_file->getLine().after("group_")).trim().trimRight(":");
 			g_id = str_num.toUnsignedInt();
@@ -359,8 +418,8 @@ void CombiLibManager::_parseCombiLibFile()
 				exit(EXIT_FAILURE);
 			}
 			
-			// map the found g_id to internal g_id:
-			if( id_mapping.find(g_id) != id_mapping.end() )
+			// map the found g_id to internal-g_id if not already existing:
+			if( id_mapping.find(g_id) == id_mapping.end() )
 			{
 				// create new groupfragmentlist for the group (r-groups start at 1)
 				_lib.push_back( vector<RFragment*>() );
@@ -387,17 +446,17 @@ void CombiLibManager::_parseCombiLibFile()
 			tmp->group_id = id_mapping[g_id];
 			
 			// update our id_mapping and the one for the r-fragment:
-			list< pair<int, Atom*> >::iterator it = tmp->r_atom_lst.begin();
+			list< RAtom >::iterator it = tmp->r_atom_lst.begin();
 			for(; it != tmp->r_atom_lst.end(); ++it)
 			{
-				int r_id = it->first;
+				int r_id = (*it).id;
 				// create new r-groups for the r-atoms we found
 				if ( id_mapping.find(r_id) != id_mapping.end() )
 				{
 					_lib.push_back( vector<RFragment*>() );
 					id_mapping[r_id] = _lib.size();
 				}
-				it->first = id_mapping[r_id];
+				(*it).id = id_mapping[r_id];
 			}
 			
 			// add to combi lib:
@@ -422,7 +481,7 @@ void CombiLibManager::_parseCombiLibFile()
 		{
 			Log<<"ERROR in CombiLibManager: could not find a r-fragment for r-group "
 				 <<it2->first<< " but that r-group is referenced in the combi-file. "
-				 <<"If that r-group should not exist anymore, check if any r-label"
+				 <<"If that r-group should not exist anymore, check if any r-label "
 				 <<"still references that group."<<endl;
 			exit(EXIT_FAILURE);
 		}
@@ -481,7 +540,7 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 	// ERROR, we should have found a specific group id but could not find it.
 	// g_id == -1 means we are not interested in the group_id at all
 	// g_id ==  0 means we have a scaffold and thus no group atom anyways
-	if( !group_atom && (g_id != -1 || g_id != 0) )
+	if( !group_atom && g_id != -1 && g_id != 0 )
 	{
 		cout<<"ERROR in SMILESParser: could not find r-label with group_id "
 			  << g_id << " in SMILES " << smiles_string << endl;
@@ -508,8 +567,12 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 		else
 		{
 			unsigned int group_id = (*iti).first;
+			RAtom new_r;
+			new_r.id  = group_id;
+			new_r.atm = atm_ptr;
+			new_r.done= false;
 			
-			frag->r_atom_lst.push_back(  make_pair( group_id, atm_ptr )  );
+			frag->r_atom_lst.push_back( new_r );
 		}
 	}
 	

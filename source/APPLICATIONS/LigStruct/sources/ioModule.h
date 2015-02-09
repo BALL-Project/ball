@@ -101,11 +101,16 @@ public:
 	CombiLibMap& getCombiLib();
 	
 	void generateCombinationsSMILES( list<String>& out_SMILES);
-	void generateCombinationsAtomContainer(list<AtomContainer>& out_molecules);
+	void generateCombinationsAtomContainer(list<AtomContainer *> &out_molecules);
 	
 private:
-	
+	void _combineRecur();
 	void _parseCombiLibFile();
+	
+	/* 
+	 * 
+	 */
+	void _connectRFragments(RFragment& frag1, RFragment& frag2);
 	
 	LineBasedFile* _combilib_file;
 	RFragment*     _scaffold;
