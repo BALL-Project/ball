@@ -266,6 +266,7 @@ void CombiLibManager::generateCombinationsSMILES(list<String>& out_SMILES)
 		ba_conv.SetOutFormat("smi");
 		
 		String tmp_SMILES = ba_conv.WriteString( tmp, 1 );
+		
 		out_SMILES.push_back( tmp_SMILES );
 		
 		delete tmp; tmp = 0;
@@ -274,8 +275,6 @@ void CombiLibManager::generateCombinationsSMILES(list<String>& out_SMILES)
 
 void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& out_molecules)
 {
-	out_molecules.clear();
-	
 	if( !_lib_is_generated )
 	{
 		_parseCombiLibFile();
@@ -287,12 +286,14 @@ void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& ou
 	for(; it != _scaffold->r_atom_lst.end(); ++it)
 	{
 		if( !(*it).done )
+		{
 			ra = &*it;
-//		_combineRecur(ra, out_molecules);
+			break;
+		}
 	}
 	
 	// check for end recursion case:
-	if( it == _scaffold->r_atom_lst.end())
+	if( !ra )
 	{
 		// make a copy of the current molecule in _scaffold, push it to the 
 		// result list and return
@@ -302,36 +303,44 @@ void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& ou
 	// recursion case:
 	else
 	{
+		ra->done = true;
+		
+		// iterate over all RFrags in the next needed RGroup:
 		vector<RFragment*>& group = _lib[ra->id];
 		vector<RFragment*>::iterator it2;
 		for(it2 = group.begin(); it2 != group.end(); ++it2)
 		{
-			RFragment* tmp = *it2;
-			Bond* bnd;
+			RFragment* tmp = new RFragment( **it2 );
+			Bond* bnd = 0;
 			
-			//1.) extend r_atom_lst with the new rFragments ratoms
-//			_scaffold->r_atom_lst;
-//			list< RAtom* > tmp_rlist();
+			//1.) extend r_atom_lst with the RAtoms of the new RFragment
+			//    (we do not need the rotors here, so ignore them)
+			list< RAtom >::iterator it;
+			for( it = tmp->r_atom_lst.begin(); it != tmp->r_atom_lst.end(); ++it)
+				_scaffold->r_atom_lst.push_back( *it );
+			
 			//2.) connect the molecule to the scaffold and create a bond
-			AtomContainer* tmp_ac = new AtomContainer(*tmp->molecule);
-			_scaffold->molecule->insert( *tmp_ac );
+			_scaffold->molecule->insert( *tmp->molecule );
 			bnd = ra->atm->createBond( *tmp->group_atom );
 			
 			//3.) recurr deeper
+			ra->done = true;
 			generateCombinationsAtomContainer(out_molecules);
+			
 			
 			//4.) delete bond, and remove inserted molecule
 			bnd->destroy();
-			_scaffold->molecule->remove( *tmp_ac );
+			_scaffold->molecule->remove( *tmp->molecule );
 			
 			//5.) remove the added r_atom from the list again
+			for( it = tmp->r_atom_lst.begin(); it != tmp->r_atom_lst.end(); ++it)
+				_scaffold->r_atom_lst.pop_back();
+			
+			delete tmp;
 		}
+		ra->done = false;
 	}
 	
-}
-
-void CombiLibManager::_combineRecur()
-{
 }
 
 void CombiLibManager::_parseCombiLibFile()
@@ -343,7 +352,7 @@ void CombiLibManager::_parseCombiLibFile()
 	if (_combilib_file->isClosed())
 	{
 		// Some exception!
-		cout<<"CombiLibManader ERROR"<<endl; exit(EXIT_FAILURE);
+		cout<<"CombiLibManader ERROR: file is closed"<<endl; exit(EXIT_FAILURE);
 	}
 	else if( !_combilib_file)
 	{
@@ -472,12 +481,12 @@ void CombiLibManager::_parseCombiLibFile()
 			exit(EXIT_FAILURE);
 		}
 	}
-	
+	 
 	// check if for all found r-groups we have at last one r-fragment
 	boost::unordered_map< int, int >::iterator it2;
 	for(it2 = id_mapping.begin(); it2 != id_mapping.end(); ++it2)
 	{
-		if( _lib[it2->second].size() == 0 )
+		if( _lib[it2->first].size() == 0 )
 		{
 			Log<<"ERROR in CombiLibManager: could not find a r-fragment for r-group "
 				 <<it2->first<< " but that r-group is referenced in the combi-file. "

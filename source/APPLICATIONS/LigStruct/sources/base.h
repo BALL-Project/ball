@@ -171,13 +171,16 @@ public:
 		this->molecule   = 0;
 	}
 	
+	/*
+	 * Clone RFragment, manually clones the molecule
+	 */
 	RFragment(const RFragment& other)
 	{
 		this->molecule = new AtomContainer();
 		
 		// clone atoms:
 		RAtom const * tmp_r = 0;
-		for(AtomIterator ati = this->molecule->beginAtom(); +ati; ++ati)
+		for(AtomIterator ati = other.molecule->beginAtom(); +ati; ++ati)
 		{
 			Atom* tmp_at = new Atom( *ati );
 			this->molecule->insert( *tmp_at );
@@ -211,6 +214,7 @@ public:
 		rotor_lst = other.rotor_lst;
 	}
 	
+	/// F I E L D S:
 	int group_id; //id 0 identifies the scaffold
 	AtomContainer* molecule;
 	
@@ -219,6 +223,8 @@ public:
 	// inter connections
 	Atom* group_atom;
 	list< RAtom > r_atom_lst;
+	
+//	vector< TemplateCoord > coord_set;
 
 private:
 	RAtom const* _isRAtom( const list< RAtom >& ilist, Atom* atom)

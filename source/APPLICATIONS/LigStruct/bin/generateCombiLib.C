@@ -56,6 +56,7 @@ int main(int argc, char* argv[])
 	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib());
 	
 	list<String> combins;
+	combins.clear();
 	combi_man.generateCombinationsSMILES(combins);
 	
 	for(list<String>::iterator it = combins.begin(); it != combins.end(); ++it)
@@ -64,7 +65,7 @@ int main(int argc, char* argv[])
 	}
 	
 ///// I N I T I A L    R - G R O U P    A S S E M B L Y
-
+ 
 //	Log << "Reading combi-lib..."<<endl;
 //	CombiLib in_lib;
 //	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/test.conf";
@@ -82,6 +83,7 @@ int main(int argc, char* argv[])
 //	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
 	
 ///// Clean up
+	combi_file.close();
 	Log << "....done!"<<endl;
 }
 

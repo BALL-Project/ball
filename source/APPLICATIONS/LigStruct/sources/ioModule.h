@@ -104,7 +104,6 @@ public:
 	void generateCombinationsAtomContainer(list<AtomContainer *> &out_molecules);
 	
 private:
-	void _combineRecur();
 	void _parseCombiLibFile();
 	
 	/* 
