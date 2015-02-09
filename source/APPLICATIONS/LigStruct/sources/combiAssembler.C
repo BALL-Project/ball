@@ -22,6 +22,11 @@ void CombiAssembler::setCombiLib(CombiLibMap &clib)
 	_r_groups = &clib;
 }
 
+void CombiAssembler::writeCombinations(SDFile &handle)
+{
+	
+}
+
 void CombiAssembler::connectRFragments()
 {
 	Atom* at1 = 0;

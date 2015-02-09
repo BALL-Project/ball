@@ -101,8 +101,6 @@ void TemplateDatabaseManager::readSiteTemplates()
 
 void TemplateDatabaseManager::readRigidTemplates()
 {
-	//DEBUG:
-	cout<<"reading fragment lib from: "<<_path_to_rigids<<endl;
 	_templates_rigids.clear();
 	LineBasedFile libFile(_path_to_rigids, ios::in);
 	
@@ -221,8 +219,11 @@ CombiLibManager::~CombiLibManager()
 
 void CombiLibManager::setCombiLib(LineBasedFile &combilib_file)
 {
-	_lib_is_generated = false;
 	_combilib_file = & combilib_file;
+	
+	_parseCombiLibFile();
+	
+	_lib_is_generated = false;
 }
 
 RFragment &CombiLibManager::getScaffold()

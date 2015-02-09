@@ -20,6 +20,9 @@ public:
 	void setScaffold(RFragment& scaffold);
 	void setCombiLib(CombiLibMap& clib);
 	
+	void writeCombinations(SDFile& handle);
+	
+	void getCombinations( list<AtomContainer*>& result );
 private:
 	
 	RFragment* _scaffold;

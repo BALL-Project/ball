@@ -39,49 +39,60 @@ int main(int argc, char* argv[])
 	
 ///// I N I T    A S S E M B L E R
 	
-	// setup template library manager:
+	//1.) setup template library manager:
+	String config_path = "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf";
+	cout<<" * loading databases specified in: "<<config_path<<endl;
+	
 	TemplateDatabaseManager template_man;
-	template_man.libraryPathesFromConfig("/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf");
+	template_man.libraryPathesFromConfig(config_path);
 	template_man.readAll();
 	
 	// setup structureAssembler:
 	StructureAssembler assem( template_man );
 
-	// setup combiLib manager
+	//2.) setup combiLib manager
+	cout<<" * parsing input combilib "<<endl;
+	
 	CombiLibManager combi_man;
 	LineBasedFile combi_file(parpars.get("i"), ios::in);
 	combi_man.setCombiLib( combi_file );
-			
-	// finally init the combiAssembler:
-	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib());
 	
-	list<String> combins;
+	//3.) simple testing:
+	String control_path = parpars.get("o") + "_control.sdf";
+	cout<<" * generating 2D combinations, and write them to "<< control_path <<endl;
+	
+	list< AtomContainer* > combins;
 	combins.clear();
-	combi_man.generateCombinationsSMILES(combins);
+	combi_man.generateCombinationsAtomContainer( combins );
+	SDFile control_file(control_path, ios::out);
 	
-	for(list<String>::iterator it = combins.begin(); it != combins.end(); ++it)
+	//-  write AC-list to SDFile
+	for(list<AtomContainer*>::iterator it = combins.begin(); it != combins.end(); ++it)
+		control_file << **it;
+	
+	//4.) assemble all individual RFragments:
+	cout<<" * assebling R-fragments"<<endl;
+	CombiLibMap& r_fragments = combi_man.getCombiLib();
+	
+	CombiLibMap::iterator it1 = r_fragments.begin();
+	for(; it1 != r_fragments.end(); ++it1)
 	{
-		cout<<*it<<endl;
+		vector< RFragment* >::iterator it2 = (*it1).begin();
+		for(; it2 != (*it1).end(); ++it2)
+		{
+			assem.assembleStructure( * (*it2)->molecule );
+		}
 	}
 	
-///// I N I T I A L    R - G R O U P    A S S E M B L Y
- 
-//	Log << "Reading combi-lib..."<<endl;
-//	CombiLib in_lib;
-//	String combi_path = "/Users/pbrach/files/projects/Master-2014_2015/1_code/ball_ligandStruct/source/APPLICATIONS/LigStruct/examples/test.conf";
-//	readGroups(in_lib, combi_path, assem);
-//	Log <<" - done - "<<endl<<endl;
+	//5.) finally calculate all valid combinations:
+	cout<<" * generating 3D combinations, and write results to "<< parpars.get("o") <<endl;
 	
+	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib() );
+	SDFile outfile( parpars.get("o"), ios::out);
+	combiner.writeCombinations( outfile );
+	outfile.close();
 
-	
-	
-///// F I N I S H
-///// write output
-//	String outfile_name = String(parpars.get("o"));
-//	SDFile outfile(outfile_name, ios::out);
 
-//	Log << "wrote structure to file: "<< endl << outfile_name << endl<<endl;
-	
 ///// Clean up
 	combi_file.close();
 	Log << "....done!"<<endl;
