@@ -21,13 +21,15 @@ public:
 	void getCombinations( std::list< BALL::AtomContainer*>& result );
 private:
 	
-	RFragment*        _scaffold;
-	CombiLibMap*      _r_groups;
+	void connectClashFree(Atom &at1, Atom &at2, ConnectList& connections);
 	
-	MoleculeConnector _connector;
-	ClashResolver     _cresolv;
+	RFragment*          _work_mol;
+	CombiLibMap*        _r_groups;
+	std::list< RAtom* > _r_atms;
 	
-	void connectRFragments();
+	MoleculeConnector       _connector;
+	ConnectionClashResolver _cresolv;
+
 };
 
 #endif // COMBIASSEMBLER_H

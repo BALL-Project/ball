@@ -86,10 +86,12 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		_connector.connect( &at1, &at2 );
 
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at1, at2, connections, linker_rotors);
-		if( _clash_resolver.detect() != 0 )
+		_clash_resolver.setMolecule(at1, at2, connections, &linker_rotors);
+		c_cnt = _clash_resolver.detect();
+		
+		if( c_cnt != 0 )
 		{
-			cout<<"Resolving clash, got: "<<_clash_resolver.detect()<<endl;
+			cout<<"Resolving clash, got: "<<c_cnt<<endl;
 			c_cnt = _clash_resolver.resolve();
 			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
@@ -103,10 +105,12 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		_connector.connect( &at2, &at1 );
 		
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at2, at1, connections, linker_rotors);
-		if( _clash_resolver.detect() != 0 )
+		_clash_resolver.setMolecule(at2, at1, connections, &linker_rotors);
+		c_cnt = _clash_resolver.detect();
+		
+		if( c_cnt != 0 )
 		{
-			cout<<"Resolving clash, got: "<<_clash_resolver.detect()<<endl;
+			cout<<"Resolving clash, got: "<<c_cnt<<endl;
 			c_cnt = _clash_resolver.resolve();
 			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}

@@ -43,7 +43,7 @@ ConnectionClashResolver::~ConnectionClashResolver()
 	delete _save_small; _save_small = 0;
 }
 
-void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections, ConnectList& more_rotors)
+void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections, ConnectList *more_rotors)
 {
 	atm_large = &atm1;
 	atm_small = &atm2;
@@ -80,17 +80,20 @@ void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &c
 		}
 	}
 	
-	for ( auto& p : more_rotors)
+	if( more_rotors )
 	{
-		if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
+		for ( auto& p : *more_rotors)
 		{
-			_large_rotors->push_back( p );
-			_all_rotors->push_back( p );
-		}
-		else if( &p.first->getRoot() == _small_root && &p.second->getRoot() == _small_root)
-		{
-			_small_rotors->push_back( p );
-			_all_rotors->push_back( p );
+			if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
+			{
+				_large_rotors->push_back( p );
+				_all_rotors->push_back( p );
+			}
+			else if( &p.first->getRoot() == _small_root && &p.second->getRoot() == _small_root)
+			{
+				_small_rotors->push_back( p );
+				_all_rotors->push_back( p );
+			}
 		}
 	}
 	_all_rotors->push_back( make_pair(&atm1,&atm2) );

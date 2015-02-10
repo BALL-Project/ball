@@ -322,7 +322,9 @@ void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& ou
 			
 			//2.) connect the molecule to the scaffold and create a bond
 			_scaffold->molecule->insert( *tmp->molecule );
-			bnd = ra->atm->createBond( *tmp->group_atom );
+			Bond b;
+			b.setOrder(1);
+			bnd = ra->atm->createBond(b, *tmp->group_atom );
 			
 			//3.) recurr deeper
 			ra->done = true;

@@ -32,7 +32,7 @@ public:
 	 * @param atm1 part of the larger fragment
 	 * @param atm2 part of the smaller fragment
 	 */
-	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections, ConnectList &more_rotors);
+	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections, ConnectList *more_rotors=0);
 	
 	int resolve(bool conserve_large = false);
 	

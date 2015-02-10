@@ -61,22 +61,14 @@ int main(int argc, char* argv[])
 	String control_path = parpars.get("o") + "_control.sdf";
 	cout<<" * generating 2D combinations, and write them to "<< control_path <<endl;
 	
+	//--- generate the control-data: all combinations without coordinates
+	//--- as input for single prediction:
 	list< AtomContainer* > combins;
 	combins.clear();
 	combi_man.generateCombinationsAtomContainer( combins );
-	//DEBUG - START
-//	list< String > combins2;
-//	combi_man.generateCombinationsSMILES( combins2 );
-//	cout<<endl<<"STRINGS:"<<endl;
-//	for(list<String >::iterator it= combins2.begin(); it != combins2.end(); ++it)
-//	{
-//		cout<< *it<<endl;
-//	}
-//	cout<<endl;
-	//DEBUG - END
-	SDFile control_file(control_path, ios::out);
 	
-	//-  write AC-list to SDFile
+	SDFile control_file(control_path, ios::out);
+	//--- write AC-list to SDFile
 	for(list<AtomContainer*>::iterator it = combins.begin(); it != combins.end(); ++it)
 		control_file << **it;
 	
@@ -84,23 +76,25 @@ int main(int argc, char* argv[])
 	cout<<" * assebling R-fragments"<<endl;
 	CombiLibMap& r_fragments = combi_man.getCombiLib();
 	
-	SDFile outfile( parpars.get("o"), ios::out);
-	CombiLibMap::iterator it1 = r_fragments.begin();
-	for(; it1 != r_fragments.end(); ++it1)
-	{
-		vector< RFragment* >::iterator it2 = (*it1).begin();
-		for(; it2 != (*it1).end(); ++it2)
-		{
-			assem.assembleStructure( * (*it2)->molecule );
-			outfile << * (*it2)->molecule;
-		}
-	}
+	//DEBUG - START just check if everything was assebled correctly
+//	SDFile outfile( parpars.get("o"), ios::out);
+//	CombiLibMap::iterator it1 = r_fragments.begin();
+//	for(; it1 != r_fragments.end(); ++it1)
+//	{
+//		vector< RFragment* >::iterator it2 = (*it1).begin();
+//		for(; it2 != (*it1).end(); ++it2)
+//		{
+//			assem.assembleStructure( * (*it2)->molecule );
+//			outfile << * (*it2)->molecule;
+//		}
+//	}
+	//DEBUG - END
 	
 	//5.) finally calculate all valid combinations:
 	cout<<" * generating 3D combinations, and write results to "<< parpars.get("o") <<endl;
 	
 	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib() );
-	
+	SDFile outfile( parpars.get("o"), ios::out);
 	combiner.writeCombinations( outfile );
 	outfile.close();
 
