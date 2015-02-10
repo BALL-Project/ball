@@ -50,7 +50,6 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	if( ! _r_atms.empty() )
 	{
 		ra = _r_atms.front();
-		cout<<"Taking: "<<ra->id<<endl;
 		_r_atms.pop_front(); // deeper recursions shall not handle this r-atom again
 	}
 	else
@@ -62,14 +61,12 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	if( !ra )
 	{
 		// write out the current work mol
-		cout<<"---------Writing Molecule"<<endl;
 		handle << * _work_mol->molecule;
 		return;
 	}
 	//3.) recursion case:
 	else
 	{
-		cout<<"---------RECURSION"<<endl;
 		// iterate over all RFrags in the RGroup fitting to the current R-atom 'ra':
 		vector<RFragment*>& group = _r_groups->at(ra->id);
 		vector<RFragment*>::iterator it2;

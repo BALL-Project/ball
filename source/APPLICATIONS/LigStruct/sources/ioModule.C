@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 using namespace std; 
@@ -545,7 +546,9 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 			int r_id = (*it)->GetIsotope();
 			
 			if (r_id == g_id)
+			{
 				group_atom = ptr;
+			}
 			
 			for_deletion.push_back( *it );
 			con_lst.push_back(  make_pair( r_id, ptr )  );
@@ -568,13 +571,12 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 	
 	// convert OBMol to BALL::Molecule and canonize
 	frag->molecule = MolecularSimilarity::createMolecule(_babel_mol, true);
-	_cano.canonicalize( * frag->molecule );
 	
 	// convert the Open babel connection list to the final connection list:
 	list< pair<int, OpenBabel::OBAtom*> >::iterator iti = con_lst.begin();
 	for(; iti != con_lst.end(); iti++)
 	{
-		Atom* atm_ptr = frag->molecule->getAtom( (*iti).second->GetIdx() - 1 );
+		Atom* atm_ptr = frag->molecule->getAtom( (*iti).second->GetIndex() );
 		
 		if ( (*iti).second == group_atom)
 		{
@@ -591,6 +593,8 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 			frag->r_atom_lst.push_back( new_r );
 		}
 	}
+	
+	_cano.canonicalize( * frag->molecule );
 	
 	return frag;
 }
