@@ -14,6 +14,10 @@
 #include <BALL/KERNEL/molecule.h> //DEBUG
 
 #include <limits>
+
+using namespace std; 
+using namespace BALL;
+
 ConnectionClashResolver::ConnectionClashResolver(float tolerance, int max_rotors): 
 	_tolerance(tolerance),
 	_max_rotations(max_rotors),
@@ -250,8 +254,8 @@ void ConnectionClashResolver::setAtomsToRotate(Atom &start, Atom &probe, Atom &b
 int ConnectionClashResolver::resolve(bool conserve_large)
 {
 	int clash_cnt = -1;
-	_save_large->setCoordinates( *_large_root );
-	_save_small->setCoordinates( *_small_root );
+	_save_large->readCoordinatesFromMolecule( *_large_root );
+	_save_small->readCoordinatesFromMolecule( *_small_root );
 	
 	//1) CONNECTION rotation might solve the clashes
 	clash_cnt = resolveConnection();
@@ -300,7 +304,7 @@ int ConnectionClashResolver::resolveConnection()
 		{
 //			cout<<"resolveConnection: Accepted "<<current_count<<endl;
 			best_cnt = current_count;
-			_save_small->setCoordinates( *_small_root );
+			_save_small->readCoordinatesFromMolecule( *_small_root );
 		}
 
 		// we could find a clash-free solution
@@ -312,7 +316,7 @@ int ConnectionClashResolver::resolveConnection()
 	}
 
 	// we could not find a clash-free solution, but we use the best we visited:
-	_save_small->transferCoordinates( *_small_root );
+	_save_small->applyCoordinates2Molecule( *_small_root );
 	return best_cnt;
 }
 
@@ -329,8 +333,8 @@ int ConnectionClashResolver::resolveFragment( AtomContainer& frag, ConnectList& 
 		
 		for( auto& p : clist)
 		{
-			_save_large->transferCoordinates( *_large_root );
-			_save_small->transferCoordinates( *_small_root );
+			_save_large->applyCoordinates2Molecule( *_large_root );
+			_save_small->applyCoordinates2Molecule( *_small_root );
 			
 			// else: test 20 rotations for that rotor
 			for( int i = 1; i < 20; ++i)
@@ -344,8 +348,8 @@ int ConnectionClashResolver::resolveFragment( AtomContainer& frag, ConnectList& 
 //					cout<<"resolveFragment: in try "<<tries<<" found better solution with "<<current_count<<" clashes"<<endl;
 					best_cnt = current_count;
 					
-					_save_large->setCoordinates( *_large_root );
-					_save_small->setCoordinates( *_small_root );
+					_save_large->readCoordinatesFromMolecule( *_large_root );
+					_save_small->readCoordinatesFromMolecule( *_small_root );
 				}
 				
 				if( current_count == 0)
@@ -356,8 +360,8 @@ int ConnectionClashResolver::resolveFragment( AtomContainer& frag, ConnectList& 
 			}
 		}
 		
-		_save_large->transferCoordinates( *_large_root );
-		_save_small->transferCoordinates( *_small_root );
+		_save_large->applyCoordinates2Molecule( *_large_root );
+		_save_small->applyCoordinates2Molecule( *_small_root );
 	}
 	return best_cnt;
 }
@@ -386,8 +390,8 @@ int ConnectionClashResolver::resolveAll( const int &steps)
 	}
 	else
 	{
-		_save_large->transferCoordinates( *_large_root );
-		_save_small->transferCoordinates( *_small_root );
+		_save_large->applyCoordinates2Molecule( *_large_root );
+		_save_small->applyCoordinates2Molecule( *_small_root );
 		
 		return best_cnt;
 	}
@@ -418,8 +422,8 @@ int ConnectionClashResolver::resolveAllRecur(const ConnectList::iterator &p,
 		{
 //			cout<<"resolveAll: stored a solution with only "<<current_cnt<<" clashes"<<endl;
 			best_cnt = current_cnt;
-			_save_large->setCoordinates( *_large_root );
-			_save_small->setCoordinates( *_small_root );
+			_save_large->readCoordinatesFromMolecule( *_large_root );
+			_save_small->readCoordinatesFromMolecule( *_small_root );
 		}
 		
 		// this rotation solved ALL clashes
@@ -610,7 +614,7 @@ int ClashResolver::resolve()
 			if( used_rotors.has( &p ) )
 				continue;
 			
-			best_conf.transferCoordinates( *_molecule );
+			best_conf.applyCoordinates2Molecule( *_molecule );
 			
 			// else: test 9 rotations for that rotor
 			for( int i = 1; i < 36; ++i)
@@ -622,7 +626,7 @@ int ClashResolver::resolve()
 				if ( current_count < best_cnt )
 				{
 					best_cnt = current_count;
-					best_conf.setCoordinates( *_molecule );
+					best_conf.readCoordinatesFromMolecule( *_molecule );
 					best_rotor = &p;
 				}
 				
@@ -632,7 +636,7 @@ int ClashResolver::resolve()
 		}
 		if( best_rotor != 0)
 			used_rotors.insert( best_rotor );
-		best_conf.transferCoordinates( *_molecule );
+		best_conf.applyCoordinates2Molecule( *_molecule );
 	}
 	
 	if(current_count < best_cnt)
@@ -641,7 +645,7 @@ int ClashResolver::resolve()
 	}
 	else
 	{
-		best_conf.transferCoordinates( *_molecule );
+		best_conf.applyCoordinates2Molecule( *_molecule );
 	}
 	return best_cnt;
 }

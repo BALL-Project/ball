@@ -12,6 +12,8 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
+using namespace std; 
+using namespace BALL;
 
 /// L i b r a r y R e a d e r
 /// ############################################################################
@@ -222,8 +224,6 @@ void CombiLibManager::setCombiLib(LineBasedFile &combilib_file)
 	_combilib_file = & combilib_file;
 	
 	_parseCombiLibFile();
-	
-	_lib_is_generated = false;
 }
 
 RFragment &CombiLibManager::getScaffold()
@@ -347,7 +347,7 @@ void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& ou
 void CombiLibManager::_parseCombiLibFile()
 {
 	//TODO: better whole class clearing
-	id_mapping.clear();
+	_id_mapping.clear();
 	_lib.clear();
 	
 	if (_combilib_file->isClosed())
@@ -429,10 +429,10 @@ void CombiLibManager::_parseCombiLibFile()
 			}
 			
 			// map the found g_id to internal-g_id if not already existing:
-			if( id_mapping.find(g_id) == id_mapping.end() )
+			if( _id_mapping.find(g_id) == _id_mapping.end() )
 			{
 				// create new groupfragmentlist for the group (r-groups start at 1)
-				id_mapping[g_id] = _lib.size();
+				_id_mapping[g_id] = _lib.size();
 				_lib.push_back( vector<RFragment*>() );
 			}
 		}
@@ -453,7 +453,7 @@ void CombiLibManager::_parseCombiLibFile()
 			}
 			
 			RFragment* tmp =  _smi_parser.fromSMILEStoRFragment(str, g_id);
-			tmp->group_id = id_mapping[g_id];
+			tmp->group_id = _id_mapping[g_id];
 			
 			// update our id_mapping and the one for the r-fragment:
 			list< RAtom >::iterator it = tmp->r_atom_lst.begin();
@@ -462,16 +462,16 @@ void CombiLibManager::_parseCombiLibFile()
 				int r_id = (*it).id;
 				
 				// create new r-groups for the r-atoms with new group ids
-				if ( id_mapping.find(r_id) == id_mapping.end() )
+				if ( _id_mapping.find(r_id) == _id_mapping.end() )
 				{
-					id_mapping[r_id] = _lib.size();
+					_id_mapping[r_id] = _lib.size();
 					_lib.push_back( vector<RFragment*>() );
 				}
-				(*it).id = id_mapping[r_id];
+				(*it).id = _id_mapping[r_id];
 			}
 			
 			// add to combi lib:
-			_lib[ id_mapping[g_id] ].push_back( tmp );
+			_lib[ _id_mapping[g_id] ].push_back( tmp );
 		}
 
 		/// 'undefined line': throw error
@@ -486,7 +486,7 @@ void CombiLibManager::_parseCombiLibFile()
 	 
 	// check if for all found r-groups we have at last one r-fragment
 	boost::unordered_map< int, int >::iterator it2;
-	for(it2 = id_mapping.begin(); it2 != id_mapping.end(); ++it2)
+	for(it2 = _id_mapping.begin(); it2 != _id_mapping.end(); ++it2)
 	{
 		if( _lib[it2->second].size() == 0 )
 		{
@@ -509,11 +509,13 @@ SmilesParser::SmilesParser(){
 
 SmilesParser::~SmilesParser(){}
 
-Molecule *SmilesParser::fromSMILEStoMolecule(const String &smiles_string)
+AtomContainer *SmilesParser::fromSMILEStoMolecule(const String &smiles_string)
 {
 	_babel_conv.ReadString(&_babel_mol, smiles_string);
 	
-	return MolecularSimilarity::createMolecule(_babel_mol, true);
+	AtomContainer* tmp = MolecularSimilarity::createMolecule(_babel_mol, true);
+	_cano.canonicalize(*tmp);
+	return tmp;
 }
 
 RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string, 
@@ -562,8 +564,9 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 	for(int i = 0; i < for_deletion.size(); i++)
 		_babel_mol.DeleteAtom( for_deletion[i], true);
 	
-	// convert OBMol to BALL::Molecule
+	// convert OBMol to BALL::Molecule and canonize
 	frag->molecule = MolecularSimilarity::createMolecule(_babel_mol, true);
+	_cano.canonicalize( * frag->molecule );
 	
 	// convert the Open babel connection list to the final connection list:
 	list< pair<int, OpenBabel::OBAtom*> >::iterator iti = con_lst.begin();

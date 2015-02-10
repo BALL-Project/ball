@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 	
 ///// I N I T    A S S E M B L E R
 	
-	//1.) setup template library manager:
+	//1.) setup template database manager, to load the fragment database:
 	String config_path = "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf";
 	cout<<" * loading databases specified in: "<<config_path<<endl;
 	
@@ -64,6 +64,16 @@ int main(int argc, char* argv[])
 	list< AtomContainer* > combins;
 	combins.clear();
 	combi_man.generateCombinationsAtomContainer( combins );
+	//DEBUG - START
+//	list< String > combins2;
+//	combi_man.generateCombinationsSMILES( combins2 );
+//	cout<<endl<<"STRINGS:"<<endl;
+//	for(list<String >::iterator it= combins2.begin(); it != combins2.end(); ++it)
+//	{
+//		cout<< *it<<endl;
+//	}
+//	cout<<endl;
+	//DEBUG - END
 	SDFile control_file(control_path, ios::out);
 	
 	//-  write AC-list to SDFile
@@ -74,6 +84,7 @@ int main(int argc, char* argv[])
 	cout<<" * assebling R-fragments"<<endl;
 	CombiLibMap& r_fragments = combi_man.getCombiLib();
 	
+	SDFile outfile( parpars.get("o"), ios::out);
 	CombiLibMap::iterator it1 = r_fragments.begin();
 	for(; it1 != r_fragments.end(); ++it1)
 	{
@@ -81,6 +92,7 @@ int main(int argc, char* argv[])
 		for(; it2 != (*it1).end(); ++it2)
 		{
 			assem.assembleStructure( * (*it2)->molecule );
+			outfile << * (*it2)->molecule;
 		}
 	}
 	
@@ -88,7 +100,7 @@ int main(int argc, char* argv[])
 	cout<<" * generating 3D combinations, and write results to "<< parpars.get("o") <<endl;
 	
 	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib() );
-	SDFile outfile( parpars.get("o"), ios::out);
+	
 	combiner.writeCombinations( outfile );
 	outfile.close();
 

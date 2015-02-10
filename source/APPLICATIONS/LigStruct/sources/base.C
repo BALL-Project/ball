@@ -19,11 +19,130 @@
 #include <BALL/KERNEL/forEach.h>
 #include <vector>
 
-
 /// Name Spaces
 using namespace BALL;
 using namespace std;
 
+/// C l a s s   T e m p l a t e C o o r d
+/// ############################################################################
+TemplateCoord::TemplateCoord(BALL::Size n)
+{
+	_size = n;
+	positions = new BALL::Vector3[n];
+}
+
+TemplateCoord::TemplateCoord( AtomContainer& mol)
+{
+	_size = mol.countAtoms();
+	positions = new Vector3[_size];
+	readCoordinatesFromMolecule( mol );
+}
+
+void TemplateCoord::applyCoordinates2Molecule( AtomContainer& mol)
+{
+	AtomIterator qit = mol.beginAtom();
+	for (int i = 0 ; i < _size; i++, qit++)
+	{
+		qit->setPosition( positions[i] );
+	}
+}
+
+void TemplateCoord::readCoordinatesFromMolecule( AtomContainer& mol)
+{
+	AtomIterator qit = mol.beginAtom();
+	for (int i = 0 ; i < _size; i++, qit++)
+	{
+		positions[i] = qit->getPosition();
+	}
+}
+
+TemplateCoord::~TemplateCoord()
+{
+	delete[] positions; // delete only the array not the elements!!!
+}
+
+Vector3& TemplateCoord::operator[]( Index idx)
+{
+	return positions[idx];
+}
+
+Vector3& TemplateCoord::get( Index idx)
+{
+	return positions[idx];
+}
+
+const Size& TemplateCoord::size()
+{
+	return _size;
+}
+
+/// C l a s s   R F r a g m e n t
+/// ############################################################################
+RFragment::RFragment()
+{
+	this->group_atom = 0;
+	this->group_id   = 0;
+	this->molecule   = 0;
+}
+
+RFragment::RFragment(const RFragment& other)
+{
+	this->molecule = new BALL::AtomContainer();
+	
+	// clone atoms:
+	RAtom const * tmp_r = 0;
+	for(BALL::AtomIterator ati = other.molecule->beginAtom(); +ati; ++ati)
+	{
+		BALL::Atom* tmp_at = new BALL::Atom( *ati );
+		this->molecule->insert( *tmp_at );
+		
+		// check what kind of atom we are currently coping
+		// case group atom: transfer the group atom:
+		if( &*ati == other.group_atom)
+		{
+			this->group_atom = tmp_at;
+		}
+		// else check for r-atom
+		else
+		{
+			tmp_r = _isRAtom( other.r_atom_lst, &*ati);
+			if( tmp_r )
+			{
+				RAtom new_r;
+				new_r.atm = tmp_at;
+				new_r.id  = tmp_r->id;
+				new_r.done= tmp_r->done;
+				
+				this->r_atom_lst.push_back( new_r );
+			}
+		}
+	}
+	
+	// clone bonds
+	BALL::cloneBonds(*other.molecule, *this->molecule);
+	
+	group_id = other.group_id;
+	rotor_lst = other.rotor_lst;
+}
+
+RAtom const* RFragment::_isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom)
+{
+	std::list< RAtom >::const_iterator it = ilist.begin();
+	for(; it != ilist.end(); ++it)
+	{
+		if( (*it).atm == atom )
+			return &*it;
+	}
+	
+	return 0;
+}
+
+/// C l a s s   C o m b i n a t i o n
+/// ############################################################################
+
+
+/// C l a s s   L i g B a s e
+/// ############################################################################
 String LigBase::printInlineMol(Composite *mol)
 {
 	String tmp = "";
@@ -168,5 +287,4 @@ void LigBase::removeHydrogens(AtomContainer &tmp)
 	for(int i = 0; i<bnd_remove.size(); ++i)
 		bnd_remove[i]->destroy();
 }
-
 

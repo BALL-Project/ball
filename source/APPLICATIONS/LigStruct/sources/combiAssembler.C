@@ -1,9 +1,13 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
 #include "combiAssembler.h"
 
+using namespace std;
+using namespace BALL;
 
-
-BALL::CombiAssembler::CombiAssembler(RFragment* scaffold, CombiLibMap* clib):
+CombiAssembler::CombiAssembler(RFragment* scaffold, CombiLibMap* clib):
 	_scaffold(scaffold), _r_groups(clib)
 {}
 

@@ -6,6 +6,7 @@
 #define IOMODULE_H
 
 #include "base.h"
+#include "canonicalizer.h"
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/SDFile.h>
@@ -13,8 +14,6 @@
 
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
-
-using namespace BALL;
 
 /// T e m p l a t e L i b r a r y M a n a g e r
 /// ############################################################################
@@ -39,7 +38,7 @@ public:
 	 * Get all needed library information from a config file
 	 * that lists the paths to the respective lib files
 	 */
-	void libraryPathesFromConfig(const String& config_path);
+	void libraryPathesFromConfig(const BALL::String& config_path);
 	
 	void readBondLenths();
 	
@@ -63,9 +62,9 @@ private:
 	BondLengthMap _bondlengths;
 	SiteMap _templates_sites;
 	
-	String _path_to_rigids;
-	String _path_to_bondlengths;
-	String _path_to_sites;
+	BALL::String _path_to_rigids;
+	BALL::String _path_to_bondlengths;
+	BALL::String _path_to_sites;
 };
 
 
@@ -77,13 +76,15 @@ public:
 	SmilesParser();
 	~SmilesParser();
 	
-	Molecule *fromSMILEStoMolecule(const String& smiles_string);
+	AtomContainer *fromSMILEStoMolecule(const BALL::String& smiles_string);
 	
-	RFragment* fromSMILEStoRFragment(const String& smiles_string, const int& g_id = -1);
+	RFragment* fromSMILEStoRFragment(const BALL::String& smiles_string, const int& g_id = -1);
 	
 private:
 	OpenBabel::OBConversion _babel_conv;
 	OpenBabel::OBMol        _babel_mol;
+	Canonicalizer           _cano;
+	
 };
 
 
@@ -92,32 +93,27 @@ private:
 class CombiLibManager
 {
 public:
-	CombiLibManager(LineBasedFile * combilib_file=0);
+	CombiLibManager(BALL::LineBasedFile * combilib_file=0);
 	~CombiLibManager();
 	
-	void setCombiLib(LineBasedFile &combilib_file);
+	void setCombiLib(BALL::LineBasedFile &combilib_file);
 	
 	RFragment& getScaffold();
 	CombiLibMap& getCombiLib();
 	
-	void generateCombinationsSMILES( list<String>& out_SMILES);
-	void generateCombinationsAtomContainer(list<AtomContainer *> &out_molecules);
+	void generateCombinationsSMILES( std::list<BALL::String>& out_SMILES);
+	void generateCombinationsAtomContainer(std::list<BALL::AtomContainer *> &out_molecules);
 	
 private:
 	void _parseCombiLibFile();
 	
-	/* 
-	 * 
-	 */
-	void _connectRFragments(RFragment& frag1, RFragment& frag2);
-	
-	LineBasedFile* _combilib_file;
-	RFragment*     _scaffold;
-	CombiLibMap    _lib;
+	BALL::LineBasedFile* _combilib_file;
+	RFragment*           _scaffold;
+	CombiLibMap          _lib;
 	
 	bool         _lib_is_generated;
 	SmilesParser _smi_parser;
-	boost::unordered_map< int, int > id_mapping;
+	boost::unordered_map< int, int > _id_mapping;
 };
 
 
@@ -131,7 +127,7 @@ public:
 	 * @param input
 	 * @param handle
 	 */
-	static void writeMolVec(vector<AtomContainer* >& input, SDFile &handle);
+	static void writeMolVec(std::vector<BALL::AtomContainer* >& input, BALL::SDFile &handle);
 	
 	/**
 	 * @brief writeMolVec write vector of BALL::AtomContainer to a single 
@@ -141,26 +137,26 @@ public:
 	 * @param input
 	 * @param handle
 	 */
-	static void writeMolVec(vector<AtomContainer*>& input, LineBasedFile& handle);
+	static void writeMolVec(std::vector<BALL::AtomContainer*>& input, BALL::LineBasedFile& handle);
 	
 	/**
 	 * @brief writeMol same as writeMolVec for a single file
 	 * @param mol
 	 * @param handle
 	 */
-	static void writeMol(AtomContainer& mol, LineBasedFile &handle);
+	static void writeMol(BALL::AtomContainer& mol, BALL::LineBasedFile &handle);
 	
 	/**
 	 * @brief writeMol same as writeMolVec for a single file
 	 * @param mol
 	 * @param handle
 	 */
-	static void writeMol(AtomContainer& mol, SDFile &handle);
+	static void writeMol(BALL::AtomContainer& mol, BALL::SDFile &handle);
 	
 	
 private:
-	static void writePositionLines(AtomContainer& mol, LineBasedFile &handle);
-	static void readOBMolecule(const String& path, OpenBabel::OBMol& mol);
+	static void writePositionLines(BALL::AtomContainer& mol, BALL::LineBasedFile &handle);
+	static void readOBMolecule(const BALL::String& path, OpenBabel::OBMol& mol);
 
 };
 

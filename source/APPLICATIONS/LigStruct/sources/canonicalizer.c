@@ -12,6 +12,7 @@
 #include <openbabel/graphsym.h>
 
 #include <BALL/STRUCTURE/UCK.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 
 
@@ -50,6 +51,10 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	// swap the temp with the original and delete the temp
 	molecule.swap(*new_frag);
 	delete new_frag;
+	
+	// aromatize:
+	AromaticityProcessor aroma;
+	molecule.apply(aroma);
 }
 
 
@@ -68,7 +73,7 @@ void Matcher::matchFragment(AtomContainer& fragment)
 		
 	if(templat && (templat->size() == fragment.countAtoms()) )
 	{
-		templat->transferCoordinates( fragment );
+		templat->applyCoordinates2Molecule( fragment );
 	}
 	else // print error msg, showing element-list and key of the not matchable molecule
 	{

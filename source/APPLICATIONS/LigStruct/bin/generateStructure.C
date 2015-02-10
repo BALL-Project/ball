@@ -47,12 +47,12 @@ int main(int argc, char* argv[])
 	
 	Molecule* tmp = infile.read();
 	StructureAssembler lig_assembler( lib_loader );
-	AromaticityProcessor aroma_proc;
+//	AromaticityProcessor aroma_proc;
 			
 	while (tmp)
 	{
 		LigBase::removeHydrogens( *tmp );
-		tmp->apply(aroma_proc);
+//		tmp->apply(aroma_proc); // <- should now be handled by 'canonicalizer' within StructureAssembler
 		
 //		cout<<"Molecule:"<<LigBase::printInlineMol( tmp)<<endl;
 		

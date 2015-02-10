@@ -55,8 +55,8 @@
 
 ///// Name Spaces
 //using namespace OpenBabel;
-using namespace BALL;
-using namespace std;
+//using namespace std;
+//using namespace BALL;
 
 struct RFragment;
 class TemplateCoord;
@@ -65,19 +65,19 @@ class TemplateCoord;
 /// ############################################################################
 
 // Standard Data:
-typedef vector<Atom*>                     AtmVec;
-typedef vector<Atom*>::iterator           AVIter;
-typedef vector <AtomContainer*>           ACVec;
-typedef vector <AtomContainer*>::iterator ACVecIter;
+typedef std::vector<BALL::Atom*>                     AtmVec;
+typedef std::vector<BALL::Atom*>::iterator           AVIter;
+typedef std::vector <BALL::AtomContainer*>           ACVec;
+typedef std::vector <BALL::AtomContainer*>::iterator ACVecIter;
 
 // Special Data:
-typedef list< pair<Atom*, Atom*> > ConnectList;
+typedef std::list< std::pair<BALL::Atom*, BALL::Atom*> > ConnectList;
 
 // Database types:
-typedef vector< vector<RFragment*> > CombiLibMap; // key==group number, value==all groupfragment for that group
-typedef boost::unordered_map <String, TemplateCoord*> RigidsMap;// key == UCK key
-typedef boost::unordered_map <String, float >         BondLengthMap;
-typedef boost::unordered_map <String, AtomContainer*> SiteMap;
+typedef std::vector< std::vector<RFragment*> > CombiLibMap; // key==group number, value==all groupfragment for that group
+typedef boost::unordered_map <BALL::String, TemplateCoord*> RigidsMap;// key == UCK key
+typedef boost::unordered_map <BALL::String, float >         BondLengthMap;
+typedef boost::unordered_map <BALL::String, BALL::AtomContainer*> SiteMap;
 
 
 /// C l a s s   T e m p l a t e C o o r d
@@ -91,155 +91,77 @@ class TemplateCoord
 {
 	
 public:
-	TemplateCoord(Size n)
-	{
-		_size = n;
-		positions = new Vector3[n];
-	}
+	TemplateCoord(BALL::Size n);
 
-	TemplateCoord(AtomContainer& mol)
-	{
-		_size = mol.countAtoms();
-		positions = new Vector3[_size];
-		setCoordinates( mol );
-	}
+	TemplateCoord( BALL::AtomContainer& mol);
 	
-	~TemplateCoord()
-	{
-		delete[] positions;
-	}
+	~TemplateCoord();
 	
-	Vector3& operator[](Index idx)
-	{
-		return positions[idx];
-	}
+	BALL::Vector3& operator[]( BALL::Index idx);
 	
-	Vector3& get(Index idx)
-	{
-		return positions[idx];
-	}
+	BALL::Vector3& get( BALL::Index idx);
 
-	const Size& size()
-	{
-		return _size;
-	}
+	const BALL::Size& size();
 	
 	/**
 	 * Apply coordinates of this to the input BALL::AtomContainer
 	 * @brief setCoordinates
 	 * @param mol
 	 */
-	void transferCoordinates(AtomContainer& mol)
-	{
-		AtomIterator qit = mol.beginAtom();
-		for (int i = 0 ; i < _size; i++, qit++)
-		{
-			qit->setPosition( positions[i] );
-		}
-	}
+	void applyCoordinates2Molecule( BALL::AtomContainer& mol);
 	
-	void setCoordinates(AtomContainer& mol)
-	{
-		AtomIterator qit = mol.beginAtom();
-		for (int i = 0 ; i < _size; i++, qit++)
-		{
-			positions[i] = qit->getPosition();
-		}
-	}
+	void readCoordinatesFromMolecule( BALL::AtomContainer& mol);
 
 private:
-	Size _size;
-	Vector3 *positions;
+	BALL::Size _size;
+	BALL::Vector3 *positions;
 };
 
-/// S t r u c t   G r o u p F r a g m e n t
+/// S t r u c t   R - A t o m
 /// ############################################################################
 struct RAtom
 {
 	int id;
 	bool done;
-	Atom* atm;
+	BALL::Atom* atm;
 };
 
+
+/// C l a s s   R F r a g m e n t
+/// ############################################################################
 class RFragment
 {
 public:
-	RFragment()
-	{
-		this->group_atom = 0;
-		this->group_id   = 0;
-		this->molecule   = 0;
-	}
+	RFragment();
 	
-	/*
+	/**
 	 * Clone RFragment, manually clones the molecule
 	 */
-	RFragment(const RFragment& other)
-	{
-		this->molecule = new AtomContainer();
-		
-		// clone atoms:
-		RAtom const * tmp_r = 0;
-		for(AtomIterator ati = other.molecule->beginAtom(); +ati; ++ati)
-		{
-			Atom* tmp_at = new Atom( *ati );
-			this->molecule->insert( *tmp_at );
-			
-			// check what kind of atom we are currently coping
-			// case group atom: transfer the group atom:
-			if( &*ati == other.group_atom)
-			{
-				this->group_atom = tmp_at;
-			}
-			// else check for r-atom
-			else
-			{
-				tmp_r = _isRAtom( other.r_atom_lst, &*ati);
-				if( tmp_r )
-				{
-					RAtom new_r;
-					new_r.atm = tmp_at;
-					new_r.id  = tmp_r->id;
-					new_r.done= tmp_r->done;
-					
-					this->r_atom_lst.push_back( new_r );
-				}
-			}
-		}
-		
-		// clone bonds
-		BALL::cloneBonds(*other.molecule, *this->molecule);
-		
-		group_id = other.group_id;
-		rotor_lst = other.rotor_lst;
-	}
+	RFragment(const RFragment& other);
 	
 	/// F I E L D S:
-	int group_id; //id 0 identifies the scaffold
-	AtomContainer* molecule;
+	int                  group_id; //id 0 identifies the scaffold
+	BALL::AtomContainer* molecule;
+	ConnectList          rotor_lst; // all intra rotor bonds of this RFragment
+	BALL::Atom*          group_atom; // (donor) connection
+	std::list< RAtom >   r_atom_lst; // (acceptor) connections
 	
-	ConnectList rotor_lst; // all intra rotor bonds of this RFragment
-	
-	// inter connections
-	Atom* group_atom;
-	list< RAtom > r_atom_lst;
-	
-//	vector< TemplateCoord > coord_set;
+	std::vector< TemplateCoord > coord_set; // alternate positions/ conformations
 
 private:
-	RAtom const* _isRAtom( const list< RAtom >& ilist, Atom* atom)
-	{
-		list< RAtom >::const_iterator it = ilist.begin();
-		for(; it != ilist.end(); ++it)
-		{
-			if( (*it).atm == atom )
-				return &*it;
-		}
-		
-		return 0;
-	}
+	RAtom const* _isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom);
 };
 
+/// C l a s s   C o m b i n a t i o n
+/// ############################################################################
+class Combination
+{
+public:
+	
+	std::list< RAtom > r_list;
+private:
+	
+};
 
 /// C l a s s   L i g B a s e
 /// ############################################################################
@@ -248,29 +170,29 @@ class LigBase
 public:
 	
 	// generate a mini dump of a molecule
-	static String printInlineMol(Composite* mol);
-	static String printMol(Composite* mol);
+	static BALL::String printInlineMol( BALL::Composite* mol);
+	static BALL::String printMol( BALL::Composite* mol);
+
+	static BALL::String printInlineStarMol( BALL::Composite* mol);
+	static BALL::String printInlineStarMol(AtmVec& mol);
 	
-	static String printInlineStarMol(Composite* mol);
-	static String printInlineStarMol(AtmVec& mol);
-	
-	static int countBondsAndOrder(Atom& atm);
-	static int countBondsInPartent(Atom& atm, const Composite &parent);
+	static int countBondsAndOrder( BALL::Atom& atm);
+	static int countBondsInPartent( BALL::Atom& atm, const BALL::Composite &parent);
 	
 	// get the position of an atom in the molcule list:
-	static const int getAtomPosition(Atom* atm, AtomContainer *mol);
+	static const int getAtomPosition( BALL::Atom* atm, BALL::AtomContainer *mol);
 	
 	// Translate the AtomContainer 'fromMol' into an AtmVec 'toMol'
-	static void toAtmVec( AtomContainer& fromMol, AtmVec& toMol);
+	static void toAtmVec( BALL::AtomContainer& fromMol, AtmVec& toMol);
 	
-	static void transferMolecule( AtomContainer* toMol, AtomContainer* fromMol);
+	static void transferMolecule( BALL::AtomContainer* toMol, BALL::AtomContainer* fromMol);
 	
-	static void clearExternalBonds(AtomContainer* mol);
+	static void clearExternalBonds( BALL::AtomContainer* mol);
 	
-	static void copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop);
+	static void copyMoleculeProperies( BALL::AtomContainer &orig, BALL::AtomContainer &cop);
 
 	// Remove Hydrogens
-	static void removeHydrogens(AtomContainer &tmp );
+	static void removeHydrogens( BALL::AtomContainer &tmp );
 };
 
 #endif // LIGANDSTRUCTUREBASE_H
