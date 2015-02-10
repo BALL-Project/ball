@@ -9,7 +9,7 @@
 class CombiAssembler
 {
 public:
-	CombiAssembler(RFragment* scaffold = 0, CombiLibMap* clib = 0);
+	CombiAssembler(TemplateDatabaseManager& data, CombiLibMap* clib);
 	
 	~CombiAssembler();
 	
@@ -18,7 +18,7 @@ public:
 	
 	void writeCombinations(SDFile& handle);
 	
-	void getCombinations( std::list< BALL::AtomContainer*>& result );
+//	void getCombinations( std::list< BALL::AtomContainer*>& result );
 private:
 	
 	void connectClashFree(Atom &at1, Atom &at2, ConnectList& connections);
@@ -30,6 +30,7 @@ private:
 	MoleculeConnector       _connector;
 	ConnectionClashResolver _cresolv;
 
+	void _combineRecur(SDFile& handle);
 };
 
 #endif // COMBIASSEMBLER_H

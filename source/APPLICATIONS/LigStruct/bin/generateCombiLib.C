@@ -76,24 +76,22 @@ int main(int argc, char* argv[])
 	cout<<" * assebling R-fragments"<<endl;
 	CombiLibMap& r_fragments = combi_man.getCombiLib();
 	
-	//DEBUG - START just check if everything was assebled correctly
-//	SDFile outfile( parpars.get("o"), ios::out);
-//	CombiLibMap::iterator it1 = r_fragments.begin();
-//	for(; it1 != r_fragments.end(); ++it1)
-//	{
-//		vector< RFragment* >::iterator it2 = (*it1).begin();
-//		for(; it2 != (*it1).end(); ++it2)
-//		{
-//			assem.assembleStructure( * (*it2)->molecule );
-//			outfile << * (*it2)->molecule;
-//		}
-//	}
-	//DEBUG - END
+	CombiLibMap::iterator it1 = r_fragments.begin();
+	for(; it1 != r_fragments.end(); ++it1)
+	{
+		vector< RFragment* >::iterator it2 = (*it1).begin();
+		for(; it2 != (*it1).end(); ++it2)
+		{
+			assem.assembleStructure( * (*it2)->molecule );
+//			outfile << * (*it2)->molecule; // DEBUG
+		}
+	}
+
 	
 	//5.) finally calculate all valid combinations:
 	cout<<" * generating 3D combinations, and write results to "<< parpars.get("o") <<endl;
 	
-	CombiAssembler combiner( &combi_man.getScaffold(), &combi_man.getCombiLib() );
+	CombiAssembler combiner( template_man, &combi_man.getCombiLib() );
 	SDFile outfile( parpars.get("o"), ios::out);
 	combiner.writeCombinations( outfile );
 	outfile.close();

@@ -7,9 +7,11 @@
 using namespace std;
 using namespace BALL;
 
-CombiAssembler::CombiAssembler(RFragment* scaffold, CombiLibMap* clib):
-	_work_mol(scaffold), _r_groups(clib)
-{}
+CombiAssembler::CombiAssembler(TemplateDatabaseManager &data, CombiLibMap* clib):
+	_work_mol(0), _r_groups(clib)
+{
+	_connector.setLibs(data.getSiteTemplates(), data.getBondLengthData());
+}
 
 CombiAssembler::~CombiAssembler()
 {
@@ -28,26 +30,46 @@ void CombiAssembler::setCombiLib(CombiLibMap &clib)
 
 void CombiAssembler::writeCombinations(SDFile &handle)
 {
+	_r_atms.clear();
+	
+	_work_mol = _r_groups->at(0)[0];
+	
+	for(list<RAtom>::iterator it = _work_mol->r_atom_lst.begin(); it != _work_mol->r_atom_lst.end(); ++it)
+	{
+		_r_atms.push_back( &*it );
+	}
+	
+	_combineRecur( handle );
+}
+
+
+void CombiAssembler::_combineRecur(SDFile &handle)
+{
 	//1.) get next RAtom:
 	RAtom* ra;
 	if( ! _r_atms.empty() )
 	{
 		ra = _r_atms.front();
+		cout<<"Taking: "<<ra->id<<endl;
 		_r_atms.pop_front(); // deeper recursions shall not handle this r-atom again
 	}
 	else
+	{
 		ra = 0;
+	}
 	
 	//2.) check for end-case:
 	if( !ra )
 	{
 		// write out the current work mol
+		cout<<"---------Writing Molecule"<<endl;
 		handle << * _work_mol->molecule;
 		return;
 	}
 	//3.) recursion case:
 	else
 	{
+		cout<<"---------RECURSION"<<endl;
 		// iterate over all RFrags in the RGroup fitting to the current R-atom 'ra':
 		vector<RFragment*>& group = _r_groups->at(ra->id);
 		vector<RFragment*>::iterator it2;
@@ -78,7 +100,7 @@ void CombiAssembler::writeCombinations(SDFile &handle)
 			
 			_work_mol->molecule->insert( *tmp->molecule );
 			//3.3) recurr deeper
-			writeCombinations( handle );
+			_combineRecur( handle );
 			
 			
 			//3.4) delete bond, and remove inserted molecule
@@ -121,6 +143,7 @@ void CombiAssembler::connectClashFree(Atom &at1, Atom &at2, ConnectList& connect
 	cout<<LigBase::printInlineMol(root_2)<<endl;
 	
 	_connector.connect( &at1, &at2 );
+	cout<<"connected molecules"<<endl;
 	
 	// 2.) detect and resolve clashes:
 	_cresolv.setMolecule(at1, at2, connections);
@@ -131,5 +154,5 @@ void CombiAssembler::connectClashFree(Atom &at1, Atom &at2, ConnectList& connect
 		c_cnt = _cresolv.resolve();
 		cout<<"Resolving finished with: "<<c_cnt<<endl;
 	}
-
+	
 }
