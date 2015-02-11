@@ -111,7 +111,7 @@ void MoleculeConnector::loadTemplates(AtomContainer*& tmp, String& key)
 		tmp = new AtomContainer( * _connections->at(key) );
 	}
 	else
-	{//TODO: implement as exception
+	{//#TODO:####: implement as exception
 		cout<<"ERROR in moleculeConnector: could not find connectionTemplate for: "
 			  << key<<endl;
 		exit(EXIT_FAILURE);

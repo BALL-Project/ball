@@ -238,7 +238,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 		for(ati++; +ati; ati++)
 		{
 			tem_2_atm = &*ati;
-			///TODO: 'atomsCompatible' won't work, use with a site atom, replace!
+			///#WARNING:####: 'atomsCompatible' won't work, use with a site atom, replace!
 			if( atomsCompatible(site2_atm, tem_2_atm) ) 
 			{
 				Vector3& tem2 = tem_2_atm->getPosition(); //assign first neighbor
@@ -248,7 +248,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 				for(ato++; +ato; ato++)
 				{
 					tem_3_atm = &*ato;
-					///TODO: 'atomsCompatible' won't work, use with a site atom, replace!
+					///#TODO:####: 'atomsCompatible' won't work, use with a site atom, replace!
 					if( (tem_2_atm != tem_3_atm) && (atomsCompatible(site3_atm, tem_3_atm)) )
 					{
 						float rmsd = numeric_limits<float>::max();
@@ -275,7 +275,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 
 /*
  * atomsCompatible
- * TODO: improve this version. Perhaps by using selections for sites and 
+ * #TODO:####: improve this version. Perhaps by using selections for sites and 
  * restricting to bonds that are selected?
  */
 bool StarAligner::atomsCompatible(Atom* at1,Atom* at2)
@@ -495,7 +495,7 @@ void StarAligner::sqdistPerPermutation(AVIter& ati1, AVIter& end1,
 		{
 			// test if element and bondtype fit for this assignment
 			// (this is rather for correctness than for speed)
-			///TODO: illegal use of 'atomsCompatible'
+			///#TODO:####: illegal use of 'atomsCompatible'
 			if(  atomsCompatible( *ati1, atm_vec[j] )  )
 			{
 				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
@@ -525,7 +525,7 @@ void StarAligner::swapAtoms(Atom*& a, Atom*& b)
 
 /*
  * twoPointMatch
- * TODO: reimplement more efficiently
+ * #TODO:####: reimplement more efficiently
  */
 Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2, 
 																		 const Vector3& w1, const Vector3& w2)

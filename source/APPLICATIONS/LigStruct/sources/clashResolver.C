@@ -103,7 +103,7 @@ void ConnectionClashResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &c
 }
 
 
-// TODO: this is just a quick primitive implementation. Coulb be solved nicely
+//#TODO: this is just a quick primitive implementation. Coulb be solved nicely
 // in a recursive manner (takes a bit more time to write)
 bool ConnectionClashResolver::atom3Away(Atom& at1, Atom& at2)
 {

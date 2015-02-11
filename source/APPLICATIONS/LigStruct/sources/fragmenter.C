@@ -58,7 +58,7 @@ bool MoleculeFragmenter::isRigidAtom(Atom &atm)
 	// if the atom has only one connection that leads to a rigid atom, it self is considered rigid
 	if( atm.countBonds() == 1 )
 	{
-		if ( isRigidAtom( * atm.beginBond()->getBoundAtom( atm )) ) //TODO: this recursion is not pretty/efficient
+		if ( isRigidAtom( * atm.beginBond()->getBoundAtom( atm )) ) //#TODO: this recursion is not pretty/efficient
 			return true;
 		else
 			return false;

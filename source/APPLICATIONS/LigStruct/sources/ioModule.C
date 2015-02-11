@@ -349,7 +349,7 @@ void CombiLibManager::generateCombinationsAtomContainer(list<AtomContainer*>& ou
 
 void CombiLibManager::_parseCombiLibFile()
 {
-	//TODO: better whole class clearing
+	//#TODO:####: better whole class clearing
 	_id_mapping.clear();
 	_lib.clear();
 	
@@ -480,7 +480,7 @@ void CombiLibManager::_parseCombiLibFile()
 		/// 'undefined line': throw error
 		else
 		{
-			// TODO: throw exception
+			//#TODO:####: throw exception
 			Log<<"ERROR in CombiLibManager: could not understand the combi lib line: ";
 			Log<< _combilib_file->getLine()<<endl;
 			exit(EXIT_FAILURE);

@@ -19,11 +19,11 @@ class Canonicalizer
 public:
 	Canonicalizer();
 	~Canonicalizer();
-	
+
 	void canonicalize(AtomContainer &molecule);
 	
 private:
-	// TODO: create OBGraphSym and OBmol as private member
+	//#TODO: create OBGraphSym and OBmol as private member
 };
 
 /// C l a s s   M a t c h e r

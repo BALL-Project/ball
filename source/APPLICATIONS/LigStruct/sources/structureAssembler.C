@@ -54,7 +54,7 @@ void StructureAssembler::assembleStructure(AtomContainer& mol)
 	}
 	
 	// re-insert all fragments into the original molecule
-	// TODO: perhaps it makes more sense to splice all atoms, or only insert the root of one fragment
+	//#TODO:####: perhaps it makes more sense to splice all atoms, or only insert the root of one fragment
 	for(AtomContainer*& f : rigids)
 	{
 		mol.insert( *f );
