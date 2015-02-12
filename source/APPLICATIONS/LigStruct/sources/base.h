@@ -127,6 +127,7 @@ struct RAtom
 {
 	int id;
 	BALL::Atom* atm;
+	
 };
 
 
@@ -143,27 +144,19 @@ public:
 	RFragment(const RFragment& other);
 	
 	/// F I E L D S:
-	int                  group_id; //id 0 identifies the scaffold
-	BALL::AtomContainer* molecule;
-	ConnectList          rotor_lst; // all intra rotor bonds of this RFragment
-	BALL::Atom*          group_atom; // (donor) connection
-	std::list< RAtom >   r_atom_lst; // (acceptor) connections
+	int                group_id;   // to which r-group this r-fragment belongs
+	BALL::Atom*        group_atom; // (donor) connection
+	std::list< RAtom > r_atom_lst; // (acceptor) connections
 	
-	std::vector< TemplateCoord > coord_set; // alternate positions/ conformations
-
+	BALL::AtomContainer* molecule; // the actual molecule
+	ConnectList          rotor_lst; // all intra rotor bonds of this RFragment
+	
+	int                          curr_set;// coordinate set that is currently used
+	std::vector< TemplateCoord > coord_sets; // alternate positions/ conformations
+	
+	
 private:
 	RAtom const* _isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom);
-};
-
-/// C l a s s   C o m b i n a t i o n
-/// ############################################################################
-class Combination
-{
-public:
-	
-	std::list< RAtom > r_list;
-private:
-	
 };
 
 /// C l a s s   L i g B a s e

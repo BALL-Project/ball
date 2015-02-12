@@ -111,7 +111,6 @@ RFragment::RFragment(const RFragment& other)
 				RAtom new_r;
 				new_r.atm = tmp_at;
 				new_r.id  = tmp_r->id;
-				new_r.done= tmp_r->done;
 				
 				this->r_atom_lst.push_back( new_r );
 			}

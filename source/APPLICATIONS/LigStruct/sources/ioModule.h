@@ -102,14 +102,17 @@ public:
 	CombiLibMap& getCombiLib();
 	
 	void generateCombinationsSMILES( std::list<BALL::String>& out_SMILES);
-	void generateCombinationsAtomContainer(std::list<BALL::AtomContainer *> &out_molecules);
+	void generateCombinationsAtomContainer(
+			std::list<BALL::AtomContainer *> &out_molecules);
 	
 private:
 	void _parseCombiLibFile();
+	void _recurGenerateCombi( std::list<BALL::AtomContainer *> &out_molecules);
 	
 	BALL::LineBasedFile* _combilib_file;
 	RFragment*           _scaffold;
 	CombiLibMap          _lib;
+	std::list< RAtom* >  _r_atms;
 	
 	bool         _lib_is_generated;
 	SmilesParser _smi_parser;

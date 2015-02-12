@@ -148,8 +148,8 @@ void CombiAssembler::connectClashFree(Atom &at1, Atom &at2, ConnectList& connect
 	{
 //		cout<<"Resolving clash, got: "<<c_cnt<<endl;
 		c_cnt = _cresolv.resolve();
-		if(c_cnt != 0)
-			cout<<"Resolving finished with: "<<c_cnt<<endl;
+//		if(c_cnt != 0)
+//			cout<<"Resolving finished with: "<<c_cnt<<endl;
 	}
 	
 }
