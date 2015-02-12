@@ -6,6 +6,9 @@
 #include "moleculeConnector.h"
 #include "structureAssembler.h"
 
+#include <map>
+#include <set>
+
 class CombiAssembler
 {
 public:
@@ -21,7 +24,9 @@ public:
 //	void getCombinations( std::list< BALL::AtomContainer*>& result );
 private:
 	
-	void connectClashFree(Atom &at1, Atom &at2, ConnectList& connections);
+	bool _connectClashFree(Atom &at1, Atom &at2, ConnectList& connections);
+	void _checkAndConnect(RAtom& acceptor, RFragment& donor);
+	void _addSet(RFragment& mol);
 	
 	RFragment*          _work_mol;
 	CombiLibMap*        _r_groups;

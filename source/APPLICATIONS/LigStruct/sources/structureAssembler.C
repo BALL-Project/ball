@@ -92,7 +92,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		if( c_cnt != 0 )
 		{
 //			cout<<"Resolving clash, got: "<<c_cnt<<endl;
-			c_cnt = _clash_resolver.resolve();
+			c_cnt = _clash_resolver.resolve().first;
 //			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
 		
@@ -111,7 +111,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		if( c_cnt != 0 )
 		{
 //			cout<<"Resolving clash, got: "<<c_cnt<<endl;
-			c_cnt = _clash_resolver.resolve();
+			c_cnt = _clash_resolver.resolve().first;
 //			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
 		

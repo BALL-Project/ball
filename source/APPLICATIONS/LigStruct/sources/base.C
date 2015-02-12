@@ -76,6 +76,29 @@ const Size& TemplateCoord::size()
 	return _size;
 }
 
+/// S t r u c t   R A t o m
+/// ############################################################################
+//#WARNING: add a guard to not override via insert ???
+void RAtom::addParnter(RFragment &other)
+{
+	known_partners[ make_pair(parent->curr_set, &other) ] = other.curr_set;
+}
+
+
+int RAtom::getCompatibleSet(RFragment &other)
+{
+	std::map< pair<int ,RFragment*>, int >::iterator it;
+	it = known_partners.find( make_pair(parent->curr_set, &other) );
+	
+	if( it != known_partners.end() )
+	{
+		if( it->second < other.coord_sets.size())
+			return it->second;
+	}
+
+	return -1;
+}
+
 /// C l a s s   R F r a g m e n t
 /// ############################################################################
 RFragment::RFragment()
@@ -124,6 +147,21 @@ RFragment::RFragment(const RFragment& other)
 	rotor_lst = other.rotor_lst;
 }
 
+void RFragment::setCoordsTo(const int &set)
+{
+	if( curr_set == set)
+		return;
+	
+	coord_sets[set].applyCoordinates2Molecule( *molecule );
+	curr_set = set;
+}
+
+void RFragment::newSetFromCurrent()
+{
+	curr_set = coord_sets.size();
+	coord_sets.push_back( TemplateCoord( *molecule ) );
+}
+
 RAtom const* RFragment::_isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom)
 {
 	std::list< RAtom >::const_iterator it = ilist.begin();
@@ -135,9 +173,6 @@ RAtom const* RFragment::_isRAtom( const std::list< RAtom >& ilist, BALL::Atom* a
 	
 	return 0;
 }
-
-/// C l a s s   C o m b i n a t i o n
-/// ############################################################################
 
 
 /// C l a s s   L i g B a s e
@@ -286,4 +321,17 @@ void LigBase::removeHydrogens(AtomContainer &tmp)
 	for(int i = 0; i<bnd_remove.size(); ++i)
 		bnd_remove[i]->destroy();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 

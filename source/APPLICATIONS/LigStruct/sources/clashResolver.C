@@ -14,6 +14,7 @@
 #include <BALL/KERNEL/molecule.h> //DEBUG
 
 #include <limits>
+#include <utility>
 
 using namespace std; 
 using namespace BALL;
@@ -254,7 +255,7 @@ void ConnectionClashResolver::setAtomsToRotate(Atom &start, Atom &probe, Atom &b
  * 
  * (Well: resolveALL(int) of course gives the complete count)
  */
-int ConnectionClashResolver::resolve(bool conserve_large)
+pair<int, bool> ConnectionClashResolver::resolve(bool optimal, bool conserve_large)
 {
 	int clash_cnt = -1;
 	_save_large->readCoordinatesFromMolecule( *_large_root );
@@ -265,26 +266,31 @@ int ConnectionClashResolver::resolve(bool conserve_large)
 	
 //	cout<<"Connections finished with: "<<clash_cnt<<endl;
 	if( clash_cnt == 0)
-		return detectInMolecule( *_small_root) + detectInMolecule( *_large_root); // + clash_cnt (which is 0)
+		return make_pair( 
+					detectInMolecule( *_small_root) + detectInMolecule( *_large_root),
+					false); // + clash_cnt (which is 0)
 	
 	//2) SMALL FRAGMENT rotations might the solve the clashes:
 	clash_cnt = resolveFragment( *_small_root, *_small_rotors);
 	
 //	cout<<"SMALL finished with: "<<clash_cnt<<endl;
 	if( clash_cnt == 0 || conserve_large)
-		return clash_cnt + detectInMolecule( *_large_root);
+		return make_pair( 
+					clash_cnt + detectInMolecule( *_large_root),
+					false);
 	
 	//3) LARGE FRAGMENT rotations might solve the clashes:
 	clash_cnt = resolveFragment( *_large_root, *_large_rotors);
 //	cout<<"LARGE finished with: "<<clash_cnt<<endl;
-	if( clash_cnt == 0)
-		return detectInMolecule( *_small_root);
+	if( clash_cnt == 0 || !optimal)
+		return make_pair( detectInMolecule( *_small_root),
+											true);
 
 	//4) ALL rotations:
 	clash_cnt = resolveAll( 6 );
 //	cout<<"ALL(6) finished with: "<<clash_cnt<<endl;
 	
-	return clash_cnt;
+	return make_pair(clash_cnt, true);
 }
 
 // resolve     C O N N E C T I O N

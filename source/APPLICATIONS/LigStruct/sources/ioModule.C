@@ -516,10 +516,10 @@ void CombiLibManager::_parseCombiLibFile()
 	 
 	// check if for all found r-groups we have at last one r-fragment
 	boost::unordered_map< int, int >::iterator it2;
-	cout<<"Parsing gave: "<<endl;
+//	cout<<"Parsing gave: "<<endl; //#DEBUG
 	for(it2 = _id_mapping.begin(); it2 != _id_mapping.end(); ++it2)
 	{
-		cout<<"group: "<<it2->second<<" size: "<<_lib[it2->second].size()<<endl;
+//		cout<<"group: "<<it2->second<<" size: "<<_lib[it2->second].size()<<endl; //#DEBUG
 		if( _lib[it2->second].size() == 0 )
 		{
 			Log<<"ERROR in CombiLibManager: could not find a r-fragment for r-group "
@@ -558,6 +558,7 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 	
 	RFragment* frag = new RFragment();
 	frag->group_id = g_id;
+	frag->curr_set = -1;
 	
 	list< pair<int, OpenBabel::OBAtom*> > con_lst;
 	OpenBabel::OBAtom* group_atom = 0;
@@ -617,6 +618,7 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 			RAtom new_r;
 			new_r.id  = group_id;
 			new_r.atm = atm_ptr;
+			new_r.parent = frag;
 			
 			frag->r_atom_lst.push_back( new_r );
 		}

@@ -39,7 +39,7 @@ void CombiAssembler::writeCombinations(SDFile &handle)
 		_r_atms.push_back( &*it );
 	}
 	
-	_combineRecur( handle );
+	_combineRecur( handle);
 }
 
 
@@ -72,7 +72,7 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 		vector<RFragment*>::iterator it2;
 		for(it2 = group.begin(); it2 != group.end(); ++it2)
 		{
-			RFragment* tmp = new RFragment( **it2 );
+			RFragment* tmp = *it2;
 			Bond* bnd = 0;
 			
 			//3.1) extend '_r_amts' with the RAtoms of the new RFragment same for the
@@ -90,8 +90,8 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 			b.setOrder(1);
 			bnd = ra->atm->createBond(b, *tmp->group_atom );
 			
-			//3.3) connect the two fragments clashFree:
-			connectClashFree(*ra->atm, *tmp->group_atom, _work_mol->rotor_lst);
+			//3.3) connect the two fragments:
+			_checkAndConnect(*ra, *tmp);
 			_work_mol->molecule->insert( *tmp->molecule );
 			
 			//3.4) recurr deeper
@@ -109,47 +109,98 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 			for(ConnectList::iterator it = tmp->rotor_lst.begin(); 
 					it != tmp->rotor_lst.end(); ++it)
 				_work_mol->rotor_lst.pop_back();
-			
-			delete tmp;
 		}
 	}
 	
 	_r_atms.push_front( ra ); // upper calls of writeCombinations should handle this atom first
 }
 
+void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
+{
+	int acc_id = acceptor.parent->curr_set;
+	int donor_id = donor.curr_set;
+	
+	/*
+	 * 1.) the acceptor and donor do have a conformation
+	 */
+	if( acc_id != -1 && donor_id != -1)
+	{
+		// known Fragment?!
+		int donor_target_set = acceptor.getCompatibleSet(donor);
+		if ( donor_target_set != -1)
+		{
+			cout<<"Reusing coordinates!"<<endl;//#DEBUG
+			
+			donor.setCoordsTo( donor_target_set ); // to the fitting coordinates
+			
+			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, _work_mol->rotor_lst);
+			int c_cnt = _cresolv.detect();
+			
+			// if we need to resolve a clash...
+			if (c_cnt != 0)
+			{
+				pair<int,bool> res = _cresolv.resolve();
+				
+				// resolving the clash, led to a new coordinate set:
+				if( res.second )
+				{
+					acceptor.parent->newSetFromCurrent();
+					donor.newSetFromCurrent();
+					
+					acceptor.addParnter(donor);
+				}
+			}
+			return;
+		}
+	}
+	
+	/*
+	 * 2.) only the acceptor side has a conformation
+	 */
+	else if (acc_id != -1 && donor_id == -1) 
+	{
+		// if the known acceptor side was changed: add both coordinates...
+		if(_connectClashFree( *acceptor.atm, *donor.group_atom, _work_mol->rotor_lst))
+			acceptor.parent->newSetFromCurrent();
+		
+		//...else: only the ones from the donor
+		donor.newSetFromCurrent();
+			
+		acceptor.addParnter(donor);
+	}
+	/*
+	 *  3.) both are new (should only occur at the beginning)
+	 */
+	else
+	{
+		_connectClashFree( *acceptor.atm, *donor.group_atom, _work_mol->rotor_lst);
+		
+		acceptor.parent->newSetFromCurrent();
+		donor.newSetFromCurrent();
+		
+		acceptor.addParnter( donor );
+	}
+}
+
 /*
  * at1 == atom from scaffold
  * at2 == atom from new R-fragment
  */
-void CombiAssembler::connectClashFree(Atom &at1, Atom &at2, ConnectList& connections)
+bool CombiAssembler::_connectClashFree(Atom &at1, Atom &at2, ConnectList& connections)
 {
-	//1.) select biggest molecule as 1st connection partner. 
-	//    REASON: we assume that our connection method keeps the first fragment 
-	//    in place and only transforms the second fragment!
-
-	// get root container to be able to identify all connected atoms of the
-	// respective connection-atom:
-//	AtomContainer* root_1 = (AtomContainer*) &at1.getRoot();
-//	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
-	
-//	cout<<endl<<endl<<"#### Connecting:"<<endl;
 	int c_cnt;
 
-//	cout<<LigBase::printInlineMol(root_1)<<endl;
-//	cout<<LigBase::printInlineMol(root_2)<<endl;
-	
 	_connector.connect( &at1, &at2 );
-//	cout<<"connected molecules"<<endl;
 	
 	// 2.) detect and resolve clashes:
 	_cresolv.setMolecule(at1, at2, connections);
+	
 	c_cnt = _cresolv.detect();
+	
 	if( c_cnt != 0 )
 	{
-//		cout<<"Resolving clash, got: "<<c_cnt<<endl;
-		c_cnt = _cresolv.resolve();
-//		if(c_cnt != 0)
-//			cout<<"Resolving finished with: "<<c_cnt<<endl;
+		return _cresolv.resolve().second;
 	}
 	
+	return false; // nothing changed
 }

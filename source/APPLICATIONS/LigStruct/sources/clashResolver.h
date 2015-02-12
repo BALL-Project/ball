@@ -9,14 +9,12 @@
 #include <BALL/MATHS/angle.h>
 #include <BALL/DATATYPE/hashSet.h>
 
-//using namespace OpenBabel;
 using namespace BALL;
 //using namespace std;
 
 class ConnectionClashResolver
 {
 public:
-//	ClashResolver();
 	ConnectionClashResolver( float tolerance = 1.3, int max_rotors = 2);
 	~ConnectionClashResolver();
 	
@@ -34,7 +32,7 @@ public:
 	 */
 	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections, ConnectList *more_rotors=0);
 	
-	int resolve(bool conserve_large = false);
+	std::pair<int, bool> resolve(bool optimal = false, bool conserve_large = false);
 	
 	/**
 	 * @brief detect ONLY clashes that occur between the two fragments NOT within

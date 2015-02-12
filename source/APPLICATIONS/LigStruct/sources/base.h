@@ -123,11 +123,17 @@ private:
 
 /// S t r u c t   R - A t o m
 /// ############################################################################
+class RFragment;
+
 struct RAtom
 {
 	int id;
 	BALL::Atom* atm;
+	RFragment* parent;
+	std::map< std::pair<int ,RFragment*>, int > known_partners;
 	
+	void addParnter(RFragment& other);
+	int getCompatibleSet(RFragment& other);
 };
 
 
@@ -154,6 +160,8 @@ public:
 	int                          curr_set;// coordinate set that is currently used
 	std::vector< TemplateCoord > coord_sets; // alternate positions/ conformations
 	
+	void setCoordsTo(const int& set);
+	void newSetFromCurrent();
 	
 private:
 	RAtom const* _isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom);
