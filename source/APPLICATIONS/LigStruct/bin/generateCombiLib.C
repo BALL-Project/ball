@@ -57,20 +57,22 @@ int main(int argc, char* argv[])
 	LineBasedFile combi_file(parpars.get("i"), ios::in);
 	combi_man.setCombiLib( combi_file );
 	
-	//3.) simple testing:
-	String control_path = parpars.get("o") + "_control.sdf";
-	cout<<" * generating 2D combinations, and write them to "<< control_path <<endl;
+	//#DEBUG 2d controll output
+//	//3.) simple testing:
+//	String control_path = parpars.get("o") + "_control.sdf";
+//	cout<<" * generating 2D combinations, and write them to "<< control_path <<endl;
 	
-	//--- generate the control-data: all combinations without coordinates
-	//--- as input for single prediction:
-	list< AtomContainer* > combins;
-	combins.clear();
-	combi_man.generateCombinationsAtomContainer( combins );
+//	//--- generate the control-data: all combinations without coordinates
+//	//--- as input for single prediction:
+//	list< AtomContainer* > combins;
+//	combins.clear();
+//	combi_man.generateCombinationsAtomContainer( combins );
 	
-	SDFile control_file(control_path, ios::out);
-	//--- write AC-list to SDFile
-	for(list<AtomContainer*>::iterator it = combins.begin(); it != combins.end(); ++it)
-		control_file << **it;
+//	SDFile control_file(control_path, ios::out);
+//	//--- write AC-list to SDFile
+//	for(list<AtomContainer*>::iterator it = combins.begin(); it != combins.end(); ++it)
+//		control_file << **it;
+	//#DEBUG 2d controll output END
 	
 	//4.) assemble all individual RFragments:
 	cout<<" * assebling R-fragments"<<endl;
@@ -93,7 +95,9 @@ int main(int argc, char* argv[])
 	
 	CombiAssembler combiner( template_man, &combi_man.getCombiLib() );
 	SDFile outfile( parpars.get("o"), ios::out);
+	
 	combiner.writeCombinations( outfile );
+	
 	outfile.close();
 
 

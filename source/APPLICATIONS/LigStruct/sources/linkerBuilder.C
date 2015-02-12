@@ -333,9 +333,9 @@ ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 	_cresolv.setMolecule(linker_frag, temp );
 	if(_cresolv.detect() != 0)
 	{
-		cout<<endl<<"built linker: "<<endl;
-		cout<<LigBase::printInlineMol( &linker_frag)<<endl;
-		cout<<"  contains "<<_cresolv.resolve()<<" clashes."<<endl;
+//		cout<<endl<<"built linker: "<<endl; //#DEBUG
+//		cout<<LigBase::printInlineMol( &linker_frag)<<endl; //#DEBUG
+//		cout<<"  contains "<<_cresolv.resolve()<<" clashes."<<endl; //#DEBUG
 	}
 	
 	return temp;

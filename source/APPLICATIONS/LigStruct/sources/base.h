@@ -74,8 +74,12 @@ typedef std::vector <BALL::AtomContainer*>::iterator ACVecIter;
 typedef std::list< std::pair<BALL::Atom*, BALL::Atom*> > ConnectList;
 
 // Database types:
-typedef std::vector< std::vector<RFragment*> > CombiLibMap; // key==group number, value==all groupfragment for that group
-typedef boost::unordered_map <BALL::String, TemplateCoord*> RigidsMap;// key == UCK key
+// key==group number, value==all groupfragment for that group
+typedef std::vector< std::vector<RFragment*> > CombiLibMap; 
+
+// key == UCK key
+typedef boost::unordered_map <BALL::String, TemplateCoord*> RigidsMap;
+
 typedef boost::unordered_map <BALL::String, float >         BondLengthMap;
 typedef boost::unordered_map <BALL::String, BALL::AtomContainer*> SiteMap;
 
@@ -122,7 +126,6 @@ private:
 struct RAtom
 {
 	int id;
-	bool done;
 	BALL::Atom* atm;
 };
 

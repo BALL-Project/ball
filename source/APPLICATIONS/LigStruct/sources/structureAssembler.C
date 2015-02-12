@@ -76,12 +76,12 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	AtomContainer* root_1 = (AtomContainer*) &at1.getRoot();
 	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
 	
-	cout<<endl<<endl<<"#### Connecting:"<<endl;
+//	cout<<endl<<endl<<"#### Connecting:"<<endl;
 	int c_cnt;
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
-		cout<<LigBase::printInlineMol(root_1)<<endl;
-		cout<<LigBase::printInlineMol(root_2)<<endl;
+//		cout<<LigBase::printInlineMol(root_1)<<endl;
+//		cout<<LigBase::printInlineMol(root_2)<<endl;
 
 		_connector.connect( &at1, &at2 );
 
@@ -91,17 +91,17 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		
 		if( c_cnt != 0 )
 		{
-			cout<<"Resolving clash, got: "<<c_cnt<<endl;
+//			cout<<"Resolving clash, got: "<<c_cnt<<endl;
 			c_cnt = _clash_resolver.resolve();
-			cout<<"Resolving finished with: "<<c_cnt<<endl;
+//			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
 		
 		root_1->insert( *root_2 );
 	}
 	else
 	{
-		cout<<LigBase::printInlineMol(root_2)<<endl;
-		cout<<LigBase::printInlineMol(root_1)<<endl;
+//		cout<<LigBase::printInlineMol(root_2)<<endl;
+//		cout<<LigBase::printInlineMol(root_1)<<endl;
 		_connector.connect( &at2, &at1 );
 		
 		// 2.) detect and resolve clashes:
@@ -110,9 +110,9 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		
 		if( c_cnt != 0 )
 		{
-			cout<<"Resolving clash, got: "<<c_cnt<<endl;
+//			cout<<"Resolving clash, got: "<<c_cnt<<endl;
 			c_cnt = _clash_resolver.resolve();
-			cout<<"Resolving finished with: "<<c_cnt<<endl;
+//			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
 		
 		root_2->insert( *root_1 );
