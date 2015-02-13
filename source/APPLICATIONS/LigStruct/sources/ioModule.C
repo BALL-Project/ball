@@ -297,6 +297,19 @@ void CombiLibManager::generateCombinationsAtomContainer(
 	_recurGenerateCombi( out_molecules );
 }
 
+void CombiLibManager::_sortRGroups()
+{
+	for( int i = 1; i < _lib.size(); ++i)
+	{
+		std::sort(_lib[i].begin(), _lib[i].end(), _compareRFrag);
+	}
+}
+
+bool CombiLibManager::_compareRFrag(RFragment *&frag1, RFragment *&frag2)
+{
+	return frag1->size > frag2->size;
+}
+
 void CombiLibManager::_recurGenerateCombi(std::list<AtomContainer *> &out_molecules)
 {
 	//1.) get next unhandled RAtom:
@@ -529,6 +542,9 @@ void CombiLibManager::_parseCombiLibFile()
 			exit(EXIT_FAILURE);
 		}
 	}
+	
+	_sortRGroups();
+	
 	_lib_is_generated = true;
 }
 
@@ -559,7 +575,7 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 	RFragment* frag = new RFragment();
 	frag->group_id = g_id;
 	frag->curr_set = -1;
-	
+	frag->size = _babel_mol.NumAtoms();
 	list< pair<int, OpenBabel::OBAtom*> > con_lst;
 	OpenBabel::OBAtom* group_atom = 0;
 	

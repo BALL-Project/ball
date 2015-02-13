@@ -106,6 +106,11 @@ public:
 			std::list<BALL::AtomContainer *> &out_molecules);
 	
 private:
+	void _sortRGroups();
+	/*
+	 * Returns true if frag1 has more atoms than frag2
+	 */
+	bool static _compareRFrag(RFragment*& frag1, RFragment*& frag2 );
 	void _parseCombiLibFile();
 	void _recurGenerateCombi( std::list<BALL::AtomContainer *> &out_molecules);
 	

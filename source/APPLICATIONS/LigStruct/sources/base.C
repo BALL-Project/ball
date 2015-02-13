@@ -34,6 +34,7 @@ TemplateCoord::TemplateCoord(BALL::Size n)
 TemplateCoord::TemplateCoord( AtomContainer& mol)
 {
 	_size = mol.countAtoms();
+
 	positions = new Vector3[_size];
 	readCoordinatesFromMolecule( mol );
 }
@@ -103,9 +104,18 @@ int RAtom::getCompatibleSet(RFragment &other)
 /// ############################################################################
 RFragment::RFragment()
 {
+	this->size = 0;
 	this->group_atom = 0;
 	this->group_id   = 0;
 	this->molecule   = 0;
+}
+
+RFragment::~RFragment()
+{
+	for(int i = 0; i < coord_sets.size(); ++i)
+	{
+		delete coord_sets[i];
+	}
 }
 
 RFragment::RFragment(const RFragment& other)
@@ -152,14 +162,14 @@ void RFragment::setCoordsTo(const int &set)
 	if( curr_set == set)
 		return;
 	
-	coord_sets[set].applyCoordinates2Molecule( *molecule );
+	coord_sets[set]->applyCoordinates2Molecule( *molecule );
 	curr_set = set;
 }
 
 void RFragment::newSetFromCurrent()
 {
 	curr_set = coord_sets.size();
-	coord_sets.push_back( TemplateCoord( *molecule ) );
+	coord_sets.push_back( new TemplateCoord( *molecule ) );
 }
 
 RAtom const* RFragment::_isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom)

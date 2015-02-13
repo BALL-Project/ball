@@ -143,13 +143,14 @@ class RFragment
 {
 public:
 	RFragment();
-	
+	~RFragment();
 	/**
 	 * Clone RFragment, manually clones the molecule
 	 */
 	RFragment(const RFragment& other);
 	
 	/// F I E L D S:
+	BALL::Size size;
 	int                group_id;   // to which r-group this r-fragment belongs
 	BALL::Atom*        group_atom; // (donor) connection
 	std::list< RAtom > r_atom_lst; // (acceptor) connections
@@ -157,8 +158,8 @@ public:
 	BALL::AtomContainer* molecule; // the actual molecule
 	ConnectList          rotor_lst; // all intra rotor bonds of this RFragment
 	
-	int                          curr_set;// coordinate set that is currently used
-	std::vector< TemplateCoord > coord_sets; // alternate positions/ conformations
+	int                           curr_set;// coordinate set that is currently used
+	std::vector< TemplateCoord* > coord_sets; // alternate positions/ conformations
 	
 	void setCoordsTo(const int& set);
 	void newSetFromCurrent();
