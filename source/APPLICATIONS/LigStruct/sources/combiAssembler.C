@@ -63,7 +63,7 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	{
 		// write out the current work mol
 		handle << * _work_mol->molecule;
-//		cout<<(*_r_groups)[0][0]->coord_sets.size()<<endl;
+
 		return;
 	}
 	//3.) recursion case:
