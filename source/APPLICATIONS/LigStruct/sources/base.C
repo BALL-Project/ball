@@ -4,22 +4,9 @@
 
 #include "base.h"
 
-
-#include <BALL/DATATYPE/string.h>
-
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
-
-#include <BALL/CONCEPT/composite.h>
-#include <BALL/KERNEL/atomContainer.h>
-
 #include <BALL/KERNEL/forEach.h>
-#include <vector>
 
-/// Name Spaces
 using namespace BALL;
 using namespace std;
 
@@ -59,7 +46,6 @@ void TemplateCoord::readCoordinatesFromMolecule( AtomContainer& mol)
 
 TemplateCoord::~TemplateCoord()
 {
-//	delete[] positions; // delete only the array not the elements!!!
 }
 
 Vector3& TemplateCoord::operator[]( Index idx)

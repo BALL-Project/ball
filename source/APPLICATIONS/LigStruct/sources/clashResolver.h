@@ -5,9 +5,8 @@
 #define CLASHRESOLVER_H
 
 #include "base.h"
-#include <BALL/KERNEL/bond.h>
+
 #include <BALL/MATHS/angle.h>
-#include <BALL/DATATYPE/hashSet.h>
 
 class ConnectionClashResolver
 {

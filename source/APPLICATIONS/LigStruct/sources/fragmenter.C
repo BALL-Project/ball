@@ -4,17 +4,13 @@
 
 #include "fragmenter.h"
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/CONCEPT/property.h>
-
 #include <BALL/KERNEL/forEach.h>
 
 #include <boost/pending/disjoint_sets.hpp>
-#include <boost/unordered_map.hpp>
+
+using namespace BALL;
+using namespace std;
 
 MoleculeFragmenter::MoleculeFragmenter()
 {

@@ -3,18 +3,10 @@
 //
 
 #include "ClashResolver.h"
-#include <BALL/KERNEL/PTE.h>
 
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/quaternion.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/MATHS/vector3.h>
-#include <BALL/MATHS/matrix44.h>
-
-#include <BALL/FORMAT/SDFile.h> //DEBUG
-#include <BALL/KERNEL/molecule.h> //DEBUG
-
-#include <limits>
-#include <utility>
 
 using namespace std; 
 using namespace BALL;

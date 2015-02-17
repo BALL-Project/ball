@@ -7,11 +7,6 @@
 
 #include "base.h"
 
-#include <BALL/KERNEL/atomContainer.h>
-
-using namespace BALL;
-using namespace std;
-
 /// C l a s s   C a n o n i c a l i z e r
 /// ############################################################################
 class Canonicalizer
@@ -20,7 +15,7 @@ public:
 	Canonicalizer();
 	~Canonicalizer();
 
-	void canonicalize(AtomContainer &molecule);
+	void canonicalize(BALL::AtomContainer &molecule);
 	
 private:
 	//#TODO: create OBGraphSym and OBmol as private member
@@ -34,9 +29,9 @@ public:
 	Matcher( RigidsMap& coord_map );
 	~Matcher();
 	
-	void matchFragment(AtomContainer &fragment);
+	void matchFragment(BALL::AtomContainer &fragment);
 	
-	static const String getUCK(AtomContainer & mol);
+	static const BALL::String getUCK(BALL::AtomContainer & mol);
 	
 private:
 	RigidsMap& _coord_lib;

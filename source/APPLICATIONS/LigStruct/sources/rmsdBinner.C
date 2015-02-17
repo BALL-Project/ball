@@ -5,6 +5,9 @@
 #include "rmsdBinner.h"
 #include "base.h"
 
+using namespace BALL;
+using namespace std;
+
 RMSDBinner::RMSDBinner(bool star_align, float threshold, int limit):
 	_threshold(threshold),
 	_variant_limit(limit),

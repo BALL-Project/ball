@@ -5,20 +5,9 @@
 #ifndef RMSDBINNER_H
 #define RMSDBINNER_H
 
-#include "../sources/starAligner.h"
-//#include "../sources/canonicalizer.h" // important for molecules only
+#include "starAligner.h"
 
-#include <BALL/KERNEL/atomContainer.h>
-#include <BALL/DATATYPE/string.h>
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
-
-#include <util.h>
-#include <algorithm>
-
-#include <boost/container/map.hpp>
-
-using namespace BALL;
-using namespace std;
 
 /**
 	ATTENTION: if using this with molecule Fragments (not starLike Molecules and
@@ -44,29 +33,29 @@ public:
 	 * @param key
 	 * @param molecule
 	 */
-	void addMolecule(const String& key, AtomContainer& molecule);
+	void addMolecule(const BALL::String& key, BALL::AtomContainer& molecule);
 	
 	/**
 	 * Get iterators to the complete library
 	 */
-	map <String, vector< pair<AtomContainer*, int> > >::iterator begin();
-	map <String, vector< pair<AtomContainer*, int> > >::iterator end();
+	std::map <BALL::String, std::vector< std::pair<BALL::AtomContainer*, int> > >::iterator begin();
+	std::map <BALL::String, std::vector< std::pair<BALL::AtomContainer*, int> > >::iterator end();
 	
 	int size();
 	
 private:
 	
-	float _getRMSD(AtomContainer &mol1, AtomContainer &mol2 );
+	float _getRMSD(BALL::AtomContainer &mol1, BALL::AtomContainer &mol2 );
 	
-	void insertMoleculeIntoBins(vector< pair<AtomContainer*, int> >& bins, AtomContainer& molecule);
+	void insertMoleculeIntoBins(std::vector< std::pair<BALL::AtomContainer*, int> >& bins, BALL::AtomContainer& molecule);
 	
-	void filter2TopX(vector< pair<AtomContainer*, int> >& mol_list, const int &num_top=1);
+	void filter2TopX(std::vector< std::pair<BALL::AtomContainer*, int> >& mol_list, const int &num_top=1);
 	
-	void insertMoleculeToLib(const String& key, AtomContainer& molecule);
+	void insertMoleculeToLib(const BALL::String& key, BALL::AtomContainer& molecule);
 	
 	void sortAll();
 	
-	static bool comparator(pair<AtomContainer*, int>& a, pair<AtomContainer*, int> & b)
+	static bool comparator(std::pair<BALL::AtomContainer*, int>& a, std::pair<BALL::AtomContainer*, int> & b)
 	{return b.second < a.second;}
 	
 	
@@ -78,7 +67,7 @@ private:
 	StarAligner _star_aligner; 
 	
 	float _threshold; // starting RMSD for different bins
-	map <String, vector< pair<AtomContainer*, int> > > _map_of_bins;
+	std::map <BALL::String, std::vector< std::pair<BALL::AtomContainer*, int> > > _map_of_bins;
 	
 	int _variant_limit;
 	bool all_sorted;

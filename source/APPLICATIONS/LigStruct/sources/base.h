@@ -14,13 +14,13 @@
 //#include <BALL/KERNEL/forEach.h>
 
 /// BALL: Base Classes (String + Math)
-#include <BALL/DATATYPE/string.h>
+//#include <BALL/DATATYPE/string.h>
 //#include <BALL/MATHS/angle.h>
 //#include <BALL/MATHS/vector3.h>
 //#include <BALL/MATHS/matrix44.h>
 
 /// BALL: Atom, Bond, Element
-#include <BALL/KERNEL/atom.h>
+//#include <BALL/KERNEL/atom.h>
 //#include <BALL/KERNEL/atomIterator.h>
 //#include <BALL/KERNEL/bond.h>
 //#include <BALL/KERNEL/bondIterator.h>
@@ -28,8 +28,8 @@
 #include <BALL/KERNEL/global.h>
 
 /// BALL: Molecule Container
-#include <BALL/CONCEPT/composite.h>
-#include <BALL/KERNEL/atomContainer.h>
+//#include <BALL/CONCEPT/composite.h>
+//#include <BALL/KERNEL/atomContainer.h>
 //#include <BALL/KERNEL/fragment.h>
 //#include <BALL/KERNEL/molecule.h>
 
@@ -46,11 +46,11 @@
 //#include <openbabel/graphsym.h>
 
 /// STL
-#include <vector>
+//#include <vector>
 //#include <limits>
 
 /// BOOST
-#include <boost/unordered_map.hpp>
+//#include <boost/unordered_map.hpp>
 //#include <boost/pending/disjoint_sets.hpp>
 
 struct RFragment;

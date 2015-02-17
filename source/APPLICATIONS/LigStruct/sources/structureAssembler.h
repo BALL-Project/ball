@@ -5,15 +5,12 @@
 #ifndef STRCUTUREASSEMBLER_H
 #define STRCUTUREASSEMBLER_H
 
-#include "ioModule.h"
 #include "fragmenter.h"
 #include "linkerBuilder.h"
-#include "moleculeConnector.h"
+#include "ioModule.h"
 #include "clashResolver.h"
-#include "canonicalizer.h"
+#include "moleculeConnector.h"
 
-using namespace BALL;
-using namespace std;
 
 class StructureAssembler
 {
@@ -31,11 +28,12 @@ public:
 	 * @brief assembleStructure
 	 * @param mol
 	 */
-	void assembleStructure(AtomContainer& mol);
+	void assembleStructure(BALL::AtomContainer& mol);
 	
 private:
 	
-	void connectClashFree(Atom &at1, Atom &at2, ConnectList& connections, ConnectList& linker_rotors);
+	void connectClashFree(BALL::Atom &at1, BALL::Atom &at2, 
+												ConnectList& connections, ConnectList& linker_rotors);
 	
 	TemplateDatabaseManager& _libs; // needed fragment libs
 	

@@ -1,13 +1,7 @@
 #ifndef COMBIASSEMBLER_H
 #define COMBIASSEMBLER_H
 
-#include "base.h"
-#include "clashResolver.h"
-#include "moleculeConnector.h"
 #include "structureAssembler.h"
-
-#include <map>
-#include <set>
 
 class CombiAssembler
 {
@@ -19,12 +13,11 @@ public:
 	void setScaffold(RFragment& scaffold);
 	void setCombiLib(CombiLibMap& clib);
 	
-	void writeCombinations(SDFile& handle);
+	void writeCombinations(BALL::SDFile& handle);
 	
-//	void getCombinations( std::list< BALL::AtomContainer*>& result );
 private:
 	
-	bool _connectClashFree(Atom &at1, Atom &at2, ConnectList& connections);
+	bool _connectClashFree(BALL::Atom &at1, BALL::Atom &at2, ConnectList& connections);
 	void _checkAndConnect(RAtom& acceptor, RFragment& donor);
 	void _addSet(RFragment& mol);
 	
@@ -35,7 +28,7 @@ private:
 	MoleculeConnector       _connector;
 	ConnectionClashResolver _cresolv;
 
-	void _combineRecur(SDFile& handle);
+	void _combineRecur(BALL::SDFile& handle);
 };
 
 #endif // COMBIASSEMBLER_H

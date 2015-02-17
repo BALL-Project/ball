@@ -7,15 +7,6 @@
 #include "base.h"
 #include "starAligner.h"
 
-#include <BALL/DATATYPE/string.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/atom.h>
-
-#include <boost/unordered_map.hpp>
-
-using namespace BALL;
-using namespace std;
-
 class MoleculeConnector
 {
 public:
@@ -36,10 +27,10 @@ public:
  * both atoms (and thus between their respective AtomContainer) the bond
  * needs to already exist.
  */
-	void connect(Atom* atm1, Atom* atm2);
+	void connect(BALL::Atom* atm1, BALL::Atom* atm2);
 
 private:
-	void loadTemplates(AtomContainer*& tmp, String &key);
+	void loadTemplates(BALL::AtomContainer*& tmp, BALL::String &key);
 	
 	/*
 	 * From an atom (given by 'atm') determine the site and the key for the site.
@@ -48,25 +39,27 @@ private:
 	 * for neighbors that belond to a different molecule/parent.
 	 * The site 'key' on the other hand also contains these foreign neighbors
 	 */
-	void getSite(Atom* atm, AtmVec& site, String& key);
+	void getSite(BALL::Atom* atm, AtmVec& site, BALL::String& key);
 	
 	/* 
 	 * get transformation vector to move atom 2 so that it has the correct 
 	 * distance to atom 1
 	 */
-	Vector3 getDiffVec(Atom* atm1, Atom* atm2);
+	BALL::Vector3 getDiffVec(BALL::Atom* atm1, BALL::Atom* atm2);
 	
-	Atom* getMatchingAtomAll(Atom *center, AtmVec& mol, Element &elem, short bo);
+	BALL::Atom* getMatchingAtomAll(BALL::Atom *center, AtmVec& mol, 
+																 BALL::Element &elem, short bo);
 	
 	/*
 	 * compare ("element+bondorder",Atom*)-pairs according to the string part
 	 */
-	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
+	static bool compare(std::pair<BALL::String,BALL::Atom*>& a, 
+											std::pair<BALL::String,BALL::Atom*>& b);
 	
 	/// Class member:
-	SiteMap* _connections;
+	SiteMap*       _connections;
 	BondLengthMap* _bond_lengths;
-	StarAligner _star_aligner;
+	StarAligner    _star_aligner;
 };
 
 #endif // MOLECULECONNECTOR_H

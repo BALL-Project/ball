@@ -6,23 +6,8 @@
 
 #include "base.h"
 
-#include <BALL/KERNEL/atomContainer.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/molecule.h>
-
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-
-
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-
-#include <vector>
-#include <boost/pending/disjoint_sets.hpp>
-#include <boost/unordered_map.hpp>
-
-using namespace BALL;
-using namespace std;
 
 class MoleculeFragmenter
 {
@@ -30,11 +15,11 @@ public:
 	MoleculeFragmenter();
 	~MoleculeFragmenter();
 	
-	void setMolecule(AtomContainer& in_mol);
+	void setMolecule(BALL::AtomContainer& in_mol);
 	
-	bool isRigidAtom(Atom &atm);
+	bool isRigidAtom(BALL::Atom &atm);
 	
-	bool isRotableBond(Bond &bnd);
+	bool isRotableBond(BALL::Bond &bnd);
 	
 	/**
 	 * @brief isBridgingBond, bridging bonds are rotable bonds that connect
@@ -44,13 +29,13 @@ public:
 	 * @param bnd
 	 * @return 
 	 */
-	bool isBridgingBond(Bond &bnd);
+	bool isBridgingBond(BALL::Bond &bnd);
 	
 	void fragment(ACVec &rigid_fragments, ACVec &linker_fragments,
 														ConnectList& connections);
 	
-	void fragmentToSites(boost::unordered_map< String, pair<float, int> >& bondLenths,
-											 vector< pair< String, AtomContainer*> >& connections, 
+	void fragmentToSites(boost::unordered_map< BALL::String, std::pair<float, int> >& bondLenths,
+											 std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections, 
 											 bool restrict_to_bridges=false);
 	
 	
@@ -70,38 +55,37 @@ private:
 	void calcAtomToPos();
 	
 	/// For connectionLibs:
-	void addBondToConnectionsLib(Bond& bnd,
-															 boost::unordered_map< String, pair<float, int> >& bondLenths,
-															 vector< pair< String, AtomContainer*> > &connections);
+	void addBondToConnectionsLib(
+			BALL::Bond& bnd, boost::unordered_map< BALL::String,
+			std::pair<float, int> >& bondLenths,
+			std::vector< std::pair< BALL::String, BALL::AtomContainer*> > &connections);
 	
-	static bool compare(pair<String,Atom*>& a, pair<String,Atom*>& b);
+	static bool compare(std::pair<BALL::String,BALL::Atom*>& a, 
+											std::pair<BALL::String,BALL::Atom*>& b);
 	
 	/*
 	 * getSite
 	 */
-	AtomContainer* getSite(Atom* atm, String& key);
+	BALL::AtomContainer* getSite(BALL::Atom* atm, BALL::String& key);
 	
 	/*
 	 * Add in such a way that we keep the average bond length
 	 */
 	void addLengthtoLib(
-			boost::unordered_map<String, pair<float, int> > & bondLengths, 
-			String bk1, String bk2, float len);
-	
-	
-	
+			boost::unordered_map< BALL::String, std::pair<float, int> > & bondLengths, 
+			BALL::String bk1, BALL::String bk2, float len);
 	
 	/// Fields:
-	AtomContainer* _molecule;
+	BALL::AtomContainer* _molecule;
 	
-	vector< AtmVec > _sssr;
-	RingPerceptionProcessor _rpp;
+	std::vector< AtmVec >         _sssr;
+	BALL::RingPerceptionProcessor _rpp;
 	
-	vector <bool> _is_InRing;
-	boost::unordered_map< Bond*, bool > _is_BondInRing;
+	std::vector <bool>                        _is_InRing;
+	boost::unordered_map< BALL::Bond*, bool > _is_BondInRing;
 	
-	vector < Atom* > _atom_list;
-	boost::unordered_map<Atom *, int> _atom_to_pos;
+	std::vector < BALL::Atom* >             _atom_list;
+	boost::unordered_map<BALL::Atom *, int> _atom_to_pos;
 };
 
 #endif // LIGSTRUC_FRAGMENTER_H

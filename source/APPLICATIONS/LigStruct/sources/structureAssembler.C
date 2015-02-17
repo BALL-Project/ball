@@ -4,9 +4,6 @@
 
 #include "structureAssembler.h"
 
-#include <BALL/KERNEL/fragment.h>
-
-
 using namespace BALL;
 using namespace std;
 

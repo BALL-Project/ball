@@ -5,7 +5,6 @@
 #include "canonicalizer.h"
 
 #include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/KERNEL/atomContainer.h>
 
 #include <openbabel/mol.h>
 #include <openbabel/canon.h>
@@ -14,7 +13,8 @@
 #include <BALL/STRUCTURE/UCK.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
-
+using namespace BALL;
+using namespace std;
 
 /// C l a s s   C a n o n i c a l i z e r
 /// ############################################################################

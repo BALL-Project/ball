@@ -8,9 +8,7 @@
 #include "base.h"
 #include "canonicalizer.h"
 
-#include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/SDFile.h>
-#include <BALL/FORMAT/lineBasedFile.h>
 
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
@@ -76,7 +74,7 @@ public:
 	SmilesParser();
 	~SmilesParser();
 	
-	AtomContainer *fromSMILEStoMolecule(const BALL::String& smiles_string);
+	BALL::AtomContainer *fromSMILEStoMolecule(const BALL::String& smiles_string);
 	
 	RFragment* fromSMILEStoRFragment(const BALL::String& smiles_string, const int& g_id = -1);
 	

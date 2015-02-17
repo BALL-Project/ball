@@ -2,20 +2,8 @@
 // vi: set ts=2:
 //
 #include "moleculeConnector.h"
-#include "starAligner.h"
-#include "base.h"
 
-#include <BALL/KERNEL/atomContainer.h>
-
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
-
-#include <BALL/DATATYPE/string.h>
-#include <BALL/KERNEL/fragment.h>
-#include <boost/unordered_map.hpp>
 
 using namespace BALL;
 using namespace std;

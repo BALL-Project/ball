@@ -5,16 +5,13 @@
 #include "starAligner.h"
 #include "base.h"
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
-
 #include <BALL/STRUCTURE/structureMapper.h>
 
 #include <limits>
 
+using namespace BALL;
+using namespace std;
 
 StarAligner::StarAligner()
 {

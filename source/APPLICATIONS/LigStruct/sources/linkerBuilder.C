@@ -3,18 +3,14 @@
 //
 
 #include "linkerBuilder.h"
-#include "base.h"
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/atomIterator.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/KERNEL/fragment.h>
+#include <BALL/MATHS/analyticalGeometry.h>
 
-#include <BALL/MATHS/matrix44.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
+using namespace BALL;
+using namespace std;
+
 /**
  * buildLinker
  */

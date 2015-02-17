@@ -5,11 +5,6 @@
 #include "ioModule.h"
 #include "base.h"
 
-#include <BALL/FORMAT/lineBasedFile.h>
-#include <BALL/FORMAT/SDFile.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
