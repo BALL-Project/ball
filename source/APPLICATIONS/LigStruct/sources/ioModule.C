@@ -138,7 +138,8 @@ void TemplateDatabaseManager::readRigidTemplates()
 		}
 		else
 		{
-			Log << "WARNING: missed in the template coordinate lib file a line!!!"<<endl;
+			Log << "WARNING: missed in the template coordinate lib file a line!!!"
+					<< endl;
 		}
 	}
 	libFile.close();

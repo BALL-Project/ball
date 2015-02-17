@@ -9,9 +9,6 @@
 #include <BALL/MATHS/angle.h>
 #include <BALL/DATATYPE/hashSet.h>
 
-using namespace BALL;
-//using namespace std;
-
 class ConnectionClashResolver
 {
 public:
@@ -30,7 +27,7 @@ public:
 	 * @param atm1 part of the larger fragment
 	 * @param atm2 part of the smaller fragment
 	 */
-	void setMolecule(Atom& atm1, Atom& atm2, ConnectList& connections, ConnectList *more_rotors=0);
+	void setMolecule(BALL::Atom& atm1, BALL::Atom& atm2, ConnectList& connections, ConnectList *more_rotors=0);
 	
 	std::pair<int, bool> resolve(bool optimal = false, bool conserve_large = false);
 	
@@ -48,30 +45,30 @@ public:
 	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
 	 * degree/radiant
 	 */
-	void rotate(Atom& atm1, Atom& atm2, Angle angle);
+	void rotate(BALL::Atom& atm1, BALL::Atom& atm2, BALL::Angle angle);
 	
 private:
 	/// private Methods for detection
 	/*
 	 * Detect all clashes within 'ac'
 	 */
-	int detectInMolecule(AtomContainer& ac);
+	int detectInMolecule(BALL::AtomContainer& ac);
 	
 	/*
 	 * Detect all clashes between 'ac1' and 'ac2' but ignore the clashes occuring
 	 * within each fragment.
 	 */
-	int detectBetweenMolecules(AtomContainer& ac1, AtomContainer& ac2);
+	int detectBetweenMolecules(BALL::AtomContainer& ac1, BALL::AtomContainer& ac2);
 	
 	/*
 	 * check if the two atoms are speparated by at least 3 bonds
 	 */
-	bool atom3Away(Atom& at1, Atom& at2);
+	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
 	
 	/*
 	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
 	 */
-	bool doClash(Atom& atm1, Atom& atm2);
+	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
 	
 	/// private Methods for resolving
 	/*
@@ -90,22 +87,23 @@ private:
 	
 	int resolveAllRecur(const ConnectList::iterator& p, 
 											const ConnectList::iterator &p_end, 
-											Angle& angle, const int& steps , int &best_cnt);
+											BALL::Angle& angle, const int& steps , int &best_cnt);
 	/*
 	 * Rotate bonds in a fragment 'frag' to remove inter and intra clashes
 	 */
-	int resolveFragment(AtomContainer& frag , ConnectList &clist);
+	int resolveFragment(BALL::AtomContainer& frag , ConnectList &clist);
 	
 	/*
 	 * Helper for 'rotate'
 	 */
-	void setAtomsToRotate(Atom &start ,Atom &probe, Atom &block, HashSet<Atom *> &result);
+	void setAtomsToRotate(BALL::Atom &start, BALL::Atom &probe, BALL::Atom &block,
+												BALL::HashSet<BALL::Atom *> &result);
 	
-	Atom* atm_large;
-	Atom* atm_small;
-	 
-	AtomContainer* _large_root;
-	AtomContainer* _small_root;
+	BALL::Atom* atm_large;
+	BALL::Atom* atm_small;
+	
+	BALL::AtomContainer* _large_root;
+	BALL::AtomContainer* _small_root;
 
 	ConnectList* _small_rotors;
 	ConnectList* _large_rotors;
@@ -132,7 +130,7 @@ public:
 	 * @param molecule
 	 * @param connections
 	 */
-	void setMolecule(AtomContainer& molecule, ConnectList& rotors);
+	void setMolecule(BALL::AtomContainer& molecule, ConnectList& rotors);
 	
 //	void setMolecule(AtomContainer& molecule);
 	
@@ -152,24 +150,24 @@ public:
 	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
 	 * degree/radiant
 	 */
-	void rotate(Atom& atm1, Atom& atm2, Angle angle);
+	void rotate(BALL::Atom& atm1, BALL::Atom& atm2, BALL::Angle angle);
 	
 private:
 	/// private Methods for detection
 	/*
 	 * Detect all clashes within 'ac'
 	 */
-	int detectInMolecule(AtomContainer& ac);
+	int detectInMolecule(BALL::AtomContainer& ac);
 	
 	/*
 	 * check if the two atoms are speparated by at least 3 bonds
 	 */
-	bool atom3Away(Atom& at1, Atom& at2);
+	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
 	
 	/*
 	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
 	 */
-	bool doClash(Atom& atm1, Atom& atm2);
+	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
 	
 	/// private Methods for resolving
 	/*
@@ -182,15 +180,16 @@ private:
 	
 	int resolveAllRecur(const ConnectList::iterator& p, 
 											const ConnectList::iterator &p_end, 
-											Angle& angle, const int& steps );
+											BALL::Angle& angle, const int& steps );
 
 	
 	/*
 	 * Helper for 'rotate'
 	 */
-	void setAtomsToRotate(Atom &start ,Atom &probe, Atom &block, HashSet<Atom *> &result);
+	void setAtomsToRotate(BALL::Atom &start, BALL::Atom &probe, BALL::Atom &block,
+												BALL::HashSet<BALL::Atom *> &result);
 	
-	AtomContainer* _molecule;
+	BALL::AtomContainer* _molecule;
 
 	ConnectList* _rotors;
 	

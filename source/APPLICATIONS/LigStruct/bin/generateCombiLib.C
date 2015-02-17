@@ -88,7 +88,6 @@ int main(int argc, char* argv[])
 //			outfile << * (*it2)->molecule; // DEBUG
 		}
 	}
-
 	
 	//5.) finally calculate all valid combinations:
 	cout<<" * generating 3D combinations, and write results to "<< parpars.get("o") <<endl;
@@ -99,10 +98,7 @@ int main(int argc, char* argv[])
 	combiner.writeCombinations( outfile );
 	
 	outfile.close();
-
-
 ///// Clean up
-	combi_file.close();
 	Log << "....done!"<<endl;
 }
 

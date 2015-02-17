@@ -289,7 +289,6 @@ pair<int, bool> ConnectionClashResolver::resolve(bool optimal, bool conserve_lar
 	//4) ALL rotations:
 	clash_cnt = resolveAll( 6 );
 //	cout<<"ALL(6) finished with: "<<clash_cnt<<endl;
-	
 	return make_pair(clash_cnt, true);
 }
 

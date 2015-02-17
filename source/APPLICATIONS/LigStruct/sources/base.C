@@ -28,14 +28,14 @@ using namespace std;
 TemplateCoord::TemplateCoord(BALL::Size n)
 {
 	_size = n;
-	positions = new BALL::Vector3[n];
+	positions.reserve( _size );
 }
 
 TemplateCoord::TemplateCoord( AtomContainer& mol)
 {
 	_size = mol.countAtoms();
 
-	positions = new Vector3[_size];
+	positions.reserve( _size );
 	readCoordinatesFromMolecule( mol );
 }
 
@@ -53,13 +53,13 @@ void TemplateCoord::readCoordinatesFromMolecule( AtomContainer& mol)
 	AtomIterator qit = mol.beginAtom();
 	for (int i = 0 ; i < _size; i++, qit++)
 	{
-		positions[i] = qit->getPosition();
+		positions.push_back( qit->getPosition() );
 	}
 }
 
 TemplateCoord::~TemplateCoord()
 {
-	delete[] positions; // delete only the array not the elements!!!
+//	delete[] positions; // delete only the array not the elements!!!
 }
 
 Vector3& TemplateCoord::operator[]( Index idx)
@@ -298,15 +298,15 @@ void LigBase::clearExternalBonds(AtomContainer *mol)
 	}
 }
 
-void LigBase::copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop)
-{
-	NamedPropertyIterator  it;
-	for(it = orig.beginNamedProperty (); it !=orig.endNamedProperty(); it++)
-	{
-		cop.setProperty(*it);
-	}
-	cop.setName(orig.getName());
-}
+//void LigBase::copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop)
+//{
+//	NamedPropertyIterator  it;
+//	for(it = orig.beginNamedProperty (); it !=orig.endNamedProperty(); it++)
+//	{
+//		cop.setProperty(*it);
+//	}
+//	cop.setName(orig.getName());
+//}
 
 void LigBase::removeHydrogens(AtomContainer &tmp)
 {

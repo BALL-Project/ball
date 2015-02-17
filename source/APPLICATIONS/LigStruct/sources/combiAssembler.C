@@ -34,7 +34,8 @@ void CombiAssembler::writeCombinations(SDFile &handle)
 	
 	_work_mol = _r_groups->at(0)[0];
 	
-	for(list<RAtom>::iterator it = _work_mol->r_atom_lst.begin(); it != _work_mol->r_atom_lst.end(); ++it)
+	for(list<RAtom>::iterator it = _work_mol->r_atom_lst.begin(); 
+			it != _work_mol->r_atom_lst.end(); ++it)
 	{
 		_r_atms.push_back( &*it );
 	}
@@ -62,6 +63,7 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	{
 		// write out the current work mol
 		handle << * _work_mol->molecule;
+//		cout<<(*_r_groups)[0][0]->coord_sets.size()<<endl;
 		return;
 	}
 	//3.) recursion case:
@@ -129,7 +131,7 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 		int donor_target_set = acceptor.getCompatibleSet(donor);
 		if ( donor_target_set != -1)
 		{
-			cout<<"Reusing coordinates!"<<endl;//#DEBUG
+//			cout<<"Reusing coordinates!"<<endl;//#DEBUG
 			
 			donor.setCoordsTo( donor_target_set ); // to the fitting coordinates
 			
@@ -139,7 +141,9 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 			// if we need to resolve a clash...
 			if (c_cnt != 0)
 			{
+//				Global_Timer::timer2.start(); //#DEBUG: time measure!
 				pair<int,bool> res = _cresolv.resolve();
+//				Global_Timer::timer2.stop(); //#DEBUG: time measure!
 				
 				// resolving the clash, led to a new coordinate set:
 				if( res.second )
@@ -199,7 +203,10 @@ bool CombiAssembler::_connectClashFree(Atom &at1, Atom &at2, ConnectList& connec
 	
 	if( c_cnt != 0 )
 	{
+//		Global_Timer::timer1.start(); //#DEBUG: time measure!
+//		cout<<"new connection clash!"<<endl;
 		return _cresolv.resolve().second;
+//		Global_Timer::timer1.stop(); //#DEBUG: time measure!
 	}
 	
 	return false; // nothing changed

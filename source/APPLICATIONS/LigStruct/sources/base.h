@@ -53,11 +53,6 @@
 #include <boost/unordered_map.hpp>
 //#include <boost/pending/disjoint_sets.hpp>
 
-///// Name Spaces
-//using namespace OpenBabel;
-//using namespace std;
-//using namespace BALL;
-
 struct RFragment;
 class TemplateCoord;
 
@@ -118,7 +113,7 @@ public:
 
 private:
 	BALL::Size _size;
-	BALL::Vector3 *positions;
+	std::vector<BALL::Vector3> positions;
 };
 
 /// S t r u c t   R - A t o m
@@ -194,7 +189,7 @@ public:
 	
 	static void clearExternalBonds( BALL::AtomContainer* mol);
 	
-	static void copyMoleculeProperies( BALL::AtomContainer &orig, BALL::AtomContainer &cop);
+//	static void copyMoleculeProperies( BALL::AtomContainer &orig, BALL::AtomContainer &cop);
 
 	// Remove Hydrogens
 	static void removeHydrogens( BALL::AtomContainer &tmp );
