@@ -44,7 +44,7 @@ public:
 	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
 	 * degree/radiant
 	 */
-	void rotate(BALL::Atom& atm1, BALL::Atom& atm2, BALL::Angle angle);
+	void rotate(BALL::Atom& atm1, BALL::Atom& atm2, const BALL::Angle &angle);
 	
 private:
 	/// private Methods for detection
@@ -70,6 +70,27 @@ private:
 	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
 	
 	/// private Methods for resolving
+	
+	/**
+	 * @brief rotateRestricted - rotates the atoms that belong to 'parent'
+	 * @param atm1
+	 * @param atm2
+	 * @param parent
+	 * @param angle
+	 */
+	void rotateRestricted(BALL::Atom& atm1, BALL::Atom& atm2, 
+												BALL::Composite* parent, const BALL::Angle& angle);
+	
+	/**
+	 * @brief findRotateDirection - true if atm2-side is where the atoms shall be
+	 * moved
+	 * @param atm1
+	 * @param atm2
+	 * @param parent
+	 * @return 
+	 */
+	bool findRotateDirection(BALL::Atom& atm1, BALL::Atom& atm2, 
+													 BALL::Composite* parent);
 	/*
 	 * Try to resolve clashes between large and small fragment by rotating along
 	 * the connecting bond.

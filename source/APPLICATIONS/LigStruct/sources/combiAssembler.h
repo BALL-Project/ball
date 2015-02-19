@@ -28,6 +28,7 @@ private:
 	MoleculeConnector       _connector;
 	ConnectionClashResolver _cresolv;
 
+	std::list< std::pair<int*, int*> > _work_trace;
 	void _combineRecur(BALL::SDFile& handle);
 };
 

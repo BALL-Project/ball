@@ -1,7 +1,6 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-
 #ifndef LIGANDSTRUCTUREBASE_H
 #define LIGANDSTRUCTUREBASE_H
 
@@ -25,7 +24,6 @@
 //#include <BALL/KERNEL/bond.h>
 //#include <BALL/KERNEL/bondIterator.h>
 //#include <BALL/KERNEL/PTE.h>
-#include <BALL/KERNEL/global.h>
 
 /// BALL: Molecule Container
 //#include <BALL/CONCEPT/composite.h>
@@ -52,6 +50,8 @@
 /// BOOST
 //#include <boost/unordered_map.hpp>
 //#include <boost/pending/disjoint_sets.hpp>
+
+#include <BALL/KERNEL/global.h>
 
 struct RFragment;
 class TemplateCoord;
@@ -179,19 +179,26 @@ public:
 	static int countBondsAndOrder( BALL::Atom& atm);
 	static int countBondsInPartent( BALL::Atom& atm, const BALL::Composite &parent);
 	
-	// get the position of an atom in the molcule list:
+	/**
+	 * @brief getAtomPosition - get the position of an atom in the molcule list
+	 * @param atm
+	 * @param mol
+	 * @return 
+	 */
 	static const int getAtomPosition( BALL::Atom* atm, BALL::AtomContainer *mol);
 	
-	// Translate the AtomContainer 'fromMol' into an AtmVec 'toMol'
+	/**
+	 * @brief toAtmVec - Translate the AtomContainer 'fromMol' into an AtmVec '
+	 * toMol'
+	 * @param fromMol
+	 * @param toMol
+	 */
 	static void toAtmVec( BALL::AtomContainer& fromMol, AtmVec& toMol);
 	
 	static void transferMolecule( BALL::AtomContainer* toMol, BALL::AtomContainer* fromMol);
 	
 	static void clearExternalBonds( BALL::AtomContainer* mol);
-	
-//	static void copyMoleculeProperies( BALL::AtomContainer &orig, BALL::AtomContainer &cop);
 
-	// Remove Hydrogens
 	static void removeHydrogens( BALL::AtomContainer &tmp );
 };
 

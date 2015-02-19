@@ -3,8 +3,8 @@
 //
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
-#include <BALL/FORMAT/lineBasedFile.h>
-#include <BALL/SYSTEM/file.h>
+//#include <BALL/FORMAT/lineBasedFile.h>
+//#include <BALL/SYSTEM/file.h>
 
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/string.h>
@@ -16,36 +16,17 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <BALL/STRUCTURE/UCK.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/STRUCTURE/structureMapper.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/MATHS/angle.h>
-#include <BALL/MATHS/vector3.h>
-#include <BALL/MATHS/matrix44.h>
-
-
-#include <vector>
-#include <set>
-#include <BALL/QSAR/ringPerceptionProcessor.h>
-
-#include "../sources/fragmenter.h"
-#include "../sources/moleculeConnector.h"
-#include "../sources/linkerBuilder.h"
+#include "../sources/clashResolver.h"
 #include "../sources/ioModule.h"
 
-#include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/MATHS/quaternion.h>
-using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
 
-
-/// ################# M A I N #################
+/// ################################## C O M M A N D L I N E    P A R S E R
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("test ClashResolver", "  ", 0.1, String(__DATE__), "Testing");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 //	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
@@ -73,8 +54,7 @@ int main(int argc, char* argv[])
 	lib_manag.readSiteTemplates();
 	lib_manag.readBondLenths();
 	
-	LinkerBuilder frag_builder(lib_manag.getSiteTemplates(), lib_manag.getBondLengthData());
-	frag_builder.buildLinker( *(Fragment*)mol );
+	ConnectionClashResolver c_resolver;
 	
 	outfile<< *mol;
 	Log << "......done!"<<endl;

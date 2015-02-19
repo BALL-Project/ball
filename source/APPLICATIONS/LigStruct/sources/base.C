@@ -71,7 +71,6 @@ void RAtom::addParnter(RFragment &other)
 	known_partners[ make_pair(parent->curr_set, &other) ] = other.curr_set;
 }
 
-
 int RAtom::getCompatibleSet(RFragment &other)
 {
 	std::map< pair<int ,RFragment*>, int >::iterator it;
@@ -283,16 +282,6 @@ void LigBase::clearExternalBonds(AtomContainer *mol)
 		bit->destroy();
 	}
 }
-
-//void LigBase::copyMoleculeProperies(AtomContainer &orig, AtomContainer &cop)
-//{
-//	NamedPropertyIterator  it;
-//	for(it = orig.beginNamedProperty (); it !=orig.endNamedProperty(); it++)
-//	{
-//		cop.setProperty(*it);
-//	}
-//	cop.setName(orig.getName());
-//}
 
 void LigBase::removeHydrogens(AtomContainer &tmp)
 {

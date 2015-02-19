@@ -63,6 +63,17 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	{
 		// write out the current work mol
 		handle << * _work_mol->molecule;
+		
+		//#DEBUG start:
+		cout<<">>> S-"<<_work_mol->curr_set<<" ";
+		for(list<pair<int*,int*>>::iterator it = _work_trace.begin(); 
+				it != _work_trace.end(); ++it)
+		{
+			cout<<"F"<<*it->first<<"-"<<*it->second<<" ";
+		}
+		cout<<endl;
+		//#DEBUG end!
+		
 
 		return;
 	}
@@ -72,6 +83,7 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 		// iterate over all RFrags in the RGroup fitting to the current R-atom 'ra':
 		vector<RFragment*>& group = _r_groups->at(ra->id);
 		vector<RFragment*>::iterator it2;
+		
 		for(it2 = group.begin(); it2 != group.end(); ++it2)
 		{
 			RFragment* tmp = *it2;
@@ -99,6 +111,11 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 			//3.4) recurr deeper
 			_combineRecur( handle );
 			
+			//#DEBUG
+			if(_work_trace.size())
+				_work_trace.pop_back();
+			//#DEBUG
+			
 			//3.5) delete bond, and remove inserted molecule
 			bnd->destroy();
 			_work_mol->molecule->remove( *tmp->molecule );
@@ -122,11 +139,13 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	int acc_id = acceptor.parent->curr_set;
 	int donor_id = donor.curr_set;
 	
+	
 	/*
 	 * 1.) the acceptor and donor do have a conformation
 	 */
 	if( acc_id != -1 && donor_id != -1)
 	{
+		cout<<"case: known partner"<<endl;
 		// known Fragment?!
 		int donor_target_set = acceptor.getCompatibleSet(donor);
 		if ( donor_target_set != -1)
@@ -137,14 +156,12 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 			
 			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, _work_mol->rotor_lst);
 			int c_cnt = _cresolv.detect();
-			
 			// if we need to resolve a clash...
-			if (c_cnt != 0)
+			if ( c_cnt != 0 )
 			{
-//				Global_Timer::timer2.start(); //#DEBUG: time measure!
+				cout<<"case: known -- clashes: "<<c_cnt<<endl;
 				pair<int,bool> res = _cresolv.resolve();
-//				Global_Timer::timer2.stop(); //#DEBUG: time measure!
-				
+				cout<<"case: known -- clashes after: "<<res.first<<" moved S: "<<res.second<<endl;
 				// resolving the clash, led to a new coordinate set:
 				if( res.second )
 				{
@@ -154,7 +171,6 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 					acceptor.addParnter(donor);
 				}
 			}
-			return;
 		}
 	}
 	
@@ -163,9 +179,13 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	 */
 	else if (acc_id != -1 && donor_id == -1) 
 	{
+		cout<<"case: new partner "<<donor.group_id<<endl;
 		// if the known acceptor side was changed: add both coordinates...
 		if(_connectClashFree( *acceptor.atm, *donor.group_atom, _work_mol->rotor_lst))
+		{
+			cout<<"changed work_mol"<<endl;
 			acceptor.parent->newSetFromCurrent();
+		}
 		
 		//...else: only the ones from the donor
 		donor.newSetFromCurrent();
@@ -177,6 +197,7 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	 */
 	else
 	{
+		cout<<"case: both new"<<endl;
 		_connectClashFree( *acceptor.atm, *donor.group_atom, _work_mol->rotor_lst);
 		
 		acceptor.parent->newSetFromCurrent();
@@ -184,6 +205,10 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 		
 		acceptor.addParnter( donor );
 	}
+	
+	//#DEBUG
+	_work_trace.push_back(make_pair(&donor.group_id, &donor.curr_set));
+	//#DEBUG
 }
 
 /*
@@ -200,13 +225,12 @@ bool CombiAssembler::_connectClashFree(Atom &at1, Atom &at2, ConnectList& connec
 	_cresolv.setMolecule(at1, at2, connections);
 	
 	c_cnt = _cresolv.detect();
-	
 	if( c_cnt != 0 )
 	{
-//		Global_Timer::timer1.start(); //#DEBUG: time measure!
-//		cout<<"new connection clash!"<<endl;
-		return _cresolv.resolve().second;
-//		Global_Timer::timer1.stop(); //#DEBUG: time measure!
+		cout<<"connector -- clashes: "<<c_cnt<<endl;
+		pair<int,bool> res = _cresolv.resolve();
+		cout<<"connector -- clashes after: "<<res.first<<" moved S: "<<res.second<<endl;
+		return res.second;
 	}
 	
 	return false; // nothing changed
