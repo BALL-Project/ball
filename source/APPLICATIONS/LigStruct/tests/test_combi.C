@@ -17,21 +17,15 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	/// ------ S E T    P A R S E R -------
-	CommandlineParser parpars("3D structure generation of ligands", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Prediction");
+	CommandlineParser parpars("combi tester", " tests 3D combi assembly", 0.1, String(__DATE__), "Test");
 	parpars.registerParameter("i", "combiLib as CONF file", INFILE, false);
 	parpars.registerParameter("o", "output molecules with 3D coordinates in one SDF", OUTFILE, true);
-//	parpars.registerParameter("l", "library configuration file", INFILE, false);
 	
 	parpars.setSupportedFormats("i","combi");
 	parpars.setSupportedFormats("o","sdf");
-//	parpars.setSupportedFormats("l","conf");
 	parpars.setOutputFormatSource("i","o");
 
-	String manual = 
-			"Generate a valid (not optimized) 3D structure for structures of an "
-			"entire combinatorial library which is defined in a CONF file (either "
-			"containing SIMLES for each group or giving the paths multi line SMILES "
-			"files).";
+	String manual = "test tool for combi assembly";
 	
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);

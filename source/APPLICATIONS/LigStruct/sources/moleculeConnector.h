@@ -18,7 +18,7 @@ public:
 	void setBondLengthLib(BondLengthMap& bondLib);
 	void setLibs(SiteMap& connectLib, BondLengthMap& bondLib);
 /**  
- * connectFragments connects the two given fragments (by their child atoms)
+ * connectFragments - connects the two given fragments (by their child atoms)
  * in such a way, that molecule1 (given by 'atm1') retains its position,
  * whereas molecule 2 is transformed to fit the connection.
  * 
