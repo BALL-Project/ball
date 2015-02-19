@@ -33,8 +33,8 @@ public:
 	 * 
 	 * The calculated transformation is applied to the query molecule
 	 */
-	void bondAlign(BALL::Atom* atA1, BALL::Atom* atA2, BALL::Atom* atB1, 
-								 BALL::Atom* atB2);
+	static BALL::Matrix4x4 bondAlign(BALL::Atom* atA1, BALL::Atom* atA2, BALL::Atom* atB1, 
+												BALL::Atom* atB2);
 	
 	/*
 	 * Get a list of atom-pointers of atoms that were not aligned (if 'query'
@@ -117,7 +117,7 @@ private:
 	 *   n1 onto w1
 	 *   n2 on the ray given by w1 - w2
 	 */
-	BALL::Matrix4x4 twoPointMatch(
+	static BALL::Matrix4x4 twoPointMatch(
 			const BALL::Vector3& n1, const BALL::Vector3& n2, const BALL::Vector3& w1,
 			const BALL::Vector3& w2);
 	

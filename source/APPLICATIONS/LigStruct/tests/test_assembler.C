@@ -57,6 +57,8 @@ int main(int argc, char* argv[])
 		}
 	}
 	
+	// O U T   P U T   F I L E
+	SDFile outfile(parpars.get("o"), std::ios::out);
 	
 	// manual connection:
 	MoleculeConnector mc;
@@ -65,6 +67,8 @@ int main(int argc, char* argv[])
 	RFragment* scaff = r_fragments[0][0];
 	RFragment* frag1 = r_fragments[1][0];
 	
+	outfile << * scaff->molecule;
+	outfile << * frag1->molecule;
 
 	Atom* at1 = scaff->r_atom_lst.front().atm;
 	Atom* at2 = frag1->group_atom;
@@ -72,13 +76,14 @@ int main(int argc, char* argv[])
 	Bond* bnd = at1->createBond( *at2 );
 	bnd->setOrder(1);
 	
+	cout<<"Connecting!"<<endl;
 	mc.connect(at1, at2);
 
-	at1->getParent()->appendChild( * at2->getParent() );
+	at1->getParent()->appendChild( at2->getRoot() );
 	
 //	CombiAssembler combiner( data_man, &combi_man.getCombiLib() );
 	
-	SDFile outfile(parpars.get("o"), std::ios::out);
+	
 	
 //	combiner.writeCombinations(outfile);
 	

@@ -6,6 +6,7 @@
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/FORMAT/SDFile.h>
 
 using namespace BALL;
 using namespace std;
@@ -306,6 +307,7 @@ void LigBase::removeHydrogens(AtomContainer &tmp)
 	for(int i = 0; i<bnd_remove.size(); ++i)
 		bnd_remove[i]->destroy();
 }
+
 
 
 

@@ -4,6 +4,7 @@
 #include "moleculeConnector.h"
 
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/FORMAT/SDFile.h>//#DEBUG
 
 using namespace BALL;
 using namespace std;
@@ -41,6 +42,8 @@ void MoleculeConnector::setLibs(SiteMap &connectLib, BondLengthMap &bondLib)
  */
 void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 {
+	SDFile outfile("./2OUT.sdf", std::ios::out);//#DEBUG
+	outfile << *(Molecule*) &atm1->getRoot();//#DEBUG
 	//1) get connection sites of the two atoms and the corresponding templates
 	AtmVec site_frag1, site_frag2;
 	String key1, key2;
@@ -51,7 +54,7 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	AtomContainer* templ1;
 	AtomContainer* templ2;
 	
-	// load templates + only make a copy of a template if both sites are identical
+	// load templates & only make a copy of a template if both sites are identical
 	bool identical_templates = false;
 	if( key1 != key2)
 	{
@@ -91,9 +94,19 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 
 	Atom* atm1_partner = getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2);
 	Atom* atm2_partner = getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1);
+
+	cout<<"looking for: "<<elem1<<" "<< bo1<<endl;
+	cout<<"I am the match: "<<atm2_partner->getElement().getSymbol()<<endl;
 	
-	_star_aligner.setMolecules(*frag2, *frag2);
-	_star_aligner.bondAlign(atm1, atm1_partner, atm2_partner, atm2);
+	outfile << *(Molecule*) templ1;//#DEBUG
+	outfile << *(Molecule*) templ2;//#DEBUG
+	Matrix4x4 bmatr = StarAligner::bondAlign(atm1, atm1_partner, atm2_partner, atm2);
+	TransformationProcessor transformer;
+	transformer.setTransformation( bmatr );
+	
+	outfile << *(Molecule*)frag2; //#DEBUG
+	frag2->apply( transformer );
+	outfile << *(Molecule*)frag2; //#DEBUG
 	
 	//5) set bond length to standard length
 	Vector3 bond_fix = getDiffVec(atm1, atm2);
@@ -103,6 +116,9 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 
 	if( identical_templates )
 		delete templ2;
+	
+	outfile << *(Molecule*) &atm1->getRoot();//#DEBUG
+	outfile.close(); //#DEBUG
 }
 
 void MoleculeConnector::loadTemplates(AtomContainer*& tmp, String& key)

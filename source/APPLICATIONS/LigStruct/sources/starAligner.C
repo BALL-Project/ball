@@ -287,7 +287,7 @@ bool StarAligner::atomsCompatible(Atom* at1,Atom* at2)
 /**
  * bondAlign
  */
-void StarAligner::bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2)
+Matrix4x4 StarAligner::bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2)
 {
 	Vector3& vA1 = atA1->getPosition();
 	Vector3& vA2 = atA2->getPosition();
@@ -296,11 +296,7 @@ void StarAligner::bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2)
 	Vector3& vB2 = atB2->getPosition();
 	
 	// map the second pair onto the first pair:
-	_matrix = twoPointMatch( vB1, vB2, vA1, vA2 );
-	
-	// apply the calculated transformation onto the 'query' molecule
-	_transformer.setTransformation(_matrix);
-	_query->apply(_transformer);
+	return twoPointMatch( vB1, vB2, vA1, vA2 );
 }
 
 
