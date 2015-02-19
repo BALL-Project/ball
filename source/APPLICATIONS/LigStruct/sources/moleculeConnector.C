@@ -50,7 +50,7 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 	
 	getSite(atm1, site_frag1, key1);
 	getSite(atm2, site_frag2, key2);
-	
+	cout<<"TEMP 2 SITE: "<<LigBase::printInlineStarMol(site_frag2)<<endl;
 	AtomContainer* templ1;
 	AtomContainer* templ2;
 	

@@ -56,9 +56,9 @@ public:
 	 * The central atom is not tested, because it is the translation 
 	 * center and thus should always have distance 0
 	 */
-	float getMinRMSD(BALL::AtomContainer* mol1, BALL::AtomContainer* mol2);
+//	float getMinRMSD(BALL::AtomContainer* mol1, BALL::AtomContainer* mol2);
 	float getMinRMSD(AtmVec* vec1, BALL::AtomContainer* mol2);
-	float getMinRMSD(AtmVec* vec1, AtmVec* vec2);
+//	float getMinRMSD(AtmVec* vec1, AtmVec* vec2);
 	
 private:
 	bool _delete_site;

@@ -162,6 +162,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 	///         for a second neighbor from 'site'
 	else if( unique_atms.size() == 1)
 	{
+		cout<<"FOUND A SINGLE UNIQUE"<<endl; //#DEBUG
 		// if at least one mol1 atom was unique, it is curcial to use it:
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = unique_atms[0]->getPosition();
@@ -203,6 +204,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 				AtomContainer test_mol( *_query );
 				test_mol.apply(transformer);
 				rmsd = getMinRMSD(&site, &test_mol);
+				cout<<"RMSD:"<<rmsd<<endl;
 				if (rmsd < best_rmsd)
 				{
 					best_rmsd = rmsd;
@@ -210,7 +212,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 				}
 			}
 		} // loop-end
-		
+		cout<<"found bestRMSD: "<<best_rmsd<<endl;
 	}
 	
 	
@@ -356,26 +358,26 @@ Atom* StarAligner::getMatchingAtom(Atom* center, AtomContainer* mol, String &ele
 }
 
 
-/**
- * getMinRMSD (1)
- */
-float StarAligner::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
-{
-	AtmVec vec1;
-	AtmVec vec2;
-	LigBase::toAtmVec(*mol1, vec1);
-	LigBase::toAtmVec(*mol2, vec2);
+///**
+// * getMinRMSD (1)
+// */
+//float StarAligner::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
+//{
+//	AtmVec vec1;
+//	AtmVec vec2;
+//	LigBase::toAtmVec(*mol1, vec1);
+//	LigBase::toAtmVec(*mol2, vec2);
 	
-	// the 'sum of all square distances' for the best (minimal) permutation:
-	float min_sq_dist = numeric_limits<float>::max(); 
+//	// the 'sum of all square distances' for the best (minimal) permutation:
+//	float min_sq_dist = numeric_limits<float>::max(); 
 	
-	AtmVec::iterator ati = vec1.begin(); ++ati;  // start with second atom (first is central atom)
-	AtmVec::iterator end1 = vec1.end();
-	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
+//	AtmVec::iterator ati = vec1.begin(); ++ati;  // start with second atom (first is central atom)
+//	AtmVec::iterator end1 = vec1.end();
+//	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
 	
-	min_sq_dist = sqrt( min_sq_dist / (float)(vec1.size() - 1) );
-	return min_sq_dist;
-}
+//	min_sq_dist = sqrt( min_sq_dist / (float)(vec1.size() - 1) );
+//	return min_sq_dist;
+//}
 
 /**
  * getMinRMSD (2)
@@ -393,23 +395,24 @@ float StarAligner::getMinRMSD(AtmVec* vec1, AtomContainer* mol2)
 	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
 	
 	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
+	cout<<"min dist: "<<min_sq_dist<<" size-1:"<<vec1->size() - 1<<endl;
 	return min_sq_dist;
 }
 
-/**
- * getMinRMSD (3)
- */
-float StarAligner::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
-{
-	float min_sq_dist = numeric_limits<float>::max();
+///**
+// * getMinRMSD (3)
+// */
+//float StarAligner::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
+//{
+//	float min_sq_dist = numeric_limits<float>::max();
 	
-	AtmVec::iterator ati = vec1->begin(); ++ati;
-	AtmVec::iterator end1 = vec1->end();
-	sqdistPerPermutation( ati, end1, *vec2, 1, 0, &min_sq_dist);
+//	AtmVec::iterator ati = vec1->begin(); ++ati;
+//	AtmVec::iterator end1 = vec1->end();
+//	sqdistPerPermutation( ati, end1, *vec2, 1, 0, &min_sq_dist);
 	
-	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
-	return min_sq_dist;
-}
+//	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
+//	return min_sq_dist;
+//}
 
 /*
  * getUniqueAtoms (1)
