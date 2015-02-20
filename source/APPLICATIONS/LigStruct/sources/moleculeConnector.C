@@ -42,6 +42,9 @@ void MoleculeConnector::setLibs(SiteMap &connectLib, BondLengthMap &bondLib)
  */
 void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 {
+	cout<< LigBase::printInlineMol( &atm1->getRoot() )<<endl;
+	cout<< LigBase::printInlineMol( &atm2->getRoot() )<<endl;
+				 
 	SDFile outfile("./2OUT.sdf", std::ios::out);//#DEBUG
 	outfile << *(Molecule*) &atm1->getRoot();//#DEBUG
 	//1) get connection sites of the two atoms and the corresponding templates
@@ -94,9 +97,6 @@ void MoleculeConnector::connect(Atom* atm1, Atom* atm2)
 
 	Atom* atm1_partner = getMatchingAtomAll( &*templ1->beginAtom(), remain_tmp1, elem2, bo2);
 	Atom* atm2_partner = getMatchingAtomAll( &*templ2->beginAtom(), remain_tmp2, elem1, bo1);
-
-	cout<<"looking for: "<<elem1<<" "<< bo1<<endl;
-	cout<<"I am the match: "<<atm2_partner->getElement().getSymbol()<<endl;
 	
 	outfile << *(Molecule*) templ1;//#DEBUG
 	outfile << *(Molecule*) templ2;//#DEBUG

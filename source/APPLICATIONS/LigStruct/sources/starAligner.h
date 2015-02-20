@@ -82,9 +82,8 @@ private:
 															BALL::String& elem, short bo);
 	
 	/*
-	 * Creates a vector (on heap mem) containing all unique atoms of mol1
+	 * Fills an AtmVec 'unique_atms' with all unique atoms of 'mol1'
 	 */
-	void getUniqueAtoms(BALL::AtomContainer* mol1, AtmVec& unique_atms);
 	void getUniqueAtoms(AtmVec &mol1, AtmVec& unique_atms);
 	
 	/*

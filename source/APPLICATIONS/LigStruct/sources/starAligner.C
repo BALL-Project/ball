@@ -7,6 +7,7 @@
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/FORMAT/SDFile.h>//#DEBUG
 
 #include <limits>
 
@@ -54,6 +55,8 @@ void StarAligner::setMolecules(AtmVec &ref_site, AtomContainer &query)
 
 void StarAligner::align()
 {
+	cout<<"Site    : "<<LigBase::printInlineStarMol(*_site) <<endl;//#DEBUG
+	cout<<"Template: "<<LigBase::printInlineStarMol(_query) <<endl;//#DEBUG
 	_calculateOptimalTransformation();
 	
 	_transformer.setTransformation(_matrix);
@@ -188,6 +191,9 @@ void StarAligner::_alignCase3(AtmVec& site)
 		float best_rmsd = numeric_limits<float>::max();
 		Matrix4x4 test_matrix; TransformationProcessor transformer;
 		
+		SDFile outfile("./starAligner.sdf", std::ios::out);//#DEBUG
+		cout<<"Working on: "<<LigBase::printInlineMol( _query)<<endl;
+		
 		AtomIterator ati = _query->beginAtom();
 		for(ati++; +ati; ati++)
 		{
@@ -203,8 +209,9 @@ void StarAligner::_alignCase3(AtmVec& site)
 				// test transformation with a dummy_molecule:
 				AtomContainer test_mol( *_query );
 				test_mol.apply(transformer);
+				outfile << test_mol; //#DEBUG
 				rmsd = getMinRMSD( site, test_mol);
-				cout<<"RMSD:"<<rmsd<<endl;
+				cout<<"RMSD:"<<rmsd<<endl; //#DEBUG
 				if (rmsd < best_rmsd)
 				{
 					best_rmsd = rmsd;
@@ -212,6 +219,8 @@ void StarAligner::_alignCase3(AtmVec& site)
 				}
 			}
 		} // loop-end
+		
+		outfile.close(); //#DEBUG
 		cout<<"found bestRMSD: "<<best_rmsd<<endl;
 	}
 	
@@ -425,20 +434,24 @@ void StarAligner::sqdistPerPermutation(AtmVec& vec1,
 }
 
 /*
- * getUniqueAtoms (2)
+ * getUniqueAtoms
  */
 void StarAligner::getUniqueAtoms(AtmVec& mol1, AtmVec& unique_atms)
 {
 	AtmVec::iterator atmi = mol1.begin();
-	for (atmi++; atmi != mol1.end(); atmi++)
+	short bo = 0;
+	for (++atmi; atmi != mol1.end(); ++atmi)
 	{
 		bool isUnique = true;
-		AtmVec::iterator atmk = atmi; //mol1->beginAtom();
-		for(atmk++; atmk != mol1.end(); atmk++)
+		bo = (*atmi)->getBond( *mol1[0] )->getOrder();
+		
+		AtmVec::iterator atmk = mol1.begin();
+		for(++atmk; atmk != mol1.end(); atmk++)
 		{
 			if( 
-				  (*atmi)->getElement() == (*atmk)->getElement() &&
-					(*atmi)->getBond( *mol1[0] )->getOrder() == (*atmk)->getBond( *mol1[0] )->getOrder()
+					atmk != atmi &&
+					(*atmi)->getElement() == (*atmk)->getElement() &&
+					bo == (*atmk)->getBond( *mol1[0] )->getOrder()
 				)
 			{
 				isUnique = false;
