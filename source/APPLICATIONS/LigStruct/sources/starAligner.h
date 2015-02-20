@@ -56,31 +56,22 @@ public:
 	 * The central atom is not tested, because it is the translation 
 	 * center and thus should always have distance 0
 	 */
-//	float getMinRMSD(BALL::AtomContainer* mol1, BALL::AtomContainer* mol2);
-	float getMinRMSD(AtmVec* vec1, BALL::AtomContainer* mol2);
-//	float getMinRMSD(AtmVec* vec1, AtmVec* vec2);
+	float getMinRMSD(AtmVec& vec1, BALL::AtomContainer& mol2);
 	
 private:
-	bool _delete_site;
-	//	AtomContainer* _reference;
-	AtmVec* _site;
-	BALL::AtomContainer* _query;
-//	AtmVec _remainder;
 	
-	BALL::Matrix4x4 _matrix;
-	BALL::TransformationProcessor _transformer;
+	bool _delete_site;
 	bool _got_transformation;
 	float _best_rmsd;
 	
+	AtmVec* _site;
+	BALL::AtomContainer* _query;
+	
+	BALL::Matrix4x4 _matrix;
+	BALL::TransformationProcessor _transformer;
+	
 	void _calculateOptimalTransformation();
 	void _alignCase3(AtmVec& site);
-	
-	
-	/*
-	 * Check if two atoms of a star-molecule are identical in their element and
-	 * the bond order to the central atom.
-	 */
-	bool atomsCompatible(BALL::Atom* at1, BALL::Atom* at2);
 	
 	/* 
 	 * Find the first atom in 'mol', that has same element and bond order as 'atm'
@@ -97,15 +88,19 @@ private:
 	void getUniqueAtoms(AtmVec &mol1, AtmVec& unique_atms);
 	
 	/*
-	 * Sets the 'global_sq_dist' the the lowest value found. All permutations are
+	 * Sets the 'global_sq_dist' to the lowest value found. All permutations are
 	 * tested and 'global_sq_dist' is only updated if a permutation yields a lower
 	 * sum of square distances.
 	 * 
 	 * Thus 'global_sq_dist' needs to initially point to a float that is set to
 	 * numeric_limits<float>::max() in the surronding recursion wrapper.
 	 */
-	void sqdistPerPermutation(AVIter &ati, AVIter& end, AtmVec& atm_vec, int i, 
-														float loc_sq_dist, float* global_sq_dist);
+	void sqdistPerPermutation(AtmVec& vec1, 
+														int     pos1, 
+													  AtmVec& vec2, 
+													  int     pos2, 
+													  float   loc_sq_dist, 
+													  float&  global_sq_dist);
 	
 	/*
 	 * Swap two Atom-Pointer (by simply using references to pointer)

@@ -71,7 +71,7 @@ float StarAligner::bestRMSD()
 	AtomContainer temp( *_query );
 	temp.apply(_transformer);
 	
-	_best_rmsd = getMinRMSD(_site, &temp);
+	_best_rmsd = getMinRMSD( *_site, temp);
 	return _best_rmsd;
 }
 
@@ -203,7 +203,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 				// test transformation with a dummy_molecule:
 				AtomContainer test_mol( *_query );
 				test_mol.apply(transformer);
-				rmsd = getMinRMSD(&site, &test_mol);
+				rmsd = getMinRMSD( site, test_mol);
 				cout<<"RMSD:"<<rmsd<<endl;
 				if (rmsd < best_rmsd)
 				{
@@ -232,13 +232,18 @@ void StarAligner::_alignCase3(AtmVec& site)
 		Atom* tem_3_atm = 0;
 		
 		// test all possible assignments to 'selectionA2'
+		bool bo_equal = false;
+		bool elem_equal = false;
 		AtomIterator ati = _query->beginAtom();
 		Matrix4x4 temp_trans; TransformationProcessor transformer;
 		for(ati++; +ati; ati++)
 		{
 			tem_2_atm = &*ati;
-			///#WARNING:####: 'atomsCompatible' won't work, use with a site atom, replace!
-			if( atomsCompatible(site2_atm, tem_2_atm) ) 
+			
+			bo_equal = site2_atm->getBond( *site[0] )->getOrder() == tem_2_atm->beginBond()->getOrder();
+			elem_equal = site2_atm->getElement() == tem_2_atm->getElement();
+			
+			if( elem_equal && bo_equal)
 			{
 				Vector3& tem2 = tem_2_atm->getPosition(); //assign first neighbor
 				
@@ -247,8 +252,11 @@ void StarAligner::_alignCase3(AtmVec& site)
 				for(ato++; +ato; ato++)
 				{
 					tem_3_atm = &*ato;
-					///#TODO:####: 'atomsCompatible' won't work, use with a site atom, replace!
-					if( (tem_2_atm != tem_3_atm) && (atomsCompatible(site3_atm, tem_3_atm)) )
+					
+					bo_equal = site3_atm->getBond( *site[0] )->getOrder() == tem_3_atm->beginBond()->getOrder();
+					elem_equal = site2_atm->getElement() == tem_2_atm->getElement();
+					
+					if( (tem_2_atm != tem_3_atm) && ( elem_equal && bo_equal) )
 					{
 						float rmsd = numeric_limits<float>::max();
 						AtomContainer test_mol( *_query );
@@ -258,7 +266,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 						transformer.setTransformation(temp_trans);
 						test_mol.apply(transformer);
 						
-						rmsd = getMinRMSD(&site, &test_mol);
+						rmsd = getMinRMSD( site, test_mol);
 						if (rmsd < best_rmsd)
 						{
 							best_rmsd = rmsd;
@@ -269,20 +277,6 @@ void StarAligner::_alignCase3(AtmVec& site)
 			}
 		}// loop-end
 	}
-}
-
-
-/*
- * atomsCompatible
- * #TODO:####: improve this version. Perhaps by using selections for sites and 
- * restricting to bonds that are selected?
- */
-bool StarAligner::atomsCompatible(Atom* at1,Atom* at2)
-{
-	return ( 
-					 ( at1->getElement()            == at2->getElement() ) && 
-					 ( at1->beginBond()->getOrder() == at2->beginBond()->getOrder()) 
-				 );
 }
 
 
@@ -358,84 +352,75 @@ Atom* StarAligner::getMatchingAtom(Atom* center, AtomContainer* mol, String &ele
 }
 
 
-///**
-// * getMinRMSD (1)
-// */
-//float StarAligner::getMinRMSD(AtomContainer* mol1, AtomContainer* mol2)
-//{
-//	AtmVec vec1;
-//	AtmVec vec2;
-//	LigBase::toAtmVec(*mol1, vec1);
-//	LigBase::toAtmVec(*mol2, vec2);
-	
-//	// the 'sum of all square distances' for the best (minimal) permutation:
-//	float min_sq_dist = numeric_limits<float>::max(); 
-	
-//	AtmVec::iterator ati = vec1.begin(); ++ati;  // start with second atom (first is central atom)
-//	AtmVec::iterator end1 = vec1.end();
-//	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
-	
-//	min_sq_dist = sqrt( min_sq_dist / (float)(vec1.size() - 1) );
-//	return min_sq_dist;
-//}
-
 /**
- * getMinRMSD (2)
+ * getMinRMSD
  */
-float StarAligner::getMinRMSD(AtmVec* vec1, AtomContainer* mol2)
+float StarAligner::getMinRMSD(AtmVec& vec1, AtomContainer& mol2)
 {
 	AtmVec vec2;
-	LigBase::toAtmVec(*mol2, vec2);
+	LigBase::toAtmVec(mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
-	float min_sq_dist = numeric_limits<float>::max(); 
+	float global_sq_dist = numeric_limits<float>::max(); 
 	
-	AtmVec::iterator ati = vec1->begin(); ++ati;  // start with second atom (first is central atom)
-	AtmVec::iterator end1 = vec1->end();
-	sqdistPerPermutation( ati, end1, vec2, 1, 0, &min_sq_dist);
+	sqdistPerPermutation( vec1, 1, vec2, 1, 0, global_sq_dist);
 	
-	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
-	cout<<"min dist: "<<min_sq_dist<<" size-1:"<<vec1->size() - 1<<endl;
-	return min_sq_dist;
+	global_sq_dist = sqrt( global_sq_dist / (float)(vec1.size() - 1) );
+	
+	return global_sq_dist;
 }
 
-///**
-// * getMinRMSD (3)
-// */
-//float StarAligner::getMinRMSD(AtmVec* vec1, AtmVec* vec2)
-//{
-//	float min_sq_dist = numeric_limits<float>::max();
-	
-//	AtmVec::iterator ati = vec1->begin(); ++ati;
-//	AtmVec::iterator end1 = vec1->end();
-//	sqdistPerPermutation( ati, end1, *vec2, 1, 0, &min_sq_dist);
-	
-//	min_sq_dist = sqrt( min_sq_dist / (float)(vec1->size() - 1) );
-//	return min_sq_dist;
-//}
-
-/*
- * getUniqueAtoms (1)
+/**
+ * sqdistPerPermutations
  */
-void StarAligner::getUniqueAtoms(AtomContainer* mol1, AtmVec& unique_atms)
+void StarAligner::sqdistPerPermutation(AtmVec& vec1, 
+																			 int     pos1, 
+																			 AtmVec& vec2, 
+																			 int     pos2, 
+																			 float   loc_sq_dist, 
+																			 float&  global_sq_dist)
 {
-	AtomIterator atmi = mol1->beginAtom();
-	for (atmi++; +atmi; ++atmi)
+	// end case: a permutation was generated, check the RMSD
+	if( pos1 == vec1.size() )
 	{
-		bool isUnique = true;
-		AtomIterator atmk = atmi; //mol1->beginAtom();
-		for(atmk++; +atmk; ++atmk)
+		if( loc_sq_dist < global_sq_dist )
 		{
-			if( atomsCompatible( &*atmi, &*atmk) )
+			global_sq_dist = loc_sq_dist;
+		}
+		return;
+	}
+	// recursion case: 
+	// test all remaining possible pertubations/mappings of atoms from mol2 
+	// (the vector entry) to the next atom of mol1 (the atom iterator)
+	else
+	{
+		float sq_dist_update;// the square distance for the current atom pair
+		
+		bool bo_compatible   = false;
+		bool elem_compatible = false;
+		
+		const Element& elem_1 = vec1[pos1]->getElement();
+		short  bo_1 = vec1[pos1]->getBond( * vec1[0] )->getOrder();
+		
+		for(int i = pos2; i < vec2.size(); i++)
+		{
+			// test if element and bondtype fit for this assignment
+			bo_compatible = bo_1 == vec2[i]->getBond( * vec2[0] )->getOrder();
+			elem_compatible = elem_1 == vec2[i]->getElement();
+			
+			if(  bo_compatible && elem_compatible)
 			{
-				isUnique = false;
-				break;
+				sq_dist_update = vec1[pos1]->getPosition().getSquareDistance( vec2[i]->getPosition() );
+				
+				// permute the vector entries
+				swapAtoms(vec2[pos2], vec2[i]); // use 'i' instead of 'pos2'
+				
+				// next recursion
+				sqdistPerPermutation( vec1, (pos1+1), vec2, (pos2+1), (loc_sq_dist + sq_dist_update), global_sq_dist);
+				
+				swapAtoms(vec2[pos2], vec2[i]); // undo the swap for next itertation
 			}
-		}
-		if(isUnique)
-		{
-			unique_atms.push_back(&*atmi);
-		}
+		} // end for-loop
 	}
 }
 
@@ -451,7 +436,10 @@ void StarAligner::getUniqueAtoms(AtmVec& mol1, AtmVec& unique_atms)
 		AtmVec::iterator atmk = atmi; //mol1->beginAtom();
 		for(atmk++; atmk != mol1.end(); atmk++)
 		{
-			if( atomsCompatible(*atmi, *atmk) )
+			if( 
+				  (*atmi)->getElement() == (*atmk)->getElement() &&
+					(*atmi)->getBond( *mol1[0] )->getOrder() == (*atmk)->getBond( *mol1[0] )->getOrder()
+				)
 			{
 				isUnique = false;
 				break;
@@ -461,49 +449,6 @@ void StarAligner::getUniqueAtoms(AtmVec& mol1, AtmVec& unique_atms)
 		{
 			unique_atms.push_back(*atmi);
 		}
-	}
-}
-
-/*
- * sqdistForPermutations
- */
-void StarAligner::sqdistPerPermutation(AVIter& ati1, AVIter& end1,
-							AtmVec& atm_vec, int i, float loc_sq_dist, float* global_sq_dist)
-{
-	// end recursion case: 
-	// everything was permuted so check how good the square dist was and perhaps
-	// update the global sq_dist
-	if( ati1 == end1 )
-	{
-		if( (*global_sq_dist) > loc_sq_dist)
-		{
-			*global_sq_dist = loc_sq_dist;
-		}
-		return;
-	}
-	// recursion case:
-	// test all remaining possible pertubations/mappings of atoms from mol2 
-	// (the vectorentry) to the next atom of mol1 (the atom iterator)
-	else
-	{
-		float sq_dist_update;// the square distance for the current atom pair
-		for(int j = i; j < atm_vec.size(); j++)
-		{
-			// test if element and bondtype fit for this assignment
-			// (this is rather for correctness than for speed)
-			///#TODO:####: illegal use of 'atomsCompatible'
-			if(  atomsCompatible( *ati1, atm_vec[j] )  )
-			{
-				sq_dist_update = (*ati1)->getPosition().getSquareDistance( atm_vec[j]->getPosition() );
-				
-				swapAtoms(atm_vec[i], atm_vec[j]); // permute the vector entries
-				
-				AtmVec::iterator ati2 = ati1; // create new atom iterator for next recursion
-				sqdistPerPermutation( ++ati2, end1, atm_vec, (i+1), (loc_sq_dist + sq_dist_update), global_sq_dist);
-				
-				swapAtoms(atm_vec[i], atm_vec[j]); // undo the swap for next itertation
-			}
-		} // end for-loop
 	}
 }
 
@@ -521,7 +466,7 @@ void StarAligner::swapAtoms(Atom*& a, Atom*& b)
 
 /*
  * twoPointMatch
- * #TODO:####: reimplement more efficiently
+ * #TODO: reimplement more efficiently
  */
 Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2, 
 																		 const Vector3& w1, const Vector3& w2)
