@@ -9,14 +9,28 @@
 #include <BALL/MATHS/angle.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
+/**
+ * @brief The ClashDetector class - Simply provides methods to detect clashes
+ * within and between molecules. It simply counts all clashes, where a clash
+ * is defined as two atoms having a distance that is less than their added
+ * vdw-radii minus a tolerance. The standard tolerance used here is 
+ * 1.3 Angsroem.
+ */
 class ClashDetector
 {
 public:
+	/**
+	 * @brief ClashDetector - here it is possible to specify how large the 
+	 * tolereance shall be.
+	 * @param tolerance
+	 */
 	ClashDetector( float tolerance = 1.3 );
 	~ClashDetector();
 	
 	/**
-	 * @brief detectInMolecule
+	 * @brief detectInMolecule - checks each atom of 'ac' against all 
+	 * remaining atoms in 'ac' if a clash exists. Each clash is counted once and
+	 * the total count is returned.
 	 * 
 	 * @param ac
 	 * @return 
@@ -25,23 +39,13 @@ public:
 	
 	/**
 	 * @brief detectBetweenMolecules - Detect all clashes between 'ac1' and 'ac2'
-	 * but ignore the clashes occuring within each fragment
+	 * but ignores clashes occuring within each fragment
 	 * 
 	 * @param ac1
 	 * @param ac2
 	 * @return 
 	 */
 	int detectBetweenMolecules(BALL::AtomContainer& ac1, BALL::AtomContainer& ac2);
-	
-	/**
-	 * @brief doClash - check if actual dist+tolerance is grater than the 
-	 * theoretical vdw-dist
-	 * 
-	 * @param atm1
-	 * @param atm2
-	 * @return 
-	 */
-	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
 	
 private:
 	/*
@@ -52,6 +56,16 @@ private:
 	 * @return 
 	 */
 	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
+	
+	/*
+	 * @brief doClash - check if actual dist+tolerance is grater than the 
+	 * theoretical vdw-dist
+	 * 
+	 * @param atm1
+	 * @param atm2
+	 * @return 
+	 */
+	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
 	
 	float _tolerance;
 };

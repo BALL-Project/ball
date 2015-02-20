@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 	lib_manag.readSiteTemplates();
 	lib_manag.readBondLenths();
 	
-	ConnectionClashResolver c_resolver;
+	ConnectionResolver c_resolver;
 	
 	outfile<< *mol;
 	Log << "......done!"<<endl;

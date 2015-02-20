@@ -43,7 +43,7 @@ private:
 	Matcher            _matcher;
 	LinkerBuilder      _linker_builder;
 	MoleculeConnector  _connector;
-	ConnectionClashResolver _clash_resolver;
+	ConnectionResolver _clash_resolver;
 
 	
 	//

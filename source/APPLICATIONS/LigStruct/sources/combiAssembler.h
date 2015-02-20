@@ -26,7 +26,7 @@ private:
 	std::list< RAtom* > _r_atms;
 	
 	MoleculeConnector       _connector;
-	ConnectionClashResolver _cresolv;
+	ConnectionResolver _cresolv;
 
 	std::list< std::pair<int*, int*> > _work_trace;
 	void _combineRecur(BALL::SDFile& handle);

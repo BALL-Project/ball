@@ -53,8 +53,8 @@ private:
 	BondLengthMap& _bond_lengths;
 	
 	// helper structures
-	BALL::HashSet<BALL::Atom* > _done;
-	list< BALL::Bond* > _rotors;
+	BALL::HashSet< BALL::Atom* > _done;
+	ConnectList _rotors;
 
 	// helper objects
 	StarAligner _aligner;

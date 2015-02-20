@@ -5,15 +5,13 @@
 #define CLASHRESOLVER_H
 
 #include "base.h"
+#include "clashBase.h"
 
 #include <BALL/MATHS/angle.h>
 
 /// C l a s s   C l a s h R e s o l v e r
 /// ############################################################################
-
-///#TODO: was faster to simply reimplement but here we actually need a class 
-/// hierachy
-class ClashResolver
+class ClashResolver: public ClashDetector
 {
 public:
 	ClashResolver( float tolerance = 1.3, int max_rotors = 20);
@@ -29,6 +27,14 @@ public:
 	int resolve();
 	
 	/**
+	 * Solve optimally under the constraint of discretized angles. ('steps'
+	 * gives the number of angles that are to be tested for each bond)
+	 * 
+	 * Rotates all bridging bonds in 'small' and 'large'
+	 */ 
+	int resolveOptimal( const int& steps = 3 );
+	
+	/**
 	 * @brief detect ONLY clashes that occur between the two fragments NOT within
 	 * a fragment (we assume that the two should start as clash free). Is a 
 	 * wrapper for the call "detectBetweenMolecules( *_large_root, *_small_root)"
@@ -37,41 +43,18 @@ public:
 	 */
 	int detect();
 	
-private:
-	/// private Methods for detection
-	/*
-	 * Detect all clashes within 'ac'
-	 */
-	int detectInMolecule(BALL::AtomContainer& ac);
-	
-	/*
-	 * check if the two atoms are speparated by at least 3 bonds
-	 */
-	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
-	
-	/*
-	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
-	 */
-	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
-	
-	/// private Methods for resolving
-	/*
-	 * Solve optimally under the constraint of discretized angles. ('steps'
-	 * gives the number of angles that are to be tested for each bond)
-	 * 
-	 * Rotates all bridging bonds in 'small' and 'large'
-	 */ 
-	int resolveAll( const int& steps );
-	
-	int resolveAllRecur(const ConnectList::iterator& p, 
-											const ConnectList::iterator &p_end, 
-											BALL::Angle& angle, const int& steps );
-	
+protected:
 	BALL::AtomContainer* _molecule;
 
-	ConnectList* _rotors;
+	ConnectList* _all_rotors;
 	
-	const float _tolerance;   // tolerance in Anstroem for vdw-dist violation
+private:
+	int resolveOptimalRecur(const ConnectList::iterator& p, 
+													const ConnectList::iterator &p_end, 
+													BALL::Angle& angle, const int& steps );
+	
+
+	
 	int _max_rotations; // maximum number of bonds to rotate
 };
 
@@ -79,13 +62,13 @@ private:
 
 
 
-/// C l a s s   C o n n e c t i o n C l a s h R e s o l v e r
+/// C l a s s   C o n n e c t i o n R e s o l v e r
 /// ############################################################################
-class ConnectionClashResolver
+class ConnectionResolver: public ClashDetector
 {
 public:
-	ConnectionClashResolver( float tolerance = 1.3, int max_rotors = 2);
-	~ConnectionClashResolver();
+	ConnectionResolver( float tolerance = 1.3, int max_rotors = 2);
+	~ConnectionResolver();
 	
 	/**
 	 * Preconditions: 
@@ -101,6 +84,12 @@ public:
 	 */
 	void setMolecule(BALL::Atom& atm1, BALL::Atom& atm2, ConnectList& connections, ConnectList *more_rotors=0);
 	
+	/**
+	 * @brief resolve
+	 * @param optimal
+	 * @param conserve_large
+	 * @return 
+	 */
 	std::pair<int, bool> resolve(bool optimal = false, bool conserve_large = false);
 	
 	/**
@@ -113,25 +102,6 @@ public:
 	int detect();
 	
 private:
-	/// private Methods for detection
-	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
-	/*
-	 * Detect all clashes within 'ac'
-	 */
-	int detectInMolecule(BALL::AtomContainer& ac);
-	
-	/*
-	 * Detect all clashes between 'ac1' and 'ac2' but ignore the clashes occuring
-	 * within each fragment.
-	 */
-	int detectBetweenMolecules(BALL::AtomContainer& ac1, BALL::AtomContainer& ac2);
-	
-	/*
-	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
-	 */
-	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
-	
-	/// private Methods for resolving
 	/*
 	 * Try to resolve clashes between large and small fragment by rotating along
 	 * the connecting bond.
@@ -167,7 +137,6 @@ private:
 	TemplateCoord* _save_large;
 	TemplateCoord* _save_small;
 	
-	const float _tolerance; // tolerance in Anstroem for vdw-dist violation
 	int _max_rotations;     // maximum number of bonds to rotate
 };
 #endif // CLASHRESOLVER_H

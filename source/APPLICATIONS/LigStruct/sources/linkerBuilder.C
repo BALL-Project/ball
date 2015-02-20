@@ -31,7 +31,7 @@ ConnectList LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	int atom_cnt = linker_frag.countAtoms();
 	
 	// -1.) catch trivial cases:
-	if(atom_cnt<3)
+	if(atom_cnt < 3)
 	{
 		if(atom_cnt == 0)
 		{
@@ -316,23 +316,13 @@ ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 	}
 	
 	//4.) check for clashes and resolve
-	
-	// translate list of bonds to ConnectList (I am sorry for this)
-	//#TODO: remove this stupid translation step!
-	ConnectList temp;
-	for(list<Bond*>::iterator bit = _rotors.begin(); bit != _rotors.end(); ++bit)
-	{
-		temp.push_back( make_pair( (*bit)->getFirstAtom(), (*bit)->getSecondAtom()) );
-	}
-	
-	// resolve possible clashes within the linker:
-	_cresolv.setMolecule(linker_frag, temp );
+	_cresolv.setMolecule(linker_frag, _rotors );
 	if(_cresolv.detect() != 0)
 	{
 		_cresolv.resolve();
 	}
 	
-	return temp;
+	return _rotors;
 }
 
 /*
@@ -361,7 +351,7 @@ void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd,
 		if( previous_cnt > 2)
 		{
 			dist = 1;
-			_rotors.push_back( &bnd );
+			_rotors.push_back( make_pair( bnd.getFirstAtom(), bnd.getSecondAtom() ) );
 		}
 		// current atom is a 'hub' 
 		// guarantees that we get on chains of lenght > 2 between two hubs
@@ -369,7 +359,7 @@ void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd,
 		else if( current_cnt > 2)
 		{
 			if( dist > 1)// prev. atom was no hub!
-				_rotors.push_back( &bnd );
+				_rotors.push_back(make_pair( bnd.getFirstAtom(), bnd.getSecondAtom() ));
 			
 			dist = 0;
 		}
