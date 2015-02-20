@@ -7,7 +7,6 @@
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/structureMapper.h>
-#include <BALL/FORMAT/SDFile.h>//#DEBUG
 
 #include <limits>
 
@@ -55,8 +54,6 @@ void StarAligner::setMolecules(AtmVec &ref_site, AtomContainer &query)
 
 void StarAligner::align()
 {
-	cout<<"Site    : "<<LigBase::printInlineStarMol(*_site) <<endl;//#DEBUG
-	cout<<"Template: "<<LigBase::printInlineStarMol(_query) <<endl;//#DEBUG
 	_calculateOptimalTransformation();
 	
 	_transformer.setTransformation(_matrix);
@@ -165,10 +162,10 @@ void StarAligner::_alignCase3(AtmVec& site)
 	///         for a second neighbor from 'site'
 	else if( unique_atms.size() == 1)
 	{
-		cout<<"FOUND A SINGLE UNIQUE"<<endl; //#DEBUG
 		// if at least one mol1 atom was unique, it is curcial to use it:
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = unique_atms[0]->getPosition();
+		
 		// get next non unique atom from site:
 		Atom* site3_atm = 0;
 		for(int i = 1; i < site.size(); ++i)
@@ -179,26 +176,33 @@ void StarAligner::_alignCase3(AtmVec& site)
 				break;
 			}
 		}
+		
 		Vector3& sit3 = site3_atm->getPosition();
 		
 		Vector3& tem1 = _query->beginAtom()->getPosition();
-		String elem = unique_atms[0]->getElement().getSymbol();
-		short    bo = unique_atms[0]->getBond( *site[0] )->getOrder();
+		String   elem = unique_atms[0]->getElement().getSymbol();
+		short      bo = unique_atms[0]->getBond( *site[0] )->getOrder();
+		
 		Atom* tem2_atm = getMatchingAtom(&*_query->beginAtom(), _query, elem, bo );
-		Vector3& tem2 = tem2_atm->getPosition();
+		Vector3&  tem2 = tem2_atm->getPosition();
 		
 		// test all possible assignments of an 'templ'-atm to the 'site3_atm'
 		float best_rmsd = numeric_limits<float>::max();
 		Matrix4x4 test_matrix; TransformationProcessor transformer;
 		
-		SDFile outfile("./starAligner.sdf", std::ios::out);//#DEBUG
-		cout<<"Working on: "<<LigBase::printInlineMol( _query)<<endl;
+		bool bo_equal = false;
+		bool elem_equal = false;
 		
 		AtomIterator ati = _query->beginAtom();
-		for(ati++; +ati; ati++)
+		for(++ati; +ati; ati++)
 		{
 			float rmsd = numeric_limits<float>::max();
-			if(&*ati != tem2_atm) // all atoms that are not yet assigned
+			
+			bo_equal = site3_atm->getBond( *site[0] )->getOrder() == ati->getBond(*_query->beginAtom())->getOrder();
+			elem_equal = site3_atm->getElement() == ati->getElement();
+			
+			// all atoms that match 'site3_atm' and are not identical to 'stie2_atm'
+			if(&*ati != tem2_atm && bo_equal && elem_equal) 
 			{
 				Vector3& tem3 = ati->getPosition();
 				
@@ -209,9 +213,9 @@ void StarAligner::_alignCase3(AtmVec& site)
 				// test transformation with a dummy_molecule:
 				AtomContainer test_mol( *_query );
 				test_mol.apply(transformer);
-				outfile << test_mol; //#DEBUG
+
 				rmsd = getMinRMSD( site, test_mol);
-				cout<<"RMSD:"<<rmsd<<endl; //#DEBUG
+
 				if (rmsd < best_rmsd)
 				{
 					best_rmsd = rmsd;
@@ -219,9 +223,6 @@ void StarAligner::_alignCase3(AtmVec& site)
 				}
 			}
 		} // loop-end
-		
-		outfile.close(); //#DEBUG
-		cout<<"found bestRMSD: "<<best_rmsd<<endl;
 	}
 	
 	
@@ -245,6 +246,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 		bool elem_equal = false;
 		AtomIterator ati = _query->beginAtom();
 		Matrix4x4 temp_trans; TransformationProcessor transformer;
+		
 		for(ati++; +ati; ati++)
 		{
 			tem_2_atm = &*ati;
