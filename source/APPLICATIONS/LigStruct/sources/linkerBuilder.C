@@ -317,21 +317,19 @@ ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 	
 	//4.) check for clashes and resolve
 	
-	// hier wirds kurz ekelhaft bitte weggucken:
+	// translate list of bonds to ConnectList (I am sorry for this)
+	//#TODO: remove this stupid translation step!
 	ConnectList temp;
 	for(list<Bond*>::iterator bit = _rotors.begin(); bit != _rotors.end(); ++bit)
 	{
 		temp.push_back( make_pair( (*bit)->getFirstAtom(), (*bit)->getSecondAtom()) );
-//		(*bit)->setOrder(2);//DEBUG (show me the rotors as double bonds)
 	}
 	
-//	cout<<"Linker Rotors: "<<temp.size()<<endl;
+	// resolve possible clashes within the linker:
 	_cresolv.setMolecule(linker_frag, temp );
 	if(_cresolv.detect() != 0)
 	{
-//		cout<<endl<<"built linker: "<<endl; //#DEBUG
-//		cout<<LigBase::printInlineMol( &linker_frag)<<endl; //#DEBUG
-//		cout<<"  contains "<<_cresolv.resolve()<<" clashes."<<endl; //#DEBUG
+		_cresolv.resolve();
 	}
 	
 	return temp;
@@ -432,7 +430,8 @@ void LinkerBuilder::setBondTrans(Bond &bnd)
 																	 p3.x, p3.y, p3.z, 
 																	 p4.x, p4.y, p4.z );
 	
-	_cresolv.rotate(*at1, *at2, Angle(Constants::PI)-is_angle);
+	_roto.setAxis(*at1, *at2);
+	_roto.rotate( Angle(Constants::PI)-is_angle );
 
 }
 

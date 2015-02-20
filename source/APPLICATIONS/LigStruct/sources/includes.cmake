@@ -7,7 +7,7 @@
 
 ### list all filenames of the directory here ###
 SET(GROUP LIGSTRUCT)
-
+ 
 SET(DIRECTORY source/APPLICATIONS/LigStruct/sources)
 
 FILE(GLOB HEADERS_LIST "${DIRECTORY}/*.h")

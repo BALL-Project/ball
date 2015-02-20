@@ -8,6 +8,79 @@
 
 #include <BALL/MATHS/angle.h>
 
+/// C l a s s   C l a s h R e s o l v e r
+/// ############################################################################
+
+///#TODO: was faster to simply reimplement but here we actually need a class 
+/// hierachy
+class ClashResolver
+{
+public:
+	ClashResolver( float tolerance = 1.3, int max_rotors = 20);
+	~ClashResolver();
+	
+	/**
+	 * @brief setMolecule
+	 * @param molecule
+	 * @param connections
+	 */
+	void setMolecule(BALL::AtomContainer& molecule, ConnectList& rotors);
+	
+	int resolve();
+	
+	/**
+	 * @brief detect ONLY clashes that occur between the two fragments NOT within
+	 * a fragment (we assume that the two should start as clash free). Is a 
+	 * wrapper for the call "detectBetweenMolecules( *_large_root, *_small_root)"
+	 * 
+	 * @return number of clashes found BETWEEN both fragments
+	 */
+	int detect();
+	
+private:
+	/// private Methods for detection
+	/*
+	 * Detect all clashes within 'ac'
+	 */
+	int detectInMolecule(BALL::AtomContainer& ac);
+	
+	/*
+	 * check if the two atoms are speparated by at least 3 bonds
+	 */
+	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
+	
+	/*
+	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
+	 */
+	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
+	
+	/// private Methods for resolving
+	/*
+	 * Solve optimally under the constraint of discretized angles. ('steps'
+	 * gives the number of angles that are to be tested for each bond)
+	 * 
+	 * Rotates all bridging bonds in 'small' and 'large'
+	 */ 
+	int resolveAll( const int& steps );
+	
+	int resolveAllRecur(const ConnectList::iterator& p, 
+											const ConnectList::iterator &p_end, 
+											BALL::Angle& angle, const int& steps );
+	
+	BALL::AtomContainer* _molecule;
+
+	ConnectList* _rotors;
+	
+	const float _tolerance;   // tolerance in Anstroem for vdw-dist violation
+	int _max_rotations; // maximum number of bonds to rotate
+};
+
+
+
+
+
+/// C l a s s   C o n n e c t i o n C l a s h R e s o l v e r
+/// ############################################################################
 class ConnectionClashResolver
 {
 public:
@@ -39,15 +112,9 @@ public:
 	 */
 	int detect();
 	
-	/**
-	 * Keep positions of atoms connected to 'atm1' but rotate all atoms that
-	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
-	 * degree/radiant
-	 */
-	void rotate(BALL::Atom& atm1, BALL::Atom& atm2, const BALL::Angle &angle);
-	
 private:
 	/// private Methods for detection
+	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
 	/*
 	 * Detect all clashes within 'ac'
 	 */
@@ -60,37 +127,11 @@ private:
 	int detectBetweenMolecules(BALL::AtomContainer& ac1, BALL::AtomContainer& ac2);
 	
 	/*
-	 * check if the two atoms are speparated by at least 3 bonds
-	 */
-	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
-	
-	/*
 	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
 	 */
 	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
 	
 	/// private Methods for resolving
-	
-	/**
-	 * @brief rotateRestricted - rotates the atoms that belong to 'parent'
-	 * @param atm1
-	 * @param atm2
-	 * @param parent
-	 * @param angle
-	 */
-	void rotateRestricted(BALL::Atom& atm1, BALL::Atom& atm2, 
-												BALL::Composite* parent, const BALL::Angle& angle);
-	
-	/**
-	 * @brief findRotateDirection - true if atm2-side is where the atoms shall be
-	 * moved
-	 * @param atm1
-	 * @param atm2
-	 * @param parent
-	 * @return 
-	 */
-	bool findRotateDirection(BALL::Atom& atm1, BALL::Atom& atm2, 
-													 BALL::Composite* parent);
 	/*
 	 * Try to resolve clashes between large and small fragment by rotating along
 	 * the connecting bond.
@@ -113,12 +154,6 @@ private:
 	 */
 	int resolveFragment(BALL::AtomContainer& frag , ConnectList &clist);
 	
-	/*
-	 * Helper for 'rotate'
-	 */
-	void setAtomsToRotate(BALL::Atom &start, BALL::Atom &probe, BALL::Atom &block,
-												BALL::HashSet<BALL::Atom *> &result);
-	
 	BALL::Atom* atm_large;
 	BALL::Atom* atm_small;
 	
@@ -134,86 +169,5 @@ private:
 	
 	const float _tolerance; // tolerance in Anstroem for vdw-dist violation
 	int _max_rotations;     // maximum number of bonds to rotate
-};
-
-
-///#TODO: was faster to simply reimplement but here we actually need a class 
-/// hierachy
-class ClashResolver
-{
-public:
-	ClashResolver( float tolerance = 1.2, int max_rotors = 20);
-	~ClashResolver();
-	
-	/**
-	 * @brief setMolecule
-	 * @param molecule
-	 * @param connections
-	 */
-	void setMolecule(BALL::AtomContainer& molecule, ConnectList& rotors);
-	
-//	void setMolecule(AtomContainer& molecule);
-	
-	int resolve();
-	
-	/**
-	 * @brief detect ONLY clashes that occur between the two fragments NOT within
-	 * a fragment (we assume that the two should start as clash free). Is a 
-	 * wrapper for the call "detectBetweenMolecules( *_large_root, *_small_root)"
-	 * 
-	 * @return number of clashes found BETWEEN both fragments
-	 */
-	int detect();
-	
-	/**
-	 * Keep positions of atoms connected to 'atm1' but rotate all atoms that
-	 * are connected to 'atm2' around the axis atm1-atm2 about 'angle'
-	 * degree/radiant
-	 */
-	void rotate(BALL::Atom& atm1, BALL::Atom& atm2, BALL::Angle angle);
-	
-private:
-	/// private Methods for detection
-	/*
-	 * Detect all clashes within 'ac'
-	 */
-	int detectInMolecule(BALL::AtomContainer& ac);
-	
-	/*
-	 * check if the two atoms are speparated by at least 3 bonds
-	 */
-	bool atom3Away(BALL::Atom& at1, BALL::Atom& at2);
-	
-	/*
-	 * check if actual dist+tolerance is grater than the theoretical vdw-dist
-	 */
-	bool doClash(BALL::Atom& atm1, BALL::Atom& atm2);
-	
-	/// private Methods for resolving
-	/*
-	 * Solve optimally under the constraint of discretized angles. ('steps'
-	 * gives the number of angles that are to be tested for each bond)
-	 * 
-	 * Rotates all bridging bonds in 'small' and 'large'
-	 */ 
-	int resolveAll( const int& steps );
-	
-	int resolveAllRecur(const ConnectList::iterator& p, 
-											const ConnectList::iterator &p_end, 
-											BALL::Angle& angle, const int& steps );
-
-	
-	/*
-	 * Helper for 'rotate'
-	 */
-	void setAtomsToRotate(BALL::Atom &start, BALL::Atom &probe, BALL::Atom &block,
-												BALL::HashSet<BALL::Atom *> &result);
-	
-	BALL::AtomContainer* _molecule;
-
-	ConnectList* _rotors;
-	
-	const float _tolerance;   // tolerance in Anstroem for vdw-dist violation
-	int _max_rotations; // maximum number of bonds to rotate
 };
 #endif // CLASHRESOLVER_H

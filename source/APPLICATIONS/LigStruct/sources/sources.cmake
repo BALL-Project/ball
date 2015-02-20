@@ -7,6 +7,7 @@ SET(SOURCES_LIST
 	base.C
 	canonicalizer.C
 	combiAssembler.C
+	clashBase.C
 	clashResolver.C
 	linkerBuilder.C
 	fragmenter.C

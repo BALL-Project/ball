@@ -4,88 +4,79 @@
 
 #include "../sources/base.h"
 #include "../sources/ioModule.h"
-#include "../sources/structureAssembler.h"
 #include "../sources/combiAssembler.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
-#include <BALL/FORMAT/SDFile.h>
+
+#define CONF_PATH "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf"
 
 using namespace BALL;
 using namespace std;
 
-/// ################# M A I N #################
+/// ################################## C O M M A N D L I N E    P A R S E R
 int main(int argc, char* argv[])
 {
-	/// ------ S E T    P A R S E R -------
-	CommandlineParser parpars("combi tester", " tests 3D combi assembly", 0.1, String(__DATE__), "Test");
-	parpars.registerParameter("i", "combiLib as CONF file", INFILE, false);
-	parpars.registerParameter("o", "output molecules with 3D coordinates in one SDF", OUTFILE, true);
+	CommandlineParser parpars("combiLib 3D structure generation", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Preparation");
+	parpars.registerParameter("i", "combiLib as *.combi", INFILE, false);
+	parpars.registerParameter("o", "3D molecules in SDFormat", OUTFILE, true);
 	
 	parpars.setSupportedFormats("i","combi");
 	parpars.setSupportedFormats("o","sdf");
+
 	parpars.setOutputFormatSource("i","o");
 
-	String manual = "test tool for combi assembly";
+	String manual = 
+			"Generate a valid (not optimized) 3D structure for structures of an "
+			"entire combinatorial library which is defined in a COMBI file";
 	
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);
 	
 	
-///// I N I T    A S S E M B L E R
-	
-	//1.) setup template database manager, to load the fragment database:
-	String config_path = "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf";
-	cout<<" * loading databases specified in: "<<config_path<<endl;
-	
-	TemplateDatabaseManager template_man;
-	template_man.libraryPathesFromConfig(config_path);
-	template_man.readAll();
-	
-	// setup structureAssembler:
-	StructureAssembler assem( template_man );
-
-	//2.) setup combiLib manager
-	cout<<" * parsing input combilib "<<endl;
+	/// ################################## L O A D    D A T A B A S E / I N P U T
+	//1.) setup combiLib manager, parse combiLib, check if its correctly written
+	cout<<" * parsing input combilib... ";
 	
 	CombiLibManager combi_man;
 	LineBasedFile combi_file(parpars.get("i"), ios::in);
 	combi_man.setCombiLib( combi_file );
 	
-	//#DEBUG 2d controll output
-	//3.) simple testing:
-//	String control_path = parpars.get("o") + "_control.sdf";
-//	cout<<" * generating 2D combinations, and write them to "<< control_path <<endl;
+	cout<<"OK!"<<endl;
 	
-//	//--- generate the control-data: all combinations without coordinates
-//	//--- as input for single prediction:
-//	list< AtomContainer* > combins;
-//	combins.clear();
-//	combi_man.generateCombinationsAtomContainer( combins );
 	
-//	SDFile control_file(control_path, ios::out);
-//	//--- write AC-list to SDFile
-//	for(list<AtomContainer*>::iterator it = combins.begin(); it != combins.end(); ++it)
-//		control_file << **it;
-	//#DEBUG 2d controll output END
+	//2.) setup template database manager, to load the fragment databases
+	String config_path = CONF_PATH;
+	TemplateDatabaseManager template_man;
+	template_man.libraryPathesFromConfig( config_path );
 	
-	//4.) assemble all individual RFragments:
+	cout<<" * loading databases specified in: "<<config_path<<endl;
+	template_man.readAll(); 
+
+	
+	//// ################################## C O M B I    A S S E M B L E    3 D
+	//3.) assemble all individual RFragments:
 	cout<<" * assebling R-fragments"<<endl;
-	CombiLibMap& r_fragments = combi_man.getCombiLib();
+
+	StructureAssembler assem( template_man ); // init structureAssembler with Databases
 	
-	CombiLibMap::iterator it1 = r_fragments.begin();
-	for(; it1 != r_fragments.end(); ++it1)
+	CombiLibMap& c_lib = combi_man.getCombiLib();
+	
+	// for each r-group
+	for(CombiLibMap::iterator r_group = c_lib.begin(); 
+			r_group != c_lib.end(); ++r_group)
 	{
-		vector< RFragment* >::iterator it2 = (*it1).begin();
-		for(; it2 != (*it1).end(); ++it2)
+		// for each r-fragment in that group
+		for(vector< RFragment* >::iterator r_frag = (*r_group).begin(); 
+				r_frag != (*r_group).end(); ++r_frag)
 		{
-			cout<<"assembling: "<<LigBase::printInlineMol( (*it2)->molecule)<<endl;
-			assem.assembleStructure( * (*it2)->molecule );
-//			outfile << * (*it2)->molecule; // DEBUG
+			assem.assembleStructure( * (*r_frag)->molecule ); // assem each r-fragment
 		}
 	}
 	
-	//5.) finally calculate all valid combinations:
-	cout<<" * generating 3D combinations, and write results to "<< parpars.get("o") <<endl;
+	
+	//4.) finally calculate all valid combinations:
+	cout<<" * generating 3D combinations, and write results to "
+		  << parpars.get("o") <<endl;
 	
 	CombiAssembler combiner( template_man, &combi_man.getCombiLib() );
 	SDFile outfile( parpars.get("o"), ios::out);
@@ -93,7 +84,7 @@ int main(int argc, char* argv[])
 	combiner.writeCombinations( outfile );
 	
 	outfile.close();
-///// Clean up
+
 	Log << "....done!"<<endl;
 }
 

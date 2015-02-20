@@ -170,11 +170,11 @@ class LigBase
 public:
 	
 	// generate a mini dump of a molecule
-	static BALL::String printInlineMol( BALL::Composite* mol);
-	static BALL::String printMol( BALL::Composite* mol);
+	static BALL::String printInlineMol( BALL::Composite* mol); //#DEBUG: for debugging
+	static BALL::String printMol( BALL::Composite* mol);//#DEBUG: for debugging
 
-	static BALL::String printInlineStarMol( BALL::Composite* mol);
-	static BALL::String printInlineStarMol(AtmVec& mol);
+	static BALL::String printInlineStarMol( BALL::Composite* mol);//#DEBUG: for debugging
+	static BALL::String printInlineStarMol(AtmVec& mol);//#DEBUG: for debugging
 	
 	static int countBondsAndOrder( BALL::Atom& atm);
 	static int countBondsInPartent( BALL::Atom& atm, const BALL::Composite &parent);

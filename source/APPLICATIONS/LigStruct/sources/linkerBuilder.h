@@ -7,6 +7,7 @@
 #include "base.h"
 #include "starAligner.h"
 #include "clashResolver.h"
+#include "clashBase.h"
 
 /**
  * @brief The LinkerBuilder class
@@ -59,6 +60,7 @@ private:
 	StarAligner _aligner;
 	ClashResolver _cresolv; // for rotations
 	
+	Rotator _roto;
 };
 
 
