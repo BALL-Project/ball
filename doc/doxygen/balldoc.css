@@ -1,0 +1,267 @@
+
+body {
+	background-color: #eee;
+}
+
+/**
+ * 4.0 Header
+ * ----------------------------------------------------------------------------
+ */
+
+/**
+ * 4.1 Site Header
+ * ----------------------------------------------------------------------------
+ */
+
+#titlearea {
+	border: none;
+	font: 400 14px/22px Roboto,sans-serif;
+}
+
+#titlearea h1 {
+	font-family: Bitter, Georgia, serif;
+}
+
+#titlearea h2 {
+	font: 300 italic 34px "Source Sans Pro", Helvetica, sans-serif;
+	margin: 0;
+}
+
+.site-header {
+    position: relative;
+}
+
+.site-header .home-link {
+    color: #141412;
+    display: block;
+    margin: 0 auto;
+    min-width: 1080px;
+    max-width: 1550px;
+    min-height: 230px;
+    padding: 0 0 0 50px;
+    text-decoration: none;
+    width: 100%;
+}
+
+.site-header .site-title:hover {
+    text-decoration: underline;
+}
+
+.site-title {
+    font-size: 80px;
+    font-weight: bold;
+    line-height: 1;
+    margin: 0;
+    padding: 58px 0 10px 0;
+}
+
+.site-description {
+    font: 300 italic 34px "Source Sans Pro", Helvetica, sans-serif;
+    margin: 0;
+}
+
+
+/**
+ * 4.2 Navigation
+ * ----------------------------------------------------------------------------
+ */
+ 
+.main-navigation {
+    clear: both;
+    margin: 0 auto;
+    min-width: 1080px;
+    max-width: 1600px;
+    min-height: 45px;
+    position: relative;
+}
+
+ul.nav-menu, ul.tablist
+div.nav-menu > ul {
+    margin: 0;
+    padding: 0 40px 0 0;
+    position: relative;
+}
+
+.nav-menu li {
+    display: inline-block;
+    position: relative;
+	background-image: none;
+}
+
+.nav-menu li a, .tablist li a {
+    color: #141412;
+    display: block;
+    font-size: 15px;
+    line-height: 1;
+    padding: 15px 20px;
+    text-decoration: none;
+	background-image: none;
+}
+
+.nav-menu li:hover > a, .tablist li:hover, .tablist li.current:hover,
+.nav-menu li a:hover, .tablist li a:hover, .tablist li.current a:hover,
+.nav-menu li:focus > a, .tablist li:focus, .tablist li.current:focus,
+.nav-menu li a:focus, .tablist li a:focus, .tablist li.current a:focus {
+    background-color: #220e10;
+    color: #fff;
+}
+
+.nav-menu .sub-menu,
+.nav-menu .children {
+    background-color: #220e10;
+    border: 2px solid #f7f5e7;
+    border-top: 0;
+    padding: 0;
+    position: absolute;
+    left: -2px;
+    z-index: 99999;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+.nav-menu .sub-menu ul,
+.nav-menu .children ul {
+    border-left: 0;
+    left: 100%;
+    top: 0;
+}
+
+ul.nav-menu ul a,
+.nav-menu ul ul a {
+    color: #fff;
+    margin: 0;
+    width: 200px;
+}
+
+ul.nav-menu ul a:hover,
+.nav-menu ul ul a:hover,
+ul.nav-menu ul a:focus,
+.nav-menu ul ul a:focus {
+    background-color: #db572f;
+}
+
+ul.nav-menu li:hover > ul,
+.nav-menu ul li:hover > ul,
+ul.nav-menu .focus > ul,
+.nav-menu .focus > ul {
+    clip: inherit;
+    overflow: inherit;
+    height: inherit;
+    width: inherit;
+}
+
+.nav-menu .current_page_item > a, .tablist li.current a,
+.nav-menu .current_page_ancestor > a,
+.nav-menu .current-menu-item > a,
+.nav-menu .current-menu-ancestor > a {
+    color: #bc360a;
+    font-style: italic;
+}
+
+.menu-toggle {
+    display: none;
+}
+
+/* Navbar */
+.navbar {
+	border-bottom: 2px solid #aaa;
+}
+
+.navbar, .tabs, .tabs2, .tabs3 {
+	background-image: none;
+    background-color: #f7f5e7;
+    margin: 0 auto;
+    min-width: 1080px;
+    max-width: 1600px;
+}
+
+.tabs2 {
+	margin-bottom: 30px;
+}
+
+.site-header .search-form {
+    position: absolute;
+    right: 20px;
+    top: 1px;
+}
+
+.site-header {
+	background: url(balldoc-header.jpg) no-repeat scroll top;
+	background-size: 1600px auto;
+}
+@media (max-width: 767px) {
+	.site-header {
+		background-size: 768px auto;
+	}
+}
+@media (max-width: 359px) {
+	.site-header {
+		background-size: 360px auto;
+	}
+}
+
+.site-title,
+.site-description {
+	color: #f4f4f4;
+}
+
+.tablist li, .tablist a, .tablist a:hover, .tablist li.current a {
+	background-image: none;
+	text-shadow: none;
+}
+
+.tablist {
+	width: 100%;
+	position: relative;
+}
+
+#MSearchBox {
+	margin: 0;
+	top: 8px;
+	right: 0;
+}
+
+#MSearchResultsWindow {
+	left: auto;
+	right: auto;
+}
+
+/**
+ * Content
+ * ----------------------------------------------------------------------------
+ */
+
+#content-wrapper {
+	min-width: 1078px;
+	max-width: 1598px;
+	margin: 0 auto;
+	border: 1px solid #f7f5e7;
+	border-top: none;
+	border-bottom: none;
+	background-color: #fff;
+	/*position: relative; Must not be relative, otherwise the search windows will be displaced. */
+}
+
+div.header {
+	background-image: none;
+	background-color: #fff;
+}
+
+/**
+ * Footer
+ * ----------------------------------------------------------------------------
+ */
+
+hr.footer {
+	display: none;
+}
+
+address.footer {
+	padding: 5px 10px;
+	background-color: #f7f5e5;
+	border-top: 2px solid #ccc;
+}
+
+

@@ -25,6 +25,10 @@ IF (DOXYGEN_FOUND)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_inc.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_inc)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_dot)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc-header.html.in ${PROJECT_BINARY_DIR}/doc/inc/balldoc-header.html)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc-footer.html.in ${PROJECT_BINARY_DIR}/doc/inc/balldoc-footer.html)
+	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc.css DESTINATION ${PROJECT_BINARY_DIR}/doc/inc)
+	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc-header.jpg DESTINATION ${PROJECT_BINARY_DIR}/doc/inc)
 	
 	#######################################################################
 	## doc
