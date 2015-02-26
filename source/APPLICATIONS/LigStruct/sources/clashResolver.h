@@ -28,11 +28,11 @@ public:
 	
 	/**
 	 * Solve optimally under the constraint of discretized angles. ('steps'
-	 * gives the number of angles that are to be tested for each bond)
+	 * is the number by which we devide 360° to get discrete angles)
 	 * 
 	 * Rotates all bridging bonds in 'small' and 'large'
 	 */ 
-	int resolveOptimal( const int& steps = 3 );
+	int resolveAllCombinations( const int& steps = 3 );
 	
 	/**
 	 * @brief detect ONLY clashes that occur between the two fragments NOT within
@@ -49,7 +49,7 @@ protected:
 	ConnectList* _all_rotors;
 	
 private:
-	int resolveOptimalRecur(const ConnectList::iterator& p, 
+	int allCombinationsRecur(const ConnectList::iterator& p, 
 													const ConnectList::iterator &p_end, 
 													BALL::Angle& angle, const int& steps );
 	
@@ -82,20 +82,25 @@ public:
 	 * @param atm1 part of the larger fragment
 	 * @param atm2 part of the smaller fragment
 	 */
-	void setMolecule(BALL::Atom& atm1, BALL::Atom& atm2, ConnectList& connections, ConnectList *more_rotors=0);
+	void setMolecule(BALL::Atom& atm1, BALL::Atom& atm2, 
+									 ConnectList& connection_rotors, ConnectList *linker_rotors=0);
 	
 	/**
-	 * @brief resolve
+	 * @brief resolve -  does not to handle old clashes that existed already. 
+	 * Always returns the correct complet clash-count, after optimization.
+	 * NOTE: each resolveXYZ() call gives only clash counts for the fragment parts
+	 * that should be solved but not the total clash count.
+	 * 
 	 * @param optimal
 	 * @param conserve_large
 	 * @return 
 	 */
-	std::pair<int, bool> resolve(bool optimal = false, bool conserve_large = false);
+	std::pair<int, bool> resolve(bool optimal = false);
 	
 	/**
-	 * @brief detect ONLY clashes that occur between the two fragments NOT within
-	 * a fragment (we assume that the two should start as clash free). Is a 
-	 * wrapper for the call "detectBetweenMolecules( *_large_root, *_small_root)"
+	 * @brief detect - Detects ONLY clashes that occur between the two fragments 
+	 * that are to be connected. NOT clashes within any fragment (we assume that 
+	 * given clashes can't be resolved by repeated attempts of ConnectionResolver)
 	 * 
 	 * @return number of clashes found BETWEEN both fragments
 	 */
@@ -109,20 +114,28 @@ private:
 	int resolveConnection();
 	
 	/*
+	 * Rotate bonds within fragment 'frag' to remove inter and intra clashes.
+	 * 'frag' needs to be either '_large_root' or '_small_root'.
+	 */
+	int resolveFragment(BALL::AtomContainer& frag , ConnectList &clist, const int &given_clashes = 0);
+	
+	int resolveLarge(const int &given_clashes = 0);
+	
+	/*
 	 * Solve optimally under the constraint of discretized angles. ('steps'
 	 * gives the number of angles that are to be tested for each bond)
 	 * 
 	 * Rotates all bridging bonds in 'small' and 'large'
 	 */ 
-	int resolveAll( const int& steps );
+	int resolveAllCombinations( const int& steps );
 	
-	int resolveAllRecur(const ConnectList::iterator& p, 
-											const ConnectList::iterator &p_end, 
-											BALL::Angle& angle, const int& steps , int &best_cnt);
-	/*
-	 * Rotate bonds in a fragment 'frag' to remove inter and intra clashes
-	 */
-	int resolveFragment(BALL::AtomContainer& frag , ConnectList &clist);
+	int allCombinationsRecur(const ConnectList::iterator& p, 
+													 const ConnectList::iterator &p_end, 
+													 BALL::Angle& angle, 
+													 const int& steps , 
+													 int &best_cnt);
+	
+	int detectAll();
 	
 	BALL::Atom* atm_large;
 	BALL::Atom* atm_small;

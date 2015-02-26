@@ -42,74 +42,80 @@ int ClashResolver::detect()
 
 int ClashResolver::resolve()
 {
-	HashSet< pair< Atom*, Atom* >* > used_rotors;
-	pair< Atom*, Atom* >*            best_rotor = 0;
+	pair< Atom*, Atom* >* last_rotor = 0;
+	pair< Atom*, Atom* >* best_rotor = 0;
 	
 	TemplateCoord best_conf( *_molecule );
 	
-	int best_cnt = detect();
-	int current_count = 0;
-	//1.) try influence independent heuristic:
-	for(int tries=0; tries < _max_rotations; tries++) // try optimise _max_rotations bonds
+	int best_cnt = detectInMolecule( *_molecule );
+	int current_cnt = 0;
+	
+	// try optimise bonds, use two times the size of '_all_rotors' optimization steps
+	for(int tries=0; tries < 2*_all_rotors->size(); tries++)
 	{
-		if(used_rotors.size() == _all_rotors->size())
-			used_rotors.clear();
-		
 		best_rotor = 0;
 		
-		for( auto& p : *_all_rotors)
+		// for each given rotor, test 36 angles and find the one best rotation 
+		// among these
+		for( ConnectList::iterator it = _all_rotors->begin();
+				 it!= _all_rotors->end(); ++it)
 		{
-			// cycle if we already selected that rotor
-			if( used_rotors.has( &p ) )
+			// do not optimize the same rotor in two consecutive steps
+			if( &*it == last_rotor )
 				continue;
 			
+			// use the currently known best conformation:
 			best_conf.applyCoordinates2Molecule( *_molecule );
 			
-			// else: test 36 rotations for that rotor
 			Rotator roto;
-			roto.setAxis( *p.first, *p.second );
+			roto.setAxis( *it->first, *it->second );
+			
+			// test 36 rotations for the selected rotor:
 			for( int i = 1; i < 36; ++i)
 			{
-				roto.rotate( Angle(10.0, false) );
+				roto.rotate( Angle(10.0, false) ); // perfrom a rotation on '_molecule'
 				
-				current_count = detect();
+				current_cnt = detectInMolecule( *_molecule ); // get score for the resulting conformation
 				
-				if ( current_count < best_cnt )
+				if ( current_cnt < best_cnt )
 				{
-					best_cnt = current_count;
+					best_cnt = current_cnt;
 					best_conf.readCoordinatesFromMolecule( *_molecule );
-					best_rotor = &p;
+					best_rotor = &*it;
 				}
 				
-				if( current_count == 0)
+				if( current_cnt == 0)
 					return 0;
 			}
 		}
-		if( best_rotor != 0)
-			used_rotors.insert( best_rotor );
+		
+		// set to the best found conformation:
 		best_conf.applyCoordinates2Molecule( *_molecule );
+		
+		if( best_rotor != 0)
+			last_rotor = best_rotor;
+		
+		// last round was not able to find any better rotation and did not return
+		// because of 0 clashes. Return early, we will not be able to find any 
+		// better rotation in further optimisation trials
+		else
+		{
+			return best_cnt;
+		}
 	}
 	
-	if(current_count < best_cnt)
-	{
-		best_cnt = current_count;
-	}
-	else
-	{
-		best_conf.applyCoordinates2Molecule( *_molecule );
-	}
 	return best_cnt;
 }
 
-int ClashResolver::resolveOptimal( const int &steps)
+int ClashResolver::resolveAllCombinations( const int &steps)
 {
 	// calc the rotation angle to use, depending on the steps:
 	Angle rot_angle = Angle( 360.0 / (float)steps, false );
 	
-	return resolveOptimalRecur( _all_rotors->begin(), _all_rotors->end(), rot_angle, steps);
+	return allCombinationsRecur( _all_rotors->begin(), _all_rotors->end(), rot_angle, steps);
 }
 
-int ClashResolver::resolveOptimalRecur(const ConnectList::iterator &p, 
+int ClashResolver::allCombinationsRecur(const ConnectList::iterator &p, 
 																	 const ConnectList::iterator& p_end, 
 																	 Angle& angle, const int &steps)
 {
@@ -136,7 +142,7 @@ int ClashResolver::resolveOptimalRecur(const ConnectList::iterator &p,
 			ConnectList::iterator next_p = p; ++next_p;  
 			if( next_p != p_end )
 			{
-				current_cnt = resolveOptimalRecur( next_p, p_end, angle, steps);
+				current_cnt = allCombinationsRecur( next_p, p_end, angle, steps);
 				
 				// some other rotation based on this rotation solved ALL clashes
 				if ( current_cnt == 0)
@@ -183,7 +189,8 @@ ConnectionResolver::~ConnectionResolver()
 	delete _save_small; _save_small = 0;
 }
 
-void ConnectionResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connections, ConnectList *more_rotors)
+void ConnectionResolver::setMolecule(
+		Atom &atm1, Atom &atm2, ConnectList &connection_rotors, ConnectList *linker_rotors)
 {
 	atm_large = &atm1;
 	atm_small = &atm2;
@@ -206,23 +213,23 @@ void ConnectionResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connec
 	_small_rotors->clear();
 	_all_rotors->clear();
 	
-	for ( auto& p : connections)
+	for (ConnectList::iterator p = connection_rotors.begin(); p!=connection_rotors.end(); ++p)
 	{
-		if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
+		if( &p->first->getRoot() == _large_root && &p->second->getRoot() == _large_root)
 		{
-			_large_rotors->push_back( p );
-			_all_rotors->push_back( p );
+			_large_rotors->push_back( *p );
+			_all_rotors->push_back( *p );
 		}
-		else if( &p.first->getRoot() == _small_root && &p.second->getRoot() == _small_root)
+		else if( &p->first->getRoot() == _small_root && &p->second->getRoot() == _small_root)
 		{
-			_small_rotors->push_back( p );
-			_all_rotors->push_back( p );
+			_small_rotors->push_back( *p );
+			_all_rotors->push_back( *p );
 		}
 	}
 	
-	if( more_rotors )
+	if( linker_rotors )
 	{
-		for ( auto& p : *more_rotors)
+		for ( auto& p : *linker_rotors)
 		{
 			if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
 			{
@@ -236,6 +243,8 @@ void ConnectionResolver::setMolecule(Atom &atm1, Atom &atm2, ConnectList &connec
 			}
 		}
 	}
+	_small_rotors->push_back( make_pair(&atm1,&atm2) );
+	_large_rotors->push_back( make_pair(&atm1,&atm2) );
 	_all_rotors->push_back( make_pair(&atm1,&atm2) );
 	
 	_max_rotations = _all_rotors->size() * 2;
@@ -248,49 +257,45 @@ int ConnectionResolver::detect()
 	return detectBetweenMolecules( *_small_root, *_large_root );
 }
 
-/*                             R E S O L V E
- * try not to handle old unsolvable clashes if possible, but always return the
- * correct clash-count.
- * NOTE: each resolveXYZ() call gives only clash counts for the fragment parts
- * that should be solved but not the total clash count. 
- * 
- * (Well: resolveALL(int) of course gives the complete count)
- */
-pair<int, bool> ConnectionResolver::resolve(bool optimal, bool conserve_large)
+pair<int, bool> ConnectionResolver::resolve(bool optimal)
 {
 	_save_large->readCoordinatesFromMolecule( *_large_root );
 	_save_small->readCoordinatesFromMolecule( *_small_root );
+	
+	const int given_large_cnt = detectInMolecule( *_large_root);
+	const int given_small_cnt = detectInMolecule( *_small_root);
+	
+	bool changed_large = false;
 	
 	//1) CONNECTION rotation might solve the clashes
 	int clash_cnt = resolveConnection();
 	
 	//2) SMALL FRAGMENT rotations:
-	if( clash_cnt != 0 && _small_rotors->size() )
-		clash_cnt = resolveFragment( *_small_root, *_small_rotors);
+	if( clash_cnt != 0 && _small_rotors->size() > 1 )
+	{
+		clash_cnt = resolveFragment( *_small_root, *_small_rotors, given_small_cnt);
+	}
 	
 	//3) LARGE FRAGMENT rotations:
-	if( clash_cnt != 0 && _large_rotors->size() )
-		clash_cnt = resolveFragment( *_large_root, *_large_rotors);
+	// * also rotate connecting bond -> DONE: that bond is simply added to the rotors
+	// * also rotate all bonds in small_root (use '_all_rotors') when working on large
+	// * check rotations: do not restrict them to large fragment in this case
+	if( clash_cnt != 0 && _large_rotors->size() > 1 )
+	{
+		clash_cnt = resolveLarge( given_large_cnt + given_small_cnt );
+		changed_large = true;
+	}
 
-	if( clash_cnt == 0 || !optimal)
-		return make_pair( detectInMolecule( *_small_root), true);
-
-	//4) ALL rotations:
-	clash_cnt = resolveAll( 6 );
-
-	return make_pair(clash_cnt, true);
+	return make_pair( detectAll(), changed_large );
 }
 
-// resolve     C O N N E C T I O N
-// stick to detecing only clashes between fragments, because by rotating the
-// connection we can only create inter-molecular clashes
 int ConnectionResolver::resolveConnection()
 {
 	int current_count = 0;
 	
 	int best_cnt = detectBetweenMolecules( *_large_root, *_small_root);
 
-	// test 36 angles/rotations along the connecting bond, take the best one
+	// test 36 angles/rotations along the connecting bond, select the best one
 	Rotator roto;
 	roto.setAxis(*atm_large, *atm_small);
 	
@@ -313,37 +318,37 @@ int ConnectionResolver::resolveConnection()
 		}
 	}
 
-	// we could not find a clash-free solution, but we use the best we visited:
+	// we could not find a clash-free solution, but we use the best conformation
+	// that was visited:
 	_save_small->applyCoordinates2Molecule( *_small_root );
 	return best_cnt;
 }
 
-/* resolve           F R A G M E N T
- * 
- */
-int ConnectionResolver::resolveFragment( AtomContainer& frag, ConnectList& clist )
+int ConnectionResolver::resolveFragment(AtomContainer& frag,
+																				ConnectList&   clist,
+																				const int&     given_clashes)
 {
-	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) + detectInMolecule( frag );
+	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) + detectInMolecule( frag ) - given_clashes;
 	int current_count = 0;
 	
 	for(int tries=0; tries < _max_rotations; tries++) // try optimise _max_rotations bonds
 	{
 		
-		for( auto& p : clist)
+		for(ConnectList::iterator p = clist.begin(); p != clist.end(); ++p)
 		{
 			_save_large->applyCoordinates2Molecule( *_large_root );
 			_save_small->applyCoordinates2Molecule( *_small_root );
 			
 			// else: test 20 rotations for that rotor
 			Rotator roto;
-			roto.setAxis(*p.first, *p.second, &frag.getRoot());
+			roto.setAxis(*p->first, *p->second, &frag.getRoot());
 						
 			for( int i = 1; i < 20; ++i)
 			{
 				roto.rotate( Angle(18.0, false) );
 				
 				current_count = detectBetweenMolecules(*_large_root, *_small_root)
-											+ detectInMolecule( frag );
+											+ detectInMolecule( frag ) - given_clashes;
 				
 				if ( current_count < best_cnt )
 				{
@@ -355,7 +360,50 @@ int ConnectionResolver::resolveFragment( AtomContainer& frag, ConnectList& clist
 				
 				if( current_count == 0)
 				{
-//					cout<<"resolveFragment: found optimal solution. try: "<<tries<<endl;
+					return 0;
+				}
+			}
+		}
+		
+		_save_large->applyCoordinates2Molecule( *_large_root );
+		_save_small->applyCoordinates2Molecule( *_small_root );
+	}
+	return best_cnt;
+}
+
+int ConnectionResolver::resolveLarge( const int &given_clashes)
+{
+	int best_cnt = detectAll() - given_clashes;
+	int current_count = 0;
+	
+	for(int tries=0; tries < _max_rotations; tries++) // try optimise _max_rotations bonds
+	{
+		
+		for(ConnectList::iterator p = _all_rotors->begin(); p != _all_rotors->end(); ++p)
+		{
+			_save_large->applyCoordinates2Molecule( *_large_root );
+			_save_small->applyCoordinates2Molecule( *_small_root );
+			
+			// else: test 20 rotations for that rotor
+			Rotator roto;
+			roto.setAxis(*p->first, *p->second);
+						
+			for( int i = 1; i < 20; ++i)
+			{
+				roto.rotate( Angle(18.0, false) );
+				
+				current_count = detectAll() - given_clashes;
+				
+				if ( current_count < best_cnt )
+				{
+					best_cnt = current_count;
+					
+					_save_large->readCoordinatesFromMolecule( *_large_root );
+					_save_small->readCoordinatesFromMolecule( *_small_root );
+				}
+				
+				if( current_count == 0)
+				{
 					return 0;
 				}
 			}
@@ -371,7 +419,7 @@ int ConnectionResolver::resolveFragment( AtomContainer& frag, ConnectList& clist
 /* 
  * resolve           A L L
  */
-int ConnectionResolver::resolveAll( const int &steps)
+int ConnectionResolver::resolveAllCombinations( const int &steps)
 {
 	// calc the rotation angle to use, depending on the steps:
 	Angle rot_angle = Angle( 360.0 / (float)steps, false );
@@ -382,7 +430,7 @@ int ConnectionResolver::resolveAll( const int &steps)
 									+ detectInMolecule( *_small_root );
 	
 	// recursivly check all possible combinations
-	int result = resolveAllRecur( _all_rotors->begin(), _all_rotors->end(), rot_angle, steps, best_cnt);
+	int result = allCombinationsRecur( _all_rotors->begin(), _all_rotors->end(), rot_angle, steps, best_cnt);
 	
 	// if we solved all clashes: cool! else use the best we could find.
 	if( result == 0)
@@ -402,7 +450,7 @@ int ConnectionResolver::resolveAll( const int &steps)
 /*
  *  resolve           A L L (recursion)
  */
-int ConnectionResolver::resolveAllRecur(const ConnectList::iterator &p, 
+int ConnectionResolver::allCombinationsRecur(const ConnectList::iterator &p, 
 																	 const ConnectList::iterator& p_end, 
 																	 Angle& angle, const int &steps, int &best_cnt )
 {
@@ -443,7 +491,7 @@ int ConnectionResolver::resolveAllRecur(const ConnectList::iterator &p,
 			ConnectList::iterator next_p = p; ++next_p;  
 			if( next_p != p_end )
 			{
-				current_cnt = resolveAllRecur( next_p, p_end, angle, steps, best_cnt);
+				current_cnt = allCombinationsRecur( next_p, p_end, angle, steps, best_cnt);
 				
 				// some other rotation based on this rotation solved ALL clashes
 				if ( current_cnt == 0)
@@ -456,6 +504,13 @@ int ConnectionResolver::resolveAllRecur(const ConnectList::iterator &p,
 	}
 	
 	return best_cnt;
+}
+
+int ConnectionResolver::detectAll()
+{
+	return detectBetweenMolecules(*_large_root, *_small_root) 
+								+ detectInMolecule( *_large_root ) 
+								+ detectInMolecule( *_small_root );
 }
 
 
