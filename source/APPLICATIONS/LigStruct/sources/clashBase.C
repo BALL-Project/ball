@@ -4,6 +4,7 @@
 
 #include "clashBase.h"
 
+#include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/quaternion.h>
 
@@ -128,18 +129,41 @@ void Rotator::setAxis(Atom &atm1, Atom &atm2, Composite *parent)
 	// get the atoms that are to be rotated:
 	_to_rotate.clear();
 	
+	// no direction/parent given, do not care where you rotate
 	if( parent == 0)
+	{
 		setAtomsToRotate(atm2, atm2, atm1);
-	else
+	}
+	// both atoms belong to the parent:
+	else if( parent->isAncestorOf(atm1) && parent->isAncestorOf(atm2) )
 	{
 		HashSet< Atom* > tested_atoms;
-		if( findRotateDirection(tested_atoms, atm1, atm2, parent) )
+		tested_atoms.insert( &atm1 ); // insert the blocking atom
+		
+		if( findRotateDirection(tested_atoms, atm2, parent) )
 		{
 			setAtomsToRotate(atm2, atm2, atm1);
 		}
 		else
 		{
 			setAtomsToRotate(atm1, atm1, atm2);
+		}
+	}
+	// one atom does not belong to the parent
+	else
+	{
+		if( parent->isAncestorOf(atm1) )
+		{
+			setAtomsToRotate(atm1, atm1, atm2);
+		}
+		else if (parent->isAncestorOf(atm2) )
+		{
+			setAtomsToRotate(atm2, atm2, atm1);
+		}
+		else
+		{
+			cout<<"ERROR - clashBase - Rotator::setAxis - l.166"<<endl;
+			exit(EXIT_FAILURE);
 		}
 	}
 }
@@ -184,38 +208,38 @@ void Rotator::setAtomsToRotate(Atom &start, Atom &probe, Atom &block)
 	}
 }
 
-bool Rotator::findRotateDirection(BALL::HashSet<Atom *>& tested, Atom &block, 
+bool Rotator::findRotateDirection(BALL::HashSet<Atom *>& tested, 
 																	Atom &direction, Composite *parent)
 {
 	bool is_child = true;
 	
 	// check if the current 'direction' is actually a child of 'parent'
-	if( ! parent->isAncestorOf(direction) )
+	if( parent->isAncestorOf(direction) )
 	{
-		is_child = false;
-	}
-	
-	// if current is child, check if also all neighbours are so (recursively)
-	else
-	{
-		// get all partner atoms of 'probe'
+		// get all partner atoms of 'direction'
 		for (AtomBondConstIterator it = direction.beginBond(); +it ; it++)
 		{
 			Atom* partner = it->getPartner(direction);
 			
 			// make sure to only check atoms that are not 'block'
-			if ( partner == &block || tested.has(partner) )
+			if ( tested.has(partner) )
 				continue;
 			
 			tested.insert(partner);
 			
-			if ( !findRotateDirection(tested, direction, *partner, parent) )
+			if ( !findRotateDirection(tested, *partner, parent) )
 			{
 				is_child = false;
 				break;
 			}
 		}
 	}
+	else
+	{
+		is_child = false;
+	}
+	
+
 	
 	return is_child;
 }

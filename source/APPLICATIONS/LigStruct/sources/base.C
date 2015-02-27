@@ -24,7 +24,12 @@ TemplateCoord::TemplateCoord( AtomContainer& mol)
 	_size = mol.countAtoms();
 
 	positions.reserve( _size );
-	readCoordinatesFromMolecule( mol );
+	
+	// transfer initial coords:
+	for (AtomIterator qit = mol.beginAtom(); +qit; qit++)
+	{
+		positions.push_back( qit->getPosition() );
+	}
 }
 
 void TemplateCoord::applyCoordinates2Molecule( AtomContainer& mol)
@@ -38,10 +43,22 @@ void TemplateCoord::applyCoordinates2Molecule( AtomContainer& mol)
 
 void TemplateCoord::readCoordinatesFromMolecule( AtomContainer& mol)
 {
-	AtomIterator qit = mol.beginAtom();
-	for (int i = 0 ; i < _size; i++, qit++)
+	if(positions.size() == _size)
 	{
-		positions.push_back( qit->getPosition() );
+		AtomIterator qit = mol.beginAtom();
+		for (int i = 0 ; i < _size; i++, qit++)
+		{
+			positions[i] = qit->getPosition() ;
+		}
+	}
+	// very first insertion:
+	else
+	{
+		AtomIterator qit = mol.beginAtom();
+		for (int i = 0 ; i < _size; i++, qit++)
+		{
+			positions.push_back( qit->getPosition() );
+		}
 	}
 }
 

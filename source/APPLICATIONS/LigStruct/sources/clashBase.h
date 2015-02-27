@@ -139,7 +139,7 @@ private:
 	 * @param parent
 	 * @return 
 	 */
-	bool findRotateDirection(BALL::HashSet<BALL::Atom *> &tested, BALL::Atom &block, 
+	bool findRotateDirection(BALL::HashSet<BALL::Atom *> &tested, 
 													 BALL::Atom& direction, BALL::Composite* parent);
 	
 	BALL::HashSet<BALL::Atom *> _to_rotate; // atoms to be rotated

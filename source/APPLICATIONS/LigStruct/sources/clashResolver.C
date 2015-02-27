@@ -257,6 +257,9 @@ pair<int, bool> ConnectionResolver::resolve()
 	int clash_cnt = resolveConnection();
 	
 	cout<<"after conntection rotation: "<<clash_cnt<<endl;
+	cout<<"inter: "<<detectBetweenMolecules(*_small_root, *_large_root)<<endl;
+	cout<<"small: "<<detectInMolecule(*_small_root)<<endl;
+	cout<<"large: "<<detectInMolecule(*_large_root)<<endl;
 	
 	//2) SMALL FRAGMENT rotations:
 	if( clash_cnt != 0 && _small_rotors->size() > 1 )
@@ -265,6 +268,9 @@ pair<int, bool> ConnectionResolver::resolve()
 	}
 	
 	cout<<"after small rotation: "<<clash_cnt<<endl;
+	cout<<"inter: "<<detectBetweenMolecules(*_small_root, *_large_root)<<endl;
+	cout<<"small: "<<detectInMolecule(*_small_root)<<endl;
+	cout<<"large: "<<detectInMolecule(*_large_root)<<endl;
 	
 	//3) LARGE FRAGMENT rotations:
 	// * also rotate connecting bond -> DONE: that bond is simply added to the rotors
@@ -277,6 +283,9 @@ pair<int, bool> ConnectionResolver::resolve()
 	}
 
 		cout<<"after large rotation: "<<clash_cnt<<endl;
+		cout<<"inter: "<<detectBetweenMolecules(*_small_root, *_large_root)<<endl;
+		cout<<"small: "<<detectInMolecule(*_small_root)<<endl;
+		cout<<"large: "<<detectInMolecule(*_large_root)<<endl;
 	return make_pair( detectAll(), changed_large );
 }
 
@@ -285,17 +294,18 @@ int ConnectionResolver::resolveConnection()
 	int current_count = 0;
 	
 	int best_cnt = detectBetweenMolecules( *_large_root, *_small_root);
-
-	// test 36 angles/rotations along the connecting bond, select the best one
+	
 	Rotator roto;
 	roto.setAxis(*atm_large, *atm_small, _small_root);
 	
+	// test 36 angles/rotations along the connecting bond, select the best one
 	for( int i = 1; i < 36; ++i)
 	{
 		roto.rotate( Angle(10.0, false) );
 		
 		current_count = detectBetweenMolecules( *_large_root, *_small_root);
-//		cout<<"connection: "<<current_count<<endl;
+		cout<<"connection: "<<current_count<<endl;
+		
 		if ( current_count < best_cnt)
 		{
 			best_cnt = current_count;
@@ -305,13 +315,14 @@ int ConnectionResolver::resolveConnection()
 		// we could find a clash-free solution
 		if( current_count == 0)
 		{
+			cout<<" EARLY exit!"<<endl;
 			return 0;
 		}
 	}
-
 	// we could not find a clash-free solution, but we use the best conformation
 	// that was visited:
 	_save_small->applyCoordinates2Molecule( *_small_root );
+
 	return best_cnt;
 }
 
@@ -324,7 +335,7 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 	
 	for(int tries=0; tries < _max_rotations; tries++) // try optimise _max_rotations bonds
 	{
-		
+//		cout<<endl<<"try: "<<tries<<endl;
 		for(ConnectList::iterator p = clist.begin(); p != clist.end(); ++p)
 		{
 			_save_large->applyCoordinates2Molecule( *_large_root );
@@ -333,7 +344,9 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 			// else: test 20 rotations for that rotor
 			Rotator roto;
 			roto.setAxis(*p->first, *p->second, &frag.getRoot());
-						
+			
+//			cout<<"testing small: "<<p->first<<" - "<<p->second<<endl;
+			
 			for( int i = 1; i < 20; ++i)
 			{
 				roto.rotate( Angle(18.0, false) );
