@@ -7,6 +7,7 @@
 #include "base.h"
 
 #include <BALL/MATHS/angle.h>
+#include <BALL/DATATYPE/hashSet.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
 /**
@@ -138,8 +139,8 @@ private:
 	 * @param parent
 	 * @return 
 	 */
-	bool findRotateDirection(BALL::Atom& block, BALL::Atom& direction, 
-													 BALL::Composite* parent);
+	bool findRotateDirection(BALL::HashSet<BALL::Atom *> &tested, BALL::Atom &block, 
+													 BALL::Atom& direction, BALL::Composite* parent);
 	
 	BALL::HashSet<BALL::Atom *> _to_rotate; // atoms to be rotated
 	

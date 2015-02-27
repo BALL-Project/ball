@@ -132,10 +132,15 @@ void Rotator::setAxis(Atom &atm1, Atom &atm2, Composite *parent)
 		setAtomsToRotate(atm2, atm2, atm1);
 	else
 	{
-		if( findRotateDirection(atm1, atm2, parent) )
+		HashSet< Atom* > tested_atoms;
+		if( findRotateDirection(tested_atoms, atm1, atm2, parent) )
+		{
 			setAtomsToRotate(atm2, atm2, atm1);
+		}
 		else
+		{
 			setAtomsToRotate(atm1, atm1, atm2);
+		}
 	}
 }
 
@@ -179,7 +184,8 @@ void Rotator::setAtomsToRotate(Atom &start, Atom &probe, Atom &block)
 	}
 }
 
-bool Rotator::findRotateDirection(Atom &block, Atom &direction, Composite *parent)
+bool Rotator::findRotateDirection(BALL::HashSet<Atom *>& tested, Atom &block, 
+																	Atom &direction, Composite *parent)
 {
 	bool is_child = true;
 	
@@ -198,10 +204,12 @@ bool Rotator::findRotateDirection(Atom &block, Atom &direction, Composite *paren
 			Atom* partner = it->getPartner(direction);
 			
 			// make sure to only check atoms that are not 'block'
-			if (partner == &block)
+			if ( partner == &block || tested.has(partner) )
 				continue;
 			
-			if ( !findRotateDirection(direction, *partner, parent) )
+			tested.insert(partner);
+			
+			if ( !findRotateDirection(tested, direction, *partner, parent) )
 			{
 				is_child = false;
 				break;
