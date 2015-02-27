@@ -27,13 +27,14 @@ public:
 	 * 
 	 * @brief assembleStructure
 	 * @param mol
+	 * @return - returns the found list of rotable atom pairs
 	 */
-	void assembleStructure(BALL::AtomContainer& mol);
+	ConnectList *assembleStructure(BALL::AtomContainer& mol);
 	
 private:
 	
 	void connectClashFree(BALL::Atom &at1, BALL::Atom &at2, 
-												ConnectList& connections, ConnectList& linker_rotors);
+												ConnectList& connections);
 	
 	TemplateDatabaseManager& _libs; // needed fragment libs
 	

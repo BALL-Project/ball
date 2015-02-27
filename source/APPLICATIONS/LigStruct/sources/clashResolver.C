@@ -190,7 +190,7 @@ ConnectionResolver::~ConnectionResolver()
 }
 
 void ConnectionResolver::setMolecule(
-		Atom &atm1, Atom &atm2, ConnectList &connection_rotors, ConnectList *linker_rotors)
+		Atom &atm1, Atom &atm2, ConnectList &connection_rotors)
 {
 	atm_large = &atm1;
 	atm_small = &atm2;
@@ -227,22 +227,6 @@ void ConnectionResolver::setMolecule(
 		}
 	}
 	
-	if( linker_rotors )
-	{
-		for ( auto& p : *linker_rotors)
-		{
-			if( &p.first->getRoot() == _large_root && &p.second->getRoot() == _large_root)
-			{
-				_large_rotors->push_back( p );
-				_all_rotors->push_back( p );
-			}
-			else if( &p.first->getRoot() == _small_root && &p.second->getRoot() == _small_root)
-			{
-				_small_rotors->push_back( p );
-				_all_rotors->push_back( p );
-			}
-		}
-	}
 	_small_rotors->push_back( make_pair(&atm1,&atm2) );
 	_large_rotors->push_back( make_pair(&atm1,&atm2) );
 	_all_rotors->push_back( make_pair(&atm1,&atm2) );
@@ -257,24 +241,30 @@ int ConnectionResolver::detect()
 	return detectBetweenMolecules( *_small_root, *_large_root );
 }
 
-pair<int, bool> ConnectionResolver::resolve(bool optimal)
+pair<int, bool> ConnectionResolver::resolve()
 {
 	_save_large->readCoordinatesFromMolecule( *_large_root );
 	_save_small->readCoordinatesFromMolecule( *_small_root );
 	
 	const int given_large_cnt = detectInMolecule( *_large_root);
 	const int given_small_cnt = detectInMolecule( *_small_root);
+	cout<<"resolving, given counts: large "<< given_large_cnt 
+			<<" small "<< given_small_cnt<<endl;
 	
 	bool changed_large = false;
 	
 	//1) CONNECTION rotation might solve the clashes
 	int clash_cnt = resolveConnection();
 	
+	cout<<"after conntection rotation: "<<clash_cnt<<endl;
+	
 	//2) SMALL FRAGMENT rotations:
 	if( clash_cnt != 0 && _small_rotors->size() > 1 )
 	{
 		clash_cnt = resolveFragment( *_small_root, *_small_rotors, given_small_cnt);
 	}
+	
+	cout<<"after small rotation: "<<clash_cnt<<endl;
 	
 	//3) LARGE FRAGMENT rotations:
 	// * also rotate connecting bond -> DONE: that bond is simply added to the rotors
@@ -286,6 +276,7 @@ pair<int, bool> ConnectionResolver::resolve(bool optimal)
 		changed_large = true;
 	}
 
+		cout<<"after large rotation: "<<clash_cnt<<endl;
 	return make_pair( detectAll(), changed_large );
 }
 
@@ -297,14 +288,14 @@ int ConnectionResolver::resolveConnection()
 
 	// test 36 angles/rotations along the connecting bond, select the best one
 	Rotator roto;
-	roto.setAxis(*atm_large, *atm_small);
+	roto.setAxis(*atm_large, *atm_small, _small_root);
 	
 	for( int i = 1; i < 36; ++i)
 	{
 		roto.rotate( Angle(10.0, false) );
 		
 		current_count = detectBetweenMolecules( *_large_root, *_small_root);
-		
+//		cout<<"connection: "<<current_count<<endl;
 		if ( current_count < best_cnt)
 		{
 			best_cnt = current_count;

@@ -23,9 +23,10 @@ public:
 	 * @brief buildLinker a flexible linker fragment
 	 * This function only works on cycle free molecules (but molecules with 
 	 * cycles are normally not considered a flexible)
-	 * @param linker_lst
+	 * @param linker_frag
+	 * @param result_rotors
 	 */
-	ConnectList buildLinker(BALL::AtomContainer &linker_frag);
+	void buildLinker(BALL::AtomContainer &linker_frag, ConnectList& result_rotors);
 	
 private:
 	void recurLinkerConnect(BALL::Atom &at, const BALL::Composite &parent);
@@ -39,7 +40,7 @@ private:
 	static bool compare(std::pair< BALL::String, BALL::Atom* >& a, 
 											std::pair< BALL::String, BALL::Atom* >& b);
 	
-	ConnectList resolveLinkerClashes(BALL::AtomContainer &linker_frag);
+	void resolveLinkerClashes(BALL::AtomContainer &linker_frag, ConnectList &result_rotors);
 	void recurResolveLinker(int previous_cnt, BALL::Bond& bnd, 
 													BALL::Atom &curr_atm, int dist, 
 													BALL::Composite *parent );

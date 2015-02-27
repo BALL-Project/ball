@@ -614,7 +614,7 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 	// convert OBMol to BALL::Molecule and canonize
 	frag->molecule = MolecularSimilarity::createMolecule(_babel_mol, true);
 	
-	// convert the Open babel connection list to the final connection list:
+	// convert the Open babel r-connection list to the final list r-atoms:
 	list< pair<int, OpenBabel::OBAtom*> >::iterator iti = con_lst.begin();
 	for(; iti != con_lst.end(); iti++)
 	{

@@ -90,10 +90,11 @@ int RAtom::getCompatibleSet(RFragment &other)
 /// ############################################################################
 RFragment::RFragment()
 {
-	this->size = 0;
+	this->size       = 0;
 	this->group_atom = 0;
 	this->group_id   = 0;
 	this->molecule   = 0;
+	this->rotor_lst  = 0; 
 }
 
 RFragment::~RFragment()
@@ -102,6 +103,10 @@ RFragment::~RFragment()
 	{
 		delete coord_sets[i];
 	}
+	
+	rotor_lst->clear();
+	
+	delete molecule;
 }
 
 RFragment::RFragment(const RFragment& other)

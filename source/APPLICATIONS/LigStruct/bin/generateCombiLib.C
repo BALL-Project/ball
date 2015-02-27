@@ -74,7 +74,8 @@ int main(int argc, char* argv[])
 		for(vector< RFragment* >::iterator r_frag = (*r_group).begin(); 
 				r_frag != (*r_group).end(); ++r_frag)
 		{
-			assem.assembleStructure( * (*r_frag)->molecule ); // assem each r-fragment
+			 // assemble each r-fragment, and set the rotors_list
+			(*r_frag)->rotor_lst = assem.assembleStructure( * (*r_frag)->molecule );
 		}
 	}
 	

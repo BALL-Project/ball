@@ -21,48 +21,51 @@ StructureAssembler::~StructureAssembler()
 	
 }
 
-void StructureAssembler::assembleStructure(AtomContainer& mol)
+ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 {
 	// create fragments from query molecule:
 	ACVec rigids, linker;
-	ConnectList connections;
+	ConnectList* connections = new ConnectList;
 	
 	_fragmenter.setMolecule(mol);
-	_fragmenter.fragment(rigids, linker, connections);
+	_fragmenter.fragment(rigids, linker, *connections);
 
 	// canonicalize, generate UCK-key and match the rigid fragments
-	for( AtomContainer*& tmp: rigids )
+	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
 	{
-		_canoicalizer.canonicalize( *tmp );
-		_matcher.matchFragment( *tmp );
+		_canoicalizer.canonicalize( **rig_frag );
+		_matcher.matchFragment( **rig_frag );
 	}
 	
 	// build linker fragments
-	ConnectList linker_rotors;
-	for( AtomContainer*& tmp: linker )
+	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
 	{
-		linker_rotors.splice(linker_rotors.end(), _linker_builder.buildLinker(*tmp) ); 
+		// build linker, and insert rotors into 'connections'
+		_linker_builder.buildLinker(**lin_frag, *connections); 
 	}
 	
 	// connect the ready-made fragments to a single molecule
-	for( auto& atm_pair : connections )
+	for(ConnectList::iterator atm_pair = connections->begin(); 
+			atm_pair != connections->end(); ++atm_pair )
 	{
-		connectClashFree( * atm_pair.first, * atm_pair.second, connections, linker_rotors);
+		connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
 	}
 	
 	// re-insert all fragments into the original molecule
-	//#TODO:####: perhaps it makes more sense to splice all atoms, or only insert the root of one fragment
-	for(AtomContainer*& f : rigids)
+	//#TODO: perhaps it makes more sense to splice all atoms, or only insert the root of one fragment
+	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
 	{
-		mol.insert( *f );
+		mol.insert( **rig_frag );
 	}
-	for(AtomContainer*& f : linker)
+	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
 	{
-		mol.insert( *f );
+		mol.insert( **lin_frag );
 	}
+	
+	return connections;
 }
 
-void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& connections, ConnectList& linker_rotors)
+void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& connections)
 {
 	//1.) select biggest molecule as 1st connection partner. 
 	//    REASON: we assume that our connection method keeps the first fragment 
@@ -73,43 +76,33 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	AtomContainer* root_1 = (AtomContainer*) &at1.getRoot();
 	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
 	
-//	cout<<endl<<endl<<"#### Connecting:"<<endl;
 	int c_cnt;
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
-//		cout<<LigBase::printInlineMol(root_1)<<endl;
-//		cout<<LigBase::printInlineMol(root_2)<<endl;
-
 		_connector.connect( &at1, &at2 );
 
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at1, at2, connections, &linker_rotors);
+		_clash_resolver.setMolecule(at1, at2, connections);
 		c_cnt = _clash_resolver.detect();
 		
 		if( c_cnt != 0 )
 		{
-//			cout<<"Resolving clash, got: "<<c_cnt<<endl;
 			c_cnt = _clash_resolver.resolve().first;
-//			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
 		
 		root_1->insert( *root_2 );
 	}
 	else
 	{
-//		cout<<LigBase::printInlineMol(root_2)<<endl;
-//		cout<<LigBase::printInlineMol(root_1)<<endl;
 		_connector.connect( &at2, &at1 );
 		
 		// 2.) detect and resolve clashes:
-		_clash_resolver.setMolecule(at2, at1, connections, &linker_rotors);
+		_clash_resolver.setMolecule(at2, at1, connections);
 		c_cnt = _clash_resolver.detect();
 		
 		if( c_cnt != 0 )
 		{
-//			cout<<"Resolving clash, got: "<<c_cnt<<endl;
 			c_cnt = _clash_resolver.resolve().first;
-//			cout<<"Resolving finished with: "<<c_cnt<<endl;
 		}
 		
 		root_2->insert( *root_1 );

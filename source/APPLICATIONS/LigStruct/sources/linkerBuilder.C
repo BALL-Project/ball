@@ -26,7 +26,7 @@ LinkerBuilder::~LinkerBuilder()
 	
 }
 
-ConnectList LinkerBuilder::buildLinker(AtomContainer& linker_frag)
+void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_rotors)
 {
 	int atom_cnt = linker_frag.countAtoms();
 	
@@ -35,12 +35,12 @@ ConnectList LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	{
 		if(atom_cnt == 0)
 		{
-			return ConnectList();
+			return;
 		}
 		else if(atom_cnt == 1)
 		{
 			linker_frag.beginAtom()->setPosition( Vector3() );
-			return ConnectList();
+			return;
 		}
 		else if (atom_cnt == 2)
 		{
@@ -51,7 +51,7 @@ ConnectList LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 			
 			at1->setPosition( Vector3() ); at2->setPosition( Vector3(0,0, b_len ) );
 			
-			return ConnectList();
+			return;
 		}
 	}
 	
@@ -105,13 +105,11 @@ ConnectList LinkerBuilder::buildLinker(AtomContainer& linker_frag)
 	// resolve all linker clashes:
 	if( atom_cnt > 3)
 	{
-		return resolveLinkerClashes( linker_frag );
+		return resolveLinkerClashes( linker_frag, result_rotors );
 	}
 	else
 	{
-		ConnectList tmp;
-		tmp.push_back( make_pair(at1, at1->getPartnerAtom(0) ) );
-		return tmp;
+		result_rotors.push_back( make_pair(at1, at1->getPartnerAtom(0) ) );
 	}
 }
 
@@ -274,7 +272,7 @@ bool LinkerBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
  * A 'terminal atom' is connected to a single atom and is only part of a 'chain'
  * if it is connected to a 'link'. Is it connected to a hub it will be ignored
  */
-ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
+void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag, ConnectList& result_rotors)
 {
 	_rotors.clear();
 	
@@ -303,8 +301,7 @@ ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 			if( ! isTerminalBond(*bit, linker_frag) )
 				setBondTrans( *bit);
 		}
-
-		return ConnectList();
+		return;
 	}
 
 	//3.) for all connected atoms/bonds start the recursion
@@ -322,7 +319,8 @@ ConnectList LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag)
 		_cresolv.resolve();
 	}
 	
-	return _rotors;
+	// append the found rotors to the 'result_rotors'
+	result_rotors.splice( result_rotors.end(), _rotors );
 }
 
 /*

@@ -83,7 +83,7 @@ public:
 	 * @param atm2 part of the smaller fragment
 	 */
 	void setMolecule(BALL::Atom& atm1, BALL::Atom& atm2, 
-									 ConnectList& connection_rotors, ConnectList *linker_rotors=0);
+									 ConnectList& connection_rotors);
 	
 	/**
 	 * @brief resolve -  does not to handle old clashes that existed already. 
@@ -95,7 +95,7 @@ public:
 	 * @param conserve_large
 	 * @return 
 	 */
-	std::pair<int, bool> resolve(bool optimal = false);
+	std::pair<int, bool> resolve();
 	
 	/**
 	 * @brief detect - Detects ONLY clashes that occur between the two fragments 

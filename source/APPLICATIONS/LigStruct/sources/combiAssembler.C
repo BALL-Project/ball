@@ -95,9 +95,9 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 					 it != tmp->r_atom_lst.end(); ++it)
 				_r_atms.push_back( &*it );
 			
-			for( ConnectList::iterator it = tmp->rotor_lst.begin();
-					 it != tmp->rotor_lst.end(); ++it)
-				_work_mol->rotor_lst.push_back( *it );
+			for( ConnectList::iterator it = tmp->rotor_lst->begin();
+					 it != tmp->rotor_lst->end(); ++it)
+				_work_mol->rotor_lst->push_back( *it );
 			
 			//3.2) connect the molecule to the scaffold and create a bond
 			Bond b;
@@ -125,9 +125,9 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 					 it != tmp->r_atom_lst.end(); ++it)
 				_r_atms.pop_back();
 			
-			for(ConnectList::iterator it = tmp->rotor_lst.begin(); 
-					it != tmp->rotor_lst.end(); ++it)
-				_work_mol->rotor_lst.pop_back();
+			for(ConnectList::iterator it = tmp->rotor_lst->begin(); 
+					it != tmp->rotor_lst->end(); ++it)
+				_work_mol->rotor_lst->pop_back();
 		}
 	}
 	
@@ -154,7 +154,7 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 			
 			donor.setCoordsTo( donor_target_set ); // to the fitting coordinates
 			
-			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, _work_mol->rotor_lst);
+			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
 			int c_cnt = _cresolv.detect();
 			// if we need to resolve a clash...
 			if ( c_cnt != 0 )
@@ -181,7 +181,7 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	{
 		cout<<"case: new partner "<<donor.group_id<<endl;
 		// if the known acceptor side was changed: add both coordinates...
-		if(_connectClashFree( *acceptor.atm, *donor.group_atom, _work_mol->rotor_lst))
+		if(_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst))
 		{
 			cout<<"changed work_mol"<<endl;
 			acceptor.parent->newSetFromCurrent();
@@ -198,7 +198,7 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	else
 	{
 		cout<<"case: both new"<<endl;
-		_connectClashFree( *acceptor.atm, *donor.group_atom, _work_mol->rotor_lst);
+		_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
 		
 		acceptor.parent->newSetFromCurrent();
 		donor.newSetFromCurrent();
