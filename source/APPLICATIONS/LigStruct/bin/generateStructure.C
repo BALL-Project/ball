@@ -3,10 +3,12 @@
 //
 #include "../sources/ioModule.h"
 #include "../sources/structureAssembler.h"
+#include "../sources/clashResolver.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 
 using namespace BALL;
+using namespace std;
 
 /// ################################## C O M M A N D L I N E    P A R S E R
 int main(int argc, char* argv[])
@@ -37,7 +39,6 @@ int main(int argc, char* argv[])
 
 	SDFile infile( parpars.get("i"), std::ios::in);
 	Molecule* tmp = infile.read();
-	infile.close();
 	
 	
 //// ################################## A S S E M B L E    3 D
@@ -54,11 +55,14 @@ int main(int argc, char* argv[])
 		lig_assembler.assembleStructure( *tmp );
 		
 		outfile << *tmp;
-
+		ClashDetector cdetec;
+		cout << "Found clashes: "<<cdetec.detectInMolecule( *tmp )<<endl;
+				
 		delete tmp;
 		tmp = infile.read();
 	}
 	
+	infile.close();
 	outfile.close();
 	
 	Log <<std::endl<< "......done!"<<std::endl;

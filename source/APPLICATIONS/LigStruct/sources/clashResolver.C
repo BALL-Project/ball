@@ -248,8 +248,10 @@ pair<int, bool> ConnectionResolver::resolve()
 	
 	const int given_large_cnt = detectInMolecule( *_large_root);
 	const int given_small_cnt = detectInMolecule( *_small_root);
-	cout<<"resolving, given counts: large "<< given_large_cnt 
-			<<" small "<< given_small_cnt<<endl;
+	cout<<"resolving, given counts: "<<endl;
+	cout<<"  large: "<< given_large_cnt<< " "<<_large_root->countAtoms() <<endl;
+	cout<<"  small: "<< given_small_cnt<< " " <<_small_root->countAtoms() <<endl;
+	cout<<"  inter: "<< detectBetweenMolecules(*_large_root, *_small_root)<<endl;
 	
 	bool changed_large = false;
 	

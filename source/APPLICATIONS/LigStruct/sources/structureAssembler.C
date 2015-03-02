@@ -33,9 +33,7 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	// canonicalize, generate UCK-key and match the rigid fragments
 	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
 	{
-		cout<< "befor frag: "<< LigBase::printInlineMol(*rig_frag)<<endl;
 		_canoicalizer.canonicalize( **rig_frag );
-		cout<< "Canon frag: "<< LigBase::printInlineMol(*rig_frag)<<endl;
 		_matcher.matchFragment( **rig_frag );
 	}
 	
@@ -46,22 +44,21 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 		_linker_builder.buildLinker(**lin_frag, *connections);
 	}
 	
+	ClashDetector cdet; //#DEBUG
+	
 	// connect the ready-made fragments to a single molecule
 	for(ConnectList::iterator atm_pair = connections->begin(); 
 			atm_pair != connections->end(); ++atm_pair )
 	{
 		// only connect if this is not a linker-rotor bond
 		if( &atm_pair->first->getRoot() != &atm_pair->second->getRoot() )
+		{
 			connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
-		//#DEBUG
-//		Atom* atm = atm_pair->first;
-//		cout<<"clashes after assembly connection:" 
-//			  <<_clash_resolver.detectInMolecule( *(AtomContainer*)&atm->getRoot() );
-		//#DEBUG - END
+		}
 	}
 	
 	// re-insert all fragments into the original molecule
-	//#TODO: perhaps it makes more sense to splice all atoms, or only insert the root of one fragment
+	//#TODO: perhaps it makes more sense to insert only the "master" root fragment
 	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
 	{
 		mol.insert( **rig_frag );
@@ -70,7 +67,6 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	{
 		mol.insert( **lin_frag );
 	}
-	
 	return connections;
 }
 
@@ -85,18 +81,22 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	AtomContainer* root_1 = (AtomContainer*) &at1.getRoot();
 	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
 	
+	ClashDetector cdetec;//#DEBUG
+	
 	int c_cnt;
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
 		_connector.connect( &at1, &at2 );
-
+	cout<<"before connection: "<<cdetec.detectBetweenMolecules(*root_1, *root_2)<<endl;
+	cout<<"root1: "<<cdetec.detectInMolecule( *root_1 )<<endl;
+	cout<<"root2: "<<cdetec.detectInMolecule( *root_2 )<<endl;
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at1, at2, connections);
 		c_cnt = _clash_resolver.detect();
 		
 		if( c_cnt != 0 )
 		{
-//			c_cnt = _clash_resolver.resolve().first;
+			c_cnt = _clash_resolver.resolve().first;
 		}
 		
 		root_1->insert( *root_2 );
@@ -104,18 +104,22 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	else
 	{
 		_connector.connect( &at2, &at1 );
-		
+		cout<<"before connection: "<<cdetec.detectBetweenMolecules(*root_1, *root_2)<<endl;
+		cout<<"root1: "<<cdetec.detectInMolecule( *root_1 )<<endl;
+		cout<<"root2: "<<cdetec.detectInMolecule( *root_2 )<<endl;
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at2, at1, connections);
 		c_cnt = _clash_resolver.detect();
 		
 		if( c_cnt != 0 )
 		{
-//			c_cnt = _clash_resolver.resolve().first;
+			c_cnt = _clash_resolver.resolve().first;
 		}
 		
 		root_2->insert( *root_1 );
 	}
+	
+	cout<<"after connection: "<<cdetec.detectInMolecule( *root_1 )<<endl; //#DEBUG
 }
 
 
