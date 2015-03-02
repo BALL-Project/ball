@@ -370,7 +370,7 @@ void CombiLibManager::_recurGenerateCombi(std::list<AtomContainer *> &out_molecu
 
 void CombiLibManager::_parseCombiLibFile()
 {
-	//#TODO:####: better whole class clearing
+	//#TODO: better whole class clearing
 	_id_mapping.clear();
 	_lib.clear();
 	
@@ -635,8 +635,7 @@ RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string,
 			frag->r_atom_lst.push_back( new_r );
 		}
 	}
-	
-	_cano.canonicalize( * frag->molecule );
+	_cano.canonicalize( * frag->molecule ); // will be done during assembly anyways
 	
 	return frag;
 }

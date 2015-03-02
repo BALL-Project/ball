@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 	CombiLibManager combi_man;
 	LineBasedFile combi_file(parpars.get("i"), ios::in);
 	combi_man.setCombiLib( combi_file );
+	combi_file.close();
 	
 	cout<<"OK!"<<endl;
 	

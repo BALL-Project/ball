@@ -41,15 +41,16 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
 	{
 		// build linker, and insert rotors into 'connections'
-		_linker_builder.buildLinker(**lin_frag, *connections); 
+		_linker_builder.buildLinker(**lin_frag, *connections);
 	}
 	
 	// connect the ready-made fragments to a single molecule
 	for(ConnectList::iterator atm_pair = connections->begin(); 
 			atm_pair != connections->end(); ++atm_pair )
 	{
-		connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
-		
+		// only connect if this is not a linker-rotor bond
+		if( &atm_pair->first->getRoot() != &atm_pair->second->getRoot() )
+			connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
 		//#DEBUG
 //		Atom* atm = atm_pair->first;
 //		cout<<"clashes after assembly connection:" 
@@ -93,7 +94,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		
 		if( c_cnt != 0 )
 		{
-			c_cnt = _clash_resolver.resolve().first;
+//			c_cnt = _clash_resolver.resolve().first;
 		}
 		
 		root_1->insert( *root_2 );
@@ -108,7 +109,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		
 		if( c_cnt != 0 )
 		{
-			c_cnt = _clash_resolver.resolve().first;
+//			c_cnt = _clash_resolver.resolve().first;
 		}
 		
 		root_2->insert( *root_1 );
