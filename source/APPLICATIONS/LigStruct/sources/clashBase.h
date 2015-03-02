@@ -25,7 +25,7 @@ public:
 	 * tolereance shall be.
 	 * @param tolerance
 	 */
-	ClashDetector( float tolerance = 1.3 );
+	ClashDetector( float tolerance = 1.2 );
 	~ClashDetector();
 	
 	/**

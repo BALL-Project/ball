@@ -14,7 +14,7 @@
 class ClashResolver: public ClashDetector
 {
 public:
-	ClashResolver( float tolerance = 1.3, int max_rotors = 20);
+	ClashResolver( float tolerance = 1.2, int max_rotors = 20);
 	~ClashResolver();
 	
 	/**
@@ -67,7 +67,7 @@ private:
 class ConnectionResolver: public ClashDetector
 {
 public:
-	ConnectionResolver( float tolerance = 1.3, int max_rotors = 2);
+	ConnectionResolver( float tolerance = 1.2, int max_rotors = 2);
 	~ConnectionResolver();
 	
 	/**

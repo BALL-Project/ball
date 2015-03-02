@@ -32,7 +32,7 @@ void ClashResolver::setMolecule(AtomContainer& molecule, ConnectList& rotors)
 	
 	_molecule = &molecule;
 	
-	_max_rotations = rotors.size() * 5;
+	_max_rotations = rotors.size() * 3;
 }
 
 int ClashResolver::detect()
@@ -233,7 +233,7 @@ void ConnectionResolver::setMolecule(
 	
 	_max_rotations = _all_rotors->size() * 2;
 	
-	cout<<"set rotors. small: "<< _small_rotors->size() <<" large: "<< _large_rotors->size() << " all: "<< _all_rotors->size() <<endl;
+//	cout<<"set rotors. small: "<< _small_rotors->size() <<" large: "<< _large_rotors->size() << " all: "<< _all_rotors->size() <<endl;
 }
 
 int ConnectionResolver::detect()
@@ -304,7 +304,6 @@ int ConnectionResolver::resolveConnection()
 		roto.rotate( Angle(10.0, false) );
 		
 		current_count = detectBetweenMolecules( *_large_root, *_small_root);
-		cout<<"connection: "<<current_count<<endl;
 		
 		if ( current_count < best_cnt)
 		{
@@ -315,7 +314,6 @@ int ConnectionResolver::resolveConnection()
 		// we could find a clash-free solution
 		if( current_count == 0)
 		{
-			cout<<" EARLY exit!"<<endl;
 			return 0;
 		}
 	}

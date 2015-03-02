@@ -49,6 +49,12 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 			atm_pair != connections->end(); ++atm_pair )
 	{
 		connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
+		
+		//#DEBUG
+//		Atom* atm = atm_pair->first;
+//		cout<<"clashes after assembly connection:" 
+//			  <<_clash_resolver.detectInMolecule( *(AtomContainer*)&atm->getRoot() );
+		//#DEBUG - END
 	}
 	
 	// re-insert all fragments into the original molecule
