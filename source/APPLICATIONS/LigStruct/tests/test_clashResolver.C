@@ -87,9 +87,9 @@ int main(int argc, char* argv[])
 	
 	c_resolv.setMolecule(*at1, *at2, rotors);
 	
-	cout<<"Between fragments: "<<c_resolv.detectBetweenMolecules( *scaff->molecule, *frag1->molecule)<<endl;
-	cout<<"In Scaffold: "<<c_resolv.detectInMolecule( *scaff->molecule )<<endl;
-	cout<<"In fragment: "<<c_resolv.detectInMolecule( *frag1->molecule )<<endl;
+//	cout<<"Between fragments: "<<c_resolv.detectBetweenMolecules( *scaff->molecule, *frag1->molecule)<<endl;
+//	cout<<"In Scaffold: "<<c_resolv.detectInMolecule( *scaff->molecule )<<endl;
+//	cout<<"In fragment: "<<c_resolv.detectInMolecule( *frag1->molecule )<<endl;
 	
 	cout<<endl;
 	c_resolv.resolve();
