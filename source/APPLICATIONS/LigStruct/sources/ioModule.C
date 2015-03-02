@@ -516,7 +516,7 @@ void CombiLibManager::_parseCombiLibFile()
 		/// 'undefined line': throw error
 		else
 		{
-			//#TODO:####: throw exception
+			//#TODO: throw exception
 			Log<<"ERROR in CombiLibManager: could not understand the combi lib line: ";
 			Log<< _combilib_file->getLine()<<endl;
 			exit(EXIT_FAILURE);
@@ -525,10 +525,9 @@ void CombiLibManager::_parseCombiLibFile()
 	 
 	// check if for all found r-groups we have at last one r-fragment
 	boost::unordered_map< int, int >::iterator it2;
-//	cout<<"Parsing gave: "<<endl; //#DEBUG
+
 	for(it2 = _id_mapping.begin(); it2 != _id_mapping.end(); ++it2)
 	{
-//		cout<<"group: "<<it2->second<<" size: "<<_lib[it2->second].size()<<endl; //#DEBUG
 		if( _lib[it2->second].size() == 0 )
 		{
 			Log<<"ERROR in CombiLibManager: could not find a r-fragment for r-group "

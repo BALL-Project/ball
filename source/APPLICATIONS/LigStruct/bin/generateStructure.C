@@ -55,8 +55,6 @@ int main(int argc, char* argv[])
 		lig_assembler.assembleStructure( *tmp );
 		
 		outfile << *tmp;
-		ClashDetector cdetec;
-		cout << "Found clashes: "<<cdetec.detectInMolecule( *tmp )<<endl;
 				
 		delete tmp;
 		tmp = infile.read();

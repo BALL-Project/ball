@@ -11,7 +11,7 @@ StructureAssembler::StructureAssembler( TemplateDatabaseManager& libs )
 	: _libs( libs ), 
 		_matcher( libs.getRigidTemplates() ),
 		_linker_builder( libs.getSiteTemplates(), libs.getBondLengthData() ),
-		_clash_resolver(1.3, 3)
+		_clash_resolver(1.2, 3)
 {
 	_connector.setLibs(libs.getSiteTemplates(), libs.getBondLengthData());
 }
@@ -43,8 +43,6 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 		// build linker, and insert rotors into 'connections'
 		_linker_builder.buildLinker(**lin_frag, *connections);
 	}
-	
-	ClashDetector cdet; //#DEBUG
 	
 	// connect the ready-made fragments to a single molecule
 	for(ConnectList::iterator atm_pair = connections->begin(); 
@@ -81,15 +79,11 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	AtomContainer* root_1 = (AtomContainer*) &at1.getRoot();
 	AtomContainer* root_2 = (AtomContainer*) &at2.getRoot();
 	
-	ClashDetector cdetec;//#DEBUG
-	
 	int c_cnt;
 	if( root_1->countAtoms() > root_2->countAtoms() )
 	{
 		_connector.connect( &at1, &at2 );
-	cout<<"before connection: "<<cdetec.detectBetweenMolecules(*root_1, *root_2)<<endl;
-	cout<<"root1: "<<cdetec.detectInMolecule( *root_1 )<<endl;
-	cout<<"root2: "<<cdetec.detectInMolecule( *root_2 )<<endl;
+
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at1, at2, connections);
 		c_cnt = _clash_resolver.detect();
@@ -104,9 +98,7 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 	else
 	{
 		_connector.connect( &at2, &at1 );
-		cout<<"before connection: "<<cdetec.detectBetweenMolecules(*root_1, *root_2)<<endl;
-		cout<<"root1: "<<cdetec.detectInMolecule( *root_1 )<<endl;
-		cout<<"root2: "<<cdetec.detectInMolecule( *root_2 )<<endl;
+
 		// 2.) detect and resolve clashes:
 		_clash_resolver.setMolecule(at2, at1, connections);
 		c_cnt = _clash_resolver.detect();
@@ -118,8 +110,6 @@ void StructureAssembler::connectClashFree(Atom& at1, Atom& at2, ConnectList& con
 		
 		root_2->insert( *root_1 );
 	}
-	
-	cout<<"after connection: "<<cdetec.detectInMolecule( *root_1 )<<endl; //#DEBUG
 }
 
 

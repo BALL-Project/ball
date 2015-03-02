@@ -7,7 +7,6 @@
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 #include <openbabel/mol.h>
-#include <openbabel/atom.h> //#DEBUG
 #include <openbabel/canon.h>
 #include <openbabel/graphsym.h>
 
