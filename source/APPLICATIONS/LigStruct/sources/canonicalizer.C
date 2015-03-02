@@ -7,6 +7,7 @@
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
 #include <openbabel/mol.h>
+#include <openbabel/atom.h> //#DEBUG
 #include <openbabel/canon.h>
 #include <openbabel/graphsym.h>
 
@@ -31,11 +32,12 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	OBMol* temp = MolecularSimilarity::createOBMol( molecule, true);
 	
 	// get canonical labels:
+	vector<unsigned int> sym;
+	vector<unsigned int> clabels;
+
 	OBGraphSym grsym(temp);
-	std::vector<unsigned int> sym;
 	grsym.GetSymmetry(sym);
 	
-	vector<unsigned int> clabels;
 	CanonicalLabels(temp, sym, clabels);
 	
 	// resort atom list by inserting into a new empty molecule

@@ -33,7 +33,9 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	// canonicalize, generate UCK-key and match the rigid fragments
 	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
 	{
+		cout<< "befor frag: "<< LigBase::printInlineMol(*rig_frag)<<endl;
 		_canoicalizer.canonicalize( **rig_frag );
+		cout<< "Canon frag: "<< LigBase::printInlineMol(*rig_frag)<<endl;
 		_matcher.matchFragment( **rig_frag );
 	}
 	
