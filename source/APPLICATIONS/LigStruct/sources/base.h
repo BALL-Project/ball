@@ -202,5 +202,4 @@ public:
 
 	static void removeHydrogens( BALL::AtomContainer &tmp );
 };
-
 #endif // LIGANDSTRUCTUREBASE_H

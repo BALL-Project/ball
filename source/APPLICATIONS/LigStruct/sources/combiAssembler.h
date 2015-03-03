@@ -25,11 +25,16 @@ private:
 	CombiLibMap*        _r_groups;
 	std::list< RAtom* > _r_atms;
 	
-	MoleculeConnector       _connector;
+	MoleculeConnector  _connector;
 	ConnectionResolver _cresolv;
 
+	std::list< RFragment* >            _current_combination;
 	std::list< std::pair<int*, int*> > _work_trace;
 	void _combineRecur(BALL::SDFile& handle);
+	
+	void newSetForCurrentCombination();
+	
+	int total_reuse; //#DEBUG
 };
 
 #endif // COMBIASSEMBLER_H

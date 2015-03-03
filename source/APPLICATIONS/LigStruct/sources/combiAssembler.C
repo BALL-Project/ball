@@ -33,6 +33,7 @@ void CombiAssembler::writeCombinations(SDFile &handle)
 	_r_atms.clear();
 	
 	_work_mol = _r_groups->at(0)[0];
+	_current_combination.push_back(_work_mol);
 	
 	for(list<RAtom>::iterator it = _work_mol->r_atom_lst.begin(); 
 			it != _work_mol->r_atom_lst.end(); ++it)
@@ -62,16 +63,16 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	if( !ra )
 	{
 		// write out the current work mol
-		handle << * _work_mol->molecule;
+//		handle << * _work_mol->molecule;
 		
 		//#DEBUG start:
-		cout<<">>> S-"<<_work_mol->curr_set<<" ";
-		for(list<pair<int*,int*>>::iterator it = _work_trace.begin(); 
-				it != _work_trace.end(); ++it)
-		{
-			cout<<"F"<<*it->first<<"-"<<*it->second<<" ";
-		}
-		cout<<endl;
+//		cout<<">>> S-"<<_work_mol->curr_set<<" ";
+//		for(list<pair<int*,int*>>::iterator it = _work_trace.begin(); 
+//				it != _work_trace.end(); ++it)
+//		{
+//			cout<<"F"<<*it->first<<"-"<<*it->second<<" ";
+//		}
+//		cout<<endl;
 		//#DEBUG end!
 		
 
@@ -106,7 +107,10 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 			
 			//3.3) connect the two fragments:
 			_checkAndConnect(*ra, *tmp);
+			
+			// insert new fragment into working mol
 			_work_mol->molecule->insert( *tmp->molecule );
+			_current_combination.push_back( tmp );
 			
 			//3.4) recurr deeper
 			_combineRecur( handle );
@@ -119,6 +123,7 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 			//3.5) delete bond, and remove inserted molecule
 			bnd->destroy();
 			_work_mol->molecule->remove( *tmp->molecule );
+			_current_combination.pop_back();
 			
 			//3.6) remove the added r_atom from the list again
 			for( list< RAtom >::iterator it = tmp->r_atom_lst.begin();
@@ -130,8 +135,17 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 				_work_mol->rotor_lst->pop_back();
 		}
 	}
-	
 	_r_atms.push_front( ra ); // upper calls of writeCombinations should handle this atom first
+}
+
+void CombiAssembler::newSetForCurrentCombination()
+{
+	for(list< RFragment* >::iterator it = _current_combination.begin(); 
+			it != _current_combination.end(); ++it)
+	{
+		RFragment* tmp = *it;
+		tmp->newSetFromCurrent();
+	}
 }
 
 void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
@@ -139,38 +153,58 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	int acc_id = acceptor.parent->curr_set;
 	int donor_id = donor.curr_set;
 	
-	
 	/*
 	 * 1.) the acceptor and donor do have a conformation
 	 */
 	if( acc_id != -1 && donor_id != -1)
 	{
-		cout<<"case: known partner"<<endl;
-		// known Fragment?!
-		int donor_target_set = acceptor.getCompatibleSet(donor);
-		if ( donor_target_set != -1)
+		int compatible_donor_set = acceptor.getCompatibleSet(donor);
+		
+		// 1.1) known Fragments are compatible!
+		if ( false)// compatible_donor_set != -1)
 		{
-//			cout<<"Reusing coordinates!"<<endl;//#DEBUG
-			
-			donor.setCoordsTo( donor_target_set ); // to the fitting coordinates
+			donor.setCoordsTo( compatible_donor_set ); // to the fitting coordinates
 			
 			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
 			int c_cnt = _cresolv.detect();
+			
 			// if we need to resolve a clash...
 			if ( c_cnt != 0 )
 			{
-				cout<<"case: known -- clashes: "<<c_cnt<<endl;
 				pair<int,bool> res = _cresolv.resolve();
-				cout<<"case: known -- clashes after: "<<res.first<<" moved S: "<<res.second<<endl;
+				
 				// resolving the clash, led to a new coordinate set:
 				if( res.second )
 				{
-					acceptor.parent->newSetFromCurrent();
+					newSetForCurrentCombination();
+					
 					donor.newSetFromCurrent();
 					
 					acceptor.addParnter(donor);
 				}
+				
+				// only the fragment was changed
+				else
+				{
+					donor.newSetFromCurrent();
+					acceptor.addParnter(donor);
+				}
 			}
+		}
+		
+		// 1.2) acceptor and donor have one or more sets, BUT donor is not 
+		//      compatible with given acceptor!
+		// same as case 2.)
+		else
+		{
+			if(_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst))
+			{
+				newSetForCurrentCombination();
+			}
+			
+			donor.newSetFromCurrent();
+				
+			acceptor.addParnter(donor);
 		}
 	}
 	
@@ -179,12 +213,10 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 	 */
 	else if (acc_id != -1 && donor_id == -1) 
 	{
-		cout<<"case: new partner "<<donor.group_id<<endl;
 		// if the known acceptor side was changed: add both coordinates...
 		if(_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst))
 		{
-			cout<<"changed work_mol"<<endl;
-			acceptor.parent->newSetFromCurrent();
+			newSetForCurrentCombination();
 		}
 		
 		//...else: only the ones from the donor
@@ -193,18 +225,19 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 		acceptor.addParnter(donor);
 	}
 	/*
-	 *  3.) both are new (should only occur at the beginning)
+	 *  3.) both are new (should only occur in the very first recursion)
 	 */
 	else
 	{
-		cout<<"case: both new"<<endl;
 		_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
 		
-		acceptor.parent->newSetFromCurrent();
+		newSetForCurrentCombination();
+		
 		donor.newSetFromCurrent();
 		
 		acceptor.addParnter( donor );
 	}
+
 	
 	//#DEBUG
 	_work_trace.push_back(make_pair(&donor.group_id, &donor.curr_set));
@@ -227,10 +260,9 @@ bool CombiAssembler::_connectClashFree(Atom &at1, Atom &at2, ConnectList& connec
 	c_cnt = _cresolv.detect();
 	if( c_cnt != 0 )
 	{
-		cout<<"connector -- clashes: "<<c_cnt<<endl;
-		pair<int,bool> res = _cresolv.resolve();
-		cout<<"connector -- clashes after: "<<res.first<<" moved S: "<<res.second<<endl;
-		return res.second;
+		//pair<int,bool> res = _cresolv.resolve();
+		
+		return _cresolv.resolve().second;
 	}
 	
 	return false; // nothing changed

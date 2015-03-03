@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	combi_man.setCombiLib( combi_file );
 	combi_file.close();
 	
-	cout<<"OK!"<<endl;
+	cout<<"ok"<<endl;
 	
 	
 	//2.) setup template database manager, to load the fragment databases

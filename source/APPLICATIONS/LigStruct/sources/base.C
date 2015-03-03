@@ -122,6 +122,7 @@ RFragment::~RFragment()
 	}
 	
 	rotor_lst->clear();
+	delete rotor_lst;
 	
 	delete molecule;
 }

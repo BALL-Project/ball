@@ -10,6 +10,8 @@
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
+/// C l a s s   C l a s h D e t e c t o r
+/// ############################################################################
 /**
  * @brief The ClashDetector class - Simply provides methods to detect clashes
  * within and between molecules. It simply counts all clashes, where a clash
@@ -75,7 +77,8 @@ private:
 
 
 
-
+/// C l a s s   R o t a t o r
+/// ############################################################################
 /**
  * @brief The Rotator class - The general idea is taken from Jan Fuhrmann and
  * Marcel Schumanns implementation of 'rotate' found in 
