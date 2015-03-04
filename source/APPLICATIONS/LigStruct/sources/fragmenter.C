@@ -107,6 +107,18 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 	linker_fragments.clear();
 	connections.clear();
 	
+	//0.) Catch trivial cases:
+	if(num_atoms == 1)
+	{
+		AtomContainer* dummy = new AtomContainer();
+		
+		dummy->insert( *_molecule->beginAtom() );
+		
+		linker_fragments.push_back(dummy);
+		
+		return;
+	}
+	
 	/*
 	 * Init the fragment indexing strcutrues:
 	 */
@@ -225,7 +237,7 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 			if(link_groups[parent_id]<0)
 			{
 				link_groups[parent_id] = linker_fragments.size();
-				Fragment* dummy = new Fragment();
+				AtomContainer* dummy = new AtomContainer();
 				
 				dummy->insert(*atm);
 				
@@ -246,7 +258,7 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 			if(rigid_groups[parent_id]<0)
 			{
 				rigid_groups[parent_id] = rigid_fragments.size();
-				Fragment* dummy = new Fragment();
+				AtomContainer* dummy = new AtomContainer();
 				
 				dummy->insert(*atm);
 				rigid_fragments.push_back(dummy);

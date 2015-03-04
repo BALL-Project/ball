@@ -164,6 +164,9 @@ int ClashResolver::allCombinationsRecur(const ConnectList::iterator &p,
 
 /// C l a s s   C o n n e c t i o n R e s o l v e r
 /// ############################################################################
+
+int ConnectionResolver::num_resolve_calls = 0; //#DEBUG
+
 ConnectionResolver::ConnectionResolver(float tolerance, int max_rotors): 
 	ClashDetector(tolerance),
 	_max_rotations(max_rotors),
@@ -241,6 +244,8 @@ int ConnectionResolver::detect()
 
 pair<int, bool> ConnectionResolver::resolve()
 {
+	ConnectionResolver::num_resolve_calls++;
+	
 	_save_large->readCoordinatesFromMolecule( *_large_root );
 	_save_small->readCoordinatesFromMolecule( *_small_root );
 	

@@ -26,8 +26,9 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	// create fragments from query molecule:
 	ACVec rigids, linker;
 	ConnectList* connections = new ConnectList;
-	
+
 	_fragmenter.setMolecule(mol);
+	
 	_fragmenter.fragment(rigids, linker, *connections);
 
 	// canonicalize, generate UCK-key and match the rigid fragments

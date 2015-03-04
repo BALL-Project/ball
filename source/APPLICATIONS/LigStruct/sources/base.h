@@ -54,6 +54,53 @@
 
 #include <BALL/KERNEL/global.h>
 
+//#DEBUG - START
+#include <ctime>
+
+struct Timer
+{
+	clock_t total_clocks;
+	
+	clock_t start_clocks;
+	
+	void start()
+	{
+		start_clocks = clock();
+	}
+	
+	void stop()
+	{
+		if( start_clocks )
+		{
+			total_clocks += clock() - start_clocks;
+		}
+		else
+		{
+			std::cout<<"RUN-ERROR in timer: stopped before starting!"<<std::endl;
+			exit(EXIT_FAILURE);
+		}
+		
+		start_clocks = 0;
+	}
+	
+	void reset()
+	{
+		start_clocks = 0;
+		total_clocks = 0;
+	}
+	
+	float getSeconds()
+	{
+		return (float)total_clocks / CLOCKS_PER_SEC;
+	}
+	
+	float getMilliSecs()
+	{
+		return getSeconds() * 1000;
+	}
+};
+//#DEBUG - END
+
 struct RFragment;
 class TemplateCoord;
 

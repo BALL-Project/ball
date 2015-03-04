@@ -40,6 +40,7 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_
 		else if(atom_cnt == 1)
 		{
 			linker_frag.beginAtom()->setPosition( Vector3() );
+			
 			return;
 		}
 		else if (atom_cnt == 2)

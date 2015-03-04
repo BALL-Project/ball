@@ -67,6 +67,7 @@ private:
 class ConnectionResolver: public ClashDetector
 {
 public:
+	
 	ConnectionResolver( float tolerance = 1.2, int max_rotors = 2);
 	~ConnectionResolver();
 	
@@ -105,6 +106,8 @@ public:
 	 * @return number of clashes found BETWEEN both fragments
 	 */
 	int detect();
+	
+	static int num_resolve_calls;
 	
 private:
 	/*

@@ -15,6 +15,9 @@ public:
 	
 	void writeCombinations(BALL::SDFile& handle);
 	
+	
+	static bool apply_reuse; //#DEBUG
+	static bool write_output; //#DEBUG
 private:
 	
 	bool _connectClashFree(BALL::Atom &at1, BALL::Atom &at2, ConnectList& connections);
@@ -35,6 +38,7 @@ private:
 	void newSetForCurrentCombination();
 	
 	int total_reuse; //#DEBUG
+	int total_resolves; //#DEBUG
 };
 
 #endif // COMBIASSEMBLER_H
