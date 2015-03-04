@@ -57,12 +57,15 @@
 //#DEBUG - START
 #include <ctime>
 
-struct Timer
+class Timer
 {
-	clock_t total_clocks;
-	
-	clock_t start_clocks;
-	
+public:
+	Timer()
+	{
+		total_clocks = 0;
+		start_clocks = 0;
+	}
+
 	void start()
 	{
 		start_clocks = clock();
@@ -98,6 +101,11 @@ struct Timer
 	{
 		return getSeconds() * 1000;
 	}
+	
+private:
+	clock_t total_clocks;
+	
+	clock_t start_clocks;
 };
 //#DEBUG - END
 
