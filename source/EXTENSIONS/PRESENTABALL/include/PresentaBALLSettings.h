@@ -14,7 +14,7 @@
 
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 namespace BALL
 {
@@ -32,7 +32,7 @@ namespace BALL
 
 				/// Constructor
 				PresentaBALLSettings(HTMLBasedInterface* parent = 0,
-													 const char* name = "PresentaBALLSettings", Qt::WFlags fl = 0);
+													 const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
 
 				/// Destructor
 				~PresentaBALLSettings();

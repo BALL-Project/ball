@@ -12,8 +12,8 @@
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
+#include <QtWebKitWidgets/QWebPage>
+#include <QtWebKitWidgets/QWebFrame>
 
 #include <QtCore/QUrlQuery>
 

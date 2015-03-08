@@ -10,7 +10,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		PresentaBALLSettings::PresentaBALLSettings(HTMLBasedInterface* parent, const char* name, Qt::WFlags fl)
+		PresentaBALLSettings::PresentaBALLSettings(HTMLBasedInterface* parent, const char* name, Qt::WindowFlags fl)
 			: ConfigDialog(parent, fl),
 			  Ui_PresentaBALLSettingsData(),
 				html_interface_(parent)
