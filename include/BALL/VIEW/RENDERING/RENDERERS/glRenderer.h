@@ -37,7 +37,7 @@
 #define APIENTRY
 #endif
 
-#include <GL/glu.h>
+#include <glu.h>
 
 class QFont;
 
