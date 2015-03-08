@@ -10,6 +10,10 @@ namespace BALL
 		{
 		}
 
+		HTMLView::~HTMLView()
+		{
+		}
+
 		HTMLViewDock::HTMLViewDock(HTMLView* view, QWidget* parent, const char* title)
 			: DockWidget(parent, title),
 			  html_view_(0)

@@ -20,6 +20,7 @@ namespace BALL
 			public:
 				
 				HTMLView(QWidget* parent = 0);
+				virtual ~HTMLView();
 		};
 
 		class BALL_VIEW_EXPORT HTMLViewDock : public DockWidget
