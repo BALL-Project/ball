@@ -2,8 +2,6 @@
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-Q_EXPORT_PLUGIN2(pluginBALLaxy, BALL::VIEW::BALLaxyPlugin)
-
 namespace BALL
 {
 	namespace VIEW

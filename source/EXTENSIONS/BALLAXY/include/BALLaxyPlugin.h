@@ -22,6 +22,7 @@ namespace BALL
 				public ModularWidgetPlugin
 		{
 			Q_OBJECT
+			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.ModularWidget.BALLaxy")
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::ModularWidgetPlugin)
 
 			public:

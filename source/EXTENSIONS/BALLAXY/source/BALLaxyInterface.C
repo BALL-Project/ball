@@ -28,6 +28,7 @@
 #include <QHttpMultiPart>
 #include <QSslError>
 #include <QWriteLocker>
+#include <QUrlQuery>
 
 #include <QtCore/QDebug>
 
@@ -238,14 +239,15 @@ namespace BALL
 
 		void BALLaxyInterface::executeLink(const QUrl& url)
 		{
-			QString action_name = url.queryItemValue("action");
+            QUrlQuery query(url);
+			QString action_name = query.queryItemValue("action");
 			if(action_name == QString::null)
 			{
 				return;
 			}
 
-			QString method_type = url.queryItemValue("method");
-			QString parameters  = url.queryItemValue("parameters");
+			QString method_type = query.queryItemValue("method");
+			QString parameters  = query.queryItemValue("parameters");
 
 			//Ideally this if should be converted into another registry
 			if(method_type == "native")
@@ -254,12 +256,12 @@ namespace BALL
 
 				if(it != action_registry_.end())
 				{
-					(*it)->execute(url.queryItems());
+					(*it)->execute(query.queryItems());
 				}
 			}
 			else if(method_type == "" || method_type == "python")
 			{
-					executePython_(action_name, url.queryItems());
+					executePython_(action_name, query.queryItems());
 			}
 		}
 
@@ -296,7 +298,7 @@ namespace BALL
 			}
 			catch(Exception::FileNotFound)
 			{
-				Log.error() << "Could not execute action " << action.toAscii().data() << "\n No such file or directory." << std::endl;
+				Log.error() << "Could not execute action " << action.toLatin1().data() << "\n No such file or directory." << std::endl;
 			}
 		}
 
