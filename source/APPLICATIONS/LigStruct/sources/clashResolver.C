@@ -235,11 +235,15 @@ void ConnectionResolver::setMolecule(
 	_all_rotors->push_back( make_pair(&atm1,&atm2) );
 	
 	_max_rotations = _all_rotors->size() * 2;
+	
+	createBetweenPairList(*_large_root, *_small_root, _clash_inter);
+	createInnerPairList(*_large_root, _clash_large);
+	createInnerPairList(*_small_root, _clash_small);
 }
 
 int ConnectionResolver::detect()
 {
-	return detectBetweenMolecules( *_small_root, *_large_root );
+	return detectPairList(_clash_inter);
 }
 
 pair<int, bool> ConnectionResolver::resolve()
@@ -248,9 +252,11 @@ pair<int, bool> ConnectionResolver::resolve()
 	
 	_save_large->readCoordinatesFromMolecule( *_large_root );
 	_save_small->readCoordinatesFromMolecule( *_small_root );
-	
-	const int given_large_cnt = detectInMolecule( *_large_root);
-	const int given_small_cnt = detectInMolecule( *_small_root);
+
+	const int given_large_cnt = detectPairList( _clash_large);
+	const int given_small_cnt = detectPairList( _clash_small);	
+//	const int given_large_cnt = detectInMolecule( *_large_root);
+//	const int given_small_cnt = detectInMolecule( *_small_root);
 	
 	bool changed_large = false;
 	
@@ -277,7 +283,7 @@ int ConnectionResolver::resolveConnection()
 {
 	int current_count = 0;
 	
-	int best_cnt = detectBetweenMolecules( *_large_root, *_small_root);
+	int best_cnt = detectPairList(_clash_inter);
 	
 	Rotator roto;
 	roto.setAxis(*atm_large, *atm_small, _small_root);
@@ -287,7 +293,7 @@ int ConnectionResolver::resolveConnection()
 	{
 		roto.rotate( Angle(10.0, false) );
 		
-		current_count = detectBetweenMolecules( *_large_root, *_small_root);
+		current_count = detectPairList(_clash_inter);
 		
 		if ( current_count < best_cnt)
 		{
@@ -312,7 +318,18 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 																				ConnectList&   clist,
 																				const int&     given_clashes)
 {
-	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) + detectInMolecule( frag ) - given_clashes;
+//	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) + detectInMolecule( frag ) - given_clashes;
+	
+	int best_cnt = -1;
+	if(&frag == _small_root)
+	{
+		best_cnt = detectPairList(_clash_inter) + detectPairList(_clash_small) - given_clashes;
+	}
+	else
+	{
+		best_cnt = detectPairList(_clash_inter) + detectPairList(_clash_large) - given_clashes;
+	}
+	
 	int current_count = 0;
 	
 	for(int tries=0; tries < _max_rotations; tries++) // try optimise _max_rotations bonds
@@ -330,8 +347,17 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 			{
 				roto.rotate( Angle(18.0, false) );
 				
-				current_count = detectBetweenMolecules(*_large_root, *_small_root)
-											+ detectInMolecule( frag ) - given_clashes;
+				if(&frag == _small_root)
+				{
+					current_count = detectPairList(_clash_inter) + detectPairList(_clash_small) - given_clashes;
+				}
+				else
+				{
+					current_count = detectPairList(_clash_inter) + detectPairList(_clash_large) - given_clashes;
+				}
+				
+//				current_count = detectBetweenMolecules(*_large_root, *_small_root)
+//											+ detectInMolecule( frag ) - given_clashes;
 				
 				if ( current_count < best_cnt )
 				{
@@ -408,9 +434,7 @@ int ConnectionResolver::resolveAllCombinations( const int &steps)
 	Angle rot_angle = Angle( 360.0 / (float)steps, false );
 	
 	// set best clash cnt to current status
-	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) 
-									+ detectInMolecule( *_large_root ) 
-									+ detectInMolecule( *_small_root );
+	int best_cnt = detectAll();
 	
 	// recursivly check all possible combinations
 	int result = allCombinationsRecur( _all_rotors->begin(), _all_rotors->end(), rot_angle, steps, best_cnt);
@@ -448,9 +472,7 @@ int ConnectionResolver::allCombinationsRecur(const ConnectList::iterator &p,
 		if( i != 0)
 			roto.rotate( angle );
 		
-		current_cnt = detectBetweenMolecules(*_large_root, *_small_root) 
-									+ detectInMolecule( *_large_root ) 
-									+ detectInMolecule( *_small_root );
+		current_cnt = detectAll();
 		
 		// check if current solution is better than the previous:
 		if( current_cnt < best_cnt)
@@ -491,9 +513,13 @@ int ConnectionResolver::allCombinationsRecur(const ConnectList::iterator &p,
 
 int ConnectionResolver::detectAll()
 {
-	return detectBetweenMolecules(*_large_root, *_small_root) 
-								+ detectInMolecule( *_large_root ) 
-								+ detectInMolecule( *_small_root );
+	return detectPairList(_clash_inter)
+					+ detectPairList(_clash_small)
+					+ detectPairList(_clash_large);
+			
+//			detectBetweenMolecules(*_large_root, *_small_root) 
+//								+ detectInMolecule( *_large_root ) 
+//								+ detectInMolecule( *_small_root );
 }
 
 

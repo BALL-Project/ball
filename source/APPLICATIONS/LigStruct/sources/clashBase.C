@@ -25,6 +25,49 @@ ClashDetector::~ClashDetector()
 	
 }
 
+int ClashDetector::detectPairList(std::list<std::pair<Atom *, Atom *> > &p_list)
+{
+	int clash_count = 0;
+	
+	for(std::list<std::pair<Atom *, Atom *> >::iterator it = p_list.begin();
+			it != p_list.end(); ++it)
+	{
+		if ( doClash( *it->first, *it->second) )
+			++clash_count;
+	}
+	return clash_count;
+}
+
+void ClashDetector::createBetweenPairList(AtomContainer &ac1, AtomContainer &ac2, list<pair<Atom *, Atom *> > &p_list)
+{
+	p_list.clear();
+	
+	for(AtomIterator ati1 = ac1.beginAtom(); +ati1; ++ati1)
+	{
+		for(AtomIterator ati2 = ac2.beginAtom(); +ati2; ++ati2)
+		{
+			// make sure that more than 2 bonds are between the atoms:
+			if( atom3Away(*ati1, *ati2) )
+				p_list.push_back( make_pair(&*ati1, &*ati2) );
+		}
+	}
+}
+
+void ClashDetector::createInnerPairList(AtomContainer &ac, list<pair<Atom *, Atom *> > &p_list)
+{
+	p_list.clear();
+	
+	for(AtomIterator ati1 = ac.beginAtom(); +ati1; ++ati1)
+	{
+		AtomIterator ati2 = ati1;
+		for( ++ati2; +ati2; ++ati2)
+		{
+			if( atom3Away(*ati1, *ati2))
+				p_list.push_back( make_pair(&*ati1, &*ati2) );
+		}
+	}
+}
+
 int ClashDetector::detectInMolecule(AtomContainer &ac)
 {
 	int clash_count = 0;

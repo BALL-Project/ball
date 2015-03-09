@@ -31,6 +31,29 @@ public:
 	~ClashDetector();
 	
 	/**
+	 * @brief detectPairList
+	 * @return 
+	 */
+	int detectPairList(std::list< std::pair< BALL::Atom*, BALL::Atom*> >& p_list);
+	
+	/**
+	 * @brief createBetweenPairList
+	 * @param ac1
+	 * @param ac2
+	 * @param p_list
+	 */
+	void createBetweenPairList(BALL::AtomContainer& ac1, BALL::AtomContainer& ac2,
+														 std::list< std::pair< BALL::Atom*, BALL::Atom*> >& p_list);
+	
+	/**
+	 * @brief createInnerPairList
+	 * @param ac
+	 * @param p_list
+	 */
+	void createInnerPairList(BALL::AtomContainer& ac, 
+													 std::list< std::pair< BALL::Atom*, BALL::Atom*> >& p_list);
+	
+	/**
 	 * @brief detectInMolecule - checks each atom of 'ac' against all 
 	 * remaining atoms in 'ac' if a clash exists. Each clash is counted once and
 	 * the total count is returned.

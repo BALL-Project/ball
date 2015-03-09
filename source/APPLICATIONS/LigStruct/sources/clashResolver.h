@@ -153,6 +153,10 @@ private:
 	TemplateCoord* _save_large;
 	TemplateCoord* _save_small;
 	
+	std::list< std::pair<BALL::Atom*, BALL::Atom*> > _clash_small;
+	std::list< std::pair<BALL::Atom*, BALL::Atom*> > _clash_large;
+	std::list< std::pair<BALL::Atom*, BALL::Atom*> > _clash_inter;
+	
 	int _max_rotations;     // maximum number of bonds to rotate
 };
 #endif // CLASHRESOLVER_H

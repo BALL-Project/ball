@@ -5,7 +5,6 @@
 #include "../sources/base.h"
 #include "../sources/ioModule.h"
 #include "../sources/combiAssembler.h"
-#include "../sources/clashResolver.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 

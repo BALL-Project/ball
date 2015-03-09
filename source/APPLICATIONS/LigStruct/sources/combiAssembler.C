@@ -275,6 +275,9 @@ bool CombiAssembler::_connectClashFree(Atom &at1, Atom &at2, ConnectList& connec
 	_cresolv.setMolecule(at1, at2, connections);
 	
 	c_cnt = _cresolv.detect();
+	
+//	cout<<"connection clashes: "<<c_cnt<<endl;
+	
 	if( c_cnt != 0 )
 	{
 		//pair<int,bool> res = _cresolv.resolve();

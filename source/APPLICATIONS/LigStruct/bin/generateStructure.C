@@ -3,7 +3,6 @@
 //
 #include "../sources/ioModule.h"
 #include "../sources/structureAssembler.h"
-#include "../sources/clashResolver.h"
 
 #include <BALL/FORMAT/commandlineParser.h>
 
