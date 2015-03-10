@@ -145,8 +145,8 @@ namespace BALL
 				want_to_use_vertex_buffer_(false),
 				use_preview_(true),
 				show_fps_(false),
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
 				main_display_(new GLRenderWindow(this)),
 				main_renderer_(0),
 				stereo_left_eye_(-1),
@@ -194,8 +194,8 @@ namespace BALL
 #ifdef BALL_HAS_RTFACT
 				continuous_loop_(false),
 #endif
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
 				main_display_(new GLRenderWindow(this)),
 				main_renderer_(0),
 				stereo_left_eye_(-1),
