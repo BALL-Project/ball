@@ -31,10 +31,14 @@ void logMessages(QtMsgType type, const QMessageLogContext& context, const QStrin
 
 	switch ( type ) {
 		case QtDebugMsg:
-				BALL::Log.info() << message.toStdString() << " " << context.file << " " << context.line << " " << context.function << std::endl;
+            BALL::Log.info() << message.toStdString() << " " << (context.file ? context.file : "(unknown context)")
+                                                      << " " << context.line
+                                                      << " " << (context.function ? context.function : "(unknown function)") << std::endl;
 				break;
 		case QtWarningMsg:
-				BALL::Log.warn() << message.toStdString() << " " << context.file << " " << context.line << " " << context.function << std::endl;
+            BALL::Log.warn() << message.toStdString() << " " << (context.file ? context.file : "(unknown context)")
+                                                      << " " << context.line
+                                                      << " " << (context.function ? context.function : "(unknown function)") << std::endl;
 				break;
 		case QtFatalMsg:
 				fprintf( stderr, "Fatal: %s\n", message.toLatin1().constData() );
