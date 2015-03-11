@@ -76,12 +76,9 @@ void Matcher::matchFragment(AtomContainer& fragment)
 	{
 		templat->applyCoordinates2Molecule( fragment );
 	}
-	else // print error msg, showing element-list and key of the not matchable molecule
+	else
 	{
-		cout<<"ERROR: could not find a template for: ";
-		cout<< LigBase::printInlineMol(&fragment)<<endl;
-		cout<< "It's UCK-key: "<<keyGen.getUCK()<<endl;
-		exit(EXIT_FAILURE);
+		throw Exception::FragmentTemplateNotFound("canonicalizer.C", 81, fragment);
 	}
 }
 

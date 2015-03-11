@@ -207,7 +207,7 @@ void ConnectionResolver::setMolecule(
 	
 	if(_small_root == _large_root)
 	{
-		cout<<"ERROR: ConnectionClashResolver got two identical roots"<<endl;
+		cout<<"SEVERE ERROR: ConnectionClashResolver got two identical roots"<<endl;
 		exit(EXIT_FAILURE);
 	}
 	

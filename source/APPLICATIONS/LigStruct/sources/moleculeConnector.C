@@ -115,10 +115,8 @@ void MoleculeConnector::loadTemplates(AtomContainer*& tmp, String& key)
 		tmp = _connections->at(key);
 	}
 	else
-	{//#TODO:####: implement as exception
-		cout<<"ERROR in moleculeConnector: could not find connectionTemplate for: "
-			  << key<<endl;
-		exit(EXIT_FAILURE);
+	{
+		throw Exception::SiteTemplateNotFound("moleculeConnector.C", 119, key);
 	}
 }
 
@@ -197,7 +195,7 @@ Atom* MoleculeConnector::getMatchingAtomAll(Atom *center, AtmVec& mol, Element& 
 			return *ati;
 	}
 	
-	cout<<"ERROR: could not find a partner for: "<<elem.getSymbol()<<bo<<endl<<endl;
+	cout<<"SEVERE ERROR: could not find a partner for: "<<elem.getSymbol()<<bo<<endl<<endl;
 	cout<<"Molecule had:"<<endl;
 	for(AVIter at = mol.begin(); at != mol.end(); ++at)
 	{

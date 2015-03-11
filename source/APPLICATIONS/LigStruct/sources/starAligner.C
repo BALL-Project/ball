@@ -348,7 +348,7 @@ Atom* StarAligner::getMatchingAtom(Atom* center, AtomContainer* mol, String &ele
 			return &*ati;
 	}
 	
-	cout<<"ERROR: could not find a partner Atom!"<<endl;
+	cout<<"SEVERE ERROR: could not find a partner Atom!"<<endl;
 	cout<<"Was looking for: "<<elem<<"-"<<bo<<endl<<endl;
 	cout<<"Molecule contained:"<<endl;
 	for(AtomIterator at = mol->beginAtom(); +at; ++at)

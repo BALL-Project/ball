@@ -205,7 +205,7 @@ void Rotator::setAxis(Atom &atm1, Atom &atm2, Composite *parent)
 		}
 		else
 		{
-			cout<<"ERROR - clashBase - Rotator::setAxis - l.166"<<endl;
+			cout<<"SEVERE ERROR - clashBase - Rotator::setAxis - l.166"<<endl;
 			exit(EXIT_FAILURE);
 		}
 	}
