@@ -39,44 +39,39 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	_fragmenter.setMolecule(mol);
 	
 	_fragmenter.fragment(rigids, linker, *connections);
-	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
-		cout<<"rig-frag: "<<LigBase::moleculeToSMILES( **rig_frag )<<endl;
-		
-	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
-		cout<<"link-frag: "<<LigBase::moleculeToSMILES( **lin_frag )<<endl;	
 
-	// canonicalize, generate UCK-key and match the rigid fragments
-	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
-	{
-		_canoicalizer.canonicalize( **rig_frag );
-		_matcher.matchFragment( **rig_frag );
-	}
-	
-	// build linker fragments
 	try
 	{
+		// canonicalize, generate UCK-key and match the rigid fragments
+		for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
+		{
+			_canoicalizer.canonicalize( **rig_frag );
+			_matcher.matchFragment( **rig_frag );
+		}
+		
+		// build linker fragments
 		for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
 		{
 			// build linker, and insert rotors into 'connections'
 			_linker_builder.buildLinker(**lin_frag, *connections);
 		}
+		
+		// connect the ready-made fragments to a single molecule
+		for(ConnectList::iterator atm_pair = connections->begin(); 
+				atm_pair != connections->end(); ++atm_pair )
+		{
+			// only connect if this is not a linker-rotor bond
+			if( &atm_pair->first->getRoot() != &atm_pair->second->getRoot() )
+			{
+				connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
+			}
+		}
 	}
-	catch (const BALL::Exception::SiteTemplateNotFound& e)
+	catch (const Exception::GeneralException& e)
 	{
 		insertAll(linker, rigids, mol);
-		throw BALL::Exception::StructureNotGenerated("structureAssembler.C", 52,
-																								 mol, e);
-	}
-	
-	// connect the ready-made fragments to a single molecule
-	for(ConnectList::iterator atm_pair = connections->begin(); 
-			atm_pair != connections->end(); ++atm_pair )
-	{
-		// only connect if this is not a linker-rotor bond
-		if( &atm_pair->first->getRoot() != &atm_pair->second->getRoot() )
-		{
-			connectClashFree( * atm_pair->first, * atm_pair->second, *connections);
-		}
+		throw Exception::StructureNotGenerated("structureAssembler.C", 52,
+																					 mol, e);
 	}
 	
 	// re-insert all fragments into the original molecule

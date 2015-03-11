@@ -15,10 +15,10 @@ using namespace std;
 MoleculeFragmenter::MoleculeFragmenter()
 {
 	_molecule = 0;
+//	_rpp.options.set("algorithm_name", "Figueras");
 }
 
-MoleculeFragmenter::~MoleculeFragmenter()
-{}
+MoleculeFragmenter::~MoleculeFragmenter(){}
 
 void MoleculeFragmenter::setMolecule(AtomContainer &in_mol)
 {
@@ -54,7 +54,7 @@ bool MoleculeFragmenter::isRigidAtom(Atom &atm)
 	// if the atom has only one connection that leads to a rigid atom, it self is considered rigid
 	if( atm.countBonds() == 1 )
 	{
-		if ( isRigidAtom( * atm.beginBond()->getBoundAtom( atm )) ) //#TODO: this recursion is not pretty/efficient
+		if ( isRigidAtom( * atm.beginBond()->getBoundAtom( atm )) ) //#WARNING: this recursion is not pretty/efficient, leads to endless iterations if we have a two atom molecule
 			return true;
 		else
 			return false;
@@ -70,7 +70,7 @@ bool MoleculeFragmenter::isRotableBond(Bond &bnd)
 		return false;
 	
 	// if any of the binding partners is a terminal atom: not rotable
-	if( bnd.getFirstAtom()->countBonds() ==1 || bnd.getSecondAtom()->countBonds() ==1)
+	if( bnd.getFirstAtom()->countBonds() == 1 || bnd.getSecondAtom()->countBonds() == 1)
 		return false;
 	
 	return true;
@@ -307,10 +307,13 @@ void MoleculeFragmenter::extractAndClearProperties()
 	// transfer and clear Bond-properties
 	AtomIterator ati0;
 	Atom::BondIterator bit;
+	
 	BALL_FOREACH_BOND(*_molecule, ati0, bit)
 	{
 		if( bit->hasProperty("InRing") )
+		{
 			_is_BondInRing[ &*bit ] = true;
+		}
 		else
 			_is_BondInRing[ &*bit ] = false;
 		
@@ -321,7 +324,9 @@ void MoleculeFragmenter::extractAndClearProperties()
 	for(AtomIterator ati = _molecule->beginAtom(); +ati; ++ati)
 	{
 		if( ati->hasProperty("InRing") )
+		{
 			_is_InRing.push_back(true);
+		}
 		else
 			_is_InRing.push_back(false);
 		

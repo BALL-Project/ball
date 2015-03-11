@@ -296,7 +296,7 @@ namespace BALL
 				: GeneralException(file, line, "FragmentTemplateNotFound", "")
 			{
 				message_ = "no template could be found for the fragment: ";
-				message_ += LigBase::printInlineMol( &frag );
+				message_ += LigBase::moleculeToSMILES( frag );
 				
 				globalHandler.setMessage(message_);
 				
@@ -304,6 +304,21 @@ namespace BALL
 			}
 		protected:
 			BALL::AtomContainer* mol;
+		};
+		
+		/// Exception : RotationAxisInRing #########################################
+		class BALL_EXPORT RotationAxisInRing
+				: public GeneralException
+		{
+		public:
+			RotationAxisInRing(const char* file, int line, Atom& atm)
+				: GeneralException(file, line, "RotationAxisInRing", "")
+			{
+				message_ = "attempted to rotate a bond within a ring. Molecule part was: \n";
+				message_ += LigBase::moleculeToSMILES( *(AtomContainer*)&atm.getRoot() );
+				
+				globalHandler.setMessage(message_);
+			}
 		};
 		
 		/// Exception : StructureNotGenerated ######################################
@@ -317,9 +332,7 @@ namespace BALL
 				_mol = &mol;
 				message_ = " No 3D coordinates could be generated for molecule: \n";
 				
-				String can_smiles;
-				canSMILESFromAtomContainer(*_mol, can_smiles);
-				message_ += can_smiles;
+				message_ += LigBase::moleculeToSMILES(*_mol);
 				message_ += "\n\n";
 				
 				message_ += "CAUSE:\n";
@@ -337,9 +350,7 @@ namespace BALL
 				
 				message_ = " No 3D coordinates could be generated for molecule: \n";
 				
-				String can_smiles;
-				canSMILESFromAtomContainer(*_mol, can_smiles);
-				message_ += can_smiles;
+				message_ += LigBase::moleculeToSMILES(*_mol);
 				message_ += "\n\n";
 				
 				message_ += "CAUSE:\n";
@@ -355,9 +366,7 @@ namespace BALL
 				
 				message_ = " No 3D coordinates could be generated for molecule: \n";
 				
-				String can_smiles;
-				canSMILESFromAtomContainer(*_mol, can_smiles);
-				message_ += can_smiles;
+				message_ += LigBase::moleculeToSMILES(*_mol);
 				message_ += "\n\n";
 				
 				message_ += "CAUSE: UNKNOWN";

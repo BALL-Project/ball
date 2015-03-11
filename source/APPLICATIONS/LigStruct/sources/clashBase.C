@@ -240,12 +240,7 @@ void Rotator::setAtomsToRotate(Atom &start, Atom &probe, Atom &block)
 				continue;
 			else
 			{
-				Log.error() << "error: rotation axis is part of a ring" << endl;
-				AtomContainer* ac = (AtomContainer*) &probe.getRoot();
-				
-				cout<<LigBase::moleculeToSMILES(*ac)<<endl;
-				
-				exit( EXIT_FAILURE );
+				throw Exception::RotationAxisInRing("clashBase.C", 243, probe);
 			}
 		}
 
