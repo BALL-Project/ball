@@ -19,7 +19,7 @@
 //#include <BALL/MATHS/matrix44.h>
 
 /// BALL: Atom, Bond, Element
-//#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/atom.h>
 //#include <BALL/KERNEL/atomIterator.h>
 //#include <BALL/KERNEL/bond.h>
 //#include <BALL/KERNEL/bondIterator.h>
@@ -27,18 +27,18 @@
 
 /// BALL: Molecule Container
 //#include <BALL/CONCEPT/composite.h>
-//#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/atomContainer.h>
 //#include <BALL/KERNEL/fragment.h>
 //#include <BALL/KERNEL/molecule.h>
 
 /// BALL: Algorithms
 //#include <BALL/STRUCTURE/UCK.h>
-//#include <BALL/STRUCTURE/molecularSimilarity.h>
+#include <BALL/STRUCTURE/molecularSimilarity.h>
 //#include <BALL/STRUCTURE/structureMapper.h>
 //#include <BALL/STRUCTURE/geometricTransformations.h>
 
 /// Open Babel
-//#include <openbabel/obconversion.h>
+#include <openbabel/obconversion.h>
 //#include <openbabel/mol.h>
 //#include <openbabel/canon.h>
 //#include <openbabel/graphsym.h>
@@ -53,9 +53,10 @@
 //#include <boost/pending/disjoint_sets.hpp>
 
 #include <BALL/KERNEL/global.h>
-
+#include <BALL/COMMON/exception.h>
 //#DEBUG - START
 #include <ctime>
+
 
 class Timer
 {
@@ -225,12 +226,20 @@ class LigBase
 {
 public:
 	
+	static bool containsUnknownElement( BALL::AtomContainer& ac );
+	
+	static bool containsHydrogen( BALL::AtomContainer& ac );
+	
+	static void removeHydrogens( BALL::AtomContainer &tmp );
+	
 	// generate a mini dump of a molecule
 	static BALL::String printInlineMol( BALL::Composite* mol); //#DEBUG: for debugging
 	static BALL::String printMol( BALL::Composite* mol);//#DEBUG: for debugging
 
 	static BALL::String printInlineStarMol( BALL::Composite* mol);//#DEBUG: for debugging
 	static BALL::String printInlineStarMol(AtmVec& mol);//#DEBUG: for debugging
+	
+	static BALL::String moleculeToSMILES( BALL::AtomContainer& ac );
 	
 	static int countBondsAndOrder( BALL::Atom& atm);
 	static int countBondsInPartent( BALL::Atom& atm, const BALL::Composite &parent);
@@ -254,7 +263,129 @@ public:
 	static void transferMolecule( BALL::AtomContainer* toMol, BALL::AtomContainer* fromMol);
 	
 	static void clearExternalBonds( BALL::AtomContainer* mol);
-
-	static void removeHydrogens( BALL::AtomContainer &tmp );
 };
+
+
+/// L i g S t r u c t    E x c e p t i o n s
+/// ############################################################################
+namespace BALL 
+{
+	namespace Exception
+	{
+		/// Exception : SiteTemplateNotFound #######################################
+		class BALL_EXPORT SiteTemplateNotFound
+				: public GeneralException
+		{
+		public:
+			SiteTemplateNotFound(const char* file, int line, String& key)
+				: GeneralException(file, line, "SiteTemplateNotFound", "")
+			{
+				message_ = "no template could be found for the site key: ";
+				message_ += key;
+				
+				globalHandler.setMessage(message_);
+			}
+		};
+		
+		/// Exception : FragmentTemplateNotFound ###################################
+		class BALL_EXPORT FragmentTemplateNotFound
+				: public GeneralException
+		{
+		public:
+			FragmentTemplateNotFound(const char* file, int line, AtomContainer& frag)
+				: GeneralException(file, line, "FragmentTemplateNotFound", "")
+			{
+				message_ = "no template could be found for the fragment: ";
+				message_ += LigBase::printInlineMol( &frag );
+				
+				globalHandler.setMessage(message_);
+				
+				mol = &frag;
+			}
+		protected:
+			BALL::AtomContainer* mol;
+		};
+		
+		/// Exception : StructureNotGenerated ######################################
+		class BALL_EXPORT StructureNotGenerated
+				: public GeneralException
+		{
+		public:
+			StructureNotGenerated(const char* file, int line, AtomContainer& mol, const GeneralException& in_exc)
+				: GeneralException(file, line, "StructureNotGenerated", "")
+			{
+				_mol = &mol;
+				message_ = " No 3D coordinates could be generated for molecule: \n";
+				
+				String can_smiles;
+				canSMILESFromAtomContainer(*_mol, can_smiles);
+				message_ += can_smiles;
+				message_ += "\n\n";
+				
+				message_ += "CAUSE:\n";
+				message_ += in_exc.getName() + String(" in line ")+String(in_exc.getLine()) 
+						+ String(" of ") + in_exc.getFile() + String("\n");
+				message_ += String("Message: ") + in_exc.getMessage() + String("\n");
+				
+				globalHandler.setMessage(message_);
+			}
+			
+			StructureNotGenerated(const char* file, int line, AtomContainer& mol, const String& cause)
+				: GeneralException(file, line, "StructureNotGenerated", "")
+			{
+				_mol = &mol;
+				
+				message_ = " No 3D coordinates could be generated for molecule: \n";
+				
+				String can_smiles;
+				canSMILESFromAtomContainer(*_mol, can_smiles);
+				message_ += can_smiles;
+				message_ += "\n\n";
+				
+				message_ += "CAUSE:\n";
+				message_ += cause;
+				
+				globalHandler.setMessage(message_);
+			}
+			
+			StructureNotGenerated(const char* file, int line, AtomContainer& mol)
+				: GeneralException(file, line, "StructureNotGenerated", "")
+			{
+				_mol = &mol;
+				
+				message_ = " No 3D coordinates could be generated for molecule: \n";
+				
+				String can_smiles;
+				canSMILESFromAtomContainer(*_mol, can_smiles);
+				message_ += can_smiles;
+				message_ += "\n\n";
+				
+				message_ += "CAUSE: UNKNOWN";
+				
+				globalHandler.setMessage(message_);
+			}
+			
+			AtomContainer* getMol()
+			{
+				return _mol;
+			}
+
+		protected:
+			AtomContainer* _mol;
+			
+		private:
+			void canSMILESFromAtomContainer(AtomContainer& ac, String& can_smiles)
+			{
+				OpenBabel::OBMol* obmol = MolecularSimilarity::createOBMol(ac, true);
+				
+				OpenBabel::OBConversion conv;
+				conv.SetOutFormat("can"); // canonical smiles
+				can_smiles = conv.WriteString(obmol);
+				
+				// remove the stupid ID that openbabel always attaches to the generated canonical smile
+				can_smiles = can_smiles.substr(0,can_smiles.find_first_of('\t'));
+			}
+		};
+	}
+}
 #endif // LIGANDSTRUCTUREBASE_H

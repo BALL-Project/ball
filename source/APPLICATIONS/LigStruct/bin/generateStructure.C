@@ -50,10 +50,17 @@ int main(int argc, char* argv[])
 	while (tmp)
 	{
 		LigBase::removeHydrogens( *tmp );
-
-		lig_assembler.assembleStructure( *tmp );
+		cout<<"Assembling: "<<LigBase::moleculeToSMILES(*tmp)<<endl;
+		try
+		{
+			lig_assembler.assembleStructure( *tmp );
 		
-		outfile << *tmp;
+			outfile << *tmp;
+		}
+		catch (BALL::Exception::StructureNotGenerated e)
+		{
+			cout<<e.getMessage()<<endl;
+		}
 				
 		delete tmp;
 		tmp = infile.read();

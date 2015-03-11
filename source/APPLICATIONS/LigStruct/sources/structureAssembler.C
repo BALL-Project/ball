@@ -21,6 +21,15 @@ StructureAssembler::~StructureAssembler()
 	
 }
 
+void StructureAssembler::insertAll(ACVec &linker, ACVec &rigids, AtomContainer& mol)
+{
+	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
+		mol.insert( **rig_frag );
+		
+	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
+		mol.insert( **lin_frag );	
+}
+
 ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 {
 	// create fragments from query molecule:
@@ -30,6 +39,11 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	_fragmenter.setMolecule(mol);
 	
 	_fragmenter.fragment(rigids, linker, *connections);
+	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
+		cout<<"rig-frag: "<<LigBase::moleculeToSMILES( **rig_frag )<<endl;
+		
+	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
+		cout<<"link-frag: "<<LigBase::moleculeToSMILES( **lin_frag )<<endl;	
 
 	// canonicalize, generate UCK-key and match the rigid fragments
 	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
@@ -39,10 +53,19 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	}
 	
 	// build linker fragments
-	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
+	try
 	{
-		// build linker, and insert rotors into 'connections'
-		_linker_builder.buildLinker(**lin_frag, *connections);
+		for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
+		{
+			// build linker, and insert rotors into 'connections'
+			_linker_builder.buildLinker(**lin_frag, *connections);
+		}
+	}
+	catch (const BALL::Exception::SiteTemplateNotFound& e)
+	{
+		insertAll(linker, rigids, mol);
+		throw BALL::Exception::StructureNotGenerated("structureAssembler.C", 52,
+																								 mol, e);
 	}
 	
 	// connect the ready-made fragments to a single molecule
@@ -58,14 +81,8 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	
 	// re-insert all fragments into the original molecule
 	//#TODO: perhaps it makes more sense to insert only the "master" root fragment
-	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
-	{
-		mol.insert( **rig_frag );
-	}
-	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
-	{
-		mol.insert( **lin_frag );
-	}
+	insertAll(linker, rigids, mol);
+	
 	return connections;
 }
 

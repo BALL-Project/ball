@@ -28,7 +28,7 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	
 	int num_atoms = molecule.countAtoms();
 
-	OBMol* temp = MolecularSimilarity::createOBMol( molecule, true);
+	OBMol* temp = MolecularSimilarity::createOBMol( molecule);
 	
 	// get canonical labels:
 	vector<unsigned int> sym;

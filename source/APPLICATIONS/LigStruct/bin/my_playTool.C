@@ -40,25 +40,28 @@
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
-using namespace OpenBabel;
+//using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
-
+static bool compareMolSize(AtomContainer*& ac1, AtomContainer*& ac2)
+{
+	return ac1->countAtoms() < ac2->countAtoms();
+}
 
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("queryFragments", " generate query fragments and connections", 0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
-//	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
 //	parpars.registerParameter("c", "location of conf file", INFILE, false);
 //	parpars.setSupportedFormats("c","conf");
 	
 	parpars.setSupportedFormats("i","sdf");
-//	parpars.setSupportedFormats("o","sdf");
-//	parpars.setOutputFormatSource("o","i");
+	parpars.setSupportedFormats("o","sdf");
+	parpars.setOutputFormatSource("o","i");
 
 	String manual = "...just playing...";
 	parpars.setToolManual(manual);
@@ -67,28 +70,54 @@ int main(int argc, char* argv[])
 	
 /// C O D E ##################################
  
-	Log << "Reading molecule..."<<endl;
+	Log << "Reading molecules..."<<endl;
 	
 	SDFile in_file(parpars.get("i"), ios::in);
-	SDFile outfile("/Users/pbrach/out.sdf", ios::out);
-	Molecule* mol1 = in_file.read();
-	Molecule* mol2 = in_file.read();
-		
-	Canonicalizer cani;
-	cani.canonicalize(*mol1);
-	cani.canonicalize(*mol2);
+	SDFile outfile(parpars.get("o"), ios::out);
 	
-	AtomBijection bj;
-	bj.assignTrivial( *mol1, *mol2);
+	map<String, AtomContainer*> unique_mols;
 	
-	pair<Matrix4x4, double> rmsd = RMSDMinimizer::computeTransformation(bj);
-	cout<<"RMSD: "<<rmsd.second<<endl;
+	// filter to unique molecules only:
+	AtomContainer* mol = in_file.read();
+	Canonicalizer canon;
+	while( mol )
+	{
+		if( !LigBase::containsUnknownElement( *mol ) && LigBase::containsHydrogen(*mol) )
+		{
+			
+			LigBase::removeHydrogens( *mol );
+
+			canon.canonicalize( *mol );
+			
+			UCK key_gen( *mol, true, 5 );
+			
+			unique_mols[ key_gen.getUCK() ] = mol;
+		}
+		mol = in_file.read();
+	}
+	in_file.close();
+	Log << "Sorting molecules..."<<endl;
 	
-	TransformationProcessor super(rmsd.first);
-	mol1->apply(super);
+	// sort according to molecule size:
+	vector<AtomContainer*> sorted_uniques;
+	sorted_uniques.reserve( unique_mols.size() );
 	
-	outfile<< *mol1;
-	outfile<< *mol2;
+	Log << "Writing molecules..."<<endl;
+	for(map<String, AtomContainer*>::iterator it = unique_mols.begin(); 
+			it != unique_mols.end(); ++it)
+	{
+		sorted_uniques.push_back( it->second );
+	}
+	sort(sorted_uniques.begin(), sorted_uniques.end(), compareMolSize);
+	
+	// write out the uniques:
+	for(vector<AtomContainer*>::iterator it = sorted_uniques.begin(); 
+			it != sorted_uniques.end(); ++it)
+	{
+		outfile << **it;
+	}
+	outfile.close();
+
 	Log << "......done!"<<endl;
 }
 

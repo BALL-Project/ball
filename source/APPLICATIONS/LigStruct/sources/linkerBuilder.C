@@ -116,15 +116,13 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_
 
 AtomContainer& LinkerBuilder::loadTemplate( String& key )
 {
-	if(_connection_templates.find(key) != _connection_templates.end())
+	if( _connection_templates.find( key ) != _connection_templates.end() )
 	{
-		return * _connection_templates[key];
+		return * _connection_templates[ key ];
 	}
 	else
 	{
-		cout<<"ERROR in linkerBuilder: could not find a connectionTemplate for: "
-				<< key<<endl;
-		exit(EXIT_FAILURE);
+		throw BALL::Exception::SiteTemplateNotFound("linkerBuilder.C", 125, key);
 	}
 }
 

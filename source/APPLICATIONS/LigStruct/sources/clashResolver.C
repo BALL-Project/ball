@@ -237,8 +237,8 @@ void ConnectionResolver::setMolecule(
 	_max_rotations = _all_rotors->size() * 2;
 	
 	createBetweenPairList(*_large_root, *_small_root, _clash_inter);
-	createInnerPairList(*_large_root, _clash_large);
-	createInnerPairList(*_small_root, _clash_small);
+	_clash_large.clear();
+	_clash_small.clear();
 }
 
 int ConnectionResolver::detect()
@@ -248,6 +248,14 @@ int ConnectionResolver::detect()
 
 pair<int, bool> ConnectionResolver::resolve()
 {
+	//0) only create the clash lists for the two molecules if we need to resolve
+	//   clashes
+	if(_clash_large.size() == 0)
+	{
+		createInnerPairList(*_large_root, _clash_large);
+		createInnerPairList(*_small_root, _clash_small);
+	}
+	
 	ConnectionResolver::num_resolve_calls++;
 	
 	_save_large->readCoordinatesFromMolecule( *_large_root );
@@ -255,8 +263,6 @@ pair<int, bool> ConnectionResolver::resolve()
 
 	const int given_large_cnt = detectPairList( _clash_large);
 	const int given_small_cnt = detectPairList( _clash_small);	
-//	const int given_large_cnt = detectInMolecule( *_large_root);
-//	const int given_small_cnt = detectInMolecule( *_small_root);
 	
 	bool changed_large = false;
 	
@@ -318,8 +324,6 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 																				ConnectList&   clist,
 																				const int&     given_clashes)
 {
-//	int best_cnt = detectBetweenMolecules(*_large_root, *_small_root) + detectInMolecule( frag ) - given_clashes;
-	
 	int best_cnt = -1;
 	if(&frag == _small_root)
 	{
@@ -347,6 +351,7 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 			{
 				roto.rotate( Angle(18.0, false) );
 				
+				// refresh current count:
 				if(&frag == _small_root)
 				{
 					current_count = detectPairList(_clash_inter) + detectPairList(_clash_small) - given_clashes;
@@ -356,9 +361,7 @@ int ConnectionResolver::resolveFragment(AtomContainer& frag,
 					current_count = detectPairList(_clash_inter) + detectPairList(_clash_large) - given_clashes;
 				}
 				
-//				current_count = detectBetweenMolecules(*_large_root, *_small_root)
-//											+ detectInMolecule( frag ) - given_clashes;
-				
+				// update best structure
 				if ( current_count < best_cnt )
 				{
 					best_cnt = current_count;

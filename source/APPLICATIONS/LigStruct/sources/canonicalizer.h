@@ -9,6 +9,13 @@
 
 /// C l a s s   C a n o n i c a l i z e r
 /// ############################################################################
+
+/**
+ * @brief The Canonicalizer class - take a AtomContainer that MUST NOT contain 
+ * any hydrogens and changes the order of atoms to a canonical one (e.g.: so 
+ * two different benzoic acid molecules would then have the exact same list of 
+ * atoms, even if the ordering was different before)
+ */
 class Canonicalizer
 {
 public:

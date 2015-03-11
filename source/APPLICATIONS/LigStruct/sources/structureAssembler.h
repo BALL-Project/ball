@@ -33,6 +33,8 @@ public:
 	
 private:
 	
+	void insertAll(ACVec& linker, ACVec& rigids, BALL::AtomContainer& mol);
+	
 	void connectClashFree(BALL::Atom &at1, BALL::Atom &at2, 
 												ConnectList& connections);
 	

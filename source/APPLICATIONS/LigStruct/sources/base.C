@@ -196,6 +196,29 @@ RAtom const* RFragment::_isRAtom( const std::list< RAtom >& ilist, BALL::Atom* a
 
 /// C l a s s   L i g B a s e
 /// ############################################################################
+bool LigBase::containsUnknownElement(AtomContainer &ac)
+{
+	for( AtomIterator it = ac.beginAtom(); +it; ++it)
+	{
+		if( it->getElement().getSymbol() == "?")
+			return true;
+	}
+	
+	return false;
+}
+
+bool LigBase::containsHydrogen(AtomContainer &ac)
+{
+	for(AtomIterator ati = ac.beginAtom(); +ati; ++ati)
+	{
+		if(ati->getElement().getSymbol() == "H")
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 String LigBase::printInlineMol(Composite *mol)
 {
 	String tmp = "";
@@ -248,6 +271,20 @@ String LigBase::printInlineStarMol(AtmVec& mol)
 			tmp += String((*ati)->getBond( *center )->getOrder());
 	}
 	return tmp;
+}
+
+String LigBase::moleculeToSMILES(AtomContainer &ac)
+{
+	OpenBabel::OBMol* obmol = MolecularSimilarity::createOBMol(ac, true);
+	
+	OpenBabel::OBConversion conv;
+	conv.SetOutFormat("can"); // canonical smiles
+	String can_smiles = conv.WriteString(obmol);
+	
+	// remove the stupid ID that openbabel always attaches to the generated canonical smile
+	can_smiles = can_smiles.substr(0,can_smiles.find_first_of('\t'));
+	
+	return can_smiles;
 }
 
 int LigBase::countBondsAndOrder(Atom &atm)
