@@ -181,7 +181,7 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 		// course be linker atoms. We need to handle these cases)
 		else
 		{
-			// Case2) rigid bond, from rigid atoms:
+			// Case2) rigid bond, formed by rigid atoms only:
 			if( isRigid_atm1 && isRigid_atm2)
 			{
 				if( !is_rigid[id1] )

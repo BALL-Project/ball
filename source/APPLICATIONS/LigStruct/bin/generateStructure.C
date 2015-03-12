@@ -50,6 +50,8 @@ int main(int argc, char* argv[])
 	while (tmp)
 	{
 		LigBase::removeHydrogens( *tmp );
+		
+		cout<<endl<<LigBase::moleculeToSMILES( *tmp )<<endl;
 		try
 		{
 			lig_assembler.assembleStructure( *tmp );
