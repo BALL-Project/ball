@@ -1,44 +1,18 @@
 
-
-#include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/string.h>
-
-#include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/bond.h>
-//#include <BALL/COMMON/hash.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <BALL/STRUCTURE/UCK.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/STRUCTURE/structureMapper.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
-//#include <BALL/MATHS/angle.h>
-//#include <BALL/MATHS/vector3.h>
-//#include <BALL/MATHS/matrix44.h>
-
-
-#include <vector>
-
-//#include <BALL/STRUCTURE/geometricProperties.h>
-//#include <BALL/MATHS/quaternion.h>
-#include <BALL/STRUCTURE/RMSDMinimizer.h>
-
-
-//#include <BALL/STRUCTURE/geometricTransformations.h>
-
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
-#include <BALL/FORMAT/lineBasedFile.h>
 
 #include <boost/unordered/unordered_set.hpp>
-#include <list>
 
 using namespace BALL;
 using namespace std;
-
 
 bool isOfElementClass(AtomContainer& mol, boost::unordered_set< Element::AtomicNumber >& elems)
 {
@@ -55,8 +29,8 @@ bool isOfElementClass(AtomContainer& mol, boost::unordered_set< Element::AtomicN
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Organic Filter", " keep only organic molecules", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "general sdfile", INFILE, true);
-	parpars.registerParameter("o", "single output SDF", OUTFILE, true);
+	parpars.registerParameter("i", "sdfile to be filtered", INFILE, true);
+	parpars.registerParameter("o", "organic molecules outputSDF", OUTFILE, true);
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
@@ -69,7 +43,8 @@ int main(int argc, char* argv[])
 	
 /// C O D E ##################################
 /// 
-	// 1.) Read input file ---------------------------------------------
+	// 1.) define the set of elements we want to keep if a molecule
+	//     consists of only these:
 	
 	boost::unordered_set< Element::AtomicNumber > organic_elements;
 	PTE_ pte;

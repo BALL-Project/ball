@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
 
 ### list all filenames of the directory this CMakeList resides in ###
 FILE(GLOB BIN_PATHES_LIST "*.C")
- 
+
 ### derive target names from file pathes and save in LIGSTRUCT_BINS:
 SET(LIGSTRUCT_BINS)
 
