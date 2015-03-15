@@ -17,16 +17,9 @@
 #include <BALL/KERNEL/PTE.h>
 
 #include <BALL/STRUCTURE/UCK.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/STRUCTURE/structureMapper.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/MATHS/angle.h>
-#include <BALL/MATHS/vector3.h>
-#include <BALL/MATHS/matrix44.h>
-
 
 #include <vector>
-#include <set>
+#include <BALL/COMMON/hash.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include "../sources/fragmenter.h"
@@ -75,52 +68,42 @@ int main(int argc, char* argv[])
 	SDFile in_file(parpars.get("i"), ios::in);
 	SDFile outfile(parpars.get("o"), ios::out);
 	
-	map<String, AtomContainer*> unique_mols;
+	HashSet<String> unique_ids;
 	
 	// filter to unique molecules only:
 	AtomContainer* mol = in_file.read();
-	Canonicalizer canon;
+	int cnt = 0;
 	while( mol )
 	{
-//		cout<<"pointer "<<mol<<" unknown elem? "<<LigBase::containsUnknownElement( *mol )
+		// some user info every 1000 molecules:
+		if( cnt % 1000 == 0)
+		{
+			cout << "\r" << flush;
+			cout << "     fragmented: "<< cnt<<" structures to "<<unique_ids.size()<<" uniques ";
+		}
+		cnt++;
 		if( !LigBase::containsUnknownElement( *mol ) )
 		{
-			if( LigBase::containsHydrogen(*mol) )
-			{
-				cout<<"WOW!"<<endl;
-			
-				LigBase::removeHydrogens( *mol );
-			}
-
-			canon.canonicalize( *mol );
-			
 			UCK key_gen( *mol, true, 5 );
 			
-			unique_mols[ key_gen.getUCK() ] = mol;
+			String key = key_gen.getUCK();
+			if( !unique_ids.has( key ))
+			{
+				unique_ids.insert( key_gen.getUCK());
+				
+				outfile << *mol;
+			}
 		}
+		else
+		{
+			cout<<"found illegal molecule: "<<endl;
+			cout<< LigBase::printInlineMol( mol)<<endl;
+			cout<< LigBase::moleculeToSMILES( *mol) <<endl;
+		}
+		
 		mol = in_file.read();
 	}
 	in_file.close();
-	Log << "Sorting molecules..."<<endl;
-	
-	// sort according to molecule size:
-	vector<AtomContainer*> sorted_uniques;
-	sorted_uniques.reserve( unique_mols.size() );
-	
-	Log << "Writing molecules..."<<endl;
-	for(map<String, AtomContainer*>::iterator it = unique_mols.begin(); 
-			it != unique_mols.end(); ++it)
-	{
-		sorted_uniques.push_back( it->second );
-	}
-	sort(sorted_uniques.begin(), sorted_uniques.end(), compareMolSize);
-	
-	// write out the uniques:
-	for(vector<AtomContainer*>::iterator it = sorted_uniques.begin(); 
-			it != sorted_uniques.end(); ++it)
-	{
-		outfile << **it;
-	}
 	outfile.close();
 
 	Log << "......done!"<<endl;

@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	
 	if (parpars.has("single"))
 	{
-		cout<<"Using 'single' option, this will create a big but also better site\ņ"
+		cout<<"Using 'single' option, this will create a big but also better site "
 					"database. Also the computation will take a bit longer.\n"<<endl;
 	}
 	// Read all AtomContainers.
