@@ -103,12 +103,13 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 {
 	typedef boost::disjoint_sets < int*, int*, boost::find_with_full_path_compression > DisjointSet;
 	int num_atoms = _molecule->countAtoms();
+	
 	rigid_fragments.clear();
 	linker_fragments.clear();
 	connections.clear();
-	
+
 	//0.) Catch trivial cases:
-	if(num_atoms == 1)
+	if( num_atoms == 1 )
 	{
 		AtomContainer* dummy = new AtomContainer();
 		
@@ -116,6 +117,21 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 		
 		linker_fragments.push_back(dummy);
 		
+		return;
+	}
+	else if( num_atoms == 2 )
+	{
+		AtomContainer* dummy = new AtomContainer();
+
+		if( _molecule->beginAtom()->getBond( *(++_molecule->beginAtom()) )->getOrder() == 1 )
+			linker_fragments.push_back( dummy );
+		
+		else
+			rigid_fragments.push_back( dummy );
+
+		dummy->insert( *_molecule->beginAtom() );
+		dummy->insert( *_molecule->beginAtom() );
+
 		return;
 	}
 	
