@@ -30,7 +30,6 @@ StarAligner::~StarAligner()
 
 void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
 {
-	cout<<"STAR: "<<&reference<<" query: "<<&query<<endl;
 	if(_delete_site)
 		delete _site;
 	
@@ -89,7 +88,6 @@ void StarAligner::_calculateOptimalTransformation()
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
-		cout<<"case 2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		
@@ -101,10 +99,8 @@ void StarAligner::_calculateOptimalTransformation()
 		short bo = site[1]->getBond( *site[0] )->getOrder();
 		
 		// Find a compatible atom in 'templ'
-		cout<<" searching compatible:"<<elem.getSymbol()<<bo<<endl;
 		for(++ati; +ati; ++ati) 
 		{
-			cout<<"to: "<<ati->getElement().getSymbol()<<_query->beginAtom()->getBond(*ati)->getOrder()<<endl;
 			if( ati->getElement() == elem && _query->beginAtom()->getBond(*ati)->getOrder() == bo) // at least 1 will be compatible
 			{
 				tem2_atm = &*ati;
@@ -113,13 +109,11 @@ void StarAligner::_calculateOptimalTransformation()
 
 		if ( (bo == 2 || bo == 5) && site[1]->countBonds() > 1)
 		{
-			cout<<"case double Correction"<<endl;
 			_matrix = doubleBondCorrection( * _query->beginAtom(), * tem2_atm,
 																			*site[0], * site[1]);
 		}
 		else
 		{
-			cout<<"two point match"<<endl;
 			_matrix = twoPointMatch(tem1, tem2_atm->getPosition(), sit1, sit2);
 		}
 	}
@@ -508,7 +502,6 @@ Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2,
 Matrix4x4 StarAligner::doubleBondCorrection(Atom &tem1, Atom &tem2,
 																						Atom &sit1, Atom &sit2)
 {
-	cout<<"TEM: "<<&tem2<<endl;
 	const Vector3& s1 = sit1.getPosition();
 	const Vector3& s2 = sit2.getPosition();
 	Atom* sit3 = 0;
@@ -532,29 +525,18 @@ Matrix4x4 StarAligner::doubleBondCorrection(Atom &tem1, Atom &tem2,
 		if ( &tem1 != tem3 )
 			break;
 	}
-	cout<<"just before mapper"<<endl;
 	// if the double bond has connected atoms on each end, match so that these
 	// atoms are planar with the bond
 	if ( tem3 != 0 && sit3 != 0)
 	{
 		Vector3& s3 = sit3->getPosition();
 		Vector3& t3 = tem3->getPosition();
-		cout<<"correction"<<endl;
-		cout<<t1<<endl;
-//		cout<<t2<<endl;
-		cout<<t3<<endl;
 
-		cout<<endl;
-
-		cout<<s1<<endl;
-		cout<<s2<<endl;
-		cout<<s3<<endl;
 		return StructureMapper::matchPoints(t1, t2, t3, s1, s2, s3);
 	}
 	// otherwise a simple two point match is sufficient
 	else
 	{
-		cout<<"simple"<<endl;
 		return StructureMapper::matchPoints(t1, t2, Vector3(), s1, s2, Vector3());
 	}
 }

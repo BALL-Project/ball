@@ -35,8 +35,8 @@ public:
 														ConnectList& connections);
 	
 	void fragmentToSites(boost::unordered_map< BALL::String, std::pair<float, int> >& bondLenths,
-											 std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections, 
-											 bool restrict_to_bridges=false);
+											 std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections,
+											 bool restrict_to_rotables=false);
 	
 	
 	

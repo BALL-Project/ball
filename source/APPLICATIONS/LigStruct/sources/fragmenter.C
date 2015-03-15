@@ -292,23 +292,23 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 void MoleculeFragmenter::fragmentToSites(
 		boost::unordered_map<String, pair<float, int> > &bondLenths, 
 		vector<pair<String, AtomContainer *> > &connections, 
-		bool restrict_to_bridges)
+		bool restrict_to_rotables)
 {
 //	bondLenths.clear();
 	connections.clear();
 	
 	AtomIterator ati;
 	AtomBondIterator bit;
-	if( restrict_to_bridges )
+	if( restrict_to_rotables )
 	{
 		BALL_FOREACH_BOND(*_molecule, ati, bit)
-			if( isBridgingBond( *bit) )
+			if( isRotableBond(*bit) )
 				addBondToConnectionsLib(*bit, bondLenths, connections);
 	}
 	else
 	{
 		BALL_FOREACH_BOND(*_molecule, ati, bit)
-			if( isRotableBond(*bit) )
+			if( bit->getOrder() == 1 )
 				addBondToConnectionsLib(*bit, bondLenths, connections);
 	}
 	
