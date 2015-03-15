@@ -30,6 +30,7 @@ StarAligner::~StarAligner()
 
 void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
 {
+	cout<<"STAR: "<<&reference<<" query: "<<&query<<endl;
 	if(_delete_site)
 		delete _site;
 	
@@ -65,7 +66,7 @@ float StarAligner::bestRMSD()
 {
 	if( !_got_transformation )
 		_calculateOptimalTransformation();
-	
+
 	_transformer.setTransformation(_matrix);
 	
 	AtomContainer temp( *_query );
@@ -88,29 +89,39 @@ void StarAligner::_calculateOptimalTransformation()
 	/// Case 2) 'site' contains 1 neighbor. Find best match for it in 'templ' and 2pointMatch.
 	else if ( site.size() == 2)
 	{
+		cout<<"case 2"<<endl;
 		Vector3& sit1 = site[0]->getPosition();
 		Vector3& sit2 = site[1]->getPosition();
 		
 		AtomIterator ati = _query->beginAtom();
 		Vector3& tem1 = ati->getPosition();
-		Atom* tem2_atm;
+		Atom* tem2_atm = 0;
 		
 		const Element& elem = site[1]->getElement();
 		short bo = site[1]->getBond( *site[0] )->getOrder();
 		
 		// Find a compatible atom in 'templ'
+		cout<<" searching compatible:"<<elem.getSymbol()<<bo<<endl;
 		for(++ati; +ati; ++ati) 
 		{
-			if( ati->getElement() == elem && ati->beginBond()->getOrder() == bo) // at least 1 will be compatible
+			cout<<"to: "<<ati->getElement().getSymbol()<<_query->beginAtom()->getBond(*ati)->getOrder()<<endl;
+			if( ati->getElement() == elem && _query->beginAtom()->getBond(*ati)->getOrder() == bo) // at least 1 will be compatible
 			{
 				tem2_atm = &*ati;
 			}
 		}
+
 		if ( (bo == 2 || bo == 5) && site[1]->countBonds() > 1)
+		{
+			cout<<"case double Correction"<<endl;
 			_matrix = doubleBondCorrection( * _query->beginAtom(), * tem2_atm,
 																			*site[0], * site[1]);
+		}
 		else
+		{
+			cout<<"two point match"<<endl;
 			_matrix = twoPointMatch(tem1, tem2_atm->getPosition(), sit1, sit2);
+		}
 	}
 	/// Case 3) 'site' has at least 2 neighbors
 	else
@@ -168,7 +179,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 		
 		// get next non unique atom from site:
 		Atom* site3_atm = 0;
-		for(int i = 1; i < site.size(); ++i)
+		for(unsigned int i = 1; i < site.size(); ++i)
 		{
 			if( site[i] != unique_atms[0] )
 			{
@@ -251,7 +262,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 		{
 			tem_2_atm = &*ati;
 			
-			bo_equal = site2_atm->getBond( *site[0] )->getOrder() == tem_2_atm->beginBond()->getOrder();
+			bo_equal = site2_atm->getBond( *site[0] )->getOrder() ==  _query->beginAtom()->getBond(*tem_2_atm)->getOrder();
 			elem_equal = site2_atm->getElement() == tem_2_atm->getElement();
 			
 			if( elem_equal && bo_equal)
@@ -264,7 +275,7 @@ void StarAligner::_alignCase3(AtmVec& site)
 				{
 					tem_3_atm = &*ato;
 					
-					bo_equal = site3_atm->getBond( *site[0] )->getOrder() == tem_3_atm->beginBond()->getOrder();
+					bo_equal = site3_atm->getBond( *site[0] )->getOrder() == _query->beginAtom()->getBond(*tem_3_atm)->getOrder();
 					elem_equal = site2_atm->getElement() == tem_2_atm->getElement();
 					
 					if( (tem_2_atm != tem_3_atm) && ( elem_equal && bo_equal) )
@@ -413,7 +424,7 @@ void StarAligner::sqdistPerPermutation(AtmVec& vec1,
 		const Element& elem_1 = vec1[pos1]->getElement();
 		short  bo_1 = vec1[pos1]->getBond( * vec1[0] )->getOrder();
 		
-		for(int i = pos2; i < vec2.size(); i++)
+		for(unsigned int i = pos2; i < vec2.size(); i++)
 		{
 			// test if element and bondtype fit for this assignment
 			bo_compatible = bo_1 == vec2[i]->getBond( * vec2[0] )->getOrder();
@@ -497,6 +508,7 @@ Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2,
 Matrix4x4 StarAligner::doubleBondCorrection(Atom &tem1, Atom &tem2,
 																						Atom &sit1, Atom &sit2)
 {
+	cout<<"TEM: "<<&tem2<<endl;
 	const Vector3& s1 = sit1.getPosition();
 	const Vector3& s2 = sit2.getPosition();
 	Atom* sit3 = 0;
@@ -520,18 +532,31 @@ Matrix4x4 StarAligner::doubleBondCorrection(Atom &tem1, Atom &tem2,
 		if ( &tem1 != tem3 )
 			break;
 	}
-	
+	cout<<"just before mapper"<<endl;
 	// if the double bond has connected atoms on each end, match so that these
 	// atoms are planar with the bond
 	if ( tem3 != 0 && sit3 != 0)
 	{
 		Vector3& s3 = sit3->getPosition();
 		Vector3& t3 = tem3->getPosition();
+		cout<<"correction"<<endl;
+		cout<<t1<<endl;
+//		cout<<t2<<endl;
+		cout<<t3<<endl;
+
+		cout<<endl;
+
+		cout<<s1<<endl;
+		cout<<s2<<endl;
+		cout<<s3<<endl;
 		return StructureMapper::matchPoints(t1, t2, t3, s1, s2, s3);
 	}
 	// otherwise a simple two point match is sufficient
 	else
+	{
+		cout<<"simple"<<endl;
 		return StructureMapper::matchPoints(t1, t2, Vector3(), s1, s2, Vector3());
+	}
 }
 
 
@@ -560,7 +585,7 @@ void StarAligner::matchPermutaions(Atom& center,
 			
 			// insert into cleared result vector
 			result.clear();
-			for(int k = i; k < atm_vec.size(); ++k)
+			for(unsigned int k = i; k < atm_vec.size(); ++k)
 				result.push_back( atm_vec[k] );
 		}
 		return;
@@ -574,7 +599,7 @@ void StarAligner::matchPermutaions(Atom& center,
 	else
 	{
 		float sq_dist_update;// the square distance for the current atom pair
-		for(int j = i; j < atm_vec.size(); j++)
+		for(unsigned int j = i; j < atm_vec.size(); j++)
 		{
 			// test if element and bondtype fit for this assignment
 			// (this is rather for correctness than for speed)

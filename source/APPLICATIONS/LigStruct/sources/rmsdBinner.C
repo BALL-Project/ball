@@ -52,6 +52,18 @@ int RMSDBinner::size()
 	return _map_of_bins.size();
 }
 
+float RMSDBinner::compareDistances(AtomContainer &mol1, AtomContainer &mol2)
+{
+	Atom& atm_A1 = *mol1.beginAtom();
+	Atom& atm_A2 = *++mol1.beginAtom();
+
+	Atom& atm_B1 = *mol2.beginAtom();
+	Atom& atm_B2 = *++mol2.beginAtom();
+
+	float tmp = std::abs(atm_A1.getDistance( atm_A2) - atm_B1.getDistance( atm_B2) );
+	return std::sqrt((tmp*tmp/2));
+}
+
 
 void RMSDBinner::insertMoleculeToLib(const String &key, AtomContainer &molecule)
 {
@@ -74,7 +86,7 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 	if(_variant_limit > 0)
 	{
 		// cut down if at least 100 entries exist. When you do, then filter with the actual limit
-		int limit = ( (_variant_limit*10) > 100) ? (_variant_limit*10) : 100;
+		unsigned int limit = ( (_variant_limit*10) > 100) ? (_variant_limit*10) : 100;
 		
 		if ( bins.size() > limit )
 		{ 
@@ -83,19 +95,18 @@ void RMSDBinner::insertMoleculeIntoBins(vector<pair<AtomContainer *, int> > &bin
 	}
 	
 	vector<pair<AtomContainer *, int> >::iterator bit;
-	
 	for( bit = bins.begin(); bit != bins.end(); ++bit)
 	{
 		// not different enough: delete this instance
 		if( _getRMSD(molecule, *bit->first) <= _threshold )
 		{
 			delete &molecule;
-			
+
 			bit->second += 1;
 			return;
 		}
 	}
-	// must be a new shape: add to the list
+	// must be a new conformation, add it to the list
 		bins.push_back( make_pair( &molecule, 1) );
 }
 
@@ -118,9 +129,7 @@ float RMSDBinner::_getRMSD(AtomContainer &mol1, AtomContainer &mol2 )
 	{
 		if(mol1.countAtoms() < 3)
 		{
-			_star_aligner.setMolecules(mol1, mol2);
-			
-			return _star_aligner.bestRMSD();
+			return compareDistances( mol1, mol2);
 		}
 		else
 		{
@@ -157,7 +166,7 @@ void RMSDBinner::filter2TopX(vector<pair<AtomContainer *, int> > &mol_list, cons
 	}
 	
 	// delete remaining items:
-	for(int i = num_top; i < mol_list.size(); i++)
+	for(unsigned int i = num_top; i < mol_list.size(); i++)
 	{
 		delete mol_list[i].first;
 	}

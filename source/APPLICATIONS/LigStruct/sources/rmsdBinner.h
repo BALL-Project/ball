@@ -44,7 +44,8 @@ public:
 	int size();
 	
 private:
-	
+	float compareDistances( BALL::AtomContainer& mol1, BALL::AtomContainer& mol2);
+
 	float _getRMSD(BALL::AtomContainer &mol1, BALL::AtomContainer &mol2 );
 	
 	void insertMoleculeIntoBins(std::vector< std::pair<BALL::AtomContainer*, int> >& bins, BALL::AtomContainer& molecule);

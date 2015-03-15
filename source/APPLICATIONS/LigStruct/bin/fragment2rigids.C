@@ -65,7 +65,6 @@ int main(int argc, char* argv[])
 			cout << "\r" << flush;
 			cout << "     fragmented: "<< molecule_cnt<<" structures"<<", unique fragments: "<<binner.size();
 		}
-		
 		// normalize the structures:
 		LigBase::removeHydrogens( *tmp );
 		tmp->apply(arproc);
@@ -73,7 +72,7 @@ int main(int argc, char* argv[])
 		// get all rigid fragments from molecule 'tmp'
 		molfrag.setMolecule( *tmp );
 		molfrag.fragment(fragments, dummy, dummy2);
-		
+
 		total_fragment_cnt += fragments.size();
 		
 		// for each fragment in the molecule:
@@ -82,7 +81,7 @@ int main(int argc, char* argv[])
 		{
 			// canonicalise the atomlist & set UCK key
 			canoni.canonicalize( **fit );
-			
+
 			String key = Matcher::getUCK( **fit);
 
 			binner.addMolecule(key, **fit);
@@ -92,7 +91,6 @@ int main(int argc, char* argv[])
 		delete tmp;
 		molecule_cnt++;
 		tmp = in_file.read();
-	
 	}
 	cout << "\r" << flush;
 	cout << "                                                                " << endl;
