@@ -48,7 +48,7 @@ bool validCovalentBond(Atom& atm, Atom& btm)
 	float ideal_dist = atm.getElement().getCovalentRadius() + btm.getElement().getCovalentRadius();
 	
 	float actual_dist = atm.getDistance( btm );
-	float diff = abs(ideal_dist - actual_dist);
+	float diff = std::abs(ideal_dist - actual_dist);
 	
 	if ( diff > (ideal_dist * 0.3) )
 	{
