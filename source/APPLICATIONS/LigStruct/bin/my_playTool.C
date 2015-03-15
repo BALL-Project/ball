@@ -82,10 +82,15 @@ int main(int argc, char* argv[])
 	Canonicalizer canon;
 	while( mol )
 	{
-		if( !LigBase::containsUnknownElement( *mol ) && LigBase::containsHydrogen(*mol) )
+//		cout<<"pointer "<<mol<<" unknown elem? "<<LigBase::containsUnknownElement( *mol )
+		if( !LigBase::containsUnknownElement( *mol ) )
 		{
+			if( LigBase::containsHydrogen(*mol) )
+			{
+				cout<<"WOW!"<<endl;
 			
-			LigBase::removeHydrogens( *mol );
+				LigBase::removeHydrogens( *mol );
+			}
 
 			canon.canonicalize( *mol );
 			

@@ -33,7 +33,7 @@ int main(int argc, char* argv[])
 	if ( parpars.has("c") )
 		lib_loader.libraryPathesFromConfig( parpars.get("c") );
 	else
-		lib_loader.libraryPathesFromConfig( "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf");
+		lib_loader.libraryPathesFromConfig( "/Users/pbrach/files/projects/Master-2014_2015/0_data/4_used_libs_copies/libraries.conf");
 	lib_loader.readAll();
 
 	SDFile infile( parpars.get("i"), std::ios::in);

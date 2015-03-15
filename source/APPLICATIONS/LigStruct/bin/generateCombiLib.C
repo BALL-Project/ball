@@ -8,7 +8,7 @@
 
 #include <BALL/FORMAT/commandlineParser.h>
 
-#define CONF_PATH "/Users/pbrach/files/projects/Master-2014_2015/0_data/used_libs_copies/libraries.conf"
+#define CONF_PATH "/Users/pbrach/files/projects/Master-2014_2015/0_data/4_used_libs_copies/libraries.conf"
 
 using namespace BALL;
 using namespace std;
