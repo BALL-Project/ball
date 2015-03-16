@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 	{
 		LigBase::removeHydrogens( *tmp );
 		
-		cout<<endl<<LigBase::moleculeToSMILES( *tmp )<<endl;
+//		cout<<endl<<LigBase::moleculeToSMILES( *tmp )<<endl;
 		try
 		{
 			lig_assembler.assembleStructure( *tmp );

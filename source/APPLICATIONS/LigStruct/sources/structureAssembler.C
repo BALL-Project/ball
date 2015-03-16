@@ -40,14 +40,14 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	
 	_fragmenter.fragment(rigids, linker, *connections);
 
-	//#DEBUG - start
-	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
-		cout<<"rigid: "<<LigBase::moleculeToSMILES( **rig_frag )<<endl;
+//	//#DEBUG - start
+//	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
+//		cout<<"rigid: "<<LigBase::moleculeToSMILES( **rig_frag )<<endl;
 		
-	cout<<" - "<<endl;
-	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
-		cout<<"flexi:"<<LigBase::moleculeToSMILES( **lin_frag )<<endl;
-	//#DEBUG - stop
+//	cout<<" - "<<endl;
+//	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
+//		cout<<"flexi:"<<LigBase::moleculeToSMILES( **lin_frag )<<endl;
+//	//#DEBUG - stop
 	
 	try
 	{
