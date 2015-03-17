@@ -27,7 +27,11 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	using namespace OpenBabel;
 	
 	int num_atoms = molecule.countAtoms();
-
+	
+	// aromatize:
+	AromaticityProcessor aroma;
+	molecule.apply(aroma);
+	
 	OBMol* temp = MolecularSimilarity::createOBMol( molecule);
 	
 	// get canonical labels:
@@ -52,10 +56,6 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	// swap the temp with the original and delete the temp
 	molecule.swap(*new_frag);
 	delete new_frag;
-	
-	// aromatize:
-	AromaticityProcessor aroma;
-	molecule.apply(aroma);
 }
 
 
