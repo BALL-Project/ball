@@ -41,7 +41,7 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	OBGraphSym grsym(temp);
 	grsym.GetSymmetry(sym);
 	
-	CanonicalLabels(temp, sym, clabels);
+	CanonicalLabels(temp, sym, clabels, OBBitVec(), 30, false);
 	
 	// resort atom list by inserting into a new empty molecule
 	AtomContainer* new_frag = new AtomContainer;
@@ -71,7 +71,7 @@ void Matcher::matchFragment(AtomContainer& fragment)
 	// for all fragments, match these against the lib:
 	UCK keyGen( fragment, true, 5 );
 	TemplateCoord* templat = _coord_lib[ keyGen.getUCK() ];
-		
+	
 	if(templat && (templat->size() == fragment.countAtoms()) )
 	{
 		templat->applyCoordinates2Molecule( fragment );

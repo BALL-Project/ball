@@ -40,7 +40,7 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	
 	_fragmenter.fragment(rigids, linker, *connections);
 
-//	//#DEBUG - start
+	//#DEBUG - start
 //	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
 //		cout<<"rigid: "<<LigBase::moleculeToSMILES( **rig_frag )<<endl;
 		

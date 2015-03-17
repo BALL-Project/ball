@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
 	
 	// For each molecule:
 	Log<<" * fragmenting..."<<endl;
+	
 	while ( tmp )
 	{
 		// some user info every 1000 molecules:
@@ -81,7 +82,7 @@ int main(int argc, char* argv[])
 		{
 			// canonicalise the atomlist & set UCK key
 			canoni.canonicalize( **fit );
-
+			
 			String key = Matcher::getUCK( **fit);
 
 			binner.addMolecule(key, **fit);
@@ -100,7 +101,6 @@ int main(int argc, char* argv[])
 			<< total_fragment_cnt <<" fragments and "<< binner.size()
 			<< " unique fragments"<<endl<<endl;
 
-	
 	// write to out file:
 	LineBasedFile* outfile = 0;
 	SDFile* out_sdf = 0;

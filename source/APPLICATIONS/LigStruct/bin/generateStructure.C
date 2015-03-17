@@ -60,6 +60,8 @@ int main(int argc, char* argv[])
 		}
 		catch (BALL::Exception::StructureNotGenerated e)
 		{
+			cout<<"############## NOT Converted ###############"<<endl;
+			cout<<"Molecule name: "<< tmp->getName() <<endl;
 			cout<<e.getMessage()<<endl;
 		}
 				
