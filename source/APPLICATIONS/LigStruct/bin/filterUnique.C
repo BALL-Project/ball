@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 		if( cnt % 1000 == 0)
 		{
 			cout << "\r" << flush;
-			cout << "     fragmented: "<< cnt<<" structures to "<<unique_ids.size()<<" uniques ";
+			cout << "     filtered: "<< cnt<<" structures to "<<unique_ids.size()<<" uniques ";
 		}
 		cnt++;
 		
