@@ -60,6 +60,7 @@ int main(int argc, char* argv[])
 			UCK key_gen( *mol, true, 5 ); //generate canonical key
 			
 			String key = key_gen.getUCK(); //check if the key is new
+			cout<<"Key is: "<<key<<endl;
 			if( !unique_ids.has( key ))
 			{
 				unique_ids.insert( key_gen.getUCK());
