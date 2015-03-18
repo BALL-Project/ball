@@ -124,7 +124,7 @@ void CommandlineParser::registerParameter
 
 void CommandlineParser::checkAndRegisterFlag(String name, String description,
                                              bool default_gui_value,
-																						 bool perform_check, bool hidden)
+											 bool perform_check, bool hidden)
 {
 	checkParameterName(name, perform_check);
 
@@ -241,18 +241,6 @@ void CommandlineParser::setSupportedFormats(String par_name, String supported_fo
 		it->second.supported_formats.push_back(formats[i].trim());
 	}
 }
-
-
-void CommandlineParser::setOutputFormatSource(String output_parname, String input_parname)
-{
-	map<String, ParameterDescription>::iterator it = registered_parameters_.find(output_parname);
-	if (it == registered_parameters_.end())
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setOutputFormatSource error","You need to register a parameter before you can set its format-source!");
-	}
-	it->second.output_format_source = input_parname;
-}
-
 
 void CommandlineParser::printToolInfo()
 {

@@ -26,8 +26,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o1","mol2,sdf,drf");
 	parpars.setSupportedFormats("o2","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o1","i");
-	parpars.setOutputFormatSource("o2","i");
 
 	parpars.parse(argc, argv);
 

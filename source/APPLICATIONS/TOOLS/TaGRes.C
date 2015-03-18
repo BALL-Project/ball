@@ -58,7 +58,6 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("mod","mod");
 	par.setSupportedFormats("o","mol2,sdf,drf");
 	par.setSupportedFormats("write_ini","ini");
-	par.setOutputFormatSource("o","i");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	par.registerAdvancedParameters(default_options);

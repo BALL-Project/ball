@@ -22,7 +22,6 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	par.setSupportedFormats("chr","mol2,drf");
 	par.setSupportedFormats("o","mol2,drf");
-	par.setOutputFormatSource("o","i");
 	par.parse(argc, argv);
 
 	GenericMolFile* input = MolFileFactory::open(par.get("i"));

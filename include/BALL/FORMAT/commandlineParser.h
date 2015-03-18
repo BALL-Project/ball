@@ -74,17 +74,6 @@ namespace BALL
 			/** Register the allowed values for a string-parameter. */
 			void setParameterRestrictions(String par_name, list<String>& allowed_values);
 
-			/** In case of output-files, this functions allows to specify the name 
-			    of an input-parameter, whose format should be used for the given 
-			    output-parameter. \n
-					
-					Note, that this function will only have an effect on the creation of 
-					config-files for workflow-systems (Galaxy, Knime, etc.) and not for 
-					the command-line interface, where the user will directly specify 
-					output-filenames. 
-			*/
-			void setOutputFormatSource(String output_parname, String input_parname);
-
 			/** Register the supported formats for input-/output-files.
 			  
 					@param supported_formats supported file-formats separated by commas 

@@ -45,7 +45,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("t","mol2,sdf,drf");
 	parpars.setSupportedFormats("at","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","t");
 	parpars.parse(argc, argv);
 
 	GenericMolFile* target = MolFileFactory::open(parpars.get("t"));

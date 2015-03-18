@@ -70,26 +70,22 @@ void ParamFile::writeSection(String section_name, String section_description, St
 	}
 
 	xmlOut_->writeStartElement("tool");
-	xmlOut_->writeAttribute("status", "internal");
-	xmlOut_->writeStartElement("name");
-	xmlOut_->writeCharacters(section_name.c_str());
-	xmlOut_->writeEndElement();
-	xmlOut_->writeStartElement("version");
-	xmlOut_->writeCharacters(version.c_str());
-	xmlOut_->writeEndElement();
+	xmlOut_->writeAttribute("version", version.c_str());
+	xmlOut_->writeAttribute("name", section_name.c_str());
+	xmlOut_->writeAttribute("category", category.c_str());
+	// left commented out because the attribute is optional anyway
+	//xmlOut_->writeAttribute("docurl", "");
+
 	xmlOut_->writeStartElement("description");
 	xmlOut_->writeCharacters(section_description.c_str());
 	xmlOut_->writeEndElement();
+
 	xmlOut_->writeStartElement("manual");
 	xmlOut_->writeCDATA(section_helptext.c_str());
 	xmlOut_->writeEndElement();
 
-	xmlOut_->writeStartElement("docurl");
-	xmlOut_->writeEndElement();
-	xmlOut_->writeStartElement("category");
-	xmlOut_->writeCharacters(category.c_str());
-	xmlOut_->writeEndElement();
-	xmlOut_->writeStartElement("type");
+	xmlOut_->writeStartElement("executableName");
+	xmlOut_->writeCharacters(section_name.c_str());
 	xmlOut_->writeEndElement();
 
 	xmlOut_->writeStartElement("PARAMETERS");
@@ -133,13 +129,11 @@ void ParamFile::writeSection(String section_name, String section_description, St
 		String tag = "";
 		if(d_it->second.type==INFILE)
 		{
-			tag = "input file";
-			type = "string";
+			type = "input-file";
 		}
 		else if(d_it->second.type==OUTFILE)
 		{
-			tag = "output file";
-			type = "string";
+			type = "output-file";
 		}
 		else if(d_it->second.type==STRING)
 		{
@@ -153,19 +147,17 @@ void ParamFile::writeSection(String section_name, String section_description, St
 		{
 			type = "float";
 		}
-		if(d_it->second.type==INFILELIST)
+		else if(d_it->second.type==INFILELIST)
 		{
-			tag = "input file";
-			type = "string";
+			type = "input-file";
 			is_list = true;
 		}
-		if(d_it->second.type==OUTFILELIST)
+		else if(d_it->second.type==OUTFILELIST)
 		{
-			tag = "output file";
-			type = "string";
+			type = "output-file";
 			is_list = true;
 		}
-		if(d_it->second.type==STRINGLIST)
+		else if(d_it->second.type==STRINGLIST)
 		{
 			type = "string";
 			is_list = true;
@@ -191,39 +183,42 @@ void ParamFile::writeSection(String section_name, String section_description, St
 			tag = "galaxy_opt_outid";
 		}
 
+		if(is_list)
+		{
+			xmlOut_->writeStartElement("ITEMLIST");
+		}
+		else
+		{
+			xmlOut_->writeStartElement("ITEM");
+		}
 
-		if (d_it->second.mandatory)
+		xmlOut_->writeAttribute("name", d_it->first.c_str());
+		xmlOut_->writeAttribute("type", type.c_str());
+
+		if (d_it->second.hidden)
 		{
 			if (tag != "")
 			{
-				tag += ", ";
+				tag += ", hidden";
 			}
-			tag += "mandatory";
+			else
+			{
+				tag += "hidden";
+			}
+		}
+
+		xmlOut_->writeAttribute("description", d_it->second.description.c_str());
+
+		if (d_it->second.mandatory)
+		{
+			xmlOut_->writeAttribute("required", "true");
 		}
 
 		if (d_it->second.advanced)
 		{
-			if (tag != "")
-			{
-				tag += ", ";
-			}
-			tag += "advanced";
+			xmlOut_->writeAttribute("advanced", "true");
 		}
 
-		if(!is_list)
-		{
-			xmlOut_->writeStartElement("ITEM");
-		}
-		else
-		{
-			xmlOut_->writeStartElement("ITEMLIST");
-		}
-
-		xmlOut_->writeAttribute("name",d_it->first.c_str());
-		xmlOut_->writeAttribute("type",type.c_str());
-		if (d_it->second.hidden)
-			xmlOut_->writeAttribute("hidden", "true");
-		xmlOut_->writeAttribute("description",d_it->second.description.c_str());
 		if(tag!="")
 		{
 			xmlOut_->writeAttribute("tags",tag.c_str());
@@ -260,27 +255,28 @@ void ParamFile::writeSection(String section_name, String section_description, St
 			xmlOut_->writeAttribute("supported_formats", formats.c_str());
 		}
 
-		if (d_it->second.output_format_source != "")
+		// no value has been set for this parameter
+		if(value_it == values.end())
 		{
-			xmlOut_->writeAttribute("output_format_source", d_it->second.output_format_source.c_str());
-		}
-
-		if(value_it==values.end()) // no value has been set for this parameter
-		{
-			xmlOut_->writeAttribute("value","");
+			// write an empty default value only if
+			// we are not handling a list (default value for a list is not supported)
+			if (!is_list)
+			{
+				xmlOut_->writeAttribute("value","");
+			}
 		}
 		else
 		{
 			if(!is_list)
 			{
-				xmlOut_->writeAttribute("value",value_it->second.front().c_str());
+				xmlOut_->writeAttribute("value", value_it->second.front().c_str());
 			}
 			else
 			{
 				for(list<String>::const_iterator l_it=value_it->second.begin(); l_it!=value_it->second.end(); l_it++)
 				{
 					xmlOut_->writeStartElement("LISTITEM");
-					xmlOut_->writeAttribute("value",l_it->c_str());
+					xmlOut_->writeAttribute("value", l_it->c_str());
 					xmlOut_->writeEndElement();
 				}
 			}
@@ -360,7 +356,7 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 			}
 
 			QXmlStreamAttributes attrs = xmlIn_->attributes();
-			String category = "";
+
 			if (tagname=="NODE")
 			{
 				inside_par_node++;
@@ -372,16 +368,20 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 
 			if (inside_par_node && (tagname=="ITEM" || tagname=="ITEMLIST") )
 			{
+				// ITEM and ITEMLIST elements have the "tags" attribute; extract the tags
+				std::set<String> tags = getTags(attrs);
+
 				pd.name = attrs.value("name").toString().toStdString();
 				pd.description = attrs.value("description").toString().toStdString();
-				pd.category = section;
-				pd.hidden = false;
-				if (attrs.hasAttribute("hidden"))
+				pd.category = "Bioinformatics";
+
+				if (attrs.hasAttribute("category"))
 				{
-					pd.hidden = (attrs.value("hidden").toString() == "true");
+					pd.category = attrs.value("category").toString().toStdString();
 				}
+
 				String type = attrs.value("type").toString().toStdString();
-				bool is_list = 0;
+				bool is_list = false;
 				if (tagname=="ITEM")
 				{
 					if(type=="int")
@@ -394,90 +394,76 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					}
 					if (type=="string")
 					{
-						if (attrs.hasAttribute("tags"))
+						pd.type=STRING;
+						if (tags.find("galaxy_opt_outdir") != tags.end())
 						{
-							String tags = attrs.value("tags").toString().toStdString();
-							if (tags.hasSubstring("input file"))
-							{
-								pd.type=INFILE;
-							}
-							else if (tags.hasSubstring("output file"))
-							{
-								pd.type=OUTFILE;
-							}
-							else if (tags.hasSubstring("galaxy_opt_outdir"))
-							{
-								pd.type=GALAXY_OPT_OUTDIR;
-							}
-							else if (tags.hasSubstring("galaxy_opt_outid"))
-							{
-								pd.type=GALAXY_OPT_OUTID;
-							}
-							else
-							{
-								pd.type=STRING;
-							}
+							pd.type=GALAXY_OPT_OUTDIR;
 						}
-						else
+						else if (tags.find("galaxy_opt_outid") != tags.end())
 						{
-							pd.type=STRING;
+							pd.type=GALAXY_OPT_OUTID;
 						}
 					}
 				}
 				else if (tagname=="ITEMLIST")
 				{
+					// we know it's a list, let's see what kind of list we're dealing with
+					is_list = true;
+
 					if (type=="int")
 					{
-						pd.type=INTLIST;
-						is_list = 1;
+						pd.type=INTLIST;						
 					}
-					if (type=="float")
+					else if (type=="float" || type=="double")
 					{
 						pd.type=DOUBLELIST;
-						is_list = 1;
 					}
-					if (type=="string")
+					else if (type=="input-file")
 					{
-						if (attrs.hasAttribute("tags"))
-						{
-							String tags = attrs.value("tags").toString().toStdString();
-							if (tags.hasSubstring("input file"))
-							{
-								pd.type=INFILELIST;
-							}
-							else if (tags.hasSubstring("output file"))
-							{
-								pd.type=OUTFILELIST;
-							}
-							else
-							{
-								pd.type=STRINGLIST;
-							}
-						}
-						else
-						{
-							pd.type=STRINGLIST;
-						}
-						is_list = 1;
+						pd.type=INFILELIST;
+					}
+					else if (type=="output-file")
+					{
+						pd.type=OUTFILELIST;
+					}
+					else if (type=="string")
+					{
+						pd.type=STRINGLIST;
+					}
+					else
+					{
+						throw BALL::Exception::GeneralException(__FILE__, __LINE__,
+																"ParamFile::readSection() error",
+																"Parameter type " + type + " not recognized");
 					}
 				}
 
-				if (attrs.hasAttribute("tags"))
+				pd.mandatory = false;
+				if (attrs.hasAttribute("required"))
 				{
-					String tags = attrs.value("tags").toString().toStdString();
-					if (tags.hasSubstring("mandatory"))
+					String required = attrs.value("required").toString().toStdString();
+					required.trim().toLower();
+					if (required == "true")
 					{
 						pd.mandatory = true;
 					}
-					if (tags.hasSubstring("advanced"))
+				}
+
+				pd.advanced = false;
+				if (attrs.hasAttribute("advanced"))
+				{
+					String advanced = attrs.value("advanced").toString().toStdString();
+					advanced.trim().toLower();
+					if (advanced == "true")
 					{
 						pd.advanced = true;
 					}
-					if (tags.hasSubstring("hidden"))
-					{
-						pd.hidden = true;
-					}
+				}
 
+				pd.hidden = false;
+				if (tags.find("hidden") != tags.end())
+				{
+					pd.hidden = true;
 				}
 
 				if (attrs.hasAttribute("restrictions"))
@@ -503,12 +489,6 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 					{
 						pd.supported_formats.push_back(v[i].trim());
 					}
-				}
-
-				if (attrs.hasAttribute("output_format_source"))
-				{
-					String source = attrs.value("output_format_source").toString().toStdString();
-					pd.output_format_source = source;
 				}
 
 				if (!is_list)
@@ -574,3 +554,24 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 	}
 }
 
+std::set<String> ParamFile::getTags(QXmlStreamAttributes& attributes)
+{
+	set<String> tagSet;
+
+	if (attributes.hasAttribute("tags"))
+	{
+		String tagsAttributeValue = attributes.value("tags").toString().toStdString();
+		if (tagsAttributeValue != "")
+		{
+			// separate the value of the attribute by commas
+			std::vector<String> tags;
+			int nTags = tagsAttributeValue.split(tags, ",");
+			for (int i = 0; i < nTags; i++)
+			{
+				tagSet.insert(tags[i].trim());
+			}
+		}
+	}
+
+	return tagSet;
+}

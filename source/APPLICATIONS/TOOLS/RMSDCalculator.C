@@ -29,7 +29,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("org",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","i");
 	parpars.parse(argc, argv);
 
 	// Retrieve coordinates of original poses

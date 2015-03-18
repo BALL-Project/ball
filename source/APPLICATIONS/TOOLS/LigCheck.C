@@ -217,7 +217,6 @@ int main(int argc, char* argv[])
 	par.setToolManual(man);
 	par.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	par.setSupportedFormats("o",MolFileFactory::getSupportedFormats());
-	par.setOutputFormatSource("o","i");
 	par.parse(argc, argv);
 
 	GenericMolFile* input = MolFileFactory::open(par.get("i"));

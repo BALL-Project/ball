@@ -166,7 +166,6 @@ Supported formats are ") + MolFileFactory::getSupportedFormats() + String(".");
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("o",MolFileFactory::getSupportedFormats());
-	parpars.setOutputFormatSource("o","i");
 	parpars.parse(argc, argv);
 	
 	// Create a dummy OBConversion object, that loads the available plugins.

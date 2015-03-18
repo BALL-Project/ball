@@ -30,7 +30,6 @@ int main(int argc, char* argv[])
 	parpars.setParameterRestrictions("mode",slist);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","i");
 	parpars.parse(argc, argv);
 
 	const String& nf = CommandlineParser::NOT_FOUND;

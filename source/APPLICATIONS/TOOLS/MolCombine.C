@@ -32,7 +32,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i1","mol2,sdf,drf");
 	parpars.setSupportedFormats("i2","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","i1");
 	parpars.parse(argc, argv);
 
 	String mode = parpars.get("mode");

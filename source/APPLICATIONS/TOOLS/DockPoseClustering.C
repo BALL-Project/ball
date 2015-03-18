@@ -51,20 +51,11 @@ int main (int argc, char **argv)
 
 	parpars.registerParameter("o_dcd_id", "output id ", GALAXY_OPT_OUTID, false, "$o_dcd.id", true);
 	// need to be hidden in command line mode
-  parpars.setParameterAsAdvanced("o_dcd_id");
+	parpars.setParameterAsAdvanced("o_dcd_id");
 
 	parpars.registerParameter("o_dcd_dir", "output directory for 2nd to last cluster dcd file (if needed) ", GALAXY_OPT_OUTDIR, false, "$__new_file_path__", true);
 	// need to be hidden in command line mode
-  parpars.setParameterAsAdvanced("o_dcd_dir");
-
-	/*
-	parpars.registerParameter("o_type", "output type (dcd, index_list, or score_matrix) ", STRING, false, "dcd");
-	list<String> output_types;
-	output_types.push_back("dcd");          // each cluster a dcd file         --> o_id and o_dir
-	output_types.push_back("index_list");   // indices of clusters single file --> -o 
-	output_types.push_back("score_matrix"); // single file --> -o
-	parpars.setParameterRestrictions("o_type", output_types);
-	*/
+	parpars.setParameterAsAdvanced("o_dcd_dir");
 
 	// register String parameter for supplying minimal rmsd between clusters
 	parpars.registerParameter("rmsd_cutoff", "minimal rmsd between the final clusters (default 5.0) ", DOUBLE, false, 5.0);

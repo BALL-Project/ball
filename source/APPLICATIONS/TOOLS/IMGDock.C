@@ -39,7 +39,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
 	parpars.setSupportedFormats("write_ini","ini");
-	parpars.setOutputFormatSource("o","i");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	IMGDock::getDefaultOptions(default_options);

@@ -34,7 +34,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("o","mol2, sdf, drf");
 	parpars.setSupportedFormats("q","txt");
 	parpars.setSupportedFormats("smarts_file","txt");
-	parpars.setOutputFormatSource("o","i");
 	String manual = "MolFilter can filter molecules from a molecule input file according to SMARTS expressions, logP, molecular weight, or similarity to query molecule(s).\n\nOutput of this tool is a molecule file that contains all compounds that fulfilled the specified search criteria.";
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);
