@@ -31,7 +31,10 @@ int main(int argc, char* argv[])
 /// ################################## L O A D    D A T A B A S E / I N P U T
 	TemplateDatabaseManager lib_loader;
 	if ( parpars.has("c") )
+	{
+		cout<<"Reading configuration from: "<< parpars.get("c") << endl;
 		lib_loader.libraryPathesFromConfig( parpars.get("c") );
+	}
 	else
 		lib_loader.libraryPathesFromConfig( "/Users/pbrach/files/projects/Master-2014_2015/0_data/4_used_libs_copies/libraries.conf");
 	lib_loader.readAll();

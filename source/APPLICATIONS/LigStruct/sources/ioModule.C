@@ -43,13 +43,22 @@ void TemplateDatabaseManager::readAll()
 	// read lib files:
 //	readSDFFragmentLib();
 	if( _path_to_rigids != "")
+	{
+		cout<<"loading fragments from: "<< _path_to_rigids<<endl;
 		readRigidTemplates();
+	}
 	
 	if( _path_to_bondlengths != "")
+	{
+		cout<<"loading bondlengths from: "<< _path_to_bondlengths<<endl;
 		readBondLenths();
+	}
 	
 	if( _path_to_sites != "")
+	{
+		cout<<"loading sites from: "<< _path_to_sites<<endl;
 		readSiteTemplates();
+	}
 }
 
 void TemplateDatabaseManager::readBondLenths()
@@ -188,8 +197,8 @@ void TemplateDatabaseManager::libraryPathesFromConfig(const String& config_path)
 			tmp = tmp.after("fragments=");
 			_path_to_rigids = tmp.trim();
 		}
-		else if(tmp.hasPrefix("bondlenths=")){
-			tmp = tmp.after("bondlenths=");
+		else if(tmp.hasPrefix("bondlengths=")){
+			tmp = tmp.after("bondlengths=");
 			_path_to_bondlengths = tmp.trim();
 		}
 		else if(tmp.hasPrefix("connections=")){
