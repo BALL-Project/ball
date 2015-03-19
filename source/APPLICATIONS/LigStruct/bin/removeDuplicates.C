@@ -57,15 +57,15 @@ int main(int argc, char* argv[])
 		AromaticityProcessor ar_pr;
 		mol->apply(ar_pr);
 		
-			UCK key_gen( *mol, true, 5 ); //generate canonical key
-			
-			String key = key_gen.getUCK(); //check if the key is new
-			if( !unique_ids.has( key ))
-			{
-				unique_ids.insert( key );
-				mol->setProperty("key", key);
-				outfile << *mol;
-			}
+		UCK key_gen( *mol, true, 5 ); //generate canonical key
+		
+		String key = key_gen.getUCK(); //check if the key is new
+		if( !unique_ids.has( key ))
+		{
+			unique_ids.insert( key );
+			mol->setProperty("UCK-Hash", key);
+			outfile << *mol;
+		}
 			
 		// read the next molecule
 		mol = in_file.read();
