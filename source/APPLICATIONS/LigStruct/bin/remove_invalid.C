@@ -1,46 +1,16 @@
 
-
-#include <BALL/KERNEL/forEach.h>
-#include <BALL/DATATYPE/string.h>
-
-#include <BALL/CONCEPT/composite.h>
-#include <BALL/KERNEL/atomContainer.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/bond.h>
-//#include <BALL/COMMON/hash.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PTE.h>
-
-#include <BALL/STRUCTURE/UCK.h>
-#include <BALL/STRUCTURE/molecularSimilarity.h>
-#include <BALL/STRUCTURE/structureMapper.h>
-#include <BALL/STRUCTURE/geometricTransformations.h>
-//#include <BALL/MATHS/angle.h>
-//#include <BALL/MATHS/vector3.h>
-//#include <BALL/MATHS/matrix44.h>
-
-
-#include <vector>
-
-//#include <BALL/STRUCTURE/geometricProperties.h>
-//#include <BALL/MATHS/quaternion.h>
-#include <BALL/STRUCTURE/RMSDMinimizer.h>
-
-
-//#include <BALL/STRUCTURE/geometricTransformations.h>
-
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
-#include <BALL/FORMAT/lineBasedFile.h>
+#include <BALL/KERNEL/PTE.h>
 
-#include <boost/unordered/unordered_set.hpp>
-#include <list>
+#include "../sources/base.h"
 
 using namespace BALL;
 using namespace std;
 
 static unsigned int num_covalent_fault = 0;
 static unsigned int num_vdw_fault      = 0;
+static unsigned int num_elem_fault     = 0;
 
 // covalent bond is valid if it does not *derive (+/-)* more than 30 % from its ideal
 bool validCovalentBond(Atom& atm, Atom& btm)
@@ -55,7 +25,7 @@ bool validCovalentBond(Atom& atm, Atom& btm)
 		num_covalent_fault++;
 		return false;
 	}
-		
+	
 	return true;
 }
 
@@ -76,7 +46,7 @@ bool validVdwDist(Atom& atm, Atom& btm)
 	return true;
 }
 
-bool isValid(AtomContainer& mol)
+bool hasValidGeometry(AtomContainer& mol)
 {
 	for (AtomIterator ati = mol.beginAtom(); +ati; ++ati)
 	{
@@ -102,20 +72,37 @@ bool isValid(AtomContainer& mol)
 	return true;
 }
 
+bool isValid(AtomContainer& mol)
+{
+	if( LigBase::containsUnknownElement( mol ) )
+	{
+		num_elem_fault++;
+		return false;
+	}
+	else
+	{
+		return hasValidGeometry( mol );
+	}
+}
+
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Remove bad Molecules", " filter badly clashing molecules out", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("Remove Invalid", " filter out invalid molecules", 
+														0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "general sdfile", INFILE, true);
 	parpars.registerParameter("o", "single output SDF", OUTFILE, true);
-	parpars.registerParameter("ugly", "structures you do not like", OUTFILE, true);
+	parpars.registerParameter("ugly", "structures you do not like", OUTFILE, false);
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setSupportedFormats("ugly","sdf");
 	parpars.setOutputFormatSource("o","i");
 
-	String manual = "does stuff";
+	String manual = "From a given input multi SDFile, all structures that have "
+									"severe clashes or containing atoms of unkonwn elements are "
+									"removed. Additionally from all valid structures reamaining "
+									"explicit hydrogens are removed.";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
@@ -127,13 +114,19 @@ int main(int argc, char* argv[])
 	
 	SDFile in_file(parpars.get("i"), ios::in);
 	SDFile out_file(parpars.get("o"), ios::out);
-	SDFile uglies(parpars.get("ugly"), ios::out);
+	
+	SDFile* uglies = 0;
+	bool write_ugly = parpars.has("ugly");
+	
+	if( write_ugly )
+		uglies = new SDFile( parpars.get("ugly"), ios::out);
 
 	AtomContainer* tmp_mol = 0;
 	unsigned int num_failed_reads = 0;
 	unsigned int num_sucess_reads = 0;
 	unsigned int num_invalid      = 0;
 	unsigned int num_valid        = 0;
+	
 	while(true)
 	{
 		//try to load a molecule
@@ -154,6 +147,8 @@ int main(int argc, char* argv[])
 		if( tmp_mol == 0 )
 			break;
 		
+		LigBase::removeHydrogens( *tmp_mol );
+		
 		// check the molecule
 		if( isValid(*tmp_mol) )
 		{
@@ -163,16 +158,25 @@ int main(int argc, char* argv[])
 		else
 		{
 			num_invalid++;
-			uglies << *tmp_mol;
+			
+			if( write_ugly )
+				*uglies << *tmp_mol;
 		}
 			
 		delete tmp_mol;
 		
 	}
 
-	Log<< " read "<< num_failed_reads+num_sucess_reads<< " from which "<<num_failed_reads<<" could not be parsed"<<endl;
+	Log<< " Read "<< num_failed_reads+num_sucess_reads<< " from which "<<num_failed_reads<<" could not be parsed"<<endl;
 	Log<< " from total read input molecules ("<< num_sucess_reads<< ") "<<num_valid <<" were valid and "<<num_invalid<<" were invalid"<<endl;
-	Log<<" Total vdw-faults: "<<num_vdw_fault<<" | Total covalent-faults: "<<num_covalent_fault<<endl;
+	Log<<" Total unknown-element-faults: "<<num_elem_fault    <<endl;
+	Log<<" Total vdw-faults            : "<<num_vdw_fault     <<endl;
+	Log<<" Total covalent-faults       : "<<num_covalent_fault<<endl;
+	Log<<endl<<"All "<<num_valid<<" valid molecules were written to: "<<parpars.get("o")<<endl;
+	
+	if( write_ugly )
+		Log<<endl<<"All "<<num_invalid<<" invalid molecules were written to: "<<parpars.get("ugly")<<endl;
+	
 	Log << "......done!"<<endl;
 }
 

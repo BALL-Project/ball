@@ -28,7 +28,8 @@ bool isOfElementClass(AtomContainer& mol, boost::unordered_set< Element::AtomicN
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Organic Filter", " keep only organic molecules", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("Remove Metal", " keep only organic molecules", 
+														0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "sdfile to be filtered", INFILE, true);
 	parpars.registerParameter("o", "organic molecules outputSDF", OUTFILE, true);
 	
@@ -36,7 +37,10 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setOutputFormatSource("o","i");
 
-	String manual = "does stuff";
+	String manual = "Selects only molecules conaining atoms of the organic set. "
+									"In this case that is: "
+									"[As, B, Br, C, Cl, F, H, I, N, O, P, Si, S, Se] all other "
+									"(metal and metal-organic) molecules are removed";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
@@ -112,7 +116,7 @@ int main(int argc, char* argv[])
 	} while( tmp_mol );
 
 	Log<< " read "<< num_failed_reads+num_sucess_reads<< " from which "<<num_failed_reads<<" could not be parsed"<<endl;
-	Log<< " from total "<< num_sucess_reads<< " molecules "<<num_organic <<" were organic and "<<num_sucess_reads-num_organic<<" organo-metal"<<endl;
+	Log<< " from the "<< num_sucess_reads<< " read molecules "<<num_organic <<" were organic and "<<num_sucess_reads-num_organic<<" organo-metal"<<endl;
 	Log<< " from the "<<num_organic<<" organic molecules "<< num_valid<< " were larger than 1 atom, these were written to the out-file"<<endl;
 	Log << "......done!"<<endl;
 }

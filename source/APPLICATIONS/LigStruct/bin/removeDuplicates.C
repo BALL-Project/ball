@@ -15,7 +15,8 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Unique Molecules", " filter a collection to contain only unique structures", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("Remove Duplicates", " keep only unique molecules", 
+														0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	
@@ -23,7 +24,9 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setOutputFormatSource("o","i");
 
-	String manual = "...just playing...";
+	String manual = "Filter a SDFile to contain only structures of unique "
+									"topology. The first representant of a cartain topology "
+									"is kept. Stereochemistry is NOT respected!";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
@@ -45,35 +48,25 @@ int main(int argc, char* argv[])
 		// some user info every 1000 molecules:
 		if( cnt % 1000 == 0)
 		{
-			cout << "\r" << flush;
-			cout << "     filtered: "<< cnt<<" structures to "<<unique_ids.size()<<" uniques ";
+//			cout << "\r" << flush;
+			cout << "     filtered: "<< cnt<<" structures to "<<unique_ids.size()<<" uniques "<<endl;
 		}
 		cnt++;
 		
 		// assign canonical aromatic labels:
 		AromaticityProcessor ar_pr;
-		mol->apply(ar_pr);
+//		mol->apply(ar_pr);
 		
-		// make sure the molecule is leagl/valid
-		if( !LigBase::containsUnknownElement( *mol ) && !LigBase::containsHydrogen( *mol))
-		{
 			UCK key_gen( *mol, true, 5 ); //generate canonical key
 			
 			String key = key_gen.getUCK(); //check if the key is new
-			cout<<"Key is: "<<key<<endl;
+			//			cout<<"Key is: "<<key<<endl;
 			if( !unique_ids.has( key ))
 			{
 				unique_ids.insert( key_gen.getUCK());
 				
 				outfile << *mol;
 			}
-		}
-		else
-		{
-			cout<<"found illegal molecule (unknown element or hydrogens found): "<<endl;
-			cout<< LigBase::printInlineMol( mol)<<endl;
-			cout<< LigBase::moleculeToSMILES( *mol) <<endl;
-		}
 			
 		// read the next molecule
 		mol = in_file.read();
