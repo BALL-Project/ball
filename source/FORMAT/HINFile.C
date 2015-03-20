@@ -787,24 +787,30 @@ namespace BALL
 						// The name may (latest versions) be enclosed by double quotes.
 						std::vector<String> fields;
 						getLine().splitQuoted(fields, String::CHARACTER_CLASS__WHITESPACE, "\"");
-						String name(fields[2]);
 
-						if ((name != "") && (name != "-"))
+						// Make sure that the name field is not empty as
+						// splitQuoted silently drops empty fields
+						if(fields.size() > 2)
 						{
-							// Remove leading/trailing blanks from the name.
-							name.trim();
+							String name(fields[2]);
 
-							// For newer versions of HyperChem, the name has to be
-							// enclosed in double quotes.
-							if (name[0] == '"')
+							if ((name != "") && (name != "-"))
 							{
-								name.erase(0, 1);
+								// Remove leading/trailing blanks from the name.
+								name.trim();
+
+								// For newer versions of HyperChem, the name has to be
+								// enclosed in double quotes.
+								if (name[0] == '"')
+								{
+									name.erase(0, 1);
+								}
+								if (name[name.size() - 1] == '"')
+								{
+									name.erase(name.size() - 1, 1);
+								}
+								molecule->setName(name);
 							}
-							if (name[name.size() - 1] == '"')
-							{
-								name.erase(name.size() - 1, 1);
-							}
-							molecule->setName(name);
 						}
 					}
 
