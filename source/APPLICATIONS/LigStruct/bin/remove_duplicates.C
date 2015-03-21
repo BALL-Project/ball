@@ -68,6 +68,7 @@ int main(int argc, char* argv[])
 		}
 			
 		// read the next molecule
+		delete mol;
 		mol = in_file.read();
 	}
 	
