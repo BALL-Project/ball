@@ -288,12 +288,14 @@ void mergeDRFiles(vector<String>& names, string& output_file, Size& best_k, stri
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("DockResultMerger", "merge docking output files", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerParameter("i", "input files", INFILELIST, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("score", "score property name", STRING, false, "score");
-	parpars.registerParameter("min", "minimal score value", DOUBLE);
-	parpars.registerParameter("max", "maximal score value", DOUBLE);
-	parpars.registerParameter("k", "number of output molecules", BALL::INT);
+	parpars.registerMandatoryParameter("i", "input files", INFILELIST);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
+
+	parpars.registerOptionalParameter("score", "score property name", STRING, "score");
+	parpars.registerOptionalParameter("min", "minimal score value", DOUBLE, -30);
+	parpars.registerOptionalParameter("max", "maximal score value", DOUBLE, 0);
+	parpars.registerOptionalParameter("k", "number of output molecules", BALL::INT, 20);
+
 	parpars.registerFlag("rm", "remove input files after merging");
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");

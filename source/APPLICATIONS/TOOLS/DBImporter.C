@@ -49,19 +49,18 @@ int main(int argc, char* argv[])
 	#endif
 
 	CommandlineParser parpars("DBImporter", "import molecules into data base", version, String(__DATE__), "Convert, combine and store");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "log file", OUTFILE);
-	parpars.registerParameter("target", "target/dataset name whose molecules should be exported", STRING);
-	parpars.registerParameter("d", "database name", STRING, true);
-	parpars.registerParameter("u", "database username", STRING, true);
-	parpars.registerParameter("host", "database host", STRING, true);
-	parpars.registerParameter("port", "database port", BALL::INT, false, "3306");
-	//parpars.registerParameter("id", "molecule ID property-tag name", STRING);
-	parpars.registerParameter("p", "database password", STRING, true);
-	parpars.registerParameter("vn", "name of compound vendor", STRING);
-	parpars.registerParameter("vid", "name of vendor's compound-ID tag in sd-file", STRING);
-	parpars.registerParameter("vd", "vendor library date or version", STRING);
-	parpars.registerParameter("vu", "url from wich vendor library was obtained", STRING);
+	parpars.registerMandatoryParameter("i", "input file", INFILE);
+	parpars.registerOptionalParameter("o", "log file", OUTFILE);
+	parpars.registerOptionalParameter("target", "target/dataset name whose molecules should be exported", STRING);
+	parpars.registerMandatoryParameter("d", "database name", STRING);
+	parpars.registerMandatoryParameter("u", "database username", STRING);
+	parpars.registerMandatoryParameter("host", "database host", STRING);
+	parpars.registerOptionalParameter("port", "database port", BALL::INT, "3306");
+	parpars.registerMandatoryParameter("p", "database password", STRING);
+	parpars.registerOptionalParameter("vn", "name of compound vendor", STRING);
+	parpars.registerOptionalParameter("vid", "name of vendor's compound-ID tag in sd-file", STRING);
+	parpars.registerOptionalParameter("vd", "vendor library date or version", STRING);
+	parpars.registerOptionalParameter("vu", "url from wich vendor library was obtained", STRING);
 	String man = "This tool imports molecules into a database.\nAs input we need the file containing the molecules to be imported in sd-, mol2- or drf-format.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());

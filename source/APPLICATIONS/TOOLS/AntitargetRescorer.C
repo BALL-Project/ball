@@ -35,9 +35,9 @@ double calculateMedian(HashMap<String, double>& scores)
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("AntitargetRescorer", "rescore w/ anti-target dock-results", VERSION, String(__DATE__), "Rescoring");
-	parpars.registerParameter("t", "input file w/ target dock-results", INFILE, true);
-	parpars.registerParameter("at", "input file w/ anti-target dock-results", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
+	parpars.registerMandatoryParameter("t", "input file w/ target dock-results", INFILE);
+	parpars.registerMandatoryParameter("at", "input file w/ anti-target dock-results", INFILE);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
 	String manual = "This tool rescores docking output poses.\nAntitargetRescoring can be used to try to enhance target specificity. Therefore, dock your compounds into your target of interest and into a (very) different protein and supply the docking results here. All compounds that received a very good antitarget-score will thus be penalized, i.e. they will have a much worse score within the output file.\n\nAs input we need:\n\
     * a file containing the compounds that are to be rescored. Supported formats are mol2, sdf or drf (DockResultFile, xml-based). Those compound should have been docket into the specified protein (i.e. the target).\n\
     * a file containing the same compounds docked into the antitarget.\n\nOutput of this tool is a file in the same format as the input ligand file containing all compounds with scores obtained by rescoring in form of a property 'antitarget_rescore'.";

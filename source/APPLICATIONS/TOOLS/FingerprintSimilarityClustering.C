@@ -546,16 +546,16 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("FingerprintSimilarityClustering", "fast clustering of compounds using 2D binary fingerprints", VERSION, String(__DATE__), "Chemoinformatics");
 	
-	parpars.registerParameter("t", "Target library input file", INFILE, true);
-	parpars.registerParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", INT, true, "1");
-	parpars.registerParameter("fp_col", "Column number for comma separated smiles input which contains the fingerprint", INT, false, -1);
-	parpars.registerParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", INT, false, -1);
-	parpars.registerParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, false, " ");
-	parpars.registerParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, false, " ");
-	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, 0.7);
-	parpars.registerParameter("cc", "Clustering size cutoff [default: 1000]", INT, false, 1000);
-	parpars.registerParameter("l", "Number of fingerprints to read", INT, false, "0");
-	parpars.registerParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, false, "1");
+	parpars.registerMandatoryParameter("t", "Target library input file", INFILE);
+	parpars.registerMandatoryParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", INT);
+	parpars.registerOptionalParameter("fp_col", "Column number for comma separated smiles input which contains the fingerprint", INT, -1);
+	parpars.registerOptionalParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", INT, -1);
+	parpars.registerOptionalParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, " ");
+	parpars.registerOptionalParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, " ");
+	parpars.registerOptionalParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, 0.7);
+	parpars.registerOptionalParameter("cc", "Clustering size cutoff [default: 1000]", INT, 1000);
+	parpars.registerOptionalParameter("l", "Number of fingerprints to read", INT, 0);
+	parpars.registerOptionalParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, "1");
 	parpars.registerFlag("sdf_out", "If input file has SD format, this flag activates writing of clustering information as new tags in a copy of the input SD file.");
 	
 	parpars.setSupportedFormats("t","smi, smi.gz, csv, csv.gz, txt, txt.gz, sdf, sdf.gz");

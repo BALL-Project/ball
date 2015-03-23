@@ -146,11 +146,11 @@ void createReferenceArea(const vector<vector<std::pair<Vector3, double> > >& lay
 int main (int argc, char **argv)
 {
 	CommandlineParser parpars("PocketDetector", "detect binding pocket", VERSION, String(__DATE__), "Docking");
-	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	parpars.registerParameter("rl", "reference ligand", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input ini file", INFILE);
-	parpars.registerParameter("mol_out", "output file for pseudo-atoms describing pocket (for visualization purposes)", OUTFILE);
+	parpars.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
+	parpars.registerMandatoryParameter("rl", "reference ligand", INFILE);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
+	parpars.registerOptionalParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input ini file", INFILE);
+	parpars.registerOptionalParameter("mol_out", "output file for pseudo-atoms describing pocket (for visualization purposes)", OUTFILE);
 
 	String man = "This tool tries to detect the binding pocket in which the reference ligand is located.\nTherefore, probe atoms are placed above the protein surface at positions of relative deep burial. The cluster of probe atoms around the geometric center of the reference ligand is used for the description of the binding pocket.\n\nAs input we need:\n\
     * a file containing a protonated protein in pdb-format. Furthermore, it should contain only relevant (i.e. strongly bound) water molecules as detected by WaterFinder.\n\

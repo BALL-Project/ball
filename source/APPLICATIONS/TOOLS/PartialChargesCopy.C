@@ -14,9 +14,9 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("PartialChargesCopy", "transfer part. charges between files", VERSION, String(__DATE__), "Preparation");
-	par.registerParameter("i", "input molecule file", INFILE, true);
-	par.registerParameter("chr", "file containing the same molecules as the input file, but with (different) partial charges", INFILE, true);
-	par.registerParameter("o", "output file", OUTFILE, true);
+	par.registerMandatoryParameter("i", "input molecule file", INFILE);
+	par.registerMandatoryParameter("chr", "file containing the same molecules as the input file, but with (different) partial charges", INFILE);
+	par.registerMandatoryParameter("o", "output file", OUTFILE);
 	String man = "This tool copies partial charges from a given file to the conformations read from a different file.\nThis can be useful when computing partial charges with external tools, most of which write output as mol2-files *without* support for storing molecular properties. By use of this tool we can thus assign the computed partial charges to the original molecules, thus retaining all properties.";
 	par.setToolManual(man);
 	par.setSupportedFormats("i",MolFileFactory::getSupportedFormats());

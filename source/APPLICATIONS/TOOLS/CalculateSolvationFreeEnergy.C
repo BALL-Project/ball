@@ -20,9 +20,9 @@ int main(int argc, char* argv[])
 
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("CalculateSolvationFreeEnergy", "calculate solvation free energy of a protein using AMBER ", VERSION, String(__DATE__), "ForceFields");
-	parpars.registerParameter("pdb",  "input pdb file ", INFILE,  true);
-	parpars.registerParameter("epsilon_medium", "dielectric constant in medium", DOUBLE, false,  fdpb.options.getReal(FDPB::Option::SOLVENT_DC));
-	parpars.registerParameter("epsilon_vacuum", "dielectric constant in vacuum", DOUBLE, false, 1);
+	parpars.registerMandatoryParameter("pdb",  "input pdb file ", INFILE);
+	parpars.registerOptionalParameter("epsilon_medium", "dielectric constant in medium", DOUBLE, fdpb.options.getReal(FDPB::Option::SOLVENT_DC));
+	parpars.registerOptionalParameter("epsilon_vacuum", "dielectric constant in vacuum", DOUBLE, 1);
 
 	// the manual
 	String man = String("This tool computes the solvation free energy of a pdb file using the Jackson-Sternberg approach (bonded energy using a force field and a non bonded energy (electrostatics only) by solving the Poisson-Boltzmann equation. Parameters are the dielectric constants for the medium (-epsilon_medium) and the vacuum (-epsilon_vacuum).");

@@ -12,9 +12,9 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("PDBDownload", "retrieve pdb-file from pdb.org", VERSION, String(__DATE__), "Get Data");
-	par.registerParameter("id", "PDB ID for desired structure", STRING, true);
-	par.registerParameter("o", "output file", OUTFILE, true);
-	par.registerParameter("p", "proxy", STRING);
+	par.registerMandatoryParameter("id", "PDB ID for desired structure", STRING);
+	par.registerMandatoryParameter("o", "output file", OUTFILE);
+	par.registerOptionalParameter("p", "proxy", STRING);
 	String man("Download a pdb-file from the pdb data bank (http://www.pdb.org/) using the specified ID of the desired protein structure.");
 	par.setToolManual(man);
 	par.setSupportedFormats("o","pdb");

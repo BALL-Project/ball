@@ -199,9 +199,9 @@ bool checkMolecule(Molecule* mol, int molecule_no, map<String, pair<int, String>
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("LigCheck", "check molecules for errors", VERSION, String(__DATE__), "Checks and evaluations");
-	par.registerParameter("i", "input molecule file", INFILE, true);
-	par.registerParameter("o", "output file", OUTFILE, true);
-	par.registerParameter("ef", "error fraction; print error if fraction of invalid mols is larger", DOUBLE, false, "0.5");
+	par.registerMandatoryParameter("i", "input molecule file", INFILE);
+	par.registerMandatoryParameter("o", "output file", OUTFILE);
+	par.registerOptionalParameter("ef", "error fraction; print error if fraction of invalid mols is larger", DOUBLE, 0.5);
 	par.registerFlag("ri", "remove invalid molecules.", true);
 	par.registerFlag("ut", "check for unique topologies");
 	par.registerFlag("nc", "no not check for unique conformations");

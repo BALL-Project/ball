@@ -30,7 +30,7 @@ int main (int argc, char **argv)
 	// - description
 	// - parameter type
 	// - required
-	parpars.registerParameter("i", "input serialized cluster file", INFILE, true);
+	parpars.registerMandatoryParameter("i", "input serialized cluster file", INFILE);
 
 	// we register an output file parameter 
 	// - CLI switch
@@ -39,17 +39,18 @@ int main (int argc, char **argv)
 	// - required
 	// - default value
 	// - hidden in galaxy
-	parpars.registerParameter("o_out", "output file name ", OUTFILE, true, "", true);
+	parpars.registerMandatoryParameter("o_out", "output file name ", OUTFILE);
+	parpars.setParameterAsHidden("o_out");
 
 	// we register the output type
-	parpars.registerParameter("o_type", "output type (gv, index_list) ", STRING, true, "index_list");
+	parpars.registerOptionalParameter("o_type", "output type (gv, index_list) ", STRING, "index_list");
 	list<String> output_types;
 	output_types.push_back("gv");
 	output_types.push_back("index_list");
 	parpars.setParameterRestrictions("o_type", output_types);
 
 	// we register the cutoff type
-	parpars.registerParameter("cutoff_type", "cutoff type (ward_distance, num_clusters) ", STRING, false, "ward_distance");
+	parpars.registerOptionalParameter("cutoff_type", "cutoff type (ward_distance, num_clusters) ", STRING, "ward_distance");
 	list<String> cutoff_types;
 	cutoff_types.push_back("ward_distance");
 	cutoff_types.push_back("num_clusters");
@@ -57,14 +58,14 @@ int main (int argc, char **argv)
 
 	// we register the cutoff value, either the minimal ward distance between the clusters
 	//                               or the number of clusters to split into
-	parpars.registerParameter("cut_value", "cut value for splitting the given WART tree using the cutoff-type (default 5.0) ", DOUBLE, false, 5.0);
+	parpars.registerOptionalParameter("cut_value", "cut value for splitting the given WART tree using the cutoff-type (default 5.0) ", DOUBLE, 5.0);
 	parpars.setParameterRestrictions("cut_value", 0.0, 10000);
 
 	// we register a parameter defining the minimal size of clusters - e.g. for filtering out single outlieers
-	parpars.registerParameter("min_size", "minimal size of clusters (default 1) ", INT, false, 1);
+	parpars.registerOptionalParameter("min_size", "minimal size of clusters (default 1) ", INT, 1);
 	parpars.setParameterRestrictions("min_size", 1, 10000);
 
-  // the manual
+	// the manual
 	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i) of the serialized cluster tree, the output filename (-o_out), the output type (-o_type). The optional parameter -min_size allows to filter for cluster of a minimal size, parameter -cutoff_type defines the way to cut the cluster tree (either by ward distance or by a target number of clusters) using paramter -cut_value.\n\nOutput of this tool is the extracted cluster tree, either as index list or as graph visualization (gv).";
 
 	parpars.setToolManual(man);

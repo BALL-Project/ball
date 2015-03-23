@@ -260,17 +260,17 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("FingerprintSimilaritySearch", "calculate similar molecules in a library", VERSION, String(__DATE__), "Chemoinformatics");
 	
-	parpars.registerParameter("t", "Target library input file", INFILE, true);
-	parpars.registerParameter("q", "Query library input file", INFILE, true);
-	parpars.registerParameter("o", "Result output file", OUTFILE, true);
-	parpars.registerParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", BALL::INT, true, "1");
-	parpars.registerParameter("fp_col", "Column number for comma separated smiles input which contains the fingerprint", BALL::INT, false, "-1");
-	parpars.registerParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", BALL::INT, false, "-1");
-	parpars.registerParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, false, " ");
-	parpars.registerParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, false, " ");
-	parpars.registerParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, false, "0.7");
-	parpars.registerParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, false, "1");
-	parpars.registerParameter("bs", "Block size [default: 500]", BALL::INT, false, "500");
+	parpars.registerMandatoryParameter("t", "Target library input file", INFILE);
+	parpars.registerMandatoryParameter("q", "Query library input file", INFILE);
+	parpars.registerMandatoryParameter("o", "Result output file", OUTFILE);
+	parpars.registerMandatoryParameter("f", "Fingerprint format [1 = binary bitstring, 2 = comma separated feature list]", BALL::INT);
+	parpars.registerOptionalParameter("fp_col", "Column number for comma separated smiles input which contains the fingerprint", BALL::INT, -1);
+	parpars.registerOptionalParameter("id_col", "Column number for comma separated smiles input which contains the molecule identifier", BALL::INT, -1);
+	parpars.registerOptionalParameter("fp_tag", "Tag name for SDF input which contains the fingerprint", STRING, " ");
+	parpars.registerOptionalParameter("id_tag", "Tag name for SDF input which contains the molecule identifier", STRING, " ");
+	parpars.registerOptionalParameter("tc", "Tanimoto cutoff [default: 0.7]", DOUBLE, 0.7);
+	parpars.registerOptionalParameter("nt", "Number of parallel threads to use. To use all possible threads enter <max> [default: 1]", STRING, "1");
+	parpars.registerOptionalParameter("bs", "Block size [default: 500]", BALL::INT, "500");
 	parpars.registerFlag("sdf_out", "If query file has SD format, this flag activates writing of nearest neighbours as a new CSV tag in a copy of the query SD file.");
 	
 	parpars.setParameterRestrictions("f", 1, 2);

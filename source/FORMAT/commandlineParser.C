@@ -71,7 +71,7 @@ CommandlineParser::CommandlineParser
 
 void CommandlineParser::checkAndRegisterParameter
   (String name, String description, ParameterType type, bool mandatory,
-   String default_value, bool perform_check, bool hidden)
+   String default_value, bool perform_check)
 {
 	checkParameterName(name, perform_check);
 
@@ -80,7 +80,7 @@ void CommandlineParser::checkAndRegisterParameter
 	pardes.description = description;
 	pardes.mandatory   = mandatory;
 	pardes.type        = type;
-	pardes.hidden      = hidden;
+	pardes.hidden      = false;
 
 	registered_parameters_.insert(make_pair(name, pardes));
 	original_parameter_order_.push_back(registered_parameters_.find(name));
@@ -113,13 +113,14 @@ void CommandlineParser::checkAndRegisterParameter
 	}
 }
 
-void CommandlineParser::registerParameter
-  (String name, String description,
-   ParameterType type, bool mandatory,
-	 String default_value, bool hidden)
+void CommandlineParser::registerMandatoryParameter(String name, String description, ParameterType type)
 {
-	// add parameter and check if the parameter name is valid
-	checkAndRegisterParameter(name, description, type, mandatory, default_value, true, hidden);
+	checkAndRegisterParameter(name, description, type, true, "", true);
+}
+
+void CommandlineParser::registerOptionalParameter(String name, String description, ParameterType type, String default_value)
+{
+	checkAndRegisterParameter(name, description, type, false, default_value, true);
 }
 
 void CommandlineParser::checkAndRegisterFlag(String name, String description,
@@ -184,7 +185,7 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 				continue;
 			}
 
-			registerParameter(name, pardes->description, pardes->type, false, it->second);
+			registerOptionalParameter(name, pardes->description, pardes->type, it->second);
 			registered_parameters_[name].advanced = true;
 			registered_parameters_[name].allowed_values = pardes->allowed_values;
 			registered_parameters_[name].category = category;
@@ -708,4 +709,9 @@ void CommandlineParser::validateRegisteredFilesHaveFormats()
 		}
 
 	}
+}
+
+void CommandlineParser::setParameterAsHidden(String name)
+{
+	registered_parameters_[name].hidden = true;
 }

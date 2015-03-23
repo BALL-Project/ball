@@ -11,9 +11,9 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("AutoModel","automatically find best QSAR model", VERSION, String(__DATE__), "QuEasy (QSAR)");
-	par.registerParameter("i","input data-file",INFILE,true);
-	par.registerParameter("o","output model file",OUTFILE,true);
-	par.registerParameter("min_quality","minimal desired quality (default: 0.3)",DOUBLE, false, "0.3");
+	par.registerMandatoryParameter("i", "input data-file", INFILE);
+	par.registerMandatoryParameter("o", "output model file", OUTFILE);
+	par.registerOptionalParameter("min_quality", "minimal desired quality (default: 0.3)", DOUBLE, 0.3);
 	par.setParameterRestrictions("min_quality",0,1);
 
 	String man = "This tool tries to automatically find the best QSAR model for a given data set. \n\nIt therefore applies nested validation, including feature selection, for each available model-type. The model with the best nested prediction quality is saved to the specified output file. However, if the best obtained nested prediction quality is smaller than the value specified by '-min_quality', an error will be shown and no model will be saved.";

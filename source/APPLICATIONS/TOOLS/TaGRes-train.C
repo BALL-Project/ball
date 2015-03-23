@@ -23,15 +23,15 @@ using namespace BALL;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("TaGResTrain", "Target-specific Grid-Rescoring, training", VERSION, String(__DATE__), "Rescoring");
-	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	par.registerParameter("i", "training compound data set", INFILE, true);
-	par.registerParameter("o", "model file", OUTFILE, true);
-	par.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
-	par.registerParameter("method", "rescoring type: 'Rescoring3D' or 'Rescoring4D', or 'Rescoring1D'", STRING, true);
-	par.registerParameter("function", "scoring function: 'MM' or 'PLP'", STRING);
-	par.registerParameter("exp", "property-tag name containing experimentally determined binding-free-energies", STRING, true, "binding_free_energy");
+	par.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
+	par.registerMandatoryParameter("rl", "reference-ligand", INFILE);
+	par.registerOptionalParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
+	par.registerMandatoryParameter("i", "training compound data set", INFILE);
+	par.registerMandatoryParameter("o", "model file", OUTFILE);
+	par.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	par.registerMandatoryParameter("method", "rescoring type: 'Rescoring3D' or 'Rescoring4D', or 'Rescoring1D'", STRING);
+	par.registerOptionalParameter("function", "scoring function: 'MM' or 'PLP'", STRING);
+	par.registerMandatoryParameter("exp", "property-tag name containing experimentally determined binding-free-energies", STRING);
 
 	String man = "This tool generates a model for Target-specific Grid-Rescoring (TaGRes).\nAs input we need:\n\n\
     * a file containing a protonated protein in pdb-format\n\

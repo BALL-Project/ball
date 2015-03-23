@@ -419,13 +419,13 @@ double calculateMinimalDistance(const AtomContainer& ref_ligand, const AtomConta
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("WaterFinder", "find strongly bound waters ", VERSION, String(__DATE__), "Docking");
-	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	par.registerParameter("wat", "input pdb-file containing water molecules (if not part of rec.-file)", INFILE);
+	par.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
+	par.registerMandatoryParameter("rl", "reference-ligand", INFILE);
+	par.registerOptionalParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
+	par.registerOptionalParameter("wat", "input pdb-file containing water molecules (if not part of rec.-file)", INFILE);
 	par.registerFlag("ai", "use ab-initio water search (ignore water in pdb-file), experimental!");
-	par.registerParameter("o", "output pdb file", OUTFILE);
-	par.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	par.registerOptionalParameter("o", "output pdb file", OUTFILE);
+	par.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
 
 	String man = "This tool searches for crystal waters that\n\
     * either interact very strongly with the receptor\n\

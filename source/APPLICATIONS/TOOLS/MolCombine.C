@@ -15,11 +15,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("MolCombine", "combine molecular files", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerParameter("i1", "input molecule file A", INFILE, true);
-	parpars.registerParameter("i2", "input molecule file B", INFILE, true);
-	parpars.registerParameter("mode","'intersection', 'union' or 'b_not_a'", STRING, true);
+	parpars.registerMandatoryParameter("i1", "input molecule file A", INFILE);
+	parpars.registerMandatoryParameter("i2", "input molecule file B", INFILE);
+	parpars.registerMandatoryParameter("mode","'intersection', 'union' or 'b_not_a'", STRING);
 	parpars.registerFlag("ignH", "ignore hydrogens, i.e. match molecules to any protonation state.", true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
 	parpars.registerFlag("replace_prop", "replace properties from file 1 w/ those from file 2");
 	parpars.registerFlag("rm", "remove input files when finished");
 	String man = "This tool generates the intersection or union of two given chemical files. Property-tags of molecules that appear in both input files are automatically merged.\n\nIf you want to match molecules regardless of their protonation state, use option '-ignH'.\n\nOutput of this tool is a file containing the union resp. intersection of all molecules of input A and B.";

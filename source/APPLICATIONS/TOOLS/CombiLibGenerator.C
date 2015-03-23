@@ -155,9 +155,9 @@ void readFile(String a_file_name)
 int main(int argc, char** argv)
 {
 	CommandlineParser parpars("CombiLibGenerator", "generate combinatorial lib", VERSION, String(__DATE__), "Get Data");
-	parpars.registerParameter("i", "input combi-lib file", INFILE, true);
-	parpars.registerParameter("o", "output molecule file", OUTFILE, true);
-	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.registerMandatoryParameter("i", "input combi-lib file", INFILE);
+	parpars.registerMandatoryParameter("o", "output molecule file", OUTFILE);
+	parpars.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
 	parpars.setSupportedFormats("i","txt");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
 	parpars.setSupportedFormats("write_ini","ini");

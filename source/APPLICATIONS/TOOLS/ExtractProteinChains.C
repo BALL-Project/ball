@@ -15,22 +15,25 @@ int main(int argc, char* argv[])
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("ExtractProteinChains", "separate all chains of a pdb file into separate pdb files", VERSION, String(__DATE__), "Preparation");
 
-	parpars.registerParameter("pdb",  "input pdb file ", INFILE,  true);
-	parpars.registerParameter("chain_id",  "chain to extract ", STRING,  false);
+	parpars.registerMandatoryParameter("pdb",  "input pdb file ", INFILE);
+	parpars.registerOptionalParameter("chain_id",  "chain to extract ", STRING);
 	//TODO
 	//parpars.registerFlag("skip_nonaa", "skip all non aminoacids", false);
 
-	parpars.registerParameter("o", "output file name ", OUTFILE, true, "", true);
+	parpars.registerMandatoryParameter("o", "output file name ", OUTFILE);
+	parpars.setParameterAsHidden("o");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_id", "output id", GALAXY_OPT_OUTID, false, "$o.id", true);
+	parpars.registerOptionalParameter("o_id", "output id", GALAXY_OPT_OUTID, "$o.id");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
+	parpars.setParameterAsHidden("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", GALAXY_OPT_OUTDIR, false, "$__new_file_path__", true);
+	parpars.registerOptionalParameter("o_dir", "output directory for 2nd to last solution", GALAXY_OPT_OUTDIR, "$__new_file_path__");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dir");
+	parpars.setParameterAsHidden("o_dir");
 
 	// the manual
 	String man = String("This tool splits a pdb file into its chains.");

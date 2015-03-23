@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 {
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("ResidueChecker", "check residues to debug a protein structure wrt to PDB conventions", VERSION, String(__DATE__), "ForceFields");
-	parpars.registerParameter("pdb",  "input pdb file ", INFILE,  true);
+	parpars.registerMandatoryParameter("pdb",  "input pdb file ", INFILE);
 
 	// TODO: offer upload of a distinguished fragDB file? 
 	// shall we normalize names according to force field conventions??

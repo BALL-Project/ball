@@ -27,9 +27,9 @@ void copyHydrogens(OpenBabel::OBMol* obmol, Protein* protein);
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("ProteinProtonator", "protonate protein structures", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("ph", "pH-value for pH-dep. protonation", DOUBLE, false, "7.0");
+	parpars.registerMandatoryParameter("i", "input file", INFILE);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
+	parpars.registerOptionalParameter("ph", "pH-value for pH-dep. protonation", DOUBLE, 7.0);
 	String man = "";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","pdb");

@@ -53,13 +53,9 @@ namespace BALL
 			static const String NOT_FOUND;
 			static const list<String> EMTPY_LIST;
 
-			// - CLI switch
-			// - description
-			// - parameter type
-			// - required
-			// - default value
-			// - hidden in galaxy
-			void registerParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool hidden = false);
+			void registerMandatoryParameter(String name, String description, ParameterType type);
+
+			void registerOptionalParameter(String name, String description, ParameterType type, String default_value = "");
 
 			void registerFlag(String name, String description, bool default_gui_value = false, bool hidden = false);
 
@@ -67,6 +63,8 @@ namespace BALL
 
 			// exclude parameter from showing in help mode e.g. galaxy specific multi-output parameter
 			void setParameterAsAdvanced(String name);
+
+			void setParameterAsHidden(String name);
 
 			/** Register the minimal and maximal allowed value for a numerical parameter. */
 			void setParameterRestrictions(String par_name, double min_value, double max_value);
@@ -123,7 +121,7 @@ namespace BALL
 
 			void replaceEscapedCharacters_(String& parameter_value);
 
-			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true, bool hidden=false);
+			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
 
 			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true, bool hidden=false);
 

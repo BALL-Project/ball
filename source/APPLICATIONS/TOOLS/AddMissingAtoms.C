@@ -21,8 +21,8 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("AddMissingAtoms", "add missing atoms to protein structures", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
+	parpars.registerMandatoryParameter("i", "input file", INFILE);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
 
 	parpars.setSupportedFormats("i","pdb");
 	parpars.setSupportedFormats("o","pdb,drf");

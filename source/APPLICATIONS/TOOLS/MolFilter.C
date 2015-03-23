@@ -16,18 +16,18 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("MolFilter", "filter molecule files            ", "0.9", String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input molecule-file", INFILE, true);
-	parpars.registerParameter("min_logP", "minimal logP value", DOUBLE);
-	parpars.registerParameter("max_logP", "maximal logP value", DOUBLE);
-	parpars.registerParameter("min_MW", "minimal molecular weight", DOUBLE);
-	parpars.registerParameter("max_MW", "maximal molecular weight", DOUBLE);
-	parpars.registerParameter("q", "query molecules for similarity searching", INFILE);
-	parpars.registerParameter("min_sim", "minimal average similarity", DOUBLE);
-	parpars.registerParameter("max_sim", "maximal similarity", DOUBLE);
-	parpars.registerParameter("smarts", "SMARTS pattern", STRING);
-	parpars.registerParameter("smarts_file", "SMARTS pattern", INFILE);
+	parpars.registerMandatoryParameter("i", "input molecule-file", INFILE);
+	parpars.registerOptionalParameter("min_logP", "minimal logP value", DOUBLE);
+	parpars.registerOptionalParameter("max_logP", "maximal logP value", DOUBLE);
+	parpars.registerOptionalParameter("min_MW", "minimal molecular weight", DOUBLE);
+	parpars.registerOptionalParameter("max_MW", "maximal molecular weight", DOUBLE);
+	parpars.registerOptionalParameter("q", "query molecules for similarity searching", INFILE);
+	parpars.registerOptionalParameter("min_sim", "minimal average similarity", DOUBLE);
+	parpars.registerOptionalParameter("max_sim", "maximal similarity", DOUBLE);
+	parpars.registerOptionalParameter("smarts", "SMARTS pattern", STRING);
+	parpars.registerOptionalParameter("smarts_file", "SMARTS pattern", INFILE);
 
-	parpars.registerParameter("o", "output molecule file", OUTFILE);
+	parpars.registerOptionalParameter("o", "output molecule file", OUTFILE);
 	parpars.registerFlag("quiet", "by quiet, i.e. do not show progress information");
 	parpars.registerFlag("rm", "remove input file when finished");
 	parpars.setSupportedFormats("i","mol2, sdf, drf");

@@ -16,11 +16,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("InteractionConstraintDefiner", "define interaction constraint", VERSION, String(__DATE__), "Docking");
-	parpars.registerParameter("res", "residue ID", STRING, true);
-	parpars.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input configuration file", INFILE);
-	parpars.registerParameter("s", "desired minimal interation (score) between ligand and specified residue(s)", DOUBLE, true, "-2.0");
-	parpars.registerParameter("p", "penalty value", DOUBLE, true, "10");
-	parpars.registerParameter("o", "output configuration file", OUTFILE, true);
+	parpars.registerMandatoryParameter("res", "residue ID", STRING);
+	parpars.registerMandatoryParameter("s", "desired minimal interation (score) between ligand and specified residue(s)", DOUBLE);
+	parpars.registerMandatoryParameter("p", "penalty value", DOUBLE);
+	parpars.registerMandatoryParameter("o", "output configuration file", OUTFILE);
+	parpars.registerOptionalParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input configuration file", INFILE);
 	String man = "This tool allows to define interaction constraints for docking or scoring.\n\nThe constraint to be created will enforce a specified minimal interaction between ligands and the specified residue(s) of the receptor. Please specify residue IDs in the following manner: <chain-ID>:<residue-ID>, e.g. A:57. If you want to use more than one residue, separate their IDs by commas, e.g. A:57,B:17.\n\nOutput of this tool is a ini-file that contains the desired interaction constraint.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME,"ini");

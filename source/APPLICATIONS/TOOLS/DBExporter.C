@@ -30,28 +30,27 @@ int main(int argc, char* argv[])
 	CommandlineParser parpars("DBExporter", "export molecules from data base", version, String(__DATE__), "Get Data");
 
 	// -- Register all available parameters and flags here ---
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("start_id", "ID of the first conformation to be exported", BALL::INT);
-	parpars.registerParameter("end_id", "ID of the last conformation to be exported", BALL::INT);
-	parpars.registerParameter("min_logP", "minimal logP value", DOUBLE);
-	parpars.registerParameter("max_logP", "maximal logP value", DOUBLE);
-	parpars.registerParameter("min_MW", "minimal molecular weight", DOUBLE);
-	parpars.registerParameter("max_MW", "maximal molecular weight", DOUBLE);
-	parpars.registerParameter("max_mols", "max. number of molecules to be exported", BALL::INT);
-	parpars.registerParameter("target", "target/dataset name whose molecules should be exported", STRING);
-	parpars.registerParameter("q", "query molecules for similarity searching", INFILE);
-	parpars.registerParameter("min_sim", "minimal average similarity", DOUBLE);
-	parpars.registerParameter("max_sim", "maximal similarity", DOUBLE);
-	parpars.registerParameter("smarts", "SMARTS pattern", STRING);
-	parpars.registerParameter("smarts_file", "SMARTS pattern", INFILE);
-	parpars.registerParameter("uck", "UCK key", STRING);
+	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
+	parpars.registerOptionalParameter("start_id", "ID of the first conformation to be exported", BALL::INT);
+	parpars.registerOptionalParameter("end_id", "ID of the last conformation to be exported", BALL::INT);
+	parpars.registerOptionalParameter("min_logP", "minimal logP value", DOUBLE);
+	parpars.registerOptionalParameter("max_logP", "maximal logP value", DOUBLE);
+	parpars.registerOptionalParameter("min_MW", "minimal molecular weight", DOUBLE);
+	parpars.registerOptionalParameter("max_MW", "maximal molecular weight", DOUBLE);
+	parpars.registerOptionalParameter("max_mols", "max. number of molecules to be exported", BALL::INT);
+	parpars.registerOptionalParameter("target", "target/dataset name whose molecules should be exported", STRING);
+	parpars.registerOptionalParameter("q", "query molecules for similarity searching", INFILE);
+	parpars.registerOptionalParameter("min_sim", "minimal average similarity", DOUBLE);
+	parpars.registerOptionalParameter("max_sim", "maximal similarity", DOUBLE);
+	parpars.registerOptionalParameter("smarts", "SMARTS pattern", STRING);
+	parpars.registerOptionalParameter("smarts_file", "SMARTS pattern", INFILE);
+	parpars.registerOptionalParameter("uck", "UCK key", STRING);
 	parpars.registerFlag("s", "show summary of datasets in database");
-	parpars.registerParameter("d", "database name", STRING, true);
-	parpars.registerParameter("u", "database username", STRING, true);
-	parpars.registerParameter("host", "database host", STRING, true);
-	parpars.registerParameter("port", "database port", BALL::INT, false, "3306");
-//	parpars.registerParameter("id", "molecule ID property-tag name", STRING);
-	parpars.registerParameter("p", "database password", STRING, true);
+	parpars.registerMandatoryParameter("d", "database name", STRING);
+	parpars.registerMandatoryParameter("u", "database username", STRING);
+	parpars.registerMandatoryParameter("host", "database host", STRING);
+	parpars.registerOptionalParameter("port", "database port", BALL::INT, "3306");
+	parpars.registerMandatoryParameter("p", "database password", STRING);
 	parpars.setParameterRestrictions("min_sim",0,1);
 	parpars.setParameterRestrictions("max_sim",0,1);
 	parpars.setParameterRestrictions("min_logP",-10,10);
@@ -59,7 +58,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("o","mol2, sdf, drf");
 	parpars.setSupportedFormats("q",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("smarts_file","txt");
-	// -------
 
 	String man = "This tool exports compounds from a database to a molecular file. Compounds can be filtered according to (among others) SMARTS expressions, logP, molecular weight, or similarity to query molecule(s) and dataset name.";
 
