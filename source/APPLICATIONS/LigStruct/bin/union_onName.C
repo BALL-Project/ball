@@ -4,10 +4,7 @@
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atomContainer.h>
-#include <BALL/STRUCTURE/UCK.h>
-#include <BALL/QSAR/aromaticityProcessor.h>
-
-#include "../sources/base.h"
+#include <BALL/KERNEL/molecule.h>
 
 using namespace BALL;
 using namespace std;
@@ -15,7 +12,7 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Merge Molecules", " according to their names", 0.1, String(__DATE__), "Preparation");
+	CommandlineParser parpars("Union Molecule Lists", " according to their names", 0.1, String(__DATE__), "Preparation");
 	parpars.registerParameter("small", "small mol list", INFILE, true);
 	parpars.registerParameter("large", "large mol list", INFILE, true);
 	parpars.registerParameter("o", "output mol", OUTFILE, true);
@@ -25,7 +22,7 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setOutputFormatSource("o","small");
 
-	String manual = "Keeps the common set of both input structures";
+	String manual = "Keeps the common set of both input structures according to their names";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
