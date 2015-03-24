@@ -20,6 +20,8 @@
 using namespace BALL;
 using namespace std;
 
+static bool inserted;
+
 static unsigned int total_molecules = 0;
 
 // number of all faults (possibly more than 1 per molecule)
@@ -42,6 +44,7 @@ static double worst_stretch = 0;
 static double worst_bend    = 0;
 static double worst_clash   = 0;
 
+static list< pair<AtomContainer*, float> > ten_worst;
 
 /*
  * 
@@ -106,9 +109,6 @@ float singleInvertedOverlapFactor(Atom& atm, Atom& btm)
 	
 	if (result > 1.0)
 		++total_clashes;
-	
-	if (result > worst_clash)
-		worst_clash = result;
 		
 	return result;
 }
@@ -141,63 +141,105 @@ float getInvertedOverlapFactor(AtomContainer& mol)
 		}
 	}
 	
-	return max_factor;
-}
-
-
-/*
- * 
- */
-float singleBendSeverity( MMFF94StretchBend::Bend& bend)
-{
-	float angle_severity = bend.delta_theta;
-	
-	if( angle_severity > 1. )
-		++total_stretch_faults;
-	
-	// to radiant:
-	angle_severity = angle_severity / 180 * Constants::PI;
-	
-	if( angle_severity > worst_bend)
-		worst_bend = angle_severity;
-	
-	return angle_severity;
-}
-
-
-/*
- * 
- */
-float getBendSeverity( AtomContainer& mol )
-{
-	float max_factor = 0.0;
-	float tmp = 0.0;
-
-	// extract and calculated the bends via MMFF94:
-	System tmp_sys;
-	tmp_sys.insert( *(Molecule*)&mol );
-
-	FragmentDB db("");
-	tmp_sys.apply(db.normalize_names);
-	tmp_sys.apply(db.build_bonds);
-
-	MMFF94 mmff( tmp_sys );
-
-	MMFF94StretchBend bend_component( mmff );
-
-	vector<MMFF94StretchBend::Bend> bends = bend_component.getBends();
-	
-	// iterate over all bends:
-	for(vector<MMFF94StretchBend::Bend>::iterator bit; bit != bends.end(); ++bit)
+	if (max_factor > worst_clash)
 	{
-		tmp = singleBendSeverity( *bit );
+		worst_clash = max_factor;
+	}
+	
+	int size = ten_worst.size();
+	
+	if( size == 0)
+	{
+		// add new element
+		ten_worst.push_front( make_pair(&mol, max_factor) );
+		inserted = true;
+	}
+	else if( max_factor > ten_worst.back().second )
+	{
+//		cout<<endl<<endl<<"inserting: "<<max_factor<<endl;
+//		for(list<pair<AtomContainer*, float>>::iterator it = ten_worst.begin();
+//				it != ten_worst.end(); ++it)
+//		{
+//			cout<<"score: "<<it->second<<endl;
+//		}
+		// insert sorted:
+		for(list<pair<AtomContainer*, float>>::iterator it = ten_worst.begin();
+				it != ten_worst.end(); ++it)
+		{
+			if( it->second < max_factor)
+			{
+				ten_worst.insert(it, make_pair(&mol , max_factor) );
+				break;
+			}
+		}
 		
-		if(tmp > max_factor)
-			max_factor = tmp;
+		inserted = true;
+		
+		// remove last element if container max is reached:
+		if(ten_worst.size() == 11)
+		{
+			delete ten_worst.back().first;
+			ten_worst.pop_back();
+		}
 	}
 	
 	return max_factor;
 }
+
+
+///*
+// * 
+// */
+//float singleBendSeverity( MMFF94StretchBend::Bend& bend)
+//{
+//	float angle_severity = bend.delta_theta;
+	
+//	if( angle_severity > 1. )
+//		++total_stretch_faults;
+	
+//	// to radiant:
+//	angle_severity = angle_severity / 180 * Constants::PI;
+	
+//	if( angle_severity > worst_bend)
+//		worst_bend = angle_severity;
+	
+//	return angle_severity;
+//}
+
+
+///*
+// * 
+// */
+//float getBendSeverity( AtomContainer& mol )
+//{
+//	float max_factor = 0.0;
+//	float tmp = 0.0;
+
+//	// extract and calculated the bends via MMFF94:
+//	System tmp_sys;
+//	tmp_sys.insert( *(Molecule*)&mol );
+
+//	FragmentDB db("");
+//	tmp_sys.apply(db.normalize_names);
+//	tmp_sys.apply(db.build_bonds);
+
+//	MMFF94 mmff( tmp_sys );
+
+//	MMFF94StretchBend bend_component( mmff );
+
+//	vector<MMFF94StretchBend::Bend> bends = bend_component.getBends();
+	
+//	// iterate over all bends:
+//	for(vector<MMFF94StretchBend::Bend>::iterator bit; bit != bends.end(); ++bit)
+//	{
+//		tmp = singleBendSeverity( *bit );
+		
+//		if(tmp > max_factor)
+//			max_factor = tmp;
+//	}
+	
+//	return max_factor;
+//}
 
 
 void updateTotalMeasure( AtomContainer& mol)
@@ -210,7 +252,7 @@ void updateTotalMeasure( AtomContainer& mol)
 		severity_stretches += this_stretch_severity;
 		++num_severe_stretches;
 	}
-	
+
 	// Angle deviation
 	// does NOT work...
 //	float this_bend_severity = getBendSeverity( mol );
@@ -265,8 +307,7 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Quality Checker", "Report quality of structures", 0.1, String(__DATE__), "Evaluation");
 	parpars.registerParameter("i", "input SDF to be assessed ", STRING, true);
-	
-	parpars.setSupportedFormats("i","sdf");
+	parpars.registerParameter("o", "output file for the 10 worst sturcures", STRING, false);
 
 	parpars.setToolManual("Checks how well the found covalent bond lengths and "
 												"vdw-distances agree with known standard parameters");
@@ -281,16 +322,25 @@ int main(int argc, char* argv[])
 	AtomContainer* tmp;
 
 	tmp = in_file.read();
-
+	inserted = true;
+	
 	while(tmp)
 	{
+		inserted = false;
 		total_molecules++;
 		
 		updateTotalMeasure( *tmp );
 		
+		if( !inserted )
+			delete tmp;
+		
 		tmp = in_file.read(); // next loop iteration
 	}
-	in_file.close();
+	
+	if( !inserted )
+		delete tmp;
+	
+	 in_file.close();
 	
 	// get final averages from total counts:
 	calculateAverages();
@@ -307,4 +357,19 @@ int main(int argc, char* argv[])
 	
 	Log<< "clashes: " << severity_clashes << " / " << worst_clash << " / "
 		 << total_clashes << " / "<< num_severe_clashes << endl;
+	
+	// give the ten ugliest structures back:
+	if(parpars.has("o"))
+	{
+		cout<<"writing "<< ten_worst.size()<<" worst structures"<<endl;
+		SDFile outfile(parpars.get("o"), ios::out);
+		
+		for(list< pair<AtomContainer*,float> >::iterator it = ten_worst.begin(); 
+				it != ten_worst.end(); ++it )
+		{
+			it->first->setProperty("clash_score", it->second);
+			outfile << * it->first;
+		}
+	}
+	
 }
