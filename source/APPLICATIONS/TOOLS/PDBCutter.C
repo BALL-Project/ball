@@ -23,13 +23,13 @@ void usage (const char *progname);
 int main (int argc, char **argv)
 {
 	CommandlineParser parpars("PDBCutter", "separate ligand and receptor  ", VERSION, String(__DATE__), "Preparation");
-	parpars.registerMandatoryParameter("i", "input pdb-file", INFILE);
-	parpars.registerMandatoryParameter("rec", "receptor output pdb-file", OUTFILE);
-	parpars.registerMandatoryParameter("lig", "ligand output pdb-file", OUTFILE);
-	parpars.registerMandatoryParameter("lig_chain", "chain-name of ligand", STRING);
-	parpars.registerMandatoryParameter("lig_name", "ligand name", STRING);
-	parpars.registerOptionalParameter("rm_ch", "protein chains that are to be deleted", STRINGLIST);
-	parpars.registerOptionalParameter("rm_res", "pdb-residues that are to be deleted (e.g. water or ions)", STRINGLIST);
+	parpars.registerMandatoryInputFile("i", "input pdb-file");
+	parpars.registerMandatoryOutputFile("rec", "receptor output pdb-file");
+	parpars.registerMandatoryOutputFile("lig", "ligand output pdb-file");
+	parpars.registerMandatoryStringParameter("lig_chain", "chain-name of ligand");
+	parpars.registerMandatoryStringParameter("lig_name", "ligand name");
+	parpars.registerOptionalStringListParameter("rm_ch", "protein chains that are to be deleted");
+	parpars.registerOptionalStringListParameter("rm_res", "pdb-residues that are to be deleted (e.g. water or ions)");
 	String man = "This tool splits a given pdb-file into two files containing receptor and reference ligand, respectively.\n\nThe name of the reference ligand (exactly as it appears in the pdb-file) and the name of its chain need to be specified by '-lig_name' and '-lig_chain'.\nOptionally, chains (e.g. in case of multimers) or pdb-residues (e.g. water or ions) that you don't need can be deleted from the receptor. In this case, specify their names with '-rm_ch' or '-rm_res'.\n\nOutput of this tool is one pdb-file containing the receptor-structure, i.e. the protein w/o reference ligand and w/o undesired chains/residues (if any were specified), and one pdb-file containing the reference ligand.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","pdb");

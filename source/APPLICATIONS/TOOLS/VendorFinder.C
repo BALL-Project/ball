@@ -18,13 +18,13 @@ void optimizePurchase(list<pair<Size, list<MolDB::VendorInfo> > >& result_list, 
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("VendorFinder", "search vendors for compounds", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerMandatoryParameter("i", "input file containing compounds", INFILE);
-	parpars.registerMandatoryParameter("d", "database name", STRING);
-	parpars.registerMandatoryParameter("u", "database username", STRING);
-	parpars.registerMandatoryParameter("host", "database host", STRING);
-	parpars.registerOptionalParameter("port", "database port", BALL::INT, "3306");
-	parpars.registerMandatoryParameter("p", "database password", STRING);
-	parpars.registerOptionalParameter("o", "output text file", OUTFILE);
+	parpars.registerMandatoryInputFile("i", "input file containing compounds");
+	parpars.registerMandatoryStringParameter("d", "database name");
+	parpars.registerMandatoryStringParameter("u", "database username");
+	parpars.registerMandatoryStringParameter("host", "database host");
+	parpars.registerOptionalIntegerParameter("port", "database port", 3306);
+	parpars.registerMandatoryStringParameter("p", "database password");
+	parpars.registerOptionalOutputFile("o", "output text file");
 	parpars.registerFlag("opt", "optimize purchase, i.e. select cheapest sources and sort by vendor");
 	String man = "This tool can be used to fetch information about vendors for each compound in the given input file from a data base.\n\nOf course, vendors can only be found if they have been stored in the database that is to be used here. Use DBImporter with molecules files obtained from the compound vendors of your choice in order to create such a database.\n\nOutput of this tool is a text-file containing a list of vendor-name and vendor's compound-ID for each compound in the input file for which vendor-information was found in the database.";
 	parpars.setToolManual(man);

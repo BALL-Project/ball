@@ -24,11 +24,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("ConstraintsFinder", "find strongly interacting residues", VERSION, String(__DATE__), "Docking");
-	parpars.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
-	parpars.registerMandatoryParameter("rl", "reference-ligand", INFILE);
-	parpars.registerOptionalParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	parpars.registerOptionalParameter("o", "output configuration file", OUTFILE);
-	parpars.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.registerMandatoryInputFile("rec", "receptor pdb-file");
+	parpars.registerMandatoryInputFile("rl", "reference-ligand");
+	parpars.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file");
+	parpars.registerOptionalOutputFile("o", "output configuration file");
+	parpars.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
 	String man = "This tool searches protein residues with which the reference ligand interacts strongly.\nTherefore the interaction of the reference ligand to each residue is evaluated. Residues with a score worse (i.e. larger) than -2 are ignored. A maximum of 3 constraints are created for the most strongly interacting residues that met the above criterion.\n\nAs input we need:\n\
     * a file containing a protonated protein in pdb-format\n\
     * a file containing a reference ligand.\n\

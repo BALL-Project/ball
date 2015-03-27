@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
 	// - category
 	CommandlineParser parpars("CrystalGenerator", "creates crystals", "VERSION", String(__DATE__), "Structure Creation");
 	
-	parpars.registerMandatoryParameter("i", "input pdb file", INFILE);
-	parpars.registerMandatoryParameter("o", "output pdb file", OUTFILE);
+	parpars.registerMandatoryInputFile("i", "input pdb file");
+	parpars.registerMandatoryOutputFile("o", "output pdb file");
 
 	// the space group
-	parpars.registerMandatoryParameter("sg", "space group symbol in Herman-Mauguin notation", STRING);
+	parpars.registerMandatoryStringParameter("sg", "space group symbol in Herman-Mauguin notation");
   
 	CrystalGenerator generator;
 	
@@ -73,30 +73,30 @@ int main(int argc, char* argv[])
 	parpars.setParameterRestrictions("sg", space_groups);
 	
 	// the cell axes
-	parpars.registerOptionalParameter("axis_a", "cell axis a", DOUBLE);
-	parpars.registerOptionalParameter("axis_b", "cell axis b", DOUBLE);
-	parpars.registerOptionalParameter("axis_c", "cell axis c", DOUBLE);
+	parpars.registerOptionalDoubleParameter("axis_a", "cell axis a");
+	parpars.registerOptionalDoubleParameter("axis_b", "cell axis b");
+	parpars.registerOptionalDoubleParameter("axis_c", "cell axis c");
   
 	// the cell angles
-	parpars.registerOptionalParameter("angle_alpha", "cell angle alpha", DOUBLE);
-	parpars.setParameterRestrictions("angle_alpha", 0., 359.);
-	parpars.registerOptionalParameter("angle_beta", "cell angle beta", DOUBLE);
-	parpars.setParameterRestrictions("angle_beta", 0., 359.);
-	parpars.registerOptionalParameter("angle_gamma", "cell angle gamma", DOUBLE);
-	parpars.setParameterRestrictions("angle_gamma", 0., 359.);
+	parpars.registerOptionalDoubleParameter("angle_alpha", "cell angle alpha");
+	parpars.setParameterRestrictions("angle_alpha", 0.0, 359.0);
+	parpars.registerOptionalDoubleParameter("angle_beta", "cell angle beta");
+	parpars.setParameterRestrictions("angle_beta", 0.0, 359.0);
+	parpars.registerOptionalDoubleParameter("angle_gamma", "cell angle gamma");
+	parpars.setParameterRestrictions("angle_gamma", 0.0, 359.0);
 	
 	// the unit cell indices to create
-	parpars.registerMandatoryParameter("from_uc_a", "from unit cell index a", INT);
+	parpars.registerMandatoryIntegerParameter("from_uc_a", "from unit cell index a");
 	parpars.setParameterRestrictions("from_uc_a", 0, 9);
-	parpars.registerMandatoryParameter("from_uc_b", "from unit cell index b", INT);
+	parpars.registerMandatoryIntegerParameter("from_uc_b", "from unit cell index b");
 	parpars.setParameterRestrictions("from_uc_b", 0, 9);
-	parpars.registerMandatoryParameter("from_uc_c", "from unit cell index c", INT);
+	parpars.registerMandatoryIntegerParameter("from_uc_c", "from unit cell index c");
 	parpars.setParameterRestrictions("from_uc_c", 0, 9);
-	parpars.registerMandatoryParameter("to_uc_a", "to unit cell index a", INT);
+	parpars.registerMandatoryIntegerParameter("to_uc_a", "to unit cell index a");
 	parpars.setParameterRestrictions("from_uc_a", 0, 9);
-	parpars.registerMandatoryParameter("to_uc_b", "to unit cell index b", INT);
+	parpars.registerMandatoryIntegerParameter("to_uc_b", "to unit cell index b");
 	parpars.setParameterRestrictions("from_uc_b", 0, 9);
-	parpars.registerMandatoryParameter("to_uc_c", "to unit cell index c", INT);
+	parpars.registerMandatoryIntegerParameter("to_uc_c", "to unit cell index c");
 	parpars.setParameterRestrictions("from_uc_c", 0, 9);
   
 	String man = "TODO: Manual";

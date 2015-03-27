@@ -23,8 +23,8 @@ void usage (const char *progname);
 int main (int argc, char **argv)
 {
 	CommandlineParser parpars("PeptideBuilder", "build a peptide  ", VERSION, String(__DATE__), "Preparation");
-	parpars.registerMandatoryParameter("i", "input torsion-file", INFILE);
-	parpars.registerMandatoryParameter("o", "peptide output pdb-file", OUTFILE);
+	parpars.registerMandatoryInputFile("i", "input torsion-file");
+	parpars.registerMandatoryOutputFile("o", "peptide output pdb-file");
 
 	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.\n\nExample:\n\n# aa   phi    psi   omega\n\nA    -180    140\n\nC    -180    180\n\nG    -90    -140\n\nP    -65    -40       0   # cis\n\nT    -120    -90\n\nP    -78     146     180  # trans";
 

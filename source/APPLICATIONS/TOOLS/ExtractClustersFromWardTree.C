@@ -30,7 +30,7 @@ int main (int argc, char **argv)
 	// - description
 	// - parameter type
 	// - required
-	parpars.registerMandatoryParameter("i", "input serialized cluster file", INFILE);
+	parpars.registerMandatoryInputFile("i", "input serialized cluster file");
 
 	// we register an output file parameter 
 	// - CLI switch
@@ -39,18 +39,18 @@ int main (int argc, char **argv)
 	// - required
 	// - default value
 	// - hidden in galaxy
-	parpars.registerMandatoryParameter("o_out", "output file name ", OUTFILE);
+	parpars.registerMandatoryOutputFile("o_out", "output file name ");
 	parpars.setParameterAsHidden("o_out");
 
 	// we register the output type
-	parpars.registerOptionalParameter("o_type", "output type (gv, index_list) ", STRING, "index_list");
+	parpars.registerOptionalStringParameter("o_type", "output type (gv, index_list) ", "index_list");
 	list<String> output_types;
 	output_types.push_back("gv");
 	output_types.push_back("index_list");
 	parpars.setParameterRestrictions("o_type", output_types);
 
 	// we register the cutoff type
-	parpars.registerOptionalParameter("cutoff_type", "cutoff type (ward_distance, num_clusters) ", STRING, "ward_distance");
+	parpars.registerOptionalStringParameter("cutoff_type", "cutoff type (ward_distance, num_clusters) ", "ward_distance");
 	list<String> cutoff_types;
 	cutoff_types.push_back("ward_distance");
 	cutoff_types.push_back("num_clusters");
@@ -58,11 +58,11 @@ int main (int argc, char **argv)
 
 	// we register the cutoff value, either the minimal ward distance between the clusters
 	//                               or the number of clusters to split into
-	parpars.registerOptionalParameter("cut_value", "cut value for splitting the given WART tree using the cutoff-type (default 5.0) ", DOUBLE, 5.0);
-	parpars.setParameterRestrictions("cut_value", 0.0, 10000);
+	parpars.registerOptionalDoubleParameter("cut_value", "cut value for splitting the given WART tree using the cutoff-type (default 5.0) ", 5.0);
+	parpars.setParameterRestrictions("cut_value", 0.0, 10000.0);
 
 	// we register a parameter defining the minimal size of clusters - e.g. for filtering out single outlieers
-	parpars.registerOptionalParameter("min_size", "minimal size of clusters (default 1) ", INT, 1);
+	parpars.registerOptionalIntegerParameter("min_size", "minimal size of clusters (default 1) ", 1);
 	parpars.setParameterRestrictions("min_size", 1, 10000);
 
 	// the manual

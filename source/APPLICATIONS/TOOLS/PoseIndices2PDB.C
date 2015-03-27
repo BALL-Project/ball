@@ -24,21 +24,21 @@ int main(int argc, char** argv)
 {
 	CommandlineParser parpars("PoseIndices2PDB", "converts pose indices into PDB files ", VERSION, String(__DATE__), "Convert, combine and store");
 
-	parpars.registerMandatoryParameter("i_clust", "input cluster index file", INFILE);
-	parpars.registerMandatoryParameter("i_trans", "input tranformation file", INFILE);
-	parpars.registerMandatoryParameter("i_pdb",   "input reference pdb file", INFILE);
+	parpars.registerMandatoryInputFile("i_clust", "input cluster index file");
+	parpars.registerMandatoryInputFile("i_trans", "input tranformation file");
+	parpars.registerMandatoryInputFile("i_pdb",   "input reference pdb file");
 
-	parpars.registerMandatoryParameter("o", "output file name prefix for resulting pdb files", OUTFILE);
+	parpars.registerMandatoryOutputFile("o", "output file name prefix for resulting pdb files");
 	parpars.setParameterAsHidden("o");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerOptionalParameter("o_id", "output file name prefix for 2nd to last pdb file", GALAXY_OPT_OUTID, "$o.id");
+	parpars.registerOptionalGalaxyOutputId("o_id", "output file name prefix for 2nd to last pdb file", "$o.id");
 	// need to be hidden in command line mode
 	parpars.setParameterAsHidden("o_id");
 	parpars.setParameterAsAdvanced("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerOptionalParameter("o_dir", "output directory for 2nd to last pdb file", GALAXY_OPT_OUTDIR, "$__new_file_path__");
+	parpars.registerOptionalGalaxyOutputFolder("o_dir", "output directory for 2nd to last pdb file", "$__new_file_path__");
 	// need to be hidden in command line mode
 	parpars.setParameterAsHidden("o_dir");
 	parpars.setParameterAsAdvanced("o_dir");

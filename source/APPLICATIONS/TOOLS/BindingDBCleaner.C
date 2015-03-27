@@ -15,10 +15,10 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("BindingDBCleaner", "fix bindingdb.org downloads", VERSION, String(__DATE__), "Preparation");
-	parpars.registerMandatoryParameter("i", "input file", INFILE);
-	parpars.registerMandatoryParameter("type", "type of contained activity values: 'Ki' or 'IC50'",STRING);
-	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
-	parpars.registerMandatoryParameter("target", "binding-DB target name", STRING);
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryStringParameter("type", "type of contained activity values: 'Ki' or 'IC50'");
+	parpars.registerMandatoryOutputFile("o", "output file");
+	parpars.registerMandatoryStringParameter("target", "binding-DB target name");
 	String manual = "This tool cleans up the sd-properties contained in sd-files downloaded from bindingdb.org.\n\nFor all compounds in the input file, the affinity value for the specified target is searched and retained but all other properties are removed. Furthermore, the IC50 or Ki value of each compound is converted to a binding-free-energy value in units of [kJ/mol] that is added as a property-tag named 'binding_free_energy'.\n\nAll compounds in the input file for which no IC50 resp. Ki value for the specified target can found, are ignored and not written to the output file.";
 	parpars.setToolManual(manual);
 	list<String> slist;

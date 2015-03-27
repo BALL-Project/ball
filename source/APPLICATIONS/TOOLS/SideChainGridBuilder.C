@@ -44,8 +44,8 @@ GridBasedScoring* createScoringFunction(AtomContainer* receptor, AtomContainer* 
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("SideChainGridBuilder", "build side chain grid", VERSION, String(__DATE__), "Docking");
-	parpars.registerMandatoryParameter("param", "parameter file", INFILE);
-	parpars.registerMandatoryParameter("d", "output directory", STRING);
+	parpars.registerMandatoryInputFile("param", "parameter file");
+	parpars.registerMandatoryStringParameter("d", "output directory");
 	parpars.setSupportedFormats("param", "ini");
 	parpars.setToolManual("This tool precalculates a side chain grid.");
 

@@ -21,11 +21,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("GridBuilder", "create score-grids for docking", VERSION, String(__DATE__), "Docking");
-	parpars.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
-	parpars.registerMandatoryParameter("rl", "reference-ligand", INFILE);
-	parpars.registerMandatoryParameter("grd", "ScoreGrid file", OUTFILE);
-	parpars.registerOptionalParameter("pocket", "configuration file", INFILE);
-	parpars.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.registerMandatoryInputFile("rec", "receptor pdb-file");
+	parpars.registerMandatoryInputFile("rl", "reference-ligand");
+	parpars.registerMandatoryOutputFile("grd", "ScoreGrid file");
+	parpars.registerOptionalInputFile("pocket", "configuration file");
+	parpars.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
 
 	String man = "This tool precalculates a score-grid for a binding pocket of a given receptor.\n\nAs input we need:\n\
     * a file containing a protonated protein in pdb-format\n\

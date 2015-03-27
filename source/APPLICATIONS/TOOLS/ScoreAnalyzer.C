@@ -125,14 +125,14 @@ BALL::String valueToString(double value)
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("ScoreAnalyzer", "generate ROC or enrichment plots", VERSION, String(__DATE__), "Analysis");
-	parpars.registerMandatoryParameter("mode", "'roc', 'top50', 'scatter' or 'enrichment'", STRING);
-	parpars.registerOptionalParameter("title", "plot title", STRING);
-	parpars.registerOptionalParameter("o", "output eps-/png-file", OUTFILE);
-	parpars.registerMandatoryParameter("i", "input file", INFILE);
-	parpars.registerMandatoryParameter("s", "score label", STRING);
-	parpars.registerMandatoryParameter("e", "binding-free-energy/class label name", STRING);
+	parpars.registerMandatoryStringParameter("mode", "'roc', 'top50', 'scatter' or 'enrichment'");
+	parpars.registerOptionalStringParameter("title", "plot title");
+	parpars.registerOptionalOutputFile("o", "output eps-/png-file");
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryStringParameter("s", "score label");
+	parpars.registerMandatoryStringParameter("e", "binding-free-energy/class label name");
 	parpars.registerFlag("b", "binary experimental activity data");
-	parpars.registerOptionalParameter("t", "only in case of non-binary act. data: binding-free-energy threshold; compound with values *below* this threshold will be defined as binder", STRING);
+	parpars.registerOptionalStringParameter("t", "only in case of non-binary act. data: binding-free-energy threshold; compound with values *below* this threshold will be defined as binder");
 	String man = "This tool can be used generate plots that allow to evaluate the quality of docking or (re-)scoring.\n\nThe type of plot to be generated must be chosen by either '-roc', '-top50', '-scatter' or '-enrichment'. The name of the property-tag that contains the scores to be evaluated (e.g. obtained by docking) is to be specified by '-s'; the name of the property-tag containing experimental data (e.g. binding-free-energy measurements or binder/non-binder info) by use '-e'. If the experimental reference data is not binary, then a threshold below which compound will be considered binders must be given with '-t'.\nThe output graphic will created by use of gnuplot, so make sure to have it installed and in your PATH environment variable.\n\nThe output of this tool is a plot in form of an eps or png-file (as chosen).";
 	parpars.setToolManual(man);
 	list<String> slist;

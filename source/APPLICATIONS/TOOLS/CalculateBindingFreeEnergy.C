@@ -19,8 +19,9 @@ int main(int argc, char* argv[])
 {
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("CalculateBindingFreeEnergy", "calculate binding energy of two proteins using AMBER", VERSION, String(__DATE__), "ForceFields");
-	parpars.registerMandatoryParameter("pdb_a",  "first input pdb file ", INFILE);
-	parpars.registerMandatoryParameter("pdb_b",  "second input pdb file ", INFILE);
+	parpars.registerMandatoryInputFile("pdb_a",  "first input pdb file ");
+	parpars.registerMandatoryInputFile("pdb_b",  "second input pdb file ");
+	///TODO: generate an output file with the energy that is being calculated!!! stdout is not enough!!!
 
 	// the manual
 	String man = String("This tool computes the binding energy of two given pdb files using the AMBER force field.");

@@ -16,9 +16,9 @@ int main(int argc, char* argv[])
 {
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("ExtractProteinSequence", "extracts fasta sequence", VERSION, String(__DATE__), "Get Data");
-	parpars.registerMandatoryParameter("i",  "input pdb file from which to extract ", INFILE);
-	parpars.registerMandatoryParameter("o",  "output fasta file", OUTFILE);
-	parpars.registerOptionalParameter("c",  "chain specifier", STRING);
+	parpars.registerMandatoryInputFile("i",  "input pdb file from which to extract ");
+	parpars.registerMandatoryOutputFile("o",  "output fasta file");
+	parpars.registerOptionalStringParameter("c",  "chain specifier");
 
 	// the manual
 	String man = String("This tool extracts the fasta sequence from a given pdb file.");

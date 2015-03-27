@@ -24,20 +24,20 @@ int main(int argc, char** argv)
 {
 	CommandlineParser parpars("TrajectoryFile2PDBSplitter", "splits SnapShots into PDB files ", VERSION, String(__DATE__), "Convert, combine and store");
 
-	parpars.registerMandatoryParameter("i_traj", "input trajectory file", INFILE);
-	parpars.registerMandatoryParameter("i_pdb", "input pdb-file", INFILE);
+	parpars.registerMandatoryInputFile("i_traj", "input trajectory file");
+	parpars.registerMandatoryInputFile("i_pdb", "input pdb-file");
 
-	parpars.registerMandatoryParameter("o", "output pdb-file for first solution", OUTFILE);
+	parpars.registerMandatoryOutputFile("o", "output pdb-file for first solution");
 	parpars.setParameterAsHidden("o");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerOptionalParameter("o_id", "output id", GALAXY_OPT_OUTID, "$o.id");
+	parpars.registerOptionalGalaxyOutputId("o_id", "output id", "$o.id");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
 	parpars.setParameterAsHidden("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerOptionalParameter("o_dir", "output directory for 2nd to last pdb file", GALAXY_OPT_OUTDIR, "$__new_file_path__");
+	parpars.registerOptionalGalaxyOutputFolder("o_dir", "output directory for 2nd to last pdb file", "$__new_file_path__");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dir");
 	parpars.setParameterAsHidden("o_dir");

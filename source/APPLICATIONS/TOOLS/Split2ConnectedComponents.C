@@ -22,24 +22,23 @@ int main (int argc, char **argv)
 {
 	CommandlineParser parpars("Split2ConnectedComponents", "splits a molecular file into its connected components", VERSION, String(__DATE__), "Preparation");
 
-	parpars.registerMandatoryParameter("i", "input mol2-file", INFILE);
+	parpars.registerMandatoryInputFile("i", "input mol2-file");
 
-	parpars.registerMandatoryParameter("o", "output mol2-file name for first solution", OUTFILE);
+	parpars.registerMandatoryOutputFile("o", "output mol2-file name for first solution");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerOptionalParameter("o_id", "output id", GALAXY_OPT_OUTID, "$o.id");
+	parpars.registerOptionalGalaxyOutputId("o_id", "output id", "$o.id");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
 	parpars.setParameterAsHidden("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerOptionalParameter("o_dir", "output directory for 2nd to last solution", GALAXY_OPT_OUTDIR, "$__new_file_path__");
+	parpars.registerOptionalGalaxyOutputFolder("o_dir", "output directory for 2nd to last solution", "$__new_file_path__");
 	// need to be hidden in command line mode
 	parpars.setParameterAsHidden("o_dir");
 	parpars.setParameterAsAdvanced("o_dir");
 
-	// register String parameter for supplying max number of solutions
-	parpars.registerOptionalParameter("min_atoms", "ignore connected components with less than minimal number of atoms", INT, 4);
+	parpars.registerOptionalIntegerParameter("min_atoms", "ignore connected components with less than minimal number of atoms", 4);
 
 	String man = "This tool splits a given molecular file into its connected components.\n\nOptional parameters are the minimal number of atoms ('-min_atoms') a connected component should have to be stored.\n\nOutput of this tool is a number of mol2 files each containing one connected component.";
 	parpars.setToolManual(man);

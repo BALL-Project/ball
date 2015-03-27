@@ -23,9 +23,9 @@ BALL::String valueToString(double value);
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("MolDepict", "create structure diagrams", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerMandatoryParameter("i", "input file", INFILE);
-	parpars.registerMandatoryParameter("o", "output pdf-file", OUTFILE);
-	parpars.registerOptionalParameter("max", "maximal number of pictures (default=60, 0=unlimited)", BALL::INT, 60);
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryOutputFile("o", "output pdf-file");
+	parpars.registerOptionalIntegerParameter("max", "maximal number of pictures (default=60, 0=unlimited)", 60);
 	String man = "This tool create structure diagrams for small molecules.\nSupported input-formats are mol, mol2, sdf, drf.\n\nOutput of this tool is one pdf-file containing the structure diagrams for all molecules in the input-file.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());

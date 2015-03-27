@@ -18,14 +18,14 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("IMGDock", "Iterative Multi-Greedy Docking", VERSION, String(__DATE__), "Docking");
-	parpars.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
-	parpars.registerMandatoryParameter("rl", "reference-ligand", INFILE);
-	parpars.registerOptionalParameter("pocket", "configuration file", INFILE);
-	parpars.registerMandatoryParameter("i", "compounds to be docked", INFILE);
-	parpars.registerMandatoryParameter("o", "output file for docked compounds", OUTFILE);
-	parpars.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.registerMandatoryInputFile("rec", "receptor pdb-file");
+	parpars.registerMandatoryInputFile("rl", "reference-ligand");
+	parpars.registerOptionalInputFile("pocket", "configuration file");
+	parpars.registerMandatoryInputFile("i", "compounds to be docked");
+	parpars.registerMandatoryOutputFile("o", "output file for docked compounds");
+	parpars.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
 	parpars.registerFlag("rm", "remove input file when finished");
-	parpars.registerMandatoryParameter("grd", "ScoreGrid file", INFILE);
+	parpars.registerMandatoryInputFile("grd", "ScoreGrid file");
 	String man = "IMGDock docks compounds into the binding pocket of a receptor using an iterative multi-greedy approach.\nAs input we need:\n\n\
     * a file containing a protonated protein in pdb-format\n\
     * a file containing a reference ligand. This reference ligand should be located in the binding pocket. Supported formats are mol2, sdf or drf (DockResultFile, xml-based).\n\

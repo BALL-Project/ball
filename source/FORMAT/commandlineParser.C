@@ -113,14 +113,169 @@ void CommandlineParser::checkAndRegisterParameter
 	}
 }
 
-void CommandlineParser::registerMandatoryParameter(String name, String description, ParameterType type)
+void CommandlineParser::registerMandatoryIntegerParameter(const String& name, const String& description)
 {
-	checkAndRegisterParameter(name, description, type, true, "", true);
+	checkAndRegisterParameter(name, description, BALL::INT, true, 0, true);
 }
 
-void CommandlineParser::registerOptionalParameter(String name, String description, ParameterType type, String default_value)
+void CommandlineParser::registerMandatoryIntegerListParameter(const String& name, const String& description)
 {
-	checkAndRegisterParameter(name, description, type, false, default_value, true);
+	checkAndRegisterParameter(name, description, BALL::INTLIST, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryDoubleParameter(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::DOUBLE, true, 0.0, true);
+}
+
+void CommandlineParser::registerMandatoryDoubleListParameter(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::DOUBLELIST, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryStringParameter(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::STRING, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryStringListParameter(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::STRINGLIST, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryInputFile(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::INFILE, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryOutputFile(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::OUTFILE, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryInputFileList(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::INFILELIST, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryOutputFileList(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::OUTFILELIST, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryGalaxyOutputFolder(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::GALAXY_OPT_OUTDIR, true, "", true);
+}
+
+void CommandlineParser::registerMandatoryGalaxyOutputId(const String& name, const String& description)
+{
+	checkAndRegisterParameter(name, description, BALL::GALAXY_OPT_OUTID, true, "", true);
+}
+
+void CommandlineParser::registerOptionalIntegerParameter(const String& name, const String& description, int default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::INT, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalIntegerListParameter(const String& name, const String& description, const std::vector<int>& default_values)
+{
+	String default_value = "";
+	for (int i = 0, n = default_values.size(); i < n; i++)
+	{
+		if (i != 0)
+		{
+			default_value += " ";
+		}
+		default_value += default_values[i];
+	}
+	checkAndRegisterParameter(name, description, BALL::INTLIST, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalDoubleParameter(const String& name, const String& description, double default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::DOUBLE, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalDoubleListParameter(const String& name, const String& description, const std::vector<double>& default_values)
+{
+	String default_value = "";
+	for (int i = 0, n = default_values.size(); i < n; i++)
+	{
+		if (i != 0)
+		{
+			default_value += " ";
+		}
+		default_value += default_values[i];
+	}
+	checkAndRegisterParameter(name, description, BALL::DOUBLELIST, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalStringParameter(const String& name, const String& description, const String& default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::STRING, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalStringListParameter(const String& name, const String& description, const std::vector<String>& default_values)
+{
+	String default_value = "";
+	for (int i = 0, n = default_values.size(); i < n; i++)
+	{
+		if (i != 0)
+		{
+			default_value += " ";
+		}
+		default_value += default_values[i];
+	}
+	checkAndRegisterParameter(name, description, BALL::STRINGLIST, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalInputFile(const String& name, const String& description, const String& default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::INFILE, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalOutputFile(const String& name, const String& description, const String& default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::OUTFILE, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalInputFileList(const String& name, const String& description, const std::vector<String>& default_values)
+{
+	String default_value = "";
+	for (int i = 0, n = default_values.size(); i < n; i++)
+	{
+		if (i != 0)
+		{
+			default_value += " ";
+		}
+		default_value += default_values[i];
+	}
+	checkAndRegisterParameter(name, description, BALL::INFILELIST, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalOutputFileList(const String& name, const String& description, const std::vector<String>& default_values)
+{
+	String default_value = "";
+	for (int i = 0, n = default_values.size(); i < n; i++)
+	{
+		if (i != 0)
+		{
+			default_value += " ";
+		}
+		default_value += default_values[i];
+	}
+	checkAndRegisterParameter(name, description, BALL::OUTFILELIST, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalGalaxyOutputFolder(const String& name, const String& description, const String& default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::GALAXY_OPT_OUTDIR, false, default_value, true);
+}
+
+void CommandlineParser::registerOptionalGalaxyOutputId(const String& name, const String& description, const String& default_value)
+{
+	checkAndRegisterParameter(name, description, BALL::GALAXY_OPT_OUTID, false, default_value, true);
 }
 
 void CommandlineParser::checkAndRegisterFlag(String name, String description,
@@ -134,6 +289,11 @@ void CommandlineParser::checkAndRegisterFlag(String name, String description,
 	pardes.description = description;
 	pardes.mandatory   = false;
 	pardes.hidden      = hidden;
+	// default value for flags is 0 (false)
+	list<String> alist;
+	alist.push_back("0");
+	parameter_map_[name] = alist;
+
 
 	list<String> values;
 	values.push_back("0");
@@ -163,6 +323,7 @@ void CommandlineParser::registerFlag(String name, String description, bool defau
 }
 
 /// TODO: figure out the meaning of the hard-coded prefixes and remove them!
+/// TODO: why do we need this method if we have "setParameterAsAdvanced"?
 void CommandlineParser::registerAdvancedParameters(Options& options)
 {
 	if (   options.getName().hasPrefix("ReferenceArea")
@@ -185,7 +346,73 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 				continue;
 			}
 
-			registerOptionalParameter(name, pardes->description, pardes->type, it->second);
+			switch(pardes->type)
+			{
+				case BALL::INFILE:
+					registerOptionalInputFile(name, pardes->description, it->second);
+					break;
+				case BALL::OUTFILE:
+					registerOptionalOutputFile(name, pardes->description, it->second);
+					break;
+				case BALL::STRING:
+					registerOptionalStringParameter(name, pardes->description, it->second);
+					break;
+				case BALL::INT:
+					registerOptionalIntegerParameter(name, pardes->description, it->second.toInt());
+					break;
+				case BALL::DOUBLE:
+					registerOptionalDoubleParameter(name, pardes->description, it->second.toDouble());
+					break;
+				case BALL::GALAXY_OPT_OUTDIR:
+					registerOptionalGalaxyOutputFolder(name, pardes->description, it->second);
+					break;
+				case BALL::GALAXY_OPT_OUTID:
+					registerOptionalGalaxyOutputId(name, pardes->description, it->second);
+					break;
+				case BALL::INFILELIST:
+				case BALL::OUTFILELIST:
+				case BALL::INTLIST:
+				case BALL::DOUBLELIST:
+				{
+					///TODO: not sure if files are to be split by spaces? let's assume they are...
+					vector<String> splitValue;
+					Size nValues = it->second.split(splitValue);
+					if (pardes->type == BALL::INFILELIST)
+					{
+						registerOptionalInputFileList(name, pardes->description, splitValue);
+					}
+					else if (pardes->type == BALL::OUTFILELIST)
+					{
+						registerOptionalOutputFileList(name, pardes->description, splitValue);
+					}
+					else if (pardes->type == BALL::INTLIST)
+					{
+						vector<int> intValues;
+						for (int i = 0; i < nValues; i++)
+						{
+							intValues.push_back(splitValue[i].toInt());
+						}
+						registerOptionalIntegerListParameter(name, pardes->description, intValues);
+					}
+					else if (pardes->type == BALL::DOUBLELIST)
+					{
+						vector<double> doubleValues;
+						for (int i = 0; i < nValues; i++)
+						{
+							doubleValues.push_back(splitValue[i].toDouble());
+						}
+						registerOptionalDoubleListParameter(name, pardes->description, doubleValues);
+					}
+					break;
+				}
+
+				default:
+					// unrecognized parameter type!
+					throw BALL::Exception::GeneralException(__FILE__,__LINE__,"registerAdvancedParameters error",
+						"Unrecognized parameter type for parameter " + name);
+
+			}
+
 			registered_parameters_[name].advanced = true;
 			registered_parameters_[name].allowed_values = pardes->allowed_values;
 			registered_parameters_[name].category = category;
@@ -205,6 +432,18 @@ void CommandlineParser::setParameterAsAdvanced(String name)
 }
 
 void CommandlineParser::setParameterRestrictions(String par_name, double min_value, double max_value)
+{
+	map<String, ParameterDescription>::iterator it = registered_parameters_.find(par_name);
+	if (it == registered_parameters_.end())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error","You need to register a parameter before you can set restrictions for it!");
+	}
+	it->second.allowed_values.clear();
+	it->second.allowed_values.push_back(String(min_value));
+	it->second.allowed_values.push_back(String(max_value));
+}
+
+void CommandlineParser::setParameterRestrictions(String par_name, int min_value, int max_value)
 {
 	map<String, ParameterDescription>::iterator it = registered_parameters_.find(par_name);
 	if (it == registered_parameters_.end())

@@ -49,10 +49,10 @@ void validateParameters(CommandlineParser& params)
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Converter", "interconvert molecular file-formats", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerMandatoryParameter("i", "input filename", INFILE);
-	parpars.registerMandatoryParameter("if", "input format", STRING);
-	parpars.registerMandatoryParameter("o", "output filename", OUTFILE);
-	parpars.registerMandatoryParameter("of", "output format", STRING);
+	parpars.registerMandatoryInputFile("i", "input filename");
+	parpars.registerMandatoryStringParameter("if", "input format");
+	parpars.registerMandatoryOutputFile("o", "output filename");
+	parpars.registerMandatoryStringParameter("of", "output format");
 	parpars.registerFlag("rm", "remove input file when finished");
 	
 	// the available formats

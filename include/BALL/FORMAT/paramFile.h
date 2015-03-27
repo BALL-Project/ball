@@ -36,6 +36,8 @@ namespace BALL
 		STRINGLIST,
 		INTLIST,
 		DOUBLELIST,
+		//TODO: do we REALLY need these two openly galaxy specific parameter types?
+		//      couldn't we do it with tags or something more elegant?
 		GALAXY_OPT_OUTDIR,
 		GALAXY_OPT_OUTID
 	};

@@ -24,10 +24,10 @@ int main(int argc, char** argv)
 {
 	CommandlineParser parpars("Trajectory2RigidTransformation", "converts a trajectory file into a rigid transformation file ", VERSION, String(__DATE__), "Convert, combine and store");
 
-	parpars.registerMandatoryParameter("i_dcd", "input trajectory file", INFILE);
-	parpars.registerMandatoryParameter("i_pdb",  "input pdb-file", INFILE);
+	parpars.registerMandatoryInputFile("i_dcd", "input trajectory file");
+	parpars.registerMandatoryInputFile("i_pdb",  "input pdb-file");
 
-	parpars.registerMandatoryParameter("o", "output file for the rigid transformations", OUTFILE);
+	parpars.registerMandatoryOutputFile("o", "output file for the rigid transformations");
 	parpars.setParameterAsHidden("o");
 
 	// the manual

@@ -33,10 +33,10 @@ int main (int argc, char **argv)
 	// - CLI switch
 	// - description
 	// - Inputfile
-	parpars.registerMandatoryParameter("i_pdb", "input pdb-file", INFILE);
-	parpars.registerOptionalParameter("i_dcd", "input dcd-file", INFILE);
-	//TODO offer the alternatives in a more elegant way!
-	parpars.registerOptionalParameter("i_trans", "or input transformation file for rigid rmsd clustering ", INFILE);
+	parpars.registerMandatoryInputFile("i_pdb", "input pdb-file");
+	parpars.registerOptionalInputFile("i_dcd", "input dcd-file");
+	///TODO: offer the alternatives in a more elegant way!
+	parpars.registerOptionalInputFile("i_trans", "or input transformation file for rigid rmsd clustering ");
 
 	// we register an output file parameter 
 	// - CLI switch
@@ -45,29 +45,29 @@ int main (int argc, char **argv)
 	// - required
 	// - default value
 	// - hidden in galaxy
-	parpars.registerMandatoryParameter("o_index_list", "output file name for the index list ", OUTFILE);
+	parpars.registerMandatoryOutputFile("o_index_list", "output file name for the index list ");
 	parpars.setParameterAsHidden("o_index_list");
-	parpars.registerOptionalParameter("o_score_matrix", "output file name for scoring matrix ", OUTFILE);
+	parpars.registerOptionalOutputFile("o_score_matrix", "output file name for scoring matrix ");
 	parpars.setParameterAsHidden("o_score_matrix");
-	parpars.registerOptionalParameter("o_dcd", "output file name for the first cluster dcd file ", OUTFILE);
+	parpars.registerOptionalOutputFile("o_dcd", "output file name for the first cluster dcd file ");
 	parpars.setParameterAsHidden("o_dcd");
 
-	parpars.registerOptionalParameter("o_dcd_id", "output id ", GALAXY_OPT_OUTID, "$o_dcd.id");
+	parpars.registerOptionalGalaxyOutputId("o_dcd_id", "output id ", "$o_dcd.id");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dcd_id");
 	parpars.setParameterAsHidden("o_dcd_id");
 
-	parpars.registerOptionalParameter("o_dcd_dir", "output directory for 2nd to last cluster dcd file (if needed) ", GALAXY_OPT_OUTDIR, "$__new_file_path__");
+	parpars.registerOptionalGalaxyOutputFolder("o_dcd_dir", "output directory for 2nd to last cluster dcd file (if needed) ", "$__new_file_path__");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dcd_dir");
 	parpars.setParameterAsHidden("o_dcd_dir");
 
 	// register String parameter for supplying minimal rmsd between clusters
-	parpars.registerOptionalParameter("rmsd_cutoff", "minimal rmsd between the final clusters (default 5.0) ", DOUBLE, 5.0);
+	parpars.registerOptionalDoubleParameter("rmsd_cutoff", "minimal rmsd between the final clusters (default 5.0) ", 5.0);
 	parpars.setParameterRestrictions("rmsd_cutoff", 0, 100);
 
 	// choice of cluster algorithm  
-	parpars.registerOptionalParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, CLINK_ALTHAUS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, "CLINK_DEFAYS");
+	parpars.registerOptionalStringParameter("alg", "algorithm used for clustering (CLINK_DEFAYS, CLINK_ALTHAUS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", "CLINK_DEFAYS");
 	list<String> cluster_algs;
 	cluster_algs.push_back("CLINK_DEFAYS");
 	cluster_algs.push_back("CLINK_ALTHAUS");
@@ -77,7 +77,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("alg", cluster_algs);
 
 	// choice of atom rmsd scope 
-	parpars.registerOptionalParameter("scope", "atoms to be considered for scoreing a pose (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, "C_ALPHA");
+	parpars.registerOptionalStringParameter("scope", "atoms to be considered for scoreing a pose (C_ALPHA, BACKBONE, ALL_ATOMS) ", "C_ALPHA");
 	list<String> rmsd_levels;
 	rmsd_levels.push_back("C_ALPHA");
 	//rmsd_levels.push_back("HEAVY_ATOMS"); //TODO
@@ -86,7 +86,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("scope", rmsd_levels);
 
 	// choice of rmsd type
-	parpars.registerOptionalParameter("rmsd_type", "rmsd type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, "SNAPSHOT_RMSD");
+	parpars.registerOptionalStringParameter("rmsd_type", "rmsd type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", "SNAPSHOT_RMSD");
 	list<String> rmsd_types;
 	rmsd_types.push_back("SNAPSHOT_RMSD");
 	rmsd_types.push_back("RIGID_RMSD");
@@ -94,26 +94,26 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("rmsd_type", rmsd_types);
 
 	// further optional output parameters
-	parpars.registerOptionalParameter("o_red_dcd", "output file for the reduced cluster set (dcd with one structure per final cluster) ", OUTFILE);
+	parpars.registerOptionalOutputFile("o_red_dcd", "output file for the reduced cluster set (dcd with one structure per final cluster) ");
 
 	// write the final cluster tree in boost::serialize format, if it was computed
-	parpars.registerOptionalParameter("o_cluster_tree", "output file containing the cluster tree in boost::serialize format (if the tree was computed) ", OUTFILE);
+	parpars.registerOptionalOutputFile("o_cluster_tree", "output file containing the cluster tree in boost::serialize format (if the tree was computed) ");
 
 	// register bool parameter for using pre-clustering
 	parpars.registerFlag("use_refinement", "Apply a second clustering run with different options (-refine_alg <string>, -refine_rmsd_type <string>, and -refine_rmsd_scope <string>)", false, true);
 
 	// refinement algorithm
-	parpars.registerOptionalParameter("refine_alg", "algorithm used for second clustering run (CLINK_DEFAYS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", STRING, "CLINK_DEFAYS");
+	parpars.registerOptionalStringParameter("refine_alg", "algorithm used for second clustering run (CLINK_DEFAYS, NEAREST_NEIGHBOR_CHAIN_WARD, SLINK_SIBSON, TRIVIAL_COMPLETE_LINKAGE) ", "CLINK_DEFAYS");
 	parpars.setParameterAsHidden("refine_alg");
 	parpars.setParameterRestrictions("refine_alg", cluster_algs);
 
 	// refinement rmsd type
-	parpars.registerOptionalParameter("refine_rmsd_type", "rmsd type used for second clustering run (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, "SNAPSHOT_RMSD");
+	parpars.registerOptionalStringParameter("refine_rmsd_type", "rmsd type used for second clustering run (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", "SNAPSHOT_RMSD");
 	parpars.setParameterAsHidden("refine_rmsd_type");
 	parpars.setParameterRestrictions("refine_rmsd_type", rmsd_types);
 
 	// refinement rmsd scope
-	parpars.registerOptionalParameter("refine_rmsd_scope", "atoms to be considered for rmsd score in second clustering run (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, "C_ALPHA");
+	parpars.registerOptionalStringParameter("refine_rmsd_scope", "atoms to be considered for rmsd score in second clustering run (C_ALPHA, BACKBONE, ALL_ATOMS) ", "C_ALPHA");
 	parpars.setParameterAsHidden("refine_rmsd_scope");
 	parpars.setParameterRestrictions("refine_rmsd_scope", rmsd_levels);
 

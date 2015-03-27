@@ -146,10 +146,10 @@ bool advancedMoleculeCheck(Molecule* mol)
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Ligand3DGenerator", "generate 3D coordinates for small molecules", VERSION, String(__DATE__), "Preparation");
-	parpars.registerMandatoryParameter("i", "input file", INFILE);
-	parpars.registerMandatoryParameter("o", "output file", OUTFILE);
-	parpars.registerOptionalParameter("ph", "pH-value for pH-dep. protonation", DOUBLE, 7.0);
-	parpars.registerOptionalParameter("ff", "Forcefield to use for optimization (any available OpenBabel plugin)", STRING, "MMFF94");
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryOutputFile("o", "output file");
+	parpars.registerOptionalDoubleParameter("ph", "pH-value for pH-dep. protonation", 7.0);
+	parpars.registerOptionalStringParameter("ff", "Forcefield to use for optimization (any available OpenBabel plugin)", "MMFF94");
 	parpars.registerFlag("rm", "remove input file when finished");
 	parpars.registerFlag("k", "keep existing 3D coordinates (flag precedes '-kp')");
 	parpars.registerFlag("kp", "keep existing 3D coordinates but re-protonate compound in a pH dependent manner (flag is preceded by '-k')");

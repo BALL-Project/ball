@@ -92,17 +92,17 @@ void startInputReading(InputConfiguration& conf, String data_path, QSARData* q, 
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("InputReader","generate QSAR data set     ", VERSION, String(__DATE__), "QuEasy (QSAR)");
-	par.registerMandatoryParameter("i", "input sd-file", INFILE);
-	par.registerMandatoryParameter("o", "output dat-file", OUTFILE);
-	par.registerOptionalParameter("act","sd-property containing response values",STRING);
+	par.registerMandatoryInputFile("i", "input sd-file");
+	par.registerMandatoryOutputFile("o", "output dat-file");
+	par.registerOptionalStringParameter("act","sd-property containing response values");
 	par.registerFlag("sdp","use sd-properties as additional descriptors");
 	par.registerFlag("no_cd","do not center descriptors");
 	par.registerFlag("no_cr","do not center response values");
-	par.registerOptionalParameter("csv","input csv-file w/ additional descriptors",INFILE);
-	par.registerOptionalParameter("csv_nr","no. of response variables in csv-file",INT);
+	par.registerOptionalInputFile("csv","input csv-file w/ additional descriptors");
+	par.registerOptionalIntegerParameter("csv_nr","no. of response variables in csv-file");
 	par.registerFlag("csv_cl","csv-file has compound (row) labels");
 	par.registerFlag("csv_dl","csv-file has descriptor (column) labels");
-	par.registerOptionalParameter("csv_sep","separator symbol in csv-file",INT);
+	par.registerOptionalIntegerParameter("csv_sep","separator symbol in csv-file");
 
 	String man = "This tool reads input from sd-files and generate features for QSAR analysis.\nActivity data (response values) for a training set are taken from sd-properties of the input file; the name of this property can be specified by option '-act'.\nThe following number of features will be automatically created for each molecule in your sd-file:\n\n\
     * 40 atom and bond count descriptors\n\

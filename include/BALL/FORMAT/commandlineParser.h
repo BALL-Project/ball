@@ -53,9 +53,53 @@ namespace BALL
 			static const String NOT_FOUND;
 			static const list<String> EMTPY_LIST;
 
-			void registerMandatoryParameter(String name, String description, ParameterType type);
+			void registerMandatoryIntegerParameter(const String& name, const String& description);
 
-			void registerOptionalParameter(String name, String description, ParameterType type, String default_value = "");
+			void registerMandatoryIntegerListParameter(const String& name, const String& description);
+
+			void registerMandatoryDoubleParameter(const String& name, const String& description);
+
+			void registerMandatoryDoubleListParameter(const String& name, const String& description);
+
+			void registerMandatoryStringParameter(const String& name, const String& description);
+
+			void registerMandatoryStringListParameter(const String& name, const String& description);
+
+			void registerMandatoryInputFile(const String& name, const String& description);
+
+			void registerMandatoryOutputFile(const String& name, const String& description);
+
+			void registerMandatoryInputFileList(const String& name, const String& description);
+
+			void registerMandatoryOutputFileList(const String& name, const String& description);
+
+			void registerMandatoryGalaxyOutputFolder(const String& name, const String& description);
+
+			void registerMandatoryGalaxyOutputId(const String& name, const String& description);
+
+			void registerOptionalIntegerParameter(const String& name, const String& description, int default_value = 0);
+
+			void registerOptionalIntegerListParameter(const String& name, const String& description, const std::vector<int>& default_values = vector<int>());
+
+			void registerOptionalDoubleParameter(const String& name, const String& description, double default_value = 0.0);
+
+			void registerOptionalDoubleListParameter(const String& name, const String& description, const std::vector<double>& default_values = vector<double>());
+
+			void registerOptionalStringParameter(const String& name, const String& description, const String& default_value = "");
+
+			void registerOptionalStringListParameter(const String& name, const String& description, const std::vector<String>& default_values = vector<String>());
+
+			void registerOptionalInputFile(const String& name, const String& description, const String& default_value = "");
+
+			void registerOptionalOutputFile(const String& name, const String& description, const String& default_value = "");
+
+			void registerOptionalInputFileList(const String& name, const String& description, const std::vector<String>& default_values = vector<String>());
+
+			void registerOptionalOutputFileList(const String& name, const String& description, const std::vector<String>& default_values = vector<String>());
+
+			void registerOptionalGalaxyOutputFolder(const String& name, const String& description, const String& default_value = "");
+
+			void registerOptionalGalaxyOutputId(const String& name, const String& description, const String& default_value = "");
 
 			void registerFlag(String name, String description, bool default_gui_value = false, bool hidden = false);
 
@@ -66,8 +110,11 @@ namespace BALL
 
 			void setParameterAsHidden(String name);
 
-			/** Register the minimal and maximal allowed value for a numerical parameter. */
+			/** Register the minimal and maximal allowed value for a floating-point numerical parameter. */
 			void setParameterRestrictions(String par_name, double min_value, double max_value);
+
+			/** Register the minimal and maximal allowed value for an integer numerical parameter. */
+			void setParameterRestrictions(String par_name, int min_value, int max_value);
 
 			/** Register the allowed values for a string-parameter. */
 			void setParameterRestrictions(String par_name, list<String>& allowed_values);
@@ -119,12 +166,13 @@ namespace BALL
 
 		private:
 
+			void assertParamterTypeIsNotNumeric(ParameterType type);
+
 			void replaceEscapedCharacters_(String& parameter_value);
 
 			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
 
 			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true, bool hidden=false);
-
 
 			void validateRegisteredFilesHaveFormats();
 

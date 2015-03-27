@@ -16,18 +16,18 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("MolFilter", "filter molecule files            ", "0.9", String(__DATE__), "Preparation");
-	parpars.registerMandatoryParameter("i", "input molecule-file", INFILE);
-	parpars.registerOptionalParameter("min_logP", "minimal logP value", DOUBLE);
-	parpars.registerOptionalParameter("max_logP", "maximal logP value", DOUBLE);
-	parpars.registerOptionalParameter("min_MW", "minimal molecular weight", DOUBLE);
-	parpars.registerOptionalParameter("max_MW", "maximal molecular weight", DOUBLE);
-	parpars.registerOptionalParameter("q", "query molecules for similarity searching", INFILE);
-	parpars.registerOptionalParameter("min_sim", "minimal average similarity", DOUBLE);
-	parpars.registerOptionalParameter("max_sim", "maximal similarity", DOUBLE);
-	parpars.registerOptionalParameter("smarts", "SMARTS pattern", STRING);
-	parpars.registerOptionalParameter("smarts_file", "SMARTS pattern", INFILE);
+	parpars.registerMandatoryInputFile("i", "input molecule-file");
+	parpars.registerOptionalDoubleParameter("min_logP", "minimal logP value", 0.0);
+	parpars.registerOptionalDoubleParameter("max_logP", "maximal logP value", 20.0);
+	parpars.registerOptionalDoubleParameter("min_MW", "minimal molecular weight", 0.0);
+	parpars.registerOptionalDoubleParameter("max_MW", "maximal molecular weight", 1e10);
+	parpars.registerOptionalInputFile("q", "query molecules for similarity searching");
+	parpars.registerOptionalDoubleParameter("min_sim", "minimal average similarity", 0.0);
+	parpars.registerOptionalDoubleParameter("max_sim", "maximal similarity", 1.0);
+	parpars.registerOptionalStringParameter("smarts", "SMARTS pattern");
+	parpars.registerOptionalInputFile("smarts_file", "SMARTS pattern");
 
-	parpars.registerOptionalParameter("o", "output molecule file", OUTFILE);
+	parpars.registerOptionalOutputFile("o", "output molecule file");
 	parpars.registerFlag("quiet", "by quiet, i.e. do not show progress information");
 	parpars.registerFlag("rm", "remove input file when finished");
 	parpars.setSupportedFormats("i","mol2, sdf, drf");

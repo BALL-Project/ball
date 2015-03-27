@@ -23,13 +23,13 @@ using namespace BALL;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("SimpleRescorer", "rescore docking results", VERSION, String(__DATE__), "Rescoring");
-	par.registerMandatoryParameter("rec", "receptor pdb-file", INFILE);
-	par.registerMandatoryParameter("rl", "reference-ligand", INFILE);
-	par.registerOptionalParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	par.registerMandatoryParameter("i", "compounds to be rescored", INFILE);
-	par.registerMandatoryParameter("o", "rescored compounds", OUTFILE);
-	par.registerOptionalParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
-	par.registerOptionalParameter("function", "scoring function: 'MM', 'PLP' or 'PB'", STRING);
+	par.registerMandatoryInputFile("rec", "receptor pdb-file");
+	par.registerMandatoryInputFile("rl", "reference-ligand");
+	par.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file");
+	par.registerMandatoryInputFile("i", "compounds to be rescored");
+	par.registerMandatoryOutputFile("o", "rescored compounds");
+	par.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
+	par.registerOptionalStringParameter("function", "scoring function: 'MM', 'PLP' or 'PB'");
 	par.registerFlag("rm", "remove input file when finished");
 
 	String man = "This tool rescores docking output poses.\nA scoring function is used to evaluate the binding-free-energy of each compound. This is similar to the scoring done during docking; details depend on the config-file (if one is specified).\n\nAs input we need:\n\
