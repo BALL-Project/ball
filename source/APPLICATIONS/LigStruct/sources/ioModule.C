@@ -216,7 +216,8 @@ void TemplateDatabaseManager::libraryPathesFromConfig(const String& config_path)
 
 CombiLibManager::CombiLibManager(LineBasedFile *combilib_file):
 	_combilib_file(combilib_file),
-	_lib_is_generated(false)
+	_lib_is_generated(false),
+	_scaffold(0)
 {}
 
 CombiLibManager::~CombiLibManager()
