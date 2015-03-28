@@ -56,6 +56,7 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	// swap the temp with the original and delete the temp
 	molecule.swap(*new_frag);
 	delete new_frag;
+	delete temp;
 }
 
 

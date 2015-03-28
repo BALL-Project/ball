@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 			cout<<"Molecule name: "<< tmp->getName() <<endl;
 			cout<<e.getMessage()<<endl;
 		}
-				
+
 		delete tmp;
 		tmp = infile.read();
 	}
