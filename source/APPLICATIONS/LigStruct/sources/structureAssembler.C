@@ -79,6 +79,7 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	catch (const Exception::GeneralException& e)
 	{
 		insertAll(linker, rigids, mol);
+		delete connections;
 		throw Exception::StructureNotGenerated("structureAssembler.C", 52,
 																					 mol, e);
 	}

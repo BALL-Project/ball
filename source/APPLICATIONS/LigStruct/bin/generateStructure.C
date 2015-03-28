@@ -48,7 +48,8 @@ int main(int argc, char* argv[])
 	StructureAssembler lig_assembler( lib_loader );
 
 	SDFile outfile(parpars.get("o"), std::ios::out);
-	
+	ConnectList* dummy_con_lst = 0;
+			
 	// assemble and write every structure to the outfile
 	while (tmp)
 	{
@@ -57,8 +58,8 @@ int main(int argc, char* argv[])
 //		cout<<endl<<LigBase::moleculeToSMILES( *tmp )<<endl;
 		try
 		{
-			lig_assembler.assembleStructure( *tmp );
-		
+			dummy_con_lst = lig_assembler.assembleStructure( *tmp );
+			delete dummy_con_lst;
 			outfile << *tmp;
 		}
 		catch (BALL::Exception::StructureNotGenerated e)
