@@ -233,7 +233,7 @@ void uniqueFingerprintsFilter(vector<vector<unsigned short> >& mol_features, con
 }
 
 
-void readMoleculeIdentifiers(unordered_map<unsigned int, set<String> >& mol_identifiers)
+void readMoleculeIdentifiers(boost::unordered_map<unsigned int, set<String> >& mol_identifiers)
 {
 	File in("FFC_1_fingerprint_duplicates.txt", File::MODE_IN);
 	
@@ -275,7 +275,7 @@ void writeConnectedComponents(const vector<unsigned int>& m_indices,
 	out << "# CMPD_IDS:   Comma separated list of original compound id(s) which map onto this SRC_NODE_ID." << endl;
 	out << "SRC_NODE_ID DST_NODE_INDEX TANIMOTO_SIM CMPD_IDS" << endl;
 	
-	unordered_map<unsigned int, set<String> > mol_identifiers;
+	boost::unordered_map<unsigned int, set<String> > mol_identifiers;
 	readMoleculeIdentifiers(mol_identifiers);
 
 	String cids;
@@ -321,7 +321,7 @@ void writeConnectedComponents(const vector<unsigned int>& m_indices,
 	out << "# CMPD_IDS:   Comma separated list of original compound id(s) which map onto this SRC_NODE_ID." << endl;
 	out << "SRC_NODE_INDEX DST_NODE_INDEX TANIMOTO_SIM CMPD_IDS" << endl;
 
-	unordered_map<unsigned int, set<String> > mol_identifiers;
+	boost::unordered_map<unsigned int, set<String> > mol_identifiers;
 	readMoleculeIdentifiers(mol_identifiers);
 
 	set<String>::iterator it;
@@ -888,7 +888,7 @@ $ FingerprintSimilarityClustering -t target.sdf -fp_tag FPRINT -f 1 -id_tag NAME
 	Log.level(10) << "++ STEP 5: Remap fingerprint duplicates" << endl;
 
 
-	unordered_map<unsigned int, set<String> > identifiers;
+	boost::unordered_map<unsigned int, set<String> > identifiers;
 	readMoleculeIdentifiers(identifiers);
 
 	// Store final cluster information
