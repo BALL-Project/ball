@@ -15,7 +15,7 @@ CHECK_CXX_SOURCE_COMPILES(
 	{
 		std::string s;
 		std::string::const_iterator c_it = s.cbegin();
-		s.insert(c_it, 1, 'a');
+		std::string::iterator result = s.insert(c_it, 1, 'a');
 
 		return 0;
 	}" BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
