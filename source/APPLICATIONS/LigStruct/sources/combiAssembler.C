@@ -54,7 +54,7 @@ void CombiAssembler::writeCombinations(SDFile &handle)
 void CombiAssembler::_combineRecur(SDFile &handle)
 {
 	//1.) get next RAtom:
-	RAtom* ra;
+	RAtom* ra=0;
 	if( ! _r_atms.empty() )
 	{
 		ra = _r_atms.front();

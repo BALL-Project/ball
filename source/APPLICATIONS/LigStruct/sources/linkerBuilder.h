@@ -22,7 +22,7 @@ public:
 	 *
 	 * @brief buildLinker a flexible linker fragment
 	 * This function only works on cycle free molecules (but molecules with 
-	 * cycles are normally not considered a flexible)
+	 * cycles are normally not considered as flexible)
 	 * @param linker_frag
 	 * @param result_rotors
 	 */

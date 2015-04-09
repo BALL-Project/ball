@@ -60,10 +60,12 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_
 	_done.clear();
 	
 	//1.) Start with an atom that is NOT at the end of the molecule
+	// I think this restraint can be removed now, because in the beginning
+	// we had no site templates for sites that consisted only of 2 atoms
 	Atom* at1 = 0;
 	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
 	{
-		if( LigBase::countBondsInPartent(*ati, linker_frag) > 1)
+		if( LigBase::countBondsInParent(*ati, linker_frag) > 1)
 		{
 			at1 = &*ati;
 			break;
@@ -114,6 +116,7 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_
 	}
 }
 
+
 AtomContainer& LinkerBuilder::loadTemplate( String& key )
 {
 	if( _connection_templates.find( key ) != _connection_templates.end() )
@@ -132,7 +135,7 @@ AtomContainer& LinkerBuilder::loadTemplate( String& key )
  */
 void LinkerBuilder::recurLinkerConnect(Atom& atm, const Composite& parent)
 {
-	if( LigBase::countBondsInPartent( atm, parent) < 2 )
+	if( LigBase::countBondsInParent( atm, parent) < 2 )
 	{
 		return;
 	}
@@ -280,7 +283,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag, ConnectList
 	int current_cnt = 0;
 	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
 	{
-		current_cnt = LigBase::countBondsInPartent(*ati, linker_frag);
+		current_cnt = LigBase::countBondsInParent(*ati, linker_frag);
 		if( current_cnt > 2)
 		{
 			at1 = &*ati;
@@ -329,7 +332,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag, ConnectList
 void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd, 
 																			Atom& curr_atm, int dist, Composite* parent)
 {
-	int current_cnt = LigBase::countBondsInPartent( curr_atm, *parent );
+	int current_cnt = LigBase::countBondsInParent( curr_atm, *parent );
 	
 	// A terminal atom (thus also a terminal bond) was found: 
 	// TERMINATE recursion
@@ -431,9 +434,9 @@ bool LinkerBuilder::isTerminalBond(Bond &bnd, Composite &parent)
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();
 			
-	if( LigBase::countBondsInPartent(*at1, parent) == 1 )
+	if( LigBase::countBondsInParent(*at1, parent) == 1 )
 		return true;
-	else if (LigBase::countBondsInPartent(*at2, parent) == 1 )
+	else if (LigBase::countBondsInParent(*at2, parent) == 1 )
 		return true;
 	else
 		return false;

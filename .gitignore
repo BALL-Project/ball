@@ -36,4 +36,4 @@ include/BALL/VIEW/UIC/*
 data/BALLView/translations/BALLView.de_DE.qm
 data/BALLView/translations/BALLView.zh_TW.qm
 source/TEST/data/SideChainPlacementProcessor_test_output_pre_1.pdb
-CMakeLists.txt.user
+CMakeLists.txt.user*

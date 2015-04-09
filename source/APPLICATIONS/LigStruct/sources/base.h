@@ -242,7 +242,7 @@ public:
 	static BALL::String moleculeToSMILES( BALL::AtomContainer& ac );
 	
 	static int countBondsAndOrder( BALL::Atom& atm);
-	static int countBondsInPartent( BALL::Atom& atm, const BALL::Composite &parent);
+	static int countBondsInParent( BALL::Atom& atm, const BALL::Composite &parent);
 	
 	/**
 	 * @brief getAtomPosition - get the position of an atom in the molcule list

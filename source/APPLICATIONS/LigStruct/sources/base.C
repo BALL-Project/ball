@@ -297,7 +297,7 @@ int LigBase::countBondsAndOrder(Atom &atm)
 	return cnt;
 }
 
-int LigBase::countBondsInPartent(Atom &atm, const Composite &parent)
+int LigBase::countBondsInParent(Atom &atm, const Composite &parent)
 {
 	int cnt = 0;
 	for( Atom::BondIterator bit = atm.beginBond(); +bit; ++bit )
