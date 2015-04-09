@@ -21,7 +21,7 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("libFragmenter", "cut a molecule along its rotable bonds, generating fragments", 0.3, String(__DATE__), "Preparation");
+	CommandlineParser parpars("Fragment to rigids", "cut a molecule along its rotable bonds, generating fragments", 0.3, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("o", "output SDF", OUTFILE, true);
 	

@@ -20,7 +20,7 @@ using namespace std;
 /// ################# M A I N #################
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("connectionFragmenter", " fragments to connection sites", 0.5, String(__DATE__), "Preparation");
+	CommandlineParser parpars("Fragment to sites", " create site templates", 0.5, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("oS", "output SDF with site templates", OUTFILE, true);
 	parpars.registerParameter("oB", "output bond lengths", OUTFILE, true);
