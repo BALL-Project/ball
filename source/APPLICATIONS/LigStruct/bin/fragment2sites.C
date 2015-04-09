@@ -22,12 +22,14 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("connectionFragmenter", " fragments to connection sites", 0.5, String(__DATE__), "Preparation");
 	parpars.registerParameter("i", "input SDF", INFILE, true);
-	parpars.registerParameter("o", "output SDF and bond length file (do not specify a type!)", OUTFILE, true);
+	parpars.registerParameter("oS", "output SDF with site templates", OUTFILE, true);
+	parpars.registerParameter("oB", "output bond lengths", OUTFILE, true);
 	
 	parpars.registerFlag("single", "usa all single bonds, not only rotable bonds (takes longer)");
 
 	parpars.setSupportedFormats("i","sdf");
-	parpars.setSupportedFormats("o","sdf");
+	parpars.setSupportedFormats("oS","sdf");
+	parpars.setSupportedFormats("oB","line");
 
 	String manual = "For creating a connection library.";
 	parpars.setToolManual(manual);
@@ -38,8 +40,8 @@ int main(int argc, char* argv[])
 	
 	// open in- and output files:
 	SDFile infile(parpars.get("i"), ios::in);
-	SDFile outfile(parpars.get("o")+"_sites.sdf", ios::out);
-	LineBasedFile bondFile(parpars.get("o")+"_bondlen.line", ios::out);
+	SDFile outfile(parpars.get("oS"), ios::out);
+	LineBasedFile bondFile(parpars.get("oB"), ios::out);
 	
 	MoleculeFragmenter mol_fragger;
 	RMSDBinner binner(true, 0.3, 100);

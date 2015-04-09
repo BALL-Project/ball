@@ -10,9 +10,9 @@
 #include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <BALL/MOLMEC/MMFF94/MMFF94.h>
-#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
-#include <BALL/STRUCTURE/fragmentDB.h>
+//#include <BALL/MOLMEC/MMFF94/MMFF94.h>
+//#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
+//#include <BALL/STRUCTURE/fragmentDB.h>
 
 #include "../sources/base.h"
 #include "../sources/clashBase.h"
