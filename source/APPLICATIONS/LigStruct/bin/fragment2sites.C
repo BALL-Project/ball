@@ -24,8 +24,6 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input SDF", INFILE, true);
 	parpars.registerParameter("oS", "output SDF with site templates", OUTFILE, true);
 	parpars.registerParameter("oB", "output bond lengths", OUTFILE, true);
-	
-	parpars.registerFlag("single", "usa all single bonds, not only rotable bonds (takes longer)");
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("oS","sdf");
@@ -52,11 +50,6 @@ int main(int argc, char* argv[])
 	boost::unordered_map <String, pair<float, int> > lengths;
 	vector<pair<String, AtomContainer *> > temp_sites;
 	
-	if (parpars.has("single"))
-	{
-		cout<<"Using 'single' option, this will create a big but also better site "
-					"database. Also the computation will take a bit longer.\n"<<endl;
-	}
 	// Read all AtomContainers.
 	AtomContainer* tmp_mol = infile.read();
 	while ( tmp_mol )
@@ -73,7 +66,7 @@ int main(int argc, char* argv[])
 		
 		// fragment to connection sites:
 		mol_fragger.setMolecule( *tmp_mol );
-		mol_fragger.fragmentToSites(lengths, temp_sites, !parpars.has("single"));
+		mol_fragger.fragmentToSites(lengths, temp_sites, false);
 		
 		total_sites += temp_sites.size();
 		
