@@ -299,11 +299,7 @@ namespace BALL
 				message_ += LigBase::moleculeToSMILES( frag );
 				
 				globalHandler.setMessage(message_);
-				
-				mol = &frag;
 			}
-		protected:
-			BALL::AtomContainer* mol;
 		};
 		
 		/// Exception : RotationAxisInRing #########################################
@@ -329,10 +325,9 @@ namespace BALL
 			StructureNotGenerated(const char* file, int line, AtomContainer& mol, const GeneralException& in_exc)
 				: GeneralException(file, line, "StructureNotGenerated", "")
 			{
-				_mol = &mol;
 				message_ = " No 3D coordinates could be generated for molecule: \n";
 				
-				message_ += LigBase::moleculeToSMILES(*_mol);
+				message_ += LigBase::moleculeToSMILES(mol);
 				message_ += "\n\n";
 				
 				message_ += "CAUSE:\n";
@@ -346,11 +341,9 @@ namespace BALL
 			StructureNotGenerated(const char* file, int line, AtomContainer& mol, const String& cause)
 				: GeneralException(file, line, "StructureNotGenerated", "")
 			{
-				_mol = &mol;
-				
 				message_ = " No 3D coordinates could be generated for molecule: \n";
 				
-				message_ += LigBase::moleculeToSMILES(*_mol);
+				message_ += LigBase::moleculeToSMILES(mol);
 				message_ += "\n\n";
 				
 				message_ += "CAUSE:\n";
@@ -362,25 +355,15 @@ namespace BALL
 			StructureNotGenerated(const char* file, int line, AtomContainer& mol)
 				: GeneralException(file, line, "StructureNotGenerated", "")
 			{
-				_mol = &mol;
-				
 				message_ = " No 3D coordinates could be generated for molecule: \n";
 				
-				message_ += LigBase::moleculeToSMILES(*_mol);
+				message_ += LigBase::moleculeToSMILES(mol);
 				message_ += "\n\n";
 				
 				message_ += "CAUSE: UNKNOWN";
 				
 				globalHandler.setMessage(message_);
 			}
-			
-			AtomContainer* getMol()
-			{
-				return _mol;
-			}
-
-		protected:
-			AtomContainer* _mol;
 			
 		private:
 			void canSMILESFromAtomContainer(AtomContainer& ac, String& can_smiles)

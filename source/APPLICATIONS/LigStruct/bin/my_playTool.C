@@ -68,13 +68,21 @@ int main(int argc, char* argv[])
 				matcher.matchFragment( **it);
 			}
 		}
-		catch (BALL::Exception::FragmentTemplateNotFound e)
+		catch (...)
 		{
-			cout<<"############## NOT Convertible ###############"<<endl;
-			cout<<"Molecule name: "<< tmp->getName() <<endl;
-			cout<<e.getMessage()<<endl;
+			cout<<"-#-"<<endl;
 		}
 
+		for(ACVecIter it = dummy.begin(); it != dummy.end(); ++it)
+		{
+			delete *it;
+		}
+		
+		for(ACVecIter it = fragments.begin(); it != fragments.end(); ++it)
+		{
+			delete *it;
+		}
+		
 		delete tmp;
 		tmp = infile.read();
 	}

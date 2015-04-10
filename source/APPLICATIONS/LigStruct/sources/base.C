@@ -283,7 +283,7 @@ String LigBase::moleculeToSMILES(AtomContainer &ac)
 	
 	// remove the stupid ID that openbabel always attaches to the generated canonical smile
 	can_smiles = can_smiles.substr(0,can_smiles.find_first_of('\t'));
-	
+	delete obmol;
 	return can_smiles;
 }
 
