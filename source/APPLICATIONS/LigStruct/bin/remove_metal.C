@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 
 	String manual = "Selects only molecules conaining atoms of the organic set. "
 									"In this case that is: "
-									"[Br, C, Cl, F, H, I, N, O, P, S, Se] all other "
+									"[As, B, Br, C, Cl, F, H, I, N, O, P, S, Se, Si] all other "
 									"(metal and metal-organic) molecules are removed";
 	parpars.setToolManual(manual);
 
@@ -53,6 +53,8 @@ int main(int argc, char* argv[])
 	boost::unordered_set< Element::AtomicNumber > organic_elements;
 	PTE_ pte;
 	
+	organic_elements.insert( pte[Element::ARSENIC].getAtomicNumber());
+	organic_elements.insert( pte[Element::BORON].getAtomicNumber()   );
 	organic_elements.insert( pte[Element::BROMINE].getAtomicNumber() );
 	organic_elements.insert( pte[Element::CARBON ].getAtomicNumber());
 	organic_elements.insert( pte[Element::CHLORINE].getAtomicNumber());
@@ -64,7 +66,7 @@ int main(int argc, char* argv[])
 	organic_elements.insert( pte[Element::PHOSPHORUS].getAtomicNumber());
 	organic_elements.insert( pte[Element::SULFUR  ].getAtomicNumber());
 	organic_elements.insert( pte[Element::SELENIUM].getAtomicNumber());
-	
+	organic_elements.insert( pte[Element::SILICON ].getAtomicNumber());
 	
 	Log << "Reading molecules..."<<endl;
 	
