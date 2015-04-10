@@ -1,81 +1,86 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/FORMAT/commandlineParser.h>
-#include <BALL/FORMAT/SDFile.h>
-#include <BALL/KERNEL/atomContainer.h>
-#include <BALL/STRUCTURE/UCK.h>
-#include <BALL/QSAR/aromaticityProcessor.h>
+#include "../sources/ioModule.h"
+#include "../sources/structureAssembler.h"
 
-#include "../sources/base.h"
+#include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 using namespace BALL;
 using namespace std;
 
-/// ################# M A I N #################
+/// ################################## C O M M A N D L I N E    P A R S E R
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Merge Molecules", " according to their names", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("small", "small mol list", INFILE, true);
-	parpars.registerParameter("large", "large mol list", INFILE, true);
-	parpars.registerParameter("o", "output mol", OUTFILE, true);
+	CommandlineParser parpars("CheckFragmenter", " check if structures could be generated", 0.1, String(__DATE__), "Preparation");
+	parpars.registerParameter("i", "query libary as SDF", INFILE, true);
 	
-	parpars.setSupportedFormats("small","sdf");
-	parpars.setSupportedFormats("large","sdf");
-	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","small");
+	parpars.registerParameter("c", "location of conf file", INFILE, false);
+	parpars.setSupportedFormats("c","conf");
+	
+	parpars.setSupportedFormats("i","sdf");
 
-	String manual = "Keeps the common set of both input structures";
+	String manual = "Check if we can predict all molecules from a library";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);
 	
-/// C O D E ##################################
- 
-	SDFile in_file1(parpars.get("small"), ios::in);
-	SDFile in_file2(parpars.get("large"), ios::in);
-	SDFile outfile(parpars.get("o"), ios::out);
-	
-	
-	Log << "Reading small list"<<endl;
-	
-	HashSet<String> unique_names;
-	AtomContainer* mol = in_file1.read();
-	
-	while( mol )
+/// ################################## L O A D    D A T A B A S E / I N P U T
+	TemplateDatabaseManager lib_loader;
+	if ( parpars.has("c") )
 	{
-		unique_names.insert( mol->getName().trim() );
-		delete mol;
-		
-		mol = in_file1.read();
+		cout<<"Reading configuration from: "<< parpars.get("c") << endl;
+		lib_loader.libraryPathesFromConfig( parpars.get("c") );
 	}
-	cout<<"Read "<<unique_names.size()<< " names"<<endl;
-	in_file1.close();
+	else
+		lib_loader.libraryPathesFromConfig( "/Users/pbrach/files/projects/Master-2014_2015/0_data/4_used_libs_copies/libraries.conf");
 	
-	Log << "Filtering large list"<<endl;
-	
-	mol = in_file2.read();
-	int cnt_tot = 0;
-	int taken = 0;
-	
-	while( mol )
-	{
-		cnt_tot++;
+	lib_loader.readAll();
 
-		if( unique_names.has( mol->getName().trim() ) )
+	SDFile infile( parpars.get("i"), std::ios::in);
+	Molecule* tmp = infile.read();
+	
+	
+//// ################################## A S S E M B L E    3 D
+	// StructureAssembler class: this is this tools wrapped main-class:
+	
+	MoleculeFragmenter   fragmenter;
+	AromaticityProcessor arproc;
+	Matcher              matcher(lib_loader.getRigidTemplates());
+
+	ACVec fragments, dummy;
+	ConnectList dummy2;
+	
+	// assemble and write every structure to the outfile
+	while (tmp)
+	{
+		LigBase::removeHydrogens( *tmp );
+		tmp->apply(arproc);
+		
+		fragmenter.setMolecule(*tmp);
+		fragmenter.fragment(fragments, dummy, dummy2);
+		
+		try
 		{
-			taken++;
-			 outfile << *mol;
+			for(ACVecIter it = fragments.begin(); it != fragments.end(); ++it)
+			{
+				matcher.matchFragment( **it);
+			}
+		}
+		catch (BALL::Exception::FragmentTemplateNotFound e)
+		{
+			cout<<"############## NOT Convertible ###############"<<endl;
+			cout<<"Molecule name: "<< tmp->getName() <<endl;
+			cout<<e.getMessage()<<endl;
 		}
 
-		delete mol;
-		
-		mol = in_file2.read();
+		delete tmp;
+		tmp = infile.read();
 	}
-	in_file2.close();
-	outfile.close();
-	Log << "Large had "<<cnt_tot<<" molecules "<<endl;
-	Log <<" from those "<< taken <<" agreed with small"<<endl;
-	Log << "......done!"<<endl;
+	
+	infile.close();
+	
+	Log <<std::endl<< "......done!"<<std::endl;
 }
 
