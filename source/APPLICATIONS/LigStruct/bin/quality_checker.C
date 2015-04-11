@@ -10,296 +10,161 @@
 #include <BALL/KERNEL/bondIterator.h>
 #include <BALL/KERNEL/PTE.h>
 
-//#include <BALL/MOLMEC/MMFF94/MMFF94.h>
-//#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
-//#include <BALL/STRUCTURE/fragmentDB.h>
-
+#include <cmath>
 #include "../sources/base.h"
 #include "../sources/clashBase.h"
 
 using namespace BALL;
 using namespace std;
 
-static bool inserted;
 
-static unsigned int total_molecules = 0;
-
-// number of all faults (possibly more than 1 per molecule)
-static unsigned int total_stretch_faults = 0;
-static unsigned int total_bend_faults    = 0;
-static unsigned int total_clashes        = 0;
-
-// number of the most severe faults per molecule (if any occured in molecule)
-static unsigned int num_severe_stretches = 0;
-static unsigned int num_severe_bends = 0;
-static unsigned int num_severe_clashes = 0;
-
-// averaged severity scores over all severest (per molecule) faults
-static double severity_stretches = 0;
-static double severity_bends     = 0;
-static double severity_clashes   = 0;
-
-// worst found value:
-static double worst_stretch = 0;
-static double worst_bend    = 0;
-static double worst_clash   = 0;
-
-static list< pair<AtomContainer*, float> > ten_worst;
-
-/*
- * 
- */
-float singleStretch(Atom& atm, Atom& btm)
+class CSSAnalyzer
 {
-	float ideal_dist = atm.getElement().getCovalentRadius() + btm.getElement().getCovalentRadius();
-	
-	// return absolute difference to ideal
-	float diff = std::abs( ideal_dist - atm.getDistance( btm ) );
-	float stretch_severity = diff / ideal_dist;
-	
-	if( stretch_severity > 0.01 )
-		++total_stretch_faults;
-	
-	if( stretch_severity > worst_stretch)
-		worst_stretch = stretch_severity;
-	
-	return stretch_severity;
-}
-
-/*
- * 
- */
-float getStretchSeverity( AtomContainer& mol)
-{
-	float max_stretch = 0.0;
-	float tmp = 0.0;
-	
-	// iterate over all non-covalent atom pairs:
-	for(AtomIterator ati = mol.beginAtom(); +ati; ++ati)
+public:
+	CSSAnalyzer(list< pair<AtomContainer*, float> >& collect_lst, int n = 0):
+		total_clash_count(0),
+		number_to_collect(n),
+		uglies_list(collect_lst),
+		total_average(0),
+		worst_CSS(0)
 	{
-		AtomIterator bti = ati;
-		for (++bti; +bti; ++bti)
+	}
+	
+	bool addStructure( AtomContainer& mol )
+	{
+		bool inserted = false;
+		
+		// 1.) get CSS for the structure
+		float clash_severity = getStructureCSS( mol );
+		
+		// 2.) update 'average CSS', 'clash count' and 'worst CSS' if it contained a clash
+		if ( clash_severity > 0)
 		{
-			// atm & btm ARE bonded:
-			if ( ati->getBond( *bti ) != 0)
+			total_clash_molecules++;
+			
+			// incremental average update formula:
+			// avg(i) = avg(i-1) + ( ( val(i) -avg(i-1) ) / i)
+			total_average = total_average + ((clash_severity - total_average) / total_clash_molecules);
+			
+			if (clash_severity > worst_CSS)
+				worst_CSS = clash_severity;
+			
+			// 3.) update the worst output structures
+			if( uglies_list.empty() )
 			{
-				tmp = singleStretch(*ati, *bti);
+				// add new element
+				uglies_list.push_front( make_pair(&mol, clash_severity) );
+				inserted = true;
+			}
+			else if( clash_severity > uglies_list.back().second )
+			{
+				//		cout<<endl<<endl<<"inserting: "<<max_factor<<endl;
+				//		for(list<pair<AtomContainer*, float>>::iterator it = ten_worst.begin();
+				//				it != ten_worst.end(); ++it)
+				//		{
+				//			cout<<"score: "<<it->second<<endl;
+				//		}
+				// insert sorted:
+				for(list<pair<AtomContainer*, float>>::iterator it = uglies_list.begin();
+						it != uglies_list.end(); ++it)
+				{
+					if( it->second < clash_severity)
+					{
+						uglies_list.insert(it, make_pair(&mol , clash_severity) );
+						break;
+					}
+				}
+				inserted = true;
 				
-				if(tmp > max_stretch)
-					max_stretch = tmp;
+				// remove last element if container max is reached:
+				if(uglies_list.size() > number_to_collect)
+				{
+					delete uglies_list.back().first;
+					uglies_list.pop_back();
+				}
 			}
 		}
+		return inserted;
 	}
 	
-	return max_stretch;
-}
-
-/*
- * Get inverted overlap factor
- */
-float singleInvertedOverlapFactor(Atom& atm, Atom& btm)
-{
-	float ideal_dist = atm.getElement().getVanDerWaalsRadius() + btm.getElement().getCovalentRadius();
-	
-	float result =  (ideal_dist / atm.getDistance( btm ));
-	
-	// limit worst score to 10:
-	if (result > 10)
-		result = 10;
-	
-	if (result > 1.0)
-		++total_clashes;
-		
-	return result;
-}
-
-/*
- * Search for the maximal (most severe clash) and return its inverted
- * overlap factor.
- * 
- * If no clash existed return 0
- */
-float getInvertedOverlapFactor(AtomContainer& mol)
-{
-	float max_factor = 0.0;
-	float tmp = 0.0;
-	
-	// iterate over all non-covalent atom pairs:
-	for(AtomIterator ati = mol.beginAtom(); +ati; ++ati)
+	float getWorstCSS()
 	{
-		AtomIterator bti = ati;
-		for (++bti; +bti; ++bti)
+		return worst_CSS;
+	}
+
+	float getAverageCSS()
+	{
+		return total_average;
+	}
+	
+	unsigned int getNumberClashes()
+	{
+		return total_clash_count;
+	}
+	
+	unsigned int getNumberClashingStructures()
+	{
+		return total_clash_molecules;
+	}
+	
+private:
+
+	int  number_to_collect;
+	list< pair<AtomContainer*, float> >& uglies_list;
+	
+	unsigned int total_clash_count;
+	unsigned int total_clash_molecules;
+	
+	float total_average;
+	float worst_CSS;
+	
+	
+	/*
+	 * Search for the maximal (most severe clash) and return its inverted
+	 * overlap factor.
+	 * 
+	 * If no clash existed return 0
+	 */
+	float getStructureCSS(AtomContainer& mol)
+	{
+		float max_severity = 0.0;
+		float tmp = 0.0;
+		
+		// iterate over all non-covalent atom pairs:
+		for(AtomIterator ati = mol.beginAtom(); +ati; ++ati)
 		{
-			// atm & btm are NOT bonded:
-			if ( ati->getBond( *bti ) == 0)
+			AtomIterator bti = ati;
+			for (++bti; +bti; ++bti)
 			{
-				tmp = singleInvertedOverlapFactor(*ati, *bti);
-				
-				if(tmp > max_factor)
-					max_factor = tmp;
+				// atm & btm are NOT bonded:
+				if ( ati->getBond( *bti ) == 0)
+				{
+					tmp = singleCSS(*ati, *bti);
+					
+					if( tmp > 0)
+						total_clash_count++;
+								
+					if(tmp > max_severity)
+						max_severity = tmp;
+				}
 			}
 		}
+		return max_severity;
 	}
 	
-	if (max_factor > worst_clash)
+	/*
+	 * Get Clash Severity Score for a single Atom-Pair
+	 */
+	float singleCSS(Atom& atm, Atom& btm)
 	{
-		worst_clash = max_factor;
-	}
-	
-	int size = ten_worst.size();
-	
-	if( size == 0)
-	{
-		// add new element
-		ten_worst.push_front( make_pair(&mol, max_factor) );
-		inserted = true;
-	}
-	else if( max_factor > ten_worst.back().second )
-	{
-//		cout<<endl<<endl<<"inserting: "<<max_factor<<endl;
-//		for(list<pair<AtomContainer*, float>>::iterator it = ten_worst.begin();
-//				it != ten_worst.end(); ++it)
-//		{
-//			cout<<"score: "<<it->second<<endl;
-//		}
-		// insert sorted:
-		for(list<pair<AtomContainer*, float>>::iterator it = ten_worst.begin();
-				it != ten_worst.end(); ++it)
-		{
-			if( it->second < max_factor)
-			{
-				ten_worst.insert(it, make_pair(&mol , max_factor) );
-				break;
-			}
-		}
+		float ideal_dist = atm.getElement().getVanDerWaalsRadius() + btm.getElement().getVanDerWaalsRadius();
 		
-		inserted = true;
-		
-		// remove last element if container max is reached:
-		if(ten_worst.size() == 11)
-		{
-			delete ten_worst.back().first;
-			ten_worst.pop_back();
-		}
+		//CSSvdw = min(10, max(0, distideal vdw/distreal − 1)
+		float result =  min(10.f, max(0.f, (ideal_dist / atm.getDistance( btm ) - 1) ));
+
+		return result;
 	}
-	
-	return max_factor;
-}
-
-
-///*
-// * 
-// */
-//float singleBendSeverity( MMFF94StretchBend::Bend& bend)
-//{
-//	float angle_severity = bend.delta_theta;
-	
-//	if( angle_severity > 1. )
-//		++total_stretch_faults;
-	
-//	// to radiant:
-//	angle_severity = angle_severity / 180 * Constants::PI;
-	
-//	if( angle_severity > worst_bend)
-//		worst_bend = angle_severity;
-	
-//	return angle_severity;
-//}
-
-
-///*
-// * 
-// */
-//float getBendSeverity( AtomContainer& mol )
-//{
-//	float max_factor = 0.0;
-//	float tmp = 0.0;
-
-//	// extract and calculated the bends via MMFF94:
-//	System tmp_sys;
-//	tmp_sys.insert( *(Molecule*)&mol );
-
-//	FragmentDB db("");
-//	tmp_sys.apply(db.normalize_names);
-//	tmp_sys.apply(db.build_bonds);
-
-//	MMFF94 mmff( tmp_sys );
-
-//	MMFF94StretchBend bend_component( mmff );
-
-//	vector<MMFF94StretchBend::Bend> bends = bend_component.getBends();
-	
-//	// iterate over all bends:
-//	for(vector<MMFF94StretchBend::Bend>::iterator bit; bit != bends.end(); ++bit)
-//	{
-//		tmp = singleBendSeverity( *bit );
-		
-//		if(tmp > max_factor)
-//			max_factor = tmp;
-//	}
-	
-//	return max_factor;
-//}
-
-
-void updateTotalMeasure( AtomContainer& mol)
-{
-	// Covalent deviation
-	float this_stretch_severity = getStretchSeverity( mol );
-	
-	if ( this_stretch_severity > 0.01)
-	{
-		severity_stretches += this_stretch_severity;
-		++num_severe_stretches;
-	}
-
-	// Angle deviation
-	// does NOT work...
-//	float this_bend_severity = getBendSeverity( mol );
-//	if( this_bend_severity > (Constants::PI / 180 )) // bigger than 1°
-//	{
-//		severity_bends += this_bend_severity;
-//		++num_severe_bends;
-//	}
-	
-	// Clashes
-	float this_clash_severity = getInvertedOverlapFactor( mol );
-	
-	if ( this_clash_severity > 1)
-	{
-		severity_clashes += this_clash_severity;
-		++num_severe_clashes;
-	}
-}
-
-void calculateAverages()
-{
-	// bonds
-	if( num_severe_stretches )
-	{
-		severity_stretches /= num_severe_stretches;
-	}
-	else
-		severity_stretches = 0;
-	
-	// angles
-	if( num_severe_bends )
-	{
-		severity_bends /= num_severe_bends;
-		severity_bends -= 1;
-	}
-	else
-		severity_bends = 0;
-	
-	// clashes
-	if (num_severe_clashes)
-	{
-		severity_clashes /= num_severe_clashes;
-		severity_clashes -= 1;
-	}
-	else
-		severity_clashes = 0;
-}
+};/// END OF CLASS
 
 ///################################# M A I N ###################################
 ///#############################################################################
@@ -307,69 +172,78 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Quality Checker", "Report quality of structures", 0.1, String(__DATE__), "Evaluation");
 	parpars.registerParameter("i", "input SDF to be assessed ", STRING, true);
-	parpars.registerParameter("o", "output file for the 10 worst sturcures", STRING, false);
+	parpars.registerParameter("o", "output file for the worst sturcures if '-n' was set", STRING, false);
+	parpars.registerParameter("n", "number of worst structures to collect", STRING, false);
 
 	parpars.setToolManual("Checks how well the found covalent bond lengths and "
 												"vdw-distances agree with known standard parameters");
 
 	parpars.parse(argc, argv);
 	
+	// -n and -o always need to be specified together:
+	if( parpars.has("n") || parpars.has("o") )
+		if(  !parpars.has("n") || !parpars.has("o") )
+		{
+			Log << "If the flag '-n' you also have to specify an outputfile via '-o' "<<endl;
+			Log << "or if a output file was specified you also need to give the number of"<<endl;
+			Log<<" worst structures to be printed with '-n'."<<endl;
+			exit(0);
+		}
+	
 	
 	/// C O D E ##################################
+	/// 0.) setup the analyzer:
+	/// -----------------------------------------------------------------
+	list< pair<AtomContainer*, float> > x_worst_structures;
+	
+	int collect = 0;
+	if ( parpars.has("n") )
+		collect = parpars.get("n").toInt();
+	
+	CSSAnalyzer analyzer( x_worst_structures, collect);
+	
+	
+	/// 1.) read and analyze every structure:
+	/// -----------------------------------------------------------------
 	SDFile in_file(parpars.get("i"), ios::in);
 	Log<<"Reading and evaluating input file: "<<endl<<in_file.getName()<<endl;
 
-	AtomContainer* tmp;
-
-	tmp = in_file.read();
-	inserted = true;
+	int total_molecules = 0;
+	AtomContainer* tmp = in_file.read();
 	
 	while(tmp)
 	{
-		inserted = false;
+		if ( !analyzer.addStructure( *tmp ) )
+			delete tmp; // structure was not added to the x_worst...
+		
 		total_molecules++;
-		
-		updateTotalMeasure( *tmp );
-		
-		if( !inserted )
-			delete tmp;
 		
 		tmp = in_file.read(); // next loop iteration
 	}
+	in_file.close();
 	
-	if( !inserted )
-		delete tmp;
-	
-	 in_file.close();
-	
-	// get final averages from total counts:
-	calculateAverages();
-	
+	/// 2.) report output:
+	/// -----------------------------------------------------------------
 	Log<<"...done analysing"<<endl<<endl<<endl;
 
 	Log << "Reporting faults ( avg severity / worst severity / total occurences / total molecules):" << endl;
 	Log << "Total molecules: " << total_molecules << endl << endl;
-	Log<< "Stretch: " << severity_stretches << " / "<< worst_stretch << " / " 
-		 << total_stretch_faults << " / "<< num_severe_stretches << endl;
+	Log<< "clashes: " << analyzer.getAverageCSS() << " / " << analyzer.getWorstCSS() << " / "
+		 << analyzer.getNumberClashes() << " / "<< analyzer.getNumberClashingStructures() << endl;
 	
-	Log<< "Bend   : " << severity_bends << " / " << worst_bend 
-		 << " / " << total_bend_faults << " / "<< num_severe_bends << endl;
-	
-	Log<< "clashes: " << severity_clashes << " / " << worst_clash << " / "
-		 << total_clashes << " / "<< num_severe_clashes << endl;
-	
-	// give the ten ugliest structures back:
+	/// 3.) write the ugliest structures out
+	/// -----------------------------------------------------------------
 	if(parpars.has("o"))
 	{
-		cout<<"writing "<< ten_worst.size()<<" worst structures"<<endl;
+		cout<<"writing "<< x_worst_structures.size()<<" worst structures"<<endl;
 		SDFile outfile(parpars.get("o"), ios::out);
 		
-		for(list< pair<AtomContainer*,float> >::iterator it = ten_worst.begin(); 
-				it != ten_worst.end(); ++it )
+		for(list< pair<AtomContainer*,float> >::iterator it = x_worst_structures.begin(); 
+				it != x_worst_structures.end(); ++it )
 		{
 			it->first->setProperty("clash_score", it->second);
 			outfile << * it->first;
+			delete it->first;
 		}
 	}
-	
 }
