@@ -11,6 +11,7 @@
 #include <BALL/KERNEL/PTE.h>
 
 #include <cmath>
+#include <map>
 #include "../sources/base.h"
 #include "../sources/clashBase.h"
 
@@ -21,14 +22,13 @@ using namespace std;
 class CSSAnalyzer
 {
 public:
-	CSSAnalyzer(list< pair<AtomContainer*, float> >& collect_lst, int n = 0):
+	CSSAnalyzer(list< pair<AtomContainer*, float> >& collect_lst, float _prec = 0.1, int n = 0):
+		prec(_prec),
 		total_clash_count(0),
 		number_to_collect(n),
 		uglies_list(collect_lst),
 		total_average(0),
-		worst_CSS(0)
-	{
-	}
+		worst_CSS(0){}
 	
 	bool addStructure( AtomContainer& mol )
 	{
@@ -36,6 +36,8 @@ public:
 		
 		// 1.) get CSS for the structure
 		float clash_severity = getStructureCSS( mol );
+		
+		updateDistrib(clash_severity);
 		
 		// 2.) update 'average CSS', 'clash count' and 'worst CSS' if it contained a clash
 		if ( clash_severity > 0)
@@ -50,7 +52,7 @@ public:
 				worst_CSS = clash_severity;
 			
 			// 3.) update the worst output structures
-			if( uglies_list.empty() )
+			if( uglies_list.empty() && number_to_collect != 0 )
 			{
 				// add new element
 				uglies_list.push_front( make_pair(&mol, clash_severity) );
@@ -58,13 +60,6 @@ public:
 			}
 			else if( clash_severity > uglies_list.back().second )
 			{
-				//		cout<<endl<<endl<<"inserting: "<<max_factor<<endl;
-				//		for(list<pair<AtomContainer*, float>>::iterator it = ten_worst.begin();
-				//				it != ten_worst.end(); ++it)
-				//		{
-				//			cout<<"score: "<<it->second<<endl;
-				//		}
-				// insert sorted:
 				for(list<pair<AtomContainer*, float>>::iterator it = uglies_list.begin();
 						it != uglies_list.end(); ++it)
 				{
@@ -107,9 +102,14 @@ public:
 		return total_clash_molecules;
 	}
 	
+	const map< float, int>& getDrb()
+	{
+		return distrib;
+	}
+	
 private:
 
-	int  number_to_collect;
+	int number_to_collect;
 	list< pair<AtomContainer*, float> >& uglies_list;
 	
 	unsigned int total_clash_count;
@@ -117,6 +117,9 @@ private:
 	
 	float total_average;
 	float worst_CSS;
+	
+	float prec;
+	map< float, int> distrib;
 	
 	
 	/*
@@ -164,6 +167,28 @@ private:
 
 		return result;
 	}
+	
+	void updateDistrib(float css)
+	{
+		// set precision:
+		css = round(css);
+		
+		if( distrib.find(css) != distrib.end() )
+		{
+			distrib[css]++;
+		}
+		else
+		{
+			distrib[css] = 1;
+		}
+	}
+	
+	float round(float f)
+	{
+		int multi = (int)ceil(1 / prec);
+		
+		return floor(f*multi + 0.5)/multi;
+	}
 };/// END OF CLASS
 
 ///################################# M A I N ###################################
@@ -174,6 +199,7 @@ int main(int argc, char* argv[])
 	parpars.registerParameter("i", "input SDF to be assessed ", STRING, true);
 	parpars.registerParameter("o", "output file for the worst sturcures if '-n' was set", STRING, false);
 	parpars.registerParameter("n", "number of worst structures to collect", STRING, false);
+	parpars.registerParameter("d", "distribution precision, defaults to 0.1", STRING, false);
 
 	parpars.setToolManual("Checks how well the found covalent bond lengths and "
 												"vdw-distances agree with known standard parameters");
@@ -200,7 +226,11 @@ int main(int argc, char* argv[])
 	if ( parpars.has("n") )
 		collect = parpars.get("n").toInt();
 	
-	CSSAnalyzer analyzer( x_worst_structures, collect);
+	float prec = 0.1;
+	if( parpars.has("d") )
+		prec = parpars.get("d").toFloat();
+	
+	CSSAnalyzer analyzer( x_worst_structures, prec, collect);
 	
 	
 	/// 1.) read and analyze every structure:
@@ -226,14 +256,14 @@ int main(int argc, char* argv[])
 	/// -----------------------------------------------------------------
 	Log<<"...done analysing"<<endl<<endl<<endl;
 
-	Log << "Reporting faults ( avg severity / worst severity / total occurences / total molecules):" << endl;
-	Log << "Total molecules: " << total_molecules << endl << endl;
-	Log<< "clashes: " << analyzer.getAverageCSS() << " / " << analyzer.getWorstCSS() << " / "
+	Log << "Number of analysed structures: " << total_molecules << endl << endl;
+	Log << "Reporting faults: avg severity / worst severity / total occurences / total molecules" << endl;
+	Log<< analyzer.getAverageCSS() << " / " << analyzer.getWorstCSS() << " / "
 		 << analyzer.getNumberClashes() << " / "<< analyzer.getNumberClashingStructures() << endl;
 	
 	/// 3.) write the ugliest structures out
 	/// -----------------------------------------------------------------
-	if(parpars.has("o"))
+	if(parpars.has("o") && x_worst_structures.size() != 0)
 	{
 		cout<<"writing "<< x_worst_structures.size()<<" worst structures"<<endl;
 		SDFile outfile(parpars.get("o"), ios::out);
@@ -245,5 +275,16 @@ int main(int argc, char* argv[])
 			outfile << * it->first;
 			delete it->first;
 		}
+	}
+	
+	/// 4.) report the CSS distribution
+	/// -----------------------------------------------------------------
+	Log<<endl;
+	Log<<endl;
+	Log<<"Reporting CSS distribution:"<<endl;
+	for(map<float, int>::const_iterator it = analyzer.getDrb().begin(); 
+			it != analyzer.getDrb().end(); ++it)
+	{
+		Log<<it->first<<";"<<it->second<<endl;
 	}
 }
