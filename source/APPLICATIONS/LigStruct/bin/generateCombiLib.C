@@ -8,8 +8,6 @@
 
 #include <BALL/FORMAT/commandlineParser.h>
 
-#define CONF_PATH "/Users/pbrach/files/projects/Master-2014_2015/0_data/4_used_libs_copies/libraries.conf"
-
 using namespace BALL;
 using namespace std;
 
@@ -54,7 +52,7 @@ int main(int argc, char* argv[])
 	
 	
 	//2.) setup template database manager, to load the fragment databases
-	String config_path = CONF_PATH;
+	String config_path = "databases.conf";
 	
 	if ( parpars.has("c") )
 		config_path = parpars.get("c");
