@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 		lib_loader.libraryPathesFromConfig( parpars.get("c") );
 	}
 	else
-		lib_loader.libraryPathesFromConfig( "/Users/pbrach/files/projects/Master-2014_2015/0_data/4_used_libs_copies/libraries.conf");
+		lib_loader.libraryPathesFromConfig( "databases.conf");
 	
 	lib_loader.readAll();
 
