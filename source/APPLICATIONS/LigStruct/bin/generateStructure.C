@@ -55,11 +55,11 @@ int main(int argc, char* argv[])
 	while (tmp)
 	{
 		LigBase::removeHydrogens( *tmp );
-		
-//		cout<<endl<<LigBase::moleculeToSMILES( *tmp )<<endl;
+
 		try
 		{
 			dummy_con_lst = lig_assembler.assembleStructure( *tmp );
+
 			delete dummy_con_lst;
 			outfile << *tmp;
 		}

@@ -195,6 +195,12 @@ ConnectionResolver::~ConnectionResolver()
 void ConnectionResolver::setMolecule(
 		Atom &atm1, Atom &atm2, ConnectList &connection_rotors)
 {
+	if(_save_large != 0)
+	{
+		delete _save_large;
+		delete _save_small;
+	}
+
 	atm_large = &atm1;
 	atm_small = &atm2;
 	

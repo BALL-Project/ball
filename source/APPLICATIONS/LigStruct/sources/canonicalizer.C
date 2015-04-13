@@ -26,14 +26,13 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 {
 	using namespace OpenBabel;
 	
-	int num_atoms = molecule.countAtoms();
-	
 	// aromatize:
 	AromaticityProcessor aroma;
 	molecule.apply(aroma);
 	
 	OBMol* temp = MolecularSimilarity::createOBMol( molecule);
-	
+	int num_atoms = temp->NumAtoms();
+
 	// get canonical labels:
 	vector<unsigned int> sym;
 	vector<unsigned int> clabels;
@@ -45,6 +44,7 @@ void Canonicalizer::canonicalize(AtomContainer& molecule)
 	
 	// resort atom list by inserting into a new empty molecule
 	AtomContainer* new_frag = new AtomContainer;
+
 	vector <Atom*> aList(num_atoms);
 	for( int i = 0; i < clabels.size(); i++)
 		aList[ clabels[i]-1 ] = molecule.getAtom(i);

@@ -88,7 +88,7 @@ public:
 	
 	/**
 	 * @brief resolve -  does not to handle old clashes that existed already. 
-	 * Always returns the correct complet clash-count, after optimization.
+	 * Always returns the correct complete clash-count, after optimization.
 	 * NOTE: each resolveXYZ() call gives only clash counts for the fragment parts
 	 * that should be solved but not the total clash count.
 	 * 

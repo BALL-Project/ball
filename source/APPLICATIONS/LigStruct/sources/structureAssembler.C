@@ -40,15 +40,6 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 	
 	_fragmenter.fragment(rigids, linker, *connections);
 
-	//#DEBUG - start
-//	for(ACVecIter rig_frag = rigids.begin(); rig_frag != rigids.end(); ++rig_frag)
-//		cout<<"rigid: "<<LigBase::moleculeToSMILES( **rig_frag )<<endl;
-		
-//	cout<<" - "<<endl;
-//	for(ACVecIter lin_frag = linker.begin(); lin_frag != linker.end(); ++lin_frag)
-//		cout<<"flexi:"<<LigBase::moleculeToSMILES( **lin_frag )<<endl;
-//	//#DEBUG - stop
-	
 	try
 	{
 		// canonicalize, generate UCK-key and match the rigid fragments
@@ -66,7 +57,7 @@ ConnectList* StructureAssembler::assembleStructure(AtomContainer& mol)
 		}
 		
 		// connect the ready-made fragments to a single molecule
-		for(ConnectList::iterator atm_pair = connections->begin(); 
+		for(ConnectList::iterator atm_pair = connections->begin();
 				atm_pair != connections->end(); ++atm_pair )
 		{
 			// only connect if this is not a linker-rotor bond
