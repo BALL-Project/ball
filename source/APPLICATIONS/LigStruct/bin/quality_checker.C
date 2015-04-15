@@ -58,7 +58,7 @@ public:
 				uglies_list.push_front( make_pair(&mol, clash_severity) );
 				inserted = true;
 			}
-			else if( clash_severity > uglies_list.back().second )
+			else if( number_to_collect != 0 && clash_severity > uglies_list.back().second )
 			{
 				for(list<pair<AtomContainer*, float>>::iterator it = uglies_list.begin();
 						it != uglies_list.end(); ++it)
@@ -244,7 +244,9 @@ int main(int argc, char* argv[])
 	while(tmp)
 	{
 		if ( !analyzer.addStructure( *tmp ) )
+		{
 			delete tmp; // structure was not added to the x_worst...
+		}
 		
 		total_molecules++;
 		
