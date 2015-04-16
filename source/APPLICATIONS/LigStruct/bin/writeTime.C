@@ -36,20 +36,23 @@ int main(int argc, char* argv[])
 	Log << "Reading input"<<endl;
 	
 	AtomContainer* mol = in_file.read();
-	
-	while( mol )
+	Timer my_timer;
+
+	int cnt = 0;
+	my_timer.start();
+	while( mol && cnt < 100000 )
 	{
 		mol_list.push_back( mol );
 		
+		cnt++;
 		mol = in_file.read();
 	}
-	cout<<"Read "<<mol_list.size()<< " structures"<<endl;
+	my_timer.stop();
+	cout<<"Read "<<mol_list.size()<< " structures and needed "<< my_timer.getSeconds()<< " seconds"<<endl;
 	in_file.close();
 	
 	Log << "Writing:"<<endl;
-	
-	// timing:
-	Timer my_timer; 
+	my_timer.reset();
 	my_timer.start();
 	
 	SDFile outfile(parpars.get("o"), ios::out);
@@ -63,7 +66,7 @@ int main(int argc, char* argv[])
 	my_timer.stop();
 	
 	Log << "Needed "<<my_timer.getSeconds()<<" seconds for "<<mol_list.size()
-			<< "files"<<endl<<endl;
+			<< " files"<<endl<<endl;
 	Log << "......done!"<<endl;
 }
 
