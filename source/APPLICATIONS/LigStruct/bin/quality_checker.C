@@ -24,6 +24,7 @@ class CSSAnalyzer
 public:
 	CSSAnalyzer(list< pair<AtomContainer*, float> >& collect_lst, float _prec = 0.1, int n = 0):
 		prec(_prec),
+		total_clash_molecules(0),
 		total_clash_count(0),
 		number_to_collect(n),
 		uglies_list(collect_lst),
