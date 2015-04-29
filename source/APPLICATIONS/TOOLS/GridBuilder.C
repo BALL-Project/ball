@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
-	Options* scoring_options = default_options.getSubcategory("Scoring Function");
+	Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	scoring_options->setDefault("atom_types", "C, H, N, O, P, S, Cl, F, I");
 	scoring_options->addParameterDescription("atom_types", "elements for which grids should be precalculated", STRING);
 	parpars.registerAdvancedParameters(default_options);
@@ -83,7 +83,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(parpars.get("pocket"), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = option_category->setDefault("scoring_type", "GridedMM");
 	String grid_file = parpars.get("grd");

@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 		{
 			DockingAlgorithm::readOptionFile(default_inifile, default_options, clist);
 		}
-		Options* scoring_options = default_options.getSubcategory("Scoring Function");
+		Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 
 		scoring_options->setDefault("scoring_type", "GridedMM");
 		scoring_options->setDefault("scoregrid_resolution", 0.5);
@@ -84,7 +84,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(parpars.get("pocket"), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = "GridedMM";
 

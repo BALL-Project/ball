@@ -463,7 +463,7 @@ int main(int argc, char* argv[])
 			DockingAlgorithm::readOptionFile(default_inifile, default_options, clist);
 		}
 
-		Options* scoring_options = default_options.getSubcategory("Scoring Function");
+		Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 		scoring_options->setDefault("scoring_type", "MM");
 		scoring_options->setDefault("nonbonded_cutoff_precalculation", scoring_options->get("nonbonded_cutoff"));
 		scoring_options->set("nonbonded_cutoff", 3.0);
@@ -486,7 +486,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(par.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = option.setDefault("scoring_type", "MM");
 

@@ -16,6 +16,7 @@
 using namespace std;
 using namespace BALL;
 
+const char* ScoringFunction::SUBCATEGORY_NAME = "ScoringFunction";
 
 const char* ScoringFunction::Option::VERBOSITY = "verbosity";
 const char* ScoringFunction::Option::BASE_FUNCTION_TYPE= "base_function_type";
@@ -105,7 +106,7 @@ ScoringFunction::ScoringFunction(AtomContainer& receptor, AtomContainer& ligand,
 	receptor_ = &receptor;
 	ligand_ = &ligand;
 
-	Options* option_category = options.getSubcategory("Scoring Function");
+	Options* option_category = options.getSubcategory(SUBCATEGORY_NAME);
 	if (!option_category) option_category = &options;
 	options_ = *option_category;
 
@@ -128,7 +129,7 @@ ScoringFunction::ScoringFunction(AtomContainer& receptor, Vector3& hashgrid_orig
 	receptor_ = &receptor;
 	ligand_ = NULL;
 
-	Options* option_category = options.getSubcategory("Scoring Function");
+	Options* option_category = options.getSubcategory(SUBCATEGORY_NAME);
 	if (!option_category) option_category = &options;
 	options_ = *option_category;
 
@@ -1480,7 +1481,7 @@ void ScoringFunction::getScoreContributions(vector<double>& score_contributions,
 
 void ScoringFunction::getDefaultOptions(Options& options)
 {
-	Options* option_category = options.createSubcategory("Scoring Function");
+	Options* option_category = options.createSubcategory("ScoringFunction");
 
 	// units in Armstrongs
 	list<String> allowed_values;
