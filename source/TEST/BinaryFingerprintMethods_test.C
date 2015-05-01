@@ -331,7 +331,7 @@ CHECK(cutoffSearch())
 	
 	float sim;
 	String key;
-	unordered_map<string, float> results;
+	boost::unordered_map<string, float> results;
 	LineBasedFile lbf(BALL_TEST_DATA_PATH(BinaryFingerprintMethods_SimSearchResults.csv), File::MODE_IN);
 	while(lbf.readLine())
 	{
@@ -347,8 +347,8 @@ CHECK(cutoffSearch())
 	
 	float cutoff = 0.0;
 	String outfile_name = "_BALL_CUTOFF_SEARCH_TEST.tmp";
-	unordered_map<string, float>::iterator it;
-	unordered_map<string, float> results_subset;
+	boost::unordered_map<string, float>::iterator it;
+	boost::unordered_map<string, float> results_subset;
 	
 	while (cutoff <= 1.0)
 	{
@@ -391,9 +391,9 @@ CHECK(connectedComponents(store_nns=true))
 	unsigned int id, min_id, int_cutoff;
 	map<string, float> tmp_cc;
 	map<string, float>::iterator cc_it;
-	unordered_map<unsigned int, map<string, float> > ccs_results;
-	unordered_map<unsigned int, map<string, float> >::iterator ccs_it;
-	unordered_map<unsigned int, unordered_map<unsigned int, map<string, float> > > all_ccs;
+	boost::unordered_map<unsigned int, map<string, float> > ccs_results;
+	boost::unordered_map<unsigned int, map<string, float> >::iterator ccs_it;
+	boost::unordered_map<unsigned int, boost::unordered_map<unsigned int, map<string, float> > > all_ccs;
 	
 	LineBasedFile lbf(BALL_TEST_DATA_PATH(BinaryFingerprintMethods_ConnectedComponents.csv), File::MODE_IN);
 	while(lbf.readLine())
@@ -409,7 +409,7 @@ CHECK(connectedComponents(store_nns=true))
 			}
 			
 			int_cutoff = lbf.getField(1).toUnsignedInt();
-			all_ccs[int_cutoff] = unordered_map<unsigned int, map<string, float> >();
+			all_ccs[int_cutoff] = boost::unordered_map<unsigned int, map<string, float> >();
 			
 			continue;
 		}
@@ -539,9 +539,9 @@ CHECK(connectedComponents(store_nns=false))
 	unsigned int id, int_cutoff;
 	map<string, float> tmp_cc;
 	map<string, float>::iterator cc_it;
-	unordered_map<unsigned int, map<string, float> > ccs_results;
-	unordered_map<unsigned int, map<string, float> >::iterator ccs_it;
-	unordered_map<unsigned int, unordered_map<unsigned int, map<string, float> > > all_ccs;
+	boost::unordered_map<unsigned int, map<string, float> > ccs_results;
+	boost::unordered_map<unsigned int, map<string, float> >::iterator ccs_it;
+	boost::unordered_map<unsigned int, boost::unordered_map<unsigned int, map<string, float> > > all_ccs;
 	
 	LineBasedFile lbf(BALL_TEST_DATA_PATH(BinaryFingerprintMethods_ConnectedComponents.csv), File::MODE_IN);
 	while(lbf.readLine())
@@ -557,7 +557,7 @@ CHECK(connectedComponents(store_nns=false))
 			}
 			
 			int_cutoff = lbf.getField(1).toUnsignedInt();
-			all_ccs[int_cutoff] = unordered_map<unsigned int, map<string, float> >();
+			all_ccs[int_cutoff] = boost::unordered_map<unsigned int, map<string, float> >();
 			
 			continue;
 		}
