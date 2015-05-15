@@ -76,6 +76,16 @@ namespace BALL
 		bool hidden;
 	};
 
+	class BALL_EXPORT ParameterUtils
+	{
+		public:
+			/** From category, parameter_name builds [category]:[parameter_name] */
+			static const String buildNestedParameterName(const String& category, const String& parameter_name);
+
+			/** Returns [category, parameter] from [category]:[parameter] */
+			static const Size parseNestedParameterName(const String& parameter_name, String string_array[]);
+	};
+
 	/** Class for storing and retrieving parameters (e.g. tool-parameters) to an xml-based file */
 	class BALL_EXPORT ParamFile : public File
 	{
@@ -98,7 +108,7 @@ namespace BALL
 			@param descriptions descriptions of parameters will be stored here 
 			@param values values of parameters will be stored here
 			@param overwrite_existing if set to true, entries already existing in 'descriptions' and 'values' will be overwritten. */
-			void readSection(String& section_name, String& section_description, String& version, String& section_helptext,
+			void readSection(String& tool_name, String& section_description, String& version, String& section_helptext,
 					             String& category, std::list<std::pair<String, ParameterDescription> >& descriptions,
 											 std::map<String,list<String> >& values,
 											 bool overwrite_existing=false);

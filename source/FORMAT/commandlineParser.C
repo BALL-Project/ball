@@ -337,10 +337,14 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 	{
 		for (Options::ConstIterator it = options.begin(); it != options.end(); it++)
 		{
-			const String& name = it->first;
+			// nested parameters will be registered as [category]:[parameter] in the parameter map
+			const String& name = ParameterUtils::buildNestedParameterName(category, it->first);
+
 			checkParameterName(name, true);
 
-			const ParameterDescription* pardes = options.getParameterDescription(name);
+			// since we are using options, we don't need the [category]:[parameter] format
+			// to fetch the parameter from the option
+			const ParameterDescription* pardes = options.getParameterDescription(it->first);
 			if (!pardes)
 			{
 				continue;
@@ -419,8 +423,7 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 		}
 	}
 
-	for (StringHashMap<Options*>::Iterator it = options.beginSubcategories();
-			 it != options.endSubcategories(); it++)
+	for (StringHashMap<Options*>::Iterator it = options.beginSubcategories(); it != options.endSubcategories(); it++)
 	{
 		registerAdvancedParameters(*it->second);
 	}
@@ -431,12 +434,31 @@ void CommandlineParser::setParameterAsAdvanced(String name)
 	registered_parameters_[name].advanced = true;
 }
 
-void CommandlineParser::setParameterRestrictions(String par_name, double min_value, double max_value)
+void CommandlineParser::setParameterRestrictions(String category, String par_name, double min_value, double max_value)
 {
-	map<String, ParameterDescription>::iterator it = registered_parameters_.find(par_name);
+	String used_par_name = category.isEmpty() ? par_name : ParameterUtils::buildNestedParameterName(category, par_name);
+	map<String, ParameterDescription>::iterator it = registered_parameters_.find(used_par_name);
 	if (it == registered_parameters_.end())
 	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error","You need to register a parameter before you can set restrictions for it!");
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error", "Parameter " + used_par_name + " needs to be registered before you can set restrictions.");
+	}
+	it->second.allowed_values.clear();
+	it->second.allowed_values.push_back(String(min_value));
+	it->second.allowed_values.push_back(String(max_value));
+}
+
+void CommandlineParser::setParameterRestrictions(String par_name, double min_value, double max_value)
+{
+	setParameterRestrictions("", par_name, min_value, max_value);
+}
+
+void CommandlineParser::setParameterRestrictions(String category, String par_name, int min_value, int max_value)
+{
+	String used_par_name = category.isEmpty() ? par_name : ParameterUtils::buildNestedParameterName(category, par_name);
+	map<String, ParameterDescription>::iterator it = registered_parameters_.find(used_par_name);
+	if (it == registered_parameters_.end())
+	{
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error", "Parameter " + used_par_name + " needs to be registered before you can set restrictions.");
 	}
 	it->second.allowed_values.clear();
 	it->second.allowed_values.push_back(String(min_value));
@@ -445,41 +467,46 @@ void CommandlineParser::setParameterRestrictions(String par_name, double min_val
 
 void CommandlineParser::setParameterRestrictions(String par_name, int min_value, int max_value)
 {
-	map<String, ParameterDescription>::iterator it = registered_parameters_.find(par_name);
-	if (it == registered_parameters_.end())
-	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error","You need to register a parameter before you can set restrictions for it!");
-	}
-	it->second.allowed_values.clear();
-	it->second.allowed_values.push_back(String(min_value));
-	it->second.allowed_values.push_back(String(max_value));
+	setParameterRestrictions("", par_name, min_value, max_value);
 }
 
-void CommandlineParser::setParameterRestrictions(String par_name, list<String>& allowed_values)
+void CommandlineParser::setParameterRestrictions(String category, String par_name, list<String>& allowed_values)
 {
-	map<String, ParameterDescription>::iterator it = registered_parameters_.find(par_name);
+	String used_par_name = category.isEmpty() ? par_name : ParameterUtils::buildNestedParameterName(category, par_name);
+	map<String, ParameterDescription>::iterator it = registered_parameters_.find(used_par_name);
 	if (it == registered_parameters_.end())
 	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error","You need to register a parameter before you can set restrictions for it!");
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setParameterRestrictions error", "Parameter " + used_par_name + " needs to be registered before you can set restrictions.");
 	}
 	it->second.allowed_values.clear();
 	it->second.allowed_values = allowed_values;
 }
 
-void CommandlineParser::setSupportedFormats(String par_name, String supported_formats)
+void CommandlineParser::setParameterRestrictions(String par_name, list<String>& allowed_values)
+{
+	setParameterRestrictions("", par_name, allowed_values);
+}
+
+void CommandlineParser::setSupportedFormats(String category, String par_name, String supported_formats)
 {
 	vector<String> formats;
 	supported_formats.split(formats, ",");
-	map<String, ParameterDescription>::iterator it = registered_parameters_.find(par_name);
+	String used_par_name = category.isEmpty() ? par_name : ParameterUtils::buildNestedParameterName(category, par_name);
+	map<String, ParameterDescription>::iterator it = registered_parameters_.find(used_par_name);
 	if (it == registered_parameters_.end())
 	{
-		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setSupportedFormats error","You need to register a parameter before you can set supported formats for it!");
+		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"setSupportedFormats error", "Parameter " + used_par_name + " needs to be registered before you can set restrictions.");
 	}
 	it->second.supported_formats.clear();
 	for (Size i=0; i<formats.size(); i++)
 	{
 		it->second.supported_formats.push_back(formats[i].trim());
 	}
+}
+
+void CommandlineParser::setSupportedFormats(String par_name, String supported_formats)
+{
+	setSupportedFormats("", par_name, supported_formats);
 }
 
 void CommandlineParser::printToolInfo()
@@ -565,9 +592,12 @@ void CommandlineParser::parse(int argc, char* argv[])
 			{
 				current_par_name = token;
 				name_read = true;
-			}
-			else // command line flag
+			}			
+			else
 			{
+				// name was already read and we are encountering a second argument that starts with "-".
+				// this means that we just processed a flag:
+				// e.g.: -flag_one -something
 				if (registered_flags_.find(current_par_name) != registered_flags_.end())
 				{
 					list<String> v;
@@ -773,6 +803,7 @@ void CommandlineParser::replaceEscapedCharacters_(String& parameter_value)
 
 void CommandlineParser::copyAdvancedParametersToOptions(Options& options)
 {
+	String string_array[2];
 	for (list<MapIterator>::iterator it = original_parameter_order_.begin(); it != original_parameter_order_.end(); it++)
 	{
 		ParameterDescription& p = (*it)->second;
@@ -787,7 +818,9 @@ void CommandlineParser::copyAdvancedParametersToOptions(Options& options)
 			{
 				option_category = options.createSubcategory(p.category);
 			}
-			option_category->set(p.name, search_it->second.front());
+			// we need to deconstruct from the registered parameter name to the option name
+			ParameterUtils::parseNestedParameterName(p.name, string_array);
+			option_category->set(string_array[1], search_it->second.front());
 		}
 	}
 }

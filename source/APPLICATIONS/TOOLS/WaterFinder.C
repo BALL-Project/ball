@@ -450,7 +450,7 @@ int main(int argc, char* argv[])
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	par.registerAdvancedParameters(default_options);
-	par.setSupportedFormats("filename","ini");
+	par.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename","ini");
 	par.parse(argc, argv);
 
 	String default_inifile = par.get("write_ini");

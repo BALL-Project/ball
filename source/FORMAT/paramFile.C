@@ -98,6 +98,8 @@ void ParamFile::writeSection(String section_name, String section_description, St
 	String previous_section = "";
 	Size open_sections = 0;
 
+	String string_array[2];
+
 	for(list<pair<String,ParameterDescription> >::const_iterator d_it=descriptions.begin();
 		d_it!=descriptions.end(); d_it++)
 	{
@@ -122,6 +124,24 @@ void ParamFile::writeSection(String section_name, String section_description, St
 				open_sections++;
 			}
 			previous_section = section;
+		}
+
+		String parameter_name = d_it->first.c_str();
+		// only parameters with a category (section) need their name to be deconstructed
+		if (!section.isEmpty())
+		{
+			Size n_elements = ParameterUtils::parseNestedParameterName(parameter_name, string_array);
+			// sanity check... in case the parameter is not properly formatted, write some warnings and just move on
+			if (n_elements != 2)
+			{
+				Log.warn() << "Parameter " << parameter_name << " has been registered under section " << section << " but is not properly formatted." << endl;
+				Log.warn() << " Expected format is [section]:[parameter_name]";
+			}
+			else
+			{
+				// we do not need the category component at this point
+				parameter_name = string_array[1];
+			}
 		}
 
 		String type = "";
@@ -192,7 +212,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 			xmlOut_->writeStartElement("ITEM");
 		}
 
-		xmlOut_->writeAttribute("name", d_it->first.c_str());
+		xmlOut_->writeAttribute("name", parameter_name.c_str());
 		xmlOut_->writeAttribute("type", type.c_str());
 
 		if (d_it->second.hidden)
@@ -296,7 +316,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 }
 
 
-void ParamFile::readSection(String& section_name, String& section_description, String& version,  String& section_helptext,
+void ParamFile::readSection(String& tool_name, String& section_description, String& version,  String& section_helptext,
 		                        String& category, list<pair<String,ParameterDescription> >& descriptions,
 														map<String,list<String> >& values,bool overwrite_existing)
 {
@@ -305,14 +325,14 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 		throw BALL::Exception::GeneralException(__FILE__,__LINE__,"ParamFile::readSection() error","Reading is not possible, file is opened in write mode!");
 	}
 
-	section_name = "";
+	tool_name = "";
 	section_description = "";
 	version = "";
 	section_helptext = "";
 	category = "";
 
 	int inside_par_node = 0;
-	String section = "";
+	String current_section = "";
 
 	ParameterDescription pd;
 	list<String> values_current_par;
@@ -331,38 +351,31 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 
 		if (token == QXmlStreamReader::StartElement)
 		{
-			if (!inside_par_node)
+			QXmlStreamAttributes attrs = xmlIn_->attributes();
+
+			if (tagname == "tool")
 			{
-				if(tagname=="name")
-				{
-					section_name = xmlIn_->readElementText().toStdString();
-				}
-				else if(tagname=="version")
-				{
-					version = xmlIn_->readElementText().toStdString();
-				}
-				else if(tagname=="description")
-				{
-					section_description = xmlIn_->readElementText().toStdString();
-				}
-				else if(tagname=="category")
-				{
-					category = xmlIn_->readElementText().toStdString();
-				}
-				else if(tagname=="manual")
-				{
-					section_helptext = xmlIn_->readElementText().toStdString();
-				}
+				tool_name = attrs.value("name").toString().toStdString();
+				version = attrs.value("version").toString().toStdString();
+				category = attrs.value("category").toString().toStdString();
 			}
 
-			QXmlStreamAttributes attrs = xmlIn_->attributes();
+			if (tagname == "description")
+			{
+				section_description = xmlIn_->readElementText().toStdString();
+			}
+
+			if(tagname == "manual")
+			{
+				section_helptext = xmlIn_->readElementText().toStdString();
+			}
 
 			if (tagname=="NODE")
 			{
 				inside_par_node++;
 				if (inside_par_node > 1)
 				{
-					section = attrs.value("name").toString().toStdString();
+					current_section = attrs.value("name").toString().toStdString();
 				}
 			}
 
@@ -372,6 +385,13 @@ void ParamFile::readSection(String& section_name, String& section_description, S
 				std::set<String> tags = getTags(attrs);
 
 				pd.name = attrs.value("name").toString().toStdString();
+				if (!current_section.isEmpty() && current_section != "1")
+				{
+					// we are reading a nested parameter and we need to format it like [section]:[parameter]
+					// unless we are handling the top section ("conveniently" named "1")
+					pd.name = ParameterUtils::buildNestedParameterName(current_section, pd.name);
+				}
+
 				pd.description = attrs.value("description").toString().toStdString();
 				pd.category = "Bioinformatics";
 
@@ -574,4 +594,16 @@ std::set<String> ParamFile::getTags(QXmlStreamAttributes& attributes)
 	}
 
 	return tagSet;
+}
+
+
+const String ParameterUtils::buildNestedParameterName(const String& category, const String& parameter_name)
+{
+	return category + ":" + parameter_name;
+}
+
+
+const Size ParameterUtils::parseNestedParameterName(const String& parameter_name, String string_array[])
+{
+	return parameter_name.split(string_array, 2, ":");
 }

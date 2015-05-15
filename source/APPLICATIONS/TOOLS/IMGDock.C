@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	ScoringFunction::getDefaultOptions(default_options);
 	IMGDock::getDefaultOptions(default_options);
 	parpars.registerAdvancedParameters(default_options);
-	parpars.setSupportedFormats("filename","ini");
+	parpars.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 	parpars.parse(argc, argv);
 
 	String default_inifile = parpars.get("write_ini");

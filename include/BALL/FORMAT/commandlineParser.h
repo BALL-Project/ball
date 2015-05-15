@@ -111,19 +111,23 @@ namespace BALL
 			void setParameterAsHidden(String name);
 
 			/** Register the minimal and maximal allowed value for a floating-point numerical parameter. */
+			void setParameterRestrictions(String category, String par_name, double min_value, double max_value);
 			void setParameterRestrictions(String par_name, double min_value, double max_value);
 
 			/** Register the minimal and maximal allowed value for an integer numerical parameter. */
+			void setParameterRestrictions(String category, String par_name, int min_value, int max_value);
 			void setParameterRestrictions(String par_name, int min_value, int max_value);
 
 			/** Register the allowed values for a string-parameter. */
+			void setParameterRestrictions(String category, String par_name, list<String>& allowed_values);
 			void setParameterRestrictions(String par_name, list<String>& allowed_values);
 
-			/** Register the supported formats for input-/output-files.
-			  
-					@param supported_formats supported file-formats separated by commas 
+			/** Register the supported formats for input-/output-files.			  
+					@param supported_formats supported file-formats separated by commas 			
 			*/
+			void setSupportedFormats(String category, String par_name, String supported_formats);
 			void setSupportedFormats(String par_name, String supported_formats);
+
 
 			/** Parse all parameters found in the command line 
 			 */

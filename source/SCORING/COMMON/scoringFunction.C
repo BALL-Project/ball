@@ -1481,7 +1481,7 @@ void ScoringFunction::getScoreContributions(vector<double>& score_contributions,
 
 void ScoringFunction::getDefaultOptions(Options& options)
 {
-	Options* option_category = options.createSubcategory("ScoringFunction");
+	Options* option_category = options.createSubcategory(SUBCATEGORY_NAME);
 
 	// units in Armstrongs
 	list<String> allowed_values;
