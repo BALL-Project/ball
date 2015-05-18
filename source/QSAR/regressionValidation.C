@@ -136,7 +136,6 @@ namespace BALL
 				Q2_ += quality_;
 			}
 			Q2_ = Q2_/k;
-		//	F_cv_ = gsl_cdf_fdist_P((Q2_*(lines-col-1))/((1-Q2_)*col), col, lines-col-1);
 			
 			std_err_ = std_err_ / ((k-1)*lines);
 			
@@ -255,9 +254,6 @@ namespace BALL
 			{
 				col = model_->descriptor_IDs_.size();
 			}
-			
-			//F_regr_ = gsl_cdf_fdist_P((R2_*(lines-col-1))/((1-R2_)*col), col, lines-col-1);
-		//	F_regr_ = gsl_cdf_fdist_P( (ssR_*(lines-col-1))/(ssE_*col), col, lines-col-1 );
 		}
 
 
