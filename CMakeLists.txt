@@ -261,7 +261,6 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTSQL "Compile BALL's database adapaters (requires QtSql)" ON)
 OPTION(USE_QTWEBKIT "Add support for QWebkit" ${BALL_HAS_VIEW})
 
 IF(NOT BALL_HAS_VIEW)
@@ -274,7 +273,6 @@ FIND_PACKAGE(Qt4 REQUIRED)
 
 SET(QT_USE_QTXML TRUE)
 SET(QT_USE_QTNETWORK TRUE)
-SET(QT_USE_QTSQL    ${USE_QTSQL})
 
 # Qt Dependencies for VIEW
 IF(BALL_HAS_VIEW)
@@ -605,7 +603,6 @@ ENDIF()
 
 TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
                            ${QT_QTCORE_LIBRARY}
-                           ${QT_QTSQL_LIBRARY}
                            ${QT_QTNETWORK_LIBRARY}
                            ${QT_QTXML_LIBRARY})
 

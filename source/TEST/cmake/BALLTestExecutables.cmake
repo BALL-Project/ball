@@ -113,7 +113,6 @@ SET(BALL_DOCKING_TESTS
 	GeneticAlgorithm_test
 	GeneticIndividual_test
 	GridAnalysis_test
-	MolDB_test
 	Parameter_test
 	PoseClustering_test
 	Receptor_test
@@ -383,11 +382,6 @@ SET(BALL_QSAR_TESTS
 
 SET(BALL_XDR_TESTS
 	XDRPersistenceManager_test
-)
-
-SET(BALL_SQL_TESTS
-# TODO: this test is currently broken!
-#	DBInterface_test
 )
 
 SET(BALL_ASIO_TESTS

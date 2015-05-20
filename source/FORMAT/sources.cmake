@@ -19,7 +19,6 @@ SET(SOURCES_LIST
 	JCAMPFile.C
 	KCFFile.C
 	lineBasedFile.C
-	molDB.C
 	MOLFile.C
 	molFileFactory.C
 	MOPACInputFile.C
@@ -43,10 +42,6 @@ SET(SOURCES_LIST
 	TRRFile.C
 	XYZFile.C
 )
-
-IF (BALL_HAS_QTSQL)
-	SET(SOURCES_LIST ${SOURCES_LIST} DBInterface.C)
-ENDIF()
 
 ADD_BALL_SOURCES("FORMAT" "${SOURCES_LIST}")
 

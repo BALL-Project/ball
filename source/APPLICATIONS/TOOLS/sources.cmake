@@ -14,8 +14,6 @@ SET(EXECUTABLES_LIST
 	ConstraintsFinder
 	Converter
 	CrystalGenerator
-	DBExporter
-	DBImporter
 	DockPoseClustering
 	DockResultMerger
 	EvenSplit
@@ -64,7 +62,6 @@ SET(EXECUTABLES_LIST
 	TrajectoryFile2PDBSplitter
 	Trajectory2RigidTransformation
 	Validator
-	VendorFinder
 	WaterFinder
 	# add new programs here
 )
