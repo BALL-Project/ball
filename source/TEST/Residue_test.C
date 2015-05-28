@@ -356,6 +356,23 @@ CHECK(void setInsertionCode(char insertion_code) throw())
 	TEST_EQUAL(r1.getInsertionCode(), 'r')
 RESULT
 
+CHECK(setInsertionCode invalid)
+	Residue r1('x');
+
+	TEST_EQUAL(r1.getInsertionCode(), ' ');
+	TEST_EXCEPTION(Exception::InvalidArgument, r1.setInsertionCode('\0'));
+	TEST_EQUAL(r1.getInsertionCode(), ' ');
+RESULT
+
+CHECK(void unsetInsertionCode())
+	Residue r1('x');
+	TEST_EQUAL(r1.getInsertionCode(), ' ');
+	r1.setInsertionCode('A');
+	TEST_EQUAL(r1.getInsertionCode(), 'A');
+	r1.unsetInsertionCode();
+	TEST_EQUAL(r1.getInsertionCode(), ' ');
+RESULT
+
 CHECK(char getInsertionCode() const throw())
 	Residue r1('x');
 	TEST_EQUAL(r1.getInsertionCode(), ' ')

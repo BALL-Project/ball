@@ -214,6 +214,25 @@ CHECK(void setInsertionCode(char insertion_code) throw())
 	TEST_EQUAL(n1.getInsertionCode(), 'r')
 RESULT
 
+CHECK(setInsertionCode invalid)
+	Nucleotide n1('x');
+
+	TEST_EQUAL(n1.getInsertionCode(), ' ');
+	TEST_EXCEPTION(Exception::InvalidArgument, n1.setInsertionCode('\0'));
+	TEST_EQUAL(n1.getInsertionCode(), ' ');
+RESULT
+
+CHECK(void unsetInsertionCode())
+	Nucleotide n1('x');
+
+	TEST_EQUAL(n1.getInsertionCode(), ' ');
+	n1.setInsertionCode('A');
+	TEST_EQUAL(n1.getInsertionCode(), 'A');
+	n1.unsetInsertionCode();
+	TEST_EQUAL(n1.getInsertionCode(), ' ');
+RESULT
+
+
 CHECK(char getInsertionCode() const throw())
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.getInsertionCode(), ' ')
