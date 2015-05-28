@@ -6,6 +6,7 @@
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/COMMON/exception.h>
 
 using namespace::std;
 
@@ -375,7 +376,19 @@ namespace BALL
 
 	void Residue::setInsertionCode(char insertion_code)
 	{
+		// Is the insertion code a visible ASCII character
+		if(insertion_code < 32 || insertion_code > 126) {
+			throw Exception::InvalidArgument(__FILE__, __LINE__,
+				"The specified insertion code is invalid. Only visible values "
+				"and the space character ' ' are allowed."
+			);
+		}
+
 		insertion_code_ = insertion_code;
+	}
+
+	void Residue::unsetInsertionCode() {
+		insertion_code_ = ' ';
 	}
 
 	char Residue::getInsertionCode() const

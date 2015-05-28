@@ -37,6 +37,7 @@ using namespace BALL;
   void setID(const String&);
   const String& getID() const;
   void setInsertionCode(char);
+  void unsetInsertionCode();
   char getInsertionCode() const;
   void prepend(Atom& /Transfer/);
   void append(Atom& /Transfer/);

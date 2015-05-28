@@ -168,10 +168,23 @@ namespace BALL
 		*/
 		const String& getID() const;
 
-		/**	Set the insertion code of the nucleotide.
-				@param insertion_code the new insertion code
-		*/
+		/**
+		 * Set the insertion code.
+		 *
+		 * An insertion code is a visible ASCII character as well as the space
+		 * character ' '.
+		 *
+		 * @param insertion_code the new insertion code
+		 * @throws InvalidArgument if an unsupported insertion code has been specified.
+		 */
 		void setInsertionCode(char insertion_code);
+
+		/**
+		 * Unset the current insertion code.
+		 *
+		 * This is equivalent to calling setInsertionCode(' ').
+		 */
+		void unsetInsertionCode();
 
 		/**	Retrieve the insertion code of the nucleotide.
 				@return String the insertion code (constant)

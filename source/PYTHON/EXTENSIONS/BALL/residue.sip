@@ -62,6 +62,7 @@ class Residue
   void setID(const String&);
   const String& getID() const;
   void setInsertionCode(char);
+  void unsetInsertionCode();
   char getInsertionCode() const;
   Size countPDBAtoms() const;
   void prepend(PDBAtom& /Transfer/);
