@@ -31,6 +31,7 @@ int main (int argc, char **argv)
 	// - parameter type
 	// - required
 	parpars.registerParameter("i", "input serialized cluster file", INFILE, true);
+	parpars.registerParameter("i_type", "input type (binary, text)", STRING, false, "binary");
 
 	// we register an output file parameter 
 	// - CLI switch
@@ -65,7 +66,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("min_size", 1, 10000);
 
   // the manual
-	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i) of the serialized cluster tree, the output filename (-o_out), the output type (-o_type). The optional parameter -min_size allows to filter for cluster of a minimal size, parameter -cutoff_type defines the way to cut the cluster tree (either by ward distance or by a target number of clusters) using paramter -cut_value.\n\nOutput of this tool is the extracted cluster tree, either as index list or as graph visualization (gv).";
+	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i) of the serialized cluster tree, the output filename (-o_out), the output type (-o_type). The optional parameter -i_type allows to switch between binary (default) and text file for the cluster tree input, parameter -min_size allows to filter for cluster of a minimal size, parameter -cutoff_type defines the way to cut the cluster tree (either by ward distance or by a target number of clusters) using paramter -cut_value.\n\nOutput of this tool is the extracted cluster tree, either as index list or as graph visualization (gv).";
 
 	parpars.setToolManual(man);
 
@@ -87,7 +88,8 @@ int main (int argc, char **argv)
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 
 	// import a binary file
-	pc.deserializeWardClusterTree(tree, true);
+	bool binary = parpars.get("i_type") == "binary" ? true : false;
+	pc.deserializeWardClusterTree(tree, binary);
 
 	int min_cluster_size = 0;
 	if (parpars.has("min_size"))
