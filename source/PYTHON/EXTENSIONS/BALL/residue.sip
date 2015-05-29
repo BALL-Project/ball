@@ -24,10 +24,15 @@ class Residue
    	PROPERTY__CYCLIC,
    	NUMBER_OF_PROPERTIES
   };
+  // following the definition of FullNameType in BALL/KERNEL/residue.h
   enum FullNameType
   {
    	NO_VARIANT_EXTENSIONS,
-   	ADD_VARIANT_EXTENSIONS
+   	ADD_VARIANT_EXTENSIONS,
+   	ADD_RESIDUE_ID,
+	ADD_VARIANT_EXTENSIONS_AND_ID,
+	ADD_RESIDUE_ID_AND_INSERTION_CODE,
+	ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE
   };
   Residue();
   Residue(const Residue&, bool deep = true);
@@ -86,7 +91,9 @@ class Residue
 
   SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Residue ") + sipCpp->getName() + sipCpp->getID()
-    			    + " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
+	sipRes = PyString_FromString(String(
+		                            String("Residue ")
+		                          + sipCpp->getFullName(ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE)
+		                          + " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };
