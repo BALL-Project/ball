@@ -138,24 +138,25 @@ namespace BALL
 		// Happily munch empty lines at the end of a file after the properties block. 
 		// This is required because otherwise, an empty line on the end of a file will
 		// lead our parser to try and read another MOLFile, which won't succeed.
-		int no_chars = 0;
 		if (good())
 		{
+			streampos current_pos = tellg();
+			String current_line = getLine();
+			Position current_line_number = line_number_;
+
 			readLine();
-			no_chars += getLine().size()+1; // +1 for new-line character
 			while(good() && (getLine().trim() == ""))
 			{
 				readLine();
-				no_chars += getLine().size()+1;
 			}
-		}
 
-		// if the file is still good, we read too far.
-		if (good())
-		{
-			for(int i=0; i<no_chars; i++)
+			// If the file is still good we have read too far.
+			// Thus, we reset the LineBasedFile to the stored position
+			if (good())
 			{
-				unget();
+				seekg(current_pos);
+				line_ = current_line;
+				line_number_ = current_line_number;
 			}
 		}
 	}
