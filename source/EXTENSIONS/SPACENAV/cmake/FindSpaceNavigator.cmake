@@ -12,6 +12,7 @@
 # - SPNAV_LIBRARIES    a listcontaining the appropriate libraries
 # - SPNAV_INCLUDE_DIRS a listcontaining the approriate include directories
 
+INCLUDE(LibFindMacros)
 
 IF(UNIX)
 	FIND_PATH(spnav_include

@@ -12,11 +12,7 @@
 #include <fstream>
 #include <sstream>
 
-#ifdef BALL_HAS_OPENEYE
-	#include <oechem.h>
-	#include <BALL/FORMAT/SDFile.h>
-	using namespace OEChem;
-#elif defined BALL_HAS_OPENBABEL
+#ifdef BALL_HAS_OPENBABEL
 	#include <openbabel/obconversion.h>
 	#include <openbabel/parsmart.h>
 	#include <BALL/FORMAT/SDFile.h>
@@ -69,7 +65,7 @@ MolecularSimilarity::MolecularSimilarity(String smarts_file)
 
 
 
-#if defined BALL_HAS_OPENBABEL && not defined BALL_HAS_OPENEYE
+#ifdef BALL_HAS_OPENBABEL
 OBMol* MolecularSimilarity::createOBMol(const Molecule& mol, bool ignore_hydrogen, bool suppress_warning)
 {
 	OBMol* obmol = new OBMol;
@@ -342,93 +338,6 @@ void MolecularSimilarity::generateCanSmile(const Molecule& molecule, String& can
 #endif
 
 
-#ifdef BALL_HAS_OPENEYE
-OEMol* MolecularSimilarity::createOEMol(const Molecule& mol, bool ignore_hydrogen)
-{
-	OEMol* oemol = new OEMol;
-	HashMap<const Atom*,OEAtomBase*> atoms;
-	HashMap<OEAtomBase*,HashSet<OEAtomBase*> > bonds;
-	HashMap<OEAtomBase*,HashSet<OEAtomBase*> >::iterator s_it;
-
-	for(AtomConstIterator a_it=mol.beginAtom(); +a_it; a_it++)
-	{
-		if(ignore_hydrogen && a_it->getElement().getSymbol()=="H") continue;
-		OEAtomBase* atom = oemol->NewAtom(a_it->getElement().getAtomicNumber());
-		const Vector3& pos = a_it->getPosition();
-		double coords[3] = {pos.x, pos.y, pos.z};
-		oemol->SetCoords(atom, coords);
-		atoms.insert(make_pair(&*a_it,atom));
-	}
-	for(AtomConstIterator a_it=mol.beginAtom(); +a_it; a_it++)
-	{
-		if(ignore_hydrogen && a_it->getElement().getSymbol()=="H") continue;
-
-		for(Atom::BondConstIterator b_it=a_it->beginBond(); +b_it; b_it++)
-		{
-			if(ignore_hydrogen && b_it->getPartner(*a_it)->getElement().getSymbol()=="H") continue;
-
-			OEAtomBase* atom1 = atoms.find(b_it->getFirstAtom())->second;
-			OEAtomBase* atom2 = atoms.find(b_it->getSecondAtom())->second;
-
-			// do not add any bond twice ...
-			s_it=bonds.find(atom1);
-			if(s_it!=bonds.end() && s_it->second.find(atom2)!=s_it->second.end())
-			{
-				continue;
-			}
-			s_it=bonds.find(atom2);
-			if(s_it!=bonds.end() && s_it->second.find(atom1)!=s_it->second.end())
-			{
-				continue;
-			}
-
-			int order = b_it->getOrder();
-			if (b_it->isAromatic())
-			{
-				OEBondBase* bond = oemol->NewBond(atom1,atom2,1);
-				bond->SetAromatic(true);
-			}
-			else if (order==0)
-			{
-				OEBondBase* bond = oemol->NewBond(atom1,atom2,1);
-			}
-			else if(order<=4) oemol->NewBond(atom1,atom2,order);
-			else if(order==5)
-			{
-				OEBondBase* bond = oemol->NewBond(atom1,atom2,1);
-				bond->SetAromatic(true);
-			}
-			else if(order==6) oemol->NewBond(atom1,atom2,1);
-
-			s_it=bonds.find(atom1);
-			if(s_it==bonds.end())
-			{
-				HashSet<OEAtomBase*> set;
-				set.insert(atom2);
-				bonds.insert(make_pair(atom1,set));
-			}
-			else
-			{
-				s_it->second.insert(atom2);
-			}
-		}
-	}
-
-	OEAssignAromaticFlags(*oemol); // make sure that detection of aromatic atoms/bonds will work later when using smarts-matcher
-
-	return oemol;
-}
-
-
-void MolecularSimilarity::generateCanSmile(const Molecule& molecule, String& cansmile, OEChem::OEMol** output_oemol, bool ignore_hydrogen)
-{
-	OEMol* oemol = createOEMol(molecule,ignore_hydrogen);
-	if(output_oemol) *output_oemol = oemol;
-	OECreateCanSmiString(cansmile,*oemol);
-	if(!output_oemol) delete oemol;
-}
-#endif
-
 
 void MolecularSimilarity::generateFingerprints(System& molecules, vector<vector<Size> >& fingerprints)
 {
@@ -462,9 +371,29 @@ void MolecularSimilarity::generateFingerprints(const list<Molecule*>& molecules,
 
 void MolecularSimilarity::generateFingerprint(Molecule& molecule, vector<Size>& fingerprint)
 {
-#if not defined BALL_HAS_OPENBABEL && not defined BALL_HAS_OPENEYE
 	Size no_smarts = smarts_.size();
 	fingerprint.resize(no_smarts);
+
+#ifdef BALL_HAS_OPENBABEL
+	OBMol* obmol = createOBMol(molecule, false);
+
+	for(Size i=0; i<no_smarts;i++)
+	{
+		try
+		{
+			OBSmartsPattern pattern;
+			pattern.Init(smarts_[i]);
+			pattern.Match(*obmol);
+			fingerprint[i] = pattern.GetUMapList().size();
+		}
+		catch(...)
+		{
+			Log.error() << "Error while trying to match OB SMARTS for fingerprint generation." << endl;
+		}
+	}
+
+	delete obmol;
+#else
 	for(Size i=0; i<no_smarts;i++)
 	{
 		try
@@ -475,79 +404,14 @@ void MolecularSimilarity::generateFingerprint(Molecule& molecule, vector<Size>& 
 		}
 		catch(BALL::Exception::GeneralException)
 		{
-		//	cout<<"encountered an error while trying to match SMART "<<endl;
+			Log.error() << "Error while trying to match SMARTS for fingerprint generation." << endl;
 		}
 	}
-#elif defined BALL_HAS_OPENBABEL
-	OBMol* obmol = createOBMol(molecule, false);
-	generateFingerprint(*obmol,fingerprint);
-	delete obmol;
-#elif defined BALL_HAS_OPENEYE
-	OEMol* oemol = createOEMol(molecule, false);
-	generateFingerprint(*oemol,fingerprint);
-	delete oemol;
 #endif
 }
 
 
-#ifdef BALL_HAS_OPENEYE
-void MolecularSimilarity::generateFingerprint(OEMol& mol, vector<Size>& fingerprint)
-{
-	Size no_smarts = smarts_.size();
-	fingerprint.resize(no_smarts);
-	for(Size i=0; i<no_smarts;i++)
-	{
-		try
-		{
-			OESubSearch pat(smarts_[i].c_str());
-			bool unique = true; // return only unique matches
-			Size no_matches = 0;
-			for (OESystem::OEIter<OEMatchBase> match = pat.Match(mol,unique);match;++match)
-			{
-				no_matches++;
-			}
-			fingerprint[i] = no_matches;
-		}
-		catch(...) { }
-	}
-}
-
-void MolecularSimilarity::matchSmarts(const String& usmile, const String& smarts, Size& no_matches, Size max_matches)
-{
-	OEGraphMol oemol;
-	OEParseSmiles(oemol,usmile.c_str());
-	OEAssignAromaticFlags(oemol);
-	OESubSearch pat(smarts.c_str());
-	if(max_matches > 0)
-	{
-		pat.SetMaxMatches(max_matches);
-	}
-	bool unique = true; // return only unique matches
-	no_matches = 0;
-	for (OESystem::OEIter<OEMatchBase> match = pat.Match(oemol,unique);match;++match)
-	{
-		no_matches++;
-	}
-}
-
-#elif defined BALL_HAS_OPENBABEL
-void MolecularSimilarity::generateFingerprint(OBMol& mol, vector<Size>& fingerprint)
-{
-	Size no_smarts = smarts_.size();
-	fingerprint.resize(no_smarts);
-	for(Size i=0; i<no_smarts;i++)
-	{
-		try
-		{
-			OBSmartsPattern pattern;
-			pattern.Init(smarts_[i]);
-			pattern.Match(mol);
-			fingerprint[i] = pattern.GetUMapList().size();
-		}
-		catch(...) { }
-	}
-}
-
+#ifdef BALL_HAS_OPENBABEL
 void MolecularSimilarity::matchSmarts(const String& usmile, const String& smarts, Size& no_matches, Size max_matches)
 {
 	OBMol mol;
@@ -562,6 +426,7 @@ void MolecularSimilarity::matchSmarts(const String& usmile, const String& smarts
 	no_matches=pattern.GetUMapList().size();
 }
 #endif
+
 
 void MolecularSimilarity::generatePathFingerprint(Molecule& mol, vector<bool>& fingerprint)
 {

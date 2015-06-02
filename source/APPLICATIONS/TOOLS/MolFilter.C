@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
 
 		if (use_logP)
 		{
-		#if defined BALL_HAS_OPENBABEL || defined BALL_HAS_OPENEYE
+		#ifdef BALL_HAS_OPENBABEL
 			LogP calculator;
 			String cansmile;
 			molsim.generateCanSmile(*mol, cansmile);
@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
 				mol_is_selected = false;
 			}
 		#else
-			Log.error() << "[Error:] Filtering by use of logP is not supported because this tool has been built without support for OpenBabel or OpenEye." << endl;
+			Log.error() << "[Error:] Filtering by use of logP is not supported because this tool has been built without support for OpenBabel." << endl;
 			exit(1);
 		#endif
 		}
@@ -226,7 +226,7 @@ int main(int argc, char* argv[])
 
 		if (use_smarts)
 		{
-		#if defined BALL_HAS_OPENBABEL || defined BALL_HAS_OPENEYE
+		#ifdef BALL_HAS_OPENBABEL
 			String cansmile;
 			Size req_matches = 1;
 			molsim.generateCanSmile(*mol,cansmile);

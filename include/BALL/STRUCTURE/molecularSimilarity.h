@@ -11,15 +11,17 @@
 #define BALL_STRUCTURE_MOLECULARSIMILARITY_H
 
 #ifndef BALL_COMMON_H
-#       include <BALL/common.h>
+	   #include <BALL/common.h>
+#endif
+
+#ifndef BALL_CONFIG_CONFIG_H
+		#include <BALL/CONFIG/config.h>
 #endif
 
 #include <BALL/STRUCTURE/smartsMatcher.h>
 #include <BALL/KERNEL/system.h>
 
-#ifdef BALL_HAS_OPENEYE
-	#include <oechem/mol.h>
-#elif defined BALL_HAS_OPENBABEL
+#ifdef BALL_HAS_OPENBABEL
 	#include <openbabel/mol.h>
 #endif
 
@@ -39,29 +41,23 @@ namespace BALL
 			void generateFingerprint(Molecule& molecule, vector<Size>& fingerprint);
 
 
-			#ifdef BALL_HAS_OPENEYE
-				static OEChem::OEMol* createOEMol(const Molecule& mol, bool ignore_hydrogen=0);
-
-				void generateCanSmile(const Molecule& molecule, String& cansmile, OEChem::OEMol** output_oemol=0, bool ignore_hydrogen=0);
-
-				void generateFingerprint(OEChem::OEMol& mol, vector<Size>& fingerprint);
-			#elif defined BALL_HAS_OPENBABEL
-
-				/** create an Openbabel-molecule from a given BALL::Molecule
-				@param suppress_warning if set to true, warning about aromatic bonds of carboxyl- and guanidinium-groups being de-aromatized (which OpenBabel requires) will not be shown. */
+			#ifdef BALL_HAS_OPENBABEL
+				/** Create an Openbabel-molecule from a given BALL::Molecule
+				 * @param suppress_warning if set to true, warning about aromatic bonds
+				 * of carboxyl- and guanidinium-groups being de-aromatized (which OpenBabel requires) will not be shown.
+				*/
 				static OpenBabel::OBMol* createOBMol(const Molecule& mol, bool ignore_hydrogen=0, bool suppress_warning=0);
 
-				/** create a BALL::Molecule from a given OpenBabel-molecule */
+				/** Create a BALL::Molecule from a given OpenBabel-molecule
+				*/
 				static Molecule* createMolecule(OpenBabel::OBMol& obmol, bool ignore_hydrogen=0);
 
 				void generateCanSmile(const Molecule& mol, String& cansmile, OpenBabel::OBMol** output_obmol=0, bool ignore_hydrogen=0);
 
-				void generateFingerprint(OpenBabel::OBMol& mol, vector<Size>& fingerprint);
-			#endif
-
-			#if (defined BALL_HAS_OPENEYE | defined BALL_HAS_OPENBABEL)
-				/** match the given SMARTS pattern to the supplied smile and return the number of matches.
-				@param max_matches the maximal number of SMART matches to be made; can be used as a speed-up. If this number of matches has been found, the SMARTS-matching algorithm will abort. Specifying zero will not set any such constraint.*/
+				/** Match the given SMARTS pattern to the supplied smile and return the number of matches.
+				 * @param max_matches the maximal number of SMART matches to be made; can be used as a speed-up.
+				 * If this number of matches has been found, the SMARTS-matching algorithm will abort.
+				 * Specifying zero will not set any such constraint.*/
 				void matchSmarts(const String& usmile, const String& smarts, Size& no_matches, Size max_matches=0);
 			#endif
 

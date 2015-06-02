@@ -432,10 +432,16 @@ IF (WIN32)
 ENDIF()
 
 
-OPTION(USE_OPEN_EYE_BABEL "Build BALL with support for OpenEye/OpenBabel" ON)
+# Check for the presence of OpenBabel version 2
+SET(BALL_HAS_OPENBABEL FALSE)
 
-IF(USE_OPEN_EYE_BABEL)
-	INCLUDE(cmake/BALLConfigOpenEye_Babel.cmake)
+FIND_PACKAGE(OpenBabel2)
+IF(OPENBABEL2_FOUND)
+	SET(BALL_HAS_OPENBABEL TRUE)
+	INCLUDE_DIRECTORIES(${OPENBABEL2_INCLUDE_DIRS})
+	LIST(APPEND BALL_DEP_LIBRARIES ${OPENBABEL2_LIBRARIES})
+ELSE()
+	MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
 ENDIF()
 
 
