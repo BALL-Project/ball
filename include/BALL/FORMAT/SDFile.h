@@ -69,6 +69,13 @@ namespace BALL
 		 */
 		virtual Molecule* read();
 
+		/**
+		 * Count the number of molecule (MOL) records in the SDF
+		 *
+		 * @return number of MOL records in SDFile
+		 */
+		Size countMolecules();
+
 		/** Do not read atoms and bonds.
 		 *	This (seemingly strange) option allows the user to read
 		 *	the properties of the molecules only. Since SD files can contain

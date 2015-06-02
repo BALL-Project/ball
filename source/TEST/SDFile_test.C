@@ -76,6 +76,19 @@ CHECK(SDFile::read(System& system))
 	TEST_EQUAL(m.getProperty("SlogP").getString(), "1.1878")
 RESULT
 
+CHECK(SDFile::countMolecules())
+	SDFile f(BALL_TEST_DATA_PATH(SDFile_test1.sdf));
+
+	TEST_EQUAL(f.countMolecules(), 11);
+
+	System system;
+	f.read(system);
+	f.close();
+
+	TEST_EQUAL(system.countAtoms(), 518)
+	TEST_EQUAL(system.countBonds(), 528)
+	TEST_EQUAL(system.countMolecules(), 11)
+RESULT
 
 CHECK(SDFile::SDFile(const String& filename, File::OpenMode open_mode))
 	SDFile f(BALL_TEST_DATA_PATH(SDFile_test1.sdf), std::ios::in);

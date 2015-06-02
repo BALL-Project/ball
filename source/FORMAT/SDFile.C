@@ -116,6 +116,24 @@ namespace BALL
 		return read_anything;
 	}
 
+	Size SDFile::countMolecules()
+	{
+		Size n_molecules = 0;
+		Molecule* mol = NULL;
+
+		while ( (mol = read()) )
+		{
+			++n_molecules;
+
+			delete mol;
+			mol = NULL;
+		}
+
+		reopen();
+
+		return n_molecules;
+	}
+
 	void SDFile::readPropertyBlock_(Molecule& molecule)
 	{
 		// the end of the block is marked by "$$$$"
