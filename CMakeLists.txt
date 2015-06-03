@@ -1,5 +1,5 @@
 # CMake configuration for BALL (http://www.ball-project.org)
-# 
+#
 # This file is - on purpose - heavily based on the CMake configuration
 # of OpenMS (http://www.openms.de) to optimize synergy effects
 
@@ -9,14 +9,14 @@ PROJECT("BALL")
 #   BALL specific:
 #
 #   inherited from OpenMS:
-#			- test for contrib headers (CONTRIB_HEADER_DIR ccmake variable - test one header for each required library)
-#			- parallel build of test executables
-#			- target to execute all EXAMPLES
+#           - test for contrib headers (CONTRIB_HEADER_DIR ccmake variable - test one header for each required library)
+#           - parallel build of test executables
+#           - target to execute all EXAMPLES
 
 ########################################################
 ### entries meant to be configured using CMake cache ###
-### - do NOT hardcode them here!										 ###
-### - edit them within CMakeCache.txt using ccmake	 ###
+### - do NOT hardcode them here!                                         ###
+### - edit them within CMakeCache.txt using ccmake   ###
 ########################################################
 # CONTRIB_CUSTOM_DIR
 # STL_DEBUG
@@ -31,7 +31,7 @@ SET(BALL_PACKAGE_VERSION_MINOR "4")
 SET(BALL_PACKAGE_VERSION_PATCH "79")
 
 ########################################################
-###    end manual	entries													   ###
+###    end manual   entries                                                    ###
 ########################################################
 
 # Heart of the BUILD system : only edit when you know what you�re doing (we don�t)
@@ -48,7 +48,7 @@ SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 OPTION(BALL_USE_PROJECT_FOLDERS ON)
 IF (BALL_USE_PROJECT_FOLDERS)
-	SET(USE_FOLDERS TRUE)
+    SET(USE_FOLDERS TRUE)
 ENDIF()
 
 SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}.${BALL_PACKAGE_VERSION_PATCH}" CACHE INTERNAL "BALL VERSION" FORCE)
@@ -60,21 +60,21 @@ SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSIO
 ## default build type (for Makefile generators): Release
 ## TODO: 64 Bit builds etc for Windows
 IF(BALL_BUILD_TYPE)
-	MESSAGE(WARNING "The BALL_BUILD_TYPE should no longer be used. Use CMAKE_BUILD_TYPE instead")
-	SET(CMAKE_BUILD_TYPE ${BALL_BUILD_TYPE})
+    MESSAGE(WARNING "The BALL_BUILD_TYPE should no longer be used. Use CMAKE_BUILD_TYPE instead")
+    SET(CMAKE_BUILD_TYPE ${BALL_BUILD_TYPE})
 ENDIF()
 
 ## if no build type is given, default to Release
 IF(NOT CMAKE_BUILD_TYPE)
-	SET(CMAKE_BUILD_TYPE Release)
+    SET(CMAKE_BUILD_TYPE Release)
 ENDIF()
 
 SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
 SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
 
 IF(UNIX AND BALL_CONTRIB_PATH)
-	SET(CMAKE_LIBRARY_PATH ${BALL_CONTRIB_PATH}/lib ${BALL_CONTRIB_PATH}/lib64 ${CMAKE_LIBRARY_PATH})
-	SET(CMAKE_INCLUDE_PATH ${BALL_CONTRIB_PATH}/include ${CMAKE_INCLUDE_PATH})
+    SET(CMAKE_LIBRARY_PATH ${BALL_CONTRIB_PATH}/lib ${BALL_CONTRIB_PATH}/lib64 ${CMAKE_LIBRARY_PATH})
+    SET(CMAKE_INCLUDE_PATH ${BALL_CONTRIB_PATH}/include ${CMAKE_INCLUDE_PATH})
 ENDIF()
 
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
@@ -99,7 +99,7 @@ INCLUDE(cmake/BALLComponents.cmake)
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/include/) ## for configured files, i.e. config.h
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
 IF (BALL_CONTRIB_PATH)
-	INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
+    INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
 ENDIF()
 
 ## Extra libraries we want to link into BALL
@@ -109,33 +109,33 @@ SET(VIEW_DEP_LIBRARIES)
 ## Flex and Bison
 ## This ugly hack is required as long as we cannot tell cmake to set an environment variable for bison...
 IF (WIN32)
-	FIND_PROGRAM(BISON_EXECUTABLE BALL-bison.bat DOC "path to the bison executable")
+    FIND_PROGRAM(BISON_EXECUTABLE BALL-bison.bat DOC "path to the bison executable")
 ENDIF()
 FIND_PACKAGE(BISON)
 IF (NOT BISON_FOUND)
-	MESSAGE(SEND_ERROR "Could not find bison parser generator!")
+    MESSAGE(SEND_ERROR "Could not find bison parser generator!")
 ENDIF()
 
 IF (WIN32)
-	SET(BALL_BISON_BAT ${BISON_EXECUTABLE})
-	SET(BISON_EXECUTABLE "call")
+    SET(BALL_BISON_BAT ${BISON_EXECUTABLE})
+    SET(BISON_EXECUTABLE "call")
 ENDIF()
 
 FIND_PACKAGE(FLEX)
 IF (NOT FLEX_FOUND)
-	MESSAGE(SEND_ERROR "Could not find flex scanner generator!")
+    MESSAGE(SEND_ERROR "Could not find flex scanner generator!")
 ENDIF()
 ## Figure out if the used flex version supports ...lex_destroy()
 MESSAGE(STATUS "Checking for yylex_destroy support in flex")
 STRING(REGEX REPLACE "^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$" "\\1;\\2;\\3"
-	FLEX_VERSION_NUMERIC ${FLEX_VERSION})
+    FLEX_VERSION_NUMERIC ${FLEX_VERSION})
 LIST(GET FLEX_VERSION_NUMERIC 2 FLEX_PATCH_LEVEL)
 IF (FLEX_PATCH_LEVEL GREATER 8)
-	MESSAGE(STATUS "Checking for yylex_destroy support in flex - found")
-	SET(BALL_HAS_YYLEX_DESTROY TRUE)
+    MESSAGE(STATUS "Checking for yylex_destroy support in flex - found")
+    SET(BALL_HAS_YYLEX_DESTROY TRUE)
 ELSE()
-	MESSAGE(STATUS "Checking for yylex_destroy support in flex - Not found")
-	SET(BALL_HAS_YYLEX_DESTROY FALSE)
+    MESSAGE(STATUS "Checking for yylex_destroy support in flex - Not found")
+    SET(BALL_HAS_YYLEX_DESTROY FALSE)
 ENDIF()
 
 ## Third-party libraries ##
@@ -143,7 +143,7 @@ ENDIF()
 ## XDR related stuff
 FIND_PACKAGE(XDR)
 IF (XDR_FOUND)
-	INCLUDE(cmake/BALLConfigXDR.cmake)
+    INCLUDE(cmake/BALLConfigXDR.cmake)
 ENDIF()
 
 ## Boost and Asio
@@ -165,13 +165,13 @@ OPTION(USE_FFTW_THREADS "Try to find FFTW with thread support" OFF)
 
 FIND_PACKAGE(FFTW)
 IF(FFTW_FOUND)
-	INCLUDE(cmake/BALLConfigFFTW.cmake)
+    INCLUDE(cmake/BALLConfigFFTW.cmake)
 ENDIF()
 
 #Set the default complex precision to float if the setting for this value
 #could not be determined earlier
 IF(NOT BALL_COMPLEX_PRECISION)
-	SET(BALL_COMPLEX_PRECISION "float")
+    SET(BALL_COMPLEX_PRECISION "float")
 ENDIF()
 
 ## lpsolve
@@ -179,8 +179,8 @@ OPTION(USE_LPSOLVE "Compile with lpsolve support, if lpsolve can be found" ON)
 
 FIND_PACKAGE(LPSolve)
 IF (LPSOLVE_FOUND)
-	SET(BALL_HAS_LPSOLVE TRUE)
-	INCLUDE_DIRECTORIES(${LPSOLVE_INCLUDE_DIR})
+    SET(BALL_HAS_LPSOLVE TRUE)
+    INCLUDE_DIRECTORIES(${LPSOLVE_INCLUDE_DIR})
 ENDIF()
 
 
@@ -190,8 +190,8 @@ OPTION(USE_LIBSVM "Compile with libsvm support if libsvm can be found" ON)
 #this setting crashes cmake when libSVM is installed
 #FIND_PACKAGE(libSVM)
 #IF (LIBSVM_FOUND)
-#	SET(BALL_HAS_LIBSVM TRUE)
-#	INCLUDE_DIRECTORIES(${LIBSVM_INCLUDE_DIRS})
+#   SET(BALL_HAS_LIBSVM TRUE)
+#   INCLUDE_DIRECTORIES(${LIBSVM_INCLUDE_DIRS})
 ## ENDIF()
 
 IF(USE_LIBSVM)
@@ -206,7 +206,7 @@ ENDIF()
 SET(USE_CUDA OFF CACHE BOOL "Should CUDA support be enabled (version <= 2.1 currently supported)?")
 
 IF(USE_CUDA)
-	FIND_PACKAGE(CUDA REQUIRED)
+    FIND_PACKAGE(CUDA REQUIRED)
 ENDIF()
 
 ## TBB
@@ -215,26 +215,26 @@ SET(REQUIRE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support b
 
 ## RTFact would require tbb... so check if it is required
 IF(REQUIRE_RTFACT)
-	SET(REQUIRE_TBB ON)
+    SET(REQUIRE_TBB ON)
 ENDIF()
 
 IF(USE_TBB)
-	IF (REQUIRE_TBB)
-		FIND_PACKAGE(TBB REQUIRED)
-	ELSE()
-		FIND_PACKAGE(TBB)
-		IF (NOT TBB_FOUND)
-			MESSAGE(STATUS "Intel Threading Building Blocks not found!")
-		ENDIF()
-	ENDIF()
+    IF (REQUIRE_TBB)
+        FIND_PACKAGE(TBB REQUIRED)
+    ELSE()
+        FIND_PACKAGE(TBB)
+        IF (NOT TBB_FOUND)
+            MESSAGE(STATUS "Intel Threading Building Blocks not found!")
+        ENDIF()
+    ENDIF()
 
-	IF (TBB_FOUND)
-		INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
-		BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
-		LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
+    IF (TBB_FOUND)
+        INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
+        BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
+        LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
 
-		SET(BALL_HAS_TBB TRUE)
-	ENDIF()
+        SET(BALL_HAS_TBB TRUE)
+    ENDIF()
 ENDIF()
 
 ## MPI
@@ -242,21 +242,20 @@ OPTION(USE_MPI "Should MPI support be enabled?" ON)
 OPTION(REQUIRE_MPI "Should MPI support be required?" OFF)
 
 IF (USE_MPI)
-	IF (REQUIRE_MPI)
-		FIND_PACKAGE(MPI REQUIRED)
-	ELSE()
-		FIND_PACKAGE(MPI)
-	ENDIF()
+    IF (REQUIRE_MPI)
+        FIND_PACKAGE(MPI REQUIRED)
+    ELSE()
+        FIND_PACKAGE(MPI)
+    ENDIF()
 
-	IF (MPI_FOUND)
-		ADD_DEFINITIONS(${MPI_CXX_COMPILE_FLAGS})
-		INCLUDE_DIRECTORIES(${MPI_CXX_INCLUDE_PATH})
+    IF (MPI_FOUND)
+        ADD_DEFINITIONS(${MPI_CXX_COMPILE_FLAGS})
+        INCLUDE_DIRECTORIES(${MPI_CXX_INCLUDE_PATH})
 
-		SET(BALL_HAS_MPI TRUE)
-	ENDIF()
+        SET(BALL_HAS_MPI TRUE)
+    ENDIF()
 
 ENDIF()
-
 
 ## VIEW related options/settings/libraries
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
@@ -265,9 +264,9 @@ OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and
 OPTION(USE_QTWEBKIT "Add support for QWebkit" ${BALL_HAS_VIEW})
 
 IF(NOT BALL_HAS_VIEW)
-	MESSAGE(WARNING "Warning: CMakes Qt4 find macro is too restrictive and requires UIC and RCC to be present. "
-	                "If you are building without the GUI part of Qt installed, you will need to create dummy files "
-	                "for both executables in the Qt prefix path.")
+    MESSAGE(WARNING "Warning: CMakes Qt4 find macro is too restrictive and requires UIC and RCC to be present. "
+                    "If you are building without the GUI part of Qt installed, you will need to create dummy files "
+                    "for both executables in the Qt prefix path.")
 ENDIF()
 
 FIND_PACKAGE(Qt4 REQUIRED)
@@ -277,15 +276,15 @@ SET(QT_USE_QTNETWORK TRUE)
 
 # Qt Dependencies for VIEW
 IF(BALL_HAS_VIEW)
-	SET(QT_USE_QTOPENGL   TRUE)
-	SET(QT_USE_QTTEST     TRUE)
+    SET(QT_USE_QTOPENGL   TRUE)
+    SET(QT_USE_QTTEST     TRUE)
 
-	IF(USE_QTWEBKIT)
-		SET(QT_USE_QTWEBKIT TRUE)
-		SET(QT_USE_PHONON   TRUE)
-	ENDIF()
+    IF(USE_QTWEBKIT)
+        SET(QT_USE_QTWEBKIT TRUE)
+        SET(QT_USE_PHONON   TRUE)
+    ENDIF()
 ELSE()
-	SET(QT_DONT_USE_QTGUI TRUE)
+    SET(QT_DONT_USE_QTGUI TRUE)
 ENDIF()
 
 
@@ -295,21 +294,21 @@ INCLUDE(${QT_USE_FILE})
 
 SET(BALL_HAS_QTWEBKIT TRUE)
 IF(USE_QTWEBKIT AND NOT QT_QTWEBKIT_FOUND)
-	SET(BALL_HAS_QTWEBKIT FALSE)
-	MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
+    SET(BALL_HAS_QTWEBKIT FALSE)
+    MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
 ENDIF()
 
 ## On Windows, we might need to explicitly deploy openssl libraries for Qt
 IF(WIN32)
-	FIND_PATH(QT_SSLEAY_LIB NAME ssleay32.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	IF(QT_SSLEAY_LIB)
-		LIST(APPEND QT_LIBRARIES ${QT_SSLEAY_LIB}/ssleay32.dll)
-	ENDIF()
+    FIND_PATH(QT_SSLEAY_LIB NAME ssleay32.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
+    IF(QT_SSLEAY_LIB)
+        LIST(APPEND QT_LIBRARIES ${QT_SSLEAY_LIB}/ssleay32.dll)
+    ENDIF()
 
-	FIND_PATH(QT_LIBEAY_LIB NAME libeay32.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	IF(QT_SSLEAY_LIB)
-		LIST(APPEND QT_LIBRARIES ${QT_LIBEAY_LIB}/libeay32.dll)
-	ENDIF()
+    FIND_PATH(QT_LIBEAY_LIB NAME libeay32.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
+    IF(QT_SSLEAY_LIB)
+        LIST(APPEND QT_LIBRARIES ${QT_LIBEAY_LIB}/libeay32.dll)
+    ENDIF()
 ENDIF()
 
 MESSAGE(STATUS "QT qmake at ${QT_QMAKE_EXECUTABLE}")
@@ -324,70 +323,70 @@ INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 ## VIEW dependent packages
 IF (BALL_HAS_VIEW)
 
-	## VIEW dependent options
-	OPTION(BALL_ENABLE_CG "Build against NVIDIA Cg library" OFF)
-	OPTION(BALL_REQUIRE_CG "Fail if NVIDIA Cg could not be detected" OFF)
+    ## VIEW dependent options
+    OPTION(BALL_ENABLE_CG "Build against NVIDIA Cg library" OFF)
+    OPTION(BALL_REQUIRE_CG "Fail if NVIDIA Cg could not be detected" OFF)
 
-	OPTION(USE_RTFACT "Enable RTfact support" ON)
-	OPTION(REQUIRE_RTFACT "Require RTfact support" OFF)
+    OPTION(USE_RTFACT "Enable RTfact support" ON)
+    OPTION(REQUIRE_RTFACT "Require RTfact support" OFF)
 
-	## OpenGL
-	FIND_PACKAGE(OpenGL)
-	IF (NOT OPENGL_FOUND OR NOT OPENGL_GLU_FOUND)
-		MESSAGE(SEND_ERROR "Could not find gl/glu!")
-	ENDIF()
+    ## OpenGL
+    FIND_PACKAGE(OpenGL)
+    IF (NOT OPENGL_FOUND OR NOT OPENGL_GLU_FOUND)
+        MESSAGE(SEND_ERROR "Could not find gl/glu!")
+    ENDIF()
 
-	## GLEW
-	FIND_PACKAGE(GLEW)
-	IF (GLEW_FOUND)
-		SET(BALL_HAS_GLEW TRUE)
-	ENDIF()
+    ## GLEW
+    FIND_PACKAGE(GLEW)
+    IF (GLEW_FOUND)
+        SET(BALL_HAS_GLEW TRUE)
+    ENDIF()
 
-	## RTfact
-	IF (USE_RTFACT)
-		IF (REQUIRE_RTFACT)
-			FIND_PACKAGE(RTfact REQUIRED)
-		ELSE()
-			FIND_PACKAGE(RTfact)
-		ENDIF()
+    ## RTfact
+    IF (USE_RTFACT)
+        IF (REQUIRE_RTFACT)
+            FIND_PACKAGE(RTfact REQUIRED)
+        ELSE()
+            FIND_PACKAGE(RTfact)
+        ENDIF()
 
-		IF (RTFACT_FOUND)
-			## RTfact requires TBB
-			IF (NOT CMAKE_COMPILER_IS_INTELCXX)
-				IF (NOT TBB_FOUND)
-					MESSAGE(SEND_ERROR "RTfact support requires TBB!")
-				ENDIF()
-			ENDIF()
+        IF (RTFACT_FOUND)
+            ## RTfact requires TBB
+            IF (NOT CMAKE_COMPILER_IS_INTELCXX)
+                IF (NOT TBB_FOUND)
+                    MESSAGE(SEND_ERROR "RTfact support requires TBB!")
+                ENDIF()
+            ENDIF()
 
-			SET(BALL_HAS_RTFACT TRUE)
-			INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
-		ENDIF()
-	ENDIF()
+            SET(BALL_HAS_RTFACT TRUE)
+            INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
+        ENDIF()
+    ENDIF()
 
-	## Cg
-	IF (BALL_ENABLE_CG)
-		IF (BALL_REQUIRE_CG)
-			SET(CG_MESSAGE "Looking for Cg library (required)...")
-		ELSE()
-			SET(CG_MESSAGE "Looking for Cg library...")
-		ENDIF()
+    ## Cg
+    IF (BALL_ENABLE_CG)
+        IF (BALL_REQUIRE_CG)
+            SET(CG_MESSAGE "Looking for Cg library (required)...")
+        ELSE()
+            SET(CG_MESSAGE "Looking for Cg library...")
+        ENDIF()
 
-		MESSAGE(STATUS ${CG_MESSAGE})
-		FIND_PACKAGE(Cg)
+        MESSAGE(STATUS ${CG_MESSAGE})
+        FIND_PACKAGE(Cg)
 
-		IF (CG_FOUND)
-			MESSAGE(STATUS "${CG_MESSAGE} - found  ${CG_LIBRARY}  ${CG_GL_LIBRARY}")
-			SET(BALL_HAS_CG TRUE)
-			SET(CG_LIBRARIES ${CG_LIBRARY} ${CG_GL_LIBRARY})
-			INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_PATH})
-		ELSE()
-			IF (BALL_REQUIRE_CG)
-				MESSAGE(SEND_ERROR "Could not find Cg library, but Cg was marked as required!")
-			ELSE()
-				MESSAGE(STATUS "Disabling Cg support")
-			ENDIF()
-		ENDIF()
-	ENDIF(BALL_ENABLE_CG)
+        IF (CG_FOUND)
+            MESSAGE(STATUS "${CG_MESSAGE} - found  ${CG_LIBRARY}  ${CG_GL_LIBRARY}")
+            SET(BALL_HAS_CG TRUE)
+            SET(CG_LIBRARIES ${CG_LIBRARY} ${CG_GL_LIBRARY})
+            INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_PATH})
+        ELSE()
+            IF (BALL_REQUIRE_CG)
+                MESSAGE(SEND_ERROR "Could not find Cg library, but Cg was marked as required!")
+            ELSE()
+                MESSAGE(STATUS "Disabling Cg support")
+            ENDIF()
+        ENDIF()
+    ENDIF(BALL_ENABLE_CG)
 
 ENDIF(BALL_HAS_VIEW)
 
@@ -395,41 +394,41 @@ ENDIF(BALL_HAS_VIEW)
 OPTION(BALL_PYTHON_SUPPORT "Compile BALL's python interface (requires python development packages)" ON)
 
 IF (BALL_PYTHON_SUPPORT)
-	FIND_PACKAGE(PythonInterp)
-	IF (PYTHONINTERP_FOUND)
-		FIND_PACKAGE(PythonLibs)
-		IF (PYTHONLIBS_FOUND)
-			BALL_COMBINE_LIBS(PYTHON_LIBRARIES "${PYTHON_LIBRARIES}" "${PYTHON_DEBUG_LIBRARIES}")
-			SET(SIP_EXTRA_OPTIONS "-e")
-			FIND_PACKAGE(SIP)
-			SET(BALL_SIP_VERSION ${SIP_VERSION})
-			SET(BALL_SIP_VERSION_STR ${SIP_VERSION_STR})
-		ENDIF()
-	ENDIF()
+    FIND_PACKAGE(PythonInterp)
+    IF (PYTHONINTERP_FOUND)
+        FIND_PACKAGE(PythonLibs)
+        IF (PYTHONLIBS_FOUND)
+            BALL_COMBINE_LIBS(PYTHON_LIBRARIES "${PYTHON_LIBRARIES}" "${PYTHON_DEBUG_LIBRARIES}")
+            SET(SIP_EXTRA_OPTIONS "-e")
+            FIND_PACKAGE(SIP)
+            SET(BALL_SIP_VERSION ${SIP_VERSION})
+            SET(BALL_SIP_VERSION_STR ${SIP_VERSION_STR})
+        ENDIF()
+    ENDIF()
 
-	IF (NOT PYTHONINTERP_FOUND OR NOT PYTHONLIBS_FOUND OR NOT SIP_FOUND)
-		SET(BALL_PYTHON_SUPPORT OFF)
-		MESSAGE(WARNING "Disabling python support.")
-	ELSE()
-		INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
-		INCLUDE_DIRECTORIES(${SIP_INCLUDE_DIR})
-	ENDIF()
+    IF (NOT PYTHONINTERP_FOUND OR NOT PYTHONLIBS_FOUND OR NOT SIP_FOUND)
+        SET(BALL_PYTHON_SUPPORT OFF)
+        MESSAGE(WARNING "Disabling python support.")
+    ELSE()
+        INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+        INCLUDE_DIRECTORIES(${SIP_INCLUDE_DIR})
+    ENDIF()
 ENDIF()
 
 ## On Windows, we might need a seperate regex2-lib
 IF (WIN32)
-	IF (NOT BALL_HAS_BOOST_REGEX)
-		FIND_LIBRARY(REGEX_LIBRARIES
-			NAMES regex2 regex
-			PATH_SUFFIXES lib dlls
-			DOC "Regular expressions library")
+    IF (NOT BALL_HAS_BOOST_REGEX)
+        FIND_LIBRARY(REGEX_LIBRARIES
+            NAMES regex2 regex
+            PATH_SUFFIXES lib dlls
+            DOC "Regular expressions library")
 
-		IF (NOT REGEX_LIBRARIES)
-			MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
-		ENDIF()
-	ELSE()
-		SET(REGEX_LIBRARIES "")
-	ENDIF()
+        IF (NOT REGEX_LIBRARIES)
+            MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
+        ENDIF()
+    ELSE()
+        SET(REGEX_LIBRARIES "")
+    ENDIF()
 ENDIF()
 
 
@@ -438,11 +437,11 @@ SET(BALL_HAS_OPENBABEL FALSE)
 
 FIND_PACKAGE(OpenBabel2)
 IF(OPENBABEL2_FOUND)
-	SET(BALL_HAS_OPENBABEL TRUE)
-	INCLUDE_DIRECTORIES(${OPENBABEL2_INCLUDE_DIRS})
-	LIST(APPEND BALL_DEP_LIBRARIES ${OPENBABEL2_LIBRARIES})
+    SET(BALL_HAS_OPENBABEL TRUE)
+    INCLUDE_DIRECTORIES(${OPENBABEL2_INCLUDE_DIRS})
+    LIST(APPEND BALL_DEP_LIBRARIES ${OPENBABEL2_LIBRARIES})
 ELSE()
-	MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
+    MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
 ENDIF()
 
 
@@ -452,7 +451,7 @@ OPTION(BALL_BUILD_BALLAXY "Build BALL-based galaxy tools" ON)
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
-	
+    
 ## automatically create the version numbers
 CONFIGURE_FILE(cmake/templates/version.h.in ${PROJECT_BINARY_DIR}/include/BALL/COMMON/version.h)
 CONFIGURE_FILE(cmake/templates/BALL.doc.in  ${PROJECT_SOURCE_DIR}/include/BALL/BALL.doc)
@@ -471,7 +470,7 @@ ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
 SET(BALL_EXECUTABLES "")
 ########################################################
-###    BUILD the lib																 ###
+###    BUILD the lib                                                                 ###
 ########################################################
 
 ## are we building a shared or static lib?! (BOTH within 
@@ -484,88 +483,88 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 
 ## These variables are used in all install-targets
 IF (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-	SET(BALL_RUNTIME_INSTALL_DIRECTORY "bin")
-	SET(BALL_LIBRARY_INSTALL_DIRECTORY "lib")
-	SET(BALL_ARCHIVE_INSTALL_DIRECTORY "lib")
-	SET(BALL_HEADER_INSTALL_DIRECTORY   ".")
-	SET(BALL_DATA_INSTALL_DIRECTORY    "share/BALL")
-	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "share/BALL/doc")
-	IF(WIN32)
-		SET(BALL_PYTHON_INSTALL_DIRECTORY  "bin")
-		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "bin")
-		SET(BALL_TOOLS_INSTALL_DIRECTORY   "bin/BALLTools")
-	ELSE()
-		SET(BALL_PYTHON_INSTALL_DIRECTORY  "lib")
-		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "lib")
-		SET(BALL_TOOLS_INSTALL_DIRECTORY   "lib/BALL")
-	ENDIF()
+    SET(BALL_RUNTIME_INSTALL_DIRECTORY "bin")
+    SET(BALL_LIBRARY_INSTALL_DIRECTORY "lib")
+    SET(BALL_ARCHIVE_INSTALL_DIRECTORY "lib")
+    SET(BALL_HEADER_INSTALL_DIRECTORY   ".")
+    SET(BALL_DATA_INSTALL_DIRECTORY    "share/BALL")
+    SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "share/BALL/doc")
+    IF(WIN32)
+        SET(BALL_PYTHON_INSTALL_DIRECTORY  "bin")
+        SET(BALL_PLUGIN_INSTALL_DIRECTORY  "bin")
+        SET(BALL_TOOLS_INSTALL_DIRECTORY   "bin/BALLTools")
+    ELSE()
+        SET(BALL_PYTHON_INSTALL_DIRECTORY  "lib")
+        SET(BALL_PLUGIN_INSTALL_DIRECTORY  "lib")
+        SET(BALL_TOOLS_INSTALL_DIRECTORY   "lib/BALL")
+    ENDIF()
 ELSE()
-	SET(BALL_BUNDLE_INSTALL_DIRECTORY  					"Applications")
-	SET(BALL_RUNTIME_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_LIBRARY_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_ARCHIVE_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_DATA_INSTALL_DIRECTORY    					"Applications/BALLView.app/Contents/Resources")
-	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "Applications/BALLView.app/Contents/Resources/doc")
-	SET(BALL_HEADER_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_PYTHON_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_PLUGIN_INSTALL_DIRECTORY           "Applications/BALLView.app/Contents/plugins")
-	SET(BALL_TOOLS_INSTALL_DIRECTORY            "Applications/BALLView.app/Contents/BALLTools")
+    SET(BALL_BUNDLE_INSTALL_DIRECTORY                   "Applications")
+    SET(BALL_RUNTIME_INSTALL_DIRECTORY                  "Applications/BALLView.app/Contents/Frameworks")
+    SET(BALL_LIBRARY_INSTALL_DIRECTORY                  "Applications/BALLView.app/Contents/Frameworks")
+    SET(BALL_ARCHIVE_INSTALL_DIRECTORY                  "Applications/BALLView.app/Contents/Frameworks")
+    SET(BALL_DATA_INSTALL_DIRECTORY                     "Applications/BALLView.app/Contents/Resources")
+    SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "Applications/BALLView.app/Contents/Resources/doc")
+    SET(BALL_HEADER_INSTALL_DIRECTORY                   "Applications/BALLView.app/Contents/Frameworks")
+    SET(BALL_PYTHON_INSTALL_DIRECTORY                   "Applications/BALLView.app/Contents/Frameworks")
+    SET(BALL_PLUGIN_INSTALL_DIRECTORY           "Applications/BALLView.app/Contents/plugins")
+    SET(BALL_TOOLS_INSTALL_DIRECTORY            "Applications/BALLView.app/Contents/BALLTools")
 ENDIF()
 
 ## big include file for headers and C files, which fills the BALL_sources variable
 INCLUDE(cmake/BALLIncludes.cmake)
 IF (BALL_HAS_VIEW)
-	INCLUDE(cmake/VIEWIncludes.cmake)
+    INCLUDE(cmake/VIEWIncludes.cmake)
 ENDIF()
 
 IF (MSVC)
-	## use BALLd.dll, VIEWd.dll in debug mode
-	SET(CMAKE_DEBUG_POSTFIX d)
+    ## use BALLd.dll, VIEWd.dll in debug mode
+    SET(CMAKE_DEBUG_POSTFIX d)
 ENDIF()
 
 ## mark header files as headers...
 SET_PROPERTY(SOURCE ${BALL_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
 IF (BALL_HAS_VIEW)
-	SET_PROPERTY(SOURCE ${VIEW_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
+    SET_PROPERTY(SOURCE ${VIEW_headers} APPEND PROPERTY HEADER_FILE_ONLY TRUE)
 ENDIF()
 
 ## add library target
 ## warning: set BUILD_SHARED_LIBS to decide if library is shared or static (see above)! 
 ## We need the BUILD_SHARED_LIBS flag to set declspec flags for MSVC!
 IF (FOUND_CUDART AND USE_CUDA) # we need both conditions due to possible present cached entries
-	CUDA_ADD_LIBRARY(BALL ${BALL_sources} ${BALL_headers} ${Cuda_sources})
-	IF (BALL_HAS_VIEW)
-		CUDA_ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers} ${Cuda_sources})
-	ENDIF()
+    CUDA_ADD_LIBRARY(BALL ${BALL_sources} ${BALL_headers} ${Cuda_sources})
+    IF (BALL_HAS_VIEW)
+        CUDA_ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers} ${Cuda_sources})
+    ENDIF()
 ELSE()
-	ADD_LIBRARY(BALL SHARED ${BALL_sources} ${BALL_headers})
-	IF (BALL_HAS_VIEW)
-		ADD_LIBRARY(VIEW SHARED ${VIEW_sources} ${VIEW_headers})
-	ENDIF()
+    ADD_LIBRARY(BALL SHARED ${BALL_sources} ${BALL_headers})
+    IF (BALL_HAS_VIEW)
+        ADD_LIBRARY(VIEW SHARED ${VIEW_sources} ${VIEW_headers})
+    ENDIF()
 ENDIF()
 
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic
 LIST(APPEND BALL_DEP_LIBRARIES
-	${BOOST_LIBRARIES}
-	${REGEX_LIBRARIES}
-	${XDR_LIBRARIES}
-	${FFTW_LIBRARIES}
-	${LPSOLVE_LIBRARIES}
-	${MPI_LIBRARIES}
-	${PYTHON_LIBRARIES}
+    ${BOOST_LIBRARIES}
+    ${REGEX_LIBRARIES}
+    ${XDR_LIBRARIES}
+    ${FFTW_LIBRARIES}
+    ${LPSOLVE_LIBRARIES}
+    ${MPI_LIBRARIES}
+    ${PYTHON_LIBRARIES}
 )
 
 
 IF(UNIX)
-	LIST(APPEND BALL_DEP_LIBRARIES "pthread")
+    LIST(APPEND BALL_DEP_LIBRARIES "pthread")
 ENDIF()
 
 IF(TBB_FOUND)
-	LIST(APPEND BALL_DEP_LIBRARIES ${TBB_LIBRARIES})
+    LIST(APPEND BALL_DEP_LIBRARIES ${TBB_LIBRARIES})
 ENDIF()
 
 IF(LIBSVM_FOUND)
-	LIST(APPEND BALL_DEP_LIBRARIES ${LIBSVM_LIBRARIES})
+    LIST(APPEND BALL_DEP_LIBRARIES ${LIBSVM_LIBRARIES})
 ENDIF()
 
 SET(BALL_COMPILE_FLAGS)
@@ -575,37 +574,37 @@ SET(VIEW_LINK_FLAGS)
 
 SET_TARGET_PROPERTIES(BALL PROPERTIES SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}")
 IF (MSVC)
-	SET(BALL_COMPILE_DEFINTIONS ${COMPILE_DEFINITIONS} "BALL_BUILD_DLL" CACHE INTERNAL "")
-	SET_TARGET_PROPERTIES(BALL PROPERTIES COMPILE_DEFINITIONS "${BALL_COMPILE_DEFINTIONS}")
-	# With MALL, BALL breaks incremental linking (seems to be too large...)
-	SET(BALL_LINK_FLAGS "${BALL_LINK_FLAGS} /NODEFAULTLIB:libcmt /INCREMENTAL:no")
+    SET(BALL_COMPILE_DEFINTIONS ${COMPILE_DEFINITIONS} "BALL_BUILD_DLL" CACHE INTERNAL "")
+    SET_TARGET_PROPERTIES(BALL PROPERTIES COMPILE_DEFINITIONS "${BALL_COMPILE_DEFINTIONS}")
+    # With MALL, BALL breaks incremental linking (seems to be too large...)
+    SET(BALL_LINK_FLAGS "${BALL_LINK_FLAGS} /NODEFAULTLIB:libcmt /INCREMENTAL:no")
 ELSEIF (APPLE)
-	SET_TARGET_PROPERTIES(BALL PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
+    SET_TARGET_PROPERTIES(BALL PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
 ENDIF()
 
 IF (BALL_HAS_VIEW)
 ## TODO: Qt handling!
-	LIST(APPEND VIEW_DEP_LIBRARIES ${GLEW_LIBRARY} ${RTFACT_LIBRARIES})
+    LIST(APPEND VIEW_DEP_LIBRARIES ${GLEW_LIBRARY} ${RTFACT_LIBRARIES})
 
-	SET_TARGET_PROPERTIES(VIEW PROPERTIES SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}")
-	IF(MSVC)
-		## Do we really need this?
-		SET(VIEW_COMPILE_DEFINITIONS ${COMPILE_DEFINITIONS} "BALL_VIEW_BUILD_DLL" CACHE INTERNAL "")
-		SET_TARGET_PROPERTIES(VIEW PROPERTIES COMPILE_DEFINITIONS "${VIEW_COMPILE_DEFINITIONS}")
-		SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} /NODEFAULTLIB:libcmt")
-	ELSEIF(APPLE)
-		SET_TARGET_PROPERTIES(VIEW PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
-	ENDIF()
+    SET_TARGET_PROPERTIES(VIEW PROPERTIES SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}")
+    IF(MSVC)
+        ## Do we really need this?
+        SET(VIEW_COMPILE_DEFINITIONS ${COMPILE_DEFINITIONS} "BALL_VIEW_BUILD_DLL" CACHE INTERNAL "")
+        SET_TARGET_PROPERTIES(VIEW PROPERTIES COMPILE_DEFINITIONS "${VIEW_COMPILE_DEFINITIONS}")
+        SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} /NODEFAULTLIB:libcmt")
+    ELSEIF(APPLE)
+        SET_TARGET_PROPERTIES(VIEW PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
+    ENDIF()
 
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
-	IF(ENABLE_COVERAGE_TESTING)
-		SET(BALL_COMPILE_FLAGS "${BALL_COMPILE_FLAGS} -fprofile-arcs -ftest-coverage")
-		SET(BALL_LINK_FLAGS "${BALL_LINK_FLAGS} -fprofile-arcs")
-		SET(VIEW_COMPILE_FLAGS "${VIEW_COMPILE_FLAGS} -fprofile-arcs -ftest-coverage")
-		SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} -fprofile-arcs")
-	ENDIF()
+    IF(ENABLE_COVERAGE_TESTING)
+        SET(BALL_COMPILE_FLAGS "${BALL_COMPILE_FLAGS} -fprofile-arcs -ftest-coverage")
+        SET(BALL_LINK_FLAGS "${BALL_LINK_FLAGS} -fprofile-arcs")
+        SET(VIEW_COMPILE_FLAGS "${VIEW_COMPILE_FLAGS} -fprofile-arcs -ftest-coverage")
+        SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} -fprofile-arcs")
+    ENDIF()
 ENDIF()
 
 TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
@@ -615,18 +614,18 @@ TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
 
 
 IF(BALL_HAS_VIEW)
-	TARGET_LINK_LIBRARIES(VIEW BALL
-	                      ${VIEW_DEP_LIBRARIES}
-	                      ${OPENGL_LIBRARIES}
-	                      ${QT_QTCORE_LIBRARY}
-	                      ${QT_QTNETWORK_LIBRARY}
-	                      ${QT_QTGUI_LIBRARY}
-	                      ${QT_QTTEST_LIBRARY}
-	                      ${QT_QTOPENGL_LIBRARY})
+    TARGET_LINK_LIBRARIES(VIEW BALL
+                          ${VIEW_DEP_LIBRARIES}
+                          ${OPENGL_LIBRARIES}
+                          ${QT_QTCORE_LIBRARY}
+                          ${QT_QTNETWORK_LIBRARY}
+                          ${QT_QTGUI_LIBRARY}
+                          ${QT_QTTEST_LIBRARY}
+                          ${QT_QTOPENGL_LIBRARY})
 
-	IF(USE_QTWEBKIT)
-		TARGET_LINK_LIBRARIES(VIEW ${QT_QTWEBKIT_LIBRARY})
-	ENDIF()
+    IF(USE_QTWEBKIT)
+        TARGET_LINK_LIBRARIES(VIEW ${QT_QTWEBKIT_LIBRARY})
+    ENDIF()
 ENDIF()
 
 ## add targets for Python modules
@@ -636,87 +635,79 @@ ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 ADD_SUBDIRECTORY(source/EXTENSIONS)
 
 IF(BALL_HAS_VIEW)
-	## add BALLView target
-	ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
-	LIST(APPEND BALL_EXECUTABLES "BALLView" "BALLView")
+    ## add BALLView target
+    ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
+    LIST(APPEND BALL_EXECUTABLES "BALLView" "BALLView")
 ENDIF()
 
 ## add BENCHMARK target
 ADD_SUBDIRECTORY(source/BENCHMARKS/)
 
 SET_TARGET_PROPERTIES(BALL PROPERTIES
-	COMPILE_FLAGS "${BALL_COMPILE_FLAGS}"
-	LINK_FLAGS "${BALL_LINK_FLAGS}"
+    COMPILE_FLAGS "${BALL_COMPILE_FLAGS}"
+    LINK_FLAGS "${BALL_LINK_FLAGS}"
 )
 
 IF(BALL_HAS_VIEW)
-	SET_TARGET_PROPERTIES(VIEW PROPERTIES
-		COMPILE_FLAGS "${VIEW_COMPILE_FLAGS}"
-		LINK_FLAGS "${VIEW_LINK_FLAGS}"
-	)
+    SET_TARGET_PROPERTIES(VIEW PROPERTIES
+        COMPILE_FLAGS "${VIEW_COMPILE_FLAGS}"
+        LINK_FLAGS "${VIEW_LINK_FLAGS}"
+    )
 ENDIF()
 
 ###### add Utility targets ########
-# TODO: re-commend, by pbrach
-#SET(UTILITIES_EXECUTABLES)
-#INCLUDE(source/APPLICATIONS/UTILITIES/BALLUtilities.cmake)
-#
-#FOREACH(i ${UTILITIES_EXECUTABLES})
-#	ADD_EXECUTABLE(${i} source/APPLICATIONS/UTILITIES/${i}.C)
-#	TARGET_LINK_LIBRARIES(${i} BALL)
-#	SET_PROPERTY(TARGET ${i} PROPERTY FOLDER UTILITIES)
-#ENDFOREACH(i)
-#ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
-#ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
+SET(UTILITIES_EXECUTABLES)
+INCLUDE(source/APPLICATIONS/UTILITIES/BALLUtilities.cmake)
 
-###### add LigStruct targets ########
-# by pbrach
+FOREACH(i ${UTILITIES_EXECUTABLES})
+    ADD_EXECUTABLE(${i} source/APPLICATIONS/UTILITIES/${i}.C)
+    TARGET_LINK_LIBRARIES(${i} BALL)
+    SET_PROPERTY(TARGET ${i} PROPERTY FOLDER UTILITIES)
+ENDFOREACH(i)
+ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
+ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
 
+###### add Ligand3DGenerator #########
+IF(BALL_HAS_OPENBABEL)
 # Include LigStruct sources (library part) into the BALL lib:
-INCLUDE(source/APPLICATIONS/LigStruct/sources/sources.cmake)
-INCLUDE(source/APPLICATIONS/LigStruct/sources/includes.cmake)
+    INCLUDE(source/APPLICATIONS/LigStruct/sources/sources.cmake)
+    INCLUDE(source/APPLICATIONS/LigStruct/sources/includes.cmake)
 
-# Add binaries (tests + tools:
-add_custom_target(LIGSTRUCT)
+    # Add binaries (tools):
+    add_custom_target(LIGSTRUCT)
+    ADD_SUBDIRECTORY(source/APPLICATIONS/LigStruct/bin)
+ENDIF()
 
-### Add bins and tests
-ADD_SUBDIRECTORY(source/APPLICATIONS/LigStruct/bin)
-
-
-
-
-####### add ballaxy project #########
-# TODO: re-commend, by pbrach
-#IF(BALL_BUILD_BALLAXY)
-#	ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
-#ENDIF()
+###### add ballaxy project #########
+IF(BALL_BUILD_BALLAXY)
+    ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
+ENDIF()
 
 
 ###### add MMFF94 test targets ##########
-# TODO: recommend, by pbrach
-#SET(MMFF94_EXECUTABLES)
-#INCLUDE(source/APPLICATIONS/MMFF94/BALLMMFF94.cmake)
-#
-#FOREACH(i ${MMFF94_EXECUTABLES})
-#	ADD_EXECUTABLE(${i} source/APPLICATIONS/MMFF94/${i}.C)
-#	TARGET_LINK_LIBRARIES(${i} BALL)
-#ENDFOREACH(i)
-#ADD_CUSTOM_TARGET(MMFF94 EXCLUDE_FROM_ALL)
-#ADD_DEPENDENCIES(MMFF94 ${MMFF94_EXECUTABLES})
-#
-#OPTION(BALL_BUILD_QUEASY "Build BALL with QSAR frontends" ON)
-#IF (BALL_BUILD_QUEASY)
-#	## add QuEasyRun target
-#	ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyRun)
-#
-#	IF(BALL_HAS_VIEW)
-#		## add QuEasyViz target
-#		ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyViz)
-#	ENDIF()
-#ENDIF()
+SET(MMFF94_EXECUTABLES)
+INCLUDE(source/APPLICATIONS/MMFF94/BALLMMFF94.cmake)
+
+FOREACH(i ${MMFF94_EXECUTABLES})
+    ADD_EXECUTABLE(${i} source/APPLICATIONS/MMFF94/${i}.C)
+    TARGET_LINK_LIBRARIES(${i} BALL)
+ENDFOREACH(i)
+ADD_CUSTOM_TARGET(MMFF94 EXCLUDE_FROM_ALL)
+ADD_DEPENDENCIES(MMFF94 ${MMFF94_EXECUTABLES})
+
+OPTION(BALL_BUILD_QUEASY "Build BALL with QSAR frontends" ON)
+IF (BALL_BUILD_QUEASY)
+    ## add QuEasyRun target
+    ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyRun)
+
+    IF(BALL_HAS_VIEW)
+        ## add QuEasyViz target
+        ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyViz)
+    ENDIF()
+ENDIF()
 
 ########################################################
-###    Documentation    														 ###
+###    Documentation                                                             ###
 ########################################################
 
 INCLUDE(cmake/BALLDoc.cmake)
@@ -726,92 +717,92 @@ INCLUDE(cmake/BALLDoc.cmake)
 ######################################################################
 
 IF (WIN32)
-	INCLUDE(InstallRequiredSystemLibraries)
+    INCLUDE(InstallRequiredSystemLibraries)
 ENDIF()
 
 INSTALL(TARGETS BALL
-	EXPORT BALLExportGroup
-	COMPONENT "${COMPONENT_LIBBALL}"
-	RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
-	LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
-	ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
+    EXPORT BALLExportGroup
+    COMPONENT "${COMPONENT_LIBBALL}"
+    RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
+    LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
+    ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
 )
 
 IF(BALL_HAS_VIEW)
-	INSTALL(TARGETS VIEW
-		EXPORT BALLExportGroup
-		COMPONENT "${COMPONENT_LIBVIEW}"
-		RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
-		LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
-		ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
-	)
+    INSTALL(TARGETS VIEW
+        EXPORT BALLExportGroup
+        COMPONENT "${COMPONENT_LIBVIEW}"
+        RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
+        LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
+        ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
+    )
 ENDIF()
 
 ## If we are not installing into the source directory directly, take
 ## care of data files and headers
 IF (NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL ".")
-	## Install the data directories
-	INSTALL(DIRECTORY data DESTINATION "${BALL_DATA_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL})
-	
-	## Install the includes
-	INSTALL(DIRECTORY include DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL_DEV})
+    ## Install the data directories
+    INSTALL(DIRECTORY data DESTINATION "${BALL_DATA_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL})
+    
+    ## Install the includes
+    INSTALL(DIRECTORY include DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL_DEV})
 ENDIF()
 
 ## The configured files have to be copied in any case
 INSTALL(FILES 
-		${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h 
-		DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/CONFIG"
-		COMPONENT ${COMPONENT_LIBBALL_DEV}
+        ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h 
+        DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/CONFIG"
+        COMPONENT ${COMPONENT_LIBBALL_DEV}
 )
 
 INSTALL(FILES
-		${PROJECT_BINARY_DIR}/include/BALL/COMMON/version.h
-		DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/COMMON"
-		COMPONENT ${COMPONENT_LIBBALL_DEV}
+        ${PROJECT_BINARY_DIR}/include/BALL/COMMON/version.h
+        DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/COMMON"
+        COMPONENT ${COMPONENT_LIBBALL_DEV}
 )
 
 INSTALL(FILES 
-		${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h
-		DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/PYTHON"
-		COMPONENT ${COMPONENT_LIBBALL_DEV}
+        ${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h
+        DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/PYTHON"
+        COMPONENT ${COMPONENT_LIBBALL_DEV}
 )
 
 IF (WIN32)
-	SET(FIND_DLL_INPUT ${BALL_DEP_LIBRARIES} ${SIP_LIBRARIES} ${VIEW_DEP_LIBRARIES} ${QT_LIBRARIES})
-	BALL_LIB_TO_DLL(BALL_DEP_DEBUG_DLLS BALL_DEP_OPT_DLLS "${FIND_DLL_INPUT}")
-	# NOTE: the special treatment for cg is necessary on 64 bit machines
-	LIST(APPEND BALL_DEP_OPT_DLLS ${CG_DLLS})
-	LIST(REMOVE_DUPLICATES BALL_DEP_OPT_DLLS)
+    SET(FIND_DLL_INPUT ${BALL_DEP_LIBRARIES} ${SIP_LIBRARIES} ${VIEW_DEP_LIBRARIES} ${QT_LIBRARIES})
+    BALL_LIB_TO_DLL(BALL_DEP_DEBUG_DLLS BALL_DEP_OPT_DLLS "${FIND_DLL_INPUT}")
+    # NOTE: the special treatment for cg is necessary on 64 bit machines
+    LIST(APPEND BALL_DEP_OPT_DLLS ${CG_DLLS})
+    LIST(REMOVE_DUPLICATES BALL_DEP_OPT_DLLS)
 
-	# If we know where to find a python installer, we can package it
-	IF (PYTHON_INSTALLER_PATH)
-		FILE(TO_CMAKE_PATH "${PYTHON_INSTALLER_PATH}" PYTHON_INSTALLER_PATH_TMP)
-		GET_FILENAME_COMPONENT(PYTHON_INSTALLER ${PYTHON_INSTALLER_PATH_TMP} NAME)
-	ENDIF()
+    # If we know where to find a python installer, we can package it
+    IF (PYTHON_INSTALLER_PATH)
+        FILE(TO_CMAKE_PATH "${PYTHON_INSTALLER_PATH}" PYTHON_INSTALLER_PATH_TMP)
+        GET_FILENAME_COMPONENT(PYTHON_INSTALLER ${PYTHON_INSTALLER_PATH_TMP} NAME)
+    ENDIF()
 
-	FOREACH(LIB ${BALL_DEP_OPT_DLLS})
-		STRING(TOLOWER "${LIB}" LOWER_LIB)
-		INSTALL(FILES "${LIB}" 
-			DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
-			COMPONENT ${COMPONENT_LIBBALL})
-	ENDFOREACH()
+    FOREACH(LIB ${BALL_DEP_OPT_DLLS})
+        STRING(TOLOWER "${LIB}" LOWER_LIB)
+        INSTALL(FILES "${LIB}" 
+            DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
+            COMPONENT ${COMPONENT_LIBBALL})
+    ENDFOREACH()
 ENDIF()
 
 ##### Packaging #####
 IF (BALL_ENABLE_PACKAGING)
-	INCLUDE(cmake/BALLPackageConfig.cmake)
+    INCLUDE(cmake/BALLPackageConfig.cmake)
 ENDIF()
 
 ##### Tests #####
 #IF ("${PACKAGE_TYPE}" STREQUAL "none")
-	INCLUDE(Dart)
-	ENABLE_TESTING()
-	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
+    INCLUDE(Dart)
+    ENABLE_TESTING()
+    ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
 #ENDIF()
 
 ##### targets list #####
 INCLUDE(cmake/BALLTargets.cmake)
-	
+    
 ##### Message after BALL has been built #####
 INCLUDE(cmake/BALLFinishedMessage.cmake)
 
@@ -839,7 +830,7 @@ MESSAGE(STATUS "")
 GET_PROPERTY(BALL_ADDED_COMPILE_DEFINITIONS DIRECTORY . PROPERTY COMPILE_DEFINITIONS)
 ## convert to CXX flags
 FOREACH(CURRENT_DEFINITION ${BALL_ADDED_COMPILE_DEFINITIONS})
-	LIST(APPEND CF_BALL_ADDCXX_FLAGS "-D${CURRENT_DEFINITION}")
+    LIST(APPEND CF_BALL_ADDCXX_FLAGS "-D${CURRENT_DEFINITION}")
 ENDFOREACH()
 
 ## for add_definition commands (currently empty, but who knows...)
@@ -855,9 +846,9 @@ GET_DIRECTORY_PROPERTY(BALL_INCLUDE_DIRS  INCLUDE_DIRECTORIES)
 
 ## Configure the BALLConfig for compilation against the version in PROJECT_BINARY_DIR
 CONFIGURE_FILE(
-	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
-	"${PROJECT_BINARY_DIR}/cmake/BALLConfig.cmake"
-	@ONLY
+    "${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
+    "${PROJECT_BINARY_DIR}/cmake/BALLConfig.cmake"
+    @ONLY
 )
 SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 
@@ -867,30 +858,30 @@ LIST(REMOVE_ITEM BALL_INCLUDE_DIRS "${PROJECT_BINARY_DIR}/include" "${PROJECT_SO
 SET(BALL_INCLUDE_DIRS ${BALL_PATH}/include/ ${BALL_INCLUDE_DIRS})
 SET(CF_BALLExport "${BALL_PATH}/${BALL_CMAKE_EXPORT_PATH}/BALLExport.cmake")
 CONFIGURE_FILE(
-	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
-	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
-	@ONLY
+    "${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
+    "${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+    @ONLY
 )
 INSTALL(FILES 
-	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
-	DESTINATION "${BALL_CMAKE_EXPORT_PATH}/"
-	COMPONENT   ${COMPONENT_LIBBALL_DEV}
+    "${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+    DESTINATION "${BALL_CMAKE_EXPORT_PATH}/"
+    COMPONENT   ${COMPONENT_LIBBALL_DEV}
 )
 
 ## Create BALLExport.cmake
 STRING(COMPARE LESS ${CMAKE_MINOR_VERSION} "8" CMAKE_DEPRECATED_VERSION)
 IF (${CMAKE_DEPRECATED_VERSION})
-	MESSAGE(STATUS "Cannot register BALL with CMake! For external code, set the path to BALL during find_package() manually.")
+    MESSAGE(STATUS "Cannot register BALL with CMake! For external code, set the path to BALL during find_package() manually.")
 ELSE()
-	## register BALL with CMake so that it can be found easily
-	EXPORT(PACKAGE BALL)
+    ## register BALL with CMake so that it can be found easily
+    EXPORT(PACKAGE BALL)
 ENDIF()
 ## export our libs
 
 IF(BALL_HAS_VIEW)
-	EXPORT(TARGETS BALL VIEW FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
+    EXPORT(TARGETS BALL VIEW FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 ELSE()
-	EXPORT(TARGETS BALL FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
+    EXPORT(TARGETS BALL FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 ENDIF()
 
 INSTALL(EXPORT BALLExportGroup DESTINATION ${BALL_CMAKE_EXPORT_PATH} FILE BALLExport.cmake COMPONENT "{COMPONENT_LIBBALL_DEV}")
