@@ -15,11 +15,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("MolCombine", "combine molecular files", VERSION, String(__DATE__), "Convert, combine and store");
-	parpars.registerParameter("i1", "input molecule file A", INFILE, true);
-	parpars.registerParameter("i2", "input molecule file B", INFILE, true);
-	parpars.registerParameter("mode","'intersection', 'union' or 'b_not_a'", STRING, true);
+	parpars.registerMandatoryInputFile("i1", "input molecule file A");
+	parpars.registerMandatoryInputFile("i2", "input molecule file B");
+	parpars.registerMandatoryStringParameter("mode","'intersection', 'union' or 'b_not_a'");
 	parpars.registerFlag("ignH", "ignore hydrogens, i.e. match molecules to any protonation state.", true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
+	parpars.registerMandatoryOutputFile("o", "output file");
 	parpars.registerFlag("replace_prop", "replace properties from file 1 w/ those from file 2");
 	parpars.registerFlag("rm", "remove input files when finished");
 	String man = "This tool generates the intersection or union of two given chemical files. Property-tags of molecules that appear in both input files are automatically merged.\n\nIf you want to match molecules regardless of their protonation state, use option '-ignH'.\n\nOutput of this tool is a file containing the union resp. intersection of all molecules of input A and B.";
@@ -32,7 +32,6 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i1","mol2,sdf,drf");
 	parpars.setSupportedFormats("i2","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","i1");
 	parpars.parse(argc, argv);
 
 	String mode = parpars.get("mode");

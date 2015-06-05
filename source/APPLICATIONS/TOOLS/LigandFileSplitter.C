@@ -114,12 +114,12 @@ String getOutputFileName(String& outname_base, bool is_pattern, String& outfile_
 
 int main(int argc, char* argv[])
 {
-  CommandlineParser parpars("LigandFileSplitter", "split molecule files", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input molecule file", INFILE, true);
-  parpars.registerParameter("no", "Number of output files to be created", BALL::INT, false);
-  parpars.registerParameter("mpf", "Number of molecules per output file", BALL::INT, false);
-	parpars.registerParameter("outname_pattern", "Pattern that will be used to generate the names of the output files, see notes and examples below.", BALL::STRING, false);
-	parpars.registerParameter("o", "Output filenames. If none are specified, input filename postfixed with IDs will be used", OUTFILELIST, false);
+	CommandlineParser parpars("LigandFileSplitter", "split molecule files", VERSION, String(__DATE__), "Preparation");
+	parpars.registerMandatoryInputFile("i", "input molecule file");
+	parpars.registerOptionalIntegerParameter("no", "Number of output files to be created");
+	parpars.registerOptionalIntegerParameter("mpf", "Number of molecules per output file");
+	parpars.registerOptionalStringParameter("outname_pattern", "Pattern that will be used to generate the names of the output files, see notes and examples below.");
+	parpars.registerOptionalOutputFileList("o", "Output filenames. If none are specified, input filename postfixed with IDs will be used");
   
 	String man =
 	"LigandFileSplitter splits a molecule file into a given number of subsets.\n\n"
@@ -158,7 +158,6 @@ int main(int argc, char* argv[])
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","i");
  	parpars.parse(argc, argv);
   
   

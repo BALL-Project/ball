@@ -199,9 +199,9 @@ bool checkMolecule(Molecule* mol, int molecule_no, map<String, pair<int, String>
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("LigCheck", "check molecules for errors", VERSION, String(__DATE__), "Checks and evaluations");
-	par.registerParameter("i", "input molecule file", INFILE, true);
-	par.registerParameter("o", "output file", OUTFILE, true);
-	par.registerParameter("ef", "error fraction; print error if fraction of invalid mols is larger", DOUBLE, false, "0.5");
+	par.registerMandatoryInputFile("i", "input molecule file");
+	par.registerMandatoryOutputFile("o", "output file");
+	par.registerOptionalDoubleParameter("ef", "error fraction; print error if fraction of invalid mols is larger", 0.5);
 	par.registerFlag("ri", "remove invalid molecules.", true);
 	par.registerFlag("ut", "check for unique topologies");
 	par.registerFlag("nc", "no not check for unique conformations");
@@ -217,7 +217,6 @@ int main(int argc, char* argv[])
 	par.setToolManual(man);
 	par.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	par.setSupportedFormats("o",MolFileFactory::getSupportedFormats());
-	par.setOutputFormatSource("o","i");
 	par.parse(argc, argv);
 
 	GenericMolFile* input = MolFileFactory::open(par.get("i"));

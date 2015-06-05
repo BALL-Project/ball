@@ -27,14 +27,13 @@ void copyHydrogens(OpenBabel::OBMol* obmol, Protein* protein);
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("ProteinProtonator", "protonate protein structures", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("ph", "pH-value for pH-dep. protonation", DOUBLE, false, "7.0");
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryOutputFile("o", "output file");
+	parpars.registerOptionalDoubleParameter("ph", "pH-value for pH-dep. protonation", 7.0);
 	String man = "";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","pdb");
 	parpars.setSupportedFormats("o","pdb,drf");
-	parpars.setOutputFormatSource("o","i");
 	String manual = "ProteinProtonator allows you add hydrogens to a protein structure.\n\nNote that all hydrogen atoms already present in the input file will be ignored. If desired, you can specify a specific pH value, for which protonation is to be done; otherwise a neutral pH will be assumed.\n\nOutput of this tool is one pdb-file containing the input protein structure with added hydrogens atoms.";
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);

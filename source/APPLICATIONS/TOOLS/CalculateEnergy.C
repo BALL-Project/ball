@@ -18,12 +18,12 @@ int main(int argc, char* argv[])
 {
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("CalculateEnergy", "calculate free energy of a protein ", VERSION, String(__DATE__), "ForceFields");
-	parpars.registerParameter("pdb",  "input pdb file ", INFILE,  true);
+	parpars.registerMandatoryInputFile("pdb", "input pdb file ");
 
 	// TODO: offer upload of a distinguished fragDB file?
 
 	// choice of force field
-	parpars.registerParameter("force_field", "force field (AMBER, MMFF94)", STRING, false, "AMBER");
+	parpars.registerOptionalStringParameter("force_field", "force field (AMBER, MMFF94)", "AMBER");
 	list<String> force_fields;
 	force_fields.push_back("AMBER");
 	force_fields.push_back("MMFF94");
@@ -33,9 +33,9 @@ int main(int argc, char* argv[])
 	// TODO: shall we offer a force field parameter file upload?
 
 	// TODO: check the naming!
-	parpars.registerParameter("non_bond_cutoff",  "cutoff radius in calculations of nonbonded interactions", DOUBLE, false, 20.0);
-	parpars.registerParameter("elec_stat_cuton", "electrostatic cuton", DOUBLE, false, 13.0);
-	parpars.registerParameter("elec_stat_cutoff", "electrostatic cutoff", DOUBLE, false, 15.0);
+	parpars.registerOptionalDoubleParameter("non_bond_cutoff",  "cutoff radius in calculations of nonbonded interactions", 20.0);
+	parpars.registerOptionalDoubleParameter("elec_stat_cuton", "electrostatic cuton", 13.0);
+	parpars.registerOptionalDoubleParameter("elec_stat_cutoff", "electrostatic cutoff", 15.0);
 	parpars.registerFlag("dist_dep_dielec", "apply distance dependent dielectric constant", false);
 	// NOTE: assign is the default
 	//parpars.registerFlag("assign_typenames","automatically assign type names to the system", false);

@@ -14,12 +14,12 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("PropertyModifier", "modify molecule property tags", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
-	parpars.registerParameter("mode", "'delete', 'add' or 'rename' properties", STRING, true);
-	parpars.registerParameter("name", "property name ('all' will erase all properties if in delete-mode)", STRING, true);
-	parpars.registerParameter("value", "property value (in case of prop. adding only)", STRING);
-	parpars.registerParameter("new_name", "new property name (in case of renaming only)", STRING);
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryOutputFile("o", "output file");
+	parpars.registerMandatoryStringParameter("mode", "'delete', 'add' or 'rename' properties");
+	parpars.registerMandatoryStringParameter("name", "property name ('all' will erase all properties if in delete-mode)");
+	parpars.registerOptionalStringParameter("value", "property value (in case of prop. adding only)");
+	parpars.registerOptionalStringParameter("new_name", "new property name (in case of renaming only)");
 	parpars.registerFlag("rm", "remove input file when finished");
 	String man = "With this tools you can add, rename or delete molecule property tags.\nThese tags can for example contain information about scores, binding-free-energy, IDs or names for the resp. molecule.\nThe output of this tool is a molecule file in which the desired property tags have been added/renamed/deleted (as chosen).";
 	parpars.setToolManual(man);
@@ -30,7 +30,6 @@ int main(int argc, char* argv[])
 	parpars.setParameterRestrictions("mode",slist);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o","i");
 	parpars.parse(argc, argv);
 
 	const String& nf = CommandlineParser::NOT_FOUND;

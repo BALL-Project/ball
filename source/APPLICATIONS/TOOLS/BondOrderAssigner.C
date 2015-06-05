@@ -28,26 +28,29 @@ int main (int argc, char **argv)
 	// - description
 	// - Inputfile
 	// - required
-	parpars.registerParameter("i", "input mol2-file", INFILE, true);
+	parpars.registerMandatoryInputFile("i", "input mol2-file");
 
 	// we register an output file parameter 
 	// - description
 	// - Outputfile
 	// - required
-	parpars.registerParameter("o", "output mol2-file name for first solution", OUTFILE, true, "", true);
+	parpars.registerMandatoryOutputFile("o", "output mol2-file name for first solution");
+	parpars.setParameterAsHidden("o");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_id", "output id", GALAXY_OPT_OUTID, false, "$o.id", true);
+	parpars.registerOptionalGalaxyOutputId("o_id", "output id", "$o.id");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_id");
+	parpars.setParameterAsHidden("o_id");
 
 	// parameters for galaxy for handling multiple output files
-	parpars.registerParameter("o_dir", "output directory for 2nd to last solution", GALAXY_OPT_OUTDIR, false, "$__new_file_path__", true);
+	parpars.registerOptionalGalaxyOutputFolder("o_dir", "output directory for 2nd to last solution", "$__new_file_path__");
 	// need to be hidden in command line mode
 	parpars.setParameterAsAdvanced("o_dir");
+	parpars.setParameterAsHidden("o_dir");
 
 	// register String parameter for supplying max number of solutions
-	parpars.registerParameter("max_sol", "maximal number of assignments solutions to compute", INT, false, 25);
+	parpars.registerOptionalIntegerParameter("max_sol", "maximal number of assignments solutions to compute", 25);
 	parpars.setParameterRestrictions("max_sol", 0, 100);
 
 	// parameter for computing sub-optimal solutions
@@ -58,7 +61,7 @@ int main (int argc, char **argv)
 	//parpars.registerFlag("add_hyd", "add hydrogens as well", false);
 
 	// choice of penalty table 
-	parpars.registerParameter("scr_pen", "penalty table (Antechamber, BALL)", STRING, false, "Antechamber");
+	parpars.registerOptionalStringParameter("scr_pen", "penalty table (Antechamber, BALL)", "Antechamber");
 	list<String> ini_files;
 	ini_files.push_back("Antechamber");
 	ini_files.push_back("BALL");

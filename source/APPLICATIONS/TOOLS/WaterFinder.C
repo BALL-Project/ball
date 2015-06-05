@@ -419,13 +419,13 @@ double calculateMinimalDistance(const AtomContainer& ref_ligand, const AtomConta
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("WaterFinder", "find strongly bound waters ", VERSION, String(__DATE__), "Docking");
-	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	par.registerParameter("wat", "input pdb-file containing water molecules (if not part of rec.-file)", INFILE);
+	par.registerMandatoryInputFile("rec", "receptor pdb-file");
+	par.registerMandatoryInputFile("rl", "reference-ligand");
+	par.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file");
+	par.registerOptionalInputFile("wat", "input pdb-file containing water molecules (if not part of rec.-file)");
 	par.registerFlag("ai", "use ab-initio water search (ignore water in pdb-file), experimental!");
-	par.registerParameter("o", "output pdb file", OUTFILE);
-	par.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	par.registerOptionalOutputFile("o", "output pdb file");
+	par.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
 
 	String man = "This tool searches for crystal waters that\n\
     * either interact very strongly with the receptor\n\
@@ -450,7 +450,7 @@ int main(int argc, char* argv[])
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	par.registerAdvancedParameters(default_options);
-	par.setSupportedFormats("filename","ini");
+	par.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename","ini");
 	par.parse(argc, argv);
 
 	String default_inifile = par.get("write_ini");
@@ -463,7 +463,7 @@ int main(int argc, char* argv[])
 			DockingAlgorithm::readOptionFile(default_inifile, default_options, clist);
 		}
 
-		Options* scoring_options = default_options.getSubcategory("Scoring Function");
+		Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 		scoring_options->setDefault("scoring_type", "MM");
 		scoring_options->setDefault("nonbonded_cutoff_precalculation", scoring_options->get("nonbonded_cutoff"));
 		scoring_options->set("nonbonded_cutoff", 3.0);
@@ -486,7 +486,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(par.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = option.setDefault("scoring_type", "MM");
 

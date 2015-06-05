@@ -14,20 +14,19 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("EvenSplit", "generate splits w/ equal property range", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o1", "output file 1", OUTFILE, true);
-	parpars.registerParameter("o2", "output file 2", OUTFILE, true);
-	parpars.registerParameter("prop", "property name", STRING, true, "binding_free_energy");
-	parpars.registerParameter("n", "max. number of compounds to use from input file", BALL::INT);
-	parpars.registerParameter("k", "extract each k'th compound to 2nd output file", BALL::INT, false, "2");
-	parpars.registerParameter("offset", "offset; extract each (i+offset)%k == 0 to 2nd output file", BALL::INT, false, "0");
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryOutputFile("o1", "output file 1");
+	parpars.registerMandatoryOutputFile("o2", "output file 2");
+
+	parpars.registerOptionalStringParameter("prop", "property name", "binding_free_energy");
+	parpars.registerOptionalIntegerParameter("n", "max. number of compounds to use from input file");
+	parpars.registerOptionalIntegerParameter("k", "extract each k'th compound to 2nd output file", 2);
+	parpars.registerOptionalIntegerParameter("offset", "offset; extract each (i+offset)%k == 0 to 2nd output file");
 	String man = "This tool splits a molecule file into two subsets in such a way that each of them convers an equal range of a property. The property with respect to which this is to be done should be specified with '-prop'.";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");
 	parpars.setSupportedFormats("o1","mol2,sdf,drf");
 	parpars.setSupportedFormats("o2","mol2,sdf,drf");
-	parpars.setOutputFormatSource("o1","i");
-	parpars.setOutputFormatSource("o2","i");
 
 	parpars.parse(argc, argv);
 

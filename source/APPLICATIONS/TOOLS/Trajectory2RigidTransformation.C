@@ -24,10 +24,11 @@ int main(int argc, char** argv)
 {
 	CommandlineParser parpars("Trajectory2RigidTransformation", "converts a trajectory file into a rigid transformation file ", VERSION, String(__DATE__), "Convert, combine and store");
 
-	parpars.registerParameter("i_dcd", "input trajectory file", INFILE, true);
-	parpars.registerParameter("i_pdb",  "input pdb-file", INFILE, true);
+	parpars.registerMandatoryInputFile("i_dcd", "input trajectory file");
+	parpars.registerMandatoryInputFile("i_pdb",  "input pdb-file");
 
-	parpars.registerParameter("o", "output file for the rigid transformations", OUTFILE, true, "", true);
+	parpars.registerMandatoryOutputFile("o", "output file for the rigid transformations");
+	parpars.setParameterAsHidden("o");
 
 	// the manual
 	String man = "This tool converts SnapShots of a given TrajectoryFile and the reference PDBFile into a rigid transformation file.\n\nParameters are the input SnapShots as TrajectoryFile (-i_dcd), the corresponding reference pdb file that was originally used to create the TrajectoryFile (-i_pdb) and a naming schema for the resulting transformation file (-o).\n\nOutput of this tool is a file storing each given SnapShot as rigid transformation per line.";

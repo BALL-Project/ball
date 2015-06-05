@@ -23,7 +23,6 @@ SET(EXECUTABLES_LIST
 	FeatureSelector
 	FingerprintSimilarityClustering
 	FingerprintSimilaritySearch
-	GalaxyConfigGenerator
 	GridBuilder
 	IMGDock
 	InputPartitioner

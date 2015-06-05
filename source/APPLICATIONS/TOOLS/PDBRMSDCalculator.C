@@ -35,20 +35,21 @@ int main (int argc, char **argv)
 	// - CLI switch
 	// - description
 	// - Inputfile
-	parpars.registerParameter("i_pdb", "input pdb-file", INFILE, true);
-	parpars.registerParameter("i_query", "molecule(s) to compare input file", INFILE, false);
+	parpars.registerMandatoryInputFile("i_pdb", "input pdb-file");
+	parpars.registerMandatoryInputFile("i_query", "molecule(s) to compare input file");
 
-	parpars.registerParameter("i_type", "query type (pdb, dcd, or transformation file (rigid_transformations) ", STRING, false, "pdb");
+	parpars.registerOptionalStringParameter("i_type", "query type (pdb, dcd, or transformation file (rigid_transformations) ", "pdb");
 	list<String> input_types;
 	input_types.push_back("pdb");
 	input_types.push_back("dcd");
 	input_types.push_back("rigid_transformations");
 	parpars.setParameterRestrictions("i_type", input_types);
 
-	parpars.registerParameter("o", "output file name", OUTFILE, false, "", true);
+	parpars.registerOptionalOutputFile("o", "output file name");
+	parpars.setParameterAsHidden("o");
 
 	// choice of atom rmsd scope 
-	parpars.registerParameter("scope", "atoms to be considered for scoreing a pose (C_ALPHA, BACKBONE, ALL_ATOMS) ", STRING, false, "C_ALPHA");
+	parpars.registerOptionalStringParameter("scope", "atoms to be considered for scoreing a pose (C_ALPHA, BACKBONE, ALL_ATOMS) ", "C_ALPHA");
 	list<String> rmsd_levels;
 	rmsd_levels.push_back("C_ALPHA");
 	//rmsd_levels.push_back("HEAVY_ATOMS"); //TODO
@@ -57,7 +58,7 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("scope", rmsd_levels);
 
 	// choice of rmsd type
-	parpars.registerParameter("rmsd_type", "rmsd type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", STRING, false, "SNAPSHOT_RMSD");
+	parpars.registerOptionalStringParameter("rmsd_type", "rmsd type used for clustering (SNAPSHOT_RMSD, RIGID_RMSD, CENTER_OF_MASS_DISTANCE) ", "SNAPSHOT_RMSD");
 	list<String> rmsd_types;
 	rmsd_types.push_back("SNAPSHOT_RMSD");
 	rmsd_types.push_back("RIGID_RMSD");

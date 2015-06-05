@@ -19,6 +19,7 @@
 
 #include <map>
 #include <list>
+#include <set>
 
 
 namespace BALL
@@ -35,6 +36,8 @@ namespace BALL
 		STRINGLIST,
 		INTLIST,
 		DOUBLELIST,
+		//TODO: do we REALLY need these two openly galaxy specific parameter types?
+		//      couldn't we do it with tags or something more elegant?
 		GALAXY_OPT_OUTDIR,
 		GALAXY_OPT_OUTID
 	};
@@ -50,7 +53,6 @@ namespace BALL
 			mandatory = false;
 			advanced = false;
 			type = INFILE;
-			output_format_source = "";
 			allowed_values.clear();
 			supported_formats.clear();
 			hidden = false;
@@ -63,10 +65,6 @@ namespace BALL
 		bool advanced;
 		ParameterType type;
 
-		/** In case of ouput-files, this variable allows to specify the name of an input-parameter, whose format should be used as ouput-format. \n
-		Note, that this variable will be used only for the creation of config-files for workflow-systems (Galaxy, Knime, etc.) and not for the command-line interface, where the user will directly specify output-filenames. */
-		String output_format_source;
-
 		/** If this list is empty, then there are no restrictions on the value of the parameter */
 		list<String> allowed_values;
 
@@ -76,6 +74,16 @@ namespace BALL
 
 		// if parameters shall be hidden in galaxy
 		bool hidden;
+	};
+
+	class BALL_EXPORT ParameterUtils
+	{
+		public:
+			/** From category, parameter_name builds [category]:[parameter_name] */
+			static const String buildNestedParameterName(const String& category, const String& parameter_name);
+
+			/** Returns [category, parameter] from [category]:[parameter] */
+			static const Size parseNestedParameterName(const String& parameter_name, String string_array[]);
 	};
 
 	/** Class for storing and retrieving parameters (e.g. tool-parameters) to an xml-based file */
@@ -100,7 +108,7 @@ namespace BALL
 			@param descriptions descriptions of parameters will be stored here 
 			@param values values of parameters will be stored here
 			@param overwrite_existing if set to true, entries already existing in 'descriptions' and 'values' will be overwritten. */
-			void readSection(String& section_name, String& section_description, String& version, String& section_helptext,
+			void readSection(String& tool_name, String& section_description, String& version, String& section_helptext,
 					             String& category, std::list<std::pair<String, ParameterDescription> >& descriptions,
 											 std::map<String,list<String> >& values,
 											 bool overwrite_existing=false);
@@ -116,6 +124,19 @@ namespace BALL
 			QXmlStreamReader* xmlIn_;
 			QXmlStreamWriter* xmlOut_;
 			QFile* file_;
+
+		private:
+
+			/**
+			 * Given the value of the "tags" attribute of an ITEM or ITEMLIST element, this method
+			 * extracts the attribute named "tags" and returns each individual tag, assumming that
+			 * each tag has been comma separated (each individual tag is trimmed of whitespace).
+			 *
+			 * @brief getTags
+			 * @param attributes The attributes.
+			 * @return A set containing the individual tasks.
+			 */
+			std::set<String> getTags(QXmlStreamAttributes& attributes);
 	};
 }
 

@@ -14,11 +14,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("PropertyPlotter", "plot molecule properties", VERSION, String(__DATE__), "Analysis");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("p1", "name of property 1", STRING, true);
-	parpars.registerParameter("p2", "name of property 2", STRING);
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryStringParameter("p1", "name of property 1");
+	parpars.registerOptionalStringParameter("p2", "name of property 2");
 	parpars.registerFlag("quiet", "be quiet, i.e. do not print progress information");
-	parpars.registerParameter("o", "output png-/eps-file", OUTFILE);
+	parpars.registerOptionalOutputFile("o", "output png-/eps-file");
 	String man = "PropertyPlotter can be used to generate distribution- or scatter-plots of data contained in molecule property-tags.\n\nIn case you want to create a scatter-plot, specify the name of both property-tags to be used with '-p1' and '-p2'. If you want to generate a distribution plot, just specify '-p1'.\nThe output graphic will created by use of gnuplot, so make sure to have it installed and in your PATH environment variable.\n\nThe output of this tool is a plot in form of an eps or png-file (as chosen).";
 	parpars.setToolManual(man);
 	parpars.setSupportedFormats("i","mol2,sdf,drf");

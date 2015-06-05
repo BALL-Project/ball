@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
 	// - category
 	CommandlineParser parpars("CrystalGenerator", "creates crystals", "VERSION", String(__DATE__), "Structure Creation");
 	
-  parpars.registerParameter("i",  "input pdb file",    INFILE,  true);
-	parpars.registerParameter("o",  "output pdb file",   OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input pdb file");
+	parpars.registerMandatoryOutputFile("o", "output pdb file");
 
-  // the space group
-	parpars.registerParameter("sg", "space group symbol in Herman-Mauguin notation", STRING, true);
+	// the space group
+	parpars.registerMandatoryStringParameter("sg", "space group symbol in Herman-Mauguin notation");
   
 	CrystalGenerator generator;
 	
@@ -72,60 +72,57 @@ int main(int argc, char* argv[])
 					
 	parpars.setParameterRestrictions("sg", space_groups);
 	
-  // the cell axes
-  parpars.registerParameter("axis_a", "cell axis a", DOUBLE, false);
-	//parpars.setParameterRestrictions("axis_a", 0, 100);
-	parpars.registerParameter("axis_b", "cell axis b", DOUBLE, false);
-	//parpars.setParameterRestrictions("axis_b", 0, 100);
-	parpars.registerParameter("axis_c", "cell axis c", DOUBLE, false);
-	//parpars.setParameterRestrictions("axis_c", 0, 100);
+	// the cell axes
+	parpars.registerOptionalDoubleParameter("axis_a", "cell axis a");
+	parpars.registerOptionalDoubleParameter("axis_b", "cell axis b");
+	parpars.registerOptionalDoubleParameter("axis_c", "cell axis c");
   
-  // the cell angles
-	parpars.registerParameter("angle_alpha", "cell angle alpha", DOUBLE, false);
-	parpars.setParameterRestrictions("angle_alpha", 0., 359.);
-	parpars.registerParameter("angle_beta", "cell angle beta", DOUBLE, false);
-	parpars.setParameterRestrictions("angle_beta", 0., 359.);
-	parpars.registerParameter("angle_gamma", "cell angle gamma", DOUBLE, false);
-	parpars.setParameterRestrictions("angle_gamma", 0., 359.);
+	// the cell angles
+	parpars.registerOptionalDoubleParameter("angle_alpha", "cell angle alpha");
+	parpars.setParameterRestrictions("angle_alpha", 0.0, 359.0);
+	parpars.registerOptionalDoubleParameter("angle_beta", "cell angle beta");
+	parpars.setParameterRestrictions("angle_beta", 0.0, 359.0);
+	parpars.registerOptionalDoubleParameter("angle_gamma", "cell angle gamma");
+	parpars.setParameterRestrictions("angle_gamma", 0.0, 359.0);
 	
-  // the unit cell indices to create
-  parpars.registerParameter("from_uc_a", "from unit cell index a", INT, true);
+	// the unit cell indices to create
+	parpars.registerMandatoryIntegerParameter("from_uc_a", "from unit cell index a");
 	parpars.setParameterRestrictions("from_uc_a", 0, 9);
-	parpars.registerParameter("from_uc_b", "from unit cell index b", INT, true);
+	parpars.registerMandatoryIntegerParameter("from_uc_b", "from unit cell index b");
 	parpars.setParameterRestrictions("from_uc_b", 0, 9);
-	parpars.registerParameter("from_uc_c", "from unit cell index c", INT, true);
+	parpars.registerMandatoryIntegerParameter("from_uc_c", "from unit cell index c");
 	parpars.setParameterRestrictions("from_uc_c", 0, 9);
-	parpars.registerParameter("to_uc_a", "to unit cell index a", INT, true);
+	parpars.registerMandatoryIntegerParameter("to_uc_a", "to unit cell index a");
 	parpars.setParameterRestrictions("from_uc_a", 0, 9);
-	parpars.registerParameter("to_uc_b", "to unit cell index b", INT, true);
+	parpars.registerMandatoryIntegerParameter("to_uc_b", "to unit cell index b");
 	parpars.setParameterRestrictions("from_uc_b", 0, 9);
-	parpars.registerParameter("to_uc_c", "to unit cell index c", INT, true);
+	parpars.registerMandatoryIntegerParameter("to_uc_c", "to unit cell index c");
 	parpars.setParameterRestrictions("from_uc_c", 0, 9);
   
-  String man = "TODO: Manual";
+	String man = "TODO: Manual";
 	parpars.setToolManual(man);
 	
-  parpars.setSupportedFormats("i","pdb");
-  parpars.setSupportedFormats("o","pdb");
+	parpars.setSupportedFormats("i","pdb");
+	parpars.setSupportedFormats("o","pdb");
 
 	parpars.parse(argc, argv);
    
-  PDBFile file;
-  file.open(parpars.get("i"));
-  System system;
-  file >> system;
+	PDBFile file;
+	file.open(parpars.get("i"));
+	System system;
+	file >> system;
 
-  generator.setSystem(&system);
+	generator.setSystem(&system);
 
-  boost::shared_ptr<CrystalInfo> ci_ptr(new CrystalInfo());
-  ci_ptr->setSpaceGroup(parpars.get("sg"));
+	boost::shared_ptr<CrystalInfo> ci_ptr(new CrystalInfo());
+	ci_ptr->setSpaceGroup(parpars.get("sg"));
 	ci_ptr->setCellEdgeLengthA(parpars.get("axis_a").toDouble());
 	ci_ptr->setCellEdgeLengthB(parpars.get("axis_b").toDouble());
 	ci_ptr->setCellEdgeLengthC(parpars.get("axis_c").toDouble());
 	ci_ptr->setCellAngleAlpha(Angle(parpars.get("angle_alpha").toDouble(), false));
 	ci_ptr->setCellAngleBeta(Angle(parpars.get("angle_beta").toDouble(), false));
 	
-  ci_ptr->setCellAngleGamma(Angle(parpars.get("angle_gamma").toDouble(), false));
+	ci_ptr->setCellAngleGamma(Angle(parpars.get("angle_gamma").toDouble(), false));
   
 	generator.setCrystalInfo(ci_ptr);
 	
