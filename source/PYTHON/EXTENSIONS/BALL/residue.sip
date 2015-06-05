@@ -46,7 +46,7 @@ class Residue
   // Residue& operator = (const Residue& residue);
   void get(Residue&, bool deep = true) const;
   void swap(Residue&);
-  String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
+  String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE) const;
   bool hasTorsionPhi() const;
   Angle getTorsionPhi() const;
   bool hasTorsionPsi() const;
@@ -93,7 +93,7 @@ class Residue
 %MethodCode
 	sipRes = PyString_FromString(String(
 		                            String("Residue ")
-		                          + sipCpp->getFullName(ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE)
+		                          + sipCpp->getFullName()
 		                          + " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };
