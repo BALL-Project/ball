@@ -23,7 +23,6 @@ SET(EXECUTABLES_LIST
 	FeatureSelector
 	FingerprintSimilarityClustering
 	FingerprintSimilaritySearch
-	GalaxyConfigGenerator
 	GridBuilder
 	IMGDock
 	InputPartitioner
@@ -51,12 +50,12 @@ SET(EXECUTABLES_LIST
 	ResidueChecker
 	RMSDCalculator
 	ScoreAnalyzer
+	SeparateMolecules
 	SideChainGridBuilder
 	SimilarityAnalyzer
 	SimpleRescorer
 	SLICK
 	SpatialConstraintDefiner
-	Split2ConnectedComponents
 	TaGRes
 	TaGRes-train
 	TrajectoryFile2PDBSplitter

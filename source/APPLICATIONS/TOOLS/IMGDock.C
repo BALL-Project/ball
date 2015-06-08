@@ -18,14 +18,14 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("IMGDock", "Iterative Multi-Greedy Docking", VERSION, String(__DATE__), "Docking");
-	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	parpars.registerParameter("rl", "reference-ligand", INFILE, true);
-	parpars.registerParameter("pocket", "configuration file", INFILE);
-	parpars.registerParameter("i", "compounds to be docked", INFILE, true);
-	parpars.registerParameter("o", "output file for docked compounds", OUTFILE, true);
-	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.registerMandatoryInputFile("rec", "receptor pdb-file");
+	parpars.registerMandatoryInputFile("rl", "reference-ligand");
+	parpars.registerOptionalInputFile("pocket", "configuration file");
+	parpars.registerMandatoryInputFile("i", "compounds to be docked");
+	parpars.registerMandatoryOutputFile("o", "output file for docked compounds");
+	parpars.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
 	parpars.registerFlag("rm", "remove input file when finished");
-	parpars.registerParameter("grd", "ScoreGrid file", INFILE, true);
+	parpars.registerMandatoryInputFile("grd", "ScoreGrid file");
 	String man = "IMGDock docks compounds into the binding pocket of a receptor using an iterative multi-greedy approach.\nAs input we need:\n\n\
     * a file containing a protonated protein in pdb-format\n\
     * a file containing a reference ligand. This reference ligand should be located in the binding pocket. Supported formats are mol2, sdf or drf (DockResultFile, xml-based).\n\
@@ -39,12 +39,11 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	parpars.setSupportedFormats("o","mol2,sdf,drf");
 	parpars.setSupportedFormats("write_ini","ini");
-	parpars.setOutputFormatSource("o","i");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	IMGDock::getDefaultOptions(default_options);
 	parpars.registerAdvancedParameters(default_options);
-	parpars.setSupportedFormats("filename","ini");
+	parpars.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 	parpars.parse(argc, argv);
 
 	String default_inifile = parpars.get("write_ini");
@@ -56,7 +55,7 @@ int main(int argc, char* argv[])
 		{
 			DockingAlgorithm::readOptionFile(default_inifile, default_options, clist);
 		}
-		Options* scoring_options = default_options.getSubcategory("Scoring Function");
+		Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 
 		scoring_options->setDefault("scoring_type", "GridedMM");
 		scoring_options->setDefault("scoregrid_resolution", 0.5);
@@ -85,7 +84,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(parpars.get("pocket"), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = "GridedMM";
 

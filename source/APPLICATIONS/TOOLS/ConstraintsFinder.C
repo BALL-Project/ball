@@ -24,11 +24,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("ConstraintsFinder", "find strongly interacting residues", VERSION, String(__DATE__), "Docking");
-	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	parpars.registerParameter("rl", "reference-ligand", INFILE, true);
-	parpars.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	parpars.registerParameter("o", "output configuration file", OUTFILE);
-	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
+	parpars.registerMandatoryInputFile("rec", "receptor pdb-file");
+	parpars.registerMandatoryInputFile("rl", "reference-ligand");
+	parpars.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file");
+	parpars.registerOptionalOutputFile("o", "output configuration file");
+	parpars.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
 	String man = "This tool searches protein residues with which the reference ligand interacts strongly.\nTherefore the interaction of the reference ligand to each residue is evaluated. Residues with a score worse (i.e. larger) than -2 are ignored. A maximum of 3 constraints are created for the most strongly interacting residues that met the above criterion.\n\nAs input we need:\n\
     * a file containing a protonated protein in pdb-format\n\
     * a file containing a reference ligand.\n\
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	parpars.registerAdvancedParameters(default_options);
-	parpars.setSupportedFormats("filename","ini");
+	parpars.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 	parpars.parse(argc, argv);
 
 	String default_inifile = parpars.get("write_ini");
@@ -55,7 +55,7 @@ int main(int argc, char* argv[])
 		{
 			DockingAlgorithm::readOptionFile(default_inifile, default_options, clist);
 		}
-		Options* scoring_options = default_options.getSubcategory("Scoring Function");
+		Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 
 		scoring_options->setDefault("scoring_type", "MM");
 		scoring_options->setDefault("nonbonded_cutoff_precalculation", scoring_options->get("nonbonded_cutoff"));
@@ -79,7 +79,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(parpars.get(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = option_category->setDefault("scoring_type", "MM");
 	Options original_options = option;

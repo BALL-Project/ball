@@ -23,9 +23,8 @@ void usage (const char *progname);
 int main (int argc, char **argv)
 {
 	CommandlineParser parpars("PeptideBuilder", "build a peptide  ", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input torsion-file", INFILE, true);
-	parpars.registerParameter("o", "peptide output pdb-file", OUTFILE, true);
-	//parpars.registerParameter("peptide_name", "name of the peptide", STRING, false);
+	parpars.registerMandatoryInputFile("i", "input torsion-file");
+	parpars.registerMandatoryOutputFile("o", "peptide output pdb-file");
 
 	String man = "This tool creates a peptide by a given torsion file. The amino acids shall be given in three letter code, the phi, psi, and omega angles shall be given in degree.\n\nExample:\n\n# aa   phi    psi   omega\n\nA    -180    140\n\nC    -180    180\n\nG    -90    -140\n\nP    -65    -40       0   # cis\n\nT    -120    -90\n\nP    -78     146     180  # trans";
 
@@ -38,8 +37,8 @@ int main (int argc, char **argv)
 	BALL::Peptides::PeptideBuilder* pb = new BALL::Peptides::PeptideBuilder;
 
 	// "link" the fragment db for adding missing information
-  FragmentDB fdb("");
-  pb->setFragmentDB(&fdb);
+	FragmentDB fdb("");
+	pb->setFragmentDB(&fdb);
 
 	// read the torsion file (format AA, PHI, PSI)
 	// e.g. ALA 109 65

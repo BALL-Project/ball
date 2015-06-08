@@ -32,6 +32,9 @@ namespace BALL
 		friend class SideChainOptimizer;
 
 		public:
+
+			static const char* SUBCATEGORY_NAME;
+
 			struct Option
 			{
 				/**

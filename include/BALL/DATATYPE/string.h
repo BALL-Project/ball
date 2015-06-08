@@ -1410,7 +1410,7 @@ namespace BALL
 			The Substring class represents an efficient way to deal with substrings
 			of  \link String String \endlink . Each Substring is bound to an instance of String and 
 			is defined by a start and end index. It can be used like a String (with several
-			restrictions) but only affects the given range of the string it is bount to. \par
+			restrictions) but only affects the given range of the string it is bound to. \par
 			
 			\ingroup String
 	*/

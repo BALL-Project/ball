@@ -90,7 +90,7 @@ namespace BALL
 		receptor_ = receptor.getProtein(0);
 
 		name_ = "Iterative Multi-Greedy Docking";
-		Options* option_category = input_options.getSubcategory("Scoring Function");
+		Options* option_category = input_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 		if (!option_category) option_category = &input_options;
 		parameter_filename_ = option_category->get("filename");
 

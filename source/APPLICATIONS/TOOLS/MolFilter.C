@@ -16,25 +16,24 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("MolFilter", "filter molecule files            ", "0.9", String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input molecule-file", INFILE, true);
-	parpars.registerParameter("min_logP", "minimal logP value", DOUBLE);
-	parpars.registerParameter("max_logP", "maximal logP value", DOUBLE);
-	parpars.registerParameter("min_MW", "minimal molecular weight", DOUBLE);
-	parpars.registerParameter("max_MW", "maximal molecular weight", DOUBLE);
-	parpars.registerParameter("q", "query molecules for similarity searching", INFILE);
-	parpars.registerParameter("min_sim", "minimal average similarity", DOUBLE);
-	parpars.registerParameter("max_sim", "maximal similarity", DOUBLE);
-	parpars.registerParameter("smarts", "SMARTS pattern", STRING);
-	parpars.registerParameter("smarts_file", "SMARTS pattern", INFILE);
+	parpars.registerMandatoryInputFile("i", "input molecule-file");
+	parpars.registerOptionalDoubleParameter("min_logP", "minimal logP value", 0.0);
+	parpars.registerOptionalDoubleParameter("max_logP", "maximal logP value", 20.0);
+	parpars.registerOptionalDoubleParameter("min_MW", "minimal molecular weight", 0.0);
+	parpars.registerOptionalDoubleParameter("max_MW", "maximal molecular weight", 1e10);
+	parpars.registerOptionalInputFile("q", "query molecules for similarity searching");
+	parpars.registerOptionalDoubleParameter("min_sim", "minimal average similarity", 0.0);
+	parpars.registerOptionalDoubleParameter("max_sim", "maximal similarity", 1.0);
+	parpars.registerOptionalStringParameter("smarts", "SMARTS pattern");
+	parpars.registerOptionalInputFile("smarts_file", "SMARTS pattern");
 
-	parpars.registerParameter("o", "output molecule file", OUTFILE);
+	parpars.registerOptionalOutputFile("o", "output molecule file");
 	parpars.registerFlag("quiet", "by quiet, i.e. do not show progress information");
 	parpars.registerFlag("rm", "remove input file when finished");
 	parpars.setSupportedFormats("i","mol2, sdf, drf");
 	parpars.setSupportedFormats("o","mol2, sdf, drf");
 	parpars.setSupportedFormats("q","txt");
 	parpars.setSupportedFormats("smarts_file","txt");
-	parpars.setOutputFormatSource("o","i");
 	String manual = "MolFilter can filter molecules from a molecule input file according to SMARTS expressions, logP, molecular weight, or similarity to query molecule(s).\n\nOutput of this tool is a molecule file that contains all compounds that fulfilled the specified search criteria.";
 	parpars.setToolManual(manual);
 	parpars.parse(argc, argv);

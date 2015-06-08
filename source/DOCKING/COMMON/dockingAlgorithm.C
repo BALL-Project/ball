@@ -111,7 +111,7 @@ namespace BALL
 				if (key == "" || value == "") continue;
 				options_category->set(key, value);
 
-				if (name == "Scoring Function" || name == "IMGDock")
+				if (name == ScoringFunction::SUBCATEGORY_NAME || name == "IMGDock")
 				{
 					Log.level(10)<<key<<" : "<<value<<endl;
 				}

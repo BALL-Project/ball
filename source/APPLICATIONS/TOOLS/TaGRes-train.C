@@ -23,15 +23,15 @@ using namespace BALL;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("TaGResTrain", "Target-specific Grid-Rescoring, training", VERSION, String(__DATE__), "Rescoring");
-	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	par.registerParameter("i", "training compound data set", INFILE, true);
-	par.registerParameter("o", "model file", OUTFILE, true);
-	par.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
-	par.registerParameter("method", "rescoring type: 'Rescoring3D' or 'Rescoring4D', or 'Rescoring1D'", STRING, true);
-	par.registerParameter("function", "scoring function: 'MM' or 'PLP'", STRING);
-	par.registerParameter("exp", "property-tag name containing experimentally determined binding-free-energies", STRING, true, "binding_free_energy");
+	par.registerMandatoryInputFile("rec", "receptor pdb-file");
+	par.registerMandatoryInputFile("rl", "reference-ligand");
+	par.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file");
+	par.registerMandatoryInputFile("i", "training compound data set");
+	par.registerMandatoryOutputFile("o", "model file");
+	par.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
+	par.registerMandatoryStringParameter("method", "rescoring type: 'Rescoring3D' or 'Rescoring4D', or 'Rescoring1D'");
+	par.registerOptionalStringParameter("function", "scoring function: 'MM' or 'PLP'");
+	par.registerMandatoryStringParameter("exp", "property-tag name containing experimentally determined binding-free-energies");
 
 	String man = "This tool generates a model for Target-specific Grid-Rescoring (TaGRes).\nAs input we need:\n\n\
     * a file containing a protonated protein in pdb-format\n\
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	par.registerAdvancedParameters(default_options);
-	par.setSupportedFormats("filename","ini");
+	par.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 	par.parse(argc, argv);
 
 

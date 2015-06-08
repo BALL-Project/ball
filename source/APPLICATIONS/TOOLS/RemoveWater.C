@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
 {
 	// instantiate CommandlineParser object
 	CommandlineParser parpars("RemoveWater", "removes water from PDB file ", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i",  "input pdb file ", INFILE,  true);
-	parpars.registerParameter("o",  "output fasta file", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i",  "input pdb file ");
+	parpars.registerMandatoryOutputFile("o",  "output fasta file");
 
 	// the manual
 	String man = String("This tool removes water from a given pdb file.");

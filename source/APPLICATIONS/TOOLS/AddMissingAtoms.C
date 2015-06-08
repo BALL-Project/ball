@@ -21,12 +21,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("AddMissingAtoms", "add missing atoms to protein structures", VERSION, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input file", INFILE, true);
-	parpars.registerParameter("o", "output file", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input file");
+	parpars.registerMandatoryOutputFile("o", "output file");
 
 	parpars.setSupportedFormats("i","pdb");
 	parpars.setSupportedFormats("o","pdb,drf");
-	parpars.setOutputFormatSource("o","i");
 
 	parpars.registerFlag("opt_hyd", "optimize the positions of hydrogens", false);
 

@@ -116,10 +116,10 @@ void startModelCreation(ModelConfiguration& conf, QSARData* q, String* data_file
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("ModelCreator","create a QSAR model       ","1.1",String(__DATE__), "QuEasy (QSAR)");
-	par.registerParameter("i","input dat-file",INFILE,true);
-	par.registerParameter("o","output model file",OUTFILE,true);
-	par.registerParameter("type","model type",STRING,true);
-	par.registerParameter("kernel","kernel type (in case of kernel-model)",STRING);
+	par.registerMandatoryInputFile("i", "input dat-file");
+	par.registerMandatoryOutputFile("o", "output model file");
+	par.registerMandatoryStringParameter("type", "model type");
+	par.registerOptionalStringParameter("kernel", "kernel type (in case of kernel-model)");
 	Registry reg;
 	list<String> restr;
 	for(RegistryEntryIterator it=reg.beginEntry(); it!=reg.endEntry(); it++)

@@ -21,11 +21,12 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("GridBuilder", "create score-grids for docking", VERSION, String(__DATE__), "Docking");
-	parpars.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	parpars.registerParameter("rl", "reference-ligand", INFILE, true);
-	parpars.registerParameter("pocket", "configuration file", INFILE);
-	parpars.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
-	parpars.registerParameter("grd", "ScoreGrid file", OUTFILE, true);
+	parpars.registerMandatoryInputFile("rec", "receptor pdb-file");
+	parpars.registerMandatoryInputFile("rl", "reference-ligand");
+	parpars.registerMandatoryOutputFile("grd", "ScoreGrid file");
+	parpars.registerOptionalInputFile("pocket", "configuration file");
+	parpars.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
+
 	String man = "This tool precalculates a score-grid for a binding pocket of a given receptor.\n\nAs input we need:\n\
     * a file containing a protonated protein in pdb-format\n\
     * a file containing a reference ligand.\n\
@@ -41,11 +42,11 @@ int main(int argc, char* argv[])
 
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
-	Options* scoring_options = default_options.getSubcategory("Scoring Function");
+	Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	scoring_options->setDefault("atom_types", "C, H, N, O, P, S, Cl, F, I");
 	scoring_options->addParameterDescription("atom_types", "elements for which grids should be precalculated", STRING);
 	parpars.registerAdvancedParameters(default_options);
-	parpars.setSupportedFormats("filename","ini");
+	parpars.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 
 	parpars.parse(argc, argv);
 
@@ -82,7 +83,7 @@ int main(int argc, char* argv[])
 	{
 		DockingAlgorithm::readOptionFile(parpars.get("pocket"), option, constraints, ref_ligand);
 	}
-	Options* option_category = option.getSubcategory("Scoring Function");
+	Options* option_category = option.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	if (!option_category) option_category = &option;
 	String scoring_type = option_category->setDefault("scoring_type", "GridedMM");
 	String grid_file = parpars.get("grd");

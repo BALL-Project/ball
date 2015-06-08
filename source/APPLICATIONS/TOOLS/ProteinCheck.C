@@ -821,8 +821,8 @@ void generateReport(Protein& protein, String inputfilename, String outputfile)
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("ProteinCheck", "quality check for proteins structures", VERSION, String(__DATE__), "Checks and evaluations");
-	parpars.registerParameter("i", "input pdb-file", INFILE, true);
-	parpars.registerParameter("o", "pdf-file for quality report", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input pdb-file");
+	parpars.registerMandatoryOutputFile("o", "pdf-file for quality report");
 	parpars.registerFlag("bc", "ignore broken chains");
 	String man = "Check a given protein structure for the following errors:\n\
     * bond-lengths may not be completely senseless (i.e. <0.7 or >2.5 Angstroem)\n\

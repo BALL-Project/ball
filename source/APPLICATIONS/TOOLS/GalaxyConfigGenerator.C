@@ -470,10 +470,6 @@ int main(int argc, char* argv[])
 		if (formats == "") formats = "data";
 		if (has_mol2 && has_sdf && has_drf) formats = "mol2/sdf/drf";
 		xml.writeAttribute("format",formats.c_str());
-		if (desc.output_format_source != "")
-		{
-			xml.writeAttribute("format_source", desc.output_format_source.c_str());
-		}
 
 		if (tool_name == "Converter" && desc.name == "o")
 		{

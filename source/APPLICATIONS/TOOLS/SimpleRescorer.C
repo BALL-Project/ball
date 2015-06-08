@@ -23,13 +23,13 @@ using namespace BALL;
 int main(int argc, char* argv[])
 {
 	CommandlineParser par("SimpleRescorer", "rescore docking results", VERSION, String(__DATE__), "Rescoring");
-	par.registerParameter("rec", "receptor pdb-file", INFILE, true);
-	par.registerParameter("rl", "reference-ligand", INFILE, true);
-	par.registerParameter(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file", INFILE);
-	par.registerParameter("i", "compounds to be rescored", INFILE, true);
-	par.registerParameter("o", "rescored compounds", OUTFILE, true);
-	par.registerParameter("write_ini", "write ini-file w/ default parameters (and don't do anything else)", OUTFILE);
-	par.registerParameter("function", "scoring function: 'MM', 'PLP' or 'PB'", STRING);
+	par.registerMandatoryInputFile("rec", "receptor pdb-file");
+	par.registerMandatoryInputFile("rl", "reference-ligand");
+	par.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "configuration file");
+	par.registerMandatoryInputFile("i", "compounds to be rescored");
+	par.registerMandatoryOutputFile("o", "rescored compounds");
+	par.registerOptionalOutputFile("write_ini", "write ini-file w/ default parameters (and don't do anything else)");
+	par.registerOptionalStringParameter("function", "scoring function: 'MM', 'PLP' or 'PB'");
 	par.registerFlag("rm", "remove input file when finished");
 
 	String man = "This tool rescores docking output poses.\nA scoring function is used to evaluate the binding-free-energy of each compound. This is similar to the scoring done during docking; details depend on the config-file (if one is specified).\n\nAs input we need:\n\
@@ -48,11 +48,10 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("i",MolFileFactory::getSupportedFormats());
 	par.setSupportedFormats("o","mol2,sdf,drf");
 	par.setSupportedFormats("write_ini","ini");
-	par.setOutputFormatSource("o","i");
 	Options default_options;
 	ScoringFunction::getDefaultOptions(default_options);
 	par.registerAdvancedParameters(default_options);
-	par.setSupportedFormats("filename","ini");
+	par.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 	par.parse(argc, argv);
 
 

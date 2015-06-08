@@ -1,9 +1,10 @@
 #include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 #include <BALL/KERNEL/bond.h>
-
+#include <BALL/KERNEL/atomContainer.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/forEach.h>
+#include <map>
 #include <vector>
-#include <stack>
-#include <set>
 
 namespace BALL
 {
@@ -21,97 +22,84 @@ namespace BALL
 		return true;
 	}
 
+	
+	/// Computes processor intern "components_", which contains the molecules
+	/// separate molecules
 	Processor::Result ConnectedComponentsProcessor::operator () (AtomContainer& ac)
 	{
-		// for faster access, store all pointers to atoms
-		std::vector<Atom*> atom_vector(ac.countAtoms());
-		Size current_index = 0;
+		// if possible one should try to refactor this, so that we can use the
+		// disjoint set without having to rely on the mapping. The mappings take
+		// about 30-50% of the whole computation time in this method!!!
+		const int num_atoms = ac.countAtoms();
+		// mapping: atom to int, and int to atom:
+		Atom* i_to_atm[num_atoms];
+		std::map< Atom*, int> atm_to_i; // std::map was most efficient, compared with hashmaps
+		
+		// create empty disjoint set:
+		std::vector <int> atm_rank(num_atoms);
+		std::vector <int> atm_parent(num_atoms);
+		
+		DisjointSet dset(&atm_rank[0], &atm_parent[0]);
 
-		for (AtomIterator at_it = ac.beginAtom(); +at_it; ++at_it, ++current_index)
+		//------------------------------------------------
+		// Populate the dset with elements and
+		// create a mapping from atom pointer to vertex (for adding edges later)
+		// and from int to atom-pointer
+		AtomIterator atom_it;
+		int i1 = 0;
+		BALL_FOREACH_ATOM(ac, atom_it)
 		{
-			at_it->setProperty("__CC_CONSIDER_ATOM", true);
-			at_it->clearProperty("BALL_CC_INDEX");
-			atom_vector[current_index] = &(*at_it);
+			dset.make_set(i1); // enter singleton sets for every atom
+
+			// create the necessary mappings:
+			atm_to_i[&*atom_it] = i1;
+			i_to_atm[i1] = (&*atom_it);
+			
+			i1++;
 		}
 
-		// for each atom, the component_index contains the index of its 
-		// connected component
-		vector<Index> component_index(atom_vector.size(), -1);
-
-		// now calculate all connected components in the graph
-		// formed by atoms and bonds of the system
-
-		// index of the current connected component
-		current_index = 0;
-
-		AtomIterator start_atom = ac.beginAtom();
-		// search components until all atoms have been considered
-		while (+start_atom)
+		//------------------------------------------------
+		// Add edges from the atom container (ac) to the disjoint set
+		// (iterate over all unique bonds)
+		int v1, v2;
+		Atom::BondIterator bond_iter;
+		BALL_FOREACH_INTRABOND(ac, atom_it, bond_iter)
 		{
-			// jump over all atoms that are already assigned a component
-			while (+start_atom && start_atom->hasProperty("BALL_CC_INDEX"))
-				++start_atom;
+			v1 = atm_to_i[bond_iter->getFirstAtom()];
+			v2 = atm_to_i[bond_iter->getSecondAtom()];
 
-			if (+start_atom)
-			{
-				// create a new component
-				components_.push_back(Component());
+			dset.union_set(v1, v2); // union the elements that are connected
+		}
 
-				// create a stack containing all atoms to be examined for this component
-				std::stack<Atom*> atom_stack;
-
-				// our start atom is the first to be considered and is marked, too
-				atom_stack.push(&(*start_atom));
-				start_atom->setProperty("BALL_CC_INDEX", current_index);
-				components_[current_index].push_back(&(*start_atom));
-
-				// never examine this atom again as start atom
-				++start_atom;
-
-				// calculate the connected component
-				while (!atom_stack.empty())
-				{
-					// check all bonds of this atom and remove it from the stack
-					Atom* current_atom = atom_stack.top();
-					atom_stack.pop();
-
-					Atom::BondIterator bond_it = current_atom->beginBond();
-					for (; +bond_it; ++bond_it)
-					{
-						// add the atom if it is not marked yet
-						// NOTE: if the bond points outside the current atom container,
-						//       e.g., if we are applied to a Residue and have a bond to
-						//       the next one, we ignore it here, so that we do not step
-						//			 out of bounds of ac
-						Atom* partner = bond_it->getPartner(*current_atom);
-						if (partner->hasProperty("__CC_CONSIDER_ATOM")) // otherwise, it points outside ac
-						{
-							if (!partner->hasProperty("BALL_CC_INDEX"))
-							{
-								// remember this atom in the stack and store its component index
-								atom_stack.push(partner);
-								partner->setProperty("BALL_CC_INDEX", current_index);
-								components_[current_index].push_back(partner);
-							}
-						}
-					}
-				}
-
-				// done with this component, increase the component counter
-				++current_index;
+		//------------------------------------------------
+		// Iterate through the component indices
+		// split according to the ds-information:
+		std::vector <int> pnames (num_atoms, -1); // mapps representative parents
+																							// to component numbers
+		int num = 0;
+		int par = -1;
+		int idx = -1;
+		for (int i = 0; i < num_atoms; i++)
+		{
+			par = dset.find_set(i); // get parent of element 'i'
+			idx = pnames[par];
+			if (idx != -1)
+			{ // add element to existing component
+				components_[idx].push_back(i_to_atm[i]);
+			}
+			else
+			{ // create new component for current element:
+				Component tmp;
+				tmp.push_back(i_to_atm[i]);
+				components_.push_back(tmp);
+				pnames[par] = num;
+				num++;
 			}
 		}
-
-		// clear our helper property
-		for (AtomIterator at_it = ac.beginAtom(); +at_it; ++at_it)
-			at_it->clearProperty("__CC_CONSIDER_ATOM");
-
-		// We always search for connected components in the uppermost
-		// AtomContainer we are given. So we are done now, since the
-		// connected components of all children have already been
-		// computed.
+		
 		return Processor::BREAK;
-	}
+	}// END OF PROCESSOR
+
 
 	bool ConnectedComponentsProcessor::finish()
 	{
@@ -122,59 +110,69 @@ namespace BALL
 	{
 		components_.clear();
 	}
-
+	
 	Size ConnectedComponentsProcessor::getNumberOfConnectedComponents()
 	{
 		return components_.size();
 	}
-
-  ConnectedComponentsProcessor::ComponentVector& ConnectedComponentsProcessor::getComponents()
+	
+	void ConnectedComponentsProcessor::getComponents(ComponentVector &comp)
 	{
-		return components_;
+		comp.assign(components_.begin(), components_.end());
 	}
+	
 
-	const ConnectedComponentsProcessor::ComponentVector& ConnectedComponentsProcessor::getComponents() const
+	/// Return the component with most atoms
+	void ConnectedComponentsProcessor::getLargestComponent(Molecule& result)
 	{
-		return components_;
-	}
-
-	Size ConnectedComponentsProcessor::splitIntoMolecules(System& to_split)
-	{
-		// first, compute the connected components
-		to_split.apply(*this);
-
-		// these will be removed later...
-		std::set<Molecule*> to_delete;
-
-		// for each connected component...
-		for (Size current_component_index = 0; 
-						  current_component_index < components_.size(); 
-							++current_component_index)
+		int i, pos = 0, max = 0;
+		for(i = 0; i< components_.size(); i++)
 		{
-			Component& current_component = components_[current_component_index];
-
-			// insert a new molecule into the system
-			Molecule *current_mol = new Molecule;
-			to_split.insert(*current_mol);
-
-			current_mol->setName(to_split.getName()+"_comp_"+String(current_component_index));
-
-			for (Size current_atom_index = 0;
-								current_atom_index < current_component.size();
-								++current_atom_index)
+			int tmp = components_[i].size() ;
+			if (tmp > max)
 			{
-				to_delete.insert(current_component[current_atom_index]->getMolecule());
-				current_mol->insert(*(current_component[current_atom_index]));
+				max = tmp;
+				pos = i;
 			}
 		}
-
-		// now clean up a little...
-		std::set<Molecule*>::iterator del_it = to_delete.begin();
-		for (; del_it != to_delete.end(); ++del_it)
+		
+		for ( int i = 0; i < components_[pos].size(); i++)
 		{
-			delete *del_it;
+			result.insert( *(components_[pos][i]) );
 		}
-
-		return getNumberOfConnectedComponents();
 	}
+	
+
+	void ConnectedComponentsProcessor::getMinAtomsComponents(MolVec& result, const int& min)
+	{
+		for(int i = 0; i < components_.size(); i++)
+		{
+			int siz = components_[i].size();
+			if (siz >= min)
+			{
+				Molecule tmp = Molecule();
+				
+				for(int k = 0; k < siz; k++)
+				{
+					tmp.insert( *(components_[i][k]) );
+				}
+				result.push_back(tmp);
+			}
+		}
+	}
+	
+	void ConnectedComponentsProcessor::getAllComponents(MolVec& results)
+	{
+		for(int i = 0; i < components_.size(); i++)
+		{
+			Molecule tmp = Molecule();
+			
+			for(int k = 0; k < components_[i].size(); k++)
+			{
+				tmp.insert( *(components_[i][k]) );
+			}
+			results.push_back(tmp);
+		}
+	}
+
 }
