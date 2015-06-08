@@ -30,7 +30,6 @@ namespace BALL
 
 			public:
 				InteractionModeManager(Scene* scene);
-				void init();
 
 				QString getCurrentModeName() const;
 
@@ -62,6 +61,7 @@ namespace BALL
 				Scene* scene_;
 				bool need_update_;
 
+				void init_();
 				bool handleStereoKeyPress_(QKeyEvent* evt);
 		};
 	}

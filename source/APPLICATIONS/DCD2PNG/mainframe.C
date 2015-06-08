@@ -26,6 +26,7 @@ namespace BALL
 			display_properties_(0),
 			molecular_structure_(0)
 	{
+		registerThis();
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Mainframe " << this << std::endl;
 		#endif

@@ -66,6 +66,8 @@ namespace BALL
 			qload_action_(0),
 			qsave_action_(0)
 	{
+		registerThis();
+
 		#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new Mainframe " << this << std::endl;
 		#endif

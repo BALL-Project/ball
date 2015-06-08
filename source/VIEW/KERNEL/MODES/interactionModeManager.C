@@ -19,9 +19,10 @@ namespace BALL
 			  last_mode_(0),
 			  scene_(scene)
 		{
+			init_();
 		}
 
-		void InteractionModeManager::init()
+		void InteractionModeManager::init_()
 		{
 			actions_ = new QActionGroup(this);
 			//Rotate mode is the default mode

@@ -4193,8 +4193,6 @@ namespace BALL
 
 		void Scene::addToolBarEntries(QToolBar* tb)
 		{
-			mode_manager_.init();
-
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
 				toolbar_view_controls_->addActions(toolbar_actions_view_controls_);
