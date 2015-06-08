@@ -132,7 +132,6 @@ namespace BALL
 				complement_selection_action_(0),
 				clear_selection_action_(0),
 				open_action_(0),
-				save_project_action_(0),
 				preferences_action_(0),
 				delete_action_(0)
 		{
@@ -310,7 +309,6 @@ namespace BALL
 				complement_selection_action_(0),
 				clear_selection_action_(0),
 				open_action_(0),
-				save_project_action_(0),
 				preferences_action_(0),
 				delete_action_(0)
 		{
@@ -624,10 +622,6 @@ namespace BALL
 			}
 
 			if (preferences_action_ == 0) return;
-
-			save_project_action_->setEnabled(!composites_locked_);
-			qload_action_->setEnabled(!composites_locked_);
-			qsave_action_->setEnabled(!composites_locked_);
 		}
 
 
