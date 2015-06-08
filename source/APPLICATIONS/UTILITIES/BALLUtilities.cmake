@@ -12,7 +12,6 @@ SET(EXECUTABLES_LIST
 	atomtyper
 	calculate_RMSD
 	clip_protein_around_ligand
-	compute_connected_components
 	compute_docking_RMSD
 	dcd2dcd
 	export_fragment

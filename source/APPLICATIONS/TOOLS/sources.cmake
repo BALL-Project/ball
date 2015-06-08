@@ -55,7 +55,6 @@ SET(EXECUTABLES_LIST
 	SimpleRescorer
 	SLICK
 	SpatialConstraintDefiner
-	Split2ConnectedComponents
 	TaGRes
 	TaGRes-train
 	TrajectoryFile2PDBSplitter
