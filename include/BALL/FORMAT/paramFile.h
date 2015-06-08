@@ -80,10 +80,10 @@ namespace BALL
 	{
 		public:
 			/** From category, parameter_name builds [category]:[parameter_name] */
-			static const String buildNestedParameterName(const String& category, const String& parameter_name);
+			static String buildNestedParameterName(const String& category, const String& parameter_name);
 
 			/** Returns [category, parameter] from [category]:[parameter] */
-			static const Size parseNestedParameterName(const String& parameter_name, String string_array[]);
+			static Size parseNestedParameterName(const String& parameter_name, String string_array[]);
 	};
 
 	/** Class for storing and retrieving parameters (e.g. tool-parameters) to an xml-based file */

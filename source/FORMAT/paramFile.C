@@ -597,13 +597,13 @@ std::set<String> ParamFile::getTags(QXmlStreamAttributes& attributes)
 }
 
 
-const String ParameterUtils::buildNestedParameterName(const String& category, const String& parameter_name)
+String ParameterUtils::buildNestedParameterName(const String& category, const String& parameter_name)
 {
 	return category + ":" + parameter_name;
 }
 
 
-const Size ParameterUtils::parseNestedParameterName(const String& parameter_name, String string_array[])
+Size ParameterUtils::parseNestedParameterName(const String& parameter_name, String string_array[])
 {
 	return parameter_name.split(string_array, 2, ":");
 }
