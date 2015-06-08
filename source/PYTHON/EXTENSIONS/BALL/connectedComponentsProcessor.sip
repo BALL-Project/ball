@@ -41,5 +41,6 @@ class ConnectedComponentsProcessor
 		//const ComponentVector& getComponents() const;
 
 		void getAllComponents(vector<Molecule>& results);
-		
+		void getMinAtomsComponents(vector<Molecule>& result, const int &min);
+		void getLargestComponent(Molecule& result);
 };
