@@ -40,6 +40,6 @@ class ConnectedComponentsProcessor
 		//ComponentVector& getComponents();
 		//const ComponentVector& getComponents() const;
 
-		Size splitIntoMolecules(System&);
+		void getAllComponents(vector<Molecule>& results);
 		
 };
