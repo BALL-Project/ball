@@ -50,6 +50,7 @@ SET(EXECUTABLES_LIST
 	ResidueChecker
 	RMSDCalculator
 	ScoreAnalyzer
+	SeparateMolecules
 	SideChainGridBuilder
 	SimilarityAnalyzer
 	SimpleRescorer
