@@ -19,9 +19,9 @@ int main(int argc, char* argv[])
 	my_timer.start(); //#DEBUG
 	
 	CommandlineParser parpars("combiLib 3D structure generation", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "combiLib as *.combi", INFILE, false);
-	parpars.registerParameter("o", "3D molecules in SDFormat", OUTFILE, true);
-	parpars.registerParameter("c", "configuration file in *.conf", INFILE, false);
+	parpars.registerMandatoryInputFile("i", "combiLib as *.combi");
+	parpars.registerMandatoryOutputFile("o", "3D molecules in SDFormat");
+	parpars.registerOptionalInputFile("c", "configuration file in *.conf");
 	
 	parpars.registerFlag("w", "write results to out file"); //#DEBUG
 	parpars.registerFlag("u", "use structure re-use"); //#DEBUG
@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
 	parpars.setSupportedFormats("i","combi");
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setSupportedFormats("c","conf");
-	parpars.setOutputFormatSource("i","o");
+//	parpars.setOutputFormatSource("i","o");
 
 	String manual = 
 			"Generate a valid (not optimized) 3D structure for structures of an "

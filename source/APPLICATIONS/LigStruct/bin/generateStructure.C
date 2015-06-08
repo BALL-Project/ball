@@ -13,15 +13,14 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("StructurePrediction", " generate 3D coordinates for a query", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "query molecule as SDF", INFILE, true);
-	parpars.registerParameter("o", "output molecule with 3D coordinates SDF", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "query molecule as SDF");
+	parpars.registerMandatoryOutputFile("o", "output molecule with 3D coordinates SDF");
 	
-	parpars.registerParameter("c", "location of conf file", INFILE, false);
+	parpars.registerOptionalInputFile("c", "location of conf file");
 	parpars.setSupportedFormats("c","conf");
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","i");
 
 	String manual = "...currently only predicting structures that consist of rigid fragments...";
 	parpars.setToolManual(manual);

@@ -197,10 +197,10 @@ private:
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Quality Checker", "Report quality of structures", 0.1, String(__DATE__), "Evaluation");
-	parpars.registerParameter("i", "input SDF to be assessed ", STRING, true);
-	parpars.registerParameter("o", "output file for the worst sturcures if '-n' was set", STRING, false);
-	parpars.registerParameter("n", "number of worst structures to collect", STRING, false);
-	parpars.registerParameter("d", "distribution precision, defaults to 0.1", STRING, false);
+	parpars.registerMandatoryInputFile("i", "input SDF to be assessed ");
+	parpars.registerOptionalInputFile("o", "output file for the worst sturcures if '-n' was set");
+	parpars.registerOptionalIntegerParameter("n", "number of worst structures to collect");
+	parpars.registerOptionalDoubleParameter("d", "distribution precision, defaults to 0.1");
 
 	parpars.setToolManual("Checks how well the found covalent bond lengths and "
 												"vdw-distances agree with known standard parameters");

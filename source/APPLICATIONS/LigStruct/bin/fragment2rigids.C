@@ -22,8 +22,8 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Fragment to rigids", "cut a molecule along its rotable bonds, generating fragments", 0.3, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input SDF", INFILE, true);
-	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input SDF");
+	parpars.registerMandatoryOutputFile("o", "output SDF");
 	
 	parpars.registerFlag("sdf", "output the lib in sdf AND lineBased format");
 

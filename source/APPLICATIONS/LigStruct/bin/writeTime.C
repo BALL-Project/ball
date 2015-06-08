@@ -15,12 +15,11 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Test time to write", " ", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input", INFILE, true);
-	parpars.registerParameter("o", "output ", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input");
+	parpars.registerMandatoryOutputFile("o", "output ");
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","i");
 
 	String manual = "measure time needed to write a AtomContainer to SDF";
 	parpars.setToolManual(manual);

@@ -17,12 +17,11 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Remove Duplicates", " keep only unique molecules", 
 														0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input SDF", INFILE, true);
-	parpars.registerParameter("o", "output SDF", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input SDF");
+	parpars.registerMandatoryOutputFile("o", "output SDF");
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","i");
 
 	String manual = "Filter a SDFile to contain only structures of unique "
 									"topology. The first representant of a cartain topology "

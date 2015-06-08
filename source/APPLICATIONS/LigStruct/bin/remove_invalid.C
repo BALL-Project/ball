@@ -90,14 +90,13 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Remove Invalid", " filter out invalid molecules", 
 														0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "general sdfile", INFILE, true);
-	parpars.registerParameter("o", "single output SDF", OUTFILE, true);
-	parpars.registerParameter("ugly", "structures you do not like", OUTFILE, false);
+	parpars.registerMandatoryInputFile("i", "general sdfile");
+	parpars.registerMandatoryOutputFile("o", "single output SDF");
+	parpars.registerOptionalOutputFile("ugly", "structures you do not like");
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
 	parpars.setSupportedFormats("ugly","sdf");
-	parpars.setOutputFormatSource("o","i");
 
 	String manual = "From a given input multi SDFile, all structures that have "
 									"severe clashes or containing atoms of unkonwn elements are "

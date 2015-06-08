@@ -14,9 +14,9 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("CheckFragmenter", " check if structures could be generated", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "query libary as SDF", INFILE, true);
+	parpars.registerMandatoryInputFile("i", "query libary as SDF");
 	
-	parpars.registerParameter("c", "location of conf file", INFILE, false);
+	parpars.registerOptionalInputFile("c", "location of conf file");
 	parpars.setSupportedFormats("c","conf");
 	
 	parpars.setSupportedFormats("i","sdf");

@@ -13,14 +13,13 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Union Molecule Lists", " according to their names", 0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("small", "small mol list", INFILE, true);
-	parpars.registerParameter("large", "large mol list", INFILE, true);
-	parpars.registerParameter("o", "output mol", OUTFILE, true);
+	parpars.registerMandatoryInputFile("small", "small mol list");
+	parpars.registerMandatoryInputFile("large", "large mol list");
+	parpars.registerMandatoryOutputFile("o", "output mol");
 	
 	parpars.setSupportedFormats("small","sdf");
 	parpars.setSupportedFormats("large","sdf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","small");
 
 	String manual = "Keeps the common set of both input structures according to their names";
 	parpars.setToolManual(manual);

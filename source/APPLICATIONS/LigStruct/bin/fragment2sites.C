@@ -21,9 +21,9 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Fragment to sites", " create site templates", 0.5, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "input SDF", INFILE, true);
-	parpars.registerParameter("oS", "output SDF with site templates", OUTFILE, true);
-	parpars.registerParameter("oB", "output bond lengths", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "input SDF");
+	parpars.registerMandatoryOutputFile("oS", "output SDF with site templates");
+	parpars.registerMandatoryOutputFile("oB", "output bond lengths");
 
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("oS","sdf");

@@ -30,12 +30,11 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Remove Metal", " keep only organic molecules", 
 														0.1, String(__DATE__), "Preparation");
-	parpars.registerParameter("i", "sdfile to be filtered", INFILE, true);
-	parpars.registerParameter("o", "organic molecules outputSDF", OUTFILE, true);
+	parpars.registerMandatoryInputFile("i", "sdfile to be filtered");
+	parpars.registerMandatoryOutputFile("o", "organic molecules outputSDF");
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setOutputFormatSource("o","i");
 
 	String manual = "Selects only molecules conaining atoms of the organic set. "
 									"In this case that is: "
