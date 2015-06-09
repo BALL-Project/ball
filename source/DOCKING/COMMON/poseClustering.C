@@ -1594,6 +1594,40 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		boost::write_graphviz(out, cluster_tree_, ClusterTreeWriter_(&cluster_tree_));
 	}
 
+	void PoseClustering::exportToJSONDFS_(ClusterTreeNode const& current, String& result)
+	{
+		// what kind of node is this?
+		if (out_degree(current, cluster_tree_) == 0)
+		{
+			// we are in a leaf => simplified formatting, terminate recursion
+			result += String("{ \"name\": \"") + String(*(cluster_tree_[current].poses.begin())) + "\" }\n";
+		}
+		else
+		{
+			result += "{\n";
+			result += String("\t\"name\": \"") + String(cluster_tree_[current].merged_at) + "\",\n";
+			result += "\t\"children\": [\n";
+
+			BGL_FORALL_ADJ(current, child, cluster_tree_, ClusterTree)
+			{
+				exportToJSONDFS_(child, result);
+				result += ",";
+			}
+
+			result.back() = '\n';
+			result += "\t]\n";
+			result += "}\n";
+		}
+	}
+
+	void PoseClustering::exportClusterTreeToJSON(std::ostream& out)
+	{
+		String result = "";
+		exportToJSONDFS_(cluster_tree_[boost::graph_bundle], result);
+
+		out << result;
+	}
+
 	void PoseClustering::serializeWardClusterTree(std::ostream& out, bool binary)
 	{
 		if (binary)
