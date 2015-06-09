@@ -386,12 +386,10 @@ namespace BALL
 			int number = 0;
 
 			#ifdef BALL_VIEW_DEBUG
-					
 			if (strlen(char_ptr) > 3)
 			{
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__i, strlen(char_ptr));
+				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, strlen(char_ptr));
 			}
-				
 			#endif
 
 			if (strlen(char_ptr) == 2)

@@ -27,7 +27,7 @@ namespace BALL
 		SimpleBox::~SimpleBox()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error << "Destructing object " << (void *)this 
+				Log.error() << "Destructing object " << (void *)this
 									<< " of class " << RTTI::getName<SimpleBox>() << std::endl;
 			#endif 
 		}

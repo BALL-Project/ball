@@ -31,7 +31,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "Destructing object " << (void *)this 
-										<< " of class BALLaxyInterfacePreferences" << endl;
+										<< " of class BALLaxyInterfacePreferences" << std::endl;
 			#endif 
 		}
 

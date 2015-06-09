@@ -68,7 +68,7 @@ TestFramework::TestFramework(QWidget *parent, const char *name)
 TestFramework::~TestFramework()
 {
 	#ifdef BALL_VIEW_DEBUG
-		Log.error() << "Destructing TestFramework " <<this << endl;
+		Log.error() << "Destructing TestFramework " << this << std::endl;
 	#endif 
 }
 

@@ -354,7 +354,7 @@ namespace BALL
 					
 				if ((length != 6) && (length != 7))
 				{
-					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, length);
 				}
 								
 			#endif
