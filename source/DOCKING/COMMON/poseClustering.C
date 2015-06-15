@@ -2340,7 +2340,6 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	{
 		// Please note, for efficiency reasons this code is copied 
 		// from function convertTransformations2Snaphots() below
-
 		if (i < (Index) poses_.size())
 		{
 			// compute the translation vector to the origin
@@ -2501,7 +2500,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	{
 		out << "++++ cluster " << i << " score " << getClusterScore(i) << " members "  << clusters_[i].size();
 
-		if (cluster_representatives_.size() <= i)
+		if (i < cluster_representatives_.size())
 				out  << " rep " << cluster_representatives_[i];
 	  out << " ++++" << endl;
 
