@@ -48,9 +48,9 @@ CHECK( applied on empty System )
 	
 	TEST_EQUAL(ccp.getNumberOfConnectedComponents(), 0)
 	
-	ccp.splitIntoMolecules(sys);
+	ConnectedComponentsProcessor::ComponentVector components;
+	ccp.getComponents(components);
 	
-	ConnectedComponentsProcessor::ComponentVector components = ccp.getComponents();
 	TEST_EQUAL(components.size(), 0)
 
 RESULT
@@ -75,11 +75,14 @@ CHECK( splitIntoMolecules() )
 	
 	sys.apply(ccp);
 
-	ccp.splitIntoMolecules(sys);
-
-	for (MoleculeIterator m_it = sys.beginMolecule(); +m_it; ++m_it)
+	ConnectedComponentsProcessor::MolVec molecules;
+	ccp.getAllComponents(molecules);
+	
+	for (
+	ConnectedComponentsProcessor::MolVec::iterator m_it = molecules.begin(); 
+	m_it != molecules.end(); ++m_it)
 	{
-		TEST_EQUAL(m_it->countAtoms(), 10)
+		TEST_EQUAL( (*m_it).countAtoms(), 10)
 	}
 RESULT
 
@@ -90,17 +93,27 @@ CHECK( splitIntoMolecules() twice )
 	mol >> sys;
 
 	sys.apply(ccp);
-
-	ccp.splitIntoMolecules(sys);
-
-	sys.apply(ccp);
-
-	ccp.splitIntoMolecules(sys);
-
-
-	for (MoleculeIterator m_it = sys.beginMolecule(); +m_it; ++m_it)
+	
+	ConnectedComponentsProcessor::MolVec molecules0;
+	ccp.getAllComponents(molecules0);
+	System sys2;
+	
+	for (
+	ConnectedComponentsProcessor::MolVec::iterator m_it = molecules0.begin(); 
+	m_it != molecules0.end(); ++m_it)
 	{
-		TEST_EQUAL(m_it->countAtoms(), 10)
+		sys2.insert(*m_it);
+	}
+	
+	sys2.apply(ccp);
+
+	ConnectedComponentsProcessor::MolVec molecules1;
+	ccp.getAllComponents(molecules1);
+	for (
+	ConnectedComponentsProcessor::MolVec::iterator m_it = molecules1.begin(); 
+	m_it != molecules1.end(); ++m_it)
+	{
+		TEST_EQUAL( (*m_it).countAtoms(), 10)
 	}
 RESULT
 
@@ -115,8 +128,9 @@ CHECK( getComponents() )
 	
 	sys.apply(ccp);
 
-	ccp.splitIntoMolecules(sys);
-	ConnectedComponentsProcessor::ComponentVector components = ccp.getComponents();
+	ConnectedComponentsProcessor::ComponentVector components;
+	ccp.getComponents(components);
+	
 	TEST_EQUAL(components.size(), 2)
 	TEST_EQUAL(components[0].size(), 10)
 
