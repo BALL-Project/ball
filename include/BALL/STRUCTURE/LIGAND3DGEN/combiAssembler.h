@@ -32,7 +32,6 @@ private:
 	ConnectionResolver _cresolv;
 
 	std::list< RFragment* >            _current_combination;
-	std::list< std::pair<int*, int*> > _work_trace;
 	void _combineRecur(BALL::SDFile& handle);
 	
 	void newSetForCurrentCombination();

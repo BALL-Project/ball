@@ -68,21 +68,9 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 	//2.) check for end-case:
 	if( !ra )
 	{
-		if(CombiAssembler::write_output) //#DEBUG
-			//write out the current work mol
-			handle << * _work_mol->molecule;
-		
-		//#DEBUG start:
-//		cout<<">>> S-"<<_work_mol->curr_set<<" ";
-//		for(list<pair<int*,int*>>::iterator it = _work_trace.begin(); 
-//				it != _work_trace.end(); ++it)
-//		{
-//			cout<<"F"<<*it->first<<"-"<<*it->second<<" ";
-//		}
-//		cout<<endl;
-		//#DEBUG end!
-		
-
+		//write out the current work mol
+		handle << * _work_mol->molecule;
+			
 		return;
 	}
 	//3.) recursion case:
@@ -122,11 +110,6 @@ void CombiAssembler::_combineRecur(SDFile &handle)
 			//3.4) recurr deeper
 			_combineRecur( handle );
 			
-			//#DEBUG
-			if(_work_trace.size())
-				_work_trace.pop_back();
-			//#DEBUG
-			
 			//3.5) delete bond, and remove inserted molecule
 			bnd->destroy();
 			_work_mol->molecule->remove( *tmp->molecule );
@@ -157,107 +140,95 @@ void CombiAssembler::newSetForCurrentCombination()
 
 void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 {
-	if(CombiAssembler::apply_reuse) //#DEBUG - start0
-	{
-		int acc_id = acceptor.parent->curr_set;
-		int donor_id = donor.curr_set;
-		
-		/*
+	int acc_id = acceptor.parent->curr_set;
+	int donor_id = donor.curr_set;
+	
+	/*
 		 * 1.) the acceptor and donor do have a conformation
 		 */
-		if( acc_id != -1 && donor_id != -1)
+	if( acc_id != -1 && donor_id != -1)
+	{
+		int compatible_donor_set = acceptor.getCompatibleSet(donor);
+		
+		// 1.1) known Fragments are compatible!
+		if ( compatible_donor_set != -1)
 		{
-			int compatible_donor_set = acceptor.getCompatibleSet(donor);
+			total_reuse++; //#DEBUG
 			
-			// 1.1) known Fragments are compatible!
-			if ( compatible_donor_set != -1)
-			{
-				total_reuse++; //#DEBUG
-				
-				donor.setCoordsTo( compatible_donor_set ); // to the fitting coordinates
-				
-				_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
-				int c_cnt = _cresolv.detect();
-				
-				// if we need to resolve a clash...
-				if ( c_cnt != 0 )
-				{
-					pair<int,bool> res = _cresolv.resolve();
-					
-					// resolving the clash, led to a new coordinate set:
-					if( res.second )
-					{
-						newSetForCurrentCombination();
-						
-						donor.newSetFromCurrent();
-						
-						acceptor.addParnter(donor);
-					}
-					
-					// only the fragment was changed
-					else
-					{
-						donor.newSetFromCurrent();
-						acceptor.addParnter(donor);
-					}
-				}
-			}
+			donor.setCoordsTo( compatible_donor_set ); // to the fitting coordinates
 			
-			// 1.2) acceptor and donor have one or more sets, BUT donor is not 
-			//      compatible with given acceptor!
-			// same as case 2.)
-			else
+			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
+			int c_cnt = _cresolv.detect();
+			
+			// if we need to resolve a clash...
+			if ( c_cnt != 0 )
 			{
-				if(_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst))
+				pair<int,bool> res = _cresolv.resolve();
+				
+				// resolving the clash, led to a new coordinate set:
+				if( res.second )
 				{
 					newSetForCurrentCombination();
+					
+					donor.newSetFromCurrent();
+					
+					acceptor.addParnter(donor);
 				}
 				
-				donor.newSetFromCurrent();
-					
-				acceptor.addParnter(donor);
+				// only the fragment was changed
+				else
+				{
+					donor.newSetFromCurrent();
+					acceptor.addParnter(donor);
+				}
 			}
 		}
 		
-		/*
-		 * 2.) only the acceptor side has a conformation
-		 */
-		else if (acc_id != -1 && donor_id == -1) 
+		// 1.2) acceptor and donor have one or more sets, BUT donor is not 
+		//      compatible with given acceptor!
+		// same as case 2.)
+		else
 		{
-			// if the known acceptor side was changed: add both coordinates...
 			if(_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst))
 			{
 				newSetForCurrentCombination();
 			}
 			
-			//...else: only the ones from the donor
 			donor.newSetFromCurrent();
-				
+			
 			acceptor.addParnter(donor);
 		}
-		/*
+	}
+	
+	/*
+		 * 2.) only the acceptor side has a conformation
+		 */
+	else if (acc_id != -1 && donor_id == -1) 
+	{
+		// if the known acceptor side was changed: add both coordinates...
+		if(_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst))
+		{
+			newSetForCurrentCombination();
+		}
+		
+		//...else: only the ones from the donor
+		donor.newSetFromCurrent();
+		
+		acceptor.addParnter(donor);
+	}
+	/*
 		 *  3.) both are new (should only occur in the very first recursion)
 		 */
-		else
-		{
-			_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
-			
-			newSetForCurrentCombination();
-			
-			donor.newSetFromCurrent();
-			
-			acceptor.addParnter( donor );
-		}
-	}
 	else
 	{
 		_connectClashFree( *acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
+		
+		newSetForCurrentCombination();
+		
+		donor.newSetFromCurrent();
+		
+		acceptor.addParnter( donor );
 	}
-	//#DEBUG - end0
-	
-	//#DEBUG
-	_work_trace.push_back(make_pair(&donor.group_id, &donor.curr_set));
-	//#DEBUG
 }
 
 

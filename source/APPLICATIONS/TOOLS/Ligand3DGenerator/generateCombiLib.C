@@ -14,17 +14,10 @@ using namespace std;
 /// ################################## C O M M A N D L I N E    P A R S E R
 int main(int argc, char* argv[])
 {
-	float overhead_time, assembly_time, combi_time; //#DEBUG
-	Timer my_timer; //#DEBUG
-	my_timer.start(); //#DEBUG
-	
 	CommandlineParser parpars("combiLib 3D structure generation", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Preparation");
 	parpars.registerMandatoryInputFile("i", "combiLib as *.combi");
 	parpars.registerMandatoryOutputFile("o", "3D molecules in SDFormat");
 	parpars.registerOptionalInputFile("c", "configuration file in *.conf");
-	
-	parpars.registerFlag("w", "write results to out file"); //#DEBUG
-	parpars.registerFlag("u", "use structure re-use"); //#DEBUG
 	
 	parpars.setSupportedFormats("i","combi");
 	parpars.setSupportedFormats("o","sdf");
@@ -62,13 +55,6 @@ int main(int argc, char* argv[])
 	
 	cout<<" * loading databases specified in: "<<config_path<<endl;
 	template_man.readAll(); 
-
-	//#DEBUG - start
-	my_timer.stop();
-	overhead_time = my_timer.getSeconds();
-	my_timer.reset();
-	my_timer.start();
-	//#DEBUG - end
 	
 	//// ################################## C O M B I    A S S E M B L E    3 D
 	//3.) assemble all individual RFragments:
@@ -91,13 +77,6 @@ int main(int argc, char* argv[])
 		}
 	}
 	
-	//#DEBUG - start
-	my_timer.stop();
-	assembly_time = my_timer.getSeconds();
-	my_timer.reset();
-	my_timer.start();
-	//#DEBUG - end
-	
 	//4.) finally calculate all valid combinations:
 	cout<<" * generating 3D combinations, and write results to "
 		  << parpars.get("o") <<endl;
@@ -107,21 +86,10 @@ int main(int argc, char* argv[])
 	
 	ConnectionResolver::num_resolve_calls = 0;
 
-	CombiAssembler::apply_reuse = parpars.has("u");
-	CombiAssembler::write_output = parpars.has("w") ;
 	combiner.writeCombinations( outfile );
-	
-	//#DEBUG - start
-	my_timer.stop();
-	combi_time = my_timer.getSeconds();
-	cout<<"calls to resolve(): "<<ConnectionResolver::num_resolve_calls<<endl; 
-	cout<<"overhead:   "<<overhead_time<<endl; 
-	cout<<"assembly:   "<<assembly_time<<endl;
-	cout<<"combiner:   "<<combi_time<<endl;
-		//#DEBUG - end
 	
 	outfile.close();
 
-//	Log << "....done!"<<endl;
+	Log << "....done!"<<endl;
 }
 
