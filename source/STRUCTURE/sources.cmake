@@ -1,5 +1,9 @@
 INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
 
+IF(BALL_HAS_OPENBABEL)
+	INCLUDE(source/STRUCTURE/LIGAND3DGEN/sources.cmake)
+ENDIF()
+
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	addHydrogenProcessor.C

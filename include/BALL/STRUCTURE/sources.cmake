@@ -1,6 +1,10 @@
 ### the directory name ###
 SET(GROUP STRUCTURE)
 
+IF(BALL_HAS_OPENBABEL)
+    INCLUDE(include/BALL/STRUCTURE/LIGAND3DGEN/sources.cmake)
+ENDIF()
+
 FILE(GLOB HEADERS_LIST "include/BALL/${GROUP}/*.h" "include/BALL/${GROUP}/*.iC")	
 
 ADD_BALL_HEADERS("${GROUP}" "${HEADERS_LIST}")
