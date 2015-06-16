@@ -67,6 +67,8 @@ SET(EXECUTABLES_LIST
 
 IF(BALL_HAS_OPENBABEL)
 	LIST(APPEND EXECUTABLES_LIST
+		Generate3DCombinations
+		Generate3DStructure
 		Ligand3DGenerator
 		MolDepict
 		ProteinProtonator
