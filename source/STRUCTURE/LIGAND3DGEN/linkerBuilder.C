@@ -14,9 +14,8 @@ using namespace std;
 /**
  * buildLinker
  */
-LinkerBuilder::LinkerBuilder(SiteMap& connection_templates , BondLengthMap &bonds)
-	: _connection_templates(connection_templates),
-		_bond_lengths(bonds)
+LinkerBuilder::LinkerBuilder(SiteMap& connection_templates )
+	: _connection_templates(connection_templates)
 {
 	
 } 
@@ -48,7 +47,7 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_
 			Atom* at1 = linker_frag.getAtom(0); Atom* at2 = linker_frag.getAtom(1);
 			
 			String key = at1->getElement().getSymbol() + at2->getElement().getSymbol();
-			float b_len = _bond_lengths[key];
+			float b_len = at1->getElement().getCovalentRadius() + at2->getElement().getCovalentRadius();
 			
 			at1->setPosition( Vector3() ); at2->setPosition( Vector3(0,0, b_len ) );
 			

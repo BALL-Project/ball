@@ -10,10 +10,10 @@ using namespace std;
 StructureAssembler::StructureAssembler( TemplateDatabaseManager& libs )
 	: _libs( libs ), 
 		_matcher( libs.getRigidTemplates() ),
-		_linker_builder( libs.getSiteTemplates(), libs.getBondLengthData() ),
+		_linker_builder( libs.getSiteTemplates()),
 		_clash_resolver(1.2, 3)
 {
-	_connector.setLibs(libs.getSiteTemplates(), libs.getBondLengthData());
+	_connector.setConnectionLib(libs.getSiteTemplates());
 }
 	
 StructureAssembler::~StructureAssembler()

@@ -15,8 +15,6 @@ public:
 	~MoleculeConnector();
 	
 	void setConnectionLib(SiteMap& connectLib);
-	void setBondLengthLib(BondLengthMap& bondLib);
-	void setLibs(SiteMap& connectLib, BondLengthMap& bondLib);
 /**  
  * connectFragments - connects the two given fragments (by their child atoms)
  * in such a way, that molecule1 (given by 'atm1') retains its position,
@@ -58,7 +56,6 @@ private:
 	
 	/// Class member:
 	SiteMap*       _connections;
-	BondLengthMap* _bond_lengths;
 	StarAligner    _star_aligner;
 };
 

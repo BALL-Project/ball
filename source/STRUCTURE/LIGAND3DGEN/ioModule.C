@@ -28,11 +28,6 @@ RigidsMap &TemplateDatabaseManager::getRigidTemplates()
 	return _templates_rigids;
 }
 
-BondLengthMap &TemplateDatabaseManager::getBondLengthData()
-{
-	return _bondlengths;
-}
-
 SiteMap &TemplateDatabaseManager::getSiteTemplates()
 {
 	return _templates_sites;
@@ -48,37 +43,10 @@ void TemplateDatabaseManager::readAll()
 		readRigidTemplates();
 	}
 	
-	if( _path_to_bondlengths != "")
-	{
-		cout<<"loading bondlengths from: "<< _path_to_bondlengths<<endl;
-		readBondLenths();
-	}
-	
 	if( _path_to_sites != "")
 	{
 		cout<<"loading sites from: "<< _path_to_sites<<endl;
 		readSiteTemplates();
-	}
-}
-
-void TemplateDatabaseManager::readBondLenths()
-{
-	LineBasedFile bondFile(_path_to_bondlengths, ios::in);
-	
-	while( bondFile.readLine() )
-	{
-		String st_ar[2];
-		bondFile.getLine().split(st_ar, 2);
-		
-		_bondlengths[st_ar[0]] = st_ar[1].toFloat();
-		
-		// generate also the reversed label, if both differ
-		if( (st_ar[0])[0] != (st_ar[0])[1] )
-		{
-			String altKey = (st_ar[0])[1];
-			altKey += (st_ar[0])[0];
-			_bondlengths[altKey] = st_ar[1].toFloat();
-		}
 	}
 }
 
@@ -196,10 +164,6 @@ void TemplateDatabaseManager::libraryPathesFromConfig(const String& config_path)
 		if(tmp.hasPrefix("fragments=")){
 			tmp = tmp.after("fragments=");
 			_path_to_rigids = tmp.trim();
-		}
-		else if(tmp.hasPrefix("bondlengths=")){
-			tmp = tmp.after("bondlengths=");
-			_path_to_bondlengths = tmp.trim();
 		}
 		else if(tmp.hasPrefix("connections=")){
 			tmp = tmp.after("connections=");

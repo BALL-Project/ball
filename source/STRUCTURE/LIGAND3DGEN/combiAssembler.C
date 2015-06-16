@@ -10,7 +10,7 @@ using namespace BALL;
 CombiAssembler::CombiAssembler(TemplateDatabaseManager &data, CombiLibMap* clib):
 	_work_mol(0), _r_groups(clib)
 {
-	_connector.setLibs(data.getSiteTemplates(), data.getBondLengthData());
+	_connector.setConnectionLib(data.getSiteTemplates());
 }
 
 CombiAssembler::~CombiAssembler()

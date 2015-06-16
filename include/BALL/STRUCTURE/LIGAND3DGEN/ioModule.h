@@ -38,8 +38,6 @@ public:
 	 */
 	void libraryPathesFromConfig(const BALL::String& config_path);
 	
-	void readBondLenths();
-	
 	void readSiteTemplates();
 	
 	void readRigidTemplates();
@@ -52,16 +50,13 @@ public:
 	void readSDFRigidTemplates();
 	
 	RigidsMap& getRigidTemplates();
-	BondLengthMap& getBondLengthData();
 	SiteMap& getSiteTemplates();
 	
 private:
 	RigidsMap _templates_rigids;
-	BondLengthMap _bondlengths;
 	SiteMap _templates_sites;
 	
 	BALL::String _path_to_rigids;
-	BALL::String _path_to_bondlengths;
 	BALL::String _path_to_sites;
 };
 

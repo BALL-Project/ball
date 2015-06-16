@@ -15,7 +15,7 @@
  */
 class LinkerBuilder{
 public:
-	LinkerBuilder(SiteMap& connection_templates, BondLengthMap& bonds);
+	LinkerBuilder(SiteMap& connection_templates);
 	 
 	~LinkerBuilder();
 	/**
@@ -51,7 +51,6 @@ private:
 	
 	// input libs:
 	SiteMap& _connection_templates;
-	BondLengthMap& _bond_lengths;
 	
 	// helper structures
 	BALL::HashSet< BALL::Atom* > _done;

@@ -12,7 +12,6 @@ using namespace std;
 MoleculeConnector::MoleculeConnector()
 {
 	_connections = 0;
-	_bond_lengths = 0;
 }
 
 MoleculeConnector::~MoleculeConnector()
@@ -23,17 +22,6 @@ MoleculeConnector::~MoleculeConnector()
 void MoleculeConnector::setConnectionLib(SiteMap &connectLib)
 {
 	_connections = &connectLib;
-}
-
-void MoleculeConnector::setBondLengthLib(BondLengthMap &bondLib)
-{
-	_bond_lengths = &bondLib;
-}
-
-void MoleculeConnector::setLibs(SiteMap &connectLib, BondLengthMap &bondLib)
-{
-	_connections = &connectLib;
-	_bond_lengths = &bondLib;
 }
 
 /**  
@@ -166,7 +154,7 @@ Vector3 MoleculeConnector::getDiffVec(Atom* atm1, Atom* atm2)
 {
 	String key = atm1->getElement().getSymbol();
 	key += atm2->getElement().getSymbol();
-	float bond_len = _bond_lengths->at(key);
+	float bond_len = atm1->getElement().getCovalentRadius() + atm2->getElement().getCovalentRadius();
 	
 	Vector3 diff_vec = atm1->getPosition() - atm2->getPosition();
 	float diff_len = diff_vec.getLength() - bond_len;
