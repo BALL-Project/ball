@@ -7,9 +7,6 @@
 using namespace std;
 using namespace BALL;
 
-bool CombiAssembler::apply_reuse = 0; //#DEBUG
-bool CombiAssembler::write_output = 0; //#DEBUG
-
 CombiAssembler::CombiAssembler(TemplateDatabaseManager &data, CombiLibMap* clib):
 	_work_mol(0), _r_groups(clib)
 {
@@ -44,10 +41,8 @@ void CombiAssembler::writeCombinations(SDFile &handle)
 		_r_atms.push_back( &*it );
 	}
 	
-	total_reuse = 0; //#DEBUG
 	
 	_combineRecur( handle);
-	cout<<"re-used connections: "<<total_reuse<<endl; //#DEBUG
 }
 
 
@@ -153,8 +148,6 @@ void CombiAssembler::_checkAndConnect(RAtom &acceptor, RFragment &donor)
 		// 1.1) known Fragments are compatible!
 		if ( compatible_donor_set != -1)
 		{
-			total_reuse++; //#DEBUG
-			
 			donor.setCoordsTo( compatible_donor_set ); // to the fitting coordinates
 			
 			_cresolv.setMolecule(*acceptor.atm, *donor.group_atom, *_work_mol->rotor_lst);
