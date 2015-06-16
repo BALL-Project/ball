@@ -108,7 +108,7 @@ OBMol* MolecularSimilarity::createOBMol(const Molecule& mol, bool ignore_hydroge
 			}
 
 			int order = b_it->getOrder();
-			OBBond* bond = new OBBond;
+			OBBond* bond = obmol->NewBond();
 			bond->SetBegin(atom1);
 			bond->SetEnd(atom2);
 			if (b_it->isAromatic())
