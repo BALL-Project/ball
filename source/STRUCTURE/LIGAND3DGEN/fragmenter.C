@@ -290,11 +290,9 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 
 
 void MoleculeFragmenter::fragmentToSites(
-		boost::unordered_map<String, pair<float, int> > &bondLenths, 
 		vector<pair<String, AtomContainer *> > &connections, 
 		bool restrict_to_rotables)
 {
-//	bondLenths.clear();
 	connections.clear();
 	
 	AtomIterator ati;
@@ -303,13 +301,13 @@ void MoleculeFragmenter::fragmentToSites(
 	{
 		BALL_FOREACH_BOND(*_molecule, ati, bit)
 			if( isRotableBond(*bit) )
-				addBondToConnectionsLib(*bit, bondLenths, connections);
+				addBondToConnectionsLib(*bit, connections);
 	}
 	else
 	{
 		BALL_FOREACH_BOND(*_molecule, ati, bit)
 			if( bit->getOrder() == 1 )
-				addBondToConnectionsLib(*bit, bondLenths, connections);
+				addBondToConnectionsLib(*bit, connections);
 	}
 	
 }
@@ -362,11 +360,10 @@ void MoleculeFragmenter::calcAtomToPos()
 }
 
 void MoleculeFragmenter::addBondToConnectionsLib(
-		Bond &bnd, 
-		boost::unordered_map<String, pair<float, int> > &bondLengths, 
+		Bond &bnd,
 		vector< pair< String, AtomContainer*> > &connections)
 {
-	String key1, key2, bk1, bk2;
+	String key1, key2;
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();
 	
@@ -376,14 +373,6 @@ void MoleculeFragmenter::addBondToConnectionsLib(
 	
 	connections.push_back( make_pair( key1, site1) );
 	connections.push_back( make_pair( key2, site2) );
-	
-	// get Bond Length and add to the lib:
-	bk1 = at1->getElement().getSymbol();
-	bk2 = at2->getElement().getSymbol();
-	
-	float len = at1->getDistance( *at2 );
-	
-	addLengthtoLib(bondLengths, bk1, bk2, len);
 }
 
 AtomContainer *MoleculeFragmenter::getSite(Atom *atm, String &key)
@@ -445,33 +434,5 @@ bool MoleculeFragmenter::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 {
 	return a.first < b.first;
 }
-
-void MoleculeFragmenter::addLengthtoLib(
-		boost::unordered_map<String, pair<float, int> > &bondLengths, 
-		String bk1, String bk2, float len)
-{
-	String key1 = bk1+bk2;
-	if( bondLengths.find(key1) == bondLengths.end() )
-	{
-		bondLengths[key1]      = make_pair(len, 1);
-		bondLengths[bk2 + bk1] = make_pair(len, 1);
-	}
-	else
-	{
-		int cnt = bondLengths[key1].second;
-		float avg = bondLengths[key1].first;
-		
-		// incremental average: add the current lenght 'len' to the existing
-		// average
-		++cnt;
-		avg = avg + (len - avg) / (cnt);
-		
-		bondLengths[key1]      = make_pair( avg, cnt);
-		bondLengths[bk2 + bk1] = make_pair( avg, cnt);
-	}
-}
-
-
-
 
 

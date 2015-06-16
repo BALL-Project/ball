@@ -22,12 +22,10 @@ int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("Fragment to sites", " create site templates", 0.5, String(__DATE__), "Preparation");
 	parpars.registerMandatoryInputFile("i", "input SDF");
-	parpars.registerMandatoryOutputFile("oS", "output SDF with site templates");
-	parpars.registerMandatoryOutputFile("oB", "output bond lengths");
+	parpars.registerMandatoryOutputFile("o", "output SDF with site templates");
 
 	parpars.setSupportedFormats("i","sdf");
-	parpars.setSupportedFormats("oS","sdf");
-	parpars.setSupportedFormats("oB","line");
+	parpars.setSupportedFormats("o","sdf");
 
 	String manual = "For creating a connection library.";
 	parpars.setToolManual(manual);
@@ -38,8 +36,7 @@ int main(int argc, char* argv[])
 	
 	// open in- and output files:
 	SDFile infile(parpars.get("i"), ios::in);
-	SDFile outfile(parpars.get("oS"), ios::out);
-	LineBasedFile bondFile(parpars.get("oB"), ios::out);
+	SDFile outfile(parpars.get("o"), ios::out);
 	
 	MoleculeFragmenter mol_fragger;
 	RMSDBinner binner(true, 0.3, 100);
@@ -47,7 +44,6 @@ int main(int argc, char* argv[])
 	
 	int cnt = 0;
 	int total_sites = 0;
-	boost::unordered_map <String, pair<float, int> > lengths;
 	vector<pair<String, AtomContainer *> > temp_sites;
 	
 	// Read all AtomContainers.
@@ -66,7 +62,7 @@ int main(int argc, char* argv[])
 		
 		// fragment to connection sites:
 		mol_fragger.setMolecule( *tmp_mol );
-		mol_fragger.fragmentToSites(lengths, temp_sites, false);
+		mol_fragger.fragmentToSites(temp_sites, false);
 		
 		total_sites += temp_sites.size();
 		
@@ -96,14 +92,6 @@ int main(int argc, char* argv[])
 		LigIO::writeMol(*ac, outfile);
 	}
 	outfile.close();
-	
-	// print results of standard lengths calculation:
-	boost::unordered_map <String, pair<float, int> >::iterator mit;
-	for(mit = lengths.begin(); mit != lengths.end(); mit++)
-	{
-		bondFile <<mit->first<<" "<< mit->second.first<<endl ;
-	}
-	bondFile.close();
 	
 	Log << "fragmented "<< cnt<<" structures to "<<total_sites<<" sites, wrote "<<binner.size()<<" unique sites"<<endl;
 }

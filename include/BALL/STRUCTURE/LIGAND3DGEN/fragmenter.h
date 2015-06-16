@@ -34,8 +34,7 @@ public:
 	void fragment(ACVec &rigid_fragments, ACVec &linker_fragments,
 														ConnectList& connections);
 	
-	void fragmentToSites(boost::unordered_map< BALL::String, std::pair<float, int> >& bondLenths,
-											 std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections,
+	void fragmentToSites(std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections,
 											 bool restrict_to_rotables=false);
 	
 	
@@ -55,9 +54,7 @@ private:
 	void calcAtomToPos();
 	
 	/// For connectionLibs:
-	void addBondToConnectionsLib(
-			BALL::Bond& bnd, boost::unordered_map< BALL::String,
-			std::pair<float, int> >& bondLenths,
+	void addBondToConnectionsLib(BALL::Bond& bnd,
 			std::vector< std::pair< BALL::String, BALL::AtomContainer*> > &connections);
 	
 	static bool compare(std::pair<BALL::String,BALL::Atom*>& a, 
@@ -67,13 +64,6 @@ private:
 	 * getSite
 	 */
 	BALL::AtomContainer* getSite(BALL::Atom* atm, BALL::String& key);
-	
-	/*
-	 * Add in such a way that we keep the average bond length
-	 */
-	void addLengthtoLib(
-			boost::unordered_map< BALL::String, std::pair<float, int> > & bondLengths, 
-			BALL::String bk1, BALL::String bk2, float len);
 	
 	/// Fields:
 	BALL::AtomContainer* _molecule;
