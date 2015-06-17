@@ -115,7 +115,7 @@ private:
 	std::list< BALL::RAtom* >  _r_atms;
 	
 	bool         _lib_is_generated;
-	SmilesParserOB _smi_parser;
+	BALL::SmilesParserOB _smi_parser;
 	boost::unordered_map< int, int > _id_mapping;
 };
 

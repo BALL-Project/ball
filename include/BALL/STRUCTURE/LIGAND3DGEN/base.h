@@ -4,56 +4,20 @@
 #ifndef LIGANDBASE_H
 #define LIGANDBASE_H
 
-/// BALL: File IO
-//#include <BALL/FORMAT/SDFile.h>
-//#include <BALL/FORMAT/lineBasedFile.h>
-//#include <BALL/SYSTEM/file.h>
-
-/// BALL: Macros
-//#include <BALL/KERNEL/forEach.h>
-
-/// BALL: Base Classes (String + Math)
 #include <BALL/DATATYPE/string.h>
-//#include <BALL/MATHS/angle.h>
 #include <BALL/MATHS/vector3.h>
-//#include <BALL/MATHS/matrix44.h>
-
-/// BALL: Atom, Bond, Element
 #include <BALL/KERNEL/atom.h>
-//#include <BALL/KERNEL/atomIterator.h>
-//#include <BALL/KERNEL/bond.h>
-//#include <BALL/KERNEL/bondIterator.h>
-//#include <BALL/KERNEL/PTE.h>
-
-/// BALL: Molecule Container
-//#include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/atomContainer.h>
-//#include <BALL/KERNEL/fragment.h>
-//#include <BALL/KERNEL/molecule.h>
-
-/// BALL: Algorithms
-//#include <BALL/STRUCTURE/UCK.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
-//#include <BALL/STRUCTURE/structureMapper.h>
-//#include <BALL/STRUCTURE/geometricTransformations.h>
-
-/// Open Babel
-#include <openbabel/obconversion.h>
-//#include <openbabel/mol.h>
-//#include <openbabel/canon.h>
-//#include <openbabel/graphsym.h>
-
-/// STL
-#include <vector>
-#include <list>
-//#include <limits>
-
-/// BOOST
-#include <boost/unordered_map.hpp>
-//#include <boost/pending/disjoint_sets.hpp>
-
 #include <BALL/KERNEL/global.h>
 #include <BALL/COMMON/exception.h>
+
+#include <openbabel/obconversion.h>
+
+#include <vector>
+#include <list>
+
+#include <boost/unordered_map.hpp>
 
 namespace BALL 
 {
@@ -168,7 +132,7 @@ private:
 	RAtom const* _isRAtom( const std::list< RAtom >& ilist, BALL::Atom* atom);
 };
 
-/// C l a s s   L i g B a s e
+/// S t a t i c   C l a s s   L i g B a s e
 /// ############################################################################
 class LigBase
 {
@@ -214,7 +178,7 @@ public:
 };
 
 
-/// L i g S t r u c t    E x c e p t i o n s
+/// L i g a n d 3 D   E x c e p t i o n s
 /// ############################################################################
 namespace Exception
 {
