@@ -13,9 +13,40 @@
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
 
+#include <boost/unordered_map.hpp>
 namespace BALL 
 {
-/// T e m p l a t e L i b r a r y M a n a g e r
+/// R i g i d F r a g m e n t s D a t a b a s e
+/// ############################################################################
+class RigidFragmentDB:
+		public boost::unordered_map <BALL::String, TemplateCoord*>
+{
+public:
+	RigidFragmentDB();
+	
+	RigidFragmentDB(const BALL::String& filename);
+	
+	~RigidFragmentDB();
+	
+private:
+	BALL::String _filename;
+};
+
+/// S i t e F r a g m e n t s D a t a b a s e
+/// ############################################################################
+class SiteFragmentDB:
+		public boost::unordered_map <BALL::String, BALL::AtomContainer*>
+{
+	SiteFragmentDB();
+	
+	SiteFragmentDB(const BALL::String& filename);
+	
+	~SiteFragmentDB();
+private:
+	BALL::String _filename;
+};
+
+/// T e m p l a t e D a t a b a s e M a n a g e r
 /// ############################################################################
 /**
  * @brief The IOModule is a class to read, store and mange any library

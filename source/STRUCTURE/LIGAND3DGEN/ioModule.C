@@ -8,8 +8,136 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/molecularSimilarity.h>
 
+#include <BALL/SYSTEM/path.h>
+
 using namespace std; 
 using namespace BALL;
+
+
+/// R i g i d F r a g m e n t s D a t a b a s e
+/// ############################################################################
+RigidFragmentDB::RigidFragmentDB()
+{
+	RigidFragmentDB("");
+}
+
+RigidFragmentDB::~RigidFragmentDB()
+{
+	// clear memory from allocated template fragments
+	for(RigidFragmentDB::iterator it = this->begin();
+			it != this->end(); ++it)
+	{
+		delete it->second;
+	}
+}
+
+RigidFragmentDB::RigidFragmentDB(const BALL::String& filename)
+{
+	if (filename == "")
+	{
+		_filename = "fragments/template_rigids.line";
+	}
+	
+	Path path;
+	_filename = path.find( filename );
+	
+	if ( _filename == "")
+	{
+		throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+	}
+	
+
+	LineBasedFile db_file(_filename, ios::in);
+	
+	// read in fragmentLib and create hash-map from that:
+	String key;
+	while( db_file.readLine() )
+	{
+		TemplateCoord* tmp_frag=0;
+		if ( db_file.getLine().hasPrefix("key ") )
+		{
+			// get key:
+			key = db_file.getLine().after("key ");
+			
+			// get number of positions:
+			db_file.readLine();
+			Size size = db_file.getLine().toUnsignedInt();
+			
+			// get positions:
+			tmp_frag = new TemplateCoord(size);
+			Size i;
+			for(i = 0; i < size; i++)
+			{
+				db_file.readLine();
+				String coords[3];
+				db_file.getLine().split(coords, 3);
+				Vector3& vec = (*tmp_frag)[i];
+				vec.set(coords[0].toFloat(), coords[1].toFloat(), coords[2].toFloat());
+			}
+			
+			// append to hash map
+			this->insert( make_pair(key, tmp_frag) );
+		}
+		else
+		{
+			Log << "WARNING: missed in the template coordinate lib file a line!!!"
+					<< endl;
+		}
+	}
+	db_file.close();
+}
+
+
+/// S i t e F r a g m e n t s D a t a b a s e
+/// ############################################################################
+SiteFragmentDB::SiteFragmentDB()
+{
+	SiteFragmentDB("");
+}
+
+SiteFragmentDB::~SiteFragmentDB()
+{
+	// clear memory from allocated template fragments
+	for(SiteFragmentDB::iterator it = this->begin();
+			it != this->end(); ++it)
+	{
+		delete it->second;
+	}
+}
+
+SiteFragmentDB::SiteFragmentDB(const BALL::String& filename)
+{
+	if (filename == "")
+	{
+		_filename = "fragments/template_sites.sdf";
+	}
+	
+	Path path;
+	_filename = path.find( filename );
+	
+	if ( _filename == "")
+	{
+		throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+	}
+	
+	
+	SDFile handle(_filename, ios::in); //open the lib file as sdf-file
+	
+	// read all lib molecules and save them with their key:
+	Fragment* tmp_mol;
+	tmp_mol = (Fragment*)handle.read(); // first entry
+	
+	int cnt = 0;
+	while(tmp_mol)
+	{
+		BALL::String key = tmp_mol->getProperty("key").getString();
+		this->insert(make_pair(key, tmp_mol));
+		
+		tmp_mol = (Fragment*)handle.read();
+		cnt++;
+	}
+	handle.close();
+}
 
 /// L i b r a r y R e a d e r
 /// ############################################################################
