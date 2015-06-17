@@ -9,6 +9,9 @@
 
 #include <BALL/MATHS/angle.h>
 
+
+namespace BALL 
+{
 /// C l a s s   C l a s h R e s o l v e r
 /// ############################################################################
 class ClashResolver: public ClashDetector
@@ -22,7 +25,7 @@ public:
 	 * @param molecule
 	 * @param connections
 	 */
-	void setMolecule(BALL::AtomContainer& molecule, ConnectList& rotors);
+	void setMolecule(BALL::AtomContainer& molecule, BALL::ConnectList& rotors);
 	
 	int resolve();
 	
@@ -46,11 +49,11 @@ public:
 protected:
 	BALL::AtomContainer* _molecule;
 
-	ConnectList* _all_rotors;
+	BALL::ConnectList* _all_rotors;
 	
 private:
-	int allCombinationsRecur(const ConnectList::iterator& p, 
-													const ConnectList::iterator &p_end, 
+	int allCombinationsRecur(const BALL::ConnectList::iterator& p, 
+													const BALL::ConnectList::iterator &p_end, 
 													BALL::Angle& angle, const int& steps );
 	
 
@@ -84,7 +87,7 @@ public:
 	 * @param atm2 part of the smaller fragment
 	 */
 	void setMolecule(BALL::Atom& atm1, BALL::Atom& atm2, 
-									 ConnectList& connection_rotors);
+									 BALL::ConnectList& connection_rotors);
 	
 	/**
 	 * @brief resolve -  does not to handle old clashes that existed already. 
@@ -120,7 +123,7 @@ private:
 	 * Rotate bonds within fragment 'frag' to remove inter and intra clashes.
 	 * 'frag' needs to be either '_large_root' or '_small_root'.
 	 */
-	int resolveFragment(BALL::AtomContainer& frag , ConnectList &clist, const int &given_clashes = 0);
+	int resolveFragment(BALL::AtomContainer& frag , BALL::ConnectList &clist, const int &given_clashes = 0);
 	
 	int resolveLarge(const int &given_clashes = 0);
 	
@@ -132,8 +135,8 @@ private:
 	 */ 
 	int resolveAllCombinations( const int& steps );
 	
-	int allCombinationsRecur(const ConnectList::iterator& p, 
-													 const ConnectList::iterator &p_end, 
+	int allCombinationsRecur(const BALL::ConnectList::iterator& p, 
+													 const BALL::ConnectList::iterator &p_end, 
 													 BALL::Angle& angle, 
 													 const int& steps , 
 													 int &best_cnt);
@@ -146,12 +149,12 @@ private:
 	BALL::AtomContainer* _large_root;
 	BALL::AtomContainer* _small_root;
 
-	ConnectList* _small_rotors;
-	ConnectList* _large_rotors;
-	ConnectList* _all_rotors;
+	BALL::ConnectList* _small_rotors;
+	BALL::ConnectList* _large_rotors;
+	BALL::ConnectList* _all_rotors;
 	
-	TemplateCoord* _save_large;
-	TemplateCoord* _save_small;
+	BALL::TemplateCoord* _save_large;
+	BALL::TemplateCoord* _save_small;
 	
 	std::list< std::pair<BALL::Atom*, BALL::Atom*> > _clash_small;
 	std::list< std::pair<BALL::Atom*, BALL::Atom*> > _clash_large;
@@ -159,4 +162,6 @@ private:
 	
 	int _max_rotations;     // maximum number of bonds to rotate
 };
+
+}// End Namespace "BALL"
 #endif // CLASHRESOLVER_H

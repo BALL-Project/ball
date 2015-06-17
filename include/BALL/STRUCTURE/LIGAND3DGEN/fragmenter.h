@@ -1,13 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef LIGSTRUC_FRAGMENTER_H
-#define LIGSTRUC_FRAGMENTER_H
+#ifndef LIGAND_FRAGMENTER_H
+#define LIGAND_FRAGMENTER_H
 
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
+
+namespace BALL 
+{
 
 class MoleculeFragmenter
 {
@@ -31,8 +34,8 @@ public:
 	 */
 	bool isBridgingBond(BALL::Bond &bnd);
 	
-	void fragment(ACVec &rigid_fragments, ACVec &linker_fragments,
-														ConnectList& connections);
+	void fragment(BALL::ACVec &rigid_fragments, BALL::ACVec &linker_fragments,
+														BALL::ConnectList& connections);
 	
 	void fragmentToSites(std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections,
 											 bool restrict_to_rotables=false);
@@ -68,7 +71,7 @@ private:
 	/// Fields:
 	BALL::AtomContainer* _molecule;
 	
-	std::vector< AtmVec >         _sssr;
+	std::vector< BALL::AtmVec >   _sssr;
 	BALL::RingPerceptionProcessor _rpp;
 	
 	std::vector <bool>                        _is_InRing;
@@ -78,4 +81,5 @@ private:
 	boost::unordered_map<BALL::Atom *, int> _atom_to_pos;
 };
 
-#endif // LIGSTRUC_FRAGMENTER_H
+} //End Namespace BALL
+#endif // LIGAND_FRAGMENTER_H

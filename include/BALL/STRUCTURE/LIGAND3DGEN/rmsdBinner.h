@@ -9,6 +9,8 @@
 
 #include <BALL/STRUCTURE/RMSDMinimizer.h>
 
+namespace BALL 
+{
 /**
 	ATTENTION: if using this with molecule Fragments (not starLike Molecules and
 	thus constructing not with a StarAligner) means that all molecules will be
@@ -75,4 +77,5 @@ private:
 	bool _use_star_align;
 };
 
+} // End Namespace BALL
 #endif // RMSDBINNER_H

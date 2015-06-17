@@ -10,6 +10,8 @@
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
+namespace BALL 
+{
 /// C l a s s   C l a s h D e t e c t o r
 /// ############################################################################
 /**
@@ -176,4 +178,6 @@ private:
 	BALL::Vector3 _basis;
 	
 };
+
+} // End Namespace "BALL"
 #endif // CLASHBASE_H

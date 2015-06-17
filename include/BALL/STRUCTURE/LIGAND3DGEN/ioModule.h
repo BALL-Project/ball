@@ -13,6 +13,8 @@
 #include <openbabel/obconversion.h>
 #include <openbabel/mol.h>
 
+namespace BALL 
+{
 /// T e m p l a t e L i b r a r y M a n a g e r
 /// ############################################################################
 /**
@@ -49,12 +51,12 @@ public:
 	 */
 	void readSDFRigidTemplates();
 	
-	RigidsMap& getRigidTemplates();
-	SiteMap& getSiteTemplates();
+	BALL::RigidsMap& getRigidTemplates();
+	BALL::SiteMap& getSiteTemplates();
 	
 private:
-	RigidsMap _templates_rigids;
-	SiteMap _templates_sites;
+	BALL::RigidsMap _templates_rigids;
+	BALL::SiteMap _templates_sites;
 	
 	BALL::String _path_to_rigids;
 	BALL::String _path_to_sites;
@@ -63,20 +65,20 @@ private:
 
 /// S m i l e s P a r s e r
 /// ############################################################################
-class SmilesParser
+class SmilesParserOB
 {
 public:
-	SmilesParser();
-	~SmilesParser();
+	SmilesParserOB();
+	~SmilesParserOB();
 	
 	BALL::AtomContainer *fromSMILEStoMolecule(const BALL::String& smiles_string);
 	
-	RFragment* fromSMILEStoRFragment(const BALL::String& smiles_string, const int& g_id = -1);
+	BALL::RFragment* fromSMILEStoRFragment(const BALL::String& smiles_string, const int& g_id = -1);
 	
 private:
 	OpenBabel::OBConversion _babel_conv;
 	OpenBabel::OBMol        _babel_mol;
-	Canonicalizer           _cano;
+	BALL::Canonicalizer           _cano;
 	
 };
 
@@ -91,8 +93,8 @@ public:
 	
 	void setCombiLib(BALL::LineBasedFile &combilib_file);
 	
-	RFragment& getScaffold();
-	CombiLibMap& getCombiLib();
+	BALL::RFragment& getScaffold();
+	BALL::CombiLibMap& getCombiLib();
 	
 	void generateCombinationsSMILES( std::list<BALL::String>& out_SMILES);
 	void generateCombinationsAtomContainer(
@@ -103,17 +105,17 @@ private:
 	/*
 	 * Returns true if frag1 has more atoms than frag2
 	 */
-	bool static _compareRFrag(RFragment*& frag1, RFragment*& frag2 );
+	bool static _compareRFrag(BALL::RFragment*& frag1, BALL::RFragment*& frag2 );
 	void _parseCombiLibFile();
 	void _recurGenerateCombi( std::list<BALL::AtomContainer *> &out_molecules);
 	
 	BALL::LineBasedFile* _combilib_file;
-	RFragment*           _scaffold;
-	CombiLibMap          _lib;
-	std::list< RAtom* >  _r_atms;
+	BALL::RFragment*           _scaffold;
+	BALL::CombiLibMap          _lib;
+	std::list< BALL::RAtom* >  _r_atms;
 	
 	bool         _lib_is_generated;
-	SmilesParser _smi_parser;
+	SmilesParserOB _smi_parser;
 	boost::unordered_map< int, int > _id_mapping;
 };
 
@@ -161,4 +163,5 @@ private:
 
 };
 
+} // End Namespace "BALL"
 #endif // IOMODULE_H

@@ -9,13 +9,15 @@
 #include <BALL/STRUCTURE/LIGAND3DGEN/clashResolver.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/clashBase.h>
 
+namespace BALL 
+{
 /**
  * @brief The LinkerBuilder class
  * A class for calculating coordinates for linker/flexible fragments
  */
 class LinkerBuilder{
 public:
-	LinkerBuilder(SiteMap& connection_templates);
+	LinkerBuilder(BALL::SiteMap& connection_templates);
 	 
 	~LinkerBuilder();
 	/**
@@ -26,7 +28,7 @@ public:
 	 * @param linker_frag
 	 * @param result_rotors
 	 */
-	void buildLinker(BALL::AtomContainer &linker_frag, ConnectList& result_rotors);
+	void buildLinker(BALL::AtomContainer &linker_frag, BALL::ConnectList& result_rotors);
 	
 private:
 	void recurLinkerConnect(BALL::Atom &at, const BALL::Composite &parent);
@@ -40,7 +42,7 @@ private:
 	static bool compare(std::pair< BALL::String, BALL::Atom* >& a, 
 											std::pair< BALL::String, BALL::Atom* >& b);
 	
-	void resolveLinkerClashes(BALL::AtomContainer &linker_frag, ConnectList &result_rotors);
+	void resolveLinkerClashes(BALL::AtomContainer &linker_frag, BALL::ConnectList &result_rotors);
 	void recurResolveLinker(int previous_cnt, BALL::Bond& bnd, 
 													BALL::Atom &curr_atm, int dist, 
 													BALL::Composite *parent );
@@ -50,19 +52,19 @@ private:
 	bool isTerminalBond( BALL::Bond& bnd, BALL::Composite& parent);
 	
 	// input libs:
-	SiteMap& _connection_templates;
+	BALL::SiteMap& _connection_templates;
 	
 	// helper structures
 	BALL::HashSet< BALL::Atom* > _done;
-	ConnectList _rotors;
+	BALL::ConnectList _rotors;
 
 	// helper objects
-	StarAligner _aligner;
-	ClashResolver _cresolv; // for rotations
+	BALL::StarAligner _aligner;
+	BALL::ClashResolver _cresolv; // for rotations
 	
-	Rotator _roto;
+	BALL::Rotator _roto;
 };
 
 
-
+} // End Namespace BALL
 #endif // LINKERBUILDER_H

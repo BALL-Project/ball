@@ -5,11 +5,16 @@
 #ifndef STARALIGNER_H
 #define STARALIGNER_H
 
+#include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-typedef std::vector<BALL::Atom*> AtmVec;
-typedef std::vector<BALL::Atom*>::iterator AVIter;
+namespace BALL 
+{
+
+//typedef std::vector<BALL::Atom*> AtmVec;
+//typedef std::vector<BALL::Atom*>::iterator AVIter;
 
 class StarAligner
 {
@@ -33,14 +38,14 @@ public:
 	 * 
 	 * The calculated transformation is applied to the query molecule
 	 */
-	static BALL::Matrix4x4 bondAlign(BALL::Atom* atA1, BALL::Atom* atA2, BALL::Atom* atB1, 
-												BALL::Atom* atB2);
+	static BALL::Matrix4x4 bondAlign(BALL::Atom* atA1, BALL::Atom* atA2, 
+																	 BALL::Atom* atB1, BALL::Atom* atB2);
 	
 	/*
 	 * Get a list of atom-pointers of atoms that were not aligned (if 'query'
 	 * contained more atoms than 'site').
 	 */
-	void getRemainder(AtmVec& remainder);
+	void getRemainder(BALL::AtmVec& remainder);
 	
 	void setMolecules(BALL::AtomContainer& reference, BALL::AtomContainer& query);
 	void setMolecules(AtmVec& ref_site, BALL::AtomContainer& query);
@@ -129,4 +134,5 @@ private:
 	
 };
 
+} // End Namespace "BALL"
 #endif // STARALIGNER_H

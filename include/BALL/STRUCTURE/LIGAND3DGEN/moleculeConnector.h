@@ -7,6 +7,9 @@
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/starAligner.h>
 
+namespace BALL 
+{
+
 class MoleculeConnector
 {
 public:
@@ -14,7 +17,7 @@ public:
 	MoleculeConnector();
 	~MoleculeConnector();
 	
-	void setConnectionLib(SiteMap& connectLib);
+	void setConnectionLib(BALL::SiteMap& connectLib);
 /**  
  * connectFragments - connects the two given fragments (by their child atoms)
  * in such a way, that molecule1 (given by 'atm1') retains its position,
@@ -55,8 +58,9 @@ private:
 											std::pair<BALL::String,BALL::Atom*>& b);
 	
 	/// Class member:
-	SiteMap*       _connections;
+	BALL::SiteMap*       _connections;
 	StarAligner    _star_aligner;
 };
 
+} // End Namespace "BALL"
 #endif // MOLECULECONNECTOR_H

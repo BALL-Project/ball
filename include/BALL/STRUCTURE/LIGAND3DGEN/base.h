@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef LIGANDSTRUCTUREBASE_H
-#define LIGANDSTRUCTUREBASE_H
+#ifndef LIGANDBASE_H
+#define LIGANDBASE_H
 
 /// BALL: File IO
 //#include <BALL/FORMAT/SDFile.h>
@@ -55,6 +55,9 @@
 #include <BALL/KERNEL/global.h>
 #include <BALL/COMMON/exception.h>
 
+namespace BALL 
+{
+
 struct RFragment;
 class TemplateCoord;
 
@@ -93,7 +96,7 @@ class TemplateCoord
 	
 public:
 	TemplateCoord(BALL::Size n);
-
+	
 	TemplateCoord( BALL::AtomContainer& mol);
 	
 	~TemplateCoord();
@@ -101,7 +104,7 @@ public:
 	BALL::Vector3& operator[]( BALL::Index idx);
 	
 	BALL::Vector3& get( BALL::Index idx);
-
+	
 	const BALL::Size& size();
 	
 	/**
@@ -112,7 +115,7 @@ public:
 	void applyCoordinates2Molecule( BALL::AtomContainer& mol);
 	
 	void readCoordinatesFromMolecule( BALL::AtomContainer& mol);
-
+	
 private:
 	BALL::Size _size;
 	std::vector<BALL::Vector3> positions;
@@ -180,7 +183,7 @@ public:
 	// generate a mini dump of a molecule
 	static BALL::String printInlineMol( BALL::Composite* mol); //#DEBUG: for debugging
 	static BALL::String printMol( BALL::Composite* mol);//#DEBUG: for debugging
-
+	
 	static BALL::String printInlineStarMol( BALL::Composite* mol);//#DEBUG: for debugging
 	static BALL::String printInlineStarMol(AtmVec& mol);//#DEBUG: for debugging
 	
@@ -213,116 +216,116 @@ public:
 
 /// L i g S t r u c t    E x c e p t i o n s
 /// ############################################################################
-namespace BALL 
+namespace Exception
 {
-	namespace Exception
+/// Exception : SiteTemplateNotFound #######################################
+class BALL_EXPORT SiteTemplateNotFound
+		: public GeneralException
+{
+public:
+	SiteTemplateNotFound(const char* file, int line, String& key)
+		: GeneralException(file, line, "SiteTemplateNotFound", "")
 	{
-		/// Exception : SiteTemplateNotFound #######################################
-		class BALL_EXPORT SiteTemplateNotFound
-				: public GeneralException
-		{
-		public:
-			SiteTemplateNotFound(const char* file, int line, String& key)
-				: GeneralException(file, line, "SiteTemplateNotFound", "")
-			{
-				message_ = "no template could be found for the site key: ";
-				message_ += key;
-				
-				globalHandler.setMessage(message_);
-			}
-		};
+		message_ = "no template could be found for the site key: ";
+		message_ += key;
 		
-		/// Exception : FragmentTemplateNotFound ###################################
-		class BALL_EXPORT FragmentTemplateNotFound
-				: public GeneralException
-		{
-		public:
-			FragmentTemplateNotFound(const char* file, int line, AtomContainer& frag)
-				: GeneralException(file, line, "FragmentTemplateNotFound", "")
-			{
-				message_ = "no template could be found for the fragment: ";
-				message_ += LigBase::moleculeToSMILES( frag );
-				
-				globalHandler.setMessage(message_);
-			}
-		};
-		
-		/// Exception : RotationAxisInRing #########################################
-		class BALL_EXPORT RotationAxisInRing
-				: public GeneralException
-		{
-		public:
-			RotationAxisInRing(const char* file, int line, Atom& atm)
-				: GeneralException(file, line, "RotationAxisInRing", "")
-			{
-				message_ = "attempted to rotate a bond within a ring. Molecule part was: \n";
-				message_ += LigBase::moleculeToSMILES( *(AtomContainer*)&atm.getRoot() );
-				
-				globalHandler.setMessage(message_);
-			}
-		};
-		
-		/// Exception : StructureNotGenerated ######################################
-		class BALL_EXPORT StructureNotGenerated
-				: public GeneralException
-		{
-		public:
-			StructureNotGenerated(const char* file, int line, AtomContainer& mol, const GeneralException& in_exc)
-				: GeneralException(file, line, "StructureNotGenerated", "")
-			{
-				message_ = " No 3D coordinates could be generated for molecule: \n";
-				
-				message_ += LigBase::moleculeToSMILES(mol);
-				message_ += "\n\n";
-				
-				message_ += "CAUSE:\n";
-				message_ += in_exc.getName() + String(" in line ")+String(in_exc.getLine()) 
-						+ String(" of ") + in_exc.getFile() + String("\n");
-				message_ += String("Message: ") + in_exc.getMessage() + String("\n");
-				
-				globalHandler.setMessage(message_);
-			}
-			
-			StructureNotGenerated(const char* file, int line, AtomContainer& mol, const String& cause)
-				: GeneralException(file, line, "StructureNotGenerated", "")
-			{
-				message_ = " No 3D coordinates could be generated for molecule: \n";
-				
-				message_ += LigBase::moleculeToSMILES(mol);
-				message_ += "\n\n";
-				
-				message_ += "CAUSE:\n";
-				message_ += cause;
-				
-				globalHandler.setMessage(message_);
-			}
-			
-			StructureNotGenerated(const char* file, int line, AtomContainer& mol)
-				: GeneralException(file, line, "StructureNotGenerated", "")
-			{
-				message_ = " No 3D coordinates could be generated for molecule: \n";
-				
-				message_ += LigBase::moleculeToSMILES(mol);
-				message_ += "\n\n";
-				
-				message_ += "CAUSE: UNKNOWN";
-				
-				globalHandler.setMessage(message_);
-			}
-			
-		private:
-			void canSMILESFromAtomContainer(AtomContainer& ac, String& can_smiles)
-			{
-				OpenBabel::OBMol* obmol = MolecularSimilarity::createOBMol(ac, true);
-				
-				OpenBabel::OBConversion conv;
-				conv.SetOutFormat("can"); // canonical smiles
-				can_smiles = conv.WriteString(obmol);
-				
-				// remove the stupid ID that openbabel always attaches to the generated canonical smile
-				can_smiles = can_smiles.substr(0,can_smiles.find_first_of('\t'));
-			}
-		};
+		globalHandler.setMessage(message_);
 	}
-}
+};
+
+/// Exception : FragmentTemplateNotFound ###################################
+class BALL_EXPORT FragmentTemplateNotFound
+		: public GeneralException
+{
+public:
+	FragmentTemplateNotFound(const char* file, int line, AtomContainer& frag)
+		: GeneralException(file, line, "FragmentTemplateNotFound", "")
+	{
+		message_ = "no template could be found for the fragment: ";
+		message_ += LigBase::moleculeToSMILES( frag );
+		
+		globalHandler.setMessage(message_);
+	}
+};
+
+/// Exception : RotationAxisInRing #########################################
+class BALL_EXPORT RotationAxisInRing
+		: public GeneralException
+{
+public:
+	RotationAxisInRing(const char* file, int line, Atom& atm)
+		: GeneralException(file, line, "RotationAxisInRing", "")
+	{
+		message_ = "attempted to rotate a bond within a ring. Molecule part was: \n";
+		message_ += LigBase::moleculeToSMILES( *(AtomContainer*)&atm.getRoot() );
+		
+		globalHandler.setMessage(message_);
+	}
+};
+
+/// Exception : StructureNotGenerated ######################################
+class BALL_EXPORT StructureNotGenerated
+		: public GeneralException
+{
+public:
+	StructureNotGenerated(const char* file, int line, AtomContainer& mol, const GeneralException& in_exc)
+		: GeneralException(file, line, "StructureNotGenerated", "")
+	{
+		message_ = " No 3D coordinates could be generated for molecule: \n";
+		
+		message_ += LigBase::moleculeToSMILES(mol);
+		message_ += "\n\n";
+		
+		message_ += "CAUSE:\n";
+		message_ += in_exc.getName() + String(" in line ")+String(in_exc.getLine()) 
+				+ String(" of ") + in_exc.getFile() + String("\n");
+		message_ += String("Message: ") + in_exc.getMessage() + String("\n");
+		
+		globalHandler.setMessage(message_);
+	}
+	
+	StructureNotGenerated(const char* file, int line, AtomContainer& mol, const String& cause)
+		: GeneralException(file, line, "StructureNotGenerated", "")
+	{
+		message_ = " No 3D coordinates could be generated for molecule: \n";
+		
+		message_ += LigBase::moleculeToSMILES(mol);
+		message_ += "\n\n";
+		
+		message_ += "CAUSE:\n";
+		message_ += cause;
+		
+		globalHandler.setMessage(message_);
+	}
+	
+	StructureNotGenerated(const char* file, int line, AtomContainer& mol)
+		: GeneralException(file, line, "StructureNotGenerated", "")
+	{
+		message_ = " No 3D coordinates could be generated for molecule: \n";
+		
+		message_ += LigBase::moleculeToSMILES(mol);
+		message_ += "\n\n";
+		
+		message_ += "CAUSE: UNKNOWN";
+		
+		globalHandler.setMessage(message_);
+	}
+	
+private:
+	void canSMILESFromAtomContainer(AtomContainer& ac, String& can_smiles)
+	{
+		OpenBabel::OBMol* obmol = MolecularSimilarity::createOBMol(ac, true);
+		
+		OpenBabel::OBConversion conv;
+		conv.SetOutFormat("can"); // canonical smiles
+		can_smiles = conv.WriteString(obmol);
+		
+		// remove the stupid ID that openbabel always attaches to the generated canonical smile
+		can_smiles = can_smiles.substr(0,can_smiles.find_first_of('\t'));
+	}
+};
+
+}// End Namespace "Exception"
+
+}// End Namespace "BALL"
 #endif // LIGANDSTRUCTUREBASE_H

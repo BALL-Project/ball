@@ -7,6 +7,9 @@
 
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
 
+
+namespace BALL 
+{
 /// C l a s s   C a n o n i c a l i z e r
 /// ############################################################################
 
@@ -33,7 +36,7 @@ private:
 class Matcher
 {
 public:
-	Matcher( RigidsMap& coord_map );
+	Matcher( BALL::RigidsMap& coord_map );
 	~Matcher();
 	
 	void matchFragment(BALL::AtomContainer &fragment);
@@ -41,7 +44,8 @@ public:
 	static const BALL::String getUCK(BALL::AtomContainer & mol);
 	
 private:
-	RigidsMap& _coord_lib;
+	BALL::RigidsMap& _coord_lib;
 };
 
+} // End Namespace "BALL"
 #endif // CANONICALIZER_H

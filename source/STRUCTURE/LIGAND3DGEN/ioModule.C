@@ -520,13 +520,13 @@ void CombiLibManager::_parseCombiLibFile()
 /// S m i l e s P a r s e r
 /// ############################################################################
 
-SmilesParser::SmilesParser(){
+SmilesParserOB::SmilesParserOB(){
 	_babel_conv.SetInFormat("smi");
 }
 
-SmilesParser::~SmilesParser(){}
+SmilesParserOB::~SmilesParserOB(){}
 
-AtomContainer *SmilesParser::fromSMILEStoMolecule(const String &smiles_string)
+AtomContainer *SmilesParserOB::fromSMILEStoMolecule(const String &smiles_string)
 {
 	_babel_conv.ReadString(&_babel_mol, smiles_string);
 	
@@ -535,7 +535,7 @@ AtomContainer *SmilesParser::fromSMILEStoMolecule(const String &smiles_string)
 	return tmp;
 }
 
-RFragment *SmilesParser::fromSMILEStoRFragment(const String &smiles_string, 
+RFragment *SmilesParserOB::fromSMILEStoRFragment(const String &smiles_string, 
 																							 const int &g_id)
 {
 	// get the obmol SMILES input:

@@ -11,6 +11,8 @@
 #include <BALL/STRUCTURE/LIGAND3DGEN/clashResolver.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/moleculeConnector.h>
 
+namespace BALL 
+{
 
 class StructureAssembler
 {
@@ -29,27 +31,25 @@ public:
 	 * @param mol
 	 * @return - returns the found list of rotable atom pairs
 	 */
-	ConnectList *assembleStructure(BALL::AtomContainer& mol);
+	BALL::ConnectList *assembleStructure(BALL::AtomContainer& mol);
 	
 private:
 	
-	void insertAll(ACVec& linker, ACVec& rigids, BALL::AtomContainer& mol);
+	void insertAll(BALL::ACVec& linker, BALL::ACVec& rigids, BALL::AtomContainer& mol);
 	
 	void connectClashFree(BALL::Atom &at1, BALL::Atom &at2, 
-												ConnectList& connections);
+												BALL::ConnectList& connections);
 	
 	TemplateDatabaseManager& _libs; // needed fragment libs
 	
 	// Tool-Classes needed for structure fragmenting and reassembly
-	MoleculeFragmenter _fragmenter;
-	Canonicalizer      _canoicalizer;
-	Matcher            _matcher;
-	LinkerBuilder      _linker_builder;
-	MoleculeConnector  _connector;
-	ConnectionResolver _clash_resolver;
-
-	
-	//
-	
+	BALL::MoleculeFragmenter _fragmenter;
+	BALL::Canonicalizer      _canoicalizer;
+	BALL::Matcher            _matcher;
+	BALL::LinkerBuilder      _linker_builder;
+	BALL::MoleculeConnector  _connector;
+	BALL::ConnectionResolver _clash_resolver;
 };
+
+} // End Namespace "BALL"
 #endif // STRCUTUREASSEMBLER_H
