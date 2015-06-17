@@ -3,7 +3,7 @@
 //
 
 #include <BALL/STRUCTURE/LIGAND3DGEN/starAligner.h>
-#include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/structureMapper.h>

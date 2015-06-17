@@ -5,7 +5,7 @@
 #ifndef IOMODULE_H
 #define IOMODULE_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 #include <BALL/STRUCTURE/UCK.h>
 
 #include <BALL/FORMAT/SDFile.h>

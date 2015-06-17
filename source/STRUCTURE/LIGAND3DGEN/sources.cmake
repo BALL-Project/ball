@@ -4,7 +4,7 @@
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
-	base.C
+	ligand3DBase.C
 	combiAssembler.C
 	linkerBuilder.C
 	ioModule.C

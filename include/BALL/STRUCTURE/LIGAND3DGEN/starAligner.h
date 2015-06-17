@@ -5,7 +5,7 @@
 #ifndef STARALIGNER_H
 #define STARALIGNER_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>

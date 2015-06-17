@@ -4,7 +4,7 @@
 #ifndef LINKERBUILDER_H
 #define LINKERBUILDER_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/starAligner.h>
 #include <BALL/STRUCTURE/clashResolver.h>
 

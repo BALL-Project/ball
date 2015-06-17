@@ -4,7 +4,7 @@
 #ifndef LIGAND_FRAGMENTER_H
 #define LIGAND_FRAGMENTER_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>

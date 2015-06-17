@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include  <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include  <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/combiAssembler.h>
 

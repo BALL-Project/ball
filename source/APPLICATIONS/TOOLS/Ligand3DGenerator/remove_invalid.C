@@ -3,7 +3,7 @@
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include  <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include  <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 
 using namespace BALL;
 using namespace std;

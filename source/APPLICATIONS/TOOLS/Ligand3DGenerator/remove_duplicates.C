@@ -7,7 +7,7 @@
 #include <BALL/STRUCTURE/UCK.h>
 #include <BALL/QSAR/aromaticityProcessor.h>
 
-#include  <BALL/STRUCTURE/LIGAND3DGEN/base.h>
+#include  <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 
 using namespace BALL;
 using namespace std;

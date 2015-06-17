@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef LIGANDBASE_H
-#define LIGANDBASE_H
+#ifndef LIGAND3DBASE_H
+#define LIGAND3DBASE_H
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/MATHS/vector3.h>
@@ -308,4 +308,4 @@ private:
 	BALL::RigidsMap& _coord_lib;
 };
 }// End Namespace "BALL"
-#endif // LIGANDSTRUCTUREBASE_H
+#endif // LIGAND3DBASE_H
