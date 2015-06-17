@@ -3,6 +3,7 @@
 //
 
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h> 
+#include <BALL/STRUCTURE/UCK.h>
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
@@ -10,6 +11,35 @@
 
 using namespace BALL;
 using namespace std;
+
+/// C l a s s   M a t c h e r
+/// ############################################################################
+Matcher::Matcher(RigidsMap &coord_map):_coord_lib(coord_map){}
+
+Matcher::~Matcher(){}
+
+void Matcher::matchFragment(AtomContainer& fragment)
+{
+	// for all fragments, match these against the lib:
+	UCK keyGen( fragment, true, 5 );
+	TemplateCoord* templat = _coord_lib[ keyGen.getUCK() ];
+	
+	if(templat && (templat->size() == fragment.countAtoms()) )
+	{
+		templat->applyCoordinates2Molecule( fragment );
+	}
+	else
+	{
+		throw Exception::FragmentTemplateNotFound("canonicalizer.C", 81, fragment);
+	}
+}
+
+const String Matcher::getUCK(AtomContainer &mol)
+{
+	UCK keyGen( mol, true, 5 );
+	return keyGen.getUCK();
+}
+
 
 /// C l a s s   T e m p l a t e C o o r d
 /// ############################################################################

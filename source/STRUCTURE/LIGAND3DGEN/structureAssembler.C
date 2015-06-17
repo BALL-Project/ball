@@ -7,6 +7,9 @@
 using namespace BALL;
 using namespace std;
 
+
+/// C l a s s   S t r u c t u r e A s s e m b l e r
+/// ############################################################################
 StructureAssembler::StructureAssembler( TemplateDatabaseManager& libs )
 	: _libs( libs ), 
 		_matcher( libs.getRigidTemplates() ),

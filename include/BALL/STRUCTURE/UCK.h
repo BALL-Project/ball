@@ -9,6 +9,8 @@
 	#include <BALL/DATATYPE/string.h>
 #endif
 
+#include <BALL/KERNEL/atomContainer.h>
+
 #include <vector>
 
 namespace BALL
@@ -103,6 +105,27 @@ namespace BALL
 		String id_;
 		float weight_;
 		bool ignore_hydrogens_;
+	};
+	
+	/// C l a s s   C a n o n i c a l i z e r
+	/// ############################################################################
+	
+	/**
+	 * @brief Canonicalizer class - takes an AtomContainer that MUST NOT contain 
+	 * any hydrogens and changes the order of atoms to a canonical one (e.g.: so 
+	 * two different benzoic acid molecules would then have the exact same list of 
+	 * atoms, even if the ordering was different before)
+	 */
+	class Canonicalizer
+	{
+	public:
+		Canonicalizer();
+		~Canonicalizer();
+	
+		void canonicalize(BALL::AtomContainer &molecule);
+		
+	private:
+		//#TODO: create OBGraphSym and OBmol as private member
 	};
 
 }//namespace

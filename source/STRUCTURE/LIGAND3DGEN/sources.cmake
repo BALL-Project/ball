@@ -5,7 +5,6 @@
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	base.C
-	canonicalizer.C
 	combiAssembler.C
 	clashResolver.C
 	linkerBuilder.C

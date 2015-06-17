@@ -4,7 +4,6 @@
 
 #include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/fragmenter.h>
-#include  <BALL/STRUCTURE/LIGAND3DGEN/canonicalizer.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/rmsdBinner.h>
 
 #include <BALL/FORMAT/commandlineParser.h>

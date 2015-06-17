@@ -6,7 +6,7 @@
 #define IOMODULE_H
 
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
-#include <BALL/STRUCTURE/LIGAND3DGEN/canonicalizer.h>
+#include <BALL/STRUCTURE/UCK.h>
 
 #include <BALL/FORMAT/SDFile.h>
 

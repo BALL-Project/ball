@@ -14,6 +14,8 @@
 namespace BALL 
 {
 
+/// C l a s s  S t r u c t u r e A s s e m b l e r
+/// ############################################################################
 class StructureAssembler
 {
 public:

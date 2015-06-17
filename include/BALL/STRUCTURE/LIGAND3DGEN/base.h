@@ -291,5 +291,21 @@ private:
 
 }// End Namespace "Exception"
 
+
+/// C l a s s   M a t c h e r
+/// ############################################################################
+class Matcher
+{
+public:
+	Matcher( BALL::RigidsMap& coord_map );
+	~Matcher();
+	
+	void matchFragment(BALL::AtomContainer &fragment);
+	
+	static const BALL::String getUCK(BALL::AtomContainer & mol);
+	
+private:
+	BALL::RigidsMap& _coord_lib;
+};
 }// End Namespace "BALL"
 #endif // LIGANDSTRUCTUREBASE_H

@@ -798,10 +798,6 @@ int ConnectionResolver::detectAll()
 	return detectPairList(_clash_inter)
 					+ detectPairList(_clash_small)
 					+ detectPairList(_clash_large);
-			
-//			detectBetweenMolecules(*_large_root, *_small_root) 
-//								+ detectInMolecule( *_large_root ) 
-//								+ detectInMolecule( *_small_root );
 }
 
 
