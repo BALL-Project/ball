@@ -6,7 +6,7 @@
 
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/starAligner.h>
-#include <BALL/STRUCTURE/LIGAND3DGEN/clashResolver.h>
+#include <BALL/STRUCTURE/clashResolver.h>
 
 namespace BALL 
 {

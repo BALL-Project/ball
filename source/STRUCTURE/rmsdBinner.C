@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/rmsdBinner.h>
+#include <BALL/STRUCTURE/rmsdBinner.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/base.h>
 
 using namespace BALL;

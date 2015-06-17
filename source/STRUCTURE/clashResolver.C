@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/clashResolver.h>
+#include <BALL/STRUCTURE/clashResolver.h>
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/PTE.h>

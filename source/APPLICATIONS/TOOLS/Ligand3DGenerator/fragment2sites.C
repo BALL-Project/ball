@@ -3,8 +3,8 @@
 //
 
 #include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
-#include  <BALL/STRUCTURE/LIGAND3DGEN/fragmenter.h>
-#include  <BALL/STRUCTURE/LIGAND3DGEN/rmsdBinner.h>
+#include  <BALL/STRUCTURE/fragmenter.h>
+#include  <BALL/STRUCTURE/rmsdBinner.h>
 
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>

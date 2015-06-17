@@ -14,12 +14,14 @@ SET(SOURCES_LIST
 	binaryFingerprintMethods.C
 	bindingPocketProcessor.C
 	buildBondsProcessor.C
+	clashResolver.C
 	connectedComponentsProcessor.C
 	connolly.C
 	defaultProcessors.C
 	disulfidBondProcessor.C
 	DNAMutator.C
 	fragmentDB.C
+	fragmenter.C
 	geometricProperties.C
 	geometricTransformations.C
 	graphEdge.C
@@ -72,6 +74,7 @@ SET(SOURCES_LIST
 	UCK.C
 	residueRotamerSet.C
 	rotamerLibrary.C
+	rmsdBinner.C
 	RMSDMinimizer.C
 )
 

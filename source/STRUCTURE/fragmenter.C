@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/fragmenter.h>
+#include <BALL/STRUCTURE/fragmenter.h>
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>

@@ -5,10 +5,10 @@
 #ifndef STRCUTUREASSEMBLER_H
 #define STRCUTUREASSEMBLER_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/fragmenter.h>
+#include <BALL/STRUCTURE/fragmenter.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/linkerBuilder.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
-#include <BALL/STRUCTURE/LIGAND3DGEN/clashResolver.h>
+#include <BALL/STRUCTURE/clashResolver.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/moleculeConnector.h>
 
 namespace BALL 

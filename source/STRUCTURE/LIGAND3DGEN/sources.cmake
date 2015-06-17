@@ -6,12 +6,9 @@
 SET(SOURCES_LIST
 	base.C
 	combiAssembler.C
-	clashResolver.C
 	linkerBuilder.C
-	fragmenter.C
 	ioModule.C
 	moleculeConnector.C
-	rmsdBinner.C
 	structureAssembler.C
 	starAligner.C
 )
