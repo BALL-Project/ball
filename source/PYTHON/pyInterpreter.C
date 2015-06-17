@@ -336,6 +336,17 @@ namespace BALL
 		
 		state = (runSingleString_(s, Py_single_input) != 0);
 
+		if (!state)
+		{
+			// save the error message, because resetting stdout would overwrite it
+			String result = error_message_;
+
+			runSingleString_("sys.stdout=stdout", Py_single_input);
+			runSingleString_("sys.stderr=stderr", Py_single_input);
+
+			return result;
+		}
+
 		// retrieve output
 		char* buf = 0;
 		PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
