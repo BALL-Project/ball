@@ -8,8 +8,8 @@ ENDIF()
 
 IF (COMPONENT_PLUGINS)
 	SET_COMPONENT_NAME(${COMPONENT_PLUGINS}
-		"SpaceNavigator plugin"
-		"Plugin adding support for 3Dconnexion SpaceNavigator input device"
+		"BALLView plugins"
+		"Plugins extending BALLView's functionality"
 	)
 
 	SET_COMPONENT_DEPENDENCIES(${COMPONENT_PLUGINS} ${COMPONENT_LIBVIEW})  
