@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13.18.1 2007/03/25 21:42:50 oliver Exp $
-//
 
 #include <BALL/PYTHON/pyInterpreter.h>
-#include <Python.h>
-
 #include <BALL/PYTHON/BALLPythonConfig.h>
 
 #include <BALL/FORMAT/lineBasedFile.h>
+
+#include <Python.h>
 
 namespace BALL
 {
@@ -353,7 +351,6 @@ namespace BALL
 	}
 
 	String PyInterpreter::runFile(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 		if (!valid_) return "";
 
