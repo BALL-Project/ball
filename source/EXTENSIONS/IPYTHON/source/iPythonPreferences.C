@@ -4,7 +4,7 @@
 
 #include <iPythonPreferences.h>
 
-#include <IPythonWidget.h>
+#include <iPythonWidget.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtWidgets/QLineEdit>
