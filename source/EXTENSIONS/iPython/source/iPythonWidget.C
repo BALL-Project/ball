@@ -23,6 +23,7 @@ namespace BALL
 			main_view->settings()->setAttribute(QWebSettings::JavascriptCanAccessClipboard, true);
 
 			tab_view_->addTab(main_view, "iPython");
+			tab_view_->setTabsClosable(true);
 //			connect(main_view, SIGNAL(linkClicked(const QUrl&)), this, SLOT(handleLinkClicked(const QUrl&)));
 		}
 
