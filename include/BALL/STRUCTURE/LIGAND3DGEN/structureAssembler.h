@@ -19,7 +19,7 @@ namespace BALL
 class StructureAssembler
 {
 public:
-	StructureAssembler( TemplateDatabaseManager& libs );
+	StructureAssembler( RigidFragmentDB& rigid_db, SiteFragmentDB& site_db);
 
 	~StructureAssembler();
 
@@ -41,8 +41,6 @@ private:
 	
 	void connectClashFree(BALL::Atom &at1, BALL::Atom &at2, 
 												BALL::ConnectList& connections);
-	
-	TemplateDatabaseManager& _libs; // needed fragment libs
 	
 	// Tool-Classes needed for structure fragmenting and reassembly
 	BALL::MoleculeFragmenter _fragmenter;

@@ -16,11 +16,13 @@ int main(int argc, char* argv[])
 	parpars.registerMandatoryInputFile("i", "query molecule as SDF");
 	parpars.registerMandatoryOutputFile("o", "output molecule with 3D coordinates SDF");
 	
-	parpars.registerOptionalInputFile("c", "location of conf file");
-	parpars.setSupportedFormats("c","conf");
+	parpars.registerOptionalInputFile("fragments", "specifies the path to a custom rigid fragments file in line format");
+	parpars.registerOptionalInputFile("sites", "specifies the path to a custom site templates file in sdf format");
 	
 	parpars.setSupportedFormats("i","sdf");
 	parpars.setSupportedFormats("o","sdf");
+	parpars.setSupportedFormats("fragments","line");
+	parpars.setSupportedFormats("sites","sdf");
 
 	String manual = "...currently only predicting structures that consist of rigid fragments...";
 	parpars.setToolManual(manual);
@@ -28,24 +30,33 @@ int main(int argc, char* argv[])
 	parpars.parse(argc, argv);
 	
 /// ################################## L O A D    D A T A B A S E / I N P U T
-	TemplateDatabaseManager lib_loader;
-	if ( parpars.has("c") )
-	{
-		cout<<"Reading configuration from: "<< parpars.get("c") << endl;
-		lib_loader.libraryPathesFromConfig( parpars.get("c") );
-	}
-	else
-		lib_loader.libraryPathesFromConfig( "databases.conf");
+	cout<<" * loading databases "<<endl;
+	String rigids_path = "";
+	String sites_path  = "";
 	
-	lib_loader.readAll();
+	if ( parpars.has("fragments")  )
+	{
+		rigids_path = parpars.get("fragments");
+		cout<<"   loading rigid fragments from: "<<rigids_path<<endl;
+	}
+	
+	if ( parpars.has("sites")  )
+	{
+		sites_path = parpars.get("sites");
+		cout<<"   loading site templates from: "<<sites_path<<endl;
+	}
+	
+	RigidFragmentDB rigid_db( rigids_path );
+	SiteFragmentDB  site_db( sites_path );
 
+	
 	SDFile infile( parpars.get("i"), std::ios::in);
 	Molecule* tmp = infile.read();
 	
 	
 //// ################################## A S S E M B L E    3 D
 	// StructureAssembler class: this is this tools wrapped main-class:
-	StructureAssembler lig_assembler( lib_loader );
+	StructureAssembler lig_assembler( rigid_db, site_db );
 
 	SDFile outfile(parpars.get("o"), std::ios::out);
 	ConnectList* dummy_con_lst = 0;

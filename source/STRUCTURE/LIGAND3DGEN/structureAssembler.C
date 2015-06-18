@@ -10,13 +10,12 @@ using namespace std;
 
 /// C l a s s   S t r u c t u r e A s s e m b l e r
 /// ############################################################################
-StructureAssembler::StructureAssembler( TemplateDatabaseManager& libs )
-	: _libs( libs ), 
-		_matcher( libs.getRigidTemplates() ),
-		_linker_builder( libs.getSiteTemplates()),
+StructureAssembler::StructureAssembler(RigidFragmentDB &rigid_db , SiteFragmentDB &site_db)
+	: _matcher( rigid_db ),
+		_linker_builder( site_db ),
 		_clash_resolver(1.2, 3)
 {
-	_connector.setConnectionLib(libs.getSiteTemplates());
+	_connector.setConnectionLib( site_db );
 }
 	
 StructureAssembler::~StructureAssembler()

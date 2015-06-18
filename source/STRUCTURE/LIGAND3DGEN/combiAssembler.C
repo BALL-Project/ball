@@ -7,10 +7,10 @@
 using namespace std;
 using namespace BALL;
 
-CombiAssembler::CombiAssembler(TemplateDatabaseManager &data, CombiLibMap* clib):
+CombiAssembler::CombiAssembler(SiteFragmentDB& site_db, CombiLibMap* clib):
 	_work_mol(0), _r_groups(clib)
 {
-	_connector.setConnectionLib(data.getSiteTemplates());
+	_connector.setConnectionLib( site_db );
 }
 
 CombiAssembler::~CombiAssembler()

@@ -1,16 +1,19 @@
 #ifndef COMBIASSEMBLER_H
 #define COMBIASSEMBLER_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/structureAssembler.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3Dbase.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/moleculeConnector.h>
+#include <BALL/STRUCTURE/clashResolver.h>
+#include <BALL/FORMAT/SDFile.h>
 
 namespace BALL 
 {
 
-
 class CombiAssembler
 {
 public:
-	CombiAssembler(TemplateDatabaseManager& data, BALL::CombiLibMap* clib);
+	CombiAssembler(SiteFragmentDB& site_db, BALL::CombiLibMap* clib);
 	
 	~CombiAssembler();
 	
@@ -33,7 +36,7 @@ private:
 	MoleculeConnector  _connector;
 	ConnectionResolver _cresolv;
 
-	std::list< BALL::RFragment* >            _current_combination;
+	std::list< BALL::RFragment* > _current_combination;
 	void _combineRecur(BALL::SDFile& handle);
 	
 	void newSetForCurrentCombination();

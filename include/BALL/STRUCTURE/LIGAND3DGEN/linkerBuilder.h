@@ -16,7 +16,7 @@ namespace BALL
  */
 class LinkerBuilder{
 public:
-	LinkerBuilder(BALL::SiteMap& connection_templates);
+	LinkerBuilder(SiteFragmentDB& connection_templates);
 	 
 	~LinkerBuilder();
 	/**
@@ -51,7 +51,7 @@ private:
 	bool isTerminalBond( BALL::Bond& bnd, BALL::Composite& parent);
 	
 	// input libs:
-	BALL::SiteMap& _connection_templates;
+	SiteFragmentDB& _connection_templates;
 	
 	// helper structures
 	BALL::HashSet< BALL::Atom* > _done;

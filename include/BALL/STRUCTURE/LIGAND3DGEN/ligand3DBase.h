@@ -22,6 +22,8 @@
 namespace BALL 
 {
 
+class RigidFragmentDB;
+
 struct RFragment;
 class TemplateCoord;
 
@@ -41,11 +43,11 @@ typedef std::list< std::pair<BALL::Atom*, BALL::Atom*> > ConnectList;
 // key==group number, value==all groupfragment for that group
 typedef std::vector< std::vector<RFragment*> > CombiLibMap; 
 
-// key == UCK key
-typedef boost::unordered_map <BALL::String, TemplateCoord*> RigidsMap;
+//// key == UCK key
+//typedef boost::unordered_map <BALL::String, TemplateCoord*> RigidsMap;
 
-//typedef boost::unordered_map <BALL::String, float >         BondLengthMap;
-typedef boost::unordered_map <BALL::String, BALL::AtomContainer*> SiteMap;
+////typedef boost::unordered_map <BALL::String, float >         BondLengthMap;
+//typedef boost::unordered_map <BALL::String, BALL::AtomContainer*> SiteMap;
 
 
 /// C l a s s   T e m p l a t e C o o r d
@@ -292,12 +294,43 @@ private:
 }// End Namespace "Exception"
 
 
+/// R i g i d F r a g m e n t s D a t a b a s e
+/// ############################################################################
+class RigidFragmentDB:
+		public boost::unordered_map <BALL::String, TemplateCoord*>
+{
+public:
+	RigidFragmentDB();
+	
+	RigidFragmentDB(const BALL::String& filename);
+	
+	~RigidFragmentDB();
+	
+private:
+	BALL::String _filename;
+};
+
+/// S i t e F r a g m e n t s D a t a b a s e
+/// ############################################################################
+class SiteFragmentDB:
+		public boost::unordered_map <BALL::String, BALL::AtomContainer*>
+{
+public:
+	SiteFragmentDB();
+	
+	SiteFragmentDB(const BALL::String& filename);
+	
+	~SiteFragmentDB();
+private:
+	BALL::String _filename;
+};
+
 /// C l a s s   M a t c h e r
 /// ############################################################################
 class Matcher
 {
 public:
-	Matcher( BALL::RigidsMap& coord_map );
+	Matcher( RigidFragmentDB& coord_map );
 	~Matcher();
 	
 	void matchFragment(BALL::AtomContainer &fragment);
@@ -305,7 +338,7 @@ public:
 	static const BALL::String getUCK(BALL::AtomContainer & mol);
 	
 private:
-	BALL::RigidsMap& _coord_lib;
+	RigidFragmentDB& _coord_lib;
 };
 }// End Namespace "BALL"
 #endif // LIGAND3DBASE_H

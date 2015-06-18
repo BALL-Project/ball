@@ -4,6 +4,7 @@
 
 #include  <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
+#include  <BALL/STRUCTURE/LIGAND3DGEN/structureAssembler.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/combiAssembler.h>
 
 #include <BALL/FORMAT/commandlineParser.h>
@@ -17,12 +18,13 @@ int main(int argc, char* argv[])
 	CommandlineParser parpars("combiLib 3D structure generation", " generate coordinates for a combiLib", 0.1, String(__DATE__), "Preparation");
 	parpars.registerMandatoryInputFile("i", "combiLib as *.combi");
 	parpars.registerMandatoryOutputFile("o", "3D molecules in SDFormat");
-	parpars.registerOptionalInputFile("c", "configuration file in *.conf");
+	parpars.registerOptionalInputFile("fragments", "specifies the path to a custom rigid fragments file in line format");
+	parpars.registerOptionalInputFile("sites", "specifies the path to a custom site templates file in sdf format");
 	
 	parpars.setSupportedFormats("i","combi");
 	parpars.setSupportedFormats("o","sdf");
-	parpars.setSupportedFormats("c","conf");
-//	parpars.setOutputFormatSource("i","o");
+	parpars.setSupportedFormats("fragments","line");
+	parpars.setSupportedFormats("sites","sdf");
 
 	String manual = 
 			"Generate a valid (not optimized) 3D structure for structures of an "
@@ -44,23 +46,31 @@ int main(int argc, char* argv[])
 	cout<<"ok"<<endl;
 	
 	
-	//2.) setup template database manager, to load the fragment databases
-	String config_path = "databases.conf";
+	//2.) load the fragment databases
+	cout<<" * loading databases"<<endl;
+	String rigids_path = "";
+	String sites_path  = "";
 	
-	if ( parpars.has("c") )
-		config_path = parpars.get("c");
+	if ( parpars.has("fragments")  )
+	{
+		rigids_path = parpars.get("fragments");
+		cout<<"   loading rigid fragments from: "<<rigids_path<<endl;
+	}
 	
-	TemplateDatabaseManager template_man;
-	template_man.libraryPathesFromConfig( config_path );
+	if ( parpars.has("sites")  )
+	{
+		sites_path = parpars.get("sites");
+		cout<<"   loading site templates from: "<<sites_path<<endl;
+	}
 	
-	cout<<" * loading databases specified in: "<<config_path<<endl;
-	template_man.readAll(); 
-	
+	RigidFragmentDB rigid_db( rigids_path );
+	SiteFragmentDB  site_db( sites_path );
+
 	//// ################################## C O M B I    A S S E M B L E    3 D
 	//3.) assemble all individual RFragments:
 	cout<<" * assebling R-fragments"<<endl;
 
-	StructureAssembler assem( template_man ); // init structureAssembler with Databases
+	StructureAssembler assem(rigid_db, site_db); // init structureAssembler with Databases
 	
 	CombiLibMap& c_lib = combi_man.getCombiLib();
 	
@@ -81,7 +91,7 @@ int main(int argc, char* argv[])
 	cout<<" * generating 3D combinations, and write results to "
 		  << parpars.get("o") <<endl;
 	
-	CombiAssembler combiner( template_man, &combi_man.getCombiLib() );
+	CombiAssembler combiner( site_db, &combi_man.getCombiLib() );
 	SDFile outfile( parpars.get("o"), ios::out);
 	
 	ConnectionResolver::num_resolve_calls = 0;

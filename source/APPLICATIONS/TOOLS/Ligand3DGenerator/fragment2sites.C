@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
 		AtomContainer* ac = it->second[0].first;
 		ac->setProperty("key", key);
 		
-		LigIO::writeMol(*ac, outfile);
+		outfile << *ac;
 	}
 	outfile.close();
 	

@@ -16,6 +16,19 @@ using namespace OpenBabel;
 using namespace BALL;
 using namespace std;
 
+void writePositionLines(AtomContainer& mol, LineBasedFile& handle)
+{
+	handle <<"key "<< mol.getProperty("key").getString() <<endl;
+	handle << String(mol.countAtoms()) << endl;
+	
+	AtomIterator ati = mol.beginAtom();
+	for(; +ati; ati++)
+	{
+		handle << String(ati->getPosition().x) << " ";
+		handle << String(ati->getPosition().y) << " ";
+		handle << String(ati->getPosition().z) << endl;
+	}
+}
 
 /// ################# M A I N #################
 int main(int argc, char* argv[])
@@ -123,11 +136,11 @@ int main(int argc, char* argv[])
 		
 		if(use_sdf)
 		{
-			LigIO::writeMol(frag, * (LineBasedFile*)outfile);
-			LigIO::writeMol(frag, * (SDFile*)out_sdf);
+			writePositionLines(frag, *outfile);
+			(*out_sdf) << frag;
 		}
 		else
-			LigIO::writeMol(frag, * (LineBasedFile*)outfile);
+			(*out_sdf) << frag;
 	}
 	outfile->close();
 	

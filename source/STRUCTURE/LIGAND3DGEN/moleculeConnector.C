@@ -19,7 +19,7 @@ MoleculeConnector::~MoleculeConnector()
 	
 }
 
-void MoleculeConnector::setConnectionLib(SiteMap &connectLib)
+void MoleculeConnector::setConnectionLib(SiteFragmentDB &connectLib)
 {
 	_connections = &connectLib;
 }

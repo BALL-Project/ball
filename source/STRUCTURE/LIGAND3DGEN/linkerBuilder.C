@@ -14,7 +14,7 @@ using namespace std;
 /**
  * buildLinker
  */
-LinkerBuilder::LinkerBuilder(SiteMap& connection_templates )
+LinkerBuilder::LinkerBuilder(SiteFragmentDB &connection_templates )
 	: _connection_templates(connection_templates)
 {
 	

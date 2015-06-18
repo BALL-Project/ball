@@ -17,7 +17,7 @@ public:
 	MoleculeConnector();
 	~MoleculeConnector();
 	
-	void setConnectionLib(BALL::SiteMap& connectLib);
+	void setConnectionLib(SiteFragmentDB& connectLib);
 /**  
  * connectFragments - connects the two given fragments (by their child atoms)
  * in such a way, that molecule1 (given by 'atm1') retains its position,
@@ -58,8 +58,8 @@ private:
 											std::pair<BALL::String,BALL::Atom*>& b);
 	
 	/// Class member:
-	BALL::SiteMap*       _connections;
-	StarAligner    _star_aligner;
+	SiteFragmentDB* _connections;
+	StarAligner     _star_aligner;
 };
 
 } // End Namespace "BALL"

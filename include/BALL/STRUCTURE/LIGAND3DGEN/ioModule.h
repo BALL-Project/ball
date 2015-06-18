@@ -16,83 +16,6 @@
 #include <boost/unordered_map.hpp>
 namespace BALL 
 {
-/// R i g i d F r a g m e n t s D a t a b a s e
-/// ############################################################################
-class RigidFragmentDB:
-		public boost::unordered_map <BALL::String, TemplateCoord*>
-{
-public:
-	RigidFragmentDB();
-	
-	RigidFragmentDB(const BALL::String& filename);
-	
-	~RigidFragmentDB();
-	
-private:
-	BALL::String _filename;
-};
-
-/// S i t e F r a g m e n t s D a t a b a s e
-/// ############################################################################
-class SiteFragmentDB:
-		public boost::unordered_map <BALL::String, BALL::AtomContainer*>
-{
-	SiteFragmentDB();
-	
-	SiteFragmentDB(const BALL::String& filename);
-	
-	~SiteFragmentDB();
-private:
-	BALL::String _filename;
-};
-
-/// T e m p l a t e D a t a b a s e M a n a g e r
-/// ############################################################################
-/**
- * @brief The IOModule is a class to read, store and mange any library
- * 
- */
-class TemplateDatabaseManager
-{
-public:
-	
-	TemplateDatabaseManager();
-	
-	~TemplateDatabaseManager();
-	
-	/**
-	 * @brief readAll reads all libs FOR WHICH A PATH WAS SET
-	 */
-	void readAll();
-	
-	/*
-	 * Get all needed library information from a config file
-	 * that lists the paths to the respective lib files
-	 */
-	void libraryPathesFromConfig(const BALL::String& config_path);
-	
-	void readSiteTemplates();
-	
-	void readRigidTemplates();
-	
-	/*
-	 * fragment_lib reader for fragmentLibs that are in SDF Format, converts
-	 * the data to unordered_map <String, TemplateCoord*> for efficient internal
-	 * representation
-	 */
-	void readSDFRigidTemplates();
-	
-	BALL::RigidsMap& getRigidTemplates();
-	BALL::SiteMap& getSiteTemplates();
-	
-private:
-	BALL::RigidsMap _templates_rigids;
-	BALL::SiteMap _templates_sites;
-	
-	BALL::String _path_to_rigids;
-	BALL::String _path_to_sites;
-};
-
 
 /// S m i l e s P a r s e r
 /// ############################################################################
@@ -148,50 +71,6 @@ private:
 	bool         _lib_is_generated;
 	BALL::SmilesParserOB _smi_parser;
 	boost::unordered_map< int, int > _id_mapping;
-};
-
-
-/// (static) L i g I O
-/// ############################################################################
-class LigIO
-{
-public:
-	/**
-	 * @brief writeMolVec write vector of BALL::AtomContainer to a single SDFile
-	 * @param input
-	 * @param handle
-	 */
-	static void writeMolVec(std::vector<BALL::AtomContainer* >& input, BALL::SDFile &handle);
-	
-	/**
-	 * @brief writeMolVec write vector of BALL::AtomContainer to a single 
-	 * LineBasedFile. This will only write the molecule key and the coordinates to
-	 * save space and reading time.
-	 * 
-	 * @param input
-	 * @param handle
-	 */
-	static void writeMolVec(std::vector<BALL::AtomContainer*>& input, BALL::LineBasedFile& handle);
-	
-	/**
-	 * @brief writeMol same as writeMolVec for a single file
-	 * @param mol
-	 * @param handle
-	 */
-	static void writeMol(BALL::AtomContainer& mol, BALL::LineBasedFile &handle);
-	
-	/**
-	 * @brief writeMol same as writeMolVec for a single file
-	 * @param mol
-	 * @param handle
-	 */
-	static void writeMol(BALL::AtomContainer& mol, BALL::SDFile &handle);
-	
-	
-private:
-	static void writePositionLines(BALL::AtomContainer& mol, BALL::LineBasedFile &handle);
-	static void readOBMolecule(const BALL::String& path, OpenBabel::OBMol& mol);
-
 };
 
 } // End Namespace "BALL"
