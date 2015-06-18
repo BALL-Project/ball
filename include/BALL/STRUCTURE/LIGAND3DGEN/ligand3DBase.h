@@ -140,43 +140,9 @@ class LigBase
 {
 public:
 	
-	static bool containsUnknownElement( BALL::AtomContainer& ac );
-	
-	static bool containsHydrogen( BALL::AtomContainer& ac );
-	
 	static void removeHydrogens( BALL::AtomContainer &tmp );
 	
-	// generate a mini dump of a molecule
-	static BALL::String printInlineMol( BALL::Composite* mol); //#DEBUG: for debugging
-	static BALL::String printMol( BALL::Composite* mol);//#DEBUG: for debugging
-	
-	static BALL::String printInlineStarMol( BALL::Composite* mol);//#DEBUG: for debugging
-	static BALL::String printInlineStarMol(AtmVec& mol);//#DEBUG: for debugging
-	
 	static BALL::String moleculeToSMILES( BALL::AtomContainer& ac );
-	
-	static int countBondsAndOrder( BALL::Atom& atm);
-	static int countBondsInParent( BALL::Atom& atm, const BALL::Composite &parent);
-	
-	/**
-	 * @brief getAtomPosition - get the position of an atom in the molcule list
-	 * @param atm
-	 * @param mol
-	 * @return 
-	 */
-	static const int getAtomPosition( BALL::Atom* atm, BALL::AtomContainer *mol);
-	
-	/**
-	 * @brief toAtmVec - Translate the AtomContainer 'fromMol' into an AtmVec '
-	 * toMol'
-	 * @param fromMol
-	 * @param toMol
-	 */
-	static void toAtmVec( BALL::AtomContainer& fromMol, AtmVec& toMol);
-	
-	static void transferMolecule( BALL::AtomContainer* toMol, BALL::AtomContainer* fromMol);
-	
-	static void clearExternalBonds( BALL::AtomContainer* mol);
 };
 
 

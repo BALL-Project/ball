@@ -64,7 +64,7 @@ void LinkerBuilder::buildLinker(AtomContainer& linker_frag, ConnectList& result_
 	Atom* at1 = 0;
 	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
 	{
-		if( LigBase::countBondsInParent(*ati, linker_frag) > 1)
+		if( countBondsInParent(*ati, linker_frag) > 1)
 		{
 			at1 = &*ati;
 			break;
@@ -134,7 +134,7 @@ AtomContainer& LinkerBuilder::loadTemplate( String& key )
  */
 void LinkerBuilder::recurLinkerConnect(Atom& atm, const Composite& parent)
 {
-	if( LigBase::countBondsInParent( atm, parent) < 2 )
+	if( countBondsInParent( atm, parent) < 2 )
 	{
 		return;
 	}
@@ -282,7 +282,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag, ConnectList
 	int current_cnt = 0;
 	for(AtomIterator ati = linker_frag.beginAtom(); +ati; ++ati)
 	{
-		current_cnt = LigBase::countBondsInParent(*ati, linker_frag);
+		current_cnt = countBondsInParent(*ati, linker_frag);
 		if( current_cnt > 2)
 		{
 			at1 = &*ati;
@@ -331,7 +331,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag, ConnectList
 void LinkerBuilder::recurResolveLinker(int previous_cnt, Bond& bnd, 
 																			Atom& curr_atm, int dist, Composite* parent)
 {
-	int current_cnt = LigBase::countBondsInParent( curr_atm, *parent );
+	int current_cnt = countBondsInParent( curr_atm, *parent );
 	
 	// A terminal atom (thus also a terminal bond) was found: 
 	// TERMINATE recursion
@@ -424,6 +424,17 @@ void LinkerBuilder::setBondTrans(Bond &bnd)
 
 }
 
+int LinkerBuilder::countBondsInParent(Atom &atm, const Composite &parent)
+{
+	int cnt = 0;
+	for( Atom::BondIterator bit = atm.beginBond(); +bit; ++bit )
+	{
+		if( parent.isParentOf( * bit->getBoundAtom( atm )) )
+			cnt++;
+	}
+	return cnt;
+}
+
 /*
  * P R I V A T E
  * isTerminalBond
@@ -433,9 +444,9 @@ bool LinkerBuilder::isTerminalBond(Bond &bnd, Composite &parent)
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();
 			
-	if( LigBase::countBondsInParent(*at1, parent) == 1 )
+	if( countBondsInParent(*at1, parent) == 1 )
 		return true;
-	else if (LigBase::countBondsInParent(*at2, parent) == 1 )
+	else if (countBondsInParent(*at2, parent) == 1 )
 		return true;
 	else
 		return false;

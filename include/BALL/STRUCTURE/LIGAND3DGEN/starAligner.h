@@ -111,6 +111,14 @@ private:
 	 */
 	void swapAtoms(BALL::Atom*& a, BALL::Atom*& b);
 	
+	/* 
+	 * @brief toAtmVec - Translate the AtomContainer 'fromMol' into an AtmVec '
+	 * toMol'
+	 * @param fromMol
+	 * @param toMol
+	 */
+	static void toAtmVec( BALL::AtomContainer& fromMol, AtmVec& toMol);
+	
 	/*
 	 * twoPointMatch mapps:
 	 *   n1 onto w1

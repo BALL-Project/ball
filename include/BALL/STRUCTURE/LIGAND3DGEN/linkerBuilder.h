@@ -50,6 +50,8 @@ private:
 	
 	bool isTerminalBond( BALL::Bond& bnd, BALL::Composite& parent);
 	
+	static int countBondsInParent( BALL::Atom& atm, const BALL::Composite &parent);
+	
 	// input libs:
 	SiteFragmentDB& _connection_templates;
 	

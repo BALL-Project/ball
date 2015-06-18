@@ -72,9 +72,20 @@ bool hasValidGeometry(AtomContainer& mol)
 	return true;
 }
 
+bool containsUnknownElement(AtomContainer &ac)
+{
+	for( AtomIterator it = ac.beginAtom(); +it; ++it)
+	{
+		if( it->getElement().getSymbol() == "?")
+			return true;
+	}
+	
+	return false;
+}
+
 bool isValid(AtomContainer& mol)
 {
-	if( LigBase::containsUnknownElement( mol ) )
+	if( containsUnknownElement( mol ) )
 	{
 		num_elem_fault++;
 		return false;

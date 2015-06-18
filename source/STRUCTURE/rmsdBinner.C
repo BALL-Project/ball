@@ -116,8 +116,8 @@ float RMSDBinner::_getRMSD(AtomContainer &mol1, AtomContainer &mol2 )
 	if( mol1.countAtoms()!= mol2.countAtoms())
 	{
 		cout <<"ERROR: in RMSDBinner two molecules had different size: "<<endl;
-		cout<< "Mol1: "<<LigBase::printInlineMol(&mol1)<<endl;
-		cout<< "Mol2: "<<LigBase::printInlineMol(&mol2)<<endl;
+		cout<< "Mol1: "<<LigBase::moleculeToSMILES(mol1)<<endl;
+		cout<< "Mol2: "<<LigBase::moleculeToSMILES(mol2)<<endl;
 	}
 	if( _use_star_align )
 	{
@@ -139,8 +139,8 @@ float RMSDBinner::_getRMSD(AtomContainer &mol1, AtomContainer &mol2 )
 			if(bj.size() < 3)
 			{
 				cout <<"ERROR: in RMSDBinner bijection was smaller 3: "<<endl;
-				cout<< "Mol1: "<<LigBase::printInlineMol(&mol1)<<endl;
-				cout<< "Mol2: "<<LigBase::printInlineMol(&mol2)<<endl;
+				cout<< "Mol1: "<<LigBase::moleculeToSMILES(mol1)<<endl;
+				cout<< "Mol2: "<<LigBase::moleculeToSMILES(mol2)<<endl;
 			}
 			
 			pair<Matrix4x4, double> rmsd = RMSDMinimizer::computeTransformation(bj);

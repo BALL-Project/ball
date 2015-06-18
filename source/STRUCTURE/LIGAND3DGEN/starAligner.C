@@ -36,7 +36,7 @@ void StarAligner::setMolecules(AtomContainer &reference, AtomContainer &query)
 	_got_transformation=false;
 	_delete_site = true;
 	_site = new AtmVec;
-	LigBase::toAtmVec(reference, *_site);
+	toAtmVec(reference, *_site);
 	
 	_query = &query;
 }
@@ -321,7 +321,7 @@ Matrix4x4 StarAligner::bondAlign(Atom* atA1, Atom* atA2, Atom* atB1, Atom* atB2)
 void StarAligner::getRemainder( AtmVec& remainder )
 {
 	AtmVec vec2;
-	LigBase::toAtmVec(*_query, vec2);
+	toAtmVec(*_query, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float min_sq_dist = numeric_limits<float>::max(); 
@@ -374,7 +374,7 @@ Atom* StarAligner::getMatchingAtom(Atom* center, AtomContainer* mol, String &ele
 float StarAligner::getMinRMSD(AtmVec& vec1, AtomContainer& mol2)
 {
 	AtmVec vec2;
-	LigBase::toAtmVec(mol2, vec2);
+	toAtmVec(mol2, vec2);
 	
 	// the 'sum of all square distances' for the best (minimal) permutation:
 	float global_sq_dist = numeric_limits<float>::max(); 
@@ -492,6 +492,13 @@ Matrix4x4 StarAligner::twoPointMatch(const Vector3& n1, const Vector3& n2,
 																		 const Vector3& w1, const Vector3& w2)
 {
 	return StructureMapper::matchPoints(n1, n2, Vector3(), w1, w2, Vector3());
+}
+
+// Translate the AtomContainer 'fromMol' into an AtmVec 'toMol'
+void StarAligner::toAtmVec(AtomContainer &fromMol, AtmVec &toMol)
+{
+	for(AtomIterator ati = fromMol.beginAtom(); +ati; ++ati)
+		toMol.push_back(&*ati);
 }
 
 /*
