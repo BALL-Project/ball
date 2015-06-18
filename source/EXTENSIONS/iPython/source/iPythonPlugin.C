@@ -2,8 +2,6 @@
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-Q_EXPORT_PLUGIN2(pluginiPython, BALL::VIEW::IPythonPlugin)
-
 namespace BALL
 {
 	namespace VIEW
