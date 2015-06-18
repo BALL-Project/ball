@@ -7,14 +7,14 @@
 #include <IPythonWidget.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QLineEdit>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		IPythonPreferences::IPythonPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
+		IPythonPreferences::IPythonPreferences(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: ConfigDialog(parent, fl),
 			  Ui_IPythonPreferencesData()
 				

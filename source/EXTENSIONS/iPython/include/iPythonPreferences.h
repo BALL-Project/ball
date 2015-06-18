@@ -15,7 +15,7 @@
 
 #include <ui_iPythonPreferences.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {
@@ -35,7 +35,7 @@ namespace BALL
 			public:
 			
 				/// Default Constructor.
-				IPythonPreferences(QWidget *parent = NULL, const char *name = "IPythonPreferences", Qt::WFlags fl=0);
+				IPythonPreferences(QWidget *parent = NULL, const char *name = "IPythonPreferences", Qt::WindowFlags fl=0);
 				
 				/// Destructor.
 				virtual ~IPythonPreferences();

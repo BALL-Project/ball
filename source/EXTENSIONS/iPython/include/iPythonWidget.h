@@ -5,7 +5,7 @@
 	#include <BALL/VIEW/WIDGETS/HTMLView.h>
 #endif
 
-#include <QtGui/QTabWidget>
+#include <QtWidgets/QTabWidget>
 #include <QtCore/QHash>
 #include <QtNetwork/QNetworkReply>
 #include <QReadWriteLock>
