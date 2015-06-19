@@ -182,7 +182,7 @@ int main(int argc, char* argv[])
 	unsigned int cnt = 0;
 	do
 	{
-		//try 'try_limit' times to load a molecule
+		// 1) try 'try_limit' times to load a molecule
 		const int try_limit = 10000;
 		int i = 0;
 		for(; i < try_limit; ++i) // try reading untill you do not get any exception
@@ -191,7 +191,7 @@ int main(int argc, char* argv[])
 			if( cnt % 1000 == 0)
 			{
 				cout << "\r" << flush;
-				cout << "     Filtered: "<< cnt<<" structures to "<<num_valid<<" valid organic molecules"<<endl;
+				cout << "     Filtered: "<< cnt<<" structures to "<<num_valid<<" valid organic molecules";
 			}
 			cnt++;
 			
@@ -213,51 +213,56 @@ int main(int argc, char* argv[])
 			exit(EXIT_FAILURE);
 		}
 		
-		LigBase::removeHydrogens( *tmp_mol );
-		
-		if(tmp_mol->countAtoms() == 1)
+		// 2) If you've got a molecule: apply filters
+		if( 0 != tmp_mol)
 		{
-			num_too_small++;
-			num_invalid++;
-			continue;
-		}
-		
-		// check the molecule
-		if( isOfElementClass(*tmp_mol, organic_elements) ) // is organic molecule
-		{
-			num_organic++;
+			LigBase::removeHydrogens( *tmp_mol );
 			
-			if( isValid(*tmp_mol)) // is valid-organic
+			if(tmp_mol->countAtoms() <= 1)
 			{
-				results_file << *tmp_mol;
-				num_valid++;
-			}
-			else // is invalid-organic
-			{
+				num_too_small++;
 				num_invalid++;
-				invalids_file << *tmp_mol;
+				continue;
 			}
-		}
-		else // is metal-molecule:
-		{
-			num_metal++;
-			metals_file << *tmp_mol;
-		}
 			
-		delete tmp_mol;
-		
+			// check the molecule
+			if( isOfElementClass(*tmp_mol, organic_elements) ) // is organic molecule
+			{
+				num_organic++;
+				
+				if( isValid(*tmp_mol)) // is valid-organic
+				{
+					results_file << *tmp_mol;
+					num_valid++;
+				}
+				else // is invalid-organic
+				{
+					num_invalid++;
+					invalids_file << *tmp_mol;
+				}
+			}
+			else // is metal-molecule:
+			{
+				num_metal++;
+				metals_file << *tmp_mol;
+			}
+			
+			delete tmp_mol;
+		}
 	} while( tmp_mol );
 	cout << "\r" << flush;
-	cout << "                                                                              " << endl;
-
-	Log<< " Successfully read structures: "<< num_sucess_reads << endl;
+	cout << "                                                                        " << endl;
+	
+	Log<< endl<< endl;
+	Log<< "REPORT:"<<endl;
+	Log<< " Successfully read structures: "<< num_sucess_reads - 1 << endl;
 	Log<< " Failed read attempts:         "<< num_failed_reads << endl;
 	Log<< endl;
 	Log<< " after excluding single atom structures: " << num_sucess_reads - num_too_small<<endl; 
 	Log<< " after excluding non-organic structures: " << num_organic << endl;
 	Log<< " after excluding invalid structures:     " << num_valid   << endl;
 	Log<< endl;
-	Log<< " Number of invalid Structures:" << num_invalid <<endl;
+	Log<< " Number of invalid Structures: " << num_invalid <<endl;
 	Log<< " Found invalid types:"<<endl;
 	Log<< "       Contained Unknown Element: " << num_elem_fault <<endl;
 	Log<< "   Contained Covalent Bond Fault: " << num_covalent_fault <<endl;
