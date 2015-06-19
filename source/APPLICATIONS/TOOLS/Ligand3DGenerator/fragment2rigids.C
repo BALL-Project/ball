@@ -140,7 +140,7 @@ int main(int argc, char* argv[])
 			(*out_sdf) << frag;
 		}
 		else
-			(*out_sdf) << frag;
+			writePositionLines(frag, *outfile);
 	}
 	outfile->close();
 	

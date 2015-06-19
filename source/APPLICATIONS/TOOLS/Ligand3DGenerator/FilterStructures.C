@@ -6,8 +6,15 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/FORMAT/commandlineParser.h>
+#include <BALL/SYSTEM/file.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/ligand3Dbase.h>
+
+#include <BALL/QSAR/aromaticityProcessor.h>
+#include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
+#include  <BALL/STRUCTURE/fragmenter.h>
+#include  <BALL/STRUCTURE/rmsdBinner.h>
 
 #include <boost/unordered/unordered_set.hpp>
 
@@ -117,6 +124,22 @@ bool isOfElementClass(AtomContainer& mol, boost::unordered_set< Element::AtomicN
 	return true;
 }
 
+
+/// ################# W r i t e L i n e    F i l e s #################
+void writePositionLines(AtomContainer& mol, LineBasedFile& handle)
+{
+	handle <<"key "<< mol.getProperty("key").getString() <<endl;
+	handle << String(mol.countAtoms()) << endl;
+	
+	AtomIterator ati = mol.beginAtom();
+	for(; +ati; ati++)
+	{
+		handle << String(ati->getPosition().x) << " ";
+		handle << String(ati->getPosition().y) << " ";
+		handle << String(ati->getPosition().z) << endl;
+	}
+}
+
 /// ################# M A I N #################
 /// File names: 
 /// - rejected_metal.sdf : contains all metal or metal-organic molecules
@@ -169,7 +192,12 @@ int main(int argc, char* argv[])
 	SDFile results_file("filtered_organic.sdf", ios::out);
 	SDFile invalids_file("rejected_invalid-organic.sdf", ios::out);
 	SDFile metals_file("rejected_metal.sdf", ios::out);
+	SDFile rigids_file("templates_rigid.sdf", ios::out);
+	LineBasedFile rigids_file_line("templates_rigid.line", ios::out);
+	SDFile sites_file("templates_sites.sdf", ios::out);
+	
 
+	/// For filter counts
 	AtomContainer* tmp_mol = 0;
 	unsigned int num_failed_reads = 0;
 	unsigned int num_sucess_reads = 0;
@@ -178,8 +206,22 @@ int main(int argc, char* argv[])
 	unsigned int num_too_small = 0;
 	unsigned int num_valid = 0;
 	unsigned int num_invalid = 0;
-	
 	unsigned int cnt = 0;
+	
+	/// For fragmenting:
+	ACVec fragments, dummy;
+	ConnectList dummy2;
+	int total_fragment_cnt=0;
+	
+	MoleculeFragmenter mol_fragmenter;
+	Canonicalizer canoni;
+	RMSDBinner rigid_binner(false);
+	AromaticityProcessor arproc;
+	
+	int total_sites = 0;
+	vector<pair<String, AtomContainer *> > temp_sites;
+	RMSDBinner site_binner(true, 0.3, 100);
+	
 	do
 	{
 		// 1) try 'try_limit' times to load a molecule
@@ -234,6 +276,34 @@ int main(int argc, char* argv[])
 				{
 					results_file << *tmp_mol;
 					num_valid++;
+					
+					// Fragment:
+					tmp_mol->apply(arproc);
+					
+					mol_fragmenter.setMolecule(*tmp_mol);
+					mol_fragmenter.fragmentToSites(temp_sites, false);
+					mol_fragmenter.fragment(fragments, dummy, dummy2);
+					
+					total_sites += temp_sites.size();
+					total_fragment_cnt += fragments.size();
+					
+					// Binning for each site:
+					vector<pair<String, AtomContainer *> >::iterator ita;
+					for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
+						site_binner.addMolecule( ita->first, *ita->second );
+					
+					// Binning for each rigid fragment:
+					vector<AtomContainer*>::iterator fit;
+					for(fit = fragments.begin(); fit!=fragments.end(); fit++)
+					{
+						// canonicalise the atomlist & set UCK key
+						canoni.canonicalize( **fit );
+						
+						String key = Matcher::getUCK( **fit);
+			
+						rigid_binner.addMolecule(key, **fit);
+					}
+					
 				}
 				else // is invalid-organic
 				{
@@ -254,13 +324,13 @@ int main(int argc, char* argv[])
 	cout << "                                                                        " << endl;
 	
 	Log<< endl<< endl;
-	Log<< "REPORT:"<<endl;
+	Log<< "REPORT - Input Structures:"<<endl;
 	Log<< " Successfully read structures: "<< num_sucess_reads - 1 << endl;
 	Log<< " Failed read attempts:         "<< num_failed_reads << endl;
 	Log<< endl;
 	Log<< " after excluding single atom structures: " << num_sucess_reads - num_too_small<<endl; 
 	Log<< " after excluding non-organic structures: " << num_organic << endl;
-	Log<< " after excluding invalid structures:     " << num_valid   << endl;
+	Log<< " after excluding invalid structures:     " << num_valid   << " (finally used structures)"<< endl;
 	Log<< endl;
 	Log<< " Number of invalid Structures: " << num_invalid <<endl;
 	Log<< " Found invalid types:"<<endl;
@@ -268,5 +338,28 @@ int main(int argc, char* argv[])
 	Log<< "   Contained Covalent Bond Fault: " << num_covalent_fault <<endl;
 	Log<< "          Contained Severe Clash: " << num_vdw_fault <<endl;
 	Log<< "......done!" << endl;
+	
+	
+	///3.) Write Site templates out
+	map <String, vector< pair<AtomContainer*, int> > >::iterator it;
+	for(it = site_binner.begin(); it != site_binner.end(); ++it)
+	{
+		String key = it->first;
+		AtomContainer* ac = it->second[0].first;
+		ac->setProperty("key", key);
+		
+		sites_file << *ac;
+	}
+	
+	///4.) Write Rigid fragments out
+	map <String, vector< pair<AtomContainer*, int> > >::iterator bin_it;
+	for(bin_it = rigid_binner.begin(); bin_it != rigid_binner.end(); ++bin_it)
+	{
+		AtomContainer& frag = * bin_it->second[0].first;
+		frag.setProperty("key", bin_it->first);
+		
+		writePositionLines(frag, rigids_file_line);
+		rigids_file << frag;
+	}
 }
 
