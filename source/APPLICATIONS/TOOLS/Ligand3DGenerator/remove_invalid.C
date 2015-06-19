@@ -12,7 +12,7 @@ static unsigned int num_covalent_fault = 0;
 static unsigned int num_vdw_fault      = 0;
 static unsigned int num_elem_fault     = 0;
 
-// covalent bond is valid if it does not *derive (+/-)* more than 30 % from its ideal
+// covalent bond is valid if it does not derive more than 30 % from its ideal length
 bool validCovalentBond(Atom& atm, Atom& btm)
 {
 	float ideal_dist = atm.getElement().getCovalentRadius() + btm.getElement().getCovalentRadius();

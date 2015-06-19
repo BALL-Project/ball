@@ -22,10 +22,7 @@
 namespace BALL 
 {
 
-class RigidFragmentDB;
-
 struct RFragment;
-class TemplateCoord;
 
 /// T y p e   D e f i n i t i o n s
 /// ############################################################################
@@ -42,12 +39,6 @@ typedef std::list< std::pair<BALL::Atom*, BALL::Atom*> > ConnectList;
 // Database types:
 // key==group number, value==all groupfragment for that group
 typedef std::vector< std::vector<RFragment*> > CombiLibMap; 
-
-//// key == UCK key
-//typedef boost::unordered_map <BALL::String, TemplateCoord*> RigidsMap;
-
-////typedef boost::unordered_map <BALL::String, float >         BondLengthMap;
-//typedef boost::unordered_map <BALL::String, BALL::AtomContainer*> SiteMap;
 
 
 /// C l a s s   T e m p l a t e C o o r d
