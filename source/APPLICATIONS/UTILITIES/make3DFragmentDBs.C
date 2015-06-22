@@ -23,6 +23,7 @@ using namespace std;
 
 
 /// ################# Q u a l i t y F i l t e r #################
+/// #################       M E T H O D S       #################
 static unsigned int num_covalent_fault = 0;
 static unsigned int num_vdw_fault      = 0;
 static unsigned int num_elem_fault     = 0;
@@ -113,6 +114,7 @@ bool isValid(AtomContainer& mol)
 
 
 /// ################# E l e m e n t F i l t e r #################
+/// #################       M E T H O D         #################
 bool isOfElementClass(AtomContainer& mol, boost::unordered_set< Element::AtomicNumber >& elems)
 {
 	for (AtomIterator ati = mol.beginAtom(); +ati; ++ati)
@@ -149,16 +151,33 @@ void writePositionLines(AtomContainer& mol, LineBasedFile& handle)
 /// 
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Filter Structures", " keep only valid organic molecules", 
+	CommandlineParser parpars("Make 3D Fragment DBs", " Create 3D fragment templates from a collection of experimental structures", 
 														0.1, String(__DATE__), "Preparation");
 	parpars.registerMandatoryInputFile("i", "sdfile to be filtered");
 	parpars.setSupportedFormats("i","sdf");
 
-	String manual = "Selects only molecules conaining atoms of the organic set. "
-									"In this case that is: "
-									"[As, B, Br, C, Cl, F, H, I, N, O, P, S, Se, Si] all other "
-									"(metal and metal-organic) molecules are removed."
-									"Following files will be created:";
+	String manual = "This tool collects 3D fragments from experimental molecule "
+									"structures. These can be used for the Generate3DStructure "
+									"and Generate3DCombinations tools as fragment template "
+									"databases. \n\n"
+									"Please provide as input a SDFile that contains separated "
+									"molecules (e.g.: by applying SeparateMolecules from BALL/TOOLS\n"
+									"The following steps will then be performed:\n" 
+									" 0.) Remove all structures that contain only 1 or less atoms.\n"
+									" 1.) Remove all structures with atoms outside of the "
+									"organic set: [As, B, Br, C, Cl, F, H, I, N, O, P, S, Se, Si]\n"
+									" 2.) Remove all structures that contain an invalid geometry "
+									"which is defined as having a vdw-Interaction with a distance"
+									" of only 40% of the ideal distance or a covalent bond of "
+								  "only 30% of the standard distance.\n"
+									" 3.) Split into site templates and rigid templates.\n\n"
+									"The following files will be created:\n"
+									"* rejected_metal.sdf - contains all structures that were removed in step 1\n"
+									"* rejected_invalid-organic.sdf - contains all structures that were removed in step 2\n"
+									"* filtered_organic.sdf - contains the remaining structures after step 0 to 2\n"
+									"* templates_rigid.sdf - all rigid template fragments in a SDFile plus UCK in the 'key' property\n"
+									"* templates_rigid.line - all rigid template fragments only as coordinates plus UCK\n"
+									"* templates_sites.sdf - all site template fragments in a SDFile with the site-key stored in the 'key' property\n";
 	parpars.setToolManual(manual);
 
 	parpars.parse(argc, argv);

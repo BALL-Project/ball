@@ -17,6 +17,7 @@ SET(EXECUTABLES_LIST
 	export_fragment
 	file_converter
 	hin2mol2
+	make3DFragmentDBs
 	pdb2amber_naming
 	pdb2dcd
 	pdb2hin

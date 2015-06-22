@@ -667,19 +667,6 @@ ENDFOREACH(i)
 ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
 ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
 
-###### add Ligand3DGenerator #########
-
-# built only if OpenBabel is present
-IF(BALL_HAS_OPENBABEL)
-# Include LigStruct sources (library part) into the BALL lib:
-    #INCLUDE(source/STRUCTURE/LIGAND3DGEN/sources.cmake)
-    #INCLUDE(include/BALL/STRUCTURE/LIGAND3DGEN/sources.cmake)
-
-    # Add the Ligand3DGenerator Tools:
-    add_custom_target(LIG3DGEN)
-    ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS/Ligand3DGenerator)
-ENDIF()
-
 ###### add ballaxy project #########
 IF(BALL_BUILD_BALLAXY)
     ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
