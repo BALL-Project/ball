@@ -250,12 +250,10 @@ namespace BALL
 			int length = (int)s.size();
 
 			#ifdef BALL_VIEW_DEBUG
-					
 				if ((length != 6) && (length != 8))
 				{
-					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__, length);
 				}
-				
 			#endif
 
 			char buffer[5];

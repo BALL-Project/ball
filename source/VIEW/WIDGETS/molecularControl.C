@@ -1230,7 +1230,7 @@ namespace BALL
 																							Composite& composite, QString* default_name)
 		{
 			#ifdef BALL_VIEW_DEBUG
-			if (composite_to_item_.has(&composite))
+			if (composite_to_item_.find(&composite) != composite_to_item_.end())
 			{
 				Log.error() << (String)tr("Composite ") << & composite << (String)tr(" already added!") << std::endl;
 			}

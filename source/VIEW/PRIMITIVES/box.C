@@ -44,7 +44,7 @@ namespace BALL
 		Box::~Box()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error << "Destructing object " << (void *)this 
+				Log.error() << "Destructing object " << (void *)this
 									<< " of class " << RTTI::getName<Box>() << std::endl;
 			#endif 
 		}

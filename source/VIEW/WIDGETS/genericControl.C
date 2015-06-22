@@ -48,7 +48,7 @@ namespace BALL
 		GenericControl::~GenericControl()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << this << " of class GenericControl" << endl;
+				Log.error() << "Destructing object " << this << " of class GenericControl" << std::endl;
 			#endif 
 		}
 

@@ -952,10 +952,8 @@ namespace BALL
 			QAction* complement_selection_action_;
 			QAction* clear_selection_action_;
 			QAction* open_action_;
-			QAction* save_project_action_;
 			QAction* preferences_action_;
 			QAction* delete_action_;
-			QAction* qload_action_, *qsave_action_;
 
 			QAction* last_highlighted_menu_entry_;
 			HashMap<Position, QMenu*> id_to_menu_;

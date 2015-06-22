@@ -30,7 +30,7 @@ EditSettings::~EditSettings()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
-								<< " of class EditSettings" << endl;
+								<< " of class EditSettings" << std::endl;
 	#endif 
 }
 

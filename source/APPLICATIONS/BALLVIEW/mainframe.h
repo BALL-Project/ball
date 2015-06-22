@@ -52,11 +52,15 @@ namespace BALL
 		///
 		void howToCite();
 
+		void checkMenus();
+
 		protected:
 			void changeEvent(QEvent* evt);
 			void setupPluginHandlers_();
 
 			Scene* scene_;
+			QAction* save_project_action_;
+			QAction* qload_action_, *qsave_action_;
 	};
 
 } // namespace BALL

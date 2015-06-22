@@ -67,7 +67,7 @@ MainControlPreferences::~MainControlPreferences()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
-								<< " of class MainControlPreferences" << endl;
+								<< " of class MainControlPreferences" << std::endl;
 	#endif 
 }
 

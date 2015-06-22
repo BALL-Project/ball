@@ -29,7 +29,7 @@ FileObserver::~FileObserver()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
-								<< " of class FileObserver" << endl;
+								<< " of class FileObserver" << std::endl;
 	#endif 
 }
 

@@ -61,8 +61,13 @@ namespace BALL
 
 	Mainframe::Mainframe(QWidget* parent, const char* name)
 		:	MainControl(parent, name, ".BALLView"),
-			scene_(0)
+			scene_(0),
+			save_project_action_(0),
+			qload_action_(0),
+			qsave_action_(0)
 	{
+		registerThis();
+
 		#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new Mainframe " << this << std::endl;
 		#endif
@@ -298,6 +303,15 @@ namespace BALL
 	void Mainframe::howToCite()
 	{
 		HelpViewer::getInstance("BALLView Docu")->showHelp("tips.html", (String)tr("cite"));
+	}
+
+	void Mainframe::checkMenus()
+	{
+		MainControl::checkMenus();
+
+		save_project_action_->setEnabled(!composites_locked_);
+		qload_action_->setEnabled(!composites_locked_);
+		qsave_action_->setEnabled(!composites_locked_);
 	}
 
 	void Mainframe::show()

@@ -25,7 +25,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 		  Log.error() << "Destructing object " << (void *)this
-			            << " of class OpenSavePreferences" << endl;
+			            << " of class OpenSavePreferences" << std::endl;
 			#endif
 		}
 
