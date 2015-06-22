@@ -32,7 +32,7 @@ namespace BALL
 		// about 30-50% of the whole computation time in this method!!!
 		const int num_atoms = ac.countAtoms();
 		// mapping: atom to int, and int to atom:
-		Atom* i_to_atm[num_atoms];
+		std::vector <Atom*> i_to_atm(num_atoms, 0);
 		std::map< Atom*, int> atm_to_i; // std::map was most efficient, compared with hashmaps
 		
 		// create empty disjoint set:

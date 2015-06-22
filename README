@@ -22,8 +22,8 @@ line and run "make package" instead of a plain make.
 
 On Windows, make sure to run the commands in a Visual Studio command shell.
 
-For further details of the build process, please refer to our trac
-http://ball-trac.bioinf.uni-sb.de/wiki/DevelopmentEnvironment
+For further details of the build process, please refer to our Wiki on
+https://github.com/BALL-Project/ball/wiki/DevelopmentEnvironment
 
 To build the documentation, run "make doc". Alternatively, you can refer
 to the online documentation at http://www.ball-project.org/Documentation/

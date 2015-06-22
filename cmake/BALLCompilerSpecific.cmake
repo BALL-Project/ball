@@ -60,7 +60,9 @@ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 		SET(USE_PEDANTIC OFF)
 	ENDIF()
 
-	ADD_DEFINITIONS(-Wall -Wextra -Wno-long-long)
+	# Added -Wno-deprecated-declarations as Eigen3 currently uses binder2nd
+	# which spams the compiler output.
+	ADD_DEFINITIONS(-Wall -Wextra -Wno-long-long -Wno-deprecated-declarations)
 
 	IF(USE_PEDANTIC)
 		ADD_BALL_DEFINITIONS("-pedantic")
