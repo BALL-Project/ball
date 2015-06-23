@@ -129,7 +129,7 @@ namespace BALL
 		delete line;
 		return;
 	}
-
+	
 	void UCK::getGraph(vector<String>& v, PairVector& e, const Molecule& mol)
 	{
 		weight_ = 0.0;
@@ -145,7 +145,7 @@ namespace BALL
 			// find chemical formula
 			for(Size i = 0; i != mol_name->size(); ++i)
 			{
-				if((*mol_name)[i].first == atit1->getName())	// increase number of already existing molecules
+				if((*mol_name)[i].first == atit1->getElement().getSymbol())	// increase number of already existing molecules
 				{
 					(*mol_name)[i].second++;
 					found_atom = true;
@@ -155,13 +155,13 @@ namespace BALL
 			
 			if(!found_atom)	// add current atom to formula, if it doesn't exist
 			{
-				mol_name->push_back(make_pair(atit1->getName(),1));
+				mol_name->push_back(make_pair(atit1->getElement().getSymbol(),1));
 				found_atom = false;
 			}
 			found_atom = false;
 			
 			weight_ += atit1->getElement().getAtomicWeight();
-			v.push_back(atit1->getName());	// add atom-name to label-list
+			v.push_back(atit1->getElement().getSymbol());	// add atom-name to label-list
 			Size dest = 0;
 			// find bonds from current atom to all other atoms and store them in e
 			for(AtomConstIterator atit2 = mol.beginAtom(); atit2 != mol.endAtom(); ++atit2)
