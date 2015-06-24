@@ -243,8 +243,8 @@ namespace BALL
 		{
 			return false;
 		}
-		// the torsion angle phi is not defined for
-		// the N-terminus
+		// the torsion angle omega is not defined for
+		// the C-terminus
 		return  !isCTerminal() && hasProperty(PROPERTY__AMINO_ACID);
 	}
 

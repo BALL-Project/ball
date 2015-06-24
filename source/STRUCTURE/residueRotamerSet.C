@@ -53,8 +53,10 @@ namespace BALL
 			number_of_torsions_(0),
 			has_torsion_phi_(false),
 			has_torsion_psi_(false),
+			has_torsion_omega_(false),
 			phi_(0),
-			psi_(0)
+			psi_(0),
+			omega_(0)
 	{
 	}
         
@@ -70,8 +72,10 @@ namespace BALL
 			number_of_torsions_(number_of_torsions),
 			has_torsion_phi_(false),
 			has_torsion_psi_(false),
+			has_torsion_omega_(false),
 			phi_(0),
-			psi_(0)
+			psi_(0),
+			omega_(0)
 
 	{
 		setTemplateResidue(residue, number_of_torsions);
@@ -261,8 +265,10 @@ namespace BALL
 			original_coordinates_(rhs.original_coordinates_),
 			has_torsion_phi_(rhs.has_torsion_phi_),
 			has_torsion_psi_(rhs.has_torsion_psi_),
+			has_torsion_omega_(rhs.has_torsion_omega_),
 			phi_(rhs.phi_),
-			psi_(rhs.psi_)
+			psi_(rhs.psi_),
+			omega_(rhs.omega_)
 	{
 	}
 
@@ -285,8 +291,10 @@ namespace BALL
 			original_coordinates_ = rhs.original_coordinates_;
 			has_torsion_phi_ = rhs.has_torsion_phi_;
 			has_torsion_psi_ = rhs.has_torsion_psi_;
+			has_torsion_omega_ = rhs.has_torsion_omega_;
 			phi_ = rhs.phi_;
 			psi_ = rhs.psi_;
+			omega_ = rhs.omega_;
 		}
 
 		return (*this);
@@ -809,6 +817,22 @@ namespace BALL
 	{
 		psi_ = angle;
 		has_torsion_psi_ = true;
+	}
+
+	bool ResidueRotamerSet::hasTorsionOmega() const
+	{
+		return has_torsion_omega_;
+	}
+
+	Angle ResidueRotamerSet::getTorsionOmega() const
+	{
+		return omega_;
+	}
+
+	void ResidueRotamerSet::setTorsionOmega(const Angle& angle)
+	{
+		omega_ = angle;
+		has_torsion_omega_ = true;
 	}
 
 	void ResidueRotamerSet::sort()

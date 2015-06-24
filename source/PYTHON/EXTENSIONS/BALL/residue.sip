@@ -46,6 +46,8 @@ class Residue
   Angle getTorsionPhi() const;
   bool hasTorsionPsi() const;
   Angle getTorsionPsi() const;  
+  bool hasTorsionOmega() const;
+  Angle getTorsionOmega() const;  
 
   Protein* getProtein();
   // const Protein* getProtein() const;
