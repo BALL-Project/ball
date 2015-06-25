@@ -201,8 +201,23 @@ CHECK(HashGridBox3<Item>* getBox(const Vector3& vector) throw())
   // ???
 RESULT
 
-CHECK(Size countNonEmptyBoxes() const throw())
-  // ???
+CHECK(Size countNonEmptyBoxes() const)
+	HashGrid3<char> testGrid(Vector3(), 20, 30, 40, 1, 1, 1);
+
+	TEST_EQUAL(0, testGrid.countNonEmptyBoxes());
+
+	testGrid.insert(1.f, 2.f, 3.f, 'a');
+	TEST_EQUAL(1, testGrid.countNonEmptyBoxes());
+	testGrid.insert(1.f, 2.f, 3.f, 'b');
+	TEST_EQUAL(1, testGrid.countNonEmptyBoxes());
+
+	testGrid.insert(.2f, 2.f, 1.f, 'c');
+	TEST_EQUAL(2, testGrid.countNonEmptyBoxes());
+
+	for(HashGrid3<char>::BoxIterator it = testGrid.beginBox(); +it; ++it) {
+		it->insert('a');
+	}
+	TEST_EQUAL(20 * 30 * 40, testGrid.countNonEmptyBoxes());
 RESULT
 
 CHECK(Size getSize() const throw())

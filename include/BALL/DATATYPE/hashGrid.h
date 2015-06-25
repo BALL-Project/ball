@@ -1346,15 +1346,9 @@ namespace BALL
 	Size 
 	HashGrid3<Item>::countNonEmptyBoxes() const
 	{
-		Size size = 0;
-
-		for (Position i=0; i<27; ++i)
-		{
-			if (!box_[i].isEmpty())
-				++size;
-		}
-
-		return size;
+		return std::count_if(box_.begin(), box_.end(),
+			std::not1(std::mem_fun_ref(&HashGridBox3<Item>::isEmpty))
+		);
 	}
 
 	template <typename Item>
