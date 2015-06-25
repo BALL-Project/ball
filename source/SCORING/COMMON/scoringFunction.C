@@ -681,8 +681,6 @@ HashGrid3<Atom*>* ScoringFunction::initializeHashGrid(AtomContainer* sys, Vector
 		}
 	}
 
-	//Log<<"inserted "<<inserted<<" atoms into "<<hashgrid->countNonEmptyBoxes()<<" hashgrid boxes"<<endl;
-
 	return hashgrid;
 }
 
