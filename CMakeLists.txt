@@ -862,8 +862,7 @@ INSTALL(FILES
 )
 
 ## Create BALLExport.cmake
-STRING(COMPARE LESS ${CMAKE_MINOR_VERSION} "8" CMAKE_DEPRECATED_VERSION)
-IF (${CMAKE_DEPRECATED_VERSION})
+IF(${CMAKE_VERSION} VERSION_LESS "2.8.0")
 	MESSAGE(STATUS "Cannot register BALL with CMake! For external code, set the path to BALL during find_package() manually.")
 ELSE()
 	## register BALL with CMake so that it can be found easily
