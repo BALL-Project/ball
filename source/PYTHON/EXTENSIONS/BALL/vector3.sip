@@ -49,7 +49,7 @@ class Vector3
 
   // float operator [] (Index) const;
   // ???? const Vector3& operator + () const;
-  // ???? Vector3 operator - () const;
+  Vector3 operator - () const;
   Vector3& operator += (const Vector3&);
   Vector3& operator -= (const Vector3&);
  //???? Vector3& operator *= (float);
