@@ -62,7 +62,7 @@ class Vector2
 %End
 
 	// ???? const Vector2& operator + () const throw();
-	// ???? Vector2 operator - () const	throw();
+	Vector2 operator - () const	throw();
 	Vector2 operator + (const Vector2&) const throw();
 	Vector2 operator - (const Vector2&) const throw();
 	Vector2& operator += (const Vector2&) throw();

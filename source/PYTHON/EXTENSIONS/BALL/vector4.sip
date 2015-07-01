@@ -41,7 +41,7 @@ class Vector4
 
   // float operator [] (Index) const;
   // ???? Vector4 operator + () const;
-  // ???? Vector4 operator - () const;
+  Vector4 operator - () const;
   Vector4& operator += (const Vector4&);
   Vector4& operator -= (const Vector4&);
   Vector4 operator * (float);
