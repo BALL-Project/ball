@@ -1506,7 +1506,11 @@ namespace BALL
 
   void PDBFile::writeRawRecord_(const char* format, const char* tag, ...)
   {
-    static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
+#ifdef BALL_HAS_THREAD_LOCAL
+		thread_local char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
+#else
+		static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
+#endif
 
 		va_list args;
 		va_start(args, tag);
