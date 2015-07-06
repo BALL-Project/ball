@@ -215,8 +215,11 @@ INCLUDE(cmake/BALLConfigSList.cmake)
 ## Check for the presence of C++11 initializer lists
 INCLUDE(cmake/BALLConfigInitializerList.cmake)
 
-## Check for rvalue reference
+## Check for extern templates
 INCLUDE(cmake/BALLConfigExternTemplates.cmake)
+
+## Check for thread_local
+INCLUDE(cmake/BALLConfigThreadLocal.cmake)
 
 ## Check for rvalue reference
 INCLUDE(cmake/BALLConfigRValueReferences.cmake)

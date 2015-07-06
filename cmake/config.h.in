@@ -207,6 +207,12 @@
 // MSVC.
 #cmakedefine BALL_HAS_EXTERN_TEMPLATES
 
+// Defines whether the C++11 thread_local keyword is supported.
+// If this keyword is present, some uses of static in methods can
+// be replaced by thread_local for improving the thread safety of
+// BALL.
+#cmakedefine BALL_HAS_THREAD_LOCAL
+
 // Defines whether the compiler supports c++0x-style rvalue references
 // (int&&, ...)
 #cmakedefine BALL_HAS_RVALUE_REFERENCES
