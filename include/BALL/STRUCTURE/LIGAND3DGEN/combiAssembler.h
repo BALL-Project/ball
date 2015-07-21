@@ -1,7 +1,7 @@
 #ifndef COMBIASSEMBLER_H
 #define COMBIASSEMBLER_H
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3Dbase.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
 #include <BALL/STRUCTURE/LIGAND3DGEN/moleculeConnector.h>
 #include <BALL/STRUCTURE/clashResolver.h>

@@ -9,7 +9,7 @@
 #include <BALL/SYSTEM/file.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/SDFile.h>
-#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3Dbase.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 
 #include <BALL/QSAR/aromaticityProcessor.h>
 #include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>

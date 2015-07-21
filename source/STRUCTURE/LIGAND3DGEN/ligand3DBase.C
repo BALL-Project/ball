@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3Dbase.h> 
+#include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
 #include <BALL/STRUCTURE/UCK.h>
 
 #include <BALL/KERNEL/PTE.h>
