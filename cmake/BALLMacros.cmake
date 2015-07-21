@@ -26,7 +26,7 @@ MACRO(QT4_WRAP_UI_BALL outfiles )
     ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
       COMMAND ${QT_UIC_EXECUTABLE}
       ARGS ${ui_options} -o ${outfile} ${infile}
-      MAIN_DEPENDENCY ${infile})
+      MAIN_DEPENDENCY ${infile} VERBATIM)
     SET(${outfiles} ${${outfiles}} ${outfile})
   ENDFOREACH (it)
 ENDMACRO (QT4_WRAP_UI_BALL)

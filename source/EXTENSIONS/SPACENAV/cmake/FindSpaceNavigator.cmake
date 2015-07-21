@@ -29,8 +29,6 @@ IF(UNIX)
 	SET(SPNAV_PROCESS_INCLUDES spnav_include)
 	SET(SPNAV_PROCESS_LIBS spnav_lib)
 
-	MESSAGE(STATUS ${spnav_include})
-
 	LIBFIND_PROCESS(SPNAV)
 ELSEIF(APPLE)
 	#TODO: Improve MacOS X code

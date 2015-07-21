@@ -139,7 +139,7 @@ namespace BALL
 		delete line;
 		return;
 	}
-
+	
 	void UCK::getGraph(vector<String>& v, PairVector& e, const Molecule& mol)
 	{
 		weight_ = 0.0;

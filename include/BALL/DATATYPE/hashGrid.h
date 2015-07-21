@@ -752,10 +752,29 @@ namespace BALL
 		return processor.finish(); 
 	}
 
-	/**	Three-dimensional Hash Grid Class.
-			????? \par
-			
-	*/
+	/**
+	 * @brief Three-dimensional Hash Grid Class.
+	 *
+	 * This class is useful for quickly finding neighbors of or contacts between
+	 * atoms and other objects that can be assigned a coordinate. Assuming uniform
+	 * distribution of the points stored in the grid, this brings the asymptotic
+	 * runtime of neighborhood queries down from O(n*m) to O(m).
+	 *
+	 * The common use case for finding all objects with a distance <= d to a query
+	 * point is as follows:
+	 *
+	 * 1. Create a HashGrid with spacing d covering all required space (check your query domain too!).
+	 * 2. Insert all objects you want to check for neighborhood.
+	 * 3. Retrieve the box of a query point
+	 * 4. Iterate over all entries in all neighboring boxes and compute the acutal distance.
+	 *
+	 * @warning Setting up a HashGrid3 requires a considerable amount of time, as
+	 *          a cubic amount of memory cells need to be allocated and initialized.
+	 *          This is not problematic if the HashGrid3 seldomly changes and
+	 *          is often used for lookups. If, however, only few lookups are
+	 *          required using a HashGrid3 may actually deteriorate performance
+	 *          compared to a brute-force lookup.
+	 */
 	template <typename Item>
 	class HashGrid3
 	{
@@ -769,23 +788,33 @@ namespace BALL
 
 		/// Default constructor
 		HashGrid3();
-			
+
 		/** Constructor using origin, dimensions, and spacings of the grid.
-				It creates a hashgrid at <tt>origin</tt> with axis-dependant spacings. 
-				@param origin
-				@param dimension_x
-				@param dimension_y
-				@param dimension_z
-				@param spacing_x
-				@param spacing_y
-				@param spacing_z
+				It creates a hashgrid at <tt>origin</tt> with axis-dependant spacings.
+
+				If you want to define a HashGrid with a variable number of boxes, consider
+				to use HashGrid3(const Vector3&, const Vector3&, float) instead.
+
+				@param origin The origin of the HashGrid. This is the point with the lowest
+				              coordinate values in x-, y-, and z-direction.
+				@param dimension_x The number of boxes on the x-axis.
+				@param dimension_y The number of boxes on the y-axis.
+				@param dimension_z The number of boxes on the z-axis.
+				@param spacing_x The size of a single box on the x-axis.
+				@param spacing_y The size of a single box on the y-axis.
+				@param spacing_z The size of a single box on the z-axis.
+
+				@see BALL::BoundingBoxProcessor::getLower() const
 		*/
 		HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y,
 				Size dimension_z, float spacing_x, float spacing_y, float spacing_z);
 
 		/** Constructor using origin, dimensions, and a single spacing (only
 				cubic grids)
-		*/ 
+
+			This is a convenience overload for
+			BALL::HashGrid3(const Vector3&, Size, Size, Size, float, float, float)
+		*/
 		HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, 
 				Size dimension_z, float spacing);
 
@@ -1346,15 +1375,9 @@ namespace BALL
 	Size 
 	HashGrid3<Item>::countNonEmptyBoxes() const
 	{
-		Size size = 0;
-
-		for (Position i=0; i<27; ++i)
-		{
-			if (!box_[i].isEmpty())
-				++size;
-		}
-
-		return size;
+		return std::count_if(box_.begin(), box_.end(),
+			std::not1(std::mem_fun_ref(&HashGridBox3<Item>::isEmpty))
+		);
 	}
 
 	template <typename Item>

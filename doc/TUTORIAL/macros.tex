@@ -11,8 +11,15 @@
 \usepackage{times}
 % use postscript fonts
 
-\usepackage{psboxit}
-\newcommand{\graybox}[1]{\psboxit{box .85 setgray fill}{\fbox{#1}}}
+\usepackage{xcolor}
+\usepackage[framemethod=default]{mdframed}
+\newcommand{\graybox}[1]{%
+\begin{mdframed}[backgroundcolor=lightgray]%
+#1%
+\end{mdframed}%
+}
+%\newcommand{\graybox}[1]{#1}
+
 % display gray shaded boxes using postscript commands
 %
 
