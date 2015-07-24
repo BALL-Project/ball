@@ -32,7 +32,7 @@ public:
 private:
 	OpenBabel::OBConversion _babel_conv;
 	OpenBabel::OBMol        _babel_mol;
-	BALL::Canonicalizer           _cano;
+	BALL::Canonicalizer     _cano;
 	
 };
 

@@ -373,7 +373,7 @@ AtomContainer *SmilesParserOB::fromSMILEStoMolecule(const String &smiles_string)
 }
 
 RFragment *SmilesParserOB::fromSMILEStoRFragment(const String &smiles_string, 
-																							 const int &g_id)
+																								 const int &g_id)
 {
 	// get the obmol SMILES input:
 	_babel_conv.ReadString(&_babel_mol, smiles_string);

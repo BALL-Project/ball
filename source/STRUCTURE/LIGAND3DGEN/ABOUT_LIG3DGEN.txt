@@ -1,0 +1,33 @@
+ 
+Ligand 3D Generator, 04-2015 by Hans-Philipp Brachvogel
+(contact: philipp-brachvogel@web.de)
+
+
+written during the master thesis project: 
+"Direct 3D Structure Generation from Combinatorial Libraries"
+(supervised by Dr. Philipp Thiel)
+
+Information about Ligand3DGenerator can be found in the original thesis
+(contact me if you need a copy). However the sub-framework was restructured
+in oder to better integrate it within the BALL library. Relevant modules are:
+
+# Main functionality classes:
+source/STRUCTURE/LIGAND3DGEN/structureAssembler
+STRUCTURE/LIGAND3DGEN/combiAssembler
+
+# Higher level classes:
+source/STRUCTURE/LIGAND3DGEN/moleculeConnector
+source/STRUCTURE/LIGAND3DGEN/linkerBuilder
+source/STRUCTURE/clashResolver
+source/STRUCTURE/fragmenter
+source/STRUCTURE/rmsdBinner
+source/STRUCTURE/UCK (contains now Canonicalizer class)
+
+# Basic classes:
+source/STRUCTURE/LIGAND3DGEN/ligand3DBase (contains now Matcher class)
+source/STRUCTURE/LIGAND3DGEN/ioModule
+source/STRUCTURE/LIGAND3DGEN/starAligner
+
+# Data files (relevant for StructureAssembler and combiAssembler)
+/data/fragments/template_rigids.line
+/data/fragments/template_sites.sdf
