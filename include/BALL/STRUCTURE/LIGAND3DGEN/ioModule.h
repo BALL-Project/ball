@@ -63,13 +63,13 @@ private:
 	void _parseCombiLibFile();
 	void _recurGenerateCombi( std::list<BALL::AtomContainer *> &out_molecules);
 	
-	BALL::LineBasedFile* _combilib_file;
-	BALL::RFragment*           _scaffold;
-	BALL::CombiLibMap          _lib;
-	std::list< BALL::RAtom* >  _r_atms;
+	BALL::LineBasedFile*      _combilib_file;
+	BALL::RFragment*          _scaffold;
+	BALL::CombiLibMap         _lib;
+	std::list< BALL::RAtom* > _r_atms;
 	
-	bool         _lib_is_generated;
-	BALL::SmilesParserOB _smi_parser;
+	bool                             _lib_is_generated;
+	BALL::SmilesParserOB             _smi_parser;
 	boost::unordered_map< int, int > _id_mapping;
 };
 

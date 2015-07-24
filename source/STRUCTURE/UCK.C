@@ -379,17 +379,17 @@ namespace BALL
 		OBGraphSym grsym(temp);
 		grsym.GetSymmetry(sym);
 		
-		CanonicalLabels(temp, sym, clabels, OBBitVec(), 30, false);
+		CanonicalLabels(temp, sym, clabels, OBBitVec(), 300, false);
 		
 		// resort atom list by inserting into a new empty molecule
 		AtomContainer* new_frag = new AtomContainer;
 		
 		vector <Atom*> aList(num_atoms);
-		for( int i = 0; i < clabels.size(); i++)
+		for( unsigned int i = 0; i < clabels.size(); i++)
 			aList[ clabels[i]-1 ] = molecule.getAtom(i);
 		
 		// insert in correct order into temporary atomContainer
-		for( int i = 0; i < clabels.size(); i++)
+		for( unsigned int i = 0; i < clabels.size(); i++)
 			new_frag->append( *aList[i] );
 		
 		// swap the temp with the original and delete the temp

@@ -1,20 +1,28 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
-#include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/FORMAT/commandlineParser.h>
+
 #include <BALL/SYSTEM/file.h>
+
+#include <BALL/DATATYPE/string.h>
+
+#include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/FORMAT/SDFile.h>
+
 #include <BALL/STRUCTURE/LIGAND3DGEN/ligand3DBase.h>
+#include <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
+#include <BALL/STRUCTURE/fragmenter.h>
+#include <BALL/STRUCTURE/rmsdBinner.h>
+#include <BALL/STRUCTURE/UCK.h>
 
 #include <BALL/QSAR/aromaticityProcessor.h>
-#include  <BALL/STRUCTURE/LIGAND3DGEN/ioModule.h>
-#include  <BALL/STRUCTURE/fragmenter.h>
-#include  <BALL/STRUCTURE/rmsdBinner.h>
 
 #include <boost/unordered/unordered_set.hpp>
 
@@ -126,7 +134,6 @@ bool isOfElementClass(AtomContainer& mol, boost::unordered_set< Element::AtomicN
 	return true;
 }
 
-
 /// ################# W r i t e L i n e    F i l e s #################
 void writePositionLines(AtomContainer& mol, LineBasedFile& handle)
 {
@@ -151,7 +158,7 @@ void writePositionLines(AtomContainer& mol, LineBasedFile& handle)
 /// 
 int main(int argc, char* argv[])
 {
-	CommandlineParser parpars("Make 3D Fragment DBs", " Create 3D fragment templates from a collection of experimental structures", 
+	CommandlineParser parpars("Make 3D Fragment DBs", " Create 3D fragment templates from a collection of experimental structures",
 														0.1, String(__DATE__), "Preparation");
 	parpars.registerMandatoryInputFile("i", "sdfile to be filtered");
 	parpars.setSupportedFormats("i","sdf");
@@ -162,19 +169,20 @@ int main(int argc, char* argv[])
 									"databases. \n\n"
 									"Please provide as input a SDFile that contains separated "
 									"molecules (e.g.: by applying SeparateMolecules from BALL/TOOLS\n"
-									"The following steps will then be performed:\n" 
+									"The following steps will then be performed:\n"
 									" 0.) Remove all structures that contain only 1 or less atoms.\n"
 									" 1.) Remove all structures with atoms outside of the "
 									"organic set: [As, B, Br, C, Cl, F, H, I, N, O, P, S, Se, Si]\n"
 									" 2.) Remove all structures that contain an invalid geometry "
 									"which is defined as having a vdw-Interaction with a distance"
 									" of only 40% of the ideal distance or a covalent bond of "
-								  "only 30% of the standard distance.\n"
+									"only 30% of the standard distance.\n"
 									" 3.) Split into site templates and rigid templates.\n\n"
 									"The following files will be created:\n"
 									"* rejected_metal.sdf - contains all structures that were removed in step 1\n"
 									"* rejected_invalid-organic.sdf - contains all structures that were removed in step 2\n"
 									"* filtered_organic.sdf - contains the remaining structures after step 0 to 2\n"
+									"* unique_filtered_organic.sdf - same as above, but reduced to only unique topologies\n"
 									"* templates_rigid.sdf - all rigid template fragments in a SDFile plus UCK in the 'key' property\n"
 									"* templates_rigid.line - all rigid template fragments only as coordinates plus UCK\n"
 									"* templates_sites.sdf - all site template fragments in a SDFile with the site-key stored in the 'key' property\n";
@@ -182,8 +190,8 @@ int main(int argc, char* argv[])
 
 	parpars.parse(argc, argv);
 	
-/// C O D E ##################################
-/// 
+	/// C O D E ##################################
+	///
 	// 1.) define the set of elements we want to keep if a molecule
 	//     consists of only these:
 	
@@ -214,7 +222,12 @@ int main(int argc, char* argv[])
 	SDFile rigids_file("templates_rigid.sdf", ios::out);
 	LineBasedFile rigids_file_line("templates_rigid.line", ios::out);
 	SDFile sites_file("templates_sites.sdf", ios::out);
-	
+	SDFile uniques_file("unique_filtered_organic.sdf", ios::out);
+
+	/// For uniqueness check
+	HashSet<String> unique_ids;
+	String unique_key="###";
+
 
 	/// For filter counts
 	AtomContainer* tmp_mol = 0;
@@ -270,7 +283,7 @@ int main(int argc, char* argv[])
 		if (i >= try_limit)
 		{
 			cout<<"ERROR: Tried "<<try_limit<<" times to read a molecule from the input file"
-					<< "but failed every time"<<endl;
+				 << "but failed every time"<<endl;
 			exit(EXIT_FAILURE);
 		}
 		
@@ -286,45 +299,63 @@ int main(int argc, char* argv[])
 				continue;
 			}
 			
-			// check the molecule
+			// Is Organic
 			if( isOfElementClass(*tmp_mol, organic_elements) ) // is organic molecule
 			{
 				num_organic++;
 				
-				if( isValid(*tmp_mol)) // is valid-organic
+				// Is Valid (and organic)
+				if( isValid(*tmp_mol))
 				{
+//					canoni.canonicalize(*tmp_mol);
+					AromaticityProcessor aroma;
+					tmp_mol->apply(aroma);
+
 					results_file << *tmp_mol;
 					num_valid++;
-					
-					// Fragment:
-					tmp_mol->apply(arproc);
-					
-					mol_fragmenter.setMolecule(*tmp_mol);
-					mol_fragmenter.fragmentToSites(temp_sites, false);
-					mol_fragmenter.fragment(fragments, dummy, dummy2);
-					
-					total_sites += temp_sites.size();
-					total_fragment_cnt += fragments.size();
-					
-					// Binning for each site:
-					vector<pair<String, AtomContainer *> >::iterator ita;
-					for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
-						site_binner.addMolecule( ita->first, *ita->second );
-					
-					// Binning for each rigid fragment:
-					vector<AtomContainer*>::iterator fit;
-					for(fit = fragments.begin(); fit!=fragments.end(); fit++)
+
+					unique_key = Matcher::getUCK(*tmp_mol);
+
+					// Is unique (and valid, organic)
+					if( !unique_ids.has( unique_key ))
 					{
-						// canonicalise the atomlist & set UCK key
-						canoni.canonicalize( **fit );
-						
-						String key = Matcher::getUCK( **fit);
-			
-						rigid_binner.addMolecule(key, **fit);
+						unique_ids.insert( unique_key );
+						tmp_mol->setProperty("UCK-Hash", unique_key);
+						uniques_file << *tmp_mol;
+					}
+					
+					// Create Fragments from the Molecule:
+					{
+						tmp_mol->apply(arproc);
+
+						mol_fragmenter.setMolecule(*tmp_mol);
+						mol_fragmenter.fragmentToSites(temp_sites, false);
+						mol_fragmenter.fragment(fragments, dummy, dummy2);
+
+						total_sites += temp_sites.size();
+						total_fragment_cnt += fragments.size();
+
+						// Binning for each site:
+						vector<pair<String, AtomContainer *> >::iterator ita;
+						for(ita = temp_sites.begin(); ita != temp_sites.end(); ++ita)
+							site_binner.addMolecule( ita->first, *ita->second );
+
+						// Binning for each rigid fragment:
+						vector<AtomContainer*>::iterator fit;
+						for(fit = fragments.begin(); fit!=fragments.end(); fit++)
+						{
+							// canonicalise the atomlist & set UCK key
+							canoni.canonicalize( **fit );
+
+							unique_key = Matcher::getUCK( **fit);
+
+							rigid_binner.addMolecule(unique_key, **fit);
+						}
 					}
 					
 				}
-				else // is invalid-organic
+				// Else it is an in-valid organic molecule:
+				else
 				{
 					num_invalid++;
 					invalids_file << *tmp_mol;
@@ -347,9 +378,10 @@ int main(int argc, char* argv[])
 	Log<< " Successfully read structures: "<< num_sucess_reads - 1 << endl;
 	Log<< " Failed read attempts:         "<< num_failed_reads << endl;
 	Log<< endl;
-	Log<< " after excluding single atom structures: " << num_sucess_reads - num_too_small<<endl; 
+	Log<< " after excluding single atom structures: " << num_sucess_reads - num_too_small<<endl;
 	Log<< " after excluding non-organic structures: " << num_organic << endl;
 	Log<< " after excluding invalid structures:     " << num_valid   << " (finally used structures)"<< endl;
+	Log<< " after excluding duplicates:             " << unique_ids.getSize() << endl;
 	Log<< endl;
 	Log<< " Number of invalid Structures: " << num_invalid <<endl;
 	Log<< " Found invalid types:"<<endl;
@@ -363,9 +395,9 @@ int main(int argc, char* argv[])
 	map <String, vector< pair<AtomContainer*, int> > >::iterator it;
 	for(it = site_binner.begin(); it != site_binner.end(); ++it)
 	{
-		String key = it->first;
+		unique_key = it->first;
 		AtomContainer* ac = it->second[0].first;
-		ac->setProperty("key", key);
+		ac->setProperty("key", unique_key);
 		
 		sites_file << *ac;
 	}

@@ -115,6 +115,10 @@ namespace BALL
 	 * any hydrogens and changes the order of atoms to a canonical one (e.g.: so 
 	 * two different benzoic acid molecules would then have the exact same list of 
 	 * atoms, even if the ordering was different before)
+	 *
+	 * This class is supposed to to replaced by an improved UCK class, because
+	 * the UCK already (implicitly) generates a canonical ordering for the
+	 * atom list. Currently we do not extract that ordering from UCK...
 	 */
 	class Canonicalizer
 	{
@@ -123,9 +127,6 @@ namespace BALL
 		~Canonicalizer();
 	
 		void canonicalize(BALL::AtomContainer &molecule);
-		
-	private:
-		//#TODO: create OBGraphSym and OBmol as private member
 	};
 
 }//namespace

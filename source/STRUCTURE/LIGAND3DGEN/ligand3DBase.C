@@ -195,7 +195,7 @@ TemplateCoord::TemplateCoord( AtomContainer& mol)
 void TemplateCoord::applyCoordinates2Molecule( AtomContainer& mol)
 {
 	AtomIterator qit = mol.beginAtom();
-	for (int i = 0 ; i < _size; i++, qit++)
+	for (unsigned int i = 0 ; i < _size; i++, qit++)
 	{
 		qit->setPosition( positions[i] );
 	}
@@ -206,7 +206,7 @@ void TemplateCoord::readCoordinatesFromMolecule( AtomContainer& mol)
 	if(positions.size() == _size)
 	{
 		AtomIterator qit = mol.beginAtom();
-		for (int i = 0 ; i < _size; i++, qit++)
+		for (unsigned int i = 0 ; i < _size; i++, qit++)
 		{
 			positions[i] = qit->getPosition() ;
 		}
@@ -215,7 +215,7 @@ void TemplateCoord::readCoordinatesFromMolecule( AtomContainer& mol)
 	else
 	{
 		AtomIterator qit = mol.beginAtom();
-		for (int i = 0 ; i < _size; i++, qit++)
+		for (unsigned int i = 0 ; i < _size; i++, qit++)
 		{
 			positions.push_back( qit->getPosition() );
 		}
@@ -276,7 +276,7 @@ RFragment::RFragment()
 
 RFragment::~RFragment()
 {
-	for(int i = 0; i < coord_sets.size(); ++i)
+	for(unsigned int i = 0; i < coord_sets.size(); ++i)
 	{
 		delete coord_sets[i];
 	}
@@ -387,10 +387,10 @@ void LigBase::removeHydrogens(AtomContainer &tmp)
 	}
 	
 	// remove the hydrogens:
-	for(int i = 0; i<to_remove.size(); ++i)
+	for(unsigned int i = 0; i<to_remove.size(); ++i)
 		tmp.remove( *to_remove[i] );
 	
-	for(int i = 0; i<bnd_remove.size(); ++i)
+	for(unsigned int i = 0; i<bnd_remove.size(); ++i)
 		bnd_remove[i]->destroy();
 }
 

@@ -17,8 +17,8 @@ using namespace BALL;
 
 CombiLibManager::CombiLibManager(LineBasedFile *combilib_file):
 	_combilib_file(combilib_file),
-	_lib_is_generated(false),
-	_scaffold(0)
+	_scaffold(0),
+	_lib_is_generated(false)
 {}
 
 CombiLibManager::~CombiLibManager()
@@ -106,7 +106,7 @@ void CombiLibManager::generateCombinationsAtomContainer(
 
 void CombiLibManager::_sortRGroups()
 {
-	for( int i = 1; i < _lib.size(); ++i)
+	for(unsigned int i = 1; i < _lib.size(); ++i)
 	{
 		std::sort(_lib[i].begin(), _lib[i].end(), _compareRFrag);
 	}
@@ -418,7 +418,7 @@ RFragment *SmilesParserOB::fromSMILEStoRFragment(const String &smiles_string,
 	}
 	
 	// Delete the r-labels (which are only pseudo atoms for highlighting r-atoms)
-	for(int i = 0; i < for_deletion.size(); i++)
+	for(unsigned int i = 0; i < for_deletion.size(); i++)
 		_babel_mol.DeleteAtom( for_deletion[i], true);
 	
 	// convert OBMol to BALL::Molecule and canonize
