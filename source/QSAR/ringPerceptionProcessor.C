@@ -78,6 +78,10 @@ Processor::Result RingPerceptionProcessor::operator () (AtomContainer& ac)
 
 Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 {
+	// do not start the algorithm, if no rings do exist in the given molecule:
+	if( ((long)ac.countBonds() - (long)ac.countAtoms() + 1) < 1)
+		return 0;
+
 	all_small_rings_.clear();
 
 	// build molecular graph
