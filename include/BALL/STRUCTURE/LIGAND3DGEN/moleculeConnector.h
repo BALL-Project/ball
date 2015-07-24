@@ -9,7 +9,23 @@
 
 namespace BALL 
 {
-
+/**
+ * @brief The MoleculeConnector class connects two molecules by transforming
+ * the coordinates of the second molecule in such a way that the geometry
+ * corresponds to the given bond between the two molecules.
+ *
+ * This is done by using the StarAligner:
+ * To the (star like) connection site
+ * of mol1 a star like template is aligned. the template contains all atoms
+ * of the site PLUS the bond-atom from mol2. Thus we derive the position
+ * of the partner atom from mol2 from the additional atom from the aligned site
+ * template.
+ *
+ * The same is done for the site on mol2 so that we have a bond vector for
+ * mol1 and mol2. These two vectors are then aligned in a simple way
+ *
+ * NOTE: the connection is NOT guaranteed to be clash free!!!
+ */
 class MoleculeConnector
 {
 public:
@@ -26,7 +42,7 @@ public:
  * Precondition: 
  * atm1 and atm2 need to belong to separate BALL::AtomContainer. Between
  * both atoms (and thus between their respective AtomContainer) the bond
- * needs to already exist.
+ * needs to already exist. So atm1 and atm2 also mark the connecting bond
  */
 	void connect(BALL::Atom* atm1, BALL::Atom* atm2);
 

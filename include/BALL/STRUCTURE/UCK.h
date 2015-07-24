@@ -126,6 +126,12 @@ namespace BALL
 		Canonicalizer();
 		~Canonicalizer();
 	
+		/**
+		 * @brief canonicalize - resorts the atom list of 'molecule' in such a way
+		 * that the order is canonical (according to openbabels canonical labels
+		 * implementation)
+		 * @param molecule
+		 */
 		void canonicalize(BALL::AtomContainer &molecule);
 	};
 

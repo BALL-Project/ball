@@ -13,9 +13,16 @@
 namespace BALL 
 {
 
-//typedef std::vector<BALL::Atom*> AtmVec;
-//typedef std::vector<BALL::Atom*>::iterator AVIter;
-
+/**
+ * @brief The StarAligner class - This class tries to align the coordinates
+ * of two identical starlike molecules.
+ * It is also possible that the reference star molecule has less neighbors.
+ *
+ * Star like molecules have a central atom which forms bonds to neighbor atoms.
+ * Other bonds than the ones originating from the central atom may not exist,
+ * or are not part of the star molecule which is considered.
+ *
+ */
 class StarAligner
 {
 public:
@@ -25,28 +32,38 @@ public:
 	
 	/**
 	 * @brief align, transforms the coordinates of the 'query' to match with the
-	 * 'reference'. The RMSD is returned.
+	 * 'reference'
 	 * @return 
 	 */
 	void align();
 	
+	/**
+	 * @brief bestRMSD returns the lowest RMSD between  'query' and 'reference'
+	 * @return
+	 */
 	float bestRMSD();
 	
 	/**
 	 * @brief bondAlign aligns two atom pairs such that
 	 * A1 is moved onto B1 and A2 is rotated onto the ray B1-B2
 	 * 
-	 * The calculated transformation is applied to the query molecule
+	 * The calculated transformation is applied to the molecule in 'this->_query'
 	 */
 	static BALL::Matrix4x4 bondAlign(BALL::Atom* atA1, BALL::Atom* atA2, 
 																	 BALL::Atom* atB1, BALL::Atom* atB2);
 	
-	/*
-	 * Get a list of atom-pointers of atoms that were not aligned (if 'query'
-	 * contained more atoms than 'site').
+	/**
+	 * @brief getRemainder Get a list of atom-pointers of atoms that were not
+	 * aligned (if 'this->_query' contained more atoms than 'this->_site').
 	 */
 	void getRemainder(BALL::AtmVec& remainder);
 	
+	/**
+	 * @brief setMolecules inits the StarAligner
+	 * @param reference this star molecule is kept at it original position
+	 * @param query this star molecule is transformed such that it matches the
+	 * references position best
+	 */
 	void setMolecules(BALL::AtomContainer& reference, BALL::AtomContainer& query);
 	void setMolecules(AtmVec& ref_site, BALL::AtomContainer& query);
 	
@@ -55,8 +72,8 @@ public:
 	 *
 	 * Get the minimal RMSD between two molecules by testing all meaningful
 	 * mappings of mol1 to mol2. Atom element and bond type need to match and 
-	 * the mapping is an unambigious projection (each atom of mol1 may only be once 
-	 * assigned to an atom of mol2 per mapping and the other way around).
+	 * the mapping is an unambigious projection (each atom of mol1 may only be
+	 * once assigned to an atom of mol2 per mapping and the other way around).
 	 * 
 	 * The central atom is not tested, because it is the translation 
 	 * center and thus should always have distance 0
@@ -129,8 +146,8 @@ private:
 			const BALL::Vector3& w2);
 	
 	/*
-	 * Is a towPointMatching that respects the need for planarity of neighbors
-	 * connected to the bond if we are twoPointmatching a double bond.
+	 * Is a towPointMatch'ing that respects the need for planarity of neighbors
+	 * connected to the bond if we are twoPointmatching a double bond for example
 	 */
 	BALL::Matrix4x4 doubleBondCorrection(BALL::Atom &tem1, BALL::Atom &tem2, 
 																			 BALL::Atom &sit1, BALL::Atom &sit2);

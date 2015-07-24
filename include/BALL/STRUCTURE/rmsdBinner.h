@@ -14,13 +14,17 @@ namespace BALL
 /**
 	ATTENTION: if using this with molecule Fragments (not starLike Molecules and
 	thus constructing not with a StarAligner) means that all molecules will be
-	transformed for rmsd calculation. Currently this behaviour is no problem and 
-	probably saves coding+computation time.
+	transformed for rmsd calculation. Currently this behaviour is non problematic
+	and probably saves coding+computation time.
 	
-	PRECONDITION: for molecule fragments, we assume a already canonicalised list
+	PRECONDITION: for molecule fragments, we assume an already canonicalised list
 	of atoms for each molecule!!!
 	
- * @brief The RMSDBinner class
+ * @brief The RMSDBinner class clusters eiter molecules (thus also fragments)
+ * or star like molecules according to their RMSD. If the RMSD between two
+ * input molecules is below 'threshold' they are part of the same bin and thus
+ * only the representative of that bin is kept. If a molecule is new or the RMSD
+ * is larger than 'threshol' a new bin will be created.
  */
 class RMSDBinner
 {
