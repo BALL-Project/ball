@@ -219,9 +219,9 @@ int main(int argc, char* argv[])
 	SDFile results_file("filtered_organic.sdf", ios::out);
 	SDFile invalids_file("rejected_invalid-organic.sdf", ios::out);
 	SDFile metals_file("rejected_metal.sdf", ios::out);
-	SDFile rigids_file("templates_rigid.sdf", ios::out);
-	LineBasedFile rigids_file_line("templates_rigid.line", ios::out);
-	SDFile sites_file("templates_sites.sdf", ios::out);
+	SDFile rigids_file("template_rigids.sdf", ios::out);
+	LineBasedFile rigids_file_line("template_rigids.line", ios::out);
+	SDFile sites_file("template_sites.sdf", ios::out);
 	SDFile uniques_file("unique_filtered_organic.sdf", ios::out);
 
 	/// For uniqueness check
