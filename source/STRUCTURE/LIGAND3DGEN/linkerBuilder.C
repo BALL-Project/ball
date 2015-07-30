@@ -261,7 +261,7 @@ bool LinkerBuilder::compare(pair<String,Atom*>& a, pair<String,Atom*>& b)
 
 /*
  * P R I V A T E
- * findRotors
+ * resolveLinkerClashes
  * A 'hub' is an atom that connects with more than two other atoms and thus may 
  * connect 3 chains.
  * 
@@ -391,7 +391,7 @@ void LinkerBuilder::setBondTrans(Bond &bnd)
 	Atom* at1 = bnd.getFirstAtom();
 	Atom* at2 = bnd.getSecondAtom();
 	
-	// find "the other bond" that is not bnd:
+	// find any other (than 'bnd') 2 bonds that span the torsion:
 	Atom* at1_p = 0;
 	for(AtomBondIterator bit = at1->beginBond(); +bit; ++bit)
 	{
@@ -421,9 +421,12 @@ void LinkerBuilder::setBondTrans(Bond &bnd)
 	
 	_roto.setAxis(*at1, *at2);
 	_roto.rotate( Angle(Constants::PI)-is_angle );
-
 }
 
+/*
+ * P R I V A T E
+ * countBondsInParent
+ */
 int LinkerBuilder::countBondsInParent(Atom &atm, const Composite &parent)
 {
 	int cnt = 0;
