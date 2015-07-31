@@ -36,17 +36,17 @@ typedef std::vector <BALL::AtomContainer*>::iterator ACVecIter;
 // Special Data:
 typedef std::list< std::pair<BALL::Atom*, BALL::Atom*> > ConnectList;
 
-// Database types:
-// key==group number, value==all groupfragment for that group
-typedef std::vector< std::vector<RFragment*> > CombiLibMap; 
+// Database type:
+typedef std::vector< std::vector<RFragment*> > CombiLibMap;
 
 
 /// C l a s s   T e m p l a t e C o o r d
 /// ############################################################################
 /**
- * @brief The TemplateCoord class is a simple array wrapper for BALL::Vector3
+ * @brief The TemplateCoord class is a wrapper for std::vector of BALL::Vector3
  * 
- * To efficiently save coordinates without much overhead
+ * It allows efficiently save only coordinates without much overhead and
+ * read/write coordinates from/to a given molecule
  */
 class TemplateCoord
 {
@@ -65,7 +65,8 @@ public:
 	const BALL::Size& size();
 	
 	/**
-	 * Apply coordinates of this to the input BALL::AtomContainer
+	 * Write coordinates of this instance to a given BALL::AtomContainer
+	 * (please make sure that coordinates are correct for the molecule)
 	 * @brief setCoordinates
 	 * @param mol
 	 */
@@ -82,27 +83,51 @@ private:
 /// ############################################################################
 class RFragment;
 
+/**
+ * @brief The RAtom struct - An R-Atom marks a connection point for any
+ * R-fragment. It also manages the compatibility state of connected fragments
+ */
 struct RAtom
 {
-	int id;
-	BALL::Atom* atm;
-	RFragment* parent;
+	int id; // Group-ID for this R-atom
+	BALL::Atom* atm; // the actual BALL atom behind this R-atom
+	RFragment* parent; // the actual R-fragment this R-atom is contained in
+
+	// map of known R-fragments, that were previously connected via this R-atom
 	std::map< std::pair<int ,RFragment*>, int > known_partners;
 	
+	/**
+	 * @brief addParnter - save which R-fragment was succesfully connected to
+	 * this R-atom and also which of its coordinate sets is the correct one
+	 * @param other
+	 */
 	void addParnter(RFragment& other);
+
+	/**
+	 * @brief getCompatibleSet - returns the set-ID for the R-fragment the R-atom
+	 * is part of, which fits to the input R-fragment 'other'.
+	 * @param other
+	 * @return
+	 */
 	int getCompatibleSet(RFragment& other);
 };
 
 
 /// C l a s s   R F r a g m e n t
 /// ############################################################################
+/**
+ * @brief The RFragment class - Wraps a BALL::AtomContainer that contains a
+ * fragment. Indexes the group- and r-atoms and keeps a list of rotable bonds.
+ * Furthermore it keeps a vector of saved positions for the respective molecue.
+ */
 class RFragment
 {
 public:
 	RFragment();
 	~RFragment();
+
 	/**
-	 * Clone RFragment, manually clones the molecule
+	 * Clone R-Fragment, manually clones the molecule
 	 */
 	RFragment(const RFragment& other);
 	
@@ -127,10 +152,14 @@ private:
 
 /// S t a t i c   C l a s s   L i g B a s e
 /// ############################################################################
+/**
+ * @brief The LigBase class - Purely static class that offers some helpful
+ * routines
+ */
 class LigBase
 {
 public:
-	
+	/* hydrogens are completely removed/deleted */
 	static void removeHydrogens( BALL::AtomContainer &tmp );
 	
 	static BALL::String moleculeToSMILES( BALL::AtomContainer& ac );
@@ -139,6 +168,10 @@ public:
 
 /// L i g a n d 3 D   E x c e p t i o n s
 /// ############################################################################
+/**
+ * Collection of exceptions for several possible failures within the structure
+ * coordinate generation process.
+ */
 namespace Exception
 {
 /// Exception : SiteTemplateNotFound #######################################
@@ -172,6 +205,13 @@ public:
 };
 
 /// Exception : RotationAxisInRing #########################################
+/*
+ * #TODO#: Theoretically this exception can be removed now.
+ *
+ * Earlier the RingPerceptionProcessor was faulty which could lead to a
+ * situtation where not all ring atoms where correctly assigned as beeing
+ * "InRing".
+ */
 class BALL_EXPORT RotationAxisInRing
 		: public GeneralException
 {
@@ -253,6 +293,15 @@ private:
 
 /// R i g i d F r a g m e n t s D a t a b a s e
 /// ############################################################################
+/**
+ * @brief The RigidFragmentDB class -A hashMap that saves only the coordinates
+ * of the molecule that belongs to the UCK-hash value, which gives the
+ * key-string here.
+ *
+ * Automatically initializes itself from the input filename. Should be a .line
+ * file with rigid templates that were generated from the tool
+ * ../APPLICATIONS/UTILITIES/make3DFragmentDBs.C
+ */
 class RigidFragmentDB:
 		public boost::unordered_map <BALL::String, TemplateCoord*>
 {
@@ -269,6 +318,14 @@ private:
 
 /// S i t e F r a g m e n t s D a t a b a s e
 /// ############################################################################
+/**
+ * @brief The SiteFragmentDB class - HashMap of Site templates, saved as
+ * BALL::AtomContainer s and the site-key as key-string
+ *
+ * Automatically initializes itself from the input filename. Should be a .sdf
+ * file with site templates that were generated from the tool
+ * ../APPLICATIONS/UTILITIES/make3DFragmentDBs.C
+ */
 class SiteFragmentDB:
 		public boost::unordered_map <BALL::String, BALL::AtomContainer*>
 {
@@ -284,6 +341,13 @@ private:
 
 /// C l a s s   M a t c h e r
 /// ############################################################################
+/**
+ * @brief The Matcher class - given a RigidFragmentDB it searches within that
+ * DB for any query molecule and if found sets the query to the coordinates
+ * of the found template.
+ *
+ * For this the necessary canonicalization setps are executed on the query
+ */
 class Matcher
 {
 public:

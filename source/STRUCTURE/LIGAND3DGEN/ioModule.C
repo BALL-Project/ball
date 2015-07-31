@@ -15,23 +15,18 @@ using namespace BALL;
 /// C o m b i L i b M a n a g e r
 /// ############################################################################
 
-CombiLibManager::CombiLibManager(LineBasedFile *combilib_file):
-	_combilib_file(combilib_file),
+CombiLibManager::CombiLibManager(LineBasedFile& combilib_file):
+	_combilib_file(&combilib_file),
 	_scaffold(0),
 	_lib_is_generated(false)
-{}
+{
+	_parseCombiLibFile();
+}
 
 CombiLibManager::~CombiLibManager()
 {
 	// _combilib_file to be deleted out side of CombiLibManager
 	_combilib_file = 0;
-}
-
-void CombiLibManager::setCombiLib(LineBasedFile &combilib_file)
-{
-	_combilib_file = & combilib_file;
-	
-	_parseCombiLibFile();
 }
 
 RFragment &CombiLibManager::getScaffold()

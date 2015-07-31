@@ -44,6 +44,10 @@ private:
 	void recurLinkerConnect(BALL::Atom &at, const BALL::Composite &parent);
 	
 	/*
+	 * #TODO# Further generalize the MoleculeConnector and thus remove
+	 * several functions from here. Also move the SiteTemplateNoFound exception
+	 * to MoleculeConnector.
+	 *
 	 * Set the position of the 'partner' atom to the free position calculated
 	 * from the alignment of the 'site' template to the actual star molecule
 	 * 'temp'
