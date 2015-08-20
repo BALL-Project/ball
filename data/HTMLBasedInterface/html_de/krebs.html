@@ -1,83 +1,55 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 	<head>
 		<title>Brustkrebs</title>
-		<link rel="stylesheet" href="../css/style.css">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="../css/presentaball.css">
+		<script src="../scripts/toggleanswers.js"></script>
 	</head>
-	<body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px" >
-		<script language="javascript">
-			<!--
-			function showAnswer(answer_id) {
-				document.getElementById(answer_id).style.visibility="visible";
-			}
-			function hideAnswer(answer_id) {
-				document.getElementById(answer_id).style.visibility="hidden";
-			}
-			-->
-		</script>
-	  <div class="navigation" id="breadcrumb">
-	    <a href="index.html?action=clearAll&module=common_functions">Startseite</a> > Brustkrebs I
-	  </div>
-	  <div id="text-content">
-	    <h1>Brustkrebs</h1> 
-		<div class="greeter">
-	     	<p class="general">
-		Unter Krebs versteht man in der Medizin eine meist (b&ouml;sartige) Gewebebildung, die auch als Tumor bezeichnet wird.
-		Befallen werden kann prinzipiell jedes Organ des menschlichen K&ouml;rpers, besonders geh&auml;uft tritt Krebs jedoch in 
-		Organen wie Brustdr&uuml;se (Frauen), 
- 		Prostata (M&auml;nner), sowie Lunge und Dickdarm auf. <br>
-		Damit ist Krebs nach den Herz-Kreislauferkrankungen in Deutschland die zweith&auml;ufigste Todesursache.<br>
-		Krebs ist sehr komplex und daher nur schwer bek&auml;mpfbar.
-	      	</p>	
-		<p class="functionality">
-		Krebs entsteht, wenn das Zellwachstum au&szlig;er Kontrolle ger&auml;t. 
-		Im menschlichen K&ouml;rper sorgen tausende Gene f&uuml;r die sichere Erhaltung des genetischen Codes von einer
-		Zellgeneration zur n&auml;chsten.<br> 
-		Passiert ein genetischer Abschreibefehler, wird der Zellzyklus angehalten, um Reparaturen vorzunehmen und danach 
-		falls notwendig einen vorzeitigen Zelltod zu veranlassen, damit keine falsche genetische Information
-		weitergegeben werden kann. <br>
-		Bei Krebs ist diese Selbstkontrolle kaputt.
-		</p>
-		<p class="step">
-		Der genetische Code besteht aus nur 4 Molek&uuml;len: <b><font color="yellow">A (gelb)</font>, <font color="red">C (rot)</font>, 
-		<font color="green">G (gr&uuml;n)</font></b> und <b><font color="blue">T (blau)</font></b>. <br>
-		<div class="task">Wieviele A sind in der DNA nebenan enthalten? (Klicke <a href="javascript:showAnswer('numberofas')">hier</a>, um die richtige Antwort zu sehen)<br> 
+	<body>
+		<div class="navigation" id="breadcrumb">
+			<a href="index.html?action=clearAll&amp;module=common_functions">Startseite</a> > Brustkrebs I
+		</div>
+		
+		<div id="text-content">
+			<h1>Brustkrebs</h1> 
 
-		<p class="answer" style="visibility:hidden" id="numberofas">
-			Der Doppelstrang, den Du rechts siehst, sieht so aus... <br>	
-			<b>
-			<tt>
-				<font color="red">C</font><font color="yellow">A</font><font color="green">G</font><font color="yellow">A</font><font color="yellow">A</font><font color="red">C</font><font color="yellow">A</font><font color="blue">T</font><font color="red">C</font><font color="green">G</font><font color="yellow">A</font><font color="blue">T</font><font color="green">G</font><font color="blue">T</font><font color="blue">T</font><font color="red">C</font><font color="blue">T</font><font color="green">G</font> <br>
+			<p>Unter Krebs versteht man in der Medizin eine meist (bösartige) Gewebebildung, die auch als Tumor bezeichnet wird. Befallen werden kann prinzipiell jedes Organ des menschlichen Körpers, besonders gehäuft tritt Krebs jedoch in Organen wie Brustdrüse (Frauen), Prostata (Männer), sowie Lunge und Dickdarm auf. </p>
+			<p>Damit ist Krebs nach den Herz-Kreislauferkrankungen in Deutschland die zweithäufigste Todesursache. Krebs ist sehr komplex und daher nur schwer bekämpfbar.</p>
+			<p>Krebs entsteht, wenn das Zellwachstum außer Kontrolle gerät. Im menschlichen Körper sorgen tausende Gene für die sichere Erhaltung des genetischen Codes von einer Zellgeneration zur nächsten.</p>
+			<p>Passiert ein genetischer Abschreibefehler, wird der Zellzyklus angehalten, um Reparaturen vorzunehmen und danach falls notwendig einen vorzeitigen Zelltod zu veranlassen, damit keine falsche genetische Information weitergegeben werden kann. Bei Krebs ist diese Selbstkontrolle kaputt.</p>
+			<p>Der genetische Code besteht aus nur 4 Molekülen: <strong><span class="a">A (gelb)</span>, <span class="c">C (rot)</span>, <span class="g">G (grün)</span></b> und <span class="t">T (blau)</span></strong>.</p>
 
-				<font color="green">G</font><font color="blue">T</font><font color="red">C</font><font color="blue">T</font><font color="blue">T</font><font color="green">G</font><font color="blue">T</font><font color="yellow">A</font><font color="green">G</font><font color="red">C</font><font color="blue">T</font><font color="yellow">A</font><font color="red">C</font><font color="yellow">A</font><font color="yellow">A</font><font color="green">G</font><font color="yellow">A</font><font color="red">C</font>
-			</tt>
-			</b>
-			<br>
-			Im gesamten Doppelstrang sind also 10 '<font color="yellow">A</font>' enthalten.<br>
-			Antwort <a href="javascript:hideAnswer('numberofas')">verstecken</a>
-		</p>
+			<div class="task">
+				<p>Wieviele A sind in der DNA nebenan enthalten?</p>
+				<a href="javascript:showAnswer('numberofas')">Antwort anzeigen</a>
+				<div class="answer" id="numberofas">
+					<p>Der Doppelstrang, den Du rechts siehst, sieht so aus:</p>
+					<span class="dna">
+						<p><span class="c">C</span><span class="a">A</span><span class="g">G</span><span class="a">A</span><span class="a">A</span><span class="c">C</span><span class="a">A</span><span class="t">T</span><span class="c">C</span><span class="g">G</span><span class="a">A</span><span class="t">T</span><span class="g">G</span><span class="t">T</span><span class="t">T</span><span class="c">C</span><span class="t">T</span><span class="g">G</span></p>
+						<p><span class="g">G</span><span class="t">T</span><span class="c">C</span><span class="t">T</span><span class="t">T</span><span class="g">G</span><span class="t">T</span><span class="a">A</span><span class="g">G</span><span class="c">C</span><span class="t">T</span><span class="a">A</span><span class="c">C</span><span class="a">A</span><span class="a">A</span><span class="g">G</span><span class="a">A</span><span class="c">C</span></p>
+					</span>
+					<p>Im gesamten Doppelstrang sind also 10 '<strong><span class="a">A</span></strong>' enthalten.</p>
+					<a href="javascript:hideAnswer('numberofas')">Antwort verstecken</a>
+				</div>
+				<p>Mit Hilfe der Maus kannst Du die DNA drehen.</p>
+			</div>
 
-		Mit Hilfe der Maus kannst Du die DNA drehen.</div>
-		<br>
-		Zur Sicherheit wird der genetische Code als Doppelstrang gespeichert, und jedes Molek&uuml;l hat einen festgelegten Partner, d.h. 
-		falls die eine H&auml;lfte der DNA verloren geht, kann man die Information &uuml;ber den anderen Strang wieder ablesen.<br>
-		So kann sich eine Zelle bei der Zellteilung genetisch reparieren.<br>
-		<br>
-		<div class="task">Welches Molek&uuml;l  liegt A immer gegen&uuml;ber? <br> 
-		Und welches liegt G immer gegen&uuml;ber? <br>
-		Mit Hilfe der Maus kannst Du Dir den DNA Doppelstrang genauer ansehen.</div> 
-		</p>
-		<p class="step">
-		Wissenschaftler haben herausgefunden, dass Krebszellen genau wie Haarwurzelzellen viel schneller wachsen als normale Zellen. 
-		Au&szlig;erdem sind sie nicht gut darin, genetische Abschreibefehler zu reparieren.<br>
-		Die Idee f&uuml;r einen Wirkstoff gegen Krebs ist daher die Zellteilung zu behindern. 
-		Das trifft den Krebs mehr als gesunde Zellen, da er sich ja viel h&auml;ufiger teilt.
-		<br>
-		Ein Mittel gegen Brustkrebs ist zum Beispiel Docetaxel.<br>
-		Klicke auf weiter, um mehr &uuml;ber den Wirkstoff zu erfahren.<b>
-      </p>
-		<a href="index.html?action=clearAll&module=common_functions">zur&uuml;ck</a> 
-		<a href="krebs3.html?action=loadProject&module=common_functions&filename=projects/Docetaxel_solo.bvp">weiter</a> 
+			<p>Zur Sicherheit wird der genetische Code als Doppelstrang gespeichert, und jedes Molekül hat einen festgelegten Partner, d.h. falls die eine Hälfte der DNA verloren geht, kann man die Information über den anderen Strang wieder ablesen. So kann sich eine Zelle bei der Zellteilung genetisch reparieren.</p>
+			
+			<div class="task">
+				<p>Welches Molekül  liegt A immer gegenüber? Und welches liegt G immer gegenüber?</p>
+				<p>Mit Hilfe der Maus kannst Du Dir den DNA Doppelstrang genauer ansehen.</p>
+			</div>
+
+			<p>Wissenschaftler haben herausgefunden, dass Krebszellen genau wie Haarwurzelzellen viel schneller wachsen als normale Zellen. Außerdem sind sie nicht gut darin, genetische Abschreibefehler zu reparieren.</p>
+			<p>Die Idee für einen Wirkstoff gegen Krebs ist daher die Zellteilung zu behindern. Das trifft den Krebs mehr als gesunde Zellen, da er sich ja viel häufiger teilt.</p>
+			<p>Ein Mittel gegen Brustkrebs ist zum Beispiel Docetaxel. Klicke auf weiter, um mehr über den Wirkstoff zu erfahren.</p>
+
+			<ul class="buttons">
+				<li><a href="index.html?action=clearAll&amp;module=common_functions">zurück</a></li>
+				<li><a href="krebs2.html?action=loadProject&amp;module=common_functions&amp;filename=projects/Docetaxel_solo.bvp">weiter</a></li>
+			</ul>
 		</div> 
-	</div>
 	</body>
 </html>

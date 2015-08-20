@@ -1,0 +1,227 @@
+/*
+ * PresentaBALL style sheet.
+ * @version 2.0 (2015-08-20)
+ */
+
+
+/* General definitions */
+
+body {
+	font-family: Arial, sans-serif;
+	font-size: 15px;
+	background-color: #fff;
+	margin: 0;
+}
+
+body h1 {
+	margin: 30px 0 0 0;
+	color: #333;
+	font-size: 24px;
+}
+
+body h3 {
+	margin: 30px 0 -10px 0;
+	font-size: 18px;
+}
+
+body a {
+	color: #d60;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+body a:hover, 
+body a:focus {
+	text-decoration: none; 
+	color: #333;
+}
+
+
+/* Breadcrumb navigation */
+
+#breadcrumb {
+	background-color: #333;
+	vertical-align: middle;
+	color: #fff;
+	padding: 10px;
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	float: left;
+	font-weight: bold;
+	box-shadow: 0 0 5px #000;
+}
+
+#breadcrumb a {
+	color: #f90;
+}
+
+#breadcrumb a:hover, 
+#breadcrumb a:focus {
+	color: #fff;
+	text-decoration: none;
+}
+
+
+/* Content area */
+
+#text-content {
+	padding: 30px 20px 1em 20px;
+	clear: both;
+	color: #333;
+}
+
+#text-content p {
+	text-align: justify;
+}
+
+#text-content div.actions {
+	margin: 0 0 20px 0;
+	background-color: #eee;
+	display: table;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+}
+
+#text-content div.actions h3 {
+	margin: -1px;
+	padding: 5px 10px;
+	color: #eee;
+	background-color: #333;
+	display: block;
+	border-radius: 8px 8px 0 0;
+	font-size: 16px;
+}
+
+#text-content div.actions a {
+	margin-bottom: 2pt;
+	display: block;
+}
+
+#text-content div.actions ul {
+	padding: 0 10px;
+	list-style: none;
+}
+
+#text-content div.actions span {
+	display: block;
+	margin: 10px;
+}
+
+#text-content div.answer {
+	visibility: hidden;
+}
+
+#text-content ul.buttons {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	float: left;
+	list-style: none;
+}
+
+#text-content ul.buttons li {
+	margin: 0;
+	float: left;
+}
+
+#text-content ul.buttons li a, 
+#text-content ul.buttons li button {
+	display: block;
+	margin: 0 10px 0 0;
+	padding: 5px 10px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	background-color: #333;
+	color: #f90;
+	font-weight: bold;
+	font-size: 15px;
+}
+
+#text-content ul.buttons li button[disabled],
+#text-content ul.buttons li button[disabled]:hover,
+#text-content ul.buttons li button[disabled]:focus {
+	color: #ccc;
+}
+
+#text-content ul.buttons li a:hover, 
+#text-content ul.buttons li a:focus, 
+#text-content ul.buttons li button:hover,
+#text-content ul.buttons li button:focus {
+	color: #fff;
+}
+
+#text-content div.decoration-image {
+	float: right;
+	margin: 5px 0 5px 20px;
+}
+
+#text-content div.logos {
+	overflow: hidden;
+}
+
+#text-content div.logos ul {
+	float: right;
+	list-style: none;
+}
+
+#text-content div.logos ul li {
+	float: left;
+	margin: 0 20px 0 0;
+}
+
+#text-content div.logos ul li img {
+	height: 60px;
+}
+
+#text-content div.structure {
+	text-align: center;
+	margin: 0 0 20px 0;
+}
+
+#text-content div.structure span {
+	display: block;
+	font-size: small;
+}
+
+#text-content div.task {
+	margin: 0 0 20px 0;
+	padding: 5px 10px;
+	background-color: #eee;
+	text-align: left;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+}
+
+#text-content div.task p {
+	margin: 0 0 10px 0;
+}
+
+#text-content span.dna {
+	font-weight: bold;
+	font-family: mono;
+	padding: 0 0 20px 0;
+	display: block;
+	font-size: 18px;
+	letter-spacing: 4px;
+}
+
+#text-content span.dna p {
+	margin: 0;
+}
+
+#text-content span.a {
+	color: #d60;
+}
+
+#text-content span.g {
+	color: #00a200;
+}
+
+#text-content span.c {
+	color: #a20000;
+}
+
+#text-content span.t {
+	color: #0000a2;
+}
