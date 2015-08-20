@@ -224,7 +224,7 @@ function onJSActionSignal(i) { //i = ActionType
 	{
 	  case 11: // optimizing = 2
 	  {
-		  if (i != 2) return; 
+		  if (i != 94) return; 
 	    
 		  document.getElementById('button1').disabled=false;
 		  
@@ -232,7 +232,7 @@ function onJSActionSignal(i) { //i = ActionType
 	  }
 	  case 12: // bondorder = 3
 	  {
-		  if (i != 3) return;
+		  if (i != 2) return;
 		 
 		  document.getElementById('button1').disabled=false;
 		 
@@ -240,7 +240,7 @@ function onJSActionSignal(i) { //i = ActionType
 	  }
 	  case 13: // add_hydrogens = 1
 	  {
-		  if (i != 1) return;
+		  if (i != 95) return;
 		  
 		  document.getElementById('button1').disabled=false;
 		  
