@@ -16,6 +16,11 @@ namespace BALL
 
 /// C l a s s  S t r u c t u r e A s s e m b l e r
 /// ############################################################################
+
+/**
+ * @brief The StructureAssembler class - create valid 3D coordinates for
+ * a single molecule
+ */
 class StructureAssembler
 {
 public:

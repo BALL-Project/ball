@@ -9,17 +9,44 @@
 
 namespace BALL 
 {
-
+/**
+ * @brief The CombiAssembler class - creates valid 3D coordinates for all
+ * possible combinations of a combi-lib
+ */
 class CombiAssembler
 {
 public:
+	/**
+	 * @brief CombiAssembler - generates 3D coordinates in a manner that is
+	 * optimized for speed. Before application it is necessary to set the
+	 * central scaffold with setScaffold()
+	 *
+	 * @param site_db - collection of site templates to be able to connect the
+	 * individual fragments
+	 * @param clib - input combilib which needs to be initialized with 3D
+	 * coordinates for the contained R-fragments
+	 */
 	CombiAssembler(SiteFragmentDB& site_db, BALL::CombiLibMap* clib);
 	
 	~CombiAssembler();
 	
+	/**
+	 * @brief setScaffold - setter for the central scaffold for all combinations
+	 * @param scaffold
+	 */
 	void setScaffold(BALL::RFragment& scaffold);
+
+	/**
+	 * @brief setCombiLib - setter for the internal combilib
+	 * @param clib
+	 */
 	void setCombiLib(BALL::CombiLibMap& clib);
 	
+	/**
+	 * @brief writeCombinations - calculates and writes the combinations with
+	 * their 3D coordinates directly to the given SDFile handle
+	 * @param handle
+	 */
 	void writeCombinations(BALL::SDFile& handle);
 	
 	
