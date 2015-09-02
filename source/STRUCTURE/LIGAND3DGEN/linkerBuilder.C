@@ -315,7 +315,7 @@ void LinkerBuilder::resolveLinkerClashes(AtomContainer &linker_frag, ConnectList
 	
 	//4.) check for clashes and resolve
 	_cresolv.setMolecule(linker_frag, _rotors );
-	if(_cresolv.detect() != 0)
+	if(_cresolv.detectInMolecule( linker_frag ) != 0)
 	{
 		_cresolv.resolve();
 	}

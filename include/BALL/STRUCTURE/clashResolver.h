@@ -10,6 +10,13 @@
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
+
+/**
+ * This whole clash resolving module should be reworked to implement a fast
+ * and efficient clash resolving method. Several good solutions to this problem
+ * are already known, but the implementation might be at least a bachelor
+ * thesis.
+ */
 namespace BALL 
 {
 
@@ -20,27 +27,39 @@ namespace BALL
  * within and between molecules. It simply counts all clashes, where a clash
  * is defined as two atoms having a distance that is less than their added
  * vdw-radii minus a tolerance. The standard tolerance used here is 
- * 1.3 Angsroem.
+ * 1.2 Angsroem.
+ *
+ * #TODO: perhaps its smarter to define a relative tolerance here
  */
 class ClashDetector
 {
 public:
 	/**
-	 * @brief ClashDetector - here it is possible to specify how large the 
-	 * tolereance shall be.
+	 * @brief ClashDetector - Initializes the ClashDetector. Here it is possible
+	 * to specify an alternative tolerance value
+	 *
 	 * @param tolerance
 	 */
 	ClashDetector( float tolerance = 1.2 );
 	~ClashDetector();
 	
 	/**
-	 * @brief detectPairList
+	 * @brief detectPairList - detects the number of clashes (return value)
+	 * from a AtomPairList. Every pair is checked for potentially causing a clash
+	 *
+	 * #TODO: possibly reuse BALL::AtomBijection here!
+	 *
 	 * @return 
 	 */
 	int detectPairList(std::list< std::pair< BALL::Atom*, BALL::Atom*> >& p_list);
 	
 	/**
-	 * @brief createBetweenPairList
+	 * @brief createBetweenPairList - creates a pairlist (p_list) for the two
+	 * AtomContainer ac1 and ac2. Every atom from ac1 is checked agains every atom
+	 * from ac2. The two molecules may be different. Thus we can check for clashes
+	 * that occur between two molecules, but ignore clashes that exist within each
+	 * molecule.
+	 *
 	 * @param ac1
 	 * @param ac2
 	 * @param p_list
@@ -49,7 +68,10 @@ public:
 														 std::list< std::pair< BALL::Atom*, BALL::Atom*> >& p_list);
 	
 	/**
-	 * @brief createInnerPairList
+	 * @brief createInnerPairList - forms a list from a single atomcontainer
+	 * input. The list checks each atom of the molecule agains all remaining
+	 * atoms. Thus we can check for clashes a molecule causes within itself.
+	 *
 	 * @param ac
 	 * @param p_list
 	 */
@@ -102,14 +124,13 @@ private:
 
 
 
-
 /// C l a s s   R o t a t o r
 /// ############################################################################
 /**
  * @brief The Rotator class - The general idea is taken from Jan Fuhrmann and
  * Marcel Schumanns implementation of 'rotate' found in 
  * BALL_DOCKING_GENETICDOCK_ROTATE_BOND. The class abstracts all steps that are
- * necessary to rotate along an bond given by two atoms.
+ * necessary to rotate along a bond given by two atoms.
  */
 class Rotator
 {
@@ -181,39 +202,55 @@ private:
 };
 
 
+
+
 /// C l a s s   C l a s h R e s o l v e r
 /// ############################################################################
+/**
+ * @brief The ClashResolver class - resolves clashes within a molecule
+ */
 class ClashResolver: public ClashDetector
 {
 public:
-	ClashResolver( float tolerance = 1.2, int max_rotors = 20);
+	/**
+	 * @brief ClashResolver - create a clashResolver and set the tolerance
+	 * for the underlying ClashDetector.
+	 *
+	 * @param tolerance
+	 * @param max_rotors
+	 */
+	ClashResolver( float tolerance = 1.2);
 	~ClashResolver();
 	
 	/**
-	 * @brief setMolecule
+	 * @brief setMolecule - init the ClashResolver with a molecule pointer
+	 * and a list of possible rotors to solve the clashes.
+	 *
 	 * @param molecule
 	 * @param connections
 	 */
 	void setMolecule(BALL::AtomContainer& molecule, BALL::ConnectList& rotors);
 	
+	/**
+	 * @brief resolve - resolves clashes within the set molecule by rotating
+	 * it along the list of rotable bonds (given via setMolecule())
+	 *
+	 * Here we have two times the-number-of-rotors tries to set all rotors
+	 * to a value creating fewest clashes. So we apply a primitive greedy
+	 * method.
+	 *
+	 * @return
+	 */
 	int resolve();
 	
 	/**
 	 * Solve optimally under the constraint of discretized angles. ('steps'
 	 * is the number by which we devide 360° to get discrete angles)
 	 * 
-	 * Rotates all bridging bonds in 'small' and 'large'
+	 * Rotates all bridging bonds
 	 */ 
 	int resolveAllCombinations( const int& steps = 3 );
 	
-	/**
-	 * @brief detect ONLY clashes that occur between the two fragments NOT within
-	 * a fragment (we assume that the two should start as clash free). Is a 
-	 * wrapper for the call "detectBetweenMolecules( *_large_root, *_small_root)"
-	 * 
-	 * @return number of clashes found BETWEEN both fragments
-	 */
-	int detect();
 	
 protected:
 	BALL::AtomContainer* _molecule;
@@ -224,10 +261,6 @@ private:
 	int allCombinationsRecur(const BALL::ConnectList::iterator& p, 
 													const BALL::ConnectList::iterator &p_end, 
 													BALL::Angle& angle, const int& steps );
-	
-
-	
-	int _max_rotations; // maximum number of bonds to rotate
 };
 
 
@@ -236,6 +269,10 @@ private:
 
 /// C l a s s   C o n n e c t i o n R e s o l v e r
 /// ############################################################################
+/**
+ * @brief The ConnectionResolver class - resolves clashes that occur between two
+ * molecules AND clashes that were newly introduced withn a molecule
+ */
 class ConnectionResolver: public ClashDetector
 {
 public:

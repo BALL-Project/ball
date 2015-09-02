@@ -287,9 +287,8 @@ bool Rotator::findRotateDirection(BALL::HashSet<Atom *>& tested,
 
 /// C l a s s   C l a s h R e s o l v e r
 /// ############################################################################
-ClashResolver::ClashResolver(float tolerance, int max_rotors): 
-	ClashDetector(tolerance),
-	_max_rotations(max_rotors)
+ClashResolver::ClashResolver(float tolerance):
+	ClashDetector(tolerance)
 {
 	_all_rotors = 0;
 	
@@ -304,14 +303,8 @@ void ClashResolver::setMolecule(AtomContainer& molecule, ConnectList& rotors)
 	_all_rotors = &rotors;
 	
 	_molecule = &molecule;
-	
-	_max_rotations = rotors.size() * 3;
 }
 
-int ClashResolver::detect()
-{
-	return detectInMolecule( *_molecule );
-}
 
 int ClashResolver::resolve()
 {
@@ -401,7 +394,7 @@ int ClashResolver::allCombinationsRecur(const ConnectList::iterator &p,
 	{
 		roto.rotate( angle );
 		
-		current_cnt = detect();
+		current_cnt = detectInMolecule( *_molecule );
 		
 		// this rotation solved ALL clashes
 		if( current_cnt == 0)
