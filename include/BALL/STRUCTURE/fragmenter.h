@@ -12,16 +12,56 @@
 namespace BALL 
 {
 
+/**
+ * @brief The MoleculeFragmenter class - handles fragmenting and assignment of
+ * rigidness/flexibility according to topology. Theoretically this violates
+ * the single responsibility principle. In future the assignment should be
+ * handled by a separate class.
+ */
 class MoleculeFragmenter
 {
 public:
+
+	/**
+	 * @brief MoleculeFragmenter initializes to an empty fragmenter with no
+	 * molecule. The all public fragmenter methods may only be used after
+	 * the setMolecule() method was used to specify the internal molecule
+	 * which is to be fragmented.
+	 *
+	 * Also: the methods isRigidAtom(), isRotableBond() and isBridgingBond()
+	 * may only be called with atoms or bonds of the molecule that was set.
+	 */
 	MoleculeFragmenter();
 	~MoleculeFragmenter();
 	
+	/**
+	 * @brief setMolecule - sets the internally used molecule to the given input
+	 * molecule
+	 * @param in_mol
+	 */
 	void setMolecule(BALL::AtomContainer& in_mol);
 	
+	/**
+	 * @brief isRigidAtom - checks wether the atom belongs to the rigid atoms.
+	 *
+	 * These are: atoms that are part of any(!) ring, terminal atoms that are
+	 * connected to rigid atoms and atoms that form a bond with bond order > 1.
+	 *
+	 * @param atm
+	 * @return
+	 */
 	bool isRigidAtom(BALL::Atom &atm);
 	
+	/**
+	 * @brief isRotableBond - is the bond rotatable?
+	 *
+	 * Such bonds are defined by this method as all bonds that are NOT:
+	 * single bonds (bond order ==1), or a ring bond, or are terminal bonds
+	 * (to a terminal atom)
+	 *
+	 * @param bnd
+	 * @return
+	 */
 	bool isRotableBond(BALL::Bond &bnd);
 	
 	/**
@@ -34,9 +74,36 @@ public:
 	 */
 	bool isBridgingBond(BALL::Bond &bnd);
 	
+	/**
+	 * @brief fragment - fragments to rigid and flexible/linker fragments
+	 *
+	 * These are stored in AtomContainer vectors (ACVec). Also a list of
+	 * connecting atoms between the respective fragments is saved in
+	 * "connections". The fragments are formed by iterating over all bonds.
+	 * Every bridging bond indicates a pair of atoms for the "conntections"
+	 * list. Depending on their "isRigidAtom()" result atoms are assigned to
+	 * a linker or rigid disjoint set. Individual fragments can be identified
+	 * because bridging bonds are removed.
+	 *
+	 * @param rigid_fragments
+	 * @param linker_fragments
+	 * @param connections
+	 */
 	void fragment(BALL::ACVec &rigid_fragments, BALL::ACVec &linker_fragments,
 														BALL::ConnectList& connections);
 	
+	/**
+	 * @brief fragmentToSites - Selects all site-templates from a given input
+	 * molecule
+	 *
+	 * The site templates are saved as pair with their site-key string (see the
+	 * thesis for details). If restrict_to_rotables is set to true, only atoms
+	 * that are part of a rotable bond will be used as site-centers. (Standard
+	 * behavior) Otherwise all single bonds will be used.
+	 *
+	 * @param connections
+	 * @param restrict_to_rotables
+	 */
 	void fragmentToSites(std::vector< std::pair< BALL::String, BALL::AtomContainer*> >& connections,
 											 bool restrict_to_rotables=false);
 	
@@ -46,8 +113,8 @@ private:
 	/// For FragmentLibs:
 	/*
 	 * clearProperties() removes all atom properties of the internal '_molecule'.
-	 * Properties are need in order to annotate atoms with the 'InRing' property,
-	 * but are also quite memory consuming.
+	 * Properties are needed in order to annotate atoms with the 'InRing'
+	 * property, but are also quite memory consuming.
 	 */
 	void extractAndClearProperties();
 	
@@ -60,6 +127,9 @@ private:
 	void addBondToConnectionsLib(BALL::Bond& bnd,
 			std::vector< std::pair< BALL::String, BALL::AtomContainer*> > &connections);
 	
+	/*
+	 * compares lexically on the String of the two pairs.
+	 */
 	static bool compare(std::pair<BALL::String,BALL::Atom*>& a, 
 											std::pair<BALL::String,BALL::Atom*>& b);
 	

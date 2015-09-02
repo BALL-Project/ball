@@ -15,7 +15,6 @@ using namespace std;
 MoleculeFragmenter::MoleculeFragmenter()
 {
 	_molecule = 0;
-//	_rpp.options.set("algorithm_name", "Figueras");
 }
 
 MoleculeFragmenter::~MoleculeFragmenter(){}
@@ -193,11 +192,11 @@ void MoleculeFragmenter::fragment(ACVec &rigid_fragments,
 			}
 		}
 		// for all fixed bonds:
-		// (note: terminal bonds are always fixed bonds, BUT their atoms may of
-		// course be linker atoms. We need to handle these cases)
+		// (note: terminal bonds are assigned as fixed bonds, BUT their atoms may
+		// be linker atoms. We need to handle these cases)
 		else
 		{
-			// Case2) rigid bond, formed by rigid atoms only:
+			// Case2) rigid bond:
 			if( isRigid_atm1 && isRigid_atm2)
 			{
 				if( !is_rigid[id1] )
@@ -309,7 +308,6 @@ void MoleculeFragmenter::fragmentToSites(
 			if( bit->getOrder() == 1 )
 				addBondToConnectionsLib(*bit, connections);
 	}
-	
 }
 
 
