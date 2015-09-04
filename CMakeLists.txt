@@ -48,6 +48,8 @@ IF(POLICY CMP0043)
 	CMAKE_POLICY(SET CMP0043 NEW)
 ENDIF()
 
+CMAKE_POLICY(SET CMP0020 OLD)
+
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 OPTION(BALL_USE_PROJECT_FOLDERS ON)
@@ -265,7 +267,6 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTSQL "Compile BALL's database adapaters (requires QtSql)" ON)
 OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
 
 FIND_PACKAGE(Qt5Core REQUIRED)
@@ -282,10 +283,6 @@ IF (BALL_HAS_VIEW)
 	IF(USE_QTWEBKIT)
 		FIND_PACKAGE(Qt5WebKitWidgets)
 	ENDIF()
-ENDIF()
-
-IF(USE_QTSQL)
-	FIND_PACKAGE(Qt5Sql)
 ENDIF()
 
 SET(BALL_HAS_QTWEBKIT TRUE)
@@ -602,9 +599,8 @@ ENDIF()
 TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
                            ${Qt5Core_LIBRARIES}
                            ${Qt5Network_LIBRARIES}
-                           ${Qt5Xml_LIBRARIES}
-                           ${Qt5Sql_LIBRARIES})
-QT5_USE_MODULES(BALL Core Network Xml Sql)
+			   ${Qt5Xml_LIBRARIES})
+QT5_USE_MODULES(BALL Core Network Xml)
 
 IF(BALL_HAS_VIEW)
 	TARGET_LINK_LIBRARIES(VIEW BALL
