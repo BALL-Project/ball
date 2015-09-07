@@ -15,7 +15,7 @@ namespace BALL
 {
 	/** Class for calculation of the Octonal/Water partition coefficient.\n
 	Based on Wildman and Crippen, J. Chem. Inf. Comput. Sci. 1999, 39, 868-873 */
-	class LogP
+	class BALL_EXPORT LogP
 	{
 		public:
 			LogP();
