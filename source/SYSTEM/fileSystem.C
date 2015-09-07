@@ -2,6 +2,8 @@
 // vi: set ts=2:
 //
 
+#include <algorithm>
+
 #include <BALL/SYSTEM/fileSystem.h>
 
 #include <BALL/DATATYPE/regularExpression.h>
