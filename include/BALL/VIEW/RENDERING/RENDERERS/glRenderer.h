@@ -37,7 +37,11 @@
 #define APIENTRY
 #endif
 
-#include <glu.h>
+#ifdef BALL_OS_DARWIN
+	#include <OpenGL/glu.h>
+#else
+	#include <GL/glu.h>
+#endif
 
 class QFont;
 

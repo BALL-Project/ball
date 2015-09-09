@@ -36,7 +36,11 @@
 #include <BALL/MATHS/plane3.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 
-#include <gl.h>
+#ifdef BALL_OS_DARWIN
+	#include <OpenGL/gl.h>
+#else
+	#include <GL/gl.h>
+#endif
 
 # include <BALL/VIEW/RENDERING/vertexBuffer.h>
 
