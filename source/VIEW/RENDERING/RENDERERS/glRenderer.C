@@ -3,6 +3,13 @@
 //
 
 #include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
+
+#include <BALL/KERNEL/atom.h>
+#include <BALL/MATHS/vector2.h>
+#include <BALL/MATHS/plane3.h>
+#include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/SYSTEM/timer.h>
+
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -23,26 +30,12 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
-
-#include <BALL/SYSTEM/timer.h>
-#include <BALL/KERNEL/atom.h>
+#include <BALL/VIEW/RENDERING/vertexBuffer.h>
 
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include <QtGui/QImage>
 #include <QtGui/QOpenGLContext>
-
-#include <BALL/MATHS/vector2.h>
-#include <BALL/MATHS/plane3.h>
-#include <BALL/MATHS/analyticalGeometry.h>
-
-#ifdef BALL_OS_DARWIN
-	#include <OpenGL/gl.h>
-#else
-	#include <GL/gl.h>
-#endif
-
-# include <BALL/VIEW/RENDERING/vertexBuffer.h>
 
 using namespace std;
 

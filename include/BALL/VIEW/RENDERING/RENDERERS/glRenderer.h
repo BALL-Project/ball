@@ -43,6 +43,8 @@
 	#include <GL/glu.h>
 #endif
 
+#include <QtGui/QOpenGLFunctions_1_3>
+
 class QFont;
 
 namespace BALL
@@ -63,7 +65,7 @@ namespace BALL
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT GLRenderer
-			: public Renderer
+			: public Renderer, protected QOpenGLFunctions_1_3
 		{
 			friend class Scene;
 			public:
