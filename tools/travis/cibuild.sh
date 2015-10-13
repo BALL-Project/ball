@@ -4,5 +4,3 @@ git checkout qt5_150827
 pushd build
 cmake ..
 make
-
-

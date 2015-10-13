@@ -11,15 +11,11 @@ addons:
          - g++-4.8
          - libboost-chrono1.55-dev
          - libboost-date-time1.55-dev
-         - libboost-filesystem1.55-dev
          - libboost-iostreams1.55-dev
-         - libboost-math1.55-dev
-         - libboost-python1.55-dev
          - libboost-regex1.55-dev
          - libboost-serialization1.55-dev
          - libboost-system1.55-dev
          - libboost-thread1.55-dev
-         - libicu-dev
          - libqt5clucene5
          - libqt5designer5
          - libqt5designercomponents5
@@ -44,8 +40,8 @@ addons:
          
 before_script:
   ./tools/travis/cibuild.before.sh
-#script:
-#  ./tools/travis/cibuild.sh
+script:
+  ./tools/travis/cibuild.sh
 
 #second we exclude those that are redundant, don't make sense or take too long
 matrix:
