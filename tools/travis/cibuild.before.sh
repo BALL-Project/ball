@@ -5,5 +5,5 @@ git checkout tarball_revisited
 
 mkdir build
 pushd build
-cmake .. -DPACKAGES="eigen3;sip;tbb;fftw3;openbabel" -DTHREADS=4
+cmake .. -DPACKAGES="eigen3;sip;tbb;fftw;openbabel" -DTHREADS=4
 make
