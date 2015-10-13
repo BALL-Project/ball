@@ -1,4 +1,6 @@
 git clone https://github.com/BALL-Project/ball_contrib.git
+
+pushd ball_contrib
 git checkout tarball_revisited
 
 pushd build
