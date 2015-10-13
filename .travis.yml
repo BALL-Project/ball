@@ -9,7 +9,7 @@ addons:
          - boost-latest
          - kalakris-cmake
       packages:
-         - cmake
+         - kalakris-cmake
          - g++-4.8
          - libboost-chrono1.55-dev
          - libboost-date-time1.55-dev
