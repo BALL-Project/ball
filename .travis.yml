@@ -1,47 +1,10 @@
-sudo: false
+sudo: true
 language: cpp
 os:
  - linux
-addons:
-   apt:
-      sources:
-         - kalakris-cmake
-         - ubuntu-toolchain-r-test
-         - boost-latest
-      packages:
-         - cmake
-         - g++-4.8
-         - libboost-chrono1.55-dev
-         - libboost-date-time1.55-dev
-         - libboost-iostreams1.55-dev
-         - libboost-regex1.55-dev
-         - libboost-serialization1.55-dev
-         - libboost-system1.55-dev
-         - libboost-thread1.55-dev
-         - libqt5clucene5
-         - libqt5designer5
-         - libqt5designercomponents5
-         - libqt5help5
-         - libqt5qml5
-         - libqt5quick5
-         - libqt5quickparticles5
-         - libqt5quicktest5
-         - libqt5quickwidgets5
-         - libqt5scintilla2-12v5
-         - libqt5scintilla2-12v5-dbg
-         - libqt5scintilla2-designer
-         - libqt5scintilla2-designer-dbg
-         - libqt5scintilla2-dev
-         - libqt5scintilla2-l10n
-         - libqt5svg5
-         - libqt5svg5-dev
-         - libqt5svg5-private-dev
-         - libqt5webkit5-dev
-         - libqt5webkit5-dev:i386
-         - doxygen 
          
-#before_script:
-#  ./tools/travis/cibuild.before.sh
+before_script:
+  ./tools/travis/cibuild.before.sh
 script:
   ./tools/travis/cibuild.sh
 
