@@ -40,8 +40,8 @@ addons:
          - libqt5webkit5-dev:i386
          - doxygen 
          
-before_script:
-  ./tools/travis/cibuild.before.sh
+#before_script:
+#  ./tools/travis/cibuild.before.sh
 script:
   ./tools/travis/cibuild.sh
 
