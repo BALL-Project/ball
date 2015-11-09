@@ -246,7 +246,7 @@ namespace BALL
 		}
 
  		if (e->key() == Qt::Key_Delete &&
-				RTTI::isKindOf<QTreeWidget>(*sender))
+                RTTI::isKindOf<QTreeWidget>(sender))
  		{
  			deleteClicked();
 			return true;

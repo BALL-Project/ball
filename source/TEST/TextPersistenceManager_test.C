@@ -51,7 +51,7 @@ CHECK(TextPersistenceManager::TextPersistenceManager(istream& is))
 	PersistentObject* po = pm.readObject();
 	is.close();
 	TEST_NOT_EQUAL(po, 0)
-	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
+    TEST_EQUAL(RTTI::isKindOf<Composite>(po), true)
 	delete po;
 RESULT
 

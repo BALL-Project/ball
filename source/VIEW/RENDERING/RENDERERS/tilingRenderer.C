@@ -102,7 +102,7 @@ namespace BALL
 
 		void TilingRenderer::renderToBuffer(RenderTarget* target)
 		{
-			if (RTTI::isKindOf<GLRenderer>(*real_renderer_))
+            if (RTTI::isKindOf<GLRenderer>(real_renderer_))
 			{
 				GLRenderer* gl_renderer = static_cast<GLRenderer*>(real_renderer_);
 

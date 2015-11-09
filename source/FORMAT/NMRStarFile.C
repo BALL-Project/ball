@@ -1077,12 +1077,12 @@ namespace BALL
 		Chain* chain;
 
 		// first check, if the given AtomContainer is a valid chain
-		if (RTTI::isKindOf<Chain>(ac))
+        if (RTTI::isKindOf<Chain>(&ac))
 		{
 			chain = RTTI::castTo<Chain>(ac);
 		}
 
-		if (RTTI::isKindOf<System>(ac))
+        if (RTTI::isKindOf<System>(&ac))
 		{
 			System* system =  RTTI::castTo<System>(ac);
 			if (system->countChains() > 0)
@@ -1137,11 +1137,11 @@ namespace BALL
 		{	
 			// check, if the AtomContainer is a chain
 			// first check, if the given AtomContainer is a valid chain
-			if (RTTI::isKindOf<Chain>(ac))
+            if (RTTI::isKindOf<Chain>(&ac))
 			{
 				chain = RTTI::castTo<Chain>(ac);
 			}
-			else if (RTTI::isKindOf<System>(ac))
+            else if (RTTI::isKindOf<System>(&ac))
 			{
 				System* system =  RTTI::castTo<System>(ac);
 				if (system->countChains() > 0)

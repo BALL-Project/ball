@@ -84,7 +84,7 @@ namespace BALL
   Processor::Result Selector::operator () (Composite& composite)
   {
 		// if the composite is an atom, we apply the expression tree...
-		if (RTTI::isKindOf<Atom>(composite))
+        if (RTTI::isKindOf<Atom>(&composite))
 		{
 			Atom& atom = dynamic_cast<Atom&>(composite);
 			if (expression_.operator () (atom))

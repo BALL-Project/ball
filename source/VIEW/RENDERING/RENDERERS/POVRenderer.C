@@ -71,7 +71,7 @@ namespace BALL
 
 		void POVRenderer::clear()
 		{
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
+            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 			{
 				delete outfile_;
 			}
@@ -87,7 +87,7 @@ namespace BALL
 		void POVRenderer::setFileName(const String& name)
 			throw(Exception::FileNotFound)
 		{
-			if (outfile_ == 0 || !RTTI::isKindOf<File>(*outfile_)) 
+            if (outfile_ == 0 || !RTTI::isKindOf<File>(outfile_))
 			{
 				outfile_ = new File();
 			}
@@ -96,7 +96,7 @@ namespace BALL
 
 		void POVRenderer::setOstream(std::ostream& out_stream)
 		{
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_)) 
+            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 			{
 				delete outfile_;
 			}
@@ -191,7 +191,7 @@ namespace BALL
 				    << "// To render this scene, call povray (available from www.povray.org)"
 					  << " like this:\n//" << endl;
 
-				if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
+                if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 				{
 					// Add a command line with the correct options to call POVRay to the header
 					// so we can just copy&paste this to render this file.
@@ -513,7 +513,7 @@ namespace BALL
 			} // all Representations
 
 
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
+            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 			{
 				(*(File*)outfile_).close();
 			}

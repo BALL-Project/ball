@@ -132,7 +132,7 @@ CHECK(AddCartoonModel::createGeometricObjects() throw())
 	cm.createGeometricObjects();
 	TEST_EQUAL(cm.getGeometricObjects().size(), 130)
 	GeometricObject* go = *cm.getGeometricObjects().begin();
-	TEST_EQUAL(RTTI::isKindOf<Mesh>(*go), true)
+    TEST_EQUAL(RTTI::isKindOf<Mesh>(go), true)
 	Mesh* mesh = dynamic_cast<Mesh*>(go);
 	TEST_EQUAL(mesh->vertex.size(), 481)
 	TEST_EQUAL(mesh->normal.size(), 481)
@@ -169,7 +169,7 @@ CHECK(DNA model)
 	cm.createGeometricObjects();
 	TEST_EQUAL(cm.getGeometricObjects().size(), 345)
 	GeometricObject* go = *cm.getGeometricObjects().begin();
-	TEST_EQUAL(RTTI::isKindOf<Mesh>(*go), true)
+    TEST_EQUAL(RTTI::isKindOf<Mesh>(go), true)
 	Mesh* mesh = dynamic_cast<Mesh*>(go);
 	TEST_EQUAL(mesh->vertex.size(), 241)
 	TEST_EQUAL(mesh->normal.size(), 241)

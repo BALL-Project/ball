@@ -521,7 +521,7 @@ namespace BALL
 					 it++)
 			{
 
-				if (RTTI::isKindOf<Mesh>(**it))
+                                if (RTTI::isKindOf<Mesh>(*it))
 				{
 					Mesh const& mesh = *(const Mesh*)*it;
 
@@ -591,7 +591,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-				if (RTTI::isKindOf<Sphere>(**it))
+                                if (RTTI::isKindOf<Sphere>(*it))
 				{
 					Sphere const& sphere = *(const Sphere*)*it;
 
@@ -641,7 +641,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-				if (RTTI::isKindOf<TwoColoredTube>(**it))
+                                if (RTTI::isKindOf<TwoColoredTube>(*it))
 				{
 					TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
 
@@ -736,7 +736,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-				if (RTTI::isKindOf<TwoColoredLine>(**it))
+                                if (RTTI::isKindOf<TwoColoredLine>(*it))
 				{
 					TwoColoredLine const& old_line = *(const TwoColoredLine*)*it;
 
@@ -904,7 +904,7 @@ namespace BALL
 					 it++)
 			{
 
-				if (RTTI::isKindOf<Mesh>(**it))
+                                if (RTTI::isKindOf<Mesh>(*it))
 				{
 					Mesh const& mesh = *(const Mesh*)*it;
 
@@ -967,7 +967,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-				if (RTTI::isKindOf<Sphere>(**it))
+                                if (RTTI::isKindOf<Sphere>(*it))
 				{
 					Sphere const& sphere = *(const Sphere*)*it;
 
@@ -1017,7 +1017,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-				if (RTTI::isKindOf<TwoColoredTube>(**it))
+                                if (RTTI::isKindOf<TwoColoredTube>(*it))
 				{
 					TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
 
@@ -1117,7 +1117,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-				if (RTTI::isKindOf<TwoColoredLine>(**it))
+                                if (RTTI::isKindOf<TwoColoredLine>(*it))
 				{
 					TwoColoredLine const& old_line = *(const TwoColoredLine*)*it;
 

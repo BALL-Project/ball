@@ -388,7 +388,7 @@ cout << endl;
 
 			// What kind of composite do we have?
 			// Do we have a molecule? (Nothing else is allowed)
-			if (RTTI::isKindOf<Molecule>(ac))
+            if (RTTI::isKindOf<Molecule>(&ac))
 			{
 				// Store the AtomContainer
 				ac_ = &ac;
@@ -1312,11 +1312,11 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 			apply(i);
 
 			// What kind of composite do we have?
-			if (RTTI::isKindOf<System>(*solutions_[i].ac))
+            if (RTTI::isKindOf<System>(solutions_[i].ac))
 			{
 				return *(RTTI::castTo<System>(*solutions_[i].ac));
 			}
-			else if (RTTI::isKindOf<Molecule>(*solutions_[i].ac))
+            else if (RTTI::isKindOf<Molecule>(solutions_[i].ac))
 			{
 				Molecule* m = RTTI::castTo<Molecule>(*solutions_[i].ac);
 				return *(m->getSystem());

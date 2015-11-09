@@ -224,7 +224,7 @@ namespace BALL
 				list<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
-					if (RTTI::isKindOf<AtomContainer>(**it))
+                    if (RTTI::isKindOf<AtomContainer>(*it))
 					{
 						AtomConstIterator ait;
 						const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
@@ -233,7 +233,7 @@ namespace BALL
 							atoms.push_back(&*ait);
 						}
 					}
-					else if (RTTI::isKindOf<Atom>(**it))
+                    else if (RTTI::isKindOf<Atom>(*it))
 					{
 						const Atom* atom = dynamic_cast<const Atom*> (*it);
 						atoms.push_back(atom);
@@ -243,7 +243,7 @@ namespace BALL
 			else 
 			{
 				// composite from mesh
-				if (RTTI::isKindOf<AtomContainer>(*from_mesh))
+                if (RTTI::isKindOf<AtomContainer>(from_mesh))
 				{
 					AtomConstIterator ait;
 					const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(from_mesh);
@@ -252,7 +252,7 @@ namespace BALL
 						atoms.push_back(&*ait);
 					}
 				}
-				else if (RTTI::isKindOf<Atom>(*from_mesh))
+                else if (RTTI::isKindOf<Atom>(from_mesh))
 				{
 					const Atom* atom = dynamic_cast<const Atom*> (from_mesh);
 					atoms.push_back(atom);

@@ -256,7 +256,7 @@ namespace BALL
 
 		bool ResidueNameColorProcessor::canUseMeshShortcut_(const Composite& composite)
 		{
-			return RTTI::isKindOf<Residue>(composite);
+            return RTTI::isKindOf<Residue>(&composite);
 		}
 
 		void ResidueNameColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -294,7 +294,7 @@ namespace BALL
 
 		bool ResidueNumberColorProcessor::canUseMeshShortcut_(const Composite& composite)
 		{
-			return RTTI::isKindOf<Residue>(composite);
+            return RTTI::isKindOf<Residue>(&composite);
 		}
 
 		void ResidueNumberColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -338,23 +338,23 @@ namespace BALL
 			ResidueIterator res_it;
 			for(; it != composites_->end(); it++)
 			{
-				if (RTTI::isKindOf<System>(**it))
+                if (RTTI::isKindOf<System>(*it))
 				{
 					res_it = ((System*)*it)->beginResidue();
 				}
-				else if (RTTI::isKindOf<Protein>(**it))
+                else if (RTTI::isKindOf<Protein>(*it))
 				{
 					res_it = ((Protein*)*it)->beginResidue();
 				}
-				else if (RTTI::isKindOf<Chain>(**it))
+                else if (RTTI::isKindOf<Chain>(*it))
 				{
 					res_it = ((Chain*)*it)->beginResidue();
 				}
-				else if (RTTI::isKindOf<SecondaryStructure>(**it))
+                else if (RTTI::isKindOf<SecondaryStructure>(*it))
 				{
 					res_it = ((SecondaryStructure*)*it)->beginResidue();
 				}
-				else if (RTTI::isKindOf<Atom>(**it))
+                else if (RTTI::isKindOf<Atom>(*it))
 				{
 					const Residue* residue = dynamic_cast<const Residue*>((**it).getParent());
 					if (residue == 0) continue;
@@ -650,7 +650,7 @@ namespace BALL
 
 		Processor::Result AtomDistanceColorProcessor::operator() (GeometricObject*& object)
 		{
-			if (RTTI::isKindOf<Mesh>(*object))
+            if (RTTI::isKindOf<Mesh>(object))
 			{
 				if (last_composite_of_grid_ == 0)
 				{ 
@@ -659,7 +659,7 @@ namespace BALL
 				list<const Composite*>::const_iterator it = composites_->begin();
 				for(; it != composites_->end(); it++)
 				{
-					if (RTTI::isKindOf<AtomContainer>(**it))
+                    if (RTTI::isKindOf<AtomContainer>(*it))
 					{
 						AtomIterator ait;
 						AtomContainer* acont = (AtomContainer*)(*it);
@@ -668,7 +668,7 @@ namespace BALL
 							addAtom(*ait);
 						}
 					}
-					else if (RTTI::isKindOf<Atom>(**it))
+                    else if (RTTI::isKindOf<Atom>(*it))
 					{
 						addAtom(*dynamic_cast<const Atom*> (*it));
 					}
@@ -680,15 +680,15 @@ namespace BALL
 			}
 
 			if (object->getComposite() == 0 ||
-					(!RTTI::isKindOf<Atom>(*object->getComposite()) &&
-					 !RTTI::isKindOf<Bond>(*object->getComposite())))
+                    (!RTTI::isKindOf<Atom>(object->getComposite()) &&
+                     !RTTI::isKindOf<Bond>(object->getComposite())))
 			{
 				return ColorProcessor::operator () (object);
 			}
 
 			list_.push_back(object);
 
-			if (RTTI::isKindOf<Bond>(*object->getComposite()))
+            if (RTTI::isKindOf<Bond>(object->getComposite()))
 			{
 				addAtom(*dynamic_cast<const Bond*>(object->getComposite())->getFirstAtom());
 				addAtom(*dynamic_cast<const Bond*>(object->getComposite())->getSecondAtom());
@@ -836,7 +836,7 @@ namespace BALL
 
 		bool SecondaryStructureColorProcessor::canUseMeshShortcut_(const Composite& composite)
 		{
-			return RTTI::isKindOf<SecondaryStructure>(composite) ||
+            return RTTI::isKindOf<SecondaryStructure>(&composite) ||
 				     composite.getAncestor(dummy_ss_) != 0;
 		}
 
@@ -941,7 +941,7 @@ namespace BALL
 
 		bool ResidueTypeColorProcessor::canUseMeshShortcut_(const Composite& composite)
 		{
-			return RTTI::isKindOf<Residue>(composite);
+            return RTTI::isKindOf<Residue>(&composite);
 		}
 
 		void ResidueTypeColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
@@ -1172,7 +1172,7 @@ namespace BALL
 
 		bool ChainColorProcessor::canUseMeshShortcut_(const Composite& composite)
 		{
-			return RTTI::isKindOf<Chain>(composite) ||
+            return RTTI::isKindOf<Chain>(&composite) ||
 						 composite.getAncestor(dummy_chain_) != 0;
 		}
 
@@ -1186,7 +1186,7 @@ namespace BALL
 
 		bool MoleculeColorProcessor::canUseMeshShortcut_(const Composite& composite)
 		{
-			return RTTI::isKindOf<Molecule>(composite) ||
+            return RTTI::isKindOf<Molecule>(&composite) ||
 						 composite.getAncestor(dummy_molecule_) != 0;
 		}
 

@@ -310,7 +310,7 @@ namespace BALL
 				// if the current representation is not already custom colored,
 				// change its coloring processor
 				if (   (rep_->getColorProcessor() == 0) 
-						|| (!RTTI::isKindOf<CustomColorProcessor>(*(rep_->getColorProcessor()))))
+                        || (!RTTI::isKindOf<CustomColorProcessor>((rep_->getColorProcessor()))))
 				{
 					rep_->setColorProcessor(new CustomColorProcessor);
 					rep_->setColoringMethod(COLORING_CUSTOM);
@@ -375,7 +375,7 @@ namespace BALL
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "ModifyRepresentationDialog " << this << " onNotify " << message << std::endl;
 		#endif
-			if (RTTI::isKindOf<RepresentationMessage>(*message))
+            if (RTTI::isKindOf<RepresentationMessage>(message))
 			{
 				RepresentationMessage *rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
@@ -402,7 +402,7 @@ namespace BALL
 				return;
 			}
 
-			if (!RTTI::isKindOf<DatasetMessage>(*message)) return;
+            if (!RTTI::isKindOf<DatasetMessage>(message)) return;
 
 			DatasetMessage& dmsg = *(DatasetMessage*)(message);
 			if (!dmsg.isValid()) return;
@@ -553,7 +553,7 @@ namespace BALL
 			for (; git != rep_->getGeometricObjects().end(); ++git)
 			{
 				// get the original mesh
-				if (!RTTI::isKindOf<Mesh>(**git)) continue;
+                if (!RTTI::isKindOf<Mesh>(*git)) continue;
 				Mesh& org_mesh = *dynamic_cast<Mesh*>(*git);
 
 				// copy all vertices and colors into a new mesh
@@ -703,7 +703,7 @@ namespace BALL
 			HashSet<const Composite*>::ConstIterator it = roots.begin();
 			for(; +it; it++)
 			{
-				if (RTTI::isKindOf<AtomContainer>(**it))
+                if (RTTI::isKindOf<AtomContainer>(*it))
 				{
 					AtomConstIterator ait;
 					const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
@@ -714,7 +714,7 @@ namespace BALL
 						if ((*ait).isSelected()) selected_atoms.push_back(&*ait);
 					}
 				}
-				else if (RTTI::isKindOf<Atom>(**it))
+                else if (RTTI::isKindOf<Atom>(*it))
 				{
 					const Atom* atom = dynamic_cast<const Atom*> (*it);
 					all_atoms.push_back(atom);
@@ -827,7 +827,7 @@ namespace BALL
 			GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
 			for (; it != rep_->getGeometricObjects().end(); it++)
 			{
-				if (!RTTI::isKindOf<Mesh> (**it)) continue;
+                if (!RTTI::isKindOf<Mesh> (*it)) continue;
 
 				Mesh* mesh = dynamic_cast<Mesh*> (*it);
 

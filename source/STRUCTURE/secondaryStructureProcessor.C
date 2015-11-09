@@ -813,7 +813,7 @@ namespace BALL
 	 **********************************************/
 	Processor::Result SecondaryStructureProcessor::operator() (Composite &composite)
 	{
-		if (!RTTI::isKindOf<Chain>(composite))
+        if (!RTTI::isKindOf<Chain>(&composite))
 		{
 			return Processor::CONTINUE;
 		}
@@ -910,7 +910,7 @@ namespace BALL
 		for (; +ssit; ++ssit)
 		{
 			if ((*ssit).getParent() == 0 ||
-					!RTTI::isKindOf<SecondaryStructure>(*(*ssit).getParent()))
+                    !RTTI::isKindOf<SecondaryStructure>((*ssit).getParent()))
 			{
 				to_remove.push_back(&*ssit);
 			}

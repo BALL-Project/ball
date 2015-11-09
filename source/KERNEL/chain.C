@@ -69,7 +69,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<Protein>(*ancestor_it) == true)
+            if (RTTI::isKindOf<Protein>(&*ancestor_it) == true)
 			{
 				return (Protein *)&*ancestor_it;
 			}

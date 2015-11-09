@@ -50,7 +50,7 @@ ifstream is(filename.c_str(), std::ios::in|std::ios::binary);
 	PersistentObject* po = pm.readObject();
 	is.close();
 	TEST_NOT_EQUAL(po, 0)
-	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
+    TEST_EQUAL(RTTI::isKindOf<Composite>(po), true)
 	delete po;
 RESULT
 
@@ -64,7 +64,7 @@ CHECK(XDRPersistenceManager(std::istream& is, std::ostream& os) throw())
 	PersistentObject* po = pm.readObject();
 	is.close();
 	TEST_NOT_EQUAL(po, 0)
-	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
+    TEST_EQUAL(RTTI::isKindOf<Composite>(po), true)
 	// *po >> pm;
 	os.close();
 	delete po;
@@ -436,11 +436,11 @@ CHECK([Extra] full_test0)
 
 	PersistentObject* po =  0;
 	STATUS("Before readObject...")
-	po = pm2.readObject();
-	STATUS("After readObject...")
+    po = pm2.readObject();
+    STATUS("After readObject...")
 	is.close();
-	TEST_EQUAL(RTTI::isKindOf<Bond>(*po), true)
-	delete po;
+    TEST_EQUAL(RTTI::isKindOf<Bond>(po), true)
+    delete po;
 RESULT
 	
 

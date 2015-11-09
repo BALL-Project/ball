@@ -182,7 +182,7 @@ namespace BALL
 			virtual const Composite* getAncestor_(const Composite& composite) 
 				{ return composite.getAncestor(dummy_chain_);}
 
-			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Chain>(composite);}
+                        virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Chain>(&composite);}
 			bool canUseMeshShortcut_(const Composite& composite);
 
  			Chain 	dummy_chain_;
@@ -205,7 +205,7 @@ namespace BALL
 			virtual const Composite* getAncestor_(const Composite& composite) 
 				{ return composite.getAncestor(dummy_molecule_);}
 
-			virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Molecule>(composite);}
+                        virtual bool isOK_(const Composite& composite) { return RTTI::isKindOf<Molecule>(&composite);}
 			bool canUseMeshShortcut_(const Composite& composite);
 
  			Molecule 	dummy_molecule_;

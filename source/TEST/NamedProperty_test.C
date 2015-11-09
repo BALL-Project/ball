@@ -217,8 +217,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
+        TEST_EQUAL(isKindOf<NamedProperty>(ptr), true)
+        if (isKindOf<NamedProperty>(ptr))
 		{
 			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
 			TEST_EQUAL(pers_a->getType(), NamedProperty::FLOAT)
@@ -237,8 +237,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
+        TEST_EQUAL(isKindOf<NamedProperty>(ptr), true)
+        if (isKindOf<NamedProperty>(ptr))
 		{
 			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
 			TEST_EQUAL(pers_a->getType(), NamedProperty::OBJECT)
@@ -257,8 +257,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
+        TEST_EQUAL(isKindOf<NamedProperty>(ptr), true)
+        if (isKindOf<NamedProperty>(ptr))
 		{
 			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
 			TEST_EQUAL(pers_a->getType(), NamedProperty::NONE)
@@ -276,8 +276,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
+        TEST_EQUAL(isKindOf<NamedProperty>(ptr), true)
+        if (isKindOf<NamedProperty>(ptr))
 		{
 			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
 			TEST_EQUAL(pers_a->getType(), NamedProperty::STRING)
@@ -296,8 +296,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
+        TEST_EQUAL(isKindOf<NamedProperty>(ptr), true)
+        if (isKindOf<NamedProperty>(ptr))
 		{
 			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
 			TEST_EQUAL(pers_a->getType(), NamedProperty::SMART_OBJECT)

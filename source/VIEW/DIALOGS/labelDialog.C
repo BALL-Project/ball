@@ -109,7 +109,7 @@ namespace BALL
 			Log.error() << "LabelDialog " << this << " onNotify " << message << std::endl;
 #endif
 			// selection => store last selection for later processing
-			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+            if (RTTI::isKindOf<ControlSelectionMessage>(message))
 			{
 				ControlSelectionMessage* selection = RTTI::castTo<ControlSelectionMessage>(*message);
 				// disabled apply button, if selection is empty

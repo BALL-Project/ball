@@ -167,19 +167,19 @@ namespace BALL
 
 			GenericControl::onNotify(message);
 
-			if (RTTI::isKindOf<TransformationMessage> (*message))
+            if (RTTI::isKindOf<TransformationMessage>(message))
 			{
 				moveItems(*(TransformationMessage*)message);
 				return;
 			}
 
-			if (RTTI::isKindOf<SyncClippingPlanesMessage>(*message))
+            if (RTTI::isKindOf<SyncClippingPlanesMessage>(message))
 			{
 				updateClippingPlanes();
 				return;
 			}
 
-			if (!RTTI::isKindOf<RepresentationMessage> (*message)) return;
+            if (!RTTI::isKindOf<RepresentationMessage>(message)) return;
 
 			Representation* rep =	(RTTI::castTo<RepresentationMessage> (*message))->getRepresentation();
 			if (rep == 0) return;
@@ -443,11 +443,11 @@ namespace BALL
 
 				while (!c_ptr->isRoot())
 				{
-					if (RTTI::isKindOf<AtomContainer> (*c_ptr))
+                    if (RTTI::isKindOf<AtomContainer> (c_ptr))
 					{
 						name = ((const AtomContainer*) c_ptr)->getName() + "->" + name;
 					}
-					else if (RTTI::isKindOf<Atom> (*c_ptr))
+                    else if (RTTI::isKindOf<Atom> (c_ptr))
 					{
 						name = ((const Atom*) c_ptr)->getName() + "->" + name;
 					}

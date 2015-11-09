@@ -47,7 +47,7 @@ namespace BALL
 		{
 			if (mode_ == ONE_LABEL)
 			{
-				if (RTTI::isKindOf<Atom>(composite)) 
+                if (RTTI::isKindOf<Atom>(&composite))
 				{
 					center_ += (dynamic_cast<Atom*>(&composite))->getPosition();
 					nr_objects_ ++;
@@ -66,11 +66,11 @@ namespace BALL
 			}
 			else if (mode_ == ALL_ATOMS)
 			{
-				do_it = RTTI::isKindOf<Atom>(composite);
+                do_it = RTTI::isKindOf<Atom>(&composite);
 			}
 			else if (mode_ == ALL_RESIDUES)
 			{
-				do_it = RTTI::isKindOf<Residue>(composite);
+                do_it = RTTI::isKindOf<Residue>(&composite);
 			}
 
 			if (!do_it) return Processor::CONTINUE;

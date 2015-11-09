@@ -94,19 +94,19 @@ namespace BALL
 		ResidueIterator    ri;
 
 		// do we have a system?
-		if (RTTI::isKindOf<System>(composite))
+        if (RTTI::isKindOf<System>(&composite))
 		{
 			System *s = RTTI::castTo<System>(composite);
 			s->apply(bp);
 			ri = s->beginResidue();
 		}
-		else if (RTTI::isKindOf<Protein>(composite))
+        else if (RTTI::isKindOf<Protein>(&composite))
 		{
 			Protein *s = RTTI::castTo<Protein>(composite);
 			s->apply(bp);
 			ri = s->beginResidue();
     }
-		else if (RTTI::isKindOf<Chain>(composite))
+        else if (RTTI::isKindOf<Chain>(&composite))
 		{
 			Chain *s = RTTI::castTo<Chain>(composite);
 			s->apply(bp);

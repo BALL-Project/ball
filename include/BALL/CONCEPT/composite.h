@@ -2115,7 +2115,7 @@ B		*/
 			{
 				--it;
 			} 
-			while (+it && !RTTI::isKindOf<T>(*it));
+            while (+it && !RTTI::isKindOf<T>(&*it));
 		}
 
 		// return a NULL pointer if nothing was found
@@ -2156,7 +2156,7 @@ B		*/
 		{
 			it++;
 		} 
-		while (it.isValid() && !RTTI::isKindOf<T>(*it));
+        while (it.isValid() && !RTTI::isKindOf<T>(&*it));
 
 
 		// return a NULL pointer if nothing was found

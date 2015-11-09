@@ -49,7 +49,7 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WindowFlags 
 	connect( relative, SIGNAL( clicked() ), this, SLOT( positionTypeChanged() ) );
 	connect (update_directly_checkBox, SIGNAL(stateChanged(int)), this, SLOT( updateDirectlyBoxChanged()));
 
-	if (parent == 0 || !RTTI::isKindOf<Scene>(*parent)) 
+    if (parent == 0 || !RTTI::isKindOf<Scene>(parent))
 	{
 		Log.error() << "LightSettings dialog must be created with a Scene as parent!" << std::endl;
 		return;

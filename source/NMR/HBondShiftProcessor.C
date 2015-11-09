@@ -409,7 +409,7 @@ namespace BALL
   Processor::Result HBondShiftProcessor::operator () (Composite& object)
 	{
 		// Here, we collect all possible acceptors and donors.
-		if (RTTI::isKindOf<Atom>(object))
+        if (RTTI::isKindOf<Atom>(&object))
 		{
 			Atom* atom = RTTI::castTo<Atom>(object);
 
@@ -511,7 +511,7 @@ namespace BALL
 
 		for (Position i = 0; !system && i<acceptors_.size(); i++)
 		{
-			if  (RTTI::isKindOf<System>(acceptors_[i]->getRoot()))
+            if  (RTTI::isKindOf<System>(&acceptors_[i]->getRoot()))
 			{
 				system = dynamic_cast<System*>(&(acceptors_[i]->getRoot()));
 			}

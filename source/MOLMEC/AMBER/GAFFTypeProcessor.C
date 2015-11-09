@@ -48,7 +48,7 @@ namespace BALL
 	Processor::Result GAFFTypeProcessor::operator() (Composite &composite)
 	{
 		// TODO: think whether application to other things than molecules would make sense...
-		if (RTTI::isKindOf<Molecule>(composite))
+        if (RTTI::isKindOf<Molecule>(&composite))
 		{
 			Molecule *mol = RTTI::castTo<Molecule>(composite);
 

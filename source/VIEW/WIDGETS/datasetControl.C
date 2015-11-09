@@ -70,7 +70,7 @@ void DatasetControl::onNotify(Message *message)
 #endif
 
 	GenericControl::onNotify(message);
-	if (!RTTI::isKindOf<DatasetMessage>(*message)) return;
+    if (!RTTI::isKindOf<DatasetMessage>(message)) return;
 	
 	DatasetMessage* msg = (DatasetMessage*) message;
 	if (!msg->isValid())

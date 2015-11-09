@@ -32,42 +32,42 @@ CHECK(RTTI::isKindOf<>())
 	Protein*			p_ptr(&p);
 	Molecule*			m_ptr(&p);
 	AtomContainer*	b_ptr(&p);
-	TEST_EQUAL(isKindOf<Molecule>(*p_ptr), true)
-	TEST_EQUAL(isKindOf<Molecule>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<Molecule>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<Protein>(*p_ptr), true)
-	TEST_EQUAL(isKindOf<Protein>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<Protein>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<AtomContainer>(*p_ptr), true)
-	TEST_EQUAL(isKindOf<AtomContainer>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<Residue>(*p_ptr), false)
-	TEST_EQUAL(isKindOf<Residue>(*m_ptr), false)
-	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
+    TEST_EQUAL(isKindOf<Molecule>(p_ptr), true)
+    TEST_EQUAL(isKindOf<Molecule>(m_ptr), true)
+    TEST_EQUAL(isKindOf<Molecule>(b_ptr), true)
+    TEST_EQUAL(isKindOf<Protein>(p_ptr), true)
+    TEST_EQUAL(isKindOf<Protein>(m_ptr), true)
+    TEST_EQUAL(isKindOf<Protein>(b_ptr), true)
+    TEST_EQUAL(isKindOf<AtomContainer>(p_ptr), true)
+    TEST_EQUAL(isKindOf<AtomContainer>(m_ptr), true)
+    TEST_EQUAL(isKindOf<AtomContainer>(b_ptr), true)
+    TEST_EQUAL(isKindOf<Residue>(p_ptr), false)
+    TEST_EQUAL(isKindOf<Residue>(m_ptr), false)
+    TEST_EQUAL(isKindOf<Residue>(b_ptr), false)
 	Molecule m;
 	m_ptr = &m;
 	b_ptr = &m;
-	TEST_EQUAL(isKindOf<Molecule>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<Molecule>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<Protein>(*m_ptr), false)
-	TEST_EQUAL(isKindOf<Protein>(*b_ptr), false)
-	TEST_EQUAL(isKindOf<AtomContainer>(*m_ptr), true)
-	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<Residue>(*m_ptr), false)
-	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
+    TEST_EQUAL(isKindOf<Molecule>(m_ptr), true)
+    TEST_EQUAL(isKindOf<Molecule>(b_ptr), true)
+    TEST_EQUAL(isKindOf<Protein>(m_ptr), false)
+    TEST_EQUAL(isKindOf<Protein>(b_ptr), false)
+    TEST_EQUAL(isKindOf<AtomContainer>(m_ptr), true)
+        TEST_EQUAL(isKindOf<AtomContainer>(b_ptr), true)
+    TEST_EQUAL(isKindOf<Residue>(m_ptr), false)
+    TEST_EQUAL(isKindOf<Residue>(b_ptr), false)
 	AtomContainer b;
 	b_ptr = &b;
-	TEST_EQUAL(isKindOf<Molecule>(*b_ptr), false)
-	TEST_EQUAL(isKindOf<Protein>(*b_ptr), false)
-	TEST_EQUAL(isKindOf<AtomContainer>(*b_ptr), true)
-	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
+    TEST_EQUAL(isKindOf<Molecule>(b_ptr), false)
+    TEST_EQUAL(isKindOf<Protein>(b_ptr), false)
+    TEST_EQUAL(isKindOf<AtomContainer>(b_ptr), true)
+    TEST_EQUAL(isKindOf<Residue>(b_ptr), false)
 
 	System*	s_ptr = new System;
-	TEST_EQUAL(isKindOf<System>(*s_ptr), true)
+    TEST_EQUAL(isKindOf<System>(s_ptr), true)
 	delete s_ptr;
 
 	s_ptr = 0;
-	TEST_EQUAL(isKindOf<System>(*s_ptr), false)
+    TEST_EQUAL(isKindOf<System>(s_ptr), false)
 RESULT											
 
 CHECK(RTTI::isInstanceOf<>())

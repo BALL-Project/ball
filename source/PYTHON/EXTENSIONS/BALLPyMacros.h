@@ -36,7 +36,7 @@
 	sipReleaseType(object, sipType_##type, state)
 
 #define BALL_TO_SIP_MAP(type)\
-	if (RTTI::isKindOf<type>(*sipCpp))\
+        if (RTTI::isKindOf<type>(sipCpp))\
 	{\
 		sipType = sipType_##type;\
 	}\
@@ -72,7 +72,7 @@
 	sipReleaseInstance(object, sipClass_##type, state)
 
 #define BALL_TO_SIP_MAP(type)\
-	if (RTTI::isKindOf<type>(*sipCpp))\
+        if (RTTI::isKindOf<type>(sipCpp))\
 	{\
 		sipClass = sipClass_##type;\
 	}\

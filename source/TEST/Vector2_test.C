@@ -108,8 +108,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<Vector2>(*ptr), true)
-		if (isKindOf<Vector2>(*ptr))
+        TEST_EQUAL(isKindOf<Vector2>(ptr), true)
+        if (isKindOf<Vector2>(ptr))
 		{
 			Vector2* v_ptr = castTo<Vector2>(*ptr);
 			TEST_REAL_EQUAL(v_ptr->x, 1.0)

@@ -79,7 +79,7 @@ namespace BALL
 
 		void XML3DRenderer::clear()
 		{
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
+            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 			{
 				delete outfile_;
 			}
@@ -121,7 +121,7 @@ namespace BALL
 			throw(Exception::FileNotFound)
 		{
 			create_XHTML_ = true;
-			if (outfile_ == 0 || !RTTI::isKindOf<File>(*outfile_)) 
+            if (outfile_ == 0 || !RTTI::isKindOf<File>(outfile_))
 			{
 				outfile_ = new File();
 			}
@@ -131,7 +131,7 @@ namespace BALL
 		void XML3DRenderer::setOstream(std::ostream& out_stream)
 		{
 			create_XHTML_ = false;
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_)) 
+            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 			{
 				delete outfile_;
 			}
@@ -481,7 +481,7 @@ namespace BALL
 			
 			if (create_XHTML_) {createXHTMLFooter();};	
 
-			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
+            if (outfile_ != 0 && RTTI::isKindOf<File>(outfile_))
 			{
 				(*(File*)outfile_).close();
 			}

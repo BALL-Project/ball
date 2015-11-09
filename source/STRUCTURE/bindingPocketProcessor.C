@@ -232,19 +232,19 @@ namespace BALL
 		layers_.clear();
 
 		// do we have a system?
-		if (RTTI::isKindOf<System>(composite))
+        if (RTTI::isKindOf<System>(&composite))
 		{
 			System *s = RTTI::castTo<System>(composite);
 			s->apply(bp);
 			ai = s->beginAtom();
 		}
-		else if (RTTI::isKindOf<Protein>(composite))
+        else if (RTTI::isKindOf<Protein>(&composite))
 		{
 			Protein *s = RTTI::castTo<Protein>(composite);
 			s->apply(bp);
 			ai = s->beginAtom();
 		}
-		else if (RTTI::isKindOf<Chain>(composite))
+        else if (RTTI::isKindOf<Chain>(&composite))
 		{
 			Molecule *s = RTTI::castTo<Molecule>(composite);
 			s->apply(bp);

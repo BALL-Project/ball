@@ -205,7 +205,7 @@ namespace BALL
 		for (composite_it = reference_composite_->beginComposite(); 
 				 composite_it != reference_composite_->endComposite(); ++composite_it) 
 		{
-			if (RTTI::isKindOf<Atom>(*composite_it))
+            if (RTTI::isKindOf<Atom>(&*composite_it))
 			{
 				atom_ptr = RTTI::castTo<Atom>(*composite_it);
 				reference_atoms.push_back(atom_ptr);	

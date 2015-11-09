@@ -70,14 +70,14 @@ namespace BALL
 	{
 		cout << "read object @ " << (void*)&po << endl;
 	
-		if (RTTI::isKindOf<Atom>(po))
+        if (RTTI::isKindOf<Atom>(&po))
 		{
 			Atom*	atom = RTTI::castTo<Atom>(po);
 			cout << " read atom " << atom->getName() << endl;
 			
 			return (Composite *)atom;
 		} 
-		else if (RTTI::isKindOf<Protein>(po)) 
+        else if (RTTI::isKindOf<Protein>(&po))
 		{
 			Protein*	p = RTTI::castTo<Protein>(po);
 			cout << " read protein with " 
@@ -97,7 +97,7 @@ namespace BALL
 			
 			return (Composite *)s;
 		} 
-		else if (RTTI::isKindOf<System>(po)) 
+        else if (RTTI::isKindOf<System>(&po))
 		{
 			System *s = RTTI::castTo<System>(po);
 			cout << " read system with " 

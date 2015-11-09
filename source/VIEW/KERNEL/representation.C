@@ -418,7 +418,7 @@ namespace BALL
 				Size triangles = 0;
 				for (;it != getGeometricObjects().end(); it++)
 				{
-					if (RTTI::isKindOf<Mesh>(**it))
+                    if (RTTI::isKindOf<Mesh>(*it))
 					{ 
 						triangles += dynamic_cast<Mesh*>(*it)->triangle.size();
 					}
@@ -664,7 +664,7 @@ namespace BALL
 			const Composite* c_ptr = *getComposites().begin();
 
 			String composite_name;
-			if (RTTI::isKindOf<Atom>(*c_ptr))
+            if (RTTI::isKindOf<Atom>(c_ptr))
 			{
 				if (c_ptr->getParent() != 0)
 				{
@@ -712,7 +712,7 @@ namespace BALL
 			Vector3 v1, v2;
 			for (; it != getGeometricObjects().end(); it++)
 			{
-				if (RTTI::isKindOf<Vertex>(**it))
+                if (RTTI::isKindOf<Vertex>(*it))
 				{
 					Vertex* v = dynamic_cast<Vertex*>(*it);
 					v1 = v->getVertex();
@@ -720,7 +720,7 @@ namespace BALL
 					v->setVertex(v1);
 				}
 
-				if (RTTI::isKindOf<Vertex2>(**it))
+                if (RTTI::isKindOf<Vertex2>(*it))
 				{
 					Vertex2* v = dynamic_cast<Vertex2*>(*it);
 					v1 = v->getVertex1();
@@ -731,7 +731,7 @@ namespace BALL
 					v->setVertex2(v2);
 				}
 
-				if (RTTI::isKindOf<Sphere>(**it))
+                if (RTTI::isKindOf<Sphere>(*it))
 				{
 					Sphere* v = dynamic_cast<Sphere*>(*it);
 					v1 = v->getPosition();

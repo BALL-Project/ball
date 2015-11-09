@@ -32,22 +32,22 @@ CompositeProperties::CompositeProperties(Composite* composite, QWidget* parent,
 	named->setPropertyManager(dynamic_cast<PropertyManager*>(composite));
 
 	setObjectName(name);
-	if (RTTI::isKindOf<AtomContainer>(*composite))
+    if (RTTI::isKindOf<AtomContainer>(composite))
 	{
 		name_edit->setText(((AtomContainer*)composite)->getName().c_str());
 
-		if (RTTI::isKindOf<Residue>(*composite))
+        if (RTTI::isKindOf<Residue>(composite))
 		{
 			id_edit->setText(((Residue*)composite)->getID().c_str());
 		}
 	}
 
-	if (!RTTI::isKindOf<Residue>(*composite))
+    if (!RTTI::isKindOf<Residue>(composite))
 	{
 		residues_box->setEnabled(false);
 	}
 
-	if (!RTTI::isKindOf<Atom>(*composite))
+    if (!RTTI::isKindOf<Atom>(composite))
 	{
 		atoms_box->setEnabled(false);
 		return;
@@ -116,7 +116,7 @@ void CompositeProperties::accept()
 {
 	try
 	{
-		if (RTTI::isKindOf<Atom>(*composite_))
+        if (RTTI::isKindOf<Atom>(composite_))
 		{
 			Atom* atom = (Atom*) composite_;
 			
@@ -187,12 +187,12 @@ void CompositeProperties::accept()
 		return;
 	}
 
-	if (RTTI::isKindOf<AtomContainer>(*composite_))
+    if (RTTI::isKindOf<AtomContainer>(composite_))
 	{
 		((AtomContainer*)composite_)->setName(ascii(name_edit->text()));
 	}
 
-	if (RTTI::isKindOf<Residue>(*composite_))
+    if (RTTI::isKindOf<Residue>(composite_))
 	{
 		Residue* residue = (Residue*) composite_;
 		residue->setID(ascii(id_edit->text()));

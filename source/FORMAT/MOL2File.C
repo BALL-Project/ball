@@ -134,13 +134,13 @@ namespace BALL
 
 		String mol_type = "SMALL";
 		// if we are in a protein, set the molecule type to PROTEIN
-		if (RTTI::isKindOf<Protein>(new_molecule))
+        if (RTTI::isKindOf<Protein>(&new_molecule))
 		{
 			mol_type = "PROTEIN";
 		}
 		// if we are in an nucleic acid,
 		// set the type to NUCLEIC_ACID
-		else if (RTTI::isKindOf<NucleicAcid>(new_molecule))
+        else if (RTTI::isKindOf<NucleicAcid>(&new_molecule))
 		{
 			mol_type = "PROTEIN";
 		}
@@ -252,7 +252,7 @@ namespace BALL
 				<< substructure_name[i] << " ";
 			Position root_atom = atom_map[&*(substructure_pointers[i]->beginAtom())];
 			f << root_atom;
-			if (RTTI::isKindOf<Residue>(*substructure_pointers[i]))
+            if (RTTI::isKindOf<Residue>(substructure_pointers[i]))
 			{
 				f << " RESIDUE";
 			}
@@ -992,7 +992,7 @@ namespace BALL
 		AtomContainer::ChildCompositeConstIterator children_it;
 		for (children_it = frag_it->beginChildComposite(); +children_it; ++children_it)
 		{
-			if (RTTI::isKindOf<Atom>(*children_it))
+            if (RTTI::isKindOf<Atom>(&*children_it))
 				return true;
 		}
 

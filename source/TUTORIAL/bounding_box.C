@@ -58,7 +58,7 @@ bool GLBoundingBoxModel::finish()
 
 	// if the bounding box is degenerated or if the root of the composite is no
 	// System, do not create a bounding box
-	if (bbox_.a == bbox_.b || !RTTI::isKindOf<System>(*root))
+        if (bbox_.a == bbox_.b || !RTTI::isKindOf<System>(root))
 	{
 		return false;
 	}
@@ -94,7 +94,7 @@ Processor::Result GLBoundingBoxModel::operator() (Composite &composite)
 	}
 
 	// if we do not encounter an atom, skip it
-	if (!RTTI::isKindOf<Atom>(composite))
+        if (!RTTI::isKindOf<Atom>(&composite))
 	{
 		return Processor::CONTINUE;
 	}

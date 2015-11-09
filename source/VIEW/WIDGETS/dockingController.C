@@ -97,7 +97,7 @@ namespace BALL
 		{
 			// if (re)docking has finished, start scoring
 			// first check if user has aborted (re)docking
-			if (RTTI::isKindOf<DockingFinishedMessage>(*message))
+            if (RTTI::isKindOf<DockingFinishedMessage>(message))
 			{
 				DockingFinishedMessage* dfm = RTTI::castTo<DockingFinishedMessage>(*message);
 				
@@ -128,7 +128,7 @@ namespace BALL
 			}
 
 			// DatasetControl sends this messages, when user wants to have a look at a DockResult
-			if (RTTI::isKindOf<DatasetMessage>(*message))
+            if (RTTI::isKindOf<DatasetMessage>(message))
 			{
 				DatasetMessage* sdrm = RTTI::castTo<DatasetMessage>(*message);
 				if (!sdrm->isValid()) return;

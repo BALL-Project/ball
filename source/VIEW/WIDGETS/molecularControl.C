@@ -306,7 +306,7 @@ namespace BALL
 		bool MolecularControl::reactToMessages_(Message* message)
 		{
 			// react only to NewMolecularMessage, but not to NewCompositeMessage
-			if (RTTI::isKindOf<CompositeMessage>(*message))
+            if (RTTI::isKindOf<CompositeMessage>(message))
 			{
 				CompositeMessage* composite_message = RTTI::castTo<CompositeMessage>(*message);
 				switch (composite_message->getType())
@@ -400,14 +400,14 @@ namespace BALL
 						return false;
 				}
 			}
-			else if (RTTI::isKindOf<NewSelectionMessage> (*message))
+            else if (RTTI::isKindOf<NewSelectionMessage>(message))
 			{
 				NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 				setSelection_(true, nsm->openItems());
 				return true;
 			}
 
-			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+            if (RTTI::isKindOf<ControlSelectionMessage>(message))
 			{
 				ControlSelectionMessage* nsm = (ControlSelectionMessage*) message;
 				highlight(nsm->getSelection());
@@ -551,14 +551,14 @@ namespace BALL
 			paste_action_->setEnabled(allow_paste && composites_muteable);
 
 			// -----------------------------------> AtomContainer
-			bool ac = RTTI::isKindOf<AtomContainer>(composite);
+            bool ac = RTTI::isKindOf<AtomContainer>(&composite);
 			count_items_action_->setEnabled(ac);
 			atom_overview_->setEnabled(ac);
 			atom_overview_selection_->setEnabled(ac);
 			// <----------------------------------- AtomContainer
 
 			// -----------------------------------> Atoms
-			bond_propertes_action_->setEnabled(RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
+            bond_propertes_action_->setEnabled(RTTI::isKindOf<Atom>(&composite) && one_item && composites_muteable);
 			// <----------------------------------- Atoms
 
 			composite_properties_action_->setEnabled(one_item);
@@ -577,7 +577,7 @@ namespace BALL
 				list<Composite*>::const_iterator it = composite_list.begin();
 				for ( ; it!=composite_list.end(); ++it)
 				{
-					if (RTTI::isKindOf<Residue>(**it))
+                    if (RTTI::isKindOf<Residue>(*it))
 					{
 						Residue* res = reinterpret_cast<Residue*>(*it);
 						if (Peptides::OneLetterCode(res->getName()) == 'C')
@@ -597,7 +597,7 @@ namespace BALL
 							num_cysteins++;
 						}
 					}
-					else if (RTTI::isKindOf<Atom>(**it))
+                    else if (RTTI::isKindOf<Atom>(*it))
 					{
 						Atom* atom = reinterpret_cast<Atom*>(*it);
 						if (atom->getElement() == PTE[Element::S])
@@ -822,7 +822,7 @@ namespace BALL
 
 			if (selected_.size() > 0) context_composite_ = *selected_.begin();
 
-			if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
+            if (selected_.size() == 1 && RTTI::isKindOf<System>(*selected_.begin()))
 			{
 				bool is_in_move_mode = Scene::getInstance(0) && Scene::getInstance(0)->inMoveMode();
 
@@ -1167,7 +1167,7 @@ namespace BALL
 			list<Composite*>::const_iterator list_it = copy_list_.begin();
 			for (; list_it != copy_list_.end(); ++list_it)
 			{
-				if (RTTI::isKindOf<System>(**list_it))
+                if (RTTI::isKindOf<System>(*list_it))
 				{
 					// create a new copy of the composite
 					Composite *new_composite = (Composite*)(*list_it)->create();
@@ -1238,7 +1238,7 @@ namespace BALL
 
 			if (!show_ss_)
 			{
-				if (RTTI::isKindOf<SecondaryStructure>(composite))
+                if (RTTI::isKindOf<SecondaryStructure>(&composite))
 				{
 					recurseGeneration_(parent, composite);
 					return 0;
@@ -1354,22 +1354,22 @@ namespace BALL
 			AtomContainer& ac = *(AtomContainer*) context_composite_;
 
 			String s;
-			if (RTTI::isKindOf<System>(ac))
+            if (RTTI::isKindOf<System>(&ac))
 			{
 				s+=String(((System*)&ac)->countResidues());
 				s+= (String)tr(" Residues") + ", ";
 			}
-			else if (RTTI::isKindOf<Protein>(ac))
+            else if (RTTI::isKindOf<Protein>(&ac))
 			{
 				s+=String(((Protein*)&ac)->countResidues());
 				s+= (String)tr(" Residues") + ", ";
 			}
-			else if (RTTI::isKindOf<Chain>(ac))
+            else if (RTTI::isKindOf<Chain>(&ac))
 			{
 				s+=String(((Chain*)&ac)->countResidues());
 				s+= (String)tr(" Residues") + ", ";
 			}
-			if (RTTI::isKindOf<SecondaryStructure>(ac))
+            if (RTTI::isKindOf<SecondaryStructure>(&ac))
 			{
 				s+=String(((SecondaryStructure*)&ac)->countResidues());
 				s+= (String)tr(" Residues") + ", ";
@@ -1475,32 +1475,32 @@ namespace BALL
 
 		bool MolecularControl::pasteAllowedFor_(Composite& child)
 		{
-			if (RTTI::isKindOf<System>(child)) 
+            if (RTTI::isKindOf<System>(&child))
 			{
 				return !getSelection().size();
 			}
 
 			if (!getSelection().size()) return false;
 
-			const Composite& parent = **getSelection().begin();
+            const Composite* parent = *getSelection().begin();
 
 			if (RTTI::isKindOf<Atom>(parent)) return false;
 			
-			if (RTTI::isKindOf<Residue>(parent)) return (RTTI::isKindOf<Atom>(child));
+            if (RTTI::isKindOf<Residue>(parent)) return (RTTI::isKindOf<Atom>(&child));
 
-			if (RTTI::isKindOf<SecondaryStructure>(parent)) return (RTTI::isKindOf<Residue>(child));
+            if (RTTI::isKindOf<SecondaryStructure>(parent)) return (RTTI::isKindOf<Residue>(&child));
 
-			if (RTTI::isKindOf<Chain>(parent)) return (RTTI::isKindOf<SecondaryStructure>(child) ||
-																								 RTTI::isKindOf<Residue>(child));
+            if (RTTI::isKindOf<Chain>(parent)) return (RTTI::isKindOf<SecondaryStructure>(&child) ||
+                                                                                                 RTTI::isKindOf<Residue>(&child));
 			
-			if (RTTI::isKindOf<Protein>(parent)) return (RTTI::isKindOf<Chain>(child));
+            if (RTTI::isKindOf<Protein>(parent)) return (RTTI::isKindOf<Chain>(&child));
 
-			if (RTTI::isKindOf<Nucleotide>(parent)) return (RTTI::isKindOf<Atom>(child));
+            if (RTTI::isKindOf<Nucleotide>(parent)) return (RTTI::isKindOf<Atom>(&child));
 
-			if (RTTI::isKindOf<NucleicAcid>(parent)) return (RTTI::isKindOf<Nucleotide>(child));
+            if (RTTI::isKindOf<NucleicAcid>(parent)) return (RTTI::isKindOf<Nucleotide>(&child));
 
-			if (RTTI::isKindOf<Molecule>(parent)) return (!RTTI::isKindOf<Molecule>(child));
-			if (RTTI::isKindOf<System>(parent)) return (RTTI::isKindOf<Molecule>(child));
+            if (RTTI::isKindOf<Molecule>(parent)) return (!RTTI::isKindOf<Molecule>(&child));
+            if (RTTI::isKindOf<System>(parent)) return (RTTI::isKindOf<Molecule>(&child));
 
 			return true;
 		}

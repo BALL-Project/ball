@@ -80,7 +80,7 @@ namespace BALL
 
 		void GenericControl::onNotify(Message *message)
 		{
-			if (!RTTI::isKindOf<DeselectControlsMessage>(*message)) return;
+            if (!RTTI::isKindOf<DeselectControlsMessage>(message)) return;
 
 			listview->clearSelection();
 		}

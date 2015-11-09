@@ -80,7 +80,7 @@ namespace BALL
 
 		void Preferences::insertEntry(PreferencesEntry *child)
 		{
-			if (!RTTI::isKindOf<QWidget>(*child)) 
+            if (!RTTI::isKindOf<QWidget>(child))
 			{
 				Log.error() << "PreferencesEntry not derived from QWidget in " 
 										<< __FILE__ << "  " << __LINE__<< std::endl;

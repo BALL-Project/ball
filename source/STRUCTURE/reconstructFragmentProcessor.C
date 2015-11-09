@@ -129,7 +129,7 @@ namespace BALL
 	{
 		// abort if the object is not a residue (only residues are 
 		// contained in the fragment DB)																				
-		if (!RTTI::isKindOf<Residue>(object))
+        if (!RTTI::isKindOf<Residue>(&object))
 		{
 			return Processor::CONTINUE;
 		}

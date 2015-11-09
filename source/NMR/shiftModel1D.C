@@ -222,10 +222,10 @@ namespace BALL
 
 		Processor::Result result = Processor::CONTINUE;
 
-		if (!system_ && RTTI::isKindOf<Atom>(composite))
+                if (!system_ && RTTI::isKindOf<Atom>(&composite))
 		{
 			Atom* atom = dynamic_cast<Atom*>(&composite);
-			if  (RTTI::isKindOf<System>(atom->getRoot()))
+                        if  (RTTI::isKindOf<System>(&atom->getRoot()))
 			{	
 				system_ = dynamic_cast<System*>(&(atom->getRoot()));
 			}

@@ -48,7 +48,7 @@ namespace BALL
 				
 		Processor::Result AddSurfaceModel::operator () (Composite& composite)
 		{
-			if (RTTI::isKindOf<AtomContainer>(composite)) 
+            if (RTTI::isKindOf<AtomContainer>(&composite))
 			{
 				AtomIterator it;
 				BALL_FOREACH_ATOM(*(AtomContainer*) &composite, it)
@@ -58,7 +58,7 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 			
-			if (!RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
+            if (!RTTI::isKindOf<Atom>(&composite)) return Processor::CONTINUE;
 
 			atoms_.insert((Atom*) &composite);
 

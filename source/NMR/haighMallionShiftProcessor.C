@@ -544,7 +544,7 @@ namespace BALL
 		
 		for (Position i = 0; !system && i<targets_.size(); i++)
 		{
-			if  (RTTI::isKindOf<System>(	targets_[i]->getRoot()))
+            if  (RTTI::isKindOf<System>(&targets_[i]->getRoot()))
 			{	
 				system = dynamic_cast<System*>(&(targets_[i]->getRoot()));
 			}

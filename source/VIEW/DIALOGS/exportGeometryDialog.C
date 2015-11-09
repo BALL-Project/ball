@@ -234,12 +234,12 @@ void ExportGeometryDialog::accept()
 				// mesh (5) is the only real printable representation
 				//
 				// TODO: what about spheres, e.g.??
-				if (! (	 RTTI::isKindOf<Box> (**git)
-							 ||RTTI::isKindOf<Disc>(**git)
-							 ||RTTI::isKindOf<GridVisualisation>(**git)
-							 ||RTTI::isKindOf<Label>(**git)
-							 ||RTTI::isKindOf<Mesh>(**git)
-							 ||RTTI::isKindOf<SimpleBox>(**git)
+                if (! (	 RTTI::isKindOf<Box> (*git)
+                             ||RTTI::isKindOf<Disc>(*git)
+                             ||RTTI::isKindOf<GridVisualisation>(*git)
+                             ||RTTI::isKindOf<Label>(*git)
+                             ||RTTI::isKindOf<Mesh>(*git)
+                             ||RTTI::isKindOf<SimpleBox>(*git)
 							)
 					 )
 				{
