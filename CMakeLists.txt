@@ -5,23 +5,6 @@
 
 PROJECT("BALL")
 
-# TODO LIST:
-#   BALL specific:
-#
-#   inherited from OpenMS:
-#			- test for contrib headers (CONTRIB_HEADER_DIR ccmake variable - test one header for each required library)
-#			- parallel build of test executables
-#			- target to execute all EXAMPLES
-
-########################################################
-### entries meant to be configured using CMake cache ###
-### - do NOT hardcode them here!										 ###
-### - edit them within CMakeCache.txt using ccmake	 ###
-########################################################
-# CONTRIB_CUSTOM_DIR
-# STL_DEBUG
-# QT_DB_PLUGIN
-
 ########################################################
 ###    manual entries (edit this for new release)    ###
 ########################################################
@@ -31,14 +14,16 @@ SET(BALL_PACKAGE_VERSION_MINOR "4")
 SET(BALL_PACKAGE_VERSION_PATCH "79")
 
 ########################################################
-###    end manual	entries													   ###
+###    end manual entries                            ###
 ########################################################
 
-# Heart of the BUILD system : only edit when you know what you�re doing (we don�t)
-# quick manual for most commands: http://www.cmake.org/cmake/help/cmake2.6docs.html
-# useful predefined variables: http://www.paraview.org/Wiki/CMake_Useful_Variables
+# Heart of the BUILD system:
+# Only edit when you know what you are doing!
+#
+# Quick manual for most commands:     https://cmake.org/cmake/help/v2.8.12/cmake.html
+# Useful predefined CMake variables:  https://cmake.org/Wiki/CMake_Useful_Variables
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.8 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
@@ -269,9 +254,16 @@ OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and
 ## QT
 OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
 
+# Enable automatic invocation of moc if required
+SET(CMAKE_AUTOMOC ON)
+
 FIND_PACKAGE(Qt5Core REQUIRED)
 FIND_PACKAGE(Qt5Xml)
 FIND_PACKAGE(Qt5Network)
+
+LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
+                               Qt5::Xml
+                               Qt5::Network)
 
 IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt5Widgets REQUIRED)
@@ -280,15 +272,25 @@ IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt5PrintSupport)
 
 	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
+
+        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::Widgets
+                                       Qt5::OpenGL
+                                       Qt5::PrintSupport
+                                       Qt5::Network
+                                       Qt5::Test
+                                       Qt5::Xml)
+
 	IF(USE_QTWEBKIT)
 		FIND_PACKAGE(Qt5WebKitWidgets)
-	ENDIF()
-ENDIF()
 
-SET(BALL_HAS_QTWEBKIT TRUE)
-IF(USE_QTWEBKIT AND NOT Qt5WebKit_FOUND)
-	SET(BALL_HAS_QTWEBKIT FALSE)
-	MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
+                IF(Qt5WebKit_FOUND)
+                        SET(BALL_HAS_QTWEBKIT TRUE)
+                        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebKitWidgets)
+                ELSE()
+                        SET(BALL_HAS_QTWEBKIT FALSE)
+                        MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
+                ENDIF()
+	ENDIF()
 ENDIF()
 
 ## On Windows, we might need to explicitly deploy openssl libraries for Qt
@@ -557,8 +559,8 @@ SET(VIEW_LINK_FLAGS)
 
 SET_TARGET_PROPERTIES(BALL PROPERTIES
 	SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}"
-	AUTOMOC TRUE
 )
+
 IF (MSVC)
 	SET(BALL_COMPILE_DEFINTIONS ${COMPILE_DEFINITIONS} "BALL_BUILD_DLL" CACHE INTERNAL "")
 	SET_TARGET_PROPERTIES(BALL PROPERTIES COMPILE_DEFINITIONS "${BALL_COMPILE_DEFINTIONS}")
@@ -574,8 +576,7 @@ IF (BALL_HAS_VIEW)
 
 	SET_TARGET_PROPERTIES(VIEW PROPERTIES
 		SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}"
-		AUTOMOC TRUE
-	)
+)
 
 	IF(MSVC)
 		## Do we really need this?
@@ -596,21 +597,12 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	ENDIF()
 ENDIF()
 
-TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
-                           ${Qt5Core_LIBRARIES}
-                           ${Qt5Network_LIBRARIES}
-			   ${Qt5Xml_LIBRARIES})
-QT5_USE_MODULES(BALL Core Network Xml)
+TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES})
 
 IF(BALL_HAS_VIEW)
 	TARGET_LINK_LIBRARIES(VIEW BALL
-	                      ${VIEW_DEP_LIBRARIES}
-	                      ${OPENGL_LIBRARIES})
-	QT5_USE_MODULES(VIEW Widgets Network OpenGL PrintSupport Test Xml)
-
-	IF(USE_QTWEBKIT)
-		QT5_USE_MODULES(VIEW WebKitWidgets)
-	ENDIF()
+                                   ${VIEW_DEP_LIBRARIES}
+                                   ${OPENGL_LIBRARIES})
 ENDIF()
 
 ## add targets for Python modules
