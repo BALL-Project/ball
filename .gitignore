@@ -1,3 +1,4 @@
+*DS_STORE
 include/BALL/BALL.doc
 contrib/*
 *.o
