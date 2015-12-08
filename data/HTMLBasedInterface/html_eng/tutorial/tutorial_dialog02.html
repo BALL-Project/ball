@@ -1,48 +1,33 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tutorial dialog</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="../../css/presentaball.css">
+		<script>var current_step = 2;</script>
+		<script src="../../scripts/connectVIEW.js"></script>
+	</head>
+	<body>
+		<div class="navigation" id="breadcrumb">
+			<a href="../index.html?action=clearAll&amp;module=common_functions">Main page</a> > Tutorial dialog II
+		</div>
 
-<html>
-<head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+		<div id="text-content">
+			<h1>Rotating the camera</h1>
 
-  <title>Tutorial Dialog</title>
-  <link rel="stylesheet" href="../../css/style.css" type="text/css">
-</head>
-
-<body>
-<script type="text/javascript"> var current_step = 2 </script>
-<script type="text/javascript" src="../../scripts/connectVIEW.js"></script>
-  <div class="navigation" id="breadcrumb">
-    <a href=
-    "index.html?action=clearAll&amp;module=common_functions">Startseite</a> > Tutorial Dialog II
-  </div>
-
-  <div id="text-content">
-    <blockquote>
-
-      <h3>Rotating the camera</h3>
-
-      After we created the peptide we can freely position the camera:
-      To do so click with a mouse button into the 3D graphics view and drag the mouse:
-      <br><br>
-      &nbsp;&nbsp; Left button: Rotate <br>
-      &nbsp;&nbsp; Middle or Wheel: Zoom<br>
-      &nbsp;&nbsp; Right button: Move view <br>
-      <br>
-      When you are finished playing around with the camera,
-      center the camera on the peptide:
-      Find the widget with the name <b>Structures</b> and
-      highlight the System by <b>clicking on its name ("ARND").</b><br>
-      Then press the right mouse button to open a context menu and press on the
-      <b>Focus</b> entry.<br>
-      This will enable the next step of the tutorial. <br> 
-      Press Next to continue.
-
-      </blockquote>
-	  
-    
-     <input type="button" id="button1" value="Next" disabled="disabled" onClick="location.href='tutorial_dialog03.html' ">
-       
-  </div>
-</body>
+			<p>
+				After we created the peptide we can freely position the camera: To do so click with a mouse button into the 3D graphics view and drag the mouse:
+				<ul>
+					<li>Left button: Rotate</li>
+					<li>Middle button or wheel: Zoom</li>
+					<li>Right button: Move view</li>
+				</ul>
+			</p>
+			<p>When you are finished playing around with the camera, center the camera on the peptide: Find the widget with the name <strong>Structures</strong> and highlight the System by <strong>clicking on its name ("ARND").</strong></p>
+			<p>Then press the right mouse button to open a context menu and press on the <strong>Focus</strong> entry. This will enable the next step of the tutorial.</p>
+			<ul class="buttons">
+				<li><button id="button1" disabled onClick="location.href='tutorial_dialog03.html';">Next</button></li>
+			</ul>
+		</div>
+	</body>
 </html>

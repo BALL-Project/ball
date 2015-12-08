@@ -1,62 +1,55 @@
-<html>
-  <head>
-    <title>EHEC</title>
-    <link rel="stylesheet" href="../css/style.css">
-   </head>
-  <body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px" >
-	 <script language="javascript">
-			<!--
-			function showAnswer(answer_id) {
-				document.getElementById(answer_id).style.visibility="visible";
-			}
-			function hideAnswer(answer_id) {
-				document.getElementById(answer_id).style.visibility="hidden";
-			}
-			-->
-	 </script>
-    <div class="navigation" id="breadcrumb">
-	    <a href="index.html?action=clearAll&module=common_functions">Main page</a> > EHEC
-	  </div>
-    <div id="text-content">
-    <h1>EHEC</h1>
-	<h3>Enterohemorragic Escherichia coli</h3>
-		<div class="greeter">
-			<p class="general">
-			We humans are never alone - just as for animals, a huge number of microorganisms lives on our skin and in our body. Even though we cannot see them with the naked eye, these organisms are important to our well-being. They live in particular in the healthy human intestine, where they help us to digest food, train our immune system and even prevent an unregulated proliferation of other harmful microbes.
-			</p>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>EHEC</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="../css/presentaball.css">
+		<script src="../scripts/toggleanswers.js"></script>
+	</head>
+	<body>
+		<div class="navigation" id="breadcrumb">
+			<a href="index.html?action=clearAll&amp;module=common_functions">Main page</a> > EHEC
+		</div>
+
+		<div id="text-content">
+			<h1>EHEC</h1>
+		
+			<h3>Enterohemorragic Escherichia coli</h3>
+			<p>We humans are never alone - just as for animals, a huge number of microorganisms lives on our skin and in our body. Even though we cannot see them with the naked eye, these organisms are important to our well-being. They live in particular in the healthy human intestine, where they help us to digest food, train our immune system and even prevent an unregulated proliferation of other harmful microbes.</p>
+
 			<div class="task">
-			What do you think, how many microorganisms live in the intestine of an average, healthy adult?<br>
-			<a href="javascript:showAnswer('noorg')">Answer</a>
-			<div class="answer" style="visibility:hidden" id="noorg">
-			One estimates that approx. 1 quadrillion microorganisms live in our gut. That is a 1 with 15 zeros: 1.000.000.000.000.000. For comparison only, the number of cells in the adult human body is 10 times smaller, thus "only" 100 trillion: 100.000.000.000.000. The current population on earth is estimated to be 7 billion people, that is a 7 with 9 zeros: 7.000.000.000. You see, there a quiet a lot microbes in our body! </br>
-			<a href="javascript:hideAnswer('noorg')">Hide answer</a>
-			</div>
+				<p>What do you think, how many microorganisms live in the intestine of an average, healthy adult?</p>
+				<a href="javascript:showAnswer('noorg')">Answer</a>
+				<div class="answer" id="noorg">
+					<p>One estimates that approx. 1 quadrillion microorganisms live in our gut. That is a 1 with 15 zeros: 1.000.000.000.000.000. For comparison only, the number of cells in the adult human body is 10 times smaller, thus "only" 100 trillion: 100.000.000.000.000. The current population on earth is estimated to be 7 billion people, that is a 7 with 9 zeros: 7.000.000.000. You see, there a quiet a lot microbes in our body!</p> 
+					<a href="javascript:hideAnswer('noorg')">Hide answer</a>
+				</div>
 			</div>
 
-			<div id="ehec_structure_bg" class="structure"><div class="img"><img id="ehec_structure" src="../images/ehec.png"></div>E.coli bacteria</div>
+			<div id="ehec_structure_bg" class="structure">
+				<img id="ehec_structure" src="../images/ehec.png">
+				<span>E. coli bacteria</span>
+			</div>
 
-			<p class="functionality">
-			One of these microorganisms is the bacterium Escherichia coli (short: E. coli). The image above shows several stained E. coli bacteria in red. They have the form of small rods and are probably the best examined lifeform on our planet. This is due to the fact that, e.g., E. coli bacteria can be easily cultivated in the lab and grow quickly under ideal conditions. That is why E. coli is sometimes refered to as the pet of biologists.<br>
-			On the other hand, you certainly know that drinking water and food are tested for E. coli and, if E. coli bacteria are found, are not cleared for consumption. This is necessary because humans are only used to live with E. coli in the intestine. When we drink or eat contaminated food, E. coli bacteria may enter other areas of our body and make us sick.
-			</p>
+			<p>One of these microorganisms is the bacterium Escherichia coli (short: E. coli). The image above shows several stained E. coli bacteria in red. They have the form of small rods and are probably the best examined lifeform on our planet. This is due to the fact that, e.g., E. coli bacteria can be easily cultivated in the lab and grow quickly under ideal conditions. That is why E. coli is sometimes refered to as the pet of biologists.</p>
+			
+			<p>On the other hand, you certainly know that drinking water and food are tested for E. coli and, if E. coli bacteria are found, are not cleared for consumption. This is necessary because humans are only used to live with E. coli in the intestine. When we drink or eat contaminated food, E. coli bacteria may enter other areas of our body and make us sick.</p>
+			
 			<div class="task">
-			What do you think, how can you avoid to come down with an E. coli intoxication?<br>
-			<a href="javascript:showAnswer('disease')">Answer</a>
-			<div class="answer" style="visibility:hidden" id="disease">
-			You should follow the basic rules of hygiene: wash your hands after going to the bathroom, before you start cooking and wash raw food thoroughly or, even better, boil it before you eat it. Moreover, you should never drink water if you do not know for sure that it is clean; because you cannot see if the water is contaminated with bacteria. </br>
-			<a href="javascript:hideAnswer('disease')">Hide answer</a>
-			</div>
-			</div>
-
-			<p class="step">
-			You learned quite a lot about E. coli bacteria - they can make people sick, too. But what exactly are enterohemorragic Escherichia coli bacteria? And why can they be so harmful? You learn more about that on the next page.
-			</p>
-
-			<div>
-			<a href="ehec2.html?action=loadProject&module=common_functions&filename=projects/intimin.bvp">next</a>
-			<a href="index.html?action=clearAll&module=common_functions">Main page</a>
+				<p>What do you think, how can you avoid to come down with an E. coli intoxication?</p>
+				<a href="javascript:showAnswer('disease')">Answer</a>
+				<div class="answer" id="disease">
+					<p>You should follow the basic rules of hygiene: wash your hands after going to the bathroom, before you start cooking and wash raw food thoroughly or, even better, boil it before you eat it. Moreover, you should never drink water if you do not know for sure that it is clean; because you cannot see if the water is contaminated with bacteria.</p>
+					<a href="javascript:hideAnswer('disease')">Hide answer</a>
+				</div>
 			</div>
 
-		</div> <!-- end of greeter -->
+			<p>You learned quite a lot about E. coli bacteria - they can make people sick, too. But what exactly are enterohemorragic Escherichia coli bacteria? And why can they be so harmful? You learn more about that on the next page.</p>
+
+			<ul class="buttons">
+				<li><a href="index.html?action=clearAll&amp;module=common_functions">Back</a></li>
+				<li><a href="ehec2.html?action=loadProject&amp;module=common_functions&amp;filename=projects/intimin.bvp">Next</a></li>
+			</ul>
+		</div>
 	</body>
 </html>

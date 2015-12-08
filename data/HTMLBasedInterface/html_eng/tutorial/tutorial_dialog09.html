@@ -1,46 +1,27 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tutorial dialog</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="../../css/presentaball.css">
+		<script>var current_step = 9;</script>
+		<script src="../../scripts/connectVIEW.js"></script>
+	</head>
+	<body>
+		<div class="navigation" id="breadcrumb">
+			<a href="../index.html?action=clearAll&amp;module=common_functions">Main page</a> > Tutorial dialog IX
+		</div>
 
-<html>
-<head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+		<div id="text-content">
+			<h1>Creating a isocontour surface</h1>
 
-  <title>Tutorial Dialog</title>
-  <link rel="stylesheet" href="../../css/style.css" type="text/css">
-</head>
+			<p>An other way to visualise the electrostatics grid are isocontour surfaces which connect all neighbouring points in the grid which have the same electrostatic value.</p>
+			<p>We will now create such a isocontour surface: First find the <strong>Datasets</strong> widget, then highlight the FDPB dataset and use its context menu or the menu entry <strong>Tools &#8658; Grids  &#8658; Render Contour Surface</strong> to create the surface.</p>
+			<p>In the now open dialog enter the value <strong>0.01</strong> as threshold and press <strong>OK</strong>. It also possible to create multiple iso surface with different colors.</p>
 
-<body>
-<script type="text/javascript"> var current_step = 8 </script>
-<script type="text/javascript" src="../../scripts/connectVIEW.js"></script>
-  <div class="navigation" id="breadcrumb">
-    <a href=
-    "index.html?action=clearAll&amp;module=common_functions">Startseite</a> > Tutorial Dialog IX
-  </div>
-
-  <div id="text-content">
-	<blockquote>
-
-      <h3> Creating a isocontour surface </h3>
-
-    An other way to visualise the electrostatics grid are isocontour surfaces which 
-    connect all neighbouring points in the grid which have the same electrostatic 
-    value. <br>
-    We will now create such a isocontour surface:<br>
-    First find the </b>"Datasets"</b> widget, then highlight the FDPB dataset and use its 
-    context menu or the menu entry "<b>Tools->Grids->Render Contour Surface</b>" to
-    create the surface.<br>
-    In the now open dialog enter the value <b>0.01</b> as threshold and press "<b>OK</b>".
-    <br>
-    It also possible to create multiple iso surface with different colors.
-    <br>
-    <br>
-    Press Next to continue.
-    </blockquote>
-	
-    
-     <input type="button" id="button1" value="Next" disabled="disabled" onClick="location.href='tutorial_dialog10.html' ">
-       
-    
-  </div>
-</body>
+			<ul class="buttons">
+				<li><button id="button1" disabled onClick="location.href='tutorial_dialog10.html';">Next</button></li>
+			</ul>
+		</div>
+	</body>
 </html>

@@ -1,55 +1,36 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN">
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tutorial dialog</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="../../css/presentaball.css">
+		<script>var current_step = 4;</script>
+		<script src="../../scripts/connectVIEW.js"></script>
+	</head>
+	<body>
+		<div class="navigation" id="breadcrumb">
+			<a href="../index.html?action=clearAll&amp;module=common_functions">Main page</a> > Tutorial dialog IV
+		</div>
 
-<html>
-<head>
-  <meta name="generator" content=
-  "HTML Tidy for Linux (vers 25 March 2009), see www.w3.org">
+		<div id="text-content">
+			<h1>Molecular Dynamics Simulation</h1>
 
-  <title>Tutorial Dialog</title>
-  <link rel="stylesheet" href="../../css/style.css" type="text/css">
-</head>
+			<p>Now we will simulate the peptides natural movements by performing a molecular dynamics simulation (MDS). To do so, open the according dialog by using the menu entry <strong>Molecular Mechanics &#8658; Molecular Dynamics</strong> (The menu entry is only enabled if a System is highlighted!).</p>
+			<p>
+				Now we have to perform some settings: 
+				<ul>
+					<li>Set the number of iterations to 100.</li>
+					<li>To accelerate the MDS, set the timestep to 0.001.</li>
+					<li>Set the temperature to 400 K.</li>
+					<li>Select the force field "<strong>AMBER</strong>".</li>
+				</ul>
+			</p>
+			<p>Also, we want to be able to visualise the resulting trajectories. To do so, click the checkbox <strong>save to</strong>. Then click <strong>Simulate</strong>.</p>
+			<p>The next step becomes available, when the simulation has finished and a trajectory file was created.</p>
 
-<body>
-<script type="text/javascript"> var current_step = 4 </script>
-<script type="text/javascript" src="../../scripts/connectVIEW.js"></script>
-  <div class="navigation" id="breadcrumb">
-    <a href=
-    "index.html?action=clearAll&amp;module=common_functions">Startseite</a> > Tutorial Dialog IV
-  </div>
-
-  <div id="text-content">
-    <blockquote>
-
-    <h3> Molecular Dynamics Simulation </h3>
-
-    Now we will simulate the peptides natural movements 
-    by performing a molecular dynamics simulation (MDS). To do so,
-    open the according dialog by using the menu entry <br>
-    <b>"Molecular Mechanics -> Molecular Dynamics"</b><br>
-    (The menu entry is only enabled if a System is highlighted.)<br>
-    <br>
-    Now we have to perform some settings:<br>
-    Set the number of iterations to 100.<br>
-    To accelerate the MDS, set the timestep to 0.001. <br>
-    Set the temperature to 400 K.<br>
-    Select the force field "<b>AMBER</b>".<br>
-    <br>
-    Also, we want to be able to visualise the resulting trajectories.
-    To do so, click the checkbox <b>save to</b>.
-    Then click <b>"Simulate"</b>.
-    <br>
-    The next step becomes available, when the simulation has finished
-    and a trajectory file was created.
-    <br><br>
-    Press Next to continue.
-
-    </blockquote>
-
-    
-    
-     <input type="button" id="button1" value="Next" disabled="disabled" onClick="location.href='tutorial_dialog05.html' ">
-       
-    
-  </div>
-</body>
+			<ul class="buttons">
+				<li><button id="button1" disabled onClick="location.href='tutorial_dialog05.html';">Next</button></li>
+			</ul>
+		</div>
+	</body>
 </html>

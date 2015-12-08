@@ -1,72 +1,53 @@
-<html>
-  <head>
-    <title>EHEC</title>
-    <link rel="stylesheet" href="../css/style.css">
-   </head>
-  <body style="background-color:#000000;color:#FFFFFF;margin:0px 0px 0px 0px" >
-	 <script language="javascript">
-			<!--
-			function showAnswer(answer_id) {
-				document.getElementById(answer_id).style.visibility="visible";
-			}
-			function hideAnswer(answer_id) {
-				document.getElementById(answer_id).style.visibility="hidden";
-			}
-			-->
-	 </script>
-    <div class="navigation" id="breadcrumb">
-	    <a href="index.html?action=clearAll&module=common_functions">Main page</a> 
-		<a href="ehec.html?action=loadProject&module=common_functions&filename=projects/intimin.bvp">EHEC I</a> > EHEC II
-	  </div>
-    <div id="text-content">
-    <h1>EHEC</h1>
-	<h3>Enterohemorragic Escherichia coli</h3>
-		<div class="greeter">
-			<p class="general">
-			As it is the case for most bacteria, there exists different types of E. coli, so-called strains. Some of these strains produce poisons (toxins) that can cause different diseases in humans.<br>
-			The strain enterohemorragic Escherichia coli (EHEC), e.g., can cause bloody diarrhea. These pathogenic germs exist in the flora of the intestine of ruminant animals like cattle or sheep, just like other E. coli strains live in the human intestine.
-			</p>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>EHEC 2</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<link rel="stylesheet" href="../css/presentaball.css">
+		<script src="../scripts/toggleanswers.js"></script>
+	</head>
+	<body>
+		<div class="navigation" id="breadcrumb">
+			<a href="index.html?action=clearAll&amp;module=common_functions">Main page</a> > <a href="ehec.html?action=loadProject&amp;module=common_functions&amp;filename=projects/intimin.bvp">EHEC I</a> > EHEC II
+		</div>
 
-			<p class="functionality">
-			To cause a disease in a human being, the EHEC bacteria need to attach to the intestinal mucosa. The bacteria possess a large, specialized system of proteins, like a "biological machinery", that has an important role in this process.
-			</p>
+		<div id="text-content">
+			<h1>EHEC</h1>
+    
+			<h3>Enterohemorragic Escherichia coli</h3>
+			<p>As it is the case for most bacteria, there exists different types of E. coli, so-called strains. Some of these strains produce poisons (toxins) that can cause different diseases in humans.</p>
+			<p>The strain enterohemorragic Escherichia coli (EHEC), e.g., can cause bloody diarrhea. These pathogenic germs exist in the flora of the intestine of ruminant animals like cattle or sheep, just like other E. coli strains live in the human intestine.</p>
+			<p>To cause a disease in a human being, the EHEC bacteria need to attach to the intestinal mucosa. The bacteria possess a large, specialized system of proteins, like a "biological machinery", that has an important role in this process.</p>
 
 			<div class="task">
-			When you look at the shape of intimin on the right side, can you imagine how this "machine" works?<br>
-			<a href="javascript:showAnswer('t3ss')">Answer</a>
-			<div class="answer" style="visibility:hidden" id="t3ss">
-			The structure reminds of a needle. When this needle comes into contact with a cell of the intestinal mucosa, several bacterial proteins are injected into the cell. The principle is similar to a shot you get at the doctor's.</br>
-			<a href="javascript:hideAnswer('t3ss')">Hide answer</a>
-			</div>
+				<p>When you look at the shape of intimin on the right side, can you imagine how this "machine" works?<p>
+				<a href="javascript:showAnswer('t3ss')">Answer</a>
+				<div class="answer" id="t3ss">
+					<p>The structure reminds of a needle. When this needle comes into contact with a cell of the intestinal mucosa, several bacterial proteins are injected into the cell. The principle is similar to a shot you get at the doctor's.</p>
+					<a href="javascript:hideAnswer('t3ss')">Hide answer</a>
+				</div>
 			</div>
 
-			<p class="functionality">
-			There are still some open questions regarding the injection of the bacterial proteins into the cell. It is known, however, that the cell incorporates these proteins into the cellular membrane where they serve as "anchorage" area for the EHEC bacteria. To be able to do so, the EHEC bacteria have the corresponding matches on their surface, e.g. the protein <a href="ehec2_en.html?action=loadProject&module=common_functions&filename=projects/intimin_cartoon.bvp">intimin</a>. This protein on the bacterial surface binds to its counterpart Tir (translocated intimin receptor) that has been injected by the above mentioned "needle" prior to that.
-			</p>
+			<p>There are still some open questions regarding the injection of the bacterial proteins into the cell. It is known, however, that the cell incorporates these proteins into the cellular membrane where they serve as "anchorage" area for the EHEC bacteria. To be able to do so, the EHEC bacteria have the corresponding matches on their surface, e.g. the protein <a href="ehec2.html?action=loadProject&module=common_functions&filename=projects/intimin_cartoon.bvp">intimin</a>. This protein on the bacterial surface binds to its counterpart Tir (translocated intimin receptor) that has been injected by the above mentioned "needle" prior to that.</p>
 
 			<h3>EHEC or HUS?</h3>
-			<p class="general">
-			If EHEC E. coli bacteria enter our body, we may fall ill and suffer from, e.g., bloody diarrhea, but for a healthy adult person, this is usually not a very risky disease. Not until the complication HUS (hemolytic-uremic syndrome) develops, the situation turns into a highly critical medical condition that, unfortunately, mostly occurs among children. How does this happen? 
-			</p>
+			<p>If EHEC E. coli bacteria enter our body, we may fall ill and suffer from, e.g., bloody diarrhea, but for a healthy adult person, this is usually not a very risky disease. Not until the complication HUS (hemolytic-uremic syndrome) develops, the situation turns into a highly critical medical condition that, unfortunately, mostly occurs among children. How does this happen?</p>
 
 			<div class="task">
-			You have just learned that EHEC bacteria produce toxins that may damage our cells. These so-called verotoxins belong to the class of AB5 toxins. Have a look at the following <a href="ehec2_en.html?action=loadProject&module=common_functions&filename=projects/shiga.bvp">structure of AB5 toxins</a>, can you identify the reason why they are called that way?<br>
-			<a href="javascript:showAnswer('shiga')">Answer</a>
-			<div class="answer" style="visibility:hidden" id="shiga">
-			AB5 toxins consist of two subunits, A and B, and the B subunit is composed of 5 identical parts.</br>
-			<a href="javascript:hideAnswer('shiga')">Hide answer</a>
-			</div>
+				<p>You have just learned that EHEC bacteria produce toxins that may damage our cells. These so-called verotoxins belong to the class of AB5 toxins. Have a look at the following <a href="ehec2.html?action=loadProject&module=common_functions&filename=projects/shiga.bvp">structure of AB5 toxins</a>, can you identify the reason why they are called that way?</p>
+				<a href="javascript:showAnswer('shiga')">Answer</a>
+				<div class="answer" id="shiga">
+					<p>AB5 toxins consist of two subunits, A and B, and the B subunit is composed of 5 identical parts.</p>
+					<a href="javascript:hideAnswer('shiga')">Hide answer</a>
+				</div>
 			</div>
 
-			<p class="functionality">
-			Verotoxins bind to a part of the cell surface called Gb3. This interaction triggers a process that leads to the absorption of the toxins into the interior of the cell. Once inside the cell, the toxin interfere with the production of new proteins and the cell dies. This results in tissue damage in the affected areas. Additionally, the toxins reach other parts of the body by binding to blood cells and travelling to, e.g., the kidneys. They can cause massive cellular damage, leading ultimately to kidney failure. The EHEC bacteria stay put but their toxins spread in the body and lead to complications like HUS.
-			</p>
-
-			<div class="step">
-			<a href="ehec.html?action=loadProject&module=common_functions&filename=projects/intimin.bvp">back</a>
-			<a href="index.html?action=clearAll&module=common_functions">Main page</a><br>
-			</div>
-	  </div>
-	 </div>
-  </body>
+			<p>Verotoxins bind to a part of the cell surface called Gb3. This interaction triggers a process that leads to the absorption of the toxins into the interior of the cell. Once inside the cell, the toxin interfere with the production of new proteins and the cell dies. This results in tissue damage in the affected areas. Additionally, the toxins reach other parts of the body by binding to blood cells and travelling to, e.g., the kidneys. They can cause massive cellular damage, leading ultimately to kidney failure. The EHEC bacteria stay put but their toxins spread in the body and lead to complications like HUS.</p>
+			
+			<ul class="buttons">
+				<li><a href="ehec.html?action=loadProject&amp;module=common_functions&amp;filename=projects/intimin.bvp">Back</a></li>
+				<li><a href="index.html?action=clearAll&amp;module=common_functions">Main page</a></li>
+			</ul>
+		</div>
+	</body>
 </html>
