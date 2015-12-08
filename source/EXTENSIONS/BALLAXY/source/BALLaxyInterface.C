@@ -267,6 +267,7 @@ namespace BALL
 
 		void BALLaxyInterface::executePython_(const QString& action, const ParameterList& parameters)
 		{
+#ifdef BALL_PYTHON_SUPPORT
 			//Ensure, that the module search path is registered
 			static bool added_module_path = false;
 
@@ -299,7 +300,10 @@ namespace BALL
 			catch(Exception::FileNotFound)
 			{
 				Log.error() << "Could not execute action " << action.toLatin1().data() << "\n No such file or directory." << std::endl;
-			}
+                        }
+#else
+                        Log.error() << "BALL is compiled without Python support. Action " << action.toStdString() << " could not be executed." << std::endl;
+#endif
 		}
 
 		// TODO: ask the user what to do (for the moment, we just ignore any ssl errors)
