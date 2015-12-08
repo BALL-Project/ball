@@ -429,10 +429,6 @@ ELSE()
 	MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
 ENDIF()
 
-
-# always build the tools
-OPTION(BALL_BUILD_BALLAXY "Build BALL-based galaxy tools" ON)
-
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
@@ -605,20 +601,11 @@ IF(BALL_HAS_VIEW)
                                    ${OPENGL_LIBRARIES})
 ENDIF()
 
-## add targets for Python modules
-ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
-
-## add the plugins
-ADD_SUBDIRECTORY(source/EXTENSIONS)
-
 IF(BALL_HAS_VIEW)
 	## add BALLView target
 	ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 	LIST(APPEND BALL_EXECUTABLES "BALLView" "BALLView")
 ENDIF()
-
-## add BENCHMARK target
-ADD_SUBDIRECTORY(source/BENCHMARKS/)
 
 SET_TARGET_PROPERTIES(BALL PROPERTIES
 	COMPILE_FLAGS "${BALL_COMPILE_FLAGS}"
@@ -630,6 +617,12 @@ IF(BALL_HAS_VIEW)
 		COMPILE_FLAGS "${VIEW_COMPILE_FLAGS}"
 		LINK_FLAGS "${VIEW_LINK_FLAGS}"
 	)
+ENDIF()
+
+###### Add BALLTools #########
+OPTION(BALL_BUILD_TOOLS "Build BALL command line tools (BALLTools)" ON)
+IF(BALL_BUILD_TOOLS)
+        ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
 ENDIF()
 
 ###### add Utility targets ########
@@ -645,11 +638,14 @@ ENDFOREACH(i)
 ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
 ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
 
-###### add ballaxy project #########
-IF(BALL_BUILD_BALLAXY)
-	ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
-ENDIF()
+## add targets for Python modules
+ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
 
+## add the plugins
+ADD_SUBDIRECTORY(source/EXTENSIONS)
+
+## add BENCHMARK target
+ADD_SUBDIRECTORY(source/BENCHMARKS/)
 
 ###### add MMFF94 test targets ##########
 SET(MMFF94_EXECUTABLES)
