@@ -647,17 +647,6 @@ IF(BALL_BUILD_MMFF94)
         ADD_SUBDIRECTORY(source/APPLICATIONS/MMFF94)
 ENDIF()
 
-OPTION(BALL_BUILD_QUEASY "Build BALL with QSAR frontends" ON)
-IF (BALL_BUILD_QUEASY)
-        MESSAGE(STATUS "Remember to reenable queasy")
-        ## add QuEasyRun target
-        #ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyRun)
-
-        IF(BALL_HAS_VIEW)
-                ## add QuEasyViz target
-                #	ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyViz)
-        ENDIF()
-ENDIF()
 
 ########################################################
 ###    Documentation    														 ###
