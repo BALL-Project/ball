@@ -38,12 +38,12 @@
 #endif
 
 #ifdef BALL_OS_DARWIN
+        #include <OpenGL/gl.h>
 	#include <OpenGL/glu.h>
 #else
+        #include <GL/gl.h>
 	#include <GL/glu.h>
 #endif
-
-#include <QtGui/QOpenGLFunctions_1_3>
 
 class QFont;
 
@@ -65,7 +65,7 @@ namespace BALL
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT GLRenderer
-			: public Renderer, protected QOpenGLFunctions_1_3
+                        : public Renderer
 		{
 			friend class Scene;
 			public:
