@@ -1219,7 +1219,7 @@ namespace BALL
 		///
 		template <class InputIterator>
 		iterator insert(iterator p, InputIterator first, InputIterator last);
-#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS)
+#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT)
 		///
 		String& insert(const_iterator p, std::initializer_list<char> li);
 #endif

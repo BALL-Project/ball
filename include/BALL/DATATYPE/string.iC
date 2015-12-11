@@ -1372,7 +1372,7 @@ String::iterator String::insert(iterator p, InputIterator first, InputIterator l
 	return str_.insert(p, first, last);
 }
 
-#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS)
+#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT)
 BALL_INLINE
 String& String::insert(const_iterator p, std::initializer_list<char> li)
 {
