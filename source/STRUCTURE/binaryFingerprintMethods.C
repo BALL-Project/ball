@@ -614,15 +614,7 @@ bool BinaryFingerprintMethods::checkSimilaritySwitch(const float a_sim, const fl
 
 void BinaryFingerprintMethods::setBlockSize(const unsigned short blocksize)
 {
-	if (blocksize > Limits<unsigned short>::max())
-	{
-		blocksize_ = Limits<unsigned short>::max() - 1;
-	}
-	else
-	{
-		blocksize_ = blocksize;
-	}
-	
+	blocksize_ = blocksize;
 	cc_matrix_size_ = sizeof(unsigned short) * (blocksize_ + 1);
 }
 

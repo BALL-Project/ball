@@ -803,8 +803,8 @@ bool testNonBonded(MMFF94& mmff, const String& filename, bool compare)
 			if ((atoms2[as] == pv[poss].second->getName() &&
 					 atoms1[as] == pv[poss].first->getName()) 
 					||
-					 atoms1[as] == pv[poss].second->getName() &&
-					 atoms2[as] == pv[poss].first->getName())
+					(atoms1[as] == pv[poss].second->getName() &&
+					 atoms2[as] == pv[poss].first->getName()))
 			{
 				found = true;
 				break;
