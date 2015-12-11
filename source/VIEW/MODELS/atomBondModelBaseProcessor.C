@@ -147,10 +147,22 @@ namespace BALL
 		Processor::Result AtomBondModelBaseProcessor::operator () (Composite& composite)
 		{
 			Fragment* residue = dynamic_cast<Fragment*>(&composite);
-			if (residue == 0) return Processor::CONTINUE;
+			if (residue == 0) 
+			{
+				return Processor::CONTINUE;
+			}
 
 			RingPerceptionProcessor rpp;
-			rpp.calculateSSSR(rings_, *residue);
+			try
+			{
+				rpp.calculateSSSR(rings_, *residue);
+			}
+			catch (Exception::GeneralException e)
+			{
+				Log.warn() << "Exception of type " << e.getName() << " occured in line "
+					         << e.getLine() << " of " << e.getFile() << endl;
+				Log.warn() << "Error message: " << e.getMessage() << endl;
+			}
 			return Processor::CONTINUE;
 		}
 
