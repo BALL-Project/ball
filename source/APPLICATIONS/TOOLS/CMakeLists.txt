@@ -28,25 +28,47 @@ FOREACH(i ${TOOLS_EXECUTABLES})
 	)
 ENDFOREACH(i)
 
-CONFIGURE_FILE(
+# before finding CTD2Galaxy, let's see if the variable CTD2GALAXY_DIR has been set
+# if not, we can infer it based on the value of BALL_CONTRIB_PATH
+IF (BALL_CONTRIB_PATH AND NOT CTD2GALAXY_DIR)
+	SET(CTD2GALAXY_DIR "${BALL_CONTRIB_PATH}/install/lib/python/CTD2Galaxy")
+ENDIF()
+FIND_PACKAGE(CTD2Galaxy)
+MESSAGE(STATUS "PYTHONPATH = $ENV{PYTHONPATH}")
+IF (NOT CTD2GALAXY)
+	MESSAGE(WARNING "CTD2Galaxy or one of its requirements could not be found. The BALL-based galaxy tools will not be built.")
+ELSE()
+	# store the location of the configuration files in a variable
+	FIND_FILE(CTD2GALAXY_MACROS_FILE
+		macros.xml
+		PATHS ${CMAKE_SOURCE_DIR}/cmake/ballaxy
+	)       
+	FIND_FILE(CTD2GALAXY_FORMATS_FILE
+		file_formats.txt
+		PATHS ${CMAKE_SOURCE_DIR}/cmake/ballaxy
+	)
+               
+	CONFIGURE_FILE(
 		"${CMAKE_SOURCE_DIR}/cmake/ballaxy/env.sh.in"
 		"${CMAKE_BINARY_DIR}/ballaxy/${CF_BALL_PACKAGE_VERSION}/env.sh"
 		@ONLY
-)
+	)
 
-CONFIGURE_FILE(
+	CONFIGURE_FILE(
 		"${CMAKE_SOURCE_DIR}/cmake/ballaxy/setupBALLAXYDirectories.cmake.in"
 		"${PROJECT_BINARY_DIR}/cmake/setupBALLAXYDirectories.cmake"
 		@ONLY
-)
+	)
 
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink 
-	                 "${CMAKE_BINARY_DIR}/ballaxy/${CF_BALL_PACKAGE_VERSION}"
-									 "${CMAKE_BINARY_DIR}/ballaxy/default")
+	EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink 
+		"${CMAKE_BINARY_DIR}/ballaxy/${CF_BALL_PACKAGE_VERSION}"
+		"${CMAKE_BINARY_DIR}/ballaxy/default")
 
 
-ADD_CUSTOM_TARGET(ballaxy
-	COMMAND ${CMAKE_COMMAND} -P "${PROJECT_BINARY_DIR}/cmake/setupBALLAXYDirectories.cmake"
-)
-ADD_DEPENDENCIES(ballaxy ${TOOLS_EXECUTABLES})
+	ADD_CUSTOM_TARGET(ballaxy
+		COMMAND ${CMAKE_COMMAND} -P "${PROJECT_BINARY_DIR}/cmake/setupBALLAXYDirectories.cmake"
+	)
+	
+	ADD_DEPENDENCIES(ballaxy ${TOOLS_EXECUTABLES})
+ENDIF()
 
