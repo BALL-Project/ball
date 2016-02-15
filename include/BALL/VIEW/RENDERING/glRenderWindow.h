@@ -75,6 +75,9 @@ namespace BALL
 			
 			void setupStereo(float eye_separation, float focal_length);
 			
+			/// Call swapBuffers() but first make sure the window is exposed
+			void safeBufferSwap();
+
 			/// Get the window's downsampling factor.
 			float getDownsamplingFactor() const
 				{return down_sampling_factor_;}

@@ -1752,7 +1752,7 @@ namespace BALL
 			{
 				// paint all buffers
                 if (RTTI::isKindOf<GLRenderWindow>(renderer->target))
-					static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+					static_cast<GLRenderWindow*>(renderer->target)->safeBufferSwap();
 
 				if (renderer->isContinuous() && (renderer->getTimeToLive() != 0))
 				{
