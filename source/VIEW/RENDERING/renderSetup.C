@@ -191,12 +191,15 @@ namespace BALL
 
 			//renderToBuffer_();
 
-			render_mutex_.lock();
+			if (gl_target_->isVisible())
+			{
+				render_mutex_.lock();
 
-			if (gl_target_)
-				gl_target_->swapBuffers();
+				if (gl_target_)
+					gl_target_->swapBuffers();
 
-			render_mutex_.unlock();
+				render_mutex_.unlock();
+			}
 		}
 
 		void RenderSetup::updateCamera(const Camera* camera)
