@@ -263,6 +263,13 @@ OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
 # Enable automatic invocation of moc if required
 SET(CMAKE_AUTOMOC ON)
 
+SET(QTDIR "" CACHE PATH "Path to the qt installation (optional)")
+SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QTDIR})
+
+IF(QTDIR)
+	INCLUDE_DIRECTORIES(BEFORE "${QTDIR}/include")
+ENDIF()
+
 FIND_PACKAGE(Qt5Core REQUIRED)
 FIND_PACKAGE(Qt5Xml)
 FIND_PACKAGE(Qt5Network)
