@@ -218,6 +218,15 @@ namespace BALL
 			class BALL_EXPORT ClusterProperties
 			{
 				public:
+						ClusterProperties();
+						ClusterProperties(const ClusterProperties&);
+
+						ClusterProperties& operator=(const ClusterProperties&);
+
+#ifdef BALL_HAS_RVALUE_REFERENCES
+						ClusterProperties(ClusterProperties&&) noexcept;
+						ClusterProperties& operator=(ClusterProperties&&) noexcept;
+#endif
 					/** Serialization method
 					 */
 					template <class Archive>

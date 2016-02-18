@@ -1717,6 +1717,70 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	}
 #endif
 
+		PoseClustering::ClusterProperties::ClusterProperties()
+				: size(0),
+					merged_at(0.0f)
+#ifdef POSECLUSTERING_DEBUG
+				,	current_cluster_id(0.0f)
+#endif
+		{
+
+		}
+
+		PoseClustering::ClusterProperties::ClusterProperties(const PoseClustering::ClusterProperties& o)
+				: poses(o.poses),
+				  size(o.size),
+				  center(o.center),
+				  merged_at(o.merged_at)
+#ifdef POSECLUSTERING_DEBUG
+				, current_cluster_id(o.current_cluster_id)
+#endif
+		{
+		}
+
+		PoseClustering::ClusterProperties&
+		PoseClustering::ClusterProperties::operator=(const PoseClustering::ClusterProperties& o)
+		{
+				if(&o != this)
+				{
+						poses = o.poses;
+						size = o.size;
+						center = o.center;
+						merged_at = o.merged_at;
+#ifdef POSECLUSTERING_DEBUG
+						current_cluster_id = o.current_cluster_id;
+#endif
+				}
+
+				return *this;
+		}
+
+#ifdef BALL_HAS_RVALUE_REFERENCES
+		PoseClustering::ClusterProperties::ClusterProperties(ClusterProperties&& o) noexcept
+				: poses(std::move(o.poses)),
+				  size(o.size),
+				  center(std::move(o.center)),
+				  merged_at(o.merged_at)
+#ifdef POSECLUSTERING_DEBUG
+				,	current_cluster_id(o.current_cluster_id)
+#endif
+		{
+		}
+
+		PoseClustering::ClusterProperties&
+		PoseClustering::ClusterProperties::operator=(ClusterProperties&& o) noexcept
+		{
+				poses = std::move(o.poses);
+				size = o.size;
+				center = std::move(o.center);
+				merged_at = o.merged_at;
+#ifdef POSECLUSTERING_DEBUG
+				current_cluster_id = o.current_cluster_id;
+#endif
+				return *this;
+		}
+#endif
+
 	template <class Archive>
 	void PoseClustering::ClusterProperties::serialize(Archive& ar, const unsigned int /*version*/)
 	{
