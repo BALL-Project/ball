@@ -444,35 +444,6 @@ int main(int argc, char **argv)\
 		}\
 	}\
 
-/**	NULL equality macro.
-        This macro uses the operator == to check its two arguments
-        for equality. Besides handling some internal stuff, it basically
-        evaluates #((a) == (b))#. \par
-        Remember that operator == has to be defined somehow for the two
-        argument types. \par
-        @param	a value/object to test
-        @param	b expected value
-        \ingroup ClassTest
-*/
-#define TEST_NULL(a)  \
-    {\
-        TEST::this_test = a;\
-        TEST::test = TEST::test && TEST::this_test;\
-        if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-        {\
-            if (!TEST::newline)\
-            {\
-                TEST::newline = true;\
-                std::cout << std::endl;\
-            }\
-            std::cout << "    (line " << __LINE__ << " TEST_NULL(" << #a << "): got " << (a) << ", expected NULL) ";\
-            if (TEST::this_test)\
-                std::cout << " + " << std::endl;\
-            else \
-                std::cout << " - " << std::endl;\
-        }\
-    }\
-
 /**	Exception test macro.
 		This macro checks if a given type of exception occured while executing the
 		given command.

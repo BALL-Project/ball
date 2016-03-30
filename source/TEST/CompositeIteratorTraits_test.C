@@ -96,9 +96,8 @@ CHECK(CompositeIteratorTraits(const Composite& composite) throw())
 	TEST_EQUAL(&t.getData(), &c)
 	t.forward();
 	TEST_EQUAL(t.isValid(), false)
-    TEST_NULL(&t.getData())
-	TEST_EQUAL(t.getPredicate(), &p)
 	TEST_EQUAL(t.isEnd(), true)
+	TEST_EQUAL(t.getPredicate(), &p)
 RESULT
 
 CHECK(Composite& getData() throw())
@@ -382,7 +381,6 @@ CHECK([EXTRA] Iteration)
 	TEST_EQUAL(t3.isBegin(), false)
 	TEST_EQUAL(t3.isValid(), false)
 	TEST_EQUAL(t3.isSingular(), false)
-    TEST_NULL(&t3.getData())
 
 	Composite root;
 	root.appendChild(single);
@@ -399,7 +397,6 @@ CHECK([EXTRA] Iteration)
 	TEST_EQUAL(t4.isBegin(), false)
 	TEST_EQUAL(t4.isValid(), false)
 	TEST_EQUAL(t4.isSingular(), false)
-    TEST_NULL(&t4.getData())
 RESULT
 
 /////////////////////////////////////////////////////////////
