@@ -36,7 +36,7 @@ ENDIF()
 FIND_PACKAGE(CTD2Galaxy)
 MESSAGE(STATUS "PYTHONPATH = $ENV{PYTHONPATH}")
 IF (NOT CTD2GALAXY)
-	MESSAGE(WARNING "CTD2Galaxy or one of its requirements could not be found. The BALL-based galaxy tools will not be built.")
+	MESSAGE(STATUS "CTD2Galaxy or one of its requirements could not be found. The BALL-based galaxy tools will not be built.")
 ELSE()
 	# store the location of the configuration files in a variable
 	FIND_FILE(CTD2GALAXY_MACROS_FILE
