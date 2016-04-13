@@ -154,8 +154,6 @@ namespace BALL
 				return;
 			}
 
-			bool released_key = false;
-
 			switch (evt->key()) {
 				case Qt::Key_AltGr: //or else we get unicode salad
 					return;
@@ -166,7 +164,6 @@ namespace BALL
 				case Qt::Key_Menu: //unused (yes, but why?)
 					break;
 				default:
-					released_key = true;
 					key_ = evt->key();
 			}
 
