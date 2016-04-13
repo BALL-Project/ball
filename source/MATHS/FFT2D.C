@@ -345,7 +345,7 @@ namespace BALL
 	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
 	template <>
 	TFFT2D<FloatTraits>::TFFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
-		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX_),(((ldnX)-1)*stepPhysY_))),
+		: TRegularData2D<Complex>(TRegularData2D<Complex>::IndexType((ldnX), (ldnY)), -origin, Vector2((((ldnX)-1)*stepPhysX),(((ldnX)-1)*stepPhysY))),
 		  lengthX_(ldnX),
 			lengthY_(ldnY),
 			inFourierSpace_(inFourierSpace),
