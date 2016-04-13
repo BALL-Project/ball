@@ -46,7 +46,6 @@ namespace BALL
 
 		// now, generate the nice tree decompositions
 		typedef typename TreeWidthImplementation<EditableGraph>::MinorMinWidth   MinorMinWidth;
-		typedef typename TreeWidthImplementation<EditableGraph>::FillInHeuristic FillInHeuristic;
 		typedef typename TreeWidthImplementation<EditableGraph>::GreedyFillIn   GreedyFillIn;
 
 		nice_tree_decompositions_.resize(num_components);
