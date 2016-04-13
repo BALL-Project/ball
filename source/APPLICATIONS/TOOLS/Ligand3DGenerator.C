@@ -232,7 +232,7 @@ Supported formats are ") + MolFileFactory::getSupportedFormats() + String(".");
 	String mol_name;
 	bool setup_ok;
 	bool ob_error;
-	bool rebuild_mol;
+	bool rebuild_mol = false;
 	int no_written = 0;
 	int no_ignored = 0;
 	Molecule *mol, *new_mol;
