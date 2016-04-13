@@ -159,7 +159,6 @@ namespace BALL
 			Atom* cAtom   = NULL;
 			Atom* ch3Atom = NULL;
 			Atom* oAtom   = NULL;
-			Atom* h1Atom  = NULL;
 			Vector3 h2Atom(0.0,0.0,0.0);
 			Vector3 h3Atom(0.0,0.0,0.0);
 			Vector3 nAtom(0.0,0.0,0.0);
@@ -183,7 +182,6 @@ namespace BALL
 			{
 				if (n_atom->getName() == "1H")
 				{
-					h1Atom = &*n_atom;
 					n_atom->setName("H");
 
 					if (chain.getResidue(0)->getName() == "PRO")
