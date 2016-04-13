@@ -22,9 +22,6 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("o","mod");
 	par.parse(argc,argv);
 
-
-	typedef unsigned int Size;
-
 	QSARData input_data;
 	input_data.readFromFile(par.get("i"));
 	double min_quality = 0.3;
