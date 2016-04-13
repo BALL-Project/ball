@@ -752,13 +752,13 @@ namespace BALL
 
 	BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance, float A, float B)
 	{
-		register float inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
+		float inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
 	BALL_TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance, float A, float B)
 	{
-		register float inv_dist_10 = inverse_square_distance * inverse_square_distance;
+		float inv_dist_10 = inverse_square_distance * inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
 		return (inv_dist_10 * (inverse_square_distance * A - B)); 
 	}

@@ -398,7 +398,7 @@ namespace BALL
 
 	Size Residue::countPDBAtoms() const
 	{
-		register Size size = 0;
+		Size size = 0;
 
 		for (PDBAtomConstIterator protein_atom_iterator = beginPDBAtom();
 				 !protein_atom_iterator.isEnd(); ++protein_atom_iterator)
