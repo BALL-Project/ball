@@ -392,7 +392,7 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 					else if (pardes->type == BALL::INTLIST)
 					{
 						vector<int> intValues;
-						for (int i = 0; i < nValues; i++)
+						for (Size i = 0; i < nValues; i++)
 						{
 							intValues.push_back(splitValue[i].toInt());
 						}
@@ -401,7 +401,7 @@ void CommandlineParser::registerAdvancedParameters(Options& options)
 					else if (pardes->type == BALL::DOUBLELIST)
 					{
 						vector<double> doubleValues;
-						for (int i = 0; i < nValues; i++)
+						for (Size i = 0; i < nValues; i++)
 						{
 							doubleValues.push_back(splitValue[i].toDouble());
 						}
