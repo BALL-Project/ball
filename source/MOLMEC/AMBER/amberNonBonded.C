@@ -530,11 +530,6 @@ namespace BALL
 
 	void AmberNonBonded::update(const vector<pair<Atom*, Atom*> >& atom_vector)
 	{
-		if(&atom_vector==0)
-		{
-			cout<<"ERROR, invalid atom_vector given !!!"<<endl;
-			exit(1);
-		}
 		buildVectorOfNonBondedAtomPairs(atom_vector, van_der_waals_, hydrogen_bond_);
 	}
 
