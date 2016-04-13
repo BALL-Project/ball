@@ -118,7 +118,7 @@ namespace BALL
 		 * @param min - minimal amount of atoms that are needed for a molecule to 
 		 *							be selected as result
 		*/
-		void getMinAtomsComponents(MolVec &result, const int &min);
+		void getMinAtomsComponents(MolVec &result, size_t min);
 		
 		/** Convenience method. Inserts all identified \link Molecule Molecule 
 		 * \endlink's into the input vector. Properties of the original molecule
