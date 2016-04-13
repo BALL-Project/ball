@@ -20,11 +20,6 @@ namespace BALL
 		Ligand* DockResultFile::gmf_last_ligand_ = 0;
 		bool DockResultFile::gmf_new_ligand_read_ = 0;
 
-
-		DockResultFile::DockResultFile()
-		{
-		}
-
 		DockResultFile::DockResultFile(const String& name, File::OpenMode open_mode)
 			:
 			GenericMolFile(),
@@ -156,10 +151,6 @@ namespace BALL
 				*/
 			}
 			closed_ = false;
-		}
-
-		DockResultFile::DockResultFile(const DockResultFile &df)
-		{
 		}
 
 		DockResultFile::~DockResultFile()
