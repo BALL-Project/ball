@@ -1355,7 +1355,7 @@ String::iterator String::insert(const_iterator p, char c)
 BALL_INLINE
 void String::insert(iterator p, size_t n, char c)
 {
-	return str_.insert(p, n, c);
+	str_.insert(p, n, c);
 }
 
 BALL_INLINE
