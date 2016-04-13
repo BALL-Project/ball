@@ -226,7 +226,7 @@ namespace BALL
 		if(offset_symops_ != 0)
 		{
 			char sym_record[80];
-			Size sym_lines = 0;
+			Distance sym_lines = 0;
 			Log.info() << "CCP4File::readSymmetryRecords(): File has the following symmetry information stored:" << std::endl;
 			while (sym_lines < offset_symops_/80)
 			{
