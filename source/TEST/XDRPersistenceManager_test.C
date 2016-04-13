@@ -423,7 +423,12 @@ RESULT
 
 CHECK([Extra] full_test0)
 	String filename;
+	Atom a1;
+	Atom a2;
 	Bond b1;
+
+	b1.setFirstAtom(&a1);
+	b1.setSecondAtom(&a2);
 
 	NEW_TMP_FILE(filename);
 	ofstream os(filename.c_str(), std::ios::out|std::ios::binary);
@@ -440,7 +445,16 @@ CHECK([Extra] full_test0)
     STATUS("After readObject...")
 	is.close();
     TEST_EQUAL(RTTI::isKindOf<Bond>(po), true)
-    delete po;
+
+	// Cleanup
+	Bond* bond = dynamic_cast<Bond*>(po);
+	delete bond->getFirstAtom();
+	delete bond->getSecondAtom();
+
+	bond->setFirstAtom(NULL);
+	bond->setSecondAtom(NULL);
+
+	delete po;
 RESULT
 	
 
