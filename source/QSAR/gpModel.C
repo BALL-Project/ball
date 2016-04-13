@@ -92,7 +92,7 @@ namespace BALL
 					sum += K_t_(i)*K_t_(j)*L_(i, j); // k(x*, _i)*k(x*, x_j)*L_ij
 				}
 			}
-			double res = sqrt(abs(mx(1, 1)-sum));
+			double res = sqrt(fabs(mx(1, 1)-sum));
 			return res;	
 		}
 

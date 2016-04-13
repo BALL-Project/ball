@@ -401,7 +401,7 @@ namespace BALL
 			int i_p = static_cast <int> (p);
 			if (i_p != p) // if a root of dist should be taken, then dist may not be negative
 			{
-				dist = abs(dist);
+				dist = fabs(dist);
 			}
 			return pow(dist, p);
 		}
@@ -414,7 +414,7 @@ namespace BALL
 			int i_p = static_cast <int> (p);
 			if (i_p != p) // if a root of dist should be taken, then dist may not be negative
 			{
-				dist = abs(dist);
+				dist = std::abs(dist);
 			}
 			return pow(dist, p);
 		}
