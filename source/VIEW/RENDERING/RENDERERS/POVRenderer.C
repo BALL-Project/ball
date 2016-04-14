@@ -25,6 +25,8 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 
+#include <GL/gl.h>
+
 using std::endl;
 
 namespace BALL
