@@ -190,18 +190,6 @@ namespace BALL
 					*/
 				Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WindowFlags w_flags = 0);
 
-				/** Copy constructor.
-					Initialize the width, height and camera position.
-					\par
-					Calls registerWidget.
-					\param  scene the scene to be copied
-					\param  parent_widget the parent widget of this scene
-					\param  name the name of this scene
-					\param  wflags the flags the scene widget should have
-					(See documentation of QT-library for information concerning widget flags)
-					*/
-				BALL_DEPRECATED Scene(const Scene& scene, QWidget* parent_widget = NULL, const char* name = NULL, Qt::WindowFlags wflags = 0);
-
 				/** Destructor.
 				*/
 				virtual ~Scene();
@@ -217,21 +205,6 @@ namespace BALL
 				virtual void clear();
 
 				//@}
-
-				/**	@name	Assignment
-				*/
-				//@{
-
-				/** Assignment.
-					Initialize the width, height and camera position.
-					\param  scene the scene to be copied
-					*/
-				BALL_DEPRECATED void set(const Scene& scene);
-
-				/** Assignment operator.
-					Calls set.
-					*/
-				BALL_DEPRECATED const Scene& operator =	(const Scene& scene);
 
 				//@}
 				/**	@name	Accessors: inspectors and mutators

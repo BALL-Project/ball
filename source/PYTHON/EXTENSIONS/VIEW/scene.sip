@@ -12,6 +12,8 @@ class Scene
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
+  private:
+    Scene(const Scene&);
   public:
 //  void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 //  BALL_EMBEDDABLE(Scene,);
@@ -21,15 +23,11 @@ static Size countInstances();
 static Scene* getInstance(Position);
 
   Scene() throw();
-//  Scene(QWidget*, const char*, WFlags);
-  Scene(const Scene&);
-//  const Scene& operator =  (const Scene&) throw();
 //  void fetchPreferences(INIFile&) throw();
 //  void finalizePreferencesTab(Preferences &preferences) throw();
 //  void finalizeWidget(MainControl&) throw();
 //  void initializePreferencesTab(Preferences &preferences) throw();
 //  void initializeWidget(MainControl&) throw();
-//  void set(const Scene&) throw();
   ~Scene() throw();
 
 //////////////////	void addStructure(String name);

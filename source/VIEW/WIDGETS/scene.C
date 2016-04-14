@@ -175,56 +175,6 @@ namespace BALL
 				registerWidget(this);
 			}
 
-		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
-			:	QWidget(parent_widget, w_flags),
-				ModularWidget(scene),
-				system_origin_(scene.system_origin_),
-				update_running_(false),
-				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
-				stage_(new Stage(*scene.stage_)),
-				renderers_(),
-				gl_renderer_(new GLRenderer()),
-#ifdef BALL_HAS_RTFACT
-				rt_renderer_(new t_RaytracingRenderer()),
-#endif
-				light_settings_(new LightSettings(this)),
-				material_settings_(new MaterialSettings(this)),
-				animation_thread_(0),
-				stop_animation_(false),
-#ifdef BALL_HAS_RTFACT
-				continuous_loop_(false),
-#endif
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
-				main_display_(new GLRenderWindow(this)),
-				main_renderer_(0),
-				stereo_left_eye_(-1),
-				stereo_right_eye_(-1),
-				mode_manager_(this)
-			{
-				initializeMembers_();
-
-				stage_settings_=new StageSettings(this);
-#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new Scene (3) " << this << std::endl;
-#endif
-				registerRenderers_();
-
-				setObjectName(name);
-
-				// the widget with the MainControl
-				ModularWidget::registerWidget(this);
-				setAcceptDrops(true);
-
-				init();
-
-				resize((Size) scene.renderers_[main_renderer_]->renderer->getWidth(),
-				       (Size) scene.renderers_[main_renderer_]->renderer->getHeight());
-
-				renderers_[main_renderer_]->resize(width(), height());
-				renderers_[main_renderer_]->start();
-			}
-
 		Scene::~Scene()
 		{
 #ifdef BALL_VIEW_DEBUG
@@ -267,20 +217,6 @@ namespace BALL
 			animation_points_.clear();
 
 			// TODO: clear the render setups
-		}
-
-		void Scene::set(const Scene& scene)
-		{
-			stage_ = scene.stage_;
-			system_origin_.set(scene.system_origin_);
-
-			// TODO: copy the render setups
-		}
-
-		const Scene& Scene::operator = (const Scene& scene)
-		{
-			set(scene);
-			return *this;
 		}
 
 		bool Scene::isValid() const
