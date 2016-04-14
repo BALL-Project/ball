@@ -192,7 +192,7 @@ namespace BALL
 
 	bool NucleotidePredicate::operator () (const Atom& atom) const
 	{
-		return RTTI::isKindOf<Nucleotide>(atom);
+        return RTTI::isKindOf<Nucleotide>(&atom);
 	}
 
 	// in ring predicate

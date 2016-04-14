@@ -168,7 +168,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<Protein>(*ancestor_it))
+            if (RTTI::isKindOf<Protein>(&*ancestor_it))
 			{
 				return (Protein *)&*ancestor_it;
 			}
@@ -187,7 +187,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<Chain>(*ancestor_it))
+            if (RTTI::isKindOf<Chain>(&*ancestor_it))
 			{
 				return (Chain *)&*ancestor_it;
 			}
@@ -206,7 +206,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<Residue>(*ancestor_it))
+            if (RTTI::isKindOf<Residue>(&*ancestor_it))
 			{
 				return (Residue *)&*ancestor_it;
 			}

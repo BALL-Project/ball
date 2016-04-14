@@ -8,12 +8,12 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QMouseEvent>
 #include <QtGui/QKeyEvent>
 #include <QtCore/QEvent>
 #include <QtGui/QTextCursor>
-#include <QtGui/QToolBar>
+#include <QtWidgets/QToolBar>
 
 using namespace std;
 
@@ -164,7 +164,7 @@ namespace BALL
 			Log.error() << "HelpViewer" << this  << "onNotify " << message << std::endl;
 #endif
 
-			if (RTTI::isKindOf<RegisterHelpSystemMessage>(*message)) 
+            if (RTTI::isKindOf<RegisterHelpSystemMessage>(message))
 			{
 				RegisterHelpSystemMessage* msg = RTTI::castTo<RegisterHelpSystemMessage>(*message);
 				if (msg->isRegister())
@@ -179,7 +179,7 @@ namespace BALL
 				return;
 			}
 
-			if (!RTTI::isKindOf<ShowHelpMessage>(*message)) return;
+            if (!RTTI::isKindOf<ShowHelpMessage>(message)) return;
 
 			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
 			bool classname = false;
@@ -317,7 +317,7 @@ namespace BALL
 			// maybe the library has a bug under windows
 			try
 			{
-				if (RTTI::isKindOf<QMenu>(*widget))
+                if (RTTI::isKindOf<QMenu>(widget))
 				{
 					ignore_event_ = true;
 

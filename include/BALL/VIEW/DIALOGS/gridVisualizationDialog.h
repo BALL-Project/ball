@@ -40,7 +40,7 @@ namespace BALL
 
 			///
 			GridVisualizationDialog(QWidget* parent = 0, const char* name = "GridVisualizationDialog", 
-															bool modal = FALSE, Qt::WFlags fl = 0);
+															bool modal = false, Qt::WindowFlags fl = 0);
 
 			///
 			~GridVisualizationDialog();
@@ -65,7 +65,7 @@ namespace BALL
 			void accept();
 			void autoScale();
 			void gridSelected();
-			bool exec();
+			int exec();
 
 			protected:
 

@@ -36,7 +36,7 @@ namespace BALL
 
 		Processor::Result AddLineModel::operator() (Composite &composite)
 		{
-			if (!RTTI::isKindOf<Atom>(composite))
+            if (!RTTI::isKindOf<Atom>(&composite))
 			{
 				return Processor::CONTINUE;
 			}

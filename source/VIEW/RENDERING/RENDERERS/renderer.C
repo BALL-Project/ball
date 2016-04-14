@@ -89,20 +89,20 @@ namespace BALL
 		void Renderer::render_(const GeometricObject* object)
 		{
 			// most used geometric objects first
-			if 			(RTTI::isKindOf<Sphere>(*object))  				renderSphere_(*(const 								Sphere*) object);
-			else if (RTTI::isKindOf<TwoColoredTube>(*object)) renderTwoColoredTube_(*(const TwoColoredTube*) object);
-			else if (RTTI::isKindOf<Mesh>(*object))   				renderMesh_(*(const   									Mesh*) object);
-			else if (RTTI::isKindOf<TwoColoredLine>(*object)) renderTwoColoredLine_(*(const TwoColoredLine*) object);
-			else if (RTTI::isKindOf<Point>(*object))  	 			renderPoint_(*(const  								 Point*) object);
-			else if (RTTI::isKindOf<Disc>(*object))   				renderDisc_(*(const   									Disc*) object);
-			else if (RTTI::isKindOf<Line>(*object))  	 				renderLine_(*(const   									Line*) object);
-			else if (RTTI::isKindOf<Tube>(*object))  	 				renderTube_(*(const   									Tube*) object);
-			else if (RTTI::isKindOf<Box>(*object))  					renderBox_(*(const   		 			 					 Box*) object);
-			else if (RTTI::isKindOf<SimpleBox>(*object))  		renderSimpleBox_(*(const   		 		 SimpleBox*) object);
-			else if (RTTI::isKindOf<Label>(*object))  	 			renderLabel_(*(const   				 				 Label*) object);
-			else if (RTTI::isKindOf<MultiLine>(*object)) renderMultiLine_(*(const MultiLine*) object);
-			else if (RTTI::isKindOf<GridVisualisation>(*object)) 	renderGridVisualisation_(*(const  GridVisualisation*) object);
-			else if (RTTI::isKindOf<QuadMesh>(*object))   		 renderQuadMesh_(*(const   						QuadMesh*) object);
+            if 			(RTTI::isKindOf<Sphere>(object))  				renderSphere_(*(const 								Sphere*) object);
+            else if (RTTI::isKindOf<TwoColoredTube>(object)) renderTwoColoredTube_(*(const TwoColoredTube*) object);
+            else if (RTTI::isKindOf<Mesh>(object))   				renderMesh_(*(const   									Mesh*) object);
+            else if (RTTI::isKindOf<TwoColoredLine>(object)) renderTwoColoredLine_(*(const TwoColoredLine*) object);
+            else if (RTTI::isKindOf<Point>(object))  	 			renderPoint_(*(const  								 Point*) object);
+            else if (RTTI::isKindOf<Disc>(object))   				renderDisc_(*(const   									Disc*) object);
+            else if (RTTI::isKindOf<Line>(object))  	 				renderLine_(*(const   									Line*) object);
+            else if (RTTI::isKindOf<Tube>(object))  	 				renderTube_(*(const   									Tube*) object);
+            else if (RTTI::isKindOf<Box>(object))  					renderBox_(*(const   		 			 					 Box*) object);
+            else if (RTTI::isKindOf<SimpleBox>(object))  		renderSimpleBox_(*(const   		 		 SimpleBox*) object);
+            else if (RTTI::isKindOf<Label>(object))  	 			renderLabel_(*(const   				 				 Label*) object);
+            else if (RTTI::isKindOf<MultiLine>(object)) renderMultiLine_(*(const MultiLine*) object);
+            else if (RTTI::isKindOf<GridVisualisation>(object)) 	renderGridVisualisation_(*(const  GridVisualisation*) object);
+            else if (RTTI::isKindOf<QuadMesh>(object))   		 renderQuadMesh_(*(const   						QuadMesh*) object);
 			// ... add more types of GeometricObjects here
 			else
 			{

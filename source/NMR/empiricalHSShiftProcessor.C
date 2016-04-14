@@ -315,7 +315,7 @@ namespace BALL
 		// string the corresponding property computation.
 		
 		// If the composite is an atom ...
-		if (RTTI::isKindOf<Atom>(composite))
+        if (RTTI::isKindOf<Atom>(&composite))
 		{
 			Atom* atom = dynamic_cast<Atom*>(&composite);
 			
@@ -2363,7 +2363,7 @@ namespace BALL
 		
 		for (Position i = 0; i < targets_.size(); i++)
 		{
-			if  (RTTI::isKindOf<System>(targets_[i].current_atom->getRoot()))
+            if  (RTTI::isKindOf<System>(&targets_[i].current_atom->getRoot()))
 			{	
 				system = dynamic_cast<System*>(&(targets_[i].current_atom->getRoot()));
 			}

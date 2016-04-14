@@ -41,7 +41,7 @@ class BALL_VIEW_EXPORT ContourSurfaceDialog
 		ColorRGBA getColor();
 
 	public slots:
-		virtual bool exec();
+		virtual int exec();
 
 	protected slots: 
 		virtual void valuesChanged();

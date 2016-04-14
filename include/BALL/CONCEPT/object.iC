@@ -34,7 +34,7 @@ BALL_INLINE
 bool Object::operator == (const Object &object) const
 	
 {
-  return (RTTI::isKindOf<Object>(object) && (handle_ == object.handle_));
+  return (RTTI::isKindOf<Object>(&object) && (handle_ == object.handle_));
 }
 
 BALL_INLINE 
@@ -48,7 +48,7 @@ BALL_INLINE
 bool Object::operator < (const Object &object) const
 	
 {
-  return (RTTI::isKindOf<Object>(object) && (handle_ < object.handle_));
+  return (RTTI::isKindOf<Object>(&object) && (handle_ < object.handle_));
 }
 
 BALL_INLINE 

@@ -311,7 +311,7 @@ namespace BALL
 	{
 		// Here, we collect all target bonds and
 		// all charged atoms (as effectors of the electric field).
-		if (RTTI::isKindOf<Atom>(object))
+        if (RTTI::isKindOf<Atom>(&object))
 		{
 			Atom* atom_ptr = RTTI::castTo<Atom>(object);
 
@@ -438,7 +438,7 @@ namespace BALL
 		std::vector<std::pair<Atom*, Atom*> >::iterator tbond_it = bond_list_.begin();
 		for (; tbond_it != bond_list_.end(); ++tbond_it)
 		{
-			if  (RTTI::isKindOf<System>(tbond_it->first->getRoot()))
+            if  (RTTI::isKindOf<System>(&tbond_it->first->getRoot()))
 			{
 				system = dynamic_cast<System*>(&(tbond_it->first->getRoot()));
 				break;

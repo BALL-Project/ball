@@ -4,7 +4,7 @@
 
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtGui/QImage>
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
@@ -125,7 +125,7 @@ namespace BALL
 					result = current_image_.heightMM();
 					break;
 				case QPaintDevice::PdmNumColors: 
-					result = current_image_.numColors();
+					result = current_image_.colorCount();
 					break;
 				case QPaintDevice::PdmDepth: 
 					result = current_image_.depth();

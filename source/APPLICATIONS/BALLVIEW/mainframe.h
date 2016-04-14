@@ -13,7 +13,7 @@
 # include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

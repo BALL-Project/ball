@@ -60,7 +60,7 @@ namespace BALL
 			throw InvalidClient(__FILE__, __LINE__);
 		}	
 			
-		if (!RTTI::isKindOf<PersistentObject>(composite))
+        if (!RTTI::isKindOf<PersistentObject>(&composite))
 		{
 			throw NoPersistentObject(__FILE__, __LINE__);
 		}

@@ -14,8 +14,9 @@
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 #include <QtCore/QUrl>
+#include <QtCore/QMimeData>
 
 #include <BALL/COMMON/init.h>
 
@@ -311,7 +312,7 @@ namespace BALL
 
 		String ascii(const QString& str)
 		{
-			return str.toAscii().constData();
+			return str.toStdString();
 		}
 
 		/** Uses the de-Casteljou algorithm to evalute a cubic Hermite interpolation

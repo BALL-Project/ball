@@ -11,7 +11,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		OpenSavePreferences::OpenSavePreferences(QWidget* parent, const char* name, Qt::WFlags fl)
+		OpenSavePreferences::OpenSavePreferences(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: QWidget(parent, fl)
 		{
 			setINIFileSectionName("OpenSave");

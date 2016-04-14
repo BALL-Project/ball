@@ -144,9 +144,9 @@ cout << endl;
 			// What kind of composite do we have?
 			// Do we have a system, a molecule or a chain? 
 			// Nothing else is allowed ...
-			if (   RTTI::isKindOf<Chain>(ac) 
-					|| RTTI::isKindOf<Protein>(ac) 
-					|| RTTI::isKindOf<System>(ac)) 
+            if (   RTTI::isKindOf<Chain>(&ac)
+                    || RTTI::isKindOf<Protein>(&ac)
+                    || RTTI::isKindOf<System>(&ac))
 			{
 				//System* sys = RTTI::castTo<System>(ac);
 				AtomContainer* sys = RTTI::castTo<AtomContainer>(ac);
@@ -180,7 +180,7 @@ cout << endl;
 					Chain*   chain = NULL;
 					System*  in_sys;
 
-					if (RTTI::isKindOf<System>(ac))
+                    if (RTTI::isKindOf<System>(&ac))
 					{
 						in_sys = RTTI::castTo<System>(ac);
 						if (in_sys->countProteins() == 0)
@@ -197,9 +197,9 @@ cout << endl;
 					}
 					else
 					{
-						if (RTTI::isKindOf<Protein>(ac))
+                        if (RTTI::isKindOf<Protein>(&ac))
 							prot = RTTI::castTo<Protein>(ac);
-						if (RTTI::isKindOf<Chain>(ac))
+                        if (RTTI::isKindOf<Chain>(&ac))
 						{
 							chain =  RTTI::castTo<Chain>(ac);
 							prot = chain->getProtein();

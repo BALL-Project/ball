@@ -8,9 +8,9 @@
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/QStackedWidget>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {
@@ -80,7 +80,7 @@ namespace BALL
 
 		void Preferences::insertEntry(PreferencesEntry *child)
 		{
-			if (!RTTI::isKindOf<QWidget>(*child)) 
+            if (!RTTI::isKindOf<QWidget>(child))
 			{
 				Log.error() << "PreferencesEntry not derived from QWidget in " 
 										<< __FILE__ << "  " << __LINE__<< std::endl;

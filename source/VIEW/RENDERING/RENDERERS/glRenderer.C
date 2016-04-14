@@ -3,6 +3,13 @@
 //
 
 #include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
+
+#include <BALL/KERNEL/atom.h>
+#include <BALL/MATHS/vector2.h>
+#include <BALL/MATHS/plane3.h>
+#include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/SYSTEM/timer.h>
+
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/DATATYPE/colorMap.h>
@@ -23,28 +30,12 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
-
-#include <BALL/SYSTEM/timer.h>
-#include <BALL/KERNEL/atom.h>
+#include <BALL/VIEW/RENDERING/vertexBuffer.h>
 
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include <QtGui/QImage>
-
-#include <BALL/MATHS/vector2.h>
-#include <BALL/MATHS/plane3.h>
-#include <BALL/MATHS/analyticalGeometry.h>
-
-#ifndef BALL_HAS_GLEW
- #define GLX_GLXEXT_PROTOTYPES // required for Mesa-like implementations
- #include <GL/gl.h>
- #include <GL/glx.h>
- #include <GL/glext.h>
-#endif
-
-#ifdef BALL_HAS_GLEW
-# include <BALL/VIEW/RENDERING/vertexBuffer.h>
-#endif
+#include <QtGui/QOpenGLContext>
 
 using namespace std;
 
@@ -210,8 +201,6 @@ namespace BALL
 			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
 			glEnable(GL_NORMALIZE);
 
-#ifdef BALL_HAS_GLEW
-			glewInit();
 			// accelerate lighting calculations, if possible:
 			if (isExtensionSupported("GL_EXT_rescale_normal"))
 			{
@@ -223,7 +212,6 @@ namespace BALL
 					glEnable(GL_RESCALE_NORMAL);
 				}
 			}
-#endif
 
 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
@@ -504,7 +492,6 @@ namespace BALL
 			
 			display_list->endDefinition();
 
-#ifdef BALL_HAS_GLEW
 			clearVertexBuffersFor(*(Representation*)&rep);
 			
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
@@ -528,7 +515,6 @@ namespace BALL
 					}
 				}
 			}
-#endif
 
 #ifdef BALL_BENCHMARKING
 		t.stop();
@@ -2158,19 +2144,7 @@ namespace BALL
 
 		bool GLRenderer::isExtensionSupported(const String& extension) const
 		{
-			// Extension names should not have spaces
-			if (extension == "" || extension.hasSubstring(" ")) return false;
-
-			// Get Extensions String
-			if (glGetString(GL_EXTENSIONS) == 0)
-			{
-				return false;
-			}
-
-			String supported_extensions = (const char*) glGetString(GL_EXTENSIONS);
-			if (supported_extensions.hasSubstring(extension)) return true;
-
-			return false;
+			return QOpenGLContext::currentContext()->hasExtension(extension.c_str());
 		}
 
 		String GLRenderer::getVendor()
@@ -2217,9 +2191,6 @@ namespace BALL
 
 		bool GLRenderer::enableVertexBuffers(bool state)
 		{
-#ifndef BALL_HAS_GLEW
-			return false;
-#else
 			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
 			{
 				use_vertex_buffer_ = false;
@@ -2236,12 +2207,10 @@ namespace BALL
 			if (use_vertex_buffer_) MeshBuffer::initGL();
 
 			return true;
-#endif
 		}
 
 		void GLRenderer::clearVertexBuffersFor(Representation& rep)
 		{
-#ifdef BALL_HAS_GLEW
 			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
 			if (vit == rep_to_buffers_.end()) return;
 
@@ -2254,14 +2223,12 @@ namespace BALL
 
 			meshes.clear();
 			rep_to_buffers_.erase(vit);
-#endif
 		}
 
 		void GLRenderer::drawBuffered(const Representation& rep)
 		{
 			if (rep.isHidden()) return;
 
-#ifdef BALL_HAS_GLEW
 			// if we have vertex buffers for this Representation, draw them
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 			{
@@ -2279,7 +2246,6 @@ namespace BALL
 					}
 				}
 			}
-#endif
 
 			// if we have a displaylist for this Representation, draw it
 			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
@@ -2305,11 +2271,7 @@ namespace BALL
 
 		bool GLRenderer::vertexBuffersSupported() const
 		{
-#ifdef BALL_HAS_GLEW
 			return isExtensionSupported("GL_ARB_vertex_buffer_object");
-#else
-			return false;
-#endif
 		}
 
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
@@ -2457,9 +2419,7 @@ namespace BALL
 		{
 			if (!isExtensionSupported("GL_EXT_texture3D")) return 0;
 
-			// prevent warning and error if not using GLEW:
 			Position texname = 0;
-#ifdef BALL_HAS_GLEW
 			removeTextureFor_(grid);
 			RegularData3D::IndexType tex_size = grid.getSize();
 
@@ -2488,7 +2448,6 @@ namespace BALL
 			glBindTexture(GL_TEXTURE_3D, 0);
 			grid_to_texture_[&grid] = texname;
 			delete[] texels;
-#endif
 			return texname;
 		}
 

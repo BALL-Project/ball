@@ -6,8 +6,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/COMMON/rtti.h>
 
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {

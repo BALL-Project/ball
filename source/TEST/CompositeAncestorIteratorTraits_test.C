@@ -90,7 +90,7 @@ CHECK(CompositeIteratorTraits(const Composite& composite) throw())
 	TEST_EQUAL(&t.getData(), &c)
 	t.forward();
 	TEST_EQUAL(t.isValid(), false)
-	TEST_EQUAL(&t.getData(), 0)
+	TEST_EQUAL(t.isEnd(), true)
 	TEST_EQUAL(t.getPredicate(), &p)
 RESULT
 

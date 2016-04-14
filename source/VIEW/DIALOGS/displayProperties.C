@@ -31,11 +31,11 @@
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QLabel>
-#include <QtGui/QPushButton>
-#include <QtGui/QSlider>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QRadioButton>
 
 namespace BALL
 {
@@ -318,7 +318,7 @@ void DisplayProperties::onNotify(Message *message)
 	Log.error() << "DisplayProperties::onNotify " << message << std::endl;
 #endif
 	// new molecule => build graphical representation and notify scene
-	if (RTTI::isKindOf<CompositeMessage>(*message))
+    if (RTTI::isKindOf<CompositeMessage>(message))
 	{
 		CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
 		if (!create_representations_for_new_molecules_ ||
@@ -335,14 +335,14 @@ void DisplayProperties::onNotify(Message *message)
 		return;
 	}
 
-	if (RTTI::isKindOf<ShowDisplayPropertiesMessage>(*message))
+    if (RTTI::isKindOf<ShowDisplayPropertiesMessage>(message))
 	{
 		checkMenu(*getMainControl());
 		show();
 		return;
 	}
 
-	if (RTTI::isKindOf<RepresentationMessage>(*message))
+    if (RTTI::isKindOf<RepresentationMessage>(message))
 	{
 		switch (((RepresentationMessage*) message)->getType())
 		{
@@ -378,20 +378,20 @@ void DisplayProperties::onNotify(Message *message)
 		return;
 	}
 
-	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+    if (RTTI::isKindOf<ControlSelectionMessage>(message))
 	{
 		// disable apply button if selection is empty
 		createRepresentationMode();
 		return;
 	}
 
-	if (RTTI::isKindOf<FinishedSimulationMessage>(*message))
+    if (RTTI::isKindOf<FinishedSimulationMessage>(message))
 	{
 		checkMenu(*getMainControl());
 		return;
 	}
 
-	if (RTTI::isKindOf<CreateRepresentationMessage>(*message))
+    if (RTTI::isKindOf<CreateRepresentationMessage>(message))
 	{
 		CreateRepresentationMessage* crm = (CreateRepresentationMessage*) message;
 		if (crm->getComposites().size() == 0) return;

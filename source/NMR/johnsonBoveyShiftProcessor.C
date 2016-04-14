@@ -460,7 +460,7 @@ namespace BALL
 	{
 		// ueberpruefe fuer jedes Residue ob es in residues_with_rings ist und fuege es in die Liste aromat_list_ ein.
 		// ueberpruefe fuer jedes Atom die Liste der Expressions und falls eine wahr ist fuege das Atom in die Liste ein.
-		if (RTTI::isKindOf<Residue>(composite))  // erganze aromat_list_ um aromatische Residues 			
+        if (RTTI::isKindOf<Residue>(&composite))  // erganze aromat_list_ um aromatische Residues
 		{
 			Residue* residue = RTTI::castTo<Residue>(composite);
 			if (residues_with_rings_.has(residue->getName())) 
@@ -470,7 +470,7 @@ namespace BALL
 		}
 
 		// Liste um Aromaten erweitert		
-		if (RTTI::isKindOf<Atom>(composite))
+        if (RTTI::isKindOf<Atom>(&composite))
 		{			
 			Atom* atom_ptr = RTTI::castTo<Atom>(composite);
 			

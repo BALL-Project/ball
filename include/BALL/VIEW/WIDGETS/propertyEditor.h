@@ -17,7 +17,7 @@
 # include <BALL/FORMAT/PDBInfo.h>
 #endif
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class QLabel;
 class QSpinBox;

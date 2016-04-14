@@ -19,7 +19,7 @@
 
 #include <BALL/VIEW/UIC/ui_assignBondOrderResultsDialog.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 #include <map>
 
 namespace BALL

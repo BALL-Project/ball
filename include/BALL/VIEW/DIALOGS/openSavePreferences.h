@@ -7,7 +7,7 @@
 
 #include <BALL/VIEW/UIC/ui_openSavePreferences.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {
@@ -23,7 +23,7 @@ namespace BALL
 			public:
 				OpenSavePreferences(QWidget* parent = 0,
 				                    const char* name = "Open/Save Preferences",
-				                    Qt::WFlags fl = 0);
+				                    Qt::WindowFlags fl = 0);
 
 				~OpenSavePreferences();
 

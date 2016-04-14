@@ -7,8 +7,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLineEdit>
 
 #include <QtNetwork/QNetworkProxy>
 
@@ -17,7 +17,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
+		NetworkPreferences::NetworkPreferences(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: QWidget(parent, fl),
 				Ui_NetworkPreferencesData(),
 				PreferencesEntry()

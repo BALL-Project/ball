@@ -134,7 +134,7 @@ namespace BALL
 
 				if (!base_dir.exists()) 
 				{
-					Log.error() << "Could not locate the icon directory: " << it->toAscii().data() << std::endl;
+					Log.error() << "Could not locate the icon directory: " << it->toStdString() << std::endl;
 					return 0;
 				}
 

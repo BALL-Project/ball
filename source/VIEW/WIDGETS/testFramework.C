@@ -9,11 +9,11 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtCore/QFSFileEngine>
-#include <QtGui/QFileDialog>
-#include <QtGui/QApplication>
-#include <QtGui/QTreeView> 
-#include <QTest>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QTreeView>
+#include <QtTest/QTest>
+#include <QtTest/QSpontaneKeyEvent>
 
 #ifdef BALL_PYTHON_SUPPORT
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -210,7 +210,7 @@ bool TestFramework::eventFilter(QObject* obj, QEvent* e)
 						 e->type() == QEvent::MouseButtonRelease)
 		{
 			// abort macro if user presses mouse button:
-			if (!RTTI::isKindOf<MyMouseEvent>(*e) && e->spontaneous())
+			if (!RTTI::isKindOf<MyMouseEvent>(e) && e->spontaneous())
 			{
  				stop = true;
 			}
@@ -249,9 +249,9 @@ bool TestFramework::eventFilter(QObject* obj, QEvent* e)
 
 	if (!recording_) return false;
 
-	if (!RTTI::isKindOf<QKeyEvent>(*e) &&
-			!RTTI::isKindOf<QMouseEvent>(*e) &&
-			!RTTI::isKindOf<QShortcutEvent>(*e))
+	if (!RTTI::isKindOf<QKeyEvent>(e) &&
+			!RTTI::isKindOf<QMouseEvent>(e) &&
+			!RTTI::isKindOf<QShortcutEvent>(e))
 	{
 		return false;
 	}
@@ -601,7 +601,7 @@ void TestFramework::timeOut()
 												(Qt::KeyboardModifier)modifiers_);
 		
 		if ((Qt::MouseButton) button_ == Qt::LeftButton &&
-				RTTI::isKindOf<QMenu>(*widget_) && 
+				RTTI::isKindOf<QMenu>(widget_) && 
 				!was_visible)
 		{
 			hide = true;

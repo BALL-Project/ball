@@ -18,16 +18,16 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <QtGui/QSlider>
-#include <QtGui/QLabel>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QRadioButton>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, Qt::WFlags fl )
+		ModelSettingsDialog::ModelSettingsDialog( QWidget* parent,  const char* name, Qt::WindowFlags fl )
 			: QWidget(parent, fl),
 				Ui_ModelSettingsDialogData(),
 				PreferencesEntry()
@@ -113,12 +113,12 @@ namespace BALL
 
 		void ModelSettingsDialog::applySettingsTo(ModelProcessor& mp) const
 		{
-			if (RTTI::isKindOf<AddLineModel>(mp))
+            if (RTTI::isKindOf<AddLineModel>(&mp))
 			{
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddBallAndStickModel>(mp))
+            if (RTTI::isKindOf<AddBallAndStickModel>(&mp))
 			{
 				AddBallAndStickModel& bsm = *((AddBallAndStickModel*)&mp);
 				if (bsm.isStickModel())
@@ -134,19 +134,19 @@ namespace BALL
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddSurfaceModel>(mp))
+            if (RTTI::isKindOf<AddSurfaceModel>(&mp))
 			{
 				((AddSurfaceModel*)&mp)->setProbeRadius(getSurfaceProbeRadius());
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddVanDerWaalsModel>(mp))
+            if (RTTI::isKindOf<AddVanDerWaalsModel>(&mp))
 			{
 				((AddVanDerWaalsModel*) &mp)->setVDWRadiusFactor(getVDWRadiusFactor());
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddCartoonModel>(mp))
+            if (RTTI::isKindOf<AddCartoonModel>(&mp))
 			{
 				AddCartoonModel& cm = *dynamic_cast<AddCartoonModel*>(&mp);
 				cm.setTubeRadius(getCartoonTubeRadius());
@@ -163,19 +163,19 @@ namespace BALL
 			}
 
 			// backbone model after cartoon model !!!
-			if (RTTI::isKindOf<AddBackboneModel>(mp))
+            if (RTTI::isKindOf<AddBackboneModel>(&mp))
 			{
 				((AddBackboneModel*) &mp)->setTubeRadius(getTubeRadius());
 				return;
 			}
 					
-			if (RTTI::isKindOf<HBondModelProcessor>(mp))
+            if (RTTI::isKindOf<HBondModelProcessor>(&mp))
 			{
 				((HBondModelProcessor*) &mp)->setRadius(getHBondsRadius());
 				return;
 			}
 					
-			if (RTTI::isKindOf<ForceModel>(mp))
+            if (RTTI::isKindOf<ForceModel>(&mp))
 			{
 				((ForceModel*) &mp)->setMaxLength(getForceMaxLength());
 				((ForceModel*) &mp)->setScaling(getForceScaling());
@@ -257,7 +257,7 @@ namespace BALL
 
 		void ModelSettingsDialog::getSettings(const ModelProcessor& mp)
 		{
-			if (RTTI::isKindOf<AddBallAndStickModel>(mp))
+            if (RTTI::isKindOf<AddBallAndStickModel>(&mp))
 			{
 				if (((AddBallAndStickModel*) &mp)->isStickModel())
 				{
@@ -271,19 +271,19 @@ namespace BALL
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddSurfaceModel>(mp))
+            if (RTTI::isKindOf<AddSurfaceModel>(&mp))
 			{
 				setSurfaceProbeRadius(((AddSurfaceModel*)&mp)->getProbeRadius());
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddVanDerWaalsModel>(mp))
+            if (RTTI::isKindOf<AddVanDerWaalsModel>(&mp))
 			{
 				setVDWRadiusFactor(((AddVanDerWaalsModel*) &mp)->getVDWRadiusFactor());
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddCartoonModel>(mp))
+            if (RTTI::isKindOf<AddCartoonModel>(&mp))
 			{
 				AddCartoonModel& cm = *(AddCartoonModel*)(&mp);
 				setCartoonTubeRadius(cm.getTubeRadius());
@@ -301,19 +301,19 @@ namespace BALL
 			}
 
 			// after derived class
-			if (RTTI::isKindOf<AddBackboneModel>(mp))
+            if (RTTI::isKindOf<AddBackboneModel>(&mp))
 			{
 				setTubeRadius(((AddBackboneModel*) &mp)->getTubeRadius());
 				return;
 			}
 					
-			if (RTTI::isKindOf<HBondModelProcessor>(mp))
+            if (RTTI::isKindOf<HBondModelProcessor>(&mp))
 			{
 				setHBondRadius(((HBondModelProcessor*) &mp)->getRadius());
 				return;
 			}
 					
-			if (RTTI::isKindOf<ForceModel>(mp))
+            if (RTTI::isKindOf<ForceModel>(&mp))
 			{
 				setForceScaling(((ForceModel*) &mp)->getScaling());
 				setForceMaxLenght(((ForceModel*) &mp)->getMaxLength());

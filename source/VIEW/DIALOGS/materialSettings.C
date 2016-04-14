@@ -8,15 +8,15 @@
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/CONCEPT/property.h>
 
-#include <QtGui/QLabel>
-#include <QtGui/QSlider>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QSlider>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: QWidget(parent, fl),
 				Ui_MaterialSettingsData(),
 				PreferencesEntry(),

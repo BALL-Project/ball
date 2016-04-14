@@ -17,17 +17,17 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/sysinfo.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QSpinBox>
-#include <QtGui/QTabWidget>
-#include <QtGui/QPushButton>
-#include <QtGui/QLabel>
-#include <QtGui/QRadioButton>
-#include <QtGui/QCheckBox>
-#include <QtGui/QComboBox>
-#include <QtGui/QSlider>
-#include <QtGui/QMessageBox>
-#include <QtGui/QTabWidget>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QTabWidget>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QRadioButton>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QTabWidget>
 
 namespace BALL
 {
@@ -39,7 +39,7 @@ namespace BALL
 		{
 		}
 
-		GridVisualizationDialog::GridVisualizationDialog(QWidget* parent,  const char* name, bool, Qt::WFlags fl)
+		GridVisualizationDialog::GridVisualizationDialog(QWidget* parent,  const char* name, bool, Qt::WindowFlags fl)
 			: QDialog(parent, fl),
 				Ui_GridVisualizationDialogData(),
 				grid_(0)
@@ -278,14 +278,14 @@ namespace BALL
 			gridColorWidget->setEnabled(grid_ != 0);
 		}
 
-		bool GridVisualizationDialog::exec()
+		int GridVisualizationDialog::exec()
 		{
 			grids->clear();
 			grid_list_.clear();
 			if (controller_ == 0)
 			{
 				BALLVIEW_DEBUG
-				return false;
+				return QDialog::Rejected;
 			}
 
 			RegularData3D* selected_grid = grid_;

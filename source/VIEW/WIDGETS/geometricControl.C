@@ -20,10 +20,10 @@
 #include <BALL/VIEW/DIALOGS/clippingDialog.h>
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QMenuBar>
-#include <QtGui/QToolTip>
-#include <QtGui/QInputDialog>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QInputDialog>
 
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/analyticalGeometry.h>
@@ -167,19 +167,19 @@ namespace BALL
 
 			GenericControl::onNotify(message);
 
-			if (RTTI::isKindOf<TransformationMessage> (*message))
+            if (RTTI::isKindOf<TransformationMessage>(message))
 			{
 				moveItems(*(TransformationMessage*)message);
 				return;
 			}
 
-			if (RTTI::isKindOf<SyncClippingPlanesMessage>(*message))
+            if (RTTI::isKindOf<SyncClippingPlanesMessage>(message))
 			{
 				updateClippingPlanes();
 				return;
 			}
 
-			if (!RTTI::isKindOf<RepresentationMessage> (*message)) return;
+            if (!RTTI::isKindOf<RepresentationMessage>(message)) return;
 
 			Representation* rep =	(RTTI::castTo<RepresentationMessage> (*message))->getRepresentation();
 			if (rep == 0) return;
@@ -443,11 +443,11 @@ namespace BALL
 
 				while (!c_ptr->isRoot())
 				{
-					if (RTTI::isKindOf<AtomContainer> (*c_ptr))
+                    if (RTTI::isKindOf<AtomContainer> (c_ptr))
 					{
 						name = ((const AtomContainer*) c_ptr)->getName() + "->" + name;
 					}
-					else if (RTTI::isKindOf<Atom> (*c_ptr))
+                    else if (RTTI::isKindOf<Atom> (c_ptr))
 					{
 						name = ((const Atom*) c_ptr)->getName() + "->" + name;
 					}

@@ -43,7 +43,7 @@ namespace BALL
 				
 				///
 				DownloadElectronDensity(QWidget* parent = 0, const char* name = "DownloadElectronDensityDialog", 
-												bool modal = FALSE, Qt::WFlags fl = 0 );
+												bool modal = false, Qt::WindowFlags fl = 0 );
 
 				///
 				~DownloadElectronDensity();

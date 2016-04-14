@@ -41,8 +41,8 @@ namespace BALL
 			
 		public:
 			GLRenderWindow();
-			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
-			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WFlags w_flags = 0);
+			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = 0);
+			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = 0);
 
 			virtual ~GLRenderWindow();
 
@@ -75,6 +75,9 @@ namespace BALL
 			
 			void setupStereo(float eye_separation, float focal_length);
 			
+			/// Call swapBuffers() but first make sure the window is exposed
+			void safeBufferSwap();
+
 			/// Get the window's downsampling factor.
 			float getDownsamplingFactor() const
 				{return down_sampling_factor_;}

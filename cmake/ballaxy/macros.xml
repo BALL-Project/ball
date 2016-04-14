@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- CTD2Galaxy depends on this file and on the stdio, advanced_options macros!
+     You can edit this file to add your own macros, if you so desire, or you can
+     add additional macro files using the m/macros parameter -->
+<macros>
+  <xml name="requirements">
+    <requirements>
+      <requirement type="binary">@EXECUTABLE@</requirement>
+    </requirements>
+  </xml>
+  <xml name="stdio">
+    <stdio>
+      <exit_code range="1:"/>
+      <exit_code range=":-1"/>
+      <regex match="Error:"/>
+      <regex match="Exception:"/>
+    </stdio>
+  </xml>
+  <xml name="advanced_options">
+    <conditional name="adv_opts">
+      <param name="adv_opts_selector" type="select" label="Advanced Options">
+        <option value="basic" selected="True">Hide Advanced Options</option>
+        <option value="advanced">Show Advanced Options</option>
+      </param>
+      <when value="basic"/>
+      <when value="advanced">
+        <yield/>
+      </when>
+    </conditional>
+  </xml>
+</macros>

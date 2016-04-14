@@ -215,13 +215,13 @@ namespace BALL
 	bool DisulfidBondProcessor::connect(Composite* composite1, Composite* composite2, bool toggle)
 	{
 		bool success = false;
-		if (RTTI::isKindOf<Residue>(*composite1) && RTTI::isKindOf<Residue>(*composite2) )
+        if (RTTI::isKindOf<Residue>(composite1) && RTTI::isKindOf<Residue>(composite2) )
 		{
 			Residue* res1 = reinterpret_cast<Residue*>(composite1);
 			Residue* res2 = reinterpret_cast<Residue*>(composite2);
 			success = connect(res1, res2, toggle);
 		}
-		else if (RTTI::isKindOf<Atom>(*composite1) && RTTI::isKindOf<Atom>(*composite2))
+        else if (RTTI::isKindOf<Atom>(composite1) && RTTI::isKindOf<Atom>(composite2))
 		{
 				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
 				Atom* atom2 = reinterpret_cast<Atom*>(composite2);
@@ -360,13 +360,13 @@ namespace BALL
 	bool DisulfidBondProcessor::disconnect(Composite* composite1, Composite* composite2)
 	{
 		bool success = false;
-		if (RTTI::isKindOf<Residue>(*composite1) && RTTI::isKindOf<Residue>(*composite2) )
+        if (RTTI::isKindOf<Residue>(composite1) && RTTI::isKindOf<Residue>(composite2) )
 		{
 			Residue* res1 = reinterpret_cast<Residue*>(composite1);
 			Residue* res2 = reinterpret_cast<Residue*>(composite2);
 			success = disconnect(res1, res2);
 		}
-		else if (RTTI::isKindOf<Atom>(*composite1) && RTTI::isKindOf<Atom>(*composite2))
+        else if (RTTI::isKindOf<Atom>(composite1) && RTTI::isKindOf<Atom>(composite2))
 		{
 				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
 				Atom* atom2 = reinterpret_cast<Atom*>(composite2);

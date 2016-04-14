@@ -17,7 +17,7 @@
 # include <BALL/STRUCTURE/smilesParser.h>
 #endif
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #include <map>
 #include <boost/unordered_map.hpp>

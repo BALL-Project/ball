@@ -441,7 +441,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<Bond>(*ptr), true)
+        TEST_EQUAL(isKindOf<Bond>(ptr), true)
 		Bond*	f1 = castTo<Bond>(*ptr);
 		if (f1->getFirstAtom()->getName() == "a1")
 		{

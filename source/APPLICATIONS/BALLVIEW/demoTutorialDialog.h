@@ -18,7 +18,7 @@
 
 #include "ui_demoTutorialDialog.h"
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 namespace BALL
 {

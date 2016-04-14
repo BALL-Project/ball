@@ -6,7 +6,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
-#include <QtGui/QMenuBar>
+#include <QtCore/QMimeData>
+#include <QtWidgets/QMenuBar>
 
 namespace BALL
 {

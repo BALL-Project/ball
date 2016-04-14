@@ -7,7 +7,7 @@
 #include <BALL/VIEW/KERNEL/MODES/rotateMode.h>
 #include <BALL/VIEW/KERNEL/MODES/pickingMode.h>
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 
 namespace BALL
 {

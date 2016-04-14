@@ -12,8 +12,10 @@
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtWebKit/QWebPage>
-#include <QtWebKit/QWebFrame>
+#include <QtWebKitWidgets/QWebPage>
+#include <QtWebKitWidgets/QWebFrame>
+
+#include <QtCore/QUrlQuery>
 
 namespace BALL
 {
@@ -243,14 +245,14 @@ namespace BALL
 
 		void HTMLBasedInterface::executeLink(const QUrl& url)
 		{
-			QString action_name = url.queryItemValue("action");
+			QString action_name = QUrlQuery(url).queryItemValue("action");
 			if(action_name == QString::null)
 			{
 				return;
 			}
 
-			QString method_type = url.queryItemValue("method");
-			QString parameters  = url.queryItemValue("parameters");
+			QString method_type = QUrlQuery(url).queryItemValue("method");
+			QString parameters  = QUrlQuery(url).queryItemValue("parameters");
 
 			//Ideally this if should be converted into another registry
 			if(method_type == "native")
@@ -259,12 +261,12 @@ namespace BALL
 
 				if(it != action_registry_.end())
 				{
-					(*it)->execute(url.queryItems());
+					(*it)->execute(QUrlQuery(url).queryItems());
 				}
 			}
 			else if(method_type == "" || method_type == "python")
 			{
-					executePython_(action_name, url.queryItems());
+					executePython_(action_name, QUrlQuery(url).queryItems());
 			}
 		}
 
@@ -302,10 +304,10 @@ namespace BALL
 			}
 			catch(Exception::FileNotFound)
 			{
-				Log.error() << "Could not execute action " << action.toAscii().data() << "\n No such file or directory." << std::endl;
+				Log.error() << "Could not execute action " << action.toStdString() << "\n No such file or directory." << std::endl;
 			}
 #else
-			Log.error() << "BALL is compiled without Python support. Action " << action.toAscii().data() << " could not be executed." << std::endl;
+			Log.error() << "BALL is compiled without Python support. Action " << action.toStdString() << " could not be executed." << std::endl;
 #endif
 		}
 

@@ -310,7 +310,7 @@ CHECK(void* createObject(String signature) const throw())
 	// ?????
 	// String sig = RTTI::getStreamName<Atom>();
 	// Atom* atom = (Atom*) pm.createObject(sig);
-	// bool test = RTTI::isKindOf<Atom>(atom);
+    // bool test = RTTI::isKindOf<Atom>(&atom);
 	// TEST_EQUAL(test, true)
 RESULT
 

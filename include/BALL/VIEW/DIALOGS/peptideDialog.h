@@ -32,7 +32,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			PeptideDialog( QWidget* parent = 0, const char* name = "PeptideDialog", Qt::WFlags fl = 0 );
+			PeptideDialog( QWidget* parent = 0, const char* name = "PeptideDialog", Qt::WindowFlags fl = 0 );
 
 			/// Destructor
 			~PeptideDialog() {}

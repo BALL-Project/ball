@@ -74,19 +74,20 @@
 
 #endif
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QPrinter>
-#include <QtGui/QPrintDialog>
+#include <QtCore/QMimeData>
+#include <QtWidgets/QMenuBar>
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
 #include <QtGui/QPainter>
 #include <QtGui/QImage>
 #include <QtGui/QCursor>
-#include <QtGui/QApplication>
-#include <QtGui/QDesktopWidget>
-#include <QtGui/QFileDialog>
-#include <QtGui/QInputDialog>
-#include <QtGui/QProgressBar>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QProgressBar>
 #include <QtOpenGL/QGLPixelBuffer>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QMessageBox>
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
@@ -122,7 +123,7 @@ namespace BALL
 		float Scene::animation_smoothness_ = 2;
 		float Scene::downsampling_factor_ = 1;
 
-		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+		Scene::Scene(QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(name),
 				system_origin_(0.0, 0.0, 0.0),
@@ -144,8 +145,8 @@ namespace BALL
 				want_to_use_vertex_buffer_(false),
 				use_preview_(true),
 				show_fps_(false),
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
 				main_display_(new GLRenderWindow(this)),
 				main_renderer_(0),
 				stereo_left_eye_(-1),
@@ -174,7 +175,7 @@ namespace BALL
 				registerWidget(this);
 			}
 
-		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WFlags w_flags)
+		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, Qt::WindowFlags w_flags)
 			:	QWidget(parent_widget, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
@@ -193,8 +194,8 @@ namespace BALL
 #ifdef BALL_HAS_RTFACT
 				continuous_loop_(false),
 #endif
-				toolbar_view_controls_(new QToolBar(tr("3D View Controls"), this)),
-				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"), this)),
+				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
+				toolbar_edit_controls_(new QToolBar(tr("Edit Controls"))),
 				main_display_(new GLRenderWindow(this)),
 				main_renderer_(0),
 				stereo_left_eye_(-1),
@@ -465,27 +466,27 @@ namespace BALL
 			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
 #endif
 
-			if (RTTI::isKindOf<CompositeMessage>(*message))
+            if (RTTI::isKindOf<CompositeMessage>(message))
 			{
 				CompositeMessage* cm = RTTI::castTo<CompositeMessage>(*message);
 				handleCompositeMessage_(cm);
 			}
-			else if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+            else if (RTTI::isKindOf<ControlSelectionMessage>(message))
 			{
 				ControlSelectionMessage* csm = RTTI::castTo<ControlSelectionMessage>(*message);
 				handleControlSelectionMessage_(csm);
 			}
-			else if (RTTI::isKindOf<RepresentationMessage>(*message))
+            else if (RTTI::isKindOf<RepresentationMessage>(message))
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				handleRepresentationMessage_(rm);
 			}
-			else if (RTTI::isKindOf<DatasetMessage>(*message))
+            else if (RTTI::isKindOf<DatasetMessage>(message))
 			{
 				DatasetMessage* dm = RTTI::castTo<DatasetMessage>(*message);
 				handleDatasetMessage_(dm);
 			}
-			else if (RTTI::isKindOf<SceneMessage>(*message))
+            else if (RTTI::isKindOf<SceneMessage>(message))
 			{
 				SceneMessage *sm = RTTI::castTo<SceneMessage>(*message);
 				handleSceneMessage_(sm);
@@ -840,7 +841,7 @@ namespace BALL
 		{
 			for (size_t i=0; i<renderers_.size(); ++i)
 			{
-				if (RTTI::isKindOf<GLRenderWindow>(*(renderers_[i]->target)))
+                if (RTTI::isKindOf<GLRenderWindow>(renderers_[i]->target))
 				{
 					static_cast<GLRenderWindow*>(renderers_[i]->target)->setDownsamplingFactor(ds_factor);
 					renderers_[i]->resize(renderers_[i]->renderer->getWidth(), renderers_[i]->renderer->getHeight());
@@ -1661,7 +1662,7 @@ namespace BALL
 			list<Composite*> highl = getMainControl()->getMolecularControlSelection();
 			list<Composite*>::iterator lit = highl.begin();
 			bool selected_system_or_molecule =   (highl.size() == 1)
-				&& (RTTI::isKindOf<System>(**lit) || RTTI::isKindOf<Molecule>(**lit) ) ;
+                && (RTTI::isKindOf<System>(*lit) || RTTI::isKindOf<Molecule>(*lit) ) ;
 
 			if (bondorders_action_)
 				bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
@@ -1698,7 +1699,7 @@ namespace BALL
 
 			renderer->makeCurrent();
 			// NOTE: GLRenderers currently render in the GUI thread!
-			if (RTTI::isKindOf<GLRenderer>(*(renderer->renderer)))
+            if (RTTI::isKindOf<GLRenderer>(renderer->renderer))
 				renderer->renderToBuffer();
 			else
 				renderer->target->refresh();
@@ -1750,8 +1751,8 @@ namespace BALL
 			if (renderer->isReadyToSwap())
 			{
 				// paint all buffers
-				if (RTTI::isKindOf<GLRenderWindow>(*(renderer->target)))
-					static_cast<GLRenderWindow*>(renderer->target)->swapBuffers();
+                if (RTTI::isKindOf<GLRenderWindow>(renderer->target))
+					static_cast<GLRenderWindow*>(renderer->target)->safeBufferSwap();
 
 				if (renderer->isContinuous() && (renderer->getTimeToLive() != 0))
 				{
@@ -1765,7 +1766,7 @@ namespace BALL
 				{
 					(*render_it)->makeCurrent();
 
-					if (RTTI::isKindOf<GLRenderWindow>(*((*render_it)->target)))
+                    if (RTTI::isKindOf<GLRenderWindow>((*render_it)->target))
 						static_cast<GLRenderWindow*>((*render_it)->target)->swapBuffers();
 
 					if ((*render_it)->isContinuous() && ((*render_it)->getTimeToLive() != 0))
@@ -2020,7 +2021,7 @@ namespace BALL
 				info.visit(*composite);
 				QString this_string(info.getName().c_str());
 				if (composite->getParent() != 0 &&
-						RTTI::isKindOf<Residue>(*composite->getParent()))
+                        RTTI::isKindOf<Residue>(composite->getParent()))
 				{
 					info.visit(*composite->getParent());
 					this_string = QString(info.getName().c_str()) + " : " + this_string;
@@ -2028,7 +2029,7 @@ namespace BALL
 
 				if (this_string == "UNKNOWN") continue;
 
-				if (RTTI::isKindOf<Atom>(*composite))
+                if (RTTI::isKindOf<Atom>(composite))
 				{
 					this_string += "[T:";
 					this_string += ((Atom*)composite)->getTypeName().c_str();
@@ -2285,11 +2286,11 @@ namespace BALL
 			// ok, we have to do this the hard way...
 
 			// What kind of renderer do we have to encapsulate?
-			if (RTTI::isKindOf<GLRenderer>(*(renderers_[main_renderer_]->renderer)))
+            if (RTTI::isKindOf<GLRenderer>(renderers_[main_renderer_]->renderer))
 			{
 				// it's a GLRenderer => use tiling
 				GLOffscreenTarget* new_widget = new GLOffscreenTarget(main_display_, filename);
-				new_widget->init();
+				//new_widget->init();
 				new_widget->resize(width(), height());
 				new_widget->prepareRendering();
 
@@ -2319,7 +2320,7 @@ namespace BALL
 
 			}
 #ifdef BALL_HAS_RTFACT
-			else if (RTTI::isKindOf<t_RaytracingRenderer>(*(renderers_[main_renderer_]->renderer)))
+            else if (RTTI::isKindOf<t_RaytracingRenderer>(renderers_[main_renderer_]->renderer))
 			{
 				// create a new renderer
 				t_RaytracingRenderer* renderer = new t_RaytracingRenderer;
@@ -3704,7 +3705,7 @@ namespace BALL
 
 				// prevent adding of atoms to a System:
 				// some forcefields will go havoc otherwise
-				if (RTTI::isKindOf<System>(*ai))
+                if (RTTI::isKindOf<System>(ai))
 				{
 					System* system = (System*) ai;
 					Molecule* mol = system->getMolecule(0);

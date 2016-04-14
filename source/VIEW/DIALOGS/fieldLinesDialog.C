@@ -6,7 +6,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/QLabel>
+#include <QtWidgets/QLabel>
 
 namespace BALL
 {

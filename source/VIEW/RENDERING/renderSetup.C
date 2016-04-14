@@ -20,7 +20,7 @@
 #endif
 #endif
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 namespace BALL
 {
@@ -173,7 +173,7 @@ namespace BALL
 			}
 
 			renderer->setSize(width, height);
-			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
+            if (RTTI::isKindOf<BufferedRenderer>(renderer))
 			{
 				if(!(((BufferedRenderer*)renderer)->setFrameBufferFormat(target->getFormat())))
 				{
@@ -194,7 +194,7 @@ namespace BALL
 			render_mutex_.lock();
 
 			if (gl_target_)
-				gl_target_->swapBuffers();
+				gl_target_->safeBufferSwap();
 
 			render_mutex_.unlock();
 		}
@@ -376,11 +376,11 @@ namespace BALL
 
 			updateCamera();
 
-			if (RTTI::isKindOf<BufferedRenderer>(*renderer))
+            if (RTTI::isKindOf<BufferedRenderer>(renderer))
 			{
 				((BufferedRenderer*)renderer)->renderToBuffer(target, *stage_);
 			} 
-			else if (RTTI::isKindOf<GLRenderer>(*renderer))
+            else if (RTTI::isKindOf<GLRenderer>(renderer))
 			{
 				GLRenderer* current_gl_renderer = static_cast<GLRenderer*>(renderer);
 				// TODO: what do we do here? should we push the gl calls somewhere else, i.e. in the GUI thread?
@@ -389,7 +389,7 @@ namespace BALL
 
 				glFlush();
 			}
-			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
+            else if (RTTI::isKindOf<TilingRenderer>(renderer))
 			{
 				static_cast<TilingRenderer*>(renderer)->renderToBuffer(target);
 				glFlush();
@@ -552,7 +552,7 @@ namespace BALL
 		{
 			Position texname = 0;
 
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
+            if (RTTI::isKindOf<GLRenderer>(renderer))
 			{
 				render_mutex_.lock();
 
@@ -568,7 +568,7 @@ namespace BALL
 
 		void RenderSetup::removeGridTextures(const RegularData3D& grid)
 		{
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
+            if (RTTI::isKindOf<GLRenderer>(renderer))
 			{
 				MutexLocker ml(&render_mutex_);
 
@@ -612,7 +612,7 @@ namespace BALL
 
 		void RenderSetup::projectionModeChanged()
 		{
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
+            if (RTTI::isKindOf<GLRenderer>(renderer))
 			{
 				static_cast<GLRenderer*>(renderer)->initPerspective();
 			}
@@ -621,18 +621,18 @@ namespace BALL
 		void RenderSetup::initType_()
 		{
 			// set the type variable
-			if (RTTI::isKindOf<GLRenderer>(*renderer))
+            if (RTTI::isKindOf<GLRenderer>(renderer))
 				renderer_type_ = OPENGL_RENDERER;
-			else if (RTTI::isKindOf<POVRenderer>(*renderer))
+            else if (RTTI::isKindOf<POVRenderer>(renderer))
 				renderer_type_ = POV_RENDERER;
-			else if (RTTI::isKindOf<VRMLRenderer>(*renderer))
+            else if (RTTI::isKindOf<VRMLRenderer>(renderer))
 				renderer_type_ = VRML_RENDERER;
-			else if (RTTI::isKindOf<STLRenderer>(*renderer))
+            else if (RTTI::isKindOf<STLRenderer>(renderer))
 				renderer_type_ = STL_RENDERER;
-			else if (RTTI::isKindOf<TilingRenderer>(*renderer))
+            else if (RTTI::isKindOf<TilingRenderer>(renderer))
 				renderer_type_ = TILING_RENDERER;
 #ifdef BALL_HAS_RTFACT
-			else if (RTTI::isKindOf<RTfactRenderer>(*renderer))
+            else if (RTTI::isKindOf<RTfactRenderer>(renderer))
 				renderer_type_ = RTFACT_RENDERER;
 #endif
 			else

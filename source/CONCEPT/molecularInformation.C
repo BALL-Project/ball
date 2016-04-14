@@ -44,39 +44,39 @@ namespace BALL
 	{
 		type_ = TYPE__UNKNOWN;
 
-		if (RTTI::isKindOf<Bond>(composite))
+        if (RTTI::isKindOf<Bond>(&composite))
 		{
 			type_ = TYPE__BOND;
 		}			
-		else if (RTTI::isKindOf<System>(composite))
+        else if (RTTI::isKindOf<System>(&composite))
 		{
 			type_ = TYPE__SYSTEM;
 		}	
-		else if (RTTI::isKindOf<Protein>(composite))
+        else if (RTTI::isKindOf<Protein>(&composite))
 		{
 			type_ = TYPE__PROTEIN;
 		}
-		else if (RTTI::isKindOf<Molecule>(composite))
+        else if (RTTI::isKindOf<Molecule>(&composite))
 		{
 			type_ = TYPE__MOLECULE;
 		}
-		else if (RTTI::isKindOf<Chain>(composite))
+        else if (RTTI::isKindOf<Chain>(&composite))
 		{
 			type_ = TYPE__CHAIN;
 		}	
-		else if (RTTI::isKindOf<SecondaryStructure>(composite))
+        else if (RTTI::isKindOf<SecondaryStructure>(&composite))
 		{
 			type_ = TYPE__SECONDARY_STRUCTURE;
 		}	
-		else if (RTTI::isKindOf<Residue>(composite))
+        else if (RTTI::isKindOf<Residue>(&composite))
 		{
 			type_ = TYPE__RESIDUE;
 		}	
-		else if (RTTI::isKindOf<Fragment>(composite))
+        else if (RTTI::isKindOf<Fragment>(&composite))
 		{
 			type_ = TYPE__FRAGMENT;
 		}	
-		else if (RTTI::isKindOf<Atom>(composite))
+        else if (RTTI::isKindOf<Atom>(&composite))
 		{
 			type_ = TYPE__ATOM;
 		}	
@@ -138,7 +138,7 @@ namespace BALL
 
 		String temp(info.getName());
 		if (atom->getParent() != 0 &&
-				RTTI::isKindOf<Residue>(*atom->getParent()))
+                RTTI::isKindOf<Residue>(atom->getParent()))
 		{
 			info.visit(*atom->getParent());
 			temp = info.getName() + " : " + temp;

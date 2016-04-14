@@ -25,10 +25,6 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifdef BALL_HAS_GLEW
-# include <GL/glew.h>
-#endif
-
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 # include <BALL/VIEW/RENDERING/glDisplayList.h>
 #endif
@@ -39,6 +35,14 @@
 
 #ifndef APIENTRY
 #define APIENTRY
+#endif
+
+#ifdef BALL_OS_DARWIN
+        #include <OpenGL/gl.h>
+	#include <OpenGL/glu.h>
+#else
+        #include <GL/gl.h>
+	#include <GL/glu.h>
 #endif
 
 class QFont;
@@ -61,7 +65,7 @@ namespace BALL
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT GLRenderer
-			: public Renderer
+                        : public Renderer
 		{
 			friend class Scene;
 			public:

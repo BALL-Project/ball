@@ -47,15 +47,15 @@
 #include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <QtGui/QStatusBar>  // statusbar
-#include <QtGui/QToolTip>
-#include <QtGui/QPushButton> // needed for preferences
+#include <QtWidgets/QStatusBar>  // statusbar
+#include <QtWidgets/QToolTip>
+#include <QtWidgets/QPushButton> // needed for preferences
 #include <QtGui/QCursor>     // wait cursor
-#include <QtGui/QMessageBox>
-#include <QtGui/QFileDialog>
-#include <QtGui/QMenuBar>
-#include <QtGui/QLabel>
-#include <QtGui/QAction>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QAction>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
 
@@ -450,7 +450,7 @@ namespace BALL
 
 			if (menu)
 			{
-				if (!RTTI::isKindOf<QMenu>(*menu->parent()))
+                if (!RTTI::isKindOf<QMenu>(menu->parent()))
 				{
 					connect(menu, SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 				}
@@ -752,7 +752,7 @@ namespace BALL
 				Log.error() << "MainControl " << this << " onNotify " << message << std::endl;
    		#endif
 
-			if (RTTI::isKindOf<CompositeMessage>(*message))
+            if (RTTI::isKindOf<CompositeMessage>(message))
 			{
 				CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
 				switch(cmessage->getType())
@@ -797,18 +797,18 @@ namespace BALL
 						return;
 				}
 			}
-			else if (RTTI::isKindOf<ControlSelectionMessage> (*message))
+            else if (RTTI::isKindOf<ControlSelectionMessage> (message))
 			{
 				ControlSelectionMessage* selection_message = RTTI::castTo<ControlSelectionMessage>(*message);
 				control_selection_ = selection_message->getSelection();
 			}
-			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
+            else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(message))
 			{
 				GeometricObjectSelectionMessage* selection_message = 
 					RTTI::castTo<GeometricObjectSelectionMessage>(*message);
 				selectComposites_(*selection_message);
 			}
-			else if (RTTI::isKindOf<RepresentationMessage>(*message))
+            else if (RTTI::isKindOf<RepresentationMessage>(message))
 			{
 				RepresentationMessage* msg = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = msg->getRepresentation();
@@ -830,7 +830,7 @@ namespace BALL
 						break;
 				}	
 			}
-			else if (RTTI::isKindOf<FinishedSimulationMessage>(*message))
+            else if (RTTI::isKindOf<FinishedSimulationMessage>(message))
 			{
 				stopedSimulation_();
 			}
@@ -1197,7 +1197,7 @@ namespace BALL
 			Size nr_of_atoms = 0;
 			HashSet<Composite*>::Iterator it = selection_.begin();
 			while (it != selection_.end() && 
-						 RTTI::isKindOf<Atom>(**it) && 
+                         RTTI::isKindOf<Atom>(*it) &&
 						 nr_of_atoms < 5)
 			{
 				atoms[nr_of_atoms] = dynamic_cast<Atom*>(*it);
@@ -1650,7 +1650,7 @@ namespace BALL
 			list<ModularWidget*>::iterator it = modular_widgets_.begin();
 			for (; it != modular_widgets_.end(); ++it)
 			{
-				if (RTTI::isKindOf<GenericControl>(**it))
+                if (RTTI::isKindOf<GenericControl>(*it))
 				{
 					(dynamic_cast<GenericControl*>(*it))->deleteCurrentItems();
 				}
@@ -1904,7 +1904,7 @@ namespace BALL
 		CompositeManager::CompositeIterator cit = getCompositeManager().begin();
 		for (; cit != getCompositeManager().end(); cit++)
 		{
-			if (!RTTI::isKindOf<System>(**cit)) continue;
+            if (!RTTI::isKindOf<System>(*cit)) continue;
 
 			if (!binary)
 			{
@@ -2002,7 +2002,7 @@ namespace BALL
 		while (file.good() && !file.eof() && current_composite < nr_composites)
 		{
 			PersistentObject* po = pm->readObject();
-			if (!RTTI::isKindOf<System>(*po))
+            if (!RTTI::isKindOf<System>(po))
 			{
 				setStatusbarText((String)tr("Error while reading project file, could not read molecule."), true);
 				if (has_dp)	DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);

@@ -26,7 +26,7 @@
 #include <BALL/DOCKING/COMMON/dockResult.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 
 using namespace std;
 

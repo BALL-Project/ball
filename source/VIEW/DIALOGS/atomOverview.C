@@ -101,7 +101,7 @@ AtomOverview::OverviewProcessor::~OverviewProcessor()
 
 Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& composite)
 {
-	if (RTTI::isKindOf<Atom>(composite))
+    if (RTTI::isKindOf<Atom>(&composite))
 	{
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 		if (only_selection_ && !atom->isSelected()) return Processor::CONTINUE;
@@ -247,7 +247,7 @@ AtomOverview::ApplyProcessor::~ApplyProcessor()
 
 Processor::Result AtomOverview::ApplyProcessor::operator() (Composite& composite)
 {
-	if (RTTI::isKindOf<Atom>(composite))
+    if (RTTI::isKindOf<Atom>(&composite))
 	{
 		Atom* atom = dynamic_cast<Atom*>(&composite);
 

@@ -13,8 +13,8 @@
 # include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 
-#include <QtGui/QTableWidget>
-#include <QtGui/QItemDelegate>
+#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QItemDelegate>
 
 namespace BALL
 {

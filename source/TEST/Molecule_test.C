@@ -365,7 +365,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<Molecule>(*ptr), true)
+        TEST_EQUAL(isKindOf<Molecule>(ptr), true)
 		Molecule*	f1 = castTo<Molecule>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
 		TEST_EQUAL(f1->countAtoms(), 2)

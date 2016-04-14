@@ -30,9 +30,9 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QMessageBox>
-#include <QtGui/QTextBrowser>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QTextBrowser>
 
 using namespace std;
 
@@ -287,7 +287,7 @@ void DemoTutorialDialog::onNotifyDemo_(Message *message)
 	if (current_step_ == 13 ||
 			current_step_ == 14)
 	{
-		if (!RTTI::isKindOf<FinishedSimulationMessage>(*message)) return;
+        if (!RTTI::isKindOf<FinishedSimulationMessage>(message)) return;
 	}
 	else if (current_step_ == 15)
 	{
@@ -825,7 +825,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_ROTATE: // "Rotating"
 		{
-			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
+            if (!RTTI::isKindOf<SceneMessage>(message)) return;
 			break;
 		}
 
@@ -836,7 +836,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_MDS: // "Molecular Dynamics Simulation")
 		{
-			if (!RTTI::isKindOf<DatasetMessage>(*message)) return;
+            if (!RTTI::isKindOf<DatasetMessage>(message)) return;
 			DatasetMessage* msg = dynamic_cast<DatasetMessage*>(message);
 			if (msg->getDataset() == 0)
 			{
@@ -864,7 +864,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_ES:  // "Calculation of electrostatics"
 		{
-			if (!RTTI::isKindOf<DatasetMessage>(*message)) return;
+            if (!RTTI::isKindOf<DatasetMessage>(message)) return;
 			DatasetMessage* msg = dynamic_cast<DatasetMessage*>(message);
 			if (msg->getDataset() == 0)
 			{
@@ -948,7 +948,7 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 		}	
 		case 4: // "Rotating"
 		{
-			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
+            if (!RTTI::isKindOf<SceneMessage>(message)) return;
 			break;
 		}	
 		case 5: // "Setting light sources"

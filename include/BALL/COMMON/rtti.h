@@ -189,9 +189,9 @@ namespace BALL
 				\endcode
 		*/
 		template <typename T, typename U>
-		bool isKindOf(const U&  u)
+        bool isKindOf(const U *u)
 		{
-			return (0 != dynamic_cast<const T*>(&u));
+            return (0 != dynamic_cast<const T*>(u));
 		}
 
 		/**	Cast an object to a specialized class.

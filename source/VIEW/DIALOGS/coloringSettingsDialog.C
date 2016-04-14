@@ -6,17 +6,17 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <QtGui/QColorDialog>
-#include <QtGui/QSlider>
-#include <QtGui/QLabel>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QCheckBox>
+#include <QtWidgets>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QCheckBox>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, Qt::WFlags fl )
+		ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, Qt::WindowFlags fl )
 			: QWidget(parent, fl),
 				Ui_ColoringSettingsDialogData(),
 				PreferencesEntry()
@@ -193,9 +193,9 @@ namespace BALL
 
 		void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 		{
-			if (RTTI::isKindOf<CustomColorProcessor>(cp)) return;
+            if (RTTI::isKindOf<CustomColorProcessor>(&cp)) return;
 
-			if (RTTI::isKindOf<ElementColorProcessor>(cp))
+            if (RTTI::isKindOf<ElementColorProcessor>(&cp))
 			{
 				vector<ColorRGBA> colors = getColors(COLORING_ELEMENT);
 				for (Position p = 0; p < colors.size(); p++)
@@ -205,7 +205,7 @@ namespace BALL
 				return;
 			}
 			
-			if (RTTI::isKindOf<ResidueNameColorProcessor>(cp))
+            if (RTTI::isKindOf<ResidueNameColorProcessor>(&cp))
 			{
 				for (Position p = 0; p < (Position)residue_table_->rowCount(); p++)
 				{
@@ -215,7 +215,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
+            if (RTTI::isKindOf<ResidueNumberColorProcessor>(&cp))
 			{
 				ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
 				dp.setFirstColor(first_residue_button->getColor());
@@ -224,7 +224,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
+            if (RTTI::isKindOf<AtomChargeColorProcessor>(&cp))
 			{
 				AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
 				dp.getColors()[0] = negative_charge_button->getColor();
@@ -233,7 +233,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
+            if (RTTI::isKindOf<AtomDistanceColorProcessor>(&cp))
 			{
 				AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
 				dp.setNullDistanceColor(null_distance_button->getColor());
@@ -243,7 +243,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
+            if (RTTI::isKindOf<OccupancyColorProcessor>(&cp))
 			{
 				OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
 				dp.getColors()[0] = minimum_o_button->getColor();
@@ -251,7 +251,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
+            if (RTTI::isKindOf<SecondaryStructureColorProcessor>(&cp))
 			{
 				SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
 
@@ -263,7 +263,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
+            if (RTTI::isKindOf<TemperatureFactorColorProcessor>(&cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
 				dp.setMinColor(unassigned_tf_button->getColor());
@@ -274,7 +274,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<ForceColorProcessor>(cp))
+            if (RTTI::isKindOf<ForceColorProcessor>(&cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
 				dp.getColors()[0] = force_min_color_button->getColor();
@@ -284,7 +284,7 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<ResidueTypeColorProcessor>(cp))
+            if (RTTI::isKindOf<ResidueTypeColorProcessor>(&cp))
 			{
 				ResidueTypeColorProcessor& dp = (*(ResidueTypeColorProcessor*)&cp);
 				dp.setBasicColor(basic_color_button->getColor());
@@ -296,13 +296,13 @@ namespace BALL
 				return;
 			}
 
-			if (RTTI::isKindOf<ChainColorProcessor>(cp))
+            if (RTTI::isKindOf<ChainColorProcessor>(&cp))
 			{
 				((ChainColorProcessor*)&cp)->setColors(getColors(COLORING_CHAIN));
 				return;
 			}
 
-			if (RTTI::isKindOf<MoleculeColorProcessor>(cp))
+            if (RTTI::isKindOf<MoleculeColorProcessor>(&cp))
 			{
 				((MoleculeColorProcessor*)&cp)->setColors(getColors(COLORING_MOLECULE));
 				return;
@@ -414,19 +414,19 @@ namespace BALL
 		void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 		{
 
-			if (RTTI::isKindOf<CustomColorProcessor>(cp))
+            if (RTTI::isKindOf<CustomColorProcessor>(&cp))
 			{
 			} else
 
-			if (RTTI::isKindOf<ElementColorProcessor>(cp))
+            if (RTTI::isKindOf<ElementColorProcessor>(&cp))
 			{
 			} else
 			
-			if (RTTI::isKindOf<ResidueNameColorProcessor>(cp))
+            if (RTTI::isKindOf<ResidueNameColorProcessor>(&cp))
 			{
 			} else
 
-			if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
+            if (RTTI::isKindOf<ResidueNumberColorProcessor>(&cp))
 			{
 				ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
 				first_residue_button->setColor(dp.getFirstColor());
@@ -434,7 +434,7 @@ namespace BALL
 				last_residue_button->setColor(dp.getLastColor());
 			} else
 
-			if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
+            if (RTTI::isKindOf<AtomChargeColorProcessor>(&cp))
 			{
 				AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
 				negative_charge_button->setColor( dp.getColors()[0]);
@@ -442,7 +442,7 @@ namespace BALL
 				positive_charge_button->setColor( dp.getColors()[2]);
 			} else
 
-			if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
+            if (RTTI::isKindOf<AtomDistanceColorProcessor>(&cp))
 			{
 				AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
 				null_distance_button->setColor( dp.getNullDistanceColor());
@@ -451,14 +451,14 @@ namespace BALL
  				distance_show_selected->setChecked(dp.showSelected());
 			} else
 
-			if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
+            if (RTTI::isKindOf<OccupancyColorProcessor>(&cp))
 			{
 				OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
 				minimum_o_button->setColor(dp.getColors()[0]);
 				maximum_o_button->setColor(dp.getColors()[1]);
 			} else
 
-			if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
+            if (RTTI::isKindOf<SecondaryStructureColorProcessor>(&cp))
 			{
 				SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
 				helix_color_button->setColor(dp.getHelixColor());
@@ -467,7 +467,7 @@ namespace BALL
 				turn_color_button->setColor(dp.getTurnColor());
 			} else
 
-			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
+            if (RTTI::isKindOf<TemperatureFactorColorProcessor>(&cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
 				unassigned_tf_button->setColor( dp.getDefaultColor());
@@ -476,7 +476,7 @@ namespace BALL
 				max_tf_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 			} else
 
-			if (RTTI::isKindOf<ForceColorProcessor>(cp))
+            if (RTTI::isKindOf<ForceColorProcessor>(&cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
 				force_min_color_button->setColor(dp.getColors()[0]);
@@ -485,7 +485,7 @@ namespace BALL
 				force_min_value_slider->setValue((Size)(dp.getMinValue() * 10.0));
 			} else
 
-			if (RTTI::isKindOf<ResidueTypeColorProcessor>(cp))
+            if (RTTI::isKindOf<ResidueTypeColorProcessor>(&cp))
 			{
  				ResidueTypeColorProcessor& dp = (*(ResidueTypeColorProcessor*)&cp);
 				acidic_color_button->setColor(dp.getAcidicColor());
@@ -496,7 +496,7 @@ namespace BALL
 				polar_color_button->setColor(dp.getPolarColor());
 			} else
 
-			if (RTTI::isKindOf<ChainColorProcessor>(cp))
+            if (RTTI::isKindOf<ChainColorProcessor>(&cp))
 			{
  				ChainColorProcessor& dp = (*(ChainColorProcessor*)&cp);
 				vector<String> 		names;
@@ -512,7 +512,7 @@ namespace BALL
 				chain_table_->setContent(names, colors);
 			} else
 
-			if (RTTI::isKindOf<MoleculeColorProcessor>(cp))
+            if (RTTI::isKindOf<MoleculeColorProcessor>(&cp))
 			{
  				MoleculeColorProcessor& dp = (*(MoleculeColorProcessor*)&cp);
 				vector<String> 		names;

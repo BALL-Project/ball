@@ -78,7 +78,7 @@ namespace BALL
 		String atom_name = atom.getName().trim();
 		String original_res_name = res_name;
 
-		if (RTTI::isKindOf<Residue>(*atom.getFragment()))
+        if (RTTI::isKindOf<Residue>(atom.getFragment()))
 		{
 			Residue* residue = RTTI::castTo<Residue>(*atom.getFragment());
 				
@@ -252,7 +252,7 @@ namespace BALL
 		String atom_name = atom.getName().trim();
 		String original_res_name = res_name;
 
-		if (RTTI::isKindOf<Residue>(*atom.getFragment()))
+        if (RTTI::isKindOf<Residue>(atom.getFragment()))
 		{
 			Residue* residue = RTTI::castTo<Residue>(*atom.getFragment());
 				

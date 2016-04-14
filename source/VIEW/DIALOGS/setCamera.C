@@ -7,15 +7,15 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit> 
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLineEdit>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, Qt::WFlags fl )
+SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, Qt::WindowFlags fl )
 	: QDialog(parent, fl),
 		Ui_SetCameraData()
 {

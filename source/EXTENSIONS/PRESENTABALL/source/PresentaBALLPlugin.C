@@ -2,8 +2,6 @@
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-Q_EXPORT_PLUGIN2(pluginPresentaBALL, BALL::VIEW::PresentaBALLPlugin)
-
 namespace BALL
 {
 	namespace VIEW

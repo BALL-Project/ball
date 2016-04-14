@@ -2,15 +2,15 @@
 // vi: set ts=2:
 //
 
-#include <GL/glew.h>
-
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <QtCore/QEvent>
 #include <QtGui/QPaintEvent>
+#include <QtGui/QWindow>
 
 //#define USE_GLPAINTPIXELS
 #undef USE_GLPAINTPIXELS
@@ -46,7 +46,7 @@ namespace BALL
 			setAutoFillBackground(false);
 		}
 
-		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* /*name*/, Qt::WFlags w_flags)
+		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* /*name*/, Qt::WindowFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
 			  stereo_delta_(0.),
 			  m_screenTexID(0),
@@ -66,7 +66,7 @@ namespace BALL
 			setAutoFillBackground(false);
 		}
 
-		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* /*name*/, Qt::WFlags w_flags)
+		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* /*name*/, Qt::WindowFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, reinterpret_cast<QGLWidget const*>(&window), w_flags),
 			  stereo_delta_(0.),
 			  m_screenTexID(0),
@@ -326,7 +326,7 @@ namespace BALL
 			switch(static_cast<EventsIDs>(evt->type())) {
 				case RENDER_TO_BUFFER_FINISHED_EVENT:
 					refresh();
-					swapBuffers();
+					safeBufferSwap();
 					break;
 			}
 		}
@@ -360,6 +360,14 @@ namespace BALL
 				//http://local.wasp.uwa.edu.au/~pbourke/miscellaneous/stereographics/stereorender/
 				stereo_delta_ = (fabs(eye_separation) * width) / (focal_length * tan(Angle(aperture, false).toRadian())); 
 				std::cout << stereo_delta_ << std::endl;
+		}
+
+		void GLRenderWindow::safeBufferSwap()
+		{
+			if(isVisible() && getMainControl()->windowHandle()->isExposed())
+			{
+				swapBuffers();
+			}
 		}
 	} // namespace VIEW
 } //namespace BALL

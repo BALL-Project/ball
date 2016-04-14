@@ -2,9 +2,9 @@
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtGui/QDesktopWidget>
+#include <QtWidgets/QDesktopWidget>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 #define  ZOOM_FACTOR      7.
 

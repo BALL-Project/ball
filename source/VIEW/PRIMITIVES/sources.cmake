@@ -16,9 +16,4 @@ SET(SOURCES_LIST
 	twoColoredTube.C
 )
 
-### the list of all files requiring a moc run ###
-SET(MOC_SOURCES_LIST "")
-
 ADD_VIEW_SOURCES("VIEW/PRIMITIVES" "${SOURCES_LIST}")
-
-ADD_BALL_MOCFILES("VIEW/PRIMITIVES" "include/BALL/VIEW/PRIMITIVES" "${MOC_SOURCES_LIST}")

@@ -5,8 +5,8 @@
 #include <BALL/VIEW/DIALOGS/setClippingPlane.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit> 
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLineEdit>
 
 namespace BALL
 {

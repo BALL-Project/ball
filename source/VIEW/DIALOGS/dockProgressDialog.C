@@ -3,11 +3,11 @@
 //
 #include <BALL/VIEW/DIALOGS/dockProgressDialog.h>
 
-#include <QtGui/QProgressBar>
-#include <QtGui/QTextEdit>
-#include <QtGui/QPushButton>
-#include <QtGui/QMessageBox>
-#include <QtGui/QLabel>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QTextEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QLabel>
 
 //#define BALL_VIEW_DEBUG
 

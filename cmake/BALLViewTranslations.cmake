@@ -45,4 +45,4 @@ ADD_CUSTOM_TARGET(update_translations)
 ADD_DEPENDENCIES(update_translations ${TRANSLATIONS})
 
 ADD_CUSTOM_TARGET(compile_translations DEPENDS ${COMPILED_TRANSLATIONS})
-ADD_DEPENDENCIES(BALLView compile_translations)
+#ADD_DEPENDENCIES(BALLView compile_translations)

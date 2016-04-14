@@ -2,9 +2,6 @@
 
 #include <VRPNDriver.h>
 
-
-Q_EXPORT_PLUGIN2(pluginVRPN, BALL::VIEW::VRPNPlugin)
-
 namespace BALL
 {
 	namespace VIEW

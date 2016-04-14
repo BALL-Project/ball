@@ -430,8 +430,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<Atom>(*ptr), true)
-		if (isKindOf<Atom>(*ptr))
+        TEST_EQUAL(isKindOf<Atom>(ptr), true)
+        if (isKindOf<Atom>(ptr))
 		{
 			Atom* pers_atom = castTo<Atom>(*ptr);
 			TEST_EQUAL(pers_atom->getName(), atom->getName())

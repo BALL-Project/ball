@@ -10,7 +10,7 @@
 
 #include <QtCore/QAbstractTableModel>
 #include <QtGui/QFontMetrics>
-#include <QtGui/QSortFilterProxyModel>
+#include <QtCore/QSortFilterProxyModel>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 

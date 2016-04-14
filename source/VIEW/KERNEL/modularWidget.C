@@ -8,7 +8,7 @@
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
-#include <QtGui/QMenuBar>
+#include <QtWidgets/QMenuBar>
 
 using namespace std;
 
@@ -59,7 +59,7 @@ namespace BALL
 
 			if (!mwidget) throw(Exception::NullPointer(__FILE__, __LINE__));
 
-			if (!RTTI::isKindOf<QObject>(*mwidget)) 
+            if (!RTTI::isKindOf<QObject>(mwidget))
 			{
 				Log.error() << "ModularWidget::ModularWidget: widget " 
 										<< mwidget << " is not " 
@@ -165,7 +165,7 @@ namespace BALL
 
 			ConnectionObject* root = (const_cast<ModularWidget*>(this))->getRoot();
 
-			if (!RTTI::isKindOf<MainControl>(*root)) return VIEW::getMainControl();
+            if (!RTTI::isKindOf<MainControl>(root)) return VIEW::getMainControl();
 
 			return (dynamic_cast<MainControl*>(root));
 		}

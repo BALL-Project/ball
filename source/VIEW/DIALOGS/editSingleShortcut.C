@@ -7,14 +7,14 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		EditSingleShortcut::EditSingleShortcut(QWidget* parent, const char* name, Qt::WFlags)
+		EditSingleShortcut::EditSingleShortcut(QWidget* parent, const char* name, Qt::WindowFlags)
 			: QDialog(parent),
 				Ui_EditSingleShortcutData(),
 				is_recording_(false),

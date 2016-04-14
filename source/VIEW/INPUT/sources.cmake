@@ -9,9 +9,4 @@ SET(SOURCES_LIST
 	inputDeviceDriver.C
 )
 
-### the list of all files requiring a moc run ###
-SET(MOC_SOURCES_LIST inputPlugin.C)
-
 ADD_VIEW_SOURCES("VIEW/INPUT" "${SOURCES_LIST}")
-
-ADD_BALL_MOCFILES("VIEW/INPUT" "include/BALL/VIEW/INPUT" "${MOC_SOURCES_LIST}")

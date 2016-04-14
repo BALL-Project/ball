@@ -12,11 +12,11 @@
 #include <BALL/STRUCTURE/sdGenerator.h>
 #include <BALL/FORMAT/SDFile.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QTreeWidget>
-#include <QtGui/QTreeWidgetItem>
-#include <QtGui/QProgressBar>
-#include <QtGui/QMessageBox>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QTreeWidgetItem>
+#include <QtWidgets/QProgressBar>
+#include <QtWidgets/QMessageBox>
 
 #include <QtCore/QUrl>
 #include <QtCore/QDir>

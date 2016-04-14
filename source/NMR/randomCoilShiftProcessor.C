@@ -72,7 +72,7 @@ namespace BALL
 		}
 
 		// Try to get the system.
-		if (!system_   && (RTTI::isKindOf<System>(atom_ptr->getRoot())))
+        if (!system_   && (RTTI::isKindOf<System>(&atom_ptr->getRoot())))
 		{	
 			system_ = dynamic_cast<System*>(&(atom_ptr->getRoot()));
 		}

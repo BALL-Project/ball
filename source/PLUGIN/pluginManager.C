@@ -371,12 +371,12 @@ namespace BALL
 			if ( it != loaded_plugin_dirs_.end())
 			{
 
-				value += it->first.toAscii().toPercentEncoding().data();
+				value += it->first.toLatin1().toPercentEncoding().data();
 
 				for (++it; it != loaded_plugin_dirs_.end(); ++it)
 				{
 					value += BETWEEN_PLUGINDIR_SEPERATOR;
-					value += it->first.toAscii().toPercentEncoding().data();
+					value += it->first.toLatin1().toPercentEncoding().data();
 				}
 			}
 		}

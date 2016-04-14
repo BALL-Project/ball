@@ -74,7 +74,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<System>(*ancestor_it) == true)
+            if (RTTI::isKindOf<System>(&*ancestor_it) == true)
 			{
 				return (System *)&*ancestor_it;
 			}

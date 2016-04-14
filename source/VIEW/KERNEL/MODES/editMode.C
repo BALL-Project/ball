@@ -9,7 +9,7 @@
 
 #include <BALL/VIEW/KERNEL/MODES/editMode.h>
 
-#include <QtGui/QMenu>
+#include <QtWidgets/QMenu>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QWheelEvent>
 
@@ -612,7 +612,7 @@ namespace BALL
 
 				// prevent adding of atoms to a System:
 				// some forcefields will go havoc otherwise
-				if (RTTI::isKindOf<System>(*ai))
+                if (RTTI::isKindOf<System>(ai))
 				{
 					System* system = (System*) ai;
 					Molecule* mol = system->getMolecule(0);
@@ -795,7 +795,7 @@ namespace BALL
 			residue->apply(tf);
 
 			AtomContainer* s = *containers.begin();
-			if (RTTI::isKindOf<System>(*s))
+            if (RTTI::isKindOf<System>(s))
 			{
 				System* system = (System*) s;
 				Molecule* mol = system->getMolecule(0);
@@ -922,7 +922,7 @@ namespace BALL
 			// case 1: one system with exactly two atoms
 			if (selection.size() == 1)
 			{
-				if (RTTI::isKindOf<AtomContainer>(**selection.begin()))
+                if (RTTI::isKindOf<AtomContainer>(*selection.begin()))
 				{
 					AtomContainer* ac = reinterpret_cast<AtomContainer*>(*selection.begin());
 					if (ac->countAtoms() == 2)
@@ -962,7 +962,7 @@ namespace BALL
 				HashSet<Composite*>::Iterator it = selection.begin();
 				for (; +it; ++it)
 				{
-					if (RTTI::isKindOf<Atom>(**it))
+                    if (RTTI::isKindOf<Atom>(*it))
 					{
 						if (!first_atom)
 						{
@@ -974,7 +974,7 @@ namespace BALL
 						}
 					}
 					// case 3: a single atom in selected atomcontainer
-					else if (RTTI::isKindOf<AtomContainer>(**it))
+                    else if (RTTI::isKindOf<AtomContainer>(*it))
 					{
 						AtomContainer* ac = reinterpret_cast<AtomContainer*>(*it);
 						if (ac->countAtoms() == 1)

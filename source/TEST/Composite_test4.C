@@ -200,8 +200,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<Composite>(*ptr), true)
-		if (isKindOf<Composite>(*ptr))
+        TEST_EQUAL(isKindOf<Composite>(ptr), true)
+        if (isKindOf<Composite>(ptr))
 		{
 			Composite* pers_a = castTo<Composite>(*ptr);
 			TEST_EQUAL(pers_a->isSelected(), true)

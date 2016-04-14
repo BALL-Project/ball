@@ -32,6 +32,8 @@ void Bond::destroy()
 BALL_INLINE
 void Bond::finalize()
 {
+	assert((first_ != NULL && second_ != NULL) && "Error while deserializing bond, invalid atoms are present.");
+
 	if (*first_ > *second_)
 	{
 		Atom* tmp = first_;

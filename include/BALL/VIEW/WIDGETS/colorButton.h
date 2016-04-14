@@ -5,7 +5,7 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-#include <QtGui/QPushButton>
+#include <QtWidgets/QPushButton>
 #include <QtGui/QColor>
 
 class QPaintEvent;

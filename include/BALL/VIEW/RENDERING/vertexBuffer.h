@@ -19,6 +19,8 @@
 #	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
+#include <QtGui/QOpenGLFunctions>
+
 namespace BALL
 {
 	namespace VIEW
@@ -37,7 +39,7 @@ namespace BALL
 				These must be initialised by calling MeshBuffer::initGL() (See below).
 				\ingroup ViewRendering
 		*/
-		class BALL_VIEW_EXPORT MeshBuffer
+		class BALL_VIEW_EXPORT MeshBuffer : protected QOpenGLFunctions
 		{
 			public:
 

@@ -9,16 +9,16 @@
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/WIDGETS/colorButton.h>
 
-#include <QtGui/QSlider>
-#include <QtGui/QSpinBox>
-#include <QtGui/QLabel>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/QStackedWidget>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QComboBox>
-#include <QtGui/QGroupBox>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QRadioButton>
 
 using namespace std;
 
@@ -80,15 +80,15 @@ namespace BALL
 
 		bool PreferencesEntry::isSupported_(QObject& widget)
 		{
-			if (RTTI::isKindOf<PreferencesObject>(widget) ||
-					RTTI::isKindOf<ExtendedPreferencesObject>(widget) ||
-					RTTI::isKindOf<QSlider>(widget)   ||
-					RTTI::isKindOf<QSpinBox>(widget)  ||
-					RTTI::isKindOf<QLineEdit>(widget) ||
-					RTTI::isKindOf<QCheckBox>(widget) ||
-					RTTI::isKindOf<QComboBox>(widget) ||
-					RTTI::isKindOf<QButtonGroup>(widget) ||
-					RTTI::isKindOf<ColorButton>(widget))
+            if (RTTI::isKindOf<PreferencesObject>(&widget) ||
+                    RTTI::isKindOf<ExtendedPreferencesObject>(&widget) ||
+                    RTTI::isKindOf<QSlider>(&widget)   ||
+                    RTTI::isKindOf<QSpinBox>(&widget)  ||
+                    RTTI::isKindOf<QLineEdit>(&widget) ||
+                    RTTI::isKindOf<QCheckBox>(&widget) ||
+                    RTTI::isKindOf<QComboBox>(&widget) ||
+                    RTTI::isKindOf<QButtonGroup>(&widget) ||
+                    RTTI::isKindOf<ColorButton>(&widget))
 			{
 				return true;
 			}
@@ -175,7 +175,7 @@ namespace BALL
 					BALLVIEW_DEBUG;
 				}
 			}
-			else if (RTTI::isKindOf<PreferencesObject>(*widget))
+            else if (RTTI::isKindOf<PreferencesObject>(widget))
 			{
 				value = "";
 				const PreferencesObject* epo = dynamic_cast<const PreferencesObject*>(widget);
@@ -184,31 +184,31 @@ namespace BALL
 					BALLVIEW_DEBUG;
 				}
 			}
-			else if (RTTI::isKindOf<QSlider>(*widget))
+            else if (RTTI::isKindOf<QSlider>(widget))
 			{
 				value = String((dynamic_cast<const QSlider*>(widget))->value());
 			}
-			else if (RTTI::isKindOf<QSpinBox>(*widget))
+            else if (RTTI::isKindOf<QSpinBox>(widget))
 			{
 				value = String((dynamic_cast<const QSpinBox*>(widget))->value());
 			}
-			else if (RTTI::isKindOf<QLabel>(*widget))
+            else if (RTTI::isKindOf<QLabel>(widget))
 			{
 				value = getColor(dynamic_cast<const QLabel*>(widget));
 			}
-			else if (RTTI::isKindOf<QLineEdit>(*widget))
+            else if (RTTI::isKindOf<QLineEdit>(widget))
 			{
 				value = ascii((dynamic_cast<const QLineEdit*>(widget))->text());
 			}
-			else if (RTTI::isKindOf<QCheckBox>(*widget))
+            else if (RTTI::isKindOf<QCheckBox>(widget))
 			{
 				value = String((dynamic_cast<const QCheckBox*>(widget))->isChecked());
 			}
-			else if (RTTI::isKindOf<QComboBox>(*widget))
+            else if (RTTI::isKindOf<QComboBox>(widget))
 			{
 				value = String((dynamic_cast<const QComboBox*>(widget))->currentIndex());
 			}
-			else if (RTTI::isKindOf<QButtonGroup>(*widget))
+            else if (RTTI::isKindOf<QButtonGroup>(widget))
 			{
 				const QButtonGroup* qbg = dynamic_cast<const QButtonGroup*>(widget);
 
@@ -221,7 +221,7 @@ namespace BALL
 
 				value = String(qbg->checkedId());
 			}
-			else if (RTTI::isKindOf<QGroupBox>(*widget))
+            else if (RTTI::isKindOf<QGroupBox>(widget))
 			{
 				value.clear();
 				// QGroupBoxes can either be checkable and/or have QRadioButtons as childs
@@ -248,7 +248,7 @@ namespace BALL
 										<< " in PreferencesEntry without QRadioButton" << std::endl;
 				return false;
 			}
-			else if (RTTI::isKindOf<ColorButton>(*widget))
+            else if (RTTI::isKindOf<ColorButton>(widget))
 			{
 				const ColorButton* button = static_cast<const ColorButton*>(widget);
 				value = String(button->getColor().name());
@@ -293,43 +293,43 @@ namespace BALL
 						BALLVIEW_DEBUG;
 					}
 				}
-				else if (RTTI::isKindOf<PreferencesObject>(*widget))
+                else if (RTTI::isKindOf<PreferencesObject>(widget))
 				{
 					if (!(dynamic_cast<PreferencesObject*>(widget))->setValue(value))
 					{
 						BALLVIEW_DEBUG;
 					}
 				}
-				else if (RTTI::isKindOf<QSlider>(*widget))
+                else if (RTTI::isKindOf<QSlider>(widget))
 				{
 					(dynamic_cast<QSlider*>(widget))->setValue(value.toInt());
 				}
-				else if (RTTI::isKindOf<QSpinBox>(*widget))
+                else if (RTTI::isKindOf<QSpinBox>(widget))
 				{
 					(dynamic_cast<QSpinBox*>(widget))->setValue(value.toInt());
 				}
-				else if (RTTI::isKindOf<QLabel>(*widget))
+                else if (RTTI::isKindOf<QLabel>(widget))
 				{
 					setColor(dynamic_cast<QLabel*>(widget), ColorRGBA(value));
 				}
-				else if (RTTI::isKindOf<QLineEdit>(*widget))
+                else if (RTTI::isKindOf<QLineEdit>(widget))
 				{
 					(dynamic_cast<QLineEdit*>(widget))->setText(value.c_str());
 				}
-				else if (RTTI::isKindOf<QCheckBox>(*widget))
+                else if (RTTI::isKindOf<QCheckBox>(widget))
 				{
 					(dynamic_cast<QCheckBox*>(widget))->setChecked(value == "1");
 				}
-				else if (RTTI::isKindOf<QComboBox>(*widget))
+                else if (RTTI::isKindOf<QComboBox>(widget))
 				{
 					if (value.toUnsignedInt() >= (Position)(dynamic_cast<QComboBox*>(widget))->count()) return false;
 					(dynamic_cast<QComboBox*>(widget))->setCurrentIndex(value.toInt());
 				}
-				else if (RTTI::isKindOf<QButtonGroup>(*widget))
+                else if (RTTI::isKindOf<QButtonGroup>(widget))
 				{
 					(dynamic_cast<QButtonGroup*>(widget))->button(value.toInt())->setChecked(true);
 				}
-				else if (RTTI::isKindOf<QGroupBox>(*widget))
+                else if (RTTI::isKindOf<QGroupBox>(widget))
 				{
 					QGroupBox* gb = dynamic_cast<QGroupBox*> (widget);
 					String v = value;
@@ -354,7 +354,7 @@ namespace BALL
 						return false;
 					}
 				}
-				else if(RTTI::isKindOf<ColorButton>(*widget))
+                else if(RTTI::isKindOf<ColorButton>(widget))
 				{
 					ColorButton* button = static_cast<ColorButton*>(widget);
 					button->setColor(QColor(value.c_str()));

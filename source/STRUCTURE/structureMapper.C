@@ -53,7 +53,7 @@ namespace BALL
 
 		for (it = ac.beginAtomContainer(); +it; ++it)
 		{
-			if (RTTI::isKindOf<Fragment>(*it))
+            if (RTTI::isKindOf<Fragment>(&*it))
 			{
 				number_of_mol_fragments++;
 			}
@@ -556,7 +556,7 @@ namespace BALL
 		for	(ac_it = ac.beginAtomContainer(); 
 				 ac_it != ac.endAtomContainer(); ++ac_it)
 		{
-			if (RTTI::isKindOf<Fragment>(*ac_it))
+            if (RTTI::isKindOf<Fragment>(&*ac_it))
 			{
 				ac_fragments.push_back(RTTI::castTo<Fragment>(*ac_it));
 			}

@@ -39,12 +39,6 @@ is very similar to that of OpenGL. It can be obtained from
 \URL{http://www.mesa3d.org}.
 \index{Mesa}
 
-BALL uses GLEW, the OpenGL Extension Wrangler Library for access to the OpenGL
-extensions. If the GLEW library is not installed, BALLView will still work, but
-the advanced OpenGL features like volume rendering, vertex buffers and so on
-will not work. GLEW is freely available from \URL{http://glew.sourceforge.net}.
-\index{GLEW}
-
 If your machine has a graphics accelerator from Intel, ATI-AMD or NVidia, you
 can use the vendor-provided OpenGL drivers. The respective download locations
 are \URL{http://www.intel.com/support/graphics} (Intel),
@@ -194,12 +188,6 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            DIR/GL\\\vspace{3mm}
 
   \option{--with-mesa}&                    use MESA instead of OpenGL\\
-
-  \option{--with-glew-incl}{\tt{}=DIR}&    GLEW header files are in DIR/GL\\
-                                           \vspace{3mm}
-
-  \option{--with-glew-libs}{\tt{}=DIR}&    GLEW libraries are in DIR\\
-                                           \vspace{3mm}
 
   \option{--without-libxnet}&              use \Index{libsocket}/\Index{libnsl}
                                            for linking rather than 

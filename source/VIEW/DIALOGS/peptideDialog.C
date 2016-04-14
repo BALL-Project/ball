@@ -7,8 +7,8 @@
 #include <BALL/COMMON/logStream.h>
 #include <BALL/STRUCTURE/peptideCapProcessor.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
 
 namespace BALL
 {
@@ -16,7 +16,7 @@ namespace BALL
 	{
 		String PeptideDialog::all_amino_acids_ = "ACDEFGHIKLMNPQRSTVWY";
 
-		PeptideDialog::PeptideDialog( QWidget* parent, const char* name, Qt::WFlags fl )
+		PeptideDialog::PeptideDialog( QWidget* parent, const char* name, Qt::WindowFlags fl )
 		 : QDialog(parent, fl),
 		 	 Ui_PeptideDialogData(),
 			 Peptides::PeptideBuilder(),

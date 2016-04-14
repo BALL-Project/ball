@@ -23,8 +23,8 @@
 
 #include <BALL/VIEW/UIC/ui_modelSettingsDialog.h>
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QLabel>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLabel>
 
 class QSlider;
 class QLabel;
@@ -50,7 +50,7 @@ namespace BALL
 
 			/// Constructor
 			ModelSettingsDialog( QWidget* parent = 0, const char* name = "ModelSettingsDialog", 
-														Qt::WFlags fl = 0 );
+														Qt::WindowFlags fl = 0 );
 
 			/// Destructor
 			virtual ~ModelSettingsDialog() {}

@@ -170,7 +170,7 @@ namespace BALL
 	template <class T>
 	bool KernelPredicate<T>::operator () (const Composite& composite) const
 	{
-		return RTTI::isKindOf<T>(composite);
+        return RTTI::isKindOf<T>(&composite);
 	}
 
 	//@}

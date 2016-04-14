@@ -50,10 +50,10 @@
 #endif
 
 #include <QtGui/QKeySequence>
-#include <QtGui/QMainWindow>
-#include <QtGui/QApplication>
-#include <QtGui/QMenuBar> 
-#include <QtGui/QLabel>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QLabel>
 #include <QtCore/QTimer>
 
 class QCloseEvent;

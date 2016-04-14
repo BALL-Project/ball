@@ -431,8 +431,8 @@ namespace BALL
 				ParsedFunction<double> pf(var+f);
 				dist += pf(0);
 			}	
-			String var2="";
-			var2 = var2+"sum="+String(dist)+";";
+			String var2 = "";
+			var2 = var2 + "sum=" + String(dist) + ";";
 			//cout<<"g = "<<var+g<<endl;
 			ParsedFunction<double> pf2(var2+g);
 			return pf2(0);

@@ -12,6 +12,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
+#include <QtCore/QMimeData>
 #include <QtGui/QTextCursor>
 
 using namespace std;

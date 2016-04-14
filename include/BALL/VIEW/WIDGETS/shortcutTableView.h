@@ -9,9 +9,9 @@
 # include <BALL/VIEW/DIALOGS/editSingleShortcut.h>
 #endif
 
-#include <QtGui/QTableView>
-#include <QtGui/QItemDelegate>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QTableView>
+#include <QtWidgets/QItemDelegate>
+#include <QtWidgets/QPushButton>
 
 class QSortFilterProxyModel;
 

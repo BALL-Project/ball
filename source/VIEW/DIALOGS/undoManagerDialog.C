@@ -7,15 +7,15 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/logStream.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QRadioButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QRadioButton>
 #include <QtCore/QDateTime>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		UndoManagerDialog::UndoManagerDialog( QWidget* parent, const char* name, Qt::WFlags fl )
+		UndoManagerDialog::UndoManagerDialog( QWidget* parent, const char* name, Qt::WindowFlags fl )
 			: QDialog(parent, fl),
 			  Ui_UndoManagerDialogData(),
 				ModularWidget(name),

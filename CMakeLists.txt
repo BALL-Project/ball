@@ -5,23 +5,6 @@
 
 PROJECT("BALL")
 
-# TODO LIST:
-#   BALL specific:
-#
-#   inherited from OpenMS:
-#			- test for contrib headers (CONTRIB_HEADER_DIR ccmake variable - test one header for each required library)
-#			- parallel build of test executables
-#			- target to execute all EXAMPLES
-
-########################################################
-### entries meant to be configured using CMake cache ###
-### - do NOT hardcode them here!										 ###
-### - edit them within CMakeCache.txt using ccmake	 ###
-########################################################
-# CONTRIB_CUSTOM_DIR
-# STL_DEBUG
-# QT_DB_PLUGIN
-
 ########################################################
 ###    manual entries (edit this for new release)    ###
 ########################################################
@@ -31,18 +14,28 @@ SET(BALL_PACKAGE_VERSION_MINOR "4")
 SET(BALL_PACKAGE_VERSION_PATCH "79")
 
 ########################################################
-###    end manual	entries													   ###
+###    end manual entries                            ###
 ########################################################
 
-# Heart of the BUILD system : only edit when you know what you�re doing (we don�t)
-# quick manual for most commands: http://www.cmake.org/cmake/help/cmake2.6docs.html
-# useful predefined variables: http://www.paraview.org/Wiki/CMake_Useful_Variables
+# Heart of the BUILD system:
+# Only edit when you know what you are doing!
+#
+# Quick manual for most commands:     https://cmake.org/cmake/help/v2.8.12/cmake.html
+# Useful predefined CMake variables:  https://cmake.org/Wiki/CMake_Useful_Variables
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
 SET(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE TRUE)
+
+IF(POLICY CMP0020)
+        CMAKE_POLICY(SET CMP0020 OLD)
+ENDIF()
+
+IF(POLICY CMP0042)
+        CMAKE_POLICY(SET CMP0042 OLD)
+ENDIF()
 
 IF(POLICY CMP0043)
 	CMAKE_POLICY(SET CMP0043 NEW)
@@ -74,7 +67,7 @@ IF(NOT CMAKE_BUILD_TYPE)
 ENDIF()
 
 SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
-SET(CMAKE_PREFIX_PATH ${BALL_CONTRIB_PATH} ${CMAKE_PREFIX_PATH})
+SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${BALL_CONTRIB_PATH})
 
 IF(UNIX AND BALL_CONTRIB_PATH)
 	SET(CMAKE_LIBRARY_PATH ${BALL_CONTRIB_PATH}/lib ${BALL_CONTRIB_PATH}/lib64 ${CMAKE_LIBRARY_PATH})
@@ -265,41 +258,52 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTWEBKIT "Add support for QWebkit" ${BALL_HAS_VIEW})
+OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
 
-IF(NOT BALL_HAS_VIEW)
-	MESSAGE(WARNING "Warning: CMakes Qt4 find macro is too restrictive and requires UIC and RCC to be present. "
-	                "If you are building without the GUI part of Qt installed, you will need to create dummy files "
-	                "for both executables in the Qt prefix path.")
+# Enable automatic invocation of moc if required
+SET(CMAKE_AUTOMOC ON)
+
+SET(QTDIR "" CACHE PATH "Path to the qt installation (optional)")
+SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QTDIR})
+
+IF(QTDIR)
+	INCLUDE_DIRECTORIES(BEFORE "${QTDIR}/include")
 ENDIF()
 
-FIND_PACKAGE(Qt4 REQUIRED)
+FIND_PACKAGE(Qt5Core REQUIRED)
+FIND_PACKAGE(Qt5Xml)
+FIND_PACKAGE(Qt5Network)
 
-SET(QT_USE_QTXML TRUE)
-SET(QT_USE_QTNETWORK TRUE)
+LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
+                               Qt5::Xml
+                               Qt5::Network)
 
-# Qt Dependencies for VIEW
-IF(BALL_HAS_VIEW)
-	SET(QT_USE_QTOPENGL   TRUE)
-	SET(QT_USE_QTTEST     TRUE)
+IF (BALL_HAS_VIEW)
+	FIND_PACKAGE(Qt5Widgets REQUIRED)
+	FIND_PACKAGE(Qt5Test)
+	FIND_PACKAGE(Qt5OpenGL)
+	FIND_PACKAGE(Qt5PrintSupport)
+
+	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
+
+        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::Widgets
+                                       Qt5::OpenGL
+                                       Qt5::PrintSupport
+                                       Qt5::Network
+                                       Qt5::Test
+                                       Qt5::Xml)
 
 	IF(USE_QTWEBKIT)
-		SET(QT_USE_QTWEBKIT TRUE)
-		SET(QT_USE_PHONON   TRUE)
+		FIND_PACKAGE(Qt5WebKitWidgets)
+
+                IF(Qt5WebKit_FOUND)
+                        SET(BALL_HAS_QTWEBKIT TRUE)
+                        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebKitWidgets)
+                ELSE()
+                        SET(BALL_HAS_QTWEBKIT FALSE)
+                        MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
+                ENDIF()
 	ENDIF()
-ELSE()
-	SET(QT_DONT_USE_QTGUI TRUE)
-ENDIF()
-
-
-SET(QT_MIN_VERSION "4.4.0")
-
-INCLUDE(${QT_USE_FILE})
-
-SET(BALL_HAS_QTWEBKIT TRUE)
-IF(USE_QTWEBKIT AND NOT QT_QTWEBKIT_FOUND)
-	SET(BALL_HAS_QTWEBKIT FALSE)
-	MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
 ENDIF()
 
 ## On Windows, we might need to explicitly deploy openssl libraries for Qt
@@ -315,14 +319,9 @@ IF(WIN32)
 	ENDIF()
 ENDIF()
 
-MESSAGE(STATUS "QT qmake at ${QT_QMAKE_EXECUTABLE}")
-MESSAGE(STATUS "QT moc at ${QT_MOC_EXECUTABLE}")
-MESSAGE(STATUS "QT uic at ${QT_UIC_EXECUTABLE}")
-
 SET(EIGEN3_VERSION_OK "3.0.0")
 FIND_PACKAGE(Eigen3 REQUIRED)
 INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
-
 
 ## VIEW dependent packages
 IF (BALL_HAS_VIEW)
@@ -339,12 +338,7 @@ IF (BALL_HAS_VIEW)
 	IF (NOT OPENGL_FOUND OR NOT OPENGL_GLU_FOUND)
 		MESSAGE(SEND_ERROR "Could not find gl/glu!")
 	ENDIF()
-
-	## GLEW
-	FIND_PACKAGE(GLEW)
-	IF (GLEW_FOUND)
-		SET(BALL_HAS_GLEW TRUE)
-	ENDIF()
+	INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
 
 	## RTfact
 	IF (USE_RTFACT)
@@ -398,6 +392,15 @@ ENDIF(BALL_HAS_VIEW)
 OPTION(BALL_PYTHON_SUPPORT "Compile BALL's python interface (requires python development packages)" ON)
 
 IF (BALL_PYTHON_SUPPORT)
+	# make sure that we set the modules that come with contrib
+	IF(BALL_CONTRIB_PATH)
+		IF(WIN32)
+			SET(ENV{PYTHONPATH} "$ENV{PYTHONPATH};${BALL_CONTRIB_PATH}/install/lib/python")
+		ELSE()
+			SET(ENV{PYTHONPATH} "$ENV{PYTHONPATH}:${BALL_CONTRIB_PATH}/install/lib/python")
+		ENDIF()
+		SET(BALL_PYTHONPATH $ENV{PYTHONPATH})
+	ENDIF()
 	FIND_PACKAGE(PythonInterp)
 	IF (PYTHONINTERP_FOUND)
 		FIND_PACKAGE(PythonLibs)
@@ -447,10 +450,6 @@ IF(OPENBABEL2_FOUND)
 ELSE()
 	MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
 ENDIF()
-
-
-# always build the tools
-OPTION(BALL_BUILD_BALLAXY "Build BALL-based galaxy tools" ON)
 
 ## replace any variables in config.h.in with current values
 SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
@@ -576,7 +575,10 @@ SET(BALL_LINK_FLAGS)
 SET(VIEW_COMPILE_FLAGS)
 SET(VIEW_LINK_FLAGS)
 
-SET_TARGET_PROPERTIES(BALL PROPERTIES SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}")
+SET_TARGET_PROPERTIES(BALL PROPERTIES
+	SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}"
+)
+
 IF (MSVC)
 	SET(BALL_COMPILE_DEFINTIONS ${COMPILE_DEFINITIONS} "BALL_BUILD_DLL" CACHE INTERNAL "")
 	SET_TARGET_PROPERTIES(BALL PROPERTIES COMPILE_DEFINITIONS "${BALL_COMPILE_DEFINTIONS}")
@@ -588,9 +590,12 @@ ENDIF()
 
 IF (BALL_HAS_VIEW)
 ## TODO: Qt handling!
-	LIST(APPEND VIEW_DEP_LIBRARIES ${GLEW_LIBRARY} ${RTFACT_LIBRARIES})
+	LIST(APPEND VIEW_DEP_LIBRARIES ${RTFACT_LIBRARIES})
 
-	SET_TARGET_PROPERTIES(VIEW PROPERTIES SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}")
+	SET_TARGET_PROPERTIES(VIEW PROPERTIES
+		SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}"
+)
+
 	IF(MSVC)
 		## Do we really need this?
 		SET(VIEW_COMPILE_DEFINITIONS ${COMPILE_DEFINITIONS} "BALL_VIEW_BUILD_DLL" CACHE INTERNAL "")
@@ -599,7 +604,6 @@ IF (BALL_HAS_VIEW)
 	ELSEIF(APPLE)
 		SET_TARGET_PROPERTIES(VIEW PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
 	ENDIF()
-
 ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCXX)
@@ -611,41 +615,19 @@ IF(CMAKE_COMPILER_IS_GNUCXX)
 	ENDIF()
 ENDIF()
 
-TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES}
-                           ${QT_QTCORE_LIBRARY}
-                           ${QT_QTNETWORK_LIBRARY}
-                           ${QT_QTXML_LIBRARY})
-
+TARGET_LINK_LIBRARIES(BALL ${BALL_DEP_LIBRARIES})
 
 IF(BALL_HAS_VIEW)
 	TARGET_LINK_LIBRARIES(VIEW BALL
-	                      ${VIEW_DEP_LIBRARIES}
-	                      ${OPENGL_LIBRARIES}
-	                      ${QT_QTCORE_LIBRARY}
-	                      ${QT_QTNETWORK_LIBRARY}
-	                      ${QT_QTGUI_LIBRARY}
-	                      ${QT_QTTEST_LIBRARY}
-	                      ${QT_QTOPENGL_LIBRARY})
-
-	IF(USE_QTWEBKIT)
-		TARGET_LINK_LIBRARIES(VIEW ${QT_QTWEBKIT_LIBRARY})
-	ENDIF()
+                                   ${VIEW_DEP_LIBRARIES}
+                                   ${OPENGL_LIBRARIES})
 ENDIF()
-
-## add targets for Python modules
-ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
-
-## add the plugins
-ADD_SUBDIRECTORY(source/EXTENSIONS)
 
 IF(BALL_HAS_VIEW)
 	## add BALLView target
 	ADD_SUBDIRECTORY(source/APPLICATIONS/BALLVIEW)
 	LIST(APPEND BALL_EXECUTABLES "BALLView" "BALLView")
 ENDIF()
-
-## add BENCHMARK target
-ADD_SUBDIRECTORY(source/BENCHMARKS/)
 
 SET_TARGET_PROPERTIES(BALL PROPERTIES
 	COMPILE_FLAGS "${BALL_COMPILE_FLAGS}"
@@ -659,45 +641,28 @@ IF(BALL_HAS_VIEW)
 	)
 ENDIF()
 
-###### add Utility targets ########
-SET(UTILITIES_EXECUTABLES)
-INCLUDE(source/APPLICATIONS/UTILITIES/BALLUtilities.cmake)
-
-FOREACH(i ${UTILITIES_EXECUTABLES})
-	ADD_EXECUTABLE(${i} source/APPLICATIONS/UTILITIES/${i}.C)
-	TARGET_LINK_LIBRARIES(${i} BALL)
-	SET_PROPERTY(TARGET ${i} PROPERTY FOLDER UTILITIES)
-ENDFOREACH(i)
-ADD_CUSTOM_TARGET(UTILITIES EXCLUDE_FROM_ALL)
-ADD_DEPENDENCIES(UTILITIES ${UTILITIES_EXECUTABLES})
-
-###### add ballaxy project #########
-IF(BALL_BUILD_BALLAXY)
-	ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
+###### Add BALLTools #########
+OPTION(BALL_BUILD_TOOLS "Build BALL command line tools (BALLTools)" ON)
+IF(BALL_BUILD_TOOLS)
+        ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
+        ADD_SUBDIRECTORY(source/APPLICATIONS/UTILITIES)
 ENDIF()
 
+## add targets for Python modules
+ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)
+
+## add the plugins
+ADD_SUBDIRECTORY(source/EXTENSIONS)
+
+## add BENCHMARK target
+ADD_SUBDIRECTORY(source/BENCHMARKS/)
 
 ###### add MMFF94 test targets ##########
-SET(MMFF94_EXECUTABLES)
-INCLUDE(source/APPLICATIONS/MMFF94/BALLMMFF94.cmake)
-
-FOREACH(i ${MMFF94_EXECUTABLES})
-	ADD_EXECUTABLE(${i} source/APPLICATIONS/MMFF94/${i}.C)
-	TARGET_LINK_LIBRARIES(${i} BALL)
-ENDFOREACH(i)
-ADD_CUSTOM_TARGET(MMFF94 EXCLUDE_FROM_ALL)
-ADD_DEPENDENCIES(MMFF94 ${MMFF94_EXECUTABLES})
-
-OPTION(BALL_BUILD_QUEASY "Build BALL with QSAR frontends" ON)
-IF (BALL_BUILD_QUEASY)
-	## add QuEasyRun target
-	ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyRun)
-
-	IF(BALL_HAS_VIEW)
-		## add QuEasyViz target
-		ADD_SUBDIRECTORY(source/APPLICATIONS/QuEasyViz)
-	ENDIF()
+OPTION(BALL_BUILD_MMFF94 "Build MMFF94 command line tools" ON)
+IF(BALL_BUILD_MMFF94)
+        ADD_SUBDIRECTORY(source/APPLICATIONS/MMFF94)
 ENDIF()
+
 
 ########################################################
 ###    Documentation    														 ###

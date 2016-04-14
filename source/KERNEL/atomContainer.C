@@ -127,7 +127,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<AtomContainer>(*ancestor_it) == true)
+            if (RTTI::isKindOf<AtomContainer>(&*ancestor_it) == true)
 			{
 				return (AtomContainer *)&*ancestor_it;
 			}

@@ -251,7 +251,7 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<NucleicAcid>(*ptr), true)
+        TEST_EQUAL(isKindOf<NucleicAcid>(ptr), true)
 		NucleicAcid* f1 = castTo<NucleicAcid>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
 		TEST_EQUAL(f1->countNucleotides(), 2)

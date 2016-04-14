@@ -24,9 +24,9 @@
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QDropEvent>
-#include <QtGui/QLineEdit>
-#include <QtGui/QComboBox>
-#include <QtGui/QTabWidget>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QTabWidget>
 #include <QtGui/QSyntaxHighlighter>
 #include <QtGui/QValidator>
 #include <QtCore/QStringList>

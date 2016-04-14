@@ -11,7 +11,7 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#include <QtGui/QTextBrowser>
+#include <QtWidgets/QTextBrowser>
 
 namespace BALL
 {

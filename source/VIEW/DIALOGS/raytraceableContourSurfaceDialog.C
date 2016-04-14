@@ -4,10 +4,10 @@
 
 #include <BALL/VIEW/DIALOGS/raytraceableContourSurfaceDialog.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QLineEdit>
 //#include <QtGui/qpushbutton.h>
-#include <QtGui/QSlider>
+#include <QtWidgets/QSlider>
 #include <iostream>
 
 namespace BALL
@@ -15,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 	
-RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent, const char* name, bool, Qt::WFlags fl )
+RaytraceableContourSurfaceDialog::RaytraceableContourSurfaceDialog(RaytraceableGrid* grid, QWidget* parent, const char* name, bool, Qt::WindowFlags fl )
 	: QDialog(parent, fl),
 		Ui_RaytraceableContourSurfaceDialogData(),
 		ModularWidget(name),

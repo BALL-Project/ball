@@ -5,31 +5,30 @@
 ### So this macro is a nearly one-to-one copy of the FindQt4 - version with only
 ### minor modifications (marked with ## BALL ###)
 ###
-MACRO(QT4_WRAP_UI_BALL outfiles )
-  # since 2.8.12 qt4_extract_options has an additional argument
-  # copied fix from OpenMS
-  IF(${CMAKE_VERSION} VERSION_LESS "2.8.12")
-      QT4_EXTRACT_OPTIONS(ui_files ui_options ${ARGN})
-  ELSE()
-      QT4_EXTRACT_OPTIONS(ui_files ui_options ui_target ${ARGN})
-  ENDIF()
+function(QT5_WRAP_UI_BALL outfiles)
+    set(options)
+    set(oneValueArgs)
+    set(multiValueArgs OPTIONS)
 
-  ### BALL ###
-  # create output directory (will not exist for out-of-source builds)
-  FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/)
+    cmake_parse_arguments(_WRAP_UI "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  FOREACH (it ${ui_files})
-    GET_FILENAME_COMPONENT(outfile ${it} NAME_WE)
-    GET_FILENAME_COMPONENT(infile ${it} ABSOLUTE)
-    ### BALL ###
-    SET(outfile ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/ui_${outfile}.h)
-    ADD_CUSTOM_COMMAND(OUTPUT ${outfile}
-      COMMAND ${QT_UIC_EXECUTABLE}
-      ARGS ${ui_options} -o ${outfile} ${infile}
-      MAIN_DEPENDENCY ${infile} VERBATIM)
-    SET(${outfiles} ${${outfiles}} ${outfile})
-  ENDFOREACH (it)
-ENDMACRO (QT4_WRAP_UI_BALL)
+    set(ui_files ${_WRAP_UI_UNPARSED_ARGUMENTS})
+    set(ui_options ${_WRAP_UI_OPTIONS})
+
+		FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/)
+
+    foreach(it ${ui_files})
+        get_filename_component(outfile ${it} NAME_WE)
+        get_filename_component(infile ${it} ABSOLUTE)
+        set(outfile ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/ui_${outfile}.h)
+        add_custom_command(OUTPUT ${outfile}
+          COMMAND ${Qt5Widgets_UIC_EXECUTABLE}
+          ARGS ${ui_options} -o ${outfile} ${infile}
+          MAIN_DEPENDENCY ${infile} VERBATIM)
+        list(APPEND ${outfiles} ${outfile})
+    endforeach()
+    set(${outfiles} ${${outfiles}} PARENT_SCOPE)
+endfunction()
 
 MACRO(ADD_BALL_DEFINITIONS NEW_DEFINITIONS)
 	SET(BALL_DEFINITIONS ${NEW_DEFINITIONS} ${BALL_DEFINITIONS})
@@ -109,6 +108,28 @@ MACRO(ADD_BALL_PARSER_LEXER GROUP BASENAME PREFIX)
 	SOURCE_GROUP("Lexer Files\\\\${GROUP}" FILES ${LEXERINPUT})
 ENDMACRO()
 
+## Add the header files in HEADERS_LIST to the list
+## of files compiled into libBALL, and mark them as
+## part of source group GROUP
+MACRO(ADD_VIEW_HEADERS GROUP HEADERS_LIST)
+	SET(DIRECTORY include/BALL/${GROUP})
+
+	### add full path to the filenames ###
+	SET(HEADERS)
+	FOREACH(i ${HEADERS_LIST})
+		### make sure we do not have absolute paths flying around...
+		GET_FILENAME_COMPONENT(i ${i} NAME)
+		LIST(APPEND HEADERS ${DIRECTORY}/${i})
+	ENDFOREACH()
+
+	### pass source file list to the upper instance ###
+	LIST(APPEND VIEW_headers ${HEADERS})
+
+	### source group definition ###
+	STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
+	SOURCE_GROUP("Header Files\\\\${S_GROUP}" FILES ${HEADERS})
+ENDMACRO()
+
 ## Add the source files in SOURCES_LIST to the list
 ## of files compiled into libVIEW, and mark them as
 ## part of source group GROUP
@@ -144,7 +165,7 @@ MACRO(ADD_BALL_UIFILES GROUP UI_LIST)
 
 		### Generate the corresponding ui file ###
 		SET(OUTFILES)
-		QT4_WRAP_UI_BALL(OUTFILES ${UI_FILE})
+		QT5_WRAP_UI_BALL(OUTFILES ${UI_FILE})
 
 		### and add them to the sources ###
 		SET(VIEW_sources ${VIEW_sources} "${OUTFILES}" ${UI_FILE})
@@ -153,56 +174,6 @@ MACRO(ADD_BALL_UIFILES GROUP UI_LIST)
 		STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
 		SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${OUTFILES})
 		SOURCE_GROUP("UI Files" FILES ${UI_FILE})
-	ENDFOREACH()
-ENDMACRO()
-
-MACRO(ADD_BALL_MOCFILES GROUP INPUT_DIRECTORY MOC_LIST)
-	SET(DIRECTORY source/${GROUP})
-
-	### for out of source builds, the output directory might not yet exist ###
-	FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/${DIRECTORY})
-
-	### iterate over the moc files ###
-	FOREACH(i ${MOC_LIST})
-		GET_FILENAME_COMPONENT(NAME_BASE ${i} NAME_WE)
-
-		SET(MOC_FILE ${INPUT_DIRECTORY}/${NAME_BASE}.h)
-		SET(OUTFILE  ${PROJECT_BINARY_DIR}/${DIRECTORY}/moc_${NAME_BASE}.C)
-
-		### generate the corresponding moc files ###
-		QT4_GENERATE_MOC(${MOC_FILE} ${OUTFILE})
-
-		### and add them to the sources ###
-		SET(VIEW_sources ${VIEW_sources} ${OUTFILE})
-
-		### source group definition ###
-		STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
-		SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${OUTFILE})
-	ENDFOREACH()
-ENDMACRO()
-
-MACRO(ADD_BALL_CORE_MOCFILES GROUP INPUT_DIRECTORY MOC_LIST)
-	SET(DIRECTORY source/${GROUP})
-
-	### for out of source builds, the output directory might not yet exist ###
-	FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/${DIRECTORY})
-
-	### iterate over the moc files ###
-	FOREACH(i ${MOC_LIST})
-		GET_FILENAME_COMPONENT(NAME_BASE ${i} NAME_WE)
-
-		SET(MOC_FILE ${INPUT_DIRECTORY}/${NAME_BASE}.h)
-		SET(OUTFILE  ${PROJECT_BINARY_DIR}/${DIRECTORY}/moc_${NAME_BASE}.C)
-
-		### generate the corresponding moc files ###
-		QT4_GENERATE_MOC(${MOC_FILE} ${OUTFILE})
-
-		### and add them to the sources ###
-		SET(BALL_sources ${BALL_sources} ${OUTFILE})
-
-		### source group definition ###
-		STRING(REGEX REPLACE "/" "\\\\" S_GROUP ${GROUP})
-		SOURCE_GROUP("Source Files\\\\${S_GROUP}" FILES ${OUTFILE})
 	ENDFOREACH()
 ENDMACRO()
 

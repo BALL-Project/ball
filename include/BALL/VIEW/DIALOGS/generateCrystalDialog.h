@@ -56,7 +56,7 @@ namespace BALL
 				
 				///
 				GenerateCrystalDialog(QWidget* parent = 0, const char* name = "GenerateCrystalDialog", 
-												bool modal = FALSE, Qt::WFlags fl = 0 );
+												bool modal = false, Qt::WindowFlags fl = 0 );
 
 				///
 				~GenerateCrystalDialog();

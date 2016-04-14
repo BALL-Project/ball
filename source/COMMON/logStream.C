@@ -4,6 +4,7 @@
 // $Id: logStream.C,v 1.42.18.1 2007/03/25 22:00:03 oliver Exp $
 //
 
+#include <algorithm>
 #include <limits>
 #include <string>
 #include <cstring>

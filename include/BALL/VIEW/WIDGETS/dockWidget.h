@@ -5,11 +5,11 @@
 #	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#include <QtGui/QDockWidget>
+#include <QtWidgets/QDockWidget>
 #include <QtGui/QDropEvent>
-#include <QtGui/QDockWidget>
+#include <QtWidgets/QDockWidget>
 #include <QtGui/QMouseEvent>
-#include <QtGui/QGridLayout>
+#include <QtWidgets/QGridLayout>
 
 namespace BALL
 {

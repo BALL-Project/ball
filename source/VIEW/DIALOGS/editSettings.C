@@ -5,15 +5,15 @@
 #include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLineEdit>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WFlags fl)
+EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WindowFlags fl)
 	: QWidget(parent, fl),
 		Ui_EditSettingsData(),
 		PreferencesEntry()

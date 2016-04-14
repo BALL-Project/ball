@@ -115,8 +115,8 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 	TEST_NOT_EQUAL(ptr, 0)
 	if (ptr != 0)
 	{
-		TEST_EQUAL(isKindOf<PDBAtom>(*ptr), true)
-		if (isKindOf<PDBAtom>(*ptr))
+        TEST_EQUAL(isKindOf<PDBAtom>(ptr), true)
+        if (isKindOf<PDBAtom>(ptr))
 		{
 			PDBAtom* p2 = castTo<PDBAtom>(*ptr);
 			TEST_EQUAL(testEqual(*p2, pdba), true)

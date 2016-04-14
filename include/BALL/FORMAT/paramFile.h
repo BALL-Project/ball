@@ -13,8 +13,8 @@
 # include <BALL/DATATYPE/string.h>
 #endif
 
-#include <QtXml/QXmlStreamReader>
-#include <QtXml/QXmlStreamWriter>
+#include <QtCore/QXmlStreamReader>
+#include <QtCore/QXmlStreamWriter>
 #include <QtCore/QFile>
 
 #include <map>

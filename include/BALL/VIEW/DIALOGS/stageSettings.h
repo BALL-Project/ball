@@ -27,7 +27,7 @@
 
 #include <BALL/VIEW/UIC/ui_stageSettings.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 class QSplashScreen;
 
@@ -57,7 +57,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			StageSettings( QWidget* parent = 0, const char* name = "StageSettings", Qt::WFlags fl = 0 );
+			StageSettings( QWidget* parent = 0, const char* name = "StageSettings", Qt::WindowFlags fl = 0 );
 
 			/// Destructor
 			~StageSettings() {}

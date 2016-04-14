@@ -4,15 +4,13 @@
 #include <XML3DSettings.h>
 #include <XMPPWidget.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
 # include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
-
-Q_EXPORT_PLUGIN2(pluginXML3D, BALL::VIEW::XML3DPlugin)
 
 // TODO: make settings changeable while driver already running
 namespace BALL

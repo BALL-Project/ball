@@ -38,7 +38,7 @@
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtCore/QDir>
-#include <QtGui/QMenuBar>
+#include <QtWidgets/QMenuBar>
 
 #include <sstream>
 
@@ -279,11 +279,11 @@ namespace BALL
 	#ifdef BALL_VIEW_DEBUG
 			Log.error() << "MolecularStructure " << this  << "onNotify " << message << std::endl;
 	#endif
-			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+            if (RTTI::isKindOf<ControlSelectionMessage>(message))
 			{
 				checkMenu(*getMainControl());
 			}
-			else if (RTTI::isKindOf<CompositeMessage>(*message))
+            else if (RTTI::isKindOf<CompositeMessage>(message))
 			{
 				CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
 				switch (cmessage->getType())
@@ -299,7 +299,7 @@ namespace BALL
 						return;
 				}
 			}
-			else if (RTTI::isKindOf<MolecularTaskMessage>(*message))
+            else if (RTTI::isKindOf<MolecularTaskMessage>(message))
 			{
 				switch (((RTTI::castTo<MolecularTaskMessage>(*message)))->getType())
 				{
@@ -345,7 +345,7 @@ namespace BALL
 			list<Composite*>::const_iterator it = selection.begin();
 			for (; it != selection.end(); ++it)
 			{
-				if (!RTTI::isKindOf<AtomContainer>(**it))
+                if (!RTTI::isKindOf<AtomContainer>(*it))
 				{
 					Log.error() << (String)tr("ResidueChecker: cannot apply to a") << " " << typeid(**it).name()
 						          << " " << (String)tr("object") << std::endl;
@@ -764,7 +764,7 @@ namespace BALL
 				menu->setEnabled(composites_muteable);
 
 //   			calculate_ramachandran_->setEnabled((number_of_selected_objects == 1) &&
-//   							RTTI::isKindOf<Protein>(**getMainControl()->getMolecularControlSelection().begin()));
+//   							RTTI::isKindOf<Protein>(*getMainControl()->getMolecularControlSelection().begin()));
 		}
 
 
@@ -776,7 +776,7 @@ namespace BALL
 			#endif
 
 			// properties will be used only for atom containers
-			if (!RTTI::isKindOf<AtomContainer>(composite)) return;
+            if (!RTTI::isKindOf<AtomContainer>(&composite)) return;
 
 			Log.info() << "> " + (String)tr("applying molecular properties") + " ... " << endl;
 
@@ -1028,7 +1028,7 @@ namespace BALL
 
 			list<Composite*>::iterator it = getMainControl()->getMolecularControlSelection().begin();
 			
-			if (!RTTI::isKindOf<Protein>(**it)) 
+            if (!RTTI::isKindOf<Protein>(*it))
 			{
 				setStatusbarText((String)tr("Exact two Proteins have to be selected"), true);
 				return;
@@ -1037,7 +1037,7 @@ namespace BALL
 			a1 = (Protein*) *it;
 			it++;
 
-			if (!RTTI::isKindOf<Protein>(**it)) 
+            if (!RTTI::isKindOf<Protein>(*it))
 			{
 				setStatusbarText((String)tr("Exact two Proteins have to be selected"), true);
 				return;
@@ -1671,7 +1671,7 @@ namespace BALL
 			/*
 			List<Composite*> selection = getMainControl()->getMolecularControlSelection();
 			if (!selection.size() != 1 ||
-					!RTTI::isKindOf<Protein>(**selection.begin()))
+                    !RTTI::isKindOf<Protein>(*selection.begin()))
 			{
 				setStatusbarText("Exactly one Protein has to be selected for a Ramachandran Plot!");
 			}

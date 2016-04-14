@@ -15,7 +15,7 @@
 # include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
 
-#include <QtGui/QTreeWidgetItem>
+#include <QtWidgets/QTreeWidgetItem>
 
 namespace BALL
 {

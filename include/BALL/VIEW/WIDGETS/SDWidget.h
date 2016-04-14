@@ -11,7 +11,7 @@
 
 #include <BALL/KERNEL/system.h>
 
-#include <QtGui/QWidget>
+#include <QtWidgets/QWidget>
 
 namespace BALL
 {

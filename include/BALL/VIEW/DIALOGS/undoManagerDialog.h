@@ -17,7 +17,7 @@
 # include <BALL/VIEW/KERNEL/snapshotManagerInterface.h>
 #endif
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 #include <BALL/VIEW/UIC/ui_undoManagerDialog.h>
 
@@ -40,7 +40,7 @@ namespace BALL
 				BALL_EMBEDDABLE(UndoManagerDialog,ModularWidget)
 
 				/// Constructor
-				UndoManagerDialog( QWidget* parent = 0, const char* name = "UndoManagerDialog", Qt::WFlags fl = 0 );
+				UndoManagerDialog( QWidget* parent = 0, const char* name = "UndoManagerDialog", Qt::WindowFlags fl = 0 );
 
 				/// Destructor
 				~UndoManagerDialog() {}

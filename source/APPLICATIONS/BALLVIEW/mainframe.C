@@ -33,7 +33,7 @@
 #include <BALL/COMMON/version.h>
 
 #include <QtGui/QKeyEvent>
-#include <QtGui/QTreeWidget>
+#include <QtWidgets/QTreeWidget>
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
 #ifdef BALL_HAS_ASIO
@@ -246,7 +246,7 @@ namespace BALL
 		}
 
  		if (e->key() == Qt::Key_Delete &&
-				RTTI::isKindOf<QTreeWidget>(*sender))
+                RTTI::isKindOf<QTreeWidget>(sender))
  		{
  			deleteClicked();
 			return true;

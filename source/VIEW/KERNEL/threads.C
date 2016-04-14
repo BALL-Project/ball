@@ -19,7 +19,7 @@
 #include <BALL/FORMAT/trajectoryFile.h>
 #include <BALL/FORMAT/DCDFile.h>
 
-#include <QtGui/QApplication>
+#include <QtWidgets/QApplication>
 
 namespace BALL
 {
@@ -172,18 +172,19 @@ namespace BALL
 					updateStructure_();
 					waitForUpdateOfRepresentations_();
 
-					QString message;
-					message.sprintf((tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A").toAscii().constData(), 
-													minimizer_->getNumberOfIterations(), 
-													ff.getEnergy(), ff.getRMSGradient());
-					output_(ascii(message));
+					QString message = tr("Iteration %1: energy = %2 kJ/mol, RMS gradient = %3 kJ/mol A")
+														.arg(minimizer_->getNumberOfIterations())
+														.arg(ff.getEnergy())
+														.arg(ff.getRMSGradient());
+					output_(message.toStdString());
 				}
 
 				updateStructure_();
 
 				output_(ff.getResults());
-				output_((String)tr("final RMS gradient") + "    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   " + (String)tr("after") 
-				        + " " + String(minimizer_->getNumberOfIterations()) + " " + (String)tr("iterations") + "\n",
+				output_(tr("final RMS gradient    : %1 kJ/(mol A)   after %2 iterations\n")
+				        .arg(ff.getRMSGradient())
+								.arg(minimizer_->getNumberOfIterations()).toStdString(),
 								true);
 
 				if (converged) output_((String)tr("converged!"));
@@ -268,11 +269,11 @@ namespace BALL
 
 					waitForUpdateOfRepresentations_();
 	
-					QString message;
-					message.sprintf((tr("Iteration") + " %d: " + tr("energy") + " = %f kJ/mol, " + tr("RMS gradient") + " = %f kJ/mol A").toAscii().constData(), 
-													md_->getNumberOfIterations(), 
-													ff.getEnergy(), ff.getRMSGradient());
-					output_(ascii(message));
+					QString message = tr("Iteration %1: energy = %2 kJ/mol, RMS gradient = %3 kJ/mol A")
+					                  .arg(md_->getNumberOfIterations())
+					                  .arg(ff.getEnergy())
+					                  .arg(ff.getRMSGradient());
+					output_(message.toStdString());
 
 
 					if (save_images_) exportSceneToPNG_();

@@ -17,9 +17,9 @@
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
 
-#include <QtGui/QMenuBar>
-#include <QtGui/QFileDialog>
-#include <QtGui/QToolBar>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QToolBar>
 
 namespace BALL
 {
@@ -186,7 +186,7 @@ bool MolecularFileDialog::writeFile()
 {
 	list<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 
-	if (selection.size() != 1 || !RTTI::isKindOf<System> (**selection.begin()))
+    if (selection.size() != 1 || !RTTI::isKindOf<System> (*selection.begin()))
 	{
 		setStatusbarText((String)tr("Not a single system selected! Aborting writing..."), true);
 		return false;
@@ -722,7 +722,7 @@ System* MolecularFileDialog::openXYZFile()
 
 void MolecularFileDialog::onNotify(Message *message)
 {
-	if (RTTI::isKindOf<ControlSelectionMessage>(*message)) 
+    if (RTTI::isKindOf<ControlSelectionMessage>(message))
 	{
 		checkMenu(*getMainControl());
 	}

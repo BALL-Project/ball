@@ -8,16 +8,16 @@
 # include <BALL/VIEW/KERNEL/iconLoader.h>
 #endif
 
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
-#include <QtGui/QSpinBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMessageBox>
-#include <QtGui/QInputDialog>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QSpinBox>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QInputDialog>
 #include <QtGui/QDoubleValidator>
-#include <QtGui/QPushButton>
-#include <QtGui/QScrollBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollBar>
 
 #include <limits>
 

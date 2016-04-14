@@ -6,15 +6,15 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/residue.h>
 
-#include <QtGui/QLineEdit>
-#include <QtGui/QPushButton>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, bool, Qt::WFlags fl )
+BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, bool, Qt::WindowFlags fl )
   : QDialog(parent, fl),
 		Ui_BondPropertiesData(),
 		atom_(atom)
@@ -31,7 +31,7 @@ BondProperties::BondProperties( Atom* atom, QWidget* parent,  const char* name, 
 	parent_ = parent;
 	String text;
 	if (atom_->getParent() != 0 &&
-			RTTI::isKindOf<Residue>(*atom_->getParent()))
+            RTTI::isKindOf<Residue>(atom_->getParent()))
 	{
 		text = ((Residue*) atom_->getParent())->getID();
 	}
@@ -68,7 +68,7 @@ void BondProperties::bondSelected()
 	String text;
 	Atom* partner = bond->getPartner(*atom_);
 	if (partner->getParent() != 0 &&
-			RTTI::isKindOf<Residue>(*partner->getParent()))
+            RTTI::isKindOf<Residue>(partner->getParent()))
 	{
 		text = ((Residue*) partner->getParent())->getID();
 	}
@@ -130,7 +130,7 @@ void BondProperties::bondSelected()
 
 void BondProperties::focusAtom()
 {
-	if (!RTTI::isKindOf<MolecularControl>(*parent_) ||
+    if (!RTTI::isKindOf<MolecularControl>(parent_) ||
 			bond_box->currentIndex() == -1) 
 	{
 		return;
@@ -148,7 +148,7 @@ void BondProperties::focusAtom()
 
 void BondProperties::focusPartner()
 {
-	if (!RTTI::isKindOf<MolecularControl>(*parent_) ||
+    if (!RTTI::isKindOf<MolecularControl>(parent_) ||
 			bond_box->currentIndex() == -1) 
 	{
 		return;

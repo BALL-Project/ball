@@ -9,9 +9,9 @@
 
 #include <QtCore/QDir>
 
-#include <QtGui/QCheckBox>
-#include <QtGui/QStyleFactory>
-#include <QtGui/QFontDialog>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QStyleFactory>
+#include <QtWidgets/QFontDialog>
 
 #include <BALL/SYSTEM/path.h>
 
@@ -20,7 +20,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WFlags fl)
+MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name, Qt::WindowFlags fl)
 	: QWidget(parent, fl),
 		Ui_MainControlPreferencesData(),
 		PreferencesEntry(),

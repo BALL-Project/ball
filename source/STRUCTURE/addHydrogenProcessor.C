@@ -120,7 +120,7 @@ namespace BALL
 			}
 
 			// h_to_add == 1
-			Vector3 bv = partners[0]->getPosition() - atom_position;
+			Vector3 bv = atom_position - partners[0]->getPosition();
 			Vector3 axis = getNormal_(bv);
 
 			m.setRotation(Angle(106, false), axis);

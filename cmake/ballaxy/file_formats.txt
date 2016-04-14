@@ -1,0 +1,39 @@
+ac		ac		galaxy.datatypes.data:Text	
+ent		ent		galaxy.datatypes.data:Text	
+brk		brk		galaxy.datatypes.data:Text	
+hin		hin		galaxy.datatypes.data:Text	
+mol		mol		galaxy.datatypes.data:Text	
+xyz		xyz		galaxy.datatypes.data:Text	
+mol2.gz		mol2.gz		galaxy.datatypes.binary:Binary 		multipart/x-gzip
+sdf.gz		sdf.gz		galaxy.datatypes.binary:Binary      	multipart/x-gzip
+drf.gz		drf.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+ac.gz		ac.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+ent.gz		ent.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+brk.gz		brk.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+hin.gz		hin.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+mol.gz		mol.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+xyz.gz		xyz.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+mol2		mol2		galaxy.datatypes.data:Text      
+sdf		sdf		galaxy.datatypes.data:Text      
+drf		drf		galaxy.datatypes.data:Text      
+txt
+ini		ini		galaxy.datatypes.data:Text      
+pdf
+mod		mod		galaxy.datatypes.data:Text      
+png
+eps		eps		galaxy.datatypes.binary:Binary  
+dat		dat		galaxy.datatypes.data:Text      
+smi		smi		galaxy.datatypes.data:Text      
+smi.gz		smi.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+csv
+csv.gz		csv.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+txt.gz		txt.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+fasta
+gv		gv		galaxy.datatypes.data:Text
+dcd		dcd		galaxy.datatypes.data:Text
+grd.gz		grd.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip
+grd		grd		galaxy.datatypes.data:Text
+bngrd.gz	bngrd.gz	galaxy.datatypes.binary:Binary  	multipart/x-gzip
+bngrd		bngrd		galaxy.datatypes.data:Text
+pdb		pdb		galaxy.datatypes.data:Text
+pdb.gz		pdb.gz		galaxy.datatypes.binary:Binary  	multipart/x-gzip

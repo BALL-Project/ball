@@ -152,11 +152,7 @@ namespace BALL
 		inline 
 		bool isFinite(const T& t)
 		{
-#ifdef BALL_COMPILER_MSVC
-			return ::_finite(t);
-#else
-			return finite(t);
-#endif
+			return std::isfinite(t);
 		}
 
 		/**	Test whether a value is not a number.

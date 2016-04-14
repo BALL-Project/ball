@@ -14,9 +14,9 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 
-#include <QtGui/QFileDialog>
-#include <QtGui/QMessageBox>
-#include <QtGui/QLineEdit>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QLineEdit>
 
 
 namespace BALL
@@ -51,10 +51,10 @@ ExportGeometryDialog::~ExportGeometryDialog()
 
 
 
-void ExportGeometryDialog::exec()
+int ExportGeometryDialog::exec()
 {
 	MainControl* mc = getMainControl();
-	if (mc == 0) return;
+	if (mc == 0) return QDialog::Rejected;
 
 	RepresentationManager& rm = mc->getRepresentationManager();
 
@@ -107,7 +107,7 @@ void ExportGeometryDialog::exec()
 	vrml_ = false;
 	stl_ = false;
 	raise();
-	QDialog::exec();
+	return QDialog::exec();
 }
 
 
@@ -234,12 +234,12 @@ void ExportGeometryDialog::accept()
 				// mesh (5) is the only real printable representation
 				//
 				// TODO: what about spheres, e.g.??
-				if (! (	 RTTI::isKindOf<Box> (**git)
-							 ||RTTI::isKindOf<Disc>(**git)
-							 ||RTTI::isKindOf<GridVisualisation>(**git)
-							 ||RTTI::isKindOf<Label>(**git)
-							 ||RTTI::isKindOf<Mesh>(**git)
-							 ||RTTI::isKindOf<SimpleBox>(**git)
+                if (! (	 RTTI::isKindOf<Box> (*git)
+                             ||RTTI::isKindOf<Disc>(*git)
+                             ||RTTI::isKindOf<GridVisualisation>(*git)
+                             ||RTTI::isKindOf<Label>(*git)
+                             ||RTTI::isKindOf<Mesh>(*git)
+                             ||RTTI::isKindOf<SimpleBox>(*git)
 							)
 					 )
 				{

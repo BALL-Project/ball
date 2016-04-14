@@ -11,7 +11,7 @@
 
 #include <BALL/VIEW/UIC/ui_exportGeometryDialog.h>
 
-#include <QtGui/QDialog>
+#include <QtWidgets/QDialog>
 
 namespace BALL
 {
@@ -67,7 +67,7 @@ namespace BALL
 
 			/** Show and raise the dialog
 			*/
-			void exec();
+			int exec();
 
 			///
 			void accept();

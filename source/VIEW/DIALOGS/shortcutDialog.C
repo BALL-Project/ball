@@ -8,14 +8,14 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <QtGui/QFileDialog>
+#include <QtWidgets/QFileDialog>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		ShortcutDialog::ShortcutDialog(QWidget* parent, const char* name, Qt::WFlags)
+		ShortcutDialog::ShortcutDialog(QWidget* parent, const char* name, Qt::WindowFlags)
 			: QWidget(parent),
 				Ui_ShortcutDialogData(),
 				ModularWidget(name),

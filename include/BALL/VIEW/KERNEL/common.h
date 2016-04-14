@@ -24,8 +24,8 @@
 #endif
 
 #include <QtCore/QEvent>
-#include <QtGui/QColorDialog>
-#include <QtGui/QLabel>
+#include <QtWidgets/QColorDialog>
+#include <QtWidgets/QLabel>
 #include <QtGui/QDropEvent>
 
 namespace BALL
