@@ -5156,19 +5156,6 @@ so there was nothing to be done!</source>
     </message>
 </context>
 <context>
-    <name>EditOperationDialogData</name>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/editOperationDialog.ui" line="16"/>
-        <source>Undo list</source>
-        <translation>Historie</translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/editOperationDialog.ui" line="28"/>
-        <source>undo</source>
-        <translation>Rückgängig</translation>
-    </message>
-</context>
-<context>
     <name>EditSettingsData</name>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/editSettings.ui" line="14"/>

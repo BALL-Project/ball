@@ -17,27 +17,11 @@
 # include <BALL/VIEW/RENDERING/renderWindow.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_GLRENDERWINDOW_H
-# include <BALL/VIEW/RENDERING/glRenderWindow.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_EDITSETTINGS_H
-# include <BALL/VIEW/DIALOGS/editSettings.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_EDITOPERATION_H
-# include <BALL/VIEW/KERNEL/editOperation.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_MODES_INTERACTIONMODEMANAGER_H
 # include <BALL/VIEW/KERNEL/MODES/interactionModeManager.h>
 #endif
 
 #include <QtCore/QThread>
-#include <QtCore/QTimer>
-#include <QtGui/QDragEnterEvent>
-#include <QtGui/QDropEvent>
-#include <QtWidgets/QToolBar>
 #include <QtGui/QFont>
 #include <QtGui/QPicture>
 
@@ -48,6 +32,9 @@ class QRubberBand;
 class QMenu;
 class QImage;
 class QAction;
+class QDragEnterEvent;
+class QDropEvent;
+class QToolBar;
 class QWheelEvent;
 class QKeyEvent;
 
@@ -59,13 +46,12 @@ namespace BALL
 
 	namespace VIEW
 	{
-		class InteractionMode;
 		class Preferences;
+		class EditSettings;
 		class LightSettings;
 		class StageSettings;
 		class MaterialSettings;
 		class AnimationThread;
-		class ClippingPlane;
 		class CompositeMessage;
 		class ControlSelectionMessage;
 		class RepresentationMessage;
@@ -75,6 +61,7 @@ namespace BALL
 		class TransformationEvent6D;
 		class MotionTrackingEvent;
 		class ButtonEvent;
+		class GLRenderWindow;
 		class RenderSetup;
 		class RenderToBufferFinishedEvent;
 
@@ -137,23 +124,6 @@ namespace BALL
 				*/
 				//@{
 
-				/**
-				 * Scene may hold several windows for different renering modes.
-				 * If you need to retrieve a particular window, use this enum together
-				 * with Scene::getWindow() to get a reference to it.
-				 */
-				enum WindowType
-				{
-					/// Main window that is always being displayed directly in the QT main interface
-					CONTROL_WINDOW = 0,
-
-					/// Window into which left eye should be rendered. Indicates same window as CONTROL_WINDOW if no stereo is running.
-					LEFT_EYE_WINDOW,
-
-					/// Window into which right eye should be renderer.  Indicates same window as CONTROL_WINDOW if no stereo is running.
-					RIGHT_EYE_WINDOW
-				};
-
 				/**	@name	Constructors and Destructor
 				*/
 				//@{
@@ -168,7 +138,7 @@ namespace BALL
 					\param      w_flags the flags the scene widget should have
 					(See documentation of QT-library for information concerning widget flags)
 					*/
-				Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WindowFlags w_flags = 0, const QString& preferred_renderer = QString("GLRenderer"));
+				explicit Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WindowFlags w_flags = 0, const QString& preferred_renderer = QString("GLRenderer"));
 
 				/** Destructor.
 				*/
@@ -202,8 +172,6 @@ namespace BALL
 				/** This method exports the content of the Scene to an external Renderer.
 				*/
 				virtual bool exportScene(SceneExporter &er) const;
-
-				String getBondOrderString_(Index order);
 
 				//@}
 				/**	ModularWidget methods.
@@ -283,9 +251,6 @@ namespace BALL
 
 				void changeBondOrder();
 				void changeBondOrder(Index delta);
-				void activatedOrderItem_(QAction* action);
-				void createMolecule_();
-				void setFormalCharge_();
 
 				void deselect(bool update=true);
 				void getClickedItems(const QPoint& p);
@@ -519,8 +484,6 @@ namespace BALL
 				/// Returns the state of the preview mode
 				bool usePreview() const { return use_preview_; }
 
-				bool useVertexBuffers() const { return want_to_use_vertex_buffer_; }
-
 				/** Show or hide widget (Called by menu entry in "WINDOWS")
 					If the ModularWidget is not also a QWidget, this method does nothing
 					*/
@@ -633,21 +596,11 @@ namespace BALL
 				//@}
 
 			////////////////////////////////////////
-			Q_SIGNALS:
-
-				// signal for communication with EditOperationDialog
-				void newEditOperation(EditOperation &eo);
-
-			////////////////////////////////////////
 			protected:
 
 				/** React to RepresentationMessages.
 				 */
 				void handleRepresentationMessage_(RepresentationMessage* rm);
-
-				/** React to DatasetMessages.
-				 */
-				void handleDatasetMessage_(DatasetMessage* dm);
 
 				/** React to SceneMessages.
 				 */
@@ -671,19 +624,6 @@ namespace BALL
 				 */
 				void renderText_(QPointF const& point, QString const& text, QPaintDevice* current_dev);
 
-				/**
-				 * Insert a given Atom in the Scene. Its position is specified by the 2-dim
-				 * Mouseclick coordinates of the Screen, which will be translated into the
-				 * 3-dim space of Viewing Volume.
-				 */
-				void insert_(int x_, int y_, PDBAtom &atom_);
-
-				/**
-				 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
-				 *  computes the 2-dim Coordinates on Screen.
-				 */
-				TVector2<float> getScreenPosition_(Vector3 vec);
-
 				void initializeMembers_();
 
 				void renderGrid_();
@@ -700,8 +640,6 @@ namespace BALL
 				// element for new atoms
 				int atomic_number_;
 
-				//undo stack
-				vector<EditOperation> undo_;
 				EditSettings* edit_settings_;
 				QList<QAction*> toolbar_actions_edit_controls_;
 
@@ -784,6 +722,8 @@ namespace BALL
 				//_
 				void animate_();
 
+				String getBondOrderString_(Index order);
+
 				void rotateSystemClockwise_();
 				void zoomSystem_();
 
@@ -851,7 +791,6 @@ namespace BALL
 				AnimationThread* animation_thread_;
 				bool stop_animation_;
 				bool continuous_loop_;
-				bool want_to_use_vertex_buffer_;
 				bool use_preview_;
 
 				PreciseTime time_;

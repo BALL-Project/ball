@@ -6,7 +6,6 @@ SET(SOURCES_LIST
 	common.C
 	compositeManager.C
 	connectionObject.C
-	editOperation.C
 	geometricObject.C
 	iconLoader.C
 	mainControl.C

@@ -20,6 +20,7 @@
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/editSettings.h>
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -31,15 +32,11 @@
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
+#include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 #include <BALL/VIEW/RENDERING/sceneExporter.h>
 
-#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
-#include <BALL/VIEW/PRIMITIVES/label.h>
-#include <BALL/VIEW/PRIMITIVES/sphere.h>
-#include <BALL/VIEW/PRIMITIVES/tube.h>
-#include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 
 #include <BALL/VIEW/INPUT/transformationEvent6D.h>
@@ -61,18 +58,16 @@
 #include <BALL/STRUCTURE/addHydrogenProcessor.h>
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
-#include <BALL/VIEW/DATATYPE/colorMap.h>
 
 #include <BALL/VIEW/RENDERING/rendererFactory.h>
 
-#include <BALL/PLUGIN/pluginManager.h>
-
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
-#include <QtCore/QMimeData>
-#include <QtWidgets/QMenuBar>
 #include <QtPrintSupport/QPrinter>
 #include <QtPrintSupport/QPrintDialog>
+#include <QtCore/QMimeData>
+#include <QtGui/QDragEnterEvent>
+#include <QtGui/QDropEvent>
 #include <QtGui/QPainter>
 #include <QtGui/QImage>
 #include <QtGui/QCursor>
@@ -81,7 +76,7 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QProgressBar>
-#include <QtOpenGL/QGLPixelBuffer>
+#include <QtWidgets/QToolBar>
 #include <QtWidgets/QMessageBox>
 
 #include <boost/random/mersenne_twister.hpp>
@@ -122,11 +117,11 @@ namespace BALL
 				rb_(new QRubberBand(QRubberBand::Rectangle, this)),
 				stage_(new Stage),
 				light_settings_(new LightSettings(this)),
+				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
 				continuous_loop_(false),
-				want_to_use_vertex_buffer_(false),
 				use_preview_(true),
 				show_fps_(false),
 				toolbar_view_controls_(new QToolBar(tr("3D View Controls"))),
@@ -140,7 +135,6 @@ namespace BALL
 			{
 				initializeMembers_();
 
-				stage_settings_=new StageSettings(this);
 #ifdef BALL_VIEW_DEBUG
 				Log.error() << "new Scene (2) " << this << std::endl;
 #endif
@@ -270,25 +264,6 @@ namespace BALL
 			}
 		}
 
-		void Scene::handleDatasetMessage_(DatasetMessage* dm)
-		{
-			if (!dm->isValid()) return;
-
-			RegularData3DDataset* set = dynamic_cast<RegularData3DDataset*>(dm->getDataset());
-			if (set == 0) return;
-
-			switch (dm->getType())
-			{
-				case DatasetMessage::UPDATE:
-				case DatasetMessage::REMOVE:
-
-				default:
-					return;
-			}
-
-			updateGL();
-		}
-
 		void Scene::handleSceneMessage_(SceneMessage *sm)
 		{
 			switch (sm->getType())
@@ -395,11 +370,6 @@ namespace BALL
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				handleRepresentationMessage_(rm);
-			}
-            else if (RTTI::isKindOf<DatasetMessage>(message))
-			{
-				DatasetMessage* dm = RTTI::castTo<DatasetMessage>(*message);
-				handleDatasetMessage_(dm);
 			}
             else if (RTTI::isKindOf<SceneMessage>(message))
 			{
@@ -2129,7 +2099,6 @@ namespace BALL
 
 				GLRenderer* gr = new GLRenderer;
 				gr->init(*this);
-				gr->enableVertexBuffers(want_to_use_vertex_buffer_);
 				gr->setSize(width(), height());
 
 				TilingRenderer *trenderer = new TilingRenderer(gr, offscreen_factor_*width(), offscreen_factor_*height());
@@ -3302,97 +3271,6 @@ namespace BALL
 			setCursor(s.c_str());
 		}
 
-		// insert an atom at screen positions (x,y) on the view plane
-		// TODO: make the renderer dependent on the current target!
-		void Scene::insert_(int x, int y, PDBAtom &atom)
-		{
-			// find the 3D coordinates of screen position (x,y) on the view plane
-			// move the atom to that position
-			atom.setPosition(renderers_[main_renderer_]->mapViewportTo3D(x,y));
-
-			// now we need to find the AtomContainer into which we will insert the atom.
-			// get all highlighted composites
-			list<Composite*> composite_list = getMainControl()->getMolecularControlSelection();
-
-			Size nr_high = composite_list.size();
-			if (nr_high > 1 || (only_highlighted_ && nr_high == 0))
-			{
-				setStatusbarText((String)tr("Please highlight exactly one AtomContainer for insertion of the created atoms!"), true);
-				return;
-			}
-
-			// exactly one highlighted composite
-			if (nr_high == 1)
-			{
-				// is it an AtomContainer?
-				AtomContainer* ai = dynamic_cast<AtomContainer*>(*composite_list.begin());
-				if (ai == 0)
-				{
-					// is the parent an AtomContainer?
-					Composite* parent = (**composite_list.begin()).getParent();
-					if (parent != 0)
-					{
-						ai = dynamic_cast<AtomContainer*>(parent);
-					}
-
-					if (ai == 0)
-					{
-						setStatusbarText((String)tr("Please highlight exactly one AtomContainer for insertion of the created atoms!"), true);
-						return;
-					}
-				}
-
-				// prevent adding of atoms to a System:
-				// some forcefields will go havoc otherwise
-                if (RTTI::isKindOf<System>(ai))
-				{
-					System* system = (System*) ai;
-					Molecule* mol = system->getMolecule(0);
-					if (mol == 0)
-					{
-						mol = new Molecule();
-						system->insert(*mol);
-					}
-					ai = mol;
-				}
-
-				// we do not need to create our own system
-				ai->insert(atom);
-				getMainControl()->update(*ai, true);
-				return;
-			}
-
-			/////////////////////////////////////////////////////////
-			// no atom container highlighted:
-
-			HashSet<Composite*> composites = getMainControl()->getCompositeManager().getComposites();
-
-			// no System exists? -> create one
-			if (composites.size() == 0)
-			{
-				System *system = new System();
-				Molecule* current_molecule = new Molecule();
-				system->insert(*current_molecule);
-				current_molecule->insert(atom);
-				getMainControl()->insert(*system);
-				getMainControl()->update(*system);
-				return;
-			}
-
-			// add to first Molecule in first System
-			System* system = dynamic_cast<System*>(*composites.begin());
-			Molecule* mol = system->getMolecule(0);
-			if (mol == 0)
-			{
-				mol = new Molecule();
-				system->insert(*mol);
-			}
-
-			mol->appendChild(atom);
-			getMainControl()->update(*mol, true);
-		}
-
-
 		// Set the element for the next insert operations
 		void Scene::setEditElementType(int element_number)
 		{
@@ -3420,27 +3298,6 @@ namespace BALL
 
 			// otherwise deselect all selected items
 			deselect();
-		}
-
-		void Scene::setFormalCharge_()
-		{
-			deselect();
-
-			QObject* os = sender();
-			if (os == 0) return;
-			QAction* action = dynamic_cast<QAction*>(os);
-			if (action == 0) return;
-			String string = ascii(action->text());
-			try
-			{
-				Index fc = string.toInt();
-				if (current_atom_ != 0) current_atom_->setFormalCharge(fc);
-				getMainControl()->update(*current_atom_, true);
-			}
-			catch(...)
-			{
-				BALLVIEW_DEBUG;
-			}
 		}
 
 		void Scene::deselect(bool update)
@@ -3560,20 +3417,6 @@ namespace BALL
 		void Scene::drawLine(const Vector2& a, const Vector2& b, QPainter* painter)
 		{
 			drawLine(QPointF(a.x, a.y), QPointF(b.x, b.y), painter);
-		}
-
-		void Scene::createMolecule_()
-		{
-			System *system = new System();
-			Molecule* current_molecule = new Molecule();
-			system->insert(*current_molecule);
-			getMainControl()->insert(*system);
-
-			ControlSelectionMessage* nsm =  new ControlSelectionMessage();
-			list<Composite*> selection;
-			selection.push_back(current_molecule);
-			nsm->setSelection(selection);
-			notify_(nsm);
 		}
 
 		// TODO: make the renderer dependent on the current target!

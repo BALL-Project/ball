@@ -364,17 +364,8 @@ namespace BALL
 				insert_(evt->x(), evt->y(), *a);
 				scene_->setCurrentAtom(a);
 
-				//store the Operation in undo_
 				Vector3 atom_position = a->getPosition();
 
-/*				EditOperation eo(a, NULL, (String)qApp->tr("Edit Mode", "Added atom of type ") + PTE[atomic_number_].getName() + (String)qApp->tr("Edit Mode", " at position (")
-						+ String(atom_position.x) + ", "
-						+ String(atom_position.y) + ", "
-						+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-				undo_.push_back(eo);
-				// tell about the new undo operation
-				Q_EMIT newEditOperation(eo);
-*/
 				return;
 			}
 
@@ -435,14 +426,6 @@ namespace BALL
 
 				// we found _another_ atom: set the bond
 				new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
-/*			Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *atom, Bond::ORDER__SINGLE);
-
-				EditOperation eo(0, c, "Added bond of type single" , EditOperation::ADDED__BOND);
-				undo_.push_back(eo);
-
-				// tell about the new undo operation
-				Q_EMIT newEditOperation(eo);
-*/
 				scene_->merge(scene_->getCurrentAtom(), atom);
 
 				// update representation
@@ -471,29 +454,9 @@ namespace BALL
 				a->setPosition(new_pos);
 				scene_->getCurrentAtom()->getParent()->appendChild(*a);
 
-				//store the Operation in undo_
 				Vector3 atom_position = a->getPosition();
-/*
-				EditOperation eo(a, NULL, (String)qApp->tr("Edit Mode", "Added atom of type ") + PTE[atomic_number].getName() + (String)qApp->tr("Edit Mode", " at position (")
-						+ String(atom_position.x) + ", "
-						+ String(atom_position.y) + ", "
-						+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
-				undo_.push_back(eo);
-
-				// tell about the new undo operation
-				Q_EMIT newEditOperation(eo);
-*/
 				// set the bond
 				new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
-
-				// tell about the new undo operation
-				/*
-				Bond* c = new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
-				String bond_string = getBondOrderString_(bond_order_);
-				EditOperation eo2(0, c, (String)qApp->tr("Edit Mode", "Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
-				undo_.push_back(eo2);
-				Q_EMIT newEditOperation(eo2);
-				*/
 
 				scene_->getMainControl()->update(*a->getParent(), true);
 				scene_->setStatusbarText(qApp->tr("Edit Mode", "Added a bond and an atom"));
@@ -995,13 +958,6 @@ namespace BALL
 				// create a bond
 				Bond* bond = first_atom->createBond(*second_atom);
 				bond->setOrder(Bond::ORDER__SINGLE); //TODO single bond or current edit mode default bond order?
-
-				// 		TODO:for undo -operation
-				// 		EditOperation eo(0, bond, "Added bond of type single" , EditOperation::ADDED__BOND);
-				// 		undo_.push_back(eo);
-				//
-				// 		// tell about the new undo operation
-				// 		Q_EMIT newEditOperation(eo);
 
 				// if the bond is between two molecules, merge them
 				scene_->merge(first_atom, second_atom);
