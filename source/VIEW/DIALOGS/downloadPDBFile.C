@@ -48,7 +48,7 @@ namespace BALL
 				ModularWidget(name),
 				aborted_(false),
 				error_(false),
-				prefix_("http://www.rcsb.org/pdb/files/"),
+				prefix_("http://files.rcsb.org/view/"),
 				suffix_(".pdb"),
 				biounit_suffix_(".pdb1.gz"),
 				current_reply_(0),

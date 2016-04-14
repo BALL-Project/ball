@@ -41,7 +41,7 @@ namespace BALL
 		(const TrajectoryFile& file) const
 	{
 		return((File::operator == (file))
-				&& (number_of_snapshots_ == number_of_snapshots_)
+				&& (number_of_snapshots_ == file.number_of_snapshots_)
 				&& (number_of_atoms_ == file.number_of_atoms_));
 	}
 

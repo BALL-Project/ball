@@ -367,7 +367,7 @@ namespace BALL
 	float vdwSixTwelve(float inverse_square_distance,
 			float A, float B, float /* limit */)
 	{
-		register float inv_dist_6(inverse_square_distance
+		float inv_dist_6(inverse_square_distance
 				* inverse_square_distance * inverse_square_distance);
 
 #ifdef DEBUG
@@ -399,7 +399,7 @@ namespace BALL
 	BALL_TPL_ARG_INLINE float vdwSixTwelveSoftSimple(float inverse_square_distance,
 			float A, float B, float limit)
 	{
-		register float inv_dist_6(inverse_square_distance
+		float inv_dist_6(inverse_square_distance
 				* inverse_square_distance * inverse_square_distance);
 
 #ifdef DEBUG
@@ -435,7 +435,7 @@ namespace BALL
 	BALL_TPL_ARG_INLINE float vdwSixTwelveSoftLog(float inverse_square_distance,
 			float A, float B, float limit)
 	{
-		register float inv_dist_6(inverse_square_distance
+		float inv_dist_6(inverse_square_distance
 				* inverse_square_distance * inverse_square_distance);
 
 #ifdef DEBUG
@@ -465,7 +465,7 @@ namespace BALL
   BALL_TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance,
 			float A, float B, float /* limit */)
 	{
-		register float inv_dist_10 = inverse_square_distance *
+		float inv_dist_10 = inverse_square_distance *
 			inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
 		return (inv_dist_10 * (inverse_square_distance * A - B));
@@ -475,7 +475,7 @@ namespace BALL
   BALL_TPL_ARG_INLINE float vdwTenTwelveSoftSimple(float inverse_square_distance,
 			float A, float B, float limit)
 	{
-		register float inv_dist_10 = inverse_square_distance *
+		float inv_dist_10 = inverse_square_distance *
 			inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
 		float energy = inv_dist_10 * (inverse_square_distance * A - B);
@@ -487,7 +487,7 @@ namespace BALL
   BALL_TPL_ARG_INLINE float vdwTenTwelveSoftLog(float inverse_square_distance,
 			float A, float B, float limit)
 	{
-		register float inv_dist_10 = inverse_square_distance *
+		float inv_dist_10 = inverse_square_distance *
 			inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
 		float energy = inv_dist_10 * (inverse_square_distance * A - B);

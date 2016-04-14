@@ -125,34 +125,34 @@ namespace BALL
 	/// Return the component with most atoms
 	void ConnectedComponentsProcessor::getLargestComponent(Molecule& result)
 	{
-		int i, pos = 0, max = 0;
-		for(i = 0; i< components_.size(); i++)
+		size_t pos = 0, max = 0;
+		for(size_t i = 0; i < components_.size(); i++)
 		{
-			int tmp = components_[i].size() ;
+			size_t tmp = components_[i].size() ;
 			if (tmp > max)
 			{
 				max = tmp;
 				pos = i;
 			}
 		}
-		
-		for ( int i = 0; i < components_[pos].size(); i++)
+
+		for (size_t i = 0; i < components_[pos].size(); i++)
 		{
 			result.insert( *(components_[pos][i]) );
 		}
 	}
 	
 
-	void ConnectedComponentsProcessor::getMinAtomsComponents(MolVec& result, const int& min)
+	void ConnectedComponentsProcessor::getMinAtomsComponents(MolVec& result, size_t min)
 	{
-		for(int i = 0; i < components_.size(); i++)
+		for(size_t i = 0; i < components_.size(); i++)
 		{
-			int siz = components_[i].size();
+			size_t siz = components_[i].size();
 			if (siz >= min)
 			{
 				Molecule tmp = Molecule();
 				
-				for(int k = 0; k < siz; k++)
+				for(size_t k = 0; k < siz; k++)
 				{
 					tmp.insert( *(components_[i][k]) );
 				}
@@ -163,11 +163,11 @@ namespace BALL
 	
 	void ConnectedComponentsProcessor::getAllComponents(MolVec& results)
 	{
-		for(int i = 0; i < components_.size(); i++)
+		for(size_t i = 0; i < components_.size(); i++)
 		{
 			Molecule tmp = Molecule();
 			
-			for(int k = 0; k < components_[i].size(); k++)
+			for(size_t k = 0; k < components_[i].size(); k++)
 			{
 				tmp.insert( *(components_[i][k]) );
 			}

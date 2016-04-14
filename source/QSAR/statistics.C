@@ -401,7 +401,7 @@ namespace BALL
 			int i_p = static_cast <int> (p);
 			if (i_p != p) // if a root of dist should be taken, then dist may not be negative
 			{
-				dist = std::abs(dist);
+				dist = fabs(dist);
 			}
 			return pow(dist, p);
 		}
@@ -427,7 +427,6 @@ namespace BALL
 			{
 				String var="";
 				var = var+"x1="+String(m1(row1, j))+";x2="+String(m2(row2, j))+";";
-			//	var = var + "x1=" + String(m1(row1, j)) + ";x2=" + String(m2j)) + ";";
 			//	cout<<"f = "<<var+f<<endl;
 				ParsedFunction<double> pf(var+f);
 				dist += pf(0);

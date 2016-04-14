@@ -51,7 +51,7 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control);
 
 			///
-			void setDemoMode(bool state) { tutorial_type_ = DEMO; }
+			void setDemoMode(bool) { tutorial_type_ = DEMO; }
 			
 			///
 			//void setTutorialType(int type) { tutorial_type_ = type;}

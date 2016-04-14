@@ -63,7 +63,7 @@ void copyMoleculeProperies(Molecule &orig, Molecule &cop)
 // Write several result molecules to one file
 void writeMolVec(MolVec &input, GenericMolFile* handle, Molecule &orig)
 {
-	for(int i = 0; i < input.size(); i++)
+	for(size_t i = 0; i < input.size(); i++)
 	{
 		copyMoleculeProperies(orig, input[i]);
 		(*handle) << input[i];

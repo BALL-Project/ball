@@ -181,8 +181,6 @@ namespace BALL
 			{
 				result.getNeighbours().push_back(boost::get(boost::vertex_index, graph, *ai));
 
-				typedef typename boost::property_traits<typename boost::property_map<UndirectedGraph, boost::edge_all_t>::type>::value_type EdgeProperties;
-				
 				result.getEdgeProperties().push_back(boost::get(boost::edge_all_t(), graph, boost::edge(vertex, *ai, graph).first));
 
 				bi = ai; ++bi;

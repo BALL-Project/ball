@@ -21,6 +21,8 @@ namespace BALL
 	Atom::Atom()
 		: Composite(),
 		  PropertyManager(),
+		  interactions(0),
+		  store_interactions_disabled_(0),
 		  name_(BALL_ATOM_DEFAULT_NAME),
 		  type_name_(BALL_ATOM_DEFAULT_TYPE_NAME),
 		  element_(BALL_ATOM_DEFAULT_ELEMENT),
@@ -31,15 +33,15 @@ namespace BALL
 		  position_(BALL_ATOM_DEFAULT_POSITION),
 		  charge_(BALL_ATOM_DEFAULT_CHARGE),
 		  velocity_(BALL_ATOM_DEFAULT_VELOCITY),
-		  force_(BALL_ATOM_DEFAULT_FORCE),
-		  interactions(0),
-		  store_interactions_disabled_(0)
+		  force_(BALL_ATOM_DEFAULT_FORCE)
 	{
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
 		: Composite(atom, deep),
 		  PropertyManager(atom),
+		  interactions(0),
+		  store_interactions_disabled_(0),
 		  name_(atom.name_),
 		  type_name_(atom.type_name_),
 		  element_(atom.element_),
@@ -50,9 +52,7 @@ namespace BALL
 		  position_(atom.position_),
 		  charge_(atom.charge_),
 		  velocity_(atom.velocity_),
-		  force_(atom.force_),
-		  interactions(0),
-		  store_interactions_disabled_(0)
+		  force_(atom.force_)
 	{
 	}
 
@@ -63,6 +63,8 @@ namespace BALL
 			 const Vector3& force, float charge, float radius, Index formal_charge)
 		: Composite(),
 		  PropertyManager(),
+		  interactions(0),
+		  store_interactions_disabled_(0),
 		  name_(name),
 		  type_name_(type_name),
 		  element_(&element),
@@ -73,9 +75,7 @@ namespace BALL
 		  position_(position),
 		  charge_(charge),
 		  velocity_(velocity),
-		  force_(force),
-		  interactions(0),
-		  store_interactions_disabled_(0)
+		  force_(force)
 	{
 	}
 

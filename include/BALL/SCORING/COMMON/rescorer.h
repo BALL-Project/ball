@@ -26,19 +26,6 @@ namespace BALL
 	{
 
 		public:
-
-			// clone method
-			BALL_CREATE(Rescorer)
-
-			// default constructor
-			Rescorer();
-
-			// copy ctor
-			Rescorer(const Rescorer& rescorer);
-
-			// destructor
-			virtual ~Rescorer();
-
 			// assignment operator
 			Rescorer& operator = (const Rescorer& rescorer);
 

@@ -15,26 +15,6 @@ using namespace std;
 
 namespace BALL
 {
-	Rescorer::Rescorer()
-	{
-
-	}
-
-	Rescorer::~Rescorer()
-	{
-
-	}
-
-	Rescorer::Rescorer(const Rescorer& rescorer)
-	{
-	}
-
-	Rescorer& Rescorer::operator = (const Rescorer& rescorer)
-	{
-		//return rescorer;
-		return *this;
-	}
-
 	int Rescorer::runRescoring(CommandlineParser& par, bool simple_rescoring, bool train)
 	{
 		// just to make sure ...

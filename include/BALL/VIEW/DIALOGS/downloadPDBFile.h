@@ -57,7 +57,7 @@ namespace BALL
 				virtual void writePreferences(INIFile& inifile);
 
 				/** Set the prefix for the PDB.org url<br>
-						Standard: http://www.rcsb.org/pdb/files/
+						Standard: http://files.rcsb.org/view/
 				*/
 				void setPrefix(String s) { prefix_ = s;}
 

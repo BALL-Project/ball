@@ -629,7 +629,7 @@ BinaryFingerprintMethods::InvertedIndex* BinaryFingerprintMethods::createInverte
 	unsigned int f_count;
 // 	unsigned short *features;
 	const vector<unsigned short>* features;
-	vector<vector<unsigned short> > feature_list(Limits<unsigned short>::max() + 1, vector<unsigned short>());
+	vector<vector<unsigned short> > feature_list(std::numeric_limits<unsigned short>::max() + 1, vector<unsigned short>());
 	for (unsigned int i=0; i!=members.size(); ++i)
 	{
 		f_count = 0;

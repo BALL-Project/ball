@@ -313,7 +313,7 @@
            </size>
           </property>
           <property name="text">
-           <string>http://www.rcsb.org/pdb/files/</string>
+           <string>http://files.rcsb.org/view/</string>
           </property>
          </widget>
         </item>

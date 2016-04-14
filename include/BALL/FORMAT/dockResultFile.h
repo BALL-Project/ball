@@ -30,9 +30,6 @@ namespace BALL
 
 				static bool SHOW_IDENTICAL_LIGANDS_WARNING;
 
-				BALL_CREATE(DockResultFile)
-
-				DockResultFile();
 				DockResultFile(const String& name, File::OpenMode open_mode = std::ios::in);
 
 				virtual ~DockResultFile() throw();
