@@ -1,15 +1,17 @@
 class Scene
-	: Embeddable
+	: ModularWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/scene.h>
 %End
+	private:
+	Scene(const Scene&);
+
 	public:
 	static Size countInstances();
 	static Scene* getInstance(Position);
 
 	Scene();
-	Scene(const Scene&);
 	~Scene();
 
 	void setCursor(String c);
@@ -45,7 +47,7 @@ class Scene
 	void move(Vector3);
 	void moveComposites(PyCompositeList, Vector3);
 	void rotateComposites(PyCompositeList, float /*degree_right*/, float /*degree_up*/, float de/*gree_clockwise*/ = 0);
-	bool isAnimationRunning() const throw();
+	bool isAnimationRunning() const;
 	void setTurnPoint(const Vector3&);
 	const Vector3& getTurnPoint() const;
 	void setFullScreen(bool);
