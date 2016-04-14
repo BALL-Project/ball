@@ -6,7 +6,7 @@
 
 class Box
 	: GeometricObject,
-		Vertex2
+	  Box3
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/PRIMITIVES/box.h>
