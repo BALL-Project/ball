@@ -67,7 +67,7 @@ namespace BALL
 		}
 
 		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* /*name*/, Qt::WindowFlags w_flags)
-			: QGLWidget(gl_format_, parent_widget, reinterpret_cast<QGLWidget const*>(&window), w_flags),
+			: QGLWidget(gl_format_, parent_widget, &window, w_flags),
 			  stereo_delta_(0.),
 			  m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
