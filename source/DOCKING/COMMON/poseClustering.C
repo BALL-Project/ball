@@ -2463,7 +2463,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	}
 
 
-	void PoseClustering::printCluster_(Index i, std::ostream& out) const
+	void PoseClustering::printCluster_(Size i, std::ostream& out) const
 	{
 		out << "++++ cluster " << i << " score " << getClusterScore(i) << " members "  << clusters_[i].size();
 

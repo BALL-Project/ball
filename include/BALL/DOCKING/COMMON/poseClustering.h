@@ -640,7 +640,7 @@ namespace BALL
 			void storeSnapShotReferences_();
 
 			//
-			void printCluster_(Index i, std::ostream& out = std::cout) const;
+			void printCluster_(Size i, std::ostream& out = std::cout) const;
 
 			// 
 			void printVariables_(int a, int b, double c, int d, double e, int current_level);
