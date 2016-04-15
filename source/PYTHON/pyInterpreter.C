@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.13.18.1 2007/03/25 21:42:50 oliver Exp $
-//
 
 #include <BALL/PYTHON/pyInterpreter.h>
-#include <Python.h>
-
 #include <BALL/PYTHON/BALLPythonConfig.h>
 
 #include <BALL/FORMAT/lineBasedFile.h>
+
+#include <Python.h>
 
 namespace BALL
 {
@@ -338,6 +336,17 @@ namespace BALL
 		
 		state = (runSingleString_(s, Py_single_input) != 0);
 
+		if (!state)
+		{
+			// save the error message, because resetting stdout would overwrite it
+			String result = error_message_;
+
+			runSingleString_("sys.stdout=stdout", Py_single_input);
+			runSingleString_("sys.stderr=stderr", Py_single_input);
+
+			return result;
+		}
+
 		// retrieve output
 		char* buf = 0;
 		PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
@@ -353,7 +362,6 @@ namespace BALL
 	}
 
 	String PyInterpreter::runFile(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 		if (!valid_) return "";
 

@@ -80,7 +80,8 @@ int main(int argc, char** argv)
 		file << "A A " << " 0.0 "
 			   << rot(0) << " " << rot(1) << " " << rot(2) << " " << transl[0] << " "
 				 << rot(3) << " " << rot(4) << " " << rot(5) << " " << transl[1] << " "
-				 << rot(6) << " " << rot(7) << " " << rot(8) << " " << transl[2]
+				 << rot(6) << " " << rot(7) << " " << rot(8) << " " << transl[2] << " "
+				 << " 0.0 0.0 0.0 0.0"
 				 << endl;
 	}
 

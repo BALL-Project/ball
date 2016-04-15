@@ -44,9 +44,10 @@ int main (int argc, char **argv)
 	parpars.setParameterAsHidden("o_out");
 
 	// we register the output type
-	parpars.registerOptionalStringParameter("o_type", "output type (gv, index_list) ", "index_list");
+	parpars.registerOptionalStringParameter("o_type", "output type (gv, json, index_list) ", "index_list");
 	list<String> output_types;
 	output_types.push_back("gv");
+	output_types.push_back("json");
 	output_types.push_back("index_list");
 	parpars.setParameterRestrictions("o_type", output_types);
 
@@ -67,13 +68,13 @@ int main (int argc, char **argv)
 	parpars.setParameterRestrictions("min_size", 1, 10000);
 
 	// the manual
-	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i) of the serialized cluster tree, the output filename (-o_out), the output type (-o_type). The optional parameter -i_type allows to switch between binary (default) and text file for the cluster tree input, parameter -min_size allows to filter for cluster of a minimal size, parameter -cutoff_type defines the way to cut the cluster tree (either by ward distance or by a target number of clusters) using paramter -cut_value.\n\nOutput of this tool is the extracted cluster tree, either as index list or as graph visualization (gv).";
+	String man = "This tool extracts clusters of docking poses given a dat file.\n\nParameters are the filename (-i) of the serialized cluster tree, the output filename (-o_out), the output type (-o_type). The optional parameter -i_type allows to switch between binary (default) and text file for the cluster tree input, parameter -min_size allows to filter for cluster of a minimal size, parameter -cutoff_type defines the way to cut the cluster tree (either by ward distance or by a target number of clusters) using paramter -cut_value.\n\nOutput of this tool is the extracted cluster tree, either as index list, as graph visualization (gv) input, or as json";
 
 	parpars.setToolManual(man);
 
 	// here we set the types of I/O files
 	parpars.setSupportedFormats("i", "dat");
-	parpars.setSupportedFormats("o_out", "txt,gv");
+	parpars.setSupportedFormats("o_out", "txt,gv,json");
 
 	parpars.parse(argc, argv);
 
@@ -160,6 +161,15 @@ int main (int argc, char **argv)
 
 		Log << outfile_name << endl;
 		Log << "For drawing the graph use, e.g. \n\tdot -Tps -o tree.ps " << outfile_name << endl;
+	}
+	else if (parpars.get("o_type") == "json")
+	{
+		File json_outfile(outfile_name, std::ios::out);
+
+		pc.exportClusterTreeToJSON(json_outfile);
+		json_outfile.close();
+
+		Log << outfile_name << endl;
 	}
 	else
 	{
