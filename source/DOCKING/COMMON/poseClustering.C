@@ -1756,7 +1756,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		}
 
 #ifdef BALL_HAS_RVALUE_REFERENCES
-		PoseClustering::ClusterProperties::ClusterProperties(ClusterProperties&& o) noexcept
+		PoseClustering::ClusterProperties::ClusterProperties(ClusterProperties&& o) BALL_NOEXCEPT
 				: poses(std::move(o.poses)),
 				  size(o.size),
 				  center(std::move(o.center)),
@@ -1768,7 +1768,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		}
 
 		PoseClustering::ClusterProperties&
-		PoseClustering::ClusterProperties::operator=(ClusterProperties&& o) noexcept
+		PoseClustering::ClusterProperties::operator=(ClusterProperties&& o) BALL_NOEXCEPT
 		{
 				poses = std::move(o.poses);
 				size = o.size;

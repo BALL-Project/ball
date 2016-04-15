@@ -224,8 +224,8 @@ namespace BALL
 						ClusterProperties& operator=(const ClusterProperties&);
 
 #ifdef BALL_HAS_RVALUE_REFERENCES
-						ClusterProperties(ClusterProperties&&) noexcept;
-						ClusterProperties& operator=(ClusterProperties&&) noexcept;
+						ClusterProperties(ClusterProperties&&) BALL_NOEXCEPT;
+						ClusterProperties& operator=(ClusterProperties&&) BALL_NOEXCEPT;
 #endif
 					/** Serialization method
 					 */
