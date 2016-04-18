@@ -91,7 +91,6 @@ int main(int argc, char** argv)
 	// TODO: we have to handle amino acids differently from small molecules	
 	Log << "Mapping ";
 
-	float rmsd = std::numeric_limits<float>::max();
 	AtomBijection bijection;
 
 	bool is_peptide = (chain_to_place->beginResidue() != chain_to_place->endResidue());
@@ -122,7 +121,6 @@ int main(int argc, char** argv)
 		// TODO is the orientation correct?
 		Matrix4x4 mat =  Matrix4x4::getIdentity();
 		mapper.mapFragments(frags_chain_p, frags_chain_t, &mat, 3., 5.);
-		rmsd = mapper.calculateRMSD();
 		bijection = mapper.getBijection();
 
 		// transform
@@ -200,13 +198,8 @@ int main(int argc, char** argv)
 
 		// move the molecule back to its the center position of the template
 		chain_to_place->apply(transform);
-
-		// we cannot make a statement about the rmsd, since we have no mapping
-		rmsd = std::numeric_limits<float>::max();
 	}
 	Log << "  done." << endl;
-
-	//Log << "Placed chains onto each other with rmsd of " << rmsd  << endl;
 
 	Log << "Writing " << argv[5] << "...";
 	PDBFile outfile(argv[5], std::ios::out);
