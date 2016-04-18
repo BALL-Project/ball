@@ -167,24 +167,24 @@ int main(int argc, char** argv)
 			if (at_it->getElement().getSymbol() != "H")
 			{
 				Vector3& pos = at_it->getPosition();
-				cov_original.selfadjointView<Eigen::Upper>().rankUpdate(Eigen::Vector3f(pos.x, pos.y, pos.z));
+				cov_original.selfadjointView<Eigen::Lower>().rankUpdate(Eigen::Vector3f(pos.x, pos.y, pos.z));
 			}
 		}
 
 		// compute the eigenvectors
-		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigen_solver_original(cov_original.selfadjointView<Eigen::Upper>(), Eigen::ComputeEigenvectors);
+		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigen_solver_original(cov_original, Eigen::ComputeEigenvectors);
 
 		for (AtomIterator at_it = chain_to_place->beginAtom(); +at_it; ++at_it)
 		{
 			if (at_it->getElement().getSymbol() != "H")
 			{
 				Vector3& pos = at_it->getPosition();
-				cov_new.selfadjointView<Eigen::Upper>().rankUpdate(Eigen::Vector3f(pos.x, pos.y, pos.z));
+				cov_new.selfadjointView<Eigen::Lower>().rankUpdate(Eigen::Vector3f(pos.x, pos.y, pos.z));
 			}
 		}
 
 		// compute the eigenvectors
-		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigen_solver_new(cov_new.selfadjointView<Eigen::Upper>(), Eigen::ComputeEigenvectors);
+		Eigen::SelfAdjointEigenSolver<Eigen::Matrix3f> eigen_solver_new(cov_new, Eigen::ComputeEigenvectors);
 
 		// and compute the final rotation matrix
 		Eigen::Matrix3f rot = eigen_solver_original.eigenvectors() * eigen_solver_new.eigenvectors().transpose();
