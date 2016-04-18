@@ -291,12 +291,10 @@ void Spectrum<RegularData1D, Peak1D>::convertToLorentzian()
 			
 			RegularData1D::CoordinateType pos = data_.getCoordinates(index);
 
-			double separation, width;
 			for (BALL::Position i = 0; i < sticks_.size(); i++)
 			{	
-				separation = pos - sticks_[i].getPosition();
-				width      = sticks_[i].getWidth();
-				float l    = pow(separation, 2) / sticks_[i].getWidth();
+				double separation = pos - sticks_[i].getPosition();
+				float l    = separation * separation / sticks_[i].getWidth();
 				intensity += 1./( 1. + l );
 			}
 			//set the value
