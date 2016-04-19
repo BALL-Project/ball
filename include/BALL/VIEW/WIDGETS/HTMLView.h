@@ -6,14 +6,14 @@
 #endif
 
 #include <QtCore/QUrl>
-#include <QtWebKitWidgets/QWebView>
+#include <QtWebEngineWidgets/QWebEngineView>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		class BALL_VIEW_EXPORT HTMLView : public QWebView
+		class BALL_VIEW_EXPORT HTMLView : public QWebEngineView
 		{
 			Q_OBJECT
 

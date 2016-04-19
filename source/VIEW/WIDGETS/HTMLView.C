@@ -6,8 +6,9 @@ namespace BALL
 	{
 
 		HTMLView::HTMLView(QWidget* parent)
-			: QWebView(parent)
+			: QWebEngineView(parent)
 		{
+			setAttribute(Qt::WA_DontCreateNativeAncestors);
 		}
 
 		HTMLView::~HTMLView()
