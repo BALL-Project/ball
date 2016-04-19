@@ -5,7 +5,7 @@ FILE(GLOB HEADERS_LIST "include/BALL/${GROUP}/*.h" "include/BALL/${GROUP}/*.iC")
 
 IF(NOT BALL_HAS_QTWEBKIT)
 	LIST(REMOVE_ITEM HEADERS_LIST
-		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/HTMLBasedInterface.h"
+		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/PresentaBALLView.h"
 		"${CMAKE_SOURCE_DIR}/include/BALL/${GROUP}/HTMLView.h"
 	)
 ENDIF()

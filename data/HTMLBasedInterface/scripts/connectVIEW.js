@@ -1,5 +1,9 @@
-// include this file (connectVIEW.js) to every webpage that
-// shall be able to react on VIEW messages
+/* 
+ * Include this file (connectVIEW.js) in every webpage that shall be able
+ * to react to VIEW messages. Please note that this file requires the Qt
+ * WebChannel JS interface (qrc:///qtwebchannel/qwebchannel.js) to be
+ * loaded as well.
+ */
 current_action = -1;
 
 var MsgClass = {
@@ -255,28 +259,16 @@ function onJSActionSignal(i) { //i = ActionType
 	
 }
 
-try
-{
-	mywebview.fireJSActionSignal.connect(onJSActionSignal);
+window.onload = function() {
+	try
+	{
+		new QWebChannel(qt.webChannelTransport, function(channel) {
+			channel.objects.signals.actionSignal.connect(onJSActionSignal);
+			channel.objects.signals.messageSignal.connect(onJSMessage);
+		});
+	}
+	catch(e)
+	{
+		alert(e);
+	}
 }
-catch (e)
-{
-	// if connection does not work an exception is thrown
-	alert(e);
-}
-
-try
-{
-	// connect handler method to the fireJSCompositeMessage signal
-	// of the exposed HTMLBasedInterface object
-	mywebview.fireJSMessage.connect(onJSMessage);
-}
-catch (e)
-{
-	// if connection does not work an exception is thrown
-	alert(e);
-}
-
-
- 
-

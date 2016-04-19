@@ -39,7 +39,7 @@ namespace BALL
 
 		ModularWidget* PresentaBALLPlugin::createModularWidget(MainControl* main_control)
 		{
-			html_interface_ = new HTMLBasedInterface(main_control);
+			html_interface_ = new PresentaBALLView(main_control);
 
 			HTMLViewDock* html_view = new HTMLViewDock(html_interface_, main_control, String(tr("PresentaBALL")).c_str());
 
