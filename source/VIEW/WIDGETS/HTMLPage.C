@@ -1,11 +1,10 @@
-#include <PresentaBALLPage.h>
+#include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <QUrlQuery>
-#include <QtWebEngineWidgets/QWebEnginePage>
 
 namespace BALL
 {
@@ -17,19 +16,19 @@ namespace BALL
 			emit finishedExecution();
 		}
 
-		PresentaBALLPage::PresentaBALLPage(QObject* parent)
+		HTMLPage::HTMLPage(QObject* parent)
 				: QWebEnginePage(parent)
 		{
 			init();
 		}
 
-		PresentaBALLPage::PresentaBALLPage(QWebEngineProfile* profile, QObject* parent)
+		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent)
 				: QWebEnginePage(profile, parent)
 		{
 			init();
 		}
 
-		PresentaBALLPage::~PresentaBALLPage()
+		HTMLPage::~HTMLPage()
 		{
 			for(QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.begin(); it != action_registry_.end(); ++it)
 			{
@@ -37,13 +36,13 @@ namespace BALL
 			}
 		}
 
-		void PresentaBALLPage::init()
+		void HTMLPage::init()
 		{
 			Path p;
-			script_base_ = p.find("HTMLBasedInterface/scripts") + "/";
+			script_base_ = p.find("HTMLBasedInterface/scripts") + "/"; // TODO create settings dialog
 		}
 
-		bool PresentaBALLPage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame)
+		bool HTMLPage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame)
 		{
 			if(getMainControl()->isBusy())
 			{
@@ -54,7 +53,7 @@ namespace BALL
 			return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 		}
 
-		void PresentaBALLPage::executeLink(const QUrl& url)
+		void HTMLPage::executeLink(const QUrl& url)
 		{
 			QString action_name = QUrlQuery(url).queryItemValue("action");
 			if(action_name == QString::null)
@@ -81,7 +80,7 @@ namespace BALL
 			}
 		}
 
-		void PresentaBALLPage::executePython_(const QString& action, const ParameterList& parameters)
+		void HTMLPage::executePython_(const QString& action, const ParameterList& parameters)
 		{
 #ifdef BALL_PYTHON_SUPPORT
 			//Ensure, that the module search path is registered

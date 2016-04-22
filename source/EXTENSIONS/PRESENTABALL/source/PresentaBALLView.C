@@ -1,5 +1,4 @@
 #include <PresentaBALLView.h>
-#include <PresentaBALLPage.h>
 #include <PresentaBALLSettings.h>
 
 #include <BALL/SYSTEM/path.h>
@@ -23,7 +22,6 @@ namespace BALL
 				ModularWidget(name)
 		{
 			// establish webchannel
-			setPage(new PresentaBALLPage);
 			settings_ = new PresentaBALLSettings(this);
 			channel_ = new QWebChannel(page());
 			signal_ = new PresentaBALLSignal;

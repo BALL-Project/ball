@@ -1,4 +1,5 @@
 #include <BALL/VIEW/WIDGETS/HTMLView.h>
+#include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
 namespace BALL
 {
@@ -8,6 +9,7 @@ namespace BALL
 		HTMLView::HTMLView(QWidget* parent)
 			: QWebEngineView(parent)
 		{
+			setPage(new HTMLPage(this));
 			setAttribute(Qt::WA_DontCreateNativeAncestors);
 		}
 

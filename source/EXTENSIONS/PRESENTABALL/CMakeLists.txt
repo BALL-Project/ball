@@ -17,7 +17,6 @@ SET(UI_SOURCES_LIST
 )
 
 SET(SOURCES_LIST
-	${DIRECTORY}/PresentaBALLPage.C
 	${DIRECTORY}/PresentaBALLPlugin.C
 	${DIRECTORY}/PresentaBALLSettings.C
 	${DIRECTORY}/PresentaBALLView.C
@@ -30,7 +29,6 @@ SET(RCC_SOURCES_LIST
 SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
-	${DIRECTORY}/PresentaBALLPage.h
 	${DIRECTORY}/PresentaBALLPlugin.h
 	${DIRECTORY}/PresentaBALLSettings.h
 	${DIRECTORY}/PresentaBALLView.h

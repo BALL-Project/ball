@@ -1,5 +1,5 @@
-#ifndef PRESENTABALLPAGE_H
-#define PRESENTABALLPAGE_H
+#ifndef BALL_VIEW_WIDGETS_HTMLPAGE_H
+#define BALL_VIEW_WIDGETS_HTMLPAGE_H
 
 #include <BALL/DATATYPE/string.h>
 
@@ -28,14 +28,14 @@ namespace BALL
 				void finishedExecution();
 		};
 
-		class PresentaBALLPage: public QWebEnginePage
+		class HTMLPage: public QWebEnginePage
 		{
 			Q_OBJECT
 
 			public:
-				PresentaBALLPage(QObject* parent = 0);
-				PresentaBALLPage(QWebEngineProfile* profile, QObject* parent = 0);
-				virtual ~PresentaBALLPage();
+				HTMLPage(QObject* parent = 0);
+				HTMLPage(QWebEngineProfile* profile, QObject* parent = 0);
+				virtual ~HTMLPage();
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
@@ -50,4 +50,4 @@ namespace BALL
 		};
 	}
 }
-#endif // PRESENTABALLPAGE_H
+#endif // BALL_VIEW_WIDGETS_HTMLPAGE_H
