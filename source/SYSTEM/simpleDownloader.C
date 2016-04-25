@@ -100,7 +100,7 @@ namespace BALL
 												this,   SLOT(finished()));
 			QObject::connect(reply, SIGNAL(error(QNetworkReply::NetworkError)),
 												this,   SLOT(error(QNetworkReply::NetworkError)));
-#ifndef QT_NO_OPENSSL
+#ifndef QT_NO_SSL
 			QObject::connect(reply, SIGNAL(sslErrors(const QList<QSslError>&)),
 												this,   SLOT(sslErrors(const QList<QSslError>&)));
 #endif
@@ -112,7 +112,7 @@ namespace BALL
 			caller_->exit(error);
 		}
 
-#ifndef QT_NO_OPENSSL
+#ifndef QT_NO_SSL
 		void BasicHelper::sslErrors(const QList<QSslError>& errors)
 		{
 			Log.error() << "SSL error(s) while downloading. Errors are:\n";

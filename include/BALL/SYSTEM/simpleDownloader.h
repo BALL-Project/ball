@@ -203,7 +203,7 @@ namespace BALL
 
 			public slots:
 				void error(QNetworkReply::NetworkError error);
-#ifndef QT_NO_OPENSSL
+#ifndef QT_NO_SSL
 				void sslErrors(const QList<QSslError>& errors);
 #endif
 				virtual void finished() = 0;
