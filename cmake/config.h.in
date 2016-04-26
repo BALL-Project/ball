@@ -334,7 +334,7 @@
 #define BALL_QT_HAS_THREADS // Qt now always has thread support
 #define QT_THREAD_SUPPORT
 
-#cmakedefine BALL_HAS_QTWEBKIT
+#cmakedefine BALL_HAS_QTWEBENGINE
 
 // MPI
 #cmakedefine BALL_HAS_MPI

@@ -258,7 +258,6 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTWEBKIT "Add support for QWebkit" ON) # TODO remove
 OPTION(USE_QTWEBENGINE "Add supprt for Qt WebEngine" ON)
 
 # Enable automatic invocation of moc if required
@@ -312,19 +311,6 @@ IF (BALL_HAS_VIEW)
 			MESSAGE(STATUS "QtWebEngine has not been found. Disabling browser support.")
 			SET(BALL_HAS_QTWEBENGINE FALSE)
 		ENDIF()
-	ENDIF()
-
-	# TODO remove
-	IF(USE_QTWEBKIT)
-		FIND_PACKAGE(Qt5WebKitWidgets)
-
-                IF(Qt5WebKit_FOUND)
-                        SET(BALL_HAS_QTWEBKIT TRUE)
-                        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebKitWidgets)
-                ELSE()
-                        SET(BALL_HAS_QTWEBKIT FALSE)
-                        MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
-                ENDIF()
 	ENDIF()
 ENDIF()
 
