@@ -33,18 +33,21 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				HTMLPage(QObject* parent = 0);
-				HTMLPage(QWebEngineProfile* profile, QObject* parent = 0);
+				HTMLPage(QObject* parent = 0, bool ignore_ssl_errors = false);
+				HTMLPage(QWebEngineProfile* profile, QObject* parent = 0, bool ignore_ssl_errors = false);
 				virtual ~HTMLPage();
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
 				virtual void init();
 				virtual bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame);
+				virtual bool certificateError(const QWebEngineCertificateError &certificateError);
+				virtual void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID);
 				virtual void executeLink(const QUrl& url);
 				virtual void executePython_(const QString& action, const ParameterList& parameters);
 
 			private:
+				bool ignore_ssl_errors_;
 				String script_base_;
 				QHash<QString, HTMLInterfaceAction*> action_registry_;
 		};

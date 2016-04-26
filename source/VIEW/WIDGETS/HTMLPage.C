@@ -16,14 +16,16 @@ namespace BALL
 			emit finishedExecution();
 		}
 
-		HTMLPage::HTMLPage(QObject* parent)
-				: QWebEnginePage(parent)
+		HTMLPage::HTMLPage(QObject* parent, bool ignore_ssl_errors)
+				: QWebEnginePage(parent),
+				  ignore_ssl_errors_(ignore_ssl_errors)
 		{
 			init();
 		}
 
-		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent)
-				: QWebEnginePage(profile, parent)
+		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent, bool ignore_ssl_errors)
+				: QWebEnginePage(profile, parent),
+				  ignore_ssl_errors_(ignore_ssl_errors)
 		{
 			init();
 		}
@@ -51,6 +53,35 @@ namespace BALL
 
 			executeLink(url);
 			return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
+		}
+
+		bool HTMLPage::certificateError(const QWebEngineCertificateError &certificateError)
+		{
+			Q_UNUSED(certificateError)
+			return ignore_ssl_errors_;
+		}
+
+		void HTMLPage::javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID)
+		{
+			Q_UNUSED(level)
+			Q_UNUSED(message)
+			Q_UNUSED(lineNumber)
+			Q_UNUSED(sourceID)
+
+#ifdef BALL_VIEW_DEBUG
+			switch(level)
+			{
+				case InfoMessageLevel:
+					Log.info() << lineNumber << ": " << message.toStdString() << std::endl;
+					break;
+				case WarningMessageLevel:
+					Log.warn() << lineNumber << ": " << message.toStdString() << std::endl;
+					break;
+				case ErrorMessageLevel:
+					Log.err() << lineNumber << ": " << message.toStdString() << std::endl;
+					break;
+			}
+#endif
 		}
 
 		void HTMLPage::executeLink(const QUrl& url)
