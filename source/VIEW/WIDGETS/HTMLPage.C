@@ -78,7 +78,7 @@ namespace BALL
 					Log.warn() << lineNumber << ": " << message.toStdString() << std::endl;
 					break;
 				case ErrorMessageLevel:
-					Log.err() << lineNumber << ": " << message.toStdString() << std::endl;
+					Log.error() << lineNumber << ": " << message.toStdString() << std::endl;
 					break;
 			}
 #endif
