@@ -1,13 +1,9 @@
 #ifndef BALLAXYINTERFACE_H
 #define BALLAXYINTERFACE_H
 
-#ifndef BALL_VIEW_WIDGETS_HTMLVIEW_H
-	#include <BALL/VIEW/WIDGETS/HTMLView.h>
-#endif
+#include <BALL/VIEW/WIDGETS/HTMLView.h>
 
-#include <QtCore/QHash>
-#include <QtNetwork/QNetworkReply>
-#include <QReadWriteLock>
+#include <QWebEngineDownloadItem>
 
 namespace BALL
 {
@@ -15,24 +11,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-		class BALLaxyInterfaceAction : public QObject
-		{
-			Q_OBJECT
-
-			public:
-				virtual QString getName() const = 0;
-
-			public slots:
-
-				void execute(const QList<QPair<QString, QString> >& parameters);
-
-			protected:
-				virtual void executeImpl_(const QList<QPair<QString, QString> >& parameters) = 0;
-
-			signals:
-				void finishedExecution();
-		};
-
 		class BALLaxyInterface : public HTMLView, public Embeddable
 		{
 			Q_OBJECT
@@ -44,42 +22,25 @@ namespace BALL
 
 				virtual ~BALLaxyInterface();
 
-				void setBALLaxyBaseUrl(String const& ballaxy_base, String const& email, String const& password);
-
-				void registerAction(BALLaxyInterfaceAction* action);
-
+				void setBALLaxyBaseUrl(String const& ballaxy_base);
 				bool uploadToBallaxy(AtomContainer* ac, const String& format);
 
 			public slots:
 				void sendPDBToBallaxy();
 				void sendMOL2ToBallaxy();
-				void handleDownload(QNetworkReply* request);
-				void loadFinished(bool ok);
-				void networkAccessFinished(QNetworkReply *);
+				void verifyDownloadRequest(QWebEngineDownloadItem* request);
+				void openStructure();
 
 			protected:
-				typedef QList<QPair<QString, QString> > ParameterList;
 				void contextMenuEvent(QContextMenuEvent* evt);
 				QUrl ballaxy_base_;
 
-			protected slots:
-
-				void handleLinkClicked(const QUrl& url);
-				void executeLink(const QUrl& url);
-				void executePython_(const QString& action, const ParameterList& parameters);
-        void handleSslErrors(QNetworkReply* reply, const QList<QSslError> &errors);
-
 			private:
-				String script_base_;
-				QHash<QString, BALLaxyInterfaceAction*> action_registry_;
-
 				QMenu*   context_submenu_;
 				QAction* context_submenu_action_;
 				QAction* context_separator_;
 				QAction* context_action_pdb_;
 				QAction* context_action_mol2_;
-
-				QReadWriteLock page_lock_;
 		};
 	}
 }
