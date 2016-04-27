@@ -668,7 +668,7 @@ if (!openNbr)
 		// ... and get all entries
 		QDomNodeList entries = domDocument.elementsByTagName("entry");
 
-		for (unsigned int i= 0; i < entries.length(); i++)
+		for (int i = 0; i < entries.length(); i++)
 		{
 			pair<String, Size> tmp;
 
