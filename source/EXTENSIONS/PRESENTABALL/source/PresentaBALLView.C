@@ -74,12 +74,12 @@ namespace BALL
 
 				if (!(str == "Default") && str == "de_DE")
 				{
-					s = p.find("PresentaBALLView/html_de");
+					s = p.find("HTMLBasedInterface/html_de");
 				}
 				else
 				{
 					//default = english
-					s = p.find("PresentaBALLView/html_eng");
+					s = p.find("HTMLBasedInterface/html_eng");
 				}
 			 }
 
