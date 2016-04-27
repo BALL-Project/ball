@@ -41,8 +41,8 @@ void startInputPartitioning(InputPartitioningConfiguration& conf, QSARData* q, S
 
 	// -- create prefix for output-files ---
 	String output_prefix = conf.input_file;
-	int index = output_prefix.find_first_of(".");
-	if(index!=(int)string::npos)
+	size_t index = output_prefix.find_first_of(".");
+	if(index != string::npos)
 	{
 		output_prefix=output_prefix.substr(0,index);
 	}
