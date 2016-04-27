@@ -1358,7 +1358,7 @@ CHECK(serializeWardClusterTree(std::ostream& out))
 
 	//filename = "PoseClustering_wardtree.dat";
 	NEW_TMP_FILE(filename)
-  File temp_tree(filename, std::ios::out);
+	File temp_tree(filename, std::ios::out);
 
 	PoseClustering pc;
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::CENTER_OF_MASS_DISTANCE);
@@ -1376,10 +1376,9 @@ CHECK(serializeWardClusterTree(std::ostream& out))
 	pc.setConformationSet(&cs2);
 	pc.compute();
 
-	//pc.extractClustersForThreshold(2.4); //0.5
 	pc.serializeWardClusterTree(temp_tree);
 
-	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_wardtree.dat))
+	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_wardtree_REGEXP.dat))
 RESULT
 
 
