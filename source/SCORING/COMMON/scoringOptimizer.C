@@ -317,30 +317,56 @@ double getCovariance(const list<double>& v1, const list<double>& v2, double mean
 	return sum_of_squares/(v1.size()-1);
 }
 
+/*
+ * Compute the sum of squares using the compensated algorithm as described int
+ * Chan et al. "UPDATING FORMULAE AND A PAIRWISE ALGORITHM FOR COMPUTING SAMPLE
+ * VARIANCES", 1979
+ */
+void getSumOfSquaresHelper(const list<double>& m, double mean, double& sum_of_squares, double& compensate, size_t& size)
+{
+	if (mean == -1.0) mean = getMean(m);
+
+	sum_of_squares = 0.0;
+	compensate = 0.0;
+	size = 0;
+
+	for (list < double > ::const_iterator it = m.begin(); it != m.end(); it++)
+	{
+		double diff = *it - mean;
+		compensate += diff;
+		sum_of_squares += diff * diff;
+		++size;
+	}
+}
 
 double getSumOfSquares(const list<double>& m, double mean)
 {
-	if (mean == -1) mean = getMean(m);
-	double sum_of_squares = 0;
+	double sum_of_squares = 0.0;
+	double compensate = 0.0;
+	size_t size = 0;
 
-	for (list < double > ::const_iterator it = m.begin(); it != m.end(); it++)
+	getSumOfSquaresHelper(m, mean, sum_of_squares, compensate, size);
+
+	if(size == 0)
 	{
-		sum_of_squares += pow(*it-mean, 2);
+		return 0;
 	}
-	return sum_of_squares;
-}
 
+	return sum_of_squares - compensate * compensate / size;
+}
 
 double getStddev(const list<double>& m, double mean)
 {
-	if (mean == -1) mean = getMean(m);
-	double sum_of_squares = 0;
+	double sum_of_squares = 0.0;
+	double compensate = 0.0;
+	size_t size = 0;
 
-	for (list < double > ::const_iterator it = m.begin(); it != m.end(); it++)
+	getSumOfSquaresHelper(m, mean, sum_of_squares, compensate, size);
+
+	if(size <= 1)
 	{
-		sum_of_squares += pow(*it-mean, 2);
+		return 0.0;
 	}
 
-	double var = sum_of_squares/(m.size()-1);
-	return sqrt(var);
+	return sqrt((sum_of_squares - compensate * compensate / size) / (size - 1));
 }
