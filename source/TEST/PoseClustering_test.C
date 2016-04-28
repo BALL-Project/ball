@@ -1355,9 +1355,9 @@ RESULT
 
 CHECK(serializeWardClusterTree(std::ostream& out))
 	String filename;
-
-	//filename = "PoseClustering_wardtree.dat";
 	NEW_TMP_FILE(filename)
+
+	// First, cluster and serialize ClusterTree
 	File temp_tree(filename, std::ios::out);
 
 	PoseClustering pc;
@@ -1375,10 +1375,50 @@ CHECK(serializeWardClusterTree(std::ostream& out))
 
 	pc.setConformationSet(&cs2);
 	pc.compute();
-
 	pc.serializeWardClusterTree(temp_tree);
 
-	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_wardtree_REGEXP.dat))
+	temp_tree.close();
+
+
+	// Second, deserialize and check ClusterTree
+	temp_tree.open(filename, std::ios::in);
+
+	PoseClustering pc2;
+	pc2.options.set(PoseClustering::Option::RMSD_TYPE, PoseClustering::SNAPSHOT_RMSD);
+	pc2.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
+	pc2.options.setReal(PoseClustering::Option::DISTANCE_THRESHOLD, 0);
+
+	pc2.deserializeWardClusterTree(temp_tree);
+
+	std::vector<std::set<Index> > clusters = pc2.extractClustersForThreshold(0.5);
+	TEST_EQUAL(clusters.size(), 6)
+	TEST_EQUAL(pc2.getNumberOfClusters(), 6)
+	TEST_EQUAL(pc2.getClusterScore(0), 0.)
+
+	pc2.extractClustersForThreshold(2.4);
+	TEST_EQUAL(pc2.getNumberOfClusters(), 3)
+	TEST_EQUAL(pc2.getClusterSize(0), 4)
+	PRECISION(1e-3)
+	TEST_REAL_EQUAL(pc2.getClusterScore(0),  2.34918)
+	PRECISION(1e-5)
+
+	TEST_REAL_EQUAL(pc2.getClusterScore(1), 1.09569e-05)
+	TEST_REAL_EQUAL(pc2.getClusterScore(2), 0.945311)
+
+	pc2.extractClustersForThreshold(50.7);
+	TEST_EQUAL(pc2.getNumberOfClusters(), 2)
+	TEST_EQUAL(pc2.getClusterSize(0), 4)
+	PRECISION(1e-3)
+	TEST_REAL_EQUAL(pc2.getClusterScore(0), 50.6247)
+	TEST_REAL_EQUAL(pc2.getClusterScore(1), 2.34918)
+
+	pc2.extractClustersForThreshold(59);
+	TEST_EQUAL(pc2.getNumberOfClusters(), 1)
+	TEST_REAL_EQUAL(pc2.getClusterScore(0), 58.395)
+	PRECISION(1e-5)
+
+	temp_tree.close();
+
 RESULT
 
 
