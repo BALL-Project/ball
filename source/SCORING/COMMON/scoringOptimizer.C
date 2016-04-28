@@ -18,6 +18,10 @@
 using namespace BALL;
 using namespace std;
 
+static double getMean(const list<double>& v);
+static double getCovariance(const list<double>& v1, const list<double>& v2, double mean1, double mean2);
+static double getStddev(const list<double>& m, double mean);
+static double getSumOfSquares(const list<double>& m, double mean);
 
 ScoringOptimizer::ScoringOptimizer(Options& options, bool train)
 {
@@ -282,7 +286,7 @@ ScoringFunction* ScoringOptimizer::createScoringFunction(System& receptor, Syste
 }
 
 
-double BALL::getMean(const list<double>& v)
+double getMean(const list<double>& v)
 {
 	double sum = 0;
 	for (list < double > ::const_iterator it = v.begin(); it != v.end(); it++)
@@ -293,7 +297,7 @@ double BALL::getMean(const list<double>& v)
 }
 
 
-double BALL::getCovariance(const list<double>& v1, const list<double>& v2, double mean1, double mean2)
+double getCovariance(const list<double>& v1, const list<double>& v2, double mean1, double mean2)
 {
 	if (v1.size() != v2.size())
 	{
@@ -314,7 +318,7 @@ double BALL::getCovariance(const list<double>& v1, const list<double>& v2, doubl
 }
 
 
-double BALL::getSumOfSquares(const list<double>& m, double mean)
+double getSumOfSquares(const list<double>& m, double mean)
 {
 	if (mean == -1) mean = getMean(m);
 	double sum_of_squares = 0;
@@ -327,7 +331,7 @@ double BALL::getSumOfSquares(const list<double>& m, double mean)
 }
 
 
-double BALL::getStddev(const list<double>& m, double mean)
+double getStddev(const list<double>& m, double mean)
 {
 	if (mean == -1) mean = getMean(m);
 	double sum_of_squares = 0;

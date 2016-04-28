@@ -55,14 +55,6 @@ namespace BALL
 
 			ScoringFunction* createScoringFunction(System& receptor, System& ligand);
 	};
-
-	static double getMean(const list<double>& v);
-
-	static double getCovariance(const list<double>& v1, const list<double>& v2, double mean1, double mean2);
-
-	static double getStddev(const list<double>& m, double mean);
-
-	static double getSumOfSquares(const list<double>& m, double mean);
 }
 
 
