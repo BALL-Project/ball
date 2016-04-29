@@ -45,7 +45,7 @@ Output of this tool is a number of mol2 files each containing one bond order ass
 
 To upload an input file please use the upload tool (Get Data -> Upload File).
 
-**Further information and help** can be found in our wiki http://ball-trac.bioinf.uni-sb.de/wiki/BOAConstructor.
+**Further information and help** can be found in our wiki https://github.com/BALL-Project/ball/wiki/BOAConstructor_Help.
 
 If you use this tool, please don't forget to cite us: 
 

@@ -1,7 +1,8 @@
-BALL ChangeLog
+BALL Changelog
 
-The ChangeLog for BALL >= 1.3 can be found at the following URL:
-	http://ball-trac.bioinf.uni-sb.de/wiki/ReleaseNotes
+The changelog for BALL >= 1.3 can be found at the following URL:
+	https://github.com/BALL-Project/ball/wiki/ReleaseNotes
 
-Older ChangeLogs are located at the following URL:
-	http://www.ball-project.org/overview/version-history
+Please note that these logs are just a list of highlights and by no means complete.
+If you are interested in the full range of changes, see the commit log found here:
+	https://github.com/BALL-Project/ball/releases
