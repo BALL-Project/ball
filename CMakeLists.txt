@@ -258,7 +258,7 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTWEBENGINE "Add supprt for Qt WebEngine" ON)
+OPTION(USE_QTWEBENGINE "Add support for QtWebEngine" ON)
 
 # Enable automatic invocation of moc if required
 SET(CMAKE_AUTOMOC ON)
@@ -294,9 +294,9 @@ IF (BALL_HAS_VIEW)
 	                               Qt5::Xml)
 
 	IF(USE_QTWEBENGINE)
+		FIND_PACKAGE(Qt5WebEngine 5.5 REQUIRED)
 		FIND_PACKAGE(Qt5WebEngineWidgets REQUIRED)
 		FIND_PACKAGE(Qt5WebChannel REQUIRED)
-		# TODO move webchannel requirement to use_presentaball (well, for now)
 		IF(Qt5WebEngine_FOUND)
 			MESSAGE(STATUS "Found QtWebEngine")
 			IF(Qt5WebChannel_FOUND)
