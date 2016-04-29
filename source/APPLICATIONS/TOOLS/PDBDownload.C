@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 	par.setSupportedFormats("o","pdb");
 	par.parse(argc, argv);
 
-	String prefix("http://files.rcsb.org/view/");
+	String prefix("http://files.rcsb.org/download/");
 	String id = par.get("id");
 	String url = prefix;
 	url += id;

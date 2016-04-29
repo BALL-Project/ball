@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>669</width>
-    <height>426</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -313,7 +313,7 @@
            </size>
           </property>
           <property name="text">
-           <string>http://files.rcsb.org/view/</string>
+           <string>http://files.rcsb.org/download/</string>
           </property>
          </widget>
         </item>
