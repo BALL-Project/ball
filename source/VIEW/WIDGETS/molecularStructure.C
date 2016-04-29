@@ -189,7 +189,7 @@ namespace BALL
 			}
 
 			description = "Shortcut|MolecularMechanics|Options";
-			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("Options"), this, 
+			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("Force Field Options"), this,
 																	SLOT(setupForceField()), description, QKeySequence(), 
 																	tr("Configure the force field"),
 																	UIOperationMode::MODE_ADVANCED);
