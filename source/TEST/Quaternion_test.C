@@ -29,22 +29,6 @@ PRECISION(1E-4)
 float i = 0.24302, j = 2 * i, k = 3 * i, angle = -0.416147; 
 
 CHECK(BALL_CREATE(TQuaternion<T>))
-	Quaternion q(v, 4.0);
-	Quaternion* q_ptr = (Quaternion*)q.create(false, true);
-	TEST_REAL_EQUAL(q_ptr->i(), 0)
-	TEST_REAL_EQUAL(q_ptr->j(), 0)
-	TEST_REAL_EQUAL(q_ptr->k(), 0)
-	TEST_REAL_EQUAL(q_ptr->w(), 1.0)
-	delete q_ptr;
-	q_ptr = (Quaternion*)q.create();
-	TEST_REAL_EQUAL(q_ptr->i(), 0.24302)
-	TEST_REAL_EQUAL(q_ptr->j(), 0.48604)
-	TEST_REAL_EQUAL(q_ptr->k(), 0.72906)
-	TEST_REAL_EQUAL(q_ptr->w(), -0.416147)
-	delete q_ptr;
-RESULT
-
-CHECK(BALL_CREATE(TQuaternion<T>))
 	Quaternion q;
 	TEST_REAL_EQUAL(q.w(), 1)
 	TEST_REAL_EQUAL(q.i(), 0)

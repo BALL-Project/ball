@@ -32,9 +32,6 @@ namespace BALL
 		: public boost::math::quaternion<T> //{/*...*/};
 	{
 		public:
-
-		BALL_CREATE(TQuaternion<T>)
-
 		/**
 		 * @name Constructors and Destructors
 		 */
