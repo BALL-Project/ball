@@ -181,6 +181,7 @@ namespace BALL
 			Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
 #endif
 			delete stage_;
+			delete gl_renderer_;
 
 			for (Position i=0; i<renderers_.size(); ++i)
 			{
