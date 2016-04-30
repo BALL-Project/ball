@@ -22,6 +22,15 @@ namespace BALL
 			init_();
 		}
 
+		InteractionModeManager::~InteractionModeManager()
+		{
+			for(std::list<InteractionMode*>::iterator it = modes_.begin();
+					it != modes_.end(); ++it)
+			{
+				delete *it;
+			}
+		}
+
 		void InteractionModeManager::init_()
 		{
 			actions_ = new QActionGroup(this);

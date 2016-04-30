@@ -30,6 +30,7 @@ namespace BALL
 
 			public:
 				InteractionModeManager(Scene* scene);
+				virtual ~InteractionModeManager();
 
 				QString getCurrentModeName() const;
 
