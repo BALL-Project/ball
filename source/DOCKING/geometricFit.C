@@ -847,8 +847,6 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		System* system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
 
-    int PENALTY;
-
     // init grid value
     if( pro_idx == PROTEIN_A )
     {
@@ -864,8 +862,6 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
       {
 				*grid = Complex(0.0,0.0);
       }
-
-      PENALTY = options.getInteger(Option::PENALTY_STATIC);
     }
     else // if ( pro_idx == PROTEIN_B )
     {
@@ -886,8 +882,6 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
       {
 				*grid = Complex(0.0,0.0);
       }
-
-      PENALTY = options.getInteger(Option::PENALTY_MOBILE);
     }
 
 		if (surface_type == FTDOCK)
