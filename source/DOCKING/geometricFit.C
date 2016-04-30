@@ -854,7 +854,7 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
     {
       if( FFT_grid_a_ == NULL )
       {
-				Log.error() << "FFT_grid_a_ is null !" << endl;
+			throw Exception::NullPointer(__FILE__, __LINE__);
       }
 
       Complex* grid = &( (*FFT_grid_a_)[0] );
@@ -871,7 +871,7 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
     {
       if ( FFT_grid_b_ == NULL )
       {
-				Log.error() << "FFT_grid_b_ is null !" << endl;
+			throw Exception::NullPointer(__FILE__, __LINE__);
       }
 
       // since we are re-using FFT_grid_b_,
