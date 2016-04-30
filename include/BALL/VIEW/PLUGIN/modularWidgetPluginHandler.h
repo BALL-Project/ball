@@ -25,7 +25,6 @@ namespace BALL
 		{
 			public:
 				ModularWidgetPluginHandler(MainControl* parent);
-				virtual ~ModularWidgetPluginHandler();
 
 				virtual bool canHandle(BALLPlugin* plugin) const;
 

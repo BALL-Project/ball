@@ -430,10 +430,11 @@ namespace BALL
 	{
 		PluginManager& man = PluginManager::instance();
 
-		boost::shared_ptr<InputDevPluginHandler> input_dev_handler(new InputDevPluginHandler());
-		man.registerHandler(input_dev_handler);
+		boost::shared_ptr<PluginHandler> handler(new InputDevPluginHandler());
+		man.registerHandler(handler);
 
-		man.registerHandler(new ModularWidgetPluginHandler(this));
+		handler.reset(new ModularWidgetPluginHandler(this));
+		man.registerHandler(handler);
 		man.registerHandler(new PluginDialog(getPreferences(), this));
 	}
 }
