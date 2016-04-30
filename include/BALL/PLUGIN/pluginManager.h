@@ -175,7 +175,7 @@ namespace BALL
 			 * shared_ptr which is stored in the PluginManager and
 			 * hence destroyed once the PluginManager is unloaded.
 			 */
-			void registerHandler(boost::shared_ptr<PluginHandler> h);
+			void registerHandler(const boost::shared_ptr<PluginHandler>& h);
 
 			/**
 			 * Unregister a PluginHandler.
