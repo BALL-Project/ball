@@ -411,39 +411,6 @@ namespace BALL
 			///
 			void setFogIntensity(float value)
 				{ fog_intensity_ = value;}
-				
-			///
-			float getSpecularIntensity() const
-				{ return specular_;}
-
-			///
-			void setSpecularIntensity(float value)
-				{ specular_ = value;}
-					
-			///
-			float getDiffuseIntensity() const
-				{ return diffuse_;}
-
-			///
-			void setDiffuseIntensity(float value)
-				{ diffuse_ = value;}
-					
-			///
-			float getAmbientIntensity() const
-				{ return ambient_;}
-
-			///
-			void setAmbientIntensity(float value)
-				{ ambient_ = value;}
-					
-			///
-			float getShininess() const
-				{ return shininess_;}
-
-			///
-			void setShininess(float value)
-				{ shininess_ = value;}
-
 
 			//@}
 			/**	@name Predicates
@@ -511,11 +478,6 @@ namespace BALL
 
 			//_
 			bool 							swap_side_by_side_stereo_;
-
-			float 							specular_;
-			float 							diffuse_;
-			float 							ambient_;
-			float 							shininess_;
 
 			// the current default materials used for raytracing
 			Material  material_;

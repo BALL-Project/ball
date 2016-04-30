@@ -112,14 +112,6 @@ class Stage
 	bool swapSideBySideStereo() const throw();
 	float getFogIntensity() const	throw();
 	void setFogIntensity(float) throw();
-	float getSpecularIntensity() const throw();
-	void setSpecularIntensity(float) throw();
-	float getDiffuseIntensity() const throw();
-	void setDiffuseIntensity(float)	throw();		
-	float getAmbientIntensity() const throw();
-	void setAmbientIntensity(float) throw();			
-	float getShininess() const throw();
-	void setShininess(float)throw();
 	//bool operator == (const Stage& ) const throw();
 	Vector3 calculateRelativeCoordinates(Vector3) const;
 	Vector3 calculateAbsoluteCoordinates(Vector3) const;
