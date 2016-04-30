@@ -308,23 +308,24 @@ namespace BALL
 			// Set the background color
 			out << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
 
+			const Stage::Material& material = stage.getMaterial();
+
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
-			out << "#declare BALLFinish            		 = finish { ";
+			out << "#declare BALLFinish = finish { ";
 
-			// stage uses opengl values for material parameters (-1.0 -> 1.0), so normalize these
-			out << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
+			out << "specular " << material.specular_intensity << " ";
 
 			// shininess   0 -> roughness: 0.1
 			// shininess 128 -> roughness: 0.01
-			float r = 0.1 - ((stage.getShininess() / 128.0) * 0.09);
+			float r = 0.1f - 0.09f * material.shininess / 128.0f;
 			out << "roughness " << r << " ";
-			
-			out << "diffuse " 	<< stage.getDiffuseIntensity() << " ";
+
+			out << "diffuse " << material.reflective_intensity << " ";
 
 			// povray uses an other ambient setting
-			out << "ambient "  << stage.getAmbientIntensity() << " }"	 	<< endl;
+			out << "ambient "  << material.ambient_intensity << " }\n";
 
 			out << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
 			out << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
