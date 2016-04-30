@@ -1430,7 +1430,6 @@ std::cout << "I have " << rotation_num << " rotations" << std::endl;
 		mpi.acceptDatapoints(our_psi);
 
 		int rotation_num = our_phi.size();
-		int total_round = our_phi.size();
 
 		Timer loop_timer;
 		loop_timer.start();
