@@ -247,6 +247,7 @@ namespace BALL
 				default:
 					BALLVIEW_DEBUG
 					Log.error() << "Type: " << type << std::endl;
+					return NULL;
 			}
 
 			applySettingsTo(*model_processor);
