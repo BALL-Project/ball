@@ -145,14 +145,12 @@ ENDIF()
 
 ## Boost and Asio
 INCLUDE(cmake/BALLConfigBoost.cmake)
-INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-LIST(APPEND BALL_DEP_LIBRARIES ${BOOST_LIBRARIES})
-# make the rest of CMake aware of boost's existence
-LIST(APPEND CMAKE_REQUIRED_INCLUDES ${BOOST_INCLUDE_DIRS})
 
-## Check for the boost::unordered_map implementation
-INCLUDE(cmake/BALLConfigHashMap.cmake)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+LIST(APPEND BALL_DEP_LIBRARIES ${Boost_LIBRARIES})
+# make the rest of CMake aware of boost's existence
+#LIST(APPEND CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIR})
 
 ## FFTW
 OPTION(USE_FFTWD "Use double precision FFTW if found" ON)

@@ -1,55 +1,33 @@
-SET(BALL_BOOST_COMPONENTS system thread iostreams regex date_time serialization chrono)
-if ( WIN32 )
-  LIST(APPEND BALL_BOOST_COMPONENTS zlib bzip2)
+# Find and configure Boost library
+
+# Mandatory boost components
+SET(BALL_BOOST_COMPONENTS_MANDATORY
+	bzip2
+	chrono
+	date_time
+	iostreams
+	regex
+	serialization
+	system
+	thread
+	zlib
+)
+
+# Add optional boost components
+SET(BALL_BOOST_COMPONENTS ${BALL_BOOST_COMPONENTS_MANDATORY} regex)
+
+# Additional Boost versions that should be included by CMake
+# CMake 2.8.12, which is minimum for BALL, already knowns versions 1.33 up to 1.56
+SET(Boost_ADDITIONAL_VERSIONS "1.60" "1.59" "1.58" "1.57")
+
+# Detailed messaging in case of failures
+SET(Boost_DETAILED_FAILURE_MSG ON)
+
+# Invoke CMake FindBoost module
+FIND_PACKAGE(Boost 1.55 REQUIRED COMPONENTS ${BALL_BOOST_COMPONENTS})
+
+IF(WIN32)
+	ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
 	ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 	ADD_DEFINITIONS(-DBOOST_THREAD_USE_DLL)
-endif()
-SET(Boost_ADDITIONAL_VERSIONS "1.39" "1.39.0" "1.40" "1.40.0" "1.41" "1.41.0"
-        "1.42" "1.42.0" "1.43" "1.43.0" "1.44.0" "1.45.0" "1.46.0" "1.46.1" "1.47" "1.47.0" "1.47.1" "1.59")
-SET(Boost_DETAILED_FAILURE_MSG ON)
-FIND_PACKAGE(Boost COMPONENTS ${BALL_BOOST_COMPONENTS})
-
-IF (NOT Boost_VERSION) ## we cannot test for Boost_FOUND since this requires all components
-	MESSAGE(SEND_ERROR "Could not find a suitable boost installation! This is a required dependency for BALL! Try setting BOOST_ROOT in ccmake!")
-ELSE()
-	SET(BOOST_LIBRARIES "")
-	FOREACH(COMPONENT ${BALL_BOOST_COMPONENTS})
-		STRING(TOUPPER ${COMPONENT} COMPONENT)
-		
-		IF (Boost_${COMPONENT}_FOUND)
-			SET(BALL_HAS_BOOST_${COMPONENT} TRUE)
-			LIST(APPEND BOOST_LIBRARIES ${Boost_${COMPONENT}_LIBRARY})
-		ENDIF()
-	ENDFOREACH()
-	
-	## For asio, we have some more work to do...
-	MESSAGE(STATUS ${Boost_INCLUDE_DIRS})
-	FIND_PATH(BOOST_ASIO_DIR 
-		NAMES "boost/asio.hpp"
-		PATHS ${Boost_INCLUDE_DIRS})
-
-	IF (BOOST_ASIO_DIR)
-		SET(BALL_HAS_BOOST_ASIO TRUE)
-		SET(BALL_HAS_ASIO TRUE)
-		SET(BALL_ASIO_NAMESPACE "boost::asio")
-	ELSE()
-		## Try to find asio as a standalone lib
-		FIND_PATH(ASIO_INCLUDE_DIR NAMES asio.hpp)
-		IF (ASIO_INCLUDE_DIR)
-			SET(BALL_HAS_ASIO TRUE)
-			SET(BALL_HAS_BOOST_ASIO FALSE)
-			SET(BALL_ASIO_NAMESPACE "asio")
-		ENDIF()
-	ENDIF()
-	SET(BOOST_INCLUDE_DIRS ${Boost_INCLUDE_DIRS})
-
-	IF(ASIO_INCLUDE_DIR)
-		SET(BOOST_INCLUDE_DIRS ${ASIO_INCLUDE_DIR})
-	ENDIF()
-
-	## Can we use boost regex?
-	IF (Boost_REGEX_FOUND)
-		SET(BALL_HAS_BOOST_REGEX TRUE)	
-	ENDIF()
-
 ENDIF()
