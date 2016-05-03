@@ -530,7 +530,6 @@ ENDIF()
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic
 LIST(APPEND BALL_DEP_LIBRARIES
 	${BOOST_LIBRARIES}
-	${REGEX_LIBRARIES}
 	${XDR_LIBRARIES}
 	${FFTW_LIBRARIES}
 	${LPSOLVE_LIBRARIES}
