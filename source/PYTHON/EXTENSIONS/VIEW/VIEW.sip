@@ -27,9 +27,7 @@
 %Include view-common.sip
 %Include clippingPlane.sip
 
-%If (BALL_HAS_ASIO)
 %Include serverWidget.sip
-%End
 
 // VIEW/DATATYPE
 %Include colorUnit.sip

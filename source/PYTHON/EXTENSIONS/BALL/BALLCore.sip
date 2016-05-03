@@ -15,8 +15,6 @@
 #include <BALLPyMacros.h>
 %End
 
-%Feature BALL_HAS_ASIO
-
 %Include copying.sip
 
 %Include deque.sip
@@ -51,7 +49,7 @@
 // forwardIterator.h // not supported
 // notification.h    // ??
 %Include object.sip 
-// %Include client.sip // we need to find a way to have this depend on BALL_HAS_ASIO
+%Include client.sip // we need to find a way to have this depend on BALL_HAS_ASIO
 %Include molecularInformation.sip
 // persitenceManager.h // ??
 %Include persistentObject.sip

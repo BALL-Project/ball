@@ -13,8 +13,8 @@ namespace BALL
 
 	void TCPServer::activate()
 	{
-		acceptor_.open(BALL_ASIO_NAMESPACE::ip::tcp::v4());
-		acceptor_.bind(BALL_ASIO_NAMESPACE::ip::tcp::endpoint(BALL_ASIO_NAMESPACE::ip::tcp::v4(), port_));
+		acceptor_.open(boost::asio::ip::tcp::v4());
+		acceptor_.bind(boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port_));
 
 		if (port_ == 0)
 			port_ = acceptor_.local_endpoint().port();
@@ -78,8 +78,8 @@ namespace BALL
 		{
 			try 
 			{
-				acceptor_.open(BALL_ASIO_NAMESPACE::ip::tcp::v4());
-				acceptor_.bind(BALL_ASIO_NAMESPACE::ip::tcp::endpoint(BALL_ASIO_NAMESPACE::ip::tcp::v4(), port_));
+				acceptor_.open(boost::asio::ip::tcp::v4());
+				acceptor_.bind(boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), port_));
 
 				if (port_ == 0)
 					port_ = acceptor_.local_endpoint().port();

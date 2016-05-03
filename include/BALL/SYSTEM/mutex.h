@@ -15,13 +15,7 @@
 #include <QtCore/QReadLocker>
 #include <QtCore/QWriteLocker>
 
-#ifdef BALL_HAS_BOOST_THREAD
-# include <boost/version.hpp>
-# if BOOST_VERSION >= 103500
-#	include <boost/thread/mutex.hpp>
-# define BALL_HAS_BOOST_MUTEX
-# endif
-#endif
+#include <boost/thread/mutex.hpp>
 
 #undef BALL_USE_THREAD_CHECKER_API
 #ifdef BALL_USE_THREAD_CHECKER_API
@@ -159,8 +153,6 @@ namespace BALL
 	};
 
 
-
-#ifdef BALL_HAS_BOOST_MUTEX
 	// Boost-based mutexes only require a mapping of tryLock to try_lock.
 	template <>
 	class TMutex<boost::mutex>
@@ -181,8 +173,6 @@ namespace BALL
 				return try_lock();
 			}
 	};
-
-#endif
 
 
 #ifdef BALL_USE_THREAD_CHECKER_API

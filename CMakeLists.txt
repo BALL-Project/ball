@@ -420,23 +420,6 @@ IF (BALL_PYTHON_SUPPORT)
 	ENDIF()
 ENDIF()
 
-## On Windows, we might need a seperate regex2-lib
-IF (WIN32)
-	IF (NOT BALL_HAS_BOOST_REGEX)
-		FIND_LIBRARY(REGEX_LIBRARIES
-			NAMES regex2 regex
-			PATH_SUFFIXES lib dlls
-			DOC "Regular expressions library")
-
-		IF (NOT REGEX_LIBRARIES)
-			MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
-		ENDIF()
-	ELSE()
-		SET(REGEX_LIBRARIES "")
-	ENDIF()
-ENDIF()
-
-
 # Check for the presence of OpenBabel version 2
 SET(BALL_HAS_OPENBABEL FALSE)
 

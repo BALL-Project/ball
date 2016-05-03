@@ -13,13 +13,7 @@
 # include <BALL/DATATYPE/string.h>
 #endif
 
-#ifdef BALL_HAS_BOOST_ASIO
-#	include <boost/asio.hpp>
-#else
-#define BOOST_DATE_TIME_NO_LIB
-#define BOOST_REGEX_NO_LIB
-# include <asio.hpp>
-#endif
+#include <boost/asio.hpp>
 
 #include <QtCore/QThread>
 
@@ -33,21 +27,21 @@ namespace BALL
 	 *  to allow boost-integrated asio as well as the pure library.
 	 */
 	class BALL_EXPORT TCPIOStream
-		: public BALL_ASIO_NAMESPACE::ip::tcp::iostream
+		: public boost::asio::ip::tcp::iostream
 	{
 		public:
 			TCPIOStream() 
-				: BALL_ASIO_NAMESPACE::ip::tcp::iostream()
+				: boost::asio::ip::tcp::iostream()
 			{
 			}
 
 			TCPIOStream(const String& hostname, const String& protocol)
-				: BALL_ASIO_NAMESPACE::ip::tcp::iostream(hostname, protocol)
+				: boost::asio::ip::tcp::iostream(hostname, protocol)
 			{
 			}
 
 			TCPIOStream(const String& hostname, Position port)
-				: BALL_ASIO_NAMESPACE::ip::tcp::iostream(hostname, String(port))
+				: boost::asio::ip::tcp::iostream(hostname, String(port))
 			{
 			}
 	};
@@ -90,9 +84,9 @@ namespace BALL
 
 			TCPIOStream connected_stream_;
 
-			BALL_ASIO_NAMESPACE::io_service io_service_;
+			boost::asio::io_service io_service_;
 
-			BALL_ASIO_NAMESPACE::ip::tcp::acceptor acceptor_;
+			boost::asio::ip::tcp::acceptor acceptor_;
 	};
 
 	/** This class provides a simple TCP Server running in its own QThread.

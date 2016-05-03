@@ -9,32 +9,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_HAS_BOOST_REGEX
-# include <boost/regex.h>
-#else
-// for SGI CC: turn of warnings #1174: function "regcomp" was declared but never referenced
-#if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
-#	pragma set woff 1174
-#endif
-
-#ifdef BALL_HAS_SYS_TYPES_H
-#	include <sys/types.h>
-#endif
-
-#ifdef BALL_HAS_REGEX_H
-	// make sure __STDC__ is set when including the
-  // GNU regex headers under Windows
-# ifdef BALL_COMPILER_MSVC
-#		define __STDC__ 1
-		extern "C" {
-#	endif
-#			include <regex.h>
-#	ifdef BALL_COMPILER_MSVC
-		}
-#	endif
-#endif
-
-#endif
+#include <boost/regex.h>
 
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma reset woff 1174

@@ -36,9 +36,7 @@
 #include <QtWidgets/QTreeWidget>
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
-#ifdef BALL_HAS_ASIO
 #include <BALL/VIEW/KERNEL/serverWidget.h>
-#endif
 
 #include "ui_aboutDialog.h"
 
@@ -148,12 +146,10 @@ namespace BALL
 		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
 
 		// setup the VIEW server
-		#ifdef BALL_HAS_ASIO
-			ServerWidget* server = new ServerWidget(this);
-			// registering object generator
-			MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-			server->registerObjectCreator(*object_creator);
-		#endif
+		ServerWidget* server = new ServerWidget(this);
+		// registering object generator
+		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+		server->registerObjectCreator(*object_creator);
 
 		#ifdef BALL_PYTHON_SUPPORT
 			new TestFramework(this, ((String)"Test Framework").c_str());

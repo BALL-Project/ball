@@ -280,6 +280,7 @@
 // flex
 #cmakedefine BALL_HAS_YYLEX_DESTROY
 
+/*
 // boost
 
 // defined if we have boost::system support
@@ -302,6 +303,8 @@
 
 // the namespace to use for asio
 #cmakedefine BALL_ASIO_NAMESPACE @BALL_ASIO_NAMESPACE@
+*/
+
 
 // Define whether the FFTW library/header is available.
 #cmakedefine BALL_HAS_FFTW
