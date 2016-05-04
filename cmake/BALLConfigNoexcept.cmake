@@ -1,6 +1,6 @@
 CHECK_CXX_SOURCE_COMPILES(
 	"template <class T>
-	void self_assign(T& t) noexcept(noexcept(t = t))
+	void self_assign(T& t) noexcept
 	{
 	    t = t;
 	}
