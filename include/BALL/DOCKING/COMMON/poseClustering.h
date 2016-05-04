@@ -41,7 +41,17 @@
 
 #include <boost/shared_ptr.hpp>
 #include <boost/variant.hpp>
-#include <boost/graph/adjacency_list.hpp>
+
+// Boost 1.56+ implicitly deletes the copy constructors of stored_edge_properties. In order
+// to automatically use the respective move constructor instead, ClusterProperties has to
+// be _nothrow_ move constructible!
+#if defined(BALL_HAS_RVALUE_REFERENCES) && !defined(BALL_HAS_NOEXCEPT)
+# define BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
+# include <boost/graph/adjacency_list.hpp>
+# undef BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
+#else
+# include <boost/graph/adjacency_list.hpp>
+#endif
 
 #include <set>
 #include <iostream>

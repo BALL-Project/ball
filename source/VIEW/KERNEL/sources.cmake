@@ -16,6 +16,7 @@ SET(SOURCES_LIST
 	preferencesEntry.C
 	representationManager.C
 	representation.C
+	serverWidget.C
 	shortcutRegistry.C
 	snapshotManagerInterface.C
 	stage.C
@@ -23,9 +24,6 @@ SET(SOURCES_LIST
 	UIOperationMode.C
 )
 
-IF(BALL_HAS_ASIO)
-	SET(SOURCES_LIST ${SOURCES_LIST} serverWidget.C)
-	SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} serverWidget.C)
-ENDIF()
+SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} serverWidget.C)
 
 ADD_VIEW_SOURCES("VIEW/KERNEL" "${SOURCES_LIST}")

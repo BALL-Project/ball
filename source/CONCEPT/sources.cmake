@@ -4,6 +4,7 @@ SET(DIRECTORY source/CONCEPT)
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	autoDeletable.C
+	client.C
 	composite.C
 	embeddable.C
 	enumerator.C
@@ -24,11 +25,6 @@ SET(SOURCES_LIST
 
 IF(BALL_HAS_XDR)
 	LIST(APPEND SOURCES_LIST XDRPersistenceManager.C)
-ENDIF()
-
-### asio dependent sources ###
-IF (BALL_HAS_ASIO)
-	SET(SOURCES_LIST ${SOURCES_LIST} client.C)
 ENDIF()
 
 ADD_BALL_SOURCES("CONCEPT" "${SOURCES_LIST}")

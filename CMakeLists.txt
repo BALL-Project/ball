@@ -145,14 +145,12 @@ ENDIF()
 
 ## Boost and Asio
 INCLUDE(cmake/BALLConfigBoost.cmake)
-INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})
-LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
-LIST(APPEND BALL_DEP_LIBRARIES ${BOOST_LIBRARIES})
-# make the rest of CMake aware of boost's existence
-LIST(APPEND CMAKE_REQUIRED_INCLUDES ${BOOST_INCLUDE_DIRS})
 
-## Check for the boost::unordered_map implementation
-INCLUDE(cmake/BALLConfigHashMap.cmake)
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
+LIST(APPEND BALL_DEP_LIBRARIES ${Boost_LIBRARIES})
+# make the rest of CMake aware of boost's existence
+#LIST(APPEND CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIR})
 
 ## FFTW
 OPTION(USE_FFTWD "Use double precision FFTW if found" ON)
@@ -422,23 +420,6 @@ IF (BALL_PYTHON_SUPPORT)
 	ENDIF()
 ENDIF()
 
-## On Windows, we might need a seperate regex2-lib
-IF (WIN32)
-	IF (NOT BALL_HAS_BOOST_REGEX)
-		FIND_LIBRARY(REGEX_LIBRARIES
-			NAMES regex2 regex
-			PATH_SUFFIXES lib dlls
-			DOC "Regular expressions library")
-
-		IF (NOT REGEX_LIBRARIES)
-			MESSAGE(SEND_ERROR "Could not find required regex2.lib!")
-		ENDIF()
-	ELSE()
-		SET(REGEX_LIBRARIES "")
-	ENDIF()
-ENDIF()
-
-
 # Check for the presence of OpenBabel version 2
 SET(BALL_HAS_OPENBABEL FALSE)
 
@@ -549,7 +530,6 @@ ENDIF()
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic
 LIST(APPEND BALL_DEP_LIBRARIES
 	${BOOST_LIBRARIES}
-	${REGEX_LIBRARIES}
 	${XDR_LIBRARIES}
 	${FFTW_LIBRARIES}
 	${LPSOLVE_LIBRARIES}

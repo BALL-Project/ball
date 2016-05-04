@@ -15,8 +15,6 @@
 #include <BALLPyMacros.h>
 %End
 
-%Feature BALL_HAS_ASIO
-
 %Include copying.sip
 
 %Include deque.sip

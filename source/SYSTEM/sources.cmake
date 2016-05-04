@@ -5,16 +5,13 @@ SET(SOURCES_LIST
 	file.C
 	fileSystem.C
 	mutex.C
+	networking.C
 	path.C
 	simpleDownloader.C
 	sysinfo.C
 	systemCalls.C
 	timer.C
 )
-
-IF (BALL_HAS_ASIO)
-	SET(SOURCES_LIST ${SOURCES_LIST} networking.C)
-ENDIF()
 
 IF (BALL_HAS_MPI)
 	SET(SOURCES_LIST ${SOURCES_LIST} MPISupport.C)

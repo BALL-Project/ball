@@ -44,7 +44,6 @@ namespace BALL
 		return (Composite *)0;
 	}
 
-#ifdef BALL_HAS_ASIO
 	Composite *ObjectCreator::operator() (TCPIOStream& tcp_iostream)
 			
 	{
@@ -63,6 +62,5 @@ namespace BALL
 		// convert the object
 		return convertObject(*po);
 	}
-#endif
 
 } // namespace BALL
