@@ -2,7 +2,6 @@
 
 # Mandatory boost components
 SET(BALL_BOOST_COMPONENTS
-	bzip2
 	chrono
 	date_time
 	iostreams
@@ -10,7 +9,6 @@ SET(BALL_BOOST_COMPONENTS
 	serialization
 	system
 	thread
-	zlib
 )
 
 # Additional Boost versions that should be included by CMake
