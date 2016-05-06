@@ -51,13 +51,7 @@ namespace BALL
 			widget_stack->removeWidget(RTFact);
 			setWidgetStack(widget_stack);
 			registerWidgets_();
-
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0))
 			screenCountChanged(QApplication::desktop()->screenCount());
-#else
-			screenCountChanged(QApplication::desktop()->numScreens());
-#endif
-
 			stereoModeChanged();
 
 			controlRenderer_comboBox->addItem(tr("OpenGL"));

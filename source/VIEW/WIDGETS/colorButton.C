@@ -69,15 +69,11 @@ namespace BALL
 		void ColorButton::chooseColor()
 		{
 			QColor tmp;
-#if QT_VERSION >= QT_VERSION_CHECK(4, 5, 0)
 			if(enable_alpha_) {
 				tmp = QColorDialog::getColor(color_, this, tr("Select color"), QColorDialog::ShowAlphaChannel);
 			} else {
 				tmp = QColorDialog::getColor(color_, this, tr("Choose color"));
 			}
-#else
-			tmp = QColorDialog::getColor(color_, this);
-#endif
 
 			if(tmp.isValid()) {
 				color_ = tmp;
