@@ -100,7 +100,7 @@ namespace BALL
 			if (atom_type.size()>10)
 				atom_type.truncate(10);
 
-				String atom_name = at_it->getElement().getSymbol();
+			String atom_name = at_it->getElement().getSymbol();
 			if (element_count.has(atom_name))
 			{
 				++element_count[atom_name];
