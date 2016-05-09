@@ -1945,15 +1945,12 @@ namespace BALL
 			QString string;
 			MolecularInformation info;
 
-			GeometricObject* object = 0;
 			list<GeometricObject*>::iterator git = objects.begin();
 			for (; git != objects.end(); git++)
 			{
 				// do we have a composite?
 				Composite* composite = (Composite*) (**git).getComposite();
 				if (composite == 0) continue;
-
-				object = *git;
 
 				info.visit(*composite);
 				QString this_string(info.getName().c_str());
@@ -2636,7 +2633,6 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
-			int control_screen_index = stage_settings_->getControlScreenNumber();
 			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
 			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
@@ -2720,6 +2716,9 @@ namespace BALL
 					right_renderer->init(*this);
 					static_cast<t_RaytracingRenderer*>(right_renderer)->setFrameBufferFormat(right_widget->getFormat());
 #endif
+				} else {
+					Log.error() << "Unhandled renderer type!\n";
+					return;
 				}
 
 				left_widget->show();
@@ -2815,7 +2814,6 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
-			int control_screen_index = stage_settings_->getControlScreenNumber();
 			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
 			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
@@ -2839,7 +2837,6 @@ namespace BALL
 				return;
 			}
 
-			QDesktopWidget* desktop = QApplication::desktop();
 			QRect screen_geom = QApplication::desktop()->screenGeometry(left_screen_index);
 
 			QWidget* left_screen = QApplication::desktop()->screen(left_screen_index);
@@ -2920,7 +2917,6 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
-			int control_screen_index = stage_settings_->getControlScreenNumber();
 			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
 			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
 
