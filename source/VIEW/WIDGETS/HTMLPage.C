@@ -1,6 +1,5 @@
 #include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
-#include <BALL/SYSTEM/path.h>
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
@@ -18,17 +17,15 @@ namespace BALL
 
 		HTMLPage::HTMLPage(QObject* parent, bool ignore_ssl_errors)
 				: QWebEnginePage(parent),
-				  ignore_ssl_errors_(ignore_ssl_errors)
-		{
-			init();
-		}
+				  ignore_ssl_errors_(ignore_ssl_errors),
+				  action_registry_()
+		{}
 
 		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent, bool ignore_ssl_errors)
 				: QWebEnginePage(profile, parent),
-				  ignore_ssl_errors_(ignore_ssl_errors)
-		{
-			init();
-		}
+				  ignore_ssl_errors_(ignore_ssl_errors),
+				  action_registry_()
+		{}
 
 		HTMLPage::~HTMLPage()
 		{
@@ -36,12 +33,6 @@ namespace BALL
 			{
 				delete it.value();
 			}
-		}
-
-		void HTMLPage::init()
-		{
-			Path p;
-			script_base_ = p.find("HTMLBasedInterface/scripts") + "/"; // TODO create settings dialog
 		}
 
 		bool HTMLPage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame)
@@ -114,20 +105,6 @@ namespace BALL
 		void HTMLPage::executePython_(const QString& action, const ParameterList& parameters)
 		{
 #ifdef BALL_PYTHON_SUPPORT
-			//Ensure, that the module search path is registered
-			static bool added_module_path = false;
-
-			if(!added_module_path)
-			{
-				PyInterpreter::run(String("sys.path.append(\"") + script_base_ + "\")", added_module_path);
-
-				if(!added_module_path)
-				{
-					Log.error() << "Could not add module path" << std::endl;
-					return;
-				}
-			}
-
 			//Search the module to load
 			QString load_module = "__main__";
 			for(ParameterList::const_iterator it = parameters.begin(); it != parameters.end(); ++it)

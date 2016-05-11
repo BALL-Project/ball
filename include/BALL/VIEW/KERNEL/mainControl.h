@@ -68,6 +68,7 @@ namespace BALL
 		class MainControlPreferences;
 		class OpenSavePreferences;
 		class NetworkPreferences;
+		class WebEnginePreferences;
 		class GeometricObjectSelectionMessage;
 		class SimulationThread;
 
@@ -913,6 +914,7 @@ namespace BALL
 			MainControlPreferences* 		main_control_preferences_;
 			OpenSavePreferences*				open_save_preferences_;
 			NetworkPreferences* 				network_preferences_;
+			WebEnginePreferences*				webengine_preferences_;
 			Preferences*								preferences_dialog_;
 			INIFile		 									preferences_file_;
 			
