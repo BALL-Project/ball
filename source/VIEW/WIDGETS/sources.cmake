@@ -1,3 +1,8 @@
+### The ui files go here ###
+SET(UI_LIST
+	HTMLViewErrorWidget.ui
+)
+
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	colorButton.C
@@ -33,3 +38,4 @@ IF(BALL_PYTHON_SUPPORT)
 ENDIF()
 
 ADD_VIEW_SOURCES("VIEW/WIDGETS" "${SOURCES_LIST}")
+ADD_BALL_UIFILES("VIEW/WIDGETS" "${UI_LIST}")

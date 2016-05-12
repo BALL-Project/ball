@@ -64,6 +64,11 @@ namespace BALL
 				script_base_ = script_base;
 			}
 #endif
+
+			for(unsigned int i = 0; i < HTMLViewDock::countInstances(); ++i)
+			{
+				HTMLViewDock::getInstance(i)->resetHTMLView(skip_checks->isChecked());
+			}
 		}
 
 		void WebEnginePreferences::selectScriptBase()
