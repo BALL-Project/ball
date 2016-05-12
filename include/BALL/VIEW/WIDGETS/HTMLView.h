@@ -13,8 +13,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class GLRenderer;
-
 		class BALL_VIEW_EXPORT HTMLViewErrorWidget :
 			public QWidget,
 			public Ui_HTMLViewErrorWidget
@@ -57,7 +55,7 @@ namespace BALL
 
 			protected:
 
-				void checkForIncompatibleDrivers_(GLRenderer& gl_renderer);
+				void checkForIncompatibleDrivers_();
 
 				bool skip_checks_;
 				bool show_error_;

@@ -1,8 +1,12 @@
 #include <BALL/VIEW/WIDGETS/HTMLView.h>
 
 #include <BALL/VIEW/WIDGETS/HTMLPage.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/RENDERING/renderSetup.h>
+
+#ifdef BALL_OS_DARWIN
+#	include <OpenGL/gl.h>
+#else
+#	include <GL/gl.h>
+#endif
 
 namespace BALL
 {
@@ -25,7 +29,7 @@ namespace BALL
 			  show_error_(false),
 			  html_view_(0)
 		{
-			checkForIncompatibleDrivers_(((Scene*) parent)->getGLRenderer());
+			checkForIncompatibleDrivers_();
 			setHTMLView(view);
 			registerWidget(this);
 		}
@@ -36,7 +40,7 @@ namespace BALL
 			  show_error_(false),
 			  html_view_(0)
 		{
-			checkForIncompatibleDrivers_(((Scene*) parent)->getGLRenderer());
+			checkForIncompatibleDrivers_();
 			setHTMLView(new HTMLView(this));
 			registerWidget(this);
 		}
@@ -71,9 +75,14 @@ namespace BALL
 			setHTMLView(html_view_);
 		}
 
-		void HTMLViewDock::checkForIncompatibleDrivers_(GLRenderer& gl_renderer)
+		void HTMLViewDock::checkForIncompatibleDrivers_()
 		{
-			show_error_ = gl_renderer.getVendor() == "nouveau";
+			show_error_ = false;
+			char* vendor = (char*) glGetString(GL_VENDOR);
+			if (vendor)
+			{
+				show_error_ = String(vendor) == "nouveau";
+			}
 		}
 	}
 }
