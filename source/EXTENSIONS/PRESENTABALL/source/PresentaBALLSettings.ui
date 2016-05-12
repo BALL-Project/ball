@@ -19,14 +19,14 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>user defined start page</string>
+        <string>User-defined start page</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="index_html_edit">
        <property name="toolTip">
-        <string>Position x</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;HTML page to be shown in the PresentaBALL window&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
         <string/>
