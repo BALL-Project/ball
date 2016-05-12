@@ -758,16 +758,9 @@ namespace BALL
 		HashGridBox3 < Position >::BoxIterator ibox_it;
 		HashGridBox3 < Position >::DataIterator id_it;
 
-		Matrix4x4 T;
 		Matrix4x4 T_best;
-		Vector3 v;
-		bool matched;
-		float square_tolerance;
-		Size matched_heavy_atoms;
-
-		square_tolerance = tolerance * tolerance;
+		const float square_tolerance = tolerance * tolerance;
 		no_matched_heavy_atoms = 0;
-		float squared_atom_dist, current_rmsd;
 
 		for (b_it1 = grid_S1.beginBox(); +b_it1; ++b_it1)
 		{
@@ -808,28 +801,34 @@ namespace BALL
 										{
 					//   if (index_heavy_S1[(*d_it1)] == index_heavy_S2[(*d_it4).x] && index_heavy_S1[(*d_it2)] == index_heavy_S2[(*d_it4).y] && index_heavy_S1[(*d_it3)] == index_heavy_S2[(*d_it4).z])
 										{
-										T = StructureMapper::matchPoints(heavy_atoms_S1[(*d_it1)], heavy_atoms_S1[(*d_it2)], heavy_atoms_S1[(*d_it3)], heavy_atoms_S2[(*d_it4).x], heavy_atoms_S2[(*d_it4).y], heavy_atoms_S2[(*d_it4).z]);
+										Matrix4x4 T = StructureMapper::matchPoints(
+												heavy_atoms_S1[(*d_it1)],
+												heavy_atoms_S1[(*d_it2)],
+												heavy_atoms_S1[(*d_it3)],
+												heavy_atoms_S2[(*d_it4).x],
+												heavy_atoms_S2[(*d_it4).y],
+												heavy_atoms_S2[(*d_it4).z]
+										);
 
-										matched_heavy_atoms = 0;
-										current_rmsd = 0;
-										squared_atom_dist = 0;
+										size_t matched_heavy_atoms = 0u;
+										float current_rmsd = 0.0f;
 
 						/// iterate over all heavy atoms of S1 and define them as matched if there is an atom of S2 within square_tolerance;
 						/// calculate RMSD out of all matched atoms
 										for (Size i = 0; i < no_heavy_S1; i++)
 										{
-										v = T * heavy_atoms_S1[i];
+										Vector3 v = T * heavy_atoms_S1[i];
 										ibox = fine_grid_S2.getBox(v);
 
 										if (ibox != 0)
 										{
-										matched = false;
+										bool matched = false;
 
 										for (ibox_it = ibox->beginBox(); +ibox_it && !matched; ++ibox_it)
 										{
 										for (id_it = (*ibox_it).beginData(); +id_it && !matched; ++id_it)
 										{
-										squared_atom_dist = v.getSquareDistance(heavy_atoms_S2[(*id_it)]);
+										float squared_atom_dist = v.getSquareDistance(heavy_atoms_S2[(*id_it)]);
 										if (squared_atom_dist <= square_tolerance)
 										{
 										matched_heavy_atoms++;
