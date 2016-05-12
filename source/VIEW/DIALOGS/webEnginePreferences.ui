@@ -35,7 +35,7 @@
         <item>
          <widget class="QLineEdit" name="script_base_edit">
           <property name="toolTip">
-           <string>Position x</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to additional Python modules used through WebEngine widgets. Requires Python support!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
            <string notr="true">HTMLBasedInterface/scripts</string>
@@ -44,25 +44,15 @@
         </item>
         <item>
          <widget class="QPushButton" name="browse_button">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Path to additional Python modules used through WebEngine widgets. Requires Python support!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
            <string>browse</string>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QCheckBox" name="skip_checks">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>Skip driver incompatibility checks</string>
-        </property>
-        <property name="checked">
-         <bool>false</bool>
-        </property>
-       </widget>
       </item>
      </layout>
     </widget>

@@ -68,7 +68,7 @@ namespace BALL
 
 		void WebEnginePreferences::selectScriptBase()
 		{
-			QString script_base = QFileDialog::getExistingDirectory(this, "Select a start page for PresentaBALL");
+			QString script_base = QFileDialog::getExistingDirectory(this, "Python module path");
 
 			if (script_base != "")
 			{
