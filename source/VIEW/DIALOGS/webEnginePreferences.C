@@ -42,21 +42,21 @@ namespace BALL
 			Path p;
 			String script_base = p.find(String(script_base_edit->text()));
 
-			if(script_base == "")
+			if (script_base == "")
 			{
 				Log.error() << "WebEngine: Invalid python module path!" << std::endl;
 			}
-			else if(script_base_ != script_base)
+			else if (script_base_ != script_base)
 			{
 				bool result;
-				if(script_base_ != "")
+				if (script_base_ != "")
 				{
 					PyInterpreter::run(String("sys.path.remove('") + script_base_.c_str() + "')", result);
 				}
 
 				PyInterpreter::run(String("sys.path.append('") + script_base.c_str() + "')", result);
 
-				if(!result)
+				if (!result)
 				{
 					Log.error() << "WebEngine: Could not add python module path!" << std::endl;
 				}
@@ -65,7 +65,7 @@ namespace BALL
 			}
 #endif
 
-			for(unsigned int i = 0; i < HTMLViewDock::countInstances(); ++i)
+			for (unsigned int i = 0; i < HTMLViewDock::countInstances(); ++i)
 			{
 				HTMLViewDock::getInstance(i)->resetHTMLView(skip_checks->isChecked());
 			}

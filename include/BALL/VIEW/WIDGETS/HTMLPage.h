@@ -39,9 +39,9 @@ namespace BALL
 
 			protected:
 				typedef QList<QPair<QString, QString> > ParameterList;
-				virtual bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame);
+				virtual bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame);
 				virtual bool certificateError(const QWebEngineCertificateError& /* certificateError */);
-				virtual void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString& /* sourceID */);
+				virtual void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString& /* sourceID */);
 				virtual void executeLink(const QUrl& url);
 				virtual void executePython_(const QString& action, const ParameterList& parameters);
 

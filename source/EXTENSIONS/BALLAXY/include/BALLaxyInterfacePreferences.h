@@ -27,7 +27,7 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALLaxyInterfacePreferences 
-			:	public ConfigDialog,
+			: public ConfigDialog,
 			  public Ui_BALLaxyInterfacePreferencesData
 		{
 			Q_OBJECT
@@ -48,7 +48,6 @@ namespace BALL
 
 				///
 				QUrl getBALLaxyBaseUrl();
-
 		};
 			
 	} 

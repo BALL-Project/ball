@@ -57,7 +57,7 @@ namespace BALL
 
 			protected:
 
-				void checkForIncompatibleDrivers_(GLRenderer &gl_renderer);
+				void checkForIncompatibleDrivers_(GLRenderer& gl_renderer);
 
 				bool skip_checks_;
 				bool show_error_;

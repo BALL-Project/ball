@@ -29,15 +29,15 @@ namespace BALL
 
 		HTMLPage::~HTMLPage()
 		{
-			for(QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.begin(); it != action_registry_.end(); ++it)
+			for (QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.begin(); it != action_registry_.end(); ++it)
 			{
 				delete it.value();
 			}
 		}
 
-		bool HTMLPage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool isMainFrame)
+		bool HTMLPage::acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame)
 		{
-			if(getMainControl()->isBusy())
+			if (getMainControl()->isBusy())
 			{
 				return false;
 			}
@@ -46,21 +46,19 @@ namespace BALL
 			return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 		}
 
-		bool HTMLPage::certificateError(const QWebEngineCertificateError &certificateError)
+		bool HTMLPage::certificateError(const QWebEngineCertificateError&)
 		{
-			Q_UNUSED(certificateError)
 			return ignore_ssl_errors_;
 		}
 
-		void HTMLPage::javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString &message, int lineNumber, const QString &sourceID)
+		void HTMLPage::javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString&)
 		{
 			Q_UNUSED(level)
 			Q_UNUSED(message)
 			Q_UNUSED(lineNumber)
-			Q_UNUSED(sourceID)
 
 #ifdef BALL_VIEW_DEBUG
-			switch(level)
+			switch (level)
 			{
 				case InfoMessageLevel:
 					Log.info() << lineNumber << ": " << message.toStdString() << std::endl;
@@ -78,7 +76,7 @@ namespace BALL
 		void HTMLPage::executeLink(const QUrl& url)
 		{
 			QString action_name = QUrlQuery(url).queryItemValue("action");
-			if(action_name == QString::null)
+			if (action_name == QString::null)
 			{
 				return;
 			}
@@ -87,16 +85,16 @@ namespace BALL
 			QString parameters  = QUrlQuery(url).queryItemValue("parameters");
 
 			//Ideally this if should be converted into another registry
-			if(method_type == "native")
+			if (method_type == "native")
 			{
 				QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.find(action_name);
 
-				if(it != action_registry_.end())
+				if (it != action_registry_.end())
 				{
 					(*it)->execute(QUrlQuery(url).queryItems());
 				}
 			}
-			else if(method_type == "" || method_type == "python")
+			else if (method_type == "" || method_type == "python")
 			{
 				executePython_(action_name, QUrlQuery(url).queryItems());
 			}
@@ -107,9 +105,9 @@ namespace BALL
 #ifdef BALL_PYTHON_SUPPORT
 			//Search the module to load
 			QString load_module = "__main__";
-			for(ParameterList::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+			for (ParameterList::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
 			{
-				if(it->first == "module")
+				if (it->first == "module")
 				{
 					load_module = it->second;
 					break;
@@ -120,7 +118,7 @@ namespace BALL
 			{
 				PyInterpreter::execute(load_module, action, parameters);
 			}
-			catch(Exception::FileNotFound)
+			catch (Exception::FileNotFound)
 			{
 				Log.error() << "Could not execute action " << action.toStdString() << "\n No such file or directory." << std::endl;
 			}

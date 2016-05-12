@@ -8,14 +8,12 @@ namespace BALL
 	{
 		BALLaxyPlugin::BALLaxyPlugin()
 			: icon_(":pluginBALLaxy.png"),
-				is_active_(false),
-				preferences_(new BALLaxyInterfacePreferences())
-		{
-		}
+			  is_active_(false),
+			  preferences_(new BALLaxyInterfacePreferences())
+		{ }
 
 		BALLaxyPlugin::~BALLaxyPlugin()
-		{
-		}
+		{ }
 
 		QString BALLaxyPlugin::getName() const
 		{

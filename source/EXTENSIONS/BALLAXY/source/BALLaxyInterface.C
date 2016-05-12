@@ -17,7 +17,7 @@ namespace BALL
 	{
 		BALLaxyInterface::BALLaxyInterface(MainControl* parent)
 			: HTMLView(parent),
-				Embeddable()
+			  Embeddable()
 		{
 			registerThis();
 			connect(page()->profile(), SIGNAL(downloadRequested(QWebEngineDownloadItem*)), this, SLOT(verifyDownloadRequest(QWebEngineDownloadItem*)));
@@ -38,7 +38,7 @@ namespace BALL
 			MolecularControl::getInstance(0)->getContextMenu().removeAction(context_submenu_action_);
 		}
 
-		void BALLaxyInterface::setBALLaxyBaseUrl(String const& ballaxy_base)
+		void BALLaxyInterface::setBALLaxyBaseUrl(const String& ballaxy_base)
 		{
 			ballaxy_base_.setUrl(ballaxy_base.c_str());
 			page()->load(ballaxy_base_);
@@ -125,7 +125,7 @@ namespace BALL
 		void BALLaxyInterface::openStructure()
 		{
 			QWebEngineDownloadItem* item = dynamic_cast<QWebEngineDownloadItem*>(sender());
-			if(!item)
+			if (!item)
 			{
 				Log.error() << "BALLaxy plugin: Failed to open file (unknown)" << std::endl;
 				return;

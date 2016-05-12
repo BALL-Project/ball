@@ -22,7 +22,7 @@ namespace BALL
 
 				virtual ~BALLaxyInterface();
 
-				void setBALLaxyBaseUrl(String const& ballaxy_base);
+				void setBALLaxyBaseUrl(const String& ballaxy_base);
 				bool uploadToBallaxy(AtomContainer* ac, const String& format);
 
 			public slots:

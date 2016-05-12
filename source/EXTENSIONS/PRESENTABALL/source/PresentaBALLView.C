@@ -19,7 +19,7 @@ namespace BALL
 	{
 		PresentaBALLView::PresentaBALLView(QWidget* parent, const char* name)
 			: HTMLView(parent),
-				ModularWidget(name)
+			  ModularWidget(name)
 		{
 			// establish webchannel
 			settings_ = new PresentaBALLSettings(this);
@@ -33,7 +33,7 @@ namespace BALL
 			QAction* action = 0;
 			signalMapper_ = new QSignalMapper;
 			ShortcutRegistry& sr = MainControl::getInstance(0)->getShortcutRegistry();
-			for(uint i = 0; i < sr.size(); i++)
+			for (uint i = 0; i < sr.size(); i++)
 			{
 				action = sr[i].second;
 				if (action)

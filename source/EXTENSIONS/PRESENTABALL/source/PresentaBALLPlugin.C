@@ -8,14 +8,13 @@ namespace BALL
 	{
 		PresentaBALLPlugin::PresentaBALLPlugin()
 			: icon_(":pluginPresentaBALL.png"),
-				is_active_(false),
-				settings_(0)
+			  is_active_(false),
+			  settings_(0)
 		{
 		}
 
 		PresentaBALLPlugin::~PresentaBALLPlugin()
-		{
-		}
+		{ }
 
 		QString PresentaBALLPlugin::getName() const
 		{

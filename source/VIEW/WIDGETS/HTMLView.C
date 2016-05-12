@@ -8,7 +8,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		HTMLView::HTMLView(QWidget *parent)
+		HTMLView::HTMLView(QWidget* parent)
 			: QWebEngineView(parent)
 		{
 			setPage(new HTMLPage(this));
@@ -19,40 +19,41 @@ namespace BALL
 		HTMLView::~HTMLView()
 		{}
 
-		HTMLViewDock::HTMLViewDock(HTMLView *view, QWidget *parent, const char *title)
+		HTMLViewDock::HTMLViewDock(HTMLView* view, QWidget* parent, const char* title)
 			: DockWidget(parent, title),
 			  skip_checks_(false),
 			  show_error_(false),
 			  html_view_(0)
 		{
-			checkForIncompatibleDrivers_(((Scene *) parent)->getGLRenderer());
+			checkForIncompatibleDrivers_(((Scene*) parent)->getGLRenderer());
 			setHTMLView(view);
 			registerWidget(this);
 		}
 
-		HTMLViewDock::HTMLViewDock(QWidget *parent, const char *title)
+		HTMLViewDock::HTMLViewDock(QWidget* parent, const char* title)
 			: DockWidget(parent, title),
 			  skip_checks_(false),
 			  show_error_(false),
 			  html_view_(0)
 		{
-			checkForIncompatibleDrivers_(((Scene *) parent)->getGLRenderer());
+			checkForIncompatibleDrivers_(((Scene*) parent)->getGLRenderer());
 			setHTMLView(new HTMLView(this));
 			registerWidget(this);
 		}
 
-		void HTMLViewDock::setHTMLView(HTMLView *html_view) {
-			if (!html_view) {
+		void HTMLViewDock::setHTMLView(HTMLView* html_view) {
+			if (!html_view)
+			{
 				return;
 			}
 
-			if(html_view != html_view_)
+			if (html_view != html_view_)
 			{
 				delete html_view_;
 				html_view_ = html_view;
 			}
 
-			if(!skip_checks_ && show_error_)
+			if (!skip_checks_ && show_error_)
 			{
 				// In case of an error, replace the original widget with an error message
 				// but still keep it as a member (hidden!) so that it can be restored if
@@ -70,7 +71,7 @@ namespace BALL
 			setHTMLView(html_view_);
 		}
 
-		void HTMLViewDock::checkForIncompatibleDrivers_(GLRenderer &gl_renderer)
+		void HTMLViewDock::checkForIncompatibleDrivers_(GLRenderer& gl_renderer)
 		{
 			show_error_ = gl_renderer.getVendor() == "nouveau";
 		}
