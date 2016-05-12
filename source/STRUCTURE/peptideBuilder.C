@@ -226,7 +226,7 @@ namespace BALL
 				// special case: residue is a proline
 				type = i->getType();
 				type.toUpper();
-				is_proline_ = (type == "PRO") ? true : false;
+				is_proline_ = type == "PRO";
 
 				Residue* residue2 = createResidue_(i->getType(), id);
 

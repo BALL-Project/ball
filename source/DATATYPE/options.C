@@ -115,12 +115,7 @@ namespace BALL
 
 		// try to interpret the string as three double values
 		double dummy;
-		if (sscanf(get(key).c_str(), "(%lf %lf %lf)", &dummy, &dummy, &dummy) == 3)
-		{
-			return true;
-		}
-		
-		return false;
+		return sscanf(get(key).c_str(), "(%lf %lf %lf)", &dummy, &dummy, &dummy) == 3;
 	}
 
 	bool Options::isBool(const String& key) const
@@ -154,13 +149,7 @@ namespace BALL
 		double double_value   = ::atof(get(key).c_str());
 
 		// check if it is an integer (cutoff is 1e-7)
-		if (fabs(double_value - ((double)long_value)) <= 1e-7)
-		{
-			return true;
-		}
-
-		// it is a floating point number, but no integer
-		return false;
+		return fabs(double_value - ((double)long_value)) <= 1e-7;
 	}
 
 
@@ -216,14 +205,7 @@ namespace BALL
 		}
 
 		ConstIterator it = find(key);
-		if ((it != end()) && (it->second == "true" || it->second == "1"))
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
+		return (it != end()) && (it->second == "true" || it->second == "1");
 	}
 
 	long Options::getInteger(const String& key) const

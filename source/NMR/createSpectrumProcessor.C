@@ -127,7 +127,7 @@ namespace BALL
 				if ((!(ignore_atoms_.has(atom->getFullName())
 							 || ignore_atoms_.has("*:" + atom->getName()))
 						 || !use_ignore_table_)
-						&& (expression_(*atom) == true)
+						&& expression_(*atom)
 						&& (shift != 0.0))
 				{
 					Peak1D peak;
@@ -141,7 +141,7 @@ namespace BALL
 		}
 		
 
-		if (use_averaging_ == true)
+		if (use_averaging_)
 		{
 			// average the shifts of chemically equivalent nuclei
 			// in a residue

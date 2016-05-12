@@ -186,12 +186,12 @@ namespace BALL
 
 		// Read the parameters for the VDW calculation
 		bool result = lennard_jones_.extractSection(parameters, "LennardJones");
-		if (result == false)
+		if (!result)
 		{
 			return(false);
 		}
 		result = hydrogen_bond_.extractSection(parameters, "HydrogenBonds");
-		if (result == false)
+		if (!result)
 		{
 			return(false);
 		}

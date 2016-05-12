@@ -504,7 +504,7 @@ namespace BALL
  
 	Element& PTE_::getElement(const String& symbol)
 	{
-		if (symbol.isEmpty() == true)
+		if (symbol.isEmpty())
 		{
 			return Element::UNKNOWN;
 		}
@@ -548,7 +548,7 @@ namespace BALL
 
 	bool PTE_::apply(UnaryProcessor<Element>& processor)
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
@@ -561,7 +561,7 @@ namespace BALL
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 

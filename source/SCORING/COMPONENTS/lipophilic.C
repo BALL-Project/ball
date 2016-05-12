@@ -232,7 +232,7 @@ double Lipophilic::updateScore()
 					<< ", R2 " << R2 << ")" << endl;
 			}
 
-			if (write_interactions_file_ == true)
+			if (write_interactions_file_)
 			{
 				Atom* atom_ptr_L1 = new Atom();
 				atom_ptr_L1->setElement(atom1->getElement());
@@ -256,7 +256,7 @@ double Lipophilic::updateScore()
 		}
 	}
 
-	if (write_interactions_file_ == true)
+	if (write_interactions_file_)
 	{
 		HINFile debug_file("LIPO_debug.hin", std::ios::out);
 		debug_file << interactions_molecule;

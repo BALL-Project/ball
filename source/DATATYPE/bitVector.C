@@ -272,7 +272,7 @@ namespace BALL
 		for (Index i = (Index)std::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Index)i) == true)
+			if (getBit((Index)i))
 			{
 				c |= 1;
 			}
@@ -300,7 +300,7 @@ namespace BALL
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Index)i) == true)
+			if (getBit((Index)i))
 			{
 				c |= 1;
 			}
@@ -329,7 +329,7 @@ namespace BALL
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Index)i) == true)
+			if (getBit((Index)i))
 			{
 				c |= 1;
 			}
@@ -358,7 +358,7 @@ namespace BALL
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Index)i) == true)
+			if (getBit((Index)i))
 			{
 				c |= 1;
 			}

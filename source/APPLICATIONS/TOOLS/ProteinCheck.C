@@ -404,14 +404,7 @@ bool checkProtein(Protein* protein, bool allow_broken_chains)
 		Log.level(20)<<"passed"<<endl;
 	}
 
-	if (!has_atoms || !has_hydrogens || !has_3D_coordinates || !one_molecule || !bond_length_ok || !elements_ok || !temp_factor_ok)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return has_atoms && has_hydrogens && has_3D_coordinates && one_molecule && bond_length_ok && elements_ok && temp_factor_ok;
 }
 
 

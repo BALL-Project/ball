@@ -221,14 +221,7 @@ namespace BALL
 
 	bool PiecewiseFunction::isInRange(double x) const 
 	{
-		if ((x >= range_.first) && (x < range_.second))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (x >= range_.first) && (x < range_.second);
 	}
 
 

@@ -379,12 +379,12 @@ namespace BALL
 
 	void File::close()
 	{
-		if (is_open_ == true)
+		if (is_open_)
 		{
 			std::fstream::clear();
 			std::fstream::close();
 
-			if (is_temporary_ == true)
+			if (is_temporary_)
 			{
 				remove(name_);
 				is_temporary_ = false;
@@ -438,7 +438,7 @@ namespace BALL
 			}
 		#else
 			struct stat stats;
-			if ((trace_link == true) 
+			if (trace_link
 					?  ::stat(name.c_str(), &stats) < 0
 					: ::lstat(name.c_str(), &stats) < 0)
 			{ 

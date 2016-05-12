@@ -226,7 +226,7 @@ namespace BALL
 		if (scaling_factors_.size() == 0)
 		{
 			// Read scaling factors from standard INIfile
-			if (readScalingFactors(scaling_factor_filename_) == false)
+			if (!readScalingFactors(scaling_factor_filename_))
 			{
 				return(false);
 			}

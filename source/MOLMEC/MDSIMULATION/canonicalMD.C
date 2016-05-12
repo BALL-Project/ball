@@ -200,7 +200,7 @@ namespace BALL
 		vector <Atom*>::iterator atom_it;
 		vector <AuxFactors>::iterator factor_it;
 
-		if (restart == false)
+		if (!restart)
 		{
 			// reset the current number of iteration and the simulation time to
 			// the values given in the options
@@ -239,7 +239,7 @@ namespace BALL
 
 		// If the simulation runs with periodic boundary conditions, update the
 		// position of molecules
-		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+		if (force_field_ptr_->periodic_boundary.isEnabled())
 		{
 			force_field_ptr_->periodic_boundary.updateMolecules();
 		}
@@ -261,7 +261,7 @@ namespace BALL
 
 			// If the simulation runs with periodic boundary conditions, update the
 			// list and position of molecules
-			if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+			if (force_field_ptr_->periodic_boundary.isEnabled())
 			{
 				force_field_ptr_->periodic_boundary.updateMolecules();
 			}

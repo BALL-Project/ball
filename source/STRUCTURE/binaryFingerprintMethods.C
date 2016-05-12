@@ -1567,7 +1567,7 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 	ccs.clear();
 	nn_data.clear();
 	
-	if (checkInputData(selection) == false)
+	if (!checkInputData(selection))
 	{
 		return false;
 	}
@@ -1909,7 +1909,7 @@ bool BinaryFingerprintMethods::calculateSelectionMedoid(const vector<unsigned in
 	medoid_index = selection.size() + 1;
 	LongSize n_molecules = selection.size();
 	
-	if (checkInputData(selection) == false)
+	if (!checkInputData(selection))
 	{
 		return false;
 	}
@@ -1974,7 +1974,7 @@ bool BinaryFingerprintMethods::averageLinkageClustering(const vector<unsigned in
 		return true;
 	}
 	
-	if (checkInputData(selection) == false)
+	if (!checkInputData(selection))
 	{
 		return false;
 	}

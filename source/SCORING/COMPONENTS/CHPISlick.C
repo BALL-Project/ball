@@ -597,7 +597,7 @@ namespace BALL
 							Log.info() << "Score: " << e << std::endl;
 						}
 
-						if (write_interactions_file_ == true)
+						if (write_interactions_file_)
 						{
 							Atom* atom_ptr_H = new Atom();
 							atom_ptr_H->setElement(PTE[Element::Fe]);
@@ -648,7 +648,7 @@ namespace BALL
 			Log.info() << "CHPISlick: energy is " << score_ << endl;
 		}
 
-		if (write_interactions_file_ == true)
+		if (write_interactions_file_)
 		{
 			HINFile interactions_file("CHPISlick_interactions.hin", std::ios::out);
 			interactions_file << interactions_molecule;

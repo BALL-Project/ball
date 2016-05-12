@@ -22,9 +22,7 @@ vector<String> scaffolds;
 
 bool isSection(String line)
 {
-	if (line[0] == '<' && line[line.size()-1] == '>')
-		return true;
-	return false;
+	return line[0] == '<' && line[line.size()-1] == '>';
 }
 
 bool findRGroupNames()

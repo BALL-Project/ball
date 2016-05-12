@@ -132,14 +132,7 @@ bool advancedMoleculeCheck(Molecule* mol)
 		}
 	}
 	
-	if (all_x_zero || all_y_zero || all_z_zero)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return !(all_x_zero || all_y_zero || all_z_zero);
 }
 
 

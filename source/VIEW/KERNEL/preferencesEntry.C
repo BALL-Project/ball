@@ -102,13 +102,8 @@ namespace BALL
 				return true;
 			}
 
-			QGroupBox* box = dynamic_cast<QGroupBox*>(&widget);
-			if (box != 0 && (box->isCheckable() || box->findChildren<QRadioButton*>().size()))
-			{
-				return true;
-			}
-
-			return false;
+			QGroupBox* box = qobject_cast<QGroupBox*>(&widget);
+			return box != 0 && (box->isCheckable() || !box->findChildren<QRadioButton*>().empty());
 		}
 
 		void PreferencesEntry::writePreferenceEntries(INIFile& inifile)

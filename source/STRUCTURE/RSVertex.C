@@ -86,14 +86,14 @@ namespace BALL
 		HashSet<RSEdge*>::ConstIterator e;
 		for (e = edges_.begin(); e != edges_.end(); e++)
 		{
-			if (rsvertex.edges_.has(*e) == false)
+			if (!rsvertex.edges_.has(*e))
 			{
 				return false;
 			}
 		}
 		for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
 		{
-			if (edges_.has(*e) == false)
+			if (!edges_.has(*e))
 			{
 				return false;
 			}
@@ -101,14 +101,14 @@ namespace BALL
 		HashSet<RSFace*>::ConstIterator f;
 		for (f = faces_.begin(); f != faces_.end(); f++)
 		{
-			if (rsvertex.faces_.has(*f) == false)
+			if (!rsvertex.faces_.has(*f))
 			{
 				return false;
 			}
 		}
 		for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
 		{
-			if (faces_.has(*f) == false)
+			if (!faces_.has(*f))
 			{
 				return false;
 			}

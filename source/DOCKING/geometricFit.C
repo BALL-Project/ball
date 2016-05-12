@@ -1189,7 +1189,7 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
 		// calculate all the rotation angles
 		RotationAngles_ rotAng;
 
-		if(     rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI),
+		if(     !rotAng.generateSomeAngles( (float)options.getReal(Option::DEG_PHI),
 																			 (float)options.getReal(Option::DEG_PSI),
 																			 (float)options.getReal(Option::DEG_THETA),
 																			 (float)options.getReal(Option::PHI_MIN),
@@ -1197,7 +1197,7 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
 																			 (float)options.getReal(Option::PSI_MIN),
 																			 (float)options.getReal(Option::PSI_MAX),
 																			 (float)options.getReal(Option::THETA_MIN),
-																			 (float)options.getReal(Option::THETA_MAX) ) == false
+																			 (float)options.getReal(Option::THETA_MAX) )
 				||  rotAng.getRotationNum() == 0 )
 		{
 			Log.error() << "Bad degree interval!" << endl;

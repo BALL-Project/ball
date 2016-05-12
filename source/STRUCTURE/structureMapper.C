@@ -424,19 +424,19 @@ namespace BALL
 		// searching the backbone atoms of residue r1
 		for (atom_it = r1.beginAtom(); +atom_it; ++atom_it)
 		{
-			if (got_p1_r1 == false && atom_it->getName() == "CA")
+			if (!got_p1_r1 && atom_it->getName() == "CA")
 			{
 				p1_r1 = atom_it->getPosition();
 				got_p1_r1 = true;
 				counter++;
 			}
-			if (got_p2_r1 == false && atom_it->getName() == "N")
+			if (!got_p2_r1 && atom_it->getName() == "N")
 			{
 				p2_r1 = atom_it->getPosition();
 				got_p2_r1 = true;
 				counter++;
 			}
-			if (got_p3_r1 == false && atom_it->getName() == "C")
+			if (!got_p3_r1 && atom_it->getName() == "C")
 			{
 				p3_r1 = atom_it->getPosition();
 				got_p3_r1 = true;
@@ -447,19 +447,19 @@ namespace BALL
 		// searching the backbone atoms of residue r2
 		for (atom_it = r2.beginAtom(); +atom_it; ++atom_it)
 		{
-			if (got_p1_r2 == false && atom_it->getName() == "CA")
+			if (!got_p1_r2 && atom_it->getName() == "CA")
 			{
 				p1_r2 = atom_it->getPosition();
 				got_p1_r2 = true;
 				counter++;
 			}
-			if (got_p2_r2 == false && atom_it->getName() == "N")
+			if (!got_p2_r2 && atom_it->getName() == "N")
 			{
 				p2_r2 =(*atom_it).getPosition();
 				got_p2_r2 = true;
 				counter++;
 			}
-			if (got_p3_r2 == false && atom_it->getName() == "C")
+			if (!got_p3_r2 && atom_it->getName() == "C")
 			{
 				p3_r2 = atom_it->getPosition();
 				got_p3_r2 = true;
@@ -599,7 +599,7 @@ namespace BALL
 
 		result = new vector < vector < Fragment * > >;
 
-		for(i = 0; i < no_of_frag && ready == false; i++)
+		for(i = 0; i < no_of_frag && !ready; i++)
 		{
 			for(j = 0, counter = 0; j < no_of_comp_frag; ++j)
 			{
@@ -632,7 +632,7 @@ namespace BALL
 			indices_of_pot_pattern[i] = indices_CF[i][j];
 			distances_fit = true;
 
-			for(k = 0; k < i && distances_fit == true; k++)
+			for(k = 0; k < i && distances_fit; k++)
 			{
 				distance = pattern_distances[i * no_of_frag + k] -
 				comp_frag_dist[indices_of_pot_pattern[i] * no_of_comp_frag + indices_of_pot_pattern[k]];
@@ -642,7 +642,7 @@ namespace BALL
 				}
 			}
 
-			if (distances_fit == true)
+			if (distances_fit)
 			{
 				index_stack.push(j);
 				i++;

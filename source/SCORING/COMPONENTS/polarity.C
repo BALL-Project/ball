@@ -110,12 +110,9 @@ bool Polarity::isPolar_(const Atom* atom)
 	if (fabs(atom->getCharge()) < POL_ES_THRESHOLD) return false;
 
 	int type = getType_(atom);
-	if ( (type == FresnoTypes::POLAR) || (type == FresnoTypes::HBOND_ACCEPTOR)
-		|| (type == FresnoTypes::HBOND_DONOR) || (type == FresnoTypes::HBOND_ACCEPTOR_DONOR) || (type == FresnoTypes::HBOND_HYDROGEN) )
-	{
-		return true;
-	}
-	else return false;
+	return (type == FresnoTypes::POLAR)       || (type == FresnoTypes::HBOND_ACCEPTOR)
+	    || (type == FresnoTypes::HBOND_DONOR) || (type == FresnoTypes::HBOND_ACCEPTOR_DONOR)
+	    || (type == FresnoTypes::HBOND_HYDROGEN);
 }
 
 
@@ -125,23 +122,14 @@ bool Polarity::isLipophilic_(const Atom* atom)
 	if (fabs(atom->getCharge()) > LIP_ES_THRESHOLD) return false;
 
 	int type = getType_(atom);
-	if (type == FresnoTypes::LIPOPHILIC)
-	{
-		return true;
-	}
-	else return false;
+	return type == FresnoTypes::LIPOPHILIC;
 }
 
 
 bool Polarity::isBackboneAtom_(const Atom* atom)
 {
-	if (atom->getName() == "O" || atom->getName() == "N" || atom->getName() == "H"
-		|| atom->getName() == "C" /*|| atom->getName() == "CA"*/)
-	{
-		return true;
-	}
-
-	return false;
+	return atom->getName() == "O" || atom->getName() == "N"
+	    || atom->getName() == "H" || atom->getName() == "C";
 }
 
 

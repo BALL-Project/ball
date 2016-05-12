@@ -73,9 +73,7 @@ namespace BALL
 
 		bool CompositeManager::hasRoot(const Composite* composite) const
 		{
-			if (composite_set_.has((Composite*) &composite)) return true;
-
-			return false;
+			return composite_set_.has((Composite*) &composite);
 		}
 
 

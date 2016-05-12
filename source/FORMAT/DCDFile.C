@@ -730,9 +730,8 @@ namespace BALL
 		{
 			v[atom].z = readFloat_();
 		}
-		if (!readSize_(expected_size, "Z")) return false;
 
-		return true;
+		return readSize_(expected_size, "Z") != 0;
 	}
 
 

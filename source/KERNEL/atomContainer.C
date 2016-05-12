@@ -127,7 +127,7 @@ namespace BALL
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
-            if (RTTI::isKindOf<AtomContainer>(&*ancestor_it) == true)
+            if (RTTI::isKindOf<AtomContainer>(&*ancestor_it))
 			{
 				return (AtomContainer *)&*ancestor_it;
 			}
@@ -448,7 +448,7 @@ namespace BALL
 
 	bool AtomContainer::applyInterBond(UnaryProcessor<Bond>& processor)
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
@@ -463,7 +463,7 @@ namespace BALL
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 
@@ -472,7 +472,7 @@ namespace BALL
 
 	bool AtomContainer::applyIntraBond(UnaryProcessor<Bond> &processor)
 	{
-    if (processor.start() == false)
+    if (!processor.start())
 		{
       return false;
 		}
@@ -487,7 +487,7 @@ namespace BALL
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 

@@ -59,7 +59,7 @@ namespace BALL
 		float length;
 		static float eps=78.;
 		
-		if (options.getBool(Option::LOCALITY)==true)
+		if (options.getBool(Option::LOCALITY))
 		{
 			AtomIterator atIt;
 

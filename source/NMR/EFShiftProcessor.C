@@ -152,7 +152,7 @@ namespace BALL
 		}
 
 		// Built the charge hash map.
-		if ((result == true) && parameter_section.hasVariable("charge"))
+		if (result && parameter_section.hasVariable("charge"))
 		{
 			Position charge_column = parameter_section.getColumnIndex("charge");
 			for (Position i = 0; i < parameter_section.getNumberOfKeys(); i++)

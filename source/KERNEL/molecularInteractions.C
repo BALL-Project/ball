@@ -77,8 +77,7 @@ bool MolecularInteractions::hasInteraction(const Atom* atom, String interaction_
 	map<String, map<const Atom*,double> >::const_iterator search_it = interactions_map_.find(interaction_type);
 	if(search_it==interactions_map_.end()) return false;
 
-	if(search_it->second.find(atom)!=search_it->second.end()) return true;
-	else return false;
+	return search_it->second.find(atom)!=search_it->second.end();
 }
 
 

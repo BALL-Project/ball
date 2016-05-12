@@ -750,7 +750,7 @@ namespace BALL
 			while ((!result) && (iter < 12))
 			{
 				result = line_search_.minimize(step_);
-				if (result == false)
+				if (!result)
 				{
 					for(Size i = 0; i <  number_of_atoms_; ++i)
 					{

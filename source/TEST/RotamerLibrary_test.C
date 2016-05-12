@@ -331,7 +331,7 @@ CHECK(Side chain conformations for Dunbrack library)
 				TEST_EQUAL(rc.getStatus(), true)
 
 				// Store suspicious conformations for subsequent debugging.
-				if (rc.getStatus() == false)
+				if (!rc.getStatus())
 				{
 					String outfile_name;
 					NEW_TMP_FILE(outfile_name)

@@ -919,7 +919,7 @@ namespace BALL
     Vector3 direction(atom1->getPosition() - atom2->getPosition());
 
     // choose the nearest image if period boundary is enabled 
-    if (use_periodic_boundary == true)
+    if (use_periodic_boundary)
 		{
 			AMBERcalculateMinimumImage(direction, period); 
 		}
@@ -1263,7 +1263,7 @@ namespace BALL
 		// calculate forces arising from 1-4 interaction pairs
 		// and remaining non-bonded interaction pairs
 
-		if ((use_periodic_boundary == true) && (use_dist_depend_dielectric_ == true))
+		if (use_periodic_boundary && use_dist_depend_dielectric_)
 		{
 			// periodic boundary is enabled; use a distance dependent dielectric
 			// constant 
@@ -1290,8 +1290,7 @@ namespace BALL
 		}
 		else
 		{
-			if ((use_periodic_boundary == true)
-					&& (use_dist_depend_dielectric_ == false))
+			if (use_periodic_boundary && !use_dist_depend_dielectric_)
 			{
 				// periodic boundary is enabled; use a distance dependent
 				// dielectric constant 
@@ -1319,8 +1318,7 @@ namespace BALL
 			}
 			else
 			{
-				if ((use_periodic_boundary == false) 
-						&& (use_dist_depend_dielectric_ == true))
+				if (!use_periodic_boundary && use_dist_depend_dielectric_)
 				{
 					// periodic boundary not enabled; use a distance dependent
 					// dielectric constant 

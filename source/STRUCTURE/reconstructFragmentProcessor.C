@@ -294,7 +294,7 @@ namespace BALL
 										<< " / " << (ref_atoms.third == 0 ? String("-") : ref_atoms.third->getFullName()))
 
 							Matrix4x4 T;
-							if (ref_atoms.first == true)
+							if (ref_atoms.first)
 							{
 								// we can map all three atoms, great!
 								DEBUG("mapping three atoms: " << tpl_to_res[current]->getFullName() << "/" 

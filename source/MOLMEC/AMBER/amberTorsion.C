@@ -152,9 +152,11 @@ namespace BALL
 										a4 = const_cast<Atom*>(it3->getFirstAtom());
 									}
 
-									if ((use_selection == false) 
-											|| ((use_selection == true) 
-													&& (a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+									if (!use_selection || (use_selection
+									    && a1->isSelected()
+									    && a2->isSelected()
+									    && a3->isSelected()
+									    && a4->isSelected()))
 									{
 										// search torsion parameters for (a1,a2,a3,a4)
 										Atom::Type type_a1 = a1->getType();
@@ -230,7 +232,7 @@ namespace BALL
 		if (!has_initialized_parameters)
 		{
 			result = impropers_.extractSection(getForceField()->getParameters(), "ResidueImproperTorsions");
-			if (result == false)
+			if (!result)
 			{
 				Log.error() << "cannot find section ResidueImproperTorsions" << endl;
 				return false;
@@ -320,9 +322,11 @@ namespace BALL
 								if (a1->getTypeName() > a4->getTypeName()) swap(a1, a4);
 								if (a2->getTypeName() > a4->getTypeName()) swap(a2, a4);
 
-								if	((use_selection == false) ||
-										 ((use_selection == true) &&
-											(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+								if (!use_selection || (use_selection
+								    && a1->isSelected()
+								    && a2->isSelected()
+								    && a3->isSelected()
+								    && a4->isSelected()))
 								{
 									Atom::Type type_a1 = a1->getType();
 									Atom::Type type_a2 = a2->getType();
@@ -395,10 +399,9 @@ namespace BALL
 			const Atom* atom3 = it->atom3;
 			const Atom* atom4 = it->atom4;
 
-			if ((use_selection == false) ||
-					((use_selection == true) &&
-					(   atom1->isSelected() || atom2->isSelected()
-					 || atom3->isSelected() || atom4->isSelected())))
+			if (!use_selection || (use_selection &&
+			    (   atom1->isSelected() || atom2->isSelected()
+			     || atom3->isSelected() || atom4->isSelected())))
 			{
 				a21 = atom1->getPosition() - atom2->getPosition();
 				a23 = atom3->getPosition() - atom2->getPosition();
@@ -455,10 +458,9 @@ namespace BALL
 			Atom* atom3 = it->atom3;
 			Atom* atom4 = it->atom4;
 
-			if ((use_selection == false) ||
- 					((use_selection == true) &&
-					(   atom1->isSelected() || atom2->isSelected()
-					 || atom3->isSelected() || atom4->isSelected())))
+			if (!use_selection || (use_selection &&
+			    (   atom1->isSelected() || atom2->isSelected()
+			     || atom3->isSelected() || atom4->isSelected())))
 			{
 				ab = atom1->getPosition() - atom2->getPosition();
 				double length_ab = ab.getLength();
@@ -509,7 +511,7 @@ namespace BALL
 						Vector3 dEdu = - (float)(dEdphi / (length_u2 * cb.getLength())) * (u % cb);
 	
 
-						if (use_selection == false)
+						if (!use_selection)
 						{
 							atom1->getForce() += dEdt % cb;
 							atom2->getForce() += ca % dEdt + dEdu % dc;

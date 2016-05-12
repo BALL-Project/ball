@@ -54,7 +54,7 @@ namespace BALL
 			selection_stamp_(),
 			modification_stamp_()
 	{
-		if (deep == true)
+		if (deep)
 		{
 			composite.clone(*this);
 		}
@@ -74,7 +74,7 @@ namespace BALL
 
 	void Composite::set(const Composite& composite, bool deep)
 	{
-		if (deep == true)
+		if (deep)
 		{
 			// predicative cloning
 			composite.clone(*this);
@@ -575,7 +575,7 @@ namespace BALL
 	void Composite::prependChild(Composite& composite)
 	{
 		// avoid self-prepend and prepend of children
-		if (&composite == this || isDescendantOf(composite) == true)
+		if (&composite == this || isDescendantOf(composite))
 		{
 			return;
 		}
@@ -630,7 +630,7 @@ namespace BALL
 	void Composite::appendChild(Composite& composite)
 	{
 		// avoid self-appending and appending of parent nodes
-		if (&composite == this || isDescendantOf(composite) == true)
+		if (&composite == this || isDescendantOf(composite))
 		{
 			return;
 		}
@@ -692,7 +692,7 @@ namespace BALL
 		}
 
 		// if first is already a child of parent, return immediately
-		if (first.isDescendantOf(parent) == true)
+		if (first.isDescendantOf(parent))
 		{
 			return true;
 		}
@@ -767,7 +767,7 @@ namespace BALL
 		// abort if a self-insertion is requested, there`s no parent at all,
 		// or this node is a descendant of composite
 		if (parent_ == 0 || &composite == this
-				|| isDescendantOf(composite) == true)
+				|| isDescendantOf(composite))
 		{
 			return;
 		}
@@ -827,7 +827,7 @@ namespace BALL
 		// abort if there`s no parent, on self-insertion, or
 		// if this node is a descendant of composite
 		if (parent_ == 0 || &composite == this
-				|| isDescendantOf(composite) == true)
+				|| isDescendantOf(composite))
 		{
 			return;
 		}
@@ -895,7 +895,7 @@ namespace BALL
 	{
 		// avoid self-splicing and the splicing of nodes that are
 		// descendants of composite
-		if (&composite == this || isDescendantOf(composite) == true)
+		if (&composite == this || isDescendantOf(composite))
 		{
 			return;
 		}
@@ -952,7 +952,7 @@ namespace BALL
 	{
 		// avoid self-splicing and the splicing of nodes that are
 		// descendants of composite
-		if (&composite == this || isDescendantOf(composite) == true)
+		if (&composite == this || isDescendantOf(composite))
 		{
 			return;
 		}
@@ -1008,7 +1008,7 @@ namespace BALL
 	void Composite::splice(Composite& composite)
 	{
 		// avoid self-splicing and splicing of descendants of composite
-		if (&composite == this|| isDescendantOf(composite) == true)
+		if (&composite == this|| isDescendantOf(composite))
 		{
 			return;
 		}
@@ -1098,7 +1098,7 @@ namespace BALL
 	bool Composite::removeChild(Composite& child)
 	{
 		// avoid self-removal and removal of ancestors
-		if (&child == this || isDescendantOf(child) == true)
+		if (&child == this || isDescendantOf(child))
 		{
 			return false;
 		}
@@ -1283,7 +1283,7 @@ namespace BALL
 			parent_->removeChild(*this);
 		}
 
-		if (virtual_flag == true)
+		if (virtual_flag)
 		{
 			clear();
 			stamp(MODIFICATION);
@@ -1296,8 +1296,8 @@ namespace BALL
 
 	void Composite::swap(Composite& composite)
 	{
-		if (&composite == this || isAncestorOf(composite) == true
-				|| isDescendantOf(composite) == true)
+		if (&composite == this || isAncestorOf(composite)
+				|| isDescendantOf(composite))
 		{
 			return;
 		}
@@ -1720,7 +1720,7 @@ namespace BALL
 				}
 			}
 
-			if (composite->first_child_ != 0  && composite->applyDescendantPreorderNostart_(processor) == false)
+			if (composite->first_child_ != 0  && !composite->applyDescendantPreorderNostart_(processor))
 			{
 				return false;
 			}

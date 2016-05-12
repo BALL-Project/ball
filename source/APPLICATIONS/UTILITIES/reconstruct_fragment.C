@@ -64,7 +64,7 @@ int main(int argc, char** argv)
 	FragmentDB db("");
 	system.apply(db.normalize_names);
 
-	if (automatic == true)
+	if (automatic)
 	{
 		ReconstructFragmentProcessor proc(db);
 		system.apply(proc);

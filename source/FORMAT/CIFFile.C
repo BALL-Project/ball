@@ -643,8 +643,7 @@ namespace BALL
 
 	bool CIFFile::Datablock::hasSaveframeName(const String& name) const 
 	{
-		if (saveframe_names.has(name))	return true;
-		else  return false;
+		return saveframe_names.has(name);
 				
 	}
 
@@ -652,14 +651,12 @@ namespace BALL
 	{
 		//std::cout << " hasSaveframeCategory(): looking for " << name  
 		//					<< " " << saveframe_categories.count(name) << std::endl;
-		if (saveframe_categories.count(name)>0)	return true;
-		else  return false;
+		return saveframe_categories.count(name)>0;
 	}
 	
 	bool CIFFile::Datablock::hasItem(const String& name) const 
 	{
-		if (item_names.has(name))	return true;
-		else  return false;
+		return item_names.has(name);
 	}
 	
 	struct CIFFile::State CIFFile::state;

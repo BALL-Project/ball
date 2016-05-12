@@ -190,8 +190,7 @@ namespace BALL
 				sel_features = data->getNoDescriptors();
 			}
 			
-			if (probabilities_.size() > 0 && (unsigned int)min_max_.cols() == sel_features) return true; 
-			return false;
+			return probabilities_.size() > 0 && (unsigned int)min_max_.cols() == sel_features;
 		}
 
 

@@ -166,14 +166,14 @@ namespace BALL
 					{
 						if (face->type_ == SESFace::TYPE_TORIC_SINGULAR)
 						{
-							if (cleanSingularToricFace(face,sqrt_density) == false)
+							if (!cleanSingularToricFace(face,sqrt_density))
 							{
 								done = false;
 							}
 						}
 						else
 						{
-							if (cleanToricFace(face,sqrt_density) == false)
+							if (!cleanToricFace(face,sqrt_density))
 							{
 								done = false;
 							}
@@ -1738,7 +1738,7 @@ namespace BALL
 	{
 		for (Position i = 0; i < ses_->number_of_spheric_faces_; i++)
 		{
-			if (ses_->spheric_faces_[i]->rsface_->singular_ == true)
+			if (ses_->spheric_faces_[i]->rsface_->singular_)
 			{
 				faces.push_back(ses_->spheric_faces_[i]);
 			}
@@ -2261,15 +2261,8 @@ namespace BALL
 			{
 				double epsilon = Constants::EPSILON;
 				Constants::EPSILON = 1e-6;
-				if (Maths::isGreater(probe.p.getSquareDistance(middle),
-														 probe.radius*probe.radius))
-				{
-					back = false;
-				}
-				else
-				{
-					back = true;
-				}
+				back = !Maths::isGreater(probe.p.getSquareDistance(middle),
+														 probe.radius*probe.radius);
 				Constants::EPSILON = epsilon;
 			}
 		}
@@ -2473,7 +2466,7 @@ namespace BALL
 				m++;
 			}
 		}
-		if (spheric_face1->isNeighbouredTo(spheric_face2) == false)
+		if (!spheric_face1->isNeighbouredTo(spheric_face2))
 		{
 			point1.set(vertex->point_);
 			if (new_vertex == NULL)
@@ -2566,7 +2559,7 @@ namespace BALL
 			}
 		}
 		// if the intersection points are not computed yet, compute them now
-		if (found == false)
+		if (!found)
 		{
 			TSphere3<double> s1(ses_->spheric_faces_[face1]->rsface_->center_,
 								 ses_->reduced_surface_->probe_radius_);

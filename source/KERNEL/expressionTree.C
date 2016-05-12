@@ -172,7 +172,7 @@ namespace BALL
 				// OR expressions may be aborted, if the first subexpression yields true
         if (type_ == OR)
         {
-          if (result == true)
+          if (result)
           {
             abort = true;
 					}
@@ -181,7 +181,7 @@ namespace BALL
 				{
 					// AND expressions may be aborted, if the first subexpression
 					// yields false
-          if (result == false)
+          if (!result)
           {
             abort = true;
 					}

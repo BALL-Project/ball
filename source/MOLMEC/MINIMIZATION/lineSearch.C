@@ -496,7 +496,7 @@ namespace BALL
 		double new_stp;
 		
 		// Compute whether we have directional derivatives of opposite sign.
-		bool opp_sign =  (g*(g_a/fabs(g_a)) < 0.) ? true : false;
+		bool opp_sign =  g*(g_a/fabs(g_a)) < 0.;
 		
 		// Check the four possible cases.
 		if (f > f_a)

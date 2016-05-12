@@ -55,15 +55,7 @@ bool cleanup()
 	d.remove("test3" + PS + "test4");
 	d.remove("test3");
 
-	if (d.has("test1") ||
-			d.has("test2") ||
-			d.has("test3"))
-	{
-				return false;
-
-	}
-
-	return true;
+	return !(d.has("test1") || d.has("test2") || d.has("test3"));
 }
 
 
@@ -243,7 +235,7 @@ CHECK(bool getNextEntry(String& entry))
 	STATUS("getNextEntry : " << result << " = " << s)
 	TEST_EQUAL(result, true)
 	bool found_test2 = false;
-	while (result == true)
+	while (result)
 	{
 		if ((s != ".") && (s != ".."))
 		{

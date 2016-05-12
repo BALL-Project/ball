@@ -38,7 +38,7 @@ namespace BALL
 			const Atom* atom1 = bend_it->atom1;
 			const Atom* atom2 = bend_it->atom2;
 			const Atom* atom3 = bend_it->atom3;
-			if (use_selection == false ||
+			if (!use_selection ||
 					(   atom1->isSelected()
 					 || atom2->isSelected()
 					 || atom3->isSelected()))
@@ -90,7 +90,7 @@ namespace BALL
 			Atom* atom2 = bend_[i].atom2;
 			Atom* atom3 = bend_[i].atom3;
 
-			if ((use_selection == false)
+			if (!use_selection
 					|| atom1->isSelected()
 					|| atom2->isSelected()
 					|| atom3->isSelected())
@@ -155,7 +155,7 @@ namespace BALL
 				n1 *= factor * inverse_length_v1;
 				n2 *= factor * inverse_length_v2;
 
-				if (use_selection == false)
+				if (!use_selection)
 				{
 					atom1->getForce() -= n1;
 					atom2->getForce() += n1;

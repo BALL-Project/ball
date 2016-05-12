@@ -49,7 +49,7 @@ namespace BALL
 			valid_pattern_(false)
 	{
 		memset(&regex_, 0, sizeof(regex_t));
-		if (wildcard_pattern == true)
+		if (wildcard_pattern)
 		{
 			toExtendedRegularExpression_();
 		}
@@ -85,7 +85,7 @@ namespace BALL
 
 	bool RegularExpression::match(const String& text, Index from, int execute_flags) const
 	{
-		if (valid_pattern_ == false)
+		if (!valid_pattern_)
 		{
 			return false;
 		}
@@ -105,7 +105,7 @@ namespace BALL
 
 	bool RegularExpression::match(const Substring& text, Index from, int execute_flags) const 
 	{
-		if (valid_pattern_ == false)
+		if (!valid_pattern_)
 		{
 			return false;
 		}
@@ -136,7 +136,7 @@ namespace BALL
 
 	bool RegularExpression::match(const char* text, int execute_flags) const
 	{
-		if (valid_pattern_ == false)
+		if (!valid_pattern_)
 		{
 			return false;
 		}
@@ -152,7 +152,7 @@ namespace BALL
 	bool RegularExpression::find(const String& text, Substring& found,
 															 Index from, int execute_flags) const
 	{
-		if ((valid_pattern_ == false) || (text.size() == 0))
+		if ((!valid_pattern_) || (text.size() == 0))
 		{
 			return false;
 		}
@@ -182,7 +182,7 @@ namespace BALL
 	bool RegularExpression::find(const String& text, vector<Substring>& subexpressions,
 															 Index from, int execute_flags) const
 	{
-		if (valid_pattern_ == false)
+		if (!valid_pattern_)
 		{
 			return false;
 		}

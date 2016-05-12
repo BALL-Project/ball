@@ -127,7 +127,7 @@ namespace BALL
 
 	ostream& operator << (ostream &s, const Substring& substring)
 	{
-		if (substring.isBound() == false)
+		if (!substring.isBound())
 		{
 			return s;
 		}
@@ -167,7 +167,7 @@ namespace BALL
 	void* String::create(bool /* deep */, bool empty) const
 	{
 		void* ptr;
-		if (empty == true)
+		if (empty)
 		{
 			ptr = (void*)new String;
 		} 
@@ -380,13 +380,13 @@ namespace BALL
 		if (str_index != string::npos)
 		{
 			Size index = (Index)str_index;
-			if (!(c_str()[index] == '0' && (isWhitespace(c_str()[index + 1]) == true || c_str()[index + 1] == '\0'))
+			if (!(c_str()[index] == '0' && (isWhitespace(c_str()[index + 1]) || c_str()[index + 1] == '\0'))
 					&& !(c_str()[index++] == 'f'
 					&& c_str()[index++] == 'a'
 					&& c_str()[index++] == 'l'
 					&& c_str()[index++] == 's'
 					&& c_str()[index++] == 'e'
-					&& (isWhitespace(c_str()[index]) == true || c_str()[index] == '\0')))
+					&& (isWhitespace(c_str()[index]) || c_str()[index] == '\0')))
 			{
 				return true;
 			}

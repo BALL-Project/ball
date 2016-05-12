@@ -1067,10 +1067,8 @@ namespace BALL
 		{
 			TVector3<double> norm(((*t)->vertex_[1]->point_-(*t)->vertex_[0]->point_) %
 											 ((*t)->vertex_[2]->point_-(*t)->vertex_[0]->point_)	);
-			if ((Maths::isGreater(norm*(*t)->vertex_[0]->point_,0) &&
-					 (out == false)																				) ||
-					(Maths::isLess(norm*(*t)->vertex_[0]->point_,0) &&
-					 (out == true)																				)		)
+			if ((!out && Maths::isGreater(norm*(*t)->vertex_[0]->point_, 0)) ||
+			    ( out && Maths::isLess   (norm*(*t)->vertex_[0]->point_, 0)))
 			{
 				TrianglePoint* temp = (*t)->vertex_[1];
 				(*t)->vertex_[1] = (*t)->vertex_[2];
@@ -1105,7 +1103,7 @@ namespace BALL
 			TrianglePoint* point2 = (*e)->vertex_[1];
 			TrianglePoint* new_point = new TrianglePoint;
 			new_point->point_ = (point1->point_+point2->point_).normalize();
-			if (out == true)
+			if (out)
 			{
 				new_point->normal_ = new_point->point_;
 			}

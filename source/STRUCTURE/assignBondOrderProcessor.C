@@ -286,12 +286,12 @@ namespace BALL
 		if (   (options.get(Option::ALGORITHM) == Algorithm::FPT)
 				&& (  // (options.getBool(Option::USE_FINE_PENALTY) == true) ||
 						   (options.getReal(Option::BOND_LENGTH_WEIGHTING) > 0.)
-						|| (options.getBool(Option::ADD_HYDROGENS) == true)
-						|| (options.getBool(Option::COMPUTE_ALSO_CONNECTIVITY) == true)
-						|| (options.getBool(Option::OVERWRITE_SELECTED_BONDS)  == true)
-						|| (options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS) == false)
-						|| (options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS) == false)
-						|| (options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS) == false) )
+						||  options.getBool(Option::ADD_HYDROGENS)
+						||  options.getBool(Option::COMPUTE_ALSO_CONNECTIVITY)
+						||  options.getBool(Option::OVERWRITE_SELECTED_BONDS)
+						|| !options.getBool(Option::OVERWRITE_SINGLE_BOND_ORDERS)
+						|| !options.getBool(Option::OVERWRITE_DOUBLE_BOND_ORDERS)
+						|| !options.getBool(Option::OVERWRITE_TRIPLE_BOND_ORDERS))
 			 )
 		{
 			Log.error() << __FILE__ << " " << __LINE__

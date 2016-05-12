@@ -1004,7 +1004,7 @@ namespace BALL
 		while (e != sesedge.end())
 		{
 			found = false;
-			while ((found == false) && (e != sesedge.end()))
+			while (!found && e != sesedge.end())
 			{
 				if ((*e)->type_ == SESEdge::TYPE_SINGULAR)
 				{
@@ -1056,7 +1056,7 @@ namespace BALL
 		bool old1, old2;
 		createTriangleAndEdges(edge,point,sphere,
 													 edge1,old1,edge2,old2,triangle,convex);
-		if (old1 == true)
+		if (old1)
 		{
 			if (edge1->face_[0] == NULL)
 			{
@@ -1077,7 +1077,7 @@ namespace BALL
 			part.number_of_edges_++;
 			border.push_back(edge1);
 		}
-		if (old2 == true)
+		if (old2)
 		{
 			if (edge2->face_[0] == NULL)
 			{
@@ -1133,7 +1133,7 @@ namespace BALL
 			planar_edges.pop_front();
 			p = points.begin();
 			bool built = false;
-			while ((p != points.end()) && (built == false))
+			while (p != points.end() && !built)
 			{
 				if ((*p == edge0->vertex_[0]) || (*p == edge0->vertex_[1]))
 				{
@@ -1180,7 +1180,7 @@ namespace BALL
 						triangle->vertex_[0]->faces_.insert(triangle);
 						triangle->vertex_[1]->faces_.insert(triangle);
 						triangle->vertex_[2]->faces_.insert(triangle);
-						if (old1 == true)
+						if (old1)
 						{
 							if (edge1->face_[0] == NULL)
 							{
@@ -1203,7 +1203,7 @@ namespace BALL
 							part.edges_.push_back(edge1);
 							part.number_of_edges_++;
 						}
-						if (old2 == true)
+						if (old2)
 						{
 							if (edge2->face_[0] == NULL)
 							{
@@ -1234,11 +1234,11 @@ namespace BALL
 					{
 						p++;
 						delete triangle;
-						if (old1 == false)
+						if (!old1)
 						{
 							delete edge1;
 						}
-						if (old2 == false)
+						if (!old2)
 						{
 							delete edge2;
 						}

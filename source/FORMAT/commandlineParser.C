@@ -774,8 +774,8 @@ void CommandlineParser::parse(int argc, char* argv[])
 	set<String> missing_parameters;
 	for (map < String, ParameterDescription > :: iterator it = registered_parameters_.begin(); it != registered_parameters_.end(); it++)
 	{
-		if (it->second.mandatory == false) 
-  	{
+		if (!it->second.mandatory)
+		{
 			continue;
 		}
 		if (parameter_map_.find(it->second.name) == parameter_map_.end())
@@ -917,14 +917,7 @@ const String& CommandlineParser::get(String name)
 
 bool CommandlineParser::has(String name)
 {
-	if (get(name) != NOT_FOUND)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return get(name) != NOT_FOUND;
 }
 
 
