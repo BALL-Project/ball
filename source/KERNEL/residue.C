@@ -163,6 +163,10 @@ namespace BALL
 				Log.error() << "No next residue!" << endl;
 			}
 		}
+		else
+		{
+			Log.error() << "Has no torsion Psi! (" << getFullName() << ")" << endl;
+		}
 
 		return result;
 	}
@@ -226,6 +230,10 @@ namespace BALL
 			{
 				Log.error() << "No previous residue!" << endl;
 			}
+		}
+		else
+		{
+			Log.error() << "Has no torsion Phi! (" << getFullName() << ")" << endl;
 		}
 
 		return result;

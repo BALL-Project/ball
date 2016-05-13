@@ -14,6 +14,8 @@
 		<node>CB<value>C 1.34565 1.283736 -2.23033</value></node>
 		<node>1HB<value>H 2.062533 0.6767905 -2.785621</value></node>
 		<node>2HB<value>H 0.7182986 1.840951 -2.927554</value></node>
+		<node>1OB<value>O 0.7182986 1.840951 -2.927554</value></node>
+		<node>1OH<value>H 1.4182986 2.440951 -2.927554</value></node>
 		<node>CG<value>C 2.02933 2.275858 -1.278275</value></node>
 		<node>1HG<value>H 3.057449 1.966999 -1.081919</value></node>
 		<node>2HG<value>H 2.018846 3.280874 -1.702292</value></node>
@@ -42,6 +44,8 @@
     <node>32<value>OXT C s</value></node>
     <node>33<value>1H N s</value></node>
     <node>34<value>2H N s</value></node>
+    <node>40<value>2OB CB s</value></node>
+    <node>41<value>2OH 2OB s</value></node>
   </node>
 	<node>Connections
 		<node>N-term<value>N C-term s 1.33 0.5</value></node>
@@ -56,9 +60,22 @@
 				<node>OXT</node>
 				<node>1H</node>
 				<node>2H</node>
+				<node>2OB</node>
+				<node>2OH</node>
 			</node>
 		</node>
+		<node>HYP
+			<node>Delete
+				<node>2HB</node>
+				<node>OXT</node>
+				<node>1H</node>
+				<node>2H</node>
+			</node>
 		<node>PRO-M
+			<node>Delete
+				<node>2OB</node>
+				<node>2OH</node>
+			</node>
 			<node>Properties
 				<node>C_TERMINAL</node>
 				<node>N_TERMINAL</node>
@@ -66,6 +83,8 @@
 		</node>
 		<node>PRO-C
 			<node>Delete
+				<node>2OB</node>
+				<node>2OH</node>
 				<node>1H</node>
 				<node>2H</node>
 			</node>
@@ -75,6 +94,8 @@
 		</node>
  		<node>PRO-N
  			<node>Delete
+				<node>2OB</node>
+				<node>2OH</node>
 	 			<node>OXT</node>
  			</node>
  			<node>Properties

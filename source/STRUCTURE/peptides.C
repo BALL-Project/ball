@@ -19,8 +19,15 @@ namespace BALL
 	namespace Peptides
 	{
 
-		const String one_letter_codes = "ARNDCQEGHILKMFPSTWYV";
-		const String three_letter_codes = "ALA@ARG@ASN@ASP@CYS@GLN@GLU@GLY@HIS@ILE@LEU@LYS@MET@PHE@PRO@SER@THR@TRP@TYR@VAL@";
+		const String one_letter_codes = "ARNDCQEGHILKMFPSTWYVBZ";
+		/**
+		 * http://www.apsstylemanual.org/oldmanual/reference/amino-acids.htm also defines Cit, Hey, Hyp, Orn, Thx
+		 * somewhat exceptional is Xaa and the ambiguity codes like Asx and Glx"
+		 * http://www.fao.org/docrep/004/y2775e/y2775e0e.htm has single letter for GLX and ASX
+		 * Instead of UNK one might possibly better use "Xaa" as long as one is confident that an AA is meant.
+		 * It may also be preferable to have another character than '?' as the representation of unknown, e.g. 'X'.
+		 */
+		const String three_letter_codes = "ALA@ARG@ASN@ASP@CYS@GLN@GLU@GLY@HIS@ILE@LEU@LYS@MET@PHE@PRO@SER@THR@TRP@TYR@VAL@ASX@GLX@CIT@HEY@HYP@ORN@THX@";
 
 		char OneLetterCode(const String& aa)
 		{

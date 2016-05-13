@@ -159,9 +159,12 @@ namespace BALL
 	   String chainname_;
 	   String proteinname_;
 	   
-		 /// The proline flag
-		 bool is_proline_;
-		 FragmentDB* fragment_db_;
+	   /** The proline flag is set for side chains that
+	    * are covalently bound to the backbone. Proline
+	    * and hydroxyproline are among them.
+	    */
+	   bool is_proline_;
+	   FragmentDB* fragment_db_;
 
 	   /** some helper functions for the construction of the residue; for internal use only
 	    * omega is not yet implemented
