@@ -264,20 +264,10 @@ namespace BALL
 		{
 			RingFinder find_my_ring(n);
 
-			if (find_my_ring(atom) == true)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
-			return(false);
+			return find_my_ring(atom);
 		}
 
+		return false;
 	}
 
 	NumberOfBondsPredicate::NumberOfBondsPredicate()
@@ -329,34 +319,13 @@ namespace BALL
 			switch (s[0]) 
 			{
 				case '<' :
-					if (count < n)
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
+					return count < n;
 
 				case '>' :
-					if (count > n)
-					{
-						return true;
-					}
-					else 
-					{
-						return false;
-					}
+					return count > n;
 
 				case '=':
-					if (count == n)
-					{
-						return true;
-					}
-					else 
-					{
-						return false;
-					}
+					return count == n;
 
 				default:
 					Log.error() << "NumberOfBondsPredicate::testPredicate_(): Illegal operator " 
@@ -376,14 +345,7 @@ namespace BALL
 					<< "argument format is broken: " << argument_ << std::endl;
 				return(false);
 			}
-			if (count == n)
-			{
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
+			return count == n;
 		}
 	}
 
@@ -451,34 +413,13 @@ namespace BALL
 			switch (s[0]) 
 			{
 				case '<' :
-					if (count < n)
-					{
-						return true;
-					}
-					else
-					{
-						return false;
-					}
+					return count < n;
 
 				case '>' :
-					if (count > n)
-					{
-						return true;
-					}
-					else 
-					{
-						return false;
-					}
+					return count > n;
 
 				case '=':
-					if (count == n)
-					{
-						return true;
-					}
-					else 
-					{
-						return false;
-					}
+					return count == n;
 
 				default:
 					Log.error() << "AromaticBondsPredicate::testPredicate_(): Illegal operator " 
@@ -498,14 +439,7 @@ namespace BALL
 					<< "argument format is broken: " << argument_ << std::endl;
 				return(false);
 			}
-			if (count == n)
-			{
-				return true;
-			}
-			else 
-			{
-				return false;
-			}
+			return count == n;
 		}
 	}
 
@@ -985,7 +919,7 @@ namespace BALL
 						{
 							if (lowercase.has(input[position]))
 							{
-								if (current->isFinished() == true)
+								if (current->isFinished())
 								{
 									Log.error() << "ConnectedToPredicate::parse_():\n"
 										<< "\tparse error: trying to add a lowercase char to an already finished node." 
@@ -1018,7 +952,7 @@ namespace BALL
 									if (numbers.has(link_mark_))
 									{
 
-										if (link_map_.has(link_mark_) == true)
+										if (link_map_.has(link_mark_))
 										{
 											if (link_map_[link_mark_].second != 0)
 											{
@@ -1179,28 +1113,23 @@ namespace BALL
 				break;
 
 			case CTPNode::BONDTYPE__SINGLE:
-				if (bond.getOrder() == Bond::ORDER__SINGLE) result = true;
-				else result = false;
+				result = bond.getOrder() == Bond::ORDER__SINGLE;
 				break;
 
 			case CTPNode::BONDTYPE__DOUBLE:
-				if (bond.getOrder() == Bond::ORDER__DOUBLE) result = true;
-				else result = false;
+				result = bond.getOrder() == Bond::ORDER__DOUBLE;
 				break;
 
 			case CTPNode::BONDTYPE__TRIPLE:
-				if (bond.getOrder() == Bond::ORDER__TRIPLE) result = true;
-				else result = false;
+				result = bond.getOrder() == Bond::ORDER__TRIPLE;
 				break;
 
 			case CTPNode::BONDTYPE__QUADRUPLE:
-				if (bond.getOrder() == Bond::ORDER__QUADRUPLE) result = true;
-				else result = false;
+				result = bond.getOrder() == Bond::ORDER__QUADRUPLE;
 				break;
 
 			case CTPNode::BONDTYPE__AROMATIC:
-				if (bond.isAromatic()) result = true;
-				else result = false;
+				result = bond.isAromatic();
 				break;
 
 			default:
@@ -1240,9 +1169,9 @@ namespace BALL
 			for (Size j = 0; j < atom.countBonds(); ++j)
 			{
 				bond = atom.getBond(j);
-				if (visited.has(bond) == false)
+				if (!visited.has(bond))
 				{
-					if (bondOrderMatch_(*bond, **child_it) == true)
+					if (bondOrderMatch_(*bond, **child_it))
 					{
 						partner = bond->getPartner(atom);
 						if (((*child_it)->getSymbol() == "*")
@@ -1257,7 +1186,7 @@ namespace BALL
 						{
 							visited.insert(bond);
 							this_result = find_(*partner, *child_it, visited);
-							if (this_result == true)
+							if (this_result)
 							{
 								if (verbosity > 90)
 								{
@@ -1275,7 +1204,7 @@ namespace BALL
 				}
 			}
 
-			if (this_result == false)
+			if (!this_result)
 			{
 				return(false);
 			}
@@ -1361,14 +1290,7 @@ namespace BALL
 				tcount++;
 			}
 		}
-		if ((dcount == 2) || (tcount == 1))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (dcount == 2) || (tcount == 1);
 	}
 
 	bool Sp2HybridizedPredicate::operator () (const Atom& atom) const
@@ -1387,14 +1309,7 @@ namespace BALL
 				acount++;
 			}
 		}
-		if ((dcount == 1) || (acount > 1))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (dcount == 1) || (acount > 1);
 	}
 
 	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
@@ -1490,7 +1405,7 @@ namespace BALL
 
 		// make sure we are in a 5 or 6 memebered ring.
 		RingFinder in_ring;
-		if (!in_ring(atom) == true)
+		if (!in_ring(atom))
 		{
 #ifdef DEBUG
 			std::cout << "Not in a ring." << std::endl;
@@ -1605,18 +1520,9 @@ namespace BALL
 			<< fabs(angle_C1_R) - 109.5 << std::endl;
 #endif
 
-		if ((fabs(angle_C1_H) < 15.0) 
-				&& ((fabs(angle_C1_R) - 109.5) < 15.0))
-		{
-			// if the hydrogen stands in axial position and the substituent in
-			// equatorial position the carbon is equatorially substituted
-			return(false);
-		}
-		else
-		{
-			return(true);
-		}
-
+		// if the hydrogen stands in axial position and the substituent in
+		// equatorial position the carbon is equatorially substituted
+		return fabs(angle_C1_H) >= 15.0 || fabs(angle_C1_R) - 109.5 >= 15.0;
 	}
 
 	bool Conformation4C1Predicate::operator () (const Atom& atom) const
@@ -1689,14 +1595,7 @@ namespace BALL
 		std::cout << "d * n: " << d * n << std::endl;
 #endif
 
-		if ((d * n) > 0)
-		{
-			return(false);
-		}
-		else
-		{
-			return(true);
-		}
+		return (d * n) <= 0;
 	}
 
 
@@ -1755,20 +1654,11 @@ namespace BALL
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
 
-		if (exact_ == true)
+		if (exact_)
 		{
 			if (limit == 0) 
 			{
-				if (atom == *first_atom_) 
-				{
-					// Found first atom at limit
-					return true;
-				}
-				else
-				{
-					// Reached limit without finding the first atom
-					return false;
-				}
+				return atom == *first_atom_;
 			}
 		}
 		else
@@ -1796,7 +1686,7 @@ namespace BALL
 			{
 				descend = bond->getPartner(atom);
 				visited_bonds_.insert(bond);
-				if (dfs(*descend, limit-1) == true)
+				if (dfs(*descend, limit-1))
 				{
 // #ifdef DEBUG
 // 					std::cout << "Pushing back " << atom.getFullName() << std::endl;

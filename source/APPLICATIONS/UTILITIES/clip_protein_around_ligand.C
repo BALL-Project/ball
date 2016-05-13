@@ -258,7 +258,7 @@ int main(int argc, char** argv)
 	// now load the molecules 
 	System protein;
 
-	if (use_hin_protein == true)
+	if (use_hin_protein)
 	{
 		HINFile protein_file(protein_file_name);
 		protein_file >> protein;
@@ -279,7 +279,7 @@ int main(int argc, char** argv)
 
 	System ligand;
 
-	if (use_hin_ligand == true)
+	if (use_hin_ligand)
 	{
 		HINFile ligand_hin_file;
 		ligand_hin_file.open(ligand_file_name);

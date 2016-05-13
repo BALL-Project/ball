@@ -59,14 +59,7 @@ namespace BALL
 	{
 		if (rdf_indices_.has(solvent_atom_type))
 		{
-			if (rdf_indices_[solvent_atom_type].has(solute_atom_type))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			return rdf_indices_[solvent_atom_type].has(solute_atom_type);
 		}
 		else 
 		{

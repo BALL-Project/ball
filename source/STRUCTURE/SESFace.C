@@ -161,7 +161,7 @@ namespace BALL
 		{
 			return;
 		}
-		if (singular == false)
+		if (!singular)
 		{
 			normalizeNonSingularToricFace_();
 		}

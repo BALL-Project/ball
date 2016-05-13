@@ -466,7 +466,7 @@ namespace BALL
 
 	bool Residue::isNTerminal() const
 	{
-		if (isAminoAcid() == true)
+		if (isAminoAcid())
 		{
 			const Chain* chain = getChain();
 
@@ -484,7 +484,7 @@ namespace BALL
 		
 	bool Residue::isCTerminal() const
 	{
-		if (isAminoAcid() == true)
+		if (isAminoAcid())
 		{
 			const Chain* chain = getChain();
 

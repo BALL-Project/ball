@@ -250,8 +250,7 @@ namespace BALL
 
 	bool Conformation::checkID(String& hash)
 	{
-		if (id_ != hash) return false;
-		else return true;
+		return id_ == hash;
 	}
 
 	const AtomContainer* Conformation::getParent()

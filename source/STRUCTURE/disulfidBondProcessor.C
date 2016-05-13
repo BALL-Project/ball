@@ -62,8 +62,8 @@ namespace BALL
 			// store for us
 			if ((bond_it->getFirstAtom()->getElement() == PTE[Element::S])
 					&& (bond_it->getSecondAtom()->getElement() == PTE[Element::S])
-					&& (residue1->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
-					&& (residue2->hasProperty(Residue::PROPERTY__HAS_SSBOND) == true)
+					&& residue1->hasProperty(Residue::PROPERTY__HAS_SSBOND)
+					&& residue2->hasProperty(Residue::PROPERTY__HAS_SSBOND)
 					&& (residue1 != residue2)
 					&& (residue1 != 0)
 					&& (residue2 != 0))

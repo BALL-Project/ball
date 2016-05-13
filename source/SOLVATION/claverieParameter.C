@@ -53,14 +53,7 @@ namespace BALL
 
 	bool ClaverieParameter::hasParameters(Atom::Type solvent_type, Atom::Type solute_type) const
 	{
-		if (indices_.has(solvent_type) && indices_.has(solute_type))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return indices_.has(solvent_type) && indices_.has(solute_type);
 	}
 
 

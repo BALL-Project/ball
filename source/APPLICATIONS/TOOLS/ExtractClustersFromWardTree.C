@@ -90,7 +90,7 @@ int main (int argc, char **argv)
 	pc.options.set(PoseClustering::Option::CLUSTER_METHOD, PoseClustering::NEAREST_NEIGHBOR_CHAIN_WARD);
 
 	// import a binary file
-	bool binary = parpars.get("i_type") == "binary" ? true : false;
+	bool binary = parpars.get("i_type") == "binary";
 	pc.deserializeWardClusterTree(tree, binary);
 
 	int min_cluster_size = 0;

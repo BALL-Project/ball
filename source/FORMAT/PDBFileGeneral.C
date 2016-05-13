@@ -181,7 +181,7 @@ namespace BALL
 		streampos old_pos = tellg();
 		Size size = 0;
 
-		if (from_begin_of_file == true)
+		if (from_begin_of_file)
 		{
 			readFirstRecord(false);
 		}
@@ -213,7 +213,7 @@ namespace BALL
 		streampos old_pos = tellg();
 		Size size = 0;
 
-		if (from_begin_of_file == true)
+		if (from_begin_of_file)
 		{
 			readFirstRecord(false);
 		}
@@ -264,7 +264,7 @@ namespace BALL
 		
 		// The PDB format description says: "Each line in the PDB entry file
 		// consists of 80 columns." 
-		if (strict_line_checking_ == true)
+		if (strict_line_checking_)
 		{
 			if (size <= PDB::SIZE_OF_PDB_RECORD_LINE)
 			{ 
@@ -326,7 +326,7 @@ namespace BALL
 	bool PDBFile::skipCurrentRecord()
 	{
 		// Store skipped stuff only if the corresponding flag is set
-		if (store_skipped_records_ == true)
+		if (store_skipped_records_)
 		{
 			info.getSkippedRecords().push_back(line_buffer_);
 		}
@@ -519,7 +519,7 @@ namespace BALL
 		// If we do not want to extract the values, it is sufficient
 		// to know that the record type is something we know how to
 		// handle, so we are done now.
-		if (extract_values == false)
+		if (!extract_values)
 		{
 			return true;
 		}

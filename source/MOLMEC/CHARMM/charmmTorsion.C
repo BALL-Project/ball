@@ -93,7 +93,7 @@ namespace BALL
 			// extract the torsion parameters
 			result = torsion_parameters_.extractSection(getForceField()->getParameters(), "Torsions");
 
-			if (result == false) 
+			if (!result)
 			{
 				Log.error() << "cannot find section Torsions" << endl;
 				return false;
@@ -104,7 +104,7 @@ namespace BALL
 			if (getForceField()->getParameters().getParameterFile().hasSection("ResidueTorsions"))
 			{
 				result = residue_torsions_.extractSection(getForceField()->getParameters(), "ResidueTorsions");
-				if (result == false)
+				if (!result)
 				{
 					Log.error() << "CharmmTorsion::setup: cannot parse section Torsions" << endl;
 					return false;
@@ -168,9 +168,9 @@ namespace BALL
 										a4 = const_cast<Atom*>(it3->getFirstAtom());
 									}
 
-									if (getForceField()->getUseSelection() == false ||
-											(getForceField()->getUseSelection() == true &&
-											 (a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+									if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection()
+									    && a1->isSelected() && a2->isSelected()
+									    && a3->isSelected() && a4->isSelected()))
 									{
 										// if we use ResidueTorsions (i.e. a list of torsions for each
 										// residue is specified in the parameter file), we have to check
@@ -348,9 +348,9 @@ namespace BALL
 
 		for ( ; it != torsion_.end(); it++) 
 		{
-			if ( getForceField()->getUseSelection() == false ||
-					( getForceField()->getUseSelection() == true &&
-					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
+			if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection() &&
+			    (   it->atom1->isSelected() || it->atom2->isSelected()
+			     || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 				a21 = it->atom1->getPosition() - it->atom2->getPosition();
 				a23 = it->atom3->getPosition() - it->atom2->getPosition();
@@ -404,10 +404,9 @@ namespace BALL
 
 		for (; it != torsion_.end(); it++) 
 		{
-			if (getForceField()->getUseSelection() == false ||
- 					(getForceField()->getUseSelection() == true &&
-					(it->atom1->isSelected() || it->atom2->isSelected() 
-					 || it->atom3->isSelected() || it->atom4->isSelected())))
+			if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection() &&
+			    (   it->atom1->isSelected() || it->atom2->isSelected()
+			     || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 				ab = it->atom1->getPosition() - it->atom2->getPosition();
 				double length_ab = ab.getLength();
@@ -459,7 +458,7 @@ namespace BALL
 						Vector3 dEdu = - (float)(dEdphi / (length_u2 * cb.getLength())) * (u % cb);
 	
 
-						if (getForceField()->getUseSelection() == false)
+						if (!getForceField()->getUseSelection())
 						{
 							it->atom1->getForce() += dEdt % cb;
 							it->atom2->getForce() += ca % dEdt + dEdu % dc;

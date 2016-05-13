@@ -48,7 +48,7 @@ namespace BALL
 			
 	{
 		// initialize the PersistenceManager only one times
-		if (init_ == false)
+		if (!init_)
 		{
 			init_ = true;
 

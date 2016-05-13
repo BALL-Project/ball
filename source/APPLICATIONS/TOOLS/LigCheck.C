@@ -185,14 +185,7 @@ bool checkMolecule(Molecule* mol, int molecule_no, map<String, pair<int, String>
 		Log.level(10)<<"   "<<"Error for molecule "<<molecule_no<<":"<<" atoms with nonsense partial charges detected!"<<endl;
 	}
 
-	if (!has_atoms || !has_hydrogens || !has_3D_coordinates || !one_molecule || !bond_length_ok || !elements_ok || !partial_charges_ok)
-	{
-		return false;
-	}
-	else
-	{
-		return true;
-	}
+	return has_atoms && has_hydrogens && has_3D_coordinates && one_molecule && bond_length_ok && elements_ok && partial_charges_ok;
 }
 
 

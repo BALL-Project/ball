@@ -131,13 +131,8 @@ Size BuriedPolar::getType(Atom* atom)
 
 bool BuriedPolar::isBackboneAtom(const Atom* atom)
 {
-	if (atom->getName() == "O" || atom->getName() == "N" || atom->getName() == "H"
-		|| atom->getName() == "C")
-	{
-		return true;
-	}
-
-	return false;
+	return atom->getName() == "O" || atom->getName() == "N"
+	    || atom->getName() == "H" || atom->getName() == "C";
 }
 
 

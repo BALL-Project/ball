@@ -114,14 +114,9 @@ namespace BALL
 
 		bool ModelInformation::isSurfaceModel(ModelType type) const
 		{
-			if (type == MODEL_SE_SURFACE || 
-					type == MODEL_SA_SURFACE ||
-					type == MODEL_CONTOUR_SURFACE)
-			{
-				return true;
-			}
-
-			return false;
+			return type == MODEL_SE_SURFACE
+			    || type == MODEL_SA_SURFACE
+			    || type == MODEL_CONTOUR_SURFACE;
 		}
 
 

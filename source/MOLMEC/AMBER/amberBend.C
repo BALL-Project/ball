@@ -67,7 +67,7 @@ namespace BALL
 		{
 			result = bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
 
-			if (result == false) 
+			if (!result)
 			{
 				Log.error() << "AmberBend::setup: cannot find section QuadraticAngleBend" << endl;
 				return false;
@@ -92,11 +92,10 @@ namespace BALL
 					this_bend.atom2 = (*atom_it);
 					this_bend.atom3 = it1->getPartner(**atom_it);
 
-					if ((use_selection == false) ||
-					   (use_selection == true &&
-					   (   this_bend.atom1->isSelected()
-							&& this_bend.atom2->isSelected()
-							&& this_bend.atom3->isSelected())))
+					if (!use_selection || (use_selection
+						&& this_bend.atom1->isSelected()
+						&& this_bend.atom2->isSelected()
+						&& this_bend.atom3->isSelected()))
 					{ 
 
 						Atom::Type atom_type_a1 = this_bend.atom1->getType();

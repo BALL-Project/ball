@@ -1507,20 +1507,15 @@ namespace BALL
 	// Returns true, if the property type is alphanumeric/discrete.
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::isDiscrete(String property)
 	{
-		if( property.hasSubstring("PSI") || property.hasSubstring("PHI") || 
-				property.hasSubstring("HA2L") || property.hasSubstring("HA1L") || 
-				property.hasSubstring("HNL") || property.hasSubstring("OHL")|| property.hasSubstring("CHI") )
-			return false;
-		else
-			return true;
+		return !(property.hasSubstring("PSI")  || property.hasSubstring("PHI")
+		      || property.hasSubstring("HA2L") || property.hasSubstring("HA1L")
+		      || property.hasSubstring("HNL")  || property.hasSubstring("OHL")
+		      || property.hasSubstring("CHI"));
 	}
 	
 	bool EmpiricalHSShiftProcessor::PropertiesForShift_::isMixed(String property)
 	{
-		if(property.hasSubstring("CHI") || property.hasSubstring("CHI2"))
-			return true;
-		else
-			return false;
+		return property.hasSubstring("CHI") || property.hasSubstring("CHI2");
 	}
 
 	

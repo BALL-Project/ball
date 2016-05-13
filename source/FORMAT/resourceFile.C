@@ -38,7 +38,7 @@ namespace BALL
 			child_(0),
 			number_children_(0)
 	{
-		if (deep == true)
+		if (deep)
 		{
 			ResourceEntry* cloned = entry.clone_(0);
 
@@ -184,7 +184,7 @@ namespace BALL
 		
 		if (entry != 0)
 		{
-			if (replace_value == true)
+			if (replace_value)
 			{
 				entry->value_ = value;
 			}
@@ -241,7 +241,7 @@ namespace BALL
 
 	ResourceEntry* ResourceEntry::insertChild(ResourceEntry& entry, bool replace_value)
 	{
-		if (&entry == this || entry.isAncestorOf(*this) == true)
+		if (&entry == this || entry.isAncestorOf(*this))
 		{
 			return 0;
 		}
@@ -260,7 +260,7 @@ namespace BALL
 		{
 			entry_ptr->clear();
 
-			if (replace_value == true)
+			if (replace_value)
 			{
 				entry_ptr->value_ = entry.value_;
 			}
@@ -357,7 +357,7 @@ namespace BALL
 
 	bool ResourceEntry::mergeChildrenOf(ResourceEntry& resource_entry, bool replace_value)
 	{
-		if (&resource_entry == this || resource_entry.isAncestorOf(*this) == true)
+		if (&resource_entry == this || resource_entry.isAncestorOf(*this))
 		{
 			return false;
 		}
@@ -374,7 +374,7 @@ namespace BALL
 	{
 		Index found = 0;
 		
-		if (findGreaterOrEqual_(key, found) == true)
+		if (findGreaterOrEqual_(key, found))
 		{
 			if (removed == 0)
 			{
@@ -509,7 +509,7 @@ namespace BALL
 
 			for (Index index = 0; index < (Index)number_children_; ++index)
 			{
-				if (child_[index]->isValid() == false)
+				if (!child_[index]->isValid())
 				{
 					return false;
 				}
@@ -563,10 +563,10 @@ namespace BALL
 			
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 			
-			if (entry->number_children_ > 0 && entry->applyNostart_(processor) == false)
+			if (entry->number_children_ > 0 && !entry->applyNostart_(processor))
 			{
 				return false;
 			}
@@ -577,7 +577,7 @@ namespace BALL
 
 	bool ResourceEntry::applyChildren(UnaryProcessor<ResourceEntry>& processor)
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
@@ -590,7 +590,7 @@ namespace BALL
 			
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 		
@@ -671,7 +671,7 @@ namespace BALL
 		
 		Size depth = 0;
 		
-		if (entry.isEmpty() == false)
+		if (!entry.isEmpty())
 		{
 			save_(file, &entry, depth);
 		}

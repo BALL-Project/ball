@@ -120,11 +120,7 @@ namespace BALL
 				it->second = 0;
 		}
 			scaffold_counter_++;
-		if (scaffold_counter_ < scaffolds_.size())
-		{
-			return true;
-		}
-		return false;
+		return scaffold_counter_ < scaffolds_.size();
 	}
 		bool RGroupAssembler::isPlacemark_(const String& s)
 	{

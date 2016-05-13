@@ -244,7 +244,7 @@ namespace BALL
 
 		atom_it = selected_atoms.begin();
 
-		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+		if (force_field_ptr_->periodic_boundary.isEnabled())
 		{
 			float molecule_mass = 0;
 			float mass;

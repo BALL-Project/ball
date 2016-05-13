@@ -213,7 +213,7 @@ namespace BALL
 					NonpolarSolvation::Default::NONPOLAR_OVERWRITE_RADII);
 
 		String tmp;
-		if (overwrite_radii == true)
+		if (overwrite_radii)
 		{
 			String filename
 				= options->setDefault(NonpolarSolvation::Option::NONPOLAR_RADIUS_RULES,
@@ -234,7 +234,7 @@ namespace BALL
 
 		System protein_system;
 		Molecule* protein = new Molecule(*(getScoringFunction()->getReceptor()), true);
-		if (overwrite_radii == true)
+		if (overwrite_radii)
 		{
 			protein->apply(radius_rules);
 		}
@@ -263,7 +263,7 @@ namespace BALL
 
 		System ligand_system;
 		Molecule* ligand = new Molecule(*(getScoringFunction()->getLigand()), true);
-		if (overwrite_radii == true)
+		if (overwrite_radii)
 		{
 			ligand->apply(radius_rules);
 		}

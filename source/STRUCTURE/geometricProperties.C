@@ -163,13 +163,7 @@ namespace BALL
 		fragments.clear();
 
 		// if no reference fragment is set, return immediately
-		if (reference_composite_ == 0)
-		{
-			return false;
-		}
-
-		// Go for it...
-		return true;
+		return reference_composite_ != 0;
 	}
 
 	float FragmentDistanceCollector::getDistance() const
@@ -235,14 +229,14 @@ namespace BALL
 			}
 			fragment_radius = sqrt(fragment_radius);
 
-			for ( j=0 , collect_it = false ; j < number_of_atoms && (collect_it == false) ; j++) 
+			for (j = 0, collect_it = false; j < number_of_atoms && !collect_it; j++)
 			{
 				atom_position = reference_atoms[j]->getPosition();
 				 
 				if (atom_position.getDistance(center) <= (distance + fragment_radius)) 
 				{
 					for (atom_iterator2 = mol_fragment->beginAtom(); 
-							 +atom_iterator2 && (collect_it == false); ++ atom_iterator2)
+							 +atom_iterator2 && (!collect_it); ++ atom_iterator2)
 					{
 						if ((*atom_iterator2).getPosition().getSquareDistance(atom_position) < squared_distance_) 
 						{

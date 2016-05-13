@@ -90,7 +90,7 @@ namespace BALL
 		{
 			result = improper_parameters_.extractSection(getForceField()->getParameters(), "ImproperTorsions");
 
-			if (result == false) 
+			if (!result)
 			{
 				Log.error() << "cannot find section ImproperTorsions in parameter file" << endl;
 				return false;
@@ -103,7 +103,7 @@ namespace BALL
 		if (!has_initialized_parameters)
 		{
 			result = improper_atoms_.extractSection(getForceField()->getParameters(), "ResidueImproperTorsions");
-			if (result == false)
+			if (!result)
 			{
 				Log.error() << "cannot find section ResidueImproperTorsions" << endl;
 				return false;
@@ -301,9 +301,11 @@ namespace BALL
 				{
 					// if we use selection and the atoms are selected,
 					// add the torsion the the impropers_ vector
-					if	(getForceField()->getUseSelection() == false ||
-							 (getForceField()->getUseSelection() == true &&
-								(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+					if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection()
+					    && a1->isSelected()
+					    && a2->isSelected()
+					    && a3->isSelected()
+					    && a4->isSelected()))
 					{
 						Atom::Type type_a1 = a1->getType();
 						Atom::Type type_a2 = a2->getType();
@@ -407,9 +409,9 @@ namespace BALL
 
 		for ( ; it != impropers_.end(); it++) 
 		{
-			if ( getForceField()->getUseSelection() == false ||
-					( getForceField()->getUseSelection() == true &&
-					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
+			if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection() &&
+			    (   it->atom1->isSelected() || it->atom2->isSelected()
+			     || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 				ba = it->atom2->getPosition() - it->atom1->getPosition();
 				bc = it->atom2->getPosition() - it->atom3->getPosition();
@@ -463,9 +465,9 @@ namespace BALL
 
 		for (; it != impropers_.end(); it++) 
 		{
-			if (getForceField()->getUseSelection() == false ||
-					( getForceField()->getUseSelection() == true &&
-					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
+			if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection() &&
+			    (   it->atom1->isSelected() || it->atom2->isSelected()
+			     || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
 
 				// A is the central atom
@@ -543,7 +545,7 @@ namespace BALL
 																	 +	((ilength_bcxba * ilength_bcxbd) * (bc2 * bd - bcbd * bc)));
 
 						// add the forces to the atoms' force vectors
-						if (getForceField()->getUseSelection() == false)
+						if (!getForceField()->getUseSelection())
 						{
 							it->atom1->getForce() += factor * dcosphi_dba;
 							it->atom2->getForce() -= factor * (dcosphi_dbc + dcosphi_dbd + dcosphi_dba);

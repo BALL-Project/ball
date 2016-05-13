@@ -63,7 +63,7 @@ namespace BALL
 		// remove a leading "./"
 		s.set(FileSystem::CURRENT_DIRECTORY);
 		s += "/";
-		while (path.hasPrefix(s) == true)
+		while (path.hasPrefix(s))
 		{
 			path.erase(0, s.size());	
 		}
@@ -71,7 +71,7 @@ namespace BALL
 		// remove trailing "/."
 		s.set("/");
 		s += FileSystem::CURRENT_DIRECTORY;
-		while (path.hasSuffix(s) == true)
+		while (path.hasSuffix(s))
 		{
 			path.resize(path.size() - s.size());
 		}
@@ -92,7 +92,7 @@ namespace BALL
 
 		RegularExpression reg_exp(s);
 		Substring sub;
-		while (reg_exp.find(path, sub) == true)
+		while (reg_exp.find(path, sub))
 		{
 			sub.destroy();
 		}
@@ -101,7 +101,7 @@ namespace BALL
 	void FileSystem::expandTilde_(String& path)
 	{
 		#ifndef BALL_COMPILER_MSVC
-		if (path.isEmpty() == true)
+		if (path.isEmpty())
 		{
 			return;
 		}

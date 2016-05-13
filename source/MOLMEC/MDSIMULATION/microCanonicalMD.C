@@ -75,7 +75,7 @@ namespace BALL
 	{
 		// First check whether the force field is valid. If not, then it is useless
 		// to do anything here.
-		if (my_force_field.isValid() == false)
+		if (!my_force_field.isValid())
 		{
 			// The setup has failed for some reason. Output an error message.
 			Log.error() << "MicroCanonicalMD::setup: setup failed because the force field was not valid!" << std::endl;
@@ -87,7 +87,7 @@ namespace BALL
 		// call the base class setup method
 		valid_ = MolecularDynamics::setup(my_force_field, ssm, my_options);
 
-		if (valid_ == false)
+		if (!valid_)
 			return false;
 
 		// call the specific Setup
@@ -163,7 +163,7 @@ namespace BALL
 		Size force_update_freq = 0;
 		Size iteration = 0;
 
-    if (restart == false)
+    if (!restart)
     {
       // reset the current number of iteration and the simulation time  to the values given
       // in the options 
@@ -202,7 +202,7 @@ namespace BALL
 
 		// If the simulation runs with periodic boundary conditions, update the
 		// list and position of molecules
-		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+		if (force_field_ptr_->periodic_boundary.isEnabled())
 		{
 			force_field_ptr_->periodic_boundary.updateMolecules();
 		}
@@ -228,7 +228,7 @@ namespace BALL
 
 			// If the simulation runs with periodic boundary conditions, update the
 			// list and position of molecules
-			if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+			if (force_field_ptr_->periodic_boundary.isEnabled())
 			{
 				force_field_ptr_->periodic_boundary.updateMolecules();
 			}

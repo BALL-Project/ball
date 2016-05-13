@@ -184,7 +184,7 @@ namespace BALL
 		// the file containing the rdf descriptions
 		Path path;
 		String rdf_filename;
-		if (use_rdf == true)
+		if (use_rdf)
 		{
 			rdf_filename = path.find(options.get(Option::RDF_FILENAME));
 			if (rdf_filename == "")

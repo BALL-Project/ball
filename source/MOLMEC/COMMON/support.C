@@ -405,7 +405,7 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 					new_molecule = atom_it->getMolecule();
 					if (new_molecule != old_molecule) 
 					{
-						if (add == true) 
+						if (add)
 						{
 							if ((atom_counter > 0) && (mass != 0)) 
 							{
@@ -463,7 +463,7 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 					}
 				}	
 
-				if (add == true) 
+				if (add)
 				{
 					if ((atom_counter > 0) && (mass != 0)) 
 					{
@@ -599,7 +599,7 @@ Log.error() << "calculateNonBondedAtomPairs time: " << String(t.getClockTime()) 
 					}
 
 				}
-				if (keep == false)
+				if (!keep)
 				{
 					delete_set.insert(&*mol_it);
 				}

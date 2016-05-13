@@ -149,7 +149,7 @@ namespace BALL
 			= options->setDefaultBool(PolarSolvation::Option::POLAR_GB,
 					PolarSolvation::Default::POLAR_GB);
 
-		if (use_gb_ == true)
+		if (use_gb_)
 		{
 			gbm_.setScalingFactorFile((*options)[PolarSolvation::Option::GB_SCALING_FILE]);
 		}
@@ -241,7 +241,7 @@ namespace BALL
 		desolv_protein_ = Molecule(*getScoringFunction()->getReceptor(), true);
 		desolv_ligand_ = Molecule(*getScoringFunction()->getLigand(), true);
 
-		if (unite_atoms_ == true)
+		if (unite_atoms_)
 		{
 			uniteAtoms_(desolv_protein_);
 			uniteAtoms_(desolv_ligand_);
@@ -349,12 +349,12 @@ namespace BALL
 						bb_proc.getUpper());
 
 				result = computeEnergyDifference_(system, dG_reac_system);
-				if (result == false) return false;
+				if (!result) return false;
 
 				system.clear();
 				system.insert(*((Molecule*)(desolv_protein_.create(true))));
 				result = computeEnergyDifference_(system, dG_reac_protein);
-				if (result == false) return false;
+				if (!result) return false;
 
 			}
 
@@ -377,7 +377,7 @@ namespace BALL
 					// dG_reac_ligand should still be zero (see definition above)
 
 					result = computeEnergyDifference_(system, tmp_energy);
-					if (result == false) return false;
+					if (!result) return false;
 					dG_reac_ligand += tmp_energy;
 
 					// ????? hardcoded
@@ -394,7 +394,7 @@ namespace BALL
 						offset_vector = permuteComponentSigns_(Vector3(offset), i);
 						fdpb_.options.setVector(FDPB::Option::OFFSET, offset_vector);
 						result = computeEnergyDifference_(system, tmp_energy);
-						if (result == false) return false;
+						if (!result) return false;
 						dG_reac_ligand += tmp_energy;
 						if (tmp_energy < minimal_energy) minimal_energy = tmp_energy;
 						if (tmp_energy > maximal_energy) maximal_energy = tmp_energy;
@@ -420,7 +420,7 @@ namespace BALL
 			else
 			{
 				result = computeEnergyDifference_(system, dG_reac_ligand);
-				if (result == false) return false;
+				if (!result) return false;
 			}
 
 			score_ = dG_reac_system - dG_reac_protein - dG_reac_ligand;
@@ -447,7 +447,7 @@ namespace BALL
 						bb_proc.getUpper());
 
 				result = computeFullCycle_(system, tmp_protein, tmp_ligand, tmp_energy);
-				if (result == false) return false;
+				if (!result) return false;
 
 				score_ = tmp_energy;
 
@@ -515,7 +515,7 @@ namespace BALL
 
 						result = computeFullCycle_(cut_system, cut_protein, cut_ligand,
 								tmp_energy);
-						if (result == false) return false;
+						if (!result) return false;
 						score_ = tmp_energy;
 					}
 					else
@@ -530,7 +530,7 @@ namespace BALL
 
 							result = computeFullCycle_(cut_system, cut_protein,
 									cut_ligand, tmp_energy);
-							if (result == false) return false;
+							if (!result) return false;
 							score_ += tmp_energy;
 
 							// energy minimium
@@ -544,7 +544,7 @@ namespace BALL
 								fdpb_.options.setVector(FDPB::Option::OFFSET, offset_vector);
 								result = computeFullCycle_(cut_system, cut_protein,
 										cut_ligand, tmp_energy);
-								if (result == false) return false;
+								if (!result) return false;
 								if (tmp_energy < minimal_energy) minimal_energy = tmp_energy;
 								if (tmp_energy > maximal_energy) maximal_energy = tmp_energy;
 								score_ += tmp_energy;
@@ -620,7 +620,7 @@ namespace BALL
 	{
 		float dG;
 
-		if (use_gb_ == true)
+		if (use_gb_)
 		{
 			gbm_.setup(system);
 
@@ -670,7 +670,7 @@ namespace BALL
 	bool PolarSolvation::computeESEnergy_(System& system, float& energy)
 
 	{
-		if (use_gb_ == true)
+		if (use_gb_)
 		{
 			gbm_.setup(system);
 			energy = gbm_.calculateEnergy();
@@ -710,7 +710,7 @@ namespace BALL
 			if (charge != 0.0f)
 			{
 				float potential;
-				if (use_gb_ == true)
+				if (use_gb_)
 				{
 					potential = p_hash[&*atom_it];
 				}
@@ -774,7 +774,7 @@ namespace BALL
 		// Protein radii and charges are still untouched, so we can instantly
 		// calculate the ES energy
 		bool result = computeESEnergy_(system, dGes_A);
-		if (result == false) return false;
+		if (!result) return false;
 		if (verbosity_ > 1) Log.info() << "dGes_A = " << dGes_A << endl;
 
 		// 2. Calculate the ES energy of the ligand
@@ -804,7 +804,7 @@ namespace BALL
 
 		// Now compute the ES energy
 		result = computeESEnergy_(system, dGes_B);
-		if (result == false) return false;
+		if (!result) return false;
 		if (verbosity_ > 1) Log.info() << "dGes_B = " << dGes_B << endl;
 
 		// 3. Calculate the ES energy of the protein in presence of a cavity
@@ -836,14 +836,14 @@ namespace BALL
 
 		// Comoute the electrostatic energy
 		result = computeESEnergy_(system, dGes_A_cav_B);
-		if (result == false) return false;
+		if (!result) return false;
 		if (verbosity_ > 1) Log.info() << "dGes_A_cav_B = " << dGes_A_cav_B << endl;
 
 		// 5. (a) Compute the ES interaction energies of the complex partners.
 		// This is done by computing the energy of the ligand in the potential
 		// of the protein and vice versa
 		HashMap<const Atom*, float> p_hash;
-		if (use_gb_ == true)
+		if (use_gb_)
 		{
 			gbm_.calculatePotential(p_hash);
 		}
@@ -879,13 +879,13 @@ namespace BALL
 		}
 		// ligand radii should be correct.
 		result = computeESEnergy_(system, dGes_B_cav_A);
-		if (result == false) return false;
+		if (!result) return false;
 		if (verbosity_ > 1) Log.info() << "dGes_B_cav_A = " << dGes_B_cav_A << endl;
 
 		// 5. (a) Compute the ES interaction energies of the complex partners.
 		// This is done by computing the energy of the ligand in the potential
 		// of the protein and vice versa
-		if (use_gb_ == true)
+		if (use_gb_)
 		{
 			gbm_.calculatePotential(p_hash);
 		}

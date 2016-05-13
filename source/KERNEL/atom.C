@@ -389,7 +389,7 @@ namespace BALL
 			return false;
 		}
 
-		if (bond->isAutoDeletable() == true)
+		if (bond->isAutoDeletable())
 		{
 			delete bond;
 		}
@@ -405,7 +405,7 @@ namespace BALL
 	{
 		for (int i = char(number_of_bonds_) - 1; i >= 0; --i)
 		{
-			if (bond_[i]->isAutoDeletable() == true)
+			if (bond_[i]->isAutoDeletable())
 			{
 				delete bond_[i];
 			}
@@ -521,8 +521,8 @@ namespace BALL
 
 	bool Atom::isValid() const
 	{
-		if (Composite::isValid() == false
-				|| PropertyManager::isValid() == false
+		if (!Composite::isValid()
+				|| !PropertyManager::isValid()
 				|| element_ == 0)
 		{
 			return false;
@@ -530,7 +530,7 @@ namespace BALL
 
 		for (int i = 0; i < number_of_bonds_; ++i)
 		{
-			if (bond_[i]->isValid() == false)
+			if (!bond_[i]->isValid())
 			{
 				return false;
 			}
@@ -597,7 +597,7 @@ namespace BALL
 	bool Atom::applyBonds(UnaryProcessor<Bond>& processor)
 
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
@@ -609,7 +609,7 @@ namespace BALL
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 

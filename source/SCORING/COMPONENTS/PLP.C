@@ -57,18 +57,12 @@ bool PLP::isSp3(const Atom* at)
 
 	if (at->getElement().getName() == "Oxygen")
 	{
-		if (at->countBonds() == 1)
-			return false;
-		else
-			return true;
+		return at->countBonds() != 1;
 	}
 
 	if (at->getElement().getName() == "Carbon")
 	{
-		if (at->countBonds() == 4)
-			return true;
-
-		return false;
+		return at->countBonds() == 4;
 	}
 
 	return true;

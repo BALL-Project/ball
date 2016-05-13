@@ -72,9 +72,9 @@ namespace BALL
 			for (bond_iterator = (*atom_it)->beginBond(); +bond_iterator; ++bond_iterator)
 			{
 				if (bond_iterator->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!
-				if (getForceField()->getUseSelection() == false ||
-				    (getForceField()->getUseSelection() == true &&
-				    ((*bond_iterator).getFirstAtom()->isSelected() && (*bond_iterator).getSecondAtom()->isSelected())))
+				if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection()
+				    && (*bond_iterator).getFirstAtom()->isSelected()
+				    && (*bond_iterator).getSecondAtom()->isSelected()))
 				{
 					if ((*bond_iterator).getPartner(**atom_it) == (*bond_iterator).getSecondAtom())
 					{
@@ -99,7 +99,7 @@ namespace BALL
 		{
 			bool result = stretch_parameters_.extractSection(getForceField()->getParameters(), "QuadraticBondStretch");
 
-			if (result == false) 
+			if (!result)
 			{
 				Log.error() << "cannot find section QuadraticBondStretch" << endl;
 				return false;
@@ -120,9 +120,9 @@ namespace BALL
 					
 					Bond&	bond = const_cast<Bond&>(*it);
 					if (bond.getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds!
-					if (getForceField()->getUseSelection() == false ||
-					   (getForceField()->getUseSelection() == true && 
-					   (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
+					if (!getForceField()->getUseSelection() || (getForceField()->getUseSelection()
+					    && bond.getFirstAtom()->isSelected()
+					    && bond.getSecondAtom()->isSelected()))
 					{
 
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();

@@ -174,7 +174,7 @@ namespace BALL
 	{
 		// First check whether the force field is valid. If not, then it is useless
 		// to do anything here.
-		if (force_field.isValid() == false)
+		if (!force_field.isValid())
 		{
 			// The setup has failed for some reason. Output an error message.
 			Log.error() << "Setup of instance of class 'MolecularDynamics' has failed." << std::endl;
@@ -498,7 +498,7 @@ namespace BALL
 		// gravity, otherwise we iterate directly over the individual atoms of the system 
 	  atom_it = atom_vector_.begin();
 
-		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+		if (force_field_ptr_->periodic_boundary.isEnabled())
 		{
 			double molecule_mass = 0;
 			float mass;

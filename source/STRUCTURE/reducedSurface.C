@@ -718,7 +718,7 @@ namespace BALL
 		{
 			if (rs_->faces_[i] != NULL)
 			{
-				if (treatFace(rs_->faces_[i]) == false)
+				if (!treatFace(rs_->faces_[i]))
 				{
 					i = 0;
 				}
@@ -983,7 +983,7 @@ namespace BALL
 			HashSet<RSVertex*>::Iterator test;
 			for (test = test_vertices.begin(); test != test_vertices.end(); test++)
 			{
-				if ((*test)->hasEdges() == false)
+				if (!(*test)->hasEdges())
 				{
 					rs_->vertices_[(*test)->index_] = NULL;
 					vertices_[(*test)->atom_].remove(*test);
@@ -1053,7 +1053,7 @@ namespace BALL
 							{
 								Index atom3 = j->first;
 								TSphere3<double> probe = j->second;
-								if (checkProbe(probe,SortedPosition3(atom1,atom2,atom3)) == true)
+								if (checkProbe(probe,SortedPosition3(atom1,atom2,atom3)))
 								{
 									face = new RSFace;
 									RSEdge* edge1 = new RSEdge;
@@ -1288,7 +1288,7 @@ namespace BALL
 		Index a3 = -1;
 		TSphere3<double> probe;
 		bool found = false;
-		while ((found == false) && (i != candidates.end()))
+		while (!found && i != candidates.end())
 		{
 			a3 = i->first;
 			probe = i->second;
@@ -1369,7 +1369,7 @@ namespace BALL
 		// find the first atom of unknown status
 		Index i = 0;
 		bool found = false;
-		while ((found == false) && (i < (Index)rs_->number_of_atoms_))
+		while (!found && i < (Index)rs_->number_of_atoms_)
 		{
 			if (atom_status_[i] == STATUS_UNKNOWN)
 			{
@@ -1416,7 +1416,7 @@ namespace BALL
 		// find the first neighbour atom of unknown status
 		std::deque<Index>::const_iterator i = neighbours_[atom].begin();
 		bool found = false;
-		while ((found == false) && (i != neighbours_[atom].end()))
+		while (!found && i != neighbours_[atom].end())
 		{
 			if (atom_status_[*i] == STATUS_UNKNOWN)
 			{

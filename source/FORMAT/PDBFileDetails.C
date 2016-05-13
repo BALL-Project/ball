@@ -164,7 +164,7 @@ namespace BALL
 				
 				delete_helix = !Composite::insertParent(**helix_it, *initial, *terminal, false);
 			}
-			if (delete_helix == true)
+			if (delete_helix)
 			{
 				delete (*helix_it);
 			}			
@@ -287,14 +287,14 @@ namespace BALL
 			for (protein_res_it = chain_it->beginResidue();
 					 +protein_res_it; ++protein_res_it)
 			{
-				if ((*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
-						&& (*protein_res_it).Composite::hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false)
+				if ((*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID)
+						&& !(*protein_res_it).Composite::hasAncestor(RTTI::getDefault<SecondaryStructure>()))
 				{
 					terminal_residue = initial_residue = &(*protein_res_it);
 		
 					for (; !protein_res_it.isEnd()
-							 && (*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
-							 && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false;
+							 && (*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID)
+							 && !(*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>());
 							 ++protein_res_it)
 					{
 						terminal_residue = &(*protein_res_it);
@@ -305,7 +305,7 @@ namespace BALL
 		
 					Composite::insertParent(*sec_struc, *initial_residue, *terminal_residue, false);
 		
-					if (protein_res_it.isEnd() == true)
+					if (protein_res_it.isEnd())
 					{
 						break;
 					}
@@ -352,7 +352,7 @@ namespace BALL
 			residue_sequence_number_ = record.residue.sequence_number;
 			insertion_code_ = record.residue.insertion_code;
 			
-			if (current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD) == false)
+			if (!current_residue_->hasProperty(Residue::PROPERTY__NON_STANDARD))
 			{
 				current_residue_->setProperty(Residue::PROPERTY__AMINO_ACID);
 			}
@@ -415,7 +415,7 @@ namespace BALL
 		record.charge[0] = '\0';
 		record.partial_charge[0] = '\0';
 
-		if (parse_partial_charges_ == true)
+		if (parse_partial_charges_)
 		{
 			return parseLine
 				(line, size, 
@@ -473,7 +473,7 @@ namespace BALL
 		{
 			return false;
 		}
-		if ((ignore_xplor_pseudo_atoms_ == true)
+		if (ignore_xplor_pseudo_atoms_
 				&& record.orthogonal_vector[0] >= 9998.0
 				&& record.orthogonal_vector[1] >= 9998.0
 				&& record.orthogonal_vector[2] >= 9998.0)
@@ -730,7 +730,7 @@ namespace BALL
 		current_PDB_atom_->setProperty(PDBAtom::PROPERTY__HETATM);
 		
 		static RegularExpression regular_expression("^OHH|HOH|HHO|H2O|2HO|OH2|SOL|TIP|TIP2|TIP3|TIP4|WAT|D2O$");
-		if (regular_expression.match(current_residue_->getName()) == true)
+		if (regular_expression.match(current_residue_->getName()))
 		{
 			current_residue_->setProperty(Residue::PROPERTY__WATER);
 		}
@@ -1160,7 +1160,7 @@ namespace BALL
 	{
 		Protein* protein = new Protein;
 		bool result = read(*protein);
-		if (result == true)
+		if (result)
 		{
 			molecule = *protein;
 		}
@@ -1173,7 +1173,7 @@ namespace BALL
 	{
 		Protein* protein = new Protein;
 		bool result = read(*protein);
-		if (result == false)
+		if (!result)
 		{
 			delete protein;
 		}

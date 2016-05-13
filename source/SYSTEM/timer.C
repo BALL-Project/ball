@@ -103,7 +103,7 @@ namespace BALL
 
 	bool Timer::start()
 	{
-		if (is_running_ == true)
+		if (is_running_)
 		{ 
 			/* tried to start a running timer */
 			return false;
@@ -151,7 +151,7 @@ namespace BALL
 
 	bool Timer::stop()
 	{
-		if (is_running_ == false)
+		if (!is_running_)
 		{ /* tried to stop a stopped timer */
 			return false;
 		}
@@ -200,7 +200,7 @@ namespace BALL
 
 	void Timer::reset()
 	{
-		if (is_running_ == false)
+		if (!is_running_)
 		{
 			clear();
 		} 
@@ -225,7 +225,7 @@ namespace BALL
 		LongIndex elapsed_seconds;
 		LongIndex elapsed_useconds;
 
-		if (is_running_ == false)
+		if (!is_running_)
 		{ 
 			/* timer is currently off, so just return accumulated time */
 			elapsed_seconds = current_secs_;
@@ -286,7 +286,7 @@ namespace BALL
 		#else
 			struct tms tms_buffer;	
 		#endif
-		if (is_running_ == false)
+		if (!is_running_)
 		{ 
 			/* timer is off, just return accumulated time */
 			temp_value = (double)current_user_time_;
@@ -339,7 +339,7 @@ namespace BALL
 			FILETIME kt,ut,ct,et;
 		#endif												
 		
-		if (is_running_ == false)
+		if (!is_running_)
 		{ 
 			/* timer is off, just return accumulated time */
 			temp_value = (double)current_system_time_;

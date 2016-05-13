@@ -188,8 +188,7 @@ namespace BALL
 			{
 				sel_features = data->getNoDescriptors();
 			}
-			if (!mean_.empty() && (unsigned int)mean_[0].cols() == sel_features) return true; 
-			return false;
+			return !mean_.empty() && (unsigned int)mean_[0].cols() == sel_features;
 		}
 
 

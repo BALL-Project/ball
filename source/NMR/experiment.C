@@ -34,7 +34,7 @@ namespace BALL
 	Processor::Result SimpleExperiment1D::operator () (Composite& composite)
 	{
 		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
-		if ((atom_ptr != 0) && (expression_(*atom_ptr) == true))
+		if ((atom_ptr != 0) && expression_(*atom_ptr))
 		{
 			// create a new peak at the end of the list
 			peak_list_.push_back(default_peak_);

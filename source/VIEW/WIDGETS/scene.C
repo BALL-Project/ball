@@ -1614,12 +1614,7 @@ namespace BALL
 
 		bool Scene::isAnimationRunning() const
 		{
-			if (animation_thread_ != 0 && animation_thread_->isRunning())
-			{
-				return true;
-			}
-
-			return false;
+			return animation_thread_ != 0 && animation_thread_->isRunning();
 		}
 
 		//##########################EVENTS#################################

@@ -21,7 +21,7 @@ RotationalEntropy::RotationalEntropy(ScoringFunction& sf)
 
 void RotationalEntropy::setLigandIntraMolecular(bool b)
 {
-	if (b == true)
+	if (b)
 	{
 		std::cout<<"RotationalEntropy ScoringComponent can not be used to compute ligand conformation score !"<<std::endl;
 	}

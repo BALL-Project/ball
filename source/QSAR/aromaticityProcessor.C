@@ -433,14 +433,7 @@ namespace BALL
 			}
 		}
 
-		if (destab < 2)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return destab < 2;
 	}
 
 	bool AromaticityProcessor::simpleCanBeAromaticWeaker_(const HashSet<Atom*>& ring)
@@ -485,14 +478,7 @@ namespace BALL
 				}
 			}
 		}
-		if (destab < 2)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return destab < 2;
 	}
 
 	void AromaticityProcessor::aromatize(const vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)

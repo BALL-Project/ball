@@ -228,7 +228,7 @@ namespace BALL
 	TVector3<double> RSEdge::getIntersectionPoint(Position i) const
 		throw(Exception::GeneralException)
 	{
-		if (singular_ == false)
+		if (!singular_)
 		{
 			throw Exception::GeneralException(__FILE__, __LINE__);
 		}
