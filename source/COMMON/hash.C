@@ -69,8 +69,8 @@ namespace BALL
 	 */
 	HashIndex hashPJWString(const char *s)
 	{
-		Index index = 0;
-		Index temp_index;
+		HashIndex index = 0;
+		HashIndex temp_index;
 
 #		define BALL_BITS_IN_HASHVALUE_   (sizeof(Index) * std::numeric_limits<unsigned char>::digits)
 #		define BALL_THREE_QUARTERS_      ((Index)((BALL_BITS_IN_HASHVALUE_ * 3) / 4))

@@ -671,7 +671,6 @@ namespace BALL
 			if (!model_input)
 			{
 				throw BALL::Exception::FileNotFound(__FILE__, __LINE__, model_file);
-				return NULL;
 			}
 			getline(model_input, model_type);
 			getline(model_input, model_type);

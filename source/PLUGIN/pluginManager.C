@@ -226,7 +226,7 @@ namespace BALL
 		return it.value()->instance();
 	}
 
-	void PluginManager::registerHandler(boost::shared_ptr<PluginHandler> h)
+	void PluginManager::registerHandler(const boost::shared_ptr<PluginHandler>& h)
 	{
 		handler_mutex_.lockForWrite();
 		shared_handlers_.push_back(h);

@@ -14,88 +14,72 @@ namespace BALL
 	x = ((x >> 16) & 0x0000FFFF0000FFFFull) | ((x << 16) & 0xFFFF0000FFFF0000ull);\
 	x = ((x >> 32) & 0x00000000FFFFFFFFull) | ((x << 32) & 0xFFFFFFFF00000000ull)
 
-	template <>
-	BALL_INLINE void swapBytes(unsigned short& t)
-	{
-#if   BALL_USHORT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_USHORT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_USHORT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown unsigned short size, refusing to compile."
-#endif
+	namespace __private {
+		union UInt16
+		{
+			UInt16(BALL_INT16 s_) : s(s_) { }
+
+			BALL_INT64 s;
+			BALL_UINT64 u;
+		};
+
+		union UInt32
+		{
+			UInt32(BALL_INT32 s_) : s(s_) { }
+
+			BALL_INT64 s;
+			BALL_UINT64 u;
+		};
+
+		union UInt64
+		{
+			UInt64(BALL_INT64 s_) : s(s_) { }
+
+			BALL_INT64 s;
+			BALL_UINT64 u;
+		};
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(short& t)
+	BALL_INLINE void swapBytes(BALL_INT16& t)
 	{
-#if   BALL_SHORT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_SHORT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_SHORT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown short size, refusing to compile."
-#endif
+		__private::UInt16 u(t);
+		BALL_SWAP_BYTES_16(u.u);
+		t = u.s;
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(unsigned int& t)
+	BALL_INLINE void swapBytes(BALL_UINT16& t)
 	{
-#if   BALL_UINT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_UINT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_UINT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown unsigned int size, refusing to compile."
-#endif
+		BALL_SWAP_BYTES_16(t);
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(int& t)
+	BALL_INLINE void swapBytes(BALL_INT32& t)
 	{
-#if   BALL_INT_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_INT_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_INT_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown int size, refusing to compile."
-#endif
+		__private::UInt32 u(t);
+		BALL_SWAP_BYTES_32(u.u);
+		t = u.s;
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(long& t)
+	BALL_INLINE void swapBytes(BALL_UINT32& t)
 	{
-#if   BALL_LONG_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_LONG_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_LONG_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown long size, refusing to compile."
-#endif
+		BALL_SWAP_BYTES_32(t);
 	}
 
 	template <>
-	BALL_INLINE void swapBytes(unsigned long& t)
+	BALL_INLINE void swapBytes(BALL_INT64& t)
 	{
-#if   BALL_ULONG_SIZE == 2
-			BALL_SWAP_BYTES_16(t);
-#elif BALL_ULONG_SIZE == 4
-			BALL_SWAP_BYTES_32(t);
-#elif BALL_ULONG_SIZE == 8
-			BALL_SWAP_BYTES_64(t);
-#else
-	#error "Unknown unsigned long size, refusing to compile."
-#endif
+		__private::UInt64 u(t);
+		BALL_SWAP_BYTES_64(u.u);
+		t = u.s;
+	}
+
+	template <>
+	BALL_INLINE void swapBytes(BALL_UINT64& t)
+	{
+		BALL_SWAP_BYTES_64(t);
 	}
 
 	namespace __private

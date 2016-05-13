@@ -119,9 +119,11 @@ namespace BALL
 			object_to_name_.clear();
 			all_names_ = 1;
 
-			if (GL_spheres_list_ != 0) delete[] GL_spheres_list_;
-			if (GL_boxes_list_   != 0) delete[] GL_boxes_list_;
-			if (GL_tubes_list_   != 0) delete[] GL_tubes_list_;
+			delete[] GL_spheres_list_;
+			delete[] GL_boxes_list_;
+			delete[] GL_tubes_list_;
+
+			GL_spheres_list_ = GL_boxes_list_ = GL_tubes_list_ = NULL;
 
 			DisplayListHashMap::Iterator it = display_lists_.begin();
 			for (; it != display_lists_.end(); it++)
@@ -131,6 +133,11 @@ namespace BALL
 			display_lists_.clear();
 
 			orthographic_zoom_ = 10.f;
+
+			if(GLU_quadric_obj_ != 0) {
+					gluDeleteQuadric(GLU_quadric_obj_);
+					GLU_quadric_obj_ = 0;
+			}
 		}
 
 		void GLRenderer::setAntialiasing(bool state)

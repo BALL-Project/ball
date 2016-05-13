@@ -16,11 +16,6 @@ namespace BALL
 			main_control_ = parent;
 		}
 
-		ModularWidgetPluginHandler::~ModularWidgetPluginHandler()
-		{
-			PluginManager::instance().unregisterHandler(this);
-		}
-
 		bool ModularWidgetPluginHandler::canHandle(BALLPlugin* plugin) const
 		{
 			return qobject_cast<ModularWidgetPlugin*>(plugin) != 0;

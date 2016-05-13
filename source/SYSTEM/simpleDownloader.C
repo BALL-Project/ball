@@ -4,6 +4,8 @@
 #include <QtNetwork/QSslError>
 #include <QtCore/QBuffer>
 
+#include <boost/shared_ptr.hpp>
+
 namespace BALL
 {
 	namespace SimpleDownloaderHelper
@@ -243,10 +245,11 @@ namespace BALL
 
 	int SimpleDownloader::download_(SimpleDownloaderHelper::HelperThread& th)
 	{
-		QCoreApplication* app = 0;
+		// TODO: This can be a std::unique_ptr once we depend on C++11
+		boost::shared_ptr<QCoreApplication> app;
 		if(!QCoreApplication::instance()) {
 			int tmp = 0;
-			app = new QCoreApplication(tmp, 0);
+			app.reset(new QCoreApplication(tmp, 0));
 		}
 
 		th.start();
@@ -256,8 +259,6 @@ namespace BALL
 			Log.error() << "SimpleDownloader::download_: Download request \"" << (String)(url_.toString()) << "\" timed out.\n";
 			return -1;
 		}
-
-		delete app;
 
 		return th.getStatus();
 	}

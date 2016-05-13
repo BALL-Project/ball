@@ -1143,6 +1143,8 @@ namespace BALL
 
 		String PyWidget::runCommand_(const String& text, bool& state)
 		{
+			state = false;
+
 			String result;
 #ifndef BALL_PYTHON_USE_THREADS
 			result = PyInterpreter::run(text, state);

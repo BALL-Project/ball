@@ -59,6 +59,17 @@ namespace BALL
 		///
 		struct BALL_EXPORT Stretch
 		{
+			Stretch()
+			  : atom1(NULL),
+			    atom2(NULL),
+			    kb(0.0),
+			    r0(0.0),
+			    delta_r(0.0),
+			    sbmb(false),
+			    emperical(false)
+			{
+			}
+
 			Atom* atom1;
 			Atom* atom2;
 			double kb;

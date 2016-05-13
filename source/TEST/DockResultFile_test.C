@@ -116,7 +116,7 @@ CHECK(read/write DockResultFile)
 		DockResultFile df(tmpfile,File::MODE_OUT);
 		vector<Molecule*> mols;
 		int id=0;
-		while( (mol = f.read()) )
+		while((mol = f.read()) != NULL)
 		{
 			// skip this molecule because its
 			// conformation is contained twice

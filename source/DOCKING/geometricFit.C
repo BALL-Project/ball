@@ -847,14 +847,12 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		System* system = ( pro_idx == PROTEIN_A ) ? system1_ : system2_;
 
-    int PENALTY;
-
     // init grid value
     if( pro_idx == PROTEIN_A )
     {
       if( FFT_grid_a_ == NULL )
       {
-				Log.error() << "FFT_grid_a_ is null !" << endl;
+			throw Exception::NullPointer(__FILE__, __LINE__);
       }
 
       Complex* grid = &( (*FFT_grid_a_)[0] );
@@ -864,14 +862,12 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
       {
 				*grid = Complex(0.0,0.0);
       }
-
-      PENALTY = options.getInteger(Option::PENALTY_STATIC);
     }
     else // if ( pro_idx == PROTEIN_B )
     {
       if ( FFT_grid_b_ == NULL )
       {
-				Log.error() << "FFT_grid_b_ is null !" << endl;
+			throw Exception::NullPointer(__FILE__, __LINE__);
       }
 
       // since we are re-using FFT_grid_b_,
@@ -886,8 +882,6 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
       {
 				*grid = Complex(0.0,0.0);
       }
-
-      PENALTY = options.getInteger(Option::PENALTY_MOBILE);
     }
 
 		if (surface_type == FTDOCK)
@@ -1430,7 +1424,6 @@ std::cout << "I have " << rotation_num << " rotations" << std::endl;
 		mpi.acceptDatapoints(our_psi);
 
 		int rotation_num = our_phi.size();
-		int total_round = our_phi.size();
 
 		Timer loop_timer;
 		loop_timer.start();
