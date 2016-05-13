@@ -256,7 +256,7 @@ ENDIF()
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
-OPTION(USE_QTWEBKIT "Add support for QWebkit" ON)
+OPTION(USE_QTWEBENGINE "Add support for QtWebEngine" ON)
 
 # Enable automatic invocation of moc if required
 SET(CMAKE_AUTOMOC ON)
@@ -284,23 +284,31 @@ IF (BALL_HAS_VIEW)
 
 	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
 
-        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::Widgets
-                                       Qt5::OpenGL
-                                       Qt5::PrintSupport
-                                       Qt5::Network
-                                       Qt5::Test
-                                       Qt5::Xml)
+	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::Widgets
+	                               Qt5::OpenGL
+	                               Qt5::PrintSupport
+	                               Qt5::Network
+	                               Qt5::Test
+	                               Qt5::Xml)
 
-	IF(USE_QTWEBKIT)
-		FIND_PACKAGE(Qt5WebKitWidgets)
-
-                IF(Qt5WebKit_FOUND)
-                        SET(BALL_HAS_QTWEBKIT TRUE)
-                        LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebKitWidgets)
-                ELSE()
-                        SET(BALL_HAS_QTWEBKIT FALSE)
-                        MESSAGE(STATUS "QtWebkit has not been found. Disabling browser support.")
-                ENDIF()
+	IF(USE_QTWEBENGINE)
+		FIND_PACKAGE(Qt5WebEngine 5.5 REQUIRED)
+		FIND_PACKAGE(Qt5WebEngineWidgets REQUIRED)
+		FIND_PACKAGE(Qt5WebChannel REQUIRED)
+		IF(Qt5WebEngine_FOUND)
+			MESSAGE(STATUS "Found QtWebEngine")
+			IF(Qt5WebChannel_FOUND)
+				MESSAGE(STATUS "Found QtWebChannel")
+				SET(BALL_HAS_QTWEBENGINE TRUE)
+				LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
+			ELSE()
+				MESSAGE(STATUS "QtWebChannel has not been found. Disabling browser support.")
+				SET(BALL_HAS_QTWEBENGINE FALSE)
+			ENDIF()
+		ELSE()
+			MESSAGE(STATUS "QtWebEngine has not been found. Disabling browser support.")
+			SET(BALL_HAS_QTWEBENGINE FALSE)
+		ENDIF()
 	ENDIF()
 ENDIF()
 

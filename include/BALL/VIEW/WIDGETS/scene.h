@@ -141,7 +141,6 @@ namespace BALL
 		{
 			friend class AnimationThread;
 			friend class RenderSetup;
-			friend class HTMLBasedInterface;
 
 #ifdef BALL_HAS_RTFACT
       typedef boost::shared_ptr<RaytracingRenderer> RaytracingRendererPtr;

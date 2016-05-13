@@ -62,6 +62,9 @@ namespace BALL
 			qload_action_(0),
 			qsave_action_(0)
 	{
+		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
+		qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+
 		registerThis();
 
 		#ifdef BALL_VIEW_DEBUG

@@ -1,5 +1,5 @@
 #include <PresentaBALLSettings.h>
-#include <HTMLBasedInterface.h>
+#include <PresentaBALLView.h>
 
 #include <QLineEdit>
 #include <QFileDialog>
@@ -10,10 +10,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		PresentaBALLSettings::PresentaBALLSettings(HTMLBasedInterface* parent, const char* name, Qt::WindowFlags fl)
+		PresentaBALLSettings::PresentaBALLSettings(PresentaBALLView* parent, const char* name, Qt::WindowFlags fl)
 			: ConfigDialog(parent, fl),
 			  Ui_PresentaBALLSettingsData(),
-				html_interface_(parent)
+			  html_interface_(parent)
 		{
 			setupUi(this);
 			setObjectName(name);
@@ -25,8 +25,7 @@ namespace BALL
 		}
 
 		PresentaBALLSettings::~PresentaBALLSettings()
-		{
-		}
+		{ }
 
 		void PresentaBALLSettings::setIndexHTMLLocation(const QString& path)
 		{

@@ -5,8 +5,8 @@ IF(NOT BALL_HAS_VIEW)
 	RETURN()
 ENDIF()
 
-IF(NOT USE_QTWEBKIT OR NOT Qt5WebKit_FOUND)
-	MESSAGE(STATUS "QtWebkit support has not been enabled. Disabling the PresentaBALL plugin.")
+IF(NOT USE_QTWEBENGINE OR NOT Qt5WebEngine_FOUND)
+	MESSAGE(STATUS "QtWebEngine support has not been enabled. Disabling the PresentaBALL plugin.")
 	RETURN()
 ENDIF()
 
@@ -19,7 +19,7 @@ SET(UI_SOURCES_LIST
 SET(SOURCES_LIST
 	${DIRECTORY}/PresentaBALLPlugin.C
 	${DIRECTORY}/PresentaBALLSettings.C
-	${DIRECTORY}/HTMLBasedInterface.C
+	${DIRECTORY}/PresentaBALLView.C
 )
 
 SET(RCC_SOURCES_LIST
@@ -31,7 +31,7 @@ SET(DIRECTORY include)
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/PresentaBALLPlugin.h
 	${DIRECTORY}/PresentaBALLSettings.h
-	${DIRECTORY}/HTMLBasedInterface.h
+	${DIRECTORY}/PresentaBALLView.h
 )
 
 QT5_WRAP_CPP(MOC_OUTFILES ${MOC_SOURCES_LIST})
@@ -63,4 +63,4 @@ INSTALL(TARGETS pluginPresentaBALL
 	LIBRARY DESTINATION "${BALL_PLUGIN_INSTALL_DIRECTORY}"
 )
 
-TARGET_LINK_LIBRARIES(pluginPresentaBALL BALL VIEW Qt5::WebKitWidgets)
+TARGET_LINK_LIBRARIES(pluginPresentaBALL BALL VIEW Qt5::WebEngineWidgets Qt5::WebChannel)

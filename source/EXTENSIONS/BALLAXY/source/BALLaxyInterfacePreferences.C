@@ -8,6 +8,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtWidgets/QLineEdit>
+#include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
 namespace BALL
 {
@@ -40,7 +41,8 @@ namespace BALL
 			BALLaxyInterface* bi = BALLaxyInterface::getInstance(0);
 			if (bi == 0) return;
 
-			bi->setBALLaxyBaseUrl(ascii(url_edit->text()), ascii(login_edit->text()), ascii(password_edit->text()));
+			bi->setPage(new HTMLPage(bi, ignore_ssl_errors->isChecked()));
+			bi->setBALLaxyBaseUrl(ascii(url_edit->text()));
 		}
 
 		QUrl BALLaxyInterfacePreferences::getBALLaxyBaseUrl()

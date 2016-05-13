@@ -21,6 +21,10 @@
 #include <BALL/VIEW/DIALOGS/openSavePreferences.h>
 #include <BALL/VIEW/DIALOGS/shortcutDialog.h>
 
+#ifdef BALL_HAS_QTWEBENGINE
+#	include <BALL/VIEW/DIALOGS/webEnginePreferences.h>
+#endif
+
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -116,6 +120,7 @@ namespace BALL
 				shortcut_registry_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
+				webengine_preferences_(0),
 				preferences_dialog_(new Preferences(this, ((String)tr("BALLView Preferences")).c_str())),
 				preferences_file_(),
 				composites_locked_(false),
@@ -302,6 +307,7 @@ namespace BALL
 				selection_(),
 				main_control_preferences_(0),
 				network_preferences_(0),
+				webengine_preferences_(0),
 				preferences_dialog_(new Preferences(this, ascii(tr("BALLView Preferences")).c_str())),
 				composites_locked_(false),
 				locking_widget_(0),
@@ -957,6 +963,12 @@ namespace BALL
 			// Network Preferences
 			network_preferences_ = new NetworkPreferences();
 			preferences_dialog_->insertEntry(network_preferences_);
+
+#ifdef BALL_HAS_QTWEBENGINE
+			// WebEngine Preferences
+			webengine_preferences_ = new WebEnginePreferences();
+			preferences_dialog_->insertEntry(webengine_preferences_);
+#endif
 		}
 
 		void MainControl::okPreferencesClicked_()
@@ -1020,6 +1032,13 @@ namespace BALL
 			{
 				network_preferences_->applySettings();
 			}
+
+#ifdef BALL_HAS_QTWEBENGINE
+			if (webengine_preferences_ != 0)
+			{
+				webengine_preferences_->applySettings();
+			}
+#endif
 
 			// all other preferences
 			list<ModularWidget*>::iterator it = modular_widgets_.begin();

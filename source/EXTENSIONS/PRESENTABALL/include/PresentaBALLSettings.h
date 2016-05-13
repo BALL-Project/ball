@@ -20,7 +20,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class HTMLBasedInterface;
+		class PresentaBALLView;
 
 		class PresentaBALLSettings
 			: public ConfigDialog,
@@ -31,8 +31,8 @@ namespace BALL
 			public:
 
 				/// Constructor
-				PresentaBALLSettings(HTMLBasedInterface* parent = 0,
-													 const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
+				PresentaBALLSettings(PresentaBALLView* parent = 0,
+					const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
 
 				/// Destructor
 				~PresentaBALLSettings();
@@ -46,7 +46,7 @@ namespace BALL
 				virtual void selectIndexHTMLLocation();
 
 			protected:
-				HTMLBasedInterface* html_interface_;
+				PresentaBALLView* html_interface_;
 		};
 
 	}

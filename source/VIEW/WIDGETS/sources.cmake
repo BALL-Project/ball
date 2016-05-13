@@ -1,3 +1,8 @@
+### The ui files go here ###
+SET(UI_LIST
+	HTMLViewErrorWidget.ui
+)
+
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	colorButton.C
@@ -21,8 +26,9 @@ SET(SOURCES_LIST
 	textEditorWidget.C
 )
 
-IF(BALL_HAS_QTWEBKIT)
+IF(BALL_HAS_QTWEBENGINE)
 	LIST(APPEND SOURCES_LIST
+		HTMLPage.C
 		HTMLView.C
 	)
 ENDIF()
@@ -32,3 +38,4 @@ IF(BALL_PYTHON_SUPPORT)
 ENDIF()
 
 ADD_VIEW_SOURCES("VIEW/WIDGETS" "${SOURCES_LIST}")
+ADD_BALL_UIFILES("VIEW/WIDGETS" "${UI_LIST}")
