@@ -6,14 +6,10 @@
 #endif
 
 #include <QtWidgets/QTabWidget>
-#include <QtCore/QHash>
-#include <QtNetwork/QNetworkReply>
 #include <QReadWriteLock>
 
 namespace BALL
 {
-	class AtomContainer;
-
 	namespace VIEW
 	{
 		class IPythonWidget 
@@ -32,7 +28,7 @@ namespace BALL
 					protected:
 						IPythonWidget* base_;
 
-						virtual QWebView* createWindow(QWebPage::WebWindowType type);
+						virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
 				};
 
 				IPythonWidget(MainControl* parent = 0, const char* title = "");
@@ -42,22 +38,13 @@ namespace BALL
 				void setIPythonURL(String const& url);
 
 			protected:
-				virtual QWebView* createWindow(QWebPage::WebWindowType type);
-
-			public slots:
-//				void handleDownload(QNetworkReply* request);
-				void loadFinished(bool ok);
+				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);
 				QUrl ipython_url;
 
 				QTabWidget* tab_view_;
-
-			protected slots:
-
-				void handleLinkClicked(const QUrl& url);
-        void handleSslErrors(QNetworkReply* reply, const QList<QSslError> &errors);
 
 			private:
 				QReadWriteLock page_lock_;
