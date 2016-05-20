@@ -1,5 +1,5 @@
-#ifndef IPYTHONINTERFACE_H
-#define IPYTHONINTERFACE_H
+#ifndef JUPYTERWIDGET_H
+#define JUPYTERWIDGET_H
 
 #ifndef BALL_VIEW_WIDGETS_HTMLVIEW_H
 	#include <BALL/VIEW/WIDGETS/HTMLView.h>
@@ -12,38 +12,38 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class IPythonWidget 
+		class JupyterWidget
 			: public DockWidget
 		{
 			Q_OBJECT
 
 			public:
-				BALL_EMBEDDABLE(IPythonWidget, DockWidget)
+				BALL_EMBEDDABLE(JupyterWidget, DockWidget)
 
-				class IPythonHTMLView : public HTMLView
+				class JupyterHTMLView : public HTMLView
 				{
 					public:
-						IPythonHTMLView(QWidget* parent, IPythonWidget* base);
+						JupyterHTMLView(QWidget* parent, JupyterWidget* base);
 
 					protected:
-						IPythonWidget* base_;
+						JupyterWidget* base_;
 
 						virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
 				};
 
-				IPythonWidget(MainControl* parent = 0, const char* title = "");
+				JupyterWidget(MainControl* parent = 0, const char* title = "");
 
-				virtual ~IPythonWidget();
+				virtual ~JupyterWidget();
 
-				void setIPythonURL(String const& url);
+				void setBaseURL(String const& url);
 
 			protected:
 				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);
-				QUrl ipython_url;
 
+				QUrl base_url_;
 				QTabWidget* tab_view_;
 
 			private:
@@ -52,4 +52,4 @@ namespace BALL
 	}
 }
 
-#endif // IPYTHONINTERFACE_H
+#endif // JUPYTERWIDGET_H

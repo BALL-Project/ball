@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>IPythonPreferencesData</class>
- <widget class="QWidget" name="IPythonPreferencesData">
+ <class>JupyterPreferencesData</class>
+ <widget class="QWidget" name="JupyterPreferencesData">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -29,17 +29,17 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>iPython Preferences</string>
+   <string>Jupyter Plugin Preferences</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QGroupBox" name="groupBox31">
      <property name="title">
-      <string>iPython Settings</string>
+      <string>Jupyter Plugin Settings</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
-       <widget class="QGroupBox" name="proxy_settings_group">
+       <widget class="QGroupBox" name="connection_group">
         <property name="enabled">
          <bool>true</bool>
         </property>
@@ -66,7 +66,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>iPython url</string>
+                <string>Base url</string>
                </property>
               </widget>
              </item>
@@ -93,12 +93,6 @@
               </widget>
              </item>
             </layout>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_4"/>
-           </item>
-           <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_5"/>
            </item>
           </layout>
          </item>
