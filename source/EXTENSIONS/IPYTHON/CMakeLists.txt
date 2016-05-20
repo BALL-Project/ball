@@ -1,7 +1,12 @@
 PROJECT(iPython)
 
-IF(NOT USE_QTWEBKIT)
-	MESSAGE(STATUS "QtWebkit support has not been enabled. Disabling the iPython plugin")
+IF(NOT BALL_HAS_VIEW)
+	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the iPython plugin.")
+	RETURN()
+ENDIF()
+
+IF(NOT USE_QTWEBENGINE OR NOT Qt5WebEngine_FOUND)
+	MESSAGE(STATUS "QtWebEngine support has not been enabled. Disabling the iPython plugin.")
 	RETURN()
 ENDIF()
 
@@ -58,4 +63,4 @@ INSTALL(TARGETS pluginiPython
 	LIBRARY DESTINATION "${BALL_PLUGIN_INSTALL_DIRECTORY}"
 )
 
-TARGET_LINK_LIBRARIES(pluginiPython BALL VIEW)
+TARGET_LINK_LIBRARIES(pluginiPython BALL VIEW Qt5::WebEngineWidgets)
