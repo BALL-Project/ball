@@ -1,11 +1,11 @@
-#ifndef IPYTHONPLUGIN_H
-#define IPYTHONPLUGIN_H
+#ifndef JUPYTERPLUGIN_H
+#define JUPYTERPLUGIN_H
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
 
-#include <iPythonWidget.h>
-#include <iPythonPreferences.h>
+#include "jupyterWidget.h"
+#include "jupyterPreferences.h"
 
 #include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
@@ -15,19 +15,19 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class IPythonPlugin
+		class JupyterPlugin
 			: public QObject,
 			  public BALLPlugin,
 				public VIEWPlugin,
 				public ModularWidgetPlugin
 		{
 			Q_OBJECT
-			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.ModularWidget.iPython")
+			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.ModularWidget.Jupyter")
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::ModularWidgetPlugin)
 
 			public:
-				IPythonPlugin();
-				virtual ~IPythonPlugin();
+				JupyterPlugin();
+				virtual ~JupyterPlugin();
 
 				const QPixmap* getIcon() const;
 				QString getName() const;
@@ -45,10 +45,10 @@ namespace BALL
 			private:
 				QPixmap icon_;
 				bool is_active_;
-				IPythonPreferences* preferences_;
+				JupyterPreferences* preferences_;
 		};
 	}
 }
 
 
-#endif // IPYTHONPLUGIN_H
+#endif // JUPYTERPLUGIN_H

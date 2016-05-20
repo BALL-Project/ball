@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#ifndef IPYTHONPREFERENCES_H
-#define IPYTHONPREFERENCES_H
+#ifndef JUPYTERPREFERENCES_H
+#define JUPYTERPREFERENCES_H
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>
@@ -13,7 +13,7 @@
 # include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #endif
 
-#include <ui_iPythonPreferences.h>
+#include <ui_jupyterPreferences.h>
 
 #include <QtWidgets/QWidget>
 
@@ -22,23 +22,23 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/** IPythonPreferences is a widget that will be inserted into the
+		/** JupyterPreferences is a widget that will be inserted into the
 				tab dialog Preferences.
 				\ingroup ViewDialogs
 		*/
-		class IPythonPreferences 
+		class JupyterPreferences
 			:	public ConfigDialog,
-			  public Ui_IPythonPreferencesData
+			  public Ui_JupyterPreferencesData
 		{
 			Q_OBJECT
 
 			public:
 			
 				/// Default Constructor.
-				IPythonPreferences(QWidget *parent = NULL, const char *name = "IPythonPreferences", Qt::WindowFlags fl=0);
+				JupyterPreferences(QWidget *parent = NULL, const char *name = "JupyterPreferences", Qt::WindowFlags fl=0);
 				
 				/// Destructor.
-				virtual ~IPythonPreferences();
+				virtual ~JupyterPreferences();
 
 				///
 				virtual void storeValues();
@@ -47,11 +47,11 @@ namespace BALL
 				void getSettings();
 
 				///
-				QUrl getIPythonURL();
+				QUrl getBaseURL();
 
 		};
 			
 	} 
 } // namespace
 
-#endif // IPYTHONPREFERENCES_H
+#endif // JUPYTERPREFERENCES_H

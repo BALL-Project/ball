@@ -1,25 +1,25 @@
-PROJECT(iPython)
+PROJECT(Jupyter)
 
 IF(NOT BALL_HAS_VIEW)
-	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the iPython plugin.")
+	MESSAGE(STATUS "BALL is configured to not build the VIEW components. Disabling the Jupyter plugin.")
 	RETURN()
 ENDIF()
 
 IF(NOT USE_QTWEBENGINE OR NOT Qt5WebEngine_FOUND)
-	MESSAGE(STATUS "QtWebEngine support has not been enabled. Disabling the iPython plugin.")
+	MESSAGE(STATUS "QtWebEngine support has not been enabled. Disabling the Jupyter plugin.")
 	RETURN()
 ENDIF()
 
 SET(DIRECTORY source)
 ### list all filenames of the directory here ###
 SET(UI_SOURCES_LIST
-	${DIRECTORY}/iPythonPreferences.ui
+	${DIRECTORY}/jupyterPreferences.ui
 )
 
 SET(SOURCES_LIST
-	${DIRECTORY}/iPythonPlugin.C
-	${DIRECTORY}/iPythonWidget.C
-	${DIRECTORY}/iPythonPreferences.C
+	${DIRECTORY}/jupyterPlugin.C
+	${DIRECTORY}/jupyterWidget.C
+	${DIRECTORY}/jupyterPreferences.C
 )
 
 SET(RCC_SOURCES_LIST
@@ -29,9 +29,9 @@ SET(RCC_SOURCES_LIST
 SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
-	${DIRECTORY}/iPythonPlugin.h
-	${DIRECTORY}/iPythonWidget.h
-	${DIRECTORY}/iPythonPreferences.h
+	${DIRECTORY}/jupyterPlugin.h
+	${DIRECTORY}/jupyterWidget.h
+	${DIRECTORY}/jupyterPreferences.h
 )
 
 QT5_WRAP_CPP(MOC_OUTFILES ${MOC_SOURCES_LIST})
@@ -46,21 +46,21 @@ ADD_DEFINITIONS(-DQT_PLUGIN)
 ADD_DEFINITIONS(-DQT_NO_DEBUG)
 ADD_DEFINITIONS(-DQT_SHARED)
 
-ADD_LIBRARY(pluginiPython SHARED
+ADD_LIBRARY(pluginJupyter SHARED
 	${SOURCES_LIST}
 	${MOC_OUTFILES}
 	${RCC_OUTFILES}
 	${UIC_OUTFILES}
 )
 
-SET_TARGET_PROPERTIES(pluginiPython PROPERTIES
+SET_TARGET_PROPERTIES(pluginJupyter PROPERTIES
 	PREFIX ""
 )
 
-INSTALL(TARGETS pluginiPython
+INSTALL(TARGETS pluginJupyter
 	COMPONENT "${COMPONENT_PLUGINS}"
 	RUNTIME DESTINATION "${BALL_PLUGIN_INSTALL_DIRECTORY}"
 	LIBRARY DESTINATION "${BALL_PLUGIN_INSTALL_DIRECTORY}"
 )
 
-TARGET_LINK_LIBRARIES(pluginiPython BALL VIEW Qt5::WebEngineWidgets)
+TARGET_LINK_LIBRARIES(pluginJupyter BALL VIEW Qt5::WebEngineWidgets)
