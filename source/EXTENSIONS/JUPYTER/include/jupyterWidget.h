@@ -37,11 +37,12 @@ namespace BALL
 
 				void setBaseURL(String const& url);
 
-			protected:
-				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
+			protected slots:
+				void closeTab(int index);
 
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);
+				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
 				QUrl base_url_;
 				QTabWidget* tab_view_;

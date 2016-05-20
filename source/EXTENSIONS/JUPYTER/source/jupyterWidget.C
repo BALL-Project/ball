@@ -7,6 +7,16 @@ namespace BALL
 	namespace VIEW
 	{
 
+		JupyterWidget::JupyterHTMLView::JupyterHTMLView(QWidget* parent, JupyterWidget* base)
+				: HTMLView(parent),
+				  base_(base)
+		{ }
+
+		QWebEngineView* JupyterWidget::JupyterHTMLView::createWindow(QWebEnginePage::WebWindowType type)
+		{
+			return base_->createWindow(type);
+		}
+
 		JupyterWidget::JupyterWidget(MainControl* parent, const char* title)
 			: DockWidget(parent, title)
 		{
@@ -20,31 +30,12 @@ namespace BALL
 
 			tab_view_->addTab(main_view, "Dashboard");
 			tab_view_->setTabsClosable(true);
+
+			connect(tab_view_, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 		}
 
 		JupyterWidget::~JupyterWidget()
 		{ }
-
-		JupyterWidget::JupyterHTMLView::JupyterHTMLView(QWidget* parent, JupyterWidget* base)
-			: HTMLView(parent),
-				base_(base)
-		{ }
-
-		QWebEngineView* JupyterWidget::JupyterHTMLView::createWindow(QWebEnginePage::WebWindowType type)
-		{
-			return base_->createWindow(type);
-		}
-
-		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
-		{
-			JupyterHTMLView *result = new JupyterHTMLView(tab_view_, this);
-			
-			result->load(base_url_);
-
-			tab_view_->addTab(result, "Notebook");
-
-			return result;
-		}
 
 		void JupyterWidget::setBaseURL(String const& url)
 		{
@@ -53,7 +44,23 @@ namespace BALL
 			reinterpret_cast<JupyterHTMLView*>(tab_view_->currentWidget())->load(base_url_.toString());
 		}
 
+		void JupyterWidget::closeTab(int index)
+		{
+			tab_view_->removeTab(index);
+		}
+
 		void JupyterWidget::contextMenuEvent(QContextMenuEvent*)
 		{ }
+
+		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
+		{
+			JupyterHTMLView *result = new JupyterHTMLView(tab_view_, this);
+
+			result->load(base_url_);
+
+			tab_view_->addTab(result, "Notebook");
+
+			return result;
+		}
 	}
 }
