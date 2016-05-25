@@ -46,7 +46,14 @@ namespace BALL
 
 		void JupyterWidget::closeTab(int index)
 		{
-			tab_view_->removeTab(index);
+			if(index)
+			{
+				tab_view_->removeTab(index);
+			}
+			else
+			{
+				Log.info() << "Jupyter dashboard cannot be closed" << std::endl;
+			}
 		}
 
 		void JupyterWidget::contextMenuEvent(QContextMenuEvent*)
