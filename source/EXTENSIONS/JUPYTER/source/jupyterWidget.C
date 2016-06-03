@@ -18,18 +18,20 @@ namespace BALL
 		}
 
 		JupyterWidget::JupyterWidget(MainControl* parent, const char* title)
-			: DockWidget(parent, title)
+			: DockWidget(parent, title),
+			  base_url_(),
+			  tab_view_(new QTabWidget(this)),
+			  dashboard_(0)
 		{
 			registerThis();
 
-			tab_view_ = new QTabWidget(this);
 			BALL_ASSIGN_NAME(tab_view_);
 			setGuest(*tab_view_);
 
-			JupyterHTMLView* main_view = new JupyterHTMLView(tab_view_, this);
-
-			tab_view_->addTab(main_view, "Dashboard");
+			dashboard_ = new JupyterHTMLView(tab_view_, this);
+			tab_view_->addTab(dashboard_, "Home");
 			tab_view_->setTabsClosable(true);
+			tab_view_->setMovable(true);
 
 			connect(tab_view_, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
 		}
@@ -41,12 +43,12 @@ namespace BALL
 		{
 			QWriteLocker lock(&page_lock_);
 			base_url_.setUrl(url.c_str());
-			reinterpret_cast<JupyterHTMLView*>(tab_view_->widget(0))->load(base_url_.toString());
+			dashboard_->load(base_url_.toString());
 		}
 
 		void JupyterWidget::closeTab(int index)
 		{
-			if(index)
+			if(index != tab_view_->indexOf(dashboard_))
 			{
 				tab_view_->removeTab(index);
 			}
@@ -70,7 +72,7 @@ namespace BALL
 
 		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
 		{
-			JupyterHTMLView *view = new JupyterHTMLView(tab_view_, this);
+			JupyterHTMLView* view = new JupyterHTMLView(tab_view_, this);
 			view->load(base_url_);
 			tab_view_->addTab(view, view->title());
 			connect(view, SIGNAL(titleChanged(const QString&)), this, SLOT(renameTab(const QString&)));

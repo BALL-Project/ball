@@ -47,6 +47,7 @@ namespace BALL
 
 				QUrl base_url_;
 				QTabWidget* tab_view_;
+				JupyterHTMLView* dashboard_;
 
 			private:
 				QReadWriteLock page_lock_;
