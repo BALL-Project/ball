@@ -10,6 +10,7 @@ namespace BALL
 				: HTMLView(parent),
 				  base_(base)
 		{
+			connect(this, SIGNAL(titleChanged(const QString&)), base_, SLOT(renameTab(const QString&)));
 			connect(this, SIGNAL(loadFinished(bool)), this, SLOT(prepareNotebook(bool)));
 		}
 
