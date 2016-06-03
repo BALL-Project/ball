@@ -12,30 +12,37 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class JupyterWidget
-			: public DockWidget
+		class JupyterWidget;
+
+		class JupyterHTMLView : public HTMLView
+		{
+			Q_OBJECT
+
+			public:
+				JupyterHTMLView(QWidget* parent, JupyterWidget* base);
+
+			protected slots:
+				void prepareNotebook(bool ok);
+
+			protected:
+				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
+
+				JupyterWidget* base_;
+		};
+
+		class JupyterWidget : public DockWidget
 		{
 			Q_OBJECT
 
 			public:
 				BALL_EMBEDDABLE(JupyterWidget, DockWidget)
 
-				class JupyterHTMLView : public HTMLView
-				{
-					public:
-						JupyterHTMLView(QWidget* parent, JupyterWidget* base);
-
-					protected:
-						JupyterWidget* base_;
-
-						virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
-				};
-
 				JupyterWidget(MainControl* parent = 0, const char* title = "");
 
 				virtual ~JupyterWidget();
 
 				void setBaseURL(String const& url);
+				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
 			protected slots:
 				void closeTab(int index);
@@ -43,7 +50,6 @@ namespace BALL
 
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);
-				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
 				QUrl base_url_;
 				QTabWidget* tab_view_;

@@ -7,12 +7,22 @@ namespace BALL
 	namespace VIEW
 	{
 
-		JupyterWidget::JupyterHTMLView::JupyterHTMLView(QWidget* parent, JupyterWidget* base)
+		JupyterHTMLView::JupyterHTMLView(QWidget* parent, JupyterWidget* base)
 				: HTMLView(parent),
 				  base_(base)
-		{ }
+		{
+			connect(this, SIGNAL(loadFinished(bool)), this, SLOT(prepareNotebook(bool)));
+		}
 
-		QWebEngineView* JupyterWidget::JupyterHTMLView::createWindow(QWebEnginePage::WebWindowType type)
+		void JupyterHTMLView::prepareNotebook(bool ok)
+		{
+			if(!ok) return;
+
+			// prevent multiple dashboards from being spawned
+			page()->runJavaScript("e = document.getElementById('open_notebook'); if(e) e.parentElement.removeChild(e);");
+		}
+
+		QWebEngineView* JupyterHTMLView::createWindow(QWebEnginePage::WebWindowType type)
 		{
 			return base_->createWindow(type);
 		}
@@ -73,7 +83,6 @@ namespace BALL
 		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
 		{
 			JupyterHTMLView* view = new JupyterHTMLView(tab_view_, this);
-			view->load(base_url_);
 			tab_view_->addTab(view, view->title());
 			connect(view, SIGNAL(titleChanged(const QString&)), this, SLOT(renameTab(const QString&)));
 			return view;
