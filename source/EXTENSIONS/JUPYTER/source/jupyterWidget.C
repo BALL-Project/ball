@@ -63,8 +63,7 @@ namespace BALL
 		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
 		{
 			JupyterTab* view = new JupyterTab(tab_view_, this);
-			tab_view_->addTab(view, view->title());
-			connect(view, SIGNAL(titleChanged(const QString&)), this, SLOT(renameTab(const QString&)));
+			tab_view_->addTab(view, "New tab");
 			return view;
 		}
 	}
