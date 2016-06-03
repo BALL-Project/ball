@@ -18,8 +18,9 @@ SET(UI_SOURCES_LIST
 
 SET(SOURCES_LIST
 	${DIRECTORY}/jupyterPlugin.C
-	${DIRECTORY}/jupyterWidget.C
 	${DIRECTORY}/jupyterPreferences.C
+	${DIRECTORY}/jupyterTab.C
+	${DIRECTORY}/jupyterWidget.C
 )
 
 SET(RCC_SOURCES_LIST
@@ -30,8 +31,9 @@ SET(DIRECTORY include)
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/jupyterPlugin.h
-	${DIRECTORY}/jupyterWidget.h
 	${DIRECTORY}/jupyterPreferences.h
+	${DIRECTORY}/jupyterTab.h
+	${DIRECTORY}/jupyterWidget.h
 )
 
 QT5_WRAP_CPP(MOC_OUTFILES ${MOC_SOURCES_LIST})

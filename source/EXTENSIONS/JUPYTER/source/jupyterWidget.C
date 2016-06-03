@@ -1,32 +1,12 @@
 #include <jupyterWidget.h>
 
+#include <jupyterTab.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
-
-		JupyterHTMLView::JupyterHTMLView(QWidget* parent, JupyterWidget* base)
-				: HTMLView(parent),
-				  base_(base)
-		{
-			connect(this, SIGNAL(loadFinished(bool)), this, SLOT(prepareNotebook(bool)));
-		}
-
-		void JupyterHTMLView::prepareNotebook(bool ok)
-		{
-			if(!ok) return;
-
-			// prevent multiple dashboards from being spawned
-			page()->runJavaScript("e = document.getElementById('open_notebook'); if(e) e.parentElement.removeChild(e);");
-		}
-
-		QWebEngineView* JupyterHTMLView::createWindow(QWebEnginePage::WebWindowType type)
-		{
-			return base_->createWindow(type);
-		}
-
 		JupyterWidget::JupyterWidget(MainControl* parent, const char* title)
 			: DockWidget(parent, title),
 			  base_url_(),
@@ -38,7 +18,7 @@ namespace BALL
 			BALL_ASSIGN_NAME(tab_view_);
 			setGuest(*tab_view_);
 
-			dashboard_ = new JupyterHTMLView(tab_view_, this);
+			dashboard_ = new JupyterTab(tab_view_, this);
 			tab_view_->addTab(dashboard_, "Home");
 			tab_view_->setTabsClosable(true);
 			tab_view_->setMovable(true);
@@ -82,7 +62,7 @@ namespace BALL
 
 		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
 		{
-			JupyterHTMLView* view = new JupyterHTMLView(tab_view_, this);
+			JupyterTab* view = new JupyterTab(tab_view_, this);
 			tab_view_->addTab(view, view->title());
 			connect(view, SIGNAL(titleChanged(const QString&)), this, SLOT(renameTab(const QString&)));
 			return view;

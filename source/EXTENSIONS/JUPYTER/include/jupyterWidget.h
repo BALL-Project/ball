@@ -12,23 +12,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class JupyterWidget;
-
-		class JupyterHTMLView : public HTMLView
-		{
-			Q_OBJECT
-
-			public:
-				JupyterHTMLView(QWidget* parent, JupyterWidget* base);
-
-			protected slots:
-				void prepareNotebook(bool ok);
-
-			protected:
-				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
-
-				JupyterWidget* base_;
-		};
+		class JupyterTab;
 
 		class JupyterWidget : public DockWidget
 		{
@@ -53,7 +37,7 @@ namespace BALL
 
 				QUrl base_url_;
 				QTabWidget* tab_view_;
-				JupyterHTMLView* dashboard_;
+				JupyterTab* dashboard_;
 
 			private:
 				QReadWriteLock page_lock_;
