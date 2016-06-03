@@ -41,7 +41,7 @@ namespace BALL
 		{
 			QWriteLocker lock(&page_lock_);
 			base_url_.setUrl(url.c_str());
-			reinterpret_cast<JupyterHTMLView*>(tab_view_->currentWidget())->load(base_url_.toString());
+			reinterpret_cast<JupyterHTMLView*>(tab_view_->widget(0))->load(base_url_.toString());
 		}
 
 		void JupyterWidget::closeTab(int index)
