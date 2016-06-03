@@ -56,18 +56,25 @@ namespace BALL
 			}
 		}
 
+		void JupyterWidget::renameTab(const QString& title)
+		{
+			int index = tab_view_->indexOf((JupyterWidget*) sender());
+			if(index != -1)
+			{
+				tab_view_->setTabText(index, title);
+			}
+		}
+
 		void JupyterWidget::contextMenuEvent(QContextMenuEvent*)
 		{ }
 
 		QWebEngineView* JupyterWidget::createWindow(QWebEnginePage::WebWindowType)
 		{
-			JupyterHTMLView *result = new JupyterHTMLView(tab_view_, this);
-
-			result->load(base_url_);
-
-			tab_view_->addTab(result, "Notebook");
-
-			return result;
+			JupyterHTMLView *view = new JupyterHTMLView(tab_view_, this);
+			view->load(base_url_);
+			tab_view_->addTab(view, view->title());
+			connect(view, SIGNAL(titleChanged(const QString&)), this, SLOT(renameTab(const QString&)));
+			return view;
 		}
 	}
 }
