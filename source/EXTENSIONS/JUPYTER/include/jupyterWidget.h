@@ -39,6 +39,7 @@ namespace BALL
 
 			protected slots:
 				void closeTab(int index);
+				void renameTab(const QString& title);
 
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);
