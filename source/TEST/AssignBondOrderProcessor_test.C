@@ -1833,28 +1833,30 @@ CHECK(Option::COMPUTE_ALSO_CONNCETIVITY and Option::CONNECTIVITY_CUTOFF)
 	sys.apply(abop);
 RESULT
 
-CHECK(Option::USE_FINE_PENALTY)
+CHECK(Option::USE_FINE_PENALTY set to true)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
 	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
-
 	System sys;
-	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
 	mol >> sys;
 	storeBondOrders(sys);
 	sys.apply(abop);
-	//abop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys), true)
 	abop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys), false)
+RESULT
 
-	abop.clear();
+CHECK(Option::USE_FINE_PENALTY set to false)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+	System sys;
+	mol >> sys;
 	storeBondOrders(sys);
 	sys.apply(abop);
 	TEST_EQUAL(compareBondOrder(sys), false)
-	abop.apply(5); //3);
+	abop.apply(3);
 	TEST_EQUAL(compareBondOrder(sys), true)
-
 RESULT
 
 
