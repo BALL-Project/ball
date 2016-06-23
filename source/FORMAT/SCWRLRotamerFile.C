@@ -3,6 +3,7 @@
 //
 
 #include <BALL/FORMAT/SCWRLRotamerFile.h>
+#include <BALL/DATATYPE/regularExpression.h>
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
 using namespace std;

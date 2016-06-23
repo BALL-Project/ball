@@ -3,6 +3,7 @@
 //
 
 #include <BALL/FORMAT/MOPACOutputFile.h>
+#include <BALL/DATATYPE/regularExpression.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/PTE.h>
 
