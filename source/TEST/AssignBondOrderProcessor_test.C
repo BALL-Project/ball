@@ -1833,10 +1833,11 @@ CHECK(Option::COMPUTE_ALSO_CONNCETIVITY and Option::CONNECTIVITY_CUTOFF)
 	sys.apply(abop);
 RESULT
 
-CHECK(Option::USE_FINE_PENALTY set to true)
+CHECK(Option::USE_FINE_PENALTY set to true using AStar strategy)
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
 	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
 	System sys;
 	mol >> sys;
 	storeBondOrders(sys);
@@ -1846,19 +1847,133 @@ CHECK(Option::USE_FINE_PENALTY set to true)
 	TEST_EQUAL(compareBondOrder(sys), false)
 RESULT
 
-CHECK(Option::USE_FINE_PENALTY set to false)
+CHECK(Option::USE_FINE_PENALTY set to false using AStar strategy)
 	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
 	AssignBondOrderProcessor abop;
 	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::A_STAR);
 	System sys;
 	mol >> sys;
 	storeBondOrders(sys);
 	sys.apply(abop);
 	TEST_EQUAL(compareBondOrder(sys), false)
-	abop.apply(3);
+	abop.apply(5);
 	TEST_EQUAL(compareBondOrder(sys), true)
 RESULT
 
+CHECK(Option::USE_FINE_PENALTY set to true using KGreedy strategy)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::K_GREEDY);
+	System sys;
+	mol >> sys;
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), true)
+	abop.apply(3);
+	TEST_EQUAL(compareBondOrder(sys), false)
+RESULT
+
+CHECK(Option::USE_FINE_PENALTY set to false using KGreedy strategy)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::K_GREEDY);
+	System sys;
+	mol >> sys;
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), false)
+	abop.apply(5);
+	TEST_EQUAL(compareBondOrder(sys), true)
+RESULT
+
+CHECK(Option::USE_FINE_PENALTY set to true using BranchAndBound strategy)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND);
+	System sys;
+	mol >> sys;
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), true)
+	abop.apply(3);
+	TEST_EQUAL(compareBondOrder(sys), false)
+RESULT
+
+CHECK(Option::USE_FINE_PENALTY set to false using BranchAndBound strategy)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::BRANCH_AND_BOUND);
+	System sys;
+	mol >> sys;
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), false)
+	abop.apply(5);
+	TEST_EQUAL(compareBondOrder(sys), true)
+RESULT
+
+CHECK(Option::USE_FINE_PENALTY set to true using FPT strategy)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+	System sys;
+	mol >> sys;
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), true)
+	abop.apply(3);
+	TEST_EQUAL(compareBondOrder(sys), false)
+RESULT
+
+CHECK(Option::USE_FINE_PENALTY set to false using FPT strategy)
+	MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+	AssignBondOrderProcessor abop;
+	abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+	abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::FPT);
+	System sys;
+	mol >> sys;
+	storeBondOrders(sys);
+	sys.apply(abop);
+	TEST_EQUAL(compareBondOrder(sys), false)
+	abop.apply(5);
+	TEST_EQUAL(compareBondOrder(sys), true)
+RESULT
+
+#ifdef BALL_HAS_LPSOLVE
+	CHECK(Option::USE_FINE_PENALTY set to true using ILP strategy)
+		MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+		AssignBondOrderProcessor abop;
+		abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, true);
+		abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::ILP);
+		System sys;
+		mol >> sys;
+		storeBondOrders(sys);
+		sys.apply(abop);
+		TEST_EQUAL(compareBondOrder(sys), true)
+		abop.apply(3);
+		TEST_EQUAL(compareBondOrder(sys), false)
+	RESULT
+
+	CHECK(Option::USE_FINE_PENALTY set to false using ILP strategy)
+		MOL2File mol(BALL_TEST_DATA_PATH(AssignBondOrderProcessor_test_AMPTRB10_kek_sol0.mol2), std::ios::in);
+		AssignBondOrderProcessor abop;
+		abop.options.setBool(AssignBondOrderProcessor::Option::USE_FINE_PENALTY, false);
+		abop.options.set(AssignBondOrderProcessor::Option::ALGORITHM, AssignBondOrderProcessor::Algorithm::ILP);
+		System sys;
+		mol >> sys;
+		storeBondOrders(sys);
+		sys.apply(abop);
+		TEST_EQUAL(compareBondOrder(sys), false)
+		abop.apply(5);
+		TEST_EQUAL(compareBondOrder(sys), true)
+	RESULT
+#endif
 
 CHECK(Option::INIFile)
 	// There is really not much we can test here, so we just execute the processor
