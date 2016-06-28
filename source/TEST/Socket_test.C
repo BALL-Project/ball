@@ -54,11 +54,11 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 
 	Size port = server.getPort();
 
-	// starting up can take a few moments, so we wait up to 2 second
+	// starting up can take a few moments, so we wait up
 	Size retries = 0;
-	while ((port == 0) && (retries < 10))
+	while ((port == 0) && (retries < 20))
 	{
-		sleepFor(200);
+		sleepFor((retries + 1) * 200);
 		port = server.getPort();
 		++retries;
 	}
@@ -89,11 +89,11 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 
 	Size port = server.getPort();
 
-	// starting up can take a few moments, so we wait up to 2 second
+	// starting up can take a few moments, so we wait up
 	Size retries = 0;
-	while ((port == 0) && (retries < 10))
+	while ((port == 0) && (retries < 20))
 	{
-		sleepFor(200);
+		sleepFor((retries + 1) * 200);
 		port = server.getPort();
 		++retries;
 	}
