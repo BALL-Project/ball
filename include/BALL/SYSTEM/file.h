@@ -5,10 +5,6 @@
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
 
-#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
-#	include <BALL/DATATYPE/regularExpression.h>
-#endif
-
 #ifndef BALL_DATATYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>
 #endif

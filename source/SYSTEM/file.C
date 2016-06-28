@@ -7,8 +7,6 @@
 
 #include <BALL/DATATYPE/regularExpression.h>
 
-#include <BALL/DATATYPE/regularExpression.h>
-
 #include <cstdlib>     // 'getenv'
 #include <sys/types.h>
 #include <sys/stat.h>   // 'stat', 'lstat'
