@@ -5,6 +5,9 @@
 
 #include <BALL/CONFIG/config.h>
 
+#ifdef BALL_HAS_GLEW
+#include <GL/glew.h>
+
 #include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -33,13 +36,11 @@ namespace BALL
 			vertices_(0),
 			triangles_(0)
 		{
-			initializeOpenGLFunctions();
 			buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 		}
 
 		MeshBuffer::MeshBuffer(const MeshBuffer& mesh_buffer)
-		: QOpenGLFunctions(mesh_buffer),
-			mesh_(mesh_buffer.mesh_),
+		: mesh_(mesh_buffer.mesh_),
 			buffer_(),
 			filled_(false),
 			busy_(false),
@@ -70,7 +71,7 @@ namespace BALL
 			
 			// colors, normals, indices, vertex
 			// Get valid Names
-			glGenBuffers(4, buffer_);
+			glGenBuffersARB(4, buffer_);
 
 			////////////////////////////////////////////////////////////
 			/// upload colors, normals and vertices
@@ -85,8 +86,8 @@ namespace BALL
 				data[start + 2] = mesh_->vertex[index].z;
 			}
 
-			glBindBuffer(GL_ARRAY_BUFFER, buffer_[0]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW);
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[0]);
+			glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW_ARB);
 
 			for (Size index = 0; index < vertices_; ++index)
 			{
@@ -96,8 +97,8 @@ namespace BALL
 				data[start + 2] = mesh_->normal[index].z;
 			}
 
-			glBindBuffer(GL_ARRAY_BUFFER, buffer_[1]);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW);
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
+			glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW_ARB);
 
 			if (mesh_->colors.size() > 1)
 			{
@@ -111,8 +112,8 @@ namespace BALL
 					data[start + 3] = (float) mesh_->colors[index].getAlpha();
 				}
 
-				glBindBuffer(GL_ARRAY_BUFFER, buffer_[2]);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices_ * 4, data, GL_STATIC_DRAW);
+				glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
+				glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 4, data, GL_STATIC_DRAW_ARB);
 			}
 			else
 			{
@@ -138,16 +139,16 @@ namespace BALL
 				indices[start + 2] = mesh_->triangle[index].v3;
 			}
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_[3]);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int) * triangles_ * 3,
-											indices, GL_STATIC_DRAW);
+			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffer_[3]);
+			glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, sizeof(unsigned int) * triangles_ * 3, 
+											indices, GL_STATIC_DRAW_ARB);
 			delete[] indices;
 
 			////////////////////////////////////////////////////////////
 			/// cleanup
 			////////////////////////////////////////////////////////////
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
 			filled_ = true;
 			busy_ = false;
@@ -172,7 +173,7 @@ namespace BALL
 		{
 			if (!filled_) return;
 
-			glDeleteBuffers(4, buffer_);
+			glDeleteBuffersARB(4, buffer_);
 			filled_ = false;
 		}
 
@@ -186,18 +187,18 @@ namespace BALL
 			glEnableClientState(GL_INDEX_ARRAY);
 
 			// vertices
-			glBindBuffer(GL_ARRAY_BUFFER, buffer_[0]);
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[0]);
 			glVertexPointer(3, GL_FLOAT, 0, 0); 
 
 			// indices
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer_[3]);
+			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffer_[3]);
 			glIndexPointer(GL_UNSIGNED_INT, 0, 0);
 
 			// colors
 			if (multiple_colors_)
 			{
 				glEnableClientState(GL_COLOR_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, buffer_[2]);
+				glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
 				glColorPointer (4, GL_FLOAT, 0, 0);
 			}
 			else
@@ -213,7 +214,7 @@ namespace BALL
 			if (drawing_mode == DRAWING_MODE_SOLID)
 			{
 				glEnableClientState(GL_NORMAL_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, buffer_[1]);
+				glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
 				glNormalPointer(GL_FLOAT, 0, 0);
 
 				glDrawElements(GL_TRIANGLES, triangles_ * 3, GL_UNSIGNED_INT, 0);
@@ -231,8 +232,8 @@ namespace BALL
 			////////////////////////////////////////////////////////////
 			/// cleanup
 			////////////////////////////////////////////////////////////
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
+			glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 			glDisableClientState(GL_VERTEX_ARRAY);
 			glDisableClientState(GL_COLOR_ARRAY);
 			glDisableClientState(GL_INDEX_ARRAY);
@@ -248,4 +249,4 @@ namespace BALL
 
 	} 
 }
-
+#endif // BALL_HAS_GLEW

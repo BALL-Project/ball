@@ -313,6 +313,9 @@
 
 #cmakedefine BALL_HAS_QTWEBENGINE
 
+// Glew
+#cmakedefine BALL_HAS_GLEW
+
 // MPI
 #cmakedefine BALL_HAS_MPI
 
