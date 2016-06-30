@@ -1,10 +1,11 @@
+===============================================
+==  BALL  -  Biochemical ALgorithms Library  ==
+===============================================
 
-                    BALL  -  Biochemical ALgorithm Library
-                    --------------------------------------
-                                Release 1.4
-	
 
-To install BALL, use the CMake build system.
+BUILD BALL
+----------
+  To install BALL, use the CMake build system.
 
   * Enter the toplevel directory of BALL (the one containing the
     CMakeLists.txt file and the source and include folders) 
@@ -16,38 +17,50 @@ To install BALL, use the CMake build system.
 
   * Type "make"
 
-If you want to build packages (currently mostly interesting on MacOS and
-Windows), add the flag "-DBALL_ENABLE_PACKAGING=true" to the cmake command
-line and run "make package" instead of a plain make.
+  If you want to build packages (currently mostly interesting on MacOS and
+  Windows), add the flag "-DBALL_ENABLE_PACKAGING=true" to the cmake command
+  line and run "make package" instead of a plain make.
 
-On Windows, make sure to run the commands in a Visual Studio command shell.
+  On Windows, make sure to run the commands in a Visual Studio command shell.
 
-For further details of the build process, please refer to our Wiki on
-https://github.com/BALL-Project/ball/wiki/DevelopmentEnvironment
+  For further details of the build process, please refer to our Wiki on
+    https://github.com/BALL-Project/ball/wiki/DevelopmentEnvironment
 
-To build the documentation, run "make doc". Alternatively, you can refer
-to the online documentation at http://www.ball-project.org/Documentation/
+  To build the documentation, run "make doc". Alternatively, you can refer
+  to the online documentation:
 
-Please help us to improve the quality of this library by sending all the
-problems you ran into, all criticism, encouragements, improvements, bug
-reports, and wishes for further functionality to 
-  
-  ball-bugs@bioinf.uni-sb.de
+    http://www.ball-project.org/Documentation/
 
-If you use BALL, please cite our recent publication:
+
+FEEDBACK and CONTACT
+--------------------
+  Please help us to improve the quality of this project by reporting all
+  problems you ran into, all criticism, encouragements, improvements,
+  bug reports, and wishes for further functionality either using the
+  GitHub issue tracker or by contacting us via our mailing lists:
+
+    https://github.com/BALL-Project/ball/issues
+    https://groups.google.com/forum/#!forum/ball-user-list
+    https://groups.google.com/forum/#!forum/ball-developer-list
+
+  Please have a look at our website as well:
+
+    http://www.ball-project.org
+
+
+CITE BALL
+---------
+  If you use BALL, please cite our recent publication
+  (DOI: 10.1186/1471-2105-11-531):
  
-  Andreas Hildebrandt, Anna Katharina Dehof, Alexander Rurainski, 
-  Andreas Bertsch, Marcel Schumann, Nora C Toussaint, Andreas Moll, 
-  Daniel Stockel, Stefan Nickels, Sabine C Mueller, Hans-Peter Lenhof, 
-  Oliver Kohlbacher: 
+    Andreas Hildebrandt, Anna Katharina Dehof, Alexander Rurainski,
+    Andreas Bertsch, Marcel Schumann, Nora C Toussaint, Andreas Moll,
+    Daniel Stockel, Stefan Nickels, Sabine C Mueller, Hans-Peter Lenhof,
+    Oliver Kohlbacher:
 
-  "BALL - Biochemical Algorithms Library 1.3", 
+    'BALL - Biochemical Algorithms Library 1.3',
 
-  2010, BMC Bioinformatics, 11:531
+    2010, BMC Bioinformatics, 11:531
 
-
-Please have a look at our website as well: 
-
-  http://www.ball-project.org
 
 Have fun!
