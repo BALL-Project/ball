@@ -19,6 +19,7 @@ SET(UI_SOURCES_LIST
 SET(SOURCES_LIST
 	${DIRECTORY}/jupyterPlugin.C
 	${DIRECTORY}/jupyterPreferences.C
+	${DIRECTORY}/jupyterServer.C
 	${DIRECTORY}/jupyterTab.C
 	${DIRECTORY}/jupyterWidget.C
 )
@@ -32,6 +33,7 @@ SET(DIRECTORY include)
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/jupyterPlugin.h
 	${DIRECTORY}/jupyterPreferences.h
+	${DIRECTORY}/jupyterServer.h
 	${DIRECTORY}/jupyterTab.h
 	${DIRECTORY}/jupyterWidget.h
 )
