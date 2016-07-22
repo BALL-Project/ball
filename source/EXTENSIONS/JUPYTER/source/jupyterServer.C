@@ -1,4 +1,5 @@
 #include <jupyterServer.h>
+#include <BALL/common.h>
 
 namespace BALL
 {
@@ -9,7 +10,12 @@ namespace BALL
 			  debug_(debug),
 			  nbdir_(nbdir),
 			  proc_(new QProcess(parent))
-		{ }
+		{
+			connect(proc_, SIGNAL(readyReadStandardOutput()), this, SIGNAL(readyReadStandardOutput()));
+			connect(proc_, SIGNAL(readyReadStandardError()), this, SIGNAL(readyReadStandardError()));
+			connect(proc_, SIGNAL(stateChanged(QProcess::ProcessState)), this, SIGNAL(stateChanged(QProcess::ProcessState)));
+			connect(proc_, SIGNAL(started()), this, SIGNAL(started()));
+		}
 
 		JupyterServer::~JupyterServer()
 		{ }
@@ -25,13 +31,28 @@ namespace BALL
 			{
 				args << "--debug";								// enable debug messages
 			}
-			proc_->start("jupyter", args);
+			proc_->start("jupyter", args); // TODO exe as member
 		}
 
 		void JupyterServer::terminate()
 		{
 			proc_->terminate();
 			proc_->waitForFinished(); // TODO timeout as member
+		}
+
+		QByteArray JupyterServer::readStandardOutput()
+		{
+			return proc_->readAllStandardOutput();
+		}
+
+		QByteArray JupyterServer::readStandardError()
+		{
+			return proc_->readAllStandardError();
+		}
+
+		QProcess::ProcessState JupyterServer::state()
+		{
+			return proc_->state();
 		}
 	}
 }

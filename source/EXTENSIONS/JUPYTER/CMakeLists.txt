@@ -14,12 +14,14 @@ SET(DIRECTORY source)
 ### list all filenames of the directory here ###
 SET(UI_SOURCES_LIST
 	${DIRECTORY}/jupyterPreferences.ui
+	${DIRECTORY}/jupyterServerTab.ui
 )
 
 SET(SOURCES_LIST
 	${DIRECTORY}/jupyterPlugin.C
 	${DIRECTORY}/jupyterPreferences.C
 	${DIRECTORY}/jupyterServer.C
+	${DIRECTORY}/jupyterServerTab.C
 	${DIRECTORY}/jupyterTab.C
 	${DIRECTORY}/jupyterWidget.C
 )
@@ -34,6 +36,7 @@ SET(MOC_SOURCES_LIST
 	${DIRECTORY}/jupyterPlugin.h
 	${DIRECTORY}/jupyterPreferences.h
 	${DIRECTORY}/jupyterServer.h
+	${DIRECTORY}/jupyterServerTab.h
 	${DIRECTORY}/jupyterTab.h
 	${DIRECTORY}/jupyterWidget.h
 )
