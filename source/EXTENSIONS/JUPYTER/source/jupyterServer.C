@@ -5,8 +5,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterServer::JupyterServer(QObject* parent, unsigned int port, bool debug, QString nbdir)
-			: port_(port),
+		JupyterServer::JupyterServer(QObject* parent, QString exe_path, unsigned int port, bool autostart, bool debug, QString nbdir)
+			: exe_path_(exe_path),
+			  port_(port),
 			  debug_(debug),
 			  nbdir_(nbdir),
 			  proc_(new QProcess(parent))
@@ -15,10 +16,20 @@ namespace BALL
 			connect(proc_, SIGNAL(readyReadStandardError()), this, SIGNAL(readyReadStandardError()));
 			connect(proc_, SIGNAL(stateChanged(QProcess::ProcessState)), this, SIGNAL(stateChanged(QProcess::ProcessState)));
 			connect(proc_, SIGNAL(started()), this, SIGNAL(started()));
+
+			if(autostart)
+			{
+				start();
+			}
 		}
 
 		JupyterServer::~JupyterServer()
-		{ }
+		{
+			if(proc_->state() != QProcess::ProcessState::NotRunning)
+			{
+				terminate();
+			}
+		}
 
 		void JupyterServer::start()
 		{
@@ -31,13 +42,23 @@ namespace BALL
 			{
 				args << "--debug";								// enable debug messages
 			}
-			proc_->start("jupyter", args); // TODO exe as member
+			Log.info() << "Starting Jupyter server..." << std::endl;
+			proc_->start(exe_path_, args);
 		}
 
-		void JupyterServer::terminate()
+		void JupyterServer::terminate(int kill_timer)
 		{
-			proc_->terminate();
-			proc_->waitForFinished(); // TODO timeout as member
+			Log.info() << "Shutting down Jupyter server..." << std::endl;
+			proc_->terminate(); // TODO check if this also works under Windows (c.f. QProcess documentation)
+			proc_->waitForFinished(kill_timer);
+
+			// Kill server if it didn't manage to shut down within the specified grade period
+			if(proc_->state() != QProcess::ProcessState::NotRunning)
+			{
+				Log.warn() << "The Jupyter server didn't shut down within " << kill_timer/1000
+						   << "seconds. Killing..." << std::endl;
+				proc_->kill();
+			}
 		}
 
 		QByteArray JupyterServer::readStandardOutput()
