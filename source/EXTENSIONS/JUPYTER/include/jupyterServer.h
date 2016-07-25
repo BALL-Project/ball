@@ -12,11 +12,11 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				JupyterServer(QObject* parent, unsigned int port, bool debug, QString nbdir);
+				JupyterServer(QObject* parent, QString exe_path, unsigned int port, bool autostart, bool debug, QString nbdir);
 				virtual ~JupyterServer();
 
 				void start();
-				void terminate();
+				void terminate(int kill_timer = 30000);
 				QByteArray readStandardOutput();
 				QByteArray readStandardError();
 				QProcess::ProcessState state();
@@ -28,6 +28,7 @@ namespace BALL
 				void started();
 
 			protected:
+				QString exe_path_;
 				unsigned int port_;
 				bool debug_;
 				QString nbdir_;
