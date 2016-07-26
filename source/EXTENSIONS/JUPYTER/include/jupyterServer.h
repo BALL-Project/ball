@@ -12,7 +12,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool autostart, bool debug, const QString& nbdir);
+				JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool debug, const QString& nbdir);
 				virtual ~JupyterServer();
 
 				const QString& getExePath();
@@ -36,6 +36,7 @@ namespace BALL
 				void readyReadStandardError();
 				void stateChanged(QProcess::ProcessState);
 				void started();
+				void errorOccurred(QProcess::ProcessError);
 
 			protected:
 				QString exe_path_;

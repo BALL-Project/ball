@@ -26,7 +26,7 @@ namespace BALL
 				JupyterWidget(MainControl* parent = nullptr, const char* title = "");
 				virtual ~JupyterWidget();
 
-				void setDashboardURL(String const& url);
+				void setDashboardURL(const QString& url);
 				void setServer(JupyterServer* server);
 				JupyterServer* getServer();
 

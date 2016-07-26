@@ -23,7 +23,7 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 			setINIFileSectionName("Jupyter");
-			setWidgetStackName((String)tr("JupyterWidget"));
+			setWidgetStackName("JupyterWidget");
 
 			connect(mode_edit, SIGNAL(currentIndexChanged(int)), this, SLOT(setConnectionMode(int)));
 			connect(exe_button, SIGNAL(clicked()), this, SLOT(selectExePath()));
@@ -44,35 +44,56 @@ namespace BALL
 			setConnectionMode(mode_edit->currentIndex());
 
 			JupyterWidget* bi = JupyterWidget::getInstance(0);
-			if (bi == 0) return;
+			if(!bi)
+			{
+				return;
+			}
 
 			if(conn_mode_ == ConnectionMode::EXTERNAL)
 			{
-				bi->setDashboardURL(ascii(url_edit->text()));
+				bi->setDashboardURL(getDashboardUrl());
 				bi->setServer(nullptr);
 			}
-			else if(bi->getServer()) // ConnectionMode::HOSTED (server already created)
+			else // ConnectionMode::HOSTED
 			{
 				JupyterServer* server = bi->getServer();
-				server->setExePath(exe_edit->text());
-				server->setPort(port_edit->value());
-				server->setDebug(debug_edit->checkState() == Qt::Checked);
-				server->setNbdir(nbdir_edit->text());
+				if(server)
+				{
+					server->setExePath(getExePath());
+					server->setPort(getPort());
+					server->setDebug(getDebug());
+					server->setNbdir(getNbdir());
+				}
+				else
+				{
+					server = new JupyterServer(bi, getExePath(), getPort(), getDebug(), getNbdir());
+					bi->setServer(server);
+				}
 				if(server->isRunning())
 				{
 					Log.info() << "Please restart your Jupyter server manually for changes to take effect" << std::endl;
+					return;
 				}
-				else if(autostart_edit->checkState() == Qt::Checked)
+				if(getAutostart())
 				{
 					server->start();
 				}
 			}
-			else // ConnectionMode::HOSTED (create server)
-			{
-				bi->setServer(new JupyterServer(bi, exe_edit->text(), port_edit->value(),
-												autostart_edit->checkState() == Qt::Checked,
-												debug_edit->checkState() == Qt::Checked, nbdir_edit->text()));
-			}
+		}
+
+		QString JupyterPreferences::getDashboardUrl()
+		{
+			return url_edit->text();
+		}
+
+		JupyterPreferences::ConnectionMode JupyterPreferences::getConnectionMode()
+		{
+			return conn_mode_;
+		}
+
+		void JupyterPreferences::setConnectionMode(int index)
+		{
+			setConnectionMode(static_cast<ConnectionMode>(index));
 		}
 
 		void JupyterPreferences::setConnectionMode(ConnectionMode mode)
@@ -82,9 +103,29 @@ namespace BALL
 			hosted_group->setEnabled(conn_mode_ == ConnectionMode::HOSTED);
 		}
 
-		void JupyterPreferences::setConnectionMode(int index)
+		QString JupyterPreferences::getExePath()
 		{
-			setConnectionMode(static_cast<ConnectionMode>(index));
+			return exe_edit->text();
+		}
+
+		QString JupyterPreferences::getNbdir()
+		{
+			return nbdir_edit->text();
+		}
+
+		unsigned int JupyterPreferences::getPort()
+		{
+			return port_edit->value();
+		}
+
+		bool JupyterPreferences::getAutostart()
+		{
+			return autostart_edit->checkState() == Qt::Checked;
+		}
+
+		bool JupyterPreferences::getDebug()
+		{
+			return debug_edit->checkState() == Qt::Checked;
 		}
 
 		void JupyterPreferences::selectExePath()
