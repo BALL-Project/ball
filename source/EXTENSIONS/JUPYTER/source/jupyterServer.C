@@ -5,7 +5,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterServer::JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool autostart, bool debug, const QString& nbdir)
+		JupyterServer::JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool debug, const QString& nbdir)
 			: exe_path_(exe_path),
 			  port_(port),
 			  debug_(debug),
@@ -17,10 +17,9 @@ namespace BALL
 			connect(proc_, SIGNAL(stateChanged(QProcess::ProcessState)), this, SIGNAL(stateChanged(QProcess::ProcessState)));
 			connect(proc_, SIGNAL(started()), this, SIGNAL(started()));
 
-			if(autostart)
-			{
-				start();
-			}
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
+			connect(proc_, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SIGNAL(errorOccurred(QProcess::ProcessError)));
+#endif
 		}
 
 		JupyterServer::~JupyterServer()
@@ -95,20 +94,27 @@ namespace BALL
 			}
 			Log.info() << "Starting Jupyter server..." << std::endl;
 			proc_->start(exe_path_, args);
-			// TODO check fail state
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+			// The QProcess::errorOccured signal is only available with Qt 5.6 or newer. We manually emit
+			// the corresponding signal of our own class with older Qt versions.
+			if(!proc_->waitForStarted())
+				emit errorOccurred(QProcess::ProcessError::FailedToStart);
+#endif
 		}
 
 		void JupyterServer::terminate(int kill_timer)
 		{
 			Log.info() << "Shutting down Jupyter server..." << std::endl;
 			proc_->terminate(); // TODO check if this also works under Windows (c.f. QProcess documentation)
-			proc_->waitForFinished(kill_timer);
 
-			// Kill server if it didn't manage to shut down within the specified grade period
-			if(isRunning())
+			// Kill server if it didn't manage to shut down within the specified grace period
+			if(!proc_->waitForFinished(kill_timer))
 			{
-				Log.warn() << "The Jupyter server didn't shut down within " << kill_timer/1000
-						   << "seconds. Killing..." << std::endl;
+#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
+				// This will happen automatically with Qt 5.6 or newer.
+				emit errorOccurred(QProcess::ProcessError::Timedout);
+#endif
 				proc_->kill();
 			}
 		}

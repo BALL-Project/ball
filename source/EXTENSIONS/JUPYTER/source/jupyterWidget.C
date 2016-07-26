@@ -39,11 +39,11 @@ namespace BALL
 			}
 		}
 
-		void JupyterWidget::setDashboardURL(String const& url)
+		void JupyterWidget::setDashboardURL(const QString& url)
 		{
 			QWriteLocker lock(&page_lock_);
-			dashboard_url_.setUrl(url.c_str());
-			dashboard_->load(dashboard_url_.toString());
+			dashboard_url_.setUrl(url);
+			dashboard_->load(dashboard_url_);
 		}
 
 		void JupyterWidget::setServer(JupyterServer* server)
@@ -64,7 +64,7 @@ namespace BALL
 			{
 				server_tab_ = new JupyterServerTab(tab_view_, server);
 				tab_view_->insertTab(0, server_tab_, "Server");
-				setDashboardURL(String("http://localhost:") + String(server->getPort()));
+				setDashboardURL(QString("http://localhost:%1").arg(server->getPort()));
 			}
 			server_ = server;
 		}

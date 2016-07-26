@@ -28,6 +28,7 @@ namespace BALL
 				void readStandardError();
 				void updateState(QProcess::ProcessState state);
 				void startStopServer();
+				void processError(QProcess::ProcessError error);
 
 			signals:
 				void appendMessage(const QString& /* message */);
