@@ -13,6 +13,8 @@ namespace BALL
 	namespace VIEW
 	{
 		class JupyterTab;
+		class JupyterServer;
+		class JupyterServerTab;
 
 		class JupyterWidget : public DockWidget
 		{
@@ -21,11 +23,13 @@ namespace BALL
 			public:
 				BALL_EMBEDDABLE(JupyterWidget, DockWidget)
 
-				JupyterWidget(MainControl* parent = 0, const char* title = "");
-
+				JupyterWidget(MainControl* parent = nullptr, const char* title = "");
 				virtual ~JupyterWidget();
 
-				void setBaseURL(String const& url);
+				void setDashboardURL(String const& url);
+				void setServer(JupyterServer* server);
+				JupyterServer* getServer();
+
 				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
 			protected slots:
@@ -35,9 +39,11 @@ namespace BALL
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);
 
-				QUrl base_url_;
 				QTabWidget* tab_view_;
 				JupyterTab* dashboard_;
+				QUrl dashboard_url_;
+				JupyterServer* server_;
+				JupyterServerTab* server_tab_;
 
 			private:
 				QReadWriteLock page_lock_;
