@@ -18,17 +18,22 @@ namespace BALL
 
 			public:
 				JupyterServerTab(QWidget* parent, JupyterServer* server);
+				virtual ~JupyterServerTab();
+
+				JupyterServer* getServer();
+				void setServer(JupyterServer* server);
 
 			public slots:
 				void readStandardOutput();
 				void readStandardError();
 				void updateState(QProcess::ProcessState state);
-
-			protected:
-				JupyterServer* server_;
+				void startStopServer();
 
 			signals:
 				void appendMessage(const QString& /* message */);
+
+			protected:
+				JupyterServer* server_;
 		};
 	}
 }

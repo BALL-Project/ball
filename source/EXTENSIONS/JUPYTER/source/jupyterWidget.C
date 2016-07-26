@@ -1,6 +1,8 @@
 #include <jupyterWidget.h>
 
 #include <jupyterTab.h>
+#include <jupyterServer.h>
+#include <jupyterServerTab.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 namespace BALL
@@ -9,9 +11,12 @@ namespace BALL
 	{
 		JupyterWidget::JupyterWidget(MainControl* parent, const char* title)
 			: DockWidget(parent, title),
-			  base_url_(),
 			  tab_view_(new QTabWidget(this)),
-			  dashboard_(0)
+			  dashboard_(nullptr),
+			  dashboard_url_(nullptr),
+			  server_(nullptr),
+			  server_tab_(nullptr),
+			  page_lock_()
 		{
 			registerThis();
 
@@ -19,7 +24,7 @@ namespace BALL
 			setGuest(*tab_view_);
 
 			dashboard_ = new JupyterTab(tab_view_, this);
-			tab_view_->addTab(dashboard_, "Home");
+			tab_view_->addTab(dashboard_, "Dashboard");
 			tab_view_->setTabsClosable(true);
 			tab_view_->setMovable(true);
 
@@ -27,31 +32,68 @@ namespace BALL
 		}
 
 		JupyterWidget::~JupyterWidget()
-		{ }
+		{
+			if(server_)
+			{
+				delete server_;
+			}
+		}
 
-		void JupyterWidget::setBaseURL(String const& url)
+		void JupyterWidget::setDashboardURL(String const& url)
 		{
 			QWriteLocker lock(&page_lock_);
-			base_url_.setUrl(url.c_str());
-			dashboard_->load(base_url_.toString());
+			dashboard_url_.setUrl(url.c_str());
+			dashboard_->load(dashboard_url_.toString());
+		}
+
+		void JupyterWidget::setServer(JupyterServer* server)
+		{
+			if(server_)
+			{
+				if(server) // replace server
+				{
+					server_tab_->setServer(server);
+				}
+				else // hosted -> external
+				{
+					tab_view_->removeTab(tab_view_->indexOf(server_tab_));
+				}
+				delete server_;
+			}
+			else if(server) // external -> hosted
+			{
+				server_tab_ = new JupyterServerTab(tab_view_, server);
+				tab_view_->insertTab(0, server_tab_, "Server");
+				setDashboardURL(String("http://localhost:") + String(server->getPort()));
+			}
+			server_ = server;
+		}
+
+		JupyterServer* JupyterWidget::getServer()
+		{
+			return server_;
 		}
 
 		void JupyterWidget::closeTab(int index)
 		{
-			if(index != tab_view_->indexOf(dashboard_))
+			if(index == tab_view_->indexOf(dashboard_))
 			{
-				tab_view_->removeTab(index);
+				Log.info() << "Jupyter dashboard cannot be closed" << std::endl;
+			}
+			else if(index == tab_view_->indexOf(server_tab_))
+			{
+				Log.info() << "Jupyter server tab cannot be closed" << std::endl;
 			}
 			else
 			{
-				Log.info() << "Jupyter dashboard cannot be closed" << std::endl;
+				tab_view_->removeTab(index);
 			}
 		}
 
 		void JupyterWidget::renameTab(const QString& title)
 		{
 			int index = tab_view_->indexOf((JupyterWidget*) sender());
-			if(index != -1)
+			if(index != -1 && sender() != dashboard_)
 			{
 				tab_view_->setTabText(index, title);
 			}

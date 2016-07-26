@@ -13,14 +13,29 @@ namespace BALL
 		JupyterServerTab::JupyterServerTab(QWidget* parent, JupyterServer* server)
 			: QWidget(parent),
 			  Ui_JupyterServerTab(),
-			  server_(server)
+			  server_(nullptr)
 		{
 			setupUi(this);
+			setServer(server);
+			connect(this, SIGNAL(appendMessage(const QString&)), message_edit, SLOT(appendPlainText(const QString&)));
+			connect(clear_button, SIGNAL(clicked()), message_edit, SLOT(clear()));
+			connect(start_stop_button, SIGNAL(clicked()), this, SLOT(startStopServer()));
+		}
 
+		JupyterServerTab::~JupyterServerTab()
+		{ }
+
+		JupyterServer* JupyterServerTab::getServer()
+		{
+			return server_;
+		}
+
+		void JupyterServerTab::setServer(JupyterServer* server)
+		{
+			server_ = server;
 			connect(server_, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(updateState(QProcess::ProcessState)));
 			connect(server_, SIGNAL(readyReadStandardOutput()), this, SLOT(readStandardOutput()));
 			connect(server_, SIGNAL(readyReadStandardError()), this, SLOT(readStandardError()));
-			connect(this, SIGNAL(appendMessage(const QString&)), messageArea, SLOT(appendPlainText(const QString&)));
 		}
 
 		void JupyterServerTab::readStandardOutput()
@@ -38,17 +53,35 @@ namespace BALL
 			switch(state)
 			{
 				case ProcessState::NotRunning:
-					statusLabel->setText("Stopped");
+					status_edit->setText(tr("Stopped"));
+					start_stop_button->setText(tr("Start server"));
 					break;
 				case ProcessState::Starting:
-					statusLabel->setText("Starting");
+					status_edit->setText(tr("Starting"));
+					start_stop_button->setText(tr("Stop server"));
 					break;
 				case ProcessState::Running:
-					statusLabel->setText("Running");
+					status_edit->setText(tr("Running"));
+					start_stop_button->setText(tr("Stop server"));
 					break;
 				default:
-					statusLabel->setText("Unknown");
+					status_edit->setText(tr("Unknown"));
+					start_stop_button->setText(tr("Start server"));
 			}
+		}
+
+		void JupyterServerTab::startStopServer()
+		{
+			start_stop_button->setEnabled(false);
+			if(server_->isRunning())
+			{
+				server_->terminate();
+			}
+			else
+			{
+				server_->start();
+			}
+			start_stop_button->setEnabled(true);
 		}
 	}
 }

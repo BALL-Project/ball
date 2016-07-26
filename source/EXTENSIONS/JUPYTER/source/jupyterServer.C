@@ -5,7 +5,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterServer::JupyterServer(QObject* parent, QString exe_path, unsigned int port, bool autostart, bool debug, QString nbdir)
+		JupyterServer::JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool autostart, bool debug, const QString& nbdir)
 			: exe_path_(exe_path),
 			  port_(port),
 			  debug_(debug),
@@ -25,25 +25,77 @@ namespace BALL
 
 		JupyterServer::~JupyterServer()
 		{
-			if(proc_->state() != QProcess::ProcessState::NotRunning)
+			if(isRunning())
 			{
 				terminate();
 			}
 		}
 
+		const QString& JupyterServer::getExePath()
+		{
+			return exe_path_;
+		}
+
+		void JupyterServer::setExePath(const QString &exe_path)
+		{
+			exe_path_ = exe_path;
+		}
+
+		unsigned int JupyterServer::getPort()
+		{
+			return port_;
+		}
+
+		void JupyterServer::setPort(unsigned int port)
+		{
+			port_ = port;
+		}
+
+		bool JupyterServer::getDebug()
+		{
+			return debug_;
+		}
+
+		void JupyterServer::setDebug(bool debug)
+		{
+			debug_ = debug;
+		}
+
+		const QString& JupyterServer::getNbdir()
+		{
+			return nbdir_;
+		}
+
+		void JupyterServer::setNbdir(const QString &nbdir)
+		{
+			nbdir_ = nbdir;
+		}
+
+		bool JupyterServer::isRunning()
+		{
+			return proc_->state() != QProcess::ProcessState::NotRunning;
+		}
+
 		void JupyterServer::start()
 		{
+			if(isRunning())
+			{
+				Log.warn() << "The Jupyter server is already running." << std::endl;
+				return;
+			}
 			QStringList args;
 			args << "notebook"
 				 << "--no-browser"								// do not open the browser after starting
 				 << QString("--port=%1").arg(port_)				// server port
-				 << QString("--notebook-dir=%1").arg(nbdir_);	// notebook and kernel directory
+				 << QString("--notebook-dir=%1").arg(nbdir_)	// notebook and kernel directory
+				 << QString("--port-retries=0");				// prevent port changes (dashboard wouldn't notice!)
 			if(debug_)
 			{
 				args << "--debug";								// enable debug messages
 			}
 			Log.info() << "Starting Jupyter server..." << std::endl;
 			proc_->start(exe_path_, args);
+			// TODO check fail state
 		}
 
 		void JupyterServer::terminate(int kill_timer)
@@ -53,7 +105,7 @@ namespace BALL
 			proc_->waitForFinished(kill_timer);
 
 			// Kill server if it didn't manage to shut down within the specified grade period
-			if(proc_->state() != QProcess::ProcessState::NotRunning)
+			if(isRunning())
 			{
 				Log.warn() << "The Jupyter server didn't shut down within " << kill_timer/1000
 						   << "seconds. Killing..." << std::endl;

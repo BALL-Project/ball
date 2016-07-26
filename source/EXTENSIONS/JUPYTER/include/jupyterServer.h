@@ -12,9 +12,19 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				JupyterServer(QObject* parent, QString exe_path, unsigned int port, bool autostart, bool debug, QString nbdir);
+				JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool autostart, bool debug, const QString& nbdir);
 				virtual ~JupyterServer();
 
+				const QString& getExePath();
+				void setExePath(const QString& exe_path);
+				unsigned int getPort();
+				void setPort(unsigned int port);
+				bool getDebug();
+				void setDebug(bool debug);
+				const QString& getNbdir();
+				void setNbdir(const QString& nbdir);
+
+				bool isRunning();
 				void start();
 				void terminate(int kill_timer = 30000);
 				QByteArray readStandardOutput();
