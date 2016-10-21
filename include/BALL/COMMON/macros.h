@@ -17,8 +17,14 @@
 #	include <BALL/COMMON/rtti.h>
 #endif
 
-#include <math.h>     // needed for fabs
-#include <typeinfo>		// needed for typeid
+#include <chrono>    // std::chrono::seconds
+#include <math.h>    // needed for fabs
+#include <thread>    // std::this_thread::sleep_for
+#include <typeinfo>  // needed for typeid
+
+
+// Macro to block execution of current thread for at least x milliseconds
+#define BALL_SLEEPFOR(x)                         std::this_thread::sleep_for(std::chrono::milliseconds(x))
 
 #define BALL_MAX(a, b)                           (((a) < (b)) ? (b) : (a))
 #define BALL_MAX3(x, y, z)                       ((x) > (y) ? BALL_MAX(x, z) : BALL_MAX(y, z))

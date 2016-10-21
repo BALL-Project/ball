@@ -48,7 +48,6 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
 #include <QtWidgets/QStatusBar>  // statusbar
@@ -2242,7 +2241,7 @@ namespace BALL
 		while (isBusy())
 		{
 			QApplication::processEvents();
-			sleepFor(10);
+			BALL_SLEEPFOR(10);
 		}
 	}
 
