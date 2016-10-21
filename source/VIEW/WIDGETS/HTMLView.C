@@ -73,7 +73,7 @@ namespace BALL
 
 		void HTMLViewDock::checkForIncompatibleDrivers_()
 		{
-			GLRenderer glr();
+			GLRenderer glr = GLRenderer();
 			String vendor = glr.getVendor();
 
 			if (!vendor.empty() && vendor == "nouveau")
