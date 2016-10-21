@@ -1,12 +1,8 @@
 #include <BALL/VIEW/WIDGETS/HTMLView.h>
 
+#include<BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
-#ifdef BALL_OS_DARWIN
-#	include <OpenGL/gl.h>
-#else
-#	include <GL/gl.h>
-#endif
 
 namespace BALL
 {
@@ -77,11 +73,12 @@ namespace BALL
 
 		void HTMLViewDock::checkForIncompatibleDrivers_()
 		{
-			show_error_ = false;
-			char* vendor = (char*) glGetString(GL_VENDOR);
-			if (vendor)
+			GLRenderer glr();
+			String vendor = glr.getVendor();
+
+			if (!vendor.empty() && vendor == "nouveau")
 			{
-				show_error_ = String(vendor) == "nouveau";
+				show_error_ = true;
 			}
 		}
 	}
