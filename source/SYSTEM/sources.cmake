@@ -9,7 +9,6 @@ SET(SOURCES_LIST
 	path.C
 	simpleDownloader.C
 	sysinfo.C
-	systemCalls.C
 	timer.C
 )
 

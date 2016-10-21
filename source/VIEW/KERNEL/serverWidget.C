@@ -9,7 +9,6 @@
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/FORMAT/INIFile.h>
-#include <BALL/SYSTEM/systemCalls.h>
 
 #include <QtWidgets/QStatusBar>
 #include <QtGui/QPixmap>

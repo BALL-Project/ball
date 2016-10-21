@@ -7,7 +7,6 @@
 
 ///////////////////////////
 #include <BALL/SYSTEM/networking.h>
-#include <BALL/SYSTEM/systemCalls.h> // for sleepFor()
 
 ///////////////////////////
 
@@ -58,7 +57,7 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 	Size retries = 0;
 	while ((port == 0) && (retries < 20))
 	{
-		sleepFor((retries + 1) * 200);
+		BALL_SLEEPFOR((retries + 1) * 200);
 		port = server.getPort();
 		++retries;
 	}
@@ -74,7 +73,7 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 		String received;
 		stream >> received;
 
-		sleepFor(10);
+		BALL_SLEEPFOR(10);
 		TEST_EQUAL(sent, server.received);
 		TEST_EQUAL(received, server.sent_async);	
 	}
@@ -93,7 +92,7 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 	Size retries = 0;
 	while ((port == 0) && (retries < 20))
 	{
-		sleepFor((retries + 1) * 200);
+		BALL_SLEEPFOR((retries + 1) * 200);
 		port = server.getPort();
 		++retries;
 	}
@@ -108,7 +107,7 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 
 		String received;
 		stream >> received;
-		sleepFor(10);
+		BALL_SLEEPFOR(10);
 		TEST_EQUAL(sent, server.received);
 		TEST_EQUAL(received, server.sent_sync);	
 	}

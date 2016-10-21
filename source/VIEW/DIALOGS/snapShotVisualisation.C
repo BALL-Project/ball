@@ -4,7 +4,6 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
-#include <BALL/SYSTEM/systemCalls.h>
 
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QCheckBox>
@@ -368,7 +367,7 @@ void SnapshotVisualisationDialog::update_()
 	while (main_control_->getRepresentationManager().updateRunning())
 	{
 		QApplication::processEvents();
-		sleepFor(10);
+		BALL_SLEEPFOR(10);
 	}
 }
 

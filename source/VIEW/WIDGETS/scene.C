@@ -49,7 +49,6 @@
 #include <BALL/VIEW/INPUT/buttonEvent.h>
 
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/SYSTEM/systemCalls.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/SYSTEM/directory.h>
@@ -4095,7 +4094,7 @@ namespace BALL
 			while (getMainControl()->isBusy())
 			{
 				getMainControl()->processEvents(999);
-				sleepFor(40);
+				BALL_SLEEPFOR(40);
 			}
 
 			MolecularDynamicsDialog& mdd = ms->getMDSimulationDialog();
@@ -4109,7 +4108,7 @@ namespace BALL
 			while (getMainControl()->isBusy())
 			{
 				getMainControl()->processEvents(999);
-				sleepFor(40);
+				BALL_SLEEPFOR(40);
 			}
 
 			md.setMaxIterations(200);
