@@ -28,7 +28,7 @@ namespace BALL
 				void finishedExecution();
 		};
 
-		class HTMLPage: public QWebEnginePage
+		class BALL_VIEW_EXPORT HTMLPage: public QWebEnginePage
 		{
 			Q_OBJECT
 
