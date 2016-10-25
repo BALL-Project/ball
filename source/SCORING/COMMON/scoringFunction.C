@@ -1491,43 +1491,43 @@ void ScoringFunction::getDefaultOptions(Options& options)
 	boolean_values.push_back("false");
 
 	option_category->setDefaultInteger(Option::HASHGRID_RESOLUTION, Default::HASHGRID_RESOLUTION);
-	option_category->addParameterDescription(Option::HASHGRID_RESOLUTION, "hashgrid resolution", BALL::INT, &allowed_values);
+	option_category->addParameterDescription(Option::HASHGRID_RESOLUTION, "hashgrid resolution", ParamFile::INT, &allowed_values);
 
 	option_category->setDefaultInteger(Option::HASHGRID_SIZE, Default::HASHGRID_SIZE);
-	option_category->addParameterDescription(Option::HASHGRID_SIZE, "hashgrid size (num of boxes)", BALL::INT);
+	option_category->addParameterDescription(Option::HASHGRID_SIZE, "hashgrid size (num of boxes)", ParamFile::INT);
 
 	option_category->setDefaultReal(Option::NONBONDED_CUTOFF, Default::NONBONDED_CUTOFF);
-	option_category->addParameterDescription(Option::NONBONDED_CUTOFF, "nonbonded cutoff", DOUBLE);
+	option_category->addParameterDescription(Option::NONBONDED_CUTOFF, "nonbonded cutoff", ParamFile::DOUBLE);
 
 	option_category->setDefaultInteger(Option::BURIAL_DEPTH_SCALE, Default::BURIAL_DEPTH_SCALE);
-	option_category->addParameterDescription(Option::BURIAL_DEPTH_SCALE, "relative-depth-of-burial scale", BALL::DOUBLE, &allowed_values);
+	option_category->addParameterDescription(Option::BURIAL_DEPTH_SCALE, "relative-depth-of-burial scale", ParamFile::DOUBLE, &allowed_values);
 
 	option_category->setDefaultBool(Option::IGNORE_H_CLASHES, Default::IGNORE_H_CLASHES);
-	option_category->addParameterDescription(Option::IGNORE_H_CLASHES, "ignore clashes involving hydrogens", BALL::STRING, &boolean_values);
+	option_category->addParameterDescription(Option::IGNORE_H_CLASHES, "ignore clashes involving hydrogens", ParamFile::STRING, &boolean_values);
 
 	option_category->setDefaultReal(Option::ALLOWED_INTERMOL_OVERLAP, Default::ALLOWED_INTERMOL_OVERLAP);
 	allowed_values.clear();
 	allowed_values.push_back("0");
 	allowed_values.push_back("2");
-	option_category->addParameterDescription(Option::ALLOWED_INTERMOL_OVERLAP, "allowed intermolecular atom-overlap", DOUBLE, &allowed_values);
+	option_category->addParameterDescription(Option::ALLOWED_INTERMOL_OVERLAP, "allowed intermolecular atom-overlap", ParamFile::DOUBLE, &allowed_values);
 
 	option_category->setDefaultReal(Option::ALLOWED_INTRAMOL_OVERLAP, Default::ALLOWED_INTRAMOL_OVERLAP);
-	option_category->addParameterDescription(Option::ALLOWED_INTRAMOL_OVERLAP, "allowed intramolecular atom-overlap", DOUBLE, &allowed_values);
+	option_category->addParameterDescription(Option::ALLOWED_INTRAMOL_OVERLAP, "allowed intramolecular atom-overlap", ParamFile::DOUBLE, &allowed_values);
 
 	option_category->setDefaultReal("electrostatic_cutoff", 20.0);
-	option_category->addParameterDescription("electrostatic_cutoff", "electrostatic cutoff", BALL::DOUBLE);
+	option_category->addParameterDescription("electrostatic_cutoff", "electrostatic cutoff", ParamFile::DOUBLE);
 
 	option_category->setDefaultReal("electrostatic_cuton", 17.000000);
-	option_category->addParameterDescription("electrostatic_cuton", "electrostatic cuton", BALL::DOUBLE);
+	option_category->addParameterDescription("electrostatic_cuton", "electrostatic cuton", ParamFile::DOUBLE);
 
 	option_category->setDefaultReal("vdw_cutoff", 20.000000);
-	option_category->addParameterDescription("vdw_cutoff", "vdw cutoff", BALL::DOUBLE);
+	option_category->addParameterDescription("vdw_cutoff", "vdw cutoff", ParamFile::DOUBLE);
 
 	option_category->setDefaultReal("vdw_cuton", 17.000000);
-	option_category->addParameterDescription("vdw_cuton", "vdw cuton", BALL::DOUBLE);
+	option_category->addParameterDescription("vdw_cuton", "vdw cuton", ParamFile::DOUBLE);
 
 	option_category->setDefault("filename", "Amber/amber96-docking.ini");
-	option_category->addParameterDescription("filename", "file with electrostatics and vdW parameters", INFILE);
+	option_category->addParameterDescription("filename", "file with electrostatics and vdW parameters", ParamFile::INFILE);
 }
 
 

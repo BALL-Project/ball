@@ -1,4 +1,4 @@
-/// -*- Mode: C++; tab-width: 2; -*-
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
 
@@ -130,7 +130,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 		// only parameters with a category (section) need their name to be deconstructed
 		if (!section.isEmpty())
 		{
-			Size n_elements = ParameterUtils::parseNestedParameterName(parameter_name, string_array);
+			Size n_elements = ParamFile::parseNestedParameterName(parameter_name, string_array);
 			// sanity check... in case the parameter is not properly formatted, write some warnings and just move on
 			if (n_elements != 2)
 			{
@@ -389,7 +389,7 @@ void ParamFile::readSection(String& tool_name, String& section_description, Stri
 				{
 					// we are reading a nested parameter and we need to format it like [section]:[parameter]
 					// unless we are handling the top section ("conveniently" named "1")
-					pd.name = ParameterUtils::buildNestedParameterName(current_section, pd.name);
+					pd.name = ParamFile::buildNestedParameterName(current_section, pd.name);
 				}
 
 				pd.description = attrs.value("description").toString().toStdString();
@@ -597,13 +597,13 @@ std::set<String> ParamFile::getTags(QXmlStreamAttributes& attributes)
 }
 
 
-String ParameterUtils::buildNestedParameterName(const String& category, const String& parameter_name)
+String ParamFile::buildNestedParameterName(const String& category, const String& parameter_name)
 {
 	return category + ":" + parameter_name;
 }
 
 
-Size ParameterUtils::parseNestedParameterName(const String& parameter_name, String string_array[])
+Size ParamFile::parseNestedParameterName(const String& parameter_name, String string_array[])
 {
 	return parameter_name.split(string_array, 2, ":");
 }

@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 	ScoringFunction::getDefaultOptions(default_options);
 	Options* scoring_options = default_options.getSubcategory(ScoringFunction::SUBCATEGORY_NAME);
 	scoring_options->setDefault("atom_types", "C, H, N, O, P, S, Cl, F, I");
-	scoring_options->addParameterDescription("atom_types", "elements for which grids should be precalculated", STRING);
+	scoring_options->addParameterDescription("atom_types", "elements for which grids should be precalculated", ParamFile::STRING);
 	parpars.registerAdvancedParameters(default_options);
 	parpars.setSupportedFormats(ScoringFunction::SUBCATEGORY_NAME, "filename", "ini");
 

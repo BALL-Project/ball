@@ -145,10 +145,10 @@ namespace BALL
 		//@{
 
 
-		void addParameterDescription(const String& key, String description, ParameterType type, list<String>* allowed_values = NULL);
+		void addParameterDescription(const String& key, String description, ParamFile::ParameterType type, list<String>* allowed_values = NULL);
 
 		/* Return the description that was registered for the parameter identified by the given key */
-		const ParameterDescription* getParameterDescription(const String& key) const;
+		const ParamFile::ParameterDescription* getParameterDescription(const String& key) const;
 
 		/** Create a new subcategory of options.
 		@return a pointer to the newly created subcategory. Note that the Options instance that represents the subcategory belongs to the parent object, so do not delete it manually. */
@@ -382,7 +382,7 @@ namespace BALL
 
 		/*_	The option table's name */
 		String		name_;
-		StringHashMap<ParameterDescription> descriptions_;
+		StringHashMap<ParamFile::ParameterDescription> descriptions_;
 		StringHashMap<Options*> subcategories_;
 	};
 } // namespace BALL

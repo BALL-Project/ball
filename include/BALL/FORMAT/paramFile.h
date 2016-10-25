@@ -1,17 +1,12 @@
-/// -*- Mode: C++; tab-width: 2; -*-
+// -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
 
 #ifndef BALL_FORMAT_PARAMFILE_H
 #define BALL_FORMAT_PARAMFILE_H
 
-#ifndef BALL_SYSTEM_FILE_H
-# include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
-#endif
+#include <BALL/SYSTEM/file.h>
+#include <BALL/DATATYPE/string.h>
 
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
@@ -24,85 +19,62 @@
 
 namespace BALL
 {
-	/*
-	 * 		BALL_PARAM_T_INFILE,
-		BALL_PARAM_T_OUTFILE,
-		BALL_PARAM_T_STRING,
-		BALL_PARAM_T_INT,
-		BALL_PARAM_T_DOUBLE,
-		BALL_PARAM_T_INFILELIST,
-		BALL_PARAM_T_OUTFILELIST,
-		BALL_PARAM_T_STRINGLIST,
-		BALL_PARAM_T_INTLIST,
-		BALL_PARAM_T_DOUBLELIST,
-		*/
-
-	enum BALL_EXPORT ParameterType
-	{
-		INFILE,
-		OUTFILE,
-		STRING,
-		INT,
-		DOUBLE,
-		INFILELIST,
-		OUTFILELIST,
-		STRINGLIST,
-		INTLIST,
-		DOUBLELIST,
-		//TODO: do we REALLY need these two openly galaxy specific parameter types?
-		//      couldn't we do it with tags or something more elegant?
-		GALAXY_OPT_OUTDIR,
-		GALAXY_OPT_OUTID
-	};
-
-	struct BALL_EXPORT ParameterDescription
-	{
-		// constructor
-		ParameterDescription()
-		{
-			name = "";
-			description = "";
-			category = "";
-			mandatory = false;
-			advanced = false;
-			type = INFILE;
-			allowed_values.clear();
-			supported_formats.clear();
-			hidden = false;
-		};
-
-		String name;
-		String description;
-		String category;
-		bool mandatory;
-		bool advanced;
-		ParameterType type;
-
-		/** If this list is empty, then there are no restrictions on the value of the parameter */
-		list<String> allowed_values;
-
-		/** In case of input-/output-files, this list should contain the supported file-extensions. \n
-		If the list is empty, no format restrictions are set. */
-		list<String> supported_formats;
-
-		// if parameters shall be hidden in galaxy
-		bool hidden;
-	};
-
-	class BALL_EXPORT ParameterUtils
-	{
-		public:
-			/** From category, parameter_name builds [category]:[parameter_name] */
-			static String buildNestedParameterName(const String& category, const String& parameter_name);
-
-			/** Returns [category, parameter] from [category]:[parameter] */
-			static Size parseNestedParameterName(const String& parameter_name, String string_array[]);
-	};
-
 	/** Class for storing and retrieving parameters (e.g. tool-parameters) to an xml-based file */
 	class BALL_EXPORT ParamFile : public File
 	{
 		public:
+
+			enum ParameterType
+			{
+				INFILE,
+				OUTFILE,
+				STRING,
+				INT,
+				DOUBLE,
+				INFILELIST,
+				OUTFILELIST,
+				STRINGLIST,
+				INTLIST,
+				DOUBLELIST,
+				//TODO: do we REALLY need these two openly galaxy specific parameter types?
+				//      couldn't we do it with tags or something more elegant?
+				GALAXY_OPT_OUTDIR,
+				GALAXY_OPT_OUTID
+			};
+
+			struct ParameterDescription
+			{
+				// constructor
+				ParameterDescription()
+				{
+					name = "";
+					description = "";
+					category = "";
+					mandatory = false;
+					advanced = false;
+					type = INFILE;
+					allowed_values.clear();
+					supported_formats.clear();
+					hidden = false;
+				}
+
+				String name;
+				String description;
+				String category;
+				bool mandatory;
+				bool advanced;
+				ParameterType type;
+
+				/** If this list is empty, then there are no restrictions on the value of the parameter */
+				list<String> allowed_values;
+
+				/** In case of input-/output-files, this list should contain the supported file-extensions. \n
+				If the list is empty, no format restrictions are set. */
+				list<String> supported_formats;
+
+				// if parameters shall be hidden in galaxy
+				bool hidden;
+			};
 
 			ParamFile(const String& name, File::OpenMode open_mode);
 			~ParamFile();
@@ -127,6 +99,12 @@ namespace BALL
 											 bool overwrite_existing=false);
 
 			void close();
+
+			/** From category, parameter_name builds [category]:[parameter_name] */
+			static String buildNestedParameterName(const String& category, const String& parameter_name);
+
+			/** Returns [category, parameter] from [category]:[parameter] */
+			static Size parseNestedParameterName(const String& parameter_name, String string_array[]);
 
 
 		protected:

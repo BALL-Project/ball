@@ -1,20 +1,13 @@
 #ifndef BALL_FORMAT_COMMANDLINEPARSER_H
 #define BALL_FORMAT_COMMANDLINEPARSER_H
 
-#ifndef BALL_DATATYPE_OPTIONS_H
-# include <BALL/DATATYPE/options.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_FORMAT_PARAMFILE_H
-# include <BALL/FORMAT/paramFile.h>
-#endif
+#include <BALL/DATATYPE/options.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/FORMAT/paramFile.h>
 
 #include <map>
 #include <set>
+
 
 namespace BALL
 {
@@ -170,11 +163,11 @@ namespace BALL
 
 		private:
 
-			void assertParamterTypeIsNotNumeric(ParameterType type);
+			void assertParamterTypeIsNotNumeric(ParamFile::ParameterType type);
 
 			void replaceEscapedCharacters_(String& parameter_value);
 
-			void checkAndRegisterParameter(String name, String description, ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
+			void checkAndRegisterParameter(String name, String description, ParamFile::ParameterType type, bool mandatory = false, String default_value = "", bool perform_check = true);
 
 			void checkAndRegisterFlag(String name, String description, bool default_gui_value = false, bool perform_check = true, bool hidden=false);
 
@@ -189,10 +182,10 @@ namespace BALL
 			/** map escaped characters to the original characters */
 			std::list<std::pair<String, String> > escaped_chars_;
 			std::map<String, list<String> > parameter_map_;
-			std::map<String, ParameterDescription> registered_parameters_;
+			std::map<String, ParamFile::ParameterDescription> registered_parameters_;
 
-			std::map<String, ParameterDescription> registered_flags_;
-			typedef std::map<String, ParameterDescription>::iterator MapIterator;
+			std::map<String, ParamFile::ParameterDescription> registered_flags_;
+			typedef std::map<String, ParamFile::ParameterDescription>::iterator MapIterator;
 			std::list<MapIterator> original_parameter_order_;
 			std::list<MapIterator> original_flag_order_;
 			Size max_parname_length_;
