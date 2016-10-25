@@ -16,7 +16,7 @@ using namespace std;
 int main(int argc, char* argv[])
 {
 	CommandlineParser parpars("SpatialConstraintDefiner", "define spatial constraint", VERSION, String(__DATE__), "Docking");
-	parpars.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input configuration file", INFILE);
+	parpars.registerOptionalInputFile(DockingAlgorithm::OPTION_FILE_PARAMETER_NAME, "input configuration file", ParamFile::INFILE);
 	parpars.registerMandatoryInputFile("i", "input molecule file");
 	parpars.registerMandatoryOutputFile("o", "output configuration file");
 	parpars.registerMandatoryStringParameter("type", "'fraction' or 'number' of compound atoms");

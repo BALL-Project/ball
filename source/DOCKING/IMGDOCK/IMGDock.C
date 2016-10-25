@@ -163,49 +163,49 @@ namespace BALL
 		list<String> allowed_values;
 		allowed_values.push_back("1");
 		allowed_values.push_back("90");
-		option_category->addParameterDescription(Option::STEP_WIDTH, "step-width (bond angle discretization)", BALL::INT, &allowed_values);
+		option_category->addParameterDescription(Option::STEP_WIDTH, "step-width (bond angle discretization)", ParamFile::INT, &allowed_values);
 
 		option_category->setDefaultInteger(Option::NO_SOLUTIONS, Default::NO_SOLUTIONS);
 		allowed_values.clear();
 		allowed_values.push_back("10");
 		allowed_values.push_back("1000");
-		option_category->addParameterDescription(Option::NO_SOLUTIONS, "num. multi-greedy solutions", BALL::INT, &allowed_values);
+		option_category->addParameterDescription(Option::NO_SOLUTIONS, "num. multi-greedy solutions", ParamFile::INT, &allowed_values);
 
 		option_category->setDefaultReal(Option::POST_OPTIMIZATION_STEP_WIDTH, Default::POST_OPTIMIZATION_STEP_WIDTH);
 		allowed_values.clear();
 		allowed_values.push_back("0.1");
 		allowed_values.push_back("2");
-		option_category->addParameterDescription(Option::POST_OPTIMIZATION_STEP_WIDTH, "translation opt. step-width", BALL::DOUBLE, &allowed_values);
+		option_category->addParameterDescription(Option::POST_OPTIMIZATION_STEP_WIDTH, "translation opt. step-width", ParamFile::DOUBLE, &allowed_values);
 
 		option_category->setDefaultInteger(Option::POST_OPTIMIZATION_STEPS, Default::POST_OPTIMIZATION_STEPS);
 		allowed_values.clear();
 		allowed_values.push_back("0");
 		allowed_values.push_back("10");
-		option_category->addParameterDescription(Option::POST_OPTIMIZATION_STEPS, "max. translation opt. steps", BALL::INT, &allowed_values);
+		option_category->addParameterDescription(Option::POST_OPTIMIZATION_STEPS, "max. translation opt. steps", ParamFile::INT, &allowed_values);
 
 		option_category->setDefaultInteger(Option::MIN_INHIBITOR_ATOMS, Default::MIN_INHIBITOR_ATOMS);
 		allowed_values.clear();
 		allowed_values.push_back("0");
 		allowed_values.push_back("100");
-		option_category->addParameterDescription(Option::MIN_INHIBITOR_ATOMS, "min. atoms in ref. lig. area", BALL::INT, &allowed_values);
+		option_category->addParameterDescription(Option::MIN_INHIBITOR_ATOMS, "min. atoms in ref. lig. area", ParamFile::INT, &allowed_values);
 
 		option_category->setDefaultInteger(Option::ITERATIONS, Default::ITERATIONS);
 		allowed_values.clear();
 		allowed_values.push_back("1");
 		allowed_values.push_back("20");
-		option_category->addParameterDescription(Option::ITERATIONS, "max. IMG iterations", BALL::INT, &allowed_values);
+		option_category->addParameterDescription(Option::ITERATIONS, "max. IMG iterations", ParamFile::INT, &allowed_values);
 
 		option_category->setDefaultBool(Option::DECREASE_STEPWIDTH, Default::DECREASE_STEPWIDTH);
 		allowed_values.clear();
 		allowed_values.push_back("true");
 		allowed_values.push_back("false");
-		option_category->addParameterDescription(Option::DECREASE_STEPWIDTH, "decrease step-width in each iterations", BALL::STRING, &allowed_values);
+		option_category->addParameterDescription(Option::DECREASE_STEPWIDTH, "decrease step-width in each iterations", ParamFile::STRING, &allowed_values);
 
 		option_category->setDefaultBool(Option::SUPERPOSE_LIGAND, Default::SUPERPOSE_LIGAND);
-		option_category->addParameterDescription(Option::SUPERPOSE_LIGAND, "superpose ligands with ref.-ligand", BALL::STRING, &allowed_values);
+		option_category->addParameterDescription(Option::SUPERPOSE_LIGAND, "superpose ligands with ref.-ligand", ParamFile::STRING, &allowed_values);
 
 		option_category->setDefaultBool("output_failed_dockings", false);
-		option_category->addParameterDescription("output_failed_dockings", "output erroneous molecules", BALL::STRING, &allowed_values);
+		option_category->addParameterDescription("output_failed_dockings", "output erroneous molecules", ParamFile::STRING, &allowed_values);
 	}
 
 

@@ -41,9 +41,9 @@ namespace BALL
 		clear();
 	}
 
-	void Options::addParameterDescription(const String& key, String description, ParameterType type, list<String>* allowed_values)
+	void Options::addParameterDescription(const String& key, String description, ParamFile::ParameterType type, list<String>* allowed_values)
 	{
-		ParameterDescription td;
+		ParamFile::ParameterDescription td;
 		td.name = key;
 		td.description = description;
 		td.type = type;
@@ -51,9 +51,9 @@ namespace BALL
 		descriptions_.insert(make_pair(key, td));
 	}
 
-	const ParameterDescription* Options::getParameterDescription(const String& key) const
+	const ParamFile::ParameterDescription* Options::getParameterDescription(const String& key) const
 	{
-		StringHashMap<ParameterDescription>::ConstIterator it = descriptions_.find(key);
+		StringHashMap<ParamFile::ParameterDescription>::ConstIterator it = descriptions_.find(key);
 
 		if (it == descriptions_.end())
 		{
