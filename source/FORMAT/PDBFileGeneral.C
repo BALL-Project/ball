@@ -59,8 +59,8 @@ namespace BALL
 		:	GenericMolFile(),
 			residue_name_(""),
 			residue_sequence_number_(-1),
-			current_model_(INVALID_INDEX),
-			current_record_(INVALID_INDEX),
+			current_model_(INVALID_Index),
+			current_record_(INVALID_Index),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
 			alternate_location_indicator_('A'),
@@ -94,8 +94,8 @@ namespace BALL
 			options(new_options),
 			residue_name_(""),
 			residue_sequence_number_(-1),
-			current_model_(INVALID_INDEX),
-			current_record_(INVALID_INDEX),
+			current_model_(INVALID_Index),
+			current_record_(INVALID_Index),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
 
@@ -129,8 +129,8 @@ namespace BALL
 		:	GenericMolFile(),
 			residue_name_(""),
 			residue_sequence_number_(-1),
-			current_model_(INVALID_INDEX),
-			current_record_(INVALID_INDEX),
+			current_model_(INVALID_Index),
+			current_record_(INVALID_Index),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN),
 			alternate_location_indicator_('A'),
@@ -699,8 +699,8 @@ namespace BALL
 
 	void PDBFile::clear()
 	{
-		current_model_ = INVALID_INDEX;
-		current_record_ = INVALID_INDEX;
+		current_model_ = INVALID_Index;
+		current_record_ = INVALID_Index;
 		record_fields_ = 0;
 		PDB_atom_map_.clear();
 		residue_map_.clear();

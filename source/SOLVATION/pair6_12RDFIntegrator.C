@@ -285,7 +285,7 @@ namespace BALL
 			Size from_index = poly.getIntervalIndex(FROM);
 			Size to_index = poly.getIntervalIndex(TO);
 
-			if ((from_index == INVALID_POSITION) || (to_index == INVALID_POSITION))
+			if ((from_index == INVALID_Position) || (to_index == INVALID_Position))
 			{
 				// no error message, because getIntervalIndex() handles this
 				return 0.0;

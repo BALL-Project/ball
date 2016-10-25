@@ -253,7 +253,7 @@ namespace BALL
 		Size countDescendants() const ;
 
 		/** Get the length of the path between two composite objects.
-				If no path exists <tt>INVALID_SIZE</tt> is returned.
+				If no path exists <tt>INVALID_Size</tt> is returned.
 				@param composite the second object
 				@return Size the size of the path
 		*/

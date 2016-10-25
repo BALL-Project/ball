@@ -308,7 +308,7 @@ CHECK(Size getSectionLength(const String& section_name) const)
   TEST_EQUAL(ini.getSectionLength("Section2"), 3)
   TEST_EQUAL(ini.getSectionLength("Section3"), 5)
   TEST_EQUAL(ini.getSectionLength("Section4"), 1)
-  TEST_EQUAL(ini.getSectionLength("Section5"), INVALID_SIZE)
+  TEST_EQUAL(ini.getSectionLength("Section5"), INVALID_Size)
 
 	INIFile emptyFile;
   TEST_EQUAL(+emptyFile.getSectionLength(ini.HEADER), 0)

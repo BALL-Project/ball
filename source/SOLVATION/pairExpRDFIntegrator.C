@@ -124,7 +124,7 @@ namespace BALL
 		FROM = project(from);
 
 		Size k = poly.getIntervalIndex(FROM);
-		if (k == INVALID_POSITION)
+		if (k == INVALID_Position)
 		{
 			// no error message, because getIntervalIndex() handles this
 			return 0.0;

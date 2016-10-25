@@ -43,12 +43,12 @@ namespace BALL
 			return;
 
 		// replace "\" by "/"
-		for (index = 0; index != INVALID_INDEX; index = path.substitute("\\", "/")) { }
+		for (index = 0; index != INVALID_Index; index = path.substitute("\\", "/")) { }
 #endif
 
 		// replace all double occurences of a / with a single /
 		String s("//");
-		for (index = 0; index != INVALID_INDEX; index = path.substitute(s, "/")) { }
+		for (index = 0; index != INVALID_Index; index = path.substitute(s, "/")) { }
 		
 		// expand ~ to the user's home directory
 		FileSystem::expandTilde_(path);
@@ -57,7 +57,7 @@ namespace BALL
 		s = "/";
 		s += FileSystem::CURRENT_DIRECTORY;
 		s += "/";
-		for (index = 0; index != INVALID_INDEX;
+		for (index = 0; index != INVALID_Index;
 				 index = path.substitute(s, "/")) { }
 
 		// remove a leading "./"
@@ -143,7 +143,7 @@ namespace BALL
 				}
 			}
 		}
-		else if (index == INVALID_INDEX)
+		else if (index == INVALID_Index)
 		{
 			index = (Index)path.size() - 1;
 		}

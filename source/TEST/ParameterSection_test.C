@@ -131,7 +131,7 @@ RESULT
 
 CHECK(ParameterSection::getColumnIndex(const String& variable) const )
 	TEST_EQUAL(ps.getColumnIndex("val"), 0)
-	TEST_EQUAL(ps.getColumnIndex("X"), INVALID_POSITION)
+	TEST_EQUAL(ps.getColumnIndex("X"), INVALID_Position)
 RESULT
 
 

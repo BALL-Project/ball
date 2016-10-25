@@ -650,7 +650,7 @@ namespace BALL
 	bool PDBFile::interpretRecord(const PDB::RecordENDMDL& /* record */)
 	{
 		// We are now outside a model...
-		current_model_ = INVALID_INDEX;
+		current_model_ = INVALID_Index;
 		return true;
 	}
 																												
