@@ -466,12 +466,12 @@ namespace BALL
 				} 
 				else 
 				{
-					Index next_child = INVALID_INDEX;
+					Index next_child = INVALID_Index;
 
 					do 
 					{
 						next_child = pop();
-						if (next_child == INVALID_INDEX)
+						if (next_child == INVALID_Index)
 						{
 							position_ = 0;
 							return;
@@ -521,7 +521,7 @@ namespace BALL
 			{
 				if (stack_size_ == 0)
 				{
-					return INVALID_INDEX;
+					return INVALID_Index;
 				}
 				else 
 				{

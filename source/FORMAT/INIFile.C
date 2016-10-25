@@ -425,7 +425,7 @@ namespace BALL
 	{
 		if (!section_index_.has(section_name))
 		{
-			return INVALID_SIZE;
+			return INVALID_Size;
 		}
 
 		return (Size)section_index_[section_name]->lines_.size();

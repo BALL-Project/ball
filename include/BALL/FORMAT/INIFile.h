@@ -309,7 +309,7 @@ namespace BALL
 		/**	Returns the number of lines in a section.
 				@return	Size
 					- the number of lines, or 
-					- INVALID_SIZE if the section could not be found
+					- INVALID_Size if the section could not be found
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLength(const String& section_name) const;

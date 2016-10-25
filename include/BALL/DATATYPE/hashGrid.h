@@ -1543,9 +1543,9 @@ namespace BALL
 	{
 		Index index = getIndex_(box);
 		
-		if (index == INVALID_INDEX)
+		if (index == INVALID_Index)
 		{
-			x = y = z = INVALID_POSITION;
+			x = y = z = INVALID_Position;
 			
 			return false;
 		}
@@ -1769,7 +1769,7 @@ namespace BALL
 	{
 		if ((&box < &box_[0]) || (&box - &box_[0]  >= getSize()))
 		{
-			return INVALID_INDEX;
+			return INVALID_Index;
 		} 
 		else 
 		{

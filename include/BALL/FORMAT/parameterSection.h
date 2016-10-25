@@ -127,7 +127,7 @@ namespace BALL
 		bool hasVariable(const String& variable) const ;
 
 		/**	Return the column index of a variable.
-				If section doesn't have the variable, INVALID_POSITION
+				If section doesn't have the variable, INVALID_Position
 				is returned.
 		*/
 		Position getColumnIndex(const String& variable) const ;

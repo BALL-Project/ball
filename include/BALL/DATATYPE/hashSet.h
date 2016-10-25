@@ -154,7 +154,7 @@ namespace BALL
 			{
 				bound_ = 0;
 				position_ = 0;
-				bucket_ = INVALID_POSITION;
+				bucket_ = INVALID_Position;
 			}
 			
 			void toBegin()

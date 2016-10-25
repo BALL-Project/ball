@@ -164,7 +164,7 @@ namespace BALL
 		}
 		
 		// no path from *this to composite exists
-		return INVALID_SIZE;
+		return INVALID_Size;
 	}
 
 	Size Composite::getDepth() const
@@ -1546,31 +1546,31 @@ namespace BALL
 		s << "  parent: "
 			<< ((parent_) 
 					? parent_->getHandle() 
-					: (INVALID_HANDLE)) << endl;
+					: (INVALID_Handle)) << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  first: "
 				 << ((first_child_)
 			 ? first_child_->getHandle()
-			 : INVALID_HANDLE) << endl;
+			 : INVALID_Handle) << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  last: "
 				 << ((last_child_)
 			 ? last_child_->getHandle()
-			 : INVALID_HANDLE) << endl;
+			 : INVALID_Handle) << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  previous: "
 				 << ((previous_)
 			 ? previous_->getHandle()
-			 : INVALID_HANDLE) << endl;
+			 : INVALID_Handle) << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  next: "
 				 << ((next_)
 			 ? next_->getHandle()
-			 : INVALID_HANDLE) << endl;
+			 : INVALID_Handle) << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  number of children:" << number_of_children_ << endl;
@@ -1594,11 +1594,11 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    [" << ((composite_ptr->previous_) 
 											 ? composite_ptr->previous_->getHandle() 
-											 : INVALID_HANDLE) << "] <- "
+											 : INVALID_Handle) << "] <- "
 				<< "[" << composite_ptr->getHandle() << "] -> "
 				<< "[" << ((composite_ptr->next_) 
 									 ? composite_ptr->next_->getHandle() 
-									 : INVALID_HANDLE) << "]" << endl;
+									 : INVALID_Handle) << "]" << endl;
 			
 			composite_ptr->dump(s, depth + 1);
 		}

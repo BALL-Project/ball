@@ -84,7 +84,7 @@ namespace BALL
 		}
 		else 
 		{
-			return INVALID_POSITION;
+			return INVALID_Position;
 		}
 	}
 
@@ -111,7 +111,7 @@ namespace BALL
 		if (hasRDF(type_i, type_j))
 		{
 			Position index = getIndex(type_i, type_j);
-			if (index != INVALID_POSITION)
+			if (index != INVALID_Position)
 			{
 				return getRDF(index);
 			}

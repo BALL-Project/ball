@@ -405,7 +405,7 @@ namespace BALL
 			return variable_names_[variable];
 		}
  
-		return INVALID_POSITION;
+		return INVALID_Position;
 	}
 
 	const ParameterSection& ParameterSection::operator = 
