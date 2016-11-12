@@ -1,0 +1,110 @@
+language: cpp
+
+# Activate ccache.
+# This setting adjusts PATH automatically, so CMake will use it.
+cache: ccache
+
+# Precise is too old for Qt5 applications, so request a trusty image.
+dist: trusty
+
+# While sudo commands are not used during the build, not all packages
+# are yet (2016/11) on the whitelist for container-based trusty images.
+#
+# Once all packages listed below are on the whitelist, consider
+# changing this to "false" for speedups.
+sudo: required
+
+# Install dependencies using the addons.apt.packages syntax.
+# This syntax will also work for container-based images, as soon as all
+# packages are on the whitelist.
+#
+# The dependency list is mainly inspired by the Debian packaging of ball.
+addons:
+    apt:
+        packages:
+            - build-essential
+            - debhelper
+            - dh-python
+            - cmake
+            - flex
+            - bison
+            - python-dev
+            - python-sip-dev
+            - libfftw3-dev
+            - libeigen3-dev
+            - libgsl0-dev
+            - libxrender-dev
+            - libxmu-dev
+            - libglew-dev
+            - libx11-dev
+            - tidy
+            - chrpath
+            - qtbase5-dev
+            - qttools5-dev
+            - qttools5-dev-tools
+            - libqt5opengl5-dev
+              # Remove boost 1.54
+            - libboost-all-dev-
+              # And install 1.55 instead
+            - libboost1.55-all-dev
+              # Also enable building the docs
+            - doxygen
+            - graphviz
+            - ghostscript
+            - texlive-latex-base
+            - texlive-latex-recommended
+            - texlive-latex-extra
+              # latex-xcolor is only *recommended* by
+              # texlive-latex-recommended and thus must be
+              # installed explicitly.
+            - latex-xcolor
+              # Same for texlive-fonts-recommended
+            - texlive-fonts-recommended
+
+# Dependency installation and compilation step.
+#
+# If this fails, the build will be marked as 'errored'.
+install:
+      # set ball data path while we're at the source
+      # toplevel directory.  The unit tests will later
+      # need this variable.
+    - export BALL_DATA_PATH=$(pwd)/data
+      # create build/ folder
+    - mkdir build
+    - cd build
+      # Configure the software with CMake
+      #
+      # TODO: QtWebEngine is not yet packaged in Debian/Ubuntu,
+      # so we cannot build using it.  Change this flag once
+      # it is packaged.
+      #
+      # see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=832420
+    - cmake .. -DUSE_QTWEBENGINE=OFF
+      # Now build all the targets, including installation, which pulls
+      # in the tool binaries.
+    - make -j2   BALL  VIEW  BALLView  doc_dot  doc_tutorial  build_tests
+        install DESTDIR=/tmp/target/
+
+# Execute the unittests as the main job.
+#
+# If this fails, the build will be marked as 'failed'.
+script:
+    - ctest --output-on-failure
+
+# Show ccache effectiveness after running the unittests
+after_script:
+    - ccache -s
+
+# If the build succeeded, pack up the generated files
+# and print the total size.
+#
+# In the future, this could be uploaded somewhere™ to
+# act as a reference compile and speed up binary bisecting.
+after_success:
+    - REVISION=$(git rev-parse --short HEAD)
+    - tar --create --auto-compress --owner root --group root
+      --file /tmp/ball-$REVISION.tar.bz2
+      --directory /tmp/target ./
+      # Replace this ls by an upload, once a destination
+      # is available.
+    - ls -lh /tmp/ball-$REVISION.tar.bz2
