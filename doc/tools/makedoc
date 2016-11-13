@@ -128,8 +128,8 @@ build_tex_docu ()
 	
 	$DOCPP_PATH $DOCPP_TEX_OPTIONS $BALL_PATH/doc/tex/BALL.tex $BALL_PATH/include/BALL/BALL.doc\
 	&& cd $BALL_PATH/doc/tex/\
-	&& latex BALL\
-	&& latex BALL\
+	&& latex -interaction=nonstopmode BALL\
+	&& latex -interaction=nonstopmode BALL\
 	&& dvipdf BALL.dvi\
 	&& mv BALL.pdf ..
 }
