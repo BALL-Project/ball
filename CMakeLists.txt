@@ -23,7 +23,7 @@ SET(BALL_PACKAGE_VERSION_PATCH "79")
 # Quick manual for most commands:     https://cmake.org/cmake/help/v2.8.12/cmake.html
 # Useful predefined CMake variables:  https://cmake.org/Wiki/CMake_Useful_Variables
 
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
