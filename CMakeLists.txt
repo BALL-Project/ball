@@ -253,6 +253,7 @@ IF (USE_MPI)
 ENDIF()
 
 ## VIEW related options/settings/libraries
+SET(UPDATE_TRANSLATIONS OFF CACHE BOOL "If enabled, translations are update")
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
 ## QT
@@ -281,6 +282,11 @@ IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt5Test)
 	FIND_PACKAGE(Qt5OpenGL)
 	FIND_PACKAGE(Qt5PrintSupport)
+	FIND_PACKAGE(Qt5LinguistTools)
+
+	IF(NOT Qt5LinguistTools_FOUND)
+		MESSAGE(WARNING "Qt5LinguistTools not found: BALLView translations can not be created and compiled.")
+	ENDIF()
 
 	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
 
