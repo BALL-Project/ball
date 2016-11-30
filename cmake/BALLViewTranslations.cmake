@@ -1,48 +1,38 @@
-SET(LANGUAGES
-	de_DE
-	zh_TW
-)
+IF(NOT Qt5LinguistTools_FOUND)
+	RETURN (0)
+ENDIF()
 
-SET(LUPDATE_OPTIONS 
-	-extensions C,ui,c,c++,cc,cpp,cxx,ch,h,h++,hh,hpp,hxx -source-language en_US
-)
 
+# Collect TS files from translations directory
 SET(TRANSLATION_DIR ${CMAKE_SOURCE_DIR}/data/BALLView/translations/)
+FILE(GLOB PROJECT_TS_FILES "${TRANSLATION_DIR}/*.ts")
 
-SET(TRANSLATION_SEARCH_DIRS
-	${CMAKE_SOURCE_DIR}/source
-)
+IF(UPDATE_TRANSLATIONS)
 
-SET(LUPDATE_INLUDE_PATHS
-	-I ${CMAKE_SOURCE_DIR}/include/
-)
-
-SET(TRANSLATIONS)
-SET(COMPILED_TRANSLATIONS)
-
-FOREACH(i ${LANGUAGES})
-	FILE(TO_CMAKE_PATH "${TRANSLATION_DIR}/BALLView.${i}.ts" __TS_TMP_FILE )
-	FILE(TO_CMAKE_PATH "${TRANSLATION_DIR}/BALLView.${i}.qm" __QM_TMP_FILE )
-	SET(__TRANS_NAME "translation_${i}")
-
-	LIST(APPEND TRANSLATIONS ${__TRANS_NAME})
-	LIST(APPEND COMPILED_TRANSLATIONS ${__QM_TMP_FILE})
-
-	ADD_CUSTOM_TARGET(
-		${__TRANS_NAME}
-		COMMAND ${QT_LUPDATE_EXECUTABLE} ${LUPDATE_INLUDE_PATHS} ${LUPDATE_OPTIONS} -target-language ${i} ${TRANSLATION_SEARCH_DIRS} -ts "${__TS_TMP_FILE}"
+	# Update and compile translations
+	QT5_CREATE_TRANSLATION(PROJECT_QM_FILES
+		"${CMAKE_SOURCE_DIR}/source"
+		${PROJECT_TS_FILES}
+		OPTIONS -I "${CMAKE_SOURCE_DIR}/include"
+		-extensions C,ui,c,c++,cc,cpp,cxx,ch,h,h++,hh,hpp,hxx
+		-source-language en_US
 	)
 
-	ADD_CUSTOM_COMMAND(
-		OUTPUT ${__QM_TMP_FILE}
-		COMMAND ${QT_LRELEASE_EXECUTABLE} ${__TS_TMP_FILE}
-		WORKING_DIRECTORY ${TRANSLATION_DIR}
-		DEPENDS "${__TS_TMP_FILE}"
+ELSE()
+
+	# Compile translations
+	QT5_ADD_TRANSLATION(PROJECT_QM_FILES
+		${PROJECT_TS_FILES}
 	)
+
+ENDIF()
+
+# Add a custom target to create and/or compile translations
+ADD_CUSTOM_TARGET(translations DEPENDS ${PROJECT_QM_FILES})
+
+# Copy compiled .qm files into translations directory
+FOREACH(PROJECT_QM_FILE ${PROJECT_QM_FILES})
+	ADD_CUSTOM_COMMAND(TARGET translations
+			COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_QM_FILE} ${TRANSLATION_DIR}
+		)
 ENDFOREACH()
-
-ADD_CUSTOM_TARGET(update_translations)
-ADD_DEPENDENCIES(update_translations ${TRANSLATIONS})
-
-ADD_CUSTOM_TARGET(compile_translations DEPENDS ${COMPILED_TRANSLATIONS})
-#ADD_DEPENDENCIES(BALLView compile_translations)
