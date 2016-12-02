@@ -472,8 +472,8 @@ void Spectrum<RegularData1D, Peak1D>::computeAllMoments(int moment_number)
 
 template <>
 BALL_INLINE
-void Spectrum<RegularData2D, Peak2D>::computeAllMoments(int  moment_number) 
-{	
+void Spectrum<RegularData2D, Peak2D>::computeAllMoments(int  /* moment_number */)
+{
 /*	// for a negative or equal zero moment we return 0.
 	if (moment_number < 0)
 		Log.info() << "Tried to compute a negative moment!" << std::endl;	
