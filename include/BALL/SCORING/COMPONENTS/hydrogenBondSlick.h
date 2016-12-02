@@ -157,7 +157,7 @@ namespace BALL
 		*/
 		//@{
 
-		void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
+		void update(const vector<std::pair<Atom*, Atom*> >& /* pair_vector */);
 
 		/**
 		 * Calculates and returns the component's energy.
