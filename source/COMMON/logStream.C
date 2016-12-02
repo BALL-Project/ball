@@ -24,9 +24,6 @@
 
 namespace BALL 
 {
-	// at this point, it is not yet possible to
-	// include BALL/COMMON/limits.h (which were a 
-	// much nicer solution...). Ugly header dependencies...
 	const int LogStreamBuf::MIN_LEVEL = std::numeric_limits<int>::min();
 	const int LogStreamBuf::MAX_LEVEL = std::numeric_limits<int>::max();
 	const Time LogStreamBuf::MAX_TIME = std::numeric_limits<Time>::max();

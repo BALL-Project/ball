@@ -118,7 +118,6 @@
 #cmakedefine BALL_HAS_UNISTD_H
 #cmakedefine BALL_HAS_PROCESS_H
 #cmakedefine BALL_HAS_TIME_H
-#cmakedefine BALL_HAS_LIMITS_H
 #cmakedefine BALL_HAS_DIRENT_H
 #cmakedefine BALL_HAS_DIRECT_H
 #cmakedefine BALL_HAS_PWD_H
@@ -135,9 +134,6 @@
 
 // Define whether float.h has to be included along with limits.h
 #cmakedefine BALL_HAS_FLOAT_H 
-
-// Define if numeric_limits is defined in <limits>
-#cmakedefine BALL_HAS_NUMERIC_LIMITS
 
 #cmakedefine BALL_HAS_REGEX_H
 
