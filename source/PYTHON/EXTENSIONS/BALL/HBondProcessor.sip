@@ -80,9 +80,6 @@
   sipRes = sipCpp->operator () (*a0);
 %End
 		
-  // vector<HBondProcessor::HBond> getHBonds() const;
-	// std::vector< std::vector<Position> > getBackboneHBondPairs();
-	
 		void setDefaultOptions();
 
 		Options options;

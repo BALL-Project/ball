@@ -644,11 +644,6 @@ namespace BALL
 		return s << p.pos_C << " " << p.pos_N << " " << p.pos_H << " " << p.pos_O << " " << p.number << std::endl;
 	}
 
-	const std::vector< std::vector<Position> >& HBondProcessor::getBackboneHBondPairs() const
-	{
-		return backbone_h_bond_pairs_;
-	}
-
 	const std::vector< std::vector<Position> >& HBondProcessor::getBackboneHBondPattern() const
 	{
 		return backbone_h_bond_pairs_;
