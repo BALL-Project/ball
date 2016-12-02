@@ -35,9 +35,9 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 
 	foreach(QString str, dpaths) {
 		QDir dir(str + "BALLView/translations");
-		QStringList tList = dir.entryList(QStringList("BALLView.*.qm"));
+		QStringList tList = dir.entryList(QStringList("BALLView-*.qm"));
 		foreach(QString entry, tList) {
-			entry.replace("BALLView.", "");
+			entry.replace("BALLView-", "");
 			entry.replace(".qm", "");
 			languageComboBox_->addItem(entry);
 		}
