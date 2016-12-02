@@ -331,7 +331,7 @@ namespace BALL
 				 *  by the {\tt operator () } given __not__ the property-value, but the property name. 
 				 *  
 				 */
-				ShiftHyperSurface_(String filename, String atomtype, 
+				ShiftHyperSurface_(String filename, String /* atomtype */,
 													 String firstproperty, String secondproperty, 
 													 int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL)
 					throw(Exception::FileNotFound);  

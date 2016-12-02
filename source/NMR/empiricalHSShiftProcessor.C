@@ -1569,8 +1569,8 @@ namespace BALL
 	{
 	}
 	
-	EmpiricalHSShiftProcessor::ShiftHyperSurface_::ShiftHyperSurface_(String filename, String atomtype, 
-																																		String firstproperty, String secondproperty, int verbosity)
+	EmpiricalHSShiftProcessor::ShiftHyperSurface_::ShiftHyperSurface_(String filename, String /* atomtype */,
+		String firstproperty, String secondproperty, int verbosity)
 		throw(Exception::FileNotFound)
 		:	type_(),
 			first_property_(),
