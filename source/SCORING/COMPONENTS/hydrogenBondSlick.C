@@ -216,7 +216,7 @@ namespace BALL
 	}
 
 
-	void HydrogenBondSlick::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+	void HydrogenBondSlick::update(const vector<std::pair<Atom*, Atom*> >& /* pair_vector */)
 	{
 	}
 
