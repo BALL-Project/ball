@@ -320,12 +320,6 @@ namespace BALL
 	}
 
 
-	Size TriangulatedSurface::numberOfPoints() const
-		
-	{
-		return number_of_points_;
-	}
-
 	Size TriangulatedSurface::getNumberOfPoints() const
 		
 	{
@@ -333,22 +327,10 @@ namespace BALL
 	}
 
 
-	Size TriangulatedSurface::numberOfEdges() const
-		
-	{
-		return number_of_edges_;
-	}
-
 	Size TriangulatedSurface::getNumberOfEdges() const
 		
 	{
 		return number_of_edges_;
-	}
-
-	Size TriangulatedSurface::numberOfTriangles() const
-		
-	{
-		return number_of_triangles_;
 	}
 
 	Size TriangulatedSurface::getNumberOfTriangles() const
