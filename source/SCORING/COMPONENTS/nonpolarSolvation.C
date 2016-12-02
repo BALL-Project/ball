@@ -373,7 +373,7 @@ namespace BALL
 	}
 
 
-	void NonpolarSolvation::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+	void NonpolarSolvation::update(const vector<std::pair<Atom*, Atom*> >& /* pair_vector */)
 	{
 	}
 
