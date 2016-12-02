@@ -230,7 +230,7 @@ namespace BALL
 			else
 				normalized_view = Vector3(0.,0.,-1.);
 
-			Vector2 result(FLT_MAX, FLT_MAX); 
+			Vector2 result(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
 
 			float projection_on_view = normalized_view * point;
 			if (projection_on_view <= 0)

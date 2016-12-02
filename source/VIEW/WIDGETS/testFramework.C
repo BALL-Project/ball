@@ -55,7 +55,7 @@ TestFramework::TestFramework(QWidget *parent, const char *name)
 		errors_(0),
 		last_event_(0),
 		is_command_line_(false),
-		max_run_time_(FLT_MAX)
+		max_run_time_(std::numeric_limits<float>::max())
 {
  	hide();
  	default_visible_ = false;
@@ -476,7 +476,7 @@ void TestFramework::setFilename(const String& filename)
 void TestFramework::timeOut()
 {
 	if (is_command_line_ && 
-			max_run_time_ != FLT_MAX &&
+			max_run_time_ != std::numeric_limits<float>::max() &&
 			runtime_.getClockTime() > max_run_time_)
 	{
 		abortTest();

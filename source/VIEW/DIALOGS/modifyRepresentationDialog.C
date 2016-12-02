@@ -250,8 +250,8 @@ namespace BALL
 				}
 				catch(...)
 				{
-					min_value = FLT_MAX;
-					max_value = FLT_MIN;
+					min_value = std::numeric_limits<float>::max();
+					max_value = std::numeric_limits<float>::min();
 					error = true;
 				}
 
