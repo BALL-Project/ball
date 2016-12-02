@@ -103,15 +103,6 @@ namespace BALL
 
 		/**
 		 * Assign the TQuaternion components.
-		 * @param axis the new axis component
-		 * @param angle the new angle component
-		 * @deprecated use TQuaternion::fromAxisAngle() instead
-		 */
-		BALL_DEPRECATED
-		void set(const TVector3<T>& axis, const T& angle);
-
-		/**
-		 * Assign the TQuaternion components.
 		 * @param w assigned to the angular component w
 		 * @param i assigned to the vector component i
 		 * @param j assigned to the vector component j
@@ -349,13 +340,6 @@ namespace BALL
 	void TQuaternion<T>::set(const boost::math::quaternion<T>& q)
 	{
 		boost::math::quaternion<T>::operator= (q);
-	}
-
-	template <typename T>
-	BALL_INLINE
-	void TQuaternion<T>::set(const TVector3<T>& axis, const T& angle)
-	{
-		fromAxisAngle(axis, angle);
 	}
 
 	template <typename T>
