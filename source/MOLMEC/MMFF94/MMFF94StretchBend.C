@@ -1076,8 +1076,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 		const Position e1 = atom1.getElement().getAtomicNumber();
 		const Position e2 = atom2.getElement().getAtomicNumber();
 
-		const Position t1 = atom1.getType();
-		const Position t2 = atom2.getType();
+		const Atom::Type t1 = atom1.getType();
+		const Atom::Type t2 = atom2.getType();
 
 		if(t1 == BALL_ATOM_DEFAULT_TYPE || t2 == BALL_ATOM_DEFAULT_TYPE) {
 			return -1.0;
