@@ -174,11 +174,11 @@ double Polarity::updateScore()
 		int y_size = (int)hashgrid->getSizeY();
 		int z_size = (int)hashgrid->getSizeZ();
 
-		for (; i <= pos_x+radius && i < x_size; i++)
+		for (; i <= ((int)pos_x)+radius && i < x_size; i++)
 		{
-			for (int j = j0; j <= pos_y+radius && j < y_size; j++)
+			for (int j = j0; j <= ((int)pos_y)+radius && j < y_size; j++)
 			{
-				for (int k = k0; k <= pos_z+radius && k < z_size; k++)
+				for (int k = k0; k <= ((int)pos_z)+radius && k < z_size; k++)
 				{
 					const HashGridBox3<Atom*>* box = hashgrid->getBox(i, j, k);
 					if (!box->isEmpty())
