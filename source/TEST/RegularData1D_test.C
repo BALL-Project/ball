@@ -8,7 +8,6 @@
 ///////////////////////////
 
 #include <BALL/DATATYPE/regularData1D.h>
-#include <BALL/COMMON/limits.h>
 
 ///////////////////////////
 

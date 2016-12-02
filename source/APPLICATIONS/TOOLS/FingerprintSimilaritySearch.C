@@ -3,7 +3,6 @@
 //
 
 
-#include <BALL/COMMON/limits.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/lineBasedFile.h>

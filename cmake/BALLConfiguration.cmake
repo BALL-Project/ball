@@ -97,7 +97,6 @@ INCLUDE(cmake/BALLConfigTypes.cmake)
 CHECK_INCLUDE_FILE_CXX("unistd.h"  BALL_HAS_UNISTD_H)
 CHECK_INCLUDE_FILE_CXX("process.h" BALL_HAS_PROCESS_H)
 CHECK_INCLUDE_FILE_CXX("time.h"    BALL_HAS_TIME_H)
-CHECK_INCLUDE_FILE_CXX("limits.h"  BALL_HAS_LIMITS_H)
 CHECK_INCLUDE_FILE_CXX("dirent.h"  BALL_HAS_DIRENT_H)
 CHECK_INCLUDE_FILE_CXX("direct.h"  BALL_HAS_DIRECT_H)
 CHECK_INCLUDE_FILE_CXX("pwd.h"     BALL_HAS_PWD_H)
@@ -121,15 +120,6 @@ IF (NOT BALL_FLT_MIN_IN_LIMITS_H)
 		MESSAGE(SEND_ERROR "limits.h seems to be corrupt or float.h is missing!")
 	ENDIF()
 ENDIF()
-
-## Can we use numeric_limits<>?
-CHECK_CXX_SOURCE_COMPILES("#include <limits>
-	int main(int /*argc*/, char** /*argv*/)
-	{
-		float f = std::numeric_limits<float>::min();
-
-		return 0;
-	}" BALL_HAS_NUMERIC_LIMITS)
 
 ## We *require* regex.h!
 CHECK_INCLUDE_FILE_CXX("regex.h" BALL_HAS_REGEX_H)
