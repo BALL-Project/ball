@@ -5,7 +5,6 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/compositeManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/COMMON/limits.h>
 
 namespace BALL
 {

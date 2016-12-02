@@ -10,7 +10,6 @@
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
 #include <BALL/common.h>
-#include <BALL/COMMON/limits.h>
 #include <cmath>
 ///////////////////////////
 

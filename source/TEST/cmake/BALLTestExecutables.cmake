@@ -3,7 +3,6 @@ SET(BALL_BASIC_TESTS
 	Debug_test
 	RegularExpression_test
 	GlobalTypes_test
-	Limits_test
 	VersionInfo_test
 	RTTI_test
 )
