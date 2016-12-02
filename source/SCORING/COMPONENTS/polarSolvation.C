@@ -258,7 +258,7 @@ namespace BALL
 	}
 
 
-	void PolarSolvation::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+	void PolarSolvation::update(const vector<std::pair<Atom*, Atom*> >& /* pair_vector */)
 	{
 	}
 
