@@ -643,7 +643,7 @@ namespace BALL
 	}
 
 
-	void VanDerWaalsSlick::update(const vector<std::pair<Atom*, Atom*> >& pair_vector)
+	void VanDerWaalsSlick::update(const vector<std::pair<Atom*, Atom*> >& /* pair_vector */)
 	{
 	}
 
