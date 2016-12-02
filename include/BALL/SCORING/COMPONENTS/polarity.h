@@ -73,7 +73,7 @@ namespace BALL
 			*/
 			double updateScore();
 
-			void update(const vector<std::pair<Atom*, Atom*> >& pair_vector);
+			void update(const vector<std::pair<Atom*, Atom*> >& /* pair_vector */);
 
 			//@}
 

@@ -98,7 +98,7 @@ Size Polarity::getType_(const Atom* atom)
 }
 
 
-void Polarity::update(const std::vector<std::pair<Atom*, Atom*> >& pair_vector)
+void Polarity::update(const std::vector<std::pair<Atom*, Atom*> >& /* pair_vector */)
 {
 	// nothing to be done here ...
 }
