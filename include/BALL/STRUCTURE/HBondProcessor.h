@@ -242,9 +242,6 @@ namespace BALL
 			///
 			std::vector< HBond> getHBonds() {return h_bonds_;}
 
-			///	
-			BALL_DEPRECATED const std::vector< std::vector<Position> >& getBackboneHBondPairs() const;
-
 			/// computes the HBond pattern as needed, e.g. by the SecondaryStructureProcessor
 			const std::vector< std::vector<Position> >& getBackboneHBondPattern() const;
 
