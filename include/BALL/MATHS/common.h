@@ -17,10 +17,6 @@
 # include <ieeefp.h>
 #endif
 
-#ifdef BALL_HAS_FLOAT_H
-# include <float.h>
-#endif
-
 #ifndef BALL_COMMON_CONSTANTS_H
 #	include <BALL/COMMON/constants.h>
 #endif

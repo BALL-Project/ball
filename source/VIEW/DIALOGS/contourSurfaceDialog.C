@@ -38,14 +38,14 @@ ContourSurfaceDialog::~ContourSurfaceDialog()
 
 double ContourSurfaceDialog::getThreshold() const	
 {
-	if (threshold->text().isEmpty()) return DBL_MAX;
+	if (threshold->text().isEmpty()) return std::numeric_limits<double>::max();
 	try
 	{
 		return (double)ascii(threshold->text()).toFloat();
 	}
 	catch(...)
 	{
-		return DBL_MAX;
+		return std::numeric_limits<double>::max();
 	}
 }
 
@@ -63,7 +63,7 @@ void ContourSurfaceDialog::valuesChanged()
 {
 	buttonOk->setEnabled((grids->currentIndex() != -1) && 
 												!grids->currentText().isEmpty() &&
-												(getThreshold() != DBL_MAX));
+												(getThreshold() != std::numeric_limits<double>::max()));
 }
 
 int ContourSurfaceDialog::exec()

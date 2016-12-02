@@ -132,9 +132,6 @@
 #cmakedefine BALL_HAS_SYS_SOCKET_H
 #cmakedefine BALL_HAS_SYS_SYSINFO_H
 
-// Define whether float.h has to be included along with limits.h
-#cmakedefine BALL_HAS_FLOAT_H 
-
 #cmakedefine BALL_HAS_REGEX_H
 
 #cmakedefine BALL_HAS_NETINET_IN_H

@@ -3337,7 +3337,7 @@ namespace BALL
 			// find out if the visible viewing volume has to be cut
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
-			if (value != FLT_MAX)
+			if (value != std::numeric_limits<float>::max())
 			{
 				const Camera& camera = stage_->getCamera();
 				Vector3 n(-camera.getViewVector());

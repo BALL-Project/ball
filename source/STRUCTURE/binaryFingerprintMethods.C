@@ -3080,7 +3080,7 @@ void BinaryFingerprintMethods::clusterSelectionKGS(map<unsigned int, vector<unsi
 	double avg_spread;
 	double spread_sum = 0.0;
 	double max_avg_spread = 0.0;
-	double min_avg_spread = FLT_MAX;
+	double min_avg_spread = std::numeric_limits<double>::max();
 	
 	for (int i=clusters.size()-1; i>=0; --i)
 	{
@@ -3111,8 +3111,8 @@ void BinaryFingerprintMethods::clusterSelectionKGS(map<unsigned int, vector<unsi
 	double avg_spread_norm;
 	double scale = (leaf_clusters_.size() - 2) / (max_avg_spread - min_avg_spread);
 	
-	double kgs_min = FLT_MAX;
-	double kgs_max = FLT_MIN;
+	double kgs_min = std::numeric_limits<double>::max();
+	double kgs_max = std::numeric_limits<double>::min();
 	unsigned int kgs_min_index = 0;
 	for (unsigned int i=0; i!=clusters.size(); ++i)
 	{
