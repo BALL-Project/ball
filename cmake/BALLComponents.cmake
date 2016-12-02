@@ -35,7 +35,6 @@ IF (UNIX AND NOT APPLE)
 
 	## applications
 	SET(COMPONENT_BALLVIEW "BALLView${BALL_PACKAGE_VERSION}")
-	SET(COMPONENT_QUEASY   "QuEasy${BALL_PACKAGE_VERSION}")
 	SET(COMPONENT_TOOLS    "BALLTools${BALL_PACKAGE_VERSION}")
 ELSEIF(APPLE)
 	## libraries
@@ -57,7 +56,6 @@ ELSEIF(APPLE)
 
 	## applications
 	SET(COMPONENT_BALLVIEW "BALLView${BALL_PACKAGE_VERSION}")
-	SET(COMPONENT_QUEASY   "QuEasy${BALL_PACKAGE_VERSION}")
 	SET(COMPONENT_TOOLS    "BALLTools${BALL_PACKAGE_VERSION}")
 ELSEIF(WIN32)
 	## libraries
@@ -79,13 +77,12 @@ ELSEIF(WIN32)
 
 	## applications
 	SET(COMPONENT_BALLVIEW "BALLView")
-	SET(COMPONENT_QUEASY   "QuEasy")
 	SET(COMPONENT_TOOLS    "BALLTools")
 ENDIF()
 
 INCLUDE(source/EXTENSIONS/BALLPluginComponents.cmake)
 
-## Note: On MacOS X, it is necessary to have the applications (COMPONENT_BALLVIEW, COMPONENT_QUEASY) at the 
+## Note: On MacOS X, it is necessary to have the applications (COMPONENT_BALLVIEW) at the
 ##       *end* of this list; otherwise, the automatic fixing of import library names will omit all components 
 ##       that come after it
 SET(BALL_COMPONENTS
@@ -104,10 +101,6 @@ SET(BALL_COMPONENTS
 
 IF (BALL_BUILD_BALLAXY)
 	LIST(APPEND BALL_COMPONENTS ${COMPONENT_TOOLS})
-ENDIF()
-
-IF (BALL_BUILD_QUEASY)
-	LIST(APPEND BALL_COMPONENTS ${COMPONENT_QUEASY})
 ENDIF()
 
 LIST(APPEND BALL_COMPONENTS ${COMPONENT_BALLVIEW})
@@ -200,14 +193,6 @@ IF (BALL_BUILD_BALLAXY)
 		"This package contains a number of command line tools and utilities based on BALL."
 	)
 SET_COMPONENT_DEPENDENCIES(${COMPONENT_TOOLS} "${COMPONENT_LIBBALL}")
-ENDIF()
-
-IF (BALL_BUILD_QUEASY)
-	SET_COMPONENT_NAME(${COMPONENT_QUEASY} 
-		"QuEasy"
-		"QuEasy is a frontend to BALL's QSAR capabilities"
-	)
-	SET_COMPONENT_DEPENDENCIES(${COMPONENT_QUEASY} "${COMPONENT_LIBVIEW}")
 ENDIF()
 
 SET(CPACK_COMPONENTS_ALL ${BALL_COMPONENTS})
