@@ -86,9 +86,6 @@ namespace BALL
 		 */
 		virtual Molecule* read();
 
-		///@deprecated Instead of this method use XYZFile::getComment()
-		BALL_DEPRECATED const String& getComent() const { return comment_; }
-		
 		///
 		const String& getComment() const { return comment_; }
 
