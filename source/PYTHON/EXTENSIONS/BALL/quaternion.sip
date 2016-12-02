@@ -20,7 +20,6 @@ class Quaternion
   Quaternion(float, float, float, float);
   ~Quaternion();
   void set(const Quaternion&);
-  void set(const Vector3&, float);
   void set(float, float, float, float);
   // Quaternion& operator = (const Quaternion& q);
   void get(Quaternion&) const;
