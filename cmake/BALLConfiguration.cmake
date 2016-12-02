@@ -111,16 +111,6 @@ CHECK_INCLUDE_FILE_CXX("sys/param.h"   BALL_HAS_SYS_PARAM_H)
 CHECK_INCLUDE_FILE_CXX("sys/socket.h"  BALL_HAS_SYS_SOCKET_H)
 CHECK_INCLUDE_FILE_CXX("sys/sysinfo.h" BALL_HAS_SYS_SYSINFO_H)
 
-MESSAGE(STATUS "Do we need float.h for limits.h?")
-CHECK_SYMBOL_EXISTS(FLT_MIN "limits.h" BALL_FLT_MIN_IN_LIMITS_H)
-IF (NOT BALL_FLT_MIN_IN_LIMITS_H)
-	CHECK_SYMBOL_EXISTS(FLT_MIN "float.h" BALL_HAS_FLOAT_H)
-
-	IF (NOT BALL_HAS_FLOAT_H)
-		MESSAGE(SEND_ERROR "limits.h seems to be corrupt or float.h is missing!")
-	ENDIF()
-ENDIF()
-
 ## We *require* regex.h!
 CHECK_INCLUDE_FILE_CXX("regex.h" BALL_HAS_REGEX_H)
 ##IF (NOT BALL_HAS_REGEX_H)

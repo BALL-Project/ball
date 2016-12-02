@@ -1446,7 +1446,7 @@ namespace BALL
 		getIndices(*box, x, y, z);
 
 		const Item* item = 0;
-		float distance = FLT_MAX;
+		float distance = std::numeric_limits<float>::max();
 
 		// iterator over neighbour boxes
 		for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
