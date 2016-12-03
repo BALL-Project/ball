@@ -15,7 +15,7 @@ namespace BALL
 {
 	/** pure virtual base class
 	*/
-	class BALL_EXPORT GenericGene
+	class BALL_EXPORT BALL_DEPRECATED GenericGene
 	{
 		public:
 
@@ -54,7 +54,7 @@ namespace BALL
 
 	/** gene with an arbitrary number of double values
 	*/
-	class BALL_EXPORT DoubleGene: public GenericGene
+	class BALL_EXPORT BALL_DEPRECATED DoubleGene: public GenericGene
 	{
 		public:
 
@@ -104,7 +104,7 @@ namespace BALL
 
 	/** gene with one quaternion value
 	*/
-	class BALL_EXPORT QuaternionGene: public GenericGene
+	class BALL_EXPORT BALL_DEPRECATED QuaternionGene: public GenericGene
 	{
 		public:
 
