@@ -9,7 +9,6 @@
 #include <BALL/DOCKING/GENETICDOCK/geneticAlgorithm.h>
 #include <BALL/DOCKING/GENETICDOCK/dockProblem.h>
 #include <BALL/DOCKING/GENETICDOCK/genes.h>
-#include <time.h>
 #include <BALL/DOCKING/GENETICDOCK/geneticIndividual.h>
 #include <BALL/DOCKING/GENETICDOCK/parameter.h>
 #include <BALL/DOCKING/COMMON/dockingAlgorithm.h>
@@ -127,17 +126,14 @@ namespace BALL
 	void GeneticAlgorithm::setup(DockProblem *gp, int pop_number, int iter,
 		int init, int pop, int surv, double mrate, int save, int, double, int cstart)
 	{
-		GenericGene::initializeRNG();
-
 		gp_ = gp;
 
 		/** connect problem class to genetic algorithm
 		 */
 		gp_->connectTo(this);
 
-		unsigned t = (unsigned) time(NULL);
-
-		rng_.setup((t + 116) % 21349, (t + 4382) % 31582);
+		std::random_device rd;
+		rng_.seed(rd());
 
 		max_iterations_ = iter;
 		conv_start_ = cstart;
@@ -201,8 +197,9 @@ namespace BALL
 		for (Size x = 0; x < Size(needed);)
 		{
 			pair < GeneticIndividual * , GeneticIndividual * > gi_pair;
+			std::uniform_real_distribution<double> dist(0., 1.);
 
-			double prob = rng_.randomDouble(0.0, 1.0);
+			double prob = dist(rng_);
 
 			for (Size y = 0; y < probabilities_.size(); y++)
 				/** look for rank with rank < x < rank + 1
@@ -213,7 +210,7 @@ namespace BALL
 					break;
 				}
 
-			prob = rng_.randomDouble(0.0, 1.0);
+			prob = dist(rng_);
 
 			for (Size y = 0; y < probabilities_.size(); y++)
 				/** look for rank with rank < x < rank + 1
@@ -258,6 +255,7 @@ namespace BALL
 		for (Size x = 0; x < pools_.size(); ++x)
 		{
 			vector <GeneticIndividual> &gp = pools_[x];
+			std::uniform_int_distribution<int> gp_dist(0, gp.size() - immune_ - 1);
 
 			for (int y = 0; y < int(mutation_rate_ * pools_[y].size()); ++y)
 			{
@@ -268,7 +266,7 @@ namespace BALL
 				int i = 0;
 				do
 				{
-					index = rng_.randomInteger(0, gp.size() - immune_ - 1) + immune_;
+					index = gp_dist(rng_) + immune_;
 					i++;
 				} while (gp[index].isMutated() && i < 100);
 
@@ -279,7 +277,8 @@ namespace BALL
 
 					/** mutate random gene
 					*/
-					gp[index].getGene(rng_.randomInteger(0, gp[index].numberOfGenes() - 1))->mutate();
+					std::uniform_int_distribution<int> gene_dist(0, gp[index].numberOfGenes() - 1);
+					gp[index].getGene(gene_dist(rng_))->mutate();
 				}
 			}
 		}

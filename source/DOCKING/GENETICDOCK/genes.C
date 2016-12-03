@@ -4,21 +4,31 @@
 // ----------------------------------------------------
 
 #include <BALL/DOCKING/GENETICDOCK/genes.h>
-#include <BALL/MATHS/randomNumberGenerator.h>
-#include <time.h>
 #include <iostream>
 
 namespace BALL
 {
-	RandomNumberGenerator GenericGene::rng_;
-
-	void GenericGene::initializeRNG()
+	GenericGene::GenericGene()
+		: rng_(),
+		  dist_(0., 1.)
 	{
-		unsigned t = (unsigned) time(NULL);
-		rng_.setup(t % 31329, (t + 3244) % 30082);
+		std::random_device rd;
+		rng_.seed(rd());
+	}
+
+	double GenericGene::randomGeneValue()
+	{
+		return dist_(rng_);
+	}
+
+	int GenericGene::randomGenePosition(int from, int to)
+	{
+		std::uniform_int_distribution<int> dist(from, to);
+		return dist(rng_);
 	}
 
 	DoubleGene::DoubleGene()
+		: GenericGene()
 	{
 
 	}
@@ -44,7 +54,7 @@ namespace BALL
 		/** assign random number to each double variable
 		 */
 		for (Size x = 0; x < values_.size(); ++x)
-			values_[x] = rng_.randomDouble(0.0, 1.0);
+			values_[x] = randomGeneValue();
 	}
 
 	GenericGene *DoubleGene::mate(GenericGene *gg)
@@ -106,7 +116,7 @@ namespace BALL
 
 			/** blend two values with respect to a random number
 			 */
-			offspring->values_[x] = v1 - 0.5 * d + 2 * d * rng_.randomDouble(0.0, 1.0);
+			offspring->values_[x] = v1 - 0.5 * d + 2 * d * randomGeneValue();
 
 			if (offspring->values_[x] < 0)
 				offspring->values_[x] += 1;
@@ -123,7 +133,7 @@ namespace BALL
 	{
 		/** set random variable to random number
 		 */
-		values_[rng_.randomInteger(0, values_.size() - 1)] = rng_.randomDouble(0.0, 1.0);
+		values_[randomGenePosition(0, values_.size() - 1)] = randomGeneValue();
 	}
 
 
@@ -146,6 +156,7 @@ namespace BALL
 	}
 
 	QuaternionGene::QuaternionGene()
+		: GenericGene()
 	{
 		randomize();
 	}
@@ -156,12 +167,12 @@ namespace BALL
 		 */
 		double pi = 3.14159;
 
-		double x = rng_.randomDouble(0.0, 1.0);
+		double x = randomGeneValue();
 
 		double o = sqrt(1 - x);
 		double b = sqrt(x);
-		double c = 2 * pi * rng_.randomDouble(0.0, 1.0);
-		double d = 2 * pi * rng_.randomDouble(0.0, 1.0);
+		double c = 2 * pi * randomGeneValue();
+		double d = 2 * pi * randomGeneValue();
 
 		Vector3 axis(cos(d) * b, sin(c) * o, cos(c) * o);
 		double angle = sin(d) * b;
@@ -196,10 +207,10 @@ namespace BALL
 			double k = fabs(qg->quat_.k() - quat_.k());
 			double angle = fabs(qg->quat_.getAngle() - quat_.getAngle());
 
-			i = quat_.i() - 0.5 * i + 2 * i * rng_.randomDouble(0.0, 1.0);
-			j = quat_.j() - 0.5 * j + 2 * j * rng_.randomDouble(0.0, 1.0);
-			k = quat_.k() - 0.5 * k + 2 * k * rng_.randomDouble(0.0, 1.0);
-			angle = quat_.getAngle() - 0.5 * angle + 2 * angle * rng_.randomDouble(0.0, 1.0);
+			i = quat_.i() - 0.5 * i + 2 * i * randomGeneValue();
+			j = quat_.j() - 0.5 * j + 2 * j * randomGeneValue();
+			k = quat_.k() - 0.5 * k + 2 * k * randomGeneValue();
+			angle = quat_.getAngle() - 0.5 * angle + 2 * angle * randomGeneValue();
 
 			double t = sqrt(i * i + j * j + k * k + angle * angle);
 

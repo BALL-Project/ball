@@ -6,18 +6,22 @@
 #ifndef BALL_DOCKING_GENETICDOCK_GENES_H
 #define BALL_DOCKING_GENETICDOCK_GENES_H
 
-#include <vector>
 #include <BALL/MATHS/quaternion.h>
+
+#include <vector>
+#include <random>
 
 namespace BALL
 {
-	class RandomNumberGenerator;
-
 	/** pure virtual base class
 	*/
 	class BALL_EXPORT GenericGene
 	{
 		public:
+
+			/** constructor
+			 */
+			GenericGene();
 
 			/** destructor
 			 */
@@ -39,16 +43,13 @@ namespace BALL
 			 */
 			virtual void randomize() = 0;
 
-			/** initilize random number generator
-			 */
-			static void initializeRNG();
-
 		protected:
+			double randomGeneValue();
+			int randomGenePosition(int from, int to);
 
-			/** random number generator for all genes
-			 */
-			static RandomNumberGenerator rng_;
-
+		private:
+			std::mt19937 rng_;
+			std::uniform_real_distribution<double> dist_;
 	};
 
 	/** gene with an arbitrary number of double values
