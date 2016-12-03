@@ -6,11 +6,12 @@
 #ifndef BALL_DOCKING_GENETICDOCK_GENETICALGORITHM_H
 #define BALL_DOCKING_GENETICDOCK_GENETICALGORITHM_H
 
-#include <vector>
-#include <BALL/MATHS/randomNumberGenerator.h>
-#include <utility>
 #include "geneticIndividual.h"
 #include <BALL/DOCKING/GENETICDOCK/parameter.h>
+
+#include <vector>
+#include <utility>
+#include <random>
 
 namespace BALL
 {
@@ -175,9 +176,9 @@ namespace BALL
 
 			DockingAlgorithm* docking_algorithm_;
 
-			/**
+			/** RNG engine
 			 */
-			RandomNumberGenerator rng_;
+			std::mt19937 rng_;
 
 			/** used to initialize new individuals
 			 */
