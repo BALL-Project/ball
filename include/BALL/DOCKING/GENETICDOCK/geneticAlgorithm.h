@@ -20,7 +20,7 @@ namespace BALL
 
 	class DockingAlgorithm;
 
-	class BALL_EXPORT GeneticAlgorithm
+	class BALL_EXPORT BALL_DEPRECATED GeneticAlgorithm
 	{
 		friend class EvolutionaryDocking;
 

@@ -11,7 +11,7 @@
 namespace BALL
 {
 
-	class BALL_EXPORT GenericParameter
+	class BALL_EXPORT BALL_DEPRECATED GenericParameter
 	{
 		public:
 
@@ -44,7 +44,7 @@ namespace BALL
 	};
 
 
-	class BALL_EXPORT DoubleParameter: public GenericParameter
+	class BALL_EXPORT BALL_DEPRECATED DoubleParameter: public GenericParameter
 	{
 		public:
 
@@ -70,7 +70,7 @@ namespace BALL
 	};
 
 
-	class BALL_EXPORT QuaternionParameter: public GenericParameter
+	class BALL_EXPORT BALL_DEPRECATED QuaternionParameter: public GenericParameter
 	{
 		public:
 

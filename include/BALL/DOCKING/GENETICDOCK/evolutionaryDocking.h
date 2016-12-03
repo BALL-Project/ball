@@ -31,7 +31,7 @@ namespace BALL
 	   This class is derived from class DockingAlgorithm.
 	   small ligand docking algorithm via a genetic Algorithm.
 	*/
-	class BALL_EXPORT EvolutionaryDocking : public DockingAlgorithm
+	class BALL_EXPORT BALL_DEPRECATED EvolutionaryDocking : public DockingAlgorithm
 	{
 		public:
 
