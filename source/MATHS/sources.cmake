@@ -16,7 +16,6 @@ SET(SOURCES_LIST
 	piecewiseFunction.C
 	piecewisePolynomial.C
 	quaternion.C
-	randomNumberGenerator.C
 	simpleBox3.C
 	sphere3.C
 	surface.C
