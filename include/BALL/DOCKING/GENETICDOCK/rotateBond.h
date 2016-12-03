@@ -18,90 +18,88 @@
 
 namespace BALL
 {
-  class Atom;
-  class Bond;
+	class Atom;
 
-  class BALL_EXPORT RotateBond
-    {
-    public:
+	class Bond;
 
-      /** standard constructor
-       */
-      RotateBond();
+	class BALL_EXPORT RotateBond
+	{
+		public:
 
-      /** copy constructor
-       */
-      RotateBond(const RotateBond&);
+			/** standard constructor
+			 */
+			RotateBond();
 
-      /** constructor using bond to define axis
-       */
-      RotateBond(const Bond&);
+			/** copy constructor
+			 */
+			RotateBond(const RotateBond&);
 
-      /** define axis by atoms
-       */
-      RotateBond(Atom*, Atom*);
+			/** constructor using bond to define axis
+			 */
+			RotateBond(const Bond&);
 
-      /** define axis and 2 atoms for dihedral angle
-       */
-      RotateBond(const Bond&, Atom*, Atom*);
+			/** define axis by atoms
+			 */
+			RotateBond(Atom*, Atom*);
 
-      /** define 2 axis and 2 dihedral atoms
-       */
-      RotateBond(Atom*, Atom*, Atom*, Atom*);
+			/** define axis and 2 atoms for dihedral angle
+			 */
+			RotateBond(const Bond&, Atom*, Atom*);
 
-      /** destructor
-       */
-      ~RotateBond();
+			/** define 2 axis and 2 dihedral atoms
+			 */
+			RotateBond(Atom*, Atom*, Atom*, Atom*);
 
-      /**  change dihedral angle
-       */
-      void rotate(const Angle&, bool restorePosition = true);
+			/** destructor
+			 */
+			~RotateBond();
 
-      /** set dihedral angle to new value
-       */
-      void setDihedral(const Angle&);
+			/**  change dihedral angle
+			 */
+			void rotate(const Angle&, bool restorePosition = true);
 
-      /** get current dihedral angle
-       */
-      Angle getDihedral();
+			/** set dihedral angle to new value
+			 */
+			void setDihedral(const Angle&);
 
-      /** smaller operator
-       */
-      bool operator<(const RotateBond& rb);
+			/** get current dihedral angle
+			 */
+			Angle getDihedral();
 
-    private:
+			/** smaller operator
+			 */
+			bool operator<(const RotateBond& rb);
 
-      /** first atom of the rotation axis
-       */
-      Atom* hinge_;
+		private:
 
-      /** second atom of the rotation axis
-       */
-      Atom* nail_;
+			/** first atom of the rotation axis
+			 */
+			Atom* hinge_;
 
-      /** defines dihedral angle
-       */
-      Atom* dihedral_lite_;
+			/** second atom of the rotation axis
+			 */
+			Atom* nail_;
 
-      /** defines dihedral angle
-       */
-      Atom* dihedral_heavy_;
+			/** defines dihedral angle
+			 */
+			Atom* dihedral_lite_;
 
-      /** these atoms rotate
-       */
-      HashSet<Atom*> rotate_atoms_;
+			/** defines dihedral angle
+			 */
+			Atom* dihedral_heavy_;
 
-      /** collects atoms
-       */
-      void collectAtoms(Atom*,
-			Atom*,
-			Atom*,
-			HashSet<Atom*>&);
+			/** these atoms rotate
+			 */
+			HashSet<Atom*> rotate_atoms_;
 
-      /** used by constructors
-       */
-      void setup(Atom*, Atom*, Atom*, Atom*);
-    };
+			/** collects atoms
+			 */
+			void collectAtoms(Atom*, Atom*, Atom*, HashSet<Atom*>&);
+
+			/** used by constructors
+			 */
+			void setup(Atom*, Atom*, Atom*, Atom*);
+	};
 }
 
 

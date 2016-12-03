@@ -11,88 +11,89 @@
 namespace BALL
 {
 
-  class BALL_EXPORT GenericParameter
-  {
-  public:
+	class BALL_EXPORT GenericParameter
+	{
+		public:
 
-    /** standard constructor
-     */
-    GenericParameter();
+			/** standard constructor
+			 */
+			GenericParameter();
 
-    /** copy constructor
-     */
-    GenericParameter(const GenericParameter&);
+			/** copy constructor
+			 */
+			GenericParameter(const GenericParameter&);
 
-    /** destructor
-     */
-    virtual ~GenericParameter();
+			/** destructor
+			 */
+			virtual ~GenericParameter();
 
-    /** assignment operator
-     */
-    const GenericParameter& operator = (const GenericParameter&);
+			/** assignment operator
+			 */
+			const GenericParameter& operator= (const GenericParameter&);
 
-    /** get parameter name
-     */
-    virtual String getName();
+			/** get parameter name
+			 */
+			virtual String getName();
 
-  protected:
+		protected:
 
-    /** parameter name
-     */
-    String name_;
+			/** parameter name
+			 */
+			String name_;
 
-  };
-
-
-  class BALL_EXPORT DoubleParameter: public GenericParameter
-  {
-  public:
-    /** standard constructor
-     */
-    DoubleParameter();
-
-    /** copy constructor
-     */
-    DoubleParameter(const DoubleParameter&);
-
-    /** destructor
-     */
-    virtual ~DoubleParameter();
-
-    /** assignment operator
-     */
-    const DoubleParameter& operator = (const DoubleParameter&);
-
-    /** parameter values
-     */
-    vector<double> values;
-
-  };
+	};
 
 
-  class BALL_EXPORT QuaternionParameter: public GenericParameter
-  {
-  public:
-    /** standard constructor
-     */
-    QuaternionParameter();
+	class BALL_EXPORT DoubleParameter: public GenericParameter
+	{
+		public:
 
-    /** copy constructor
-     */
-    QuaternionParameter(const QuaternionParameter&);
+			/** standard constructor
+			 */
+			DoubleParameter();
 
-    /** destructor
-     */
-    virtual ~QuaternionParameter();
+			/** copy constructor
+			 */
+			DoubleParameter(const DoubleParameter &);
 
-    /** assignment operator
-     */
-    const QuaternionParameter& operator = (const QuaternionParameter&);
+			/** destructor
+			 */
+			virtual ~DoubleParameter();
 
-    /** parameter value
-     */
-    Quaternion quat;
-  };
+			/** assignment operator
+			 */
+			const DoubleParameter &operator=(const DoubleParameter &);
+
+			/** parameter values
+			 */
+			vector<double> values;
+	};
+
+
+	class BALL_EXPORT QuaternionParameter: public GenericParameter
+	{
+		public:
+
+			/** standard constructor
+			 */
+			QuaternionParameter();
+
+			/** copy constructor
+			 */
+			QuaternionParameter(const QuaternionParameter &);
+
+			/** destructor
+			 */
+			virtual ~QuaternionParameter();
+
+			/** assignment operator
+			 */
+			const QuaternionParameter &operator=(const QuaternionParameter &);
+
+			/** parameter value
+			 */
+			Quaternion quat;
+	};
 }
 
 #endif /* BALL_DOCKING_GENETICDOCK_PARAMETER_H */
