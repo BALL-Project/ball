@@ -15,173 +15,174 @@
 namespace BALL
 {
 
-  class DockProblem;
-  class DockingAlgorithm;
+	class DockProblem;
 
-  class BALL_EXPORT GeneticAlgorithm
-    {
+	class DockingAlgorithm;
 
-      friend class EvolutionaryDocking;
+	class BALL_EXPORT GeneticAlgorithm
+	{
+		friend class EvolutionaryDocking;
 
-    public:
-      //CREATE(GeneticAlgorithm)
+		public:
+			//CREATE(GeneticAlgorithm)
 
-      /** default constructor
-       */
-      GeneticAlgorithm();
+			/** default constructor
+			 */
+			GeneticAlgorithm();
 
-      /** copy constructor
-       */
-      GeneticAlgorithm(const GeneticAlgorithm& ga);
+			/** copy constructor
+			 */
+			GeneticAlgorithm(const GeneticAlgorithm& ga);
 
-      /** constructor
-       */
-      GeneticAlgorithm(DockingAlgorithm* docker, DockProblem*,
-		       int pop_number,
-		       int iter,
-		       int init,
-		       int pop,
-		       int surv,
-		       double mrate,
-		       int save,
-		       int citer,
-		       double cvalue,
-		       int cstart );
+			/** constructor
+			 */
+			GeneticAlgorithm(DockingAlgorithm* docker, DockProblem*,
+				int pop_number,
+				int iter,
+				int init,
+				int pop,
+				int surv,
+				double mrate,
+				int save,
+				int citer,
+				double cvalue,
+				int cstart
+			);
 
-      /** default destructor
-       */
-      virtual ~GeneticAlgorithm();
+			/** default destructor
+			 */
+			virtual ~GeneticAlgorithm();
 
-      /** assignment operator
-       */
-      virtual GeneticAlgorithm& operator = (const GeneticAlgorithm& ga);
+			/** assignment operator
+			 */
+			virtual GeneticAlgorithm& operator= (const GeneticAlgorithm& ga);
 
-      /** clone method
-       */
-    //  virtual GeneticAlgorithm* clone();
+			/** clone method
+			 */
+			//  virtual GeneticAlgorithm* clone();
 
-      /** setup method
-       */
-      void setup(DockProblem*,
-		 int pop_number,
-		 int iter,
-		 int init,
-		 int pop,
-		 int surv,
-		 double mrate,
-		 int save,
-		 int citer,
-		 double cvalue,
-		 int cstart);
+			/** setup method
+			 */
+			void setup(DockProblem*,
+				int pop_number,
+				int iter,
+				int init,
+				int pop,
+				int surv,
+				double mrate,
+				int save,
+				int citer,
+				double cvalue,
+				int cstart
+			);
 
-      /** optimize pool
-       */
-      virtual void start();
+			/** optimize pool
+			 */
+			virtual void start();
 
-      /**
-       */
-      virtual double getValue() { return 0.0;};
+			/**
+			 */
+			virtual double getValue() { return 0.0; };
 
-      /** get i-th individual?!?!?
-       */
-      GeneticIndividual* getIndividual(Index i);
+			/** get i-th individual?!?!?
+			 */
+			GeneticIndividual* getIndividual(Index i);
 
-      /** register a parameter for optimization
-       */
-      bool registerParameter(GenericParameter*);
+			/** register a parameter for optimization
+			 */
+			bool registerParameter(GenericParameter*);
 
-    protected:
+		protected:
 
-      double calculate(GeneticIndividual*);
+			double calculate(GeneticIndividual*);
 
-      vector<GenericParameter*> parameters_;
+			vector<GenericParameter*> parameters_;
 
-      /** select individuals for mating
-       */
-      void select(Size);
+			/** select individuals for mating
+			 */
+			void select(Size);
 
-      /** produce offsprings
-       */
-      void mate();
+			/** produce offsprings
+			 */
+			void mate();
 
-      /** random alteration
-       */
-      void mutate();
+			/** random alteration
+			 */
+			void mutate();
 
-      /** discard individuals
-       */
-      void cleanUp();
+			/** discard individuals
+			 */
+			void cleanUp();
 
-      /** sorts the given pool according to the fitness values of its members and keeps only the best survivors_>ones (#best ones = survivors_) */
-      void cleanPool(vector<GeneticIndividual>& pool);
+			/** sorts the given pool according to the fitness values of its members and keeps only the best survivors_>ones (#best ones = survivors_) */
+			void cleanPool(vector<GeneticIndividual>& pool);
 
-      /** check for migration between populations
-       */
-      bool multiDemeCheck();
+			/** check for migration between populations
+			 */
+			bool multiDemeCheck();
 
-      /** assign fitness score
-       */
-      void updatePool();
+			/** assign fitness score
+			 */
+			void updatePool();
 
-      /** size of one population
-       */
-      Size population_size_;
+			/** size of one population
+			 */
+			Size population_size_;
 
-      /** vector of populations
-       */
-      std::vector<std::vector<GeneticIndividual> > pools_;
+			/** vector of populations
+			 */
+			std::vector<std::vector<GeneticIndividual> > pools_;
 
-      /** vector of selected individuals
-       */
-      std::vector<std::pair<GeneticIndividual*, GeneticIndividual*> > selected_;
+			/** vector of selected individuals
+			 */
+			std::vector<std::pair<GeneticIndividual*, GeneticIndividual*> > selected_;
 
-      /** probabilities for rank weighting
-       */
-      std::vector<double> probabilities_;
+			/** probabilities for rank weighting
+			 */
+			std::vector<double> probabilities_;
 
-      /** assings fitness score to individuals
-       */
-      DockProblem* gp_;
+			/** assings fitness score to individuals
+			 */
+			DockProblem* gp_;
 
-      /** number of iterations
-       */
-      Size max_iterations_;
+			/** number of iterations
+			 */
+			Size max_iterations_;
 
-      /** number of individuals immune to mutation
-       */
-      Size immune_;
+			/** number of individuals immune to mutation
+			 */
+			Size immune_;
 
-      /** fraction of individuals to be mutated
-       */
-      double mutation_rate_;
+			/** fraction of individuals to be mutated
+			 */
+			double mutation_rate_;
 
-      /** count iterations during optimizaton
-       */
-      Size iteration_;
+			/** count iterations during optimizaton
+			 */
+			Size iteration_;
 
-      /** number of individuals surviving an iteration
-       */
-      Size survivors_;
+			/** number of individuals surviving an iteration
+			 */
+			Size survivors_;
 
-      /** iteration for the first convergence test
-       */
-      int conv_start_;
+			/** iteration for the first convergence test
+			 */
+			int conv_start_;
 
-      /** true if algorithm has stopped
-       */
-      bool finished_;
+			/** true if algorithm has stopped
+			 */
+			bool finished_;
 
-      DockingAlgorithm* docking_algorithm_;
+			DockingAlgorithm* docking_algorithm_;
 
-      /**
-       */
-      RandomNumberGenerator rng_;
+			/**
+			 */
+			RandomNumberGenerator rng_;
 
-      /** used to initialize new individuals
-       */
-      GeneticIndividual template_individual_;
-
-    };
+			/** used to initialize new individuals
+			 */
+			GeneticIndividual template_individual_;
+	};
 }
 
 #endif /* BALL_DOCKING_GENETICDOCK_GENETICALGORITHM_H */

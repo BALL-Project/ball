@@ -127,17 +127,16 @@ namespace BALL
 			Atom* partner = it->getPartner(*probe);
 
 			if (partner == block)
-            {
-                if (probe == start)
-                {
-                    continue;
-                }
-                else
-                {
-                    Log.error() << "error: rotation axis is part of a ring" << endl;
-                    exit(-1);
-                }
-            }
+			{
+				if (probe == start)
+				{
+					continue;
+				} else
+				{
+					Log.error() << "error: rotation axis is part of a ring" << endl;
+					exit(-1);
+				}
+			}
 
 			/** test if partner has not already been discoverd or is not block
 			*/
