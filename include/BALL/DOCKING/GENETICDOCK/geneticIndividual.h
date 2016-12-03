@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-	class BALL_EXPORT GeneticIndividual
+	class BALL_EXPORT BALL_DEPRECATED GeneticIndividual
 	{
 		public:
 			/** standard constructor

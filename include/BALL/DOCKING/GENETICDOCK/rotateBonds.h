@@ -19,7 +19,7 @@ namespace BALL
 {
 	class RotateBond;
 
-	class BALL_EXPORT RotateBonds
+	class BALL_EXPORT BALL_DEPRECATED RotateBonds
 	{
 		public:
 

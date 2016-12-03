@@ -32,7 +32,7 @@
 namespace BALL
 {
 
-	class BALL_EXPORT DockProblem
+	class BALL_EXPORT BALL_DEPRECATED DockProblem
 	{
 		public:
 			/** constructor
