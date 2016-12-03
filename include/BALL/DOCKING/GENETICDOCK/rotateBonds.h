@@ -15,46 +15,43 @@
 #include <vector>
 
 
-
 namespace BALL
 {
-  class RotateBond;
+	class RotateBond;
 
-  class BALL_EXPORT RotateBonds
-    {
-    public:
+	class BALL_EXPORT RotateBonds
+	{
+		public:
 
-      RotateBonds(const vector<Bond*>* rotatable_bonds);
+			RotateBonds(const vector<Bond*>* rotatable_bonds);
 
-      /** copy constructor
-       */
-      RotateBonds(const RotateBonds& rb);
+			/** copy constructor
+			 */
+			RotateBonds(const RotateBonds& rb);
 
-      /** assignment operator
-       */
-      RotateBonds& operator = (const RotateBonds& rb);
+			/** assignment operator
+			 */
+			RotateBonds& operator= (const RotateBonds& rb);
 
-      /** default destructor
-       */
-      ~RotateBonds();
+			/** default destructor
+			 */
+			~RotateBonds();
 
-      /** rotate all rotable bonds according to vec
-       */
-      void rotate(std::vector<double> vec);
+			/** rotate all rotable bonds according to vec
+			 */
+			void rotate(std::vector<double> vec);
 
-      /** returns number of rotable bonds
-       */
-      int numberBonds();
+			/** returns number of rotable bonds
+			 */
+			int numberBonds();
 
-    private:
+		private:
 
-      /** vector to store all rotable bonds
-       */
-      std::vector<RotateBond*> bonds_;
+			/** vector to store all rotable bonds
+			 */
+			std::vector<RotateBond*> bonds_;
 
-    };
+	};
 }
-
-
 
 #endif /* BALL_DOCKING_GENETICDOCK_ROTATEBONDS_H */
