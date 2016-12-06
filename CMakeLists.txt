@@ -10,8 +10,8 @@ PROJECT("BALL")
 ########################################################
 
 SET(BALL_PACKAGE_VERSION_MAJOR "1")
-SET(BALL_PACKAGE_VERSION_MINOR "4")
-SET(BALL_PACKAGE_VERSION_PATCH "79")
+SET(BALL_PACKAGE_VERSION_MINOR "5")
+SET(BALL_PACKAGE_VERSION_PATCH "0")
 
 ########################################################
 ###    end manual entries                            ###
