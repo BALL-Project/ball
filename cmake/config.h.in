@@ -16,6 +16,9 @@
 #cmakedefine BALL_DEBUG
 #cmakedefine BALL_NO_INLINE_FUNCTIONS
 
+// BALL release version string
+#define BALL_RELEASE_STRING "@BALL_PACKAGE_VERSION_MAJOR@.@BALL_PACKAGE_VERSION_MINOR@.@BALL_PACKAGE_VERSION_PATCH@"
+
 // The path to the directory where BALL is installed.
 #cmakedefine BALL_PATH "@BALL_PATH@"
 #cmakedefine BALL_DATA_PATH "@BALL_DATA_PATH@"

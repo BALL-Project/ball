@@ -457,7 +457,6 @@ SET(CONFIGURED_CONFIG_H ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h)
 CONFIGURE_FILE(cmake/config.h.in ${CONFIGURED_CONFIG_H})
 	
 ## automatically create the version numbers
-CONFIGURE_FILE(cmake/templates/version.h.in ${PROJECT_BINARY_DIR}/include/BALL/COMMON/version.h)
 CONFIGURE_FILE(cmake/templates/BALL.doc.in  ${PROJECT_SOURCE_DIR}/include/BALL/BALL.doc)
 
 ## build a config.h file for the python support to not disturb the

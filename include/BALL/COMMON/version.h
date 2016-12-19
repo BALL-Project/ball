@@ -5,6 +5,10 @@
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
 
+#ifndef BALL_CONFIG_CONFIG_H
+# include <BALL/CONFIG/config.h>
+#endif
+
 #ifndef BALL_COMMON_EXCEPTION_H
 #	include <BALL/COMMON/exception.h>
 #endif
@@ -13,23 +17,17 @@
 # include <BALL/COMMON/global.h>
 #endif
 
-//
-//  master data for all revisions is stored in this define!
-//
-#define BALL_RELEASE_STRING             "@BALL_PACKAGE_VERSION_MAJOR@.@BALL_PACKAGE_VERSION_MINOR@.@BALL_PACKAGE_VERSION_PATCH@"
 
 namespace BALL
 {
 
 	/**	Version information class.
-			The BALL release, release data and related version
-			can be retrieved by these methods. \par
-			Stable releases are designated with numbers only.  \par
-			Alpha, beta, nonpublic, or prereleases are suffixed as "alpha", "beta", "nonpublic", and "pre", respectively.\par
-			The VersionInfo class contains only static methods
-			that can be used to retrieve the desired information.
-			 \par
-	\ingroup Common		
+			The BALL release, release data and related version can be retrieved by these methods. \par
+			Stable releases are designated with numbers only. \par
+			Alpha, beta, nonpublic, or prereleases are suffixed as "alpha", "beta", "nonpublic", and "pre", respectively. \par
+			The VersionInfo class contains only static methods that can be used to retrieve the desired information. \par
+			The release string (BALL_RELEASE_STRING) is defined in include/BALL/CONFIG/config.h \par
+	\ingroup Common
 	*/
 	class BALL_EXPORT VersionInfo
 	{
