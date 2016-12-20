@@ -492,14 +492,14 @@ IF (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(BALL_HEADER_INSTALL_DIRECTORY   ".")
 	SET(BALL_DATA_INSTALL_DIRECTORY    "share/BALL")
 	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "share/BALL/doc")
+	SET(BALL_TOOLS_INSTALL_DIRECTORY   "bin/BALLTools")
+
 	IF(WIN32)
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "bin")
 		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "bin")
-		SET(BALL_TOOLS_INSTALL_DIRECTORY   "bin/BALLTools")
 	ELSE()
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "lib")
 		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "lib")
-		SET(BALL_TOOLS_INSTALL_DIRECTORY   "lib/BALL")
 	ENDIF()
 ELSE()
 	SET(BALL_BUNDLE_INSTALL_DIRECTORY  					"Applications")
@@ -640,12 +640,32 @@ IF(BALL_HAS_VIEW)
 	)
 ENDIF()
 
-###### Add BALLTools #########
+
+# TOOLS and Ballaxy targets
 OPTION(BALL_BUILD_TOOLS "Build BALL command line tools (BALLTools)" ON)
-IF(BALL_BUILD_TOOLS)
-        ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
-        ADD_SUBDIRECTORY(source/APPLICATIONS/UTILITIES)
+OPTION(BALL_BUILD_BALLAXY "Build Ballaxy stubs. To create full Ballaxy instance including Galaxy also set -DBALLAXY_INSTANCE=ON" ON)
+OPTION(BALLAXY_INSTANCE "Create working Ballaxy instance." OFF)
+
+SET(TOOLS_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/TOOLS")
+SET(UTILS_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/UTILITIES")
+
+IF(BALL_BUILD_BALLAXY)
+	# Galaxy release version (GitHub release branch) can be changed via the the following CMake variable.
+	# Only used when using -DBALLAXY_INSTANCE=ON to create a full Ballaxy instance including Galaxy.
+	SET(GALAXY_RELEASE "release_16.10")
+
+	# We need the TOOLS for Ballaxy
+	SET(BALL_BUILD_TOOLS ON)
+
+	ADD_SUBDIRECTORY(workflow_support/galaxy)
 ENDIF()
+
+IF(BALL_BUILD_TOOLS)
+	ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
+	ADD_SUBDIRECTORY(source/APPLICATIONS/UTILITIES)
+ENDIF()
+
+
 
 ## add targets for Python modules
 ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)

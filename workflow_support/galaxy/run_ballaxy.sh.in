@@ -1,0 +1,13 @@
+#
+# Startup file to run Ballaxy instance
+#
+
+# Set appropriate BALL environment
+export BALL_DATA_PATH=@CMAKE_SOURCE_DIR@/data
+export PATH=@TOOLS_RUNTIME_OUTPUT_DIRECTORY@:$PATH
+export PYTHONPATH=@CMAKE_BINARY_DIR@/lib
+export @LD_LIBRARY_PATH_VAR@=@CMAKE_BINARY_DIR@/lib:$@LD_LIBRARY_PATH_VAR@
+
+# Start Galaxy
+cd @PROJECT_BINARY_DIR@
+./galaxy/run.sh
