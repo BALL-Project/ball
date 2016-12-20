@@ -1,0 +1,115 @@
+# Generate necessary directories
+FILE(MAKE_DIRECTORY @CTD_OUTFILE_DIR@)
+FILE(MAKE_DIRECTORY @GALAXY_STUBS_DIR@)
+FILE(MAKE_DIRECTORY @LOGFILE_DIR@)
+
+# Download Miniconda installer
+FILE(DOWNLOAD "https://repo.continuum.io/miniconda/@MINICONDA_INSTALLER@" "@PROJECT_BINARY_DIR@/@MINICONDA_INSTALLER@")
+
+# Install Miniconda
+EXECUTE_PROCESS(COMMAND sh @MINICONDA_INSTALLER@ -b -p @MINICONDA_INSTALL_DIR@
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Install Miniconda lxml
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y lxml
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_lxml_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_lxml_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Install Miniconda ctdopts
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y -c workflowconversion ctdopts
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_ctd_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_ctd_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Clone CTD2Galaxy and CTDSchema
+IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTD2Galaxy")
+	EXECUTE_PROCESS(COMMAND git clone https://github.com/WorkflowConversion/CTD2Galaxy
+		OUTPUT_FILE "@LOGFILE_DIR@/ctd2galaxy_clone_out.log"
+		ERROR_FILE "@LOGFILE_DIR@/ctd2galaxy_clone_err.log"
+		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+	)
+ENDIF()
+
+
+# Generate CTDs for BALLTools
+FILE(GLOB BALL_TOOLS "@TOOLS_RUNTIME_OUTPUT_DIRECTORY@/*")
+
+FOREACH(TOOL ${BALL_TOOLS})
+	GET_FILENAME_COMPONENT(TOOL_NAME ${TOOL} NAME)
+	EXECUTE_PROCESS(COMMAND "${TOOL}" -write_par "@CTD_OUTFILE_DIR@/${TOOL_NAME}.ctd"
+		OUTPUT_FILE "@LOGFILE_DIR@/ctd_generation_out.log"
+		ERROR_FILE "@LOGFILE_DIR@/ctd_generation_err.log"
+		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+	)
+ENDFOREACH()
+
+
+# Generate Galaxy XML stubs
+FILE(GLOB CTD_FILES "@CTD_OUTFILE_DIR@/*.ctd")
+
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "CTD2Galaxy/generator.py"
+	--input ${CTD_FILES}
+	--output-destination @GALAXY_STUBS_DIR@
+	--datatypes-destination "@GALAXY_STUBS_DIR@/datatypes_conf.xml"
+	--tool-conf-destination "@GALAXY_STUBS_DIR@/tool_conf.xml"
+	--formats-file "@PROJECT_SOURCE_DIR@/file_formats.txt"
+	--macros "@PROJECT_SOURCE_DIR@/macros.xml"
+	--default-category Other
+	--galaxy-tool-path BALL
+	--blacklist help h write_par par env write_ini
+	OUTPUT_FILE "@LOGFILE_DIR@/galaxy_xml_gen_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/galaxy_xml_gen_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Copy macros.xml
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "@PROJECT_SOURCE_DIR@/macros.xml" "@GALAXY_STUBS_DIR@/macros.xml")
+
+
+# If Galaxy stubs generation only, stop here
+SET(BALLAXY_INSTANCE @BALLAXY_INSTANCE@)
+IF(NOT BALLAXY_INSTANCE)
+	RETURN()
+ENDIF()
+
+# Clone Galaxy Project
+IF(NOT EXISTS "@PROJECT_BINARY_DIR@/galaxy")
+	EXECUTE_PROCESS(COMMAND git clone -b @GALAXY_RELEASE@ https://github.com/galaxyproject/galaxy.git
+		OUTPUT_FILE "@LOGFILE_DIR@/galaxy_clone_out.log"
+		ERROR_FILE "@LOGFILE_DIR@/galaxy_clone_err.log"
+		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+	)
+ENDIF()
+
+# Create link to BALL tool XMLs
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink "@GALAXY_STUBS_DIR@" "@PROJECT_BINARY_DIR@/galaxy/tools/BALL")
+
+# Deploy Ballaxy tool_conf.xml
+EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "@GALAXY_STUBS_DIR@/tool_conf.xml" "@PROJECT_BINARY_DIR@/galaxy/config/tool_conf.xml")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

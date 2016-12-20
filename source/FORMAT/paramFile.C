@@ -73,6 +73,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 	xmlOut_->writeAttribute("version", version.c_str());
 	xmlOut_->writeAttribute("name", section_name.c_str());
 	xmlOut_->writeAttribute("category", category.c_str());
+	xmlOut_->writeAttribute("ctdVersion", "1.7");
 	// left commented out because the attribute is optional anyway
 	//xmlOut_->writeAttribute("docurl", "");
 
@@ -89,7 +90,7 @@ void ParamFile::writeSection(String section_name, String section_description, St
 	xmlOut_->writeEndElement();
 
 	xmlOut_->writeStartElement("PARAMETERS");
-	xmlOut_->writeAttribute("version","1.3");
+	xmlOut_->writeAttribute("version","1.7");
 	xmlOut_->writeStartElement("NODE");
 	xmlOut_->writeAttribute("name","1");
 	String s = "Instance '1' section for '"+section_name+"'";
