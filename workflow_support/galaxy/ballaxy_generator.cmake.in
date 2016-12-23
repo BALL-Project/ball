@@ -20,6 +20,14 @@ EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y lxml
 	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
 )
 
+# lxml depends on libxml2; installing lxml installs libxml2 v2.9.4., which contains a bug in schema validation
+# so, we downgrade to the latest known version of libxml2 that works
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y libxml2=2.9.2
+        OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_libxml2_out.log"
+        ERROR_FILE "@LOGFILE_DIR@/miniconda_install_libxml2_err.log"
+        WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
 # Install Miniconda ctdopts
 EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y -c workflowconversion ctdopts
 	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_ctd_out.log"
@@ -60,6 +68,7 @@ EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "CTD2Galaxy/generat
 	--tool-conf-destination "@GALAXY_STUBS_DIR@/tool_conf.xml"
 	--formats-file "@PROJECT_SOURCE_DIR@/file_formats.txt"
 	--macros "@PROJECT_SOURCE_DIR@/macros.xml"
+	--validation-schema "@PROJECT_BINARY_DIR@/CTDSchema/CTD.xsd"
 	--default-category Other
 	--galaxy-tool-path BALL
 	--blacklist help h write_par par env write_ini
