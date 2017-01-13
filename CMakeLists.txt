@@ -29,6 +29,10 @@ SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
 SET(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE TRUE)
 
+IF(POLICY CMP0009)
+	CMAKE_POLICY(SET CMP0009 NEW)
+ENDIF()
+
 IF(POLICY CMP0020)
         CMAKE_POLICY(SET CMP0020 OLD)
 ENDIF()
@@ -90,7 +94,11 @@ SET(VIEW_LIBRARIES optimized VIEW debug VIEWd)
 INCLUDE(cmake/BALLMacros.cmake)
 INCLUDE(cmake/BALLCompilerSpecific.cmake)
 INCLUDE(cmake/BALLConfiguration.cmake)
-INCLUDE(cmake/BALLComponents.cmake)
+
+IF(NOT APPLE)
+	# We do not have a Component-based installer in MacOS
+	INCLUDE(cmake/BALLComponents.cmake)
+ENDIF()
 
 ## additional include directories
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/include/) ## for configured files, i.e. config.h
@@ -476,6 +484,7 @@ SET(BALL_EXECUTABLES "")
 ###    BUILD the lib																 ###
 ########################################################
 
+
 ## are we building a shared or static lib?! (BOTH within 
 ## the same BUILD-tree is NOT possible currently!!)
 SET(BUILD_SHARED_LIBS TRUE)
@@ -485,7 +494,7 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin")
 
 ## These variables are used in all install-targets
-IF (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+IF (NOT APPLE)
 	SET(BALL_RUNTIME_INSTALL_DIRECTORY "bin")
 	SET(BALL_LIBRARY_INSTALL_DIRECTORY "lib")
 	SET(BALL_ARCHIVE_INSTALL_DIRECTORY "lib")
@@ -501,17 +510,6 @@ IF (NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 		SET(BALL_PYTHON_INSTALL_DIRECTORY  "lib")
 		SET(BALL_PLUGIN_INSTALL_DIRECTORY  "lib")
 	ENDIF()
-ELSE()
-	SET(BALL_BUNDLE_INSTALL_DIRECTORY  					"Applications")
-	SET(BALL_RUNTIME_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_LIBRARY_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_ARCHIVE_INSTALL_DIRECTORY 					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_DATA_INSTALL_DIRECTORY    					"Applications/BALLView.app/Contents/Resources")
-	SET(BALL_DOCUMENTATION_INSTALL_DIRECTORY    "Applications/BALLView.app/Contents/Resources/doc")
-	SET(BALL_HEADER_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_PYTHON_INSTALL_DIRECTORY  					"Applications/BALLView.app/Contents/Frameworks")
-	SET(BALL_PLUGIN_INSTALL_DIRECTORY           "Applications/BALLView.app/Contents/plugins")
-	SET(BALL_TOOLS_INSTALL_DIRECTORY            "Applications/BALLView.app/Contents/BALLTools")
 ENDIF()
 
 ## big include file for headers and C files, which fills the BALL_sources variable
@@ -583,8 +581,6 @@ IF (MSVC)
 	SET_TARGET_PROPERTIES(BALL PROPERTIES COMPILE_DEFINITIONS "${BALL_COMPILE_DEFINTIONS}")
 	# With MALL, BALL breaks incremental linking (seems to be too large...)
 	SET(BALL_LINK_FLAGS "${BALL_LINK_FLAGS} /NODEFAULTLIB:libcmt /INCREMENTAL:no")
-ELSEIF (APPLE)
-	SET_TARGET_PROPERTIES(BALL PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
 ENDIF()
 
 IF (BALL_HAS_VIEW)
@@ -600,8 +596,6 @@ IF (BALL_HAS_VIEW)
 		SET(VIEW_COMPILE_DEFINITIONS ${COMPILE_DEFINITIONS} "BALL_VIEW_BUILD_DLL" CACHE INTERNAL "")
 		SET_TARGET_PROPERTIES(VIEW PROPERTIES COMPILE_DEFINITIONS "${VIEW_COMPILE_DEFINITIONS}")
 		SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} /NODEFAULTLIB:libcmt")
-	ELSEIF(APPLE)
-		SET_TARGET_PROPERTIES(VIEW PROPERTIES INSTALL_NAME_DIR "@executable_path/../Frameworks")
 	ENDIF()
 ENDIF()
 
@@ -689,6 +683,8 @@ ENDIF()
 
 INCLUDE(cmake/BALLDoc.cmake)
 
+
+
 ######################################################################
 ####        Installation Routines                                  ###
 ######################################################################
@@ -697,66 +693,67 @@ IF (WIN32)
 	INCLUDE(InstallRequiredSystemLibraries)
 ENDIF()
 
-INSTALL(TARGETS BALL
-	EXPORT BALLExportGroup
-	COMPONENT "${COMPONENT_LIBBALL}"
-	RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
-	LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
-	ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
-)
-
-IF(BALL_HAS_VIEW)
-	INSTALL(TARGETS VIEW
+IF(NOT APPLE)
+	INSTALL(TARGETS BALL
 		EXPORT BALLExportGroup
-		COMPONENT "${COMPONENT_LIBVIEW}"
+		COMPONENT "${COMPONENT_LIBBALL}"
 		RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
 		LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
 		ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
 	)
-ENDIF()
 
-## If we are not installing into the source directory directly, take
-## care of data files and headers
-IF (NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL ".")
-	## Install the data directories
-	INSTALL(DIRECTORY data DESTINATION "${BALL_DATA_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL})
-	
-	## Install the includes
-	INSTALL(DIRECTORY include DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL_DEV})
-ENDIF()
+	IF(BALL_HAS_VIEW)
+		INSTALL(TARGETS VIEW
+			EXPORT BALLExportGroup
+			COMPONENT "${COMPONENT_LIBVIEW}"
+			RUNTIME DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
+			LIBRARY DESTINATION "${BALL_LIBRARY_INSTALL_DIRECTORY}"
+			ARCHIVE DESTINATION "${BALL_ARCHIVE_INSTALL_DIRECTORY}"
+		)
+	ENDIF()
 
-## The configured files have to be copied in any case
-INSTALL(FILES 
-		${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h 
+	## If we are not installing into the source directory directly, take
+	## care of data files and headers
+	IF (NOT "${CMAKE_INSTALL_PREFIX}" STREQUAL ".")
+		### Install the data directories
+		INSTALL(DIRECTORY data DESTINATION "${BALL_DATA_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL})
+
+		### Install the includes
+		INSTALL(DIRECTORY include DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}" COMPONENT ${COMPONENT_LIBBALL_DEV})
+	ENDIF()
+
+	## The configured files have to be copied in any case
+	INSTALL(FILES ${PROJECT_BINARY_DIR}/include/BALL/CONFIG/config.h
 		DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/CONFIG"
 		COMPONENT ${COMPONENT_LIBBALL_DEV}
-)
+	)
 
-INSTALL(FILES 
+	INSTALL(FILES
 		${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h
 		DESTINATION "${BALL_HEADER_INSTALL_DIRECTORY}/include/BALL/PYTHON"
 		COMPONENT ${COMPONENT_LIBBALL_DEV}
-)
+	)
 
-IF (WIN32)
-	SET(FIND_DLL_INPUT ${BALL_DEP_LIBRARIES} ${SIP_LIBRARIES} ${VIEW_DEP_LIBRARIES} ${QT_LIBRARIES})
-	BALL_LIB_TO_DLL(BALL_DEP_DEBUG_DLLS BALL_DEP_OPT_DLLS "${FIND_DLL_INPUT}")
-	# NOTE: the special treatment for cg is necessary on 64 bit machines
-	LIST(APPEND BALL_DEP_OPT_DLLS ${CG_DLLS})
-	LIST(REMOVE_DUPLICATES BALL_DEP_OPT_DLLS)
+	IF (WIN32)
+		SET(FIND_DLL_INPUT ${BALL_DEP_LIBRARIES} ${SIP_LIBRARIES} ${VIEW_DEP_LIBRARIES} ${QT_LIBRARIES})
+		BALL_LIB_TO_DLL(BALL_DEP_DEBUG_DLLS BALL_DEP_OPT_DLLS "${FIND_DLL_INPUT}")
+		# NOTE: the special treatment for cg is necessary on 64 bit machines
+		LIST(APPEND BALL_DEP_OPT_DLLS ${CG_DLLS})
+		LIST(REMOVE_DUPLICATES BALL_DEP_OPT_DLLS)
 
-	# If we know where to find a python installer, we can package it
-	IF (PYTHON_INSTALLER_PATH)
-		FILE(TO_CMAKE_PATH "${PYTHON_INSTALLER_PATH}" PYTHON_INSTALLER_PATH_TMP)
-		GET_FILENAME_COMPONENT(PYTHON_INSTALLER ${PYTHON_INSTALLER_PATH_TMP} NAME)
+		# If we know where to find a python installer, we can package it
+		IF (PYTHON_INSTALLER_PATH)
+			FILE(TO_CMAKE_PATH "${PYTHON_INSTALLER_PATH}" PYTHON_INSTALLER_PATH_TMP)
+			GET_FILENAME_COMPONENT(PYTHON_INSTALLER ${PYTHON_INSTALLER_PATH_TMP} NAME)
+		ENDIF()
+
+		FOREACH(LIB ${BALL_DEP_OPT_DLLS})
+			STRING(TOLOWER "${LIB}" LOWER_LIB)
+			INSTALL(FILES "${LIB}"
+				DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
+				COMPONENT ${COMPONENT_LIBBALL})
+		ENDFOREACH()
 	ENDIF()
-
-	FOREACH(LIB ${BALL_DEP_OPT_DLLS})
-		STRING(TOLOWER "${LIB}" LOWER_LIB)
-		INSTALL(FILES "${LIB}" 
-			DESTINATION "${BALL_RUNTIME_INSTALL_DIRECTORY}"
-			COMPONENT ${COMPONENT_LIBBALL})
-	ENDFOREACH()
 ENDIF()
 
 ##### Packaging #####
@@ -765,11 +762,9 @@ IF (BALL_ENABLE_PACKAGING)
 ENDIF()
 
 ##### Tests #####
-#IF ("${PACKAGE_TYPE}" STREQUAL "none")
-	INCLUDE(Dart)
-	ENABLE_TESTING()
-	ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
-#ENDIF()
+INCLUDE(Dart)
+ENABLE_TESTING()
+ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
 
 ##### targets list #####
 INCLUDE(cmake/BALLTargets.cmake)
@@ -813,7 +808,7 @@ SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 
 ## create code that allows to call find_package()
 ## (must come after the above code that sets the variables!)
-GET_DIRECTORY_PROPERTY(BALL_INCLUDE_DIRS  INCLUDE_DIRECTORIES)
+GET_DIRECTORY_PROPERTY(BALL_INCLUDE_DIRS INCLUDE_DIRECTORIES)
 
 ## Configure the BALLConfig for compilation against the version in PROJECT_BINARY_DIR
 CONFIGURE_FILE(
@@ -833,20 +828,16 @@ CONFIGURE_FILE(
 	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
 	@ONLY
 )
-INSTALL(FILES 
-	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
-	DESTINATION "${BALL_CMAKE_EXPORT_PATH}/"
-	COMPONENT   ${COMPONENT_LIBBALL_DEV}
-)
 
-## Create BALLExport.cmake
-IF(${CMAKE_VERSION} VERSION_LESS "2.8.0")
-	MESSAGE(STATUS "Cannot register BALL with CMake! For external code, set the path to BALL during find_package() manually.")
-ELSE()
-	## register BALL with CMake so that it can be found easily
-	EXPORT(PACKAGE BALL)
+IF(NOT APPLE)
+	INSTALL(FILES
+		"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+		DESTINATION "${BALL_CMAKE_EXPORT_PATH}/"
+		COMPONENT   ${COMPONENT_LIBBALL_DEV}
+	)
 ENDIF()
-## export our libs
+
+EXPORT(PACKAGE BALL)
 
 IF(BALL_HAS_VIEW)
 	EXPORT(TARGETS BALL VIEW FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
@@ -854,6 +845,8 @@ ELSE()
 	EXPORT(TARGETS BALL FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 ENDIF()
 
-INSTALL(EXPORT BALLExportGroup DESTINATION ${BALL_CMAKE_EXPORT_PATH} FILE BALLExport.cmake COMPONENT "{COMPONENT_LIBBALL_DEV}")
+IF(NOT APPLE)
+	INSTALL(EXPORT BALLExportGroup DESTINATION ${BALL_CMAKE_EXPORT_PATH} FILE BALLExport.cmake COMPONENT "{COMPONENT_LIBBALL_DEV}")
+ENDIF()
 
 INCLUDE(cmake/BALLCTags.cmake)
