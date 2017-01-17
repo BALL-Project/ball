@@ -1,8 +1,59 @@
 # This script creates a fixed an dragndroppable BALLView Bundle
 
+IF(POLICY CMP0011)
+	CMAKE_POLICY(SET CMP0011 NEW)
+ENDIF()
+
+IF(POLICY CMP0012)
+	CMAKE_POLICY(SET CMP0012 NEW)
+ENDIF()
+
+
+# Fix install names in the given ITEM to match the Bundle installation
+MACRO(FIX_BUNDLE_ITEM ITEM)
+
+	# This command line call does the following:
+	#   - otool: print all dependencies linked into the dynamic library stored in ${ITEM}.
+	#   - awk:   skip first line; for the other lines print only the dependecy name (full path information).
+	#   - grep:  skip dependencies that already have @rpath, @executable_path, or @loader_path prefix.
+	#            They (most likely) have already been fixed by macdeployqt.
+	#            Also skip (estimated) system libraries, identified by the following prefixes: /usr/lib, /System
+	#   - tr:    convert multiline output into a ';'-separated, proper CMake list.
+	#
+	# With the exception of otool, everything else can be replaced by CMake functionality, however, this way it's much shorter.
+	EXECUTE_PROCESS(COMMAND bash -c "otool -L ${ITEM} | awk '{if (NR >= 2) print $1}' | grep -v -E '(^@|^/usr/lib|^/System)' | tr '\n' ';'"
+			OUTPUT_VARIABLE INSTALL_NAMES
+			WORKING_DIRECTORY ${BALLVIEW_BUNDLE_DIR})
+
+	# Iterate over all remaining dependencies that are stored in ${INSTALL_NAMES}.
+	FOREACH(INSTALL_NAME ${INSTALL_NAMES})
+
+		# Store file name (without path) in ${INSTALL_NAME_BASE}.
+		GET_FILENAME_COMPONENT(INSTALL_NAME_BASE ${INSTALL_NAME} NAME)
+		# Search its location in the Bundle relative to the Bundle's Contents path.
+		FILE(GLOB INSTALL_NAME_IN_BUNDLE RELATIVE ${BALLVIEW_BUNDLE_DIR_CONTENTS}
+			${BALLVIEW_BUNDLE_DIR_FRAMEWORKS}/*${INSTALL_NAME_BASE}
+			${BALLVIEW_BUNDLE_DIR_PLUGINS}/*${INSTALL_NAME_BASE})
+
+		IF("${ITEM}" MATCHES "^.*/${INSTALL_NAME_BASE}")
+			# Fix the install name of the item itself.
+			EXECUTE_PROCESS(COMMAND install_name_tool -id "@executable_path/../${INSTALL_NAME_IN_BUNDLE}" ${ITEM})
+		ELSE()
+			# Fix the install name of a dependency.
+			EXECUTE_PROCESS(COMMAND install_name_tool -change ${INSTALL_NAME} "@executable_path/../${INSTALL_NAME_IN_BUNDLE}" ${ITEM})
+		ENDIF()
+
+	ENDFOREACH()
+
+ENDMACRO()
+
+
 # Define some useful variables
-SET(BALLVIEW_BUNDLE_DIR           ${CMAKE_INSTALL_PREFIX}/BALLView.app)
-SET(BALLVIEW_BUNDLE_DIR_CONTENTS  ${BALLVIEW_BUNDLE_DIR}/Contents)
+SET(BALLVIEW_BUNDLE_DIR             ${CMAKE_INSTALL_PREFIX}/BALLView.app)
+SET(BALLVIEW_BUNDLE_DIR_CONTENTS    ${BALLVIEW_BUNDLE_DIR}/Contents)
+SET(BALLVIEW_BUNDLE_DIR_FRAMEWORKS  ${BALLVIEW_BUNDLE_DIR_CONTENTS}/Frameworks)
+SET(BALLVIEW_BUNDLE_DIR_PLUGINS     ${BALLVIEW_BUNDLE_DIR_CONTENTS}/plugins)
+
 SET(ITEMS_TO_FIX "")
 
 
@@ -11,20 +62,25 @@ FILE(INSTALL @CMAKE_RUNTIME_OUTPUT_DIRECTORY@/BALLView.app DESTINATION ${CMAKE_I
 
 
 # Manually install Python and SIP libraries and files
-FILE(INSTALL @SIP_LIBRARIES@ DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}/Frameworks USE_SOURCE_PERMISSIONS)
+IF(@BALL_PYTHON_SUPPORT@)
+	FILE(INSTALL @SIP_LIBRARIES@ DESTINATION ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS} USE_SOURCE_PERMISSIONS)
+	FILE(INSTALL @CMAKE_LIBRARY_OUTPUT_DIRECTORY@/BALL.py DESTINATION ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS} USE_SOURCE_PERMISSIONS)
+	FILE(INSTALL @CMAKE_LIBRARY_OUTPUT_DIRECTORY@/BALLCore.dylib DESTINATION ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS} USE_SOURCE_PERMISSIONS)
+	FILE(INSTALL @CMAKE_LIBRARY_OUTPUT_DIRECTORY@/VIEW.dylib DESTINATION ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS} USE_SOURCE_PERMISSIONS)
+	LIST(APPEND ITEMS_TO_FIX ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS}/BALLCore.dylib ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS}/VIEW.dylib)
+ENDIF()
 
-FILE(GLOB TMP_GLOB_RESULT "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@/*.py")
-FILE(INSTALL ${TMP_GLOB_RESULT} DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}/Frameworks USE_SOURCE_PERMISSIONS)
 
-FILE(GLOB TMP_GLOB_RESULT "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@/*.so")
-FILE(INSTALL ${TMP_GLOB_RESULT} DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}/Frameworks USE_SOURCE_PERMISSIONS)
-LIST(APPEND ITEMS_TO_FIX ${TMP_GLOB_RESULT})
+# Manually install plugins
+IF(@BALL_BUILD_BALLAXY@)
+	FILE(INSTALL @CMAKE_LIBRARY_OUTPUT_DIRECTORY@/pluginBALLaxy.dylib DESTINATION ${BALLVIEW_BUNDLE_DIR_PLUGINS} USE_SOURCE_PERMISSIONS)
+	LIST(APPEND ITEMS_TO_FIX ${BALLVIEW_BUNDLE_DIR_PLUGINS}/pluginBALLaxy.dylib)
+ENDIF()
 
-
-# Manually install BALL plugins into the Bundle
-FILE(GLOB TMP_GLOB_RESULT "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@/plugin*.dylib")
-FILE(INSTALL ${TMP_GLOB_RESULT} DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}/plugins USE_SOURCE_PERMISSIONS)
-LIST(APPEND ITEMS_TO_FIX ${TMP_GLOB_RESULT})
+IF(@USE_PRESENTABALL_PLUGIN@)
+	FILE(INSTALL @CMAKE_LIBRARY_OUTPUT_DIRECTORY@/pluginPresentaBALL.dylib DESTINATION ${BALLVIEW_BUNDLE_DIR_PLUGINS} USE_SOURCE_PERMISSIONS)
+	LIST(APPEND ITEMS_TO_FIX ${BALLVIEW_BUNDLE_DIR_PLUGINS}/pluginPresentaBALL.dylib)
+ENDIF()
 
 
 # Copy BALL data folder into the Bundle
@@ -35,26 +91,12 @@ FILE(INSTALL @CMAKE_SOURCE_DIR@/data DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}
 FILE(INSTALL @CMAKE_SOURCE_DIR@/doc/internal @CMAKE_SOURCE_DIR@/doc/BALLView DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}/Resources/doc USE_SOURCE_PERMISSIONS)
 
 
-# Finally, run macdeployqt on BALLView.app
+# Run macdeployqt on BALLView.app
 EXECUTE_PROCESS(COMMAND @MACDEPLOYQT_EXECUTABLE@ ${BALLVIEW_BUNDLE_DIR})
 
 
-# Fix items not handled by macdeployqt, like the SIP Python .so files
-FOREACH(ITEM ${ITEMS_TO_FIX})
-
-	EXECUTE_PROCESS(COMMAND bash -c "otool -L ${ITEM} | awk '{if (NR >= 2) print $1}' | grep -v -E '(^@|^/usr/lib|^/System)' | tr '\n' ';'"
-			OUTPUT_VARIABLE INSTALL_NAMES
-			WORKING_DIRECTORY ${BALLVIEW_BUNDLE_DIR})
-
-	FOREACH(INSTALL_NAME ${INSTALL_NAMES})
-		GET_FILENAME_COMPONENT(INSTALL_NAME_BASE ${INSTALL_NAME} NAME)
-		FILE(GLOB_RECURSE INSTALL_NAME_IN_BUNDLE RELATIVE ${BALLVIEW_BUNDLE_DIR_CONTENTS} ${BALLVIEW_BUNDLE_DIR_CONTENTS}/*${INSTALL_NAME_BASE})
-
-		IF("${ITEM}" MATCHES "^.*/${INSTALL_NAME_BASE}")
-			EXECUTE_PROCESS(COMMAND install_name_tool -id "@executable_path/../${INSTALL_NAME_IN_BUNDLE}" ${ITEM})
-		ELSE()
-			EXECUTE_PROCESS(COMMAND install_name_tool -change ${INSTALL_NAME} "@executable_path/../${INSTALL_NAME_IN_BUNDLE}" ${ITEM})
-		ENDIF()
-	ENDFOREACH()
-
+# Finally, apply manual fixes
+FOREACH(ITEM_TO_FIX ${ITEMS_TO_FIX})
+	FIX_BUNDLE_ITEM(${ITEM_TO_FIX})
 ENDFOREACH()
+
