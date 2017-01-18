@@ -1,5 +1,6 @@
 # This script creates a fixed an dragndroppable BALLView Bundle
 
+
 IF(POLICY CMP0011)
 	CMAKE_POLICY(SET CMP0011 NEW)
 ENDIF()
