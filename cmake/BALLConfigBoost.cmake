@@ -14,7 +14,14 @@ SET(BALL_BOOST_COMPONENTS
 
 # Required libraries and definitions on Windows OS
 IF(WIN32)
+
 	LIST(APPEND BALL_BOOST_COMPONENTS bzip2 zlib)
+
+	# Next two lines are a fix from CMake master to prevent missing header warnings.
+	# Lines will be obsolete when minimum required CMake version will be >= 3.7
+	SET(_Boost_BZIP2_HEADERS             "boost/iostreams/filter/bzip2.hpp")
+	SET(_Boost_ZLIB_HEADERS              "boost/iostreams/filter/zlib.hpp")
+
 	ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
 	ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
 ENDIF()
