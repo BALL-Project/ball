@@ -19,7 +19,7 @@ namespace BALL
 		(const char* file, int line)
 		: Exception::GeneralException(file, line, "IncompatibleIndex", "")
 	{
-		message_ = "different enumerator moduli occured.";
+		message_ = "different enumerator moduli occurred.";
 
 		Exception::globalHandler.setMessage(message_);
 	}

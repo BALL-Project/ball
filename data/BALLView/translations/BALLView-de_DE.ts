@@ -3314,12 +3314,12 @@ so there was nothing to be done!</source>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="738"/>
-        <source>Finished script sucessfully</source>
+        <source>Finished script successfully</source>
         <translation>Skript wurde erfolgreich beendet</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="739"/>
-        <source>Error occured in Script</source>
+        <source>Error occurred in Script</source>
         <translation>Fehler im Skript</translation>
     </message>
     <message>

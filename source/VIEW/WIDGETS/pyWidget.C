@@ -756,8 +756,8 @@ namespace BALL
 			script_output_->clear();
 			bool state = storeScript_() && openFile(current_script_, true, true);
 			String result;
-			if (state) result = (String)tr("Finished script sucessfully");
-			else 			 result = (String)tr("Error occured in Script");
+			if (state) result = (String)tr("Finished script successfully");
+			else 			 result = (String)tr("Error occurred in Script");
 			setStatusbarText(result, true);
 			return state;
 		}
@@ -1761,7 +1761,7 @@ namespace BALL
 			script_output_->clear();
 		}
 
-		// mark the line in a script where an error occured:
+		// mark the line in a script where an error occurred:
 		void PyWidget::findError_(String result)
 		{
 			if (!script_mode_) return;

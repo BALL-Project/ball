@@ -432,12 +432,12 @@ namespace BALL
 
 			if (!bond_ok)
 			{
-				result += " " + (String)tr("An error occured, while adding the bonds. Too many bonds for one atom?");
+				result += " " + (String)tr("An error occurred, while adding the bonds. Too many bonds for one atom?");
 			}
 
 			if (!hydrogen_ok)
 			{
-				result += " " + (String)tr("An error occured, while adding the hydrogens. Too many bonds for one atom?");
+				result += " " + (String)tr("An error occurred, while adding the hydrogens. Too many bonds for one atom?");
 			}
 
 			setStatusbarText(result, true);
@@ -490,7 +490,7 @@ namespace BALL
 			String result = (String)tr("  > added ") + String(new_number_of_bonds - old_number_of_bonds) +
 				(String)tr(" bonds") + " (" + (String)tr("total") + " " + String(new_number_of_bonds) + ").";
 
-			if (!ok) result +=  " " + (String)tr("An error occured. Too many bonds for one atom?");
+			if (!ok) result +=  " " + (String)tr("An error occurred. Too many bonds for one atom?");
 			setStatusbarText(result, true);
 		}
 
@@ -524,7 +524,7 @@ namespace BALL
 
 			String result = (String)tr("  > added end caps");
 
-			if (!ok) result +=  " " + (String)tr("An error occured.");
+			if (!ok) result +=  " " + (String)tr("An error occurred.");
 
 			setStatusbarText(result, true);
 		}

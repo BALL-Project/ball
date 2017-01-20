@@ -391,7 +391,7 @@ namespace BALL
 
 			if (stretch_it1 == stretch_map.end() || stretch_it2 == stretch_map.end())
 			{
-				errorOccured_("stretch", *a1, *a2, *a3);
+				errorOccurred_("stretch", *a1, *a2, *a3);
 				continue;
 			}
 
@@ -412,7 +412,7 @@ namespace BALL
 			if (sb.sbtijk == -1 ||
 			    !sb_parameters_.assignParameters(sb.sbtijk, *a1, *a2, *a3, sb.kba_ijk, sb.kba_kji))
 			{
-				errorOccured_("stretch-bend", *a1, *a2, *a3);
+				errorOccurred_("stretch-bend", *a1, *a2, *a3);
 				continue;
 			}
 
@@ -424,7 +424,7 @@ namespace BALL
 	}
 
 
-	void MMFF94StretchBend::errorOccured_(const String& string, 
+	void MMFF94StretchBend::errorOccurred_(const String& string,
 																				const Atom& a1, const Atom& a2, const Atom& a3)
 	{
 		mmff94_->error() << "MMFF94 StretchBend: Could not find " << string << " data! "

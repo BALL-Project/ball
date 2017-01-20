@@ -838,7 +838,7 @@ namespace BALL
     /** Return the last error code.
         If a method fails, an internal error code is set in
         FDPB. This error code can be queried by calling this method.
-        If no error occured it should return FDPB::ERROR__NONE.
+        If no error occurred it should return FDPB::ERROR__NONE.
         @see  getErrorMessage
         @see  ErrorCodes
     */

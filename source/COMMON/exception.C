@@ -355,7 +355,7 @@ namespace BALL
 				if ((line_ != -1) && (name_ != "unknown"))
 				{
 					Log.error() << "last entry in the exception handler: " << endl;
-					Log.error() << "exception of type " << name_.c_str() << " occured in line " 
+					Log.error() << "exception of type " << name_.c_str() << " occurred in line "
 											<< line_ << " of " << file_.c_str() << endl;
 					Log.error() << "error message: " << message_.c_str() << endl;
 				}

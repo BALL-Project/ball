@@ -46,14 +46,14 @@ namespace BALL
 			/**
 			 * Activate the plugin.
 			 *
-			 * @return true if no problems during activation occured, false otherwise
+			 * @return true if no problems during activation occurred, false otherwise
 			 */
 			virtual bool activate() = 0;
 
 			/**
 			 * Deactivate the plugin.
 			 *
-			 * @return true if no problems during deactivation occured, false otherwise
+			 * @return true if no problems during deactivation occurred, false otherwise
 			 */
 			virtual bool deactivate() = 0;
 	};

@@ -377,7 +377,7 @@ namespace BALL
 
 		if (PyErr_Occurred())
 		{
-			std::cout << "Error occured while executing " << filename << "\nPrinting Traceback:" << std::endl;
+			std::cout << "Error occurred while executing " << filename << "\nPrinting Traceback:" << std::endl;
 			PyErr_Print();
 		}
 

@@ -3449,11 +3449,11 @@ so there was nothing to be done!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured, while adding the bonds. Too many bonds for one atom?</source>
+        <source>An error occurred, while adding the bonds. Too many bonds for one atom?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured, while adding the hydrogens. Too many bonds for one atom?</source>
+        <source>An error occurred, while adding the hydrogens. Too many bonds for one atom?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3469,7 +3469,7 @@ so there was nothing to be done!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured. Too many bonds for one atom?</source>
+        <source>An error occurred. Too many bonds for one atom?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3481,7 +3481,7 @@ so there was nothing to be done!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>An error occured.</source>
+        <source>An error occurred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4151,11 +4151,11 @@ so there was nothing to be done!</source>
         <translation>離開 Python script</translation>
     </message>
     <message>
-        <source>Finished script sucessfully</source>
+        <source>Finished script successfully</source>
         <translation>成功的完成腳本</translation>
     </message>
     <message>
-        <source>Error occured in Script</source>
+        <source>Error occurred in Script</source>
         <translation>腳本有錯誤</translation>
     </message>
     <message>

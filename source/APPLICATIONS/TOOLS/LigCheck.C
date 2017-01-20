@@ -57,7 +57,7 @@ int printNonUniqueConformations(map < String, pair < int, String > > & mol_hashs
 			{
 				Log.level(10)<<", "<<it->second.second;
 			}
-			Log.level(10)<<" occured "<<it->second.first<<" times."<<endl;
+			Log.level(10)<<" occurred "<<it->second.first<<" times."<<endl;
 		}
 	}
 	return no;
@@ -283,7 +283,7 @@ int main(int argc, char* argv[])
 	if (no_non_unique > 0)
 	{
 		status = 1;
-		Log.level(20)<<endl<<no_non_unique<<" molecules occured multiple times within the input file.";
+		Log.level(20)<<endl<<no_non_unique<<" molecules occurred multiple times within the input file.";
 		if (output && remove_invalid)
 		{
 			Log.level(20)<<" Each of those molecules was only written once to the output file !";

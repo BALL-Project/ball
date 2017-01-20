@@ -217,7 +217,7 @@ namespace BALL
 		/**	Return true if the last application did not produce any warning.
 				The getStatus method may be called after applying the ResidueChecker 
 				to a kernel object. 
-				@return bool <b>true</b> if no warnings occured, <b>false</b> otherwise
+				@return bool <b>true</b> if no warnings occurred, <b>false</b> otherwise
 		*/
 		bool getStatus() const;
 

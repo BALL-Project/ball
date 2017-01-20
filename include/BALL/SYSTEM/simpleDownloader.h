@@ -76,7 +76,7 @@ namespace BALL
 			 *
 			 * @param data the string which is uploaded
 			 * @param response the response of the server
-			 * @return Non-zero if an error occured while uploading
+			 * @return Non-zero if an error occurred while uploading
 			 */
 			int uploadStringToBuffer(const String& data, std::vector<char>& response);
 
@@ -86,7 +86,7 @@ namespace BALL
 			 *
 			 * @param data the string which is uploaded
 			 * @param response the file the response is saved to
-			 * @return Non-zero if an error occured while uploading
+			 * @return Non-zero if an error occurred while uploading
 			 */
 			int uploadStringToFile(const String& data, const String& response);
 
@@ -96,7 +96,7 @@ namespace BALL
 			 *
 			 * @param path the path of the file to upload
 			 * @param response the response of the server
-			 * @return Non-zero if an error occured while uploading
+			 * @return Non-zero if an error occurred while uploading
 			 */
 			int uploadFileToBuffer(const String& path, std::vector<char>& response);
 
@@ -106,7 +106,7 @@ namespace BALL
 			 *
 			 * @param path the path of the file to upload
 			 * @param response the file the response is saved to
-			 * @return Non-zero if an error occured while uploading
+			 * @return Non-zero if an error occurred while uploading
 			 */
 			int uploadFileToFile(const String& path, const String& response);
 

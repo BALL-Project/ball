@@ -357,7 +357,7 @@ namespace BALL
 		BALL_VIEW_EXPORT void logString(const String& data);
 
 		/// BALLView Debug macro
-		#define BALLVIEW_DEBUG logString(String("A problem occured in ") + __FILE__ + " " + \
+		#define BALLVIEW_DEBUG logString(String("A problem occurred in ") + __FILE__ + " " + \
 													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de\n");
 
 	

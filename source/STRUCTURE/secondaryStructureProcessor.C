@@ -854,7 +854,7 @@ namespace BALL
 		{
 			if (resnum >= summary_.size())
 			{
-				Log.error() << "A problem occured in " << __FILE__ << " " << __LINE__ << std::endl;
+				Log.error() << "A problem occurred in " << __FILE__ << " " << __LINE__ << std::endl;
 				return Processor::CONTINUE;
 			}
 
