@@ -114,7 +114,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	{
 		QString str = f.getValue("GENERAL", "language").c_str();
 
-		if (!(str == "Default")) 
+		if (str != "en_US")
 		{
 			QString loc = "BALLView-" + str;
 
