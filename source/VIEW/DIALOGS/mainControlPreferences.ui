@@ -138,13 +138,7 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QComboBox" name="languageComboBox_">
-        <item>
-         <property name="text">
-          <string>Default</string>
-         </property>
-        </item>
-       </widget>
+       <widget class="QComboBox" name="languageComboBox_"/>
       </item>
      </layout>
     </widget>

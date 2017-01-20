@@ -33,13 +33,14 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	Path p;
 	QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
 
+	languageComboBox_->addItem("English (default)", QVariant("en_US"));
 	foreach(QString str, dpaths) {
 		QDir dir(str + "BALLView/translations");
 		QStringList tList = dir.entryList(QStringList("BALLView-*.qm"));
 		foreach(QString entry, tList) {
 			entry.replace("BALLView-", "");
 			entry.replace(".qm", "");
-			languageComboBox_->addItem(entry);
+			languageComboBox_->addItem(QLocale::languageToString(QLocale(entry).language()), QVariant(entry));
 		}
 	}
 
@@ -119,7 +120,7 @@ void MainControlPreferences::writePreferenceEntries(INIFile& inifile)
 {
 	PreferencesEntry::writePreferenceEntries(inifile);
 	inifile.insertValue(inifile_section_name_, "style", ascii(style_box_->currentText()));
-	inifile.insertValue(inifile_section_name_, "language", ascii(languageComboBox_->currentText()));
+	inifile.insertValue(inifile_section_name_, "language", ascii(languageComboBox_->currentData().toString()));
 }
 
 void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
@@ -136,8 +137,7 @@ void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
 
 	if (inifile.hasEntry(inifile_section_name_, "language"))
 	{
-		String value = inifile.getValue(inifile_section_name_, "language");
-		int e = languageComboBox_->findText(value.c_str());
+		int e = languageComboBox_->findData(QString(inifile.getValue(inifile_section_name_, "language").c_str()));
 		if (e == -1) return;
 
 		last_index_ = e;
