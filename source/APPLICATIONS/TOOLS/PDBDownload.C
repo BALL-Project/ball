@@ -71,6 +71,6 @@ int main(int argc, char* argv[])
 		return 1;
 	}
 
-	Log.level(20) << "PDB-file " << par.get("id") << " sucessfully downloaded to " << par.get("o") << endl << endl;
+	Log.level(20) << "PDB-file " << par.get("id") << " successfully downloaded to " << par.get("o") << endl << endl;
 	return 0;
 }

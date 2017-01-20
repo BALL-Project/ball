@@ -146,7 +146,7 @@ namespace BALL
 			ok &= sp.finish();
 			if (!ok)
 			{
-				Log.error() << "Unknown error occured while calculating molecular surface" << std::endl;
+				Log.error() << "Unknown error occurred while calculating molecular surface" << std::endl;
 			}
 
 			*static_cast<Surface*>(mesh) = sp.getSurface();

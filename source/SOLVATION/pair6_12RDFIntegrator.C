@@ -638,7 +638,7 @@ namespace BALL
 			if (BALL::Maths::isNan(t0))
 			{
 				Log.warn() << "Return value is NaN." << endl;
-				Log.warn() << "Error occured while integrating [" << r << ","
+				Log.warn() << "Error occurred while integrating [" << r << ","
 					<< R << ") - " << x0 << endl
 					<< "Coefs: " << a[0] << " " << a[1] << " " << a[2] << " " 
 					<< a[3] << endl;
@@ -669,7 +669,7 @@ namespace BALL
 		if (k2_ < MIN_DISTANCE)
 		{
 			Log.warn() << "project called with k2_ == " << k2_ 
-				<< ". Something seemeingly went wrong." << endl;
+				<< ". Something seemingly went wrong." << endl;
 			return x;
 		}
 
@@ -694,7 +694,7 @@ namespace BALL
 		if (k2_ < MIN_DISTANCE)
 		{
 			Log.warn() << "unproject called with k2_ == " << k2_ 
-				<< ". Something seemeingly went wrong." << endl;
+				<< ". Something seemingly went wrong." << endl;
 			return x;
 		}
 

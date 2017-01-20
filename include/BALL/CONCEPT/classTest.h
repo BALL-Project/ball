@@ -445,11 +445,11 @@ int main(int argc, char **argv)\
 	}\
 
 /**	Exception test macro.
-		This macro checks if a given type of exception occured while executing the
+		This macro checks if a given type of exception occurred while executing the
 		given command.
 		Example: \par
 		#TEST_EXCEPTION(Exception::IndexOverflow, vector3[-1])# \par
-		If no or a wrong exception occured, false is returned, otherwise true.
+		If no or a wrong exception occurred, false is returned, otherwise true.
 		@param exception_type the exception-class
 		@param command any general C++ or BALL-specific command
 		\ingroup ClassTest

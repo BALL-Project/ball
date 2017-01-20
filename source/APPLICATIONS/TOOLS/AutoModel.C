@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 	if(model)
 	{
 		model->saveToFile(par.get("o"));
-		Log.level(20) << "A model with satisfactory prediction quality has been sucessfully created and saved to file." << endl;
+		Log.level(20) << "A model with satisfactory prediction quality has been successfully created and saved to file." << endl;
 		delete model;
 	}
 }

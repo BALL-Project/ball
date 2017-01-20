@@ -183,7 +183,7 @@ namespace BALL
 		bool setupStretches_();
 		bool setupStretchBends_();
 		
-		void errorOccured_(const String& string, 
+		void errorOccurred_(const String& string,
 											 const Atom& a1, const Atom& a2, const Atom& a3);
 
 		vector<Bend> bends_;

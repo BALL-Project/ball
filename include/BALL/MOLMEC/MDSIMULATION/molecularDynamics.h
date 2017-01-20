@@ -291,7 +291,7 @@ namespace BALL
 				This method calls  \link simulateIterations simulateIterations \endlink  with the maximum 
 				number of iterations.
 				@see setMaximumNumberOfIterations
-				@return false if an error occured, e.g. the energy was too high
+				@return false if an error occurred, e.g. the energy was too high
 		*/
 		bool simulate(bool restart = false);
 
@@ -299,7 +299,7 @@ namespace BALL
 				 This method determines the number of steps necessary
 				 to simulate a given time interval and executes a
 				 simulation for that interval by calling  \link simulateIterations simulateIterations \endlink .
-				 @return false if an error occured, e.g. the energy was too high
+				 @return false if an error occurred, e.g. the energy was too high
 		*/
 		bool simulateTime(double simulation_time, bool restart = false);
 
@@ -308,7 +308,7 @@ namespace BALL
 				 This is the proper simulation method, which is implemented in 
 				 the derived classes only. The implementation provided
 				 by  \link MolecularDynamics MolecularDynamics \endlink  is simply empty.
-				 @return false if an error occured, e.g. the energy was too high
+				 @return false if an error occurred, e.g. the energy was too high
 		*/
 		virtual bool simulateIterations(Size number, bool restart = false);
 
