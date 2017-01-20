@@ -7,9 +7,10 @@
 # The following CMake variables are set by this module:
 #
 # FFTW_FOUND            true, if a valid FFTW installation has been identified
-# FTWD_FOUND            true, if double precision library found
+# FFTWD_FOUND           true, if double precision library found
 # FFTWF_FOUND           true, if single precision library found
 # FFTWL_FOUND           true, if long double precision library found
+#
 # FFTW_INCLUDE_DIR      absolute directory that contains fftw3.h header file
 #
 # FFTWD_LIB             double precision library
