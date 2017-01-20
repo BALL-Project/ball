@@ -420,10 +420,18 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	r1.select();
 	r2.select();
 	r3.select();
+
+	int sleep_time = 10;
+
+	BALL_SLEEPFOR(sleep_time);
 	ff.setup(S);
+
 	S.deselect();
 	r1.select();
+
+	BALL_SLEEPFOR(sleep_time);
 	double r1_tpl = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
@@ -431,13 +439,19 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	STATUS("  TOR: " << ff.getTorsionEnergy())
 	STATUS("  TTL: " << ff.getEnergy())
 	STATUS("r1 - tpl: " << r1_tpl)
-	
+
 	S.select();
 	r1.deselect();
+
+	BALL_SLEEPFOR(sleep_time);
 	ff.setup(S);
+
 	S.deselect();
 	r4.select();
+
+	BALL_SLEEPFOR(sleep_time);
 	double r4_tpl = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
@@ -445,13 +459,19 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	STATUS("  TOR: " << ff.getTorsionEnergy())
 	STATUS("  TTL: " << ff.getEnergy())
 	STATUS("r4 - tpl: " << r4_tpl)
-	
+
 	S.deselect();
 	r1.select();
 	r4.select();
+
+	BALL_SLEEPFOR(sleep_time);
 	ff.setup(S);
+
 	r4.deselect();
+
+	BALL_SLEEPFOR(sleep_time);
 	double r1_r4 = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
@@ -462,7 +482,10 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 
 	r4.select();
 	r1.deselect();
+
+	BALL_SLEEPFOR(sleep_time);
 	double r4_r1 = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
@@ -473,8 +496,13 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 
 	S.deselect();
 	r1.select();
+
+	BALL_SLEEPFOR(sleep_time);
 	ff.setup(S);
+
+	BALL_SLEEPFOR(sleep_time);
 	double r1_i = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
@@ -485,8 +513,13 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 
 	S.deselect();
 	r4.select();
+
+	BALL_SLEEPFOR(sleep_time);
 	ff.setup(S);
+
+	BALL_SLEEPFOR(sleep_time);
 	double r4_i = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
@@ -498,8 +531,13 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	S.deselect();
 	r2.select();
 	r3.select();
+
+	BALL_SLEEPFOR(sleep_time);
 	ff.setup(S);
+
+	BALL_SLEEPFOR(sleep_time);
 	double tpl_i = ff.updateEnergy();
+
 	STATUS("  ES : " << ff.getESEnergy())
 	STATUS("  VDW: " << ff.getVdWEnergy())
 	STATUS("  STR: " << ff.getStretchEnergy())
