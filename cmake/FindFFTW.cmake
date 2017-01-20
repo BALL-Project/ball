@@ -1,102 +1,88 @@
-## This is heavily based on the FindFFTW.cmake from itk...
-##
-## FFTW can be compiled and subsequently linked against
-## various data types.
-## There is a single set of include files, and then muttiple libraries,
-## One for each type.  I.e. libfftw.a-->double, libfftwf.a-->float, libfftwl.a -->long double
-##
-## The following logic belongs in the individual package
-## MARK_AS_ADVANCED(USE_FFTWD)
-## OPTION(USE_FFTWD "Use double precision FFTW if found" ON)
-## MARK_AS_ADVANCED(USE_FFTWF)
-## OPTION(USE_FFTWF "Use single precision FFTW if found" ON)
-## MARK_AS_ADVANCED(USE_FFTWL)
-## OPTION(USE_FFTWF "Use long double precision FFTW if found" ON)
-## MARKS_AS_ADVANCED(USE_FFTW_THREADS)
-## OPTION(USE_FFTW_THREADS "Try to find FFTW with thread support" ON)
+# Find FFTW3
+#
+# Currently, search for FFTW thread libraries is commented out
+# because I don't know how the naming scheme for those libs
+# currently looks like.
+#
+# The following CMake variables are set by this module:
+#
+# FFTW_FOUND            true, if a valid FFTW installation has been identified
+# FTWD_FOUND            true, if double precision library found
+# FFTWF_FOUND           true, if single precision library found
+# FFTWL_FOUND           true, if long double precision library found
+# FFTW_INCLUDE_DIR      absolute directory that contains fftw3.h header file
+#
+# FFTWD_LIB             double precision library
+# FFTWF_LIB             single precision library
+# FFTWL_LIB             long double precision library
 
-IF(USE_FFTWD OR USE_FFTWF OR USE_FFTWL)
-	MESSAGE(STATUS "Checking for libfftw.")
-  SET(FFTW_INC_SEARCHPATH
-    /sw/include
-    /usr/include
-    /usr/local/include
-    /usr/include/fftw
-    /usr/local/include/fftw
-		/opt/include/fftw
-		/opt/local/include/fftw
-  )
+SET(FFTW_FOUND FALSE)
+SET(FFTWD_FOUND FALSE)
+SET(FFTWF_FOUND FALSE)
+SET(FFTWL_FOUND FALSE)
 
-  FIND_PATH(FFTW_INCLUDE_PATH fftw3.h ${FFTW_INC_SEARCHPATH})
+# Define allowed fftw verions
+SET(FFTW_ALLOWED_VERSIONS 3 3.0 3.0.1 3.1 3.1.1 3.2 3.2.1 3.3 3.3.1 3.3.2 3.3.3 3.3.4 3.3.5 3.3.6)
 
-  IF(FFTW_INCLUDE_PATH)
-    SET(FFTW_INCLUDE ${FFTW_INCLUDE_PATH})
-  ENDIF (FFTW_INCLUDE_PATH)
+# Add additional search paths
+SET(CUSTOM_SEARCH_PATHS /usr/local /opt/local)
 
-  IF(FFTW_INCLUDE)
-    INCLUDE_DIRECTORIES( ${FFTW_INCLUDE})
-  ENDIF(FFTW_INCLUDE)
+# Try to find fftw3.h
+FIND_PATH(FFTW_INCLUDE_DIR fftw3.h
+	  PATHS ${CUSTOM_SEARCH_PATHS}
+	  PATH_SUFFIXES include)
 
-  GET_FILENAME_COMPONENT(FFTW_INSTALL_BASE_PATH ${FFTW_INCLUDE_PATH} PATH)
+# If not found, return.
+IF(NOT FFTW_INCLUDE_DIR)
+	RETURN()
+ENDIF()
 
-  SET(FFTW_LIB_SEARCHPATH
-    ${FFTW_INSTALL_BASE_PATH}/lib
-    /usr/lib/fftw
-    /usr/local/lib/fftw
-		/opt/lib/fftw
-		/opt/local/lib/fftw
-  )
+# Get a hint where to search for the installed fftw libraries
+GET_FILENAME_COMPONENT(FFTW_INSTALL_BASE ${FFTW_INCLUDE_DIR} PATH)
+LIST(APPEND CUSTOM_SEARCH_PATHS ${FFTW_INSTALL_BASE})
 
-  IF(USE_FFTWD)
-    MARK_AS_ADVANCED(FFTWD_LIB)
-#   OPTION(FFTWD_LIB "The full path to the fftw3 library (including the library)" )
-    FIND_LIBRARY(FFTWD_LIB fftw3 ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib
-		IF (USE_FFTW_THREADS)
-	    FIND_LIBRARY(FFTWD_THREADS_LIB fftw3_threads ${FFTW_LIB_SEARCHPATH}) #Double Precision Lib only if compiled with threads support
-		ENDIF(USE_FFTW_THREADS)
+# The fftw types searched for are
+# D: double precision library
+# F: single precision library
+# L: long double precision library
+SET(FFTW_TYPES "D;F;L")
 
-    IF(FFTWD_LIB)
-      SET(FFTWD_FOUND 1)
-      IF(FFTWD_THREADS_LIB)
-        SET(FFTWD_LIB ${FFTWD_LIB} ${FFTWD_THREADS_LIB} )
-      ENDIF(FFTWD_THREADS_LIB)
-    ENDIF(FFTWD_LIB)
-  ENDIF(USE_FFTWD)
+# Now, iterate over these types and search for the corresponding fftw libraries
+FOREACH(fftw_type IN LISTS FFTW_TYPES)
 
-  IF(USE_FFTWF)
-    MARK_AS_ADVANCED(FFTWF_LIB)
-#   OPTION(FFTWF_LIB "The full path to the fftw3f library (including the library)" )
-    FIND_LIBRARY(FFTWF_LIB fftw3f ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib
-		IF (USE_FFTW_THREADS)
-	    FIND_LIBRARY(FFTWF_THREADS_LIB fftw3f_threads ${FFTW_LIB_SEARCHPATH}) #Single Precision Lib only if compiled with threads support
-		ENDIF(USE_FFTW_THREADS)
-
-    IF(FFTWF_LIB)
-      SET(FFTWF_FOUND 1)
-      IF(FFTWF_THREADS_LIB)
-        SET(FFTWF_LIB ${FFTWF_LIB} ${FFTWF_THREADS_LIB} )
-      ENDIF(FFTWF_THREADS_LIB)
-    ENDIF(FFTWF_LIB)
-  ENDIF(USE_FFTWF)
-
-  IF(USE_FFTWL)
-    MARK_AS_ADVANCED(FFTWL_LIB)
-#   OPTION(FFTWF_LIB "The full path to the fftw3l library (including the library)" )
-    FIND_LIBRARY(FFTWL_LIB fftw3l ${FFTW_LIB_SEARCHPATH}) #Long Double Precision Lib
-		IF (USE_FFTW_THREADS)
-	    FIND_LIBRARY(FFTWL_THREADS_LIB fftw3l_threads ${FFTW_LIB_SEARCHPATH}) #Long Double Precision Lib only if compiled with threads support
-		ENDIF (USE_FFTW_THREADS)
-
-    IF(FFTWL_LIB)
-      SET(FFTWL_FOUND 1)
-      IF(FFTWL_THREADS_LIB)
-        SET(FFTWL_LIB ${FFTWF_LIB} ${FFTWF_THREADS_LIB} )
-      ENDIF(FFTWL_THREADS_LIB)
-    ENDIF(FFTWL_LIB)
-  ENDIF(USE_FFTWL)
-
-	IF(FFTWD_FOUND OR FFTWF_FOUND OR FFTWL_FOUND)
-		SET(FFTW_FOUND TRUE)
+	IF(${fftw_type} STREQUAL "D")
+		SET(FFTW_TYPE_SUFFIX "")
+	ELSE()
+		STRING(TOLOWER ${fftw_type} FFTW_TYPE_SUFFIX)
 	ENDIF()
 
-ENDIF(USE_FFTWD OR USE_FFTWF OR USE_FFTWL)
+	# Generate all possible library names
+	SET(FFTW_LIB_NAMES "")
+	SET(FFTW_THREAD_LIB_NAMES "")
+	FOREACH(fftw_allowed_version ${FFTW_ALLOWED_VERSIONS})
+		LIST(APPEND FFTW_LIB_NAMES fftw${FFTW_TYPE_SUFFIX}${fftw_allowed_version} libfftw${FFTW_TYPE_SUFFIX}-${fftw_allowed_version})
+		#LIST(APPEND FFTW_THREAD_LIB_NAMES TODO: Find out fftw thread lib names)
+	ENDFOREACH()
+
+	FIND_LIBRARY(FFTW${fftw_type}_LIB NAMES ${FFTW_LIB_NAMES}
+		     PATHS ${CUSTOM_SEARCH_PATHS}
+		     PATH_SUFFIXES lib lib64)
+
+	IF(FFTW${fftw_type}_LIB)
+		SET(FFTW${fftw_type}_FOUND TRUE)
+	ENDIF()
+
+	#FIND_LIBRARY(FFTW${fftw_type}_THREADS_LIB NAMES ${FFTW_THREAD_LIB_NAMES}
+	#	      PATHS ${CUSTOM_SEARCH_PATHS}
+	#	      PATH_SUFFIXES lib lib64)
+
+	#IF(FFTW${fftw_type}_THREADS_LIB)
+	#	SET(FFTW${fftw_type}_LIB ${FFTW${fftw_type}_LIB} ${FFTW${fftw_type}_THREADS_LIB})
+	#ENDIF()
+
+ENDFOREACH()
+
+IF(FFTWD_FOUND OR FFTWF_FOUND OR FFTWL_FOUND)
+	SET(FFTW_FOUND TRUE)
+ENDIF()
+
