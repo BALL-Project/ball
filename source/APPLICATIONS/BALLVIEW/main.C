@@ -116,7 +116,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 		if (!(str == "Default")) 
 		{
-			QString loc = "BALLView." + str;
+			QString loc = "BALLView-" + str;
 
 			BALL::Path p;
 			QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
