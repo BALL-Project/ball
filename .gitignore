@@ -13,6 +13,7 @@ moc_*.C
 *.aux
 *.bbl
 *.blg
+*.qm
 .Dependencies
 lib/*
 build/*
@@ -34,7 +35,5 @@ include/BALL/VIEW/UIC/*
 .idea
 .project
 .cproject
-data/BALLView/translations/BALLView.de_DE.qm
-data/BALLView/translations/BALLView.zh_TW.qm
 source/TEST/data/SideChainPlacementProcessor_test_output_pre_1.pdb
 CMakeLists.txt.user
