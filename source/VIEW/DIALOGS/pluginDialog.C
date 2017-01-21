@@ -33,10 +33,8 @@ namespace BALL
 		{
 		}
 
-		int PluginModel::rowCount(const QModelIndex& parent) const
+		int PluginModel::rowCount(const QModelIndex& /* parent */) const
 		{
-			Q_UNUSED(parent)
-
 			return num_rows_;
 		}
 
@@ -97,10 +95,8 @@ namespace BALL
 		{
 		}
 
-		int PluginDirectoryModel::rowCount(const QModelIndex& parent) const
+		int PluginDirectoryModel::rowCount(const QModelIndex& /* parent */) const
 		{
-			Q_UNUSED(parent);
-
 			PluginManager& man = PluginManager::instance();
 			return man.getPluginDirectories().size();
 		}

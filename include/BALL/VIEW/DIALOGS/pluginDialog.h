@@ -49,7 +49,7 @@ namespace BALL
 			public:
 				explicit PluginModel ( QObject* parent = 0 );
 
-				int rowCount(const QModelIndex& parent = QModelIndex()) const;
+				int rowCount(const QModelIndex& /* parent */ = QModelIndex()) const;
 				QVariant data(const QModelIndex& i, int role) const;
 				void pluginsLoaded();
 			private:
@@ -67,7 +67,7 @@ namespace BALL
 			public:
 				explicit PluginDirectoryModel ( QObject* parent = 0 );
 
-				int rowCount(const QModelIndex& parent = QModelIndex()) const;
+				int rowCount(const QModelIndex& /* parent */ = QModelIndex()) const;
 				QVariant data(const QModelIndex& i, int role) const;
 
 				void addDirectory(const QString& dir);
