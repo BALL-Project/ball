@@ -193,7 +193,7 @@ namespace BALL
 
 			connect(ui_->plugin_dir_button_add, SIGNAL(clicked()), this, SLOT(addPluginDirectory()));
 			connect(ui_->plugin_dir_button_remove, SIGNAL(clicked()), this, SLOT(removePluginDirectory()));
-			connect(ui_->plugin_directories_view, SIGNAL(activated(const QModelIndex&)), this, SLOT(directorySelectionChanged(const QModelIndex& )));
+			connect(ui_->plugin_directories_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(directorySelectionChanged(const QModelIndex&, const QModelIndex&)));
 			connect(ui_->plugin_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(pluginChanged(QModelIndex, const QModelIndex&)));
 		}
 
@@ -307,9 +307,9 @@ namespace BALL
 			plugin_model_.pluginsLoaded();
 		}
 
-		void PluginDialog::directorySelectionChanged(const QModelIndex& idx)
+		void PluginDialog::directorySelectionChanged(const QModelIndex& current, const QModelIndex& /* previous */)
 		{
-			ui_->plugin_dir_button_remove->setEnabled(idx.isValid());
+			ui_->plugin_dir_button_remove->setEnabled(current.isValid());
 		}
 
 		void PluginDialog::togglePluginState()

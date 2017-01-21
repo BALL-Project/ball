@@ -124,7 +124,7 @@ namespace BALL
 			protected slots:
 				virtual void addPluginDirectory();
 				virtual void removePluginDirectory();
-				virtual void directorySelectionChanged(const QModelIndex&);
+				virtual void directorySelectionChanged(const QModelIndex&, const QModelIndex& /* previous */);
 				virtual void pluginChanged(QModelIndex current, const QModelIndex& /* previous */);
 				virtual void togglePluginState();
 
