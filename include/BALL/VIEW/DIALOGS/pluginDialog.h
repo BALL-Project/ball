@@ -125,7 +125,7 @@ namespace BALL
 				virtual void addPluginDirectory();
 				virtual void removePluginDirectory();
 				virtual void directorySelectionChanged(const QModelIndex&);
-				virtual void pluginChanged(QModelIndex i);
+				virtual void pluginChanged(QModelIndex current, const QModelIndex& /* previous */);
 				virtual void togglePluginState();
 
 			private:
