@@ -131,22 +131,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>plugin_view</sender>
-   <signal>clicked(QModelIndex)</signal>
-   <receiver>PluginDialogData</receiver>
-   <slot>pluginChanged(QModelIndex)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>493</x>
-     <y>141</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>269</x>
-     <y>165</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>plugin_toggle_button</sender>
    <signal>clicked()</signal>
    <receiver>PluginDialogData</receiver>

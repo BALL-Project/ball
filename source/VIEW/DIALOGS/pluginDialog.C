@@ -198,6 +198,7 @@ namespace BALL
 			connect(ui_->plugin_dir_button_add, SIGNAL(clicked()), this, SLOT(addPluginDirectory()));
 			connect(ui_->plugin_dir_button_remove, SIGNAL(clicked()), this, SLOT(removePluginDirectory()));
 			connect(ui_->plugin_directories_view, SIGNAL(activated(const QModelIndex&)), this, SLOT(directorySelectionChanged(const QModelIndex& )));
+			connect(ui_->plugin_view->selectionModel(), SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(pluginChanged(QModelIndex, const QModelIndex&)));
 		}
 
 		PluginDialog::~PluginDialog()
@@ -265,11 +266,11 @@ namespace BALL
 			}
 		}
 
-		void PluginDialog::pluginChanged(QModelIndex i)
+		void PluginDialog::pluginChanged(QModelIndex current, const QModelIndex& /* previous */)
 		{
 			//Cleanup the old config dialog
-			active_index_ = i;
-			QObject* active_object = qvariant_cast<QObject*>(plugin_model_.data(i, Qt::UserRole));
+			active_index_ = current;
+			QObject* active_object = qvariant_cast<QObject*>(plugin_model_.data(current, Qt::UserRole));
 
 			BALLPlugin* active_plugin = qobject_cast<BALLPlugin*>(active_object);
 			if (!active_plugin)
