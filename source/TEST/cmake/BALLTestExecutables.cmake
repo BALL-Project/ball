@@ -15,7 +15,8 @@ SET(BALL_MATHS_TESTS
 	Vector3_test
 	Vector4_test
 	Quaternion_test
-	Matrix44_test
+	Matrix44_test1
+	Matrix44_test2
 	NumericalIntegrator_test
 	Line3_test
 	Circle3_test
@@ -48,7 +49,8 @@ SET(BALL_DATATYPE_TESTS
 	Hash_test
 	HashMap_test
 	StringHashMap_test
-	HashSet_test
+	HashSet_test1
+	HashSet_test2
 	HashGrid3_test
 	HashGridBox3_test
 	HashGrid3DataIteratorTraits_test
@@ -84,6 +86,7 @@ SET(BALL_CONCEPTS_TESTS
 	Composite_test2
 	Composite_test3
 	Composite_test4
+	Composite_test5
 	CompositeCompositeIteratorTraits_test
 	CompositeChildcompositeIteratorTraits_test
 	CompositeAncestorIteratorTraits_test
@@ -113,7 +116,9 @@ SET(BALL_DOCKING_TESTS
 	GeneticIndividual_test
 	GridAnalysis_test
 	Parameter_test
-	PoseClustering_test
+	PoseClustering_test1
+	PoseClustering_test2
+	PoseClustering_test3
 	Receptor_test
 	Result_test
 	RotateBond_test
@@ -181,7 +186,8 @@ SET(BALL_SCORING_TESTS
 
 SET(BALL_KERNEL_TESTS
 	PTE_test
-	Atom_test
+	Atom_test1
+	Atom_test2
 	Bond_test
 	AtomContainer_test
 	Fragment_test
@@ -201,7 +207,10 @@ SET(BALL_KERNEL_TESTS
 	KernelPredicate_test
 	Selector_test
 	RuleEvaluator_test
-	StandardPredicates_test
+	StandardPredicates_test1
+	StandardPredicates_test2
+	StandardPredicates_test3
+	StandardPredicates_test4
 	DefaultProcessors_test
 	FragmentDB_test
 	NormalizeNamesProcessor_test
@@ -223,13 +232,16 @@ SET(BALL_MOLMEC_TESTS
 	ForceField_test
 	AmberFF_test
 	MMFF94_test
-	CharmmFF_test
+	CharmmFF_test1
+	CharmmFF_test2
 	EnergyMinimizer_test
 	LineSearch_test
 	SteepestDescentMinimizer_test
 	ConjugateGradientMinimizer_test
 	StrangLBFGSMinimizer_test
-	ShiftedLVMMMinimizer_test
+	ShiftedLVMMMinimizer_test1
+	ShiftedLVMMMinimizer_test2
+	ShiftedLVMMMinimizer_test3
 	AtomTypes_test
 )
 
@@ -259,7 +271,8 @@ SET(BALL_FORMATS_TESTS
 	CCP4File_test
 	DockResultFile_test
 	HMOFile_test
-	INIFile_test
+	INIFile_test1
+	INIFile_test2
 	JCAMPFile_test
 	KCFFile_test
 	Parameters_test
@@ -290,7 +303,8 @@ SET(BALL_ENERGY_TESTS
 SET(BALL_STRUCTURE_TESTS
 	AddHydrogenProcessor_test
 	AnalyticalSES_test
-	AssignBondOrderProcessor_test
+	AssignBondOrderProcessor_test1
+	AssignBondOrderProcessor_test2
 	AtomBijection_test
 	BinaryFingerprintMethods_test
 	BindingPocketProcessor_test
