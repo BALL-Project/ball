@@ -69,7 +69,8 @@ ENDFOREACH()
 # which takes _very_ long
 SET_TESTS_PROPERTIES (
 	ScoringFunction_test
-	AssignBondOrderProcessor_test
+	AssignBondOrderProcessor_test1
+	AssignBondOrderProcessor_test2
 	PROPERTIES TIMEOUT 7200
 )
 
