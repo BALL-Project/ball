@@ -3,6 +3,7 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
+#include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -85,6 +86,16 @@ namespace BALL
 
 			if (!s.isEmpty())
 			{
+				// In case of a MacOS Bundle we have to convert the data file path
+				// that is relative to the bundle into an absolute file path to be
+				// found by the PresentaBALL widget.
+				if (s.hasPrefix("BALLView.app"))
+				{
+					QString tmp = QCoreApplication::applicationDirPath();
+					tmp.replace(QRegExp("BALLView\\.app.*"), QString(s.c_str()));
+					s = String(tmp);
+				}
+
 				setIndexHTML((s + "/index.html").c_str());
 			}
 			else
