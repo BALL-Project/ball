@@ -8,8 +8,8 @@ namespace BALL
 	{
 		BALLaxyPlugin::BALLaxyPlugin()
 			: icon_(":pluginBALLaxy.png"),
-			  is_active_(false),
-			  preferences_(new BALLaxyInterfacePreferences())
+			  preferences_(new BALLaxyInterfacePreferences()),
+			  widget_(nullptr)
 		{ }
 
 		BALLaxyPlugin::~BALLaxyPlugin()
@@ -35,28 +35,31 @@ namespace BALL
 			return preferences_;
 		}
 
-		ModularWidget* BALLaxyPlugin::createModularWidget(MainControl* main_control)
+		bool BALLaxyPlugin::activate()
 		{
-			BALLaxyInterface* ballaxy_interface = new BALLaxyInterface(main_control);
-			HTMLViewDock*     ballaxy_view      = new HTMLViewDock(ballaxy_interface, main_control, String(tr("BALLaxy")).c_str());
+			if(isActive()) return true;
+
+			BALLaxyInterface* ballaxy_interface = new BALLaxyInterface(main_control_);
+			HTMLViewDock*     ballaxy_view      = new HTMLViewDock(ballaxy_interface, main_control_, String(tr("BALLaxy")).c_str());
 
 			preferences_->storeValues();
 
-			main_control->addDockWidget(Qt::BottomDockWidgetArea, ballaxy_view);
+			main_control_->addDockWidget(Qt::RightDockWidgetArea, ballaxy_view);
 
-			return ballaxy_view;
-		}
-
-		bool BALLaxyPlugin::activate()
-		{
-			is_active_ = true;
+			widget_ = ballaxy_view;
+			widget_->registerWidget(widget_);
+			widget_->initializeWidget(*main_control_);
 
 			return true;
 		}
 
 		bool BALLaxyPlugin::deactivate()
 		{
-			is_active_ = false;
+			if(!isActive()) return true;
+
+			widget_->finalizeWidget(*main_control_);
+			delete widget_;
+			widget_ = nullptr;
 
 			return true;
 		}
