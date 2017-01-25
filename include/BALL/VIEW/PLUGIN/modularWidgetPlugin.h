@@ -24,7 +24,15 @@ namespace BALL
 			public:
 				virtual ~ModularWidgetPlugin() {}
 
-				virtual ModularWidget* createModularWidget(MainControl* parent) = 0;
+				/** Set the main control.
+				 *  Each widget plugin has to know which main control is responsible for
+				 *  the widget it creates.
+				 *
+				 *  Note: The main control has to be set before activating the plugin!
+				 *
+				 *  @param main_control Main control repsonsible for the widget
+				 */
+				virtual void setMainControl(MainControl* main_control) { main_control_ = main_control; }
 
 			protected:
 				MainControl* main_control_;
