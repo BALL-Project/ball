@@ -39,6 +39,12 @@ namespace BALL
 		{
 			if(isActive()) return true;
 
+			if(!main_control_)
+			{
+				Log.error() << "BALLaxy plugin: Undefined main control" << std::endl;
+				return false;
+			}
+
 			BALLaxyInterface* ballaxy_interface = new BALLaxyInterface(main_control_);
 			HTMLViewDock*     ballaxy_view      = new HTMLViewDock(ballaxy_interface, main_control_, String(tr("BALLaxy")).c_str());
 
