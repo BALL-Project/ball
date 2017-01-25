@@ -291,8 +291,11 @@ namespace BALL
 			plugin_path += "/plugins";
 
 			QString dir = QFileDialog::getExistingDirectory(0, tr("Select a plugin directory"), plugin_path);
-			plugin_dir_model_.addDirectory(dir);
-			plugin_model_.pluginsLoaded();
+			if(!dir.isNull())
+			{
+				plugin_dir_model_.addDirectory(dir);
+				plugin_model_.pluginsLoaded();
+			}
 		}
 
 		void PluginDialog::removePluginDirectory()
