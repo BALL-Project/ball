@@ -316,7 +316,7 @@ namespace BALL
 		{
 			if ((*it)->canHandle(plugin))
 			{
-				started = (*it)->startPlugin(plugin) && !started;
+				started |= (*it)->startPlugin(plugin);
 			}
 		}
 		handler_mutex_.unlock();
