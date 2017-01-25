@@ -38,6 +38,12 @@ namespace BALL
 		{
 			if(isActive()) return true;
 
+			if(!main_control_)
+			{
+				Log.error() << "PresentaBALL: Undefined main control" << std::endl;
+				return false;
+			}
+
 			html_interface_ = new PresentaBALLView(main_control_);
 
 			HTMLViewDock* html_view = new HTMLViewDock(html_interface_, main_control_, String(tr("PresentaBALL")).c_str());
