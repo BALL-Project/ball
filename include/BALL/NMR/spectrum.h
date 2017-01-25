@@ -43,7 +43,7 @@ namespace BALL
 	\ingroup Spectra
 	*/
 	template <typename DataT, typename PeakT, typename PositionT = typename PeakT::Position>
-	class BALL_EXPORT Spectrum
+	class Spectrum
 	{
 		public:
 		
