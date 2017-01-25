@@ -14,8 +14,6 @@
 #endif
 
 #include <QtCore/QModelIndex>
-#include <QtWidgets/QItemDelegate>
-#include <QtWidgets/QDialog>
 
 namespace Ui
 {
@@ -27,16 +25,6 @@ namespace BALL
 	namespace VIEW
 	{
 		class VIEWPlugin;
-
-/*		class PluginItemDelegate : public QItemDelegate
-		{
-			Q_OBJECT
-
-			public:
-				QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-				void paint ( QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index ) const;
-		};
-*/
 
 		/**
 		 * A wrapper around the plugin manager that provides

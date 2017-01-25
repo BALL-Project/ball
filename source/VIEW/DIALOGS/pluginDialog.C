@@ -1,6 +1,5 @@
 #include <BALL/PLUGIN/pluginManager.h>
 #include <BALL/PLUGIN/BALLPlugin.h>
-#include <BALL/COMMON/logStream.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,15 +8,12 @@
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
-#include <BALL/STRUCTURE/bindingPocketProcessor.h>
 
 #include <BALL/VIEW/UIC/ui_pluginDialog.h>
 
 Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
 
 #include <QtWidgets/QFileDialog>
-#include <QtCore/QObject>
-#include <QtCore/QDebug>
 #include <QtCore/QLibraryInfo>
 
 namespace BALL
