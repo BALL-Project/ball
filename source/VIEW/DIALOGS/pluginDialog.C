@@ -181,11 +181,6 @@ namespace BALL
 			ui_->plugin_view->setModel(&plugin_model_);
 			ui_->plugin_directories_view->setModel(&plugin_dir_model_);
 
-//			QString plugin_path(BALL_PATH);
-//			plugin_path += "/plugins";
-			QString plugin_path(QLibraryInfo::location(QLibraryInfo::PluginsPath));
-
-			plugin_dir_model_.addDirectory(plugin_path);
 			plugin_model_.pluginsLoaded();
 
 			setObjectName(name);
