@@ -16,7 +16,7 @@ namespace BALL
 			setupUi(this);
 			setObjectName(name);
 			setWidgetStackName((String)tr("PresentaBALL"));
-			setINIFileSectionName("PresentaBALL_PLUGIN");
+			setINIFileSectionName("PresentaBALL");
 			registerWidgets_();
 
 			connect(browse_button, SIGNAL(clicked()), this, SLOT(selectIndexHTMLLocation()));
