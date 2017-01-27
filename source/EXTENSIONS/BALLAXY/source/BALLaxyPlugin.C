@@ -13,7 +13,11 @@ namespace BALL
 		{ }
 
 		BALLaxyPlugin::~BALLaxyPlugin()
-		{ }
+		{
+			// Ideally, this should be handled by Qt when destroying this plugin. However, config dialogs require a
+			// QWidget as parent while this plugin is just a mere QObject.
+			delete preferences_;
+		}
 
 		QString BALLaxyPlugin::getName() const
 		{
