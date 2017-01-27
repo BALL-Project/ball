@@ -59,7 +59,6 @@ namespace BALL
 			main_control_->addDockWidget(Qt::LeftDockWidgetArea, html_view);
 
 			widget_ = html_view;
-			widget_->registerWidget(widget_);
 			widget_->initializeWidget(*main_control_);
 
 			return true;
