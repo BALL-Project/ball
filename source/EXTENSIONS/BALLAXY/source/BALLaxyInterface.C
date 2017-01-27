@@ -17,7 +17,13 @@ namespace BALL
 	{
 		BALLaxyInterface::BALLaxyInterface(MainControl* parent)
 			: HTMLView(parent),
-			  Embeddable()
+			  Embeddable(),
+			  ballaxy_base_(),
+			  context_submenu_(nullptr),
+			  context_submenu_action_(nullptr),
+			  context_separator_(nullptr),
+			  context_action_pdb_(nullptr),
+			  context_action_mol2_(nullptr)
 		{
 			registerThis();
 			connect(page()->profile(), SIGNAL(downloadRequested(QWebEngineDownloadItem*)), this, SLOT(verifyDownloadRequest(QWebEngineDownloadItem*)));

@@ -7,7 +7,11 @@ namespace BALL
 	namespace VIEW
 	{
 		BALLaxyPlugin::BALLaxyPlugin()
-			: icon_(":pluginBALLaxy.png"),
+			: QObject(),
+			  BALLPlugin(),
+			  VIEWPlugin(),
+			  ModularWidgetPlugin(),
+			  icon_(":pluginBALLaxy.png"),
 			  preferences_(new BALLaxyInterfacePreferences()),
 			  widget_(nullptr)
 		{ }
@@ -72,6 +76,5 @@ namespace BALL
 
 			return true;
 		}
-
 	}
 }
