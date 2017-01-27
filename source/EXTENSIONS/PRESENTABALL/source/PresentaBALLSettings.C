@@ -4,8 +4,6 @@
 #include <QLineEdit>
 #include <QFileDialog>
 
-#include <BALL/VIEW/KERNEL/common.h>
-
 namespace BALL
 {
 	namespace VIEW
