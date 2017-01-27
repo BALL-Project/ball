@@ -65,7 +65,7 @@ namespace BALL
 			{
 				QString str = f.getValue("GENERAL", "language").c_str();
 
-				if (!(str == "Default") && str == "de_DE")
+				if (str == "de_DE")
 				{
 					s = p.find("HTMLBasedInterface/html_de");
 				}
@@ -121,61 +121,52 @@ namespace BALL
 		{
 			//Try to cast message to the type, that you want to handle
 			CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
-			RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
-			SceneMessage* smsg = RTTI::castTo<SceneMessage>(*message);
-			DatasetMessage* dmsg = RTTI::castTo<DatasetMessage>(*message);			
-
-			if (cmsg == 0)
-			{
-				if (rmsg == 0)
-				{
-					if (smsg == 0)
-					{
-						if (dmsg == 0)
-						{
-							return;
-						}
-						else
-						{
-							emit signal_->messageSignal(3, (int) dmsg->getType()); //DataMessage = 3
-
-							#ifdef BALL_VIEW_DEBUG
-							Log.info() << "DataMessage fired to JS" << std::endl;
-							#endif
-						}
-					}
-					else
-					{
-						emit signal_->messageSignal(2, (int) smsg->getType()); //SceneMessage = 2
-
-						#ifdef BALL_VIEW_DEBUG
-						Log.info() << "SceneMessage fired to JS" << std::endl;
-						#endif
-					}
-				}
-				else
-				{
-					emit signal_->messageSignal(1, (int) rmsg->getType()); // RepresentationMessage = 1
-
-					#ifdef BALL_VIEW_DEBUG
-					Log.info() << "RepresentationMessage fired to JS" << std::endl;
-					#endif
-				}
-			}
-			else
+			if (cmsg)
 			{
 				// fire a Qt signal that can be handled by the website
 				emit signal_->messageSignal(0, (int) cmsg->getType()); // CompositeMessage = 0
 
-				#ifdef BALL_VIEW_DEBUG
+#ifdef BALL_VIEW_DEBUG
 				Log.info() << "CompositeMessage fired to JS" << std::endl;
+#endif
+				return;
+			}
+
+			RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
+			if (rmsg)
+			{
+				emit signal_->messageSignal(1, (int) rmsg->getType()); // RepresentationMessage = 1
+
+				#ifdef BALL_VIEW_DEBUG
+				Log.info() << "RepresentationMessage fired to JS" << std::endl;
 				#endif
+				return;
+			}
+
+			SceneMessage* smsg = RTTI::castTo<SceneMessage>(*message);
+			if (smsg)
+			{
+				emit signal_->messageSignal(2, (int) smsg->getType()); //SceneMessage = 2
+
+#ifdef BALL_VIEW_DEBUG
+				Log.info() << "SceneMessage fired to JS" << std::endl;
+#endif
+				return;
+			}
+
+			DatasetMessage* dmsg = RTTI::castTo<DatasetMessage>(*message);
+			if (dmsg)
+			{
+				emit signal_->messageSignal(3, (int) dmsg->getType()); //DataMessage = 3
+
+#ifdef BALL_VIEW_DEBUG
+				Log.info() << "DataMessage fired to JS" << std::endl;
+#endif
 			}
 		}
 
 		void PresentaBALLView::contextMenuEvent(QContextMenuEvent*)
-		{
-		}
+		{ }
 
 		PresentaBALLSettings* PresentaBALLView::getSettings()
 		{
