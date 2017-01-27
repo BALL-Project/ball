@@ -13,11 +13,16 @@ namespace BALL
 			  ModularWidgetPlugin(),
 			  icon_(":pluginPresentaBALL.png"),
 			  html_interface_(nullptr),
+			  settings_(new PresentaBALLSettings()),
 			  widget_(nullptr)
 		{ }
 
 		PresentaBALLPlugin::~PresentaBALLPlugin()
-		{ }
+		{
+			// Ideally, this should be handled by Qt when destroying this plugin. However, config dialogs require a
+			// QWidget as parent while this plugin is just a mere QObject.
+			delete settings_;
+		}
 
 		QString PresentaBALLPlugin::getName() const
 		{
@@ -36,7 +41,7 @@ namespace BALL
 
 		ConfigDialog* PresentaBALLPlugin::getConfigDialog()
 		{
-			return html_interface_->getSettings();
+			return settings_;
 		}
 
 		bool PresentaBALLPlugin::activate()
@@ -49,7 +54,7 @@ namespace BALL
 				return false;
 			}
 
-			html_interface_ = new PresentaBALLView(main_control_);
+			html_interface_ = new PresentaBALLView(settings_, main_control_);
 
 			HTMLViewDock* html_view = new HTMLViewDock(html_interface_, main_control_, String(tr("PresentaBALL")).c_str());
 

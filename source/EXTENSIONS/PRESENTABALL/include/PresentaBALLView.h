@@ -29,7 +29,7 @@ namespace BALL
 			BALL_EMBEDDABLE(PresentaBALLView, ModularWidget)
 
 			public:
-				PresentaBALLView(QWidget* parent = nullptr, const char* name = nullptr);
+				PresentaBALLView(PresentaBALLSettings* settings, QWidget* parent = nullptr, const char* name = nullptr);
 				virtual ~PresentaBALLView();
 
 				virtual void onNotify(Message* message);
@@ -37,11 +37,7 @@ namespace BALL
 				virtual void setIndexHTML(String const& index_html);
 				String const& getIndexHTML();
 
-				virtual void restoreDefaults();
-
 				virtual void applyPreferences();
-
-				PresentaBALLSettings* getSettings();
 
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt);

@@ -31,7 +31,7 @@ namespace BALL
 			public:
 
 				/// Constructor
-				PresentaBALLSettings(PresentaBALLView* parent = nullptr,
+				PresentaBALLSettings(QWidget* parent = nullptr,
 					const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
 
 				/// Destructor
@@ -44,9 +44,6 @@ namespace BALL
 
 			public slots:
 				virtual void selectIndexHTMLLocation();
-
-			protected:
-				PresentaBALLView* html_interface_;
 		};
 
 	}

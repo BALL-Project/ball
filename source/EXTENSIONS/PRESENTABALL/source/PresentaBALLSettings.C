@@ -1,6 +1,9 @@
 #include <PresentaBALLSettings.h>
 #include <PresentaBALLView.h>
 
+#include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/directory.h>
+
 #include <QLineEdit>
 #include <QFileDialog>
 
@@ -8,10 +11,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		PresentaBALLSettings::PresentaBALLSettings(PresentaBALLView* parent, const char* name, Qt::WindowFlags fl)
+		PresentaBALLSettings::PresentaBALLSettings(QWidget* parent, const char* name, Qt::WindowFlags fl)
 			: ConfigDialog(parent, fl),
-			  Ui_PresentaBALLSettingsData(),
-			  html_interface_(parent)
+			  Ui_PresentaBALLSettingsData()
 		{
 			setupUi(this);
 			setObjectName(name);
@@ -48,7 +50,31 @@ namespace BALL
 		void PresentaBALLSettings::restoreDefaultValues(bool all)
 		{
 			PreferencesEntry::restoreDefaultValues(all);
-			html_interface_->restoreDefaults();
+
+			//set the webpage language according to the language set in preferences
+			String home_dir = Directory::getUserHomeDir();
+			INIFile f(home_dir + FileSystem::PATH_SEPARATOR + ".BALLView");
+			f.read();
+
+			Path p;
+			String s;
+			if (f.hasEntry("GENERAL", "language") && f.getValue("GENERAL", "language") == "de_DE")
+			{
+				s = p.find("HTMLBasedInterface/html_de");
+			}
+			else
+			{
+				s = p.find("HTMLBasedInterface/html_eng");
+			}
+
+			if (!s.isEmpty())
+			{
+				setIndexHTMLLocation((s + "/index.html").c_str());
+			}
+			else
+			{
+				Log.error() << "No html directory set!" << std::endl;
+			}
 		}
 
 	}
