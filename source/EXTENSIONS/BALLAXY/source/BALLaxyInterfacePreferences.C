@@ -39,7 +39,7 @@ namespace BALL
 		void BALLaxyInterfacePreferences::storeValues()
 		{
 			BALLaxyInterface* bi = BALLaxyInterface::getInstance(0);
-			if (bi == 0) return;
+			if (!bi) return;
 
 			bi->setPage(new HTMLPage(bi, ignore_ssl_errors->isChecked()));
 			bi->setBALLaxyBaseUrl(ascii(url_edit->text()));
