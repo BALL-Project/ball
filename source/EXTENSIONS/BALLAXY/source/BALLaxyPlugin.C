@@ -57,7 +57,6 @@ namespace BALL
 			main_control_->addDockWidget(Qt::RightDockWidgetArea, ballaxy_view);
 
 			widget_ = ballaxy_view;
-			widget_->registerWidget(widget_);
 			widget_->initializeWidget(*main_control_);
 
 			return true;
