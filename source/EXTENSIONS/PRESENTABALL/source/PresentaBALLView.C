@@ -48,9 +48,7 @@ namespace BALL
 		}
 
 		PresentaBALLView::~PresentaBALLView()
-		{
-			ModularWidget::unregisterThis();
-		}
+		{ }
 
 		void PresentaBALLView::applyPreferences()
 		{
