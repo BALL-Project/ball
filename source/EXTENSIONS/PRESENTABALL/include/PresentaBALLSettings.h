@@ -31,7 +31,7 @@ namespace BALL
 			public:
 
 				/// Constructor
-				PresentaBALLSettings(PresentaBALLView* parent = 0,
+				PresentaBALLSettings(PresentaBALLView* parent = nullptr,
 					const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
 
 				/// Destructor
