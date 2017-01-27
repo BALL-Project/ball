@@ -3,16 +3,11 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
-#include <BALL/SYSTEM/fileSystem.h>
-#include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 
 #include <QtWebChannel/QtWebChannel>
-#include <QtCore/QUrlQuery>
-#include <QThread>
 
 namespace BALL
 {
