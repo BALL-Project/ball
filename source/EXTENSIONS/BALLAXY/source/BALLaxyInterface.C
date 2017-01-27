@@ -50,12 +50,12 @@ namespace BALL
 			GenericMolFile* mol_file = MolFileFactory::open(tmp_filename, std::ios::out);
 
 			// currently, we can only handle Molecules and Systems
-			if (dynamic_cast<System*>(ac) != 0)
+			if (dynamic_cast<System*>(ac))
 			{
 				*mol_file << *dynamic_cast<System*>(ac);
 				mol_file->close();
 			}
-			else if (dynamic_cast<Molecule*>(ac) != 0)
+			else if (dynamic_cast<Molecule*>(ac))
 			{
 				*mol_file << *dynamic_cast<Molecule*>(ac);
 				mol_file->close();
