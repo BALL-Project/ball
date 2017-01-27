@@ -35,7 +35,7 @@ namespace BALL
 			public:
 			
 				/// Default Constructor.
-				BALLaxyInterfacePreferences(QWidget *parent = NULL, const char *name = "BALLaxyInterfacePreferences", Qt::WindowFlags fl=0);
+				BALLaxyInterfacePreferences(QWidget *parent = nullptr, const char *name = "BALLaxyInterfacePreferences", Qt::WindowFlags fl=0);
 				
 				/// Destructor.
 				virtual ~BALLaxyInterfacePreferences();
