@@ -26,7 +26,7 @@ namespace BALL
 			restoreDefaults();
 
 			// connect actions
-			QAction* action = 0;
+			QAction* action = nullptr;
 			signalMapper_ = new QSignalMapper(this);
 			ShortcutRegistry& sr = MainControl::getInstance(0)->getShortcutRegistry();
 			for (uint i = 0; i < sr.size(); i++)
