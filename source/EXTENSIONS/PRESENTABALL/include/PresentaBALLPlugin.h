@@ -18,8 +18,8 @@ namespace BALL
 		class PresentaBALLPlugin
 			: public QObject,
 			  public BALLPlugin,
-				public VIEWPlugin,
-				public ModularWidgetPlugin
+			  public VIEWPlugin,
+			  public ModularWidgetPlugin
 		{
 			Q_OBJECT
 			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.ModularWidget.PresentaBALL")
@@ -47,6 +47,5 @@ namespace BALL
 		};
 	}
 }
-
 
 #endif // PRESENTABALLPLUGIN_H

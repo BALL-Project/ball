@@ -15,7 +15,12 @@ namespace BALL
 	{
 		PresentaBALLView::PresentaBALLView(QWidget* parent, const char* name)
 			: HTMLView(parent),
-			  ModularWidget(name)
+			  ModularWidget(name),
+			  signal_(nullptr),
+			  channel_(nullptr),
+			  signalMapper_(nullptr),
+			  index_html_(""),
+			  settings_(nullptr)
 		{
 			// establish webchannel
 			settings_ = new PresentaBALLSettings(this);
