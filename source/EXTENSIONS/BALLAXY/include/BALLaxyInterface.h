@@ -18,7 +18,7 @@ namespace BALL
 			public:
 				BALL_EMBEDDABLE(BALLaxyInterface, Embeddable)
 
-				BALLaxyInterface(MainControl* parent = 0);
+				BALLaxyInterface(MainControl* parent = nullptr);
 
 				virtual ~BALLaxyInterface();
 
