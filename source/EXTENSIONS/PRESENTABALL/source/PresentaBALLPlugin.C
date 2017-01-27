@@ -7,7 +7,12 @@ namespace BALL
 	namespace VIEW
 	{
 		PresentaBALLPlugin::PresentaBALLPlugin()
-			: icon_(":pluginPresentaBALL.png"),
+			: QObject(nullptr),
+			  BALLPlugin(),
+			  VIEWPlugin(),
+			  ModularWidgetPlugin(),
+			  icon_(":pluginPresentaBALL.png"),
+			  html_interface_(nullptr),
 			  widget_(nullptr)
 		{ }
 
