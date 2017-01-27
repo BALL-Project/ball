@@ -15,6 +15,9 @@ namespace BALL
 		{
 			Q_OBJECT
 
+			public:
+				PresentaBALLSignal(QObject* parent = nullptr): QObject(parent) { }
+
 			signals:
 				void actionSignal(int i);
 				void messageSignal(int i, int j);
@@ -26,7 +29,7 @@ namespace BALL
 			BALL_EMBEDDABLE(PresentaBALLView, ModularWidget)
 
 			public:
-				PresentaBALLView(QWidget* parent = 0, const char* name = 0);
+				PresentaBALLView(QWidget* parent = nullptr, const char* name = nullptr);
 				virtual ~PresentaBALLView();
 
 				virtual void onNotify(Message* message);

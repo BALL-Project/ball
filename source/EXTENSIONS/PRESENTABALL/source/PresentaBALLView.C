@@ -25,14 +25,14 @@ namespace BALL
 			// establish webchannel
 			settings_ = new PresentaBALLSettings(this);
 			channel_ = new QWebChannel(page());
-			signal_ = new PresentaBALLSignal;
+			signal_ = new PresentaBALLSignal(this);
 			page()->setWebChannel(channel_);
 			channel_->registerObject(QString("signals"), signal_);
 			restoreDefaults();
 
 			// connect actions
 			QAction* action = 0;
-			signalMapper_ = new QSignalMapper;
+			signalMapper_ = new QSignalMapper(this);
 			ShortcutRegistry& sr = MainControl::getInstance(0)->getShortcutRegistry();
 			for (uint i = 0; i < sr.size(); i++)
 			{
@@ -53,9 +53,6 @@ namespace BALL
 
 		PresentaBALLView::~PresentaBALLView()
 		{
-			delete channel_;
-			delete signal_;
-			delete signalMapper_;
 			ModularWidget::unregisterThis();
 		}
 
