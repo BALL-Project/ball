@@ -1,8 +1,6 @@
 #include <PresentaBALLView.h>
 #include <PresentaBALLSettings.h>
 
-#include <BALL/SYSTEM/path.h>
-#include <BALL/SYSTEM/directory.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -13,22 +11,20 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		PresentaBALLView::PresentaBALLView(QWidget* parent, const char* name)
+		PresentaBALLView::PresentaBALLView(PresentaBALLSettings* settings, QWidget* parent, const char* name)
 			: HTMLView(parent),
 			  ModularWidget(name),
 			  signal_(nullptr),
 			  channel_(nullptr),
 			  signalMapper_(nullptr),
 			  index_html_(""),
-			  settings_(nullptr)
+			  settings_(settings)
 		{
 			// establish webchannel
-			settings_ = new PresentaBALLSettings(this);
 			channel_ = new QWebChannel(page());
 			signal_ = new PresentaBALLSignal(this);
 			page()->setWebChannel(channel_);
 			channel_->registerObject(QString("signals"), signal_);
-			restoreDefaults();
 
 			// connect actions
 			QAction* action = nullptr;
@@ -54,51 +50,6 @@ namespace BALL
 		PresentaBALLView::~PresentaBALLView()
 		{
 			ModularWidget::unregisterThis();
-		}
-
-		void PresentaBALLView::restoreDefaults()
-		{
-			Path p;
-			String s;
-			
-			//set the webpage language according to the language set in preferences
-			String home_dir = Directory::getUserHomeDir();
-			INIFile f(home_dir + FileSystem::PATH_SEPARATOR + ".BALLView");
-			f.read();
-
-			if (f.hasEntry("GENERAL", "language")) 
-			{
-				QString str = f.getValue("GENERAL", "language").c_str();
-
-				if (str == "de_DE")
-				{
-					s = p.find("HTMLBasedInterface/html_de");
-				}
-				else
-				{
-					//default = english
-					s = p.find("HTMLBasedInterface/html_eng");
-				}
-			 }
-
-			if (!s.isEmpty())
-			{
-				// In case of a MacOS Bundle we have to convert the data file path
-				// that is relative to the bundle into an absolute file path to be
-				// found by the PresentaBALL widget.
-				if (s.hasPrefix("BALLView.app"))
-				{
-					QString tmp = QCoreApplication::applicationDirPath();
-					tmp.replace(QRegExp("BALLView\\.app.*"), QString(s.c_str()));
-					s = String(tmp);
-				}
-
-				setIndexHTML((s + "/index.html").c_str());
-			}
-			else
-			{
-				Log.error() << "No html directory set!" << std::endl;
-			}
 		}
 
 		void PresentaBALLView::applyPreferences()
@@ -172,10 +123,5 @@ namespace BALL
 
 		void PresentaBALLView::contextMenuEvent(QContextMenuEvent*)
 		{ }
-
-		PresentaBALLSettings* PresentaBALLView::getSettings()
-		{
-			return settings_;
-		}
 	}
 }

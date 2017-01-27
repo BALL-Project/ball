@@ -43,6 +43,7 @@ namespace BALL
 			private:
 				QPixmap icon_;
 				PresentaBALLView* html_interface_;
+				PresentaBALLSettings* settings_;
 				ModularWidget* widget_;
 		};
 	}
