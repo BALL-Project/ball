@@ -35,7 +35,7 @@ namespace BALL
 					const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
 
 				/// Destructor
-				~PresentaBALLSettings();
+				virtual ~PresentaBALLSettings();
 
 				virtual void restoreDefaultValues(bool all = false);
 
