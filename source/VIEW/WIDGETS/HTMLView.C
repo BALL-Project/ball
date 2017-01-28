@@ -73,6 +73,8 @@ namespace BALL
 
 		void HTMLViewDock::checkForIncompatibleDrivers_()
 		{
+#ifdef BALL_OS_LINUX
+			// On Winwows, the following code causes a stack overflow!
 			GLRenderer glr = GLRenderer();
 			String vendor = glr.getVendor();
 
@@ -80,6 +82,7 @@ namespace BALL
 			{
 				show_error_ = true;
 			}
+#endif
 		}
 	}
 }
