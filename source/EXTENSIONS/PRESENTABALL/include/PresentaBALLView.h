@@ -33,10 +33,6 @@ namespace BALL
 				virtual ~PresentaBALLView();
 
 				virtual void onNotify(Message* message);
-
-				virtual void setIndexHTML(String const& index_html);
-				String const& getIndexHTML();
-
 				virtual void applyPreferences();
 
 			protected:
@@ -46,7 +42,7 @@ namespace BALL
 				PresentaBALLSignal* signal_;
 				QWebChannel* channel_;
 				QSignalMapper* signalMapper_;
-				String index_html_;
+				QString index_html_;
 				PresentaBALLSettings* settings_;
 		};
 	}

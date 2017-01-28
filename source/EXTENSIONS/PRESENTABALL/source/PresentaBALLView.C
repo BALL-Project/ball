@@ -17,7 +17,7 @@ namespace BALL
 			  signal_(nullptr),
 			  channel_(nullptr),
 			  signalMapper_(nullptr),
-			  index_html_(""),
+			  index_html_(),
 			  settings_(settings)
 		{
 			// establish webchannel
@@ -45,6 +45,7 @@ namespace BALL
 			}
 
 			ModularWidget::registerWidget(this);
+			applyPreferences();
 		}
 
 		PresentaBALLView::~PresentaBALLView()
@@ -52,23 +53,12 @@ namespace BALL
 
 		void PresentaBALLView::applyPreferences()
 		{
-			setIndexHTML(ascii(settings_->getIndexHTMLLocation()));
-		}
-
-		void PresentaBALLView::setIndexHTML(const String& index_html)
-		{
+			QString index_html = settings_->getIndexHTMLLocation();
 			if (index_html != index_html_)
 			{
 				index_html_ = index_html;
-				setUrl(QUrl::fromLocalFile(index_html_.c_str()));
-
-				settings_->setIndexHTMLLocation(index_html_.c_str());
+				load(QUrl::fromLocalFile(index_html_));
 			}
-		}
-
-		String const& PresentaBALLView::getIndexHTML()
-		{
-			return index_html_;
 		}
 
 		void PresentaBALLView::onNotify(Message* message)
