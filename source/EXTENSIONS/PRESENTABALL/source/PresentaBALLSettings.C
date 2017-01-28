@@ -21,6 +21,7 @@ namespace BALL
 			setINIFileSectionName("PresentaBALL");
 			registerWidgets_();
 
+			restoreDefaultValues();
 			connect(browse_button, SIGNAL(clicked()), this, SLOT(selectIndexHTMLLocation()));
 		}
 
