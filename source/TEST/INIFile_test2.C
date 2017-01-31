@@ -179,7 +179,7 @@ RESULT
 
 INIFile inix(BALL_TEST_DATA_PATH(INIFile_test.ini));
 inix.read();
-INIFile::LineIterator it(ini.getLine(0));
+INIFile::LineIterator it(inix.getLine(0));
 INIFile::LineIterator unbound;
 
 CHECK(BALL_CREATE(IteratorTraits_))
@@ -198,7 +198,7 @@ CHECK(IteratorTraits_& getSectionNextLine())
 	INIFile::LineIterator it2(it);
 	it2.getSectionNextLine();
 	TEST_EQUAL(+it2, false)
-	it2 = ini.getLine(7);
+	it2 = inix.getLine(7);
 	TEST_EQUAL(*it2, ";comments over comments");
 	TEST_EQUAL(+it2.getSectionNextLine(), true)
 	TEST_EQUAL(*it2, "test3 = c")
@@ -206,7 +206,7 @@ CHECK(IteratorTraits_& getSectionNextLine())
 	unbound.getSectionNextLine();
 RESULT
 
-it = ini.getLine(1);
+it = inix.getLine(1);
 CHECK(IteratorTraits_(const IteratorTraits_& traits))
 	INIFile::LineIterator it2(it);
 	TEST_EQUAL(+it2, true)
@@ -221,7 +221,7 @@ CHECK(IteratorTraits_& operator ++ ())
 	++it;
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "# this is a comment =")
-	it = ini.getLine(9);
+	it = inix.getLine(9);
 	TEST_EQUAL(+it, true)
 	++it;
 	TEST_EQUAL(+it, false)
@@ -229,10 +229,10 @@ CHECK(IteratorTraits_& operator ++ ())
 RESULT
 
 CHECK(IteratorTraits_& operator -- ())
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	--it;
 	TEST_EQUAL(+it, false)
-	it = ini.getLine(1);
+	it = inix.getLine(1);
 	TEST_EQUAL(*it, "[Section2]")
 	--it;
 	TEST_EQUAL(*it, "[Section1]")
@@ -240,7 +240,7 @@ CHECK(IteratorTraits_& operator -- ())
 RESULT
 
 CHECK(List<String> ::iterator getPosition())
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	TEST_EQUAL(*(it.getPosition()), "[Section1]")
 	unbound.getPosition();
 RESULT
@@ -251,22 +251,22 @@ CHECK(SectionIterator getSection())
 RESULT
 
 CHECK(bool operator != (const IteratorTraits_& traits) const)
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	INIFile::LineIterator it3;
 	TEST_EQUAL(it != it3, true)
-	it3 = ini.getLine(1);
+	it3 = inix.getLine(1);
 	TEST_EQUAL(it != it3, true)
-	it3 = ini.getLine(0);
+	it3 = inix.getLine(0);
 	TEST_EQUAL(it != it3, false)
 RESULT
 
 CHECK(bool operator == (const IteratorTraits_& traits) const)
-  it = ini.getLine(0);
+  it = inix.getLine(0);
 	INIFile::LineIterator it3;
 	TEST_EQUAL(it == it3, false)
-	it3 = ini.getLine(1);
+	it3 = inix.getLine(1);
 	TEST_EQUAL(it == it3, false)
-	it3 = ini.getLine(0);
+	it3 = inix.getLine(0);
 	TEST_EQUAL(it == it3, true)
 RESULT
 
@@ -277,7 +277,7 @@ CHECK(bool operator + () const)
 RESULT
 
 CHECK(const IteratorTraits_& operator = (const IteratorTraits_ &traits))
-	it3 = ini.getLine(1);
+	it3 = inix.getLine(1);
 	TEST_EQUAL(*it3, "[Section2]")
 	INIFile::LineIterator it4;
 	it4 = unbound;
@@ -289,9 +289,9 @@ RESULT
 
 CHECK(bool isSectionEnd() const)
 	TEST_EQUAL(it3.isSectionEnd(), false)
-	it3 = ini.getLine(3);
+	it3 = inix.getLine(3);
 	TEST_EQUAL(it3.isSectionEnd(), false)
-	it3 = ini.getLine(10);
+	it3 = inix.getLine(10);
 	TEST_EQUAL(it3.isSectionEnd(), false)
 	++it3;
 	TEST_EQUAL(it3.isSectionEnd(), false)
@@ -299,17 +299,17 @@ CHECK(bool isSectionEnd() const)
 RESULT
 
 CHECK(bool isSectionFirstLine() const)
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	TEST_EQUAL(it.isSectionFirstLine(), true)
-	it = ini.getLine(2);
+	it = inix.getLine(2);
 	TEST_EQUAL(it.isSectionFirstLine(), false)
 	TEST_EQUAL(unbound.isSectionFirstLine(), false)
 RESULT
 
 CHECK(bool isSectionLastLine() const)
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	TEST_EQUAL(it.isSectionLastLine(), true)
-	it = ini.getLine(3);
+	it = inix.getLine(3);
 	TEST_EQUAL(it.isSectionLastLine(), true)
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(unbound.isSectionLastLine(), false)
@@ -326,7 +326,7 @@ CHECK(void toEnd())
 RESULT
 
 CHECK(void toFirstLine())
-	it = ini.getLine(3);
+	it = inix.getLine(3);
 	TEST_EQUAL(+it, true)
 	it.toFirstLine();
 	TEST_EQUAL(it.getSection()->getName(), "Section1")
@@ -337,7 +337,7 @@ CHECK(void toFirstLine())
 RESULT
 
 CHECK(void toLastLine())
-	it = ini.getLine(3);
+	it = inix.getLine(3);
 	it.toLastLine();
 	TEST_EQUAL(*it, "[Section4]")
 	it.toLastLine();
@@ -348,14 +348,14 @@ CHECK(void toLastLine())
 RESULT
 
 CHECK(void toSectionEnd())
-	it = ini.getLine(3);
+	it = inix.getLine(3);
 	it.toSectionEnd();
 	TEST_EQUAL(it.isSectionEnd(), true)
 	TEST_EQUAL(it.getSection()->getName(), "Section2")
 	--it;
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "! even more comment")
-	it = ini.getLine(9);
+	it = inix.getLine(9);
 	it.toSectionEnd();
 	--it;
 	TEST_EQUAL(*it, "[Section4]")
@@ -364,11 +364,11 @@ CHECK(void toSectionEnd())
 RESULT
 
 CHECK(void toSectionFirstLine())
-	it = ini.getLine(3);
+	it = inix.getLine(3);
 	it.toSectionFirstLine();
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "[Section2]")
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	it.toSectionFirstLine();
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "[Section1]")
@@ -377,11 +377,11 @@ CHECK(void toSectionFirstLine())
 RESULT
 
 CHECK(void toSectionLastLine())
-  it = ini.getLine(3);
+  it = inix.getLine(3);
 	it.toSectionLastLine();
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "! even more comment")
-	it = ini.getLine(0);
+	it = inix.getLine(0);
 	it.toSectionLastLine();
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(*it, "[Section1]")
