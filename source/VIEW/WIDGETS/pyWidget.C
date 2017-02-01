@@ -969,9 +969,19 @@ namespace BALL
 			silent_ = true;
 
 			vector<String> lines;
-			while (file.readLine())
+			try
 			{
-				lines.push_back(file.getLine());
+				while (file.readLine())
+				{
+					lines.push_back(file.getLine());
+				}
+			}
+			catch (Exception::ParseError)
+			{
+				appendText(("> " + (String)tr("File ") + filename + " is not readable\n").c_str(), true);
+				newPrompt_();
+				script_mode_ = false;
+				return false;
 			}
 
 			if (!is_current)
