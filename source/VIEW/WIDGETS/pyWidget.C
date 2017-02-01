@@ -382,6 +382,9 @@ namespace BALL
 			splitter->setOrientation(Qt::Vertical);
 			tab_widget_->addTab(splitter, tr("Scripting Mode"));
 
+			curr_modifying_ = new QLabel(this);
+			splitter->addWidget(curr_modifying_);
+
 			script_edit_ = new MyTextEdit(this);
 			BALL_ASSIGN_NAME(script_edit_)
 			script_edit_->setLineWrapMode(TextEditorWidget::WidgetWidth);
@@ -881,6 +884,7 @@ namespace BALL
 			String prev_script = current_script_;
 			current_script_ = filename;
 			if (!storeScript_()) current_script_ = prev_script;
+			curr_modifying_->setText(tr("Currently modifying: ") + QString(current_script_.c_str()));
 		}
 
 
@@ -982,6 +986,8 @@ namespace BALL
 				script_mode_ = false;
 				return false;
 			}
+
+			curr_modifying_->setText(tr("Currently modifying: ") + QString(filename.c_str()));
 
 			if (!is_current)
 			{
