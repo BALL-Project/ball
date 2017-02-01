@@ -878,10 +878,9 @@ namespace BALL
 			}
 
 			file.close();
-			String temp = current_script_;
+			String prev_script = current_script_;
 			current_script_ = filename;
-			storeScript_();
-			current_script_ = temp;
+			if (!storeScript_()) current_script_ = prev_script;
 		}
 
 
@@ -978,7 +977,7 @@ namespace BALL
 			}
 			catch (Exception::ParseError)
 			{
-				appendText(("> " + (String)tr("File ") + filename + " is not readable\n").c_str(), true);
+				appendText(("> " + (String)tr("File ") + filename + " is not readable. Please save your script manually in another location.\n").c_str(), true);
 				newPrompt_();
 				script_mode_ = false;
 				return false;
