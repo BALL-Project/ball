@@ -126,6 +126,9 @@ namespace BALL
 
 		QValidator::State PythonValidator::validate(QString& input, int& pos) const
 		{
+			Q_UNUSED(input)
+			Q_UNUSED(pos)
+
 			// the following is just meant as an instructive example...
 			// input.replace(QRegExp("i"), "o");
 
