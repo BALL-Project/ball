@@ -418,6 +418,7 @@ class BALL_VIEW_EXPORT PyWidget
 
 	std::list<Hotkey>::iterator findKey_(Hotkey& hotkey);
 
+	QLabel*					curr_modifying_;
 	TextEditorWidget* 				text_edit_, *script_output_;
 	MyTextEdit* 			script_edit_;
 	QTabWidget* 			tab_widget_;
