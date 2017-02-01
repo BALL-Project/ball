@@ -402,7 +402,7 @@ namespace BALL
 			BALL_ASSIGN_NAME(run_button)
 			run_button->setAutoDefault(true);
 			run_button->setDefault(true);
-			run_button->setText(tr("Run"));
+			run_button->setText(tr("Save and run"));
 			connect(run_button, SIGNAL(clicked()), this, SLOT(runCurrentScript()));
 
 			QPushButton* save_button = new QPushButton(widget);
