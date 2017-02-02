@@ -514,6 +514,9 @@ RESULT
 //CHECK convertTransformations2Snaphots_();
 
 CHECK (convertSnaphots2Transformations())
+
+	PRECISION(1e-4)
+
 	PDBFile pdb(BALL_TEST_DATA_PATH(PoseClustering_test.pdb));
 	System sys;
 	pdb.read(sys);
@@ -525,24 +528,30 @@ CHECK (convertSnaphots2Transformations())
 
 	pc.convertSnaphots2Transformations();
 
-	String filename;
-	NEW_TMP_FILE(filename)
-	LineBasedFile file(filename, std::ios::out);
+	LineBasedFile in(BALL_TEST_DATA_PATH(PoseClustering_transformFile.dat), std::ios::in);
 
-	std::vector< PoseClustering::PosePointer > poses = pc.getPoses();
-	for (Size i=0; i<poses.size(); i++)
+	for (Size i=0; i< pc.getPoses().size(); i++)
 	{
-		Eigen::Matrix3f const & rot    = poses[i].trafo->rotation;
-		Eigen::Vector3f const & transl = poses[i].trafo->translation;
-		file << "A A " << " 0.0 "
-			   << rot(0) << " " << rot(1) << " " << rot(2) << " " << transl[0] << " "
-				 << rot(3) << " " << rot(4) << " " << rot(5) << " " << transl[1] << " "
-				 << rot(6) << " " << rot(7) << " " << rot(8) << " " << transl[2]
-				 << std::endl;
+		Eigen::Matrix3f const & rot    = pc.getPoses()[i].trafo->rotation;
+		Eigen::Vector3f const & transl = pc.getPoses()[i].trafo->translation;
+
+		in.readLine();
+
+		TEST_REAL_EQUAL(rot(0),    in.getField(3).toFloat());
+		TEST_REAL_EQUAL(rot(1),    in.getField(4).toFloat());
+		TEST_REAL_EQUAL(rot(2),    in.getField(5).toFloat());
+		TEST_REAL_EQUAL(transl[0], in.getField(6).toFloat());
+		TEST_REAL_EQUAL(rot(3),    in.getField(7).toFloat());
+		TEST_REAL_EQUAL(rot(4),    in.getField(8).toFloat());
+		TEST_REAL_EQUAL(rot(5),    in.getField(9).toFloat());
+		TEST_REAL_EQUAL(transl[1], in.getField(10).toFloat());
+		TEST_REAL_EQUAL(rot(6),    in.getField(11).toFloat());
+		TEST_REAL_EQUAL(rot(7),    in.getField(12).toFloat());
+		TEST_REAL_EQUAL(rot(8),    in.getField(13).toFloat());
+		TEST_REAL_EQUAL(transl[2], in.getField(14).toFloat());
 	}
 
-	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PoseClustering_transformFile.dat))
-
+	in.close();
 
 RESULT
 
