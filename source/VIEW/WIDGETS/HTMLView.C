@@ -1,8 +1,10 @@
 #include <BALL/VIEW/WIDGETS/HTMLView.h>
 
-#include<BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
+#ifdef BALL_OS_LINUX
+#	include <QOpenGLFunctions>
+#endif
 
 namespace BALL
 {
@@ -41,7 +43,8 @@ namespace BALL
 			registerWidget(this);
 		}
 
-		void HTMLViewDock::setHTMLView(HTMLView* html_view) {
+		void HTMLViewDock::setHTMLView(HTMLView* html_view)
+		{
 			if (!html_view)
 			{
 				return;
@@ -74,14 +77,11 @@ namespace BALL
 		void HTMLViewDock::checkForIncompatibleDrivers_()
 		{
 #ifdef BALL_OS_LINUX
-			// On Winwows, the following code causes a stack overflow!
-			GLRenderer glr = GLRenderer();
-			String vendor = glr.getVendor();
+			QOpenGLFunctions glFuncs(QOpenGLContext::currentContext());
+			char* vendor = (char*) glFuncs.glGetString(GL_VENDOR);
 
-			if (!vendor.empty() && vendor == "nouveau")
-			{
-				show_error_ = true;
-			}
+			// https://bugreports.qt.io/browse/QTBUG-41242
+			show_error_ |= vendor && QString(vendor) == "nouveau";
 #endif
 		}
 	}
