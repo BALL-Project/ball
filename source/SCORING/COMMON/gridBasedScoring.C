@@ -12,12 +12,14 @@
 #include <BALL/STRUCTURE/residueRotamerSet.h>
 #include <BALL/SYSTEM/path.h>
 
-#include <boost/iostreams/filtering_stream.hpp>
+#include <boost/iostreams/device/file_descriptor.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 
 
 using namespace BALL;
 using namespace std;
+namespace boost_io = boost::iostreams;
 
 const char* GridBasedScoring ::Option::SCOREGRID_RESOLUTION = "scoregrid_resolution";
 const char* GridBasedScoring ::Option::SCOREGRID_INTERPOLATION="scoregrid_interpolation";
@@ -446,91 +448,93 @@ void GridBasedScoring::validateGridSets()
 
 
 
-void GridBasedScoring::saveGridSetsToFile(String file, String receptor_name)
+void GridBasedScoring::saveGridSetsToFile(String filename, String receptor_name)
 {
-	bool compress = false;
-	bool binary = false;
-	if (file.hasSuffix(".grd"))
-	{
-		binary = false;
-	}
-	else if (file.hasSuffix(".grd.gz"))
-	{
-		compress = true;
-	}
-	else if (file.hasSuffix(".bngrd"))
-	{
-		binary = true;
-	}
-	else if (file.hasSuffix(".bngrd.gz"))
-	{
-		compress = true;
-		binary = true;
-	}
-	else
-	{
-		// Extension unknown, will use grd-tgz format
-		Log.level(10) << "ScoreGridSet format unknown, will use grd.tgz" << endl;
-		compress = true;
-	}
-
 	if (grid_sets_.size() == 0)
 	{
-		Log.error()<<"Error in GridBasedScoring::saveGridsToFile() : there are no precalculated ScoreGridSets, so that there is nothing to be saved!!"<<endl;
+		Log.error()<<"Error in GridBasedScoring::saveGridsToFile(): there are no precalculated ScoreGridSets, so that there is nothing to be saved!!"<<endl;
 		return;
 	}
 
-	ofstream filestream;
-	ostream* output = &filestream;
-	boost::iostreams::filtering_ostream boost_filter;
-
-	if (binary)
+	bool compress = false;
+	bool binary = false;
+	if (filename.hasSuffix(".grd"))
 	{
-		filestream.open(file.c_str(), ios::binary);
+		binary = false;
+	}
+	else if (filename.hasSuffix(".grd.gz"))
+	{
+		compress = true;
+	}
+	else if (filename.hasSuffix(".bngrd"))
+	{
+		binary = true;
+	}
+	else if (filename.hasSuffix(".bngrd.gz"))
+	{
+		compress = true;
+		binary = true;
 	}
 	else
 	{
-		filestream.open(file.c_str());
-	}
-	if (compress)
-	{
-		boost_filter.push(boost::iostreams::gzip_compressor());
-		boost_filter.push(filestream);
-		output = &boost_filter;
+		compress = true;
+		Log.level(10) << "ScoreGridSet format unknown, will use grd.gz" << endl;
 	}
 
-	// save each ScoreGridSet
+
+	boost_io::filtering_ostream out;
+
+	if (compress)
+	{
+		out.push(boost_io::gzip_compressor());
+	}
+
+	if (binary)
+	{
+		out.push(boost_io::file_descriptor_sink(filename, BOOST_IOS::binary));
+	}
+	else
+	{
+		out.push(boost_io::file_descriptor_sink(filename));
+	}
+
 	for (Size set = 0; set < grid_sets_.size(); set++)
 	{
 		if (!binary)
 		{
-			String name;
-			if (set == 0) name = receptor_name;
-			else name = String("PharmacophoreContraint ") + String(set);
-			grid_sets_[set]->saveToFile(*output, name);
+			if (set == 0)
+			{
+				grid_sets_[set]->saveToFile(out, receptor_name);
+			}
+			else
+			{
+				grid_sets_[set]->saveToFile(out, "PharmacophoreContraint " + String(set));
+			}
 		}
 		else
 		{
-			grid_sets_[set]->binaryWrite(*output);
+			grid_sets_[set]->binaryWrite(out);
 		}
 	}
-
-	if (compress) boost_filter.pop();
 }
 
 
-void GridBasedScoring::readAdditionalGridSetFromFile(String file)
+void GridBasedScoring::readAdditionalGridSetFromFile(String filename)
 {
 
 	ScoreGridSet* sgs = new ScoreGridSet(this);
 	grid_sets_.push_back(sgs);
 
-	ifstream input(file.c_str());
+	ifstream input(filename.c_str());
 	sgs->readFromFile(input);
+
 	/// TODO : save+restore interaction_no_scale from file
 
 	// estimate burial of reference ligand
-	if (ligand_ != NULL) setupReferenceLigand();
+	if (ligand_ != NULL)
+	{
+		setupReferenceLigand();
+	}
 }
 
 
@@ -693,7 +697,7 @@ void GridBasedScoring::loadFlexibleResidueScoreGrids(list<pair<const Residue*, c
 }
 
 
-void GridBasedScoring::replaceGridSetFromFile(String file)
+void GridBasedScoring::replaceGridSetFromFile(String filename)
 {
 	for (Size i = 0; i < grid_sets_.size(); i++)
 	{
@@ -705,19 +709,19 @@ void GridBasedScoring::replaceGridSetFromFile(String file)
 	String prefix = "";
 	bool uncompress = false;
 	bool binary = false;
-	if (file.hasSuffix(".grd"))
+	if (filename.hasSuffix(".grd"))
 	{
 		uncompress = false;
 	}
-	else if (file.hasSuffix(".grd.gz"))
+	else if (filename.hasSuffix(".grd.gz"))
 	{
 		uncompress = true;
 	}
-	else if (file.hasSuffix(".bngrd"))
+	else if (filename.hasSuffix(".bngrd"))
 	{
 		binary = true;
 	}
-	else if (file.hasSuffix(".bngrd.gz"))
+	else if (filename.hasSuffix(".bngrd.gz"))
 	{
 		uncompress = true;
 		binary = true;
@@ -725,10 +729,28 @@ void GridBasedScoring::replaceGridSetFromFile(String file)
 	else
 	{
 		// Extension unknown, will use grd-tgz format
-		Log.level(10) << "ScoreGridSet format unknown, will try grd.gz" << endl;
 		uncompress = true;
+		Log.level(10) << "ScoreGridSet format unknown, will try grd.gz" << endl;
 	}
 
+
+	boost_io::filtering_istream in;
+
+	if (uncompress)
+	{
+		in.push(boost_io::gzip_decompressor());
+	}
+
+	if (binary)
+	{
+		in.push(boost_io::file_descriptor_source(filename, BOOST_IOS::binary));
+	}
+	else
+	{
+		in.push(boost_io::file_descriptor_source(filename));
+	}
+
+/*
 	ifstream filestream;
 	istream* input = &filestream;
 	boost::iostreams::filtering_istream boost_filter;
@@ -747,20 +769,31 @@ void GridBasedScoring::replaceGridSetFromFile(String file)
 		boost_filter.push(filestream);
 		input = &boost_filter;
 	}
+*/
 
 	list<PharmacophoreConstraint*> pharm_constraints;
 	for (list < Constraint* > ::iterator it = constraints.begin(); it != constraints.end(); it++)
 	{
 		PharmacophoreConstraint* phc = dynamic_cast<PharmacophoreConstraint*>(*it);
-		if (phc) pharm_constraints.push_back(phc);
+		if (phc)
+		{
+			pharm_constraints.push_back(phc);
+		}
 	}
 
 	if (pharm_constraints.size() == 0 && !hasFlexibleResidues() && !uncompress)
 	{
 		ScoreGridSet* sgs = new ScoreGridSet(this);
 		grid_sets_.push_back(sgs);
-		if (!binary) sgs->readFromFile(*input);
-		else sgs->binaryRead(*input);
+
+		if (!binary)
+		{
+			sgs->readFromFile(in);
+		}
+		else
+		{
+			sgs->binaryRead(in);
+		}
 	}
 	else
 	{
@@ -768,10 +801,17 @@ void GridBasedScoring::replaceGridSetFromFile(String file)
 		Size set = 0;
 		ScoreGridSet* sgs = new ScoreGridSet(this);
 		grid_sets_.push_back(sgs);
-		Log.level(10)<<"reading score grids "<<" ... "<<endl;
+		Log.level(10) << "reading score grids " << " ... " << endl;
 		Log.flush();
-		if (!binary) sgs->readFromFile(*input);
-		else sgs->binaryRead(*input);
+
+		if (!binary)
+		{
+			sgs->readFromFile(in);
+		}
+		else
+		{
+			sgs->binaryRead(in);
+		}
 		set++;
 
 		if (hasFlexibleResidues())
@@ -780,9 +820,17 @@ void GridBasedScoring::replaceGridSetFromFile(String file)
 			ScoreGridSet* sgs2 = new ScoreGridSet;
 			sgs2->hashgrid_ = flexible_residues_hashgrid_;
 			grid_sets_.push_back(sgs2);
-			Log.level(10)<<"reading score grids for flexible residues ... "<<endl<<flush;
-			if (!binary) sgs2->readFromFile(*input);
-			else sgs2->binaryRead(*input);
+			Log.level(10) << "reading score grids for flexible residues ... " << endl << flush;
+
+			if (!binary)
+			{
+				sgs2->readFromFile(in);
+			}
+			else
+			{
+				sgs2->binaryRead(in);
+			}
+
 			flex_gridset_id_ = 1;
 			set++;
 		}
@@ -794,20 +842,27 @@ void GridBasedScoring::replaceGridSetFromFile(String file)
 			defineGridSet((*it)->getGridContainer(), size_in_angstroem, 0, 0, resolution_, 0);
 			grid_sets_[grid_sets_.size()-1]->setPharmacophoreConstraint(*it);
 
-			Log.level(10)<<"reading score grids for pharm. constraint " << (*it)->getName() << " ... " << endl;
+			Log.level(10) << "reading score grids for pharm. constraint " << (*it)->getName() << " ... " << endl;
 			Log.flush();
+
 			if (!binary)
 			{
-				grid_sets_[grid_sets_.size()-1]->readFromFile(*input);
+				grid_sets_[grid_sets_.size()-1]->readFromFile(in);
 			}
-			else grid_sets_[grid_sets_.size()-1]->binaryRead(*input);
+			else
+			{
+				grid_sets_[grid_sets_.size()-1]->binaryRead(in);
+			}
 		}
 	}
 
 	/// TODO : save+restore interaction_no_scale from file
 
 	// estimate burial of reference ligand
-	if (ligand_ != NULL) setupReferenceLigand();
+	if (ligand_ != NULL)
+	{
+		setupReferenceLigand();
+	}
 }
 
 
