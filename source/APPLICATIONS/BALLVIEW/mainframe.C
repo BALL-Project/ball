@@ -134,7 +134,6 @@ namespace BALL
 
 		Path path;
 
-		addDockWidget(Qt::BottomDockWidgetArea, new HelpViewer(this, "BALLView Docu"));
 		new LabelDialog(        this, ((String)tr("LabelDialog")).c_str());
 		new MolecularStructure(	this, ((String)tr("MolecularStructure")).c_str());
  		addDockWidget(Qt::BottomDockWidgetArea, new LogView(      this, ((String)tr("Logs")).c_str()));
@@ -181,12 +180,6 @@ namespace BALL
 		if (action)
 			setMenuHint(action, (String)tr("Show informations on this version of BALLView"));
 
-		description = "Shortcut|Help|How_to_cite";
-		action = insertMenuEntry(MainControl::HELP, (String)tr("How to cite"), this, SLOT(howToCite()), description,
-		                         QKeySequence(), UIOperationMode::MODE_ADVANCED);
-		if (action)
-			setMenuHint(action, (String)tr("Show infos on how to cite BALL and BALLView"));
-
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
 		stop_simulation_action_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, (String)tr("Abort Calculation"), this, 
@@ -228,12 +221,6 @@ namespace BALL
 		if (event->type() != QEvent::KeyPress) return false;
 
 		QKeyEvent* e = dynamic_cast<QKeyEvent*>(event);
-
-		if (e->key() == Qt::Key_Escape &&
-				HelpViewer::getInstance("BALLView Docu")->isWhatsThisEnabled())
-		{
-			HelpViewer::getInstance("BALLView Docu")->exitWhatsThisMode();
-		}
 
 		QPoint point = QCursor::pos();
 		QWidget* widget = qApp->widgetAt(point);
@@ -297,11 +284,6 @@ namespace BALL
 	}
 
 	
-	void Mainframe::howToCite()
-	{
-		HelpViewer::getInstance("BALLView Docu")->showHelp("tips.html", (String)tr("cite"));
-	}
-
 	void Mainframe::checkMenus()
 	{
 		MainControl::checkMenus();
@@ -355,13 +337,11 @@ namespace BALL
 						qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
 						qload_action_->setObjectName("quickload");
 						connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
-						HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qload_action_, "tips.html#quickload");
 						tb->addAction(qload_action_);
 
 						qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
 						qsave_action_->setObjectName("quicksave");
 						connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
-						HelpViewer::getInstance("BALLView Docu")->registerForHelpSystem(qsave_action_, "tips.html#quickload");
 						tb->addAction(qsave_action_);
 
 						tb->addSeparator();
@@ -375,7 +355,6 @@ namespace BALL
 		
 						tb->addAction(stop_simulation_action_);
 						tb->addAction(preferences_action_);
-						HelpViewer::getInstance("BALLView Docu")->addToolBarEntries(tb);
 		}
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!

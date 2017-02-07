@@ -366,17 +366,8 @@ void DemoTutorialDialog::nextStepClicked()
 		{
 			next_button->setEnabled(true);
 		}
-		if (current_step_ == 10) 
-		{
-			hide();
-			HelpViewer* hv = HelpViewer::getInstance(1);
-			if (hv == 0) return;
-			hv->showHelp();
-			hv->setFloating(true);
-			hv->showMaximized();
-		}
 	}
-	else if (tutorial_type_ == RAYTRACING_TUTORIAL) 
+	else if (tutorial_type_ == RAYTRACING_TUTORIAL)
 	{
 		switch (current_step_)
 		{
@@ -421,17 +412,6 @@ void DemoTutorialDialog::nextStepClicked()
 				}
 				
 				addPlane_('x', 5, 5);
-				break;
-			}
-			case 7:
-			{
-				// offer the Documentation
-				hide();
-				HelpViewer* hv = HelpViewer::getInstance(1);
-				if (hv == 0) return;
-				hv->showHelp();
-				hv->setFloating(true);
-				hv->showMaximized();	
 				break;
 			}
 
