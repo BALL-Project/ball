@@ -49,9 +49,6 @@ namespace BALL
 		// Help menu
 		void about();
 
-		///
-		void howToCite();
-
 		void checkMenus();
 
 		protected:
