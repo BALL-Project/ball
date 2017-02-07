@@ -460,37 +460,33 @@ namespace BALL
 			if (!DatasetController::createMenuEntries()) return false;
 			
 			String description = "Shortcut|Tools|Grid|Calculate_normalized_grid";
-			insertMenuEntry_(MainControl::TOOLS_GRID, tr("Calculate normalized Grid"), SLOT(createHistogramGrid()), 
-			                 description, QKeySequence(), tr("Create a new grid with a histogram equalization"),
-											 UIOperationMode::MODE_ADVANCED);
+			insertMenuEntry_(MainControl::TOOLS_GRID, tr("Calculate normalized Grid"), SLOT(createHistogramGrid()),
+							description, QKeySequence(), tr("Create a new grid with a histogram equalization"),
+							UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Tools|Grid|Resize_for_Rendering";
-			QAction* action = insertMenuEntry_(MainControl::TOOLS_GRID, tr("Resize for Rendering"), SLOT(resizeGrid()), 
-			                                   description, QKeySequence(), tr("Resize a grid for rendering"), 
-																				 UIOperationMode::MODE_ADVANCED);
-			getDatasetControl()->setMenuHelp(action, "datasetControl.html#volume");
+			insertMenuEntry_(MainControl::TOOLS_GRID, tr("Resize for Rendering"), SLOT(resizeGrid()),
+							description, QKeySequence(), tr("Resize a grid for rendering"),
+							UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 
 			// visualizations:
 			description = "Shortcut|Tools|Grid|Visualize_3D_Grid";
-			action = insertMenuEntry_(MainControl::TOOLS_GRID, tr("Visualize 3D Grid"), SLOT(visualizeGrid()), 
-			                          description, QKeySequence(), tr("Visualize a grid"),
-																UIOperationMode::MODE_ADVANCED);
-			getDatasetControl()->setMenuHelp(action, "datasetControl.html#volume");
+			insertMenuEntry_(MainControl::TOOLS_GRID, tr("Visualize 3D Grid"), SLOT(visualizeGrid()),
+							description, QKeySequence(), tr("Visualize a grid"),
+							UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Tools|Grid|Render_Contour_Surface";
-			action = insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", SLOT(computeIsoContourSurface()), 
-					                      description, QKeySequence("Ctrl+U"), 
-																tr("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl."),
-																UIOperationMode::MODE_ADVANCED);
-			getDatasetControl()->setMenuHelp(action, "datasetControl.html#isocontour_surfaces");
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Render Contour S&urface", SLOT(computeIsoContourSurface()),
+							description, QKeySequence("Ctrl+U"),
+							tr("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl."),
+							UIOperationMode::MODE_ADVANCED);
 
-			// TODO: add to Documentation (via setMenuHelp())
 			description = "Shortcut|Tools|Grid|Create_a_Sphere";
-			insertMenuEntry_(MainControl::TOOLS_GRID, "Create a sphere", SLOT(createSphere()), 
-			                 description, QKeySequence(), tr("Create a sphere for the grid, e.g. for colorizing"),
-											 UIOperationMode::MODE_ADVANCED);
+			insertMenuEntry_(MainControl::TOOLS_GRID, "Create a sphere", SLOT(createSphere()),
+							description, QKeySequence(), tr("Create a sphere for the grid, e.g. for colorizing"),
+							UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS_GRID, UIOperationMode::MODE_ADVANCED);
 
@@ -577,7 +573,6 @@ namespace BALL
 			{
 				dialog_ = new ContourSurfaceDialog(getDatasetControl(), "ContourSurfaceDialog");
 				dialog_->setController(this);
-				getDatasetControl()->registerForHelpSystem(dialog_, "datasetControl.html#isocontour_surfaces");
 			}
 			dialog_->setGrid(getSelectedDataset());
 			if (!dialog_->exec()) return;
@@ -870,13 +865,13 @@ namespace BALL
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|TrajectoryController|Buffer_Trajectory";
-			QAction* action = insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()), 
-			                                   description, QKeySequence(), tr("Buffer Trajectory in RAM for faster access"),
-																				 UIOperationMode::MODE_ADVANCED);
+			insertMenuEntry_(MainControl::TOOLS, "Buffer Trajectory", SLOT(bufferTrajectory()),
+							description, QKeySequence(), tr("Buffer Trajectory in RAM for faster access"),
+							UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|TrajectoryController|Visualize_Trajectory";
 			insertMenuEntry_(MainControl::TOOLS, "Visualize Trajectory", SLOT(visualizeTrajectory()),
-			                 description, QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
+							description, QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 
 			getDatasetControl()->getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
 

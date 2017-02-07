@@ -64,7 +64,6 @@ class BALL_VIEW_EXPORT MolecularControl
 			Composite* composite;
 	};
 
-	///
 	enum MolecularMenuEntries
 	{
 		/// create a new Representation
@@ -297,8 +296,11 @@ class BALL_VIEW_EXPORT MolecularControl
 	*/
 	Size applySelector();
 
-	/// Show a help dialog for the Selector 
-	void showSelectorHelp();
+	/**
+	 * Show a help dialog for the Selector
+	 * @deprecated Help system has been removed. This function will also be removed in the next release.
+	 */
+	BALL_DEPRECATED void showSelectorHelp();
 
 	/// Overloaded from GenericControl, calls cut
 	virtual void deleteCurrentItems();

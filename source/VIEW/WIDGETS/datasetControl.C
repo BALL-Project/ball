@@ -46,7 +46,6 @@ DatasetControl::~DatasetControl()
 void DatasetControl::initializeWidget(MainControl& main_control)
 {
 	GenericControl::initializeWidget(main_control);
-	registerForHelpSystem(this, "datasetControl.html");
 	for (Position p = 0; p < controllers_.size(); p++)
 	{
 		controllers_[p]->createMenuEntries();

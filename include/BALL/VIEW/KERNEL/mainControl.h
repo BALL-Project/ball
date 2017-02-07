@@ -204,6 +204,7 @@ namespace BALL
 				MACRO = 10750,
 
 				/// Help menu
+				/// @deprecated Help system has been removed. This enumerator will also be removed in the next release.
 				HELP = 10800
 			};
 
@@ -562,7 +563,7 @@ namespace BALL
 			*/
 			void insertDeleteEntry();
 
-			/// Get the ID of the last highlighted menu entry (used for the HelpViewer)
+			/// Get the ID of the last highlighted menu entry
 			QAction* getLastHighLightedMenuEntry() { return last_highlighted_menu_entry_;}
 				
 			//@}

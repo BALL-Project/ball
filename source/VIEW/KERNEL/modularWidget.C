@@ -236,28 +236,14 @@ namespace BALL
 			return result;
 		}
 
-		void ModularWidget::setMenuHelp(QAction* action, const String& url)
-		{
-			if (!action || !getMainControl())
-			{
-				return;
-			}
+		void ModularWidget::setMenuHelp(QAction* /* action */, const String& /* url */)
+		{ }
 
-			registerForHelpSystem(action, url);
-		}
+		void ModularWidget::showHelp(const String& /* url */)
+		{ }
 
-		void ModularWidget::showHelp(const String& url)
-		{
-			notify_(new ShowHelpMessage(url));
-		}
-
-		void ModularWidget::registerForHelpSystem(const QObject* object, const String& url)
-		{
-			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setObject(object);
-			msg->setURL(url);
-			notify_(msg);
-		}
+		void ModularWidget::registerForHelpSystem(const QObject* /* object */, const String& /* url */)
+		{ }
 
 		void ModularWidget::setIcon(QAction* action, const String& filename, bool add_to_main_toolbar)
 		{

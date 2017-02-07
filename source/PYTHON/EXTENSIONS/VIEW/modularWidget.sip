@@ -49,11 +49,8 @@ class ModularWidget
 	//QMenuBar* menuBar() throw();
 	//Index insertMenuEntry (Index, const String&, const QObject*= 0, const char* = 0, Index = 0, Index = -1) throw();
 	//void setMenuHint(const String&);
-	//void setMenuHelp(const String&);
-	//virtual void registerForHelpSystem(const QObject*, const String&);
 //	virtual void dump(std::ostream& = std::cout, Size = 0) const throw();
 	void setWorkingDirFromFilename_(String) throw();
-	virtual void showHelp(const String&);
 	virtual bool canHandle(const String&) const;
 	virtual bool openFile(const String&);
 }; 

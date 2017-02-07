@@ -25,7 +25,6 @@ namespace BALL
 
 			if (main_action_)
 			{
-				scene_->setMenuHelp(main_action_, "scene.html#identify_atoms");
 				scene_->setIcon(main_action_, "actions/select-rectangular", false);
 				main_action_->setCheckable(true);
 				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));

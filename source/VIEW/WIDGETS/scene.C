@@ -1259,35 +1259,24 @@ namespace BALL
 			                "Shortcut|Display|Add_new_RTfact_Window", QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 #endif
 			// ======================== Display->Animation ===============================================
-			String help_url = "tips.html#animations";
-
 			record_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Record"), this,
 			                                           SLOT(dummySlot()), "Shortcut|Display|Animation|Record", QKeySequence(),
 																								 tr("Record an animation for later processing"),
 																								 UIOperationMode::MODE_ADVANCED);
 			if (record_animation_action_)
 			{
-				setMenuHelp(record_animation_action_, help_url);
 				record_animation_action_->setCheckable(true);
 			}
 
 			clear_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Clear"), this,
 			                                          SLOT(clearRecordedAnimation()), "Shortcut|Display|Animation|Clear",
 																								QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
-			if (clear_animation_action_)
-			{
-				setMenuHelp(clear_animation_action_, help_url);
-			}
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION, UIOperationMode::MODE_ADVANCED);
 
 			start_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Start"), this,
 			                                          SLOT(startAnimation()), "Shortcut|Display|Animation|Start",
 																								QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
-			if (start_animation_action_)
-			{
-				setMenuHelp(start_animation_action_, help_url);
-			}
 
 			cancel_animation_action_ = insertMenuEntry(MainControl::DISPLAY_ANIMATION, tr("Stop"), this,
 			                                           SLOT(stopAnimation()), "Shortcut|Display|Animation|Stop",
@@ -1296,7 +1285,6 @@ namespace BALL
 			if (cancel_animation_action_)
 			{
 				cancel_animation_action_->setEnabled(false);
-				setMenuHelp(cancel_animation_action_, help_url);
 			}
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY_ANIMATION, UIOperationMode::MODE_ADVANCED);
@@ -1307,7 +1295,6 @@ namespace BALL
 
 			if (animation_export_PNG_action_)
 			{
-				setMenuHelp(animation_export_PNG_action_, help_url);
 				animation_export_PNG_action_->setCheckable(true);
 			}
 
@@ -1317,7 +1304,6 @@ namespace BALL
 
 			if (animation_export_POV_action_)
 			{
-				setMenuHelp(animation_export_POV_action_, help_url);
 				animation_export_POV_action_->setCheckable(true);
 			}
 
@@ -1327,7 +1313,6 @@ namespace BALL
 
 			if (animation_repeat_action_)
 			{
-				setMenuHelp(animation_repeat_action_, help_url);
 				animation_repeat_action_->setCheckable(true);
 			}
 
@@ -1342,7 +1327,6 @@ namespace BALL
 			{
 				no_stereo_action_->setCheckable(true);
 				no_stereo_action_->setChecked(true);
-				setMenuHelp(no_stereo_action_, "tips.html#3D");
 			}
 
 			enter_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Enter Stereo"), this,
@@ -1352,7 +1336,6 @@ namespace BALL
 			if (enter_stereo_action_)
 			{
 				enter_stereo_action_->setCheckable(true);
-				setMenuHelp(enter_stereo_action_, "tips.html#3D");
 			}
 
 			//active_stereo_action_ = insertMenuEntry(MainControl::DISPLAY_STEREO, tr("Shutter Glasses"), this,
@@ -1361,7 +1344,6 @@ namespace BALL
 
 			//if (active_stereo_action_)
 			//{
-			//	setMenuHelp(active_stereo_action_, "tips.html#3D");
 			//	active_stereo_action_->setCheckable(true);
 			//}
 
@@ -1371,7 +1353,6 @@ namespace BALL
 
 			//if (dual_stereo_action_)
 			//{
-			//	setMenuHelp(dual_stereo_action_, "tips.html#3D");
 			//	dual_stereo_action_->setCheckable(true);
 			//}
 
@@ -1383,7 +1364,6 @@ namespace BALL
 			//																											  UIOperationMode::MODE_ADVANCED);
 			//if (dual_stereo_different_display_action_)
 			//{
-			//	setMenuHelp(dual_stereo_different_display_action_, "tips.html#3D");
 			//	dual_stereo_different_display_action_->setCheckable(true);
 			//}
 
@@ -1391,65 +1371,63 @@ namespace BALL
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Store Viewpoint"), this,
-			                SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store",
-											QKeySequence(), tr("Store the current viewpoint"), UIOperationMode::MODE_ADVANCED);
+							SLOT(storeViewPoint()), "Shortcut|Display|Viewpoint|Store",
+							QKeySequence(), tr("Store the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("&Restore Viewpoint"), this,
-			                SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore", QKeySequence(),
-											tr("Restore the viewpoint"), UIOperationMode::MODE_ADVANCED);
+							SLOT(restoreViewPoint()), "Shortcut|Display|Viewpoint|Restore", QKeySequence(),
+							tr("Restore the viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this,
-			                SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
-											tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_ADVANCED);
+							SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
+							tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 
 			description = "Shortcut|Display|Viewpoint|Set_Viewpoint";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Set Viewpoi&nt"), this,
-			                SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"),
-											tr("Move the viewpoint to the given coordinates"), UIOperationMode::MODE_ADVANCED);
+							SLOT(setViewPoint_()), description, QKeySequence("Ctrl+N"),
+							tr("Move the viewpoint to the given coordinates"), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Display|Viewpoint|Reset_Camera";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Rese&t Camera"), this,
-			                SLOT(resetCamera_()), description, QKeySequence(),
-											tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_ADVANCED);
+							SLOT(resetCamera_()), description, QKeySequence(),
+							tr("Reset the camera to the orgin (0,0,0)"), UIOperationMode::MODE_ADVANCED);
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|Display|Viewpoint|Limit_View_Volume";
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Limit View Volume"), this,
-			                SLOT(setupViewVolume()), description, QKeySequence(),
-											tr(""), UIOperationMode::MODE_ADVANCED);
+							SLOT(setupViewVolume()), description, QKeySequence(),
+							tr(""), UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|File|Export|PNG";
 			QAction* screenshot_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("PNG..."), this,
-			                                             SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"),
-																									 tr("Export a PNG image file from the Scene"),
-																									 UIOperationMode::MODE_ADVANCED);
+							SLOT(showExportPNGDialog()), description, QKeySequence("Alt+P"),
+							tr("Export a PNG image file from the Scene"),
+							UIOperationMode::MODE_ADVANCED);
 			setIcon(screenshot_action, "actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
 			QAction* pov_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this,
- 			                                      SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"),
-																						tr("Export a POVRay file from the Scene"),
-																						UIOperationMode::MODE_ADVANCED);
+							SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"),
+							tr("Export a POVRay file from the Scene"),
+							UIOperationMode::MODE_ADVANCED);
 			setIcon(pov_action, "mimetype/text-x-povray", false);
-			setMenuHelp(pov_action, "tips.html#povray");
 
 			description = "Shortcut|File|Export|XML3D";
-			QAction* xml3d_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("XML3D as XHTML"), this,
-																						SLOT(exportXML3D()), description, QKeySequence(""),
-																						tr("Export a XML3D/XHTML file from the Scene"),
-																						UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(xml3d_action, "tips.html#XML3D");
+			insertMenuEntry(MainControl::FILE_EXPORT, tr("XML3D as XHTML"), this,
+							SLOT(exportXML3D()), description, QKeySequence(""),
+							tr("Export a XML3D/XHTML file from the Scene"),
+							UIOperationMode::MODE_ADVANCED);
 
 			description = "Shortcut|File|Export|VRML";
 			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this,
-			                SLOT(showExportVRMLDialog()), description, QKeySequence(),
-											tr("Export a VRML or stl file from the scene"),
-											UIOperationMode::MODE_ADVANCED);
+							SLOT(showExportVRMLDialog()), description, QKeySequence(),
+							tr("Export a VRML or stl file from the scene"),
+							UIOperationMode::MODE_ADVANCED);
 
 			// ====================================== MODES =====================================
 			switch_grid_ = NULL;
@@ -1497,13 +1475,11 @@ namespace BALL
 			if (window_menu_entry_)
 			{
 				window_menu_entry_->setCheckable(true);
-				setMenuHelp(window_menu_entry_, "scene.html");
 			}
 
 			QWidget::setCursor(QCursor(Qt::ArrowCursor));
 
 			setFocusPolicy(Qt::StrongFocus);
-			registerForHelpSystem(this, "scene.html");
 
 			toolbar_view_controls_->setObjectName("3D View Control toolbar");
 			toolbar_view_controls_->setIconSize(QSize(22,22));
@@ -1520,8 +1496,6 @@ namespace BALL
 				bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
 				bondorders_action_->setObjectName(bondorders_action_->text());
 				bondorders_action_->setToolTip(tr("Compute the bond orders of the highlighted structures"));
-				//TODO
-				//registerForHelpSystem(bondorders_action_, "scene.html#bondorders");
 				connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
 				getMainControl()->getShortcutRegistry().registerShortcut(description, bondorders_action_);
 			}
@@ -1533,7 +1507,6 @@ namespace BALL
 				optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
 				optimize_action_->setObjectName(optimize_action_->text());
 				optimize_action_->setToolTip(tr("Quickly optimize the highlighted structure"));
-				registerForHelpSystem(optimize_action_, "scene.html#optimize");
 				connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
 				getMainControl()->getShortcutRegistry().registerShortcut(description, optimize_action_);
 			}
@@ -1545,7 +1518,6 @@ namespace BALL
 				add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
 				add_hydrogens_action_->setToolTip(tr("Saturate the highlighted structure with hydrogens (with regards to formal charges)"));
 				add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
-				registerForHelpSystem(add_hydrogens_action_, "scene.html#saturate");
 				connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
 				getMainControl()->getShortcutRegistry().registerShortcut(description, add_hydrogens_action_);
 			}

@@ -41,7 +41,7 @@ namespace BALL
 			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
 			virtual void contentsDragLeaveEvent(QDragLeaveEvent* e);
 			virtual void contentsDropEvent(QDropEvent* e);
-			virtual void setSource(const QUrl& name);
+			virtual void setSource(const QUrl& /* name */);
 		};
 
 		/** LogView class.
@@ -53,11 +53,6 @@ namespace BALL
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widget of your application and it will
 				record and show all messages sent to the \link BALL::LogStream Log \endlink object.
-				The LogView supports URLs, that are included into the LogStream.
-				The links must only be one line long.
-				If such a link is clicked, it's document is shown in the HelpViewer.
-				This can be used to show the corresponding section in the BALLView
-				documentation for an occuring problem.
 				\ingroup ViewWidgets
 		*/
 		class BALL_VIEW_EXPORT LogView

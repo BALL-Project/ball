@@ -115,16 +115,5 @@ namespace BALL
 			QDockWidget::setVisible(state);
 		}
 
-		void DockWidget::registerForHelpSystem(const QObject* widget, const String& url)
-		{
-			ModularWidget::registerForHelpSystem(widget, url);
-
-			// also register Windows menu entry!
-			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setObject(window_menu_entry_);
-			msg->setURL(url);
-			notify_(msg);
-		}
-
-	} // namespace VIEW 
+	} // namespace VIEW
 } // namespace BALL

@@ -7946,11 +7946,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="175"/>
-        <source>&lt;b&gt;Note:&lt;/b&gt; F1 is reserved for the internal help system!</source>
-        <translation>Hinweis: F1 ist für die interne Hilfe reserviert!</translation>
-    </message>
-    <message>
         <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="185"/>
         <source>Add a new hotkey</source>
         <translation>Neuen Hotkey hinzufügen</translation>

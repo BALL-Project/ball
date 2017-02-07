@@ -43,8 +43,6 @@ namespace BALL
 			scene_ = (Scene*) parent;
 			updateFromStage();
 
-			registerWidgetForHelpSystem_(widget_stack->widget(2), "tips.html#3D");
-
 			setDefaultValues_();
 			setINIFileSectionName("STAGE");
 			setWidgetStackName("Display");

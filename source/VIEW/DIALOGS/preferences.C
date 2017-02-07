@@ -202,11 +202,7 @@ namespace BALL
 				return;
 			}
 
-			// enable or disable help button
-			HelpViewer* hv = HelpViewer::getInstance(0);
-			if (hv != 0) buttonBox->button(QDialogButtonBox::Help)->setEnabled(hv->hasHelpFor(child));
-
-			// set the listview entry 
+			// set the listview entry
 			QTreeWidgetItem* item = widget_to_item_[child];
 			entries_listview->setCurrentItem(item);
 			entries_listview->setItemSelected(item, true);
@@ -293,23 +289,7 @@ namespace BALL
 		}
 
 		void Preferences::showHelp()
-		{
-			QList<QTreeWidgetItem*> sel = entries_listview->selectedItems();
-			if (sel.size() == 0) return;
-			QTreeWidgetItem* item =  *sel.begin();
-
-			Position i = 0;
-			while (true)
-			{
-				HelpViewer* hv = HelpViewer::getInstance(i);
-				if (hv == 0) return;
-
-				i++;
-				if (hv->getProject() != "BALLView") continue;
-				hv->showHelpFor(item_to_widget_[item]);
-				break;
-			}
-		}
+		{ }
 
 		void Preferences::reject()
 		{

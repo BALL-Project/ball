@@ -138,21 +138,18 @@ namespace BALL
 																	 SLOT(calculateForceFieldEnergy()), description, QKeySequence("Ctrl+A"),
 			                             tr("Calculate the energy of a System with the selected force field."),
 																	 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(energy_id_, "mm.html#single_point");
 
 			description = "Shortcut|MolecularMechanics|Energy_Minimization";
 			minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("&Energy Minimization"), this, 
 																				 SLOT(runMinimization()), description, QKeySequence(),
 																				 tr("To perform an Energy Minimization, first select the molecular structures."),
 																				 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(minimization_id_, "mm.html#mini");
 
 			description = "Shortcut|MolecularMechanics|Molecular_Dynamics";
 			mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, tr("Molecular &Dynamics"), this, 
 																				 SLOT(MDSimulation()), description, QKeySequence("Ctrl+M"),
 																				 tr("To perform a MD simulation , first select the molecular structures."),
 																				 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(mdsimulation_id_, "mm.html#md");
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS, UIOperationMode::MODE_ADVANCED);
 
@@ -164,7 +161,6 @@ namespace BALL
 			if (amber_ff_id_)
 			{
 				amber_ff_id_->setCheckable(true);
-				setMenuHelp(amber_ff_id_, "mm.html");
 			}
 
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|Charmm";
@@ -175,7 +171,6 @@ namespace BALL
 			if (charmm_ff_id_)
 			{
 				charmm_ff_id_->setCheckable(true);
-				setMenuHelp(charmm_ff_id_, "mm.html");
 			}
 
 			description = "Shortcut|MolecularMechanics|Choose_ForceField|MMFF94";
@@ -186,7 +181,6 @@ namespace BALL
 			if (mmff94_id_)
 			{
 				mmff94_id_->setCheckable(true);
-				setMenuHelp(mmff94_id_, "mm.html");
 			}
 
 			description = "Shortcut|MolecularMechanics|Options";
@@ -194,12 +188,9 @@ namespace BALL
 																	SLOT(setupForceField()), description, QKeySequence(), 
 																	tr("Configure the force field"),
 																	UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(setup_ff_, "mm.html");
 
 			// Tools Menu -------------------------------------------------------------------
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
-//			hint = " Map two proteins.";
-// 			map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
 			description = "Shortcut|Tools|Calculate_RMSD";
 			calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, tr("&Calculate RMSD"), this, 
@@ -213,10 +204,6 @@ namespace BALL
 																				 tr("Recalculate the secondary structure for a structure"),
 																				 UIOperationMode::MODE_ADVANCED);
 
-//   			calculate_ramachandran_ = insertMenuEntry(MainControl::TOOLS, "Ramachandran Plot", this,
-//   																				 SLOT(calculateRamachandranPlot()));
-//   			setMenuHint("Calculate a Ramachandran Plot for a Protein.");
-			
 			description = "Shortcut|Tools|Calculate_HBonds";
 			calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, tr("Calculate H-B&onds"), this, 
 			                                       SLOT(calculateHBonds()), description, QKeySequence("Alt+N"),
@@ -234,14 +221,12 @@ namespace BALL
 																								 SLOT(createGridFromDistance()), description, QKeySequence(),
 			                                           tr("Create a grid with the distance to the geometric center of a structure"),
 																								 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(create_distance_grid_id_, "tips.html#distance_grids");
 
 			description = "Shortcut|Tools|Grid|Create_Distance_From_Camera_Grid";
 			create_distance_grid_id2_ = insertMenuEntry(MainControl::TOOLS_GRID, tr("Create &Distance from Camera Grid"), this, 
 																									SLOT(createGridFromCameraDistance()), description, QKeySequence(),
 																									tr("Create a grid with the distance to the view point"),
 																									UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(create_distance_grid_id2_, "tips.html#distance_grids");
 
 			minimization_dialog_.setAmberDialog(&amber_dialog_);
 			minimization_dialog_.setCharmmDialog(&charmm_dialog_);

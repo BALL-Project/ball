@@ -171,9 +171,6 @@ namespace BALL
 			// register all visible childs
 			registerWidgets_();
 
-			//TODO
-			//registerWidgetForHelpSystem_(widget_stack->widget(0), "plugins.html#plugins");
-
 			ui_->plugin_view->setModel(&plugin_model_);
 			ui_->plugin_directories_view->setModel(&plugin_dir_model_);
 

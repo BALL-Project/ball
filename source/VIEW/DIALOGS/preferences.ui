@@ -65,7 +65,7 @@
      <item>
       <widget class="QDialogButtonBox" name="buttonBox">
        <property name="standardButtons">
-        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Help|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
+        <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::Ok|QDialogButtonBox::RestoreDefaults</set>
        </property>
       </widget>
      </item>
@@ -130,27 +130,10 @@
     </hint>
    </hints>
   </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>helpRequested()</signal>
-   <receiver>PreferencesData</receiver>
-   <slot>showHelp()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>332</x>
-     <y>467</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>330</x>
-     <y>596</y>
-    </hint>
-   </hints>
-  </connection>
  </connections>
  <slots>
   <signal>applied()</signal>
   <slot>dialogButtonsClicked_(QAbstractButton*)</slot>
-  <slot>showHelp()</slot>
   <slot>cancelPreferences()</slot>
  </slots>
 </ui>

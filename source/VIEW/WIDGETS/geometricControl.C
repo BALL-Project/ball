@@ -533,7 +533,6 @@ namespace BALL
 			                                       this, SLOT(createNewClippingPlane()), "Shortcut|Display|Create|ClippingPlane",
 																						 QKeySequence(), tr("Add an OpenGL Clipping Plane to the Scene"),
 																						 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(menu_clipping_plane_, "geometricControl.html#clipping_planes");
 
 			menu_load_surface_ = insertMenuEntry(MainControl::FILE_OPEN, tr("Surface"), this,
 																					 SLOT(loadSurface()), "Shortcut|Display|Create|Surface",
@@ -542,8 +541,6 @@ namespace BALL
 			modify_surface_ = insertMenuEntry(MainControl::DISPLAY, tr("Modify Representation"), modify_rep_dialog_,
 			                                  SLOT(show()), "Shortcut|Display|Modify Representation", QKeySequence(),
 																				tr(""), UIOperationMode::MODE_ADVANCED);
-
-			registerForHelpSystem(this, "geometricControl.html");
 		}
 
 		void GeometricControl::enterMoveMode()

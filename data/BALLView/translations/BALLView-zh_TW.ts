@@ -8158,10 +8158,6 @@ p, li { white-space: pre-wrap; }
         <translation>Alt+R</translation>
     </message>
     <message>
-        <source>&lt;b&gt;Note:&lt;/b&gt; F1 is reserved for the internal help system!</source>
-        <translation>&lt;b&gt;注意：&lt;/b&gt;F1 已保留給內部的說明系統。</translation>
-    </message>
-    <message>
         <source>Add a new hotkey</source>
         <translation>新增熱鍵</translation>
     </message>

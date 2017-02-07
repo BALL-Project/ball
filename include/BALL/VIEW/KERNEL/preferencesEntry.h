@@ -180,10 +180,8 @@ namespace BALL
 			*/
 			void unregisterObject_(QObject* widget);
 
-			/** Register a widget for the internal help system
-			 		@see HelpViewer
-			*/
-			void registerWidgetForHelpSystem_(const QWidget* widget, const String& url);
+			/// @deprecated Help system has been removed. This function will also be removed in the next release.
+			BALL_DEPRECATED void registerWidgetForHelpSystem_(const QWidget* /* widget */, const String& /* url */);
 
 			//_ Helper function to restore the values of the current stack widget or all values
 			void restoreValues_(bool all, const ValueMap& map);
