@@ -107,7 +107,6 @@ namespace BALL
 																	 SLOT(show()), description, QKeySequence("Ctrl+D"), 
 																	 tr("Download an electron density map from EDS or EMDB"),
 																	 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(menu_id_, "tips.html#download_edmap");
 			setIcon(menu_id_, "actions/download-electrondensity", true);
 		}
 

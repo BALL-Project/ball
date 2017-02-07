@@ -465,7 +465,6 @@ namespace BALL
 		void PyWidget::initializeWidget(MainControl& main_control)
 		{
 			DockWidget::initializeWidget(main_control);
-			registerForHelpSystem(this, "pythonInterpreter.html");
 
 	insertMenuEntry(MainControl::TOOLS_PYTHON, tr("Load Python Script"), this,
 									SLOT(loadScript()), "Shortcut|Tools|Python|Load_script",
@@ -638,16 +637,14 @@ namespace BALL
 				comment = tr("Run a Python script");
 			}
 
-			QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this, 
-			                                  SLOT(hotkeyItem()), "", seq, comment, UIOperationMode::MODE_ADVANCED);
+			QAction* action = insertMenuEntry(MainControl::USER, entry.c_str(), this,
+						SLOT(hotkeyItem()), "", seq, comment, UIOperationMode::MODE_ADVANCED);
 			if (action) action->setData((*it).action.c_str());
-			setMenuHelp(action, "pythonInterpreter.html#create_hotkeys");
 		}
 
 		getMainControl()->insertPopupMenuSeparator(MainControl::USER, UIOperationMode::MODE_ADVANCED);
-		QAction* action = insertMenuEntry(MainControl::USER, tr("Modify"), this, SLOT(modifyHotkeys()), "", QKeySequence(),
-		                                  tr("Manage user defined Python commands"), UIOperationMode::MODE_ADVANCED);
-		setMenuHelp(action, "pythonInterpreter.html#create_hotkeys");
+		insertMenuEntry(MainControl::USER, tr("Modify"), this, SLOT(modifyHotkeys()), "", QKeySequence(),
+						tr("Manage user defined Python commands"), UIOperationMode::MODE_ADVANCED);
 	}
 
 			/////////////////////////////////////////
@@ -738,13 +735,6 @@ namespace BALL
 
 		void PyWidget::reactTo(const QKeyEvent& e) 
 		{
-			if (e.key() == Qt::Key_F1 &&
-			    e.modifiers() == Qt::ShiftModifier)
-			{
-				showDocumentation();
-				return;
-			}
-
 			list<Hotkey>::iterator it = hotkeys_.begin();
 			for (; it != hotkeys_.end(); it++)
 			{
@@ -1111,13 +1101,7 @@ namespace BALL
 					return false;
 				}
 			}
-			else if (e->key() == Qt::Key_Enter)	
-			{
-				// show docu
-				showDocumentation();
-				return true;
-			}
-			else 
+			else
 			{
 				// clear history position
 				history_position_ = history_.size();
@@ -1555,22 +1539,11 @@ namespace BALL
 			return true;
 		}
 
-		void PyWidget::showClassDocu(String classname, String member)
-		{
-			if (classname == "")
-			{
-				classname = member;
-				member = "";
-			}
-
-			notify_(new ShowHelpMessage(classname, "BALL class", member));
-		}
+		void PyWidget::showClassDocu(String /* classname */, String /* member */)
+		{ }
 
 		void PyWidget::showDocumentation()
-		{
-			getClassAndMember_(getCurrentLine());
-			showClassDocu(class_, member_);
-		}
+		{ }
 
 		bool PyWidget::getClassAndMember_(String toc)
 		{
@@ -1640,8 +1613,6 @@ namespace BALL
 			QAction* action1 = menu.addAction("Copy", text_edit, SLOT(copy()));
 			action1->setEnabled(text_edit->textCursor().hasSelection());
 
-			createMenuHelpEntry_(&menu, text_edit, point);
-
 			menu.addSeparator();
 
 			QAction* action2 = menu.addAction(tr("Create script"), this, SLOT(createScript_()));
@@ -1656,16 +1627,12 @@ namespace BALL
 		void PyWidget::showEditContextMenu(const QPoint& point)
 		{
 			QMenu* menu = script_edit_->createStandardContextMenu();
-			menu->addSeparator();
-
-			createMenuHelpEntry_(menu, script_edit_, point);
 			menu->exec(mapToGlobal(point));
 			delete menu;
 		}
 
 		String PyWidget::getCurrentWord_(QTextCursor& cursor_pos)
 		{
-			// "Help for" action
 			const Position pos = cursor_pos.position() - cursor_pos.block().position();
 			String text = ascii(cursor_pos.block().text());
 			String string = text.getSubstring(0, pos); 
@@ -1679,31 +1646,11 @@ namespace BALL
 			return string;
 		}
 
-		void PyWidget::createMenuHelpEntry_(QMenu* menu, TextEditorWidget* text_edit, const QPoint& point)
-		{
-			QTextCursor cursor_pos = text_edit->cursorForPosition(point);
-			String string = getCurrentWord_(cursor_pos);
-			bool found = getClassAndMember_(string);
-			String entry(tr("Help for: "));
-
-			if (found)
-			{
-				String key;
-
-				if (class_ != "") key = class_+ "." + member_;
-				else key = member_;
-				key.trim();
-				entry += key;
-			}
-
-			QAction* action = menu->addAction(entry.c_str(), this, SLOT(showHelp_()));
-			if (!found) action->setEnabled(false);
-		}
+		void PyWidget::createMenuHelpEntry_(QMenu* /* menu */, TextEditorWidget* /* text_edit */, const QPoint& /* point */)
+		{ }
 
 		void PyWidget::showHelp_()
-		{
-			showClassDocu(class_, member_);
-		}
+		{ }
 
 		void PyWidget::writePreferences(INIFile& inifile)
 		{
@@ -1888,9 +1835,8 @@ namespace BALL
 
 		void PyWidget::checkMenu(MainControl& main_control)
 		{
-	QMenu* menu = main_control.initPopupMenu(MainControl::TOOLS_PYTHON, UIOperationMode::MODE_ADVANCED);
-	if (menu)
-		menu->setEnabled(!main_control.isBusy());
+			QMenu* menu = main_control.initPopupMenu(MainControl::TOOLS_PYTHON, UIOperationMode::MODE_ADVANCED);
+			if (menu) menu->setEnabled(!main_control.isBusy());
 		}
 
 		bool PyWidget::isInDirectMode() const

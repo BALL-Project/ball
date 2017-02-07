@@ -28,42 +28,9 @@ namespace BALL
 				backward_(false)
 		{
 			setOpenExternalLinks(true);
-//   			connect(this, SIGNAL(backwardAvailable(bool)), this, SLOT(setBackwardAvailable(bool)));
-//   			connect(this, SIGNAL(forwardAvailable(bool)), this, SLOT(setForwardAvailable(bool)));
 		}
 
-		/*
-		QMenu* MyTextBrowser::createMenu(const QPoint&)
-		{
-			QPopupMenu* cm = new QPopupMenu(this);
-			cm->insertItem("Home", this, SLOT(home()));
-
-			Index back 		= cm->insertItem("Back", this, SLOT(backward()));
-			cm->setItemEnabled(back, backward_);
-
-			Index forward = cm->insertItem("Forward", this, SLOT(forward()));
-			cm->setItemEnabled(forward, forward_);
-
-			cm->insertSeparator();
-			Index copy_a = cm->insertItem("Copy", this, SLOT(copy()));
-			cm->setItemEnabled(copy_a, hasSelectedText());
-
-			return cm;
-		}
-		
-		void MyTextBrowser::setBackwardAvailable(bool b)
-		{
-			backward_ = b;
-		}
-
-		void MyTextBrowser::setForwardAvailable(bool b)
-		{
-			forward_ = b;
-		}
-*/
-
-
-		HelpViewer::HelpViewer(QWidget *parent, const char *name)
+		HelpViewer::HelpViewer(QWidget* parent, const char* name)
 			: DockWidget(parent, name),
 				project_("BALLView"),
 				default_page_("index.html"),
@@ -73,11 +40,6 @@ namespace BALL
 				whats_this_(true),
 				whats_action_(0)
 		{
-			Path p;
-			String dir = p.find("../doc/BALLView/");
-
-			setBaseDirectory(dir);
-
 			hide();
 			setGuest(*browser_);
 			registerWidget(this);
@@ -97,22 +59,9 @@ namespace BALL
 		{
 			DockWidget::initializeWidget(main_control);
 			QAction* action = insertMenuEntry(MainControl::HELP, tr((project_ + " Documentation").c_str()), this, SLOT(showHelp()),
-			                                  "Shortcut|MainControl|Documentation|Help", QKeySequence(), 
-																				tr(""), UIOperationMode::MODE_ADVANCED);
+							"Shortcut|MainControl|Documentation|Help", QKeySequence(),
+							tr(""), UIOperationMode::MODE_ADVANCED);
 			setIcon(action, "actions/help-hint", true);
-
-			if (action)
-				registerForHelpSystem(action, "tips.html#help");
-
-			if (whats_this_)
-			{
-				whats_action_ = insertMenuEntry(MainControl::HELP, tr("Whats this?"), this, SLOT(enterWhatsThisMode()),
-				                                "Shortcut|MainControl|Documentation|WhatsThis", QKeySequence(),
-																				tr("Show help for clicked widget, exit this mode with right mouse button."),
-																				UIOperationMode::MODE_ADVANCED);
-				registerForHelpSystem(whats_action_, "tips.html#help");
-			}
-
  			qApp->installEventFilter(this);
 		}
 
@@ -179,7 +128,7 @@ namespace BALL
 				return;
 			}
 
-            if (!RTTI::isKindOf<ShowHelpMessage>(message)) return;
+			if (!RTTI::isKindOf<ShowHelpMessage>(message)) return;
 
 			ShowHelpMessage* msg = RTTI::castTo<ShowHelpMessage>(*message);
 			bool classname = false;

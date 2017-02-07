@@ -165,17 +165,14 @@ namespace BALL
 															 UIOperationMode::OperationMode minimal_mode = UIOperationMode::MODE_ALL);
 
 			/** Set the help URL for the given action
-			 *	@see insertMenuEntry
-			 *	@see HelpViewer
-			 *  @param action the action to process (it is safe to pass a null pointer)
-			 *  @param url the url to add
+			 *  @deprecated Help system has been removed. This function will also be removed in the next release.
 			 */
-			void setMenuHelp(QAction* action, const String& url);
+			BALL_DEPRECATED void setMenuHelp(QAction* /* action */, const String& /* url */);
 
 			/** Register an QObject for the help system.
-			 		@see HelpViewer
+			 *  @deprecated Help system has been removed. This function will also be removed in the next release.
 			*/
-			virtual void registerForHelpSystem(const QObject* object, const String& url);
+			BALL_DEPRECATED virtual void registerForHelpSystem(const QObject* /* object */, const String& /* url */);
 
 			/** Add the widgets actions to the (main) toolbar.
 			 		This method is needed to enable ordering the entries.
@@ -302,7 +299,10 @@ namespace BALL
 
 			void setWorkingDirFromFilename_(String filename);
 
-			virtual void showHelp(const String& url);
+			/**
+			 * @deprecated Help system has been removed. This function will also be removed in the next release.
+			 */
+			BALL_DEPRECATED virtual void showHelp(const String& /* url */);
 
 			protected:
 

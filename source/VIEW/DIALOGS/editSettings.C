@@ -22,7 +22,6 @@ EditSettings::EditSettings(QWidget* parent, const char* name, Qt::WindowFlags fl
 	setObjectName(name);
 	setINIFileSectionName("EDITING");
 	setWidgetStackName((String)tr("Editing"));
-	registerWidgetForHelpSystem_(this, "scene.html#editing");
 	registerWidgets_();
 }
 

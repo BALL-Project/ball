@@ -47,12 +47,8 @@ namespace BALL
 		}
 
 
-		void DragLogView::setSource(const QUrl& name)
-		{
-			MainControl* mc = getMainControl();
-			ShowHelpMessage* msg = new ShowHelpMessage(ascii(name.toString()));
-			if (mc) mc->sendMessage(*msg);
-		}
+		void DragLogView::setSource(const QUrl& /* name */)
+		{ }
 
 
 		LogView::LogView(QWidget *parent, const char *name)
@@ -113,21 +109,12 @@ namespace BALL
 		{
  			setUpdatesEnabled(false);
  			QTextCursor ct = text_edit_->textCursor();
- 			if (!ct.atEnd()) 
- 			{
- 				ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+ 			if (!ct.atEnd()) {
+				ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
 				text_edit_->setTextCursor(ct);
- 			}
-					
-			if (!text.hasSubstring("href"))
-			{
-				text_edit_->insertPlainText(text.c_str());
 			}
-			else
-			{
-				text_edit_->insertHtml(text.c_str());
-				text_edit_->insertHtml("<br>");
-			}
+
+			text_edit_->insertPlainText(text.c_str());
 
  			ct.movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
  			text_edit_->setTextCursor(ct);
@@ -144,8 +131,6 @@ namespace BALL
 			insertMenuEntry(MainControl::EDIT, tr("Clear Logs"), text_edit_, SLOT(clear()),
 			                "Shortcut|MainControl|Edit|ClearLogs", QKeySequence(), tr(""),
 											UIOperationMode::MODE_ADVANCED);
-
-			registerForHelpSystem(this, "logView.html");
 		}
 
 

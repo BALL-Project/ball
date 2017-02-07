@@ -778,8 +778,8 @@ class BALL_VIEW_EXPORT SyncClippingPlanesMessage
 };
 
 
-///
-class BALL_VIEW_EXPORT ShowHelpMessage
+/// @deprecated Help system has been removed. This class will also be removed in the next release.
+class BALL_DEPRECATED BALL_VIEW_EXPORT ShowHelpMessage
 	: public Message
 {
 	public:
@@ -804,8 +804,9 @@ class BALL_VIEW_EXPORT ShowHelpMessage
 /** Register a QObject to a URL in the documentation
  		This message is send by ModularWidget::registerForHelpSystem and should
 		probably not be used otherwise.
+	@deprecated Help system has been removed. This class will also be removed in the next release.
 */
-class BALL_VIEW_EXPORT RegisterHelpSystemMessage
+class BALL_DEPRECATED BALL_VIEW_EXPORT RegisterHelpSystemMessage
 	: public Message
 {
 	public:

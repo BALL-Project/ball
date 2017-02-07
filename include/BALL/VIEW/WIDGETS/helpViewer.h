@@ -18,7 +18,10 @@ namespace BALL
 	namespace VIEW
 	{
 
-		class BALL_VIEW_EXPORT MyTextBrowser
+		/**
+		 * @deprecated Help system has been removed. This class will also be removed in the next release.
+		 */
+		class BALL_DEPRECATED BALL_VIEW_EXPORT MyTextBrowser
 			: public QTextBrowser
 		{
 			Q_OBJECT
@@ -27,15 +30,7 @@ namespace BALL
 
 			MyTextBrowser(QWidget* parent, const char* name = 0);
 
-			public slots:
-
-//   			void setBackwardAvailable(bool b);
-
-//   			void setForwardAvailable(bool b);
-
 			protected:
-
-//   			virtual QMenu* createPopupMenu(const QPoint& pos);
 
 			bool forward_, backward_;
 		};
@@ -44,7 +39,7 @@ namespace BALL
 				The documentation for BALLView was written in the HTML format, such that it either be
 				used online from the project's website or inside the program itself.
 				To obtain help for individual elements in the graphical user interface a special mode
-				was added. In the "Help" menu the entry "Whats this?" will switch into this mode and 
+				was added. In the "Help" menu the entry "Whats this?" will switch into this mode and
 				transform the mouse cursor into a question mark. While the "Whats this?" mode is
 				active a left mouse click on any widget will open the corresponding help entry in the
 				documentation. (If no help entry for that widget exists nothing will happen.)
@@ -62,8 +57,9 @@ namespace BALL
 				The implemention for opening the documentation per "Whats this?" menu entry and
 				the hotkey "F1" is also done here.
 				\ingroup ViewWidgets
+				@deprecated Help system has been removed. This class will also be removed in the next release.
 		*/
-		class BALL_VIEW_EXPORT HelpViewer
+		class BALL_DEPRECATED BALL_VIEW_EXPORT HelpViewer
 			: public DockWidget
 		{
 			Q_OBJECT

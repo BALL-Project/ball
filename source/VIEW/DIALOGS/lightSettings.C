@@ -30,7 +30,6 @@ LightSettings::LightSettings(QWidget* parent, const char* name, Qt::WindowFlags 
 	defaultsPressed();
 	setWidgetStackName((String)tr("Lighting"));
 	setINIFileSectionName("LIGHTING");
-	registerWidgetForHelpSystem_(this, "scene.html#lightsources");
 	registerWidgets_();
 	
 	lights_list->setSelectionMode(QAbstractItemView::SingleSelection);	

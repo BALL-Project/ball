@@ -26,7 +26,6 @@ namespace BALL
 
 			if (main_action_)
 			{
-				scene_->setMenuHelp(main_action_, "scene.html#rotate_mode");
 				main_action_->setCheckable(true);
 				scene_->setIcon(main_action_, "actions/transform-rotate", false);
 				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));

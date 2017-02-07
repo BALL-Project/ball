@@ -128,10 +128,7 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 												SLOT(show()), description, QKeySequence("Ctrl+I"),
 												tr("Create a new representation or modify an existing one"),
 	                      UIOperationMode::MODE_ADVANCED);
-	setMenuHelp(id_, "displayProperties.html");
 	setIcon(id_, "categories/preferences-display", true);
-
-	registerForHelpSystem(this, "displayProperties.html");
 
 	selectModel(MODEL_STICK);
 }

@@ -148,8 +148,8 @@ namespace BALL
 			/// Store the last applied values for undo
 			void applyPreferences();
 
-			///
-			void showHelp();
+			/// @deprecated Help system has been removed. This function will also be removed in the next release.
+			BALL_DEPRECATED void showHelp();
 
 			protected slots:
 				void dialogButtonsClicked_(QAbstractButton* button);

@@ -61,9 +61,6 @@ namespace BALL
 			virtual void setWidgetVisible(bool state);
 			
 			///
-			virtual void registerForHelpSystem(const QObject* widget, const String& url);
-
-			///
 			QGridLayout* getGuestLayout() { return layout_;}
 
 			public slots:

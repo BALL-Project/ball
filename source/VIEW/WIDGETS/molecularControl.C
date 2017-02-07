@@ -163,15 +163,6 @@ namespace BALL
 			clear_button->setToolTip(tr("Clear the selection."));
 			lay->addWidget(clear_button,3, 0);
 
-			QPushButton* help_button = new QPushButton(this);
-			BALL_ASSIGN_NAME(help_button)
-			help_button->resize(60, 25);
-			help_button->setMinimumSize(40, 25);
-			help_button->setText(tr("Help"));
-			connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
-			help_button->setToolTip(tr("Show a help dialog."));
-			lay->addWidget(help_button,3, 1);
-
 			QPushButton* select_button = new QPushButton(this);
 			BALL_ASSIGN_NAME(select_button)
 			select_button->resize(60, 25);
@@ -181,7 +172,7 @@ namespace BALL
 			connect(select_button, SIGNAL(clicked()), this, SLOT(applySelector()));
 			connect(selector_edit_->lineEdit(), SIGNAL(returnPressed()), this, SLOT(applySelector()));
 			select_button->setToolTip(tr("Apply the current expression."));
-			lay->addWidget(select_button,3, 2);
+			lay->addWidget(select_button,3, 1);
 
 			resize(200,400);
 
@@ -879,12 +870,10 @@ namespace BALL
 			                             "Shortcut|Edit|Select", QKeySequence(),
 																	 tr("Select a molecular object to see its position in the scene or to mark it for a simulation"),
 																	 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(select_id_, "molecularControl.html#selection_highlight");
 
 			deselect_id_ = insertMenuEntry(MainControl::EDIT, tr("&Deselect"), this, SLOT(deselect()),
 			                               "Shortcut|Edit|Deselect", QKeySequence(), tr("Deselect a molecular object."),
 																		 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(deselect_id_, "molecularControl.html#selection_highlight");
 
 			main_control.insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
@@ -912,9 +901,6 @@ namespace BALL
 																			tr("Clear the items in the clipboard"), UIOperationMode::MODE_ADVANCED);
 
 			GenericControl::initializeWidget(main_control);
-
-			registerForHelpSystem(this, "molecularControl.html");
-			registerForHelpSystem(selector_edit_, "molecularControl.html#regular_expressions"); 
 
 			description = "Shortcut|Display|Create|Distance_Label";
 			distance_action_ = insertMenuEntry(MainControl::DISPLAY_CREATE, tr("Distance Label"), this, 
@@ -1448,9 +1434,7 @@ namespace BALL
 
 
 		void MolecularControl::showSelectorHelp()
-		{
-			showHelp("molecularControl.html#regular_expressions");
-		}
+		{ }
 
 		void MolecularControl::clearSelector()
 		{

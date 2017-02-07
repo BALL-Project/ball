@@ -490,15 +490,8 @@ namespace BALL
 		}
 
 
-		void PreferencesEntry::registerWidgetForHelpSystem_(const QWidget* widget, const String& url)
-		{
-			if (getMainControl() == 0) return;
-
-			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setObject(widget);
-			msg->setURL(url);
-			getMainControl()->sendMessage(*msg);
-		}
+		void PreferencesEntry::registerWidgetForHelpSystem_(const QWidget* /* widget */, const String& /* url */)
+		{ }
 
 
 		void PreferencesEntry::storeValues()

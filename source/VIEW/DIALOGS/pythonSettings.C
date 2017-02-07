@@ -119,9 +119,6 @@ PythonSettings::PythonSettings(QWidget* parent, const char* name)
 	connect(new_button, SIGNAL(pressed()), table, SLOT(addEmptyRow()));
 	connect(remove_button, SIGNAL(pressed()), table, SLOT(removeSelection()));
 
-	registerWidgetForHelpSystem_(widget_stack->widget(0), "pythonInterpreter.html#startup_script");
-	registerWidgetForHelpSystem_(widget_stack->widget(1), "pythonInterpreter.html#create_hotkeys");
-
 	setWidgetStackName("Python");
 	setWidgetStack(widget_stack);
 	registerWidgets_();

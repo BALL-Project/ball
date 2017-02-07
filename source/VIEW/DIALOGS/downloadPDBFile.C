@@ -96,7 +96,6 @@ namespace BALL
 																 SLOT(show()), description, QKeySequence("Ctrl+T"),
 																 tr("Download a PDB file from www.rcsb.org"),
 																 UIOperationMode::MODE_ADVANCED);
-			setMenuHelp(menu_id_, "tips.html#download_pdb");
 			setIcon(menu_id_, "actions/download-pdb", true);
 		}
 

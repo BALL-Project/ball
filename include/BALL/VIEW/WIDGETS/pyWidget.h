@@ -276,8 +276,8 @@ class BALL_VIEW_EXPORT PyWidget
 	//
 	void dump(std::ostream& s, Size depth) const;
 
-	//
-	void showClassDocu(String classname, String member);
+	/// @deprecated Help system has been removed.
+	BALL_DEPRECATED void showClassDocu(String /* classname */, String /* member */);
 
 	//
 	virtual void fetchPreferences(INIFile& inifile);
@@ -314,8 +314,8 @@ class BALL_VIEW_EXPORT PyWidget
 	//
 	void abortScript();
 
-	// Show the docu for the current line
-	void showDocumentation();
+	/// @deprecated Help system has been removed.
+	BALL_DEPRECATED void showDocumentation();
 
 	///
 	bool runCurrentScript();
@@ -346,7 +346,8 @@ class BALL_VIEW_EXPORT PyWidget
 
 	virtual bool completionSelected_();
 
-	virtual void showHelp_();
+	/// @deprecated Help system has been removed.
+	BALL_DEPRECATED virtual void showHelp_();
 
 	virtual void printCursorPosition_();
 
@@ -408,7 +409,8 @@ class BALL_VIEW_EXPORT PyWidget
 
 	bool keyPressed(QKeyEvent* e);
 
-	void createMenuHelpEntry_(QMenu* menu, TextEditorWidget* text_edit, const QPoint& point);
+	/// @deprecated Help system has been removed.
+	BALL_DEPRECATED void createMenuHelpEntry_(QMenu* /* menu */, TextEditorWidget* /* text_edit */, const QPoint& /* point */);
 
 	void findError_(String result);
 

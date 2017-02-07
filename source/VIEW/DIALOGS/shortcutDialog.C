@@ -40,8 +40,6 @@ namespace BALL
 			//The search should not be stored from session to session
 			unregisterObject_(searchEdit);
 
-			//TODO
-			//registerWidgetForHelpSystem_(widget_stack->widget(0), "shortcuts.html#shortcuts");
 			hide();
 
 			connect(browse_export_button, SIGNAL(clicked()), this, SLOT(browseExportFile_()));
