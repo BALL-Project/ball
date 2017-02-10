@@ -736,7 +736,6 @@ WARN_LOGFILE           = @CF_BALL_BIN_PATH@/doc/doc-error.log
 
 INPUT                  = @CF_BALL_SRC_PATH@/include/BALL/ \
                          @CF_BALL_SRC_PATH@/source/APPLICATIONS/BALLVIEW/ \
-                         @CF_BALL_SRC_PATH@/doc/BALLView/ \
                          @CF_BALL_SRC_PATH@/doc/TUTORIAL/
 
 # This tag can be used to specify the character encoding of the source files
@@ -828,8 +827,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @CF_BALL_SRC_PATH@/doc/images/ \
-                         @CF_BALL_SRC_PATH@/doc/BALLView/images/
+IMAGE_PATH             = @CF_BALL_SRC_PATH@/doc/images/
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
