@@ -96,7 +96,6 @@ namespace BALL
 			a->setProperty("explicit_h", ai.explicit_hydrogens);
 			a->setFormalCharge( ai.formal_charge );
 			a->setProperty("atom_class", ai.atom_class);
-
 		}
 
 		molecule_->insert(*a);
@@ -258,7 +257,11 @@ namespace BALL
 		ring_bonds_.clear();
 
 		bool success = iterateMoleculeTree_(mol_tree, nullptr);
-		success = generateRingBonds_();
+
+		if(success)
+		{
+			success = generateRingBonds_();
+		}
 
 		return success;
 	}
