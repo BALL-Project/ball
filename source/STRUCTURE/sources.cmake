@@ -55,6 +55,7 @@ SET(SOURCES_LIST
 	smilesParser.C
 	smartsParser.C
 	smartsMatcher.C
+	SMILESParserNEW.C
 	solventAccessibleSurface.C
 	solventExcludedSurface.C
 	structureMapper.C

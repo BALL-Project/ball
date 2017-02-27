@@ -55,6 +55,7 @@ SET(EXECUTABLES_LIST
 	SimilarityAnalyzer
 	SimpleRescorer
 	SLICK
+	SMILESReader
 	SpatialConstraintDefiner
 	TaGRes
 	TaGRes-train
