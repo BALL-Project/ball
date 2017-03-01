@@ -110,8 +110,18 @@ namespace BALL
 
 			~SMILESParser();
 
+			/**
+			 * Parse given SMILES string and generate Molecule
+			 * @param smiles SMILES string
+			 * @param molecule pointer to Molecule to be populated
+			 * @return
+			 */
 			bool parse(const std::string& smiles, BALL::Molecule* molecule);
 
+			/**
+			 * Set new SMILESParser options
+			 * @param new_options Options to use
+			 */
 			void setOptions(const BALL::Options& new_options);
 
 		private:
@@ -180,12 +190,17 @@ namespace BALL
 
 
 			/**
-			 * addHydrogens
-			 * @return
+			 * Add explicit hydrogens to the molecule generated from SMILES string
+			 *  * @return
 			 */
 			bool addHydrogens_();
 
 
+			/**
+			 * Return default valence count for a given atom
+			 * @param atom the atom for which the default valence count should be returned
+			 * @return valence count for specified atom
+			 */
 			unsigned int getDefaultValence_(const Atom* atom);
 
 
@@ -237,7 +252,7 @@ namespace BALL
 
 
 			/**
-			 * setDefaultOptions
+			 * Set SMILESParser default options
 			 */
 			void setDefaultOptions_();
 

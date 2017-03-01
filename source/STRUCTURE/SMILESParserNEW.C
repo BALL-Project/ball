@@ -72,7 +72,10 @@ namespace BALL
 	bool SMILESParser::parse(const string& smiles, Molecule* molecule)
 	{
 		bool success = false;
+
 		molecule_ = molecule;
+		molecule_->clear();
+
 		SPMoleculeTree mol_tree;
 
 		string::const_iterator smiles_begin = smiles.begin();
@@ -288,11 +291,14 @@ namespace BALL
 					if( bond_order == 7)
 					{
 						// bond_order = 7: cis-trans single bond '/'
-						//atom_2->setProperty("cis_trans", "");
+
+						// TODO: mark correct atom
 					}
 					else
 					{
 						// bond_order = 8: cis-trans single bond '\'
+
+						// TODO: mark correct atom
 					}
 
 					// Both imply formation of a single bond
