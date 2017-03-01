@@ -5,22 +5,11 @@
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
-
+#include <BALL/common.h>
+#include <BALL/DATATYPE/options.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/molecule.h>
 
 #include <string>
 #include <unordered_map>
@@ -39,13 +28,22 @@ namespace qi = boost::spirit::qi;
 
 namespace BALL 
 {
+	/*
+	 * Struct to store a ring bond member atom
+	 * during parsing the SMILES string
+	 */
 	struct SPRingBond
 	{
 		unsigned int rb_id = 0;
-		BALL::Bond::Order rb_order = BALL::Bond::ORDER__UNKNOWN;
+		unsigned int rb_order = 0;
 		BALL::Atom* rb_atom = nullptr;
 	};
 
+
+	/*
+	 * Struct to store atom information
+	 * during parsing the SMILES string
+	 */
 	struct SPAtomInfo
 	{
 			bool is_bracket_atom = false;
@@ -56,11 +54,17 @@ namespace BALL
 			int formal_charge = 0;
 			unsigned int atom_class = 0;
 
-			BALL::Bond::Order bond_order_in = BALL::Bond::ORDER__UNKNOWN;
-			BALL::Bond::Order bond_order_out = BALL::Bond::ORDER__UNKNOWN;
+			unsigned int bond_order_in = 0;
+			unsigned int bond_order_out = 0;
 			std::vector<SPRingBond> ring_bonds;
+
+			std::string chiral_class = "";
 	};
 
+
+	/*
+	 * Struct to store parsed SMILES information in a hierarchical tree
+	 */
 	struct SPMoleculeTree
 	{
 			std::vector<SPAtomInfo> atom_list;
@@ -77,17 +81,45 @@ namespace BALL
 	class BALL_EXPORT SMILESParser
 	{
 		public:
+
+			struct BALL_EXPORT Option
+			{
+					static const string SP_ADD_HYDROGENS;
+
+					static const string SP_ADD_EXPLICIT_HYDROGENS;
+
+					static const string SP_GENERATE_3D_COORDINATES;
+
+					static const string SP_GENERATE_3D_COORDINATES_ISOMERIC;
+			};
+
+			struct BALL_EXPORT Default
+			{
+					static const bool SP_ADD_HYDROGENS;
+
+					static const bool SP_ADD_EXPLICIT_HYDROGENS;
+
+					static const bool SP_GENERATE_3D_COORDINATES;
+
+					static const bool SP_GENERATE_3D_COORDINATES_ISOMERIC;
+			};
+
 			SMILESParser();
+
+			SMILESParser(const BALL::Options& new_options);
 
 			~SMILESParser();
 
 			bool parse(const std::string& smiles, BALL::Molecule* molecule);
 
+			void setOptions(const BALL::Options& new_options);
 
 		private:
 
-
-
+			/*
+			 * Actual SMILES parser
+			 * implementing a Boost spirit grammar.
+			 */
 			struct SMILESParserGrammar
 					: qi::grammar<std::string::const_iterator, SPMoleculeTree()>
 			{
@@ -102,27 +134,35 @@ namespace BALL
 
 				void setAtomInfo(SPAtomInfo& ai, std::string element_symbol, bool is_aromatic);
 
+				void setAtomInfoChiral_TH_AL_(SPAtomInfo& ai, std::string element_symbol, std::string chiral_class);
+
 				/*
 				 * Spirit symbol tables to define tokens for the different atom classes,
-				 * the bond types, and the formal charges (up to +- 15).
+				 * the bond types, formal charges, and chirality information.
 				 */
 				qi::symbols<char, std::string> atomsBracket_;
 				qi::symbols<char, std::string> atomsOrgAli_;
 				qi::symbols<char, std::string> atomsOrgAro_;
-				qi::symbols<char, BALL::Bond::Order> bonds_;
+				qi::symbols<char, unsigned int> bonds_;
 				qi::symbols<char, int> charges_;
+				qi::symbols<char, std::string> chiral_TH_;
+				qi::symbols<char, std::string> chiral_AL_;
+				qi::symbols<char, std::string> chiral_SP_;
+				qi::symbols<char, std::string> chiral_TB_;
+				qi::symbols<char, std::string> chiral_OH_;
 
-
+				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_chiral_;
 				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_bracket_;
 				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_organic_;
+				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_;
 				qi::rule<std::string::const_iterator, unsigned int()> r_ring_number_;
 				qi::rule<std::string::const_iterator, SPRingBond()> r_ring_bond_;
 
-				qi::rule<std::string::const_iterator, SPAtomInfo()> r_atom;
-				qi::rule<std::string::const_iterator, std::vector<SPAtomInfo>() > r_chain;
-				qi::rule<std::string::const_iterator, std::vector<SPMoleculeTree>()> r_branch;
-				qi::rule<std::string::const_iterator, SPMoleculeTree()> r_smiles;
-				qi::rule<std::string::const_iterator, SPMoleculeTree()> r_start;
+				qi::rule<std::string::const_iterator, SPAtomInfo()> r_node_;
+				qi::rule<std::string::const_iterator, std::vector<SPAtomInfo>() > r_chain_;
+				qi::rule<std::string::const_iterator, std::vector<SPMoleculeTree>()> r_branch_;
+				qi::rule<std::string::const_iterator, SPMoleculeTree()> r_smiles_;
+				qi::rule<std::string::const_iterator, SPMoleculeTree()> r_start_;
 
 				// Single digit parser for unsigned int
 				qi::uint_parser<unsigned, 10, 1, 1> uint_1_digit_;
@@ -140,6 +180,16 @@ namespace BALL
 
 
 			/**
+			 * addHydrogens
+			 * @return
+			 */
+			bool addHydrogens_();
+
+
+			unsigned int getDefaultValence_(const Atom* atom);
+
+
+			/**
 			 * Create new atom and set its parameters
 			 * @param ai AtomInfo struct containing the parsed atom information
 			 * @return
@@ -153,7 +203,7 @@ namespace BALL
 			 * @param a1 first incident atom
 			 * @param a2 second incident atom
 			 */
-			void createBond_(const Bond::Order bond_order, BALL::Atom* a1, BALL::Atom* a2);
+			void createBond_(unsigned int bond_order, BALL::Atom* a1, BALL::Atom* a2);
 
 
 			/**
@@ -179,11 +229,17 @@ namespace BALL
 
 
 			/**
-			 * @brief printMolTree
+			 * printMolTree
 			 * @param mt
 			 * @param depth
 			 */
 			void dumpMolTree_(SPMoleculeTree& mt, unsigned int depth);
+
+
+			/**
+			 * setDefaultOptions
+			 */
+			void setDefaultOptions_();
 
 
 			/*
@@ -202,6 +258,10 @@ namespace BALL
 			 */
 			std::unordered_map<unsigned int, std::vector<SPRingBond> > ring_bonds_;
 
+			/*
+			 * Options for the SMILESParser
+			 */
+			BALL::Options options_;
 	};
 
 } // namespace BALL
@@ -210,14 +270,14 @@ namespace BALL
 BOOST_FUSION_ADAPT_STRUCT
 (
 	BALL::SPMoleculeTree,
-	(std::vector<BALL::SPAtomInfo>,       atom_list)
-	(std::vector<BALL::SPMoleculeTree>,   children)
+	(std::vector<BALL::SPAtomInfo>,     atom_list)
+	(std::vector<BALL::SPMoleculeTree>, children)
 )
 
 BOOST_FUSION_ADAPT_STRUCT
 (
 	BALL::SPRingBond,
-	(BALL::Bond::Order, rb_order)
+	(unsigned int, rb_order)
 	(unsigned int, rb_id)
 )
 

@@ -3,8 +3,10 @@
 //
 
 
+
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/SDFile.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/SMILESParserNEW.h>
 #include "version.h"
 
@@ -14,6 +16,24 @@
 
 using namespace BALL;
 using namespace std;
+
+
+/*
+struct TESTParser : qi::grammar<std::string::const_iterator>
+{
+		TESTParser() : TESTParser::base_type(start)
+		{
+			bracket =
+
+			chiral =
+
+			start = "[" >> ( chiral | bracket ) >> "]";
+		}
+
+		qi::rule<std::string::const_iterator> r1;
+		qi::rule<std::string::const_iterator> start;
+};
+*/
 
 
 int main(int argc, char* argv[])
@@ -38,6 +58,13 @@ int main(int argc, char* argv[])
 
 	SMILESParser smiles_parser;
 	bool success = smiles_parser.parse(smiles, &m);
+
+	/*
+	for(unsigned int i=0; i!=m.countAtoms(); ++i)
+	{
+		cerr << i << "\t" << (m.getAtom(i)->getElement()).getSymbol() << endl;
+	}
+	*/
 
 	SDFile sdf(par.get("o"), std::ios::out);
 	sdf.write(m);
