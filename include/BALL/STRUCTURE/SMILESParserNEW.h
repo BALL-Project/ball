@@ -11,10 +11,10 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/molecule.h>
 
+#include <list>
 #include <string>
 #include <unordered_map>
 #include <utility>
-#include <vector>
 
 #define BOOST_SPIRIT_DEBUG
 #include <boost/spirit/include/qi.hpp>
@@ -56,7 +56,7 @@ namespace BALL
 
 			unsigned int bond_order_in = 0;
 			unsigned int bond_order_out = 0;
-			std::vector<SPRingBond> ring_bonds;
+			std::list<SPRingBond> ring_bonds;
 
 			std::string chiral_class = "";
 	};
@@ -67,8 +67,8 @@ namespace BALL
 	 */
 	struct SPMoleculeTree
 	{
-			std::vector<SPAtomInfo> atom_list;
-			std::vector<SPMoleculeTree> children;
+			std::list<SPAtomInfo> atom_list;
+			std::list<SPMoleculeTree> children;
 	};
 
 
@@ -146,10 +146,8 @@ namespace BALL
 
 				void setAtomInfoChiral_TH_AL_(SPAtomInfo& ai, std::string element_symbol, std::string chiral_class);
 
-				/*
-				 * Spirit symbol tables to define tokens for the different atom classes,
-				 * the bond types, formal charges, and chirality information.
-				 */
+				// Spirit symbol tables to define tokens for the different atom classes,
+				// the bond types, formal charges, and chirality information.
 				qi::symbols<char, std::string> atomsBracket_;
 				qi::symbols<char, std::string> atomsOrgAli_;
 				qi::symbols<char, std::string> atomsOrgAro_;
@@ -161,16 +159,16 @@ namespace BALL
 				qi::symbols<char, std::string> chiral_TB_;
 				qi::symbols<char, std::string> chiral_OH_;
 
+				// The rules used by this grammar
 				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_chiral_;
 				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_bracket_;
 				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_organic_;
 				qi::rule<std::string::const_iterator, void(SPAtomInfo&)> r_atom_;
 				qi::rule<std::string::const_iterator, unsigned int()> r_ring_number_;
 				qi::rule<std::string::const_iterator, SPRingBond()> r_ring_bond_;
-
 				qi::rule<std::string::const_iterator, SPAtomInfo()> r_node_;
-				qi::rule<std::string::const_iterator, std::vector<SPAtomInfo>() > r_chain_;
-				qi::rule<std::string::const_iterator, std::vector<SPMoleculeTree>()> r_branch_;
+				qi::rule<std::string::const_iterator, std::list<SPAtomInfo>() > r_chain_;
+				qi::rule<std::string::const_iterator, std::list<SPMoleculeTree>()> r_branch_;
 				qi::rule<std::string::const_iterator, SPMoleculeTree()> r_smiles_;
 				qi::rule<std::string::const_iterator, SPMoleculeTree()> r_start_;
 
@@ -271,7 +269,7 @@ namespace BALL
 			/*
 			 * Map of ring bonds to be formed
 			 */
-			std::unordered_map<unsigned int, std::vector<SPRingBond> > ring_bonds_;
+			std::unordered_map<unsigned int, std::list<SPRingBond> > ring_bonds_;
 
 			/*
 			 * Options for the SMILESParser
@@ -285,8 +283,8 @@ namespace BALL
 BOOST_FUSION_ADAPT_STRUCT
 (
 	BALL::SPMoleculeTree,
-	(std::vector<BALL::SPAtomInfo>,     atom_list)
-	(std::vector<BALL::SPMoleculeTree>, children)
+	(std::list<BALL::SPAtomInfo>,     atom_list)
+	(std::list<BALL::SPMoleculeTree>, children)
 )
 
 BOOST_FUSION_ADAPT_STRUCT

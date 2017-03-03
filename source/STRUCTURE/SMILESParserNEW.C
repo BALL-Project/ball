@@ -6,6 +6,7 @@
 #include <BALL/KERNEL/PTE.h>
 
 #include <locale>
+#include <vector>
 
 #include <boost/bind.hpp>
 #include <boost/spirit/include/phoenix.hpp>
@@ -236,11 +237,11 @@ namespace BALL
 		// If specified, store the ring bonds in the global ring bond map
 		if( !ai.ring_bonds.empty() )
 		{
-			std::unordered_map<unsigned int, vector<SPRingBond> >::iterator rb_iter;
+			std::unordered_map<unsigned int, list<SPRingBond> >::iterator rb_iter;
 
 			for( auto ring_bond_member : ai.ring_bonds )
 			{
-				rb_iter = ring_bonds_.insert( ring_bonds_.begin(), make_pair(ring_bond_member.rb_id, vector<SPRingBond>()) );
+				rb_iter = ring_bonds_.insert( ring_bonds_.begin(), make_pair(ring_bond_member.rb_id, list<SPRingBond>()) );
 				(rb_iter->second).push_back(ring_bond_member);
 				(rb_iter->second).back().rb_atom = a;
 			}
@@ -324,7 +325,7 @@ namespace BALL
 
 		// Generate first atom of current chain and insert it into the molecule
 		// The first atom is treated differently because it can have a predecessor (branch) or not (first atom in SMILES)
-		vector<SPAtomInfo>::const_iterator ai_iter = mol_tree.atom_list.cbegin();
+		list<SPAtomInfo>::const_iterator ai_iter = mol_tree.atom_list.cbegin();
 		Atom* curr_atom = createAtom_(*ai_iter);
 
 		if( prev_atom != nullptr)
@@ -375,7 +376,7 @@ namespace BALL
 		for( auto rb_id : ring_bonds_ )
 		{
 			// The map value is a vector that contains all atoms that specified this ring bond index.
-			vector<SPRingBond> members = rb_id.second;
+			list<SPRingBond> members = rb_id.second;
 
 			// Sanity check: if the member count is odd, there is an unmatched (non-closed) ring bond.
 			//               We do not accept this.
@@ -391,10 +392,13 @@ namespace BALL
 
 			// All ring bonds can be closed.
 			// Iterate over all ring bond member pairs and create the bond.
-			for(unsigned int i=0; i!=members.size(); i+=2)
+			list<SPRingBond>::const_iterator rb_iter = members.begin();
+			while( rb_iter!=members.end() )
 			{
-				SPRingBond rb1 = members[i];
-				SPRingBond rb2 = members[i+1];
+				SPRingBond rb1 = *rb_iter;
+				++rb_iter;
+				SPRingBond rb2 = *rb_iter;
+				++rb_iter;
 
 				// Sanity check: ring bond orders can be specified explicitely, but they have to match.
 				//               Contradicting ring bond orders are not accepted.
@@ -420,7 +424,7 @@ namespace BALL
 #endif
 
 		// Sanity check: First atom cannot have an in-bond
-		if( mol_tree.atom_list[0].bond_order_in != 0 )
+		if( mol_tree.atom_list.front().bond_order_in != 0 )
 		{
 			errorMessage_("SMILESParser error: bond order prefix for SMILES. Example: '=C'");
 			return false;
@@ -452,9 +456,9 @@ namespace BALL
 
 		++depth;
 
-		for (unsigned int i=0; i!=mt.children.size(); ++i)
+		for( auto c : mt.children)
 		{
-			dumpMolTree_(mt.children[i], depth);
+			dumpMolTree_(c, depth);
 		}
 	}
 
@@ -572,7 +576,7 @@ namespace BALL
 	void SMILESParser::SMILESParserGrammar::initSymbolTables()
 	{
 		// Populate atom element symbol tables
-		vector<string> atoms_bracket = {"*", "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P",
+		list<string> atoms_bracket = {"*", "H", "He", "Li", "Be", "B", "C", "N", "O", "F", "Ne", "Na", "Mg", "Al", "Si", "P",
 										"S", "Cl", "Ar", "K", "Ca", "Sc", "Ti", "V", "Cr", "Mn", "Fe", "Co", "Ni", "Cu", "Zn",
 										"Ga", "Ge", "As", "Se", "Br", "Kr", "Rb", "Sr", "Y", "Zr", "Nb", "Mo", "Tc", "Ru", "Rh",
 										"Pd", "Ag", "Cd", "In", "Sn", "Sb", "Te", "I", "Xe", "Cs", "Ba", "Hf", "Ta", "W", "Re",
@@ -585,7 +589,7 @@ namespace BALL
 			atomsBracket_.add(s, s);
 		}
 
-		vector<string> atoms_org_ali = {"*", "B", "C", "N", "O", "P", "S", "F", "Cl", "Br", "I", "*"};
+		list<string> atoms_org_ali = {"*", "B", "C", "N", "O", "P", "S", "F", "Cl", "Br", "I", "*"};
 		for ( auto s : atoms_org_ali )
 		{
 			atomsOrgAli_.add(s, s);
