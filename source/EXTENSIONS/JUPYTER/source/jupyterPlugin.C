@@ -8,14 +8,12 @@ namespace BALL
 	{
 		JupyterPlugin::JupyterPlugin()
 			: icon_(":pluginJupyter.png"),
-				is_active_(false),
-				preferences_(new JupyterPreferences())
-		{
-		}
+			  preferences_(new JupyterPreferences()),
+			  widget_(nullptr)
+		{ }
 
 		JupyterPlugin::~JupyterPlugin()
-		{
-		}
+		{ }
 
 		QString JupyterPlugin::getName() const
 		{
@@ -37,27 +35,30 @@ namespace BALL
 			return preferences_;
 		}
 
-		ModularWidget* JupyterPlugin::createModularWidget(MainControl* main_control)
+		bool JupyterPlugin::activate()
 		{
-			JupyterWidget* jupyter_widget = new JupyterWidget(main_control, "Jupyter");
+			if(isActive()) return true;
+
+			JupyterWidget* jupyter_widget = new JupyterWidget(main_control_, "Jupyter");
 
 			preferences_->storeValues();
 
-			main_control->addDockWidget(Qt::BottomDockWidgetArea, jupyter_widget);
+			main_control_->addDockWidget(Qt::BottomDockWidgetArea, jupyter_widget);
 
-			return jupyter_widget;
-		}
-
-		bool JupyterPlugin::activate()
-		{
-			is_active_ = true;
+			widget_ = jupyter_widget;
+			widget_->registerWidget(widget_);
+			widget_->initializeWidget(*main_control_);
 
 			return true;
 		}
 
 		bool JupyterPlugin::deactivate()
 		{
-			is_active_ = false;
+			if(!isActive()) return true;
+
+			widget_->finalizeWidget(*main_control_);
+			delete widget_;
+			widget_ = nullptr;
 
 			return true;
 		}
