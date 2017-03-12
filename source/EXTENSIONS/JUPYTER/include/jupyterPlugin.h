@@ -1,7 +1,6 @@
 #ifndef JUPYTERPLUGIN_H
 #define JUPYTERPLUGIN_H
 
-#include <QtCore/QObject>
 #include <QtGui/QPixmap>
 
 #include "jupyterWidget.h"
@@ -35,20 +34,17 @@ namespace BALL
 
 				ConfigDialog* getConfigDialog();
 
-				ModularWidget* createModularWidget(MainControl* main_control);
-
-				bool isActive() { return is_active_; }
+				bool isActive() { return widget_; }
 
 				bool activate();
 				bool deactivate();
 
 			private:
 				QPixmap icon_;
-				bool is_active_;
 				JupyterPreferences* preferences_;
+				ModularWidget* widget_;
 		};
 	}
 }
-
 
 #endif // JUPYTERPLUGIN_H
