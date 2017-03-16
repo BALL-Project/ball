@@ -23,8 +23,8 @@
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 #ifdef BALL_PYTHON_SUPPORT
-#	include <BALL/VIEW/WIDGETS/pyWidget.h>
-# include <BALL/VIEW/WIDGETS/testFramework.h>
+#	include <BALL/PYTHON/pyInterpreter.h>
+#	include <BALL/VIEW/WIDGETS/testFramework.h>
 #endif
 
 #include <BALL/SYSTEM/path.h>
@@ -149,8 +149,8 @@ namespace BALL
 		server->registerObjectCreator(*object_creator);
 
 		#ifdef BALL_PYTHON_SUPPORT
+			PyInterpreter::initialize();
 			new TestFramework(this, ((String)"Test Framework").c_str());
-			addDockWidget(Qt::BottomDockWidgetArea, new PyWidget(this, ((String)tr("Python Interpreter")).c_str()));
 		#endif
 
 		// ---------------------
@@ -253,11 +253,6 @@ namespace BALL
 			checkMenus();
 			return false;
 		}
-
-		#ifdef BALL_PYTHON_SUPPORT
- 			PyWidget::getInstance(0)->reactTo(*e);
-			e->accept();
-		#endif
 
 		return false;
 	}

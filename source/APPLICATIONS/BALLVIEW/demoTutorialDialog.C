@@ -22,7 +22,6 @@
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -101,10 +100,7 @@ void DemoTutorialDialog::initDemo_()
 	// hide some dockwidgets
 	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
  	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
-#ifdef BALL_PYTHON_SUPPORT
- 	if (PyWidget::getInstance(0) != 0) 			 PyWidget::getInstance(0)->hide();
-#endif
-	
+
 #ifdef	BALL_HAS_RTFACT
 	// Set the background to black
 	ColorRGBA color(0, 0, 0, 255);
