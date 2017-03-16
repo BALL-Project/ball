@@ -20,7 +20,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class ComboBoxDelegate
+		class BALL_DEPRECATED ComboBoxDelegate
 			: public QItemDelegate
 		{
 			public:
@@ -44,7 +44,7 @@ namespace BALL
 		/** Class for storing Python hotkeys in a GUI table
 				\ingroup ViewDialogs
 		*/
-		class HotkeyTable
+		class BALL_DEPRECATED HotkeyTable
 			:	public QTableWidget,
 				public PreferencesEntry::ExtendedPreferencesObject
 		{

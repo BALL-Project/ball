@@ -31,7 +31,7 @@ namespace BALL
 				when the application has loaded and a PyWidget instance is added.
 				\ingroup ViewDialogs
 		*/
-		class BALL_VIEW_EXPORT PythonSettings 
+		class BALL_VIEW_EXPORT BALL_DEPRECATED PythonSettings
 			: public QWidget,
 				public Ui_PythonSettingsData,
 				public PreferencesEntry
