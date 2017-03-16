@@ -14,7 +14,6 @@
 		- \link BALL::VIEW::GeometricControl Control of the representations \endlink
 		- \link BALL::VIEW::DatasetControl Control of trajectories and grids\endlink
 		- \link BALL::VIEW::LogView Logviews \endlink
-		- \link BALL::VIEW::PyWidget Interface to the Python interpreter \endlink
 		- \link BALL::VIEW::RegularData1DWidget Plotting of onedimensional data \endlink
 		- \link BALL::VIEW::RegularData2DWidget Plotting of  twodimensional data \endlink
 

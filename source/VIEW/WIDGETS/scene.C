@@ -3196,7 +3196,6 @@ namespace BALL
 
 		void Scene::setWidgetVisible(bool state)
 		{
-			// only for Python needed
 			QWidget::setVisible(state);
 		}
 

@@ -107,7 +107,6 @@ namespace BALL
 			if (event->mimeData()->hasUrls()) event->acceptProposedAction();
 		}
 
-		// only for Python needed
 		void DockWidget::setWidgetVisible(bool state)
 		{
  			if (window_menu_entry_ != 0) window_menu_entry_->setChecked(state);

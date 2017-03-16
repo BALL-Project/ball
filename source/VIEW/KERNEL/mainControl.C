@@ -419,15 +419,6 @@ namespace BALL
 				case TOOLS:
 					menu = addMenu(tr("&Tools"), UIOperationMode::MODE_ADVANCED);
 					break;
-				case TOOLS_PYTHON:
-					menu = NULL;
-					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
-					{
-						menu = initPopupMenu(TOOLS, UIOperationMode::MODE_ADVANCED);
-						if (menu)
-							menu = menu->addMenu(tr("&Python"));
-					}
-					break;
 				case TOOLS_GRID:
 					menu = NULL;
 					if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
@@ -439,9 +430,6 @@ namespace BALL
 					break;
 				case WINDOWS:
 					menu = addMenu(tr("&Windows"), UIOperationMode::MODE_ADVANCED);
-					break;
-				case USER:
-					menu = addMenu(tr("&User"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case MACRO:
 					menu = addMenu(tr("Macros"), UIOperationMode::MODE_ADVANCED);

@@ -55,7 +55,6 @@ namespace BALL
 				<b>Remember:</b> A ModularWidget is not notified by the Messages it sends itself!
 				\see MainControl
 				\see Embeddable
-				\see PyWidget
 			\ingroup ViewKernelConnectivity
 		*/
 		class BALL_VIEW_EXPORT ModularWidget
