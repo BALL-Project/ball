@@ -497,49 +497,6 @@ void TestFramework::timeOut()
 
 	if (timer_.getClockTime() < time_) return;
 
-#ifdef BALL_PYTHON_SUPPORT		
-	if (python_line_ != "")
-	{
-		PyWidget* pyw = 0;
-
-		pyw = PyWidget::getInstance(0);
-		if (pyw == 0) 
-		{
-			Log.error() << "Can not exec Python in macro since no Python support available" << std::endl;
-		}
-
-		else
-		{
-			if (expected_result_ == "")
-			{
-				pyw->runString(python_line_);
-			}
-			else
-			{
-				bool ok;
-				String result = PyInterpreter::run(python_line_, ok);
-				// trim newline
-				if (result.size()) result.truncate(result.size()-1);
-				if (!ok || result != expected_result_)
-				{
-					Log.error() << "------------------------------------------------" << std::endl;
-					Log.error() << "Test failed in "
-											<< filename_ << " " << line_nr_ << ":";
-					if (!ok) Log.error() << "(call failed)";
-					Log.error() << std::endl 
-					            << python_line_ << std::endl 
-					            << result << "!=" 
-					            << expected_result_<< "!" << std::endl;
-					errors_++;
-				}
-			}
-		}
-
-		processEvent_();
-		return;
-	}
-#endif
-
 	if (type_ == 0) 
 	{
 		test_running_ = false;

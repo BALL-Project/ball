@@ -71,10 +71,9 @@ Mainframe::Mainframe(...)
 {
   new LogView(this);          // widget (1)
   new DatasetControl(this);   // widget (2)
-  new PyWidget(this);         // widget (3)
-  new MolecularControl(this); // widget (4)
-  new GeometricControl(this); // widget (5)
-  new Scene(this);            // widget (6)
+  new MolecularControl(this); // widget (3)
+  new GeometricControl(this); // widget (4)
+  new Scene(this);            // widget (5)
 }
 \end{lstlisting}
 
@@ -115,7 +114,6 @@ custom-tailored applications.
 \class{MolecularStructure}           & Force field and molecular mechanics \\
                                      & features\\
 \class{PubChemDialog}                & Download a structure from PubChem\\
-\class{PyWidget}                     & Python scripting\\
 \class{Scene}                        & Three-dimensional graphics\\
 \class{ShortcutDialog}               & Editor for keyboard shortcuts\\
 \class{SnapshotVisualisation}        & Visualization of trajectories\\
@@ -612,8 +610,6 @@ method, the drawing style, and the geometric objects representing the model
 (see Fig.~\ref{fig:representation}). This approach has many advantages:
 \begin{itemize}
   \item The different models and coloring methods can be freely combined.
-  \item Users can can create customized representations \eg by using the 
-        \Index{Python} scripting interface.
   \item Users can combine as many different representations as they like to
         compose complex molecular visualizations.
   \item Individual representations can be enable/disable any time.
