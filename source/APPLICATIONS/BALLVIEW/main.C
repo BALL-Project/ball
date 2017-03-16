@@ -14,7 +14,6 @@
 #include <QtCore/QTranslator>
 
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QSplashScreen>
 #include <QtOpenGL/qgl.h>
 
 #include "mainframe.h"
@@ -90,10 +89,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	{
 		BALL::VIEW::UIOperationMode::instance().setMode(BALL::VIEW::UIOperationMode::MODE_KIOSK);
 	}
-
-  QPixmap splash_pm(":BALLView-1.4-Splashscreen.png");
-  QSplashScreen* splash = new QSplashScreen(splash_pm);
-  splash->show();
 
 	// =============== testing for opengl support ======================================
 	if (!QGLFormat::hasOpenGL())
@@ -197,10 +192,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		mainframe.aboutToExit();
 		return 0;
 	}
-	
-	// Remove the splashscreen
-	splash->finish(&mainframe);
-	delete splash;
 	
 	// Hand over control to the application.
 	return application.exec();
