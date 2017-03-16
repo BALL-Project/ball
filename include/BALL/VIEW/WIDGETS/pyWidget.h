@@ -46,7 +46,7 @@ class RunPythonThread;
 /** Class for syntax highlighting of Python code.
 		\ingroup ViewWidgets
 */
-class BALL_VIEW_EXPORT PythonHighlighter
+class BALL_VIEW_EXPORT BALL_DEPRECATED PythonHighlighter
 	: public QSyntaxHighlighter
 {
 	public:
@@ -73,7 +73,7 @@ class BALL_VIEW_EXPORT PythonHighlighter
 /** Class for validating (and potentially fixing) entered python code.
 		\ingroup ViewWidgets
 */
-class BALL_VIEW_EXPORT PythonValidator
+class BALL_VIEW_EXPORT BALL_DEPRECATED PythonValidator
 	: public QValidator
 {
 	public:
@@ -83,7 +83,7 @@ class BALL_VIEW_EXPORT PythonValidator
 		virtual State validate(QString& input, int& pos) const;		
 };
 
-class BALL_VIEW_EXPORT RunPythonThread
+class BALL_VIEW_EXPORT BALL_DEPRECATED RunPythonThread
 	: public QThread
 {
 	public:
@@ -98,7 +98,7 @@ class BALL_VIEW_EXPORT RunPythonThread
 };
 
 ///
-struct BALL_VIEW_EXPORT Hotkey
+struct BALL_VIEW_EXPORT BALL_DEPRECATED Hotkey
 {
 
 	public:
@@ -136,7 +136,7 @@ struct BALL_VIEW_EXPORT Hotkey
 		PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
 		\ingroup ViewWidgets
 */
-class BALL_VIEW_EXPORT PyWidget
+class BALL_VIEW_EXPORT BALL_DEPRECATED PyWidget
 	: public DockWidget
 {
 	class MyLineEdit
