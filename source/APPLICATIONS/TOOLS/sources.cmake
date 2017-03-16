@@ -2,6 +2,7 @@
 SET(DIRECTORY source/APPLICATIONS/TOOLS)
 
 SET(EXECUTABLES_LIST
+	ExpressionParser
 	AddMissingAtoms
 	AntitargetRescorer
 	AutoModel
