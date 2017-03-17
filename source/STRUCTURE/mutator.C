@@ -4,11 +4,6 @@
 
 namespace BALL
 {
-
-#ifdef BALL_DEBUG
-# include <BALL/STRUCTURE/mutator.iC>
-#endif
-
 	Mutator::Mutator(FragmentDB* db)
 		: db_(db), keep_db_(true)
 	{
@@ -36,6 +31,13 @@ namespace BALL
 		if(opts & OPTIMIZE) {
 			optimize();
 		}
+	}
+
+	void Mutator::setFragmentDB(FragmentDB* db)
+	{
+		freeDB_();
+		db_ = db;
+		keep_db_ = true;
 	}
 
 	void Mutator::freeDB_()

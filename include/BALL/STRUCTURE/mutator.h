@@ -83,11 +83,6 @@ namespace BALL
 			bool keep_db_;
 			void freeDB_();
 	};
-
-#ifndef BALL_DEBUG
-# include <BALL/STRUCTURE/mutator.iC>
-#endif
-
 }
 
 #endif //BALL_STRUCTURE_MUTATOR_H
