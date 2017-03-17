@@ -32,7 +32,8 @@ SET(BALL_MATHS_TESTS
 SET(BALL_SYSTEM_TESTS
 	Directory_test
 	FileSystem_test
-	File_test
+	File_test1
+	File_test2
 	Path_test
 	PreciseTime_test
 	Sysinfo_test
@@ -43,7 +44,8 @@ SET(BALL_SYSTEM_TESTS
 
 SET(BALL_DATATYPE_TESTS
 	Bit_test
-	BitVector_test
+	BitVector_test1
+	BitVector_test2
 	Contour_test
 	ContourLine_test
 	Hash_test
@@ -62,12 +64,19 @@ SET(BALL_DATATYPE_TESTS
 	String_test2
 	String_test3
 	String_test4
+	String_test5
+	String_test6
+	String_test7
+	String_test8
 	Substring_test
 	Triple_test
 	Quadruple_test
-	RegularData1D_test
-	RegularData2D_test
-	RegularData3D_test
+	RegularData1D_test1
+	RegularData1D_test2
+	RegularData2D_test1
+	RegularData2D_test2
+	RegularData3D_test1
+	RegularData3D_test2
 	ContourSurface_test
 )
 
@@ -87,6 +96,7 @@ SET(BALL_CONCEPTS_TESTS
 	Composite_test3
 	Composite_test4
 	Composite_test5
+	Composite_test6
 	CompositeCompositeIteratorTraits_test
 	CompositeChildcompositeIteratorTraits_test
 	CompositeAncestorIteratorTraits_test
@@ -189,7 +199,8 @@ SET(BALL_KERNEL_TESTS
 	Atom_test1
 	Atom_test2
 	Bond_test
-	AtomContainer_test
+	AtomContainer_test1
+	AtomContainer_test2
 	Fragment_test
 	Chain_test
 	Molecule_test
@@ -199,7 +210,8 @@ SET(BALL_KERNEL_TESTS
 	PDBAtom_test
 	NucleicAcid_test
 	Nucleotide_test
-	Residue_test
+	Residue_test1
+	Residue_test2
 	Expression_test
 	ExpressionParser_test
 	ExpressionPredicate_test
