@@ -268,10 +268,15 @@ SET(BALL_NMR_TESTS
 	JohnsonBoveyShiftProcessor_test
 	ShiftModel_test
 	ShiftModule_test
-	Spectrum_test
 	Peak_test
 	PeakList_test
 )
+
+IF(NOT MSVC)
+	LIST(APPEND BALL_NMR_TESTS
+		Spectrum_test
+	)
+ENDIF()
 
 SET(BALL_FORMATS_TESTS
 	AmiraMeshFile_test
