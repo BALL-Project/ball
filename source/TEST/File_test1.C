@@ -14,9 +14,6 @@
 using namespace BALL;
 using namespace std;
 
-#ifdef BALL_COMPILER_MSVC
-#	define sleep(a) _sleep(1000 * a)
-#endif
 
 START_TEST(File)
 

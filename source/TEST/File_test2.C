@@ -14,9 +14,6 @@
 using namespace BALL;
 using namespace std;
 
-#ifdef BALL_COMPILER_MSVC
-#	define sleep(a) _sleep(1000 * a)
-#endif
 
 START_TEST(File)
 
@@ -26,10 +23,10 @@ START_TEST(File)
 
 File* f1 = 0;
 
-String source_name(BALL_TEST_DATA_PATH(../File_test.C));
+String source_name(BALL_TEST_DATA_PATH(../File_test2.C));
 
 CHECK(bool operator == (const File& file) const throw())
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 /* TODO: we can't copy files!
 	File f1(f);
@@ -42,7 +39,7 @@ CHECK(bool operator == (const File& file) const throw())
 RESULT
 
 CHECK(bool operator != (const File& file) const throw())
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	/* TODO: we can't copy files!
 	File f1(f);
@@ -55,15 +52,15 @@ CHECK(bool operator != (const File& file) const throw())
 RESULT
 
 CHECK(static bool isAccessible(String name) throw(Exception::FileNotFound))
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
-	TEST_EQUAL(f.isAccessible(BALL_TEST_DATA_PATH(File_test.txt)), true)
+	TEST_EQUAL(f.isAccessible(BALL_TEST_DATA_PATH(File_test2.txt)), true)
 	f.remove("XXX");
 	TEST_EQUAL(f.isAccessible("XXX"), false)
 RESULT
 
 CHECK(bool isAccessible() const throw())
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isAccessible(), true)
 	file.copyTo("XXZ");
@@ -74,23 +71,23 @@ CHECK(bool isAccessible() const throw())
 RESULT
 
 CHECK(bool isCanonized() const throw(Exception::FileNotFound))
-	File f0(BALL_TEST_DATA_PATH(../../TEST/data/File_test.txt));
+	File f0(BALL_TEST_DATA_PATH(../../TEST/data/File_test2.txt));
 	TEST_EQUAL(f0.isValid(), true)
 	TEST_EQUAL(f0.isCanonized(), true)
 
-	File f2(BALL_TEST_DATA_PATH(/File_test.txt));
+	File f2(BALL_TEST_DATA_PATH(/File_test2.txt));
 	TEST_EQUAL(f2.isValid(), true)
 	TEST_EQUAL(f2.isCanonized(), true)
 
-	File f4(BALL_TEST_DATA_PATH(../data/File_test.txt));
+	File f4(BALL_TEST_DATA_PATH(../data/File_test2.txt));
 	TEST_EQUAL(f4.isValid(), true)
 	TEST_EQUAL(f4.isCanonized(), true)
 
-	File f5(BALL_TEST_DATA_PATH(.././data/File_test.txt));
+	File f5(BALL_TEST_DATA_PATH(.././data/File_test2.txt));
 	TEST_EQUAL(f5.isValid(), true)
 	TEST_EQUAL(f5.isCanonized(), true)
 
-	File f6(BALL_TEST_DATA_PATH(File_test.txt));
+	File f6(BALL_TEST_DATA_PATH(File_test2.txt));
 	TEST_EQUAL(f6.isValid(), true)
 	TEST_EQUAL(f6.isCanonized(), true)
 
@@ -100,7 +97,7 @@ CHECK(bool isCanonized() const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool isReadable(String name) throw(Exception::FileNotFound))
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isReadable(source_name), true)	
 
@@ -116,7 +113,7 @@ CHECK(bool isReadable() const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool isWritable(String name) throw(Exception::FileNotFound))
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isWritable(source_name), true)	
 
@@ -132,7 +129,7 @@ CHECK(bool isWritable() const throw(Exception::FileNotFound))
 RESULT
 
 CHECK(static bool isExecutable(String name) throw(Exception::FileNotFound))
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 #ifndef BALL_COMPILER_MSVC
 	TEST_EQUAL(f.isExecutable(BALL_TEST_DATA_PATH(File_test2.txt)), true)
@@ -166,7 +163,7 @@ CHECK(bool isValid() const throw())
 RESULT
 
 CHECK(bool isOpen() const throw())
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isOpen(), true)	
 	File f2;
@@ -178,7 +175,7 @@ CHECK(bool isOpen() const throw())
 RESULT
 
 CHECK(bool isClosed() const throw())
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isClosed(), false)	
 	File f2;
@@ -193,10 +190,10 @@ String filename;
 CHECK(std::fstream& getFileStream())
 	NEW_TMP_FILE(filename);
 	File new_file(filename, std::ios::out);
-	File  file(BALL_TEST_DATA_PATH(File_test.txt));
+	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	new_file.getFileStream() << "0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";
 	new_file.close();
-	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(File_test.txt))
+	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(File_test2.txt))
 
 	File x;
 	x.getFileStream();
