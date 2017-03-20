@@ -25,7 +25,6 @@
 # TBB_DEBUG_LIBRARIES, the libraries to link against to use TBB with debug symbols.
 # TBB_FOUND, If false, don't try to use TBB.
 
-
 if (WIN32)
     # has em64t/vc8   em64t/vc9
     # has ia32/vc7.1  ia32/vc8   ia32/vc9
@@ -187,6 +186,11 @@ mark_as_advanced(TBB_LIBRARY_DEBUG TBB_MALLOC_LIBRARY_DEBUG)
 
 
 if (TBB_INCLUDE_DIR)
+    FIND_FILE(TBB_STDDEF_H "tbb_stddef.h" PATHS ${TBB_INCLUDE_DIR} PATH_SUFFIXES tbb)
+    FILE(STRINGS ${TBB_STDDEF_H} TBB_VERSION_MAJOR_TMP REGEX "#define TBB_VERSION_MAJOR [0-9]+")
+    SEPARATE_ARGUMENTS(TBB_VERSION_MAJOR_TMP)
+    LIST(GET TBB_VERSION_MAJOR_TMP -1 TBB_VERSION_MAJOR)
+
     if (TBB_LIBRARY)
         set (TBB_FOUND "YES")
         set (TBB_LIBRARIES ${TBB_LIBRARY} ${TBB_MALLOC_LIBRARY} ${TBB_LIBRARIES})
@@ -194,8 +198,9 @@ if (TBB_INCLUDE_DIR)
         set (TBB_INCLUDE_DIRS ${TBB_INCLUDE_DIR} CACHE PATH "TBB include directory" FORCE)
         set (TBB_LIBRARY_DIRS ${TBB_LIBRARY_DIR} CACHE PATH "TBB library directory" FORCE)
         mark_as_advanced(TBB_INCLUDE_DIRS TBB_LIBRARY_DIRS TBB_LIBRARIES TBB_DEBUG_LIBRARIES)
-        message(STATUS "Found Intel TBB")
+	message(STATUS "Found Intel TBB: major version ${TBB_VERSION_MAJOR}")
     endif (TBB_LIBRARY)
+
 endif (TBB_INCLUDE_DIR)
 
 if (NOT TBB_FOUND)

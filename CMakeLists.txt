@@ -103,6 +103,21 @@ IF (BALL_CONTRIB_PATH)
 	INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
 ENDIF()
 
+
+### LGPL or GPL build
+SET(BALL_LICENSE "LGPL" CACHE STRING "BALL licensing model: LGPL (default) or GPL")
+
+IF(${BALL_LICENSE} STREQUAL "LGPL")
+	SET(BALL_LICENSE_LGPL TRUE)
+	SET(BALL_LICENSE_GPL  FALSE)
+ELSEIF(${BALL_LICENSE} STREQUAL "GPL")
+	SET(BALL_LICENSE_LGPL FALSE)
+	SET(BALL_LICENSE_GPL  TRUE)
+ELSE()
+	MESSAGE(FATAL_ERROR "BALL_LICENSE can either be 'LGPL' (default) or 'GPL'")
+ENDIF()
+
+
 ## Extra libraries we want to link into BALL
 SET(BALL_DEP_LIBRARIES)
 SET(VIEW_DEP_LIBRARIES)
@@ -156,23 +171,44 @@ LIST(APPEND BALL_DEP_LIBRARIES ${Boost_LIBRARIES})
 # make the rest of CMake aware of boost's existence
 #LIST(APPEND CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIR})
 
-## FFTW
-OPTION(USE_FFTWD "Use double precision FFTW if found" ON)
-OPTION(USE_FFTWF "Use single precision FFTW if found" ON)
-OPTION(USE_FFTWF "Use long double precision FFTW if found" ON)
-OPTION(USE_FFTW_THREADS "Try to find FFTW with thread support" OFF)
 
-FIND_PACKAGE(FFTW)
-IF(FFTW_FOUND)
-	INCLUDE_DIRECTORIES(${FFTW_INCLUDE_DIR})
-	INCLUDE(cmake/BALLConfigFFTW.cmake)
+
+# OpenBabel availability: default false
+SET(BALL_HAS_OPENBABEL FALSE)
+
+IF(${BALL_LICENSE_GPL})
+
+	# FFTW
+	OPTION(USE_FFTWD "Use double precision FFTW if found" ON)
+	OPTION(USE_FFTWF "Use single precision FFTW if found" ON)
+	OPTION(USE_FFTWF "Use long double precision FFTW if found" ON)
+	OPTION(USE_FFTW_THREADS "Try to find FFTW with thread support" OFF)
+
+	FIND_PACKAGE(FFTW)
+	IF(FFTW_FOUND)
+		INCLUDE_DIRECTORIES(${FFTW_INCLUDE_DIR})
+		INCLUDE(cmake/BALLConfigFFTW.cmake)
+	ENDIF()
+
+	#Set the default complex precision to float if the setting for this value
+	#could not be determined earlier
+	IF(NOT BALL_COMPLEX_PRECISION)
+		SET(BALL_COMPLEX_PRECISION "float")
+	ENDIF()
+
+
+	# OpenBabel
+	FIND_PACKAGE(OpenBabel2)
+	IF(OPENBABEL2_FOUND)
+		SET(BALL_HAS_OPENBABEL TRUE)
+		INCLUDE_DIRECTORIES(${OPENBABEL2_INCLUDE_DIRS})
+		LIST(APPEND BALL_DEP_LIBRARIES ${OPENBABEL2_LIBRARIES})
+	ELSE()
+		MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
+	ENDIF()
+
 ENDIF()
 
-#Set the default complex precision to float if the setting for this value
-#could not be determined earlier
-IF(NOT BALL_COMPLEX_PRECISION)
-	SET(BALL_COMPLEX_PRECISION "float")
-ENDIF()
 
 ## lpsolve
 OPTION(USE_LPSOLVE "Compile with lpsolve support, if lpsolve can be found" ON)
@@ -220,13 +256,18 @@ IF(USE_TBB)
 		ENDIF()
 	ENDIF()
 
-	IF (TBB_FOUND)
-		INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
-		BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
-		LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
+	IF(${BALL_LICENSE_GPL} OR NOT ${TBB_VERSION_MAJOR} VERSION_LESS 2017)
 
-		SET(BALL_HAS_TBB TRUE)
+		IF (TBB_FOUND)
+			INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
+			BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
+			LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
+
+			SET(BALL_HAS_TBB TRUE)
+		ENDIF()
+
 	ENDIF()
+
 ENDIF()
 
 ## MPI
@@ -368,7 +409,7 @@ IF (BALL_HAS_VIEW)
 		IF (RTFACT_FOUND)
 			## RTfact requires TBB
 			IF (NOT CMAKE_COMPILER_IS_INTELCXX)
-				IF (NOT TBB_FOUND)
+				IF (NOT BALL_HAS_TBB)
 					MESSAGE(SEND_ERROR "RTfact support requires TBB!")
 				ENDIF()
 			ENDIF()
@@ -437,18 +478,6 @@ IF (BALL_PYTHON_SUPPORT)
 		INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 		INCLUDE_DIRECTORIES(${SIP_INCLUDE_DIR})
 	ENDIF()
-ENDIF()
-
-# Check for the presence of OpenBabel version 2
-SET(BALL_HAS_OPENBABEL FALSE)
-
-FIND_PACKAGE(OpenBabel2)
-IF(OPENBABEL2_FOUND)
-	SET(BALL_HAS_OPENBABEL TRUE)
-	INCLUDE_DIRECTORIES(${OPENBABEL2_INCLUDE_DIRS})
-	LIST(APPEND BALL_DEP_LIBRARIES ${OPENBABEL2_LIBRARIES})
-ELSE()
-	MESSAGE("Could not find a OpenBabel2 installation. Skipping OpenBabel dependencies.")
 ENDIF()
 
 
