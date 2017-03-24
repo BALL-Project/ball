@@ -309,23 +309,18 @@ ENDIF()
 
 SET(QT_MIN_VERSION 5.5)
 
-FIND_PACKAGE(Qt5Core ${QT_MIN_VERSION} REQUIRED)
-FIND_PACKAGE(Qt5Xml ${QT_MIN_VERSION})
-FIND_PACKAGE(Qt5Network ${QT_MIN_VERSION})
+FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Core Xml Network)
 
 LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
                                Qt5::Xml
                                Qt5::Network)
 
 IF (BALL_HAS_VIEW)
-	FIND_PACKAGE(Qt5Widgets ${QT_MIN_VERSION} REQUIRED)
-	FIND_PACKAGE(Qt5Test ${QT_MIN_VERSION})
-	FIND_PACKAGE(Qt5OpenGL ${QT_MIN_VERSION})
-	FIND_PACKAGE(Qt5PrintSupport ${QT_MIN_VERSION})
+	FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Widgets Test OpenGL PrintSupport)
 	FIND_PACKAGE(Qt5LinguistTools ${QT_MIN_VERSION})
 
 	IF(NOT Qt5LinguistTools_FOUND)
-		MESSAGE(WARNING "Qt5LinguistTools not found: BALLView translations can not be created and compiled.")
+		MESSAGE(WARNING "Qt5LinguistTools not found: BALLView translations cannot be created and compiled.")
 	ENDIF()
 
 	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
@@ -333,27 +328,25 @@ IF (BALL_HAS_VIEW)
 	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::Widgets
 	                               Qt5::OpenGL
 	                               Qt5::PrintSupport
-	                               Qt5::Network
-	                               Qt5::Test
-	                               Qt5::Xml)
+	                               Qt5::Test)
 
+	# WebEngine support
 	IF(USE_QTWEBENGINE)
-		FIND_PACKAGE(Qt5WebEngine ${QT_MIN_VERSION} REQUIRED)
-		FIND_PACKAGE(Qt5WebEngineWidgets ${QT_MIN_VERSION} REQUIRED)
-		FIND_PACKAGE(Qt5WebChannel ${QT_MIN_VERSION} REQUIRED)
-		IF(Qt5WebEngine_FOUND)
-			MESSAGE(STATUS "Found QtWebEngine")
-			IF(Qt5WebChannel_FOUND)
-				MESSAGE(STATUS "Found QtWebChannel")
-				SET(BALL_HAS_QTWEBENGINE TRUE)
-				LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
-			ELSE()
-				MESSAGE(STATUS "QtWebChannel has not been found. Disabling browser support.")
-				SET(BALL_HAS_QTWEBENGINE FALSE)
-			ENDIF()
-		ELSE()
-			MESSAGE(STATUS "QtWebEngine has not been found. Disabling browser support.")
+		FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} COMPONENTS WebEngine WebEngineWidgets WebChannel)
+
+		SET(BALL_HAS_QTWEBENGINE TRUE)
+		IF(NOT Qt5WebEngine_FOUND)
+			MESSAGE(STATUS "QtWebEngine has not been found. Disabling WebEngine support.")
 			SET(BALL_HAS_QTWEBENGINE FALSE)
+		ENDIF()
+
+		IF(NOT Qt5WebChannel_FOUND)
+			MESSAGE(STATUS "QtWebChannel has not been found. Disabling WebEngine support.")
+			SET(BALL_HAS_QTWEBENGINE FALSE)
+		ENDIF()
+
+		IF(BALL_HAS_QTWEBENGINE)
+			LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
 		ENDIF()
 	ENDIF()
 ENDIF()
