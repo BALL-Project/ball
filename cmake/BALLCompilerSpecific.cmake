@@ -1,5 +1,5 @@
 ########################################################
-###    compiler flags																 ###
+###    compiler flags                                ###
 ########################################################
 
 SET(USE_PEDANTIC ON CACHE BOOL "Use pedantic compilation options if offered by the compiler")
@@ -11,7 +11,9 @@ SET(CXX_COMPILER_VERSION_MAJOR "0" CACHE INTERNAL "The C++ compiler major versio
 SET(CXX_COMPILER_VERSION_MINOR "0" CACHE INTERNAL "The C++ compiler minor version")
 SET(CXX_COMPILER_VERSION_MINOR_MINOR "0" CACHE INTERNAL "The C++ compiler minor minor version")
 
-SET(CXX_USE_TR1 TRUE CACHE STRING "Use tr1 support if available")
+SET(CMAKE_CXX_STANDARD 11 CACHE INTERNAL "C++ ISO standard")
+SET(CMAKE_CXX_STANDARD_REQUIRED ON CACHE INTERNAL "Enforce C++11")
+SET(CMAKE_CXX_EXTENSIONS OFF CACHE INTERNAL "Disable C++ extensions")
 
 IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 
@@ -34,18 +36,6 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 		CXX_COMPILER_VERSION_MINOR ${CXX_COMPILER_VERSION})
 	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])$" "\\3"
 		CXX_COMPILER_VERSION_MINOR_MINOR ${CXX_COMPILER_VERSION})
-
-	## tr1 support in g++ often requires -std=c++0x
-	IF (CXX_USE_TR1)
-		## use tr1 for g++ > 4.3
-		SET(CXX_COMPILER_VERSION_MAJOR_MINOR ${CXX_COMPILER_VERSION_MAJOR}${CXX_COMPILER_VERSION_MINOR})
-		IF (CXX_COMPILER_VERSION_MAJOR_MINOR GREATER 42)
-			ADD_BALL_DEFINITIONS("-std=c++0x")
-			MESSAGE(STATUS "g++ requires -std=c++0x for tr1")
-		ELSE()
-			SET(CXX_TR1_INCOMPATIBLE TRUE)
-		ENDIF()
-	ENDIF()
 
 	## -Wconversion flag for GCC
 	SET(CXX_WARN_CONVERSION OFF CACHE BOOL "Enables warnings for type conversion problems (GCC only)")
@@ -180,8 +170,4 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
 		CXX_COMPILER_VERSION_MINOR ${CXX_COMPILER_VERSION})
 
 	SET(CXX_COMPILER_VERSION "${CXX_COMPILER_VERSION_MAJOR}.${CXX_COMPILER_VERSION_MINOR}")
-
-	## Clang should use c++-11 - mode 
-	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-	SET(CF_BALL_ADDCXX_FLAGS "-std=c++11" ${CF_BALL_ADDCXX_FLAGS})
 ENDIF()
