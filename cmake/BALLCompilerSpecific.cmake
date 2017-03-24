@@ -52,7 +52,7 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 
 	# Added -Wno-deprecated-declarations as Eigen3 currently uses binder2nd
 	# which spams the compiler output.
-	ADD_DEFINITIONS(-Wall -Wextra -Wno-long-long -Wno-deprecated-declarations)
+	ADD_DEFINITIONS(-Wall -Wextra -Wno-deprecated-declarations)
 
 	IF(USE_PEDANTIC)
 		ADD_BALL_DEFINITIONS("-pedantic")
@@ -82,7 +82,7 @@ ELSEIF(MINGW)
 	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])" "\\3"
 		CXX_COMPILER_VERSION_MINOR_MINOR ${CXX_COMPILER_VERSION})
 
-	ADD_DEFINITIONS(-Wall -Wextra -Wno-long-long)
+	ADD_DEFINITIONS(-Wall -Wextra)
 
 	IF(USE_PEDANTIC)
 		ADD_BALL_DEFINITIONS(-pedantic)
