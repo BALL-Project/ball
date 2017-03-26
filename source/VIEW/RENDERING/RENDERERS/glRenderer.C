@@ -118,7 +118,6 @@ namespace BALL
 		{
 			glDisable(GL_BLEND);
 			glDisable(GL_LIGHTING);
-			glDisable(GL_LIGHT_MODEL_LOCAL_VIEWER);
 			glDisable(GL_RESCALE_NORMAL);
 			glDisable(GL_COLOR_MATERIAL);
 			glDisable(GL_DEPTH_TEST);
