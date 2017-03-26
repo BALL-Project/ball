@@ -33,6 +33,8 @@ void logMessages(QtMsgType type, const QMessageLogContext& context, const QStrin
 		case QtCriticalMsg:
 				fprintf( stderr, "Critical: %s\n", message.toLatin1().constData() );
 				abort();                    // deliberately core dump
+		default:
+			break;
 	}
 }
 
