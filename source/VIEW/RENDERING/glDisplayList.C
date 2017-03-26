@@ -101,10 +101,17 @@ namespace BALL
 				throw DisplayListRedeclaration(__FILE__, __LINE__);
 			}
 
-			GLint current_index = 99;
+			GLint current_index = -1;
 
  			glGetIntegerv(GL_LIST_INDEX, &current_index);
  			CHECK_GL_ERROR
+
+			// missing OpenGL context
+			if(current_index == -1)
+			{
+				Log.error() << "Display lists cannot be created without OpenGL context!" << endl;
+				throw NoDisplayListAvailable(__FILE__, __LINE__);
+			}
 
 			// we are already in a display list definition
 			if (current_index != 0)
