@@ -2,30 +2,14 @@
 // vi: set ts=2:
 //
 
-// order of includes is important: first qapplication, than BALL includes
+// order of includes is important: first qapplication, then BALL includes
 #include <QtWidgets/QApplication>
-#include <BALL/CONFIG/config.h>
-
-#ifdef BALL_HAS_GLEW
-# include <GL/glew.h>
-#endif
-
-#include <QtCore/QLocale>
-#include <QtCore/QTranslator>
-
 #include <QtWidgets/QMessageBox>
-#include <QtOpenGL/qgl.h>
+#include <QtCore/QTranslator>
 
 #include "mainframe.h"
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/directory.h>
-#include <BALL/FORMAT/INIFile.h>
-#include <BALL/SYSTEM/fileSystem.h>
-#include <BALL/COMMON/logStream.h>
-
-#include <BALL/VIEW/KERNEL/UIOperationMode.h>
-
-#include <iostream>
 
 void logMessages(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {

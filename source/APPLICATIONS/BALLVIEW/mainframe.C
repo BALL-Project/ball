@@ -13,7 +13,6 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
@@ -30,10 +29,6 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/COMMON/version.h>
-
-#include <QtGui/QKeyEvent>
-#include <QtWidgets/QTreeWidget>
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
 #include <BALL/VIEW/KERNEL/serverWidget.h>
