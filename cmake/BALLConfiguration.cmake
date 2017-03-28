@@ -102,23 +102,12 @@ CHECK_INCLUDE_FILE_CXX("direct.h"  BALL_HAS_DIRECT_H)
 CHECK_INCLUDE_FILE_CXX("pwd.h"     BALL_HAS_PWD_H)
 CHECK_INCLUDE_FILE_CXX("stdint.h"  BALL_HAS_STDINT_H)
 
-CHECK_INCLUDE_FILE_CXX("sys/ioctl.h"   BALL_HAS_SYS_IOCTL_H)
 CHECK_INCLUDE_FILE_CXX("sys/time.h"    BALL_HAS_SYS_TIME_H)
 CHECK_INCLUDE_FILE_CXX("sys/stat.h"    BALL_HAS_SYS_STAT_H)
 CHECK_INCLUDE_FILE_CXX("sys/times.h"   BALL_HAS_SYS_TIMES_H)
 CHECK_INCLUDE_FILE_CXX("sys/types.h"   BALL_HAS_SYS_TYPES_H)
 CHECK_INCLUDE_FILE_CXX("sys/param.h"   BALL_HAS_SYS_PARAM_H)
-CHECK_INCLUDE_FILE_CXX("sys/socket.h"  BALL_HAS_SYS_SOCKET_H)
 CHECK_INCLUDE_FILE_CXX("sys/sysinfo.h" BALL_HAS_SYS_SYSINFO_H)
-
-## We *require* regex.h!
-CHECK_INCLUDE_FILE_CXX("regex.h" BALL_HAS_REGEX_H)
-##IF (NOT BALL_HAS_REGEX_H)
-##	MESSAGE(SEND_ERROR "Could not find regex.h! Regular expression support is required for BALL!")
-##ENDIF()
-
-CHECK_INCLUDE_FILE_CXX("netinet/in.h" BALL_HAS_NETINET_IN_H)
-CHECK_INCLUDE_FILE_CXX("netdb.h" BALL_HAS_NETDB_H)
 
 CHECK_CXX_SOURCE_COMPILES("#include <sys/stat.h>
 	int main(int /*argc*/, char** /*argv*/)

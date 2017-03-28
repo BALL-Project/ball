@@ -126,19 +126,12 @@
 #cmakedefine BALL_HAS_PWD_H
 #cmakedefine BALL_HAS_STDINT_H
 
-#cmakedefine BALL_HAS_SYS_IOCTL_H
 #cmakedefine BALL_HAS_SYS_TIME_H
 #cmakedefine BALL_HAS_SYS_STAT_H
 #cmakedefine BALL_HAS_SYS_TIMES_H
 #cmakedefine BALL_HAS_SYS_TYPES_H
 #cmakedefine BALL_HAS_SYS_PARAM_H
-#cmakedefine BALL_HAS_SYS_SOCKET_H
 #cmakedefine BALL_HAS_SYS_SYSINFO_H
-
-#cmakedefine BALL_HAS_REGEX_H
-
-#cmakedefine BALL_HAS_NETINET_IN_H
-#cmakedefine BALL_HAS_NETDB_H
 
 // Some systems don't provide mode_t for us...
 #cmakedefine mode_t @BALL_MODE_T@
@@ -161,7 +154,6 @@
 // Specific to the Windows port
 #ifdef BALL_OS_WINDOWS
 #define BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-#define BALL_USE_WINSOCK
 
 // MS VC++ doesn't define all required symbols in 
 // math.h if this symbol isn't defined *before* including
