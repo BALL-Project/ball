@@ -340,6 +340,11 @@ IF (BALL_HAS_VIEW)
 			SET(BALL_HAS_QTWEBENGINE FALSE)
 		ENDIF()
 
+		IF(NOT Qt5WebEngineWidgets_FOUND)
+			MESSAGE(STATUS "QtWebEngineWidgets has not been found. Disabling WebEngine support.")
+			SET(BALL_HAS_QTWEBENGINE FALSE)
+		ENDIF()
+
 		IF(NOT Qt5WebChannel_FOUND)
 			MESSAGE(STATUS "QtWebChannel has not been found. Disabling WebEngine support.")
 			SET(BALL_HAS_QTWEBENGINE FALSE)
