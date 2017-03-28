@@ -191,7 +191,7 @@ namespace BALL
 			virtual ~BoxIteratorTraits() {}
 
 			BoxIteratorTraits()
-				: bound_(0),
+				: bound_(nullptr),
 					position_(0),
 					x_(0), y_(0), z_(0)
 			{
@@ -222,7 +222,7 @@ namespace BALL
 
 			bool isSingular() const
 			{
-				return (bound_ == 0);
+				return !bound_;
 			}
 				
 			BoxIteratorPosition& getPosition()
@@ -247,12 +247,12 @@ namespace BALL
 				
 			bool isValid() const
 			{
-				return (bound_ != 0 && position_ < 27);
+				return (bound_ && position_ < 27);
 			}
 
 			void invalidate()
 			{
-				bound_ = 0;
+				bound_ = nullptr;
 				position_ = 100;
 			}
 
@@ -368,7 +368,7 @@ namespace BALL
 				virtual ~DataIteratorTraits() {}
 
 			DataIteratorTraits()
-			:	bound_(0),
+			:	bound_(nullptr),
 				position_()
 			{
 			}
@@ -404,7 +404,7 @@ namespace BALL
 
 			bool isSingular() const
 			{
-				return (bound_ == 0);
+				return !bound_;
 			}
 				
 			DataIteratorPosition& getPosition()
@@ -429,12 +429,12 @@ namespace BALL
 
 			bool isValid() const
 			{
-				return (bound_ != 0 && position_ != bound_->data.end());
+				return (bound_ && position_ != bound_->data.end());
 			}
 
 			void invalidate()
 			{
-				bound_ = 0;
+				bound_ = nullptr;
 				position_ = bound_->data.end();
 			}
 
@@ -564,7 +564,7 @@ namespace BALL
 	template<typename Item>  
 	Item* HashGridBox3<Item>::find(const Item& item)
 	{
-		typename DataContainer::iterator found = std::find(data.begin(), data.end(), item);
+		DataIteratorPosition found = std::find(data.begin(), data.end(), item);
 
 		if (found != data.end())
 		{
@@ -697,10 +697,10 @@ namespace BALL
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  data:" << std::endl;
-		for (typename DataContainer::const_iterator d_it = data.begin(); d_it != data.end(); ++d_it)
+		for(const Item& e: data)
 		{
 			BALL_DUMP_DEPTH(s, depth);
-			s << "    " << *d_it << std::endl;
+			s << "    " << e << std::endl;
 		}
 
 		BALL_DUMP_STREAM_SUFFIX(s);
@@ -709,20 +709,20 @@ namespace BALL
 	template <typename Item>
 	bool HashGridBox3<Item>::apply(UnaryProcessor<Item>& processor)
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
 
 		Processor::Result result;
-			
-		for (typename DataContainer::iterator d_it = data.begin(); d_it != data.end(); ++d_it)
+
+		for(Item& e: data)
 		{
-			result = processor(*d_it);
+			result = processor(e);
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 
@@ -732,9 +732,9 @@ namespace BALL
 	template <typename Item>
 	bool HashGridBox3<Item>::apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 	{
-    if (processor.start() == false)
+		if (!processor.start())
 		{
-      return false;
+			return false;
 		}
  
 		Processor::Result result;
@@ -745,7 +745,7 @@ namespace BALL
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 
@@ -1011,7 +1011,7 @@ namespace BALL
 			virtual ~BoxIteratorTraits() {}
 
 			BoxIteratorTraits()
-				:	bound_(0),
+				:	bound_(nullptr),
 					position_(0)
 			{
 			}
@@ -1047,7 +1047,7 @@ namespace BALL
 
 			bool isSingular() const
 			{
-				return (bound_ == 0);
+				return !bound_;
 			}
 				
 			BoxIteratorPosition& getPosition()
@@ -1072,12 +1072,12 @@ namespace BALL
 				
 			bool isValid() const
 			{
-				return (bound_ != 0 && position_ < bound_->getSize());
+				return (bound_ && position_ < bound_->getSize());
 			}
 
 			void invalidate()
 			{
-				bound_ = 0;
+				bound_ = nullptr;
 				position_ = bound_->getSize()+1;
 			}
 
@@ -1250,11 +1250,9 @@ namespace BALL
 	template <typename Item>
 	void HashGrid3<Item>::clear()
 	{
-		Size size = dimension_x_ * dimension_y_ * dimension_z_;
-
-		for (Position index = 0; index < (Position)size; ++index)
+		for(HashGridBox3<Item>& e: box_)
 		{
-			box_[index].clear();
+			e.clear();
 		}
 	}
 
@@ -1264,7 +1262,7 @@ namespace BALL
 	{
 		HashGridBox3<Item>* box = getBox(x, y, z);
 		
-		if (box != 0)
+		if (box)
 		{
 			box->clear();
 		}
@@ -1276,7 +1274,7 @@ namespace BALL
 	{
 		HashGridBox3<Item>* box = getBox(vector);
 		
-		if (box != 0)
+		if (box)
 		{
 			box->clear();
 		}
@@ -1337,9 +1335,9 @@ namespace BALL
 		dimension_z_ = grid.dimension_z_;
 		box_ = grid.box_;
 
-		for(Position i = 0; i < box_.size(); ++i)
+		for(HashGridBox3<Item>& e: box_)
 		{
-			box_[i].setParent(this);
+			e.setParent(this);
 		}
 	}
 
@@ -1354,8 +1352,7 @@ namespace BALL
 
 	template <typename Item>
 	BALL_INLINE 
-	void HashGrid3<Item>::get(Vector3 &origin, Vector3 &unit,
-														Size& dimension_x, Size& dimension_y, Size& dimension_z) const
+	void HashGrid3<Item>::get(Vector3 &origin, Vector3 &unit, Size& dimension_x, Size& dimension_y, Size& dimension_z) const
 	{
 		origin.set(origin_);
 		unit.set(unit_);
@@ -1565,7 +1562,7 @@ namespace BALL
 	{
 		HashGridBox3<Item>* box = getBox(x, y, z);
 		
-		if (box != 0)
+		if (box)
 		{
 			box->insert(item);
 		}
@@ -1577,7 +1574,7 @@ namespace BALL
 	{
 		HashGridBox3<Item> *box = getBox(vector);
 		
-		if (box != 0)
+		if (box)
 		{
 			box->insert(item);
 		}
@@ -1588,13 +1585,8 @@ namespace BALL
 	bool HashGrid3<Item>::remove(Position x, Position y, Position z, const Item& item)
 	{
 		HashGridBox3<Item>* box = getBox(x, y, z);
-		
-		if (box != 0)
-		{
-			return box->remove(item);
-		}
-		
-		return false;
+
+		return box ? box->remove(item) : false;
 	}
 
 	template <typename Item>
@@ -1602,13 +1594,8 @@ namespace BALL
 	bool HashGrid3<Item>::remove(const Vector3& vector, const Item& item)
 	{
 		HashGridBox3<Item>* box = getBox(vector);
-		
-		if (box != 0)
-		{
-			return box->remove(item);
-		}
 
-		return false;
+		return box ? box->remove(item) : false;
 	}
 
 	template <typename Item>
@@ -1637,7 +1624,7 @@ namespace BALL
 
 	template <typename Item>
 	BALL_INLINE 
-	bool HashGrid3<Item>::operator !=	(const HashGrid3<Item>& grid) const
+	bool HashGrid3<Item>::operator != (const HashGrid3<Item>& grid) const
 	{
 		return !(*this == grid);
 	}
@@ -1652,16 +1639,10 @@ namespace BALL
 	template <typename Item>
 	bool HashGrid3<Item>::isValid() const
 	{
-		Size size = getSize();
-		
-		for (Position index = 0; index < (Position)size; ++index)
+		for(const HashGridBox3<Item>& e: box_)
 		{
-			if (box_[index].isValid() == false)
-			{
-				return false;
-			}
+			if(!e.isValid()) return false;
 		}
-
 		return true;
 	}
 
@@ -1716,7 +1697,7 @@ namespace BALL
 	template <typename Item>
 	bool HashGrid3<Item>::apply(UnaryProcessor<Item>& processor)
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
@@ -1731,7 +1712,7 @@ namespace BALL
 
 				if (result <= Processor::BREAK)
 				{
-					return (result == Processor::BREAK) ? true : false;
+					return result == Processor::BREAK;
 				}
 			}
 		}
@@ -1742,7 +1723,7 @@ namespace BALL
 	template <typename Item>
 	bool HashGrid3<Item>::apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 	{
-		if (processor.start() == false)
+		if (!processor.start())
 		{
 			return false;
 		}
@@ -1756,7 +1737,7 @@ namespace BALL
 
 			if (result <= Processor::BREAK)
 			{
-				return (result == Processor::BREAK) ? true : false;
+				return result == Processor::BREAK;
 			}
 		}
 
