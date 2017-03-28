@@ -5,7 +5,7 @@ IF(NOT BALL_HAS_VIEW)
 	RETURN()
 ENDIF()
 
-IF(NOT USE_QTWEBENGINE OR NOT Qt5WebEngine_FOUND)
+IF(NOT BALL_HAS_QTWEBENGINE)
 	MESSAGE(STATUS "QtWebEngine support has not been enabled. Disabling the BALLaxy plugin")
 	RETURN()
 ENDIF()
