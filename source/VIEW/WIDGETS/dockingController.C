@@ -30,8 +30,6 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QComboBox>
 
-//#define BALL_VIEW_DEBUG
-//#undef BALL_QT_HAS_THREADS
 using namespace std;
 
 namespace BALL
@@ -251,55 +249,33 @@ namespace BALL
 				dock_alg_->setup(s1, s2, dock_dialog_.getAlgorithmOptions());
 			}
 			
-			// ============================= WITH MULTITHREADING ====================================
-			#ifdef BALL_QT_HAS_THREADS
-				if (!(getMainControl()->lockCompositesFor(this))) return;
+			if (!(getMainControl()->lockCompositesFor(this))) return;
 
-				if (thread_ != 0)
-				{
-					thread_->terminate();
-					thread_->wait();
-					delete thread_;
-				}
+			if (thread_ != 0)
+			{
+				thread_->terminate();
+				thread_->wait();
+				delete thread_;
+			}
 
-				thread_ = new DockingThread;
-				thread_->setDockingAlgorithm(dock_alg_);
-				thread_->setMainControl(getMainControl());
-				
-				progress_dialog_ = new DockProgressDialog(this);
-				// dialog is deleted by itself when it's closed
-				progress_dialog_->fillDialog(dock_dialog_.systems1->currentText(),
-																		dock_dialog_.systems2->currentText(),
-																		dock_dialog_.algorithms->currentText(),
-																		dock_dialog_.scoring_functions->currentText(),
-																		dock_dialog_.getAlgorithmOptions(),
-																		dock_dialog_.getScoringOptions());
-				progress_dialog_->setDockingAlgorithm(dock_alg_);
-			
-				// start thread
-				// function calls DockingThread::run()
-				thread_->start();
-				progress_dialog_->show();
-			// ============================= WITHOUT MULTITHREADING =================================
-			#else
-				// start docking
-				setStatusbarText("Starting docking...", true);
-				dock_alg_->start();
-				setStatusbarText("Docking finished.", true);
-				ConformationSet* cs = new ConformationSet(dock_alg_->getConformationSet());
-				if (!runScoring_(cs))
-				{
-				 delete cs;
-				 cs = 0;
-				}
-				// delete instance 
-				// conformationSet is deleted by dockResult
-				if (dock_alg_ != 0)
-				{
-					delete dock_alg_;
-					dock_alg_ = 0;
-				}
-			#endif
+			thread_ = new DockingThread;
+			thread_->setDockingAlgorithm(dock_alg_);
+			thread_->setMainControl(getMainControl());
+
+			progress_dialog_ = new DockProgressDialog(this);
+			// dialog is deleted by itself when it's closed
+			progress_dialog_->fillDialog(dock_dialog_.systems1->currentText(),
+																	dock_dialog_.systems2->currentText(),
+																	dock_dialog_.algorithms->currentText(),
+																	dock_dialog_.scoring_functions->currentText(),
+																	dock_dialog_.getAlgorithmOptions(),
+																	dock_dialog_.getScoringOptions());
+			progress_dialog_->setDockingAlgorithm(dock_alg_);
+
+			// start thread
+			// function calls DockingThread::run()
+			thread_->start();
+			progress_dialog_->show();
 		}
 
 		EnergeticEvaluation* DockingController::createEvaluationMethod(Index method)

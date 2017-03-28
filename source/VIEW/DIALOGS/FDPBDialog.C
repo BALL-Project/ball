@@ -135,8 +135,8 @@ namespace BALL
 			}
 
 			bool use_mt = false;
-			// currently doesnt work:
-			#ifdef BALL_QT_HAS_THREADS
+
+			// FIXME currently doesnt work:
 			if (getMainControl()->useMultithreading())
 			{
 				use_mt = true;
@@ -184,7 +184,6 @@ namespace BALL
 				}
 			}
 
-			#endif
 			if (!use_mt) calculate_();
 			
 			setStatusbarText(tr("Finished FDPB grid"), true);

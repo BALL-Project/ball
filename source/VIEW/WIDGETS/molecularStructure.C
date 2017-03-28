@@ -1325,8 +1325,6 @@ namespace BALL
 				// perform an initial step (no restart step)
 				minimizer->minimize(1, false);
 
-				// ============================= WITH MULTITHREADING ==================
-		#ifdef BALL_QT_HAS_THREADS
 				EnergyMinimizerThread* thread = new EnergyMinimizerThread;
 				getMainControl()->setSimulationThread(thread);
 
@@ -1336,39 +1334,6 @@ namespace BALL
 
 				thread->start(QThread::LowPriority);
 				return;
-				
-   		#else
-				// ============================= WITHOUT MULTITHREADING ===============
-				// iterate until done and refresh the screen every "steps" iterations
-				bool ok = true;
-				bool converged = false;
-				while (ok && !converged && minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
-				{
-					converged = minimizer->minimize(minimization_dialog_.getRefresh(), true);
-					getMainControl()->update(*system);
-
-					setStatusbarText(String(tr("Iteration"))  + " "   + String(minimizer->getNumberOfIterations())
-													 + ": " + (String)tr("E") + " = " + String(ff.getEnergy()) + " " 
-													 + (String)tr("kJ/mol")   + ", "  + (String)tr("RMS grad") + " = "
-													 + String(ff.getRMSGradient()) + " " + (String)tr("kJ/(mol A)"), true);
-					ok = !minimizer->wasAborted();
-				}
-
-				if (!ok)
-				{
-					setStatusbarText((String)tr("Aborted EnergyMinimizer because of strange energy values."), true);
-				}
-				else
-				{
-					// Print the final results.
-					Log.info() << endl << (String)tr("minimization terminated.") << endl << endl;
-					Log.info() << ff.getResults();
-					Log.info() << (String)tr("final RMS gradient")   << "    : " << ff.getRMSGradient() 
-						         << " " << (String)tr("kJ/(mol A)")    << "   "    << (String)tr("after") << " " 
-										 << minimizer->getNumberOfIterations() << " "      << (String)tr("iterations") << endl << endl;
-					setStatusbarText((String)tr("Final energy") + ": " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol."), true);
-				}
-		#endif
 			}
 			catch(Exception::GeneralException& e)
 			{
@@ -1458,8 +1423,7 @@ namespace BALL
 					trajectory_file = TrajectoryFileFactory::open(name, std::ios::out, "dcd");
 					static_cast<DCDFile*>(trajectory_file)->enableVelocityStorage();
 				}
-				// ============================= WITH MULTITHREADING ===================
-			#ifdef BALL_QT_HAS_THREADS
+
 				MDSimulationThread* thread = new MDSimulationThread;
 				if (!getMainControl()->setSimulationThread(thread))
 				{
@@ -1476,65 +1440,6 @@ namespace BALL
 				thread->setTrajectoryFile(trajectory_file);
 				thread->setComposite(system);
 				thread->start(QThread::LowPriority);
-
-			#else
-				// ============================= WITHOUT MULTITHREADING =================
-				// iterate until done and refresh the screen every "steps" iterations
-				SnapShotManager manager(system, &getForceField(), trajectory_file);
-				manager.setFlushToDiskFrequency(10);
-				
-				bool ok = true;
-				while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps() && ok)
-				{
-					ok = mds->simulateIterations(steps, true);
-					getMainControl()->update(*system);
-					
-					if (trajectory_file != 0) 
-					{
-						manager.takeSnapShot();
-					}
-
-
-					setStatusbarText(String(tr("Iteration"))  + " "   + String(mds->getNumberOfIterations())
-													 + ": " + (String)tr("E") + " = " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol") + ", " 
-													 + (String)tr("RMS grad") + " = "
-													 + String(ff.getRMSGradient())    + " "  + (String)tr("kJ/(mol A)"), true);
-				}
-
-				if (trajectory_file) manager.flushToDisk();
-
-				if (!ok)
-				{
-					setStatusbarText((String)tr("Aborted MDSimulation because of strange energy values."), true);
-					return;
-				}
-
-				Log.info() << std::endl << (String)tr("Simulation terminated.") << std::endl << endl;
-				Log.info() << ff.getResults();
-				Log.info() << (String)tr("final RMS gradient") << "    : " << ff.getRMSGradient() << " " 
-				           << (String)tr("kJ/(mol A)")         << "   "    << (String)tr("after") << " " 
-									 << mds->getNumberOfIterations()     << " "      << (String)tr("iterations") << endl << endl;
-				setStatusbarText((String)tr("Final energy") + ": " + String(ff.getEnergy()) + " " + (String)tr("kJ/mol."), true);
-
-				// clean up
-				delete mds;
-
-				if (trajectory_file != 0)
-				{
-					trajectory_file->close();
-					delete trajectory_file;
-					Directory d;
-
-					// use an absolute filename
-					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
-					trajectory_file = TrajectoryFileFactory::open(name, File::MODE_IN, "dcd");
-
-					NewTrajectoryMessage* message = new NewTrajectoryMessage;
-					message->setComposite(*system);
-					message->setTrajectoryFile(*trajectory_file);
-					notify_(message);
-				}
-			#endif
 			}
 			catch(Exception::GeneralException& e)
 			{

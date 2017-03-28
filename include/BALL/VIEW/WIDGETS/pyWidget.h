@@ -33,9 +33,6 @@
 
 #include <QtCore/QThread>
 
-// currently doesnt work right
-#undef BALL_QT_HAS_THREADS
-
 namespace BALL
 {
 	namespace VIEW

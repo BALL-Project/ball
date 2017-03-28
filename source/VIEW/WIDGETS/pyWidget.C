@@ -22,9 +22,6 @@
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QPushButton>
 
-// currently doesnt work right
-#undef BALL_PYTHON_USE_THREADS
-
 namespace BALL
 {
 	namespace VIEW
@@ -135,20 +132,7 @@ namespace BALL
 			return Acceptable;
 		}
 
-#ifdef BALL_PYTHON_USE_THREADS
-		RunPythonThread::RunPythonThread()
-			: QThread(),
-			input(),
-			output()
-		{}
-
-		void RunPythonThread::run()
-		{
-			output = PyInterpreter::run(input, state);
-		}
-#endif
-
-		Hotkey Hotkey::createHotkey(String modifier, String key, String command, 
+		Hotkey Hotkey::createHotkey(String modifier, String key, String command,
 		                            bool& ok, String comm)
 		{
 			ok = false;
@@ -1148,22 +1132,7 @@ namespace BALL
 			state = false;
 
 			String result;
-#ifndef BALL_PYTHON_USE_THREADS
 			result = PyInterpreter::run(text, state);
-#else
-			thread_->input = text;
-			thread_->start();
-
-			while (thread_->running()) 
-			{
-				qApp->wakeUpGuiThread();
-				qApp->processEvents(500);
-				thread_->wait(50);
-			}
-
-			result = thread_->output;
-			state = thread_->state;
-#endif
 
 			return result;
 		}
