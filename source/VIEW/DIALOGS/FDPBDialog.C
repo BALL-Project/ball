@@ -136,7 +136,8 @@ namespace BALL
 
 			bool use_mt = false;
 
-			// FIXME currently doesnt work:
+			// FIXME currently doesn't work (<- TODO check)
+			/*
 			if (getMainControl()->useMultithreading())
 			{
 				use_mt = true;
@@ -183,6 +184,7 @@ namespace BALL
 					thread_->wait(10); 
 				}
 			}
+			 */
 
 			if (!use_mt) calculate_();
 			
