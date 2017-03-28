@@ -26,7 +26,7 @@
 #endif
 
 #include <algorithm>
-#include <list>
+#include <forward_list>
 
 namespace BALL 
 {
@@ -97,7 +97,7 @@ namespace BALL
 		/// The const version of find()
 		const Item* find(const Item& item) const;
 
-		/** Counts all items in the data item list.
+		/** Counts all items in the data item list (in linear time).
 				@return the size of the data item list.
 		*/
 		Size getSize() const;
@@ -346,7 +346,7 @@ namespace BALL
 			return ConstBoxIterator::end(*this);
 		}
 
-		typedef typename std::list<Item> DataContainer;
+		typedef typename std::forward_list<Item> DataContainer;
 
 		typedef typename DataContainer::iterator DataIteratorPosition;
 		
@@ -562,7 +562,7 @@ namespace BALL
 			return &(*found);
 		}
 
-		return 0;
+		return nullptr;
 	}
 
 	template<typename Item>  
@@ -575,7 +575,7 @@ namespace BALL
 	template<typename Item>  
 	Size HashGridBox3<Item>::getSize() const
 	{
-		return data.size();
+		return std::distance(data.begin(), data.end());
 	}
 
 	template<typename Item>  
@@ -588,12 +588,19 @@ namespace BALL
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 	{
-		DataIteratorPosition pos = std::find(data.begin(), data.end(), item);
+		if(data.front() == item)
+		{
+			data.pop_front();
+			return true;
+		}
+
+		// unfortunately, this does not work for the first element
+		DataIteratorPosition pos = std::adjacent_find(data.begin(), data.end(),
+			[&](const Item&, const Item& next){ return next == item; });
 
 		if (pos != data.end())
 		{
-			data.erase(pos);
-
+			data.erase_after(pos);
 			return true;
 		}
 
