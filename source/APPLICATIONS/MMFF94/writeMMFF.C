@@ -121,10 +121,8 @@
 		QDialog w;
  		Ui_AboutDialog about;
 		about.setupUi(&w);
-		QString version = QString("QT ") + qVersion();
-#ifdef BALL_QT_HAS_THREADS
-		version += "(mt)";
-#endif
+		QString version = QString("QT ") + qVersion() + "(mt)";
+
 		about.qt_version_label->setText(version);
 		QFont font = about.BALLView_version_label->font();
 		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
