@@ -189,9 +189,6 @@ CHECK_CXX_SOURCE_COMPILES("template <int i>
 		return 0;
 	}" BALL_HAS_INLINE_TPL_ARGS)
 
-## Check for the presence of the slist extension
-INCLUDE(cmake/BALLConfigSList.cmake)
-
 ## Check for the presence of C++11 initializer lists
 INCLUDE(cmake/BALLConfigInitializerList.cmake)
 

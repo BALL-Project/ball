@@ -191,10 +191,6 @@
 // Define whether inline functions may be used as template parameters.
 #cmakedefine BALL_HAS_INLINE_TPL_ARGS
 
-// Defines whether the GNU slist implementation could be found
-// This is useful for e.g. an efficient HashGrid implementation
-#cmakedefine BALL_HAS_GNU_SLIST
-
 // Defines whether the compiler supports c++0x-style initializer lists
 #cmakedefine BALL_HAS_INITIALIZER_LISTS
 
