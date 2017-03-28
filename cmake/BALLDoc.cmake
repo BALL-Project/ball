@@ -116,11 +116,11 @@ IF (LATEX_COMPILER AND DVIPS_CONVERTER)
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating BALL pdf tutorial"
 										COMMAND ${CMAKE_COMMAND} -E echo ""   
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} -interaction=nonstopmode tutorial.tex
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${BIBTEX_COMPILER} tutorial
 										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${MAKEINDEX_COMPILER} tutorial.idx
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
-										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} tutorial.tex
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} -interaction=nonstopmode tutorial.tex
+										COMMAND ${CMAKE_COMMAND} -E chdir ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/	${PDFLATEX_COMPILER} -interaction=nonstopmode tutorial.tex
 										COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/doc/TUTORIAL/tutorial.pdf doc/tutorial.pdf
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMAND ${CMAKE_COMMAND} -E echo "The BALL tutorial in PDF format has been successfully created:" 

@@ -297,6 +297,22 @@ int main(int argc, char **argv)\
 			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
     }\
   }\
+	catch (std::exception& e)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (!TEST::newline) \
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (caught STL exception!)" << std::endl;\
+			std::cout << "    (what(): " << e.what() << ")" << std::endl;\
+		}\
+	}\
   catch (...)\
   {\
     TEST::this_test = false;\
