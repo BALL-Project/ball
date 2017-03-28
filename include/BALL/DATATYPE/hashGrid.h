@@ -588,14 +588,7 @@ namespace BALL
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 	{
-		if(data.front() == item)
-		{
-			data.pop_front();
-			return true;
-		}
-
-		// unfortunately, this does not work for the first element
-		DataIteratorPosition pos = std::adjacent_find(data.begin(), data.end(),
+		DataIteratorPosition pos = std::adjacent_find(data.before_begin(), data.end(),
 			[&](const Item&, const Item& next){ return next == item; });
 
 		if (pos != data.end())
