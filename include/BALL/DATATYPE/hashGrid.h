@@ -25,13 +25,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#ifdef BALL_HAS_GNU_SLIST
-#include <ext/slist>
-#else
-#include <list>
-#endif
-
 #include <algorithm>
+#include <list>
 
 namespace BALL 
 {
@@ -351,11 +346,7 @@ namespace BALL
 			return ConstBoxIterator::end(*this);
 		}
 
-#ifdef BALL_HAS_GNU_SLIST
-		typedef typename __gnu_cxx::slist<Item> DataContainer;
-#else
 		typedef typename std::list<Item> DataContainer;
-#endif
 
 		typedef typename DataContainer::iterator DataIteratorPosition;
 		
@@ -597,32 +588,6 @@ namespace BALL
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 	{
-#ifdef BALL_HAS_GNU_SLIST
-		if(data.empty())
-		{
-			return false;
-		}
-
-		if(*data.begin() == item)
-		{
-			data.pop_front();
-			return true;
-		}
-
-		DataIteratorPosition prev = data.begin();
-		DataIteratorPosition pos = prev;
-		for(++pos; pos != data.end(); ++pos)
-		{
-			if(*pos == item)
-			{
-				data.erase_after(prev);
-				return true;
-			}
-
-			prev = pos;
-		}
-		return false;
-#else
 		DataIteratorPosition pos = std::find(data.begin(), data.end(), item);
 
 		if (pos != data.end())
@@ -633,7 +598,6 @@ namespace BALL
 		}
 
 		return false;
-#endif
 	}
 
 	template<typename Item>  
