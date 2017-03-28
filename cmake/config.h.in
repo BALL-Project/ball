@@ -292,9 +292,9 @@
 #cmakedefine BALL_HAS_OPENBABEL
 
 // QT options
-#define BALL_QT_HAS_THREADS // Qt now always has thread support
 #define QT_THREAD_SUPPORT
 
+// Qt WebEngine
 #cmakedefine BALL_HAS_QTWEBENGINE
 
 // Glew
