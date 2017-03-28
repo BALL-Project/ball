@@ -93,6 +93,13 @@ CHECK(Size getSize() const throw())
 	hbox.insert(test_int);
 	size = hbox.getSize();
 	TEST_EQUAL(size, 1)
+	for(int i = 0; i < 5; ++i)
+	{
+		hbox.insert(i);
+	}
+	size = hbox.getSize();
+	TEST_EQUAL(size, 6)
+
 RESULT
 
 
@@ -110,10 +117,16 @@ CHECK(bool remove(const Item& item) throw())
 	{
 		hbox.insert(i);
 	}
-	hbox.remove(3);
-	int size = hbox.getSize();
-	TEST_EQUAL(size, 4)
+	TEST_EQUAL(hbox.remove(3), true)
+	TEST_EQUAL(hbox.getSize(), 4)
 	TEST_EQUAL(hbox.find(3), 0)
+	// invalid element
+	TEST_EQUAL(hbox.remove(5), false)
+	TEST_EQUAL(hbox.getSize(), 4)
+	// remove first element
+	TEST_EQUAL(hbox.remove(0), true)
+	TEST_EQUAL(hbox.getSize(), 3)
+	TEST_EQUAL(hbox.find(0), 0)
 RESULT
 
 
