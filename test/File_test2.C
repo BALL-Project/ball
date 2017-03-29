@@ -21,8 +21,6 @@ START_TEST(File)
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-File* f1 = 0;
-
 String source_name(BALL_TEST_DATA_PATH(../File_test2.C));
 
 CHECK(bool operator == (const File& file) const throw())
@@ -71,7 +69,7 @@ CHECK(bool isAccessible() const throw())
 RESULT
 
 CHECK(bool isCanonized() const throw(Exception::FileNotFound))
-	File f0(BALL_TEST_DATA_PATH(../../TEST/data/File_test2.txt));
+	File f0(BALL_TEST_DATA_PATH(../../test/data/File_test2.txt));
 	TEST_EQUAL(f0.isValid(), true)
 	TEST_EQUAL(f0.isCanonized(), true)
 

@@ -76,7 +76,7 @@ ENDIF()
 
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
 
-SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/source/TEST/data)
+SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/test/data)
 SET(BALL_BENCHMARK_DATA_PATH ${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data)
 
 # Should we build packages as well?
@@ -510,7 +510,7 @@ CONFIGURE_FILE(cmake/templates/BALL.doc.in  ${PROJECT_SOURCE_DIR}/include/BALL/B
 CONFIGURE_FILE(cmake/BALLPythonConfig.h.in ${PROJECT_BINARY_DIR}/include/BALL/PYTHON/BALLPythonConfig.h)
 
 ## build a config.h file for our tests to not disturb the rest of BALL
-CONFIGURE_FILE(cmake/BALLTestConfig.h.in ${PROJECT_BINARY_DIR}/source/TEST/BALLTestConfig.h)
+CONFIGURE_FILE(cmake/BALLTestConfig.h.in ${PROJECT_BINARY_DIR}/test/BALLTestConfig.h)
 
 ## build a config.h file for our benchmarks to not disturb the rest of BALL
 CONFIGURE_FILE(cmake/BALLBenchmarkConfig.h.in ${PROJECT_BINARY_DIR}/source/BENCHMARKS/BALLBenchmarkConfig.h)
@@ -809,7 +809,7 @@ ENDIF()
 ##### Tests #####
 INCLUDE(Dart)
 ENABLE_TESTING()
-ADD_SUBDIRECTORY(source/TEST EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
+ADD_SUBDIRECTORY(test EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
 
 ##### targets list #####
 INCLUDE(cmake/BALLTargets.cmake)
