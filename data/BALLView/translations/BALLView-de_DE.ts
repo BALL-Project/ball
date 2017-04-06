@@ -474,7 +474,6 @@ Oliver Kohlbacher</source>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="133"/>
-        <location filename="../../../source/APPLICATIONS/PyBALL/mainframe.C" line="64"/>
         <source>BALL Docu</source>
         <translation>BALL Dokumentation</translation>
     </message>
@@ -565,7 +564,6 @@ Oliver Kohlbacher</source>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="215"/>
-        <location filename="../../../source/APPLICATIONS/PyBALL/mainframe.C" line="87"/>
         <source>Ready.</source>
         <translation>Bereit.</translation>
     </message>
@@ -595,11 +593,6 @@ Oliver Kohlbacher</source>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="364"/>
         <source>QT </source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/PyBALL/mainframe.C" line="77"/>
-        <source>BALL</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2265,15 +2258,6 @@ so there was nothing to be done!</source>
         <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1057"/>
         <source>Invalid Pipeline</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::Mainframe</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/PyBALL/mainframe.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
     </message>
 </context>
 <context>
