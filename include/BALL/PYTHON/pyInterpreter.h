@@ -5,17 +5,7 @@
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATAYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_SYSTEM_PATH_H
-# include <BALL/SYSTEM/path.h>
-#endif
+#include <BALL/SYSTEM/path.h>
 
 #include <vector>
 
@@ -60,7 +50,7 @@ namespace BALL
 
 			/**	Stop the interpreter.
 					Deallocate all memory occupied by the interpreter
-					(by calling <tt>PY_Finalize</tt>.
+					(by calling <tt>Py_Finalize</tt>.
 			*/
 			static void finalize();
 
@@ -98,14 +88,6 @@ namespace BALL
 					@param file_name the name of the program file
 			*/
 			static String runFile(const String& filename);
-
-			/**	Import a module.	
-					The module with name <tt>module_name</tt> is imported
-					using <tt>PyImport_ImportModule</tt> and initialized.
-					@return true if the modules was found an initialized correctly
-			*/
-			static bool importModule(const String& module_name);
-			//@}
 
 			static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
 
