@@ -5,6 +5,7 @@
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
 
+#include <BALL/PYTHON/pyKernel.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <vector>
@@ -25,14 +26,14 @@ namespace BALL
 	{
 		private:
 			// We don't want anybody to instantiate this!
-			PyInterpreter();
+			PyInterpreter() {}
 			~PyInterpreter() {}
 		
 		public:
 			/**	@name Type definitions */
 			//@{
 			/// Used to encode the individual paths appended to sys.path for dynamic loading of modules.
-			typedef std::vector<String> PathStrings;
+			using PathStrings = std::vector<String>;
 			//@}
 
 			/**	@name Initialization */
@@ -50,26 +51,26 @@ namespace BALL
 
 			/**	Stop the interpreter.
 					Deallocate all memory occupied by the interpreter
-					(by calling <tt>Py_Finalize</tt>.
+					(by calling <tt>Py_Finalize</tt>).
 			*/
 			static void finalize();
 
 			/**	Determine the interpreter state.
 					@return true if the interpreter is correctly initialized
 			*/
-			static bool isInitialized();
+			static bool isInitialized() { return kernel_ && kernel_->isStarted(); }
 
 			///	Append additional search paths to sys.path upon initialization
-			static void setSysPath(const PathStrings& path_strings);
+			static void setSysPath(const PathStrings& path_strings) { sys_path_ = path_strings; }
 
 			/// Get the current paths added to sys.path
-			static const PathStrings& getSysPath();
+			static const PathStrings& getSysPath() { return sys_path_; }
 
 			///
-			static bool isValid() { return valid_;}
+			static bool isValid() { return isInitialized(); }
 			
 			///
-			static String getStartupLog() { return start_log_;}
+			static String getStartupLog() { return start_log_; }
 			
 			//@}
 
@@ -92,8 +93,8 @@ namespace BALL
 			static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
 
 		protected:
+			static PyKernel* kernel_;
 			static PathStrings sys_path_;
-			static bool   valid_;
 			static String start_log_;
 	};
    
