@@ -7,8 +7,9 @@ INCLUDE(CMakeFindDependencyMacro)
 # Set BALL include directories
 SET(BALL_INCLUDE_DIRS "@BALL_INCLUDE_DIRS@")
 
-# Set CXX compile flags used for BALL
-SET(BALL_ADDCXX_FLAGS "@CMAKE_CXX_FLAGS@")
+# Set important CXX compile flags and definitions used for BALL
+SET(BALL_CXX_FLAGS "@BALL_PROJECT_COMPILE_FLAGS@")
+SET(BALL_COMPILE_DEFINITIONS "@BALL_PROJECT_COMPILE_DEFNS@")
 
 # Search required Qt5 dependencies
 SET(QT5_IMPORTED_TARGETS @QT5_IMPORTED_TARGETS@)

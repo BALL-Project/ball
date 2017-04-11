@@ -37,7 +37,7 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 	SET(CXX_WARN_CONVERSION OFF CACHE BOOL "Enables warnings for type conversion problems (GCC only)")
 	IF(CXX_WARN_CONVERSION)
 		IF(CMAKE_COMPILER_IS_GNUCXX)
-			ADD_DEFINITIONS(-Wconversion)
+			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
 		ENDIF()
 	ENDIF()
 	MESSAGE(STATUS "Compiler checks for conversion: ${CXX_WARN_CONVERSION}")
@@ -46,19 +46,20 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 		SET(USE_PEDANTIC OFF)
 	ENDIF()
 
-	ADD_BALL_DEFINITIONS("-std=c++0x")
+	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -std=c++0x")
 
-	# Added -Wno-deprecated-declarations as Eigen3 currently uses binder2nd
-	# which spams the compiler output.
-	ADD_DEFINITIONS(-Wall -Wextra -Wno-deprecated-declarations)
+	# Added -Wno-deprecated-declarations as Eigen3 currently uses binder2nd which spams the compiler output.
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-declarations")
 
 	IF(USE_PEDANTIC)
-		ADD_BALL_DEFINITIONS("-pedantic")
+		SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -pedantic")
 	ENDIF()
 
 	## Recommended setting for eclipse, see http://www.cmake.org/Wiki/CMake:Eclipse
 	IF(CMAKE_GENERATOR STREQUAL "Eclipse CDT4 - Unix Makefiles")
-		ADD_BALL_DEFINITIONS(-fmessage-length=0)
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
 	ENDIF()
 
 # TODO: replace by proper compiler ID
@@ -80,13 +81,14 @@ ELSEIF(MINGW)
 	STRING(REGEX REPLACE "([0-9])\\.([0-9])\\.([0-9])" "\\3"
 		CXX_COMPILER_VERSION_MINOR_MINOR ${CXX_COMPILER_VERSION})
 
-	ADD_DEFINITIONS(-Wall -Wextra)
+	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -std=c++0x")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wextra")
 
 	IF(USE_PEDANTIC)
-		ADD_BALL_DEFINITIONS(-pedantic)
+		SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -pedantic")
 	ENDIF()
 
-	ADD_BALL_DEFINITIONS("-std=c++0x")
 ELSEIF(MSVC)
 
 	SET(CXX_COMPILER_ID "MSVC")
@@ -115,7 +117,7 @@ ELSEIF(MSVC)
 
 	## disable min and max macros by default
 	## see CGAL and BOOST configs for more elaborate explanations
-	ADD_BALL_DEFINITIONS(/DNOMINMAX)
+	SET(BALL_PROJECT_COMPILE_DEFNS "${BALL_PROJECT_COMPILE_DEFNS} /DNOMINMAX")
 
 	## compile such that GSL is in DLL mode
 	#add_definitions(/DGSL_DLL)
@@ -169,5 +171,6 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} MATCHES ".*Clang")
 		CXX_COMPILER_VERSION_MINOR ${CXX_COMPILER_VERSION})
 
 	SET(CXX_COMPILER_VERSION "${CXX_COMPILER_VERSION_MAJOR}.${CXX_COMPILER_VERSION_MINOR}")
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -std=c++11")
 ENDIF()

@@ -93,6 +93,13 @@ ENDIF()
 ## Required type information
 INCLUDE(cmake/BALLConfigTypes.cmake)
 
+
+# Header and Compile checks
+IF(NOT APPLE)
+	SET(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} ${BALL_PROJECT_COMPILE_FLAGS}")
+	SET(CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS} ${BALL_PROJECT_COMPILE_DEFNS}")
+ENDIF()
+
 ## system headers:
 CHECK_INCLUDE_FILE_CXX("unistd.h"  BALL_HAS_UNISTD_H)
 CHECK_INCLUDE_FILE_CXX("process.h" BALL_HAS_PROCESS_H)
@@ -227,3 +234,4 @@ ENDIF()
 
 ## user flag with default "QMYSQL"
 set(QT_DB_PLUGIN "QMYSQL" CACHE STRING "User switch to change the Qt database plugin.")
+

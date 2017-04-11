@@ -59,6 +59,9 @@ ENDIF()
 
 SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
 
+SET(BALL_PROJECT_COMPILE_FLAGS "")
+SET(BALL_PROJECT_COMPILE_DEFNS "")
+
 SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/test/data)
 SET(BALL_BENCHMARK_DATA_PATH ${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data)
 
@@ -265,7 +268,7 @@ IF (USE_MPI)
 	ENDIF()
 
 	IF (MPI_FOUND)
-		ADD_DEFINITIONS(${MPI_CXX_COMPILE_FLAGS})
+		SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} ${MPI_CXX_COMPILE_FLAGS}")
 		INCLUDE_DIRECTORIES(${MPI_CXX_INCLUDE_PATH})
 
 		SET(BALL_HAS_MPI TRUE)
@@ -306,8 +309,6 @@ IF (BALL_HAS_VIEW)
 	IF(NOT Qt5LinguistTools_FOUND)
 		MESSAGE(WARNING "Qt5LinguistTools not found: BALLView translations cannot be created and compiled.")
 	ENDIF()
-
-	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
 
 	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::OpenGL
 	                               Qt5::PrintSupport
@@ -504,6 +505,11 @@ SET(BALL_EXECUTABLES "")
 ########################################################
 ###    BUILD the lib																 ###
 ########################################################
+
+
+# Add BALL project specific compiler flags and definitions
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${BALL_PROJECT_COMPILE_FLAGS}")
+ADD_DEFINITIONS("${BALL_PROJECT_COMPILE_DEFNS}")
 
 
 ## are we building a shared or static lib?! (BOTH within 
