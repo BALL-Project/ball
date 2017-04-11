@@ -21,7 +21,7 @@
 			functionality provided by BALL.
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
-		\version @BALL_PACKAGE_VERSION_MAJOR@.@BALL_PACKAGE_VERSION_MINOR@.@BALL_PACKAGE_VERSION_PATCH@
+		\version @PROJECT_VERSION@
 		\author 
 				- Tim Aubertin
 				- Christian Bender

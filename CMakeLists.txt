@@ -1,17 +1,19 @@
-# CMake configuration for BALL (http://www.ball-project.org)
+# CMake configuration for BALL
 #
-# This file is - on purpose - heavily based on the CMake configuration
-# of OpenMS (http://www.openms.de) to optimize synergy effects
+# http://www.ball-project.org
 
-PROJECT("BALL")
 
-########################################################
-###    manual entries (edit this for new release)    ###
-########################################################
+CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 
-SET(BALL_PACKAGE_VERSION_MAJOR "1")
-SET(BALL_PACKAGE_VERSION_MINOR "5")
-SET(BALL_PACKAGE_VERSION_PATCH "0")
+
+CMAKE_POLICY(SET CMP0020 OLD)
+CMAKE_POLICY(SET CMP0042 OLD)
+CMAKE_POLICY(SET CMP0043 NEW)
+CMAKE_POLICY(SET CMP0048 NEW)
+
+
+PROJECT("BALL" VERSION 1.5.0)
+
 
 ########################################################
 ###    end manual entries                            ###
@@ -19,27 +21,10 @@ SET(BALL_PACKAGE_VERSION_PATCH "0")
 
 # Heart of the BUILD system:
 # Only edit when you know what you are doing!
-#
-# Quick manual for most commands:     https://cmake.org/cmake/help/v2.8.12/cmake.html
-# Useful predefined CMake variables:  https://cmake.org/Wiki/CMake_Useful_Variables
-
-CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
 
 SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
 
 SET(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE TRUE)
-
-IF(POLICY CMP0020)
-        CMAKE_POLICY(SET CMP0020 OLD)
-ENDIF()
-
-IF(POLICY CMP0042)
-        CMAKE_POLICY(SET CMP0042 OLD)
-ENDIF()
-
-IF(POLICY CMP0043)
-	CMAKE_POLICY(SET CMP0043 NEW)
-ENDIF()
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
@@ -47,8 +32,6 @@ OPTION(BALL_USE_PROJECT_FOLDERS ON)
 IF (BALL_USE_PROJECT_FOLDERS)
 	SET(USE_FOLDERS TRUE)
 ENDIF()
-
-SET(CF_BALL_PACKAGE_VERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}.${BALL_PACKAGE_VERSION_PATCH}" CACHE INTERNAL "BALL VERSION" FORCE)
 
 # Initialize the various PREFIX variables. This has to happen before any files
 # using them are included.
@@ -611,7 +594,7 @@ SET(VIEW_COMPILE_FLAGS)
 SET(VIEW_LINK_FLAGS)
 
 SET_TARGET_PROPERTIES(BALL PROPERTIES
-	SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}"
+	SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
 )
 
 IF (MSVC)
@@ -626,7 +609,7 @@ IF (BALL_HAS_VIEW)
 	LIST(APPEND VIEW_DEP_LIBRARIES ${GLEW_LIBRARY} ${RTFACT_LIBRARIES})
 
 	SET_TARGET_PROPERTIES(VIEW PROPERTIES
-		SOVERSION "${BALL_PACKAGE_VERSION_MAJOR}.${BALL_PACKAGE_VERSION_MINOR}"
+		SOVERSION "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
 )
 
 	IF(MSVC)
@@ -844,6 +827,8 @@ MESSAGE(STATUS "")
 #
 ######################################################
 
+INCLUDE(CMakePackageConfigHelpers)
+
 
 # Collect Qt5 dependencies
 GET_TARGET_PROPERTY(QT5_LINK_LIBRARIES BALL LINK_LIBRARIES)
@@ -870,6 +855,14 @@ CONFIGURE_FILE(
 	@ONLY
 )
 
+# Generate BALL package config version file
+write_basic_package_version_file(
+	"${PROJECT_BINARY_DIR}/cmake/BALLConfigVersion.cmake"
+	VERSION ${PROJECT_VERSION}
+	COMPATIBILITY AnyNewerVersion
+)
+
+# Generate exports
 EXPORT(TARGETS BALL
 	FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 
@@ -878,6 +871,7 @@ IF(BALL_HAS_VIEW)
 		APPEND
 		FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 ENDIF()
+
 
 # Store BALL build directory in the CMake user package registry
 EXPORT(PACKAGE BALL)
@@ -900,6 +894,7 @@ IF(NOT APPLE)
 
 	INSTALL(FILES
 		"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+		"${PROJECT_BINARY_DIR}/cmake/BALLConfigVersion.cmake"
 		DESTINATION "${BALL_CMAKE_EXPORT_PATH}/"
 		COMPONENT   ${COMPONENT_LIBBALL_DEV}
 	)
