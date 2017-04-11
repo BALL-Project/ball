@@ -32,7 +32,7 @@ IF (WIN32 AND NOT UNIX)
 
 	SET(CPACK_NSIS_MUI_ICON "${PROJECT_SOURCE_DIR}\\\\data\\\\graphics\\\\ballview.ico")
 	SET(CPACK_NSIS_MUI_UNIICON "${PROJECT_SOURCE_DIR}\\\\data\\\\graphics\\\\ballview.ico")
-	SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}\\\\data\\\\graphics\\\\installer_header.bmp")
+	SET(CPACK_PACKAGE_ICON "${PROJECT_SOURCE_DIR}\\\\data\\\\graphics\\\\nsis_installer_header.bmp")
 	SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin\\\\BALLView.exe")
 	IF (BALL_HAS_RTFACT)
 		SET(CPACK_PACKAGE_NAME "BALL-RT")
