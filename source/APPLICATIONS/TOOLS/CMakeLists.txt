@@ -3,7 +3,6 @@ PROJECT(TOOLS)
 
 # Set BALL specific includes and compilerflags
 INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR})
-ADD_DEFINITIONS(${BALL_DEFINITIONS})
 ADD_DEFINITIONS(${BALL_ADD_CXXFLAGS})
 
 ###### add TOOLS targets ########

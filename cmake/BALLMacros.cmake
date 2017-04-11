@@ -30,11 +30,6 @@ function(QT5_WRAP_UI_BALL outfiles)
     set(${outfiles} ${${outfiles}} PARENT_SCOPE)
 endfunction()
 
-MACRO(ADD_BALL_DEFINITIONS NEW_DEFINITIONS)
-	SET(BALL_DEFINITIONS ${NEW_DEFINITIONS} ${BALL_DEFINITIONS})
-	SET(CMAKE_REQUIRED_DEFINITIONS ${BALL_DEFINITIONS})
-	ADD_DEFINITIONS(${NEW_DEFINITIONS})
-ENDMACRO(ADD_BALL_DEFINITIONS)
 
 ## Add the source files in SOURCES_LIST to the list
 ## of files compiled into libBALL, and mark them as

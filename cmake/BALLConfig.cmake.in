@@ -1,9 +1,21 @@
-### CMake BALL config file for external code
-### configured by the BALL build system from <BALL-Dir>/cmake/BALL.cmake.in
+# CMake BALL package configuration file for upstream projects
+# Automatically configured by the BALL build system from
+# <BALL-Dir>/cmake/BALLConfig.cmake.in
 
+INCLUDE(CMakeFindDependencyMacro)
+
+# Set BALL include directories
 SET(BALL_INCLUDE_DIRS "@BALL_INCLUDE_DIRS@")
-SET(BALL_ADDCXX_FLAGS "@CF_BALL_ADDCXX_FLAGS@")
-SET(BALL_DEFINITIONS  "@BALL_DEFINITIONS@")
 
-## create targets 'BALL' and 'VIEW', including their dependencies
-INCLUDE(@CF_BALLExport@)
+# Set CXX compile flags used for BALL
+SET(BALL_ADDCXX_FLAGS "@CMAKE_CXX_FLAGS@")
+
+# Search required Qt5 dependencies
+SET(QT5_IMPORTED_TARGETS @QT5_IMPORTED_TARGETS@)
+FOREACH(QT5_IMPORTED_TARGET ${QT5_IMPORTED_TARGETS})
+	 find_dependency(${QT5_IMPORTED_TARGET} @QT_MIN_VERSION@)
+ENDFOREACH()
+
+
+# Create IMPORTED targets for BALL and VIEW
+INCLUDE("${CMAKE_CURRENT_LIST_DIR}/BALLExport.cmake")

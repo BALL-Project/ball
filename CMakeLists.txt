@@ -309,14 +309,15 @@ ENDIF()
 
 SET(QT_MIN_VERSION 5.5)
 
-FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Core Xml Network)
+FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Core Network Xml)
 
 LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
+			       Qt5::Network
                                Qt5::Xml
-                               Qt5::Network)
+			       )
 
 IF (BALL_HAS_VIEW)
-	FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Widgets Test OpenGL PrintSupport)
+	FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets)
 	FIND_PACKAGE(Qt5LinguistTools ${QT_MIN_VERSION})
 
 	IF(NOT Qt5LinguistTools_FOUND)
@@ -325,10 +326,10 @@ IF (BALL_HAS_VIEW)
 
 	ADD_DEFINITIONS(${Qt5Widgets_DEFINITIONS})
 
-	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::Widgets
-	                               Qt5::OpenGL
+	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::OpenGL
 	                               Qt5::PrintSupport
-	                               Qt5::Test)
+				       Qt5::Test
+				       Qt5::Widgets)
 
 	# WebEngine support
 	IF(USE_QTWEBENGINE)
@@ -515,7 +516,6 @@ CONFIGURE_FILE(cmake/BALLTestConfig.h.in ${PROJECT_BINARY_DIR}/test/BALLTestConf
 ## build a config.h file for our benchmarks to not disturb the rest of BALL
 CONFIGURE_FILE(cmake/BALLBenchmarkConfig.h.in ${PROJECT_BINARY_DIR}/source/BENCHMARKS/BALLBenchmarkConfig.h)
 
-ADD_DEFINITIONS(${BALL_DEFINITIONS})
 
 SET(BALL_EXECUTABLES "")
 ########################################################
@@ -833,65 +833,85 @@ MESSAGE(STATUS "")
 MESSAGE(STATUS "-----------------------------------------------------------------")
 MESSAGE(STATUS "")
 
+
+
 ######################################################
-#### build settings and configs for external code ####
+# Create CMake package configurations to be used with
+# find_package()for:
+#
+#   - local build tree BALL
+#   - installed BALL
+#
 ######################################################
 
-## grep definitions (-D<XXX>) that were set using 'add_definitions()'
-GET_PROPERTY(BALL_ADDED_COMPILE_DEFINITIONS DIRECTORY . PROPERTY COMPILE_DEFINITIONS)
-## convert to CXX flags
-FOREACH(CURRENT_DEFINITION ${BALL_ADDED_COMPILE_DEFINITIONS})
-	LIST(APPEND CF_BALL_ADDCXX_FLAGS "-D${CURRENT_DEFINITION}")
+
+# Collect Qt5 dependencies
+GET_TARGET_PROPERTY(QT5_LINK_LIBRARIES BALL LINK_LIBRARIES)
+GET_TARGET_PROPERTY(VIEW_LINK_LIBRARIES VIEW LINK_LIBRARIES)
+SET(QT5_LINK_LIBRARIES ${QT5_LINK_LIBRARIES} ${VIEW_LINK_LIBRARIES})
+
+SET(QT5_IMPORTED_TARGETS "")
+FOREACH(TMP_LINKED_LIB ${QT5_LINK_LIBRARIES})
+	IF(${TMP_LINKED_LIB} MATCHES ".*Qt5")
+		STRING(REPLACE "::" "" TMP_QT5_LINK_LIBRARY ${TMP_LINKED_LIB})
+		SET(QT5_IMPORTED_TARGETS ${QT5_IMPORTED_TARGETS} ${TMP_QT5_LINK_LIBRARY})
+	ENDIF()
 ENDFOREACH()
 
-## for add_definition commands (currently empty, but who knows...)
-SET(CF_BALL_ADD_DEFINITIONS)
 
-## the filename for library settings (this file will be included in BALLConfig.cmake)
-SET(BALL_CMAKE_EXPORT_PATH "lib/cmake/BALL" CACHE PATH "Path to the cmake config and export files")
-SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
-
-## create code that allows to call find_package()
-## (must come after the above code that sets the variables!)
+# Collect BALL include directories
 GET_DIRECTORY_PROPERTY(BALL_INCLUDE_DIRS INCLUDE_DIRECTORIES)
 
-## Configure the BALLConfig for compilation against the version in PROJECT_BINARY_DIR
+
+# Generate CMake package configuration for BALL build tree
 CONFIGURE_FILE(
 	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
 	"${PROJECT_BINARY_DIR}/cmake/BALLConfig.cmake"
 	@ONLY
 )
-SET(CF_BALLExport ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 
-## Configure the BALLConfig for compilation against the installed version
-## If we want to install the package, we need to rewrite the include directories
-LIST(REMOVE_ITEM BALL_INCLUDE_DIRS "${PROJECT_BINARY_DIR}/include" "${PROJECT_SOURCE_DIR}/include")
-SET(BALL_INCLUDE_DIRS ${BALL_PATH}/include/ ${BALL_INCLUDE_DIRS})
-SET(CF_BALLExport "${BALL_PATH}/${BALL_CMAKE_EXPORT_PATH}/BALLExport.cmake")
-CONFIGURE_FILE(
-	"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
-	"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
-	@ONLY
-)
+EXPORT(TARGETS BALL
+	FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
 
+IF(BALL_HAS_VIEW)
+	EXPORT(TARGETS VIEW
+		APPEND
+		FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
+ENDIF()
+
+# Store BALL build directory in the CMake user package registry
+EXPORT(PACKAGE BALL)
+
+
+# Generate CMake package configuration for BALL installation
 IF(NOT APPLE)
+	# Installation path for BALL CMake package configuration files
+	SET(BALL_CMAKE_EXPORT_PATH "lib/cmake/BALL" CACHE PATH "Path to the cmake package configuration files")
+
+	LIST(REMOVE_ITEM BALL_INCLUDE_DIRS "${PROJECT_BINARY_DIR}/include")
+	LIST(REMOVE_ITEM BALL_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/include")
+	SET(BALL_INCLUDE_DIRS ${BALL_PATH}/include/ ${BALL_INCLUDE_DIRS})
+
+	CONFIGURE_FILE(
+		"${PROJECT_SOURCE_DIR}/cmake/BALLConfig.cmake.in"
+		"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
+		@ONLY
+	)
+
 	INSTALL(FILES
 		"${PROJECT_BINARY_DIR}/exports/BALLConfig.cmake"
 		DESTINATION "${BALL_CMAKE_EXPORT_PATH}/"
 		COMPONENT   ${COMPONENT_LIBBALL_DEV}
 	)
+
+	INSTALL(EXPORT BALLExportGroup
+		DESTINATION ${BALL_CMAKE_EXPORT_PATH}
+		FILE BALLExport.cmake
+		COMPONENT "${COMPONENT_LIBBALL_DEV}")
 ENDIF()
 
-EXPORT(PACKAGE BALL)
 
-IF(BALL_HAS_VIEW)
-	EXPORT(TARGETS BALL VIEW FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
-ELSE()
-	EXPORT(TARGETS BALL FILE ${PROJECT_BINARY_DIR}/cmake/BALLExport.cmake)
-ENDIF()
-
-IF(NOT APPLE)
-	INSTALL(EXPORT BALLExportGroup DESTINATION ${BALL_CMAKE_EXPORT_PATH} FILE BALLExport.cmake COMPONENT "{COMPONENT_LIBBALL_DEV}")
-ENDIF()
-
+######################################################
+# Generate CTags for BALL project
+######################################################
 INCLUDE(cmake/BALLCTags.cmake)
