@@ -6,6 +6,9 @@
 
 #include <QFileDialog>
 
+using std::string;
+using std::tie;
+
 namespace BALL
 {
 	namespace VIEW
@@ -44,23 +47,20 @@ namespace BALL
 
 			if (script_base == "")
 			{
-				Log.error() << "WebEngine: Invalid python module path!" << std::endl;
+				Log.error() << "WebEngine: Invalid python module path!\n";
+			}
+			else if (!PyInterpreter::isInitialized())
+			{
+				Log.error() << "WebEngine: Python interpreter unavailable!\n";
 			}
 			else if (script_base_ != script_base)
 			{
-				bool result;
 				if (script_base_ != "")
 				{
-					PyInterpreter::run(String("sys.path.remove('") + script_base_.c_str() + "')", result);
+					PyInterpreter::run(string("sys.path.remove('") + script_base_.c_str() + "')");
 				}
 
-				PyInterpreter::run(String("sys.path.append('") + script_base.c_str() + "')", result);
-
-				if (!result)
-				{
-					Log.error() << "WebEngine: Could not add python module path!" << std::endl;
-				}
-
+				PyInterpreter::run(string("sys.path.append('") + script_base.c_str() + "')");
 				script_base_ = script_base;
 			}
 #endif

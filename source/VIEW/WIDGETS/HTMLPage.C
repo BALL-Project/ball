@@ -5,6 +5,8 @@
 
 #include <QUrlQuery>
 
+using std::string;
+
 namespace BALL
 {
 	namespace VIEW
@@ -103,27 +105,28 @@ namespace BALL
 		void HTMLPage::executePython_(const QString& action, const ParameterList& parameters)
 		{
 #ifdef BALL_PYTHON_SUPPORT
-			//Search the module to load
-			QString load_module = "__main__";
-			for (ParameterList::const_iterator it = parameters.begin(); it != parameters.end(); ++it)
+			string load_module = "__main__";
+			PyKernel::KeyValArgs args;
+			for (const auto& pair: parameters)
 			{
-				if (it->first == "module")
-				{
-					load_module = it->second;
-					break;
-				}
-			}
+				if (pair.first == "module") load_module = pair.second.toStdString();
 
+				if (pair.first == "action" || pair.first == "module" || pair.first == "method") continue;
+
+				args[pair.first.toStdString()] = pair.second.toStdString();
+			}
 			try
 			{
-				PyInterpreter::execute(load_module, action, parameters);
+				PyInterpreter::execute(load_module, action.toStdString(), args);
 			}
 			catch (Exception::FileNotFound)
 			{
-				Log.error() << "Could not execute action " << action.toStdString() << "\n No such file or directory." << std::endl;
+				Log.error() << "Could not execute action " << action.toStdString() << " from module "
+				            << load_module << " \n";
 			}
 #else
-			Log.error() << "BALL is compiled without Python support. Action " << action.toStdString() << " could not be executed." << std::endl;
+			Log.error() << "BALL is compiled without Python support. Action " << action.toStdString()
+						<< " could not be executed." << std::endl;
 #endif
 		}
 	}
