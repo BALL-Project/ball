@@ -4,41 +4,35 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 
 using std::map;
-using std::pair;
 using std::string;
 
 namespace BALL
 {
 	PyCAPIKernel::PyCAPIKernel() :
 		PyKernel{},
+		main_module_{nullptr},
 		context_{nullptr}
 	{
 		Py_Initialize();
 
 		// get a borrowed reference to the main module
-		auto main_module = PyImport_AddModule("__main__");
-		if (!main_module)
+		main_module_ = PyImport_AddModule("__main__");
+		if (!main_module_)
 		{
 			Log.error() << "Python intialization failed: could not add \"__main__\" module! No Python support available.\n";
 			return;
 		}
 
 		// and create a valid context for our further Python calls
-		context_ = PyModule_GetDict(main_module);
+		context_ = PyModule_GetDict(main_module_);
 		if (!context_)
 		{
 			Log.error() << "Could not get valid context for Python module \"__main__\"! No Python support available.\n";
 			return;
 		}
 
-		// redirect output to a stream object that we can query after running some code
-		PyRun_SimpleString(
-			"import sys, cStringIO\n"
-			"__BALL_CIO = cStringIO.StringIO()\n"
-			"sys.stdout = __BALL_CIO\n"
-			"sys.stderr = __BALL_CIO\n"
-		);
-		cio_ = PyObject_GetAttrString(PyObject_GetAttrString(main_module, "__BALL_CIO"), "getvalue");
+		// import modules for output redirection
+		PyRun_SimpleString("import sys, cStringIO");
 	}
 
 	PyCAPIKernel::~PyCAPIKernel()
@@ -46,9 +40,6 @@ namespace BALL
 		/* TODO: for some reason, finalize crashes on Windows, at least if no python
 		 * module has been found. We need to fix this correctly.
 		 */
-		Py_DecRef(cio_);
-		Py_DecRef(context_);
-
 #ifndef BALL_COMPILER_MSVC
 			Py_Finalize();
 #endif
@@ -85,7 +76,7 @@ namespace BALL
 		return err;
 	}
 
-	pair<bool, string> PyCAPIKernel::run(string str)
+	std::pair<bool, string> PyCAPIKernel::run(string str)
 	{
 #ifdef BALL_VIEW_DEBUG
 		Log.info() << ">>> " << str.toStdString() << '\n';
@@ -94,12 +85,24 @@ namespace BALL
 		// clear previous errors
 		PyErr_Clear();
 
+		// redirect output to StringIO
+		PyRun_SimpleString(
+			"__BALL_CIO = cStringIO.StringIO()\n"
+			"sys.stdout = __BALL_CIO\n"
+			"sys.stderr = __BALL_CIO\n"
+		);
+
 		// run the string through the interpreter
 		PyRun_String(str.c_str(), Py_single_input, context_, context_);
 
 		if (PyErr_Occurred()) return {false, ""};
 
-		return {true, PyString_AsString(PyObject_CallFunction(cio_, nullptr))};
+		auto cio = PyObject_GetAttrString(main_module_, "__BALL_CIO");
+		auto cio_val = PyObject_GetAttrString(cio, "getvalue");
+		auto ret = std::make_pair(true, PyString_AsString(PyObject_CallFunction(cio_val, nullptr)));
+		Py_DecRef(cio_val);
+		Py_DecRef(cio);
+		return ret;
 	}
 
 	bool PyCAPIKernel::runFile(string filename)
