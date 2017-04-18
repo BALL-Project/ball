@@ -79,7 +79,7 @@ namespace BALL
 	std::pair<bool, string> PyCAPIKernel::run(string str)
 	{
 #ifdef BALL_VIEW_DEBUG
-		Log.info() << ">>> " << str.toStdString() << '\n';
+		Log.info() << ">>> " << str << '\n';
 #endif
 
 		// clear previous errors
