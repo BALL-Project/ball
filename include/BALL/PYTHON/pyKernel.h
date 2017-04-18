@@ -1,6 +1,8 @@
 #ifndef BALL_PYTHON_PYKERNEL_H
 #define BALL_PYTHON_PYKERNEL_H
 
+#include <BALL/COMMON/global.h>
+
 #include <Python.h>
 
 #include <map>
@@ -45,8 +47,10 @@ namespace BALL
 			 *
 			 * @param filename Python file name
 			 * @return true if the execution succeeded
+			 *
+			 * @deprecated Use Jupyter notebook plugin instead
 			 */
-			virtual bool runFile(std::string filename) = 0;
+			BALL_DEPRECATED virtual bool runFile(std::string filename) = 0;
 
 			/**
 			 * Calls a single function from a given module.
