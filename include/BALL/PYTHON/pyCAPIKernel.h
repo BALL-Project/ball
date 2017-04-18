@@ -27,7 +27,7 @@ namespace BALL
 			 */
 			PyObject* loadModule(const std::string& name);
 
-			PyObject* cio_;
+			PyObject* main_module_;
 			PyObject* context_;
 	};
 }
