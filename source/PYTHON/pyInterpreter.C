@@ -81,8 +81,15 @@ namespace BALL
 		bool ok;
 		string res;
 		tie(ok, res) = run("sip.SIP_VERSION");
-		auto module_sip_version = std::stoul(res);
-
+		unsigned long module_sip_version = 0ul;
+		try
+		{
+			module_sip_version = std::stoul(res);
+		}
+		catch(const std::invalid_argument& e)
+		{
+			Log.error() << "ERROR: Could not read SIP version string\n";
+		}
 
 		string module_sip_version_str;
 		tie(ok, module_sip_version_str) = run("sip.SIP_VERSION_STR");
