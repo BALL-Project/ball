@@ -1,15 +1,15 @@
-#ifndef BALL_PYTHON_LEGACYKERNEL_H
-#define BALL_PYTHON_LEGACYKERNEL_H
+#ifndef BALL_PYTHON_PYCAPIKERNEL_H
+#define BALL_PYTHON_PYCAPIKERNEL_H
 
 #include <BALL/PYTHON/pyKernel.h>
 
 namespace BALL
 {
-	class LegacyKernel : public PyKernel
+	class PyCAPIKernel : public PyKernel
 	{
 		public:
-			LegacyKernel();
-			~LegacyKernel();
+			PyCAPIKernel();
+			~PyCAPIKernel();
 
 			bool isStarted() const override;
 			std::string getErrorMessage() const override;
@@ -32,4 +32,4 @@ namespace BALL
 	};
 }
 
-#endif // BALL_PYTHON_LEGACYKERNEL_H
+#endif // BALL_PYTHON_PYCAPIKERNEL_H
