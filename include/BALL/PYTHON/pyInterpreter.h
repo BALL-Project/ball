@@ -60,17 +60,23 @@ namespace BALL
 			*/
 			static bool isInitialized() { return kernel_ && kernel_->isStarted(); }
 
-			///	Append additional search paths to sys.path upon initialization
-			static void setSysPath(const PathStrings& path_strings) { sys_path_ = path_strings; }
+			/**
+			 * Append additional search paths to sys.path upon initialization
+			 * @deprecated Old String API; Might be re-added under a less misleading name in the future
+			 */
+			BALL_DEPRECATED static void setSysPath(const PathStrings& path_strings) { sys_path_ = path_strings; }
 
-			/// Get the current paths added to sys.path
-			static const PathStrings& getSysPath() { return sys_path_; }
+			/**
+			 * Get the current (additional) paths added to sys.path
+			 * @deprecated Old String API; Might be re-added under a less misleading name in the future
+			 */
+			BALL_DEPRECATED static const PathStrings& getSysPath() { return sys_path_; }
 
-			///
-			static bool isValid() { return isInitialized(); }
+			/// @deprecated Returns PyInterpreter::isInitialized()
+			BALL_DEPRECATED static bool isValid() { return isInitialized(); }
 			
-			///
-			static String getStartupLog() { return start_log_; }
+			/// @deprecated Error messages are directly printed to Log.error; Always returns an empty string.
+			BALL_DEPRECATED static String getStartupLog() { return String(); }
 			
 			//@}
 
@@ -79,23 +85,37 @@ namespace BALL
 			//@{
 			/**	Execute a string.
 					@param s the string to run (may contain multiple lines with correct indentation)
-					@param result bool reference which contains the result after call of function
-					@return the output of the interpreter (may also contain error messages)
+					@return {ok, res} with `ok` indicating whether the execution was successful and `res` representing
+					        the output of the interpreter (may also contain error messages)
 			*/
-			static String run(const String& s, bool& result);
+			static std::pair<bool, std::string> run(const std::string& s);
+
+			/// @deprecated Use run(const std::string&, bool&) instead
+			BALL_DEPRECATED static String run(const String& s, bool& result);
 
 			/**	Run a Python program from a file.
 			 		If the file does not exist, or cannot be opened, an Exception::FileNotFound is thrown
 					@param file_name the name of the program file
+				@deprecated Functionality replaced by Jupyter notebook plugin
 			*/
-			static String runFile(const String& filename);
+			BALL_DEPRECATED static String runFile(const String& filename);
 
-			static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
+			/**
+			 * Calls a single function from a given module.
+			 *
+			 * @param module a Python module
+			 * @param func a function from the given module
+			 * @param params function arguments as key-value pairs
+			 * @return true if the execution succeeded
+			 */
+			static bool execute(const std::string& module, const std::string& func, const PyKernel::KeyValArgs& params);
+
+			/// @deprecated use execute(const string&, const string&, const KeyValArgs&) instead
+			BALL_DEPRECATED static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
 
 		protected:
 			static PyKernel* kernel_;
 			static PathStrings sys_path_;
-			static String start_log_;
 	};
    
 } // namespace BALL
