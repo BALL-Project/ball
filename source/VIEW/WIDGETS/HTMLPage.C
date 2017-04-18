@@ -115,11 +115,8 @@ namespace BALL
 
 				args[pair.first.toStdString()] = pair.second.toStdString();
 			}
-			try
-			{
-				PyInterpreter::execute(load_module, action.toStdString(), args);
-			}
-			catch (Exception::FileNotFound)
+
+			if (!PyInterpreter::execute(load_module, action.toStdString(), args))
 			{
 				Log.error() << "Could not execute action " << action.toStdString() << " from module "
 				            << load_module << " \n";
