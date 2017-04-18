@@ -6,7 +6,7 @@
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/PYTHON/BALLPythonConfig.h>
-#include <BALL/PYTHON/legacyKernel.h>
+#include <BALL/PYTHON/pyCAPIKernel.h>
 
 using std::string;
 using std::tie;
@@ -27,7 +27,7 @@ namespace BALL
 		// finalize the interpreter if it is already running
 		if(kernel_) finalize();
 
-		kernel_ = new LegacyKernel();
+		kernel_ = new PyCAPIKernel();
 
 		// import sys
 		run("import sys");

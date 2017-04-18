@@ -1,4 +1,4 @@
-#include <BALL/PYTHON/legacyKernel.h>
+#include <BALL/PYTHON/pyCAPIKernel.h>
 
 #include <BALL/COMMON/logStream.h>
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -9,7 +9,7 @@ using std::string;
 
 namespace BALL
 {
-	LegacyKernel::LegacyKernel() :
+	PyCAPIKernel::PyCAPIKernel() :
 		PyKernel{},
 		context_{nullptr}
 	{
@@ -41,7 +41,7 @@ namespace BALL
 		cio_ = PyObject_GetAttrString(PyObject_GetAttrString(main_module, "__BALL_CIO"), "getvalue");
 	}
 
-	LegacyKernel::~LegacyKernel()
+	PyCAPIKernel::~PyCAPIKernel()
 	{
 		/* TODO: for some reason, finalize crashes on Windows, at least if no python
 		 * module has been found. We need to fix this correctly.
@@ -54,12 +54,12 @@ namespace BALL
 #endif
 	}
 
-	bool LegacyKernel::isStarted() const
+	bool PyCAPIKernel::isStarted() const
 	{
 		return bool(Py_IsInitialized());
 	}
 
-	string LegacyKernel::getErrorMessage() const
+	string PyCAPIKernel::getErrorMessage() const
 	{
 		if(!PyErr_Occurred()) return "";
 
@@ -85,7 +85,7 @@ namespace BALL
 		return err;
 	}
 
-	pair<bool, string> LegacyKernel::run(string str)
+	pair<bool, string> PyCAPIKernel::run(string str)
 	{
 #ifdef BALL_VIEW_DEBUG
 		Log.info() << ">>> " << str.toStdString() << '\n';
@@ -102,7 +102,7 @@ namespace BALL
 		return {true, PyString_AsString(PyObject_CallFunction(cio_, nullptr))};
 	}
 
-	bool LegacyKernel::runFile(string filename)
+	bool PyCAPIKernel::runFile(string filename)
 	{
 		FILE* file = fopen(filename.c_str(), "r");
 		if(!file) throw Exception::FileNotFound(__FILE__, __LINE__, filename.c_str());
@@ -119,7 +119,7 @@ namespace BALL
 		return true;
 	}
 
-	bool LegacyKernel::execute(const string& module, const string& func_name, const KeyValArgs& args)
+	bool PyCAPIKernel::execute(const string& module, const string& func_name, const KeyValArgs& args)
 	{
 		PyErr_Clear();
 
@@ -176,7 +176,7 @@ namespace BALL
 		return true;
 	}
 
-	PyObject* LegacyKernel::loadModule(const string& name)
+	PyObject* PyCAPIKernel::loadModule(const string& name)
 	{
 		PyObject* module_dict = PyImport_GetModuleDict();
 
