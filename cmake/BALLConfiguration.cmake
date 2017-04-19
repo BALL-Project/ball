@@ -17,8 +17,9 @@ ELSEIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 	SET(BALL_NO_INLINE_FUNCTIONS FALSE CACHE STRING "Reduce usage of inline functions (useful for debugging purposes)")
 ENDIF()
 
-## define some directories
-## TODO: I'm not sure what will be the most sensible approach here for BALL...
+
+# Define some directories
+# TODO: I'm not sure what will be the most sensible approach here for BALL...
 IF ("${CMAKE_INSTALL_PREFIX}" STREQUAL ".")
 	SET(BALL_PATH ${PROJECT_SOURCE_DIR} CACHE STRING "Path to the top level install location.")
 	SET(BALL_DATA_PATH ${BALL_PATH}/data CACHE STRING "Path to the BALL data directory.")
@@ -26,6 +27,11 @@ ELSE()
 	SET(BALL_PATH ${CMAKE_INSTALL_PREFIX} CACHE STRING "Path to the top level install location.")
 	SET(BALL_DATA_PATH ${BALL_PATH}/share/BALL/data CACHE STRING "Path to the BALL data directory.")
 ENDIF()
+
+SET(BALL_TEST_DATA_PATH      "${PROJECT_SOURCE_DIR}/test/data")
+SET(BALL_BENCHMARK_DATA_PATH "${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data")
+
+
 
 ## some information about the processor and system type
 SET(BALL_BINFMT "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}" CACHE INTERNAL "BALL binary format")
