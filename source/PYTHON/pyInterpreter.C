@@ -162,4 +162,10 @@ namespace BALL
 
 		return execute(module.toStdString(), func_name.toStdString(), args);
 	}
+
+	string PyInterpreter::getErrorMessage()
+	{
+		return kernel_->getErrorMessage();
+	}
+
 } // namespace BALL

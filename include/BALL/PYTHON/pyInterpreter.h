@@ -110,8 +110,16 @@ namespace BALL
 			 */
 			static bool execute(const std::string& module, const std::string& func, const PyKernel::KeyValArgs& params);
 
+			/**
+			 * Returns the most recent error message emitted by the Python interpreter.
+			 *
+			 * @return most recent error message
+			 */
+			static std::string getErrorMessage();
+
 			/// @deprecated use execute(const string&, const string&, const KeyValArgs&) instead
 			BALL_DEPRECATED static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
+			//@}
 
 		protected:
 			static PyKernel* kernel_;
