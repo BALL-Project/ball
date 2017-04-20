@@ -1,7 +1,7 @@
 #ifndef BALL_VIEW_WIDGETS_HTMLPAGE_H
 #define BALL_VIEW_WIDGETS_HTMLPAGE_H
 
-#include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/global.h>
 
 #include <QtCore/QHash>
 #include <QtWebEngineWidgets/QWebEnginePage>
