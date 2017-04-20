@@ -30,13 +30,6 @@ namespace BALL
 				~WebEnginePreferences();
 
 				void applySettings();
-
-			public slots:
-
-				void selectScriptBase();
-
-			protected:
-				String script_base_;
 		};
 	}
 }
