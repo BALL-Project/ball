@@ -1,0 +1,10 @@
+{
+	"argv": [
+		"python",
+		"-m",
+		"ballview_kernel",
+		"-f",
+		"{connection_file}"
+	],
+	"display_name": "BALLView"
+}
