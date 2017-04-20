@@ -61,6 +61,16 @@ namespace BALL
 			 * @return true if the execution succeeded
 			 */
 			virtual bool execute(const std::string& module, const std::string& func, const KeyValArgs& args) = 0;
+
+		protected:
+
+			/**
+			 * Appends the 'python' directory in the BALL data path to `sys.path`. This is where additional
+			 * BALL-specific Python scripts would be located.
+			 *
+			 * This function should be called by every kernel implementation on initialization!
+			 */
+			virtual void loadScriptDir();
 	};
 }
 
