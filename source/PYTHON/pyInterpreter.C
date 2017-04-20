@@ -7,6 +7,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/PYTHON/BALLPythonConfig.h>
 #include <BALL/PYTHON/pyCAPIKernel.h>
+#include <BALL/PYTHON/pyServer.h>
 
 using std::string;
 using std::tie;
@@ -74,7 +75,7 @@ namespace BALL
 
 		bool ok;
 		string res;
-		tie(ok, res) = run("sip.SIP_VERSION");
+		tie(ok, res) = run("sys.stdout.write(str(sip.SIP_VERSION))");
 		unsigned long module_sip_version = 0ul;
 		try
 		{
@@ -86,7 +87,7 @@ namespace BALL
 		}
 
 		string module_sip_version_str;
-		tie(ok, module_sip_version_str) = run("sip.SIP_VERSION_STR");
+		tie(ok, module_sip_version_str) = run("sys.stdout.write(sip.SIP_VERSION_STR)");
 
 		auto module_major_minor   = module_sip_version & 0xFFFFFF00;
 		auto module_bugfix        = module_sip_version & 0x000000FF;
