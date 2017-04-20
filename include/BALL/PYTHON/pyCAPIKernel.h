@@ -12,7 +12,7 @@ namespace BALL
 			~PyCAPIKernel();
 
 			bool isStarted() const override;
-			std::string getErrorMessage() const override;
+			std::string getErrorMessage() const override { return last_err_; };
 
 			std::pair<bool, std::string> run(std::string str) override;
 			BALL_DEPRECATED bool runFile(std::string filename) override;
@@ -27,8 +27,17 @@ namespace BALL
 			 */
 			PyObject* loadModule(const std::string& name);
 
+			/**
+			 * Returns whether the Python error flag is currently set and, if so, sets the internal error message
+			 * buffer accordingly (accessible via `getErrorMessage`).
+			 *
+			 * @return true if Python error flag is currently set
+			 */
+			bool errorOccurred();
+
 			PyObject* main_module_;
 			PyObject* context_;
+			std::string last_err_;
 	};
 }
 
