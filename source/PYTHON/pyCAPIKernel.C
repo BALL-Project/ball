@@ -11,7 +11,8 @@ namespace BALL
 	PyCAPIKernel::PyCAPIKernel() :
 		PyKernel{},
 		main_module_{nullptr},
-		context_{nullptr}
+		context_{nullptr},
+		last_err_{}
 	{
 		Py_Initialize();
 
@@ -53,9 +54,13 @@ namespace BALL
 		return bool(Py_IsInitialized());
 	}
 
-	string PyCAPIKernel::getErrorMessage() const
+	bool PyCAPIKernel::errorOccurred()
 	{
-		if(!PyErr_Occurred()) return "";
+		if (!PyErr_Occurred())
+		{
+			last_err_ = "";
+			return false;
+		}
 
 #ifdef BALL_VIEW_DEBUG
 		PyErr_Print();
@@ -66,17 +71,13 @@ namespace BALL
 		PyObject* value;
 		PyObject* range;
 
-		char* message;
 		PyErr_Fetch(&type, &value, &range);
-		err = "ERROR: " +
-		      PyArg_Parse(value, "s", &message) ? message : "(unknown error)"
-		      "\n";
+		last_err_ = PyString_AsString(value);
 
 		Py_DecRef(type);
 		Py_DecRef(value);
 		Py_DecRef(range);
-
-		return err;
+		return true;
 	}
 
 	std::pair<bool, string> PyCAPIKernel::run(string str)
@@ -99,7 +100,7 @@ namespace BALL
 		// (with Py_file_input, return value is always Py_None)
 		PyRun_String(str.c_str(), Py_file_input, context_, context_);
 
-		if (PyErr_Occurred()) return {false, ""};
+		if (errorOccurred()) return {false, ""};
 
 		auto cio = PyObject_GetAttrString(main_module_, "__BALL_CIO");
 		auto cio_val = PyObject_GetAttrString(cio, "getvalue");
