@@ -83,7 +83,7 @@ namespace BALL
 		}
 		catch(const std::invalid_argument& e)
 		{
-			Log.error() << "ERROR: Could not read SIP version string\n";
+			Log.error() << "[PyInterpreter] ERROR: Could not read SIP version string" << std::endl;
 		}
 
 		string module_sip_version_str;
@@ -97,12 +97,12 @@ namespace BALL
 		if ((module_major_minor != ball_major_minor) || (module_bugfix < ball_bugfix))
 		{
 			tie(ok, res) = run("sip");
-			Log.error() << "ERROR: Version of imported sip module is not compatible with the version BALL "
-			               "was built against.\n"
+			Log.error() << "[PyInterpreter] ERROR: Version of imported sip module is not compatible with the version "
+			               "BALL was built against.\n"
 			               "If BALL was compiled using SIP version x.y.z then it can be used with any SIP "
 			               "version x.y.z' where 'z' >= z.\n"
 			               "Got (from " + res + ") " + module_sip_version_str + "; Expected " +
-			               BALL_SIP_VERSION_STR +"\n";
+			               BALL_SIP_VERSION_STR << std::endl;
 			finalize();
 			return;
 		}
@@ -111,7 +111,7 @@ namespace BALL
 		tie(ok, res) = run("from BALL import *");
 		if (!ok)
 		{
-			Log.error() << "Could not import the BALL library! No Python support available." << std::endl;
+			Log.error() << "[PyInterpreter] Could not import the BALL library! No Python support available." << std::endl;
 			finalize();
 		}
 	}
@@ -120,12 +120,12 @@ namespace BALL
 	{
 		if (!isInitialized())
 		{
-			Log.error() << "Python: Interpreter is not initialized.\n";
+			Log.error() << "[PyInterpreter] Interpreter is not initialized." << std::endl;
 			return { false, "" };
 		}
 
 		auto res = kernel_->run(s);
-		if (!res.first) Log.error() << "Python: " << kernel_->getErrorMessage() << '\n';
+		if (!res.first) Log.error() << "[PyInterpreter] " << kernel_->getErrorMessage() << std::endl;
 		return res;
 	}
 
