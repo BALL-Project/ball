@@ -96,7 +96,8 @@ namespace BALL
 		);
 
 		// run the string through the interpreter
-		PyRun_String(str.c_str(), Py_single_input, context_, context_);
+		// (with Py_file_input, return value is always Py_None)
+		PyRun_String(str.c_str(), Py_file_input, context_, context_);
 
 		if (PyErr_Occurred()) return {false, ""};
 
