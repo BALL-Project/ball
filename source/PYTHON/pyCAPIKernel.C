@@ -33,6 +33,9 @@ namespace BALL
 
 		// import modules for output redirection
 		PyRun_SimpleString("import sys, cStringIO");
+
+		// Add path for BALL-specific Python scripts
+		loadScriptDir();
 	}
 
 	PyCAPIKernel::~PyCAPIKernel()

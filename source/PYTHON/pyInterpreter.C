@@ -63,12 +63,6 @@ namespace BALL
 			sys_path_.push_back(python_path);
 #endif
 
-		// try to locate startup.py as well
-		String python_startup_path = String(p.find("startup.py")).before("startup.py");
-		python_startup_path.trim();
-		while (python_startup_path.substitute("\\", "/") != String::EndPos) {};
-		if (python_startup_path != "") sys_path_.push_back(python_startup_path);
-
 		// Add additional paths (user-defined) to the end of the search path.
 		for (const auto& s: sys_path_)
 		{
