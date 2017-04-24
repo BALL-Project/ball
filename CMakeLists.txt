@@ -1,96 +1,76 @@
-# CMake configuration for BALL
+########################################################
 #
+# CMake configuration for BALL
 # http://www.ball-project.org
-
+#
+########################################################
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0 FATAL_ERROR)
-
 
 CMAKE_POLICY(SET CMP0020 OLD)
 CMAKE_POLICY(SET CMP0042 OLD)
 CMAKE_POLICY(SET CMP0043 NEW)
 CMAKE_POLICY(SET CMP0048 NEW)
 
-
 PROJECT("BALL" VERSION 1.5.0)
 
 
+
 ########################################################
-###    end manual entries                            ###
+# General build system settings
 ########################################################
 
-# Heart of the BUILD system:
-# Only edit when you know what you are doing!
+# Use folders to group TARGTES using the folder target property in IDEs
+SET(USE_FOLDERS TRUE)
 
-SET(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS TRUE)
+# Automatically search lib64 folders
+SET(FIND_LIBRARY_USE_LIB64_PATHS TRUE)
 
-SET(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE TRUE)
-
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
-
-OPTION(BALL_USE_PROJECT_FOLDERS ON)
-IF (BALL_USE_PROJECT_FOLDERS)
-	SET(USE_FOLDERS TRUE)
-ENDIF()
-
-# Initialize the various PREFIX variables. This has to happen before any files
-# using them are included.
-#SET(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "Installation prefix for BALL")
-
-## default build type (for Makefile generators): Release
-## TODO: 64 Bit builds etc for Windows
-IF(BALL_BUILD_TYPE)
-	MESSAGE(WARNING "The BALL_BUILD_TYPE should no longer be used. Use CMAKE_BUILD_TYPE instead")
-	SET(CMAKE_BUILD_TYPE ${BALL_BUILD_TYPE})
-ENDIF()
-
-## if no build type is given, default to Release
+# Set default build type to Release
 IF(NOT CMAKE_BUILD_TYPE)
 	SET(CMAKE_BUILD_TYPE Release)
 ENDIF()
 
-SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the contrib directory, if installed (optional)")
-SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${BALL_CONTRIB_PATH})
+# Add cmake directory from BALL source tree to CMAKE_MODULE_PATH
+SET(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${PROJECT_SOURCE_DIR}/cmake")
 
-IF(UNIX AND BALL_CONTRIB_PATH)
-	SET(CMAKE_LIBRARY_PATH ${BALL_CONTRIB_PATH}/lib ${BALL_CONTRIB_PATH}/lib64 ${CMAKE_LIBRARY_PATH})
-	SET(CMAKE_INCLUDE_PATH ${BALL_CONTRIB_PATH}/include ${CMAKE_INCLUDE_PATH})
+# Add include directoy from BALL source tree
+INCLUDE_DIRECTORIES("${PROJECT_SOURCE_DIR}/include")
+
+# Add include directoy from build tree for configured files
+INCLUDE_DIRECTORIES("${PROJECT_BINARY_DIR}/include")
+
+# Handling user specified path to ball_contrib installation (-DBALL_CONTRIB_PATH)
+# TODO: Get rid of BALL_CONTRIB_PATH when globally refactoring build system
+SET(BALL_CONTRIB_PATH "" CACHE PATH "Path to the ball_contrib installation directory (optional)")
+IF(BALL_CONTRIB_PATH)
+	# Add include directoy from user specified BALL_CONTRIB_PATH
+	INCLUDE_DIRECTORIES("${BALL_CONTRIB_PATH}/include")
+
+	# Add ball contrib install directories to CMake search paths for find_XXX() functions
+	SET(CMAKE_PREFIX_PATH  "${BALL_CONTRIB_PATH}")
+
+	# Required for CMake include and compile tests (seems to be required only on Windows)
+	SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
 ENDIF()
 
-SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
+# Include BALL specific CMake macros
+INCLUDE(cmake/BALLMacros.cmake)
 
+# BALL specific compiler and linker settings
 SET(BALL_PROJECT_COMPILE_FLAGS "")
 SET(BALL_PROJECT_COMPILE_DEFNS "")
+INCLUDE(BALLCompilerSpecific)
 
-SET(BALL_TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/test/data)
-SET(BALL_BENCHMARK_DATA_PATH ${PROJECT_SOURCE_DIR}/source/BENCHMARKS/data)
+# Determine BALL configuration
+INCLUDE(BALLConfiguration)
 
-# Should we build packages as well?
-OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" OFF)
-
-# Used for linking BALL dependent applications and libraries (BALLView, Python bindings, ...)
-SET(BALL_LIBRARIES optimized BALL debug BALLd)
-SET(VIEW_LIBRARIES optimized VIEW debug VIEWd)
-
-# some of our own macros (BALL_CHECKLIB, QT4_WRAP_UI_OWN, ...)
-INCLUDE(cmake/BALLMacros.cmake)
-INCLUDE(cmake/BALLCompilerSpecific.cmake)
-INCLUDE(cmake/BALLConfiguration.cmake)
-
+# We do not have a Component-based installer in MacOS
 IF(NOT APPLE)
-	# We do not have a Component-based installer in MacOS
-	INCLUDE(cmake/BALLComponents.cmake)
+	INCLUDE(BALLComponents)
 ENDIF()
 
-## additional include directories
-INCLUDE_DIRECTORIES(${PROJECT_BINARY_DIR}/include/) ## for configured files, i.e. config.h
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include/)
-IF (BALL_CONTRIB_PATH)
-	INCLUDE_DIRECTORIES(${BALL_CONTRIB_PATH}/include/)
-ENDIF()
-
-
-### LGPL or GPL build
+# License choice: LGPL or GPL build
 SET(BALL_LICENSE "LGPL" CACHE STRING "BALL licensing model: LGPL (default) or GPL")
 
 IF(${BALL_LICENSE} STREQUAL "LGPL")
@@ -103,6 +83,11 @@ ELSE()
 	MESSAGE(FATAL_ERROR "BALL_LICENSE can either be 'LGPL' (default) or 'GPL'")
 ENDIF()
 
+
+
+########################################################
+# Search and configure third party dependencies
+########################################################
 
 ## Extra libraries we want to link into BALL
 SET(BALL_DEP_LIBRARIES)
@@ -140,22 +125,19 @@ ELSE()
 	SET(BALL_HAS_YYLEX_DESTROY FALSE)
 ENDIF()
 
-## Third-party libraries ##
 
 ## XDR related stuff
 FIND_PACKAGE(XDR)
 IF (XDR_FOUND)
-	INCLUDE(cmake/BALLConfigXDR.cmake)
+	INCLUDE(BALLConfigXDR)
 ENDIF()
 
 ## Boost and Asio
-INCLUDE(cmake/BALLConfigBoost.cmake)
+INCLUDE(BALLConfigBoost)
 
 INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 LINK_DIRECTORIES(${Boost_LIBRARY_DIRS})
 LIST(APPEND BALL_DEP_LIBRARIES ${Boost_LIBRARIES})
-# make the rest of CMake aware of boost's existence
-#LIST(APPEND CMAKE_REQUIRED_INCLUDES ${Boost_INCLUDE_DIR})
 
 
 
@@ -173,7 +155,7 @@ IF(${BALL_LICENSE_GPL})
 	FIND_PACKAGE(FFTW)
 	IF(FFTW_FOUND)
 		INCLUDE_DIRECTORIES(${FFTW_INCLUDE_DIR})
-		INCLUDE(cmake/BALLConfigFFTW.cmake)
+		INCLUDE(BALLConfigFFTW)
 	ENDIF()
 
 	#Set the default complex precision to float if the setting for this value
@@ -465,7 +447,7 @@ ENDIF()
 
 
 IF(APPLE)
-	FIND_FILE(MACDEPLOYQT_EXECUTABLE macdeployqt PATHS ${BALL_CONTRIB_PATH}/bin)
+	FIND_PROGRAM(MACDEPLOYQT_EXECUTABLE macdeployqt PATHS ${BALL_CONTRIB_PATH}/bin)
 
 	IF(${MACDEPLOYQT_EXECUTABLE} STREQUAL "MACDEPLOYQT_EXECUTABLE-NOTFOUND")
 		MESSAGE(WARNING "MacOS Bundle generation not possible: macdeployqt not found")
@@ -473,7 +455,7 @@ IF(APPLE)
 		SET(QT_DEPLOY_EXECUTABLE ${MACDEPLOYQT_EXECUTABLE})
 	ENDIF()
 ELSEIF(WIN32)
-	FIND_FILE(WINDEPLOYQT_EXECUTABLE windeployqt.exe PATHS ${BALL_CONTRIB_PATH}/bin)
+	FIND_PROGRAM(WINDEPLOYQT_EXECUTABLE windeployqt.exe PATHS ${BALL_CONTRIB_PATH}/bin)
 
 	IF(${WINDEPLOYQT_EXECUTABLE} STREQUAL "WINDEPLOYQT_EXECUTABLE-NOTFOUND")
 		MESSAGE(WARNING "Package generation not possible: windeployqt.exe not found")
@@ -540,9 +522,9 @@ IF (NOT APPLE)
 ENDIF()
 
 ## big include file for headers and C files, which fills the BALL_sources variable
-INCLUDE(cmake/BALLIncludes.cmake)
+INCLUDE(BALLIncludes)
 IF (BALL_HAS_VIEW)
-	INCLUDE(cmake/VIEWIncludes.cmake)
+	INCLUDE(VIEWIncludes)
 ENDIF()
 
 IF (MSVC)
@@ -704,16 +686,9 @@ IF(BALL_BUILD_MMFF94)
 ENDIF()
 
 
-########################################################
-###    Documentation    														 ###
-########################################################
-
-INCLUDE(cmake/BALLDoc.cmake)
-
-
 
 ######################################################################
-####        Installation Routines                                  ###
+# Installation Routines
 ######################################################################
 
 IF (WIN32)
@@ -790,33 +765,46 @@ IF(NOT APPLE)
 	ENDIF()
 ENDIF()
 
-##### Packaging #####
-IF (BALL_ENABLE_PACKAGING)
-	INCLUDE(cmake/BALLPackageConfig.cmake)
+
+
+########################################################
+# Packaging, Documentation, Tests
+########################################################
+
+# Build BALL packages y/n
+OPTION(BALL_ENABLE_PACKAGING "Enable the building of binary packages" OFF)
+
+# Packaging
+IF(BALL_ENABLE_PACKAGING)
+	INCLUDE(BALLPackageConfig)
 ENDIF()
 
-##### Tests #####
+# Documentation
+INCLUDE(BALLDoc)
+
+# Tests
 INCLUDE(Dart)
 ENABLE_TESTING()
 ADD_SUBDIRECTORY(test EXCLUDE_FROM_ALL) ## configure the Test project (but do not add it to BALL itself)
 
-##### targets list #####
-INCLUDE(cmake/BALLTargets.cmake)
-	
-##### Message after BALL has been built #####
-INCLUDE(cmake/BALLFinishedMessage.cmake)
+# Targets list
+INCLUDE(BALLTargets)
 
-##### Messages at the end of cmake #####
+# Message after BALL has been built
+INCLUDE(BALLFinishedMessage)
+
+
+# CMake configuration message
 MESSAGE(STATUS "")
 MESSAGE(STATUS "-----------------------------------------------------------------")
 MESSAGE(STATUS "")
 MESSAGE(STATUS "You have successfully configured BALL.")
 MESSAGE(STATUS "")
 IF (MSVC)
-  MESSAGE(STATUS "Execute the 'targets' project to see prominent targets!")
+	MESSAGE(STATUS "Execute the 'targets' project to see prominent targets!")
 ELSE()
-  MESSAGE(STATUS "For a full list of make targets execute:")
-  MESSAGE(STATUS "'make targets'")
+	MESSAGE(STATUS "For a full list of make targets execute:")
+	MESSAGE(STATUS "'make targets'")
 ENDIF()
 MESSAGE(STATUS "")
 MESSAGE(STATUS "-----------------------------------------------------------------")
@@ -915,4 +903,4 @@ ENDIF()
 ######################################################
 # Generate CTags for BALL project
 ######################################################
-INCLUDE(cmake/BALLCTags.cmake)
+INCLUDE(BALLCTags)
