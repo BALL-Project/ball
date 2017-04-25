@@ -2,7 +2,7 @@
 ==  BALL  -  Biochemical ALgorithms Library  ==
 ===============================================
  
- 
+  
 BUILD BALL 
 ----------
   To install BALL, use the CMake build system.
