@@ -92,12 +92,5 @@ Shortcut|Tools|Grid|Resize_for_Rendering
 Shortcut|Tools|Grid|Visualize_3D_Grid	
 Shortcut|Tools|Grid|Visualize_Field_Lines	
 Shortcut|Tools|Load_Plugin	
-Shortcut|Tools|Python|Abort_script	
-Shortcut|Tools|Python|Clear_editor	
-Shortcut|Tools|Python|Exec_script	
-Shortcut|Tools|Python|Export_history	
-Shortcut|Tools|Python|Load_script	
-Shortcut|Tools|Python|Run_current_script	Alt+Y
-Shortcut|Tools|Python|Save_script	
 Shortcut|Tools|Visualize_DockResult	
 Shortcut|TrajectoryController|Buffer_Trajectory	

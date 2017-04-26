@@ -14,7 +14,6 @@ Shortcut|Display|Create|Angle_Label
 Shortcut|Edit|Cut	Ctrl+X
 Shortcut|File|Export|POVRay	Ctrl+Y
 Shortcut|TrajectoryController|Buffer_Trajectory	
-Shortcut|Tools|Python|Exec_script	
 Shortcut|Display|Picking_Mode	Ctrl+P
 Shortcut|Display|Show_Coordinate_System|at_origin	
 Shortcut|Tools|Grid|Resize_for_Rendering	
@@ -38,9 +37,7 @@ Shortcut|ToggleFullscreen
 Shortcut|MolecularMechanics|Choose_ForceField|Charmm	
 Shortcut|Display|Edit_Mode	Ctrl+E
 Shortcut|Edit|Invert_Selection	
-Shortcut|Tools|Python|Load_script	
 Shortcut|Display|Move_Mode	
-Shortcut|Tools|Python|Run_current_script	
 Shortcut|Display|Animation|Export_POV	
 Shortcut|Display|Display_Properties	Ctrl+I
 Shortcut|MolecularMechanics|Choose_ForceField|Amber	
@@ -51,7 +48,6 @@ Shortcut|Build|Create_new_molecule
 Shortcut|Display|Show_Coordinate_System|here	
 Shortcut|Build|Build_Peptide	Alt+U
 Shortcut|Tools|Calculate_RMSD	
-Shortcut|Tools|Python|Export_history	
 Shortcut|File|Open|Download_PDB	Ctrl+T
 Shortcut|File|Open|Download_Electron Density	Ctrl+D
 Shortcut|Build|Check_Structure	Ctrl+K
@@ -62,8 +58,6 @@ Shortcut|File|Open|PubChem
 Shortcut|Display|Stereo|Side_by_Side_on_Different_Displays	
 Shortcut|Help|About	
 Shortcut|Build|Add_Hydrogens	Ctrl+H
-Shortcut|Tools|Python|Clear_editor	
-Shortcut|Tools|Python|Save_script	
 Shortcut|QuicklyOptimizeStructure	
 Shortcut|Tools|Grid|Create_Distance_From_Camera_Grid	
 Shortcut|Help|How_to_cite	
@@ -82,7 +76,6 @@ Shortcut|File|Export|VRML
 Shortcut|Display|Animation|Clear	
 Shortcut|Display|Viewpoint|Set_Viewpoint	Ctrl+N
 Shortcut|Edit|Clear_Clipboard	
-Shortcut|Tools|Python|Abort_script	
 Shortcut|File|Quit	Ctrl+Q
 Shortcut|Tools|Grid|Create_Distance_Grid	
 Shortcut|Edit|Preferences	Ctrl+Z
