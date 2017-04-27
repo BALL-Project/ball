@@ -13,7 +13,7 @@ namespace BALL
 			: DockWidget(parent, title),
 			  tab_view_(new QTabWidget(this)),
 			  dashboard_(nullptr),
-			  dashboard_url_(nullptr),
+			  dashboard_url_(),
 			  server_(nullptr),
 			  server_tab_(nullptr),
 			  page_lock_()
