@@ -55,7 +55,7 @@ IF(BISON_EXECUTABLE)
     RESULT_VARIABLE BISON_version_result
     OUTPUT_STRIP_TRAILING_WHITESPACE)
   IF(NOT ${BISON_version_result} EQUAL 0)
-    MESSAGE(SEND_ERROR "Command \"${BISON_EXECUTABLE} --version\" failed with output:\n${BISON_version_error}")
+    MESSAGE(FATAL_ERROR "Command \"${BISON_EXECUTABLE} --version\" failed with output:\n${BISON_version_error}")
   ELSE()
     STRING(REGEX REPLACE "^.*bison \\(GNU Bison\\) ([^\n]+)\n.*" "\\1"
       BISON_VERSION "${BISON_version_output}")
@@ -98,7 +98,7 @@ IF(BISON_EXECUTABLE)
     SET(BISON_TARGET_option_extraopts "")
     SET(BISON_TARGET_outputs "${BisonOutput}")
     IF(NOT ${ARGC} EQUAL 3 AND NOT ${ARGC} EQUAL 5 AND NOT ${ARGC} EQUAL 7)
-      MESSAGE(SEND_ERROR "Usage")
+      MESSAGE(FATAL_ERROR "Usage")
     ELSE()
       # Parsing parameters
       IF(${ARGC} GREATER 5 OR ${ARGC} EQUAL 5)
