@@ -10,8 +10,8 @@ namespace BALL
 				: HTMLView(parent),
 				  base_(base)
 		{
-			connect(this, SIGNAL(titleChanged(const QString&)), base_, SLOT(renameTab(const QString&)));
-			connect(this, SIGNAL(loadFinished(bool)), this, SLOT(prepareNotebook(bool)));
+			connect(this, &JupyterTab::titleChanged, base_, &JupyterWidget::renameTab);
+			connect(this, &JupyterTab::loadFinished, this, &JupyterTab::prepareNotebook);
 		}
 
 		void JupyterTab::prepareNotebook(bool ok)

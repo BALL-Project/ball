@@ -8,8 +8,8 @@
 #include <jupyterWidget.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QLineEdit>
 
 namespace BALL
 {
@@ -25,9 +25,10 @@ namespace BALL
 			setINIFileSectionName("Jupyter");
 			setWidgetStackName("JupyterWidget");
 
-			connect(mode_edit, SIGNAL(currentIndexChanged(int)), this, SLOT(setConnectionMode(int)));
-			connect(exe_button, SIGNAL(clicked()), this, SLOT(selectExePath()));
-			connect(nbdir_button, SIGNAL(clicked()), this, SLOT(selectNbdir()));
+			connect(mode_edit,    static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged),
+					this,         &JupyterPreferences::selectConnectionMode);
+			connect(exe_button,   &QPushButton::clicked, this, &JupyterPreferences::selectExePath);
+			connect(nbdir_button, &QPushButton::clicked, this, &JupyterPreferences::selectNbdir);
 			registerWidgets_();
 		}
 
@@ -41,7 +42,7 @@ namespace BALL
 
 		void JupyterPreferences::storeValues()
 		{
-			setConnectionMode(mode_edit->currentIndex());
+			selectConnectionMode(mode_edit->currentIndex());
 
 			JupyterWidget* bi = JupyterWidget::getInstance(0);
 			if(!bi)
@@ -91,7 +92,7 @@ namespace BALL
 			return conn_mode_;
 		}
 
-		void JupyterPreferences::setConnectionMode(int index)
+		void JupyterPreferences::selectConnectionMode(int index)
 		{
 			setConnectionMode(static_cast<ConnectionMode>(index));
 		}

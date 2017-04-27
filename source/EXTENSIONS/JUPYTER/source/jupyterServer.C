@@ -12,13 +12,13 @@ namespace BALL
 			  nbdir_(nbdir),
 			  proc_(new QProcess(parent))
 		{
-			connect(proc_, SIGNAL(readyReadStandardOutput()), this, SIGNAL(readyReadStandardOutput()));
-			connect(proc_, SIGNAL(readyReadStandardError()), this, SIGNAL(readyReadStandardError()));
-			connect(proc_, SIGNAL(stateChanged(QProcess::ProcessState)), this, SIGNAL(stateChanged(QProcess::ProcessState)));
-			connect(proc_, SIGNAL(started()), this, SIGNAL(started()));
+			connect(proc_, &QProcess::readyReadStandardOutput, this, &JupyterServer::readyReadStandardOutput);
+			connect(proc_, &QProcess::readyReadStandardError,  this, &JupyterServer::readyReadStandardError);
+			connect(proc_, &QProcess::stateChanged,            this, &JupyterServer::stateChanged);
+			connect(proc_, &QProcess::started,                 this, &JupyterServer::started);
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
-			connect(proc_, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SIGNAL(errorOccurred(QProcess::ProcessError)));
+			connect(proc_, &QProcess::errorOccurred,           this, &JupyterServer::errorOccurred);
 #endif
 		}
 

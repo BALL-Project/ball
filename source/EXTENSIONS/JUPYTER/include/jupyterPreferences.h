@@ -58,7 +58,7 @@ namespace BALL
 				bool getDebug();
 
 			public slots:
-				void setConnectionMode(int index);
+				void selectConnectionMode(int index);
 				void selectExePath();
 				void selectNbdir();
 
