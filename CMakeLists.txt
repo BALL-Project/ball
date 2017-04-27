@@ -48,7 +48,7 @@ IF(BALL_CONTRIB_PATH)
 	INCLUDE_DIRECTORIES("${BALL_CONTRIB_PATH}/include")
 
 	# Add ball contrib install directories to CMake search paths for find_XXX() functions
-	SET(CMAKE_PREFIX_PATH  "${BALL_CONTRIB_PATH}")
+	SET(CMAKE_PREFIX_PATH  "${BALL_CONTRIB_PATH}" "${CMAKE_PREFIX_PATH}")
 
 	# Required for CMake include and compile tests (seems to be required only on Windows)
 	SET(CMAKE_REQUIRED_INCLUDES ${BALL_CONTRIB_PATH}/include ${CMAKE_REQUIRED_INCLUDES})
