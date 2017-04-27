@@ -28,7 +28,7 @@ namespace BALL
 			tab_view_->setTabsClosable(true);
 			tab_view_->setMovable(true);
 
-			connect(tab_view_, SIGNAL(tabCloseRequested(int)), this, SLOT(closeTab(int)));
+			connect(tab_view_, &QTabWidget::tabCloseRequested, this, &JupyterWidget::closeTab);
 		}
 
 		JupyterWidget::~JupyterWidget()

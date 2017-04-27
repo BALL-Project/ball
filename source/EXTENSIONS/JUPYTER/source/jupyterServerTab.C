@@ -18,9 +18,9 @@ namespace BALL
 		{
 			setupUi(this);
 			setServer(server);
-			connect(this, SIGNAL(appendMessage(const QString&)), message_edit, SLOT(appendHtml(const QString&)));
-			connect(clear_button, SIGNAL(clicked()), message_edit, SLOT(clear()));
-			connect(start_stop_button, SIGNAL(clicked()), this, SLOT(startStopServer()));
+			connect(this, &JupyterServerTab::appendMessage, message_edit, &QPlainTextEdit::appendHtml);
+			connect(clear_button, &QPushButton::clicked, message_edit, &QPlainTextEdit::clear);
+			connect(start_stop_button, &QPushButton::clicked, this, &JupyterServerTab::startStopServer);
 		}
 
 		JupyterServerTab::~JupyterServerTab()
@@ -38,10 +38,10 @@ namespace BALL
 				return;
 			}
 			server_ = server;
-			connect(server_, SIGNAL(stateChanged(QProcess::ProcessState)), this, SLOT(updateState(QProcess::ProcessState)));
-			connect(server_, SIGNAL(readyReadStandardOutput()), this, SLOT(readStandardOutput()));
-			connect(server_, SIGNAL(readyReadStandardError()), this, SLOT(readStandardError()));
-			connect(server_, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(processError(QProcess::ProcessError)));
+			connect(server_, &JupyterServer::stateChanged,            this, &JupyterServerTab::updateState);
+			connect(server_, &JupyterServer::readyReadStandardOutput, this, &JupyterServerTab::readStandardOutput);
+			connect(server_, &JupyterServer::readyReadStandardError,  this, &JupyterServerTab::readStandardError);
+			connect(server_, &JupyterServer::errorOccurred,           this, &JupyterServerTab::processError);
 		}
 
 		void JupyterServerTab::readStandardOutput()
