@@ -7,7 +7,6 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/PYTHON/BALLPythonConfig.h>
 #include <BALL/PYTHON/pyCAPIKernel.h>
-#include <BALL/PYTHON/pyServer.h>
 
 using std::string;
 using std::tie;
@@ -15,6 +14,7 @@ using std::tie;
 namespace BALL
 {
 	PyKernel* PyInterpreter::kernel_ = nullptr;
+	PyServer* PyInterpreter::server_ = nullptr;
 	PyInterpreter::PathStrings PyInterpreter::sys_path_;
 
 	void PyInterpreter::finalize()
@@ -166,6 +166,23 @@ namespace BALL
 	string PyInterpreter::getErrorMessage()
 	{
 		return kernel_->getErrorMessage();
+	}
+
+	void PyInterpreter::startServer()
+	{
+		// Server is already running
+		if (serverIsRunning()) return;
+
+		server_ = new PyServer;
+	}
+
+	void PyInterpreter::stopServer()
+	{
+		// Server is not running
+		if (!serverIsRunning()) return;
+
+		delete server_;
+		server_ = nullptr;
 	}
 
 } // namespace BALL
