@@ -3,6 +3,8 @@
 #include <jupyterTab.h>
 #include <jupyterServer.h>
 #include <jupyterServerTab.h>
+
+#include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 namespace BALL
@@ -27,6 +29,8 @@ namespace BALL
 			tab_view_->addTab(dashboard_, "Dashboard");
 			tab_view_->setTabsClosable(true);
 			tab_view_->setMovable(true);
+
+			PyInterpreter::startServer();
 
 			connect(tab_view_, &QTabWidget::tabCloseRequested, this, &JupyterWidget::closeTab);
 		}
