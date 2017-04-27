@@ -6,6 +6,7 @@
 #define BALL_PYTHON_PYINTERPRETER_H
 
 #include <BALL/PYTHON/pyKernel.h>
+#include <BALL/PYTHON/pyServer.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <vector>
@@ -121,9 +122,33 @@ namespace BALL
 			BALL_DEPRECATED static bool execute(const QString& module, const QString& func, const QList<QPair<QString, QString> >& params);
 			//@}
 
+
+			/**@name Server */
+			//@{
+
+			/**
+			 * Start a PyServer instance (if not already running) to allow remote execution of Python code, e.g., via
+			 * the BALLView Jupyter kernel.
+			 */
+			static void startServer();
+
+			/**
+			 * Stops the PyServer (if running).
+			 */
+			static void stopServer();
+
+			/**
+			 * Indicates whether a PyServer instance is currently running.
+			 *
+			 * @return true if PyServer is running
+			 */
+			static bool serverIsRunning() { return bool(server_); }
+			//@}
+
 		protected:
-			static PyKernel* kernel_;
+			static PyKernel*   kernel_;
 			static PathStrings sys_path_;
+			static PyServer*   server_;
 	};
    
 } // namespace BALL
