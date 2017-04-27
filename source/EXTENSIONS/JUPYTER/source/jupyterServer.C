@@ -16,10 +16,7 @@ namespace BALL
 			connect(proc_, &QProcess::readyReadStandardError,  this, &JupyterServer::readyReadStandardError);
 			connect(proc_, &QProcess::stateChanged,            this, &JupyterServer::stateChanged);
 			connect(proc_, &QProcess::started,                 this, &JupyterServer::started);
-
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 6, 0))
 			connect(proc_, &QProcess::errorOccurred,           this, &JupyterServer::errorOccurred);
-#endif
 		}
 
 		JupyterServer::~JupyterServer()
@@ -94,13 +91,6 @@ namespace BALL
 			}
 			Log.info() << "Starting Jupyter server..." << std::endl;
 			proc_->start(exe_path_, args);
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
-			// The QProcess::errorOccured signal is only available with Qt 5.6 or newer. We manually emit
-			// the corresponding signal of our own class with older Qt versions.
-			if(!proc_->waitForStarted())
-				emit errorOccurred(QProcess::ProcessError::FailedToStart);
-#endif
 		}
 
 		void JupyterServer::terminate(int kill_timer)
@@ -111,10 +101,6 @@ namespace BALL
 			// Kill server if it didn't manage to shut down within the specified grace period
 			if(!proc_->waitForFinished(kill_timer))
 			{
-#if (QT_VERSION < QT_VERSION_CHECK(5, 6, 0))
-				// This will happen automatically with Qt 5.6 or newer.
-				emit errorOccurred(QProcess::ProcessError::Timedout);
-#endif
 				proc_->kill();
 			}
 		}
