@@ -1382,7 +1382,7 @@ namespace BALL
 
 			String description("Shortcut|Display|Viewpoint|Show_Viewpoint");
 			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Vie&wpoint"), this,
-							SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
+							SLOT(showViewPoint_()), description, QKeySequence(),
 							tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
 
