@@ -1,14 +1,14 @@
 #ifndef JUPYTERPLUGIN_H
 #define JUPYTERPLUGIN_H
 
-#include <QtGui/QPixmap>
-
-#include "jupyterWidget.h"
-#include "jupyterPreferences.h"
+#include <jupyterWidget.h>
+#include <jupyterPreferences.h>
 
 #include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #include <BALL/VIEW/PLUGIN/modularWidgetPlugin.h>
+
+#include <QtGui/QPixmap>
 
 namespace BALL
 {

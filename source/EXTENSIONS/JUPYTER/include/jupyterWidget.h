@@ -1,12 +1,10 @@
 #ifndef JUPYTERWIDGET_H
 #define JUPYTERWIDGET_H
 
-#ifndef BALL_VIEW_WIDGETS_HTMLVIEW_H
-	#include <BALL/VIEW/WIDGETS/HTMLView.h>
-#endif
+#include <BALL/VIEW/WIDGETS/HTMLView.h>
 
+#include <QtCore/QReadWriteLock>
 #include <QtWidgets/QTabWidget>
-#include <QReadWriteLock>
 
 namespace BALL
 {

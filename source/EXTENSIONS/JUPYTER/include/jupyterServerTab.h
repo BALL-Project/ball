@@ -1,8 +1,9 @@
 #ifndef JUPYTERSERVERTAB_H
 #define JUPYTERSERVERTAB_H
 
-#include <jupyterServer.h>
 #include <ui_jupyterServerTab.h>
+
+#include <jupyterServer.h>
 
 #include <QWidget>
 

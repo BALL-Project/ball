@@ -1,5 +1,6 @@
 #include <jupyterServer.h>
-#include <BALL/common.h>
+
+#include <BALL/COMMON/logStream.h>
 
 namespace BALL
 {
