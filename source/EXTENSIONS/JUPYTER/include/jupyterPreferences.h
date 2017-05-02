@@ -1,19 +1,10 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 #ifndef JUPYTERPREFERENCES_H
 #define JUPYTERPREFERENCES_H
 
-#ifndef BALL_COMMON_GLOBAL_H
-# include <BALL/COMMON/global.h>
-#endif
-
-#ifndef BALL_VIEW_PLUGIN_VIEWPLUGIN_H
-# include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
-#endif
-
 #include <ui_jupyterPreferences.h>
+
+#include <BALL/COMMON/global.h>
+#include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 
 #include <QtWidgets/QWidget>
 

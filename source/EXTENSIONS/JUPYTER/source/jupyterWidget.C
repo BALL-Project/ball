@@ -1,8 +1,8 @@
 #include <jupyterWidget.h>
 
-#include <jupyterTab.h>
 #include <jupyterServer.h>
 #include <jupyterServerTab.h>
+#include <jupyterTab.h>
 
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>

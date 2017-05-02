@@ -1,8 +1,7 @@
 #include <jupyterServerTab.h>
 
-#include <BALL/VIEW/DIALOGS/preferences.h>
-#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <jupyterPlugin.h>
+
 
 namespace BALL
 {
