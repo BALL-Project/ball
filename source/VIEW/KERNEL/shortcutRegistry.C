@@ -49,18 +49,24 @@ namespace BALL
 				key_seq = ascii(shortcut->shortcut().toString());
 			}
 
-			if ( !(hasDescription(description) || shortcut_keys_.has(key_seq)))
+			if (hasDescription(description))
 			{
-				shortcuts_[description] = shortcut;
-				if (key_seq != "")
-				{
-					shortcut_keys_.insert(key_seq);
-				}
-
-				emit shortcutChanged();
-			}
-			else
 				Log.warn() << "Double shortcut entry " << description << std::endl;
+				return;
+			}
+
+			shortcuts_[description] = shortcut;
+
+			if (shortcut_keys_.has(key_seq))
+			{
+				Log.warn() << "Double shortcut entry " << key_seq << std::endl;
+			}
+			else if (key_seq != "")
+			{
+				shortcut_keys_.insert(key_seq);
+			}
+
+			emit shortcutChanged();
 		}
 
 		void ShortcutRegistry::clear()
