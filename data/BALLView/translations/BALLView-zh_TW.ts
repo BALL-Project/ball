@@ -4506,7 +4506,7 @@ so there was nothing to be done!</source>
         <translation>恢復觀察點</translation>
     </message>
     <message>
-        <source>Show Viewpoint</source>
+        <source>Show Vie&amp;wpoint</source>
         <translation>顯示觀察點</translation>
     </message>
     <message>

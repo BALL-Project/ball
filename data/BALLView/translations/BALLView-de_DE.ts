@@ -3572,8 +3572,8 @@ so there was nothing to be done!</source>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1484"/>
-        <source>Show Viewpoint</source>
-        <translation>Viewpoint anzeigen</translation>
+        <source>Show Vie&amp;wpoint</source>
+        <translation>Vie&amp;wpoint anzeigen</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1486"/>

@@ -1380,8 +1380,8 @@ namespace BALL
 
 			getMainControl()->insertPopupMenuSeparator(MainControl::DISPLAY_VIEWPOINT, UIOperationMode::MODE_ADVANCED);
 
-			String description("Shortcut|Display|Viewpoint|Show_Vie&wpoint");
-			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Viewpoint"), this,
+			String description("Shortcut|Display|Viewpoint|Show_Viewpoint");
+			insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, tr("Show Vie&wpoint"), this,
 							SLOT(showViewPoint_()), description, QKeySequence("Ctrl+W"),
 							tr("Print the coordinates of the current viewpoint"), UIOperationMode::MODE_ADVANCED);
 
