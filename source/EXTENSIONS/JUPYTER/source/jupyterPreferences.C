@@ -32,7 +32,7 @@ namespace BALL
 		JupyterPreferences::~JupyterPreferences()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
+				Log.error() << "[JupyterPlugin] Destructing object " << (void *)this
 							<< " of class JupyterPreferences" << std::endl;
 			#endif 
 		}
@@ -69,7 +69,7 @@ namespace BALL
 				}
 				if(server->isRunning())
 				{
-					Log.info() << "Please restart your Jupyter server manually for changes to take effect" << std::endl;
+					Log.info() << "[JupyterPlugin] Please restart your Jupyter server manually for changes to take effect" << std::endl;
 					return;
 				}
 				if(getAutostart())
