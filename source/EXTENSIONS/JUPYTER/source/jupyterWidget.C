@@ -82,11 +82,11 @@ namespace BALL
 		{
 			if(index == tab_view_->indexOf(dashboard_))
 			{
-				Log.info() << "Jupyter dashboard cannot be closed" << std::endl;
+				Log.info() << "[JupyterPlugin] Dashboard cannot be closed" << std::endl;
 			}
 			else if(index == tab_view_->indexOf(server_tab_))
 			{
-				Log.info() << "Jupyter server tab cannot be closed" << std::endl;
+				Log.info() << "[JupyterPlugin] Server tab cannot be closed" << std::endl;
 			}
 			else
 			{

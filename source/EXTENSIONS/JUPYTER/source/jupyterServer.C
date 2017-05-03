@@ -77,7 +77,7 @@ namespace BALL
 		{
 			if(isRunning())
 			{
-				Log.warn() << "The Jupyter server is already running." << std::endl;
+				Log.warn() << "[JupyterPlugin] The Jupyter server is already running." << std::endl;
 				return;
 			}
 			QStringList args;
@@ -90,13 +90,13 @@ namespace BALL
 			{
 				args << "--debug";								// enable debug messages
 			}
-			Log.info() << "Starting Jupyter server..." << std::endl;
+			Log.info() << "[JupyterPlugin] Starting Jupyter server..." << std::endl;
 			proc_->start(exe_path_, args);
 		}
 
 		void JupyterServer::terminate(int kill_timer)
 		{
-			Log.info() << "Shutting down Jupyter server..." << std::endl;
+			Log.info() << "[JupyterPlugin] Shutting down Jupyter server..." << std::endl;
 			proc_->terminate(); // TODO check if this also works under Windows (c.f. QProcess documentation)
 
 			// Kill server if it didn't manage to shut down within the specified grace period
