@@ -28,7 +28,7 @@ namespace BALL
 			}
 		}
 
-		bool JupyterServer::isRunning()
+		bool JupyterServer::isRunning() const
 		{
 			return proc_->state() != QProcess::ProcessState::NotRunning;
 		}
@@ -76,7 +76,7 @@ namespace BALL
 			return proc_->readAllStandardError();
 		}
 
-		QProcess::ProcessState JupyterServer::state()
+		QProcess::ProcessState JupyterServer::state() const
 		{
 			return proc_->state();
 		}

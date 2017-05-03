@@ -79,14 +79,9 @@ namespace BALL
 			}
 		}
 
-		QString JupyterPreferences::getDashboardUrl()
+		QString JupyterPreferences::getDashboardUrl() const
 		{
 			return url_edit->text();
-		}
-
-		JupyterPreferences::ConnectionMode JupyterPreferences::getConnectionMode()
-		{
-			return conn_mode_;
 		}
 
 		void JupyterPreferences::selectConnectionMode(int index)
@@ -101,27 +96,27 @@ namespace BALL
 			hosted_group->setEnabled(conn_mode_ == ConnectionMode::HOSTED);
 		}
 
-		QString JupyterPreferences::getExePath()
+		QString JupyterPreferences::getExePath() const
 		{
 			return exe_edit->text();
 		}
 
-		QString JupyterPreferences::getNbdir()
+		QString JupyterPreferences::getNbdir() const
 		{
 			return nbdir_edit->text();
 		}
 
-		unsigned int JupyterPreferences::getPort()
+		unsigned int JupyterPreferences::getPort() const
 		{
 			return port_edit->value();
 		}
 
-		bool JupyterPreferences::getAutostart()
+		bool JupyterPreferences::getAutostart() const
 		{
 			return autostart_edit->checkState() == Qt::Checked;
 		}
 
-		bool JupyterPreferences::getDebug()
+		bool JupyterPreferences::getDebug() const
 		{
 			return debug_edit->checkState() == Qt::Checked;
 		}

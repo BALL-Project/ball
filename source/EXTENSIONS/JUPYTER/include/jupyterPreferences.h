@@ -39,14 +39,14 @@ namespace BALL
 				///
 				void getSettings();
 
-				QString getDashboardUrl();
-				ConnectionMode getConnectionMode();
+				QString getDashboardUrl() const;
+				ConnectionMode getConnectionMode() const { return conn_mode_; }
 				void setConnectionMode(ConnectionMode mode);
-				QString getExePath();
-				QString getNbdir();
-				unsigned int getPort();
-				bool getAutostart();
-				bool getDebug();
+				QString getExePath() const;
+				QString getNbdir() const;
+				unsigned int getPort() const;
+				bool getAutostart() const;
+				bool getDebug() const;
 
 			public slots:
 				void selectConnectionMode(int index);
