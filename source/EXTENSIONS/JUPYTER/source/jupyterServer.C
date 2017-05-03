@@ -28,46 +28,6 @@ namespace BALL
 			}
 		}
 
-		const QString& JupyterServer::getExePath()
-		{
-			return exe_path_;
-		}
-
-		void JupyterServer::setExePath(const QString &exe_path)
-		{
-			exe_path_ = exe_path;
-		}
-
-		unsigned int JupyterServer::getPort()
-		{
-			return port_;
-		}
-
-		void JupyterServer::setPort(unsigned int port)
-		{
-			port_ = port;
-		}
-
-		bool JupyterServer::getDebug()
-		{
-			return debug_;
-		}
-
-		void JupyterServer::setDebug(bool debug)
-		{
-			debug_ = debug;
-		}
-
-		const QString& JupyterServer::getNbdir()
-		{
-			return nbdir_;
-		}
-
-		void JupyterServer::setNbdir(const QString &nbdir)
-		{
-			nbdir_ = nbdir;
-		}
-
 		bool JupyterServer::isRunning()
 		{
 			return proc_->state() != QProcess::ProcessState::NotRunning;
