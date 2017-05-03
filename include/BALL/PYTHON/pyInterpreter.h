@@ -5,9 +5,11 @@
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
 
+// This has to be included before Python.h as to macro redefinition clashes in macOS Python...
+#include <BALL/SYSTEM/path.h>
+
 #include <BALL/PYTHON/pyKernel.h>
 #include <BALL/PYTHON/pyServer.h>
-#include <BALL/SYSTEM/path.h>
 
 #include <vector>
 
