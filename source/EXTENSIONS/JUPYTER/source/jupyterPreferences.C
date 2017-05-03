@@ -6,7 +6,6 @@
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtWidgets/QFileDialog>
-#include <QtWidgets/QLineEdit>
 
 namespace BALL
 {
