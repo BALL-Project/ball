@@ -15,22 +15,22 @@ namespace BALL
 				JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool debug, const QString& nbdir);
 				virtual ~JupyterServer();
 
-				const QString& getExePath() { return exe_path_; }
-				unsigned int getPort() { return port_; }
-				bool getDebug() { return debug_; }
-				const QString& getNbdir() { return nbdir_; }
+				const QString& getExePath() const { return exe_path_; }
+				unsigned int getPort() const { return port_; }
+				bool getDebug() const { return debug_; }
+				const QString& getNbdir() const { return nbdir_; }
 
 				void setExePath(const QString& exe_path) { exe_path_ = exe_path; }
 				void setPort(unsigned int port) { port_ = port; }
 				void setDebug(bool debug) { debug_ = debug; }
 				void setNbdir(const QString& nbdir) { nbdir_ = nbdir; }
 
-				bool isRunning();
+				bool isRunning() const;
 				void start();
 				void terminate(int kill_timer = 30000);
 				QByteArray readStandardOutput();
 				QByteArray readStandardError();
-				QProcess::ProcessState state();
+				QProcess::ProcessState state() const;
 
 			signals:
 				void readyReadStandardOutput();
