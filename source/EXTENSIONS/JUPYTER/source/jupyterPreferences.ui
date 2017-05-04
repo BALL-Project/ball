@@ -213,7 +213,7 @@
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Root directory of the Jupyter dashboard&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
              <property name="text">
-              <string>~/jupyter</string>
+              <string/>
              </property>
             </widget>
            </item>
