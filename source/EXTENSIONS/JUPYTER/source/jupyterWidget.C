@@ -68,7 +68,7 @@ namespace BALL
 			{
 				server_tab_ = new JupyterServerTab(tab_view_, server);
 				tab_view_->insertTab(0, server_tab_, "Server");
-				setDashboardURL(QString("http://localhost:%1").arg(server->getPort()));
+				setDashboardURL(QString("http://localhost:%1?token=%2").arg(server->getPort()).arg(server->getToken()));
 			}
 			server_ = server;
 		}

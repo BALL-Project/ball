@@ -12,18 +12,27 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				JupyterServer(QObject* parent, const QString& exe_path, unsigned int port, bool debug, const QString& nbdir);
+				JupyterServer(
+					QObject* parent,
+					const QString& exe_path,
+					unsigned int port,
+					bool debug,
+					const QString& nbdir,
+					const QString& token
+				);
 				virtual ~JupyterServer();
 
 				const QString& getExePath() const { return exe_path_; }
 				unsigned int getPort() const { return port_; }
 				bool getDebug() const { return debug_; }
 				const QString& getNbdir() const { return nbdir_; }
+				const QString& getToken() const { return token_; }
 
 				void setExePath(const QString& exe_path) { exe_path_ = exe_path; }
 				void setPort(unsigned int port) { port_ = port; }
 				void setDebug(bool debug) { debug_ = debug; }
 				void setNbdir(const QString& nbdir) { nbdir_ = nbdir; }
+				void setToken(const QString& token) { token_ = token; }
 
 				bool isRunning() const;
 				void start();
@@ -44,6 +53,7 @@ namespace BALL
 				unsigned int port_;
 				bool debug_;
 				QString nbdir_;
+				QString token_;
 				QProcess* proc_;
 		};
 	}

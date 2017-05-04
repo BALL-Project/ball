@@ -60,10 +60,11 @@ namespace BALL
 					server->setPort(getPort());
 					server->setDebug(getDebug());
 					server->setNbdir(getNbdir());
+					server->setToken(getToken());
 				}
 				else
 				{
-					server = new JupyterServer(bi, getExePath(), getPort(), getDebug(), getNbdir());
+					server = new JupyterServer(bi, getExePath(), getPort(), getDebug(), getNbdir(), getToken());
 					bi->setServer(server);
 				}
 				if(server->isRunning())
@@ -103,6 +104,11 @@ namespace BALL
 		QString JupyterPreferences::getNbdir() const
 		{
 			return nbdir_edit->text();
+		}
+
+		QString JupyterPreferences::getToken() const
+		{
+			return token_edit->text();
 		}
 
 		unsigned int JupyterPreferences::getPort() const
