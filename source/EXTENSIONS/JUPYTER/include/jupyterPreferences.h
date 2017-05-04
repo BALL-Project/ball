@@ -44,6 +44,7 @@ namespace BALL
 				void setConnectionMode(ConnectionMode mode);
 				QString getExePath() const;
 				QString getNbdir() const;
+				QString getToken() const;
 				unsigned int getPort() const;
 				bool getAutostart() const;
 				bool getDebug() const;

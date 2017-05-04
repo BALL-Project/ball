@@ -231,14 +231,14 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
+         <item row="6" column="0">
           <widget class="QLabel" name="autostart_label">
            <property name="text">
             <string>Autostart</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
+         <item row="6" column="1">
           <widget class="QCheckBox" name="autostart_edit">
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Start the Jupyter server along with BALLView&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -248,20 +248,34 @@
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
+         <item row="7" column="0">
           <widget class="QLabel" name="debug_label">
            <property name="text">
             <string>Debug mode</string>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
+         <item row="7" column="1">
           <widget class="QCheckBox" name="debug_edit">
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show Jupyter debug messages in the server tab&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLineEdit" name="token_edit">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Optional security token to limit access to the Jupyter server. Not defining a token disables authentication and, thus, allows execution of arbitrary Python code to any local user or process (&lt;span style=&quot; font-weight:600;&quot;&gt;not recommended&lt;/span&gt;). &lt;span style=&quot; font-style:italic;&quot;&gt;Requires Jupyter Notebook 4.3 or later.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLabel" name="token_label">
+           <property name="text">
+            <string>Security token</string>
            </property>
           </widget>
          </item>
