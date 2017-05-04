@@ -6,19 +6,12 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterServer::JupyterServer(
-				QObject* parent,
-				const QString& exe_path,
-				unsigned int port,
-				bool debug,
-				const QString& nbdir,
-				const QString& token
-			)
-			: exe_path_(exe_path),
-			  port_(port),
-			  debug_(debug),
-			  nbdir_(nbdir),
-			  token_(token),
+		JupyterServer::JupyterServer(QObject* parent)
+			: exe_path_(),
+			  port_(0ul),
+			  debug_(false),
+			  nbdir_(),
+			  token_(),
 			  proc_(new QProcess(parent))
 		{
 			connect(proc_, &QProcess::readyReadStandardOutput, this, &JupyterServer::readyReadStandardOutput);
@@ -30,10 +23,8 @@ namespace BALL
 
 		JupyterServer::~JupyterServer()
 		{
-			if(isRunning())
-			{
-				terminate();
-			}
+			if(isRunning()) terminate();
+			if(proc_) delete proc_;
 		}
 
 		bool JupyterServer::isRunning() const

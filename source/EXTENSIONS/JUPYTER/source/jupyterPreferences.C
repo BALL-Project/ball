@@ -72,26 +72,23 @@ namespace BALL
 
 				case ConnectionMode::HOSTED:
 					auto server = widget->getServer();
-					if (server)
-					{
-						server->setExePath(getExePath());
-						server->setPort(getPort());
-						server->setDebug(getDebug());
-						server->setNbdir(getNbdir());
-						server->setToken(getToken());
-					}
-					else
-					{
-						server = new JupyterServer(widget, getExePath(), getPort(), getDebug(), getNbdir(), getToken());
-						widget->setServer(server);
-					}
+					if (!server) server = new JupyterServer(widget);
+
+					server->setExePath(getExePath());
+					server->setPort(getPort());
+					server->setDebug(getDebug());
+					server->setNbdir(getNbdir());
+					server->setToken(getToken());
+
+					widget->setDashboardURL(QString("http://localhost:%1?token=%2").arg(getPort()).arg(getToken()));
+					widget->setServer(server);
+
 					if (server->isRunning())
 					{
 						Log.info() << "[JupyterPlugin] Please restart your Jupyter server manually "
 								   << "for changes to take effect" << std::endl;
-						return;
 					}
-					if (getAutostart()) server->start();
+					else if (getAutostart()) server->start();
 					break;
 			}
 		}

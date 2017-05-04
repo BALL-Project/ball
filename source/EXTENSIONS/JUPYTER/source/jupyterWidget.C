@@ -52,9 +52,11 @@ namespace BALL
 
 		void JupyterWidget::setServer(JupyterServer* server)
 		{
-			if(server_)
+			if (server_ == server) return;
+
+			if (server_)
 			{
-				if(server) // replace server
+				if (server) // replace server
 				{
 					server_tab_->setServer(server);
 				}
@@ -64,11 +66,10 @@ namespace BALL
 				}
 				delete server_;
 			}
-			else if(server) // external -> hosted
+			else if (server) // external -> hosted
 			{
 				server_tab_ = new JupyterServerTab(tab_view_, server);
 				tab_view_->insertTab(0, server_tab_, "Server");
-				setDashboardURL(QString("http://localhost:%1?token=%2").arg(server->getPort()).arg(server->getToken()));
 			}
 			server_ = server;
 		}

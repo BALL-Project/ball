@@ -12,14 +12,7 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				JupyterServer(
-					QObject* parent,
-					const QString& exe_path,
-					unsigned int port,
-					bool debug,
-					const QString& nbdir,
-					const QString& token
-				);
+				JupyterServer(QObject* parent);
 				virtual ~JupyterServer();
 
 				const QString& getExePath() const { return exe_path_; }
