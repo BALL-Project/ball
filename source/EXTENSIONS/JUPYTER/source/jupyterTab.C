@@ -21,6 +21,7 @@ namespace BALL
 			// prevent multiple dashboards from being spawned
 			page()->runJavaScript("e = document.getElementById('ipython_notebook'); if(e) e.childNodes[0].href='#';");
 			page()->runJavaScript("e = document.getElementById('open_notebook'); if(e) e.parentElement.removeChild(e);");
+			page()->runJavaScript("e = document.getElementById('login_widget'); if(e) e.parentElement.removeChild(e);");
 			// remove download options (unfortunately, the corresponding menu entry lacks an ID...)
 			page()->runJavaScript("e = document.getElementById('print_preview').nextElementSibling; if(e) e.parentElement.removeChild(e);");
 		}
