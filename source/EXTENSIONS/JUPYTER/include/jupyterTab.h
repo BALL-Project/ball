@@ -20,7 +20,7 @@ namespace BALL
 				void prepareNotebook(bool ok);
 
 			protected:
-				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type);
+				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type) override;
 
 				JupyterWidget* base_;
 		};

@@ -28,16 +28,16 @@ namespace BALL
 				JupyterPlugin();
 				virtual ~JupyterPlugin();
 
-				const QPixmap* getIcon() const;
-				QString getName() const;
-				QString getDescription() const;
+				const QPixmap* getIcon() const override;
+				QString getName() const override;
+				QString getDescription() const override;
 
-				ConfigDialog* getConfigDialog();
+				ConfigDialog* getConfigDialog() override;
 
-				bool isActive() { return widget_; }
+				bool isActive() override { return widget_; }
 
-				bool activate();
-				bool deactivate();
+				bool activate() override;
+				bool deactivate() override;
 
 			private:
 				QPixmap icon_;

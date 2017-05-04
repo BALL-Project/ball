@@ -34,7 +34,7 @@ namespace BALL
 				virtual ~JupyterPreferences();
 
 				///
-				virtual void storeValues();
+				virtual void storeValues() override;
 
 				///
 				void getSettings();

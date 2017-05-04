@@ -35,7 +35,7 @@ namespace BALL
 				void renameTab(const QString& title);
 
 			protected:
-				void contextMenuEvent(QContextMenuEvent* evt);
+				void contextMenuEvent(QContextMenuEvent* evt) override;
 
 				QTabWidget* tab_view_;
 				JupyterTab* dashboard_;
