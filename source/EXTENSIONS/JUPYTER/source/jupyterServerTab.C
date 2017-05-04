@@ -2,6 +2,7 @@
 
 #include <jupyterPlugin.h>
 
+#include <QtWidgets/QScrollBar>
 
 namespace BALL
 {
@@ -37,10 +38,11 @@ namespace BALL
 				return;
 			}
 			server_ = server;
-			connect(server_, &JupyterServer::stateChanged,            this, &JupyterServerTab::updateState);
-			connect(server_, &JupyterServer::readyReadStandardOutput, this, &JupyterServerTab::readStandardOutput);
-			connect(server_, &JupyterServer::readyReadStandardError,  this, &JupyterServerTab::readStandardError);
-			connect(server_, &JupyterServer::errorOccurred,           this, &JupyterServerTab::processError);
+			connect(server_,      &JupyterServer::stateChanged,            this, &JupyterServerTab::updateState);
+			connect(server_,      &JupyterServer::readyReadStandardOutput, this, &JupyterServerTab::readStandardOutput);
+			connect(server_,      &JupyterServer::readyReadStandardError,  this, &JupyterServerTab::readStandardError);
+			connect(server_,      &JupyterServer::errorOccurred,           this, &JupyterServerTab::processError);
+			connect(message_edit, &QPlainTextEdit::textChanged,            this, &JupyterServerTab::scrollToEnd);
 		}
 
 		void JupyterServerTab::readStandardOutput()
@@ -107,6 +109,12 @@ namespace BALL
 				default:
 					message_edit->appendHtml("<strong>An unknown error occured!</strong>");
 			}
+		}
+
+		void JupyterServerTab::scrollToEnd()
+		{
+			auto sb = message_edit->verticalScrollBar();
+			if (sb) sb->setValue(sb->maximum());
 		}
 	}
 }

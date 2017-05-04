@@ -30,6 +30,7 @@ namespace BALL
 				void updateState(QProcess::ProcessState state);
 				void startStopServer();
 				void processError(QProcess::ProcessError error);
+				void scrollToEnd();
 
 			signals:
 				void appendMessage(const QString& /* message */);
