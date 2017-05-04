@@ -16,7 +16,7 @@ namespace BALL
 
 		void JupyterTab::prepareNotebook(bool ok)
 		{
-			if(!ok || page()->title() != "IPython Notebook") return;
+			if(!ok || (page()->title() != "IPython Notebook" && page()->title() != "Jupyter Notebook")) return;
 
 			// prevent multiple dashboards from being spawned
 			page()->runJavaScript("e = document.getElementById('ipython_notebook'); if(e) e.childNodes[0].href='#';");
