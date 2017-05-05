@@ -56,23 +56,26 @@ namespace BALL
 
 	bool PyCAPIKernel::errorOccurred()
 	{
-		if (!PyErr_Occurred())
-		{
-			last_err_ = "";
-			return false;
-		}
+		last_err_ = "";
+		if (!PyErr_Occurred()) return false;
 
 #ifdef BALL_VIEW_DEBUG
 		PyErr_Print();
 #endif
 
-		string err;
-		PyObject* type;
-		PyObject* value;
-		PyObject* range;
+		if (PyErr_ExceptionMatches(PyExc_SyntaxError))
+		{
+			last_err_ = "Syntax error";
+			return true;
+		}
+
+		PyObject* type =  nullptr;
+		PyObject* value = nullptr;
+		PyObject* range = nullptr;
 
 		PyErr_Fetch(&type, &value, &range);
-		last_err_ = PyString_AsString(value);
+		auto err = value ? PyString_AsString(value) : "unknown error";
+		last_err_ = err ? err : "unknown error";
 
 		Py_DecRef(type);
 		Py_DecRef(value);
