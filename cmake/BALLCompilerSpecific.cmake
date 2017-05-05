@@ -173,4 +173,9 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} MATCHES ".*Clang")
 	SET(CXX_COMPILER_VERSION "${CXX_COMPILER_VERSION_MAJOR}.${CXX_COMPILER_VERSION_MINOR}")
 
 	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -std=c++11")
+
+	# Disable "inconsistent missing override" warnings for now, as this is primarily macro-induced
+	# (e.g., via BALL_EMBEDDABLE) and, unfortunately, won't be resolved until many more parts of our
+	# code consistently use override specifiers.
+	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -Wno-inconsistent-missing-override")
 ENDIF()
