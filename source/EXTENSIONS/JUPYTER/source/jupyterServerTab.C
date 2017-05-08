@@ -96,15 +96,20 @@ namespace BALL
 			switch(error)
 			{
 				case ProcessError::FailedToStart:
-					message_edit->appendHtml("<strong>The server failed to start! Please make sure that the path to the\
-											Jupyter executable is set correctly and that you have the permission to\
-											invoke the program.</strong>");
+					message_edit->appendHtml("<strong>The server failed to start! Please make sure that the path to the "
+					                         "Jupyter executable is set correctly and that you have the permission to "
+					                         "invoke the program.</strong>");
 					break;
 				case ProcessError::Crashed:
 					message_edit->appendHtml("<strong>The server crashed during runtime!</strong>");
 					break;
 				case ProcessError::Timedout:
+#ifdef BALL_OS_WINDOWS
+					message_edit->appendHtml("<strong>The server does not seem to be reponding. Please terminate"
+					                         "jupyter-notebook.exe manually via Windows Task Manager.</strong>");
+#else
 					message_edit->appendHtml("<strong>The server took too long to shut down and will be killed!</strong>");
+#endif
 					break;
 				default:
 					message_edit->appendHtml("<strong>An unknown error occured!</strong>");
