@@ -39,7 +39,7 @@ Shortcut|EditMode|SetElement
 Shortcut|Edit|Clear_Clipboard	
 Shortcut|Edit|Copy	Ctrl+C
 Shortcut|Edit|Cut	Ctrl+X
-Shortcut|Edit|Delete	Del
+Shortcut|Edit|Delete	
 Shortcut|Edit|Deselect	
 Shortcut|Edit|Paste	Ctrl+V
 Shortcut|Edit|Preferences	Ctrl+Z
