@@ -1460,7 +1460,6 @@ namespace BALL
 				toggle_continuous_loop_action_->setChecked(false);
 				toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
 				toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
-				toggle_continuous_loop_action_->setShortcut(QKeySequence(Qt::Key_Space));
 				shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
 			}
 			// end of the toolbar entries

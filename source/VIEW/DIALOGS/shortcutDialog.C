@@ -64,7 +64,7 @@ namespace BALL
 		void ShortcutDialog::browseImportFile_()
 		{
 			Path p;
-			String filename = p.find("shortcuts_13.txt");
+			String filename = p.find("shortcuts_15.txt");
 			QString s = QFileDialog::getOpenFileName(
 			                0,
 			                tr("Choose a file to import shortcuts from"),
@@ -109,9 +109,9 @@ namespace BALL
 			Path p;
 			String filename;
 
-			if (entry == tr("Default Shortcuts (Version 1.3)"))
+			if (entry == tr("Default Shortcuts (Version 1.5)"))
 			{
-				filename = p.find("BALLView/shortcuts_13.txt");
+				filename = p.find("BALLView/shortcuts_15.txt");
 			} 
 			else if (entry == tr("Legacy Shortcuts (Version 1.2)")) 
 			{
