@@ -30,7 +30,7 @@ namespace BALL
 			tab_view_->setTabsClosable(true);
 			tab_view_->setMovable(true);
 
-			PyInterpreter::startServer();
+			if (PyInterpreter::isInitialized()) PyInterpreter::startServer();
 
 			connect(tab_view_, &QTabWidget::tabCloseRequested, this, &JupyterWidget::closeTab);
 		}
