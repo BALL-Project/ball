@@ -29,7 +29,7 @@ namespace BALL
 
 				bool isRunning() const;
 				void start();
-				void terminate(int kill_timer = 30000);
+				void terminate(int kill_timer = 10000);
 				QByteArray readStandardOutput();
 				QByteArray readStandardError();
 				QProcess::ProcessState state() const;
