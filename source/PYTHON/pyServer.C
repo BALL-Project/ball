@@ -13,8 +13,14 @@ using std::tie;
 
 namespace BALL {
 	PyServer::PyServer() :
-		server_{new QTcpServer(this)}
+		server_{nullptr}
 	{
+		if (!PyInterpreter::isInitialized())
+		{
+			Log.error() << "[PyServer] Server cannot be started as the Python interpreter is unavailable!" << std::endl;
+			return;
+		}
+		server_ = new QTcpServer(this);
 		server_->listen(QHostAddress::LocalHost, 8897u);
 
 		connect(server_, &QTcpServer::newConnection, this, &PyServer::processRequest);
