@@ -20,7 +20,8 @@ namespace BALL
 		main_module_ = PyImport_AddModule("__main__");
 		if (!main_module_)
 		{
-			Log.error() << "Python intialization failed: could not add \"__main__\" module! No Python support available.\n";
+			Log.error() << "[PyInterpreter] Python intialization failed: could not add '__main__' module! "
+			            << "No Python support available." << std::endl;
 			return;
 		}
 
@@ -28,7 +29,8 @@ namespace BALL
 		context_ = PyModule_GetDict(main_module_);
 		if (!context_)
 		{
-			Log.error() << "Could not get valid context for Python module \"__main__\"! No Python support available.\n";
+			Log.error() << "[PyInterpreter] Could not get valid context for Python module '__main__'! "
+			            << "No Python support available." << std::endl;
 			return;
 		}
 
@@ -86,7 +88,7 @@ namespace BALL
 	std::pair<bool, string> PyCAPIKernel::run(string str)
 	{
 #ifdef BALL_VIEW_DEBUG
-		Log.info() << ">>> " << str << '\n';
+		Log.info() << "[PyInterpreter] >>> " << str << std::endl;
 #endif
 
 		// clear previous errors
@@ -123,7 +125,7 @@ namespace BALL
 
 		if (PyErr_Occurred())
 		{
-			Log.error() << "Error occurred while executing " << filename << "\n";
+			Log.error() << "[PyInterpreter] Error occurred while executing " << filename << std::endl;
 			PyErr_Print();
 			return false;
 		}
@@ -138,7 +140,7 @@ namespace BALL
 
 		if (!mod)
 		{
-			Log.error() << "Could not load module " << module << std::endl;
+			Log.error() << "[PyInterpreter] Could not load module " << module << std::endl;
 			return false;
 		}
 
@@ -154,7 +156,7 @@ namespace BALL
 
 		if (!dict)
 		{
-			Log.error() << "Error: Could not create named arguments dictionary" << std::endl;
+			Log.error() << "[PyInterpreter] Could not create named arguments dictionary" << std::endl;
 			return false;
 		}
 
@@ -163,7 +165,8 @@ namespace BALL
 			PyObject* val = PyString_FromString(pair.second.c_str());
 			if (!val)
 			{
-				Log.error() << "Could not create parameter" << pair.first << "=" << pair.second << " Skipping." << std::endl;
+				Log.error() << "[PyInterpreter] Could not create parameter"
+				            << pair.first << "=" << pair.second << " Skipping." << std::endl;
 				continue;
 			}
 			PyDict_SetItemString(dict, pair.first.c_str(), val);
@@ -175,7 +178,7 @@ namespace BALL
 
 		if (!dummy)
 		{
-			Log.error() << "Could not allocate dummy tuple" << std::endl;
+			Log.error() << "[PyInterpreter] Could not allocate dummy tuple" << std::endl;
 			return false;
 		}
 
@@ -193,7 +196,7 @@ namespace BALL
 
 		if (!module_dict)
 		{
-			Log.error() << "Could not obtain module dictionary" << std::endl;
+			Log.error() << "[PyInterpreter] Could not obtain module dictionary" << std::endl;
 			return nullptr;
 		}
 
