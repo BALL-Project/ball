@@ -146,7 +146,13 @@ namespace BALL
 
 	bool PyInterpreter::execute(const string& module, const string& func_name, const PyKernel::KeyValArgs& params)
 	{
-		return isInitialized() ? kernel_->execute(module, func_name, params) : false;
+		if (!isInitialized())
+		{
+			Log.error() << "[PyInterpreter] Interpreter is not initialized." << std::endl;
+			return false;
+		}
+
+		return kernel_->execute(module, func_name, params);
 	}
 
 	bool PyInterpreter::execute(const QString& module, const QString& func_name, const QList<QPair<QString, QString> >& params)
@@ -165,11 +171,17 @@ namespace BALL
 
 	string PyInterpreter::getErrorMessage()
 	{
-		return kernel_->getErrorMessage();
+		return isInitialized() ? kernel_->getErrorMessage() : "Interpreter is not initialized";
 	}
 
 	void PyInterpreter::startServer()
 	{
+		if (!isInitialized())
+		{
+			Log.error() << "[PyInterpreter] Interpreter is not initialized." << std::endl;
+			return;
+		}
+
 		// Server is already running
 		if (serverIsRunning()) return;
 
