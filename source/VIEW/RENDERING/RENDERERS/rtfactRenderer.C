@@ -55,9 +55,11 @@ namespace BALL
 
 			rayTracer.attachScene(sceneHandle);
 
+			renderBuffer = RTpieCpp::CreateFrameBufferHandle();
+
 			renderTask = rayTracer.createRenderTask();
 			renderTask.setOverSamplingRate(1);
-            renderTask.setAccumulatePixels(false);
+			renderTask.setAccumulatePixels(false);
 			renderTask.setMaxDepth(20);
 
 			pickTask = rayTracer.createPickTask();
