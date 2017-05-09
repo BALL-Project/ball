@@ -3,6 +3,8 @@
 
 #include <BALL/PYTHON/pyKernel.h>
 
+#include <vector>
+
 namespace BALL
 {
 	class PyCAPIKernel : public PyKernel
@@ -23,7 +25,7 @@ namespace BALL
 			 * Imports the Python module with the given name.
 			 *
 			 * @param name Python module
-			 * @return new reference to the imported module, or nullptr in case of an error
+			 * @return borrowed reference to the imported module, or nullptr in case of an error
 			 */
 			PyObject* loadModule(const std::string& name);
 
@@ -38,6 +40,7 @@ namespace BALL
 			PyObject* main_module_;
 			PyObject* context_;
 			std::string last_err_;
+			std::vector<PyObject*> modules_;
 	};
 }
 

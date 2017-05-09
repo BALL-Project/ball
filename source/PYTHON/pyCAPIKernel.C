@@ -12,7 +12,8 @@ namespace BALL
 		PyKernel{},
 		main_module_{nullptr},
 		context_{nullptr},
-		last_err_{}
+		last_err_{},
+		modules_{}
 	{
 		Py_Initialize();
 
@@ -43,6 +44,9 @@ namespace BALL
 
 	PyCAPIKernel::~PyCAPIKernel()
 	{
+		// free additionally loaded modules
+		for (auto module: modules_) Py_DecRef(module);
+
 		/* TODO: for some reason, finalize crashes on Windows, at least if no python
 		 * module has been found. We need to fix this correctly.
 		 */
@@ -103,13 +107,15 @@ namespace BALL
 
 		// run the string through the interpreter
 		// (with Py_file_input, return value is always Py_None)
-		PyRun_String(str.c_str(), Py_file_input, context_, context_);
+		Py_DecRef(PyRun_String(str.c_str(), Py_file_input, context_, context_));
 
 		if (errorOccurred()) return {false, ""};
 
 		auto cio = PyObject_GetAttrString(main_module_, "__BALL_CIO");
 		auto cio_val = PyObject_GetAttrString(cio, "getvalue");
-		auto ret = std::make_pair(true, PyString_AsString(PyObject_CallFunction(cio_val, nullptr)));
+		auto cio_f = PyObject_CallFunction(cio_val, nullptr);
+		auto ret = std::make_pair(true, PyString_AsString(cio_f));
+		Py_DecRef(cio_f);
 		Py_DecRef(cio_val);
 		Py_DecRef(cio);
 		return ret;
@@ -149,6 +155,7 @@ namespace BALL
 		if (!func || !PyCallable_Check(func))
 		{
 			PyErr_Print();
+			Py_DecRef(func);
 			return false;
 		}
 
@@ -157,36 +164,39 @@ namespace BALL
 		if (!dict)
 		{
 			Log.error() << "[PyInterpreter] Could not create named arguments dictionary" << std::endl;
+			Py_DecRef(func);
 			return false;
 		}
 
 		for (const auto& pair: args)
 		{
-			PyObject* val = PyString_FromString(pair.second.c_str());
+			auto val = PyString_FromString(pair.second.c_str());
 			if (!val)
 			{
-				Log.error() << "[PyInterpreter] Could not create parameter"
-				            << pair.first << "=" << pair.second << " Skipping." << std::endl;
+				Log.error() << "[PyInterpreter] Could not create parameter "
+				            << pair.first << " = " << pair.second << "! Skipping..." << std::endl;
 				continue;
 			}
 			PyDict_SetItemString(dict, pair.first.c_str(), val);
+			Py_DecRef(val);
 		}
-
-		Py_DecRef(dict);
 
 		auto dummy = PyTuple_New(0);
 
 		if (!dummy)
 		{
 			Log.error() << "[PyInterpreter] Could not allocate dummy tuple" << std::endl;
+			Py_DecRef(func);
+			Py_DecRef(dict);
 			return false;
 		}
 
 		auto res = PyObject_Call(func, dummy, dict);
 
 		Py_DecRef(res);
+		Py_DecRef(func);
 		Py_DecRef(dummy);
-
+		Py_DecRef(dict);
 		return true;
 	}
 
@@ -209,12 +219,11 @@ namespace BALL
 		}
 		else
 		{
-			//This could leak the imported module. Need to check...
 			module = PyImport_ImportModule(name.c_str());
+			if (module) modules_.push_back(module); // module will be de-allocated on kernel destruction
 		}
 
 		Py_DecRef(mod_name);
-
 
 		if (!module || PyErr_Occurred())
 		{
