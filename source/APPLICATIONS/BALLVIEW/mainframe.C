@@ -208,6 +208,9 @@ namespace BALL
 
 	Mainframe::~Mainframe()
 	{
+		#ifdef BALL_PYTHON_SUPPORT
+			PyInterpreter::finalize();
+		#endif
 	}
 
 
