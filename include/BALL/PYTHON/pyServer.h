@@ -1,11 +1,13 @@
 #ifndef BALL_PYTHON_PYSERVER_H
 #define BALL_PYTHON_PYSERVER_H
 
+#include <BALL/COMMON/global.h>
+
 #include <QtNetwork/QTcpServer>
 
 namespace BALL
 {
-	class PyServer : public QObject
+	class BALL_EXPORT PyServer : public QObject
 	{
 		Q_OBJECT
 
@@ -17,7 +19,6 @@ namespace BALL
 
 			~PyServer();
 
-		public slots:
 			/**
 			 * Processes a single request and sends a suitable response.
 			 */
