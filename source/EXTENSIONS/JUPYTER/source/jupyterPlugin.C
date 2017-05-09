@@ -13,7 +13,9 @@ namespace BALL
 		{ }
 
 		JupyterPlugin::~JupyterPlugin()
-		{ }
+		{
+			delete preferences_;
+		}
 
 		QString JupyterPlugin::getName() const
 		{
