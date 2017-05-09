@@ -59,14 +59,14 @@ namespace BALL
 
 #ifndef BALL_HAS_RTFACT
 			radioButton_rtfact->setEnabled(false);
-			radioButton_opengl->setChecked(true);
 #else
-			radioButton_rtfact->setChecked(true);
 			controlRenderer_comboBox->addItem(tr("RTfact"));
 			stereoScreensRenderer_comboBox->addItem(tr("RTfact"));
 			stereoScreensRenderer_comboBox->setCurrentIndex(2);
 #endif
-// TODO: this is the bad ms wischa hack!! Remove after the children are gone!
+			radioButton_opengl->setChecked(true);
+
+			// TODO: this is the bad ms wischa hack!! Remove after the children are gone!
 			controlRenderer_comboBox->setCurrentIndex(2);
 			leftEyeScreen_comboBox->setCurrentIndex(2);
 			rightEyeScreen_comboBox->setCurrentIndex(2);
