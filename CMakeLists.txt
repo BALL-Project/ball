@@ -127,10 +127,7 @@ ENDIF()
 
 
 ## XDR related stuff
-FIND_PACKAGE(XDR)
-IF (XDR_FOUND)
-	INCLUDE(BALLConfigXDR)
-ENDIF()
+INCLUDE(BALLConfigXDR)
 
 ## Boost and Asio
 INCLUDE(BALLConfigBoost)
@@ -280,9 +277,8 @@ SET(QT_MIN_VERSION 5.5)
 FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Core Network Xml)
 
 LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
-			       Qt5::Network
-                               Qt5::Xml
-			       )
+                               Qt5::Network
+                               Qt5::Xml)
 
 IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets)
@@ -294,8 +290,8 @@ IF (BALL_HAS_VIEW)
 
 	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::OpenGL
 	                               Qt5::PrintSupport
-				       Qt5::Test
-				       Qt5::Widgets)
+	                               Qt5::Test
+	                               Qt5::Widgets)
 
 	# WebEngine support
 	IF(USE_QTWEBENGINE)
