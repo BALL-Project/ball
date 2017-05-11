@@ -175,7 +175,7 @@ namespace BALL
 			QString qt = ui_->pubchem_label->displayText();
 
 			if ( qt == "" ) return;
-			QString pug_query_("http://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/%1/%2/SDF");
+			QString pug_query_("https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/%1/%2/SDF");
 
 			if(!network_manager_) {
 				network_manager_ = new QNetworkAccessManager(this);
