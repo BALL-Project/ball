@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-
-#include <BALL/FORMAT/molFileFactory.h>
+ 
+   #include <BALL/FORMAT/molFileFactory.h>
 #include <BALL/FORMAT/commandlineParser.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
