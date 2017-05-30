@@ -13,8 +13,9 @@
 
 Q_DECLARE_METATYPE(BALL::VIEW::VIEWPlugin*)
 
-#include <QtWidgets/QFileDialog>
+#include <QtCore/QCoreApplication>
 #include <QtCore/QLibraryInfo>
+#include <QtWidgets/QFileDialog>
 
 namespace BALL
 {
@@ -173,6 +174,54 @@ namespace BALL
 
 			ui_->plugin_view->setModel(&plugin_model_);
 			ui_->plugin_directories_view->setModel(&plugin_dir_model_);
+
+#ifdef BALL_OS_DARWIN
+
+			// On macOS, we can locate potential default plugin directories relative
+			// to the directory (absolute path) containing the BALLView binary.
+			// The latter has the suffix BALLView.app/Contents/MacOS
+
+			QDir app_dir = QDir(QCoreApplication::applicationDirPath());
+
+			// Option 1: BALLView bundle installation
+			// Plugins will reside in BALLView.app/Contents/plugins
+			if(app_dir.cd("../plugins"))
+			{
+				plugin_dir_model_.addDirectory(app_dir.path());
+			}
+			else
+			{
+				// Option 2: BALLView build from source
+				// Plugins will reside in <build_dir>/lib
+				if (app_dir.cd("../../../../lib"))
+				{
+					plugin_dir_model_.addDirectory(app_dir.path());
+				}
+			}
+
+#elif defined BALL_OS_LINUX
+
+			// On Linux, we can locate the default plugin directory relative
+			// to the directory (absolute path) containing the BALLView binary.
+
+			QDir app_dir = QDir(QCoreApplication::applicationDirPath());
+
+			// For installed BALLView binaries and source builds the folder hierarchy is identical.
+			// BALLView will reside in <install_or_build_dir>/bin
+			// Plugins will reside in  <install_or_build_dir>/lib
+			if(app_dir.cd("../lib"))
+			{
+				plugin_dir_model_.addDirectory(app_dir.path());
+			}
+
+#elif defined BALL_OS_WINDOWS
+
+			// On Windows, BALLView plugins reside in the same folder as the BALLView executable.
+			// Thus, we simply can use this path as the default plugin directory.
+
+			plugin_dir_model_.addDirectory(QCoreApplication::applicationDirPath());
+
+#endif
 
 			plugin_model_.pluginsLoaded();
 
