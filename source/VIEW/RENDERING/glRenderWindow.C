@@ -40,14 +40,14 @@ namespace BALL
 
 		GLRenderWindow::GLRenderWindow()
 			: QGLWidget(gl_format_),
-			  stereo_delta_(0.),
+			  stereo_delta_(0.f),
 			  m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 			  ignore_events_(false),
-			  down_sampling_factor_(1.)
+			  down_sampling_factor_(1.f)
 		{		
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
@@ -56,7 +56,7 @@ namespace BALL
 
 		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* /*name*/, Qt::WindowFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, nullptr, w_flags),
-			  stereo_delta_(0.),
+			  stereo_delta_(0.f),
 			  m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
@@ -76,14 +76,14 @@ namespace BALL
 
 		GLRenderWindow::GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* /*name*/, Qt::WindowFlags w_flags)
 			: QGLWidget(gl_format_, parent_widget, &window, w_flags),
-			  stereo_delta_(0.),
+			  stereo_delta_(0.f),
 			  m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
 			  FB_TEXTURE_FORMAT(GL_RGB),
 			  FB_INTERNAL_TEXTURE_FORMAT(GL_RGB),
 			  FB_TEXTURE_DATATYPE(GL_FLOAT),
 			  ignore_events_(false),
-			  down_sampling_factor_(1.)
+			  down_sampling_factor_(1.f)
 		{
 			// we will swap buffers manually in the scene for synchronization
 			setAutoBufferSwap(false);
@@ -178,8 +178,8 @@ namespace BALL
 			float origWidth = static_cast<float>(m_fmt.getWidth());
 			float newWidth = (origWidth + fabs(stereo_delta_));
 			float newRatio = origWidth / newWidth;
-			float deltaRatio = 1. - newRatio;
-				
+			float deltaRatio = 1.f - newRatio;
+
 			glBegin(GL_QUADS);
 			
 			if (stereo_delta_ <= 0.)
@@ -361,7 +361,7 @@ namespace BALL
 		
 		void GLRenderWindow::setupStereo(float eye_separation, float focal_length)
 		{
-				float aperture = 60.;
+				float aperture = 60.f;
 				float width = static_cast<float>(m_fmt.getWidth());
 				
 				//formula according to Paul Bourke
