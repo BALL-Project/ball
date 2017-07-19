@@ -37,8 +37,10 @@ namespace BALL
 				and exports them into a data file in the XML3DRay 1.5 format, which can
 				be used to render the same scene externally.
 				\ingroup ViewRendering
+
+			@deprecated Incompatible with recent XML3D versions
 		*/
-		class BALL_VIEW_EXPORT XML3DRenderer : public Renderer
+		class BALL_DEPRECATED BALL_VIEW_EXPORT XML3DRenderer : public Renderer
 		{
 			public:
 
