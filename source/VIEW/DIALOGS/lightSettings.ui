@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>675</width>
-    <height>432</height>
+    <height>446</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -82,7 +82,7 @@
        <property name="title">
         <string>Orientation</string>
        </property>
-       <layout class="QGridLayout">
+       <layout class="QGridLayout" name="gridLayout1">
         <item row="2" column="0" colspan="2">
          <widget class="QRadioButton" name="relative">
           <property name="toolTip">

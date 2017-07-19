@@ -1,10 +1,8 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>GeometricFitDialogData</class>
- <widget class="QDialog" name="GeometricFitDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="GeometricFitDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,363 +10,361 @@
     <height>313</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="maximumSize" >
+  <property name="maximumSize">
    <size>
     <width>450</width>
     <height>350</height>
    </size>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Geometric Fit Options</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="leftMargin">
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
+    <number>9</number>
+   </property>
+   <property name="spacing">
     <number>6</number>
    </property>
-   <item row="0" column="0" colspan="3" >
-    <widget class="QGroupBox" name="buttonGroup15" >
-     <layout class="QGridLayout" >
-      <property name="margin" >
+   <item row="0" column="0" colspan="3">
+    <widget class="QGroupBox" name="buttonGroup15">
+     <layout class="QGridLayout">
+      <property name="leftMargin">
        <number>11</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin">
+       <number>11</number>
+      </property>
+      <property name="rightMargin">
+       <number>11</number>
+      </property>
+      <property name="bottomMargin">
+       <number>11</number>
+      </property>
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="4" column="0" >
-       <widget class="QLabel" name="near_radius_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="4" column="0">
+       <widget class="QLabel" name="near_radius_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>near radius</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="inside_value_1_label_2" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="3" column="0">
+       <widget class="QLabel" name="inside_value_1_label_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>penalty value for mobile partner</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="surface_thickness" >
-        <property name="minimumSize" >
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="surface_thickness">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>130</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>1.0</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="sur_thick_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="0" column="0">
+       <widget class="QLabel" name="sur_thick_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>surface thickness</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="0" >
-       <widget class="QLabel" name="deg_interval_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="5" column="0">
+       <widget class="QLabel" name="deg_interval_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>degree interval for rotation</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0" >
-       <widget class="QLabel" name="peak_num_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="6" column="0">
+       <widget class="QLabel" name="peak_num_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>number of peaks for each rotation</string>
         </property>
        </widget>
       </item>
-      <item row="7" column="1" >
-       <widget class="QComboBox" name="surface_type" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
+      <item row="7" column="1">
+       <widget class="QComboBox" name="surface_type">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>130</width>
           <height>23</height>
          </size>
         </property>
-        <property name="acceptDrops" >
+        <property name="acceptDrops">
          <bool>false</bool>
         </property>
-        <property name="currentIndex" >
+        <property name="currentIndex">
          <number>0</number>
         </property>
-        <property name="insertPolicy" >
+        <property name="insertPolicy">
          <enum>QComboBox::InsertAtTop</enum>
         </property>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>Connolly</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>van der Waals</string>
          </property>
         </item>
         <item>
-         <property name="text" >
+         <property name="text">
           <string>FTDock</string>
          </property>
         </item>
        </widget>
       </item>
-      <item row="7" column="0" >
-       <widget class="QLabel" name="surface_type_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="7" column="0">
+       <widget class="QLabel" name="surface_type_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>200</width>
           <height>32767</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>surface type</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="inside_value_1_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="2" column="0">
+       <widget class="QLabel" name="inside_value_1_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>penalty value for static partner</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QLineEdit" name="penalty_static" >
-        <property name="minimumSize" >
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="penalty_static">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>130</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>-15</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
-       <widget class="QLineEdit" name="penalty_mobile" >
-        <property name="minimumSize" >
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="penalty_mobile">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>80</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>1</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="grid_spacing" >
-        <property name="minimumSize" >
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="grid_spacing">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>130</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>1.0</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="4" column="1" >
-       <widget class="QLineEdit" name="near_radius" >
-        <property name="minimumSize" >
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="near_radius">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>80</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>1.8</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="5" column="1" >
-       <widget class="QLineEdit" name="deg_interval" >
-        <property name="minimumSize" >
+      <item row="5" column="1">
+       <widget class="QLineEdit" name="deg_interval">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>80</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>20</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="6" column="1" >
-       <widget class="QLineEdit" name="peak_num" >
-        <property name="minimumSize" >
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="peak_num">
+        <property name="minimumSize">
          <size>
           <width>135</width>
           <height>23</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>80</width>
           <height>23</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>3</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="grid_spacing_label" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="1" column="0">
+       <widget class="QLabel" name="grid_spacing_label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>grid spacing</string>
         </property>
        </widget>
@@ -376,76 +372,69 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2" >
-    <widget class="QPushButton" name="reset_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>0</vsizetype>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="reset_button">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>90</width>
        <height>0</height>
       </size>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Reset</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QPushButton" name="ok_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>0</vsizetype>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="ok_button">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>90</width>
        <height>0</height>
       </size>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>OK</string>
      </property>
-     <property name="default" >
+     <property name="default">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QPushButton" name="cancel_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>0</vsizetype>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="cancel_button">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>90</width>
        <height>0</height>
       </size>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>Cancel</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>surface_thickness</tabstop>
   <tabstop>grid_spacing</tabstop>
@@ -467,11 +456,11 @@
    <receiver>GeometricFitDialogData</receiver>
    <slot>reject()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>217</x>
      <y>294</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>212</x>
      <y>306</y>
     </hint>
@@ -483,11 +472,11 @@
    <receiver>GeometricFitDialogData</receiver>
    <slot>accept()</slot>
    <hints>
-    <hint type="sourcelabel" >
+    <hint type="sourcelabel">
      <x>122</x>
      <y>289</y>
     </hint>
-    <hint type="destinationlabel" >
+    <hint type="destinationlabel">
      <x>120</x>
      <y>307</y>
     </hint>

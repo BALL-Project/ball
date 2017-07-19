@@ -1,10 +1,8 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>PTEDialogData</class>
- <widget class="QWidget" name="PTEDialogData" >
-  <property name="geometry" >
+ <widget class="QWidget" name="PTEDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,42 +10,47 @@
     <height>272</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>0</hsizetype>
-    <vsizetype>0</vsizetype>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
     <horstretch>1</horstretch>
     <verstretch>1</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Peridodic Table of Elements</string>
   </property>
-  <property name="toolTip" >
+  <property name="toolTip">
    <string/>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="leftMargin">
     <number>9</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
+    <number>9</number>
+   </property>
+   <property name="spacing">
     <number>6</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="element_group" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>7</vsizetype>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="element_group">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>1</horstretch>
        <verstretch>1</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Main elements</string>
      </property>
-     <widget class="QPushButton" name="pushButtonSe" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonSe">
+      <property name="geometry">
        <rect>
         <x>210</x>
         <y>140</y>
@@ -55,23 +58,21 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>3</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="whatsThis" >
+      <property name="whatsThis">
        <string/>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Se</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonBr" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonBr">
+      <property name="geometry">
        <rect>
         <x>250</x>
         <y>140</y>
@@ -79,20 +80,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>1</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Br</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonKr" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonKr">
+      <property name="geometry">
        <rect>
         <x>290</x>
         <y>140</y>
@@ -100,20 +99,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>1</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Kr</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonAr" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonAr">
+      <property name="geometry">
        <rect>
         <x>290</x>
         <y>100</y>
@@ -121,12 +118,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Ar</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonCl" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonCl">
+      <property name="geometry">
        <rect>
         <x>250</x>
         <y>100</y>
@@ -134,12 +131,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Cl</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonS" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonS">
+      <property name="geometry">
        <rect>
         <x>210</x>
         <y>100</y>
@@ -147,12 +144,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>S</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonP" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonP">
+      <property name="geometry">
        <rect>
         <x>170</x>
         <y>100</y>
@@ -160,12 +157,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>P</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonSi" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonSi">
+      <property name="geometry">
        <rect>
         <x>130</x>
         <y>100</y>
@@ -173,12 +170,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Si</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonAl" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonAl">
+      <property name="geometry">
        <rect>
         <x>90</x>
         <y>100</y>
@@ -186,12 +183,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Al</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonMg" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonMg">
+      <property name="geometry">
        <rect>
         <x>50</x>
         <y>100</y>
@@ -199,12 +196,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Mg</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonBe" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonBe">
+      <property name="geometry">
        <rect>
         <x>50</x>
         <y>60</y>
@@ -212,12 +209,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Be</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonB" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonB">
+      <property name="geometry">
        <rect>
         <x>90</x>
         <y>60</y>
@@ -225,12 +222,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>B</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonC" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonC">
+      <property name="geometry">
        <rect>
         <x>130</x>
         <y>60</y>
@@ -238,12 +235,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>C</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonN" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonN">
+      <property name="geometry">
        <rect>
         <x>170</x>
         <y>60</y>
@@ -251,12 +248,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>N</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonO" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonO">
+      <property name="geometry">
        <rect>
         <x>210</x>
         <y>60</y>
@@ -264,12 +261,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>O</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonF" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonF">
+      <property name="geometry">
        <rect>
         <x>250</x>
         <y>60</y>
@@ -277,12 +274,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>F</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonNe" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonNe">
+      <property name="geometry">
        <rect>
         <x>290</x>
         <y>60</y>
@@ -290,12 +287,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Ne</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="buttonHe" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="buttonHe">
+      <property name="geometry">
        <rect>
         <x>290</x>
         <y>20</y>
@@ -303,12 +300,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>He</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonLi" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonLi">
+      <property name="geometry">
        <rect>
         <x>10</x>
         <y>60</y>
@@ -316,12 +313,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Li</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonNa" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonNa">
+      <property name="geometry">
        <rect>
         <x>10</x>
         <y>100</y>
@@ -329,12 +326,12 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Na</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonCa" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonCa">
+      <property name="geometry">
        <rect>
         <x>50</x>
         <y>140</y>
@@ -342,20 +339,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>3</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Ca</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonGa" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonGa">
+      <property name="geometry">
        <rect>
         <x>90</x>
         <y>140</y>
@@ -363,20 +358,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>3</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Ga</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonGe" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonGe">
+      <property name="geometry">
        <rect>
         <x>130</x>
         <y>140</y>
@@ -384,20 +377,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>3</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Ge</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonAs" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonAs">
+      <property name="geometry">
        <rect>
         <x>170</x>
         <y>140</y>
@@ -405,20 +396,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>3</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>As</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButtonK" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="pushButtonK">
+      <property name="geometry">
        <rect>
         <x>10</x>
         <y>140</y>
@@ -426,20 +415,18 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>3</hsizetype>
-        <vsizetype>0</vsizetype>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>K</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="buttonH" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="buttonH">
+      <property name="geometry">
        <rect>
         <x>10</x>
         <y>20</y>
@@ -447,34 +434,42 @@
         <height>30</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>H</string>
       </property>
      </widget>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="title" >
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
       <string>All elements</string>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="leftMargin">
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="0" >
-       <widget class="QComboBox" name="element_box" />
+      <item row="0" column="0">
+       <widget class="QComboBox" name="element_box"/>
       </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>buttonH</tabstop>
   <tabstop>buttonHe</tabstop>

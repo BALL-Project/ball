@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>PropEditorWidget</class>
  <widget class="QWidget" name="PropEditorWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>128</width>
+    <height>41</height>
+   </rect>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QLabel" name="label_">

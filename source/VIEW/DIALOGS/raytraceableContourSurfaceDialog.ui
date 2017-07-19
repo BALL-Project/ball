@@ -1,10 +1,11 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>RaytraceableContourSurfaceDialogData</class>
- <widget class="QDialog" name="RaytraceableContourSurfaceDialogData" >
-  <property name="enabled" >
+ <widget class="QDialog" name="RaytraceableContourSurfaceDialogData">
+  <property name="enabled">
    <bool>true</bool>
   </property>
-  <property name="geometry" >
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,14 +13,14 @@
     <height>249</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Ray-traced Contour Surface Options</string>
   </property>
-  <property name="toolTip" >
-   <string comment="C" />
+  <property name="toolTip">
+   <string comment="C"/>
   </property>
-  <widget class="QGroupBox" name="groupBoxValue" >
-   <property name="geometry" >
+  <widget class="QGroupBox" name="groupBoxValue">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>10</y>
@@ -27,17 +28,17 @@
      <height>141</height>
     </rect>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>add contour surface</string>
    </property>
-   <property name="title" >
+   <property name="title">
     <string>Contour Threshold Value</string>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignHCenter</set>
    </property>
-   <widget class="QSlider" name="ContourSurfaceThresholdSlider" >
-    <property name="geometry" >
+   <widget class="QSlider" name="ContourSurfaceThresholdSlider">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>50</y>
@@ -45,24 +46,24 @@
       <height>20</height>
      </rect>
     </property>
-    <property name="toolTip" >
+    <property name="toolTip">
      <string>choose a contour Surface threshold of value</string>
     </property>
-    <property name="whatsThis" >
+    <property name="whatsThis">
      <string>slider to chose a threshold of a new contour surface</string>
     </property>
-    <property name="accessibleName" >
+    <property name="accessibleName">
      <string/>
     </property>
-    <property name="accessibleDescription" >
+    <property name="accessibleDescription">
      <string/>
     </property>
-    <property name="orientation" >
+    <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QLineEdit" name="ContourSurfaceThresholdLineEdit" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="ContourSurfaceThresholdLineEdit">
+    <property name="geometry">
      <rect>
       <x>250</x>
       <y>50</y>
@@ -70,15 +71,12 @@
       <height>24</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="contour surface threshold value" >contour surface threshold value</string>
+    <property name="toolTip">
+     <string comment="contour surface threshold value">contour surface threshold value</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="add_button" >
-    <property name="windowModality" >
-     <enum>Qt::WindowModal</enum>
-    </property>
-    <property name="geometry" >
+   <widget class="QPushButton" name="add_button">
+    <property name="geometry">
      <rect>
       <x>14</x>
       <y>100</y>
@@ -86,18 +84,15 @@
       <height>26</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="add a contour" />
+    <property name="toolTip">
+     <string comment="add a contour"/>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>add</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="OK_button" >
-    <property name="windowModality" >
-     <enum>Qt::WindowModal</enum>
-    </property>
-    <property name="geometry" >
+   <widget class="QPushButton" name="OK_button">
+    <property name="geometry">
      <rect>
       <x>130</x>
       <y>100</y>
@@ -105,18 +100,15 @@
       <height>26</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="add a contour" >add contour surface and close</string>
+    <property name="toolTip">
+     <string comment="add a contour">add contour surface and close</string>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>OK</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="cancel_button" >
-    <property name="windowModality" >
-     <enum>Qt::WindowModal</enum>
-    </property>
-    <property name="geometry" >
+   <widget class="QPushButton" name="cancel_button">
+    <property name="geometry">
      <rect>
       <x>250</x>
       <y>100</y>
@@ -124,16 +116,16 @@
       <height>26</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="cancel dialog" >cancel dialog</string>
+    <property name="toolTip">
+     <string comment="cancel dialog">cancel dialog</string>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>cancel</string>
     </property>
    </widget>
   </widget>
-  <widget class="QGroupBox" name="groupBoxValue_2" >
-   <property name="geometry" >
+  <widget class="QGroupBox" name="groupBoxValue_2">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>160</y>
@@ -141,17 +133,17 @@
      <height>81</height>
     </rect>
    </property>
-   <property name="toolTip" >
+   <property name="toolTip">
     <string>add contour surface</string>
    </property>
-   <property name="title" >
+   <property name="title">
     <string>Contour Threshold Range</string>
    </property>
-   <property name="alignment" >
+   <property name="alignment">
     <set>Qt::AlignHCenter</set>
    </property>
-   <widget class="QLabel" name="RangeLabel_min" >
-    <property name="geometry" >
+   <widget class="QLabel" name="RangeLabel_min">
+    <property name="geometry">
      <rect>
       <x>30</x>
       <y>20</y>
@@ -159,12 +151,12 @@
       <height>20</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>min</string>
     </property>
    </widget>
-   <widget class="QLabel" name="RangeLabel_max" >
-    <property name="geometry" >
+   <widget class="QLabel" name="RangeLabel_max">
+    <property name="geometry">
      <rect>
       <x>110</x>
       <y>20</y>
@@ -172,12 +164,12 @@
       <height>20</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>max</string>
     </property>
    </widget>
-   <widget class="QLabel" name="RangeLabel_steps" >
-    <property name="geometry" >
+   <widget class="QLabel" name="RangeLabel_steps">
+    <property name="geometry">
      <rect>
       <x>190</x>
       <y>20</y>
@@ -185,15 +177,12 @@
       <height>20</height>
      </rect>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>steps</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="autoRangeButton" >
-    <property name="windowModality" >
-     <enum>Qt::WindowModal</enum>
-    </property>
-    <property name="geometry" >
+   <widget class="QPushButton" name="autoRangeButton">
+    <property name="geometry">
      <rect>
       <x>260</x>
       <y>40</y>
@@ -201,15 +190,15 @@
       <height>26</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="set the range values to default values" >set the contour threshold range to default values</string>
+    <property name="toolTip">
+     <string comment="set the range values to default values">set the contour threshold range to default values</string>
     </property>
-    <property name="text" >
+    <property name="text">
      <string>auto</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="RangeLineEdit_steps" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="RangeLineEdit_steps">
+    <property name="geometry">
      <rect>
       <x>180</x>
       <y>40</y>
@@ -217,12 +206,12 @@
       <height>24</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="range steps" >set the number of steps</string>
+    <property name="toolTip">
+     <string comment="range steps">set the number of steps</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="RangeLineEdit_max" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="RangeLineEdit_max">
+    <property name="geometry">
      <rect>
       <x>100</x>
       <y>40</y>
@@ -230,12 +219,12 @@
       <height>24</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="maximum threshold" >set the maximum theshold</string>
+    <property name="toolTip">
+     <string comment="maximum threshold">set the maximum theshold</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="RangeLineEdit_min" >
-    <property name="geometry" >
+   <widget class="QLineEdit" name="RangeLineEdit_min">
+    <property name="geometry">
      <rect>
       <x>20</x>
       <y>40</y>
@@ -243,14 +232,14 @@
       <height>24</height>
      </rect>
     </property>
-    <property name="toolTip" >
-     <string comment="minimum threshold" >set the minimum threshold</string>
+    <property name="toolTip">
+     <string comment="minimum threshold">set the minimum threshold</string>
     </property>
    </widget>
   </widget>
  </widget>
  <resources>
-  <include location="raytraceableContourSurfaceDialog.qrc" />
+  <include location="raytraceableContourSurfaceDialog.qrc"/>
  </resources>
  <connections/>
 </ui>

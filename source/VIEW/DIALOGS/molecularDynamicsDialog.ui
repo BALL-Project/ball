@@ -1,211 +1,215 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>MolecularDynamicsDialogData</class>
- <widget class="QDialog" name="MolecularDynamicsDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="MolecularDynamicsDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>383</width>
-    <height>424</height>
+    <height>451</height>
    </rect>
   </property>
-  <property name="sizePolicy" >
-   <sizepolicy>
-    <hsizetype>5</hsizetype>
-    <vsizetype>5</vsizetype>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>0</width>
     <height>0</height>
    </size>
   </property>
-  <property name="maximumSize" >
+  <property name="maximumSize">
    <size>
     <width>9000</width>
     <height>9000</height>
    </size>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>MolecularDynamicsSimulation</string>
   </property>
-  <property name="toolTip" >
+  <property name="toolTip">
    <string/>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="leftMargin">
     <number>4</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin">
+    <number>4</number>
+   </property>
+   <property name="rightMargin">
+    <number>4</number>
+   </property>
+   <property name="bottomMargin">
+    <number>4</number>
+   </property>
+   <property name="spacing">
     <number>6</number>
    </property>
-   <item row="3" column="1" >
-    <widget class="QPushButton" name="cancel_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="cancel_button">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>150</width>
        <height>0</height>
       </size>
      </property>
-     <property name="maximumSize" >
+     <property name="maximumSize">
       <size>
        <width>32767</width>
        <height>30</height>
       </size>
      </property>
-     <property name="focusPolicy" >
+     <property name="focusPolicy">
       <enum>Qt::TabFocus</enum>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>C&amp;ancel</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+A</string>
      </property>
-     <property name="autoDefault" >
+     <property name="autoDefault">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <widget class="QPushButton" name="start_button" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>5</vsizetype>
+   <item row="3" column="0">
+    <widget class="QPushButton" name="start_button">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="minimumSize" >
+     <property name="minimumSize">
       <size>
        <width>150</width>
        <height>25</height>
       </size>
      </property>
-     <property name="focusPolicy" >
+     <property name="focusPolicy">
       <enum>Qt::TabFocus</enum>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Start simulation</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>&amp;Simulate</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+S</string>
      </property>
-     <property name="autoDefault" >
+     <property name="autoDefault">
       <bool>true</bool>
      </property>
-     <property name="default" >
+     <property name="default">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" colspan="2" >
-    <widget class="QGroupBox" name="GroupBox2_2" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>5</hsizetype>
-       <vsizetype>3</vsizetype>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="GroupBox2_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Trajectory</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignHCenter</set>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="leftMargin">
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="enable_dcd" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>1</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="enable_dcd">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Write trajectories to file in order to be able to watch snapshots</string>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>save to</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
-       <widget class="QPushButton" name="browse_button" >
-        <property name="text" >
+      <item row="0" column="2">
+       <widget class="QPushButton" name="browse_button">
+        <property name="text">
          <string>Browse</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="dcd_file_edit" >
-        <property name="enabled" >
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="dcd_file_edit">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>0</vsizetype>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>150</width>
           <height>25</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>200</width>
           <height>32767</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>trajectory.dcd</string>
         </property>
-        <property name="maxLength" >
+        <property name="maxLength">
          <number>32767</number>
         </property>
-        <property name="frame" >
+        <property name="frame">
          <bool>true</bool>
         </property>
-        <property name="echoMode" >
+        <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading</set>
         </property>
        </widget>
@@ -213,69 +217,78 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="QGroupBox" name="groupBox5" >
-     <property name="title" >
+   <item row="1" column="1">
+    <widget class="QGroupBox" name="groupBox5">
+     <property name="title">
       <string>Force Field</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignHCenter</set>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
+     <layout class="QVBoxLayout">
+      <property name="spacing">
        <number>6</number>
       </property>
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
       <item>
-       <widget class="QRadioButton" name="useAmberRadioButton" >
-        <property name="text" >
+       <widget class="QRadioButton" name="useAmberRadioButton">
+        <property name="text">
          <string>AMBER</string>
         </property>
-        <property name="shortcut" >
+        <property name="shortcut">
          <string/>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="useCharmmRadioButton" >
-        <property name="text" >
+       <widget class="QRadioButton" name="useCharmmRadioButton">
+        <property name="text">
          <string>CHARMM</string>
         </property>
-        <property name="shortcut" >
+        <property name="shortcut">
          <string/>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="useMMFF94RadioButton" >
-        <property name="text" >
+       <widget class="QRadioButton" name="useMMFF94RadioButton">
+        <property name="text">
          <string>MMFF94</string>
         </property>
-        <property name="shortcut" >
+        <property name="shortcut">
          <string/>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="advanced_button" >
-        <property name="minimumSize" >
+       <widget class="QPushButton" name="advanced_button">
+        <property name="minimumSize">
          <size>
           <width>0</width>
           <height>30</height>
          </size>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Alter force field options</string>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>&amp;ForceField Options</string>
         </property>
-        <property name="shortcut" >
+        <property name="shortcut">
          <string>Alt+F</string>
         </property>
        </widget>
@@ -283,40 +296,49 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0" >
-    <widget class="QGroupBox" name="dielectric_group_2" >
-     <property name="title" >
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="dielectric_group_2">
+     <property name="title">
       <string>Ensemble</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignHCenter</set>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
+     <layout class="QVBoxLayout">
+      <property name="spacing">
        <number>6</number>
       </property>
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
       <item>
-       <widget class="QRadioButton" name="canonical_button" >
-        <property name="text" >
+       <widget class="QRadioButton" name="canonical_button">
+        <property name="text">
          <string>canonical</string>
         </property>
-        <property name="checked" >
+        <property name="checked">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QRadioButton" name="microcanonical_button" >
-        <property name="minimumSize" >
+       <widget class="QRadioButton" name="microcanonical_button">
+        <property name="minimumSize">
          <size>
           <width>120</width>
           <height>0</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>microcanonical</string>
         </property>
        </widget>
@@ -324,419 +346,416 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QGroupBox" name="GroupBox_3" >
-     <property name="focusPolicy" >
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="GroupBox_3">
+     <property name="focusPolicy">
       <enum>Qt::NoFocus</enum>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Parameters</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignHCenter</set>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="leftMargin">
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="4" column="2" >
-       <widget class="QLabel" name="textLabel1" >
-        <property name="text" >
+      <item row="4" column="2">
+       <widget class="QLabel" name="textLabel1">
+        <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" >
-       <widget class="QLabel" name="temperature_2" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="4" column="0">
+       <widget class="QLabel" name="temperature_2">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>190</width>
           <height>0</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>200</width>
           <height>32767</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>steps between refresh</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" >
-       <widget class="QLabel" name="Label_4_2_2" >
-        <property name="minimumSize" >
+      <item row="2" column="2">
+       <widget class="QLabel" name="Label_4_2_2">
+        <property name="minimumSize">
          <size>
           <width>25</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>ps)</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="Label_4" >
-        <property name="minimumSize" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="Label_4">
+        <property name="minimumSize">
          <size>
           <width>150</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>number of steps</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" >
-       <widget class="QLineEdit" name="timestep_linedit" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="timestep_linedit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Timesteps in which snapshots are taken</string>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>0.0001</string>
         </property>
-        <property name="frame" >
+        <property name="frame">
          <bool>true</bool>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="steps_lineedit" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="steps_lineedit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>1000</string>
         </property>
-        <property name="frame" >
+        <property name="frame">
          <bool>true</bool>
         </property>
-        <property name="echoMode" >
+        <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="2" >
-       <widget class="QLabel" name="Label_4_2" >
-        <property name="minimumSize" >
+      <item row="1" column="2">
+       <widget class="QLabel" name="Label_4_2">
+        <property name="minimumSize">
          <size>
           <width>25</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>ps</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="4" column="1" >
-       <widget class="QLineEdit" name="refresh_lineedit" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="refresh_lineedit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>1</string>
         </property>
-        <property name="frame" >
+        <property name="frame">
          <bool>true</bool>
         </property>
-        <property name="echoMode" >
+        <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="1" >
-       <widget class="QLabel" name="time_lineedit" >
-        <property name="text" >
+      <item row="2" column="1">
+       <widget class="QLabel" name="time_lineedit">
+        <property name="text">
          <string>0.01</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
-       <widget class="QLabel" name="simulationtime_edit" >
-        <property name="minimumSize" >
+      <item row="2" column="0">
+       <widget class="QLabel" name="simulationtime_edit">
+        <property name="minimumSize">
          <size>
           <width>50</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>(total time:</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="Label_5" >
-        <property name="minimumSize" >
+      <item row="1" column="0">
+       <widget class="QLabel" name="Label_5">
+        <property name="minimumSize">
          <size>
           <width>130</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>timestep</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="1" >
-       <widget class="QLineEdit" name="temperature_lineedit" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="temperature_lineedit">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="maximumSize" >
+        <property name="maximumSize">
          <size>
           <width>110</width>
           <height>24</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::StrongFocus</enum>
         </property>
-        <property name="toolTip" >
+        <property name="toolTip">
          <string>Temperature in which the simulation runs</string>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>300</string>
         </property>
-        <property name="frame" >
+        <property name="frame">
          <bool>true</bool>
         </property>
-        <property name="echoMode" >
+        <property name="echoMode">
          <enum>QLineEdit::Normal</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="textLabel2" >
-        <property name="text" >
+      <item row="0" column="2">
+       <widget class="QLabel" name="textLabel2">
+        <property name="text">
          <string/>
         </property>
        </widget>
       </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="temperature" >
-        <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>7</hsizetype>
-          <vsizetype>5</vsizetype>
+      <item row="3" column="0">
+       <widget class="QLabel" name="temperature">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>150</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>temperature</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="3" column="2" >
-       <widget class="QLabel" name="Label_4_2_3" >
-        <property name="minimumSize" >
+      <item row="3" column="2">
+       <widget class="QLabel" name="Label_4_2_3">
+        <property name="minimumSize">
          <size>
           <width>25</width>
           <height>0</height>
          </size>
         </property>
-        <property name="focusPolicy" >
+        <property name="focusPolicy">
          <enum>Qt::NoFocus</enum>
         </property>
-        <property name="lineWidth" >
+        <property name="lineWidth">
          <number>1</number>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>K</string>
         </property>
-        <property name="textFormat" >
+        <property name="textFormat">
          <enum>Qt::AutoText</enum>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
@@ -746,8 +765,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>steps_lineedit</tabstop>
   <tabstop>timestep_linedit</tabstop>
@@ -766,7 +784,7 @@
   <tabstop>cancel_button</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
  <connections/>

@@ -1,10 +1,8 @@
-<ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>ClippingDialogData</class>
- <widget class="QDialog" name="ClippingDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="ClippingDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -12,14 +10,14 @@
     <height>593</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Clipping Dialog</string>
   </property>
-  <property name="sizeGripEnabled" >
+  <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
-  <widget class="QLabel" name="textLabel1" >
-   <property name="geometry" >
+  <widget class="QLabel" name="textLabel1">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>7</y>
@@ -27,12 +25,12 @@
      <height>35</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>Select the representations to be clipped by this plane:</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="buttonOk" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="buttonOk">
+   <property name="geometry">
     <rect>
      <x>11</x>
      <y>557</y>
@@ -40,21 +38,21 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>O&amp;K</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+K</string>
    </property>
-   <property name="autoDefault" >
+   <property name="autoDefault">
     <bool>true</bool>
    </property>
-   <property name="default" >
+   <property name="default">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="buttonCancel" >
-   <property name="geometry" >
+  <widget class="QPushButton" name="buttonCancel">
+   <property name="geometry">
     <rect>
      <x>256</x>
      <y>557</y>
@@ -62,18 +60,18 @@
      <height>25</height>
     </rect>
    </property>
-   <property name="text" >
+   <property name="text">
     <string>C&amp;ancel</string>
    </property>
-   <property name="shortcut" >
+   <property name="shortcut">
     <string>Alt+A</string>
    </property>
-   <property name="autoDefault" >
+   <property name="autoDefault">
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QTableWidget" name="listview" >
-   <property name="geometry" >
+  <widget class="QTableWidget" name="listview">
+   <property name="geometry">
     <rect>
      <x>10</x>
      <y>40</y>
@@ -83,8 +81,7 @@
    </property>
   </widget>
  </widget>
- <layoutdefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>listview</tabstop>
   <tabstop>buttonOk</tabstop>

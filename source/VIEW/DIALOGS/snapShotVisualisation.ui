@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>SnapshotVisualisationDialogData</class>
- <widget class="QDialog" name="SnapshotVisualisationDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="SnapshotVisualisationDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,276 +10,291 @@
     <height>332</height>
    </rect>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>0</width>
     <height>0</height>
    </size>
   </property>
-  <property name="maximumSize" >
+  <property name="maximumSize">
    <size>
     <width>3900</width>
     <height>3400</height>
    </size>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Snapshot Visualisation</string>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QGridLayout">
+   <property name="leftMargin">
     <number>4</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin">
+    <number>4</number>
+   </property>
+   <property name="rightMargin">
+    <number>4</number>
+   </property>
+   <property name="bottomMargin">
+    <number>4</number>
+   </property>
+   <property name="spacing">
     <number>6</number>
    </property>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QGroupBox" name="sliderBox" >
-     <property name="title" >
+   <item row="0" column="0" colspan="2">
+    <widget class="QGroupBox" name="sliderBox">
+     <property name="title">
       <string>Navigation</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignHCenter</set>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="leftMargin">
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin">
+       <number>9</number>
+      </property>
+      <property name="rightMargin">
+       <number>9</number>
+      </property>
+      <property name="bottomMargin">
+       <number>9</number>
+      </property>
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="2" column="0" colspan="4" >
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
+      <item row="2" column="0" colspan="4">
+       <layout class="QHBoxLayout">
+        <property name="spacing">
          <number>6</number>
         </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QPushButton" name="firstSnapshotButton" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+         <widget class="QPushButton" name="firstSnapshotButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>21</width>
             <height>31</height>
            </size>
           </property>
-          <property name="toolTip" >
+          <property name="toolTip">
            <string>First snapshot</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>|&lt;</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="tenBackwardButton" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+         <widget class="QPushButton" name="tenBackwardButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>21</width>
             <height>31</height>
            </size>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>&lt;&lt;</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="oneBackwardButton" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+         <widget class="QPushButton" name="oneBackwardButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>21</width>
             <height>31</height>
            </size>
           </property>
-          <property name="toolTip" >
+          <property name="toolTip">
            <string>One snapshot backwards</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>&lt;</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="oneForwardButton" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+         <widget class="QPushButton" name="oneForwardButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>21</width>
             <height>31</height>
            </size>
           </property>
-          <property name="toolTip" >
+          <property name="toolTip">
            <string>One snapshot further</string>
           </property>
-          <property name="text" >
-           <string>></string>
+          <property name="text">
+           <string>&gt;</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="tenForwardButton" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+         <widget class="QPushButton" name="tenForwardButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>21</width>
             <height>31</height>
            </size>
           </property>
-          <property name="text" >
-           <string>>></string>
+          <property name="text">
+           <string>&gt;&gt;</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="lastSnapshotButton" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>7</hsizetype>
-            <vsizetype>0</vsizetype>
+         <widget class="QPushButton" name="lastSnapshotButton">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="minimumSize" >
+          <property name="minimumSize">
            <size>
             <width>21</width>
             <height>31</height>
            </size>
           </property>
-          <property name="toolTip" >
+          <property name="toolTip">
            <string>Last snapshot</string>
           </property>
-          <property name="text" >
-           <string>>|</string>
+          <property name="text">
+           <string>&gt;|</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="0" column="2" >
-       <widget class="QLabel" name="TextLabel2_2" >
-        <property name="minimumSize" >
+      <item row="0" column="2">
+       <widget class="QLabel" name="TextLabel2_2">
+        <property name="minimumSize">
          <size>
           <width>50</width>
           <height>0</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Current</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="4" >
-       <widget class="QSlider" name="snapShotSlider" >
-        <property name="minimumSize" >
+      <item row="1" column="0" colspan="4">
+       <widget class="QSlider" name="snapShotSlider">
+        <property name="minimumSize">
          <size>
           <width>360</width>
           <height>0</height>
          </size>
         </property>
-        <property name="cursor" >
-         <cursor>0</cursor>
+        <property name="cursor">
+         <cursorShape>ArrowCursor</cursorShape>
         </property>
-        <property name="minimum" >
+        <property name="minimum">
          <number>1</number>
         </property>
-        <property name="pageStep" >
+        <property name="pageStep">
          <number>5</number>
         </property>
-        <property name="orientation" >
+        <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
-        <property name="tickInterval" >
+        <property name="tickInterval">
          <number>20</number>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="TextLabel2" >
-        <property name="minimumSize" >
+      <item row="0" column="0">
+       <widget class="QLabel" name="TextLabel2">
+        <property name="minimumSize">
          <size>
           <width>70</width>
           <height>0</height>
          </size>
         </property>
-        <property name="text" >
+        <property name="text">
          <string>Snapshots</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="QLineEdit" name="numberOfSnapshots" >
-        <property name="enabled" >
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="numberOfSnapshots">
+        <property name="enabled">
          <bool>false</bool>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>90</width>
           <height>0</height>
          </size>
         </property>
-        <property name="readOnly" >
+        <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="3" >
-       <widget class="QLineEdit" name="currentSnapshot" >
-        <property name="enabled" >
+      <item row="0" column="3">
+       <widget class="QLineEdit" name="currentSnapshot">
+        <property name="enabled">
          <bool>true</bool>
         </property>
-        <property name="minimumSize" >
+        <property name="minimumSize">
          <size>
           <width>90</width>
           <height>0</height>
          </size>
         </property>
-        <property name="readOnly" >
+        <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
@@ -286,106 +302,124 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="QPushButton" name="cancelButton" >
-     <property name="minimumSize" >
+   <item row="2" column="1">
+    <widget class="QPushButton" name="cancelButton">
+     <property name="minimumSize">
       <size>
        <width>180</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Close window</string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>C&amp;ancel</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+A</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="0" >
-    <widget class="QPushButton" name="animateButton" >
-     <property name="minimumSize" >
+   <item row="2" column="0">
+    <widget class="QPushButton" name="animateButton">
+     <property name="minimumSize">
       <size>
        <width>180</width>
        <height>32</height>
       </size>
      </property>
-     <property name="toolTip" >
+     <property name="toolTip">
       <string>Play snapshots </string>
      </property>
-     <property name="text" >
+     <property name="text">
       <string>A&amp;nimate</string>
      </property>
-     <property name="shortcut" >
+     <property name="shortcut">
       <string>Alt+N</string>
      </property>
-     <property name="default" >
+     <property name="default">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox2" >
-     <property name="title" >
+   <item row="1" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupBox2">
+     <property name="title">
       <string>Animation</string>
      </property>
-     <property name="alignment" >
+     <property name="alignment">
       <set>Qt::AlignHCenter</set>
      </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
+     <layout class="QGridLayout">
+      <property name="leftMargin">
        <number>4</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="rightMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
+      <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="1" >
-       <widget class="QGroupBox" name="groupBox10" >
-        <property name="title" >
+      <item row="0" column="1">
+       <widget class="QGroupBox" name="groupBox10">
+        <property name="title">
          <string>Repeat</string>
         </property>
-        <property name="alignment" >
+        <property name="alignment">
          <set>Qt::AlignHCenter</set>
         </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
+        <layout class="QGridLayout">
+         <property name="leftMargin">
           <number>9</number>
          </property>
-         <property name="spacing" >
+         <property name="topMargin">
+          <number>9</number>
+         </property>
+         <property name="rightMargin">
+          <number>9</number>
+         </property>
+         <property name="bottomMargin">
+          <number>9</number>
+         </property>
+         <property name="spacing">
           <number>6</number>
          </property>
-         <item row="2" column="0" >
-          <widget class="QRadioButton" name="rockLoopButton" >
-           <property name="enabled" >
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="rockLoopButton">
+           <property name="enabled">
             <bool>true</bool>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>Rock</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0" >
-          <widget class="QRadioButton" name="forwardLoopButton" >
-           <property name="enabled" >
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="forwardLoopButton">
+           <property name="enabled">
             <bool>true</bool>
            </property>
-           <property name="text" >
+           <property name="text">
             <string>Loop</string>
            </property>
-           <property name="checked" >
+           <property name="checked">
             <bool>false</bool>
            </property>
           </widget>
          </item>
-         <item row="0" column="0" >
-          <widget class="QRadioButton" name="noLoopButton" >
-           <property name="text" >
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="noLoopButton">
+           <property name="text">
             <string>Don't loop</string>
            </property>
-           <property name="checked" >
+           <property name="checked">
             <bool>true</bool>
            </property>
           </widget>
@@ -393,42 +427,51 @@
         </layout>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <layout class="QGridLayout" >
-        <property name="margin" >
+      <item row="0" column="0">
+       <layout class="QGridLayout">
+        <property name="leftMargin">
          <number>0</number>
         </property>
-        <property name="spacing" >
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
          <number>6</number>
         </property>
-        <item row="0" column="0" >
-         <widget class="QLabel" name="TextLabel2_3" >
-          <property name="minimumSize" >
+        <item row="0" column="0">
+         <widget class="QLabel" name="TextLabel2_3">
+          <property name="minimumSize">
            <size>
             <width>80</width>
             <height>0</height>
            </size>
           </property>
-          <property name="maximumSize" >
+          <property name="maximumSize">
            <size>
             <width>80</width>
             <height>32767</height>
            </size>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>Start</string>
           </property>
          </widget>
         </item>
-        <item row="1" column="1" >
-         <widget class="QLineEdit" name="endSnapshot" >
-          <property name="minimumSize" >
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="endSnapshot">
+          <property name="minimumSize">
            <size>
             <width>120</width>
             <height>25</height>
            </size>
           </property>
-          <property name="maximumSize" >
+          <property name="maximumSize">
            <size>
             <width>100</width>
             <height>32767</height>
@@ -436,34 +479,34 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="TextLabel2_4" >
-          <property name="minimumSize" >
+        <item row="1" column="0">
+         <widget class="QLabel" name="TextLabel2_4">
+          <property name="minimumSize">
            <size>
             <width>80</width>
             <height>0</height>
            </size>
           </property>
-          <property name="maximumSize" >
+          <property name="maximumSize">
            <size>
             <width>80</width>
             <height>32767</height>
            </size>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>End</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="1" >
-         <widget class="QLineEdit" name="startSnapshot" >
-          <property name="minimumSize" >
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="startSnapshot">
+          <property name="minimumSize">
            <size>
             <width>120</width>
             <height>25</height>
            </size>
           </property>
-          <property name="maximumSize" >
+          <property name="maximumSize">
            <size>
             <width>100</width>
             <height>32767</height>
@@ -471,182 +514,191 @@
           </property>
          </widget>
         </item>
-        <item row="2" column="0" colspan="2" >
-         <widget class="QGroupBox" name="groupBox4" >
-          <property name="title" >
+        <item row="2" column="0" colspan="2">
+         <widget class="QGroupBox" name="groupBox4">
+          <property name="title">
            <string>Speed</string>
           </property>
-          <property name="alignment" >
+          <property name="alignment">
            <set>Qt::AlignHCenter</set>
           </property>
-          <layout class="QGridLayout" >
-           <property name="margin" >
+          <layout class="QGridLayout">
+           <property name="leftMargin">
             <number>2</number>
            </property>
-           <property name="spacing" >
+           <property name="topMargin">
+            <number>2</number>
+           </property>
+           <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
+            <number>2</number>
+           </property>
+           <property name="spacing">
             <number>6</number>
            </property>
-           <item row="0" column="0" >
-            <widget class="QLineEdit" name="animationSpeedLineEdit" >
-             <property name="enabled" >
+           <item row="0" column="0">
+            <widget class="QLineEdit" name="animationSpeedLineEdit">
+             <property name="enabled">
               <bool>false</bool>
              </property>
-             <property name="maximumSize" >
+             <property name="maximumSize">
               <size>
                <width>80</width>
                <height>32767</height>
               </size>
              </property>
-             <property name="palette" >
+             <property name="palette">
               <palette>
                <active>
-                <colorrole role="WindowText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="WindowText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Button" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Button">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>221</red>
                    <green>223</green>
                    <blue>228</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Light" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Light">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Midlight" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Midlight">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Dark" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Dark">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>85</red>
                    <green>85</green>
                    <blue>85</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Mid" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Mid">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>199</red>
                    <green>199</green>
                    <blue>199</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Text" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Text">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="BrightText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="BrightText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="ButtonText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="ButtonText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Base" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Base">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Window" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Window">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>239</red>
                    <green>239</green>
                    <blue>239</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Shadow" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Shadow">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Highlight" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Highlight">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>103</red>
                    <green>141</green>
                    <blue>178</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="HighlightedText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="HighlightedText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Link" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Link">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>238</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="LinkVisited" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="LinkVisited">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>82</red>
                    <green>24</green>
                    <blue>139</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="AlternateBase" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="AlternateBase">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>232</red>
                    <green>232</green>
                    <blue>232</blue>
@@ -655,153 +707,153 @@
                 </colorrole>
                </active>
                <inactive>
-                <colorrole role="WindowText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="WindowText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Button" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Button">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>221</red>
                    <green>223</green>
                    <blue>228</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Light" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Light">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Midlight" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Midlight">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Dark" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Dark">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>85</red>
                    <green>85</green>
                    <blue>85</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Mid" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Mid">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>199</red>
                    <green>199</green>
                    <blue>199</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Text" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Text">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="BrightText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="BrightText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="ButtonText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="ButtonText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Base" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Base">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Window" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Window">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>239</red>
                    <green>239</green>
                    <blue>239</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Shadow" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Shadow">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Highlight" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Highlight">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>103</red>
                    <green>141</green>
                    <blue>178</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="HighlightedText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="HighlightedText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Link" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Link">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>238</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="LinkVisited" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="LinkVisited">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>82</red>
                    <green>24</green>
                    <blue>139</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="AlternateBase" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="AlternateBase">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>232</red>
                    <green>232</green>
                    <blue>232</blue>
@@ -810,153 +862,153 @@
                 </colorrole>
                </inactive>
                <disabled>
-                <colorrole role="WindowText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="WindowText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>128</red>
                    <green>128</green>
                    <blue>128</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Button" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Button">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>221</red>
                    <green>223</green>
                    <blue>228</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Light" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Light">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Midlight" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Midlight">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Dark" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Dark">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>85</red>
                    <green>85</green>
                    <blue>85</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Mid" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Mid">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>199</red>
                    <green>199</green>
                    <blue>199</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Text" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Text">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>199</red>
                    <green>199</green>
                    <blue>199</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="BrightText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="BrightText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="ButtonText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="ButtonText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>128</red>
                    <green>128</green>
                    <blue>128</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Base" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Base">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>239</red>
                    <green>239</green>
                    <blue>239</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Window" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Window">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>239</red>
                    <green>239</green>
                    <blue>239</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Shadow" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Shadow">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>0</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Highlight" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Highlight">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>86</red>
                    <green>117</green>
                    <blue>148</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="HighlightedText" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="HighlightedText">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>255</red>
                    <green>255</green>
                    <blue>255</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="Link" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="Link">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>0</red>
                    <green>0</green>
                    <blue>238</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="LinkVisited" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="LinkVisited">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>82</red>
                    <green>24</green>
                    <blue>139</blue>
                   </color>
                  </brush>
                 </colorrole>
-                <colorrole role="AlternateBase" >
-                 <brush brushstyle="SolidPattern" >
-                  <color alpha="255" >
+                <colorrole role="AlternateBase">
+                 <brush brushstyle="SolidPattern">
+                  <color alpha="255">
                    <red>232</red>
                    <green>232</green>
                    <blue>232</blue>
@@ -966,7 +1018,7 @@
                </disabled>
               </palette>
              </property>
-             <property name="font" >
+             <property name="font">
               <font>
                <family>Sans Serif</family>
                <pointsize>9</pointsize>
@@ -979,39 +1031,39 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1" >
-            <widget class="QSlider" name="animationSpeedSlider" >
-             <property name="minimumSize" >
+           <item row="0" column="1">
+            <widget class="QSlider" name="animationSpeedSlider">
+             <property name="minimumSize">
               <size>
                <width>120</width>
                <height>0</height>
               </size>
              </property>
-             <property name="maximumSize" >
+             <property name="maximumSize">
               <size>
                <width>120</width>
                <height>32767</height>
               </size>
              </property>
-             <property name="cursor" >
-              <cursor>6</cursor>
+             <property name="cursor">
+              <cursorShape>SizeHorCursor</cursorShape>
              </property>
-             <property name="toolTip" >
+             <property name="toolTip">
               <string>Select animation speed</string>
              </property>
-             <property name="minimum" >
+             <property name="minimum">
               <number>1</number>
              </property>
-             <property name="maximum" >
+             <property name="maximum">
               <number>10</number>
              </property>
-             <property name="pageStep" >
+             <property name="pageStep">
               <number>1</number>
              </property>
-             <property name="orientation" >
+             <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
-             <property name="tickInterval" >
+             <property name="tickInterval">
               <number>1</number>
              </property>
             </widget>
@@ -1021,48 +1073,57 @@
         </item>
        </layout>
       </item>
-      <item row="0" column="2" >
-       <layout class="QVBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
+      <item row="0" column="2">
+       <layout class="QVBoxLayout">
+        <property name="spacing">
          <number>6</number>
         </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
-         <widget class="QCheckBox" name="export_POV" >
-          <property name="minimumSize" >
+         <widget class="QCheckBox" name="export_POV">
+          <property name="minimumSize">
            <size>
             <width>110</width>
             <height>0</height>
            </size>
           </property>
-          <property name="toolTip" >
+          <property name="toolTip">
            <string>Export one PNG image for each Snapshot.</string>
           </property>
-          <property name="whatsThis" >
+          <property name="whatsThis">
            <string>Export one PNG image for each Snapshot.</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>export POVRay</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="export_PNG" >
-          <property name="minimumSize" >
+         <widget class="QCheckBox" name="export_PNG">
+          <property name="minimumSize">
            <size>
             <width>110</width>
             <height>0</height>
            </size>
           </property>
-          <property name="toolTip" >
+          <property name="toolTip">
            <string>Export one PNG image for each Snapshot.</string>
           </property>
-          <property name="whatsThis" >
+          <property name="whatsThis">
            <string>Export one PNG image for each Snapshot.</string>
           </property>
-          <property name="text" >
+          <property name="text">
            <string>export PNGs</string>
           </property>
          </widget>
@@ -1074,7 +1135,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>snapShotSlider</tabstop>
   <tabstop>currentSnapshot</tabstop>
@@ -1098,7 +1159,7 @@
   <tabstop>numberOfSnapshots</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
  <connections/>

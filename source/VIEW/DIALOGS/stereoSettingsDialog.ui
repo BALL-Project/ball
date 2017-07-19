@@ -1,7 +1,8 @@
-<ui version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>StereoSettingsDialogData</class>
- <widget class="QDialog" name="StereoSettingsDialogData" >
-  <property name="geometry" >
+ <widget class="QDialog" name="StereoSettingsDialogData">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -9,38 +10,47 @@
     <height>415</height>
    </rect>
   </property>
-  <property name="minimumSize" >
+  <property name="minimumSize">
    <size>
     <width>350</width>
     <height>0</height>
    </size>
   </property>
-  <property name="maximumSize" >
+  <property name="maximumSize">
    <size>
     <width>350</width>
     <height>32767</height>
    </size>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Set Camera</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
-   <property name="spacing" >
+  <layout class="QVBoxLayout">
+   <property name="spacing">
     <number>6</number>
    </property>
+   <property name="leftMargin">
+    <number>9</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>9</number>
+   </property>
+   <property name="bottomMargin">
+    <number>9</number>
+   </property>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="enabled" >
+    <widget class="QGroupBox" name="groupBox">
+     <property name="enabled">
       <bool>false</bool>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Screen Size</string>
      </property>
-     <widget class="QLabel" name="view_label_2" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_2">
+      <property name="geometry">
        <rect>
         <x>21</x>
         <y>21</y>
@@ -48,12 +58,12 @@
         <height>18</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>height</string>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_6" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_6">
+      <property name="geometry">
        <rect>
         <x>21</x>
         <y>44</y>
@@ -61,12 +71,12 @@
         <height>18</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>width</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="screen_height" >
-      <property name="geometry" >
+     <widget class="QLineEdit" name="screen_height">
+      <property name="geometry">
        <rect>
         <x>191</x>
         <y>19</y>
@@ -75,8 +85,8 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLineEdit" name="screen_width" >
-      <property name="geometry" >
+     <widget class="QLineEdit" name="screen_width">
+      <property name="geometry">
        <rect>
         <x>191</x>
         <y>49</y>
@@ -85,8 +95,8 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_4" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_4">
+      <property name="geometry">
        <rect>
         <x>281</x>
         <y>21</y>
@@ -94,12 +104,12 @@
         <height>18</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>cm</string>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_5" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_5">
+      <property name="geometry">
        <rect>
         <x>281</x>
         <y>44</y>
@@ -107,22 +117,22 @@
         <height>18</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>cm</string>
       </property>
      </widget>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_2" >
-     <property name="enabled" >
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="enabled">
       <bool>false</bool>
      </property>
-     <property name="title" >
+     <property name="title">
       <string>Viewer Position</string>
      </property>
-     <widget class="QLineEdit" name="viewer_height" >
-      <property name="geometry" >
+     <widget class="QLineEdit" name="viewer_height">
+      <property name="geometry">
        <rect>
         <x>190</x>
         <y>50</y>
@@ -131,8 +141,8 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_9" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_9">
+      <property name="geometry">
        <rect>
         <x>280</x>
         <y>20</y>
@@ -140,12 +150,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>cm</string>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_10" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_10">
+      <property name="geometry">
        <rect>
         <x>280</x>
         <y>50</y>
@@ -153,12 +163,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>cm</string>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_8" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_8">
+      <property name="geometry">
        <rect>
         <x>20</x>
         <y>50</y>
@@ -166,12 +176,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>height relative to screen</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="viewer_distance_from_screen" >
-      <property name="geometry" >
+     <widget class="QLineEdit" name="viewer_distance_from_screen">
+      <property name="geometry">
        <rect>
         <x>190</x>
         <y>18</y>
@@ -180,8 +190,8 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_7" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_7">
+      <property name="geometry">
        <rect>
         <x>20</x>
         <y>20</y>
@@ -189,19 +199,19 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>distance from screen</string>
       </property>
      </widget>
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_3" >
-     <property name="title" >
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
       <string>Stereo Settings</string>
      </property>
-     <widget class="QLabel" name="view_label_11" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_11">
+      <property name="geometry">
        <rect>
         <x>20</x>
         <y>50</y>
@@ -209,12 +219,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>eye separation</string>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_12" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_12">
+      <property name="geometry">
        <rect>
         <x>280</x>
         <y>20</y>
@@ -222,12 +232,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>A</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="eye_separation" >
-      <property name="geometry" >
+     <widget class="QLineEdit" name="eye_separation">
+      <property name="geometry">
        <rect>
         <x>190</x>
         <y>50</y>
@@ -236,8 +246,8 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_14" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_14">
+      <property name="geometry">
        <rect>
         <x>20</x>
         <y>20</y>
@@ -245,12 +255,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>focal distance</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="focal_distance" >
-      <property name="geometry" >
+     <widget class="QLineEdit" name="focal_distance">
+      <property name="geometry">
        <rect>
         <x>190</x>
         <y>18</y>
@@ -259,8 +269,8 @@
        </rect>
       </property>
      </widget>
-     <widget class="QLabel" name="view_label_13" >
-      <property name="geometry" >
+     <widget class="QLabel" name="view_label_13">
+      <property name="geometry">
        <rect>
         <x>280</x>
         <y>50</y>
@@ -268,12 +278,12 @@
         <height>21</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>A</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="reset_to_standard_button" >
-      <property name="geometry" >
+     <widget class="QPushButton" name="reset_to_standard_button">
+      <property name="geometry">
        <rect>
         <x>10</x>
         <y>80</y>
@@ -281,92 +291,97 @@
         <height>28</height>
        </rect>
       </property>
-      <property name="text" >
+      <property name="text">
        <string>Reset to Standard</string>
       </property>
      </widget>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
+    <layout class="QHBoxLayout">
+     <property name="spacing">
       <number>6</number>
      </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
      <item>
-      <widget class="QPushButton" name="ok_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+      <widget class="QPushButton" name="ok_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>0</width>
          <height>30</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>32767</width>
          <height>30</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Set camera to new coordinates</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>O&amp;K</string>
        </property>
-       <property name="shortcut" >
+       <property name="shortcut">
         <string>Alt+K</string>
        </property>
-       <property name="default" >
+       <property name="default">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="apply_button" >
-       <property name="text" >
+      <widget class="QPushButton" name="apply_button">
+       <property name="text">
         <string>&amp;Apply</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="cancel_button" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
+      <widget class="QPushButton" name="cancel_button">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize" >
+       <property name="minimumSize">
         <size>
          <width>0</width>
          <height>30</height>
         </size>
        </property>
-       <property name="maximumSize" >
+       <property name="maximumSize">
         <size>
          <width>32767</width>
          <height>30</height>
         </size>
        </property>
-       <property name="toolTip" >
+       <property name="toolTip">
         <string>Close window without reseting camera</string>
        </property>
-       <property name="text" >
+       <property name="text">
         <string>C&amp;ancel</string>
        </property>
-       <property name="shortcut" >
+       <property name="shortcut">
         <string>Alt+A</string>
        </property>
       </widget>
@@ -375,7 +390,7 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11" />
+ <layoutdefault spacing="6" margin="11"/>
  <tabstops>
   <tabstop>screen_height</tabstop>
   <tabstop>screen_width</tabstop>
@@ -383,7 +398,7 @@
   <tabstop>cancel_button</tabstop>
  </tabstops>
  <includes>
-  <include location="global" >BALL/COMMON/global.h</include>
+  <include location="global">BALL/COMMON/global.h</include>
  </includes>
  <resources/>
  <connections/>
