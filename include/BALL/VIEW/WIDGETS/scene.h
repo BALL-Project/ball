@@ -542,12 +542,6 @@ namespace BALL
 				void exportNextPOVRay();
 
 				///
-				void exportXML3D();
-
-				///
-				void dumpXML3D(std::ostream& xml3ddump);
-
-				///
 				void printScene();
 
 				/// show an dialog to save an PNG file to

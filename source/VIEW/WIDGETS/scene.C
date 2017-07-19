@@ -29,7 +29,6 @@
 
 #include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/XML3DRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
@@ -1417,12 +1416,6 @@ namespace BALL
 							UIOperationMode::MODE_ADVANCED);
 			setIcon(pov_action, "mimetype/text-x-povray", false);
 
-			description = "Shortcut|File|Export|XML3D";
-			insertMenuEntry(MainControl::FILE_EXPORT, tr("XML3D as XHTML"), this,
-							SLOT(exportXML3D()), description, QKeySequence(""),
-							tr("Export a XML3D/XHTML file from the Scene"),
-							UIOperationMode::MODE_ADVANCED);
-
 			description = "Shortcut|File|Export|VRML";
 			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this,
 							SLOT(showExportVRMLDialog()), description, QKeySequence(),
@@ -2307,71 +2300,6 @@ namespace BALL
 			{
 				setStatusbarText((String)tr("Exported POV to ") + result);
 				setWorkingDirFromFilename_(result);
-			}
-		}
-
-		void Scene::exportXML3D()
-		{
-			QString qresult = QFileDialog::getSaveFileName(
-												0,
-												"Export XML3D as XHTML File",
-												getWorkingDir().c_str(),
-												"*.xhtml");
-
-			if (qresult == QString::null) return;
-
-			String result = ascii(qresult);
-
-			if (!result.hasSuffix(".xhtml"))
-			{
-				result += ".xhtml";
-			}
-
-			bool ok = false;
-
-			try
-			{
-				main_display_->makeCurrent();
-				XML3DRenderer pr(result);
-				if (exportScene(pr)) ok = true;
-			}
-			catch(...)
-			{
-			}
-
-			if (!ok)
-			{
-				setStatusbarText("Could not export XML3D/XHTML to " + result, true);
-			}
-			else
-			{
-				setStatusbarText("Exported XML3D/XHTML  to " + result);
-				setWorkingDirFromFilename_(result);
-			}
-		}
-
-		void Scene::dumpXML3D(std::ostream& xml3ddump)
-		{
-			bool ok = false;
-
-			try
-			{
-//				main_display_->makeCurrent();
-				XML3DRenderer pr(xml3ddump);
-
-				if (exportScene(pr)) ok = true;
-			}
-			catch(...)
-			{
-			}
-
-			if (!ok)
-			{
-				setStatusbarText((String)tr("Could not export XML3D/XHTML to string"), true);
-			}
-			else
-			{
-				setStatusbarText((String)tr("Dumped XML3D/XHTML to string"));
 			}
 		}
 
