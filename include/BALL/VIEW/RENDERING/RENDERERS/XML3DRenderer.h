@@ -113,7 +113,7 @@ namespace BALL
 
 			/** Converts an Material into the corresponding shader properties.
 			 */
-			String XML3DRaytracingMaterial(const Stage::Material& input);
+			String XML3DRaytracingMaterial(const Stage::Material& /* input */);
 
 			/** Converts a Vector3 into a String in XML3DRay format.
 			 */
@@ -151,19 +151,19 @@ namespace BALL
 
 			void renderSphere_(const Sphere& sphere);
 			
-			void renderDisc_(const Disc& disc);
+			void renderDisc_(const Disc& /* disc */);
 
-			void renderTube_(const Tube& tube);
+			void renderTube_(const Tube& /* tube */);
 
 			void renderTwoColoredTube_(const TwoColoredTube& tube);
 
 			void renderMesh_(const Mesh& mesh);
 
-			void renderTwoColoredLine_(const TwoColoredLine& line);
+			void renderTwoColoredLine_(const TwoColoredLine& /* line */);
 
-			void renderLine_(const Line& line);
+			void renderLine_(const Line& /* line */);
 
-			void renderPoint_(const Point& point);
+			void renderPoint_(const Point& /* point */);
 
 			// do nothing
 			void renderLabel_(const Label&);

@@ -173,7 +173,7 @@ namespace BALL
 			return output;
 		}
 		
-		String XML3DRenderer::XML3DRaytracingMaterial(const Stage::Material& input)
+		String XML3DRenderer::XML3DRaytracingMaterial(const Stage::Material&)
 		{
 			String result;
       	
@@ -605,28 +605,28 @@ namespace BALL
 
 		}
 
-		void XML3DRenderer::renderDisc_(const Disc& disc)
+		void XML3DRenderer::renderDisc_(const Disc&)
 		{
 			// *Not Implemented yet*
 		}
 
-		void XML3DRenderer::renderLine_(const Line& line)
+		void XML3DRenderer::renderLine_(const Line&)
 		{
 			// *Not implemented yet*
 		}
 
-		void XML3DRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
+		void XML3DRenderer::renderTwoColoredLine_(const TwoColoredLine&)
 		{
 			// *Not implmented yet*
 		}
 
 
-		void XML3DRenderer::renderTube_(const Tube& tube)
+		void XML3DRenderer::renderTube_(const Tube&)
 		{
 			// *Not implmented yet*
 		}	
 
-		void XML3DRenderer::renderPoint_(const Point& point)
+		void XML3DRenderer::renderPoint_(const Point&)
 		{
 			// *Not implmented yet*
 		}
