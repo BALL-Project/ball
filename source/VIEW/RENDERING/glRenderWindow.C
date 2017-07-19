@@ -24,7 +24,13 @@ namespace BALL
 	  QGLFormat GLRenderWindow::gl_format_(
 				QGL::DepthBuffer 		 | 
 #ifndef BALL_OS_DARWIN
-				QGL::StereoBuffers 	 | 
+	/*
+	 * StereoBuffers on Linux/X11 are broken in QGLWidget 5.7.0 and 5.7.1
+	 * https://github.com/BALL-Project/ball/issues/630
+	 */
+#	if !defined(BALL_OS_LINUX) || QT_VERSION < QT_VERSION_CHECK(5, 7, 0) || QT_VERSION > QT_VERSION_CHECK(5, 7, 1)
+				QGL::StereoBuffers 	 |
+#	endif
 #endif
 				QGL::DoubleBuffer 	 | 
 				QGL::DirectRendering |
@@ -49,7 +55,7 @@ namespace BALL
 		}
 
 		GLRenderWindow::GLRenderWindow(QWidget* parent_widget, const char* /*name*/, Qt::WindowFlags w_flags)
-			: QGLWidget(gl_format_, parent_widget, (QGLWidget*)0, w_flags),
+			: QGLWidget(gl_format_, parent_widget, nullptr, w_flags),
 			  stereo_delta_(0.),
 			  m_screenTexID(0),
 			  FB_TEXTURE_TARGET(GL_TEXTURE_2D),
