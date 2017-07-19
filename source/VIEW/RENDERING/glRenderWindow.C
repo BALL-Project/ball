@@ -336,6 +336,8 @@ namespace BALL
 					refresh();
 					safeBufferSwap();
 					break;
+				default:
+					break;
 			}
 		}
 
