@@ -358,7 +358,8 @@ namespace BALL
 
 		/// BALLView Debug macro
 		#define BALLVIEW_DEBUG logString(String("A problem occurred in ") + __FILE__ + " " + \
-													 String(__LINE__) + ".  Please notify us per mail: ball@bioinf.uni-sb.de\n");
+		                                   String(__LINE__) + ". Please notify us on GitHub: " + \
+		                                   "https://github.com/ball-project/ball/issues\n");
 
 	
 		BALL_VIEW_EXPORT void processDropEvent(QDropEvent* e);
