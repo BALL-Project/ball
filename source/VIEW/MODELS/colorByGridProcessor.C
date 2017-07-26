@@ -58,9 +58,9 @@ namespace BALL
 			cm_.setRange(min_value_, max_value_);
 
 			std::vector<Vector4> interpolation_points(3);
-			interpolation_points[0] = Vector4(0.);
+			interpolation_points[0] = Vector4(0.f);
 			interpolation_points[1] = Vector4( (mid_value_ - min_value_) / (max_value_ - min_value_));
-			interpolation_points[2] = Vector4(1.);
+			interpolation_points[2] = Vector4(1.f);
 
 			cm_.setInterpolationBoundaries(interpolation_points);
 			cm_.createMap();
