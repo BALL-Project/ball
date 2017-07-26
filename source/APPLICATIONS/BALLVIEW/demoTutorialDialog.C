@@ -55,13 +55,19 @@ enum TutorialSteps
 
 
 DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
-	:	QDialog(parent),
-		Ui_DemoTutorialDialogData(),
-		ModularWidget(name),
-		surface_(0),
-		demo_action_(0),
-		tutorial_action_(0),
-		raytracing_tutorial_action_(0)
+	: QDialog(parent),
+	  Ui_DemoTutorialDialogData(),
+	  ModularWidget(name),
+	  tutorial_type_(DEMO),
+	  composites_(),
+	  grid_(nullptr),
+	  system_(nullptr),
+	  prefix_(""),
+	  current_step_(0),
+	  surface_(nullptr),
+	  demo_action_(nullptr),
+	  tutorial_action_(nullptr),
+	  raytracing_tutorial_action_(nullptr)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DemoTutorialDialog " << this << std::endl;
