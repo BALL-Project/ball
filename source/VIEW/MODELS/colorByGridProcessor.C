@@ -11,10 +11,18 @@ namespace BALL
 	namespace VIEW
 	{
 		 ColorByGridProcessor::ColorByGridProcessor(const RegularData3D* grid, const GridColorWidget* widget)
-			: min_value_(-1.0f),
+			: values_(),
+			  objects_(),
+			  min_value_(-1.0f),
 			  mid_value_(0.0f),
 			  max_value_(1.0f),
 			  normalization_enabled_(false),
+			  min_min_color_(),
+			  min_color_(),
+			  mid_color_(),
+			  max_color_(),
+			  max_max_color_(),
+			  cm_(),
 			  grid_(grid),
 			  num_levels_(0)
 		{
