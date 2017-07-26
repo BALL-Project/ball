@@ -138,14 +138,10 @@ void DemoTutorialDialog::initDemo_()
 String DemoTutorialDialog::getBaseDir_()
 {
 	Path p;
-	String dir = p.find(   String("..")
-	                     + FileSystem::PATH_SEPARATOR
-											 + "doc"
-											 + FileSystem::PATH_SEPARATOR
-											 + "internal" 
-											 + FileSystem::PATH_SEPARATOR );
-
-	return dir;
+	return p.find(String("..")
+	               + FileSystem::PATH_SEPARATOR + "doc"
+	               + FileSystem::PATH_SEPARATOR + "internal"
+	               + FileSystem::PATH_SEPARATOR);
 }
 
 void DemoTutorialDialog::initTutorials_()
@@ -275,7 +271,7 @@ void DemoTutorialDialog::onNotify(Message* message)
 			break;
 		case TUTORIAL: 
 			onNotifyTutorial_(message);
-			break;	 
+			break;
 		case RAYTRACING_TUTORIAL:
 			onNotifyRaytracingTutorial_(message);
 			break;
@@ -286,17 +282,16 @@ void DemoTutorialDialog::onNotifyDemo_(Message *message)
 {
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
-	if (current_step_ == 13 ||
-			current_step_ == 14)
+	if (current_step_ == 13 || current_step_ == 14)
 	{
-        if (!RTTI::isKindOf<FinishedSimulationMessage>(message)) return;
+		if (!RTTI::isKindOf<FinishedSimulationMessage>(message)) return;
 	}
 	else if (current_step_ == 15)
 	{
 		DatasetMessage* msg = RTTI::castTo<DatasetMessage>(*message);
-		if (msg == 0) return;
+		if (!msg) return;
 
-		if (msg->getDataset() == 0)
+		if (!msg->getDataset())
 		{
 			BALLVIEW_DEBUG
 			return;
@@ -305,18 +300,17 @@ void DemoTutorialDialog::onNotifyDemo_(Message *message)
 		RegularData3DDataset* set = dynamic_cast<RegularData3DDataset*>(msg->getDataset());
 		if (set->getType() != RegularData3DController::type) return;
 
-		grid_ = (RegularData3D*) set->getData();
+		grid_ = set->getData();
 	}
 	else if (current_step_ == 16)
 	{
 		SceneMessage* msg = RTTI::castTo<SceneMessage>(*message);
-		if (msg == 0 || msg->getType() != SceneMessage::REBUILD_DISPLAY_LISTS)
+		if (!msg || msg->getType() != SceneMessage::REBUILD_DISPLAY_LISTS)
 		{
 			return;
 		}
 	}
-	else if (rmsg == 0 ||
-					 rmsg->getType() != RepresentationMessage::UPDATE)
+	else if (!rmsg || rmsg->getType() != RepresentationMessage::UPDATE)
 	{
 		return;
 	}
@@ -434,9 +428,9 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 	Vector3 v_low(0., 0., 0.);
 	Vector3 v_upp(0., 0., 0.);
 
-	System* system = NULL;
+	System* system = nullptr;
 	system = dynamic_cast<System*>(*sit);
-	if (system != 0) 
+	if (system)
 	{
 		system->apply(bbp);
 		v_low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
@@ -452,7 +446,7 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 	for (; +sit; ++sit)
 	{
 		system = dynamic_cast<System*>(*sit);
-		if (system != 0) 
+		if (system)
 		{
 			system->apply(bbp);
 			Vector3 low = Vector3(bbp.getLower().x, bbp.getLower().y, bbp.getLower().z);
@@ -472,11 +466,11 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 
  	if (! bottom)
 	{ 
-	 	Vector3 v_tmp = v_low;
-    v_low = v_upp;
-    v_upp = v_tmp;
-    height = height*(-1);
-    boundary = boundary*(-1);
+		Vector3 v_tmp = v_low;
+		v_low = v_upp;
+		v_upp = v_tmp;
+		height = height*(-1);
+		boundary = boundary*(-1);
 	}
 
 	Vector3 v_low_left (0., 0., 0.);
@@ -500,22 +494,22 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 	else if (plane_specifier == 'y')
 	{ 
 		v_low       = v_low - Vector3(boundary, height, boundary);
-    v_upp       = v_upp + Vector3(boundary, height, boundary);
-    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
-    v_low_right = Vector3(v_low.x, v_low.y, v_upp.z);
-    v_upp_right = Vector3(v_upp.x, v_low.y, v_upp.z);
-    v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
-    normal      = Vector3(0., 1., 0.);
+		v_upp       = v_upp + Vector3(boundary, height, boundary);
+		v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
+		v_low_right = Vector3(v_low.x, v_low.y, v_upp.z);
+		v_upp_right = Vector3(v_upp.x, v_low.y, v_upp.z);
+		v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
+		normal      = Vector3(0., 1., 0.);
 	}
 	else if (plane_specifier == 'z')
 	{
 		v_low 			= v_low - Vector3(boundary, boundary, height);
-    v_upp 			= v_upp + Vector3(boundary, boundary, height);
-    v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
-    v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
-    v_upp_right = Vector3(v_upp.x, v_upp.y, v_low.z);
-    v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
-    normal 			= Vector3(0., 0., 1.);
+		v_upp 			= v_upp + Vector3(boundary, boundary, height);
+		v_low_left  = Vector3(v_low.x, v_low.y, v_low.z);
+		v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
+		v_upp_right = Vector3(v_upp.x, v_upp.y, v_low.z);
+		v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
+		normal 			= Vector3(0., 0., 1.);
 	}
 	else
 	{
@@ -588,13 +582,13 @@ void DemoTutorialDialog::nextStepDemo_()
 			String file_name = path.find("structures/bpti.pdb");
 
 			MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
-			if (dialog == 0) return;
+			if (!dialog) return;
 
 			dp->enableCreationForNewMolecules(false);
 			system_ = dialog->openMolecularFile(file_name);
 			dp->enableCreationForNewMolecules(true);
 
-		  if (system_ == 0)
+		  if (!system_)
 			{
 				String msg((String)tr("Could not open bpti.pdb. Maybe the file was deleted?")+"\n");
 				msg += (String)tr("It should be found in") + " " + file_name;
@@ -632,11 +626,11 @@ void DemoTutorialDialog::nextStepDemo_()
 	Size nr = pm.getNumberOfRepresentations();
 	std::list<Representation*> reps = pm.getRepresentations();
 
-	if (surface_ == 0 && nr == 1 && current_step_ == 6)
+	if (!surface_ && nr == 1 && current_step_ == 6)
 	{
 		GeometricObject* go = *(**reps.begin()).getGeometricObjects().begin();
 		Mesh* mesh = dynamic_cast<Mesh*>(go);
-		if (mesh != 0)
+		if (mesh)
 		{
 			surface_ = new Mesh(*mesh);
 		}
@@ -694,12 +688,11 @@ void DemoTutorialDialog::nextStepDemo_()
 	{
 		notify_(new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX));
 	}
-	else if (current_step_ == 12 ||
-					 current_step_ == 13)
+	else if (current_step_ == 12 || current_step_ == 13)
 	{
-		getMainControl()->setMultithreading(0);
+		getMainControl()->setMultithreading(false);
 		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
-		getMainControl()->setMultithreading(1);
+		getMainControl()->setMultithreading(true);
 
 		list<Composite*> composites;
 		composites.push_back(*getMainControl()->getCompositeManager().getComposites().begin());
@@ -758,14 +751,14 @@ void DemoTutorialDialog::nextStepDemo_()
 		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 		getMainControl()->setMultithreading(1);
 
-   	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
+		notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
 
 		DatasetController* dc = DatasetControl::getInstance(0)->getController(RegularData3DController::type);
 		RegularData3DController& rcon = *(RegularData3DController*) dc;
 		vector<Dataset*> grids = rcon.getDatasets();
 		if (grids.empty()) return;
- 		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(255,0,0), -0.1);
- 		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(0,0,255), 0.1);
+		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(255,0,0), -0.1);
+		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(0,0,255), 0.1);
 
 		// last entry: we are done
 	}
@@ -795,13 +788,13 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
-	if (rmsg != 0 && rmsg->getRepresentation() == 0) return;
+	if (rmsg && !rmsg->getRepresentation()) return;
 
 	switch (current_step_)
 	{
 		case TUTORIAL_PEPTIDE: // "Building a peptide from a given sequence"
 		{
-			if (cmsg == 0 || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+			if (!cmsg || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
 			break;
 		}
 
@@ -818,16 +811,15 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_MDS: // "Molecular Dynamics Simulation")
 		{
-            if (!RTTI::isKindOf<DatasetMessage>(message)) return;
+			if (!RTTI::isKindOf<DatasetMessage>(message)) return;
 			DatasetMessage* msg = dynamic_cast<DatasetMessage*>(message);
-			if (msg->getDataset() == 0)
+			if (!msg->getDataset())
 			{
 				BALLVIEW_DEBUG
 				return;
 			}
 
-			if (msg->getDataset()->getType() != TrajectoryController::type ||
-					msg->getType() != DatasetMessage::ADD)
+			if (msg->getDataset()->getType() != TrajectoryController::type || msg->getType() != DatasetMessage::ADD)
 			{
 				return;
 			}
@@ -837,7 +829,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_TRAJECTORY: // "Visualisation of trajectories")
 		{
-			if (cmsg != 0 && cmsg->getType() == CompositeMessage::CHANGED_COMPOSITE)
+			if (cmsg && cmsg->getType() == CompositeMessage::CHANGED_COMPOSITE)
 			{
 				enableNextStep_();
 			}
@@ -848,7 +840,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 		{
             if (!RTTI::isKindOf<DatasetMessage>(message)) return;
 			DatasetMessage* msg = dynamic_cast<DatasetMessage*>(message);
-			if (msg->getDataset() == 0)
+			if (!msg->getDataset())
 			{
 				BALLVIEW_DEBUG
 				return;
@@ -865,7 +857,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_SES: // "Creating a Solvent Excluded Surface"
 		{
-			if (rmsg == 0 ||
+			if (!rmsg ||
 					rmsg->getType() != RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL ||
 					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE)
 			{
@@ -876,7 +868,7 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_SES_COLORING: // "Coloring a SES by electrostatics"
 		{
-			if (rmsg == 0 || 
+			if (!rmsg ||
 					(rmsg->getType() != RepresentationMessage::UPDATE &&
 					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE))
 			{
@@ -887,13 +879,12 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 
 		case TUTORIAL_CS: // "Creating a isocontour surface"
 		{
-			if (rmsg == 0 ||
-					rmsg->getRepresentation()->getModelType() != MODEL_CONTOUR_SURFACE)
+			if (!rmsg || rmsg->getRepresentation()->getModelType() != MODEL_CONTOUR_SURFACE)
 			{
 				return;
 			}
 			break;
-		}		
+		}
 
 		default:
 			BALLVIEW_DEBUG;
@@ -909,7 +900,7 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 
-	if (rmsg != 0 && rmsg->getRepresentation() == 0) return;
+	if (rmsg && !rmsg->getRepresentation()) return;
 
 	switch (current_step_)
 	{
@@ -920,7 +911,7 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 		}
 		case 2: // "Building a peptide from a given sequence"
 		{
-			if (cmsg == 0 || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
+			if (!cmsg || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
 			break;
 		}
 		case 3: // "Set the background color"
@@ -930,7 +921,7 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 		}	
 		case 4: // "Rotating"
 		{
-            if (!RTTI::isKindOf<SceneMessage>(message)) return;
+			if (!RTTI::isKindOf<SceneMessage>(message)) return;
 			break;
 		}	
 		case 5: // "Setting light sources"
@@ -942,7 +933,7 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 		case 6: // "Setting the materials"
 		{	
 			// check, if we got an SES 
-			if (rmsg == 0 ||
+			if (!rmsg ||
 					rmsg->getType() != RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL ||
 					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE)
 			{
@@ -953,28 +944,10 @@ void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
 		case 7:  // "downsampling/PNGs"
 		{	
 			//TODO find a checker!!
-			if (cmsg != 0) 
+			if (cmsg)
 				cout <<  "*7*" << cmsg->getType() << endl;
 			break; 
 		}	
-	
-		/* Put into a later step
-			if (tutorial_type_ == RAYTRACING_TUTORIAL)
-			{
-				// set the camera non-optimal
-				Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
-				Vector3 absolute_offset = 	camera.getRightVector() * 100
-																	+	camera.getLookUpVector() * 100
-																	+ camera.getViewVector() * 100;
-
-				camera.setViewPoint(camera.getViewPoint()+absolute_offset);
-				camera.setLookAtPosition(camera.getLookAtPosition()+absolute_offset);		
-				Scene::getInstance(0)->rotateClockwise(90);
-				Scene::getInstance(0)->update();
-				Scene::getInstance(0)->updateGL();
-			}
-			*/
-
 		default:
 			BALLVIEW_DEBUG;
 			Log.error() << "Current step: " << current_step_ << std::endl;
@@ -991,18 +964,19 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 	String description = "Shortcut|Help|Demo";
 	demo_action_ = insertMenuEntry(MainControl::HELP, tr("Demo"), this, SLOT(showDemo()), 
 	                               description, QKeySequence(),
-																 tr("Show a demonstration of BALLView's features"), UIOperationMode::MODE_ADVANCED);
+	                               tr("Show a demonstration of BALLView's features"),
+	                               UIOperationMode::MODE_ADVANCED);
 
 	description = "Shortcut|Help|Tutorial";
 	tutorial_action_ = insertMenuEntry(MainControl::HELP, tr("Tutorial"), this, SLOT(showTutorial()), 
 	                                   description, QKeySequence(), tr("Perform a step-by-step tutorial"),
-																		 UIOperationMode::MODE_ADVANCED);
+	                                   UIOperationMode::MODE_ADVANCED);
 
 #ifdef BALL_HAS_RTFACT
 	description = "Shortcut|Help|RaytracingTutorial";
 	raytracing_tutorial_action_ = insertMenuEntry(MainControl::HELP, tr("Ray tracing Tutorial"), this, 
 	                                              SLOT(showRaytracingTutorial()), description, QKeySequence(),
-																								tr("Learn how to use RTFact"), UIOperationMode::MODE_ADVANCED);
+	                                              tr("Learn how to use RTFact"), UIOperationMode::MODE_ADVANCED);
 #endif
 
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
