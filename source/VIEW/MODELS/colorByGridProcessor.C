@@ -14,18 +14,18 @@ namespace BALL
 			: min_value_(-1.0f),
 			  mid_value_(0.0f),
 			  max_value_(1.0f),
-				normalization_enabled_(false),
-				grid_(grid),
-				num_levels_(0)
+			  normalization_enabled_(false),
+			  grid_(grid),
+			  num_levels_(0)
 		{
 			if(widget)
 			{
 				setColors(
-						widget->getMinMinColor(),
-						widget->getMinColor(),
-						widget->getMidColor(),
-						widget->getMaxColor(),
-						widget->getMaxMaxColor()
+					widget->getMinMinColor(),
+					widget->getMinColor(),
+					widget->getMidColor(),
+					widget->getMaxColor(),
+					widget->getMaxMaxColor()
 				);
 
 				setBreakpoints(widget->getMinValue(), widget->getMidValue(), widget->getMaxValue());
@@ -97,7 +97,8 @@ namespace BALL
 			}
 			catch (Exception::OutOfGrid&)
 			{
-				Log.warn() << "Warning! There is a point contained in the surface that is not inside the grid!" << std::endl;
+				Log.warn() << "Warning! There is a point contained in the surface that is not inside "
+				           << "the grid!" << std::endl;
 			}
 
 			return Processor::CONTINUE;
