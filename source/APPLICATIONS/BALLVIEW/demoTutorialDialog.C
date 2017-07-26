@@ -5,8 +5,6 @@
 #include "demoTutorialDialog.h"
 #include "mainframe.h"
 
-#include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -17,16 +15,12 @@
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
-#include <BALL/DATATYPE/contourSurface.h>
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
-#include <BALL/VIEW/WIDGETS/helpViewer.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <QtWidgets/QPushButton>
