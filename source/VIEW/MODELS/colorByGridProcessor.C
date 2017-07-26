@@ -76,18 +76,18 @@ namespace BALL
 
 			try
 			{
-				vector<Vector3>* vertices = 0;
+				vector<Vector3>* vertices = nullptr;
 
 				Mesh* mesh = dynamic_cast<Mesh*>(object);
-				if (mesh != 0) vertices = &mesh->vertex;
+				if (mesh) vertices = &mesh->vertex;
 
 				QuadMesh* qmesh = dynamic_cast<QuadMesh*>(object);
-				if (qmesh != 0) vertices = &qmesh->vertex;
+				if (qmesh) vertices = &qmesh->vertex;
 
 				MultiLine* line = dynamic_cast<MultiLine*>(object);
-				if (line != 0) vertices = &line->vertices;
+				if (line) vertices = &line->vertices;
 
-				if (vertices == 0) return Processor::CONTINUE;
+				if (!vertices) return Processor::CONTINUE;
 
 				values_.reserve(values_.size() + vertices->size());
 				for (Position i = 0; i < vertices->size(); i++)
@@ -119,31 +119,31 @@ namespace BALL
 
 			for(std::list<GeometricObject*>::iterator it = objects_.begin(); it != objects_.end(); ++it)
 			{
-				vector<ColorRGBA>* colors = 0;
-				vector<Vector3>*   vertices = 0;
+				vector<ColorRGBA>* colors = nullptr;
+				vector<Vector3>*   vertices = nullptr;
 
 				Mesh* mesh = dynamic_cast<Mesh*>(*it);
-				if (mesh != 0)
+				if (mesh)
 				{
 					colors = &mesh->colors;
 					vertices = &mesh->vertex;
 				}
 
 				QuadMesh* qmesh = dynamic_cast<QuadMesh*>(*it);
-				if (qmesh != 0)
+				if (qmesh)
 				{
 					colors = &qmesh->colors;
 					vertices = &qmesh->vertex;
 				}
 
 				MultiLine* line = dynamic_cast<MultiLine*>(*it);
-				if (line != 0)
+				if (line)
 				{
 					colors = &line->colors;
 					vertices = &line->vertices;
 				}
 
-				if (colors == 0) continue;
+				if (!colors) continue;
 
 				colors->resize(vertices->size());
 				for (Position i = 0; (i < colors->size()) && (p < values_.size()); ++i, ++p)
