@@ -378,10 +378,10 @@ void DemoTutorialDialog::nextStepClicked()
 				// first manipulate the light
 				LightSource& ls = Scene::getInstance(0)->getStage()->getLightSource(0);
 				ls.setPosition(Vector3(1, -8, -45));        //(Vector3(1, -2, -15));
-				ls.setAttenuation(Vector3(0., 0., 0.2));    //0.7
+				ls.setAttenuation(Vector3(0, 0, 0.2f));    //0.7
 				ls.setType(LightSource::POSITIONAL);
 				ls.setColor(ColorRGBA(255, 255, 255, 255)); //ColorRGBA(255, 245, 208, 255));
-				ls.setIntensity(250./100);
+				ls.setIntensity(0.25f);
 				LightSettings::getInstance(0)->updateFromStage();
 
 				// then change the camera position
@@ -419,11 +419,10 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 	HashSet<Composite*>::Iterator sit = composites.begin();
 
 	BoundingBoxProcessor bbp;
-	Vector3 v_low(0., 0., 0.);
-	Vector3 v_upp(0., 0., 0.);
+	Vector3 v_low(0, 0, 0);
+	Vector3 v_upp(0, 0, 0);
 
-	System* system = nullptr;
-	system = dynamic_cast<System*>(*sit);
+	System* system = dynamic_cast<System*>(*sit);
 	if (system)
 	{
 		system->apply(bbp);
@@ -467,12 +466,12 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 		boundary = boundary*(-1);
 	}
 
-	Vector3 v_low_left (0., 0., 0.);
-	Vector3 v_low_right(0., 0., 0.);
-	Vector3 v_upp_right(0., 0., 0.);
-	Vector3 v_upp_left (0., 0., 0.);
+	Vector3 v_low_left (0, 0, 0);
+	Vector3 v_low_right(0, 0, 0);
+	Vector3 v_upp_right(0, 0, 0);
+	Vector3 v_upp_left (0, 0, 0);
 
-	Vector3 normal(0., 0., 0.);
+	Vector3 normal(0, 0, 0);
 
 	
 	if (plane_specifier == 'x')
@@ -483,7 +482,7 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 		v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
 		v_upp_right = Vector3(v_low.x, v_upp.y, v_upp.z);
 		v_upp_left  = Vector3(v_low.x, v_low.y, v_upp.z);
-		normal      = Vector3(1., 0., 0.);
+		normal      = Vector3(1, 0, 0);
 	}
 	else if (plane_specifier == 'y')
 	{ 
@@ -493,7 +492,7 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 		v_low_right = Vector3(v_low.x, v_low.y, v_upp.z);
 		v_upp_right = Vector3(v_upp.x, v_low.y, v_upp.z);
 		v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
-		normal      = Vector3(0., 1., 0.);
+		normal      = Vector3(0, 1, 0);
 	}
 	else if (plane_specifier == 'z')
 	{
@@ -503,7 +502,7 @@ void  DemoTutorialDialog::addPlane_(char plane_specifier, int height, int bounda
 		v_low_right = Vector3(v_low.x, v_upp.y, v_low.z);
 		v_upp_right = Vector3(v_upp.x, v_upp.y, v_low.z);
 		v_upp_left  = Vector3(v_upp.x, v_low.y, v_low.z);
-		normal 			= Vector3(0., 0., 1.);
+		normal 			= Vector3(0, 0, 1);
 	}
 	else
 	{
@@ -707,7 +706,7 @@ void DemoTutorialDialog::nextStepDemo_()
 		}
 		else
 		{
-			ms->getMDSimulationDialog().setTimeStep(0.002);
+			ms->getMDSimulationDialog().setTimeStep(0.002f);
 			ms->getMDSimulationDialog().setNumberOfSteps(30);
 			ms->MDSimulation(false);
 		}
@@ -733,8 +732,8 @@ void DemoTutorialDialog::nextStepDemo_()
 		cdialog->setMode(0);
 		cdialog->setRepresentation(rep);
 		cdialog->setGrid(grid_);
-		cdialog->setMinValue(-0.7);
-		cdialog->setMaxValue(0.7);
+		cdialog->setMinValue(-0.7f);
+		cdialog->setMaxValue(0.7f);
 		cdialog->accept();
 
 		getMainControl()->update(*rep);
@@ -751,8 +750,8 @@ void DemoTutorialDialog::nextStepDemo_()
 		RegularData3DController& rcon = *(RegularData3DController*) dc;
 		vector<Dataset*> grids = rcon.getDatasets();
 		if (grids.empty()) return;
-		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(255,0,0), -0.1);
-		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(0,0,255), 0.1);
+		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(255,0,0), -0.1f);
+		rcon.computeIsoContourSurface(*grids[0], ColorRGBA(0,0,255), 0.1f);
 
 		// last entry: we are done
 	}
@@ -987,5 +986,5 @@ void DemoTutorialDialog::checkMenu(MainControl& main_control)
 	if (raytracing_tutorial_action_)
 		raytracing_tutorial_action_->setEnabled(!busy);
 }
-						
+
 } } // namespaces
