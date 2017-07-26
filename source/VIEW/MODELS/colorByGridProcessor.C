@@ -54,7 +54,7 @@ namespace BALL
 			cm_.setBaseColors(list, 3);
 			cm_.setMinMaxColors(min_min_color_, max_max_color_);
 			cm_.setAlphaBlending(true);
-			cm_.setNumberOfColors(num_levels_);
+			cm_.setNumberOfColors(static_cast<Size>(num_levels_));
 			cm_.setRange(min_value_, max_value_);
 
 			std::vector<Vector4> interpolation_points(3);
