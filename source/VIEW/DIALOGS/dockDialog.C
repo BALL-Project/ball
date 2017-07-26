@@ -841,57 +841,14 @@ namespace BALL
 		void DockDialog::scoringFuncChosen()
 		{
 			// if chosen scoring function has advanced options, enable advanced_button
-			Index index = scoring_functions->currentIndex();
-			if (scoring_dialogs_.has(index))
-			{
-				scoring_advanced_button->setEnabled(true);
-			}
-			else
-			{
-				scoring_advanced_button->setEnabled(false);
-			}
+			scoring_advanced_button->setEnabled(scoring_dialogs_.has(scoring_functions->currentIndex()));
 		}
 		
 		// Indicates an algorithm in the combobox was chosen.
 		void DockDialog::algorithmChosen()
 		{
 			// if chosen algorithm has advanced options
-			Index index = algorithms->currentIndex();
-			if (algorithm_dialogs_.has(index))
-			{
-				alg_advanced_button->setEnabled(true);
-				// disable scoring functions which aren't allowed for chosen algorithm
-				for (Index i = 0; i < scoring_functions->count(); i++)
-				{
-					bool found = false;
-					for (Position j = 0; j < allowed_sf_[index].size(); j++)
-					{
-						if (allowed_sf_[index][j] == i)
-						{
-						 	found = true;
-							break;
-						}
-					}
-//   					scoring_functions->listBox()->item(i)->setSelectable(found); ????
-				}
-			}
-			else
-			{
-				// current item is <select>
-				alg_advanced_button->setEnabled(false);
-				// enable all scoring functions
-				for (int i = 0; i < scoring_functions->count(); i++)
-				{
-//   					scoring_functions->listBox()->item(i)->setSelectable(true); ????
-				}
-			}
-			
-			// set default scoring function as current item if the current item isn't an allowed scoring function
-//   			if(!scoring_functions->listBox()->item(scoring_functions->currentIndex())->isSelectable())
-//   			{
-//   				scoring_functions->setCurrentIndex(0);
-//   			}
-			// ?????????
+			alg_advanced_button->setEnabled(algorithm_dialogs_.has(algorithms->currentIndex()));
 		}
 		
 		//
