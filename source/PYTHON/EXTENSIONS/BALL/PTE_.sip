@@ -9,7 +9,6 @@
 %End
 
 class Element
-  : PropertyManager
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/PTE.h>
@@ -65,7 +64,6 @@ class Element
  };
 
 class PTE_
-	: PropertyManager
 {
 	public:
 	PTE_();
