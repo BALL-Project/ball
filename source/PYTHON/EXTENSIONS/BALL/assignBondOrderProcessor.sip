@@ -5,19 +5,18 @@
 %ModuleCode
 	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
 
 
 class AssignBondOrderProcessor 
-	: CompositeProcessor
+	: AtomContainerProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/assignBondOrderProcessor.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
 	public:

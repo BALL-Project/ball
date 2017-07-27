@@ -1,6 +1,7 @@
 class AddHydrogenProcessor : CompositeProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/addHydrogenProcessor.h>
 	using namespace BALL;
 %End

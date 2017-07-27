@@ -6,6 +6,7 @@ class StructureMapper
 	:	TransformationProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/structureMapper.h>
 	using namespace BALL;
 %End

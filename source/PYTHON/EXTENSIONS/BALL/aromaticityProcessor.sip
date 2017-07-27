@@ -6,17 +6,16 @@
 %ModuleCode
 	#include <BALL/QSAR/aromaticityProcessor.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
 class AromaticityProcessor
-	:	CompositeProcessor
+	:	AtomContainerProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/QSAR/aromaticityProcessor.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 
 	public:

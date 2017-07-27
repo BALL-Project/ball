@@ -5,13 +5,12 @@
 //
 
 class TranslationProcessor
-//  : public UnaryProcessor<Atom> 
 	: AtomProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricTransformations.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   TranslationProcessor();
@@ -25,13 +24,12 @@ class TranslationProcessor
 };
 
 class TransformationProcessor
-//  :public UnaryProcessor<Atom> 
 	: AtomProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricTransformations.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   TransformationProcessor();
