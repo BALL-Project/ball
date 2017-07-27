@@ -5,7 +5,6 @@
 //
 
 class Vector3
- : PersistentObject
 {
 %TypeHeaderCode
 	#include <BALL/MATHS/vector3.h>
