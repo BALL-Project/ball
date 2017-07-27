@@ -5,13 +5,12 @@
 //
 
 class BoundingBoxProcessor
-//  : public UnaryProcessor<Atom>
-	: AtomProcessor
+	: ConstAtomProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricProperties.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   virtual bool start() throw();
@@ -26,13 +25,12 @@ class BoundingBoxProcessor
 };
 
 class GeometricCenterProcessor
-//	:	public UnaryProcessor<Atom> 
-	: AtomProcessor
+	: ConstAtomProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricProperties.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
   virtual bool start() throw();
@@ -45,13 +43,12 @@ class GeometricCenterProcessor
 };
 
 class FragmentDistanceCollector
-//  : public UnaryProcessor<Composite> 
-	: CompositeProcessor
+	: ConstCompositeProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricProperties.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
   public:
   FragmentDistanceCollector();

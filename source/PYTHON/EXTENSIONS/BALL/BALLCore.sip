@@ -253,13 +253,7 @@
 %Include extractors.sip
 %Include pyIndexList.sip // a list of numbers (indices etc.)
 %Include pyAtomDict.sip // a dictionary mapping to atoms
-%Include pyAtomProcessor.sip 
-%Include pyBondProcessor.sip
-%Include pyFragmentProcessor.sip
-%Include pyResidueProcessor.sip
-%Include pyCompositeProcessor.sip
-%Include pyChainProcessor.sip
-//%Include pyLists.sip
+%Include pyUnaryProcessors.sip 
 
 // QSAR
 //%Include descriptor.sip
