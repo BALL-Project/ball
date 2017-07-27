@@ -382,6 +382,26 @@ using namespace BALL::Exception;
 %End
 };
 
+%Exception File::CannotWrite(GeneralException) /PyName=CannotWrite/
+{
+%TypeHeaderCode
+	#include <BALL/DATATYPE/string.h>
+	#include <BALL/COMMON/exception.h>
+	 using namespace BALL;
+	 using namespace BALL::Exception;
+%End
+%RaiseCode
+	String detail =
+		(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
+	 	+ ": " + sipExceptionRef.getMessage();
+
+	SIP_BLOCK_THREADS
+	PyErr_SetString(sipException_File_CannotWrite, detail.c_str());
+	SIP_UNBLOCK_THREADS
+%End
+};
+
+
 /// creates a crash under windows:
 class GlobalExceptionHandler
 {

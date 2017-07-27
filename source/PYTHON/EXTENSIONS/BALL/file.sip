@@ -14,8 +14,6 @@ class std__openmode
 	public:
 };
 
-
-
 class File
 {
 %TypeHeaderCode
@@ -33,28 +31,6 @@ class File
 
 %End
   public:
-
-	// nested class File::CannotWrite
-	class CannotWrite
-	{
-		 public:
-		 CannotWrite(const char*, int, const String&) throw();
-		 ~CannotWrite() throw();
-		 String getFilename() const throw();
-	};
-
-
-	/*
-	unsigned enum {
-		MODE_IN,
-		MODE_OUT,
-		MODE_APP,
-		MODE_BINARY,
-		MODE_ATE,
-		MODE_TRUNC
-	};
-	*/
-
 
   File();
 	// default open mode: IN
