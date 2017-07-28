@@ -1,4 +1,4 @@
-%UnitCode
+%ModuleCode
 	#include <BALL/SOLVATION/ooiEnergy.h>
 %End
 
