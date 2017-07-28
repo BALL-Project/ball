@@ -1,14 +1,28 @@
 /////////////////////////
-// VIEW PYTHON SUPPORT
+// VIEW PYTHON SUPPORT //
 /////////////////////////
-//
-// module definition file
-//
 
 %Module VIEW
 
 %ModuleHeaderCode
 #include <BALLPyMacros.h>
+%End
+
+%ModuleHeaderCode
+	#include <BALLPyMacros.h>
+%End
+
+%UnitCode
+	#include <sstream>
+	#include <BALL/COMMON/exception.h>
+	using std::stringstream;
+	using namespace BALL;
+	using namespace BALL::Exception;
+%End
+
+%Copying
+	BALL is made available under the Lesser GNU Public License (LGPL 2.1).
+	See LICENSE for details.
 %End
 
 %Import BALL/BALLCore.sip
@@ -63,7 +77,6 @@
 %Include label.sip
 %Include line.sip
 %Include mesh.sip
-// %Include point.sip
 %Include simpleBox.sip
 %Include sphere.sip
 %Include twoColoredLine.sip
@@ -92,5 +105,3 @@
 %Include geometricControl.sip
 %Include logView.sip
 %Include datasetControl.sip
-//%Include helpViewer.sip
-
