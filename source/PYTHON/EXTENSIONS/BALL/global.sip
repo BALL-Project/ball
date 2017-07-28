@@ -91,7 +91,6 @@
 {
 %TypeHeaderCode
 	#include <BALL/COMMON/global.h>
-	using namespace BALL;
 %End
 
 %ConvertToTypeCode

@@ -42,7 +42,6 @@ class AssignTypeNameProcessor
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/COMMON/assignTypes.h>
-	using namespace BALL;
 %End
 
 	public:
