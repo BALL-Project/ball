@@ -1,116 +1,74 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 class Composite
-  :  PersistentObject,
-   	 Object,
-   	 Selectable
+	: PersistentObject,
+	  Object,
+	  Selectable
 {
-%TypeHeaderCode	
+%TypeHeaderCode
 	#include <BALL/CONCEPT/composite.h>
-	using namespace BALL;
 %End
-  public:
-  // typedef UnaryPredicate<Composite> KernelPredicateType;
-  // BALL_CREATE(Composite)
-  // static UnaryProcessor<Composite> DEFAULT_PROCESSOR;
-  // static KernelPredicateType DEFAULT_UNARY_PREDICATE;
-  Composite();
-  Composite(const Composite&, bool deep = true);
-  ~Composite() throw();
-  virtual void clear() throw();
-  virtual void destroy() throw();
-  void destroy(bool);
-  // void* clone(Composite&, KernelPredicateType&) const;
-  // virtual void persistentWrite(PersistenceManager&, const char* name = 0) const;
-  // virtual void persistentRead(PersistenceManager&);
-  // void set(const Composite&, KernelPredicateType&);
-  void set(const Composite&, bool deep = true);
-  // Composite& operator = (const Composite&);
-  // void get(Composite&, KernelPredicateType& predicate) const;
-  void get(Composite&, bool deep = true) const;
-  Size getDegree() const;
-  // Size count(const KernelPredicateType&) const;
-  Size countDescendants() const;
-  Size getPathLength(const Composite&);
-  Size getDepth() const;
-  Size getHeight() const;
-  Composite& getRoot();
-  // const Composite& getRoot() const;
-  Composite* getLowestCommonAncestor(Composite&);
-  // const Composite* getLowestCommonAncestor(const Composite&) const;
-  // template <typename T> T* getAncestor(const T&  );
-  // template <class T> const T* getAncestor(const T&  ) const;
-  // template <typename T> T* getPrevious(const T&  );
-  // template <class T> const T* getPrevious(const T& dummy) const;
-  // template <typename T> T* getNext(const T&  );
-  // template <class T> const T* getNext(const T& dummy) const;
-  Composite* getParent();
-  // const Composite* getParent() const;
-  Composite* getChild(Index);
-  // const Composite* getChild(Index) const;
-  Composite* getSibling(Index);
-  // const Composite* getSibling(Index) const;
-  Composite* getFirstChild();
-  // const Composite* getFirstChild() const;
-  Composite* getLastChild();
-  // const Composite* getLastChild() const;
 
-  const PreciseTime& getModificationTime() const throw();
-  const PreciseTime& getSelectionTime() const throw();
-  void prependChild(Composite& /Transfer/);
-  void appendChild(Composite& /Transfer/);
-  static bool insertParent
-   (Composite&, Composite&, 
-    Composite&, bool destroy_parent = true);
-  void insertBefore(Composite& /Transfer/);
-  void insertAfter(Composite& /Transfer/);
-  void spliceBefore(Composite&);
-  void spliceAfter(Composite&);
-  void splice(Composite&);
-  bool removeChild(Composite&);
+	public:
+	Composite();
+	Composite(const Composite&, bool deep = true);
+	~Composite() throw();
+	virtual void clear() throw();
+	virtual void destroy() throw();
+	void destroy(bool);
+	void set(const Composite&, bool deep = true);
+	void get(Composite&, bool deep = true) const;
+	Size getDegree() const;
+	Size countDescendants() const;
+	Size getPathLength(const Composite&);
+	Size getDepth() const;
+	Size getHeight() const;
+	Composite& getRoot();
+	Composite* getLowestCommonAncestor(Composite&);
+	Composite* getParent();
+	Composite* getChild(Index);
+	Composite* getSibling(Index);
+	Composite* getFirstChild();
+	Composite* getLastChild();
+
+	const PreciseTime& getModificationTime() const throw();
+	const PreciseTime& getSelectionTime() const throw();
+	void prependChild(Composite& /Transfer/);
+	void appendChild(Composite& /Transfer/);
+	static bool insertParent
+		(Composite&, Composite&,
+		Composite&, bool destroy_parent = true);
+	void insertBefore(Composite& /Transfer/);
+	void insertAfter(Composite& /Transfer/);
+	void spliceBefore(Composite&);
+	void spliceAfter(Composite&);
+	void splice(Composite&);
+	bool removeChild(Composite&);
 	bool removeSelected();
-  void replace(Composite&);
-  void swap(Composite&);
-  virtual void select() throw();
-  virtual void deselect() throw();
-  bool isEmpty() const;
-  bool isRoot() const;
-  bool isRootOf(const Composite&) const;
-  bool isInterior() const;
-  bool hasChild() const;
-  bool isChildOf(const Composite&) const;
-  bool isFirstChild() const;
-  bool isFirstChildOf(const Composite&) const;
-  bool isLastChild() const;
-  bool isLastChildOf(const Composite&) const;
-  bool hasParent() const;
-  bool isParentOf(const Composite&) const;
-  bool hasSibling() const;
-  bool isSiblingOf(const Composite&) const;
-  bool hasPreviousSibling() const;
-  bool isPreviousSiblingOf(const Composite&) const;
-  bool hasNextSibling() const;
-  bool isNextSiblingOf(const Composite&) const;
-  bool isDescendantOf(const Composite&) const;
-  // template <typename T> bool hasAncestor(const T& dummy ) const; 
-  bool isAncestorOf(const Composite&) const;
-  bool isRelatedWith(const Composite&) const;
-  bool isHomomorph(const Composite&) const;
-  bool containsSelection() const;
-  virtual bool isValid() const throw();
-  // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
-  // void host(Visitor<Composite>& visitor);
-  // template <typename T> bool applyAncestor(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyChild(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyDescendantPreorder(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyDescendantPostorder(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyDescendant(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyPreorder(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyPostorder(UnaryProcessor<T>& processor);
-  // template <typename T> bool apply(UnaryProcessor<T>& processor);
-  // template <typename T> bool applyLevel(UnaryProcessor<T>& processor, long level);
+	void replace(Composite&);
+	void swap(Composite&);
+	virtual void select() throw();
+	virtual void deselect() throw();
+	bool isEmpty() const;
+	bool isRoot() const;
+	bool isRootOf(const Composite&) const;
+	bool isInterior() const;
+	bool hasChild() const;
+	bool isChildOf(const Composite&) const;
+	bool isFirstChild() const;
+	bool isFirstChildOf(const Composite&) const;
+	bool isLastChild() const;
+	bool isLastChildOf(const Composite&) const;
+	bool hasParent() const;
+	bool isParentOf(const Composite&) const;
+	bool hasSibling() const;
+	bool isSiblingOf(const Composite&) const;
+	bool hasPreviousSibling() const;
+	bool isPreviousSiblingOf(const Composite&) const;
+	bool hasNextSibling() const;
+	bool isNextSiblingOf(const Composite&) const;
+	bool isDescendantOf(const Composite&) const;
+	bool isAncestorOf(const Composite&) const;
+	bool isRelatedWith(const Composite&) const;
+	bool isHomomorph(const Composite&) const;
+	bool containsSelection() const;
+	virtual bool isValid() const throw();
 };

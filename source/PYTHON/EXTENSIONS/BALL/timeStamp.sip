@@ -1,35 +1,26 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 class PreciseTime
 {
 %TypeHeaderCode
 	#include <time.h>
 	#include <BALL/CONCEPT/timeStamp.h>
-	using namespace BALL;
 %End
-  public:
-  // BALL_CREATE_NODEEP(PreciseTime)
-  PreciseTime();
-  PreciseTime(const PreciseTime&);
-  ~PreciseTime() throw();
-  static const PreciseTime ZERO;
-  void set(long, long) throw();
-  void set(const PreciseTime&) throw();
-  // const PreciseTime& operator = (const PreciseTime&) throw();
+	public:
+
+	PreciseTime();
+	PreciseTime(const PreciseTime&);
+	~PreciseTime() throw();
+
+	static const PreciseTime ZERO;
+	void set(long, long) throw();
+	void set(const PreciseTime&) throw();
 	bool operator < (const PreciseTime&) const throw();
 	bool operator > (const PreciseTime&) const throw();
- 	bool operator == (const PreciseTime&) const throw();
-  long getSeconds() const throw();
-  long getMicroSeconds() const throw();
-  static PreciseTime now() throw();
-  //  void write(PersistenceManager& pm)const;
-  //  bool read(PersistenceManager& pm);
+	bool operator == (const PreciseTime&) const throw();
+	long getSeconds() const throw();
+	long getMicroSeconds() const throw();
+	static PreciseTime now() throw();
 
-  SIP_PYOBJECT __str__();
+	SIP_PYOBJECT __str__();
 %MethodCode
 	static char buf[128];
 	time_t secs = sipCpp->getSeconds();
@@ -47,22 +38,20 @@ class TimeStamp
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/timeStamp.h>
-	using namespace BALL;
 %End
-  public:
-  // BALL_CREATE_NODEEP(TimeStamp)
-  TimeStamp() throw();
-  ~TimeStamp() throw();
-  bool isNewerThan(const PreciseTime&) const throw ();
-  bool isOlderThan(const PreciseTime&) const throw ();
-  bool isNewerThan(const TimeStamp&) const throw ();
-  bool isOlderThan(const TimeStamp&) const throw ();
-  virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) throw ();
-  const PreciseTime& getTime() const throw ();
-  //  void write(PersistenceManager& pm) const;
-  //  bool read(PersistenceManager& pm);
+	public:
 
-  SIP_PYOBJECT __str__();
+	TimeStamp() throw();
+	~TimeStamp() throw();
+
+	bool isNewerThan(const PreciseTime&) const throw ();
+	bool isOlderThan(const PreciseTime&) const throw ();
+	bool isNewerThan(const TimeStamp&) const throw ();
+	bool isOlderThan(const TimeStamp&) const throw ();
+	virtual void stamp(const PreciseTime& time = PreciseTime::ZERO) throw ();
+	const PreciseTime& getTime() const throw ();
+
+	SIP_PYOBJECT __str__();
 %MethodCode
 	time_t secs = sipCpp->getTime().getSeconds();
 	static char buf[128];
@@ -75,6 +64,3 @@ class TimeStamp
 	sipRes = PyString_FromString(time_str.c_str());
 %End
 };
-
-// std::ostream& operator << (std::ostream& os, const PreciseTime& time);
-// std::ostream& operator << (std::ostream& os, const TimeStamp& stamp);

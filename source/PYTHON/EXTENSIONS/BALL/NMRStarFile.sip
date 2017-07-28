@@ -1,394 +1,308 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
-
 class NMRStarFile
-//	: CIFFile
 {
 %TypeHeaderCode
-	#include <BALL/FORMAT/CIFFile.h>
-  #include <BALL/FORMAT/NMRStarFile.h>
-  using namespace BALL;
-	using namespace std;
+	#include <BALL/FORMAT/NMRStarFile.h>
 %End
 	public:
 
-			static const float FLOAT_VALUE_NA;
-			static const int INT_VALUE_NA;
-			static const int POSITION_VALUE_NA;
-			
-			class SampleCondition
-			{
-				public:
-					SampleCondition(); 
-	
-					String	name;
-					vector<String> types;
-					StringHashMap<float>  values;
-					StringHashMap<float>  errors;
-					StringHashMap<String> units;
-					
-					bool hasType(String );	
-//					void clear(); 
-//					ostream& operator >> (ostream& s);
-			};
-	
-			class Sample
-			{
-				public:
-				
-					class Component
-					{
-						public:
-							Component();
-//							void clear(); 
-//							ostream& operator >> (ostream& s);
-							
-							String label;
-							float concentration_value;
-							String value_unit;
-							float concentration_min;
-							float concentration_max;
-							String isotopic_labeling;
-					};
+	static const float FLOAT_VALUE_NA;
+	static const int INT_VALUE_NA;
+	static const int POSITION_VALUE_NA;
 
-					Sample(); 
-//					void clear(); 
-//					ostream& operator >> (ostream& s);
+	class SampleCondition
+	{
+		public:
+		SampleCondition();
+		bool hasType(String );
 
-					String label;
-					String type;
-					String details;
+		String name;
+		vector<String> types;
+		StringHashMap<float> values;
+		StringHashMap<float> errors;
+		StringHashMap<String> units;
+	};
 
-//					vector <Component> components;
-			};
+	class Sample
+	{
+		public:
 
-			class ShiftReferenceElement
-			{
-				public:
-					ShiftReferenceElement();
+		class Component
+		{
+			public:
+			Component();
 
-					String		mol_common_name;
-					String		atom_type;
-					Position	isotope_number;
-					String		atom_group;
-					String		shift_units;
-					float			shift_value;
-					String		reference_method;
-					String		reference_type;
-					float			indirect_shift_ratio;
+			String label;
+			float concentration_value;
+			String value_unit;
+			float concentration_min;
+			float concentration_max;
+			String isotopic_labeling;
+		};
 
-//					void clear(); 
-//					ostream& operator >> (ostream& s);
-			};
+		Sample();
 
-			class ShiftReferenceSet
-			{
-				public:	
-					ShiftReferenceSet();
-				
-					String name;  
-//					vector<NMRStarFile::ShiftReferenceElement> elements;
-//					void clear(); 
-//					ostream& operator >> (ostream& s);
-			};
+		String label;
+		String type;
+		String details;
+	};
 
-			class NMRAtomData
-			{
-				public:
-					NMRAtomData();
+	class ShiftReferenceElement
+	{
+		public:
+		ShiftReferenceElement();
 
-					Position	atom_ID;
-					Position	residue_seq_code;
-					String		residue_label;
-					String		atom_name;
-					char			atom_type;
-					float			shift_value;
-					float			error_value;
-					Position	ambiguity_code;
-		
-//					bool operator == (const NMRAtomData& ) const;
+		String   mol_common_name;
+		String   atom_type;
+		Position isotope_number;
+		String   atom_group;
+		String   shift_units;
+		float    shift_value;
+		String   reference_method;
+		String   reference_type;
+		float    indirect_shift_ratio;
+	};
 
-//					void clear(); 
-//					ostream& operator >> (ostream& s);
-			};
+	class ShiftReferenceSet
+	{
+		public:
+		ShiftReferenceSet();
 
-						
-			class NMRAtomDataSet
-			{
-				public:
-					NMRAtomDataSet(NMRStarFile* parent);
+		String name;
+	};
 
-					String										name;
-//					vector<NMRStarFile::NMRAtomData> 	atom_data; //TODO!!
-					String 										condition;  
-					String										reference;  
-					vector<String>						samples;   
-//					void clear(); 
-//					ostream& operator >> (ostream& s);
-			};
-			
-			class EntryInformation
-			{
-				public:
-					EntryInformation();
-					~EntryInformation();
-//					ostream& operator >> (ostream& s);
-					void clear(); 
+	class NMRAtomData
+	{
+		public:
+		NMRAtomData();
 
-					String entry_type;
-					String BMRB_accession_code;
-					String NMR_STAR_version;
-					String experimental_method;
-					String submission_date;
-			};
+		Position atom_ID;
+		Position residue_seq_code;
+		String   residue_label;
+		String   atom_name;
+		char     atom_type;
+		float    shift_value;
+		float    error_value;
+		Position ambiguity_code;
+	};
 
-			class MonomericPolymer
-			{
-				public:
-					class HomologDB 
-					{
-						public:
-							HomologDB();
-//							ostream& operator >> (ostream& s); 
-							void clear(); 
+	class NMRAtomDataSet
+	{
+		public:
+		NMRAtomDataSet(NMRStarFile* parent);
 
-							String name;
-							String accession_code;
-							String entry_mol_name;
-							float  seq_to_submitted_percentage;
-							float  subject_length;
-							float  seq_identity;
-							float  seq_positive;
-							float  homology_expectation_value;  
-					};
+		String name;
+		String condition;
+		String reference;
+		vector<String> samples;
+	};
+
+	class EntryInformation
+	{
+		public:
+		EntryInformation();
+		~EntryInformation();
+		void clear();
+
+		String entry_type;
+		String BMRB_accession_code;
+		String NMR_STAR_version;
+		String experimental_method;
+		String submission_date;
+	};
+
+	class MonomericPolymer
+	{
+		public:
+
+		class HomologDB
+		{
+			public:
+			HomologDB();
+			void clear();
+
+			String name;
+			String accession_code;
+			String entry_mol_name;
+			float  seq_to_submitted_percentage;
+			float  subject_length;
+			float  seq_identity;
+			float  seq_positive;
+			float  homology_expectation_value;
+		};
+
+		MonomericPolymer();
+		void clear();
+
+		String label_name;
+		String type;
+		String polymer_class;
+		String common_name;
+		String name_variant;
+		float  molecular_mass;
+		String details;
+		int number_of_residues;
+		String residue_sequence;
+		StringHashMap<String> residues_by_index;
+	};
 
 
-						MonomericPolymer(); 
-//						ostream& operator >> (ostream& s); 
-						void clear(); 
+	class MolecularSystem
+	{
+		public:
 
-						String label_name;
-						String type;
-						String polymer_class;
-						String common_name;
-						String name_variant;
-						float  molecular_mass;
-						String details;  	
-						int number_of_residues;
-						String residue_sequence; 
-						StringHashMap<String> residues_by_index;
+		class RelatedDB
+		{
+			public:
+			RelatedDB();
+			void clear();
 
-//						vector<NMRStarFile::MonomericPolymer::HomologDB> homolog_database_entries; 
-			};
+			String name;
+			String accession_code;
+			String entry_mol_name;
+			String relation_type;
+			String details;
+		};
 
+		class ChemicalUnit
+		{
+			public:
+			ChemicalUnit();
+			void clear();
 
-			class MolecularSystem
-			{	
-				public:
-					class RelatedDB
-					{
-						public:
-							RelatedDB();
-			//				ostream& operator >> (ostream& s); 
-							void clear(); 
+			String component_name;
+			String label;
+		};
 
-							String name;
-							String accession_code;
-							String entry_mol_name;
-							String relation_type;
-							String details;
-					};
-					
-													
-					class ChemicalUnit
-					{
-						public:
-							ChemicalUnit();  
-					//		ostream& operator >> (ostream& s);  
-							void clear();  
+		MolecularSystem();
+		~MolecularSystem();
 
-							String component_name;
-							String label;
-//							MonomericPolymer* monomeric_polymer; 
-//							NMRAtomDataSet* shifts;             
-					};
+		ChemicalUnit&  getChemicalUnit(Position i);
+		Size getNumberOfChemicalUnits();
+		void clear();
 
+		String system_name;
+		String abbreviation_common;
+		String system_physical_state;
+		String system_oligomer_state;
+		String system_paramagnetic;
+		String system_thiol_state;
+		float system_molecular_weight;
+	};
 
-					MolecularSystem(); 
-					~MolecularSystem(); 
-	
-					ChemicalUnit&  getChemicalUnit(Position i);
-					Size getNumberOfChemicalUnits();					
+	class NMRSpectrometer
+	{
+		public:
+		NMRSpectrometer();
+		String manufacturer;
+		String model;
+		float  field_strength;
+	};
 
-					String system_name;
-					String abbreviation_common;
-					//vector<NMRStarFile::MolecularSystem::ChemicalUnit> chemical_units;  
-					String system_physical_state;
-					String system_oligomer_state;
-					String system_paramagnetic;
-					String system_thiol_state;
-					float system_molecular_weight;	
-
-//					vector<NMRStarFile::MolecularSystem::RelatedDB> related_database_entries;
-//					ostream& operator >> (ostream& s); 
-					void clear(); 
-			};
-
-
-			class NMRSpectrometer
-			{
-				public:
-					NMRSpectrometer();
-					String manufacturer;
-					String model;
-					float  field_strength;
-//					ostream& operator >> (ostream& s);
-			};
-			
-			class BALLToBMRBMapper
-			{
+	class BALLToBMRBMapper
+	{
 %TypeHeaderCode
-					#include <BALL/KERNEL/chain.h>
-  				#include <BALL/COMMON/exception.h>
-					
-					using namespace BALL;
-					using namespace BALL::Exception;
-					using namespace std;
-					typedef pair<Position, Position>             BMRBIndex;
-					typedef map<Atom const* , BMRBIndex>         BALLToBMRBMapping; 
-					typedef map<const NMRStarFile::NMRAtomData*, Atom const*> BMRBToBALLMapping;
+		#include <BALL/KERNEL/chain.h>
+		using BMRBIndex = std::pair<Position, Position>;
+		using BALLToBMRBMapping = std::map<Atom* const, BMRBIndex>;
+		using BMRBToBALLMapping = std::map<const NMRStarFile::NMRAtomData*, Atom* const>;
 %End
-				public:
-				
-					BALLToBMRBMapper();	
+		public:
 
-					BALLToBMRBMapper(const Chain& , const NMRStarFile&, const String&);	
-					virtual ~BALLToBMRBMapper();
+		BALLToBMRBMapper();
 
-					const Chain* getChain() const;
-					void setChain(const Chain&);
-					
-					void setNMRStarFile(const NMRStarFile&);
-					const NMRStarFile* getNMRStarFile() const;
-					
-					// void setNMRAtomDataSet(const NMRAtomDataSet& ); 
-					bool setNMRAtomDataSetByName(const String& );
-					//const NMRAtomDataSet* getNMRAtomDataSet();
+		BALLToBMRBMapper(const Chain& , const NMRStarFile&, const String&);
+		virtual ~BALLToBMRBMapper();
 
-					// TODO!
-//					map<const Atom*, BMRBIndex>& getBALLToBMRBMapping();
-//					const BALLToBMRBMapping& getBALLToBMRBMapping() const;
-					
-					// TODO!
-//					BMRBToBALLMapping& getBMRBToBALLMapping();
-//					const BMRBToBALLMapping& getBMRBToBALLMapping() const;
+		const Chain* getChain() const;
+		void setChain(const Chain&);
 
-					int getNumberOfMismatches();
-					int getNumberOfGaps();
-					bool isMapped(const NMRStarFile::NMRAtomData&) const; // TODO!
-					const Atom* getBALLAtom(const NMRStarFile::NMRAtomData&) const;
+		void setNMRStarFile(const NMRStarFile&);
+		const NMRStarFile* getNMRStarFile() const;
 
-					bool isMapped(const Atom*) const;
-					pair<Position, Position> operator () (Atom*);
+		bool setNMRAtomDataSetByName(const String& );
 
-					bool createTrivialMapping();
-					bool createMapping(const String&, const String&);	
-					void clear();
+		int getNumberOfMismatches();
+		int getNumberOfGaps();
+		bool isMapped(const NMRStarFile::NMRAtomData&) const;
+		const Atom* getBALLAtom(const NMRStarFile::NMRAtomData&) const;
 
-			};
+		bool isMapped(const Atom*) const;
+		pair<Position, Position> operator () (Atom*);
 
-			NMRStarFile();
-			
-			NMRStarFile(const String&_name, OpenMode)
-				throw(FileNotFound);
+		bool createTrivialMapping();
+		bool createMapping(const String&, const String&);
+		void clear();
+	};
 
-			~NMRStarFile();
+	NMRStarFile();
 
-			bool read();
-			void close();
+	NMRStarFile(const String&_name, OpenMode)
+		throw(FileNotFound);
 
-		//	bool read(AtomContainer&);
+	~NMRStarFile();
 
-			bool assignShifts(BALLToBMRBMapper&);
-			bool assignShifts(AtomContainer&, const String&,  const String&, const String&);
+	bool read();
+	void close();
 
-			
-			Size getNumberOfAtoms() const;
-			Size getNumberOfShiftsAssigned();
-	
-			// TODO!		
-//			const vector<NMRStarFile::NMRAtomDataSet>& getNMRData() const;
-
-			const EntryInformation& getEntryInformation() const;
-
-			MolecularSystem& getMolecularInformation();
-			MolecularSystem::ChemicalUnit& getChemicalUnitByLabel(const String& );
-	
-			bool hasSampleCondition(String );
-
-			SampleCondition& getSampleConditionByName(String );
-//			const SampleCondition& getSampleConditionByName(String ) const;
-			SampleCondition& getSampleCondition(Position );
-//			const SampleCondition& getSampleCondition(Position ) const;
-			const Size getNumberOfSampleConditions() const;
-//			const vector<SampleCondition>& getSampleConditions() const;
-//			vector<NMRStarFile::SampleCondition>& getSampleConditions();
-//			vector<NMRStarFile::Sample> getSamples() const; //TODO
-
-			Size getNumberOfSamples() const;
-			bool hasSample(String label) const;
-			Sample getSample(Index ) const;
-			Sample getSample(String ) const;
+	bool assignShifts(BALLToBMRBMapper&);
+	bool assignShifts(AtomContainer&, const String&,  const String&, const String&);
 
 
-//			vector<NMRStarFile::ShiftReferenceSet>& getShiftReferenceSets(); 
-//			const vector<ShiftReferenceSet>& getShiftReferenceSets() const;
+	Size getNumberOfAtoms() const;
+	Size getNumberOfShiftsAssigned();
 
-			Size getNumberOfShiftReferenceSets() const;
-			bool hasShiftReferenceSet(String );	
+	const EntryInformation& getEntryInformation() const;
 
-//			const ShiftReferenceSet& getShiftReferenceSet(Position ) const;
-			ShiftReferenceSet& getShiftReferenceSet(Position ); 
-//			const ShiftReferenceSet& getShiftReferenceSetByName(String ) const;
-			ShiftReferenceSet& getShiftReferenceSetByName(String );
-			
-//			vector<NMRSpectrometer>& getNMRSpectrometers();
-			Size getNumberOfNMRSpectrometers() const;
-			NMRStarFile::NMRSpectrometer& getNMRSpectrometer(Position );	
-			NMRSpectrometer& getNMRSpectrometerByName(String );
+	MolecularSystem& getMolecularInformation();
+	MolecularSystem::ChemicalUnit& getChemicalUnitByLabel(const String& );
 
-			
-			String getNMRSpectrometerManufacturer(Position );
-			float getNMRSpectrometerFieldStrength(Position );
-		
-			Size getNumberOfMonomericPolymers() const;
+	bool hasSampleCondition(String );
 
-			MonomericPolymer getMonomericPolymer(Position);
-			MonomericPolymer getMonomericPolymer(String name);
-		
-//			vector<NMRStarFile::MonomericPolymer> getMonomericPolymers() const;
-			
-			bool hasMonomericPolymer(String name) const; 
-		
-			bool isMonomericPolymer(String ); 
+	SampleCondition& getSampleConditionByName(String );
+	SampleCondition& getSampleCondition(Position );
+	const Size getNumberOfSampleConditions() const;
 
-			void addMonomericPolymer(MonomericPolymer );
-			
-			String getResidueSequence(Position i) const;
+	Size getNumberOfSamples() const;
+	bool hasSample(String label) const;
+	Sample getSample(Index ) const;
+	Sample getSample(String ) const;
 
-			bool hasHshifts();
-			bool hasCshifts();
-			bool hasNshifts();
+	Size getNumberOfShiftReferenceSets() const;
+	bool hasShiftReferenceSet(String );
 
-			bool operator == (const NMRStarFile& ) const;
-			bool operator != (const NMRStarFile& ) const;
-	
-			void clear(); 
+	ShiftReferenceSet& getShiftReferenceSet(Position );
+	ShiftReferenceSet& getShiftReferenceSetByName(String );
+
+	Size getNumberOfNMRSpectrometers() const;
+	NMRStarFile::NMRSpectrometer& getNMRSpectrometer(Position );
+	NMRSpectrometer& getNMRSpectrometerByName(String );
+
+
+	String getNMRSpectrometerManufacturer(Position );
+	float getNMRSpectrometerFieldStrength(Position );
+
+	Size getNumberOfMonomericPolymers() const;
+
+	MonomericPolymer getMonomericPolymer(Position);
+	MonomericPolymer getMonomericPolymer(String name);
+
+	bool hasMonomericPolymer(String name) const;
+
+	bool isMonomericPolymer(String );
+
+	void addMonomericPolymer(MonomericPolymer );
+
+	String getResidueSequence(Position i) const;
+
+	bool hasHshifts();
+	bool hasCshifts();
+	bool hasNshifts();
+
+	bool operator == (const NMRStarFile& ) const;
+	bool operator != (const NMRStarFile& ) const;
+
+	void clear();
 
 	private:
-			NMRStarFile(const NMRStarFile& f);
-
-
+	NMRStarFile(const NMRStarFile& f);
 };

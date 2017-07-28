@@ -1,21 +1,10 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-// Author:
-//   Oliver Kohlbacher
-//
-
 %ModuleCode
 	#include <list>
 	#include <BALL/KERNEL/extractors.h>
-	using namespace std;
-	using namespace BALL;
+	using std::list;
 %End
 
 list<Atom*>                 atoms(const AtomContainer&, const String& expression = String());
-//AtomList                  all_atoms(const Composite&);
 list<PDBAtom*>              PDBAtoms(const AtomContainer&, const String& expression = String());
 list<Bond*>                 bonds(const AtomContainer&, bool selected_only = false);
 list<Bond*>                 bonds(const Atom&);
@@ -35,7 +24,6 @@ class BALLCoreSipExtractors
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
 
-	using namespace BALL;
 	namespace BALL {
 		class BALLCoreSipExtractors
 		{
@@ -45,62 +33,62 @@ class BALLCoreSipExtractors
 %End
 
 	public:
-		list<Atom*>  __atoms();
+	list<Atom*>  __atoms();
 %MethodCode
 	// do nothing
 %End
 
-		list<PDBAtom*>  __PDBAtoms();
+	list<PDBAtom*>  __PDBAtoms();
 %MethodCode
 	// do nothing
 %End
 
-		list<Bond*> __bonds();
+	list<Bond*> __bonds();
 %MethodCode
 	// do nothing
 %End
 
-		list<AtomContainer*> __atomContainers();
+	list<AtomContainer*> __atomContainers();
 %MethodCode
 	// do nothing
 %End
 
-		list<Fragment*> __fragments();
+	list<Fragment*> __fragments();
 %MethodCode
 	// do nothing
 %End
 
-		list<Molecule*> __molecules();
+	list<Molecule*> __molecules();
 %MethodCode
 	// do nothing
 %End
 
-		list<Residue*> __residues();
+	list<Residue*> __residues();
 %MethodCode
 	// do nothing
 %End
 
-		list<SecondaryStructure*> __secondaryStructures();
+	list<SecondaryStructure*> __secondaryStructures();
 %MethodCode
 	// do nothing
 %End
 
-		list<Chain*> __chains();
+	list<Chain*> __chains();
 %MethodCode
 	// do nothing
 %End
 
-		list<Protein*> __proteins();
+	list<Protein*> __proteins();
 %MethodCode
 	// do nothing
 %End
 
-		list<Nucleotide*> __nucleotides();
+	list<Nucleotide*> __nucleotides();
 %MethodCode
 	// do nothing
 %End
 
-		list<NucleicAcid*> __nucleicAcids();
+	list<NucleicAcid*> __nucleicAcids();
 %MethodCode
 	// do nothing
 %End

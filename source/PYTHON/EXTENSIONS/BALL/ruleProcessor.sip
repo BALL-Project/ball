@@ -4,7 +4,6 @@ class RuleProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/MOLMEC/COMMON/ruleProcessor.h>
-	using namespace BALL;
 %End
 	public:
 	RuleProcessor();
@@ -12,7 +11,7 @@ class RuleProcessor
 	RuleProcessor(const RuleProcessor&);
 	~RuleProcessor();
 	void clear();
-	void destroy();   
+	void destroy();
 	bool initialize(INIFile&, const String&);
 	void set(const RuleProcessor&);
 	virtual bool start();

@@ -1,21 +1,10 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
-%ModuleCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
-
 class FDPB
 {
 %TypeHeaderCode
 	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
 %End
 	public:
+
 	enum ErrorCode
 	{
 		ERROR__NONE = -1,
@@ -49,14 +38,10 @@ class FDPB
 		ERROR__SETUP_REQUIRED,
 		NUMBER_OF_ERRORS
 	};
+
 	struct Option
 	{
-%TypeHeaderCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
 		static const String& VERBOSITY;
-
 		static const String& PRINT_TIMING;
 		static const String& SPACING;
 		static const String& BORDER;
@@ -79,47 +64,31 @@ class FDPB
 		static const String& BOUNDING_BOX_LOWER;
 		static const String& BOUNDING_BOX_UPPER;
 	};
+
 	struct Boundary
 	{
-%TypeHeaderCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
 		static const String& ZERO;
-
 		static const String& DEBYE;
 		static const String& COULOMB;
 		static const String& DIPOLE;
 		static const String& FOCUSING;
 	};
+
 	struct ChargeDistribution
 	{
-%TypeHeaderCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
 		static const String& TRILINEAR;
 		static const String& UNIFORM;
 	};
+
 	struct DielectricSmoothing
 	{
-%TypeHeaderCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
-		public:
 		static const String& NONE;
-
 		static const String& UNIFORM;
-
 		static const String& HARMONIC;
 	};
+
 	class Default
 	{
-%TypeHeaderCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
 		public:
 		static const int VERBOSITY;
 		static const bool PRINT_TIMING ;
@@ -142,10 +111,6 @@ class FDPB
 
 	class FastAtomStruct
 	{
-%TypeHeaderCode
-	#include <BALL/SOLVATION/poissonBoltzmann.h>
-	using namespace BALL;
-%End
 		public:
 		float q;
 		float r;
@@ -154,8 +119,9 @@ class FDPB
 		float z;
 		int index;
 	};
+
 	typedef struct FastAtomStruct FastAtom;
-	public:
+
 	FDPB();
 	FDPB(const FDPB&);
 	FDPB(System&);
@@ -164,42 +130,27 @@ class FDPB
 	FDPB(System&, Options&);
 	~FDPB();
 	void destroy();
-
 	void destroyGrids();
-
 	bool setup(System&);
-
 	bool setup(System&, Options&);
-
 	bool setupEpsGrid(System&);
 	bool setupSASGrid(System&);
-
 	bool setupAtomArray(System&);
 	bool setupKappaGrid();
 	bool setupQGrid();
 	bool setupPhiGrid();
 	bool setupBoundary();
-
 	bool solve();
-
 	double getEnergy() const;
 	double getReactionFieldEnergy() const;
 	double calculateReactionFieldEnergy() const;
-
 	Size getNumberOfIterations() const;
-
 	Index getErrorCode() const;
 	static String getErrorMessage(Index);
 
 	Options options;
 	Options results;
-
-	//RegularData3D<Vector3>* eps_grid;
 	RegularData3D* kappa_grid;
-
 	RegularData3D* q_grid;
-
 	RegularData3D* phi_grid;
-	//TRegularData3D<char>* SAS_grid;
-	//vector<FDPB::FastAtom>* atom_array;
 };

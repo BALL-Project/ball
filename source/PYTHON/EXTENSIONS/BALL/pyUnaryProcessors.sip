@@ -2,7 +2,6 @@ class AtomProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -17,7 +16,6 @@ class AtomContainerProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -32,7 +30,6 @@ class BondProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -47,7 +44,6 @@ class ChainProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -62,7 +58,6 @@ class CompositeProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -77,7 +72,6 @@ class FragmentProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -92,7 +86,6 @@ class ResidueProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -107,7 +100,6 @@ class ConstAtomProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();
@@ -122,7 +114,6 @@ class ConstCompositeProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	bool start();

@@ -4,8 +4,7 @@ template <ValueType>
 %MappedType StringHashMap<ValueType>
 {
 %TypeHeaderCode
-#include <BALL/DATATYPE/stringHashMap.h>
-using namespace BALL;
+	#include <BALL/DATATYPE/stringHashMap.h>
 %End
 
 %ConvertFromTypeCode
@@ -52,7 +51,7 @@ using namespace BALL;
 
 %ConvertToTypeCode
 	// Convert a Python dictionary to an object on the heap.
-	
+
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
@@ -108,9 +107,8 @@ template <ValueType*>
 %MappedType StringHashMap<ValueType*>
 {
 %TypeHeaderCode
-#include <BALL/DATATYPE/stringHashMap.h>
-#include <BALL/PYTHON/pyBALLSipHelper.h>
-using namespace BALL;
+	#include <BALL/DATATYPE/stringHashMap.h>
+	#include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -157,7 +155,7 @@ using namespace BALL;
 
 %ConvertToTypeCode
 	// Convert a Python dictionary to an object on the heap.
-	
+
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
@@ -213,9 +211,8 @@ template <float>
 %MappedType StringHashMap<float>
 {
 %TypeHeaderCode
-#include <BALL/DATATYPE/stringHashMap.h>
-#include <BALL/PYTHON/pyBALLSipHelper.h>
-using namespace BALL;
+	#include <BALL/DATATYPE/stringHashMap.h>
+	#include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -252,7 +249,7 @@ using namespace BALL;
 
 %ConvertToTypeCode
 	// Convert a Python dictionary to an object on the heap.
-	
+
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)

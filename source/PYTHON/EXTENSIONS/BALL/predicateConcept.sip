@@ -1,41 +1,30 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
-class UnaryCompositePredicate 
-//  : public unary_function<T, bool> 
+class UnaryCompositePredicate
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/predicate.h>
 	#include <BALL/CONCEPT/composite.h>
-	using namespace BALL;
-	typedef UnaryPredicate<Composite> UnaryCompositePredicate;
+	using UnaryCompositePredicate = UnaryPredicate<Composite>;
 %End
-  public:
+	public:
 	UnaryCompositePredicate() throw();
 	~UnaryCompositePredicate() throw();
-  bool operator () (const Composite&) const throw();
+	bool operator () (const Composite&) const throw();
 %MethodCode
 	sipRes = sipCpp->operator()(*a0);
 %End
 };
 
-
-class UnaryAtomPredicate 
-//  : public unary_function<T, bool> 
+class UnaryAtomPredicate
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/predicate.h>
 	#include <BALL/KERNEL/atom.h>
-	using namespace BALL;
-	typedef UnaryPredicate<Atom> UnaryAtomPredicate;
+	using UnaryAtomPredicate = UnaryPredicate<Atom>;
 %End
-  public:
+	public:
 	UnaryAtomPredicate() throw();
 	~UnaryAtomPredicate() throw();
-  bool operator() (const Atom&) const throw();
+	bool operator() (const Atom&) const throw();
 %MethodCode
 	sipRes = sipCpp->operator()(*a0);
 %End

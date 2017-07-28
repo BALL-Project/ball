@@ -4,7 +4,6 @@ class AssignBaseProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/MOLMEC/COMMON/assignTypes.h>
-	using namespace BALL;
 %End
 
 	public:
@@ -28,7 +27,6 @@ class AssignTypeProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/MOLMEC/COMMON/assignTypes.h>
-	using namespace BALL;
 %End
 
 	public:

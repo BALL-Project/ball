@@ -1,14 +1,7 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
-class Path 
+class Path
 {
 %TypeHeaderCode
-#include <BALL/SYSTEM/path.h>
-using namespace BALL;
+	#include <BALL/SYSTEM/path.h>
 %End
 
 	public:

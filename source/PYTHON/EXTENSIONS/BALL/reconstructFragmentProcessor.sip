@@ -1,17 +1,9 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
-class ReconstructFragmentProcessor 
-//  : public UnaryProcessor<Fragment> 
+class ReconstructFragmentProcessor
 	: FragmentProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 	#include <BALL/STRUCTURE/fragmentDB.h>
-	using namespace BALL;
 %End
 	public:
 	ReconstructFragmentProcessor();
@@ -21,10 +13,9 @@ class ReconstructFragmentProcessor
 	virtual bool finish();
 	Processor::Result operator()(Fragment&);
 %MethodCode
-  sipRes = sipCpp->operator () (*a0);
+	sipRes = sipCpp->operator () (*a0);
 %End
 	Size getNumberOfInsertedAtoms();
 	void setFragmentDB(const FragmentDB&);
 	const FragmentDB* getFragmentDB() const;
 };
-

@@ -4,18 +4,12 @@ class HBondProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/HBondProcessor.h>
-	using namespace BALL;
 %End
 
 	public:
 
 	class HBond
 	{
-%TypeHeaderCode
-		#include <BALL/STRUCTURE/HBondProcessor.h>
-		using namespace BALL;
-%End
-
 		public:
 		HBond();
 		HBond(const Atom*, const Atom*, bool);
@@ -28,10 +22,6 @@ class HBondProcessor
 
 	struct Option
 	{
-%TypeHeaderCode
-		#include <BALL/STRUCTURE/HBondProcessor.h>
-		using namespace BALL;
-%End
 		static const String PREDICTION_METHOD;
 		static const String ADD_HBONDS;
 		static const String KABSCH_SANDER_ENERGY_CUTOFF;
@@ -39,10 +29,6 @@ class HBondProcessor
 
 	struct Default
 	{
-%TypeHeaderCode
-		#include <BALL/STRUCTURE/HBondProcessor.h>
-		using namespace BALL;
-%End
 		static const String PREDICTION_METHOD;
 		static const bool ADD_HBONDS;
 		static const float KABSCH_SANDER_ENERGY_CUTOFF;
@@ -50,10 +36,6 @@ class HBondProcessor
 
 	struct PredictionMethod
 	{
-%TypeHeaderCode
-		#include <BALL/STRUCTURE/HBondProcessor.h>
-		using namespace BALL;
-%End
 		static const String KABSCH_SANDER;
 		static const String WISHART_ET_AL;
 	};

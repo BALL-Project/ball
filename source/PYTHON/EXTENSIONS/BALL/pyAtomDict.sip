@@ -1,15 +1,10 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 %MappedType PyAtomDict
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-  #include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/pyBALLSipHelper.h>
 	#include <BALL/KERNEL/atom.h>
-	using namespace BALL;
-	typedef HashMap<const Atom*, float> PyAtomDict;
+	using PyAtomDict = HashMap<const Atom*, float>;
 %End
 
 %ConvertFromTypeCode
@@ -21,7 +16,6 @@
 	}
 
 	// Convert the hash map to a dictionary.
-
 	for (PyAtomDict::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		PyObject* key = pyMapBALLObjectToSip(const_cast<Atom&>(*(it->first)));
@@ -36,20 +30,20 @@
 
 	return dict;
 %End
- 
+
 %ConvertToTypeCode
 	// Convert a Python dictionary to a PyAtomDict object on the
 	// heap.
- 
+
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
 	{
 		return 0;
 	}
-		
+
 	PyAtomDict* atom_dict = new PyAtomDict;
- 
+
 	for (int i = 0; i < PyList_GET_SIZE(key_list); ++i)
 	{
 		PyObject* key = PyList_GET_ITEM(key_list,i);
@@ -70,10 +64,9 @@
 		double value = PyFloat_AsDouble(float_obj);
 		atom_dict -> insert(std::pair<Atom*,float>(atom, value));
 	}
- 
+
 	*sipCppPtr = atom_dict;
 
 	return 1;
 %End
 };
-

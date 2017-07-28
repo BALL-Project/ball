@@ -2,7 +2,6 @@ class AtomIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/atomIterator.h>
-	using namespace BALL;
 %End
 	AtomIterator& __iter__();
 %MethodCode
@@ -27,7 +26,6 @@ class FragmentIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/fragmentIterator.h>
-	using namespace BALL;
 %End
 	FragmentIterator& __iter__();
 %MethodCode
@@ -52,7 +50,6 @@ class ChainIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/chainIterator.h>
-	using namespace BALL;
 %End
 	ChainIterator& __iter__();
 %MethodCode
@@ -77,7 +74,6 @@ class ResidueIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/residueIterator.h>
-	using namespace BALL;
 %End
 	ResidueIterator& __iter__();
 %MethodCode
@@ -102,7 +98,6 @@ class MoleculeIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/moleculeIterator.h>
-	using namespace BALL;
 %End
 	MoleculeIterator& __iter__();
 %MethodCode
@@ -127,7 +122,6 @@ class ProteinIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/proteinIterator.h>
-	using namespace BALL;
 %End
 	ProteinIterator& __iter__();
 %MethodCode
@@ -152,7 +146,6 @@ class PDBAtomIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/atomIterator.h>
-	using namespace BALL;
 %End
 	PDBAtomIterator& __iter__();
 %MethodCode
@@ -177,7 +170,6 @@ class SecondaryStructureIterator
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/secondaryStructureIterator.h>
-	using namespace BALL;
 %End
 	SecondaryStructureIterator& __iter__();
 %MethodCode
@@ -197,4 +189,3 @@ class SecondaryStructureIterator
 	++*sipCpp;
 %End
 };
-

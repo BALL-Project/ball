@@ -3,10 +3,10 @@ class ResidueChecker
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/residueChecker.h>
-	using namespace BALL;
 %End
-	
-  public:
+
+	public:
+
 	enum TestType
 	{
 		MISSING_ATOMS = 0,
@@ -39,4 +39,4 @@ class ResidueChecker
 %End
 	bool start();
 	bool finish();
-}; 
+};

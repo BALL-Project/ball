@@ -30,12 +30,12 @@
 %Include exception.sip
 %Include global.sip
 %Include logStream.sip
-%Include version.sip 
+%Include version.sip
 
 // CONCEPT
 %Include composite.sip
 %Include embeddable.sip
-%Include object.sip 
+%Include object.sip
 %Include molecularInformation.sip
 %Include persistentObject.sip
 %Include predicateConcept.sip
@@ -45,13 +45,13 @@
 %Include timeStamp.sip
 
 // DATATYPE
-%Include bitVector.sip 
+%Include bitVector.sip
 %Include options.sip
 %Include regularData1D.sip
 %Include regularData2D.sip
 %Include regularData3D.sip
 %Include regularExpression.sip
-%Include string.sip 
+%Include string.sip
 %Include stringHashMap.sip
 
 // ENERGY
@@ -88,9 +88,9 @@
 %Include atomContainer.sip
 %Include PDBAtom.sip
 %Include PTE_.sip
-%Include bond.sip 
+%Include bond.sip
 %Include chain.sip
-%Include expression.sip 
+%Include expression.sip
 %Include fragment.sip
 %Include molecule.sip
 %Include nucleicAcid.sip
@@ -157,7 +157,6 @@
 %Include snapShot.sip
 %Include snapShotManager.sip
 %Include typeRuleProcessor.sip
-%Include typeNameRuleProcessor.sip
 
 // MOLMEC/MDSIMULATION
 %Include canonicalMD.sip
@@ -202,7 +201,7 @@
 %Include geometricTransformations.sip
 %Include pyAtomHashGrid.sip
 %Include peptides.sip
-%Include numericalSAS.sip 
+%Include numericalSAS.sip
 %Include nucleotideMapping.sip
 %Include residueChecker.sip
 %Include RMSDMinimizer.sip

@@ -1,53 +1,31 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-//
-
-%ModuleCode
-	#include <BALL/QSAR/aromaticityProcessor.h>
-	using namespace BALL;
-%End
-
 class AromaticityProcessor
-	:	AtomContainerProcessor
+	: AtomContainerProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/QSAR/aromaticityProcessor.h>
-	using namespace BALL;
-	using namespace BALL::Exception;
 %End
 
 	public:
 
-		struct Option
-		{	
-			static const char* OVERWRITE_BOND_ORDERS;	
-		};
+	struct Option
+	{
+		static const char* OVERWRITE_BOND_ORDERS;
+	};
 
-		struct Default
-		{
-			static const bool OVERWRITE_BOND_ORDERS;
-		};
+	struct Default
+	{
+		static const bool OVERWRITE_BOND_ORDERS;
+	};
 
-		// BALL_CREATE(AromaticityProcessor)
+	AromaticityProcessor();
+	virtual ~AromaticityProcessor();
 
-		AromaticityProcessor();
-//		AromaticityProcessor(const AromaticityProcessor& aro);
+	Options options;
+	void setDefaultOptions();
+	Processor::Result operator () (AtomContainer& ac);
 
-		virtual ~AromaticityProcessor();
-
-//		AromaticityProcessor& operator = (const AromaticityProcessor& aro);
-
-		Options options;
-		void setDefaultOptions();
-
-//		void aromatize(const vector<vector<Atom*> >&, AtomContainer&);
-
-//		void aromatizeSimple(vector<vector<Atom*> >&);
-
-		Processor::Result operator () (AtomContainer& ac);
 %MethodCode
-  sipRes = sipCpp->operator () (*a0);
+	sipRes = sipCpp->operator () (*a0);
 %End
 };
