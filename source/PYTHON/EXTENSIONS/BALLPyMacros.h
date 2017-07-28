@@ -1,7 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 #ifndef BALL_PYTHON_EXTENSIONS_BALLPYMACROS_H
 #define BALL_PYTHON_EXTENSIONS_BALLPYMACROS_H
 
@@ -10,7 +6,7 @@
 	sipType_##type
 
 #define BALL_CONVERT_FROM_INSTANCE(object, type, transferObject)\
- sipConvertFromType(object, sipType_##type, transferObject)
+	sipConvertFromType(object, sipType_##type, transferObject)
 
 #define BALL_CONVERT_FROM_MAPPED_TYPE(object, type, transferObject)\
 	sipConvertFromType(object, sipType_##type, transferObject)
@@ -34,7 +30,7 @@
 	sipReleaseType(object, sipType_##type, state)
 
 #define BALL_TO_SIP_MAP(type)\
-        if (RTTI::isKindOf<type>(sipCpp))\
+	if (RTTI::isKindOf<type>(sipCpp))\
 	{\
 		sipType = sipType_##type;\
 	}\
