@@ -2,26 +2,6 @@
 // vi: set ts=2:
 //
 
-%Exception StringHashMapString::IllegalKey(GeneralException) /PyName=StringHashMapString_IllegalKey/
-{
-%TypeHeaderCode
-#include <BALL/DATATYPE/string.h>
-#include <BALL/COMMON/exception.h>
-using namespace BALL;
-using namespace BALL::Exception;
-typedef StringHashMap<String> StringHashMapString;
-%End
-%RaiseCode
-		String detail = 
-			(String)(sipExceptionRef.getName()) + " in line " + String(sipExceptionRef.getLine()) + " of " + sipExceptionRef.getFile()
-																				 + ": " + sipExceptionRef.getMessage();
-
-    SIP_BLOCK_THREADS
-    PyErr_SetString(sipException_StringHashMapString_IllegalKey, detail.c_str());
-    SIP_UNBLOCK_THREADS
-%End
-};
-
 class Options
   // : public StringHashMap<String> 
 {

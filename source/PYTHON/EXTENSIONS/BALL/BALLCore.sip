@@ -8,6 +8,11 @@
 	#include <BALLPyMacros.h>
 %End
 
+%UnitCode
+	namespace BALL{}
+	using namespace BALL;
+%End
+
 %Copying
 	BALL is made available under the Lesser GNU Public License (LGPL 2.1).
 	See LICENSE for details.
