@@ -1,16 +1,15 @@
-
 class SecondaryStructureProcessor
-	:	CompositeProcessor
+	: CompositeProcessor
 {
 %TypeHeaderCode
+	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 	using namespace BALL;
-	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End
 	public:
 	SecondaryStructureProcessor();
 	Processor::Result operator() (Composite&);
 %MethodCode
-  sipRes = sipCpp->operator () (*a0);
+	sipRes = sipCpp->operator () (*a0);
 %End
 };
