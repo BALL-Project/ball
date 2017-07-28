@@ -1,11 +1,3 @@
-%UnitCode
-	#include <sstream>
-	#include <BALL/COMMON/exception.h>
-
-	using std::stringstream;
-	using namespace BALL::Exception;
-%End
-
 %Exception GeneralException(SIP_Exception) /PyName=GeneralException/
 {
 %RaiseCode
@@ -230,7 +222,7 @@
 	SIP_UNBLOCK_THREADS
 %End
 };
-  
+
 %Exception BufferOverflow(GeneralException) /PyName=BufferOverflow/
 {
 %RaiseCode

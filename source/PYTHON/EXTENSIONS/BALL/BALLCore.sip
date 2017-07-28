@@ -9,8 +9,11 @@
 %End
 
 %UnitCode
-	namespace BALL{}
+	#include <sstream>
+	#include <BALL/COMMON/exception.h>
+	using std::stringstream;
 	using namespace BALL;
+	using namespace BALL::Exception;
 %End
 
 %Copying
