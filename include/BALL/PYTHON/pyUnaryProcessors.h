@@ -1,5 +1,5 @@
-#ifndef BALL_PYTHON_PYPROCESSOR_H
-#define BALL_PYTHON_PYPROCESSOR_H
+#ifndef BALL_PYTHON_PYUNARYPROCESSORS_H
+#define BALL_PYTHON_PYUNARYPROCESSORS_H
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -17,4 +17,4 @@ namespace BALL
 	using ConstCompositeProcessor = ConstUnaryProcessor<Composite>;
 }
 
-#endif //BALL_PYTHON_PYPROCESSOR_H
+#endif //BALL_PYTHON_PYUNARYPROCESSORS_H
