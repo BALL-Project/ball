@@ -1,22 +1,19 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 /////////////////////////
-// BALL PYTHON SUPPORT
+// BALL PYTHON SUPPORT //
 /////////////////////////
-//
-// module definition file
-//
 
 %Module(name=BALLCore, all_raise_py_exception=True)
 
 %ModuleHeaderCode
-#include <BALLPyMacros.h>
+	#include <BALLPyMacros.h>
 %End
 
-%Include copying.sip
+%Copying
+	BALL is made available under the Lesser GNU Public License (LGPL 2.1).
+	See LICENSE for details.
+%End
 
+// STL
 %Include deque.sip
 %Include list.sip
 %Include vector.sip
@@ -25,78 +22,43 @@
 
 // COMMON
 %Include constants.sip
-// %Include create.sip
-// debug.sip // not needed
 %Include exception.sip
 %Include global.sip
-// %Include hash.sip // ??
-// %Include limits.sip // ??
 %Include logStream.sip
-// %Include rtti.sip // ??
 %Include version.sip 
 
 // CONCEPT
-// XDRPersistenceManager.h
-// autoDeletable.h	// not needed
-// baseFunctor.h		// not supported
-// baseIterator.h   // not supported
-// bidirectionalIterator.h // not supported
-// classTest.h      // not needed
-// comparator.h     // ??
 %Include composite.sip
 %Include embeddable.sip
-// enumerator.h     // ??
-// forwardIterator.h // not supported
-// notification.h    // ??
 %Include object.sip 
-// %Include client.sip // we need to find a way to have this depend on BALL_HAS_ASIO
 %Include molecularInformation.sip
-// persitenceManager.h // ??
 %Include persistentObject.sip
 %Include predicateConcept.sip
 %Include processor.sip
 %Include property.sip
-// randomAccessIterator.h // not supported
-// reverseBidirectionalIterator.h // not supported
 %Include selectable.sip
-// singleton.h // not supported
-// textPersistenceManager.h // ??
 %Include timeStamp.sip
-// visitor.h // not supported
 
 // DATATYPE
-// binarySearchTree.h // ??
 %Include bitVector.sip 
-// forEach.h // not supported -> extractors!
-// %Include hashGrid.h // ?? too generic... Possibly create an Atom* grid from it?
-// hashMap.h // -> dictionary
-// hashSet.h // -> dictionary
-// list.h // -> Python lists
-// listStack.h // ?? 
 %Include options.sip
 %Include regularData1D.sip
 %Include regularData2D.sip
 %Include regularData3D.sip
-// triple.h -- generic, no way...
-// quadruple.h -- generic, no way...
 %Include regularExpression.sip
 %Include string.sip 
 %Include stringHashMap.sip
-// stringHashSet.h // -> dictionaries
-
 
 // ENERGY
 %Include atomicContactEnergy.sip
 %Include coulomb.sip
 %Include distanceCoulomb.sip
 
-
 // FORMAT
 %Include DCDFile.sip
 %Include HINFile.sip
 %Include HMOFile.sip
 %Include INIFile.sip
-// %Include JCAMPFile.sip
 %Include KCFFile.sip
 %Include MOL2File.sip
 %Include MOLFile.sip
@@ -104,12 +66,10 @@
 %Include PDBFile.sip
 %Include PDBInfo.sip
 %Include PDBRecords.sip
-%Include PDBdefs.sip // only the most relevant enums, we do not expose the internals
+%Include PDBdefs.sip
 %Include SDFile.sip
 %Include TRRFile.sip
 %Include XYZFile.sip
-// %Include bruker1DFile.sip
-// %Include bruker2DFile.sip
 %Include genericMolFile.sip
 %Include lineBasedFile.sip
 %Include molFileFactory.sip
@@ -118,39 +78,22 @@
 %Include resourceFile.sip
 %Include trajectoryFile.sip
 
-
 // KERNEL
 %Include atom.sip
 %Include atomContainer.sip
-// atomIterator.h // not needed
 %Include PDBAtom.sip
-// PDBAtomIterator.h // not needed
 %Include PTE_.sip
 %Include bond.sip 
-// bondIterator.h // not needed
 %Include chain.sip
-// chainIterator.h // not needed
 %Include expression.sip 
-// forEach.h // not needed
 %Include fragment.sip
-// fragmentIterator.h // not needed
-// global.h // not needed
-// iterator.h // not needed
 %Include molecule.sip
-// moleculeIterator.h // not needed
 %Include nucleicAcid.sip
-// nucleicAcidIterator.h // not needed
 %Include nucleotide.sip
-// nucleotideIterator.h // not needed
-// %Include predicate.sip
 %Include protein.sip
-// proteinIterator.h // not needed
 %Include residue.sip
-// residueIterator.h // not needed
 %Include secondaryStructure.sip
-// secondaryStructureIterator.h // not needed
 %Include selector.sip
-// %Include standardPredicates.sip // not needed - use Selector class!
 %Include system.sip
 
 // MATHS
@@ -159,14 +102,8 @@
 %Include box3.sip
 %Include simpleBox3.sip
 %Include circle3.sip
-// %Include common.sip - trouble! namespaces...
-// %Include function.sip - template stuff only...
 %Include line3.sip
 %Include matrix44.sip
-// %Include numericalIntegrator.sip
-// %Include piecewiseFunction.sip
-// %Include piecewisePolynomial.sip
-// %Include rombergIntegrator.sip
 %Include plane3.sip
 %Include quaternion.sip
 %Include sphere3.sip
@@ -214,7 +151,6 @@
 %Include ruleProcessor.sip
 %Include snapShot.sip
 %Include snapShotManager.sip
-// support.h
 %Include typeRuleProcessor.sip
 %Include typeNameRuleProcessor.sip
 
@@ -231,42 +167,23 @@
 %Include strangLBFGS.sip
 %Include shiftedLVMM.sip
 
-// MOLMEC/PARAMETER
-// %Include atomTypes.sip
-// %Include charmmEEF1.sip
-// %Include cosineTorsion.sip
-// %Include forceFieldParameters.sip
-// %Include lennardJones.sip
-// %Include potential1210.sip
-// %Include quadraticAngleBend.sip
-// %Include quadraticBondStretch.sip
-// %Include quadraticImproperTorsion.sip
-// %Include residueTorsions.sip
-// %Include templates.sip
-
-
 // NMR
 %Include shiftModule.sip
-// %Include johnsonBovey.sip // ??
 
 // PYTHON
 %Include extractors.sip
 %Include pyIndexList.sip // a list of numbers (indices etc.)
-%Include pyAtomDict.sip // a dictionary mapping to atoms
-%Include pyUnaryProcessors.sip 
+%Include pyAtomDict.sip  // a dictionary mapping to atoms
+%Include pyUnaryProcessors.sip
 
 // QSAR
-//%Include descriptor.sip
-//%Include simpleDescriptors.sip
 %Include aromaticityProcessor.sip
 
 // SOLVATION
-// %Include molecularSurfaceGrid.sip // ??
 %Include ooiEnergy.sip
 %Include poissonBoltzmann.sip
 
 // STRUCTURE
-// %Include analyticalSES.sip
 %Include addHydrogenProcessor.sip
 %Include assignBondOrderProcessor.sip
 %Include atomBijection.sip
@@ -284,8 +201,6 @@
 %Include nucleotideMapping.sip
 %Include residueChecker.sip
 %Include RMSDMinimizer.sip
-// %Include rotamerLibrary.sip
-// %Include rules.sip
 %Include structureMapper.sip
 %Include peptideBuilder.sip
 %Include peptideCapProcessor.sip
@@ -295,11 +210,7 @@
 %Include sdGenerator.sip
 
 // SYSTEM
-// %Include directory.sip
 %Include file.sip
-// %Include fileSystem.sip
 %Include path.sip
-// %Include socket.sip
 %Include sysinfo.sip
 %Include timer.sip
-
