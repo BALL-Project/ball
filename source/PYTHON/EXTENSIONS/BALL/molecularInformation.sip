@@ -2,10 +2,9 @@ class MolecularInformation
 {
 %TypeHeaderCode
 	#include <BALL/CONCEPT/molecularInformation.h>
-	using namespace BALL;
 %End
-  public:
-			
+	public:
+
 	enum Type
 	{
 		TYPE__UNKNOWN              = -1,
@@ -17,11 +16,11 @@ class MolecularInformation
 		TYPE__RESIDUE              = 5,
 		TYPE__SECONDARY_STRUCTURE  = 6,
 		TYPE__ATOM                 = 7,
-		TYPE__BOND 								 = 8
+		TYPE__BOND                 = 8
 	};
 
 	MolecularInformation() throw();
-  ~MolecularInformation()	throw();
+	~MolecularInformation()	throw();
 	virtual void clear() throw();
 	Type getType() const throw();
 	String getName() const throw();

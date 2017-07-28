@@ -1,10 +1,9 @@
 class ClearChargeProcessor
-	: AtomProcessor 
+	: AtomProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	Processor::Result operator () (Atom&);
@@ -19,7 +18,6 @@ class ClearRadiusProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	Processor::Result operator () (Atom&);
@@ -34,7 +32,6 @@ class AssignRadiusProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	AssignRadiusProcessor();
@@ -52,12 +49,11 @@ class AssignRadiusProcessor
 };
 
 class AssignChargeProcessor
-	: AssignRadiusProcessor 
+	: AssignRadiusProcessor
 {
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/defaultProcessors.h>
-	using namespace BALL;
 %End
 	public:
 	AssignChargeProcessor();

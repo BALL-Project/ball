@@ -3,7 +3,6 @@ class ForceFieldParameters
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-	using namespace BALL;
 %End
 	public:
 

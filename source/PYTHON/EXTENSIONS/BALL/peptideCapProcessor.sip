@@ -5,7 +5,6 @@ class PeptideCapProcessor
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/peptideCapProcessor.h>
 	#include <BALL/STRUCTURE/peptides.h>
-	using namespace BALL;
 	using namespace BALL::Peptides;
 %End
 public:

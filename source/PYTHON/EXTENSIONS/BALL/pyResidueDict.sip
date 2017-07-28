@@ -1,14 +1,10 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 %MappedType PyResidueDict
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-  #include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/pyBALLSipHelper.h>
 	#include <BALL/KERNEL/residue.h>
-	typedef HashMap<const Residue*, float> PyResidueDict;
+	using PyResidueDict = HashMap<const Residue*, float>;
 %End
 
 %ConvertFromTypeCode
@@ -35,20 +31,20 @@
 
 	return dict;
 %End
- 
+
 %ConvertToTypeCode
 	// Convert a Python dictionary to a PyResidueDict object on the
 	// heap.
- 
+
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
 	{
 		return 0;
 	}
-		
+
 	PyResidueDict* residue_dict = new PyResidueDict;
- 
+
 	for (int i = 0; i < PyList_GET_SIZE(key_list); ++i)
 	{
 		PyObject* key = PyList_GET_ITEM(key_list,i);
@@ -69,10 +65,9 @@
 		double value = PyFloat_AsDouble(float_obj);
 		residue_dict -> insert(std::pair<Residue*,float>(residue, value));
 	}
- 
+
 	*sipCppPtr = residue_dict;
 
 	return 1;
 %End
 };
-

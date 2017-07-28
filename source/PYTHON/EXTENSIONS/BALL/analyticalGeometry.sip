@@ -1,29 +1,7 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 %ModuleCode
 	#include <BALL/MATHS/analyticalGeometry.h>
-	using namespace BALL;
 %End
 
-// float GetDeterminant_(const T* m, Size dim);
-// float GetDeterminant(const T* m, Size dim);
-// float GetDeterminant2(const T* m);
-// float GetDeterminant2(float m00, float m01, float m10, float m11);
-// float GetDeterminant3(const T *m);
-// float GetDeterminant3
-//   (float m00, float m01, float m02,
-//    float m10, float m11, float m12,
-//   float m20, float m21, float m22);
-// bool SolveSystem(const T* m, T* x, const Size dim);
-// bool SolveSystem2
-// short SolveQuadraticEquation
-//  (float, float b, const float c, float& x1, float x2);
-// Vector3 GetPartition(const Vector3&, const Vector3& b);
-// Vector3 GetPartition(const Vector3&, const Vector3& b, float r, float s);
 float GetDistance(const Vector3&, const Vector3&);
 float GetDistance(const Line3&, const Vector3&);
 float GetDistance(const Vector3&, const Line3&);
@@ -71,8 +49,7 @@ bool isParallel(const Line3&, const Plane3&);
 bool isParallel(const Plane3&, const Line3&);
 bool isParallel(const Plane3&, const Plane3&);
 Angle getTorsionAngle
-  (float, float, float,
-   float, float, float,
-   float, float, float, 
-   float, float, float);
- 
+	(float, float, float,
+	 float, float, float,
+	 float, float, float,
+	 float, float, float);

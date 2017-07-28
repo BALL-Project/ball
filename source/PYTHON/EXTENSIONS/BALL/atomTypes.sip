@@ -2,9 +2,7 @@ class AtomTypes
 	: ParameterSection
 {
 %TypeHeaderCode
-	#include <BALL/KERNEL/atom.h>
 	#include <BALL/MOLMEC/PARAMETER/atomTypes.h>
-	using namespace BALL;
 %End
 	public:
 
@@ -13,7 +11,7 @@ class AtomTypes
 	virtual ~AtomTypes();
 
 	virtual bool extractSection(Parameters& parameters,
-			const String& section_name);
+		const String& section_name);
 	AtomType getType(const String& name) const;
 	bool hasType(const String& name) const;
 	String getTypeName(AtomType type) const;
@@ -22,4 +20,3 @@ class AtomTypes
 
 	bool operator == (const AtomTypes& atom_types) const;
 };
-

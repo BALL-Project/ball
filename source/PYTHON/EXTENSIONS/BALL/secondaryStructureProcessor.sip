@@ -4,7 +4,6 @@ class SecondaryStructureProcessor
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/secondaryStructureProcessor.h>
-	using namespace BALL;
 %End
 	public:
 	SecondaryStructureProcessor();

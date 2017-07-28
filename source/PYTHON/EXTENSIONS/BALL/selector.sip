@@ -4,7 +4,6 @@ class Selector
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyUnaryProcessors.h>
 	#include <BALL/KERNEL/selector.h>
-	using namespace BALL;
 %End
 	public:
 	Selector();

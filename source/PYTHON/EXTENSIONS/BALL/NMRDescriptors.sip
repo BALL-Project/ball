@@ -1,6 +1,5 @@
 %ModuleHeaderCode
 	#include <BALL/QSAR/NMRDescriptors.h>
-	using namespace BALL;
 %End
 
 PyResidueDict& calculateResidueChiAngles(const Protein&);
@@ -39,9 +38,7 @@ PyResidueDict& calculateResidueChiAngles(const Chain&);
 	}
 %End
 
-
 float calculateResidueChiAngles(const Residue&) const;
-
 
 PyResidueDict& calculateResidueChi2Angles(const Protein&);
 %MethodCode
@@ -80,4 +77,3 @@ PyResidueDict& calculateResidueChi2Angles(const Chain&);
 %End
 
 float calculateResidueChi2Angles(const Residue&) const;
-

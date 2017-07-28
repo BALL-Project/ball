@@ -1,20 +1,8 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
-%TypeHeaderCode
+%ModuleCode
 	#include <BALL/MATHS/common.h>
 	using namespace BALL::Maths;
 %End
 
-// float abs(float);
-// float frac(float);
-// float max(float, float);
-// float max(float, float, float);
-// float min(float, float);
-// float min(float, float, float);
 float round(float);
 float sgn(float);
 bool isFinite(float);

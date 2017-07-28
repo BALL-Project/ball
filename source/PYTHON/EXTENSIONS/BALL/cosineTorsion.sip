@@ -2,8 +2,7 @@ struct Data
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	using namespace BALL;
-	typedef CosineTorsion::Data Data;
+	using Data = CosineTorsion::Data;
 %End
 };
 
@@ -11,8 +10,7 @@ struct SingleData
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	using namespace BALL;
-	typedef CosineTorsion::SingleData SingleData;
+	using SingleData = CosineTorsion::SingleData;
 %End
 };
 
@@ -20,8 +18,7 @@ struct SingleValues
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	using namespace BALL;
-	typedef CosineTorsion::SingleValues SingleValues;
+	using SingleValues = CosineTorsion::SingleValues;
 %End
 	SingleValues(const SingleValues& v);
 	SingleValues();
@@ -33,8 +30,7 @@ struct Values
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	using namespace BALL;
-	typedef CosineTorsion::Values Values;
+	using Values = CosineTorsion::Values;
 %End
 	Values();
 	Values(Size number);
@@ -50,7 +46,6 @@ class CosineTorsion
 {
 %TypeHeaderCode
 	#include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
-	using namespace BALL;
 %End
 	public:
 
@@ -64,8 +59,6 @@ class CosineTorsion
 	bool hasParameters(AtomType I, AtomType J, AtomType K, AtomType L) const;
 	Values getParameters(AtomType I, AtomType J, AtomType K, AtomType L) const;
 	bool assignParameters(Values& parameters, AtomType I,
-												AtomType J, AtomType K, AtomType L) const;
-
+		AtomType J, AtomType K, AtomType L) const;
 	bool operator == (const CosineTorsion& cosine_torsion) const;
 };
-
