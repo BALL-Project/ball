@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-%Exception GeneralException(SIP_Exception) /PyName=GeneralException, Default/
+%Exception GeneralException(SIP_Exception) /PyName=GeneralException/
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/string.h>
