@@ -18,7 +18,7 @@ class ServerWidget
 	~ServerWidget() throw();
 	virtual void clear() throw();
 
-	%Exception ServerWidget::NotCompositeObject(GeneralException) /PyName=ServerWidget_NotCompositeObject/
+	%Exception ServerWidget::NotCompositeObject(SIP_Exception) /PyName=ServerWidget_NotCompositeObject/
 	{
 %TypeHeaderCode
 #include <BALL/DATATYPE/string.h>
