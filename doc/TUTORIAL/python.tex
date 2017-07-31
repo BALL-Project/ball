@@ -1,7 +1,7 @@
 \section{Overview}
 
 \Index{Python} is an object-oriented scripting language~\cite{Python} that is 
-well suited both as a language for embedding scripts into BALL applications and
+well-suited both as a language for embedding scripts into BALL applications and
 as a rapid prototyping language using the underlying BALL objects.
 BALL provides Python bindings for most of its classes in order to allow 
 \Index{Rapid Methodology Development} (RMD). Some of the functionality BALL 
@@ -14,7 +14,7 @@ Since release 1.2 of BALL, the Python support is enabled by default. The
 remainder of this section assumes that you are somewhat familiar with the most
 important language concepts of Python.
 
-BALL relies on SIP~\cite{SIP} \index{SIP} version 4.6.0 to translate its class
+BALL relies on SIP~\cite{SIP} \index{SIP} to translate its class
 headers semi-automatically into Python wrapper classes. For each \CPP class
 SIP creates a subclass defining the Python interface and a Python class
 using that \CPP interface class. The Python class has the same name as the
@@ -97,47 +97,25 @@ there is no further documentation of the Python support available.
 
 \section{Installation}
 
-Download, configure, and install the \Index{SIP} version 4.6.0 or later from 
-\URL{http://www.ballview.org/Downloads/Contrib/} or from~\cite{SIP}.
-Run the configure script with the command ''python configure.py -x" to disable 
-the Qt support. It is important to compile BALL with the same \CPP compiler SIP
-and Qt were compiled with. You can then enable the Python support of BALL
-by specifying the option \mbox{"\option{--with-python=<path>}"}, where
-{\tt path} should point to the executable of an installed Python (version at
-least 2.5). You will also have to specify the path to the SIP executable, its
-headers, and its library ({\tt libsip.a|so}). Adding these four options might
-look something like this on your system:
+The \texttt{BALLCore} and \texttt{VIEW} Python modules are already included
+in all source and  binary distributions and installed automatically.
+Alternatively, the modules can also be built manually using the
+\texttt{BALLCoremodule} and \texttt{VIEWmodule} targets:
+\begin{lstlisting}{language=sh}
+make BALLCoremodule VIEWmodule
+\end{lstlisting}
+On Windows, the modules can be built using the \texttt{BALLPython.sln}
+solution file.
 
-\begin{lstlisting}{}
-  ./configure \
-    --with-python=/opt/bin/python2.5\
-    --with-sip=/opt/bin/sip\
-    --with-sip-incl=/opt/include/sip\
-    --with-sip-lib=/opt/lib
+Before the modules can finally be used, two environment variables need to be set:
+\begin{lstlisting}{language=sh}
+# Linux/Mac
+export PYTHONPATH=<PATH to BALL libs>:<PATH to sip libs>:${PYTHONPATH}
+export LD_LIBRARY_PATH=<PATH to BALL libs>:<PATH to QT libs>:\
+<PATH to sip libs>:${LD_LIBRARY_PATH}
+
+# Windows
+set PYTHONPATH=<PATH to BALL libs>;<PATH to sip libs>;%PYTHONPATH%
+set PATH=<PATH to BALL libs>;<PATH to QT libs>;<PATH to sip libs>;%PATH%
 \end{lstlisting}
 
-\noindent
-After configuring and building BALL, you should then change to {\tt
-BALL/source/PYTHON/EXTENSIONS}. Here, you will have to run
-
-\begin{lstlisting}{}
-  make sip
-  make depend
-  make
-  make install
-\end{lstlisting}
-
-\noindent
-in order to build the Python bindings, which are then installed to
-{\tt BALL/lib/<platform>}. You can then execute the {\tt pyballinit.py} script in 
-{\tt BALL/source/PYTHON/EXTENSIONS} to get an interactive Python shell with
-the BALL bindings or just start the Python interpreter and import the BALL
-bindings through
-
-\begin{lstlisting}{}
-  from BALL import *
-\end{lstlisting}
-
-\noindent
-Note, that you have to add the directory where the bindings are installed to
-Python's module search path ({\tt sys.path}).
