@@ -1,9 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 class GeometricObject
 {
 %TypeHeaderCode
@@ -22,9 +16,6 @@ class GeometricObject
 	#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 	#include <BALL/VIEW/PRIMITIVES/multiLine.h>
 	#include <BALL/VIEW/PRIMITIVES/quadMesh.h>
-
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
 
 %ConvertToSubClassCode
@@ -34,7 +25,7 @@ class GeometricObject
 	//BALL_TO_SIP_MAP(Point)
 	//BALL_TO_SIP_MAP(MultiLine)
 	//BALL_TO_SIP_MAP(QuadMesh)
-	
+
 	BALL_TO_SIP_MAP(Sphere)
 	BALL_TO_SIP_MAP(TwoColoredTube)
 	BALL_TO_SIP_MAP(Tube)
@@ -49,45 +40,38 @@ class GeometricObject
 	}
 %End
 
-  public:
+	public:
 
-  // BALL_CREATE(GeometricObject);
-  GeometricObject() throw();
-  GeometricObject(const GeometricObject&) throw();
-  ~GeometricObject() throw();
-  virtual void clear() throw();
-  void set(const GeometricObject&) throw();
-  // GeometricObject& operator = (const GeometricObject& object) throw();
-  void swap(GeometricObject&) throw();
-  void setComposite(const Composite*) throw();
-  const Composite* getComposite() const throw();
-  virtual bool isValid() const throw();
-  // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
-  void setColor(const ColorRGBA&) throw();
-  void setColor(const ColorUnit&, const ColorUnit&, const ColorUnit&, const ColorUnit& alpha = 1.0) throw();
+	GeometricObject() throw();
+	GeometricObject(const GeometricObject&) throw();
+	~GeometricObject() throw();
+	virtual void clear() throw();
+	void set(const GeometricObject&) throw();
+	void swap(GeometricObject&) throw();
+	void setComposite(const Composite*) throw();
+	const Composite* getComposite() const throw();
+	virtual bool isValid() const throw();
+	void setColor(const ColorRGBA&) throw();
+	void setColor(const ColorUnit&, const ColorUnit&, const ColorUnit&, const ColorUnit& alpha = 1.0) throw();
 
 	ColorRGBA& getColor() throw();
-  // const ColorRGBA& getColor() const throw();
 
-  void getColor(ColorUnit&, ColorUnit&, ColorUnit&, ColorUnit&) const throw();
-	//bool operator == (const GeometricObject& object) const throw();
-	//bool operator < (const GeometricObject& object) const throw();
+	void getColor(ColorUnit&, ColorUnit&, ColorUnit&, ColorUnit&) const throw();
 
 	// convert to a string representation
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("GeometricObject") 
-						+ " { "
-						+ " Composite: " + String((long int)sipCpp->getComposite())
-						+ " }").c_str());
+	sipRes = PyString_FromString(String(String("GeometricObject")
+		+ " { "
+		+ " Composite: " + String((long int)sipCpp->getComposite())
+		+ " }").c_str());
 %End
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("GeometricObject") 
-						+ " { "
-						+ " Composite: " + String((long int)sipCpp->getComposite())
-						+ " }").c_str());
+	sipRes = PyString_FromString(String(String("GeometricObject")
+		+ " { "
+		+ " Composite: " + String((long int)sipCpp->getComposite())
+		+ " }").c_str());
 %End
-
 };

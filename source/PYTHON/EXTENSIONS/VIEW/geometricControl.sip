@@ -1,32 +1,23 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 class GeometricControl
-  : DockWidget
+	: DockWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/geometricControl.h>
 	#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 	#include <list>
-	using namespace BALL;
-	using namespace BALL::VIEW;
-	using namespace std;
+	using std::list;
 %End
-  public:
+	public:
 
 	static Size countInstances();
 	static GeometricControl* getInstance(Position);
 
 	GeometricControl() throw();
-  ~GeometricControl() throw();
+	~GeometricControl() throw();
 
 	list<Representation*> getHighlightedRepresentations() const throw();
-			
+
 	virtual void selectAtoms();
-//	virtual void selectedRepresentation(Representation& representation, bool state);
 	virtual void updateSelection();
 	virtual void focus();
 	virtual void enterMoveMode();

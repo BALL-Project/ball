@@ -15,9 +15,13 @@
 %UnitCode
 	#include <sstream>
 	#include <BALL/COMMON/exception.h>
+
+	namespace BALL { namespace VIEW {}}
+
 	using std::stringstream;
 	using namespace BALL;
 	using namespace BALL::Exception;
+	using namespace BALL::VIEW;
 %End
 
 %Copying
@@ -40,7 +44,6 @@
 %Include geometricObject.sip
 %Include view-common.sip
 %Include clippingPlane.sip
-
 %Include serverWidget.sip
 
 // VIEW/DATATYPE

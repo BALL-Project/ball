@@ -1,24 +1,15 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 class ModifyRepresentationDialog
-  : ModularWidget
+	: ModularWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
-  public:
+	public:
 
-	// methods implemented by the BALL_EMBEDDED macro
 	static Size countInstances();
 	static ModifyRepresentationDialog* getInstance(Position);
 
-  ~ModifyRepresentationDialog() throw();
+	~ModifyRepresentationDialog() throw();
 
 	void setRepresentation(Representation*) throw();
 	void setGrid(RegularData3D*) throw();
@@ -29,7 +20,7 @@ class ModifyRepresentationDialog
 
 	void accept();
 	void reject();
-	void tabChanged();		
+	void tabChanged();
 	void autoScale();
 	void choosePressed();
 	void gridSelected();
@@ -37,5 +28,5 @@ class ModifyRepresentationDialog
 	void applySplit();
 
 	private:
-		ModifyRepresentationDialog(const ModifyRepresentationDialog&);
+	ModifyRepresentationDialog(const ModifyRepresentationDialog&);
 };

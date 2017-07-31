@@ -1,14 +1,7 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 %ModuleHeaderCode
 	#include <QtCore/QtGlobal>
 	#include <BALL/VIEW/KERNEL/common.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
-
 
 enum EventsIDs
 {
@@ -64,7 +57,7 @@ enum ModelType
 	/// defines the property for the model: H-Bonds
 	MODEL_HBONDS,
 
-	/// 
+	///
 	MODEL_FORCES,
 
 	// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -128,9 +121,4 @@ String createTemporaryFilename() throw();
 Vector3 getNormal(const Vector3&)	throw();
 
 void logString(const String&);
-//QColor chooseColor(QLabel* label);
-//void processDropEvent(QDropEvent* e);
-//Camera focusCamera(const Vector3List)
 Camera focusCamera(Composite*);
-
-
