@@ -1,19 +1,13 @@
-class ClippingPlane 
+class ClippingPlane
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/clippingPlane.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
-  public:
+	public:
 
-	//BALL_CREATE(ClippingPlane)
 	ClippingPlane() throw();
-  ClippingPlane(const ClippingPlane&) throw();
-  //virtual ~ClippingPlane() throw();
-//const ClippingPlane& operator = (const ClippingPlane&) throw();
+	ClippingPlane(const ClippingPlane&) throw();
 	void clear() throw();
-	//HashSet<const Representation*>& getRepresentations();
 	const Vector3& getNormal() const;
 	void setNormal(const Vector3&);
 	bool isActive() const;

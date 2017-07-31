@@ -1,12 +1,10 @@
-class VRMLRenderer 
+class VRMLRenderer
 	: Renderer
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
-  public:
+	public:
 
 	VRMLRenderer();
 	VRMLRenderer(const String&); //throw(Exception::FileNotFound);

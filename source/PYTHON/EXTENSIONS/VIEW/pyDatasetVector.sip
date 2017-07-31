@@ -1,9 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 %MappedType PyDatasetVector
 {
 %TypeHeaderCode
@@ -33,36 +27,35 @@
 
 	return pl;
 %End
- 
+
 %ConvertToTypeCode
 	// Convert a Python list of Dataset instances to an DatasetVector object on the
 	// heap.
 	//
-	
+
 	if (sipIsErr == NULL)
 	{
 		return PyList_Check(sipPy);
 	}
- 
+
 	PyDatasetVector *dvector = new PyDatasetVector;
- 
+
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
 		Dataset* set;
 		set = reinterpret_cast<Dataset*>(BALL_FORCE_CONVERT_TO_TYPE(PyList_GET_ITEM(sipPy,i), Dataset));
- 
+
 		if (*sipIsErr)
 		{
 			delete dvector;
 			return 0;
 		}
- 
+
 		dvector -> push_back(set);
 	}
- 
+
 	*sipCppPtr = dvector;
 
 	return 1;
 %End
 };
-

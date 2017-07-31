@@ -1,25 +1,17 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 class PyWidget
-  : DockWidget
+	: DockWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/pyWidget.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
-  public:
-	// methods implemented by the BALL_EMBEDDED macro
+	public:
+
 	static Size countInstances();
 	static PyWidget* getInstance(Position);
-	
-  PyWidget() throw();
-  ~PyWidget() throw();
-	
+
+	PyWidget() throw();
+	~PyWidget() throw();
+
 	virtual void initializeWidget(MainControl&) throw();
 	virtual void finalizeWidget(MainControl&) throw();
 	bool toAbortScript() throw();
@@ -34,5 +26,5 @@ class PyWidget
 	void unmap(String, String);
 
 	private:
-		PyWidget(const PyWidget&);
-}; 
+	PyWidget(const PyWidget&);
+};

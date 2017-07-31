@@ -1,23 +1,14 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
-class AddCartoonModel 
-  : AddBackboneModel
+class AddCartoonModel
+	: AddBackboneModel
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/MODELS/cartoonModel.h>
-	using namespace BALL;
-	using namespace BALL::VIEW;
 %End
-  public:
+	public:
 
 	AddCartoonModel() throw();
-  AddCartoonModel(const AddCartoonModel&) throw();
-  ~AddCartoonModel() throw();
-  //Processor::Result operator() (Composite&);
+	AddCartoonModel(const AddCartoonModel&) throw();
+	~AddCartoonModel() throw();
 
 	void setHelixRadius(float) throw();
 	float getHelixRadius() const throw();

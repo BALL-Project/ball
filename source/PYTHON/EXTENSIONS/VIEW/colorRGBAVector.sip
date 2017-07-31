@@ -1,9 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id$
-//
-
 %MappedType PyColorRGBAVector
 {
 %TypeHeaderCode
@@ -31,30 +25,29 @@
 
 	return pl;
 %End
- 
+
 %ConvertToTypeCode
 	// Convert a Python list of ColorRGBA instances to an ColorRGBAVector object on the heap.
-	
+
 	if (sipIsErr == NULL) return PyList_Check(sipPy);
- 
+
 	PyColorRGBAVector* cl = new PyColorRGBAVector;
- 
+
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
 		ColorRGBA* c = reinterpret_cast<ColorRGBA*>(BALL_FORCE_CONVERT_TO_TYPE(PyList_GET_ITEM(sipPy,i), ColorRGBA));
- 
+
 		if (*sipIsErr)
 		{
 			delete cl;
 			return 0;
 		}
- 
+
 		cl-> push_back(*c);
 	}
- 
+
 	*sipCppPtr = cl;
 
 	return 1;
 %End
 };
-
