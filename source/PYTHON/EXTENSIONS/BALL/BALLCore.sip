@@ -6,6 +6,12 @@
 
 %ModuleHeaderCode
 	#include <BALLPyMacros.h>
+
+	#if SIP_VERSION >= 0x041300 && SIP_VERSION < 0x041303
+		// fix missing sipExportedExceptions_BALLCore[] declaration in
+		// sip versions 4.19.0 to 4.19.2; fixed since 4.19.3.
+		extern PyObject* sipExportedExceptions_BALLCore[];
+	#endif
 %End
 
 %UnitCode
