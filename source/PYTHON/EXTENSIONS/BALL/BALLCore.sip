@@ -21,6 +21,10 @@
 	See LICENSE for details.
 %End
 
+%Include pyIndexList.sip // a list of numbers (indices etc.)
+%Include pyAtomDict.sip  // a dictionary mapping to atoms
+%Include pyUnaryProcessors.sip
+
 // STL
 %Include deque.sip
 %Include list.sip
@@ -94,6 +98,7 @@
 %Include bond.sip
 %Include chain.sip
 %Include expression.sip
+%Include extractors.sip
 %Include fragment.sip
 %Include molecule.sip
 %Include nucleicAcid.sip
@@ -176,12 +181,6 @@
 
 // NMR
 %Include shiftModule.sip
-
-// PYTHON
-%Include extractors.sip
-%Include pyIndexList.sip // a list of numbers (indices etc.)
-%Include pyAtomDict.sip  // a dictionary mapping to atoms
-%Include pyUnaryProcessors.sip
 
 // QSAR
 %Include aromaticityProcessor.sip
