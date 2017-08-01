@@ -1,10 +1,7 @@
 #include <BALL/VIEW/DIALOGS/webEnginePreferences.h>
 
-#include <BALL/PYTHON/pyInterpreter.h>
-#include <BALL/SYSTEM/path.h>
 #include <BALL/VIEW/WIDGETS/HTMLView.h>
 
-#include <QFileDialog>
 
 using std::string;
 using std::tie;
