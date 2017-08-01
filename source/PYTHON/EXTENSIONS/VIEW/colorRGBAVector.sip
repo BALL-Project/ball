@@ -1,7 +1,7 @@
 %MappedType PyColorRGBAVector
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyColorRGBAVector.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyColorRGBAVector.h>
 %End
 
 %ConvertFromTypeCode

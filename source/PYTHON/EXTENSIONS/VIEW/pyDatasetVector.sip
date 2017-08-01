@@ -1,7 +1,7 @@
 %MappedType PyDatasetVector
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyDatasetVector.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyDatasetVector.h>
 %End
 
 %ConvertFromTypeCode

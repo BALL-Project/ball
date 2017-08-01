@@ -5,7 +5,7 @@ class Mesh
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/PRIMITIVES/mesh.h>
-	#include <BALL/PYTHON/pyColorRGBAVector.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyColorRGBAVector.h>
 %End
 	public:
 	Mesh() throw();
