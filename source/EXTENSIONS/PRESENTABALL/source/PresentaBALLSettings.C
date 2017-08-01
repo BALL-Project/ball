@@ -61,11 +61,11 @@ namespace BALL
 			String s;
 			if (f.hasEntry("GENERAL", "language") && f.getValue("GENERAL", "language") == "de_DE")
 			{
-				s = p.find("HTMLBasedInterface/html_de");
+				s = p.find("PresentaBALL/html_de");
 			}
 			else
 			{
-				s = p.find("HTMLBasedInterface/html_eng");
+				s = p.find("PresentaBALL/html_eng");
 			}
 
 			if (!s.isEmpty())
