@@ -98,7 +98,7 @@ void DemoTutorialDialog::initDemo_()
 	move(20,20);
 
 	// hide some dockwidgets
-	if (LogView::getInstance(0) != 0) 			 LogView::getInstance(0)->hide();
+	if (LogView::getInstance(0) != 0) LogView::getInstance(0)->hide();
  	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
 
 #ifdef	BALL_HAS_RTFACT
@@ -132,10 +132,7 @@ void DemoTutorialDialog::initDemo_()
 String DemoTutorialDialog::getBaseDir_()
 {
 	Path p;
-	return p.find(String("..")
-	               + FileSystem::PATH_SEPARATOR + "doc"
-	               + FileSystem::PATH_SEPARATOR + "internal"
-	               + FileSystem::PATH_SEPARATOR);
+	return p.find(String("BALLView") + FileSystem::PATH_SEPARATOR + "html" + FileSystem::PATH_SEPARATOR);
 }
 
 void DemoTutorialDialog::initTutorials_()
