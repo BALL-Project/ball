@@ -1,62 +1,36 @@
-#!/usr/bin/env /opt/bin/python2.1
-from ClassTest import *
+import unittest
+from BALLCore import Atom, Element, PTE
 
-START_TEST('Atom', '$Id: Atom_test.py,v 1.4 2005/12/23 17:03:01 amoll Exp $')
+class TestAtom(unittest.TestCase):
 
-CHECK('Atom.Atom()')
-a = Atom()
-TEST_EQUAL(a.isValid(), true)
-RESULT()
+	def setUp(self):
+		self.atom = Atom()
 
+	def test_isValid(self):
+		self.assertTrue(self.atom.isValid())
 
-atom = Atom()
-CHECK('Atom.getCharge()')
-try:
-	TEST_REAL_EQUAL(atom.getCharge(), 0.0)
-except:
-	FAIL()
-RESULT()
+	def test_getCharge(self):
+		self.assertAlmostEquals(self.atom.getCharge(), 0)
 
-CHECK('Atom.setCharge(charge)')
-try:
-	atom.setCharge(1.23456)
-	TEST_REAL_EQUAL(atom.getCharge(), 1.23456)
-except:
-	FAIL()
-RESULT()
+	def test_setCharge(self):
+		self.atom.setCharge(1.23456)
+		self.assertAlmostEquals(self.atom.getCharge(), 1.23456)
 
-CHECK('Atom.getName()')
-try:
-	TEST_EQUAL(atom.getName(), '')
-except:
-	FAIL()
-RESULT()
+	def test_getName(self):
+		self.assertEquals(self.atom.getName(), '')
 
-CHECK('Atom.setName(name)')
-try:
-	atom.setName('ATOMNAME')
-	TEST_EQUAL(atom.getName(), 'ATOMNAME')
-	atom.setName('')
-	TEST_EQUAL(atom.getName(), '')
-except:
-	FAIL()
-RESULT()
+	def test_setName(self):
+		self.atom.setName('ATOMNAME')
+		self.assertEquals(self.atom.getName(), 'ATOMNAME')
+		self.atom.setName('')
+		self.assertEquals(self.atom.getName(), '')
 
-CHECK('Atom.getElement()')
-try:
-	TEST_EQUAL(atom.getElement(), Element.UNKNOWN)
-except:
-	FAIL()
-RESULT()
+	def test_getElement(self):
+		self.assertTrue(self.atom.getElement().isUnknown())
 
-CHECK('Atom.setElement(element)')
-try:
-	atom.setElement(PTE_.getElement(1))
-	TEST_EQUAL(atom.getElement(), PTE_.getElement(1))
-except:
-	FAIL()
-RESULT()
+	def test_setElement(self):
+		self.atom.setElement(PTE.getElement(1))
+		self.assertEquals(self.atom.getElement(), PTE.getElement(1))
 
-
-
-END_TEST()
+def suite():
+	return unittest.TestLoader().loadTestsFromTestCase(TestAtom)
