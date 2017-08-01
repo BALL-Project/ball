@@ -2,7 +2,7 @@ class RegularData3D
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 	public:
 

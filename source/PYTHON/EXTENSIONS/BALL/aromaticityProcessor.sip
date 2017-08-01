@@ -2,7 +2,7 @@ class AromaticityProcessor
 	: AtomContainerProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/QSAR/aromaticityProcessor.h>
 %End
 

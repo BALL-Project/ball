@@ -2,7 +2,7 @@ class Selector
 	: CompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/KERNEL/selector.h>
 %End
 	public:

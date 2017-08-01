@@ -2,7 +2,7 @@ class ShiftModule
 	: CompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/NMR/shiftModule.h>
 %End
 	public:

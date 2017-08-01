@@ -2,7 +2,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 	#include <BALL/KERNEL/chain.h>
 	using PyChainDict = HashMap<const Chain*, float>;
 %End

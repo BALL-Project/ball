@@ -2,7 +2,7 @@ class SecondaryStructureProcessor
 	: CompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 %End
 	public:

@@ -2,7 +2,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 	#include <BALL/KERNEL/atom.h>
 	using PyAtomDict = HashMap<const Atom*, float>;
 %End

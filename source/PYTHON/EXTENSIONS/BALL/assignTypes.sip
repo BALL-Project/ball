@@ -2,7 +2,7 @@ class AssignBaseProcessor
 	: public AtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/MOLMEC/COMMON/assignTypes.h>
 %End
 
@@ -25,7 +25,7 @@ class AssignTypeProcessor
 	: public AssignBaseProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/MOLMEC/COMMON/assignTypes.h>
 %End
 

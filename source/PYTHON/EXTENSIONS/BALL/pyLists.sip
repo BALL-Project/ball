@@ -6,8 +6,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -24,8 +24,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -42,8 +42,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -60,8 +60,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -78,8 +78,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -96,8 +96,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -114,8 +114,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -132,8 +132,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -150,8 +150,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -168,8 +168,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -186,8 +186,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -204,8 +204,8 @@
 {
 %TypeHeaderCode
 	#include <BALL/KERNEL/extractors.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -221,7 +221,7 @@
 %MappedType RegularData3DList
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyListHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyListHelper.h>
 %End
 
 %ConvertFromTypeCode

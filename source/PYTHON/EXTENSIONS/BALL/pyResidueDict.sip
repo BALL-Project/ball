@@ -2,7 +2,7 @@
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/hashMap.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 	#include <BALL/KERNEL/residue.h>
 	using PyResidueDict = HashMap<const Residue*, float>;
 %End

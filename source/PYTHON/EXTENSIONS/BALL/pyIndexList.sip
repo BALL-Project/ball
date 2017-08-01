@@ -1,8 +1,8 @@
 %MappedType PyIndexList
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyIndexList.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyIndexList.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 %End
 %ConvertFromTypeCode
 	PyObject *pl;

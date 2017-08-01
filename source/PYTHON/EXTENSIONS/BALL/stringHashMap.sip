@@ -108,7 +108,7 @@ template <ValueType*>
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/stringHashMap.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 %End
 
 %ConvertFromTypeCode
@@ -212,7 +212,7 @@ template <float>
 {
 %TypeHeaderCode
 	#include <BALL/DATATYPE/stringHashMap.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 %End
 
 %ConvertFromTypeCode
