@@ -2,7 +2,7 @@ class ColorMap
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/DATATYPE/colorMap.h>
-	#include <BALL/PYTHON/pyColorRGBAVector.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyColorRGBAVector.h>
 %End
 	public:
 

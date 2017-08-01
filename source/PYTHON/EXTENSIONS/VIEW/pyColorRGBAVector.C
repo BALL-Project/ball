@@ -1,10 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: pyColorRGBAVector.C,v 1.2 2005-12-23 17:02:55 amoll Exp $
-//
-
-#include <BALL/PYTHON/pyColorRGBAVector.h>
+#include <BALL/PYTHON/EXTENSIONS/pyColorRGBAVector.h>
 
 namespace BALL
 {

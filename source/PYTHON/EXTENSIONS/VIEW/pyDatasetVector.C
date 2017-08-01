@@ -1,10 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: pyDatasetVector.C,v 1.1.4.1 2007-03-25 21:37:21 oliver Exp $
-//
-
-#include <BALL/PYTHON/pyDatasetVector.h>
+#include <BALL/PYTHON/EXTENSIONS/pyDatasetVector.h>
 
 namespace BALL
 {
@@ -21,7 +15,7 @@ namespace BALL
 
 	PyDatasetVector::PyDatasetVector(const std::vector<VIEW::Dataset*>& dvector)
 		: vector<VIEW::Dataset*>(dvector)
-  {
+	{
 	}
 
 	PyDatasetVector& PyDatasetVector::operator = (const std::vector<VIEW::Dataset*>& dvector)

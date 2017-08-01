@@ -3,7 +3,7 @@ class DatasetControl
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/datasetControl.h>
-	#include <BALL/PYTHON/pyDatasetVector.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyDatasetVector.h>
 %End
 	public:
 

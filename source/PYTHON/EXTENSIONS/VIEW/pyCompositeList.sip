@@ -1,8 +1,8 @@
 %MappedType PyCompositeList
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyCompositeList.h>
-	#include <BALL/PYTHON/pyBALLSipHelper.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyCompositeList.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h>
 %End
 
 %ConvertFromTypeCode
