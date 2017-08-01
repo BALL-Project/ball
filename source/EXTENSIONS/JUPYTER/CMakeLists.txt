@@ -10,6 +10,11 @@ IF(NOT USE_QTWEBENGINE)
 	RETURN()
 ENDIF()
 
+IF(NOT BALL_PYTHON_SUPPORT)
+	MESSAGE(STATUS "Python support has not been enabled. Disabling the Jupyter plugin.")
+	RETURN()
+ENDIF()
+
 SET(DIRECTORY source)
 ### list all filenames of the directory here ###
 SET(UI_SOURCES_LIST
