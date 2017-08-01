@@ -1,7 +1,7 @@
 class FragmentDB
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 	using StringHashMapString = StringHashMap<String>;
@@ -51,7 +51,7 @@ class NormalizeNamesProcessor
 	: FragmentProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	using NormalizeNamesProcessor = FragmentDB::NormalizeNamesProcessor;
 %End
@@ -74,7 +74,7 @@ class BuildBondsProcessor
 	: FragmentProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/fragmentDB.h>
 	using BuildBondsProcessor = FragmentDB::BuildBondsProcessor;
 %End

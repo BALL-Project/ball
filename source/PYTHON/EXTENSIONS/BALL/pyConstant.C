@@ -1,10 +1,5 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: pyConstant.C,v 1.2 2002-02-27 12:23:59 sturm Exp $
-
 #include <BALL/COMMON/constants.h>
-#include <BALL/PYTHON/pyConstant.h>
+#include <BALL/PYTHON/EXTENSIONS/pyConstant.h>
 
 namespace BALL
 {
@@ -16,9 +11,9 @@ namespace BALL
 
 	// Euler's number - base of the natural logarithm
 	double Constant::E  = 2.718281828459045235L;
-	
+
 	//	Elementary charge.
-	double Constant::ELEMENTARY_CHARGE = 1.60217738E-19L;  	 // C     
+	double Constant::ELEMENTARY_CHARGE = 1.60217738E-19L;  	 // C
 
 	/// Elementary charge (alias)
 	double Constant::e0								=	ELEMENTARY_CHARGE;
@@ -46,14 +41,14 @@ namespace BALL
 
 	// Boltzmann constant (alias)
 	double Constant::k	        				= BOLTZMANN;
-	
+
 	// Planck constant.
 	double Constant::PLANCK 	         	= 6.6260754E-34L;      // J * sec
 
 	// Planck constant (alias)
 	double Constant::h       	   			= PLANCK;
 
-	// Gas constant (= NA * k)	
+	// Gas constant (= NA * k)
 	double Constant::GAS_CONSTANT 	  	= NA * k;
 
 	// Gas constant (alias)
@@ -71,7 +66,7 @@ namespace BALL
 	// Bohr radius (alias)
 	double Constant::a0     						= BOHR_RADIUS;
 
-	//  the following values from: 
+	//  the following values from:
 	//  P.W.Atkins: Physical Chemistry, 5th ed., Oxford University Press, 1995
 
 	// Vacuum permittivity.
@@ -90,8 +85,8 @@ namespace BALL
 	double Constant::GRAVITATIONAL_CONSTANT  = 6.67259E-11L;    	// N m^2 / kg^2
 
 	// Fine structure constant.
-	double Constant::FINE_STRUCTURE_CONSTANT = 7.29735E-3L;   		// 1      
-		
+	double Constant::FINE_STRUCTURE_CONSTANT = 7.29735E-3L;   		// 1
+
 	// Degree per rad.
 	double Constant::DEG_PER_RAD				= 57.2957795130823209L;
 

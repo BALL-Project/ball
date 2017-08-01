@@ -1,8 +1,8 @@
-class HBondProcessor 
+class HBondProcessor
 	: CompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/HBondProcessor.h>
 %End
 

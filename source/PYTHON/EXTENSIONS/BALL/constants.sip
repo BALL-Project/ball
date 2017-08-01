@@ -1,7 +1,7 @@
 class Constant
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyConstant.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyConstant.h>
 %End
 
 	public:

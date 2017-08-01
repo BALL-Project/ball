@@ -2,7 +2,7 @@ class ConnectedComponentsProcessor
 	: AtomContainerProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/connectedComponentsProcessor.h>
 	using std::vector;
 %End

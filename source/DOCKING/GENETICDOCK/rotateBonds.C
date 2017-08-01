@@ -6,16 +6,10 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
-#include <BALL/MATHS/matrix44.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/COMMON/constants.h>
-
-#include <iostream>
 
 #include <BALL/DOCKING/GENETICDOCK/rotateBonds.h>
-
 #include <BALL/DOCKING/GENETICDOCK/rotateBond.h>
-#include <BALL/PYTHON/pyConstant.h>
 
 using namespace std;
 

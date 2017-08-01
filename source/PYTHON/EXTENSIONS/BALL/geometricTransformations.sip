@@ -2,7 +2,7 @@ class TranslationProcessor
 	: AtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricTransformations.h>
 %End
 	public:
@@ -20,7 +20,7 @@ class TransformationProcessor
 	: AtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricTransformations.h>
 %End
 	public:

@@ -2,7 +2,7 @@ class PeptideCapProcessor
 	: ChainProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/peptideCapProcessor.h>
 	#include <BALL/STRUCTURE/peptides.h>
 	using namespace BALL::Peptides;

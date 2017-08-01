@@ -2,7 +2,7 @@ class BoundingBoxProcessor
 	: ConstAtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricProperties.h>
 %End
 	public:
@@ -21,7 +21,7 @@ class GeometricCenterProcessor
 	: ConstAtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricProperties.h>
 %End
 	public:
@@ -38,7 +38,7 @@ class FragmentDistanceCollector
 	: ConstCompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 	#include <BALL/STRUCTURE/geometricProperties.h>
 %End
 	public:

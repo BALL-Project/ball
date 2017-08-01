@@ -1,8 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: pyBALLSipHelper.C,v 1.4.28.2 2007-03-28 13:58:08 amoll Exp $
-
 #include <typeinfo>
 #include "sipAPIBALLCore.h"
 #include <BALL/KERNEL/PDBAtom.h>

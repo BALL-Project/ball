@@ -1,7 +1,7 @@
 class AtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -15,7 +15,7 @@ class AtomProcessor
 class AtomContainerProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -29,7 +29,7 @@ class AtomContainerProcessor
 class BondProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -43,7 +43,7 @@ class BondProcessor
 class ChainProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -57,7 +57,7 @@ class ChainProcessor
 class CompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -71,7 +71,7 @@ class CompositeProcessor
 class FragmentProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -85,7 +85,7 @@ class FragmentProcessor
 class ResidueProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -99,7 +99,7 @@ class ResidueProcessor
 class ConstAtomProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
@@ -113,7 +113,7 @@ class ConstAtomProcessor
 class ConstCompositeProcessor
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyUnaryProcessors.h>
+	#include <BALL/PYTHON/EXTENSIONS/pyUnaryProcessors.h>
 %End
 	public:
 	bool start();
