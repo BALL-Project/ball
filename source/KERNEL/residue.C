@@ -555,6 +555,11 @@ namespace BALL
 		{
 			full_name += String(getID());
 		}
+		if (BALL_RESIDUE_DEFAULT_INSERTION_CODE != insertion_code_ &&
+		    (type == ADD_RESIDUE_ID_AND_INSERTION_CODE || type == ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE))
+		{
+			full_name += String(getInsertionCode());
+		}
 
 		return full_name;
 	}
