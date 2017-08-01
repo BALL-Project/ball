@@ -1,7 +1,10 @@
 #include <BALL/VIEW/WIDGETS/HTMLPage.h>
 
-#include <BALL/PYTHON/pyInterpreter.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+
+#ifdef BALL_PYTHON_SUPPORT
+#	include <BALL/PYTHON/pyInterpreter.h>
+#endif
 
 #include <QUrlQuery>
 
@@ -122,6 +125,7 @@ namespace BALL
 				            << load_module << " \n";
 			}
 #else
+			Q_UNUSED(parameters)
 			Log.error() << "BALL is compiled without Python support. Action " << action.toStdString()
 						<< " could not be executed." << std::endl;
 #endif
