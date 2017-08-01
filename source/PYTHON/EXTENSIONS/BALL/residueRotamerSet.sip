@@ -48,6 +48,9 @@ class ResidueRotamerSet
 		bool hasTorsionPsi() const;
 		Angle getTorsionPsi() const;
 		void setTorsionPsi(const Angle& psi);
+		bool hasTorsionOmega() const;
+		Angle getTorsionOmega() const;
+		void setTorsionOmega(const Angle& omega);
 		bool setTemplateResidue(const Residue& residue, Size number_of_torsions);
 		bool setRotamer(Residue& residue, const Rotamer& rotamer);
 		Rotamer getRotamer(const Residue& residue) const;

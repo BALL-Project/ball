@@ -205,6 +205,15 @@ namespace BALL
 
 		///
 		void setTorsionPsi(const Angle& psi);
+
+		///
+		bool hasTorsionOmega() const;
+
+		///
+		Angle getTorsionOmega() const;
+
+		///
+		void setTorsionOmega(const Angle& psi);
 		//@}
 
 		/**	@name	Rotamer Assignment
@@ -297,11 +306,17 @@ namespace BALL
 		/// true if this residue rotamer set is backbone dependent
 		bool has_torsion_psi_;
 
+		/// true if this residue rotamer set is backbone dependent
+		bool has_torsion_omega_;
+
 		/// The torsion phi
 		Angle phi_;
 
 		/// The torsion psi
 		Angle psi_;
+
+		/// The torsion omega
+		Angle omega_;
 	};
 
 } // namespace BALL
