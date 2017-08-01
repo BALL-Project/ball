@@ -247,10 +247,11 @@ namespace BALL
 	};
 
 	//@}
-// required for visual studio
+// required for MSVC 12/2013 (TODO remove)
 #ifdef BALL_COMPILER_MSVC
 class Atom;
 template class BALL_EXPORT UnaryProcessor<Atom>;
+template class BALL_EXPORT ConstUnaryProcessor<Atom>;
 #endif
 
 } // namespace BALL
