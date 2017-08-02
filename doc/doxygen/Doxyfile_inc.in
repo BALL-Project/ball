@@ -722,7 +722,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
-WARN_LOGFILE           = @CF_BALL_BIN_PATH@/doc/doc-error.log
+WARN_LOGFILE           = @CF_BALL_BIN_PATH@/doc/doxygen/doc-error.log
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files
@@ -735,8 +735,7 @@ WARN_LOGFILE           = @CF_BALL_BIN_PATH@/doc/doc-error.log
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = @CF_BALL_SRC_PATH@/include/BALL/ \
-                         @CF_BALL_SRC_PATH@/source/APPLICATIONS/BALLVIEW/ \
-                         @CF_BALL_SRC_PATH@/doc/TUTORIAL/
+                         @CF_BALL_SRC_PATH@/source/APPLICATIONS/BALLVIEW/
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -827,7 +826,7 @@ EXAMPLE_RECURSIVE      = NO
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH             = @CF_BALL_SRC_PATH@/doc/images/
+IMAGE_PATH             = @CF_BALL_SRC_PATH@/doc/doxygen/images/
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
 # invoke to filter for each input file. Doxygen will invoke the filter program
@@ -1031,7 +1030,7 @@ HTML_FILE_EXTENSION    = .html
 # of the possible markers and block names see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_HEADER            = inc/balldoc-header.html
+HTML_HEADER            = template/balldoc-header.html
 
 # The HTML_FOOTER tag can be used to specify a user-defined HTML footer for each
 # generated HTML page. If the tag is left blank doxygen will generate a standard
@@ -1041,7 +1040,7 @@ HTML_HEADER            = inc/balldoc-header.html
 # that doxygen normally uses.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_FOOTER            = inc/balldoc-footer.html
+HTML_FOOTER            = template/balldoc-footer.html
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading style
 # sheet that is used by each HTML page. It can be used to fine-tune the look of
@@ -1064,7 +1063,7 @@ HTML_STYLESHEET        =
 # see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_STYLESHEET  = inc/balldoc.css
+HTML_EXTRA_STYLESHEET  = template/balldoc.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -1074,7 +1073,7 @@ HTML_EXTRA_STYLESHEET  = inc/balldoc.css
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES       = inc/balldoc-header.jpg
+HTML_EXTRA_FILES       = images/balldoc-header.jpg
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output. Doxygen
 # will adjust the colors in the stylesheet and background images according to
@@ -2058,7 +2057,7 @@ DOT_NUM_THREADS        = 0
 # The default value is: Helvetica.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-DOT_FONTNAME           = 
+DOT_FONTNAME           =
 
 # The DOT_FONTSIZE tag can be used to set the size (in points) of the font of
 # dot graphs.

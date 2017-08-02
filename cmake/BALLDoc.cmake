@@ -25,13 +25,13 @@ IF(NOT APPLE)
 ENDIF()
 
 IF (DOXYGEN_FOUND)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_inc.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_inc)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/Doxyfile)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/Doxyfile_dot)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc-header.html.in ${PROJECT_BINARY_DIR}/doc/inc/balldoc-header.html)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc-footer.html.in ${PROJECT_BINARY_DIR}/doc/inc/balldoc-footer.html)
-	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc.css DESTINATION ${PROJECT_BINARY_DIR}/doc/inc)
-	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/balldoc-header.jpg DESTINATION ${PROJECT_BINARY_DIR}/doc/inc)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_inc.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_inc)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_dot)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/template/balldoc-header.html.in ${PROJECT_BINARY_DIR}/doc/doxygen/template/balldoc-header.html)
+	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/template/balldoc-footer.html.in ${PROJECT_BINARY_DIR}/doc/doxygen/template/balldoc-footer.html)
+	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/template/balldoc.css DESTINATION ${PROJECT_BINARY_DIR}/doc/doxygen/template)
+	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/images/balldoc-header.jpg DESTINATION ${PROJECT_BINARY_DIR}/doc/doxygen/images)
 	
 	#######################################################################
 	## doc
@@ -41,7 +41,7 @@ IF (DOXYGEN_FOUND)
 										COMMAND ${CMAKE_COMMAND} -E echo "Creating html documentation"
 										COMMAND ${CMAKE_COMMAND} -E echo ""   
 										COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html
-										COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile
+										COMMAND ${CMAKE_COMMAND} -E chdir doc/doxygen ${DOXYGEN_EXECUTABLE} Doxyfile
 										COMMAND ${CMAKE_COMMAND} -E echo ""
 										COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 										COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created."
@@ -56,7 +56,7 @@ IF (DOXYGEN_FOUND)
 			DESTINATION "${BALL_DOCUMENTATION_INSTALL_DIRECTORY}/BALL"
 			COMPONENT   "${COMPONENT_DOCUMENTATION_HTML}"
 		)
-		INSTALL(FILES       "${PROJECT_SOURCE_DIR}/doc/classes"
+		INSTALL(FILES       "${PROJECT_SOURCE_DIR}/doc/doxygen/classes"
 			DESTINATION "${BALL_DOCUMENTATION_INSTALL_DIRECTORY}/"
 			COMPONENT   "${COMPONENT_DOCUMENTATION_HTML}"
 			OPTIONAL
@@ -91,7 +91,7 @@ IF (DOXYGEN_FOUND)
 											COMMAND ${CMAKE_COMMAND} -E echo "Creating DOT html documentation"
 											COMMAND ${CMAKE_COMMAND} -E echo ""   
 											COMMAND ${CMAKE_COMMAND} -E remove_directory doc/html-dot
-											COMMAND ${CMAKE_COMMAND} -E chdir doc ${DOXYGEN_EXECUTABLE} Doxyfile_dot
+											COMMAND ${CMAKE_COMMAND} -E chdir doc/doxygen ${DOXYGEN_EXECUTABLE} Doxyfile_dot
 											COMMAND ${CMAKE_COMMAND} -E echo ""
 											COMMAND ${CMAKE_COMMAND} -E echo "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 											COMMAND ${CMAKE_COMMAND} -E echo "The documentation has been successfully created."
