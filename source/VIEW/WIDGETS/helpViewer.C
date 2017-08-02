@@ -168,35 +168,6 @@ namespace BALL
 
 		void HelpViewer::collectClasses_()
 		{
-			classes_to_files_.clear();
-			
-			Path p;
-			String filename = p.find("../doc/classes");
-
-			if (filename == "")
-			{
-				Log.error() << "Could not load the file \"classes\" to parse class list for the documentation!"
-										<< std::endl;
-
-				return;
-			}
-
-			try
-			{
-				LineBasedFile file(filename);
-				vector<String> fields;
-				while (file.readLine())
-				{
-					const String& line = file.getLine();
-					line.split(fields, " ");
-					classes_to_files_[fields[0]] = fields[1];
-				}
-			}
-			catch(...)
-			{
-				Log.error() << "Could not parse the file \"classes\" containing the class list for the documentation!"
-										<< std::endl;
-			}
 		}
 
 		void HelpViewer::setDefaultPage(const String& url)
