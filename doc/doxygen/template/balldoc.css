@@ -43,10 +43,6 @@ body {
     width: 100%;
 }
 
-.site-header .site-title:hover {
-    text-decoration: underline;
-}
-
 .site-title {
     font-size: 80px;
     font-weight: bold;
@@ -65,7 +61,7 @@ body {
  * 4.2 Navigation
  * ----------------------------------------------------------------------------
  */
- 
+
 .main-navigation {
     clear: both;
     margin: 0 auto;
@@ -221,6 +217,11 @@ ul.nav-menu .focus > ul,
 	margin: 0;
 	top: 8px;
 	right: 0;
+	position: relative;
+}
+
+#MSearchBox .right {
+	top: 0;
 }
 
 #MSearchResultsWindow {

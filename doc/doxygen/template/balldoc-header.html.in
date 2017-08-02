@@ -22,23 +22,10 @@ $extrastylesheet
 <!--BEGIN TITLEAREA-->
 <div id="titlearea">
 <header id="masthead" class="site-header" role="banner">
-	<a class="home-link" href="http://balldoc.informatik.uni-tuebingen.de/" title="BALL" rel="home">
+	<div class="home-link">
 		<h1 class="site-title">BALL $projectnumber</h1>
 		<h2 class="site-description">Biochemical Algorithms Library</h2>
-	</a>
-	<div id="navbar" class="navbar">
-		<nav id="site-navigation" class="navigation main-navigation" role="navigation">
-			<div class="menu-menu-1-container">
-				<ul class="nav-menu">
-					<li><a href="http://balldoc.informatik.uni-tuebingen.de/">News</a></li>
-					<li><a href="http://balldoc.informatik.uni-tuebingen.de/?page_id=2">About</a></li>
-					<li class="current-menu-item"><a href="http://balldoc.informatik.uni-tuebingen.de/?page_id=21">Documentation</a></li>
-					<li><a href="http://balldoc.informatik.uni-tuebingen.de/?page_id=23">Support</a></li>
-					<li><a href="http://balldoc.informatik.uni-tuebingen.de/?page_id=30">Gallery</a></li>
-				</ul>
-			</div>
-		</nav><!-- #site-navigation -->
-	</div><!-- #navbar -->
+	</div>
 </header>
 </div>
 <div id="content-wrapper"><div>
