@@ -20,14 +20,15 @@ namespace BALL {
 			Log.error() << "[PyServer] Server cannot be started as the Python interpreter is unavailable!" << std::endl;
 			return;
 		}
-		server_ = new QTcpServer(this);
+		server_ = new QTcpServer();
 		server_->listen(QHostAddress::LocalHost, 8897u);
-
-		connect(server_, &QTcpServer::newConnection, this, &PyServer::processRequest);
+		server_->connect(server_, &QTcpServer::newConnection, [this]{ this->processRequest(); });
 	}
 
 	PyServer::~PyServer()
-	{ }
+	{
+		if(server_) delete server_;
+	}
 
 	void PyServer::processRequest()
 	{

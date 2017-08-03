@@ -7,10 +7,8 @@
 
 namespace BALL
 {
-	class BALL_EXPORT PyServer : public QObject
+	class BALL_EXPORT PyServer
 	{
-		Q_OBJECT
-
 		public:
 			/**
 			 * Starts a new Python server and listens for requests.
