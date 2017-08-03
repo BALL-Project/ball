@@ -114,7 +114,7 @@ namespace BALL
 		auto cio = PyObject_GetAttrString(main_module_, "__BALL_CIO");
 		auto cio_val = PyObject_GetAttrString(cio, "getvalue");
 		auto cio_f = PyObject_CallFunction(cio_val, nullptr);
-		auto ret = std::make_pair(true, PyString_AsString(cio_f));
+		auto ret = std::make_pair<bool, string>(true, PyString_AsString(cio_f));
 		Py_DecRef(cio_f);
 		Py_DecRef(cio_val);
 		Py_DecRef(cio);
