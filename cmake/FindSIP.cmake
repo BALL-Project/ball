@@ -125,14 +125,14 @@ IF(NOT SIP_VERSION)
     ${SIP_CONFIG_BIN_DIRS}
   )
 
-  # (c) Try to extract version information from sip.h:
-  
-  FILE(READ ${SIP_INCLUDE_DIR}/sip.h SIP_H_TEXT)
-  STRING(REGEX MATCH   "define SIP_VERSION[ \t]+([0-9a-fx]+)"       SIP_VERSION "${SIP_H_TEXT}" )
-  STRING(REGEX REPLACE "define SIP_VERSION[ \t]+([0-9a-fx]+)" "\\1" SIP_VERSION "${SIP_VERSION}")
-
-  STRING(REGEX MATCH   "define SIP_VERSION_STR[ \t]+\"([^\"]*)\""        SIP_VERSION_STR "${SIP_H_TEXT}"     )
-  STRING(REGEX REPLACE "define SIP_VERSION_STR[ \t]+\"([^\"]*)\""  "\\1" SIP_VERSION_STR "${SIP_VERSION_STR}")
+	# (c) Try to extract version information from sip.h:
+	IF(SIP_INCLUDE_DIR)
+		FILE(READ ${SIP_INCLUDE_DIR}/sip.h SIP_H_TEXT)
+		STRING(REGEX MATCH   "define SIP_VERSION[ \t]+([0-9a-fx]+)"       SIP_VERSION "${SIP_H_TEXT}" )
+		STRING(REGEX REPLACE "define SIP_VERSION[ \t]+([0-9a-fx]+)" "\\1" SIP_VERSION "${SIP_VERSION}")
+		STRING(REGEX MATCH   "define SIP_VERSION_STR[ \t]+\"([^\"]*)\""        SIP_VERSION_STR "${SIP_H_TEXT}"     )
+		STRING(REGEX REPLACE "define SIP_VERSION_STR[ \t]+\"([^\"]*)\""  "\\1" SIP_VERSION_STR "${SIP_VERSION_STR}")
+	ENDIF()
 ENDIF(NOT SIP_VERSION)
 
 IF(NOT SIP_LIBRARIES)
