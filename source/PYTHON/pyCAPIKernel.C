@@ -5,6 +5,7 @@
 
 using std::map;
 using std::string;
+using std::stringstream;
 
 namespace BALL
 {
@@ -62,7 +63,6 @@ namespace BALL
 
 	bool PyCAPIKernel::errorOccurred()
 	{
-		last_err_ = "";
 		if (!PyErr_Occurred()) return false;
 
 #ifdef BALL_VIEW_DEBUG
@@ -77,15 +77,30 @@ namespace BALL
 
 		PyObject* type =  nullptr;
 		PyObject* value = nullptr;
-		PyObject* range = nullptr;
+		PyObject* trace = nullptr;
 
-		PyErr_Fetch(&type, &value, &range);
-		auto err = value ? PyString_AsString(value) : "unknown error";
-		last_err_ = err ? err : "unknown error";
+		PyErr_Fetch(&type, &value, &trace);
+		stringstream err;
 
-		Py_DecRef(type);
+		// error type
+		if(type)
+		{
+			auto name  = PyObject_GetAttrString(type, "__name__");
+			auto sname = name ? PyString_AsString(name) : nullptr;
+			if(sname)  err << sname << ": ";
+			Py_DecRef(name);
+			Py_DecRef(type);
+		}
+
+		// error message
+		auto svalue = PyString_AsString(value);
+		err << (svalue ? svalue : "unknown error");
 		Py_DecRef(value);
-		Py_DecRef(range);
+
+		// stack trace (TODO)
+		Py_DecRef(trace);
+
+		last_err_ = err.str();
 		return true;
 	}
 
