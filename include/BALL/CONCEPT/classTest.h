@@ -1,18 +1,9 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
+#ifndef BALL_CONCEPT_CLASSTEST_H
+#define BALL_CONCEPT_CLASSTEST_H
 
-#ifndef BALL_CONCEPT_AUTODELETABLE_H
-# include <BALL/CONCEPT/autoDeletable.h>
-#endif
-
-#ifndef BALL_SYSTEM_H
-# include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
-# include <BALL/DATATYPE/regularExpression.h>
-#endif
+#include <BALL/CONCEPT/autoDeletable.h>
+#include <BALL/SYSTEM/file.h>
+#include <BALL/DATATYPE/regularExpression.h>
 
 #include <string>
 #include <list>
@@ -916,3 +907,5 @@ int main(int argc, char **argv)\
 	}
 
 #endif	
+
+#endif // BALL_CONCEPT_CLASSTEST_H
