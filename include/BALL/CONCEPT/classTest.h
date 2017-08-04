@@ -14,6 +14,96 @@
 # include <strstream>
 #endif
 
+/* define a special namespace for all internal variables */\
+/* to avoid potential collisions                         */\
+namespace TEST
+{
+	int          verbose = 0;
+	bool         all_tests = true;
+	bool         test = true;
+	bool         this_test;
+	int          exception = 0;
+	string        exception_name = "";
+	const char*  version_string = BALL_RELEASE_STRING;
+	bool          newline = false;
+	list<string>  tmp_file_list;
+	std::ifstream infile;
+	std::ifstream templatefile;
+	bool         equal_files;
+	double       precision = 1e-6;
+
+	template<class T>
+	void printErrorMessage(T &, bool subtest)
+	{
+		std::cout << std::endl
+				  << "    (caught unidentified and unexpected exception"
+				  << (subtest ? "" : " outside a subtest") << "!)"
+		<< std::endl;
+	}
+
+	template<>
+	void printErrorMessage(std::exception& e, bool subtest)
+	{
+		std::cout << std::endl
+				  << "    (caught expected STL exception"
+				  << (subtest ? "" : " outside a subtest")
+				  << ": " << e.what() << ")"
+				  << std::endl;
+	}
+
+	template<>
+	void printErrorMessage(BALL::Exception::GeneralException& e, bool subtest)
+	{
+		std::cout << std::endl
+				  << "    (caught exception of type "
+				  << e.getName();
+		if ((e.getLine() > 0) && e.getFile()[0] != '\0')
+		{
+			std::cout << (subtest ? "" : " outside a subtest")
+					  << ", which was thrown in line "
+					  << e.getLine() << " of file " << e.getFile();
+		}
+		std::cout << " - unexpected!) "
+				  << std::endl
+				  << "    (message is: " << e.getMessage() << ")"
+				  << std::endl;
+	}
+
+	template<>
+	void printErrorMessage(BALL::Exception::FileNotFound& e, bool subtest)
+	{
+		std::cout << std::endl
+				  << "    (caught exception of type "
+				  << e.getName();
+		if ((e.getLine() > 0) && e.getFile()[0] != '\0')
+		{
+			std::cout << (subtest ? "" : " outside a subtest")
+					  << ", which was thrown in line "
+					  << e.getLine() << " of file " << e.getFile();
+		}
+		std::cout << " while looking for file " << e.getFilename()
+				  << " - unexpected!) "
+				  << std::endl;
+	}
+
+	template<class T>
+	void printException(T e, bool subtest)
+	{
+		TEST::this_test = false;
+		TEST::test = false;
+		TEST::all_tests = false;
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))
+		{
+			if(!TEST::newline)
+			{
+				TEST::newline = true;
+				std::cout << std::endl;
+			}
+			printErrorMessage(e, subtest);
+		}
+	}
+}
+
 /**	Define the precision for floating point comparisons.
 		The macro  \link #TEST_REAL_EQUAL TEST_REAL_EQUAL \endlink  checks whether the floating point number returned by
 		the subtest is close to the expected result by comparing the absolute value
@@ -39,24 +129,6 @@
 		\ingroup ClassTest
 */
 #define START_TEST(class_name)\
-/* define a special namespace for all internal variables */\
-/* to avoid potential collisions                         */\
-namespace TEST {\
-	int						verbose = 0;\
-	bool					all_tests = true;\
-  bool					test = true;\
-	bool					this_test;\
-	int 					exception = 0;\
-	string 				exception_name = "";\
-	const char*		version_string = BALL_RELEASE_STRING;\
-	bool					newline = false;\
-	list<string>	tmp_file_list;\
-	std::ifstream	infile;\
-	std::ifstream	templatefile;\
-	bool					equal_files;\
-	double				precision = 1e-6;\
-}\
-\
 \
 int main(int argc, char **argv)\
 {\
@@ -99,65 +171,11 @@ int main(int argc, char **argv)\
 #define END_TEST \
 	/* global try block */\
 	}\
-	/* catch FileNotFound exceptions to print out the file name */\
-	catch (BALL::Exception::FileNotFound& e)\
-	{\
-		TEST::this_test = false;\
-		TEST::test = false;\
-		TEST::all_tests = false;\
-  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-		{\
-			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
-				TEST::exception++;\
-    	std::cout << std::endl << "    (caught exception of type ";\
-			std::cout << e.getName();\
-			if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
-				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
-			std::cout << " while looking for file " << e.getFilename();\
-			std::cout << " - unexpected!) " << std::endl;\
-		}\
-  }\
-	/* catch BALL exceptions to retrieve additional information */\
-	catch (BALL::Exception::GeneralException& e)\
-	{\
-		TEST::this_test = false;\
-		TEST::test = false;\
-		TEST::all_tests = false;\
-  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-		{\
-			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
-				TEST::exception++;\
-    	std::cout << std::endl << "    (caught exception of type ";\
-			std::cout << e.getName();\
-			if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
-				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
-			std::cout << " - unexpected!) " << std::endl;\
-			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
-		}\
-  }\
-	/* catch all std::exception-derived exceptions */\
-	catch (std::exception& e)\
-	{\
-		TEST::this_test = false;\
-		TEST::test = false;\
-		TEST::all_tests = false;\
-  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-		{\
-    	std::cout << std::endl << "    (caught expected STL exception outside a subtest: " << e.what() << ")" << std::endl;\
-		}\
-	}\
-\
-	/* catch all non-BALL/non-STL exceptions */\
-	catch (...)\
-	{\
-		TEST::this_test = false;\
-		TEST::test = false;\
-		TEST::all_tests = false;\
-  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-		{\
-    	std::cout << std::endl << "    (caught unidentified and unexpected exception outside a subtest!) " << std::endl;\
-		}\
-	}\
+	catch (BALL::Exception::FileNotFound& e) { TEST::printException(e, false); }\
+	catch (BALL::Exception::GeneralException& e) { TEST::printException(e, false); }\
+	catch (std::exception& e) { TEST::printException(e, false); }\
+	catch (...) { TEST::printException(0, false); }\
+	\
 	/* clean up all temporary files */\
 	while (TEST::tmp_file_list.size() > 0 && TEST::verbose < 1)\
 	{\
@@ -165,18 +183,12 @@ int main(int argc, char **argv)\
 		TEST::tmp_file_list.pop_back();\
 	}\
 	/* check for exit code */\
-	if (!TEST::all_tests)\
-	{\
-		std::cout << "FAILED" << std::endl;\
-		return 1;\
-	} else {\
-		std::cout << "PASSED" << std::endl;\
-		return 0;\
-	}\
+	std::cout << (TEST::all_tests ? "PASSED" : "FAILED") << std::endl;\
 	/* Finally, clean up pointers still pointing to */\
 	/* AutoDeletable objects, as this might lead to strange */\
 	/* warnings (still reachable) when using valgrind. */\
 	BALL::AutoDeletable::clearLastPtr(); \
+	return !TEST::all_tests;\
 }\
 
 
@@ -249,77 +261,13 @@ int main(int argc, char **argv)\
 #define RESULT \
 			break;\
 		}\
-  }\
-	/* catch FileNotFound exceptions to print out the file name */\
-	catch (BALL::Exception::FileNotFound& e)\
-	{\
-		TEST::this_test = false;\
-		TEST::test = false;\
-		TEST::all_tests = false;\
-  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-		{\
-			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
-				TEST::exception++;\
-    	std::cout << std::endl << "    (caught exception of type ";\
-			std::cout << e.getName();\
-			if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
-				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
-			std::cout << " while looking for file " << e.getFilename();\
-			std::cout << " - unexpected!) " << std::endl;\
-		}\
-  }\
-  catch (::BALL::Exception::GeneralException& e)\
-  {\
-    TEST::this_test = false;\
-    TEST::test = false;\
-    TEST::all_tests = false;\
-    if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-    {\
-			if (!TEST::newline) \
-			{\
-				TEST::newline = true;\
-				std::cout << std::endl;\
-			}\
-      std::cout << "    (caught exception of type ";\
-      std::cout << e.getName();\
-      if ((e.getLine() > 0) && (!(e.getFile()[0] == '\0')))\
-        std::cout << ", which was thrown in line " << e.getLine() << " of file " << e.getFile();\
-      std::cout << " - unexpected!) " << std::endl;\
-			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
-    }\
-  }\
-	catch (std::exception& e)\
-	{\
-		TEST::this_test = false;\
-		TEST::test = false;\
-		TEST::all_tests = false;\
-		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-		{\
-			if (!TEST::newline) \
-			{\
-				TEST::newline = true;\
-				std::cout << std::endl;\
-			}\
-			std::cout << "    (caught STL exception!)" << std::endl;\
-			std::cout << "    (what(): " << e.what() << ")" << std::endl;\
-		}\
 	}\
-  catch (...)\
-  {\
-    TEST::this_test = false;\
-    TEST::test = false;\
-    TEST::all_tests = false;\
-    if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-    {\
-			if (!TEST::newline) \
-			{\
-				TEST::newline = true;\
-				std::cout << std::endl;\
-			}\
-      std::cout << "    (caught unidentified and unexpected exception!)" << std::endl;\
-    }\
-  }\
-\
+	/* catch FileNotFound exceptions to print out the file name */\
+	catch (BALL::Exception::FileNotFound& e) { TEST::printException(e, true); }\
+	catch (::BALL::Exception::GeneralException& e) { TEST::printException(e, true); }\
+	catch (std::exception& e) { TEST::printException(e, true); }\
+	catch (...) { TEST::printException(0, true); }\
+	\
 	TEST::all_tests = TEST::all_tests && TEST::test;\
 	if (TEST::verbose > 0){\
 		if (TEST::newline)\
