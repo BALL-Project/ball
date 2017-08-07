@@ -257,6 +257,16 @@ namespace BALL
 			}
 		}
 
+		void PluginDialog::restoreDefaultValues(bool /* all */)
+		{
+			for (auto i = plugin_dir_model_.rowCount() - 1; i >= 0 ; --i)
+			{
+				plugin_dir_model_.removeDirectory(plugin_dir_model_.index(i));
+			}
+			setDefaultPluginDirectory();
+			plugin_model_.pluginsLoaded();
+		}
+
 		void PluginDialog::pluginChanged(QModelIndex current, const QModelIndex& /* previous */)
 		{
 			//Cleanup the old config dialog

@@ -97,17 +97,19 @@ namespace BALL
 				 * This method is called automatically before the main
 				 * application is closed.
 				 */
-				 virtual void finalizeWidget(MainControl& main_control);
+				virtual void finalizeWidget(MainControl& main_control);
 
-				 virtual void writePreferenceEntries(INIFile& inifile);
-				 virtual void readPreferenceEntries(const INIFile& inifile);
+				virtual void writePreferenceEntries(INIFile& inifile);
+				virtual void readPreferenceEntries(const INIFile& inifile);
 
-				 virtual void registerChildEntry(PreferencesEntry* child);
-				 virtual void unregisterChildEntry(PreferencesEntry* child);
+				virtual void registerChildEntry(PreferencesEntry* child);
+				virtual void unregisterChildEntry(PreferencesEntry* child);
 
-				 bool canHandle(BALLPlugin* plugin) const;
-				 bool specificSetup_(BALLPlugin* plugin);
-				 bool specificShutdown_(BALLPlugin* plugin);
+				virtual void restoreDefaultValues(bool /* all */ = false);
+
+				bool canHandle(BALLPlugin* plugin) const;
+				bool specificSetup_(BALLPlugin* plugin);
+				bool specificShutdown_(BALLPlugin* plugin);
 
 			protected:
 				/**
