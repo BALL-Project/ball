@@ -109,6 +109,13 @@ namespace BALL
 				 bool specificSetup_(BALLPlugin* plugin);
 				 bool specificShutdown_(BALLPlugin* plugin);
 
+			protected:
+				/**
+				 * Tries to find and set the platform-dependend plugin default directory (relative to the location of
+				 * the BALLView executable). If the default location does not exist, this function does nothing.
+				 */
+				virtual void setDefaultPluginDirectory();
+
 			protected slots:
 				virtual void addPluginDirectory();
 				virtual void removePluginDirectory();
