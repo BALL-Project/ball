@@ -264,7 +264,6 @@ namespace BALL
 				plugin_dir_model_.removeDirectory(plugin_dir_model_.index(i));
 			}
 			setDefaultPluginDirectory();
-			plugin_model_.pluginsLoaded();
 		}
 
 		void PluginDialog::pluginChanged(QModelIndex current, const QModelIndex& /* previous */)
