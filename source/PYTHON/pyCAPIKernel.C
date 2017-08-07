@@ -65,10 +65,6 @@ namespace BALL
 	{
 		if (!PyErr_Occurred()) return false;
 
-#ifdef BALL_DEBUG
-		PyErr_Print();
-#endif
-
 		if (PyErr_ExceptionMatches(PyExc_SyntaxError))
 		{
 			last_err_ = "Syntax error";
