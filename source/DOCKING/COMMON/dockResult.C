@@ -8,7 +8,6 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/DOCKING/COMMON/dockResult.h>
 
-//#define BALL_VIEW_DEBUG
 namespace BALL
 {
 		// Default Constructor

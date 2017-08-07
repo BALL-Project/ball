@@ -65,7 +65,7 @@ namespace BALL
 	{
 		if (!PyErr_Occurred()) return false;
 
-#ifdef BALL_VIEW_DEBUG
+#ifdef BALL_DEBUG
 		PyErr_Print();
 #endif
 
@@ -106,7 +106,7 @@ namespace BALL
 
 	std::pair<bool, string> PyCAPIKernel::run(string str)
 	{
-#ifdef BALL_VIEW_DEBUG
+#ifdef BALL_DEBUG
 		Log.info() << "[PyInterpreter] >>> " << str << std::endl;
 #endif
 
