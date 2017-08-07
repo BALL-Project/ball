@@ -14,33 +14,11 @@
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
-#include <fstream>
-#include <iostream>
 #include <boost/iostreams/filtering_streambuf.hpp>
 #include <boost/iostreams/copy.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QRadioButton>
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QComboBox>
-#include <QtGui/QImage>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QApplication>
 #include <QtWidgets/QProgressBar>
-
-#include <QtCore/QUrl>
-#include <QtCore/QFile>
-
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QNetworkReply>
-
-#ifdef BALL_HAS_SSTREAM
-# include <sstream>
-#else
-# include <strstream>
-#endif
 
 using namespace std;
 

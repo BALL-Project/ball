@@ -5,19 +5,8 @@
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
 #define BALL_VIEW_WIDGETS_LOGVIEW_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifdef BALL_HAS_SSTREAM
-# include <sstream>
-#else
-# include <strstream>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
-#	include <BALL/VIEW/WIDGETS/dockWidget.h>
-#endif
+#include <BALL/common.h>
+#include <BALL/VIEW/WIDGETS/dockWidget.h>
 
 #include <QtWidgets/QTextBrowser>
 #include <QtGui/QDragEnterEvent>
