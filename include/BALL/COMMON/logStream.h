@@ -5,37 +5,17 @@
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
 
-#ifndef BALL_CONFIG_CONFIG_H
-#	include <BALL/CONFIG/config.h>
-#endif
+#include <BALL/COMMON/global.h>
+#include <BALL/COMMON/debug.h>
+#include <BALL/CONFIG/config.h>
 
-#ifndef BALL_COMMON_GLOBAL_H
-#	include <BALL/COMMON/global.h>
-#endif
-
-#ifndef BALL_COMMON_DEBUG_H
-#	include <BALL/COMMON/debug.h>
-#endif
-
-#ifdef BALL_HAS_SYS_TIME_H
-#	include <sys/time.h>
-#endif
-
-#ifdef BALL_HAS_TIME_H
-#	include <time.h>
-#endif
-
-#ifdef BALL_HAS_SSTREAM
-# include <sstream>
-#else
-# include <strstream>
-#endif
+#include <sys/time.h>
+#include <time.h>
 
 #include <iostream>
 #include <list>
+#include <sstream>
 #include <vector>
-#include <string>
-
 
 using std::list;
 using std::vector;

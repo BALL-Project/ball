@@ -8,12 +8,6 @@
 #include <string>
 #include <list>
 
-#ifdef BALL_HAS_SSTREAM
-# include <sstream>
-#else
-# include <strstream>
-#endif
-
 /* define a special namespace for all internal variables */\
 /* to avoid potential collisions                         */\
 namespace TEST
@@ -749,21 +743,12 @@ int main(int argc, char **argv)\
 		 \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
 		\ingroup ClassTest
 */
-#ifdef BALL_HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL(level) \
 	{\
 		std::ostringstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, level, level);
-#else
-#define CAPTURE_OUTPUT_LEVEL(level) \
-	{\
-		std::ostrstream TEST_strstr;\
-		Log.remove(std::cout);\
-		Log.remove(std::cerr);\
-		Log.insert(TEST_strstr, level, level);
-#endif
 
 /**	Redirect output to the global logging facility.
 		This macro (together with  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink ) can be used
@@ -777,83 +762,43 @@ int main(int argc, char **argv)\
 		 \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
 		\ingroup ClassTest
 */
-#ifdef BALL_HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
 	{\
 		std::ostringstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, minlevel, maxlevel);
-#else
-#define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
-	{\
-		std::ostrstream TEST_strstr;\
-		Log.remove(std::cout);\
-		Log.remove(std::cerr);\
-		Log.insert(TEST_strstr, minlevel, maxlevel);
-#endif
+
 /**	Compare output made to the global logging facility.
 		@see CAPTURE_OUTPUT
 		\ingroup ClassTest
 */
-
-#ifdef BALL_HAS_SSTREAM
 #define COMPARE_OUTPUT(text) \
-                Log.remove(TEST_strstr);\
-                Log.insert(std::cout, LogStream::INFORMATION_LEVEL, LogStream::ERROR_LEVEL - 1);\
-                Log.insert(std::cerr, LogStream::ERROR_LEVEL);\
-                TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
-                TEST::test = TEST::test && TEST::this_test;\
-                \
-                if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-                {\
-                        /* reserve space for the null-terminated content of the strstrem */\
-                        char* TEST_strstr_contents = new char[TEST_strstr.str().size() + 1];\
-                        ::strncpy(TEST_strstr_contents, TEST_strstr.str().c_str(), TEST_strstr.str().size());\
-                        TEST_strstr_contents[TEST_strstr.str().size()] = '\0';\
-                        \
-                        if (!TEST::newline)\
-                        {\
-                                TEST::newline = true;\
-                                std::cout << std::endl;\
-                        }\
-                        std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << ") ";\
-                        if (TEST::this_test)\
-                                std::cout << " + " << std::endl;\
-                        else \
-                                std::cout << " - " << std::endl;\
-                        delete [] TEST_strstr_contents;\
-                }\
-        }
-#else
-#define COMPARE_OUTPUT(text) \
-		Log.remove(TEST_strstr);\
-		Log.insert(std::cout, LogStream::INFORMATION_LEVEL, LogStream::ERROR_LEVEL - 1);\
-		Log.insert(std::cerr, LogStream::ERROR_LEVEL);\
-		TEST::this_test = (::strncmp(TEST_strstr.str(), text, TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0) == 0);\
-		TEST::test = TEST::test && TEST::this_test;\
+	Log.remove(TEST_strstr);\
+	Log.insert(std::cout, LogStream::INFORMATION_LEVEL, LogStream::ERROR_LEVEL - 1);\
+	Log.insert(std::cerr, LogStream::ERROR_LEVEL);\
+	TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
+	TEST::test = TEST::test && TEST::this_test;\
+	\
+	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+	{\
+		/* reserve space for the null-terminated content of the strstrem */\
+		char* TEST_strstr_contents = new char[TEST_strstr.str().size() + 1];\
+		::strncpy(TEST_strstr_contents, TEST_strstr.str().c_str(), TEST_strstr.str().size());\
+		TEST_strstr_contents[TEST_strstr.str().size()] = '\0';\
 		\
-		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		if (!TEST::newline)\
 		{\
-			/* reserve space for the null-terminated content of the strstrem */\
-			char* TEST_strstr_contents = new char[TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0 + 1];\
-			::strncpy(TEST_strstr_contents, TEST_strstr.str(), TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0);\
-			TEST_strstr_contents[TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0] = '\0';\
-			\
-			if (!TEST::newline)\
-			{\
-				TEST::newline = true;\
-				std::cout << std::endl;\
-			}\
-			std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << "') ";\
-			if (TEST::this_test)\
-				std::cout << " + " << std::endl;\
-			else \
-				std::cout << " - " << std::endl;\
-			delete [] TEST_strstr_contents;\
+			TEST::newline = true;\
+			std::cout << std::endl;\
 		}\
-	}
-
-#endif	
+		std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << ") ";\
+		if (TEST::this_test)\
+			std::cout << " + " << std::endl;\
+		else \
+			std::cout << " - " << std::endl;\
+		delete [] TEST_strstr_contents;\
+	}\
+}
 
 #endif // BALL_CONCEPT_CLASSTEST_H

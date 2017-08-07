@@ -194,11 +194,7 @@ CHECK(String(Size buffer_size, const char* format, ... ) throw(Exception::IndexU
 RESULT
 
 CHECK(String(std::stringstream& s) throw())
-#ifdef BALL_HAS_SSTREAM
 	std::stringstream instream("ABC DEF");
-#else
-	std::strstream instream("ABC DEF", strlen("ABC DEF"), ios::app);
-#endif
 	s2 = new String(instream);
 	TEST_NOT_EQUAL(s2, 0)
 	TEST_EQUAL(*s2, "ABC")

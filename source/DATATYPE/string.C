@@ -208,11 +208,7 @@ namespace BALL
 		delete [] buffer;
 	}
 
-#ifdef BALL_HAS_SSTREAM
 	String::String(std::stringstream& s)
-#else
-	String::String(std::strstream& s)
-#endif
 		: str_("")
 	{
 		s >> (*this);

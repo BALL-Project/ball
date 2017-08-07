@@ -149,11 +149,7 @@ RESULT
 delete s2;
 
 CHECK(void set(std::stringstream& s) throw())
-#ifdef BALL_HAS_SSTREAM
 	std::stringstream instream("ABC DEF GHI jkl mno");
-#else
-	std::strstream instream("ABC DEF GHI jkl mno", strlen("ABC DEF GHI jkl mno"), ios::app);
-#endif
 
 	s2 = new String;
 	s2->set(instream);
@@ -279,11 +275,7 @@ CHECK(const String& operator = (const char* pc) throw(Exception::NullPointer))
 RESULT
 
 CHECK(const String& operator = (std::stringstream& s) throw())
-#ifdef BALL_HAS_SSTREAM
 	std::stringstream instream("ABC DEF GHI jkl mni");
-#else
-	std::strstream instream("ABC DEF GHI jkl mni", strlen("ABC DEF GHI jkl mni"),ios::app);
-#endif
 
 	s2 = new String;
 	*s2 = instream;

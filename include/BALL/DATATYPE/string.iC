@@ -80,11 +80,7 @@ String::String(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
-#ifdef BALL_HAS_SSTREAM
 void String::set(std::stringstream& s)
-#else
-void String::set(std::strstream& s)
-#endif
 {
 	s >> (*this);
 }
@@ -430,11 +426,7 @@ const String& String::operator = (const char* char_ptr)
 
 BALL_INLINE 
 
-#ifdef BALL_HAS_SSTREAM
 const String& String::operator = (std::stringstream& s)
-#else
-const String& String::operator = (std::strstream& s)
-#endif
 {
   set(s);
   return *this;

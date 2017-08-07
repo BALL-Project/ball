@@ -136,10 +136,6 @@
 // Some systems don't provide mode_t for us...
 #cmakedefine mode_t @BALL_MODE_T@
 
-// Define whether we can use <sstream> or whether we have to use the
-// older <strstream>
-#cmakedefine BALL_HAS_SSTREAM
-
 // on some systems (e.g. Solaris) we need to include /usr/include/ieeefp.h
 // for some floating point functions
 #cmakedefine BALL_HAS_IEEEFP_H

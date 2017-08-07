@@ -30,13 +30,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <sstream>
 #include <vector>
-
-#ifdef BALL_HAS_SSTREAM
-# include <sstream>
-#else
-# include <strstream>
-#endif
 
 using std::string;
 
@@ -214,11 +209,7 @@ namespace BALL
 				successive construction of multiple strings from the same <tt>stringstream</tt>
 				object leads to identical copies.
 		*/
-#ifdef BALL_HAS_SSTREAM
 		String(std::stringstream& s);
-#else
-		String(std::strstream& s);
-#endif
 
 		/** Creates a new string from len copies of c.
 		*/
@@ -302,11 +293,7 @@ namespace BALL
 		/** Assign a String from a <b>stringstream</b>.
 				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
-#ifdef BALL_HAS_SSTREAM
 		void set(std::stringstream& s);
-#else
-		void set(std::strstream& s);
-#endif
 
 		/// Assign a String from the result of repeating <b>c</b> <b>len</b> times
 		void set(char c, Size len = 1);
@@ -368,11 +355,7 @@ namespace BALL
 		/** Assign a string from a <b>stringstream</b>.
 				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
-#ifdef BALL_HAS_SSTREAM
 		const String& operator = (std::stringstream& s);
-#else
-		const String& operator = (std::strstream& s);
-#endif
 
 		/// Assign a String from a single char
 		const String& operator = (char c);
