@@ -35,11 +35,11 @@ EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y -c workfl
 	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
 )
 
-# Clone CTD2Galaxy and CTDSchema
-IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTD2Galaxy")
-	EXECUTE_PROCESS(COMMAND git clone https://github.com/WorkflowConversion/CTD2Galaxy
-		OUTPUT_FILE "@LOGFILE_DIR@/ctd2galaxy_clone_out.log"
-		ERROR_FILE "@LOGFILE_DIR@/ctd2galaxy_clone_err.log"
+# Clone CTDConverter and CTDSchema
+IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTDConverter")
+	EXECUTE_PROCESS(COMMAND git clone https://github.com/WorkflowConversion/CTDConverter
+		OUTPUT_FILE "@LOGFILE_DIR@/ctdconverter_clone_out.log"
+		ERROR_FILE "@LOGFILE_DIR@/ctdconverter_clone_err.log"
 		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
 	)
 ENDIF()
@@ -61,7 +61,7 @@ ENDFOREACH()
 # Generate Galaxy XML stubs
 FILE(GLOB CTD_FILES "@CTD_OUTFILE_DIR@/*.ctd")
 
-EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "CTD2Galaxy/generator.py"
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "CTDConverter/galaxy/generator.py"
 	--input ${CTD_FILES}
 	--output-destination @GALAXY_STUBS_DIR@
 	--datatypes-destination "@GALAXY_STUBS_DIR@/datatypes_conf.xml"
