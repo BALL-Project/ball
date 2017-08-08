@@ -9,8 +9,13 @@
 #include <BALL/COMMON/debug.h>
 #include <BALL/CONFIG/config.h>
 
-#include <sys/time.h>
-#include <time.h>
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif
 
 #include <iostream>
 #include <list>
