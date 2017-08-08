@@ -3,7 +3,7 @@ PROJECT(BALLAXY)
 
 # Check OS and set appropriate Miniconda setup file URL
 IF(WIN32)
-	MESSAGE(STATUS "WARNING: Galaxy is not available for Windows OS. Skipping Ballaxy.")
+	MESSAGE(WARNING "WARNING: Galaxy is not available for Windows OS. Skipping Ballaxy.")
 ELSEIF(APPLE)
 	SET(MINICONDA_INSTALLER "Miniconda2-latest-MacOSX-x86_64.sh")
 	SET(LD_LIBRARY_PATH_VAR "DYLD_LIBRARY_PATH")
