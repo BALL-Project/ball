@@ -4,10 +4,9 @@
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
-#include <unistd.h>
+
 ///////////////////////////
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/SYSTEM/file.h>
 
 #ifdef BALL_COMPILER_MSVC
 #	include<windows.h>
@@ -312,7 +311,7 @@ CHECK(void dump(::std::ostream& s = ::std::cout, Size depth = 0L) const)
 	t1.start();
 	BUSY_WAIT
 	t1.stop();
-  String filename;
+	String filename;
 	NEW_TMP_FILE(filename)
 
 	std::ofstream outfile(filename.c_str(), std::ios::out);
