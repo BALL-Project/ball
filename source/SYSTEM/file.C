@@ -232,7 +232,8 @@ namespace BALL
 			String transformation_command = transformation_manager_.findTransformation(name_);
 			if (transformation_command != "")
 			{
-				if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__FILTER))
+				// assert that TRANSFORMATION__FILTER is enabled
+				if (!(transformation_methods_  & (1 << File::TRANSFORMATION__FILTER)))
 				{		
 					setstate(std::ios_base::failbit);
 					throw Exception::FileNotFound(__FILE__, __LINE__, name_ + " (using " + transformation_command + ")");
@@ -263,8 +264,8 @@ namespace BALL
 			// check for the EXEC transformation prefix
 			if (name_.hasPrefix(TRANSFORMATION_EXEC_PREFIX))
 			{
-				// is the EXEC transformation enabled?
-				if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__EXEC))
+				// assert that EXEC transformation is enabled
+				if (!(transformation_methods_ & (1 << File::TRANSFORMATION__EXEC)))
 				{
 					setstate(std::ios_base::failbit);
 					throw Exception::FileNotFound(__FILE__, __LINE__, name);
