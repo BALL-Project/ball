@@ -29,14 +29,13 @@ namespace BALL
 			next_(0),
 			first_child_(0),
 			last_child_(0),
+			properties_(0),
 			contains_selection_(false),
 			number_of_selected_children_(0),
 			number_of_children_containing_selection_(0),
 			selection_stamp_(),
 			modification_stamp_()
-	{
-		BALL_BIT_CLEAR_ALL(properties_);
-	}
+	{ }
 
 	// copy ctor
 	Composite::Composite(const Composite& composite, bool deep)
@@ -48,6 +47,7 @@ namespace BALL
 			next_(0),
 			first_child_(0),
 			last_child_(0),
+			properties_(0),
 			contains_selection_(false),
 			number_of_selected_children_(0),
 			number_of_children_containing_selection_(0),
@@ -1253,7 +1253,7 @@ namespace BALL
 		first_child_ = last_child_ = 0;
 
 		// clear properties
-		BALL_BIT_CLEAR_ALL(properties_);
+		properties_ = 0;
 
 		// update counters and selection
 		number_of_children_ = 0;
