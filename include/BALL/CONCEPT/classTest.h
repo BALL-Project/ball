@@ -313,7 +313,7 @@ int main(int argc, char **argv)\
 		\ingroup ClassTest
 */
 #define TEST_REAL_EQUAL(a,b)  \
-	TEST::this_test = BALL_REAL_EQUAL((a), (b), TEST::precision); \
+	TEST::this_test = fabs((a) - (b)) < TEST::precision; \
 	TEST::test = TEST::test && TEST::this_test;\
 	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 	{\

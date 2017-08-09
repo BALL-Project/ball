@@ -42,7 +42,7 @@ namespace BALL
 	const Index  PoseClustering::Default::RMSD_LEVEL_OF_DETAIL = PoseClustering::C_ALPHA;
 
 	const String PoseClustering::Option::DISTANCE_THRESHOLD = "pose_clustering_rmsd_threshold";
-  const float PoseClustering::Default::DISTANCE_THRESHOLD = 3;
+	const float PoseClustering::Default::DISTANCE_THRESHOLD = 3;
 
 	const String PoseClustering::Option::RMSD_TYPE = "pose_clustering_rmsd_type";
 	const Index PoseClustering::Default::RMSD_TYPE = PoseClustering::SNAPSHOT_RMSD;
@@ -763,7 +763,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		// now, join clusters if needed
 		for (Position current_cluster=0; current_cluster < cluster_helper.size(); ++current_cluster)
 		{
-			if (BALL_REAL_LESS_OR_EQUAL(lambda_[current_cluster], threshold, 1e-5))
+			if (Maths::isLessOrEqual(lambda_[current_cluster], threshold))
 			{
 				// merge this cluster with its destination
 				cluster_helper[pi_[current_cluster]].insert(cluster_helper[current_cluster].begin(), cluster_helper[current_cluster].end());
@@ -793,7 +793,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	{
 		for (int i=0; i<current_level; ++i)
 		{
-			if (BALL_REAL_GREATER_OR_EQUAL(lambda_[i], mu_[i], 1e-5))
+			if (Maths::isGreaterOrEqual(lambda_[i], mu_[i]))
 			{
 				mu_[pi_[i]] = min(mu_[pi_[i]], lambda_[i]);
 				lambda_[i]  = mu_[i];
@@ -807,7 +807,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 
 		for (int i=0; i<current_level; ++i)
 		{
-			if (BALL_REAL_GREATER_OR_EQUAL(lambda_[i], lambda_[pi_[i]], 1e-5))
+			if (Maths::isGreaterOrEqual(lambda_[i], lambda_[pi_[i]]))
 				pi_[i] = current_level;
 		}
 	}
@@ -817,7 +817,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 	{
 		for (int i=0; i<current_level; ++i)
 		{
-			if (BALL_REAL_LESS(lambda_[i], mu_[i], 1e-5))
+			if (Maths::isLess(lambda_[i], mu_[i]))
 			{
 				mu_[pi_[i]] = max(mu_[pi_[i]], mu_[i]);
 				mu_[i] = numeric_limits<double>::max();
@@ -832,9 +832,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		{
 			int j = (current_level-1)-i;
 
-			if (BALL_REAL_GREATER_OR_EQUAL(lambda_[j], mu_[pi_[j]], 1e-5))
+			if (Maths::isGreaterOrEqual(lambda_[j], mu_[pi_[j]]))
 			{
-				if (BALL_REAL_LESS(mu_[j], mu_[a], 1e-5))
+				if (Maths::isLess(mu_[j], mu_[a]))
 				{
 					a = j;
 				}
@@ -883,7 +883,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		{
 			if (pi_[pi_[i]] == current_level)
 			{
-				if (BALL_REAL_GREATER_OR_EQUAL(lambda_[i], lambda_[pi_[i]], 1e-5))
+				if (Maths::isGreaterOrEqual(lambda_[i], lambda_[pi_[i]]))
 					pi_[i] = current_level;
 			}
 		}
@@ -1007,7 +1007,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 					float rmsd = computeWardDistance_(active_clusters[current_cluster], active_clusters[i], rmsd_type);
 
 					// for stability, make sure that "really" smaller cases are always taken...
-					if (BALL_REAL_LESS(rmsd, min_cluster_dist, 1e-5))
+					if (Maths::isLess(rmsd, min_cluster_dist))
 					{
 						nearest_cluster = i;
 						min_cluster_dist = rmsd;
@@ -1122,7 +1122,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		// we automatically extract clusters if a reasonable threshold is provided.
 		// distance threshold equal zero prohibits that to save runtime 
 		float threshold = options.getReal(Option::DISTANCE_THRESHOLD);
-		if (BALL_REAL_GREATER_OR_EQUAL(threshold, 0.0, 1e-5))
+		if (Maths::isGreaterOrEqual(threshold, 0.0))
 			extractClustersForThreshold(threshold);
 
 		return true;
@@ -1738,7 +1738,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				float rmsd = parent_->computeWardDistance_(active_clusters_[current_cluster_], active_clusters_[i], rmsd_type_);
 
 				// for stability, make sure that "really" smaller cases are always taken...
-				if (BALL_REAL_LESS(rmsd, min_value, 1e-5))
+				if (Maths::isLess(rmsd, min_value))
 				{
 					min_index = i;
 					min_value = rmsd;
