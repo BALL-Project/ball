@@ -185,9 +185,9 @@ namespace BALL
 	const String File::TRANSFORMATION_HTTP_PREFIX = "http://";
 	const String File::TRANSFORMATION_FTP_PREFIX  = "ftp://";
 
-	Size File::transformation_methods_ = BALL_BIT(File::TRANSFORMATION__EXEC) 
-																				| BALL_BIT(File::TRANSFORMATION__FILTER) 
-																				| BALL_BIT(File::TRANSFORMATION__URL);
+	Size File::transformation_methods_ = 1 << File::TRANSFORMATION__EXEC
+	                                   | 1 << File::TRANSFORMATION__FILTER
+	                                   | 1 << File::TRANSFORMATION__URL;
 
 	File::File()
 		:	std::fstream(),
