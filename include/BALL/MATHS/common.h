@@ -137,7 +137,7 @@ namespace BALL
 		inline 
 		T sgn(const T& t)
 		{
-			return BALL_SGN(t);
+			return ((t < 0) ? -1 : (t == 0) ? 0 : 1);
 		}
 
 		/**	Test whether a number is finite.

@@ -509,7 +509,7 @@ namespace BALL
 			} 
 			else	
 			{
-				angle = BALL_SGN(b) * Constants::PI / 2;
+				angle = Maths::sgn(b) * Constants::PI / 2;
 			}
 
 			if (Maths::isLess(a, 0)) 
