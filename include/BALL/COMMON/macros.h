@@ -16,6 +16,36 @@
 
 namespace BALL
 {
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_max(T a, T b)
+	{
+		return a < b ? b : a;
+	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_max3(T a, T b, T c)
+	{
+		return a > b ? (a > c ? a : c) : (b > c ? b : c);
+	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_min(T a, T b)
+	{
+		return a > b ? b : a;
+	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_min3(T a, T b, T c)
+	{
+		return a < b ? (a < c ? a : c) : (b < c ? b : c);
+	}
+
+	template<class X>
+	int BALL_DEPRECATED BALL_INLINE ball_macro_abs(X x)
+	{
+		return x >= 0 ? x : -x;
+	}
+
 	template<class X>
 	int BALL_DEPRECATED BALL_INLINE ball_macro_sgn(X x)
 	{
@@ -47,15 +77,39 @@ namespace BALL
 	}
 
 	template<class X, class Y, class E>
+	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_equal(X x, Y y, E e)
+	{
+		return fabs(x - y) <= e;
+	}
+
+	template<class X, class Y, class E>
 	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_not_equal(X x, Y y, E e)
 	{
 		return fabs(x - y) > e;
 	}
 
 	template<class X, class Y, class E>
+	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_less(X x, Y y, E e)
+	{
+		return (x - y) < -e;
+	}
+
+	template<class X, class Y, class E>
+	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_less_or_equal(X x, Y y, E e)
+	{
+		return (x - y) <= e;
+	}
+
+	template<class X, class Y, class E>
 	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_greater(X x, Y y, E e)
 	{
 		return (x - y) > e;
+	}
+
+	template<class X, class Y, class E>
+	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_greater_or_equal(X x, Y y, E e)
+	{
+		return (x - y) >= -e;
 	}
 
 	template<class X>
@@ -127,6 +181,12 @@ namespace BALL
 		return (x + bits - 1) >> shift;
 	}
 
+	template<class T, std::size_t N>
+	std::size_t BALL_DEPRECATED BALL_INLINE ball_macro_sizeof_array(T (&)[N])
+	{
+		return N;
+	}
+
 	template<class T>
 	T BALL_DEPRECATED BALL_INLINE ball_macro_bitarray_size(T x)
 	{
@@ -167,6 +227,12 @@ namespace BALL
 		return (a[x >> shift] & (1 << (x & (bits - 1)))) != 0;
 	}
 
+	template<class Bit>
+	unsigned BALL_DEPRECATED BALL_INLINE ball_macro_bit(Bit bit)
+	{
+		return 1 << bit;
+	}
+
 	template<class Bitset, class Bit>
 	void BALL_DEPRECATED BALL_INLINE ball_macro_bit_set(Bitset& bitset, Bit bit)
 	{
@@ -197,6 +263,12 @@ namespace BALL
 		bitset &= ~(1 << bit);
 	}
 
+	template<class Bitset>
+	void BALL_DEPRECATED BALL_INLINE ball_macro_bit_clear_all(Bitset& bitset)
+	{
+		bitset = 0;
+	}
+
 	template<class Bitset, class Bit>
 	void BALL_DEPRECATED BALL_INLINE ball_macro_bit_clear_all_to(Bitset& bitset, Bit bit)
 	{
@@ -214,29 +286,35 @@ namespace BALL
 	{
 		return bitset & (1 << bit);
 	}
+
+	template<class Bitset, class Bit>
+	bool BALL_DEPRECATED BALL_INLINE ball_macro_bit_is_cleared(Bitset& bitset, Bit bit)
+	{
+		return !(bitset & (1 << bit));
+	}
 }
 
 // Macro to block execution of current thread for at least x milliseconds
 #define BALL_SLEEPFOR(x)                         std::this_thread::sleep_for(std::chrono::milliseconds(x))
 
-#define BALL_MAX(a, b)                           (((a) < (b)) ? (b) : (a))
-#define BALL_MAX3(x, y, z)                       ((x) > (y) ? BALL_MAX(x, z) : BALL_MAX(y, z))
-#define BALL_MIN(a, b)                           (((a) > (b)) ? (b) : (a))
-#define BALL_MIN3(x, y, z)                       ((x) < (y) ? BALL_MIN(x, z) : BALL_MIN(y, z))
-#define BALL_ABS(x)                              (((x) >= 0) ? (x) : -(x))
-#define BALL_SGN(x)                              (((x) < 0) ? -1 : ((x) == 0) ? 0 : 1)
+#define BALL_MAX(a, b)                           BALL::ball_macro_max(a, b)
+#define BALL_MAX3(x, y, z)                       BALL::ball_macro_max3(x, y, z)
+#define BALL_MIN(a, b)                           BALL::ball_macro_min(a, b)
+#define BALL_MIN3(x, y, z)                       BALL::ball_macro_min3(x, y ,z)
+#define BALL_ABS(x)                              BALL::ball_macro_abs(x)
+#define BALL_SGN(x)                              BALL::ball_macro_sgn(x)
 #define BALL_ODD(x)                              BALL::ball_macro_odd(x)
 
 #define BALL_INT_ODD(x)                          BALL::ball_macro_int_odd(x)
 #define BALL_INT_EVEN(x)                         BALL::ball_macro_int_even(x)
 
 #define BALL_REAL_ROUND                          BALL::ball_macro_real_round
-#define BALL_REAL_EQUAL(x, y, e)                 (fabs((x) - (y)) <= e)
+#define BALL_REAL_EQUAL(x, y, e)                 BALL::ball_macro_real_equal(x, y, e)
 #define BALL_REAL_NOT_EQUAL(x, y, e)             BALL::ball_macro_real_not_equal(x, y, e)
-#define BALL_REAL_LESS(x, y, e)                  (((x) - (y)) < -e)
-#define BALL_REAL_LESS_OR_EQUAL(x, y, e)         (((x) - (y)) <= e)
+#define BALL_REAL_LESS(x, y, e)                  BALL::ball_macro_real_less(x, y, e)
+#define BALL_REAL_LESS_OR_EQUAL(x, y, e)         BALL::ball_macro_real_less_or_equal(x, y, e)
 #define BALL_REAL_GREATER(x, y, e)               BALL::ball_macro_real_greater(x, y, e)
-#define BALL_REAL_GREATER_OR_EQUAL(x, y, e)      (((x) - (y)) >= -e)
+#define BALL_REAL_GREATER_OR_EQUAL(x, y, e)      BALL::ball_macro_real_greater_or_equal(x, y, e)
 #define BALL_REAL_ABS(x)                         BALL::ball_macro_real_abs(x)
 #define BALL_REAL_SGN(x)                         BALL::ball_macro_sgn(x)
 #define BALL_REAL_ODD(x)                         BALL::ball_macro_real_odd(x)
@@ -254,7 +332,7 @@ namespace BALL
 #define BALL_CHAR_ALL_BITS_CLEARED               BALL::ball_macro_all_bits_cleared<char>()
 #define BALL_NUMBER_OF_BYTES(bits)               BALL::ball_macro_number_of_bytes(bits)
 
-#define BALL_SIZEOF_ARRAY(a)                     (sizeof(a) / sizeof(*(a)))
+#define BALL_SIZEOF_ARRAY(a)                     BALL::ball_macro_sizeof_array(a)
 
 #define BALL_BITARRAY_SIZE(number_of_bits)       BALL::ball_macro_bitarray_size(number_of_bits)
 #define BALL_BITARRAY_CLEAR_BIT(array, x)        BALL::ball_macro_bitarray_clear_bit(array, x)
@@ -262,17 +340,17 @@ namespace BALL
 #define BALL_BITARRAY_TOGGLE_BIT(array, x)       BALL::ball_macro_bitarray_toggle_bit(array, x)
 #define BALL_BITARRAY_IS_BIT_SET(array, x)       BALL::ball_macro_bitarray_is_bit_set(array, x)
 
-#define BALL_BIT(bit)                            (1 << (bit))
+#define BALL_BIT(bit)                            BALL::ball_macro_bit(bit)
 #define BALL_BIT_SET(bitset, bit)                BALL::ball_macro_bit_set(bitset, bit)
 #define BALL_BIT_SET_ALL(bitset)                 BALL::ball_macro_bit_set_all(bitset)
 #define BALL_BIT_SET_ALL_TO(bitset, bit)         BALL::ball_macro_bit_set_all_to(bitset, bit)
 #define BALL_BIT_SET_ALL_FROM(bitset, bit)       BALL::ball_macro_bit_set_all_from(bitset, bit)
 #define BALL_BIT_CLEAR(bitset, bit)              BALL::ball_macro_bit_clear(bitset, bit)
-#define BALL_BIT_CLEAR_ALL(bitset)               ((bitset) = 0)
+#define BALL_BIT_CLEAR_ALL(bitset)               BALL::ball_macro_bit_clear_all(bitset)
 #define BALL_BIT_CLEAR_ALL_TO(bitset, bit)       BALL::ball_macro_bit_clear_all_to(bitset, bit)
 #define BALL_BIT_CLEAR_ALL_FROM(bitset, bit)     BALL::ball_macro_bit_clear_all_from(bitset, bit)
 #define BALL_BIT_IS_SET(bitset, bit)             BALL::ball_macro_bit_is_set(bitset, bit)
-#define BALL_BIT_IS_CLEARED(bitset, bit)         !((bitset) & (1 << (bit)))
+#define BALL_BIT_IS_CLEARED(bitset, bit)         BALL::ball_macro_bit_is_cleared(bitset, bit)
 
 #define BALL_ANGLE_RADIAN_TO_DEGREE(rad_angle)   (180.0 / ::BALL::Constants::PI * (rad_angle))
 #define BALL_ANGLE_DEGREE_TO_RADIAN(deg_angle)   (::BALL::Constants::PI / 180.0 * (deg_angle))
