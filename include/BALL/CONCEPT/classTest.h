@@ -5,8 +5,10 @@
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/regularExpression.h>
 
-#include <string>
+#include <chrono>
 #include <list>
+#include <string>
+#include <thread>
 
 /* define a special namespace for all internal variables */\
 /* to avoid potential collisions                         */\
@@ -264,6 +266,13 @@ int main(int argc, char **argv)\
 			std::cout << "    ";\
 		std::cout << (TEST::test ? "passed" : "FAILED") << std::endl;\
 	}\
+
+/**	Sleep macro.
+		Block execution of the current block for at least ms milliseconds.
+		@param	ms waiting time in milliseconds
+		\ingroup ClassTest
+*/
+#define SLEEP_FOR_MSECS(ms) std::this_thread::sleep_for(std::chrono::milliseconds(ms))
 
 /**	Create a temporary filename.
 		This macro assigns a new temporary filename to the string variable given as

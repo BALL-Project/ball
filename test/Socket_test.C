@@ -57,7 +57,7 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 	Size retries = 0;
 	while ((port == 0) && (retries < 20))
 	{
-		BALL_SLEEPFOR((retries + 1) * 200);
+		SLEEP_FOR_MSECS((retries + 1) * 200);
 		port = server.getPort();
 		++retries;
 	}
@@ -73,7 +73,7 @@ CHECK([EXTRA] simple asynchronous socket transmission to/from threaded server)
 		String received;
 		stream >> received;
 
-		BALL_SLEEPFOR(10);
+		SLEEP_FOR_MSECS(10);
 		TEST_EQUAL(sent, server.received);
 		TEST_EQUAL(received, server.sent_async);	
 	}
@@ -92,7 +92,7 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 	Size retries = 0;
 	while ((port == 0) && (retries < 20))
 	{
-		BALL_SLEEPFOR((retries + 1) * 200);
+		SLEEP_FOR_MSECS((retries + 1) * 200);
 		port = server.getPort();
 		++retries;
 	}
@@ -107,7 +107,7 @@ CHECK([EXTRA] simple synchronous socket transmission to/from threaded server)
 
 		String received;
 		stream >> received;
-		BALL_SLEEPFOR(10);
+		SLEEP_FOR_MSECS(10);
 		TEST_EQUAL(sent, server.received);
 		TEST_EQUAL(received, server.sent_sync);	
 	}

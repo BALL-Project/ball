@@ -423,13 +423,13 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 
 	int sleep_time = 10;
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	ff.setup(S);
 
 	S.deselect();
 	r1.select();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double r1_tpl = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
@@ -443,13 +443,13 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	S.select();
 	r1.deselect();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	ff.setup(S);
 
 	S.deselect();
 	r4.select();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double r4_tpl = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
@@ -464,12 +464,12 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	r1.select();
 	r4.select();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	ff.setup(S);
 
 	r4.deselect();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double r1_r4 = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
@@ -483,7 +483,7 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	r4.select();
 	r1.deselect();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double r4_r1 = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
@@ -497,10 +497,10 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	S.deselect();
 	r1.select();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	ff.setup(S);
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double r1_i = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
@@ -514,10 +514,10 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	S.deselect();
 	r4.select();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	ff.setup(S);
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double r4_i = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
@@ -532,10 +532,10 @@ CHECK([EXTRA] Additivity of energies w/ selection)
 	r2.select();
 	r3.select();
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	ff.setup(S);
 
-	BALL_SLEEPFOR(sleep_time);
+	SLEEP_FOR_MSECS(sleep_time);
 	double tpl_i = ff.updateEnergy();
 
 	STATUS("  ES : " << ff.getESEnergy())
