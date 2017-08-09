@@ -273,7 +273,7 @@ namespace BALL
 		
 					// Now extract element and position (x, y, z) from the string.
 					String		s[4];
-					entry_it->getValue().split(s, BALL_SIZEOF_ARRAY(s), " ");
+					entry_it->getValue().split(s, 4, " ");
 					Vector3	r(s[1].toFloat(), s[2].toFloat(), s[3].toFloat());
 		
 					// and assign its values to the atom
