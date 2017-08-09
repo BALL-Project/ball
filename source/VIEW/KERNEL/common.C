@@ -459,7 +459,7 @@ namespace BALL
 				vector<float> temp(values);
 				for (Position p = 0; p < size; p++)
 				{
-					temp[p] = BALL_ABS(temp[p]);
+					temp[p] = std::abs(temp[p]);
 				}
 				sorted = temp;
 				sort(sorted.begin(), sorted.end());

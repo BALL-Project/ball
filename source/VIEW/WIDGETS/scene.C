@@ -469,7 +469,7 @@ namespace BALL
 
 				if (fps_.size() > 0)
 				{
-					if (BALL_ABS(*fps_.begin() - ti) > ti / 0.5)
+					if (std::abs(*fps_.begin() - ti) > ti / 0.5)
 					{
 						fps_.clear();
 					}

@@ -1963,8 +1963,8 @@ namespace BALL
 			glLoadIdentity();
 
 			// calculate picking rectangle
-			Size width  = BALL_ABS((Index)x2 - (Index)x1);
-			Size height = BALL_ABS((Index)y2 - (Index)y1);
+			auto width  = std::abs((Index)x2 - (Index)x1);
+			auto height = std::abs((Index)y2 - (Index)y1);
 
 			Position center_x = BALL_MIN(x2, x1) + width / 2;
 			Position center_y = BALL_MIN(y2, y1) + height / 2;

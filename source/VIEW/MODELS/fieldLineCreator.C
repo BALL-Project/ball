@@ -175,7 +175,7 @@ namespace BALL
 					const vector<float>& values =  potential_grid_->getData();
 					for (Position p = 0; p < values.size(); p++)
 					{
-						new_grid.getClosestValue((potential_grid_->getCoordinates(p))) += BALL_ABS(values[p]);
+						new_grid.getClosestValue((potential_grid_->getCoordinates(p))) += std::abs(values[p]);
 					}
 				}
 				else
