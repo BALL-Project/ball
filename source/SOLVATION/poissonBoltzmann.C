@@ -417,7 +417,7 @@ namespace BALL
 
 
 			// we need a cubic grid, so calculate the largest dimension of the grid
-			float size = BALL_MAX3(upper_.x - lower_.x, upper_.y - lower_.y, upper_.z - lower_.z);
+			float size = std::max(std::max(upper_.x - lower_.x, upper_.y - lower_.y), upper_.z - lower_.z);
 
 			// now expand the grid in all three directions. This also changes the origin.
 			// The molecule is centered in the resulting box

@@ -352,10 +352,10 @@ bool Kekuliser::fixAromaticRings_()
 			info.atom = &atom;
 
 			Index max_double = uncharged_double + 1;
-			max_double = BALL_MIN(1, max_double);
+			max_double = std::min(1, max_double);
 
 			Index min_double = uncharged_double - 1;
-			min_double = BALL_MAX(0, min_double);
+			min_double = std::max(0, min_double);
 
 			// allow charged atoms only for selected elements
 			Position atomic_number = atom.getElement().getAtomicNumber();

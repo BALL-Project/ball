@@ -54,7 +54,7 @@ namespace BALL
 		
 		double alamb,ave,delx,dely,delz,e2,e3,sqrtx,sqrty,sqrtz,xt,yt,zt;
 		
-		if (BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
+		if (std::min(std::min(x, y), z)  < 0.0 || std::min(std::min(x + y, x + z), y + z) < TINY || std::max(std::max(x, y), z) > BIG)
 		{
 			Log.error() << "JohnsonBoveyShiftProcessor::rf : argument error" << endl;
 			return 0;
@@ -78,7 +78,7 @@ namespace BALL
 				dely=(ave-yt)/ave;
 				delz=(ave-zt)/ave;
 			}
-			while (BALL_MAX3(fabs(delx), fabs(dely), fabs(delz)) > ERRTOL);
+			while (std::max(std::max(fabs(delx), fabs(dely)), fabs(delz)) > ERRTOL);
 			e2=delx*dely-delz*delz;
 			e3=delx*dely*delz;
 			return (1.0 + (C1*e2-C2-C3*e3)*e2 + C4*e3)/sqrt(ave);
@@ -107,7 +107,7 @@ namespace BALL
 		
 		double alamb,ave,delx,dely,delz,ea,eb,ec,ed,ee,fac,sqrtx,sqrty,sqrtz,sum,xt,yt,zt;
 		
-		if (BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
+		if (std::min(x, y) < 0.0 || std::min(x  +  y, z) < TINY || std::max(std::max(x, y), z) > BIG)
 		{
 			Log.error() << "JohnsonBoveyShiftProcessor::rd : argument error" << endl;
 			return 0;
@@ -135,7 +135,7 @@ namespace BALL
 					dely=(ave-yt)/ave;
 					delz=(ave-zt)/ave;
 					}
-				while (BALL_MAX3(fabs(delx), fabs(dely), fabs(delz)) > ERRTOL);
+				while (std::max(std::max(fabs(delx), fabs(dely)), fabs(delz)) > ERRTOL);
 				ea=delx*dely;
 				eb=delz*delz;
 				ec=ea-eb;

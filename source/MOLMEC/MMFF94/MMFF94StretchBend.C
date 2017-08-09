@@ -1228,8 +1228,8 @@ Log.info() << "Bend " << bend.atom1->getName() << " "
 
 		Position e1 = a1.getElement().getAtomicNumber();
 		Position e2 = a2.getElement().getAtomicNumber();
-		Position p1 = BALL_MIN(e1, e2);
-		Position p2 = BALL_MAX(e1, e2);
+		Position p1 = std::min(e1, e2);
+		Position p2 = std::max(e1, e2);
 
 		const Position HELIUM = 2;
 		const Position NEON = 10;

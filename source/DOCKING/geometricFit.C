@@ -725,16 +725,16 @@ void GeometricFit::doPreTranslation_( ProteinIndex pro_idx )
 			atom_index    = (atom_position + FFT_grid_origin_)/grid_spacing;
 //			std::cout << atom_index << std::endl;
 
-			for (grid_index.x  = (Position)BALL_MAX((int)Maths::rint(atom_index.x) - points_to_check, 0);
-					 grid_index.x <= (Position)BALL_MIN((int)Maths::rint(atom_index.x) + points_to_check, grid_size - 1);
+			for (grid_index.x  = (Position)std::max((int)Maths::rint(atom_index.x) - points_to_check, 0);
+					 grid_index.x <= (Position)std::min((int)Maths::rint(atom_index.x) + points_to_check, grid_size - 1);
 					 grid_index.x++)
 			{
-				for (grid_index.y  = (Position)BALL_MAX((int)Maths::rint(atom_index.y) - points_to_check, 0);
-						 grid_index.y <= (Position)BALL_MIN((int)Maths::rint(atom_index.y) + points_to_check, grid_size - 1);
+				for (grid_index.y  = (Position)std::max((int)Maths::rint(atom_index.y) - points_to_check, 0);
+						 grid_index.y <= (Position)std::min((int)Maths::rint(atom_index.y) + points_to_check, grid_size - 1);
 						 grid_index.y++)
 				{
-					for (grid_index.z  = (Position)BALL_MAX((int)Maths::rint(atom_index.z) - points_to_check, 0);
-							 grid_index.z <= (Position)BALL_MIN((int)Maths::rint(atom_index.z) + points_to_check, grid_size - 1);
+					for (grid_index.z  = (Position)std::max((int)Maths::rint(atom_index.z) - points_to_check, 0);
+							 grid_index.z <= (Position)std::min((int)Maths::rint(atom_index.z) + points_to_check, grid_size - 1);
 							 grid_index.z++)
 					{
 						// That can be done faster...

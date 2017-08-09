@@ -74,7 +74,7 @@ namespace BALL
 		inline 
 		T max(const T& a, const T& b)
 		{ 
-			return BALL_MAX(a, b);
+			return a < b ? b : a;
 		}
 
 		/**	Return the greatest of three numbers.
@@ -87,7 +87,7 @@ namespace BALL
 		inline 
 		T max(const T& a, const T& b, const T &ct)
 		{ 
-			return BALL_MAX3(a, b, ct);
+			return a > b ? max(a, ct) : max(b, ct);
 		}
 #endif
 
@@ -101,7 +101,7 @@ namespace BALL
 		inline 
 		T min(const T& a, const T& b)
 		{ 
-			return BALL_MIN(a, b);
+			return a > b ? b : a;
 		}
 
 		/**	Return the smallest of three numbers.
@@ -114,7 +114,7 @@ namespace BALL
 		inline 
 		T min(const T& a, const T& b, const T &ct)
 		{ 
-			return BALL_MIN3(a, b, ct);
+			return a < b ? min(a, ct) : min(b, ct);
 		}
 #endif
 
