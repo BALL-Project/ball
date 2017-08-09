@@ -216,8 +216,8 @@ bool testStretch(MMFF94& mmff, const String& filename, bool compare)
 
 			// equal values for parameters?
 			if (sbmb_ok &&
-					BALL_REAL_EQUAL(s.r0, r0s[poss2], 0.0001) && 
-					BALL_REAL_EQUAL(s.kb, kbs[poss2], 0.0001))
+					Maths::isEqual(s.r0, r0s[poss2]) &&
+					Maths::isEqual(s.kb, kbs[poss2]))
 			{
 				break;
 			}
@@ -331,11 +331,11 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 			
 			//s.sbtijk != sbtijk || // may differ!!!
 
-			bool ok1 = BALL_REAL_EQUAL(constants[0], constants_ours[0], 0.0001) &&
-								 BALL_REAL_EQUAL(constants[1], constants_ours[1], 0.0001); 
+			bool ok1 = Maths::isEqual(constants[0], constants_ours[0]) &&
+					Maths::isEqual(constants[1], constants_ours[1]);
 
-			bool ok2 = BALL_REAL_EQUAL(constants[1], constants_ours[0], 0.0001) &&
-								 BALL_REAL_EQUAL(constants[0], constants_ours[1], 0.0001); 
+			bool ok2 = Maths::isEqual(constants[1], constants_ours[0]) &&
+					Maths::isEqual(constants[0], constants_ours[1]);
 
 			if ((!ok1 && !ok2) || !isOk(s.energy, energy1, 10))
 			{
@@ -424,8 +424,8 @@ bool testBend(MMFF94& mmff, const String& filename, bool compare)
 			}
 
 			found = true;
-			if (BALL_REAL_EQUAL(s.theta0, theta0[poss2], 0.001) &&
-					BALL_REAL_EQUAL(s.ka, ka[poss2], 0.001) &&
+			if (Maths::isEqual(s.theta0, theta0[poss2]) &&
+					Maths::isEqual(s.ka, ka[poss2]) &&
 					isOk(s.energy, energy[poss2], 10))
 			{
 				break;
@@ -577,13 +577,13 @@ bool testTorsions(MMFF94& mmff, const String& filename, bool compare, long& wron
 		
 		if (!t.heuristic)
 		{
-			ok = (BALL_REAL_EQUAL(t.v1 , v1[found], 0.0001) &&
-						BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
-						BALL_REAL_EQUAL(t.v3 , v3[found], 0.0001))
+			ok = (Maths::isEqual(t.v1 , v1[found]) &&
+					Maths::isEqual(t.v2 , v2[found]) &&
+					Maths::isEqual(t.v3 , v3[found]))
 					||
-					 (BALL_REAL_EQUAL(t.v3 , v1[found], 0.0001) &&
-						BALL_REAL_EQUAL(t.v2 , v2[found], 0.0001) &&
-						BALL_REAL_EQUAL(t.v1 , v3[found], 0.0001));
+					(Maths::isEqual(t.v3 , v1[found]) &&
+					Maths::isEqual(t.v2 , v2[found]) &&
+					Maths::isEqual(t.v1 , v3[found]));
 		}
 		else
 		{
@@ -724,7 +724,7 @@ bool testPlanes(MMFF94& mmff, const String& filename, bool compare)
 		}
 
 
-		if (BALL_REAL_EQUAL(t.k_oop, k[found], 0.0001)) continue;
+		if (Maths::isEqual(t.k_oop, k[found])) continue;
 
 		Log.error() << std::endl
 								<< "Problem Plane:   " << filename << " "
