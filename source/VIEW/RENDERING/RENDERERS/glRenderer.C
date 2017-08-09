@@ -86,7 +86,7 @@ namespace BALL
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
 				near_(1.5),
-				far_(2000.),
+				far_(2000.f),
 				left_(-1),
 				right_(1),
 				top_(1),
@@ -1050,7 +1050,7 @@ namespace BALL
 			translateVector3_(disc.getCircle().p);
 			const Vector3 rotation_axis(-disc.getCircle().n.y, disc.getCircle().n.x, 0.0);
 			// angle between z-axis-vector and result
-			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
+			const float angle = Angle::toDegree(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
 			static Position slices[4] = {6, 14, 24, 40};
@@ -1251,7 +1251,7 @@ namespace BALL
 			// cross product with z-axis-vector and result
 			const Vector3 rotation_axis(-result.y, result.x, 0.0);
 			// angle between z-axis-vector and result
-			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
+			const float angle = Angle::toDegree(acos(result.z / length));
 
 			translateVector3_(tube.getVertex1());
 
@@ -1279,7 +1279,7 @@ namespace BALL
 			// cross product with z-axis-vector and result
 			const Vector3 rotation_axis(-result.y, result.x, 0.0);
 			// angle between z-axis-vector and result
-			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / length));
+			const float angle = Angle::toDegree(acos(result.z / length));
 
 			glPushMatrix();
 			setColor4ub_(tube);
@@ -2352,7 +2352,7 @@ namespace BALL
 			translateVector3_(point);
 			const Vector3 rotation_axis(-n.y, n.x, 0.0);
 			// angle between z-axis-vector and result
-			const float angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(n.z / n.getLength()));
+			const float angle = Angle::toDegree(acos(n.z / n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
 			initGLU_(DRAWING_MODE_SOLID);
@@ -2382,10 +2382,10 @@ namespace BALL
 
 		void GLRenderer::setProjection()
 		{
-			left_   = -2.0 * x_scale_;
-			right_  =  2.0 * x_scale_;
-			bottom_ = -2.0 * y_scale_;
-			top_    =  2.0 * y_scale_;
+			left_   = -2 * x_scale_;
+			right_  =  2 * x_scale_;
+			bottom_ = -2 * y_scale_;
+			top_    =  2 * y_scale_;
 
 			if (stage_->getCamera().getProjectionMode() == Camera::PERSPECTIVE)
 			{
@@ -2425,21 +2425,21 @@ namespace BALL
 			{
 				for( j = 0; j < TEXTURE_SIZE; ++j )
 				{
-					float x = ( (float) j + 1. ) / (TEXTURE_SIZE + 1.);
-					float y = ( (float) i + 1. ) / (TEXTURE_SIZE + 1.);
+					float x = ( (float) j + 1 ) / (TEXTURE_SIZE + 1);
+					float y = ( (float) i + 1 ) / (TEXTURE_SIZE + 1);
 
-					float LT = 2. * x - 1.;
-					float VT = 2. * y - 1.;
+					float LT = 2 * x - 1;
+					float VT = 2 * y - 1;
 
-					float intensity = 0.;
+					float intensity = 0;
 					intensity += ka;
 					intensity += kd * sqrt( 1. - LT*LT );
 					intensity += kr * pow( fabs( LT*VT - sqrt( 1. - LT*LT ) * sqrt( 1. - VT*VT ) ), shininess * 255. );
 
 					if( intensity < 0. || 1. < intensity )
 					{
-						if( intensity < 0. ) intensity = 0.;
-						if( 1. < intensity ) intensity = 1.;
+						if( intensity < 0. ) intensity = 0;
+						if( 1. < intensity ) intensity = 1;
 					}
 		//   					assert( 0. <= intensity && intensity <= 1. );
 
