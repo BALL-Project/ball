@@ -3384,7 +3384,7 @@ namespace BALL
 
 			Index order = current_bond_->getOrder();
 			order += delta;
-			order = BALL_MAX((Index)Bond::ORDER__SINGLE, order);
+			order = std::max((Index)Bond::ORDER__SINGLE, order);
 			if (order > Bond::ORDER__AROMATIC) order = Bond::ORDER__SINGLE;
 			if (current_bond_->getOrder() == order) return;
 

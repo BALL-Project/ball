@@ -94,12 +94,10 @@ namespace BALL
 
 		void PickingMode::selectionPressedMoved_()
 		{
-			Position x0, x1, y0, y1;
-
-			x0 = BALL_MIN(mouse_pos_new_.x(), mouse_pos_pick_.x());
-			x1 = BALL_MAX(mouse_pos_new_.x(), mouse_pos_pick_.x());
-			y0 = BALL_MIN(mouse_pos_new_.y(), mouse_pos_pick_.y());
-			y1 = BALL_MAX(mouse_pos_new_.y(), mouse_pos_pick_.y());
+			auto x0 = std::min(mouse_pos_new_.x(), mouse_pos_pick_.x());
+			auto x1 = std::max(mouse_pos_new_.x(), mouse_pos_pick_.x());
+			auto y0 = std::min(mouse_pos_new_.y(), mouse_pos_pick_.y());
+			auto y1 = std::max(mouse_pos_new_.y(), mouse_pos_pick_.y());
 
 			QPoint p0 = scene_->mapFromGlobal(QPoint(x0, y0));
 			QPoint p1 = scene_->mapFromGlobal(QPoint(x1, y1));

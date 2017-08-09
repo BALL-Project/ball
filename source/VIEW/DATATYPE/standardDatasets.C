@@ -129,7 +129,7 @@ namespace BALL
 			Vector3 x = grid.getCoordinates(RegularData3D::IndexType(size.x - 1, 0, 0)) - origin;
 			Vector3 y = grid.getCoordinates(RegularData3D::IndexType(0, size.y - 1, 0)) - origin;
 			Vector3 z = grid.getCoordinates(RegularData3D::IndexType(0, 0, size.z - 1)) - origin;
-			float min = BALL_MIN3(x.getLength(), y.getLength(), z.getLength());
+			float min = std::min(std::min(x.getLength(), y.getLength()), z.getLength());
 			min /= 2.;
 			min -= 0.01;
 

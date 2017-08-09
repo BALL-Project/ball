@@ -1224,7 +1224,7 @@ void AddBackboneModel::refineModelParts_()
 				Size max = interpolated_points_[set][0].size() - 1;
 				// for the last point: we make an off by one, so that we get a connection to the next model
 				// but prevent a segfault for the last point in the current set:
-				new_part.last_point = BALL_MIN(max, (new_part.last_guide_point + 1) * interpolation_steps_);
+				new_part.last_point = std::min(max, (new_part.last_guide_point + 1) * interpolation_steps_);
 				new_part.type = part.type;
 
 				new_residues.clear();

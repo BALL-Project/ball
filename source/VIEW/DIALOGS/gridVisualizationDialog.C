@@ -233,7 +233,7 @@ namespace BALL
 			vol.y = grid.getCoordinates(RegularData3D::IndexType(0,s.y-1,0)) - origin;
 			vol.z = grid.getCoordinates(RegularData3D::IndexType(0,0,s.z-1)) - origin;
 			vol.origin = origin;
-			vol.max_dim = BALL_MAX3(vol.x.getLength(), vol.y.getLength(), vol.z.getLength());
+			vol.max_dim = std::max(std::max(vol.x.getLength(), vol.y.getLength()), vol.z.getLength());
 			vol.draw_box = render_box->isChecked();
 
 			Representation* rep = new Representation;

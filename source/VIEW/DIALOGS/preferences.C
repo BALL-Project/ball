@@ -163,8 +163,8 @@ namespace BALL
 				y_pos = inifile.getValue("WINDOWS", "Preferences::y").toInt();
 			}
 			
-			x_pos = BALL_MAX(x_pos, 20);
-			y_pos = BALL_MAX(y_pos, 20);
+			x_pos = std::max(x_pos, 20);
+			y_pos = std::max(y_pos, 20);
 
 			move(x_pos, y_pos);
 

@@ -115,8 +115,8 @@ namespace BALL
 				Index y = inifile.getValue("WINDOWS", getIdentifier() + "::y").toInt();
 				Position w = inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt();
 				Position h = inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt();
-				x = BALL_MAX(x, 0);
-				y = BALL_MAX(y, 0);
+				x = std::max(x, 0);
+				y = std::max(y, 0);
 
 				widget->resize(QSize(w, h));
 				widget->move(x, y);

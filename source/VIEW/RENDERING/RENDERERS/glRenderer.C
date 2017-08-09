@@ -1685,8 +1685,8 @@ namespace BALL
 				for (Position p = 0; p < mesh.normal.size(); p++)
 				{
 					v = mesh.normal[p] * vv;
-					if (v < 0.) v = 0.;
-					tex_values.push_back(BALL_MIN(1., v));
+					if (v < 0) v = 0;
+					tex_values.push_back(std::min(1.f, v));
 				}
 
 				// prevent problems with single colored meshes:
@@ -1966,8 +1966,8 @@ namespace BALL
 			auto width  = std::abs((Index)x2 - (Index)x1);
 			auto height = std::abs((Index)y2 - (Index)y1);
 
-			Position center_x = BALL_MIN(x2, x1) + width / 2;
-			Position center_y = BALL_MIN(y2, y1) + height / 2;
+			Position center_x = std::min(x2, x1) + width / 2;
+			Position center_y = std::min(y2, y1) + height / 2;
 
 			if (width == 0)	width = 1;
 			if (height == 0) height = 1;
@@ -2925,8 +2925,8 @@ namespace BALL
 				for (Position p = 0; p < mesh.normal.size(); p++)
 				{
 					v = mesh.normal[p] * vv;
-					if (v < 0.) v = 0.;
-					tex_values.push_back(BALL_MIN(1., v));
+					if (v < 0) v = 0;
+					tex_values.push_back(std::min(1.f, v));
 				}
 
 				// prevent problems with single colored meshes:

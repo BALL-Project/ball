@@ -1510,13 +1510,13 @@ namespace BALL
 				if (inifile.hasEntry("WINDOWS", "Main::height")) h = inifile.getValue("WINDOWS", "Main::height").toInt();
 				if (inifile.hasEntry("WINDOWS", "Main::width"))  w = inifile.getValue("WINDOWS", "Main::width").toInt();
 
-				x_pos = BALL_MAX(-4, x_pos);
-				y_pos = BALL_MAX(-4, y_pos);
+				x_pos = std::max(-4, x_pos);
+				y_pos = std::max(-4, y_pos);
 				if (String(BALL_OS) == "Darwin") 
 				{
 					// Don't move the window under the menu bar per default on OSX.
 					// The menu bar has a fixed height of 22 pixels. Yes, always.
-					y_pos = BALL_MAX(22, y_pos);
+					y_pos = std::max(22, y_pos);
 				}
 
 				resize(w,h);

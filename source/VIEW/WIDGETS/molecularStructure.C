@@ -957,7 +957,7 @@ namespace BALL
 			a1->deselect();
 			a2->deselect();
 
-			Size max_atoms = BALL_MAX(a1->countAtoms(), a2->countAtoms());
+			Size max_atoms = std::max(a1->countAtoms(), a2->countAtoms());
 
 			if (ab.size() == max_atoms)
 			{

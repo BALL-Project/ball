@@ -299,8 +299,7 @@ Size SnapshotVisualisationDialog::getStartSnapshot() const
 	try
 	{
 		Size s = (Size)ascii(startSnapshot->text()).toUnsignedInt();
-		s = BALL_MAX(s, 1);
-		return s;
+		return std::max(s, 1u);
 	}
 	catch(...)
 	{

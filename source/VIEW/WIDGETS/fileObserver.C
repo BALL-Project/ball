@@ -41,7 +41,7 @@ void FileObserver::updateFile()
 	// Compare time of file modification with the time of the last update
 //	QDateTime l1 = QFSFileEngine(file_name_.c_str()).fileTime(QAbstractFileEngine::ModificationTime);
 //	QDateTime l2 = QFSFileEngine(file_name_.c_str()).fileTime(QAbstractFileEngine::CreationTime);
-	QDateTime last_mod; //= BALL_MAX(l1, l2);
+	QDateTime last_mod; //= max(l1, l2);
 	if (last_mod <= last_vis_time_) 
 	{
 		unlockComposites();
