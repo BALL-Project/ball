@@ -190,6 +190,8 @@ namespace BALL
 		typedef std::vector<BlockType>	VectorType;
 		///
 		static const Size BlockSize;
+		///
+		static const Size CharBits;
 
 		//@}
 		/**	@name	Constructors and Destructors 

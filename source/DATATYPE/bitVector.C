@@ -15,6 +15,7 @@ namespace BALL
 	#	endif
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
+	const Size BitVector::CharBits  = BALL_CHAR_SIZE * 8;
 
 	Bit::IllegalOperation::IllegalOperation(const char* file, int line)
 		:	Exception::GeneralException(file, line)
@@ -250,12 +251,12 @@ namespace BALL
 
 	void BitVector::setUnsignedChar(unsigned char bit_pattern)
 	{
-		setSize(BALL_CHAR_BITS, false);
+		setSize(CharBits, false);
 		unsigned char c = bit_pattern;
 
 		// We do this in a loop instead of using a direct cast to avoid
 		// problems with differing byte orders (big endian/little endian)
-		for (Position i = 0; i < BALL_CHAR_BITS; i++)
+		for (Position i = 0; i < CharBits; i++)
 		{
 			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
@@ -269,7 +270,7 @@ namespace BALL
 		// We do this in a loop instead of using a direct cast to avoid
 		// problems with differing byte orders (big endian/little endian)
 
-		for (Index i = (Index)std::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
+		for (Index i = (Index)std::min(CharBits, getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
 			if (getBit((Index)i))
@@ -283,10 +284,10 @@ namespace BALL
 
 	void BitVector::setUnsignedShort(unsigned short bit_pattern)
 	{
-		setSize(sizeof(unsigned short) * BALL_CHAR_BITS, false);
+		setSize(sizeof(unsigned short) * CharBits, false);
 		unsigned short c = bit_pattern;
 
-		for (Position i = 0; i < sizeof(unsigned short) * BALL_CHAR_BITS; i++)
+		for (Position i = 0; i < sizeof(unsigned short) * CharBits; i++)
 		{
 			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
@@ -296,7 +297,7 @@ namespace BALL
 	unsigned short BitVector::getUnsignedShort() const
 	{
 		unsigned short c = 0;
-		Index i = (Index)std::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned short) * CharBits), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -311,10 +312,10 @@ namespace BALL
 
 	void BitVector::setUnsignedInt(unsigned int bit_pattern)
 	{
-		setSize(sizeof(unsigned int) * BALL_CHAR_BITS, false);
+		setSize(sizeof(unsigned int) * CharBits, false);
 		unsigned int c = bit_pattern;
 
-		for (Position i = 0; i < sizeof(unsigned int) * BALL_CHAR_BITS; i++)
+		for (Position i = 0; i < sizeof(unsigned int) * CharBits; i++)
 		{
 			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
@@ -325,7 +326,7 @@ namespace BALL
 	{
 		unsigned int c = 0;
 
-		Index i = (Index)std::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned int) * CharBits), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -340,10 +341,10 @@ namespace BALL
 
 	void BitVector::setUnsignedLong(unsigned long bit_pattern)
 	{
-		setSize(sizeof(unsigned long) * BALL_CHAR_BITS, false);
+		setSize(sizeof(unsigned long) * CharBits, false);
 		unsigned long c = bit_pattern;
 
-		for (Position i = 0; i < sizeof(unsigned long) * BALL_CHAR_BITS; i++)
+		for (Position i = 0; i < sizeof(unsigned long) * CharBits; i++)
 		{
 			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
@@ -354,7 +355,7 @@ namespace BALL
 	{
 		unsigned long c = 0;
 
-		Index i = (Index)std::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned long) * CharBits), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
