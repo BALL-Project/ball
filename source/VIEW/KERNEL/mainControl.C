@@ -63,7 +63,9 @@
 #include <QtCore/QEvent>
 
 #include <algorithm> // sort
+#include <chrono> // chrono::milliseconds
 #include <cstdlib>
+#include <thread> // this_thread::sleep_for
 
 //       #define BALL_BENCHMARKING
 
@@ -2229,7 +2231,7 @@ namespace BALL
 		while (isBusy())
 		{
 			QApplication::processEvents();
-			BALL_SLEEPFOR(10);
+			std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		}
 	}
 

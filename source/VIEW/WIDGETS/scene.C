@@ -90,6 +90,9 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
 
+#include <chrono> // chrono::milliseconds
+#include <thread> // this_thread::sleep_for
+
 //#define BALL_VIEW_DEBUG
 
 //#define BALL_BENCHMARKING
@@ -3992,7 +3995,7 @@ namespace BALL
 			while (getMainControl()->isBusy())
 			{
 				getMainControl()->processEvents(999);
-				BALL_SLEEPFOR(40);
+				std::this_thread::sleep_for(std::chrono::milliseconds(40));
 			}
 
 			MolecularDynamicsDialog& mdd = ms->getMDSimulationDialog();
@@ -4006,7 +4009,7 @@ namespace BALL
 			while (getMainControl()->isBusy())
 			{
 				getMainControl()->processEvents(999);
-				BALL_SLEEPFOR(40);
+				std::this_thread::sleep_for(std::chrono::milliseconds(40));
 			}
 
 			md.setMaxIterations(200);
