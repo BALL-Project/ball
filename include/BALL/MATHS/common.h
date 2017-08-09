@@ -49,7 +49,7 @@ namespace BALL
 		inline 
 		T abs(const T& t)
 		{
-			return BALL_ABS(t);
+			return t >= 0 ? t : -t;
 		}
 
 		/**	Return the fraction of a number.
