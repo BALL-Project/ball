@@ -394,9 +394,7 @@ namespace BALL
 
 	template <typename T>
 	TAngle<T>::TAngle(const T& new_value, bool radian)
-		:	value((radian == true)
-			 ? (T)new_value 
-			 : (T)BALL_ANGLE_DEGREE_TO_RADIAN((double)new_value))
+		:	value(radian ? new_value : toRadian(new_value))
 	{
 	}
 
@@ -417,9 +415,7 @@ namespace BALL
 	template <typename T>
 	void TAngle<T>::set(const T& new_value, bool radian)
 	{
-		value = (radian == true)
-			 ? new_value 
-			 : BALL_ANGLE_DEGREE_TO_RADIAN(new_value);
+		value = radian ? new_value : toRadian(new_value);
 	}
 
 	template <typename T>
@@ -445,9 +441,7 @@ namespace BALL
 	template <typename T>
 	void TAngle<T>::get(T& val, bool radian) const
 	{
-		val = (radian == true)
-					 ? value 
-					 : BALL_ANGLE_RADIAN_TO_DEGREE(value);
+		val = radian ? value : toDegree(value);
 	}
 
 	template <typename T>
@@ -463,23 +457,21 @@ namespace BALL
 	}
 
 	template <typename T>
-	T TAngle<T>::toRadian(const T& degree)
-	{
-		return BALL_ANGLE_DEGREE_TO_RADIAN(degree);
+	T TAngle<T>::toRadian(const T& degree) {
+		return Constants::PI / 180. * degree;
 	}
 
 	template <typename T>
 	T TAngle<T>::toDegree() const
 	{
-		if (value == (T) 0.0) return (T) 0.0;
-		return BALL_ANGLE_RADIAN_TO_DEGREE(value);
+		return toDegree(value);
 	}
 
 	template <typename T>
 	T TAngle<T>::toDegree(const T& radian)
 	{
 		if (radian == (T) 0.0) return (T) 0.0;
-		return BALL_ANGLE_RADIAN_TO_DEGREE(radian);
+		return 180. / Constants::PI * radian;
 	}
 
 	template <typename T>
