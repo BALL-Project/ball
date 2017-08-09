@@ -81,8 +81,8 @@ int main(int argc, char** argv)
 	float max_diff = 0.01;
 	for (Position p = 0; p < charmm_forces.size(); p++)
 	{
-		float d = BALL_MAX3(diff(charmm_forces[p].x, ball_forces[p].x),
-												diff(charmm_forces[p].y, ball_forces[p].y),
+		float d = std::max(std::max(diff(charmm_forces[p].x, ball_forces[p].x),
+												diff(charmm_forces[p].y, ball_forces[p].y)),
 												diff(charmm_forces[p].z, ball_forces[p].z));
 
 		if (d > max_diff)
