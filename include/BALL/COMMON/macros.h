@@ -17,6 +17,12 @@
 namespace BALL
 {
 	template<class T>
+	void BALL_DEPRECATED BALL_INLINE ball_macro_sleepfor(T ms)
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+	}
+
+	template<class T>
 	T BALL_DEPRECATED BALL_INLINE ball_macro_max(T a, T b)
 	{
 		return a < b ? b : a;
@@ -146,6 +152,12 @@ namespace BALL
 	int BALL_DEPRECATED BALL_INLINE ball_macro_real_round_int(X x)
 	{
 		return (x > 0 ? (int)(x + 0.5) : -(int)(0.5 - x));
+	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_char_bits()
+	{
+		return T(BALL_CHAR_SIZE * 8);
 	}
 
 	template<class T>
@@ -292,10 +304,28 @@ namespace BALL
 	{
 		return !(bitset & (1 << bit));
 	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_angle_radians_to_degree(T rad_angle)
+	{
+		return 180. / ::BALL::Constants::PI * rad_angle;
+	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_angle_degree_to_radian(T deg_angle)
+	{
+		return ::BALL::Constants::PI / 180. * deg_angle;
+	}
+
+	template<class T>
+	T BALL_DEPRECATED BALL_INLINE ball_macro_generic_echo(T value)
+	{
+		return value;
+	}
 }
 
 // Macro to block execution of current thread for at least x milliseconds
-#define BALL_SLEEPFOR(x)                         std::this_thread::sleep_for(std::chrono::milliseconds(x))
+#define BALL_SLEEPFOR(x)                         BALL::ball_macro_sleepfor(x)
 
 #define BALL_MAX(a, b)                           BALL::ball_macro_max(a, b)
 #define BALL_MAX3(x, y, z)                       BALL::ball_macro_max3(x, y, z)
@@ -308,7 +338,7 @@ namespace BALL
 #define BALL_INT_ODD(x)                          BALL::ball_macro_int_odd(x)
 #define BALL_INT_EVEN(x)                         BALL::ball_macro_int_even(x)
 
-#define BALL_REAL_ROUND                          BALL::ball_macro_real_round
+#define BALL_REAL_ROUND(x)                       BALL::ball_macro_real_round(x)
 #define BALL_REAL_EQUAL(x, y, e)                 BALL::ball_macro_real_equal(x, y, e)
 #define BALL_REAL_NOT_EQUAL(x, y, e)             BALL::ball_macro_real_not_equal(x, y, e)
 #define BALL_REAL_LESS(x, y, e)                  BALL::ball_macro_real_less(x, y, e)
@@ -325,7 +355,7 @@ namespace BALL
 
 
 // The following macros assume BALL_CHAR_BITS is one of either 8, 16, or 32
-#define BALL_CHAR_BITS                           BALL_CHAR_SIZE * 8
+#define BALL_CHAR_BITS                           BALL::ball_macro_char_bits<unsigned>()
 #define BALL_CHAR_MASK                           BALL::ball_macro_char_mask<unsigned>()
 #define BALL_CHAR_SHIFT                          BALL::ball_macro_char_shift<unsigned>()
 #define BALL_CHAR_ALL_BITS_SET                   BALL::ball_macro_all_bits_set<char>()
@@ -352,10 +382,10 @@ namespace BALL
 #define BALL_BIT_IS_SET(bitset, bit)             BALL::ball_macro_bit_is_set(bitset, bit)
 #define BALL_BIT_IS_CLEARED(bitset, bit)         BALL::ball_macro_bit_is_cleared(bitset, bit)
 
-#define BALL_ANGLE_RADIAN_TO_DEGREE(rad_angle)   (180.0 / ::BALL::Constants::PI * (rad_angle))
-#define BALL_ANGLE_DEGREE_TO_RADIAN(deg_angle)   (::BALL::Constants::PI / 180.0 * (deg_angle))
+#define BALL_ANGLE_RADIAN_TO_DEGREE(rad_angle)   BALL::ball_macro_angle_radian_to_degree(rad_angle)
+#define BALL_ANGLE_DEGREE_TO_RADIAN(deg_angle)   BALL::ball_macro_angle_degree_to_radian(deg_angle)
 
-#define BALL_OFFSET_OF(struct_name, struct_var_name)   ((long)&(((struct_name*)0)->struct_var_name))
+#define BALL_OFFSET_OF(struct_name, struct_var_name)   BALL::ball_macro_generic_echo((long)&(((struct_name*)0)->struct_var_name))
 
 #define BALL_DUMP_DEPTH(os, depth)               for (dump_indent_depth_ = 0; dump_indent_depth_ < depth; ++dump_indent_depth_) { os << "    "; }
 #define BALL_DUMP_STREAM_PREFIX(os)              Size dump_indent_depth_ = 0;
