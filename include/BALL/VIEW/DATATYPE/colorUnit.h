@@ -5,13 +5,9 @@
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
+#include <BALL/common.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/MATHS/common.h>
 
 #include <iostream>
 #include <cstdio>

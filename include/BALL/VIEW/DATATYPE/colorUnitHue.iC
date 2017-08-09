@@ -64,40 +64,40 @@ BALL_INLINE
 bool ColorUnitHue::operator ==
   (const ColorUnitHue& color_unit) const
 {
-  return (BALL_REAL_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
+  return Maths::isEqual(value_, color_unit.value_);
 }
 
 BALL_INLINE
 bool ColorUnitHue::operator !=
   (const ColorUnitHue& color_unit) const
 {
-  return (BALL_REAL_NOT_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
+  return Maths::isNotEqual(value_, color_unit.value_);
 }
     
 BALL_INLINE
 bool ColorUnitHue::operator <
   (const ColorUnitHue& color_unit) const
 {
-  return (BALL_REAL_LESS(value_, color_unit.value_, ::BALL::Constants::EPSILON));
+  return Maths::isLess(value_, color_unit.value_);
 }
     
 BALL_INLINE
 bool ColorUnitHue::operator <=
   (const ColorUnitHue &color_unit) const
 {
-  return (BALL_REAL_LESS_OR_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
+  return Maths::isLessOrEqual(value_, color_unit.value_);
 }
     
 BALL_INLINE
 bool ColorUnitHue::operator >
   (const ColorUnitHue& color_unit) const
 {
-  return (BALL_REAL_GREATER(value_, color_unit.value_, ::BALL::Constants::EPSILON));
+  return Maths::isGreater(value_, color_unit.value_);
 }
     
 BALL_INLINE
 bool ColorUnitHue::operator >=
   (const ColorUnitHue &color_unit) const
 {
-  return (BALL_REAL_GREATER_OR_EQUAL(value_, color_unit.value_, ::BALL::Constants::EPSILON));
+  return Maths::isGreaterOrEqual(value_, color_unit.value_);
 }
