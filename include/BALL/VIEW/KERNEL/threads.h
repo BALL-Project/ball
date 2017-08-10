@@ -252,9 +252,8 @@ namespace VIEW
 				///
 				virtual ~MDSimulationThread();
 				
-				///
-				virtual void run()
-					throw(Exception::NullPointer);
+				/// @throws BALL::Exception::NullPointer
+				virtual void run();
 
 				///
 				void setMolecularDynamics(MolecularDynamics* md);
@@ -290,9 +289,8 @@ namespace VIEW
 				///
 				void setDockingAlgorithm(DockingAlgorithm* dock_alg);
 					
-				///
-				virtual void run()
-					throw(Exception::NullPointer);
+				/// @throws BALL::Exception::NullPointer
+				virtual void run();
 					
 			protected:
 				DockingAlgorithm* dock_alg_;

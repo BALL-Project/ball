@@ -17,7 +17,6 @@ namespace BALL
 		Resolution RaytracingRenderer::getSupportedResolution(
 			const Resolution &min, const Resolution &max,
 			const PixelFormat &format) const
-            throw(BALL::Exception::FormatUnsupported)
 		{
 			if(!supports(format))
 			{

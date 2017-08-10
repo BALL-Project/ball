@@ -56,9 +56,8 @@ namespace BALL
 			///
 			virtual void applySettingsTo(ColorProcessor& cp) const;
 
-			///
-			virtual ColorProcessor* createColorProcessor(ColoringMethod method) const
-				throw(Exception::InvalidOption);
+			/// @throws BALL::Exception::InvalidOption
+			virtual ColorProcessor* createColorProcessor(ColoringMethod method) const;
 
 			///
 			virtual void getSettings(const ColorProcessor& cp);

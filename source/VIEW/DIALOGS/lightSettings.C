@@ -495,24 +495,21 @@ void LightSettings::setAttenuation_(const Vector3& a)
 	 attenuation_p_3->setText(createFloatString(a.z, 4).c_str());
 }
 
-Vector3 LightSettings::getPosition_() 
-	throw(Exception::InvalidFormat)
+Vector3 LightSettings::getPosition_()
 {
 	return Vector3(position_x->text().toFloat(),
 				 			   position_y->text().toFloat(),
 			  				 position_z->text().toFloat());
 }
 
-Vector3 LightSettings::getDirection_() 
-	throw(Exception::InvalidFormat)
+Vector3 LightSettings::getDirection_()
 {
 	return Vector3(direction_x->text().toFloat(),
 				 			   direction_y->text().toFloat(),
 			  				 direction_z->text().toFloat());
 }
 
-Vector3 LightSettings::getAttenuation_() 
-	throw(Exception::InvalidFormat)
+Vector3 LightSettings::getAttenuation_()
 {
 	return Vector3(attenuation_p_1->text().toFloat(),
 				 			   attenuation_p_2->text().toFloat(),

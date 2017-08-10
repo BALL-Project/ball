@@ -233,10 +233,10 @@ namespace BALL
 			 *  specified in the constructor.
 			 *  The buffer will remain valid until update() is called with that buffer.
 			 *  Each call to getBuffer() creates a new FrameBuffer.
-			 *  @throw Exception::NoBufferAvailable if no new FrameBuffer can be created for this 
+			 *  @throw BALL::Exception::NoBufferAvailable if no new FrameBuffer can be created for this
 			 *         RenderTarget (e.g. if the RenderTarget supports only a single buffer at a time)
 			 */
-			virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable) = 0;
+			virtual FrameBufferPtr getBuffer() = 0;
 
 			virtual FrameBufferFormat getFormat() const = 0;
 

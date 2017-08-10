@@ -89,7 +89,6 @@ namespace BALL
 		}
 
 		float MMFF94ConfigurationDialog::getValue_(const QLineEdit* edit) const
-			throw(Exception::InvalidFormat)
 		{
 			return ascii(edit->text()).toFloat();
 		}

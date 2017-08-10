@@ -63,9 +63,9 @@ namespace BALL
 
 			/** Detailed constructor.
 			 		\param name The name of the file we will create
+			 		\exception BALL::Exception::FileNotFound
 			 */
-			XML3DRenderer(const String& name)
-				throw(Exception::FileNotFound);
+			XML3DRenderer(const String& name);
 			
 			XML3DRenderer(std::ostream& name);
 			
@@ -88,9 +88,9 @@ namespace BALL
 
 			/** Sets the name of the file we will create.
 			 		\param name The file name
+			 		\exception BALL::Exception::FileNotFound
 			 */
-			void setFileName(const String& name)
-				throw(Exception::FileNotFound);
+			void setFileName(const String& name);
 
 			/// Set a stream as output device
 			void setOstream(std::ostream& out_stream);

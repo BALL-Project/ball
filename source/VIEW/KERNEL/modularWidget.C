@@ -51,7 +51,6 @@ namespace BALL
 		}
 
 		void ModularWidget::registerWidget(ModularWidget* mwidget)
-			throw(Exception::NullPointer)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "registering ModularWidget at " << mwidget << endl;

@@ -94,8 +94,9 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	private:
 	
 	float getValue_(const QAbstractSlider* slider) const;
-	float getValue_(const QLineEdit* edit) const
-		throw(Exception::InvalidFormat);
+
+	///  @throws BALL::Exception::InvalidFormat
+	float getValue_(const QLineEdit* edit) const;
 	
 
 	// the sliders min and max

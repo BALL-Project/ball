@@ -39,7 +39,6 @@ VRMLRenderer::VRMLRenderer()
 }
 
 VRMLRenderer::VRMLRenderer(const String& name)
-	throw(Exception::FileNotFound)
 	: Renderer(),
 		width(600),
 		height(600),
@@ -66,7 +65,6 @@ void VRMLRenderer::clear()
 }
 
 void VRMLRenderer::setFileName(const String& name)
-	throw(Exception::FileNotFound)
 {
 	outfile_.open(name, std::ios::out);
 	current_indent_ = 0;

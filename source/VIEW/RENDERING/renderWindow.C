@@ -29,7 +29,7 @@ namespace BALL
 			}
 
 		template<typename taPixelDatatype>
-			FrameBufferPtr TRenderWindow<taPixelDatatype>::getBuffer() throw(BALL::Exception::NoBufferAvailable)        
+			FrameBufferPtr TRenderWindow<taPixelDatatype>::getBuffer()
 			{
 				if((m_fmt.getWidth() < m_minimalWidth) || (m_fmt.getHeight() < m_minimalHeight))
 				{

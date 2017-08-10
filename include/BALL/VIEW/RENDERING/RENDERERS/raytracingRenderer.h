@@ -39,10 +39,10 @@ namespace BALL
 			 */
 			virtual bool supports(const PixelFormat &format) const;			
 
+			/// @throws BALL::Exception::FormatUnsupported
 			virtual Resolution getSupportedResolution(
 				const Resolution &min, const Resolution &max,
-				const PixelFormat &format) const
-                throw(BALL::Exception::FormatUnsupported);			
+				const PixelFormat &format) const;
 					
 			/*
 			 * Get description of the renderer int textual form

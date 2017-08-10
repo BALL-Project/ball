@@ -187,7 +187,6 @@ namespace BALL
 
 
 		ModelProcessor* ModelSettingsDialog::createModelProcessor(ModelType type) const
-			throw(Exception::InvalidOption)
 		{
 			ModelProcessor* model_processor = 0;
 

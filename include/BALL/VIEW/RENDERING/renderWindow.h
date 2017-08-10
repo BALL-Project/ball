@@ -76,8 +76,9 @@ namespace BALL
 			 * See \link RenderTarget \endlink for general description.
 			 * In addition there is a precondition that \link init \endlink must be called before 
 			 * getBuffer. If not, \link NoBufferAvailable \endlink exception is thrown.
+			 * @throws BALL::Exception::NoBufferAvailable
 			 */
-			virtual FrameBufferPtr getBuffer() throw(BALL::Exception::NoBufferAvailable);            
+			virtual FrameBufferPtr getBuffer();
 
 			/*
 			 * See \link RenderTarget \endlink for description.

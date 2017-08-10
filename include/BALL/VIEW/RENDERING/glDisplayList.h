@@ -135,14 +135,13 @@ class BALL_VIEW_EXPORT GLDisplayList
 			between a <b>startDefinition</b> and <b>endDefinition</b> command.
 			This method indicates the start of a display list. Every object drawn after
 			this method will be compiled into this glDisplayList.
-			\exception   NestedDisplayList thrown whenever a nested display list definition is tried.
-			\exception   NoDisplayListAvailable thrown whenever no memory for the display list is available.
-			\exception   DisplayListRedeclaration thrown whenever this glDisplayList is tried to redefine before 
+			\exception   BALL::VIEW::GLDisplayList::NestedDisplayList thrown whenever a nested display list definition is tried.
+			\exception   BALL::VIEW::GLDisplayList::NoDisplayListAvailable thrown whenever no memory for the display list is available.
+			\exception   BALL::VIEW::GLDisplayList::DisplayListRedeclaration thrown whenever this glDisplayList is tried to redefine before
 									 destroy is called.
 			\see         endDefinition
 	*/
-	void startDefinition()
-		throw(NestedDisplayList, NoDisplayListAvailable, DisplayListRedeclaration);
+	void startDefinition();
 
 	/** End the display list.
 			This method is the end command for a display list definition.

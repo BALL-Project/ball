@@ -58,9 +58,8 @@ namespace BALL
 			///
 			virtual void applySettingsTo(ModelProcessor& cp) const;
 				
-			///
-			virtual ModelProcessor* createModelProcessor(ModelType type) const
-				throw(Exception::InvalidOption);
+			/// @throws BALL::Exception::InvalidOption
+			virtual ModelProcessor* createModelProcessor(ModelType type) const;
 
 			///
 			virtual void getSettings(const ModelProcessor& mp);

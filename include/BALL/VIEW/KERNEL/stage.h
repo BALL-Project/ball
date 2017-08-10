@@ -256,15 +256,15 @@ namespace BALL
 
 					/** Write a raytracing material to a persistent stream.
 					 		@param pm the persistence manager
+					 		@throws BALL::Exception::GeneralException
 					 */
-					virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-						throw(Exception::GeneralException);
+					virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 
 					/** Read a raytracing material from a persistent stream.
 					 		@param pm the persistence manager
+					 		@throws BALL::Exception::GeneralException
 					*/
-					virtual void persistentRead(PersistenceManager& pm)
-						throw(Exception::GeneralException);
+					virtual void persistentRead(PersistenceManager& pm);
 
 					//@}
 

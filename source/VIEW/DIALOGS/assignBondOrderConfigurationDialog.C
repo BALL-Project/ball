@@ -161,7 +161,6 @@ namespace BALL
 		}
 
 		float AssignBondOrderConfigurationDialog::getValue_(const QLineEdit* edit) const
-			throw(Exception::InvalidFormat)
 		{
 			return ascii(edit->text()).toFloat();
 		}

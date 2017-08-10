@@ -86,7 +86,6 @@ namespace BALL
 		}
 
 		float AmberConfigurationDialog::getValue_(const QLineEdit* edit) const
-			throw(Exception::InvalidFormat)
 		{
 			return ascii(edit->text()).toFloat();
 		}

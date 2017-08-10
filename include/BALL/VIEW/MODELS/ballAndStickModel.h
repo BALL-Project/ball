@@ -94,10 +94,9 @@ namespace BALL
 
 			/** Change the radius of the ball-component.
 					\param       radius the new radius of the ball-component: (<b>radius > 0</b>)
-					\exception  OutOfRange thrown if <b>radius <= 0</b>
+					\exception  BALL::Exception::OutOfRange thrown if <b>radius <= 0</b>
 			*/
-			void setBallRadius(const float radius)
-				throw(Exception::OutOfRange);
+			void setBallRadius(const float radius);
 
 			/** Inspection of the radius of the ball-component.
 			*/
@@ -105,10 +104,9 @@ namespace BALL
 
 			/** Change the radius of the stick-component.
 					\param       radius the new radius of the stick-component: (radius > 0)
-					\exception  OutOfRange thrown if radius <= 0
+					\exception  BALL::Exception::OutOfRange thrown if radius <= 0
 			*/
-			void setStickRadius(const float radius)
-				throw(Exception::OutOfRange);
+			void setStickRadius(const float radius);
 
 			/** Inspection of the radius of the stick-component.
 			*/
@@ -196,8 +194,8 @@ namespace BALL
 
 			inline void renderMultipleBond_(const Bond& bond, Vector3 normal, Vector3 dir);
 
-			inline void renderDashedBond_(const Bond& bond, Vector3 n)
-				throw(Exception::DivisionByZero);
+			/// @throws BALL::Exception::DivisionByZero
+			inline void renderDashedBond_(const Bond& bond, Vector3 n);
 
 			void collectRingBonds_();
 

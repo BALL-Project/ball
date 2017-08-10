@@ -109,10 +109,10 @@ namespace BALL
 					this method in their constructors. This method connects them to the
 					MainControl object.
 					\param  mwidget the ModularWidget to be registered to the MainControl
+					@throws BALL::Exception::NullPointer
 			*/
-			static void registerWidget(ModularWidget* mwidget)
-				throw(Exception::NullPointer);
-				
+			static void registerWidget(ModularWidget* mwidget);
+
 			/**	Initialize the widget.
 					This method is called automatically	immediately before the main application 
 					is started. It should add the widget's menu entries and connections (if required).

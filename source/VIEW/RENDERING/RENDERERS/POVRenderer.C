@@ -52,7 +52,6 @@ namespace BALL
 
 
 		POVRenderer::POVRenderer(const String& name)
-			throw(Exception::FileNotFound)
 			: Renderer(),
 				human_readable_(true),
 				font_file_("/local/amoll/povray-3.5/include/crystal.ttf")
@@ -85,7 +84,6 @@ namespace BALL
 		}
 
 		void POVRenderer::setFileName(const String& name)
-			throw(Exception::FileNotFound)
 		{
             if (outfile_ == 0 || !RTTI::isKindOf<File>(outfile_))
 			{

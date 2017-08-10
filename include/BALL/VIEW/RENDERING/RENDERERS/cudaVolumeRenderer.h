@@ -19,8 +19,8 @@ namespace BALL
 			public:			
 
             /* RT renderer methods */
-                virtual bool init(const Scene& scene) 
-                    throw(BALL::Exception::CUDAError)				
+                /// @throws BALL::Exception::CUDAError
+                virtual bool init(const Scene& scene)
             {
                 try
 	            {

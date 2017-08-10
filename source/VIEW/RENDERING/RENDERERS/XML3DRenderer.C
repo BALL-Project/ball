@@ -52,7 +52,6 @@ namespace BALL
 
 
 		XML3DRenderer::XML3DRenderer(const String& name)
-			throw(Exception::FileNotFound)
 			: Renderer(),
 				human_readable_(true),
 				create_XHTML_(true)
@@ -118,7 +117,6 @@ namespace BALL
 		}
 
 		void XML3DRenderer::setFileName(const String& name)
-			throw(Exception::FileNotFound)
 		{
 			create_XHTML_ = true;
             if (outfile_ == 0 || !RTTI::isKindOf<File>(outfile_))
