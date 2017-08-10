@@ -116,9 +116,8 @@ namespace BALL
 			static const String FILENAME;
 		};
 
-		///
-		GeneralizedBornModel()
-			throw(Exception::FileNotFound);
+		/// @throws BALL::Exception::FileNotFound
+		GeneralizedBornModel();
 
 		///
 		~GeneralizedBornModel();
@@ -126,9 +125,10 @@ namespace BALL
 		///
 		void clear();
 
-		/// We need an additional optioned version of that piece of code
-		bool setup(const AtomContainer& ac)
-			throw(Exception::FileNotFound);
+		/** We need an additional optioned version of that piece of code
+		    @throws BALL::Exception::FileNotFound
+		 */
+		bool setup(const AtomContainer& ac);
 
 		/// ??? This should be done through Options!
 		void setScalingFactorFile(const String& filename);
@@ -161,9 +161,8 @@ namespace BALL
 		/// system at the position of atom_i
 		float calculatePotential(const Atom& atom_i) const;
 
-		///
-		bool readScalingFactors(const String& inifile_name)
-			throw(Exception::FileNotFound);
+		/// @throws BALL::Exception::FileNotFound
+		bool readScalingFactors(const String& inifile_name);
 
 
 		private:

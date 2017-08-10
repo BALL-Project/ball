@@ -64,7 +64,6 @@ using namespace BALL;
 	}
 
 	std::vector < ConformationSet::Conformation > ForceFieldEvaluation::operator () (ConformationSet& conformations)
-		throw(Exception::TooManyErrors)
 	{
 		std::vector < ConformationSet::Conformation > result;
 		if (!ff_) return result;

@@ -328,7 +328,6 @@ void PLP::update(const vector<pair<Atom*, Atom*> >& atom_vector)
 
 
 void PLP::update()
-	throw(Exception::TooManyErrors)
 {
 	cout<<"PLP::update() !!"<<endl;
 	cout<<"Use only PLP::update(const AtomPairVector&)"<<endl;

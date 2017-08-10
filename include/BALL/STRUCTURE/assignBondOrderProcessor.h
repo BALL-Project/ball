@@ -307,7 +307,7 @@ namespace BALL
 			AssignBondOrderProcessor();
 
 			// constructor with parameter filename //TODO
-			//AssignBondOrderProcessor(const String& file_name) throw(Exception::FileNotFound);
+			//AssignBondOrderProcessor(const String& file_name);
 
 			/// Destructor
 			virtual ~AssignBondOrderProcessor();
@@ -401,8 +401,9 @@ namespace BALL
 			 *  @param  i index of the solution, whose bond order assignment should be applied. 
 			 * 	@return const System& - the original system with bond order assignment of solution i. 
 			 * 					If i is invalid, an Exception is thrown.
+			 * 	@throws BALL::Exception::IndexOverflow
 			 */
-			const System& getSolution(Position i) throw(Exception::IndexOverflow);
+			const System& getSolution(Position i);
 
 			/** Returns the total charge of solution i. 
 			 
@@ -544,8 +545,9 @@ namespace BALL
 			/** Reads and stores the penalty-INIFile (for example BondOrder.ini).
 			 *
 			 *	@return bool - false if the INIFile could not be read correctly.
+			 *	@throws BALL::Exception::FileNotFound
 			 */
-			bool readAtomPenalties_() throw(Exception::FileNotFound());
+			bool readAtomPenalties_();
 
 			/** Assigns every atom of the AtomContainer to which the
 			 *  processor is applied to a block of possible valences 

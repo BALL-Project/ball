@@ -191,7 +191,6 @@ namespace BALL
 	}
 
 	TSphere3<double> ReducedSurface::getSphere(Position i) const
-		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_atoms_)
 		{
@@ -204,7 +203,6 @@ namespace BALL
 	}
 
 	RSVertex* ReducedSurface::getVertex(Position i) const
-		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_vertices_)
 		{
@@ -217,7 +215,6 @@ namespace BALL
 	}
 
 	RSEdge* ReducedSurface::getEdge(Position i) const
-		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_edges_)
 		{
@@ -230,7 +227,6 @@ namespace BALL
 	}
 
 	RSFace* ReducedSurface::getFace(Position i) const
-		throw(Exception::IndexOverflow)
 	{
 		if (i < number_of_faces_)
 		{
@@ -1191,7 +1187,6 @@ namespace BALL
 	}
 
 	Position RSComputer::getStartPosition()
-		throw(Exception::DivisionByZero)
 	{
 		if (findFirstFace() != NULL)
 		{
@@ -1209,7 +1204,6 @@ namespace BALL
 	}
 
 	RSFace* RSComputer::findFirstFace()
-		throw(Exception::DivisionByZero)
 	{
 		for (Position direction = 0; direction < 3; direction++)
 		{
@@ -1262,7 +1256,6 @@ namespace BALL
 	}
 
 	RSFace* RSComputer::findFace(Position direction, Position extrem)
-		throw(Exception::DivisionByZero)
 	{
 		Index a1 = findFirstAtom(direction, extrem);
 		if (a1 == -1)

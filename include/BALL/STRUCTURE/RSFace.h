@@ -116,6 +116,7 @@ namespace BALL
 				@param	normal		assigned to the normal vector
 				@param	singular
 				@param	index			assigned to the index
+				@throws BALL::Exception::DivisionByZero
 		*/
 		RSFace(RSVertex* vertex1,
 				RSVertex* vertex2,
@@ -126,8 +127,7 @@ namespace BALL
 				const TVector3<double>& center,
 				const TVector3<double>& normal,
 				bool singular,
-				Index index)
-			throw(Exception::DivisionByZero);
+				Index index);
 
 		/**	Destructor.
 				Destructs the RSFace object.
@@ -168,6 +168,7 @@ namespace BALL
 				@param	normal		assigned to the normal vector
 				@param	singular
 				@param	index			assigned to the index
+				@throws BALL::Exception::DivisionByZero
 		*/
 		void set(RSVertex* vertex1,
 				RSVertex* vertex2,
@@ -178,8 +179,7 @@ namespace BALL
 				const TVector3<double>& center,
 				const TVector3<double>& normal,
 				bool singular,
-				Index index)
-			throw(Exception::DivisionByZero);
+				Index index);
 
 		//@}
 		/**	@name	Predicates
@@ -233,9 +233,9 @@ namespace BALL
 
 		/** Set the vector orthogonal to the RSFace.
 				@param	normal	the new normal
+				@throws BALL::Exception::DivisionByZero
 		*/
-		void setNormal(const TVector3<double>& normal)
-			throw(Exception::DivisionByZero);
+		void setNormal(const TVector3<double>& normal);
 
 		/** Return the vector orthogonal to the RSFace.
 				@return	TVector3<double>	the vector orthogonal to the RSFace.

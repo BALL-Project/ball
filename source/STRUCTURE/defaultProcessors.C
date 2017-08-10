@@ -36,7 +36,6 @@ namespace BALL
 	}
 
 	AssignRadiusProcessor::AssignRadiusProcessor(const String& filename)
-		throw(Exception::FileNotFound)
 		:	number_of_errors_(0),
 			number_of_assignments_(0)
 	{
@@ -145,7 +144,6 @@ namespace BALL
 	}
 
 	bool AssignRadiusProcessor::buildTable_()
-		throw(Exception::FileNotFound)
 	{
 		ifstream infile(filename_.c_str());
 
@@ -195,7 +193,6 @@ namespace BALL
 	}
 
 	void AssignRadiusProcessor::setFilename(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 		Path path;
 		filename_ = path.find(filename);
@@ -220,7 +217,6 @@ namespace BALL
 	}
 
 	AssignChargeProcessor::AssignChargeProcessor(const String& filename)
-		throw(Exception::FileNotFound)
 		: AssignRadiusProcessor(filename),
 			total_charge_(0.0)
 	{

@@ -251,14 +251,14 @@ namespace BALL
 			protected:	
 				
 				/** Read the Conversion table from file.
+				 *  @throws BALL::Exception::FileNotFound
 				 */
-				void readConversionTable_()
-					throw (Exception::FileNotFound());
+				void readConversionTable_();
 			
 				/** Read the pseudo atoms conversion table from file.
+				 *  @throws BALL::Exception::FileNotFound
 				 */
-				void readPseudoAtomsConversionTable_()
-					throw (Exception::FileNotFound());
+				void readPseudoAtomsConversionTable_();
 
 				std::vector<String> 								conventions_;
 				std::vector< std::vector <String> > conversion_table_;	

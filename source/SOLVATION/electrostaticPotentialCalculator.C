@@ -36,7 +36,6 @@ namespace BALL
 	}
 
 	void ElectrostaticPotentialCalculator::apply(System &S)
-		throw(Exception::NullPointer)
 	{
 		if (frag_db_ == 0)
 		{

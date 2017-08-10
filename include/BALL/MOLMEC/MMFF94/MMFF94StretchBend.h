@@ -108,9 +108,9 @@ namespace BALL
 		virtual ~MMFF94StretchBend();
 
 		/**	Setup method.
+		 * @throws BALL::Exception::TooManyErrors
 		*/
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		virtual bool setup();
 
 		///	Calculates and returns the component's energy.
 		virtual double updateEnergy();

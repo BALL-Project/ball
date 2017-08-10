@@ -296,9 +296,9 @@ namespace BALL
 				@return	TVector3<double>	the intersection point near to the first
 														RSVertex if i = 0, the intersection point near
 														to the second RSVertex otherwise
+				@throws BALL::Exception::GeneralException
 		*/
-		TVector3<double> getIntersectionPoint(Position i) const
-			throw(Exception::GeneralException);
+		TVector3<double> getIntersectionPoint(Position i) const;
 
 		/** Set singular
 		*/

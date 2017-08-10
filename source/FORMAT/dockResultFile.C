@@ -236,7 +236,6 @@ namespace BALL
 
 
 		Molecule* DockResultFile::read()
-			throw (Exception::ParseError)
 		{
 			if(!mode_read_)
 			{
@@ -309,7 +308,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::write(const Molecule& mol)
-			throw (BALL::File::CannotWrite)
 		{
 			if(mode_read_)
 			{
@@ -535,7 +533,6 @@ namespace BALL
 
 
 		Ligand* DockResultFile::readLigand()
-					throw(Exception::ParseError)
 		{
 			current_ligand_ = 0;
 			Ligand* ret = 0;
@@ -1055,7 +1052,6 @@ namespace BALL
 
 
 		bool DockResultFile::readResults_()
-					throw(Exception::ParseError)
 		{
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
 			{
@@ -1086,7 +1082,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readResult()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1149,7 +1144,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readSubResult()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1187,7 +1181,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readEntry()
-					throw(Exception::ParseError)
 		{
 			Result::ResultData rd;
 			HashMap<String,String> attrs;
@@ -1229,7 +1222,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readLigands()
-					throw(Exception::ParseError)
 		{
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
 			{
@@ -1260,7 +1252,6 @@ namespace BALL
 		}
 
 		void DockResultFile::buildLigand()
-				throw(Exception::ParseError)
 		{
 			current_ligand_ = new Ligand(current_molecule_);
 			current_ligand_->setId(current_ligand_id_);
@@ -1268,7 +1259,6 @@ namespace BALL
 		}
 
 		void DockResultFile::buildReceptor()
-				throw(Exception::ParseError)
 		{
 			current_receptor_ = new Receptor(current_protein_);
 			current_receptor_->setId(current_receptor_id_);
@@ -1276,7 +1266,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readLigand_()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1320,7 +1309,6 @@ namespace BALL
 
 
 		bool DockResultFile::readFlexibilities()
-					throw(Exception::ParseError)
 		{
 			flexdef_idx = 0;
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
@@ -1354,7 +1342,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readConformations(FlexibleMolecule* target)
-					throw(Exception::ParseError)
 		{
 			target->clearConformations();
 
@@ -1397,7 +1384,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readConformation(Conformation* conformation)
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1443,7 +1429,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readFlexibility()
-					throw(Exception::ParseError)
 		{
 			current_flexdef_ = FlexDefinition();
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
@@ -1478,7 +1463,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readFullFlexResidue()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1505,7 +1489,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readRotamericResidue()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1535,7 +1518,6 @@ namespace BALL
 
 
 		bool DockResultFile::readCoordinates()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1598,7 +1580,6 @@ namespace BALL
 
 
 		void DockResultFile::buildMolecule()
-			throw(Exception::ParseError)
 		{
 			current_molecule_ = new Molecule();
 			current_molecule_->setName(current_molecule_name_);
@@ -1636,7 +1617,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readMolecule()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1677,7 +1657,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readAtoms()
-					throw(Exception::ParseError)
 		{
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
 			{
@@ -1706,7 +1685,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readAtom()
-					throw(Exception::ParseError)
 		{
 			current_atom_ = new Atom();
 			HashMap<String,String> attrs;
@@ -1769,7 +1747,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readBonds()
-					throw(Exception::ParseError)
 		{
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
 			{
@@ -1798,7 +1775,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readBond()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1833,7 +1809,6 @@ namespace BALL
 
 
 		bool DockResultFile::readReceptors_()
-					throw(Exception::ParseError)
 		{
 			while(!xmlIn_->atEnd() && !xmlIn_->hasError())
 			{
@@ -1864,7 +1839,6 @@ namespace BALL
 		}
 
 		Receptor* DockResultFile::readReceptor()
-				throw(Exception::ParseError)
 		{
 			current_receptor_ = 0;
 			readReceptor_();
@@ -1872,7 +1846,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readReceptor_()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -1920,7 +1893,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readProtein()
-					throw(Exception::ParseError)
 		{
 			current_chain_ = new Chain;
 			HashMap<String,String> attrs;
@@ -1955,7 +1927,6 @@ namespace BALL
 		}
 
 		void DockResultFile::buildProtein()
-				throw(Exception::ParseError)
 		{
 			current_protein_ = new Protein();
 			current_protein_->insert(*current_chain_);
@@ -1963,7 +1934,6 @@ namespace BALL
 		}
 
 		void DockResultFile::buildResidue()
-				throw(Exception::ParseError)
 		{
 			for(unsigned int i=0;i<current_PDB_atoms_.size();i++)
 			{
@@ -1977,7 +1947,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readResidue()
-					throw(Exception::ParseError)
 		{
 			HashMap<String,String> attrs;
 			attributesToHashMap(xmlIn_->attributes(),attrs);
@@ -2017,7 +1986,6 @@ namespace BALL
 		}
 
 		bool DockResultFile::readPDBAtom()
-					throw(Exception::ParseError)
 		{
 			PDBAtom* atm = new PDBAtom();
 			HashMap<String,String> attrs;

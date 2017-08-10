@@ -172,9 +172,9 @@ namespace BALL
 
 		/**	Force field specific setup.
 				This method is called by setup.
+				@throws BALL::Exception::TooManyErrors
 		*/
-		virtual bool specificSetup()
-			throw(Exception::TooManyErrors);
+		virtual bool specificSetup();
 
 		/** Set the number of atoms, for which the setup of the forcefield can
 		    fail, until the setup() methods aborts and return false.
@@ -337,9 +337,9 @@ namespace BALL
 				between two calls to update. \par
 				The default implementation calls  \link ForceFieldComponent::update ForceFieldComponent::update \endlink  for
 				each component in the force field.
+				@throws BALL::Exception::TooManyErrors
 		*/
-		virtual void update()
-			throw(Exception::TooManyErrors);
+		virtual void update();
 
 		/** Get the current results in String form
 		 		(Generic function to be overloaded in derived classes.)
@@ -348,7 +348,7 @@ namespace BALL
 			 { return "undefined";}
 
 		//_ Report an error and increase the error counter
-		std::ostream& error() throw(Exception::TooManyErrors);
+		std::ostream& error();
 
 		//@}
 		/**	@name	Public Attributes

@@ -207,7 +207,6 @@ namespace BALL
 	}
 
 	void AmberNonBonded::update()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -364,7 +363,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberNonBonded::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -539,7 +537,6 @@ namespace BALL
 		(const vector<pair<Atom*, Atom*> >& atom_vector,
 		 const LennardJones& lennard_jones, 
 		 const Potential1210& hydrogen_bond)
-		throw(Exception::TooManyErrors)
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();

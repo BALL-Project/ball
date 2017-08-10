@@ -113,7 +113,6 @@ namespace BALL
 	}
 
 	const SolventAtomDescriptor& SolventDescriptor::getAtomDescriptor(Position index) const 
-		throw(Exception::IndexOverflow)
 	{
 		if (index >= solvent_atoms_.size())
 		{
@@ -124,7 +123,6 @@ namespace BALL
 	}
 
 	SolventAtomDescriptor& SolventDescriptor::getAtomDescriptor(Position index)  
-		throw(Exception::IndexOverflow)
 	{
 		if (index >= solvent_atoms_.size())
 		{

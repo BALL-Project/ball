@@ -81,13 +81,13 @@ namespace BALL
 				@param	periodic_boundary_enabled flag indicating the use of periodic boundary conditions
 				@param	type	the type of algorithm used to calculate the pair vector
 				@return	the number of pairs generated (<tt>pair_vector.size()</tt>)
+				@throws BALL::Exception::OutOfMemory
 		*/
 		BALL_EXPORT BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
 			 const AtomVector& atom_vector, const SimpleBox3& box, 
 			 double distance,	bool periodic_boundary_enabled, 
-			 PairListAlgorithmType type)
-			throw(Exception::OutOfMemory);
+			 PairListAlgorithmType type);
 
 		/**	Sort the pair list.
 				The atom pairs in the list ar sorted in such a way, that those atom pairs

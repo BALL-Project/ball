@@ -47,14 +47,12 @@ namespace BALL
 
 	// setup
 	bool ForceFieldComponent::setup()
-		throw(Exception::TooManyErrors)
 	{
 		return true;
 	}
 
 	// update pair lists - empty!
 	void update()
-		throw(Exception::TooManyErrors)
 	{
 	}
 
@@ -98,7 +96,6 @@ namespace BALL
 	}
 
 	void ForceFieldComponent::update()
-		throw(Exception::TooManyErrors)
 	{
 	}
 

@@ -109,7 +109,6 @@ namespace BALL
 	}
 
 	void SmilesParser::parse(const String& s)
-		throw(Exception::ParseError)
 	{
 		// clear out previous atoms
 		for (Position i = 0; i < all_atoms_.size(); i++)

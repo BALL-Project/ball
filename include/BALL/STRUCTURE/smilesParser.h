@@ -129,9 +129,9 @@ namespace BALL
 		*/
 		//@{
 		/**	Parse a SMILES string.
+		    @throws BALL::Exception::ParserError
 		*/
-		void parse(const String& s)
-			throw(Exception::ParseError);
+		void parse(const String& s);
 
 		/**	Return the parsed system
 		*/

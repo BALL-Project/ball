@@ -252,10 +252,8 @@ namespace BALL
 		*/
 		//@{
 
-		/** 
-		*/
-		virtual bool finish() 
-			throw(Exception::DivisionByZero);
+		/// @throws BALL::Exception::DivisionByZero
+		virtual bool finish();
 
 		//@}
 		/** @name Options 

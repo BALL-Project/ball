@@ -65,9 +65,10 @@ namespace BALL
 	}
 
 
-	// setup the internal datastructures for the component
+	/** setup the internal datastructures for the component
+	 *  @throws BALL::Exception::TooManyErrors
+	 */
 	bool MMFF94OutOfPlaneBend::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0 ||
 				dynamic_cast<MMFF94*>(getForceField()) == 0) 

@@ -81,42 +81,42 @@ namespace BALL
 		//@{
 		
 		/**
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		void setVertex(SASVertex* vertex, Position i)
-			throw(Exception::IndexOverflow);
+		void setVertex(SASVertex* vertex, Position i);
 
 		/**
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		SASVertex* getVertex(Position i) const
-			throw(Exception::IndexOverflow);
+		SASVertex* getVertex(Position i) const;
 
 		/**
 		*/
 		Size numberOfVertices() const;
 		
 		/**
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		void setEdge(SASEdge* edge, Position i)
-			throw(Exception::IndexOverflow);
+		void setEdge(SASEdge* edge, Position i);
 
 		/**
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		SASEdge* getEdge(Position i) const
-			throw(Exception::IndexOverflow);
+		SASEdge* getEdge(Position i) const;
 
 		/**
 		*/
 		Size numberOfEdges() const;
 		
 		/**
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		void setFace(SASFace* face, Position i)
-			throw(Exception::IndexOverflow);
+		void setFace(SASFace* face, Position i);
 
 		/**
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		SASFace* getFace(Position i) const
-			throw(Exception::IndexOverflow);
+		SASFace* getFace(Position i) const;
 
 		/**
 		*/

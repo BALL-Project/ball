@@ -100,9 +100,9 @@ namespace BALL
 			 *  and store a GAFFCESParser for every CESstring.
 			 *  The path to the atom type file is taken from the value
 			 *  of the option ATOMTYPE_FILENAME.
+			 *  @throws BALL::Exception::FileNotFound
 			 */
-			void parseAtomtypeTableFile_()
-				throw(Exception::FileNotFound);
+			void parseAtomtypeTableFile_();
 
 			/// compute aromaticity, ring memberships, GAFF bond typization, ...
 			void precomputeBondProperties_(Molecule* molecule);

@@ -51,9 +51,9 @@ namespace BALL
 		//@{
 
 		/**	Setup method.
+		 * @throws BALL::Exception::TooManyErrors
 		*/
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		virtual bool setup();
 		//@}
 	};
 } // namespace BALL

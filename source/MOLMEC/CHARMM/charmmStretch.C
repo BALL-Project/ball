@@ -36,7 +36,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmStretch::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{

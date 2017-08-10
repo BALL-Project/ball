@@ -284,7 +284,6 @@ namespace BALL
 
   // Calculate the torsion angle between four atoms
   Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
-		throw(Exception::IllegalPosition)
 	{
 		Vector3 a12(a2.getPosition() - a1.getPosition());
 Vector3 a23(a3.getPosition() - a2.getPosition());
@@ -394,7 +393,6 @@ Vector3 a23(a3.getPosition() - a2.getPosition());
 
   // Calculate the bond angle between three atoms
   Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
-		throw(Exception::IllegalPosition)
 	{
 		// two atoms can't have the same position
 		if (a1.getPosition() == a2.getPosition() ||

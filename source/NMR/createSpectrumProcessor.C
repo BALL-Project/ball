@@ -18,7 +18,6 @@ namespace BALL
 	const String CreateSpectrumProcessor::AVERAGE_SECTION_NAME =  "AverageAtoms";
 
 	CreateSpectrumProcessor::CreateSpectrumProcessor()
-		throw(Exception::FileNotFound, Exception::ParseError)
 		:	width_(1.0),
 			use_averaging_(true),
 			use_ignore_table_(true),
@@ -49,7 +48,6 @@ namespace BALL
 	}
 
 	void CreateSpectrumProcessor::init(const String& filename)
-		throw(Exception::ParseError, Exception::FileNotFound)
 	{
 		valid_ = false;
 

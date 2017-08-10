@@ -36,7 +36,6 @@ namespace BALL
 	}
 
 	bool MMFF94ParametersBase::readParameters(Parameters& p, const String& section)
-		throw(Exception::FileNotFound)
 	{
 		ParameterSection p_sec;
 		p_sec.extractSection(p, section);
@@ -638,7 +637,6 @@ bool MMFF94StretchBendParameters::setup_(const vector<vector<String> >& lines)
 
 
 bool MMFF94StretchBendParameters::readEmpiricalParameters(Parameters& p, const String& section)
-	throw(Exception::FileNotFound)
 {
 	ParameterSection p_sec;
 	p_sec.extractSection(p, section);
@@ -1217,7 +1215,6 @@ double MMFF94ESParameters::getPartialCharge(Position at1, Position at2, Position
 }
 
 bool MMFF94ESParameters::readEmpiricalParameters(Parameters& p, const String& section)
-	throw(Exception::FileNotFound)
 {
 	phis_.resize(MMFF94_number_atom_types);
 	pbcis_.resize(MMFF94_number_atom_types);

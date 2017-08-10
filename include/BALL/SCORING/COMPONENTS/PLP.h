@@ -99,11 +99,12 @@ namespace BALL
 			virtual void updateForces() throw();
 
 			/**	Update the pair list.
-			This method is called by the force field whenever
-			\link ForceField::update ForceField::update \endlink  is called. It is used
-			to recalculate the nonbonded pair list. */
-			virtual void update()
-				throw(Exception::TooManyErrors);
+					This method is called by the force field whenever
+					\link ForceField::update ForceField::update \endlink  is called. It is used
+					to recalculate the nonbonded pair list.
+					@throws BALL::Exception::TooManyErrors
+			 */
+			virtual void update();
 
 			double getVDWEnergy() const;
 

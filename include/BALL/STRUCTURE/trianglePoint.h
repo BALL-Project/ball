@@ -143,9 +143,9 @@ namespace BALL
 			;
 
 		/** Set the normal of the TrianglePoint
+		    @throws BALL::Exception::DivisionByZero
 		*/
-		void setNormal(const TVector3<double>& normal)
-			throw(Exception::DivisionByZero);
+		void setNormal(const TVector3<double>& normal);
 
 		//@}
 

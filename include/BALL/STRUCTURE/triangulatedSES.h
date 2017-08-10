@@ -131,8 +131,10 @@ namespace BALL
 		*/
 		//@{
 
-		void compute()
-			throw(Exception::GeneralException,Exception::DivisionByZero);
+		/** @throws BALL::Exception::GeneralException
+		    @throws BALL::Exception::DivisionByZero
+		 */
+		void compute();
 
 		//@}
 
@@ -192,8 +194,10 @@ namespace BALL
 		*/
 		//@{
 
-		void run()
-			throw(Exception::GeneralException,Exception::DivisionByZero);
+		/** @throws BALL::Exception::GeneralException
+		    @throws BALL::Exception::DivisionByZero
+		 */
+		void run();
 
 		private:
 

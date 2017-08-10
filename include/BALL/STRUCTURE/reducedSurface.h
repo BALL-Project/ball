@@ -301,30 +301,30 @@ namespace BALL
 		/** Return the i'th sphere.
 				@param	i	the index of the sphere that should be given back
 				@return TSphere3<double>, the i'th sphere
+				@throws BALL::Exception::IndexOverflow
 		*/
-    TSphere3<double> getSphere(Position i) const
-	    throw(Exception::IndexOverflow);
+    TSphere3<double> getSphere(Position i) const;
 
 		/** Return the i'th rsvertex.
 				@param	i	the index of the rsvertex that should be given back
 				@return RSVertex, the i'th rsvertex
+				@throws BALL::Exception::IndexOverflow
 		*/
-		RSVertex* getVertex(Position i) const
-			throw(Exception::IndexOverflow);
+		RSVertex* getVertex(Position i) const;
 
 		/** Return the i'th rsedge.
 				@param	i	the index of the rsedge that should be given back
 				@return RSEdge, the i'th rsedge
+				@throws BALL::Exception::IndexOverflow
 		*/
-		RSEdge* getEdge(Position i) const
-			throw(Exception::IndexOverflow);
+		RSEdge* getEdge(Position i) const;
 
 		/** Return the i'th rsface.
 				@param	i	the index of the rsface that should be given back
 				@return RSFace, the i'th rsface
+				@throws BALL::Exception::IndexOverflow
 		*/
-		RSFace* getFace(Position i) const
-			throw(Exception::IndexOverflow);
+		RSFace* getFace(Position i) const;
 
 		/** Insert a new RSVertex.
 				@param	rsvertex	a pointer to the RSVertex to insert
@@ -628,9 +628,9 @@ namespace BALL
 												1, if a single vertex is found,
 												2, if an edge is found,
 												3, if a face is found
+			@throws BALL::Exception::DivisionByZero
 		*/
-		Position getStartPosition()
-			throw(Exception::DivisionByZero);
+		Position getStartPosition();
 
 		//@}
 		/*_ @name Finding a first face
@@ -640,9 +640,9 @@ namespace BALL
 		/*_ Try to find a starting face
 			@return	RSFace*	a pointer to the found face, if a face can be found,
 													NULL otherwise
+			@throws BALL::Exception::DivisionByZero
 		*/
-		RSFace* findFirstFace()
-			throw(Exception::DivisionByZero);
+		RSFace* findFirstFace();
 
 		/*_ Try to find a starting face in a given direction
 			@param	direction		search in x-direction, if direction is 0,
@@ -652,9 +652,9 @@ namespace BALL
 													search in max direction, if extrem is 1
 			@return	RSFace*	a pointer to the found face, if a face can be found,
 													NULL otherwise
+			@throws BALL::Exception::DivisionByZero
 		*/
-		RSFace* findFace(Position direction, Position extrem)
-			throw(Exception::DivisionByZero);
+		RSFace* findFace(Position direction, Position extrem);
 
 		//@}
 		/*_ @name Finding a first edge

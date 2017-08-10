@@ -108,9 +108,9 @@ namespace BALL
 		//@{
 
 		/**	Setup method.
+		 * @throws BALL::Exception::TooManyErrors
 		*/
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		virtual bool setup();
 
 		//@}
 		/**	@name	Accessors	
@@ -154,10 +154,10 @@ namespace BALL
 			;
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
+		 * @throws BALL::Exception::TooManyErrors
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
-			(const std::vector<std::pair<Atom*, Atom*> >& atom_vector)
-			throw(Exception::TooManyErrors);
+			(const std::vector<std::pair<Atom*, Atom*> >& atom_vector);
 
 		//@}
 

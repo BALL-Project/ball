@@ -211,7 +211,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmNonBonded::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -490,7 +489,6 @@ namespace BALL
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
 	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs(const vector<pair<Atom*, Atom*> >& atom_vector)
-		throw(Exception::TooManyErrors)
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();

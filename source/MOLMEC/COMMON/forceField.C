@@ -524,7 +524,6 @@ namespace BALL
 	}
 
 	void ForceField::update()
-		throw(Exception::TooManyErrors)
 	{
 		// check for validity of the force field
 		if (!valid_)
@@ -548,8 +547,7 @@ namespace BALL
 	}
 	
 
-	bool ForceField::specificSetup() 
-		throw(Exception::TooManyErrors)
+	bool ForceField::specificSetup()
 	{
 		return true;
 	}
@@ -642,7 +640,7 @@ namespace BALL
 		return unassigned_atoms_;
 	}
 
-	std::ostream& ForceField::error() throw(Exception::TooManyErrors)
+	std::ostream& ForceField::error()
 	{
 		number_of_errors_++;
 		if (number_of_errors_ > max_number_of_errors_)

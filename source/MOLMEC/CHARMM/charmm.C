@@ -155,7 +155,6 @@ namespace BALL
 
 	// force field specific setup method
 	bool CharmmFF::specificSetup()
-		throw(Exception::TooManyErrors)
 	{
 		// check whether the system is assigned
 		if (getSystem() == 0)

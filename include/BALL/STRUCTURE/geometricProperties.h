@@ -304,9 +304,9 @@ namespace BALL
 	//@{
 		
 	/**	Calculate the torsion angle between four atoms
+	    @throws BALL::Exception::IllegalPosition
 	*/
-	BALL_EXPORT Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
-		throw(Exception::IllegalPosition);
+	BALL_EXPORT Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4);
 
 	/**
 	 * Set the torsion angle defined by a1, a2, a3, a4. The atoms should be connected by bonds
@@ -319,9 +319,9 @@ namespace BALL
 	BALL_EXPORT bool setTorsionAngle(const Atom& a1, const Atom& a2, Atom& a3, const Atom& a4, Angle angle);
 
 	/**	Calculate the bond angle between three atoms
+	    @throws BALL::Exception::IllegalPosition
 	*/
-	BALL_EXPORT Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
-		throw(Exception::IllegalPosition);
+	BALL_EXPORT Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3);
 
 	//@}
 } // namespace BALL

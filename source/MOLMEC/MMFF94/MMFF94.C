@@ -144,7 +144,6 @@ namespace BALL
 	}
 
 	bool MMFF94::specificSetup()
-		throw(Exception::TooManyErrors)
 	{
 		// check whether the system is assigned
 		if (getSystem() == 0) return false;

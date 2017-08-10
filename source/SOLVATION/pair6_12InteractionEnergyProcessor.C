@@ -174,7 +174,6 @@ namespace BALL
 
 
 	bool Pair6_12InteractionEnergyProcessor::finish() 
-		throw(Exception::DivisionByZero)
 	{
 
 		// how loud will we cry?

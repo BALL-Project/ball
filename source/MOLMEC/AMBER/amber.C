@@ -148,7 +148,6 @@ namespace BALL
 	}
 
 	bool AmberFF::specificSetup()
-		throw(Exception::TooManyErrors)
 	{
 		// check whether the system is assigned
 		if (getSystem() == 0)
