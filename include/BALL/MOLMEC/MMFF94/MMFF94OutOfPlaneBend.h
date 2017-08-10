@@ -54,9 +54,10 @@ namespace BALL
 		///	Destructor.
 		virtual ~MMFF94OutOfPlaneBend();
 
-		///	Setup method.
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		/** Setup method.
+		 *  @throws BALL::Exception::TooManyErrors
+		 */
+		virtual bool setup();
 
 		///	Calculates and returns the component's energy.
 		virtual double updateEnergy();

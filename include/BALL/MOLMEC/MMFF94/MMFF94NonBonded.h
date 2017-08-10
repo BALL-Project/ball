@@ -84,9 +84,10 @@ namespace BALL
 		bool operator == (const MMFF94NonBonded& anb)
 			;
 
-		///	Setup method.
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		/** Setup method.
+		 *  @throws BALL::Exception::TooManyErrors
+		 */
+		virtual bool setup();
 
 		///	Calculates and returns the component's energy.
 		virtual double updateEnergy()
@@ -100,9 +101,9 @@ namespace BALL
 				This method is called by the force field whenever
 				 \link ForceField::update ForceField::update \endlink  is called. It is used
 				to recalculate the nonbonded pair list.
+				@throws BALL::Exception::TooManyErrors
 		*/
-		virtual void update()
-			throw(Exception::TooManyErrors);
+		virtual void update();
 
 		///	Computes the most efficient way to calculate the non-bonded atom pairs
 		virtual MolmecSupport::PairListAlgorithmType

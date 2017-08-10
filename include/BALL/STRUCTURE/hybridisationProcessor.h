@@ -114,9 +114,11 @@ namespace BALL
 			/// copy construcor
 			HybridisationProcessor(const HybridisationProcessor& hp);
 		
-			/// Constructor with parameter filename for the smarts based algorithm
-			/// and parameter filename for the force field based method
-			HybridisationProcessor(const String& smarts_file_name, const String& ff_file_name) throw(Exception::FileNotFound);
+			/** Constructor with parameter filename for the smarts based algorithm
+					and parameter filename for the force field based method
+					@throws BALL::Exception::FileNotFound
+			 */
+			HybridisationProcessor(const String& smarts_file_name, const String& ff_file_name);
 			
 			/// destructor
 			virtual ~HybridisationProcessor();
@@ -139,8 +141,10 @@ namespace BALL
 			/// Return the number of hybridisation states set during the last application.
 			Size getNumberOfHybridisationStatesSet(); 
 
-			/// sets the parameters file
-			void setAtomTypeSmarts(const String& file_name) throw(Exception::FileNotFound);
+			/** sets the parameters file
+				@throws BALL::Exception::FileNotFound
+			 */
+			void setAtomTypeSmarts(const String& file_name);
 
 			/// Return the atom_types--hybridisation  Hashmap 
 			vector< std::pair<String, Size> > getHybridisationMap() { return atom_type_smarts_;};
@@ -188,8 +192,10 @@ namespace BALL
 				String a3;
 			};
 			
-			/// method to read the paramter file
-			bool readAtomTypeSmartsFromFile_(const String& file_name = "") throw(Exception::FileNotFound);
+			/** method to read the paramter file
+					@throws BALL::Exception::FileNotFound
+			 */
+			bool readAtomTypeSmartsFromFile_(const String& file_name = "");
 			
 			/// number of bonds, which are created during the processor call
 			Size num_hybridisation_states_;
@@ -201,8 +207,9 @@ namespace BALL
 			 *  are stored in 'rad'.
 			 */
 			StringHashMap<StringHashMap<StringHashMap<std::multimap<float, AtomNames_> > > > bond_angles_;
-			
-			bool readAndInitBondAnglesFromFile_(const String& file_name = "") throw(Exception::FileNotFound);
+
+			/// @throws BALL::Exception::FileNotFound
+			bool readAndInitBondAnglesFromFile_(const String& file_name = "");
 			
 			/** Maps the atom types onto their elements
 			 */

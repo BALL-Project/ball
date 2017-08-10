@@ -219,7 +219,6 @@ namespace BALL
 	}
 
 	Conformation* Result::getInputConformer(Ligand* lig)
-			throw(Exception::GeneralException)
 	{
 		for (Position i = 0; i < lig->getNumberOfConformations(); i++)
 		{
@@ -234,7 +233,6 @@ namespace BALL
 	}
 
 	Conformation* Result::getFirstOutputConformation(Ligand* lig)
-			throw(Exception::GeneralException)
 	{
 		for (Position i = 0; i < lig->getNumberOfConformations(); i++)
 		{
@@ -403,7 +401,6 @@ namespace BALL
 		}
 		else
 		{
-			//throw(Exception::IndexOverflow(__FILE__, __LINE__, id, 1));
 			throw(Exception::InvalidArgument(__FILE__, __LINE__, "supplied id not found"));
 		}
 	}

@@ -647,9 +647,9 @@ namespace BALL
 		*/
 		//@{
 		/**	Parse a SMARTS string.
+		 *  @throws BALL::Exception::ParseError
 		*/
-		void parse(const String& s)
-			throw(Exception::ParseError);
+		void parse(const String& s);
 
 		/**	@name Accessors
 		*/

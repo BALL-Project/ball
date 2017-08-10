@@ -39,7 +39,6 @@ namespace BALL
 
 	RMSDMinimizer::Result RMSDMinimizer::computeTransformation
 		(const AtomBijection& ab)
-		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
 	{
 		RMSDMinimizer::PointVector X(ab.size());
 		RMSDMinimizer::PointVector Y(ab.size());
@@ -53,7 +52,6 @@ namespace BALL
 
 	std::pair<Matrix4x4, double> RMSDMinimizer::computeTransformation
 		(const RMSDMinimizer::PointVector& A, const RMSDMinimizer::PointVector& B)
-		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
 	{
 		// Copy the point sets so we can remove the barycenters easily
 		PointVector X(A);
@@ -148,7 +146,6 @@ namespace BALL
 	}
 
 	double RMSDMinimizer::minimizeRMSD(AtomContainer& a, AtomContainer& b)
-		throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates)
 	{
 		StructureMapper sm(a, b);
 		sm.calculateDefaultBijection();

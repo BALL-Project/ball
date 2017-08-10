@@ -101,8 +101,10 @@ namespace BALL
 			/// copy construcor
 			BuildBondsProcessor(const BuildBondsProcessor& bbp);
 		
-			/// constructor with parameter filename
-			BuildBondsProcessor(const String& file_name) throw(Exception::FileNotFound);
+			/** constructor with parameter filename
+			 *  @throws BALL::Exception::FileNotFound
+			 */
+			BuildBondsProcessor(const String& file_name);
 			
 			/// destructor
 			virtual ~BuildBondsProcessor();
@@ -125,8 +127,10 @@ namespace BALL
 			/// Return the number of bonds built during the last application.
 			Size getNumberOfBondsBuilt();
 
-			/// sets the parameters file
-			void setBondLengths(const String& file_name) throw(Exception::FileNotFound);
+			/** sets the parameters file
+			 *  @throws BALL::Exception::FileNotFound
+			 */
+			void setBondLengths(const String& file_name);
 
 			/// Return the bond length Hashmap 
 			HashMap<Size, HashMap<Size, HashMap<int, float> > > getBondMap() { return bond_lengths_;};
@@ -165,8 +169,10 @@ namespace BALL
 			/// deletes bonds, like from multiple bonded hydrogens or halogens
 			void deleteOverestimatedBonds_(AtomContainer& ac);
 			
-			/// method to read the paramter file
-			void readBondLengthsFromFile_(const String& file_name = "") throw(Exception::FileNotFound);
+			/** method to read the paramter file
+			 *  @throws BALL::Exception::FileNotFound
+			 */
+			void readBondLengthsFromFile_(const String& file_name = "");
 			
 			/// number of bonds, which are created during the processor call
 			Size num_bonds_;

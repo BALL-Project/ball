@@ -121,7 +121,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool MMFF94StretchBend::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0 || getForceField()->getSystem() == 0) 
 		{

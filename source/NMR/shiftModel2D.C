@@ -95,7 +95,6 @@ namespace BALL
 	}
 	
 	bool  ShiftModel2D::init_()
-			throw(Exception::FileNotFound)
 	{
 		valid_ = true;
 
@@ -105,7 +104,6 @@ namespace BALL
 	}
 
 	void ShiftModel2D::setFilename(const String& filename)
-			throw(Exception::FileNotFound)
 	{
 		// set the parameter filename 
 		parameters_.setFilename(filename);

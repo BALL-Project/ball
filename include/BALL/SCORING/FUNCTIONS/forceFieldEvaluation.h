@@ -60,9 +60,8 @@ namespace BALL
 				const Options& getOptions() const
 					throw();
 
-				///
-				virtual std::vector < ConformationSet::Conformation > operator () (ConformationSet& conformations)
-					throw(Exception::TooManyErrors);
+				/// @throws BALL::Exception::TooManyErrors
+				virtual std::vector < ConformationSet::Conformation > operator () (ConformationSet& conformations);
 
 			protected:
 

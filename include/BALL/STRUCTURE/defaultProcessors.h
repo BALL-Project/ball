@@ -68,10 +68,9 @@ namespace BALL
 		AssignRadiusProcessor();
 
 		/** Detailled constructor.
-				If the file can not be found in the actual path, FileNotFound is thrown.
+		 *  @throws BALL::Exception::FileNotFound if the file can not be found in the actual path.
 		*/
-		AssignRadiusProcessor(const String& filename)
-			throw(Exception::FileNotFound);
+		AssignRadiusProcessor(const String& filename);
 
 		/** Start Method.
 		 * 	The number of errors and the numbers of assignments are reset to 0.
@@ -103,10 +102,9 @@ namespace BALL
 		virtual Processor::Result operator()(Atom& atom);
 
 		/**	Set the filename to read the radii from.
-		 *  If the file can not be found in the actual path, FileNotFound is thrown.
+		 *  @throws BALL::Exception::FileNotFound if the file can not be found in the actual path.
 		 */
-		void setFilename(const String& filename)
-			throw(Exception::FileNotFound);
+		void setFilename(const String& filename);
 
 		/**	Return the current filename
 		*/
@@ -125,9 +123,10 @@ namespace BALL
 
 		protected:
 
-		//_ Extract the data from the file.
-		bool buildTable_()
-			throw(Exception::FileNotFound);
+		/** Extract the data from the file.
+		 *  @throws BALL::Exception::FileNotFound
+		 */
+		bool buildTable_();
 
 		String									filename_;
 		StringHashMap<float>		table_;
@@ -151,10 +150,9 @@ namespace BALL
 		AssignChargeProcessor();
 
 		/** Detailled constructor.
-		 * 	If the file can not be found in the actual path, FileNotFound is thrown.
+		 *  @throws BALL::Exception::FileNotFound if the file can not be found in the actual path.
 		 */
-		AssignChargeProcessor(const String& filename)
-			throw(Exception::FileNotFound);
+		AssignChargeProcessor(const String& filename);
 		
     /** Start Method.
 		 *  The number of errors and the numbers of assignments are reset to 0.

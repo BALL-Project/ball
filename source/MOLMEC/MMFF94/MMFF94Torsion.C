@@ -84,7 +84,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool MMFF94Torsion::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0 ||
 				dynamic_cast<MMFF94*>(getForceField()) == 0) 

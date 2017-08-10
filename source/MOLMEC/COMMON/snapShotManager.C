@@ -386,7 +386,7 @@ namespace BALL
 	// snapshots has been taken, all snapshots so far are saved to disk The
 	// first snapshot taken (and with no other previous snapshots in a file)
 	// has index 1. 
-	void SnapShotManager::takeSnapShot() throw(File::CannotWrite)
+	void SnapShotManager::takeSnapShot()
 	{
 		if (system_ptr_ == 0) return;
 
@@ -580,7 +580,6 @@ namespace BALL
 
 	// This method writes all snapshots in memory to the snapshot file on disk
 	void SnapShotManager::flushToDisk()
-		throw(File::CannotWrite)
 	{
 		// if no snapshots are in main memory, then there is nothing to do
 		// also abort, if no trajectory file was set

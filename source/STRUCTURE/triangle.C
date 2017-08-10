@@ -81,7 +81,6 @@ namespace BALL
 
 
 	void Triangle::setPoint(Position i, TrianglePoint* vertex)
-		throw(Exception::IndexOverflow)
 	{
 		if (i > 3) {
 			throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
@@ -92,7 +91,6 @@ namespace BALL
 
 
 	TrianglePoint* Triangle::getPoint(Position i) const
-		throw(Exception::IndexOverflow)
 	{
 		if (i > 3) {
 			throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);

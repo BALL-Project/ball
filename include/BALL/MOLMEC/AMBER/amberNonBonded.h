@@ -103,9 +103,9 @@ namespace BALL
 		//@{
 
 		/**	Setup method.
+		 * @throws BALL::Exception::TooManyErrors
 		*/
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		virtual bool setup();
 
 
 		/** Setup this component according to the given options and store the ForceFieldParameters in par */
@@ -131,9 +131,9 @@ namespace BALL
 				This method is called by the force field whenever
 				 \link ForceField::update ForceField::update \endlink  is called. It is used
 				to recalculate the nonbonded pair list.
+				@throws BALL::Exception::TooManyErrors
 		*/
-		virtual void update()
-			throw(Exception::TooManyErrors);
+		virtual void update();
 
 
 		/** Update this component using the given atom-pairs only */
@@ -162,12 +162,12 @@ namespace BALL
 			;
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
+		 * @throws BALL::Exception::TooManyErrors
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
 			(const std::vector<std::pair<Atom*, Atom*> >& atom_vector,
 			 const LennardJones& lennard_jones,
-			 const Potential1210& hydrogen_bond)
-			throw(Exception::TooManyErrors);
+			 const Potential1210& hydrogen_bond);
 
 		//@}
 

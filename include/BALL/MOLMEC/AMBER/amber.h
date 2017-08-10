@@ -212,9 +212,9 @@ namespace BALL
 		//@{
 
 		/**	Force field specific setup
+		 * @throws BALL::Exception::TooManyErrors
 		*/
-		virtual bool specificSetup()
-			throw(Exception::TooManyErrors);
+		virtual bool specificSetup();
 
 		//@}
 		/**	@name Accessors specific to the AMBER force field

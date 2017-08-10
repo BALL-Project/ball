@@ -36,8 +36,9 @@ namespace BALL
 
 				/** Read receptor object.
 							@return Receptor* pointer to the read Receptor object
+							@throws BALL::Exception::ParseError
 				 */
-				Receptor* readReceptor() throw(Exception::ParseError);
+				Receptor* readReceptor();
 
 				/** Write receptor object (directly).
 							@param pointer to Receptor object
@@ -46,8 +47,9 @@ namespace BALL
 
 				/** Read receptor object.
 							@return Ligand* pointer to the read Ligand object
+							@throws BALL::Exception::ParseError
 				 */
-				Ligand* readLigand() throw(Exception::ParseError);
+				Ligand* readLigand();
 
 				/** Write Ligand object (directly).
 							@param pointer to Ligand object
@@ -66,8 +68,9 @@ namespace BALL
 
 				/** Read result objects.
 							@return vector of Result pointers
+							@throws BALL::Exception::ParseError
 				 */
-				vector<Result*> readResults() throw(Exception::ParseError);
+				vector<Result*> readResults();
 
 				/**	Close file.  */
 				void close();
@@ -82,8 +85,11 @@ namespace BALL
 				/**	@name GenericMolecule interface functions */
 				//@{
 
-				Molecule* read() throw (Exception::ParseError);
-				bool write(const Molecule& mol) throw (File::CannotWrite);
+				/// @throws BALL::Exception::ParseError
+				Molecule* read();
+
+				/// @throws BALL::File::CannotWrite
+				bool write(const Molecule& mol);
 
 				void setOutputParameters(Result::Method, String property_name, String& receptor_conf_UID, String method_description="");
 
@@ -196,17 +202,17 @@ namespace BALL
 				void writeFlexibility(const FlexDefinition &fd, QXmlStreamWriter &out);
 				void writeRotamericFlexibleResidue(Position idx, QXmlStreamWriter &out);
 				void writeFullyFlexibleResidue(Position idx, QXmlStreamWriter &out);
-				// receptor read
-				bool readReceptors_() throw(Exception::ParseError);
-				bool readReceptor_() throw(Exception::ParseError);
-				bool readProtein() throw(Exception::ParseError);
-				bool readResidue() throw(Exception::ParseError);
-				bool readPDBAtom() throw(Exception::ParseError);
-				// result read
-				bool readResults_() throw(Exception::ParseError);
-				bool readResult() throw(Exception::ParseError);
-				bool readSubResult() throw(Exception::ParseError);
-				bool readEntry() throw(Exception::ParseError);
+				// receptor read (might throw BALL::Exception::ParseError)
+				bool readReceptors_();
+				bool readReceptor_();
+				bool readProtein();
+				bool readResidue();
+				bool readPDBAtom();
+				// result read (might throw BALL::Exception::ParseError)
+				bool readResults_();
+				bool readResult();
+				bool readSubResult();
+				bool readEntry();
 				// result write
 				void writeResults(QXmlStreamWriter &out);
 				void writeResult(Result* result, QXmlStreamWriter &out);
@@ -217,28 +223,28 @@ namespace BALL
 				void writeMolecule(Molecule* mol, QXmlStreamWriter &out);
 				void writeAtom(Atom* at, QXmlStreamWriter &out);
 				void writeBond(Bond* b, QXmlStreamWriter &out);
-				// ligand read
-				bool readLigands() throw(Exception::ParseError);
-				bool readLigand_() throw(Exception::ParseError);
-				bool readMolecule() throw(Exception::ParseError);
-				bool readConformations(FlexibleMolecule* target) throw(Exception::ParseError);
-				bool readConformation(Conformation* conformation) throw(Exception::ParseError);
-				bool readCoordinates() throw(Exception::ParseError);
-				bool readFlexibility() throw(Exception::ParseError);
-				bool readFlexibilities() throw(Exception::ParseError);
-				bool readFullFlexResidue() throw(Exception::ParseError);
-				bool readRotamericResidue() throw(Exception::ParseError);
-				bool readAtoms() throw(Exception::ParseError);
-				bool readAtom() throw(Exception::ParseError);
-				bool readBonds() throw(Exception::ParseError);
-				bool readBond() throw(Exception::ParseError);
+				// ligand read (might throw BALL::Exception::ParseError)
+				bool readLigands();
+				bool readLigand_();
+				bool readMolecule();
+				bool readConformations(FlexibleMolecule* target);
+				bool readConformation(Conformation* conformation);
+				bool readCoordinates();
+				bool readFlexibility();
+				bool readFlexibilities();
+				bool readFullFlexResidue();
+				bool readRotamericResidue();
+				bool readAtoms();
+				bool readAtom();
+				bool readBonds();
+				bool readBond();
 
-				// building
-				void buildLigand() throw(Exception::ParseError);
-				void buildMolecule() throw(Exception::ParseError);
-				void buildReceptor() throw(Exception::ParseError);
-				void buildProtein() throw(Exception::ParseError);
-				void buildResidue() throw(Exception::ParseError);
+				// building (might throw BALL::Exception::ParseError)
+				void buildLigand();
+				void buildMolecule();
+				void buildReceptor();
+				void buildProtein();
+				void buildResidue();
 
 				// helper methods
 				bool retrieveInt(const String& s, int &out);

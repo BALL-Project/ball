@@ -98,7 +98,6 @@ namespace BALL
 		}
 
 		void DockResult::sortBy(Index scoring_index)
-			throw(Exception::IndexOverflow)
 		{
 			if (scoring_index >= (Index)scorings_.size())
 			{
@@ -116,7 +115,6 @@ namespace BALL
 
 		// i -> score row, j -> scoring column
 		float DockResult::operator()(Position i, Position j)
-			throw(Exception::IndexOverflow)
 		{
 			// check if i and j are valid
 			if (j >= scorings_.size())
@@ -143,7 +141,6 @@ namespace BALL
 
 		// returns sorted scores of scoring_ i
 		const vector < ConformationSet::Conformation > DockResult::getScores(Position i) const
-			throw(Exception::IndexOverflow)
 		{
 			if (i >= scorings_.size())
 			{
@@ -162,7 +159,6 @@ namespace BALL
 
 		//returns name of scoring function of scoring_ i
 		const String& DockResult::getScoringName(Position i) const
-			throw(Exception::IndexOverflow)
 		{
 			if (i >= scorings_.size())
 			{
@@ -174,7 +170,6 @@ namespace BALL
 
 		//returns options of scoring function of scoring_ i
 		const Options& DockResult::getScoringOptions(Position i) const
-			throw(Exception::IndexOverflow)
 		{
 			if (i >= scorings_.size())
 			{
@@ -211,7 +206,6 @@ namespace BALL
 
 		/// delete i-th Scoring_ of vector scorings_
 		void DockResult::deleteScoring(Position i)
-			throw(Exception::IndexOverflow)
 		{
 			if (i >= scorings_.size())
 			{

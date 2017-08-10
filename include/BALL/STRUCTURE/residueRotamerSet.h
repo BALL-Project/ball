@@ -181,12 +181,15 @@ namespace BALL
 		Size getNumberOfTorsions() const;
 
 		/**	Set the number of valid torsions for this side chain.
-				\exception Exception::IndexOverflow if the number of torsions is above four.
+				\exception BALL::Exception::IndexOverflow if the number of torsions is above four.
 		*/
-		void setNumberOfTorsions(Size number_of_torsions) throw(Exception::IndexOverflow);
+		void setNumberOfTorsions(Size number_of_torsions);
 
-		///	Random access operator for single rotamers.
-		const Rotamer& operator [] (Position index)	const throw(Exception::IndexOverflow);
+		/** Random access operator for single rotamers.
+				\exception BALL::Exception::IndexOverflow
+		 */
+
+		const Rotamer& operator [] (Position index)	const;
 
 		/// 
 		bool hasTorsionPhi() const;

@@ -35,7 +35,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberBend::setup()
-		throw(Exception::TooManyErrors)
 	{
 		// clear old bends:
 		bend_.clear();

@@ -180,7 +180,6 @@ namespace BALL
 
 
 	void SnapShot::takeSnapShot(const System& system)
-		throw(Exception::OutOfMemory)
 	{
 		number_of_atoms_ = system.countAtoms();
 
@@ -232,7 +231,6 @@ namespace BALL
 
 
 	void SnapShot::getAtomPositions(const System& system)
-		throw(Exception::OutOfMemory)
 	{
 		// obtain the number of atoms
 		number_of_atoms_ = system.countAtoms();
@@ -269,7 +267,6 @@ namespace BALL
 
 
 	void SnapShot::getAtomVelocities(const System& system)
-		throw(Exception::OutOfMemory)
 	{
 		number_of_atoms_ = system.countAtoms();
 		atom_velocities_.resize(number_of_atoms_);
@@ -302,7 +299,6 @@ namespace BALL
 
 
 	void SnapShot::getAtomForces(const System& system)
-		throw(Exception::OutOfMemory)
 	{
 		number_of_atoms_ = system.countAtoms();
 		atom_forces_.resize(number_of_atoms_);

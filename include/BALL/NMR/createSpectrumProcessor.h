@@ -68,12 +68,11 @@ namespace BALL
 				Create a default instance of CreateSpectrumProcessor.
 				Calls  \link init init \endlink  to read default values from a configuration
 				file, see  \link init init \endlink  for details.
-				@exception FileNotFound if the INI file does not exist
-				@exception ParseError if the contents of the file could not be parsed
+				@exception BALL::Exception::FileNotFound if the INI file does not exist
+				@exception BALL::Exception::ParseError if the contents of the file could not be parsed
 		*/	
-		CreateSpectrumProcessor()
-			throw(Exception::FileNotFound, Exception::ParseError);
-		
+		CreateSpectrumProcessor();
+
 		/**	Destructor
 		*/
 		virtual ~CreateSpectrumProcessor();
@@ -88,8 +87,8 @@ namespace BALL
 				information on ignored and averaged atoms.
 				The default filename is <tt>NMR/StandardSpectrum.ini</tt> 
 				in the BALL data path.
-				@exception FileNotFound if the INI file does not exist
-				@exception ParseError if the contents of the file could not be parsed
+				@exception BALL::Exception::FileNotFound if the INI file does not exist
+				@exception BALL::Exception::ParseError if the contents of the file could not be parsed
 		*/
 		virtual void init();
 
@@ -98,11 +97,10 @@ namespace BALL
 				information on ignored and averaged atoms.
 				The default filename is <tt>NMR/StandardSpectrum.ini</tt> 
 				in the BALL data path.
-				@exception FileNotFound if the INI file does not exist
-				@exception ParseError if the contents of the file could not be parsed
+				@exception BALL::Exception::FileNotFound if the INI file does not exist
+				@exception BALL::Exception::ParseError if the contents of the file could not be parsed
 		*/
-		virtual void init(const String& filename)
-			throw(Exception::ParseError, Exception::FileNotFound);
+		virtual void init(const String& filename);
 
 		/**	Start method.
 		*/

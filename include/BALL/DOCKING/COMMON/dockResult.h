@@ -97,11 +97,11 @@ namespace BALL
 				ConformationSet* getConformationSet()
 					throw();
 
-				/*  Sets scoring flag by which all scores are sorted displayed
+				/** Sets scoring flag by which all scores are sorted displayed
 						a negative index corresponds to sorting by snapshot index
+						@throws BALL::Exception::IndexOverflow
 				 */
-				 void sortBy(Index scoring_index)
-					throw(Exception::IndexOverflow);
+				 void sortBy(Index scoring_index);
 
 				/*  Get the number of the scoring by which all scores are sorted displayed
 				 */
@@ -110,24 +110,24 @@ namespace BALL
 
 				/** Returns score i of the scoring j in respect of the current sorting
 				 *  indicated by the flag \link DockResult::sorted_by_ sorted_by_ \endlink.
+				 *  @throws BALL::Exception::IndexOverflow
 				 */
-				float operator()(Position i, Position j)
-					throw(Exception::IndexOverflow);
+				float operator()(Position i, Position j);
 
 				/** Returns the scores of \link DockResult::Scoring_ scoring \endlink i.
+				    @throws BALL::Exception::IndexOverflow
 				*/
-				const vector < ConformationSet::Conformation > getScores(Position i) const
-					throw(Exception::IndexOverflow);
+				const vector < ConformationSet::Conformation > getScores(Position i) const;
 
 				/** Returns the name of scoring function of \link DockResult::Scoring_ scoring \endlink i.
+				    @throws BALL::Exception::IndexOverflow
 				*/
-				const String& getScoringName(Position i) const
-					throw(Exception::IndexOverflow);
+				const String& getScoringName(Position i) const;
 
 				/** Returns the scoring function options of \link DockResult::Scoring_ scoring \endlink i.
+				    @throws BALL::Exception::IndexOverflow
 				*/
-				const Options& getScoringOptions(Position i) const
-					throw(Exception::IndexOverflow);
+				const Options& getScoringOptions(Position i) const;
 
 				/** Returns the number of scorings.
 				*/
@@ -143,9 +143,9 @@ namespace BALL
 					throw();
 
 				/** Deletes Scoring_ i of vector \link DockResult::scorings_ scorings_ \endlink.
+				    @throws BALL::Exception::IndexOverflow
 				*/
-				void deleteScoring(Position i)
-					throw(Exception::IndexOverflow);
+				void deleteScoring(Position i);
 
 				//@}
 

@@ -138,15 +138,15 @@ namespace BALL
 		*/
 		Size getNumberOfAtomTypes() const;
 
-		/** Get atom decriptions by index 
+		/** Get atom decriptions by index
+		    @throws BALL::Exception::IndexOverflow
 		*/
-		const SolventAtomDescriptor& getAtomDescriptor(Position index) const 
-			throw(Exception::IndexOverflow);
+		const SolventAtomDescriptor& getAtomDescriptor(Position index) const;
 		
 		/** Get atom decriptions by index 
+		    @throws BALL::Exception::IndexOverflow
 		*/
-		SolventAtomDescriptor& getAtomDescriptor(Position index) 
-			throw(Exception::IndexOverflow);
+		SolventAtomDescriptor& getAtomDescriptor(Position index);
 
 		//@}
 		/** @name Predicates 

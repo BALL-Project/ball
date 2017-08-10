@@ -46,15 +46,23 @@ namespace BALL
 		typedef std::vector<Vector3> PointVector;
 		typedef std::pair<Matrix4x4, double> Result;
 
-		static Result computeTransformation(const AtomBijection& ab)
-			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+		/**
+		 * @throws BALL::RMSDMinimizer::IncompatibleCoordinateSets
+		 * @throws BALL::RMSDMinimizer::TooFewCoordinates
+		 */
+		static Result computeTransformation(const AtomBijection& ab);
 
-		static Result computeTransformation(const PointVector& X, const PointVector& Y)
-			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
+		/**
+		 * @throws BALL::RMSDMinimizer::IncompatibleCoordinateSets
+		 * @throws BALL::RMSDMinimizer::TooFewCoordinates
+		 */
+		static Result computeTransformation(const PointVector& X, const PointVector& Y);
 
-		static double minimizeRMSD(AtomContainer& a, AtomContainer& b)
-			throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates);
-
+		/**
+		 * @throws BALL::RMSDMinimizer::IncompatibleCoordinateSets
+		 * @throws BALL::RMSDMinimizer::TooFewCoordinates
+		 */
+		static double minimizeRMSD(AtomContainer& a, AtomContainer& b);
  };
 
 }	// namespace BALL

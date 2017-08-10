@@ -53,7 +53,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmTorsion::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{

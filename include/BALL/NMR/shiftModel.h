@@ -106,18 +106,18 @@ namespace BALL
 		ModuleList& getModuleList();
 
 		/**	Set the parameter filename.
+		 * @throws BALL::Exception::FileNotFound
 		*/
-		void setFilename(const String& filename)
-			throw(Exception::FileNotFound);
+		void setFilename(const String& filename);
 
 		/**	Return the parameter filename.
 		*/
 		const String& getFilename() const;
 		
 		/**	Register a new module type.
+		 * @throws BALL::Exception::NullPointer
 		*/
-		void registerModule(const String& name, CreateMethod method) 
-			throw(Exception::NullPointer);
+		void registerModule(const String& name, CreateMethod method);
 
 		/**	Unregister a module type.
 		*/
@@ -182,9 +182,9 @@ namespace BALL
 				This method assumes that object has a valid	parameter file assigned.
 				It sets {\tt valid_} to <b>  true </b> if it could create a shift model 
 				from the contents of the parameter file.
+				@throws BALL::Exception::FileNotFound
 		*/
-		bool init_()
-			throw(Exception::FileNotFound);
+		bool init_();
 
 		/*_	Create a ShiftModule from a symbolic name.
 				This method create a shift module from the symbolic

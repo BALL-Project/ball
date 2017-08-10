@@ -72,8 +72,7 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup()
-			throw(Exception::TooManyErrors);
+		virtual bool setup();
 
 		//@}
 		/**	@name	Accessors	
@@ -134,9 +133,9 @@ namespace BALL
 				this method. It is called for each component of a force field
 				each time  \link ForceField::update ForceField::update \endlink  is called.
 				The default implementation does exactly nothing.
+				@throws BALL::Exception::TooManyErrors
 		*/
-		virtual void update()
-			throw(Exception::TooManyErrors);
+		virtual void update();
 
 		/** interface to ScoringComponent */
 		double updateScore();

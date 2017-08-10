@@ -36,7 +36,6 @@ namespace BALL
 			 double distance,
 			 bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type)
-			throw(Exception::OutOfMemory)
 		{
 #ifdef BALL_BENCHMARK
 	Timer t;

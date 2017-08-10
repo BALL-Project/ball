@@ -100,7 +100,6 @@ namespace BALL
 	//and their TypeDefinition in corresponding vector
 	//and store a GAFFCESParser for every CESstring
 	void GAFFTypeProcessor::parseAtomtypeTableFile_()
-		throw(Exception::FileNotFound)
 	{
 		StringHashMap<GAFFCESParser*>::Iterator parser_it = ces_parsers_.begin();
 		for (; parser_it != ces_parsers_.end(); ++parser_it)

@@ -730,7 +730,6 @@ namespace BALL
 	}
 
 	void SmartsParser::parse(const String& s)
-		throw(Exception::ParseError)
 	{
 		// clear out stuff from previous run
 		clear();

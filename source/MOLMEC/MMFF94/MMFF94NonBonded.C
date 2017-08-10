@@ -138,7 +138,6 @@ namespace BALL
 	}
 
 	void MMFF94NonBonded::update()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -186,7 +185,6 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool MMFF94NonBonded::setup()
-		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0 ||
 				!dynamic_cast<MMFF94*>(getForceField()))

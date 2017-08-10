@@ -329,12 +329,12 @@ namespace BALL
 				 *  Note: 
 				 *  The spline or value can be accessed 
 				 *  by the {\tt operator () } given __not__ the property-value, but the property name. 
-				 *  
+				 *
+				 *  @throws BALL::Exception::FileNotFound
 				 */
 				ShiftHyperSurface_(String filename, String /* atomtype */,
 													 String firstproperty, String secondproperty, 
-													 int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL)
-					throw(Exception::FileNotFound);  
+													 int verbosity = EmpiricalHSShiftProcessor::VERBOSITY_LEVEL_CRITICAL);
 
 				/**	Destructor.
 				*/

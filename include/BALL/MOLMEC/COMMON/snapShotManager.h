@@ -184,9 +184,9 @@ class BALL_EXPORT SnapShotManager
 			it in main memory. If there is not sufficient space, the snapshots
 			collected so far are flushed to hard disk. The first snapshot taken
 			has index 1.
-			@throw File::CannotWrite thrown if the snapshot could not be flushed to disk
+			@throw BALL::File::CannotWrite thrown if the snapshot could not be flushed to disk
 	*/
-	virtual void takeSnapShot() throw(File::CannotWrite);
+	virtual void takeSnapShot();
 
 	/** Read a certain SnapShot from a TrajectoryFile. This method tries to
 			read SnapShot number <b>number</b> from the file
@@ -217,8 +217,8 @@ class BALL_EXPORT SnapShotManager
 	virtual bool applyLastSnapShot();
 
 	/// This method writes all snapshots taken so far to hard disk
-	/// @throw File::CannotWrite thrown if the snapshots could not be flushed to disk
-	virtual void flushToDisk() throw(File::CannotWrite);
+	/// @throw BALL::File::CannotWrite thrown if the snapshots could not be flushed to disk
+	virtual void flushToDisk();
 
 	///
 	Size getNumberOfSnapShotsInBuffer() { return snapshot_buffer_.size(); }

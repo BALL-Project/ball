@@ -53,7 +53,6 @@ namespace BALL
 	*/
 
 	GeneralizedBornModel::GeneralizedBornModel()
-		throw(Exception::FileNotFound)
 		: ac_(0),
 			born_radii_(),
 			pair_list_(),
@@ -125,7 +124,6 @@ namespace BALL
 
 
 	bool GeneralizedBornModel::setup(const AtomContainer& ac)
-		throw(Exception::FileNotFound)
 	{
 		
 		Timer timer;
@@ -448,7 +446,6 @@ namespace BALL
 
 
 	bool GeneralizedBornModel::readScalingFactors(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 
 		Path path;

@@ -124,14 +124,16 @@ namespace BALL
 			/** Get the input conformation of the result for a specific Ligand.
 					@param  pointer to Ligand
 					@return pointer to input Conformation
+					@throws BALL::Exception::GeneralException
 			 */
-			Conformation* getInputConformer(Ligand* lig) throw(Exception::GeneralException);
+			Conformation* getInputConformer(Ligand* lig);
 
 			/** Get the first output conformation of the result for a specific Ligand.
 					@param  pointer to Ligand
 					@return  pointer to first output Conformation
+					@throws BALL::Exception::GeneralException
 			 */
-			Conformation* getFirstOutputConformation(Ligand* lig) throw(Exception::GeneralException);
+			Conformation* getFirstOutputConformation(Ligand* lig);
 
 			/** Get the all output conformation of the result for a specific Ligand.
 					@param  pointer to Ligand

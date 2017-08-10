@@ -59,9 +59,8 @@ namespace BALL
 		///
 		bool isInitialized() { return is_initialized_;}
 
-		///
-		bool readParameters(Parameters& p, const String& section)
-			throw(Exception::FileNotFound);
+		/// @throws BALL::Exception::FileNotFound
+		bool readParameters(Parameters& p, const String& section);
 
 		///
 		void setEquivalences(const MMFF94AtomTypeEquivalences& equi) { equiv_ = &equi;}
@@ -336,9 +335,10 @@ namespace BALL
 		bool assignParameters(Position stretch_bend_type, const Atom& atom1, const Atom& atom2, const Atom& atom3, 
 											 double& kba_ijk, double& kba_kji) const;
 
-		/// read parameters for stretch-bends and for assignment by periodic table row
-		bool readEmpiricalParameters(Parameters& p, const String& section)
-			throw(Exception::FileNotFound);
+		/** read parameters for stretch-bends and for assignment by periodic table row
+		 *  @throws BALL::Exception::FileNotFound
+		 */
+		bool readEmpiricalParameters(Parameters& p, const String& section);
 		
 		//@}
 
@@ -549,9 +549,8 @@ namespace BALL
 		*/
 		double getPartialCharge(Position at1, Position at2, Position bt) const;
 		
-		///
-		bool readEmpiricalParameters(Parameters& p, const String& section)
-			throw(Exception::FileNotFound);
+		/// @throws BALL::Exception::FileNotFound
+		bool readEmpiricalParameters(Parameters& p, const String& section);
 
 		///
 		double getPhi(Index atom_type) const;

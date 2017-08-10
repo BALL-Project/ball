@@ -304,7 +304,7 @@ namespace BALL
 		return number_of_torsions_;
 	}
 
-	const Rotamer& ResidueRotamerSet::operator [] (Position index) const throw(Exception::IndexOverflow)
+	const Rotamer& ResidueRotamerSet::operator [] (Position index) const
 	{
   	if (index >= rotamers_.size())
     {
@@ -315,7 +315,6 @@ namespace BALL
 
 	// set the number of torsions
 	void ResidueRotamerSet::setNumberOfTorsions(Size number_of_torsions)
-		throw(Exception::IndexOverflow)
 	{
 		if (number_of_torsions > 4)
 		{

@@ -89,7 +89,6 @@ namespace BALL
 	}
 
 	void ShiftModel::setFilename(const String& filename)
-		throw(Exception::FileNotFound)
 	{
 		// set the parameter filename 
 		parameters_.setFilename(filename);
@@ -139,7 +138,6 @@ namespace BALL
 	}
 
 	bool ShiftModel::init_()
-		throw(Exception::FileNotFound)
 	{
 		// inivalidate object
 		valid_ = false;
@@ -194,8 +192,7 @@ namespace BALL
 	}
 
 	void ShiftModel::registerModule(const String& name, CreateMethod create_method)
-		throw(Exception::NullPointer)
-	{	
+	{
 		// check that we did not get something strange
 		if (create_method == 0)
 		{

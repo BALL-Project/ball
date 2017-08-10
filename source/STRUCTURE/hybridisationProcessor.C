@@ -63,7 +63,7 @@ namespace BALL
 	{
 	}
 
-	HybridisationProcessor::HybridisationProcessor(const String& smarts_file_name, const String& gaff_angle_file_name)	throw(Exception::FileNotFound)
+	HybridisationProcessor::HybridisationProcessor(const String& smarts_file_name, const String& gaff_angle_file_name)
 		:	UnaryProcessor<AtomContainer>(),
 			options(),
 			num_hybridisation_states_(0)
@@ -523,15 +523,13 @@ if (!openNbr)
 		return Processor::BREAK;
 	}
 
-	void HybridisationProcessor::setAtomTypeSmarts(const String& file_name) 
-		throw(Exception::FileNotFound)
+	void HybridisationProcessor::setAtomTypeSmarts(const String& file_name)
 	{
 		atom_type_smarts_.clear();
 		valid_ = readAtomTypeSmartsFromFile_(file_name);
 	}
 	
 	bool HybridisationProcessor::readAndInitBondAnglesFromFile_(const String& file_name) 
-		throw (Exception::FileNotFound)
 	{
 		// test file or set default file
 		String filename(file_name);
@@ -623,7 +621,6 @@ if (!openNbr)
 	
 
 	bool HybridisationProcessor::readAtomTypeSmartsFromFile_(const String& file_name) 
-		throw(Exception::FileNotFound)
 	{
 		// test file or set default file
 		String filename(file_name);

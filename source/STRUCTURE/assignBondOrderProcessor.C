@@ -627,7 +627,6 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 
 
 	bool AssignBondOrderProcessor::readAtomPenalties_()
-		throw(Exception::FileNotFound())
 	{
 		// Open parameter file
 		Path    path;
@@ -1297,7 +1296,6 @@ cout << " ~~~~~~~~ added hydrogen dump ~~~~~~~~~~~~~~~~" << endl;
 
 
 	const System& AssignBondOrderProcessor::getSolution(Position i)
-		throw(Exception::IndexOverflow)
 	{
 		if (i >= solutions_.size())
 		{

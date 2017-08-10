@@ -47,7 +47,7 @@ namespace BALL
 		min_bond_lengths_ = bbp.min_bond_lengths_;
 	}
 
-	BuildBondsProcessor::BuildBondsProcessor(const String& file_name)	throw(Exception::FileNotFound)
+	BuildBondsProcessor::BuildBondsProcessor(const String& file_name)
 		:	UnaryProcessor<AtomContainer>(),
 			options(),
 			num_bonds_(0),
@@ -431,7 +431,7 @@ namespace BALL
 		return order;
 	}
 
-	void BuildBondsProcessor::setBondLengths(const String& file_name) throw(Exception::FileNotFound)
+	void BuildBondsProcessor::setBondLengths(const String& file_name)
 	{
 		bond_lengths_.clear();
 		min_bond_lengths_.clear();
@@ -440,7 +440,7 @@ namespace BALL
 		readBondLengthsFromFile_(file_name);
 	}
 
-	void BuildBondsProcessor::readBondLengthsFromFile_(const String& file_name) throw(Exception::FileNotFound)
+	void BuildBondsProcessor::readBondLengthsFromFile_(const String& file_name)
 	{
 		// test file or set default file
 		String filename(file_name);

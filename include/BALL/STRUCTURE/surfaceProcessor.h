@@ -96,9 +96,10 @@ namespace BALL
 		/**
 		 * Sets the radius of the used probe sphere
 		 *
-		 * @throw Exception::OutOfRange Specifying a radius <= 0 is illegal
+		 * @throw BALL::Exception::OutOfRange Specifying a radius <= 0 is illegal
 		 */
-		void setProbeRadius(double radius) throw(Exception::OutOfRange){
+		void setProbeRadius(double radius)
+		{
 			if(radius <= 0.0) {
 				throw Exception::OutOfRange(__FILE__, __LINE__);
 			}

@@ -74,9 +74,9 @@ namespace BALL
 		//@{
 		
 		/**	Set the parameter filename.
+		 *  @throws BALL::Exception::FileNotFound
 		*/
-		void setFilename(const String& filename)
-			throw(Exception::FileNotFound);
+		void setFilename(const String& filename);
 
 		/**	Return the parameter filename.
 		*/
@@ -193,9 +193,9 @@ namespace BALL
 				This method assumes that object has a valid	parameter file assigned.
 				It sets {\tt valid_} to <b>  true </b> if it could create a shift model 
 				from the contents of the parameter file.
+				@throws BALL::Exception::FileNotFound
 		*/
-		bool init_()
-			throw(Exception::FileNotFound);
+		bool init_();
 
 		/*_ The spectrum peaks
 		 * */

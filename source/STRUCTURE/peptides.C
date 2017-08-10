@@ -140,7 +140,6 @@ namespace BALL
 		}
 		
 		void NameConverter::readConversionTable_()
-			throw (Exception::FileNotFound())
 		{
 			// Open parameter file
 			Path path;
@@ -207,7 +206,6 @@ namespace BALL
 		}
 		
 		void NameConverter::readPseudoAtomsConversionTable_()
-			throw (Exception::FileNotFound())
 		{
 			// Open parameter file
 			Path path;

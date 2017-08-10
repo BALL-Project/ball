@@ -83,9 +83,9 @@ namespace BALL
 		
 		/** Apply the current model to the System S and prepare everything for a calculation.
 		 		@exception NullPointer if FragmentDB is not set
+		 		@throws BALL::Exception::NullPointer
 		 */
-		void apply(System &S)
-			throw(Exception::NullPointer);
+		void apply(System &S);
 
 		///
 		void setFragmentDB(const FragmentDB* db)

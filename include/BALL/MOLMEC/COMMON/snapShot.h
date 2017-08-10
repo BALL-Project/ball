@@ -121,9 +121,9 @@ namespace BALL
 		/** Take a SnapShot from a system. Copy all positions, velocities and
 				forces from the System <tt>system</tt> to this instance of SnapShot.
 				@param system the System from which to take the data
+				@throws BALL::Exception::OutOfMemory
 		*/
-		void takeSnapShot(const System& system)
-			throw(Exception::OutOfMemory);
+		void takeSnapShot(const System& system);
 
 		/** Apply the data contained in a SnapShot to a System. Copy all
 				available data to the system. <b>Note</b> that some trajectory file
@@ -137,9 +137,9 @@ namespace BALL
 		/** Read all atom positions from a System and store them in this
 				instance of SnapShot.
 				@param system the System from which data will be read
+				@throws BALL::Exception::OutOfMemory
 		*/
-		void getAtomPositions(const System& system)
-			throw(Exception::OutOfMemory);
+		void getAtomPositions(const System& system);
 
 		/** Set all Atom positions of a System to the values stored in this
 				instance of SnapShot.
@@ -150,9 +150,9 @@ namespace BALL
 		/** Read all atom velocities from a System and store them in this
 				instance of SnapShot.
 				@param system the System from which data will be read
+				@throws BALL::Exception::OutOfMemory
 		*/
-		void getAtomVelocities(const System& system)
-			throw(Exception::OutOfMemory);
+		void getAtomVelocities(const System& system);
 
 		/** Set all Atom velocities of a System to the values stored in this
 				instance of SnapShot.
@@ -163,9 +163,9 @@ namespace BALL
 		/** Read all atom forces from a System and store them in this
 				instance of SnapShot.
 				@param system the System from which data will be read
+				@throws BALL::Exception::OutOfMemory
 		*/
-		void getAtomForces(const System& system)
-			throw(Exception::OutOfMemory);
+		void getAtomForces(const System& system);
 
 		/** Set all Atom forces of a System to the values stored in this
 				instance of SnapShot.
