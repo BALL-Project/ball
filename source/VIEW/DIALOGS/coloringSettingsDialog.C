@@ -344,7 +344,6 @@ namespace BALL
 
 
 		ColorProcessor* ColoringSettingsDialog::createColorProcessor(ColoringMethod method) const
-			throw(Exception::InvalidOption)
 		{
 			ColorProcessor* color_processor = 0;
 

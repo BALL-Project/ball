@@ -304,7 +304,6 @@ namespace BALL
 		}
 
 		Vector3 StageSettings::getTextureUpDirection_()
-			throw(Exception::InvalidFormat)
 		{
 			return Vector3(up_direction_x->text().toFloat(),
 				 			   up_direction_y->text().toFloat(),
@@ -320,7 +319,6 @@ namespace BALL
 
 
 		float StageSettings::getUser2ScreenDistance_()
-			throw(Exception::InvalidFormat)
 		{
 			return screen_distance_lineEdit->text().toFloat();
 		}
@@ -331,7 +329,6 @@ namespace BALL
 		}
 
 		float StageSettings::getUserEyeDistance_()
-			throw(Exception::InvalidFormat)
 		{
 			return eye_distance_lineEdit->text().toFloat();
 		}
@@ -342,7 +339,6 @@ namespace BALL
 		}
 		
 		float StageSettings::getUserEyeLevel_()
-			throw(Exception::InvalidFormat)
 		{
 			return eye_level_lineEdit->text().toFloat();
 		}

@@ -114,7 +114,6 @@ namespace BALL
 		}
 
 		void Stage::Material::persistentWrite(PersistenceManager& pm, const char* name) const
-			throw(Exception::GeneralException)
 		{
 			pm.writeObjectHeader(this, name);
 				// ambient
@@ -133,7 +132,6 @@ namespace BALL
 		}
 		
 		void Stage::Material::persistentRead(PersistenceManager& pm)
-			throw(Exception::GeneralException)
 		{
 			String color;
 

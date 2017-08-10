@@ -46,9 +46,9 @@ class BALL_VIEW_EXPORT STLRenderer
 
 	/** Detailed constructor.
 			\param name The name of the file we will create
+			\exception BALL::Exception::FileNotFound
 	 */
-	STLRenderer(const String& name)
-		throw(Exception::FileNotFound);
+	STLRenderer(const String& name);
 	
 	/// Destructor.
 	virtual ~STLRenderer();
@@ -63,9 +63,9 @@ class BALL_VIEW_EXPORT STLRenderer
 
 	/** Sets the name of the file we will create.
 			\param name The file name
+			\exception BALL::Exception::FileNotFound
 	 */
-	void setFileName(const String& name)
-		throw(Exception::FileNotFound);
+	void setFileName(const String& name);
 
 
 	/** Converts a Vector3 into a String in VRML format as stl works in the same perspektive.

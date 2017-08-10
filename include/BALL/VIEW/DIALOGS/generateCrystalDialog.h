@@ -64,8 +64,8 @@ namespace BALL
 				///
 				//void checkMenu(MainControl& mc);
 				
-				///
-				bool initSpaceGroupList() throw(Exception::FileNotFound);
+				/// @throws BALL::Exception::FileNotFound
+				bool initSpaceGroupList();
 				
 				///
 				bool generate();

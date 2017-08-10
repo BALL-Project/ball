@@ -263,8 +263,7 @@ namespace BALL
 		}
 
 	  void ServerWidget::BALLViewServer::sendObject()
-				throw(ServerWidget::NotCompositeObject)
-    {
+	{
 			output_("Server: receiving object ... \n");
 
 			unsigned long object_handle;

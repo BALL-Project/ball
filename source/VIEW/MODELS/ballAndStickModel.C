@@ -73,7 +73,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::setBallRadius(const float radius)
-			throw(Exception::OutOfRange)
 		{
 			// radius can never be lower or equal 0
 			if (radius <= (float)0)
@@ -85,7 +84,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::setStickRadius(const float radius)
-			throw(Exception::OutOfRange)
 		{
 			// radius can never be lower or equal 0
 			if (radius <= (float)0)
@@ -385,7 +383,6 @@ namespace BALL
 		}
 
 		void AddBallAndStickModel::renderDashedBond_(const Bond& bond, Vector3 n)
-			throw(Exception::DivisionByZero)
 		{
 			const Atom& a1 = *bond.getFirstAtom();
 			const Atom& a2 = *bond.getSecondAtom();

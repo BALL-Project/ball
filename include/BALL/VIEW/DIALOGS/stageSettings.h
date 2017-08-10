@@ -150,30 +150,26 @@ namespace BALL
 
 			private:
 			
-			///
-			Vector3 getTextureUpDirection_()
-				throw(Exception::InvalidFormat);
+			/// @throws BALL::Exception::InvalidFormat
+			Vector3 getTextureUpDirection_();
 			
 			///
 			void setTextureUpDirection_(const Vector3& tud);
 
-			///
-			float getUser2ScreenDistance_()
-				throw(Exception::InvalidFormat);
+			/// @throws BALL::Exception::InvalidFormat
+			float getUser2ScreenDistance_();
 			
 			///
 			void setUser2ScreenDistance_(const float& s2u);
 
-			///
-			float getUserEyeLevel_()
-				throw(Exception::InvalidFormat);
+			/// @throws BALL::Exception::InvalidFormat
+			float getUserEyeLevel_();
 			
 			///
 			void setUserEyeLevel_(const float& s2u);
 			
-			///
-			float getUserEyeDistance_()
-				throw(Exception::InvalidFormat);
+			/// @throws BALL::Exception::InvalidFormat
+			float getUserEyeDistance_();
 			
 			///
 			void setUserEyeDistance_(const float& s2u);

@@ -240,7 +240,6 @@ namespace BALL
 
 		// =====================================================
 		void MDSimulationThread::run()
-			throw(Exception::NullPointer)
 		{
 			if (main_control_ == 0) return;
 
@@ -392,7 +391,6 @@ namespace BALL
 		
 		/// 
 		void DockingThread::run()
-			throw(Exception::NullPointer)
 		{
 				if (dock_alg_ == 0 ||
 						main_control_ == 0)

@@ -92,8 +92,6 @@ namespace BALL
 		}
 
 		void GLDisplayList::startDefinition()
-			throw(GLDisplayList::NestedDisplayList, GLDisplayList::NoDisplayListAvailable, 
-						GLDisplayList::DisplayListRedeclaration)
 		{
 			CHECK_GL_ERROR
 			if (GL_list_ != 0)

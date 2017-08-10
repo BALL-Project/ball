@@ -49,9 +49,9 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 
 	/** Detailed constructor.
 			\param name The name of the file we will create
+			\exception BALL::Exception::FileNotFound
 	 */
-	VRMLRenderer(const String& name)
-		throw(Exception::FileNotFound);
+	VRMLRenderer(const String& name);
 	
 	/// Destructor.
 	virtual ~VRMLRenderer();
@@ -66,9 +66,9 @@ class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 
 	/** Sets the name of the file we will create.
 			\param name The file name
+			\exception BALL::Exception::FileNotFound
 	 */
-	void setFileName(const String& name)
-		throw(Exception::FileNotFound);
+	void setFileName(const String& name);
 
 	/** Converts a ColorRGBA into a String in VRMLRay format.
 	 */

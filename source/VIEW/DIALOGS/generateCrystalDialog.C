@@ -52,7 +52,6 @@ namespace BALL
 		}
 		
 		bool GenerateCrystalDialog::initSpaceGroupList()
-		throw(Exception::FileNotFound)
 		{
 			if (generator_)
 			{

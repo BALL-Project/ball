@@ -95,9 +95,9 @@ namespace BALL
 					BALLViewServer(ServerWidget* parent, Size port, bool restart = true);
 
 					/** private methodes used for reacting to client requests.
+					 * @throws BALL::VIEW::ServerWidget::NotCompositeObject
 					*/
-					void sendObject()
-						throw(NotCompositeObject);
+					void sendObject();
 
 					virtual void run();
 

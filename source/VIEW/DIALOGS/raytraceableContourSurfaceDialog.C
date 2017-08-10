@@ -221,7 +221,6 @@ float RaytraceableContourSurfaceDialog::getValue_(const QAbstractSlider* slider)
 
 
 float RaytraceableContourSurfaceDialog::getValue_(const QLineEdit* edit) const
-	throw(Exception::InvalidFormat)
 {
 	return (edit->text()).toFloat();
 }

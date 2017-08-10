@@ -77,8 +77,8 @@ namespace BALL
 
 			String getValue_(const QCheckBox* box) const;
 
-			float getValue_(const QLineEdit* edit) const
-				throw(Exception::InvalidFormat);
+			/// @throws BALL::Exception::InvalidFormat
+			float getValue_(const QLineEdit* edit) const;
 
 			CharmmFF* charmm_;
 		};

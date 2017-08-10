@@ -217,7 +217,6 @@ namespace BALL
 		}
 
 		float CharmmConfigurationDialog::getValue_(const QLineEdit* edit) const
-			throw(Exception::InvalidFormat)
 		{
 			return ascii(edit->text()).toFloat();
 		}

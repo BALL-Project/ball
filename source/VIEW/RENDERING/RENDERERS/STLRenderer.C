@@ -38,7 +38,6 @@ STLRenderer::STLRenderer()
 //the filename has to be saved as the stl file has to end with the same 
 //line as it starts just with endsolid instead "solid"
 STLRenderer::STLRenderer(const String& name)
-	throw(Exception::FileNotFound)
 	: Renderer(),
 		width(600),
 		height(600),
@@ -66,7 +65,6 @@ void STLRenderer::clear()
 }
 
 void STLRenderer::setFileName(const String& name)
-	throw(Exception::FileNotFound)
 {
 	outfile_.open(name, std::ios::out);
 	current_indent_ = 0;
@@ -1124,7 +1122,7 @@ void STLRenderer::renderMesh_(const Mesh& mesh)
 	vector<Surface::Triangle>::const_iterator itt = mesh.triangle.begin(); 
 	for (; itt != mesh.triangle.end(); itt++)
 	{
-		//header für jedes Dreieck
+		//header fï¿½r jedes Dreieck
 		outheader_("facet normal " + (VRMLVector3(mesh.normal[count])));
 		outheader_("outer loop");
 
