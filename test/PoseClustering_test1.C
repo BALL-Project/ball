@@ -8,15 +8,10 @@
 ///////////////////////////
 
 #include <BALL/DOCKING/COMMON/poseClustering.h>
-#include <BALL/FORMAT/DCDFile.h>
-#include <BALL/MOLMEC/COMMON/snapShot.h>
-#include <BALL/DOCKING/COMMON/conformationSet.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/selector.h>
-#include <BALL/CONCEPT/property.h>
 ///////////////////////////
 
 using namespace BALL;
@@ -42,19 +37,19 @@ RESULT
 
 
 CHECK(setDefaultOptions())
-	PoseClustering test_pc;
-	test_pc.setDefaultOptions();
+	PoseClustering pc;
+	pc.setDefaultOptions();
 
-	TEST_EQUAL(test_pc.options.getInteger(PoseClustering::Default::RMSD_LEVEL_OF_DETAIL),
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Default::RMSD_LEVEL_OF_DETAIL),
 													 PoseClustering::Default::RMSD_LEVEL_OF_DETAIL)
 
-	TEST_REAL_EQUAL(test_pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD),
+	TEST_REAL_EQUAL(pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD),
 													 PoseClustering::Default::DISTANCE_THRESHOLD)
 
-	TEST_EQUAL(test_pc.options.getInteger(PoseClustering::Option::CLUSTER_METHOD),
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::CLUSTER_METHOD),
 		                   PoseClustering::Default::CLUSTER_METHOD)
 
-	TEST_EQUAL(test_pc.options.getInteger(PoseClustering::Option::RMSD_TYPE),
+	TEST_EQUAL(pc.options.getInteger(PoseClustering::Option::RMSD_TYPE),
 		                   PoseClustering::Default::RMSD_TYPE)
 
 RESULT
@@ -123,7 +118,7 @@ CHECK(compute() - general)
 	TEST_EQUAL(pc.getClusterSize(0), 4)
 	TEST_REAL_EQUAL(pc.getClusterScore(0), 7.4983)
 	TEST_REAL_EQUAL(pc.computeCompleteLinkageRMSD(0, pc.options, false), 7.4983)
-	std::set<Index> c0 = pc.getCluster(0);
+	auto& c0 = pc.getCluster(0);
 	TEST_EQUAL((c0.find(0)!=c0.end()), true)
 	TEST_EQUAL((c0.find(3)!=c0.end()), true)
 	TEST_EQUAL((c0.find(4)==c0.end()), true)
@@ -131,7 +126,7 @@ CHECK(compute() - general)
 	TEST_EQUAL(pc.getClusterSize(2), 2)
 	TEST_REAL_EQUAL(pc.getClusterScore(2), 2.65794)
 	TEST_REAL_EQUAL(pc.computeCompleteLinkageRMSD(2, pc.options, false), 2.65794)
-	std::set<Index> c2 = pc.getCluster(2);
+	auto& c2 = pc.getCluster(2);
 	TEST_EQUAL((c2.find(6)!=c2.end()), true)
 	TEST_EQUAL((c2.find(7)!=c2.end()), true)
 
@@ -362,7 +357,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	TEST_REAL_EQUAL(pc.getClusterScore(0), 2.95941)
 	TEST_EQUAL(pc.getClusterSize(17), 4)
 	TEST_REAL_EQUAL(pc.getClusterScore(17), 7.86801)
-	std::set<Index> c0 = pc.getCluster(4);
+	auto& c0 = pc.getCluster(4);
 	TEST_EQUAL((c0.find(0)!=c0.end()), true)
 	TEST_EQUAL((c0.find(7)!=c0.end()), true)
 	TEST_EQUAL((c0.find(8)!=c0.end()), true)
@@ -376,7 +371,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	TEST_EQUAL(pc.getClusterSize(28), 4)
 	TEST_REAL_EQUAL(pc.getClusterScore(28), 3.51245)
 	PRECISION(1e-5)
-	std::set<Index> c35 = pc.getCluster(28);
+	auto& c35 = pc.getCluster(28);
 	TEST_EQUAL((c35.find(31) != c35.end()), true)
 	TEST_EQUAL((c35.find(32) != c35.end()), true)
 	TEST_EQUAL((c35.find(51) != c35.end()), true)
@@ -429,7 +424,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 	TEST_EQUAL(pc.getClusterSize(7), 2)
 	TEST_REAL_EQUAL(pc.getClusterScore(7), 4.39475)
 
-	std::set<Index> c19 = pc.getCluster(19);
+	auto& c19 = pc.getCluster(19);
 	TEST_EQUAL(pc.getClusterSize(19), 6)
 	TEST_REAL_EQUAL(pc.getClusterScore(19), 9.53159)
 	PRECISION(1e-5)
@@ -445,7 +440,7 @@ CHECK(PoseClustering::Option::CLUSTER_METHOD with RMSD_TYPE = RIGID_RMSD)
 
 	TEST_EQUAL(pc.getNumberOfClusters(), 36)
 	TEST_EQUAL(pc.getClusterSize(20), 4)
-	std::set<Index> c1 = pc.getCluster(20);
+	auto& c1 = pc.getCluster(20);
 	TEST_EQUAL((c1.find(31) != c1.end()), true)
 	TEST_EQUAL((c1.find(32) != c1.end()), true)
 	TEST_EQUAL((c1.find(51) != c1.end()), true)
@@ -568,4 +563,3 @@ RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-

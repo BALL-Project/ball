@@ -8,15 +8,11 @@
 ///////////////////////////
 
 #include <BALL/DOCKING/COMMON/poseClustering.h>
-#include <BALL/FORMAT/DCDFile.h>
-#include <BALL/MOLMEC/COMMON/snapShot.h>
-#include <BALL/DOCKING/COMMON/conformationSet.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/selector.h>
-#include <BALL/CONCEPT/property.h>
 ///////////////////////////
 
 using namespace BALL;
@@ -91,13 +87,13 @@ CHECK(float getRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_a
 
 	Eigen::Matrix3f covariance_matrix = PoseClustering::computeCovarianceMatrix(sys, PoseClustering::ALL_ATOMS);
 
-	Vector3 axis(3., 1., 4.);
+	Vector3 axis(3, 1, 4);
 	axis.normalize();
 
 	bm.setRotation(Angle(2.19), axis);
-	bm.m14 = 1.0; bm.m24 = 2.0; bm.m34 = 4.5;
+	bm.m14 = 1; bm.m24 = 2; bm.m34 = 4.5f;
 
-	Eigen::Vector3f t1(1.0, 2.0, 4.5);
+	Eigen::Vector3f t1(1, 2, 4.5f);
 	Eigen::Matrix3f m1;
 	m1 << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
 
@@ -105,13 +101,13 @@ CHECK(float getRigidRMSD(Eigen::Vector3f const& t_ab, Eigen::Matrix3f const& M_a
 	S.apply(tp);
 
 	bm.setIdentity();
-	Eigen::Vector3f t2(0.07, 1., 3.1);
+	Eigen::Vector3f t2(0.07f, 1, 3.1f);
 
-	axis = Vector3(1., 2., 1.);
+	axis = Vector3(1, 2, 1);
 	axis.normalize();
 
-	bm.setRotation(Angle(1.), axis);
-	bm.m14 = 0.07; bm.m24 = 1.; bm.m34 = 3.1;
+	bm.setRotation(Angle(1), axis);
+	bm.m14 = 0.07f; bm.m24 = 1; bm.m34 = 3.1f;
 	Eigen::Matrix3f m2;
 	m2 << bm.m11, bm.m12, bm.m13, bm.m21, bm.m22, bm.m23, bm.m31, bm.m32, bm.m33;
 
@@ -157,11 +153,11 @@ CHECK(getReducedConformationSet())
 	(*cs3)[0].applySnapShot(sys0);
 
 	StructureMapper mapper(sys3, sys0);
-  mapper.calculateDefaultBijection();
+	mapper.calculateDefaultBijection();
 
 	PRECISION(1e-3)
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD
-  TEST_REAL_EQUAL(mapper.calculateRMSD(), 37.2132)
+	TEST_REAL_EQUAL(mapper.calculateRMSD(), 37.2132)
 	TEST_REAL_EQUAL(pc.getScore(sys3, sys0, pc.options), 37.0582)
 	pc.options.setInteger(PoseClustering::Option::RMSD_TYPE, PoseClustering::RIGID_RMSD);
 	TEST_REAL_EQUAL(pc.getScore(sys3, sys0, pc.options), 37.1737)
@@ -187,7 +183,7 @@ CHECK(getReducedConformationSet())
 	(*cs_rigid)[0].applySnapShot(sys1);
 
 	StructureMapper mapper_rigid(sys18, sys1);
-  mapper_rigid.calculateDefaultBijection();
+	mapper_rigid.calculateDefaultBijection();
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	TEST_EQUAL(mapper_rigid.calculateRMSD() >= pc_rigid.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	TEST_EQUAL(pc_rigid.getScore(sys18, sys1, pc_rigid.options) >= pc_rigid.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
@@ -216,7 +212,7 @@ CHECK(getReducedConformationSet())
 	(*cs_nnw)[0].applySnapShot(sys_nnw);
 
 	StructureMapper mapper_nnw(sys17, sys_nnw);
-  mapper_nnw.calculateDefaultBijection();
+	mapper_nnw.calculateDefaultBijection();
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	//TODO: not really what we want to do: Ward distance vs RMSD
 	TEST_EQUAL(mapper_nnw.calculateRMSD() >= pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
@@ -248,10 +244,10 @@ CHECK(getClusterRepresentative(Index i))
 	TEST_EQUAL(sys3->getProtein(0)->countAtoms(), 454)
 
 	StructureMapper mapper(*sys3, *sys4);
-  mapper.calculateDefaultBijection();
+	mapper.calculateDefaultBijection();
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	PRECISION(1e-3)
-  TEST_REAL_EQUAL(mapper.calculateRMSD(), 53.895)
+	TEST_REAL_EQUAL(mapper.calculateRMSD(), 53.895)
 	TEST_REAL_EQUAL(pc.getScore(*sys4, *sys3, pc.options), 53.9642)
 	PRECISION(1e-5)
 
@@ -346,19 +342,19 @@ CHECK(getClusterConformationSet(Index i))
 	(*cs0)[2].applySnapShot(sys1);
 
 	StructureMapper mapper(sys2, sys1);
-  mapper.calculateDefaultBijection();
+	mapper.calculateDefaultBijection();
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD
-  TEST_EQUAL(mapper.calculateRMSD() > pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+	TEST_EQUAL(mapper.calculateRMSD() > pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	PRECISION(1e-1)
 	TEST_REAL_EQUAL(pc.getScore(sys2, sys1, pc.options), 36.2734)
-  PRECISION(1e-5)
+	PRECISION(1e-5)
 
 	// same cluster
 	(*cs0)[0].applySnapShot(sys2);
 	// should be smaller than PoseClustering::Option::DISTANCE_THRESHOLD
 	PRECISION(1e-1)
-  TEST_REAL_EQUAL(mapper.calculateRMSD(), 2.996)
-  TEST_EQUAL(mapper.calculateRMSD() < pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+	TEST_REAL_EQUAL(mapper.calculateRMSD(), 2.996)
+	TEST_EQUAL(mapper.calculateRMSD() < pc.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	TEST_REAL_EQUAL(pc.getScore(sys2, sys1, pc.options), 2.97102)
 	PRECISION(1e-5)
 
@@ -419,10 +415,10 @@ CHECK(getClusterConformationSet(Index i))
 	(*cs1_nnw)[1].applySnapShot(sys1_nnw);
 
 	StructureMapper mapper_nnw(sys2_nnw, sys1_nnw);
-  mapper_nnw.calculateDefaultBijection();
+	mapper_nnw.calculateDefaultBijection();
 	// should be larger than PoseClustering::Option::DISTANCE_THRESHOLD	
 	//TODO: not really what we want to do: Ward distance vs RMSD
-  TEST_EQUAL(mapper_nnw.calculateRMSD() > pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+	TEST_EQUAL(mapper_nnw.calculateRMSD() > pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	PRECISION(1e-1)
 	TEST_REAL_EQUAL(pc_nnw.getScore(sys2_nnw, sys1_nnw, pc_nnw.options), 36.2734)
 	PRECISION(1e-5)
@@ -431,9 +427,9 @@ CHECK(getClusterConformationSet(Index i))
 	(*cs1_nnw)[0].applySnapShot(sys2_nnw);
 	// should be smaller than PoseClustering::Option::DISTANCE_THRESHOLD
 	PRECISION(1e-1)
-  TEST_REAL_EQUAL(mapper_nnw.calculateRMSD(), 2.84235)
+	TEST_REAL_EQUAL(mapper_nnw.calculateRMSD(), 2.84235)
 	//TODO: not really what we want to do: Ward distance vs RMSD
-  TEST_EQUAL(mapper_nnw.calculateRMSD() < pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
+	TEST_EQUAL(mapper_nnw.calculateRMSD() < pc_nnw.options.getReal(PoseClustering::Option::DISTANCE_THRESHOLD), true)
 	TEST_REAL_EQUAL(pc_nnw.getScore(sys2_nnw, sys1_nnw, pc_nnw.options), 2.675794)
 	PRECISION(1e-5)
 
@@ -564,4 +560,3 @@ RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-
