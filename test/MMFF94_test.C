@@ -10,8 +10,6 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
-#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
-#include <BALL/MATHS/matrix44.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/KERNEL/PTE.h>
@@ -39,11 +37,10 @@ const double FORCES_FACTOR = 1000 * 1E10 / Constants::AVOGADRO;
 // CHARMM forces to BALL forces
 const double CHARMM_FORCES_FACTOR = Constants::JOULE_PER_CAL * FORCES_FACTOR;
 
-float diff(double original, double our)
+template<class T>
+T diff(T original, T our)
 {
-	double x = original - our;
-	x = fabs(x);
-	return x / fabs(original);
+	return fabs(original - our) / fabs(original);
 }
 
 START_TEST(MMFF94)
@@ -73,7 +70,7 @@ RESULT
 
 
 MMFF94 mmff;
-const float delta = 0.00001;
+const float delta = 0.00001f;
 
 mmff.options[MMFF94::Option::VDW_CUTOFF] = 99;
 mmff.options[MMFF94::Option::VDW_CUTON] = 98;
@@ -95,17 +92,16 @@ CHECK(forces and energies equal in two consecutive runs)
 	mmff.updateForces();
 	Atom& atom1 = *s.getAtom(0);
 	Vector3 f1 = atom1.getForce();
-	float energy = mmff.getEnergy();
+	auto energy = mmff.getEnergy();
 	TEST_EQUAL(Maths::isZero(energy), false)
 	TEST_EQUAL(f1.getLength() > 0., true)
 
-	atom1.setForce(Vector3(99.));
+	atom1.setForce(Vector3(99));
 	mmff.updateEnergy();
 	mmff.updateForces();
 	Vector3 f2 = atom1.getForce();
-	float energy2 = mmff.getEnergy();
 	TEST_EQUAL(f1, f2)
-	TEST_REAL_EQUAL(energy, energy2)
+	TEST_REAL_EQUAL(energy, mmff.getEnergy())
 RESULT
 
 ForceFieldComponent* ffc = enableOneComponent("MMFF94 StretchBend", mmff);
@@ -126,11 +122,11 @@ CHECK(test 1.1: Stretches)
 	PRECISION(1e-11)
 	// atoms in optimal distance -> forces should be (almost) zero
 	AtomIterator it = s.beginAtom();
-	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(0.)), 0)
-	it->setForce(Vector3(0.));
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3()), 0)
+	it->setForce(Vector3());
 	it++;
-	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(0.)), 0)
-	it->setForce(Vector3(0.));
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3()), 0)
+	it->setForce(Vector3());
 
 	// move atom by 0.5 to far away
 	it->setPosition(Vector3(2.646,0,0));
@@ -138,9 +134,10 @@ CHECK(test 1.1: Stretches)
 	sb.updateStretchForces();
 
 	it = s.beginAtom();
-	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(406.1635825 * FORCES_FACTOR, 0, 0)), 0)
+	auto x = (float)(406.1635825 * FORCES_FACTOR);
+	TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(x, 0, 0)), 0)
 	it++;
-	TEST_REAL_EQUAL(it->getForce().getDistance(-Vector3(406.1635825 * FORCES_FACTOR, 0, 0)), 0)
+	TEST_REAL_EQUAL(it->getForce().getDistance(-Vector3(x, 0, 0)), 0)
 RESULT
 
 // compare values to CHARMM:
@@ -156,11 +153,11 @@ CHECK(test 1.2: Stretches compared to CHARMM implementation)
 	mmff.updateForces();
 	AtomIterator it = s.beginAtom();
 
-	float charmm_energy = 147.96645 * Constants::JOULE_PER_CAL;
+	auto charmm_energy = 147.96645 * Constants::JOULE_PER_CAL;
 	TEST_EQUAL(diff(charmm_energy, sb.getStretchEnergy()) < 0.00001, true)
 
 	// value from CHARMM:
-	Vector3 charmm(-879.369641, 0, 0);
+	Vector3 charmm(-879.369641f, 0, 0);
 	charmm *= CHARMM_FORCES_FACTOR;
 
 	TEST_REAL_EQUAL(it->getForce().getDistance(charmm), 0)
@@ -200,10 +197,10 @@ CHECK(test 1.3: Stretches with finite difference)
 	// the energy and compare it to the force
 	PRECISION(2e-10)
 	Vector3 pos = a2.getPosition();
-	for (double d = .0; d <= 0.5; d += 0.01)
+	for (float d = 0; d <= 0.5; d += 0.01f)
 	{
 		// move the atom to the new position
-		a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
+		a2.getPosition() = pos + Vector3(d, 0, 0);
 
 		// calculate the force
 		mmff.updateForces();
@@ -214,7 +211,7 @@ CHECK(test 1.3: Stretches with finite difference)
 		sb.updateEnergy();
 		double dE = sb.getStretchEnergy();
 
-		a2.getPosition() += Vector3(delta, 0.0, 0.0);
+		a2.getPosition() += Vector3(delta, 0, 0);
 		mmff.updateEnergy();
 		dE = -(sb.getStretchEnergy() - dE) / delta;
 		TEST_REAL_EQUAL(force, dE * FORCES_FACTOR)
@@ -245,14 +242,14 @@ CHECK(test 2.1: Bends)
 
 	PRECISION(0.5)
 
-	float charmm_energy = 3.09341 * Constants::JOULE_PER_CAL;
+	auto charmm_energy = 3.09341 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
-	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy() < 0.0001), true)
+	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy()) < 0.001, true)
 
 	// gradient value in CHARMM (kcal /mol A) !:
-	Vector3 v1(0., 27.3344889, 0.);
-	Vector3 v2(27.3344889,-27.3344889, 0.);
-	Vector3 v3(-27.3344889, 0., 0.);
+	Vector3 v1(0, 27.3344889f, 0);
+	Vector3 v2(27.3344889f,-27.3344889f, 0);
+	Vector3 v3(-27.3344889f, 0, 0);
 	v1 *= -CHARMM_FORCES_FACTOR;
 	v2 *= -CHARMM_FORCES_FACTOR;
 	v3 *= -CHARMM_FORCES_FACTOR;
@@ -275,9 +272,9 @@ CHECK(test 2.1: Bends)
 
 	a3.setPosition(Vector3(0, 2.96900, 0));
 
-	v1.set(0., 27.3344889, 0.);
-	v2.set(8.92122591,-27.3344889, 0.);
-	v3.set(-8.92122591, 0., 0.);
+	v1.set(0, 27.3344889f, 0);
+	v2.set(8.92122591f,-27.3344889f, 0);
+	v3.set(-8.92122591f, 0, 0);
 	v1 *= -CHARMM_FORCES_FACTOR;
 	v2 *= -CHARMM_FORCES_FACTOR;
 	v3 *= -CHARMM_FORCES_FACTOR;
@@ -325,7 +322,7 @@ CHECK(test 3.1: linear Bends)
 	// LBEND  1  0.  85.0400921  0.
  	// LBEND  2  85.0400921 -85.0400921  0.
   // LBEND  3 -85.0400921  0.  0.
-	float charmm = -85.0400921 * CHARMM_FORCES_FACTOR;
+	auto charmm = (float)(-85.0400921 * CHARMM_FORCES_FACTOR);
 	Vector3 v1(0, charmm, 0);
 	Vector3 v2(charmm, -charmm, 0);
 	Vector3 v3(-charmm, 0, 0);
@@ -337,7 +334,7 @@ CHECK(test 3.1: linear Bends)
 
 	TEST_EQUAL(diff(v2.y, a2.getForce().y) < 0.0001, true)
 
-	float charmm_energy = 100.00715 * JOULE_PER_CAL;
+	auto charmm_energy = 100.00715 * JOULE_PER_CAL;
 	PRECISION(0.01)
 	TEST_REAL_EQUAL(mmff.getBendEnergy(), charmm_energy)
 	TEST_EQUAL(diff(charmm_energy, mmff.getBendEnergy()) < 0.00001, true)
@@ -370,7 +367,7 @@ CHECK(force test 4.1: StretchBends)
 	//  7.37396 0       0
 	// -7.37396 7.37396 0
 	// 0       -7.37396 0
-	float charmm1 = -7.37396 * CHARMM_FORCES_FACTOR;
+	auto charmm1 = (float)(-7.37396 * CHARMM_FORCES_FACTOR);
 
 	Vector3 v1(charmm1, 0, 0);
 	Vector3 v2(-charmm1, charmm1, 0);
@@ -414,9 +411,9 @@ CHECK(force test 4.2: StretchBends)
 	// 15.37403 -24.48579  0.00000
   // -64.97696 29.61047  0.00000
   // 49.60293  -5.12468  0.00000
-	Vector3 v1(15.37403, -24.48579, 0.00000);
- 	Vector3 v2(-64.97696,  29.61047, 0.00000);
-	Vector3 v3(49.60293, -5.12468, 0.00000);
+	Vector3 v1(15.37403f, -24.48579f, 0);
+ 	Vector3 v2(-64.97696f,  29.61047f, 0);
+	Vector3 v3(49.60293f, -5.12468f, 0);
 
 	v1 *= -CHARMM_FORCES_FACTOR;
 	v2 *= -CHARMM_FORCES_FACTOR;
@@ -430,7 +427,7 @@ CHECK(force test 4.2: StretchBends)
 
 	// value from CHARMM:
 	PRECISION(0.01)
-	float charmm_energy = -25.34351 * JOULE_PER_CAL;
+	auto charmm_energy = -25.34351 * JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
 	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy()) < 0.00001, true)
 RESULT
@@ -460,9 +457,9 @@ CHECK(force test 4.3: StretchBends)
 	PRECISION(2e-11)
 
 	// force value in CHARMM (kcal /mol A) !:
-	Vector3 v1(-72.39536, 11.80861,-36.9695);
-	Vector3 v2(99.26076,-27.76734, 15.95874);
-	Vector3 v3(-26.86540, 15.95874, 21.0108);
+	Vector3 v1(-72.39536f, 11.80861f,-36.9695f);
+	Vector3 v2(99.26076f,-27.76734f, 15.95874f);
+	Vector3 v3(-26.86540f, 15.95874f, 21.0108f);
 	v1 *= -CHARMM_FORCES_FACTOR;
 	v2 *= -CHARMM_FORCES_FACTOR;
 	v3 *= -CHARMM_FORCES_FACTOR;
@@ -496,10 +493,10 @@ CHECK(force test 5.1: Planes)
 	PRECISION(2e-11)
 
 	// force value in CHARMM (kcal /mol A) !:
-  Vector3 v1(13.75731,-11.19557,-11.33832);
-	Vector3 v2(1.99175, 27.36249, -2.42734);
-	Vector3 v3(-10.13007, 10.36824, 17.52184);
-	Vector3 v4(-5.61899,-26.53516, -3.75618);
+  Vector3 v1(13.75731f,-11.19557f,-11.33832f);
+	Vector3 v2(1.99175f, 27.36249f, -2.42734f);
+	Vector3 v3(-10.13007f, 10.36824f, 17.52184f);
+	Vector3 v4(-5.61899f,-26.53516f, -3.75618f);
 
 	v1 *= -CHARMM_FORCES_FACTOR;
 	v2 *= -CHARMM_FORCES_FACTOR;
@@ -516,7 +513,7 @@ CHECK(force test 5.1: Planes)
 
 	// value from CHARMM:
 	PRECISION(0.01)
-	float charmm_energy =38.44301 * JOULE_PER_CAL;
+	auto charmm_energy =38.44301 * JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
 	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy()) < 0.00001, true)
 RESULT
@@ -551,10 +548,10 @@ CHECK(force test 5.2: Planes)
 	*/
 
 	// BALL values
-	Vector3 v1(-6.56536115141,13.1307223028,  0.0);
-	Vector3 v2(-4.37690730111,-13.1307223028,  0.0);
-	Vector3 v3(10.9422684525,0.0 , 0.0);
-	Vector3 v4(0.0,  0.0,  0.0);
+	Vector3 v1(-6.56536115141f, 13.1307223028f, 0);
+	Vector3 v2(-4.37690730111f, -13.1307223028f, 0);
+	Vector3 v3(10.9422684525f, 0 , 0);
+	Vector3 v4(0, 0, 0);
 
 	v1 *= CHARMM_FORCES_FACTOR;
 	v2 *= CHARMM_FORCES_FACTOR;
@@ -572,7 +569,7 @@ CHECK(force test 5.2: Planes)
 
 	// value from CHARMM:
 	PRECISION(0.01)
-	float charmm_energy = 36.46189 * JOULE_PER_CAL;
+	auto charmm_energy = 36.46189 * JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
 	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy()) < 0.00001, true)
 RESULT
@@ -599,10 +596,10 @@ CHECK(force test 6: Torsions)
 	PRECISION(2e-11)
 
 	// gradient value in CHARMM (kcal /mol A) !:
-	Vector3 v1(0.,  0.,  12.);
-	Vector3 v2(-5.19556474E-16, 0.,-12.);
-	Vector3 v3(-6., 0.,-6.);
-	Vector3 v4(6., 0., 6.);
+	Vector3 v1(0,  0,  12);
+	Vector3 v2(-5.19556474E-16f, 0,-12);
+	Vector3 v3(-6, 0,-6);
+	Vector3 v4(6, 0, 6);
 
 	v1 *= -CHARMM_FORCES_FACTOR;
 	v2 *= -CHARMM_FORCES_FACTOR;
@@ -618,7 +615,7 @@ CHECK(force test 6: Torsions)
 
 	// value from CHARMM:
 	PRECISION(0.01)
-	float charmm_energy = 6.0 * JOULE_PER_CAL;
+	auto charmm_energy = 6.0 * JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), charmm_energy)
 	TEST_EQUAL(diff(charmm_energy, mmff.getEnergy()) < 0.00001, true)
 RESULT
@@ -648,13 +645,13 @@ CHECK(force test 7: VDW)
 
 	PRECISION(0.1)
 	
-	float vdw_charmm = 64.46085 * Constants::JOULE_PER_CAL;
+	auto vdw_charmm = 64.46085 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(mmff.getEnergy(), vdw_charmm)
 	TEST_EQUAL(diff(vdw_charmm, mmff.getEnergy()) < 0.00001, true)
 
 	PRECISION(1e-12)
 
-	float charmm_force = 208.73727 * CHARMM_FORCES_FACTOR;
+	auto charmm_force = (float)(208.73727 * CHARMM_FORCES_FACTOR);
 	
 	TEST_REAL_EQUAL(a1.getForce().x, -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x,  charmm_force);
@@ -671,7 +668,7 @@ CHECK(force test 7: VDW)
 	PRECISION(2e-10)
 	Vector3 pos = a2.getPosition();
 	
-	for (double d = .0; d <= 0.5; d += 0.01)
+	for (float d = .0; d <= 0.5; d += 0.01f)
 	{
 		// move the atom to the new position
 		a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
@@ -721,7 +718,7 @@ CHECK(force test 8: ES CDIE)
 	TEST_EQUAL(diff(es_charmm, nb.getESEnergy()) < 0.00001, true)
 	PRECISION(2e-14)
 
-	float charmm_force = -158.03526 * CHARMM_FORCES_FACTOR;
+	auto charmm_force = (float)(-158.03526 * CHARMM_FORCES_FACTOR);
 
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -736,7 +733,7 @@ CHECK(force test 8: ES CDIE)
 	// the energy and compare it to the force
 	PRECISION(2e-10)
 	Vector3 pos = a2.getPosition();
-	for (double d = .0; d <= 0.5; d += 0.01)
+	for (float d = 0; d <= 0.5; d += 0.01f)
 	{
 		// move the atom to the new position
 		a2.getPosition() = pos + Vector3(d, 0.0, 0.0);
@@ -786,7 +783,7 @@ CHECK(force test 8.2: ES RDIE)
 	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
 	PRECISION(2e-14)
 
-	float charmm_force = -1.30756 * CHARMM_FORCES_FACTOR;
+	auto charmm_force = (float)(-1.30756 * CHARMM_FORCES_FACTOR);
 
 	PRECISION(2e-13)
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
@@ -801,7 +798,7 @@ CHECK(force test 8.2: ES RDIE)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -5.99552 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-5.99552 * CHARMM_FORCES_FACTOR);
 	es_charmm = -18.12812 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -841,7 +838,7 @@ CHECK(force test 9: ES SWITCH)
 	TEST_REAL_EQUAL(nb.getESEnergy(), es_charmm)
 	PRECISION(2e-14)
 
-	float charmm_force = -3.77685 * CHARMM_FORCES_FACTOR;
+	auto charmm_force = (float)(-3.77685 * CHARMM_FORCES_FACTOR);
 
 	PRECISION(2e-15)
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
@@ -866,7 +863,7 @@ CHECK(force test 9: ES SWITCH)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -7.16454 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-7.16454 * CHARMM_FORCES_FACTOR);
 	es_charmm = -8.16304 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -878,7 +875,7 @@ CHECK(force test 9: ES SWITCH)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -10.24873 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-10.24873 * CHARMM_FORCES_FACTOR);
 	es_charmm = -16.94178 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -890,7 +887,7 @@ CHECK(force test 9: ES SWITCH)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -18.14475 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-18.14475 * CHARMM_FORCES_FACTOR);
 	es_charmm = -44.21526 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -931,7 +928,7 @@ CHECK(force test 10: ES SWITCH RDIE)
 	TEST_EQUAL(diff(es_charmm, nb.getESEnergy()) < 0.00001, true)
 	PRECISION(2e-14)
 
-	float charmm_force = -0.75161 * CHARMM_FORCES_FACTOR;
+	auto charmm_force = (float)(-0.75161 * CHARMM_FORCES_FACTOR);
 
 	PRECISION(2e-15)
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
@@ -955,7 +952,7 @@ CHECK(force test 10: ES SWITCH RDIE)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -1.58332 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-1.58332 * CHARMM_FORCES_FACTOR);
 	es_charmm = -1.66266 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -967,7 +964,7 @@ CHECK(force test 10: ES SWITCH RDIE)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -2.54627 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-2.54627 * CHARMM_FORCES_FACTOR);
 	es_charmm = -3.72560 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -979,7 +976,7 @@ CHECK(force test 10: ES SWITCH RDIE)
 	mmff.setup(s);
 	mmff.updateForces();
 	mmff.updateEnergy();
-	charmm_force = -5.99826 * CHARMM_FORCES_FACTOR;
+	charmm_force = (float)(-5.99826 * CHARMM_FORCES_FACTOR);
 	es_charmm = -11.62162 * Constants::JOULE_PER_CAL;
 	TEST_REAL_EQUAL(a1.getForce().x , -charmm_force);
 	TEST_REAL_EQUAL(a2.getForce().x , charmm_force);
@@ -991,4 +988,3 @@ RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-
