@@ -173,15 +173,11 @@ int main(int argc, char **argv)\
 	/* clean up all temporary files */\
 	while (TEST::tmp_file_list.size() > 0 && TEST::verbose < 1)\
 	{\
-		::BALL::File::remove(TEST::tmp_file_list.back());\
+		::BALL::File::remove(TEST::tmp_file_list.back().c_str());\
 		TEST::tmp_file_list.pop_back();\
 	}\
 	/* check for exit code */\
 	std::cout << (TEST::all_tests ? "PASSED" : "FAILED") << std::endl;\
-	/* Finally, clean up pointers still pointing to */\
-	/* AutoDeletable objects, as this might lead to strange */\
-	/* warnings (still reachable) when using valgrind. */\
-	BALL::AutoDeletable::clearLastPtr(); \
 	return !TEST::all_tests;\
 }\
 
@@ -266,11 +262,7 @@ int main(int argc, char **argv)\
 	if (TEST::verbose > 0){\
 		if (TEST::newline)\
 			std::cout << "    ";\
-		if (TEST::test){\
-			std::cout << "passed" << std::endl;\
-		} else {\
-			std::cout << "FAILED" << std::endl;\
-		}\
+		std::cout << (TEST::test ? "passed" : "FAILED") << std::endl;\
 	}\
 
 /**	Create a temporary filename.
@@ -331,10 +323,7 @@ int main(int argc, char **argv)\
 			std::cout << std::endl;\
 		}\
  		std::cout << "    (line " << __LINE__ << " TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
-		if (TEST::this_test)\
-			std::cout << " + " << std::endl;\
-		else \
-			std::cout << " - " << std::endl;\
+		std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 	}\
 
 /**	Generic equality macro.
@@ -359,10 +348,7 @@ int main(int argc, char **argv)\
 				std::cout << std::endl;\
 			}\
 			std::cout << "    (line " << __LINE__ << " TEST_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
-			if (TEST::this_test)\
-				std::cout << " + " << std::endl;\
-			else \
-				std::cout << " - " << std::endl;\
+			std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 		}\
 	}\
 
@@ -386,10 +372,7 @@ int main(int argc, char **argv)\
 				std::cout << std::endl;\
 			}\
 			std::cout << "    (line " << __LINE__ << " TEST_NOT_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", forbidden is " << (b) << ") ";\
-			if (TEST::this_test)\
-				std::cout << " + " << std::endl;\
-			else \
-				std::cout << " - " << std::endl;\
+			std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 		}\
 	}\
 
@@ -441,10 +424,7 @@ int main(int argc, char **argv)\
 				case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
 				case 3:	std::cout << " ERROR: wrong exception!) "; break;\
 			}\
-			if (TEST::this_test)\
-				std::cout << " + " << std::endl;\
-			else \
-				std::cout << " - " << std::endl;\
+			std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 		}\
 	}\
 
@@ -495,10 +475,7 @@ int main(int argc, char **argv)\
 				case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
 				case 3:	std::cout << " ERROR: wrong exception!) "; break;\
 			}\
-			if (TEST::this_test)\
-				std::cout << " + " << std::endl;\
-			else \
-				std::cout << " - " << std::endl;\
+			std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 		}\
 	}\
 
@@ -598,19 +575,7 @@ int main(int argc, char **argv)\
 				std::cout << std::endl;\
 			}\
 			std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << "): ";\
-			if (TEST::this_test)\
-			{\
-				std::cout << "true";\
-			} else {\
-				std::cout << "false";\
-			}\
-			\
-			if (TEST::this_test)\
-			{\
-				std::cout << " + " << std::endl;\
-			} else {\
-				std::cout << " - " << std::endl;\
-			}\
+			std::cout << (TEST::this_test ? "true + " : "false - ") << std::endl;\
 		}\
 	}
 
@@ -714,19 +679,7 @@ int main(int argc, char **argv)\
 				std::cout << std::endl;\
 			}\
 			std::cout << "    (line " << __LINE__ << ": TEST_FILE_REGEXP("<< #filename << ", " << #templatename << "): ";\
-			if (TEST::this_test)\
-			{\
-				std::cout << "true";\
-			} else {\
-				std::cout << "false";\
-			}\
-			\
-			if (TEST::this_test)\
-			{\
-				std::cout << " + " << std::endl;\
-			} else {\
-				std::cout << " - " << std::endl;\
-			}\
+			std::cout << (TEST::this_test ? "true + " : "false - ") << std::endl;\
 		}\
 	}
 
@@ -793,10 +746,7 @@ int main(int argc, char **argv)\
 			std::cout << std::endl;\
 		}\
 		std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << ") ";\
-		if (TEST::this_test)\
-			std::cout << " + " << std::endl;\
-		else \
-			std::cout << " - " << std::endl;\
+		std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 		delete [] TEST_strstr_contents;\
 	}\
 }
