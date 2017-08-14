@@ -521,8 +521,14 @@ namespace BALL
 									temporary[5] = e;
 									temporary[6] = f;
 									temporary[7] = g;
+
+#ifdef BALL_COMPILER_MSVC
+									bool exists = ::_access_s(temporary.c_str(), F_OK) == 0;
+#else
+									bool exists = ::access(temporary.c_str(), F_OK) >= 0;
+#endif
 			
-									if (created_temp_filenames_.find(temporary) == created_temp_filenames_.end() && ::access(temporary.c_str(), F_OK) < 0)
+									if (created_temp_filenames_.find(temporary) == created_temp_filenames_.end() && !exists)
 									{
 										created_temp_filenames_.insert(temporary);
 										return true;

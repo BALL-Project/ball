@@ -30,7 +30,6 @@
 #	define S_ISCHR _S_ISCHR
 #	define S_ISBLK _S_ISBLK
 #	define S_ISFIFO _S_ISFIFO
-#	define access _access
 #endif
 
 #include <iostream>

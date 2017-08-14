@@ -92,7 +92,7 @@ bool File::isAccessible(String name)
 {
   FileSystem::canonizePath(name);
 #ifdef BALL_COMPILER_MSVC
-  return (::_access(name.c_str(),F_OK) == 0);
+  return (::_access_s(name.c_str(),F_OK) == 0);
 #else
   return (::access(name.c_str(), F_OK) == 0);
 #endif
@@ -218,8 +218,12 @@ bool File::isReadable(String name)
 	if (!File::isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 
   FileSystem::canonizePath(name);
-  
-  return (::access(name.c_str(), R_OK) == 0);
+
+#ifdef BALL_COMPILER_MSVC
+	return (::_access_s(name.c_str(),R_OK) == 0);
+#else
+	return (::access(name.c_str(), R_OK) == 0);
+#endif
 }
 
 BALL_INLINE 
@@ -234,8 +238,12 @@ bool File::isWritable(String name)
 	if (!File::isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
 
   FileSystem::canonizePath(name);
-  
-  return (::access(name.c_str(), W_OK) == 0);
+
+#ifdef BALL_COMPILER_MSVC
+	return (::_access_s(name.c_str(),W_OK) == 0);
+#else
+	return (::access(name.c_str(), W_OK) == 0);
+#endif
 }
 
 BALL_INLINE 
