@@ -153,7 +153,12 @@ bool File::truncate(String path, Size size)
 
 	FileSystem::canonizePath(path);
 #ifdef BALL_COMPILER_MSVC
-	int fh = _open(path.c_str(), _O_RDWR | _O_CREAT, _S_IREAD | _S_IWRITE );
+	int fh = 0;
+	if (_sopen_s(&fh, path.c_str(), (_O_RDWR | _O_CREAT), _SH_DENYWR, (_S_IREAD | _S_IWRITE)) != 0 || fh == -1)
+	{
+		return false;
+	}
+
 	int result = _chsize(fh, (long)size);
 	_close(fh);
 	return (result == 0);

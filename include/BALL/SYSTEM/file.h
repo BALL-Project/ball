@@ -45,6 +45,8 @@
 #ifdef BALL_COMPILER_MSVC
 #	include <fcntl.h>
 #	include <io.h>
+#	include <share.h> // shflags for _sopen_s
+
 	// Define the missing symbols from <unistd.h>,
 	// which M$, in its infinite wisdom, was unable to provide.
 #	define F_OK 0
