@@ -236,7 +236,7 @@ namespace BALL
 
 		Py_DecRef(mod_name);
 
-		if (!module || PyErr_Occurred())
+		if (PyErr_Occurred())
 		{
 			PyErr_Print();
 			return nullptr;
