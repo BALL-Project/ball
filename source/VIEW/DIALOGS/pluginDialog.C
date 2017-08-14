@@ -61,23 +61,28 @@ namespace BALL
 			{
 				case Qt::UserRole:
 					return qVariantFromValue(man.getPluginInstance(i.row()));
+
 				case Qt::DisplayRole:
 				{
-					BALLPlugin* ptr = qobject_cast<BALLPlugin*>(man.getPluginInstance(i.row()));
+					BALLPlugin* ptr = qobject_cast<BALLPlugin *>(man.getPluginInstance(i.row()));
 
 					// we *know* that this is a BALLPlugin (the loader takes care of that), so we don't need
 					// to test if the cast succeeded
 					return ptr->getName() + " (" + (ptr->isActive() ? tr("active") : tr("inactive")) + ")";
 				}
+
 				case Qt::DecorationRole:
 				{
-					VIEWPlugin* ptr = qobject_cast<VIEWPlugin*>(man.getPluginInstance(i.row()));
-
-					if (ptr)
-						return *(ptr->getIcon());
-					else
-						return QVariant();
+					VIEWPlugin* ptr = qobject_cast<VIEWPlugin *>(man.getPluginInstance(i.row()));
+					return ptr ? *(ptr->getIcon()) : QVariant();
 				}
+
+				case Qt::ToolTipRole:
+				{
+					VIEWPlugin *ptr = qobject_cast<VIEWPlugin *>(man.getPluginInstance(i.row()));
+					return ptr ? ptr->getDescription() : QVariant();
+				}
+
 				default:
 					return QVariant();
 			}
