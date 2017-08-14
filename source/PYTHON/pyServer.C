@@ -41,7 +41,7 @@ namespace BALL {
 
 		if (json.isNull() || !json.isObject())
 		{
-			client->write(createMessage("error", "Invalid request"));
+			client->write(createMessage("error", "[PyServer] ERROR: Invalid request"));
 			disconnectClient(client);
 			return;
 		}
@@ -53,7 +53,7 @@ namespace BALL {
 		if (  msg_type == QJsonValue::Undefined || !msg_type.isString()
 			|| content == QJsonValue::Undefined || !content.isString())
 		{
-			client->write(createMessage("error", "Invalid request"));
+			client->write(createMessage("error", "[PyServer] ERROR: Invalid request"));
 			disconnectClient(client);
 			return;
 		}
@@ -65,7 +65,7 @@ namespace BALL {
 		}
 		else
 		{
-			client->write(createMessage("error", "Invalid request type"));
+			client->write(createMessage("error", "[PyServer] ERROR: Invalid request type"));
 		}
 		disconnectClient(client);
 	}
