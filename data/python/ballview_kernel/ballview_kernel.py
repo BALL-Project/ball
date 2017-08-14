@@ -56,30 +56,42 @@ class BALLViewKernel(Kernel):
 		data = self.recvall(s)
 		s.close()
 
-		data = json.loads(data)
+		content = {}
+		if data is None:
+			content.update({
+				'name': 'stderr',
+				'text': 'WARNING: Response from BALL PyServer is incomplete!\n'
+				        'Your code was evaluated by the BALL PyServer but the output cannot be shown!'
+			})
 
-		content = {
-			'name': 'stdout' if data['msg_type'] == 'execute_result' else 'stderr',
-			'text': data['content']
-		}
+		else:
+			content.update({
+				'name': 'stdout' if data['msg_type'] == 'execute_result' else 'stderr',
+				'text': data['content']
+			})
+
 		self.send_response(self.iopub_socket, 'stream', content)
-
-		return {
+		content.update({
 			'status':           'ok',
 			'execution_count':  self.execution_count,
 			'payload':          [],
 			'user_expressions': {},
-		}
+		})
+		return content 
 
 	def recvall(self, sock):
-		"""Reads all data from the given socket"""
-		buf = 4096
+		"""Reads all JSON data from the given socket and returns the dict representation of the data. Returns None
+		if the data is not in JSON format."""
+		nbytes = 4096
 		dat = []
 		while True:
-			dat.append(sock.recv(buf))
-			if len(dat[-1]) < buf:
+			dat.append(sock.recv(nbytes))
+			if(len(dat[-1])) < nbytes:
 				break
-		return ''.join(dat)
+		try:
+			return json.loads(''.join(dat))
+		except ValueError:
+			return None
 
 if __name__ == '__main__':
 	from ipykernel.kernelapp import IPKernelApp
