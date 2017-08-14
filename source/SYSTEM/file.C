@@ -19,7 +19,7 @@
 namespace BALL 
 {
 	using namespace Exception;
- 
+
 	const File::OpenMode File::MODE_IN = std::ios::in;
 	const File::OpenMode File::MODE_OUT = std::ios::out;
 	const File::OpenMode File::MODE_APP = std::ios::app;
@@ -542,12 +542,12 @@ namespace BALL
 	{
 		return transformation_manager_;
 	}
-    
+
 	const TransformationManager& File::getTransformationManager() const
 	{
 		return transformation_manager_;
 	}
-    
+
 	void File::enableTransformation(File::Transformation transformation)
 	{
 		transformation_methods_ |= transformation;

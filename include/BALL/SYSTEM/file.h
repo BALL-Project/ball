@@ -56,11 +56,11 @@
 namespace BALL 
 {
 	/**	This class handles automatic file transformation methods.
-		   \link File File \endlink  provides the ability to transform files on the fly using 
+			\link File File \endlink  provides the ability to transform files on the fly using
 			predefined transformation commands  (e.g. unix-style filters). For example, compressed 
-      files can be automatically decompressed by calling the unic <tt>compress</tt> command.
+			files can be automatically decompressed by calling the unic <tt>compress</tt> command.
 			The respective commands are selected via a suitable regular expression, usually
-      matching the file suffix. A frequent application for this transformation is the
+			matching the file suffix. A frequent application for this transformation is the
 			compressed storage of PDB files in the unix compressed format (<tt>*.Z</tt>).
 			Transformation manager basically contains a map consisting of two strings.
 			Using  \link findTransformationCommand findTransformationCommand \endlink ,  
@@ -73,7 +73,7 @@ namespace BALL
 			\ingroup System
 	*/
 	class BALL_EXPORT TransformationManager
-	{	
+	{
 		public:
 			
 		/**	Constructors and Destructors
@@ -125,9 +125,9 @@ namespace BALL
 		/// The map containing all transformation methods
 		std::map<String, String>	transformation_methods_;
 	};
-		
-	/**	File Class.	
-			\ingroup System		
+
+	/**	File Class.
+			\ingroup System
 	*/
 	class BALL_EXPORT File
 		: public std::fstream
@@ -444,11 +444,11 @@ namespace BALL
 		*/
 		static bool createTemporaryFilename(String& temporary, const String& suffix = ".TMP");
 
-    /** Return the stream associated with this file.
+		/** Return the stream associated with this file.
 				Implemented just for convenience.
-        @return std::fstream the stream
-    */
-    std::fstream& getFileStream();
+				@return std::fstream the stream
+		*/
+		std::fstream& getFileStream();
 
 		//@}
 		/**@name On-the-fly file transformation
@@ -482,11 +482,11 @@ namespace BALL
 		*/
 		static bool isTransformationEnabled(Transformation transformation);
 
-		/**	
+		/**
 		*/
 		static void registerTransformation(const String& pattern, const String& exec);
 
-		/**	
+		/**
 		*/
 		static void unregisterTransformation(const String& pattern);
 
@@ -610,7 +610,7 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/file.iC>
 #	endif
-  
+
 } // namespace BALL
 
 #endif // BALL_SYSTEM_FILE_H
