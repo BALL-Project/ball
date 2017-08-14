@@ -90,6 +90,13 @@ namespace BALL {
 		QJsonObject msg;
 		msg["msg_type"] = msg_type;
 		msg["content"]  = content;
+
+		if (msg["content"] == QJsonValue::Null)
+		{
+			msg["msg_type"] = "error";
+			msg["content"] = "[PyServer] ERROR: Output could not be generated; It was probably too large.";
+		}
+
 		return QJsonDocument(msg).toJson(QJsonDocument::Compact);
 	}
 
