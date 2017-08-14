@@ -6,12 +6,12 @@ import json, socket, sys, traceback
 __version__ = '0.1'
 
 class BALLViewKernel(Kernel):
-	"""BALLView kernel for Jupyter"""
+	"""PyBALL kernel for Jupyter"""
 
-	implementation = 'ballview_kernel'
+	implementation = 'pyball_kernel'
 	implementation_version = __version__
 
-	banner = 'BALLView'
+	banner = 'PyBALL'
 
 	language_info = {
 		'mimetype':       'text/x-python',
