@@ -97,12 +97,12 @@ namespace BALL
 		if ((module_major_minor != ball_major_minor) || (module_bugfix < ball_bugfix))
 		{
 			tie(ok, res) = run("sip");
-			Log.error() << "[PyInterpreter] ERROR: Version of imported sip module is not compatible with the version "
-			               "BALL was built against.\n"
-			               "If BALL was compiled using SIP version x.y.z then it can be used with any SIP "
-			               "version x.y.z' where 'z' >= z.\n"
-			               "Got (from " + res + ") " + module_sip_version_str + "; Expected " +
-			               BALL_SIP_VERSION_STR << std::endl;
+			Log.error() << "[PyInterpreter] ERROR: Version of imported sip module is not compatible with "
+			            << "the version BALL was built against.\n"
+			            << "If BALL was compiled using SIP version x.y.z then it can be used with any SIP "
+			            << "version x.y.z' where 'z' >= z.\n"
+			            << "Got (from " + res + ") " + module_sip_version_str + "; Expected "
+			            << BALL_SIP_VERSION_STR << std::endl;
 			finalize();
 			return;
 		}
@@ -111,7 +111,8 @@ namespace BALL
 		tie(ok, res) = run("from BALL import *");
 		if (!ok)
 		{
-			Log.error() << "[PyInterpreter] Could not import the BALL library! No Python support available." << std::endl;
+			Log.error() << "[PyInterpreter] ERROR: Could not import the BALL library! "
+			            << "No Python support available." << std::endl;
 			finalize();
 		}
 	}
@@ -120,12 +121,13 @@ namespace BALL
 	{
 		if (!isInitialized())
 		{
-			Log.error() << "[PyInterpreter] Interpreter is not initialized." << std::endl;
+			Log.error() << "[PyInterpreter] ERROR: Interpreter is not initialized; "
+			            << "Code cannot be executed." << std::endl;
 			return { false, "" };
 		}
 
 		auto res = kernel_->run(s);
-		if (!res.first) Log.error() << "[PyInterpreter] " << kernel_->getErrorMessage() << std::endl;
+		if (!res.first) Log.error() << "[PyInterpreter] ERROR: " << kernel_->getErrorMessage() << std::endl;
 		return res;
 	}
 
@@ -148,7 +150,8 @@ namespace BALL
 	{
 		if (!isInitialized())
 		{
-			Log.error() << "[PyInterpreter] Interpreter is not initialized." << std::endl;
+			Log.error() << "[PyInterpreter] ERROR: Interpreter is not initialized; "
+			            << func_name << " cannot be executed." << std::endl;
 			return false;
 		}
 
@@ -178,7 +181,8 @@ namespace BALL
 	{
 		if (!isInitialized())
 		{
-			Log.error() << "[PyInterpreter] Interpreter is not initialized." << std::endl;
+			Log.error() << "[PyInterpreter] ERROR: Interpreter is not initialized; "
+			            << "refusing to start PyServer" << std::endl;
 			return;
 		}
 
