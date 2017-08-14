@@ -90,7 +90,7 @@ namespace BALL
 
 		// error message
 		auto svalue = value ? PyString_AsString(value) : nullptr;
-		err << (svalue ? svalue : "unknown error");
+		err << (svalue ? svalue : "(no error message given)");
 		Py_DecRef(value);
 
 		// stack trace (TODO)
