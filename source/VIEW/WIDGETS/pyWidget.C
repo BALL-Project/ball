@@ -645,7 +645,7 @@ namespace BALL
 
 			Path p;
 
-			String startup = p.find("startup.py");
+			String startup = p.find("python/pywidget_init.py");
 			if (!openFile(startup, true))
 			{
 				Log.error() << (String)tr("Could not find startup script. Please set the correct path to the data path!") << std::endl;
@@ -928,7 +928,7 @@ namespace BALL
 			if (!is_current) script_edit_->clear();
 			script_mode_ = true;
 			stop_script_ = false;
-			full_silent_ = filename.hasSuffix("startup.py");
+			full_silent_ = filename.hasSuffix("pywidget_init.py");
 
 			if (run) appendText(((String)"> " + (String)tr("executing script from ") + filename + "\n").c_str(), false, true);
 			else     appendText(((String)"> " + (String)tr("loading script from ") + filename + "\n").c_str(), false, true);

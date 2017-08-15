@@ -1,3 +1,11 @@
+############################################################
+#                       ============                       #
+#                        DEPRECATED                        #
+#                       ============                       #
+# This file is not maintained and will be removed in the   #
+# next release. Please use the view_utils module instead!  #
+############################################################
+
 from sip import *
 from random import *
 ###################### defines: ############################
@@ -75,7 +83,7 @@ def run(file):
 
 def openFile(file):
 	return getMainControl().openFile(file)
-	
+
 def getSystems():
 	return getMainControl().getCompositeManager().getComposites()
 
@@ -168,14 +176,14 @@ def addOptimizedHydrogens():
 	setMultithreading(1)
 	getMolecularStructure().runMinimization(false)
 
-def relaxStructure():	
+def relaxStructure():
 	s = getOneSystem()
 	getScene().optimizeStructure()
 
 def highlightLigand():
 	s = getOneSystem()
 	removeWater()
-	S = s[0] 
+	S = s[0]
 	l = []
 	for r in residues(S):
 		if not r.isAminoAcid():
@@ -185,7 +193,7 @@ def highlightLigand():
 
 def showCartoonAndLigand():
 	s = getOneSystem()
-	S = s[0] 
+	S = s[0]
 	clearRepresentations()
 	highlightLigand()
 	getDisplayProperties().selectModel(MODEL_VDW)
@@ -261,7 +269,7 @@ def addPlane(plane_specifier, height, boundary, bottom = True):
         v_low.z = low.z
       #
       if v_upp.x < upp.x:
-        v_upp.x = upp.x 
+        v_upp.x = upp.x
       if v_upp.y < upp.y:
         v_upp.y = upp.y
       if v_upp.z < upp.z:
