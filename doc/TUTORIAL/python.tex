@@ -65,26 +65,26 @@ For the template problem, we pre-instantiated some of the
 commonly used instances, \eg \class{Unary\-Processor\-<Atom>} maps to the 
 \class{AtomProcessor} class and classes derived from it in Python.
 
-The BALLView application contains an interactive interpreter window
-if BALL was compiled with Python support. You can even access the
-data structures of the viewer from there. Assuming that you are
-currently displaying a structure in the viewer, you can retrieve a
-reference to the first system displayed through the somewhat cryptic
-command 
+Any VIEW application (e.g., BALLView) can be extended by an interactive Python
+interpreter through the Jupyter plugin. Using the PyBALL kernel for Jupyter, 
+you can even access the data structures of the viewer from there. Assuming that
+you are currently displaying a structure in the viewer, you can retrieve a
+reference to the first system displayed through the somewhat lengthy command
 
 \begin{lstlisting}{}
-  system = MainControl::getInstance(0)\\
-  .getCompositeManager().getComposites()[0].
+  system = MainControl::getInstance(0)\
+    .getCompositeManager().getComposites()[0]
 \end{lstlisting}
 
 \noindent
-Since this is not very convenient, we added a Python startup script that is 
-always executed when \mbox{BALLView} starts up. It can be found under 
-\file{BALL/data/startup.py}. By using one of the methods defined in this file,
-it is possible to obtain the first \class{System} by simply calling
+Since this is not very convenient, we added a Python module named \texttt{view\_utils}
+providing aliases for many functions. The module can be found in the \texttt{data/python/}
+directory. By using one of the functions defined in this file, it is possible to obtain
+the first \class{System} by simply calling
 
 \begin{lstlisting}{}
-  system = getSystem(0).
+  from view_utils import *
+  system = getSystems()[0].
 \end{lstlisting}
 
 \noindent
