@@ -19,17 +19,9 @@ SET(CTD_OUTFILE_DIR "${PROJECT_BINARY_DIR}/ctd_files")
 SET(GALAXY_STUBS_DIR "${PROJECT_BINARY_DIR}/galaxy_stubs")
 SET(LOGFILE_DIR "${PROJECT_BINARY_DIR}/log")
 
-# Configure file that will install CTDConverter and its dependencies
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/workflow_support/common/install_ctdconverter.cmake.in" 
-               "${PROJECT_BINARY_DIR}/install_ctdconverter.cmake" @ONLY)
-
-# Configure file that will generate all CTDs
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/workflow_support/common/generate_ctds.cmake.in" 
-               "${PROJECT_BINARY_DIR}/generate_ctds.cmake" @ONLY)
 
 # Configure Ballaxy build file
-CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/ballaxy_generator.cmake.in" 
-               "${PROJECT_BINARY_DIR}/ballaxy_generator.cmake" @ONLY)
+CONFIGURE_FILE("${PROJECT_SOURCE_DIR}/ballaxy_generator.cmake.in" "${PROJECT_BINARY_DIR}/ballaxy_generator.cmake" @ONLY)
 
 # Generate Galaxy startup file including necessary ENV variables
 IF(${BALLAXY_INSTANCE})

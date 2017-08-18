@@ -4,16 +4,16 @@ FILE(MAKE_DIRECTORY @GALAXY_STUBS_DIR@)
 FILE(MAKE_DIRECTORY @LOGFILE_DIR@)
 
 # Install CTDConverter and its dependencies
-INCLUDE(@PROJECT_BINARY_DIR@/install_ctdconverter.cmake)
+INCLUDE(${CMAKE_SOURCE_DIR}/workflow_support/common/install_ctdconverter.cmake.in)
 
 # Generate CTDs for BALLTools
-INCLUDE(@PROJECT_BINARY_DIR@/generate_ctds.cmake)
+INCLUDE(${CMAKE_SOURCE_DIR}/workflow_support/common/generate_ctds.cmake)
 
 # Generate Galaxy XML stubs
 MESSAGE(STATUS "Generating Galaxy ToolConfig files")
 FILE(GLOB CTD_FILES "@CTD_OUTFILE_DIR@/*.ctd")
 
-EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "convert.py"
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "CTDConverter/converter.py"
 	galaxy	
 	--input ${CTD_FILES}
 	--output-destination @GALAXY_STUBS_DIR@
@@ -27,7 +27,7 @@ EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "convert.py"
 	--blacklist help h write_par par env write_ini
 	OUTPUT_FILE "@LOGFILE_DIR@/galaxy_xml_gen_out.log"
 	ERROR_FILE "@LOGFILE_DIR@/galaxy_xml_gen_err.log"
-	WORKING_DIRECTORY "@PROJECT_BINARY_DIR@/CTDConverter"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
 )
 
 # Copy macros.xml

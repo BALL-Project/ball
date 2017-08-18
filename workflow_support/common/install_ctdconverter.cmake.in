@@ -1,0 +1,69 @@
+# Script to install CTDConverter and its dependencies via conda
+MESSAGE(STATUS "Installing CTDConverter and its dependencies")
+SET(CTDCONVERTER_VERSION "cwl_support")
+SET(CTDSCHEMA_VERSION "v1.7")
+
+# Download Miniconda installer
+MESSAGE(STATUS "Installing miniconda")
+FILE(DOWNLOAD "https://repo.continuum.io/miniconda/@MINICONDA_INSTALLER@" "@PROJECT_BINARY_DIR@/@MINICONDA_INSTALLER@")
+
+# Install Miniconda
+EXECUTE_PROCESS(COMMAND sh @MINICONDA_INSTALLER@ -b -p @MINICONDA_INSTALL_DIR@
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Install dependencies in the proper order: ctdopts, lxml, ruamel.yaml, downgraded libxml2
+# Install CTDopts
+MESSAGE(STATUS "Installing CTDopts (CTDConverter dependency)")
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y --channel workflowconversion ctdopts
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_ctdopts_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_ctdopts_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Install Miniconda lxml
+MESSAGE(STATUS "Installing lxml (CTDConverter dependency)")
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y lxml
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_lxml_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_lxml_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Install ruamel.yaml
+MESSAGE(STATUS "Installing ruamel.yaml (CTDConverter dependency)")
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y --channel conda-forge ruamel.yaml
+	OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_ruamel_yaml_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/miniconda_install_ruamel_yaml_err.log"
+	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# lxml depends on libxml2; installing lxml installs libxml2 v2.9.4., which contains a bug in schema validation
+# so, we downgrade to the latest known version of libxml2 that works
+MESSAGE(STATUS "Downgrading libxml2 (CTDConverter dependency)")
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y libxml2=2.9.2
+        OUTPUT_FILE "@LOGFILE_DIR@/miniconda_install_libxml2_out.log"
+        ERROR_FILE "@LOGFILE_DIR@/miniconda_install_libxml2_err.log"
+        WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+)
+
+# Clone CTDConverter
+IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTDConverter")
+	MESSAGE(STATUS "Cloning CTDConverter GitHub repository")
+	EXECUTE_PROCESS(COMMAND git clone --branch ${CTDCONVERTER_VERSION} https://github.com/WorkflowConversion/CTDConverter
+		OUTPUT_FILE "@LOGFILE_DIR@/ctdconverter_clone_out.log"
+		ERROR_FILE "@LOGFILE_DIR@/ctdconverter_clone_err.log"
+		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+	)	
+ENDIF()
+
+# Clone CTDSchema
+IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTDSchema")
+	MESSAGE(STATUS "Cloning CTDSchema GitHub repository")
+	EXECUTE_PROCESS(COMMAND git clone --branch ${CTDSCHEMA_VERSION} https://github.com/WorkflowConversion/CTDSchema
+		OUTPUT_FILE "@LOGFILE_DIR@/ctdschema_clone_out.log"
+		ERROR_FILE "@LOGFILE_DIR@/ctdschema_clone_err.log"
+		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+	)	
+ENDIF()
