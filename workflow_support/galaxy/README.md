@@ -30,6 +30,10 @@ For a detailed description how a working Ballaxy instance can be setup using the
 please have a look at the corresponding [Galaxy documentation] and a configured BALLAXY setup script 
 for a full ballaxy instance (ball_build_dir/workflow_support/galaxy/ballaxy_generator.cmake).
 
+To generate the [Galaxy] *ToolConfigs* and all related files, simply use the `ballaxy` target, like so:
+
+    $ make ballaxy
+
 
 [Galaxy]: https://galaxyproject.org
 [Galaxy documentation]: https://new.galaxyproject.org/Admin/Tools/AddToolTutorial

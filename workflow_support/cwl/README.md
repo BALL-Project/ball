@@ -5,9 +5,11 @@ This folder contains a BALL dependent subproject to generate [CWL] task definiti
 
 The following configure options are provided as CMake flags:
 
-- `BALL_BUILD_CWL` (default: `ON`): 
+- `BALL_BUILD_CWL` (default: `ON`): Builds required [CWL] task descriptors to include BALL TOOLS in [CWL] workflows.
 
-  Builds required [CWL] task descriptors to include BALL TOOLS in [CWL] workflows.
-  
+To generate the [CWL] task descriptors, simply use the `cwl` target, like so:
+
+    $ make cwl
+ 
 
 [CWL]: https://github.com/common-workflow-language
