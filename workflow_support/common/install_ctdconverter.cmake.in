@@ -1,7 +1,8 @@
 # Script to install CTDConverter and its dependencies via conda
 MESSAGE(STATUS "Installing CTDConverter and its dependencies")
-SET(CTDCONVERTER_VERSION "cwl_support")
-SET(CTDSCHEMA_VERSION "v1.7")
+
+MESSAGE(STATUS "Using CTDConverter version @CTDCONVERTER_VERSION@")
+MESSAGE(STATUS "Using CTDSchema version @CTDSCHEMA_VERSION@")
 
 # Download Miniconda installer
 MESSAGE(STATUS "Installing miniconda")
@@ -51,7 +52,7 @@ EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/conda" install -y libxml2=2
 # Clone CTDConverter
 IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTDConverter")
 	MESSAGE(STATUS "Cloning CTDConverter GitHub repository")
-	EXECUTE_PROCESS(COMMAND git clone --branch ${CTDCONVERTER_VERSION} https://github.com/WorkflowConversion/CTDConverter
+	EXECUTE_PROCESS(COMMAND git clone --branch @CTDCONVERTER_VERSION@ https://github.com/WorkflowConversion/CTDConverter
 		OUTPUT_FILE "@LOGFILE_DIR@/ctdconverter_clone_out.log"
 		ERROR_FILE "@LOGFILE_DIR@/ctdconverter_clone_err.log"
 		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
@@ -61,7 +62,7 @@ ENDIF()
 # Clone CTDSchema
 IF(NOT EXISTS "@PROJECT_BINARY_DIR@/CTDSchema")
 	MESSAGE(STATUS "Cloning CTDSchema GitHub repository")
-	EXECUTE_PROCESS(COMMAND git clone --branch ${CTDSCHEMA_VERSION} https://github.com/WorkflowConversion/CTDSchema
+	EXECUTE_PROCESS(COMMAND git clone --branch @CTDSCHEMA_VERSION@ https://github.com/WorkflowConversion/CTDSchema
 		OUTPUT_FILE "@LOGFILE_DIR@/ctdschema_clone_out.log"
 		ERROR_FILE "@LOGFILE_DIR@/ctdschema_clone_err.log"
 		WORKING_DIRECTORY @PROJECT_BINARY_DIR@

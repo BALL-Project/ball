@@ -1,77 +1,25 @@
 # Generate necessary directories
 FILE(MAKE_DIRECTORY @CTD_OUTFILE_DIR@)
-FILE(MAKE_DIRECTORY @GALAXY_STUBS_DIR@)
+FILE(MAKE_DIRECTORY @CWL_STUBS_DIR@)
 FILE(MAKE_DIRECTORY @LOGFILE_DIR@)
 
 # Install CTDConverter and its dependencies
-INCLUDE(${CMAKE_SOURCE_DIR}/workflow_support/common/install_ctdconverter.cmake.in)
+INCLUDE(@PROJECT_BINARY_DIR@/install_ctdconverter.cmake)
 
 # Generate CTDs for BALLTools
-INCLUDE(${CMAKE_SOURCE_DIR}/workflow_support/common/generate_ctds.cmake)
+INCLUDE(@PROJECT_BINARY_DIR@/generate_ctds.cmake)
 
-# Generate Galaxy XML stubs
-MESSAGE(STATUS "Generating Galaxy ToolConfig files")
+# Generate CWL stubs
+MESSAGE(STATUS "Generating CWL task files")
 FILE(GLOB CTD_FILES "@CTD_OUTFILE_DIR@/*.ctd")
 
-EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "CTDConverter/converter.py"
-	galaxy	
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "convert.py"
+	cwl
 	--input ${CTD_FILES}
-	--output-destination @GALAXY_STUBS_DIR@
-	--datatypes-destination "@GALAXY_STUBS_DIR@/datatypes_conf.xml"
-	--tool-conf-destination "@GALAXY_STUBS_DIR@/tool_conf.xml"
-	--formats-file "@PROJECT_SOURCE_DIR@/file_formats.txt"
-	--macros "@PROJECT_SOURCE_DIR@/macros.xml"
+	--output-destination @CWL_STUBS_DIR@
 	--validation-schema "@PROJECT_BINARY_DIR@/CTDSchema/CTD.xsd"
-	--default-category Other
-	--galaxy-tool-path BALL
 	--blacklist help h write_par par env write_ini
-	OUTPUT_FILE "@LOGFILE_DIR@/galaxy_xml_gen_out.log"
-	ERROR_FILE "@LOGFILE_DIR@/galaxy_xml_gen_err.log"
-	WORKING_DIRECTORY @PROJECT_BINARY_DIR@
+	OUTPUT_FILE "@LOGFILE_DIR@/cwl_gen_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/cwl_gen_err.log"
+	WORKING_DIRECTORY "@PROJECT_BINARY_DIR@/CTDConverter"
 )
-
-# Copy macros.xml
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "@PROJECT_SOURCE_DIR@/macros.xml" "@GALAXY_STUBS_DIR@/macros.xml")
-
-
-# If Galaxy stubs generation only, stop here
-SET(BALLAXY_INSTANCE @BALLAXY_INSTANCE@)
-IF(NOT BALLAXY_INSTANCE)
-	RETURN()
-ENDIF()
-
-# Clone Galaxy Project
-IF(NOT EXISTS "@PROJECT_BINARY_DIR@/galaxy")
-	EXECUTE_PROCESS(COMMAND git clone -b @GALAXY_RELEASE@ https://github.com/galaxyproject/galaxy.git
-		OUTPUT_FILE "@LOGFILE_DIR@/galaxy_clone_out.log"
-		ERROR_FILE "@LOGFILE_DIR@/galaxy_clone_err.log"
-		WORKING_DIRECTORY @PROJECT_BINARY_DIR@
-	)
-ENDIF()
-
-# Create link to BALL tool XMLs
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink "@GALAXY_STUBS_DIR@" "@PROJECT_BINARY_DIR@/galaxy/tools/BALL")
-
-# Deploy Ballaxy tool_conf.xml
-EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "@GALAXY_STUBS_DIR@/tool_conf.xml" "@PROJECT_BINARY_DIR@/galaxy/config/tool_conf.xml")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

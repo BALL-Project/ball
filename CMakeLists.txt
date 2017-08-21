@@ -633,14 +633,29 @@ IF(BALL_HAS_VIEW)
 	)
 ENDIF()
 
+# TODO read version from the command line (CTDConverter/CTDSchema versions), default to "master"
+
 
 # TOOLS and Ballaxy targets
 OPTION(BALL_BUILD_TOOLS "Build BALL command line tools (BALLTools)" ON)
 OPTION(BALL_BUILD_BALLAXY "Build Ballaxy stubs. To create full Ballaxy instance including Galaxy also set -DBALLAXY_INSTANCE=ON" ON)
+OPTION(BALL_BUILD_CWL "Build CWL stubs." ON)
 OPTION(BALLAXY_INSTANCE "Create working Ballaxy instance." OFF)
 
 SET(TOOLS_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/TOOLS")
 SET(UTILS_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/UTILITIES")
+
+## read the version for CTDSchema/CTDConverter if they are needed
+IF(BALL_BUILD_BALAXY OR BALL_BUILD_CWL)
+	IF (NOT CTDSCHEMA_VERSION)
+		MESSAGE(STATUS "Setting CTDSchema version to its default value (v1.7)")
+		SET(CTDSCHEMA_VERSION "v1.7")
+	ENDIF()
+	IF (NOT CTDCONVERTER_VERSION)
+		MESSAGE(STATUS "Setting CTDConverter version to its default value (v2.0)")
+		SET(CTDCONVERTER_VERSION "v2.0")
+	ENDIF()	
+ENDIF()
 
 IF(BALL_BUILD_BALLAXY)
 	# Galaxy release version (GitHub release branch) can be changed via the the following CMake variable.
@@ -653,12 +668,16 @@ IF(BALL_BUILD_BALLAXY)
 	ADD_SUBDIRECTORY(workflow_support/galaxy)
 ENDIF()
 
+IF(BALL_BUILD_CWL)
+	# We need the TOOLS to generate the CWL stubs
+	SET(BALL_BUILD_TOOLS ON)
+	ADD_SUBDIRECTORY(workflow_support/cwl)
+ENDIF()
+
 IF(BALL_BUILD_TOOLS)
 	ADD_SUBDIRECTORY(source/APPLICATIONS/TOOLS)
 	ADD_SUBDIRECTORY(source/APPLICATIONS/UTILITIES)
 ENDIF()
-
-
 
 ## add targets for Python modules
 ADD_SUBDIRECTORY(source/PYTHON/EXTENSIONS)

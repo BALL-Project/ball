@@ -54,24 +54,3 @@ EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E create_symlink "@GALAXY_STUBS_DIR@" 
 
 # Deploy Ballaxy tool_conf.xml
 EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy "@GALAXY_STUBS_DIR@/tool_conf.xml" "@PROJECT_BINARY_DIR@/galaxy/config/tool_conf.xml")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
