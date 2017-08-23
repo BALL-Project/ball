@@ -1,0 +1,25 @@
+# Generate necessary directories
+FILE(MAKE_DIRECTORY @CTD_OUTFILE_DIR@)
+FILE(MAKE_DIRECTORY @CWL_STUBS_DIR@)
+FILE(MAKE_DIRECTORY @LOGFILE_DIR@)
+
+# Install CTDConverter and its dependencies
+INCLUDE(@PROJECT_BINARY_DIR@/install_ctdconverter.cmake)
+
+# Generate CTDs for BALLTools
+INCLUDE(@PROJECT_BINARY_DIR@/generate_ctds.cmake)
+
+# Generate CWL stubs
+MESSAGE(STATUS "Generating CWL task files")
+FILE(GLOB CTD_FILES "@CTD_OUTFILE_DIR@/*.ctd")
+
+EXECUTE_PROCESS(COMMAND "@MINICONDA_INSTALL_DIR@/bin/python" "convert.py"
+	cwl
+	--input ${CTD_FILES}
+	--output-destination @CWL_STUBS_DIR@
+	--validation-schema "@PROJECT_BINARY_DIR@/CTDSchema/CTD.xsd"
+	--blacklist help h write_par par env write_ini
+	OUTPUT_FILE "@LOGFILE_DIR@/cwl_gen_out.log"
+	ERROR_FILE "@LOGFILE_DIR@/cwl_gen_err.log"
+	WORKING_DIRECTORY "@PROJECT_BINARY_DIR@/CTDConverter"
+)
