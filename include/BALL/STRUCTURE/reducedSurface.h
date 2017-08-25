@@ -370,11 +370,11 @@ namespace BALL
 		              TAngle<double>& angle, bool check = false) const;
 
 		/** Compute the reduced surface.
+		 *  @throws BALL::Exception::GeneralException
+		 *  @throws BALL::Exception::DivisionByZero
+		 *  @throws BALL::Exception::IndexOverflow
 		*/
-		void compute()
-			throw(Exception::GeneralException,
-			      Exception::DivisionByZero,
-			      Exception::IndexOverflow);
+		void compute();
 
 		//@}
 
@@ -537,11 +537,11 @@ namespace BALL
 		//@{
 
 		/** Compute the reduced surface
+		 * @throws BALL::Exception::GeneralException
+		 * @throws BALL::Exception::DivisionByZero
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		void run()
-			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+		void run();
 
 		//@}
 
@@ -557,27 +557,27 @@ namespace BALL
 		void preProcessing();
 
 		/*_ Compute a RSComponent.
+		 * @throws BALL::Exception::GeneralException
+		 * @throws BALL::Exception::DivisionByZero
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		void getRSComponent()
-			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+		void getRSComponent();
 
 		/*_ Treat all edges of a face.
-			@param	face	the RSFace to be treated
+		 * @param	face	the RSFace to be treated
+		 * @throws BALL::Exception::GeneralException
+		 * @throws BALL::Exception::DivisionByZero
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		bool treatFace(RSFace* face)
-			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+		bool treatFace(RSFace* face);
 
 		/*_ Roll over an edge that belongs to only one face and find the other one.
-				@param	edge	the RSEdge to be treated
+		 * @param	edge	the RSEdge to be treated
+		 * @throws BALL::Exception::GeneralException
+		 * @throws BALL::Exception::DivisionByZero
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		bool treatEdge(RSEdge* edge)
-			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+		bool treatEdge(RSEdge* edge);
 
 		/*_ Treat an ambiguous situation.
 				All vertices on an ambiguous atom are deleted with all its edges and
@@ -587,11 +587,11 @@ namespace BALL
 		void correct(Index atom);
 
 		/*_ Check all new created vertices for extensions
+		 * @throws BALL::Exception::GeneralException
+		 * @throws BALL::Exception::DivisionByZero
+		 * @throws BALL::Exception::IndexOverflow
 		*/
-		void extendComponent()
-			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+		void extendComponent();
 
 		/*_ Find a third atom rolling over two vertices starting on a face.
 				From all atoms which can be touched by the probe sphere when it
@@ -606,12 +606,12 @@ namespace BALL
 			@param	probe		the new probe sphere
 			@param	phi			the rotation angle
 			@return	Index		index of the found atom
+			@throws BALL::Exception::GeneralException
+			@throws BALL::Exception::DivisionByZero
+			@throws BALL::Exception::IndexOverflow
 		*/
 		Index thirdAtom(RSVertex* vertex1, RSVertex* vertex2,
-		                RSFace* face, TSphere3<double>& probe, TAngle<double>& phi)
-			throw(Exception::GeneralException,
-						Exception::DivisionByZero,
-						Exception::IndexOverflow);
+		                RSFace* face, TSphere3<double>& probe, TAngle<double>& phi);
 
 		//@}
 		/*_ @name Finding a start position
