@@ -1587,6 +1587,7 @@ namespace BALL
 
 		bool MainControl::remove(Composite& composite, bool to_delete, bool update)
 		{
+			wait();
 			control_selection_.clear();
 
 			if (update) notify_(new CompositeMessage(composite, CompositeMessage::REMOVED_COMPOSITE));
