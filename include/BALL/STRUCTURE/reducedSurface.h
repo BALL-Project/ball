@@ -882,7 +882,12 @@ namespace BALL
 
 		/*_ all new created vertices which are not yet checked for extensions
 		*/
-		HashSet<RSVertex*> new_vertices_;
+		std::deque<RSVertex*> new_vertices_;
+
+		/*_ all dangling pointers in new_vertices_
+		 * (stored separately for performance reasons)
+		 */
+		HashSet<RSVertex*> rm_vertices_;
 
 		/*_ all new created faces which are not completely treated yet
 		*/

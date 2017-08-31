@@ -636,6 +636,7 @@ namespace BALL
 	   neighbours_of_two_(),
 	   probe_positions_(),
 	   new_vertices_(),
+	   rm_vertices_(),
 	   new_faces_(),
 	   vertices_()
 	{
@@ -649,6 +650,7 @@ namespace BALL
 	   neighbours_of_two_(),
 	   probe_positions_(),
 	   new_vertices_(),
+	   rm_vertices_(),
 	   new_faces_(),
 	   vertices_(rs->number_of_atoms_)
 	{
@@ -853,7 +855,7 @@ namespace BALL
 				vertex1->join(*test_vertex1);
 				test_vertex1->substitute(vertex1);
 				rs_->vertices_[test_vertex1->index_] = NULL;
-				new_vertices_.erase(test_vertex1);
+				rm_vertices_.insert(test_vertex1);
 				vertices_[test_vertex1->atom_].remove(test_vertex1);
 				delete test_vertex1;
 			}
@@ -863,7 +865,7 @@ namespace BALL
 				vertex2->join(*test_vertex2);
 				test_vertex2->substitute(vertex2);
 				rs_->vertices_[test_vertex2->index_] = NULL;
-				new_vertices_.erase(test_vertex2);
+				rm_vertices_.insert(test_vertex2);
 				vertices_[test_vertex2->atom_].remove(test_vertex2);
 				delete test_vertex2;
 			}
@@ -968,13 +970,13 @@ namespace BALL
 				{
 					rs_->vertices_[(*test)->index_] = NULL;
 					vertices_[(*test)->atom_].remove(*test);
-					new_vertices_.erase(*test);
+					rm_vertices_.insert(*test);
 					delete *test;
 				}
 			}
 			rs_->vertices_[vertex->index_] = NULL;
 			vertices_[atom].remove(vertex);
-			new_vertices_.erase(vertex);
+			rm_vertices_.erase(vertex);
 			delete vertex;
 		}
 		rs_->atom_[atom].radius -= 10*Constants::EPSILON;
@@ -985,15 +987,22 @@ namespace BALL
 
 	void RSComputer::extendComponent()
 	{
-		std::deque<RSVertex*> new_vertices;
-		std::copy(new_vertices_.begin(), new_vertices_.end(), std::back_inserter(new_vertices));
-
-		while(!new_vertices.empty())
+		while(!new_vertices_.empty())
 		{
 			RSFace* face = NULL;
-			RSVertex* vertex1 = new_vertices.front();
-			new_vertices.pop_front();
-  		Index atom1(vertex1->atom_);
+			RSVertex* vertex1 = new_vertices_.front();
+			new_vertices_.pop_front();
+
+			/*
+			 * Caution: vertex1 might be a dangling pointer!
+			 * Skip iteration if vertex has been deleted.
+			 */
+			if (rm_vertices_.find(vertex1) != rm_vertices_.end())
+			{
+				continue;
+			}
+
+			Index atom1(vertex1->atom_);
 			std::deque<Index>::const_iterator i = neighbours_[atom1].begin();
 			bool stop = false;
 			while (!stop && i != neighbours_[atom1].end())
@@ -1012,8 +1021,8 @@ namespace BALL
 						{
 							insert(edge);
 							insert(vertex2);
-							new_vertices.push_back(vertex1);
-							new_vertices.push_back(vertex2);
+							new_vertices_.push_back(vertex1);
+							new_vertices_.push_back(vertex2);
 							// i = neighbours_[atom1].end()--; ???
 							break;
 						}
@@ -1045,9 +1054,9 @@ namespace BALL
 									insert(face);
 									insert(vertex2);
 									insert(vertex3);
-									new_vertices.push_back(vertex1);
-									new_vertices.push_back(vertex2);
-									new_vertices.push_back(vertex3);
+									new_vertices_.push_back(vertex1);
+									new_vertices_.push_back(vertex2);
+									new_vertices_.push_back(vertex3);
 									// i = neighbours_[atom1].end()--;
 									// j = candidates.end()--;
 									// ????
@@ -1066,8 +1075,7 @@ namespace BALL
 				getRSComponent();
 			}
 		}
-
-		new_vertices_.clear();
+		rm_vertices_.clear();
 	}
 
 	Index RSComputer::thirdAtom(RSVertex*	vertex1, RSVertex* vertex2,
@@ -1941,7 +1949,7 @@ namespace BALL
 	void RSComputer::insert(RSVertex* vertex)
 	{
 		rs_->insert(vertex);
-		new_vertices_.insert(vertex);
+		new_vertices_.push_back(vertex);
 		vertices_[vertex->atom_].push_back(vertex);
 		atom_status_[vertex->atom_] = STATUS_ON_SURFACE;
 	}
