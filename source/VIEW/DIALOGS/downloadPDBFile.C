@@ -177,12 +177,17 @@ namespace BALL
 					system->setProperty("FROM_FILE", url);
 					close();
 					pdbId->clearEditText();
-					getMainControl()->insert(*system, ascii(pdbId->currentText()));
-					
-					notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
-					
-					download->setDefault(true);
-					pdbId->setFocus();
+					if (!getMainControl()->insert(*system, ascii(pdbId->currentText())))
+					{
+						setStatusbarText(tr("Error adding the PDB file to systems"), true);
+						delete system;
+					}
+					else
+					{
+						notify_(new CompositeMessage(*system, CompositeMessage::CENTER_CAMERA));
+						download->setDefault(true);
+						pdbId->setFocus();
+					}
 				}
 				catch(...)
 				{
