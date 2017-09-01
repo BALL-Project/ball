@@ -976,7 +976,7 @@ namespace BALL
 			}
 			rs_->vertices_[vertex->index_] = NULL;
 			vertices_[atom].remove(vertex);
-			rm_vertices_.erase(vertex);
+			rm_vertices_.insert(vertex);
 			delete vertex;
 		}
 		rs_->atom_[atom].radius -= 10*Constants::EPSILON;
