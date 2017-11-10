@@ -159,19 +159,6 @@ ELSE()
 	}" BALL_ALLOW_LONG64_TYPE_OVERLOADS) 
 ENDIF()
 
-## Do we have an ansi compatible iostream implementation?
-CHECK_CXX_SOURCE_COMPILES("#include <iostream>
-	class A : public std::iostream
-	{
-		A() : std::basic_ios<char>(0),
-					std::iostream(0)
-		{}
-	};
-
-	int main(int /*argc*/, char** /*argv*/)
-	{
-	}" BALL_HAS_ANSI_IOSTREAM)
-
 ## Check whether the compiler allows parameterization oftemplate functions
 ## with inline functions (SGI CC has a problem with that)
 CHECK_CXX_SOURCE_COMPILES("template <int i>

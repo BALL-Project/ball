@@ -170,12 +170,6 @@
 
 #endif // BALL_OS_WINDOWS
 
-// Define whether the compiler provides an ANSI-compliant implementation
-// of <iostream>. This is required in COMMON/socket.h/C since we need
-// the correct initialisation of the base classes. These base classes are
-// either something like std::basic_ios<char> etc., or ios, istream etc.
-#cmakedefine BALL_HAS_ANSI_IOSTREAM
-
 // Define whether inline functions may be used as template parameters.
 #cmakedefine BALL_HAS_INLINE_TPL_ARGS
 
