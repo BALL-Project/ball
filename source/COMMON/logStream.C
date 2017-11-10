@@ -16,10 +16,8 @@
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	define BALL_IOS std::basic_ios<char>
-#	define BALL_OSTREAM std::ostream
 #else
 #	define BALL_IOS std::ios
-#	define BALL_OSTREAM std::ostream
 #endif
 
 namespace BALL 
@@ -296,7 +294,7 @@ namespace BALL
 	// keep the given buffer	
 	LogStream::LogStream(LogStreamBuf* buf, bool delete_buf, bool associate_stdio)
 		: BALL_IOS(buf),
-			BALL_OSTREAM(buf),
+			std::ostream(buf),
 			delete_buffer_(delete_buf),
 			disable_output_(false)
 	{
