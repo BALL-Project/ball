@@ -1154,14 +1154,12 @@ String& String::operator += (char c)
 	return *this;
 }
 
-#ifdef BALL_HAS_INITIALIZER_LISTS
 BALL_INLINE
 String& String::operator += (std::initializer_list<char> il)
 {
 	str_ += il;
 	return *this;
 }
-#endif
 
 BALL_INLINE
 String& String::append(const String& str)
@@ -1213,14 +1211,12 @@ String& String::append(InputIterator first, InputIterator last)
 	return *this;
 }
 
-#ifdef BALL_HAS_INITIALIZER_LISTS
 BALL_INLINE
 String& String::append(std::initializer_list<char> li)
 {
 	str_.append(li);
 	return *this;
 }
-#endif
 
 BALL_INLINE
 void String::push_back(char c)
@@ -1278,14 +1274,12 @@ String& String::assign(InputIterator first, InputIterator last)
 	return *this;
 }
 
-#ifdef BALL_HAS_INITIALIZER_LISTS
 BALL_INLINE
 String& String::assign(std::initializer_list<char> li)
 {
 	str_.assign(li);
 	return *this;
 }
-#endif
 
 #ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 BALL_INLINE
@@ -1364,7 +1358,7 @@ String::iterator String::insert(iterator p, InputIterator first, InputIterator l
 	return str_.insert(p, first, last);
 }
 
-#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT)
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT
 BALL_INLINE
 String& String::insert(const_iterator p, std::initializer_list<char> li)
 {
@@ -1515,7 +1509,7 @@ String& String::replace(iterator i1, iterator i2, InputIterator first, InputIter
 }
 #endif
 
-#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS)
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
 BALL_INLINE
 String& String::replace(const_iterator i1, const_iterator i2, std::initializer_list<char> li)
 {

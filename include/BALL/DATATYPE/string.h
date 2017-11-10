@@ -1129,10 +1129,10 @@ namespace BALL
 		String& operator += (const char* s);
 		///
 		String& operator += (char c);
-#ifdef BALL_HAS_INITIALIZER_LISTS
+
 		///
 		String& operator += (std::initializer_list<char> il);
-#endif
+
 		///
 		String& append(const String& str);
 		///
@@ -1148,10 +1148,10 @@ namespace BALL
 		///
 		template <class InputIterator>
 		String& append(InputIterator first, InputIterator last);
-#ifdef BALL_HAS_INITIALIZER_LISTS
+
 		///
 		String& append(std::initializer_list<char> li);
-#endif
+
 		///
 		void push_back(char c);
 		///
@@ -1169,10 +1169,10 @@ namespace BALL
 		///
 		template <class InputIterator>
 		String& assign(InputIterator first, InputIterator last);
-#ifdef BALL_HAS_INITIALIZER_LISTS
+
 		///
 		String& assign(std::initializer_list<char> li);
-#endif
+
 #ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		///
 		String& assign(string&& str) BALL_NOEXCEPT;
@@ -1202,7 +1202,7 @@ namespace BALL
 		///
 		template <class InputIterator>
 		iterator insert(iterator p, InputIterator first, InputIterator last);
-#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT)
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT
 		///
 		String& insert(const_iterator p, std::initializer_list<char> li);
 #endif
@@ -1256,7 +1256,7 @@ namespace BALL
 		template <class InputIterator>
 		String& replace(iterator i1, iterator i2, InputIterator first, InputIterator last);
 #endif
-#if defined(BALL_HAS_INITIALIZER_LISTS) && defined(BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS)
+#ifdef BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
 		///
 		String& replace(const_iterator i1, const_iterator i2, std::initializer_list<char> li);
 #endif
