@@ -14,13 +14,7 @@
 
 #define BUFFER_LENGTH 32768
 
-#ifdef BALL_HAS_ANSI_IOSTREAM
-#	define BALL_IOS std::basic_ios<char>
-#else
-#	define BALL_IOS std::ios
-#endif
-
-namespace BALL 
+namespace BALL
 {
 	const int LogStreamBuf::MIN_LEVEL = std::numeric_limits<int>::min();
 	const int LogStreamBuf::MAX_LEVEL = std::numeric_limits<int>::max();
@@ -293,7 +287,7 @@ namespace BALL
 
 	// keep the given buffer	
 	LogStream::LogStream(LogStreamBuf* buf, bool delete_buf, bool associate_stdio)
-		: BALL_IOS(buf),
+		: std::basic_ios<char>(buf),
 			std::ostream(buf),
 			delete_buffer_(delete_buf),
 			disable_output_(false)
