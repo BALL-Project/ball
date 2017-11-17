@@ -1101,7 +1101,6 @@ namespace BALL
 		///
 		const char& at(size_t pos) const;
 
-#ifdef BALL_HAS_STD_STRING_FRONT_BACK
 		///
 		char& front();
 		///
@@ -1110,8 +1109,6 @@ namespace BALL
 		char& back();
 		///
 		const char& back() const;
-#endif
-
 		//@}
 
 		/** @name Modifiers

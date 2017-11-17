@@ -26,18 +26,6 @@ CHECK_CXX_SOURCE_COMPILES(
 	"#include <string>
 	int main(int, char**)
 	{
-		std::string s;
-		s.front();
-		s.back();
-
-		return 0;
-	}" BALL_HAS_STD_STRING_FRONT_BACK
-)
-
-CHECK_CXX_SOURCE_COMPILES(
-	"#include <string>
-	int main(int, char**)
-	{
 		std::string s(\"a\");
 		s.pop_back();
 

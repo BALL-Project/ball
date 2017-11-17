@@ -1094,7 +1094,6 @@ const char& String::at(size_t pos) const
 	return str_.at(pos);
 }
 
-#ifdef BALL_HAS_STD_STRING_FRONT_BACK
 BALL_INLINE
 char& String::front()
 {
@@ -1118,7 +1117,6 @@ const char& String::back() const
 {
 	return str_.back();
 }
-#endif
 
 BALL_INLINE
 String& String::operator += (const String& str)
