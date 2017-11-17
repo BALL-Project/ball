@@ -14,12 +14,6 @@
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
 
-#ifdef BALL_HAS_INLINE_TPL_ARGS
-# define BALL_TPL_ARG_INLINE inline
-#else
-# define BALL_TPL_ARG_INLINE
-#endif
-
 // #define DEBUG 1
 
 namespace BALL
@@ -363,7 +357,7 @@ namespace BALL
 
 	// This is the standard version of the Lennard-Jones potential.
 	//
-	// BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance,
+	// inline float vdwSixTwelve(float inverse_square_distance,
 	float vdwSixTwelve(float inverse_square_distance,
 			float A, float B, float /* limit */)
 	{
@@ -395,8 +389,8 @@ namespace BALL
 	// This function will simply return a constant (defined by
 	// softening_limit) if the energy should rise above that constant value.
 	//
-	// BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance,
-	BALL_TPL_ARG_INLINE float vdwSixTwelveSoftSimple(float inverse_square_distance,
+	// inline float vdwSixTwelve(float inverse_square_distance,
+	inline float vdwSixTwelveSoftSimple(float inverse_square_distance,
 			float A, float B, float limit)
 	{
 		float inv_dist_6(inverse_square_distance
@@ -431,8 +425,8 @@ namespace BALL
 	// limit, it returns the value of softening limit plus the logarithm of
 	// the energy.
 	//
-	// BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance,
-	BALL_TPL_ARG_INLINE float vdwSixTwelveSoftLog(float inverse_square_distance,
+	// inline float vdwSixTwelve(float inverse_square_distance,
+	inline float vdwSixTwelveSoftLog(float inverse_square_distance,
 			float A, float B, float limit)
 	{
 		float inv_dist_6(inverse_square_distance
@@ -462,7 +456,7 @@ namespace BALL
 	}
 
 
-  BALL_TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance,
+	inline float vdwTenTwelve(float inverse_square_distance,
 			float A, float B, float /* limit */)
 	{
 		float inv_dist_10 = inverse_square_distance *
@@ -472,7 +466,7 @@ namespace BALL
 	}
 
 
-  BALL_TPL_ARG_INLINE float vdwTenTwelveSoftSimple(float inverse_square_distance,
+	inline float vdwTenTwelveSoftSimple(float inverse_square_distance,
 			float A, float B, float limit)
 	{
 		float inv_dist_10 = inverse_square_distance *
@@ -484,7 +478,7 @@ namespace BALL
 	}
 
 
-  BALL_TPL_ARG_INLINE float vdwTenTwelveSoftLog(float inverse_square_distance,
+	inline float vdwTenTwelveSoftLog(float inverse_square_distance,
 			float A, float B, float limit)
 	{
 		float inv_dist_10 = inverse_square_distance *
@@ -523,7 +517,7 @@ namespace BALL
 
 	// ??? There seems to be something wrong with this switching function.
 
-  // BALL_TPL_ARG_INLINE float cubicSwitch(double square_distance,
+  // inline float cubicSwitch(double square_distance,
   /*float cubicSwitch(double square_distance,
 			const SwitchingCutOnOff& cutoffs)
   {

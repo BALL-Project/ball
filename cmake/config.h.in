@@ -170,9 +170,6 @@
 
 #endif // BALL_OS_WINDOWS
 
-// Define whether inline functions may be used as template parameters.
-#cmakedefine BALL_HAS_INLINE_TPL_ARGS
-
 // Defines whether the extern keyword for templates is supported by the compiler.
 // We can use this to speed up compilation and to reduce some warnings in under
 // MSVC.

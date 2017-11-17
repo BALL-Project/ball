@@ -159,23 +159,6 @@ ELSE()
 	}" BALL_ALLOW_LONG64_TYPE_OVERLOADS) 
 ENDIF()
 
-## Check whether the compiler allows parameterization oftemplate functions
-## with inline functions (SGI CC has a problem with that)
-CHECK_CXX_SOURCE_COMPILES("template <int i>
-	inline double foo(double x){ return i * x; }
-
-	typedef double (*Function)(double);
-
-	template <Function F>
-	inline double bar(double x) { return F(x); }
-
-	int main(int /*argc*/, char** /*argv*/)
-	{
-		double d = bar< foo<3> >(2.0);
-		
-		return 0;
-	}" BALL_HAS_INLINE_TPL_ARGS)
-
 ## Check for extern templates
 INCLUDE(cmake/BALLConfigExternTemplates.cmake)
 

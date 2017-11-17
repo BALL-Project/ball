@@ -14,13 +14,7 @@ using namespace std;
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
 
-#ifdef BALL_HAS_INLINE_TPL_ARGS
-#	define BALL_TPL_ARG_INLINE inline
-#else
-#	define BALL_TPL_ARG_INLINE
-#endif
-
-namespace BALL 
+namespace BALL
 {
 	bool store_interactions = false;
 	AdvancedElectrostatic* advanced_electrostatic = 0;
@@ -737,23 +731,23 @@ namespace BALL
 		float B;
 	};
 		
-	BALL_TPL_ARG_INLINE float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
+	inline float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * inverse_square_distance;
 	}
 
-	BALL_TPL_ARG_INLINE float coulomb(float inverse_square_distance, float charge_product)
+	inline float coulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * sqrt(inverse_square_distance);
 	}
 
-	BALL_TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance, float A, float B)
+	inline float vdwSixTwelve(float inverse_square_distance, float A, float B)
 	{
 		float inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
-	BALL_TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance, float A, float B)
+	inline float vdwTenTwelve(float inverse_square_distance, float A, float B)
 	{
 		float inv_dist_10 = inverse_square_distance * inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
@@ -813,7 +807,7 @@ namespace BALL
 	}
 
 	
-	BALL_TPL_ARG_INLINE float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
+	inline float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
 	{
 		float below_off = ((square_distance < cutoffs.cutoff_2) ? 1.0 : 0.0);
 		float below_on = ((square_distance < cutoffs.cuton_2) ? 1.0 : 0.0);
