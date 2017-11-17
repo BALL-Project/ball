@@ -1084,10 +1084,8 @@ namespace BALL
 		///
 		bool empty() const BALL_NOEXCEPT;
 
-#ifdef BALL_HAS_STD_STRING_SHRINK_TO_FIT
 		///
 		void shrink_to_fit();
-#endif
 		//@}
 
 		/** @name Element Access

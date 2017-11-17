@@ -27,17 +27,6 @@ CHECK_CXX_SOURCE_COMPILES(
 	int main(int, char**)
 	{
 		std::string s;
-		s.shrink_to_fit();
-
-		return 0;
-	}" BALL_HAS_STD_STRING_SHRINK_TO_FIT
-)
-
-CHECK_CXX_SOURCE_COMPILES(
-	"#include <string>
-	int main(int, char**)
-	{
-		std::string s;
 		s.front();
 		s.back();
 

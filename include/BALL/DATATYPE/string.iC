@@ -1064,13 +1064,11 @@ bool String::empty() const BALL_NOEXCEPT
 	return str_.empty();
 }
 
-#ifdef BALL_HAS_STD_STRING_SHRINK_TO_FIT
 BALL_INLINE
 void String::shrink_to_fit()
 {
 	return str_.shrink_to_fit();
 }
-#endif
 
 BALL_INLINE
 char& String::operator[] (size_t pos)

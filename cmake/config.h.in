@@ -193,9 +193,6 @@
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT
 
-// Defines whether the c++ std lib implementation supports shrink_to_fit in string
-#cmakedefine BALL_HAS_STD_STRING_SHRINK_TO_FIT
-
 // Defines whether the c++ std lib implementation supports front/back in string
 #cmakedefine BALL_HAS_STD_STRING_FRONT_BACK
 
