@@ -176,10 +176,6 @@
 // BALL.
 #cmakedefine BALL_HAS_THREAD_LOCAL
 
-// Defines whether the compiler supports c++0x-style rvalue references
-// (int&&, ...)
-#cmakedefine BALL_HAS_RVALUE_REFERENCES
-
 // Defines whether the c++ std lib implementation supports rvalue references in the std::string class
 #cmakedefine BALL_STD_STRING_HAS_RVALUE_REFERENCES
 

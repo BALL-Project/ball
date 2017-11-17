@@ -1789,7 +1789,6 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				return *this;
 		}
 
-#ifdef BALL_HAS_RVALUE_REFERENCES
 		PoseClustering::ClusterProperties::ClusterProperties(ClusterProperties&& o) BALL_NOEXCEPT
 				: poses(std::move(o.poses)),
 				  size(o.size),
@@ -1813,7 +1812,6 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 #endif
 				return *this;
 		}
-#endif
 
 	template <class Archive>
 	void PoseClustering::ClusterProperties::serialize(Archive& ar, const unsigned int /*version*/)

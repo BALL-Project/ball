@@ -1,11 +1,4 @@
 CHECK_CXX_SOURCE_COMPILES(
-	"int main(int, char**)
-	{
-		int &&a = 5;
-	}" BALL_HAS_RVALUE_REFERENCES
-)
-
-CHECK_CXX_SOURCE_COMPILES(
 	"#include <string>
 
 	class Bla : std::string
