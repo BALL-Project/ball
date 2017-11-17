@@ -986,8 +986,6 @@ String::const_reverse_iterator String::rend() const BALL_NOEXCEPT
 	return str_.rend();
 }
 
-#ifdef BALL_HAS_STD_STRING_CONST_ITERATORS
-
 BALL_INLINE
 String::const_iterator String::cbegin() const BALL_NOEXCEPT
 {
@@ -1011,8 +1009,6 @@ String::const_reverse_iterator String::crend() const BALL_NOEXCEPT
 {
 	return str_.crend();
 }
-
-#endif
 
 BALL_INLINE
 size_t String::size() const BALL_NOEXCEPT

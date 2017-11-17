@@ -189,9 +189,6 @@
 # define BALL_NOEXCEPT
 #endif
 
-// Defines whether the compiler supports c++11-style const iterators in string
-#cmakedefine BALL_HAS_STD_STRING_CONST_ITERATORS
-
 // Defines whether the c++ std lib implementation supports const_iterators in insert, replace, ...
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT

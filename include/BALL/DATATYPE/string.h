@@ -1050,7 +1050,6 @@ namespace BALL
 		///
 		const_reverse_iterator rend() const BALL_NOEXCEPT;
 
-#ifdef BALL_HAS_STD_STRING_CONST_ITERATORS
 		///
 		const_iterator cbegin() const BALL_NOEXCEPT;
 		///
@@ -1059,7 +1058,6 @@ namespace BALL
 		const_reverse_iterator crbegin() const BALL_NOEXCEPT;
 		///
 		const_reverse_iterator crend() const BALL_NOEXCEPT;
-#endif
 
 		//@}
 
