@@ -193,9 +193,6 @@
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_FUNCTIONS
 #cmakedefine BALL_HAS_STD_STRING_CONST_ITERATOR_INITLIST_INSERT
 
-// Defines whether the c++ std lib implementation supports pop_back in string
-#cmakedefine BALL_HAS_STD_STRING_POP_BACK
-
 // Defines whether we can overload functions with LongIndex and LongSize safely
 #cmakedefine BALL_ALLOW_LONG64_TYPE_OVERLOADS
 

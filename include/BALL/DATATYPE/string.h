@@ -1257,10 +1257,8 @@ namespace BALL
 		///
 		void swap(string& str);
 
-#ifdef BALL_HAS_STD_STRING_POP_BACK
 		///
 		void pop_back();
-#endif
 		//@}
 
 		/** @name String Operations

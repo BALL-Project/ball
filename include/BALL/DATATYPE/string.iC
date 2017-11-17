@@ -1516,13 +1516,11 @@ void String::swap(string& str)
 	str_.swap(str);
 }
 
-#ifdef BALL_HAS_STD_STRING_POP_BACK
 BALL_INLINE
 void String::pop_back()
 {
 	str_.pop_back();
 }
-#endif
 
 BALL_INLINE
 const char* String::c_str() const BALL_NOEXCEPT
