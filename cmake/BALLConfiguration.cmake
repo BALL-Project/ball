@@ -159,9 +159,6 @@ ELSE()
 	}" BALL_ALLOW_LONG64_TYPE_OVERLOADS) 
 ENDIF()
 
-## Check for extern templates
-INCLUDE(cmake/BALLConfigExternTemplates.cmake)
-
 ## Check for thread_local
 INCLUDE(cmake/BALLConfigThreadLocal.cmake)
 

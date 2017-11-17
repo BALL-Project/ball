@@ -170,11 +170,6 @@
 
 #endif // BALL_OS_WINDOWS
 
-// Defines whether the extern keyword for templates is supported by the compiler.
-// We can use this to speed up compilation and to reduce some warnings in under
-// MSVC.
-#cmakedefine BALL_HAS_EXTERN_TEMPLATES
-
 // Defines whether the C++11 thread_local keyword is supported.
 // If this keyword is present, some uses of static in methods can
 // be replaced by thread_local for improving the thread safety of

@@ -1142,16 +1142,10 @@ namespace BALL
 // required for visual studio
 #ifdef BALL_COMPILER_MSVC
 #include <vector>
-#ifdef BALL_HAS_EXTERN_TEMPLATES
 extern template class BALL_EXPORT std::vector<Vector3>;
-#elif
-template class BALL_EXPORT std::vector<Vector3>;
-#endif
 #endif
 
-#ifdef BALL_HAS_EXTERN_TEMPLATES
 extern template class BALL_EXPORT TVector3<float>;
-#endif
 
 }// namespace BALL
 
