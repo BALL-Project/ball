@@ -5,7 +5,7 @@ IF(NOT BALL_HAS_VIEW)
 	RETURN()
 ENDIF()
 
-IF(NOT USE_QTWEBENGINE)
+IF(NOT BALL_HAS_QTWEBENGINE)
 	MESSAGE(STATUS "QtWebEngine support has not been enabled. Disabling the Jupyter plugin.")
 	RETURN()
 ENDIF()
