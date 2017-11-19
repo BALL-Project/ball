@@ -27,6 +27,12 @@
 
 #ifdef BALL_HAS_GLEW
 # include <GL/glew.h>
+#elif defined(BALL_OS_DARWIN)
+# include <OpenGL/gl.h>
+# include <OpenGL/glu.h>
+#else
+# include <GL/gl.h>
+# include <GL/glu.h>
 #endif
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -40,16 +46,6 @@
 #ifndef APIENTRY
 #define APIENTRY
 #endif
-
-/*
-#ifdef BALL_OS_DARWIN
-        #include <OpenGL/gl.h>
-	#include <OpenGL/glu.h>
-#else
-        #include <GL/gl.h>
-	#include <GL/glu.h>
-#endif
-*/
 
 class QFont;
 
