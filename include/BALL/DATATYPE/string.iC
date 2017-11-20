@@ -23,7 +23,6 @@ String::String(const string& s)
 {
 }
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 BALL_INLINE
 String::String(String&& s)
 	: str_(std::move(s))
@@ -54,7 +53,6 @@ String& String::operator=(string&& s)
 
 	return *this;
 }
-#endif
 
 BALL_INLINE 
 String::String(const unsigned char c)
@@ -581,7 +579,6 @@ String operator + (const String& s1, char c)
   return result;
 }
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 ///	Concatenates two strings
 BALL_INLINE
 String operator + (String&& s1, const string& s2)
@@ -655,9 +652,7 @@ String operator + (char c, String&& s)
 	return std::move(s);
 }
 
-#endif
-
-BALL_INLINE 
+BALL_INLINE
 void String::destroy()
 {
   assign("");
@@ -1273,14 +1268,12 @@ String& String::assign(std::initializer_list<char> li)
 	return *this;
 }
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 BALL_INLINE
 String& String::assign(string&& str) BALL_NOEXCEPT
 {
 	str_.assign(str);
 	return *this;
 }
-#endif
 
 BALL_INLINE
 String& String::insert(size_t pos, const string& str)
@@ -1763,7 +1756,6 @@ istream& getline(istream& is, BALL::String& str)
 	return getline(is, (string&)str);
 }
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 BALL_INLINE
 istream& getline(istream& is, BALL::String&& str, char delim)
 {
@@ -1775,6 +1767,5 @@ istream& getline(istream& is, BALL::String&& str)
 {
 	return getline(is, move((string&)str));
 }
-#endif
 
 } // namespace std

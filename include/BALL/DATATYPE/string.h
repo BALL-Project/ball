@@ -154,7 +154,6 @@ namespace BALL
 		/// Copy constructor
 		String(const String& s);
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		/// Move constructor
 		String(String&& s);
 
@@ -166,7 +165,6 @@ namespace BALL
 
 		/// Move assignment operator for STL string
 		String& operator=(string&& s);
-#endif
 
 		/// QString copy constructor
 		explicit String(const QString& string);
@@ -656,7 +654,6 @@ namespace BALL
 		BALL_EXPORT
 		friend String operator + (char c, const String& s);
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		///	Concatenates two strings
 		BALL_EXPORT
 		friend String operator + (String&& s1, const string& s2);
@@ -697,7 +694,6 @@ namespace BALL
 		/// Concatenates a character and a string
 		BALL_EXPORT
 		friend String operator + (char c, String&& s);
-#endif
 
 		/// Swaps the contents with another String
 		void swap(String& s);
@@ -1166,10 +1162,8 @@ namespace BALL
 		///
 		String& assign(std::initializer_list<char> li);
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 		///
 		String& assign(string&& str) BALL_NOEXCEPT;
-#endif
 
 		///
 		String& insert(size_t pos, const string& str);
@@ -1792,7 +1786,6 @@ namespace BALL
 	BALL_EXPORT
 	String operator + (char c, const String& s);
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 	///	Concatenates two strings
 	BALL_EXPORT
 	String operator + (String&& s1, const string& s2);
@@ -1836,7 +1829,6 @@ namespace BALL
 	/// Concatenates a character and a string
 	BALL_EXPORT
 	String operator + (char c, String&& s);
-#endif
 } // namespace BALL
 
 namespace std
@@ -1855,12 +1847,10 @@ namespace std
 	istream& getline(istream& is, BALL::String& str);
 
 
-#ifdef BALL_STD_STRING_HAS_RVALUE_REFERENCES
 	///
 	istream& getline(istream& is, BALL::String&& str, char delim);
 	///
 	istream& getline(istream& is, BALL::String&& str);
-#endif
 }
 
 	//@}

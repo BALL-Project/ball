@@ -176,9 +176,6 @@
 // BALL.
 #cmakedefine BALL_HAS_THREAD_LOCAL
 
-// Defines whether the c++ std lib implementation supports rvalue references in the std::string class
-#cmakedefine BALL_STD_STRING_HAS_RVALUE_REFERENCES
-
 // Defines whether the compiler supports c++11-style noexcept statements
 #cmakedefine BALL_HAS_NOEXCEPT
 

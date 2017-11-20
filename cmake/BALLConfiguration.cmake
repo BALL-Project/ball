@@ -162,9 +162,6 @@ ENDIF()
 ## Check for thread_local
 INCLUDE(cmake/BALLConfigThreadLocal.cmake)
 
-## Check for rvalue reference
-INCLUDE(cmake/BALLConfigRValueReferences.cmake)
-
 ## Check for the presence of C++11 noexcept
 INCLUDE(cmake/BALLConfigNoexcept.cmake)
 
