@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 
+#include <BALL/VIEW/KERNEL/common.h>
 #ifdef BALL_HAS_GLEW
 #	include <GL/glew.h>
 #endif
@@ -9,7 +10,6 @@
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/COMMON/logStream.h>
-#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <QtCore/QEvent>
