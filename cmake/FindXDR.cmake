@@ -2,13 +2,15 @@
 #
 # Once run this will define:
 #
-# XDR_FOUND					= system has XDR lib
+# XDR_FOUND	 = system has XDR lib
 #
-# XDR_LIBRARIES			= full path to the libraries, if required
+# XDR_LIBRARIES	 = full path to the libraries, if required
 #
 
-INCLUDE(CheckIncludeFileCXX)
+
 INCLUDE(CheckCXXSourceCompiles)
+INCLUDE(CheckIncludeFileCXX)
+INCLUDE(CheckLibraryExists)
 
 
 SET(XDR_TEST_HEADER "
@@ -45,9 +47,39 @@ CHECK_CXX_SOURCE_COMPILES("${XDR_TEST_HEADER}
 			   xdr_int(x, &i);
 			   ${XDR_TEST_FOOTER}" RPC_XDR_INT)
 IF(NOT RPC_XDR_INT)
+	FOREACH(lib nsl oncrpc)
+		# Try to find the corresponding lib manually
+		SET(XDR_INT_LIBRARY)
+		FIND_LIBRARY(XDR_INT_LIBRARY ${lib})
+
+		IF (XDR_INT_LIBRARY)
+			CHECK_LIBRARY_EXISTS(${XDR_INT_LIBRARY} xdr_int "" XDR_INT_SYMBOL_FOUND)
+		ENDIF()
+
+		IF (XDR_INT_SYMBOL_FOUND)
+			SET(XDR_LIBRARIES ${XDR_INT_LIBRARY})
+
+			# Try to find the debug version as well
+			FIND_LIBRARY(XDR_INT_LIBRARY_D ${lib}d)
+
+			IF (XDR_INT_LIBRARY_D)
+				CHECK_LIBRARY_EXISTS(${XDR_INT_LIBRARY_D} xdr_int "" XDR_INT_SYMBOL_D_FOUND)
+				IF (XDR_INT_SYMBOL_D_FOUND)
+					BALL_COMBINE_LIBS(XDR_LIBRARIES ${XDR_LIBRARIES} ${XDR_INT_LIBRARY_D})
+				ENDIF()
+			ENDIF()
+
+			SET(RPC_XDR_INT TRUE)
+			BREAK()
+		ENDIF()
+	ENDFOREACH()
+ENDIF()
+
+IF(NOT RPC_XDR_INT)
 	MESSAGE(STATUS "XRD symbol 'xdr_int' not found. Persistence will be disabled!")
 	RETURN()
 ENDIF()
+
 
 # We have found XDR
 SET(XDR_FOUND TRUE)
@@ -59,6 +91,9 @@ CHECK_CXX_SOURCE_COMPILES("${XDR_TEST_HEADER}
 			   xdr_u_hyper(x, &q);
 			   ${XDR_TEST_FOOTER}" BALL_HAS_XDR_U_HYPER)
 
+IF(NOT BALL_HAS_XDR_U_HYPER)
+	CHECK_LIBRARY_EXISTS(${XDR_INT_LIBRARY} xdr_u_hyper "" BALL_HAS_XDR_U_HYPER)
+ENDIF()
 
 IF(BALL_HAS_XDR_U_HYPER)
 	MESSAGE(STATUS "Looking for 64-bit XDR type for xdr_u_hyper")
