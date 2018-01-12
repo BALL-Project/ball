@@ -77,17 +77,7 @@ namespace BALL
 
 		MainControl* getMainControl()
 		{
-			MainControl* mc = 0;
-			mc = MainControl::getInstance(0);
-
-			#ifdef BALL_VIEW_DEBUG
-				if (mc == 0)
-				{
-					throw (Exception::NullPointer(__FILE__, __LINE__));
-				}
-			#endif
-
-			return mc; 
+			return MainControl::getInstance(0);
 		}
 
 

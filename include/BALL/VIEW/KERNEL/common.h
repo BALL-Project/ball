@@ -308,9 +308,7 @@ namespace BALL
 		/** Get MainControl
 		 		This method is only to be used for code, which is not part of 
 				a ModularWidget.
-				On Windows, it uses the following cast:\\
-				MainControl* mc = dynamic_cast<MainControl*>(qApp->mainWidget());\\
-				On all other platforms, it uses MainControl::getInstance(0);
+				This function is equivalent to MainControl::getInstance(0)
 		*/
 		BALL_VIEW_EXPORT MainControl* getMainControl();
 
