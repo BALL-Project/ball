@@ -69,9 +69,6 @@ namespace BALL
 		 
 		ColorRGBA::~ColorRGBA()
 		{
-			#ifdef BALL_VIEW_DEBUG
-			Log.error() << "Destructing object " << this << " of class ColorRGBA" << endl;
-			#endif 
 		}
 
 		void ColorRGBA::clear()

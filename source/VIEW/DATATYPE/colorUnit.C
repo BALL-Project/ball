@@ -3,8 +3,6 @@
 //
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
-#include <cstdio>
-#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -138,10 +136,6 @@ namespace BALL
 
 		ColorUnit::~ColorUnit()
 		{
-			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " 
-						 << RTTI::getName<ColorUnit>() << endl;
-			#endif 
 		}
 
 		void ColorUnit::clear()

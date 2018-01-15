@@ -45,10 +45,6 @@ namespace BALL
 
 		ColorProcessor::~ColorProcessor()
 		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<ColorProcessor>() << std::endl;
-			#endif 
 		}
 
 		void ColorProcessor::clear()
