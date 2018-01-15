@@ -284,8 +284,8 @@ namespace BALL
 			red = green = blue = value_; 
 
 			unsigned int hue = hue_;
-			unsigned int saturation = saturation_;
-			unsigned int value = value_;
+			unsigned int saturation = (unsigned int) saturation_;
+			unsigned int value = (unsigned int) value_;
 
 			unsigned int mod_hue = hue % 60;
 			unsigned int div_hue = hue / 60;

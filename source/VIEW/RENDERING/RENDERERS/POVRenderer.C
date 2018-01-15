@@ -105,9 +105,9 @@ namespace BALL
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
 		{
 			String output = "<";
- 			output += trimFloatValue_(input.getRed()) + ", ";
- 			output += trimFloatValue_(input.getGreen()) + ", ";
- 			output += trimFloatValue_(input.getBlue()) + ", ";
+ 			output += trimFloatValue_((float) input.getRed()) + ", ";
+ 			output += trimFloatValue_((float) input.getGreen()) + ", ";
+ 			output += trimFloatValue_((float) input.getBlue()) + ", ";
 			// TODO: sensible parameter for "filter"
 			output += "0., ";
 			// TODO: transmit seems not to be linear in alpha

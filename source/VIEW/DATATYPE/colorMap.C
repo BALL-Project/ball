@@ -192,17 +192,17 @@ namespace BALL
 					current_bound_a++;
 
 
-				float red_left    = (*this)[current_bound_x].getRed();
-				float red_right   = (*this)[current_bound_x+1].getRed();
+				float red_left    = (float) ((*this)[current_bound_x].getRed());
+				float red_right   = (float) ((*this)[current_bound_x+1].getRed());
 
-				float green_left  = (*this)[current_bound_y].getGreen();
-				float green_right = (*this)[current_bound_y+1].getGreen();
+				float green_left  = (float) ((*this)[current_bound_y].getGreen());
+				float green_right = (float) ((*this)[current_bound_y+1].getGreen());
 				 
-				float blue_left   = (*this)[current_bound_z].getBlue();
-				float blue_right  = (*this)[current_bound_z+1].getBlue();
+				float blue_left   = (float) ((*this)[current_bound_z].getBlue());
+				float blue_right  = (float) ((*this)[current_bound_z+1].getBlue());
 
-				float alpha_left  = (*this)[current_bound_z].getAlpha();
-				float alpha_right = (*this)[current_bound_z+1].getAlpha();
+				float alpha_left  = (float) ((*this)[current_bound_z].getAlpha());
+				float alpha_right = (float) ((*this)[current_bound_z+1].getAlpha());
 
 				Vector4 pos1;
 				Vector4 pos2;

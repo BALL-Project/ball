@@ -496,9 +496,9 @@ namespace BALL
 			const Position z1 = (Position)floor((value - min_value_)/ x_);
  			const Position z2 = (Position)ceil((value - min_value_)/ x_);
 
-			const float& red1   = colors_[z1].getRed();
-			const float& green1 = colors_[z1].getGreen();
-			const float& blue1  = colors_[z1].getBlue();
+			const float red1   = (float) colors_[z1].getRed();
+			const float green1 = (float) colors_[z1].getGreen();
+			const float blue1  = (float) colors_[z1].getBlue();
 
 			const float red2   = (float) colors_[z2].getRed()   - (float) colors_[z1].getRed();
 			const float green2 = (float) colors_[z2].getGreen() - (float) colors_[z1].getGreen();

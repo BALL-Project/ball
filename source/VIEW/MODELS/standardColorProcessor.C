@@ -528,13 +528,13 @@ namespace BALL
 				distance = 0.0;
 			}
 
-			const float red1   = null_distance_color_.getRed();
-			const float green1 = null_distance_color_.getGreen();
-			const float blue1  = null_distance_color_.getBlue();
+			const float red1   = (float) null_distance_color_.getRed();
+			const float green1 = (float) null_distance_color_.getGreen();
+			const float blue1  = (float) null_distance_color_.getBlue();
 
-			const float red2   = full_distance_color_.getRed();
-			const float green2 = full_distance_color_.getGreen();
-			const float blue2  = full_distance_color_.getBlue();
+			const float red2   = (float) full_distance_color_.getRed();
+			const float green2 = (float) full_distance_color_.getGreen();
+			const float blue2  = (float) full_distance_color_.getBlue();
 
 			color_to_be_set.set(red1 + (distance * (red2 - red1)) 			/ distance_,
 													 green1 + (distance * (green2 - green1)) 	/ distance_,

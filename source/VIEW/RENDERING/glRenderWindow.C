@@ -240,7 +240,12 @@ namespace BALL
 			font.setBold(true);
 
 			glDisable(GL_LIGHTING);
-			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+			glColor4ub(
+					(GLubyte) color.getRed(),
+					(GLubyte) color.getGreen(),
+					(GLubyte) color.getBlue(),
+					(GLubyte) color.getAlpha()
+			);
 			QGLWidget::renderText(x, y, text.c_str(), font);
 			glEnable(GL_LIGHTING);
 		}
@@ -254,7 +259,7 @@ namespace BALL
 			font.setBold(true);
 
 			glDisable(GL_LIGHTING);
-			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+			glColor4ub((GLubyte) color.getRed(), (GLubyte) color.getGreen(), (GLubyte) color.getBlue(), (GLubyte) color.getAlpha());
 			QGLWidget::renderText(x, y, z, text.c_str(), font);
 			glEnable(GL_LIGHTING);
 		}

@@ -175,7 +175,7 @@ namespace BALL
 
 		void ColorRGBA::get(QColor& color) const
 		{
-			color.setRgb(getRed(), getGreen(), getBlue());
+			color.setRgb((int) getRed(), (int) getGreen(), (int) getBlue());
 		}
 
 		QColor ColorRGBA::getQColor() const

@@ -112,7 +112,7 @@ BALL_INLINE
 void GLRenderer::setColorRGBA_(const ColorRGBA& color)
 { 
 	//if (color == *last_color_) return;
-	glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	glColor4ub((GLubyte) color.getRed(), (GLubyte) color.getGreen(), (GLubyte) color.getBlue(), (GLubyte) color.getAlpha());
 //	last_color_  = &color;
 }
 

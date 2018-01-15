@@ -203,7 +203,12 @@ namespace BALL
 			}
 			else
 			{
-				glColor4ub(color_.getRed(), color_.getGreen(), color_.getBlue(), color_.getAlpha());
+				glColor4ub(
+						(GLubyte) color_.getRed(),
+						(GLubyte) color_.getGreen(),
+						(GLubyte) color_.getBlue(),
+						(GLubyte) color_.getAlpha()
+				);
 			}
 
 
