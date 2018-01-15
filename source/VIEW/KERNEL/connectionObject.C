@@ -143,7 +143,7 @@ void ConnectionObject::onNotify(Message * /* message */)
 
 bool ConnectionObject::isValid() const
 {
-	// check all children if parent will be ´this´
+	// check all children if parent will be this
 	list<ConnectionObject*>::const_iterator list_iterator;
 
 	for(list_iterator = children_connection_objects_.begin();

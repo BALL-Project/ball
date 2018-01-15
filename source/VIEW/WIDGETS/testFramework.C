@@ -431,9 +431,9 @@ bool TestFramework::eventFilter(QObject* obj, QEvent* e)
 	float time = timer_.getClockTime();
 	timer_.reset();
 
-	outfile_ << "I°"
-					 << time << "°"
-					 << names << "°"
+	outfile_ << "I\u00B0"
+					 << time << "\u00B0"
+					 << names << "\u00B0"
 					 << event_string << std::endl;
 
 	last_event_string_ = event_string;
@@ -624,7 +624,7 @@ void TestFramework::processEvent_()
 	lines_.pop_front();
 	line_nr_++;
 	vector<String> fields;
-	Size nr = line.split(fields, "°");
+	Size nr = line.split(fields, "\u00B0");
 	if (nr < 1) return;
 
 	vector<String> names;
