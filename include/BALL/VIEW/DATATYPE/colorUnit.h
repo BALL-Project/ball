@@ -158,57 +158,57 @@ namespace BALL
 			/** Conversion to string.
 					\return      string with format <tt> "00"-"FF"</tt> or <tt> "00"-"ff"</tt>
 			*/
-			operator String () const;
+			explicit operator String () const;
 
 			/** Conversion to char.
 					\return      char with a value of range <tt> 0 - 255</tt>
 			*/
-			operator char () const;
+			explicit operator char () const;
 
 			/** Conversion to unsigned char.
 					\return      unsigned char with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned char () const;
+			explicit operator unsigned char () const;
 
 			/** Conversion to short.
 					\return      short with a value of range <tt> 0 - 255</tt>
 			*/
-			operator short () const;
+			explicit operator short () const;
 			
 			/** Conversion to unsigned short.
 					\return      unsigned short with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned short	() const;
+			explicit operator unsigned short	() const;
 			
 			/** Conversion to int.
 					\return      int with a value of range <tt> 0 - 255</tt>
 			*/
-			operator int () const;
+			explicit operator int () const;
 
 			/** Conversion to unsigned int.
 					\return      unsigned int with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned int () const;
+			explicit operator unsigned int () const;
 
 			/** Conversion to long.
 					\return      long with a value of range <tt> 0 - 255</tt>
 			*/
-			operator long () const;
+			explicit operator long () const;
 
 			/** Conversion to unsigned long.
 					\return      unsigned long with a value of range <tt> 0 - 255</tt>
 			*/
-			operator unsigned long () const;
+			explicit operator unsigned long () const;
 
 			/** Conversion to float.
 					\return      float with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator float () const;
+			explicit operator float () const;
 
 			/** Conversion to double.
 					\return      double with a value of range <tt> 0 - 1.0</tt>
 			*/
-			operator double () const;
+			explicit operator double () const;
 			
 			//@}
 			/**	@name	Assignment methods
