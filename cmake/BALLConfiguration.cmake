@@ -11,9 +11,11 @@ INCLUDE(TestBigEndian)
 ## some debug options
 IF (CMAKE_BUILD_TYPE STREQUAL "Debug")
 	SET(BALL_DEBUG TRUE CACHE INTERNAL "BALL configured in debug mode" FORCE)
+	SET(BALL_VIEW_DEBUG TRUE CACHE INTERNAL "VIEW configured in debug mode" FORCE)
 	SET(BALL_NO_INLINE_FUNCTIONS TRUE CACHE STRING "Reduce usage of inline functions (useful for debugging purposes)")
 ELSEIF(CMAKE_BUILD_TYPE STREQUAL "Release")
 	SET(BALL_DEBUG FALSE CACHE INTERNAL "BALL configured in debug mode" FORCE)
+	SET(BALL_VIEW_DEBUG FALSE CACHE INTERNAL "VIEW configured in debug mode" FORCE)
 	SET(BALL_NO_INLINE_FUNCTIONS FALSE CACHE STRING "Reduce usage of inline functions (useful for debugging purposes)")
 ENDIF()
 
