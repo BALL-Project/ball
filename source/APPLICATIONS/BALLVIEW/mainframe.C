@@ -11,7 +11,6 @@
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
