@@ -8,7 +8,6 @@ class POVRenderer
 	POVRenderer(const String&);
 	void clear();
 
-	virtual bool init(const Stage&, float, float) throw();
-	void setFileName(const String&) throw(FileNotFound);
+	virtual bool init(const Stage*, float, float) throw();
 	~POVRenderer() throw();
 };

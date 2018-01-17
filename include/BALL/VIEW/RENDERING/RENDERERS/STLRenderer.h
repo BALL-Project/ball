@@ -70,7 +70,7 @@ class BALL_VIEW_EXPORT STLRenderer
 	/** Start method. 
 			This method creates the file and writes the header.
 	 */
-	virtual bool init(const Stage* stage, float width, float height);
+	virtual bool init(const Stage* /* stage */, float /* width */, float /* height */);
 
 	bool exportOneRepresentation(const Representation* representation);
 
