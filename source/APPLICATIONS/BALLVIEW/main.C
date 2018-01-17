@@ -95,15 +95,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		BALL::VIEW::UIOperationMode::instance().setMode(BALL::VIEW::UIOperationMode::MODE_KIOSK);
 	}
 
-	// =============== testing for opengl support ======================================
-	if (!QGLFormat::hasOpenGL())
-	{
-		QMessageBox::critical(0, "Error while starting BALLView", 
-				"Your computer has no OpenGL support, please install the correct drivers. Aborting for now...",
-				QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
-		return -1;
-	}
-
 	BALL::String home_dir = BALL::Directory::getUserHomeDir();
 
 	// =============== load translations =====================
