@@ -66,12 +66,12 @@ ModernGLRenderer::ModernGLRenderer()
 
 ModernGLRenderer::~ModernGLRenderer()
 {
-	delete camera_;
 	delete opaque_;
 	delete transparent_;
 	delete light_sources_;
 	delete volume_;
 	delete ssao_;
+	delete camera_;
 	delete clipping_plane_;
 }
 
