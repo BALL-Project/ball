@@ -25,9 +25,7 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifdef BALL_HAS_GLEW
-# include <GL/glew.h>
-#elif defined(BALL_OS_DARWIN)
+#if defined(BALL_OS_DARWIN)
 # include <OpenGL/gl.h>
 # include <OpenGL/glu.h>
 #else
@@ -36,7 +34,7 @@
 #endif
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
-# include <BALL/VIEW/RENDERING/glDisplayList.h>
+# include <glDisplayList.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H

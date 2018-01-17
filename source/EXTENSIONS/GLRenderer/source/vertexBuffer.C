@@ -5,13 +5,9 @@
 
 #include <BALL/CONFIG/config.h>
 
-#ifdef BALL_HAS_GLEW
-#include <GL/glew.h>
-
-#include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
-#include <BALL/VIEW/RENDERING/vertexBuffer.h>
+#include <glRenderer.h>
+#include <vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/VIEW/KERNEL/common.h>
 
 namespace BALL
 {
