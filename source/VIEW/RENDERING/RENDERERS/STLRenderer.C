@@ -26,14 +26,6 @@ namespace BALL
 	namespace VIEW
 	{
 
-//default constructor
-STLRenderer::STLRenderer()
-	: Renderer(),
-		outfile_(),
-		current_indent_(0)
-{
-}
-
 //constructor containing the filename: this is the usally used constructor
 //the filename has to be saved as the stl file has to end with the same 
 //line as it starts just with endsolid instead "solid"
@@ -76,13 +68,12 @@ String STLRenderer::VRMLVector3(Vector3 input)
 
 // init must be called right before the rendering starts, since
 // we need to fix the camera, light sources, etc...
-bool STLRenderer::init(const Stage* stage, float, float)
+bool STLRenderer::init(const Stage*, float, float)
 {
 	#ifdef BALL_VIEW_DEBUG_PROCESSORS
 		Log.info() << "Start the STLRender output..." << std::endl;
 	#endif
 
-	stage_ = &stage;
 	return true;
 }
 
@@ -90,7 +81,6 @@ bool STLRenderer::init(const Stage* stage, float, float)
 bool STLRenderer::finishImpl_()
 {
 	out_(endingName_);
-	outfile_.close();
 	current_indent_ = 0;
 
 	return true;

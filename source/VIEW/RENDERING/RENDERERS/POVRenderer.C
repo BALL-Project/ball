@@ -274,7 +274,7 @@ namespace BALL
 			// Set the background color
 			out << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
 
-			const Stage::Material& material = stage.getMaterial();
+			const Stage::Material& material = stage->getMaterial();
 
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
