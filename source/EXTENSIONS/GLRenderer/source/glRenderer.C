@@ -214,21 +214,6 @@ namespace BALL
 			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
 			glEnable(GL_NORMALIZE);
 
-#ifdef BALL_HAS_GLEW
-			glewInit();
-			// accelerate lighting calculations, if possible:
-			if (isExtensionSupported("GL_EXT_rescale_normal"))
-			{
-				// workaround for some Radeon cards and Mesa:
-				String renderer = getRenderer();
-				if (!renderer.hasSubstring("Mesa") ||
-						!renderer.hasSubstring("Radeon"))
-				{
-					glEnable(GL_RESCALE_NORMAL);
-				}
-			}
-#endif
-
 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
 
@@ -2209,9 +2194,6 @@ namespace BALL
 
 		bool GLRenderer::enableVertexBuffers(bool state)
 		{
-#ifndef BALL_HAS_GLEW
-			return false;
-#else
 			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
 			{
 				use_vertex_buffer_ = false;
@@ -2957,7 +2939,7 @@ namespace BALL
 
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.iC>
+#		include <glRenderer.iC>
 #	endif
 
 	} // namespace VIEW
