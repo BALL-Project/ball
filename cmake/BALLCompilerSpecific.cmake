@@ -3,6 +3,7 @@
 ########################################################
 
 SET(USE_PEDANTIC ON CACHE BOOL "Use pedantic compilation options if offered by the compiler")
+SET(USE_ASAN OFF CACHE BOOL "Compile everything with AddressSanitizer enabled (GCC/Clang only)")
 
 SET(CXX_COMPILER_ID "(unknown)" CACHE INTERNAL "The C++ compiler id")
 
@@ -55,6 +56,10 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 
 	IF(USE_PEDANTIC)
 		SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -pedantic")
+	ENDIF()
+
+	IF(USE_ASAN)
+		SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 	ENDIF()
 
 	## Recommended setting for eclipse, see http://www.cmake.org/Wiki/CMake:Eclipse
@@ -173,6 +178,10 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} MATCHES ".*Clang")
 	SET(CXX_COMPILER_VERSION "${CXX_COMPILER_VERSION_MAJOR}.${CXX_COMPILER_VERSION_MINOR}")
 
 	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -std=c++11")
+
+	IF(USE_ASAN)
+		SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+	ENDIF()
 
 	# Disable "inconsistent missing override" warnings for now, as this is primarily macro-induced
 	# (e.g., via BALL_EMBEDDABLE) and, unfortunately, won't be resolved until many more parts of our
