@@ -813,7 +813,7 @@ bool MMFF94ChargeProcessor::finish()
 //      Log.info() << "Intial Charge4 "  << atom.getName() << " " << atom.getTypeName() << "  " << atom.getCharge() << std::endl;
 	} // all atoms
 	
-	return Processor::CONTINUE;
+	return true; // Processor::CONTINUE
 }
 
 bool MMFF94ChargeProcessor::start()
