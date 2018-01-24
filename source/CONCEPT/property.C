@@ -314,8 +314,10 @@ namespace BALL
 					break;
 				case NamedProperty::OBJECT:
 					s << "OBJECT: " << named_properties_[i].getObject();
+					break;
 				case NamedProperty::SMART_OBJECT:
 					s << "SMART_OBJECT: " << named_properties_[i].getSmartObject();
+					break;
 			}
 
 			s << ")" << endl;
