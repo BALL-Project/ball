@@ -1,10 +1,12 @@
 #ifndef MODERNGL_CONFIG_DIALOG_H
 #define MODERNGL_CONFIG_DIALOG_H
 
-#include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
+#include <modernGLRenderer.h>
 #include <renderObjects/SSAO.h>
 #include <renderObjects/Transparent.h>
-#include <modernGLRenderer.h>
+
+#include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
+
 
 class ModernGLRenderer;
 

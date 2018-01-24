@@ -3,14 +3,7 @@
 #include <renderObjects/Volume.h>
 #include <Global.h>
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
-
-#include <BALL/STRUCTURE/surfaceProcessor.h>
-#include <BALL/MATHS/surface.h>
+#include <BALL/VIEW/DATATYPE/colorMap.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 
 #define BYTES_PER_TEXEL 4

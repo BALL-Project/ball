@@ -2,6 +2,7 @@
 
 #include <vbo/VBObject.h>
 
+
 VBObject::VBObject()
 	: initialized_(false)
 {

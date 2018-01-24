@@ -1,13 +1,15 @@
 #ifndef MODERNGLPLUGIN_H
 #define MODERNGLPLUGIN_H
 
-#include <QtCore/QObject>
-#include <QtGui/QPixmap>
+#include <modernGLRenderer.h>
 
 #include <BALL/PLUGIN/BALLPlugin.h>
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #include <BALL/VIEW/RENDERING/rendererPlugin.h>
-#include <modernGLRenderer.h>
+
+#include <QtCore/QObject>
+#include <QtGui/QPixmap>
+
 
 namespace BALL
 {
@@ -36,7 +38,7 @@ class ModernGLPlugin : public QObject, public BALL::BALLPlugin, public BALL::VIE
 		/**
 		 * @brief Return the icon of the renderer.
 		 *
-		 * @return QString The icon of the renderer.
+		 * @return QPixmap The icon of the renderer.
 		 **/
 		const QPixmap* getIcon() const;
 

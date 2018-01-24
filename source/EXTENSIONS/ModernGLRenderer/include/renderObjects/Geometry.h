@@ -1,16 +1,11 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/RenderObject.h>
-
-#include <ShaderManager.h>
-
 #include <vbo/VBObject.h>
 
-#include <list>
-using std::list;
+#include <Eigen/Geometry>
+
 
 class Geometry
 	: public RenderObject

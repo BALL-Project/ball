@@ -1,19 +1,8 @@
 #include <GL/glew.h>
+
 #include <renderObjects/SSAO.h>
-#include <Global.h>
 
-#include <QtCore/QDir>
-
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/SYSTEM/path.h>
-
-#include <set>
-#include <vector>
 
 
 SSAO::SSAO(Camera* camera)

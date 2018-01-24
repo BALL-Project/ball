@@ -1,6 +1,5 @@
-#include <GL/glew.h>
-
 #include <renderObjects/Point.h>
+#include <vbo/VBOPoint.h>
 #include <Global.h>
 
 #include <BALL/VIEW/PRIMITIVES/point.h>

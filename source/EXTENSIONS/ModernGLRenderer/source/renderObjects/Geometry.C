@@ -1,6 +1,5 @@
-#include <GL/glew.h>
-
 #include <renderObjects/Geometry.h>
+
 
 Geometry::Geometry(Camera* camera)
 	: RenderObject(camera),

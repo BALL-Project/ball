@@ -1,12 +1,9 @@
 #include <GL/glew.h>
 
 #include <renderObjects/ClippingPlane.h>
-#include <Global.h>
 
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
+
 
 ClippingPlane::ClippingPlane(Camera* camera)
 	: RenderObject(camera),

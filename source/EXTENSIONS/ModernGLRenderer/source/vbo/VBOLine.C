@@ -2,8 +2,6 @@
 
 #include <vbo/VBOLine.h>
 
-#include <iostream>
-
 
 void VBOLine::render_()
 {
@@ -13,4 +11,3 @@ void VBOLine::render_()
 void VBOLine::bindIndices()
 {
 }
-

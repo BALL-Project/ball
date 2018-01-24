@@ -1,16 +1,9 @@
 #ifndef COMPOSITING_H
 #define COMPOSITING_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/RenderObject.h>
-
-#include <ShaderManager.h>
-
 #include <vbo/VBObject.h>
 
-#include <list>
-using std::list;
 
 /**
  * @brief Compositing class.

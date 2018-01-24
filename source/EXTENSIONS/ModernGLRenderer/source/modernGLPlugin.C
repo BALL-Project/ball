@@ -1,7 +1,8 @@
 #include <GL/glew.h>
+
 #include <modernGLPlugin.h>
-#include <modernGLRenderer.h>
 #include <modernGLConfigDialog.h>
+
 
 ModernGLPlugin::ModernGLPlugin()
 	: is_active_(false),

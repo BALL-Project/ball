@@ -1,9 +1,9 @@
-#include <GL/glew.h>
-
 #include <renderObjects/Line.h>
+#include <vbo/VBOLine.h>
 #include <Global.h>
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
+
 
 Line::Line(Camera* camera)
 	: Geometry(camera)

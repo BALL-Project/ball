@@ -2,8 +2,9 @@
 #define CLIPPINGPLANES_H
 
 #include <Eigen/Geometry>
-#include <iostream>
+
 #include <vector>
+
 
 /**
  * @brief Manages and stores clipping planes in world space.

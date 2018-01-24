@@ -2,15 +2,18 @@
 #define POINTVOLUME_H
 
 #include <GL/glew.h>
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
-#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
+
 #include <renderObjects/Geometry.h>
 
-#include <ShaderManager.h>
-#include <vbo/VBOPoint.h>
-
 #include <list>
+
+namespace BALL
+{
+	namespace VIEW
+	{
+		class GridVisualisation;
+	}
+}
 
 /**
  * @brief RenderObject for rendering a volume texture represented as points.

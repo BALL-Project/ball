@@ -1,33 +1,20 @@
 #ifndef MODERN_GL_RENDERER_H
 #define MODERN_GL_RENDERER_H
-#include <GL/glew.h>
 
-#include <QtCore/QHash>
-#include <QtOpenGL/QGLShader>
+#include <Camera.h>
+#include <Material.h>
+#include <modernGLRenderSetup.h>
+#include <renderObjects/ClippingPlane.h>
+#include <renderObjects/LightSources.h>
+#include <renderObjects/Opaque.h>
+#include <renderObjects/SSAO.h>
+#include <renderObjects/Transparent.h>
+#include <renderObjects/Volume.h>
+
+#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 
 #include <Eigen/Geometry>
 
-#include <BALL/MATHS/vector3.h>
-
-#include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/DATATYPE/hashMap.h>
-#include <BALL/VIEW/KERNEL/stage.h>
-
-#include <list>
-
-#include <renderObjects/Sphere.h>
-#include <renderObjects/Cylinder.h>
-#include <renderObjects/Opaque.h>
-#include <ShaderManager.h>
-#include <renderObjects/Mesh.h>
-#include <renderObjects/SSAO.h>
-#include <renderObjects/Volume.h>
-#include <renderObjects/LightSources.h>
-#include <renderObjects/ClippingPlane.h>
-#include "renderObjects/Transparent.h"
-#include <Camera.h>
-#include <modernGLRenderSetup.h>
-#include "Material.h"
 
 namespace BALL
 {
@@ -35,10 +22,7 @@ namespace BALL
 	{
 		class Scene;
 		class Stage;
-		class ColorMap;
 		class RenderTarget;
-		class Renderer;
-		class MainControl;
 	}
 }
 
@@ -54,7 +38,7 @@ namespace BALL
 
 class  ModernGLRenderer
 	: public QObject,
-  public BALL::VIEW::Renderer
+	public BALL::VIEW::Renderer
 {
 		Q_OBJECT
 	public:

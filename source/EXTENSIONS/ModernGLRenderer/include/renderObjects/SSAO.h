@@ -1,13 +1,9 @@
 #ifndef SSAO_H
 #define SSAO_H
 
-
-#include <Eigen/Geometry>
-
-#include <BALL/MATHS/vector3.h>
-#include <ShaderManager.h>
 #include <renderObjects/RenderObject.h>
 #include <vbo/VBOQuad.h>
+
 
 struct SSAOParameters
 {

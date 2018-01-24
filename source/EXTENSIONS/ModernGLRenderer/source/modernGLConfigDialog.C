@@ -1,7 +1,6 @@
 #include <modernGLConfigDialog.h>
 #include <ui_modernGLConfigDialog.h>
 
-#include <modernGLRenderer.h>
 
 ModernGLConfigDialog::ModernGLConfigDialog(QWidget* parent, Qt::WindowFlags f)
 	: BALL::VIEW::ConfigDialog(parent, f),

@@ -1,9 +1,9 @@
-#include <GL/glew.h>
-
 #include <renderObjects/TwoColoredLine.h>
+#include <vbo/VBOLine.h>
 #include <Global.h>
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
+
 
 TwoColoredLine::TwoColoredLine(Camera* camera)
 	: Geometry(camera)

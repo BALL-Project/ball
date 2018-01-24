@@ -1,12 +1,12 @@
 #include <GL/glew.h>
 
 #include <renderObjects/PointVolume.h>
+#include <vbo/VBOPoint.h>
 #include <Global.h>
-
-#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
+
 
 #define BYTES_PER_TEXEL 4
 

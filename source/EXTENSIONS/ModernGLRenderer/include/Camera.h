@@ -1,16 +1,15 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <GL/glew.h>
+#include <BALL/VIEW/RENDERING/camera.h>
+
+#include <QObject>
 
 #include <Eigen/Geometry>
-#include <iostream>
-#include <QObject>
-#include <BALL/VIEW/KERNEL/stage.h>
 
 
 /**
- * @brief The viewport consits of width and height and lower left corner position (Initially (0,0)).
+ * @brief The viewport consists of width and height and lower left corner position (Initially (0,0)).
  **/
 struct Viewport
 {

@@ -3,6 +3,7 @@
 
 #include <vbo/VBObject.h>
 
+
 /**
  * @brief Stores and manages vertex buffer objects (VBO) for triangle data.
  **/

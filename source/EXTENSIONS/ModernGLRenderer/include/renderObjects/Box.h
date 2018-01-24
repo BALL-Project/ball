@@ -1,16 +1,10 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/Geometry.h>
 
-#include <ShaderManager.h>
-
-#include <vbo/VBOQuad.h>
-
 #include <list>
-using std::list;
+
 
 /**
  * @brief RenderObject for rendering a wireframe box.

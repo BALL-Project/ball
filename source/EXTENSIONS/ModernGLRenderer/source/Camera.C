@@ -1,7 +1,8 @@
+#include <GL/glew.h>
+
 #include <Camera.h>
 #include <Global.h>
 
-#include <BALL/COMMON/constants.h>
 
 Camera::Camera()
 {

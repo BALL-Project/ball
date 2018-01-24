@@ -1,15 +1,10 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/Geometry.h>
 
-#include <ShaderManager.h>
-
-#include <vbo/VBOTriangle.h>
-
 #include <list>
+
 
 /**
  * @brief RenderObject for rendering mesh data.

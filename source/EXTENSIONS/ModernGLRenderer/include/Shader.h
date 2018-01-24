@@ -1,11 +1,10 @@
 #ifndef SHADER_H
 #define SHADER_H
+
 #include <GL/glew.h>
 
 #include <QtCore/QHash>
 #include <QtOpenGL/QGLShader>
-
-#include <iostream>
 
 #include <boost/shared_ptr.hpp>
 

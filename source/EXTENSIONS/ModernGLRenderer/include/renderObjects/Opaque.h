@@ -1,14 +1,8 @@
 #ifndef OPAQUE_H
 #define OPAQUE_H
 
-
-#include <Eigen/Geometry>
-
-#include <BALL/MATHS/vector3.h>
-#include <ShaderManager.h>
 #include <renderObjects/Compositing.h>
-#include <vbo/VBOQuad.h>
-#include <BALL/VIEW/KERNEL/stage.h>
+
 
 namespace BALL
 {

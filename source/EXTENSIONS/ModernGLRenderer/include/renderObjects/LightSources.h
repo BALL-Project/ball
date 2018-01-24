@@ -1,17 +1,12 @@
 #ifndef LIGHTSOURCES_H
 #define LIGHTSOURCES_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
+#include <renderObjects/Cylinder.h>
 #include <renderObjects/RenderObject.h>
-#include "Sphere.h"
-#include "Cylinder.h"
-
-#include <ShaderManager.h>
-
-#include <vbo/VBOQuad.h>
+#include <renderObjects/Sphere.h>
 
 #include <list>
+
 
 class LightSources
 	: public RenderObject

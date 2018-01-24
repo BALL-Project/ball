@@ -1,16 +1,10 @@
 #ifndef POINT_H
 #define POINT_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/Geometry.h>
 
-#include <ShaderManager.h>
-
-#include <vbo/VBOPoint.h>
-
 #include <list>
-using std::list;
+
 
 /**
  * @brief RenderObject for rendering a point.

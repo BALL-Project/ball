@@ -1,19 +1,19 @@
 #ifndef VOLUME_H
 #define VOLUME_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/RenderObject.h>
-
-#include <ShaderManager.h>
 #include <vbo/VBOQuad.h>
 
-#include <BALL/DATATYPE/regularData3D.h>
-#include <BALL/VIEW/DATATYPE/colorMap.h>
-#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
-
 #include <list>
-using std::list;
+
+
+namespace BALL
+{
+	namespace VIEW
+	{
+		class GridVisualisation;
+	}
+}
 
 class Volume
 	: public RenderObject

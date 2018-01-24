@@ -1,5 +1,7 @@
 #include <ClippingPlanes.h>
 
+#include <iostream>
+
 
 ClippingPlanes::ClippingPlanes()
 {

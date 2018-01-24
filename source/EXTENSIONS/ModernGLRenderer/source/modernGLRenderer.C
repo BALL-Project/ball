@@ -1,42 +1,34 @@
 #include <GL/glew.h>
+
 #include <modernGLRenderer.h>
 #include <Global.h>
+
 #include <renderObjects/Box.h>
-#include <renderObjects/PointVolume.h>
 #include <renderObjects/Line.h>
-#include <renderObjects/TwoColoredLine.h>
+#include <renderObjects/Mesh.h>
 #include <renderObjects/Point.h>
+#include <renderObjects/PointVolume.h>
+#include <renderObjects/TwoColoredLine.h>
 
-#include <QtCore/QDir>
-
-#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
-#endif
-
-#include <BALL/VIEW/KERNEL/clippingPlane.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
-#include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
-#include <BALL/VIEW/PRIMITIVES/point.h>
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/multiLine.h>
 #include <BALL/VIEW/PRIMITIVES/quadMesh.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/DATATYPE/hashSet.h>
-#include <BALL/VIEW/KERNEL/message.h>
 
-#include <vector>
 
 //TODO remove local copies of variables. Store it in camera object
 

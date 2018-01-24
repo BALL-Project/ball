@@ -3,6 +3,7 @@
 
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 
+
 class ModernGLRenderSetup : public BALL::VIEW::RenderSetup
 {
 	public:

@@ -1,11 +1,8 @@
 #include <GL/glew.h>
 
 #include <renderObjects/Cylinder.h>
+#include <vbo/VBOPoint.h>
 #include <Global.h>
-
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>

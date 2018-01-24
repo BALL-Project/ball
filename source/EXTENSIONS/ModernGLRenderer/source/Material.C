@@ -1,12 +1,9 @@
 #include <Material.h>
-#include <Global.h>
 
-#include <QtCore/QDir>
+#include <iostream>
 
-#include <string>
 
 Material* Material::material_;
-
 
 Material::Material()
 	: QObject()

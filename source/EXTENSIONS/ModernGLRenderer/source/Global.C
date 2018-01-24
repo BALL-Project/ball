@@ -1,8 +1,6 @@
 #include <Global.h>
 
 
-using namespace std;
-
 namespace Global
 {
 	namespace

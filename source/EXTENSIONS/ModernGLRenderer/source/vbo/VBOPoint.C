@@ -2,8 +2,6 @@
 
 #include <vbo/VBOPoint.h>
 
-#include <iostream>
-
 
 void VBOPoint::render_()
 {
@@ -13,4 +11,3 @@ void VBOPoint::render_()
 void VBOPoint::bindIndices()
 {
 }
-

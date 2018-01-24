@@ -1,10 +1,7 @@
 #include <Shader.h>
-#include <Global.h>
-#include <BALL/COMMON/logStream.h>
 
-#include <QtCore/QDir>
+#include <iostream>
 
-#include <string>
 
 #define REPORT_UNIFORM_ERRORS
 

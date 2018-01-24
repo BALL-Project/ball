@@ -2,17 +2,17 @@
 #define RENDEROBJECT_H
 
 #include <GL/glew.h>
-#include <Eigen/Geometry>
-#include <ShaderManager.h>
-#include <Global.h>
-#include <ClippingPlanes.h>
-#include <Camera.h>
-#include <Material.h>
-#include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
-#include <iostream>
+#include <Camera.h>
+#include <ClippingPlanes.h>
+#include <Material.h>
+#include <ShaderManager.h>
+
+#include <BALL/VIEW/KERNEL/geometricObject.h>
+#include <BALL/VIEW/KERNEL/stage.h>
+
+#include <Eigen/Geometry>
+
 
 #define MAX_NUMBER_OF_LIGHTS 8
 

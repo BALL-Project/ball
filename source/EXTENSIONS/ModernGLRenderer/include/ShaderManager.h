@@ -1,15 +1,11 @@
 #ifndef SHADERMANAGER_H
 #define SHADERMANAGER_H
-#include <GL/glew.h>
+
+#include <Shader.h>
 
 #include <QtCore/QHash>
 #include <QtOpenGL/QGLShader>
 
-#include <iostream>
-
-#include <boost/shared_ptr.hpp>
-
-#include <Shader.h>
 
 /**
  * A singleton that takes care of handling all shaders.

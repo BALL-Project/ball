@@ -1,19 +1,9 @@
 #include <GL/glew.h>
+
 #include <renderObjects/Opaque.h>
+#include <vbo/VBOQuad.h>
 #include <Global.h>
 
-#include <QtCore/QDir>
-
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/VIEW/DATATYPE/colorRGBA.h>
-
-#include <set>
-#include <vector>
 
 Opaque::Opaque(Camera* camera)
 	: Compositing(camera)

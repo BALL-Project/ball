@@ -1,9 +1,11 @@
 #include <GL/glew.h>
 
 #include <renderObjects/Box.h>
+#include <vbo/VBOQuad.h>
 #include <Global.h>
 
 #include <BALL/VIEW/PRIMITIVES/box.h>
+
 
 Box::Box(Camera* camera)
 	: Geometry(camera)

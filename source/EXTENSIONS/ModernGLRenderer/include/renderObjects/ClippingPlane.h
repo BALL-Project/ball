@@ -1,16 +1,14 @@
 #ifndef CLIPPINGPLANE_H
 #define CLIPPINGPLANE_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
+#include <renderObjects/Cylinder.h>
 #include <renderObjects/RenderObject.h>
-#include "Cylinder.h"
 
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 
-#include <ShaderManager.h>
-
 #include <list>
+#include <vector>
+
 
 /**
  * @brief RenderObject for rendering a clipping plane.

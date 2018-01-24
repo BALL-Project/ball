@@ -1,6 +1,5 @@
-#include <GL/glew.h>
-
 #include <renderObjects/Compositing.h>
+
 
 Compositing::Compositing(Camera* camera)
 	: RenderObject(camera),

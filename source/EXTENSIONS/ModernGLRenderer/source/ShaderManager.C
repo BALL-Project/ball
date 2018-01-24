@@ -1,15 +1,13 @@
 #include <ShaderManager.h>
-#include <Global.h>
-#include <BALL/COMMON/logStream.h>
 
 #include <QtCore/QDir>
 
-#include <string>
+#include <iostream>
+
 
 #define REPORT_UNIFORM_ERRORS
 
 ShaderManager* ShaderManager::shadermanager_;
-
 
 ShaderManager::ShaderManager()
 {

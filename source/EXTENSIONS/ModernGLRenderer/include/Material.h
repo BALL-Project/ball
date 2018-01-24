@@ -1,10 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
-#include <GL/glew.h>
 
-#include <iostream>
 #include <QObject>
-
 
 
 /**

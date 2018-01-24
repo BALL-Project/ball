@@ -1,16 +1,10 @@
 #ifndef TWO_COLORED_LINE_H
 #define TWO_COLORED_LINE_H
 
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
 #include <renderObjects/Geometry.h>
 
-#include <ShaderManager.h>
-
-#include <vbo/VBOLine.h>
-
 #include <list>
-using std::list;
+
 
 /**
  * @brief RenderObject for rendering a two colored line.

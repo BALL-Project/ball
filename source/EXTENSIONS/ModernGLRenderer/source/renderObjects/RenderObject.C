@@ -1,5 +1,8 @@
 #include <GL/glew.h>
+
 #include <renderObjects/RenderObject.h>
+#include <Global.h>
+
 
 RenderObject::RenderObject(Camera* camera)
 	: initialized_(false),

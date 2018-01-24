@@ -1,14 +1,12 @@
 #include <GL/glew.h>
 
 #include <renderObjects/Sphere.h>
+#include <vbo/VBOPoint.h>
 #include <Global.h>
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 
-#include <BALL/VIEW/MODELS/standardColorProcessor.h>
 
 Sphere::Sphere(Camera* camera)
 	: Geometry(camera)

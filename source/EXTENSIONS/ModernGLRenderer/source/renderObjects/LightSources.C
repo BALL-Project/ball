@@ -1,12 +1,10 @@
 #include <GL/glew.h>
 
 #include <renderObjects/LightSources.h>
-#include <Global.h>
 
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
+
 
 LightSources::LightSources(Camera* camera)
 	: RenderObject(camera),

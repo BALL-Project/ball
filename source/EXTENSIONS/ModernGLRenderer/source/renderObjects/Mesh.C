@@ -2,15 +2,10 @@
 
 #include <renderObjects/Mesh.h>
 #include <Global.h>
+#include <vbo/VBOTriangle.h>
 
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
-#include <BALL/STRUCTURE/surfaceProcessor.h>
-#include <BALL/MATHS/surface.h>
 
 Mesh::Mesh(Camera* camera)
 	: Geometry(camera)

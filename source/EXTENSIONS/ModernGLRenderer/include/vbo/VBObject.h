@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 
+
 /**
  * @brief Stores three indices of the vertices forming a triangle.
  **/

@@ -2,14 +2,11 @@
 #define SPHERE_H
 
 #include <GL/glew.h>
-#include <Eigen/Geometry>
-#include <BALL/MATHS/vector3.h>
+
 #include <renderObjects/Geometry.h>
 
-#include <ShaderManager.h>
-#include <vbo/VBOPoint.h>
-
 #include <list>
+
 
 /**
  * @brief RenderObject for rendering spheres.
