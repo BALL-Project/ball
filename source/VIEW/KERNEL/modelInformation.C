@@ -41,14 +41,6 @@ namespace BALL
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "SES");
 				case MODEL_SA_SURFACE:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "SAS");
-				case MODEL_CONTOUR_SURFACE:
-					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Contour Surface");
-				case MODEL_GRID_SLICE:
-					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Grid Slice");
-				case MODEL_GRID_VOLUME:
-					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Grid Volume");
-				case MODEL_FIELD_LINES:
-					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Field Lines");
 				case MODEL_BACKBONE:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Backbone");
 				case MODEL_CARTOON:
@@ -61,6 +53,14 @@ namespace BALL
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Forces");
 				case MODEL_LABEL:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Label");
+				case MODEL_CONTOUR_SURFACE:
+					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Contour Surface");
+				case MODEL_GRID_SLICE:
+					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Grid Slice");
+				case MODEL_GRID_VOLUME:
+					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Grid Volume");
+				case MODEL_FIELD_LINES:
+					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Field Lines");
 				case MODEL_INFORMATIONS:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Informations");
 				case MODEL_COORDINATE_SYSTEM:
@@ -69,6 +69,8 @@ namespace BALL
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Proximity Light");
 				case MODEL_PLANE:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Plane");
+				case MODEL_SPHERE:
+					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Sphere");
 				case MODEL_UNKNOWN:
 					return (String)qApp->translate("BALL::VIEW::ModelInformation", "Unknown");
 			}
