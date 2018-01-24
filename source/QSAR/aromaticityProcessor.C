@@ -801,7 +801,7 @@ namespace BALL
 					}
 					else
 					{
-						// Hückel's rule not satifsfied for merge -> set aromaticity
+						// Hueckel's rule not satifsfied for merge -> set aromaticity
 						for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
 						{
 							(*it)->setProperty("IsAromatic", true);
@@ -997,6 +997,7 @@ namespace BALL
 					{
 						return 0;
 					}
+				/* FALLTHRU */
 				case 6: // C
 				case 14: // Si, experimental
 				case 32: // Ge, experimental
@@ -1106,7 +1107,7 @@ namespace BALL
 		
 		// these het atoms destabilize the ring, the ring isnt plane any more -> no pi system!
 		// beside the fact this should not be possible, bc this is checked above, but only for first
-		// level rings, not for merged ones! Returning 0 will result in not satisfying Hückels rule.
+		// level rings, not for merged ones! Returning 0 will result in not satisfying Hueckels rule.
 		if (het_count > 1)
 		{
 			return 0;

@@ -439,6 +439,7 @@ namespace BALL
 				{
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
+			/* FALLTHRU */
 			case TreeWidth<MolecularGraph>::INTRODUCE_BAG:
 			case TreeWidth<MolecularGraph>::FORGET_BAG:
 			case TreeWidth<MolecularGraph>::ROOT_BAG:

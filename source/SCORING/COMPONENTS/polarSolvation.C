@@ -188,52 +188,33 @@ namespace BALL
 			switch(calculation_method_)
 			{
 				case CALCULATION__FRESNO:
-					if (verbosity_ > 1)
-					{
-						Log.info() << "Model " << calculation_method_
-							<< ": original Fresno." << endl << endl;
-						break;
-					}
+					Log.info() << "Model " << calculation_method_ << ": original Fresno.\n" << endl;
+					break;
 
 				case CALCULATION__FULL_SLICK:
-					if (verbosity_ > 1)
-					{
-						Log.info() << "Model " << calculation_method_
-							<< ": modified Fresno." << endl << endl;
-						break;
-					}
+					Log.info() << "Model " << calculation_method_ << ": modified Fresno.\n" << endl;
+					break;
 
 				case CALCULATION__FULL_CYCLE:
-					if (verbosity_ > 1)
-					{
-						Log.info() << "Model " << calculation_method_
-							<< ": full thermodynamic cycle." << endl << endl;
-						break;
-					}
+					Log.info() << "Model " << calculation_method_ << ": full thermodynamic cycle.\n" << endl;
+					break;
 
 				case CALCULATION__FULL_CYCLE_FOCUSED:
-					if (verbosity_ > 1)
-					{
-						Log.info() << "Model " << calculation_method_
-							<< ": full thermodynamic cycle with focused grid." << endl << endl;
-						break;
-					}
+					Log.info() << "Model " << calculation_method_
+					           << ": full thermodynamic cycle with focused grid.\n" << endl;
+					break;
 
 				case CALCULATION__COULOMB:
-					if (verbosity_ > 1)
-					{
-						Log.info() << "Model " << calculation_method_
-							<< ": simple Coulomb." << endl << endl;
-						break;
-					}
+					Log.info() << "Model " << calculation_method_ << ": simple Coulomb.\n" << endl;
+					break;
 
 				case CALCULATION__EEF1:
-					if (verbosity_ > 1)
-					{
-						Log.info() << "Model " << calculation_method_
-							<< ": CHARMM/EEF1 solvation." << endl << endl;
-						break;
-					}
+					Log.info() << "Model " << calculation_method_ << ": CHARMM/EEF1 solvation.\n" << endl;
+					break;
+
+				default:
+					Log.info() << "Model " << calculation_method_ << ": UNKNOWN.\n" << endl;
+					break;
 			}
 		}
 
