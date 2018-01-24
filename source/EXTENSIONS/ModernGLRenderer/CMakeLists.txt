@@ -4,38 +4,38 @@ SET(DIRECTORY source)
 
 ### list all filenames of the directory here
 SET(SOURCES_LIST
-	${DIRECTORY}/Camera.C
-	${DIRECTORY}/ClippingPlanes.C
-	${DIRECTORY}/Global.C
-	${DIRECTORY}/ShaderManager.C
-	${DIRECTORY}/Shader.C
-	${DIRECTORY}/renderObjects/Geometry.C
-	${DIRECTORY}/renderObjects/Compositing.C
-	${DIRECTORY}/renderObjects/Opaque.C
-	${DIRECTORY}/renderObjects/Transparent.C
-	${DIRECTORY}/renderObjects/Cylinder.C
-	${DIRECTORY}/renderObjects/Mesh.C
-	${DIRECTORY}/renderObjects/RenderObject.C
-	${DIRECTORY}/renderObjects/Sphere.C
-	${DIRECTORY}/renderObjects/Line.C
-	${DIRECTORY}/renderObjects/TwoColoredLine.C
-	${DIRECTORY}/renderObjects/Point.C
+	${DIRECTORY}/renderObjects/box.C
+	${DIRECTORY}/renderObjects/clippingPlane.C
+	${DIRECTORY}/renderObjects/compositing.C
+	${DIRECTORY}/renderObjects/cylinder.C
+	${DIRECTORY}/renderObjects/geometry.C
+	${DIRECTORY}/renderObjects/lightSources.C
+	${DIRECTORY}/renderObjects/line.C
+	${DIRECTORY}/renderObjects/mesh.C
+	${DIRECTORY}/renderObjects/opaque.C
+	${DIRECTORY}/renderObjects/point.C
+	${DIRECTORY}/renderObjects/pointVolume.C
+	${DIRECTORY}/renderObjects/renderObject.C
+	${DIRECTORY}/renderObjects/sphere.C
 	${DIRECTORY}/renderObjects/SSAO.C
-	${DIRECTORY}/renderObjects/Volume.C
-	${DIRECTORY}/renderObjects/Box.C
-	${DIRECTORY}/renderObjects/PointVolume.C
-	${DIRECTORY}/renderObjects/LightSources.C
-	${DIRECTORY}/renderObjects/ClippingPlane.C
+	${DIRECTORY}/renderObjects/transparent.C
+	${DIRECTORY}/renderObjects/twoColoredLine.C
+	${DIRECTORY}/renderObjects/volume.C
 	${DIRECTORY}/vbo/VBObject.C
-	${DIRECTORY}/vbo/VBOQuad.C
-	${DIRECTORY}/vbo/VBOPoint.C
-	${DIRECTORY}/vbo/VBOTriangle.C
 	${DIRECTORY}/vbo/VBOLine.C
+	${DIRECTORY}/vbo/VBOPoint.C
+	${DIRECTORY}/vbo/VBOQuad.C
+	${DIRECTORY}/vbo/VBOTriangle.C
+	${DIRECTORY}/camera.C
+	${DIRECTORY}/clippingPlanes.C
+	${DIRECTORY}/global.C
+	${DIRECTORY}/material.C
 	${DIRECTORY}/modernGLConfigDialog.C
 	${DIRECTORY}/modernGLPlugin.C
 	${DIRECTORY}/modernGLRenderer.C
 	${DIRECTORY}/modernGLRenderSetup.C
-	${DIRECTORY}/Material.C
+	${DIRECTORY}/shader.C
+	${DIRECTORY}/shaderManager.C
 )
 
 SET(RCC_SOURCES_LIST
@@ -50,28 +50,28 @@ SET(DIRECTORY include)
 
 ### the list of all files requiring a moc run
 SET(MOC_SOURCES_LIST
-	${DIRECTORY}/Camera.h
-	${DIRECTORY}/renderObjects/Geometry.h
-	${DIRECTORY}/renderObjects/Compositing.h
-	${DIRECTORY}/renderObjects/Opaque.h
-	${DIRECTORY}/renderObjects/Transparent.h
-	${DIRECTORY}/renderObjects/Cylinder.h
-	${DIRECTORY}/renderObjects/Mesh.h
-	${DIRECTORY}/renderObjects/RenderObject.h
-	${DIRECTORY}/renderObjects/Sphere.h
-	${DIRECTORY}/renderObjects/Line.h
-	${DIRECTORY}/renderObjects/TwoColoredLine.h
-	${DIRECTORY}/renderObjects/Point.h
+	${DIRECTORY}/renderObjects/box.h
+	${DIRECTORY}/renderObjects/clippingPlane.h
+	${DIRECTORY}/renderObjects/compositing.h
+	${DIRECTORY}/renderObjects/cylinder.h
+	${DIRECTORY}/renderObjects/geometry.h
+	${DIRECTORY}/renderObjects/lightSources.h
+	${DIRECTORY}/renderObjects/line.h
+	${DIRECTORY}/renderObjects/mesh.h
+	${DIRECTORY}/renderObjects/opaque.h
+	${DIRECTORY}/renderObjects/point.h
+	${DIRECTORY}/renderObjects/pointVolume.h
+	${DIRECTORY}/renderObjects/renderObject.h
+	${DIRECTORY}/renderObjects/sphere.h
 	${DIRECTORY}/renderObjects/SSAO.h
-	${DIRECTORY}/renderObjects/Volume.h
-	${DIRECTORY}/renderObjects/Box.h
-	${DIRECTORY}/renderObjects/PointVolume.h
-	${DIRECTORY}/renderObjects/LightSources.h
-	${DIRECTORY}/renderObjects/ClippingPlane.h
+	${DIRECTORY}/renderObjects/transparent.h
+	${DIRECTORY}/renderObjects/twoColoredLine.h
+	${DIRECTORY}/renderObjects/volume.h
+	${DIRECTORY}/camera.h
+	${DIRECTORY}/material.h
 	${DIRECTORY}/modernGLConfigDialog.h
 	${DIRECTORY}/modernGLPlugin.h
 	${DIRECTORY}/modernGLRenderer.h
-	${DIRECTORY}/Material.h
 )
 
 QT5_WRAP_CPP(MOC_OUTFILES ${MOC_SOURCES_LIST})

@@ -1,7 +1,7 @@
 #ifndef SSAO_H
 #define SSAO_H
 
-#include <renderObjects/RenderObject.h>
+#include <renderObjects/renderObject.h>
 #include <vbo/VBOQuad.h>
 
 

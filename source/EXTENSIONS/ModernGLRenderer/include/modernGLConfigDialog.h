@@ -3,7 +3,7 @@
 
 #include <modernGLRenderer.h>
 #include <renderObjects/SSAO.h>
-#include <renderObjects/Transparent.h>
+#include <renderObjects/transparent.h>
 
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 

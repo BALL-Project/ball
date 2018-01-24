@@ -1,14 +1,14 @@
 #include <GL/glew.h>
 
 #include <modernGLRenderer.h>
-#include <Global.h>
+#include <global.h>
 
-#include <renderObjects/Box.h>
-#include <renderObjects/Line.h>
-#include <renderObjects/Mesh.h>
-#include <renderObjects/Point.h>
-#include <renderObjects/PointVolume.h>
-#include <renderObjects/TwoColoredLine.h>
+#include <renderObjects/box.h>
+#include <renderObjects/line.h>
+#include <renderObjects/mesh.h>
+#include <renderObjects/point.h>
+#include <renderObjects/pointVolume.h>
+#include <renderObjects/twoColoredLine.h>
 
 #include <BALL/VIEW/PRIMITIVES/gridVisualisation.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>

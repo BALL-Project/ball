@@ -1,15 +1,15 @@
 #ifndef MODERN_GL_RENDERER_H
 #define MODERN_GL_RENDERER_H
 
-#include <Camera.h>
-#include <Material.h>
+#include <camera.h>
+#include <material.h>
 #include <modernGLRenderSetup.h>
-#include <renderObjects/ClippingPlane.h>
-#include <renderObjects/LightSources.h>
-#include <renderObjects/Opaque.h>
+#include <renderObjects/clippingPlane.h>
+#include <renderObjects/lightSources.h>
+#include <renderObjects/opaque.h>
 #include <renderObjects/SSAO.h>
-#include <renderObjects/Transparent.h>
-#include <renderObjects/Volume.h>
+#include <renderObjects/transparent.h>
+#include <renderObjects/volume.h>
 
 #include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 
