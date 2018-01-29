@@ -54,7 +54,7 @@ IF(SIP_VERSION)
   SET(SIP_FOUND TRUE)
 ELSE(SIP_VERSION)
 	# determine the version of python we use
-	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_version; print get_python_version()"
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_version; print(get_python_version())"
 		OUTPUT_VARIABLE PYTHON_VERSION
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
@@ -110,7 +110,7 @@ IF(NOT SIP_VERSION)
   # (c) Try to find the sip executable:
   
   # let's try the configured binary directory anyway, in case, you know, it's actually correct...
-  EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "import sipconfig; print sipconfig.Configuration().sip_bin"
+  EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "import sipconfig; print(sipconfig.Configuration().sip_bin)"
 		OUTPUT_VARIABLE SIP_CONFIG_EXECUTABLE
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 		ERROR_QUIET
@@ -137,7 +137,7 @@ ENDIF(NOT SIP_VERSION)
 
 IF(NOT SIP_LIBRARIES)
   # Try to find the sip library:
-	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+	EXECUTE_PROCESS ( COMMAND ${PYTHON_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"
 		OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
 		OUTPUT_STRIP_TRAILING_WHITESPACE
 	)
