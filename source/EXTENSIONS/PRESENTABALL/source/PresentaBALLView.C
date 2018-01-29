@@ -68,7 +68,7 @@ namespace BALL
 			if (cmsg)
 			{
 				// fire a Qt signal that can be handled by the website
-				emit signal_->messageSignal(0, (int) cmsg->getType()); // CompositeMessage = 0
+				Q_EMIT signal_->messageSignal(0, (int) cmsg->getType()); // CompositeMessage = 0
 
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "CompositeMessage fired to JS" << std::endl;
@@ -79,7 +79,7 @@ namespace BALL
 			RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
 			if (rmsg)
 			{
-				emit signal_->messageSignal(1, (int) rmsg->getType()); // RepresentationMessage = 1
+				Q_EMIT signal_->messageSignal(1, (int) rmsg->getType()); // RepresentationMessage = 1
 
 				#ifdef BALL_VIEW_DEBUG
 				Log.info() << "RepresentationMessage fired to JS" << std::endl;
@@ -90,7 +90,7 @@ namespace BALL
 			SceneMessage* smsg = RTTI::castTo<SceneMessage>(*message);
 			if (smsg)
 			{
-				emit signal_->messageSignal(2, (int) smsg->getType()); //SceneMessage = 2
+				Q_EMIT signal_->messageSignal(2, (int) smsg->getType()); //SceneMessage = 2
 
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "SceneMessage fired to JS" << std::endl;
@@ -101,7 +101,7 @@ namespace BALL
 			DatasetMessage* dmsg = RTTI::castTo<DatasetMessage>(*message);
 			if (dmsg)
 			{
-				emit signal_->messageSignal(3, (int) dmsg->getType()); //DataMessage = 3
+				Q_EMIT signal_->messageSignal(3, (int) dmsg->getType()); //DataMessage = 3
 
 #ifdef BALL_VIEW_DEBUG
 				Log.info() << "DataMessage fired to JS" << std::endl;
