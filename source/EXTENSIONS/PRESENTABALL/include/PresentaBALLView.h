@@ -18,7 +18,7 @@ namespace BALL
 			public:
 				PresentaBALLSignal(QObject* parent = nullptr): QObject(parent) { }
 
-			signals:
+			Q_SIGNALS:
 				void actionSignal(int i);
 				void messageSignal(int i, int j);
 		};

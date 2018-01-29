@@ -42,7 +42,7 @@ namespace BALL
 				void setIndexHTMLLocation(const QString& path);
 				QString getIndexHTMLLocation();
 
-			public slots:
+			public Q_SLOTS:
 				virtual void selectIndexHTMLLocation();
 		};
 
