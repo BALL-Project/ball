@@ -54,7 +54,7 @@ namespace BALL
 				/// Overrides message in order to intercept system changed events
 				virtual void onNotify(Message* message);
 
-			public slots:
+			public Q_SLOTS:
 
 				/// Show and raise dialog
 				void show();

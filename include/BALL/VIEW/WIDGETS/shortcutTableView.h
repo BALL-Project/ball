@@ -29,13 +29,11 @@ namespace BALL
 
 				void setFilter(const QString& filter);
 
-			signals:
+			Q_SIGNALS:
 				void shortcutChanged();
 
-			protected slots:
+			protected Q_SLOTS:
 				void editSuccess_();
-
-			protected slots:
 				void onClick(const QModelIndex& index);
 
 			private:

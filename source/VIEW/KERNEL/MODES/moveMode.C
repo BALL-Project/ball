@@ -224,7 +224,7 @@ namespace BALL
 			scene_->getCurrentAtom()->setSelected(true);
 			scene_->notify(new CompositeMessage(*scene_->getCurrentAtom(), CompositeMessage::SELECTED_COMPOSITE));
 
-			emit InteractionMode::requestModeChange(this);
+			Q_EMIT InteractionMode::requestModeChange(this);
 		}
 
 	}

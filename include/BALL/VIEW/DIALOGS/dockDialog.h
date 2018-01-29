@@ -163,7 +163,7 @@ namespace BALL
 				void reset();
 				//@}
 					
-			public slots:
+			public Q_SLOTS:
 	
 				/** Shows and raises the dialog.
 					* Dialog is adapted for docking / redocking.

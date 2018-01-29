@@ -38,10 +38,10 @@ namespace BALL
 
 				int getNumLevels() const;
 
-			signals:
+			Q_SIGNALS:
 				void autoScaleRequested();
 
-			protected slots:
+			protected Q_SLOTS:
 				void transparencyToggled(bool enabled);
 				void normalizationToggled(bool enabled);
 				void validateText(QString str);

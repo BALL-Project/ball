@@ -67,7 +67,7 @@ namespace BALL
 			///
 			void readPreferenceEntries(const INIFile& inifile);
 
-			public slots:
+			public Q_SLOTS:
 
 			/// Open a filedialog to select the startup script
 			void fileSelected();

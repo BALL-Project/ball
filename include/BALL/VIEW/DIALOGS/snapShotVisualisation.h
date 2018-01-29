@@ -54,7 +54,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	///
 	Size getEndSnapshot() const;
 	
-	public slots:
+	public Q_SLOTS:
 
 	///
 	void show();
@@ -107,7 +107,7 @@ class BALL_VIEW_EXPORT SnapshotVisualisationDialog
 	///
 	void cancelPressed();
 	
-	protected slots:
+	protected Q_SLOTS:
 
 	void sliderDragStarted_();
 	void sliderDragEnded_();

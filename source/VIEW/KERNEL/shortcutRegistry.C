@@ -66,7 +66,7 @@ namespace BALL
 				shortcut_keys_.insert(key_seq);
 			}
 
-			emit shortcutChanged();
+			Q_EMIT shortcutChanged();
 		}
 
 		void ShortcutRegistry::clear()
@@ -74,7 +74,7 @@ namespace BALL
 			shortcuts_.clear();
 			shortcut_keys_.clear();
 
-			emit shortcutChanged();
+			Q_EMIT shortcutChanged();
 		}
 
 		void ShortcutRegistry::clearKeySequences()
@@ -86,7 +86,7 @@ namespace BALL
 			}
 			shortcut_keys_.clear();
 
-			emit shortcutChanged();
+			Q_EMIT shortcutChanged();
 		}
 
 		bool ShortcutRegistry::readShortcutsFromFile(const String& filename)
@@ -144,7 +144,7 @@ namespace BALL
 
 			infile.close();
 
-			emit shortcutChanged();
+			Q_EMIT shortcutChanged();
 
 			return true;
 		}

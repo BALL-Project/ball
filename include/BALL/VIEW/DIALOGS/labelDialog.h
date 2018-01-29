@@ -108,7 +108,7 @@ namespace BALL
 			
 			//@}
 			
-			public slots:
+			public Q_SLOTS:
 				
   		/** @name Public slots
 	  	*/
@@ -123,7 +123,7 @@ namespace BALL
 			*/
 			//@{
 				
-			protected slots:
+			protected Q_SLOTS:
 							
 			/** Indicates the apply button was pressed.
 			 		Creates a new Representation with the Label and notifies the widgets.

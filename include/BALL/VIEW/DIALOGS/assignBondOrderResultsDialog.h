@@ -51,7 +51,7 @@ namespace BALL
 					///
 					void setProcessor(AssignBondOrderProcessor* abop);
 
-				public slots:
+				public Q_SLOTS:
 					
 					/// Show and raise dialog
 					void show();

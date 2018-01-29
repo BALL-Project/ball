@@ -33,7 +33,7 @@ namespace BALL
 										 bool modal = false, Qt::WindowFlags fl = 0 );
 			~BondProperties();
 
-		public slots:
+		public Q_SLOTS:
 			void bondSelected();
 			void focusAtom();
 			void focusPartner();

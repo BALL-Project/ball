@@ -227,11 +227,11 @@ namespace BALL
 			void setCartoonDNABaseRadius(float value)
 				{ setValue_(cartoon_dna_base_radius_slider, value / 10.);}
 
-			public slots:
+			public Q_SLOTS:
 			
 			///
 
-			protected slots:
+			protected Q_SLOTS:
 			void stickRadiusChanged() {setLabelText_(stick_radius_label, stick_radius_slider);}
 			void VDWfactorChanged() {setLabelText_(vdw_radius_factor_label, vdw_radius_factor_slider);}
 			void ballStickSphereRadiusChanged() {setLabelText_(ball_stick_sphere_radius_label, ball_stick_sphere_radius_slider);}

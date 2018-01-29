@@ -36,7 +36,7 @@ namespace BALL
 													bool modal = false, Qt::WindowFlags fl = 0 );
 			~CompositeProperties();
 
-		public slots:
+		public Q_SLOTS:
 			void accept();
 
 		private:

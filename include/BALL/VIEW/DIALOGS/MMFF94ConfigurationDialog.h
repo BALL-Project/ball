@@ -43,7 +43,7 @@ namespace BALL
 			/// Destructor
 			virtual ~MMFF94ConfigurationDialog();
 			
-			public slots:
+			public Q_SLOTS:
 
 			///
 			virtual void resetOptions();
@@ -57,7 +57,7 @@ namespace BALL
 			/// apply the settings to a given MMFF94 force field
 			void applyTo(MMFF94& mmff);
 
-			protected slots:
+			protected Q_SLOTS:
 
 			virtual void browseParameterFiles();
 

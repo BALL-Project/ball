@@ -43,7 +43,7 @@ namespace BALL
 			/// Destructor
 			virtual ~AmberConfigurationDialog();
 			
-			public slots:
+			public Q_SLOTS:
 
 			///
 			void accept();
@@ -60,7 +60,7 @@ namespace BALL
 			//_
 			void periodicBoundaryClicked();
 
-			protected slots:
+			protected Q_SLOTS:
 
 			virtual void browseParameterFiles();
 

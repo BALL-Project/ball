@@ -282,7 +282,7 @@ namespace BALL
 			*/
 			vector<String> getSupportedFileFormats() { return file_formats_;}
 
-			public slots:
+			public Q_SLOTS:
 
 			/// Show a file dialog for writing the selected Dataset.
 			virtual bool write();

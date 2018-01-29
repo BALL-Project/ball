@@ -229,7 +229,7 @@ namespace BALL
 			const AssignBondOrderResultsDialog& getBondOrderResultsDialog() const { return bond_order_results_dialog_;}
 
 					
-			public slots:
+			public Q_SLOTS:
 
 			/** Centers the camera of Scene to the geometric center of the molecular objects
 					in the selection list.

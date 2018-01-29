@@ -161,7 +161,7 @@ namespace BALL
 			///
 			void setColoringSettingsDialog(ColoringSettingsDialog* dialog);
 	
-			public slots:
+			public Q_SLOTS:
 					
 			//@} 
 			/** @name Public slots 

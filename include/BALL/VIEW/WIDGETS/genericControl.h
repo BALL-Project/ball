@@ -108,12 +108,12 @@ namespace BALL
 
 			//@}
 
-			public slots:
+			public Q_SLOTS:
 			
 			/// Called by if del is pressed
  			virtual void deleteCurrentItems(){};
 
-		  protected slots:
+			protected Q_SLOTS:
 
  			virtual void deselectOtherControls_();
 

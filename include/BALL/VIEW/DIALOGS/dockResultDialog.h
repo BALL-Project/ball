@@ -81,7 +81,7 @@ namespace BALL
 				void addScoringFunction(const QString& name, DockingController::ScoringFunction score_func, QDialog* dialog=0);
 				//@}
 					
-			public slots:
+			public Q_SLOTS:
 
 				/** Shows and raises result dialog.
 					* Fills the result table in the dialog with the values stored in \link DockResultDialog::dock_res_ dock_res_ \endlink .
@@ -137,7 +137,7 @@ namespace BALL
 				void closeClicked();
 				
 				
-				protected slots:
+				protected Q_SLOTS:
 
 				void selectionChanged_();
 			

@@ -34,7 +34,7 @@ namespace BALL
 
 				Camera* camera;
 						
-			public slots:
+			public Q_SLOTS:
 				void okPressed();
 		};
 

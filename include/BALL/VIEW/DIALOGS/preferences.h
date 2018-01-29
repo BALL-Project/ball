@@ -119,10 +119,10 @@ namespace BALL
 			/// Activate or deactivate the apply and ok buttons
 			void setApplyEnabled(bool enabled);
 
-			signals:
+			Q_SIGNALS:
 				void applied();
 
-			public slots:
+			public Q_SLOTS:
 
 			//@}
 			/** @name Public slots
@@ -151,7 +151,7 @@ namespace BALL
 			/// @deprecated Help system has been removed. This function will also be removed in the next release.
 			BALL_DEPRECATED void showHelp();
 
-			protected slots:
+			protected Q_SLOTS:
 				void dialogButtonsClicked_(QAbstractButton* button);
 
 			protected:

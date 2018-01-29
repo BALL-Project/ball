@@ -21,7 +21,7 @@ namespace BALL
 				virtual void activate();
 				virtual void populateContextMenu(QMenu* menu);
 
-			protected slots:
+			protected Q_SLOTS:
 				void moveAtomTriggered_();
 
 			protected:

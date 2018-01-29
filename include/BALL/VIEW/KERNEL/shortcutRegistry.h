@@ -82,7 +82,7 @@ namespace BALL
 				virtual bool getValue(String&) const;
 				virtual bool setValue(const String&);
 
-			signals:
+			Q_SIGNALS:
 				void shortcutChanged();
 
 			protected:

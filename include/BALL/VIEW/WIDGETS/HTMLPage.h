@@ -17,14 +17,14 @@ namespace BALL
 			public:
 				virtual QString getName() const = 0;
 
-			public slots:
+			public Q_SLOTS:
 
 				void execute(const QList<QPair<QString, QString> >& parameters);
 
 			protected:
 				virtual void executeImpl_(const QList<QPair<QString, QString> >& parameters) = 0;
 
-			signals:
+			Q_SIGNALS:
 				void finishedExecution();
 		};
 

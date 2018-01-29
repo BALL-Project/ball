@@ -109,7 +109,7 @@ namespace BALL
 			{
 				// TODO: getDescription(QKeySequence) in shortcutRegistry to provide more helpful message.
 				Scene::getInstance(0)->setStatusbarText("Shortcut " + ascii(new_seq) + " successfully set.");
-				emit dataChanged(index, index);
+				Q_EMIT dataChanged(index, index);
 				return true;
 			}
 
@@ -179,7 +179,7 @@ namespace BALL
 
 			if(model()->setData(model()->index(edited_row_, 1, QModelIndex()),
 			                 QVariant::fromValue(editor_->getKeySequence()))) {
-				emit shortcutChanged();
+				Q_EMIT shortcutChanged();
 			}
 		}
 

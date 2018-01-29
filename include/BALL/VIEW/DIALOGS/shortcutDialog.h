@@ -55,10 +55,10 @@ namespace BALL
 			*/
 			virtual void initializeWidget(MainControl& main_control);
 
-			public slots:
+			public Q_SLOTS:
 				virtual void searchTextChanged(QString filter);
 
-			protected slots:
+			protected Q_SLOTS:
 				virtual void browseImportFile_();
 				virtual void browseExportFile_();
 

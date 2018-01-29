@@ -118,7 +118,7 @@ namespace BALL
 				 */
 				virtual void setDefaultPluginDirectory();
 
-			protected slots:
+			protected Q_SLOTS:
 				virtual void addPluginDirectory();
 				virtual void removePluginDirectory();
 				virtual void directorySelectionChanged(const QModelIndex&, const QModelIndex& /* previous */);

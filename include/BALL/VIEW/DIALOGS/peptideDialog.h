@@ -43,7 +43,7 @@ namespace BALL
 			///
 			Protein* getProtein() { return protein_;}
 
-			public slots:
+			public Q_SLOTS:
 
 			///
 			void ala_pressed() {insert_('a');}

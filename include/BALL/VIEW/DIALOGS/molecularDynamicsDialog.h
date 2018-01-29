@@ -92,12 +92,12 @@ class BALL_VIEW_EXPORT MolecularDynamicsDialog
 		/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
 		Position selectedForceField() const;
 
-		public slots:
+		public Q_SLOTS:
 				
 		///
 		virtual void accept();
 
-		protected slots:
+		protected Q_SLOTS:
 
 		virtual void enableDCDFileSelected();
 		

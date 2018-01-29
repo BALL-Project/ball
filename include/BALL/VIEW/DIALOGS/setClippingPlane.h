@@ -36,7 +36,7 @@ namespace BALL
 
 				ClippingPlane* plane_;
 						
-			public slots:
+			public Q_SLOTS:
 				void okPressed();
 		};
 

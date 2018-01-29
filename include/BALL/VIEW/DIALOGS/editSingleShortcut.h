@@ -50,11 +50,11 @@ namespace BALL
 				void reset();
 				void setup(const QString& shortcut);
 
-			public slots:
+			public Q_SLOTS:
 				virtual void accept();
 				virtual void reject();
 
-			protected slots:
+			protected Q_SLOTS:
 				void modeChanged_(bool toggled);
 
 			protected:

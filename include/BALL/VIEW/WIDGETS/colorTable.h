@@ -51,7 +51,7 @@ namespace BALL
 				///
 				virtual bool setValue(const String& value);
 
-			private slots:
+			private Q_SLOTS:
 
 				void beginEdit(int row, int col);
 

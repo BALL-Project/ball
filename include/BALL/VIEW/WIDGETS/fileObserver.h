@@ -61,7 +61,7 @@ namespace BALL
 			/// Set the update interval in milli seconds
 			void setUpdateInterval(Size msec);
 
-			public slots:
+			public Q_SLOTS:
 
 			/// Look for updates in the file
 			void updateFile();

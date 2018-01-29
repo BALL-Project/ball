@@ -90,7 +90,7 @@ namespace BALL
 			///
 			void setMode(Position pos);
 				
-			public slots:
+			public Q_SLOTS:
 			
 			void accept();
 			void tabChanged();		
@@ -100,7 +100,7 @@ namespace BALL
 			void show();
 			void applySplit();
 
-			protected slots:
+			protected Q_SLOTS:
 
 			void customColorTransparencyChanged();
 			void changeDrawingModeTransparencyChanged();

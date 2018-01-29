@@ -199,7 +199,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	 */
 	QMenu& getContextMenu();
 
-	public slots:
+	public Q_SLOTS:
 		
 	//@}
 	/** @name Public slots
@@ -326,7 +326,7 @@ class BALL_VIEW_EXPORT MolecularControl
 	/** @name Protected members 
 	*/ 
 	//@{
-	protected slots:
+	protected Q_SLOTS:
 
 	/*_ Controlling method for context menus.
 			Clear the previously created context menu.

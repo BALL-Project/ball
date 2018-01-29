@@ -80,7 +80,7 @@ namespace BALL
 				void fillDialog(const QString& p1, const QString& p2, const QString& alg, const QString& sf, const Options& alg_opt, const Options& sf_opt);
 				//@}
 				
-			public slots:
+			public Q_SLOTS:
 			
 				/** Starts timer and shows dialog to user.
 					*/
@@ -99,7 +99,7 @@ namespace BALL
 				void abortClicked();
 				
 				
-			protected slots:
+			protected Q_SLOTS:
 			
 				/** Is called when timer elapses.
 					* Gets current progress of docking algorithm.

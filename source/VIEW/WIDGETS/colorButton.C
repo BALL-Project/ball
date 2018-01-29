@@ -77,7 +77,7 @@ namespace BALL
 
 			if(tmp.isValid()) {
 				color_ = tmp;
-				emit colorChanged(color_);
+				Q_EMIT colorChanged(color_);
 			}
 		}
 

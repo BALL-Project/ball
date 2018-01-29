@@ -205,7 +205,7 @@ namespace BALL
 
 		void ServerWidget::changeLock(bool lock)
 		{
-			emit lockRequested(lock);
+			Q_EMIT lockRequested(lock);
 		}
 
 		void ServerWidget::handleLocking(bool lock)

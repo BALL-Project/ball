@@ -53,7 +53,7 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 	void setGrid(RaytraceableGrid* grid) {grid_ = grid;};
 	RaytraceableGrid* getGrid() {return grid_;};
 
-	public slots:
+	public Q_SLOTS:
 	
 	///
 	void add();
@@ -82,7 +82,7 @@ class BALL_VIEW_EXPORT RaytraceableContourSurfaceDialog
 
 	//void setDefaultRangeValues_();
 	
-	protected slots:
+	protected Q_SLOTS:
 
 	void setDefaultRangeValues_();
 

@@ -82,7 +82,7 @@ namespace BALL
 
 				QSize sizeHint() const;
 
-			protected slots:
+			protected Q_SLOTS:
 				void exportImage_();
 
 			protected:

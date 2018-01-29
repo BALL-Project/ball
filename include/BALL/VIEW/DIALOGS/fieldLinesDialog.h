@@ -47,7 +47,7 @@ namespace BALL
 			Size getIcosaederInterplationSteps();
 			float getAtomsDistance();
 
-			public slots:
+			public Q_SLOTS:
 
 			void accept();
 		};

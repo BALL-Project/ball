@@ -105,7 +105,7 @@ namespace BALL
 
 			virtual bool setValueAllowed(QObject* widget);
 
-			public slots:
+			public Q_SLOTS:
 
 			///
 			void computeDefaultPressed();
@@ -131,7 +131,7 @@ namespace BALL
 			///
 			void stereoModeChanged();
 
-			private slots:
+			private Q_SLOTS:
 				
 			///
 			void eyeDistanceChanged();
