@@ -279,6 +279,7 @@ FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Core Network Xml)
 LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
                                Qt5::Network
                                Qt5::Xml)
+LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DQT_NO_KEYWORDS")
 
 IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets)
