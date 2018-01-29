@@ -201,7 +201,7 @@ namespace BALL
 				BasicHelper(HelperThread* caller, QNetworkReply* reply);
 				virtual ~BasicHelper(){}
 
-			public slots:
+			public Q_SLOTS:
 				void error(QNetworkReply::NetworkError error);
 #ifndef QT_NO_SSL
 				void sslErrors(const QList<QSslError>& errors);
@@ -220,7 +220,7 @@ namespace BALL
 			public:
 				DLArrayHelper(HelperThread* caller, QNetworkReply* reply, QByteArray* result);
 
-			public slots:
+			public Q_SLOTS:
 				void finished();
 
 			private:
@@ -234,7 +234,7 @@ namespace BALL
 			public:
 				DLHelper(HelperThread* caller, QNetworkReply* reply, const String& path);
 
-			public slots:
+			public Q_SLOTS:
 				void finished();
 				void receivedData();
 

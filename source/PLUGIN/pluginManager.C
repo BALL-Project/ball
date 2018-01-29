@@ -65,7 +65,7 @@ namespace BALL
 			}
 
 			// collect the loaded plugins in this dir
-			foreach(QString it, plugin_dir.entryList())
+			Q_FOREACH(QString it, plugin_dir.entryList())
 			{
 				BALLPlugin* new_plugin = loadPlugin(plugin_dir.absoluteFilePath(it));
 				if (new_plugin)
