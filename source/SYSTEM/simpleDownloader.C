@@ -120,7 +120,7 @@ namespace BALL
 			Log.error() << "SSL error(s) while downloading. Errors are:\n";
 
 			QSslError ssl_error;
-			foreach(ssl_error, errors) {
+			Q_FOREACH(ssl_error, errors) {
 				Log.error() << ssl_error.errorString().toStdString() << "\n";
 			}
 
