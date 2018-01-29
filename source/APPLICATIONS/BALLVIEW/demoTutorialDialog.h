@@ -56,7 +56,7 @@ namespace BALL
 			///
 			//void setTutorialType(int type) { tutorial_type_ = type;}
 
-			public slots:
+			public Q_SLOTS:
 				
 			/// Show and raise the dialog
 			void show();

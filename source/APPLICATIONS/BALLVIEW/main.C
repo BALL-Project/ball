@@ -103,7 +103,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 			QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
 
 			QTranslator* translator = new QTranslator(&application);
-			foreach(QString s, dpaths)
+			Q_FOREACH(QString s, dpaths)
 			{
 				translator->load(loc, s + "BALLView/translations");
 				if (!translator->isEmpty())
