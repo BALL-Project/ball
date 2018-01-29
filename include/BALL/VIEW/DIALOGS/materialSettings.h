@@ -57,7 +57,7 @@ namespace BALL
 			 */
 			void updateDefaultMaterialsFromStage();
 
-			public slots:
+			public Q_SLOTS:
 
 			virtual void ambientFactorChanged();
 			virtual void specularityFactorChanged();

@@ -60,7 +60,7 @@ namespace BALL
 			///
 			void setMidValue(float value);
 
-			public slots:
+			public Q_SLOTS:
 			
 			void accept();
 			void autoScale();

@@ -325,7 +325,7 @@ namespace BALL
 
 			switch(buttonBox->buttonRole(button)) {
 				case QDialogButtonBox::ApplyRole:
-					emit applied();
+					Q_EMIT applied();
 					break;
 				case QDialogButtonBox::ResetRole:
 					setDefaultValues();

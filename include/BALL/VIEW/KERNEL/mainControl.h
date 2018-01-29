@@ -727,7 +727,7 @@ namespace BALL
 			*/
 			//@{
 			
-			public slots:
+			public Q_SLOTS:
 
 			/**	Initialize all registered ModularWidget objects.
 					It initializes the menu structure, the preferences dialogs and connects
@@ -822,7 +822,7 @@ namespace BALL
 
 			//@}
 			
-			protected slots:
+			protected Q_SLOTS:
 
 			/*_ This slot is called internally whenever the apply button
 					of the Preferences dialog	is pressed.

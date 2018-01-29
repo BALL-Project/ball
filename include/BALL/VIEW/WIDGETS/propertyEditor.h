@@ -80,7 +80,7 @@ namespace BALL
 				 */
 				virtual PropEditorWidget* clone(const std::string& name, QWidget* parent) = 0;
 
-			signals:
+			Q_SIGNALS:
 				/**
 				 * This signal is triggered when the user requested to delete this property
 				 */
@@ -246,7 +246,7 @@ namespace BALL
 				PDBInfoEditorWidget(const PDBInfo& info, QWidget* parent);
 				virtual PDBInfoEditorWidget* clone(const std::string& name, QWidget* parent);
 
-			protected slots:
+			protected Q_SLOTS:
 				void startEditorDialog();
 
 			protected:
@@ -322,7 +322,7 @@ namespace BALL
 				 */
 				bool hasChanges() const;
 
-			public slots:
+			public Q_SLOTS:
 				/**
 				 * Apply all available changes
 				 */
@@ -333,7 +333,7 @@ namespace BALL
 				 */
 				void reset();
 
-			signals:
+			Q_SIGNALS:
 				/**
 				 * Emitted upon the first user made change to the editors
 				 */
@@ -348,7 +348,7 @@ namespace BALL
 				QString chooseName_(const QString& initial);
 				void deleteProperty_(PropEditorWidget* editor);
 
-			protected slots:
+			protected Q_SLOTS:
 				void scheduleDelete_();
 				void scheduleDuplicate_();
 				void valueChanged_();

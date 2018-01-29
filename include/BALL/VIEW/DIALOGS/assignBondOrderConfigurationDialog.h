@@ -55,7 +55,7 @@ namespace BALL
 			///
 			virtual void initializeWidget(MainControl& main_control);
 
-			public slots:
+			public Q_SLOTS:
 
 			///
 			virtual void resetOptions();
@@ -66,7 +66,7 @@ namespace BALL
 			///
 			void reject();
 
-			protected slots:
+			protected Q_SLOTS:
 
 				virtual void browseParameterFiles_();
 				virtual void balanceParameterChanged_();

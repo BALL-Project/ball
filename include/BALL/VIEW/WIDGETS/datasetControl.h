@@ -114,12 +114,12 @@ namespace BALL
 			/// Deletes the currently selected items
 			virtual void deleteCurrentItems();
 
-			public slots:
+			public Q_SLOTS:
 				
 			// Overloaded from GenericControl 
 //   			virtual void deleteCurrentItems();
 
-		  protected slots:
+			protected Q_SLOTS:
 
 			virtual void showGuestContextMenu(const QPoint& pos);
 			

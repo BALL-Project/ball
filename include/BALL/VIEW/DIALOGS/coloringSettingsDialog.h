@@ -74,7 +74,7 @@ namespace BALL
 			///
 			virtual void readPreferenceEntries(INIFile& inifile);
 
-			protected slots:
+			protected Q_SLOTS:
 
 			virtual void maxDistanceChanged();
 			virtual void maxTFChanged();

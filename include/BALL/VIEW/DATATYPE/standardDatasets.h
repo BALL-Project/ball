@@ -107,7 +107,7 @@ class BALL_VIEW_EXPORT RegularData3DController
 
 	static String type;
 
-	public slots:
+	public Q_SLOTS:
 
 	///
 	bool createVectorGrid();
@@ -178,7 +178,7 @@ class BALL_VIEW_EXPORT TrajectoryController
 
 	static String type;
 
-	public slots:
+	public Q_SLOTS:
 
 	///
 	bool visualizeTrajectory();
@@ -233,7 +233,7 @@ class BALL_VIEW_EXPORT DockResultController
 
 	static String type;
 
-	public slots:
+	public Q_SLOTS:
 
 	///
 	void showDockResult();
@@ -289,7 +289,7 @@ class BALL_VIEW_EXPORT VectorGridController
 
 	static String type;
 
-	public slots:
+	public Q_SLOTS:
 
 	///
 	bool visualizeFieldLines();
@@ -339,7 +339,7 @@ class BALL_VIEW_EXPORT RaytraceableGridController
 
 	static String type;
 
-	public slots:
+	public Q_SLOTS:
 	
 	///
 	void  visualizeRaytraceableContourSurface();

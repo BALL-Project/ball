@@ -80,7 +80,7 @@ namespace BALL
 				///
 				void checkMenu(MainControl& mc);
 			
-			public slots:
+			public Q_SLOTS:
 
 				///
 				void slotDownload();

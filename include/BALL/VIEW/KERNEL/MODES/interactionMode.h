@@ -55,9 +55,9 @@ namespace BALL
 				bool isCurrent() const { return is_current_; }
 				void setCurrent(bool current) { is_current_ = current; }
 
-			signals:
+			Q_SIGNALS:
 				void requestModeChange(InteractionMode* mode);
-			protected slots:
+			protected Q_SLOTS:
 				void modeChangeSlot_();
 
 			protected:

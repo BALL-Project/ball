@@ -75,7 +75,7 @@ namespace BALL
 				///
 				void setContent(const std::list<Hotkey>& hotkeys);
 
-			public slots:
+			public Q_SLOTS:
 
 				///
 				virtual void addEmptyRow();

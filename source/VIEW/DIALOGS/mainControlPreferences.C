@@ -34,10 +34,10 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	QStringList dpaths = QString(p.getDataPath().c_str()).split("\n");
 
 	languageComboBox_->addItem("English (default)", QVariant("en_US"));
-	foreach(QString str, dpaths) {
+	Q_FOREACH(QString str, dpaths) {
 		QDir dir(str + "BALLView/translations");
 		QStringList tList = dir.entryList(QStringList("BALLView-*.qm"));
-		foreach(QString entry, tList) {
+		Q_FOREACH(QString entry, tList) {
 			entry.replace("BALLView-", "");
 			entry.replace(".qm", "");
 			languageComboBox_->addItem(QLocale::languageToString(QLocale(entry).language()), QVariant(entry));

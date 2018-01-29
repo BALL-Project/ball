@@ -35,12 +35,12 @@ class BALL_VIEW_EXPORT PTEDialog
 	///
 	~PTEDialog();
 	
-	public slots:
+	public Q_SLOTS:
 		
 	///
 	void newElementType(int elementNumber);
 
-	protected slots:
+	protected Q_SLOTS:
 
 	void elementClicked_();
 	void elementChoosen_();

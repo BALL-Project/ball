@@ -63,7 +63,7 @@ namespace BALL
 
 			bool basestats[100];
 
-			public slots:
+			public Q_SLOTS:
 
 			/** Show and raise the dialog
 			*/
@@ -77,7 +77,7 @@ namespace BALL
 			*/
 			//@{
 
-			protected slots:
+			protected Q_SLOTS:
 
 			/**	Opens the file decision dialog
 			*/

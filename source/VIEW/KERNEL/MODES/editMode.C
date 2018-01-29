@@ -373,7 +373,7 @@ namespace BALL
 						+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
 				undo_.push_back(eo);
 				// tell about the new undo operation
-				emit newEditOperation(eo);
+				Q_EMIT newEditOperation(eo);
 */
 				return;
 			}
@@ -441,7 +441,7 @@ namespace BALL
 				undo_.push_back(eo);
 
 				// tell about the new undo operation
-				emit newEditOperation(eo);
+				Q_EMIT newEditOperation(eo);
 */
 				scene_->merge(scene_->getCurrentAtom(), atom);
 
@@ -481,7 +481,7 @@ namespace BALL
 				undo_.push_back(eo);
 
 				// tell about the new undo operation
-				emit newEditOperation(eo);
+				Q_EMIT newEditOperation(eo);
 */
 				// set the bond
 				new Bond("Bond", *scene_->getCurrentAtom(), *a, Bond::ORDER__SINGLE);
@@ -492,7 +492,7 @@ namespace BALL
 				String bond_string = getBondOrderString_(bond_order_);
 				EditOperation eo2(0, c, (String)qApp->tr("Edit Mode", "Added bond of type ") + bond_string, EditOperation::ADDED__BOND);
 				undo_.push_back(eo2);
-				emit newEditOperation(eo2);
+				Q_EMIT newEditOperation(eo2);
 				*/
 
 				scene_->getMainControl()->update(*a->getParent(), true);
@@ -1001,7 +1001,7 @@ namespace BALL
 				// 		undo_.push_back(eo);
 				//
 				// 		// tell about the new undo operation
-				// 		emit newEditOperation(eo);
+				// 		Q_EMIT newEditOperation(eo);
 
 				// if the bond is between two molecules, merge them
 				scene_->merge(first_atom, second_atom);

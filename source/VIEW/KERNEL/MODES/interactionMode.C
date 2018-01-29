@@ -27,7 +27,7 @@ namespace BALL
 
 		void InteractionMode::modeChangeSlot_()
 		{
-			emit requestModeChange(this);
+			Q_EMIT requestModeChange(this);
 		}
 
 		void InteractionMode::addToolBarEntries(QToolBar* tb)

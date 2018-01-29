@@ -50,7 +50,7 @@ namespace BALL
 				is_editable_ = mode;
 
 				QObject* child;
-				foreach(child, ui_.editors->children())
+				Q_FOREACH(child, ui_.editors->children())
 				{
 					PropEditorWidget* editor = qobject_cast<PropEditorWidget*>(child);
 					if(editor)
@@ -110,7 +110,7 @@ namespace BALL
 
 			//First we need to remove all
 			QObject* child;
-			foreach(child, ui_.editors->children())
+			Q_FOREACH(child, ui_.editors->children())
 			{
 				PropEditorWidget* editor = qobject_cast<PropEditorWidget*>(child);
 				if(editor)
@@ -139,14 +139,14 @@ namespace BALL
 
 			//Delete all properties which have been scheduled for deletion
 			PropEditorWidget* prop;
-			foreach(prop, deleted_properties_)
+			Q_FOREACH(prop, deleted_properties_)
 			{
 				deleteProperty_(prop);
 			}
 
 			//Apply all other properties
 			QObject* child;
-			foreach(child, ui_.editors->children())
+			Q_FOREACH(child, ui_.editors->children())
 			{
 				PropEditorWidget* editor = qobject_cast<PropEditorWidget*>(child);
 				if(editor)
@@ -175,14 +175,14 @@ namespace BALL
 
 			//The user discarded the newly added properties
 			PropEditorWidget* prop;
-			foreach(prop, new_properties_)
+			Q_FOREACH(prop, new_properties_)
 			{
 				deleteProperty_(prop);
 			}
 
 			//And wants us to reread the old property values
 			QObject* child;
-			foreach(child, ui_.editors->children())
+			Q_FOREACH(child, ui_.editors->children())
 			{
 				PropEditorWidget* editor = qobject_cast<PropEditorWidget*>(child);
 				if(editor)
@@ -387,7 +387,7 @@ namespace BALL
 				//We need to check the inserted name against all properties and properties scheduled for creation
 				bool not_used = true;
 				PropEditorWidget* e;
-				foreach(e, new_properties_)
+				Q_FOREACH(e, new_properties_)
 				{
 					if(e->getName() == new_name)
 					{
@@ -410,7 +410,7 @@ namespace BALL
 			//We only want to emit this signal once
 			if(!has_changes_)
 			{
-				emit valueChanged();
+				Q_EMIT valueChanged();
 
 				has_changes_ = true;
 			}
@@ -707,12 +707,12 @@ namespace BALL
 
 				int n = 0;
 				skipped.clear();
-				foreach(QString line, lines) {
+				Q_FOREACH(QString line, lines) {
 					skipped.push_back(String(line));
 					n++;
 				}
 				// don't forget to emit this -- else changes won't be written back!
-				emit valueChanged();
+				Q_EMIT valueChanged();
 			}
 		}
 

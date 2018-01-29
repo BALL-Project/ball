@@ -50,7 +50,7 @@ namespace BALL
 				///
 				bool proxyEnabled();
 
-				public slots:
+				public Q_SLOTS:
 
 				///
 				void proxyModeChanged(int proxy_mode);

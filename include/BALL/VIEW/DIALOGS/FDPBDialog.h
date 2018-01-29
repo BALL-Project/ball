@@ -83,7 +83,7 @@ namespace BALL
 				{ return system_;}
 			
 
-		public slots:
+		public Q_SLOTS:
 
 			///
 			virtual void browseChargesData();
@@ -103,7 +103,7 @@ namespace BALL
 			///
 			virtual void resetPressed();
 
-		protected slots:
+		protected Q_SLOTS:
 			virtual void clicked(QAbstractButton* button);
 
 		protected:

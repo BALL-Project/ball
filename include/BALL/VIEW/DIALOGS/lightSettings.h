@@ -69,7 +69,7 @@ namespace BALL
 			///
 			void restoreValues(bool all);
 			
-			public slots:
+			public Q_SLOTS:
 
 			/// Slot for the AddLight button
 	    virtual void addLightPressed();

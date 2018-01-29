@@ -97,7 +97,7 @@ namespace BALL
 					
 				//@}
 					
-			public slots:
+			public Q_SLOTS:
 				
 				/** Shows dialog to user.
 					*/

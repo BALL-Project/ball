@@ -111,7 +111,7 @@ namespace BALL
 			///
 			virtual bool openFile(const String& filename);
 
-			public slots:
+			public Q_SLOTS:
 
 			///
 			void startTest();

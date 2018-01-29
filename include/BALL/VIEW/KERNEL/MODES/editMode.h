@@ -39,7 +39,7 @@ namespace BALL
 				virtual void activate();
 				virtual void populateContextMenu(QMenu* menu);
 
-			protected slots:
+			protected Q_SLOTS:
 				virtual void addStructure_();
 				virtual void setFormalCharge_();
 				virtual void changeBondOrder_();

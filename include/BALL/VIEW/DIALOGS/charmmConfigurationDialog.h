@@ -46,7 +46,7 @@ namespace BALL
 			///
 			const String& getFilename() const;
 			
-			public slots:
+			public Q_SLOTS:
 
 			virtual void resetOptions();
 			
@@ -65,7 +65,7 @@ namespace BALL
 			//_
 			void periodicBoundaryClicked();
 
-			protected slots:
+			protected Q_SLOTS:
 
 			virtual void browseParameterFiles();
 

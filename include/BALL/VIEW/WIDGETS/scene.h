@@ -525,7 +525,7 @@ namespace BALL
 				virtual void keyPressEvent(QKeyEvent* e);
 
 			/////////////////////////////////////////
-			public slots:
+			public Q_SLOTS:
 				/// Create an coordinate system at current position
 				void createCoordinateSystem();
 
@@ -642,7 +642,7 @@ namespace BALL
 				int getEditElementType();
 
 			////////////////////////////////////////
-			protected slots:
+			protected Q_SLOTS:
 
 				/** @name Protected slots
 				*/
@@ -676,7 +676,7 @@ namespace BALL
 				//@}
 
 			////////////////////////////////////////
-			signals:
+			Q_SIGNALS:
 
 				// signal for communication with EditOperationDialog
 				void newEditOperation(EditOperation &eo);

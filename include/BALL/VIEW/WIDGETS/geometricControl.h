@@ -122,10 +122,10 @@ namespace BALL
 
 			void updateClippingPlanes();
 
-			public slots:
+			public Q_SLOTS:
 				
 			//@}
-			/** @name Public slots 
+			/** @name Public slots
 			*/ 
 			//@{
 			
@@ -186,7 +186,7 @@ namespace BALL
 			///
 			ModifyRepresentationDialog* getModifySurfaceDialog();
 
-		  protected slots:
+		  protected Q_SLOTS:
 			
 			//@} 
 			///** @name Protected members */ 
@@ -207,7 +207,7 @@ namespace BALL
 
 			//@}
 			
-		  protected slots:
+		  protected Q_SLOTS:
 
 			virtual void onItemClicked(QTreeWidgetItem* item, int col);
 			void showGuestContextMenu(const QPoint& pos);

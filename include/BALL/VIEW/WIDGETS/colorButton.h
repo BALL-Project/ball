@@ -44,10 +44,10 @@ namespace BALL
 
 				QSize sizeHint() const;
 
-			public slots:
+			public Q_SLOTS:
 				void chooseColor();
 
-			signals:
+			Q_SIGNALS:
 				void colorChanged(QColor color);
 
 			protected:

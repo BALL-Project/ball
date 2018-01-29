@@ -63,7 +63,7 @@ namespace BALL
 			///
 			QGridLayout* getGuestLayout() { return layout_;}
 
-			public slots:
+			public Q_SLOTS:
 
 			///
 			virtual void dropEvent(QDropEvent* e);

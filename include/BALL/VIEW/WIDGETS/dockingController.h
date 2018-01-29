@@ -144,7 +144,7 @@ namespace BALL
 				///
 				virtual EnergeticEvaluation* createEvaluationMethod(Index method);
 
-			public slots:
+			public Q_SLOTS:
 				
 				/** Is called when docking is started by clicking on menu entry	<b> Docking </b>.
 						Calls \link DockingController::runDocking runDocking(false) \endlink.

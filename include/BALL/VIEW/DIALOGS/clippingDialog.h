@@ -57,7 +57,7 @@ namespace BALL
 			
 			//@}
 			
-			public slots:
+			public Q_SLOTS:
 				
   		/** @name Public slots
 	  	*/

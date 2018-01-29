@@ -26,7 +26,7 @@ namespace BALL
 
 			DragLogView(QWidget* parent);
 
-			public slots:
+			public Q_SLOTS:
 			virtual void contentsDragEnterEvent(QDragEnterEvent* e);
 			virtual void contentsDragLeaveEvent(QDragLeaveEvent* e);
 			virtual void contentsDropEvent(QDropEvent* e);
@@ -85,7 +85,7 @@ namespace BALL
 			// output a string
 			void logString(const String& text);
 
-			public slots:
+			public Q_SLOTS:
 
 			virtual void showGuestContextMenu(const QPoint&);
 			

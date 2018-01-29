@@ -40,10 +40,10 @@ class BALL_VIEW_EXPORT ContourSurfaceDialog
 		void setController(DatasetController* controller) {controller_ = controller;}
 		ColorRGBA getColor();
 
-	public slots:
+	public Q_SLOTS:
 		virtual int exec();
 
-	protected slots: 
+	protected Q_SLOTS:
 		virtual void valuesChanged();
 		virtual void chooseColor();
 	

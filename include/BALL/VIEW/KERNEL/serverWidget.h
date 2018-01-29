@@ -298,10 +298,10 @@ namespace BALL
 			/** @name Signals and Slots
 			 */
 			//@{
-			public slots:
+			public Q_SLOTS:
 				void handleLocking(bool lock);
 
-			signals:
+			Q_SIGNALS:
 				void lockRequested(bool lock);
 
 			//@}

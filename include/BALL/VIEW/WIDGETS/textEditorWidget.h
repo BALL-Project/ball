@@ -58,7 +58,7 @@ namespace BALL
 			 
 			 void resizeEvent(QResizeEvent *event);
 
-			private slots:
+			private Q_SLOTS:
 				void updateLineNumbersWidth(int newBlockCount);
 				void highlightCurrentLine();
 				void updateLineNumbers(const QRect &, int);

@@ -102,7 +102,7 @@ namespace BALL
 				/// Return the ID of the selected forcefield (see enum values in MolecularStructure)
 				Position selectedForceField() const;
 				
-				public slots:
+				public Q_SLOTS:
 
 				///
 				virtual void accept();

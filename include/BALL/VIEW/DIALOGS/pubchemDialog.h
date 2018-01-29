@@ -62,7 +62,7 @@ namespace BALL
 
 				///
 				void generateFromSMILES ( const String& SMILES );
-			public slots:
+			public Q_SLOTS:
 
 				/// Show and raise dialog
 				void show();

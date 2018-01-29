@@ -50,7 +50,7 @@ namespace BALL
 
 				void switchToLastMode();
 
-			protected slots:
+			protected Q_SLOTS:
 				void setMode_(InteractionMode* new_mode);
 
 			protected:

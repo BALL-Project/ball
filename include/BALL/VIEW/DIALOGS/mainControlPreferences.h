@@ -80,7 +80,7 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	///
 	void readPreferenceEntries(const INIFile& inifile);
 
-	public slots:
+	public Q_SLOTS:
 
 	/// Get the application's default font
 	void selectFont();

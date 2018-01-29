@@ -183,7 +183,7 @@ namespace BALL
 			item(p, 1)->setText("F2");
 			item(p, 2)->setText("");
 			item(p, 3)->setText("");
-			emit(cellActivated(p, 2));
+			Q_EMIT cellActivated(p, 2);
 		}
 
 		void HotkeyTable::removeSelection()

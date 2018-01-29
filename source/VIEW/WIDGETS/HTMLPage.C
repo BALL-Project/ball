@@ -17,7 +17,7 @@ namespace BALL
 		void HTMLInterfaceAction::execute(const QList<QPair<QString, QString> >& parameters)
 		{
 			executeImpl_(parameters);
-			emit finishedExecution();
+			Q_EMIT finishedExecution();
 		}
 
 		HTMLPage::HTMLPage(QObject* parent, bool ignore_ssl_errors)

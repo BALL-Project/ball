@@ -137,7 +137,7 @@ namespace BALL
 			///
 			void showDocumentationFor(const String& classname, const String& member);
 					
-			public slots:
+			public Q_SLOTS:
 
 			/// Show default page
 			virtual void showHelp();

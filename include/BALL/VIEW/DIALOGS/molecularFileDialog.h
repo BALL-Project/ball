@@ -183,7 +183,7 @@ namespace BALL
 
 			void setReadPDBModels(bool read) { read_all_pdb_models_ = read; }
 
-			public slots:
+			public Q_SLOTS:
 
 			/** Open a molecular file.
 					This method tries to open and read a molecular file, selected from a QFileDialog,

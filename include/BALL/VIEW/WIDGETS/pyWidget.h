@@ -291,7 +291,7 @@ class BALL_VIEW_EXPORT BALL_DEPRECATED PyWidget
 	///
 	bool isInDirectMode() const;
 
-	public slots:
+	public Q_SLOTS:
 
 	//
 	void showEditContextMenu(const QPoint& point);
@@ -337,7 +337,7 @@ class BALL_VIEW_EXPORT BALL_DEPRECATED PyWidget
 
 	bool getMembers(const String& classname, QStringList& sl, const String& prefix);
 
-	protected slots:
+	protected Q_SLOTS:
 
 	virtual bool returnPressed();
 
