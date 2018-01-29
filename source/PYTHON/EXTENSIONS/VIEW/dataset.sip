@@ -41,7 +41,7 @@ class DatasetController
 	String getType();
 	virtual void checkMenu(MainControl&);
 
-	public slots:
+	public Q_SLOTS:
 	virtual bool write();
 	virtual bool open();
 	virtual bool deleteDatasets();

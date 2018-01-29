@@ -19,7 +19,7 @@ class RegularData3DController
 	RegularData3D* createHistogramGrid(const RegularData3D&);
 	RegularData3D* getData(Dataset*);
 
-	public slots:
+	public Q_SLOTS:
 	bool createVectorGrid();
 	void computeIsoContourSurface();
 	void resizeGrid();
@@ -44,7 +44,7 @@ class TrajectoryController
 	virtual Dataset* open(String /*filetype*/, String /*filename*/);
 	SnapShotManager* getData(Dataset*);
 
-	public slots:
+	public Q_SLOTS:
 	bool visualizeTrajectory();
 	bool bufferTrajectory();
 };
