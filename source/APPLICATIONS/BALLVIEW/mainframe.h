@@ -35,7 +35,7 @@ namespace BALL
 		///
 		virtual ~Mainframe();
 
-		public slots:
+		public Q_SLOTS:
 
 		///
 		void show();
