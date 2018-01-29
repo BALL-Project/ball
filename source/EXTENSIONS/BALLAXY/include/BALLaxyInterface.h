@@ -25,7 +25,7 @@ namespace BALL
 				void setBALLaxyBaseUrl(const String& ballaxy_base);
 				bool uploadToBallaxy(AtomContainer* ac, const String& format);
 
-			public slots:
+			public Q_SLOTS:
 				void sendPDBToBallaxy();
 				void sendMOL2ToBallaxy();
 				void verifyDownloadRequest(QWebEngineDownloadItem* request);
