@@ -16,7 +16,7 @@ class LightSettings
 	virtual void restoreDefaultValues(bool /*all*/ = false);
 	void restoreValues(bool all);
 
-	public slots:
+	public Q_SLOTS:
 	virtual void addLightPressed();
 	virtual void colorPressed();
 	virtual void defaultsPressed();

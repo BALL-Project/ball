@@ -56,7 +56,7 @@ class Scene
 	void setFPSEnabled(bool);
 	void showText(const String&, Size /*font_size*/ = 20);
 
-	public slots:
+	public Q_SLOTS:
 
 	void createCoordinateSystem() throw();
 	void createCoordinateSystemAtOrigin() throw();
