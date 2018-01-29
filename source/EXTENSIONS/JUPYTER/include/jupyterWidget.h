@@ -30,7 +30,7 @@ namespace BALL
 
 				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
-			public slots:
+			public Q_SLOTS:
 				void closeTab(int index);
 				void renameTab(const QString& title);
 

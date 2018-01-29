@@ -16,7 +16,7 @@ namespace BALL
 			public:
 				JupyterTab(QWidget* parent, JupyterWidget* base);
 
-			protected slots:
+			protected Q_SLOTS:
 				void prepareNotebook(bool ok);
 
 			protected:

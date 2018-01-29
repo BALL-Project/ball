@@ -34,7 +34,7 @@ namespace BALL
 				QByteArray readStandardError();
 				QProcess::ProcessState state() const;
 
-			signals:
+			Q_SIGNALS:
 				void readyReadStandardOutput();
 				void readyReadStandardError();
 				void stateChanged(QProcess::ProcessState);

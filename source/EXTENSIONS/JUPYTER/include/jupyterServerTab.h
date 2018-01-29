@@ -24,7 +24,7 @@ namespace BALL
 				JupyterServer* getServer();
 				void setServer(JupyterServer* server);
 
-			public slots:
+			public Q_SLOTS:
 				void readStandardOutput();
 				void readStandardError();
 				void updateState(QProcess::ProcessState state);
@@ -32,7 +32,7 @@ namespace BALL
 				void processError(QProcess::ProcessError error);
 				void scrollToEnd();
 
-			signals:
+			Q_SIGNALS:
 				void appendMessage(const QString& /* message */);
 
 			protected:

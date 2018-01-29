@@ -51,7 +51,7 @@ namespace BALL
 
 				void selectConnectionMode(ConnectionMode mode);
 
-			public slots:
+			public Q_SLOTS:
 				void selectConnectionMode(int index);
 				void selectExePath();
 				void selectNbdir();
