@@ -387,6 +387,7 @@ SET(BALL_QSAR_TESTS
 	ConnectivityBase_test
 	ConnectivityDescriptors_test
 	Descriptor_test
+	Descriptors_test
 	PartialChargeProcessor_test
 	PartialChargeBase_test
 	PartialChargeDescriptors_test

@@ -12,10 +12,7 @@
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h>
-#include <iostream>
-using std::cerr; using std::endl;
 
 
 ///////////////////////////
