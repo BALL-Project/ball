@@ -168,6 +168,12 @@ void ScoringFunction::clear()
 		all_residues_hashgrid_ = nullptr;
 	}
 
+	if (all_ligand_nonbonded_)
+	{
+		delete all_ligand_nonbonded_;
+		all_ligand_nonbonded_ = nullptr;
+	}
+
 	for (Size i = 0; i < static_ligand_fragments_.size(); i++)
 	{
 		delete static_ligand_fragments_[i];

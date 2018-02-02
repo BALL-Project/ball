@@ -19,7 +19,7 @@ namespace BALL
 
 			DiffGridBasedScoring(AtomContainer& receptor, Vector3& hashgrid_origin, Options& options);
 
-			~DiffGridBasedScoring();
+			~DiffGridBasedScoring() = default;
 
 			virtual void setLigand(AtomContainer* sys);
 

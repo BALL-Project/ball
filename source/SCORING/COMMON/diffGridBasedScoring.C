@@ -14,20 +14,12 @@ using namespace BALL;
 DiffGridBasedScoring::DiffGridBasedScoring(AtomContainer& receptor, AtomContainer& ligand, Options& options)
 	: GridBasedScoring(receptor, ligand, options)
 {
-	all_ligand_nonbonded_ = 0;
 }
 
 
 DiffGridBasedScoring::DiffGridBasedScoring(AtomContainer& receptor, Vector3& hashgrid_origin, Options& options)
 	: GridBasedScoring(receptor, hashgrid_origin, options)
 {
-	all_ligand_nonbonded_ = 0;
-}
-
-
-DiffGridBasedScoring::~DiffGridBasedScoring()
-{
-	delete all_ligand_nonbonded_;
 }
 
 
