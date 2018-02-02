@@ -457,7 +457,7 @@ namespace BALL
 			 * ReferenceAreas can be added/deleted/modified directly by the user and will be used
 			 * during all future calls of updateScore().
 			 */
-			list<Constraint*> constraints;
+			list<Constraint*> constraints {};
 
 		protected:
 			/* @name Protected structs */
@@ -593,158 +593,158 @@ namespace BALL
 			/**
 			*Name of the scoring function
 			*/
-			String name_;
+			String name_ {""};
 
 			/**
 			* Scoring function options
 			*/
-			Options options_;
+			Options options_ {};
 
 			/**
 			* Receptor to dock in
 			*/
-			AtomContainer* receptor_;
+			AtomContainer* receptor_ {nullptr};
 
 			/**
 			* Ligand to dock
 			*/
-			AtomContainer* ligand_;
+			AtomContainer* ligand_ {nullptr};
 
 			/**
 			* Overall score of the scoring function
 			*/
-			double score_;
+			double score_ {0.0};
 
 			/**
 			* The intercept necessary for calculating the score
 			*/
-			double intercept_;
+			double intercept_ {0.0};
 
 			/**
 			* The base funcion for scoring simple terms
 			*/
-			ScoringBaseFunction* base_function_;
+			ScoringBaseFunction* base_function_ {nullptr};
 
 			/**
 			* The scoring components used by a particular scoring function (e.g. HBonds, VDW, etc.)
 			*/
-			vector<ScoringComponent*> scoring_components_;
+			vector<ScoringComponent*> scoring_components_ {};
 
 			/**
 			* Atoms, for which the setup of the force field fails
 			*/
-			HashSet<const Atom*> unassigned_atoms_;
+			HashSet<const Atom*> unassigned_atoms_ {};
 
 			/**
 			* Max number of unassigned atoms
 			*/
-			Size max_number_of_errors_;
+			Size max_number_of_errors_ {0};
 
 			/**
 			* Actual number of counted errors
 			*/
-			Size number_of_errors_;
+			Size number_of_errors_ {0};
 
 			/**
 			* Radius of the current ligand, i.e. the maximal distance from its geometrical center
 			*/
-			double ligand_radius_;
+			double ligand_radius_ {0.0};
 
 			/**
 			* Number of atoms of the current ligand candidate.
 			* Value is set by each call of calculateGeometricalCenter()
 			*/
-			int ligand_atoms_;
+			int ligand_atoms_ {0};
 
 			/**
 			* Geometrical center of the current ligand
 			*/
-			Vector3 ligand_center_;
+			Vector3 ligand_center_ {};
 
 			/**
 			 * HashGrid used to find potential interaction partners for a ligand atom.
 			 */
-			HashGrid3<Atom*>* hashgrid_;
+			HashGrid3<Atom*>* hashgrid_ {nullptr};
 
-			HashGrid3<Atom*>* all_residues_hashgrid_;
-			HashGrid3<Atom*>* static_residues_hashgrid_;
-			HashGrid3<Atom*>* flexible_residues_hashgrid_;
+			HashGrid3<Atom*>* all_residues_hashgrid_ {nullptr};
+			HashGrid3<Atom*>* static_residues_hashgrid_ {nullptr};
+			HashGrid3<Atom*>* flexible_residues_hashgrid_ {nullptr};
 
 			/**
 			 * Resolution that was specified by use of the Options object in the constructor.
 			 */
-			double resolution_;
+			double resolution_ {0.0};
 
 			/**
 			 * Maps each ligand atom to its StaticLigandFragments (if StaticLigandFragments have been calculated).
 			 */
-			std::map<Atom*, int> atoms_to_fragments_;
+			std::map<Atom*, int> atoms_to_fragments_ {};
 
 			/**
 			 * Average number of interactions per atom of a reference ligand within a small radius.
 			 * This is used to estimate the depth of burial of the ligand (candidate).
 			 */
-			int reference_neighbors_;
+			int reference_neighbors_ {0};
 
 			/**
 			 * Average number of target atoms within a distance of 'neighbor_cutoff' Angstroem of a ligand atom. \n
 			 * the value is calculated during each call of createNonBondedPairList().
 			 */
-			int neighboring_target_atoms_;
+			int neighboring_target_atoms_ {0};
 
 			/**
 			 * Number of ligand atoms that were found to be lying outside of hash_grid_,
 			 * as determined by the last call of createNonBondedPairList().
 			 */
-			int misplaced_ligand_atoms_;
+			int misplaced_ligand_atoms_ {0};
 
 			/**
 			 * Number of boxes around a ligand atom that are to be searched.
 			 */
-			int hashgrid_search_radius_;
+			int hashgrid_search_radius_ {0};
 
 			/**
 			 * Cutoff value for nonbonded energy.
 			 */
-			double nonbonded_cutoff_;
+			double nonbonded_cutoff_ {0.0};
 
 			/**
 			 * Squared cutoff value for nonbonded energy.
 			 */
-			double nonbonded_cutoff_2_;
+			double nonbonded_cutoff_2_ {0.0};
 
 			/**
 			 * Determines whether an overlap between two Hydrogen atoms should be considered a sterical clash.
 			 */
-			bool ignore_h_clashes_;
+			bool ignore_h_clashes_ {false};
 
 			/**
 			 * Number of overlapping receptor-ligand atom pairs as determined by the last call of update().
 			 */
-			int overlaps_;
+			int overlaps_ {0};
 
 			/**
 			 * Number of overlapping ligand atom pairs as determined by the last call of update().
 			 */
-			int ligand_intramol_overlaps_;
+			int ligand_intramol_overlaps_ {0};
 
 			/**
 			 * Allowed overlap in Angstroem for two atoms of two different molecules
 			 * (used since even in many crystal structures, some atoms overlap minimally).
 			 */
-			double allowed_intermolecular_overlap_;
+			double allowed_intermolecular_overlap_ {0.0};
 
 			/**
 			 * Allowed overlap in Angstroem for two atoms of the same molecule
 			 * (used since even in many crystal structures, some atoms overlap minimally).
 			 */
-			double allowed_intramolecular_overlap_;
+			double allowed_intramolecular_overlap_ {0.0};
 
 			/**
 			 * Number of target atoms within this squared distance of ligand atoms are used to approximate
 			 * the depth of burial of the ligand.
 			 */
-			double neighbor_cutoff_2_;
+			double neighbor_cutoff_2_ {0.0};
 
 			/** contains the static fragments of the current ligand candidate.\n
 			 * The conformation of each ligand is not changed during docking; only the position of fragments in
@@ -753,72 +753,72 @@ namespace BALL
 			 * will automatically search only for inter-fragment atom-pairs and ligand-receptor pairs,
 			 * but not for intra-fragment pairs.
 			 */
-			vector<StaticLigandFragment*> static_ligand_fragments_;
+			vector<StaticLigandFragment*> static_ligand_fragments_ {};
 
 			/**
 			 * Determines whether interactions calculated by this ScoringFunction should be saved
 			 * to each ligand atom a in a->interactions.\n
 			 * By default this is disabled for new ScoringFunctions.
 			 */
-			bool store_interactions_;
+			bool store_interactions_ {false};
 
-			bool store_interactions_phC_only_;
+			bool store_interactions_phC_only_ {false};
 
 			/**
 			 * All nonbonded pairs of the current ligand. Calculated without cutoff by createAllLigandNonBondedPairs().
 			 */
-			AtomPairVector* all_ligand_nonbonded_;
+			AtomPairVector* all_ligand_nonbonded_ {nullptr};
 
 			/**
 			 * Allows scaling down the contribution of the conformational energy of the ligand to the overall score.
 			 */
-			double conformation_scale_;
+			double conformation_scale_ {0.0};
 
 			/**
 			 * see Default::ALL_LIG_NONB_PAIRS
 			 */
-			bool use_all_lig_nonb_;
+			bool use_all_lig_nonb_ {false};
 
 			/**
 			 * see Default::USE_STATIC_LIG_FRAGMENTS
 			 */
-			bool use_static_lig_fragments_;
+			bool use_static_lig_fragments_ {false};
 
-			int burial_depth_scale_;
+			int burial_depth_scale_ {0};
 
 			/**
 			 * Standard deviation of the experimentally determined binding free energy of the used training data set.
 			 */
-			double exp_energy_stddev_;
+			double exp_energy_stddev_ {0.0};
 
 			/**
 			 * Mean of the experimentally determined binding free energy of the used training data set.
 			 */
-			double exp_energy_mean_;
+			double exp_energy_mean_ {0.0};
 
-			std::set<Residue*> flexible_residues_;
+			std::set<Residue*> flexible_residues_ {};
 
 			/**
 			 * Saves the final and all intermediate results of the last call of updateScore().
 			 */
-			Result result_;
+			Result result_ {};
 
 			/**
 			 * Energy of the StaticLigandFragments. Is calculated once for each ligand candidate by createStaticLigandFragments().
 			 */
-			double static_ligand_energy_;
+			double static_ligand_energy_ {0.0};
 
 			/**
 			 * Rotatable bonds of the current ligand molecule.
 			 * They are calculated by the function createStaticLigandFragments().
 			 */
-			vector<Bond*> rotatable_ligand_bonds_;
+			vector<Bond*> rotatable_ligand_bonds_ {};
 
 			/**
 			 * Original positions of all atoms of all flexible residues,
 			 * i.e. as they appear in the input receptor object.
 			 */
-			list<list<Vector3> > flexres_org_positions_;
+			list<list<Vector3> > flexres_org_positions_ {};
 
 	};
 

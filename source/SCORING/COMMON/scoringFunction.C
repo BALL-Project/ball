@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+#include <BALL/SCORING/COMMON/scoringFunction.h>
 
 #include <BALL/DOCKING/COMMON/sideChainOptimizer.h>
-#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecularInteractions.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-#include <BALL/SCORING/COMMON/scoringFunction.h>
 #include <BALL/SCORING/COMMON/linearBaseFunction.h>
 #include <BALL/SCORING/COMMON/fermiBaseFunction.h>
 #include <BALL/SYSTEM/path.h>
@@ -46,19 +45,7 @@ bool ScoringFunction::Default::IGNORE_H_CLASHES = true;
 
 
 ScoringFunction::ScoringFunction()
-	:	name_(""),
-		options_(),
-		receptor_(0),
-		ligand_(0),
-		score_(0.0),
-		intercept_(0.0),
-		base_function_(0),
-		scoring_components_(),
-		unassigned_atoms_(),
-		max_number_of_errors_(0),
-		number_of_errors_(0)
 {
-	//setDefaults();
 	setup();
 }
 
@@ -72,7 +59,6 @@ ScoringFunction::ScoringFunction(const ScoringFunction& sf)
 		intercept_(sf.intercept_),
 		base_function_(sf.base_function_),
 		scoring_components_(sf.scoring_components_),
-		unassigned_atoms_(),
 		max_number_of_errors_(sf.max_number_of_errors_),
 		number_of_errors_(sf.number_of_errors_)
 {
@@ -85,17 +71,9 @@ ScoringFunction::ScoringFunction(const ScoringFunction& sf)
 
 ScoringFunction::ScoringFunction(AtomContainer& receptor, AtomContainer& ligand,
 				 const Options& options)
-	:	name_(""),
-		options_(options),
+	:	options_(options),
 		receptor_(&receptor),
-		ligand_(&ligand),
-		score_(0.0),
-		intercept_(0.0),
-		base_function_(0),
-		scoring_components_(),
-		unassigned_atoms_(),
-		max_number_of_errors_(0),
-		number_of_errors_(0)
+		ligand_(&ligand)
 {
 	setup();
 }
@@ -127,7 +105,7 @@ ScoringFunction::ScoringFunction(AtomContainer& receptor, AtomContainer& ligand,
 ScoringFunction::ScoringFunction(AtomContainer& receptor, Vector3& hashgrid_origin, Options& options)
 {
 	receptor_ = &receptor;
-	ligand_ = NULL;
+	ligand_ = nullptr;
 
 	Options* option_category = options.getSubcategory(SUBCATEGORY_NAME);
 	if (!option_category) option_category = &options;
@@ -153,8 +131,8 @@ void ScoringFunction::clear()
 
 	// Don't delete the system or the molecules, that's not the job of a
 	// scoring function
-	receptor_ = 0;
-	ligand_ = 0;
+	receptor_ = nullptr;
+	ligand_ = nullptr;
 
 	name_ = String("");
 	score_ = 0.0;
@@ -166,28 +144,28 @@ void ScoringFunction::clear()
 
 	// The base function was (hopefully) assigned by the setup() method, do
 	// we have to delete it here.
-	if (base_function_ != 0)
+	if (base_function_)
 	{
 		delete base_function_;
-		base_function_ = 0;
+		base_function_ = nullptr;
 	}
 
-	if (hashgrid_ != 0)
+	if (hashgrid_)
 	{
 		delete hashgrid_;
-		hashgrid_ = 0;
+		hashgrid_ = nullptr;
 	}
 
-	if (flexible_residues_hashgrid_ != 0)
+	if (flexible_residues_hashgrid_)
 	{
 		delete flexible_residues_hashgrid_;
-		flexible_residues_hashgrid_ = 0;
+		flexible_residues_hashgrid_ = nullptr;
 	}
 
-	if (all_residues_hashgrid_ != 0)
+	if (all_residues_hashgrid_)
 	{
 		delete all_residues_hashgrid_;
-		all_residues_hashgrid_ = 0;
+		all_residues_hashgrid_ = nullptr;
 	}
 
 	for (Size i = 0; i < static_ligand_fragments_.size(); i++)
@@ -227,7 +205,7 @@ bool ScoringFunction::setup()
 					    ScoringFunction::Default::BASE_FUNCTION_TYPE);
 
 	// Check the environment
-	if (receptor_ == 0 || ligand_ == 0)
+	if (!receptor_ || !ligand_)
 	{
 		Log.error() << "ScoringFunction::setup(): No system or molecules defined"
 			<< std::endl;
@@ -249,7 +227,7 @@ bool ScoringFunction::setup()
 
 	store_interactions_ = false;
 	store_interactions_phC_only_ = false;
-	all_ligand_nonbonded_ = NULL;
+	all_ligand_nonbonded_ = nullptr;
 	resolution_ = options_.setDefaultReal(Option::HASHGRID_RESOLUTION, Default::HASHGRID_RESOLUTION);
 	nonbonded_cutoff_ = options_.setDefaultReal(Option::NONBONDED_CUTOFF, Default::NONBONDED_CUTOFF);
 	nonbonded_cutoff_2_ = nonbonded_cutoff_*nonbonded_cutoff_;
@@ -292,8 +270,8 @@ bool ScoringFunction::setup()
 
 	exp_energy_stddev_ = 0;
 	exp_energy_mean_ = 0;
-	flexible_residues_hashgrid_ = NULL;
-	all_residues_hashgrid_ = NULL;
+	flexible_residues_hashgrid_ = nullptr;
+	all_residues_hashgrid_ = nullptr;
 
 	return true;
 }
@@ -522,7 +500,7 @@ bool ScoringFunction::getCoefficient(const ScoringComponent* component,
 	{
 		if ((*it) == component)
 		{
-			coefficient = (*it)->getCoefficient();;
+			coefficient = (*it)->getCoefficient();
 
 			return true;
 		}
@@ -561,7 +539,7 @@ ScoringComponent* ScoringFunction::getComponent(const String& name) const
 		}
 	}
 
-	return 0;
+	return nullptr;
 }
 
 
@@ -573,7 +551,7 @@ ScoringComponent* ScoringFunction::getComponent(const Size index) const
 	}
 	else
 	{
-		return 0;
+		return nullptr;
 	}
 }
 
@@ -619,7 +597,7 @@ Vector3 ScoringFunction::calculateGeometricalCenter(AtomContainer* s, int* no_li
 	{
 		throw Exception::GeneralException(__FILE__, __LINE__, "ScoringFunction::calculateGeometricalCenter(ligand_) Error", "There are no atoms within the given AtomContainer!");
 	}
-	if (no_ligand_atoms != NULL)
+	if (no_ligand_atoms)
 	{
 		*no_ligand_atoms = no;
 	}
@@ -703,7 +681,7 @@ void ScoringFunction::setupReferenceLigand()
 void ScoringFunction::createAllLigandNonBondedPairs()
 {
 	delete all_ligand_nonbonded_;
-	all_ligand_nonbonded_ = NULL;
+	all_ligand_nonbonded_ = nullptr;
 
 	//if (ligand_atoms_ < 200)
 	{
@@ -804,8 +782,8 @@ AtomPairVector* ScoringFunction::createNonbondedPairVector(HashGrid3<Atom*>* has
 
 							else
 							{
-								bool b = 0;
-								if (!check_fragment) b = 1;
+								bool b = false;
+								if (!check_fragment) b = true;
 								else
 								{
 									map<Atom*, int>::iterator map_it1 = atoms_to_fragments_.find(&*atom_it);
@@ -816,14 +794,14 @@ AtomPairVector* ScoringFunction::createNonbondedPairVector(HashGrid3<Atom*>* has
 										{
 											if (map_it1->second != map_it2->second)
 											{
-												b = 1;
+												b = true;
 											}
 										}
 										else
 										{
 											if (map_it1->second == map_it2->second)
 											{
-												b = 1;
+												b = true;
 											}
 										}
 									}
@@ -905,12 +883,12 @@ int ScoringFunction::checkForAtomOverlaps(const AtomPairVector* pair_vector)
 
 AtomPairVector* ScoringFunction::createLigandNonbondedPairVector(bool intra_fragment, int& overlaps)
 {
-	AtomPairVector* nonbonded_pairs = NULL;
-	bool check_fragment = 0;
+	AtomPairVector* nonbonded_pairs = nullptr;
+	bool check_fragment = false;
 	bool use_selection = ligand_->containsSelection();
 	if (static_ligand_fragments_.size() != 0)
 	{
-		check_fragment = 1;
+		check_fragment = true;
 	}
 
 // 	if(!intra_fragment && ligand_atoms_>300)
@@ -1166,14 +1144,14 @@ void ScoringFunction::enableInteractionComponents_(const list<String>& type_name
 
 	for (list < String > ::const_iterator it = type_names.begin(); it != type_names.end(); it++)
 	{
-		bool found_components = 0;
+		bool found_components = false;
 		for (Size i = 0; i < scoring_components_.size(); i++)
 		{
 			if (scoring_components_[i]->isLigandIntraMolecular()) continue;
 
 			if (scoring_components_[i]->getTypeName() == *it)
 			{
-				found_components = 1;
+				found_components = true;
 				scoring_components_[i]->enable();
 			}
 		}
@@ -1347,11 +1325,11 @@ void ScoringFunction::update()
 {
 	overlaps_ = 0;
 	ligand_intramol_overlaps_ = 0;
-	AtomPairVector* ligand_nonbonded = NULL;
-	bool update_ligand_nonbonded = 0;
+	AtomPairVector* ligand_nonbonded = nullptr;
+	bool update_ligand_nonbonded = false;
 
 	// Check for ligand intramolecular atom clashes
-	if (all_ligand_nonbonded_ != NULL)
+	if (all_ligand_nonbonded_)
 	{
 		// all_ligand_nonbonded_ contains only interfragment pairs
 		if (static_ligand_fragments_.size() > 0)
@@ -1363,10 +1341,10 @@ void ScoringFunction::update()
 			ligand_nonbonded = createLigandNonbondedPairVector(0, ligand_intramol_overlaps_);
 		}
 	}
-	if (all_ligand_nonbonded_ == NULL) // calculate ligand nonbonded pairs
+	if (!all_ligand_nonbonded_) // calculate ligand nonbonded pairs
 	{
 		ligand_nonbonded = createLigandNonbondedPairVector(0, ligand_intramol_overlaps_);
-		update_ligand_nonbonded = 1;
+		update_ligand_nonbonded = true;
 	}
 
 	AtomPairVector* receptor_ligand = createNonbondedPairVector(hashgrid_, overlaps_, 1);
@@ -1662,7 +1640,7 @@ void ScoringFunction::createStaticLigandFragments()
 
 	if (rotatable_ligand_bonds_.size() == 0)
 	{
-		bool only_one_atom = 1;
+		bool only_one_atom = true;
 		AtomConstIterator it = ligand_->beginAtom();
 		if (it != ligand_->endAtom()) it++;
 		if (it != ligand_->endAtom()) only_one_atom = false;
@@ -1696,12 +1674,12 @@ void ScoringFunction::fetchStaticLigandFragment(Atom* a1, int index)
 			continue;
 		}
 
-		bool rotatable_bond = 0;
+		bool rotatable_bond = false;
 		int order = bond_it->getOrder();
 		if ( order == 1 && !bond_it->getProperty("InRing").getBool() && countCovalentBonds(a1, 2) > 1 && countCovalentBonds(a2, 2) > 1 && !isPeptideBond(&*bond_it) )
 		{
 			// found a rotatable bond between a1 and a2
-			rotatable_bond = 1;
+			rotatable_bond = true;
 		}
 
 		if (!rotatable_bond)
@@ -1804,21 +1782,21 @@ bool ScoringFunction::isPeptideBond(const Bond* bond) const
 	}
 	else return false;
 
-							Size no = 0; bool CO = 0; bool CR = 0;
+							Size no = 0; bool CO = false; bool CR = false;
 	for (Atom::BondConstIterator it = C->beginBond(); !it.isEnd(); ++it, no++)
 	{
 		if (it->getPartner(*C) == N) continue;
-							if (it->getOrder() == 2 && it->getPartner(*C)->getElement().getSymbol() == "O") CO = 1;
-							else if (it->getPartner(*C)->getElement().getSymbol() == "C") CR = 1;
+							if (it->getOrder() == 2 && it->getPartner(*C)->getElement().getSymbol() == "O") CO = true;
+							else if (it->getPartner(*C)->getElement().getSymbol() == "C") CR = true;
 	}
 	if (no != 3 || !CO || !CR) return false;
 
-							no = 0; bool NR = 0; bool NH = 0;
+							no = 0; bool NR = false; bool NH = false;
 	for (Atom::BondConstIterator it = N->beginBond(); !it.isEnd(); ++it, no++)
 	{
 		if (it->getPartner(*N) == C) continue;
-							if (it->getPartner(*N)->getElement().getSymbol() == "C") NR = 1;
-							else if (it->getPartner(*N)->getElement().getSymbol() == "H") NH = 1;
+							if (it->getPartner(*N)->getElement().getSymbol() == "C") NR = true;
+							else if (it->getPartner(*N)->getElement().getSymbol() == "H") NH = true;
 	}
 	if ( (no != 3 || !NR || !NH) && (no != 2 || !NR || NH) ) return false;
 
@@ -1963,7 +1941,7 @@ bool ScoringFunction::assignRotamer(Residue* residue, ResidueRotamerSet* rotamer
 
 Size ScoringFunction::countNeighboringReceptorAtoms(const Atom* atom, double distance_threshold, bool onePerCell, int* number_of_overlaps) const
 {
-	if (number_of_overlaps != NULL) *number_of_overlaps = 0;
+	if (number_of_overlaps) *number_of_overlaps = 0;
 
 	int x_size = (int)hashgrid_->getSizeX();
 	int y_size = (int)hashgrid_->getSizeY();
@@ -2010,7 +1988,7 @@ Size ScoringFunction::countNeighboringReceptorAtoms(const Atom* atom, double dis
 						if (onePerCell) break;
 					}
 
-					if (number_of_overlaps != NULL)
+					if (number_of_overlaps)
 					{
 						double radii = atom->getElement().getVanDerWaalsRadius() + (*di)->getElement().getVanDerWaalsRadius();
 						double dist = sqrt(distance_2);
