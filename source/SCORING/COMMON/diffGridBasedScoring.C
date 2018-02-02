@@ -4,8 +4,6 @@
 // ----------------------------------------------------
 
 #include <BALL/SCORING/COMMON/diffGridBasedScoring.h>
-#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
-#include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DOCKING/COMMON/structurePreparer.h>
 
@@ -45,11 +43,11 @@ void DiffGridBasedScoring::update()
 {
 	overlaps_ = 0;
 	ligand_intramol_overlaps_ = 0;
-	AtomPairVector* ligand_nonbonded = NULL;
-	bool update_ligand_nonbonded = 0;
+	AtomPairVector* ligand_nonbonded = nullptr;
+	bool update_ligand_nonbonded = false;
 
 	// Make sure to update pairlists for all atoms, including those belonging to flexible residues.
-	HashGrid3<Atom*>* backup_grid = 0;
+	HashGrid3<Atom*>* backup_grid = nullptr;
 	if (!flexible_residues_.empty())
 	{
 		backup_grid = hashgrid_;
@@ -57,7 +55,7 @@ void DiffGridBasedScoring::update()
 	}
 
 	// Check for ligand intramolecular atom clashes
-	if (all_ligand_nonbonded_ != NULL)
+	if (all_ligand_nonbonded_)
 	{
 		// all_ligand_nonbonded_ contains only interfragment pairs
 		if (static_ligand_fragments_.size() > 0)
@@ -69,15 +67,15 @@ void DiffGridBasedScoring::update()
 			ligand_nonbonded = createLigandNonbondedPairVector(0, ligand_intramol_overlaps_);
 		}
 	}
-	if (all_ligand_nonbonded_ == NULL) // calculate ligand nonbonded pairs
+	if (!all_ligand_nonbonded_) // calculate ligand nonbonded pairs
 	{
 		ligand_nonbonded = createLigandNonbondedPairVector(0, ligand_intramol_overlaps_);
-		update_ligand_nonbonded = 1;
+		update_ligand_nonbonded = true;
 	}
 
 
 	AtomPairVector empty_vector(0);
-	AtomPairVector* receptor_ligand = NULL; // will be used only if there are receptor-ligand components that could not be precalculated
+	AtomPairVector* receptor_ligand = nullptr; // will be used only if there are receptor-ligand components that could not be precalculated
 
 	for (vector<ScoringComponent*> ::iterator it = scoring_components_.begin(); it != scoring_components_.end(); ++it)
 	{
@@ -104,7 +102,7 @@ void DiffGridBasedScoring::update()
 			{
 				if ((*it)->isAtomPairwise())
 				{
-					if (receptor_ligand == NULL)
+					if (!receptor_ligand)
 					{
 						receptor_ligand = createNonbondedPairVector(hashgrid_, overlaps_, 1);
 					}
@@ -141,23 +139,13 @@ void DiffGridBasedScoring::testOverlaps(Vector3& position, HashGrid3 < Atom* > *
 	setLigand(&m);
 
 	int overlaps = 0;
-	if (hashg == NULL) hashg = hashgrid_;
+	if (!hashg) hashg = hashgrid_;
 	AtomPairVector* nonbonded_pairs = createNonbondedPairVector(hashg, overlaps, 1);
 
 	std::cout<<e.getVanDerWaalsRadius()<<std::endl;
 	std::cout<<overlaps<<" atom overlaps were found at the given position"<<std::endl;
 	std::cout<<"neighboring_target_atoms_ = "<<neighboring_target_atoms_<<std::endl;
 
-// 	update();
-// 	updateScore();
-//
-// 	cout<<"ScoreGridSet value at given position: "<<grid_sets_[0]->getGridScore(4,position,0)<<endl;
-// 	cout<<"neighboring atoms according to grid: "<<grid_sets_[0]->getGridScore(1,position,0)<<endl;
-//
-//
-// 	update();
-// 	updateScore();
-// 	cout<<"score = "<<getScore()<<endl;
 	delete nonbonded_pairs;
 }
 
@@ -170,7 +158,7 @@ void DiffGridBasedScoring::updatePrecalculatedScore(Size set)
 		String s = "ScoreGridSet no" + String(set) + " has not been defined!";
 		throw BALL::Exception::GeneralException(__FILE__, __LINE__, "DiffGridBasedScoring::updatePrecalculatedScore() error", s);
 	}
-	if (grid_sets_[set]->getHashGrid() == NULL)
+	if (!grid_sets_[set]->getHashGrid())
 	{
 		String s = "The HashGrid of ScoreGridSet no" + String(set) + " has not been created yet!";
 		throw BALL::Exception::GeneralException(__FILE__, __LINE__, "DiffGridBasedScoring::updatePrecalculatedScore() error", s);

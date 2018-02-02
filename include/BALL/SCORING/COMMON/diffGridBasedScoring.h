@@ -29,7 +29,7 @@ namespace BALL
 			/** Overloads ScoringFunction::updateScore() so that the grid score is used to asses the current receptor-ligand interaction */
 			virtual double updateScore();
 
-			void testOverlaps(Vector3& position, HashGrid3<Atom*>* hashg = NULL);
+			void testOverlaps(Vector3& position, HashGrid3<Atom*>* hashg = nullptr);
 
 		protected:
 			//ForceField* force_field_;
@@ -37,9 +37,6 @@ namespace BALL
 			/** update pairs and precalculates a score for one cell of a ScoreGrids
 			@param set the id of the ScoreGrid, whose HashGrid is to be used */
 			void updatePrecalculatedScore(Size set);
-
-		private:
-
 	};
 }
 
