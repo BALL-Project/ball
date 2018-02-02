@@ -353,9 +353,8 @@ SET(BALL_STRUCTURE_TESTS
 	SecondaryStructureProcessor_test
 	UCK_test
 	BuildBondsProcessor_test
-#	MoleculeAssembler_test
-#	SDGenerator_test
-#	RingAnalyser_test
+	SDGenerator_test
+	RingAnalyser_test
 	ResidueRotamerSet_test
 	RotamerLibrary_test
 )
