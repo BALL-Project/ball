@@ -31,7 +31,7 @@ CHECK(~NMRStarFile() )
 	delete(f);
 RESULT
 
-CHECK(NMRStarFile(const String& file_name) throw(Exception::FileNotFound, Exception::ParseError))
+CHECK(NMRStarFile(const String& file_name))
 	PRECISION(1e-3)
  	NMRStarFile rs(BALL_TEST_DATA_PATH(NMRStarFile_test.bmr));
 RESULT
@@ -155,7 +155,7 @@ CHECK(NMRAtomDataSet)
 RESULT
 
 
-CHECK(NMRAtomData) //NMRStarFile(const String& file_name) throw(Exception::FileNotFound, Exception::ParseError))
+CHECK(NMRAtomData) //NMRStarFile(const String& file_name))
 	PRECISION(1e-3)
  	//NMRStarFile rs(BALL_TEST_DATA_PATH(NMRStarFile_test.bmr));
 

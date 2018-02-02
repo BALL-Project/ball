@@ -199,7 +199,7 @@ CHECK(void writeRecord_(const PDB::RecordSEQRES& seqres))
 RESULT
 
 
-CHECK(bool write(const System& system) throw(File::CannotWrite))
+CHECK(bool write(const System& system))
 	PDBFile f;
 	f.open(BALL_TEST_DATA_PATH(PDBFile_test2.pdb));
 	String tmp_filename;
@@ -226,7 +226,7 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 RESULT
 
 
-CHECK(bool write(const System& system) throw(File::CannotWrite) - PDBFormat 1996)
+CHECK(bool write(const System& system))
 	PDBFile f;
 	f.options[PDBFile::Option::WRITE_PDBFORMAT_1996] = true;
 	
@@ -344,10 +344,10 @@ RESULT
 CHECK(PDBFile& operator >> (System& system))
 RESULT
 
-CHECK(PDBFile(const PDBFile& PDB_file) throw(Exception::FileNotFound))
+CHECK(PDBFile(const PDBFile& PDB_file))
 RESULT
 
-CHECK(PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in))
 RESULT
 
 CHECK(bool readInvalidRecord(const char* line))
@@ -356,7 +356,7 @@ RESULT
 CHECK(bool readUnknownRecord(const char* line))
 RESULT
 
-CHECK(bool write(const Protein& protein) throw(File::CannotWrite))
+CHECK(bool write(const Protein& protein))
 RESULT
 
 CHECK(void read(Protein& protein))

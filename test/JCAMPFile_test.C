@@ -28,12 +28,12 @@ CHECK(~JCAMPFile() throw())
 	delete ptr;
 RESULT
 
-CHECK(JCAMPFile(const String& name, OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(JCAMPFile(const String& name, OpenMode open_mode = std::ios::in))
 	TEST_EXCEPTION(Exception::FileNotFound, JCAMPFile("asddddddddddddaaaaaaaacasdd"))
 	JCAMPFile jcamp(BALL_TEST_DATA_PATH(JCAMPFile_test.dat));
 RESULT
 
-CHECK(void read() throw(Exception::ParseError))
+CHECK(void read())
 	JCAMPFile jcamp(BALL_TEST_DATA_PATH(JCAMPFile_test.dat));
 	jcamp.read();
 
@@ -55,7 +55,7 @@ CHECK(void read() throw(Exception::ParseError))
 	TEST_EXCEPTION(Exception::ParseError, empty.read())
 RESULT
 
-CHECK(bool write() throw(File::CannotWrite))
+CHECK(bool write())
 	JCAMPFile jcamp(BALL_TEST_DATA_PATH(JCAMPFile_test.dat));
 	jcamp.read();
 	jcamp.close();
@@ -90,7 +90,7 @@ CHECK(bool hasEntry(const String& name) const throw())
 	// ????
 RESULT
 											
-CHECK(Index getIntValue(const String& name) const throw(Exception::InvalidFormat))
+CHECK(Index getIntValue(const String& name) const)
 	// ????
 RESULT
 
@@ -102,7 +102,7 @@ CHECK(const JCAMPValue& operator [] (const String& name) const)
 	// ????
 RESULT
 
-CHECK(double getDoubleValue(const String& name) const throw(Exception::InvalidFormat))
+CHECK(double getDoubleValue(const String& name) const)
 	// ????
 RESULT
 

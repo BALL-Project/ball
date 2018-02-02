@@ -169,7 +169,7 @@ Composite composite;
 composite.select();
 String filename;
 
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	NEW_TMP_FILE(filename)
 	std::ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -179,7 +179,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	ofile.close();
 RESULT
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	using namespace RTTI;
 	std::ifstream  ifile(filename.c_str());
 	pm.setIstream(ifile);

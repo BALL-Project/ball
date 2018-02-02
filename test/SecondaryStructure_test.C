@@ -397,7 +397,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<SecondaryStructure>(), SecondaryStructure::createDefault);
 pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	SecondaryStructure* f1= new SecondaryStructure("name1");
 	Residue* f2 = new Residue("name2");
@@ -410,7 +410,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	delete f1;
 RESULT
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();

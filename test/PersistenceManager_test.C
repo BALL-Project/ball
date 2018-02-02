@@ -350,7 +350,7 @@ CHECK(void endOutput() throw())
 RESULT
 
 
-CHECK(PersistentObject* readObject() throw(Exception::GeneralException))
+CHECK(PersistentObject* readObject())
   //?????
 RESULT
 

@@ -417,7 +417,7 @@ CHECK(void clear() throw())
 	TEST_EQUAL(s2.getNumberOfNormals(), 0)
 RESULT
 
-CHECK(void readMSMSFile(const String& vert_filename, const String& face_filename) throw(Exception::FileNotFound))
+CHECK(void readMSMSFile(const String& vert_filename, const String& face_filename))
 	Surface s;
 	s.readMSMSFile(BALL_TEST_DATA_PATH(Surface_test.vert.dat), BALL_TEST_DATA_PATH(Surface_test.face.dat));
 	TEST_EQUAL(s.getNumberOfTriangles(), 170)

@@ -38,7 +38,7 @@ CHECK(~MOLFile() throw())
 RESULT
 
 
-CHECK(bool read(System& system) throw(Exception::ParseError))
+CHECK(bool read(System& system))
 	MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test1.mol));
 	System system;
 	f.read(system);
@@ -58,7 +58,7 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
 RESULT
 
 
-CHECK(MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in))
 	MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test1.mol), std::ios::in);
 	System system;
 	f.read(system);
@@ -69,7 +69,7 @@ CHECK(MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in) t
 RESULT
 
 
-CHECK(bool write(const System& system) throw(File::CannotWrite))
+CHECK(bool write(const System& system))
   Molecule* m = new Molecule;
 	m->setName("MOL");
 	System S;
@@ -139,7 +139,7 @@ CHECK([EXTRA]MOLFile::MOLFile& operator >> (System& system))
 	TEST_EQUAL(S.countMolecules(), 1)
 RESULT
 
-CHECK(Molecule* read() throw(Exception::ParseError))
+CHECK(Molecule* read())
   MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test1.mol));
 	Molecule* m = f.read();
 	f.close();
@@ -181,7 +181,7 @@ CHECK([EXTRA]MOLFile::MOLFile& operator << (const System& system))
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(MOLFile_test2.mol))
 RESULT
 
-CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
+CHECK(bool write(const Molecule& molecule))
 	NEW_TMP_FILE(filename)
 	MOLFile f(filename, std::ios::out);
 	f.write(*m);
@@ -189,7 +189,7 @@ CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(MOLFile_test2.mol))
 RESULT
 
-CHECK([EXTRA]bool read(System& system) throw(Exception::ParseError))
+CHECK([EXTRA]bool read(System& system))
 	MOLFile f(BALL_TEST_DATA_PATH(MOLFile_test5.mol));
 	System system;
 	f.read(system);

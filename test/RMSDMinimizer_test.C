@@ -19,14 +19,12 @@ using namespace BALL;
 
 typedef RMSDMinimizer::PointVector Points;
 
-CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation(const AtomBijection& ab)
-    throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates))
+CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation(const AtomBijection& ab))
 	// ????
 RESULT
 
 CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation
-    (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y)
-    throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates))
+    (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y))
 	Points A;
 	Points B;
 
@@ -69,8 +67,7 @@ CHECK(RMSDMinimizer::Result RMSDMinimizer::computeTransformation
 RESULT
 
 CHECK(RMSDMinimizer::Reszlt RMSDMinimizer::computeTransformation
-    (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y)
-    throw(RMSDMinimizer::IncompatibleCoordinateSets, RMSDMinimizer::TooFewCoordinates))
+    (const RMSDMinimizer::PointVector& X, const RMSDMinimizer::PointVector& Y))
 	vector<Vector3> vs1, vs2;
 	
 	vs1.push_back(Vector3(25.861,	3.886,	34.880));

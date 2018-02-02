@@ -111,7 +111,7 @@ CHECK(CreateSpectrumProcessor::operator () (Atom& atom) throw())
 	// ?????
 RESULT
 
-CHECK(CreateSpectrumProcessor::init(const String& filename) throw(Exception::FileNotFound))
+CHECK(CreateSpectrumProcessor::init(const String& filename))
 	CreateSpectrumProcessor csp;
 	// ?????
 RESULT

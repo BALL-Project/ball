@@ -78,13 +78,13 @@ CHECK(TMatrix4x4& operator *= (const T& scalar) throw())
 	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
-CHECK(TMatrix4x4 operator / (const T& scalar) const throw(Exception::DivisionByZero))
+CHECK(TMatrix4x4 operator / (const T& scalar) const)
 	m1 = Matrix4x4(m) / (-1.0);
 	TEST_EQUAL(m1.isEqual(-m), true)
 	TEST_EXCEPTION(Exception::DivisionByZero, m1 / 0)
 RESULT
 
-CHECK(TMatrix4x4& operator /= (const T& scalar) throw(Exception::DivisionByZero))
+CHECK(TMatrix4x4& operator /= (const T& scalar))
 	m1 = Matrix4x4(m);
 	m1 /= (-1.0);
 	TEST_EQUAL(m1.isEqual(-m), true)

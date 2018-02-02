@@ -110,11 +110,11 @@ CHECK(CompositeIteratorTraits(const CompositeIteratorTraits& traits) throw())
   // ???
 RESULT
 
-CHECK(void toBegin() throw(Exception::Precondition))
+CHECK(void toBegin())
   // ???
 RESULT
 
-CHECK(void toEnd() throw(Exception::Precondition))
+CHECK(void toEnd())
   // ???
 RESULT
 
@@ -198,11 +198,11 @@ CHECK(void setPredicate(const UnaryPredicate<Composite>& predicate) throw())
   // ???
 RESULT
 
-CHECK(void toRBegin() throw(Exception::Precondition))
+CHECK(void toRBegin())
   // ???
 RESULT
 
-CHECK(void toREnd() throw(Exception::Precondition))
+CHECK(void toREnd())
   // ???
 RESULT
 

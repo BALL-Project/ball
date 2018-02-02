@@ -114,7 +114,7 @@ CHECK(Size ResidueRotamerSet::getNumberOfTorsions() const)
 	TEST_EQUAL(r.getNumberOfTorsions(), 0)
 RESULT
 
-CHECK(void ResidueRotamerSet::setNumberOfTorsions(Size number_of_torsions) throw(Exception::IndexOverflow))
+CHECK(void ResidueRotamerSet::setNumberOfTorsions(Size number_of_torsions))
 	ResidueRotamerSet r;
 	TEST_EQUAL(r.getNumberOfTorsions(), 0)
 	r.setNumberOfTorsions(1);
@@ -151,7 +151,7 @@ CHECK(const ResidueRotamerSet::operator = (const ResidueRotamerSet& rhs))
 RESULT
 
 
-CHECK(Rotamer& ResidueRotamerSet::operator [] (Position index) throw(Exception::IndexOverflow))
+CHECK(Rotamer& ResidueRotamerSet::operator [] (Position index))
   TEST_REAL_EQUAL(rrs[0].chi1, -80.)
 	TEST_REAL_EQUAL(rrs[1].P, 0.4)
 RESULT

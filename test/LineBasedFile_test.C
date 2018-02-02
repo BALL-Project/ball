@@ -29,8 +29,7 @@ CHECK(~LineBasedFile() )
 	delete fl;
 RESULT
 
-CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
-			throw(Exception::FileNotFound))
+CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in))
 	LineBasedFile f1(BALL_TEST_DATA_PATH(LineBasedFile_test.txt));
 	TEST_EQUAL(f1.getLineNumber(), 0)
 	String line = f1.getLine();
@@ -109,8 +108,7 @@ CHECK(getLine())
 RESULT
 
 CHECK(getField(Position pos = 0, const String& quotes = "", 
-			const String& delimiters = String::CHARACTER_CLASS__WHITESPACE) 
-			const  throw(Exception::IndexUnderflow))
+			const String& delimiters = String::CHARACTER_CLASS__WHITESPACE) const)
 
 	TEST_EQUAL(f1.getField(), "line1")
 	TEST_EQUAL(f1.getField(1), "")
@@ -254,14 +252,13 @@ CHECK(switchString(const std::vector<String>& data) const )
 	TEST_EQUAL(fx.switchString(vec), 3)
 RESULT
 
-CHECK(test(const char* file, int line, bool condition, const String& msg)
-			const  throw(LineBasedFileError))
+CHECK(test(const char* file, int line, bool condition, const String& msg) const)
 	f1.test(__FILE__, __LINE__, true, "test");
 	TEST_EXCEPTION(Exception::ParseError, f1.test(__FILE__, __LINE__, false, "test") )
 	fx.test(__FILE__, __LINE__, true, "test");
 RESULT
 
-CHECK(readLine() throw(LineBasedFileError))
+CHECK(readLine())
   f1.rewind();
 	f1.readLine();
 
@@ -271,7 +268,7 @@ CHECK(readLine() throw(LineBasedFileError))
 	TEST_EQUAL(fx.getLine(), "")
 RESULT
 
-CHECK(skipLines(Size number = 1) throw(Exception::IndexUnderflow, LineBasedFileError))
+CHECK(skipLines(Size number = 1))
   f1.rewind();
 	bool result = f1.skipLines(2);
 	TEST_EQUAL(result, true)
@@ -287,7 +284,7 @@ CHECK(skipLines(Size number = 1) throw(Exception::IndexUnderflow, LineBasedFileE
 	TEST_EQUAL(fx.getLineNumber(), 0)
 RESULT
 
-CHECK(rewind() throw(LineBasedFileError))
+CHECK(rewind())
   f1.rewind();
 	String line = f1.getLine();
 	TEST_EQUAL(line, "")
@@ -299,7 +296,7 @@ CHECK(rewind() throw(LineBasedFileError))
 	TEST_EQUAL(fx.getLineNumber(), 0)
 RESULT
 
-CHECK(gotoLine(Position line_number) throw(LineBasedFileError))
+CHECK(gotoLine(Position line_number))
   f1.rewind();
 	f1.skipLines(4);
 	bool result = f1.gotoLine(3);

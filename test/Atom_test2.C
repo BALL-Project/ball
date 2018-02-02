@@ -123,7 +123,7 @@ atom->setRadius(2.34567);
 String filename;
 using std::ofstream;
 using std::ios;
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	NEW_TMP_FILE(filename)
 	ofstream	ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -135,7 +135,7 @@ RESULT
 using std::ifstream;
 using std::cout;
 using namespace RTTI;
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = 0;
@@ -258,7 +258,7 @@ CHECK(Bond* createBond(Bond& bond, Atom& atom) throw())
 	TEST_EQUAL(a.isBoundTo(c), true)
 RESULT
 
-CHECK(Bond* getBond(Position index) throw(Exception::IndexOverflow))
+CHECK(Bond* getBond(Position index))
 	Atom a,b;
 	Bond bond("", a,b);
 	a.getBond(0)->setName("1234");
@@ -266,7 +266,7 @@ CHECK(Bond* getBond(Position index) throw(Exception::IndexOverflow))
 	TEST_EXCEPTION(Exception::IndexOverflow, a.getBond(12))
 RESULT
 
-CHECK(const Bond* getBond(Position index) const throw(Exception::IndexOverflow))
+CHECK(const Bond* getBond(Position index) const)
 	Atom a,b;
 	Bond bond("", a,b);
 	const Atom& ac = a;

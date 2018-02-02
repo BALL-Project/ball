@@ -67,7 +67,7 @@ CHECK(const CoordinateType& getSpacing() const throw())
 	TEST_REAL_EQUAL(g.getSpacing().y, 1.0)
 RESULT
 
-CHECK(TRegularData2D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing) throw(Exception::OutOfMemory))
+CHECK(TRegularData2D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing))
 	RegularData2D g(Vector2(5.0, 7.0), Vector2(2.0, 3.0), Vector2(1.0, 0.5));
 	TEST_EQUAL(g.size(), 21)
 	TEST_REAL_EQUAL(g.getOrigin().x, 5.0)
@@ -81,7 +81,7 @@ CHECK(TRegularData2D(const CoordinateType& origin, const CoordinateType& dimensi
 RESULT
 
 RegularData2D g(Vector2(1.0, 2.0), Vector2(3.0, 4.0), Vector2(0.25, 0.5));
-CHECK(TRegularData2D(const TRegularData2D<ValueType>& data) throw(Exception::OutOfMemory))
+CHECK(TRegularData2D(const TRegularData2D<ValueType>& data))
 	RegularData2D g0;
 	RegularData2D g1(g0);
 	TEST_EQUAL(g1.size(), 0)
@@ -125,7 +125,7 @@ CHECK(const IndexType& getSize() const throw())
 RESULT
 
 Vector2 v;
-CHECK(const ValueType& getData(Position index) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getData(Position index) const)
 	g[0] = 5.4321;		
 	g[1] = 1.2345;		
 	TEST_REAL_EQUAL(g.getData(0), 5.4321);
@@ -169,7 +169,7 @@ CHECK(const ValueType& operator [] (const IndexType& index) const throw())
 	TEST_REAL_EQUAL(rg[RegularData2D::IndexType(10,0)], 0)
 RESULT
 
-CHECK(CoordinateType getCoordinates(Position index) const throw(Exception::OutOfGrid))
+CHECK(CoordinateType getCoordinates(Position index) const)
 	v = g.getCoordinates(0);
 	TEST_REAL_EQUAL(v.x, g.getOrigin().x)
 	TEST_REAL_EQUAL(v.y, g.getOrigin().y)
@@ -184,7 +184,7 @@ CHECK(CoordinateType getCoordinates(Position index) const throw(Exception::OutOf
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getCoordinates(g.size() + 1))
 RESULT
 
-CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exception::OutOfGrid))
+CHECK(CoordinateType getCoordinates(const IndexType& index) const)
 	v = g.getCoordinates(RegularData2D::IndexType(0, 0));
 	TEST_REAL_EQUAL(v.x, g.getOrigin().x)
 	TEST_REAL_EQUAL(v.y, g.getOrigin().y)
@@ -199,7 +199,7 @@ CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exceptio
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getCoordinates(RegularData2D::IndexType(100000, 0)))
 RESULT
 
-CHECK(void getEnclosingIndices(const CoordinateType& r, Position& ll, Position& lr, Position& ul, Position& ur) const throw(Exception::OutOfGrid))
+CHECK(void getEnclosingIndices(const CoordinateType& r, Position& ll, Position& lr, Position& ul, Position& ur) const)
 	v = g.getOrigin() + g.getSpacing() * 0.5;
 	Position p1, p2, p3, p4;
 	g.getEnclosingIndices(v, p1, p2, p3, p4);
@@ -225,7 +225,7 @@ CHECK(void getEnclosingIndices(const CoordinateType& r, Position& ll, Position& 
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getEnclosingIndices(v, p1, p2, p3, p4))
 RESULT
 
-CHECK(void getEnclosingValues(const CoordinateType& r, ValueType& ll, ValueType& lr, ValueType& ul, ValueType& ur) const throw(Exception::OutOfGrid))
+CHECK(void getEnclosingValues(const CoordinateType& r, ValueType& ll, ValueType& lr, ValueType& ul, ValueType& ur) const)
 	v = g.getOrigin() + g.getSpacing() * 0.999;
 	float p1, p2, p3, p4;
 	g[0] = 1.0;
@@ -250,7 +250,7 @@ RESULT
 
 g = RegularData2D(Vector2(0.0, 0.0), Vector2(4.0, 9.0), Vector2(2.0, 3.0));
 
-CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const)
 for (Position i = 0; i < g.size() ; i++)
 {
 	g[i] = i;
@@ -283,7 +283,7 @@ CHECK(bool isInside(const CoordinateType& x) const throw())
 	TEST_EQUAL(h.isInside(Vector2(0.0, 0.0)), true)
 RESULT
 
-CHECK(void resize(const IndexType& new_size) throw(Exception::OutOfMemory))
+CHECK(void resize(const IndexType& new_size))
 	RegularData2D g(Vector2(0.0), Vector2(9.0), Vector2(9.0));
 	g[0] = 0.0;
 	g[1] = 1.0;
@@ -301,7 +301,7 @@ CHECK(void resize(const IndexType& new_size) throw(Exception::OutOfMemory))
 	TEST_EQUAL(g[8], 0.0)
 RESULT
 
-CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
+CHECK(void rescale(const IndexType& new_size))
 	RegularData2D g(Vector2(0.0), Vector2(9.0), Vector2(9.0));
 	g[0] = 0.0;
 	g[1] = 1.0;
@@ -343,7 +343,7 @@ CHECK(ConstIterator end() const throw())
 	TEST_EQUAL(it == g.end(), true)
 RESULT
 
-CHECK(IndexType getClosestIndex(const CoordinateType& v) const throw(Exception::OutOfGrid))
+CHECK(IndexType getClosestIndex(const CoordinateType& v) const)
   RegularData2D g(Vector2(5.0, 7.0), Vector2(2.0, 3.0), Vector2(1.0, 0.5));
 	TEST_EQUAL(g.getClosestIndex(Vector2(6.4, 8.72)).x, 1)
 	TEST_EQUAL(g.getClosestIndex(Vector2(6.4, 8.72)).y, 3)

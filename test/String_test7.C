@@ -24,7 +24,7 @@ String hall("Hall");
 String halloh("Halloh");
 String s4;
 
-CHECK(int compare(const char* char_ptr, Index from = 0) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(int compare(const char* char_ptr, Index from = 0) const)
 	s4 = "abc";
 	TEST_EQUAL(s4.compare("abc"), 0)
 	TEST_EQUAL(s4.compare("abc", -3), 0)
@@ -46,7 +46,7 @@ CHECK(int compare(const char* char_ptr, Index from = 0) const throw(Exception::N
 	TEST_EXCEPTION(Exception::NullPointer, s4.compare(c, 0))
 RESULT
 
-CHECK(int compare(const char* char_ptr, Index from, Size len) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(int compare(const char* char_ptr, Index from, Size len) const)
 	s4 = "abc";
 	TEST_EQUAL(s4.compare("abc", 0, 1), 0)
 	TEST_EQUAL(s4.compare("abc", 0, 2), 0)
@@ -75,7 +75,7 @@ CHECK(int compare(const char* char_ptr, Index from, Size len) const throw(Except
 	TEST_EXCEPTION(Exception::IndexOverflow, s4.compare("a", 0, 99))
 RESULT
 
-CHECK(int compare(char c, Index from = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(int compare(char c, Index from = 0) const)
 	s4 = "abcd";
 	TEST_EQUAL(s4.compare('a'), 0)
 	TEST_EQUAL(s4.compare('a', 0), 0)
@@ -216,7 +216,7 @@ CHECK(bool operator >= (const String& string) const throw())
 	TEST_EQUAL((s4 >= s5), false)
 RESULT
 
-CHECK(friend bool operator == (const char* char_ptr, const String& string) throw(Exception::NullPointer))
+CHECK(friend bool operator == (const char* char_ptr, const String& string))
 	s5 = "abd";
 	TEST_EQUAL(("abc" == s5), false)
 	s5 = "abc";
@@ -233,7 +233,7 @@ CHECK(friend bool operator == (const char* char_ptr, const String& string) throw
 	TEST_EQUAL(("a" == s5), false)
 RESULT
 
-CHECK(friend bool operator != (const char* char_ptr, const String& string) throw(Exception::NullPointer))
+CHECK(friend bool operator != (const char* char_ptr, const String& string))
 	s5 = "abd";
 	TEST_EQUAL(("abc" != s5), true)
 	s5 = "abc";
@@ -250,7 +250,7 @@ CHECK(friend bool operator != (const char* char_ptr, const String& string) throw
 	TEST_EQUAL(("a" != s5), true)
 RESULT
 
-CHECK(friend bool operator < (const char* char_ptr, const String& string) throw(Exception::NullPointer))
+CHECK(friend bool operator < (const char* char_ptr, const String& string))
 	s5 = "abd";
 	TEST_EQUAL(("abc" < s5), true)
 	s5 = "abc";
@@ -267,7 +267,7 @@ CHECK(friend bool operator < (const char* char_ptr, const String& string) throw(
 	TEST_EQUAL(("a" < s5), false)
 RESULT
 
-CHECK(friend bool operator <= (const char* char_ptr, const String& string) throw(Exception::NullPointer))
+CHECK(friend bool operator <= (const char* char_ptr, const String& string))
 	s5 = "abd";
 	TEST_EQUAL(("abc" <= s5), true)
 	s5 = "abc";
@@ -284,7 +284,7 @@ CHECK(friend bool operator <= (const char* char_ptr, const String& string) throw
 	TEST_EQUAL(("a" <= s5), false)
 RESULT
 
-CHECK(friend bool operator > (const char* char_ptr, const String& string) throw(Exception::NullPointer))
+CHECK(friend bool operator > (const char* char_ptr, const String& string))
 	s5 = "abd";
 	TEST_EQUAL(("abc" > s5), false)
 	s5 = "abc";
@@ -301,7 +301,7 @@ CHECK(friend bool operator > (const char* char_ptr, const String& string) throw(
 	TEST_EQUAL(("a" > s5), true)
 RESULT
 
-CHECK(friend bool operator >= (const char* char_ptr, const String& string) throw(Exception::NullPointer))
+CHECK(friend bool operator >= (const char* char_ptr, const String& string))
 	s5 = "abd";
 	TEST_EQUAL(("abc" >= s5), false)
 	s5 = "abc";

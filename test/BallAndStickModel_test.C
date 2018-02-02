@@ -26,7 +26,7 @@ CHECK(AddBallAndStickModel::BALL_CREATE(AddBallAndStickModel))
 RESULT
 
 
-CHECK(AddBallAndStickModel::setBallRadius(const float radius) throw(Exception::OutOfRange))
+CHECK(AddBallAndStickModel::setBallRadius(const float radius))
 	AddBallAndStickModel bs;
 	bs.setBallRadius(0.11);
 RESULT
@@ -39,7 +39,7 @@ CHECK(AddBallAndStickModel::getBallRadius() const  throw())
 RESULT
 
 
-CHECK(AddBallAndStickModel::setStickRadius(const float radius) throw(Exception::OutOfRange))
+CHECK(AddBallAndStickModel::setStickRadius(const float radius))
 	AddBallAndStickModel bs;
 	bs.setStickRadius(0.12);
 RESULT

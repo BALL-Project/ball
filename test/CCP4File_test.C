@@ -31,7 +31,7 @@ CHECK(~CCP4File() throw())
 RESULT
 
 
-CHECK(CCP4File(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(CCP4File(const String& filename, File::OpenMode open_mode = std::ios::in))
 	CCP4File f(BALL_TEST_DATA_PATH(2ovc.ccp4), std::ios::in);
 	RegularData3D map;
 	f.read(map);
@@ -39,7 +39,7 @@ CHECK(CCP4File(const String& filename, File::OpenMode open_mode = std::ios::in) 
 RESULT
 
 
-CHECK(bool open(const String& name, File::OpenMode open_mode) throw(Exception::FileNotFound))
+CHECK(bool open(const String& name, File::OpenMode open_mode))
 	CCP4File f5;
 	bool f5_result = f5.open(BALL_TEST_DATA_PATH(2ovc.ccp4), std::ios::in | std::ios::binary);
 	TEST_EQUAL(f5_result, true)
@@ -62,7 +62,7 @@ CHECK(bool readSymmetryRecords())
 	TEST_EQUAL(f4_result, true)
 RESULT
 
-CHECK(bool read(RegularData3D& map) throw(Exception::ParseError))
+CHECK(bool read(RegularData3D& map))
 	CCP4File f(BALL_TEST_DATA_PATH(2ovc.ccp4));
 	RegularData3D map;
 	f.read(map);

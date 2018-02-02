@@ -79,7 +79,7 @@ CHECK(Iterator end() throw())
 RESULT
 
 
-CHECK(IndexType getLowerIndex(const CoordinateType& v) const throw(Exception::OutOfGrid))
+CHECK(IndexType getLowerIndex(const CoordinateType& v) const)
   RegularData3D g(Vector3(5.0, 7.0, 9.0), Vector3(2.0, 3.0, 4.0), Vector3(1.0, 0.5, 0.5));
 	TEST_EQUAL(g.getLowerIndex(Vector3(6.6, 8.76, 9.3)).x, 1)
 	TEST_EQUAL(g.getLowerIndex(Vector3(6.6, 8.76, 9.3)).y, 3)
@@ -115,7 +115,7 @@ CHECK(IndexType(Position p, Position q, Position r))
 	delete it;
 RESULT
 
-CHECK(TRegularData3D(const TRegularData3D<ValueType>& grid) throw(Exception::OutOfMemory))
+CHECK(TRegularData3D(const TRegularData3D<ValueType>& grid))
   RegularData3D g(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
 	g[0] = 1.23;
 	RegularData3D g2(g);
@@ -131,7 +131,7 @@ CHECK(TRegularData3D(const TRegularData3D<ValueType>& grid) throw(Exception::Out
 	TEST_REAL_EQUAL(g2[0], 1.23)
 RESULT
 
-CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
+CHECK(ValueType& getData(const IndexType& index))
   RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
 	TEST_REAL_EQUAL(g.getSize().x, 2.0)
 	TEST_REAL_EQUAL(g.getSize().y, 2.0)
@@ -143,7 +143,7 @@ CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(RegularData3D::IndexType(2,1,1)));
 RESULT
 
-CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getData(const IndexType& index) const)
   RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
 	g.getData(RegularData3D::IndexType(1,1,1)) = 1.23;
 	const RegularData3D& rd = g;
@@ -184,7 +184,7 @@ CHECK(size_type max_size() const throw())
 	TEST_EQUAL(g.max_size() > 1000, true)
 RESULT
 
-CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFound))
+CHECK(void binaryWrite(const String& filename) const)
 	NEW_TMP_FILE(filename)
   RegularData3D g(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
 	for (Position x = 0; x < g.getSize().x; x++)
@@ -198,7 +198,7 @@ CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFou
 	TEST_EXCEPTION(Exception::FileNotFound, g.binaryWrite("/not/there/strange_file!"))
 RESULT
 
-CHECK(void binaryRead(const String& filename) throw(Exception::FileNotFound))
+CHECK(void binaryRead(const String& filename))
 	RegularData3D g;
 	RegularData3D empty;
 	TEST_EQUAL(g == empty, true)
@@ -223,7 +223,7 @@ CHECK(void binaryRead(const String& filename) throw(Exception::FileNotFound))
 	TEST_REAL_EQUAL(g.getSpacing().z, 0.3)
 RESULT
 
-CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
+CHECK(void rescale(const IndexType& new_size))
   RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(2, 2, 2));
 	g[RegularData3D::IndexType(0, 0, 0)] = 0.0;
 	g[RegularData3D::IndexType(1, 0, 0)] = 0.0;

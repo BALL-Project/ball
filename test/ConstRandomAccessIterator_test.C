@@ -67,7 +67,6 @@ class VectorIteratorTraits_
 	}
 
 	const VectorIteratorPosition_& getPosition() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -77,7 +76,6 @@ class VectorIteratorTraits_
 	}
 
 	bool operator == (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -87,7 +85,6 @@ class VectorIteratorTraits_
 	}
 
 	bool operator != (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -97,7 +94,6 @@ class VectorIteratorTraits_
 	}
 	
 	bool operator < (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -107,7 +103,6 @@ class VectorIteratorTraits_
 	}
 	
 	bool operator > (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -117,7 +112,6 @@ class VectorIteratorTraits_
 	}
 
 	Distance getDistance(const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -140,7 +134,6 @@ class VectorIteratorTraits_
 	}
 
 	void toBegin()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -150,7 +143,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isBegin() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -160,7 +152,6 @@ class VectorIteratorTraits_
 	}
 
 	void toEnd()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -170,7 +161,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isEnd() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -180,7 +170,6 @@ class VectorIteratorTraits_
 	}
 
 	const DataType& getData() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -200,7 +189,6 @@ class VectorIteratorTraits_
 	}
 
 	void forward()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -215,7 +203,6 @@ class VectorIteratorTraits_
 	}
 
 	void toRBegin()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -225,7 +212,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isRBegin() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -235,7 +221,6 @@ class VectorIteratorTraits_
 	}
 	
 	void toREnd()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -245,7 +230,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isREnd() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -255,7 +239,6 @@ class VectorIteratorTraits_
 	}
 	
 	void backward()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -271,7 +254,6 @@ class VectorIteratorTraits_
 	}
 
 	void backward(Distance distance)
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -287,7 +269,6 @@ class VectorIteratorTraits_
 	}
 
 	void forward(Distance distance)
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -303,7 +284,6 @@ class VectorIteratorTraits_
 	}
 
 	const DataType& getData(Index index) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -373,7 +353,7 @@ CHECK(bool operator - () const throw())
 	TEST_EQUAL(-n, true)
 RESULT
 
-CHECK(ConstRandomAccessIterator& operator += (Distance distance) throw(Exception::InvalidIterator))
+CHECK(ConstRandomAccessIterator& operator += (Distance distance))
 	m.toBegin();
 	m+=2;
 	TEST_REAL_EQUAL(*m, 0.3)
@@ -387,7 +367,7 @@ CHECK(ConstRandomAccessIterator& operator += (Distance distance) throw(Exception
 RESULT
 
 
-CHECK(ConstRandomAccessIterator& operator -= (Distance distance) throw(Exception::InvalidIterator))
+CHECK(ConstRandomAccessIterator& operator -= (Distance distance))
 	m.toEnd();
 	m-=2;
 	TEST_REAL_EQUAL(*m, 0.3)
@@ -401,7 +381,7 @@ CHECK(ConstRandomAccessIterator& operator -= (Distance distance) throw(Exception
 RESULT
 
 
-CHECK(ConstRandomAccessIterator operator + (Distance distance) const throw(Exception::InvalidIterator))
+CHECK(ConstRandomAccessIterator operator + (Distance distance) const)
 	MyIterator p;
 	m.toBegin();
 	p = m + 2;
@@ -416,7 +396,7 @@ CHECK(ConstRandomAccessIterator operator + (Distance distance) const throw(Excep
 RESULT
 
 
-CHECK(ConstRandomAccessIterator operator - (Distance distance) const throw(Exception::InvalidIterator))
+CHECK(ConstRandomAccessIterator operator - (Distance distance) const)
 	MyIterator p;
 	m.toEnd();
 	p = m - 2;
@@ -433,7 +413,7 @@ RESULT
 vector<float> v1;
 v1.push_back((float)99.9);
 
-CHECK(Distance operator - (const ConstRandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
+CHECK(Distance operator - (const ConstRandomAccessIterator& iterator) const)
 	TEST_EXCEPTION(Exception::InvalidIterator, m - n)
 	TEST_EXCEPTION(Exception::InvalidIterator, n - m)
 	MyIterator m1(MyIterator::begin(v1));
@@ -450,7 +430,7 @@ CHECK(Distance operator - (const ConstRandomAccessIterator& iterator) const thro
 RESULT
 
 
-CHECK(bool operator < (const ConstRandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
+CHECK(bool operator < (const ConstRandomAccessIterator& iterator) const)
 	MyIterator m1(MyIterator::begin(v1));
 	m1.toBegin();
 	m.toBegin();
@@ -469,7 +449,7 @@ CHECK(bool operator < (const ConstRandomAccessIterator& iterator) const throw(Ex
 RESULT
 
 
-CHECK(bool operator <= (const ConstRandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
+CHECK(bool operator <= (const ConstRandomAccessIterator& iterator) const)
 	MyIterator m1(MyIterator::begin(v1));
 	m.toBegin();
 	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 <= m)
@@ -490,7 +470,7 @@ CHECK(bool operator <= (const ConstRandomAccessIterator& iterator) const throw(E
 RESULT
 
 
-CHECK(bool operator > (const ConstRandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
+CHECK(bool operator > (const ConstRandomAccessIterator& iterator) const)
 	MyIterator m1(MyIterator::begin(v1));
 	m.toBegin();
 	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 > m)
@@ -506,7 +486,7 @@ CHECK(bool operator > (const ConstRandomAccessIterator& iterator) const throw(Ex
 RESULT
 
 
-CHECK(bool operator >= (const ConstRandomAccessIterator& iterator) const throw(Exception::InvalidIterator, Exception::IncompatibleIterators))
+CHECK(bool operator >= (const ConstRandomAccessIterator& iterator) const)
 	MyIterator m1(MyIterator::begin(v1));
 	m.toBegin();
 	TEST_EXCEPTION(Exception::IncompatibleIterators, m1 >= m)
@@ -523,7 +503,7 @@ CHECK(bool operator >= (const ConstRandomAccessIterator& iterator) const throw(E
 RESULT
 
 
-CHECK(const DataType& operator [] (Index index) const throw(Exception::InvalidIterator))
+CHECK(const DataType& operator [] (Index index) const)
 	TEST_REAL_EQUAL(m[2], (float) 0.3)
 	TEST_EXCEPTION(Exception::InvalidIterator, m[6])
 	MyIterator m2;
@@ -531,26 +511,26 @@ CHECK(const DataType& operator [] (Index index) const throw(Exception::InvalidIt
 RESULT
 
 
-CHECK(static ConstRandomAccessIterator begin(const Container& container) throw(Exception::InvalidIterator))
+CHECK(static ConstRandomAccessIterator begin(const Container& container))
 	TEST_REAL_EQUAL(*MyIterator::begin(v), 0.1)
 RESULT
 
 
-CHECK(static ConstRandomAccessIterator end(const Container& container) throw(Exception::InvalidIterator))
+CHECK(static ConstRandomAccessIterator end(const Container& container))
 	MyIterator m1(MyIterator::end(v));
 	m1--;
 	TEST_REAL_EQUAL(*m1, 0.4)
 RESULT
 
 
-CHECK(static ConstRandomAccessIterator rbegin(const Container& container) throw(Exception::InvalidIterator))
+CHECK(static ConstRandomAccessIterator rbegin(const Container& container))
 	MyIterator it(MyIterator::rbegin(v));
 	TEST_EQUAL(it.isValid(), true)
 	TEST_REAL_EQUAL(*it, 0.4)
 RESULT
 
 
-CHECK(static ConstRandomAccessIterator rend(const Container& container) throw(Exception::InvalidIterator))
+CHECK(static ConstRandomAccessIterator rend(const Container& container))
   MyIterator m1(MyIterator::rend(v));
 	TEST_EQUAL(m1.isValid(), false)
 RESULT

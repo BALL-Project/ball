@@ -43,7 +43,7 @@ CHECK(void clear() throw())
 	TEST_EQUAL(v1, v2)
 RESULT
 
-CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
+CHECK(T& operator [] (Position position))
 	v = Vector3(1.0, 2.0, 3.0);
 	TEST_REAL_EQUAL(v[0], 1.0)
 	TEST_REAL_EQUAL(v[1], 2.0)
@@ -52,7 +52,7 @@ CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
 	TEST_EXCEPTION(Exception::IndexOverflow,  v[3])
 RESULT
 
-CHECK(TVector3(const T* ptr) throw(Exception::NullPointer))
+CHECK(TVector3(const T* ptr))
 	float arr[3];
 	arr[0] = 1.0;
 	arr[1] = 2.0;
@@ -125,7 +125,7 @@ CHECK(bool read(PersistenceManager& pm) throw())
 	TEST_REAL_EQUAL(v.z, 3.0)
 RESULT
 
-CHECK(void set(const T* ptr) throw(Exception::NullPointer))
+CHECK(void set(const T* ptr))
 	float arr[3];
 	arr[0] = 1.0;
 	arr[1] = 2.0;
@@ -169,7 +169,7 @@ CHECK(void set(const T& r, const TAngle<T>& phi, const TAngle<T>& theta) throw()
 	TEST_REAL_EQUAL(v[2], v2[2])
 RESULT
 
-CHECK(TVector3& operator = (const T* ptr) throw(Exception::NullPointer))
+CHECK(TVector3& operator = (const T* ptr))
 	float arr[3];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -195,7 +195,7 @@ CHECK(TVector3& operator = (T value) throw())
 	TEST_REAL_EQUAL(v2.z, (float) 1.1)
 RESULT
 
-CHECK(void get(T* ptr) const throw(Exception::NullPointer))
+CHECK(void get(T* ptr) const)
 	float arr[3];
 	v = Vector3(1.0, 2.0, 3.0);
 	v.get(arr);
@@ -259,7 +259,7 @@ CHECK(T getSquareLength() const throw())
 	TEST_REAL_EQUAL(v.getSquareLength(), 0.0)
 RESULT
 
-CHECK(TVector3& normalize() throw(Exception::DivisionByZero))
+CHECK(TVector3& normalize())
 	v = Vector3(4.0, 9.0, 16.0);
 	v.normalize();
 	float erg = ::sqrt (4.0 * 4.0 + 9.0 * 9.0 + 16.0 * 16.0);
@@ -282,7 +282,7 @@ CHECK(static const TVector3& getUnit() throw())
 	TEST_REAL_EQUAL(Vector3::getUnit().z, 1.0)
 RESULT
 
-CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
+CHECK(const T& operator [] (Position position) const)
 	v = Vector3(1.0, 2.0, 3.0);
 	v[0]=5.0;	v[1]=6.0;	v[2]=7.0;
 	const Vector3& c_v(v);
@@ -344,7 +344,7 @@ CHECK(TVector3& operator *= (const T& scalar) throw())
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-CHECK(TVector3 operator / (const T& lambda) const throw(Exception::DivisionByZero))
+CHECK(TVector3 operator / (const T& lambda) const)
 	v  = Vector3(1.0, 2.0, 3.0);
 	v = v / 0.5;
 	TEST_REAL_EQUAL(v[0], 2.0)
@@ -353,7 +353,7 @@ CHECK(TVector3 operator / (const T& lambda) const throw(Exception::DivisionByZer
 	TEST_EXCEPTION(Exception::DivisionByZero, v = v / 0)
 RESULT
 
-CHECK(TVector3& operator /= (const T& lambda) throw(Exception::DivisionByZero))
+CHECK(TVector3& operator /= (const T& lambda))
 	v  = Vector3(1.0, 2.0, 3.0);
 	v /= 0.5;
 	TEST_REAL_EQUAL(v[0], 2.0)
@@ -398,7 +398,7 @@ CHECK(T getSquareDistance(const TVector3& vector) const throw())
 	TEST_REAL_EQUAL(v.getSquareDistance(v2) , 6.0)
 RESULT
 
-CHECK(TAngle<T> getAngle(const TVector3& vector) const throw(Exception::DivisionByZero))
+CHECK(TAngle<T> getAngle(const TVector3& vector) const)
 	float r, e;
 	v2 = Vector3(1.0, 2.0, 4.0);
 	v  = Vector3(0, 1.0, 2.0);

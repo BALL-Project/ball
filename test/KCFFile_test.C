@@ -38,7 +38,7 @@ CHECK(~KCFFile() throw())
 RESULT
 
 
-CHECK(bool read(System& system) throw(Exception::ParseError))
+CHECK(bool read(System& system))
 	KCFFile f(BALL_TEST_DATA_PATH(KCFFile_test1.kcf));
 	System system;
 	f.read(system);
@@ -57,7 +57,7 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
 RESULT
 
 
-CHECK(KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in))
 	KCFFile f(BALL_TEST_DATA_PATH(KCFFile_test1.kcf), std::ios::in);
 	System system;
 	f.read(system);
@@ -68,7 +68,7 @@ CHECK(KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in) t
 RESULT
 
 
-CHECK(bool write(const System& system) throw(File::CannotWrite))
+CHECK(bool write(const System& system))
   Molecule* m = new Molecule;
 	m->setName("MOL");
 	System S;
@@ -128,7 +128,7 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 RESULT
 
 
-CHECK(Molecule* read() throw(Exception::ParseError))
+CHECK(Molecule* read())
   KCFFile f(BALL_TEST_DATA_PATH(KCFFile_test1.kcf));
 	Molecule* m = f.read();
 	f.close();
@@ -172,7 +172,7 @@ CHECK([EXTRA]KCFFile::KCFFile& operator << (const System& system))
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(KCFFile_test2.kcf))
 RESULT
 
-CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
+CHECK(bool write(const Molecule& molecule))
 	NEW_TMP_FILE(filename)
 	KCFFile f(filename, std::ios::out);
 	f.write(*m);

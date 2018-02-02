@@ -43,7 +43,7 @@ Vector4 v;
 Vector4 v1;
 Vector4 v2;
 
-CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
+CHECK(const T& operator [] (Position position) const)
 	v = Vector4(1.0, 2.0, 3.0, 4.0);
 	TEST_EQUAL(v[0], 1)
 	TEST_EQUAL(v[1], 2.0)
@@ -53,7 +53,7 @@ CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverf
 	TEST_EXCEPTION(Exception::IndexOverflow,  v[4])
 RESULT
 
-CHECK(TVector4(const T* ptr) throw(Exception::NullPointer))
+CHECK(TVector4(const T* ptr))
 	float arr[4];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -179,7 +179,7 @@ CHECK(T getSquareLength() const throw())
 	TEST_REAL_EQUAL(v.getSquareLength(), 0)
 RESULT
 
-CHECK(TVector4& normalize() throw(Exception::DivisionByZero))
+CHECK(TVector4& normalize())
 	v = Vector4(4, 9, 16, 25);
 	v.normalize();
 	TEST_REAL_EQUAL(v[0], 4/31.273)
@@ -227,7 +227,7 @@ CHECK(TVector4& operator = (T value) throw())
 	TEST_REAL_EQUAL(v.h, (float) 1.1)
 RESULT
 
-CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
+CHECK(T& operator [] (Position position))
 	v = Vector4(1, 2, 3, 4);
 	v[0]=5;	v[1]=6;
 	v[2]=7;	v[3]=8;
@@ -295,7 +295,7 @@ CHECK(TVector4& operator *= (const T& scalar) throw())
 	TEST_EQUAL(v[3], 8)
 RESULT
 
-CHECK(TVector4 operator / (const T& scalar) throw(Exception::DivisionByZero))
+CHECK(TVector4 operator / (const T& scalar))
 	v  = Vector4(1, 2, 3, 4);
 	v = v / 0.5;
 	TEST_EQUAL(v[0], 2)
@@ -305,7 +305,7 @@ CHECK(TVector4 operator / (const T& scalar) throw(Exception::DivisionByZero))
 	TEST_EXCEPTION(Exception::DivisionByZero, v = v / 0)
 RESULT
 
-CHECK(TVector4& operator /= (const T& scalar) throw(Exception::DivisionByZero))
+CHECK(TVector4& operator /= (const T& scalar))
 	v  = Vector4(1, 2, 3, 4);
 	v /= 0.5;
 	TEST_EQUAL(v[0], 2)
@@ -372,7 +372,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Vector4_test.txt))
 RESULT
 
-CHECK(void set(const T* ptr) throw(Exception::NullPointer))
+CHECK(void set(const T* ptr))
 	float arr[4];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -401,7 +401,7 @@ CHECK(void set(const TVector4& vector) throw())
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(TVector4& operator = (const T* ptr) throw(Exception::NullPointer))
+CHECK(TVector4& operator = (const T* ptr))
 	float arr[4];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -420,7 +420,7 @@ CHECK(TVector4& operator = (const TVector4& vector) throw())
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(void get(T* ptr) const throw(Exception::NullPointer))
+CHECK(void get(T* ptr) const)
 	float arr[4];
 	v = Vector4(1,2,3,4);
 	v.get(arr);

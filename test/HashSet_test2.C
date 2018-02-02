@@ -147,7 +147,7 @@ CHECK(Size erase(const KeyType& key) throw())
 	TEST_EQUAL(hs.getSize(), 2)
 RESULT
 
-CHECK(void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators))
+CHECK(void erase(Iterator f, Iterator l))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -190,7 +190,7 @@ CHECK(void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators)
 	TEST_EXCEPTION(Exception::IncompatibleIterators, hs.erase(hs2.begin(), hs.end()))
 RESULT
 
-CHECK(void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator))
+CHECK(void erase(Iterator pos))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);

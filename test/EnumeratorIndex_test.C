@@ -64,7 +64,7 @@ CHECK(const std::vector<Size>& getModulus() const throw())
 RESULT
 delete enumerator_index_ptr;
 
-CHECK(EnumeratorIndex& operator << (Size modulus) throw(Exception::OutOfRange))
+CHECK(EnumeratorIndex& operator << (Size modulus))
 	EnumeratorIndex ei;
 	TEST_EQUAL(ei.getSize(), 0)
 	
@@ -135,7 +135,7 @@ CHECK(Size getModulus(Position pos) const throw())
 	ei << 5 << 6 << 7;
 RESULT
 
-CHECK(const EnumeratorIndex& operator = (Position index) throw(Exception::IndexOverflow))
+CHECK(const EnumeratorIndex& operator = (Position index))
 	EnumeratorIndex ei;
 	ei << 4 << 5 << 6;
 	TEST_EQUAL(ei[0], 0)
@@ -152,7 +152,7 @@ CHECK(const EnumeratorIndex& operator = (Position index) throw(Exception::IndexO
 	TEST_EXCEPTION(Exception::IndexOverflow, ei = 4 * 5 *6)
 RESULT
 
-CHECK(EnumeratorIndex& operator ++ () throw(Exception::IndexOverflow))
+CHECK(EnumeratorIndex& operator ++ ())
 	EnumeratorIndex ei;
 	ei << 2 << 3 << 4;
 	ABORT_IF(ei.getSize() < 3)
@@ -171,7 +171,7 @@ CHECK(EnumeratorIndex& operator ++ () throw(Exception::IndexOverflow))
 RESULT
 
 
-CHECK(EnumeratorIndex& operator -- () throw(Exception::IndexUnderflow))
+CHECK(EnumeratorIndex& operator -- ())
 	EnumeratorIndex ei;
 	ei << 2 << 3 << 4;
 	ABORT_IF(ei.getSize() < 3)
@@ -391,7 +391,7 @@ ei_mod_diff_1 << 3 << 3 << 5;
 EnumeratorIndex ei_mod_diff_3;
 ei_mod_diff_1 << 3 << 4 << 6;
 
-CHECK(bool operator < (const EnumeratorIndex& rhs) const throw(EnumeratorIndex::IncompatibleIndex))
+CHECK(bool operator < (const EnumeratorIndex& rhs) const)
 	TEST_EQUAL(ei < ei_equal, false)
 	TEST_EQUAL(ei_equal < ei, false)
 	
@@ -422,7 +422,7 @@ CHECK(bool operator < (const EnumeratorIndex& rhs) const throw(EnumeratorIndex::
 RESULT
 
 
-CHECK(bool operator > (const EnumeratorIndex& rhs) const throw(EnumeratorIndex::IncompatibleIndex))
+CHECK(bool operator > (const EnumeratorIndex& rhs) const)
 	TEST_EQUAL(ei > ei_equal, false)
 	TEST_EQUAL(ei_equal > ei, false)
 	
@@ -452,7 +452,7 @@ CHECK(bool operator > (const EnumeratorIndex& rhs) const throw(EnumeratorIndex::
 	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_3 > ei)
 RESULT
 
-CHECK(bool operator <= (const EnumeratorIndex& rhs) const throw(EnumeratorIndex::IncompatibleIndex))
+CHECK(bool operator <= (const EnumeratorIndex& rhs) const)
 	TEST_EQUAL(ei <= ei_equal, true)
 	TEST_EQUAL(ei_equal <= ei, true)
 	
@@ -483,7 +483,7 @@ CHECK(bool operator <= (const EnumeratorIndex& rhs) const throw(EnumeratorIndex:
 RESULT
 
 
-CHECK(bool operator >= (const EnumeratorIndex& rhs) const throw(EnumeratorIndex::IncompatibleIndex))
+CHECK(bool operator >= (const EnumeratorIndex& rhs) const)
 	TEST_EQUAL(ei >= ei_equal, true)
 	TEST_EQUAL(ei_equal >= ei, true)
 	

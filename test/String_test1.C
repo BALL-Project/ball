@@ -75,7 +75,7 @@ RESULT
 
 String empty;
 String non_empty("Hallo");
-CHECK(bool operator == (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK(bool operator == (const char* char_ptr) const)
 	TEST_EQUAL((empty == ""), true)
 	TEST_EQUAL((empty == "Hallo"), false)
 	TEST_EQUAL((empty == "Halla"), false)
@@ -115,7 +115,7 @@ CHECK(void* create(bool /* deep */ = true, bool empty = false) const throw())
 	delete s2;
 RESULT
 
-CHECK(String(const String& s, Index from, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(String(const String& s, Index from, Size len = EndPos))
 	s2 = new String(halloh, 2, 4);
 	TEST_EQUAL(*s2, "lloh")
 	delete s2;
@@ -140,7 +140,7 @@ CHECK(String(const String& s, Index from, Size len = EndPos) throw(Exception::In
 		delete s2;
 RESULT
 
-CHECK(String(const char* char_ptr, Index from = 0, Size len = EndPos) throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(String(const char* char_ptr, Index from = 0, Size len = EndPos))
 	s2 = new String("halloh");
 	TEST_EQUAL(*s2, "halloh")
 	delete s2;
@@ -169,7 +169,7 @@ CHECK(String(const char* char_ptr, Index from = 0, Size len = EndPos) throw(Exce
 		delete s2;
 RESULT
 
-CHECK(String(Size buffer_size, const char* format, ... ) throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(String(Size buffer_size, const char* format, ... ))
 	s2 = new String(15, "%s", "halloh");
 	TEST_EQUAL(*s2, "halloh")
 	delete s2;

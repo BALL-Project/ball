@@ -417,7 +417,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Nucleotide* f1= new Nucleotide("name1");
 	Atom* f2 = new Atom();
@@ -432,7 +432,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	delete f1;
 RESULT
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();

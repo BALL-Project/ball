@@ -84,7 +84,7 @@ b4.setBit(3);
 b3.setBit(0);
 BitVector erg;
 
-CHECK(void bitwiseOr(const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(void bitwiseOr(const BitVector& bit_vector))
 	erg = b4;
 	erg.bitwiseOr(b3);
 	TEST_EQUAL(erg.getBit(0), true)
@@ -94,7 +94,7 @@ CHECK(void bitwiseOr(const BitVector& bit_vector) throw(Exception::OutOfMemory))
 	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
-CHECK(void bitwiseXor(const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(void bitwiseXor(const BitVector& bit_vector))
 	erg = b4;
 	erg.bitwiseXor(b3);
 	TEST_EQUAL(erg.getBit(0), false)
@@ -104,7 +104,7 @@ CHECK(void bitwiseXor(const BitVector& bit_vector) throw(Exception::OutOfMemory)
 	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
-CHECK(void bitwiseAnd(const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(void bitwiseAnd(const BitVector& bit_vector))
 	erg = b4;
 	erg.bitwiseAnd(b3);
 	TEST_EQUAL(erg.getBit(0), true)
@@ -114,7 +114,7 @@ CHECK(void bitwiseAnd(const BitVector& bit_vector) throw(Exception::OutOfMemory)
 	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
-CHECK(BitVector operator | (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector operator | (const BitVector& bit_vector))
 	BitVector b11("100");
 	BitVector b12("100000");
 	STATUS("b11 = " << b11)
@@ -143,7 +143,7 @@ CHECK(BitVector operator | (const BitVector& bit_vector) throw(Exception::OutOfM
 	TEST_EQUAL(erg.getBit(5), true)
 RESULT
 
-CHECK(BitVector& operator |= (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector& operator |= (const BitVector& bit_vector))
 	BitVector b11("1010101010");
 	BitVector b12("10000");
 	b11 |= b12;
@@ -181,7 +181,7 @@ CHECK(BitVector& operator |= (const BitVector& bit_vector) throw(Exception::OutO
 	TEST_EQUAL(b13.getBit(9), true)
 RESULT
 
-CHECK(BitVector operator & (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector operator & (const BitVector& bit_vector))
 	erg = b4 & b3;
 	TEST_EQUAL(erg.getBit(0), true)
 	TEST_EQUAL(erg.getBit(1), false)
@@ -190,7 +190,7 @@ CHECK(BitVector operator & (const BitVector& bit_vector) throw(Exception::OutOfM
 	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
-CHECK(BitVector& operator &= (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector& operator &= (const BitVector& bit_vector))
 	BitVector b11("001101010001110101");
 	BitVector b12(         "111100111");
 	BitVector b13("000000000001100101");
@@ -210,7 +210,7 @@ CHECK(BitVector& operator &= (const BitVector& bit_vector) throw(Exception::OutO
 	TEST_EQUAL(b14, b16)
 RESULT
 
-CHECK(BitVector operator ^ (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector operator ^ (const BitVector& bit_vector))
 	erg = b4 ^ b3;
 	TEST_EQUAL(erg.getBit(0), false)
 	TEST_EQUAL(erg.getBit(1), true)
@@ -219,7 +219,7 @@ CHECK(BitVector operator ^ (const BitVector& bit_vector) throw(Exception::OutOfM
 	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
-CHECK(BitVector& operator ^= (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector& operator ^= (const BitVector& bit_vector))
 	erg = b4;
 	erg ^= b3;
 	TEST_EQUAL(erg.getBit(0), false)
@@ -229,7 +229,7 @@ CHECK(BitVector& operator ^= (const BitVector& bit_vector) throw(Exception::OutO
 	TEST_EQUAL(erg.getSize(), 4)
 RESULT
 
-CHECK(BitVector operator ~ () throw(Exception::OutOfMemory))
+CHECK(BitVector operator ~ ())
 	BitVector bv3(3);
 	bv3.setBit(1, true);
 	BitVector bv3_2 = ~ bv3;
@@ -265,7 +265,7 @@ CHECK(bool operator != (const BitVector& bit_vector) const throw())
 	TEST_EQUAL(bv3 != bv3_2, false)
 RESULT
 
-CHECK(bool isAnyBit(bool value, Index first = 0, Index last = -1) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool isAnyBit(bool value, Index first = 0, Index last = -1) const)
 	BitVector bv3(3);
 	TEST_EQUAL(bv3.isAnyBit(false), true)
 	TEST_EQUAL(bv3.isAnyBit(true), false)
@@ -276,7 +276,7 @@ CHECK(bool isAnyBit(bool value, Index first = 0, Index last = -1) const throw(Ex
 	TEST_EXCEPTION(Exception::IndexUnderflow, bv3.isAnyBit(1, -111111111))
 RESULT
 
-CHECK(bool isEveryBit(bool value, Index first = 0, Index last = -1) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool isEveryBit(bool value, Index first = 0, Index last = -1) const)
 	BitVector bv3(3);
 	TEST_EQUAL(bv3.isEveryBit(false), true)
 	bv3.setBit(0, true);
@@ -304,7 +304,7 @@ using namespace RTTI;
 BitVector bv4(4);
 bv4.setBit(2, true);
 
-CHECK(friend std::istream& operator >> (std::istream& s, BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(friend std::istream& operator >> (std::istream& s, BitVector& bit_vector))
 	std::ifstream instr(BALL_TEST_DATA_PATH(BitVector_test.txt));
 	BitVector bv4_2;
 	instr >> bv4_2;
@@ -317,7 +317,7 @@ CHECK(friend std::istream& operator >> (std::istream& s, BitVector& bit_vector) 
 RESULT
 
 
-CHECK(void read(std::istream& s) throw(Exception::OutOfMemory))
+CHECK(void read(std::istream& s))
 	std::ifstream instr(BALL_TEST_DATA_PATH(BitVector_test.txt));
 	BitVector bv4_2;
 	bv4_2.read(instr);
@@ -345,7 +345,7 @@ CHECK(void write(std::ostream& s) const throw())
 	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(BitVector_test2.txt))
 RESULT
 
-CHECK(bool read(PersistenceManager& pm) throw(Exception::OutOfMemory))
+CHECK(bool read(PersistenceManager& pm))
 	ifstream	ifile(BALL_TEST_DATA_PATH(BitVector_test3.txt));
 	pm.setIstream(ifile);
 	BitVector bv;

@@ -261,7 +261,7 @@ CHECK(HashGridBox3(const HashGridBox3& grid_box, bool deep = true) throw())
   // ??? Not implemented
 RESULT
 
-CHECK(const HashGridBox3& operator = (const HashGridBox3& box) throw(Exception::NotImplemented))
+CHECK(const HashGridBox3& operator = (const HashGridBox3& box))
   // ???
 RESULT
 
@@ -269,7 +269,7 @@ CHECK(void host(Visitor<HashGridBox3> &visitor) throw())
   // ???
 RESULT
 
-CHECK(void set(const HashGridBox3& box, bool /* deep */ = true) throw(Exception::NotImplemented))
+CHECK(void set(const HashGridBox3& box, bool /* deep */ = true))
   // ???
 RESULT
 

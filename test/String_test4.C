@@ -22,7 +22,7 @@ const String abcdef = "abcdef";
 const String ABCDEF = "ABCDEF";
 String s4;
 
-CHECK(void toUpper(Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(void toUpper(Index from = 0, Size len = EndPos))
 	s4 = "abCD efGH";
 	s4.toUpper();
 	TEST_EQUAL(s4, "ABCD EFGH")
@@ -47,7 +47,7 @@ CHECK(void toUpper(Index from = 0, Size len = EndPos) throw(Exception::IndexUnde
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.toUpper(-10, 0))
 RESULT
 
-CHECK(Substring getSubstring(Index from = 0, Size len = EndPos) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(Substring getSubstring(Index from = 0, Size len = EndPos) const)
 	s4 = "abcdefg";
 	Substring sub(s4.getSubstring());
 	TEST_EQUAL(sub, s4)
@@ -62,7 +62,7 @@ CHECK(Substring getSubstring(Index from = 0, Size len = EndPos) const throw(Exce
 	TEST_EXCEPTION(Exception::IndexUnderflow, Substring sub6(sub = s4.getSubstring(-10, 0)))
 RESULT
 
-CHECK(Substring operator () (Index from, Size len = EndPos) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(Substring operator () (Index from, Size len = EndPos) const)
 	s4 = "abcdefg";
 	Substring sub(s4(0, 3));
 	TEST_EQUAL(sub, "abc")
@@ -127,7 +127,7 @@ CHECK(Substring after(const String& s, Index from = 0) const throw())
 	TEST_EQUAL(res, s4)
 RESULT
 
-CHECK(Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) const throw(Exception::NullPointer))
+CHECK(Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) const)
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.countFields(), 3)
 	TEST_EQUAL(s4.countFields("a"), 1)
@@ -145,7 +145,7 @@ CHECK(Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) con
 	TEST_EQUAL(s4.countFields(), 1)
 RESULT
 
-CHECK(Size countFieldsQuoted(const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES) const throw(Exception::NullPointer))
+CHECK(Size countFieldsQuoted(const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES) const)
 	s4 = "aa b cc b";
 	TEST_EQUAL(s4.countFieldsQuoted(), 4)
 	TEST_EQUAL(s4.countFieldsQuoted("a"), 1)
@@ -162,7 +162,7 @@ CHECK(Size countFieldsQuoted(const char* delimiters = CHARACTER_CLASS__WHITESPAC
 	TEST_EQUAL(s4.countFieldsQuoted(), 2)
 RESULT
 
-CHECK(String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index* from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index* from = 0) const)
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.getField(0), "aa")
 	TEST_EQUAL(s4.getField(1), "bb")
@@ -192,7 +192,7 @@ CHECK(String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHI
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.getField(-99, ","))	
 RESULT
 
-CHECK(String getFieldQuoted(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES, Index* from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(String getFieldQuoted(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES, Index* from = 0) const)
 	// test the default (unquoted behviour)
 	s4 = "aa bb cc";
 	TEST_EQUAL(s4.getFieldQuoted(0), "aa")
@@ -257,7 +257,7 @@ CHECK(String getFieldQuoted(Index index, const char* delimiters = CHARACTER_CLAS
 	TEST_EQUAL(s4.getFieldQuoted(7), "")
 RESULT
 
-CHECK(Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const)
 	String arr[10];
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.split(arr, 10), 7)

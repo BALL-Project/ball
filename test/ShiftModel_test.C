@@ -95,7 +95,7 @@ CHECK(ShiftModel::getModuleList())
 	}
 RESULT
 
-CHECK(ShiftModel::registerModule(const String& name, CreateMethod method) throw(Exception::NullPointer))
+CHECK(ShiftModel::registerModule(const String& name, CreateMethod method))
 	ShiftModel sm;
 	using namespace RTTI;
 	ShiftModel::CreateMethod m = getNew<ShiftModule>;

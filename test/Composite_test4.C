@@ -159,7 +159,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Composite_test.txt))
 RESULT
 
-CHECK(void host(Visitor<Composite>& visitor) throw(Exception::GeneralException))
+CHECK(void host(Visitor<Composite>& visitor))
 	myVisitor mv;
 	a.host(mv);
 	TEST_EQUAL(mv.c_ptr, &a)
@@ -167,7 +167,7 @@ RESULT
 
 ItemCollector<Composite> myproc;
 
-CHECK(template<typename T> bool applyAncestor(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyAncestor(UnaryProcessor<T>& processor))
 	a.applyAncestor(myproc);
 	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 0)
@@ -179,7 +179,7 @@ CHECK(template<typename T> bool applyAncestor(UnaryProcessor<T>& processor) thro
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyChild(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyChild(UnaryProcessor<T>& processor))
 	e.applyChild(myproc);
 	TEST_EQUAL(myproc.getSize(), 0)
 
@@ -195,7 +195,7 @@ CHECK(template<typename T> bool applyChild(UnaryProcessor<T>& processor) throw(E
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyDescendantPreorder(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyDescendantPreorder(UnaryProcessor<T>& processor))
 	e.applyDescendantPreorder(myproc);
 	TEST_EQUAL(myproc.getSize(), 0)
 
@@ -208,7 +208,7 @@ CHECK(template<typename T> bool applyDescendantPreorder(UnaryProcessor<T>& proce
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyDescendantPostorder(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyDescendantPostorder(UnaryProcessor<T>& processor))
 	e.applyDescendantPostorder(myproc);
 	TEST_EQUAL(myproc.getSize(), 0)
 
@@ -221,7 +221,7 @@ CHECK(template<typename T> bool applyDescendantPostorder(UnaryProcessor<T>& proc
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyDescendant(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyDescendant(UnaryProcessor<T>& processor))
 	e.applyDescendant(myproc);
 	TEST_EQUAL(myproc.getSize(), 0)
 
@@ -234,7 +234,7 @@ CHECK(template<typename T> bool applyDescendant(UnaryProcessor<T>& processor) th
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyPreorder(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyPreorder(UnaryProcessor<T>& processor))
 	e.applyPreorder(myproc);
 	TEST_EQUAL(myproc.getSize(), 1)
 
@@ -248,7 +248,7 @@ CHECK(template<typename T> bool applyPreorder(UnaryProcessor<T>& processor) thro
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyPostorder(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyPostorder(UnaryProcessor<T>& processor))
 	e.applyPostorder(myproc);
 	TEST_EQUAL(myproc.getSize(), 1)
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
@@ -264,7 +264,7 @@ CHECK(template<typename T> bool applyPostorder(UnaryProcessor<T>& processor) thr
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool apply(UnaryProcessor<T>& processor) throw(Exception::GeneralException))
+CHECK(template<typename T> bool apply(UnaryProcessor<T>& processor))
 	e.apply(myproc);
 	TEST_EQUAL(myproc.getSize(), 1)
 
@@ -278,7 +278,7 @@ CHECK(template<typename T> bool apply(UnaryProcessor<T>& processor) throw(Except
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(template<typename T> bool applyLevel(UnaryProcessor<T>& processor, long level) throw(Exception::GeneralException))
+CHECK(template<typename T> bool applyLevel(UnaryProcessor<T>& processor, long level))
 	e.applyLevel(myproc,0 );
 	TEST_EQUAL(myproc.getSize(), 1)
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();

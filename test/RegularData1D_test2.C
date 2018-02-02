@@ -19,7 +19,7 @@ START_TEST(RegularData1D)
 using namespace BALL;
 using namespace std;
 
-CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
+CHECK(void rescale(const IndexType& new_size))
 	TRegularData1D<float>	data;
 	TEST_EQUAL(data.getSize(), 0)
 	data.rescale(1);
@@ -115,7 +115,7 @@ CHECK(Iterator end() throw())
 	TEST_REAL_EQUAL(*it, 1.4);
 RESULT
 
-CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exception::OutOfGrid))
+CHECK(CoordinateType getCoordinates(const IndexType& index) const)
 	RegularData1D rd(0.0, 2.0, 0.5);
 
 	TEST_REAL_EQUAL(rd.getCoordinates(0), 0.0);
@@ -123,7 +123,7 @@ CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exceptio
 	TEST_REAL_EQUAL(rd.getCoordinates(4), 2.0);
 RESULT
 
-CHECK(IndexType getClosestIndex(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(IndexType getClosestIndex(const CoordinateType& x) const)
  	RegularData1D rd(0.0, 2.0, 0.5);
 
 	TEST_EQUAL(rd.getClosestIndex(0.0), 0);
@@ -132,7 +132,7 @@ CHECK(IndexType getClosestIndex(const CoordinateType& x) const throw(Exception::
 	TEST_EQUAL(rd.getClosestIndex(0.6), 1);
 RESULT
 
-CHECK(IndexType getLowerIndex(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(IndexType getLowerIndex(const CoordinateType& x) const)
  	RegularData1D rd(0.0, 2.0, 0.5);
 
 	TEST_EQUAL(rd.getLowerIndex(0.0), 0);
@@ -141,7 +141,7 @@ CHECK(IndexType getLowerIndex(const CoordinateType& x) const throw(Exception::Ou
 	TEST_EQUAL(rd.getLowerIndex(0.6), 1);
 RESULT
 
-CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const)
 	RegularData1D::VectorType v;
 	v.push_back(0.0);
 	v.push_back(0.5);
@@ -171,7 +171,7 @@ CHECK(ValueType operator () (const CoordinateType& x) const throw())
 	TEST_REAL_EQUAL(rd(0.9), 0.9)
 RESULT
 
-CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOfGrid))
+CHECK(ValueType& getClosestValue(const CoordinateType& x))
 	RegularData1D::VectorType v;
 	v.push_back(0.0);
 	v.push_back(0.5);
@@ -184,7 +184,7 @@ CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOf
 	TEST_REAL_EQUAL(rd.getClosestValue(0.9), 1.0)
 RESULT
 
-CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getClosestValue(const CoordinateType& x) const)
  	RegularData1D::VectorType v;
 	v.push_back(0.0);
 	v.push_back(0.5);
@@ -247,11 +247,11 @@ CHECK(void binaryWrite(const String& filename) const throw())
   // ???
 RESULT
 
-CHECK(void getEnclosingIndices(const CoordinateType& x, Position& lower, Position& upper) const throw(Exception::OutOfGrid))
+CHECK(void getEnclosingIndices(const CoordinateType& x, Position& lower, Position& upper) const)
   // ???
 RESULT
 
-CHECK(void getEnclosingValues(const CoordinateType& x, ValueType& lower, ValueType& upper) const throw(Exception::OutOfGrid))
+CHECK(void getEnclosingValues(const CoordinateType& x, ValueType& lower, ValueType& upper) const)
   // ???
 RESULT
 

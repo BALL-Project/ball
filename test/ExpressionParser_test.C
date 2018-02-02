@@ -182,12 +182,12 @@ CHECK(ExpressionParser(const ExpressionParser& parser))
 	ExpressionParser ep2(ep);
 RESULT
 
-CHECK(const SyntaxTree& getSyntaxTree() const throw(Exception::NullPointer))
+CHECK(const SyntaxTree& getSyntaxTree() const)
 	ExpressionParser empty;
 	TEST_EXCEPTION(Exception::NullPointer, empty.getSyntaxTree())
 RESULT
 
-CHECK(void parse(const String& s) throw(Exception::ParseError))
+CHECK(void parse(const String& s))
 	ExpressionParser parser;
 	parser.parse("test('(H2)') AND element(H)");
 RESULT

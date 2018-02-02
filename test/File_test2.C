@@ -49,7 +49,7 @@ CHECK(bool operator != (const File& file) const throw())
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(static bool isAccessible(String name) throw(Exception::FileNotFound))
+CHECK(static bool isAccessible(String name))
 	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isAccessible(BALL_TEST_DATA_PATH(File_test2.txt)), true)
@@ -68,7 +68,7 @@ CHECK(bool isAccessible() const throw())
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
-CHECK(bool isCanonized() const throw(Exception::FileNotFound))
+CHECK(bool isCanonized() const)
 	File f0(BALL_TEST_DATA_PATH(../../test/data/File_test2.txt));
 	TEST_EQUAL(f0.isValid(), true)
 	TEST_EQUAL(f0.isCanonized(), true)
@@ -94,7 +94,7 @@ CHECK(bool isCanonized() const throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, x.isCanonized())
 RESULT
 
-CHECK(static bool isReadable(String name) throw(Exception::FileNotFound))
+CHECK(static bool isReadable(String name))
 	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isReadable(source_name), true)	
@@ -102,7 +102,7 @@ CHECK(static bool isReadable(String name) throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, File::isReadable("this_file_should_not_exists"))
 RESULT
 
-CHECK(bool isReadable() const throw(Exception::FileNotFound))
+CHECK(bool isReadable() const)
 	File f2(source_name);
 	TEST_EQUAL(f2.isReadable(), true)
 
@@ -110,7 +110,7 @@ CHECK(bool isReadable() const throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, x.isReadable())
 RESULT
 
-CHECK(static bool isWritable(String name) throw(Exception::FileNotFound))
+CHECK(static bool isWritable(String name))
 	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.isWritable(source_name), true)	
@@ -118,7 +118,7 @@ CHECK(static bool isWritable(String name) throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, File::isWritable("this_file_should_not_exists"))
 RESULT
 
-CHECK(bool isWritable() const throw(Exception::FileNotFound))
+CHECK(bool isWritable() const)
 	File f2(source_name);
 	TEST_EQUAL(f2.isWritable(), true)	
 
@@ -126,7 +126,7 @@ CHECK(bool isWritable() const throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, x.isWritable())
 RESULT
 
-CHECK(static bool isExecutable(String name) throw(Exception::FileNotFound))
+CHECK(static bool isExecutable(String name))
 	File  file(BALL_TEST_DATA_PATH(File_test2.txt));
 	const File& f  = file;
 #ifndef BALL_COMPILER_MSVC
@@ -137,7 +137,7 @@ CHECK(static bool isExecutable(String name) throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, File::isExecutable("this_file_should_not_exists"))
 RESULT
 
-CHECK(bool isExecutable() const throw(Exception::FileNotFound))
+CHECK(bool isExecutable() const)
 #ifndef BALL_COMPILER_MSVC
 	File f1(BALL_TEST_DATA_PATH(File_test2.txt));
 	TEST_EQUAL(f1.isExecutable(), true)	
@@ -203,7 +203,7 @@ CHECK(void clear() throw())
 	TEST_EQUAL(file.getName(), "")
 RESULT
 
-CHECK(bool reopen(File::OpenMode open_mode) throw(Exception::FileNotFound))
+CHECK(bool reopen(File::OpenMode open_mode))
 	File file(filename);
 	TEST_EQUAL(file.reopen(), true)
 	file.setName("this_file_should_not_exists");

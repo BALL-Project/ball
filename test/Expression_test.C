@@ -73,7 +73,7 @@ CHECK(Expression(const Expression& expression) throw())
 RESULT
 
 
-CHECK(Expression(const String& expression_string) throw(Exception::ParseError))
+CHECK(Expression(const String& expression_string))
 	Expression e("true()");
 	TEST_EQUAL(e.getCreationMethods().size(), 27)
 	TEST_EQUAL(e(Atom()), true)
@@ -205,7 +205,7 @@ CHECK(void registerPredicate(const String& name, CreationMethod creation_method)
 RESULT
 
 
-CHECK(void setExpression(const String& expression) throw(Exception::ParseError))
+CHECK(void setExpression(const String& expression))
 	String test_expression("connectedTo((-H))");
 	Expression e;
 	e.setExpression(test_expression);

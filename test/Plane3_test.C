@@ -167,7 +167,7 @@ CHECK(void swap(TPlane3& plane) throw())
 	TEST_EQUAL(p2.n, v2)
 RESULT
 
-CHECK(void normalize() throw(Exception::DivisionByZero))
+CHECK(void normalize())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 9.0, 16.0);
 	p = Plane3(v1, v2);
@@ -231,7 +231,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Plane3_test.txt))
 RESULT
 
-CHECK(TPlane3(const T& a, const T& b, const T& c, const T& d) throw(Exception::DivisionByZero))
+CHECK(TPlane3(const T& a, const T& b, const T& c, const T& d))
 	Plane3 p(0, 1, 2, 3);
 	TEST_EQUAL(p.n, Vector3(0,1,2))
 	TEST_EQUAL(p.p, Vector3(0,-3,0))

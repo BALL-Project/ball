@@ -248,7 +248,7 @@ CHECK(Size countNamedProperties() const throw())
 	TEST_EQUAL(m.countNamedProperties(), 1)
 RESULT
 
-CHECK(const NamedProperty& getNamedProperty(Position index) const throw(Exception::IndexOverflow))
+CHECK(const NamedProperty& getNamedProperty(Position index) const)
 	PropertyManager m;
 	m.setProperty("TEST_PROP1", 123);
 	m.setProperty("TEST_PROP2", string("ASD"));
@@ -262,7 +262,7 @@ CHECK(const NamedProperty& getNamedProperty(Position index) const throw(Exceptio
 	TEST_EXCEPTION(Exception::IndexOverflow, c_m.getNamedProperty(3))
 RESULT
 
-CHECK(NamedProperty& getNamedProperty(Position index) throw(Exception::IndexOverflow))
+CHECK(NamedProperty& getNamedProperty(Position index))
 	PropertyManager m;
 	m.setProperty("TEST_PROP1", 123);
 	m.setProperty("TEST_PROP2", string("ASD"));

@@ -96,7 +96,7 @@ CHECK(bool operator != (const PDBAtom& pdb_atom) const throw())
 RESULT
 
 
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	NEW_TMP_FILE(filename)
 	ofstream ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -106,7 +106,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 RESULT
 
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	ifstream  ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject* ptr;

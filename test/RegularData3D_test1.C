@@ -26,7 +26,7 @@ CHECK(~TRegularData3D() throw())
 	delete grid;
 RESULT
 
-CHECK(TRegularData3D(const IndexType& size, const CoordinateType& origin = CoordinateType(0.0), const CoordinateType& dimension = CoordinateType(1.0)) throw(Exception::OutOfMemory))
+CHECK(TRegularData3D(const IndexType& size, const CoordinateType& origin = CoordinateType(0.0), const CoordinateType& dimension = CoordinateType(1.0)))
 	grid = new RegularData3D(RegularData3D::IndexType(11, 11, 11), Vector3(0.0, 0.0, 0.0), Vector3(10.0, 10.0, 10.0));
 	TEST_NOT_EQUAL(grid, 0)
 	TEST_EQUAL(grid->size(), 1331)
@@ -37,7 +37,7 @@ using BALL::Vector3;
 Vector3	lower(0.0, 0.0, 0.0);
 Vector3	upper(10.0, 10.0, 10.0);
 
-CHECK(TRegularData3D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing) throw(Exception::OutOfMemory))
+CHECK(TRegularData3D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing))
 	grid = new RegularData3D(lower, upper - lower, Vector3(1.0));
 	TEST_NOT_EQUAL(grid, 0)
 	TEST_EQUAL(grid->size(), 1331)
@@ -51,7 +51,7 @@ RESULT
 
 RegularData3D g(RegularData3D::IndexType(11, 11, 11), lower, upper - lower);
 
-CHECK(void resize(const IndexType& size) throw(Exception::OutOfMemory))
+CHECK(void resize(const IndexType& size))
 	Vector3 origin(2.0);
 	Vector3 dimension(10.0);
 
@@ -68,7 +68,7 @@ CHECK(void resize(const IndexType& size) throw(Exception::OutOfMemory))
 	TEST_EQUAL(g1.getDimension(), Vector3(dimension.x * 3. / 2, dimension.y * 4. / 2., dimension.y * 5. / 2.))
 RESULT
 
-CHECK(TRegularData3D& operator = (const TRegularData3D<ValueType>& data) throw(Exception::OutOfMemory))
+CHECK(TRegularData3D& operator = (const TRegularData3D<ValueType>& data))
 	RegularData3D g1;
 	g1 = g;
 	TEST_EQUAL(g1.size(), 1331)
@@ -89,7 +89,7 @@ RESULT
 
 RegularData3D::IndexType	index;
 
-CHECK(IndexType getClosestIndex(const CoordinateType& v) const throw(Exception::OutOfGrid))
+CHECK(IndexType getClosestIndex(const CoordinateType& v) const)
  	lower.set(3.49, 3.51, 3.0);
 	index = grid->getClosestIndex(lower);
 	TEST_EQUAL(index.x, 3)
@@ -98,19 +98,19 @@ CHECK(IndexType getClosestIndex(const CoordinateType& v) const throw(Exception::
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getClosestIndex(Vector3(1111, 1,1)))
 RESULT
 
-CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOfGrid))
+CHECK(ValueType& getClosestValue(const CoordinateType& x))
 	g.getClosestValue(Vector3(1.2, 2.3, 4.3)) = 1.232;
 	TEST_REAL_EQUAL(g[RegularData3D::IndexType(1,2,4)], 1.232)
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getClosestValue(Vector3(1111, 1,1)))
 RESULT
 
-CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getClosestValue(const CoordinateType& x) const)
 	const RegularData3D& rd = g;
 	TEST_REAL_EQUAL(rd.getClosestValue(Vector3(1.2, 2.3, 4.3)), 1.232)
 	TEST_EXCEPTION(Exception::OutOfGrid, rd.getClosestValue(Vector3(1111, 1,1)))
 RESULT
 
-CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
+CHECK(ValueType& getData(Position index))
 	grid->getData(RegularData3D::IndexType(0, 0, 0)) = 5.4321;		
 	lower = grid->getOrigin();
 	TEST_REAL_EQUAL(grid->getData(0), 5.4321);
@@ -118,7 +118,7 @@ CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
 	TEST_EXCEPTION(Exception::OutOfGrid, grid->getData(1331))
 RESULT
 
-CHECK(const ValueType& getData(Position index) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getData(Position index) const)
   RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
 	g.getData(1) = 1.23;
 	const RegularData3D& d = g;
@@ -138,7 +138,7 @@ CHECK(const ValueType& operator [] (Position index) const throw())
 RESULT
 
 
-CHECK(CoordinateType getCoordinates(Position index) const throw(Exception::OutOfGrid))
+CHECK(CoordinateType getCoordinates(Position index) const)
 	lower = grid->getCoordinates(0);
 	TEST_REAL_EQUAL(lower.x, 0.0)
 	TEST_REAL_EQUAL(lower.y, 0.0)
@@ -150,7 +150,7 @@ CHECK(CoordinateType getCoordinates(Position index) const throw(Exception::OutOf
 	TEST_REAL_EQUAL(lower.z, 2.0)
 RESULT
 
-CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exception::OutOfGrid))
+CHECK(CoordinateType getCoordinates(const IndexType& index) const)
 	upper.set(3.999999, 4.0, 3.0001);
 	lower = grid->getCoordinates(grid->getClosestIndex(upper));
 	TEST_REAL_EQUAL(lower.x, 4.0)
@@ -158,7 +158,7 @@ CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exceptio
 	TEST_REAL_EQUAL(lower.z, 3.0)
 RESULT
 
-CHECK(void getEnclosingIndices(const CoordinateType& r, Position& llf, Position& rlf, Position& luf, Position& ruf, Position& llb, Position& rlb, Position& lub, Position& rub) const throw(Exception::OutOfGrid))
+CHECK(void getEnclosingIndices(const CoordinateType& r, Position& llf, Position& rlf, Position& luf, Position& ruf, Position& llb, Position& rlb, Position& lub, Position& rub) const)
 	lower.set(2, 2, 2);
 	Position p1, p2, p3, p4, p5, p6, p7, p8;
 	g.getEnclosingIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8);
@@ -187,7 +187,7 @@ CHECK(void getEnclosingIndices(const CoordinateType& r, Position& llf, Position&
 RESULT
 
 
-CHECK(void getEnclosingValues(const CoordinateType& r, ValueType& llf, ValueType& rlf, ValueType& luf, ValueType& ruf, ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const throw(Exception::OutOfGrid))
+CHECK(void getEnclosingValues(const CoordinateType& r, ValueType& llf, ValueType& rlf, ValueType& luf, ValueType& ruf, ValueType& llb, ValueType& rlb, ValueType& lub, ValueType& rub) const)
 	lower.set(2, 2, 2);
 	float p1, p2, p3, p4, p5, p6, p7, p8;
 	g[266] = 1;
@@ -248,7 +248,7 @@ CHECK(const CoordinateType& getDimension() const throw())
 	TEST_REAL_EQUAL(grid->getDimension().z, 10.0)
 RESULT
 
-CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const)
 	lower.set(2, 2, 2);
 	TEST_EQUAL(g.getInterpolatedValue(lower), 1)
 	lower.set(0, 0, 0);

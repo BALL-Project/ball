@@ -31,7 +31,7 @@ CHECK(~BitVector() throw())
 RESULT
 
 
-CHECK(void setSize(Size size, bool keep = true) throw(Exception::OutOfMemory))
+CHECK(void setSize(Size size, bool keep = true))
 	BitVector bv;
 	bv.setSize(12);
 	TEST_EQUAL(bv.getSize(), 12)
@@ -53,7 +53,7 @@ CHECK(BALL_CREATE(BitVector))
 	delete v_ptr;
 RESULT
 
-CHECK(BitVector(Size size) throw(Exception::OutOfMemory))
+CHECK(BitVector(Size size))
 	BitVector bv0((Size)0);
 	TEST_EQUAL(bv0.getSize(), 0)
 
@@ -71,7 +71,7 @@ RESULT
 
 BitVector bv9(9);
 
-CHECK(BitVector(const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector(const BitVector& bit_vector))
 	bv9.setBit(0, true);
 	bv9.setBit(8, true);
 	BitVector bv9_2 = BitVector(bv9);
@@ -88,7 +88,7 @@ CHECK(BitVector(const BitVector& bit_vector) throw(Exception::OutOfMemory))
 	TEST_EQUAL(bv9_2.getBit(8), true)
 RESULT
 
-CHECK(BitVector(const char* bit_string) throw(Exception::OutOfMemory))
+CHECK(BitVector(const char* bit_string))
 	const char* c = "100101011";
 	BitVector bv9_2(c);
 	TEST_EQUAL(bv9_2.getSize(), 9)
@@ -119,7 +119,7 @@ CHECK(void clear() throw())
 RESULT
 
 
-CHECK(void set(const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(void set(const BitVector& bit_vector))
 	BitVector bv9_1("100000001");
 	BitVector bv9_2;
 	bv9_2.set(bv9_1);
@@ -129,7 +129,7 @@ CHECK(void set(const BitVector& bit_vector) throw(Exception::OutOfMemory))
 	TEST_EQUAL(bv9_2.getBit(8), true)
 RESULT
 
-CHECK(void set(const char* bit_string) throw(Exception::OutOfMemory))
+CHECK(void set(const char* bit_string))
 	const char* c = "100101011";
 	BitVector bv9_2;
 	bv9_2.set(c);
@@ -149,7 +149,7 @@ CHECK(void set(const char* bit_string) throw(Exception::OutOfMemory))
 	TEST_EQUAL(bv9_3.getSize(), 0)
 RESULT
 
-CHECK(BitVector& operator = (const BitVector& bit_vector) throw(Exception::OutOfMemory))
+CHECK(BitVector& operator = (const BitVector& bit_vector))
 	BitVector bv11("100101011"); 
 	BitVector bv11_2;
 	bv11_2 = bv11;
@@ -178,7 +178,7 @@ CHECK(BitVector& operator = (const BitVector& bit_vector) throw(Exception::OutOf
 	TEST_EQUAL(bv12_2.getBit(8), false)
 RESULT
 
-CHECK(BitVector& operator = (const char *bit_string) throw(Exception::OutOfMemory))
+CHECK(BitVector& operator = (const char *bit_string))
 	const char* c = "100101011";
 	BitVector bv9_2;
 	bv9_2 = c;
@@ -194,7 +194,7 @@ CHECK(BitVector& operator = (const char *bit_string) throw(Exception::OutOfMemor
 	TEST_EQUAL(bv9_2.getBit(8), true)
 RESULT
 
-CHECK(void get(BitVector& bitvector) const throw(Exception::OutOfMemory))
+CHECK(void get(BitVector& bitvector) const)
 	const char* c = "100101011";
 	BitVector bv9_2;
 	bv9_2 = c;
@@ -209,7 +209,7 @@ bv10.setBit(2, true);
 bv10.setBit(4, true);
 bv10.setBit(9, true);
 
-CHECK(BitVector operator () (Index first, Index last) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(BitVector operator () (Index first, Index last) const)
 	BitVector bv = bv10(1, 4);
 	TEST_EQUAL(bv.getBit(0), true)
 	TEST_EQUAL(bv.getBit(1), true)
@@ -251,7 +251,7 @@ CHECK(const VectorType& getBitSet() const throw())
 	TEST_EQUAL(bt[1], 2)
 RESULT
 
-CHECK(Bit operator []	(Index index) throw(Exception::OutOfMemory))
+CHECK(Bit operator []	(Index index))
 	for (Index i = 0; i < 33; i++)
 	{
 		BitVector bv(33);
@@ -272,7 +272,7 @@ CHECK(Bit operator []	(Index index) throw(Exception::OutOfMemory))
 	// Out of memory not tested
 RESULT
 
-CHECK(bool operator [] (Index index) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool operator [] (Index index) const)
 	const BitVector bv10_2(bv10);
 	TEST_EQUAL(bv10_2[0], false)
 	TEST_EQUAL(bv10_2[1], true)
@@ -281,7 +281,7 @@ CHECK(bool operator [] (Index index) const throw(Exception::IndexUnderflow, Exce
 	TEST_EQUAL(bv10_2.getSize(), 10)
 RESULT
 
-CHECK(void setBit(Index index, bool value = true) throw(Exception::IndexUnderflow, Exception::OutOfMemory))
+CHECK(void setBit(Index index, bool value = true))
 	for (Index i = 0; i < 33; i++)
 	{
 		BitVector bv(33);
@@ -309,7 +309,7 @@ CHECK(void setBit(Index index, bool value = true) throw(Exception::IndexUnderflo
 	TEST_EQUAL(bv.getBit(0), true)
 RESULT
 
-CHECK(bool getBit(Index index) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool getBit(Index index) const)
 		BitVector bv(2);
 		bv.setBit(1);
 		const BitVector& b(bv);
@@ -319,16 +319,16 @@ CHECK(bool getBit(Index index) const throw(Exception::IndexUnderflow, Exception:
 		TEST_EXCEPTION(Exception::IndexUnderflow, b.getBit(-111111111))
 RESULT
 
-CHECK(bool getBit(Index index) throw(Exception::IndexUnderflow, Exception::OutOfMemory))
+CHECK(bool getBit(Index index))
 RESULT
 
-CHECK(void toggleBit(Index index) throw(Exception::IndexUnderflow, Exception::OutOfMemory))
+CHECK(void toggleBit(Index index))
 	TEST_EQUAL(bv9.getBit(0), false)
 	bv9.toggleBit(0);
 	TEST_EQUAL(bv9.getBit(0), true)
 RESULT
 
-CHECK(void fill(bool value = true, Index first = 0, Index last = -1) throw(Exception::IndexUnderflow, Exception::OutOfMemory))
+CHECK(void fill(bool value = true, Index first = 0, Index last = -1))
 	bv9.fill(true, 2, 3);
 	TEST_EQUAL(bv9.getBit(1), false)
 	TEST_EQUAL(bv9.getBit(2), true)
@@ -336,7 +336,7 @@ CHECK(void fill(bool value = true, Index first = 0, Index last = -1) throw(Excep
 	TEST_EQUAL(bv9.getBit(4), false)
 RESULT
 
-CHECK(void toggle(Index first = 0, Index last = -1) throw(Exception::IndexUnderflow, Exception::OutOfMemory))
+CHECK(void toggle(Index first = 0, Index last = -1))
 	BitVector bv4(4);
 	bv4.setBit(1, true);
 	bv4.toggle(1, 2);

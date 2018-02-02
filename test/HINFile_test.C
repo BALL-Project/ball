@@ -44,7 +44,7 @@ CHECK(SimpleBox3 getPeriodicBoundary() const)
 RESULT
 
 
-CHECK(HINFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(HINFile(const String& filename, File::OpenMode open_mode = std::ios::in))
   HINFile hin(BALL_TEST_DATA_PATH(HINFile_test.hin));
   TEST_EQUAL(hin.isValid(), true)
 	TEST_EXCEPTION(Exception::FileNotFound, HINFile f2("asddasdcasdasdasddwad"))
@@ -52,7 +52,7 @@ RESULT
 
 System system;
 HINFile hin(BALL_TEST_DATA_PATH(HINFile_test.hin));
-CHECK(bool read(System& system) throw(Exception::ParseError))
+CHECK(bool read(System& system))
   hin.read(system);
 	hin.reopen();
 	Vector3 position(0.59038, -0.410275, -0.860515);
@@ -91,7 +91,7 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
 	TEST_EQUAL(empty.read(S2), false)
 RESULT
 
-CHECK(bool write(const System& system) throw(File::CannotWrite))
+CHECK(bool write(const System& system))
   String filename;
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
@@ -142,7 +142,7 @@ CHECK([EXTRA]robust reading)
 	f.close();
 RESULT
 
-CHECK(Molecule* read() throw(Exception::ParseError))
+CHECK(Molecule* read())
 	HINFile hin(BALL_TEST_DATA_PATH(HINFile_test.hin));
 	Molecule* m = 0;
 	m = hin.read();
@@ -163,7 +163,7 @@ CHECK(Molecule* read() throw(Exception::ParseError))
 	TEST_EXCEPTION(Exception::ParseError, f.read())
 RESULT
 
-CHECK(const HINFile& operator = (const HINFile& rhs) throw(Exception::FileNotFound))
+CHECK(const HINFile& operator = (const HINFile& rhs))
 	HINFile f(BALL_TEST_DATA_PATH(HINFile_test4.hin));
 	HINFile f2;
 	f2 = f;
@@ -174,7 +174,7 @@ CHECK(const HINFile& operator = (const HINFile& rhs) throw(Exception::FileNotFou
 	TEST_EXCEPTION(Exception::FileNotFound, f2 = f3)
 RESULT
 
-CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
+CHECK(bool write(const Molecule& molecule))
 	TEST_EXCEPTION(File::CannotWrite, empty.write(Molecule()))
 	String filename;
 	NEW_TMP_FILE(filename);

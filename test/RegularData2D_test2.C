@@ -17,7 +17,7 @@ using namespace std;
 String filename;
 Vector2 v;
 
-CHECK(IndexType getLowerIndex(const CoordinateType& v) const throw(Exception::OutOfGrid))
+CHECK(IndexType getLowerIndex(const CoordinateType& v) const)
   RegularData2D g(Vector2(5.0, 7.0), Vector2(2.0, 3.0), Vector2(1.0, 0.5));
 	TEST_EQUAL(g.getLowerIndex(Vector2(6.6, 8.76)).x, 1)
 	TEST_EQUAL(g.getLowerIndex(Vector2(6.6, 8.76)).y, 3)
@@ -62,7 +62,7 @@ CHECK(Iterator end() throw())
 	TEST_EQUAL(empty.begin() == empty.end(), true)
 RESULT
 
-CHECK(TRegularData2D(const IndexType& size, const CoordinateType& origin = CoordinateType(0.0), const CoordinateType& dimension = CoordinateType(1.0)) throw(Exception::OutOfMemory))
+CHECK(TRegularData2D(const IndexType& size, const CoordinateType& origin = CoordinateType(0.0), const CoordinateType& dimension = CoordinateType(1.0)))
 	RegularData2D g(3, Vector2(1,2), Vector2(2,4));
 	TEST_REAL_EQUAL(g.getOrigin().x, 1.0)
 	TEST_REAL_EQUAL(g.getOrigin().y, 2.0)
@@ -100,7 +100,7 @@ for (Position y = 0; y < rg.size() ; y++)
 {
 	rg[y] = (float)y;
 }
-CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOfGrid))
+CHECK(ValueType& getClosestValue(const CoordinateType& x))
 	RegularData2D rg2(rg);
 	TEST_REAL_EQUAL(rg2.getClosestValue(Vector2(1.6, 1.9)), 28.0)
 	rg2.getClosestValue(Vector2(1.6, 1.9)) = -150.0;
@@ -111,7 +111,7 @@ CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOf
 	TEST_EXCEPTION(Exception::OutOfGrid, rg2.getClosestValue(Vector2(-2.000, -2.505)))
 RESULT
 
-CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getClosestValue(const CoordinateType& x) const)
 	const RegularData2D& rg2 = rg;
 	TEST_REAL_EQUAL(rg2.getClosestValue(Vector2(-0.3, -0.2)), 14.0)
 	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(2.505, 2.000)))
@@ -120,7 +120,7 @@ CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exce
 	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(-2.000, -2.505)))
 RESULT
 
-CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
+CHECK(ValueType& getData(Position index))
 	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
 	for (Position i = 0; i < rg.size() ; i++) { rg[i] = i; }
 	TEST_REAL_EQUAL(rg.getData(0), 0.0)
@@ -129,7 +129,7 @@ CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
 	TEST_EXCEPTION(Exception::OutOfGrid, rg.getData(rg.getSize()))
 RESULT
 
-CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
+CHECK(ValueType& getData(const IndexType& index))
 	RegularData2D rg(Vector2(0.0), Vector2(5.0), Vector2(1.0));
 	for (Position x = 0; x < rg.getSize().x; x++) 
 	{
@@ -148,7 +148,7 @@ CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
 	TEST_EXCEPTION(Exception::OutOfGrid, rg.getData(RegularData2D::IndexType(12, 12)))
 RESULT
 
-CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getData(const IndexType& index) const)
 	RegularData2D rg(Vector2(0.0), Vector2(5.0), Vector2(1.0));
 	for (Position x = 0; x < rg.getSize().x; x++) 
 	{
@@ -187,7 +187,7 @@ CHECK(bool operator != (const TRegularData2D<ValueType>& data) const throw())
 	TEST_EQUAL(rg != rg2, true)
 RESULT
 
-CHECK(TRegularData2D& operator = (const TRegularData2D<ValueType>& data) throw(Exception::OutOfMemory))
+CHECK(TRegularData2D& operator = (const TRegularData2D<ValueType>& data))
  	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
 	for (Position x = 0; x < 6; x++) 
 		for (Position y = 0; y < 6; y++)
@@ -204,7 +204,7 @@ CHECK(size_type max_size() const throw())
 	TEST_EQUAL(rg.max_size() > 10000, true)
 RESULT
 
-CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFound))
+CHECK(void binaryWrite(const String& filename) const)
 	NEW_TMP_FILE(filename)
  	RegularData2D g(Vector2(1,2), Vector2(8,10), Vector2(1.0, 1.0));
 	for (Position x = 0; x < g.getSize().x; x++) 
@@ -227,7 +227,7 @@ CHECK(void binaryWrite(const String& filename) const throw(Exception::FileNotFou
 	g.binaryWrite(filename);
 RESULT
 
-CHECK(void binaryRead(const String& filename) throw(Exception::FileNotFound))
+CHECK(void binaryRead(const String& filename))
 	RegularData2D g;
 	g.binaryRead(filename);
 	for (Position x = 0; x < 7; x++) 

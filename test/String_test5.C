@@ -22,7 +22,7 @@ String hall("Hall");
 String halloh("Halloh");
 String s4;
 
-CHECK(Size split(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(Size split(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const)
 	vector<String> arr;
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.split(arr), 7)
@@ -66,7 +66,7 @@ CHECK(Size split(std::vector<String>& strings, const char* delimiters = CHARACTE
 	TEST_EQUAL(arr.size(), 2)
 RESULT
 
-CHECK(Size splitQuoted(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES, Index from = 0) const throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(Size splitQuoted(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, const char* quotes = CHARACTER_CLASS__QUOTES, Index from = 0) const)
 	vector<String> arr;
 	s4 = "a b c d e f g";
 	TEST_EQUAL(s4.splitQuoted(arr), 7)
@@ -277,7 +277,7 @@ CHECK(void swap(String& s) throw())
 	TEST_EQUAL(s5, "abc")
 RESULT
 
-CHECK(String& reverse(Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(String& reverse(Index from = 0, Size len = EndPos))
 	s4 = "abcd";
 	s4.reverse();
 	TEST_EQUAL(s4, "dcba")

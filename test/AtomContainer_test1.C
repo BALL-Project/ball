@@ -248,7 +248,7 @@ TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<AtomContainer>(), AtomContainer::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	AtomContainer* f1 = new AtomContainer("name1");
 	AtomContainer* f2 = new AtomContainer("name2");
@@ -261,7 +261,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	delete f1;
 RESULT
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();

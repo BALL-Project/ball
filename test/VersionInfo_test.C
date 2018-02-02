@@ -24,12 +24,12 @@ CHECK(static const char* getVersion() throw())
 	TEST_EQUAL(String(VersionInfo::getVersion()).hasPrefix(BALL_RELEASE_STRING), true)
 RESULT
 
-CHECK(static int getMajorRevision() throw(Exception::InvalidFormat))
+CHECK(static int getMajorRevision())
 	// just to call the method
 	TEST_NOT_EQUAL(VersionInfo::getMajorRevision(), -1)
 RESULT
 
-CHECK(static int getMinorRevision() throw(Exception::InvalidFormat))
+CHECK(static int getMinorRevision())
 	// just to call the method
 	TEST_NOT_EQUAL(VersionInfo::getMinorRevision(), -1)
 	String rel(VersionInfo::getMajorRevision());

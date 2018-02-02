@@ -34,7 +34,7 @@ CHECK(~File() throw())
 	delete f1;
 RESULT
 
-CHECK(File(const String& name, OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
 	File f(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(f.getSize(), 100)
 
@@ -52,7 +52,7 @@ CHECK(void close() throw())
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	file.open(BALL_TEST_DATA_PATH(File_test.txt));
@@ -60,7 +60,7 @@ CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) thr
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(bool reopen() throw(Exception::FileNotFound))
+CHECK(bool reopen())
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	file.close();
@@ -85,7 +85,7 @@ CHECK(Size getSize() throw())
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(static Size getSize(String name) throw(Exception::FileNotFound))
+CHECK(static Size getSize(String name))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(file.getSize(BALL_TEST_DATA_PATH(File_test.txt)), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, file.getSize("XXX"))
@@ -98,14 +98,14 @@ CHECK(File::OpenMode getOpenMode() const throw())
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(static Type getType(String name, bool trace_link) throw(Exception::FileNotFound))
+CHECK(static Type getType(String name, bool trace_link))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	TEST_EQUAL(file.getType(BALL_TEST_DATA_PATH(File_test.txt), false), 4)
 	TEST_EQUAL(file.getSize(), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, File::getType("this_file_should_not_exists", true))
 RESULT
 
-CHECK(Type getType(bool trace_link) const throw(Exception::FileNotFound))
+CHECK(Type getType(bool trace_link) const)
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.getType(false), 4)
@@ -115,7 +115,7 @@ CHECK(Type getType(bool trace_link) const throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, x.getType(true))
 RESULT
 
-CHECK(static bool copy(String source_name, String destination_name, Size buffer_size = 4096) throw(Exception::FileNotFound))
+CHECK(static bool copy(String source_name, String destination_name, Size buffer_size = 4096))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), BALL_TEST_DATA_PATH(File_test.txt)), false)
@@ -133,7 +133,7 @@ CHECK(static bool copy(String source_name, String destination_name, Size buffer_
 	TEST_EQUAL(f.copy(BALL_TEST_DATA_PATH(File_test.txt), ""), false)
 RESULT
 
-CHECK(bool copyTo(const String& destination_name, Size buffer_size = 4096) throw(Exception::FileNotFound))
+CHECK(bool copyTo(const String& destination_name, Size buffer_size = 4096))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(file.copyTo(BALL_TEST_DATA_PATH(File_test.txt)), false)
@@ -151,7 +151,7 @@ CHECK(bool copyTo(const String& destination_name, Size buffer_size = 4096) throw
 	TEST_EXCEPTION(Exception::FileNotFound, x.copyTo("asdaddasdasd"))
 RESULT
 
-CHECK(static bool move(const String& source_name, const String& destination_name) throw(Exception::FileNotFound))
+CHECK(static bool move(const String& source_name, const String& destination_name))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	TEST_EQUAL(file.copyTo("XXX"), true)
@@ -177,7 +177,7 @@ CHECK(static bool move(const String& source_name, const String& destination_name
 	TEST_EXCEPTION(Exception::FileNotFound, f.move("ZZZZZZZZZZ", "XXX"))
 RESULT
 
-CHECK(bool moveTo(const String& destination_name) throw(Exception::FileNotFound))
+CHECK(bool moveTo(const String& destination_name))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	const File& f  = file;
 	file.copyTo("XXX");
@@ -213,7 +213,7 @@ CHECK(bool remove() throw())
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
-CHECK(static bool rename(String old_path, String new_path) throw(Exception::FileNotFound))
+CHECK(static bool rename(String old_path, String new_path))
 	File  filex(BALL_TEST_DATA_PATH(File_test.txt));
 	filex.copyTo("XXX");
 
@@ -235,7 +235,7 @@ CHECK(static bool rename(String old_path, String new_path) throw(Exception::File
 	TEST_EXCEPTION(Exception::FileNotFound, f1.rename("XXX", ""))
 RESULT
 
-CHECK(bool renameTo(const String& new_path) throw(Exception::FileNotFound))
+CHECK(bool renameTo(const String& new_path))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 
@@ -251,7 +251,7 @@ CHECK(bool renameTo(const String& new_path) throw(Exception::FileNotFound))
 	TEST_EXCEPTION(Exception::FileNotFound, x.renameTo("dddddddd"))
 RESULT
 
-CHECK(static bool truncate(String path, Size size = 0) throw(Exception::FileNotFound))
+CHECK(static bool truncate(String path, Size size = 0))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 	File f1("XXX");
@@ -264,7 +264,7 @@ CHECK(static bool truncate(String path, Size size = 0) throw(Exception::FileNotF
 	TEST_EXCEPTION(Exception::FileNotFound, f1.truncate("", 50))
 RESULT
 
-CHECK(bool truncate(Size size = 0) throw(Exception::FileNotFound))
+CHECK(bool truncate(Size size = 0))
 	File  file(BALL_TEST_DATA_PATH(File_test.txt));
 	file.copyTo("XXX");
 	File f1("XXX");

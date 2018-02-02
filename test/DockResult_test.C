@@ -64,7 +64,7 @@ CHECK(void sortBy(Index scoring_index))
 	TEST_EQUAL(dr->isSortedBy(),1)
 RESULT
 
-CHECK(float operator()(Position i, Position j) throw(Exception::IndexOverflow))
+CHECK(float operator()(Position i, Position j))
 	TEST_REAL_EQUAL((*dr)(0,0),2.3)
 	TEST_REAL_EQUAL((*dr)(1,0),3.5)
 	TEST_REAL_EQUAL((*dr)(2,0),4.0)

@@ -67,7 +67,6 @@ class VectorIteratorTraits_
 	}
 
 	const VectorIteratorPosition_& getPosition() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -77,7 +76,6 @@ class VectorIteratorTraits_
 	}
 
 	bool operator == (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -87,7 +85,6 @@ class VectorIteratorTraits_
 	}
 
 	bool operator != (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -97,7 +94,6 @@ class VectorIteratorTraits_
 	}
 	
 	bool operator < (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -107,7 +103,6 @@ class VectorIteratorTraits_
 	}
 	
 	bool operator > (const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -117,7 +112,6 @@ class VectorIteratorTraits_
 	}
 
 	Distance getDistance(const VectorIteratorTraits_& traits) const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -142,7 +136,6 @@ class VectorIteratorTraits_
 	void bindTo(vector<DataType>& container) throw() { bound_ = &container; }
 
 	void toBegin()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -152,7 +145,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isBegin() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -162,7 +154,6 @@ class VectorIteratorTraits_
 	}
 
 	void toEnd()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -172,7 +163,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isEnd() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -182,7 +172,6 @@ class VectorIteratorTraits_
 	}
 
 	DataType& getData()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -202,7 +191,6 @@ class VectorIteratorTraits_
 	}
 
 	const DataType& getData() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -222,7 +210,6 @@ class VectorIteratorTraits_
 	}
 
 	void forward()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -237,7 +224,6 @@ class VectorIteratorTraits_
 	}
 
 	void toRBegin()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -247,7 +233,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isRBegin() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -257,7 +242,6 @@ class VectorIteratorTraits_
 	}
 	
 	void toREnd()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -267,7 +251,6 @@ class VectorIteratorTraits_
 	}
 
 	bool isREnd() const
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -277,7 +260,6 @@ class VectorIteratorTraits_
 	}
 	
 	void backward()
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -293,7 +275,6 @@ class VectorIteratorTraits_
 	}
 
 	void backward(Distance distance)
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -309,7 +290,6 @@ class VectorIteratorTraits_
 	}
 
 	void forward(Distance distance)
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -325,7 +305,6 @@ class VectorIteratorTraits_
 	}
 
 	DataType& getData(Index index)
-		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
 		{
@@ -401,11 +380,11 @@ CHECK(void swap(ConstForwardIterator& iterator) throw())
 	TEST_EQUAL(i2.getContainer(), &v1)	
 RESULT
 
-CHECK(ConstForwardIterator operator ++ (int) throw(Exception::Precondition))
+CHECK(ConstForwardIterator operator ++ (int))
   // ???
 RESULT
 
-CHECK(ConstForwardIterator& operator ++ () throw(Exception::Precondition))
+CHECK(ConstForwardIterator& operator ++ ())
   // ???
 RESULT
 
@@ -413,27 +392,27 @@ CHECK(ConstForwardIterator& operator = (const ConstForwardIterator& iterator) th
   // ???
 RESULT
 
-CHECK(bool isBegin() const throw(Exception::Precondition))
+CHECK(bool isBegin() const)
   // ???
 RESULT
 
-CHECK(bool isEnd() const throw(Exception::Precondition))
+CHECK(bool isEnd() const)
   // ???
 RESULT
 
-CHECK(static ConstForwardIterator begin(const Container& container) throw(Exception::Precondition))
+CHECK(static ConstForwardIterator begin(const Container& container))
   // ???
 RESULT
 
-CHECK(static ConstForwardIterator end(const Container& container) throw(Exception::Precondition))
+CHECK(static ConstForwardIterator end(const Container& container))
   // ???
 RESULT
 
-CHECK(void toBegin() throw(Exception::Precondition))
+CHECK(void toBegin())
   // ???
 RESULT
 
-CHECK(void toEnd() throw(Exception::Precondition))
+CHECK(void toEnd())
   // ???
 RESULT
 

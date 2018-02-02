@@ -29,7 +29,7 @@ CHECK(~TRegularData1D() throw())
   delete rd_ptr;
 RESULT
 
-CHECK(TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing) throw(Exception::OutOfMemory))
+CHECK(TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing))
 	RegularData1D rd(2.0, 4.0, 0.5);
 	TEST_REAL_EQUAL(rd.getOrigin(), 2.0);
 	TEST_REAL_EQUAL(rd.getDimension(), 4.0);
@@ -37,7 +37,7 @@ CHECK(TRegularData1D(const CoordinateType& origin, const CoordinateType& dimensi
 	TEST_EQUAL(rd.getSize(), 9);
 RESULT
 
-CHECK(TRegularData1D(const TRegularData1D& data) throw(Exception::OutOfMemory))
+CHECK(TRegularData1D(const TRegularData1D& data))
 	RegularData1D rd(2.0, 4.0, 0.5);
 	RegularData1D rd2(rd);
 
@@ -47,7 +47,7 @@ CHECK(TRegularData1D(const TRegularData1D& data) throw(Exception::OutOfMemory))
 	TEST_EQUAL(rd2.getSize(), 9);
 RESULT
 
-CHECK(TRegularData1D(const IndexType& size) throw(Exception::OutOfMemory))
+CHECK(TRegularData1D(const IndexType& size))
 	RegularData1D rd(5);
 	TEST_EQUAL(rd.getSize(), 5);
 	TEST_REAL_EQUAL(rd.getOrigin(), 0.0);
@@ -55,7 +55,7 @@ CHECK(TRegularData1D(const IndexType& size) throw(Exception::OutOfMemory))
 	TEST_REAL_EQUAL(rd.getSpacing(), 0.25);
 RESULT
 
-CHECK(TRegularData1D(const VectorType& data, const CoordinateType& origin = 0.0, const CoordinateType& dimension = 1.0) throw(Exception::OutOfMemory))
+CHECK(TRegularData1D(const VectorType& data, const CoordinateType& origin = 0.0, const CoordinateType& dimension = 1.0))
 	RegularData1D::VectorType v;
 	v.push_back(1.1);
 	v.push_back(1.2);
@@ -137,7 +137,7 @@ CHECK(void clear() throw())
 RESULT
 
 
-CHECK(const TRegularData1D& operator = (const TRegularData1D<ValueType>& data) throw(Exception::OutOfMemory))
+CHECK(const TRegularData1D& operator = (const TRegularData1D<ValueType>& data))
 	rd.resize(2);
 	rd.setOrigin(1.1);
 	rd.setDimension(2.1);
@@ -152,7 +152,7 @@ CHECK(const TRegularData1D& operator = (const TRegularData1D<ValueType>& data) t
 RESULT
 
 
-CHECK(const TRegularData1D& operator = (const VectorType& data) throw(Exception::OutOfMemory))
+CHECK(const TRegularData1D& operator = (const VectorType& data))
 	RegularData1D::VectorType v;
 	v.push_back(1.1);
 	v.push_back(1.2);
@@ -201,7 +201,7 @@ CHECK(const ValueType& operator [] (const IndexType& index) const throw())
   TEST_REAL_EQUAL(rd[3], 1.4)
 RESULT
 
-CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::OutOfGrid))
+CHECK(const ValueType& getData(const IndexType& index) const)
 	TEST_REAL_EQUAL(rd.getData(0), 1.1)
 	TEST_REAL_EQUAL(rd.getData(1), 1.2)
 	TEST_REAL_EQUAL(rd.getData(2), 1.3)
@@ -222,7 +222,7 @@ CHECK(ValueType& operator [] (const IndexType& index) throw())
 RESULT
 
 
-CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
+CHECK(ValueType& getData(const IndexType& index))
 	rd.getData(0) = 3.1;
 	TEST_REAL_EQUAL(rd.getData(0), 3.1)
 	rd.getData(1) = 3.2;
@@ -267,7 +267,7 @@ CHECK(TRegularData1D::setOrigin())
 	TEST_REAL_EQUAL(rd.getDimension(), -99.9)
 RESULT
 
-CHECK(void resize(const IndexType& size) throw(Exception::OutOfMemory))
+CHECK(void resize(const IndexType& size))
 	TEST_EQUAL(rd.getSize(), 4)
 	rd.resize(99);
 	TEST_EQUAL(rd.getSize(), 99)

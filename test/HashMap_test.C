@@ -60,7 +60,7 @@ CHECK(T& operator [] (const Key& key) throw())
 	TEST_EQUAL(hm[5], 32)
 RESULT
 
-CHECK(const T& operator [] (const Key& key) const throw(typename HashMap<Key, T>::IllegalKey))
+CHECK(const T& operator [] (const Key& key) const)
 	HashMap<int, int> hm;
 	hm[0] = 0;
 	hm[0] = 1;

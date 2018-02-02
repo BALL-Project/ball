@@ -101,7 +101,7 @@ Substring test_sub1(ABCDEF, 0, 6);
 Substring test_sub2;
 String test_string;
 
-CHECK(void set(const String& string, Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(void set(const String& string, Index from = 0, Size len = EndPos))
 	s2 = new String("AAAA");
 	s2->set(halloh);
 	TEST_EQUAL(*s2, halloh)
@@ -118,7 +118,7 @@ CHECK(void set(const String& string, Index from = 0, Size len = EndPos) throw(Ex
 RESULT
 delete s2;
 
-CHECK(void set(const char* char_ptr, Index from = 0, Size len = EndPos) throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(void set(const char* char_ptr, Index from = 0, Size len = EndPos))
 	s2 = new String("AAAA");
 	s2->set("halloh");
 	TEST_EQUAL(*s2, "halloh")
@@ -135,7 +135,7 @@ CHECK(void set(const char* char_ptr, Index from = 0, Size len = EndPos) throw(Ex
 RESULT
 delete s2;
 
-CHECK(void set(Size buffer_size, const char *format, ...) throw(Exception::IndexUnderflow, Exception::NullPointer))
+CHECK(void set(Size buffer_size, const char *format, ...))
 	s2 = new String;
 	s2->set(15, "%s", "halloh");
 	TEST_EQUAL(*s2, "halloh")
@@ -234,7 +234,7 @@ CHECK(void set(double d) throw())
 	TEST_REAL_EQUAL(atof(s2->c_str()), -1.2)
 RESULT
 
-CHECK(void get(char* char_ptr, Index from = 0, Size len = EndPos) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(void get(char* char_ptr, Index from = 0, Size len = EndPos) const)
 	char test_string[15];
 	s2->set("TEST");
 	s2->get(test_string);
@@ -267,7 +267,7 @@ CHECK(const String& operator = (const String& s) throw())
 	TEST_EQUAL(s4, s6)
 RESULT
 
-CHECK(const String& operator = (const char* pc) throw(Exception::NullPointer))
+CHECK(const String& operator = (const char* pc))
 	s4 = "TestTestTestTest";
 	TEST_EQUAL(s4, "TestTestTestTest")
 	s4 = "";

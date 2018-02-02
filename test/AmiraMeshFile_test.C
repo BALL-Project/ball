@@ -31,7 +31,7 @@ CHECK(~AmiraMeshFile() throw())
 RESULT
 
 
-CHECK(AmiraMeshFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(AmiraMeshFile(const String& filename, File::OpenMode open_mode = std::ios::in))
 	AmiraMeshFile f(BALL_TEST_DATA_PATH(test_ascii.am), std::ios::in);
 	RegularData3D map;
 	f.read(map);
@@ -39,7 +39,7 @@ CHECK(AmiraMeshFile(const String& filename, File::OpenMode open_mode = std::ios:
 RESULT
 
 
-CHECK(bool open(const String& name, File::OpenMode open_mode) throw(Exception::FileNotFound))
+CHECK(bool open(const String& name, File::OpenMode open_mode))
 	AmiraMeshFile f5;
 	bool f5_result = f5.open(BALL_TEST_DATA_PATH(test_ascii.am), std::ios::in | std::ios::binary);
 	TEST_EQUAL(f5_result, true)
@@ -56,7 +56,7 @@ CHECK(bool readHeader())
 	TEST_EQUAL(f3_result, true)
 RESULT
 
-CHECK(bool read(RegularData3D& map) throw(Exception::ParseError))
+CHECK(bool read(RegularData3D& map))
 	AmiraMeshFile f(BALL_TEST_DATA_PATH(test_ascii.am));
 	RegularData3D map;
 	f.read(map);

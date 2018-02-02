@@ -71,7 +71,7 @@ CHECK(void addVariants(const SiteIterator& it, const VariantVector& variants))
 	TEST_EQUAL(enumerator.countVariants(), 100000)
 RESULT
 
-CHECK(void createCombination(const Position index) throw(Exception::IndexOverflow))
+CHECK(void createCombination(const Position index))
 	for (Position i = 0; i < enumerator.countVariants(); i++) 
 	{
 		enumerator.createCombination(i); 
@@ -81,7 +81,7 @@ CHECK(void createCombination(const Position index) throw(Exception::IndexOverflo
 	}
 RESULT
 
-CHECK(void createCombination(const EnumeratorIndex& index) throw(EnumeratorIndex::IncompatibleIndex))
+CHECK(void createCombination(const EnumeratorIndex& index))
 	for (Position i = 0; i < enumerator.countVariants(); i++) 
 	{
 		enumerator.createCombination(i); 

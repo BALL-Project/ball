@@ -61,7 +61,7 @@ RESULT
 
 CHECK(PiecewiseFunction(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs) throw())
 	PiecewiseFunction PWF2(intervals, coefs);
-	// Unter der Annahme, daÿ operator== für std::vector definiert ist und
+	// Unter der Annahme, daï¿½ operator== fï¿½r std::vector definiert ist und
 	// funktioniert.
 	bool test = (PWF2.getIntervals() == intervals);
 	TEST_EQUAL(test, true);
@@ -115,7 +115,7 @@ CHECK(void setIntervals(const std::vector<Interval>& intervals) throw())
 RESULT
 
 
-CHECK(const Interval& getInterval(double x) const throw(Exception::OutOfRange))
+CHECK(const Interval& getInterval(double x) const)
 	PiecewiseFunction PWF2(intervals, coefs);
 	TEST_REAL_EQUAL(PWF2.getInterval(0.5).first, 0.0)
 	TEST_REAL_EQUAL(PWF2.getInterval(0.5).second, 1.0)
@@ -124,7 +124,7 @@ CHECK(const Interval& getInterval(double x) const throw(Exception::OutOfRange))
 RESULT
 
 
-CHECK(const Interval& getInterval(Position index) const throw(Exception::IndexOverflow))
+CHECK(const Interval& getInterval(Position index) const)
 	PiecewiseFunction PWF2(intervals, coefs);
 	Position index = 1;
 	TEST_REAL_EQUAL(PWF2.getInterval(index).first, 1.0)
@@ -132,7 +132,7 @@ CHECK(const Interval& getInterval(Position index) const throw(Exception::IndexOv
 RESULT
 
 
-CHECK(Position getIntervalIndex(double x) const throw(Exception::OutOfRange))
+CHECK(Position getIntervalIndex(double x) const)
 	PiecewiseFunction PWF2(intervals, coefs);
 	TEST_EQUAL(PWF2.getIntervalIndex(0.5), 0)
 RESULT
@@ -154,7 +154,7 @@ CHECK(void setCoefficients(const vector<Coefficients>& coefficients) throw())
 RESULT
 
 
-CHECK(const Coefficients& getCoefficients(double x) const throw(Exception::OutOfRange))
+CHECK(const Coefficients& getCoefficients(double x) const)
 	PiecewiseFunction PWF2;
 	PWF2.setCoefficients(coefs);
 	Coefficients cf;
@@ -166,7 +166,7 @@ CHECK(const Coefficients& getCoefficients(double x) const throw(Exception::OutOf
 RESULT
 
 
-CHECK(const Coefficients& getCoefficients(Position index) const throw(Exception::IndexOverflow))
+CHECK(const Coefficients& getCoefficients(Position index) const)
 	PiecewiseFunction PWF2;
 	PWF2.setCoefficients(coefs);
 	Position index = 0;

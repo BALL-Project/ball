@@ -115,7 +115,7 @@ CHECK(TMatrix4x4(const TMatrix4x4& m) throw())
 	TEST_EQUAL(m == m1 , true)
 RESULT
 
-CHECK(TMatrix4x4(const T* ptr) throw(Exception::NullPointer))
+CHECK(TMatrix4x4(const T* ptr))
 	float arr[16];
 	for (int i = 0; i <16; i++ )
 	{
@@ -126,7 +126,7 @@ CHECK(TMatrix4x4(const T* ptr) throw(Exception::NullPointer))
 	TEST_EXCEPTION(Exception::NullPointer, m1 = Matrix4x4((float*)0))
 RESULT
 
-CHECK(TMatrix4x4(const T ptr[4][4]) throw(Exception::NullPointer))
+CHECK(TMatrix4x4(const T ptr[4][4]))
 	float v[4][4];
 	int pos = 1;
 	for (int i=0; i<4; i++ )
@@ -147,7 +147,7 @@ CHECK(TMatrix4x4(const TVector4<T>& col1, const TVector4<T>& col2, const TVector
 	TEST_EQUAL(m == m1 , true)
 RESULT
 
-CHECK(void set(const T* ptr) throw(Exception::NullPointer))
+CHECK(void set(const T* ptr))
 	m1 = Matrix4x4();
 	
 	float arr[16];
@@ -162,7 +162,7 @@ CHECK(void set(const T* ptr) throw(Exception::NullPointer))
 RESULT
 
 
-CHECK(void set(const T ptr[4][4]) throw(Exception::NullPointer))
+CHECK(void set(const T ptr[4][4]))
 	m1 = Matrix4x4();
 	float v[4][4];
 	int pos = 1;
@@ -198,7 +198,7 @@ CHECK(void set(const T& m11, const T& m12, const T& m13, const T& m14, const T& 
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4& operator = (const T* ptr) throw(Exception::NullPointer))
+CHECK(TMatrix4x4& operator = (const T* ptr))
 	m1 = Matrix4x4();
 	float arr[16];
 	for (int i = 0; i <16; i++ )
@@ -209,7 +209,7 @@ CHECK(TMatrix4x4& operator = (const T* ptr) throw(Exception::NullPointer))
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4& operator = (const T ptr[4][4]) throw(Exception::NullPointer))
+CHECK(TMatrix4x4& operator = (const T ptr[4][4]))
 	m1 = Matrix4x4();
 	float v[4][4];
 	int pos = 1;
@@ -231,7 +231,7 @@ CHECK(TMatrix4x4& operator = (const TMatrix4x4& m) throw())
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(void get(T* ptr) const throw(Exception::NullPointer))
+CHECK(void get(T* ptr) const)
 	m1 = Matrix4x4();
 	float arr[16];
 	m.get(arr);
@@ -240,7 +240,7 @@ CHECK(void get(T* ptr) const throw(Exception::NullPointer))
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
 
-CHECK(void get(T ptr[4][4]) const throw(Exception::NullPointer))
+CHECK(void get(T ptr[4][4]) const)
 	m1 = Matrix4x4();
 	float arr[4][4];
 	m.get(arr);
@@ -323,14 +323,14 @@ CHECK(void transpose() throw())
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TVector4<T> getRow(Position row) const throw(Exception::IndexOverflow))
+CHECK(TVector4<T> getRow(Position row) const)
 	m1 = Matrix4x4(m);
 	vx = m1.getRow(0);
 	TEST_EQUAL(vx , v)
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.getRow(4))
 RESULT
 
-CHECK(TVector4<T> getColumn(Position col) const throw(Exception::IndexOverflow))
+CHECK(TVector4<T> getColumn(Position col) const)
 	m1 = Matrix4x4(m);
 	vx = m1.getColumn(0);
 	vy = Vector4(1.0, 5.0, 9.0, 13.0);
@@ -338,7 +338,7 @@ CHECK(TVector4<T> getColumn(Position col) const throw(Exception::IndexOverflow))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.getColumn(4))
 RESULT
 
-CHECK(void setRow(Position row, const TVector4<T>& row_value) throw(Exception::IndexOverflow))
+CHECK(void setRow(Position row, const TVector4<T>& row_value))
 	Vector4 x(0.1, 0.2, 0.3, 0.4);
 	m1 = Matrix4x4(m);
 	m1.setRow(0, x);
@@ -348,7 +348,7 @@ CHECK(void setRow(Position row, const TVector4<T>& row_value) throw(Exception::I
 RESULT
 
 
-CHECK(void setColumn(Position col, const TVector4<T>& col_value) throw(Exception::IndexOverflow))
+CHECK(void setColumn(Position col, const TVector4<T>& col_value))
 	Vector4 x(0.1, 0.2, 0.3, 0.4);
 	m1 = Matrix4x4(m);
 	m1.setColumn(0, x);
@@ -363,7 +363,7 @@ CHECK(TVector4<T> getDiagonal() const throw())
 	TEST_EQUAL(vx , vy)
 RESULT
 
-CHECK(const T& operator () (Position row, Position col) const throw(Exception::IndexOverflow))
+CHECK(const T& operator () (Position row, Position col) const)
 	const Matrix4x4& c_m1 = const_cast<const Matrix4x4&>(m1);
 	TEST_REAL_EQUAL(c_m1(0, 0), m1.m11)
 	TEST_REAL_EQUAL(c_m1(0, 1), m1.m12)
@@ -388,7 +388,7 @@ CHECK(const T& operator () (Position row, Position col) const throw(Exception::I
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, std::numeric_limits<Position>::max()))
 RESULT
 
-CHECK(T& operator () (Position row, Position col) throw(Exception::IndexOverflow))
+CHECK(T& operator () (Position row, Position col))
 	TEST_REAL_EQUAL(m1(0, 0), m1.m11)
 	TEST_REAL_EQUAL(m1(0, 1), m1.m12)
 	TEST_REAL_EQUAL(m1(0, 2), m1.m13)
@@ -412,7 +412,7 @@ CHECK(T& operator () (Position row, Position col) throw(Exception::IndexOverflow
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, std::numeric_limits<Position>::max()))
 RESULT
 
-CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
+CHECK(const T& operator [] (Position position) const)
 	const Matrix4x4& c_m1 = const_cast<const Matrix4x4&>(m1);
 	TEST_REAL_EQUAL(c_m1[0], m1.m11)
 	TEST_REAL_EQUAL(c_m1[1], m1.m12)
@@ -436,7 +436,7 @@ CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverf
 RESULT
 
 
-CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
+CHECK(T& operator [] (Position position))
 	TEST_REAL_EQUAL(m1[0] , m1.m11)
 	TEST_REAL_EQUAL(m1[1] , m1.m12)
 	TEST_REAL_EQUAL(m1[2] , m1.m13)

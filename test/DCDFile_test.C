@@ -250,7 +250,7 @@ CHECK(bool append(const SnapShot& snapshot) throw())
 RESULT
 
 
-CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CannotWrite))
+CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer))
 	vector<SnapShot> v;
 	v.push_back(ss);
 	TEST_EQUAL(ss.getNumberOfAtoms(), 892)
@@ -288,7 +288,7 @@ CHECK(bool isSwappingBytes() const throw())
 	d.isSwappingBytes();
 RESULT
 
-CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in))
 	DCDFile dcd;
 	TEST_EXCEPTION(Exception::FileNotFound, dcd.open("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", std::ios::in))
 RESULT

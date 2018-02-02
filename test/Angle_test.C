@@ -255,19 +255,19 @@ CHECK(TAngle operator * (const T& value) throw())
 	TEST_REAL_EQUAL((float)5.0, b)
 RESULT
 
-CHECK(TAngle& operator /= (const TAngle& angle) throw(Exception::DivisionByZero))
+CHECK(TAngle& operator /= (const TAngle& angle))
 	b = Angle(1);
 	b /= a;
 	TEST_REAL_EQUAL(2, b )
 RESULT
 
-CHECK(TAngle& operator /= (const T& val) throw(Exception::DivisionByZero))
+CHECK(TAngle& operator /= (const T& val))
 	b = Angle(1);
 	b /= 0.5;
 	TEST_REAL_EQUAL(2, b )
 RESULT
 
-CHECK(TAngle operator / (const TAngle& val) throw(Exception::DivisionByZero))
+CHECK(TAngle operator / (const TAngle& val))
 	b = Angle(1);
 	Angle denom (0.5);
 	b = b / denom;

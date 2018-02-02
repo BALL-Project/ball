@@ -125,7 +125,7 @@ CHECK(CompositeIteratorTraits(const CompositeIteratorTraits& traits) throw())
 	TEST_EQUAL((cit1 == cit2), true)
 RESULT
 
-CHECK(void toBegin() throw(Exception::Precondition))
+CHECK(void toBegin())
 	CompositeIteratorTraits cit(a);
 	MyPred p(c);
 	cit.setPredicate(p);
@@ -135,7 +135,7 @@ CHECK(void toBegin() throw(Exception::Precondition))
 	TEST_EQUAL((&cit.getData() == &c), true)
 RESULT
 
-CHECK(void toEnd() throw(Exception::Precondition))
+CHECK(void toEnd())
 	CompositeIteratorTraits cit(a);
 	cit.toEnd();
 	// TEST_EQUAL((BLUBB == &f), true)
@@ -311,7 +311,7 @@ CHECK(void setPredicate(const UnaryPredicate<Composite>& predicate) throw())
 	TEST_EQUAL(cit.getPredicate(), &c_predicate)
 RESULT
 
-CHECK(void toRBegin() throw(Exception::Precondition))
+CHECK(void toRBegin())
   CompositeIteratorTraits cit(a);
 	True tp;
 	cit.setPredicate(tp);
@@ -320,7 +320,7 @@ CHECK(void toRBegin() throw(Exception::Precondition))
 	TEST_EQUAL(cit.isRBegin(), true)
 RESULT
 
-CHECK(void toREnd() throw(Exception::Precondition))
+CHECK(void toREnd())
   CompositeIteratorTraits cit(a);
 	True tp;
 	cit.setPredicate(tp);

@@ -23,7 +23,7 @@ String* s2;
 String s4;
 String s5;
 
-CHECK([EXTRA]bool operator == (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK([EXTRA]bool operator == (const char* char_ptr) const)
 	s5 = "abc";
 	TEST_EQUAL((s5 == "abc"), true)
 	TEST_EQUAL((s5 == "abd"), false)
@@ -39,7 +39,7 @@ CHECK([EXTRA]bool operator == (const char* char_ptr) const throw(Exception::Null
 	TEST_EQUAL((s5 == ""), true)
 RESULT
 
-CHECK(bool operator != (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK(bool operator != (const char* char_ptr) const)
 	s5 = "abc";
 	TEST_EQUAL((s5 != "abc"), false)
 	TEST_EQUAL((s5 != "abd"), true)
@@ -55,7 +55,7 @@ CHECK(bool operator != (const char* char_ptr) const throw(Exception::NullPointer
 	TEST_EQUAL((s5 != ""), false)
 RESULT
 
-CHECK(bool operator < (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK(bool operator < (const char* char_ptr) const)
 	s5 = "abc";
 	TEST_EQUAL((s5 < "abc"), false)
 	TEST_EQUAL((s5 < "abd"), true)
@@ -71,7 +71,7 @@ CHECK(bool operator < (const char* char_ptr) const throw(Exception::NullPointer)
 	TEST_EQUAL((s5 < ""), false)
 RESULT
 
-CHECK(bool operator <= (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK(bool operator <= (const char* char_ptr) const)
 	s5 = "abc";
 	TEST_EQUAL((s5 <= "abc"), true)
 	TEST_EQUAL((s5 <= "abd"), true)
@@ -87,7 +87,7 @@ CHECK(bool operator <= (const char* char_ptr) const throw(Exception::NullPointer
 	TEST_EQUAL((s5 <= ""), true)
 RESULT
 
-CHECK(bool operator > (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK(bool operator > (const char* char_ptr) const)
 	s5 = "abc";
 	TEST_EQUAL((s5 > "abc"), false)
 	TEST_EQUAL((s5 > "abd"), false)
@@ -103,7 +103,7 @@ CHECK(bool operator > (const char* char_ptr) const throw(Exception::NullPointer)
 	TEST_EQUAL((s5 > ""), false)
 RESULT
 
-CHECK(bool operator >= (const char* char_ptr) const throw(Exception::NullPointer))
+CHECK(bool operator >= (const char* char_ptr) const)
 	s5 = "abc";
 	TEST_EQUAL((s5 >= "abc"), true)
 	TEST_EQUAL((s5 >= "abd"), false)
@@ -279,7 +279,7 @@ CHECK(friend std::istream& getline(std::istream& s, String& string, char delimit
 	TEST_EQUAL(s, "")
 RESULT
 
-CHECK(Substring operator () (Index from, Size len = EndPos) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(Substring operator () (Index from, Size len = EndPos) const)
 	s4 = "abcdef";
 	Substring sub((Substring)s4);
 	TEST_EQUAL(sub.toString(), s4)

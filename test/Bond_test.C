@@ -47,7 +47,7 @@ CHECK(Bond(const Bond& bond, bool deep = true) throw())
 	TEST_EQUAL(b1.getFirstAtom(), &a2);
 RESULT		
 
-CHECK(Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER, Type type = BALL_BOND_DEFAULT_TYPE) throw(TooManyBonds))
+CHECK(Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER, Type type = BALL_BOND_DEFAULT_TYPE))
 	Atom a1;
 	Atom a2;
 	Bond b1("name", a1, a2, 1, 2);
@@ -58,7 +58,7 @@ CHECK(Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BON
 	TEST_EQUAL(b1.getType(), 2)
 RESULT
 
-CHECK(static Bond* createBond(Bond& bond, Atom& first, Atom& second) throw(TooManyBonds))
+CHECK(static Bond* createBond(Bond& bond, Atom& first, Atom& second))
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -265,7 +265,7 @@ CHECK(Type getType() const throw())
 	TEST_EQUAL(b1.getType(), 0)
 RESULT
 
-CHECK(float getLength() const throw(NotBound))
+CHECK(float getLength() const)
 	Atom a1;
 	Atom a2;
 	a1.setPosition(Vector3(1.0, 1.0, 1.0));
@@ -396,7 +396,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Bond_test.txt))
 RESULT
 
-CHECK(void finalize() throw(Exception::GeneralException))
+CHECK(void finalize())
 	Atom a1;
 	Atom a2;
 	Atom a3;
@@ -422,7 +422,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom a1;
 	a1.setName("a1");
@@ -434,7 +434,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	ofile.close();
 RESULT
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();

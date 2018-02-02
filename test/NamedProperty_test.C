@@ -157,7 +157,7 @@ using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
 
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const)
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -206,7 +206,7 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = "") const 
 	delete np;
 RESULT
 
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	NamedProperty np;
 	PersistentObject* ptr;
 	ifstream  ifile(BALL_TEST_DATA_PATH(PropertyManager_test/NamedProperty_test_Float1.txt));

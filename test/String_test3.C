@@ -122,7 +122,7 @@ CHECK(unsigned char toUnsignedChar() const throw())
 	TEST_EQUAL(s4.toChar(), (unsigned char)0)
 RESULT
 
-CHECK(short toShort() const throw(Exception::InvalidFormat))
+CHECK(short toShort() const)
 	s4.set("123");
 	TEST_EQUAL(s4.toShort(), (short)123)
 	s4.set("abc");
@@ -155,7 +155,7 @@ CHECK(short toShort() const throw(Exception::InvalidFormat))
 	TEST_EXCEPTION(Exception::InvalidFormat, x = s4.toShort())
 RESULT
 
-CHECK(unsigned short toUnsignedShort() const throw(Exception::InvalidFormat))
+CHECK(unsigned short toUnsignedShort() const)
 	s4.set("123");
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)123)
 	s4.set("abc");
@@ -168,7 +168,7 @@ CHECK(unsigned short toUnsignedShort() const throw(Exception::InvalidFormat))
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedShort())
 RESULT
 
-CHECK(int toInt() const throw(Exception::InvalidFormat))
+CHECK(int toInt() const)
 	s4.set("123");
 	TEST_EQUAL(s4.toInt(), (int)123)
 	s4.set("abc");
@@ -179,7 +179,7 @@ CHECK(int toInt() const throw(Exception::InvalidFormat))
 	TEST_EQUAL(s4.toInt(), (int)12)
 RESULT
 
-CHECK(unsigned int toUnsignedInt() const throw(Exception::InvalidFormat))
+CHECK(unsigned int toUnsignedInt() const)
 	s4.set("123");
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)123)
 	s4.set("abc");
@@ -190,7 +190,7 @@ CHECK(unsigned int toUnsignedInt() const throw(Exception::InvalidFormat))
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12.34)
 RESULT
 
-CHECK(long toLong() const throw(Exception::InvalidFormat))
+CHECK(long toLong() const)
 	s4.set("123.4");
 	TEST_EQUAL(s4.toLong(),(long)123.4)
 	s4.set("abc");
@@ -201,7 +201,7 @@ CHECK(long toLong() const throw(Exception::InvalidFormat))
 	TEST_EQUAL(s4.toLong(), (long)-12.34)
 RESULT
 
-CHECK(unsigned long toUnsignedLong() const throw(Exception::InvalidFormat))
+CHECK(unsigned long toUnsignedLong() const)
 	s4.set("123.4");
 	TEST_EQUAL(s4.toUnsignedLong(),(unsigned long)123.4)
 	s4.set("abc");
@@ -210,7 +210,7 @@ CHECK(unsigned long toUnsignedLong() const throw(Exception::InvalidFormat))
 	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
 RESULT
 
-CHECK(float toFloat() const throw(Exception::InvalidFormat))
+CHECK(float toFloat() const)
 	PRECISION(0.01)
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toFloat(),(float)123.4)
@@ -228,7 +228,7 @@ CHECK(float toFloat() const throw(Exception::InvalidFormat))
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toFloat())
 RESULT
 
-CHECK(double toDouble() const throw(Exception::InvalidFormat))
+CHECK(double toDouble() const)
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toDouble(),(double)123.4)
 	s4.set("abc");
@@ -245,7 +245,7 @@ CHECK(double toDouble() const throw(Exception::InvalidFormat))
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toDouble())
 RESULT
 
-CHECK(void toLower(Index from = 0, Size len = EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(void toLower(Index from = 0, Size len = EndPos))
 	s4 = "abCD efGH";
 	s4.toLower();
 	TEST_EQUAL(s4, "abcd efgh")

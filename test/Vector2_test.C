@@ -54,7 +54,7 @@ CHECK(void clear() throw())
 	TEST_EQUAL(v1, v2)
 RESULT
 
-CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
+CHECK(const T& operator [] (Position position) const)
 	v = Vector2(1.0, 2.0);
 	const Vector2& c_v(v);
 	TEST_REAL_EQUAL(c_v[0], 1.0)
@@ -87,7 +87,7 @@ using std::ofstream;
 using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
 	Vector2 v(1.0, 2.0);
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), std::ios::out);
@@ -99,7 +99,7 @@ RESULT
 
 using std::ifstream;
 using std::cout;
-CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
+CHECK(void persistentRead(PersistenceManager& pm))
 	ifstream  ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject* ptr;
@@ -144,7 +144,7 @@ CHECK(TVector2& operator = (const TVector2& v) throw())
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(TVector2& operator = (const T* ptr) throw(Exception::NullPointer))
+CHECK(TVector2& operator = (const T* ptr))
 	v2 = Vector2(1.0, 2.0);
 	float x[2] = {1.0, 2.0};
 	v  = Vector2();
@@ -174,7 +174,7 @@ CHECK(T getSquareLength() const throw())
 	TEST_REAL_EQUAL(v.getSquareLength(), 0.0)
 RESULT
 
-CHECK(TVector2& normalize() throw(Exception::DivisionByZero))
+CHECK(TVector2& normalize())
 	v = Vector2(4.0, 9.0);
 	v.normalize();
 	float erg = ::sqrt (4.0 * 4.0 + 9.0 * 9.0);
@@ -194,7 +194,7 @@ CHECK(static const TVector2& getUnit() throw())
 	TEST_REAL_EQUAL(Vector2::getUnit().y, 1.0)
 RESULT
 
-CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
+CHECK(T& operator [] (Position position))
 	v = Vector2(1.0, 2.0);
 	v[0]=5.0;	v[1]=6.0;	
 	TEST_REAL_EQUAL(v[0], 5.0)
@@ -254,7 +254,7 @@ CHECK(TVector2& operator *= (const T& scalar) throw())
 	TEST_REAL_EQUAL(v[1], 4.0)
 RESULT
 
-CHECK(TVector2 operator / (const T& lambda) const throw(Exception::DivisionByZero))
+CHECK(TVector2 operator / (const T& lambda) const)
 	v  = Vector2(1.0, 2.0);
 	v = v / 0.5;
 	TEST_REAL_EQUAL(v[0], 2.0)
@@ -262,7 +262,7 @@ CHECK(TVector2 operator / (const T& lambda) const throw(Exception::DivisionByZer
 	TEST_EXCEPTION(Exception::DivisionByZero, v = v / 0)
 RESULT
 
-CHECK(TVector2& operator /= (const T& lambda) throw(Exception::DivisionByZero))
+CHECK(TVector2& operator /= (const T& lambda))
 	v  = Vector2(1.0, 2.0);
 	v /= 0.5;
 	TEST_REAL_EQUAL(v[0], 2.0)

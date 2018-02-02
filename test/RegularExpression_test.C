@@ -105,7 +105,7 @@ CHECK(Size countSubexpressions() const throw())
 	TEST_EQUAL(re2.countSubexpressions(), 2);
 RESULT
 
-CHECK(static bool match(const char* text, const char* pattern, int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0) throw(Exception::NullPointer))
+CHECK(static bool match(const char* text, const char* pattern, int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0))
 	char* c = 0;
 	TEST_EXCEPTION(Exception::NullPointer, RegularExpression::match(c, "a*bd"))
 	TEST_EXCEPTION(Exception::NullPointer, RegularExpression::match("a*bd", c))
@@ -121,7 +121,7 @@ CHECK(static bool match(const char* text, const char* pattern, int compile_flags
 	TEST_EQUAL(RegularExpression::match("abbcbbd", "a[BC]+d"), false)
 RESULT
 
-CHECK(bool match(const String& text, Index from = 0, int execute_flags = 0) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool match(const String& text, Index from = 0, int execute_flags = 0) const)
 	re2.set("a[bc]+d");
 	String s = "abbcbbd";
 	TEST_EQUAL(re2.isValid(), true)
@@ -132,7 +132,7 @@ CHECK(bool match(const String& text, Index from = 0, int execute_flags = 0) cons
 	TEST_EQUAL(re2.match(s), true)
 RESULT
 
-CHECK(bool match(const Substring& text, Index from = 0, int execute_flags = 0) const throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool match(const Substring& text, Index from = 0, int execute_flags = 0) const)
 	re2.set("a[bc]+d");
 	String s = "abbcbbd";
 	Substring ss;
@@ -141,12 +141,12 @@ CHECK(bool match(const Substring& text, Index from = 0, int execute_flags = 0) c
 	TEST_EQUAL(re2.match(ss, 1, 0), false)
 RESULT
 
-CHECK(bool match(const char* text, int execute_flags = 0) const throw(Exception::NullPointer))
+CHECK(bool match(const char* text, int execute_flags = 0) const)
 	const char* s = "abbcbbd";
 	TEST_EQUAL(re2.match(s), true)
 RESULT
 
-CHECK(bool find(const String& text, Substring& found, Index from = 0, int execute_flags = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool find(const String& text, Substring& found, Index from = 0, int execute_flags = 0) const)
 	Substring sub;
 	String text("1234ABC123");
 	RegularExpression re("[A-Z]+");
@@ -159,7 +159,7 @@ CHECK(bool find(const String& text, Substring& found, Index from = 0, int execut
 	TEST_EQUAL(text, "1234123")
 RESULT
 
-CHECK(bool find(const String& text, vector<Substring>& subexpressions, Index from = 0, int execute_flags = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(bool find(const String& text, vector<Substring>& subexpressions, Index from = 0, int execute_flags = 0) const)
 	re2.set("(bb).*(bd)");
 	String s = "abbcbbd";
 	vector<Substring> ss;

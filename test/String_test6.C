@@ -227,7 +227,7 @@ CHECK(static bool isSpace(char c) throw())
 	}
 RESULT
 
-CHECK(int compare(const String& string, Index from = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(int compare(const String& string, Index from = 0) const)
 	s4 = "abc";
 	String s5 = "abc";
 	TEST_EQUAL(s4.compare(s5), 0)
@@ -258,7 +258,7 @@ CHECK(int compare(const String& string, Index from = 0) const throw(Exception::I
 	TEST_NOT_EQUAL(s4.compare(s5, 0), 0)
 RESULT
 
-CHECK(int compare(const String& string, Index from, Size len) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
+CHECK(int compare(const String& string, Index from, Size len) const)
 	s4 = "abc";
 	String s5 = "abc";
 	TEST_EQUAL(s4.compare(s5, 0, 1), 0)
