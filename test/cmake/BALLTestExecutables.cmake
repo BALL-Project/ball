@@ -118,12 +118,6 @@ SET(BALL_DOCKING_TESTS
 	PoseClustering_test3
 )
 
-IF(BALL_HAS_FFTW)
-	LIST(APPEND BALL_DOCKING_TESTS
-		GeometricFit_test
-	)
-ENDIF()
-
 SET(BALL_SCORING_TESTS
 	ScoringFunction_test
 )
