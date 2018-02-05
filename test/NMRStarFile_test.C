@@ -453,7 +453,7 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 		NMRStarFile::NMRAtomData const& nmr_atom = nmr_file.getNMRData()[0].atom_data[0];
 		Atom const* atom = mapper.getBALLAtom(nmr_atom); 
 
-		TEST_NOT_EQUAL(atom, NULL)
+		TEST_EQUAL(atom != NULL, true)
 		TEST_EQUAL(atom->getName(), "HA")
 
 		if (atom)
@@ -467,7 +467,7 @@ CHECK(bool assignShifts(BALLToBMRBMapper& ball_to_bmrb_mapping))
 		NMRStarFile::NMRAtomData const& nmr_atom2 = nmr_file.getNMRData()[0].atom_data[22];
 		Atom const* atom2 = mapper.getBALLAtom(nmr_atom2);
 
-		TEST_NOT_EQUAL(atom2, NULL)
+		TEST_EQUAL(atom2 != NULL, true)
 		TEST_EQUAL(atom2->getName(), "N")
 
 		if (atom2)
