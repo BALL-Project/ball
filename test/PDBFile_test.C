@@ -447,8 +447,10 @@ CHECK(bool readInvalidRecord(const char* line))
 RESULT
 
 CHECK(bool readLine(char* line, Size size, bool extract_values))
- TEST_EQUAL(empty.readLine("addcasdasdasdqawe", 12, true), true) 
- TEST_EQUAL(empty.readLine("addcasda", 1, false), true) 
+	char nonsense[] = "addcasdasdasdqawe";
+	TEST_EQUAL(empty.readLine(nonsense, 12, true), true)
+	char more_nonsense[] = "addcasda";
+ 	TEST_EQUAL(empty.readLine(more_nonsense, 1, false), true)
 RESULT
 
 CHECK(bool readNextRecord(bool read_values = true))
@@ -457,16 +459,16 @@ CHECK(bool readNextRecord(bool read_values = true))
 RESULT
 
 // this is just a test if the types compile
-PDB::Integer my_int;
-PDB::Atom my_atom;
-PDB::Character my_character;
-PDB::ResidueName my_residue_name;
-PDB::AChar my_achar;
-PDB::LString4 my_lstring4;
-PDB::LString2 my_lstring2 = "  ";
-PDB::Real my_real = 0;
-PDB::Continuation my_cont = 0;
-PDB::PDBList my_list;
+PDB::Integer my_int;              (void) my_int;
+PDB::Atom my_atom = "    ";       (void) my_atom;
+PDB::Character my_character;      (void) my_character;
+PDB::ResidueName my_residue_name; (void) my_residue_name;
+PDB::AChar my_achar;              (void) my_achar;
+PDB::LString4 my_lstring4;        (void) my_lstring4;
+PDB::LString2 my_lstring2 = "  "; (void) my_lstring2;
+PDB::Real my_real = 0;            (void) my_real;
+PDB::Continuation my_cont = 0;    (void) my_cont;
+PDB::PDBList my_list;             (void) my_list;
 
 CHECK(bool readRecords())
   TEST_EQUAL(empty.readRecords(), true)
