@@ -1,5 +1,5 @@
 %{
-#include <math.h>
+#include <cmath>
 #include <BALL/MATHS/parsedFunction.h>
 
 using namespace BALL;

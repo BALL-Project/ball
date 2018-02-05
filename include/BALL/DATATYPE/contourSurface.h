@@ -22,7 +22,6 @@
 #endif
 
 #include <vector>
-#include <math.h>
 
 namespace BALL
 {

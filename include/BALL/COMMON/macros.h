@@ -10,7 +10,7 @@
 #include <BALL/COMMON/rtti.h>
 
 #include <chrono>    // std::chrono::seconds
-#include <math.h>    // needed for fabs
+#include <cmath>     // needed for fabs
 #include <thread>    // std::this_thread::sleep_for
 #include <typeinfo>  // needed for typeid
 
@@ -85,13 +85,13 @@ namespace BALL
 	template<class X, class Y, class E>
 	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_equal(X x, Y y, E e)
 	{
-		return fabs(x - y) <= e;
+		return std::fabs(x - y) <= e;
 	}
 
 	template<class X, class Y, class E>
 	bool BALL_DEPRECATED BALL_INLINE ball_macro_real_not_equal(X x, Y y, E e)
 	{
-		return fabs(x - y) > e;
+		return std::fabs(x - y) > e;
 	}
 
 	template<class X, class Y, class E>
@@ -121,7 +121,7 @@ namespace BALL
 	template<class X>
 	X BALL_DEPRECATED BALL_INLINE ball_macro_real_abs(X x)
 	{
-		return fabs(x);
+		return std::fabs(x);
 	}
 
 	template<class X>

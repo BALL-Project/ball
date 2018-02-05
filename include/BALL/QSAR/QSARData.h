@@ -16,7 +16,7 @@
 #include <list>
 #include <set>
 #include <map>
-#include <math.h>
+#include <cmath>
 #include <sstream>
 #include <fstream>
 #include <limits>
