@@ -104,7 +104,7 @@ namespace BALL
 				Size acyclic_neighbours = 0;
 				Size num_triple_bonds = 0;
 				Size num_double_bonds = 0;
-				bool has_acyclic_beta = false;
+				//bool has_acyclic_beta = false;
 
 				bool only_hetero_substituents = true;
 				Size num_primary_hetero_substituents = 0;
@@ -149,7 +149,7 @@ namespace BALL
 
 							if (!beta->getProperty("InRing").getBool())
 							{
-								has_acyclic_beta = true;
+								//has_acyclic_beta = true;
 								break;
 							}
 						}
@@ -268,7 +268,7 @@ namespace BALL
 			Angle demand = cfs_high - cfs_low;
 			demand.normalize(Angle::RANGE__UNSIGNED);
 			if (demand.toRadian() == 0)
-				demand.set(2.*M_PI);
+				demand.set((float)(2*Constants::PI));
 
 			float new_beta = demand.toRadian() / (num_hydrogens+1);
 
@@ -349,13 +349,13 @@ namespace BALL
 
 		Vector3 anchor = anchor_end - anchor_start;
 
-		float phi = 2.*M_PI / ring.atoms.size();
+		float phi = (float) (2.*Constants::PI / ring.atoms.size());
 
 		float l = anchor.getLength();
-		float r = l/(2.*sin(phi/2.));
-		float h = l/(2.*tan(phi/2.));
+		float r = (float) (l/(2.*sin(phi/2.)));
+		float h = (float) (l/(2.*tan(phi/2.)));
 
-		Vector3 orth_anchor(anchor.y, -anchor.x, 0.);
+		Vector3 orth_anchor(anchor.y, -anchor.x, 0);
 		orth_anchor.normalize();
 
 		if (!clockwise)
@@ -367,13 +367,13 @@ namespace BALL
 		Vector3 center          = anchor_start + anchor*0.5 + orth_anchor*h;
 		Vector3 center_to_start = anchor_start - center;
 
-		float phi_0 = ((center_to_start.x > 0) ? +1. : -1.) * acos(std::max(std::min(center_to_start.y/r, 1.f), -1.f));
+		float phi_0 = (float)(((center_to_start.x > 0) ? +1. : -1.) * acos(std::max(std::min(center_to_start.y/r, 1.f), -1.f)));
 
 		Position current_atom_index = (second_anchor_index + 1) % ring.atoms.size();
 
 		for (Position i=2; i<ring.atoms.size(); ++i)
 		{
-			Vector3 new_position = center + Vector3(r*sin(phi_0 + i*phi), r*cos(phi_0 + i*phi), 0);
+			Vector3 new_position = center + Vector3((float) (r*sin(phi_0 + i*phi)), (float) (r*cos(phi_0 + i*phi)), 0);
 			ring.atoms[current_atom_index]->setPosition(new_position);
 			ring.atoms[current_atom_index]->setProperty(SDGenerator::DEPOSITED);
 			current_atom_index = (current_atom_index + 1) % ring.atoms.size();
@@ -384,7 +384,7 @@ namespace BALL
 	void SDGenerator::buildOpenPolygon_(RingAnalyser::Ring& ring, Position first_anchor_index, Position second_anchor_index)
 	{
 		const size_t N = ring.atoms.size();
-		double alpha = 2 * M_PI / N;
+		double alpha = 2 * Constants::PI / N;
 
 		double bond_length = options.getReal(Option::STANDARD_BOND_LENGTH);
 
@@ -429,12 +429,12 @@ namespace BALL
 		Vector3 center = ring.atoms[first_anchor_index]->getPosition() + d_vect/2 + d_ortho*(h/D);
 		Vector3 center_to_start = ring.atoms[second_anchor_index]->getPosition() - center;
 
-		float phi_0 = ((center_to_start.x > 0) ? +1. : -1.) * acos(std::min(center_to_start.y/l, 1.));
+		float phi_0 = (float) (((center_to_start.x > 0) ? +1. : -1.) * acos(std::min(center_to_start.y/l, 1.)));
 
 		pos = 1;
 		for (int i = (second_anchor_index + 1) % N; i != (int)first_anchor_index; i = (i + 1) % N, ++pos)
 		{
-			Vector3 new_position(center.x + l*sin(phi_0 + pos*alpha), center.y + l*cos(phi_0 +pos*alpha), 0);
+			Vector3 new_position((float) (center.x + l*sin(phi_0 + pos*alpha)), (float)(center.y + l*cos(phi_0 +pos*alpha)), 0);
 			ring.atoms[i]->setPosition(new_position);
 			ring.atoms[i]->setProperty(SDGenerator::DEPOSITED);
 		}
@@ -500,11 +500,11 @@ namespace BALL
 
 	Angle SDGenerator::computeCFS_(Vector3 const& input)
 	{
-		float alpha = atan2(input.y, input.x);
+		float alpha = (float) atan2(input.y, input.x);
 
 		if (alpha < 0.)
 		{
-			alpha += 2.*M_PI;
+			alpha += 2 * Constants::PI;
 		}
 
 		return Angle(alpha, true);
@@ -581,7 +581,7 @@ namespace BALL
 		std::vector<Atom*>& ring = current_system[core_index].atoms;
 
 		// set the standard bond-length
-		double bond_length = options.getReal(Option::STANDARD_BOND_LENGTH);
+		float bond_length = (float) options.getReal(Option::STANDARD_BOND_LENGTH);
 
 		// prepare the first two atom positions
 		if (ring.size() % 2)
@@ -726,7 +726,7 @@ namespace BALL
 
 			Vector3 anchor = ring[second_atom_index]->getPosition() - ring[first_atom_index ]->getPosition();
 
-			Vector3 orth_anchor(anchor.y, -anchor.x, 0.);
+			Vector3 orth_anchor(anchor.y, -anchor.x, 0);
 			Vector3 center = ring[first_atom_index]->getPosition() + anchor*0.5;
 			
 			bool clockwise = true;
@@ -1189,14 +1189,14 @@ namespace BALL
 		if (seed->hasProperty(SDGenerator::FXAS))
 		{
 			--num_sub;
-			demand += Angle(2./3.*M_PI);
+			demand += Angle((float) (2./3 * Constants::PI));
 		}
 
-		Angle free_CFS(2.*M_PI - demand.toRadian(), true);
+		Angle free_CFS((float) (2*Constants::PI - demand.toRadian()), true);
 		free_CFS.normalize(Angle::RANGE__UNSIGNED);
 
 		if (fabs(free_CFS.toRadian()) < 1e-4)
-			free_CFS.set(2.*M_PI, true);
+			free_CFS.set((float) (2*Constants::PI), true);
 
 		return Angle((free_CFS.toRadian())/(num_sub + 1));
 	}
@@ -1431,8 +1431,8 @@ namespace BALL
 			{
 				if (next->hasProperty(SDGenerator::CORE_CHAIN))
 				{
-					setCFS_(seed, Angle(1./3.*M_PI, true), false);
-					setCFS_(seed, Angle(1./3.*M_PI, true), true);
+					setCFS_(seed, Angle((float) (1./3* Constants::PI), true), false);
+					setCFS_(seed, Angle((float) (1./3* Constants::PI), true), true);
 				}
 				else
 				{
@@ -1475,15 +1475,15 @@ namespace BALL
 		}
 		Vector3 new_position;
 
-		new_position.x = cos(seed_CFS_lo.toRadian())*bond_length;
-		new_position.y = sin(seed_CFS_lo.toRadian())*bond_length;
+		new_position.x = (float) (cos(seed_CFS_lo.toRadian())*bond_length);
+		new_position.y = (float) (sin(seed_CFS_lo.toRadian())*bond_length);
 
 		next->setPosition(seed->getPosition() + new_position);
 		next->setProperty(SDGenerator::ASSEMBLED);
 
 		// set up the next atom's CFS as pointing back towards the seed
-		setCFS_(next, Angle(getCFS_(seed, false).toRadian() - M_PI), false);
-		setCFS_(next, Angle(getCFS_(seed, false).toRadian() - M_PI), true);
+		setCFS_(next, Angle((float) (getCFS_(seed, false).toRadian() - Constants::PI)), false);
+		setCFS_(next, Angle((float) (getCFS_(seed, false).toRadian() - Constants::PI)), true);
 
 		// and take care of the zig-zagging
 		if (next->hasProperty(CORE_CHAIN))
@@ -1696,11 +1696,11 @@ namespace BALL
 						{
 							if (seed_atom->hasProperty(ZIG))
 							{
-								setCFS_(seed_atom, Angle(getCFS_(seed_atom, false).toRadian() + 4./3.*M_PI, true), false);
+								setCFS_(seed_atom, Angle((float) (getCFS_(seed_atom, false).toRadian() + 4./3.*Constants::PI), true), false);
 							}
 							else
 							{
-								setCFS_(seed_atom, Angle(getCFS_(seed_atom, false).toRadian() + 2./3.*M_PI, true), false);
+								setCFS_(seed_atom, Angle((float) (getCFS_(seed_atom, false).toRadian() + 2./3.*Constants::PI), true), false);
 							}
 						}
 						else
@@ -1740,7 +1740,7 @@ namespace BALL
 						 && (num_triple_bonds == 0) )
 				{
 					// the atom is pseudotrigonal
-					beta = Angle(2./3.*M_PI, true);
+					beta = Angle((float) (2./3* Constants::PI), true);
 				}
 
 				// iterate over the unplaced substituents in the correct order

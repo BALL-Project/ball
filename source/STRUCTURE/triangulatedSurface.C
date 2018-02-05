@@ -57,7 +57,7 @@ namespace BALL
 		result->number_of_edges_     += closed ? 2*num_vertices : 0;
 		result->number_of_triangles_ += closed ?   num_vertices : 0;
 
-		const double angle = 2*M_PI/num_vertices;
+		const double angle = 2*Constants::PI/num_vertices;
 		const double spacing = 1./(subdiv + 1);
 
 		//First create all vertices
@@ -206,7 +206,7 @@ namespace BALL
 		result->number_of_edges_    = 2*num_vertices;
 		result->number_of_triangles_= num_vertices;
 
-		const double angle = 2*M_PI/num_vertices;
+		const double angle = 2*Constants::PI/num_vertices;
 		const TVector3<double> normal(0, 0 , out ? 1 : -1);
 
 		//Compute center vertex and store the first vertex/edge in an own variable

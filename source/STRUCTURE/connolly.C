@@ -2,10 +2,6 @@
 // vi: set ts=2:
 //
 
-#ifdef _WIN32
-#	define _USE_MATH_DEFINES
-#endif
-
 // Defines that ease refactoring
 // defines the number of atoms connolly_() can take
 #ifndef CONNOLLY_STATIC_SIZE
@@ -94,13 +90,11 @@
 
 #include <cmath>
 
-#ifdef BALL_HAS_VALUES_H
-# include <values.h> // required for M_PI on some systems
-#endif
-
 #include <algorithm>
 #include <iostream>
+#include <BALL/COMMON/constants.h>
 #include <BALL/COMMON/exception.h>
+
 using std::min;
 using std::max;
 using std::cerr;
@@ -2084,7 +2078,7 @@ namespace	BALL
 
 				if (triple_ (tev, &tev[nent * 3 - 3], &face05_1.tax[it * 3 - 3]) < 0.0)
 				{
-					teang[nent - 1] = 2 * M_PI - teang[nent - 1];
+					teang[nent - 1] = 2 * Constants::PI - teang[nent - 1];
 				}
 			}
 			else
@@ -3415,7 +3409,7 @@ namespace	BALL
 					{
 						dt = -1.;
 					}
-					tau[ke - 1] = M_PI - acos (dt);
+					tau[ke - 1] = Constants::PI - acos (dt);
 				L10:
 					;
 				}
@@ -3621,18 +3615,18 @@ namespace	BALL
 				{
 					if (ispind[ke - 1] != 0)
 					{
-						sumlam = sumlam + M_PI - tau[ke - 1];
-						sumsig = sumsig + sigmaq[ke - 1] - M_PI;
+						sumlam = sumlam + Constants::PI - tau[ke - 1];
+						sumsig = sumsig + sigmaq[ke - 1] - Constants::PI;
 						sumsc += sin (sigmaq[ke - 1]) * cos (sigmaq[ke - 1]);
 					}
 				}
 
 				d__1 = face01_1.pr;
-				alens = d__1 * d__1 * 2. * (M_PI - sumlam - sin (rho) * (sumsig + M_PI));
+				alens = d__1 * d__1 * 2. * (Constants::PI - sumlam - sin (rho) * (sumsig + Constants::PI));
 				vint = alens * face01_1.pr / 3.;
 
 				d__1 = rm;
-				vcone = face01_1.pr * (d__1 * d__1) * sin (rho) * (sumsig + M_PI) / 3.;
+				vcone = face01_1.pr * (d__1 * d__1) * sin (rho) * (sumsig + Constants::PI) / 3.;
 
 				d__1 = rm;
 				vpyr = face01_1.pr * (d__1 * d__1) * sin (rho) * sumsc / 3.;
@@ -4059,7 +4053,7 @@ namespace	BALL
 				iv2 = face10_1.epv[(iep << 1) - 1];
 				if (iv1 == 0 || iv2 == 0)
 				{
-					angle = 2 * M_PI;
+					angle = 2 * Constants::PI;
 				}
 				else
 				{
@@ -4102,7 +4096,7 @@ namespace	BALL
 				pcurve += angle;
 			}
 		}
-		gauss = ieuler * 2 * M_PI - pcurve - gcurve;
+		gauss = ieuler * 2 * Constants::PI - pcurve - gcurve;
 
 		d__1 = face01_1.ar[ia - 1];
 		*areap = gauss * (d__1 * d__1);
@@ -4154,7 +4148,7 @@ namespace	BALL
 		iv2 = face10_1.epv[(iep << 1) - 1];
 		if (iv1 == 0 || iv2 == 0)
 		{
-			phi = 2 * M_PI;
+			phi = 2 * Constants::PI;
 		}
 		else
 		{
@@ -4348,7 +4342,7 @@ namespace	BALL
 					cerr << "Negative Angle in MEASFN" << endl;
 				}
 			}
-			defect = 2 * M_PI - (angle[0] + angle[1] + angle[2]);
+			defect = 2 * Constants::PI - (angle[0] + angle[1] + angle[2]);
 
 			d__1 = face01_1.pr;
 			*arean = d__1 * d__1 * defect;
@@ -4968,7 +4962,7 @@ namespace	BALL
 		angle = acos (dt);
 		if (*hand * triple_ (&v1[1], &v2[1], &axis[1]) < 0.0)
 		{
-			ret_val = 2 * M_PI - angle;
+			ret_val = 2 * Constants::PI - angle;
 		}
 		else
 		{
@@ -5098,7 +5092,7 @@ namespace	BALL
 		dots -= 4;
 
 		/* Function Body */
-		nequat = (int) sqrt ((double) (*ndots) * M_PI);
+		nequat = (int) sqrt ((double) (*ndots) * Constants::PI);
 		nvert = (int) (nequat * .5);
 		if (nvert < 1)
 		{
@@ -5110,7 +5104,7 @@ namespace	BALL
 		for (i__ = 0; i__ <= i__1; ++i__)
 		{
 			fi = (double) i__ *
-			M_PI / (double) nvert;
+			Constants::PI / (double) nvert;
 			za = cos (fi);
 			xy = sin (fi);
 			nhoriz = (int) (nequat * xy);
@@ -5122,7 +5116,7 @@ namespace	BALL
 			for (j = 0; j <= i__2; ++j)
 			{
 				fj = (double) j *
-				2 * M_PI / (double) nhoriz;
+				2 * Constants::PI / (double) nhoriz;
 				xa = cos (fj) * xy;
 				ya = sin (fj) * xy;
 				++k;

@@ -127,7 +127,7 @@ namespace BALL
 		}
 
 		if (n >= 1)
-			return angleSum / n * 180.0 / M_PI;
+			return angleSum / n * 180.0 / Constants::PI;
 		else
 			return 0.0;
 	}

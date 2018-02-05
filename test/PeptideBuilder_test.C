@@ -8,7 +8,6 @@
 
 #include <BALL/STRUCTURE/peptideBuilder.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
-#include <vector>
 
 ///////////////////////////
 
@@ -43,11 +42,11 @@ CHECK(~AminoAcidDescriptor())
 RESULT
 
 CHECK(AminoAcidDescriptor(const String& type, const Angle& phi, const Angle& psi, const Angle& omega))
-	aad= new AminoAcidDescriptor("HIS", Angle(M_PI, true), Angle(M_PI, true));
+	aad= new AminoAcidDescriptor("HIS", Angle((float) Constants::PI, true), Angle((float) Constants::PI, true));
 	TEST_NOT_EQUAL(aad, 0)
 	TEST_EQUAL(aad->getType(), "HIS")
-	TEST_EQUAL(aad->getPhi(), Angle(M_PI, true))
-	TEST_EQUAL(aad->getPsi(), Angle(M_PI, true))
+	TEST_EQUAL(aad->getPhi(), Angle((float) Constants::PI, true))
+	TEST_EQUAL(aad->getPsi(), Angle((float) Constants::PI, true))
 RESULT
 
 AminoAcidDescriptor* aad2=0;
@@ -55,8 +54,8 @@ CHECK(AminoAcidDescriptor(const AminoAcidDescriptor& aad))
 	aad2 = new AminoAcidDescriptor(*aad);
 	TEST_NOT_EQUAL(aad2, 0)
 	TEST_EQUAL(aad2->getType(), "HIS")
-	TEST_EQUAL(aad2->getPhi(), Angle(M_PI, true))
-	TEST_EQUAL(aad2->getPsi(), Angle(M_PI, true))
+	TEST_EQUAL(aad2->getPhi(), Angle((float) Constants::PI, true))
+	TEST_EQUAL(aad2->getPsi(), Angle((float) Constants::PI, true))
 RESULT
 
 
@@ -72,23 +71,23 @@ CHECK(setAminoAcidType(const String& type))
 RESULT
 
 CHECK(setPhi(const Angle& phi))
-	aad->setPhi(Angle(-47., false));
-	TEST_EQUAL(aad->getPhi(), Angle(-47., false) )
-	aad2->setPhi(Angle(-77., false));
-	TEST_EQUAL(aad2->getPhi(), Angle(-77., false) )
+	aad->setPhi(Angle(-47, false));
+	TEST_EQUAL(aad->getPhi(), Angle(-47, false) )
+	aad2->setPhi(Angle(-77, false));
+	TEST_EQUAL(aad2->getPhi(), Angle(-77, false) )
 RESULT
 
 CHECK(setPsi(const Angle& phi))
-	aad->setPsi(Angle(-58., false));
-	TEST_EQUAL(aad->getPsi(), Angle(-58., false) )
+	aad->setPsi(Angle(-58, false));
+	TEST_EQUAL(aad->getPsi(), Angle(-58, false) )
 	aad2->setPsi(Angle(8.15, false));
 	TEST_EQUAL(aad2->getPsi(), Angle(8.15, false) )
 RESULT
 
 CHECK(setOmega(const Angle& phi))
-	aad->setOmega(Angle(90., false));
-	TEST_EQUAL(aad->getOmega(), Angle(90., false))
-	aad2->setOmega(Angle(M_PI, true));
+	aad->setOmega(Angle(90, false));
+	TEST_EQUAL(aad->getOmega(), Angle(90, false))
+	aad2->setOmega(Angle((float) Constants::PI, true));
 	TEST_EQUAL(aad2->getOmega(), Angle(180, false))
 RESULT
 
@@ -113,7 +112,7 @@ RESULT
 
 CHECK(addAminoAcid(const String& type, const Angle& phi, const Angle& psi, const Angle& omega))
 	pb->addAminoAcid("LEU");
-	pb->addAminoAcid("SER",Angle(M_PI, true),Angle(M_PI, true));
+	pb->addAminoAcid("SER",Angle((float) Constants::PI, true),Angle((float) Constants::PI, true));
 	TEST_NOT_EQUAL(pb, 0)
 RESULT
 
@@ -163,11 +162,11 @@ CHECK(Protein* construct())
 	PRECISION(1e-3)
 	TEST_EQUAL(res_it->getName(), "LEU")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
-	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58,false));
 	++res_it;
 	TEST_EQUAL(res_it->getName(), "SER")
-	TEST_REAL_EQUAL(fabs(res_it->getTorsionPhi().toRadian()), M_PI)
-	TEST_REAL_EQUAL(fabs(res_it->getTorsionPsi().toRadian()), M_PI)
+	TEST_REAL_EQUAL(fabs(res_it->getTorsionPhi().toRadian()), Constants::PI)
+	TEST_REAL_EQUAL(fabs(res_it->getTorsionPsi().toRadian()), Constants::PI)
 	++res_it;
 	PRECISION(2E-2)
 	TEST_EQUAL(res_it->getName(), "GLY")
@@ -175,7 +174,7 @@ CHECK(Protein* construct())
 	TEST_REAL_EQUAL(res_it->getTorsionPsi(), -1.01);
 	++res_it;
 	TEST_EQUAL(res_it->getName(), "VAL")
-	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-77., false));
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-77, false));
 	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(0, false));
 	delete prot;
 	
@@ -185,16 +184,16 @@ CHECK(Protein* construct())
 		
 	TEST_EQUAL(res_it->getName(), "GLY")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
-	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58,false));
 	++res_it;
 	TEST_EQUAL(res_it->getName(), "VAL")
-	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-77.,false));
+	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-77,false));
 	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(0,false));
 
 	PeptideBuilder pb4;
 	pb4.setFragmentDB(&db);
 	pb4.addAminoAcid("PRO");
-	pb4.addAminoAcid("PRO", Angle(-12., false), Angle(42, false));
+	pb4.addAminoAcid("PRO", Angle(-12, false), Angle(42, false));
 	pb4.addAminoAcid("PRO", Angle(28, false), Angle(33, false));
 
 	delete prot;
@@ -204,7 +203,7 @@ CHECK(Protein* construct())
 
 	TEST_EQUAL(res_it->getName(), "PRO")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(0,false));
-	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58,false));
 	++res_it;
 	TEST_EQUAL(res_it->getName(), "PRO")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-12, false));
@@ -232,7 +231,7 @@ CHECK(PeptideBuilder(const String& sequence, const Angle& phi, const Angle& psi,
 
 	ResidueIterator res_it = prot->beginResidue();
 	TEST_EQUAL(res_it->getName(), "ALA")
-	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58.,false));
+	TEST_REAL_EQUAL(res_it->getTorsionPsi(), Angle(-58,false));
 	++res_it;
 	TEST_EQUAL(res_it->getName(), "LEU")
 	TEST_REAL_EQUAL(res_it->getTorsionPhi(), Angle(-47, false));

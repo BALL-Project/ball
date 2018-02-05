@@ -54,9 +54,8 @@ namespace BALL
 	float ElectrostaticPotentialCalculator::operator() (const Vector3& pos)
 		
 	{
-		float phi_nonloc=0.;
-		float length;
-		static float eps=78.;
+		float phi_nonloc=0;
+		static float eps=78;
 		
 		if (options.getBool(Option::LOCALITY))
 		{
@@ -64,11 +63,11 @@ namespace BALL
 
 			for (atIt=mySys_.beginAtom();+atIt;++atIt)
 			{
-				length = (pos-(*atIt).getPosition()).getLength();
+				float length = (pos-(*atIt).getPosition()).getLength();
 
 				phi_nonloc += (*atIt).getCharge()/length;
 			}
-			phi_nonloc*=1./(4*M_PI*8.85e-22*eps)*1.6e-19;
+			phi_nonloc*=1./(4*Constants::PI*8.85e-22*eps)*1.6e-19;
 		}
 		else
 		{
@@ -79,19 +78,17 @@ namespace BALL
 			static double xiol   = xi/lambda; 
 			static double weight = (eps - eps_inf)/eps_inf;
 
-			float length;
-
 			AtomIterator atIt;
 
 			for (atIt=mySys_.beginAtom();+atIt;++atIt)
 			{
-				length = (pos-(*atIt).getPosition()).getLength();
+				float length = (pos-(*atIt).getPosition()).getLength();
 
 				phi_nonloc += (*atIt).getCharge()/length * (1.+weight*sinh((*atIt).getRadius() * xiol)/((*atIt).getRadius() * xiol)
 						* exp(-xiol*length));
 			}
 
-			phi_nonloc*=1./(4*M_PI*8.85e-22*eps)*1.6e-19;
+			phi_nonloc*=1./(4*Constants::PI*8.85e-22*eps)*1.6e-19;
 		}
 		
 		return phi_nonloc;

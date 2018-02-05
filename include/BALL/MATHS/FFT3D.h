@@ -458,9 +458,9 @@ namespace BALL
 			stepPhysX_ = new_width_x;
 			stepPhysY_ = new_width_y;
 			stepPhysZ_ = new_width_z;
-			stepFourierX_ = 2.*M_PI/(stepPhysX_*lengthX_);
-			stepFourierY_ = 2.*M_PI/(stepPhysY_*lengthY_);
-			stepFourierZ_ = 2.*M_PI/(stepPhysZ_*lengthZ_);
+			stepFourierX_ = 2.*Constants::PI/(stepPhysX_*lengthX_);
+			stepFourierY_ = 2.*Constants::PI/(stepPhysY_*lengthY_);
+			stepFourierZ_ = 2.*Constants::PI/(stepPhysZ_*lengthZ_);
 
 			minPhys_ = Vector3(-origin_.x,-origin_.y,-origin_.z);
 			maxPhys_ = Vector3(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y,((lengthZ_-1)*stepPhysZ_)-origin_.z);
@@ -681,10 +681,10 @@ namespace BALL
 			//old: result = (*this)[pos];
 			result = (*this)[pos]*phase(pos);
 			
-			//normalization=1./pow(sqrt(2.*M_PI),3)*(stepPhysX_*stepPhysY_*stepPhysZ_)/((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
+			//normalization=1./pow(sqrt(2.*Constants::PI),3)*(stepPhysX_*stepPhysY_*stepPhysZ_)/((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
 			
-			normalization=1./pow(sqrt(2.*M_PI),3)/((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
-			//normalization=1./(sqrt(2.*M_PI))*(stepPhysX_*stepPhysY_*stepPhysZ_)/((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
+			normalization=1./pow(sqrt(2.*Constants::PI),3)/((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
+			//normalization=1./(sqrt(2.*Constants::PI))*(stepPhysX_*stepPhysY_*stepPhysZ_)/((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
 		}
 
 		result *= normalization;
@@ -756,9 +756,9 @@ namespace BALL
 		}
 		else
 		{
-			val*=phase(pos)*(typename ComplexTraits::ComplexPrecision)((pow(sqrt(2*M_PI),3)/(stepPhysX_*stepPhysY_*stepPhysZ_)))
+			val*=phase(pos)*(typename ComplexTraits::ComplexPrecision)((pow(sqrt(2*Constants::PI),3)/(stepPhysX_*stepPhysY_*stepPhysZ_)))
 				             *((typename ComplexTraits::ComplexPrecision)pow((typename ComplexTraits::ComplexPrecision)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
-		  /*val*=phase(pos)*(typename ComplexTraits::ComplexPrecision)((sqrt(2*M_PI)/(stepPhysX_*stepPhysY_*stepPhysZ_)))
+		  /*val*=phase(pos)*(typename ComplexTraits::ComplexPrecision)((sqrt(2*Constants::PI)/(stepPhysX_*stepPhysY_*stepPhysZ_)))
 				             *((typename ComplexTraits::ComplexPrecision)pow((typename ComplexTraits::ComplexPrecision)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));*/
 			
 			dummy = val;
@@ -891,8 +891,8 @@ namespace BALL
 	typename TFFT3D<ComplexTraits>::Complex TFFT3D<ComplexTraits>::phase(const Vector3& pos) const
 	{
 		
-		// AR: old version: -2.*M_PI...
-	  double phase = 2.*M_PI*(  (Maths::rint(pos.x/stepFourierX_))*(Maths::rint(origin_.x/stepPhysX_))
+		// AR: old version: -2.*Constants::PI...
+	  double phase = 2.*Constants::PI*(  (Maths::rint(pos.x/stepFourierX_))*(Maths::rint(origin_.x/stepPhysX_))
 															/lengthX_
 														+ (Maths::rint(pos.y/stepFourierY_))*(Maths::rint(origin_.y/stepPhysY_))
 															/lengthY_
@@ -904,7 +904,7 @@ namespace BALL
 						
 		return result;
 		
-		/*double phase = -2.*M_PI*(  (rint(pos.x/stepFourierX_))*(rint(origin_.x/stepPhysX_))
+		/*double phase = -2.*Constants::PI*(  (rint(pos.x/stepFourierX_))*(rint(origin_.x/stepPhysX_))
 															/lengthX_
 														+ (Maths::rint(pos.y/stepFourierY_))*(Maths::rint(origin_.y/stepPhysY_))
 															/lengthY_
@@ -988,8 +988,8 @@ namespace BALL
 																							from.getFourierSpaceMaxZ()));
 
 			// and fill it
-			// AR: old double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
+			// AR: old double normalization=1./(sqrt(2.*Constants::PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./pow(sqrt(2.*Constants::PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			
 			
 			Index x, y, z;
@@ -1091,8 +1091,8 @@ Vector3(from.getPhysSpaceMaxX(), from.getPhysSpaceMaxY(), from.getPhysSpaceMaxZ(
 			RegularData3D newGrid(RegularData3D::IndexType(lengthX, lengthY, lengthZ), Vector3(from.getFourierSpaceMinX(), from.getFourierSpaceMinY(), from.getFourierSpaceMinZ()), Vector3(from.getFourierSpaceMaxX(), from.getFourierSpaceMaxY(), from.getFourierSpaceMaxZ()));
 
 			// and fill it
-			// AR: old version double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./pow(sqrt(2.*M_PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
+			// AR: old version double normalization=1./(sqrt(2.*Constants::PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./pow(sqrt(2.*Constants::PI),3)/(pow((float)(lengthX*lengthY*lengthZ),(int)from.getNumberOfInverseTransforms()));
 			
 			Index x, y, z;
 			signed int xp, yp, zp;

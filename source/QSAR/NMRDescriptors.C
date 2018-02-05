@@ -202,7 +202,7 @@ namespace BALL
 		Vector3 d = X->getPosition();
 
 		//angle = getTorsionAngle(a.x, a.y, a.z, b.x, b.y, b.z, 
-		//											 c.x, c.y, c.z, d.x, d.y, d.z)*180./M_PI;
+		//											 c.x, c.y, c.z, d.x, d.y, d.z)*180./Constants::PI;
 
 		angle = calculateTorsionAngle(*N,*CA,*CB,*X).toRadian();
 		while (angle < 0.)

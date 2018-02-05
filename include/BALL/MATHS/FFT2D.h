@@ -416,8 +416,8 @@ namespace BALL
 		{
 			stepPhysX_ = new_width_x;
 			stepPhysY_ = new_width_y;
-			stepFourierX_ = 2.*M_PI/(stepPhysX_*lengthX_);
-			stepFourierY_ = 2.*M_PI/(stepPhysY_*lengthY_);
+			stepFourierX_ = 2.*Constants::PI/(stepPhysX_*lengthX_);
+			stepFourierY_ = 2.*Constants::PI/(stepPhysY_*lengthY_);
 
 			minPhys_ = Vector2(-origin_.x,-origin_.y);
   	  maxPhys_ = Vector2(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y);
@@ -589,7 +589,7 @@ namespace BALL
 		else
 		{
 			result = (*this)[pos] * phase(pos);
-			normalization=1./(2.*M_PI)*(stepPhysX_*stepPhysY_)/((float)pow((float)(lengthX_*lengthY_),(int)numFourierToPhys_));
+			normalization=1./(2.*Constants::PI)*(stepPhysX_*stepPhysY_)/((float)pow((float)(lengthX_*lengthY_),(int)numFourierToPhys_));
 		}
 
 		result *= normalization;
@@ -652,7 +652,7 @@ namespace BALL
 		}
 		else
 		{
-			val*=phase(pos)*(typename ComplexTraits::ComplexPrecision)((2*M_PI/(stepPhysX_*stepPhysY_)))
+			val*=phase(pos)*(typename ComplexTraits::ComplexPrecision)((2*Constants::PI/(stepPhysX_*stepPhysY_)))
 										 *(typename ComplexTraits::ComplexPrecision)pow((typename ComplexTraits::ComplexPrecision)(lengthX_*lengthY_),(int)numFourierToPhys_);
 			
 			dummy = val;
@@ -748,7 +748,7 @@ namespace BALL
 	template <typename ComplexTraits>
 	typename TFFT2D<ComplexTraits>::Complex TFFT2D<ComplexTraits>::phase(const Vector2& pos) const
 	{
-	  double phase = 2.*M_PI*(  Maths::rint(pos.x/stepFourierX_)*Maths::rint(origin_.x/stepPhysX_)
+	  double phase = 2.*Constants::PI*(  Maths::rint(pos.x/stepFourierX_)*Maths::rint(origin_.x/stepPhysX_)
 															/lengthX_
 														+ Maths::rint(pos.y/stepFourierY_)*Maths::rint(origin_.y/stepPhysY_)
 															/lengthY_ );
@@ -822,8 +822,8 @@ namespace BALL
 																							from.getFourierSpaceMaxY()));
 
 			// and fill it
-			// AR: old double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./(2.*M_PI)/(pow((float)(lengthX*lengthY),from.getNumberOfInverseTransforms()));
+			// AR: old double normalization=1./(sqrt(2.*Constants::PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./(2.*Constants::PI)/(pow((float)(lengthX*lengthY),from.getNumberOfInverseTransforms()));
 			
 			
 			Index x, y;
@@ -917,8 +917,8 @@ namespace BALL
 			RegularData2D newGrid(RegularData2D::IndexType(lengthX, lengthY), Vector2(from.getFourierSpaceMinX(), from.getFourierSpaceMinY()), Vector2(from.getFourierSpaceMaxX(), from.getFourierSpaceMaxY()));
 
 			// and fill it
-			// AR: old version double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
-			double normalization=1./(2.*M_PI)/(pow((float)(lengthX*lengthY),from.getNumberOfInverseTransforms()));
+			// AR: old version double normalization=1./(sqrt(2.*Constants::PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			double normalization=1./(2.*Constants::PI)/(pow((float)(lengthX*lengthY),from.getNumberOfInverseTransforms()));
 			
 			Index x, y;
 			signed int xp, yp;

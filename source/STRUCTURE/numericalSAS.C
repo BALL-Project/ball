@@ -74,8 +74,8 @@ namespace BALL
 		TriangulatedSphere sphere_template_t;
 		Size num_points = computeSphereTesselation_(sphere_template_t, num_points_requested);		
 
-		float unit_area_per_point = 4.*M_PI/num_points;
-		float unit_volume         = 4.*M_PI/(3.*num_points);
+		float unit_area_per_point = 4.*Constants::PI/num_points;
+		float unit_volume         = 4.*Constants::PI/(3.*num_points);
 
 		// it's simpler to work with surfaces later
 		Surface sphere_template;
