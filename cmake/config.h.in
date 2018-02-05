@@ -141,10 +141,6 @@
 // for some floating point functions
 #cmakedefine BALL_HAS_IEEEFP_H
 
-// on some systems (e.g. Solaris) we need to include /usr/include/values.h
-// for some floating point functions
-#cmakedefine BALL_HAS_VALUES_H
-
 #cmakedefine BALL_HAS_KILL
 #cmakedefine BALL_HAS_SYSCONF
 
