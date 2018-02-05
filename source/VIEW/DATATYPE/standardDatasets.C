@@ -101,7 +101,7 @@ namespace BALL
 		{
 			int num_lines_theta = 50;
 			int num_lines_phi   = 50;
-			float theta_start   = 20./90. * M_PI;
+			float theta_start   = (float) (2./9 * BALL::Constants::PI);
 
 			Vector3 origin = grid.getOrigin();
 
@@ -113,7 +113,7 @@ namespace BALL
 			Matrix4x4 rotation;
 			vw.normalize();
 			
-			Vector3 axis = vw % Vector3(0.,0.,1.);
+			Vector3 axis = vw % Vector3(0,0,1);
 
 			if (axis.getLength() > 1e-6)
 			{
@@ -136,10 +136,10 @@ namespace BALL
 			if (min < 0) return 0;
 
 			float radius = min;
-			float delta_phi     = 2.*M_PI/(num_lines_phi-1);
-			float delta_theta = M_PI/(num_lines_theta-1);
+			float delta_phi   = (float) (2 * Constants::PI / (num_lines_phi-1));
+			float delta_theta = (float) (Constants::PI / (num_lines_theta-1));
 
-			int theta_start_index = (int)(theta_start / M_PI * num_lines_theta);
+			int theta_start_index = (int)(theta_start / Constants::PI * num_lines_theta);
 			vector<vector<Vector3> > points_on_sphere(num_lines_theta-theta_start_index);
 
 			for (Index k = theta_start_index; k < num_lines_theta; k++)
@@ -226,7 +226,7 @@ namespace BALL
 						next.x = index.x; next.y = index.y; next.z = index.z;
 						last = next;
 
-						float factor = 1.;
+						float factor = 1;
 						if (index.x == 0)
 						{
 							// onlx forward difference possible
@@ -244,7 +244,7 @@ namespace BALL
 						}
 
 						gradient_grid[index].x = factor * spacing.x * (potential[next] - potential[last]);
-						factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
+						factor = 1; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
 
 						if (index.y == 0)
 						{
@@ -263,7 +263,7 @@ namespace BALL
 						}
 
 						gradient_grid[index].y = factor * spacing.y * (potential[next] - potential[last]);
-						factor = 1.; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
+						factor = 1; next.x = index.x; next.y = index.y; next.z = index.z; last = next;
 
 						if (index.z == 0)
 						{
@@ -693,10 +693,6 @@ namespace BALL
 				grid_ptr = new RegularData3D(new_size, origin, dim);
 			}
 			catch(...)
-			{
-			}
-
-			if (grid_ptr == 0)
 			{
 				setStatusbarText(tr("Not enough memory to resize grid!"), true);
 				return 0;

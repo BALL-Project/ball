@@ -330,13 +330,13 @@ namespace BALL
 			Vector3 d_null = Vector3(0,0,-1);
 			Vector3 dir_rotation_axis = (d_null % direction);
 
-			float dir_rotation_angle = 0.;
+			float dir_rotation_angle = 0;
 			if ((fabs(direction.x) < 1e-6) && (fabs(direction.y) < 1e-6))
 			{
 				dir_rotation_axis = Vector3(1,0,0);
 				if (direction.z > 0)
 				{
-					dir_rotation_angle = M_PI; 
+					dir_rotation_angle = (float) Constants::PI;
 				}
 				else
 				{
@@ -364,12 +364,12 @@ namespace BALL
 			
 			Vector3 up_rotated = dir_rotation_matrix * Vector3(0,1,0);
 			Vector3 up_rotation_axis = upvector % up_rotated;
-			float up_rotation_angle = 0.;	
+			float up_rotation_angle = 0;
 			if (up_rotation_axis.getSquareLength() < 1e-6)
 			{
 				if (up_rotated.y < 1e-6)
 				{
-					up_rotation_angle = M_PI;	
+					up_rotation_angle = (float) Constants::PI;
 				}
 			}
 			
