@@ -148,11 +148,6 @@
 #ifdef BALL_OS_WINDOWS
 #define BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 
-// MS VC++ doesn't define all required symbols in 
-// math.h if this symbol isn't defined *before* including
-// math.h for the first time!
-#define _USE_MATH_DEFINES 
-
 // Keep Windows from defining min/max, ERROR,... as preprocesor symbols!
 // May he how thought of defining these by default rot in hell!
 #ifndef NOMINMAX
