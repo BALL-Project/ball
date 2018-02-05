@@ -6,11 +6,7 @@
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/FORMAT/dockResultFile.h>
 #include <BALL/FORMAT/commandlineParser.h>
-#include <BALL/KERNEL/molecule.h>
 #include "version.h"
-
-#include<math.h>
-
 
 using namespace BALL;
 using namespace std;
