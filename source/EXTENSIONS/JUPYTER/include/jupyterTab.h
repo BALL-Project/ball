@@ -15,12 +15,13 @@ namespace BALL
 
 			public:
 				JupyterTab(QWidget* parent, JupyterWidget* base);
+				~JupyterTab() override = default;
 
 			protected Q_SLOTS:
 				void prepareNotebook(bool ok);
 
 			protected:
-				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType type) override;
+				QWebEngineView* createWindow(QWebEnginePage::WebWindowType type) override;
 
 				JupyterWidget* base_;
 		};

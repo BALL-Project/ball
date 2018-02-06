@@ -17,9 +17,9 @@ namespace BALL
 				tab dialog Preferences.
 				\ingroup ViewDialogs
 		*/
-		class JupyterPreferences
-			: public ConfigDialog,
-			  public Ui_JupyterPreferencesData
+		class JupyterPreferences :
+			public ConfigDialog,
+			public Ui_JupyterPreferencesData
 		{
 			Q_OBJECT
 
@@ -31,14 +31,11 @@ namespace BALL
 				JupyterPreferences(QWidget *parent = nullptr, const char *name = "JupyterPreferences", Qt::WindowFlags fl=0);
 				
 				/// Destructor.
-				virtual ~JupyterPreferences();
+				~JupyterPreferences() override;
 
 				///
-				virtual void storeValues() override;
-				virtual void restoreValues(bool all = false) override;
-
-				///
-				void getSettings();
+				void storeValues() override;
+				void restoreValues(bool all = false) override;
 
 				ConnectionMode getConnectionMode() const { return conn_mode_; }
 				QString getDashboardUrl() const { return dashboard_url_; };

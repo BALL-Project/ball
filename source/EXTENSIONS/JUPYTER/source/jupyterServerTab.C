@@ -23,14 +23,6 @@ namespace BALL
 			connect(start_stop_button, &QPushButton::clicked, this, &JupyterServerTab::startStopServer);
 		}
 
-		JupyterServerTab::~JupyterServerTab()
-		{ }
-
-		JupyterServer* JupyterServerTab::getServer()
-		{
-			return server_;
-		}
-
 		void JupyterServerTab::setServer(JupyterServer* server)
 		{
 			if(server_ == server)

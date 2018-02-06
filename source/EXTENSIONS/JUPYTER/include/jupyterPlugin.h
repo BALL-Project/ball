@@ -14,11 +14,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class JupyterPlugin
-			: public QObject,
-			  public BALLPlugin,
-				public VIEWPlugin,
-				public ModularWidgetPlugin
+		class JupyterPlugin :
+			public QObject,
+			public BALLPlugin,
+			public VIEWPlugin,
+			public ModularWidgetPlugin
 		{
 			Q_OBJECT
 			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.ModularWidget.Jupyter")
@@ -26,13 +26,13 @@ namespace BALL
 
 			public:
 				JupyterPlugin();
-				virtual ~JupyterPlugin();
+				~JupyterPlugin() override;
 
-				const QPixmap* getIcon() const override;
-				QString getName() const override;
-				QString getDescription() const override;
+				const QPixmap* getIcon() const override { return &icon_; };
+				QString getName() const override { return QString("Jupyter"); };
+				QString getDescription() const override { return QString("An interface to Jupyter notebooks."); };
 
-				ConfigDialog* getConfigDialog() override;
+				ConfigDialog* getConfigDialog() override { return preferences_; };
 
 				bool isActive() override { return widget_; }
 

@@ -17,26 +17,6 @@ namespace BALL
 			delete preferences_;
 		}
 
-		QString JupyterPlugin::getName() const
-		{
-			return QString("Jupyter");
-		}
-
-		QString JupyterPlugin::getDescription() const
-		{
-			return QString("An interface to Jupyter notebooks.");
-		}
-
-		const QPixmap* JupyterPlugin::getIcon() const
-		{
-			return &icon_;
-		}
-
-		ConfigDialog* JupyterPlugin::getConfigDialog()
-		{
-			return preferences_;
-		}
-
 		bool JupyterPlugin::activate()
 		{
 			if(isActive()) return true;

@@ -19,9 +19,9 @@ namespace BALL
 
 			public:
 				JupyterServerTab(QWidget* parent, JupyterServer* server);
-				virtual ~JupyterServerTab();
+				~JupyterServerTab() override = default;
 
-				JupyterServer* getServer();
+				JupyterServer* getServer() { return server_; };
 				void setServer(JupyterServer* server);
 
 			public Q_SLOTS:

@@ -13,7 +13,7 @@ namespace BALL
 
 			public:
 				JupyterServer(QObject* parent);
-				virtual ~JupyterServer();
+				~JupyterServer() override;
 
 				const QString& getExePath() const { return exe_path_; }
 				unsigned int getPort() const { return port_; }
@@ -27,12 +27,12 @@ namespace BALL
 				void setNbdir(const QString& nbdir) { nbdir_ = nbdir; }
 				void setToken(const QString& token) { token_ = token; }
 
-				bool isRunning() const;
-				void start();
-				void terminate(int kill_timer = 10000);
-				QByteArray readStandardOutput();
-				QByteArray readStandardError();
-				QProcess::ProcessState state() const;
+				virtual bool isRunning() const;
+				virtual void start();
+				virtual void terminate(int kill_timer = 10000);
+				virtual QByteArray readStandardOutput();
+				virtual QByteArray readStandardError();
+				virtual QProcess::ProcessState state() const;
 
 			Q_SIGNALS:
 				void readyReadStandardOutput();
