@@ -10,6 +10,8 @@
 
 #include <QtGui/QPixmap>
 
+#include <memory>
+
 namespace BALL
 {
 	namespace VIEW
@@ -25,24 +27,24 @@ namespace BALL
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::ModularWidgetPlugin)
 
 			public:
-				JupyterPlugin();
-				~JupyterPlugin() override;
+				JupyterPlugin() = default;
+				~JupyterPlugin() override = default;
 
 				const QPixmap* getIcon() const override { return &icon_; };
 				QString getName() const override { return QString("Jupyter"); };
 				QString getDescription() const override { return QString("An interface to Jupyter notebooks."); };
 
-				ConfigDialog* getConfigDialog() override { return preferences_; };
+				ConfigDialog* getConfigDialog() override { return preferences_.get(); };
 
-				bool isActive() override { return widget_; }
+				bool isActive() override { return widget_.get(); }
 
 				bool activate() override;
 				bool deactivate() override;
 
 			private:
-				QPixmap icon_;
-				JupyterPreferences* preferences_;
-				ModularWidget* widget_;
+				QPixmap icon_ {":pluginJupyter.png"};
+				std::unique_ptr<JupyterPreferences> preferences_ { new JupyterPreferences() };
+				std::unique_ptr<JupyterWidget> widget_ {nullptr};
 		};
 	}
 }

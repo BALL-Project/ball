@@ -6,29 +6,17 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterPlugin::JupyterPlugin()
-			: icon_(":pluginJupyter.png"),
-			  preferences_(new JupyterPreferences()),
-			  widget_(nullptr)
-		{ }
-
-		JupyterPlugin::~JupyterPlugin()
-		{
-			delete preferences_;
-		}
-
 		bool JupyterPlugin::activate()
 		{
 			if(isActive()) return true;
 
-			JupyterWidget* jupyter_widget = new JupyterWidget(main_control_, "Jupyter");
+			widget_.reset(new JupyterWidget());
 
 			preferences_->storeValues();
 
-			main_control_->addDockWidget(Qt::BottomDockWidgetArea, jupyter_widget);
+			main_control_->addDockWidget(Qt::BottomDockWidgetArea, widget_.get());
 
-			widget_ = jupyter_widget;
-			widget_->registerWidget(widget_);
+			widget_->registerWidget(widget_.get());
 			widget_->initializeWidget(*main_control_);
 
 			return true;
@@ -39,8 +27,7 @@ namespace BALL
 			if(!isActive()) return true;
 
 			widget_->finalizeWidget(*main_control_);
-			delete widget_;
-			widget_ = nullptr;
+			widget_.reset();
 
 			return true;
 		}

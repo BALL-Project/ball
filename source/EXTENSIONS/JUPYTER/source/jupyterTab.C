@@ -6,9 +6,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterTab::JupyterTab(QWidget* parent, JupyterWidget* base)
-				: HTMLView(parent),
-				  base_(base)
+		JupyterTab::JupyterTab(QWidget* parent, JupyterWidget* base) :
+			HTMLView(parent),
+			base_(base)
 		{
 			connect(this, &JupyterTab::titleChanged, base_, &JupyterWidget::renameTab);
 			connect(this, &JupyterTab::loadFinished, this, &JupyterTab::prepareNotebook);

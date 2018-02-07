@@ -36,7 +36,7 @@ namespace BALL
 				void appendMessage(const QString& /* message */);
 
 			protected:
-				JupyterServer* server_;
+				JupyterServer* server_ {nullptr};
 		};
 	}
 }

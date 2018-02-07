@@ -11,14 +11,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterWidget::JupyterWidget(MainControl* parent, const char* title)
-			: DockWidget(parent, title),
-			  tab_view_(new QTabWidget(this)),
-			  dashboard_(nullptr),
-			  dashboard_url_(),
-			  server_(nullptr),
-			  server_tab_(nullptr),
-			  page_lock_()
+		JupyterWidget::JupyterWidget() :
+			DockWidget(nullptr, "Jupyter")
 		{
 			registerThis();
 
@@ -33,14 +27,6 @@ namespace BALL
 			if (PyInterpreter::isInitialized()) PyInterpreter::startServer();
 
 			connect(tab_view_, &QTabWidget::tabCloseRequested, this, &JupyterWidget::closeTab);
-		}
-
-		JupyterWidget::~JupyterWidget()
-		{
-			if(server_)
-			{
-				delete server_;
-			}
 		}
 
 		void JupyterWidget::setDashboardURL(const QString& url)
@@ -64,7 +50,7 @@ namespace BALL
 				{
 					tab_view_->removeTab(tab_view_->indexOf(server_tab_));
 				}
-				delete server_;
+				server_->deleteLater();
 			}
 			else if (server) // external -> hosted
 			{
@@ -72,11 +58,6 @@ namespace BALL
 				tab_view_->insertTab(0, server_tab_, "Server");
 			}
 			server_ = server;
-		}
-
-		JupyterServer* JupyterWidget::getServer()
-		{
-			return server_;
 		}
 
 		void JupyterWidget::closeTab(int index)

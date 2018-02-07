@@ -21,12 +21,12 @@ namespace BALL
 			public:
 				BALL_EMBEDDABLE(JupyterWidget, DockWidget)
 
-				JupyterWidget(MainControl* parent = nullptr, const char* title = "");
-				virtual ~JupyterWidget();
+				JupyterWidget();
+				~JupyterWidget() override = default;
 
 				void setDashboardURL(const QString& url);
 				void setServer(JupyterServer* server);
-				JupyterServer* getServer();
+				JupyterServer* getServer() { return server_; };
 
 				virtual QWebEngineView* createWindow(QWebEnginePage::WebWindowType /*type*/);
 
@@ -37,14 +37,14 @@ namespace BALL
 			protected:
 				void contextMenuEvent(QContextMenuEvent* evt) override;
 
-				QTabWidget* tab_view_;
-				JupyterTab* dashboard_;
-				QUrl dashboard_url_;
-				JupyterServer* server_;
-				JupyterServerTab* server_tab_;
+				QTabWidget* tab_view_ {new QTabWidget(this)};
+				JupyterTab* dashboard_ {nullptr};
+				QUrl dashboard_url_ {};
+				JupyterServer* server_ {nullptr};
+				JupyterServerTab* server_tab_ {nullptr};
 
 			private:
-				QReadWriteLock page_lock_;
+				QReadWriteLock page_lock_ {};
 		};
 	}
 }

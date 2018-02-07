@@ -28,7 +28,7 @@ namespace BALL
 				enum class ConnectionMode {EXTERNAL, HOSTED};
 			
 				/// Default Constructor.
-				JupyterPreferences(QWidget *parent = nullptr, const char *name = "JupyterPreferences", Qt::WindowFlags fl=0);
+				JupyterPreferences(Qt::WindowFlags fl=0);
 				
 				/// Destructor.
 				~JupyterPreferences() override;
@@ -56,14 +56,14 @@ namespace BALL
 			protected:
 				virtual void updateServer();
 
-				ConnectionMode conn_mode_;
-				QString dashboard_url_;
-				QString exe_path_;
-				QString nbdir_;
-				QString token_;
-				unsigned int port_;
-				bool autostart_;
-				bool debug_;
+				ConnectionMode conn_mode_ {ConnectionMode::EXTERNAL};
+				QString dashboard_url_ {};
+				QString exe_path_ {};
+				QString nbdir_ {};
+				QString token_ {};
+				unsigned int port_ {0};
+				bool autostart_ {false};
+				bool debug_ {false};
 		};
 	}
 } // namespace

@@ -11,20 +11,12 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		JupyterPreferences::JupyterPreferences(QWidget* parent, const char* name, Qt::WindowFlags fl)
-			: ConfigDialog{parent, fl},
-			  Ui_JupyterPreferencesData{},
-			  conn_mode_{ConnectionMode::EXTERNAL},
-			  dashboard_url_{},
-			  exe_path_{},
-			  nbdir_{},
-			  token_{},
-			  port_{0},
-			  autostart_{false},
-			  debug_{false}
+		JupyterPreferences::JupyterPreferences(Qt::WindowFlags fl) :
+			ConfigDialog{nullptr, fl},
+			Ui_JupyterPreferencesData{}
 		{
 			setupUi(this);
-			setObjectName(name);
+			setObjectName("JupyterPreferences");
 			setINIFileSectionName("Jupyter");
 			setWidgetStackName("JupyterWidget");
 

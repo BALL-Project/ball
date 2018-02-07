@@ -42,12 +42,12 @@ namespace BALL
 				void errorOccurred(QProcess::ProcessError);
 
 			protected:
-				QString exe_path_;
-				unsigned int port_;
-				bool debug_;
-				QString nbdir_;
-				QString token_;
-				QProcess* proc_;
+				QString exe_path_ {};
+				unsigned int port_ {0};
+				bool debug_ {false};
+				QString nbdir_ {};
+				QString token_ {};
+				QProcess* proc_ {new QProcess(this)};
 		};
 	}
 }

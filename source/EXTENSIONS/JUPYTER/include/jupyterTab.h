@@ -23,7 +23,7 @@ namespace BALL
 			protected:
 				QWebEngineView* createWindow(QWebEnginePage::WebWindowType type) override;
 
-				JupyterWidget* base_;
+				JupyterWidget* base_ {nullptr};
 		};
 	}
 }

@@ -11,10 +11,9 @@ namespace BALL
 		using ProcessState = QProcess::ProcessState;
 		using ProcessError = QProcess::ProcessError;
 
-		JupyterServerTab::JupyterServerTab(QWidget* parent, JupyterServer* server)
-			: QWidget(parent),
-			  Ui_JupyterServerTab(),
-			  server_(nullptr)
+		JupyterServerTab::JupyterServerTab(QWidget* parent, JupyterServer* server) :
+			QWidget(parent),
+			Ui_JupyterServerTab()
 		{
 			setupUi(this);
 			setServer(server);
