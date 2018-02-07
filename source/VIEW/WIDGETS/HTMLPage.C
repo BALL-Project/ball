@@ -47,16 +47,17 @@ namespace BALL
 			Q_UNUSED(lineNumber)
 
 #ifdef BALL_VIEW_DEBUG
+			auto msg = QString("[HTMLPage/JSConsole] Line %1: %2").arg(lineNumber).arg(message);
 			switch (level)
 			{
 				case InfoMessageLevel:
-					Log.info() << lineNumber << ": " << message.toStdString() << std::endl;
+					Log.info() << msg.toStdString() << std::endl;
 					break;
 				case WarningMessageLevel:
-					Log.warn() << lineNumber << ": " << message.toStdString() << std::endl;
+					Log.warn() << msg.toStdString() << std::endl;
 					break;
 				case ErrorMessageLevel:
-					Log.error() << lineNumber << ": " << message.toStdString() << std::endl;
+					Log.error() << msg.toStdString() << std::endl;
 					break;
 			}
 #endif
