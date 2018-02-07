@@ -16,6 +16,14 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		/**
+		 * [JupyterPlugin]
+		 * VIEW plugin to make Jupyter notebooks accessible in a dock widget. Jupyter notebook servers can either be
+		 * hosted externally or via this plugin.
+		 *
+		 * Memory management of this plugin is isolated from the application it's running in. Do not attempt to delete
+		 * objects obtained from this plugin.
+		 */
 		class JupyterPlugin :
 			public QObject,
 			public BALLPlugin,

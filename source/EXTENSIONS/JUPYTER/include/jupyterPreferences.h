@@ -13,10 +13,10 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/** JupyterPreferences is a widget that will be inserted into the
-				tab dialog Preferences.
-				\ingroup ViewDialogs
-		*/
+		/**
+		 * [JupyterPlugin]
+		 * Settings dialog for the Jupyter plugin.
+		 */
 		class JupyterPreferences :
 			public ConfigDialog,
 			public Ui_JupyterPreferencesData
@@ -26,14 +26,10 @@ namespace BALL
 			public:
 
 				enum class ConnectionMode {EXTERNAL, HOSTED};
-			
-				/// Default Constructor.
+
 				JupyterPreferences(Qt::WindowFlags fl=0);
-				
-				/// Destructor.
 				~JupyterPreferences() override;
 
-				///
 				void storeValues() override;
 				void restoreValues(bool all = false) override;
 
@@ -46,14 +42,35 @@ namespace BALL
 				bool getAutostart() const { return autostart_; }
 				bool getDebug() const { return debug_; }
 
+				/**
+				 * Toggles the visibility of connection-mode-specific settings.
+				 *
+				 * @param mode connection mode
+				 */
 				void selectConnectionMode(ConnectionMode mode);
 
 			public Q_SLOTS:
+				/**
+				 * Toggles the visibility of connection-mode-specific settings.
+				 *
+				 * @param index connection mode index according to the dialog's selection box
+				 */
 				void selectConnectionMode(int index);
+
+				/**
+				 * Sets the path to the Jupyter executable according to the settings.
+				 */
 				void selectExePath();
+
+				/**
+				 * Sets the Jupyter notebook directory (dashboard root) according to the settings.
+				 */
 				void selectNbdir();
 
 			protected:
+				/**
+				 * Applies changes in the connection mode setting. 
+				 */
 				virtual void updateServer();
 
 				ConnectionMode conn_mode_ {ConnectionMode::EXTERNAL};
