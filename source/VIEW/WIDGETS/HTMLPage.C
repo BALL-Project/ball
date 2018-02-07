@@ -14,31 +14,15 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		void HTMLInterfaceAction::execute(const QList<QPair<QString, QString> >& parameters)
-		{
-			executeImpl_(parameters);
-			Q_EMIT finishedExecution();
-		}
-
-		HTMLPage::HTMLPage(QObject* parent, bool ignore_ssl_errors)
-				: QWebEnginePage(parent),
-				  ignore_ssl_errors_(ignore_ssl_errors),
-				  action_registry_()
+		HTMLPage::HTMLPage(QObject* parent, bool ignore_ssl_errors) :
+			QWebEnginePage(parent),
+			ignore_ssl_errors_(ignore_ssl_errors)
 		{}
 
-		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent, bool ignore_ssl_errors)
-				: QWebEnginePage(profile, parent),
-				  ignore_ssl_errors_(ignore_ssl_errors),
-				  action_registry_()
+		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent, bool ignore_ssl_errors) :
+			QWebEnginePage(profile, parent),
+			ignore_ssl_errors_(ignore_ssl_errors)
 		{}
-
-		HTMLPage::~HTMLPage()
-		{
-			for (QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.begin(); it != action_registry_.end(); ++it)
-			{
-				delete it.value();
-			}
-		}
 
 		bool HTMLPage::acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame)
 		{
@@ -80,54 +64,32 @@ namespace BALL
 
 		void HTMLPage::executeLink(const QUrl& url)
 		{
-			QString action_name = QUrlQuery(url).queryItemValue("action");
+			auto action_name = QUrlQuery(url).queryItemValue("action");
 			if (action_name == QString::null)
 			{
 				return;
 			}
 
-			QString method_type = QUrlQuery(url).queryItemValue("method");
-			QString parameters  = QUrlQuery(url).queryItemValue("parameters");
-
-			//Ideally this if should be converted into another registry
-			if (method_type == "native")
-			{
-				QHash<QString, HTMLInterfaceAction*>::iterator it = action_registry_.find(action_name);
-
-				if (it != action_registry_.end())
-				{
-					(*it)->execute(QUrlQuery(url).queryItems());
-				}
-			}
-			else if (method_type == "" || method_type == "python")
-			{
-				executePython_(action_name, QUrlQuery(url).queryItems());
-			}
-		}
-
-		void HTMLPage::executePython_(const QString& action, const ParameterList& parameters)
-		{
 #ifdef BALL_PYTHON_SUPPORT
 			string load_module = "__main__";
 			PyKernel::KeyValArgs args;
-			for (const auto& pair: parameters)
+			for (const auto& pair: QUrlQuery(url).queryItems())
 			{
 				if (pair.first == "module") load_module = pair.second.toStdString();
 
-				if (pair.first == "action" || pair.first == "module" || pair.first == "method") continue;
+				if (pair.first == "action" || pair.first == "module") continue;
 
 				args[pair.first.toStdString()] = pair.second.toStdString();
 			}
 
-			if (!PyInterpreter::execute(load_module, action.toStdString(), args))
+			if (!PyInterpreter::execute(load_module, action_name.toStdString(), args))
 			{
-				Log.error() << "Could not execute action " << action.toStdString() << " from module "
-				            << load_module << " \n";
+				Log.error() << "Could not execute action " << action_name.toStdString() << " from module "
+							<< load_module << " \n";
 			}
 #else
-			Q_UNUSED(parameters)
-			Log.error() << "BALL is compiled without Python support. Action " << action.toStdString()
-						<< " could not be executed." << std::endl;
+			Log.error() << "BALL has been compiled without Python support. Action " << action_name.toStdString()
+						<< " cannot be executed." << std::endl;
 #endif
 		}
 	}

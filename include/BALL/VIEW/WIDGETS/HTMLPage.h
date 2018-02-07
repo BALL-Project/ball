@@ -10,24 +10,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class HTMLInterfaceAction : public QObject
-		{
-			Q_OBJECT
-
-			public:
-				virtual QString getName() const = 0;
-
-			public Q_SLOTS:
-
-				void execute(const QList<QPair<QString, QString> >& parameters);
-
-			protected:
-				virtual void executeImpl_(const QList<QPair<QString, QString> >& parameters) = 0;
-
-			Q_SIGNALS:
-				void finishedExecution();
-		};
-
 		class BALL_VIEW_EXPORT HTMLPage: public QWebEnginePage
 		{
 			Q_OBJECT
@@ -35,19 +17,17 @@ namespace BALL
 			public:
 				HTMLPage(QObject* parent = 0, bool ignore_ssl_errors = false);
 				HTMLPage(QWebEngineProfile* profile, QObject* parent = 0, bool ignore_ssl_errors = false);
-				virtual ~HTMLPage();
+				~HTMLPage() override = default;
 
 			protected:
-				typedef QList<QPair<QString, QString> > ParameterList;
-				virtual bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame);
-				virtual bool certificateError(const QWebEngineCertificateError& /* certificateError */);
-				virtual void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString& /* sourceID */);
+				bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame) override;
+				bool certificateError(const QWebEngineCertificateError& /* certificateError */) override;
+				void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString& /* sourceID */) override;
+
 				virtual void executeLink(const QUrl& url);
-				virtual void executePython_(const QString& action, const ParameterList& parameters);
 
 			private:
 				bool ignore_ssl_errors_;
-				QHash<QString, HTMLInterfaceAction*> action_registry_;
 		};
 	}
 }
