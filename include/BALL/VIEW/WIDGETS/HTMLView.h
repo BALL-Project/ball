@@ -33,7 +33,7 @@ namespace BALL
 			public:
 
 				HTMLView(QWidget* parent = 0);
-				virtual ~HTMLView();
+				~HTMLView() override = default;
 		};
 
 		class BALL_VIEW_EXPORT HTMLViewDock : public DockWidget

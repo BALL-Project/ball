@@ -18,9 +18,6 @@ namespace BALL
 			hide();	// hiding WebEngine widgets seems to be sufficient to prevent nouveau-related crashes
 		}
 
-		HTMLView::~HTMLView()
-		{}
-
 		HTMLViewDock::HTMLViewDock(HTMLView* view, QWidget* parent, const char* title)
 			: DockWidget(parent, title),
 			  skip_checks_(false),
