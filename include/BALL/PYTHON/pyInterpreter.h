@@ -1,16 +1,13 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
 
-// This has to be included before Python.h as to macro redefinition clashes in macOS Python...
+// This has to be included before Python.h to prevent macro redefinition clashes in macOS Python...
 #include <BALL/SYSTEM/path.h>
 
 #include <BALL/PYTHON/pyKernel.h>
 #include <BALL/PYTHON/pyServer.h>
 
+#include <memory>
 #include <vector>
 
 #include <QtCore/QList>
@@ -29,8 +26,8 @@ namespace BALL
 	{
 		private:
 			// We don't want anybody to instantiate this!
-			PyInterpreter() {}
-			~PyInterpreter() {}
+			PyInterpreter() = default;
+			~PyInterpreter() = default;
 		
 		public:
 			/**	@name Type definitions */
@@ -148,9 +145,9 @@ namespace BALL
 			//@}
 
 		protected:
-			static PyKernel*   kernel_;
+			static std::unique_ptr<PyKernel> kernel_;
+			static std::unique_ptr<PyServer> server_;
 			static PathStrings sys_path_;
-			static PyServer*   server_;
 	};
    
 } // namespace BALL

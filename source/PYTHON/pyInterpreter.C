@@ -1,7 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 #include <BALL/PYTHON/pyInterpreter.h>
 
 #include <BALL/FORMAT/lineBasedFile.h>
@@ -10,17 +6,17 @@
 
 using std::string;
 using std::tie;
+using std::unique_ptr;
 
 namespace BALL
 {
-	PyKernel* PyInterpreter::kernel_ = nullptr;
-	PyServer* PyInterpreter::server_ = nullptr;
+	unique_ptr<PyKernel> PyInterpreter::kernel_(nullptr);
+	unique_ptr<PyServer> PyInterpreter::server_(nullptr);
 	PyInterpreter::PathStrings PyInterpreter::sys_path_;
 
 	void PyInterpreter::finalize()
 	{
-		if(kernel_) delete kernel_;
-		kernel_ = nullptr;
+		kernel_.reset();
 	}
 
 	void PyInterpreter::initialize()
@@ -28,7 +24,7 @@ namespace BALL
 		// finalize the interpreter if it is already running
 		if(kernel_) finalize();
 
-		kernel_ = new PyCAPIKernel();
+		kernel_.reset(new PyCAPIKernel());
 
 		// import sys
 		run("import sys");
@@ -189,7 +185,7 @@ namespace BALL
 		// Server is already running
 		if (serverIsRunning()) return;
 
-		server_ = new PyServer;
+		server_.reset(new PyServer);
 	}
 
 	void PyInterpreter::stopServer()
@@ -197,8 +193,7 @@ namespace BALL
 		// Server is not running
 		if (!serverIsRunning()) return;
 
-		delete server_;
-		server_ = nullptr;
+		server_.reset();
 	}
 
 } // namespace BALL
