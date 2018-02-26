@@ -12,22 +12,16 @@ using std::string;
 using std::tie;
 
 namespace BALL {
-	PyServer::PyServer() :
-		server_{nullptr}
+	PyServer::PyServer()
 	{
 		if (!PyInterpreter::isInitialized())
 		{
 			Log.error() << "[PyServer] Server cannot be started as the Python interpreter is unavailable!" << std::endl;
 			return;
 		}
-		server_ = new QTcpServer();
+		server_.reset(new QTcpServer());
 		server_->listen(QHostAddress::LocalHost, 8897u);
-		server_->connect(server_, &QTcpServer::newConnection, [this]{ this->processRequest(); });
-	}
-
-	PyServer::~PyServer()
-	{
-		if(server_) delete server_;
+		server_->connect(server_.get(), &QTcpServer::newConnection, [this]{ this->processRequest(); });
 	}
 
 	void PyServer::processRequest()

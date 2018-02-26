@@ -5,6 +5,8 @@
 
 #include <QtNetwork/QTcpServer>
 
+#include <memory>
+
 namespace BALL
 {
 	class BALL_EXPORT PyServer
@@ -15,7 +17,7 @@ namespace BALL
 			 */
 			PyServer();
 
-			~PyServer();
+			~PyServer() = default;
 
 			/**
 			 * Processes a single request and sends a suitable response.
@@ -48,7 +50,7 @@ namespace BALL
 			 */
 			void disconnectClient(QTcpSocket* client);
 
-			QTcpServer* server_;
+			std::unique_ptr<QTcpServer> server_ {nullptr};
 	};
 }
 
