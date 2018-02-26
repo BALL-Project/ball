@@ -11,7 +11,7 @@ namespace BALL
 	{
 		public:
 			PyCAPIKernel();
-			~PyCAPIKernel();
+			~PyCAPIKernel() override;
 
 			bool isStarted() const override;
 			std::string getErrorMessage() const override { return last_err_; };
@@ -37,10 +37,10 @@ namespace BALL
 			 */
 			bool errorOccurred();
 
-			PyObject* main_module_;
-			PyObject* context_;
-			std::string last_err_;
-			std::vector<PyObject*> modules_;
+			PyObject* main_module_ {nullptr};
+			PyObject* context_ {nullptr};
+			std::string last_err_ {};
+			std::vector<PyObject*> modules_ {};
 	};
 }
 

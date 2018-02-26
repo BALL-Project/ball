@@ -16,8 +16,8 @@ namespace BALL
 		public:
 			using KeyValArgs = std::map<std::string, std::string>;
 
-			PyKernel() {}
-			virtual ~PyKernel() {}
+			PyKernel() = default;
+			virtual ~PyKernel() = default;
 
 			/**
 			 * Checks whether the kernel is started.

@@ -10,11 +10,7 @@ using std::stringstream;
 namespace BALL
 {
 	PyCAPIKernel::PyCAPIKernel() :
-		PyKernel{},
-		main_module_{nullptr},
-		context_{nullptr},
-		last_err_{},
-		modules_{}
+		PyKernel{}
 	{
 		Py_Initialize();
 
