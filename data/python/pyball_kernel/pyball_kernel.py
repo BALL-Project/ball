@@ -24,11 +24,6 @@ class BALLViewKernel(Kernel):
 
 	def do_execute(self, code, silent, store_history=True, user_expressions=None, allow_stdin=False):
 
-		code = json.dumps({
-			'msg_type': 'execute_request',
-			'content':   code
-		})
-
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		try:
 			s.connect((self.pyserver_host, self.pyserver_port))
@@ -52,7 +47,12 @@ class BALLViewKernel(Kernel):
 			})
 			return content
 
-		s.sendall(code)
+		code = json.dumps({
+			'msg_type': 'execute_request',
+			'content':   code
+		})
+
+		s.sendall(code.encode('utf-8'))
 		data = self.recvall(s)
 		s.close()
 
@@ -77,7 +77,7 @@ class BALLViewKernel(Kernel):
 			'payload':          [],
 			'user_expressions': {},
 		})
-		return content 
+		return content
 
 	def recvall(self, sock):
 		"""Reads all JSON data from the given socket and returns the dict representation of the data. Returns None
@@ -85,7 +85,7 @@ class BALLViewKernel(Kernel):
 		nbytes = 4096
 		dat = []
 		while True:
-			dat.append(sock.recv(nbytes))
+			dat.append(sock.recv(nbytes).decode('utf-8'))
 			if(len(dat[-1])) < nbytes:
 				break
 		try:
