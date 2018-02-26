@@ -22,7 +22,7 @@ namespace BALL
 			is not yet supported.
 			\ingroup PythonExtensions
 	*/
-	class BALL_EXPORT PyInterpreter
+	class BALL_EXPORT PyInterpreter final
 	{
 		private:
 			// We don't want anybody to instantiate this!

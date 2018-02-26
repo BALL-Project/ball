@@ -9,7 +9,7 @@
 
 namespace BALL
 {
-	class BALL_EXPORT PyServer
+	class BALL_EXPORT PyServer final
 	{
 		public:
 			/**
