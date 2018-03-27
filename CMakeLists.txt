@@ -202,38 +202,28 @@ IF(USE_CUDA)
 	FIND_PACKAGE(CUDA REQUIRED)
 ENDIF()
 
+
 ## TBB
-SET(USE_TBB ON CACHE BOOL "Should Intel Threading Building Blocks support be enabled?")
-SET(REQUIRE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be required?")
+SET(BALL_HAS_TBB FALSE)
+FIND_PACKAGE(TBB)
 
-## RTFact would require tbb... so check if it is required
-IF(REQUIRE_RTFACT)
-	SET(REQUIRE_TBB ON)
-ENDIF()
+IF(TBB_FOUND)
 
-IF(USE_TBB)
-	IF (REQUIRE_TBB)
-		FIND_PACKAGE(TBB REQUIRED)
-	ELSE()
-		FIND_PACKAGE(TBB)
-		IF (NOT TBB_FOUND)
-			MESSAGE(STATUS "Intel Threading Building Blocks not found!")
-		ENDIF()
-	ENDIF()
-
+	# Check if BALL license and TBB license are compatible
 	IF(${BALL_LICENSE_GPL} OR NOT ${TBB_VERSION_MAJOR} VERSION_LESS 2017)
-
-		IF (TBB_FOUND)
-			INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
-			BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
-			LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
-
-			SET(BALL_HAS_TBB TRUE)
-		ENDIF()
-
+		INCLUDE_DIRECTORIES(${TBB_INCLUDE_DIRS})
+		BALL_COMBINE_LIBS(TBB_LIBRARIES "${TBB_LIBRARIES}" "${TBB_DEBUG_LIBRARIES}")
+		LIST(REMOVE_DUPLICATES TBB_LIBRARIES)
+		SET(BALL_HAS_TBB TRUE)
+		MESSAGE(STATUS "Found TBB version: ${TBB_VERSION_MAJOR}")
+	ELSE()
+		MESSAGE(STATUS "Intel Threading Building Blocks (TBB) found but incompatible license. Skip TBB support!")
 	ENDIF()
 
+ELSE()
+	MESSAGE(STATUS "Intel Threading Building Blocks (TBB) not found!")
 ENDIF()
+
 
 ## MPI
 OPTION(USE_MPI "Should MPI support be enabled?" ON)
@@ -344,9 +334,6 @@ IF (BALL_HAS_VIEW)
 	OPTION(BALL_ENABLE_CG "Build against NVIDIA Cg library" OFF)
 	OPTION(BALL_REQUIRE_CG "Fail if NVIDIA Cg could not be detected" OFF)
 
-	OPTION(USE_RTFACT "Enable RTfact support" ON)
-	OPTION(REQUIRE_RTFACT "Require RTfact support" OFF)
-
 	## OpenGL
 	FIND_PACKAGE(OpenGL)
 	IF (NOT OPENGL_FOUND OR NOT OPENGL_GLU_FOUND)
@@ -361,23 +348,22 @@ IF (BALL_HAS_VIEW)
 	ENDIF()
 
 	## RTfact
-	IF (USE_RTFACT)
-		IF (REQUIRE_RTFACT)
-			FIND_PACKAGE(RTfact REQUIRED)
-		ELSE()
-			FIND_PACKAGE(RTfact)
-		ENDIF()
+	OPTION(USE_RTFACT "Build with RTfact support?" OFF)
 
-		IF (RTFACT_FOUND)
-			## RTfact requires TBB
-			IF (NOT CMAKE_COMPILER_IS_INTELCXX)
-				IF (NOT BALL_HAS_TBB)
-					MESSAGE(FATAL_ERROR "RTfact support requires TBB!")
-				ENDIF()
+	IF(USE_RTFACT)
+		IF(BALL_HAS_TBB OR CMAKE_COMPILER_IS_INTELCXX)
+
+			FIND_PACKAGE(RTfact)
+
+			IF (RTFACT_FOUND)
+				SET(BALL_HAS_RTFACT TRUE)
+				INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
+			ELSE()
+				MESSAGE(WARNING "RTfact not found!")
 			ENDIF()
 
-			SET(BALL_HAS_RTFACT TRUE)
-			INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
+		ELSE()
+			MESSAGE(WARNING "RTfact support requires TBB or Intel C++ compiler which are not found. Skip RTfact support!")
 		ENDIF()
 	ENDIF()
 
@@ -565,7 +551,7 @@ IF(UNIX)
 	LIST(APPEND BALL_DEP_LIBRARIES "pthread")
 ENDIF()
 
-IF(TBB_FOUND)
+IF(BALL_HAS_TBB)
 	LIST(APPEND BALL_DEP_LIBRARIES ${TBB_LIBRARIES})
 ENDIF()
 
