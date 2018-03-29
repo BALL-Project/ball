@@ -174,7 +174,6 @@ namespace BALL
 		 * @param roll the nrotation about the roll axis (x-axis)
 		 */
 		void toEulerAngles(T& yaw, T& pitch, T& roll);
-		//void toEA(T& yaw, T& pitch, T& roll);
 
 		/**
 		 * Assign to another TQuaternion.
@@ -200,7 +199,7 @@ namespace BALL
 		 * @param m the matrix to compute from
 		 * @return TMatrix4x4 the rotation matrix
 		 */
-		TMatrix4x4<T>& getRotationMatrix(TMatrix4x4<T>& m) const;
+		void getRotationMatrix(TMatrix4x4<T>& m) const;
 
 		/**
 		 * Get the inverse TQuaternion.
@@ -221,52 +220,28 @@ namespace BALL
 		//@{
 
 		/**
-		 * Get the angular component w.
-		 * @return get a reference to the angular component w
-		 */
-		T& w();
-
-		/**
 		 * Get the constant angular component w.
 		 * @return get a const reference to the angular component w
 		 */
-		const T& w() const;
-
-		/**
-		 * Get the axis component i.
-		 * @return get a reference to the axis component i
-		 */
-		T& i();
+		const T w() const;
 
 		/**
 		 * Get the constant axis component i.
 		 * @return get a const reference to the axis component i
 		 */
-		const T& i() const;
-
-		/**
-		 * Get the axis component j.
-		 * @return get a reference to the axis component j
-		 */
-		T& j();
+		const T i() const;
 
 		/**
 		 * Get the constant axis component j.
 		 * @return get a const reference to the axis component j
 		 */
-		const T& j() const;
-
-		/**
-		 * Get the axis component k.
-		 * @return get a reference to the axis component k
-		 */
-		T& k();
+		const T j() const;
 
 		/**
 		 * Get the constant axis component k.
 		 * @return get a const reference to the axis component k
 		 */
-		const T& k() const;
+		const T k() const;
 
 
 		//@}
@@ -283,6 +258,10 @@ namespace BALL
 		 */
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
+
+		private:
+
+		T getLengthImaginary() const;
 
 	};
 	//@}
@@ -346,10 +325,8 @@ namespace BALL
 	BALL_INLINE
 	void TQuaternion<T>::set(const T& w, const T& i, const T& j, const T& k)
 	{
-		this->a = w;
-		this->b = i;
-		this->c = j;
-		this->d = k;
+
+		boost::math::quaternion<T>::operator= (boost::math::quaternion<T>(w, i, j, k));
 	}
 
 	template <typename T>
@@ -372,8 +349,7 @@ namespace BALL
 	BALL_INLINE
 	void TQuaternion<T>::setIdentity()
 	{
-		this->a = (T)1;
-		this->b = this->c = this->d = (T)0;
+		set((T)1, (T)0, (T)0, (T)0);
 	}
 
 	template <typename T>
@@ -384,32 +360,19 @@ namespace BALL
 
 		if (!(Maths::isEqual(length, (T)0)))
 		{
-			this->a /= length;
-			this->b /= length;
-			this->c /= length;
-			this->d /= length;
+			*this /= length;
 		}
+
 		return *this;
 	}
 
 	template <typename T>
 	void TQuaternion<T>::swap(TQuaternion<T>& q)
 	{
-		T tmp = q.a;
-		q.a = this->a;
-		this->a = tmp;
+		TQuaternion<T> tmp(q);
 
-		tmp = q.b;
-		q.b = this->b;
-		this->b = tmp;
-
-		tmp = q.c;
-		q.c = this->c;
-		this->c = tmp;
-
-		tmp = q.d;
-		q.d = this->d;
-		this->d = tmp;
+		q = *this;
+		*this = tmp;
 	}
 
 	template <typename T>
@@ -419,18 +382,19 @@ namespace BALL
 
 		if (Maths::isEqual(length, (T)0))
 		{
-			this->b = this->c = this->d = (T)0;
-			this->a = (T)1;
+			setIdentity();
 		}
 		else
 		{
 			T omega = (T) (angle * 0.5);
 			T sin_omega = (T)::sin(omega);
 
-			this->a = (T)::cos(omega);
-			this->b = axis.x * sin_omega / length;
-			this->c = axis.y * sin_omega / length;
-			this->d = axis.z * sin_omega / length;
+			T a = (T)::cos(omega);
+			T b = axis.x * sin_omega / length;
+			T c = axis.y * sin_omega / length;
+			T d = axis.z * sin_omega / length;
+
+			set(a, b, c, d);
 		}
 	}
 
@@ -450,16 +414,18 @@ namespace BALL
 		T cosRoll = cos(half_roll);
 		T sinRoll = sin(half_roll);
 
-		this->a = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw;
-		this->b = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw;
-		this->c = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
-		this->d = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
+		T a = cosRoll * cosPitch * cosYaw + sinRoll * sinPitch * sinYaw;
+		T b = sinRoll * cosPitch * cosYaw - cosRoll * sinPitch * sinYaw;
+		T c = cosRoll * sinPitch * cosYaw + sinRoll * cosPitch * sinYaw;
+		T d = cosRoll * cosPitch * sinYaw - sinRoll * sinPitch * cosYaw;
+
+		set(a, b, c, d);
 	}
 
 	template <typename T>
 	void TQuaternion<T>::toAxisAngle(TVector3<T>& axis, T& angle)
 	{
-		T length = sqrt(this->b*this->b + this->c*this->c + this->d*this->d);
+		T length = getLengthImaginary();
 
 		if (Maths::isEqual(length, (T)0))
 		{
@@ -468,10 +434,10 @@ namespace BALL
 		}
 		else
 		{
-			angle = 2 * (T)::acos(this->a);
-			axis.x = this->b / length;
-			axis.y = this->c / length;
-			axis.z = this->d / length;
+			angle = 2 * (T)::acos(w());
+			axis.x = i() / length;
+			axis.y = j() / length;
+			axis.z = k() / length;
 		}
 	}
 
@@ -521,50 +487,59 @@ namespace BALL
 	template <typename T>
 	T TQuaternion<T>::getAngle() const
 	{
-		T length = sqrt(this->b*this->b + this->c*this->c + this->d*this->d);
+		T length = getLengthImaginary();
+
 		if (Maths::isEqual(length, (T)0))
 		{
 			return (T)(0);
 		}
 		else
 		{
-			return (T)(2 * (T)::acos(this->a));
+			return (T)(2 * (T)::acos(w()));
 		}
 	}
 
 	template <typename T>
 	TVector3<T> TQuaternion<T>::getAxis()
 	{
-		T length = sqrt(this->b*this->b + this->c*this->c + this->d*this->d);
+		T length = getLengthImaginary();
+
 		if (Maths::isEqual(length, (T)0))
 		{
 			return TVector3<T>((T)0,(T)0,(T)1);
 		}
 		else
 		{
-			return TVector3<T>(this->b/length, this->c/length, this->d/length);
+			return TVector3<T>(i()/length, j()/length, k()/length);
 		}
 	}
 
 	template <typename T>
-	TMatrix4x4<T>& TQuaternion<T>::getRotationMatrix(TMatrix4x4<T>& m) const
+	T TQuaternion<T>::getLengthImaginary() const
+	{
+		return sqrt(i()*i() + j()*j() + k()*k());
+	}
+
+	template <typename T>
+	void TQuaternion<T>::getRotationMatrix(TMatrix4x4<T>& m) const
 	{
 		T s = 2.0 / boost::math::norm(*this);
+
 		m.set
 			(
-				(T)(1.0 - s * (this->c * this->c + this->d * this->d)),
-				(T)(s * (this->b * this->c - this->d * this->a)),
-				(T)(s * (this->d * this->b + this->c * this->a)),
+				(T)(1.0 - s * (j() * j() + k() * k())),
+				(T)(s * (i() * j() - k() * w())),
+				(T)(s * (k() * i() + j() * w())),
 				(T)0,
 
-				(T)(s * (this->b * this->c + this->d * this->a)),
-				(T)(1.0 - s * (this->d * this->d + this->b * this->b)),
-				(T)(s * (this->c * this->d - this->b * this->a)),
+				(T)(s * (i() * j() + k() * w())),
+				(T)(1.0 - s * (k() * k() + i() * i())),
+				(T)(s * (j() * k() - i() * w())),
 				(T)0,
 
-				(T)(s * (this->d * this->b - this->c * this->a)),
-				(T)(s * (this->c * this->d + this->b * this->a)),
-				(T)(1.0 - s * (this->c * this->c + this->b * this->b)),
+				(T)(s * (k() * i() - j() * w())),
+				(T)(s * (j() * k() + i() * w())),
+				(T)(1.0 - s * (j() * j() + i() * i())),
 				(T)0,
 
 				(T)0,
@@ -572,8 +547,6 @@ namespace BALL
 				(T)0,
 				(T)1
 			);
-
-		return m;
 	}
 
 	template <typename T>
@@ -591,58 +564,39 @@ namespace BALL
 	}
 
 	template <typename T>
-	const T& TQuaternion<T>::w() const
+	const T TQuaternion<T>::w() const
 	{
-		return this->a;
+		return this->R_component_1();
 	}
 
 	template <typename T>
-	T& TQuaternion<T>::w()
+	const T TQuaternion<T>::i() const
 	{
-		return this->a;
+		return this->R_component_2();
 	}
 
 	template <typename T>
-	const T& TQuaternion<T>::i() const
+	const T TQuaternion<T>::j() const
 	{
-		return this->b;
+		return this->R_component_3();
 	}
 
 	template <typename T>
-	T& TQuaternion<T>::i()
+	const T TQuaternion<T>::k() const
 	{
-		return this->b;
-	}
-
-	template <typename T>
-	const T& TQuaternion<T>::j() const
-	{
-		return this->c;
-	}
-
-	template <typename T>
-	T& TQuaternion<T>::j()
-	{
-		return this->c;
-	}
-
-	template <typename T>
-	const T& TQuaternion<T>::k() const
-	{
-		return this->d;
-	}
-
-	template <typename T>
-	T& TQuaternion<T>::k()
-	{
-		return this->d;
+		return this->R_component_4();
 	}
 
 	template <typename T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 	{
 		char c;
-		s >> c >> q.w() >> c >> q.i() >> c >> q.j() >> c >>q.k() >> c;
+		T w, i, j, k;
+
+		s >> c >> w >> c >> i >> c >> j >> c >> k >> c;
+
+		q.set(w, i, j, k);
+
 		return s;
 	}
 
@@ -650,7 +604,7 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
 	{
 		s << '(' << q.w() << ',' << q.i() << ','
-		         << q.j() << ',' << q.k() << ')';
+				 << q.j() << ',' << q.k() << ')';
 
 		return s;
 	}
@@ -663,16 +617,16 @@ namespace BALL
 		BALL_DUMP_HEADER(s, this, this);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    w: " << this->w() << std::endl;
+		s << "    w: " << w() << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    i: " << this->i() << std::endl;
+		s << "    i: " << i() << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    j: " << this->j() << std::endl;
+		s << "    j: " << j() << std::endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "    k: " << this->k() << std::endl;
+		s << "    k: " << k() << std::endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}

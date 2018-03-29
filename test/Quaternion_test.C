@@ -46,18 +46,15 @@ CHECK(~TQuaternion())
 	delete q_ptr;
 RESULT	
 
+
 CHECK(TQuaternion(const TQuaternion& q))
-	Quaternion q;
-	q.w() = a; 
-	q.i() = v.x;
-	q.j() = v.y;
-	q.k() = v.z;
+	Quaternion q(a, v.x, v.x, v.z);
 	Quaternion q1(q);
 	TEST_REAL_EQUAL(q1.w(), q.w())
 	TEST_REAL_EQUAL(q1.i(), q.i())
 	TEST_REAL_EQUAL(q1.j(), q.j())
 	TEST_REAL_EQUAL(q1.k(), q.k())
-RESULT	
+RESULT
 
 CHECK(TQuaternion(const boost::math::quaternion<T>& q))
 	boost::math::quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
