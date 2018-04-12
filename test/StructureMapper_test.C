@@ -61,8 +61,11 @@ CHECK(StructureMapper(AtomContainer& A, AtomContainer& B))
 	atom3->setPosition(v);
 	v.set(2,3,2);
 	atom4->setPosition(v);
+
 	Quaternion	q(7,9,12,Constants::PI * 0.6);
+	q.normalize();
 	t = q.getRotationMatrix(t);
+
 	atom5->setPosition(t * atom1->getPosition());
 	atom6->setPosition(t * atom2->getPosition());
 	atom7->setPosition(t * atom3->getPosition());
