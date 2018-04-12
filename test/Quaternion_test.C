@@ -59,13 +59,13 @@ CHECK(TQuaternion(const TQuaternion& q))
 	TEST_REAL_EQUAL(q1.k(), q.k())
 RESULT	
 
-CHECK(TQuaternion(const boost::math::quaternion<T>& q))
-	boost::math::quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
+CHECK(TQuaternion(const Eigen::Quaternion<T>& q))
+	Eigen::Quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
 	Quaternion q1(bq);
-	TEST_REAL_EQUAL(q1.w(), bq.R_component_1())
-	TEST_REAL_EQUAL(q1.i(), bq.R_component_2())
-	TEST_REAL_EQUAL(q1.j(), bq.R_component_3())
-	TEST_REAL_EQUAL(q1.k(), bq.R_component_4())
+	TEST_REAL_EQUAL(q1.w(), bq.w())
+	TEST_REAL_EQUAL(q1.i(), bq.x())
+	TEST_REAL_EQUAL(q1.j(), bq.y())
+	TEST_REAL_EQUAL(q1.k(), bq.z())
 RESULT	
 
 CHECK(TQuaternion(const T& w, const T& i, const T& j, const T& k))
@@ -98,14 +98,14 @@ CHECK(void set(const TQuaternion& q) )
 	TEST_EQUAL(q1, q)
 RESULT	
 
-CHECK(void set(const boost::math::quaternion<T>& q))
-	boost::math::quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
+CHECK(void set(const Eigen::Quaternion<T>& q))
+	Eigen::Quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
 	Quaternion q1;
 	q1.set(bq);
-	TEST_REAL_EQUAL(q1.w(), bq.R_component_1())
-	TEST_REAL_EQUAL(q1.i(), bq.R_component_2())
-	TEST_REAL_EQUAL(q1.j(), bq.R_component_3())
-	TEST_REAL_EQUAL(q1.k(), bq.R_component_4())
+	TEST_REAL_EQUAL(q1.w(), bq.w())
+	TEST_REAL_EQUAL(q1.i(), bq.x())
+	TEST_REAL_EQUAL(q1.j(), bq.y())
+	TEST_REAL_EQUAL(q1.k(), bq.z())
 RESULT	
 
 CHECK(void set(const TVector3<T>& axis, const T& angle))
@@ -129,32 +129,32 @@ CHECK(TQuaternion& operator = (const TQuaternion& q) )
 	TEST_EQUAL(q1, q)
 RESULT	
 
-CHECK(void set(const boost::math::quaternion<T>& q))
-	boost::math::quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
+CHECK(void set(const Eigen::Quaternion<T>& q))
+	Eigen::Quaternion<float> bq(4.0, 1.0, 2.0, 3.0);
 	Quaternion q1;
 	q1 = bq;
-	TEST_REAL_EQUAL(q1.w(), bq.R_component_1())
-	TEST_REAL_EQUAL(q1.i(), bq.R_component_2())
-	TEST_REAL_EQUAL(q1.j(), bq.R_component_3())
-	TEST_REAL_EQUAL(q1.k(), bq.R_component_4())
+	TEST_REAL_EQUAL(q1.w(), bq.w())
+	TEST_REAL_EQUAL(q1.i(), bq.x())
+	TEST_REAL_EQUAL(q1.j(), bq.y())
+	TEST_REAL_EQUAL(q1.k(), bq.z())
 RESULT	
 
 CHECK(void setIdentity())
 	Quaternion q(1.0, 1.0, 1.0, 1.0);
-  q.setIdentity();
-  TEST_EQUAL(q.w(), 1)
-  TEST_EQUAL(q.i(), 0)
-  TEST_EQUAL(q.j(), 0)
-  TEST_EQUAL(q.k(), 0)
+	q.setIdentity();
+	TEST_EQUAL(q.w(), 1)
+	TEST_EQUAL(q.i(), 0)
+	TEST_EQUAL(q.j(), 0)
+	TEST_EQUAL(q.k(), 0)
 RESULT
 
 CHECK(TQuaternion<T>& normalize())
 	Quaternion q(4.0, 1.0, 2.0, 3.0);
 	Quaternion q1 = q.normalize();
-  TEST_REAL_EQUAL(q1.w(), 0.133333)
-  TEST_REAL_EQUAL(q1.i(), 0.0333333)
-  TEST_REAL_EQUAL(q1.j(), 0.0666667)
-  TEST_REAL_EQUAL(q1.k(), 0.1)
+	TEST_REAL_EQUAL(q1.w(), 0.730297)
+	TEST_REAL_EQUAL(q1.i(), 0.182574)
+	TEST_REAL_EQUAL(q1.j(), 0.365148)
+	TEST_REAL_EQUAL(q1.k(), 0.547723)
 RESULT
 
 CHECK(void swap(TQuaternion& q))
