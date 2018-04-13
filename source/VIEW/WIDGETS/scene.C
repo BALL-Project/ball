@@ -627,7 +627,8 @@ namespace BALL
 			Quaternion q2;
 			q2.fromAxisAngle(camera.getRightVector(), Angle(degree_up, false).toRadian());
 
-			q1 += q2;
+			// Concatenate quaternion rotations
+			q1 *= q2;
 
 			camera.rotate(q1, system_origin_);
 			updateGL();
@@ -670,11 +671,11 @@ namespace BALL
 			Quaternion q2;
 			q2.fromAxisAngle(camera.getRightVector(), Angle(degree_up, false).toRadian());
 
-			Quaternion Q;
-			Q.fromAxisAngle(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
+			Quaternion q3;
+			q3.fromAxisAngle(camera.getViewVector(), Angle(degree_clockwise, false).toRadian());
 
-			q1 += q2;
-			q1 += Q;
+			// Concatenate quaternion rotations
+			q1 *= (q2 * q3);
 
 			GeometricCenterProcessor center_processor;
 			Vector3 center;
@@ -1753,7 +1754,7 @@ namespace BALL
 			Quaternion q3;
 			q3.fromAxisAngle(camera.getViewVector(),   0.3 * Angle(-evt->getRotation().z, false).toRadian());
 
-			q1 += q2 + q3;
+			q1 *= (q2 * q3);
 
 			camera.rotate(q1, system_origin_);
 		}
@@ -1772,8 +1773,9 @@ namespace BALL
 			Vector3 new_trackorigin = evt->getOrigin();
 			Vector3 movement = new_trackorigin - old_trackorigin_;
 
-			Quaternion new_trackrotation = evt->getTransform();
-			Quaternion track_rotation = new_trackrotation - old_trackrotation_;
+			// Commented out because both variables were unused
+			//Quaternion new_trackrotation = evt->getTransform();
+			//Quaternion track_rotation = new_trackrotation - old_trackrotation_;
 
 			//Fix this!
 		//	if (!mouse_button_is_pressed_)
