@@ -58,9 +58,7 @@
 //some cases where it does not work as expected, yet.
 #if defined(BALL_COMPILER_MSVC) && (_MSC_VER >= 1300)
     #define BALL_DEPRECATED __declspec(deprecated)
-#elif defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR - 0 > 3 || (BALL_COMPILER_VERSION_MAJOR - 0 == 3 && BALL_COMPILER_VERSION_MINOR - 0 >= 2))
-    #define BALL_DEPRECATED __attribute__((deprecated))
-#elif defined(BALL_COMPILER_LLVM)
+#elif defined(BALL_COMPILER_GXX) || defined(BALL_COMPILER_LLVM)
     #define BALL_DEPRECATED __attribute__((deprecated))
 #else
     #define BALL_DEPRECATED
