@@ -341,9 +341,6 @@ INCLUDE_DIRECTORIES(${EIGEN3_INCLUDE_DIR})
 IF (BALL_HAS_VIEW)
 
 	## VIEW dependent options
-	OPTION(BALL_ENABLE_CG "Build against NVIDIA Cg library" OFF)
-	OPTION(BALL_REQUIRE_CG "Fail if NVIDIA Cg could not be detected" OFF)
-
 	OPTION(USE_RTFACT "Enable RTfact support" ON)
 	OPTION(REQUIRE_RTFACT "Require RTfact support" OFF)
 
@@ -380,31 +377,6 @@ IF (BALL_HAS_VIEW)
 			INCLUDE_DIRECTORIES(${RTFACT_INCLUDE_DIR})
 		ENDIF()
 	ENDIF()
-
-	## Cg
-	IF (BALL_ENABLE_CG)
-		IF (BALL_REQUIRE_CG)
-			SET(CG_MESSAGE "Looking for Cg library (required)...")
-		ELSE()
-			SET(CG_MESSAGE "Looking for Cg library...")
-		ENDIF()
-
-		MESSAGE(STATUS ${CG_MESSAGE})
-		FIND_PACKAGE(Cg)
-
-		IF (CG_FOUND)
-			MESSAGE(STATUS "${CG_MESSAGE} - found  ${CG_LIBRARY}  ${CG_GL_LIBRARY}")
-			SET(BALL_HAS_CG TRUE)
-			SET(CG_LIBRARIES ${CG_LIBRARY} ${CG_GL_LIBRARY})
-			INCLUDE_DIRECTORIES(${CG_INCLUDE_PATH})
-		ELSE()
-			IF (BALL_REQUIRE_CG)
-				MESSAGE(FATAL_ERROR "Could not find Cg library, but Cg was marked as required!")
-			ELSE()
-				MESSAGE(STATUS "Disabling Cg support")
-			ENDIF()
-		ENDIF()
-	ENDIF(BALL_ENABLE_CG)
 
 ENDIF(BALL_HAS_VIEW)
 
@@ -759,8 +731,6 @@ IF(NOT APPLE)
 	IF (WIN32)
 		SET(FIND_DLL_INPUT ${BALL_DEP_LIBRARIES} ${SIP_LIBRARIES} ${VIEW_DEP_LIBRARIES} ${QT_LIBRARIES})
 		BALL_LIB_TO_DLL(BALL_DEP_DEBUG_DLLS BALL_DEP_OPT_DLLS "${FIND_DLL_INPUT}")
-		# NOTE: the special treatment for cg is necessary on 64 bit machines
-		LIST(APPEND BALL_DEP_OPT_DLLS ${CG_DLLS})
 		LIST(REMOVE_DUPLICATES BALL_DEP_OPT_DLLS)
 
 		# If we know where to find a python installer, we can package it
