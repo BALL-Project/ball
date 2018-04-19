@@ -5,7 +5,6 @@ SET(BALL_VIEW_TESTS
 	LineModel_test
 	SurfaceModel_test
 	HBondModel_test
-	ColorRGBA_test
 )
 
 SET(VIEW_TESTS 
