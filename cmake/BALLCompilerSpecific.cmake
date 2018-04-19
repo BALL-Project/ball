@@ -12,7 +12,7 @@ SET(CXX_COMPILER_VERSION_MAJOR "0" CACHE INTERNAL "The C++ compiler major versio
 SET(CXX_COMPILER_VERSION_MINOR "0" CACHE INTERNAL "The C++ compiler minor version")
 SET(CXX_COMPILER_VERSION_MINOR_MINOR "0" CACHE INTERNAL "The C++ compiler minor minor version")
 
-IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
 	SET(CXX_COMPILER_ID "GXX")
 
@@ -37,9 +37,7 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 	## -Wconversion flag for GCC
 	SET(CXX_WARN_CONVERSION OFF CACHE BOOL "Enables warnings for type conversion problems (GCC only)")
 	IF(CXX_WARN_CONVERSION)
-		IF(CMAKE_COMPILER_IS_GNUCXX)
-			SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
-		ENDIF()
+		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wconversion")
 	ENDIF()
 	MESSAGE(STATUS "Compiler checks for conversion: ${CXX_WARN_CONVERSION}")
 
@@ -67,7 +65,7 @@ IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
 		SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fmessage-length=0")
 	ENDIF()
 
-ELSEIF(MSVC)
+ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 
 	SET(CXX_COMPILER_ID "MSVC")
 
@@ -78,41 +76,20 @@ ELSEIF(MSVC)
 		CXX_COMPILER_VERSION_MAJOR ${CXX_COMPILER_VERSION})
 	STRING(REGEX REPLACE "([0-9])([0-9])([0-9])([0-9])" "\\3\\4"
 		CXX_COMPILER_VERSION_MINOR ${CXX_COMPILER_VERSION})
-	
-	#add_definitions(/Wall) ## disable for now.. its just too much!
-
-	## disable dll-interface warning
-	#add_definitions(/wd4251 /wd4275)
-	
-	## disable deprecated functions warning (e.g. for POSIX functions)
-	#add_definitions(/wd4996)
-
-	## disable explicit template instantiation request for partially defined classes
-	#add_definitions(/wd4661)
-	
-	## don't warn about unchecked std::copy()
-	#add_definitions(/D_SCL_SECURE_NO_WARNINGS /D_CRT_SECURE_NO_WARNINGS /D_CRT_SECURE_NO_DEPRECATE)
 
 	## disable min and max macros by default
 	## see CGAL and BOOST configs for more elaborate explanations
 	SET(BALL_PROJECT_COMPILE_DEFNS "${BALL_PROJECT_COMPILE_DEFNS} /DNOMINMAX")
-
-	## compile such that GSL is in DLL mode
-	#add_definitions(/DGSL_DLL)
-
-	## minimal code rebuild
-	#add_definitions(/Gm /Zi)
 
 	## if requested, produce a parallel solution
 	OPTION(BALL_BUILD_SOLUTION_PARALLEL OFF)
 	IF (BALL_BUILD_SOLUTION_PARALLEL)
 		ADD_DEFINITIONS(/MP)
 	ENDIF()
-ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
+
+ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
 	
 	SET(CXX_COMPILER_ID "Intel")
-
-	SET(CMAKE_COMPILER_IS_INTELCXX TRUE CACHE INTERNAL "Is Intel C++ compiler (icpc)")
 
 	## determine version number of the compiler
 	EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} -dumpversion
@@ -132,10 +109,9 @@ ELSEIF(${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel")
 	STRING(REGEX REPLACE "([0-9][0-9])\\.([0-9])\\.([0-9])$" "\\3"
 		CXX_COMPILER_VERSION_MINOR_MINOR ${CXX_COMPILER_VERSION})
 	
-ELSEIF(${CMAKE_CXX_COMPILER_ID} MATCHES ".*Clang")
+ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang") # matches Clang and AppleClang
    # using Clang
 	SET(CXX_COMPILER_ID "LLVM")
-	SET(CMAKE_COMPILER_IS_LLVM TRUE CACHE INTERNAL "Is LLVM C++ compiler (llvm)")
 
 	## determine version number of the compiler
 	EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} --version
