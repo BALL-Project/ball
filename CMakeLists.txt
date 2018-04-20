@@ -267,6 +267,8 @@ OPTION(USE_QTWEBENGINE "Add support for QtWebEngine" ON)
 
 # Enable automatic invocation of moc if required
 SET(CMAKE_AUTOMOC ON)
+SET(CMAKE_AUTOMOC_MOC_OPTIONS "-DBALL_DEPRECATED=") # Fix issues on some machines where moc would ignore classes with
+                                                    # multiple attribute specifications via global macros
 
 SET(QTDIR "" CACHE PATH "Path to the qt installation (optional)")
 SET(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${QTDIR})
