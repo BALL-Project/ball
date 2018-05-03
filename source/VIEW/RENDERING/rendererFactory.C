@@ -80,7 +80,7 @@ namespace BALL
 			bool result = plugin->activate();
 
 			if(result) {
-				emit rendererAdded(plugin->getName());
+				Q_EMIT rendererAdded(plugin->getName());
 			}
 
 			return result;
@@ -91,7 +91,7 @@ namespace BALL
 			bool result = plugin->deactivate();
 
 			if(result) {
-				emit rendererRemoved(plugin->getName());
+				Q_EMIT rendererRemoved(plugin->getName());
 			}
 
 			return plugin->deactivate();
