@@ -33,7 +33,7 @@ namespace BALL
 				virtual bool canHandle(BALLPlugin* plugin) const;
 				virtual std::list<QString> getAvailableRenderers() const;
 
-			signals:
+			Q_SIGNALS:
 				void rendererRemoved(QString name);
 				void rendererAdded(QString name);
 
