@@ -93,7 +93,7 @@ class Material : public QObject
 		 **/
 		void unregisterMaterial( const QObject* slot );
 
-	signals:
+	Q_SIGNALS:
 
 		void materialShininessChanged(float shininess);
 		void materialDiffuseChanged (float r, float g, float b, float a);

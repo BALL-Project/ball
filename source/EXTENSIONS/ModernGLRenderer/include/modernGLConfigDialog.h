@@ -104,7 +104,7 @@ class ModernGLConfigDialog : public BALL::VIEW::ConfigDialog
 		 */
 		virtual void readPreferenceEntries(const BALL::INIFile& ini);
 
-	private slots:
+	private Q_SLOTS:
 		/**
 		 * @brief Updates the "sample radius" label.
 		 *
@@ -146,7 +146,7 @@ class ModernGLConfigDialog : public BALL::VIEW::ConfigDialog
 		 **/
 		virtual void numPassesSliderChanged();
 
-	signals:
+	Q_SIGNALS:
 		/**
 		 * @brief Signal for changed SSO parameters.
 		 *

@@ -29,7 +29,7 @@ void Material::setMaterialShininess(float shininess)
 {
 	m_.shininess = shininess;
 
-	emit materialShininessChanged(shininess);
+	Q_EMIT materialShininessChanged(shininess);
 }
 
 void Material::setMaterialDiffuse(float r, float g, float b, float a)
@@ -39,7 +39,7 @@ void Material::setMaterialDiffuse(float r, float g, float b, float a)
 	m_.diffuse.b = b;
 	m_.diffuse.a = a;
 
-	emit materialDiffuseChanged(r,g,b,a);
+	Q_EMIT materialDiffuseChanged(r,g,b,a);
 }
 
 void Material::setMaterialAmbient(float r, float g, float b, float a)
@@ -49,7 +49,7 @@ void Material::setMaterialAmbient(float r, float g, float b, float a)
 	m_.ambient.b = b;
 	m_.ambient.a = a;
 
-	emit materialAmbientChanged(r, g, b, a);
+	Q_EMIT materialAmbientChanged(r, g, b, a);
 }
 
 void Material::setMaterialSpecular(float r, float g, float b, float a)
@@ -59,7 +59,7 @@ void Material::setMaterialSpecular(float r, float g, float b, float a)
 	m_.specular.b = b;
 	m_.specular.a = a;
 
-	emit materialSpecularChanged(r, g, b, a);
+	Q_EMIT materialSpecularChanged(r, g, b, a);
 }
 
 void Material::registerMaterial( const QObject* slot )

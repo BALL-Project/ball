@@ -145,7 +145,7 @@ bool ModernGLRenderer::init(const BALL::VIEW::Stage& stage, float width, float h
 
 	initialized_ = true;
 
-	emit(initialized());
+	Q_EMIT(initialized());
 
 	return true;
 }
@@ -833,7 +833,7 @@ void ModernGLRenderer::updateMaterialFromStage()
 	//  blue  = (float)rt_material.reflective_color.getBlue()  * rt_material.reflective_intensity;
 	//  alpha = (float)rt_material.reflective_color.getAlpha() * rt_material.reflective_intensity;
 	//
-	//  emit materialDiffuseChanged(red, green, blue, alpha);
+	//  Q_EMIT materialDiffuseChanged(red, green, blue, alpha);
 
 	material->setMaterialDiffuse(.8f,  .8f,  .8f, 1.0f);
 
@@ -845,7 +845,7 @@ void ModernGLRenderer::updateMaterialFromStage()
 	material->setMaterialShininess(shininess);
 
 	//float transparency = (float) (100.f - rt_material.transparency) * 0.01f;
-	//  emit materialTransparencyChanged(transparency);
+	//  Q_EMIT materialTransparencyChanged(transparency);
 }
 
 void ModernGLRenderer::ssaoParametersChanged(SSAOParameters ssaoParameters)
@@ -855,7 +855,7 @@ void ModernGLRenderer::ssaoParametersChanged(SSAOParameters ssaoParameters)
 		if(ssao_->isInitialized())
 		{
 			useAO_ = ssaoParameters.useAO;
-			emit useAOChanged(useAO_);
+			Q_EMIT useAOChanged(useAO_);
 
 			ssao_->setSSAOParameters(ssaoParameters);
 

@@ -58,8 +58,8 @@ void ModernGLConfigDialog::readPreferenceEntries(const BALL::INIFile& ini)
 {
 	PreferencesEntry::readPreferenceEntries(ini);
 
-	emit ssaoParametersChanged(getSSAOParameters());
-	emit transparentParametersChanged(getTransparentParameters());
+	Q_EMIT ssaoParametersChanged(getSSAOParameters());
+	Q_EMIT transparentParametersChanged(getTransparentParameters());
 }
 
 SSAOParameters ModernGLConfigDialog::getSSAOParameters()
@@ -140,9 +140,9 @@ void ModernGLConfigDialog::numPassesSliderChanged()
 void ModernGLConfigDialog::storeValues()
 {
 	SSAOParameters p = getSSAOParameters();
-	emit ssaoParametersChanged(p);
+	Q_EMIT ssaoParametersChanged(p);
 
 	TransparentParameters t = getTransparentParameters();
-	emit transparentParametersChanged(t);
+	Q_EMIT transparentParametersChanged(t);
 }
 

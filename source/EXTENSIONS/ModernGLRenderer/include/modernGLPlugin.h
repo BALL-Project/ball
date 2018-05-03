@@ -126,7 +126,7 @@ class ModernGLPlugin : public QObject, public BALL::BALLPlugin, public BALL::VIE
 			return true;
 		}
 
-	public slots:
+	public Q_SLOTS:
 		void updateLabels();
 
 	private:

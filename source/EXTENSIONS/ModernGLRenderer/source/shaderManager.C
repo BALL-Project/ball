@@ -101,7 +101,7 @@ void ShaderManager::cleanup_()
 	{
 		//delete the compiled shaders
 		QGLShader* shader;
-		foreach(shader, shaders_.values())
+		Q_FOREACH(shader, shaders_.values())
 		{
 			delete shader;
 		}
@@ -111,7 +111,7 @@ void ShaderManager::cleanup_()
 
 		//delete the linked shader programs
 		Shader* shader_program;
-		foreach(shader_program, shader_programs_.values())
+		Q_FOREACH(shader_program, shader_programs_.values())
 		{
 			delete shader_program;
 		}

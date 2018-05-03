@@ -203,13 +203,13 @@ class  ModernGLRenderer
 		 **/
 		virtual void updateMaterialForRepresentation(const BALL::VIEW::Representation* /*rep*/);
 
-	signals:
+	Q_SIGNALS:
 
 		void useAOChanged(bool useAO);
 
 		void initialized();
 
-	public slots:
+	public Q_SLOTS:
 		void ssaoParametersChanged(SSAOParameters ssao_parameters);
 		void transparentParametersChanged(TransparentParameters tp);
 

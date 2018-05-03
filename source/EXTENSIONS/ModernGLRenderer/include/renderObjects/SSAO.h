@@ -94,7 +94,7 @@ class SSAO
 		SSAOParameters defaultSSAOParameters;
 
 
-	public slots:
+	public Q_SLOTS:
 
 		virtual void setViewport(unsigned int w, unsigned int h, unsigned int x=0, unsigned int y=0 );
 

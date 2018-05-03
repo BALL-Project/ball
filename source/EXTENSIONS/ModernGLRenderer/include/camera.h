@@ -642,7 +642,7 @@ class Camera : public QObject
 		 **/
 		void unregisterClipRange(const QObject* slot);
 
-	signals:
+	Q_SIGNALS:
 
 		/**
 		 * @brief Signal for changed view matrix.

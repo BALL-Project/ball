@@ -152,7 +152,7 @@ class RenderObject: public QObject
 		 **/
 		void setLights(const BALL::VIEW::Stage* stage, bool reset_all);
 
-	public slots:
+	public Q_SLOTS:
 		/**
 		 * @brief Set the view matrix.
 		 *

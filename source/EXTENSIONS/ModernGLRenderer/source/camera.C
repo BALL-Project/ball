@@ -218,11 +218,11 @@ void Camera::setViewMatrix(Eigen::Affine3f view_matrix)
 		view_projection_matrix_ = Eigen::Matrix4f(projection_matrix_.matrix() * view_matrix_.matrix());
 		view_projection_matrix_transp_ = view_projection_matrix_.transpose();
 
-		emit viewMatrixChanged(view_matrix);
-		emit viewMatrixInverseChanged(view_matrix_inv_);
-		emit viewMatrixTransposeChanged(view_matrix_transp_);
-		emit viewProjectionMatrixChanged(view_projection_matrix_);
-		emit viewProjectionMatrixTransposeChanged(view_projection_matrix_transp_);
+		Q_EMIT viewMatrixChanged(view_matrix);
+		Q_EMIT viewMatrixInverseChanged(view_matrix_inv_);
+		Q_EMIT viewMatrixTransposeChanged(view_matrix_transp_);
+		Q_EMIT viewProjectionMatrixChanged(view_projection_matrix_);
+		Q_EMIT viewProjectionMatrixTransposeChanged(view_projection_matrix_transp_);
 	}
 }
 
@@ -246,7 +246,7 @@ void Camera::setFOV ( float fov )
 	if(fovy_ != fov)
 	{
 		fovy_ = fov;
-		emit FOVChanged(fov);
+		Q_EMIT FOVChanged(fov);
 		recreateProjectionMatrix();
 	}
 }
@@ -278,8 +278,8 @@ void Camera::setViewport (unsigned int width, unsigned int height, unsigned int 
 			y_scale_ = (float) height / (float) width;
 		}
 
-		emit viewportChanged(width, height, x, y);
-		emit frustumChanged(-x_scale_, x_scale_, -y_scale_, y_scale_);
+		Q_EMIT viewportChanged(width, height, x, y);
+		Q_EMIT frustumChanged(-x_scale_, x_scale_, -y_scale_, y_scale_);
 		recreateProjectionMatrix();
 	}
 }
@@ -299,7 +299,7 @@ void Camera::setNearDistance ( float near )
 	if(near != near_)
 	{
 		near_ = near;
-		emit nearDistanceChanged(near);
+		Q_EMIT nearDistanceChanged(near);
 		recreateProjectionMatrix();
 	}
 }
@@ -314,7 +314,7 @@ void Camera::setFarDistance ( float far )
 	if(far != far_)
 	{
 		far_ = far;
-		emit farDistanceChanged(far);
+		Q_EMIT farDistanceChanged(far);
 		recreateProjectionMatrix();
 	}
 }
@@ -343,7 +343,7 @@ float Camera::getZoom()
 void Camera::setClipRange_ ( ClipRange clipRange )
 {
 	clipRange_ = clipRange;
-	emit clipRangeChanged(clipRange_);
+	Q_EMIT clipRangeChanged(clipRange_);
 }
 
 ClipRange Camera::calculateClipRange_()
@@ -373,11 +373,11 @@ void Camera::setProjectionMatrix_ ( Eigen::Matrix4f projection_matrix )
 		view_projection_matrix_ = Eigen::Matrix4f(projection_matrix_.matrix() * view_matrix_.matrix());
 		view_projection_matrix_transp_ = view_projection_matrix_.transpose();
 
-		emit projectionMatrixChanged(projection_matrix_);
-		emit projectionMatrixInverseChanged(projection_matrix_inv_);
-		emit projectionMatrixTransposeChanged(projection_matrix_transp_);
-		emit viewProjectionMatrixChanged(view_projection_matrix_);
-		emit viewProjectionMatrixTransposeChanged(view_projection_matrix_transp_);
+		Q_EMIT projectionMatrixChanged(projection_matrix_);
+		Q_EMIT projectionMatrixInverseChanged(projection_matrix_inv_);
+		Q_EMIT projectionMatrixTransposeChanged(projection_matrix_transp_);
+		Q_EMIT viewProjectionMatrixChanged(view_projection_matrix_);
+		Q_EMIT viewProjectionMatrixTransposeChanged(view_projection_matrix_transp_);
 		setClipRange_(calculateClipRange_());
 	}
 }
@@ -452,20 +452,20 @@ Eigen::Matrix4f Camera::createPerspectiveMatrix_()
 
 void Camera::emitAll()
 {
-	emit viewMatrixChanged(view_matrix_);
-	emit viewMatrixInverseChanged(view_matrix_inv_);
-	emit viewMatrixTransposeChanged(view_matrix_transp_);
-	emit projectionMatrixChanged(projection_matrix_);
-	emit projectionMatrixInverseChanged(projection_matrix_inv_);
-	emit projectionMatrixTransposeChanged(projection_matrix_transp_);
-	emit viewProjectionMatrixChanged(view_projection_matrix_);
-	emit viewProjectionMatrixTransposeChanged(view_projection_matrix_transp_);
-	emit FOVChanged(fovy_);
-	emit viewportChanged(viewport_.width, viewport_.height, viewport_.x, viewport_.y);
-	emit nearDistanceChanged(near_);
-	emit farDistanceChanged(far_);
-	emit clipRangeChanged(clipRange_);
-	emit frustumChanged(-x_scale_, x_scale_, -y_scale_, y_scale_);
+	Q_EMIT viewMatrixChanged(view_matrix_);
+	Q_EMIT viewMatrixInverseChanged(view_matrix_inv_);
+	Q_EMIT viewMatrixTransposeChanged(view_matrix_transp_);
+	Q_EMIT projectionMatrixChanged(projection_matrix_);
+	Q_EMIT projectionMatrixInverseChanged(projection_matrix_inv_);
+	Q_EMIT projectionMatrixTransposeChanged(projection_matrix_transp_);
+	Q_EMIT viewProjectionMatrixChanged(view_projection_matrix_);
+	Q_EMIT viewProjectionMatrixTransposeChanged(view_projection_matrix_transp_);
+	Q_EMIT FOVChanged(fovy_);
+	Q_EMIT viewportChanged(viewport_.width, viewport_.height, viewport_.x, viewport_.y);
+	Q_EMIT nearDistanceChanged(near_);
+	Q_EMIT farDistanceChanged(far_);
+	Q_EMIT clipRangeChanged(clipRange_);
+	Q_EMIT frustumChanged(-x_scale_, x_scale_, -y_scale_, y_scale_);
 }
 
 void Camera::getFrustum ( float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f )

@@ -72,7 +72,7 @@ class Compositing
 		 **/
 		virtual void prepare_rendering(RenderLevel level = OPAQUE) = 0;
 
-	public slots:
+	public Q_SLOTS:
 
 		/**
 		 * @brief Set true if SSAO should be used.
