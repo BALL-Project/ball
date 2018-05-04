@@ -45,12 +45,11 @@ void ModernGLConfigDialog::setRenderer(ModernGLRenderer* renderer)
 	}
 
 	renderer_ = renderer;
-	connect(this, SIGNAL(ssaoParametersChanged(SSAOParameters)),
-	        renderer, SLOT(ssaoParametersChanged(SSAOParameters)));
+	connect(this, &ModernGLConfigDialog::ssaoParametersChanged, renderer, &ModernGLRenderer::ssaoParametersChanged);
 	renderer->ssaoParametersChanged(getSSAOParameters());
 
-	connect(this, SIGNAL(transparentParametersChanged(TransparentParameters)),
-	        renderer, SLOT(transparentParametersChanged(TransparentParameters)));
+	connect(this, &ModernGLConfigDialog::transparentParametersChanged,
+	        renderer, &ModernGLRenderer::transparentParametersChanged);
 	renderer->transparentParametersChanged(getTransparentParameters());
 }
 

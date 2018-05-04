@@ -185,13 +185,11 @@ bool ModernGLRenderer::checkTransparencySupport_()
 
 void ModernGLRenderer::connectSignalsAndSlots_()
 {
-	connect(this, SIGNAL(useAOChanged(bool)),
-	        opaque_, SLOT(setAO(bool)));
+	connect(this, &ModernGLRenderer::useAOChanged, opaque_, &Opaque::setAO);
 
 	if(Global::getTransparencySupport())
 	{
-		connect(this, SIGNAL(useAOChanged(bool)),
-		        transparent_, SLOT(setAO(bool)));
+		connect(this, &ModernGLRenderer::useAOChanged, transparent_, &Transparent::setAO);
 	}
 }
 

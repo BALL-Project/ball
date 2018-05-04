@@ -65,26 +65,18 @@ void Material::setMaterialSpecular(float r, float g, float b, float a)
 
 void Material::registerMaterial(const RenderObject* slot)
 {
-	connect(this, SIGNAL(materialShininessChanged(float)),
-	        slot, SLOT(setMaterialShininess(float)));
-	connect(this, SIGNAL(materialDiffuseChanged(float, float, float, float)),
-	        slot, SLOT(setMaterialDiffuse(float, float, float, float)));
-	connect(this, SIGNAL(materialAmbientChanged(float, float, float, float)),
-	        slot, SLOT(setMaterialAmbient(float, float, float, float)));
-	connect(this, SIGNAL(materialSpecularChanged(float, float, float, float)),
-	        slot, SLOT(setMaterialSpecular(float, float, float, float)));
+	connect(this, &Material::materialShininessChanged, slot, &RenderObject::setMaterialShininess);
+	connect(this, &Material::materialDiffuseChanged,   slot, &RenderObject::setMaterialDiffuse);
+	connect(this, &Material::materialAmbientChanged,   slot, &RenderObject::setMaterialAmbient);
+	connect(this, &Material::materialSpecularChanged,  slot, &RenderObject::setMaterialSpecular);
 }
 
 void Material::unregisterMaterial(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(materialShininessChanged(float)),
-	           slot, SLOT(setMaterialShininess(float)));
-	disconnect(this, SIGNAL(materialDiffuseChanged(float, float, float, float)),
-	           slot, SLOT(setMaterialDiffuse(float, float, float, float)));
-	disconnect(this, SIGNAL(materialAmbientChanged(float, float, float, float)),
-	           slot, SLOT(setMaterialAmbient(float, float, float, float)));
-	disconnect(this, SIGNAL(materialSpecularChanged(float, float, float, float)),
-	           slot, SLOT(setMaterialSpecular(float, float, float, float)));
+	disconnect(this, &Material::materialShininessChanged, slot, &RenderObject::setMaterialShininess);
+	disconnect(this, &Material::materialDiffuseChanged,   slot, &RenderObject::setMaterialDiffuse);
+	disconnect(this, &Material::materialAmbientChanged,   slot, &RenderObject::setMaterialAmbient);
+	disconnect(this, &Material::materialSpecularChanged,  slot, &RenderObject::setMaterialSpecular);
 }
 
 void Material::dump()

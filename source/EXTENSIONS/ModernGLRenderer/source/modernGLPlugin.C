@@ -94,8 +94,7 @@ BALL::VIEW::Renderer* ModernGLPlugin::createRenderer()
 	getConfigDialog();
 	config_dialog_->setRenderer(renderer_);
 
-	connect(renderer_, SIGNAL(initialized()),
-	        this, SLOT(updateLabels()));
+	connect(renderer_, &ModernGLRenderer::initialized, this, &ModernGLPlugin::updateLabels);
 
 	return renderer_;
 }

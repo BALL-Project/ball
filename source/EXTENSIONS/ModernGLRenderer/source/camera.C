@@ -481,169 +481,140 @@ void Camera::getFrustum ( float& near_f, float& far_f, float& left_f, float& rig
 
 void Camera::registerViewMatrix(const RenderObject* slot)
 {
-	connect(this, SIGNAL(viewMatrixChanged(Eigen::Affine3f)),
-	        slot, SLOT(setView(Eigen::Affine3f)));
+	connect(this, &Camera::viewMatrixChanged, slot, &RenderObject::setView);
 }
 
 void Camera::unregisterViewMatrix(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(viewMatrixChanged(Eigen::Affine3f)),
-	           slot, SLOT(setView(Eigen::Affine3f)));
+	disconnect(this, &Camera::viewMatrixChanged, slot, &RenderObject::setView);
 }
 
 void Camera::registerViewMatrixInverse(const RenderObject* slot)
 {
-	connect(this, SIGNAL(viewMatrixInverseChanged(Eigen::Affine3f)),
-	        slot, SLOT(setViewInverse(Eigen::Affine3f)));
+	connect(this, &Camera::viewMatrixInverseChanged, slot, &RenderObject::setViewInverse);
 }
 
 void Camera::unregisterViewMatrixInverse(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(viewMatrixInverseChanged(Eigen::Affine3f)),
-	           slot, SLOT(setViewInverse(Eigen::Affine3f)));
+	disconnect(this, &Camera::viewMatrixInverseChanged, slot, &RenderObject::setViewInverse);
 }
 
-void Camera::registerViewMatrixTranspose(const RenderObject* slot)
+void Camera::registerViewMatrixTranspose(const RenderObject* /* slot */)
 {
-	connect(this, SIGNAL(viewMatrixTransposeChanged(Eigen::Matrix4f)),
-	        slot, SLOT(setViewTranspose(Eigen::Matrix4f)));
+	//connect(this, &Camera::viewMatrixTransposeChanged, slot, &RenderObject::setViewTranspose);
 }
 
-void Camera::unregisterViewMatrixTranspose(const RenderObject* slot)
+void Camera::unregisterViewMatrixTranspose(const RenderObject* /* slot */)
 {
-	disconnect(this, SIGNAL(viewMatrixTransposeChanged(Eigen::Matrix4f)),
-	           slot, SLOT(setViewTranspose(Eigen::Matrix4f)));
+	//disconnect(this, &Camera::viewMatrixTransposeChanged, slot, &RenderObject::setViewTranspose);
 }
 
 void Camera::registerProjectionMatrix(const RenderObject* slot)
 {
-	connect(this, SIGNAL(projectionMatrixChanged(Eigen::Matrix4f)),
-	        slot, SLOT(setProjection(Eigen::Matrix4f)));
+	connect(this, &Camera::projectionMatrixChanged, slot, &RenderObject::setProjection);
 }
 
 void Camera::unregisterProjectionMatrix(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(projectionMatrixChanged(Eigen::Matrix4f)),
-	           slot, SLOT(setProjection(Eigen::Matrix4f)));
+	disconnect(this, &Camera::projectionMatrixChanged, slot, &RenderObject::setProjection);
 }
 
 void Camera::registerProjectionMatrixInverse(const RenderObject* slot)
 {
-	connect(this, SIGNAL(projectionMatrixInverseChanged(Eigen::Matrix4f)),
-	        slot, SLOT(setProjectionInverse(Eigen::Matrix4f)));
+	connect(this, &Camera::projectionMatrixInverseChanged, slot, &RenderObject::setProjectionInverse);
 }
 
 void Camera::unregisterProjectionMatrixInverse(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(projectionMatrixInverseChanged(Eigen::Matrix4f)),
-	           slot, SLOT(setProjectionInverse(Eigen::Matrix4f)));
+	disconnect(this, &Camera::projectionMatrixInverseChanged, slot, &RenderObject::setProjectionInverse);
 }
 
-void Camera::registerProjectionMatrixTranspose(const RenderObject* slot)
+void Camera::registerProjectionMatrixTranspose(const RenderObject* /* slot */)
 {
-	connect(this, SIGNAL(projectionMatrixTransposeChanged(Eigen::Matrix4f)),
-	        slot, SLOT(setProjectionTranspose(Eigen::Matrix4f)));
+	//connect(this, &Camera::projectionMatrixTransposeChanged, slot, &RenderObject::setProjectionTranspose);
 }
 
-void Camera::unregisterProjectionMatrixTranspose(const RenderObject* slot)
+void Camera::unregisterProjectionMatrixTranspose(const RenderObject* /* slot */)
 {
-	disconnect(this, SIGNAL(projectionMatrixTransposeChanged(Eigen::Matrix4f)),
-	           slot, SLOT(setProjectionTranspose(Eigen::Matrix4f)));
+	//disconnect(this, &Camera::projectionMatrixTransposeChanged, slot, &RenderObject::setProjectionTranspose);
 }
 
-void Camera::registerViewProjectionMatrix(const RenderObject* slot)
+void Camera::registerViewProjectionMatrix(const RenderObject* /* slot */)
 {
-	connect(this, SIGNAL(viewProjectionMatrixChanged(Eigen::Matrix4f)),
-	        slot, SLOT(setViewProjection(Eigen::Matrix4f)));
+	//connect(this, &Camera::viewProjectionMatrixChanged, slot, &RenderObject::setViewProjection);
 }
 
-void Camera::unregisterViewProjectionMatrix(const RenderObject* slot)
+void Camera::unregisterViewProjectionMatrix(const RenderObject* /* slot */)
 {
-	disconnect(this, SIGNAL(viewProjectionMatrixChanged(Eigen::Matrix4f)),
-	           slot, SLOT(setViewProjection(Eigen::Matrix4f)));
+	//disconnect(this, &Camera::viewProjectionMatrixChanged, slot, &RenderObject::setViewProjection);
 }
 
 void Camera::registerViewProjectionMatrixTranspose(const RenderObject* slot)
 {
-	connect(this, SIGNAL(viewProjectionMatrixTransposeChanged(Eigen::Matrix4f)),
-	        slot, SLOT(setViewProjectionTranspose(Eigen::Matrix4f)));
+	connect(this, &Camera::viewProjectionMatrixTransposeChanged, slot, &RenderObject::setViewProjectionTranspose);
 }
 
 void Camera::unregisterViewProjectionMatrixTranspose(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(viewProjectionMatrixTransposeChanged(Eigen::Matrix4f)),
-	           slot, SLOT(setViewProjectionTranspose(Eigen::Matrix4f)));
+	disconnect(this, &Camera::viewProjectionMatrixTransposeChanged, slot, &RenderObject::setViewProjectionTranspose);
 }
 
-void Camera::registerFOV(const RenderObject* slot)
+void Camera::registerFOV(const RenderObject* /* slot */)
 {
-	connect(this, SIGNAL(FOVChanged(float)),
-	        slot, SLOT(setFOV(float)));
+	//connect(this, &Camera::FOVChanged, slot, &RenderObject::setFOV);
 }
 
-void Camera::unregisterFOV(const RenderObject* slot)
+void Camera::unregisterFOV(const RenderObject* /* slot */)
 {
-	disconnect(this, SIGNAL(FOVChanged(float)),
-	           slot, SLOT(setFOV(float)));
+	//disconnect(this, &Camera::FOVChanged, slot, &RenderObject::setFOV);
 }
 
 void Camera::registerViewport(const RenderObject* slot)
 {
-	connect(this, SIGNAL(viewportChanged(unsigned int, unsigned int, unsigned int, unsigned int)),
-	        slot, SLOT(setViewport(unsigned int, unsigned int, unsigned int, unsigned int)));
+	connect(this, &Camera::viewportChanged, slot, &RenderObject::setViewport);
 }
 
 void Camera::unregisterViewport(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(viewportChanged(unsigned int, unsigned int, unsigned int, unsigned int)),
-	           slot, SLOT(setViewport(unsigned int, unsigned int, unsigned int, unsigned int)));
+	disconnect(this, &Camera::viewportChanged, slot, &RenderObject::setViewport);
 }
 
 void Camera::registerFrustum(const RenderObject* slot)
 {
-	connect(this, SIGNAL(frustumChanged( float, float, float, float)),
-	        slot, SLOT(setFrustum( float, float, float, float)));
+	connect(this, &Camera::frustumChanged, slot, &RenderObject::setFrustum);
 }
 
 void Camera::unregisterFrustum(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(frustumChanged(float, float, float, float)),
-	           slot, SLOT(setFrustum(float, float, float, float)));
+	disconnect(this, &Camera::frustumChanged, slot, &RenderObject::setFrustum);
 }
 
-void Camera::registerFarDistance(const RenderObject* slot)
+void Camera::registerFarDistance(const RenderObject* /* slot */)
 {
-	connect(this, SIGNAL(farDistanceChanged(float)),
-	        slot, SLOT(setFarDistance(float)));
+	//connect(this, &Camera::farDistanceChanged, slot, &RenderObject::setFarDistance);
 }
 
-void Camera::unregisterFarDistance(const RenderObject* slot)
+void Camera::unregisterFarDistance(const RenderObject* /* slot */)
 {
-	disconnect(this, SIGNAL(farDistanceChanged(float)),
-	           slot, SLOT(setFarDistance(float)));
+	//disconnect(this, &Camera::farDistanceChanged, slot, &RenderObject::setFarDistance);
 }
 
 void Camera::registerNearDistance(const RenderObject* slot)
 {
-	connect(this, SIGNAL(nearDistanceChanged(float)),
-	        slot, SLOT(setNearDistance(float)));
+	connect(this, &Camera::nearDistanceChanged, slot, &RenderObject::setNearDistance);
 }
 
 void Camera::unregisterNearDistance(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(nearDistanceChanged(float)),
-	           slot, SLOT(setNearDistance(float)));
+	disconnect(this, &Camera::nearDistanceChanged, slot, &RenderObject::setNearDistance);
 }
 
 void Camera::registerClipRange(const RenderObject* slot)
 {
-	connect(this, SIGNAL(clipRangeChanged(ClipRange)),
-	        slot, SLOT(setClipRange(ClipRange)));
+	connect(this, &Camera::clipRangeChanged, slot, &RenderObject::setClipRange);
 }
 
 void Camera::unregisterClipRange(const RenderObject* slot)
 {
-	disconnect(this, SIGNAL(clipRangeChanged(ClipRange)),
-	           slot, SLOT(setClipRange(ClipRange)));
+	disconnect(this, &Camera::clipRangeChanged, slot, &RenderObject::setClipRange);
 }
-
