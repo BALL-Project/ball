@@ -70,14 +70,14 @@ class TypedProperty : public Property
  * Key of the hash is a pair of name and type of the uniform. The value is a pair of the location
  * of the uniform and it's value.
  **/
-typedef QHash<QPair<QString, GLenum>, QPair<GLuint, boost::shared_ptr<Property> > > UniformDictionary;
+using UniformDictionary = QHash<QPair<QString, GLenum>, QPair<GLuint, boost::shared_ptr<Property>>>;
 
 /**
  * @brief Stores the mapping from uniform name and type on location.
  *
  * Key of the hash is the name of the attribute. The value is the location of the attribute.
  **/
-typedef QHash<QString, GLuint> AttributeDictionary;
+using AttributeDictionary = QHash<QString, GLuint>;
 
 /**
  * A singleton that takes care of handling all shaders.
