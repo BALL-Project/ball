@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+class RenderObject;
 
 /**
  * @brief Stores the parameters of the materials.
@@ -81,7 +82,7 @@ class Material : public QObject
 		 * @param slot The slot to be registered.
 		 * @return void
 		 **/
-		void registerMaterial( const QObject* slot );
+		void registerMaterial(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Material from the given <code>slot</code> object.
@@ -91,7 +92,7 @@ class Material : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterMaterial( const QObject* slot );
+		void unregisterMaterial(const RenderObject* slot);
 
 	Q_SIGNALS:
 

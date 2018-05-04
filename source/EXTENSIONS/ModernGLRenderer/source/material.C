@@ -1,4 +1,5 @@
 #include <material.h>
+#include <renderObjects/renderObject.h>
 
 #include <iostream>
 
@@ -62,7 +63,7 @@ void Material::setMaterialSpecular(float r, float g, float b, float a)
 	Q_EMIT materialSpecularChanged(r, g, b, a);
 }
 
-void Material::registerMaterial( const QObject* slot )
+void Material::registerMaterial(const RenderObject* slot)
 {
 	connect(this, SIGNAL(materialShininessChanged(float)),
 	        slot, SLOT(setMaterialShininess(float)));
@@ -74,7 +75,7 @@ void Material::registerMaterial( const QObject* slot )
 	        slot, SLOT(setMaterialSpecular(float, float, float, float)));
 }
 
-void Material::unregisterMaterial( const QObject* slot )
+void Material::unregisterMaterial(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(materialShininessChanged(float)),
 	           slot, SLOT(setMaterialShininess(float)));
