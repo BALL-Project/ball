@@ -61,10 +61,10 @@ void Camera::dump()
 
 	switch(activeProjectionMatrix_)
 	{
-		case PERSPECTIVE:
+		case ProjectionMatrixType::PERSPECTIVE:
 			std::cout << "Perspective";
 			break;
-		case ORTHOGRAPHIC:
+		case ProjectionMatrixType::ORTHOGRAPHIC:
 			std::cout << "Orthographic";
 			break;
 		default:
@@ -94,7 +94,7 @@ void Camera::init()
 	setFarDistance(2000);
 	setViewport(800, 600, 0, 0);
 
-	activeProjectionMatrix_ = PERSPECTIVE;
+	activeProjectionMatrix_ = ProjectionMatrixType::PERSPECTIVE;
 	createProjectionMatrix(activeProjectionMatrix_);
 	setViewMatrix(Eigen::Affine3f::Identity());
 	setClipRange_(calculateClipRange_());
@@ -105,10 +105,10 @@ void Camera::createProjectionMatrix ( ProjectionMatrixType matrix )
 	switch (matrix)
 	{
 
-		case ORTHOGRAPHIC:
+		case ProjectionMatrixType::ORTHOGRAPHIC:
 			setProjectionMatrix_(createOrthographicMatrix_());
 			break;
-		case PERSPECTIVE:
+		case ProjectionMatrixType::PERSPECTIVE:
 			setProjectionMatrix_(createPerspectiveMatrix_());
 			break;
 		default:
@@ -124,10 +124,10 @@ void Camera::recreateProjectionMatrix ()
 	switch (activeProjectionMatrix_)
 	{
 
-		case ORTHOGRAPHIC:
+		case ProjectionMatrixType::ORTHOGRAPHIC:
 			setProjectionMatrix_(createOrthographicMatrix_());
 			break;
-		case PERSPECTIVE:
+		case ProjectionMatrixType::PERSPECTIVE:
 			setProjectionMatrix_(createPerspectiveMatrix_());
 			break;
 		default:

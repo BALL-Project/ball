@@ -764,11 +764,11 @@ void ModernGLRenderer::updateCamera(const BALL::VIEW::Camera* camera)
 
 	if(camera->getProjectionMode() == BALL::VIEW::Camera::PERSPECTIVE)
 	{
-		camera_->createProjectionMatrix(PERSPECTIVE);
+		camera_->createProjectionMatrix(ProjectionMatrixType::PERSPECTIVE);
 	}
 	else if (camera->getProjectionMode() == BALL::VIEW::Camera::ORTHOGRAPHIC)
 	{
-		camera_->createProjectionMatrix(ORTHOGRAPHIC);
+		camera_->createProjectionMatrix(ProjectionMatrixType::ORTHOGRAPHIC);
 	}
 
 	setLights();

@@ -38,7 +38,7 @@ struct ClipRange
 /**
  * @brief Enumerates the projection matrices.
  **/
-enum ProjectionMatrixType
+enum class ProjectionMatrixType
 {
 	PERSPECTIVE,
 	ORTHOGRAPHIC
@@ -125,7 +125,7 @@ class Camera : public QObject
 		 * @brief Creates the projection matrix.
 		 *
 		 * Creates the projection matrix depening on the matrix type to use. This can either bei
-		 * PERSPECTIVE or ORTHOGRAPHIC.
+		 * ProjectionMatrixType::PERSPECTIVE or ProjectionMatrixType::ORTHOGRAPHIC.
 		 *
 		 * This method also creates the inverse and the transpose view matrix.
 		 *
