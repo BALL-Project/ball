@@ -256,7 +256,6 @@ class Shader
 		 * Otherwise, if the the uniform's value is different from the previously set value, the uniform
 		 * is set the given value.
 		 *
-		 * @param program Name of the program to set the uniform for.
 		 * @param uniform_name Name of the uniform to be set.
 		 * @param v1 Value of the uniform to be set.
 		 * @return void
