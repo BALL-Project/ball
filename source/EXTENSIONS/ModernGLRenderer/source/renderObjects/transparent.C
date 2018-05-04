@@ -89,7 +89,7 @@ void Transparent::prepare_rendering(RenderLevel level)
 {
 	switch (level)
 	{
-		case TRANSPARENCY_INIT:
+		case RenderLevel::TRANSPARENCY_INIT:
 			glDisable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
 
@@ -112,7 +112,7 @@ void Transparent::prepare_rendering(RenderLevel level)
 			glClear(GL_COLOR_BUFFER_BIT);
 			glBlendEquationEXT(GL_MAX_EXT);
 			break;
-		case TRANSPARENCY_PEEL:
+		case RenderLevel::TRANSPARENCY_PEEL:
 			// ---------------------------------------------------------------------
 			// 2. Dual Depth Peeling + Blending
 			// ---------------------------------------------------------------------
@@ -127,7 +127,7 @@ void Transparent::prepare_rendering(RenderLevel level)
 			currId_ = 0;
 			break;
 
-		case TRANSPARENCY_FINAL:
+		case RenderLevel::TRANSPARENCY_FINAL:
 			glDisable(GL_BLEND);
 
 			// ---------------------------------------------------------------------
@@ -139,7 +139,7 @@ void Transparent::prepare_rendering(RenderLevel level)
 			break;
 
 		default:
-			std::cerr << "[Transparent]: RenderLevel " << level << "is not supported" << std::endl;
+			std::cerr << "[Transparent]: RenderLevel " << static_cast<int>(level) << "is not supported" << std::endl;
 	}
 }
 
@@ -157,7 +157,7 @@ bool Transparent::render(unsigned int pass, RenderLevel level)
 
 	switch (level)
 	{
-		case TRANSPARENCY_PEEL:
+		case RenderLevel::TRANSPARENCY_PEEL:
 			currId_ = pass % 2;
 			bufId = currId_ * 3;
 
@@ -178,7 +178,7 @@ bool Transparent::render(unsigned int pass, RenderLevel level)
 			glBlendEquationEXT(GL_MAX_EXT);
 
 			break;
-		case TRANSPARENCY_BLEND:
+		case RenderLevel::TRANSPARENCY_BLEND:
 			// Full screen pass to alpha-blend the back color
 			glDrawBuffer(g_drawBuffers[6]);
 
@@ -212,7 +212,7 @@ bool Transparent::render(unsigned int pass, RenderLevel level)
 
 			break;
 
-		case TRANSPARENCY_FINAL:
+		case RenderLevel::TRANSPARENCY_FINAL:
 			s_final->bind();
 			s_final->bindTextureRECT("FrontBlenderTex", g_dualFrontBlenderTexId[currId_], 1);
 			s_final->bindTextureRECT("BackBlenderTex", g_dualBackBlenderTexId, 2);
@@ -235,7 +235,7 @@ bool Transparent::render(unsigned int pass, RenderLevel level)
 
 			break;
 		default:
-			std::cerr << "[Transparent]: RenderLevel " << level << "is not supported" << std::endl;
+			std::cerr << "[Transparent]: RenderLevel " << static_cast<int>(level) << "is not supported" << std::endl;
 	}
 
 	return true;

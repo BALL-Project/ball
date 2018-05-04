@@ -39,7 +39,7 @@ class Transparent
 		 *
 		 * @return void
 		 **/
-		void render(RenderLevel level = OPAQUE);
+		void render(RenderLevel level = RenderLevel::OPAQUE);
 
 		/**
 		 * @brief ...
@@ -48,7 +48,7 @@ class Transparent
 		 * @param level ... Defaults to RenderLevel::OPAQUE.
 		 * @return bool True if sample count > 0
 		 **/
-		bool render(unsigned int pass, RenderLevel level = OPAQUE);
+		bool render(unsigned int pass, RenderLevel level = RenderLevel::OPAQUE);
 
 		/**
 		 * @brief Setup the render targets.

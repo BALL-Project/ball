@@ -32,7 +32,7 @@ class LightSources
 		 *
 		 * @return void
 		 **/
-		void render(RenderLevel level = OPAQUE);
+		void render(RenderLevel level = RenderLevel::OPAQUE);
 
 		virtual void init(const BALL::VIEW::Stage* stage);
 

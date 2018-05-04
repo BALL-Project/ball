@@ -50,7 +50,7 @@ class SSAO
 		 *
 		 * @return void
 		 **/
-		void render(RenderLevel level = OPAQUE);
+		void render(RenderLevel level = RenderLevel::OPAQUE);
 
 		/**
 		 * @brief Render the given system.

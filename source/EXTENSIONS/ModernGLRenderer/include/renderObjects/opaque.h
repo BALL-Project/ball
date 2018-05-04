@@ -24,7 +24,7 @@ class Opaque
 		 **/
 		Opaque(Camera* camera);
 
-		virtual void prepare_rendering(RenderLevel level = OPAQUE);
+		virtual void prepare_rendering(RenderLevel level = RenderLevel::OPAQUE);
 
 		/**
 		 * @brief Starting point for rendering.
@@ -34,7 +34,7 @@ class Opaque
 		 *
 		 * @return void
 		 **/
-		void render(RenderLevel level = OPAQUE);
+		void render(RenderLevel level = RenderLevel::OPAQUE);
 
 		/**
 		 * @brief Setup the render targets.

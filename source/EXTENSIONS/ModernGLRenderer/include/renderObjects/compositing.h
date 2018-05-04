@@ -67,10 +67,10 @@ class Compositing
 		 * This includes for example binding framebuffers, clearing buffers or setting blend equations.
 		 *
 		 *
-		 * @param level The level for which the rendering should be preprared. Defaults to OPAQUE.
+		 * @param level The level for which the rendering should be preprared. Defaults to RenderLevel::OPAQUE.
 		 * @return void
 		 **/
-		virtual void prepare_rendering(RenderLevel level = OPAQUE) = 0;
+		virtual void prepare_rendering(RenderLevel level = RenderLevel::OPAQUE) = 0;
 
 	public Q_SLOTS:
 

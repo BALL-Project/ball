@@ -24,17 +24,17 @@ void Geometry::render(RenderLevel level)
 
 	switch (level)
 	{
-		case TRANSPARENCY_INIT:
+		case RenderLevel::TRANSPARENCY_INIT:
 			bindTexturesTransparencyInit_();
 			shader_manager_->getShader(transparency_init_)->bind();
 			break;
-		case TRANSPARENCY_PEEL:
+		case RenderLevel::TRANSPARENCY_PEEL:
 			shader_manager_->getShader(transparency_peel_)->bind();
 			shader_manager_->getShader(transparency_peel_)->bindTextureRECT("DepthBlenderTex", depth_tex_idx, 0);
 			shader_manager_->getShader(transparency_peel_)->bindTextureRECT("FrontBlenderTex", front_blender_tex_idx, 1);
 			bindTexturesTransparencyPeel_();
 			break;
-		case OPAQUE:
+		case RenderLevel::OPAQUE:
 			shader_manager_->getShader(shader_name_)->bind();
 			bindTexturesOpaque_();
 			break;

@@ -41,7 +41,7 @@ class Volume
 		 *
 		 * @return void
 		 **/
-		void render(RenderLevel level = OPAQUE);
+		void render(RenderLevel level = RenderLevel::OPAQUE);
 
 		/**
 		 * @brief Setup the render targets.

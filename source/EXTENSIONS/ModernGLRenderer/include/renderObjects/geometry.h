@@ -18,7 +18,7 @@ class Geometry
 
 		virtual ~Geometry();
 
-		virtual void render(RenderLevel level = OPAQUE);
+		virtual void render(RenderLevel level = RenderLevel::OPAQUE);
 
 	protected:
 

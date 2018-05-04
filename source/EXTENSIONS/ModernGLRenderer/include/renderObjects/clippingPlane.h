@@ -38,7 +38,7 @@ class ClippingPlane
 		 *
 		 * @return void
 		 **/
-		void render(RenderLevel level = OPAQUE);
+		void render(RenderLevel level = RenderLevel::OPAQUE);
 
 		virtual void init(std::vector<BALL::VIEW::ClippingPlane*>& clipping_planes);
 
@@ -79,7 +79,7 @@ class ClippingPlane
 		 *
 		 * @return void
 		 **/
-		void renderClippingPlane_(RenderLevel level = OPAQUE);
+		void renderClippingPlane_(RenderLevel level = RenderLevel::OPAQUE);
 
 		Cylinder cylinder_;
 

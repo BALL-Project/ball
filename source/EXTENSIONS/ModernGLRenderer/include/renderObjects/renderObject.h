@@ -21,7 +21,7 @@ namespace BALL
 	class System;
 }
 
-enum RenderLevel
+enum class RenderLevel
 {
 	OPAQUE,
 	TRANSPARENCY_INIT,
@@ -70,7 +70,7 @@ class RenderObject: public QObject
 		 * @param level The level the objects should be rendered with.
 		 * @return void
 		 **/
-		virtual void render(RenderLevel level = OPAQUE) = 0;
+		virtual void render(RenderLevel level = RenderLevel::OPAQUE) = 0;
 
 		/**
 		 * @brief Initializes the RenderObject.

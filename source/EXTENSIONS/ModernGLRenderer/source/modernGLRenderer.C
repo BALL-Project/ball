@@ -501,7 +501,7 @@ void ModernGLRenderer::render()
 
 	//opaque rendering is used for ssao and volume rendering
 	opaque_->prepare_rendering();
-	renderGeometry_(OPAQUE);
+	renderGeometry_(RenderLevel::OPAQUE);
 
 	renderEffects_();
 
@@ -556,28 +556,28 @@ void ModernGLRenderer::renderOpaque_()
 void ModernGLRenderer::renderTransparent_()
 {
 
-	transparent_->prepare_rendering(TRANSPARENCY_INIT);
-	renderGeometry_(TRANSPARENCY_INIT);
-	transparent_->prepare_rendering(TRANSPARENCY_PEEL);
+	transparent_->prepare_rendering(RenderLevel::TRANSPARENCY_INIT);
+	renderGeometry_(RenderLevel::TRANSPARENCY_INIT);
+	transparent_->prepare_rendering(RenderLevel::TRANSPARENCY_PEEL);
 
 	bool useOQ = transparent_->getTransparentParameters().useOQ;
 	int numPasses = transparent_->getTransparentParameters().numPasses;
 
 	for(int pass = 1; useOQ || pass <= numPasses; pass++)
 	{
-		transparent_->render(pass, TRANSPARENCY_PEEL);
+		transparent_->render(pass, RenderLevel::TRANSPARENCY_PEEL);
 		setDepthTex_(transparent_->getPrevDepthTex());
 		setFrontBlenderTex_(transparent_->getPrevFrontBlenderTex());
-		renderGeometry_(TRANSPARENCY_PEEL);
+		renderGeometry_(RenderLevel::TRANSPARENCY_PEEL);
 
-		if(!transparent_->render(pass, TRANSPARENCY_BLEND))
+		if(!transparent_->render(pass, RenderLevel::TRANSPARENCY_BLEND))
 		{
 			break;
 		}
 	}
 
-	transparent_->prepare_rendering(TRANSPARENCY_FINAL);
-	transparent_->render(TRANSPARENCY_FINAL);
+	transparent_->prepare_rendering(RenderLevel::TRANSPARENCY_FINAL);
+	transparent_->render(RenderLevel::TRANSPARENCY_FINAL);
 
 }
 
