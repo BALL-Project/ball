@@ -2,6 +2,7 @@
 
 #include <camera.h>
 #include <global.h>
+#include <renderObjects/renderObject.h>
 
 
 Camera::Camera()
@@ -478,169 +479,169 @@ void Camera::getFrustum ( float& near_f, float& far_f, float& left_f, float& rig
 	far_f    = far_;
 }
 
-void Camera::registerViewMatrix ( const QObject* slot )
+void Camera::registerViewMatrix(const RenderObject* slot)
 {
 	connect(this, SIGNAL(viewMatrixChanged(Eigen::Affine3f)),
 	        slot, SLOT(setView(Eigen::Affine3f)));
 }
 
-void Camera::unregisterViewMatrix ( const QObject* slot )
+void Camera::unregisterViewMatrix(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(viewMatrixChanged(Eigen::Affine3f)),
 	           slot, SLOT(setView(Eigen::Affine3f)));
 }
 
-void Camera::registerViewMatrixInverse ( const QObject* slot )
+void Camera::registerViewMatrixInverse(const RenderObject* slot)
 {
 	connect(this, SIGNAL(viewMatrixInverseChanged(Eigen::Affine3f)),
 	        slot, SLOT(setViewInverse(Eigen::Affine3f)));
 }
 
-void Camera::unregisterViewMatrixInverse ( const QObject* slot )
+void Camera::unregisterViewMatrixInverse(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(viewMatrixInverseChanged(Eigen::Affine3f)),
 	           slot, SLOT(setViewInverse(Eigen::Affine3f)));
 }
 
-void Camera::registerViewMatrixTranspose ( const QObject* slot )
+void Camera::registerViewMatrixTranspose(const RenderObject* slot)
 {
 	connect(this, SIGNAL(viewMatrixTransposeChanged(Eigen::Matrix4f)),
 	        slot, SLOT(setViewTranspose(Eigen::Matrix4f)));
 }
 
-void Camera::unregisterViewMatrixTranspose ( const QObject* slot )
+void Camera::unregisterViewMatrixTranspose(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(viewMatrixTransposeChanged(Eigen::Matrix4f)),
 	           slot, SLOT(setViewTranspose(Eigen::Matrix4f)));
 }
 
-void Camera::registerProjectionMatrix ( const QObject* slot )
+void Camera::registerProjectionMatrix(const RenderObject* slot)
 {
 	connect(this, SIGNAL(projectionMatrixChanged(Eigen::Matrix4f)),
 	        slot, SLOT(setProjection(Eigen::Matrix4f)));
 }
 
-void Camera::unregisterProjectionMatrix ( const QObject* slot )
+void Camera::unregisterProjectionMatrix(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(projectionMatrixChanged(Eigen::Matrix4f)),
 	           slot, SLOT(setProjection(Eigen::Matrix4f)));
 }
 
-void Camera::registerProjectionMatrixInverse ( const QObject* slot )
+void Camera::registerProjectionMatrixInverse(const RenderObject* slot)
 {
 	connect(this, SIGNAL(projectionMatrixInverseChanged(Eigen::Matrix4f)),
 	        slot, SLOT(setProjectionInverse(Eigen::Matrix4f)));
 }
 
-void Camera::unregisterProjectionMatrixInverse ( const QObject* slot )
+void Camera::unregisterProjectionMatrixInverse(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(projectionMatrixInverseChanged(Eigen::Matrix4f)),
 	           slot, SLOT(setProjectionInverse(Eigen::Matrix4f)));
 }
 
-void Camera::registerProjectionMatrixTranspose ( const QObject* slot )
+void Camera::registerProjectionMatrixTranspose(const RenderObject* slot)
 {
 	connect(this, SIGNAL(projectionMatrixTransposeChanged(Eigen::Matrix4f)),
 	        slot, SLOT(setProjectionTranspose(Eigen::Matrix4f)));
 }
 
-void Camera::unregisterProjectionMatrixTranspose ( const QObject* slot )
+void Camera::unregisterProjectionMatrixTranspose(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(projectionMatrixTransposeChanged(Eigen::Matrix4f)),
 	           slot, SLOT(setProjectionTranspose(Eigen::Matrix4f)));
 }
 
-void Camera::registerViewProjectionMatrix ( const QObject* slot )
+void Camera::registerViewProjectionMatrix(const RenderObject* slot)
 {
 	connect(this, SIGNAL(viewProjectionMatrixChanged(Eigen::Matrix4f)),
 	        slot, SLOT(setViewProjection(Eigen::Matrix4f)));
 }
 
-void Camera::unregisterViewProjectionMatrix ( const QObject* slot )
+void Camera::unregisterViewProjectionMatrix(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(viewProjectionMatrixChanged(Eigen::Matrix4f)),
 	           slot, SLOT(setViewProjection(Eigen::Matrix4f)));
 }
 
-void Camera::registerViewProjectionMatrixTranspose ( const QObject* slot )
+void Camera::registerViewProjectionMatrixTranspose(const RenderObject* slot)
 {
 	connect(this, SIGNAL(viewProjectionMatrixTransposeChanged(Eigen::Matrix4f)),
 	        slot, SLOT(setViewProjectionTranspose(Eigen::Matrix4f)));
 }
 
-void Camera::unregisterViewProjectionMatrixTranspose ( const QObject* slot )
+void Camera::unregisterViewProjectionMatrixTranspose(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(viewProjectionMatrixTransposeChanged(Eigen::Matrix4f)),
 	           slot, SLOT(setViewProjectionTranspose(Eigen::Matrix4f)));
 }
 
-void Camera::registerFOV ( const QObject* slot )
+void Camera::registerFOV(const RenderObject* slot)
 {
 	connect(this, SIGNAL(FOVChanged(float)),
 	        slot, SLOT(setFOV(float)));
 }
 
-void Camera::unregisterFOV ( const QObject* slot )
+void Camera::unregisterFOV(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(FOVChanged(float)),
 	           slot, SLOT(setFOV(float)));
 }
 
-void Camera::registerViewport ( const QObject* slot )
+void Camera::registerViewport(const RenderObject* slot)
 {
 	connect(this, SIGNAL(viewportChanged(unsigned int, unsigned int, unsigned int, unsigned int)),
 	        slot, SLOT(setViewport(unsigned int, unsigned int, unsigned int, unsigned int)));
 }
 
-void Camera::unregisterViewport ( const QObject* slot )
+void Camera::unregisterViewport(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(viewportChanged(unsigned int, unsigned int, unsigned int, unsigned int)),
 	           slot, SLOT(setViewport(unsigned int, unsigned int, unsigned int, unsigned int)));
 }
 
-void Camera::registerFrustum ( const QObject* slot )
+void Camera::registerFrustum(const RenderObject* slot)
 {
 	connect(this, SIGNAL(frustumChanged( float, float, float, float)),
 	        slot, SLOT(setFrustum( float, float, float, float)));
 }
 
-void Camera::unregisterFrustum ( const QObject* slot )
+void Camera::unregisterFrustum(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(frustumChanged(float, float, float, float)),
 	           slot, SLOT(setFrustum(float, float, float, float)));
 }
 
-void Camera::registerFarDistance ( const QObject* slot )
+void Camera::registerFarDistance(const RenderObject* slot)
 {
 	connect(this, SIGNAL(farDistanceChanged(float)),
 	        slot, SLOT(setFarDistance(float)));
 }
 
-void Camera::unregisterFarDistance ( const QObject* slot )
+void Camera::unregisterFarDistance(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(farDistanceChanged(float)),
 	           slot, SLOT(setFarDistance(float)));
 }
 
-void Camera::registerNearDistance ( const QObject* slot )
+void Camera::registerNearDistance(const RenderObject* slot)
 {
 	connect(this, SIGNAL(nearDistanceChanged(float)),
 	        slot, SLOT(setNearDistance(float)));
 }
 
-void Camera::unregisterNearDistance ( const QObject* slot )
+void Camera::unregisterNearDistance(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(nearDistanceChanged(float)),
 	           slot, SLOT(setNearDistance(float)));
 }
 
-void Camera::registerClipRange ( const QObject* slot )
+void Camera::registerClipRange(const RenderObject* slot)
 {
 	connect(this, SIGNAL(clipRangeChanged(ClipRange)),
 	        slot, SLOT(setClipRange(ClipRange)));
 }
 
-void Camera::unregisterClipRange ( const QObject* slot )
+void Camera::unregisterClipRange(const RenderObject* slot)
 {
 	disconnect(this, SIGNAL(clipRangeChanged(ClipRange)),
 	           slot, SLOT(setClipRange(ClipRange)));

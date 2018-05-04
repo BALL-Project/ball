@@ -7,6 +7,7 @@
 
 #include <Eigen/Geometry>
 
+class RenderObject;
 
 /**
  * @brief The viewport consists of width and height and lower left corner position (Initially (0,0)).
@@ -341,7 +342,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewMatrix(const QObject* slot);
+		void registerViewMatrix(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -351,7 +352,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewMatrix(const QObject* slot);
+		void unregisterViewMatrix(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -362,7 +363,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewMatrixInverse(const QObject* slot);
+		void registerViewMatrixInverse(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -372,7 +373,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewMatrixInverse(const QObject* slot);
+		void unregisterViewMatrixInverse(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -384,7 +385,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewMatrixTranspose(const QObject* slot);
+		void registerViewMatrixTranspose(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -394,7 +395,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewMatrixTranspose(const QObject* slot);
+		void unregisterViewMatrixTranspose(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -405,7 +406,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerProjectionMatrix(const QObject* slot);
+		void registerProjectionMatrix(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -415,7 +416,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterProjectionMatrix(const QObject* slot);
+		void unregisterProjectionMatrix(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -427,7 +428,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerProjectionMatrixInverse(const QObject* slot);
+		void registerProjectionMatrixInverse(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -437,7 +438,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterProjectionMatrixInverse(const QObject* slot);
+		void unregisterProjectionMatrixInverse(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -449,7 +450,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerProjectionMatrixTranspose(const QObject* slot);
+		void registerProjectionMatrixTranspose(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -459,7 +460,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterProjectionMatrixTranspose(const QObject* slot);
+		void unregisterProjectionMatrixTranspose(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -471,7 +472,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewProjectionMatrix(const QObject* slot);
+		void registerViewProjectionMatrix(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -481,7 +482,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewProjectionMatrix(const QObject* slot);
+		void unregisterViewProjectionMatrix(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -493,7 +494,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewProjectionMatrixTranspose(const QObject* slot);
+		void registerViewProjectionMatrixTranspose(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -503,7 +504,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewProjectionMatrixTranspose(const QObject* slot);
+		void unregisterViewProjectionMatrixTranspose(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -515,7 +516,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerFOV(const QObject* slot);
+		void registerFOV(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -525,7 +526,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterFOV(const QObject* slot);
+		void unregisterFOV(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -537,7 +538,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewport(const QObject* slot);
+		void registerViewport(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -547,7 +548,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewport(const QObject* slot);
+		void unregisterViewport(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -564,7 +565,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerFrustum(const QObject* slot);
+		void registerFrustum(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -574,7 +575,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterFrustum(const QObject* slot);
+		void unregisterFrustum(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -586,7 +587,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerNearDistance(const QObject* slot);
+		void registerNearDistance(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -596,7 +597,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterNearDistance(const QObject* slot);
+		void unregisterNearDistance(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -608,7 +609,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerFarDistance(const QObject* slot);
+		void registerFarDistance(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -618,7 +619,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterFarDistance(const QObject* slot);
+		void unregisterFarDistance(const RenderObject* slot);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -630,7 +631,7 @@ class Camera : public QObject
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerClipRange(const QObject* slot);
+		void registerClipRange(const RenderObject* slot);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
@@ -640,7 +641,7 @@ class Camera : public QObject
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterClipRange(const QObject* slot);
+		void unregisterClipRange(const RenderObject* slot);
 
 	Q_SIGNALS:
 
