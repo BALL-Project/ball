@@ -382,20 +382,24 @@ class Camera : public QObject
 		 * is called. The receiver needs to implement the function
 		 * setViewMatrixTranspose(Eigen::Matrix4f).
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewMatrixTranspose(const RenderObject* slot);
+		void registerViewMatrixTranspose(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
 		 *
 		 * The slot will no longer be notified on transpose view matrix changes.
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewMatrixTranspose(const RenderObject* slot);
+		void unregisterViewMatrixTranspose(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -447,20 +451,24 @@ class Camera : public QObject
 		 * the receiver is called. The receiver needs to implement the function
 		 * setProjectionMatrixTranspose(Eigen::Matrix4f).
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerProjectionMatrixTranspose(const RenderObject* slot);
+		void registerProjectionMatrixTranspose(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
 		 *
 		 * The slot will no longer be notified on transpose projection matrix changes.
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterProjectionMatrixTranspose(const RenderObject* slot);
+		void unregisterProjectionMatrixTranspose(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -469,20 +477,24 @@ class Camera : public QObject
 		 * the receiver is called. The receiver needs to implement the function
 		 * setViewProjectionMatrix(Eigen::Matrix4f).
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerViewProjectionMatrix(const RenderObject* slot);
+		void registerViewProjectionMatrix(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
 		 *
 		 * The slot will no longer be notified on view projection matrix changes.
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterViewProjectionMatrix(const RenderObject* slot);
+		void unregisterViewProjectionMatrix(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -509,24 +521,27 @@ class Camera : public QObject
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
 		 *
-		 *
 		 * Every time the field of view is changed, setFOV of the receiver is called. The
 		 * receiver needs to implement the function setFOV(float).
+		 *
+		 * Currently not implemented!
 		 *
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerFOV(const RenderObject* slot);
+		void registerFOV(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
 		 *
 		 * The slot will no longer be notified on field of view changes.
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterFOV(const RenderObject* slot);
+		void unregisterFOV(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
@@ -606,20 +621,24 @@ class Camera : public QObject
 		 * Every time the far distance is changed, setFarDistance of the receiver is called. The
 		 * receiver needs to implement the function setFarDistance(float).
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to be notified.
 		 * @return void
 		 **/
-		void registerFarDistance(const RenderObject* slot);
+		void registerFarDistance(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Disconnects the Camera from the given <code>slot</code> object.
 		 *
 		 * The slot will no longer be notified on far distance changes.
 		 *
+		 * Currently not implemented!
+		 *
 		 * @param slot The slot to disconnect.
 		 * @return void
 		 **/
-		void unregisterFarDistance(const RenderObject* slot);
+		void unregisterFarDistance(const RenderObject* /* slot */);
 
 		/**
 		 * @brief Connects the Camera with the given <code>slot</code> object.
