@@ -47,10 +47,7 @@ namespace BALL
 		class ClippingPlane;
 		class GridVisualisation;
 		class QuadMesh;
-		class FrameBuffer;
-		class RenderTarget;
 		class RenderSetup;
-		class Resolution;
 		class PixelFormat;
 
 		/** Renderer is just a generic base class.
