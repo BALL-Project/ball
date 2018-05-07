@@ -163,7 +163,7 @@ namespace BALL
 		}
 
 		#	ifdef BALL_NO_INLINE_FUNCTIONS
-		#		include <BALL/VIEW/RENDERING/glDisplayList.iC>
+		#		include <glDisplayList.iC>
 		#	endif
 
 	} // namespace VIEW
