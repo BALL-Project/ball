@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/volume.h>
 #include <global.h>
 

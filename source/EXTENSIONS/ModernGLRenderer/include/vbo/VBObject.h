@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 
+#include <QtGui/QOpenGLFunctions>
 
 /**
  * @brief Stores three indices of the vertices forming a triangle.
@@ -117,7 +118,7 @@ struct Buffer
  * @note To use this class one needs to derive from it and implement the render function.
  * @note Assignment and Copy constructor are private to avoid data races on the gpu.
  **/
-class VBObject
+class VBObject: protected QOpenGLFunctions
 {
 	public:
 

@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/SSAO.h>
 
 #include <BALL/SYSTEM/path.h>

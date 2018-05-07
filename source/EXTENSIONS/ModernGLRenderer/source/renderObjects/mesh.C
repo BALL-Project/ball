@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/mesh.h>
 #include <global.h>
 #include <vbo/VBOTriangle.h>

@@ -1,7 +1,8 @@
 #ifndef RENDEROBJECT_H
 #define RENDEROBJECT_H
 
-#include <GL/glew.h>
+#define GL_GLEXT_PROTOTYPES
+#include <QtGui/QOpenGLFunctions_3_0>
 
 #include <camera.h>
 #include <clippingPlanes.h>
@@ -37,7 +38,7 @@ enum class RenderLevel
  *
  * The init() method needs to be called to get an fully initialized object.
  **/
-class RenderObject: public QObject
+class RenderObject: public QObject, protected QOpenGLFunctions_3_0
 {
 		Q_OBJECT
 

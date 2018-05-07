@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <vbo/VBObject.h>
 
 
@@ -21,6 +19,7 @@ void VBObject::initialize_()
 		return;
 	}
 
+	initializeOpenGLFunctions();
 	initialized_ = true;
 }
 

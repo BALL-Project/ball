@@ -1,8 +1,6 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include <GL/glew.h>
-
 #include <renderObjects/geometry.h>
 
 #include <list>

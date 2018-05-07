@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/clippingPlane.h>
 
 #include <BALL/VIEW/PRIMITIVES/tube.h>

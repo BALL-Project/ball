@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/transparent.h>
 #include <vbo/VBOQuad.h>
 #include <global.h>

@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/lightSources.h>
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>

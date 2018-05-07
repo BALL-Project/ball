@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <modernGLRenderer.h>
 #include <global.h>
 
@@ -52,8 +50,6 @@ ModernGLRenderer::ModernGLRenderer()
 
 	shader_manager_ = &ShaderManager::instance();
 	shader_manager_->initialize(p.c_str());
-
-	camera_        = new Camera;
 }
 
 ModernGLRenderer::~ModernGLRenderer()
@@ -76,22 +72,10 @@ bool ModernGLRenderer::init(const BALL::VIEW::Stage& stage, float width, float h
 		return true;
 	}
 
-	GLenum result = glewInit();
-
-	if(result != GLEW_OK)
-	{
-		BALL::Log.error() << "[ModernGLRenderer]: Could not initialize GLEW: " << glewGetErrorString(result) << std::endl;
-		return false;
-	}
-
-	if(!GLEW_VERSION_2_1)
-	{
-		BALL::Log.error() << "[ModernGLRenderer] No OpenGL 2.1 support" << std::endl;
-		return false;
-	}
+	// FIXME
+	initializeOpenGLFunctions();
 
 	BALL::Log.info() << "[ModernGLRenderer] INFO: OpenGL version: " << glGetString(GL_VERSION) << std::endl;
-	BALL::Log.info() << "[ModernGLRenderer] INFO: GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
 
 	Global::setTransparencySupport(checkTransparencySupport_());
 	BALL::Log.info() << "[ModernGLRenderer] INFO: Transparency supported: " << (Global::getTransparencySupport() ? "true" : "false") << std::endl;
@@ -100,6 +84,7 @@ bool ModernGLRenderer::init(const BALL::VIEW::Stage& stage, float width, float h
 
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
+	camera_ = new Camera;
 	volume_ = new Volume(camera_);
 	ssao_   = new SSAO(camera_);
 
@@ -154,6 +139,7 @@ bool ModernGLRenderer::checkTransparencySupport_()
 {
 	std::string missing_extensions;
 
+	/*
 	if(!glewIsSupported("GL_ARB_texture_rectangle"))
 	{
 		missing_extensions += "\tGL_ARB_texture_rectangle\n";
@@ -168,6 +154,7 @@ bool ModernGLRenderer::checkTransparencySupport_()
 	{
 		missing_extensions += "\tGL_NV_depth_buffer_float or GL_ARB_depth_buffer_float\n";
 	}
+	 */
 
 	if(!missing_extensions.empty())
 	{

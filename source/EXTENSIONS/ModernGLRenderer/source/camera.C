@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <camera.h>
 #include <global.h>
 #include <renderObjects/renderObject.h>
@@ -90,6 +88,7 @@ void Camera::dump()
 
 void Camera::init()
 {
+	initializeOpenGLFunctions();
 	setFOV(45);
 	setNearDistance(1.5);
 	setFarDistance(2000);

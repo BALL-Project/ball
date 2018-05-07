@@ -1,8 +1,6 @@
 #ifndef POINTVOLUME_H
 #define POINTVOLUME_H
 
-#include <GL/glew.h>
-
 #include <renderObjects/geometry.h>
 
 #include <list>

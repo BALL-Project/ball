@@ -3,7 +3,6 @@
 
 #include <renderObjects/compositing.h>
 
-
 namespace BALL
 {
 	class System;

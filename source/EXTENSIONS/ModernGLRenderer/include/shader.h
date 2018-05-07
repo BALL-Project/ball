@@ -1,9 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <GL/glew.h>
-
 #include <QtCore/QHash>
+#include <QtGui/QOpenGLFunctions>
 #include <QtOpenGL/QGLShader>
 
 #include <boost/shared_ptr.hpp>
@@ -86,7 +85,7 @@ using AttributeDictionary = QHash<QString, GLuint>;
  *
  * Do not forget to set the basepath using initialize() for compiling shaders.
  */
-class Shader
+class Shader : protected QOpenGLFunctions
 {
 	public:
 

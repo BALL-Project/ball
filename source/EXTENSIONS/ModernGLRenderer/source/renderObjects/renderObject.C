@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/renderObject.h>
 #include <global.h>
 
@@ -13,6 +11,7 @@ RenderObject::RenderObject(Camera* camera)
 	material_ = &Material::instance();
 	camera_ = camera;
 	shader_name_ = "RenderObject";
+	initializeOpenGLFunctions();
 }
 
 RenderObject::~RenderObject()
@@ -279,6 +278,7 @@ void RenderObject::setBackBlenderTex ( GLuint tex )
 
 void RenderObject::init ()
 {
+	initializeOpenGLFunctions();
 	cleanup_();
 	initialize_();
 }

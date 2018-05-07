@@ -1,8 +1,7 @@
-#include <GL/glew.h>
-
 #include <modernGLPlugin.h>
 #include <modernGLConfigDialog.h>
 
+#include <QtGui/QOpenGLContext>
 
 ModernGLPlugin::ModernGLPlugin()
 	: is_active_(false),
@@ -33,7 +32,11 @@ QString ModernGLPlugin::getVersion() const
 
 	if(renderer_ && renderer_->isInitialized())
 	{
-		version = QString(reinterpret_cast< char const * >(glGetString(GL_VERSION)));
+		QOpenGLFunctions* glFunc = QOpenGLContext::currentContext()->functions();
+		if(glFunc)
+		{
+			version = QString(reinterpret_cast< char const * >(glFunc->glGetString(GL_VERSION)));
+		}
 	}
 
 	return version;
@@ -45,7 +48,11 @@ QString ModernGLPlugin::getVendor() const
 
 	if(renderer_ && renderer_->isInitialized())
 	{
-		vendor = QString(reinterpret_cast< char const * >(glGetString(GL_VENDOR)));
+		QOpenGLFunctions* glFunc = QOpenGLContext::currentContext()->functions();
+		if(glFunc)
+		{
+			vendor = QString(reinterpret_cast< char const * >(glFunc->glGetString(GL_VENDOR)));
+		}
 	}
 
 	return vendor;
@@ -57,7 +64,11 @@ QString ModernGLPlugin::getGraphicsCard() const
 
 	if(renderer_ && renderer_->isInitialized())
 	{
-		renderer = QString(reinterpret_cast< char const * >(glGetString(GL_RENDERER)));
+		QOpenGLFunctions* glFunc = QOpenGLContext::currentContext()->functions();
+		if(glFunc)
+		{
+			renderer = QString(reinterpret_cast< char const * >(glFunc->glGetString(GL_RENDERER)));
+		}
 	}
 
 	return renderer;

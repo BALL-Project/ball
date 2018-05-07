@@ -13,6 +13,8 @@
 
 #include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
 
+#include <QtGui/QOpenGLFunctions>
+
 #include <Eigen/Geometry>
 
 
@@ -38,7 +40,8 @@ namespace BALL
 
 class  ModernGLRenderer
 	: public QObject,
-	public BALL::VIEW::Renderer
+	public BALL::VIEW::Renderer,
+	protected QOpenGLFunctions
 {
 		Q_OBJECT
 	public:

@@ -12,6 +12,7 @@ Shader::Shader(QGLShaderProgram* shader_program, QString name)
 	  needs_refesh_(true),
 	  name_(name)
 {
+	initializeOpenGLFunctions();
 	shader_program_ = shader_program;
 	attribute_dictionary_ = new AttributeDictionary;
 	uniform_dictionary_ = new UniformDictionary;

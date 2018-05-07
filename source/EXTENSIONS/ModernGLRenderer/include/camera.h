@@ -3,7 +3,7 @@
 
 #include <BALL/VIEW/RENDERING/camera.h>
 
-#include <QObject>
+#include <QtGui/QOpenGLFunctions>
 
 #include <Eigen/Geometry>
 
@@ -61,7 +61,7 @@ enum class ProjectionMatrixType
  *
  * All the data can be querried with getters.
  **/
-class Camera : public QObject
+class Camera : public QObject, protected QOpenGLFunctions
 {
 		Q_OBJECT
 

@@ -1,5 +1,3 @@
-#include <GL/glew.h>
-
 #include <renderObjects/pointVolume.h>
 #include <vbo/VBOPoint.h>
 #include <global.h>
