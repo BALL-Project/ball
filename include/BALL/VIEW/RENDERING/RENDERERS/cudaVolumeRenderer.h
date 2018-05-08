@@ -13,7 +13,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class CudaVolumeRenderer
+		class BALL_DEPRECATED CudaVolumeRenderer
 			: public RaytracingRenderer
 		{			
 			public:			
