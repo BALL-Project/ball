@@ -28,7 +28,6 @@
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
 #include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
