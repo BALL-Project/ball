@@ -44,7 +44,6 @@
 %Include geometricObject.sip
 %Include view-common.sip
 %Include clippingPlane.sip
-%Include serverWidget.sip
 
 // VIEW/DATATYPE
 %Include colorUnit.sip
