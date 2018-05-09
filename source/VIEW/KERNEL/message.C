@@ -309,24 +309,6 @@ FinishedSimulationMessage::FinishedSimulationMessage()
 {
 }
 
-ShowHelpMessage::ShowHelpMessage(String url, String project, String entry)
-	
-	: Message(),
-		url_(url),
-		project_(project),
-		entry_(entry)
-{
-}
-
-RegisterHelpSystemMessage::RegisterHelpSystemMessage()
-	
-	: Message(),
-		object_(0),
-		url_(""),
-		register_(true)
-{
-}
-		
 DockingFinishedMessage::DockingFinishedMessage()
 	
 	: Message(),

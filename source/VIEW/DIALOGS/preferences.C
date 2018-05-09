@@ -5,7 +5,6 @@
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/WIDGETS/helpViewer.h>
 #include <BALL/FORMAT/INIFile.h>
 
 #include <QtWidgets/QStackedWidget>
@@ -287,9 +286,6 @@ namespace BALL
 
 			if (item->parent() != 0) delete item;
 		}
-
-		void Preferences::showHelp()
-		{ }
 
 		void Preferences::reject()
 		{

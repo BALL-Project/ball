@@ -39,7 +39,6 @@ class MolecularControl
 	void moveItems();
 	void collapseAll();
 	void expandAll();
-	void showSelectorHelp();
 	void clearSelector();
 	void switchShowSecondaryStructure();
 };

@@ -14,7 +14,6 @@ SET(SOURCES_LIST
  	genericControl.C
 	geometricControl.C
 	gridColorWidget.C
-	helpViewer.C
 	logView.C
 	molecularControl.C
 	molecularStructure.C
