@@ -200,13 +200,6 @@ IF(USE_LIBSVM)
 	ENDIF()
 ENDIF()
 
-## CUDA
-SET(USE_CUDA OFF CACHE BOOL "Should CUDA support be enabled (version <= 2.1 currently supported)?")
-
-IF(USE_CUDA)
-	FIND_PACKAGE(CUDA REQUIRED)
-ENDIF()
-
 ## TBB
 SET(USE_TBB ON CACHE BOOL "Should Intel Threading Building Blocks support be enabled?")
 SET(REQUIRE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be required?")
@@ -514,16 +507,9 @@ ENDIF()
 ## add library target
 ## warning: set BUILD_SHARED_LIBS to decide if library is shared or static (see above)! 
 ## We need the BUILD_SHARED_LIBS flag to set declspec flags for MSVC!
-IF (FOUND_CUDART AND USE_CUDA) # we need both conditions due to possible present cached entries
-	CUDA_ADD_LIBRARY(BALL ${BALL_sources} ${BALL_headers} ${Cuda_sources})
-	IF (BALL_HAS_VIEW)
-		CUDA_ADD_LIBRARY(VIEW ${VIEW_sources} ${VIEW_headers} ${Cuda_sources})
-	ENDIF()
-ELSE()
-	ADD_LIBRARY(BALL SHARED ${BALL_sources} ${BALL_headers})
-	IF (BALL_HAS_VIEW)
-		ADD_LIBRARY(VIEW SHARED ${VIEW_sources} ${VIEW_headers})
-	ENDIF()
+ADD_LIBRARY(BALL SHARED ${BALL_sources} ${BALL_headers})
+IF (BALL_HAS_VIEW)
+	ADD_LIBRARY(VIEW SHARED ${VIEW_sources} ${VIEW_headers})
 ENDIF()
 
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic

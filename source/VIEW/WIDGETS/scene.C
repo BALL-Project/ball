@@ -66,7 +66,6 @@
 #ifdef BALL_HAS_RTFACT
 
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-//#include <BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/rtfactRenderer.h>
 
 #endif
@@ -104,7 +103,6 @@ namespace BALL
 	{
 
 #ifdef BALL_HAS_RTFACT
-		//typedef CudaVolumeRenderer t_RaytracingRenderer;
 		typedef RTfactRenderer t_RaytracingRenderer;
 		typedef GLRenderWindow t_RaytracingWindow;
 #endif
