@@ -41,10 +41,6 @@ IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	ENDIF()
 	MESSAGE(STATUS "Compiler checks for conversion: ${CXX_WARN_CONVERSION}")
 
-	IF (MT_ENABLE_CUDA)
-		SET(USE_PEDANTIC OFF)
-	ENDIF()
-
 	SET(BALL_PROJECT_COMPILE_FLAGS "${BALL_PROJECT_COMPILE_FLAGS} -std=c++0x")
 
 	# Added -Wno-deprecated-declarations as Eigen3 currently uses binder2nd which spams the compiler output.
