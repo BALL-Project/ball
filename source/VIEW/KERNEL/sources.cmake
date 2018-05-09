@@ -16,14 +16,11 @@ SET(SOURCES_LIST
 	preferencesEntry.C
 	representationManager.C
 	representation.C
-	serverWidget.C
 	shortcutRegistry.C
 	snapshotManagerInterface.C
 	stage.C
 	threads.C
 	UIOperationMode.C
 )
-
-SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} serverWidget.C)
 
 ADD_VIEW_SOURCES("VIEW/KERNEL" "${SOURCES_LIST}")

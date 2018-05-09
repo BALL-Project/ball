@@ -100,7 +100,6 @@ SET(SOURCES_LIST
 	raytraceableContourSurfaceDialog.C
 	setCamera.C
 	setClippingPlane.C
-	serverPreferences.C
 	shortcutDialog.C
 	snapShotVisualisation.C
 	stageSettings.C
