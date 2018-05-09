@@ -95,7 +95,6 @@
 // VIEW/RENDERER
 %Include renderer.sip
 %Include POVRenderer.sip
-%Include VRMLRenderer.sip
 
 // VIEW/WIDGETS
 %Include modularWidget.sip

@@ -39,17 +39,6 @@ namespace BALL
 
 			QString getFilename() { return filename_; }
 
-			/** for information whether vrml export was chosen
-			 * @deprecated VRML export is no longer supported; will be removed in next release. Returns always false.
-			*/
-			BALL_DEPRECATED bool export_vrml() { return false; };
-
-			/** for information whether stl export was chosen
-			 * @deprecated STL export is always used for 3D structured; will be removed in next release.
-			 * Returns always true.
-			*/
-			BALL_DEPRECATED bool export_stl() { return true; };
-
 			/** for information whether representations have to be split into several files
 			*/
 			bool split();
