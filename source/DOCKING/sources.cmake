@@ -2,7 +2,6 @@
 SET(DIRECTORY source/DOCKING)
 
 INCLUDE(source/DOCKING/COMMON/sources.cmake)
-INCLUDE(source/DOCKING/GENETICDOCK/sources.cmake)
 INCLUDE(source/DOCKING/IMGDOCK/sources.cmake)
 
 SET(SOURCES_LIST )
