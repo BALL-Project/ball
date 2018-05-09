@@ -127,21 +127,6 @@ namespace BALL
 		return res;
 	}
 
-	String PyInterpreter::run(const String& s, bool& state)
-	{
-		String ret;
-		tie(state, ret) = run(string(s.c_str()));
-		return ret;
-	}
-
-	String PyInterpreter::runFile(const String& filename)
-	{
-		if (!isInitialized()) return "";
-
-		kernel_->runFile(filename.c_str());
-		return "";
-	}
-
 	bool PyInterpreter::execute(const string& module, const string& func_name, const PyKernel::KeyValArgs& params)
 	{
 		if (!isInitialized())
@@ -152,20 +137,6 @@ namespace BALL
 		}
 
 		return kernel_->execute(module, func_name, params);
-	}
-
-	bool PyInterpreter::execute(const QString& module, const QString& func_name, const QList<QPair<QString, QString> >& params)
-	{
-		if (!isInitialized()) return false;
-
-		PyKernel::KeyValArgs args;
-		for (const auto& pair: params)
-		{
-			if (pair.first == "action" || pair.first == "module" || pair.first == "method") continue;
-			args[pair.first.toStdString()] = pair.second.toStdString();
-		}
-
-		return execute(module.toStdString(), func_name.toStdString(), args);
 	}
 
 	string PyInterpreter::getErrorMessage()

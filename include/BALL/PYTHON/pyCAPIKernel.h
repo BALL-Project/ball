@@ -17,7 +17,6 @@ namespace BALL
 			std::string getErrorMessage() const override { return last_err_; };
 
 			std::pair<bool, std::string> run(std::string str) override;
-			BALL_DEPRECATED bool runFile(std::string filename) override;
 			bool execute(const std::string& module, const std::string& func, const KeyValArgs& args) override;
 
 		private:
