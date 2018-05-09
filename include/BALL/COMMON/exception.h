@@ -444,7 +444,7 @@ namespace BALL
 		/**	CUDA Error
 			CUDA or any of its calls caused an error
 		*/
-		class BALL_EXPORT CUDAError 
+		class BALL_DEPRECATED BALL_EXPORT CUDAError
 			: public Exception::GeneralException
 		{
 			public:
