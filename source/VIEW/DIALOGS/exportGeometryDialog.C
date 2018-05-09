@@ -104,8 +104,6 @@ int ExportGeometryDialog::exec()
 		row++;
 	}
 	split_ = false;
-	vrml_ = false;
-	stl_ = false;
 	raise();
 	return QDialog::exec();
 }
@@ -162,23 +160,6 @@ void ExportGeometryDialog::accept()
 		split_ = false;
 	}
 
-	if (vrml_box->isChecked())
-	{
-		vrml_ = true;
-	}
-	else
-	{
-		vrml_ = false;
-	}
-
-	if (stl_box->isChecked())
-	{
-		stl_ = true;
-	}
-	else
-	{
-		stl_ = false;
-	}
 	setFilename(file_edit->displayText());
 }
 
@@ -192,16 +173,6 @@ void ExportGeometryDialog::accept()
 		}
 		setFilename(fname);
 		file_edit->setText(fname);
-	}
-
-	bool ExportGeometryDialog::export_vrml()
-	{
-		return vrml_;
-	}
-
-	bool ExportGeometryDialog::export_stl()
-	{
-		return stl_;
 	}
 
 	bool ExportGeometryDialog::split()

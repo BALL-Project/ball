@@ -3,7 +3,6 @@
 #include <BALL/VIEW/RENDERING/RENDERERS/bufferedRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
@@ -625,8 +624,6 @@ namespace BALL
 				renderer_type_ = OPENGL_RENDERER;
             else if (RTTI::isKindOf<POVRenderer>(renderer))
 				renderer_type_ = POV_RENDERER;
-            else if (RTTI::isKindOf<VRMLRenderer>(renderer))
-				renderer_type_ = VRML_RENDERER;
             else if (RTTI::isKindOf<STLRenderer>(renderer))
 				renderer_type_ = STL_RENDERER;
             else if (RTTI::isKindOf<TilingRenderer>(renderer))

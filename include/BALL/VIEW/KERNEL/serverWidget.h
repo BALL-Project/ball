@@ -56,7 +56,7 @@ namespace BALL
 
 				\ingroup ViewKernelClient
 		*/
-		class BALL_VIEW_EXPORT ServerWidget
+		class BALL_DEPRECATED BALL_VIEW_EXPORT ServerWidget
 			  : public QObject,
 					public ModularWidget
 		{

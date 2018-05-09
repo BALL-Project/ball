@@ -40,12 +40,15 @@ namespace BALL
 			QString getFilename() { return filename_; }
 
 			/** for information whether vrml export was chosen
+			 * @deprecated VRML export is no longer supported; will be removed in next release. Returns always false.
 			*/
-			bool export_vrml();
+			BALL_DEPRECATED bool export_vrml() { return false; };
 
 			/** for information whether stl export was chosen
+			 * @deprecated STL export is always used for 3D structured; will be removed in next release.
+			 * Returns always true.
 			*/
-			bool export_stl();
+			BALL_DEPRECATED bool export_stl() { return true; };
 
 			/** for information whether representations have to be split into several files
 			*/
@@ -96,10 +99,6 @@ namespace BALL
 			/**	Makes it possible to use the filename changed by the browseFiles() method 
 			*/
 			QString filename_;
-
-			bool vrml_;
-
-			bool stl_;
 
 			bool split_;
 

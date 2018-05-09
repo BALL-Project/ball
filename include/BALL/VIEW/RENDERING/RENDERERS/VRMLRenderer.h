@@ -35,8 +35,9 @@ namespace BALL
 		<br>
 		This is unmaintained code!
 		\ingroup ViewRendering
+		@deprecated Use STL renderer instead
 */
-class BALL_VIEW_EXPORT VRMLRenderer : public Renderer
+class BALL_DEPRECATED BALL_VIEW_EXPORT VRMLRenderer : public Renderer
 {
 	public:
 

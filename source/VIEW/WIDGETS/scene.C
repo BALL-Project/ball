@@ -1422,7 +1422,7 @@ namespace BALL
 			description = "Shortcut|File|Export|VRML";
 			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this,
 							SLOT(showExportVRMLDialog()), description, QKeySequence(),
-							tr("Export a VRML or stl file from the scene"),
+							tr("Export a stl file from the scene"),
 							UIOperationMode::MODE_ADVANCED);
 
 			// ====================================== MODES =====================================
@@ -1970,7 +1970,7 @@ namespace BALL
 			updateGL();
 		}
 
-		//Opens a dialog in which parts of the scene can be exported as VRML or stl files
+		//Opens a dialog in which parts of the scene can be exported as stl files
 		void Scene::showExportVRMLDialog()
 		{
 			bool change = false;
@@ -1980,110 +1980,77 @@ namespace BALL
 			ts.exec();
 
 			bool *checked = ts.reps;
-			bool ve = ts.export_vrml();
-			bool se = ts.export_stl();
 
 			//prepare the filename
 			QString filename = ts.getFilename();
-			QString vrml_end = ".wrl";
 			QString stl_end = ".stl";
-			filename.remove( vrml_end );
 			filename.remove( stl_end );
 
 			MainControl* mc = getMainControl();
 			RepresentationManager& rm = mc->getRepresentationManager();
 			RepresentationList::const_iterator rit;
 
-			if ( ve || se)
+			if ( ts.split() )
+				//every representation gets its own file
 			{
-				if ( ts.split() )
-					//every representation gets its own file
+				//at the beginning all reps are hidden (see "saving base stats")
+				count = 0;
+				//number of filepartition
+				Position partCounter = 0;
+
+				//now all representations are hidden. in the next iteration we show one that was not hidden before and print
+				rit = rm.getRepresentations().begin();
+				for (; rit != rm.getRepresentations().end(); rit++)
 				{
-					//at the beginning all reps are hidden (see "saving base stats")
-					count = 0;
-					//number of filepartition
-					Position partCounter = 0;
-
-					//now all representations are hidden. in the next iteration we show one that was not hidden before and print
-					rit = rm.getRepresentations().begin();
-					for (; rit != rm.getRepresentations().end(); rit++)
+					if(checked[count])
 					{
-						if(checked[count])
-						{
-							//show one, print all (meaning just the one)
-							(*rit)->setHidden(false);
+						//show one, print all (meaning just the one)
+						(*rit)->setHidden(false);
 
-							QString vtemp = filename;
+						QString vtemp = filename;
 
-							if (ve)
-							{
-								vtemp.append("_");
-								vtemp.append(QString::number(partCounter));
-								vtemp.append(".wrl");
-								VRMLRenderer vrml(ascii(vtemp));
-								if ( exportScene(vrml) )
-								{
-									change = true;
-								}
-							}
-							if (se)
-							{
-								vtemp = filename;
-								vtemp.append("_");
-								vtemp.append(QString::number(partCounter));
-								vtemp.append(".stl");
-								STLRenderer stl(ascii(vtemp));
-								if ( exportScene(stl) )
-								{
-									change = true;
-								}
-							}
-
-							//hide again (for all other reps)
-							(*rit)->setHidden(true);
-							partCounter++;
-						}
-						count++;
-					}
-				}
-				else
-					//print in single file case
-				{
-					count = 0;
-
-					//make all checked representations visible
-					rit = rm.getRepresentations().begin();
-					for (; rit != rm.getRepresentations().end(); rit++)
-					{
-						if(checked[count])
-						{
-							(*rit)->setHidden(false);
-						}
-						count++;
-					}
-
-					QString vtemp = filename;
-
-					//export as requested
-					if (ve)
-					{
-						vtemp.append(".wrl");
-						VRMLRenderer vrml(ascii(vtemp));
-						if ( exportScene(vrml) )
-						{
-							change = true;
-						}
-					}
-					if (se)
-					{
 						vtemp = filename;
+						vtemp.append("_");
+						vtemp.append(QString::number(partCounter));
 						vtemp.append(".stl");
 						STLRenderer stl(ascii(vtemp));
 						if ( exportScene(stl) )
 						{
 							change = true;
 						}
+
+						//hide again (for all other reps)
+						(*rit)->setHidden(true);
+						partCounter++;
 					}
+					count++;
+				}
+			}
+			else
+				//print in single file case
+			{
+				count = 0;
+
+				//make all checked representations visible
+				rit = rm.getRepresentations().begin();
+				for (; rit != rm.getRepresentations().end(); rit++)
+				{
+					if(checked[count])
+					{
+						(*rit)->setHidden(false);
+					}
+					count++;
+				}
+
+				QString vtemp = filename;
+
+				//export as requested
+				vtemp = filename;
+				vtemp.append(".stl");
+				STLRenderer stl(ascii(vtemp));
+				if ( exportScene(stl) )
+				{
+					change = true;
 				}
 			}
 

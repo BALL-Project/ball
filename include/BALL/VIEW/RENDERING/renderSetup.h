@@ -70,7 +70,7 @@ namespace BALL {
 					/// Renders into a POVRay file
 					POV_RENDERER,
 
-					/// Renders into a VRML file
+					/// Renders into a VRML file (deprecated)
 					VRML_RENDERER,
 
 					/// Renders into an STL file

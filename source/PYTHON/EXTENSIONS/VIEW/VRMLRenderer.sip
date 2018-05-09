@@ -1,3 +1,7 @@
+/*
+ * DEPRECATED
+ * Class will be removed in the next release
+ */
 class VRMLRenderer
 	: Renderer
 {
