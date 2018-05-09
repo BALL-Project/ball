@@ -5,7 +5,6 @@ SET(SOURCES_LIST
 	POVRenderer.C
 	STLRenderer.C
 	tilingRenderer.C
-	VRMLRenderer.C
 	raytracingRenderer.C
 	XML3DRenderer.C
 )
