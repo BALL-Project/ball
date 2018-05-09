@@ -6,6 +6,7 @@
 #include <BALL/DATATYPE/regularExpression.h>
 
 #include <chrono>
+#include <cmath>
 #include <list>
 #include <string>
 #include <thread>
