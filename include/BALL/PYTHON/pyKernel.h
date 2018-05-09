@@ -43,16 +43,6 @@ namespace BALL
 			virtual std::pair<bool, std::string> run(std::string str) = 0;
 
 			/**
-			 * Executes a single Python file.
-			 *
-			 * @param filename Python file name
-			 * @return true if the execution succeeded
-			 *
-			 * @deprecated Use Jupyter notebook plugin instead
-			 */
-			BALL_DEPRECATED virtual bool runFile(std::string filename) = 0;
-
-			/**
 			 * Calls a single function from a given module.
 			 *
 			 * @param module a Python module

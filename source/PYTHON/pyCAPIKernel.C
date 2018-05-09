@@ -128,23 +128,6 @@ namespace BALL
 		return ret;
 	}
 
-	bool PyCAPIKernel::runFile(string filename)
-	{
-		FILE* file = fopen(filename.c_str(), "r");
-		if(!file) throw Exception::FileNotFound(__FILE__, __LINE__, filename.c_str());
-
-		PyErr_Clear();
-		PyRun_SimpleFileEx(file, filename.c_str(), true);
-
-		if (PyErr_Occurred())
-		{
-			Log.error() << "[PyInterpreter] Error occurred while executing " << filename << std::endl;
-			PyErr_Print();
-			return false;
-		}
-		return true;
-	}
-
 	bool PyCAPIKernel::execute(const string& module, const string& func_name, const KeyValArgs& args)
 	{
 		PyErr_Clear();
