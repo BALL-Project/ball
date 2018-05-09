@@ -6,7 +6,6 @@ SET(SOURCES_LIST
 	STLRenderer.C
 	tilingRenderer.C
 	raytracingRenderer.C
-	XML3DRenderer.C
 )
 
 IF (BALL_HAS_RTFACT)
