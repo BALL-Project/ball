@@ -22,6 +22,7 @@
 #include <fstream>
 #include <iterator>
 #include <algorithm>
+#include <cmath>
 
 namespace BALL
 {
@@ -547,7 +548,7 @@ namespace BALL
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
-		lower = (Position)floor((x - origin_) / spacing_);
+		lower = (Position)std::floor((x - origin_) / spacing_);
 		if (lower == data_.size() - 1)
 		{
 			// If we are on the right most data point, we cannot interpolate to the right!
@@ -601,7 +602,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 
-		return (IndexType)(size_type)floor((x - origin_) / spacing_ + 0.5);
+		return (IndexType)(size_type)std::floor((x - origin_) / spacing_ + 0.5);
 	}
 			
 	template <typename ValueType>
@@ -613,7 +614,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 
-		return (IndexType)(size_type)floor((x - origin_) / spacing_);
+		return (IndexType)(size_type)std::floor((x - origin_) / spacing_);
 	}
 			
 	template <typename ValueType>
@@ -626,7 +627,7 @@ namespace BALL
 		}
 		
 		// Round to the closest data point.
-		size_type index = (size_type)floor((x - origin_) / spacing_ + 0.5);
+		size_type index = (size_type)std::floor((x - origin_) / spacing_ + 0.5);
 		return data_[index];
 	}
 			
@@ -640,7 +641,7 @@ namespace BALL
 		}
 		
 		// Round to the closest data point.
-		size_type index = (size_type)floor((x - origin_) / spacing_ + 0.5);
+		size_type index = (size_type)std::floor((x - origin_) / spacing_ + 0.5);
 		return data_[index];
 	}
 			
@@ -678,7 +679,7 @@ namespace BALL
 	BALL_INLINE
 	ValueType TRegularData1D<ValueType>::operator () (const CoordinateType& x) const
 	{
-		size_type left_index = (size_type)floor((x - origin_) / spacing_);
+		size_type left_index = (size_type)std::floor((x - origin_) / spacing_);
 		if (left_index == data_.size() - 1)
 		{
 			// If we are on the right most data point, we cannot interpolate to the right!

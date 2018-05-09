@@ -6,6 +6,10 @@
 
 #include <BALL/COMMON/hash.h>
 
+#include <cmath>
+
+using std::sqrt;
+
 namespace BALL 
 {
 

@@ -6,6 +6,8 @@
 
 #include <BALL/MATHS/piecewisePolynomial.h>
 
+#include <cmath>
+
 using namespace std;
 
 namespace BALL

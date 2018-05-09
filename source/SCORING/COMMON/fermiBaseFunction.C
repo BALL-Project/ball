@@ -3,6 +3,10 @@
 #include <BALL/common.h>
 #include <BALL/SCORING/COMMON/fermiBaseFunction.h>
 
+#include <cmath>
+
+using std::exp;
+
 namespace BALL 
 {
 	FermiBaseFunction::FermiBaseFunction()
