@@ -75,7 +75,7 @@ namespace BALL
 					that was not a Composite object.
 					\see         GeneralException			
 			*/
-			class BALL_VIEW_EXPORT NotCompositeObject:	public Exception::GeneralException
+			class BALL_DEPRECATED BALL_VIEW_EXPORT NotCompositeObject:	public Exception::GeneralException
 			{
 				public:
 
@@ -87,7 +87,7 @@ namespace BALL
 			 *  This class handles the incoming connections for the simple
 			 *  BALL-protocol for sending composites over the net.
 			 */
-			class BALLViewServer
+			class BALL_DEPRECATED BALLViewServer
 				: public virtual BALLThread,
 					public virtual TCPServerThread
 			{

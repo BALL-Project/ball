@@ -31,8 +31,10 @@ namespace BALL
 				if the server will accept connections. <br>
 				This is one of the view dialogs, that is not implemented by an ui-file!
 				\ingroup ViewDialogs
+
+				@deprecated Use PyServer instead
 		*/
-		class BALL_VIEW_EXPORT ServerPreferences 
+		class BALL_DEPRECATED BALL_VIEW_EXPORT ServerPreferences
 			: public QWidget,
 				public PreferencesEntry
 		{

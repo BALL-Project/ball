@@ -1,3 +1,7 @@
+/*
+ * DEPRECATED
+ * Class will be removed in next release
+ */
 class ServerWidget
 	: ModularWidget
 {
