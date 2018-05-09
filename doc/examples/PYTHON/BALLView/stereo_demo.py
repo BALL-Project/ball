@@ -19,7 +19,7 @@ counter = 0
 limit = 60
 setMultithreading(1)  
 
-while counter < limit and not getPyWidget().toAbortScript():
+while counter < limit
   mds.simulateIterations(1)
   getMainControl().update(system)
   limit = limit + 1

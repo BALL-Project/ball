@@ -107,11 +107,6 @@ SET(SOURCES_LIST
 	undoManagerDialog.C
 )
 
-IF(BALL_PYTHON_SUPPORT)
-	SET(UI_LIST ${UI_LIST} pythonSettings.ui)
-	SET(SOURCES_LIST ${SOURCES_LIST} pythonSettings.C)
-ENDIF()
-
 IF(BALL_HAS_FFTW)
 	SET(UI_LIST ${UI_LIST} geometricFitDialog.ui)
 	SET(SOURCES_LIST ${SOURCES_LIST} geometricFitDialog.C)

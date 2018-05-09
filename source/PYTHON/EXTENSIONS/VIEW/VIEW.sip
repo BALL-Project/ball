@@ -99,7 +99,6 @@
 // VIEW/WIDGETS
 %Include modularWidget.sip
 %Include dockWidget.sip
-%Include pyWidget.sip
 %Include scene.sip
 %Include molecularStructure.sip
 %Include molecularControl.sip
