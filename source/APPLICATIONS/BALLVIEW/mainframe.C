@@ -30,7 +30,6 @@
 #include <BALL/KERNEL/forEach.h>
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
-#include <BALL/VIEW/KERNEL/serverWidget.h>
 
 #include "ui_aboutDialog.h"
 
@@ -140,12 +139,6 @@ namespace BALL
 		setAcceptDrops(true);
 
 		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
-
-		// setup the VIEW server
-		ServerWidget* server = new ServerWidget(this);
-		// registering object generator
-		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-		server->registerObjectCreator(*object_creator);
 
 		#ifdef BALL_PYTHON_SUPPORT
 			PyInterpreter::initialize();
