@@ -490,10 +490,6 @@ namespace BALL
 		}
 
 
-		void PreferencesEntry::registerWidgetForHelpSystem_(const QWidget* /* widget */, const String& /* url */)
-		{ }
-
-
 		void PreferencesEntry::storeValues()
 		{
 			String value;

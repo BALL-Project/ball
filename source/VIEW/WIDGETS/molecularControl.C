@@ -1433,9 +1433,6 @@ namespace BALL
 		}
 
 
-		void MolecularControl::showSelectorHelp()
-		{ }
-
 		void MolecularControl::clearSelector()
 		{
 			selector_edit_->addItem("");

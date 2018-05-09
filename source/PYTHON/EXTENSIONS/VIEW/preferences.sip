@@ -11,5 +11,4 @@ class Preferences
 	void setDefaultValues();
 	void reject();
 	void applyPreferences();
-	void showHelp();
 };

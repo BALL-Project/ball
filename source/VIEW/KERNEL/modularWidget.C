@@ -235,15 +235,6 @@ namespace BALL
 			return result;
 		}
 
-		void ModularWidget::setMenuHelp(QAction* /* action */, const String& /* url */)
-		{ }
-
-		void ModularWidget::showHelp(const String& /* url */)
-		{ }
-
-		void ModularWidget::registerForHelpSystem(const QObject* /* object */, const String& /* url */)
-		{ }
-
 		void ModularWidget::setIcon(QAction* action, const String& filename, bool add_to_main_toolbar)
 		{
 			if (!action) return;
