@@ -51,11 +51,6 @@ namespace BALL
 			connect( grids, SIGNAL( activated(int) ), this, SLOT( gridSelected() ) );
 
 			setObjectName(name);
-
-			RegisterHelpSystemMessage* msg = new RegisterHelpSystemMessage();
-			msg->setObject(this);
-			msg->setURL("datasetControl.html#volume");
-			getMainControl()->sendMessage(*msg);
 		}
 
 		GridVisualizationDialog::~GridVisualizationDialog()
