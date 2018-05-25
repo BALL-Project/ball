@@ -34,6 +34,7 @@
 #include <QtGui/QImage>
 #include <QtGui/QOpenGLContext>
 
+#include <config.h>
 #include <glRenderer.h>
 #include <glRenderSetup.h>
 #include <vertexBuffer.h>
@@ -505,7 +506,7 @@ namespace BALL
 			
 			display_list->endDefinition();
 
-#ifdef BALL_HAS_GLEW
+#ifdef GLRENDERER_HAS_GLEW
 			clearVertexBuffersFor(*(Representation*)&rep);
 			
 			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
@@ -2435,7 +2436,7 @@ namespace BALL
 
 			// prevent warning and error if not using GLEW:
 			Position texname = 0;
-#ifdef BALL_HAS_GLEW
+#ifdef GLRENDERER_HAS_GLEW
 			removeTextureFor_(grid);
 			RegularData3D::IndexType tex_size = grid.getSize();
 
