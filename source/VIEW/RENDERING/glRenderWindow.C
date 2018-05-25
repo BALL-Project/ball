@@ -3,9 +3,6 @@
 //
 
 #include <BALL/VIEW/KERNEL/common.h>
-#ifdef BALL_HAS_GLEW
-#	include <GL/glew.h>
-#endif
 
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
