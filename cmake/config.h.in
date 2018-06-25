@@ -207,6 +207,9 @@
 #cmakedefine BALL_XDRREC_CREATE_VOID_VOID_UINT @BALL_XDRREC_CREATE_VOID_VOID_UINT@
 #cmakedefine BALL_XDRREC_CREATE_VOID @BALL_XDRREC_CREATE_VOID@
 
+// XDR
+#cmakedefine BALL_HAS_XDR
+
 // some platforms do not provide xdr_u_hyper, so we need a workaround for this
 #cmakedefine BALL_HAS_XDR_U_HYPER 
 
