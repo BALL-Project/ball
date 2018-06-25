@@ -25,9 +25,12 @@ namespace BALL
 				                    const char* name = "Open/Save Preferences",
 				                    Qt::WindowFlags fl = 0);
 
-				~OpenSavePreferences();
+				~OpenSavePreferences() override;
 
-				void storeValues();
+				void restoreDefaultValues(bool all = false) override;
+				void restoreValues(bool all = false) override;
+				void storeValues() override;
+
 				bool binaryProjectsEnabled();
 		};
 	}
