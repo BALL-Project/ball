@@ -25,6 +25,10 @@
 #	include <BALL/VIEW/DIALOGS/webEnginePreferences.h>
 #endif
 
+#ifdef BALL_HAS_XDR
+#	include <BALL/CONCEPT/XDRPersistenceManager.h>
+#endif
+
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -46,7 +50,6 @@
 
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
-#include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 
@@ -1867,6 +1870,13 @@ namespace BALL
 
 	void MainControl::saveBALLViewProjectFile(const String& filename, bool binary)
 	{
+#ifndef BALL_HAS_XDR
+		if(binary) {
+			Log.warn() << "BALL has been compiled without XDR support! Binary-encoded project files cannot be written."
+			           << " Falling back to plain-text encoding!" << std::endl;
+			binary = false;
+		}
+#endif
 		String temp;
 		File::createTemporaryFilename(temp);
 		INIFile out(temp);
@@ -1923,8 +1933,10 @@ namespace BALL
 			}
 			else
 			{
+#ifdef BALL_HAS_XDR
 				XDRPersistenceManager pm(result.getFileStream(), result.getFileStream());
 				(*dynamic_cast<System*>(*cit)) >> pm;
+#endif
 			}
 		}
 
@@ -1939,6 +1951,12 @@ namespace BALL
 			setStatusbarText((String)tr("Could not load project file, while update is running!"), true);
 			return; 
 		}
+
+#ifndef BALL_HAS_XDR
+		Log.error() << "BALL has been compiled without XDR support. Binary-encoded project files cannot be read!"
+		            << std::endl;
+		return;
+#endif
 
 		File file;
 		try
@@ -1999,9 +2017,11 @@ namespace BALL
 
 		if (use_xdr)
 		{
+#ifdef BALL_HAS_XDR
 			pm = new XDRPersistenceManager(file, file);
 			pm->initializeInputStream();
 			((XDRPersistenceManager*)pm)->setHandleStreamsExternally(true);
+#endif
 		}
 		else
 		{
@@ -2028,8 +2048,10 @@ namespace BALL
 
 		if (use_xdr)
 		{
+#ifdef BALL_HAS_XDR
 			((XDRPersistenceManager*)pm)->setHandleStreamsExternally(false);
 			pm->finalizeInputStream();
+#endif
 		}
 
 		delete (pm);
