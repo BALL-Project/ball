@@ -193,10 +193,24 @@ CHECK(void toAxisAngle(TVector3<T>& axis, T& angle))
 	Quaternion q(v1, a);	
 	q.toAxisAngle(v2, ang);
 	v1.normalize();
-	TEST_REAL_EQUAL(ang, a)
-	TEST_REAL_EQUAL(v2.x, v1.x)
-	TEST_REAL_EQUAL(v2.y, v1.y)
-	TEST_REAL_EQUAL(v2.z, v1.z)
+	/*
+	 * There are two valid axis-angle representations for the same
+	 * rotation, namely (v, a) and (-v, 2\pi-a). Since the actual
+	 * result depends on the eigen3 version used, we have to test
+	 * both versions here.
+	 */
+	if(v2.x < 0) {
+		TEST_REAL_EQUAL(ang, 2 * BALL::Constants::PI - a)
+		TEST_REAL_EQUAL(v2.x, -v1.x)
+		TEST_REAL_EQUAL(v2.y, -v1.y)
+		TEST_REAL_EQUAL(v2.z, -v1.z)
+	}
+	else {
+		TEST_REAL_EQUAL(ang, a)
+		TEST_REAL_EQUAL(v2.x, v1.x)
+		TEST_REAL_EQUAL(v2.y, v1.y)
+		TEST_REAL_EQUAL(v2.z, v1.z)
+	}
 RESULT
 
 CHECK(void toEulerAngles(T& yaw, T& pitch, T& roll))
@@ -217,7 +231,8 @@ RESULT
 
 CHECK(T getAngle() const)
 	Quaternion q(v,a);
-	TEST_REAL_EQUAL(q.getAngle(),a) 
+	// see toAxisAngle check
+	TEST_EQUAL((abs(q.getAngle()-a) < 1e-4 || abs(q.getAngle() - 2 * BALL::Constants::PI + a) < 1e-4), true)
 RESULT
 
 CHECK(TVector3<T> getAxis())
@@ -225,9 +240,17 @@ CHECK(TVector3<T> getAxis())
 	Vector3 v1(v);
 	v1.normalize();
 	Vector3 v2 = q.getAxis();
-	TEST_REAL_EQUAL(v2.x, v1.x)
-	TEST_REAL_EQUAL(v2.y, v1.y)
-	TEST_REAL_EQUAL(v2.z, v1.z)
+	// see toAxisAngle check
+	if(v2.x < 0) {
+		TEST_REAL_EQUAL(v2.x, -v1.x)
+		TEST_REAL_EQUAL(v2.y, -v1.y)
+		TEST_REAL_EQUAL(v2.z, -v1.z)
+	}
+	else {
+		TEST_REAL_EQUAL(v2.x, v1.x)
+		TEST_REAL_EQUAL(v2.y, v1.y)
+		TEST_REAL_EQUAL(v2.z, v1.z)
+	}
 RESULT
 
 CHECK(TMatrix4x4<T>& getRotationMatrix(TMatrix4x4<T>& m) const throw())
