@@ -128,19 +128,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QCheckBox" name="use_vertex_buffers">
-       <property name="toolTip">
-        <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
-       </property>
-       <property name="text">
-        <string>Use OpenGL Vertex Buffer Objects</string>
-       </property>
-       <property name="checked">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
   </layout>

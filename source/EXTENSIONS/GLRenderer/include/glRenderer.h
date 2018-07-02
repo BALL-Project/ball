@@ -180,13 +180,13 @@ namespace BALL
 			/// Enable or disable antialiasing
 			void setAntialiasing(bool state);
 
-			/// Remove all VertexBuffer and DisplayLists for the given Representation
+			/// Remove all DisplayLists for the given Representation
 			void removeRepresentation(const BALL::VIEW::Representation& rep);
 
-			/// Buffer the visualisation for the given Representation into OpenGL VertexBuffer Objects and DisplayLists.
+			/// Buffer the visualisation for the given Representation into DisplayLists.
 			void bufferRepresentation(const BALL::VIEW::Representation& rep);
 
-			/// Draw the visualisation of the given Representation from the VertexBuffers and a DisplayList.
+			/// Draw the visualisation of the given Representation from a DisplayList.
 			void drawBuffered(const BALL::VIEW::Representation& rep);
 
 			/// Test if a Representation has a DisplayList.
@@ -218,11 +218,11 @@ namespace BALL
 
 			virtual void bufferingDependentRender_(const BALL::VIEW::Representation& repr, BufferMode mode);
 
-			///
-			void clearVertexBuffersFor(BALL::VIEW::Representation& rep);
+			/// @deprecated VBO support has been removed; does nothing
+			BALL_DEPRECATED void clearVertexBuffersFor(BALL::VIEW::Representation& /* rep */) {}
 
-			///
-			bool vertexBuffersSupported() const;
+			/// @deprecated VBO support has been removed; returns always false
+			BALL_DEPRECATED bool vertexBuffersSupported() const { return false; };
 
 			///
 			String getVendor();
@@ -239,11 +239,11 @@ namespace BALL
 			///
 			bool runningOnVirtualBox();
 
-			///
-			bool enableVertexBuffers(bool state);
+			/// @deprecated VBO support has been removed; returns always false
+			BALL_DEPRECATED bool enableVertexBuffers(bool /* state */) { return false; }
 
-			///
-			bool vertexBuffersEnabled() const;
+			/// @deprecated VBO support has been removed; returns always false
+			BALL_DEPRECATED bool vertexBuffersEnabled() const { return false; };
 
 			///
 			BALL::VIEW::DrawingMode getDrawingMode() const;
@@ -462,7 +462,8 @@ namespace BALL
 
 			RenderMode 							render_mode_;
 
-			bool 										use_vertex_buffer_;
+			/// @deprecated VBO support has been removed; always false
+			BALL_DEPRECATED bool 										use_vertex_buffer_ {false};
 			bool smooth_lines_;
 			bool 										picking_mode_;
 			BALL::VIEW::ModelType 							model_type_;

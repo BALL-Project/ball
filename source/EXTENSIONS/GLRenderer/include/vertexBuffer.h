@@ -28,7 +28,7 @@ namespace BALL
 				To ensure a maximum of platform independence we use method pointers in the source file.
 				\ingroup ViewRendering
 		*/
-		class BALL_VIEW_EXPORT MeshBuffer : protected QOpenGLFunctions
+		class BALL_DEPRECATED BALL_VIEW_EXPORT MeshBuffer : protected QOpenGLFunctions
 		{
 			public:
 

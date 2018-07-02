@@ -32,7 +32,6 @@
 
 #include <glRenderer.h>
 #include <glRenderSetup.h>
-#include <vertexBuffer.h>
 
 using namespace std;
 using namespace BALL;
@@ -97,7 +96,6 @@ namespace BALL
 				object_buffer_(new GLuint[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS]),
 				normal_vector_(),
 				render_mode_(RENDER_MODE_UNDEFINED),
-				use_vertex_buffer_(false),
 				smooth_lines_(false),
 				picking_mode_(false),
 				model_type_(MODEL_LINES),
@@ -212,8 +210,6 @@ namespace BALL
 		bool GLRenderer::init(const Stage& stage, float width, float height)
 		{
 			Renderer::init(stage, width, height);
-
-			//enableVertexBuffers(true);
 
 			// Force OpenGL to normalize transformed normals to be of unit
 			// length before using the normals in OpenGL's lighting equations
@@ -463,11 +459,6 @@ namespace BALL
 
 			if (rep.getGeometricObjects().size() == 0) return;
 
-			if (vertexBuffersEnabled())
-			{
-				clearVertexBuffersFor(*(Representation*)&rep);
-			}
-
 			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
 			if (hit == display_lists_.end()) return;
 
@@ -499,32 +490,6 @@ namespace BALL
 			render(rep, true);
 			
 			display_list->endDefinition();
-
-#ifdef BALL_HAS_GLEW
-			clearVertexBuffersFor(*(Representation*)&rep);
-			
-			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
-			{
-				// prevent copying the pointers of the buffers later...
-				rep_to_buffers_[&rep] = vector<MeshBuffer*>();
-				
-				vector<MeshBuffer*>& buffers = rep_to_buffers_.find(&rep)->second;
-
-				const list<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-				list<GeometricObject*>::const_iterator git = geometric_objects.begin();
-				for (; git != geometric_objects.end(); git++)
-				{
-					const Mesh* const mesh = dynamic_cast<Mesh*>(*git);
-					if (mesh != 0) 
-					{
-						MeshBuffer* buffer = new MeshBuffer;
-						buffer->setMesh(*mesh);
-						buffer->initialize();
-						buffers.push_back(buffer);
-					}
-				}
-			}
-#endif
 
 #ifdef BALL_BENCHMARKING
 		t.stop();
@@ -895,21 +860,10 @@ namespace BALL
 			list<GeometricObject*>::const_iterator it = geometric_objects.begin();
 			if (for_display_list)
 			{
-				if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
+				// render everything
+				for (; it != geometric_objects.end(); it++)
 				{
-					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
-					for (; it != geometric_objects.end(); it++)
-					{
-						if (dynamic_cast<Mesh*>(*it) == 0) render_(*it);
-					}
-				}
-				else
-				{
-					// render everything
-					for (; it != geometric_objects.end(); it++)
-					{
-						render_(*it);
-					}
+					render_(*it);
 				}
 			}
 			else // drawing for picking directly
@@ -2199,61 +2153,9 @@ namespace BALL
 			return (getVendor() == "Humper") && (getRenderer() == "Chromium");
 		}
 
-		bool GLRenderer::enableVertexBuffers(bool state)
-		{
-			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
-			{
-				use_vertex_buffer_ = false;
-				return false;
-			}
-
-			if (state != use_vertex_buffer_)
-			{
-				if (state) Log.info() << (String)qApp->translate("BALL::VIEW::GLRenderer", "Enabling Vertex Buffer") << std::endl;
-				else       Log.info() << (String)qApp->translate("BALL::VIEW::GLRenderer", "Disabling Vertex Buffer") << std::endl;
-			}
-			use_vertex_buffer_ = state;
-
-			return true;
-		}
-
-		void GLRenderer::clearVertexBuffersFor(Representation& rep)
-		{
-			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
-			if (vit == rep_to_buffers_.end()) return;
-
-			vector<MeshBuffer*>& meshes = vit->second;
-			vector<MeshBuffer*>::iterator bit = meshes.begin();
-			for (; bit != meshes.end(); bit++)
-			{
-				delete *bit;
-			}
-
-			meshes.clear();
-			rep_to_buffers_.erase(vit);
-		}
-
 		void GLRenderer::drawBuffered(const Representation& rep)
 		{
 			if (rep.isHidden()) return;
-
-			// if we have vertex buffers for this Representation, draw them
-			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
-			{
-				MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
-				if (vit != rep_to_buffers_.end())
-				{
-					initDrawingMeshes_();
-					MeshBuffer::setGLRenderer(this);
-					vector<MeshBuffer*>& buffers = vit->second;
-
-					vector<MeshBuffer*>::iterator bit = buffers.begin();
-					for (; bit != buffers.end(); bit++)
-					{
-						(*bit)->draw();
-					}
-				}
-			}
 
 			// if we have a displaylist for this Representation, draw it
 			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
@@ -2274,12 +2176,6 @@ namespace BALL
 			object_to_name_.clear();
 			name_to_object_.clear();
 			all_names_ = 1;
-		}
-
-
-		bool GLRenderer::vertexBuffersSupported() const
-		{
-			return isExtensionSupported("GL_ARB_vertex_buffer_object");
 		}
 
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
