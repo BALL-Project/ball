@@ -841,18 +841,6 @@ namespace BALL
 			}
 			else
 			{
-				if (!representation.hasProperty("DONT_CLIP"))
-				{
-					// prevent artifacts:
-					// first run to fill depth buffer
-					initTransparent();
-					glDepthMask(GL_TRUE);
-					glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-					renderRepresentation_(representation, for_display_list);
-
-					// options for second run 
-					glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-				}
 				initTransparent();
 			}
 
