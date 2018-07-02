@@ -1,5 +1,5 @@
-#ifndef GLPLUGIN_H
-#define GLPLUGIN_H
+#ifndef BALL_GLRENDERER_GLPLUGIN_H
+#define BALL_GLRENDERER_GLPLUGIN_H
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
@@ -12,36 +12,43 @@ namespace BALL {
 	namespace VIEW {
 		class Renderer;
 	}
-}
 
-class GLConfigDialog;
+	namespace GLRenderer {
+		class GLConfigDialog;
 
-class BALL_PLUGIN_EXPORT GLPlugin : public QObject, public BALL::BALLPlugin, public BALL::VIEW::VIEWPlugin, public BALL::VIEW::RendererPlugin
-{
-	Q_OBJECT
-	Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.Renderer.GLRenderer")
-	Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::RendererPlugin)
+		class BALL_PLUGIN_EXPORT GLPlugin :
+			public QObject,
+			public BALL::BALLPlugin,
+			public BALL::VIEW::VIEWPlugin,
+			public BALL::VIEW::RendererPlugin
+		{
+			Q_OBJECT
+			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.Renderer.GLRenderer")
+			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::RendererPlugin)
 
-	public:
-		GLPlugin();
-		virtual ~GLPlugin();
+			public:
+				GLPlugin();
+				virtual ~GLPlugin();
 
-		const QPixmap* getIcon() const;
-		QString getName() const;
-		QString getDescription() const;
+				const QPixmap* getIcon() const;
+				QString getName() const;
+				QString getDescription() const;
 
-		BALL::VIEW::ConfigDialog* getConfigDialog();
+				BALL::VIEW::ConfigDialog* getConfigDialog();
 
-		BALL::VIEW::Renderer* createRenderer();
+				BALL::VIEW::Renderer* createRenderer();
 
-		bool isActive() {return is_active_; }
-		bool activate() { return is_active_ = true; }
-		bool deactivate() { is_active_ = false; return true; }
+				bool isActive() {return is_active_; }
+				bool activate() { return is_active_ = true; }
+				bool deactivate() { is_active_ = false; return true; }
 
-	private:
-		bool is_active_;
-		QPixmap icon_;
-		GLConfigDialog* config_dialog_;
-};
+			private:
+				bool is_active_;
+				QPixmap icon_;
+				GLConfigDialog* config_dialog_;
+		};
 
-#endif //GLPLUGIN_H
+	} // namespace GLRenderer
+} // namespace BALL
+
+#endif // BALL_GLRENDERER_GLPLUGIN_H

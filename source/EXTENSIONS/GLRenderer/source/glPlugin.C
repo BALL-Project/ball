@@ -1,43 +1,51 @@
 #include <glPlugin.h>
 #include <glRenderer.h>
-#include <configDialog.h>
+#include <glConfigDialog.h>
 
-GLPlugin::GLPlugin()
-	: is_active_(false),
-	  icon_(":pluginGLRenderer.png"),
-	  config_dialog_(0)
+namespace BALL
 {
-}
+	namespace GLRenderer
+	{
 
-GLPlugin::~GLPlugin()
-{
-}
+		GLPlugin::GLPlugin()
+				: is_active_(false),
+				  icon_(":pluginGLRenderer.png"),
+				  config_dialog_(0)
+		{
+		}
 
-QString GLPlugin::getName() const
-{
-	return QString("GLRenderer");
-}
+		GLPlugin::~GLPlugin()
+		{
+		}
 
-QString GLPlugin::getDescription() const
-{
-	return QString("An OpenGL 1.x renderer.");
-}
+		QString GLPlugin::getName() const
+		{
+			return QString("GLRenderer");
+		}
 
-const QPixmap* GLPlugin::getIcon() const
-{
-	return &icon_;
-}
+		QString GLPlugin::getDescription() const
+		{
+			return QString("An OpenGL 1.x renderer.");
+		}
 
-BALL::VIEW::ConfigDialog* GLPlugin::getConfigDialog()
-{
-	if(!config_dialog_){
-		config_dialog_ = new GLConfigDialog;
-	}
+		const QPixmap* GLPlugin::getIcon() const
+		{
+			return &icon_;
+		}
 
-	return config_dialog_;
-}
+		BALL::VIEW::ConfigDialog* GLPlugin::getConfigDialog()
+		{
+			if(!config_dialog_){
+				config_dialog_ = new GLConfigDialog;
+			}
 
-BALL::VIEW::Renderer* GLPlugin::createRenderer()
-{
-	return new BALL::VIEW::GLRenderer;
-}
+			return config_dialog_;
+		}
+
+		BALL::VIEW::Renderer* GLPlugin::createRenderer()
+		{
+			return new GLRenderer;
+		}
+
+	} // namespace GLRenderer
+} // namespace BALL

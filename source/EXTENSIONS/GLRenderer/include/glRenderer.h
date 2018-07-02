@@ -1,49 +1,23 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
+#ifndef BALL_GLRENDERER_GLRENDERER_H
+#define BALL_GLRENDERER_GLRENDERER_H
 
-#ifndef BALL_VIEW_RENDERING_RENDERERS_GLRENDERER_H
-#define BALL_VIEW_RENDERING_RENDERERS_GLRENDERER_H
-
-#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
-#	include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
-#endif
-
-#ifndef BALL_MATHS_QUATERNION_H
-# include <BALL/MATHS/quaternion.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
-# include <BALL/VIEW/DATATYPE/colorRGBA.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_STAGE_H
-# include <BALL/VIEW/KERNEL/stage.h>
-#endif
+#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#include <BALL/MATHS/quaternion.h>
+#include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#include <BALL/VIEW/KERNEL/geometricObject.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 
 #if defined(BALL_OS_DARWIN)
-# include <OpenGL/gl.h>
-# include <OpenGL/glu.h>
+#	include <OpenGL/gl.h>
+#	include <OpenGL/glu.h>
 #else
-# include <GL/gl.h>
-# include <GL/glu.h>
+#	include <GL/gl.h>
+#	include <GL/glu.h>
 #endif
 
-#ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
-# include <glDisplayList.h>
-#endif
-
-#ifndef BALL_DATATYPE_REGULARDATA3D_H
-# include <BALL/DATATYPE/regularData3D.h>
-#endif
-
-#ifndef BALL_VIEW_RENDERING_GEOMETRICOBJECTDISPATCHER_H
-# include <BALL/VIEW/RENDERING/geometricObjectDispatcher.h>
-#endif
+#include <glDisplayList.h>
+#include <BALL/DATATYPE/regularData3D.h>
+#include <BALL/VIEW/RENDERING/geometricObjectDispatcher.h>
 
 #ifndef APIENTRY
 #define APIENTRY
@@ -56,22 +30,27 @@ namespace BALL
 // defines the maximal number of GL-objects, which can be selected in picking mode
 // a number as big as 100.000 is needed for large molecules, just to be sure we use a million
 #define BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS 1000000
-	namespace VIEW
-	{
+
+	namespace VIEW {
 		class Scene;
 		class GLDisplayList;
-		class MeshBuffer;
 		class ColorMap;
 		class RenderTarget;
+	}
+
+	namespace GLRenderer
+	{
+		class MeshBuffer;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
 				\ingroup ViewRendering
 		*/
-		class BALL_PLUGIN_EXPORT GLRenderer
-			: public Renderer, public GeometricObjectDispatcher
+		class BALL_PLUGIN_EXPORT GLRenderer :
+			public BALL::VIEW::Renderer,
+			public BALL::VIEW::GeometricObjectDispatcher
 		{
-			friend class Scene;
+			friend class BALL::VIEW::Scene;
 			public:
 
 			///
@@ -110,7 +89,7 @@ namespace BALL
 					<b> drawing_mode_</b> are not allowed.
 					\see         GeneralException
 			*/
-			class BALL_VIEW_EXPORT WrongModes:	public Exception::GeneralException
+			class BALL_VIEW_EXPORT WrongModes:	public BALL::Exception::GeneralException
 			{
 				public:
 
@@ -130,18 +109,18 @@ namespace BALL
 			virtual void clear();
 
 			///
-			void dump(std::ostream& s, Size depth) const;
+			void dump(std::ostream& s, BALL::Size depth) const;
 
 			///
-			inline Name getName(const GeometricObject& object);
+			inline Name getName(const BALL::VIEW::GeometricObject& object);
 
 			///
-			GeometricObject* getObject(GLRenderer::Name name) const;
+			BALL::VIEW::GeometricObject* getObject(GLRenderer::Name name) const;
 
 			using Renderer::init;
 
 			/// Initialise the renderer, e.g. the display lists.
-			virtual bool init(const Stage& stage, float width, float height);
+			virtual bool init(const BALL::VIEW::Stage& stage, float width, float height);
 
 			/// Set the light sources according to the stage
 			virtual void setLights(bool reset_all = false);
@@ -153,19 +132,19 @@ namespace BALL
 
 			/** Pick all objects in the given screen rectangle.
 			 */
-			virtual void pickObjects(Position x1, Position y1, Position x2, Position y2, 
-			                         std::list<GeometricObject*>& objects);
+			virtual void pickObjects(BALL::Position x1, BALL::Position y1, BALL::Position x2, BALL::Position y2,
+			                         std::list<BALL::VIEW::GeometricObject*>& objects);
 
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
 			*/
-			void pickObjects1(Position x1, Position y1, Position x2, Position y2);
+			void pickObjects1(BALL::Position x1, BALL::Position y1, BALL::Position x2, BALL::Position y2);
 
 			/** Pick geometric objects method2.
 			 		Call this method after pickObjects1 and rendering the representations.
 					\param objects returns the picked objects
 			*/
-			void pickObjects2(std::list<GeometricObject*>& objects);
+			void pickObjects2(std::list<BALL::VIEW::GeometricObject*>& objects);
 
 			/** Set the GL_FOG intensity
 			 */
@@ -202,16 +181,16 @@ namespace BALL
 			void setAntialiasing(bool state);
 
 			/// Remove all VertexBuffer and DisplayLists for the given Representation
-			void removeRepresentation(const Representation& rep);
+			void removeRepresentation(const BALL::VIEW::Representation& rep);
 
 			/// Buffer the visualisation for the given Representation into OpenGL VertexBuffer Objects and DisplayLists.
-			void bufferRepresentation(const Representation& rep);
+			void bufferRepresentation(const BALL::VIEW::Representation& rep);
 
 			/// Draw the visualisation of the given Representation from the VertexBuffers and a DisplayList.
-			void drawBuffered(const Representation& rep);
+			void drawBuffered(const BALL::VIEW::Representation& rep);
 
 			/// Test if a Representation has a DisplayList.
-			bool hasDisplayListFor(const Representation& rep) const;
+			bool hasDisplayListFor(const BALL::VIEW::Representation& rep) const;
 
 			///
 			RenderMode getRenderMode() const;
@@ -223,9 +202,9 @@ namespace BALL
 			 *  made current before this function is called. Buffers are not automatically
 			 *  swapped afterwards!
 			 */
-			virtual void renderToBuffer(RenderTarget* renderTarget, BufferMode mode);
+			virtual void renderToBuffer(BALL::VIEW::RenderTarget* renderTarget, BufferMode mode);
 
-			virtual void renderToBufferImpl(boost::shared_ptr<FrameBuffer> /*buffer*/) {
+			virtual void renderToBufferImpl(boost::shared_ptr<BALL::VIEW::FrameBuffer> /*buffer*/) {
 				renderToBuffer(0, DISPLAY_LISTS_RENDERING);
 			}
 
@@ -233,14 +212,14 @@ namespace BALL
 			virtual bool supports(const BALL::VIEW::FrameBufferFormat&) const { return true; }
 			virtual void formatUpdated() {}
 
-			virtual boost::shared_ptr<RenderSetup> createRenderSetup(RenderTarget* target, Scene* scene);
+			virtual boost::shared_ptr<BALL::VIEW::RenderSetup> createRenderSetup(BALL::VIEW::RenderTarget* target, BALL::VIEW::Scene* scene);
 			///
-			virtual bool render(const Representation& representation, bool for_display_list = false);
+			virtual bool render(const BALL::VIEW::Representation& representation, bool for_display_list = false);
 
-			virtual void bufferingDependentRender_(const Representation& repr, BufferMode mode);
+			virtual void bufferingDependentRender_(const BALL::VIEW::Representation& repr, BufferMode mode);
 
 			///
-			void clearVertexBuffersFor(Representation& rep);
+			void clearVertexBuffersFor(BALL::VIEW::Representation& rep);
 
 			///
 			bool vertexBuffersSupported() const;
@@ -267,7 +246,7 @@ namespace BALL
 			bool vertexBuffersEnabled() const;
 
 			///
-			DrawingMode getDrawingMode() const;
+			BALL::VIEW::DrawingMode getDrawingMode() const;
 
 			///
 			void initPerspective();
@@ -276,23 +255,23 @@ namespace BALL
 			void setProjection();
 
 			//_
-			void setColorRGBA_(const ColorRGBA& color);
+			void setColorRGBA_(const BALL::VIEW::ColorRGBA& color);
 
 			//_
-			void vertexVector3_(const Vector3& v);
+			void vertexVector3_(const BALL::Vector3& v);
 
 			//
-			void updateCamera(const Camera* camera = 0);
+			void updateCamera(const BALL::VIEW::Camera* camera = 0);
 
 			//
 			void setupStereo(float eye_separation, float focal_length);
 
-			Position createTextureFromGrid(const GridVisualisation& vis);
+			Position createTextureFromGrid(const BALL::VIEW::GridVisualisation& vis);
 			void removeTextureFor_(const RegularData3D& grid);
 
 			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 
-			void updateMaterialForRepresentation(Representation const* rep) { bufferRepresentation(*rep); }
+			void updateMaterialForRepresentation(BALL::VIEW::Representation const* rep) { bufferRepresentation(*rep); }
 
 	protected:
 			bool isExtensionSupported(const char* extension) const;
@@ -302,25 +281,25 @@ namespace BALL
 			 */
 			bool mapViewplaneToScreen_();
 
-			void renderRepresentation_(const Representation& representation, bool for_display_list);
+			void renderRepresentation_(const BALL::VIEW::Representation& representation, bool for_display_list);
 
 			///
 			void renderRepresentations_(BufferMode mode);
 
 			///
-			virtual void renderLabel_(const Label& /*label*/);
+			virtual void renderLabel_(const BALL::VIEW::Label& /*label*/);
 
 			///
-			virtual void renderLine_(const Line& /*line*/);
+			virtual void renderLine_(const BALL::VIEW::Line& /*line*/);
 
 			/// Render an illuminated line
-			virtual void renderMultiLine_(const MultiLine& line);
+			virtual void renderMultiLine_(const BALL::VIEW::MultiLine& line);
 
 			///
-			virtual void renderMesh_(const Mesh& /*mesh*/);
+			virtual void renderMesh_(const BALL::VIEW::Mesh& /*mesh*/);
 
 			///
-			virtual void renderQuadMesh_(const QuadMesh& /*mesh*/);
+			virtual void renderQuadMesh_(const BALL::VIEW::QuadMesh& /*mesh*/);
 
 			///
 			void initDrawingMeshes_();
@@ -338,37 +317,37 @@ namespace BALL
 			virtual void renderRuler();
 
 			///
-			virtual void renderPoint_(const Point& /*point*/);
+			virtual void renderPoint_(const BALL::VIEW::Point& /*point*/);
 
 			///
-			virtual void renderSimpleBox_(const SimpleBox& /*box*/);
+			virtual void renderSimpleBox_(const BALL::VIEW::SimpleBox& /*box*/);
 
 			///
-			virtual void renderBox_(const Box& /*box*/);
+			virtual void renderBox_(const BALL::VIEW::Box& /*box*/);
 
 			///
-			virtual void renderSphere_(const Sphere& /*sphere*/);
+			virtual void renderSphere_(const BALL::VIEW::Sphere& /*sphere*/);
 
 			///
-			virtual void renderDisc_(const Disc& /*disc*/);
+			virtual void renderDisc_(const BALL::VIEW::Disc& /*disc*/);
 
 			///
-			virtual void renderTube_(const Tube& /*tube*/);
+			virtual void renderTube_(const BALL::VIEW::Tube& /*tube*/);
 
 			///
-			virtual void renderTwoColoredLine_(const TwoColoredLine& /*two_colored_line*/);
+			virtual void renderTwoColoredLine_(const BALL::VIEW::TwoColoredLine& /*two_colored_line*/);
 
 			///
-			virtual void renderTwoColoredTube_(const TwoColoredTube& /*two_colored_tube*/);
+			virtual void renderTwoColoredTube_(const BALL::VIEW::TwoColoredTube& /*two_colored_tube*/);
 
 			///
-			virtual void renderClippingPlane_(const ClippingPlane& plane);
+			virtual void renderClippingPlane_(const BALL::VIEW::ClippingPlane& plane);
 
 			/// Render a grid slice
-			virtual void renderGridVisualisation_(const GridVisualisation& vol);
+			virtual void renderGridVisualisation_(const BALL::VIEW::GridVisualisation& vol);
 
 			//_
-			void setColor4ub_(const GeometricObject& object);
+			void setColor4ub_(const BALL::VIEW::GeometricObject& object);
 
 			//_
 			void createSpheres_();
@@ -383,7 +362,7 @@ namespace BALL
 			void createDottedSphere_(int precision);
 
 			//_
-			void subdivideTriangle_(Vector3& v1, Vector3& v2, Vector3& v3, int precision);
+			void subdivideTriangle_(BALL::Vector3& v1, BALL::Vector3& v2, BALL::Vector3& v3, int precision);
 
 			//_
 			void createLineBox_();
@@ -398,27 +377,27 @@ namespace BALL
 			void clearNames_();
 
 			//_
-			void normalVector3_(const Vector3& v);
+			void normalVector3_(const BALL::Vector3& v);
 
 
 			//_
-			void translateVector3_(const Vector3& v);
+			void translateVector3_(const BALL::Vector3& v);
 
 			//_
-			void texCoordVector3_(const Vector3& v)
+			void texCoordVector3_(const BALL::Vector3& v)
 				{ glTexCoord3f(v.x, v.y, v.z); }
 
 			//_
-			void scaleVector3_(const Vector3& v);
+			void scaleVector3_(const BALL::Vector3& v);
 
 			//_
-			void rotateVector3Angle_(const Vector3& v, Real angle);
+			void rotateVector3Angle_(const BALL::Vector3& v, BALL::Real angle);
 
 			//_
 			void scale_(float f);
 
 
-			void initGLU_(DrawingMode mode);
+			void initGLU_(BALL::VIEW::DrawingMode mode);
 
 			//_
 			void setOrthographicZoom(float orthographic_zoom);
@@ -429,16 +408,16 @@ namespace BALL
 			//_
 			void generateIlluminationTexture_(float ka, float kd, float kr, float shininess);
 
-			inline Position getTextureIndex_(Position x, Position y, Position z, Size width, Size height);
-			void setupGridClipPlanes_(const GridVisualisation& slice);
+			inline BALL::Position getTextureIndex_(BALL::Position x, BALL::Position y, BALL::Position z, BALL::Size width, BALL::Size height);
+			void setupGridClipPlanes_(const BALL::VIEW::GridVisualisation& slice);
 
 			// Sets the current OpenGL material
-			void setMaterial_(const Stage::Material& mat);
+			void setMaterial_(const BALL::VIEW::Stage::Material& mat);
 			///
-			DrawingMode 					drawing_mode_;
+			BALL::VIEW::DrawingMode 					drawing_mode_;
 
 			///
-			Index 								drawing_precision_;
+			BALL::Index 								drawing_precision_;
 
 			//_
 			float									near_;
@@ -468,10 +447,10 @@ namespace BALL
 			GLubyte*  						line_tex_;
 
 			// naming of geometric objects
-			typedef HashMap<const GeometricObject*, Name> NameHashMap;
-			typedef HashMap<Name, const GeometricObject*> GeometricObjectHashMap;
-			typedef HashMap<const Representation*, GLDisplayList*> DisplayListHashMap;
-			typedef HashMap<const Representation*, vector<MeshBuffer*> > MeshBufferHashMap;
+			typedef HashMap<const BALL::VIEW::GeometricObject*, Name> NameHashMap;
+			typedef HashMap<Name, const BALL::VIEW::GeometricObject*> GeometricObjectHashMap;
+			typedef HashMap<const BALL::VIEW::Representation*, GLDisplayList*> DisplayListHashMap;
+			typedef HashMap<const BALL::VIEW::Representation*, vector<MeshBuffer*> > MeshBufferHashMap;
 
 			GeometricObjectHashMap	name_to_object_;
 			NameHashMap							object_to_name_;
@@ -479,15 +458,15 @@ namespace BALL
 			MeshBufferHashMap 			rep_to_buffers_;
 			Name 										all_names_;
 			GLuint* 								object_buffer_;
-			Vector3 								normal_vector_;
+			BALL::Vector3 								normal_vector_;
 
 			RenderMode 							render_mode_;
 
 			bool 										use_vertex_buffer_;
 			bool smooth_lines_;
 			bool 										picking_mode_;
-			ModelType 							model_type_;
-			Position 								display_lists_index_;
+			BALL::VIEW::ModelType 							model_type_;
+			BALL::Position 								display_lists_index_;
 			bool 										single_pick_;
 			bool 										drawed_other_object_;
 			bool 										drawed_mesh_;
@@ -502,7 +481,7 @@ namespace BALL
 #		include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.iC>
 #	endif
 
-	} // namespace VIEW
+	} // namespace GLRenderer
 } // namespace BALL
 
-#endif // BALL_VIEW_RENDERING_GLRENDERER_H
+#endif // BALL_GLRENDERER_GLRENDERER_H

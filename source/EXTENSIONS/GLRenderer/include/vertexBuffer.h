@@ -1,23 +1,9 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: vertexBuffer.h,v 1.6 2005/12/23 17:02:21 amoll Exp $
-//
+#ifndef BALL_GLRENDERER_VERTEXBUFFER_H
+#define BALL_GLRENDERER_VERTEXBUFFER_H
 
-#ifndef BALL_VIEW_RENDERING_RENDERERS_VERTEXBUFFER_H
-#define BALL_VIEW_RENDERING_RENDERERS_VERTEXBUFFER_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_COMMON_H
-#	include <BALL/VIEW/KERNEL/common.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
-#	include <BALL/VIEW/DATATYPE/colorRGBA.h>
-#endif
+#include <BALL/common.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 
 #include <QtGui/QOpenGLFunctions>
 
@@ -26,6 +12,10 @@ namespace BALL
 	namespace VIEW
 	{
 		class Mesh;
+	}
+
+	namespace GLRenderer
+	{
 		class GLRenderer;
 
 		/** Wrapper class to draw BALLView Mesh instances with OpenGL vertex buffer objects.
@@ -59,10 +49,10 @@ namespace BALL
 			const MeshBuffer& operator = (const MeshBuffer& buffer);
 
 			/// Get the Mesh for this buffer object
-			const Mesh* getMesh() { return mesh_;}
+			const BALL::VIEW::Mesh* getMesh() { return mesh_;}
 
 			/// Set the Mesh which shall be drawn with this buffer object
-			void setMesh(const Mesh& mesh) {mesh_ = & mesh;}
+			void setMesh(const BALL::VIEW::Mesh& mesh) {mesh_ = & mesh;}
 
 			/// Transfer all vertex, normal, index and color data of the mesh into the vertex buffer object.
 			bool initialize();
@@ -88,18 +78,18 @@ namespace BALL
 			
 			protected:
 			
-			const Mesh* 				mesh_;
+			const BALL::VIEW::Mesh* 				mesh_;
  			Buffer 							buffer_;
 			bool 								filled_;
 			static GLRenderer* 	gl_renderer_;
 			bool 								busy_;
 			bool 								multiple_colors_;
-			ColorRGBA 					color_;
+			BALL::VIEW::ColorRGBA 					color_;
 			Size 								vertices_;
 			Size 								triangles_;
 		};
 
-	} // namespace VIEW
+	} // namespace GLRenderer
 } // namespace BALL
 
-#endif // BALL_VIEW_RENDERING_VERTEXBUFFER_H
+#endif // BALL_GLRENDERER_VERTEXBUFFER_H

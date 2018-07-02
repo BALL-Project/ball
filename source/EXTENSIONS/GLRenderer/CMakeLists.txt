@@ -4,7 +4,7 @@ SET(DIRECTORY source)
 
 ### list all filenames of the directory here
 SET(SOURCES_LIST
-	${DIRECTORY}/configDialog.C
+	${DIRECTORY}/glConfigDialog.C
 	${DIRECTORY}/glDisplayList.C
 	${DIRECTORY}/glPlugin.C
 	${DIRECTORY}/glRenderer.C
@@ -17,7 +17,7 @@ SET(RCC_SOURCES_LIST
 )
 
 SET(UI_SOURCES_LIST
-	${DIRECTORY}/configDialog.ui
+	${DIRECTORY}/glConfigDialog.ui
 )
 
 SET(DIRECTORY include)
@@ -25,7 +25,7 @@ SET(DIRECTORY include)
 ### the list of all files requiring a moc run
 SET(MOC_SOURCES_LIST
 	${DIRECTORY}/glPlugin.h
-	${DIRECTORY}/configDialog.h
+	${DIRECTORY}/glConfigDialog.h
 )
 
 QT5_WRAP_CPP(MOC_OUTFILES ${MOC_SOURCES_LIST})

@@ -1,20 +1,13 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: glDisplayList.h,v 1.8.16.1 2007/03/25 21:26:14 oliver Exp $
+#ifndef BALL_GLRENDERER_GLDISPLAYLIST_H
+#define BALL_GLRENDERER_GLDISPLAYLIST_H
 
-#ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
-#define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
+#include <BALL/common.h>
 
 #include <QtOpenGL/qgl.h>
 
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 
 /** GLDisplayList class.
@@ -65,7 +58,7 @@ class BALL_PLUGIN_EXPORT GLDisplayList
 			defined inside another definition of a display list.
 			\see         GeneralException			
 	*/
-	class NestedDisplayList:	public Exception::GeneralException
+	class NestedDisplayList:	public BALL::Exception::GeneralException
 	{
 		public:
 
@@ -77,7 +70,7 @@ class BALL_PLUGIN_EXPORT GLDisplayList
 			allocated but there is no more memory available.
 			\see         GeneralException			
 	*/
-	class NoDisplayListAvailable:	public Exception::GeneralException
+	class NoDisplayListAvailable:	public BALL::Exception::GeneralException
 	{
 		public:
 
@@ -89,7 +82,7 @@ class BALL_PLUGIN_EXPORT GLDisplayList
 			is tried to be redefined without being destroyed before.
 			\see         GeneralException			
 	*/
-	class DisplayListRedeclaration:	public Exception::GeneralException
+	class DisplayListRedeclaration:	public BALL::Exception::GeneralException
 	{
 		public:
 
@@ -217,7 +210,7 @@ class BALL_PLUGIN_EXPORT GLDisplayList
 			\param   s output stream where to output the state of this glDisplayList
 			\param   depth the dumping depth
 	*/
-	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+	virtual void dump(std::ostream& s = std::cout, BALL::Size depth = 0) const;
 
 	//@}
 
@@ -234,7 +227,7 @@ class BALL_PLUGIN_EXPORT GLDisplayList
 #		include <glDisplayList.iC>
 #	endif
 
-	} // namespace VIEW
+	} // namespace GLRenderer
 } // namespace BALL
 
-#endif // BALL_VIEW_RENDERING_GLDISPLAYLIST_H
+#endif // BALL_GLRENDERER_GLDISPLAYLIST_H

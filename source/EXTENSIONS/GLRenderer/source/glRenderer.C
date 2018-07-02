@@ -1,7 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
 #include <BALL/KERNEL/atom.h>
 #include <BALL/MATHS/vector2.h>
 #include <BALL/MATHS/plane3.h>
@@ -39,9 +35,8 @@
 #include <vertexBuffer.h>
 
 using namespace std;
-
-//   #define BALL_VIEW_DEBUG
-//   #define BALL_BENCHMARKING
+using namespace BALL;
+using namespace BALL::VIEW;
 
 #define BYTES_PER_TEXEL 4
 #define TEXTURE_SIZE 128  // including border
@@ -49,7 +44,7 @@ using namespace std;
 
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 
 #ifdef BALL_VIEW_DEBUG
@@ -218,7 +213,7 @@ namespace BALL
 		{
 			Renderer::init(stage, width, height);
 
-			enableVertexBuffers(true);
+			//enableVertexBuffers(true);
 
 			// Force OpenGL to normalize transformed normals to be of unit
 			// length before using the normals in OpenGL's lighting equations
@@ -2954,5 +2949,5 @@ namespace BALL
 #		include <glRenderer.iC>
 #	endif
 
-	} // namespace VIEW
+	} // namespace GLRenderer
 } // namespace BALL

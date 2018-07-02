@@ -1,16 +1,16 @@
-#ifndef BALL_PLUGINS_GLRENDERSETUP_H
-#define BALL_PLUGINS_GLRENDERSETUP_H
+#ifndef BALL_GLRENDERER_GLRENDERSETUP_H
+#define BALL_GLRENDERER_GLRENDERSETUP_H
 
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
-		class BALL_PLUGIN_EXPORT GLRenderSetup : public RenderSetup
+		class BALL_PLUGIN_EXPORT GLRenderSetup : public BALL::VIEW::RenderSetup
 		{
 			public:
-				GLRenderSetup(Renderer* renderer, RenderTarget* target, Scene* scene)
+				GLRenderSetup(BALL::VIEW::Renderer* renderer, BALL::VIEW::RenderTarget* target, BALL::VIEW::Scene* scene)
 					: RenderSetup(renderer, target, scene)
 				{
 				}
@@ -23,7 +23,7 @@ namespace BALL
 
 				void doRender_() { }
 		};
-	}
-}
+	} // namespace GLRenderer
+} // namespace BALL
 
-#endif //BALL_PLUGINS_GLRENDERSETUP_H
+#endif //BALL_GLRENDERER_GLRENDERSETUP_H

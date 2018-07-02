@@ -2,7 +2,7 @@
 
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 		void GLRenderSetup::updateTarget()
 		{

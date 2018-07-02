@@ -1,18 +1,11 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: glDisplayList.C,v 1.7.16.1 2007/03/25 21:57:01 oliver Exp $
-//
+#include <glDisplayList.h>
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/rtti.h>
 
-#include <glDisplayList.h>
-
 using namespace std;
-
-//   #define BALL_VIEW_DEBUG
+using namespace BALL;
 
 #ifdef BALL_VIEW_DEBUG
 #define CHECK_GL_ERROR \
@@ -40,7 +33,7 @@ using namespace std;
 
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 
 		const GLDisplayList::GLList 
@@ -166,5 +159,5 @@ namespace BALL
 		#		include <glDisplayList.iC>
 		#	endif
 
-	} // namespace VIEW
+	} // namespace GLRenderer
 } // namespace BALL

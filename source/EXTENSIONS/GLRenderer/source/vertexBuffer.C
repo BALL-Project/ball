@@ -1,17 +1,14 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: vertexBuffer.C,v 1.6.16.1 2007/03/25 21:57:02 oliver Exp $
-
 #include <BALL/CONFIG/config.h>
 
 #include <glRenderer.h>
 #include <vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
+using namespace BALL::VIEW;
+
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 
 		GLRenderer* MeshBuffer::gl_renderer_ = 0;
