@@ -520,7 +520,9 @@ namespace BALL
 			glDepthMask(GL_TRUE);
 			CHECK_GL_ERROR
 
-			glDrawBuffer(GL_BACK);
+			glDrawBuffer(GL_FRONT);
+			
+			CHECK_GL_ERROR
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			CHECK_GL_ERROR
 
