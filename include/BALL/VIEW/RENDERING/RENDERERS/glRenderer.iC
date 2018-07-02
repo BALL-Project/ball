@@ -4,7 +4,7 @@ void GLRenderer::initTransparent()
 	render_mode_ = RENDER_MODE_TRANSPARENT;
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
-	glDepthMask(GL_FALSE);
+	glDepthMask(GL_TRUE);
 }
 
 BALL_INLINE
