@@ -119,12 +119,14 @@ namespace BALL
 
 		void GLRenderer::clear()
 		{
+			CHECK_GL_ERROR
 			glDisable(GL_BLEND);
 			glDisable(GL_LIGHTING);
 			glDisable(GL_RESCALE_NORMAL);
 			glDisable(GL_COLOR_MATERIAL);
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_NORMALIZE);
+			CHECK_GL_ERROR
 
 			name_to_object_.clear();
 			object_to_name_.clear();
@@ -151,6 +153,7 @@ namespace BALL
 
 		void GLRenderer::setAntialiasing(bool state)
 		{
+			CHECK_GL_ERROR
 #ifndef GL_MULTISAMPLE
 #define GL_MULTISAMPLE  0x809D
 #endif
@@ -174,6 +177,7 @@ namespace BALL
 				glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 				glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST);
 			}
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::setSmoothLines(bool smooth_lines)
@@ -188,6 +192,7 @@ namespace BALL
 
 		void GLRenderer::setMaterial_(const Stage::Material& material)
 		{
+			CHECK_GL_ERROR
 			GLfloat shin[] = { material.shininess };
 			GLfloat spec[] = {
 				material.specular_intensity * (float)material.specular_color.getRed(),
@@ -205,11 +210,13 @@ namespace BALL
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
 			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
 			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   ambient);
+			CHECK_GL_ERROR
 		}
 
 		bool GLRenderer::init(const Stage& stage, float width, float height)
 		{
 			Renderer::init(stage, width, height);
+			CHECK_GL_ERROR
 
 			// Force OpenGL to normalize transformed normals to be of unit
 			// length before using the normals in OpenGL's lighting equations
@@ -230,6 +237,7 @@ namespace BALL
 
 			// specify the clear value for the depth buffer 
 			glClearDepth(200.0);
+			CHECK_GL_ERROR
 
 			setAntialiasing(true);
 
@@ -325,6 +333,7 @@ namespace BALL
 			initSolid();
 			updateCamera();
 
+			CHECK_GL_ERROR
 			return true;
 		}
 
@@ -339,6 +348,7 @@ namespace BALL
 			
 		void GLRenderer::setLights(bool reset_all)
 		{
+			CHECK_GL_ERROR
 			GLenum light_nr = GL_LIGHT0;
 
 			if (reset_all)
@@ -451,6 +461,7 @@ namespace BALL
 				glEnable(light_nr);
 				light_nr++;
 			}
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::removeRepresentation(const Representation& rep)
@@ -468,6 +479,7 @@ namespace BALL
 
 		void GLRenderer::bufferRepresentation(const Representation& rep)
 		{
+			CHECK_GL_ERROR
 #ifdef BALL_BENCHMARKING
 			Timer t;
 			t.start();
@@ -495,18 +507,22 @@ namespace BALL
 		t.stop();
 		logString("OpenGL rendering time: " + String(t.getCPUTime()));
 #endif
+			CHECK_GL_ERROR
 		}
 
 		// TODO: do we need the mode???
 		void GLRenderer::renderToBuffer(RenderTarget* /*renderTarget*/, BufferMode mode)
 		{
+			CHECK_GL_ERROR
 			if (show_preview_)
 				setAntialiasing(false);
 
 			glDepthMask(GL_TRUE);
+			CHECK_GL_ERROR
 
 			glDrawBuffer(GL_BACK);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			CHECK_GL_ERROR
 
 			if (!getMainControl())
 				return;
@@ -542,6 +558,7 @@ namespace BALL
 				glClipPlane(current_clipping_plane, planef);
 				current_clipping_plane++;
 			}
+			CHECK_GL_ERROR
 
 			// -------------------------------------------------------------------
 			// show light sources
@@ -577,9 +594,10 @@ namespace BALL
 				}
 			}
 			// -------------------------------------------------------------------
-			
-			
-			// we draw all the representations in different runs, 
+
+
+			CHECK_GL_ERROR
+			// we draw all the representations in different runs,
 			// 1. normal reps
 			// 2. transparent reps
 			// 3. allways front
@@ -711,9 +729,11 @@ namespace BALL
 				}
 			}
 
-			if (show_preview_) 
+			CHECK_GL_ERROR
+			if (show_preview_)
 				setAntialiasing(true);
 
+			CHECK_GL_ERROR
 			return;
 		}
 
@@ -782,6 +802,7 @@ namespace BALL
 
 		bool GLRenderer::render(const Representation& representation, bool for_display_list)
 		{
+			CHECK_GL_ERROR
 			if (representation.isHidden()) return true;
 
 			if (!representation.isValid())
@@ -836,11 +857,13 @@ namespace BALL
 			renderRepresentation_(representation, for_display_list);
 			glFlush();
 
+			CHECK_GL_ERROR
 			return true;
 		}
 
 		void GLRenderer::renderRepresentation_(const Representation& representation, bool for_display_list)
 		{
+			CHECK_GL_ERROR
 			model_type_ = representation.getModelType();
 
 			if (representation.hasProperty("Rendering::Material"))
@@ -877,6 +900,7 @@ namespace BALL
 			}
 
 			glFlush();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::dump(std::ostream& s, Size depth) const
@@ -913,6 +937,7 @@ namespace BALL
 
 		void GLRenderer::renderRuler()
 		{
+			CHECK_GL_ERROR
 			const Camera& s = stage_->getCamera();
 			Vector3 v = s.getViewVector();
 			v.normalize();
@@ -949,10 +974,12 @@ namespace BALL
 			}
 
 			initSolid();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderSphere_(const Sphere& sphere)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glPushMatrix();
@@ -982,10 +1009,12 @@ namespace BALL
 			}
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderDisc_(const Disc& disc)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glPushMatrix();
@@ -1004,11 +1033,13 @@ namespace BALL
 			gluDisk(GLU_quadric_obj_, 0, disc.getCircle().radius, slices[drawing_precision_], rings[drawing_precision_]);
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderLine_(const Line& line)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glDisable(GL_LIGHTING);
@@ -1020,10 +1051,12 @@ namespace BALL
 			glEnd();
 
 			glEnable(GL_LIGHTING);
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderMultiLine_(const MultiLine& line)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glDisable(GL_LIGHTING);
@@ -1077,10 +1110,12 @@ namespace BALL
 			glEnd();
 
 		//   			glDisable(GL_TEXTURE_2D);
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderLabel_(const Label& label)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glPushMatrix();
@@ -1116,11 +1151,13 @@ namespace BALL
 
 			glPopMatrix();
 			glEnable(GL_LIGHTING);
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderPoint_(const Point& point)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glDisable(GL_LIGHTING);
@@ -1130,11 +1167,13 @@ namespace BALL
 			vertexVector3_(point.getVertex());
 			glEnd();
 			glEnable(GL_LIGHTING);
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderSimpleBox_(const SimpleBox& box)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glPushMatrix();
@@ -1143,11 +1182,13 @@ namespace BALL
 			scaleVector3_(box.b - box.a);
 			GL_boxes_list_[display_lists_index_].draw();
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderBox_(const Box& box)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glPushMatrix();
@@ -1177,10 +1218,12 @@ namespace BALL
 			GL_boxes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderTube_(const Tube& tube)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			glPushMatrix();
@@ -1207,11 +1250,13 @@ namespace BALL
 			GL_tubes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			const Vector3 result(tube.getVertex2() - tube.getVertex1());
@@ -1252,10 +1297,12 @@ namespace BALL
 			GL_tubes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderTwoColoredLine_(const TwoColoredLine& line)
 		{
+			CHECK_GL_ERROR
 			initDrawingOthers_();
 
 			setColor4ub_(line);
@@ -1273,11 +1320,13 @@ namespace BALL
 			glEnd();
 
 			glEnable(GL_LIGHTING);
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::initDrawingMeshes_()
 		{
+			CHECK_GL_ERROR
 			if (drawed_mesh_) return;
 
 			if (drawing_mode_ == DRAWING_MODE_DOTS)
@@ -1304,11 +1353,13 @@ namespace BALL
 
 			drawed_mesh_ = true;
 			drawed_other_object_ = false;
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::initDrawingOthers_()
 		{
+			CHECK_GL_ERROR
 			if (drawed_other_object_) return;
 
 			if (drawing_mode_ == DRAWING_MODE_DOTS ||
@@ -1325,11 +1376,13 @@ namespace BALL
 
 			drawed_other_object_ = true;
 			drawed_mesh_ = false;
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderMesh_(const Mesh& mesh)
 		{
+			CHECK_GL_ERROR
 			if (mesh.normal.size() != mesh.vertex.size())
 			{
 				BALLVIEW_DEBUG;
@@ -1658,11 +1711,13 @@ namespace BALL
 				glEnable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_1D);
 			}
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::initGLU_(DrawingMode mode)
 		{
+			CHECK_GL_ERROR
 			if (mode == DRAWING_MODE_WIREFRAME)
 			{
 				gluQuadricDrawStyle(GLU_quadric_obj_, GLU_LINE);
@@ -1679,10 +1734,12 @@ namespace BALL
 			{
 				BALLVIEW_DEBUG;
 			}
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::createSpheres_()
 		{
+			CHECK_GL_ERROR
 			glPushMatrix();
 
 			Position slices[4] = {14, 24, 64, 100};
@@ -1701,11 +1758,13 @@ namespace BALL
 			}
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::createDottedSphere_(int precision)
 		{
+			CHECK_GL_ERROR
 			glBegin(GL_POINTS);
 
 			vector<Vector3> results = createSphere((Size)precision);
@@ -1715,11 +1774,13 @@ namespace BALL
 			}
 
 			glEnd();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::createTubes_()
 		{
+			CHECK_GL_ERROR
 			glPushMatrix();
 
 			Position slices[4] = {6, 10, 20, 64};
@@ -1737,11 +1798,13 @@ namespace BALL
 			}
 
 			glPopMatrix();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::createBoxes_()
 		{
+			CHECK_GL_ERROR
 			// building point display list
 			for (Position pos = 0; pos < BALL_VIEW_MAXIMAL_DRAWING_PRECISION; pos++)
 			{
@@ -1765,11 +1828,13 @@ namespace BALL
 				createSolidBox_();
 				GL_boxes_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + pos].endDefinition();
 			}
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::createLineBox_()
 		{
+			CHECK_GL_ERROR
 			glBegin(GL_LINES);
 
 			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
@@ -1809,11 +1874,13 @@ namespace BALL
 			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)1);
 
 			glEnd();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::createDotBox_()
 		{
+			CHECK_GL_ERROR
 			glBegin(GL_POINTS);
 
 			glVertex3f((GLfloat)0, (GLfloat)0, (GLfloat)0);
@@ -1827,11 +1894,13 @@ namespace BALL
 			glVertex3f((GLfloat)0, (GLfloat)1, (GLfloat)1);
 
 			glEnd();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::createSolidBox_()
 		{
+			CHECK_GL_ERROR
 			glBegin(GL_QUADS);
 
 			// back
@@ -1877,6 +1946,7 @@ namespace BALL
 			glVertex3f((GLfloat)1, (GLfloat)1, (GLfloat)0);
 
 			glEnd();
+			CHECK_GL_ERROR
 		}
 
 
@@ -1891,6 +1961,7 @@ namespace BALL
 
 		void GLRenderer::pickObjects1(Position x1, Position y1, Position x2, Position y2)
 		{
+			CHECK_GL_ERROR
 			glFlush();
 			GLint viewport[4];
 			// init name stack for 32000 objects
@@ -1927,10 +1998,12 @@ namespace BALL
 			glMatrixMode(GL_MODELVIEW);
 
 			updateCamera();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::pickObjects2(list<GeometricObject*>& objects)
 		{
+			CHECK_GL_ERROR
 			glFlush();
 
 			glMatrixMode(GL_PROJECTION);
@@ -1992,10 +2065,12 @@ namespace BALL
 			}
 
 			updateCamera();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::setFogIntensity(float intensity)
 		{
+			CHECK_GL_ERROR
 			if (intensity == 0)
 			{
 				glDisable(GL_FOG);
@@ -2019,12 +2094,14 @@ namespace BALL
 				// glFogf(GL_FOG_END, 400);
 				// glFogf(GL_FOG_DENSITY, ((float) stage_->getFogIntensity()) / 40.0);
 			}
+			CHECK_GL_ERROR
 		}
 
 		// ############################ MOVEMENT/SIZE ###################################
 		// TODO: shouldn't we use a camera aperture angle?
 		void GLRenderer::setSize(float width, float height)
 		{
+			CHECK_GL_ERROR
 			width_ 	= width;
 			height_ = height;
 
@@ -2042,11 +2119,13 @@ namespace BALL
 			glViewport(0, 0, (int)width_, (int)height_);
 
 			initPerspective();
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::updateCamera(const Camera* camera)
 		{
+			CHECK_GL_ERROR
 			if (camera == 0) camera = &(stage_->getCamera());
 
 			if (Maths::isZero(camera->getViewVector().getSquareLength()))
@@ -2070,10 +2149,12 @@ namespace BALL
 			normal_vector_ = (-camera->getViewVector().normalize());
 
 			setLights(false);
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::setupStereo(float eye_separation, float focal_length)
 		{
+			CHECK_GL_ERROR
 			// TODO: - make near and far clip configurable!!!
 			//       - keep the same frustrum until either the size or the stereo settings change
 
@@ -2099,6 +2180,7 @@ namespace BALL
 			glViewport(0, 0, width_, height_);
 
 			glMatrixMode(GL_MODELVIEW);
+			CHECK_GL_ERROR
 		}
 
 		bool GLRenderer::hasDisplayListFor(const Representation& rep) const
@@ -2180,6 +2262,7 @@ namespace BALL
 
 		void GLRenderer::renderClippingPlane_(const ClippingPlane& plane)
 		{
+			CHECK_GL_ERROR
 			display_lists_index_ = DRAWING_MODE_SOLID * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + DRAWING_PRECISION_HIGH;
 
 			glPushAttrib(GL_LIGHTING_BIT | GL_BLEND);
@@ -2221,10 +2304,12 @@ namespace BALL
 			glEnable(GL_CULL_FACE);
 
 			glPopAttrib();
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::initPerspective()
 		{
+			CHECK_GL_ERROR
 			if (getStereoMode() == GLRenderer::ACTIVE_STEREO)
 			{
 				//  "Dont call GLRenderer::initPerspective() in Stereo mode! "
@@ -2237,10 +2322,12 @@ namespace BALL
 			setProjection();
 
 			glMatrixMode(GL_MODELVIEW);
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::setProjection()
 		{
+			CHECK_GL_ERROR
 			left_   = -2 * x_scale_;
 			right_  =  2 * x_scale_;
 			bottom_ = -2 * y_scale_;
@@ -2255,6 +2342,7 @@ namespace BALL
 				glOrtho(left_   * orthographic_zoom_, right_ * orthographic_zoom_, 
 				        bottom_ * orthographic_zoom_,   top_ * orthographic_zoom_, near_, far_);
 			}
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::setOrthographicZoom(float orthographic_zoom)
@@ -2321,6 +2409,7 @@ namespace BALL
 
 		Position GLRenderer::createTextureFromGrid(const GridVisualisation& vis)
 		{
+			CHECK_GL_ERROR
 			const RegularData3D& grid = *vis.getGrid();
 			const ColorMap& map = *vis.getColorMap().get();
 
@@ -2356,18 +2445,22 @@ namespace BALL
 			grid_to_texture_[&grid] = texname;
 			delete[] texels;
 #endif
+			CHECK_GL_ERROR
 			return texname;
 		}
 
 		void GLRenderer::removeTextureFor_(const RegularData3D& grid)
 		{
+			CHECK_GL_ERROR
 			if (!grid_to_texture_.has(&grid)) return;
 			glDeleteTextures(1, (GLuint*)&grid_to_texture_[&grid]);
 			grid_to_texture_.erase(&grid);
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::setupGridClipPlanes_(const GridVisualisation& slice)
 		{
+			CHECK_GL_ERROR
 			double planes[6][4];
 
 			Vector3 x,y,z;
@@ -2404,11 +2497,13 @@ namespace BALL
 				glClipPlane(plane, &planes[plane - GL_CLIP_PLANE0][0]);
 				glEnable(plane);
 			}
+			CHECK_GL_ERROR
 		}
 
 
 		void GLRenderer::renderGridVisualisation_(const GridVisualisation& vol)
 		{
+			CHECK_GL_ERROR
 			GLuint texname;
 			if (!grid_to_texture_.has(vol.getGrid()))
 			{
@@ -2632,10 +2727,12 @@ namespace BALL
 			glDisable(GL_TEXTURE_GEN_T);
 			glDisable(GL_TEXTURE_GEN_R);
 			glBindTexture(GL_TEXTURE_3D, 0);
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::renderQuadMesh_(const QuadMesh& mesh)
 		{
+			CHECK_GL_ERROR
 			if (mesh.normal.size() != mesh.vertex.size())
 			{
 				BALLVIEW_DEBUG;
@@ -2826,6 +2923,7 @@ namespace BALL
 				glEnable(GL_LIGHTING);
 				glDisable(GL_TEXTURE_1D);
 			}
+			CHECK_GL_ERROR
 		}
 
 		void GLRenderer::getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f)
