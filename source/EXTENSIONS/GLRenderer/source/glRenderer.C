@@ -845,7 +845,6 @@ namespace BALL
 			}
 
 			renderRepresentation_(representation, for_display_list);
-			glFlush();
 
 			CHECK_GL_ERROR
 			return true;
