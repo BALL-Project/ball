@@ -61,13 +61,6 @@ namespace BALL
 
 		void POVRenderer::clear()
 		{
-			if (ostrm_ != 0 && RTTI::isKindOf<File>(ostrm_))
-			{
-				delete ostrm_;
-			}
-
-			ostrm_ = &std::cout;
-
 			wireframes_.clear();
 			representations_.clear();
 			color_map_.clear();
