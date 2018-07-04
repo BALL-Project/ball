@@ -372,7 +372,7 @@ namespace BALL
 			downsampling_slider->setValue(4);
 		}
 
-		void StageSettings::stereoScreenChanged(int new_screen)
+		void StageSettings::stereoScreenChanged(int /* new_screen */)
 		{
 			stereoModeChanged();
 		}
@@ -426,8 +426,6 @@ namespace BALL
 
 			if (control_screen_index == -1 || left_screen_index == -1 || right_screen_index == -1)
 				return;
-
-			QDesktopWidget* desktop = QApplication::desktop();
 
 			QRect left_screen_geom  = QApplication::desktop()->screenGeometry(left_screen_index);
 			QRect	right_screen_geom = QApplication::desktop()->screenGeometry(right_screen_index);
@@ -577,12 +575,7 @@ namespace BALL
 
 		void StageSettings::screenCountChanged(int number)
 		{
-			// first, get the old mappings
-			int old_control = controlScreen_comboBox->currentIndex();
-			int old_left    = leftEyeScreen_comboBox->currentIndex();
-			int old_right   = rightEyeScreen_comboBox->currentIndex();
-
-			// TODO: we need a heuristic to map the old values to sensible new ones...
+			// TODO: we need a heuristic to map the old indices to sensible new ones...
 
 			controlScreen_comboBox->clear();
 			controlScreen_comboBox->addItem(tr("disabled"));
