@@ -469,8 +469,8 @@ namespace BALL
 				/// Export to POVRay whithout showing file dialog
 				void exportNextPOVRay();
 
-				///
-				void printScene();
+				/// @deprecated Print support has been removed; does nothing
+				BALL_DEPRECATED void printScene() {};
 
 				/// show an dialog to save an PNG file to
 				void showExportPNGDialog();

@@ -63,8 +63,6 @@
 
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
-#include <QtPrintSupport/QPrinter>
-#include <QtPrintSupport/QPrintDialog>
 #include <QtCore/QMimeData>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDropEvent>
@@ -1403,10 +1401,6 @@ namespace BALL
 			}
 			// end of the toolbar entries
 
-			description = "Shortcut|File|Print";
-			insertMenuEntry(MainControl::FILE, tr("Print"), this, SLOT(printScene()), description, QKeySequence(),
-			                tr("Print the scene"), UIOperationMode::MODE_ADVANCED);
-
 			window_menu_entry_ = insertMenuEntry(MainControl::WINDOWS, tr("Scene"), this, SLOT(switchShowWidget()), "",
 			                                     QKeySequence(), tr(""), UIOperationMode::MODE_ADVANCED);
 			if (window_menu_entry_)
@@ -2018,26 +2012,6 @@ namespace BALL
 			}
 			getMainControl()->redrawAllRepresentations();
 		}
-
-		void Scene::printScene()
-		{
-			QPrinter printer;
-			QPrintDialog dialog(&printer, this);
-			if (!dialog.exec()) return;
-
-			setStatusbarText((String)tr("printing.."));
-
-			QPainter p;
-			if(!p.begin(&printer)) return;
-
-			// TODO: push into renderSetup
-			QImage pic = main_display_->grabFrameBuffer();
-			p.drawImage(0,0, pic);
-			p.end();
-
-			setStatusbarText((String)tr("finished printing"));
-		}
-
 
 		String Scene::exportPNG()
 		{
