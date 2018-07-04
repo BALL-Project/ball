@@ -2399,12 +2399,14 @@ namespace BALL
 		Position GLRenderer::createTextureFromGrid(const GridVisualisation& vis)
 		{
 			CHECK_GL_ERROR
-			const RegularData3D& grid = *vis.getGrid();
-			const ColorMap& map = *vis.getColorMap().get();
+			Q_UNUSED(vis)
 
 			// prevent warning and error if not using GLEW:
 			Position texname = 0;
 #ifdef BALL_HAS_GLEW
+			const RegularData3D& grid = *vis.getGrid();
+			const ColorMap& map = *vis.getColorMap().get();
+
 			removeTextureFor_(grid);
 			RegularData3D::IndexType tex_size = grid.getSize();
 
