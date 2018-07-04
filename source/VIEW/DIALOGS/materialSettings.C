@@ -254,7 +254,7 @@ namespace BALL
 		
 		void MaterialSettings::editAmbientColor()
 		{
-			QColor color = VIEW::chooseColor(ambient_color_label);
+			VIEW::chooseColor(ambient_color_label);
 
 			if (update_directly_checkBox->isChecked())
 				apply();
@@ -262,7 +262,7 @@ namespace BALL
 		
 		void MaterialSettings::editSpecularityColor()
 		{
-			QColor color = VIEW::chooseColor(specularity_color_label);
+			VIEW::chooseColor(specularity_color_label);
 
 			if (update_directly_checkBox->isChecked())
 				apply();
@@ -270,7 +270,7 @@ namespace BALL
 		
 		void MaterialSettings::editReflectivenessColor()
 		{
-			QColor color = VIEW::chooseColor(reflectiveness_color_label);
+			VIEW::chooseColor(reflectiveness_color_label);
 
 			if (update_directly_checkBox->isChecked())
 				apply();
