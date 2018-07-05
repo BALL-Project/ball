@@ -10,7 +10,7 @@ namespace BALL
 		GLPlugin::GLPlugin()
 				: is_active_(false),
 				  icon_(":pluginGLRenderer.png"),
-				  config_dialog_(0)
+				  config_dialog_(new GLConfigDialog)
 		{
 		}
 
@@ -35,11 +35,7 @@ namespace BALL
 
 		BALL::VIEW::ConfigDialog* GLPlugin::getConfigDialog()
 		{
-			if(!config_dialog_){
-				config_dialog_ = new GLConfigDialog;
-			}
-
-			return config_dialog_;
+			return config_dialog_.get();
 		}
 
 		BALL::VIEW::Renderer* GLPlugin::createRenderer()

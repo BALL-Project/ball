@@ -8,6 +8,8 @@
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
 #include <BALL/VIEW/RENDERING/rendererPlugin.h>
 
+#include <memory>
+
 namespace BALL {
 	namespace VIEW {
 		class Renderer;
@@ -45,7 +47,7 @@ namespace BALL {
 			private:
 				bool is_active_;
 				QPixmap icon_;
-				GLConfigDialog* config_dialog_;
+				std::unique_ptr<GLConfigDialog> config_dialog_;
 		};
 
 	} // namespace GLRenderer
