@@ -5,6 +5,7 @@
 #include <ui_glConfigDialog.h>
 
 #include <memory>
+#include <set>
 
 namespace BALL
 {
@@ -23,10 +24,16 @@ namespace BALL
 				GLConfigDialog(const GLConfigDialog&) = delete;
 				GLConfigDialog& operator=(const GLConfigDialog&) = delete;
 
+				void storeValues() override;
+
+				void registerRenderer(GLRenderer &renderer);
+				void unregisterRenderer(GLRenderer &renderer);
+
 				void updateGLInfo(GLRenderer& renderer);
 
 			private:
 				std::unique_ptr<Ui::OpenGLSettings> ui_;
+				std::set<GLRenderer*> renderers_;
 		};
 	} // namespace GLRenderer
 } // namespace BALL

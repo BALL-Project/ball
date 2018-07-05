@@ -482,6 +482,7 @@ namespace BALL
 			GLuint       						cel_texture_;
 
 			float                   orthographic_zoom_;
+			GLConfigDialog*         config_dialog_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

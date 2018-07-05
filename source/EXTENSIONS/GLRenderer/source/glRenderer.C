@@ -107,13 +107,16 @@ namespace BALL
 				GLU_quadric_obj_(0),
 				grid_to_texture_(),
 				cel_texture_(0),
-				orthographic_zoom_(10.f)
+				orthographic_zoom_(10.f),
+				config_dialog_(config_dialog)
 		{
-			config_dialog->updateGLInfo(*this);
+			config_dialog_->registerRenderer(*this);
+			config_dialog_->updateGLInfo(*this);
 		}
 
 		GLRenderer::~GLRenderer()
 		{
+			config_dialog_->unregisterRenderer(*this);
 			clear();
 			delete[] line_tex_;
 			delete[] object_buffer_;
