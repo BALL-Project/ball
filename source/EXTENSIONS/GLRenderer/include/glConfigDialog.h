@@ -13,7 +13,7 @@ namespace BALL
 	{
 		class GLRenderer;
 
-		class BALL_PLUGIN_EXPORT GLConfigDialog : public BALL::VIEW::ConfigDialog
+		class BALL_PLUGIN_EXPORT GLConfigDialog final : public BALL::VIEW::ConfigDialog
 		{
 			Q_OBJECT
 
