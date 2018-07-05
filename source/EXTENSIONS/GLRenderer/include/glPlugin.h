@@ -11,10 +11,6 @@
 #include <memory>
 
 namespace BALL {
-	namespace VIEW {
-		class Renderer;
-	}
-
 	namespace GLRenderer {
 		class GLConfigDialog;
 
