@@ -30,6 +30,7 @@
 #include <QtGui/QImage>
 #include <QtGui/QOpenGLContext>
 
+#include <glConfigDialog.h>
 #include <glRenderer.h>
 #include <glRenderSetup.h>
 
@@ -69,7 +70,7 @@ namespace BALL
 #define CHECK_GL_ERROR
 #endif
 
-		GLRenderer::GLRenderer()
+		GLRenderer::GLRenderer(GLConfigDialog* config_dialog)
 			: Renderer("GLRenderer"),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
@@ -108,6 +109,7 @@ namespace BALL
 				cel_texture_(0),
 				orthographic_zoom_(10.f)
 		{
+			config_dialog->updateGLInfo(*this);
 		}
 
 		GLRenderer::~GLRenderer()

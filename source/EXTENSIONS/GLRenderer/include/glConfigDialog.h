@@ -10,6 +10,8 @@ namespace BALL
 {
 	namespace GLRenderer
 	{
+		class GLRenderer;
+
 		class BALL_PLUGIN_EXPORT GLConfigDialog : public BALL::VIEW::ConfigDialog
 		{
 			Q_OBJECT
@@ -20,6 +22,8 @@ namespace BALL
 
 				GLConfigDialog(const GLConfigDialog&) = delete;
 				GLConfigDialog& operator=(const GLConfigDialog&) = delete;
+
+				void updateGLInfo(GLRenderer& renderer);
 
 			private:
 				std::unique_ptr<Ui::OpenGLSettings> ui_;

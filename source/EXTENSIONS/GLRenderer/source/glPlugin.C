@@ -40,7 +40,7 @@ namespace BALL
 
 		BALL::VIEW::Renderer* GLPlugin::createRenderer()
 		{
-			return new GLRenderer;
+			return new GLRenderer(config_dialog_.get());
 		}
 
 	} // namespace GLRenderer

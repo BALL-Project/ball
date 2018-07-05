@@ -40,6 +40,7 @@ namespace BALL
 
 	namespace GLRenderer
 	{
+		class GLConfigDialog;
 		class MeshBuffer;
 
 		/** GLRenderer
@@ -100,7 +101,7 @@ namespace BALL
 			typedef unsigned int Name;
 
 			/// Default Constructor.
-			GLRenderer();
+			explicit GLRenderer(GLConfigDialog* config_dialog = nullptr);
 
 			/// Destructor
 			~GLRenderer() override;
