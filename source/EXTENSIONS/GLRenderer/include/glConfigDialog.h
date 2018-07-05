@@ -2,11 +2,9 @@
 #define BALL_GLRENDERER_CONFIGDIALOG_H
 
 #include <BALL/VIEW/PLUGIN/VIEWPlugin.h>
+#include <ui_glConfigDialog.h>
 
-namespace Ui
-{
-	class OpenGLSettings;
-}
+#include <memory>
 
 namespace BALL
 {
@@ -17,11 +15,14 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				GLConfigDialog(QWidget* parent = 0, Qt::WindowFlags f = 0);
-				~GLConfigDialog() override;
+				GLConfigDialog(QWidget* parent = nullptr, Qt::WindowFlags f = 0);
+				~GLConfigDialog() noexcept override = default;
+
+				GLConfigDialog(const GLConfigDialog&) = delete;
+				GLConfigDialog& operator=(const GLConfigDialog&) = delete;
 
 			private:
-				Ui::OpenGLSettings* ui_;
+				std::unique_ptr<Ui::OpenGLSettings> ui_;
 		};
 	} // namespace GLRenderer
 } // namespace BALL
