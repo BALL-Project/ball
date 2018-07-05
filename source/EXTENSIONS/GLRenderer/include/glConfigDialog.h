@@ -18,7 +18,7 @@ namespace BALL
 
 			public:
 				GLConfigDialog(QWidget* parent = 0, Qt::WindowFlags f = 0);
-				virtual ~GLConfigDialog();
+				~GLConfigDialog() override;
 
 			private:
 				Ui::OpenGLSettings* ui_;

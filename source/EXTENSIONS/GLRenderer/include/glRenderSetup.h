@@ -15,13 +15,13 @@ namespace BALL
 				{
 				}
 
-				void updateTarget();
+				void updateTarget() override;
 
 			protected:
 				GLRenderSetup(const GLRenderSetup&);
 				GLRenderSetup* operator=(const GLRenderSetup&);
 
-				void doRender_() { }
+				void doRender_() override { }
 		};
 	} // namespace GLRenderer
 } // namespace BALL

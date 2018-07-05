@@ -103,10 +103,10 @@ namespace BALL
 			GLRenderer();
 
 			/// Destructor
-			virtual ~GLRenderer();
+			~GLRenderer() override;
 
 			/// Explicit default initialization.
-			virtual void clear();
+			void clear() override;
 
 			///
 			void dump(std::ostream& s, BALL::Size depth) const;
@@ -120,10 +120,10 @@ namespace BALL
 			using Renderer::init;
 
 			/// Initialise the renderer, e.g. the display lists.
-			virtual bool init(const BALL::VIEW::Stage& stage, float width, float height);
+			bool init(const BALL::VIEW::Stage& stage, float width, float height) override;
 
 			/// Set the light sources according to the stage
-			virtual void setLights(bool reset_all = false);
+			void setLights(bool reset_all = false) override;
 
 			///Should the lines in the line representation and the wireframe models
 			///be smoothed?
@@ -132,8 +132,8 @@ namespace BALL
 
 			/** Pick all objects in the given screen rectangle.
 			 */
-			virtual void pickObjects(BALL::Position x1, BALL::Position y1, BALL::Position x2, BALL::Position y2,
-			                         std::list<BALL::VIEW::GeometricObject*>& objects);
+			void pickObjects(BALL::Position x1, BALL::Position y1, BALL::Position x2, BALL::Position y2,
+			                         std::list<BALL::VIEW::GeometricObject*>& objects) override;
 
 			/** Pick geometric objects
 			 		\param x1, y1, x2, y2 the rectangle of the selection
@@ -157,7 +157,7 @@ namespace BALL
 			void exitPickingMode();
 
 			///
-			void setSize(float width, float height);
+			void setSize(float width, float height) override;
 
 			///
 			float getXScale() const;
@@ -166,7 +166,7 @@ namespace BALL
 			float getYScale() const;
 
 			/// Update the background color from the stage
-			virtual void updateBackgroundColor();
+			void updateBackgroundColor() override;
 
 			// Initialise transparent rendering
 			void initTransparent();
@@ -181,10 +181,10 @@ namespace BALL
 			void setAntialiasing(bool state);
 
 			/// Remove all DisplayLists for the given Representation
-			void removeRepresentation(const BALL::VIEW::Representation& rep);
+			void removeRepresentation(const BALL::VIEW::Representation& rep) override;
 
 			/// Buffer the visualisation for the given Representation into DisplayLists.
-			void bufferRepresentation(const BALL::VIEW::Representation& rep);
+			void bufferRepresentation(const BALL::VIEW::Representation& rep) override;
 
 			/// Draw the visualisation of the given Representation from a DisplayList.
 			void drawBuffered(const BALL::VIEW::Representation& rep);
@@ -204,15 +204,16 @@ namespace BALL
 			 */
 			virtual void renderToBuffer(BALL::VIEW::RenderTarget* renderTarget, BufferMode mode);
 
-			virtual void renderToBufferImpl(boost::shared_ptr<BALL::VIEW::FrameBuffer> /*buffer*/) {
+			void renderToBufferImpl(boost::shared_ptr<BALL::VIEW::FrameBuffer> /*buffer*/) override {
 				renderToBuffer(0, DISPLAY_LISTS_RENDERING);
 			}
 
-			virtual bool supports(const BALL::VIEW::PixelFormat&) const { return true; }
-			virtual bool supports(const BALL::VIEW::FrameBufferFormat&) const { return true; }
-			virtual void formatUpdated() {}
+			bool supports(const BALL::VIEW::PixelFormat&) const override { return true; }
+			bool supports(const BALL::VIEW::FrameBufferFormat&) const override { return true; }
+			void formatUpdated() override {}
 
-			virtual boost::shared_ptr<BALL::VIEW::RenderSetup> createRenderSetup(BALL::VIEW::RenderTarget* target, BALL::VIEW::Scene* scene);
+			boost::shared_ptr<BALL::VIEW::RenderSetup> createRenderSetup(BALL::VIEW::RenderTarget* target,
+				BALL::VIEW::Scene* scene) override;
 			///
 			virtual bool render(const BALL::VIEW::Representation& representation, bool for_display_list = false);
 
@@ -261,17 +262,21 @@ namespace BALL
 			void vertexVector3_(const BALL::Vector3& v);
 
 			//
-			void updateCamera(const BALL::VIEW::Camera* camera = 0);
+			void updateCamera(const BALL::VIEW::Camera* camera = 0) override;
 
 			//
-			void setupStereo(float eye_separation, float focal_length);
+			void setupStereo(float eye_separation, float focal_length) override;
 
 			Position createTextureFromGrid(const BALL::VIEW::GridVisualisation& vis);
 			void removeTextureFor_(const RegularData3D& grid);
 
-			virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
+			void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f,
+				float& bottom_f) override;
 
-			void updateMaterialForRepresentation(BALL::VIEW::Representation const* rep) { bufferRepresentation(*rep); }
+			void updateMaterialForRepresentation(BALL::VIEW::Representation const* rep) override
+			{
+				bufferRepresentation(*rep);
+			}
 
 	protected:
 			bool isExtensionSupported(const char* extension) const;
@@ -287,19 +292,19 @@ namespace BALL
 			void renderRepresentations_(BufferMode mode);
 
 			///
-			virtual void renderLabel_(const BALL::VIEW::Label& /*label*/);
+			void renderLabel_(const BALL::VIEW::Label& /*label*/) override;
 
 			///
-			virtual void renderLine_(const BALL::VIEW::Line& /*line*/);
+			void renderLine_(const BALL::VIEW::Line& /*line*/) override;
 
 			/// Render an illuminated line
-			virtual void renderMultiLine_(const BALL::VIEW::MultiLine& line);
+			void renderMultiLine_(const BALL::VIEW::MultiLine& line) override;
 
 			///
-			virtual void renderMesh_(const BALL::VIEW::Mesh& /*mesh*/);
+			void renderMesh_(const BALL::VIEW::Mesh& /*mesh*/) override;
 
 			///
-			virtual void renderQuadMesh_(const BALL::VIEW::QuadMesh& /*mesh*/);
+			void renderQuadMesh_(const BALL::VIEW::QuadMesh& /*mesh*/) override;
 
 			///
 			void initDrawingMeshes_();
@@ -314,37 +319,37 @@ namespace BALL
 			 *  The main use of this function is in the edit mode, where it can help to
 			 *  straighten-up structures and to correctly estimate angles and distances.
 			 */
-			virtual void renderRuler();
+			void renderRuler() override;
 
 			///
-			virtual void renderPoint_(const BALL::VIEW::Point& /*point*/);
+			void renderPoint_(const BALL::VIEW::Point& /*point*/) override;
 
 			///
-			virtual void renderSimpleBox_(const BALL::VIEW::SimpleBox& /*box*/);
+			void renderSimpleBox_(const BALL::VIEW::SimpleBox& /*box*/) override;
 
 			///
-			virtual void renderBox_(const BALL::VIEW::Box& /*box*/);
+			void renderBox_(const BALL::VIEW::Box& /*box*/) override;
 
 			///
-			virtual void renderSphere_(const BALL::VIEW::Sphere& /*sphere*/);
+			void renderSphere_(const BALL::VIEW::Sphere& /*sphere*/) override;
 
 			///
-			virtual void renderDisc_(const BALL::VIEW::Disc& /*disc*/);
+			void renderDisc_(const BALL::VIEW::Disc& /*disc*/) override;
 
 			///
-			virtual void renderTube_(const BALL::VIEW::Tube& /*tube*/);
+			void renderTube_(const BALL::VIEW::Tube& /*tube*/) override;
 
 			///
-			virtual void renderTwoColoredLine_(const BALL::VIEW::TwoColoredLine& /*two_colored_line*/);
+			void renderTwoColoredLine_(const BALL::VIEW::TwoColoredLine& /*two_colored_line*/) override;
 
 			///
-			virtual void renderTwoColoredTube_(const BALL::VIEW::TwoColoredTube& /*two_colored_tube*/);
+			void renderTwoColoredTube_(const BALL::VIEW::TwoColoredTube& /*two_colored_tube*/) override;
 
 			///
 			virtual void renderClippingPlane_(const BALL::VIEW::ClippingPlane& plane);
 
 			/// Render a grid slice
-			virtual void renderGridVisualisation_(const BALL::VIEW::GridVisualisation& vol);
+			void renderGridVisualisation_(const BALL::VIEW::GridVisualisation& vol) override;
 
 			//_
 			void setColor4ub_(const BALL::VIEW::GeometricObject& object);
