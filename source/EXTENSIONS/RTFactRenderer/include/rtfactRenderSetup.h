@@ -2,11 +2,8 @@
 #define BALL_RTFACTRENDERER_RTFACTRENDERSETUP_H
 
 #include <BALL/VIEW/RENDERING/renderSetup.h>
-#include <config.h>
 
-#ifdef USE_TBB
 #include <tbb/task_scheduler_init.h>
-#endif
 
 namespace BALL
 {
@@ -26,10 +23,7 @@ namespace BALL
 				void startRunning_();
 
 			private:
-
-#ifdef USE_TBB
 				boost::shared_ptr<tbb::task_scheduler_init> scheduler_;
-#endif
 		};
 	}
 }
