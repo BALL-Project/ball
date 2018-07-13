@@ -2092,8 +2092,7 @@ namespace BALL
 				updateGL();
 
 			}
-#ifdef BALL_HAS_RTFACT
-            else if (RTTI::isKindOf<t_RaytracingRenderer>(renderers_[main_renderer_]->renderer))
+			else if (RTTI::isKindOf<t_RaytracingRenderer>(renderers_[main_renderer_]->renderer))
 			{
 				// create a new renderer
 				t_RaytracingRenderer* renderer = new t_RaytracingRenderer;
@@ -2121,7 +2120,6 @@ namespace BALL
 
 				updateGL();
 			}
-#endif
 #endif
 
 			ok = true;
