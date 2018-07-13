@@ -11,10 +11,17 @@ ENDIF()
 
 ## RTfact
 IF (NOT CMAKE_COMPILER_IS_INTELCXX)
-	FIND_PACKAGE(TBB)
+	IF(NOT TBB_FOUND)
+		FIND_PACKAGE(TBB)
+	ENDIF()
 
 	IF(NOT TBB_FOUND)
 		MESSAGE(STATUS "Could not find TBB. Disabling the RTFact renderer plugin")
+		RETURN()
+	ENDIF()
+
+	IF(NOT ${BALL_LICENSE_GPL} AND ${TBB_VERSION_MAJOR} VERSION_LESS 2017)
+		MESSAGE(STATUS "TBB versions <2017 require BALL_LICENSE_GPL. Disabling the RTFact renderer plugin")
 		RETURN()
 	ENDIF()
 
