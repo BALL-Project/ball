@@ -106,68 +106,65 @@ namespace BALL
 				RTfactRenderer();
 
 				/// Destructor
-				virtual ~RTfactRenderer()
-				{
-				}
+				~RTfactRenderer() noexcept override = default;
 
-				virtual bool hasFPScounter();
+				bool hasFPScounter() override;
 
-				virtual double getFPS();
+				double getFPS() override;
 
 				/************************************************************************/
 				/* RaytracingRenderer methods					   */
 				/************************************************************************/
-				virtual bool init(BALL::VIEW::Scene& scene);
+				bool init(BALL::VIEW::Scene& scene) override;
 
 				virtual String getRenderer()
 				{
 					return "RTfact-RTRemote Ray Tracer";
 				}
 
-				virtual void formatUpdated()
+				void formatUpdated() override
 				{
 				}
 
-				bool supports(const BALL::VIEW::PixelFormat&) const;
+				bool supports(const BALL::VIEW::PixelFormat&) const override;
 
-				virtual boost::shared_ptr<BALL::VIEW::RenderSetup> createRenderSetup(BALL::VIEW::RenderTarget* target, BALL::VIEW::Scene* scene);
+				boost::shared_ptr<BALL::VIEW::RenderSetup> createRenderSetup(BALL::VIEW::RenderTarget* target,
+					BALL::VIEW::Scene* scene) override;
 
 				virtual BALL::VIEW::GeometricObject* pickObject(Position x, Position y);
-				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
-				                         std::list<BALL::VIEW::GeometricObject*>& objects);
+				void pickObjects(Position x1, Position y1, Position x2, Position y2,
+					std::list<BALL::VIEW::GeometricObject*>& objects) override;
 
+				void setSize(float width, float height) override;
 
+				void setupStereo(float eye_separation, float focal_length) override;
 
-				virtual void setSize(float width, float height);
-
-				virtual void setupStereo(float eye_separation, float focal_length);
-
-				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
+				void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f) override;
 				virtual void setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f);
 
-				virtual void renderToBufferImpl(BALL::VIEW::FrameBufferPtr buffer);
+				void renderToBufferImpl(BALL::VIEW::FrameBufferPtr buffer) override;
 
-				virtual void useContinuousLoop(bool use_loop);
+				void useContinuousLoop(bool use_loop) override;
 
-				void bufferRepresentation(const BALL::VIEW::Representation& rep);
-				void bufferRepresentationDynamic(const BALL::VIEW::Representation& rep);
-				void removeRepresentation(const BALL::VIEW::Representation& rep);
+				void bufferRepresentation(const BALL::VIEW::Representation& rep) override;
+				virtual void bufferRepresentationDynamic(const BALL::VIEW::Representation& rep);
+				void removeRepresentation(const BALL::VIEW::Representation& rep) override;
 
-				void setLights(bool reset_all = false);
+				void setLights(bool reset_all = false) override;
 
-				void updateCamera(const BALL::VIEW::Camera* camera = 0);
+				void updateCamera(const BALL::VIEW::Camera* camera = 0) override;
 
-				void updateBackgroundColor();
+				void updateBackgroundColor() override;
 
-				void setupEnvironmentMap(const QImage& image);
+				void setupEnvironmentMap(const QImage& image) override;
 
-				void updateMaterialForRepresentation(BALL::VIEW::Representation const* rep);
+				void updateMaterialForRepresentation(BALL::VIEW::Representation const* rep) override;
 
-				void transformTube(const BALL::VIEW::TwoColoredTube& tube, float *trafo);
-				void transformLine(const BALL::VIEW::TwoColoredLine& line, float *trafo);
+				virtual void transformTube(const BALL::VIEW::TwoColoredTube& tube, float *trafo);
+				virtual void transformLine(const BALL::VIEW::TwoColoredLine& line, float *trafo);
 
-				void updateMaterialFromStage(RTpieCpp::AppearanceHandle& material);
-				void convertMaterial(BALL::VIEW::Stage::Material const& rt_material, RTpieCpp::AppearanceHandle& material);
+				virtual void updateMaterialFromStage(RTpieCpp::AppearanceHandle& material);
+				virtual void convertMaterial(BALL::VIEW::Stage::Material const& rt_material, RTpieCpp::AppearanceHandle& material);
 
 				/** Raytracing-related functionality **/
 				//@{
@@ -179,7 +176,8 @@ namespace BALL
 				 *
 				 *  with the geometry that has been buffered by this renderer previously.
 				 */
-                virtual std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins, const std::vector<Vector3>& directions);
+				std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins,
+					const std::vector<Vector3>& directions) override;
 
                 //@}
 

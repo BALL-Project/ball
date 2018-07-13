@@ -14,10 +14,6 @@ namespace BALL
 		{
 		}
 
-		RTFactPlugin::~RTFactPlugin()
-		{
-		}
-
 		QString RTFactPlugin::getName() const
 		{
 			return QString("RTFactRenderer");

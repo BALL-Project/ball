@@ -25,19 +25,19 @@ namespace BALL
 
 			public:
 				RTFactPlugin();
-				virtual ~RTFactPlugin();
+				~RTFactPlugin() noexcept override = default;
 
-				const QPixmap* getIcon() const;
-				QString getName() const;
-				QString getDescription() const;
+				const QPixmap* getIcon() const override;
+				QString getName() const override;
+				QString getDescription() const override;
 
-				BALL::VIEW::ConfigDialog* getConfigDialog();
+				BALL::VIEW::ConfigDialog* getConfigDialog() override;
 
-				BALL::VIEW::Renderer* createRenderer();
+				BALL::VIEW::Renderer* createRenderer() override;
 
-				bool isActive() {return is_active_; }
-				bool activate() { return is_active_ = true; }
-				bool deactivate() { is_active_ = false; return true; }
+				bool isActive() override {return is_active_; }
+				bool activate() override { return is_active_ = true; }
+				bool deactivate() override { is_active_ = false; return true; }
 
 			private:
 				bool is_active_;

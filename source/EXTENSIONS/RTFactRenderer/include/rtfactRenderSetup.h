@@ -17,10 +17,12 @@ namespace BALL
 				{
 				}
 
-				void updateTarget();
+				~RTfactRenderSetup() noexcept override = default;
+
+				void updateTarget() override;
 
 			protected:
-				void startRunning_();
+				void startRunning_() override;
 
 			private:
 				boost::shared_ptr<tbb::task_scheduler_init> scheduler_;
