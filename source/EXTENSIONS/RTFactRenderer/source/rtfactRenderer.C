@@ -14,6 +14,8 @@
 
 #include <list>
 
+using namespace BALL::VIEW;
+
 static const float LINE_RADIUS = 0.02;
 
 using RTfact::Vec3f;
@@ -32,7 +34,7 @@ using RTpieCpp::AppearanceHandle;
 
 namespace BALL
 {
-	namespace VIEW
+	namespace RTfactRenderer
 	{
 		const float RTfactRenderer::vectorDifferenceTolerance_= 0.0f;
 

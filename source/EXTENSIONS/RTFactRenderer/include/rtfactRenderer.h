@@ -1,9 +1,5 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
-#ifndef BALL_VIEW_RENDERING_RENDERERS_RTFACTRENDERER_H
-#define BALL_VIEW_RENDERING_RENDERERS_RTFACTRENDERER_H
+#ifndef BALL_RTFACTRENDERER_RTFACTRENDERER_H
+#define BALL_RTFACTRENDERER_RTFACTRENDERER_H
 
 #define BALLVIEW_RTFACTRENDERER_THROW(exceptionName, message) (throw BALL::Exception::##exceptionName##(__FILE__, __LINE__, message))
 
@@ -62,14 +58,14 @@ namespace boost
 
 namespace BALL
 {
-  namespace VIEW
+	namespace RTfactRenderer
 	{
 		/** RTfactRenderer
 			Provides ray tracing through RTfact-RTRemote
 			\ingroup ViewRendering
 			*/
 		class BALL_VIEW_EXPORT RTfactRenderer
-			: public Renderer
+			: public BALL::VIEW::Renderer
 		{
 			public:
 
@@ -121,7 +117,7 @@ namespace BALL
 				/************************************************************************/
 				/* RaytracingRenderer methods					   */
 				/************************************************************************/
-				virtual bool init(Scene& scene);
+				virtual bool init(BALL::VIEW::Scene& scene);
 
 				virtual String getRenderer()
 				{
@@ -132,13 +128,13 @@ namespace BALL
 				{
 				}
 
-				bool supports(const PixelFormat&) const;
+				bool supports(const BALL::VIEW::PixelFormat&) const;
 
-				virtual boost::shared_ptr<RenderSetup> createRenderSetup(RenderTarget* target, Scene* scene);
+				virtual boost::shared_ptr<BALL::VIEW::RenderSetup> createRenderSetup(BALL::VIEW::RenderTarget* target, BALL::VIEW::Scene* scene);
 
-				virtual GeometricObject* pickObject(Position x, Position y);
+				virtual BALL::VIEW::GeometricObject* pickObject(Position x, Position y);
 				virtual void pickObjects(Position x1, Position y1, Position x2, Position y2,
-				                         std::list<GeometricObject*>& objects);
+				                         std::list<BALL::VIEW::GeometricObject*>& objects);
 
 
 
@@ -149,29 +145,29 @@ namespace BALL
 				virtual void getFrustum(float& near_f, float& far_f, float& left_f, float& right_f, float& top_f, float& bottom_f);
 				virtual void setFrustum(float near_f, float far_f, float left_f, float right_f, float top_f, float bottom_f);
 
-				virtual void renderToBufferImpl(FrameBufferPtr buffer);
+				virtual void renderToBufferImpl(BALL::VIEW::FrameBufferPtr buffer);
 
 				virtual void useContinuousLoop(bool use_loop);
 
-				void bufferRepresentation(const Representation& rep);
-				void bufferRepresentationDynamic(const Representation& rep);
-				void removeRepresentation(const Representation& rep);
+				void bufferRepresentation(const BALL::VIEW::Representation& rep);
+				void bufferRepresentationDynamic(const BALL::VIEW::Representation& rep);
+				void removeRepresentation(const BALL::VIEW::Representation& rep);
 
 				void setLights(bool reset_all = false);
 
-				void updateCamera(const Camera* camera = 0);
+				void updateCamera(const BALL::VIEW::Camera* camera = 0);
 
 				void updateBackgroundColor();
 
 				void setupEnvironmentMap(const QImage& image);
 
-				void updateMaterialForRepresentation(Representation const* rep);
+				void updateMaterialForRepresentation(BALL::VIEW::Representation const* rep);
 
-				void transformTube(const TwoColoredTube& tube, float *trafo);
-				void transformLine(const TwoColoredLine& line, float *trafo);
+				void transformTube(const BALL::VIEW::TwoColoredTube& tube, float *trafo);
+				void transformLine(const BALL::VIEW::TwoColoredLine& line, float *trafo);
 
 				void updateMaterialFromStage(RTpieCpp::AppearanceHandle& material);
-				void convertMaterial(Stage::Material const& rt_material, RTpieCpp::AppearanceHandle& material);
+				void convertMaterial(BALL::VIEW::Stage::Material const& rt_material, RTpieCpp::AppearanceHandle& material);
 
 				/** Raytracing-related functionality **/
 				//@{
@@ -226,9 +222,9 @@ namespace BALL
                 RTfact::FPSMeter                                        fpsMeter;
                 RTpieCpp::PickTaskHandle                                pickTask;
 
-                HashMap<Representation const*, RTfactData>              objects_;
-                HashMap<RTpieCpp::InstanceHandle, GeometricObject*>     geometric_objects_inst;
-                HashMap<RTpieCpp::MeshHandle, GeometricObject*>         geometric_objects_;
+                HashMap<BALL::VIEW::Representation const*, RTfactData>          objects_;
+                HashMap<RTpieCpp::InstanceHandle, BALL::VIEW::GeometricObject*> geometric_objects_inst;
+                HashMap<RTpieCpp::MeshHandle, BALL::VIEW::GeometricObject*>     geometric_objects_;
 
                 Surface                                                 sphere_template_;
                 Surface                                                 tube_template_;
@@ -245,6 +241,6 @@ namespace BALL
         };
 
     } // namespace VIEW
-} // namespace BALL
+} // namespace RTFactRenderer
 
-#endif // BALL_VIEW_RENDERING_RTFACTRENDERER_H
+#endif // BALL_RTFACTRENDERER_RTFACTRENDERER_H

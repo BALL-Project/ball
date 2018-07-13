@@ -1,5 +1,5 @@
-#ifndef BALL_PLUGINS_RTFACTRENDERSETUP_H
-#define BALL_PLUGINS_RTFACTRENDERSETUP_H
+#ifndef BALL_RTFACTRENDERER_RTFACTRENDERSETUP_H
+#define BALL_RTFACTRENDERER_RTFACTRENDERSETUP_H
 
 #include <BALL/VIEW/RENDERING/renderSetup.h>
 #include <config.h>
@@ -10,13 +10,13 @@
 
 namespace BALL
 {
-	namespace VIEW
+	namespace RTfactRenderer
 	{
-		class RTfactRenderSetup : public RenderSetup
+		class RTfactRenderSetup : public BALL::VIEW::RenderSetup
 		{
 			public:
-				RTfactRenderSetup(Renderer* renderer, RenderTarget* target, Scene* scene)
-					: RenderSetup(renderer, target, scene)
+				RTfactRenderSetup(BALL::VIEW::Renderer* renderer, BALL::VIEW::RenderTarget* target, BALL::VIEW::Scene* scene)
+					: BALL::VIEW::RenderSetup(renderer, target, scene)
 				{
 				}
 
@@ -34,4 +34,4 @@ namespace BALL
 	}
 }
 
-#endif //BALL_PLUGINS_RTFACTRENDERSETUP_H
+#endif //BALL_RTFACTRENDERER_RTFACTRENDERSETUP_H

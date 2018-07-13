@@ -1,5 +1,5 @@
-#ifndef RTFACTPLUGIN_H
-#define RTFACTPLUGIN_H
+#ifndef BALL_RTFACTRENDERER_RTFACTPLUGIN_H
+#define BALL_RTFACTRENDERER_RTFACTPLUGIN_H
 
 #include <QtCore/QObject>
 #include <QtGui/QPixmap>
@@ -10,10 +10,14 @@
 
 namespace BALL
 {
-	namespace VIEW
+	namespace RTfactRenderer
 	{
 
-		class RTFactPlugin : public QObject, public BALLPlugin, public VIEWPlugin, public RendererPlugin
+		class RTFactPlugin :
+			public QObject,
+			public BALLPlugin,
+			public BALL::VIEW::VIEWPlugin,
+			public BALL::VIEW::RendererPlugin
 		{
 			Q_OBJECT
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::RendererPlugin)
@@ -27,9 +31,9 @@ namespace BALL
 				QString getName() const;
 				QString getDescription() const;
 
-				ConfigDialog* getConfigDialog();
+				BALL::VIEW::ConfigDialog* getConfigDialog();
 
-				Renderer* createRenderer();
+				BALL::VIEW::Renderer* createRenderer();
 
 				bool isActive() {return is_active_; }
 				bool activate() { return is_active_ = true; }
@@ -42,4 +46,4 @@ namespace BALL
 	}
 }
 
-#endif //RTFACTPLUGIN_H
+#endif // BALL_RTFACTRENDERER_RTFACTPLUGIN_H

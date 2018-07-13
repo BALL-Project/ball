@@ -2,9 +2,11 @@
 
 #include <rtfactRenderer.h>
 
+using namespace BALL::VIEW;
+
 namespace BALL
 {
-	namespace VIEW
+	namespace RTfactRenderer
 	{
 		RTFactPlugin::RTFactPlugin()
 			: is_active_(false),

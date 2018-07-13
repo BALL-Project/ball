@@ -4,7 +4,7 @@
 
 namespace BALL
 {
-	namespace VIEW
+	namespace RTfactRenderer
 	{
 		void RTfactRenderSetup::updateTarget()
 		{
