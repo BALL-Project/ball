@@ -2294,7 +2294,7 @@ namespace BALL
 				if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 				{
 					// TODO: fix this
-					toggle_continuous_loop_action_->setEnabled(new_type == "RTFactRenderer");
+					toggle_continuous_loop_action_->setEnabled(new_type == "RTfactRenderer");
 				}
 
 				// ok, we have some work to do...
