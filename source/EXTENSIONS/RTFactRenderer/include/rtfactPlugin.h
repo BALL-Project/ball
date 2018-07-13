@@ -13,7 +13,7 @@ namespace BALL
 	namespace RTfactRenderer
 	{
 
-		class RTFactPlugin :
+		class RTfactPlugin :
 			public QObject,
 			public BALLPlugin,
 			public BALL::VIEW::VIEWPlugin,
@@ -21,11 +21,11 @@ namespace BALL
 		{
 			Q_OBJECT
 			Q_INTERFACES(BALL::BALLPlugin BALL::VIEW::VIEWPlugin BALL::VIEW::RendererPlugin)
-			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.Renderer.RTFactRenderer")
+			Q_PLUGIN_METADATA(IID "org.ball-project.Plugin.Renderer.RTfactRenderer")
 
 			public:
-				RTFactPlugin();
-				~RTFactPlugin() noexcept override = default;
+				RTfactPlugin();
+				~RTfactPlugin() noexcept override = default;
 
 				const QPixmap* getIcon() const override;
 				QString getName() const override;

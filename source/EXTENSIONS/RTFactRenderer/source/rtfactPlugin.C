@@ -8,33 +8,33 @@ namespace BALL
 {
 	namespace RTfactRenderer
 	{
-		RTFactPlugin::RTFactPlugin()
+		RTfactPlugin::RTfactPlugin()
 			: is_active_(false),
 			  icon_(":pluginRTfactRenderer.png")
 		{
 		}
 
-		QString RTFactPlugin::getName() const
+		QString RTfactPlugin::getName() const
 		{
-			return QString("RTFactRenderer");
+			return QString("RTfactRenderer");
 		}
 
-		QString RTFactPlugin::getDescription() const
+		QString RTfactPlugin::getDescription() const
 		{
-			return QString("A real time raytracing renderer using the RTFact library.");
+			return QString("A real time raytracing renderer using the RTfact library.");
 		}
 
-		const QPixmap* RTFactPlugin::getIcon() const
+		const QPixmap* RTfactPlugin::getIcon() const
 		{
 			return &icon_;
 		}
 
-		ConfigDialog* RTFactPlugin::getConfigDialog()
+		ConfigDialog* RTfactPlugin::getConfigDialog()
 		{
 			return NULL;
 		}
 
-		Renderer* RTFactPlugin::createRenderer()
+		Renderer* RTfactPlugin::createRenderer()
 		{
 			return new RTfactRenderer;
 		}

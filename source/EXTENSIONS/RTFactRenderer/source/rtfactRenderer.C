@@ -39,7 +39,7 @@ namespace BALL
 		const float RTfactRenderer::vectorDifferenceTolerance_= 0.0f;
 
 		RTfactRenderer::RTfactRenderer()
-			: Renderer("RTFactRenderer"),
+			: Renderer("RTfactRenderer"),
 			  rtfact_needs_update_(false)
 		{
 		}

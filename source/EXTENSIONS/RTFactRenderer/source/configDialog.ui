@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>RTFactSettings</class>
- <widget class="QWidget" name="RTFactSettings">
+ <class>RTfactSettings</class>
+ <widget class="QWidget" name="RTfactSettings">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -19,7 +19,7 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
-     <widget class="QWidget" name="RTFact">
+     <widget class="QWidget" name="RTfact">
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QGroupBox" name="groupBox_9">

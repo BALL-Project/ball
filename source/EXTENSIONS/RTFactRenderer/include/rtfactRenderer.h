@@ -239,6 +239,6 @@ namespace BALL
         };
 
     } // namespace VIEW
-} // namespace RTFactRenderer
+} // namespace RTfactRenderer
 
 #endif // BALL_RTFACTRENDERER_RTFACTRENDERER_H
