@@ -67,9 +67,6 @@ namespace BALL
 			///
 			void showTutorial();
 			
-			///
-			void showRaytracingTutorial();
-
 			/// Next Step
 			void nextStepClicked();
 						
@@ -86,7 +83,6 @@ namespace BALL
 			void enableNextStep_();
 
  			virtual void onNotifyTutorial_(Message *message);
- 			virtual void onNotifyRaytracingTutorial_(Message *message);
  			virtual void onNotifyDemo_(Message *message);
 
 			void addPlane_(char plane_specifier, int height, int boundary, bool bottom = true);
@@ -98,8 +94,7 @@ namespace BALL
 			enum TUTORIAL_TYPE
 			{
 				DEMO,
-				TUTORIAL,
-				RAYTRACING_TUTORIAL
+				TUTORIAL
 			};
 
 			TUTORIAL_TYPE    tutorial_type_;
@@ -112,7 +107,7 @@ namespace BALL
 			String 					 prefix_;
 			Position  			 current_step_;
 			Mesh* 					 surface_;
-			QAction* 				 demo_action_, *tutorial_action_, *raytracing_tutorial_action_;
+			QAction* 				 demo_action_, *tutorial_action_;
 		};
 
 } } // namespaces

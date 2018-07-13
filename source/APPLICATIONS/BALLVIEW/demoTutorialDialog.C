@@ -60,8 +60,7 @@ DemoTutorialDialog::DemoTutorialDialog(QWidget* parent, const char* name)
 	  current_step_(0),
 	  surface_(nullptr),
 	  demo_action_(nullptr),
-	  tutorial_action_(nullptr),
-	  raytracing_tutorial_action_(nullptr)
+	  tutorial_action_(nullptr)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DemoTutorialDialog " << this << std::endl;
@@ -100,33 +99,6 @@ void DemoTutorialDialog::initDemo_()
 	// hide some dockwidgets
 	if (LogView::getInstance(0) != 0) LogView::getInstance(0)->hide();
  	if (DatasetControl::getInstance(0) != 0) DatasetControl::getInstance(0)->hide();
-
-#ifdef	BALL_HAS_RTFACT
-	// Set the background to black
-	ColorRGBA color(0, 0, 0, 255);
-	Stage* stage = Scene::getInstance(0)->getStage();
-		
-	stage->setBackgroundColor(color);
-	StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-	stage_settings->updateFromStage();
-
-	//TODO: get rid of this hack. 
-	//TODO: BALLView should come up with good light settings by itself!
-	// set a good light source	
-	stage->clearLightSources();
-
-	LightSource ls;
-		
-	ls.setPosition(Vector3(1, -2, -15));
-	ls.setAttenuation(Vector3(0., 0., 0.3));
-	ls.setType(LightSource::POSITIONAL);
-	ls.setColor(ColorRGBA(255, 255, 255, 255));
-	ls.setIntensity(500./100);
-	stage->addLightSource(ls);
-	LightSettings::getInstance(0)->updateFromStage();
-	// apply everything to the scene...
-	Scene::getInstance(0)->applyPreferences();
-#endif
 }
 
 String DemoTutorialDialog::getBaseDir_()
@@ -142,85 +114,14 @@ void DemoTutorialDialog::initTutorials_()
 		setWindowTitle(tr("BALLView Tutorial"));
 		prefix_ = getBaseDir_() + "tutorial";
 	}
-	else if (tutorial_type_ == RAYTRACING_TUTORIAL)
-	{
-		setWindowTitle(tr("Ray tracing Tutorial"));
-		prefix_ = getBaseDir_() + "raytracing_tutorial";
-	}
-	
+
 	next_button->setEnabled(false);
 
-#ifdef BALL_HAS_RTFACT
-	// Set the defaults
-	((Mainframe*)getMainControl())->reset();
-
-	Scene::getInstance(0)->show();
-	MolecularControl::getInstance(0)->show();
-	MolecularControl::getInstance(0)->setFloating(false);
-	MolecularControl::getInstance(0)->applyPreferences();
- 	GeometricControl::getInstance(0)->show();
-	GeometricControl::getInstance(0)->applyPreferences();
-	GeometricControl::getInstance(0)->setFloating(false);
-
-	// Set the background to black
-	ColorRGBA color(0, 0, 0, 255);
-	Stage* stage = Scene::getInstance(0)->getStage();
-		
-	stage->setBackgroundColor(color);
-
-	StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-	stage_settings->updateFromStage();
-
-	// get one useable light source
-	stage->clearLightSources();
-
-	LightSource ls;
-		
-	ls.setPosition(Vector3(1, -2, -15));
-	ls.setAttenuation(Vector3(0., 0., 0.7));
-	ls.setType(LightSource::POSITIONAL);
-	ls.setColor(ColorRGBA(255, 255, 255, 255));
-	ls.setIntensity(500./100);
-
-	stage->addLightSource(ls);
-	LightSettings::getInstance(0)->updateFromStage();
-#endif
 	if (tutorial_type_ == TUTORIAL)
 	{
 		DatasetControl::getInstance(0)->show();
  		DatasetControl::getInstance(0)->applyPreferences();
  		DatasetControl::getInstance(0)->setFloating(false);
-	}
-	else if  (tutorial_type_ == RAYTRACING_TUTORIAL)
-	{ 
-#ifdef BALL_HAS_RTFACT
-		Stage::Material& rt_material = stage->getMaterial();
-
-		rt_material.ambient_color = ColorRGBA(255, 255, 255, 255);
-		rt_material.ambient_intensity = 0.;
-
-		rt_material.specular_color = ColorRGBA(255, 255, 255, 255);
-		rt_material.specular_intensity = 1.;
-
-		rt_material.reflective_color = ColorRGBA(255, 255, 255, 255);
-		rt_material.reflective_intensity = 0.;
-
-		rt_material.shininess = 75.031;
-		rt_material.transparency = 0;
-
-		Scene::getInstance(0)->getMaterialSettings()->updateDefaultMaterialsFromStage();
-
-		// set ball and stick as next model
-		DisplayProperties::getInstance(0)->selectModel(MODEL_BALL_AND_STICK);
-
-		// apply everything to the scene...
-		Scene::getInstance(0)->applyPreferences();
-
-		next_button->setEnabled(true);
-#else
-		Log.info() << "DemoTutorialDialog: no RTFact available! Close the dialog!" << __FILE__ << " " << __LINE__ << endl;
-		return;
-#endif
 	}
 	LogView::getInstance(0)->hide();
 }
@@ -262,9 +163,6 @@ void DemoTutorialDialog::onNotify(Message* message)
 			break;
 		case TUTORIAL: 
 			onNotifyTutorial_(message);
-			break;
-		case RAYTRACING_TUTORIAL:
-			onNotifyRaytracingTutorial_(message);
 			break;
 	}
 }
@@ -337,15 +235,6 @@ void DemoTutorialDialog::nextStepClicked()
 
 		nextStepDemo_();
 		
-		#ifdef BALL_HAS_RTFACT
-		// we do not want to show energy minimization and MD simulation
-		if (current_step_ == 11)
-		{
-			current_step_ +=2;	
-			next_button->setEnabled(true);
-		}
-		#endif
-
 	}
 	else if (tutorial_type_ == TUTORIAL) 
 	{
@@ -354,59 +243,7 @@ void DemoTutorialDialog::nextStepClicked()
 			next_button->setEnabled(true);
 		}
 	}
-	else if (tutorial_type_ == RAYTRACING_TUTORIAL)
-	{
-		switch (current_step_)
-		{
-			case 2:
-			{
-				// prepare the background for the next step
-				ColorRGBA color(255, 255, 255, 255); // white
-				Scene::getInstance(0)->getStage()->setBackgroundColor(color);
-				StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-				stage_settings->updateFromStage();
-				Scene::getInstance(0)->applyPreferences();
-				break;
-			}
-			
-			case 4: // preparing downgraded light settings 
-			{
-				// There should be just a single light source!
-				// first manipulate the light
-				LightSource& ls = Scene::getInstance(0)->getStage()->getLightSource(0);
-				ls.setPosition(Vector3(1, -8, -45));        //(Vector3(1, -2, -15));
-				ls.setAttenuation(Vector3(0, 0, 0.2f));    //0.7
-				ls.setType(LightSource::POSITIONAL);
-				ls.setColor(ColorRGBA(255, 255, 255, 255)); //ColorRGBA(255, 245, 208, 255));
-				ls.setIntensity(0.25f);
-				LightSettings::getInstance(0)->updateFromStage();
 
-				// then change the camera position
-				Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
-				camera.setViewPoint(camera.getViewPoint()+Vector3(20,20,20));
-
-				// update everything
-				Scene::getInstance(0)->applyPreferences();
-				break;
-			}
-			case 5: //preparing bad materials
-			{
-				// Add a plane to be used as a mirror
-				if (getMainControl()->getCompositeManager().getComposites().size() == 0)
-				{
-					Log.info() << "DemoTutorialDialog: no system available! " << __FILE__ << " " << __LINE__ << endl;
-				 	return;	
-				}
-				
-				addPlane_('x', 5, 5);
-				break;
-			}
-
-			default: // nothing to see here...
-				break;
-		}
-	}
- 
 	current_step_++;		
 }
 
@@ -662,9 +499,6 @@ void DemoTutorialDialog::nextStepDemo_()
 		getMainControl()->getMolecularControlSelection().push_back(system_);
 		ms->calculateHBonds();
    	notify_(new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT));
-#ifndef BALL_HAS_RTFACT
- 		notify_(new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT));
-#endif
 	}
 	else if (current_step_ == 9)
 	{
@@ -694,11 +528,7 @@ void DemoTutorialDialog::nextStepDemo_()
 			ms->chooseAmberFF();
 			ms->getMinimizationDialog().setMaxGradient(1.);
 			ms->getMinimizationDialog().setMaxIterations(20);
-#ifdef BALL_HAS_RTFACT
-			ms->getMinimizationDialog().setRefresh(10);
-#else
 			ms->getMinimizationDialog().setRefresh(5);
-#endif
 			ms->runMinimization(false);
 		}
 		else
@@ -753,13 +583,6 @@ void DemoTutorialDialog::nextStepDemo_()
 		// last entry: we are done
 	}
 }
-
-void DemoTutorialDialog::showRaytracingTutorial()
-{
-	tutorial_type_ = RAYTRACING_TUTORIAL;
-	show();
-}
-
 
 void DemoTutorialDialog::showTutorial()
 {
@@ -885,68 +708,6 @@ void DemoTutorialDialog::onNotifyTutorial_(Message *message)
 	enableNextStep_();
 }
 
-void DemoTutorialDialog::onNotifyRaytracingTutorial_(Message *message)
-{
-	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
-	RepresentationMessage* rmsg = RTTI::castTo<RepresentationMessage>(*message);
-
-	if (rmsg && !rmsg->getRepresentation()) return;
-
-	switch (current_step_)
-	{
-		case 1:
-		{
-			// nothing to be checked
-			break;
-		}
-		case 2: // "Building a peptide from a given sequence"
-		{
-			if (!cmsg || cmsg->getType() != CompositeMessage::NEW_MOLECULE) return;
-			break;
-		}
-		case 3: // "Set the background color"
-		{
-			if (Scene::getInstance(0)->getStage()->getBackgroundColor() != ColorRGBA(0, 0, 0, 255)) return;
-			break;
-		}	
-		case 4: // "Rotating"
-		{
-			if (!RTTI::isKindOf<SceneMessage>(message)) return;
-			break;
-		}	
-		case 5: // "Setting light sources"
-		{		
-			//if (Scene::getInstance(0)->getStage()->getLightSource(0).getColor() != ColorRGBA(255, 245, 208, 255)) return;
-			if (Scene::getInstance(0)->getStage()->getLightSources().size() != 2) return;
-			break;
-		}
-		case 6: // "Setting the materials"
-		{	
-			// check, if we got an SES 
-			if (!rmsg ||
-					rmsg->getType() != RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL ||
-					rmsg->getRepresentation()->getModelType() != MODEL_SE_SURFACE)
-			{
-				return;
-			}
-			break;
-		}
-		case 7:  // "downsampling/PNGs"
-		{	
-			//TODO find a checker!!
-			if (cmsg)
-				cout <<  "*7*" << cmsg->getType() << endl;
-			break; 
-		}	
-		default:
-			BALLVIEW_DEBUG;
-			Log.error() << "Current step: " << current_step_ << std::endl;
-			return;
-	}
-
-	enableNextStep_();
-}
-
 void DemoTutorialDialog::initializeWidget(MainControl&)
 {
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
@@ -962,13 +723,6 @@ void DemoTutorialDialog::initializeWidget(MainControl&)
 	                                   description, QKeySequence(), tr("Perform a step-by-step tutorial"),
 	                                   UIOperationMode::MODE_ADVANCED);
 
-#ifdef BALL_HAS_RTFACT
-	description = "Shortcut|Help|RaytracingTutorial";
-	raytracing_tutorial_action_ = insertMenuEntry(MainControl::HELP, tr("Ray tracing Tutorial"), this, 
-	                                              SLOT(showRaytracingTutorial()), description, QKeySequence(),
-	                                              tr("Learn how to use RTFact"), UIOperationMode::MODE_ADVANCED);
-#endif
-
 	getMainControl()->insertPopupMenuSeparator(MainControl::HELP);
 
 }
@@ -980,8 +734,6 @@ void DemoTutorialDialog::checkMenu(MainControl& main_control)
 		demo_action_->setEnabled(!busy);
 	if (tutorial_action_)
 		tutorial_action_->setEnabled(!busy);
-	if (raytracing_tutorial_action_)
-		raytracing_tutorial_action_->setEnabled(!busy);
 }
 
 } } // namespaces
