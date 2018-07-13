@@ -5,7 +5,7 @@ OPTION(USE_SPACENAV_PLUGIN "Build the SpaceNavigator input device plugin" ON)
 OPTION(USE_VRPN_PLUGIN "Build the VRPN input device plugin" ON)
 OPTION(USE_VRPNHD_PLUGIN "Build the VRPNDH input device plugin" ON)
 OPTION(USE_JUPYTER_PLUGIN "Build the Jupyter plugin" ON)
-OPTION(USE_RTFACT_PLUGIN "Build the RTFact renderer plugin" ON)
+OPTION(USE_RTFACT_PLUGIN "Build the RTfact renderer plugin" ON)
 
 IF (USE_PRESENTABALL_PLUGIN)
 	ADD_SUBDIRECTORY(PRESENTABALL)
@@ -32,7 +32,7 @@ IF (USE_JUPYTER_PLUGIN)
 ENDIF()
 
 IF (USE_RTFACT_PLUGIN)
-	ADD_SUBDIRECTORY(RTFactRenderer)
+	ADD_SUBDIRECTORY(RTfactRenderer)
 ENDIF()
 
 ADD_SUBDIRECTORY(GLRenderer)
