@@ -202,21 +202,10 @@ ENDIF()
 
 ## TBB
 SET(USE_TBB ON CACHE BOOL "Should Intel Threading Building Blocks support be enabled?")
-SET(REQUIRE_TBB OFF CACHE BOOL "Should Intel Threading Building Blocks support be required?")
-
-## RTFact would require tbb... so check if it is required
-IF(REQUIRE_RTFACT)
-	SET(REQUIRE_TBB ON)
-ENDIF()
-
 IF(USE_TBB)
-	IF (REQUIRE_TBB)
-		FIND_PACKAGE(TBB REQUIRED)
-	ELSE()
-		FIND_PACKAGE(TBB)
-		IF (NOT TBB_FOUND)
-			MESSAGE(STATUS "Intel Threading Building Blocks not found!")
-		ENDIF()
+	FIND_PACKAGE(TBB)
+	IF (NOT TBB_FOUND)
+		MESSAGE(STATUS "Intel Threading Building Blocks not found!")
 	ENDIF()
 
 	IF(${BALL_LICENSE_GPL} OR NOT ${TBB_VERSION_MAJOR} VERSION_LESS 2017)
