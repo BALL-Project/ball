@@ -240,9 +240,6 @@
 // VIEW related options
 #cmakedefine BALL_HAS_VIEW
 
-// Define whether BALL was built with rtfact support
-#cmakedefine BALL_HAS_RTFACT
-
 //OpenBabel
 #cmakedefine BALL_HAS_OPENBABEL
 
@@ -260,9 +257,6 @@
 
 // TBB
 #cmakedefine BALL_HAS_TBB
-
-// RTfact
-#cmakedefine BALL_HAS_RTFACT
 
 // Define for activated PYTHON support
 #cmakedefine BALL_PYTHON_SUPPORT
