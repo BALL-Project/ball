@@ -98,7 +98,7 @@ namespace BALL
 			};
 
 			/// Typedef for OPENGL names
-			typedef unsigned int Name;
+			using Name = unsigned int;
 
 			/// Default Constructor.
 			explicit GLRenderer(GLConfigDialog* config_dialog = nullptr);
@@ -453,10 +453,10 @@ namespace BALL
 			GLubyte*  						line_tex_;
 
 			// naming of geometric objects
-			typedef HashMap<const BALL::VIEW::GeometricObject*, Name> NameHashMap;
-			typedef HashMap<Name, const BALL::VIEW::GeometricObject*> GeometricObjectHashMap;
-			typedef HashMap<const BALL::VIEW::Representation*, GLDisplayList*> DisplayListHashMap;
-			typedef HashMap<const BALL::VIEW::Representation*, vector<MeshBuffer*> > MeshBufferHashMap;
+			using NameHashMap            = HashMap<const BALL::VIEW::GeometricObject*, Name>;
+			using GeometricObjectHashMap = HashMap<Name, const BALL::VIEW::GeometricObject*>;
+			using DisplayListHashMap     = HashMap<const BALL::VIEW::Representation*, GLDisplayList*>;
+			using MeshBufferHashMap      = HashMap<const BALL::VIEW::Representation*, vector<MeshBuffer*>>;
 
 			GeometricObjectHashMap	name_to_object_;
 			NameHashMap							object_to_name_;

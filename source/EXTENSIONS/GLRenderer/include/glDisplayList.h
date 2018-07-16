@@ -35,7 +35,7 @@ class BALL_PLUGIN_EXPORT GLDisplayList
 			A display list is stored as a number. For convienence a type is declared
 			that represents such a display list.
 	*/
-	typedef unsigned long GLList;
+	using GLList = unsigned long;
 
 	//@}
 	/** @name Predefined static values.

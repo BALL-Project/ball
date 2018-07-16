@@ -34,7 +34,7 @@ namespace BALL
 
 			BALL_CREATE(MeshBuffer)
 
-			typedef GLuint Buffer[4];
+			using Buffer = GLuint[4];
 
 			///
 			MeshBuffer();
