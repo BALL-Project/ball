@@ -31,7 +31,7 @@ namespace BALL
 
 		ConfigDialog* RTfactPlugin::getConfigDialog()
 		{
-			return NULL;
+			return nullptr;
 		}
 
 		Renderer* RTfactPlugin::createRenderer()

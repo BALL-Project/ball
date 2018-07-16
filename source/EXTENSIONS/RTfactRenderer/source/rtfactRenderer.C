@@ -135,7 +135,7 @@ namespace BALL
 				}
 			}
 
-			return NULL;
+			return nullptr;
 		}
 
 		bool RTfactRenderer::supports(const PixelFormat &format) const
@@ -652,7 +652,7 @@ namespace BALL
 					if (!rep.isHidden()) {
 						rt_data.instance_handles.push_back(
 						    rt_data.object_handles.back().createInstance());
-						rt_data.instance_handles.back().setTransform(mat, NULL);
+						rt_data.instance_handles.back().setTransform(mat, nullptr);
 					}
 
 					geometric_objects_inst[rt_data.instance_handles.back()] = *it;
