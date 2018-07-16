@@ -1,8 +1,6 @@
 #ifndef BALL_RTFACTRENDERER_RTFACTRENDERER_H
 #define BALL_RTFACTRENDERER_RTFACTRENDERER_H
 
-#define BALLVIEW_RTFACTRENDERER_THROW(exceptionName, message) (throw BALL::Exception::##exceptionName##(__FILE__, __LINE__, message))
-
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/representationManager.h>
