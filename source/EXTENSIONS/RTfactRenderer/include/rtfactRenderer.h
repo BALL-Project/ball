@@ -177,66 +177,61 @@ namespace BALL
 				std::vector<float> intersectRaysWithGeometry(const std::vector<Vector3>& origins,
 					const std::vector<Vector3>& directions) override;
 
-                //@}
+					//@}
 
-                private:
+				private:
 
-                static const float vectorDifferenceTolerance_;
+				static const float vectorDifferenceTolerance_;
 
-                bool doVectorsDiffer(const Vector3& vecA, const Vector3& vecB);
+				bool doVectorsDiffer(const Vector3& vecA, const Vector3& vecB);
 
-                template<typename taPixelType>
-                void renderImpl(taPixelType* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch);
+				template<typename taPixelType>
+				void renderImpl(taPixelType* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch);
 
-                void renderImpl(float* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch)
-                {
-                }
+				void renderImpl(float* buffer, const unsigned int width, const unsigned int height, const unsigned int pitch)
+				{
+				}
 
-                std::vector<RTpieCpp::LightHandle>                      lights_;
+				typedef RTfact::BasicImage2D<float> t_ColorImage;
+				typedef RTfact::BasicImage2D<float> t_DistanceImage;
+				typedef RTfact::Image2DFramebuffer<t_ColorImage, t_DistanceImage> t_Framebuffer;
 
-                typedef RTfact::BasicImage2D<float>                     t_ColorImage;
-                typedef RTfact::BasicImage2D<float>                     t_DistanceImage;
-                typedef RTfact::Image2DFramebuffer<
-                                                t_ColorImage,
-                                                t_DistanceImage>        t_Framebuffer;
+				typedef RTfact::BasicImage2D<unsigned char> t_ByteColorImage;
+				typedef RTfact::BasicImage2D<unsigned char> t_ByteDistanceImage;
+				typedef RTfact::Image2DFramebuffer<t_ByteColorImage, t_ByteDistanceImage> t_ByteFramebuffer;
 
-                typedef RTfact::BasicImage2D<unsigned char>             t_ByteColorImage;
-                typedef RTfact::BasicImage2D<unsigned char>             t_ByteDistanceImage;
-                typedef RTfact::Image2DFramebuffer<
-                                                t_ByteColorImage,
-                                                t_ByteDistanceImage>    t_ByteFramebuffer;
+				std::vector<RTpieCpp::LightHandle> lights_;
 
-                RTpieCpp::SceneHandle                                   sceneHandle;
-                RTpieCpp::RayTracerHandle                               rayTracer;
-                RTpieCpp::CameraHandle                                  cameraHandle;
-                RTpieCpp::FrameBufferHandle                             renderBuffer;
-                RTpieCpp::RenderTaskHandle                              renderTask;
-                t_Framebuffer                                           framebuffer;
-                t_ByteFramebuffer                                       byteFramebuffer;
+				RTpieCpp::SceneHandle              sceneHandle;
+				RTpieCpp::RayTracerHandle          rayTracer;
+				RTpieCpp::CameraHandle             cameraHandle;
+				RTpieCpp::FrameBufferHandle        renderBuffer;
+				RTpieCpp::RenderTaskHandle         renderTask;
+				t_Framebuffer                      framebuffer;
+				t_ByteFramebuffer                  byteFramebuffer;
 
+				RTfact::FPSMeter                   fpsMeter;
+				RTpieCpp::PickTaskHandle           pickTask;
 
-                RTfact::FPSMeter                                        fpsMeter;
-                RTpieCpp::PickTaskHandle                                pickTask;
+				HashMap<BALL::VIEW::Representation const*, RTfactData>          objects_;
+				HashMap<RTpieCpp::InstanceHandle, BALL::VIEW::GeometricObject*> geometric_objects_inst;
+				HashMap<RTpieCpp::MeshHandle, BALL::VIEW::GeometricObject*>     geometric_objects_;
 
-                HashMap<BALL::VIEW::Representation const*, RTfactData>          objects_;
-                HashMap<RTpieCpp::InstanceHandle, BALL::VIEW::GeometricObject*> geometric_objects_inst;
-                HashMap<RTpieCpp::MeshHandle, BALL::VIEW::GeometricObject*>     geometric_objects_;
+				Surface                            sphere_template_;
+				Surface                            tube_template_;
 
-                Surface                                                 sphere_template_;
-                Surface                                                 tube_template_;
+				bool                               rtfact_needs_update_;
 
-                bool                                                    rtfact_needs_update_;
+				Vector3                            last_camera_position;
+				Vector3                            last_camera_view_vec;
+				Vector3                            last_camera_lookup;
 
-                Vector3                                                 last_camera_position;
-                Vector3                                                 last_camera_view_vec;
-                Vector3                                                 last_camera_lookup;
+				float                              x_scale_;
+				float                              y_scale_;
 
-                float                                                   x_scale_;
-                float                                                   y_scale_;
+		};
 
-        };
-
-    } // namespace VIEW
+	} // namespace VIEW
 } // namespace RTfactRenderer
 
 #endif // BALL_RTFACTRENDERER_RTFACTRENDERER_H

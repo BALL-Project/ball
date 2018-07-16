@@ -309,36 +309,36 @@ namespace BALL
 			view_vector.normalize();
 			Vector3 const& look_up = camera->getLookUpVector();
 
-            if(use_continuous_loop_)
-            {
-                if (doVectorsDiffer( last_camera_position, position ))
-                {
-                    cameraHandle.setPosition( float3(position.x, position.y, position.z) );
-                    last_camera_position  = position;
-                }
+			if(use_continuous_loop_)
+			{
+				if (doVectorsDiffer( last_camera_position, position ))
+				{
+					cameraHandle.setPosition( float3(position.x, position.y, position.z) );
+					last_camera_position  = position;
+				}
 
-                if (doVectorsDiffer( last_camera_view_vec, view_vector ))
-                {
-                    cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
-                    last_camera_view_vec  = view_vector;
-                }
+				if (doVectorsDiffer( last_camera_view_vec, view_vector ))
+				{
+					cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
+					last_camera_view_vec  = view_vector;
+				}
 
-                if (doVectorsDiffer( last_camera_lookup, look_up ))
-                {
-                    cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
-                    last_camera_lookup    = look_up;
-                }
-            }
-            else
-            {
-                cameraHandle.setPosition( float3(position.x, position.y, position.z) );
-                cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
-                cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
+				if (doVectorsDiffer( last_camera_lookup, look_up ))
+				{
+					cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
+					last_camera_lookup    = look_up;
+				}
+			}
+			else
+			{
+				cameraHandle.setPosition( float3(position.x, position.y, position.z) );
+				cameraHandle.setDirection( float3(view_vector.x, view_vector.y, view_vector.z) );
+				cameraHandle.setUpVector( float3(look_up.x, look_up.y, look_up.z) );
 
-                last_camera_position  = position;
-                last_camera_view_vec  = view_vector;
-                last_camera_lookup    = look_up;
-            }
+				last_camera_position  = position;
+				last_camera_view_vec  = view_vector;
+				last_camera_lookup    = look_up;
+			}
 
 			if (lights_.size() != stage_->getLightSources().size()) return;
 
@@ -377,9 +377,12 @@ namespace BALL
 
 		void RTfactRenderer::updateBackgroundColor()
 		{
-			sceneHandle.setEnvironmentColor(stage_->getBackgroundColor().getRed(),
-															  stage_->getBackgroundColor().getGreen(),
-																stage_->getBackgroundColor().getBlue(), 1);
+			sceneHandle.setEnvironmentColor(
+				stage_->getBackgroundColor().getRed(),
+				stage_->getBackgroundColor().getGreen(),
+				stage_->getBackgroundColor().getBlue(),
+				1
+			);
 		}
 
 		void RTfactRenderer::setupEnvironmentMap(const QImage& image)
@@ -450,13 +453,13 @@ namespace BALL
 					RTfact::RTpie::int32* reordered_indices = new RTfact::RTpie::int32[aTriangleCount*3];
 					for(int i = 0;  i < aTriangleCount; i++)
 					{
-							reordered_indices[i * 3 + 2] = aIndices[i * 3 + 0];
-							reordered_indices[i * 3 + 1] = aIndices[i * 3 + 1];
-							reordered_indices[i * 3 + 0] = aIndices[i * 3 + 2];
+						reordered_indices[i * 3 + 2] = aIndices[i * 3 + 0];
+						reordered_indices[i * 3 + 1] = aIndices[i * 3 + 1];
+						reordered_indices[i * 3 + 0] = aIndices[i * 3 + 2];
 					}
 
 					aMesh.setPrimitives(aTriangleCount,
-							reordered_indices, aVertices, aNormals, aVertexColors, aTexCoords);
+						reordered_indices, aVertices, aNormals, aVertexColors, aTexCoords);
 
 					delete[] reordered_indices;
 				}
@@ -465,9 +468,9 @@ namespace BALL
 					RTfact::RTpie::int32* converted_indices = new RTfact::RTpie::int32[aTriangleCount*3];
 					for(int i = 0;  i < aTriangleCount; i++)
 					{
-							converted_indices[i * 3 + 0] = aIndices[i * 3 + 0];
-							converted_indices[i * 3 + 1] = aIndices[i * 3 + 1];
-							converted_indices[i * 3 + 2] = aIndices[i * 3 + 2];
+						converted_indices[i * 3 + 0] = aIndices[i * 3 + 0];
+						converted_indices[i * 3 + 1] = aIndices[i * 3 + 1];
+						converted_indices[i * 3 + 2] = aIndices[i * 3 + 2];
 					}
 
 					aMesh.setPrimitives(aTriangleCount,
@@ -537,7 +540,7 @@ namespace BALL
 					 it++)
 			{
 
-                                if (RTTI::isKindOf<Mesh>(*it))
+				if (RTTI::isKindOf<Mesh>(*it))
 				{
 					Mesh const& mesh = *(const Mesh*)*it;
 
@@ -752,7 +755,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-                                if (RTTI::isKindOf<TwoColoredLine>(*it))
+				if (RTTI::isKindOf<TwoColoredLine>(*it))
 				{
 					TwoColoredLine const& old_line = *(const TwoColoredLine*)*it;
 
@@ -766,7 +769,7 @@ namespace BALL
 
 					//
 					rt_data.material_handles.push_back(
-					    sceneHandle.createAppearance("PhongShader"));
+							sceneHandle.createAppearance("PhongShader"));
 					updateMaterialFromStage(rt_data.material_handles.back());
 					rt_data.material_handles.back().setParam3f(
 							"diffuseColor", float3(color1.getRed(), color1.getGreen(), color1.getBlue()));
@@ -920,7 +923,7 @@ namespace BALL
 					 it++)
 			{
 
-                                if (RTTI::isKindOf<Mesh>(*it))
+				if (RTTI::isKindOf<Mesh>(*it))
 				{
 					Mesh const& mesh = *(const Mesh*)*it;
 
@@ -983,7 +986,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-                                if (RTTI::isKindOf<Sphere>(*it))
+				if (RTTI::isKindOf<Sphere>(*it))
 				{
 					Sphere const& sphere = *(const Sphere*)*it;
 
@@ -1019,9 +1022,10 @@ namespace BALL
 					float* t_normals = new float[3*sphere_template_.getNumberOfNormals()];
 
 					transformMeshData(mat,
-														vertices, sphere_template_.getNumberOfVertices(),
-														normals, sphere_template_.getNumberOfNormals(),
-														t_vertices, t_normals);
+						vertices, sphere_template_.getNumberOfVertices(),
+						normals, sphere_template_.getNumberOfNormals(),
+						t_vertices, t_normals
+					);
 					geometric_objects_[rt_data.mesh_handles.back()] = *it;
 					setPrimitives(rt_data.mesh_handles.back(),
 						(unsigned int)sphere_template_.triangle.size(),
@@ -1033,7 +1037,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-                                if (RTTI::isKindOf<TwoColoredTube>(*it))
+				if (RTTI::isKindOf<TwoColoredTube>(*it))
 				{
 					TwoColoredTube const& old_tube = *(const TwoColoredTube*)*it;
 
@@ -1066,9 +1070,10 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 						transformMeshData(mat,
-															vertices, tube_template_.getNumberOfVertices(),
-															normals, tube_template_.getNumberOfNormals(),
-															t_vertices, t_normals);
+							vertices, tube_template_.getNumberOfVertices(),
+							normals, tube_template_.getNumberOfNormals(),
+							t_vertices, t_normals
+						);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
 						setPrimitives(rt_data.mesh_handles.back(),
 							(unsigned int)tube_template_.triangle.size(),
@@ -1095,9 +1100,10 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 						transformMeshData(mat,
-															vertices, tube_template_.getNumberOfVertices(),
-															normals, tube_template_.getNumberOfNormals(),
-															t_vertices, t_normals);
+							vertices, tube_template_.getNumberOfVertices(),
+							normals, tube_template_.getNumberOfNormals(),
+							t_vertices, t_normals
+						);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
 						setPrimitives(rt_data.mesh_handles.back(),
 							(unsigned int)tube_template_.triangle.size(),
@@ -1118,9 +1124,10 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 						transformMeshData(mat,
-															vertices, tube_template_.getNumberOfVertices(),
-															normals, tube_template_.getNumberOfNormals(),
-															t_vertices, t_normals);
+							vertices, tube_template_.getNumberOfVertices(),
+							normals, tube_template_.getNumberOfNormals(),
+							t_vertices, t_normals
+						);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
 						setPrimitives(rt_data.mesh_handles.back(),
 							(unsigned int)tube_template_.triangle.size(),
@@ -1133,7 +1140,7 @@ namespace BALL
 					rtfact_needs_update_ = true;
 				}
 
-                                if (RTTI::isKindOf<TwoColoredLine>(*it))
+				if (RTTI::isKindOf<TwoColoredLine>(*it))
 				{
 					TwoColoredLine const& old_line = *(const TwoColoredLine*)*it;
 
@@ -1165,9 +1172,10 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 						transformMeshData(mat,
-															vertices, tube_template_.getNumberOfVertices(),
-															normals, tube_template_.getNumberOfNormals(),
-															t_vertices, t_normals);
+							vertices, tube_template_.getNumberOfVertices(),
+							normals, tube_template_.getNumberOfNormals(),
+							t_vertices, t_normals
+						);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
 						setPrimitives(rt_data.mesh_handles.back(),
 							(unsigned int)tube_template_.triangle.size(),
@@ -1192,9 +1200,10 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 						transformMeshData(mat,
-															vertices, tube_template_.getNumberOfVertices(),
-															normals, tube_template_.getNumberOfNormals(),
-															t_vertices, t_normals);
+							vertices, tube_template_.getNumberOfVertices(),
+							normals, tube_template_.getNumberOfNormals(),
+							t_vertices, t_normals
+						);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
 						setPrimitives(rt_data.mesh_handles.back(),
 							(unsigned int)tube_template_.triangle.size(),
@@ -1215,9 +1224,10 @@ namespace BALL
 						rt_data.mesh_handles.back().setAppearance(
 								rt_data.material_handles.back());
 						transformMeshData(mat,
-															vertices, tube_template_.getNumberOfVertices(),
-															normals, tube_template_.getNumberOfNormals(),
-															t_vertices, t_normals);
+							vertices, tube_template_.getNumberOfVertices(),
+							normals, tube_template_.getNumberOfNormals(),
+							t_vertices, t_normals
+						);
 						geometric_objects_[rt_data.mesh_handles.back()] = *it;
 						setPrimitives(rt_data.mesh_handles.back(),
 							(unsigned int)tube_template_.triangle.size(),
@@ -1269,23 +1279,23 @@ namespace BALL
 
 		void RTfactRenderer::useContinuousLoop(bool use_loop)
 		{
-            Renderer::useContinuousLoop(use_loop);
-            renderTask.setAccumulatePixels(use_loop);
+			Renderer::useContinuousLoop(use_loop);
+			renderTask.setAccumulatePixels(use_loop);
 		}
 
 		// line x plane intersection
 		void intersection(Vector3 p, Vector3 d, // line = point + direction
-										 Vector3 o, Vector3 n, // plane = origin + normal
-										 Vector3* op, int& on)
+			 Vector3 o, Vector3 n, // plane = origin + normal
+			 Vector3* op, int& on)
 		{
 				float c = - o * n;
 				float dn = d * n;
 				if(dn == 0.0f)
-						return;
+					return;
 				float t = - (n * p + c) / dn;
 				if(t >= 0.0f && t <= 1.0f)
 				{
-						op[on++] = p + t * d;
+					op[on++] = p + t * d;
 				}
 		}
 
@@ -1293,8 +1303,8 @@ namespace BALL
 				Vector3 orig, norm;
 				PlanarPointsCompare(Vector3 _orig, Vector3 _norm) : norm(_norm), orig(_orig) {}
 				bool operator() (const Vector3 &a, const Vector3 &b) {
-						Vector3 v = (a - orig) % (b - orig);
-						return (v * norm) < 0;
+					Vector3 v = (a - orig) % (b - orig);
+					return (v * norm) < 0;
 				}
 		};
 
@@ -1334,171 +1344,169 @@ namespace BALL
 			RepresentationList::const_iterator it = pm.getRepresentations().begin();
 			for (; it != pm.getRepresentations().end(); it++)
 			{
-			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > normals;
-			    std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > points;
-			    std::map< RTpieCpp::InstanceHandle, std::vector<bool> > active;
-                std::map< RTpieCpp::InstanceHandle, std::vector<ColorRGBA> > cappingColors;
+				std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > normals;
+				std::map< RTpieCpp::InstanceHandle, std::vector<Vector3> > points;
+				std::map< RTpieCpp::InstanceHandle, std::vector<bool> > active;
+				std::map< RTpieCpp::InstanceHandle, std::vector<ColorRGBA> > cappingColors;
 
-					const Representation& rep = **it;
+				const Representation& rep = **it;
 
-					// has this representation been buffered already?
-					if (objects_.find(&rep) == objects_.end())
-						continue;
+				// has this representation been buffered already?
+				if (objects_.find(&rep) == objects_.end())
+					continue;
 
-					RTfactData& rtfactData = objects_[&rep];
-					bool cappingEnabled = false;
+				RTfactData& rtfactData = objects_[&rep];
+				bool cappingEnabled = false;
 
-					vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
-					for (;plane_it != vc.end(); plane_it++)
-					{
-							ClippingPlane& plane = **plane_it;
+				vector<ClippingPlane*>::const_iterator plane_it = vc.begin();
+				for (;plane_it != vc.end(); plane_it++)
+				{
+					ClippingPlane& plane = **plane_it;
 
-                            //This line means if the clipping plane clips the given representation
-                            if (!plane.getRepresentations().has(*it)) continue;
-							if (plane.isHidden()) continue;
-
-							std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
-							for(; iit != rtfactData.instance_handles.end(); iit++)
-							{
-
-									const Vector3& n(plane.getNormal());
-									const Vector3& p(plane.getPoint());
-
-                                    normals[*iit].push_back(n);
-                                    points[*iit].push_back(p);
-                                    active[*iit].push_back(plane.isActive());
-                                    cappingColors[*iit].push_back(plane.getCappingColor());
-
-							}
-
-							cappingEnabled = plane.cappingEnabled();
-					}
+					//This line means if the clipping plane clips the given representation
+					if (!plane.getRepresentations().has(*it)) continue;
+					if (plane.isHidden()) continue;
 
 					std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
 					for(; iit != rtfactData.instance_handles.end(); iit++)
 					{
-							const std::vector<Vector3>& instanceNormals = normals[*iit];
-							const std::vector<Vector3>& instancePoints = points[*iit];
-							const std::vector<bool>& instanceActive = active[*iit];
-                            const std::vector<ColorRGBA>& instanceCappingColors = cappingColors[*iit];
-							const int n = instanceNormals.size();
+						const Vector3& n(plane.getNormal());
+						const Vector3& p(plane.getPoint());
 
-                            float* data = new float[n*9];
-
-							int a = 0;
-							for(int i = 0; i < n; i++)
-							{
-									if(!instanceActive[i]) continue;
-									data[0*n + a] = instanceNormals[i].x;
-									data[1*n + a] = instanceNormals[i].y;
-									data[2*n + a] = instanceNormals[i].z;
-									data[3*n + a] = instancePoints[i].x;
-									data[4*n + a] = instancePoints[i].y;
-									data[5*n + a] = instancePoints[i].z;
-                                    data[6*n + a] = instanceCappingColors[i].getRed();
-                                    data[7*n + a] = instanceCappingColors[i].getGreen();
-                                    data[8*n + a] = instanceCappingColors[i].getBlue();
-									a++;
-							}
-
-							//TODO: color from ballview configuration
-                            iit->setCutPlanes(cappingEnabled, float3(data[6*n], data[7*n], data[8*n]), a,
-									data+0*n, data+1*n, data+2*n,
-									data+3*n, data+4*n, data+5*n);
-
-
-							//visualization
-							//TODO: there is a bug somewhere (some intersections are in the origin)
-							float min[3];
-							float max[3];
-							iit->getBounds(min, max);
-
-							rtfactData.cutPlaneInstances.clear();
-							rtfactData.cutPlaneMeshes.clear();
-							rtfactData.cutPlanes.clear();
-
-                            //Add the geometry for drawing the clipping plane if it is visible but not active
-                            for(int j = 0; j < n; j++)
-                            {
-                                    if(instanceActive[j]) continue;
-
-									int m = 0;
-									Vector3 p[6];
-
-									//
-									intersection(Vector3(min[0], min[1], min[2]), Vector3(max[0]-min[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(min[0], min[1], min[2]), Vector3(0, max[1]-min[1], 0), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(min[0], min[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(max[0], max[1], max[2]), Vector3(min[0]-max[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(max[0], max[1], max[2]), Vector3(0, min[1]-max[1], 0), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(max[0], max[1], max[2]), Vector3(0, 0, min[2]-max[2]), instancePoints[j], instanceNormals[j], p, m);
-
-									intersection(Vector3(max[0], max[1], min[2]), Vector3(min[0]-max[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(max[0], max[1], min[2]), Vector3(0, min[1]-max[1], 0), instancePoints[j], instanceNormals[j], p, m);
-
-									intersection(Vector3(min[0], min[1], max[2]), Vector3(max[0]-min[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(min[0], min[1], max[2]), Vector3(0, max[1]-min[1], 0), instancePoints[j], instanceNormals[j], p, m);
-
-									intersection(Vector3(max[0], min[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
-									intersection(Vector3(min[0], max[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
-
-									//
-									PlanarPointsCompare cmp(p[0], instanceNormals[0]);
-									std::sort(p, p + m, cmp);
-
-									//
-									Index* CUTPLANE_INDICES = new Index[3*m];
-									float* CUTPLANE_POSITIONS = new float[3 * 3 * (m-2)];
-									float* CUTPLANE_NORMALS = new float[3 * 3 * (m-2)];
-
-									for(int i = 0; i < m-2; i++)
-									{
-											CUTPLANE_POSITIONS[i*3*3 + 0] = p[0].x;
-											CUTPLANE_POSITIONS[i*3*3 + 1] = p[0].y;
-											CUTPLANE_POSITIONS[i*3*3 + 2] = p[0].z;
-
-											CUTPLANE_POSITIONS[i*3*3 + 3] = p[i+1].x;
-											CUTPLANE_POSITIONS[i*3*3 + 4] = p[i+1].y;
-											CUTPLANE_POSITIONS[i*3*3 + 5] = p[i+1].z;
-
-											CUTPLANE_POSITIONS[i*3*3 + 6] = p[i+2].x;
-											CUTPLANE_POSITIONS[i*3*3 + 7] = p[i+2].y;
-											CUTPLANE_POSITIONS[i*3*3 + 8] = p[i+2].z;
-									}
-
-									for(int i = 0; i < 3*(m-2); i++)
-									{
-											CUTPLANE_INDICES[i] = i;
-											CUTPLANE_NORMALS[i*3 + 0] = instanceNormals[0].x;
-											CUTPLANE_NORMALS[i*3 + 1] = instanceNormals[0].y;
-											CUTPLANE_NORMALS[i*3 + 2] = instanceNormals[0].z;
-									}
-
-									//
-									rtfactData.cutPlanes.push_back(sceneHandle.createGeometry());
-									rtfactData.cutPlaneMeshes.push_back(rtfactData.cutPlanes.back().createMesh());
-									setPrimitives(rtfactData.cutPlaneMeshes.back(),
-										m-2,
-										CUTPLANE_INDICES,
-										CUTPLANE_POSITIONS,
-										CUTPLANE_NORMALS,
-										0, 0);
-									rtfactData.cutPlaneMeshes.back().setAppearance(rtfactData.cutPlaneShader);
-									rtfactData.cutPlaneInstances.push_back( rtfactData.cutPlanes.back().createInstance() );
-
-									float m1[16], m2[16];
-									iit->getTransform(m1, m2);
-									rtfactData.cutPlaneInstances.back().setTransform(m1,m2);
-
-									rtfactData.cutPlaneInstances.back().setDropShadow(false);
-
-									//
-									delete[] CUTPLANE_INDICES;
-									delete[] CUTPLANE_POSITIONS;
-									delete[] CUTPLANE_NORMALS;
-							}
-
+						normals[*iit].push_back(n);
+						points[*iit].push_back(p);
+						active[*iit].push_back(plane.isActive());
+						cappingColors[*iit].push_back(plane.getCappingColor());
 					}
+
+					cappingEnabled = plane.cappingEnabled();
+				}
+
+				std::vector<RTpieCpp::InstanceHandle>::iterator iit = rtfactData.instance_handles.begin();
+				for(; iit != rtfactData.instance_handles.end(); iit++)
+				{
+					const std::vector<Vector3>& instanceNormals = normals[*iit];
+					const std::vector<Vector3>& instancePoints = points[*iit];
+					const std::vector<bool>& instanceActive = active[*iit];
+					const std::vector<ColorRGBA>& instanceCappingColors = cappingColors[*iit];
+					const int n = instanceNormals.size();
+
+					float* data = new float[n*9];
+
+					int a = 0;
+					for(int i = 0; i < n; i++)
+					{
+						if(!instanceActive[i]) continue;
+						data[0*n + a] = instanceNormals[i].x;
+						data[1*n + a] = instanceNormals[i].y;
+						data[2*n + a] = instanceNormals[i].z;
+						data[3*n + a] = instancePoints[i].x;
+						data[4*n + a] = instancePoints[i].y;
+						data[5*n + a] = instancePoints[i].z;
+						data[6*n + a] = instanceCappingColors[i].getRed();
+						data[7*n + a] = instanceCappingColors[i].getGreen();
+						data[8*n + a] = instanceCappingColors[i].getBlue();
+						a++;
+					}
+
+					//TODO: color from ballview configuration
+					iit->setCutPlanes(cappingEnabled, float3(data[6*n], data[7*n], data[8*n]), a,
+							data+0*n, data+1*n, data+2*n,
+							data+3*n, data+4*n, data+5*n);
+
+
+					//visualization
+					//TODO: there is a bug somewhere (some intersections are in the origin)
+					float min[3];
+					float max[3];
+					iit->getBounds(min, max);
+
+					rtfactData.cutPlaneInstances.clear();
+					rtfactData.cutPlaneMeshes.clear();
+					rtfactData.cutPlanes.clear();
+
+					//Add the geometry for drawing the clipping plane if it is visible but not active
+					for(int j = 0; j < n; j++)
+					{
+						if(instanceActive[j]) continue;
+
+						int m = 0;
+						Vector3 p[6];
+
+						//
+						intersection(Vector3(min[0], min[1], min[2]), Vector3(max[0]-min[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(min[0], min[1], min[2]), Vector3(0, max[1]-min[1], 0), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(min[0], min[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(max[0], max[1], max[2]), Vector3(min[0]-max[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(max[0], max[1], max[2]), Vector3(0, min[1]-max[1], 0), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(max[0], max[1], max[2]), Vector3(0, 0, min[2]-max[2]), instancePoints[j], instanceNormals[j], p, m);
+
+						intersection(Vector3(max[0], max[1], min[2]), Vector3(min[0]-max[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(max[0], max[1], min[2]), Vector3(0, min[1]-max[1], 0), instancePoints[j], instanceNormals[j], p, m);
+
+						intersection(Vector3(min[0], min[1], max[2]), Vector3(max[0]-min[0], 0, 0), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(min[0], min[1], max[2]), Vector3(0, max[1]-min[1], 0), instancePoints[j], instanceNormals[j], p, m);
+
+						intersection(Vector3(max[0], min[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
+						intersection(Vector3(min[0], max[1], min[2]), Vector3(0, 0, max[2]-min[2]), instancePoints[j], instanceNormals[j], p, m);
+
+						//
+						PlanarPointsCompare cmp(p[0], instanceNormals[0]);
+						std::sort(p, p + m, cmp);
+
+						//
+						Index* CUTPLANE_INDICES = new Index[3*m];
+						float* CUTPLANE_POSITIONS = new float[3 * 3 * (m-2)];
+						float* CUTPLANE_NORMALS = new float[3 * 3 * (m-2)];
+
+						for(int i = 0; i < m-2; i++)
+						{
+							CUTPLANE_POSITIONS[i*3*3 + 0] = p[0].x;
+							CUTPLANE_POSITIONS[i*3*3 + 1] = p[0].y;
+							CUTPLANE_POSITIONS[i*3*3 + 2] = p[0].z;
+
+							CUTPLANE_POSITIONS[i*3*3 + 3] = p[i+1].x;
+							CUTPLANE_POSITIONS[i*3*3 + 4] = p[i+1].y;
+							CUTPLANE_POSITIONS[i*3*3 + 5] = p[i+1].z;
+
+							CUTPLANE_POSITIONS[i*3*3 + 6] = p[i+2].x;
+							CUTPLANE_POSITIONS[i*3*3 + 7] = p[i+2].y;
+							CUTPLANE_POSITIONS[i*3*3 + 8] = p[i+2].z;
+						}
+
+						for(int i = 0; i < 3*(m-2); i++)
+						{
+							CUTPLANE_INDICES[i] = i;
+							CUTPLANE_NORMALS[i*3 + 0] = instanceNormals[0].x;
+							CUTPLANE_NORMALS[i*3 + 1] = instanceNormals[0].y;
+							CUTPLANE_NORMALS[i*3 + 2] = instanceNormals[0].z;
+						}
+
+						//
+						rtfactData.cutPlanes.push_back(sceneHandle.createGeometry());
+						rtfactData.cutPlaneMeshes.push_back(rtfactData.cutPlanes.back().createMesh());
+						setPrimitives(rtfactData.cutPlaneMeshes.back(),
+							m-2,
+							CUTPLANE_INDICES,
+							CUTPLANE_POSITIONS,
+							CUTPLANE_NORMALS,
+							0, 0);
+						rtfactData.cutPlaneMeshes.back().setAppearance(rtfactData.cutPlaneShader);
+						rtfactData.cutPlaneInstances.push_back( rtfactData.cutPlanes.back().createInstance() );
+
+						float m1[16], m2[16];
+						iit->getTransform(m1, m2);
+						rtfactData.cutPlaneInstances.back().setTransform(m1,m2);
+
+						rtfactData.cutPlaneInstances.back().setDropShadow(false);
+
+						//
+						delete[] CUTPLANE_INDICES;
+						delete[] CUTPLANE_POSITIONS;
+						delete[] CUTPLANE_NORMALS;
+					}
+
+				}
 
 			}
 
@@ -1648,7 +1656,7 @@ namespace BALL
 
 			for (Position i=0; i<4; ++i)
 				for (Position j=0; j<4; ++j)
-                    trafo[i*4+j] = matrix(i, j);
+					trafo[i*4+j] = matrix(i, j);
 		}
 
 		void RTfactRenderer::updateMaterialFromStage(AppearanceHandle& material)
@@ -1708,13 +1716,13 @@ namespace BALL
 				origins.size(),
 				reinterpret_cast<float*>(&results[0]));
 
-            return results;
-        }
+			return results;
+		}
 
-        bool RTfactRenderer::doVectorsDiffer(const Vector3 &vecA, const Vector3 &vecB)
-        {
-            return ((vecA - vecB).getSquareLength() > vectorDifferenceTolerance_);
-        }
+		bool RTfactRenderer::doVectorsDiffer(const Vector3 &vecA, const Vector3 &vecB)
+		{
+			return ((vecA - vecB).getSquareLength() > vectorDifferenceTolerance_);
+		}
 
 	}
 }
