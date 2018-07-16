@@ -192,13 +192,13 @@ namespace BALL
 				{
 				}
 
-				typedef RTfact::BasicImage2D<float> t_ColorImage;
-				typedef RTfact::BasicImage2D<float> t_DistanceImage;
-				typedef RTfact::Image2DFramebuffer<t_ColorImage, t_DistanceImage> t_Framebuffer;
+				using t_ColorImage        = RTfact::BasicImage2D<float>;
+				using t_DistanceImage     = RTfact::BasicImage2D<float>;
+				using t_Framebuffer       = RTfact::Image2DFramebuffer<t_ColorImage, t_DistanceImage>;
 
-				typedef RTfact::BasicImage2D<unsigned char> t_ByteColorImage;
-				typedef RTfact::BasicImage2D<unsigned char> t_ByteDistanceImage;
-				typedef RTfact::Image2DFramebuffer<t_ByteColorImage, t_ByteDistanceImage> t_ByteFramebuffer;
+				using t_ByteColorImage    = RTfact::BasicImage2D<unsigned char>;
+				using t_ByteDistanceImage = RTfact::BasicImage2D<unsigned char>;
+				using t_ByteFramebuffer   = RTfact::Image2DFramebuffer<t_ByteColorImage, t_ByteDistanceImage>;
 
 				std::vector<RTpieCpp::LightHandle> lights_;
 
