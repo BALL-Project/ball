@@ -1301,7 +1301,7 @@ namespace BALL
 
 		struct PlanarPointsCompare {
 				Vector3 orig, norm;
-				PlanarPointsCompare(Vector3 _orig, Vector3 _norm) : norm(_norm), orig(_orig) {}
+				PlanarPointsCompare(Vector3 _orig, Vector3 _norm) : orig(_orig), norm(_norm) {}
 				bool operator() (const Vector3 &a, const Vector3 &b) {
 					Vector3 v = (a - orig) % (b - orig);
 					return (v * norm) < 0;
