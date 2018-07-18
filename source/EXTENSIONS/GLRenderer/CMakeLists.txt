@@ -9,6 +9,7 @@ SET(SOURCES_LIST
 	${DIRECTORY}/glPlugin.C
 	${DIRECTORY}/glRenderer.C
 	${DIRECTORY}/glRenderSetup.C
+	${DIRECTORY}/tilingRenderer.C
 	${DIRECTORY}/vertexBuffer.C
 )
 

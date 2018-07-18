@@ -1,15 +1,14 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
+#include <tilingRenderer.h>
 
-#include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
-
+#include <glRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 
+using namespace BALL::VIEW;
+
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 
 		TilingRenderer::TilingRenderer(Renderer* real_renderer, Size final_width, Size final_height, Size border)
@@ -83,16 +82,9 @@ namespace BALL
 			real_renderer_->renderRuler();
 		}
 
-#ifdef BALL_COMPILER_MSVC
-// yes, it *is* *that* stupid...
-#undef near
-#undef far
-#endif
-
 		void TilingRenderer::renderToBuffer(RenderTarget* target)
 		{
-#if 0
-            if (RTTI::isKindOf<GLRenderer>(real_renderer_))
+			if (RTTI::isKindOf<GLRenderer>(real_renderer_))
 			{
 				GLRenderer* gl_renderer = static_cast<GLRenderer*>(real_renderer_);
 
@@ -123,12 +115,12 @@ namespace BALL
 				for (Size current_col = 0; current_col < num_cols_; ++current_col)
 				{
 					Size tile_width  = (current_col < num_cols_-1) ? width_ 
-																												 : final_width_  - (num_cols_ - 1) * width_no_border + 2*border_;
+						: final_width_  - (num_cols_ - 1) * width_no_border + 2*border_;
 
 					for (Size current_row = 0; current_row < num_rows_; ++current_row)
 					{
 						Size tile_height = (current_row < num_rows_-1) ? height_ 
-							                                             : final_height_ - (num_rows_ - 1) * height_no_border + 2*border_;
+							: final_height_ - (num_rows_ - 1) * height_no_border + 2*border_;
 						// set the viewport corresponding to the current tile dimensions (including borders)
 						glViewport(0, 0, tile_width, tile_height);
 
@@ -139,8 +131,8 @@ namespace BALL
 						glMatrixMode(GL_PROJECTION);
 						glLoadIdentity();
 
-						float near, far, left, right, top, bottom;
-						gl_renderer->getFrustum(near, far, left, right, top, bottom);
+						float near_f, far_f, left, right, top, bottom;
+						gl_renderer->getFrustum(near_f, far_f, left, right, top, bottom);
 
 						// adapt frustum to current tile
 						float new_left  = left     + (right - left) * (current_col * width_no_border - border_) / final_width_;
@@ -149,7 +141,7 @@ namespace BALL
 						float new_bottom = bottom     + (top - bottom) * (current_row * height_no_border - border_) / final_height_;
 						float new_top    = new_bottom + (top - bottom) * tile_height / final_height_;
 
-						glFrustum(new_left, new_right, new_bottom, new_top, near, far);
+						glFrustum(new_left, new_right, new_bottom, new_top, near_f, far_f);
 
 						// restore old matrix mode
 						glMatrixMode(matrix_mode);
@@ -175,7 +167,6 @@ namespace BALL
 				// restore the old viewport
 				glViewport(old_viewport[0], old_viewport[1], old_viewport[2], old_viewport[3]);
 			}
-#endif
 		}
 
 		void TilingRenderer::computeTilingSetup_()

@@ -30,7 +30,6 @@
 
 #include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/tilingRenderer.h>
 #include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 #include <BALL/VIEW/RENDERING/renderSetup.h>

@@ -1,21 +1,12 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
+#ifndef BALL_GLRENDERER_TILINGRENDERER_H
+#define BALL_GLRENDERER_TILINGRENDERER_H
 
-#ifndef BALL_VIEW_RENDERING_TILINGRENDERER_H
-#define BALL_VIEW_RENDERING_TILINGRENDERER_H
-
-#ifndef BALL_VIEW_RENDERING_RENDERERS_RENDERER_H
-# include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
-#endif
-
-#ifndef BALL_VIEW_RENDERING_RENDERTARGET_H
-# include <BALL/VIEW/RENDERING/renderTarget.h>
-#endif
+#include <BALL/VIEW/RENDERING/RENDERERS/renderer.h>
+#include <BALL/VIEW/RENDERING/renderTarget.h>
 
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 		/** Offscreen rendering with arbitrary resolution.
 				This class encapsulates a renderer object which it uses to render a
@@ -29,7 +20,7 @@ namespace BALL
 				\ingroup ViewRendering
 		*/
 		class BALL_VIEW_EXPORT TilingRenderer
-			:	public Renderer
+			:	public BALL::VIEW::Renderer
 		{
 			public:
 
@@ -45,7 +36,7 @@ namespace BALL
 				* 	@param border        an optional border around each tile
 				*
 				*/
-				TilingRenderer(Renderer* real_renderer, Size final_width, Size final_height, Size border = 0);
+				TilingRenderer(BALL::VIEW::Renderer* real_renderer, Size final_width, Size final_height, Size border = 0);
 				
 				/**	Copy constructor.
 				*/
@@ -60,7 +51,7 @@ namespace BALL
 
 				/** Update the camera position either from a given Camera, or from the default Stage.
 				 */
-				virtual void updateCamera(const Camera* camera = 0);
+				virtual void updateCamera(const BALL::VIEW::Camera* camera = 0);
 
 				/// Update the background color from the stage
 				virtual void updateBackgroundColor();
@@ -85,11 +76,11 @@ namespace BALL
 
 				/** Buffer a Representation for later rendering.
 				*/
-				virtual void bufferRepresentation(const Representation& rep);
+				virtual void bufferRepresentation(const BALL::VIEW::Representation& rep);
 
 				/** Remove a representation from the buffer.
 				*/
-				virtual void removeRepresentation(const Representation& rep);
+				virtual void removeRepresentation(const BALL::VIEW::Representation& rep);
 
 				/// Set the size of the display
 				virtual void setSize(float width, float height);
@@ -109,13 +100,13 @@ namespace BALL
 				//@{
 				
 				///
-				virtual void renderToBuffer(RenderTarget* target);
+				virtual void renderToBuffer(BALL::VIEW::RenderTarget* target);
 
 			protected:
 				void computeTilingSetup_();
 
 				/// The renderer used for rendering the individual tiles
-				Renderer* real_renderer_;
+				BALL::VIEW::Renderer* real_renderer_;
 
 				/// The desired width of the final image
 				Size final_width_;
@@ -131,5 +122,5 @@ namespace BALL
 		};
 	}
 }
-#endif // BALL_VIEW_RENDERING_TILINGRENDERER_H
+#endif // BALL_GLRENDERER_TILINGRENDERER_H
 
