@@ -19,8 +19,8 @@ namespace BALL
 				
 				\ingroup ViewRendering
 		*/
-		class BALL_VIEW_EXPORT TilingRenderer
-			:	public BALL::VIEW::Renderer
+		class BALL_VIEW_EXPORT TilingRenderer :
+			public BALL::VIEW::Renderer
 		{
 			public:
 
@@ -44,30 +44,30 @@ namespace BALL
 
 				/** Destructor
 				*/
-				virtual ~TilingRenderer() {}
+				~TilingRenderer()  noexcept override = default;
 
 				/// Set the light sources according to the stage
-				virtual void setLights(bool reset_all = false);
+				void setLights(bool reset_all = false) override;
 
 				/** Update the camera position either from a given Camera, or from the default Stage.
 				 */
-				virtual void updateCamera(const BALL::VIEW::Camera* camera = 0);
+				void updateCamera(const BALL::VIEW::Camera* camera = 0) override;
 
 				/// Update the background color from the stage
-				virtual void updateBackgroundColor();
+				void updateBackgroundColor() override;
 
 				///
-				virtual bool finish();
+				bool finish() override;
 
 				/** Compute the 3D position on the view plane corresponding
 				 *  to point (x,y) on the view port
 				 */
-				virtual Vector3 mapViewportTo3D(Position x, Position y);
+				Vector3 mapViewportTo3D(Position x, Position y) override;
 
 				/** Compute the 2D position on the screen corresponding
 				 *  to the 3D point vec
 				 */
-				virtual Vector2 map3DToViewport(const Vector3& vec);
+				Vector2 map3DToViewport(const Vector3& vec) override;
 
 				//@}
 				/**	@name	Accessors
@@ -76,14 +76,14 @@ namespace BALL
 
 				/** Buffer a Representation for later rendering.
 				*/
-				virtual void bufferRepresentation(const BALL::VIEW::Representation& rep);
+				void bufferRepresentation(const BALL::VIEW::Representation& rep) override;
 
 				/** Remove a representation from the buffer.
 				*/
-				virtual void removeRepresentation(const BALL::VIEW::Representation& rep);
+				void removeRepresentation(const BALL::VIEW::Representation& rep) override;
 
 				/// Set the size of the display
-				virtual void setSize(float width, float height);
+				void setSize(float width, float height) override;
 
 				/** Render a ruler.
 				 *
@@ -92,7 +92,7 @@ namespace BALL
 				 *  The main use of this function is in the edit mode, where it can help to
 				 *  straighten-up structures and to correctly estimate angles and distances.
 				 */
-				virtual void renderRuler();
+				void renderRuler() override;
 
 				//@}
 				/**	@name Predicates
@@ -100,7 +100,7 @@ namespace BALL
 				//@{
 				
 				///
-				virtual void renderToBuffer(BALL::VIEW::RenderTarget* target);
+				void renderToBuffer(BALL::VIEW::RenderTarget* target) override;
 
 			protected:
 				void computeTilingSetup_();
