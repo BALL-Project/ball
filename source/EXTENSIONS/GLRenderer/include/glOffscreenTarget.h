@@ -27,20 +27,21 @@ namespace BALL
 				/** Create a new GLOffscreenTarget with context shared from an existing GLRenderWindow.
 				 */
 				GLOffscreenTarget(BALL::VIEW::GLRenderWindow* share_from, const String& filename);
+				~GLOffscreenTarget() noexcept override = default;
 
-				virtual void prepareRendering();
+				void prepareRendering() override;
 				virtual void prepareUpscaling(Size final_width, Size final_height);
 
-				virtual bool resize(const unsigned int width, const unsigned int height);
-				virtual void refresh();
+				bool resize(const unsigned int width, const unsigned int height) override;
+				void refresh() override;
 
 				void tryUsePixelBuffer(bool use_pbo = true);
 
 				QImage getImage();
 				void updateImageTile(Size x_lower, Size y_lower, Size x_upper, Size y_upper);
 
-				virtual QPaintEngine* paintEngine() const;
-				virtual int metric(PaintDeviceMetric metric) const;
+				QPaintEngine* paintEngine() const override;
+				int metric(PaintDeviceMetric metric) const override;
 
 			protected:
 				String filename_;
