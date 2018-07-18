@@ -133,13 +133,13 @@ namespace BALL
 				 *  @throw Exception::InvalidFormat if the FrameBufferFormat is not supported by the renderer
 				 *  @throw Exception::NoBufferAvailable if the frame buffer was not correctly initialized
 				 */
-				void renderToBuffer(RenderTarget* renderTarget);
+				virtual void renderToBuffer(RenderTarget* renderTarget);
 
 				/** Tries to choose a format for buffered rendering.
 				 *  @return true if the format could be set,
 				 *  @return false if it is not supported.
 				 */
-				bool setFrameBufferFormat(const FrameBufferFormat &format);
+				virtual bool setFrameBufferFormat(const FrameBufferFormat &format);
 
 				/**
 				 * Updates the material for the current representation
@@ -187,7 +187,7 @@ namespace BALL
 
 				/** Returns the mode of the render loop.
 				 */
-				bool isContinuous() { return use_continuous_loop_; }
+				virtual bool isContinuous() { return use_continuous_loop_; }
 
 				/** Whether renderer has its own FPS counter.
 				 */
@@ -247,7 +247,7 @@ namespace BALL
 				{ stage_ = &stage;}
 
 				/// Test if a Stage was assigned to the Renderer
-				bool hasStage() const;
+				virtual bool hasStage() const;
 
 				/// Set the size of the display
 				virtual void setSize(float width, float height) {width_ = width; height_ = height;}
@@ -294,7 +294,7 @@ namespace BALL
 				//@{
 
 				///
-				bool operator == (const Renderer& /*renderer*/) const
+				virtual bool operator == (const Renderer& /*renderer*/) const
 				{ return true; }
 
 			protected:
