@@ -6,7 +6,6 @@ SET(SOURCES_LIST
 	rendererFactory.C
 	renderSetup.C
 	glRenderWindow.C
-	glOffscreenTarget.C
 	rendererPlugin.C
 	renderWindow.C
 	pixelFormat.C

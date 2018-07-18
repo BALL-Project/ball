@@ -1,8 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-
-#include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
+#include <glOffscreenTarget.h>
 
 #include <QtWidgets/QApplication>
 #include <QtGui/QImage>
@@ -11,9 +7,11 @@
 
 #include <QtOpenGL/QGLPixelBuffer>
 
+using namespace BALL::VIEW;
+
 namespace BALL
 {
-	namespace VIEW
+	namespace GLRenderer
 	{
 		GLOffscreenTarget::GLOffscreenTarget(GLRenderWindow* share_from, const String& filename)
 			: RenderWindow(),

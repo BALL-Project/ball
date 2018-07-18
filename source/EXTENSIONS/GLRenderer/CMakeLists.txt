@@ -6,6 +6,7 @@ SET(DIRECTORY source)
 SET(SOURCES_LIST
 	${DIRECTORY}/glConfigDialog.C
 	${DIRECTORY}/glDisplayList.C
+	${DIRECTORY}/glOffscreenTarget.C
 	${DIRECTORY}/glPlugin.C
 	${DIRECTORY}/glRenderer.C
 	${DIRECTORY}/glRenderSetup.C

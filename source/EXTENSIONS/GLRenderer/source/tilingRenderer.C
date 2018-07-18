@@ -2,7 +2,7 @@
 
 #include <glRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
-#include <BALL/VIEW/RENDERING/glOffscreenTarget.h>
+#include <glOffscreenTarget.h>
 
 using namespace BALL::VIEW;
 
