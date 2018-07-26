@@ -200,9 +200,6 @@ namespace BALL
 			if (stage_ == 0) return;
 			color_button->setColor(stage_->getBackgroundColor());
 
-			slider_->setValue((int) Scene::getMouseSensitivity() - 1);
-			wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
-
 			eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
 			focal_distance_slider->setValue((int) (stage_->getFocalDistance() * 10.0));
 			fog_slider->setValue((int) (stage_->getFogIntensity()));
@@ -231,8 +228,9 @@ namespace BALL
 			if (stage_ == 0) return;
 			stage_->setBackgroundColor(color_button->getColor());
 
-			Scene::setMouseSensitivity(slider_->value() + 1);
-			Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
+			auto& mode_manager = Scene::getInstance(0)->getInteractionModeManager();
+			mode_manager.setMouseSensitivity(slider_->value() + 1);
+			mode_manager.setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
 			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 			stage_->setFocalDistance((float)(focal_distance_slider->value() / 10.));

@@ -641,6 +641,9 @@ namespace BALL
 				void setEditElementType(int element_number);
 				int getEditElementType();
 
+				/// Returns a reference to the Scene's interaction mode manager
+				InteractionModeManager& getInteractionModeManager() { return mode_manager_; }
+
 			////////////////////////////////////////
 			protected Q_SLOTS:
 

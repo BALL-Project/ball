@@ -139,6 +139,11 @@ namespace BALL
 			mouse_sensitivity_ = sens;
 		}
 
+		void InteractionMode::setMouseWheelSensitivity(float sens)
+		{
+			mouse_wheel_sensitivity_ = sens;
+		}
+
 		QAction* InteractionMode::getMainAction()
 		{
 			return main_action_;

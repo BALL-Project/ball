@@ -268,5 +268,16 @@ namespace BALL
 			}
 		}
 
+		void InteractionModeManager::setMouseSensitivity(float sensitivity)
+		{
+			for(const auto& mode: modes_)
+				mode->setMouseSensitivity(sensitivity);
+		}
+
+		void InteractionModeManager::setMouseWheelSensitivity(float sensitivity)
+		{
+			for(const auto& mode: modes_)
+				mode->setMouseWheelSensitivity(sensitivity);
+		}
 	}
 }

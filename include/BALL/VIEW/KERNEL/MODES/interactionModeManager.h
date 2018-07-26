@@ -48,6 +48,9 @@ namespace BALL
 				virtual void populateContextMenu(QMenu* menu);
 				void setStereoMode(bool stereo_mode);
 
+				virtual void setMouseSensitivity(float sensitivity);
+				virtual void setMouseWheelSensitivity(float sensitivity);
+
 				void switchToLastMode();
 
 			protected Q_SLOTS:

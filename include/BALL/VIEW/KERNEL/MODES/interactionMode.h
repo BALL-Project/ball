@@ -49,6 +49,7 @@ namespace BALL
 				virtual void activate();
 
 				void setMouseSensitivity(float sens);
+				void setMouseWheelSensitivity(float sens);
 
 				QAction* getMainAction();
 
