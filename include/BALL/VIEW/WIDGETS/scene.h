@@ -358,21 +358,17 @@ namespace BALL
 				///
 				void setDefaultLighting(bool update_GL = true);
 
-				///
-				static void setMouseSensitivity(float sensitivity)
-				{ mouse_sensitivity_ = sensitivity; }
+				/// @deprecated Does nothing; use getInteractionModeManager() instead
+				BALL_DEPRECATED static void setMouseSensitivity(float /* sensitivity */) {}
 
-				///
-				static float getMouseSensitivity()
-				{ return mouse_sensitivity_;}
+				/// @deprecated Returns zero; use getInteractionModeManager() instead
+				BALL_DEPRECATED static float getMouseSensitivity() { return 0; }
 
-				///
-				static void setMouseWheelSensitivity(float sensitivity)
-				{ mouse_wheel_sensitivity_ = sensitivity; }
+				/// @deprecated Does nothing; use getInteractionModeManager() instead
+				BALL_DEPRECATED static void setMouseWheelSensitivity(float /* sensitivity */) {}
 
-				///
-				static float getMouseWheelSensitivity()
-				{ return mouse_wheel_sensitivity_;}
+				/// @deprecated Returns zero; use getInteractionModeManager() instead
+				BALL_DEPRECATED static float getMouseWheelSensitivity() { return 0; }
 
 				///
 				static void setShowLightSources(bool state)
@@ -882,8 +878,6 @@ namespace BALL
 				RaytracingWindowPtr rt_window_;
 #endif
 
-				static float mouse_sensitivity_;
-				static float mouse_wheel_sensitivity_;
 				static bool show_light_sources_;
 				static float animation_smoothness_;
 				static float downsampling_factor_;

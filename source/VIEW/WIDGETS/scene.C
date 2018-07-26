@@ -117,8 +117,6 @@ namespace BALL
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
 		// values for mouse-sensitivity
-		float Scene::mouse_sensitivity_ = 5;
-		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
 		float Scene::animation_smoothness_ = 2;
 		float Scene::downsampling_factor_ = 1;
