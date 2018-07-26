@@ -82,7 +82,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Your graphics device driver (nouveau) is known to cause issues with WebEngine, including freezes and crashes of BALLView and your operating system. Thus, WebEngine support has been disabled. You can re-enable it through the settings dialog at your own risk.</string>
+      <string>Your graphics device driver (nouveau) is known to cause issues with WebEngine, including freezes and crashes of BALLView and your operating system. Thus, WebEngine support has been disabled. You can re-enable it through the &quot;General&quot; settings dialog at your own risk.</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

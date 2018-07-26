@@ -20,10 +20,7 @@
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/openSavePreferences.h>
 #include <BALL/VIEW/DIALOGS/shortcutDialog.h>
-
-#ifdef BALL_HAS_QTWEBENGINE
-#	include <BALL/VIEW/DIALOGS/webEnginePreferences.h>
-#endif
+#include <BALL/VIEW/WIDGETS/HTMLView.h>
 
 #ifdef BALL_HAS_XDR
 #	include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -955,12 +952,6 @@ namespace BALL
 			// Network Preferences
 			network_preferences_ = new NetworkPreferences();
 			preferences_dialog_->insertEntry(network_preferences_);
-
-#ifdef BALL_HAS_QTWEBENGINE
-			// WebEngine Preferences
-			webengine_preferences_ = new WebEnginePreferences();
-			preferences_dialog_->insertEntry(webengine_preferences_);
-#endif
 		}
 
 		void MainControl::okPreferencesClicked_()
@@ -1018,19 +1009,17 @@ namespace BALL
 				{
 					enableLoggingToFile();
 				}
+
+				for (unsigned int i = 0; i < HTMLViewDock::countInstances(); ++i)
+				{
+					HTMLViewDock::getInstance(i)->resetHTMLView(main_control_preferences_->getSkipDriverChecks());
+				}
 			}
 
 			if (network_preferences_ != 0)
 			{
 				network_preferences_->applySettings();
 			}
-
-#ifdef BALL_HAS_QTWEBENGINE
-			if (webengine_preferences_ != 0)
-			{
-				webengine_preferences_->applySettings();
-			}
-#endif
 
 			// all other preferences
 			list<ModularWidget*>::iterator it = modular_widgets_.begin();

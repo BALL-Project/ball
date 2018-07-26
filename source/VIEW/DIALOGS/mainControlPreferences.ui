@@ -35,7 +35,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>GUI Style</string>
+      <string>Theme</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -57,7 +57,7 @@
    <item>
     <widget class="QGroupBox" name="GroupBox1_2_2">
      <property name="title">
-      <string>General font</string>
+      <string>Font</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -97,7 +97,7 @@
            <enum>QFrame::Sunken</enum>
           </property>
           <property name="text">
-           <string>Font Test label</string>
+           <string>Font test label</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignVCenter</set>
@@ -134,7 +134,7 @@
    <item>
     <widget class="QGroupBox" name="LenguagePreferencesGroup">
      <property name="title">
-      <string>Language Preferences</string>
+      <string>Language</string>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -167,7 +167,20 @@
       <string>Writes the information from the Logs window into a file</string>
      </property>
      <property name="text">
-      <string>enable logging to file</string>
+      <string>Enable logging to file</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="skip_driver_checks">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="text">
+      <string>Disable driver incompatibility checks (Warning: Might cause crashes!)</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
      </property>
     </widget>
    </item>

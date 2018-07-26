@@ -78,6 +78,7 @@ namespace BALL
 			char* vendor = (char*) glFuncs.glGetString(GL_VENDOR);
 
 			// https://bugreports.qt.io/browse/QTBUG-41242
+			// Fixed in Qt 5.10.0
 			show_error_ |= vendor && QString(vendor) == "nouveau";
 #endif
 		}

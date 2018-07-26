@@ -64,6 +64,9 @@ class BALL_VIEW_EXPORT MainControlPreferences
 	bool loggingToFileEnabled() const;
 
 	///
+	bool getSkipDriverChecks() const;
+
+	///
 	QFont getFont();
 
 	bool getLanguageChanged() {

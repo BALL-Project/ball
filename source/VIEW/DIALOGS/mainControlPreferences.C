@@ -99,6 +99,11 @@ bool MainControlPreferences::loggingToFileEnabled() const
 	return logging_to_file->isChecked();
 }
 
+bool MainControlPreferences::getSkipDriverChecks() const
+{
+	return skip_driver_checks->isChecked();
+}
+
 void MainControlPreferences::selectFont()
 {
 	bool ok = true;
