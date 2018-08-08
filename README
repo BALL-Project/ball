@@ -8,9 +8,9 @@ BUILD BALL
   To install BALL, use the CMake build system.
 
   * Enter the toplevel directory of BALL (the one containing the
-    CMakeLists.txt file and the source and include folders) 
+    CMakeLists.txt file and the source and include folders)
 
-  * Then create a folder "build" and change into it 
+  * Then create a folder "build" and change into it
 
   * Call "cmake .." (if you have a contrib directory for BALL, use
 	  "cmake .. -DBALL_CONTRIB_PATH=path_to_your_contrib")
@@ -29,7 +29,7 @@ BUILD BALL
   To build the documentation, run "make doc". Alternatively, you can refer
   to the online documentation:
 
-    http://www.ball-project.org/Documentation/
+    https://ball-project.org/documentation/
 
 
 FEEDBACK and CONTACT
@@ -45,14 +45,14 @@ FEEDBACK and CONTACT
 
   Please have a look at our website as well:
 
-    http://www.ball-project.org
+    https://ball-project.org
 
 
 CITE BALL
 ---------
   If you use BALL, please cite our recent publication
   (DOI: 10.1186/1471-2105-11-531):
- 
+
     Andreas Hildebrandt, Anna Katharina Dehof, Alexander Rurainski,
     Andreas Bertsch, Marcel Schumann, Nora C Toussaint, Andreas Moll,
     Daniel Stockel, Stefan Nickels, Sabine C Mueller, Hans-Peter Lenhof,
