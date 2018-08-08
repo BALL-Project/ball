@@ -28,11 +28,7 @@ IF (DOXYGEN_FOUND)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_inc.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_inc)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile)
 	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/Doxyfile_dot.in ${PROJECT_BINARY_DIR}/doc/doxygen/Doxyfile_dot)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/template/balldoc-header.html.in ${PROJECT_BINARY_DIR}/doc/doxygen/template/balldoc-header.html)
-	CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/doc/doxygen/template/balldoc-footer.html.in ${PROJECT_BINARY_DIR}/doc/doxygen/template/balldoc-footer.html)
-	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/template/balldoc.css DESTINATION ${PROJECT_BINARY_DIR}/doc/doxygen/template)
-	FILE(COPY ${PROJECT_SOURCE_DIR}/doc/doxygen/images/balldoc-header.jpg DESTINATION ${PROJECT_BINARY_DIR}/doc/doxygen/images)
-	
+
 	#######################################################################
 	## doc
 	ADD_CUSTOM_TARGET(doc ${AUTO_BUILD_DOC}
