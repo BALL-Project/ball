@@ -20,7 +20,10 @@
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/openSavePreferences.h>
 #include <BALL/VIEW/DIALOGS/shortcutDialog.h>
-#include <BALL/VIEW/WIDGETS/HTMLView.h>
+
+#ifdef BALL_HAS_QTWEBENGINE
+#	include <BALL/VIEW/WIDGETS/HTMLView.h>
+#endif
 
 #ifdef BALL_HAS_XDR
 #	include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -1010,10 +1013,12 @@ namespace BALL
 					enableLoggingToFile();
 				}
 
+#ifdef BALL_HAS_QTWEBENGINE
 				for (unsigned int i = 0; i < HTMLViewDock::countInstances(); ++i)
 				{
 					HTMLViewDock::getInstance(i)->resetHTMLView(main_control_preferences_->getSkipDriverChecks());
 				}
+#endif
 			}
 
 			if (network_preferences_ != 0)
