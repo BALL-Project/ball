@@ -1,4 +1,5 @@
 # Find and configure Boost library
+SET(Boost_NO_BOOST_CMAKE ON)
 
 # Mandatory boost components
 SET(BALL_BOOST_COMPONENTS
@@ -11,20 +12,6 @@ SET(BALL_BOOST_COMPONENTS
 	thread
 )
 
-
-# Required libraries and definitions on Windows OS
-IF(WIN32)
-
-	LIST(APPEND BALL_BOOST_COMPONENTS bzip2 zlib)
-
-	# Next two lines are a fix from CMake master to prevent missing header warnings.
-	# Lines will be obsolete when minimum required CMake version will be >= 3.7
-	SET(_Boost_BZIP2_HEADERS             "boost/iostreams/filter/bzip2.hpp")
-	SET(_Boost_ZLIB_HEADERS              "boost/iostreams/filter/zlib.hpp")
-
-	ADD_DEFINITIONS(-DBOOST_ALL_NO_LIB)
-	ADD_DEFINITIONS(-DBOOST_ALL_DYN_LINK)
-ENDIF()
 
 # Additional Boost versions that should be included by CMake
 # CMake 3.1, which is minimum for configuring BALL, already knowns versions 1.33 up to 1.56
