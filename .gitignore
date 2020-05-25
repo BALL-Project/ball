@@ -18,6 +18,8 @@ moc_*.C
 lib/*
 build/*
 build*/*
+out/*
+.vs/*
 CMakeFiles/*
 source/autom4te.cache
 source/Makefile
