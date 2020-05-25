@@ -69,7 +69,7 @@ class AtomContainer
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("AtomContainer ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("AtomContainer ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

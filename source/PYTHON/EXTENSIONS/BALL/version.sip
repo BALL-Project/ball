@@ -21,6 +21,6 @@ class VersionInfo
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	return PyString_FromString(VersionInfo::getVersion());
+	return PyBytes_FromString(VersionInfo::getVersion());
 %End
 };

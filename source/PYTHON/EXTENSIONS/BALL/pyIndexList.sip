@@ -15,7 +15,7 @@
 	// Convert the list.
 	for (PyIndexList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		if (PyList_Append(pl, PyInt_FromLong(*it)) < 0)
+		if (PyList_Append(pl, PyLong_FromLong(*it)) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -38,7 +38,7 @@
 
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
-		Index index = PyInt_AsLong(PyList_GET_ITEM(sipPy,i));
+		Index index = PyLong_AsLong(PyList_GET_ITEM(sipPy,i));
 		index_list -> push_back(index);
 	}
 

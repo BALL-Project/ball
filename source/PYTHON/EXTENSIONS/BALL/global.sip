@@ -7,12 +7,12 @@
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
 	{
-		return PyInt_Check(sipPy);
+		return PyLong_Check(sipPy);
 	}
-	if (PyInt_Check(sipPy))
+	if (PyLong_Check(sipPy))
 	{
 		*sipCppPtr = new Index;
-		**sipCppPtr = PyInt_AsLong(sipPy);
+		**sipCppPtr = PyLong_AsLong(sipPy);
 
 		return 1;
 	}
@@ -22,9 +22,9 @@
 %ConvertFromTypeCode
 	if (sipCpp == NULL)
 	{
-		return PyInt_FromLong(0);
+		return PyLong_FromLong(0);
 	}
-	return PyInt_FromLong(*sipCpp);
+	return PyLong_FromLong(*sipCpp);
 %End
 };
 
@@ -36,12 +36,12 @@
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
 	{
-		return PyInt_Check(sipPy);
+		return PyLong_Check(sipPy);
 	}
-	if (PyInt_Check(sipPy))
+	if (PyLong_Check(sipPy))
 	{
 		*sipCppPtr = new Position;
-		**sipCppPtr = PyInt_AsLong(sipPy);
+		**sipCppPtr = PyLong_AsLong(sipPy);
 
 		return 1;
 	}
@@ -51,9 +51,9 @@
 %ConvertFromTypeCode
 	if (sipCpp == NULL)
 	{
-		return PyInt_FromLong(0);
+		return PyLong_FromLong(0);
 	}
-	return PyInt_FromLong(*sipCpp);
+	return PyLong_FromLong(*sipCpp);
 %End
 };
 
@@ -66,12 +66,12 @@
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
 	{
-		return PyInt_Check(sipPy);
+		return PyLong_Check(sipPy);
 	}
-	if (PyInt_Check(sipPy))
+	if (PyLong_Check(sipPy))
 	{
 		*sipCppPtr = new LongIndex;
-		**sipCppPtr = PyInt_AsLong(sipPy);
+		**sipCppPtr = PyLong_AsLong(sipPy);
 
 		return 1;
 	}
@@ -81,9 +81,9 @@
 %ConvertFromTypeCode
 	if (sipCpp == NULL)
 	{
-		return PyInt_FromLong(0);
+		return PyLong_FromLong(0);
 	}
-	return PyInt_FromLong(*sipCpp);
+	return PyLong_FromLong(*sipCpp);
 %End
 };
 
@@ -96,12 +96,12 @@
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
 	{
-		return PyInt_Check(sipPy);
+		return PyLong_Check(sipPy);
 	}
-	if (PyInt_Check(sipPy))
+	if (PyLong_Check(sipPy))
 	{
 		*sipCppPtr = new Time;
-		**sipCppPtr = PyInt_AsLong(sipPy);
+		**sipCppPtr = PyLong_AsLong(sipPy);
 
 		return 1;
 	}
@@ -111,9 +111,9 @@
 %ConvertFromTypeCode
 	if (sipCpp == NULL)
 	{
-		return PyInt_FromLong(0);
+		return PyLong_FromLong(0);
 	}
-	return PyInt_FromLong(*sipCpp);
+	return PyLong_FromLong(*sipCpp);
 %End
 };
 

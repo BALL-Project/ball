@@ -67,7 +67,7 @@ class Residue
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Residue ") + sipCpp->getName() + sipCpp->getID()
+	sipRes = PyBytes_FromString(String(String("Residue ") + sipCpp->getName() + sipCpp->getID()
 		+ " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };
