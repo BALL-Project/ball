@@ -3,7 +3,7 @@
 
 #include <BALL/COMMON/global.h>
 
-#include <Python.h>
+#include <BALL/PYTHON/pyWrapper.h>
 
 #include <map>
 #include <string>
