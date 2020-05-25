@@ -61,7 +61,7 @@ class GeometricObject
 	// convert to a string representation
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("GeometricObject")
+	sipRes = PyBytes_FromString(String(String("GeometricObject")
 		+ " { "
 		+ " Composite: " + String((long int)sipCpp->getComposite())
 		+ " }").c_str());
@@ -69,7 +69,7 @@ class GeometricObject
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("GeometricObject")
+	sipRes = PyBytes_FromString(String(String("GeometricObject")
 		+ " { "
 		+ " Composite: " + String((long int)sipCpp->getComposite())
 		+ " }").c_str());

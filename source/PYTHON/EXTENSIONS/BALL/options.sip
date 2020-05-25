@@ -38,7 +38,7 @@ class Options
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Options ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("Options ") + sipCpp->getName()
 		+ " { " + String(sipCpp->getSize()) + " entries }").c_str());
 %End
 };

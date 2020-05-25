@@ -66,6 +66,6 @@ class Vector3
 	tmp += String(sipCpp->x) + " ";
 	tmp += String(sipCpp->y) + " ";
 	tmp += String(sipCpp->z) + ")";
-	sipRes = PyString_FromString(tmp.c_str());
+	sipRes = PyBytes_FromString(tmp.c_str());
 %End
 };

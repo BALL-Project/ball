@@ -40,7 +40,7 @@ class Molecule
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Molecule ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("Molecule ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 };

@@ -43,7 +43,7 @@ class ColorRGBA
 	String s("ColorRGBA {");
 	s += (String) *sipCpp;
 	s += " }";
-	sipRes = PyString_FromString(s.c_str());
+	sipRes = PyBytes_FromString(s.c_str());
 %End
 
 	SIP_PYOBJECT __repr__();
@@ -51,6 +51,6 @@ class ColorRGBA
 	String s("ColorRGBA {");
 	s += (String) *sipCpp;
 	s += " }";
-	sipRes = PyString_FromString(s.c_str());
+	sipRes = PyBytes_FromString(s.c_str());
 %End
 };

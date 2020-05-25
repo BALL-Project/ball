@@ -166,11 +166,11 @@ class String
 %MethodCode
 	if (sipCpp == 0)
 	{
-		sipRes = PyString_FromString("");
+		sipRes = PyBytes_FromString("");
 	}
 	else
 	{
-		sipRes = PyString_FromString(sipCpp->c_str());
+		sipRes = PyBytes_FromString(sipCpp->c_str());
 	}
 %End
 
@@ -178,17 +178,17 @@ class String
 %MethodCode
 	if (sipCpp == 0)
 	{
-		sipRes = PyString_FromString("");
+		sipRes = PyBytes_FromString("");
 	}
 	else
 	{
-		sipRes = PyString_FromString(sipCpp->c_str());
+		sipRes = PyBytes_FromString(sipCpp->c_str());
 	}
 %End
 
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
-		return (PyString_Check(sipPy) || BALL_IS_SUBCLASS_INSTANCE(sipPy, String));
+		return (PyBytes_Check(sipPy) || BALL_IS_SUBCLASS_INSTANCE(sipPy, String));
 
 	if (sipPy == Py_None)
 	{
@@ -196,9 +196,9 @@ class String
 		return 1;
 	}
 
-	if (PyString_Check(sipPy))
+	if (PyBytes_Check(sipPy))
 	{
-		*sipCppPtr = new String(PyString_AS_STRING(sipPy));
+		*sipCppPtr = new String(PyBytes_AsString(sipPy));
 		return 1;
 	}
 

@@ -44,7 +44,7 @@ class Chain
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Chain ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("Chain ") + sipCpp->getName()
 						+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 

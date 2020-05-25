@@ -7,11 +7,11 @@ class AtomType
 	public:
 %ConvertToTypeCode
 	if (sipIsErr == NULL)
-		return PyInt_Check(sipPy) || BALL_CAN_CONVERT_TO_INSTANCE(sipPy, Atom);
+		return PyLong_Check(sipPy) || BALL_CAN_CONVERT_TO_INSTANCE(sipPy, Atom);
 
-	if (PyInt_Check(sipPy))
+	if (PyLong_Check(sipPy))
 	{
-		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));
+		*sipCppPtr = new AtomType(PyLong_AsLong(sipPy));
 
 		return 1;
 	}
@@ -23,12 +23,12 @@ class AtomType
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(*sipCpp).c_str());
+	sipRes = PyBytes_FromString(String(*sipCpp).c_str());
 %End
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(*sipCpp).c_str());
+	sipRes = PyBytes_FromString(String(*sipCpp).c_str());
 %End
 };
 
@@ -148,7 +148,7 @@ class Atom
 	// convert the atom to a string representation
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Atom ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("Atom ") + sipCpp->getName()
 		+ " { " + sipCpp->getElement().getSymbol() + " @ ("
 		+ String(sipCpp->getPosition().x) + " " + String(sipCpp->getPosition().y) + " "
 		+ String(sipCpp->getPosition().z) + ") }").c_str());
@@ -156,7 +156,7 @@ class Atom
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Atom ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("Atom ") + sipCpp->getName()
 		+ " { " + sipCpp->getElement().getSymbol() + " @ ("
 		+ String(sipCpp->getPosition().x) + " " + String(sipCpp->getPosition().y) + " "
 		+ String(sipCpp->getPosition().z) + " }").c_str());

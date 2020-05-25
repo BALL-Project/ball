@@ -27,14 +27,14 @@ class NucleicAcid
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("NucleicAcid ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("NucleicAcid ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countNucleotides()) + " nucleotides,  "
 		+ String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("NucleicAcid ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("NucleicAcid ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countNucleotides()) + " nucleotides,  "
 		+ String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End

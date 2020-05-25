@@ -46,6 +46,6 @@ class Angle
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(sipCpp->toRadian()).c_str());
+	sipRes = PyBytes_FromString(String(sipCpp->toRadian()).c_str());
 %End
 };

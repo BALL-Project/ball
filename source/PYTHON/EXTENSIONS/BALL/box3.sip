@@ -29,6 +29,6 @@ class Box3
 	tmp += String(sipCpp->getPoint().x) + " ";
 	tmp += String(sipCpp->getPoint().y) + " ";
 	tmp += String(sipCpp->getPoint().z) + ") }";
-	sipRes = PyString_FromString(tmp.c_str());
+	sipRes = PyBytes_FromString(tmp.c_str());
 %End
 };

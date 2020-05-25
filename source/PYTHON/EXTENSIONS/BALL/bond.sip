@@ -103,6 +103,6 @@ class Bond
 		}
 		tmp += " }";
 	}
-	return PyString_FromString(tmp.c_str());
+	return PyBytes_FromString(tmp.c_str());
 %End
 };

@@ -25,7 +25,7 @@ class NamedProperty
 %MethodCode
 	if(sipCpp == 0)
 	{
-		sipRes = PyString_FromString("");
+		sipRes = PyBytes_FromString("");
 	}
 	else
 	{
@@ -60,7 +60,7 @@ class NamedProperty
 				output += BALL::String("Smart Object, Value: ") + BALL::String((unsigned long) &*sipCpp->getSmartObject());
 				break;
 		}
-		sipRes = PyString_FromString(output.c_str());
+		sipRes = PyBytes_FromString(output.c_str());
 	}
 %End
 };
