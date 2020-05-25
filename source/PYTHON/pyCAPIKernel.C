@@ -33,7 +33,7 @@ namespace BALL
 		}
 
 		// import modules for output redirection
-		PyRun_SimpleString("import sys, cStringIO");
+		PyRun_SimpleString("import sys, io");
 
 		// Add path for BALL-specific Python scripts
 		loadScriptDir();
@@ -78,14 +78,14 @@ namespace BALL
 		if(type)
 		{
 			auto name  = PyObject_GetAttrString(type, "__name__");
-			auto sname = name ? PyString_AsString(name) : nullptr;
+			auto sname = name ? PyBytes_AsString(name) : nullptr;
 			if(sname)  err << sname << ": ";
 			Py_DecRef(name);
 			Py_DecRef(type);
 		}
 
 		// error message
-		auto svalue = value ? PyString_AsString(value) : nullptr;
+		auto svalue = value ? PyBytes_AsString(value) : nullptr;
 		err << (svalue ? svalue : "(no error message given)");
 		Py_DecRef(value);
 
@@ -107,7 +107,8 @@ namespace BALL
 
 		// redirect output to StringIO
 		PyRun_SimpleString(
-			"__BALL_CIO = cStringIO.StringIO()\n"
+			"import io, sys\n"
+			"__BALL_CIO = io.StringIO()\n"
 			"sys.stdout = __BALL_CIO\n"
 			"sys.stderr = __BALL_CIO\n"
 		);
@@ -121,7 +122,7 @@ namespace BALL
 		auto cio = PyObject_GetAttrString(main_module_, "__BALL_CIO");
 		auto cio_val = PyObject_GetAttrString(cio, "getvalue");
 		auto cio_f = PyObject_CallFunction(cio_val, nullptr);
-		auto ret = std::make_pair<bool, string>(true, PyString_AsString(cio_f));
+		auto ret = std::make_pair<bool, string>(true, PyUnicode_AsUTF8(cio_f));
 		Py_DecRef(cio_f);
 		Py_DecRef(cio_val);
 		Py_DecRef(cio);
@@ -177,7 +178,7 @@ namespace BALL
 
 		for (const auto& pair: args)
 		{
-			auto val = PyString_FromString(pair.second.c_str());
+			auto val = PyBytes_FromString(pair.second.c_str());
 			if (!val)
 			{
 				Log.error() << "[PyInterpreter] Could not create parameter "
@@ -217,7 +218,7 @@ namespace BALL
 			return nullptr;
 		}
 
-		auto mod_name = PyString_FromString(name.c_str());
+		auto mod_name = PyBytes_FromString(name.c_str());
 
 		PyObject* module = nullptr;
 		if (PyDict_Contains(module_dict, mod_name))
