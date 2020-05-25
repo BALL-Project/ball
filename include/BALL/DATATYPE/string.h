@@ -1836,21 +1836,21 @@ namespace std
 	// Non-member functions for string
 
 	///
-	istream& operator>> (istream& is, BALL::String& str);
+	BALL_EXPORT istream& operator>> (istream& is, BALL::String& str);
 
 	///
-	ostream& operator<< (ostream& os, BALL::String const& str);
+	BALL_EXPORT ostream& operator<< (ostream& os, BALL::String const& str);
 
 	///
-	istream& getline(istream& is, BALL::String& str, char delim);
+	BALL_EXPORT istream& getline(istream& is, BALL::String& str, char delim);
 	///
-	istream& getline(istream& is, BALL::String& str);
+	BALL_EXPORT istream& getline(istream& is, BALL::String& str);
 
 
 	///
-	istream& getline(istream& is, BALL::String&& str, char delim);
+	BALL_EXPORT istream& getline(istream& is, BALL::String&& str, char delim);
 	///
-	istream& getline(istream& is, BALL::String&& str);
+	BALL_EXPORT istream& getline(istream& is, BALL::String&& str);
 }
 
 	//@}
