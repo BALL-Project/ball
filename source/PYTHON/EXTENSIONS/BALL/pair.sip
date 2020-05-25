@@ -165,8 +165,8 @@ template<FIRSTTYPE, double>
 	if ((t = PyTuple_New(2)) == NULL)
 		return NULL;
 
-		PyTuple_SET_ITEM(t, 0, PyInt_FromLong(sipCpp->first));
-		PyTuple_SET_ITEM(t, 1, PyInt_FromLong(sipCpp->second));
+		PyTuple_SET_ITEM(t, 0, PyLong_FromLong(sipCpp->first));
+		PyTuple_SET_ITEM(t, 1, PyLong_FromLong(sipCpp->second));
 
 	return t;
 %End
@@ -184,7 +184,7 @@ template<FIRSTTYPE, double>
 	std::pair<Position,Position>* result = 0;
 
 	if(!*sipIsErr) {
-		result = new std::pair<Position, Position>(PyInt_AsLong(PyNumber_Int(PyTuple_GET_ITEM(sipPy, 0))), PyInt_AsLong(PyNumber_Int(PyTuple_GET_ITEM(sipPy, 1))));
+		result = new std::pair<Position, Position>(PyLong_AsLong(PyNumber_Long(PyTuple_GET_ITEM(sipPy, 0))), PyLong_AsLong(PyNumber_Long(PyTuple_GET_ITEM(sipPy, 1))));
 	}
 
 

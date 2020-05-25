@@ -38,7 +38,7 @@ class GridVisualisation
 	// convert to a string representation
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("GridVisualisation ")
+	sipRes = PyBytes_FromString(String(String("GridVisualisation ")
 		+ " { "
 		+ "   Grid: " + String((long int)sipCpp->getGrid())
 		+ "   Texture: " + String(sipCpp->getTexture())
@@ -47,7 +47,7 @@ class GridVisualisation
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("GridVisualisation ")
+	sipRes = PyBytes_FromString(String(String("GridVisualisation ")
 		+ " { "
 		+ "   Grid: " + String((long int)sipCpp->getGrid())
 		+ "   Texture: " + String(sipCpp->getTexture())

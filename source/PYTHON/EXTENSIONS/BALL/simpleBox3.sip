@@ -40,6 +40,6 @@ class SimpleBox3
 	tmp += String(sipCpp->b.x) + " ";
 	tmp += String(sipCpp->b.y) + " ";
 	tmp += String(sipCpp->b.z) + ") }";
-	sipRes = PyString_FromString(tmp.c_str());
+	sipRes = PyBytes_FromString(tmp.c_str());
 %End
 };

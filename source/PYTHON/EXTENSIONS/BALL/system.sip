@@ -67,7 +67,7 @@ class System
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("System ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("System ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countMolecules()) + " molecules,  "
 		+ String(sipCpp->countAtoms()) + " atoms }").c_str());
 %End

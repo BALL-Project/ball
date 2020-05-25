@@ -49,13 +49,13 @@ class SecondaryStructure
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	return PyString_FromString(String(String("SecondaryStructure ") + sipCpp->getName()
+	return PyBytes_FromString(String(String("SecondaryStructure ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 
 	SIP_PYOBJECT __repr__();
 %MethodCode
-	return PyString_FromString(String(String("SecondaryStructure ") + sipCpp->getName()
+	return PyBytes_FromString(String(String("SecondaryStructure ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 };

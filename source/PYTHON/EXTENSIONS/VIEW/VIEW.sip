@@ -5,11 +5,11 @@
 %Module VIEW
 
 %ModuleHeaderCode
-#include <BALLPyMacros.h>
-%End
-
-%ModuleHeaderCode
 	#include <BALLPyMacros.h>
+
+	#if defined(MS_WIN32) && defined(_MSC_VER) && _MSC_VER >= 1900
+	#undef snprintf
+	#endif
 %End
 
 %UnitCode

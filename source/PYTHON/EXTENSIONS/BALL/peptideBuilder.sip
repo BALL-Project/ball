@@ -22,7 +22,7 @@ class AminoAcidDescriptor
 
 	SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString((String("{ ") + sipCpp->getType() + " " +
+	sipRes = PyBytes_FromString((String("{ ") + sipCpp->getType() + " " +
 		String(sipCpp->getPhi().toDegree()) + " " +
 		String(sipCpp->getPsi().toDegree()) + " " +
 		String(sipCpp->getOmega().toDegree()) + " }").c_str());

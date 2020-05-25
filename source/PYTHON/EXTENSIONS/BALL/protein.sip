@@ -54,7 +54,7 @@ class Protein
 
   SIP_PYOBJECT __str__();
 %MethodCode
-	sipRes = PyString_FromString(String(String("Protein ") + sipCpp->getName()
+	sipRes = PyBytes_FromString(String(String("Protein ") + sipCpp->getName()
 		+ " { " + String(sipCpp->countResidues()) + " residues }").c_str());
 %End
 };
