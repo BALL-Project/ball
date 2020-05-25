@@ -25,6 +25,11 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
+#ifdef BALL_COMPILER_MSVC
+# define WINDOWS_LEAN_AND_MEAN
+# include <windows.h>
+#endif
+
 #ifdef BALL_HAS_GLEW
 # include <GL/glew.h>
 #elif defined(BALL_OS_DARWIN)
