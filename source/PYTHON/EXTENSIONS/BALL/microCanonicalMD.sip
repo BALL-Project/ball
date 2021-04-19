@@ -15,7 +15,5 @@ class MicroCanonicalMD
 	virtual bool setup(ForceField&, SnapShotManager*, const Options&);
 	virtual bool specificSetup();
 	virtual void setTimeStep(double);
-	virtual bool simulate(bool restart = false);
 	virtual bool simulateIterations(Size, bool restart = false);
-	virtual bool simulateTime(double, bool restart = false);
 };

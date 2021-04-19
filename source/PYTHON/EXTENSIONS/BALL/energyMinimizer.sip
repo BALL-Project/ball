@@ -45,6 +45,6 @@ class EnergyMinimizer
 	void setSnapShotFrequency(int);
 	int getSnapShotFrequency() const;
 	ForceField* getForceField();
-	virtual bool minimize(int, bool);
+	virtual bool minimize(Size = 0, bool = false);
 	Options options;
 };

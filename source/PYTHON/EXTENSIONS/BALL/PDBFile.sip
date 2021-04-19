@@ -9,12 +9,12 @@ class PDBFile
 	PDBFile(const String&, OpenMode openmode = std::ios::in) throw(FileNotFound);
 	~PDBFile();
 	void selectAltLocationIndicator(char ch);
-	virtual bool read(Protein&) throw (ParseError);
-	virtual bool read(Molecule&) throw (ParseError);
-	virtual bool read(System&) throw (ParseError);
-	virtual bool write(const Protein&) throw(File::CannotWrite);
-	virtual bool write(const Molecule&) throw(File::CannotWrite);
-	virtual bool write(const System&) throw(File::CannotWrite);
+	bool read(Protein&) throw (ParseError);
+	bool read(Molecule&) throw (ParseError);
+	bool read(System&) throw (ParseError);
+	bool write(const Protein&) throw(File::CannotWrite);
+	bool write(const Molecule&) throw(File::CannotWrite);
+	bool write(const System&) throw(File::CannotWrite);
 	void close();
 
 	//Actually all of the following methods are non virtual

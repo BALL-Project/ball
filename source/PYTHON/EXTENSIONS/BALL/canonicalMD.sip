@@ -18,7 +18,5 @@ class CanonicalMD
 	virtual bool setup(ForceField&, SnapShotManager*, const Options&) throw();
 	virtual bool specificSetup() throw();
 	virtual void setTimeStep(double) throw();
-	virtual bool simulate(bool restart = false) throw();
 	virtual bool simulateIterations(Size, bool restart = false) throw();
-	virtual bool simulateTime(double, bool restart = false) throw();
 };
