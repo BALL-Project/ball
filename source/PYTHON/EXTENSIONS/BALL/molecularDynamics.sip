@@ -33,8 +33,8 @@ class MolecularDynamics
 	double getPotentialEnergy () const;
 	double getKineticEnergy () const;
 	ForceField *getForceField () const;
-	virtual bool simulate (bool restart = false);
+	bool simulate (bool restart = false);
 	virtual bool simulateIterations (Size, bool restart = false);
-	virtual bool simulateTime (double, bool restart = false);
+	bool simulateTime (double, bool restart = false);
 	Options options;
 };
