@@ -19,7 +19,7 @@ class ModularWidget
 	virtual void applyPreferences() throw();
 	virtual void fetchPreferences(INIFile&) throw();
 	virtual void writePreferences(INIFile&)	throw();
-	virtual void setStatusbarText(String , bool = false) throw();
+	virtual void setStatusbarText(const String&, bool = false) throw();
 	MainControl* getMainControl() const	throw();
 	String getWorkingDir() throw();
 	void setWorkingDir(const String&) throw();

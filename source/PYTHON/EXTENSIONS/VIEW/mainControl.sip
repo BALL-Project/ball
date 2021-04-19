@@ -38,7 +38,7 @@ class MainControl
 	void complementSelection();
 	virtual void aboutToExit();
 	virtual void quit(int = 0);
-	virtual bool isAboutToQuit();
+	bool isAboutToQuit();
 	virtual void resize(int, int);
 	void setContentSize(int, int);
 

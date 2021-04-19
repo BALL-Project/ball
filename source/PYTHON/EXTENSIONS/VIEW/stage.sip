@@ -77,7 +77,7 @@ class Stage
 	virtual void setCamera(const Camera& ) throw();
 	virtual const ColorRGBA& getBackgroundColor() const throw();
 	virtual void setBackgroundColor(const ColorRGBA& ) throw();
-	virtual void showCoordinateSystem(bool ) throw();
+	void showCoordinateSystem(bool ) throw();
 	bool coordinateSystemEnabled() const throw();
 	void setEyeDistance(float) throw();
 	float getEyeDistance() const throw();
