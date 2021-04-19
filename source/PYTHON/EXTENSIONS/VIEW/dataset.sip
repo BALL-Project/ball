@@ -43,7 +43,7 @@ class DatasetController
 
 	public Q_SLOTS:
 	virtual bool write();
-	virtual bool open();
+	bool open();
 	virtual bool deleteDatasets();
 	virtual bool deleteDataset();
 };
