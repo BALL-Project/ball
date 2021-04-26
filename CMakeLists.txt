@@ -241,11 +241,13 @@ IF(USE_TBB)
 ENDIF()
 
 ## MPI
-OPTION(USE_MPI "Should MPI support be enabled?" ON)
+OPTION(USE_MPI "Should MPI support be enabled?" OFF)
 OPTION(REQUIRE_MPI "Should MPI support be required?" OFF)
 
 IF (USE_MPI)
-	IF (REQUIRE_MPI)
+	IF (NOT BALL_HAS_XDR)
+		MESSAGE(STATUS "XDR has not been found, which is required for MPI support. Disabling MPI support.")
+	ELSEIF (REQUIRE_MPI)
 		FIND_PACKAGE(MPI REQUIRED)
 	ELSE()
 		FIND_PACKAGE(MPI)
@@ -257,7 +259,6 @@ IF (USE_MPI)
 
 		SET(BALL_HAS_MPI TRUE)
 	ENDIF()
-
 ENDIF()
 
 ## VIEW related options/settings/libraries
