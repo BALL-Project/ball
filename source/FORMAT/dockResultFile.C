@@ -2074,6 +2074,17 @@ namespace BALL
 
 		void DockResultFile::attributesToHashMap(const QXmlStreamAttributes &attributes, HashMap<String,String>& map)
 		{
+			// Qt 5 / Qt 6 SAX-vs-StreamReader semantic delta (review WR-03):
+			//
+			// The Qt 5 SAX overload above iterates via attributes.qName(i) —
+			// the QUALIFIED name (namespace prefix + local name). This
+			// overload uses QXmlStreamAttribute::name() which is the LOCAL
+			// name only (namespace prefix stripped). For the DockResultFile
+			// XML format — which uses no namespaces — qName == name and the
+			// two paths are functionally equivalent. If an external producer
+			// ever emits namespaced attributes the two code paths will
+			// silently disagree; switch to attributes.at(i).qualifiedName()
+			// at that point for byte-identical behaviour with the Qt 5 path.
 			map.clear();
 			for(int i=0;i<attributes.size();i++)
 			{
