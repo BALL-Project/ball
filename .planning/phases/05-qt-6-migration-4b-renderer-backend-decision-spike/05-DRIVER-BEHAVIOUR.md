@@ -202,7 +202,7 @@ Plan 08 (SPIKE-02 decision record) must cite each of the following gaps explicit
 - **What's missing:** A green `cmake --preset ci-linux && cmake --build && smoke-check` run on ubuntu-24.04 with Qt 6.5.* installed via `jurplel/install-qt-action`. CI run 25910030073 fails at the Qt install step.
 - **Root cause:** The workflow specifies `modules: qtbase qttools qtopengl`. aqtinstall 3.3.x against the Qt 6.5.* archive metadata returns "packages not found" for these module names. The aqt module-name convention changed between aqt 3.1 and 3.3; the current values are most likely no longer canonical for the requested Qt minor.
 - **What would resolve it:** Drop the `modules:` field entirely (qtbase is the default-included module set on Linux desktop) OR replace with the aqt-3.3-correct module set (likely just `qttools`; qtopengl is folded into qtbase, qtbase is implicit). A 1-line ci.yml change.
-- **Resolution owner:** Phase 5.1 (build warnings + latent bugs) or a dedicated CI fixup task. **Seed proposed:** `.planning/seeds/SEED-005-1-ci-aqtinstall-modules-fixup.md` (this plan, Task 2).
+- **Resolution owner:** Phase 5.1 (build warnings + latent bugs) or a dedicated CI fixup task. **Seed planted:** [`SEED-005-1-ci-aqtinstall-modules-fixup.md`](../../seeds/SEED-005-1-ci-aqtinstall-modules-fixup.md) (this plan, Task 2 — status dormant, scope Small).
 - **Impact on SPIKE-02:** Plan 08's decision record cites Linux driver behaviour as a GAP. Backend recommendation may still be made on macOS data alone if the rationale is strong; the Linux gap is logged as a risk to validate post-decision.
 
 ### Gap 2 — Windows default-build smoke under Qt 6 via vcpkg
@@ -210,7 +210,7 @@ Plan 08 (SPIKE-02 decision record) must cite each of the following gaps explicit
 - **What's missing:** A green `cmake --preset ci-windows` configure on windows-2022 with `qtbase` vcpkg port. CI run 25910030073 fails at the vcpkg `Configure` step.
 - **Root cause:** vcpkg manifest pins `builtin-baseline c1ce926ddf75f166cbdd444bbaf463410ac99b17`. The runner-image vcpkg checkout no longer has `versions/baseline.json` at that commit — the baseline was either rebased or the runner image's vcpkg shallow-clone depth doesn't include that history. Errors: `failed to git show versions/baseline.json` repeated for every transitive dep (boost-any, boost-asio, boost-bind, …).
 - **What would resolve it:** Either (a) re-pin `builtin-baseline` to a recent vcpkg commit that the runner-image actually has, OR (b) add a `git fetch --unshallow` step on the runner's `C:\vcpkg` checkout before configure runs, OR (c) bundle a `vcpkg-configuration.json` with a vendored registry pin. Option (a) is the cheapest; option (b) is the most robust.
-- **Resolution owner:** Phase 5.1 or dedicated CI fixup. **Seed proposed:** `.planning/seeds/SEED-005-2-ci-vcpkg-baseline-fixup.md` (this plan, Task 2).
+- **Resolution owner:** Phase 5.1 or dedicated CI fixup. **Seed planted:** [`SEED-005-2-ci-vcpkg-baseline-fixup.md`](../../seeds/SEED-005-2-ci-vcpkg-baseline-fixup.md) (this plan, Task 2 — status dormant, scope Small).
 - **Impact on SPIKE-02:** Plan 08's decision record cites Windows driver behaviour as a GAP. Note that the Phase 5 D-09 ("uniform QSurfaceFormat across all 3 OSes") was an a-priori decision; per-OS divergence is explicitly deferred. So the Windows gap impacts spike-validation breadth more than spike-decision substance.
 
 ### Gap 3 — Windows hardware/VM driver-behaviour capture
@@ -218,7 +218,7 @@ Plan 08 (SPIKE-02 decision record) must cite each of the following gaps explicit
 - **What's missing:** A live `BALLVIEW_GL_DIAG` from a Windows host (CI-runner Intel iGPU OR user-owned Windows box). Plus picking + text overlay click-through validation. Plus ANGLE-removal verification (Qt 6 uses OpenGL32 directly, no ANGLE DLL).
 - **Root cause:** No Windows hardware/VM in this session; CI Windows path also broken per Gap 2.
 - **What would resolve it:** Either (a) Windows VM (Parallels / UTM) set up on the M4 Max host and a manual run, OR (b) Gap 2 resolved first and the smoke-check step extended to capture/upload the Windows DIAG line as a CI artifact, OR (c) user runs on a Windows test box and pastes the output.
-- **Resolution owner:** Carry-forward task. **Seed proposed:** `.planning/seeds/SEED-005-3-windows-vm-driver-capture.md` (this plan, Task 2).
+- **Resolution owner:** Carry-forward task. **Seed planted:** [`SEED-005-3-windows-vm-driver-capture.md`](../../seeds/SEED-005-3-windows-vm-driver-capture.md) (this plan, Task 2 — status dormant, scope Medium; depends on SEED-005-2 for Path A).
 - **Impact on SPIKE-02:** Cited as gap.
 
 ### Gap 4 — Post-PIPE-01 spike full-render re-capture
@@ -226,7 +226,7 @@ Plan 08 (SPIKE-02 decision record) must cite each of the following gaps explicit
 - **What's missing:** A real `BALLVIEW_GL_DIAG renderer_backend=Core/QRhi qrhi_backend_name=Metal/D3D11/Vulkan ...` line emitted from a spike-built BALLView that actually finishes a frame. Currently blocked on both spike arms by the same downstream-virtual limitation (Plans 05-05 and 05-06 SUMMARYs).
 - **Root cause:** The spike substitutes a `Renderer` but `RenderSetup` + `Scene` invoke `GLRenderer`-specific methods. The fix requires either (a) substituting the matching `RenderSurface` AND extending `RenderSetup`'s virtual surface to cover the missing entry points, OR (b) PIPE-01's full pipeline replacement.
 - **What would resolve it:** PIPE-01 itself (the v2 / Phase ? programmable-pipeline rewrite). Out of scope for Phase 5.
-- **Resolution owner:** PIPE-01 (future phase). **Seed proposed:** `.planning/seeds/SEED-005-4-post-pipe01-spike-recapture.md` (this plan, Task 2).
+- **Resolution owner:** PIPE-01 (future phase). **Seed planted:** [`SEED-005-4-post-pipe01-spike-recapture.md`](../../seeds/SEED-005-4-post-pipe01-spike-recapture.md) (this plan, Task 2 — status dormant, scope Small, triggers when PIPE-01 begins).
 - **Impact on SPIKE-02:** Plan 08 will record this as the headline "data-acquisition criterion gated by the deliverable downstream of it" — a clean expectation-setting for the decision record's "what would change the answer" section.
 
 ### Gap 5 — D-07 macOS deprecation banner observability under Qt 6
@@ -259,7 +259,7 @@ matrix_table_present:      true
 ballview_gl_diag_count:    4 (incl. 1 anticipated/predicted)  # plan key_links min: ≥2 verbatim
 deprecation_section:       cited (verbatim Apple text) + empirical-finding-on-qt6 documented
 gaps_section:              5 gaps enumerated with seeds
-seeds_created:             pending Task 2 (this plan)
+seeds_created:             SEED-005-1 (aqtinstall), SEED-005-2 (vcpkg baseline), SEED-005-3 (Windows VM), SEED-005-4 (post-PIPE-01)
 wave_0_complete:           false — 5 gaps documented, downstream PIPE-01 + CI fixups required
 manual_checkpoint_status:  autonomous-call applied per §Reasonable-Call Justification
 ```
