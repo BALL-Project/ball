@@ -495,7 +495,10 @@ namespace BALL
 			context_menu_.addSeparator();
 
 			rotamer_mapper_ = new QSignalMapper(this);
-			connect(rotamer_mapper_, SIGNAL(mapped(int)), this, SLOT(changeRotamer_(int)));
+			// Qt 6: QSignalMapper::mapped(int) was renamed to mappedInt(int).
+			// Use the function-pointer form for compile-time type-safety.
+			connect(rotamer_mapper_, &QSignalMapper::mappedInt,
+			        this, &MolecularControl::changeRotamer_);
 			rotamer_menu_ = new QMenu(tr("Apply Rotamer"), this);
 			current_residue_ = 0;
 			context_menu_.addMenu(rotamer_menu_);

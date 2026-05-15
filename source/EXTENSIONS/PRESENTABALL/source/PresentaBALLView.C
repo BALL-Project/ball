@@ -37,7 +37,9 @@ namespace BALL
 				{
 					connect(action, SIGNAL(triggered()), signalMapper_, SLOT(map()));
 					signalMapper_->setMapping(action, i);
-					connect(signalMapper_, SIGNAL(mapped(int)), signal_, SIGNAL(actionSignal(int)));
+					// Qt 6: QSignalMapper::mapped(int) was renamed to mappedInt(int).
+					connect(signalMapper_, &QSignalMapper::mappedInt,
+					        signal_, &PresentaBALLSignal::actionSignal);
 #ifdef BALL_VIEW_DEBUG
 					Log.info() << "Connected <" << action->text().toStdString() << "> action to JSActionSignal " << i << std::endl;
 #endif
