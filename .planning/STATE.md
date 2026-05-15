@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
-status: "Phase 5.1 closed; next phase candidate per ROADMAP: Phase 4.1 (Config Color-Defaults Fix, promoted from backlog 999.4) or Phase 6 (Python Bindings) or Phase 8 (Packaging & Distribution)"
-stopped_at: Phase 4.1 context gathered
-last_updated: "2026-05-15T18:28:50.163Z"
+status: executing
+stopped_at: Phase 04.1-01 complete (ElementColorOverrides read/write implemented)
+last_updated: "2026-05-15T20:00:00.000Z"
 progress:
-  total_phases: 21
+  total_phases: 22
   completed_phases: 8
-  total_plans: 39
-  completed_plans: 39
-  percent: 38
+  total_plans: 41
+  completed_plans: 41
+  percent: 98
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -19,16 +19,16 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 05.1 — build-warnings-and-latent-bugs
+**Current Focus:** Phase 04.1 — config-color-defaults-fix
 
 ## Current Position
 
-Phase: 05.1 (build-warnings-and-latent-bugs) — COMPLETE (14/14 plans)
-Plan: all 14 plans landed; Wave 1 + Wave 2 complete
+Phase: 04.1 (config-color-defaults-fix) — EXECUTING
+Plan: 2 of 2
 **Phase:** 05.1 — done
 **Plans:** 14 of 14 complete (05.1-01..05.1-14)
-**Status:** Phase 5.1 closed; next phase candidate per ROADMAP: Phase 4.1 (Config Color-Defaults Fix, promoted from backlog 999.4) or Phase 6 (Python Bindings) or Phase 8 (Packaging & Distribution)
-**Progress:** [██████████] 100%
+**Status:** Ready to execute
+**Progress:** [██████████] 98%
 
 ```
 Phase 1     [x]  Build Baseline
@@ -90,6 +90,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 05.1 P12 | ~12min | 3 tasks | 1 files (Task D3 Linux ccache cache-save tar failure; diagnosis-first. Surveyed 15 recent runs on v1.6-modernization via `gh run view --log`; 7/7 successful Linux runs that reached the post-job cache phase emit the warning — chronic, not transient. Forensic root cause: warning is on the **apt-archives** cache step, NOT the **ccache** step — BACKLOG D3 misclassified which step was failing. tar fails specifically on `/var/cache/apt/archives/lock` (root:root, 0640) + `/var/cache/apt/archives/partial` (root:root, 0700) because the unprivileged `runner` user cannot read root-owned APT lockfile + partial-downloads dir; the cache action's fallback re-tars without them and the cache IS still saved (`Cache saved with key:` follows). Definitionally cosmetic but 100%-recurring noise that misleads readers. Fix: narrow `path: /var/cache/apt/archives` → `path: /var/cache/apt/archives/*.deb` in ci.yml Linux apt-archives cache step — addresses root cause by construction, `.deb` archives are the only content `apt-get install` downloads + the only content cache restore needs, lockfile + partial/ are runtime state that doesn't belong in a cache. Chose `narrow-cached-path` (a 5th option) over the four plan-listed options (split-cache-key / pre-save-cleanup / permissions-fix / no-fix-transient) autonomously per no-clarifying-questions mode — none of the four mapped cleanly to apt-cache vs. ccache. Rule 1 deviation: corrected BACKLOG D3 step attribution (was ccache, actually apt-archives) so future maintainers don't re-investigate the wrong step. Plan-11 v5 action pins preserved unchanged. YAML parses clean. 1 substantive line + 17 doc-comment lines preserving the diagnosis trail in-source. Commit 1321336.) |
 | Phase 05.1 P02 | ~12min | 1 tasks | 3 files (Task A2 C4311 pointer truncation T*→long end-to-end audit — Codex-flagged D-08 incomplete-as-spec'd task. Migrated 3 pointer-identity call chains to `reinterpret_cast<BALL::PointerSizeUInt>`: source/COMMON/hash.C [1 cast in hashPointer at line 22], source/MOLMEC/MMFF94/MMFF94StretchBend.C [4 atom-pointer casts + HashMap<long,Position>+::Iterator → HashMap<BALL::PointerSizeUInt,Position>], source/STRUCTURE/triangulatedSurface.C [4 casts in PointerPairComparator]. Decision: chose `BALL::PointerSizeUInt` (global.h:207) over `std::uintptr_t` autonomously per no-clarifying-questions mode — width-equivalent on all BALL platforms; codebase already uses PointerSizeUInt pervasively (hash.h:49, persistenceManager.h ×6, timer.h/C, molecularSurfaceGrid.C ~30 sites); zero new <cstdint> includes (PointerSizeUInt reaches via common.h transitive chain in all 3 files). Codex D-08 audit resolution: only downstream long-typed storage was the function-local HashMap inside setupStretchBends_() in the .C file — NOT a header declaration as Codex feared. Headers in plan files_modified (MMFF94StretchBend.h + triangulatedSurface.h) audited and confirmed correctly typed (atoms stored as Atom*; indices as Position/Index; the std::map<pair<TrianglePoint*,TrianglePoint*>, ..., PointerPairComparator> in triangulatedSurface.C uses pointer-typed keys — the comparator does the widening internally). NOT edited (no diff needed; not a deviation — the Codex-feared header surface didn't exist). Out-of-scope discovery: serverWidget.h:124 has HashMap<unsigned long, Composite*> on 64-bit Windows would also truncate IF the key originates from a pointer cast; not on any of the 3 audited chains, deferred. Local build green via `cmake --build build/ci-macos --target BALL -j 8`; zero warnings on 3 modified files. Pre-existing unrelated -Wdeprecated-declarations on geneticIndividual.h handled by Plan 05.1-09 — out of scope. Tri-OS CI verification (zero C4311 on the 3 files in Windows MSVC log) follows on push. Zero deviations from plan beyond the Task-2 checkpoint resolved-autonomously decision.) |
 | Phase 05.1 PP08 | 8min | - tasks | - files |
+| Phase 04.1-config-color-defaults-fix P01 | 25 | 2 tasks | 1 files |
 
 ## Accumulated Context
 

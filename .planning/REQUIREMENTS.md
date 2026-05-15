@@ -31,7 +31,7 @@ Requirements for the v1.6 release. Derived from `/Users/kohlbach/Claude/BALL/ROA
 
 ### Configuration (Phase 4.1 — promoted from backlog 999.4)
 
-- [ ] **CONFIG-01**: The persisted `~/.BALLView` config no longer silently shadows compiled element/residue color defaults — compiled defaults show through for un-customized colors, a stale/partial saved color block falls back to compiled defaults, and the user can reset colors to defaults from Preferences without deleting `~/.BALLView`
+- [x] **CONFIG-01**: The persisted `~/.BALLView` config no longer silently shadows compiled element/residue color defaults — compiled defaults show through for un-customized colors, a stale/partial saved color block falls back to compiled defaults, and the user can reset colors to defaults from Preferences without deleting `~/.BALLView`
 
 ### Rendering — Phase 4a (IMMEDIATE PRIORITY)
 
@@ -166,7 +166,7 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | DEPS-04 | Phase 4 — Dependency System Overhaul | Complete |
 | DEPS-05 | Phase 4 — Dependency System Overhaul | Complete |
 | FEAT-01 | Phase 4 — Dependency System Overhaul | Complete |
-| CONFIG-01 | Phase 4.1 — Config Color-Defaults Fix | Pending |
+| CONFIG-01 | Phase 4.1 — Config Color-Defaults Fix | Complete |
 | QT6-01 | Phase 5 — Qt 6 Migration (4b) | Complete on macOS — runtime smoke verified `3238ce3`; macOS CI `gl_profile=(compatibility\|none)` `7b28685`; Linux/Windows deferred to backlog 999.7 |
 | QT6-02 | Phase 5 — Qt 6 Migration (4b) | Complete on macOS — migration sweep + CR-01/02/03 fixed inline (`81569ee` `339cb99` `3917c10`); WR-01..07 fixed inline |
 | SPIKE-01 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Complete — `.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` |
