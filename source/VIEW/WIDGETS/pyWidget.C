@@ -345,7 +345,8 @@ namespace BALL
 			combo_box_->setMaxVisibleItems(30);
 
 			QGridLayout* lay = new QGridLayout(widget);
-			lay->setMargin(0);
+			// Qt 6: QLayout::setMargin() was removed; use setContentsMargins().
+			lay->setContentsMargins(0, 0, 0, 0);
 			lay->addWidget(text_edit_,0, 0, 1, 2);
 			lay->addWidget(line_edit_,1, 0, 1, 1);
 			lay->addWidget(combo_box_,1, 1, 1, 1);
@@ -409,7 +410,8 @@ namespace BALL
 			connect(clear_button, SIGNAL(clicked()), this, SLOT(clearScript()));
 
 			QHBoxLayout *hlayout = new QHBoxLayout;
-			hlayout->setMargin(1);
+			// Qt 6: QLayout::setMargin() was removed; use setContentsMargins().
+			hlayout->setContentsMargins(1, 1, 1, 1);
 			hlayout->addWidget(run_button);
 			hlayout->addWidget(save_button);
 			hlayout->addWidget(load_button);
