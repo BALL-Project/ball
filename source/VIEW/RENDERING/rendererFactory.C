@@ -48,7 +48,16 @@ namespace BALL
 				// the spike build still runs the default renderer when the user
 				// does not opt in. If both spike backends are compiled in (an
 				// unusual configuration), QRhi wins.
-				if (kind == Kind::OpenGL_Fixed && std::getenv("BALLVIEW_USE_SPIKE_BACKEND") != nullptr)
+				//
+				// Strict "==1" parse (review WR-01): std::getenv returns non-null
+				// for any value including "0", "false", "off". Treat only the
+				// literal single character "1" as truthy so
+				// BALLVIEW_USE_SPIKE_BACKEND=0 disables the spike as the comment
+				// claims.
+				const char* spike_env_ = std::getenv("BALLVIEW_USE_SPIKE_BACKEND");
+				const bool spike_env_truthy_ =
+					(spike_env_ != nullptr && spike_env_[0] == '1' && spike_env_[1] == '\0');
+				if (kind == Kind::OpenGL_Fixed && spike_env_truthy_)
 				{
 #  if defined(BALL_SPIKE_BACKEND_QRHI)
 					return new QRhiRenderer;
