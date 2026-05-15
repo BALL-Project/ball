@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
-status: executing
-stopped_at: Phase 04.1-01 complete (ElementColorOverrides read/write implemented)
-last_updated: "2026-05-15T20:00:00.000Z"
+status: verifying
+stopped_at: Phase 4.1 context gathered
+last_updated: "2026-05-15T19:11:11.628Z"
 progress:
-  total_phases: 22
-  completed_phases: 8
+  total_phases: 23
+  completed_phases: 9
   total_plans: 41
   completed_plans: 41
-  percent: 98
+  percent: 39
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -27,8 +27,8 @@ Phase: 04.1 (config-color-defaults-fix) — EXECUTING
 Plan: 2 of 2
 **Phase:** 05.1 — done
 **Plans:** 14 of 14 complete (05.1-01..05.1-14)
-**Status:** Ready to execute
-**Progress:** [██████████] 98%
+**Status:** Phase complete — ready for verification
+**Progress:** [██████████] 100%
 
 ```
 Phase 1     [x]  Build Baseline
@@ -91,6 +91,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 05.1 P02 | ~12min | 1 tasks | 3 files (Task A2 C4311 pointer truncation T*→long end-to-end audit — Codex-flagged D-08 incomplete-as-spec'd task. Migrated 3 pointer-identity call chains to `reinterpret_cast<BALL::PointerSizeUInt>`: source/COMMON/hash.C [1 cast in hashPointer at line 22], source/MOLMEC/MMFF94/MMFF94StretchBend.C [4 atom-pointer casts + HashMap<long,Position>+::Iterator → HashMap<BALL::PointerSizeUInt,Position>], source/STRUCTURE/triangulatedSurface.C [4 casts in PointerPairComparator]. Decision: chose `BALL::PointerSizeUInt` (global.h:207) over `std::uintptr_t` autonomously per no-clarifying-questions mode — width-equivalent on all BALL platforms; codebase already uses PointerSizeUInt pervasively (hash.h:49, persistenceManager.h ×6, timer.h/C, molecularSurfaceGrid.C ~30 sites); zero new <cstdint> includes (PointerSizeUInt reaches via common.h transitive chain in all 3 files). Codex D-08 audit resolution: only downstream long-typed storage was the function-local HashMap inside setupStretchBends_() in the .C file — NOT a header declaration as Codex feared. Headers in plan files_modified (MMFF94StretchBend.h + triangulatedSurface.h) audited and confirmed correctly typed (atoms stored as Atom*; indices as Position/Index; the std::map<pair<TrianglePoint*,TrianglePoint*>, ..., PointerPairComparator> in triangulatedSurface.C uses pointer-typed keys — the comparator does the widening internally). NOT edited (no diff needed; not a deviation — the Codex-feared header surface didn't exist). Out-of-scope discovery: serverWidget.h:124 has HashMap<unsigned long, Composite*> on 64-bit Windows would also truncate IF the key originates from a pointer cast; not on any of the 3 audited chains, deferred. Local build green via `cmake --build build/ci-macos --target BALL -j 8`; zero warnings on 3 modified files. Pre-existing unrelated -Wdeprecated-declarations on geneticIndividual.h handled by Plan 05.1-09 — out of scope. Tri-OS CI verification (zero C4311 on the 3 files in Windows MSVC log) follows on push. Zero deviations from plan beyond the Task-2 checkpoint resolved-autonomously decision.) |
 | Phase 05.1 PP08 | 8min | - tasks | - files |
 | Phase 04.1-config-color-defaults-fix P01 | 25 | 2 tasks | 1 files |
+| Phase 04.1-config-color-defaults-fix P02 | 20 | 4 tasks | 4 files |
 
 ## Accumulated Context
 

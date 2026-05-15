@@ -14,7 +14,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 02.2: CI and build-smoke matrix** - Early GitHub Actions build matrix (macOS-arm64/Linux/Windows) + a non-blank render smoke check + a GL-capability diagnostics log *(inserted per Codex review — pulled forward so Phases 3-9 land with a regression net)* (completed 2026-05-14)
 - [x] **Phase 3: Language Modernization** - Move the codebase to C++17, remove C++17-removed constructs, set the standard via CMake (completed 2026-05-14)
 - [x] **Phase 4: Dependency System Overhaul** - Delete `ball_contrib`, adopt Homebrew/system + vcpkg, config-mode `Find*.cmake`, `CMakePresets.json`, feature matrix (completed 2026-05-15; Windows CI green + blocking on run 25899905204)
-- [ ] **Phase 4.1: Config Color-Defaults Fix** - Stop persisted `~/.BALLView` config from silently shadowing compiled element/residue color defaults *(promoted from backlog 999.4 — real user-facing bug)*
+- [x] **Phase 4.1: Config Color-Defaults Fix** - Stop persisted `~/.BALLView` config from silently shadowing compiled element/residue color defaults *(promoted from backlog 999.4 — real user-facing bug)* (completed 2026-05-15)
 - [x] **Phase 5: Qt 6 Migration + Renderer Backend Spike** - Build against Qt 6 and replace deprecated VIEW APIs (keep the compat-profile GL path working), then a time-boxed renderer-backend decision spike behind the Phase 02.1 boundary *(former Phase 05.1 folded in — it must prototype against Qt 6)* *(complete 2026-05-15; 8 plans 05-01..05-08; SPIKE-01 delivered with documented caveats per the PIPE-01 downstream-init blocker; SPIKE-02 decision: split-pattern — GL-Core for v1.6.x → QRhi for v2)*
 - [x] **Phase 5.1: Build Warnings & Latent Bug Cleanup** - Fix latent bugs and tame the warning surface surfaced by Phase 4's tri-OS CI (C4717 `getline` recursion, C4311 pointer truncation on Windows, C4910 dll-export mismatch, `-Wself-assign-field`, `-Wformat-overflow`); Codex CLI cross-checked. *(inserted 2026-05-15 — captures Phase 4 follow-ups; runs after Phase 5 so Qt 6 deprecation noise clears first; complete 2026-05-15 with 14/14 plans landed — full Tier A bug fixes + Tier B Windows DLL hygiene + Tier D build configuration; retroactive Windows CI validation expected on next clean tri-OS run once the Linux `aqtinstall` Qt 6.5.3 cancellation cascade is fixed separately)*
 - [ ] **Phase 6: Python Bindings** - Decide the binding generator via a vertical slice (5-10 core classes), then commit *(restructured per Codex review — was a single under-scoped criterion)*
@@ -133,7 +133,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 
 Plans:
 - [x] 04.1-01-PLAN.md — Wave 1: writePreferenceEntries diff/override write + readPreferenceEntries legacy-Elements discard + ElementColorOverrides parse + all-white sanity (D-01, D-03, D-05, D-06)
-- [ ] 04.1-02-PLAN.md — Wave 2: Reset element colors button (.ui + header slot + slot impl) + residue follow-up backlog stub (D-02, D-04)
+- [x] 04.1-02-PLAN.md — Wave 2: Reset element colors button (.ui + header slot + slot impl) + residue follow-up backlog stub (D-02, D-04)
 
 ### Phase 5: Qt 6 Migration (4b) + Renderer Backend Decision Spike
 **Goal**: BALLView builds and runs on Qt 6 with deprecated VIEW APIs removed and the compatibility-profile fixed-function GL path kept working as the known-good backend. Once the Qt 6 build is stable, a time-boxed spike prototypes the renderer backend behind the Phase 02.1 `Renderer`/`RenderSurface` boundary and produces a *recorded decision* (GL-core vs QRhi) — de-risking and scoping the v2 `PIPE-01` rewrite, which stays out of scope. (The spike was formerly standalone Phase 05.1; folded in here 2026-05-14 because it must prototype against Qt 6. Phase 5 itself was split from the old oversized "Qt 6 + Pipeline" per the Codex review.)
@@ -255,7 +255,7 @@ Plans:
 | 02.2 CI and build-smoke matrix | 2/2 | Complete    | 2026-05-14 |
 | 3. Language Modernization | 3/3 | Complete   | 2026-05-14 |
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
-| 4.1 Config Color-Defaults Fix | 1/2 | In Progress|  |
+| 4.1 Config Color-Defaults Fix | 2/2 | Complete   | 2026-05-15 |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
 | 6. Python Bindings | 0/0 | Not started | - |
@@ -293,7 +293,7 @@ Plans:
   - **CI (Phase 9):** the GH Actions matrix should standardize on `-G Ninja` on all three runners — simpler, faster, uniform.
   - **Risk:** Low. CMake fully supports Ninja; the only watch-items are non-standard custom commands / `add_custom_command` ordering and any code that shells out assuming Makefile targets. BALL's CMake is fairly standard. Best sequenced *after* Phase 4 (dependency overhaul) and *with* Phase 9 (CI) so it lands once, matrix-wide.
 **Requirements:** TBD
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
