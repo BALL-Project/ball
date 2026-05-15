@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 05.1 Plan 10 complete (Task D1 — Qt5LinguistTools / qttools missing on Windows vcpkg; absorbs D6 root cause per CONTEXT.md). Combined option (a) + (b): `qttools` already in `vcpkg.json:8` from earlier D6 root-cause fix, added `QUIET` to `FIND_PACKAGE(Qt6LinguistTools ...)` at `CMakeLists.txt:351` + downgraded `MESSAGE(WARNING)` → `MESSAGE(STATUS)` with clearer remediation pointer; suppresses CMake's built-in 'By not providing FindQt6LinguistTools.cmake' warning on Windows Configure even in non-vcpkg edge cases. Translation pipeline behaviour unchanged on happy path; `BALLViewTranslations.cmake` already early-RETURNs when tools absent. macOS/Linux unaffected (system Qt). Rule 2 deviation — applied option (b) on top of already-landed (a) for defence-in-depth. Next CI run will verify zero `FindQt6LinguistTools.cmake` warnings on Windows Configure step."
-last_updated: "2026-05-15T14:37:05Z"
+stopped_at: "Phase 05.1 Plan 11 complete (Task D2 — Node.js 20 deprecation in GitHub Actions). Option A pin-bump v4→v5: actions/checkout@v4→v5 (×3 sites), actions/cache@v4→v5 (×3 sites: ccache, Homebrew, apt), actions/cache/restore@v4→v5 (×2 sites: ci.yml + release.yml vcpkg restore), actions/cache/save@v4→v5 (×2 sites: ci.yml + release.yml vcpkg save). 10 line edits across .github/workflows/{ci,release}.yml. Pre-flight via `gh api repos/actions/{checkout,cache}/releases/latest` confirmed v5 GA on both (checkout latest=v6.0.2, cache latest=v5.0.5); chose conservative v5 over v6-for-checkout to keep delta minimal on the v1.6 release path. Bundled cache/restore + cache/save into the same bump despite annotation only naming the bare `actions/cache@v4` — they share the Node-24 transition at v5 in the same monorepo. Deferred to follow-up: upload-artifact@v4 (→v6 for Node-24) and download-artifact@v4 (→v7 for Node-24) — currently NOT in the deprecation annotation surface, and the Node-24 jumps cross breaking-change majors (v5 changed compression/naming semantics) → warrant their own plan post v1.6.0. YAML parses clean on both files; commit d48ed2e. Next CI run on v1.6-modernization should emit zero `Node.js 20 actions are deprecated` annotations."
+last_updated: "2026-05-15T15:30:00Z"
 progress:
   total_phases: 20
   completed_phases: 7
   total_plans: 39
-  completed_plans: 31
-  percent: 79
+  completed_plans: 32
+  percent: 82
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -24,11 +24,11 @@ progress:
 ## Current Position
 
 Phase: 05.1 (build-warnings-and-latent-bugs) — EXECUTING
-Plan: 8 of 14
+Plan: 9 of 14
 **Phase:** 05.1
-**Plans:** 7 of 14 complete (05.1-01, 05.1-03, 05.1-04, 05.1-05, 05.1-07, 05.1-09, 05.1-10); next: 05.1-02 (Tier A — C4311 pointer-truncation cleanup) or 05.1-06 (A6 -Wstringop-truncation strncpy audit) or 05.1-11 (D2 Node.js 20 GitHub Actions deprecation)
+**Plans:** 8 of 14 complete (05.1-01, 05.1-03, 05.1-04, 05.1-05, 05.1-07, 05.1-09, 05.1-10, 05.1-11); next: 05.1-02 (Tier A — C4311 pointer-truncation cleanup) or 05.1-06 (A6 -Wstringop-truncation strncpy audit)
 **Status:** Ready to execute
-**Progress:** [████████░░] 79% (of total milestone, 31/39 plans)
+**Progress:** [████████░░] 82% (of total milestone, 32/39 plans)
 
 ```
 Phase 1     [x]  Build Baseline
@@ -85,6 +85,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 05.1 P07 | 6min | 2 tasks | 4 files (Tasks B1+B2 C4910 BALL_EXPORT relocation; moved `BALL_EXPORT` from `extern template class` declarations in vector3.h:1145,1148 + atom.h:1010 to the single-TU `template class` definitions in vector3.C:10,13 + atom.C:680; canonical MSVC DLL-export pattern; B1 + B2 bundled per CONTEXT.md D-02; libBALL build green on macos-arm64; tri-OS CI run 25922117642 supervised in background) |
 | Phase 05.1 P09 | 10min | 2 tasks | 2 files (Tasks B4+B5 Tier-B cosmetic Windows MSVC warning cleanup; B5: deleted dead `descriptor_IDs_.begin();` call at regressionModel.C:258 fixing C4834 [[nodiscard]] discarded return; B4: removed class-level `BALL_DEPRECATED` from `BALL::GeneticIndividual` at include/BALL/DOCKING/GENETICDOCK/geneticIndividual.h:15 fixing 5×C4996 — Remediation A un-deprecate chosen over B (refactor) and C (#pragma suppress) because the class is still load-bearing in `GeneticAlgorithm::pools_`/`template_individual_` and `EvolutionaryDocking` with no replacement class; documentary comment block records the rationale for the next maintainer; B4+B5 bundled per CONTEXT.md D-02; libBALL build green on macos-arm64; tri-OS CI run 25923452178 supervised in background) |
 | Phase 05.1 P10 | ~6min | 1 tasks | 2 files (Task D1 Qt5LinguistTools / qttools missing on Windows vcpkg — absorbs D6 root cause; combined option (a)+(b): `qttools` already declared in `vcpkg.json:8` from prior D6 fix, added `QUIET` to `FIND_PACKAGE(Qt6LinguistTools ${QT_MIN_VERSION})` at `CMakeLists.txt:351` + downgraded `MESSAGE(WARNING)` → `MESSAGE(STATUS)` with explicit remediation pointer; suppresses CMake's built-in "By not providing FindQt6LinguistTools.cmake" warning on Windows Configure even in non-vcpkg edge cases; `BALLViewTranslations.cmake` already early-RETURNs when tools absent; macOS/Linux unaffected; Rule 2 deviation — applied option (b) on top of already-landed (a) for defence-in-depth; verification deferred to next CI run) |
+| Phase 05.1 P11 | ~10min | 1 tasks | 2 files (Task D2 Node.js 20 deprecation in GitHub Actions — Option A pin bump v4→v5 across ci.yml + release.yml; 10 line edits: actions/checkout@v4→v5 ×3, actions/cache@v4→v5 ×3 [ccache/Homebrew/apt], actions/cache/restore@v4→v5 ×2, actions/cache/save@v4→v5 ×2; pre-flight `gh api` confirmed v5 GA on both — checkout latest=v6.0.2, cache latest=v5.0.5; chose conservative v5 over v6-for-checkout to keep delta minimal on the v1.6 release path; bundled cache/restore + cache/save into the same bump despite annotation naming only the bare cache@v4 — they share the Node-24 transition at v5 in the same monorepo; deferred to follow-up: upload-artifact@v4→v6 + download-artifact@v4→v7 — currently NOT in the deprecation annotation surface, and the Node-24 jumps cross breaking-change majors [v5 changed compression/naming semantics]; YAML parses clean on both files; commit d48ed2e) |
 
 ## Accumulated Context
 
