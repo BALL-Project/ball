@@ -175,7 +175,7 @@ Plans:
 **Plans**: 14 plans, 2 waves
 
 **Wave 1** *(parallel — A1-A6, B1-B2, B4-B5, D1-D5 minus B3)*
-- [ ] 05.1-01-PLAN.md — A1: C4717 getline infinite recursion in string.iC (drop std::move on rvalue overloads)
+- [x] 05.1-01-PLAN.md — A1: C4717 getline infinite recursion in string.iC (drop std::move on rvalue overloads)
 - [ ] 05.1-02-PLAN.md — A2: C4311 pointer truncation T*→long — end-to-end audit (hash.C + MMFF94 + triangulatedSurface) with downstream storage widened to std::uintptr_t / PointerSizeUInt
 - [ ] 05.1-03-PLAN.md — A3: -Wself-assign-field at pairExpInteractionEnergyProcessor.C:124 (propagate from proc.rdf_parameter_)
 - [ ] 05.1-04-PLAN.md — A4: -Wtautological-constant-out-of-range-compare in representation.C (asymmetric — preserve DrawingPrecision invariant, drop DrawingMode < 0 OR add DRAWING_MODE_INVALID = -1)
