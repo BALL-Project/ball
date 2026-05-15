@@ -29,7 +29,7 @@
 # include <BALL/SYSTEM/mutex.h>
 #endif
 
-#include <QtWidgets/QOpenGLWidget>
+#include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtGui/QSurfaceFormat>
 
 namespace BALL
