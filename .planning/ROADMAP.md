@@ -255,7 +255,7 @@ Plans:
 | 02.2 CI and build-smoke matrix | 2/2 | Complete    | 2026-05-14 |
 | 3. Language Modernization | 3/3 | Complete   | 2026-05-14 |
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
-| 4.1 Config Color-Defaults Fix | 2/2 | **In Progress — verifier flagged 3 BLOCKERs** (CR-01 read-path dead code; CR-02 last-line skip; CR-03 unguarded throws). Run `/gsd-plan-phase 4.1 --gaps`. | 2026-05-15 |
+| 4.1 Config Color-Defaults Fix | 3/5 | In Progress|  |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
 | 6. Python Bindings | 0/0 | Not started | - |
@@ -296,7 +296,7 @@ Plans:
 **Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme — build-tooling transition with no source impact, but the per-platform `BUILD-*.md` docs change. Sequenced AFTER 999.7 (Linux + Windows Qt 6 bring-up) so the cross-platform Ninja switch lands once on a green tri-OS baseline. The `CMakePresets.json` from Phase 4 already abstracts the per-platform configure; flipping the generator is a single `"generator": "Ninja"` field on each preset.
 
 **Requirements:** TBD
-**Plans:** TBD (single plan likely sufficient: update presets + verify tri-OS green + update BUILD-*.md)
+**Plans:** 3/5 plans executed
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens)
@@ -731,9 +731,15 @@ Estimated effort: ~2-3 weeks. Plan 1 (audit) is the most contentious — each cl
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before 999.6, 999.10, Phase 6, and v1.7 have landed their slices. This phase is the v2.0 "mop up" — it inherits the cleaner deprecation list after the other transitions.)
 
-### Phase 999.13: Read the Docs site + Swagger UI for the REST API (BACKLOG · TARGETED FOR v2.0)
+### Phase 999.13: Convert Doxygen docs to Read the Docs (+ Swagger UI for REST API) (BACKLOG · TARGETED FOR v2.0)
 
-**Goal:** Stand up an official BALL documentation site on [Read the Docs](https://about.readthedocs.com/) at `ball-project.readthedocs.io` (or similar) for v2.0, replacing today's scattered docs (Doxygen-generated HTML + LaTeX tutorial in `doc/TUTORIAL/`). The site includes a **Swagger UI page that renders the REST API spec authored by Phase 999.10** ([`doc/REST-API.yaml`](doc/REST-API.yaml)), so external users can browse the API interactively without rebuilding BALL locally.
+**Goal:** Convert BALL's existing Doxygen-only C++ API documentation (659 header files carrying `/** ... */` comments across 25 modules — STRUCTURE/QSAR/VIEW/KERNEL/FORMAT/etc.) into a hosted [Read the Docs](https://about.readthedocs.com/) site at `ball-project.readthedocs.io`. The Doxygen comments stay in the source (single source-of-truth, no per-class rewrite), but the OUTPUT format flips from "locally-built HTML you only see if you run `cmake --build --target doc`" to "online portal with stable URL + search + cross-references + version selector." The same site also publishes a Swagger UI page rendering Phase 999.10's REST API spec ([`doc/REST-API.yaml`](doc/REST-API.yaml)) — interactive endpoint browser without rebuilding BALL.
+
+**Two distinct deliverables, one phase:**
+1. **Convert the Doxygen-generated C++ API reference to a Read the Docs-hosted online reference** — the bulk of the work, since BALL's API surface is large (659 files with Doxygen comments). Mechanism: keep Doxygen as the comment extractor; add Breathe + Exhale as the Doxygen-XML → Sphinx bridge; publish via RTD.
+2. **Add a Swagger UI page consuming `doc/REST-API.yaml`** — small mechanical work using `sphinxcontrib-openapi` once the Sphinx site exists.
+
+The Doxygen-to-RTD conversion is the primary goal; the Swagger UI is a natural addition because both live in the same Sphinx project.
 
 **Why:** BALL has no central docs portal today. Users find:
 - A 1990s-era LaTeX tutorial in [`doc/TUTORIAL/`](doc/TUTORIAL/) — not online
@@ -755,7 +761,7 @@ For a v2.0 release shipping signed installers (Phase 8) + a Python SDK (PyBALL v
   - `docs/index.rst` — landing page with cards to sub-sections
   - `docs/getting-started/` — install instructions per platform (links to `BUILD-*.md`)
   - `docs/tutorial/` — port relevant pieces from `doc/TUTORIAL/*.tex` to reStructuredText / MyST markdown
-  - `docs/api/` — C++ API reference via [Breathe](https://breathe.readthedocs.io/) + [Exhale](https://exhale.readthedocs.io/), which consume the existing Doxygen XML output. Keeps the Doxygen comments as the source-of-truth; Sphinx renders them in a unified site.
+  - `docs/api/` — **C++ API reference, the deliverable that subsumes today's local-only Doxygen HTML.** Built via [Breathe](https://breathe.readthedocs.io/) + [Exhale](https://exhale.readthedocs.io/), which consume the existing Doxygen XML output and render it into the Sphinx site. Doxygen comments in the source stay as the source-of-truth (no per-class rewrite — 659 files would be infeasible); only the OUTPUT format moves online. CMake's `doc` target (today's `cmake --build --target doc`) becomes a developer-convenience-only step; the user-facing path is `https://ball-project.readthedocs.io/api/`.
   - `docs/python/` — PyBALL SDK reference, auto-generated from docstrings via `sphinx.ext.autodoc`. Requires Phase 6 to have landed.
   - `docs/rest-api/` — **Swagger UI page consuming `doc/REST-API.yaml`** via [`sphinxcontrib-openapi`](https://github.com/sphinx-contrib/openapi) or the [`sphinx_swagger_ui`](https://github.com/timothycrosley/sphinx-swagger-ui) plugin. Interactive endpoint browser, try-it-out forms (loopback-pointing for local dev), schema visualization.
 
