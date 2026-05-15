@@ -330,6 +330,35 @@ jobs:
           # setOptions(DeprecatedFunctions) machinery actually took effect.
           grep 'BALLVIEW_GL_DIAG.*gl_profile=compatibility' /tmp/ballview-smoke.log
 
+      # ======================================================================
+      # Spike smoke check (macOS — GLCore backend) — THROWAWAY (Plan 05-05).
+      # Non-blocking (continue-on-error: true): the GL-core spike is the
+      # SPIKE-01 throwaway prototype; a regression in it must NOT gate PR
+      # merge per CONTEXT.md framing. The step rebuilds BALLView with
+      # -DBALL_SPIKE_BACKEND=GLCore, runs the same render smoke script with
+      # BALLVIEW_USE_SPIKE_BACKEND=1 set, and uploads the captured stdout
+      # so the SPIKE-02 decision record (Plan 08) has a referenced artifact.
+      # ======================================================================
+      - name: Spike smoke check (macOS — GLCore backend)
+        if: matrix.smoke && matrix.os == 'macos-arm64'
+        continue-on-error: true
+        run: |
+          cmake --preset ci-macos -DBALL_LICENSE=GPL -DBALL_SPIKE_BACKEND=GLCore
+          cmake --build --preset ci-macos --target BALLView -j$(sysctl -n hw.ncpu)
+          BALLVIEW_USE_SPIKE_BACKEND=1 bash .planning/phases/02.2-ci-and-build-smoke-matrix/scripts/render-smoke-check.sh \
+            build/ci-macos/bin/BALLView.app/Contents/MacOS/BALLView 2>&1 \
+            | tee /tmp/ballview-spike-smoke.log
+
+      - name: Upload spike smoke log (macOS — GLCore backend)
+        if: matrix.smoke && matrix.os == 'macos-arm64'
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: spike-smoke-log-glcore-macos
+          path: /tmp/ballview-spike-smoke.log
+          if-no-files-found: ignore
+          retention-days: 30
+
       - name: Render smoke check (Linux — xvfb + software Mesa)
         if: matrix.smoke && matrix.os == 'linux-x64'
         env:
