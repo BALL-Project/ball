@@ -171,7 +171,7 @@ optional_whitespace: /* empty */ { /*strcpy($$, "");*/ }
 
 tag: TK_UNDERSCORE value { 
 	 		CIF_DEBUG("Found value " << value_helper);
-			sprintf($$, "_%s", value_helper.c_str()); 
+			snprintf($$, sizeof($$), "_%s", value_helper.c_str());
 			value_helper = "";
 		}
 	 ;
@@ -191,52 +191,52 @@ value: value_helper_start {
 	;
 
 value_helper_start: TK_VALUE                            { is_textfield = false; strcpy($$, $1); }
-						| TK_VALUE single_quote_helper value_helper { is_textfield = false; sprintf($$, "%s%s%s", $1, $2, $3); }
-						| TK_VALUE single_quote_helper              { is_textfield = false; sprintf($$, "%s%s", $1, $2); }
-						| TK_VALUE TK_UNDERSCORE value_helper				{ is_textfield = false; sprintf($$, "%s_%s", $1, $3); }
-						| TK_OPEN_SINGLE_QUOTE single_quoted_string { is_textfield = false; sprintf($$, "\'%s", $2); }
-						| TK_OPEN_DOUBLE_QUOTE double_quoted_string { is_textfield = false; sprintf($$, "\"%s", $2); }
+						| TK_VALUE single_quote_helper value_helper { is_textfield = false; snprintf($$, sizeof($$), "%s%s%s", $1, $2, $3); }
+						| TK_VALUE single_quote_helper              { is_textfield = false; snprintf($$, sizeof($$), "%s%s", $1, $2); }
+						| TK_VALUE TK_UNDERSCORE value_helper				{ is_textfield = false; snprintf($$, sizeof($$), "%s_%s", $1, $3); }
+						| TK_OPEN_SINGLE_QUOTE single_quoted_string { is_textfield = false; snprintf($$, sizeof($$), "\'%s", $2); }
+						| TK_OPEN_DOUBLE_QUOTE double_quoted_string { is_textfield = false; snprintf($$, sizeof($$), "\"%s", $2); }
 						| TK_TEXTFIELD textfield_line TK_TEXTFIELD  { is_textfield = true; }
 	;
 
 value_helper: TK_VALUE                                  { is_textfield = false; strcpy($$, $1); }
-						| TK_VALUE single_quote_helper value_helper { is_textfield = false; sprintf($$, "%s%s%s", $1, $2, $3); }
-						| TK_VALUE single_quote_helper              { is_textfield = false; sprintf($$, "%s%s", $1, $2); }
-						| TK_VALUE TK_UNDERSCORE value_helper				{ is_textfield = false; sprintf($$, "%s_%s", $1, $3); }
+						| TK_VALUE single_quote_helper value_helper { is_textfield = false; snprintf($$, sizeof($$), "%s%s%s", $1, $2, $3); }
+						| TK_VALUE single_quote_helper              { is_textfield = false; snprintf($$, sizeof($$), "%s%s", $1, $2); }
+						| TK_VALUE TK_UNDERSCORE value_helper				{ is_textfield = false; snprintf($$, sizeof($$), "%s_%s", $1, $3); }
 	;
 
 single_quote_helper: TK_SINGLE_QUOTE { strcpy($$, "\'"); }
-						| TK_SINGLE_QUOTE single_quote_helper { sprintf($$, "\'%s", $2); }
+						| TK_SINGLE_QUOTE single_quote_helper { snprintf($$, sizeof($$), "\'%s", $2); }
 	;
 
 single_quoted_string: TK_CLOSE_SINGLE_QUOTE { strcpy($$, "\'"); }
-			|	 TK_VALUE        single_quoted_string { sprintf($$, "%s%s", $1, $2); }
-			|	 TK_WHITESPACE   single_quoted_string { sprintf($$, "%s%s", $1, $2); }
-			|	 TK_VALUE TK_UNDERSCORE single_quoted_string { 
+			|	 TK_VALUE        single_quoted_string { snprintf($$, sizeof($$), "%s%s", $1, $2); }
+			|	 TK_WHITESPACE   single_quoted_string { snprintf($$, sizeof($$), "%s%s", $1, $2); }
+			|	 TK_VALUE TK_UNDERSCORE single_quoted_string {
 										CIF_DEBUG("single_quoted_string: %s_%s" << $1 << $3)
-										sprintf($$, "%s_%s", $1, $3); }
-      |  TK_SINGLE_QUOTE single_quoted_string { sprintf($$, "\'%s", $2); }
-			|  TK_DOUBLE_QUOTE single_quoted_string { sprintf($$, "\"%s", $2); }
+										snprintf($$, sizeof($$), "%s_%s", $1, $3); }
+      |  TK_SINGLE_QUOTE single_quoted_string { snprintf($$, sizeof($$), "\'%s", $2); }
+			|  TK_DOUBLE_QUOTE single_quoted_string { snprintf($$, sizeof($$), "\"%s", $2); }
 	;
 
-double_quoted_string: TK_CLOSE_DOUBLE_QUOTE { 
+double_quoted_string: TK_CLOSE_DOUBLE_QUOTE {
 										CIF_DEBUG("end double quoted string")
 										strcpy($$, "\""); }
-			|	 TK_VALUE        double_quoted_string { 
+			|	 TK_VALUE        double_quoted_string {
 										CIF_DEBUG("double_quoted_string: value " << $1)
-										sprintf($$, "%s%s", $1, $2); }
-			|	 TK_VALUE TK_UNDERSCORE double_quoted_string { 
+										snprintf($$, sizeof($$), "%s%s", $1, $2); }
+			|	 TK_VALUE TK_UNDERSCORE double_quoted_string {
 										CIF_DEBUG("double_quoted_string: %s_%s" << $1 << $3)
-										sprintf($$, "%s_%s", $1, $3); }
-			|	 TK_WHITESPACE   double_quoted_string { 
+										snprintf($$, sizeof($$), "%s_%s", $1, $3); }
+			|	 TK_WHITESPACE   double_quoted_string {
 										CIF_DEBUG("double_quoted_string: whitespace" << $1)
-										sprintf($$, "%s%s", $1, $2); }
-      |  TK_DOUBLE_QUOTE double_quoted_string { 
+										snprintf($$, sizeof($$), "%s%s", $1, $2); }
+      |  TK_DOUBLE_QUOTE double_quoted_string {
 										CIF_DEBUG("double_quoted_string: double quote and value" << $2)
-										sprintf($$, "\"%s", $2); }
-			|  TK_SINGLE_QUOTE double_quoted_string { 
+										snprintf($$, sizeof($$), "\"%s", $2); }
+			|  TK_SINGLE_QUOTE double_quoted_string {
 										CIF_DEBUG("double_quoted_string: single quote")
-										sprintf($$, "\'%s", $2); }
+										snprintf($$, sizeof($$), "\'%s", $2); }
 	;
 
 textfield_line: /* empty */ {}
