@@ -647,6 +647,90 @@ Estimated effort: ~2-3 weeks. Plan 3 (regression corpus) is the most time-consum
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; not before v1.6.x ships stable AND v1.7 lands. Sequencing within v2.0: can run in parallel with 999.9 (YAML config) and 999.10 (REST API) — independent files.)
 
+### Phase 999.12: Remove deprecated code from core library and beyond (BACKLOG · TARGETED FOR v2.0)
+
+**Goal:** Audit every `BALL_DEPRECATED` / `BALL_VIEW_DEPRECATED` / `[[deprecated]]` marker in libBALL + libVIEW + applications + bindings, and for each: **delete** the code (+ in-tree callers) OR **un-deprecate** it (if no replacement exists and the class is still load-bearing, per the Phase 5.1 Plan-09 precedent). The major-version break is the right time to ship this cleanup; v1.x stays binary-compatible with the deprecation warnings, v2.0 ships the breaking removal.
+
+**Why:** ~30 files across 7 modules carry deprecation markers as of v1.6 (Phase 5.1 census 2026-05-15). The deprecation has been signaling "this API will go away" to clients for years without follow-through; v1.x's binary compat constraint blocked actually removing it. v2.0 IS the follow-through. Leaving deprecated code in indefinitely creates two problems:
+
+- **Maintenance drag.** Every Phase-5.1-style warning sweep also has to handle the deprecated paths (Plan 05.1-09 fixed a C4996 in `GeneticIndividual` that wouldn't exist if the deprecated class were removed). The Phase 5.1 LEARNINGS already records this pattern.
+- **API surface confusion.** Users coding against BALL don't know which API is the "right" one to call; the deprecation marker says "don't use this" without saying "use that instead." Removing deprecated code forces the team to either provide a clear replacement OR keep the API as the live one.
+
+**Plan-05.1-09 precedent (load-bearing — don't ignore):** Plan 05.1-09 ran into `BALL_DEPRECATED` on `BALL::GeneticIndividual` and discovered the class is still load-bearing for `GeneticAlgorithm`, `EvolutionaryDocking`, and similar — with NO replacement class in the tree. The plan **un-deprecated** the class (1-token edit + 11-line rationale comment in `geneticIndividual.h:15`) rather than removing it. **Phase 999.12 must apply the same audit to every deprecated class** — if there's no replacement, the deprecation was wrong and the marker should be removed instead of the class.
+
+**Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme; the major-version break is the natural slot for breaking-API removal. Final v2.0 phase by sequencing — runs AFTER the other v2.0 substrate transitions (999.6, 999.9, 999.10, 999.11) because those each remove a slice of the deprecated surface as a side-effect, and 999.12 mops up what's left.
+
+**Slices already handled by other v2.0 phases:**
+
+| Module | Files | Handler phase |
+|--------|-------|---------------|
+| `BALL::VIEW::ServerWidget` + `BALLViewServer` | `include/BALL/VIEW/KERNEL/serverWidget.h` + `.iC` + `source/.../serverWidget.C` | **999.10** (deletes as part of REST API replacement) |
+| `BALL::TCPServer` / `TCPServerThread` / `TCPIOStream` | `include/BALL/SYSTEM/networking.h` + `source/SYSTEM/networking.C` | **999.10** (deletes as part of REST API replacement) |
+| `BALL::Client` / `ObjectCreator` | `include/BALL/CONCEPT/client.h` / `objectCreator.h` + source | **999.10** (deletes as part of REST API replacement) |
+| `BALL::VIEW::PythonHighlighter` / `PythonValidator` / `RunPythonThread` / `PyWidget` / `PythonSettings` | `include/BALL/VIEW/WIDGETS/pyWidget.h`, `include/BALL/VIEW/DIALOGS/pythonSettings.h` + sources | **Phase 6** (Python bindings decision; SIP-era embedding goes away if pybind11/nanobind picked) |
+| `BALL::PYTHON::pyKernel` / `pyInterpreter` / `pyCAPIKernel` | `include/BALL/PYTHON/*.h` + sources | **Phase 6** (same reason) |
+| `BALL::VIEW::CUDAVolumeRenderer` | `include/BALL/VIEW/RENDERING/RENDERERS/cudaVolumeRenderer.h` | **999.6 PIPE-01** (renderer pipeline rewrite — likely subsumes or explicitly drops the CUDA path) |
+
+**Scope of 999.12 — what's left after the slices above:**
+
+The remaining deprecated surface is concentrated in three areas:
+
+*1. DOCKING/GENETICDOCK subsystem (~11 classes — all BALL_DEPRECATED):*
+- `BALL::GeneticAlgorithm` ([geneticAlgorithm.h:23](include/BALL/DOCKING/GENETICDOCK/geneticAlgorithm.h#L23))
+- `BALL::EvolutionaryDocking` ([evolutionaryDocking.h:34](include/BALL/DOCKING/GENETICDOCK/evolutionaryDocking.h#L34))
+- `BALL::DockProblem` ([dockProblem.h:35](include/BALL/DOCKING/GENETICDOCK/dockProblem.h#L35))
+- `BALL::GenericGene` / `DoubleGene` / `QuaternionGene` ([genes.h:18,57,107](include/BALL/DOCKING/GENETICDOCK/genes.h#L18))
+- `BALL::GenericParameter` / `DoubleParameter` / `QuaternionParameter` ([parameter.h:14,47,73](include/BALL/DOCKING/GENETICDOCK/parameter.h#L14))
+- `BALL::RotateBonds` + `BALL::RotateBond` ([rotateBonds.h:22](include/BALL/DOCKING/GENETICDOCK/rotateBonds.h#L22), [rotateBond.h:25](include/BALL/DOCKING/GENETICDOCK/rotateBond.h#L25))
+
+**Disposition decision (audit at promotion time):** is GENETICDOCK still a live docking algorithm anyone uses, or is it dead code marked-for-removal-without-follow-through? The whole subsystem may be either:
+- **Live but mismarked** — apply Plan-05.1-09 pattern: remove the markers, keep the code (Note: Plan 05.1-09 already un-deprecated `GeneticIndividual` for exactly this reason)
+- **Dead** — delete the entire `DOCKING/GENETICDOCK/` directory + clear out references. Decision driver: any active research codebase building on top of EvolutionaryDocking? Maintainer call.
+
+*2. VIEW/WIDGETS legacy UI (non-Python — 4 classes):*
+- `BALL::VIEW::MyTextBrowser` + `HelpViewer` ([helpViewer.h:24,62](include/BALL/VIEW/WIDGETS/helpViewer.h#L24)) — likely Qt 5 → Qt 6 unported help-system widgets
+- `BALL::VIEW::ComboBoxDelegate` + `HotkeyTable` ([hotkeyTable.h:23,47](include/BALL/VIEW/WIDGETS/hotkeyTable.h#L23)) — legacy hotkey UI
+
+**Disposition:** if v1.7 BALLView UI Refresh provides replacement widgets, delete these. If v1.7 keeps them as-is, un-deprecate (or migrate to Qt 6 properly). Maintainer call after v1.7 lands.
+
+*3. VIEW/DIALOGS / VIEW/RENDERING residual:*
+- `BALL::VIEW::ExportGeometryDialog` ([exportGeometryDialog.h](include/BALL/VIEW/DIALOGS/exportGeometryDialog.h)) — geometry export UI; check if any users still call it
+- `BALL::VIEW::Preferences` deprecation markers — likely individual deprecated members within an otherwise-live class; targeted member removal, not class deletion
+- 2 other RENDERING/RENDERERS deprecations besides cudaVolumeRenderer — audit
+
+**Out of scope:**
+- Macro DEFINITIONS in `include/BALL/COMMON/macros.h` (49 `BALL_DEPRECATED` occurrences) — these are the deprecation macro infrastructure itself, not call sites. Keep.
+- `BALL_DEPRECATED` macro definitions in `include/BALL/COMMON/global.h` — keep.
+- The deprecation marker in `include/BALL/COMMON/exception.h:18` — that's the C4251 push/pop narrow window comment, not a class deprecation. Keep.
+- Any deprecation marker that, on audit, turns out to be load-bearing without a replacement: apply Plan-05.1-09 precedent (un-deprecate, document rationale, keep code).
+
+**Risk considerations:**
+- **External clients break.** Some downstream users may be calling `BALL::EvolutionaryDocking` or `BALL::HelpViewer` directly. v2.0 release notes carry the breaking-change list; v1.7 release notes can preview it.
+- **Audit-vs-delete asymmetry.** "Audit first" is the rule, "delete" is the action. Every deprecated class gets a one-paragraph note in the v2.0 RELEASE-NOTES.md ("removed: X — replaced by Y" / "removed: X — no replacement, was dead code" / "kept: X — was wrongly deprecated").
+- **Test suite coverage.** If a deprecated class has tests under `test/`, those tests get deleted with the class. Phase 9 (test suite triage) work landed before v2.0 means we have a clearer signal on which tests cover live code.
+- **Plan-05.1-09 false-positive risk.** Some classes may LOOK load-bearing (have callers in the tree) but those callers are themselves deprecated. Audit the dependency closure, not just first-order callers.
+
+**Dependencies:**
+- 999.10 (REST API + PyBALL SDK) — DONE before 999.12; takes the TCP-server slice off the deprecation list
+- Phase 6 (Python bindings) — DONE before 999.12; takes the SIP-era Python embedding slice off the deprecation list
+- 999.6 (PIPE-01 renderer rewrite) — DONE before 999.12; takes the CUDA volume renderer slice off the deprecation list
+- v1.7 (BALLView UI Refresh) — DONE before 999.12; informs the VIEW/WIDGETS UI cleanup audit
+
+**Plan-shape sketch (when promoted):**
+- Plan 1: **Census + audit.** `grep -rln "BALL_DEPRECATED\|BALL_VIEW_DEPRECATED" include/ source/` at promotion time. Per-class entry: file path + linked classes/callers + disposition recommendation (`delete` / `un-deprecate` / `defer`). Output: an audit table.
+- Plan 2: **DOCKING/GENETICDOCK disposition.** Either bulk-delete the directory (if dead) OR un-deprecate the whole subsystem (Plan-05.1-09 pattern at scale).
+- Plan 3: **VIEW deprecation cleanup.** Per-class delete or un-deprecate per audit.
+- Plan 4: **Per-removed-class release-notes entry.** RELEASE-NOTES.md migration guide for v1.x → v2.0 users.
+- Plan 5: **Final sweep.** `grep -rln "BALL_DEPRECATED\|BALL_VIEW_DEPRECATED"` should match only macro DEFINITIONS in macros.h + global.h (no class-level uses remain). Tri-OS CI green confirms no orphaned references.
+
+Estimated effort: ~2-3 weeks. Plan 1 (audit) is the most contentious — each class needs a real disposition call, not a blind delete. Plan 4 (release notes) is the most labour-intensive but it's the doc work that makes the v2.0 break professional.
+
+**Requirements:** TBD (emitted when promoted — likely `LEGACY-01: deprecated-code removal audit` + `LEGACY-02: v2.0 RELEASE-NOTES.md migration guide`)
+**Plans:** 0 plans (5 sketched above)
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before 999.6, 999.10, Phase 6, and v1.7 have landed their slices. This phase is the v2.0 "mop up" — it inherits the cleaner deprecation list after the other transitions.)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
