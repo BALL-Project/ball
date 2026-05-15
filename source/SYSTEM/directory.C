@@ -45,7 +45,7 @@ namespace BALL
 			{
 				directory_path_ = buffer;
 				FileSystem::canonizePath(directory_path_);
-				dir_ = CreateFile(_T(buffer),
+				dir_ = CreateFileA(buffer,
 													FILE_LIST_DIRECTORY,                // access (read/write) mode
 													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 													NULL,                               // security descriptor
@@ -83,7 +83,7 @@ namespace BALL
 		}
 		
 		#ifdef BALL_OS_WINDOWS
-			dir_ = CreateFile(_T(directory_path_.c_str()),
+			dir_ = CreateFileA(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -115,7 +115,7 @@ namespace BALL
 			{	
 				CloseHandle(dir_);
 			}
-			dir_ = CreateFile(_T(directory_path_.c_str()),
+			dir_ = CreateFileA(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -134,10 +134,10 @@ namespace BALL
 			}
 		
 			String pat = directory_path_+"/*";
-			WIN32_FIND_DATA fd;
+			WIN32_FIND_DATAA fd;
 		
 	
-			dirent_ = FindFirstFile(_T(pat.c_str()),&fd);
+			dirent_ = FindFirstFileA(pat.c_str(),&fd);
 			if (dirent_ == INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
@@ -146,7 +146,7 @@ namespace BALL
 			}
 			else
 			{
-				entry = _T(fd.cFileName);
+				entry = fd.cFileName;
 			
 				return desynchronize_(true);
 			}
@@ -185,7 +185,7 @@ namespace BALL
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			
-			dir_ = CreateFile(directory_path_.c_str(),
+			dir_ = CreateFileA(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -198,9 +198,9 @@ namespace BALL
 			if (dirent_ != INVALID_HANDLE_VALUE) FindClose(dirent_);
 
 			String pat=directory_path_ + "/*";
-			WIN32_FIND_DATA fd;
+			WIN32_FIND_DATAA fd;
 			
-			dirent_=FindFirstFile(pat.c_str(),&fd);
+			dirent_=FindFirstFileA(pat.c_str(),&fd);
 			
 			if (dirent_==INVALID_HANDLE_VALUE)
 			{
@@ -211,14 +211,14 @@ namespace BALL
 		}
 		if (dir_ == INVALID_HANDLE_VALUE) return desynchronize_(false);
 		
-		WIN32_FIND_DATA fd;
+		WIN32_FIND_DATAA fd;
 		
 		if (dirent_ == INVALID_HANDLE_VALUE)
 		{
 			// someone has forgot to call FirstEntry
 
 			String pat=directory_path_ + "/*";
-			dirent_=FindFirstFile(pat.c_str(),&fd);
+			dirent_=FindFirstFileA(pat.c_str(),&fd);
 			
 			if (dirent_==INVALID_HANDLE_VALUE)
 			{
@@ -231,7 +231,7 @@ namespace BALL
 		}
 		else
 		{
-			if (FindNextFile(dirent_,&fd)==0) return desynchronize_(false);
+			if (FindNextFileA(dirent_,&fd)==0) return desynchronize_(false);
 			entry=fd.cFileName;
 		}
 		return desynchronize_(true);
@@ -266,7 +266,7 @@ namespace BALL
 
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
-			dir_ = CreateFile(directory_path_.c_str(),
+			dir_ = CreateFileA(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -286,8 +286,8 @@ namespace BALL
 			FindClose(dirent_);
 		}
 		String pat = directory_path_ + "/*";
-		WIN32_FIND_DATA fd;
-		dirent_ = FindFirstFile(pat.c_str(),&fd);
+		WIN32_FIND_DATAA fd;
+		dirent_ = FindFirstFileA(pat.c_str(),&fd);
 		if (dirent_ == INVALID_HANDLE_VALUE)
 		{
 			if (dir_ != INVALID_HANDLE_VALUE)
@@ -299,7 +299,7 @@ namespace BALL
 			return 0;
 		}
 		Size size = 1;
-		while(FindNextFile(dirent_,&fd) != 0) ++size;
+		while(FindNextFileA(dirent_,&fd) != 0) ++size;
 		FindClose(dirent_);
 		desynchronize_();
 		return (size - 2);
@@ -327,7 +327,7 @@ namespace BALL
 		Size size =0;
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
-			dir_ = CreateFile(directory_path_.c_str(),
+			dir_ = CreateFileA(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -343,10 +343,10 @@ namespace BALL
 		}
 		
 		String pat=directory_path_+"/*";
-		WIN32_FIND_DATA fd;
+		WIN32_FIND_DATAA fd;
 		
 		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
-		dirent_=FindFirstFile(pat.c_str(),&fd);
+		dirent_=FindFirstFileA(pat.c_str(),&fd);
 		if (dirent_==INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
@@ -359,7 +359,7 @@ namespace BALL
 			bool isfile=(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)==0;
 			if (isfile) ++size;
 		}
-		while(FindNextFile(dirent_,&fd));
+		while(FindNextFileA(dirent_,&fd));
 		FindClose(dirent_);
 		desynchronize_();
 		return size;
@@ -392,7 +392,7 @@ namespace BALL
 		Size size = 0;
 		if (dir_ == INVALID_HANDLE_VALUE)
 		{
-			dir_ = CreateFile(directory_path_.c_str(),
+			dir_ = CreateFileA(directory_path_.c_str(),
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -408,10 +408,10 @@ namespace BALL
 		}
 		
 		String pat=directory_path_+"/*";
-		WIN32_FIND_DATA fd;
+		WIN32_FIND_DATAA fd;
 		
 		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
-		dirent_=FindFirstFile(pat.c_str(),&fd);
+		dirent_=FindFirstFileA(pat.c_str(),&fd);
 		if (dirent_==INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
@@ -424,7 +424,7 @@ namespace BALL
 			bool isfile=(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)!=0;
 			if (isfile) ++size;
 		}
-		while(FindNextFile(dirent_,&fd));
+		while(FindNextFileA(dirent_,&fd));
 		FindClose(dirent_);
 		desynchronize_();
 		return (size-2);
@@ -498,7 +498,7 @@ namespace BALL
 		String s;
 		Directory directory;
 		
-		HANDLE dir = CreateFile(FileSystem::CURRENT_DIRECTORY,
+		HANDLE dir = CreateFileA(FileSystem::CURRENT_DIRECTORY,
 												FILE_LIST_DIRECTORY,                
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  
 												NULL,                               
@@ -508,9 +508,9 @@ namespace BALL
 												);
 		if (dir == INVALID_HANDLE_VALUE)  return desynchronize_(false);
 		HANDLE mydirent;
-		WIN32_FIND_DATA fd;
+		WIN32_FIND_DATAA fd;
 		
-		mydirent=FindFirstFile("*",&fd);
+		mydirent=FindFirstFileA("*",&fd);
 		do
 		{
 			if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) !=0 &&
@@ -527,7 +527,7 @@ namespace BALL
 				}
 			}
 		}
-		while(FindNextFile(mydirent,&fd));
+		while(FindNextFileA(mydirent,&fd));
 		FindClose(mydirent);
 		CloseHandle(dir);
 		return desynchronize_(false);
@@ -671,7 +671,7 @@ namespace BALL
 	bool Directory::isValid() const
 	{
 		#ifdef BALL_COMPILER_MSVC
-			HANDLE dir = CreateFile(const_cast<char*>(directory_path_.c_str()),
+			HANDLE dir = CreateFileA(const_cast<char*>(directory_path_.c_str()),
 							FILE_LIST_DIRECTORY,                
 							FILE_SHARE_READ|FILE_SHARE_DELETE,  
 							NULL,                               

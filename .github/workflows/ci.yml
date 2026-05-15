@@ -239,21 +239,20 @@ jobs:
         # workspace; the install location is exposed as Qt6_DIR so CMake's
         # FIND_PACKAGE(Qt6 6.5 ...) resolves cleanly.
         #
-        # `modules:` lists *additional* modules only. aqt v3.3.0 on Qt 6.5+:
-        #   - qtbase ships by default (it's the base package, not a module) —
-        #     listing it makes aqt error `packages were not found while parsing
-        #     XML of package information!` (Phase 05.1 finding, blocked Linux
-        #     CI for ~24 hours).
-        #   - qtopengl was a Qt 5 module name; in Qt 6 it's `Qt6::OpenGLWidgets`,
-        #     part of qtbase — not a separately-installable module.
-        #   - qttools IS a real Qt 6 add-on module (lupdate / lrelease etc.).
+        # `modules:` is intentionally omitted. aqt v3.3.0 on Qt 6.5+ rejects
+        # qtbase, qtopengl, AND qttools as module names — they are all part of
+        # the default Qt 6 install on Linux, not separately-installable add-on
+        # modules. BALL's actual Qt 6 requirements (Core, Network, Xml, OpenGL,
+        # PrintSupport, Test, Widgets, OpenGLWidgets, LinguistTools) are all
+        # in the default install, so no `modules:` entry is needed.
+        # Phase 5.1 carry-forward: this finding came from CI runs 25925481471
+        # and 25934288544 where aqt rejected each module list in turn.
         # D-05: NO qt5compat — clean break.
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.5.*'
           host: 'linux'
           target: 'desktop'
-          modules: 'qttools'
           cache: true
 
       - name: Configure (Linux)

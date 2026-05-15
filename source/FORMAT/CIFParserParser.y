@@ -8,7 +8,11 @@ using namespace std;
 using namespace BALL;
 
 extern int yylex();
-extern void yyerror(char* s);
+extern void yyerror(const char* s);
+// Phase 5.1 carry-forward: MSVC rejects implicit const-char[N] -> char*
+// conversion that gcc/clang accept. Bison auto-generates calls like
+// CIFParsererror("syntax error") with const string literals, so yyerror
+// must take const char*.
 
 CIFFile::Datablock current_datablock;
 CIFFile::Datacontent current_datacontent;
@@ -247,7 +251,7 @@ textfield_line: /* empty */ {}
 %%
 /*        additional C code            */
 
-void yyerror(char* s)
+void yyerror(const char* s)
 {
 	printf("CIFParserParser(): Parse Error! %s \n",s);
 }

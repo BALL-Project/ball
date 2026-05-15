@@ -1005,9 +1005,21 @@ namespace BALL
 	};
 
 // required for visual studio
+//
+// Phase 5.1 carry-forward (post-Plan-05.1-07 measurement):
+// Guarded by !BALL_BUILD_DLL — emit the extern template declaration ONLY in
+// client TUs that link AGAINST libBALL.dll, NOT in libBALL's own TUs. When
+// compiling libBALL itself, the matching `template class BALL_EXPORT
+// std::vector<Atom*>;` definition in atom.C is the export source; an
+// unguarded extern declaration in the header tripped MSVC C4910 ×6 because
+// MSVC's pointer-element-vector implicit instantiation interacted with the
+// dllexport definition. vector3.h's same pattern does not trip because
+// value-element vectors do not share the implicit instantiation path.
 #ifdef BALL_COMPILER_MSVC
-#include <vector>
+# ifndef BALL_BUILD_DLL
+#  include <vector>
 extern template class std::vector<Atom*>;
+# endif
 #endif
 
 # ifndef BALL_NO_INLINE_FUNCTIONS
