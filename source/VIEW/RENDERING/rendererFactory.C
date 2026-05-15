@@ -20,6 +20,15 @@
 # include <cstdlib> // std::getenv for runtime opt-in gate
 #endif
 
+#ifdef BALL_SPIKE_BACKEND_QRHI
+// THROWAWAY SPIKE — Phase 5 prototype only (Plan 05-06).
+# include <BALL/VIEW/RENDERING/RENDERERS/rhiRenderer.h>
+# include <BALL/VIEW/RENDERING/qtRhiSurface.h>
+# ifndef BALL_SPIKE_BACKEND_GLCORE
+#  include <cstdlib> // std::getenv for runtime opt-in gate (shared with GLCore arm)
+# endif
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -29,17 +38,23 @@ namespace BALL
 
 			Renderer* makeRenderer(Kind kind)
 			{
-#ifdef BALL_SPIKE_BACKEND_GLCORE
-				// THROWAWAY SPIKE — runtime opt-in gate. The spike Kind exists at
-				// compile time (Kind::OpenGL_Core is in scope), but production
-				// callers still pass Kind::OpenGL_Fixed because scene.C is unchanged
-				// (Phase 02.1 boundary preserved). Intercept the production Kind
-				// only when BALLVIEW_USE_SPIKE_BACKEND=1 is set at launch; otherwise
-				// the original GLRenderer path is taken so the spike build still
-				// runs the default renderer when the user does not opt in.
+#if defined(BALL_SPIKE_BACKEND_GLCORE) || defined(BALL_SPIKE_BACKEND_QRHI)
+				// THROWAWAY SPIKE — runtime opt-in gate. The spike Kind(s) exist
+				// at compile time (Kind::OpenGL_Core / Kind::QRhi in scope), but
+				// production callers still pass Kind::OpenGL_Fixed because scene.C
+				// is unchanged (Phase 02.1 boundary preserved). Intercept the
+				// production Kind only when BALLVIEW_USE_SPIKE_BACKEND=1 is set
+				// at launch; otherwise the original GLRenderer path is taken so
+				// the spike build still runs the default renderer when the user
+				// does not opt in. If both spike backends are compiled in (an
+				// unusual configuration), QRhi wins.
 				if (kind == Kind::OpenGL_Fixed && std::getenv("BALLVIEW_USE_SPIKE_BACKEND") != nullptr)
 				{
+#  if defined(BALL_SPIKE_BACKEND_QRHI)
+					return new QRhiRenderer;
+#  else
 					return new CoreGLRenderer;
+#  endif
 				}
 #endif
 				switch (kind)
@@ -51,6 +66,12 @@ namespace BALL
 					case Kind::OpenGL_Core:
 						// THROWAWAY SPIKE — Plan 05-05.
 						return new CoreGLRenderer;
+#endif
+
+#ifdef BALL_SPIKE_BACKEND_QRHI
+					case Kind::QRhi:
+						// THROWAWAY SPIKE — Plan 05-06.
+						return new QRhiRenderer;
 #endif
 
 					case Kind::Raytracer:
@@ -98,6 +119,16 @@ namespace BALL
 						// granted context is core-profile and degrades to a no-op
 						// otherwise -- it never crashes a regular run.
 						return new GLRenderWindow(parent);
+#endif
+
+#ifdef BALL_SPIKE_BACKEND_QRHI
+					case Kind::QRhi:
+						// THROWAWAY SPIKE — Plan 05-06. QRhiWidget IS the surface
+						// (multi-inheritance mirrors GLRenderWindow's RenderWindow +
+						// QOpenGLWidget pattern). The QRhi backend is auto-selected
+						// by Qt at runtime (Metal on macOS, D3D11/12 on Windows,
+						// Vulkan or GL on Linux).
+						return new QtRhiSurface(parent);
 #endif
 
 					case Kind::POV:

@@ -46,7 +46,13 @@ namespace BALL
 				/// Not for production; removed before PIPE-01.
 				OpenGL_Core
 #endif
-				// (Plan 06 inserts BALL_SPIKE_BACKEND_QRHI block here)
+#ifdef BALL_SPIKE_BACKEND_QRHI
+				,
+				/// THROWAWAY: QRhiWidget-based renderer spike (Phase 5 / Plan 05-06).
+				/// Requires Qt 6.7+ (QRhiWidget). Only present when configured with
+				/// -DBALL_SPIKE_BACKEND=QRhi. Not for production; removed before PIPE-01.
+				QRhi
+#endif
 			};
 
 			/// Construct a Renderer for the given Kind. Caller owns the result.

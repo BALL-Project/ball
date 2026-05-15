@@ -285,7 +285,19 @@ IF (BALL_SPIKE_BACKEND STREQUAL "GLCore")
     LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DBALL_SPIKE_BACKEND_GLCORE")
     MESSAGE(STATUS "Phase 5 spike: GL-core renderer ENABLED (throwaway; not for release builds)")
 ENDIF()
-# Plan 06 will add the QRhi arm of the same option.
+IF (BALL_SPIKE_BACKEND STREQUAL "QRhi")
+    # QRhiWidget (the embedding mechanism for QRhi inside a QWidget hierarchy)
+    # only ships in Qt 6.7+. The project's D-01 floor is Qt 6.5. If the resolved
+    # Qt version is too old, emit a clear actionable WARNING and do NOT set the
+    # compile defn -- the spike sources then stay out of the build.
+    # NOTE: Qt6_VERSION is set by FIND_PACKAGE(Qt6 ...) further below, but the
+    # version variables `Qt6Core_VERSION` / `Qt6Widgets_VERSION` populated by
+    # FIND_PACKAGE are not yet in scope at this point in CMakeLists.txt -- the
+    # Qt6 find_package call lives ~25 lines below this block. We therefore
+    # defer the version check until after FIND_PACKAGE(Qt6 ... Core ...) runs;
+    # the check is implemented by setting a flag and re-evaluating later.
+    SET(BALL_SPIKE_BACKEND_QRHI_REQUESTED ON)
+ENDIF()
 
 ## QT
 OPTION(USE_QTWEBENGINE "Add support for QtWebEngine" ON)
@@ -310,6 +322,22 @@ LIST(APPEND BALL_DEP_LIBRARIES Qt6::Core
                                Qt6::Network
                                Qt6::Xml)
 LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DQT_NO_KEYWORDS")
+
+# Phase 5 spike: QRhi arm of BALL_SPIKE_BACKEND option (Plan 05-06).
+# QRhiWidget requires Qt 6.7+. Defer the version-floor check until after
+# FIND_PACKAGE(Qt6 ... Core ...) has populated Qt6Core_VERSION; if the floor
+# is met, append the BALL_SPIKE_BACKEND_QRHI compile defn so the spike code
+# in rendererFactory.{h,C} + rhiRenderer.{h,C} + qtRhiSurface.{h,C} compiles.
+# Otherwise emit a clear actionable WARNING that points to the GL-core arm.
+# THROWAWAY: this block exists only for SPIKE-01; it is removed before PIPE-01.
+IF (BALL_SPIKE_BACKEND_QRHI_REQUESTED)
+    IF (Qt6Core_VERSION VERSION_LESS 6.7)
+        MESSAGE(WARNING "Phase 5 spike: QRhi backend requested but Qt ${Qt6Core_VERSION} < 6.7 (QRhiWidget unavailable). Build proceeds without spike; rerun with -DBALL_SPIKE_BACKEND=GLCore or upgrade Qt.")
+    ELSE()
+        LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DBALL_SPIKE_BACKEND_QRHI")
+        MESSAGE(STATUS "Phase 5 spike: QRhi renderer ENABLED (throwaway; Qt ${Qt6Core_VERSION})")
+    ENDIF()
+ENDIF()
 
 IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets OpenGLWidgets)
