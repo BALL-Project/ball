@@ -167,12 +167,31 @@ Plans:
 - [x] 05-08-spike-decision-record-PLAN.md — Wave 6: 05-SPIKE-DECISION.md — chosen backend + rationale + per-platform criteria + scoped PIPE-01 task list (SPIKE-02) *(complete 2026-05-15; split-pattern decision: GL-Core for v1.6.x → QRhi for v2; 342 lines, 22 data citations; reasonable-call autonomous override per the same pattern as Plan 05-07. Phase 5 COMPLETE pending orchestrator phase-close step. PIPE-01 backlog 999.6 unblocked — dormant gate satisfied.)*
 
 ### Phase 5.1: Build Warnings & Latent Bug Cleanup (INSERTED)
-**Goal**: Remove the latent bugs and tame the warning surface surfaced by Phase 4's CI matrix once it reached green on all three OSes (run [25899905204](https://github.com/BALL-Project/ball/actions/runs/25899905204), 2026-05-15). Tier A real bugs first — C4717 `getline` infinite recursion, C4311 pointer truncation on 64-bit Windows (MMFF94 force-field code), `-Wself-assign-field`, `-Wformat-overflow` in the CIF parser, `-Wtautological-constant-out-of-range-compare`. Tier B Windows DLL hygiene — C4910 `extern template class BALL_EXPORT` mismatch in `vector3.h`/`atom.h`, broaden the C4251 pragma. Tier C style cleanup deferred until Phase 5 (Qt 6) lands and strips `-Wdeprecated-declarations`.
+**Goal**: Remove the latent bugs and tame the warning surface surfaced by Phase 4's CI matrix once it reached green on all three OSes (run [25899905204](https://github.com/BALL-Project/ball/actions/runs/25899905204), 2026-05-15). Tier A real bugs first (C4717 `getline` infinite recursion, C4311 pointer truncation with end-to-end audit, `-Wself-assign-field`, `-Wtautological-constant-out-of-range-compare`, `-Wformat-overflow` in the CIF parser, `-Wstringop-truncation` audit). Tier B Windows DLL hygiene (C4910 `extern template class BALL_EXPORT` mismatch in `vector3.h` + `atom.h`, then broaden the C4251 pragma after re-measurement, plus C4996 GeneticIndividual and C4834 cleanup). Tier D build configuration (Qt5LinguistTools / Node 20 actions / Linux ccache tar / Windows release `--config Release` / BALLView.app CFBundleIdentifier). Tier C style cleanup deferred until Phase 5 (Qt 6) lands and strips `-Wdeprecated-declarations`.
 **Depends on**: Phase 4 (the Windows CI green run that surfaced the warnings), Phase 5 (resolves the bulk of Tier C deprecation noise)
-**Requirements**: TBD
+**Requirements**: None — this phase has no formal REQ-IDs. Plans cite BACKLOG.md task IDs (A1-A6, B1-B5, D1-D5).
 **Reference**: [`.planning/phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) — full warning census, per-task fix proposals, Codex CLI cross-check verdicts
 **UI hint**: no
-**Plans**: TBD (promote with /gsd-review-backlog or scope inline when starting work)
+**Plans**: 14 plans, 2 waves
+
+**Wave 1** *(parallel — A1-A6, B1-B2, B4-B5, D1-D5 minus B3)*
+- [ ] 05.1-01-PLAN.md — A1: C4717 getline infinite recursion in string.iC (drop std::move on rvalue overloads)
+- [ ] 05.1-02-PLAN.md — A2: C4311 pointer truncation T*→long — end-to-end audit (hash.C + MMFF94 + triangulatedSurface) with downstream storage widened to std::uintptr_t / PointerSizeUInt
+- [ ] 05.1-03-PLAN.md — A3: -Wself-assign-field at pairExpInteractionEnergyProcessor.C:124 (propagate from proc.rdf_parameter_)
+- [ ] 05.1-04-PLAN.md — A4: -Wtautological-constant-out-of-range-compare in representation.C (asymmetric — preserve DrawingPrecision invariant, drop DrawingMode < 0 OR add DRAWING_MODE_INVALID = -1)
+- [ ] 05.1-05-PLAN.md — A5: -Wformat-overflow in CIFParserParser.y (sprintf → snprintf, 19 instances)
+- [ ] 05.1-06-PLAN.md — A6: -Wstringop-truncation audit of strncpy sites (10 instances, case-by-case)
+- [ ] 05.1-07-PLAN.md — B1+B2: C4910 extern template / BALL_EXPORT migration in vector3 + atom (sequenced one plan)
+- [ ] 05.1-09-PLAN.md — B4+B5: C4996 GeneticIndividual deprecation + C4834 regressionModel.C:258 (Tier-B cosmetic)
+- [ ] 05.1-10-PLAN.md — D1: Qt5LinguistTools / qttools missing on Windows vcpkg
+- [ ] 05.1-11-PLAN.md — D2: Node.js 20 GitHub Actions deprecation (bump checkout/cache pins or set FORCE_JAVASCRIPT_ACTIONS_TO_NODE24)
+- [ ] 05.1-12-PLAN.md — D3: Linux ccache cache-save tar failure (diagnosis-first; fix or no-fix-transient)
+- [ ] 05.1-13-PLAN.md — D4: Windows release LNK1104 tbb12_debug.lib — add `--config Release` in release.yml + ci.yml
+- [ ] 05.1-14-PLAN.md — D5: BALLView.app CFBundleIdentifier + bundle-identity fields (Phase 8 notarization prerequisite; choose canonical identifier)
+
+**Wave 2** *(blocked on 05.1-07 measurement)*
+- [ ] 05.1-08-PLAN.md — B3: C4251 STL-members-of-DLL-exported-classes pragma scope decision (re-measure after B1+B2 land; full / narrow / skip)
+
 
 ### Phase 6: Python Bindings
 **Goal**: Re-establish BALL's Python bindings on a supported Python (3.12+) and a maintained binding generator — via a decision-first vertical slice, not a blind full migration of all 237 `.sip` files. Restructured per the Codex review (SIP 6 migration vs a pybind11/nanobind rewrite are different projects; the generator must be *chosen* on evidence).
