@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
-status: executing
-stopped_at: Phase 5 Plan 08 complete (SPIKE-02 decision record — split pattern: GL-Core for v1.6.x → QRhi for v2; Phase 5 COMPLETE pending orchestrator phase-close step)
-last_updated: "2026-05-15T10:17:00.000Z"
+status: planning
+stopped_at: "Phase 5 Plan 08 complete (SPIKE-02 decision record — split pattern: GL-Core for v1.6.x → QRhi for v2; Phase 5 COMPLETE pending orchestrator phase-close step)"
+last_updated: "2026-05-15T10:56:38.655Z"
 progress:
-  total_phases: 19
+  total_phases: 20
   completed_phases: 7
   total_plans: 25
   completed_plans: 25
-  percent: 37
+  percent: 35
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -24,10 +24,10 @@ progress:
 ## Current Position
 
 Phase: 05 (qt-6-migration-4b-renderer-backend-decision-spike) — COMPLETE pending orchestrator phase-close step
-Plan: 8 of 8 (Plans 01-08 complete)
-**Phase:** 5 — Qt 6 Migration + Renderer Backend Spike — **COMPLETE**
+Plan: Not started
+**Phase:** 05.1
 **Plans:** 8 of 8 complete (05-01, 05-02, 05-03, 05-04, 05-05, 05-06, 05-07, 05-08)
-**Status:** Phase closeout delivered; next phase ready (Phase 4.1 OR Phase 5.1 per ordering)
+**Status:** Ready to plan
 **Progress:** [██████████] 100% of Phase 5
 
 ```
@@ -163,11 +163,13 @@ roadmap/STATE after any gsd-tools phase op.
 **Last action (Plan 05-06):** Phase 5 Plan 06 (QRhi spike — SPIKE-01 QRhi arm) executed — 2 commits, 9 files. New files: include/BALL/VIEW/RENDERING/RENDERERS/rhiRenderer.{h,C} + include/BALL/VIEW/RENDERING/qtRhiSurface.{h,C} (all carry THROWAWAY-SPIKE + QRhi API-stability provenance). QRhiRenderer overrides renderRepresentations_() + capabilities() (retained, no offscreen/picking/stereo) + pickObjects() (returns empty + DIAG line; picking deferred to GL-core arm per the accepted 05-RESEARCH.md caveat — async QRhiReadbackResult out of SPIKE-01 scope). QtRhiSurface multi-inherits RenderSurface + QRhiWidget (mirrors GLRenderWindow + QOpenGLWidget pattern); implements the 7 RenderTarget pure-virtual stubs as no-ops (PIPE-01 will re-shape). RendererFactory wires Kind::QRhi under #ifdef BALL_SPIKE_BACKEND_QRHI; the existing BALLVIEW_USE_SPIKE_BACKEND env-var gate is extended to favour QRhi when only QRhi is compiled in. CMakeLists.txt: deferred Qt 6.7+ floor check via BALL_SPIKE_BACKEND_QRHI_REQUESTED flag pattern (Qt6Core_VERSION not yet in scope at the option-block site); FIND_PACKAGE(Qt6GuiPrivate) + Qt6::GuiPrivate link target added under the gate (private-headers required for the <rhi/qrhi.h> public-API-stable-but-private-include canonical include — Pitfall 7). 3 auto-fixes during Task 2 (Rule 3 blocking): Qt6GuiPrivate find_package, RenderTarget pure-virtual stubs on QtRhiSurface, QRhi::driverInfoStruct() → driverInfo(). 1 documented decision: QShaderBaker NOT used (avoids dragging QtShaderTools into VIEW link surface); default-constructed QShader stages exercise API shape, GLSL pair kept as documentation strings. Build verification on macOS-arm64 / Qt 6.11: BALLView links green under -DBALL_SPIKE_BACKEND=QRhi (configure GREEN, build GREEN). Default + GLCore configs regression-tested green. scene.C BYTE-IDENTICAL. Runtime smoke shows [SPIKE] QRhiRenderer constructed (env-var gate correct) then crashes early before QtRhiSurface::initialize() — IDENTICAL caveat shape to Plan 05-05's CoreGLRenderer downstream-virtual limitation (env-var gate substitutes renderer at Kind::OpenGL_Fixed but matching surface substitution only fires via Kind::QRhi which scene.C does not request — PIPE-01 scope). SPIKE-01 deliverable bar (constructs + factory-wires + correct API shape + caveats documented) met for the QRhi arm; combined with Plan 05-05 the SPIKE-01 comparison data set is COMPLETE, ready for Plan 08 SPIKE-02 decision record. Commits: 50a79af (Task 1: CMake + Kind enum), c683546 (Task 2: rhiRenderer + qtRhiSurface + Qt6::GuiPrivate link).
 
 **Next action:** **Phase 5 closeout (orchestrator step)** — Phase 5 is complete and ready for the orchestrator's phase-close step (`/gsd-execute-phase 5` next-iteration close action). After phase close, choose between:
+
 - **Phase 4.1** Config Color-Defaults Fix (CONFIG-01) — promoted from backlog 999.4; real user-facing bug, only workaround is deleting `~/.BALLView`.
 - **Phase 5.1** Build Warnings & Latent Bug Cleanup — Phase 4 follow-ups (Tier A real bugs: C4717 getline recursion, C4311 pointer truncation; Tier B Windows DLL hygiene). Inserted 2026-05-15.
 - **Backlog 999.6 PIPE-01** — now UNBLOCKED (dormant gate "Phase 5 must land + SPIKE-02 must exist" is satisfied). Available for `/gsd-review-backlog` promotion.
 
 Consider also (independent of Phase 5 close):
+
 - Relax the Plan 05-04 macOS GL compat-profile grep assertion to accept `gl_profile=none` on Apple Silicon — confirmed runner-independent by Plan 05-07's two macOS DIAG captures (M4 Max local + macos-latest CI runner both emit `gl_profile=none`). One-line CI fixup.
 - Resolve SEED-005-1 (Linux aqtinstall module-name churn) + SEED-005-2 (Windows vcpkg baseline drift) before any PIPE-01 v1.6.x work begins — `05-SPIKE-DECISION.md` §5.3 lists them as PIPE-01 v1.6.x gates.
 
