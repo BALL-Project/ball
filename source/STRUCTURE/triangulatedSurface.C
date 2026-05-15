@@ -1284,13 +1284,17 @@ namespace BALL
 		typedef std::pair<TrianglePoint*, TrianglePoint*> Input;
 
 		bool operator()(const Input& p1, const Input& p2) const {
+			// Use BALL::PointerSizeUInt (global.h:207) so the canonicalization
+			// `swap(a.first, a.second) iff |a.first| > |a.second|` compares the
+			// full pointer width on 64-bit Windows (LLP64), where `unsigned long`
+			// is 32-bit and would silently truncate the upper half.
 			Input a = p1;
-			if((unsigned long)a.first > (unsigned long)a.second) {
+			if(reinterpret_cast<BALL::PointerSizeUInt>(a.first) > reinterpret_cast<BALL::PointerSizeUInt>(a.second)) {
 				std::swap(a.first, a.second);
 			}
 
 			Input b = p2;
-			if((unsigned long)b.first > (unsigned long)b.second) {
+			if(reinterpret_cast<BALL::PointerSizeUInt>(b.first) > reinterpret_cast<BALL::PointerSizeUInt>(b.second)) {
 				std::swap(b.first, b.second);
 			}
 

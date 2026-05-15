@@ -19,7 +19,10 @@ namespace BALL
 	 */
 	HashIndex hashPointer(void *const void_ptr)
 	{
-		double d = ((double)((unsigned long)void_ptr)) * 0.6180339887;
+		// Use BALL::PointerSizeUInt (global.h:207) so the pointer-value extraction
+		// preserves all bits on 64-bit Windows (LLP64), where `unsigned long` is
+		// only 32-bit and would truncate the upper half of a 64-bit pointer.
+		double d = ((double)(reinterpret_cast<BALL::PointerSizeUInt>(void_ptr))) * 0.6180339887;
 		Index index = (Index)(5832641097.37287 * (d - (double)((unsigned long)d)));
 
 		return ((index < 0) ? -index : index);

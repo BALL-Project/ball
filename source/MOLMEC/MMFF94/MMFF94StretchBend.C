@@ -353,11 +353,15 @@ namespace BALL
 		stretch_bends_.clear();
 
 		// build up a lookup table for the stretch data
-		HashMap<long, Position> stretch_map;
+		// NOTE: the key is the product of two atom-pointer values used as a cheap
+		// composite identity. Use BALL::PointerSizeUInt (global.h:207) so the
+		// pointer values aren't truncated on 64-bit Windows (LLP64), where
+		// `long` is 32 bits and silently drops the upper half of a 64-bit pointer.
+		HashMap<BALL::PointerSizeUInt, Position> stretch_map;
 		for (Position stretch_pos = 0; stretch_pos < stretches_.size(); stretch_pos++)
 		{
-			long index = ((long) stretches_[stretch_pos].atom1) * 
-									 ((long) stretches_[stretch_pos].atom2);
+			BALL::PointerSizeUInt index = reinterpret_cast<BALL::PointerSizeUInt>(stretches_[stretch_pos].atom1) *
+										 reinterpret_cast<BALL::PointerSizeUInt>(stretches_[stretch_pos].atom2);
 
 			stretch_map[index] = stretch_pos;
 		}
@@ -366,7 +370,7 @@ namespace BALL
 		StretchBend sb;
 
 		// iterator on the stretch search results
-		HashMap<long, Position>::Iterator stretch_it1, stretch_it2;
+		HashMap<BALL::PointerSizeUInt, Position>::Iterator stretch_it1, stretch_it2;
 		
 		// iterate over all bends and look for the corresponding bends in the lookup table
 		for (Position bend_pos = 0; bend_pos < bends_.size(); bend_pos++)
@@ -384,9 +388,10 @@ namespace BALL
 			Atom* a2 = bend.atom2;
 			Atom* a3 = bend.atom3;
 
-			// find the i->j and j->k stretch
-			stretch_it1 = stretch_map.find((long) a1 * (long) a2);
-			stretch_it2 = stretch_map.find((long) a2 * (long) a3);
+			// find the i->j and j->k stretch (composite identity from atom pointers —
+			// see stretch_map construction above for the LLP64-truncation rationale).
+			stretch_it1 = stretch_map.find(reinterpret_cast<BALL::PointerSizeUInt>(a1) * reinterpret_cast<BALL::PointerSizeUInt>(a2));
+			stretch_it2 = stretch_map.find(reinterpret_cast<BALL::PointerSizeUInt>(a2) * reinterpret_cast<BALL::PointerSizeUInt>(a3));
 
 			if (stretch_it1 == stretch_map.end() || stretch_it2 == stretch_map.end())
 			{
