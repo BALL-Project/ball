@@ -36,6 +36,22 @@
 #	else
 #		define BALL_VIEW_EXPORT __declspec(dllimport)
 #	endif
+//	C4251 — "class needs to have dll-interface to be used by clients of class X".
+//	This warning fires on every BALL_EXPORT class that has an STL member
+//	(std::vector, std::string, std::map, ...) and is the dominant Windows
+//	warning category (~3495 instances in Phase 4's CI baseline, run 25899905204).
+//
+//	Cosmetic-only in BALL's supported build matrix: Phase 4's vcpkg pin
+//	guarantees the BALL DLL and every client TU link against a single MSVC
+//	toolchain + a single STL ABI. The cross-CRT scenario C4251 warns about
+//	cannot occur. This project-wide disable replaces — and subsumes — the
+//	narrow push/pop window around std::string in
+//	include/BALL/COMMON/exception.h:16-19 (kept in place as belt-and-suspenders,
+//	but redundant once this pragma is active). If a future maintainer changes
+//	the build matrix to mix a non-vcpkg MSVC toolchain with a different CRT,
+//	this disable must be removed. See .planning/phases/05.1-build-warnings-
+//	and-latent-bugs/05.1-BACKLOG.md Task B3.
+#	pragma warning(disable: 4251)
 #elif defined(BALL_COMPILER_GXX) && (BALL_COMPILER_VERSION_MAJOR > 4 || (BALL_COMPILER_VERSION_MAJOR == 4 && BALL_COMPILER_VERSION_MINOR >= 3))
 # define BALL_EXPORT __attribute__((visibility ("default")))
 # define BALL_HIDE __attribute__((visibility ("hidden")))
