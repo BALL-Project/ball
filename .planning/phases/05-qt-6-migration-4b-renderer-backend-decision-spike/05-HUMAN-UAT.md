@@ -14,13 +14,13 @@ updated: 2026-05-15T13:30:00Z
 
 ### 1. Acceptance of CR-01 / CR-02 / CR-03 Qt 6 migration regressions
 expected: Architect either (a) flips them into a Phase 5.1 backlog row and closes Phase 5, OR (b) requires a follow-up plan in Phase 5 before close.
-result: resolved
-resolution: **(a) Deferred to Phase 5.1** per user direction ("focus on macOS only for now; defer implementation and CI testing to later phases"). CR-01/02/03 are real Qt 6 migration regressions but: CR-03 is gated behind BALL_PYTHON_SUPPORT=OFF (latent); CR-01 affects an SSL error-handling code path that does not fire in the macOS smoke check; CR-02 affects the rotamer menu UX (not the core render path). The macOS-only release scope is preserved. Phase 5.1 (warnings + latent bugs cleanup) is the natural home for these — added to its de-facto scope; no separate backlog row needed because 5.1 already covers Qt 6 migration cleanup.
+result: **fixed inline** (direction reversed)
+resolution: All three FIXED in this --fix run after user re-invoked `/gsd-code-review 5 --fix`. CR-01 wired HTMLPage::certificateError as a Qt 6 signal-slot (`81569ee`). CR-02 renamed QSignalMapper::mapped(int) → mappedInt at molecularControl.C:498 and PresentaBALLView.C:40 (`339cb99`). CR-03 replaced QLayout::setMargin with setContentsMargins at pyWidget.C:348 + :412 (`3917c10`). All seven Warnings also fixed (`fb0f7ed`..`1271a2a`). Build + smoke + lint stay green.
 
 ### 2. Acceptance of gl_profile=compatibility CI assertion mismatch
 expected: Architect signs off on a one-line ci.yml relaxation OR confirms it stays until SEED-005-1 + SEED-005-2 land.
-result: resolved
-resolution: **Deferred to backlog 999.7** per user direction. The CI assertion at ci.yml:331+387 is dormant today (Linux/Windows CI red upstream of the smoke step); the one-line `gl_profile=(compatibility|none)` relaxation is consolidated into Phase 999.7's scope alongside SEED-005-1/2/3. No action needed in Phase 5 itself.
+result: **fixed inline** (direction reversed)
+resolution: One-line relaxation applied (`7b28685`): macOS step now asserts `gl_profile=(compatibility|none)` since Apple Silicon GL 2.1 doesn't expose the Core/Compat distinction (two live captures confirm). Linux retains strict `compatibility` (llvmpipe does expose the distinction; fallback would be a real regression). Folded into the same --fix sweep that closed CR-01/02/03; no longer needs to wait for 999.7.
 
 ### 3. Acceptance of autonomous override precedent (Plans 05-07 + 05-08)
 expected: Architect signs §6 of 05-SPIKE-DECISION.md OR appends a §6.x amendment.
@@ -58,13 +58,16 @@ None. All items resolved or formally deferred to a tracked backlog/follow-up pha
 
 ## Resolution
 
-Phase 5 cleared for close after the Codex CLI adversarial review caught and fixed CODEX-P1 (mutex deadlock). The architect-of-record decisions reduce to:
+Phase 5 cleared for close. After the initial autonomous close, the user invoked `/gsd-code-review 5 --fix`, which reversed the "defer to Phase 5.1" direction and applied all Critical + Warning fixes inline. Final state:
 
-1. **CR-01/02/03** → Phase 5.1 (active scope; warnings + latent bugs)
-2. **CI gl_profile relaxation** → Phase 999.7 backlog
-3. **Autonomous override** → implicitly approved by user direction
-4. **CODEX-P1 mutex** → fixed inline; commit `3238ce3`
-5. **CODEX-P2 spike paint path** → already documented in SPIKE-DECISION §5.4 as PIPE-01 scope
-6. **CODEX-P2 picking shader** → dormant under P2 #5; spike-only
+1. **CR-01/02/03** → **fixed inline** (`81569ee`, `339cb99`, `3917c10`)
+2. **CI gl_profile relaxation** → **fixed inline** (`7b28685`)
+3. **WR-01..WR-07 (7 warnings)** → **fixed inline** (`fb0f7ed`..`1271a2a`)
+4. **Autonomous override** → implicitly approved by user direction
+5. **CODEX-P1 mutex** → fixed inline; commit `3238ce3`
+6. **CODEX-P2 spike paint path** → documented in SPIKE-DECISION §5.4 as PIPE-01 scope
+7. **CODEX-P2 picking shader** → dormant under #6; spike-only
 
-macOS Qt 6 runtime end-to-end verified (smoke check produces non-blank PNG + diag line). Linux/Windows runtime explicitly deferred to Phase 999.7 per user direction.
+**Linux/Windows runtime** remains explicitly deferred to Phase 999.7 per user's macOS-only direction. The macOS CI gate is now expected to pass after the gl_profile relaxation lands.
+
+Verified locally post-fix: `cmake --build` green; `render-smoke-check.sh` produces non-blank 1510×1046 PNG with 256 distinct byte values; `BALLVIEW_GL_DIAG` line shows `gl_profile=none renderer_backend=GL`; `scripts/check-no-legacy-qt6-symbols.sh` exits 0.
