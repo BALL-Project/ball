@@ -520,7 +520,7 @@ All three are correctness-sensitive substrate transitions. Grouping under v2.0 k
   - `GET /screenshot` — returns PNG of current scene.
   - `GET /version` — server version + capabilities (for SDK feature-detection).
 - **Loopback-only by default** (`bind: 127.0.0.1:8642`). LAN exposure deferred to a future phase; this iteration is local-scripting only. Single-user model — no auth needed when loopback-only.
-- OpenAPI 3.x spec at `doc/REST-API.yaml`. Authored alongside the code, not retro-fitted.
+- OpenAPI 3.x spec at `doc/REST-API.yaml`. Authored alongside the code, not retro-fitted. **Phase 999.13** (Read the Docs site) consumes this file to render an interactive Swagger UI page on the docs portal.
 - **No WebSocket** in v2.0 — push notifications deferred to a follow-up phase. The initial SDK uses polling (`GET /scene/version` returns a monotonic counter); WebSocket lands when there's a real demand.
 
 *Replacement in PyBALL (the SDK half):*
@@ -730,6 +730,84 @@ Estimated effort: ~2-3 weeks. Plan 1 (audit) is the most contentious — each cl
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before 999.6, 999.10, Phase 6, and v1.7 have landed their slices. This phase is the v2.0 "mop up" — it inherits the cleaner deprecation list after the other transitions.)
+
+### Phase 999.13: Read the Docs site + Swagger UI for the REST API (BACKLOG · TARGETED FOR v2.0)
+
+**Goal:** Stand up an official BALL documentation site on [Read the Docs](https://about.readthedocs.com/) at `ball-project.readthedocs.io` (or similar) for v2.0, replacing today's scattered docs (Doxygen-generated HTML + LaTeX tutorial in `doc/TUTORIAL/`). The site includes a **Swagger UI page that renders the REST API spec authored by Phase 999.10** ([`doc/REST-API.yaml`](doc/REST-API.yaml)), so external users can browse the API interactively without rebuilding BALL locally.
+
+**Why:** BALL has no central docs portal today. Users find:
+- A 1990s-era LaTeX tutorial in [`doc/TUTORIAL/`](doc/TUTORIAL/) — not online
+- Doxygen-generated C++ API HTML — only available if you `cmake --build --target doc` locally
+- README on GitHub
+- No Python (PyBALL) docs
+- No REST API docs (Phase 999.10 authors the OpenAPI spec but doesn't publish it)
+
+For a v2.0 release shipping signed installers (Phase 8) + a Python SDK (PyBALL via Phase 6) + a REST API (Phase 999.10), having no docs portal is a credibility gap. Read the Docs is the de-facto C++/Python scientific-software docs solution (used by NumPy, SciPy, RDKit, OpenBabel, gemmi, scikit-learn, …). It's free for OSS, integrates with GitHub, builds Sphinx docs automatically on every push, hosts at a stable URL.
+
+**Milestone target: v2.0.** Final piece of the v2.0 substrate-modernization story — once BALL ships installable + scriptable + remotely controllable, the docs need to be too.
+
+**Scope (in scope):**
+
+*Infrastructure:*
+- `.readthedocs.yaml` at repo root — RTD build config (Python version, Sphinx target, theme).
+- `docs/` directory (new — separate from the existing `doc/` which has Doxygen + LaTeX tutorial). Sphinx project layout:
+  - `docs/conf.py` — Sphinx config; theme: `furo` or `sphinx-rtd-theme` (industry standard, well-supported on RTD)
+  - `docs/index.rst` — landing page with cards to sub-sections
+  - `docs/getting-started/` — install instructions per platform (links to `BUILD-*.md`)
+  - `docs/tutorial/` — port relevant pieces from `doc/TUTORIAL/*.tex` to reStructuredText / MyST markdown
+  - `docs/api/` — C++ API reference via [Breathe](https://breathe.readthedocs.io/) + [Exhale](https://exhale.readthedocs.io/), which consume the existing Doxygen XML output. Keeps the Doxygen comments as the source-of-truth; Sphinx renders them in a unified site.
+  - `docs/python/` — PyBALL SDK reference, auto-generated from docstrings via `sphinx.ext.autodoc`. Requires Phase 6 to have landed.
+  - `docs/rest-api/` — **Swagger UI page consuming `doc/REST-API.yaml`** via [`sphinxcontrib-openapi`](https://github.com/sphinx-contrib/openapi) or the [`sphinx_swagger_ui`](https://github.com/timothycrosley/sphinx-swagger-ui) plugin. Interactive endpoint browser, try-it-out forms (loopback-pointing for local dev), schema visualization.
+
+*Read the Docs project setup:*
+- Connect the GitHub repo → Read the Docs (one-time admin step, GUI on RTD's site)
+- Configure builds: `pip install -r docs/requirements.txt && sphinx-build -b html docs/ _build/html/`
+- Set the public URL: `https://ball-project.readthedocs.io/` (or alternative if naming collides)
+- Version mapping: stable (latest tagged release), latest (v1.6-modernization branch), v1.6 / v1.7 / v2.0 (each release as a permalink)
+
+*Swagger UI page (the user's explicit ask):*
+- Single `docs/rest-api/index.rst` page that includes the rendered spec
+- Use `sphinxcontrib-openapi`'s `.. openapi::` directive (or equivalent) pointing at `../../doc/REST-API.yaml`
+- Renders endpoint summaries + request/response schemas + try-it-out forms (where applicable)
+- Cross-link from `docs/python/RemoteViewer.rst` (PyBALL SDK page from Phase 999.10) → REST endpoint that backs each method
+
+*Migration of existing content (decide at plan-time):*
+- LaTeX tutorial in `doc/TUTORIAL/` — either port to `docs/tutorial/` as MyST/reST OR keep as `.pdf` artifact downloadable from the new site
+- Doxygen HTML output — superseded by Breathe-rendered API ref in `docs/api/`; the old `cmake --build --target doc` can stay as a developer convenience but isn't the user-facing path anymore
+
+**Out of scope:**
+- Russian / German / other translations of the docs (i18n is a separate concern; ship English first)
+- Versioned docs migration of pre-1.6 BALL versions (unhelpful — the API has changed too much)
+- Hosting on a custom domain (`docs.ball-project.org` or similar) — readthedocs.io subdomain is fine for v2.0
+- Auto-generating REST endpoint examples from the OpenAPI spec — Swagger UI already does this interactively
+
+**Risk considerations:**
+- **Breathe / Exhale can be slow** on large Doxygen trees. BALL's API surface is large. Mitigation: cache the Doxygen XML in CI; build incrementally.
+- **`sphinxcontrib-openapi` may not render every OpenAPI 3.x feature** BALL's spec uses. Mitigation: choose the plugin AFTER the spec is stable (999.10 done), test rendering on the actual spec.
+- **PyBALL docstring coverage** drives the auto-doc quality. Phase 6 + the SDK plan in 999.10 should include "write docstrings" as part of acceptance criteria, not as an afterthought.
+- **RTD build limits** — free tier has time/memory caps. If BALL's Doxygen tree pushes past them, fall back to RTD Business (paid) or self-host Sphinx output.
+
+**Dependencies:**
+- **Phase 999.10** — DONE before 999.13 (it authors `doc/REST-API.yaml`, the input to the Swagger UI page)
+- **Phase 6** (Python bindings) — DONE before 999.13 (PyBALL must exist for the Python-SDK docs section)
+- **Phase 8** (Packaging & Distribution) — DONE before 999.13 (provides install instructions for `docs/getting-started/`)
+- v1.7 (BALLView UI Refresh) — helpful: any new UI features get user-facing screenshots in the docs
+
+**Plan-shape sketch (when promoted):**
+- Plan 1: **Sphinx scaffolding.** `docs/` directory, `conf.py`, `index.rst`, `.readthedocs.yaml`, `docs/requirements.txt`. Local `sphinx-build` green on a placeholder page.
+- Plan 2: **Doxygen ↔ Sphinx bridge via Breathe.** `docs/api/` consumes existing Doxygen XML output. Sample a few classes (Atom, Molecule, Composite) to confirm rendering quality.
+- Plan 3: **Swagger UI page for the REST API.** `docs/rest-api/index.rst` uses `sphinxcontrib-openapi` (or chosen plugin) to render `doc/REST-API.yaml`. Cross-link with the PyBALL SDK page.
+- Plan 4: **PyBALL SDK reference.** `docs/python/` via `sphinx.ext.autodoc` reading PyBALL docstrings. Manual narrative pages for cookbook examples (`RemoteViewer` walkthrough, common scripting patterns).
+- Plan 5: **Getting Started + Tutorial migration.** `docs/getting-started/` links to `BUILD-*.md`; `docs/tutorial/` ports relevant LaTeX-tutorial content to MyST. Old `doc/TUTORIAL/*.tex` either deleted or kept as legacy PDF download.
+- Plan 6: **Read the Docs activation.** Connect GitHub → RTD; configure versioning; publish v2.0 docs at the public URL. Add the URL to README + the project's GitHub repo description.
+
+Estimated effort: ~2-3 weeks. Plan 2 (Breathe integration) is the trickiest because BALL's API surface is large and Doxygen quality varies; Plan 3 (Swagger UI) is mechanical once the OpenAPI spec is stable.
+
+**Requirements:** TBD (emitted when promoted — likely `DOC-01: Read the Docs site live at v2.0 release` + `DOC-02: Swagger UI for REST API published` + `DOC-03: PyBALL SDK docs auto-generated from docstrings` + `DOC-04: C++ API reference via Breathe`)
+**Plans:** 0 plans (6 sketched above)
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when 999.10 + Phase 6 + Phase 8 have all landed; do NOT promote earlier — the docs site needs real content to ship, and that content comes from those upstream phases.)
 
 ---
 *Roadmap created: 2026-05-14*
