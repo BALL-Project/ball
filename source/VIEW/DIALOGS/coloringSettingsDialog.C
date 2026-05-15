@@ -41,6 +41,7 @@ namespace BALL
 			connect( force_min_value_slider, SIGNAL( valueChanged(int) ), this, SLOT( forceMinValueChanged() ) );
 			connect( max_distance_slider, SIGNAL( valueChanged(int) ), this, SLOT( maxDistanceChanged() ) );
 			connect( max_tf_slider, SIGNAL( valueChanged(int) ), this, SLOT( maxTFChanged() ) );
+			connect(reset_elements_button, SIGNAL(clicked()), this, SLOT(resetElementColors()));
 
 			registerWidgets_();
 		}
@@ -485,6 +486,30 @@ namespace BALL
 			text = text.trimRight("0");
 			if (text.hasSuffix(".")) text += "0";
 			force_min_value_label->setText(text.c_str());
+		}
+
+		void ColoringSettingsDialog::resetElementColors()
+		{
+			// D-02: clear the user's element-color overrides by repopulating
+			// element_table_ from a freshly constructed ElementColorProcessor.
+			// The next writePreferenceEntries call diffs the table against the
+			// same compiled defaults (D-06) and will emit an empty
+			// ElementColorOverrides= — restoring the unshadowed compiled palette
+			// without requiring the user to delete ~/.BALLView (CONFIG-01 criterion 3).
+			ElementColorProcessor elp;
+			const HashMap<Position, ColorRGBA>& color_hash_map = elp.getColorMap();
+			vector<String> names;
+			vector<ColorRGBA> colors;
+			HashMap<Position, ColorRGBA>::ConstIterator it = color_hash_map.begin();
+			for (; it != color_hash_map.end(); it++)
+			{
+				if (it->first == 0) continue;
+				names.push_back(PTE[it->first].getSymbol());
+				colors.push_back(it->second);
+			}
+			names.push_back(PTE[0].getSymbol());
+			colors.push_back(color_hash_map[0]);
+			element_table_->setContent(names, colors);
 		}
 
 
