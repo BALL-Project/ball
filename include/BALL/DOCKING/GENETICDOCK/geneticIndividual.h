@@ -12,7 +12,16 @@
 
 namespace BALL
 {
-	class BALL_EXPORT BALL_DEPRECATED GeneticIndividual
+	// NOTE: BALL_DEPRECATED was removed (Phase 05.1-09, BACKLOG Task B4).
+	// The class is still load-bearing internally — GeneticAlgorithm holds
+	// std::vector<std::vector<GeneticIndividual>> and a GeneticIndividual
+	// template_individual_ by value, and EvolutionaryDocking depends on the
+	// same. MSVC's STL templates instantiate the deprecated members from
+	// inside the containers, which emitted 5 spurious C4996 warnings. Since
+	// there is no replacement class and the methods are not actually going
+	// away, the deprecation was incorrect. Re-add BALL_DEPRECATED only when
+	// a replacement lands and internal callers migrate off.
+	class BALL_EXPORT GeneticIndividual
 	{
 		public:
 			/** standard constructor
