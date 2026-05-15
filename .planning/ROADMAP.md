@@ -368,13 +368,15 @@ Plans:
 Plans:
 - [ ] TBD (do NOT promote before Phase 8 closes)
 
-### Phase 999.9: Replace INIFile with YAML config (BACKLOG)
+### Phase 999.9: Replace INIFile with YAML config (BACKLOG · TARGETED FOR v2.0)
 
 **Goal:** Remove `BALL::INIFile` (the legacy in-tree INI parser/writer) and replace it project-wide with YAML. All 20 `.ini` files under `data/` get converted to `.yaml`; all ~49 source files that call `INIFile::read()` / `INIFile::write()` / `getValue()` / `setValue()` / section traversal migrate to the new YAML config API; `include/BALL/FORMAT/INIFile.h` + `source/FORMAT/INIFile.C` are deleted at the end of the migration.
 
 **Why:** INI is a 1990s format with no schema, no nested structures, no type semantics — BALL's force-field parameter files (AMBER, MMFF94, CHARMM, GAFF) are deeply hierarchical and currently encoded via ad-hoc INI section conventions that the parser and every caller have to keep in sync by hand. YAML is the modern equivalent (nested maps + lists + typed scalars + comments + anchors for shared definitions), has well-maintained C++ libraries (yaml-cpp), and trivially round-trips through Python / web tooling for downstream BALLAXY / Jupyter / inspection workflows. The migration also removes a custom parser surface (~125 INIFile references across BALL's hot code paths) from the codebase, shrinking the maintenance footprint.
 
-**Why BACKLOG, not active:** This is not core value (build + render on 3 OSes). INI files work today. The win is modernization + tooling + schema validation. Should land in a v1.7-track or v1.8 milestone, NOT in v1.6.x — v1.6.x is the modernization release that ships BALL/BALLView buildable; data-format churn during a release-cycle would invalidate the "same scientific output" guarantee.
+**Milestone target: v2.0.** Pairs naturally with the other v2.0 carry-forward (Phase 999.6 — PIPE-01 modern-pipeline rewrite) — v2.0's theme is "modernize the substrate after v1.6 stabilizes." The renderer transition + the config-format transition are both correctness-sensitive infrastructure changes that benefit from being grouped into a single major-version bump where users expect breaking-but-documented behavior changes (file-format churn, GL-vs-QRhi backend swap).
+
+**Why BACKLOG, not active in v1.6.x or v1.7:** This is not core value (build + render on 3 OSes). INI files work today. The win is modernization + tooling + schema validation. v1.6.x is the modernization release that ships BALL/BALLView buildable; data-format churn during a release-cycle would invalidate the "same scientific output" guarantee. v1.7 is the BALLView UI Refresh (SEED-001) — a UI-layer concern, not a config-format concern. v2.0 is the natural home: substrate modernization (renderer + config) together, post-v1.7-UI.
 
 **Scope (in scope):**
 - New `BALL::YAMLConfig` (or similar) reader/writer class — likely thin wrapper over `yaml-cpp` (vcpkg / Homebrew / apt all package it) — that exposes the same caller-facing verbs INIFile does (`read`/`write`/`getValue`/`setValue`/section iteration) so the migration is a one-call-at-a-time edit per call site rather than a per-file rewrite
@@ -420,7 +422,7 @@ Estimated effort: ~2 weeks if no force-field parameter regression appears; longe
 **Plans:** 0 plans (5 sketched above)
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when ready; not before v1.6.x ships stable — needs the modernization milestone closed first so the migration doesn't compound the v1.6 release risk)
+- [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; not before v1.6.x ships stable AND v1.7 UI work is mostly done — the YAML config migration touches force-field parameter loading which downstream-affects every chemistry calculation, so it lands after the modernization + UI churn settles)
 
 ---
 *Roadmap created: 2026-05-14*

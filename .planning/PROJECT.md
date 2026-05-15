@@ -46,7 +46,9 @@ non-negotiable outcome.
 ### Release Policy
 
 - **1.6 = modernized foundation.** This milestone makes BALL/BALLView build and render on current toolchains (macOS/Linux/Windows) — it is *not* a UI-polish release.
+- **1.6.1 = strict corrective patch** — re-ships v1.6.0 with the Windows installer fixed, macOS Info.plist populated, `release.yml` matching the Qt 6 codebase, the config color-defaults user bug fixed (Phase 4.1), and Phase 5.1's source-level cleanup verified on tri-OS CI.
 - **1.7 = "BALLView Refresh"** — the UI/UX modernization (SEED-001), a separate milestone gated on GSD Phase 5 (Qt 6).
+- **2.0 = substrate modernization.** Carries the post-v1.7 infrastructure transitions: PIPE-01 (renderer pipeline rewrite, fixed-function → QRhi; backlog 999.6) + INIFile-to-YAML config-format migration (backlog 999.9). Both are correctness-sensitive substrate changes that benefit from being grouped under a single major-version bump where users expect breaking-but-documented behavior changes (file-format churn, GL → QRhi backend swap). Phase 5 SPIKE-02 locked the GL-Core → QRhi split-pattern for v2; Phase 999.9 keeps the v2 theme coherent.
 - This resolves the version-numbering collision with the Claude Design Handover package (which internally assumed "1.6 = UI refresh").
 
 ### Out of Scope
