@@ -5,6 +5,7 @@
   "builtin-baseline": "c1ce926ddf75f166cbdd444bbaf463410ac99b17",
   "dependencies": [
     "qtbase",
+    "qttools",
     "boost-any",
     "boost-asio",
     "boost-bind",
