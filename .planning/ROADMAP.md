@@ -282,7 +282,7 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
 
-### Phase 999.2: Ninja build generator (BACKLOG)
+### Phase 999.2: Ninja build generator (BACKLOG · TARGETED FOR v2.0)
 
 **Goal:** Switch the default CMake generator from Make/MSBuild to **Ninja** across all three platforms.
 **Why:** Faster incremental builds and consistent parallelism everywhere; on Windows it replaces slow MSBuild and makes the legacy `ball_contrib` "do not use -j" hazard moot (contrib is already obsolete on macOS/Linux). Pure build-tooling change — **zero source changes**, just `cmake -G Ninja`.
@@ -291,12 +291,15 @@ Plans:
   - **Linux:** `apt/dnf install ninja-build`; `cmake -G Ninja`. Same benefits. Low risk.
   - **Windows:** Biggest win — replaces MSBuild (`cmake -G Ninja` in a VS dev shell, or `Ninja Multi-Config`). Eliminates the `ball_contrib` `/maxcpucount`/`-j` undefined-behaviour warning entirely. Slightly more setup (Ninja must be on PATH).
   - **CI (Phase 9):** the GH Actions matrix should standardize on `-G Ninja` on all three runners — simpler, faster, uniform.
-  - **Risk:** Low. CMake fully supports Ninja; the only watch-items are non-standard custom commands / `add_custom_command` ordering and any code that shells out assuming Makefile targets. BALL's CMake is fairly standard. Best sequenced *after* Phase 4 (dependency overhaul) and *with* Phase 9 (CI) so it lands once, matrix-wide.
+  - **Risk:** Low. CMake fully supports Ninja; the only watch-items are non-standard custom commands / `add_custom_command` ordering and any code that shells out assuming Makefile targets. BALL's CMake is fairly standard. Best sequenced *after* Phase 4 (dependency overhaul, DONE) and *with* Phase 9 (CI, in flight) so it lands once, matrix-wide.
+
+**Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme — build-tooling transition with no source impact, but the per-platform `BUILD-*.md` docs change. Sequenced AFTER 999.7 (Linux + Windows Qt 6 bring-up) so the cross-platform Ninja switch lands once on a green tri-OS baseline. The `CMakePresets.json` from Phase 4 already abstracts the per-platform configure; flipping the generator is a single `"generator": "Ninja"` field on each preset.
+
 **Requirements:** TBD
-**Plans:** 2/2 plans complete
+**Plans:** TBD (single plan likely sufficient: update presets + verify tri-OS green + update BUILD-*.md)
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when ready)
+- [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens)
 
 ### Phase 999.3: Networking rework (BACKLOG · LIKELY SUPERSEDED BY 999.10)
 
@@ -568,6 +571,81 @@ Estimated effort: ~3–4 weeks. Plan 6 (the deletion sweep) is the longest becau
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before v1.6.x ships stable AND Phase 6 picks a Python binding generator AND v1.7 UI work is mostly done. If 999.3 is still in the backlog at v2.0 promotion time, mark 999.3 as superseded.)
+
+### Phase 999.11: Replace in-tree mmCIF parser with gemmi (BACKLOG · TARGETED FOR v2.0)
+
+**Goal:** Replace BALL's in-tree Flex/Bison-based mmCIF parser with [`gemmi`](https://gemmi.readthedocs.io/) — a modern, well-maintained C++ library for structural biology that includes a fast and conformant mmCIF reader/writer. Reimplements [`BALL::CIFFile`](include/BALL/FORMAT/CIFFile.h) on top of gemmi, deletes the Flex/Bison grammar sources, and (optionally) routes other crystallography formats through gemmi where it adds value.
+
+**Why:** BALL's current mmCIF parser is the Flex/Bison pair `source/FORMAT/CIFParserLexer.l` + `source/FORMAT/CIFParserParser.y`, used by `BALL::CIFFile` (and transitively by `BALL::NMRStarFile`). It is a long-standing maintenance liability:
+- **Custom grammar that nobody else uses** — every CIF dialect edge case (multi-line text fields, save-frames, escape conventions) has to be handled by hand. The PDB mmCIF format has evolved since the grammar was written, and corner cases surface in real PDB entries.
+- **Surfaces of fragility caught by Phase 5.1:** Plan 05.1-05 fixed 20 `sprintf → snprintf` calls in the grammar; Plan 05.1-06 fixed 17 `strncpy` sites in the lexer with `-Wstringop-truncation`; Phase 5.1 carry-forward fixed a `yyerror(char*)` vs MSVC-`const char*` regression. The grammar regenerates inconsistencies between toolchains (`-Wconflicts-sr` ×3 grammar warnings remain unresolved in the lexer — see Phase 5.1 BACKLOG).
+- **gemmi is the de-facto modern alternative** — used by CCP4, PDB-tools, Phenix, RDKit-CIF integration, the Coot model viewer, and the PDB itself. MIT-licensed, packaged in vcpkg + Homebrew + apt (Debian: `libgemmi-dev`). Native Python bindings (`pip install gemmi`) and a CLI (`gemmi convert`) — useful for the eventual PyBALL SDK.
+- **Substantial code reduction:** 7 files (CIFFile.{h,C} + Lexer.l + Parser.y + Bison/Flex CMake glue) → ~1 file (CIFFile.{h,C} as a thin gemmi adapter). Removes the project's only Flex+Bison dependency for this format (PDB/MOL2/etc. still use Bison; Bison stays in the build for those).
+- **mmJSON + mmCIF + binary CIF (BinCIF) parity** — gemmi reads all three with one API; BALL today only reads CIF. Even if BALL doesn't expose all formats publicly, the floor is higher.
+
+**Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme:
+- **999.2** — Ninja build generator
+- **999.6** — PIPE-01 renderer pipeline rewrite (GL → QRhi)
+- **999.9** — INIFile → YAML config-format migration
+- **999.10** — TCP/Composite remote-control → REST API + PyBALL SDK
+- **999.11** — In-tree mmCIF parser → gemmi adoption
+
+All five are correctness-sensitive substrate changes; bundled v2.0 break keeps the major-version transition coherent.
+
+**Scope (in scope):**
+
+*Adoption:*
+- Add `gemmi` as a required dependency: `vcpkg.json`, Homebrew (`brew install gemmi`), apt (`libgemmi-dev` on Ubuntu 24.04+; built-from-source fallback if older). Min version: TBD at promotion (pick a Q4-2025 or 2026 release).
+- Add CMake `find_package(gemmi CONFIG REQUIRED)` — gemmi ships a CMake config package.
+
+*Reimplementation:*
+- Rewrite `source/FORMAT/CIFFile.C` to use `gemmi::cif::Document` / `gemmi::cif::Block` for parsing + writing. The `BALL::CIFFile` public API (Datablock / Datacontent / Item / SaveFrame iteration) is preserved so callers (currently only `NMRStarFile.C`) don't change.
+- Decision at plan-time: do we preserve `BALL::CIFFile`'s API shape as-is, or switch to a cleaner shape and migrate callers? With only `NMRStarFile.C` as the in-tree caller, the migration cost is small either way.
+
+*Deletion:*
+- `source/FORMAT/CIFParserLexer.l` — DELETE (Flex grammar)
+- `source/FORMAT/CIFParserParser.y` — DELETE (Bison grammar)
+- The generated `CIFParserLexer.C` and `CIFParserParser.C/h` go with them
+- BISON/FLEX CMake glue for these files in `source/FORMAT/sources.cmake` (or wherever it lives) — DELETE. Other parsers (PDB, MOL2, etc.) keep using Bison/Flex.
+
+*Regression coverage (mandatory before deletion):*
+- Per-format regression test: load a representative set of PDB CIF entries through both the old parser (snapshot at the point of replacement) and gemmi-based BALL::CIFFile, assert identical molecule structures (atom count, residue map, chain layout, header metadata). PDB IDs to include in the test set: a small, a typical, a large, a multi-NMR-model, a save-frame-heavy NMR-Star example.
+- Add the same set to BALL's test suite (Phase 9) so it stays a permanent gate.
+
+**Optional extension (decide during planning):**
+- gemmi also reads PDB, mmJSON, MTZ (X-ray reflection files). If BALL's existing PDB/MOL2 parsers also show maintenance issues at v2.0 time, consider routing more formats through gemmi. Default: don't expand scope — replace the CIF parser cleanly, leave other formats alone. PDB-via-gemmi can be its own Phase 999.X later.
+
+**Out of scope:**
+- mmJSON / BinCIF / MTZ support — gemmi can read them, but exposing them through `BALL::CIFFile` is a separate API decision
+- Crystallographic structure-factor manipulation (gemmi has rich MTZ + SF tools) — out of BALL's molecular-modelling scope
+- Writing CIF files in a different dialect than the current parser produces — preserve write-path output bit-for-bit unless the regression test forces a change
+- Replacing the lexer/parser pattern for PDB, MOL2, HIN, KCF, etc. — those are not gemmi-supported in the same way
+
+**Risk considerations:**
+- **gemmi may parse some malformed-but-historically-accepted CIF entries differently** than BALL's hand-rolled parser. The regression test (load + compare structures) is the gate; deviations get documented case-by-case (and the gemmi behavior is almost certainly more correct per the IUCr CIF spec).
+- **NMR-Star files** are CIF-derived but with a non-standard save-frame syntax. gemmi handles them ([gemmi NMR-Star docs](https://gemmi.readthedocs.io/en/latest/cif.html#nmr-star)). Verify the BMRB-format test entries parse with gemmi before deleting `NMRStarFile`'s parser path.
+- **gemmi version pinning** — pin a specific gemmi version in vcpkg + Homebrew + apt so cross-platform CI sees the same parser. Mitigates "works on Linux fails on Windows" via library-version drift.
+- **gemmi is C++17+** — BALL is C++17 since Phase 3; matches.
+
+**Dependencies:**
+- Phase 4 (Dependency System Overhaul) — DONE; provides the vcpkg/Homebrew/apt path for adding gemmi
+- Phase 3 (C++17) — DONE; gemmi uses C++17
+
+**Plan-shape sketch (when promoted):**
+- Plan 1: Pin gemmi version, add to vcpkg.json + Homebrew + apt + CMakeLists.txt. Smoke-test link green on all 3 OSes.
+- Plan 2: Author the BALL::CIFFile gemmi adapter behind the existing public API (parallel to the current Flex/Bison implementation, gated by `-DBALL_USE_GEMMI_CIF=ON` for safe A/B testing).
+- Plan 3: Regression test corpus — set of PDB IDs + NMR-Star entries, compare old vs new parsing outputs. Add to BALL test suite.
+- Plan 4: Flip the default to gemmi (`-DBALL_USE_GEMMI_CIF=ON` becomes the default; old path stays optionally compilable for one release as escape hatch).
+- Plan 5: Delete the Flex/Bison sources + generated files + CMake glue. Final tri-OS CI green confirms no orphaned references.
+- Plan 6 (optional): NMRStarFile.C cleanup — if gemmi handles NMR-Star natively in `gemmi::cif`, simplify NMRStarFile.C similarly.
+
+Estimated effort: ~2-3 weeks. Plan 3 (regression corpus) is the most time-consuming; Plans 1+2 are mechanical.
+
+**Requirements:** TBD (emitted when promoted — likely `FORMAT-01: gemmi-based mmCIF parser` + `FORMAT-02: deprecation/removal of Flex/Bison CIF grammar` + `FORMAT-03: PDB-entry regression corpus`)
+**Plans:** 0 plans (6 sketched above)
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; not before v1.6.x ships stable AND v1.7 lands. Sequencing within v2.0: can run in parallel with 999.9 (YAML config) and 999.10 (REST API) — independent files.)
 
 ---
 *Roadmap created: 2026-05-14*

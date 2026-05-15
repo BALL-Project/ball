@@ -48,7 +48,14 @@ non-negotiable outcome.
 - **1.6 = modernized foundation.** This milestone makes BALL/BALLView build and render on current toolchains (macOS/Linux/Windows) — it is *not* a UI-polish release.
 - **1.6.1 = strict corrective patch** — re-ships v1.6.0 with the Windows installer fixed, macOS Info.plist populated, `release.yml` matching the Qt 6 codebase, the config color-defaults user bug fixed (Phase 4.1), and Phase 5.1's source-level cleanup verified on tri-OS CI.
 - **1.7 = "BALLView Refresh"** — the UI/UX modernization (SEED-001), a separate milestone gated on GSD Phase 5 (Qt 6).
-- **2.0 = substrate modernization.** Carries the post-v1.7 infrastructure transitions: PIPE-01 (renderer pipeline rewrite, fixed-function → QRhi; backlog 999.6) + INIFile-to-YAML config-format migration (backlog 999.9) + remote-control architectural cleanup (backlog 999.10: deprecate TCP server/client from libBALL+libVIEW; narrow REST server moves into BALLView the application; PyBALL SDK class wraps it for Python users; supersedes 999.3). All three are correctness-sensitive substrate changes that benefit from being grouped under a single major-version bump where users expect breaking-but-documented behavior changes (render backend swap, file-format churn, wire-protocol + library-API change). Phase 5 SPIKE-02 locked the GL-Core → QRhi split-pattern for v2; 999.9 and 999.10 keep the v2 theme coherent. 999.10 also reshapes the library boundary — remote control is no longer a libBALL concern.
+- **2.0 = substrate modernization.** Carries the post-v1.7 infrastructure transitions:
+  - **999.2** — Ninja replaces Make/MSBuild as the default CMake generator (faster + more uniform cross-platform builds)
+  - **999.6** — PIPE-01 renderer pipeline rewrite (fixed-function GL → QRhi)
+  - **999.9** — INIFile → YAML config-format migration
+  - **999.10** — Remote-control architectural cleanup (deprecate TCP server/client from libBALL + libVIEW; narrow REST server moves INTO BALLView the application; PyBALL SDK class wraps it for Python users; supersedes 999.3)
+  - **999.11** — In-tree Flex/Bison mmCIF parser → [gemmi](https://gemmi.readthedocs.io) (drops a custom-grammar maintenance liability; gains modern PDB-tested parser used by CCP4, Phenix, RDKit-CIF)
+
+  All five are correctness-sensitive substrate changes that benefit from being grouped under a single major-version bump where users expect breaking-but-documented behavior changes (build-tooling switch, render backend swap, file-format churn, wire-protocol + library-API change, mmCIF parser swap). Phase 5 SPIKE-02 locked the GL-Core → QRhi split-pattern for v2; 999.2 / 999.9 / 999.10 / 999.11 keep the v2 theme coherent. 999.10 also reshapes the library boundary — remote control is no longer a libBALL concern.
 - This resolves the version-numbering collision with the Claude Design Handover package (which internally assumed "1.6 = UI refresh").
 
 ### Out of Scope
