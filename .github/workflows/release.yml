@@ -56,7 +56,7 @@ jobs:
           echo "Resolved ref: $REF"
 
       - name: Checkout (at resolved tag)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ steps.resolve.outputs.ref }}
 
@@ -150,7 +150,7 @@ jobs:
       - name: Restore vcpkg binary cache (Windows)
         id: vcpkg-cache
         if: matrix.os == 'windows-x64'
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
           key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'cmake/vcpkg-triplets/x64-windows-release.cmake') }}
@@ -175,7 +175,7 @@ jobs:
 
       - name: Save vcpkg binary cache (Windows)
         if: always() && matrix.os == 'windows-x64' && steps.vcpkg-cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
           key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'cmake/vcpkg-triplets/x64-windows-release.cmake') }}
