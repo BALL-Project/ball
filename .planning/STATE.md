@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
 status: executing
-stopped_at: Phase 5 context gathered
-last_updated: "2026-05-15T07:50:43.592Z"
+stopped_at: Phase 5 Plan 01 complete (CMake Qt 6 bring-up)
+last_updated: "2026-05-15T08:08:00.000Z"
 progress:
   total_phases: 19
   completed_phases: 6
   total_plans: 25
-  completed_plans: 17
-  percent: 32
+  completed_plans: 18
+  percent: 33
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -19,15 +19,16 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 4 closed — ready to start Phase 4.1 (Config Color-Defaults Fix, promoted backlog) or Phase 5 (Qt 6 Migration)
+**Current Focus:** Phase 05 — qt-6-migration-4b-renderer-backend-decision-spike
 
 ## Current Position
 
-Phase: 04 (dependency-system-overhaul) — COMPLETE (2026-05-15)
-**Phase:** 4 — Dependency System Overhaul
-**Plans:** 4 of 4 complete (04-01, 04-02, 04-03, 04-04)
-**Status:** Ready to execute
-**Progress:** [██████████] 100% of Phase 4; overall 94% of v1.6 active phases
+Phase: 05 (qt-6-migration-4b-renderer-backend-decision-spike) — EXECUTING
+Plan: 2 of 8 (Plan 01 complete)
+**Phase:** 5 — Qt 6 Migration + Renderer Backend Spike
+**Plans:** 1 of 8 complete (05-01)
+**Status:** Executing Phase 05
+**Progress:** [█░░░░░░░░░] 13% of Phase 5; overall 94% of v1.6 active phases
 
 ```
 Phase 1     [x]  Build Baseline
@@ -68,6 +69,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 04 P04-01 | 120 | 3 tasks | 7 files |
 | Phase 04 P04-02 | 26 | 4 tasks | 5 files |
 | Phase 04 P04-03 | 240 | 4 tasks | 6 files |
+| Phase 05 P05-01 | 2min | 2 tasks | 17 files (Rule 3 cascade: 13 add'l build files) |
 
 ## Accumulated Context
 
@@ -108,6 +110,7 @@ roadmap/STATE after any gsd-tools phase op.
 - [Phase 04]: Eigen3 find_package changed from range 3.4...6 to plain REQUIRED NO_MODULE + manual VERSION_LESS check: Ubuntu 22.04 Eigen 3.4.0 ships old Eigen3ConfigVersion.cmake that does not support range queries
 - [Phase 04]: GPL-gate preserved for OpenBabel in CI: -DBALL_LICENSE=GPL added to ci-macos/ci-linux configure steps; LGPL default build never searches for OpenBabel
 - [Phase 04]: BeginModify/EndModify required in OB 3.x createOBMol: replaces auto-clear behavior removed in 3.x; EndModify(true) resets all perception flags atomically
+- [Phase 05]: Plan 05-01 D-01 locked: QT_MIN_VERSION=6.5 with FIND_PACKAGE(Qt6 6.5 ...) on top-level + VIEW block; D-04 locked: Qt6::OpenGLWidgets added as last entry in VIEW_DEP_LIBRARIES (Qt 6 split QOpenGLWidget out of Qt::OpenGL into its own module — load-bearing for glRenderWindow); D-03 locked: macOS preset CMAKE_PREFIX_PATH -> /opt/homebrew/opt/qt (Homebrew unversioned qt, currently 6.11.x), vcpkg manifest -> qtbase with pinned builtin-baseline c1ce926d…; D-05 audit green (no Qt6::Core5Compat / qt5compat anywhere). Rule 3 cascade: 13 downstream CMakeLists in cmake/ + source/EXTENSIONS/ + source/APPLICATIONS/ needed QT5_* macros renamed to QT6_* and Qt5:: targets to Qt6:: — all blocking-issue fixes (configure halts at first un-renamed macro). cmake --preset ci-macos configures green against Qt 6.11 on macOS-arm64.
 
 ### Roadmap Evolution
 
@@ -132,11 +135,11 @@ roadmap/STATE after any gsd-tools phase op.
 
 ## Session Continuity
 
-**Last action:** Phase 4 (Dependency System Overhaul) marked COMPLETE — all 4 plans executed, Windows CI brought up on vcpkg manifest + choco provisioning over ~14 iterations, final green on run [25899905204](https://github.com/BALL-Project/ball/actions/runs/25899905204) (HEAD `6056f74`, GLU include fix), Windows job flipped `blocking: false` → `blocking: true`. Phase 5.1 spawned to capture the warning + latent bug backlog surfaced by the green build (~10k warning lines bucketed; Codex-cross-checked fix proposals in `.planning/phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md`).
+**Last action:** Phase 5 Plan 01 (CMake Qt 6 bring-up) executed — `CMakeLists.txt` Qt block rewritten Qt5 → Qt6, `Qt6::OpenGLWidgets` added to `VIEW_DEP_LIBRARIES` (D-04), macOS preset switched to `/opt/homebrew/opt/qt` (Homebrew unversioned `qt` 6.11.x, D-03), vcpkg manifest switched to `qtbase` + pinned `builtin-baseline` (D-03), Rule 3 cascade renamed Qt5 macros / targets across 13 downstream build files. `cmake --preset ci-macos` configures green on macOS-arm64. Commits: `a805847` (Task 1), `cd912fc` (Task 2).
 
-**Stopped at:** Phase 5 context gathered
+**Stopped at:** Phase 5 Plan 01 complete (CMake Qt 6 bring-up)
 
-**Next action:** Either **Phase 4.1** (Config Color-Defaults Fix, promoted backlog 999.4 — real user-facing bug, see roadmap) via `/gsd-plan-phase 4.1`, or **Phase 5** (Qt 6 Migration + Renderer Backend Spike) via `/gsd-discuss-phase 5`. Phase 5.1 (warnings cleanup) waits for Phase 5 to land first so Qt5-deprecation noise clears.
+**Next action:** **Phase 5 Plan 02** (source API renames) via `/gsd-execute-phase 5` — port VIEW source files off `QRegExp` / `QDesktopWidget` / `QString::SkipEmptyParts` / `QtWidgets/QOpenGLWidget` inline (D-05, no Core5Compat shim), add `QSurfaceFormat::DeprecatedFunctions` opt-in on `gl_format_` (D-06).
 
 **Notes:**
 

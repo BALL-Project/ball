@@ -147,7 +147,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 
 Plans:
 **Wave 1**
-- [ ] 05-01-cmake-qt6-bringup-PLAN.md — Wave 1: Rename CMake to Qt 6.5 + add Qt6::OpenGLWidgets; macOS preset + vcpkg manifest port (QT6-01)
+- [x] 05-01-cmake-qt6-bringup-PLAN.md — Wave 1: Rename CMake to Qt 6.5 + add Qt6::OpenGLWidgets; macOS preset + vcpkg manifest port (QT6-01) *(complete 2026-05-15; configure green on macOS-arm64 against Qt 6.11)*
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [ ] 05-02-source-api-renames-PLAN.md — Wave 2: Inline QRegExp → QRegularExpression + QDesktopWidget → QScreen + Qt::SkipEmptyParts (D-05 clean break) (QT6-02)
