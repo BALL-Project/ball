@@ -157,10 +157,10 @@ Plans:
 - [x] 05-04-ci-matrix-and-lint-PLAN.md — Wave 3: ubuntu-24.04 + jurplel/install-qt-action + GL profile assertion + new Qt5-holdout lint (QT6-01/QT6-02) *(complete 2026-05-15; ci.yml + scripts/check-no-legacy-qt6-symbols.sh; static gates green; runtime D-08 oracle wired and ready — exercises itself once BLOCKER-A/B/D land in the implicit BALL bring-up plan)*
 
 **Wave 4** *(blocked on Wave 3 completion)*
-- [ ] 05-05-glcore-spike-PLAN.md — Wave 4: CoreGLRenderer + RendererFactory::Kind::OpenGL_Core + color-buffer FBO picking + spike CI variant (SPIKE-01)
+- [x] 05-05-glcore-spike-PLAN.md — Wave 4: CoreGLRenderer + RendererFactory::Kind::OpenGL_Core + color-buffer FBO picking + spike CI variant (SPIKE-01) *(complete 2026-05-15; first Qt 6 link-green BALLView build via BLOCKER-A/B/D resolution + Qt 6 API sweep)*
 
 **Wave 5** *(blocked on Wave 4 completion)*
-- [ ] 05-06-qrhi-spike-PLAN.md — Wave 5: QRhiRenderer + QtRhiSurface + RendererFactory::Kind::QRhi (gated on Qt >= 6.7) (SPIKE-01)
+- [x] 05-06-qrhi-spike-PLAN.md — Wave 5: QRhiRenderer + QtRhiSurface + RendererFactory::Kind::QRhi (gated on Qt >= 6.7) (SPIKE-01) *(complete 2026-05-15; Qt 6.11 / Metal backend on macOS-arm64; build green via Qt6::GuiPrivate; downstream-virtual caveat identical to Plan 05-05)*
 
 **Wave 6** *(blocked on Wave 5 completion)*
 - [ ] 05-07-driver-behaviour-record-PLAN.md — Wave 6: 05-DRIVER-BEHAVIOUR.md — per-platform DIAG + picking/overlay records (SPIKE-01)
