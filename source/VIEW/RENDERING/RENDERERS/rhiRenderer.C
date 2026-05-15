@@ -83,12 +83,33 @@ namespace BALL
 
 		QRhiRenderer::~QRhiRenderer()
 		{
-			// QRhi resources are reference-counted by the QRhi instance; deleting
-			// them here is the canonical cleanup (the QRhi pointer is borrowed
-			// from the QRhiWidget which outlives this renderer in normal flow).
-			delete pipeline_;
-			delete srb_;
-			delete vbuf_;
+			// QRhi resource lifetime (review WR-02):
+			//
+			// QRhi resources (QRhiBuffer, QRhiGraphicsPipeline,
+			// QRhiShaderResourceBindings) are NOT reference-counted by the
+			// QRhi instance — they must be deleted BEFORE the QRhi instance
+			// is destroyed. The QRhi lives on the paired QtRhiSurface
+			// (QRhiWidget) which may be torn down before this renderer if
+			// the surface's QObject parent dies first. In that case the QRhi
+			// is already gone and `delete pipeline_` etc. would be UAF.
+			//
+			// Mitigation for the throwaway spike: call releaseResources_()
+			// which clears each pointer after delete. This still relies on
+			// the surface outliving the renderer in the common case (which
+			// the Phase 02.1 boundary arranges for production-path Kinds via
+			// RenderSetup), and is documented here as a known limitation
+			// that PIPE-01 must close — see GAP-4 in deferred-items.md.
+			releaseResources_();
+		}
+
+		void QRhiRenderer::releaseResources_()
+		{
+			// Delete in reverse order of creation to satisfy any internal
+			// QRhi dependency ordering (pipeline references SRB, etc.).
+			delete pipeline_; pipeline_ = nullptr;
+			delete srb_;      srb_      = nullptr;
+			delete vbuf_;     vbuf_     = nullptr;
+			resources_built_ = false;
 		}
 
 		// ------------------------------------------------------------------
@@ -128,6 +149,12 @@ namespace BALL
 				return false;
 			}
 
+			// Leak-clean failure paths (review WR-04): every early-return
+			// must release any partially-constructed QRhi resources before
+			// returning, otherwise repeated retries leak each prior attempt.
+			// releaseResources_() nulls each pointer, so it is safe to call
+			// even when a given resource was never allocated.
+
 			// Vertex buffer -- size chosen for "a few thousand triangles" worth
 			// of inline pos+color vertex data. THROWAWAY: real code would size
 			// this from the representation list.
@@ -136,6 +163,7 @@ namespace BALL
 			if (!vbuf_ || !vbuf_->create())
 			{
 				std::cerr << "BALLVIEW_GL_DIAG spike_qrhi_init=vbuf-create-failed" << std::endl;
+				releaseResources_();
 				return false;
 			}
 
@@ -148,6 +176,7 @@ namespace BALL
 			if (!srb_ || !srb_->create())
 			{
 				std::cerr << "BALLVIEW_GL_DIAG spike_qrhi_init=srb-create-failed" << std::endl;
+				releaseResources_();
 				return false;
 			}
 

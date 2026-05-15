@@ -100,6 +100,13 @@ namespace BALL
 				/// via the paired QRhiWidget).
 				bool ensureResources_(QRhi* rhi);
 
+				/// Delete the QRhi resources (pipeline / SRB / vbuf) in reverse
+				/// order of construction, null each pointer, and clear
+				/// resources_built_. Called from both the destructor and from
+				/// every failure path inside ensureResources_() so partial
+				/// allocations do not leak across retries (review WR-02/WR-04).
+				void releaseResources_();
+
 				bool initialised_ = false;
 				bool resources_built_ = false;
 
