@@ -405,7 +405,7 @@ namespace BALL
 
 	bool PluginManager::setAutoActivatePlugins(const QString& value)
 	{
-		autoactivate_plugins_ = value.split(";", QString::SkipEmptyParts);
+		autoactivate_plugins_ = value.split(";", Qt::SkipEmptyParts);
 
 		return true;
 	}

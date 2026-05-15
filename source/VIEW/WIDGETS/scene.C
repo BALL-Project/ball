@@ -81,7 +81,8 @@
 #include <QtGui/QImage>
 #include <QtGui/QCursor>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QScreen>
+#include <QtGui/QGuiApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QProgressBar>
@@ -2578,10 +2579,12 @@ namespace BALL
 				return;
 			}
 
-			QDesktopWidget* desktop = QApplication::desktop();
-
-			QWidget* left_screen  = desktop->screen(left_screen_index);
-			QWidget* right_screen = desktop->screen(right_screen_index);
+			// Qt 6 (Pitfall 5): QDesktopWidget removed. QGuiApplication::screens() returns
+			// QScreen* — which is NOT a QWidget* — so the old "pass desktop screen as parent"
+			// idiom is gone. Construct the GLRenderWindow with nullptr parent and bind it to
+			// the target screen via QWidget::setScreen() / move() after construction.
+			QScreen* left_screen  = QGuiApplication::screens().value(left_screen_index);
+			QScreen* right_screen = QGuiApplication::screens().value(right_screen_index);
 
 			QRect left_geometry  = stage_settings_->getLeftEyeGeometry();
 			QRect right_geometry = stage_settings_->getRightEyeGeometry();
@@ -2606,14 +2609,16 @@ namespace BALL
 			{
 				// in both cases (side by side and top bottom), we can
 				// use the same code
-				GLRenderWindow* left_widget = new GLRenderWindow(left_screen, "left eye", Qt::FramelessWindowHint);
+				GLRenderWindow* left_widget = new GLRenderWindow(nullptr, "left eye", Qt::FramelessWindowHint);
+				if (left_screen) left_widget->setScreen(left_screen);
 				left_widget->setDoNotResize(true);
 				left_widget->makeCurrent();
 				left_widget->init();
 				left_widget->resize(left_geometry.width(), left_geometry.height());
 				left_widget->move(left_geometry.x(), left_geometry.y());
 
-				GLRenderWindow* right_widget = new GLRenderWindow(right_screen, "right eye", Qt::FramelessWindowHint);
+				GLRenderWindow* right_widget = new GLRenderWindow(nullptr, "right eye", Qt::FramelessWindowHint);
+				if (right_screen) right_widget->setScreen(right_screen);
 				right_widget->setDoNotResize(true);
 				right_widget->makeCurrent();
 				right_widget->init();
@@ -2660,11 +2665,11 @@ namespace BALL
 				right_renderer->setSize(right_widget->width(), right_widget->height());
 
 				// we may need to account for differences in the frusta
-				QRect left_screen_size = QApplication::desktop()->screenGeometry(left_screen_index);
+				QRect left_screen_size = left_screen ? left_screen->geometry() : QRect();
 				left_renderer->setStereoFrustumConversion(left_screen_size.width()  / left_geometry.width(),
                                                   left_screen_size.height() / left_geometry.height());
 
-				QRect right_screen_size = QApplication::desktop()->screenGeometry(right_screen_index);
+				QRect right_screen_size = right_screen ? right_screen->geometry() : QRect();
 				right_renderer->setStereoFrustumConversion(right_screen_size.width()  / right_geometry.width(),
                                                    right_screen_size.height() / right_geometry.height());
 
@@ -2780,12 +2785,13 @@ namespace BALL
 				return;
 			}
 
-			QRect screen_geom = QApplication::desktop()->screenGeometry(left_screen_index);
+			// Qt 6 (Pitfall 5): replace QDesktopWidget with QScreen-based placement.
+			QScreen* left_screen  = QGuiApplication::screens().value(left_screen_index);
+			QScreen* right_screen = left_screen;
+			QRect screen_geom = left_screen ? left_screen->geometry() : QRect();
 
-			QWidget* left_screen = QApplication::desktop()->screen(left_screen_index);
-			QWidget* right_screen = left_screen;
-
-			GLRenderWindow* left_widget = new GLRenderWindow(left_screen, "left eye", Qt::FramelessWindowHint);
+			GLRenderWindow* left_widget = new GLRenderWindow(nullptr, "left eye", Qt::FramelessWindowHint);
+			if (left_screen) left_widget->setScreen(left_screen);
 			left_widget->makeCurrent();
 			left_widget->init();
 			left_widget->resize(screen_geom.width() / 2, screen_geom.height());
@@ -2813,7 +2819,8 @@ namespace BALL
 			stereo_left_eye_ = renderers_.size()-1;
 			left_rs->start();
 
-			GLRenderWindow* right_widget = new GLRenderWindow(right_screen, "right eye", Qt::FramelessWindowHint);
+			GLRenderWindow* right_widget = new GLRenderWindow(nullptr, "right eye", Qt::FramelessWindowHint);
+			if (right_screen) right_widget->setScreen(right_screen);
 			right_widget->makeCurrent();
 			right_widget->init();
 			right_widget->resize(screen_geom.width() / 2, screen_geom.height());
@@ -2885,11 +2892,13 @@ namespace BALL
 				return;
 			}
 
-			QWidget* left_screen = QApplication::desktop()->screen(left_screen_index);
-			GLRenderWindow* left_widget = new GLRenderWindow(left_screen, String(tr("left eye")).c_str());
+			QScreen* left_screen = QGuiApplication::screens().value(left_screen_index);
+			QRect left_screen_geom = left_screen ? left_screen->geometry() : QRect();
+			GLRenderWindow* left_widget = new GLRenderWindow(nullptr, String(tr("left eye")).c_str());
+			if (left_screen) left_widget->setScreen(left_screen);
 			left_widget->makeCurrent();
 			left_widget->init();
-			left_widget->resize(left_screen->width(), left_screen->height());
+			left_widget->resize(left_screen_geom.width(), left_screen_geom.height());
 
 #ifndef BALL_HAS_RTFACT
 			GLRenderer*   left_renderer = new GLRenderer;
@@ -2913,11 +2922,13 @@ namespace BALL
 			stereo_left_eye_ = renderers_.size()-1;
 			left_rs->start();
 
-			QWidget* right_screen = QApplication::desktop()->screen(right_screen_index);
-			GLRenderWindow* right_widget = new GLRenderWindow(right_screen, String(tr("right eye")).c_str());
+			QScreen* right_screen = QGuiApplication::screens().value(right_screen_index);
+			QRect right_screen_geom = right_screen ? right_screen->geometry() : QRect();
+			GLRenderWindow* right_widget = new GLRenderWindow(nullptr, String(tr("right eye")).c_str());
+			if (right_screen) right_widget->setScreen(right_screen);
 			right_widget->makeCurrent();
 			right_widget->init();
-			right_widget->resize(right_screen->width(), right_screen->height());
+			right_widget->resize(right_screen_geom.width(), right_screen_geom.height());
 
 #ifndef BALL_HAS_RTFACT
 			GLRenderer*   right_renderer = new GLRenderer;

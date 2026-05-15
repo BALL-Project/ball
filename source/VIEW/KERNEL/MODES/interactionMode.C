@@ -2,7 +2,8 @@
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 
-#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QScreen>
+#include <QtGui/QGuiApplication>
 #include <QtGui/QMouseEvent>
 #include <QtWidgets/QApplication>
 
@@ -14,7 +15,8 @@ namespace BALL
 	{
 		InteractionMode::InteractionMode(Scene* scene)
 			: scene_(scene),
-			  desktop_size_(qApp->desktop()->size()),
+			  // Qt 6: QApplication::desktop() removed. Use the primary screen's size.
+			  desktop_size_(QGuiApplication::primaryScreen() ? QGuiApplication::primaryScreen()->size() : QSize()),
 			  mouse_sensitivity_(5.0f),
 			  mouse_wheel_sensitivity_(5.0f),
 			  main_action_(0)

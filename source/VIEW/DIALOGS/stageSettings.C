@@ -21,7 +21,8 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QScreen>
+#include <QtGui/QGuiApplication>
 #include <QtWidgets/QSplashScreen>
 #include <QtGui/QLinearGradient>
 
@@ -49,7 +50,7 @@ namespace BALL
 			widget_stack->removeWidget(RTFact);
 			setWidgetStack(widget_stack);
 			registerWidgets_();
-			screenCountChanged(QApplication::desktop()->screenCount());
+			screenCountChanged(QGuiApplication::screens().size());
 			stereoModeChanged();
 
 			controlRenderer_comboBox->addItem(tr("OpenGL"));
@@ -86,7 +87,13 @@ namespace BALL
 			connect( downsampling_slider, SIGNAL( valueChanged(int) ), this, SLOT( downsamplingSliderChanged() ) );
 			connect( identifyDisplays_button, SIGNAL( clicked() ), this, SLOT( identifyDisplays() ) );
 
-			connect( QApplication::desktop(), SIGNAL( screenCountChanged(int) ), this, SLOT( screenCountChanged(int) ) );
+			// Qt 6: QApplication::desktop() was removed, QDesktopWidget::screenCountChanged
+			// no longer exists. Use QGuiApplication's screenAdded / screenRemoved signals and
+			// forward the current screen count to the existing screenCountChanged(int) slot.
+			connect( qApp, &QGuiApplication::screenAdded,
+			         this, [this](QScreen*) { this->screenCountChanged(QGuiApplication::screens().size()); } );
+			connect( qApp, &QGuiApplication::screenRemoved,
+			         this, [this](QScreen*) { this->screenCountChanged(QGuiApplication::screens().size()); } );
 			
 			connect( interlaced_radioButton,    SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
 			connect( sideBySide_radioButton,    SIGNAL( clicked() ), this, SLOT( stereoModeChanged() ) );
@@ -412,7 +419,7 @@ namespace BALL
 
 				pm.createAlphaMask();
 
-				QSplashScreen* splash = new QSplashScreen(QApplication::desktop()->screen(i), QPixmap::fromImage(pm));
+				QSplashScreen* splash = new QSplashScreen(QGuiApplication::screens().value(i), QPixmap::fromImage(pm));
 				splash->show();
 
 				identification_labels_.push_back(splash);
@@ -430,10 +437,10 @@ namespace BALL
 			if (control_screen_index == -1 || left_screen_index == -1 || right_screen_index == -1)
 				return;
 
-			QDesktopWidget* desktop = QApplication::desktop();
-
-			QRect left_screen_geom  = QApplication::desktop()->screenGeometry(left_screen_index);
-			QRect	right_screen_geom = QApplication::desktop()->screenGeometry(right_screen_index);
+			// Qt 6: QDesktopWidget was removed. Use QGuiApplication::screens().
+			QList<QScreen*> screens = QGuiApplication::screens();
+			QRect left_screen_geom  = screens.value(left_screen_index)  ? screens.value(left_screen_index)->geometry()  : QRect();
+			QRect	right_screen_geom = screens.value(right_screen_index) ? screens.value(right_screen_index)->geometry() : QRect();
 
 			if (left_screen_index == right_screen_index)
 			{
