@@ -178,7 +178,7 @@ Plans:
 - [x] 05.1-01-PLAN.md — A1: C4717 getline infinite recursion in string.iC (drop std::move on rvalue overloads)
 - [ ] 05.1-02-PLAN.md — A2: C4311 pointer truncation T*→long — end-to-end audit (hash.C + MMFF94 + triangulatedSurface) with downstream storage widened to std::uintptr_t / PointerSizeUInt
 - [x] 05.1-03-PLAN.md — A3: -Wself-assign-field at pairExpInteractionEnergyProcessor.C:124 (propagate from proc.rdf_parameter_) *(complete 2026-05-15; 1-line surgical fix at line 124; libBALL build green on macos-arm64 / Qt 6.11; commit 066195c)*
-- [ ] 05.1-04-PLAN.md — A4: -Wtautological-constant-out-of-range-compare in representation.C (asymmetric — preserve DrawingPrecision invariant, drop DrawingMode < 0 OR add DRAWING_MODE_INVALID = -1)
+- [x] 05.1-04-PLAN.md — A4: -Wtautological-constant-out-of-range-compare in representation.C (asymmetric — preserve DrawingPrecision INVALID=-1 sentinel, drop 3 tautological halves) *(complete 2026-05-15; chose Option A drop; Rule 1 deviation — plan named the `< 0` halves but actual clang warnings were on `> MAXIMAL_*` upper bounds because both macros = 4 while enum max = 3; final conditional `if (drawing_precision_ < 0 || transparency_ > 255)`; VIEW build green on macos-arm64 / Qt 6.11; commit 932bd27)*
 - [ ] 05.1-05-PLAN.md — A5: -Wformat-overflow in CIFParserParser.y (sprintf → snprintf, 19 instances)
 - [ ] 05.1-06-PLAN.md — A6: -Wstringop-truncation audit of strncpy sites (10 instances, case-by-case)
 - [ ] 05.1-07-PLAN.md — B1+B2: C4910 extern template / BALL_EXPORT migration in vector3 + atom (sequenced one plan)
