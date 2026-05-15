@@ -102,6 +102,18 @@ namespace BALL
 				int uloc_pick_mode_ = -1;
 				int uloc_picking_id_ = -1;
 
+				// Most-recent MVP uploaded by renderRepresentations_(). Cached so
+				// pickObjects() can defensively re-issue glUniformMatrix4fv on
+				// the same program (uniforms ARE program-state and survive
+				// glUseProgram unbind/rebind cycles, but pickObjects can also be
+				// called before any main-pass render — review WR-06).
+				float cached_mvp_[16] = {
+					1.0f, 0.0f, 0.0f, 0.0f,
+					0.0f, 1.0f, 0.0f, 0.0f,
+					0.0f, 0.0f, 1.0f, 0.0f,
+					0.0f, 0.0f, 0.0f, 1.0f
+				};
+
 				// Per-rep ID -> GeometricObject* map, rebuilt every frame.
 				std::unordered_map<unsigned int, GeometricObject*> id_to_object_;
 		};

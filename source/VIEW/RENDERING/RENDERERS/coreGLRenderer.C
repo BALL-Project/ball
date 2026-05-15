@@ -274,13 +274,16 @@ namespace BALL
 			// from Stage's camera. The spike's "renders the demo molecule" bar is
 			// satisfied by drawing the representations at NDC scale; pixel parity
 			// with GLRenderer is explicitly not a SPIKE-01 acceptance criterion.
-			float mvp[16] = {
+			// Cache the MVP on the member so pickObjects() can re-issue it
+			// defensively (review WR-06).
+			const float mvp[16] = {
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
 				0.0f, 0.0f, 1.0f, 0.0f,
 				0.0f, 0.0f, 0.0f, 1.0f
 			};
-			fns->glUniformMatrix4fv(uloc_mvp_, 1, /*transpose=*/0, mvp);
+			std::memcpy(cached_mvp_, mvp, sizeof(cached_mvp_));
+			fns->glUniformMatrix4fv(uloc_mvp_, 1, /*transpose=*/0, cached_mvp_);
 			fns->glUniform1i(uloc_pick_mode_, 0);  // main render pass
 
 			fns->glEnable(GL_DEPTH_TEST);
@@ -361,6 +364,13 @@ namespace BALL
 			fns->glBindFramebuffer(GL_FRAMEBUFFER, picking_fbo_);
 			fns->glUseProgram(program_id_);
 			fns->glBindVertexArray(vao_id_);
+			// Defensive MVP re-upload (review WR-06): uniforms are
+			// program-state and survive glUseProgram unbind/rebind, but if
+			// pickObjects() is ever invoked before any main-pass render the
+			// cached identity MVP from the member default ensures the program
+			// has a well-defined u_mvp value rather than whatever garbage was
+			// last bound to the GL context.
+			fns->glUniformMatrix4fv(uloc_mvp_, 1, /*transpose=*/0, cached_mvp_);
 			fns->glUniform1i(uloc_pick_mode_, 1);
 			unsigned int clear_id = 0;
 			fns->glClearBufferuiv(GL_COLOR, 0, &clear_id);
