@@ -68,8 +68,8 @@ Requirements for the v1.6 release. Derived from `/Users/kohlbach/Claude/BALL/ROA
 
 ### Renderer Backend Spike (Phase 5 — folded in from former Phase 05.1)
 
-- [ ] **SPIKE-01**: A throwaway prototype renders the demo molecule through at least the leading backend candidate (GL-core and/or QRhi) behind the Phase 02.1 `RendererFactory`, demonstrating picking and a text overlay
-- [ ] **SPIKE-02**: A decision record names the chosen backend, the rationale, per-platform (macOS/Windows) acceptance criteria, and a scoped task list for the `PIPE-01` full rewrite
+- [x] **SPIKE-01**: A throwaway prototype renders the demo molecule through at least the leading backend candidate (GL-core and/or QRhi) behind the Phase 02.1 `RendererFactory`, demonstrating picking and a text overlay — *delivered with documented caveats per Plans 05-05 (GL-core arm + picking) + 05-06 (QRhi arm) + 05-07 (per-platform driver record); downstream-virtual full-render limitation is PIPE-01 scope per `.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` §5.4*
+- [x] **SPIKE-02**: A decision record names the chosen backend, the rationale, per-platform (macOS/Windows) acceptance criteria, and a scoped task list for the `PIPE-01` full rewrite — *`.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` — split decision: GL-Core for v1.6.x → QRhi for v2*
 
 ### Python Bindings (Phase 6)
 
@@ -169,8 +169,8 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | CONFIG-01 | Phase 4.1 — Config Color-Defaults Fix | Pending |
 | QT6-01 | Phase 5 — Qt 6 Migration (4b) | Pending |
 | QT6-02 | Phase 5 — Qt 6 Migration (4b) | Pending |
-| SPIKE-01 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Pending |
-| SPIKE-02 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Pending |
+| SPIKE-01 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Complete — `.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` |
+| SPIKE-02 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Complete — `.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` |
 | PY-01 | Phase 6 — Python Bindings | Pending |
 | PY-02 | Phase 6 — Python Bindings | Pending |
 | PKG-01 | Phase 8 — Packaging & Distribution | Pending |
