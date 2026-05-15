@@ -368,6 +368,60 @@ Plans:
 Plans:
 - [ ] TBD (do NOT promote before Phase 8 closes)
 
+### Phase 999.9: Replace INIFile with YAML config (BACKLOG)
+
+**Goal:** Remove `BALL::INIFile` (the legacy in-tree INI parser/writer) and replace it project-wide with YAML. All 20 `.ini` files under `data/` get converted to `.yaml`; all ~49 source files that call `INIFile::read()` / `INIFile::write()` / `getValue()` / `setValue()` / section traversal migrate to the new YAML config API; `include/BALL/FORMAT/INIFile.h` + `source/FORMAT/INIFile.C` are deleted at the end of the migration.
+
+**Why:** INI is a 1990s format with no schema, no nested structures, no type semantics — BALL's force-field parameter files (AMBER, MMFF94, CHARMM, GAFF) are deeply hierarchical and currently encoded via ad-hoc INI section conventions that the parser and every caller have to keep in sync by hand. YAML is the modern equivalent (nested maps + lists + typed scalars + comments + anchors for shared definitions), has well-maintained C++ libraries (yaml-cpp), and trivially round-trips through Python / web tooling for downstream BALLAXY / Jupyter / inspection workflows. The migration also removes a custom parser surface (~125 INIFile references across BALL's hot code paths) from the codebase, shrinking the maintenance footprint.
+
+**Why BACKLOG, not active:** This is not core value (build + render on 3 OSes). INI files work today. The win is modernization + tooling + schema validation. Should land in a v1.7-track or v1.8 milestone, NOT in v1.6.x — v1.6.x is the modernization release that ships BALL/BALLView buildable; data-format churn during a release-cycle would invalidate the "same scientific output" guarantee.
+
+**Scope (in scope):**
+- New `BALL::YAMLConfig` (or similar) reader/writer class — likely thin wrapper over `yaml-cpp` (vcpkg / Homebrew / apt all package it) — that exposes the same caller-facing verbs INIFile does (`read`/`write`/`getValue`/`setValue`/section iteration) so the migration is a one-call-at-a-time edit per call site rather than a per-file rewrite
+- Conversion of all 20 `.ini` files under `data/` to canonical YAML, preserving every value bit-exactly:
+  - Force fields: `data/Amber/amber{91,91S,94,94gly,96,96-docking}.ini`, `data/CHARMM/param22.ini`, `data/CHARMM/EEF1/param19_eef1.ini`, `data/MMFF94/mmff94.ini`, `data/bond_lengths/bond_lengths_mmff94.ini`, `data/bondtyping/GAFFbondangles.ini`
+  - Solvation: `data/solvation/{Claverie-AMBER,Ooi,RDF-AMBER}.ini`, `data/solvents/PCM-water.ini`
+  - NMR: `data/NMR/{StandardSpectrum,SHIFTX,SHIFTX2,WilliamsonAsakura}.ini`
+  - XRAY: `data/XRAY/spacegroups-details.ini`
+- All ~49 source-file callers migrated to the new API (force-field engines in `MOLMEC/`, NMR/ in `NMR/`, VIEW dialog preference loaders, BALLView preferences, BALLAXY / Jupyter / PresentaBall extensions, Python bindings)
+- `include/BALL/FORMAT/INIFile.h` + `source/FORMAT/INIFile.C` deleted at the END (after all callers migrated + new YAML config tested green)
+- Old `.ini` files in `data/` deleted after corresponding `.yaml` is verified bit-exact
+
+**Out of scope:**
+- Schema validation (separate follow-up — YAML enables it but isn't required for parity)
+- Changing the SEMANTICS of any force-field parameter file — this is a pure format conversion, scientific output stays bit-exact
+- Persisted user config (`~/.BALLView`) — Phase 4.1 owns that; if 4.1 still uses INIFile, the 4.1 fix lands first, THEN this phase migrates that file too
+- Python `.sip` binding regeneration for any new YAMLConfig types — that's Phase 6 territory
+
+**Risk considerations (correctness-sensitive):**
+- Force-field parameter files (`amber94.ini`, `mmff94.ini`, etc.) drive energy calculations. Bit-exact preservation is mandatory — a sign error, decimal-truncation, or rounding drift will silently change every MD simulation downstream. Mitigation: a per-file regression test that loads both old INI + new YAML through the relevant force-field, computes energies on a canonical molecule, and asserts equality to ≤1e-12.
+- INIFile may have undocumented behaviors callers depend on (whitespace tolerance, comment styles, section-name case sensitivity). Audit the 49 callers for behaviors-not-just-values before deciding the YAMLConfig API.
+- yaml-cpp's default parser is fairly strict — non-canonical YAML in the converted files will surface late. Pin the parser version and validate every converted file via a separate `yaml-cpp -> roundtrip -> diff` step.
+
+**Dependencies:**
+- Phase 4 (Dependency System Overhaul) — DONE; provides the vcpkg/Homebrew/apt path for adding `yaml-cpp` as a required dep
+- Phase 3 (C++17) — DONE; yaml-cpp uses `std::optional` and `std::variant`-friendly APIs in newer versions
+
+**Plan-shape sketch (when promoted):**
+- Plan 1: pick yaml-cpp version, add as required dep in vcpkg.json + Homebrew + apt + `CMakeLists.txt`. Smoke-test the link green on all 3 OSes.
+- Plan 2: build `BALL::YAMLConfig` (the wrapper). API mirrors INIFile verb shape. Unit test on a hand-written canonical YAML.
+- Plan 3 (largest): convert all 20 `.ini` files in `data/` to `.yaml`. Bit-exact regression test per file (force-field energy, NMR shift, etc.) before each old `.ini` is deleted.
+- Plan 4 (largest): migrate the ~49 callers. Done one file at a time; commit per caller; full BALL test suite green after each.
+- Plan 5: delete `INIFile.h` + `INIFile.C` + all old `.ini` files. Update README / BUILD-*.md / any doc references. Final green CI on all 3 OSes.
+
+Estimated effort: ~2 weeks if no force-field parameter regression appears; longer if bit-exact preservation forces a YAML representation tweak per force-field.
+
+**Carry-along clean-up (do NOT skip during the migration):**
+- All `*.opt` files referenced via INIFile in `data/options/` (if any — verify with `find data -name "*.opt"`)
+- Any project-shipped sample / tutorial that hard-codes `*.ini` paths in expected user input
+- BALL's Python tutorials that load `.ini` files via `BALL.INIFile()` — update them to `BALL.YAMLConfig()`
+
+**Requirements:** TBD (emitted when promoted — likely `CONFIG-02: YAML config format` + per-file-format requirements)
+**Plans:** 0 plans (5 sketched above)
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when ready; not before v1.6.x ships stable — needs the modernization milestone closed first so the migration doesn't compound the v1.6 release risk)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
