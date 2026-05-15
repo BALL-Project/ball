@@ -69,10 +69,10 @@ namespace BALL
 			virtual vector<ColorRGBA> getColors(ColoringMethod method) const;
 
 			///
-			virtual void writePreferenceEntries(INIFile& inifile);
+			virtual void writePreferenceEntries(INIFile& inifile) override;
 
 			///
-			virtual void readPreferenceEntries(INIFile& inifile);
+			virtual void readPreferenceEntries(const INIFile& inifile) override;
 
 			protected Q_SLOTS:
 
