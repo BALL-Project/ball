@@ -1,0 +1,291 @@
+name: Release
+
+# Best-effort, UNSIGNED binary installer build for tagged releases. Trigger
+# manually with `gh workflow run release.yml -f tag=v1.6.0` (or via the
+# Actions UI). Future tags pushed in the v*.*.* shape will also auto-trigger.
+#
+# Scope: macOS arm64 + Windows x64 binary bundles, attached to a GitHub
+# Release. No code signing, no notarization, no Linux installer (Linux
+# users build from source per BUILD-macos.md).
+#
+# Phase 8 (Packaging & Distribution) replaces this with a signed/notarized
+# pipeline. Until then: SmartScreen warns on Windows, Gatekeeper warns on
+# macOS — workaround documented in the release body below.
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Git tag to build and package (e.g. v1.6.0)"
+        required: true
+        type: string
+      draft:
+        description: "Create the GitHub release as draft"
+        required: false
+        type: boolean
+        default: true
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  package:
+    name: Package (${{ matrix.os }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-arm64
+            runner: macos-14
+          - os: windows-x64
+            runner: windows-2022
+
+    steps:
+      - name: Resolve target ref
+        id: resolve
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF="${{ github.event.inputs.tag }}"
+          else
+            REF="${{ github.ref_name }}"
+          fi
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          echo "asset=BALLView-${REF}-${{ matrix.os }}.zip" >> "$GITHUB_OUTPUT"
+          echo "Resolved ref: $REF"
+
+      - name: Checkout (at resolved tag)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.resolve.outputs.ref }}
+
+      # =====================================================================
+      # macOS arm64 — Homebrew Qt 5.15, ci-macos preset, macdeployqt
+      # =====================================================================
+      - name: Install dependencies (macOS / Homebrew)
+        if: matrix.os == 'macos-arm64'
+        run: |
+          brew install qt@5 boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache
+
+      - name: Configure (macOS)
+        if: matrix.os == 'macos-arm64'
+        run: |
+          cmake --preset ci-macos -DBALL_LICENSE=GPL
+
+      - name: Build (macOS)
+        if: matrix.os == 'macos-arm64'
+        run: |
+          cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
+
+      - name: Locate BALLView.app (macOS)
+        if: matrix.os == 'macos-arm64'
+        id: locate-mac
+        shell: bash
+        run: |
+          APP=$(find build/ci-macos -name "BALLView.app" -type d | head -1)
+          if [ -z "$APP" ]; then
+            echo "::error::BALLView.app not found in build/ci-macos"
+            find build/ci-macos -name "BALLView*" -maxdepth 8 2>/dev/null || true
+            exit 1
+          fi
+          echo "app=$APP" >> "$GITHUB_OUTPUT"
+          echo "Found: $APP"
+
+      - name: macdeployqt (macOS)
+        if: matrix.os == 'macos-arm64'
+        run: |
+          /opt/homebrew/opt/qt@5/bin/macdeployqt "${{ steps.locate-mac.outputs.app }}" -verbose=1
+
+      - name: Bundle data/ into the .app (macOS)
+        if: matrix.os == 'macos-arm64'
+        shell: bash
+        run: |
+          if [ -d data ]; then
+            mkdir -p "${{ steps.locate-mac.outputs.app }}/Contents/Resources/data"
+            cp -R data/* "${{ steps.locate-mac.outputs.app }}/Contents/Resources/data/"
+            echo "Bundled $(du -sh data | awk '{print $1}') of runtime data into the .app"
+          else
+            echo "::warning::data/ not found at repo root — .app may be missing runtime resources"
+          fi
+
+      - name: Zip .app (macOS)
+        if: matrix.os == 'macos-arm64'
+        shell: bash
+        run: |
+          APP_DIR=$(dirname "${{ steps.locate-mac.outputs.app }}")
+          APP_NAME=$(basename "${{ steps.locate-mac.outputs.app }}")
+          cd "$APP_DIR"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_NAME" "${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
+          ls -lh "${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
+
+      # =====================================================================
+      # Windows x64 — vcpkg manifest, ci-windows preset, windeployqt
+      # =====================================================================
+      - name: Restore vcpkg binary cache (Windows)
+        id: vcpkg-cache
+        if: matrix.os == 'windows-x64'
+        uses: actions/cache/restore@v4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'cmake/vcpkg-triplets/x64-windows-release.cmake') }}
+          restore-keys: |
+            vcpkg-${{ matrix.os }}-
+
+      - name: Install flex/bison (Windows — winflexbison3 via choco)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          choco install winflexbison3 -y
+
+      - name: Configure (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
+          Write-Host "VCPKG_ROOT=$env:VCPKG_ROOT"
+          cmake --preset ci-windows `
+            -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
+            -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe"
+
+      - name: Save vcpkg binary cache (Windows)
+        if: always() && matrix.os == 'windows-x64' && steps.vcpkg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          key: vcpkg-${{ matrix.os }}-${{ hashFiles('vcpkg.json', 'cmake/vcpkg-triplets/x64-windows-release.cmake') }}
+
+      - name: Build (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          cmake --build --preset ci-windows --target BALL VIEW BALLView
+
+      - name: Locate BALLView.exe + windeployqt (Windows)
+        if: matrix.os == 'windows-x64'
+        id: locate-win
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path build\ci-windows -Filter BALLView.exe -Recurse | Select-Object -First 1
+          if (-not $exe) {
+            Write-Host "::error::BALLView.exe not found in build/ci-windows"
+            Get-ChildItem -Path build -Filter "*.exe" -Recurse | Select-Object -First 20 | ForEach-Object { Write-Host $_.FullName }
+            exit 1
+          }
+          Write-Host "Found: $($exe.FullName)"
+          "exe=$($exe.FullName)" >> $env:GITHUB_OUTPUT
+          "deploy_dir=$($exe.Directory.FullName)" >> $env:GITHUB_OUTPUT
+          # windeployqt ships in vcpkg's installed Qt5 tools dir
+          $wdq = Get-ChildItem -Path build\ci-windows\vcpkg_installed -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $wdq) {
+            Write-Host "::error::windeployqt.exe not found in vcpkg_installed"
+            Get-ChildItem -Path build\ci-windows -Filter "windeployqt*" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { Write-Host $_.FullName }
+            exit 1
+          }
+          Write-Host "windeployqt: $($wdq.FullName)"
+          "windeployqt=$($wdq.FullName)" >> $env:GITHUB_OUTPUT
+
+      - name: windeployqt (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          & "${{ steps.locate-win.outputs.windeployqt }}" --release --no-translations --no-system-d3d-compiler --no-compiler-runtime "${{ steps.locate-win.outputs.exe }}"
+
+      - name: Bundle data/ next to .exe (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          $dataSrc = Join-Path $env:GITHUB_WORKSPACE "data"
+          $dataDst = Join-Path "${{ steps.locate-win.outputs.deploy_dir }}" "data"
+          if (Test-Path $dataSrc) {
+            Copy-Item -Path $dataSrc -Destination $dataDst -Recurse -Force
+            Write-Host "Bundled runtime data alongside BALLView.exe"
+          } else {
+            Write-Warning "data/ not found at repo root — bundle may be missing runtime resources"
+          }
+
+      - name: Zip deploy dir (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          Compress-Archive -Path "${{ steps.locate-win.outputs.deploy_dir }}\*" -DestinationPath "${{ github.workspace }}\${{ steps.resolve.outputs.asset }}" -Force
+          Get-Item "${{ github.workspace }}\${{ steps.resolve.outputs.asset }}" | Select-Object Length,Name
+
+      # =====================================================================
+      # Upload workflow artifact (consumed by the release job below)
+      # =====================================================================
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.resolve.outputs.asset }}
+          path: ${{ steps.resolve.outputs.asset }}
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Create GitHub Release
+    needs: package
+    if: success()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Resolve ref
+        id: resolve
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            REF="${{ github.event.inputs.tag }}"
+          else
+            REF="${{ github.ref_name }}"
+          fi
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+
+      - name: Download all packaging artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: |
+          find artifacts -type f -name "*.zip" -exec ls -lh {} \;
+
+      - name: Create / update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          REF="${{ steps.resolve.outputs.ref }}"
+          DRAFT_FLAG=""
+          if [ "${{ github.event.inputs.draft || 'true' }}" = "true" ]; then
+            DRAFT_FLAG="--draft"
+          fi
+
+          BODY=$(cat <<'EOF'
+          **Unsigned best-effort installers** built from this tag.
+
+          - **macOS:** download the `.zip`, unzip, drag `BALLView.app` anywhere. Gatekeeper will block on first launch — right-click → Open → confirm, or run `xattr -dr com.apple.quarantine BALLView.app` once before launching.
+          - **Windows:** download the `.zip`, extract. Windows SmartScreen will warn — choose "More info → Run anyway".
+
+          Both binaries are **not code-signed or notarized**. That work is Phase 8 ("Packaging & Distribution") in the roadmap.
+
+          Build from source: see `BUILD-macos.md` (macOS), the GitHub Actions CI workflow at the same tag for the Linux + Windows recipes.
+
+          Linux: build from source — no Linux installer in this release.
+          EOF
+          )
+
+          # If the release doesn't exist yet, create it. Otherwise update assets.
+          if gh release view "$REF" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "Release $REF exists — uploading assets (clobber)"
+            for f in artifacts/*/*.zip; do
+              gh release upload "$REF" "$f" --clobber --repo "$GITHUB_REPOSITORY"
+            done
+          else
+            echo "Creating release $REF $DRAFT_FLAG"
+            gh release create "$REF" $DRAFT_FLAG \
+              --title "BALLView $REF" \
+              --notes "$BODY" \
+              --repo "$GITHUB_REPOSITORY" \
+              artifacts/*/*.zip
+          fi
