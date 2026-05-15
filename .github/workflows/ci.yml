@@ -325,10 +325,16 @@ jobs:
           # would still render a blank-ish-but-not-fully-blank PNG that the
           # render-smoke threshold accepts. The BALLVIEW_GL_DIAG line emitted
           # from GLRenderWindow::initializeGL() reports the live granted
-          # profile; this step asserts the live profile is `compatibility`,
-          # proving the Plan 05-03 setProfile(CompatibilityProfile) +
-          # setOptions(DeprecatedFunctions) machinery actually took effect.
-          grep 'BALLVIEW_GL_DIAG.*gl_profile=compatibility' /tmp/ballview-smoke.log
+          # profile; this step asserts the live profile is `compatibility`
+          # OR `none`. Apple Silicon's GL 2.1 implementation does not expose
+          # the Core/Compat profile distinction at version 2.1 — both M4 Max
+          # hardware and macos-latest software runner emit `gl_profile=none`
+          # (verified live, 05-DRIVER-BEHAVIOUR.md §BALLVIEW_GL_DIAG Captures).
+          # The original D-08 oracle was empirically invalidated post-Phase-5
+          # and relaxed here; Linux retains the strict `compatibility` check
+          # (llvmpipe DOES expose the distinction so a fallback to core is a
+          # real regression on that platform).
+          grep -E 'BALLVIEW_GL_DIAG.*gl_profile=(compatibility|none)' /tmp/ballview-smoke.log
 
       # ======================================================================
       # Spike smoke check (macOS — GLCore backend) — THROWAWAY (Plan 05-05).
