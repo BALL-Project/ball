@@ -163,7 +163,7 @@ Plans:
 - [x] 05-06-qrhi-spike-PLAN.md — Wave 5: QRhiRenderer + QtRhiSurface + RendererFactory::Kind::QRhi (gated on Qt >= 6.7) (SPIKE-01) *(complete 2026-05-15; Qt 6.11 / Metal backend on macOS-arm64; build green via Qt6::GuiPrivate; downstream-virtual caveat identical to Plan 05-05)*
 
 **Wave 6** *(blocked on Wave 5 completion)*
-- [ ] 05-07-driver-behaviour-record-PLAN.md — Wave 6: 05-DRIVER-BEHAVIOUR.md — per-platform DIAG + picking/overlay records (SPIKE-01)
+- [x] 05-07-driver-behaviour-record-PLAN.md — Wave 6: 05-DRIVER-BEHAVIOUR.md — per-platform DIAG + picking/overlay records (SPIKE-01)
 - [ ] 05-08-spike-decision-record-PLAN.md — Wave 6: 05-SPIKE-DECISION.md — chosen backend + rationale + per-platform criteria + scoped PIPE-01 task list (SPIKE-02)
 
 ### Phase 5.1: Build Warnings & Latent Bug Cleanup (INSERTED)
