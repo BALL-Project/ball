@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
 status: executing
-stopped_at: Phase 5 Plan 01 complete (CMake Qt 6 bring-up)
-last_updated: "2026-05-15T08:08:00.000Z"
+stopped_at: Phase 5 Plan 02 complete (source API renames)
+last_updated: "2026-05-15T10:30:00.000Z"
 progress:
   total_phases: 19
   completed_phases: 6
   total_plans: 25
-  completed_plans: 18
-  percent: 33
+  completed_plans: 19
+  percent: 35
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -24,11 +24,11 @@ progress:
 ## Current Position
 
 Phase: 05 (qt-6-migration-4b-renderer-backend-decision-spike) — EXECUTING
-Plan: 2 of 8 (Plan 01 complete)
+Plan: 3 of 8 (Plans 01-02 complete)
 **Phase:** 5 — Qt 6 Migration + Renderer Backend Spike
-**Plans:** 1 of 8 complete (05-01)
+**Plans:** 2 of 8 complete (05-01, 05-02)
 **Status:** Executing Phase 05
-**Progress:** [█░░░░░░░░░] 13% of Phase 5; overall 94% of v1.6 active phases
+**Progress:** [██░░░░░░░░] 25% of Phase 5; overall 94% of v1.6 active phases
 
 ```
 Phase 1     [x]  Build Baseline
@@ -70,6 +70,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 04 P04-02 | 26 | 4 tasks | 5 files |
 | Phase 04 P04-03 | 240 | 4 tasks | 6 files |
 | Phase 05 P05-01 | 2min | 2 tasks | 17 files (Rule 3 cascade: 13 add'l build files) |
+| Phase 05 P05-02 | 8min | 2 tasks | 6 files (QRegExp + QDesktopWidget + SkipEmptyParts ports) |
 
 ## Accumulated Context
 
@@ -111,6 +112,7 @@ roadmap/STATE after any gsd-tools phase op.
 - [Phase 04]: GPL-gate preserved for OpenBabel in CI: -DBALL_LICENSE=GPL added to ci-macos/ci-linux configure steps; LGPL default build never searches for OpenBabel
 - [Phase 04]: BeginModify/EndModify required in OB 3.x createOBMol: replaces auto-clear behavior removed in 3.x; EndModify(true) resets all perception flags atomically
 - [Phase 05]: Plan 05-01 D-01 locked: QT_MIN_VERSION=6.5 with FIND_PACKAGE(Qt6 6.5 ...) on top-level + VIEW block; D-04 locked: Qt6::OpenGLWidgets added as last entry in VIEW_DEP_LIBRARIES (Qt 6 split QOpenGLWidget out of Qt::OpenGL into its own module — load-bearing for glRenderWindow); D-03 locked: macOS preset CMAKE_PREFIX_PATH -> /opt/homebrew/opt/qt (Homebrew unversioned qt, currently 6.11.x), vcpkg manifest -> qtbase with pinned builtin-baseline c1ce926d…; D-05 audit green (no Qt6::Core5Compat / qt5compat anywhere). Rule 3 cascade: 13 downstream CMakeLists in cmake/ + source/EXTENSIONS/ + source/APPLICATIONS/ needed QT5_* macros renamed to QT6_* and Qt5:: targets to Qt6:: — all blocking-issue fixes (configure halts at first un-renamed macro). cmake --preset ci-macos configures green against Qt 6.11 on macOS-arm64.
+- [Phase 05]: Plan 05-02 D-05 reinforced: QRegExp -> QRegularExpression inline in pyWidget.{h,C} (PythonHighlighter rewritten on QRegularExpressionMatchIterator with behavioural parity — keyword/string/comment highlighting all preserved); QDesktopWidget -> QGuiApplication::screens()/QScreen inline across stageSettings.C + scene.C + interactionMode.C (no Core5Compat shim). Pitfall 5 applied uniformly: 6 stereo `new GLRenderWindow(screen, …)` sites in scene.C (3 methods × 2 eyes) rewritten as `new GLRenderWindow(nullptr, …)` + `widget->setScreen(screen)` + `move()` — Phase 02.1's "9 guard-deferred stereo sites" all compile under Qt 6 with correct semantics. pluginManager.C: QString::SkipEmptyParts -> Qt::SkipEmptyParts (one-token Qt 6 namespace move). Deviations: (1) interactionMode.C include was NOT dead (Plan said delete; actually used at ctor `qApp->desktop()->size()`) — replaced with QGuiApplication::primaryScreen() ? primaryScreen()->size() : QSize(). (2) stageSettings.C had 3 additional QApplication::desktop() sites beyond the plan's documented line 24+433-436 (lines 52, 89, 415) — auto-fixed as Rule 3 blocking-issue. (3) scene.C had 6 stereo GLRenderWindow construction sites, not the 2-3 documented — uniform Pitfall 5 transform applied. Build verification: pluginManager.C compiles clean in isolation under Qt 6; the 5 VIEW files cannot be verified to compile yet because of three OUT-OF-SCOPE pre-existing Qt 6 blockers in BALL/FORMAT (QtXml/QXmlDefaultHandler removed in Qt 6), BALL/SYSTEM (QMutexLocker is templated in Qt 6), and BALL/VIEW/RENDERING (QtWidgets/QOpenGLWidget moved to QtOpenGLWidgets — explicitly forbidden territory for Plan 05-02, Plan 03 owns it). All three blockers logged at .planning/phases/05.../deferred-items.md. Commits: be894f7 (Task 1), d7e067f (Task 2).
 
 ### Roadmap Evolution
 
@@ -135,11 +137,11 @@ roadmap/STATE after any gsd-tools phase op.
 
 ## Session Continuity
 
-**Last action:** Phase 5 Plan 01 (CMake Qt 6 bring-up) executed — `CMakeLists.txt` Qt block rewritten Qt5 → Qt6, `Qt6::OpenGLWidgets` added to `VIEW_DEP_LIBRARIES` (D-04), macOS preset switched to `/opt/homebrew/opt/qt` (Homebrew unversioned `qt` 6.11.x, D-03), vcpkg manifest switched to `qtbase` + pinned `builtin-baseline` (D-03), Rule 3 cascade renamed Qt5 macros / targets across 13 downstream build files. `cmake --preset ci-macos` configures green on macOS-arm64. Commits: `a805847` (Task 1), `cd912fc` (Task 2).
+**Last action:** Phase 5 Plan 02 (source API renames) executed — 6 files in VIEW + PLUGIN ported off `QRegExp` / `QDesktopWidget` / `QString::SkipEmptyParts` inline per D-05 (no Core5Compat shim). PythonHighlighter rewritten on `QRegularExpressionMatchIterator` with behavioural parity. Pitfall 5 applied uniformly across 6 stereo `new GLRenderWindow(screen, …)` sites in scene.C: `nullptr` parent + `widget->setScreen()` + `move()`. Three out-of-scope Qt 6 blockers in BALL/FORMAT (QtXml), BALL/SYSTEM (templated QMutexLocker), and BALL/VIEW/RENDERING (QOpenGLWidget header — Plan 03 territory) prevent full BALL/VIEW build green; logged to `.planning/phases/05.../deferred-items.md` for the next plan wave. pluginManager.C compiles clean in isolation. Commits: `be894f7` (Task 1: pyWidget QRegExp port), `d7e067f` (Task 2: QDesktopWidget + SkipEmptyParts ports).
 
-**Stopped at:** Phase 5 Plan 01 complete (CMake Qt 6 bring-up)
+**Stopped at:** Phase 5 Plan 02 complete (source API renames)
 
-**Next action:** **Phase 5 Plan 02** (source API renames) via `/gsd-execute-phase 5` — port VIEW source files off `QRegExp` / `QDesktopWidget` / `QString::SkipEmptyParts` / `QtWidgets/QOpenGLWidget` inline (D-05, no Core5Compat shim), add `QSurfaceFormat::DeprecatedFunctions` opt-in on `gl_format_` (D-06).
+**Next action:** **Phase 5 Plan 03** (QSurfaceFormat + QtOpenGLWidgets header port) via `/gsd-execute-phase 5` — covers D-06 (`QSurfaceFormat::DeprecatedFunctions` opt-in on `gl_format_`), D-07/D-08/D-09 verification, and Pitfall 4 (`<QtWidgets/QOpenGLWidget>` -> `<QtOpenGLWidgets/QOpenGLWidget>` in `glRenderWindow.h`). Plan 03 should also pick up BLOCKER-A (QtXml/QXmlDefaultHandler in dockResultFile.h — port to QXmlStreamReader) and BLOCKER-B (templated QMutexLocker in mutex.h) — both are needed for `cmake --build --target BALL VIEW BALLView` to go green and prove Plan 05-02's VIEW-side ports compile correctly.
 
 **Notes:**
 
