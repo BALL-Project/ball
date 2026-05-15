@@ -80,6 +80,7 @@ namespace BALL
 			virtual void maxTFChanged();
 			virtual void forceMaxValueChanged();
 			virtual void forceMinValueChanged();
+			virtual void resetElementColors();
 
 			protected:
 
