@@ -140,7 +140,23 @@ jobs:
         if: matrix.os == 'linux-x64'
         uses: actions/cache@v5
         with:
-          path: /var/cache/apt/archives
+          # Phase 5.1 Plan 12 (Task D3): scope the cached path to `*.deb` only.
+          # Caching the full `/var/cache/apt/archives` directory was triggering a
+          # post-job warning on every Linux run:
+          #   /usr/bin/tar: ../../../../../var/cache/apt/archives/lock: Cannot open: Permission denied
+          #   /usr/bin/tar: ../../../../../var/cache/apt/archives/partial: Cannot open: Permission denied
+          #   ##[warning]Failed to save: "/usr/bin/tar" failed ... exit code 2
+          # The runner is unprivileged; APT's exclusive lock file and partial/
+          # subdirectory are root-only (0640 / 0700), so tar fails on them. The
+          # cache action's fallback re-tars without the unreadable entries and
+          # the cache *is* still saved ("Cache saved with key: ..." follows the
+          # warning), so this was definitionally cosmetic — but the warning
+          # surfaced on 7/7 recent successful runs (chronic recurrence, not
+          # transient). Narrowing the cached path to the .deb archives — which
+          # is the only content `apt-get install` actually downloads and the
+          # only content the cache restore needs — silences the warning by
+          # construction and avoids the slower fallback tar pass.
+          path: /var/cache/apt/archives/*.deb
           key: apt-${{ matrix.os }}-${{ hashFiles('.github/workflows/ci.yml') }}
           restore-keys: |
             apt-${{ matrix.os }}-
