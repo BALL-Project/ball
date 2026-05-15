@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 05.1 Plan 04 complete (Task A4 -Wtautological-constant-out-of-range-compare fix — 932bd27; dropped 3 tautological halves in Representation::isValid at source/VIEW/KERNEL/representation.C, preserved DRAWING_PRECISION_INVALID=-1 sentinel check per CONTEXT.md D-09; VIEW build green on macos-arm64 / Qt 6.11; tri-OS CI verification follows on push)"
-last_updated: "2026-05-15T16:00:00.000Z"
+stopped_at: "Phase 05.1 Plan 07 complete (Tasks B1 + B2 C4910 BALL_EXPORT relocation fix — d0f7261; moved BALL_EXPORT from `extern template class` declarations in vector3.h/atom.h to the single-TU definitions in vector3.C/atom.C for std::vector<Vector3>, TVector3<float>, std::vector<Atom*>; canonical MSVC DLL-export pattern; libBALL build green on macos-arm64 / Qt 6.11; tri-OS CI run 25922117642 watched in background)"
+last_updated: "2026-05-15T16:30:00.000Z"
 progress:
   total_phases: 20
   completed_phases: 7
   total_plans: 39
-  completed_plans: 28
-  percent: 72
+  completed_plans: 29
+  percent: 74
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -26,7 +26,7 @@ progress:
 Phase: 05.1 (build-warnings-and-latent-bugs) — EXECUTING
 Plan: 6 of 14
 **Phase:** 05.1
-**Plans:** 4 of 14 complete (05.1-01, 05.1-03, 05.1-04, 05.1-05); next: 05.1-02 (Tier A — C4311 pointer-truncation cleanup) or 05.1-06 (A6 -Wstringop-truncation strncpy audit)
+**Plans:** 5 of 14 complete (05.1-01, 05.1-03, 05.1-04, 05.1-05, 05.1-07); next: 05.1-02 (Tier A — C4311 pointer-truncation cleanup) or 05.1-06 (A6 -Wstringop-truncation strncpy audit)
 **Status:** Ready to execute
 **Progress:** [███████░░░] 74% (of total milestone, 29/39 plans)
 
@@ -82,6 +82,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 05.1 P03 | 3min | 1 tasks | 1 files (Task A3 -Wself-assign-field; 1-line fix at pairExpInteractionEnergyProcessor.C:124) |
 | Phase 05.1 P04 | 6min | 1 tasks | 1 files (Task A4 -Wtautological-constant-out-of-range-compare; dropped 3 tautological halves in Representation::isValid at representation.C:269-274; preserved DRAWING_PRECISION_INVALID=-1 sentinel per D-09; Rule 1 deviation — plan misidentified WHICH halves were tautological, actual clang warnings were on `> MAXIMAL` upper bounds not `< 0` halves) |
 | Phase 05.1 P05 | ~7min | 1 tasks | 1 files (Task A5 -Wformat-overflow CIFParserParser.y; 20 sprintf($$, ...) → snprintf($$, sizeof($$), ...) swaps across the Bison grammar's tag/value/quoted-string composition actions; uses sizeof($$) which yields CIFPARSER_LINE_LENGTH=2550 at compile time via the %union char[N]; libBALL build green; pre-existing -Wwritable-strings + 5 shift/reduce conflicts in regenerated .C are out-of-scope) |
+| Phase 05.1 P07 | 6min | 2 tasks | 4 files (Tasks B1+B2 C4910 BALL_EXPORT relocation; moved `BALL_EXPORT` from `extern template class` declarations in vector3.h:1145,1148 + atom.h:1010 to the single-TU `template class` definitions in vector3.C:10,13 + atom.C:680; canonical MSVC DLL-export pattern; B1 + B2 bundled per CONTEXT.md D-02; libBALL build green on macos-arm64; tri-OS CI run 25922117642 supervised in background) |
 
 ## Accumulated Context
 
@@ -134,6 +135,7 @@ roadmap/STATE after any gsd-tools phase op.
 - [Phase 05.1]: Plan 05.1-03 (Task A3 -Wself-assign-field fix at pairExpInteractionEnergyProcessor.C:124): changed `rdf_parameter_ = rdf_parameter_;` → `rdf_parameter_ = proc.rdf_parameter_;` in the copy-assignment operator. Real bug — copy-assignment was silently retaining the destination's prior RadialDistributionFunction rather than propagating the source's. The copy constructor in the same file already had the correct initializer (`rdf_parameter_(proc.rdf_parameter_)` at line 91), confirming `proc` as the parameter name. Pure 1-line body edit; no ABI / link-compat impact. Local libBALL build green via `cmake --build build/ci-macos --target BALL -j 8`. Plan executed exactly as written, zero deviations. Commit 066195c.
 - [Phase 05.1]: Plan 05.1-04 (Task A4 -Wtautological-constant-out-of-range-compare in representation.C) — Option A (asymmetric drop) chosen over Option B (add DRAWING_MODE_INVALID=-1 sentinel) because Option A is a 3-half deletion plus comment in one .C file with zero header recompile cascade, vs. Option B which would have added an enumerator to a public-API enum in include/BALL/VIEW/KERNEL/common.h and triggered a VIEW-wide rebuild. CRITICAL DEVIATION (Rule 1): the plan and BACKLOG.md Task A4 misidentified which halves clang flagged — they named the `< 0` halves but a force-rebuild after the initial single-half edit showed clang's warnings were actually on the `> BALL_VIEW_MAXIMAL_*` upper bounds (because both MAXIMAL macros = 4 while the largest enumerator in each enum = 3). The `< 0` halves did not trip the warning. Extended Option A from a 1-token deletion (`drawing_mode_ < 0`) to a 3-half deletion (both `> MAXIMAL_*` upper bounds + `drawing_mode_ < 0`), keeping the meaningful `drawing_precision_ < 0` sentinel check that catches DRAWING_PRECISION_INVALID=-1 per CONTEXT.md D-09. Final post-fix conditional: `if (drawing_precision_ < 0 || transparency_ > 255)`. 6-line comment block above the conditional records the rationale for each dropped half. Force-rebuild of representation.C: pre-fix 2 tautological-constant-out-of-range-compare warnings, post-fix 0 warnings. `[100%] Built target VIEW` clean on macos-arm64 / Qt 6.11. Commit 932bd27.
 - [Phase 05.1]: Plan 05.1-05 (Task A5 -Wformat-overflow in CIFParserParser.y): replaced all 20 `sprintf($$, fmt, ...)` calls in the Bison grammar's tag/value/quoted-string composition actions with `snprintf($$, sizeof($$), fmt, ...)`. The `$$` Bison macro expands to a `yyval.text`-style reference to a `char[CIFPARSER_LINE_LENGTH]` field of the `%union`, so `sizeof($$)` yields the correct 2550-byte bound at compile time (refactor-safe: bumping CIFPARSER_LINE_LENGTH automatically re-bounds every snprintf without further edits). BACKLOG.md A5 named 19 sprintf instances (the gcc warning count); the file actually had 20 sprintf calls — all swapped. Surface compiles cleanly: bison 3.8.2 regenerated `build/source/FORMAT/CIFParserParser.C` from the .y, gcc/clang built the .C with zero `-Wformat-overflow` warnings. Pre-existing unrelated warnings in the regenerated .C (2 `-Wwritable-strings` on yyerror string-literal arguments + 5 `[-Wconflicts-sr]` shift/reduce grammar conflicts) were left alone — separate latent issues, not in plan 05.1-05's scope. Removes a security-adjacent memory-corruption risk on malformed CIF input. The 18 `strncpy(...,CIFPARSER_LINE_LENGTH)` sites in the sibling `CIFParserLexer.l` belong to Task A6 (-Wstringop-truncation, plan 05.1-06) and were intentionally not touched. libBALL re-link green on macos-arm64 / Qt 6.11; CI verification follows on push. Commit d46b942.
+- [Phase 05.1]: Plan 05.1-07 (Tasks B1 + B2 — C4910 MSVC `extern template class BALL_EXPORT` contradictory-attribute fix). Pattern: `BALL_EXPORT` (=`__declspec(dllexport)` on MSVC) belongs on the single TU emitting the explicit instantiation, NOT on the per-TU `extern template class` declaration in the header — the two attributes are logically contradictory (one says "don't instantiate", the other says "generate exported code"). B1 covers `std::vector<Vector3>` + `TVector3<float>`: stripped `BALL_EXPORT` from `extern template class` at include/BALL/MATHS/vector3.h:1145,1148 and added `BALL_EXPORT` to the matching `template class` definitions at source/MATHS/vector3.C:10,13. B2 covers `std::vector<Atom*>`: include/BALL/KERNEL/atom.h:1010 previously held `template class BALL_EXPORT std::vector<Atom*>;` *without* `extern` (every TU emitted a definition, only MSVC's COMDAT folding masked the duplication) — replaced with `extern template class std::vector<Atom*>;` declaration; added the single `template class BALL_EXPORT std::vector<Atom*>;` definition at source/KERNEL/atom.C:680 under the same `#ifdef BALL_COMPILER_MSVC` guard that wraps the matching extern declaration in the header. B1 + B2 landed as one atomic commit per CONTEXT.md D-02 (shared fix pattern). `BALL_EXPORT` is a no-op on non-MSVC, so local macos-arm64 build is a pre-flight check, not a test of the actual fix — `[100%] Built target BALL` clean. Windows MSVC C4910-on-vector3.h drop and Atom* per-TU duplicate-emit elimination verify on CI run 25922117642 (supervised in background). Zero deviations from plan. Commit d0f7261.
 
 ### Roadmap Evolution
 
