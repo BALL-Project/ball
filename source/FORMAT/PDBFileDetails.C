@@ -19,6 +19,7 @@
 #include <cctype>
 #include <cstdarg>
 #include <cstdlib>
+#include <cstring>
 
 using namespace std;
 
@@ -1457,7 +1458,15 @@ namespace BALL
 			aai.current_residue = atom.residue;
 			if (atom.residue != 0)
 			{
-				strncpy(aai.residue_name, atom.residue->getName().c_str(), 4);
+				// PDB ResidueName is char[4]; treat as a fixed-width 3-char field
+				// followed by an explicit nul. Source length may equal or exceed 3,
+				// so use memcpy + explicit nul-termination rather than strncpy
+				// (avoids -Wstringop-truncation and guarantees nul-termination for
+				// the downstream printf "%-3s" consumer).
+				const std::string& rn = atom.residue->getName();
+				const std::size_t n = rn.size() < 3 ? rn.size() : 3;
+				std::memcpy(aai.residue_name, rn.data(), n);
+				aai.residue_name[n] = '\0';
 				if (atom.residue->getID().toInt() == 0)
 				{
 					aai.residue_id++;
@@ -1470,7 +1479,9 @@ namespace BALL
 			}
 			else
 			{
-				strncpy(aai.residue_name, "UNK", 4);
+				// Literal "UNK" is 3 chars; copy plus explicit nul terminator.
+				std::memcpy(aai.residue_name, "UNK", 3);
+				aai.residue_name[3] = '\0';
 			}
 		}
 	}
@@ -1550,7 +1561,11 @@ namespace BALL
 			atom_info.current_chain = structure.atoms[0].chain;
 			if (atom_info.current_residue != 0)
 			{
-				strncpy(atom_info.residue_name, atom_info.current_residue->getName().c_str(), 4);
+				// PDB ResidueName is char[4]; 3-char field + nul (see updateAdditionalAtomInfo_).
+				const std::string& rn = atom_info.current_residue->getName();
+				const std::size_t n = rn.size() < 3 ? rn.size() : 3;
+				std::memcpy(atom_info.residue_name, rn.data(), n);
+				atom_info.residue_name[n] = '\0';
 				try
 				{
 					atom_info.residue_id = atom_info.current_residue->getID().toInt();
@@ -1774,15 +1789,31 @@ namespace BALL
 			{
 				if (res_name == original_name[i])
 				{
-					strncpy(seq, seqres_name[i], 3);
+					// seqres_name entries are 1- or 2-char literals, nul-terminated.
+					// Fill the 3-char field, padding with nul as strncpy did.
+					const std::size_t srclen = std::strlen(seqres_name[i]);
+					const std::size_t n = srclen < 3 ? srclen : 3;
+					std::memcpy(seq, seqres_name[i], n);
+					if (n < 3) seq[n] = '\0';
+					seq[3] = '\0';
 					break;
 				}
 			}
 			if (seq[0] == '\0')
 			{
-				strncpy(seq, res_name.c_str(), 3);
+				// Copy at most 3 chars from res_name into the 4-byte buffer; always nul-terminate.
+				const std::size_t n = res_name.size() < 3 ? res_name.size() : 3;
+				std::memcpy(seq, res_name.c_str(), n);
+				seq[n] = '\0';
 			}
-			strncpy(sr.residue_name[res_counter++], seq, 3);
+			// Copy 3-char residue label into fixed-width slot; explicit nul at [3].
+			{
+				PDB::ResidueName& dst = sr.residue_name[res_counter++];
+				const std::size_t srclen = std::strlen(seq);
+				const std::size_t n = srclen < 3 ? srclen : 3;
+				std::memcpy(dst, seq, n);
+				dst[n] = '\0';
+			}
 		}
 		if (res_counter > 0)
 		{
@@ -1799,7 +1830,13 @@ namespace BALL
 			{
 				const SecondaryStructure& helix(*structure.sec_structs[i]);
 				hr.serial_number++;
-				strncpy(hr.helix_ID, helix.getName().c_str(), 3);
+				// LString3 (char[4]): 3-char PDB field + explicit nul.
+				{
+					const std::string& nm = helix.getName();
+					const std::size_t n = nm.size() < 3 ? nm.size() : 3;
+					std::memcpy(hr.helix_ID, nm.data(), n);
+					hr.helix_ID[n] = '\0';
+				}
 				hr.initial_residue.set(*helix.beginResidue());
 				hr.terminal_residue.set(*helix.rbeginResidue());
 				hr.comment[0] = '\0';
@@ -1839,12 +1876,20 @@ namespace BALL
 				if (name.has(':'))
 				{
 					String sheet_id = name.before(":");
-					strncpy(sr.sheet_ID, sheet_id.c_str(), 3);
+					// LString3 (char[4]): 3-char PDB field + explicit nul.
+					{
+						const std::size_t n = sheet_id.size() < 3 ? sheet_id.size() : 3;
+						std::memcpy(sr.sheet_ID, sheet_id.data(), n);
+						sr.sheet_ID[n] = '\0';
+					}
 					sr.strand_number = name.after(":").toString().toInt();
 				}
-				else	
+				else
 				{
-					strncpy(sr.sheet_ID, name.c_str(), 3);
+					// LString3 (char[4]): 3-char PDB field + explicit nul.
+					const std::size_t n = name.size() < 3 ? name.size() : 3;
+					std::memcpy(sr.sheet_ID, name.data(), n);
+					sr.sheet_ID[n] = '\0';
 					sr.strand_number = 1;
 				}
 				sr.initial_residue.set(*strand.beginResidue());
@@ -1864,7 +1909,13 @@ namespace BALL
 			{
 				const SecondaryStructure& turn(*structure.sec_structs[i]);
 				tr.sequence_number++;
-				strncpy(tr.turn_ID, turn.getName().c_str(), 3);
+				// LString3 (char[4]): 3-char PDB field + explicit nul.
+				{
+					const std::string& nm = turn.getName();
+					const std::size_t n = nm.size() < 3 ? nm.size() : 3;
+					std::memcpy(tr.turn_ID, nm.data(), n);
+					tr.turn_ID[n] = '\0';
+				}
 				tr.initial_residue.set(*turn.beginResidue());
 				tr.terminal_residue.set(*turn.rbeginResidue());
 				tr.comment[0] = '\0';

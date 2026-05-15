@@ -6,6 +6,24 @@ using namespace BALL;
 #include "CIFParserParser.h"
 #include <string.h>
 
+/*
+ * BALL Phase 05.1-06: copy yytext into the parser's fixed-width
+ * CIFParserlval.text[CIFPARSER_LINE_LENGTH] buffer with explicit
+ * nul-termination, replacing the historical
+ *   strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH);
+ * idiom that triggers -Wstringop-truncation under gcc (no terminating
+ * nul when the source is longer than the destination). Tokens longer
+ * than CIFPARSER_LINE_LENGTH-1 are truncated deterministically.
+ */
+static inline void CIF_copy_text(char* dst, const char* src)
+{
+        const size_t srclen = strlen(src);
+        const size_t max    = (size_t)(CIFPARSER_LINE_LENGTH - 1);
+        const size_t n      = srclen < max ? srclen : max;
+        memcpy(dst, src, n);
+        dst[n] = '\0';
+}
+
 #define YY_INPUT(buf,result,max_size) \
 { \
 	((std::istream*)CIFFile::state.current_parser)->read(buf, max_size);\
@@ -87,13 +105,13 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 		{WS_OR_COMMENT}* {
        CIF_DEBUG("TextField Whitespace")
-       strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+       CIF_copy_text(CIFParserlval.text, yytext);
        return TK_TEXTFIELD_LINE;	
 		}
 		
 		{TEXTLEADCHAR}{AnyPrintChar}*{EOL} {
 			CIF_DEBUG("TextField line")
-			strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+			CIF_copy_text(CIFParserlval.text, yytext);
 			return TK_TEXTFIELD_LINE;	
 	  }
 }
@@ -114,25 +132,25 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 	# {
 		CIF_DEBUG("Quoting # to value")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_VALUE;
 	}
 	
 	; {
 		CIF_DEBUG("Quoting ; to value")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_VALUE;
 	}
 
 	{VALUE}	{
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		CIF_DEBUG("found value " << yytext)
 		return TK_VALUE;
 	}
 
 	{WHITESPACE} {
 		CIF_DEBUG("WhiteSpace")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_WHITESPACE;
 	}
 }
@@ -158,25 +176,25 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 	# {
 		CIF_DEBUG("Quoting # to value")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_VALUE;
 	}
 	
 	; {
 		CIF_DEBUG("Quoting ; to value")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_VALUE;
 	}
 
 	{VALUE}	{
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		CIF_DEBUG("found value " << yytext)
 		return TK_VALUE;
 	}
 
 	{WHITESPACE} {
 		CIF_DEBUG("WhiteSpace")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_WHITESPACE;
 	}
 }
@@ -197,14 +215,14 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 	{NBC}+ {
 		CIF_DEBUG("L: now in save frame " << yytext)
 		BEGIN(INITIAL); 
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_SAVE_HEADING;
 	}
 	
 	{WS_OR_COMMENT} {
 		CIF_DEBUG("L: closing save frame")
 		BEGIN(INITIAL);
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_WHITESPACE;
 	}
 }
@@ -220,7 +238,7 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 	{NBC}+ {
 		CIF_DEBUG("L: found data heading title " << yytext)
 		BEGIN(INITIAL); 
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_DATA_HEADING;
   }
 }
@@ -240,13 +258,13 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 	{VALUE}	{
 		CIF_DEBUG("found looped value " << yytext)
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_VALUE;
 	}
 	
 	{WS_OR_COMMENT} {
 		CIF_DEBUG("Found WhiteSpace")
-		strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+		CIF_copy_text(CIFParserlval.text, yytext);
 		return TK_WHITESPACE;
 	 }
 }
@@ -259,7 +277,7 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 
 {VALUE}	{
- 	strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+ 	CIF_copy_text(CIFParserlval.text, yytext);
 	CIF_DEBUG("found value " << yytext)
 	return TK_VALUE;
 }
@@ -271,7 +289,7 @@ VALUE								[.?]|({NUMERIC}|{CHARSTRING})
 
 {WS_OR_COMMENT} {
 	CIF_DEBUG("Found WhiteSpace")
-	strncpy(CIFParserlval.text, yytext, CIFPARSER_LINE_LENGTH); 
+	CIF_copy_text(CIFParserlval.text, yytext);
 	return TK_WHITESPACE;
  }
 %%

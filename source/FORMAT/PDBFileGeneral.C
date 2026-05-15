@@ -18,6 +18,7 @@
 #include <cctype>
 #include <cstdarg>
 #include <cstdlib>
+#include <cstring>
 
 using std::streampos;
 using std::ios;
@@ -378,8 +379,20 @@ namespace BALL
 			char *var_arg_char;
 		};
 
-		strncpy(formats, "%.6s", 4);
-		strncpy(&(formats[4]), format_string, sizeof(formats)-4);
+		// Deliberate fixed-width prefix: copy the 4-byte literal "%.6s" into
+		// formats[0..3] without nul-terminating; the trailing region is written
+		// by the second copy and then explicitly nul-terminated below.
+		// memcpy (rather than strncpy) silences -Wstringop-truncation: gcc
+		// flags strncpy when bound == source length, even when subsequent code
+		// makes the construction safe.
+		std::memcpy(formats, "%.6s", 4);
+		{
+			const std::size_t fs_len = std::strlen(format_string);
+			const std::size_t avail  = sizeof(formats) - 4 - 1; // leave room for nul
+			const std::size_t ncopy  = (fs_len < avail) ? fs_len : avail;
+			std::memcpy(&(formats[4]), format_string, ncopy);
+			formats[4 + ncopy] = '\0';
+		}
 		formats[sizeof(formats) - 1] = '\0';
 		va_start(var_args, format_string);
 		record_fields_ = 0;
