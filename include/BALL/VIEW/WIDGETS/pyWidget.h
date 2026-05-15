@@ -30,6 +30,7 @@
 #include <QtGui/QSyntaxHighlighter>
 #include <QtGui/QValidator>
 #include <QtCore/QStringList>
+#include <QtCore/QRegularExpression>
 
 #include <QtCore/QThread>
 
@@ -64,10 +65,10 @@ class BALL_VIEW_EXPORT BALL_DEPRECATED PythonHighlighter
 	QTextCharFormat python_format;
 	QTextCharFormat string_format;
 	QTextCharFormat comment_format;
-	vector<QRegExp> python_patterns;
-	vector<QRegExp> BALL_patterns;
-	QRegExp 				string_pattern;
-	QRegExp 				comment_pattern;
+	vector<QRegularExpression> python_patterns;
+	vector<QRegularExpression> BALL_patterns;
+	QRegularExpression 				string_pattern;
+	QRegularExpression 				comment_pattern;
 };
 
 /** Class for validating (and potentially fixing) entered python code.

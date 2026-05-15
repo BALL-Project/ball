@@ -21,6 +21,7 @@
 #include <QtGui/QTextCursor>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QPushButton>
+#include <QtCore/QRegularExpression>
 
 namespace BALL
 {
@@ -53,18 +54,18 @@ namespace BALL
 			QStringList::iterator lit = python_keywords.begin();
 			for (; lit != python_keywords.end(); lit++)
 			{
-				python_patterns.push_back(QRegExp(delim + *lit + delim));
+				python_patterns.push_back(QRegularExpression(delim + *lit + delim));
 			}
 
 			BALL_patterns.clear();
 			lit = BALL_keywords.begin();
 			for (; lit != BALL_keywords.end(); lit++)
 			{
-				BALL_patterns.push_back(QRegExp(delim + *lit + delim));
+				BALL_patterns.push_back(QRegularExpression(delim + *lit + delim));
 			}
 
-			string_pattern  = QRegExp("\".*\"");
-			comment_pattern = QRegExp("#.*");
+			string_pattern  = QRegularExpression("\".*\"");
+			comment_pattern = QRegularExpression("#.*");
 		}
 
 		void PythonHighlighter::highlightBlock(const QString& text)
@@ -73,42 +74,42 @@ namespace BALL
 
 			for (Position p = 0; p < python_patterns.size(); p++)
 			{
-				const QRegExp& expression = python_patterns[p];
-				Index index = expression.indexIn(text);
-				while (index >= 0) 
+				const QRegularExpression& expression = python_patterns[p];
+				QRegularExpressionMatchIterator it = expression.globalMatch(text);
+				while (it.hasNext())
 				{
-					int length = expression.matchedLength();
-					setFormat(index, length, python_format);
-					index = text.indexOf(expression, index + length);
+					QRegularExpressionMatch m = it.next();
+					setFormat(m.capturedStart(), m.capturedLength(), python_format);
 				}
 			}
 
 			for (Position p = 0; p < BALL_patterns.size(); p++)
 			{
-				const QRegExp& expression = BALL_patterns[p];
-				Index index = expression.indexIn(text);
-				while (index >= 0) 
+				const QRegularExpression& expression = BALL_patterns[p];
+				QRegularExpressionMatchIterator it = expression.globalMatch(text);
+				while (it.hasNext())
 				{
-					int length = expression.matchedLength();
-					setFormat(index, length, my_class_format);
-					index = text.indexOf(expression, index + length);
+					QRegularExpressionMatch m = it.next();
+					setFormat(m.capturedStart(), m.capturedLength(), my_class_format);
 				}
 			}
 
-			Index index = string_pattern.indexIn(text);
-			while (index >= 0) 
 			{
-				int length = string_pattern.matchedLength();
-				setFormat(index, length, string_format);
-				index = text.indexOf(string_pattern, index + length);
+				QRegularExpressionMatchIterator it = string_pattern.globalMatch(text);
+				while (it.hasNext())
+				{
+					QRegularExpressionMatch m = it.next();
+					setFormat(m.capturedStart(), m.capturedLength(), string_format);
+				}
 			}
 
-			index = comment_pattern.indexIn(text);
-			while (index >= 0) 
 			{
-				int length = comment_pattern.matchedLength();
-				setFormat(index, length, comment_format);
-				index = text.indexOf(comment_pattern, index + length);
+				QRegularExpressionMatchIterator it = comment_pattern.globalMatch(text);
+				while (it.hasNext())
+				{
+					QRegularExpressionMatch m = it.next();
+					setFormat(m.capturedStart(), m.capturedLength(), comment_format);
+				}
 			}
 		}
 
@@ -127,7 +128,7 @@ namespace BALL
 			Q_UNUSED(pos)
 
 			// the following is just meant as an instructive example...
-			// input.replace(QRegExp("i"), "o");
+			// input.replace(QRegularExpression("i"), "o");
 
 			return Acceptable;
 		}
