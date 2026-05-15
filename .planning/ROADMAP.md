@@ -189,14 +189,16 @@ Plans:
 **Plans**: TBD
 
 ### Phase 8: Packaging & Distribution
-**Goal**: BALLView is shippable: a notarizable, self-contained macOS bundle, plus an honest, documented build-from-source story for Linux and Windows, plus a license/distribution review. Scope clarified per the Codex review — v1.6 ships a macOS *bundle*; Linux/Windows are build-from-source targets for this milestone (installers/AppImage are a later milestone).
+**Goal**: BALLView is shippable: a **signed and notarized** macOS bundle plus a **signed** Windows installer, plus an honest, documented build-from-source story for Linux, plus a license/distribution review. v1.6.0 already ships *unsigned* best-effort installers via `release.yml` (commit `a186fb5`) — Phase 8 replaces that with the signed/notarized pipeline so users stop seeing Gatekeeper / SmartScreen warnings. (Original Codex-reviewed scope was macOS bundle + Linux/Windows from-source; expanded 2026-05-15 to include Windows signed installer based on the v1.6.0 release feedback.)
 **Depends on**: Phase 5 (Qt 6 build is what gets packaged)
-**Requirements**: PKG-01, PKG-02, PKG-03
+**Requirements**: PKG-01, PKG-02, PKG-03, PKG-04 (Windows signed installer — added 2026-05-15)
 **Success Criteria** (what must be TRUE):
   1. `BALLView.app` launches by double-click with no environment variables set, finding its `data/` in `Contents/Resources`
-  2. The macOS build produces a `macdeployqt`-processed, notarizable universal (arm64 + x86_64) bundle
-  3. `BUILD-macos.md` is joined by `BUILD-linux.md` and `BUILD-windows.md` documenting the from-source build on each platform
-  4. A license/distribution review covers the FFTW GPL path, OpenBabel, Qt deployment mode, and bundled `data/` — recorded so notarization/distribution is unambiguous
+  2. The macOS build produces a `macdeployqt`-processed, **code-signed (Developer ID Application) + Apple-notarized + stapled** universal (arm64 + x86_64) bundle that passes `spctl --assess` and opens without Gatekeeper warnings on a fresh macOS install
+  3. The Windows build produces a **code-signed** installer (or zip + signed `.exe` + signed bundled DLLs) that passes `signtool verify /pa` and minimizes SmartScreen friction (full SmartScreen-bypass is no longer available post-2024; reputation-building is expected on early releases regardless)
+  4. `BUILD-macos.md` is joined by `BUILD-linux.md` and `BUILD-windows.md` documenting the from-source build on each platform
+  5. A license/distribution review covers the FFTW GPL path, OpenBabel, Qt deployment mode, bundled `data/`, and the **code-signing chain of trust** (cert provenance, timestamping authority, renewal cadence) — recorded so notarization/distribution is unambiguous
+**Reference**: [`.planning/phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md`](phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md) — full signing & notarization research (macOS Developer ID + notarytool flow, Windows path comparison [SignPath Foundation vs Azure Artifact Signing vs commercial EV/OV], CA/B Forum 2026 changes, BALL's LGPL-2.1 eligibility for SignPath Foundation, GitHub Actions integration patterns)
 **Plans**: TBD
 
 ### Phase 9: Test Suite Triage
