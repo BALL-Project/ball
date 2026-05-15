@@ -48,8 +48,12 @@ namespace BALL
 
 		public:
 			GLRenderWindow();
-			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = 0);
-			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = 0);
+			// Qt 6: QFlags::QFlags(int) is no longer implicit, so `= 0` for a
+			// QFlags-typed default arg is a hard error. Use the default-constructed
+			// QFlags{} as the canonical "no flags" sentinel (binary-compatible with
+			// the previous `= 0` initialisation).
+			GLRenderWindow(QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = Qt::WindowFlags());
+			GLRenderWindow(const GLRenderWindow& window, QWidget* parent_widget, const char* name = NULL, Qt::WindowFlags w_flags = Qt::WindowFlags());
 
 			virtual ~GLRenderWindow();
 

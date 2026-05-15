@@ -49,7 +49,7 @@ namespace BALL
 
 			/// Constructor
 			LightSettings( QWidget* parent = 0, const char* name = "LightSettings", 
-										Qt::WindowFlags fl = 0 );
+										Qt::WindowFlags fl = Qt::WindowFlags() );
 
 			/// Destructor
 			~LightSettings() {}

@@ -27,7 +27,7 @@ namespace BALL
 
 				enum class ConnectionMode {EXTERNAL, HOSTED};
 
-				JupyterPreferences(Qt::WindowFlags fl=0);
+				JupyterPreferences(Qt::WindowFlags fl = Qt::WindowFlags());
 				~JupyterPreferences() override;
 
 				void storeValues() override;

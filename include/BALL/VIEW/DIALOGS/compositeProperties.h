@@ -33,7 +33,7 @@ namespace BALL
 
 		public:
 			CompositeProperties(Composite* composite,  QWidget* parent = 0, const char* name = "CompositeProperties", 
-													bool modal = false, Qt::WindowFlags fl = 0 );
+													bool modal = false, Qt::WindowFlags fl = Qt::WindowFlags() );
 			~CompositeProperties();
 
 		public Q_SLOTS:

@@ -50,7 +50,7 @@ namespace BALL
 
 			/// Constructor
 			ModelSettingsDialog( QWidget* parent = 0, const char* name = "ModelSettingsDialog", 
-														Qt::WindowFlags fl = 0 );
+														Qt::WindowFlags fl = Qt::WindowFlags() );
 
 			/// Destructor
 			virtual ~ModelSettingsDialog() {}

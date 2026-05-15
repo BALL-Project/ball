@@ -32,7 +32,7 @@ namespace BALL
 
 				/// Constructor
 				PresentaBALLSettings(QWidget* parent = nullptr,
-					const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = 0);
+					const char* name = "PresentaBALLSettings", Qt::WindowFlags fl = Qt::WindowFlags());
 
 				/// Destructor
 				virtual ~PresentaBALLSettings();

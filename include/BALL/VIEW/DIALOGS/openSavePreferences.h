@@ -23,7 +23,7 @@ namespace BALL
 			public:
 				OpenSavePreferences(QWidget* parent = 0,
 				                    const char* name = "Open/Save Preferences",
-				                    Qt::WindowFlags fl = 0);
+				                    Qt::WindowFlags fl = Qt::WindowFlags());
 
 				~OpenSavePreferences() override;
 

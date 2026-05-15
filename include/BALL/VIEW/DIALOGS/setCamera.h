@@ -29,7 +29,7 @@ namespace BALL
 				Q_OBJECT
 
 			public:
-				SetCamera( QWidget* parent = 0, const char* name = "SetCamera", bool modal = false, Qt::WindowFlags fl = 0 );
+				SetCamera( QWidget* parent = 0, const char* name = "SetCamera", bool modal = false, Qt::WindowFlags fl = Qt::WindowFlags() );
 				~SetCamera();
 
 				Camera* camera;

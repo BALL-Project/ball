@@ -187,7 +187,7 @@ namespace BALL
 					\param      w_flags the flags the scene widget should have
 					(See documentation of QT-library for information concerning widget flags)
 					*/
-				Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WindowFlags w_flags = 0);
+				Scene(QWidget* parent_widget = 0, const char* name = NULL, Qt::WindowFlags w_flags = Qt::WindowFlags());
 
 				/** Destructor.
 				*/

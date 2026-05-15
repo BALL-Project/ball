@@ -61,7 +61,7 @@ namespace BALL
 
 			///
 			ModifyRepresentationDialog(QWidget* parent = 0, const char* name = "ModifyRepresentationDialog", 
-																 bool modal = false, Qt::WindowFlags fl = 0);
+																 bool modal = false, Qt::WindowFlags fl = Qt::WindowFlags());
 
 			///
 			~ModifyRepresentationDialog();

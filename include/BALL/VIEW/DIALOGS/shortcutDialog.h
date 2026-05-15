@@ -42,7 +42,7 @@ namespace BALL
 			public:
 
 			/// Constructor
-			ShortcutDialog(QWidget* parent = NULL, const char* name = "ShortcutDialog", Qt::WindowFlags fl = 0 );
+			ShortcutDialog(QWidget* parent = NULL, const char* name = "ShortcutDialog", Qt::WindowFlags fl = Qt::WindowFlags() );
 
 			/// Destructor
 			virtual ~ShortcutDialog();
