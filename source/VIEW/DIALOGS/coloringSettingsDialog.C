@@ -158,8 +158,6 @@ namespace BALL
 			// This makes the bug class structurally impossible: there is no stored shadow
 			// copy of the defaults that can drift out of sync with the compiled palette.
 			{
-				const Size BALL_VIEW_NUMBER_ELEMENTS_LOCAL = 111;
-
 				ElementColorProcessor live_defaults;
 				const HashMap<Position, ColorRGBA>& defaults_map = live_defaults.getColorMap();
 
@@ -169,7 +167,7 @@ namespace BALL
 				{
 					BALL::Element const& e = PTE_::getElement(ascii(element_table_->item(p, 0)->text()));
 
-					if (e.getAtomicNumber() == 0 || e.getAtomicNumber() >= BALL_VIEW_NUMBER_ELEMENTS_LOCAL)
+					if (e.getAtomicNumber() == 0 || e.getAtomicNumber() > Element::NUMBER_OF_ELEMENTS)
 					{
 						continue;
 					}
@@ -201,7 +199,7 @@ namespace BALL
 					if (inifile.hasEntry("COLORING_OPTIONS", "ElementColorOverrides"))
 					{
 						INIFile::LineIterator it  = inifile.getSectionFirstLine("COLORING_OPTIONS");
-						INIFile::LineIterator end = inifile.getSectionLastLine("COLORING_OPTIONS");
+						INIFile::LineIterator end = inifile.getSectionLastLine("COLORING_OPTIONS").getSectionNextLine();
 						for (; it != end; ++it)
 						{
 							if ((*it).hasPrefix("ElementColorOverrides="))
