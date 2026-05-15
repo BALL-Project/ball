@@ -255,7 +255,7 @@ Plans:
 | 02.2 CI and build-smoke matrix | 2/2 | Complete    | 2026-05-14 |
 | 3. Language Modernization | 3/3 | Complete   | 2026-05-14 |
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
-| 4.1 Config Color-Defaults Fix | 3/5 | In Progress|  |
+| 4.1 Config Color-Defaults Fix | 4/5 | In Progress|  |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
 | 6. Python Bindings | 0/0 | Not started | - |
@@ -296,7 +296,7 @@ Plans:
 **Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme — build-tooling transition with no source impact, but the per-platform `BUILD-*.md` docs change. Sequenced AFTER 999.7 (Linux + Windows Qt 6 bring-up) so the cross-platform Ninja switch lands once on a green tri-OS baseline. The `CMakePresets.json` from Phase 4 already abstracts the per-platform configure; flipping the generator is a single `"generator": "Ninja"` field on each preset.
 
 **Requirements:** TBD
-**Plans:** 3/5 plans executed
+**Plans:** 4/5 plans executed
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens)
