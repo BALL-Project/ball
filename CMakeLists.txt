@@ -93,7 +93,7 @@ ENDIF()
 # Pinned inline at each find_package call site (or via the SET below for Qt).
 #
 #   CMake   3.21  — CMakePresets.json schema v3 + toolchainFile support
-#   Qt5     5.15  — the only maintained Qt5 release line; Homebrew + vcpkg both ship 5.15.x
+#   Qt6     6.5   — Qt 6.5 LTS floor (D-01); Homebrew ships unversioned qt 6.x, vcpkg ships qtbase
 #   Boost   1.70  — config-mode BoostConfig.cmake is reliable from 1.70+
 #   Eigen3  3.4   — first Eigen with stable Eigen3Config.cmake (covers the 5.x line; see note at FIND_PACKAGE)
 #   TBB    2021.0 — first oneTBB release shipping TBBConfig.cmake / TBB::tbb target
@@ -288,50 +288,51 @@ IF(QTDIR)
 	INCLUDE_DIRECTORIES(BEFORE "${QTDIR}/include")
 ENDIF()
 
-SET(QT_MIN_VERSION 5.15)
+SET(QT_MIN_VERSION 6.5)
 
-FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED Core Network Xml)
+FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED Core Network Xml)
 
-LIST(APPEND BALL_DEP_LIBRARIES Qt5::Core
-                               Qt5::Network
-                               Qt5::Xml)
+LIST(APPEND BALL_DEP_LIBRARIES Qt6::Core
+                               Qt6::Network
+                               Qt6::Xml)
 LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DQT_NO_KEYWORDS")
 
 IF (BALL_HAS_VIEW)
-	FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets)
-	FIND_PACKAGE(Qt5LinguistTools ${QT_MIN_VERSION})
+	FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets OpenGLWidgets)
+	FIND_PACKAGE(Qt6LinguistTools ${QT_MIN_VERSION})
 
-	IF(NOT Qt5LinguistTools_FOUND)
-		MESSAGE(WARNING "Qt5LinguistTools not found: BALLView translations cannot be created and compiled.")
+	IF(NOT Qt6LinguistTools_FOUND)
+		MESSAGE(WARNING "Qt6LinguistTools not found: BALLView translations cannot be created and compiled.")
 	ENDIF()
 
-	LIST(APPEND VIEW_DEP_LIBRARIES Qt5::OpenGL
-	                               Qt5::PrintSupport
-	                               Qt5::Test
-	                               Qt5::Widgets)
+	LIST(APPEND VIEW_DEP_LIBRARIES Qt6::OpenGL
+	                               Qt6::PrintSupport
+	                               Qt6::Test
+	                               Qt6::Widgets
+	                               Qt6::OpenGLWidgets)
 
 	# WebEngine support
 	IF(USE_QTWEBENGINE)
-		FIND_PACKAGE(Qt5 ${QT_MIN_VERSION} QUIET COMPONENTS WebEngine WebEngineWidgets WebChannel)
+		FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} QUIET COMPONENTS WebEngineCore WebEngineWidgets WebChannel)
 
 		SET(BALL_HAS_QTWEBENGINE TRUE)
-		IF(NOT Qt5WebEngine_FOUND)
+		IF(NOT Qt6WebEngineCore_FOUND)
 			MESSAGE(STATUS "QtWebEngine has not been found. Disabling WebEngine support.")
 			SET(BALL_HAS_QTWEBENGINE FALSE)
 		ENDIF()
 
-		IF(NOT Qt5WebEngineWidgets_FOUND)
+		IF(NOT Qt6WebEngineWidgets_FOUND)
 			MESSAGE(STATUS "QtWebEngineWidgets has not been found. Disabling WebEngine support.")
 			SET(BALL_HAS_QTWEBENGINE FALSE)
 		ENDIF()
 
-		IF(NOT Qt5WebChannel_FOUND)
+		IF(NOT Qt6WebChannel_FOUND)
 			MESSAGE(STATUS "QtWebChannel has not been found. Disabling WebEngine support.")
 			SET(BALL_HAS_QTWEBENGINE FALSE)
 		ENDIF()
 
 		IF(BALL_HAS_QTWEBENGINE)
-			LIST(APPEND VIEW_DEP_LIBRARIES Qt5::WebEngineWidgets Qt5::WebChannel)
+			LIST(APPEND VIEW_DEP_LIBRARIES Qt6::WebEngineWidgets Qt6::WebChannel)
 		ENDIF()
 	ENDIF()
 ENDIF()
@@ -840,18 +841,18 @@ MESSAGE(STATUS "")
 INCLUDE(CMakePackageConfigHelpers)
 
 
-# Collect Qt5 dependencies
-GET_TARGET_PROPERTY(QT5_LINK_LIBRARIES BALL LINK_LIBRARIES)
+# Collect Qt6 dependencies
+GET_TARGET_PROPERTY(QT6_LINK_LIBRARIES BALL LINK_LIBRARIES)
 IF(BALL_HAS_VIEW)
 	GET_TARGET_PROPERTY(VIEW_LINK_LIBRARIES VIEW LINK_LIBRARIES)
-	SET(QT5_LINK_LIBRARIES ${QT5_LINK_LIBRARIES} ${VIEW_LINK_LIBRARIES})
+	SET(QT6_LINK_LIBRARIES ${QT6_LINK_LIBRARIES} ${VIEW_LINK_LIBRARIES})
 ENDIF()
 
-SET(QT5_IMPORTED_TARGETS "")
-FOREACH(TMP_LINKED_LIB ${QT5_LINK_LIBRARIES})
-	IF(${TMP_LINKED_LIB} MATCHES ".*Qt5")
-		STRING(REPLACE "::" "" TMP_QT5_LINK_LIBRARY ${TMP_LINKED_LIB})
-		SET(QT5_IMPORTED_TARGETS ${QT5_IMPORTED_TARGETS} ${TMP_QT5_LINK_LIBRARY})
+SET(QT6_IMPORTED_TARGETS "")
+FOREACH(TMP_LINKED_LIB ${QT6_LINK_LIBRARIES})
+	IF(${TMP_LINKED_LIB} MATCHES ".*Qt6")
+		STRING(REPLACE "::" "" TMP_QT6_LINK_LIBRARY ${TMP_LINKED_LIB})
+		SET(QT6_IMPORTED_TARGETS ${QT6_IMPORTED_TARGETS} ${TMP_QT6_LINK_LIBRARY})
 	ENDIF()
 ENDFOREACH()
 

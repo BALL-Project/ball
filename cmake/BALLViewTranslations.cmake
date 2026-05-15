@@ -1,9 +1,9 @@
-# Skip translation handling when Qt5LinguistTools is unavailable. RETURN()
+# Skip translation handling when Qt6LinguistTools is unavailable. RETURN()
 # takes no positional argument — RETURN(0) errors on CMake >= 3.25 unless
 # CMP0140 is OLD. This branch was previously never exercised because every
-# CI/dev environment shipped Qt5LinguistTools; the Windows vcpkg build does
-# not (qt5-tools is not in the manifest), which surfaced the bug.
-IF(NOT Qt5LinguistTools_FOUND)
+# CI/dev environment shipped Qt6LinguistTools; the Windows vcpkg build does
+# not (qttools is not in the manifest), which surfaced the bug.
+IF(NOT Qt6LinguistTools_FOUND)
 	RETURN()
 ENDIF()
 
@@ -15,7 +15,7 @@ FILE(GLOB PROJECT_TS_FILES "${TRANSLATION_DIR}/*.ts")
 IF(UPDATE_TRANSLATIONS)
 
 	# Update and compile translations
-	QT5_CREATE_TRANSLATION(PROJECT_QM_FILES
+	QT6_CREATE_TRANSLATION(PROJECT_QM_FILES
 		"${CMAKE_SOURCE_DIR}/source"
 		${PROJECT_TS_FILES}
 		OPTIONS -I "${CMAKE_SOURCE_DIR}/include"
@@ -26,7 +26,7 @@ IF(UPDATE_TRANSLATIONS)
 ELSE()
 
 	# Compile translations
-	QT5_ADD_TRANSLATION(PROJECT_QM_FILES
+	QT6_ADD_TRANSLATION(PROJECT_QM_FILES
 		${PROJECT_TS_FILES}
 	)
 

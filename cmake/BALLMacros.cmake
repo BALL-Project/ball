@@ -5,7 +5,7 @@
 ### So this macro is a nearly one-to-one copy of the FindQt4 - version with only
 ### minor modifications (marked with ## BALL ###)
 ###
-function(QT5_WRAP_UI_BALL outfiles)
+function(QT6_WRAP_UI_BALL outfiles)
     set(options)
     set(oneValueArgs)
     set(multiValueArgs OPTIONS)
@@ -17,12 +17,19 @@ function(QT5_WRAP_UI_BALL outfiles)
 
 		FILE(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/)
 
+    # Resolve uic via the Qt6::uic IMPORTED target (Qt 6 path; no Qt6Widgets_UIC_EXECUTABLE).
+    if(TARGET Qt6::uic)
+      set(_BALL_UIC_EXECUTABLE Qt6::uic)
+    else()
+      set(_BALL_UIC_EXECUTABLE uic)
+    endif()
+
     foreach(it ${ui_files})
         get_filename_component(outfile ${it} NAME_WE)
         get_filename_component(infile ${it} ABSOLUTE)
         set(outfile ${PROJECT_BINARY_DIR}/include/BALL/VIEW/UIC/ui_${outfile}.h)
         add_custom_command(OUTPUT ${outfile}
-          COMMAND ${Qt5Widgets_UIC_EXECUTABLE}
+          COMMAND ${_BALL_UIC_EXECUTABLE}
           ARGS ${ui_options} -o ${outfile} ${infile}
           MAIN_DEPENDENCY ${infile} VERBATIM)
         list(APPEND ${outfiles} ${outfile})
@@ -161,7 +168,7 @@ MACRO(ADD_BALL_UIFILES GROUP UI_LIST)
 
 		### Generate the corresponding ui file ###
 		SET(OUTFILES)
-		QT5_WRAP_UI_BALL(OUTFILES ${UI_FILE})
+		QT6_WRAP_UI_BALL(OUTFILES ${UI_FILE})
 
 		### and add them to the sources ###
 		SET(VIEW_sources ${VIEW_sources} "${OUTFILES}" ${UI_FILE})
