@@ -14,7 +14,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 02.2: CI and build-smoke matrix** - Early GitHub Actions build matrix (macOS-arm64/Linux/Windows) + a non-blank render smoke check + a GL-capability diagnostics log *(inserted per Codex review — pulled forward so Phases 3-9 land with a regression net)* (completed 2026-05-14)
 - [x] **Phase 3: Language Modernization** - Move the codebase to C++17, remove C++17-removed constructs, set the standard via CMake (completed 2026-05-14)
 - [x] **Phase 4: Dependency System Overhaul** - Delete `ball_contrib`, adopt Homebrew/system + vcpkg, config-mode `Find*.cmake`, `CMakePresets.json`, feature matrix (completed 2026-05-15; Windows CI green + blocking on run 25899905204)
-- [ ] **Phase 4.1: Config Color-Defaults Fix** - Stop persisted `~/.BALLView` config from silently shadowing compiled element/residue color defaults *(promoted from backlog 999.4 — real user-facing bug)* *(2026-05-15: 2 plans landed but verifier flagged 3 BLOCKERs — read path is dead code due to `INIFile&` vs `const INIFile&` override mismatch (CR-01); `getSectionLastLine` loops skip the last line (CR-02); unguarded throws in token parse (CR-03). See `.planning/phases/04.1-config-color-defaults-fix/04.1-VERIFICATION.md`. Run `/gsd-plan-phase 4.1 --gaps` to plan fix work.)*
+- [x] **Phase 4.1: Config Color-Defaults Fix** - Stop persisted `~/.BALLView` config from silently shadowing compiled element/residue color defaults *(promoted from backlog 999.4 — real user-facing bug)* *(2026-05-15: 2 plans landed but verifier flagged 3 BLOCKERs — read path is dead code due to `INIFile&` vs `const INIFile&` override mismatch (CR-01); `getSectionLastLine` loops skip the last line (CR-02); unguarded throws in token parse (CR-03). See `.planning/phases/04.1-config-color-defaults-fix/04.1-VERIFICATION.md`. Run `/gsd-plan-phase 4.1 --gaps` to plan fix work.)* (completed 2026-05-15)
 - [x] **Phase 5: Qt 6 Migration + Renderer Backend Spike** - Build against Qt 6 and replace deprecated VIEW APIs (keep the compat-profile GL path working), then a time-boxed renderer-backend decision spike behind the Phase 02.1 boundary *(former Phase 05.1 folded in — it must prototype against Qt 6)* *(complete 2026-05-15; 8 plans 05-01..05-08; SPIKE-01 delivered with documented caveats per the PIPE-01 downstream-init blocker; SPIKE-02 decision: split-pattern — GL-Core for v1.6.x → QRhi for v2)*
 - [x] **Phase 5.1: Build Warnings & Latent Bug Cleanup** - Fix latent bugs and tame the warning surface surfaced by Phase 4's tri-OS CI (C4717 `getline` recursion, C4311 pointer truncation on Windows, C4910 dll-export mismatch, `-Wself-assign-field`, `-Wformat-overflow`); Codex CLI cross-checked. *(inserted 2026-05-15 — captures Phase 4 follow-ups; runs after Phase 5 so Qt 6 deprecation noise clears first; complete 2026-05-15 with 14/14 plans landed — full Tier A bug fixes + Tier B Windows DLL hygiene + Tier D build configuration; retroactive Windows CI validation expected on next clean tri-OS run once the Linux `aqtinstall` Qt 6.5.3 cancellation cascade is fixed separately)*
 - [ ] **Phase 6: Python Bindings** - Decide the binding generator via a vertical slice (5-10 core classes), then commit *(restructured per Codex review — was a single under-scoped criterion)*
@@ -255,7 +255,7 @@ Plans:
 | 02.2 CI and build-smoke matrix | 2/2 | Complete    | 2026-05-14 |
 | 3. Language Modernization | 3/3 | Complete   | 2026-05-14 |
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
-| 4.1 Config Color-Defaults Fix | 4/5 | In Progress|  |
+| 4.1 Config Color-Defaults Fix | 5/5 | Complete   | 2026-05-15 |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
 | 6. Python Bindings | 0/0 | Not started | - |
@@ -296,7 +296,7 @@ Plans:
 **Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme — build-tooling transition with no source impact, but the per-platform `BUILD-*.md` docs change. Sequenced AFTER 999.7 (Linux + Windows Qt 6 bring-up) so the cross-platform Ninja switch lands once on a green tri-OS baseline. The `CMakePresets.json` from Phase 4 already abstracts the per-platform configure; flipping the generator is a single `"generator": "Ninja"` field on each preset.
 
 **Requirements:** TBD
-**Plans:** 4/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens)
