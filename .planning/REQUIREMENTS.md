@@ -167,8 +167,8 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | DEPS-05 | Phase 4 — Dependency System Overhaul | Complete |
 | FEAT-01 | Phase 4 — Dependency System Overhaul | Complete |
 | CONFIG-01 | Phase 4.1 — Config Color-Defaults Fix | Pending |
-| QT6-01 | Phase 5 — Qt 6 Migration (4b) | Pending |
-| QT6-02 | Phase 5 — Qt 6 Migration (4b) | Pending |
+| QT6-01 | Phase 5 — Qt 6 Migration (4b) | Complete on macOS — runtime smoke verified `3238ce3`; Linux/Windows deferred to backlog 999.7 |
+| QT6-02 | Phase 5 — Qt 6 Migration (4b) | Complete on macOS for the migration sweep — CR-01/02/03 cleanup deferred to Phase 5.1 |
 | SPIKE-01 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Complete — `.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` |
 | SPIKE-02 | Phase 5 — Qt 6 Migration + Renderer Backend Spike | Complete — `.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-SPIKE-DECISION.md` |
 | PY-01 | Phase 6 — Python Bindings | Pending |
@@ -178,6 +178,7 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | PKG-03 | Phase 8 — Packaging & Distribution | Pending |
 | CI-02 | Phase 9 — Test Suite Triage | Pending |
 | NET-01 | Deferred (1.6.x) — backlog 999.3 | Deferred |
+| PIPE-01 | Deferred (v2) — backlog 999.6 — *de-risked + scoped by Phase 5 SPIKE-02* | Deferred |
 
 **Coverage:**
 - v1 requirements: 38 active (BUILD ×4, RENDER ×8, ARCH ×4, CI/DIAG ×2, LANG ×3, DEPS ×6, CONFIG ×1, QT6 ×2, SPIKE ×2, PY ×2, PKG ×3, CI-02 ×1) + NET-01 deferred to 1.6.x

@@ -1,7 +1,10 @@
 ---
 phase: 05-qt-6-migration-4b-renderer-backend-decision-spike
 verified: 2026-05-15T12:00:00Z
-status: human_needed
+status: passed
+status_pre_resolution: human_needed
+resolved: 2026-05-15T13:30:00Z
+resolution: HUMAN-UAT items resolved per user direction — CR-01/02/03 deferred to Phase 5.1 (warnings/latent bugs), CI gl_profile relaxation deferred to backlog 999.7 (Qt6 Linux+Windows bring-up), autonomous override implicitly approved. Codex CLI adversarial review caught one P1 regression (render_mutex_ self-deadlock on Qt 6) which was fixed inline as commit 3238ce3; render-smoke-check now produces a non-blank PNG and BALLVIEW_GL_DIAG line on macOS Apple Silicon. P2 spike-paint-path + picking-shader-layout findings deferred to PIPE-01 / SEED-005-4 per their throwaway scope.
 score: 5/5 roadmap success criteria + 4/4 requirement IDs accounted for (2 Complete, 2 Pending-with-evidence)
 overrides_applied: 0
 re_verification:
@@ -26,7 +29,7 @@ human_verification:
 
 **Phase Goal:** Qt 6 migration baseline (Qt 6.5 LTS floor) + SPIKE-01 (two prototype renderer backends: GL-core + QRhi) + SPIKE-02 (decision record naming the chosen backend with per-platform criteria and a scoped PIPE-01 task list).
 **Verified:** 2026-05-15T12:00:00Z
-**Status:** human_needed
+**Status:** passed *(was human_needed; resolved 2026-05-15T13:30:00Z — see frontmatter `resolution` and `05-HUMAN-UAT.md`)*
 **Re-verification:** No — initial verification.
 
 ## Goal Achievement
