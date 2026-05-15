@@ -165,7 +165,15 @@ namespace BALL
 			unsigned int vs = compile_one(GL_VERTEX_SHADER, k_vertex_shader_src_);
 			unsigned int fs = compile_one(GL_FRAGMENT_SHADER, k_fragment_shader_src_);
 			if (!vs || !fs)
+			{
+				// Leak-clean: compile_one() deletes the handle it created on
+				// failure (returning 0), but the SUCCEEDED side of a mixed
+				// success/failure pair would be left dangling here without
+				// these guards (review WR-07).
+				if (vs) fns->glDeleteShader(vs);
+				if (fs) fns->glDeleteShader(fs);
 				return false;
+			}
 
 			program_id_ = fns->glCreateProgram();
 			fns->glAttachShader(program_id_, vs);
