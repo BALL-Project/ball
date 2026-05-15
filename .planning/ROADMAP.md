@@ -312,6 +312,39 @@ Plans:
 
 **Status:** Promoted to active **Phase 4.1: Config Color-Defaults Fix** on 2026-05-14 (real user-facing bug; only workaround is deleting `~/.BALLView`). See the Phase 4.1 detail section above.
 
+### Phase 999.4b: Residue color persistence — apply Phase 4.1 fix pattern to ResidueNameColorProcessor (BACKLOG)
+
+**Goal:** Apply the Phase 4.1 D-01/D-03/D-05/D-06 fix pattern (diff/override
+only, legacy-key discard, key-name + defensive sanity, diff at write time)
+to the residue color persistence path so editing the compiled
+`ResidueNameColorProcessor` default table at
+[`source/VIEW/MODELS/standardColorProcessor.C:196`](../../../source/VIEW/MODELS/standardColorProcessor.C:196)
+produces visibly updated colors even when a pre-existing `~/.BALLView`
+contains the legacy `ResidueNames=`/`ResidueNameColors=` keys.
+**Why backlog, not v1.6 Phase 4.1:** same bug class, same fix pattern, but
+Phase 4.1 was scoped to element-only per D-04 to keep the change surface small
+and the migration risk concentrated. Promote when a contributor has time;
+this is a pure persistence-format change, no UX implications.
+**Scope:**
+  - Mirror Phase 4.1 Plan 01 against the residue-name section of
+    [`source/VIEW/DIALOGS/coloringSettingsDialog.C`](../../../source/VIEW/DIALOGS/coloringSettingsDialog.C)
+    — replace the unconditional `ResidueNames=`/`ResidueNameColors=` write
+    (lines 154-161) with a diff against `ResidueNameColorProcessor()` and a
+    new key (e.g. `ResidueNameColorOverrides=`).
+  - Mirror Phase 4.1 Plan 02 with a "Reset residue colors to defaults"
+    button on the Residue_Name page of `coloringSettingsDialog.ui` (line 107
+    of that file).
+  - Defensive sanity check on residues is harder than the all-white check
+    on elements — residue color collisions are less visually distinctive
+    than C/N/O/P/S = white. Promote-time decision: which residue triples
+    constitute "implausible" (probably default-name = `#ffffff` for
+    GLY/ALA/VAL/LEU/ILE — though several real defaults are already pale).
+**Requirements:** TBD (new sub-requirement CONFIG-02 on promotion)
+**Reference:** `.planning/phases/04.1-config-color-defaults-fix/04.1-CONTEXT.md` /deferred/
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when ready)
+
 ### Phase 999.5: Open-PR triage (BACKLOG)
 
 **Goal:** Review every open pull request on `BALL-Project/ball` in GitHub — triage each one against the current state of the codebase.
