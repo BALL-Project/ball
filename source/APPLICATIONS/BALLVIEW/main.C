@@ -7,6 +7,7 @@
 #include <QtWidgets/QMessageBox>
 #include <QtCore/QTranslator>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QDir>
 #include <QtCore/QTimer>
 #include <QtGui/QSurfaceFormat>
 
@@ -68,6 +69,38 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	QSurfaceFormat::setDefaultFormat(BALL::VIEW::GLRenderWindow::gl_format_);
 
 	QApplication application(argc, argv);
+
+#ifdef Q_OS_MACOS
+	// Resolve BALL_DATA_PATH for the macOS .app bundle.
+	//
+	// The MacOSXBundleInfo.plist.in template sets LSEnvironment.BALL_DATA_PATH
+	// to "BALLView.app/Contents/Resources/data" — a RELATIVE path. macOS
+	// Launch Services consults LSEnvironment when the app is launched via
+	// double-click, but it passes the value through literally; there's no
+	// path-substitution mechanism. The user's cwd at that point is /, so
+	// "BALLView.app/Contents/Resources/data" resolves to nothing real and
+	// BALL::Path can't find the bundled data tree.
+	//
+	// Fix: override the env var here with the absolute Resources/data path
+	// computed from the executable location. Runs BEFORE any BALL include
+	// touches getenv("BALL_DATA_PATH") (BALL::Path consults it lazily on
+	// first use, which is after this point). Works for double-click launches,
+	// drag-into-Applications, /Applications, ~/Downloads — wherever the .app
+	// lives. Shell-launched runs (BALLView.app/Contents/MacOS/BALLView from a
+	// terminal) also benefit: this overrides any pre-set BALL_DATA_PATH only
+	// when the bundled data/ exists, so a developer's manually-set value to
+	// a source-tree data/ dir is preserved (we use qputenv unconditionally
+	// when the bundled tree is present — choose: prefer the bundle's data
+	// over any env var, OR respect the env var if already set).
+	{
+		QString data_path = QDir::cleanPath(
+			QCoreApplication::applicationDirPath() + "/../Resources/data");
+		if (QDir(data_path).exists())
+		{
+			qputenv("BALL_DATA_PATH", data_path.toLocal8Bit());
+		}
+	}
+#endif
 
 	QStringList arguments = application.arguments();
 	QStringList::const_iterator arg_it;
