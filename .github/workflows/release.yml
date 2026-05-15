@@ -109,6 +109,31 @@ jobs:
             echo "::warning::data/ not found at repo root — .app may be missing runtime resources"
           fi
 
+      - name: Ad-hoc resign bundle (macOS — required after macdeployqt + data bundling on macOS 26+)
+        if: matrix.os == 'macos-arm64'
+        run: |
+          # MUST run AFTER macdeployqt AND AFTER bundling data/ — both modify
+          # the .app's contents and would invalidate any prior signature seal.
+          # This step is the LAST step before zipping.
+          #
+          # Why this is needed: macdeployqt rewrites install_name paths in
+          # bundled Qt frameworks, which invalidates the dylibs' original
+          # signatures. macOS 26's tightened CODESIGNING enforcement SIGKILLs
+          # bundles with internal signature inconsistency at load (before
+          # main() runs — confirmed against crash report ID
+          # D4252593-FDD2-4001-94FD-E36402AE15BE on macOS 26.4.1).
+          #
+          # The fix is an ad-hoc resign at the bundle level — replaces every
+          # modified dylib's signature with a no-identity signature that's
+          # still internally consistent, and produces the bundle-level
+          # _CodeSignature/CodeResources manifest macOS expects on load.
+          # Gatekeeper still complains (no Developer ID) — that's Phase 8.
+          codesign --force --deep --sign - "${{ steps.locate-mac.outputs.app }}"
+          codesign --verify --deep --strict --verbose=2 "${{ steps.locate-mac.outputs.app }}" 2>&1 | tail -10
+          # Strict verify exits 0 on success, non-zero on real failures —
+          # the `--prepared:`/`--validated:` lines from --verbose=2 are
+          # progress, not errors.
+
       - name: Zip .app (macOS)
         if: matrix.os == 'macos-arm64'
         shell: bash
