@@ -177,7 +177,7 @@ Plans:
 **Wave 1** *(parallel — A1-A6, B1-B2, B4-B5, D1-D5 minus B3)*
 - [x] 05.1-01-PLAN.md — A1: C4717 getline infinite recursion in string.iC (drop std::move on rvalue overloads)
 - [ ] 05.1-02-PLAN.md — A2: C4311 pointer truncation T*→long — end-to-end audit (hash.C + MMFF94 + triangulatedSurface) with downstream storage widened to std::uintptr_t / PointerSizeUInt
-- [ ] 05.1-03-PLAN.md — A3: -Wself-assign-field at pairExpInteractionEnergyProcessor.C:124 (propagate from proc.rdf_parameter_)
+- [x] 05.1-03-PLAN.md — A3: -Wself-assign-field at pairExpInteractionEnergyProcessor.C:124 (propagate from proc.rdf_parameter_) *(complete 2026-05-15; 1-line surgical fix at line 124; libBALL build green on macos-arm64 / Qt 6.11; commit 066195c)*
 - [ ] 05.1-04-PLAN.md — A4: -Wtautological-constant-out-of-range-compare in representation.C (asymmetric — preserve DrawingPrecision invariant, drop DrawingMode < 0 OR add DRAWING_MODE_INVALID = -1)
 - [ ] 05.1-05-PLAN.md — A5: -Wformat-overflow in CIFParserParser.y (sprintf → snprintf, 19 instances)
 - [ ] 05.1-06-PLAN.md — A6: -Wstringop-truncation audit of strncpy sites (10 instances, case-by-case)
@@ -244,6 +244,7 @@ Plans:
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
 | 4.1 Config Color-Defaults Fix | 0/0 | Not started (promoted from backlog 999.4) | - |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 5/8 | In progress — Plans 01-05 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike + Qt 6 link bring-up) | - |
+| 5.1 Build Warnings & Latent Bug Cleanup | 2/14 | In progress — Plans 01 + 03 complete (C4717 getline + -Wself-assign-field pairExp); Plan 02 (C4311 audit) is next Tier A | - |
 | 6. Python Bindings | 0/0 | Not started | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
