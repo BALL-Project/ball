@@ -213,14 +213,16 @@ Plans:
 **Requirements**: PKG-01, PKG-02, PKG-03, PKG-04 (Windows signed installer — added 2026-05-15)
 **Success Criteria** (what must be TRUE):
   1. `BALLView.app` launches by double-click with no environment variables set, finding its `data/` in `Contents/Resources`
-  2. The macOS build produces a `macdeployqt`-processed, **code-signed (Developer ID Application) + Apple-notarized + stapled** universal (arm64 + x86_64) bundle that passes `spctl --assess` and opens without Gatekeeper warnings on a fresh macOS install
-  3. The Windows build produces a **code-signed** installer (or zip + signed `.exe` + signed bundled DLLs) that passes `signtool verify /pa` and minimizes SmartScreen friction (full SmartScreen-bypass is no longer available post-2024; reputation-building is expected on early releases regardless)
+  2. The macOS build produces a `macdeployqt`-processed, **code-signed (Developer ID Application) + Apple-notarized + stapled** universal (arm64 + x86_64) bundle packaged as a **`.dmg`** (via `create-dmg`) with a drag-to-Applications hint and BALL branding — that passes `spctl --assess` and opens without Gatekeeper warnings on a fresh macOS install
+  3. The Windows build produces a **code-signed `.exe` installer** (via CPack NSIS — modernizing the existing `cmake/BALLPackageConfig.cmake` scaffolding) that passes `signtool verify /pa`, registers in Add/Remove Programs, places Start Menu shortcuts, supports clean uninstall, and minimizes SmartScreen friction (full SmartScreen-bypass is no longer available post-2024; reputation-building is expected on early releases regardless)
   4. `BUILD-macos.md` is joined by `BUILD-linux.md` and `BUILD-windows.md` documenting the from-source build on each platform
   5. A license/distribution review covers the FFTW GPL path, OpenBabel, Qt deployment mode, bundled `data/`, and the **code-signing chain of trust** (cert provenance, timestamping authority, renewal cadence) — recorded so notarization/distribution is unambiguous
 **Decisions locked (2026-05-15)**:
   - **Windows signing provider: SignPath Foundation (Path A)** — free for OSS, BALL's LGPL-2.1 qualifies. Fallback order if rejected: Path B (Azure Artifact Signing, ~$120/yr) → Path C (commercial OV + cloud HSM, $200-500/yr). Avoid commercial EV (over-spec, no SmartScreen bypass post-2024).
   - **macOS signing path: Apple Developer ID Application + notarytool + stapler** — the only path for non-App-Store distribution, $99/yr Apple Developer Program.
-**Reference**: [`.planning/phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md`](phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md) — full signing & notarization research (macOS Developer ID + notarytool flow, Windows path comparison with decision rationale, CA/B Forum 2026 changes, BALL's LGPL-2.1 SignPath Foundation eligibility, GitHub Actions integration patterns)
+**References**:
+- [`.planning/phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md`](phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md) — full signing & notarization research (macOS Developer ID + notarytool flow, Windows path comparison with decision rationale, CA/B Forum 2026 changes, BALL's LGPL-2.1 SignPath Foundation eligibility, GitHub Actions integration patterns)
+- [`.planning/phases/08-packaging-and-distribution/08-INSTALLER-FORMATS-RESEARCH.md`](phases/08-packaging-and-distribution/08-INSTALLER-FORMATS-RESEARCH.md) — installer format research: macOS `.dmg` via `create-dmg` (recommended over hdiutil / dmgbuild), Windows `.exe` installer via CPack NSIS (leverages BALL's existing `cmake/BALLPackageConfig.cmake` scaffolding; WiX/MSI noted as future enterprise upgrade), CMake/CPack integration sketch, coupling with signing flow
 **Plans**: TBD
 
 ### Phase 9: Test Suite Triage
