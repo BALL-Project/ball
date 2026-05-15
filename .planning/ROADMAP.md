@@ -151,7 +151,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 - [x] 05-02-source-api-renames-PLAN.md — Wave 2: Inline QRegExp → QRegularExpression + QDesktopWidget → QScreen + Qt::SkipEmptyParts (D-05 clean break) (QT6-02) *(complete 2026-05-15; 6 files ported, BLOCKER-A/B/C deferred to follow-on plan)*
-- [ ] 05-03-qsurfaceformat-compat-profile-PLAN.md — Wave 2: QSurfaceFormat::DeprecatedFunctions + QtOpenGLWidgets include (D-06/D-07/D-08/D-09) (QT6-01)
+- [x] 05-03-qsurfaceformat-compat-profile-PLAN.md — Wave 2: QSurfaceFormat::DeprecatedFunctions + QtOpenGLWidgets include (D-06/D-07/D-08/D-09) (QT6-01) *(complete 2026-05-15; 2 files; BLOCKER-C resolved, BLOCKER-A/B/D deferred)*
 
 **Wave 3** *(blocked on Wave 2 completion)*
 - [ ] 05-04-ci-matrix-and-lint-PLAN.md — Wave 3: ubuntu-24.04 + jurplel/install-qt-action + GL profile assertion + new Qt5-holdout lint (QT6-01/QT6-02)
