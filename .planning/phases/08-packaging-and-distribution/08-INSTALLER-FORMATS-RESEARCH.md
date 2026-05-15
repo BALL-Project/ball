@@ -180,11 +180,16 @@ ELSEIF(WIN32)
   SET(CPACK_NSIS_HELP_LINK "https://ball-project.org")
   SET(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/BALL-Project/ball")
   SET(CPACK_NSIS_CONTACT "https://github.com/BALL-Project/ball/issues")
-  SET(CPACK_NSIS_MODIFY_PATH ON)
+  # NOTE: CPACK_NSIS_MODIFY_PATH is intentionally NOT set — per-user
+  # install (Decision #3, 2026-05-15). Modifying system PATH would
+  # require admin elevation; we want the installer to work for
+  # academic / non-IT-admin users without UAC prompts.
+  SET(CPACK_NSIS_INSTALL_ROOT "$LOCALAPPDATA\\Programs")  # per-user default
   SET(CPACK_NSIS_MENU_LINKS
     "bin/BALLView.exe" "BALLView"
     "https://ball-project.org" "BALL Project Homepage")
   SET(CPACK_NSIS_INSTALLED_ICON_NAME "bin/BALLView.exe")
+  # NSIS installer chrome stays English-only (Decision #4, 2026-05-15).
 ENDIF()
 
 INCLUDE(CPack)
@@ -216,13 +221,13 @@ Adding to the existing Phase 8 deliverables list:
 9. **`packaging/macos/dmg-background.png`** — design asset, 1024×640 PNG with drag-to-Applications visual hint. Commits to the repo.
 10. **License + welcome RTF** — already referenced in `BALLPackageConfig.cmake:11-13` (Welcome.rtf, COPYRIGHT). Verify these exist and have current content; update for v1.6 → v1.7.
 
-## Open questions for Phase 8 to resolve
+## Decisions locked (2026-05-15)
 
-1. **DMG vs PKG for macOS** — PKG (Apple's installer format) is rarer but supports per-file install rules, scripts, and is preferred for command-line tool distribution. BALLView is GUI-only — DMG is the right answer. PKG only enters the picture if BALL adds CLI-tool distribution.
-2. **NSIS vs WiX timing** — NSIS for Phase 8 v1.x release shipment; WiX for institutional / Group Policy / "professional" distribution. Phase 8.1 or v2 upgrade?
-3. **Per-user vs per-machine install on Windows** — NSIS supports both; `CPACK_NSIS_MODIFY_PATH ON` modifies system PATH (per-machine). User-mode install (no admin needed, no PATH modification) is friendlier for academic / non-IT-admin users. Decision: probably per-user default, per-machine as a checkbox.
-4. **Installer-level translations** — BALLView's own translations are handled by Qt; the NSIS installer itself can also be translated (NSIS ships with MUI translations for 30+ languages). Worth it for v1.x release? Probably not — English-only installer is fine, with the app itself supporting more languages internally.
-5. **Auto-update mechanism** — Sparkle (macOS) + WinSparkle (Windows) integrate with DMG/installer distribution. Out of scope for v1.6 / probably Phase 8.1.
+1. **DMG vs PKG for macOS — DMG.** BALLView is GUI-only; DMG is the right answer. PKG only enters the picture if BALL adds command-line tool distribution as a separate offering (not in current scope).
+2. **NSIS vs WiX timing — NSIS for Phase 8 v1.x.** WiX MSI is the future enterprise upgrade (Phase 8.1 or v2) for institutional / Group Policy distribution. NSIS leverages BALL's existing CPack scaffolding and produces a working `.exe` installer with the least friction.
+3. **Per-user vs per-machine install on Windows — per-user (no admin required).** Academic / non-IT-admin users are the primary distribution audience. NSIS produces a per-user installer by default; do NOT set `CPACK_NSIS_MODIFY_PATH ON` (avoids the per-machine PATH modification, removes the admin requirement). Installer drops into `%LOCALAPPDATA%\Programs\BALLView` or similar user-writable location. Per-machine install would need an explicit `/D=C:\Program Files\BALLView` invocation by the user; we don't expose that as a default checkbox in v1.x.
+4. **Installer-level translations — English only for v1.x.** BALLView's own UI translations are handled by Qt and continue to support multiple languages internally. The NSIS installer chrome (welcome page, license dialog, install location prompt) stays English-only — adding translations is a backlog item if user demand surfaces.
+5. **Auto-update mechanism — DEFERRED (filed as backlog `999.8`).** Sparkle (macOS) + WinSparkle (Windows) are the canonical OSS auto-update frameworks but adding them is non-trivial (appcast hosting, signed update manifests, rollback handling). Phase 8 ships installers without auto-update; users manually re-download for v1.7 → v1.8. Auto-update is its own backlog phase that Phase 8 unblocks.
 
 ## References
 

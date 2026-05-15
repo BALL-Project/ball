@@ -353,6 +353,17 @@ Plans:
 Plans:
 - [ ] TBD (do NOT promote before Phase 5.1 closes; needs Windows access)
 
+### Phase 999.8: Auto-Update via Sparkle + WinSparkle (BACKLOG · DORMANT)
+
+**Goal:** BALLView checks for new releases on launch and prompts the user to install — Sparkle on macOS, WinSparkle on Windows. Eliminates the "manually re-download from GitHub Releases" friction for v1.x → v1.x+1 updates.
+**Why DORMANT, not active:** Phase 8 ships installers WITHOUT auto-update — captured as a deliberate Phase 8 deferral (Decision #5, 2026-05-15) because auto-update is non-trivial enough (appcast hosting, signed update manifests, key management, rollback handling) to be its own backlog phase. Phase 8 unblocks this — Sparkle + WinSparkle integrate INTO the installer pipeline.
+**Depends on:** Phase 5 (Qt 6 — Sparkle hooks into QApplication event loop), Phase 8 (Packaging — signing infrastructure must exist first), project decision on appcast hosting (GitHub Pages vs ball-project.org vs CDN bucket)
+**Reference:** [`.planning/phases/999.8-auto-update-sparkle-winsparkle/AUTO-UPDATE-BACKLOG.md`](phases/999.8-auto-update-sparkle-winsparkle/AUTO-UPDATE-BACKLOG.md) — full scope (Sparkle vs WinSparkle integration, appcast hosting options, key management, recommended 3-plan structure)
+**Requirements:** TBD
+
+Plans:
+- [ ] TBD (do NOT promote before Phase 8 closes)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
