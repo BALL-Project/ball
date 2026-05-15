@@ -35,7 +35,8 @@ namespace BALL
 			int max    = std::max(1, blockCount());
 			int digits = ((int)log10((float)max))+1;
 
-			int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+			// Qt 6: QFontMetrics::width(QChar) deprecated -> use horizontalAdvance.
+			int space = 3 + fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits;
 
 			return space;
 		}

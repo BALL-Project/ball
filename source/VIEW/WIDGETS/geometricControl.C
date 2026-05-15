@@ -326,7 +326,8 @@ namespace BALL
 			if (rep.isHidden()) new_item->setCheckState(0, Qt::Unchecked);
 			ignore_change_ = false;
 
-			listview->setItemSelected(new_item, true);
+			// Qt 6: QTreeWidget::setItemSelected removed; call on the item directly.
+			new_item->setSelected(true);
  			deselectOtherControls_();
 			updateSelection();
 		}
@@ -891,7 +892,7 @@ namespace BALL
 												 "surface.dat").c_str(),
 												"*.*");
 
-			if (qresult == QString::null) return;
+			if (qresult == QString()) return;
 
 			String result = ascii(qresult);
 			mesh->binaryWrite(result);
@@ -905,7 +906,7 @@ namespace BALL
 												(getWorkingDir() + String(FileSystem::PATH_SEPARATOR)).c_str(),
 												"*.*");
 
-			if (qresult == QString::null) return;
+			if (qresult == QString()) return;
 
 			String result = ascii(qresult);
 			Mesh* mesh = new Mesh();

@@ -70,7 +70,7 @@ namespace BALL
 			if (e->modifiers() == Qt::NoModifier)
 			{
 				if (e->buttons() == Qt::LeftButton)  return TRANSLATE_ACTION;
-				if (e->buttons() == Qt::MidButton)   return ZOOM_ACTION;
+				if (e->buttons() == Qt::MiddleButton)   return ZOOM_ACTION;
 				if (e->buttons() == Qt::RightButton) return ROTATE_ACTION;
 			}
 			else if (e->buttons() == Qt::LeftButton)

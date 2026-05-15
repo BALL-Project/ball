@@ -204,7 +204,7 @@ bool MolecularFileDialog::writeFile()
 								file_name.c_str(),
 								getSupportedFileFormats().c_str());
 
-	if (s == QString::null) return false;
+	if (s == QString()) return false;
 
 	setStatusbarText((String)tr("writing file..."));
 

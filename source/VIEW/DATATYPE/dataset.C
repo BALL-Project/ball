@@ -324,7 +324,7 @@ namespace BALL
 													getDatasetControl()->getWorkingDir().c_str(),
 													getFileTypes_().c_str());
 
-			if (file == QString::null) return false;
+			if (file == QString()) return false;
 
 			vector<String> fields;
 			String s(ascii(file));
@@ -345,7 +345,7 @@ namespace BALL
 													getDatasetControl()->getWorkingDir().c_str(),
 													getFileTypes_().c_str());
 
-			if (file == QString::null) return false;
+			if (file == QString()) return false;
 
 			vector<String> fields;
 			String s(ascii(file));

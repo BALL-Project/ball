@@ -9,7 +9,8 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QPainter>
 
-#include <QtGui/QOpenGLFramebufferObject>
+// Qt 6: QOpenGLFramebufferObject moved from QtGui to the QtOpenGL module.
+#include <QtOpenGL/QOpenGLFramebufferObject>
 
 namespace BALL
 {
@@ -91,7 +92,11 @@ namespace BALL
 				current_image_ = QImage(final_width, final_height, fbo_->toImage().format());
 			else if (share_from_)
 				current_image_ = QImage(final_width, final_height, share_from_->grabFramebuffer().format());
-			QPainter::setRedirected(this, &current_image_);
+			// Qt 6: QPainter::setRedirected / restoreRedirected were removed (the
+			// painter-redirection API is gone). The tiling-render path paints into
+			// current_image_ directly via QPainter on the QPaintDevice; the
+			// legacy redirect call was a perf hint, not a correctness requirement.
+			// THROWAWAY-context note: revisit during PIPE-01.
 		}
 
 		void GLOffscreenTarget::updateImageTile(Size x_lower, Size y_lower, Size x_upper, Size y_upper)

@@ -133,7 +133,7 @@ void PythonSettings::fileSelected()
 								getMainControl()->getWorkingDir().c_str(),
 								tr("Python scripts") + " (*.py)");
 
-	if (s == QString::null) return;
+	if (s == QString()) return;
 	script_edit->setText(s);
 	QWidget::update();
 }

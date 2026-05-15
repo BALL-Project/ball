@@ -121,20 +121,20 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 		s = atom->getElement().getSymbol();
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
-		if (atom->getElement().isUnknown()) table_->item(c, r)->setBackgroundColor(Qt::red);
+		if (atom->getElement().isUnknown()) table_->item(c, r)->setBackground(Qt::red);
 
 		// Type
 		s = atom->getType();
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
- 		if (atom->getType() == -1) table_->item(r, c)->setBackgroundColor(Qt::red);
+ 		if (atom->getType() == -1) table_->item(r, c)->setBackground(Qt::red);
 
 		// Radius
 		float f = atom->getRadius();
 		s = String(f);
 		c++;
 		table_->setItem(r, c, new QTableWidgetItem(s.c_str()));
-		if (f <= 0.0 || f > 4.0) table_->item(r, c)->setBackgroundColor(Qt::red);
+		if (f <= 0.0 || f > 4.0) table_->item(r, c)->setBackground(Qt::red);
 
 		// Charge
 		f = atom->getCharge();
@@ -158,7 +158,7 @@ Processor::Result AtomOverview::OverviewProcessor::operator() (Composite& compos
 		if (f > (float) max ||
 				f < (float) min)
 		{
-			table_->item(r, c)->setBackgroundColor(Qt::red);
+			table_->item(r, c)->setBackground(Qt::red);
 		}
 		
 		// FCharge

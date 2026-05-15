@@ -19,6 +19,8 @@
 #include <boost/iostreams/filter/gzip.hpp>
 
 #include <QtWidgets/QProgressBar>
+#include <QtCore/QFile>
+#include <QtCore/QIODevice>
 
 using namespace std;
 

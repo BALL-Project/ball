@@ -13,7 +13,9 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QTreeView>
 #include <QtTest/QTest>
-#include <QtTest/QSpontaneKeyEvent>
+// Qt 6: header rename / private utility move; the canonical public spelling
+// is QtTest's qtestspontaneevent.h.
+#include <QtTest/qtestspontaneevent.h>
 
 #ifdef BALL_PYTHON_SUPPORT
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -593,7 +595,8 @@ void TestFramework::timeOut()
 
 	if (e != 0)
 	{
-		reinterpret_cast<QSpontaneKeyEvent*>(e)->setSpontaneous();
+		// Qt 6: QSpontaneKeyEvent::setSpontaneous is a static method taking the event.
+		QSpontaneKeyEvent::setSpontaneous(e);
     if (!qApp->notify(widget_, e))
 		{
  			BALLVIEW_DEBUG

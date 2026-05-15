@@ -55,20 +55,23 @@ namespace BALL
 				return;
 			}
 
-			switch ((Index)(e->buttons() | e->modifiers()))
+			// Qt 6: Qt::Modifier and Qt::MouseButton are strongly-typed enums under
+			// QFlags; `Qt::SHIFT | Qt::LeftButton` is ambiguous. Cast both sides to
+			// int and bitwise-OR there to recover the legacy single-integer dispatch.
+			switch ((Index)((int)e->buttons() | (int)e->modifiers()))
 			{
-				case (Qt::SHIFT | Qt::LeftButton):
-				case  Qt::MidButton:
+				case ((int)Qt::SHIFT | (int)Qt::LeftButton):
+				case  Qt::MiddleButton:
 					zoomSystem_();
 					break;
 
-				case (Qt::CTRL | Qt::LeftButton):
+				case ((int)Qt::CTRL | (int)Qt::LeftButton):
 				case  Qt::RightButton:
 					translateSystem_();
 					break;
 
-				case ((Index)Qt::LeftButton | Qt::RightButton):
-				case (Qt::SHIFT | Qt::CTRL | Qt::LeftButton):
+				case ((int)Qt::LeftButton | (int)Qt::RightButton):
+				case ((int)Qt::SHIFT | (int)Qt::CTRL | (int)Qt::LeftButton):
 					rotateSystemClockwise_();
 					break;
 

@@ -167,7 +167,7 @@ void ExportGeometryDialog::accept()
 	void ExportGeometryDialog::browseFiles()
 	{
 		QString fname = QFileDialog::getSaveFileName(0, tr("Export as 3D file"), getMainControl()->getWorkingDir().c_str(), "*.*");
-		if (fname == QString::null)
+		if (fname == QString())
 		{
 			return;
 		}

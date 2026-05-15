@@ -820,7 +820,7 @@ namespace BALL
 			                                         0, tr("Export History"),
 			                                         getWorkingDir().c_str(), "");
 
-			if (s == QString::null) return;
+			if (s == QString()) return;
 			String filename(ascii(s));
 			setWorkingDirFromFilename_(filename);
 
@@ -846,7 +846,7 @@ namespace BALL
 			                                         0, tr("Save script"),
 			                                         getWorkingDir().c_str(), "*.py");
 
-			if (s == QString::null) return;
+			if (s == QString()) return;
 			String filename(ascii(s));
 			setWorkingDirFromFilename_(filename);
 
@@ -888,7 +888,7 @@ namespace BALL
 			                                         working_dir_.c_str(),
 			                                         tr("Python Scripts") + "(*.py)");
 
-			if (s == QString::null) return;
+			if (s == QString()) return;
 			setWorkingDirFromFilename_(ascii(s));
 			working_dir_ = getWorkingDir();
 

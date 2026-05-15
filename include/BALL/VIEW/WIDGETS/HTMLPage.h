@@ -4,7 +4,8 @@
 #include <BALL/COMMON/global.h>
 
 #include <QtCore/QHash>
-#include <QtWebEngineWidgets/QWebEnginePage>
+// Qt 6 moved QWebEnginePage from QtWebEngineWidgets into QtWebEngineCore.
+#include <QtWebEngineCore/QWebEnginePage>
 
 namespace BALL
 {
@@ -21,7 +22,10 @@ namespace BALL
 
 			protected:
 				bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame) override;
-				bool certificateError(const QWebEngineCertificateError& /* certificateError */) override;
+				// Qt 6: QWebEnginePage::certificateError is now a signal, not a
+				// virtual hook. Keep the slot/non-virtual handler for the
+				// signal-connection path used by callers; no 'override'.
+				bool certificateError(const QWebEngineCertificateError& /* certificateError */);
 				void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString& /* sourceID */) override;
 
 				virtual void executeLink(const QUrl& url);

@@ -61,7 +61,7 @@
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QAction>
+#include <QtGui/QAction>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
 
@@ -2100,7 +2100,7 @@ namespace BALL
 											getWorkingDir().c_str(), 
 											"*.bvp");
 
-	 	if (qresult == QString::null) return;
+	 	if (qresult == QString()) return;
 
 		String result = ascii(qresult);
 		if (result.isEmpty()) return;

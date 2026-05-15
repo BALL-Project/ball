@@ -45,7 +45,7 @@ namespace BALL
 				setItem(p,0,item);
 				item->setFlags(Qt::ItemIsEnabled);
 				item = new QTableWidgetItem();
-				item->setBackgroundColor(colors_[p].getQColor());
+				item->setBackground(colors_[p].getQColor());
 				setItem(p,1,item);
 			}
 			setting_content_ = false;
@@ -60,7 +60,7 @@ namespace BALL
 			for (Position p = 0; p < names_.size(); p++)
 			{
 				QTableWidgetItem* item = new QTableWidgetItem();
-				item->setBackgroundColor(colors_[p].getQColor());
+				item->setBackground(colors_[p].getQColor());
 				setItem(p, 1, item);
 			}
 			setting_content_ = false;
@@ -69,12 +69,12 @@ namespace BALL
 		void ColorTable::beginEdit(int row, int col)
 		{
 			if (col == 0 || setting_content_) return;
-			ColorRGBA old_rgba(item(row,col)->backgroundColor());
+			ColorRGBA old_rgba(item(row,col)->background().color());
 			QColor qcolor = QColorDialog::getColor(old_rgba.getQColor());
 			if (!qcolor.isValid()) return;
 
 			ColorRGBA new_color(qcolor);
-			item(row,col)->setBackgroundColor(new_color.getQColor());
+			item(row,col)->setBackground(new_color.getQColor());
 			colors_[row] = new_color;
 		}
 

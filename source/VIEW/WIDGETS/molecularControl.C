@@ -333,12 +333,12 @@ namespace BALL
 						{
 							composite_ptr = (*(MyTreeWidgetItem*)*qit).composite;
 							
-							if (listview->isItemExpanded(*qit))
+							if ((*qit)->isExpanded())
 							{
 								open_items.insert(composite_ptr);
 							}
 
-							if (listview->isItemSelected(*qit))
+							if ((*qit)->isSelected())
 							{
 								highlighted.insert(composite_ptr);
 							}
@@ -1029,7 +1029,7 @@ namespace BALL
 				selected_.push_back(*sit);
 
 				QTreeWidgetItem* parent = (*fit->second).parent();
-				while (parent != 0 && !listview->isItemExpanded(parent))
+				while (parent != 0 && !(parent)->isExpanded())
 				{
 					listview->expandItem(parent);
 					parent = parent->parent();
@@ -1562,7 +1562,7 @@ namespace BALL
 					if (expand)
 					{
 						QTreeWidgetItem* parent = item->parent();
-						while (parent != 0 && !listview->isItemExpanded(parent))
+						while (parent != 0 && !(parent)->isExpanded())
 						{
 							listview->expandItem(parent);
 							parent = parent->parent();

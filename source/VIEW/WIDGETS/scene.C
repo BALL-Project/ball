@@ -1505,7 +1505,8 @@ namespace BALL
 
 			toolbar_view_controls_->setObjectName("3D View Control toolbar");
 			toolbar_view_controls_->setIconSize(QSize(22,22));
-			toolbar_view_controls_->layout()->setMargin(2);
+			// Qt 6: QLayout::setMargin removed; use setContentsMargins.
+			toolbar_view_controls_->layout()->setContentsMargins(2, 2, 2, 2);
 			toolbar_view_controls_->layout()->setSpacing(2);
 
 			/// EDITABLE SCENE STUFF
@@ -1558,7 +1559,8 @@ namespace BALL
 			{
 				toolbar_edit_controls_->setObjectName(tr("Edit Control toolbar"));
 				toolbar_edit_controls_->setIconSize(QSize(23,23));
-				toolbar_edit_controls_->layout()->setMargin(2);
+				// Qt 6: QLayout::setMargin removed; use setContentsMargins.
+				toolbar_edit_controls_->layout()->setContentsMargins(2, 2, 2, 2);
 				toolbar_edit_controls_->layout()->setSpacing(2);
 			}
 		}
@@ -2170,7 +2172,7 @@ namespace BALL
 					(getWorkingDir() + String(FileSystem::PATH_SEPARATOR) + start).c_str(),
 					"*.png");
 
-			if (qresult == QString::null) return;
+			if (qresult == QString()) return;
 
 			String result = ascii(qresult);
 			if (!offscreen_rendering_)
@@ -2288,7 +2290,7 @@ namespace BALL
 					getWorkingDir().c_str(),
 					"*.pov");
 
-			if (qresult == QString::null) return;
+			if (qresult == QString()) return;
 
 			String result = ascii(qresult);
 

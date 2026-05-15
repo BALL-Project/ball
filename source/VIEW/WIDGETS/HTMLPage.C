@@ -66,7 +66,7 @@ namespace BALL
 		void HTMLPage::executeLink(const QUrl& url)
 		{
 			auto action_name = QUrlQuery(url).queryItemValue("action");
-			if (action_name == QString::null)
+			if (action_name == QString())
 			{
 				return;
 			}

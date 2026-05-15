@@ -578,7 +578,7 @@ namespace BALL
 			QString s = QFileDialog::getOpenFileName(0, "Choose a file", 
 																							 main_control->getWorkingDir().c_str());
 
-			if (s == QString::null) return;
+			if (s == QString()) return;
 			main_control->setWorkingDir(ascii(s));
 			lineedit.setText(s);
 		}

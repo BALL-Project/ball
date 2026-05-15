@@ -60,7 +60,7 @@ namespace BALL
 			switch(role)
 			{
 				case Qt::UserRole:
-					return qVariantFromValue(man.getPluginInstance(i.row()));
+					return QVariant::fromValue(man.getPluginInstance(i.row()));
 
 				case Qt::DisplayRole:
 				{

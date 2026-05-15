@@ -10,7 +10,7 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QStyle>
 #include <QtWidgets/QStyleOptionFocusRect>
-#include <QtWidgets/QAction>
+#include <QtGui/QAction>
 
 #include <QtWidgets/QFileDialog>
 #include <QtGui/QImageWriter>
@@ -118,7 +118,9 @@ namespace BALL
 
 			QPainter painter(pd);
 
-			QPen pen(palette().foreground().color(), 3, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin);
+			// Qt 6: QPalette::foreground() removed; use windowText() (the canonical
+			// replacement for the foreground colour role).
+			QPen pen(palette().windowText().color(), 3, Qt::SolidLine, Qt::RoundCap, Qt::MiterJoin);
 			painter.setPen(pen);
 			painter.setRenderHint(QPainter::Antialiasing, true);
 			painter.translate(pd->width()/2, pd->height()/2);
@@ -278,13 +280,13 @@ namespace BALL
 
 			// intersect them
 			QPointF intersection_point;
-			if (line_from_to.intersect(upper, &intersection_point) == QLineF::BoundedIntersection)
+			if (line_from_to.intersects(upper, &intersection_point) == QLineF::BoundedIntersection)
 				return intersection_point;
-			if (line_from_to.intersect(right, &intersection_point) == QLineF::BoundedIntersection)
+			if (line_from_to.intersects(right, &intersection_point) == QLineF::BoundedIntersection)
 				return intersection_point;
-			if (line_from_to.intersect(lower, &intersection_point) == QLineF::BoundedIntersection)
+			if (line_from_to.intersects(lower, &intersection_point) == QLineF::BoundedIntersection)
 				return intersection_point;
-			if (line_from_to.intersect(left, &intersection_point) == QLineF::BoundedIntersection)
+			if (line_from_to.intersects(left, &intersection_point) == QLineF::BoundedIntersection)
 				return intersection_point;
 
 			//If to and from are too close, the computed intersection is incorrect.
@@ -316,7 +318,7 @@ namespace BALL
 		{
 			QString file = QFileDialog::getSaveFileName(this, tr("Export image"), QString(), "Images (*.png *.xpm *.jpg *.bmp *.gif)");
 
-			if(file != QString::null)
+			if(file != QString())
 			{
 				QImage image(width(), height(), QImage::Format_ARGB32);
 				image.fill(0);

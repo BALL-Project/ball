@@ -334,7 +334,7 @@ namespace BALL
 			getDatasetControl()->getWorkingDir().c_str(),
 			QString("( *.3dg)"));
 
-			if (file == QString::null) return false;
+			if (file == QString()) return false;
 
 			vector<String> fields;
 			String s(ascii(file));
@@ -1022,7 +1022,7 @@ namespace BALL
 										getDatasetControl()->getWorkingDir().c_str(),
 										"DCD files(*.dcd)");
 
-			if (s == QString::null) return false;
+			if (s == QString()) return false;
 			String filename = ascii(s);
 			getDatasetControl()->setWorkingDirFromFilename_(filename);
 

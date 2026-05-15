@@ -170,8 +170,8 @@ namespace BALL
 				if (server_.isRunning())
 				{
 					// adjust the tool tip and update the server icon
-					QString tip;
-					tip.sprintf("VIEW Server listening on port %d", port); 
+					// Qt 6: QString::sprintf removed; use the static QString::asprintf.
+					QString tip = QString::asprintf("VIEW Server listening on port %d", port);
 					server_icon_->setToolTip(tip);
 					server_icon_->show();
 				}

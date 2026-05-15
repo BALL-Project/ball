@@ -8,6 +8,8 @@
 #include <BALL/VIEW/KERNEL/MODES/pickingMode.h>
 
 #include <QtWidgets/QMenu>
+// Qt 6: QActionGroup moved from QtWidgets to QtGui.
+#include <QtGui/QActionGroup>
 
 namespace BALL
 {
@@ -54,7 +56,7 @@ namespace BALL
 
 		QString InteractionModeManager::getCurrentModeName() const
 		{
-			return current_mode_ ? current_mode_->getName() : QString::null;
+			return current_mode_ ? current_mode_->getName() : QString();
 		}
 
 		void InteractionModeManager::keyPressEvent(QKeyEvent* evt)

@@ -120,7 +120,7 @@ namespace BALL
 						
 						if ((e.getAtomicNumber() > 0) && (e.getAtomicNumber() < table->rowCount()))
 						{
-							colors[e.getAtomicNumber()] = table->item(p, 1)->backgroundColor();
+							colors[e.getAtomicNumber()] = table->item(p, 1)->background().color();
 						}
 					}
 						
@@ -134,7 +134,7 @@ namespace BALL
 					
 			for (Position p = 0; p < (Position)table->rowCount(); p++)
 			{
-				colors.push_back(table->item(p, 1)->backgroundColor());
+				colors.push_back(table->item(p, 1)->background().color());
 			}
 
 			return colors;
@@ -154,7 +154,7 @@ namespace BALL
 			for (Index i=0; i<residue_table_->rowCount(); ++i)
 			{
 				residue_names       += ascii(residue_table_->item(i, 0)->text()) + ";";
-				residue_name_colors += (String)(static_cast<ColorRGBA>(residue_table_->item(i, 1)->backgroundColor())) + ";";
+				residue_name_colors += (String)(static_cast<ColorRGBA>(residue_table_->item(i, 1)->background().color())) + ";";
 			}
 
 			inifile.insertValue("COLORING_OPTIONS", "ResidueNames",      residue_names);
@@ -210,7 +210,7 @@ namespace BALL
 				for (Position p = 0; p < (Position)residue_table_->rowCount(); p++)
 				{
 					(*(ResidueNameColorProcessor*)&cp).getColorMap()[ascii(residue_table_->item(p,0)->text())] = 
-						residue_table_->item(p,1)->backgroundColor();
+						residue_table_->item(p,1)->background().color();
 				}
 				return;
 			}

@@ -332,7 +332,11 @@ IF (BALL_HAS_VIEW)
 		ENDIF()
 
 		IF(BALL_HAS_QTWEBENGINE)
-			LIST(APPEND VIEW_DEP_LIBRARIES Qt6::WebEngineWidgets Qt6::WebChannel)
+			# Qt 6: QWebEnginePage / QWebEngineProfile / QWebEngineCertificateError
+			# moved into the QtWebEngineCore module. Link both Core and Widgets so
+			# moc-generated translation units can resolve every QWebEngine* header
+			# regardless of which module owns it.
+			LIST(APPEND VIEW_DEP_LIBRARIES Qt6::WebEngineCore Qt6::WebEngineWidgets Qt6::WebChannel)
 		ENDIF()
 	ENDIF()
 ENDIF()

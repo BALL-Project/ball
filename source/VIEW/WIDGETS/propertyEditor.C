@@ -9,7 +9,7 @@
 #endif
 
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QAction>
+#include <QtGui/QAction>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QLineEdit>
@@ -381,7 +381,7 @@ namespace BALL
 				                                         QLineEdit::Normal, initial, &ok);
 
 				if(!ok) {
-					return QString::null;
+					return QString();
 				}
 
 				//We need to check the inserted name against all properties and properties scheduled for creation

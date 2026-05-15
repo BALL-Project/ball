@@ -380,7 +380,7 @@ namespace BALL
 
 			//////////////////////////////////////////////
 			// middle button -> add bond
-			if ( evt->button() == Qt::MidButton ||
+			if ( evt->button() == Qt::MiddleButton ||
 			    (evt->button() == Qt::LeftButton && evt->modifiers() == Qt::ControlModifier))
 			{
 				if (scene_->getCurrentAtom())
@@ -504,7 +504,8 @@ namespace BALL
 
 		void EditMode::wheelEvent(QWheelEvent* evt)
 		{
-			Index delta = evt->delta();
+			// Qt 6: QWheelEvent::delta() -> angleDelta().y(); pos() -> position().toPoint().
+			Index delta = evt->angleDelta().y();
 			if (delta == 0) return;
 
 			if (scene_->isAnimationRunning() || scene_->getMainControl()->isBusy()) return;
@@ -514,7 +515,7 @@ namespace BALL
 
 			if (evt->modifiers() == Qt::ShiftModifier)
 			{
-				scene_->getClickedItems(evt->pos());
+				scene_->getClickedItems(evt->position().toPoint());
 				scene_->changeBondOrder(delta);
 			}
 			else

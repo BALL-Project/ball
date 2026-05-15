@@ -115,7 +115,7 @@ namespace BALL
 										"",
 										"");
 
-			if (s == QString::null) return;
+			if (s == QString()) return;
 			lineedit.setText(s);
 		}
 

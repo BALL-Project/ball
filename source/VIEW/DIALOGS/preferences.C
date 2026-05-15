@@ -205,9 +205,11 @@ namespace BALL
 			// set the listview entry
 			QTreeWidgetItem* item = widget_to_item_[child];
 			entries_listview->setCurrentItem(item);
-			entries_listview->setItemSelected(item, true);
-		
-			if (item->parent() != 0) entries_listview->setItemExpanded(item->parent(), true);
+			// Qt 6: QTreeWidget::setItemSelected / setItemExpanded removed; call
+			// directly on the QTreeWidgetItem (which inherits the per-item helpers).
+			item->setSelected(true);
+
+			if (item->parent() != 0) item->parent()->setExpanded(true);
 
 			// is the child a direct child of the stacked widget?
 			if (widget_stack->indexOf(child) != -1)

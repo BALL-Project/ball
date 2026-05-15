@@ -54,7 +54,8 @@ namespace BALL
 			setWidget(container_);
 
 			layout_ = new QGridLayout();
-			layout_->setMargin(0);
+			// Qt 6: QLayout::setMargin removed; use setContentsMargins(l,t,r,b).
+			layout_->setContentsMargins(0, 0, 0, 0);
 			layout_->setObjectName("Layout");
 			container_->setLayout(layout_);
 		}

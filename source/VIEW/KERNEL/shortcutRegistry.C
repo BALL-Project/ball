@@ -7,7 +7,7 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
-#include <QtWidgets/QAction>
+#include <QtGui/QAction>
 
 namespace BALL
 {

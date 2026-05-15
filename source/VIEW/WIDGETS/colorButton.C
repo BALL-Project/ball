@@ -157,9 +157,11 @@ namespace BALL
 			if ( hasFocus() ) {
 				QRect focusRect = style()->subElementRect( QStyle::SE_PushButtonFocusRect, &butOpt, this );
 				QStyleOptionFocusRect focusOpt;
-				focusOpt.init(this);
+				// Qt 6: QStyleOption::init() -> initFrom(); QPalette::background() ->
+				// QPalette::window().
+				focusOpt.initFrom(this);
 				focusOpt.rect            = focusRect;
-				focusOpt.backgroundColor = palette().background().color();
+				focusOpt.backgroundColor = palette().window().color();
 				style()->drawPrimitive( QStyle::PE_FrameFocusRect, &focusOpt, &painter, this );
 			}
 		}
@@ -169,8 +171,9 @@ namespace BALL
 		{
 				QStyleOptionButton opt;
 				initStyleOption(&opt);
-				return style()->sizeFromContents(QStyle::CT_PushButton, &opt, QSize(40, 15), this).
-						expandedTo(QApplication::globalStrut());
+				// Qt 6: QApplication::globalStrut() removed; the legacy "minimum
+				// size hint" intent is conveyed by the QSize(40, 15) baseline alone.
+				return style()->sizeFromContents(QStyle::CT_PushButton, &opt, QSize(40, 15), this);
 		}
 
 	}

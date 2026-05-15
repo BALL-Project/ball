@@ -107,7 +107,10 @@ void LightSettings::update()
 	if (getCurrentLightNumber_() == -1)
 	{
 		ignore_ = true;
-		lights_list->setItemSelected(lights_list->item(lights_.size() - 1), true);
+		// Qt 6: QListWidget::setItemSelected removed; call setSelected() on the
+		// QListWidgetItem directly.
+		if (QListWidgetItem* it = lights_list->item(lights_.size() - 1))
+			it->setSelected(true);
 		ignore_ = false;
 		return;
 	}

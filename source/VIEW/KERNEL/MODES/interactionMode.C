@@ -82,7 +82,8 @@ namespace BALL
 
 			evt->accept();
 
-			mouse_pos_new_.setY(mouse_pos_old_.y() + (evt->delta() / 120. * mouse_wheel_sensitivity_));
+			// Qt 6: QWheelEvent::delta() removed; vertical scroll comes from angleDelta().y().
+			mouse_pos_new_.setY(mouse_pos_old_.y() + (evt->angleDelta().y() / 120. * mouse_wheel_sensitivity_));
 			zoomSystem_();
 		}
 
