@@ -341,10 +341,17 @@ ENDIF()
 
 IF (BALL_HAS_VIEW)
 	FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets OpenGLWidgets)
-	FIND_PACKAGE(Qt6LinguistTools ${QT_MIN_VERSION})
+	# Phase 5.1 D1 (root-cause D6): On Windows, Qt6LinguistTools ships with the vcpkg
+	# `qttools` port, which is declared in vcpkg.json. macOS/Linux get it from system
+	# Qt. QUIET suppresses CMake's built-in "By not providing FindQt6LinguistTools.cmake"
+	# warning in the rare edge case where the port is unavailable (e.g. local dev build
+	# without vcpkg); BALLViewTranslations.cmake already RETURN()s in that branch and
+	# our STATUS message below explains the consequence. Translations are non-critical
+	# (BALLView builds & runs without them — they only affect i18n string lookup).
+	FIND_PACKAGE(Qt6LinguistTools ${QT_MIN_VERSION} QUIET)
 
 	IF(NOT Qt6LinguistTools_FOUND)
-		MESSAGE(WARNING "Qt6LinguistTools not found: BALLView translations cannot be created and compiled.")
+		MESSAGE(STATUS "Qt6LinguistTools not found — translations disabled (add 'qttools' to vcpkg.json on Windows or install qttools via system Qt to enable).")
 	ENDIF()
 
 	LIST(APPEND VIEW_DEP_LIBRARIES Qt6::OpenGL
