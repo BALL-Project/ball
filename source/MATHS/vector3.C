@@ -7,10 +7,10 @@
 
 namespace BALL
 {
-template class TVector3<float>;
+template class BALL_EXPORT TVector3<float>;
 
 #ifdef BALL_COMPILER_MSVC
-	template class std::vector<Vector3>;
+	template class BALL_EXPORT std::vector<Vector3>;
 #endif
 
 }

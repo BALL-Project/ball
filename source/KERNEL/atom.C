@@ -676,4 +676,8 @@ namespace BALL
 #   include <BALL/KERNEL/atom.iC>
 # endif
 
+#ifdef BALL_COMPILER_MSVC
+	template class BALL_EXPORT std::vector<Atom*>;
+#endif
+
 } // namespace BALL
