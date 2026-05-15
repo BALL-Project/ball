@@ -226,7 +226,7 @@ namespace BALL
 			inifile.insertValue("COLORING_OPTIONS", "ResidueNameColors", residue_name_colors);
 		}
 
-		void ColoringSettingsDialog::readPreferenceEntries(INIFile& inifile)
+		void ColoringSettingsDialog::readPreferenceEntries(const INIFile& inifile)
 		{
 			PreferencesEntry::readPreferenceEntries(inifile);
 
@@ -239,13 +239,18 @@ namespace BALL
 			// flow through for all untouched indices (optimistic migration per D-03).
 			if (inifile.hasEntry("COLORING_OPTIONS", "Elements"))
 			{
-				INIFile::LineIterator it  = inifile.getSectionFirstLine("COLORING_OPTIONS");
-				INIFile::LineIterator end = inifile.getSectionLastLine("COLORING_OPTIONS");
+				INIFile::LineIterator it  = const_cast<INIFile&>(inifile).getSectionFirstLine("COLORING_OPTIONS");
+				INIFile::LineIterator end = const_cast<INIFile&>(inifile).getSectionLastLine("COLORING_OPTIONS");
 				for (; it != end; ++it)
 				{
 					if ((*it).hasPrefix("Elements="))
 					{
-						inifile.deleteLine(it);
+						// Local const_cast: deleteLine mutates the INIFile (line removal). The base virtual
+						// signature uses `const INIFile&` for read-only consumers; legacy-key migration is the
+						// one mutation we perform inside the read path (D-03 optimistic discard). All other
+						// PreferencesEntry subclasses in VIEW/DIALOGS already use this signature; the const_cast
+						// is contained to this single call site.
+						const_cast<INIFile&>(inifile).deleteLine(it);
 						break;
 					}
 				}
