@@ -298,10 +298,11 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
 
-### Phase 999.3: Networking rework (BACKLOG)
+### Phase 999.3: Networking rework (BACKLOG · LIKELY SUPERSEDED BY 999.10)
 
 **Goal:** Rework `TCPServer`/`TCPServerThread` onto the modern Boost.Asio acceptor/socket model and cover it with a unit test.
 **Why backlog, not v1.6:** Networking is not the milestone's core value, and the Boost.Asio API breakage was already fixed in Phase 1 — the code compiles and links. A proper rework + test is genuine polish but does not gate "build and render on 3 OSes". Deferred to a 1.6.x release. (Moved out of the active roadmap per the Codex adversarial review.)
+**Likely superseded:** [Phase 999.10](#phase-99910-replace-socket-remote-control-with-rest-api-backlog--targeted-for-v20) (v2.0) replaces the entire TCP-socket remote-control interface with a REST API and deletes `TCPServer`/`TCPServerThread` outright. If 999.10 promotes to active, this phase becomes moot — close as superseded. The only path where 999.3 survives is if 999.10 is itself deferred past v2.0 and BALL needs the TCP server in the interim.
 **Requirements:** NET-01
 **Plans:** 0 plans
 
@@ -456,6 +457,85 @@ Estimated effort: ~2 weeks if no force-field parameter regression appears; longe
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; not before v1.6.x ships stable AND v1.7 UI work is mostly done — the YAML config migration touches force-field parameter loading which downstream-affects every chemistry calculation, so it lands after the modernization + UI churn settles)
+
+### Phase 999.10: Replace socket remote-control with REST API (BACKLOG · TARGETED FOR v2.0)
+
+**Goal:** Replace BALLView's legacy TCP-socket remote-control interface (`BALL::VIEW::ServerWidget` + `BALL::VIEW::BALLViewServer`, already marked `BALL_DEPRECATED`) with a modern HTTP REST API for scripting BALLView from external clients (Python, `curl`, web tools, BALLAXY). Retires `BALL::TCPServer` / `BALL::TCPServerThread` / `BALL::TCPIOStream` in `include/BALL/SYSTEM/networking.h` as the underlying transport. Deletes the matching SIP binding (`source/PYTHON/EXTENSIONS/VIEW/serverWidget.sip`) at the end.
+
+**Why:** The current interface is a binary `Composite`-stream over a raw TCP socket using BALL's custom `Persistence` framework. It is:
+- **Already `BALL_DEPRECATED`** in the source ([`include/BALL/VIEW/KERNEL/serverWidget.h:59`](include/BALL/VIEW/KERNEL/serverWidget.h#L59)) — the maintainer flagged the design as unfit for current use.
+- **Hard to script from anything except BALL** — clients need BALL's `Persistence` writer to construct payloads; no `curl` / Postman / `requests.post()` shortcut.
+- **No standard discoverability** — no OpenAPI spec, no auth model, no rate limiting; the server happily accepts whatever the wire format demands.
+- **Not browser-reachable** — modern BALLView extensions (BALLAXY, Jupyter, PresentaBall) all live in a browser/notebook layer that cannot speak the binary protocol directly. They currently work around it via separate sidecar plumbing.
+
+REST + HTTP fixes all four. Python clients become `requests.post('http://localhost:8642/molecules', files={'file': open('1ake.pdb')})`; a browser extension can POST a SMILES via `fetch()`; `curl` works as a smoke check; OpenAPI specs are mechanical to author and machine-readable.
+
+**Milestone target: v2.0.** Joins the existing v2.0 substrate-modernization theme:
+- **999.6** — PIPE-01 renderer pipeline rewrite (fixed-function GL → QRhi)
+- **999.9** — INIFile → YAML config-format migration
+- **999.10** — TCP/Composite-stream → REST API remote-control modernization
+
+All three are correctness-sensitive substrate transitions. Grouping under v2.0 keeps the major-version break coherent — a user upgrading 1.x → 2.0 expects file-format churn, render-backend swap, AND wire-protocol change. None of them belong in a 1.x patch where users expect drop-in replacement.
+
+**Supersedes backlog 999.3** (Networking rework — modernize existing `TCPServer` onto the modern Boost.Asio acceptor/socket model + unit test). If 999.10 lands, 999.3's goal is moot — the `TCPServer` class goes away entirely. Mark 999.3 as superseded once 999.10 promotes; do not run both.
+
+**Why BACKLOG, not active in v1.6.x or v1.7:** Not core value (build + render on 3 OSes). The TCP server already compiles (the `boost::asio` API breakage was fixed in Phase 1) and `BALL::VIEW::ServerWidget` is `BALL_DEPRECATED` but not removed, so external clients that still use it continue to work in v1.6.x. v1.7 is the UI refresh, not the wire-protocol refresh. Pushing this into v1.6.x or v1.7 would force users to migrate twice (once for UI, again for protocol); pushing it to v2.0 makes the migration a single break.
+
+**Scope (in scope):**
+- New `BALL::VIEW::RestServer` (or similar) — HTTP server hosting the BALLView remote-control endpoints. Library choice (decide during promotion plan):
+  - **cpp-httplib** (header-only, MIT, no extra runtime deps, available in vcpkg + Homebrew + apt) — recommended default; tiny surface, good fit for a single embedded server
+  - **Boost.Beast** (BALL already pulls boost; HTTP atop existing `boost::asio`) — bigger learning curve, more flexible
+  - **drogon / crow / cpprestsdk** — larger frameworks, likely over-spec for BALL's use case
+- REST endpoint surface (sketch, not locked):
+  - `POST /molecules` — body: PDB/SDF/SMILES/MOL2; loads the molecule into the running BALLView scene. Response: assigned scene-graph ID.
+  - `GET /molecules` — list of loaded molecule IDs + names.
+  - `GET /molecules/{id}` — molecule metadata; optional `Accept: chemical/x-pdb` returns the structure file.
+  - `DELETE /molecules/{id}` — remove from scene.
+  - `POST /commands` — body: `{action, params}`; executes a BALLView command (e.g. `select`, `color-by-element`, `set-representation`). Action vocabulary mirrors BALLView's existing menu actions.
+  - `GET /screenshot` — returns a PNG of the current scene.
+  - `GET /scene` — current scene-graph state as JSON.
+  - `WebSocket /events` — push notifications: molecule loaded/removed, selection changed, render state. Standard `ws://` upgrade.
+- OpenAPI 3.x spec file in the source tree (`doc/REST-API.yaml`) — both human reference and machine input for client generation.
+- **Loopback-only by default** (`bind: 127.0.0.1:8642`), with an opt-in `--listen` CLI flag for LAN access. Token-based auth for the LAN case (header `X-BALL-Token`, configurable per-launch).
+- Python client convenience wrapper `ball.remote.Client(...)` so existing Python scripts using `serverWidget.sip` have a clean migration path.
+- Removal of the old infrastructure at the END of the migration:
+  - `include/BALL/SYSTEM/networking.h` + `source/SYSTEM/networking.C` (`TCPIOStream`, `TCPServer`, `TCPServerThread`) — keep only if other callers still depend on them; otherwise delete
+  - `include/BALL/VIEW/KERNEL/serverWidget.{h,iC}` + `source/VIEW/KERNEL/serverWidget.C` — delete
+  - `source/PYTHON/EXTENSIONS/VIEW/serverWidget.sip` — delete (Python users move to the new client wrapper)
+  - Any BALLView UI bits referring to "Server" dialogs/menus — strip or repoint at a REST control panel
+
+**Out of scope:**
+- Authn beyond a static loopback-or-token model (OAuth, SSO, multi-user sessions) — that's a separate "BALLView as a service" milestone
+- Remote rendering / streaming the 3D scene over the wire — different problem; covered by future R&D if desired
+- Non-HTTP transports (gRPC, MessagePack-RPC) — REST/HTTP is the lowest-friction option for the BALLAXY / Jupyter / web ecosystem; if a performance need surfaces, gRPC is a future Phase 999.X
+- Backwards-compatibility shim that speaks both old TCP protocol and new REST — out of scope; users migrate at v2.0 transition. The old class stays `BALL_DEPRECATED` through v1.7; v2.0 removes it.
+
+**Risk considerations:**
+- **Existing TCP clients break at v2.0.** Mitigation: v1.7 release notes include a deprecation banner pointing at `ball.remote.Client`. v2.0 release notes carry the migration guide.
+- **Port conflict / firewall friction.** Mitigation: loopback-only by default + clear docs for the opt-in `--listen` flag.
+- **Browser CORS for the BALLAXY / web integrations.** Mitigation: a permissive `Access-Control-Allow-Origin: *` on loopback is the typical pattern; documented as a deliberate choice for a local-only dev server.
+- **HTTP library choice locks in some maintenance shape.** Mitigation: thin wrapper around the chosen library inside `BALL::VIEW::RestServer` so swapping cpp-httplib ↔ Beast later is contained.
+
+**Dependencies:**
+- Phase 4 (Dependency System Overhaul) — DONE; provides the vcpkg/Homebrew/apt path for adding the chosen HTTP library
+- Phase 5 (Qt 6) — DONE; necessary for the WebSocket bridge if the chosen library uses Qt event-loop integration (Beast can; cpp-httplib runs its own threads independent of Qt)
+- v1.7 (BALLView UI Refresh) — useful, not blocking: if a settings-panel "REST API" toggle wants to land in the new UI, it co-designs with v1.7. If v1.7 is UI-only with no server-settings exposure, 999.10 is purely v2.0 work.
+
+**Plan-shape sketch (when promoted):**
+- Plan 1: Library decision (cpp-httplib vs Beast). 1-page comparison + smoke test of both on `GET /version`. Lock the choice.
+- Plan 2: Add chosen HTTP library across vcpkg.json + Homebrew + apt + CMakeLists.txt. Smoke-test link green on all 3 OSes.
+- Plan 3: `BALL::VIEW::RestServer` skeleton + `GET /version` + `GET /molecules` + `POST /molecules` + auth model + loopback binding. Unit tests via `curl` in CI.
+- Plan 4: Remaining endpoints (`POST /commands`, `GET /screenshot`, `GET /scene`, `WebSocket /events`). OpenAPI spec authored alongside.
+- Plan 5: Python `ball.remote.Client(...)` convenience wrapper. Migration guide doc.
+- Plan 6: Delete `serverWidget.{h,C,iC,sip}` + (conditionally) `networking.{h,C}`. Update UI references. Final tri-OS CI green.
+
+Estimated effort: ~3–4 weeks. Endpoint design + auth model is the longest discussion; the implementation surface is well-trodden territory for cpp-httplib / Beast.
+
+**Requirements:** TBD (emitted when promoted — likely `REMOTE-01: REST API for BALLView control` + per-endpoint requirements + `REMOTE-02: deprecation/removal of TCP-Composite protocol`)
+**Plans:** 0 plans (6 sketched above)
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before v1.6.x ships stable AND v1.7 UI work is mostly done. If 999.3 is still in the backlog at v2.0 promotion time, mark 999.3 as superseded.)
 
 ---
 *Roadmap created: 2026-05-14*
