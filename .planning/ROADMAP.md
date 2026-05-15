@@ -154,7 +154,7 @@ Plans:
 - [x] 05-03-qsurfaceformat-compat-profile-PLAN.md — Wave 2: QSurfaceFormat::DeprecatedFunctions + QtOpenGLWidgets include (D-06/D-07/D-08/D-09) (QT6-01) *(complete 2026-05-15; 2 files; BLOCKER-C resolved, BLOCKER-A/B/D deferred)*
 
 **Wave 3** *(blocked on Wave 2 completion)*
-- [ ] 05-04-ci-matrix-and-lint-PLAN.md — Wave 3: ubuntu-24.04 + jurplel/install-qt-action + GL profile assertion + new Qt5-holdout lint (QT6-01/QT6-02)
+- [x] 05-04-ci-matrix-and-lint-PLAN.md — Wave 3: ubuntu-24.04 + jurplel/install-qt-action + GL profile assertion + new Qt5-holdout lint (QT6-01/QT6-02) *(complete 2026-05-15; ci.yml + scripts/check-no-legacy-qt6-symbols.sh; static gates green; runtime D-08 oracle wired and ready — exercises itself once BLOCKER-A/B/D land in the implicit BALL bring-up plan)*
 
 **Wave 4** *(blocked on Wave 3 completion)*
 - [ ] 05-05-glcore-spike-PLAN.md — Wave 4: CoreGLRenderer + RendererFactory::Kind::OpenGL_Core + color-buffer FBO picking + spike CI variant (SPIKE-01)

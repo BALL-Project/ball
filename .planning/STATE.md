@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
 status: executing
-stopped_at: Phase 5 Plan 03 complete (QSurfaceFormat compat profile + QtOpenGLWidgets include)
-last_updated: "2026-05-15T11:00:00.000Z"
+stopped_at: Phase 5 Plan 04 complete (CI matrix to Qt 6 + Qt5 holdout lint)
+last_updated: "2026-05-15T12:00:00.000Z"
 progress:
   total_phases: 19
   completed_phases: 6
   total_plans: 25
-  completed_plans: 20
-  percent: 37
+  completed_plans: 21
+  percent: 39
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -24,11 +24,11 @@ progress:
 ## Current Position
 
 Phase: 05 (qt-6-migration-4b-renderer-backend-decision-spike) — EXECUTING
-Plan: 4 of 8 (Plans 01-03 complete)
+Plan: 5 of 8 (Plans 01-04 complete)
 **Phase:** 5 — Qt 6 Migration + Renderer Backend Spike
-**Plans:** 3 of 8 complete (05-01, 05-02, 05-03)
+**Plans:** 4 of 8 complete (05-01, 05-02, 05-03, 05-04)
 **Status:** Executing Phase 05
-**Progress:** [███░░░░░░░] 37% of Phase 5; overall 95% of v1.6 active phases
+**Progress:** [█████░░░░░] 50% of Phase 5; overall 96% of v1.6 active phases
 
 ```
 Phase 1     [x]  Build Baseline
@@ -72,6 +72,7 @@ roadmap/STATE after any gsd-tools phase op.
 | Phase 05 P05-01 | 2min | 2 tasks | 17 files (Rule 3 cascade: 13 add'l build files) |
 | Phase 05 P05-02 | 8min | 2 tasks | 6 files (QRegExp + QDesktopWidget + SkipEmptyParts ports) |
 | Phase 05 P05-03 | 6min | 2 tasks | 2 files (QtOpenGLWidgets include + QSurfaceFormat::DeprecatedFunctions; BLOCKER-C resolved, BLOCKER-D surfaced) |
+| Phase 05 P05-04 | 8min | 2 tasks | 2 files (CI matrix to ubuntu-24.04 + jurplel/install-qt-action + GL profile assertion + Qt5 holdout lint; bonus USE_QTWEBENGINE=OFF on Windows) |
 
 ## Accumulated Context
 
@@ -115,6 +116,7 @@ roadmap/STATE after any gsd-tools phase op.
 - [Phase 05]: Plan 05-01 D-01 locked: QT_MIN_VERSION=6.5 with FIND_PACKAGE(Qt6 6.5 ...) on top-level + VIEW block; D-04 locked: Qt6::OpenGLWidgets added as last entry in VIEW_DEP_LIBRARIES (Qt 6 split QOpenGLWidget out of Qt::OpenGL into its own module — load-bearing for glRenderWindow); D-03 locked: macOS preset CMAKE_PREFIX_PATH -> /opt/homebrew/opt/qt (Homebrew unversioned qt, currently 6.11.x), vcpkg manifest -> qtbase with pinned builtin-baseline c1ce926d…; D-05 audit green (no Qt6::Core5Compat / qt5compat anywhere). Rule 3 cascade: 13 downstream CMakeLists in cmake/ + source/EXTENSIONS/ + source/APPLICATIONS/ needed QT5_* macros renamed to QT6_* and Qt5:: targets to Qt6:: — all blocking-issue fixes (configure halts at first un-renamed macro). cmake --preset ci-macos configures green against Qt 6.11 on macOS-arm64.
 - [Phase 05]: Plan 05-02 D-05 reinforced: QRegExp -> QRegularExpression inline in pyWidget.{h,C} (PythonHighlighter rewritten on QRegularExpressionMatchIterator with behavioural parity — keyword/string/comment highlighting all preserved); QDesktopWidget -> QGuiApplication::screens()/QScreen inline across stageSettings.C + scene.C + interactionMode.C (no Core5Compat shim). Pitfall 5 applied uniformly: 6 stereo `new GLRenderWindow(screen, …)` sites in scene.C (3 methods × 2 eyes) rewritten as `new GLRenderWindow(nullptr, …)` + `widget->setScreen(screen)` + `move()` — Phase 02.1's "9 guard-deferred stereo sites" all compile under Qt 6 with correct semantics. pluginManager.C: QString::SkipEmptyParts -> Qt::SkipEmptyParts (one-token Qt 6 namespace move). Deviations: (1) interactionMode.C include was NOT dead (Plan said delete; actually used at ctor `qApp->desktop()->size()`) — replaced with QGuiApplication::primaryScreen() ? primaryScreen()->size() : QSize(). (2) stageSettings.C had 3 additional QApplication::desktop() sites beyond the plan's documented line 24+433-436 (lines 52, 89, 415) — auto-fixed as Rule 3 blocking-issue. (3) scene.C had 6 stereo GLRenderWindow construction sites, not the 2-3 documented — uniform Pitfall 5 transform applied. Build verification: pluginManager.C compiles clean in isolation under Qt 6; the 5 VIEW files cannot be verified to compile yet because of three OUT-OF-SCOPE pre-existing Qt 6 blockers in BALL/FORMAT (QtXml/QXmlDefaultHandler removed in Qt 6), BALL/SYSTEM (QMutexLocker is templated in Qt 6), and BALL/VIEW/RENDERING (QtWidgets/QOpenGLWidget moved to QtOpenGLWidgets — explicitly forbidden territory for Plan 05-02, Plan 03 owns it). All three blockers logged at .planning/phases/05.../deferred-items.md. Commits: be894f7 (Task 1), d7e067f (Task 2).
 - [Phase 05]: Plan 05-03 D-06 mitigated + BLOCKER-C resolved: glRenderWindow.h:32 #include <QtWidgets/QOpenGLWidget> -> #include <QtOpenGLWidgets/QOpenGLWidget> (Pitfall 4 / BLOCKER-C from deferred-items.md). glRenderWindow.C gl_format_ static initializer gains `fmt.setOptions(QSurfaceFormat::DeprecatedFunctions)` immediately after `fmt.setProfile(CompatibilityProfile)` — Pitfall 2 mitigation, applied uniformly across all 3 OSes with no per-OS #ifdef (D-09). All other initializer fields byte-identical (version 2.1, depth 24, stencil 8, double buffer, samples 4, stereo guard). D-07 audited green: no GL_SILENCE_DEPRECATION token (non-comment) in glRenderWindow.{h,C} or main.C — macOS GL-deprecation warnings stay visible at runtime as the standing SPIKE-02 motivator. The DIAG-01 emission in initializeGL() was not modified; it already derives `gl_profile=<compatibility|core>` from the live granted format, so Plan 04's CI grep step (`grep 'BALLVIEW_GL_DIAG.*gl_profile=compatibility'`) is the runtime oracle for D-06+D-08. Deviations: (1) Build verification methodology — full `cmake --build VIEW` still fails because BLOCKER-A (QXmlDefaultHandler in dockResultFile.h) and BLOCKER-B (templated QMutexLocker in mutex.h) remain out-of-scope; switched to the same isolated-compile proxy Plan 05-02 used for pluginManager.C, which confirms glRenderWindow.C compiles past line 32 of glRenderWindow.h (no `'QtWidgets/QOpenGLWidget' file not found`). (2) New BLOCKER-D surfaced: `Qt::WindowFlags w_flags = 0` default args at glRenderWindow.h:51-52 fail Qt 6's stricter QFlags conversion — logged to deferred-items.md, owned by the same downstream wave as A/B. Runtime D-08 oracle (non-blank PNG + DIAG-01 gl_profile=compatibility) deferred to Plan 04 CI step once A/B/D land. Commits: 07c32bb (Task 1), 546b200 (Task 2).
+- [Phase 05]: Plan 05-04 D-02 + D-06/D-08 + Qt5-holdout-lint shipped: .github/workflows/ci.yml: (1) Linux matrix runner ubuntu-22.04 -> ubuntu-24.04 (D-02); (2) Linux apt step strips qtbase5-dev/qtbase5-dev-tools/libqt5opengl5-dev/qttools5-dev and a new jurplel/install-qt-action@v4 step installs Qt 6.5.* via aqtinstall (host=linux, target=desktop, modules='qtbase qttools qtopengl', cache=true) — apt's Qt 6.4.2 on 24.04 is below the D-01 floor, this is the canonical Pitfall 1 mitigation; (3) macOS Homebrew install: qt@5 -> qt (matches Plan 05-01 D-03); (4) both smoke-check steps (macOS + Linux) tee stdout to /tmp/ballview-smoke.log and a follow-up `Assert GL compat profile` step greps BALLVIEW_GL_DIAG for `gl_profile=compatibility` — D-06+D-08 runtime oracle (a non-blank PNG alone is insufficient under Qt 6 because macOS defaults to GL 4.1 core if QSurfaceFormat is not forced); (5) lint job runner bumped to ubuntu-24.04 + new step running scripts/check-no-legacy-qt6-symbols.sh — the Phase 2 grep-gate scaffold reused verbatim with a new LEGACY_PATTERN catching QRegExp|QDesktopWidget|QApplication::desktop|QString::SkipEmptyParts|QtWidgets/QOpenGLWidget|QtWidgets/QDesktopWidget|Qt5:: under source/ + include/BALL/. Bonus: -DUSE_QTWEBENGINE=OFF added to ci-windows configure (vcpkg manifest does not ship qtwebengine; CMakeLists option still defaults ON for backward compat). Static gates green today: YAML parses, lint script exits 0 against current tree, exits 1 against an injected QRegExp canary (gate is real). Runtime D-08 oracle deferred to next plan wave: BLOCKER-A (QXmlDefaultHandler in dockResultFile.h), BLOCKER-B (templated QMutexLocker in mutex.h), BLOCKER-D (Qt::WindowFlags w_flags = 0) still gate the BALL link, so the CI run will not actually reach the smoke-check step until those three land. The CI harness is wired and ready; the runtime oracle exercises itself the first push after A/B/D land. Commits: c04865f (Task 1: lint script), a26cafa (Task 2: ci.yml Qt 6 bring-up + lint hookup + bonus USE_QTWEBENGINE=OFF).
 
 ### Roadmap Evolution
 
@@ -139,11 +141,11 @@ roadmap/STATE after any gsd-tools phase op.
 
 ## Session Continuity
 
-**Last action:** Phase 5 Plan 03 (QSurfaceFormat compat profile + QtOpenGLWidgets include) executed — 2 files in VIEW/RENDERING: `glRenderWindow.h:32` swapped to `#include <QtOpenGLWidgets/QOpenGLWidget>` (Pitfall 4 / BLOCKER-C resolved); `glRenderWindow.C` gl_format_ static initializer gains `fmt.setOptions(QSurfaceFormat::DeprecatedFunctions)` after `setProfile(CompatibilityProfile)` (D-06 / Pitfall 2 mitigation, uniform across all 3 OSes per D-09). D-07 audited: no GL_SILENCE_DEPRECATION suppression added. DIAG-01 emission in initializeGL() untouched; Plan 04 CI grep step is the runtime D-06/D-08 oracle. BLOCKER-A (dockResultFile.h QXmlDefaultHandler) and BLOCKER-B (templated QMutexLocker) still out of scope; BLOCKER-D newly surfaced (glRenderWindow.h:51-52 `Qt::WindowFlags w_flags = 0` int-to-flags conversion). All three blockers logged at `.planning/phases/05.../deferred-items.md`. Isolated compile of `glRenderWindow.C` confirms the include resolves clean (no `'QtWidgets/QOpenGLWidget' file not found`). Commits: `07c32bb` (Task 1: QtOpenGLWidgets include), `546b200` (Task 2: DeprecatedFunctions option).
+**Last action:** Phase 5 Plan 04 (CI matrix + Qt5 holdout lint) executed — 2 files: NEW `scripts/check-no-legacy-qt6-symbols.sh` (Phase 2 grep-gate scaffold reused verbatim with a Qt5-symbol LEGACY_PATTERN, scans source/ + include/BALL/, exits 0 against current tree + 1 against injected QRegExp canary); `.github/workflows/ci.yml`: Linux matrix runner ubuntu-22.04 → ubuntu-24.04 (D-02), Qt5 -dev apt packages stripped + new jurplel/install-qt-action@v4 step pinned to `version: '6.5.*'` (modules qtbase/qttools/qtopengl, cache: true) — D-01 mitigation for apt 6.4.2 on 24.04 (Pitfall 1); macOS brew install qt@5 → qt (matches Plan 05-01 D-03); smoke-check stdout teed to /tmp/ballview-smoke.log + new `Assert GL compat profile` steps grep BALLVIEW_GL_DIAG for `gl_profile=compatibility` on macOS + Linux (D-06 + D-08 runtime oracle — blank PNG alone is insufficient under Qt 6); lint job bumped to ubuntu-24.04 + new step runs the Plan 05-04 Task 1 script. Bonus: -DUSE_QTWEBENGINE=OFF added to ci-windows configure (vcpkg manifest does not ship qtwebengine, CMakeLists option defaults ON for backward compat). Static gates green: YAML parses (`yaml.safe_load`), all 18 acceptance-tally greps pass. Runtime D-08 oracle deferred to next plan wave: BLOCKER-A/B/D still gate the BALL link; the CI harness is wired and ready, runtime exercises itself the first push after A/B/D land. Commits: `c04865f` (Task 1: lint script), `a26cafa` (Task 2: ci.yml Qt 6 bring-up + lint hookup + USE_QTWEBENGINE=OFF).
 
-**Stopped at:** Phase 5 Plan 03 complete (QSurfaceFormat compat profile + QtOpenGLWidgets include)
+**Stopped at:** Phase 5 Plan 04 complete (CI matrix + Qt5 holdout lint)
 
-**Next action:** **Phase 5 Plan 04** (CI matrix: ubuntu-24.04 + jurplel/install-qt-action + GL profile assertion + new Qt5-holdout lint) via `/gsd-execute-phase 5` — OR a prerequisite BALL bring-up plan to land BLOCKER-A (dockResultFile.h → QXmlStreamReader), BLOCKER-B (templated QMutexLocker in mutex.h), and BLOCKER-D (glRenderWindow.h:51-52 `Qt::WindowFlags w_flags = 0` → `Qt::WindowFlags()`) so the BALL/VIEW/BALLView build actually links. Without those three, the Plan 04 CI smoke check cannot verify the runtime D-06/D-08 oracle (non-blank PNG + `gl_profile=compatibility` on macOS).
+**Next action:** **BALL Qt 6 bring-up plan** (implicit between Wave 3 and Wave 4) to land BLOCKER-A (dockResultFile.h → QXmlStreamReader), BLOCKER-B (templated QMutexLocker in mutex.h + TMutex<QMutex> → QRecursiveMutex), and BLOCKER-D (glRenderWindow.h:51-52 `Qt::WindowFlags w_flags = 0` → `Qt::WindowFlags()`). Once that lands, `cmake --build --preset ci-{macos,linux,windows} --target BALL VIEW BALLView` goes link-green, the smoke check fires on macOS + Linux, and the Plan 05-04 `Assert GL compat profile` grep step exercises the D-06/D-08 runtime oracle. After that: Wave 4 — **Phase 5 Plan 05** (GL-core spike: CoreGLRenderer + RendererFactory::Kind::OpenGL_Core + color-buffer FBO picking + spike CI variant).
 
 **Notes:**
 
