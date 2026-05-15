@@ -104,10 +104,10 @@ namespace BALL
 			// first, look in the local user's part of the registry
 			HKEY base = HKEY_CURRENT_USER;
 			
-			DWORD reg_result = RegOpenKeyEx(base, "Software\\BALL", 0, dSam, &key);
+			DWORD reg_result = RegOpenKeyExA(base, "Software\\BALL", 0, dSam, &key);
       
 			if (reg_result == ERROR_SUCCESS)
-				reg_result = RegQueryValueEx(key, "BALL_DATA_PATH", 0, 0, &(regbuffer[0]), &valuesize);
+				reg_result = RegQueryValueExA(key, "BALL_DATA_PATH", 0, 0, &(regbuffer[0]), &valuesize);
 
 			// if we found BALL_DATA_PATH in the registry keys, reg_result will equal ERROR_SUCCESS
 			if ((reg_result == ERROR_SUCCESS) && (valuesize > 0))
@@ -120,10 +120,10 @@ namespace BALL
 			valuesize = regbuffer.size();
 
 			base = HKEY_LOCAL_MACHINE;
-			reg_result = RegOpenKeyEx(base, "Software\\BALL", 0, dSam, &key);
+			reg_result = RegOpenKeyExA(base, "Software\\BALL", 0, dSam, &key);
 
 			if (reg_result == ERROR_SUCCESS)
-				reg_result = RegQueryValueEx(key, "BALL_DATA_PATH", 0, 0, &(regbuffer[0]), &valuesize);
+				reg_result = RegQueryValueExA(key, "BALL_DATA_PATH", 0, 0, &(regbuffer[0]), &valuesize);
 			
 			if ((reg_result == ERROR_SUCCESS) && (valuesize > 0))
 			{
