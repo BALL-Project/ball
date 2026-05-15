@@ -184,7 +184,13 @@ jobs:
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
-          cmake --build --preset ci-windows --target BALL VIEW BALLView
+          # --config Release is REQUIRED on multi-config generators
+          # (Visual Studio). Without it, MSBuild defaults to Debug and tries
+          # to link Debug variants of vcpkg deps (e.g. tbb12_debug.lib),
+          # which the x64-windows-release overlay triplet doesn't build.
+          # See Phase 5.1 backlog Task D4 for the post-mortem on the v1.6.0
+          # release workflow run 25908337693 that surfaced this.
+          cmake --build --preset ci-windows --config Release --target BALL VIEW BALLView
 
       - name: Locate BALLView.exe + windeployqt (Windows)
         if: matrix.os == 'windows-x64'
