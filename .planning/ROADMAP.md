@@ -230,7 +230,9 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. The `test/` tree (currently `EXCLUDE_FROM_ALL`) is wired into the build and `ctest` runs in CI on all three platforms
   2. Test failures are triaged — each is fixed, quarantined with a tracking note, or documented as a known modernization casualty
-**Plans**: TBD
+  3. The gatekeeper flips from `continue-on-error: true` to blocking on macOS + Linux once the triaged green-list is stable
+**Progress (partial, 2026-05-15)**: macOS + Linux test gatekeeper wired into `ci.yml` — non-blocking (`continue-on-error: true`) so failures don't block development while triage runs. Test results uploaded as workflow artifacts (`ball-tests-{macos,linux}.xml` JUnit XML) for every CI run. Windows tests deferred to Phase 9 main work (vcpkg + MSVC test integration is non-trivial; macOS+Linux first). Baseline pass/fail on v1.6.0 source captured separately.
+**Plans**: TBD (Phase 9 main work: triage the failing tests, fix/quarantine/document each, flip gatekeeper to blocking)
 
 ## Progress
 

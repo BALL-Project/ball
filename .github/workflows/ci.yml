@@ -133,6 +133,44 @@ jobs:
           # D-07: the BUILD-macos.md target set, Release.
           cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
 
+      # ----------------------------------------------------------------------
+      # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — wires the BALL unit-test
+      # tree (`test/`, 295 files, EXCLUDE_FROM_ALL by default) into the CI
+      # matrix so regressions surface as soon as they happen. Initially
+      # continue-on-error: true because the suite was never run post the C++17
+      # migration + dep overhaul + Phase 5 Qt 6 port — Phase 9 triage triages
+      # the existing failures (fix / quarantine / known-casualty) and flips
+      # this to blocking once the green-list is stable. See ROADMAP Phase 9.
+      # ----------------------------------------------------------------------
+      - name: Build BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+        if: matrix.os == 'macos-arm64'
+        continue-on-error: true
+        timeout-minutes: 45
+        run: |
+          cmake --build build/ci-macos --target build_tests -j$(sysctl -n hw.ncpu)
+
+      - name: Run BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+        if: matrix.os == 'macos-arm64'
+        continue-on-error: true
+        timeout-minutes: 60
+        run: |
+          cd build/ci-macos
+          # --timeout 120 caps individual hangs (most BALL tests run in <10s;
+          # ScoringFunction_test + AssignBondOrderProcessor_test{1,2} have
+          # 2h timeouts set in test/CMakeLists.txt and will hit this cap —
+          # acceptable for the gatekeeper, Phase 9 decides which to skip).
+          ctest --output-on-failure --timeout 120 \
+                --output-junit ${{ github.workspace }}/ball-tests-macos.xml || true
+
+      - name: Upload test results (macOS)
+        if: always() && matrix.os == 'macos-arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ball-tests-macos-${{ github.run_id }}
+          path: ball-tests-macos.xml
+          if-no-files-found: warn
+          retention-days: 30
+
       # ======================================================================
       # Linux — apt deps + the BUILD-macos.md flow adapted to Linux paths.
       # ======================================================================
@@ -218,6 +256,35 @@ jobs:
         run: |
           # D-07: the BUILD-macos.md target set, Release.
           cmake --build --preset ci-linux --target BALL VIEW BALLView -j$(nproc)
+
+      # ----------------------------------------------------------------------
+      # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — see macOS counterpart
+      # for the rationale + flip-to-blocking trigger.
+      # ----------------------------------------------------------------------
+      - name: Build BALL test suite (Linux — Phase 9 gatekeeper, non-blocking)
+        if: matrix.os == 'linux-x64'
+        continue-on-error: true
+        timeout-minutes: 45
+        run: |
+          cmake --build build/ci-linux --target build_tests -j$(nproc)
+
+      - name: Run BALL test suite (Linux — Phase 9 gatekeeper, non-blocking)
+        if: matrix.os == 'linux-x64'
+        continue-on-error: true
+        timeout-minutes: 60
+        run: |
+          cd build/ci-linux
+          ctest --output-on-failure --timeout 120 \
+                --output-junit ${{ github.workspace }}/ball-tests-linux.xml || true
+
+      - name: Upload test results (Linux)
+        if: always() && matrix.os == 'linux-x64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ball-tests-linux-${{ github.run_id }}
+          path: ball-tests-linux.xml
+          if-no-files-found: warn
+          retention-days: 30
 
       # ======================================================================
       # Windows — real vcpkg + choco provisioning (Phase 4 / Plan 04-04).
