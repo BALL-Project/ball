@@ -312,6 +312,18 @@ Plans:
 Plans:
 - [ ] TBD (do NOT promote before Phase 5 + SPIKE-02 complete)
 
+### Phase 999.7: Qt 6 Linux + Windows Bring-Up and CI Fixup (BACKLOG · DORMANT)
+
+**Goal:** Bring Linux and Windows runtime to parity with the Phase 5 macOS Qt 6 baseline. Phase 5 delivered the migration end-to-end on macOS-arm64 (configure + link + smoke green); Linux and Windows were deferred because three CI/tooling carry-forwards (aqtinstall module syntax, vcpkg baseline drift, Windows hardware) blocked the matrix.
+**Why DORMANT, not active:** Phase 5.1 is the next active phase (warnings + latent bugs from Phase 4's tri-OS CI). Folding Linux/Windows Qt 6 bring-up into 5.1 would blur its scope. Promote when Phase 5.1 closes AND a contributor has Windows access (or the project decides to ship v1.6.0 macOS-only with a "build from source, unverified" footnote for Linux/Windows).
+**Scope:** (1) Resolve SEED-005-1 (Linux aqtinstall) + green Linux build + smoke. (2) Resolve SEED-005-2 (Windows vcpkg baseline) + SEED-005-3 (Windows VM driver capture) + green Windows build + smoke. (3) One-line macOS CI assertion relaxation (`gl_profile=(compatibility|none)`) — Apple GL 2.1 emits `none`, not `compatibility`. (4) Optional: SEED-005-4 post-PIPE-01 spike re-capture once full render works.
+**Depends on:** Phase 5 (DONE), Phase 5.1 (NOT YET DONE — sequencing only, not technical)
+**Reference:** [`.planning/phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md`](phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md) — consolidated scope + per-seed effort
+**Requirements:** QT6-01-LINUX, QT6-01-WINDOWS (new, TBD on promotion); the existing QT6-01 stays "macOS verified" via Phase 5
+
+Plans:
+- [ ] TBD (do NOT promote before Phase 5.1 closes; needs Windows access)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
