@@ -1,29 +1,52 @@
 ---
 milestone: v1.6.1
-milestone_name: "Patch — re-ship v1.6 with the cleanup landed"
-status: draft (awaiting /gsd-new-milestone)
+milestone_name: "Strict corrective release for v1.6.0"
+status: draft (post-review revision, awaiting /gsd-new-milestone)
 drafted: 2026-05-15
-predecessor: v1.6 (which shipped as v1.6.0 with broken Windows installer + empty macOS Info.plist version strings)
+revised: 2026-05-15 (post claude + codex synthesis review; see .planning/REVIEW-v1.6.1.md)
+predecessor: v1.6 (which shipped as v1.6.0 with broken Windows installer + empty macOS Info.plist version strings + release.yml still pinned to Qt 5)
 ---
 
-# Milestone v1.6.1 — Context (Pre-Workflow Draft)
+# Milestone v1.6.1 — Context (Pre-Workflow Draft, Revised Post-Review)
 
 > This file is a lightweight scope doc for the v1.6.1 milestone, intended to be
 > picked up by `/gsd-new-milestone v1.6.1` (which scans for
 > `.planning/MILESTONE-CONTEXT.md`). It captures the scope, in-flight work, and
 > release criteria so the formal workflow can short-circuit its questioning step.
+>
+> **Revised 2026-05-15** after a synthesis review (claude + codex 0.128.0
+> adversarial) flagged 4 critical findings, 6 significant concerns, and 5
+> notable risks. Full review at [`REVIEW-v1.6.1.md`](REVIEW-v1.6.1.md). Key
+> change: Phase 5.2 PR triage moved OUT of v1.6.1 (deferred to v1.6.2) per
+> codex's "scope drift" finding. Release.yml Qt 5 → Qt 6 added as critical
+> pre-tag fix. B3 measurement made explicit.
 
 ## Goal
 
-**Ship what v1.6.0 should have shipped.** v1.6.0 tagged on 2026-05-15 but the
+**Strict corrective release: ship v1.6.0's intended payload, nothing more.**
+v1.6.0 tagged on 2026-05-15 (commit `afa00c2`, on a Qt 5 codebase) but the
 Windows installer was skipped (LNK1104 `tbb12_debug.lib`), the macOS bundle's
-Info.plist had empty version strings, and tri-OS CI was never green on the
-release branch. v1.6.1 is the corrective re-release: same modernization payload,
-but actually buildable, actually installable, actually verifiable on all three
-OSes.
+Info.plist had empty version strings, tri-OS CI was never green on the release
+branch, and `release.yml` was never updated to follow Phase 5's Qt 6 migration
+(it still installs `qt@5` and calls `qt@5/bin/macdeployqt` — Qt 5 paths).
+v1.6.1 is the corrective re-release: same modernization payload, plus the
+release pipeline fixed to match the Qt 6 codebase, plus the small color-defaults
+user-facing bug fixed.
 
-Phase 5.1 already landed the source-level fixes; v1.6.1 is mostly verification +
-re-tag + a small user-facing bug fix (Phase 4.1).
+Phase 5.1 already landed the source-level fixes; v1.6.1 is verification +
+release.yml repair + re-tag + Phase 4.1 (color defaults).
+
+### Scope discipline (post-review)
+
+Codex's review flagged that the original draft drifted into a minor-release
+shape ("PR triage" + "optional Phase 8 slice" + "maybe Phase 9 folds in" all
+added to a "patch release"). Revised scope is **strictly corrective**:
+
+- **In scope:** Phase 5.1 verification, release.yml Qt 6 repair, Phase 4.1 if
+  landed by tag-date, tag + artifacts + release notes, B3 baseline measurement.
+- **Out of scope (deferred to v1.6.2):** Upstream PR triage (Phase 999.5),
+  Phase 8 notarization slice, Phase 9 test work, Tier-C warning cleanup,
+  artifact-action major-version bumps.
 
 ## Goal one-liner
 
@@ -57,7 +80,31 @@ Plus two in-cycle gap fixes:
 green, with the warning-census drops visible per UAT tests 3–11 in
 [`05.1-UAT.md`](.planning/phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md).
 
-### 2. Phase 4.1 — Config Color-Defaults Fix (IN PARALLEL JOB — user-driven)
+### 2. **`release.yml` Qt 5 → Qt 6 repair (CRITICAL — pre-tag fix)**
+
+**Surfaced by codex review (REVIEW-v1.6.1.md CRITICAL #1).** `release.yml` was
+authored in commit `a186fb5` (BEFORE Phase 5 / Qt 6 migration). It still
+installs `qt@5` via Homebrew and calls `/opt/homebrew/opt/qt@5/bin/macdeployqt`.
+v1.6.0 worked because it tagged on a Qt 5 codebase (verified — `git show v1.6.0:CMakeLists.txt`
+shows `FIND_PACKAGE(Qt5 ...)`). The current `v1.6-modernization` HEAD requires
+Qt 6 (`FIND_PACKAGE(Qt6 ...)` at [CMakeLists.txt:319](CMakeLists.txt#L319)).
+**Without this fix, any v1.6.1 release attempt will fail at CMake configure.**
+
+Required changes in [`.github/workflows/release.yml`](.github/workflows/release.yml):
+- Line 69: `brew install qt@5 ...` → `brew install qt ...` (Qt 6)
+- Line 134: `/opt/homebrew/opt/qt@5/bin/macdeployqt` → `/opt/homebrew/opt/qt/bin/macdeployqt`
+- Lines 245, 268, 269: update stale "Qt5" comments to "Qt6"
+
+Windows side already uses vcpkg's Qt 6 `qtbase` port (verified — `vcpkg.json:6`,
+release.yml uses `windeployqt` from `vcpkg_installed`). No Windows-side Qt fix
+needed.
+
+**Verification gate:** match ci.yml's Qt 6 setup pattern from [ci.yml:111-116](.github/workflows/ci.yml#L111).
+After fix, run `gh workflow run release.yml -f tag=<test-tag>` against a
+throwaway test tag (or rely on tri-OS CI green as proof — CI exercises the same
+Homebrew install path).
+
+### 3. Phase 4.1 — Config Color-Defaults Fix (IN PARALLEL JOB — user-driven)
 
 Persisted `~/.BALLView` config was silently shadowing compiled element / residue
 color defaults. Real user-facing bug. Promoted from backlog 999.4. User is
@@ -67,7 +114,24 @@ running this in a separate job in parallel.
 `v1.6-modernization` and merges with Phase 5.1, the v1.6.1 milestone has the
 patch payload it needs.
 
-### 3. Re-tag and re-release (PENDING — gated on 1 + 2)
+### 4. B3 C4251 baseline measurement (must run BEFORE any further source merges)
+
+**Surfaced by codex review (REVIEW-v1.6.1.md SIGNIFICANT #8).** Phase 5.1
+Plan 08 applied the project-wide `#pragma warning(disable: 4251)` in `global.h`
+without measurement (CI cancellations prevented the post-fix count from being
+recorded). UAT expects retroactive validation on the next clean tri-OS CI run.
+
+**If any source-touching work lands before this measurement** (Phase 4.1 merge,
+PR triage cherry-picks, etc.), the post-B1+B2 baseline is no longer cleanly
+reachable — we'll never know whether the pragma was needed or already redundant.
+
+**Required action:** on the first clean tri-OS CI run after commit `54da903`
+(or its successor), record the C4251 count from the Windows MSVC log to
+[`05.1-08-SUMMARY.md`](.planning/phases/05.1-build-warnings-and-latent-bugs/05.1-08-SUMMARY.md).
+One-line update; ~5 minutes of work. Block all further v1.6.1 source merges
+until this measurement is recorded.
+
+### 5. Re-tag and re-release (PENDING — gated on 1 + 2 + 3 + 4)
 
 - Tag `v1.6.1` on the green HEAD of `v1.6-modernization` after CI verification
 - `gh workflow run release.yml -f tag=v1.6.1`
@@ -75,88 +139,79 @@ patch payload it needs.
   - `BALLView-v1.6.1-macos-arm64.zip` (with populated Info.plist + ad-hoc resign
     from D4-mac already in place)
   - `BALLView-v1.6.1-windows-x64.zip` (the missing v1.6.0 installer)
-- Attach to the GitHub Release; supersede v1.6.0's incomplete asset list
+- **Edit v1.6.0's release notes** to point at v1.6.1 (it was an incomplete
+  release; users should grab v1.6.1 instead). Do NOT delete the v1.6.0 tag
+  (release tag immutability + downstream caching).
+- Verify the new GitHub Release is **published**, not draft
+- Verify the macOS app passes `codesign --verify --deep --strict` AFTER zipping
+  (D4-mac's ad-hoc resign + stapler order matters)
 
-### 4. Optional — Phase 8 minimal macOS notarization slice (CONDITIONAL)
+### Deferred to v1.6.2 (per codex review — scope-discipline cuts)
 
-Only if a Developer ID Application certificate is available to the maintainer.
-The Phase 5.1 prereqs are satisfied (`CFBundleIdentifier` correct,
-`CFBundleVersion` non-empty, D4-mac ad-hoc resign in place).
+The following items appeared in the original v1.6.1 draft but were moved out
+post-review (REVIEW-v1.6.1.md CRITICAL #3 — "scope drift" finding). They land
+in v1.6.2 instead:
 
-- `codesign --sign "Developer ID Application: ..." --options runtime BALLView.app`
-- `notarytool submit BALLView-v1.6.1-macos-arm64.zip --apple-id ... --wait`
-- `xcrun stapler staple BALLView.app`
+- **Upstream PR triage (5 PRs: #640, #600, #554, #550, #546).** Goes into
+  Phase 999.5 ("Open-PR triage") which already exists as a backlog phase.
+  Reason: codex's archaeology of `source/KERNEL/residue.C` revealed that PRs
+  #554 (omega torsion) and #546 (insertion-code printing) are partially-implemented
+  in the current code — cherry-picking blindly creates duplicate API or
+  overwrites modernized logic. Pre-cherry-pick archaeology per-PR is required;
+  not patch-release work.
+- **Optional Phase 8 macOS notarization slice.** Requires Developer ID Application
+  certificate; if not in hand, full Phase 8 is the natural slot (v1.6.2 or v1.7).
+- **Phase 9 test-suite work** (user's commits `b2bb718` + `61bf5a7`). Already
+  landed on the branch but treat as v1.6.2 deliverable for accounting clarity.
+- **Action artifact pin bumps** (`upload-artifact@v4` → v6, `download-artifact@v4` → v7).
+  Cross breaking-change majors; not patch-release work.
+- **Tier-C warning bulk cleanup** (~3700 warnings). Explicitly out of Phase 5.1
+  scope per CONTEXT.md D-04.
 
-If no certificate is available, **defer to Phase 8 proper** in a later milestone.
-v1.6.1 still ships with the existing ad-hoc-resign macOS bundle which loads on
-macOS 26+ but requires the right-click→Open dance.
+### Promoted from backlog: Phase 999.7 Linux part (post-review)
 
-### 5. Upstream PR triage and integration (NEW — Phase 5.2 candidate)
+**Surfaced by claude review (REVIEW-v1.6.1.md SIGNIFICANT #6).** The Linux
+aqtinstall fix in commit `54da903` is partial work for [Phase 999.7](.planning/ROADMAP.md#L348)
+("Qt 6 Linux + Windows Bring-Up and CI Fixup"). Phase 999.7's dormancy
+condition ("Phase 5.1 closes AND a contributor has Windows access") is partly
+satisfied — Phase 5.1 is done. Promote the **Linux part only** to active
+status; Windows part stays dormant until a contributor has Windows access.
 
-Five PRs sit open on `master` from 2015–2017 — pre-modernization community
-contributions never reviewed by the current maintainer. Most don't fit the
-post-Phase-4 architecture directly; this slot triages each, integrates what's
-salvageable into `v1.6-modernization`, and closes the rest.
-
-Suggested new phase number: **Phase 5.2** (inserted after 5.1; pure
-maintenance + integration, no architectural decisions). Plan-shape: one plan
-per disposition group.
-
-| PR | Author / Year | Files | Disposition | Plan |
-|---|---|---|---|---|
-| [#640](https://github.com/BALL-Project/ball/pull/640) — Refactored FindXDR.cmake | philthiel / 2017 | `cmake/FindXDR.cmake`, `cmake/BALLConfiguration.cmake` | **Investigate-then-close-or-rebase**: Phase 4 moved to config-mode `find_package` for the deps that had upstream configs; XDR has no upstream config so `FindXDR.cmake` still exists in tree (verified). If XDR is still a build dep on any OS, rebase this PR against the post-Phase-4 CMake; if XDR has been replaced/dropped, close as obsolete with explanation. | Plan A |
-| [#600](https://github.com/BALL-Project/ball/pull/600) — Travis-CI integration | dannyedel / 2016 | `.travis.yml`, `cmake/BALLDoc.cmake`, `doc/tools/makedoc`, `include/BALL/CONCEPT/classTest.h`, `source/TEST/data/PoseClustering_wardtree.dat` | **Split-disposition**: `.travis.yml` is fully obsolete (Travis-CI .com sunset 2021; GitHub Actions matrix is the CI of record via Phase 02.2 — close that part). The other 4 files (`BALLDoc.cmake`, `makedoc`, `classTest.h`, `PoseClustering_wardtree.dat`) may carry orthogonal small improvements; review individually and cherry-pick what's still valid. | Plan B |
-| [#554](https://github.com/BALL-Project/ball/pull/554) — Omega torsion angles | smoe / 2015 | `residueRotamerSet.{h,C}`, `residue.C`, `residue.sip`, `residueRotamerSet.sip` | **Split-disposition**: Extract the C++ slice (`residue.C` + `residueRotamerSet.{h,C}`) — pure C++ addition that gives BALL omega-dihedral handling alongside psi/phi. Defer the `.sip` Python additions to Phase 6 (binding generator decision pending). | Plan C |
-| [#550](https://github.com/BALL-Project/ball/pull/550) — Hydroxyproline (HYP) as standard AA | smoe / 2015 | `PRO.db`, `peptideBuilder.{h,C}`, `residue.C`, `peptides.C` | **Rebase + merge** — pure C++ + data addition; no Python parts; closes a real gap (HYP appears in 157 PDB entries, currently surfaces as `unknown/?` with no torsion angles). The smallest single PR-merge win in the set; ships in v1.6.1. | Plan D |
-| [#546](https://github.com/BALL-Project/ball/pull/546) — Print residue with insertion code | smoe / 2015 | `residue.{h,C}`, `residue.sip` | **Split-disposition**: Extract the C++ slice (`residue.h` + `residue.C`) — extends `getFullName()` to include insertion code (PDB residues like `100A`) + extends the `FullnameType` enum. Defer the `.sip` part to Phase 6. | Plan C (bundles with #554) |
-
-**Total v1.6.1 PR-integration payload** when all dispositions complete: ~2 PRs
-merged (the C++ slices of #550 and the C++ slices of #554 + #546 bundled),
-~2 PRs closed as obsolete (#600 `.travis.yml` part, #640 if XDR is gone),
-~3 PRs deferred (the `.sip` portions of #554 and #546, plus any unresolved
-#600 cherry-pick decisions and the #640 verdict).
-
-**Caveats:**
-- Each PR is ~9–10 years old; rebasing may surface conflicts with Phase 1–5
-  modernization (C++17 changes in Phase 3, header reorganization, etc.).
-- Author engagement is unlikely (the smoe PRs are from 2015). Maintainer
-  cherry-picks the diffs rather than waiting for rebases.
-- HYP support (#550) and the omega-torsion C++ slice (#554) may interact —
-  smoe authored both and #554's body mentions hydroxyproline rich-ness in
-  collagen as motivation. Land #550 first; rebase #554's C++ slice on top.
+Commit `54da903` becomes the first piece of Phase 999.7 work; record it as
+such in 999.7's progress notes.
 
 ## Out of scope (defer to v1.7 / v1.6.2 / later)
 
 | Item | Why deferred | Target |
 |------|--------------|--------|
-| **Phase 6** (Python Bindings) | Vertical-slice decision spike (SIP 6 vs pybind11 vs nanobind) is its own milestone-shape; doesn't fit a patch release | v1.7-track |
-| **Phase 8 full** (BUILD-linux.md, BUILD-windows.md, license/distribution review, full notarization wiring) | Bigger scope than a patch; the macOS notarization slice can land in v1.6.1 conditionally | v1.6.2 or v1.7 |
-| **Phase 9** (Test Suite Triage) | Already in flight via commits `b2bb718` + `61bf5a7`; may finish before v1.6.1 ships, in which case it folds in. Otherwise its own milestone. | Possibly v1.6.1 if it finishes; else v1.6.2 |
+| **Upstream PR triage** (#640, #600, #554, #550, #546) | Per codex review: PRs #554 / #546 partially-implemented in current Residue; per-PR archaeology required before cherry-pick. Phase 999.5 slot is the proper home. | v1.6.2 |
+| **Phase 8 macOS notarization slice** | Requires Developer ID cert; full Phase 8 is the natural home | v1.6.2 or v1.7 |
+| **Phase 6** (Python Bindings) | Vertical-slice decision spike (SIP 6 vs pybind11 vs nanobind) is its own milestone-shape | v1.7-track |
+| **Phase 8 full** (BUILD-linux.md, BUILD-windows.md, license review, signing wiring) | Bigger scope than a patch | v1.6.2 or v1.7 |
+| **Phase 9** (Test Suite Triage) | Already in flight via commits `b2bb718` + `61bf5a7`; treat as v1.6.2 deliverable for accounting clarity | v1.6.2 |
 | **Action artifact pins** (`upload-artifact@v4` → v6, `download-artifact@v4` → v7) | Deferred from Phase 5.1 Plan 11; cross breaking-change majors | v1.6.2 |
-| **Tier-C warning bulk cleanup** (~3700 warnings of `-Wdeprecated-copy`, `-Wunqualified-std-cast-call`, `-Wcatch-value`, etc.) | Explicitly out of Phase 5.1 scope per CONTEXT.md D-04 | v1.6.2 or v1.7 |
+| **Tier-C warning bulk cleanup** (~3700 warnings) | Explicitly out of Phase 5.1 scope per CONTEXT.md D-04 | v1.6.2 or v1.7 |
 | **BALLView UI refresh** (SEED-001) | The v1.7 milestone proper | v1.7 |
-| **B3 measurement retroactive validation** | Plan 08 applied the C4251 pragma by default without the measurement (CI cancellations); next clean tri-OS run records the actual count. Non-blocking. | v1.6.1 verification side-band |
 
-## Release criteria
+## Release criteria (revised post-review)
 
-A v1.6.1 release is shippable when **all six** are true:
+A v1.6.1 release is shippable when **all eight** are true:
 
-1. **Tri-OS CI green** on the target HEAD — macOS arm64, Linux x64, Windows x64
+1. **`release.yml` Qt 6 repair landed** — `brew install qt` and `qt/bin/macdeployqt`
+   in [release.yml:69, 134](.github/workflows/release.yml#L69) (CRITICAL pre-tag)
+2. **Tri-OS CI green** on the target HEAD — macOS arm64, Linux x64, Windows x64
    all reach `[100%] Built target BALL` + their respective smoke checks
-2. **Phase 5.1 UAT tests 3–11 PASS** — warning census on each toolchain shows
+3. **Phase 5.1 UAT tests 3–11 PASS** — warning census on each toolchain shows
    the targeted categories at zero on the matched files
-3. **Phase 4.1 merged + UAT-confirmed** — color defaults bug user-verified fixed
-4. **Phase 5.2 (PR triage) complete** — each of the 5 open PRs has a
-   recorded disposition (merged / cherry-picked / closed-with-explanation /
-   deferred-to-Phase-6); the GitHub PR list shows 0 PRs in undecided state
-5. **Both installers attached to the GitHub Release** — Windows zip (new) +
-   macOS arm64 zip (re-shipped with populated Info.plist + functional bundle
-   identity)
-6. **No new C4717 / C4311 / C4910 / C4834 regressions** in the post-tag CI run
-   — i.e. v1.6.1's source-level cleanup is not undone by any commit between
-   Phase 5.1 close-out and the tag (relevant for #550 HYP / #554 omega / #546
-   insertion-code rebases, which touch `residue.C` and may introduce new
-   warnings on Windows MSVC if not careful)
+4. **B3 C4251 baseline recorded** in [05.1-08-SUMMARY.md](.planning/phases/05.1-build-warnings-and-latent-bugs/05.1-08-SUMMARY.md)
+   — post-pragma Windows MSVC count from the first clean tri-OS CI run
+5. **Phase 4.1 merged + UAT-confirmed** — color defaults bug user-verified fixed
+6. **Both installers attached to the GitHub Release** — Windows zip + macOS arm64
+   zip — and the GitHub Release is **published**, not draft
+7. **Artifacts built from the exact `v1.6.1` tag** — not a moved HEAD; cross-check
+   `Tagger SHA == release artifact build commit`
+8. **macOS app passes `codesign --verify --deep --strict`** AFTER zipping (D4-mac
+   stapler order); v1.6.0's release notes edited to point at v1.6.1
 
 ## Carry-over from v1.6 STATE
 
