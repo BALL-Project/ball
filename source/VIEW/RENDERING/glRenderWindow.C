@@ -37,6 +37,7 @@ namespace BALL
 	  QSurfaceFormat GLRenderWindow::gl_format_ = [] {
 				QSurfaceFormat fmt;
 				fmt.setProfile(QSurfaceFormat::CompatibilityProfile);
+				fmt.setOptions(QSurfaceFormat::DeprecatedFunctions); // Qt 6: explicit legacy entry points (D-06; Pitfall 2)
 				fmt.setVersion(2, 1);                              // fixed-function pipeline
 				fmt.setDepthBufferSize(24);                        // was DepthBuffer
 				fmt.setStencilBufferSize(8);                       // was StencilBuffer
