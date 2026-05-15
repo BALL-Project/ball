@@ -6,13 +6,28 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <set>
-
 #include <QtWidgets>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QCheckBox>
+
+#include <algorithm>
+
+namespace
+{
+	// D-05.2: atomic numbers whose all-white override is treated as corruption
+	// (carbon, nitrogen, oxygen, phosphorus, sulphur). File-scope so the rule
+	// lives in one named place and the parse loop stays readable.
+	constexpr BALL::Position KNOWN_COLORED_ATOMIC_NUMBERS[] = {6, 7, 8, 15, 16};
+
+	bool isKnownColoredElement(BALL::Position atomic_number)
+	{
+		return std::find(std::begin(KNOWN_COLORED_ATOMIC_NUMBERS),
+		                 std::end(KNOWN_COLORED_ATOMIC_NUMBERS),
+		                 atomic_number) != std::end(KNOWN_COLORED_ATOMIC_NUMBERS);
+	}
+}
 
 namespace BALL
 {
@@ -261,15 +276,6 @@ namespace BALL
 			{
 				String overrides_raw = inifile.getValue("COLORING_OPTIONS", "ElementColorOverrides");
 
-				// D-05.2: known-colored elements whose all-white override (#ffffff) is suspicious
-				// and should be discarded as likely corruption (carbon/nitrogen/oxygen/phosphorus/sulphur).
-				std::set<Position> known_colored;
-				known_colored.insert(6);   // carbon
-				known_colored.insert(7);   // nitrogen
-				known_colored.insert(8);   // oxygen
-				known_colored.insert(15);  // phosphorus
-				known_colored.insert(16);  // sulphur
-
 				std::vector<String> tokens;
 				overrides_raw.split(tokens, ";");
 
@@ -282,13 +288,38 @@ namespace BALL
 
 					if (parts.size() != 2 || parts[0].isEmpty() || parts[1].isEmpty()) continue;
 
-					Position atomic_number = parts[0].toUnsignedInt();
-					ColorRGBA override_color(parts[1]);
+					// D-05.2 length pre-check: ColorRGBA(const String&) reads 6 or 8 chars without bounds
+					// checking in release builds (source/VIEW/DATATYPE/colorRGBA.C:255-282 — undefined
+					// behaviour for shorter strings); in BALL_VIEW_DEBUG it throws Exception::InvalidRange.
+					// Guard explicitly so a malformed token cannot corrupt or abort.
+					if (parts[1].size() != 6 && parts[1].size() != 8)
+					{
+						Log.warn() << "ColoringSettingsDialog: dropping malformed override token '"
+						           << tokens[t] << "' (color hex must be 6 or 8 chars)" << std::endl;
+						continue;
+					}
+
+					Position atomic_number;
+					ColorRGBA override_color;
+					try
+					{
+						atomic_number = parts[0].toUnsignedInt();
+						override_color = ColorRGBA(parts[1]);
+					}
+					catch (const Exception::GeneralException&)
+					{
+						// CONFIG-01 criterion 2: stale/partial saved color block falls back to compiled defaults.
+						// String::toUnsignedInt throws InvalidFormat on non-numeric input; ColorRGBA throws
+						// InvalidRange on bad length in BALL_VIEW_DEBUG. Both derive from GeneralException.
+						Log.warn() << "ColoringSettingsDialog: dropping unparseable override token '"
+						           << tokens[t] << "' (parse exception)" << std::endl;
+						continue;
+					}
 
 					// D-05.2 all-white sanity check: drop override if RGB is (255,255,255)
 					// for a known-colored element — treat as corruption and fall through to
 					// the compiled default for that index.
-					if (known_colored.count(atomic_number) > 0)
+					if (isKnownColoredElement(atomic_number))
 					{
 						ColorUnit white_unit(1.0f);
 						if (override_color.getRed()   == white_unit &&
