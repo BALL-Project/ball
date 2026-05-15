@@ -57,11 +57,11 @@ namespace BALL
 		public:
 			// Qt 6 removed QMutex::Recursive / QMutex::NonRecursive (QMutex is always
 			// non-recursive in Qt 6; recursive mutexes are a separate QRecursiveMutex
-			// class). For the BALL TMutex<QMutex> wrapper, the legacy "is_recursive"
-			// flag is no longer honoured -- the few call sites that set it expect
-			// reentrancy that QMutex alone cannot provide, but the BALL hot path
-			// (Mutex typedef) is constructed with the default (false), so this is
-			// behaviourally compatible for the production paths exercised today.
+			// class — see RecursiveMutex typedef at the bottom of this header). This
+			// wrapper therefore ignores the legacy is_recursive flag. Call sites that
+			// need recursion MUST use RecursiveMutex / QRecursiveMutex directly
+			// (renderSetup.h::render_mutex_ migrated post-Phase-5 after Codex
+			// adversarial review caught the self-deadlock).
 			TMutex(bool /*is_recursive*/ = false)
 				: QMutex()
 			{
@@ -241,6 +241,15 @@ namespace BALL
 	typedef TMutexLocker<BALL_DEFAULT_MUTEXLOCKER_TYPE, BALL_DEFAULT_MUTEX_TYPE> MutexLocker;
 	typedef TReadLocker<BALL_DEFAULT_READLOCKER_TYPE, BALL_DEFAULT_READWRITELOCK_TYPE> ReadLocker;
 	typedef TWriteLocker<BALL_DEFAULT_WRITELOCKER_TYPE, BALL_DEFAULT_READWRITELOCK_TYPE> WriteLocker;
+
+	// Qt 6: QMutex is non-recursive; recursion lives in a separate QRecursiveMutex
+	// class. Call sites that reentrantly lock the same mutex on one thread (e.g.
+	// RenderSetup::render_mutex_, which renderToBuffer_ -> updateCamera reenters)
+	// must use RecursiveMutex instead of Mutex. Note: QRecursiveMutex is NOT
+	// compatible with QWaitCondition::wait() — use Mutex (non-recursive) for
+	// wait-condition usage.
+	typedef QRecursiveMutex RecursiveMutex;
+	typedef QMutexLocker<QRecursiveMutex> RecursiveMutexLocker;
 }
 
 #endif // BALL_SYSTEM_MUTEX_H

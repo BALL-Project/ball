@@ -41,7 +41,7 @@ namespace BALL
 				use_continuous_loop_(false),
 				scene_(scene),
 				stage_(stage),
-				render_mutex_(true),
+				render_mutex_(),
 				show_ruler_(false),
 				ttl_(-1),
 				export_after_ttl_(false),
@@ -68,7 +68,7 @@ namespace BALL
 				use_continuous_loop_(rs.use_continuous_loop_),
 				scene_(rs.scene_),
 				stage_(rs.stage_),
-				render_mutex_(true),
+				render_mutex_(),
 				show_ruler_(rs.show_ruler_),
 				ttl_(rs.ttl_),
 				export_after_ttl_(rs.export_after_ttl_),
@@ -612,7 +612,7 @@ namespace BALL
 		{
             if (RTTI::isKindOf<GLRenderer>(renderer))
 			{
-				MutexLocker ml(&render_mutex_);
+				RecursiveMutexLocker ml(&render_mutex_);
 
 				makeCurrent();
 
@@ -622,7 +622,7 @@ namespace BALL
 
 		Vector3 RenderSetup::mapViewportTo3D(Position x, Position y)
 		{
-			MutexLocker ml(&render_mutex_);
+			RecursiveMutexLocker ml(&render_mutex_);
 			makeCurrent();
 
 			return renderer->mapViewportTo3D(x, y);
@@ -630,7 +630,7 @@ namespace BALL
 
 		Vector2 RenderSetup::map3DToViewport(const Vector3& vec)
 		{
-			MutexLocker ml(&render_mutex_);
+			RecursiveMutexLocker ml(&render_mutex_);
 			makeCurrent();
 
 			return renderer->map3DToViewport(vec);
@@ -640,7 +640,7 @@ namespace BALL
 		                              Position x2, Position y2,
 		                              list<GeometricObject*>& objects)
 		{
-			MutexLocker ml(&render_mutex_);
+			RecursiveMutexLocker ml(&render_mutex_);
 			makeCurrent();
 
 			renderer->pickObjects(x1, y1, x2, y2, objects);
@@ -648,7 +648,7 @@ namespace BALL
 
 		void RenderSetup::showRuler(bool show)
 		{
-			MutexLocker ml(&render_mutex_);
+			RecursiveMutexLocker ml(&render_mutex_);
 			show_ruler_ = show;
 		}
 

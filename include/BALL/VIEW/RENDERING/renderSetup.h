@@ -251,7 +251,7 @@ namespace BALL {
 				 *
 				 *  Note: this function works asynchronously, so a rs.wait(); maybe required.
 				 */
-				void stop() { MutexLocker ml(&render_mutex_); about_to_quit_ = true; }
+				void stop() { RecursiveMutexLocker ml(&render_mutex_); about_to_quit_ = true; }
 
 				/** Indicates whether the renderer has already been stopped.
 				 */
@@ -334,8 +334,11 @@ namespace BALL {
 				Scene* scene_;
 				Stage const* stage_;
 
-				// locks the renderer during updates and rendering
-				mutable Mutex render_mutex_;
+				// Locks the renderer during updates and rendering. Recursive because
+				// renderToBuffer_() locks it and then calls updateCamera() which locks
+				// the same mutex again — Qt 6's non-recursive QMutex would self-deadlock.
+				// loop_mutex (below) remains a non-recursive Mutex for QWaitCondition.
+				mutable RecursiveMutex render_mutex_;
 				
 				bool show_ruler_;
 
