@@ -11,7 +11,17 @@
 #include <BALL/DOCKING/COMMON/result.h>
 #include <BALL/DOCKING/COMMON/receptor.h>
 
-#include <QtXml/QXmlDefaultHandler>
+// Qt 6 removed the legacy QtXml SAX classes (QXmlDefaultHandler, QXmlAttributes,
+// QXmlContentHandler, ...). DockResultFile already reads exclusively through the
+// modern QXmlStreamReader path (xmlIn_->attributes() returns QXmlStreamAttributes),
+// so under Qt 6 we drop the SAX include. The dead QXmlAttributes overload of
+// attributesToHashMap() is ifdef-stubbed out below. Pre-Qt-6 builds keep the legacy
+// include for source compatibility -- TEMPORARILY DEFERRED full QtXml SAX removal
+// is tracked in .planning/phases/05-*/deferred-items.md (BLOCKER-A).
+#include <QtCore/qglobal.h>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+#  include <QtXml/QXmlDefaultHandler>
+#endif
 #include <QtCore/QXmlStreamReader>
 #include <QtCore/QXmlStreamWriter>
 #include <QtCore/QFile>
@@ -253,7 +263,9 @@ namespace BALL
 				bool setCoordinate(const int& idx , const String& coord);
 				static String fromQString(const QString &s);
 				static QString toQString(const String &s);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 				static void attributesToHashMap(const QXmlAttributes& attributes, HashMap<String,String>& map);
+#endif
 				static void attributesToHashMap(const QXmlStreamAttributes& attributes, HashMap<String,String>& map);
 				static bool isAminoAcid(String s);
 
