@@ -39,6 +39,14 @@ namespace BALL
 				POV,            ///< POV-Ray file renderer
 				STL,            ///< STL file renderer
 				VRML            ///< VRML file renderer
+#ifdef BALL_SPIKE_BACKEND_GLCORE
+				,
+				/// THROWAWAY: GL 3.2+ core-profile renderer spike (Phase 5 / Plan 05-05).
+				/// Only present when configured with -DBALL_SPIKE_BACKEND=GLCore.
+				/// Not for production; removed before PIPE-01.
+				OpenGL_Core
+#endif
+				// (Plan 06 inserts BALL_SPIKE_BACKEND_QRHI block here)
 			};
 
 			/// Construct a Renderer for the given Kind. Caller owns the result.

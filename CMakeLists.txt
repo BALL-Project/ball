@@ -273,6 +273,20 @@ ENDIF()
 SET(UPDATE_TRANSLATIONS OFF CACHE BOOL "If enabled, translations are update")
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
+## Phase 5 renderer-backend spike (THROWAWAY prototype — Plan 05-05 / 05-06).
+## Selects between OFF (default, production fixed-function path), "GLCore"
+## (Plan 05-05 GL 3.2+ core-profile prototype), and "QRhi" (Plan 05-06 prototype).
+## A NULL release build is unchanged — no compile-defn is appended unless the
+## value is explicitly set to "GLCore" or "QRhi".
+SET(BALL_SPIKE_BACKEND "OFF" CACHE STRING
+    "Renderer backend spike (OFF|GLCore|QRhi) -- THROWAWAY Phase 5 prototype, never production")
+SET_PROPERTY(CACHE BALL_SPIKE_BACKEND PROPERTY STRINGS "OFF" "GLCore" "QRhi")
+IF (BALL_SPIKE_BACKEND STREQUAL "GLCore")
+    LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DBALL_SPIKE_BACKEND_GLCORE")
+    MESSAGE(STATUS "Phase 5 spike: GL-core renderer ENABLED (throwaway; not for release builds)")
+ENDIF()
+# Plan 06 will add the QRhi arm of the same option.
+
 ## QT
 OPTION(USE_QTWEBENGINE "Add support for QtWebEngine" ON)
 
