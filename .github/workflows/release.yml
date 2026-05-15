@@ -61,12 +61,22 @@ jobs:
           ref: ${{ steps.resolve.outputs.ref }}
 
       # =====================================================================
-      # macOS arm64 — Homebrew Qt 5.15, ci-macos preset, macdeployqt
+      # macOS arm64 — Homebrew Qt 6, ci-macos preset, macdeployqt
+      #
+      # Phase 5.1 critical fix (codex review CRITICAL #1, 2026-05-15):
+      # v1.6.0 tagged on a Qt 5 codebase (release ran `brew install qt@5`
+      # against `FIND_PACKAGE(Qt5 ...)` in CMakeLists.txt and the qt@5 path
+      # to macdeployqt). Phase 5 migrated the codebase to Qt 6 but this
+      # workflow was never updated. Any v1.6.1 release attempt would have
+      # failed at CMake configure because the codebase now requires Qt 6
+      # (FIND_PACKAGE(Qt6 ... REQUIRED ...) at CMakeLists.txt:319). Mirror
+      # ci.yml's Qt 6 Homebrew setup: `brew install qt` (unversioned name
+      # is Qt 6 on current Homebrew) and `qt/bin/macdeployqt`.
       # =====================================================================
       - name: Install dependencies (macOS / Homebrew)
         if: matrix.os == 'macos-arm64'
         run: |
-          brew install qt@5 boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache
+          brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache
 
       - name: Configure (macOS)
         if: matrix.os == 'macos-arm64'
@@ -131,7 +141,8 @@ jobs:
       - name: macdeployqt (macOS)
         if: matrix.os == 'macos-arm64'
         run: |
-          /opt/homebrew/opt/qt@5/bin/macdeployqt "${{ steps.locate-mac.outputs.app }}" -verbose=1
+          # Phase 5.1 carry-forward: qt (unversioned) is Qt 6 on current Homebrew.
+          /opt/homebrew/opt/qt/bin/macdeployqt "${{ steps.locate-mac.outputs.app }}" -verbose=1
 
       - name: Bundle data/ into the .app (macOS)
         if: matrix.os == 'macos-arm64'
@@ -242,7 +253,7 @@ jobs:
           Write-Host "Found: $($exe.FullName)"
           "exe=$($exe.FullName)" >> $env:GITHUB_OUTPUT
           "deploy_dir=$($exe.Directory.FullName)" >> $env:GITHUB_OUTPUT
-          # windeployqt ships in vcpkg's installed Qt5 tools dir
+          # windeployqt ships in vcpkg's installed Qt 6 tools dir
           $wdq = Get-ChildItem -Path build\ci-windows\vcpkg_installed -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
           if (-not $wdq) {
             Write-Host "::error::windeployqt.exe not found in vcpkg_installed"
@@ -256,17 +267,17 @@ jobs:
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
-          # --no-angle: vcpkg's qt5-base port doesn't include the ANGLE
-          #   library (libGLESv2.dll / libEGL.dll — Windows OpenGL ES on
-          #   D3D translator). Without --no-angle, windeployqt fails with
-          #   "libGLESv2.dll does not exist" trying to deploy it. BALL uses
-          #   GLEW + hardware OpenGL anyway — ANGLE isn't needed.
+          # --no-angle: vcpkg's qtbase port (Qt 6) doesn't include the
+          #   ANGLE library (libGLESv2.dll / libEGL.dll — Windows OpenGL ES
+          #   on D3D translator). Without --no-angle, windeployqt fails
+          #   with "libGLESv2.dll does not exist" trying to deploy it.
+          #   BALL uses GLEW + hardware OpenGL anyway — ANGLE isn't needed.
           # --no-opengl-sw: skip opengl32sw.dll (software-Mesa OpenGL
           #   fallback). BALL requires hardware OpenGL; the software path
           #   isn't useful here and tends to surface similar "DLL does not
           #   exist" failures depending on vcpkg port config.
-          # See Phase 5.1 backlog D6 for the broader Qt5 deploy-tooling
-          # surface (qt5-tools port required, ANGLE/SW skipped, etc.).
+          # See Phase 5.1 backlog D1/D6 for the broader Qt 6 deploy-tooling
+          # surface (qttools port required, ANGLE/SW skipped, etc.).
           & "${{ steps.locate-win.outputs.windeployqt }}" --release `
               --no-translations --no-system-d3d-compiler --no-compiler-runtime `
               --no-angle --no-opengl-sw `
