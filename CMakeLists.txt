@@ -353,6 +353,22 @@ IF (BALL_HAS_VIEW)
 	                               Qt6::Widgets
 	                               Qt6::OpenGLWidgets)
 
+	# THROWAWAY SPIKE (Plan 05-06): the QRhi spike sources (rhiRenderer.C +
+	# qtRhiSurface.C) include <rhi/qrhi.h>, which lives in Qt's private API
+	# include tree. Qt6::GuiPrivate is the canonical CMake target that exposes
+	# the private headers (still public-API-stable from Qt 6.6+; QRhi is a
+	# documented public class even though its header lives under the private
+	# include path -- see Qt 6.7 release notes). The Private target requires
+	# an explicit FIND_PACKAGE(Qt6 ... Gui ...) call to be in scope.
+	# Production builds never link this target -- removed alongside the spike
+	# before PIPE-01.
+	IF (BALL_SPIKE_BACKEND STREQUAL "QRhi" AND Qt6Core_VERSION VERSION_GREATER_EQUAL 6.7)
+		# Private-headers target is shipped as a SEPARATE package
+		# (Qt6GuiPrivate), not a component of Qt6 Gui. Find it explicitly.
+		FIND_PACKAGE(Qt6GuiPrivate ${QT_MIN_VERSION} REQUIRED)
+		LIST(APPEND VIEW_DEP_LIBRARIES Qt6::GuiPrivate)
+	ENDIF()
+
 	# WebEngine support
 	IF(USE_QTWEBENGINE)
 		FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} QUIET COMPONENTS WebEngineCore WebEngineWidgets WebChannel)
