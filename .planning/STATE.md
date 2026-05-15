@@ -2,13 +2,13 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
-status: planning
+status: executing
 stopped_at: "Phase 5 Plan 08 complete (SPIKE-02 decision record — split pattern: GL-Core for v1.6.x → QRhi for v2; Phase 5 COMPLETE pending orchestrator phase-close step)"
-last_updated: "2026-05-15T10:56:38.655Z"
+last_updated: "2026-05-15T13:32:56.590Z"
 progress:
   total_phases: 20
   completed_phases: 7
-  total_plans: 25
+  total_plans: 39
   completed_plans: 25
   percent: 35
 ---
@@ -19,15 +19,15 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 05 — qt-6-migration-4b-renderer-backend-decision-spike
+**Current Focus:** Phase 05.1 — build-warnings-and-latent-bugs
 
 ## Current Position
 
-Phase: 05 (qt-6-migration-4b-renderer-backend-decision-spike) — COMPLETE pending orchestrator phase-close step
-Plan: Not started
+Phase: 05.1 (build-warnings-and-latent-bugs) — EXECUTING
+Plan: 1 of 14
 **Phase:** 05.1
 **Plans:** 8 of 8 complete (05-01, 05-02, 05-03, 05-04, 05-05, 05-06, 05-07, 05-08)
-**Status:** Ready to plan
+**Status:** Executing Phase 05.1
 **Progress:** [██████████] 100% of Phase 5
 
 ```
