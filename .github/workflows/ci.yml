@@ -237,15 +237,23 @@ jobs:
         # D-01 6.5 LTS floor. jurplel/install-qt-action wraps aqtinstall and
         # downloads the official Qt build from download.qt.io into the runner
         # workspace; the install location is exposed as Qt6_DIR so CMake's
-        # FIND_PACKAGE(Qt6 6.5 ...) resolves cleanly. Modules: qtbase + qttools
-        # + qtopengl (Qt6::OpenGLWidgets ships as part of qtbase). D-05: NO
-        # qt5compat — clean break.
+        # FIND_PACKAGE(Qt6 6.5 ...) resolves cleanly.
+        #
+        # `modules:` lists *additional* modules only. aqt v3.3.0 on Qt 6.5+:
+        #   - qtbase ships by default (it's the base package, not a module) —
+        #     listing it makes aqt error `packages were not found while parsing
+        #     XML of package information!` (Phase 05.1 finding, blocked Linux
+        #     CI for ~24 hours).
+        #   - qtopengl was a Qt 5 module name; in Qt 6 it's `Qt6::OpenGLWidgets`,
+        #     part of qtbase — not a separately-installable module.
+        #   - qttools IS a real Qt 6 add-on module (lupdate / lrelease etc.).
+        # D-05: NO qt5compat — clean break.
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.5.*'
           host: 'linux'
           target: 'desktop'
-          modules: 'qtbase qttools qtopengl'
+          modules: 'qttools'
           cache: true
 
       - name: Configure (Linux)
