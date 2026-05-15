@@ -129,7 +129,11 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
   3. The user can reset element/residue colors to compiled defaults from Preferences without deleting `~/.BALLView`
 **Fix options** (decide during planning): version/checksum the color block with fallback-on-mismatch; a "reset colors to defaults" Preferences action; or persist only user-customized colors as a diff/override set so new compiled defaults show through.
 **UI hint**: yes
-**Plans**: TBD
+**Plans**: 2 plans, 2 waves
+
+Plans:
+- [ ] 04.1-01-PLAN.md — Wave 1: writePreferenceEntries diff/override write + readPreferenceEntries legacy-Elements discard + ElementColorOverrides parse + all-white sanity (D-01, D-03, D-05, D-06)
+- [ ] 04.1-02-PLAN.md — Wave 2: Reset element colors button (.ui + header slot + slot impl) + residue follow-up backlog stub (D-02, D-04)
 
 ### Phase 5: Qt 6 Migration (4b) + Renderer Backend Decision Spike
 **Goal**: BALLView builds and runs on Qt 6 with deprecated VIEW APIs removed and the compatibility-profile fixed-function GL path kept working as the known-good backend. Once the Qt 6 build is stable, a time-boxed spike prototypes the renderer backend behind the Phase 02.1 `Renderer`/`RenderSurface` boundary and produces a *recorded decision* (GL-core vs QRhi) — de-risking and scoping the v2 `PIPE-01` rewrite, which stays out of scope. (The spike was formerly standalone Phase 05.1; folded in here 2026-05-14 because it must prototype against Qt 6. Phase 5 itself was split from the old oversized "Qt 6 + Pipeline" per the Codex review.)
@@ -251,7 +255,7 @@ Plans:
 | 02.2 CI and build-smoke matrix | 2/2 | Complete    | 2026-05-14 |
 | 3. Language Modernization | 3/3 | Complete   | 2026-05-14 |
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
-| 4.1 Config Color-Defaults Fix | 0/0 | Not started (promoted from backlog 999.4) | - |
+| 4.1 Config Color-Defaults Fix | 0/2 | Not started (promoted from backlog 999.4; 2 plans, 2 waves) | - |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 5/8 | In progress — Plans 01-05 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike + Qt 6 link bring-up) | - |
 | 5.1 Build Warnings & Latent Bug Cleanup | 13/14 | In progress — Plans 01-07, 09-14 complete (Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release (no-op verify) + D5 BALLView.app CFBundleIdentifier); only Plan 08 (B3 C4251 pragma re-measurement) remaining | - |
 | 6. Python Bindings | 0/0 | Not started | - |
