@@ -231,7 +231,12 @@ Plans:
   1. The `test/` tree (currently `EXCLUDE_FROM_ALL`) is wired into the build and `ctest` runs in CI on all three platforms
   2. Test failures are triaged — each is fixed, quarantined with a tracking note, or documented as a known modernization casualty
   3. The gatekeeper flips from `continue-on-error: true` to blocking on macOS + Linux once the triaged green-list is stable
-**Progress (partial, 2026-05-15)**: macOS + Linux test gatekeeper wired into `ci.yml` — non-blocking (`continue-on-error: true`) so failures don't block development while triage runs. Test results uploaded as workflow artifacts (`ball-tests-{macos,linux}.xml` JUnit XML) for every CI run. Windows tests deferred to Phase 9 main work (vcpkg + MSVC test integration is non-trivial; macOS+Linux first). Baseline pass/fail on v1.6.0 source captured separately.
+**Progress (partial, 2026-05-15)**:
+- macOS + Linux test gatekeeper wired into `ci.yml` AND `release.yml` (mirrors). Non-blocking initially (`continue-on-error: true`); flips to blocking once the triaged green-list is stable. Test results uploaded as workflow artifacts (`ball-tests-{macos,linux}.xml` JUnit XML) for every CI run.
+- **Linux coverage job** added to `ci.yml` using BALL's existing `ENABLE_COVERAGE_TESTING` option (gcovr HTML + Cobertura XML; 90-day artifact retention).
+- **PR test-results check run** via `EnricoMi/publish-unit-test-result-action@v2` — surfaces JUnit XML as an inline check on PRs/pushes.
+- **v1.6.0 baseline captured** locally on macOS arm64 (see [`.planning/phases/09-test-suite-triage/PHASE-9-BASELINE.md`](phases/09-test-suite-triage/PHASE-9-BASELINE.md)): **291/294 pass = 99.0%** when `BALL_DATA_PATH` is set. Three real failures need triage as Phase 9 main work: `Directory_test` (macOS path), `AmberFF_test` (2.6% energy off — FP precision suspect), `AssignBondOrderProcessor_test2` (one fine-penalty assertion).
+- Windows tests deferred to Phase 9 main work (vcpkg + MSVC test integration is non-trivial).
 **Plans**: TBD (Phase 9 main work: triage the failing tests, fix/quarantine/document each, flip gatekeeper to blocking)
 
 ## Progress

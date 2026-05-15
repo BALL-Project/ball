@@ -78,6 +78,42 @@ jobs:
         run: |
           cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
 
+      # ----------------------------------------------------------------------
+      # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — mirrors the ci.yml
+      # gatekeeper so release builds ALSO surface unit test regressions.
+      # Tests run AFTER the BALLView build (the binary the user gets in the
+      # installer must build green; tests give us confidence in correctness
+      # of the binary that ships).
+      # ----------------------------------------------------------------------
+      - name: Build BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+        if: matrix.os == 'macos-arm64'
+        continue-on-error: true
+        timeout-minutes: 45
+        run: |
+          cmake --build build/ci-macos --target build_tests -j$(sysctl -n hw.ncpu)
+
+      - name: Run BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+        if: matrix.os == 'macos-arm64'
+        continue-on-error: true
+        timeout-minutes: 60
+        run: |
+          cd build/ci-macos
+          # BALL_DATA_PATH MUST be set — see ci.yml gatekeeper for the
+          # post-mortem (v1.6.0 local baseline: 50/294 fail without it,
+          # 3/294 fail with it).
+          export BALL_DATA_PATH="${{ github.workspace }}/data"
+          ctest --output-on-failure --timeout 120 \
+                --output-junit ${{ github.workspace }}/ball-tests-macos-release.xml || true
+
+      - name: Upload test results (macOS — release)
+        if: always() && matrix.os == 'macos-arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ball-tests-macos-release-${{ steps.resolve.outputs.ref }}-${{ github.run_id }}
+          path: ball-tests-macos-release.xml
+          if-no-files-found: warn
+          retention-days: 90
+
       - name: Locate BALLView.app (macOS)
         if: matrix.os == 'macos-arm64'
         id: locate-mac

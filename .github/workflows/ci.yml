@@ -155,10 +155,16 @@ jobs:
         timeout-minutes: 60
         run: |
           cd build/ci-macos
+          # BALL_DATA_PATH MUST be set so tests find FragmentDB, force-field
+          # parameter files, rotamer libraries, etc. v1.6.0 local baseline:
+          # 50/294 fail without it (= "data path unset" noise), 3/294 fail
+          # with it (= actual triage candidates: Directory_test, AmberFF_test,
+          # AssignBondOrderProcessor_test2 — Phase 9 main work).
           # --timeout 120 caps individual hangs (most BALL tests run in <10s;
           # ScoringFunction_test + AssignBondOrderProcessor_test{1,2} have
           # 2h timeouts set in test/CMakeLists.txt and will hit this cap —
           # acceptable for the gatekeeper, Phase 9 decides which to skip).
+          export BALL_DATA_PATH="${{ github.workspace }}/data"
           ctest --output-on-failure --timeout 120 \
                 --output-junit ${{ github.workspace }}/ball-tests-macos.xml || true
 
@@ -274,6 +280,8 @@ jobs:
         timeout-minutes: 60
         run: |
           cd build/ci-linux
+          # See macOS counterpart — BALL_DATA_PATH is the make-or-break env var.
+          export BALL_DATA_PATH="${{ github.workspace }}/data"
           ctest --output-on-failure --timeout 120 \
                 --output-junit ${{ github.workspace }}/ball-tests-linux.xml || true
 
@@ -551,3 +559,147 @@ jobs:
           # source/ + include/BALL/. The Qt 6 migration (Plans 05-01..03)
           # eliminated every site; this step prevents regressions.
           bash scripts/check-no-legacy-qt6-symbols.sh "$GITHUB_WORKSPACE"
+
+  # --------------------------------------------------------------------------
+  # coverage — Phase 9 partial promotion (NON-BLOCKING) — code coverage on
+  # Linux GCC using BALL's existing ENABLE_COVERAGE_TESTING CMake option
+  # (CMakeLists.txt line 681 — wires -fprofile-arcs -ftest-coverage for
+  # BALL + VIEW under GXX). Separate job from the main build matrix because:
+  #   - Coverage instrumentation is 2-3x slower than Release; running it
+  #     in the matrix would slow every PR
+  #   - Coverage runs in parallel with the matrix on a separate runner —
+  #     net wall-clock cost is ~0
+  #   - Failures here are non-blocking (continue-on-error: true) — coverage
+  #     gen errors should never block a PR that has otherwise-green CI
+  # Produces gcovr HTML report + Cobertura XML, both uploaded as artifacts
+  # for browsing + future Codecov / GitHub Code Insights integration.
+  # --------------------------------------------------------------------------
+  coverage:
+    name: coverage (Linux, gcov, non-blocking)
+    runs-on: ubuntu-24.04
+    continue-on-error: true
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Cache apt archives
+        uses: actions/cache@v5
+        with:
+          path: /var/cache/apt/archives/*.deb
+          key: apt-coverage-ubuntu-24.04-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: |
+            apt-coverage-ubuntu-24.04-
+
+      - name: Install dependencies + gcovr
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            cmake make g++ ccache \
+            qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev \
+            libboost-all-dev libeigen3-dev libfftw3-dev libtbb-dev libglew-dev \
+            libopenbabel-dev libsvm-dev flex bison \
+            xvfb mesa-utils libgl1-mesa-dri \
+            gcovr lcov
+
+      - name: Configure (Linux + ENABLE_COVERAGE_TESTING)
+        run: |
+          # Reuse ci-linux preset but inject the coverage flag + force
+          # Debug build (no -O optimization so coverage line mapping is
+          # accurate). BALL_LICENSE=GPL keeps OpenBabel paths exercised.
+          cmake --preset ci-linux \
+            -DENABLE_COVERAGE_TESTING=ON \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DBALL_LICENSE=GPL
+
+      - name: Build BALL + tests (coverage build)
+        run: |
+          cmake --build build/ci-linux --target BALL VIEW BALLView -j$(nproc)
+          cmake --build build/ci-linux --target build_tests -j$(nproc)
+
+      - name: Run test suite under coverage
+        run: |
+          cd build/ci-linux
+          export BALL_DATA_PATH="${{ github.workspace }}/data"
+          # Don't fail the job on test failures — coverage % is the
+          # signal of interest here, and the gatekeeper jobs (above)
+          # are already capturing the pass/fail breakdown.
+          ctest --output-on-failure --timeout 240 \
+                --output-junit ${{ github.workspace }}/ball-tests-coverage.xml || true
+
+      - name: Generate coverage report (gcovr HTML + Cobertura XML)
+        run: |
+          mkdir -p coverage-report
+          gcovr \
+            --root . \
+            --exclude '.*build/.*' \
+            --exclude '.*test/.*' \
+            --exclude '/usr/.*' \
+            --exclude '.*moc_.*\.cpp' \
+            --exclude '.*ui_.*\.h' \
+            --html-details coverage-report/index.html \
+            --xml-pretty --xml coverage-report/coverage.xml \
+            --print-summary 2>&1 | tee coverage-summary.txt
+          echo ""
+          echo "Coverage summary:"
+          grep -E "^lines:|^functions:|^branches:" coverage-summary.txt || \
+            tail -5 coverage-summary.txt
+
+      - name: Upload coverage HTML report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html-${{ github.run_id }}
+          path: coverage-report/
+          retention-days: 30
+
+      - name: Upload coverage Cobertura XML (for Codecov / GitHub Insights)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml-${{ github.run_id }}
+          path: coverage-report/coverage.xml
+          retention-days: 90
+
+  # --------------------------------------------------------------------------
+  # test-report — Phase 9 partial promotion — runs after the build matrix +
+  # coverage job, downloads each platform's JUnit XML artifact, and publishes
+  # a unified test-results summary as a Check Run on the PR / push (visible
+  # inline in the GitHub UI without needing to download the XML manually).
+  #
+  # Uses EnricoMi/publish-unit-test-result-action — the canonical OSS action
+  # for this pattern. Configured to NEVER fail the build itself
+  # (fail_on: "nothing") since the gatekeeper steps are non-blocking; this
+  # job is purely visualization.
+  #
+  # Skipped on forked-PR runs because cross-repo PRs don't have permissions
+  # to write check runs on the upstream. The Linux build's --output-junit
+  # output remains available as a downloadable artifact in that case.
+  # --------------------------------------------------------------------------
+  test-report:
+    name: test-report (PR check summary)
+    needs: [build, coverage]
+    if: always() && github.event.pull_request.head.repo.full_name == github.repository || github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    permissions:
+      checks: write
+      pull-requests: write
+    continue-on-error: true
+    steps:
+      - name: Download all test result artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: ball-tests-*
+          path: junit-artifacts
+          merge-multiple: true
+
+      - name: Publish unit test results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            junit-artifacts/*.xml
+          comment_mode: changes in failures
+          check_name: "BALL test suite (Phase 9 gatekeeper)"
+          fail_on: "nothing"
+          report_individual_runs: true
