@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
-status: verifying
-stopped_at: Phase 4.1 context gathered
-last_updated: "2026-05-15T19:11:11.628Z"
+status: "Phase 4.1 verification flagged 3 BLOCKERs — CR-01 read-path dead code (override signature mismatch), CR-02 getSectionLastLine off-by-one, CR-03 unguarded throws. Run /gsd-plan-phase 4.1 --gaps to plan fix work."
+stopped_at: Phase 4.1 verification gaps_found
+last_updated: "2026-05-15T21:30:00.000Z"
 progress:
   total_phases: 23
   completed_phases: 9
