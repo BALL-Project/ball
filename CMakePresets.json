@@ -19,7 +19,7 @@
       "displayName": "macOS / Homebrew",
       "inherits": "base",
       "cacheVariables": {
-        "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt@5;/opt/homebrew",
+        "CMAKE_PREFIX_PATH": "/opt/homebrew/opt/qt;/opt/homebrew",
         "BISON_EXECUTABLE": "/opt/homebrew/opt/bison/bin/bison",
         "FLEX_EXECUTABLE": "/opt/homebrew/opt/flex/bin/flex"
       }
