@@ -23,6 +23,10 @@
 #include <QtOpenGL/QOpenGLFunctions_3_2_Core>
 #include <QtOpenGL/QOpenGLVersionFunctionsFactory>
 #include <QtOpenGL/QOpenGLFramebufferObject>
+// qopenglext.h provides every GL_* constant as a #define (review WR-05).
+// QOpenGLFunctions_3_2_Core does not expose them as members; including this
+// header lets the spike use the named macros instead of hex literals.
+#include <QtGui/qopenglext.h>
 
 #include <cstring>
 
@@ -146,7 +150,7 @@ namespace BALL
 				fns->glShaderSource(s, 1, &src, nullptr);
 				fns->glCompileShader(s);
 				int ok = 0;
-				fns->glGetShaderiv(s, /*GL_COMPILE_STATUS=*/0x8B81, &ok);
+				fns->glGetShaderiv(s, GL_COMPILE_STATUS, &ok);
 				if (!ok)
 				{
 					char log[1024] = {0};
@@ -158,8 +162,8 @@ namespace BALL
 				return s;
 			};
 
-			unsigned int vs = compile_one(/*GL_VERTEX_SHADER=*/0x8B31, k_vertex_shader_src_);
-			unsigned int fs = compile_one(/*GL_FRAGMENT_SHADER=*/0x8B30, k_fragment_shader_src_);
+			unsigned int vs = compile_one(GL_VERTEX_SHADER, k_vertex_shader_src_);
+			unsigned int fs = compile_one(GL_FRAGMENT_SHADER, k_fragment_shader_src_);
 			if (!vs || !fs)
 				return false;
 
@@ -168,7 +172,7 @@ namespace BALL
 			fns->glAttachShader(program_id_, fs);
 			fns->glLinkProgram(program_id_);
 			int link_ok = 0;
-			fns->glGetProgramiv(program_id_, /*GL_LINK_STATUS=*/0x8B82, &link_ok);
+			fns->glGetProgramiv(program_id_, GL_LINK_STATUS, &link_ok);
 			fns->glDeleteShader(vs);
 			fns->glDeleteShader(fs);
 			if (!link_ok)
@@ -192,29 +196,29 @@ namespace BALL
 				return false;
 
 			fns->glGenFramebuffers(1, &picking_fbo_);
-			fns->glBindFramebuffer(/*GL_FRAMEBUFFER=*/0x8D40, picking_fbo_);
+			fns->glBindFramebuffer(GL_FRAMEBUFFER, picking_fbo_);
 
 			// R32UI colour attachment for per-pixel object IDs.
 			fns->glGenTextures(1, &picking_tex_);
-			fns->glBindTexture(/*GL_TEXTURE_2D=*/0x0DE1, picking_tex_);
-			fns->glTexImage2D(/*GL_TEXTURE_2D*/0x0DE1, 0, /*GL_R32UI=*/0x8236,
-			                  width, height, 0, /*GL_RED_INTEGER=*/0x8D94,
-			                  /*GL_UNSIGNED_INT=*/0x1405, nullptr);
-			fns->glTexParameteri(0x0DE1, /*GL_TEXTURE_MIN_FILTER=*/0x2801, /*GL_NEAREST=*/0x2600);
-			fns->glTexParameteri(0x0DE1, /*GL_TEXTURE_MAG_FILTER=*/0x2800, /*GL_NEAREST=*/0x2600);
-			fns->glFramebufferTexture2D(/*GL_FRAMEBUFFER=*/0x8D40,
-			                            /*GL_COLOR_ATTACHMENT0=*/0x8CE0,
-			                            /*GL_TEXTURE_2D=*/0x0DE1, picking_tex_, 0);
+			fns->glBindTexture(GL_TEXTURE_2D, picking_tex_);
+			fns->glTexImage2D(GL_TEXTURE_2D, 0, GL_R32UI,
+			                  width, height, 0, GL_RED_INTEGER,
+			                  GL_UNSIGNED_INT, nullptr);
+			fns->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			fns->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			fns->glFramebufferTexture2D(GL_FRAMEBUFFER,
+			                            GL_COLOR_ATTACHMENT0,
+			                            GL_TEXTURE_2D, picking_tex_, 0);
 
 			// Depth renderbuffer (required for correct depth-sorted picking).
 			fns->glGenRenderbuffers(1, &picking_depth_);
-			fns->glBindRenderbuffer(/*GL_RENDERBUFFER=*/0x8D41, picking_depth_);
-			fns->glRenderbufferStorage(0x8D41, /*GL_DEPTH_COMPONENT24=*/0x81A6, width, height);
-			fns->glFramebufferRenderbuffer(/*GL_FRAMEBUFFER=*/0x8D40,
-			                               /*GL_DEPTH_ATTACHMENT=*/0x8D00,
-			                               /*GL_RENDERBUFFER=*/0x8D41, picking_depth_);
+			fns->glBindRenderbuffer(GL_RENDERBUFFER, picking_depth_);
+			fns->glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+			fns->glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+			                               GL_DEPTH_ATTACHMENT,
+			                               GL_RENDERBUFFER, picking_depth_);
 
-			fns->glBindFramebuffer(/*GL_FRAMEBUFFER=*/0x8D40, 0);
+			fns->glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			picking_fbo_w_ = width;
 			picking_fbo_h_ = height;
 			return true;
@@ -279,9 +283,9 @@ namespace BALL
 			fns->glUniformMatrix4fv(uloc_mvp_, 1, /*transpose=*/0, mvp);
 			fns->glUniform1i(uloc_pick_mode_, 0);  // main render pass
 
-			fns->glEnable(/*GL_DEPTH_TEST=*/0x0B71);
+			fns->glEnable(GL_DEPTH_TEST);
 			fns->glClearColor(0.05f, 0.05f, 0.08f, 1.0f);
-			fns->glClear(/*GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT*/ 0x4000 | 0x0100);
+			fns->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// Build VBO data per representation. THROWAWAY: we render each
 			// GeometricObject as a single coloured point at its position. This
@@ -316,20 +320,19 @@ namespace BALL
 					{ 0.0f, 0.0f, 0.0f, 0.6f, 0.8f, 1.0f }
 				};
 
-				fns->glBindBuffer(/*GL_ARRAY_BUFFER=*/0x8892, vbo_id_);
-				fns->glBufferData(/*GL_ARRAY_BUFFER=*/0x8892, sizeof(verts), verts,
-				                  /*GL_STREAM_DRAW=*/0x88E0);
+				fns->glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
+				fns->glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts,
+				                  GL_STREAM_DRAW);
 
 				fns->glEnableVertexAttribArray(0);
-				fns->glVertexAttribPointer(0, 3, /*GL_FLOAT=*/0x1406, 0, sizeof(V), (void*)0);
+				fns->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(V), (void*)0);
 				fns->glEnableVertexAttribArray(1);
-				fns->glVertexAttribPointer(1, 3, /*GL_FLOAT=*/0x1406, 0, sizeof(V),
+				fns->glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(V),
 				                           (void*)(3 * sizeof(float)));
 
 				fns->glUniform1ui(uloc_picking_id_, my_id);
 
-				// GL_POINTS = 0x0000
-				fns->glDrawArrays(0x0000, 0, 1);
+				fns->glDrawArrays(GL_POINTS, 0, 1);
 			}
 
 			// Restore GL state so the QPainter text-overlay path in
@@ -338,8 +341,8 @@ namespace BALL
 			// no shader program bound.
 			fns->glBindVertexArray(0);
 			fns->glUseProgram(0);
-			fns->glDisable(/*GL_DEPTH_TEST=*/0x0B71);
-			fns->glBindFramebuffer(/*GL_FRAMEBUFFER=*/0x8D40, 0);
+			fns->glDisable(GL_DEPTH_TEST);
+			fns->glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 
 		void CoreGLRenderer::pickObjects(Position x1, Position y1, Position /*x2*/, Position /*y2*/,
@@ -355,13 +358,13 @@ namespace BALL
 				return;
 
 			// Render pass 2: into the picking FBO with picking-mode shader.
-			fns->glBindFramebuffer(/*GL_FRAMEBUFFER=*/0x8D40, picking_fbo_);
+			fns->glBindFramebuffer(GL_FRAMEBUFFER, picking_fbo_);
 			fns->glUseProgram(program_id_);
 			fns->glBindVertexArray(vao_id_);
 			fns->glUniform1i(uloc_pick_mode_, 1);
 			unsigned int clear_id = 0;
-			fns->glClearBufferuiv(/*GL_COLOR=*/0x1800, 0, &clear_id);
-			fns->glClear(/*GL_DEPTH_BUFFER_BIT*/ 0x0100);
+			fns->glClearBufferuiv(GL_COLOR, 0, &clear_id);
+			fns->glClear(GL_DEPTH_BUFFER_BIT);
 
 			// Re-issue the same draws that renderRepresentations_() did. THROWAWAY:
 			// in a production renderer we would cache the draw list; for the spike
@@ -373,21 +376,21 @@ namespace BALL
 				unsigned int id = kv.first;
 				struct V { float x, y, z, r, g, b; };
 				V verts[1] = { { 0.0f, 0.0f, 0.0f, 0, 0, 0 } };
-				fns->glBindBuffer(/*GL_ARRAY_BUFFER=*/0x8892, vbo_id_);
-				fns->glBufferData(/*GL_ARRAY_BUFFER=*/0x8892, sizeof(verts), verts,
-				                  /*GL_STREAM_DRAW=*/0x88E0);
+				fns->glBindBuffer(GL_ARRAY_BUFFER, vbo_id_);
+				fns->glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts,
+				                  GL_STREAM_DRAW);
 				fns->glEnableVertexAttribArray(0);
-				fns->glVertexAttribPointer(0, 3, /*GL_FLOAT=*/0x1406, 0, sizeof(V), (void*)0);
+				fns->glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(V), (void*)0);
 				fns->glUniform1ui(uloc_picking_id_, id);
-				fns->glDrawArrays(/*GL_POINTS=*/0x0000, 0, 1);
+				fns->glDrawArrays(GL_POINTS, 0, 1);
 			}
 
 			// Read back the single pixel under the cursor as an unsigned int.
 			unsigned int picked = 0;
-			fns->glBindFramebuffer(/*GL_READ_FRAMEBUFFER=*/0x8CA8, picking_fbo_);
-			fns->glReadPixels((int)x1, (int)y1, 1, 1, /*GL_RED_INTEGER=*/0x8D94,
-			                  /*GL_UNSIGNED_INT=*/0x1405, &picked);
-			fns->glBindFramebuffer(/*GL_FRAMEBUFFER=*/0x8D40, 0);
+			fns->glBindFramebuffer(GL_READ_FRAMEBUFFER, picking_fbo_);
+			fns->glReadPixels((int)x1, (int)y1, 1, 1, GL_RED_INTEGER,
+			                  GL_UNSIGNED_INT, &picked);
+			fns->glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 			auto it = id_to_object_.find(picked);
 			if (it != id_to_object_.end() && it->second != nullptr)
