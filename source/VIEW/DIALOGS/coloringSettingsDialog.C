@@ -149,6 +149,68 @@ namespace BALL
 				inifile.appendSection("COLORING_OPTIONS");
 			}
 
+			// D-01 + D-06: Compute element-color overrides as a diff against the live
+			// compiled ElementColorProcessor defaults. Only entries that differ from the
+			// compiled defaults are written under the new "ElementColorOverrides=" key.
+			// This makes the bug class structurally impossible: there is no stored shadow
+			// copy of the defaults that can drift out of sync with the compiled palette.
+			{
+				const Size BALL_VIEW_NUMBER_ELEMENTS_LOCAL = 111;
+
+				ElementColorProcessor live_defaults;
+				const HashMap<Position, ColorRGBA>& defaults_map = live_defaults.getColorMap();
+
+				String overrides_serialized;
+
+				for (Position p = 0; p < (Position)element_table_->rowCount(); ++p)
+				{
+					BALL::Element const& e = PTE_::getElement(ascii(element_table_->item(p, 0)->text()));
+
+					if (e.getAtomicNumber() == 0 || e.getAtomicNumber() >= BALL_VIEW_NUMBER_ELEMENTS_LOCAL)
+					{
+						continue;
+					}
+
+					ColorRGBA dialog_color(element_table_->item(p, 1)->background().color());
+
+					HashMap<Position, ColorRGBA>::ConstIterator dit = defaults_map.find(e.getAtomicNumber());
+
+					bool differs = (dit == defaults_map.end()) ||
+					               ((String)dialog_color != (String)dit->second);
+
+					if (differs)
+					{
+						overrides_serialized += String(e.getAtomicNumber()) + ":" + (String)dialog_color + ";";
+					}
+				}
+
+				if (!overrides_serialized.empty())
+				{
+					// INIFile upsert idiom: insertValue no-ops if key exists; setValue no-ops if key absent — the pair covers both.
+					if (!inifile.insertValue("COLORING_OPTIONS", "ElementColorOverrides", overrides_serialized))
+					{
+						inifile.setValue("COLORING_OPTIONS", "ElementColorOverrides", overrides_serialized);
+					}
+				}
+				else
+				{
+					// No overrides: remove any stale ElementColorOverrides= line from a prior write.
+					if (inifile.hasEntry("COLORING_OPTIONS", "ElementColorOverrides"))
+					{
+						INIFile::LineIterator it  = inifile.getSectionFirstLine("COLORING_OPTIONS");
+						INIFile::LineIterator end = inifile.getSectionLastLine("COLORING_OPTIONS");
+						for (; it != end; ++it)
+						{
+							if ((*it).hasPrefix("ElementColorOverrides="))
+							{
+								inifile.deleteLine(it);
+								break;
+							}
+						}
+					}
+				}
+			}
+
 			String residue_names, residue_name_colors;
 
 			for (Index i=0; i<residue_table_->rowCount(); ++i)
