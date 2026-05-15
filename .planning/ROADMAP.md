@@ -224,7 +224,7 @@ Plans:
 | 3. Language Modernization | 3/3 | Complete   | 2026-05-14 |
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
 | 4.1 Config Color-Defaults Fix | 0/0 | Not started (promoted from backlog 999.4) | - |
-| 5. Qt 6 Migration (4b) + Renderer Backend Spike | 0/0 | Not started (former Phase 05.1 folded in) | - |
+| 5. Qt 6 Migration (4b) + Renderer Backend Spike | 5/8 | In progress — Plans 01-05 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike + Qt 6 link bring-up) | - |
 | 6. Python Bindings | 0/0 | Not started | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
