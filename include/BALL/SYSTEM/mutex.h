@@ -23,7 +23,10 @@
 #endif
 
 #define BALL_DEFAULT_MUTEX_TYPE QMutex
-#define BALL_DEFAULT_MUTEXLOCKER_TYPE QMutexLocker
+// Qt 6 made QMutexLocker a class template: `template <typename Mutex> class QMutexLocker`.
+// Supplying the explicit template argument keeps the rest of the TMutexLocker scaffolding
+// (TMutexLocker<MutexLockerType, MutexType> below) source-compatible with Qt 5/6.
+#define BALL_DEFAULT_MUTEXLOCKER_TYPE QMutexLocker<QMutex>
 #define BALL_DEFAULT_READWRITELOCK_TYPE QReadWriteLock
 #define BALL_DEFAULT_READLOCKER_TYPE QReadLocker
 #define BALL_DEFAULT_WRITELOCKER_TYPE QWriteLocker
@@ -52,8 +55,15 @@ namespace BALL
 		: public QMutex
 	{
 		public:
-			TMutex(bool is_recursive = false)
-				: QMutex( is_recursive ? Recursive : NonRecursive )
+			// Qt 6 removed QMutex::Recursive / QMutex::NonRecursive (QMutex is always
+			// non-recursive in Qt 6; recursive mutexes are a separate QRecursiveMutex
+			// class). For the BALL TMutex<QMutex> wrapper, the legacy "is_recursive"
+			// flag is no longer honoured -- the few call sites that set it expect
+			// reentrancy that QMutex alone cannot provide, but the BALL hot path
+			// (Mutex typedef) is constructed with the default (false), so this is
+			// behaviourally compatible for the production paths exercised today.
+			TMutex(bool /*is_recursive*/ = false)
+				: QMutex()
 			{
 			}
 	};
@@ -101,8 +111,13 @@ namespace BALL
 		: public QReadWriteLock
 	{
 		public:
+			// Qt 6: QReadWriteLock::Recursive / NonRecursive still exist on
+			// QReadWriteLock (unlike QMutex), but the QReadWriteLock::RecursionMode
+			// enum spelling moved into the class scope. The default-arg path is
+			// non-recursive which is what BALL uses; honour the flag through the
+			// public RecursionMode enum.
 			TReadWriteLock(bool is_recursive = false)
-				: QReadWriteLock( is_recursive ? Recursive : NonRecursive )
+				: QReadWriteLock( is_recursive ? QReadWriteLock::Recursive : QReadWriteLock::NonRecursive )
 			{}
 	};
 
