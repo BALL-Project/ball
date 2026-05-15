@@ -121,7 +121,7 @@ namespace BALL
 		C1_ = proc.C1_;
 		C2_ = proc.C2_;
 		solvent_ = proc.solvent_;
-		rdf_parameter_ = rdf_parameter_;
+		rdf_parameter_ = proc.rdf_parameter_;
 
 		return *this;
 	}
