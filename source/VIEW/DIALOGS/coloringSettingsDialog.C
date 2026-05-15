@@ -240,7 +240,7 @@ namespace BALL
 			if (inifile.hasEntry("COLORING_OPTIONS", "Elements"))
 			{
 				INIFile::LineIterator it  = const_cast<INIFile&>(inifile).getSectionFirstLine("COLORING_OPTIONS");
-				INIFile::LineIterator end = const_cast<INIFile&>(inifile).getSectionLastLine("COLORING_OPTIONS");
+				INIFile::LineIterator end = const_cast<INIFile&>(inifile).getSectionLastLine("COLORING_OPTIONS").getSectionNextLine();
 				for (; it != end; ++it)
 				{
 					if ((*it).hasPrefix("Elements="))
@@ -251,10 +251,10 @@ namespace BALL
 						// PreferencesEntry subclasses in VIEW/DIALOGS already use this signature; the const_cast
 						// is contained to this single call site.
 						const_cast<INIFile&>(inifile).deleteLine(it);
+						Log.info() << "ColoringSettingsDialog: dropping legacy Elements= block (Phase 4.1 migration; compiled defaults will be used for untouched indices)" << std::endl;
 						break;
 					}
 				}
-				Log.info() << "ColoringSettingsDialog: dropping legacy Elements= block (Phase 4.1 migration; compiled defaults will be used for untouched indices)" << std::endl;
 			}
 
 			// Step 2 — D-05.1: parse the new ElementColorOverrides= key if present and apply
