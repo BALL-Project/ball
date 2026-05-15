@@ -54,9 +54,14 @@ jobs:
 
           # ---- Linux (Ubuntu) — blocking -----------------------------------
           # apt equivalents of the Homebrew set + xvfb/software-Mesa for the
-          # headless render smoke check (D-08).
+          # headless render smoke check (D-08). Phase 5 D-02: runner bumped
+          # from ubuntu-22.04 to ubuntu-24.04 (newer GCC + ships glibc/Mesa
+          # current enough for Qt 6.5+ via jurplel/install-qt-action). The
+          # apt-shipped Qt on 24.04 is 6.4.2 (below the D-01 6.5 floor), so
+          # the Qt 6 install is provisioned through jurplel/install-qt-action
+          # rather than apt — see the dedicated step below.
           - os: linux-x64
-            runner: ubuntu-22.04
+            runner: ubuntu-24.04
             blocking: true
             smoke: true
             ccache_dir: ~/.cache/ccache
@@ -104,7 +109,11 @@ jobs:
         if: matrix.os == 'macos-arm64'
         run: |
           # D-06: the verbatim BUILD-macos.md dependency line + ccache.
-          brew install qt@5 boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison
+          # Phase 5 (Plan 05-01 D-03): Homebrew unversioned `qt` is the Qt 6
+          # source (currently 6.11.x, well above the D-01 6.5 floor). The
+          # `macos-homebrew` CMake preset's CMAKE_PREFIX_PATH already points
+          # at /opt/homebrew/opt/qt (not qt@5) — see Plan 05-01 SUMMARY.
+          brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison
           brew install ccache
 
       - name: Configure (macOS)
@@ -141,10 +150,16 @@ jobs:
         run: |
           # D-06: apt equivalents of the Homebrew set, + build tooling + ccache,
           # + xvfb/software-Mesa for the headless render smoke check (D-08).
+          #
+          # Phase 5 (Plan 05-04): the Qt5 -dev packages (qtbase5-dev /
+          # qtbase5-dev-tools / libqt5opengl5-dev / qttools5-dev) are REMOVED.
+          # Ubuntu 24.04 apt ships Qt 6.4.2 which is below the D-01 6.5 floor;
+          # Qt is installed through jurplel/install-qt-action in the dedicated
+          # step below (aqtinstall, pinned to Qt 6.5.*). xvfb + Mesa stay for
+          # the headless smoke check; non-Qt deps unchanged.
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             cmake make g++ ccache \
-            qtbase5-dev qtbase5-dev-tools libqt5opengl5-dev qttools5-dev \
             libboost-all-dev libeigen3-dev libfftw3-dev libtbb-dev libglew-dev \
             libopenbabel-dev libsvm-dev flex bison \
             xvfb mesa-utils libgl1-mesa-dri
@@ -155,6 +170,23 @@ jobs:
           # (see the Feature Matrix in REQUIREMENTS.md) — Linux CI builds without
           # it; macOS keeps it (Homebrew's lp_solve is fine). Phase 4 (FEAT-01)
           # confirms the per-platform optional-dependency policy.
+
+      - name: Install Qt 6 (Linux — jurplel/install-qt-action / aqtinstall)
+        if: matrix.os == 'linux-x64'
+        # D-01 + D-02 (Plan 05-04): Ubuntu 24.04 apt ships Qt 6.4.2, below the
+        # D-01 6.5 LTS floor. jurplel/install-qt-action wraps aqtinstall and
+        # downloads the official Qt build from download.qt.io into the runner
+        # workspace; the install location is exposed as Qt6_DIR so CMake's
+        # FIND_PACKAGE(Qt6 6.5 ...) resolves cleanly. Modules: qtbase + qttools
+        # + qtopengl (Qt6::OpenGLWidgets ships as part of qtbase). D-05: NO
+        # qt5compat — clean break.
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.5.*'
+          host: 'linux'
+          target: 'desktop'
+          modules: 'qtbase qttools qtopengl'
+          cache: true
 
       - name: Configure (Linux)
         if: matrix.os == 'linux-x64'
@@ -235,7 +267,18 @@ jobs:
           # vcpkg.json deps at configure time.
           # win_bison.exe / win_flex.exe from winflexbison3 are passed explicitly
           # because FindBISON/FindFLEX search for 'bison'/'flex' by default.
+          #
+          # Phase 5 (Plan 05-04): USE_QTWEBENGINE=OFF on Windows — Plan 05-01
+          # carried the CMakeLists USE_QTWEBENGINE OPTION default `ON` for
+          # Phase 1+2+3+4 backward compatibility. The vcpkg manifest does NOT
+          # declare `qtwebengine` (it bloats cold-build by ~30min and Windows
+          # CI has no consumer for it), so the FIND_PACKAGE(Qt6 WebEngineCore)
+          # call would fail. Flipping the option OFF at configure time is the
+          # least-invasive fix; macOS Homebrew has qtwebengine so it stays ON
+          # there. See Plan 05-01 SUMMARY §"Open Items for Downstream Plans"
+          # for the carry-forward note.
           cmake --preset ci-windows `
+            -DUSE_QTWEBENGINE=OFF `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe"
 
@@ -266,8 +309,26 @@ jobs:
         run: |
           # Preset puts the binary at build/ci-macos/; pass explicitly so the
           # script's autodetect (which looks in build/bin/) is not needed.
+          # Phase 5 (Plan 05-04): tee stdout to /tmp/ballview-smoke.log so the
+          # follow-up "Assert GL compat profile" step can grep BALLVIEW_GL_DIAG
+          # for `gl_profile=compatibility` (D-06 / D-08 runtime oracle).
           bash .planning/phases/02.2-ci-and-build-smoke-matrix/scripts/render-smoke-check.sh \
-            build/ci-macos/bin/BALLView.app/Contents/MacOS/BALLView
+            build/ci-macos/bin/BALLView.app/Contents/MacOS/BALLView 2>&1 \
+            | tee /tmp/ballview-smoke.log
+
+      - name: Assert GL compat profile (macOS — D-06 / D-08)
+        if: matrix.smoke && matrix.os == 'macos-arm64'
+        run: |
+          # D-06 + D-08 runtime oracle (Plan 05-04): a non-blank PNG alone is
+          # NOT enough — Qt 6 on macOS defaults to a GL 4.1 *core* context if
+          # QSurfaceFormat is not forced, and a silently-degraded core context
+          # would still render a blank-ish-but-not-fully-blank PNG that the
+          # render-smoke threshold accepts. The BALLVIEW_GL_DIAG line emitted
+          # from GLRenderWindow::initializeGL() reports the live granted
+          # profile; this step asserts the live profile is `compatibility`,
+          # proving the Plan 05-03 setProfile(CompatibilityProfile) +
+          # setOptions(DeprecatedFunctions) machinery actually took effect.
+          grep 'BALLVIEW_GL_DIAG.*gl_profile=compatibility' /tmp/ballview-smoke.log
 
       - name: Render smoke check (Linux — xvfb + software Mesa)
         if: matrix.smoke && matrix.os == 'linux-x64'
@@ -280,8 +341,21 @@ jobs:
         run: |
           # Preset puts the binary at build/ci-linux/; pass explicitly so the
           # script's autodetect (which looks in build/bin/) is not needed.
+          # Phase 5 (Plan 05-04): tee stdout to /tmp/ballview-smoke.log for the
+          # follow-up GL compat-profile assertion step (D-06 / D-08).
           bash .planning/phases/02.2-ci-and-build-smoke-matrix/scripts/render-smoke-check.sh \
-            build/ci-linux/bin/BALLView
+            build/ci-linux/bin/BALLView 2>&1 \
+            | tee /tmp/ballview-smoke.log
+
+      - name: Assert GL compat profile (Linux — D-06 / D-08)
+        if: matrix.smoke && matrix.os == 'linux-x64'
+        run: |
+          # D-06 + D-08 runtime oracle (Plan 05-04). See macOS counterpart
+          # above for the rationale — same grep, same exit semantics. On
+          # Linux under llvmpipe the compat profile is fully supported, so
+          # the granted format MUST report `gl_profile=compatibility`. A
+          # silent fall-through to core would be a Phase 5 regression.
+          grep 'BALLVIEW_GL_DIAG.*gl_profile=compatibility' /tmp/ballview-smoke.log
 
       # On a smoke-check failure, upload the (blank) PNG + captured BALLView log
       # so the failure can be debugged without re-running CI. The Plan 01 script
@@ -329,15 +403,20 @@ jobs:
           retention-days: 7
 
   # --------------------------------------------------------------------------
-  # lint — the legacy-Qt-GL-symbol grep gate (Phase 2 carry-over).
+  # lint — the legacy-Qt-symbol grep gates.
   #
   # Its own lightweight job: it needs no build, so a fast standalone job is
   # cleaner than a per-OS step. Blocking/required — a legacy symbol regression
-  # fails CI. The script takes the repo root as $1 and exits 0/1.
+  # fails CI. Each script takes the repo root as $1 and exits 0/1.
+  #
+  # Phase 5 (Plan 05-04): the Linux runner bumped from ubuntu-22.04 to
+  # ubuntu-24.04 in step with the build matrix (D-02). The new Qt 5 holdout
+  # gate (check-no-legacy-qt6-symbols.sh, scripts/) was added alongside the
+  # Phase 2 legacy-GL gate — same pattern, different LEGACY_PATTERN set.
   # --------------------------------------------------------------------------
   lint:
-    name: lint (legacy-GL grep gate)
-    runs-on: ubuntu-22.04
+    name: lint (legacy-Qt grep gates)
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -345,3 +424,12 @@ jobs:
       - name: Legacy Qt GL symbol grep gate
         run: |
           bash .planning/phases/02-rendering-port-4a/scripts/check-no-legacy-gl-symbols.sh "$GITHUB_WORKSPACE"
+
+      - name: Legacy Qt 5 symbol grep gate (Phase 5)
+        run: |
+          # Plan 05-04 Task 1 — catches QRegExp / QDesktopWidget /
+          # QApplication::desktop / QString::SkipEmptyParts /
+          # QtWidgets/QOpenGLWidget / QtWidgets/QDesktopWidget / Qt5:: under
+          # source/ + include/BALL/. The Qt 6 migration (Plans 05-01..03)
+          # eliminated every site; this step prevents regressions.
+          bash scripts/check-no-legacy-qt6-symbols.sh "$GITHUB_WORKSPACE"
