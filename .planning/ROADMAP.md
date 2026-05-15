@@ -198,7 +198,10 @@ Plans:
   3. The Windows build produces a **code-signed** installer (or zip + signed `.exe` + signed bundled DLLs) that passes `signtool verify /pa` and minimizes SmartScreen friction (full SmartScreen-bypass is no longer available post-2024; reputation-building is expected on early releases regardless)
   4. `BUILD-macos.md` is joined by `BUILD-linux.md` and `BUILD-windows.md` documenting the from-source build on each platform
   5. A license/distribution review covers the FFTW GPL path, OpenBabel, Qt deployment mode, bundled `data/`, and the **code-signing chain of trust** (cert provenance, timestamping authority, renewal cadence) — recorded so notarization/distribution is unambiguous
-**Reference**: [`.planning/phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md`](phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md) — full signing & notarization research (macOS Developer ID + notarytool flow, Windows path comparison [SignPath Foundation vs Azure Artifact Signing vs commercial EV/OV], CA/B Forum 2026 changes, BALL's LGPL-2.1 eligibility for SignPath Foundation, GitHub Actions integration patterns)
+**Decisions locked (2026-05-15)**:
+  - **Windows signing provider: SignPath Foundation (Path A)** — free for OSS, BALL's LGPL-2.1 qualifies. Fallback order if rejected: Path B (Azure Artifact Signing, ~$120/yr) → Path C (commercial OV + cloud HSM, $200-500/yr). Avoid commercial EV (over-spec, no SmartScreen bypass post-2024).
+  - **macOS signing path: Apple Developer ID Application + notarytool + stapler** — the only path for non-App-Store distribution, $99/yr Apple Developer Program.
+**Reference**: [`.planning/phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md`](phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md) — full signing & notarization research (macOS Developer ID + notarytool flow, Windows path comparison with decision rationale, CA/B Forum 2026 changes, BALL's LGPL-2.1 SignPath Foundation eligibility, GitHub Actions integration patterns)
 **Plans**: TBD
 
 ### Phase 9: Test Suite Triage

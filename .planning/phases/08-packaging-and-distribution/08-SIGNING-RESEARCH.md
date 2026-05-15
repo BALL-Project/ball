@@ -138,9 +138,13 @@ Three industry shifts in the last ~3 years:
 
 Net effect: the cheapest "Windows signing" path no longer exists. Every option below involves either ongoing money or surrendering signing to a third-party service.
 
+### Decision (2026-05-15)
+
+**Windows signing path LOCKED to Path A — SignPath Foundation (free OSS program).** BALL's LGPL-2.1 license, GitHub-public-CI, and academic OSS posture fit the SignPath Foundation eligibility criteria; the foundation underwrites the cert + HSM at no cost. The manual approval gate per release is acceptable (and arguably desirable as an anti-supply-chain-attack control on an academic project). Paths B (Azure Artifact Signing) and C (commercial EV/OV) preserved below as documented escalation paths if SignPath rejects the application or if fully-automated nightly releases become a hard requirement later.
+
 ### Three viable paths for BALL
 
-#### Path A — SignPath Foundation (FREE for OSS)
+#### Path A — SignPath Foundation (FREE for OSS) — **CHOSEN 2026-05-15**
 
 - Free for OSI-approved licenses without commercial dual-licensing — **BALL's LGPL-2.1 qualifies**
 - HSM-backed certificate (FIPS 140-2 Level 3), managed by the foundation
@@ -169,11 +173,14 @@ Net effect: the cheapest "Windows signing" path no longer exists. Every option b
 
 **Cost:** $200-500/year + per-signature fees. **Setup time:** ~1-2 weeks (cert vetting, HSM provisioning, workflow integration).
 
-### Recommended path for BALL
+### Fallback paths (not chosen — preserved for the record)
 
-**Path A (SignPath Foundation) — free, well-trod by similar OSS projects, only real downside is the manual approval gate.** If the manual gate is a problem (e.g. fully-autonomous nightly releases needed), Path B (Azure) is the cheap automated alternative at ~$120/year.
+If the SignPath Foundation application is rejected, or if a future requirement makes the manual approval gate unworkable, the fallback order is:
 
-Avoid Path C unless there's a specific enterprise requirement (Windows drivers, signed installer attestation that SignPath can't issue).
+1. **Path B (Azure Artifact Signing, ~$120/yr)** — fully automated, OIDC-authenticated. Pick this first if SignPath falls through.
+2. **Path C (commercial OV cert + cloud HSM, $200-500/yr)** — only if both A and B are unavailable, or if a specific enterprise distribution requirement demands direct cert ownership.
+
+Avoid the commercial EV path entirely — BALL ships no Windows drivers and the EV premium no longer buys SmartScreen-bypass (post-2024).
 
 ### The signing flow (any path)
 
@@ -210,8 +217,8 @@ When Phase 8 is promoted from research to active, the plan should cover:
 1. **Apple Developer Program enrollment** ($99/year, one-time setup + annual renewal)
 2. **macOS signing + notarization wiring in `release.yml`** (~80 lines added to the macOS job)
 3. **macOS entitlements file authored + tested under hardened runtime** locally before CI submission
-4. **Windows signing provider chosen** (SignPath Foundation = recommended)
-5. **Windows signing wiring in `release.yml`** (~30 lines added to the Windows job + approval gate if SignPath)
+4. **Windows signing provider — DECIDED: SignPath Foundation (Path A)**. Submit the foundation application early in the phase; foundation reviews take real time. If rejected, fall back to Path B (Azure Artifact Signing).
+5. **Windows signing wiring in `release.yml`** (~30 lines added to the Windows job + the SignPath manual-approval gate). The SignPath GitHub Action ([`signpath/github-action-submit-signing-request`](https://github.com/SignPath/github-action-submit-signing-request)) submits the build artifact to the foundation, pauses for human approval in the SignPath UI, then downloads the signed artifact back into the workflow for attachment to the GitHub Release.
 6. **Installer format decision: keep zips, or upgrade to DMG (macOS) + MSI/NSIS (Windows)** (separate scope from signing, but typically bundled in Phase 8)
 7. **Verification: run `spctl` (macOS) and `signtool verify` (Windows) on the released artifacts to confirm chain-of-trust integrity**
 8. **Documentation update: `BUILD-macos.md` etc. mention how to skip signing for local dev builds (no `--options runtime`, etc.)**
@@ -219,7 +226,7 @@ When Phase 8 is promoted from research to active, the plan should cover:
 ## Open questions for Phase 8 to resolve
 
 1. **Who owns the Apple Developer Program account?** Project-level (TÜBINGEN / BALL maintainers as the legal entity) vs. an individual maintainer. Legal entity is the right answer if BALL has institutional sponsorship; individual is the fallback. The cert's "Org" string is publicly visible in the signed bundle's metadata.
-2. **SignPath Foundation eligibility approval** — submit application early. Foundation reviews the project's licensing, governance, and supply-chain posture. Approval is non-trivial but BALL's LGPL-2.1 + GitHub-public-CI should clear it.
+2. **SignPath Foundation application — when to submit.** Decision to use SignPath is LOCKED (2026-05-15); open question is the *timing* of submission. Foundation reviews the project's licensing, governance, and supply-chain posture and takes ~weeks to clear. Optimal timing: submit at the start of Phase 8 so the approval window overlaps with the macOS notarization wiring work (parallelism). If rejected, fall back to Path B (Azure Artifact Signing) without losing wall-clock time on the phase.
 3. **MSI vs zip on Windows** — does Phase 8 do MSI/NSIS at the same time, or split into 8.1 (signing) + 8.2 (installer formats)?
 4. **Auto-update path** — out of scope for Phase 8 v1.6? Sparkle (macOS) + WinSparkle (Windows) typically come after first signed release.
 5. **Cert renewal cadence post-March-2026** — 458-day cap means renewal every ~15 months. Document the renewal runbook so it doesn't surprise the project at expiry.
