@@ -6,6 +6,8 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/PTE.h>
 
+#include <set>
+
 #include <QtWidgets>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QLabel>
@@ -227,7 +229,88 @@ namespace BALL
 		{
 			PreferencesEntry::readPreferenceEntries(inifile);
 
-			if (    inifile.hasEntry("COLORING_OPTIONS", "ResidueNames") 
+			// D-05 conflict rule: legacy-discard branch (step 1) runs first so that when both
+			// Elements= and ElementColorOverrides= are present, the old key is dropped and the
+			// new key is parsed — the ordering invariant handles the both-present case by construction.
+
+			// Step 1 — D-03: silently discard any legacy Elements= line from pre-Phase-4.1 configs.
+			// This runs unconditionally: if the key is present it is deleted and compiled defaults
+			// flow through for all untouched indices (optimistic migration per D-03).
+			if (inifile.hasEntry("COLORING_OPTIONS", "Elements"))
+			{
+				INIFile::LineIterator it  = inifile.getSectionFirstLine("COLORING_OPTIONS");
+				INIFile::LineIterator end = inifile.getSectionLastLine("COLORING_OPTIONS");
+				for (; it != end; ++it)
+				{
+					if ((*it).hasPrefix("Elements="))
+					{
+						inifile.deleteLine(it);
+						break;
+					}
+				}
+				Log.info() << "ColoringSettingsDialog: dropping legacy Elements= block (Phase 4.1 migration; compiled defaults will be used for untouched indices)" << std::endl;
+			}
+
+			// Step 2 — D-05.1: parse the new ElementColorOverrides= key if present and apply
+			// override colors into element_table_ for each atomic number listed.
+			if (inifile.hasEntry("COLORING_OPTIONS", "ElementColorOverrides"))
+			{
+				String overrides_raw = inifile.getValue("COLORING_OPTIONS", "ElementColorOverrides");
+
+				// D-05.2: known-colored elements whose all-white override (#ffffff) is suspicious
+				// and should be discarded as likely corruption (carbon/nitrogen/oxygen/phosphorus/sulphur).
+				std::set<Position> known_colored;
+				known_colored.insert(6);   // carbon
+				known_colored.insert(7);   // nitrogen
+				known_colored.insert(8);   // oxygen
+				known_colored.insert(15);  // phosphorus
+				known_colored.insert(16);  // sulphur
+
+				std::vector<String> tokens;
+				overrides_raw.split(tokens, ";");
+
+				for (Position t = 0; t < (Position)tokens.size(); ++t)
+				{
+					if (tokens[t].isEmpty()) continue;
+
+					std::vector<String> parts;
+					tokens[t].split(parts, ":");
+
+					if (parts.size() != 2 || parts[0].isEmpty() || parts[1].isEmpty()) continue;
+
+					Position atomic_number = parts[0].toUnsignedInt();
+					ColorRGBA override_color(parts[1]);
+
+					// D-05.2 all-white sanity check: drop override if RGB is (255,255,255)
+					// for a known-colored element — treat as corruption and fall through to
+					// the compiled default for that index.
+					if (known_colored.count(atomic_number) > 0)
+					{
+						ColorUnit white_unit(1.0f);
+						if (override_color.getRed()   == white_unit &&
+						    override_color.getGreen() == white_unit &&
+						    override_color.getBlue()  == white_unit)
+						{
+							Log.warn() << "ColoringSettingsDialog: dropping suspicious all-white override for atomic number "
+							           << atomic_number << " (D-05 sanity check; compiled default will be used)" << std::endl;
+							continue;
+						}
+					}
+
+					// Find the matching row in element_table_ by symbol and apply the override color.
+					String symbol = PTE[atomic_number].getSymbol();
+					for (Position p = 0; p < (Position)element_table_->rowCount(); ++p)
+					{
+						if (ascii(element_table_->item(p, 0)->text()) == symbol)
+						{
+							element_table_->item(p, 1)->setBackground(override_color.getQColor());
+							break;
+						}
+					}
+				}
+			}
+
+			if (    inifile.hasEntry("COLORING_OPTIONS", "ResidueNames")
 				   && inifile.hasEntry("COLORING_OPTIONS", "ResidueNameColors"))
 			{
 				String residue_names       = inifile.getValue("COLORING_OPTIONS", "ResidueNames");
