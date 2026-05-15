@@ -1759,13 +1759,13 @@ istream& getline(istream& is, BALL::String& str)
 BALL_INLINE
 istream& getline(istream& is, BALL::String&& str, char delim)
 {
-	return getline(is, move((string&)str), delim);
+	return getline(is, (string&)str, delim);
 }
 
 BALL_INLINE
 istream& getline(istream& is, BALL::String&& str)
 {
-	return getline(is, move((string&)str));
+	return getline(is, (string&)str);
 }
 
 } // namespace std
