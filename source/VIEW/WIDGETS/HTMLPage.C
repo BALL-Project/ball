@@ -17,12 +17,25 @@ namespace BALL
 		HTMLPage::HTMLPage(QObject* parent, bool ignore_ssl_errors) :
 			QWebEnginePage(parent),
 			ignore_ssl_errors_(ignore_ssl_errors)
-		{}
+		{
+			connectCertificateErrorHandler_();
+		}
 
 		HTMLPage::HTMLPage(QWebEngineProfile* profile, QObject* parent, bool ignore_ssl_errors) :
 			QWebEnginePage(profile, parent),
 			ignore_ssl_errors_(ignore_ssl_errors)
-		{}
+		{
+			connectCertificateErrorHandler_();
+		}
+
+		void HTMLPage::connectCertificateErrorHandler_()
+		{
+			// Qt 6: certificateError is a signal on QWebEnginePage, not a
+			// virtual hook. Wire it to onCertificateError() so the
+			// ignore_ssl_errors_ flag is honoured (Qt 5 parity).
+			connect(this, &QWebEnginePage::certificateError,
+			        this, &HTMLPage::onCertificateError);
+		}
 
 		bool HTMLPage::acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame)
 		{
@@ -35,9 +48,23 @@ namespace BALL
 			return QWebEnginePage::acceptNavigationRequest(url, type, isMainFrame);
 		}
 
-		bool HTMLPage::certificateError(const QWebEngineCertificateError&)
+		void HTMLPage::onCertificateError(const QWebEngineCertificateError& error)
 		{
-			return ignore_ssl_errors_;
+			// Qt 6 signal-based API: accept/reject is communicated by calling
+			// the corresponding method on the error object, not via a return
+			// value. The signal hands us a const-ref; the accept/reject
+			// methods are non-const, so we strip const here (the object is
+			// owned by Qt and lives for the duration of the slot call).
+			QWebEngineCertificateError& mutable_error =
+				const_cast<QWebEngineCertificateError&>(error);
+			if (ignore_ssl_errors_)
+			{
+				mutable_error.acceptCertificate();
+			}
+			else
+			{
+				mutable_error.rejectCertificate();
+			}
 		}
 
 		void HTMLPage::javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString&)

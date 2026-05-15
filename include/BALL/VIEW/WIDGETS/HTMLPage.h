@@ -6,6 +6,7 @@
 #include <QtCore/QHash>
 // Qt 6 moved QWebEnginePage from QtWebEngineWidgets into QtWebEngineCore.
 #include <QtWebEngineCore/QWebEnginePage>
+#include <QtWebEngineCore/QWebEngineCertificateError>
 
 namespace BALL
 {
@@ -22,15 +23,22 @@ namespace BALL
 
 			protected:
 				bool acceptNavigationRequest(const QUrl& url, NavigationType type, bool isMainFrame) override;
-				// Qt 6: QWebEnginePage::certificateError is now a signal, not a
-				// virtual hook. Keep the slot/non-virtual handler for the
-				// signal-connection path used by callers; no 'override'.
-				bool certificateError(const QWebEngineCertificateError& /* certificateError */);
 				void javaScriptConsoleMessage(JavaScriptConsoleMessageLevel level, const QString& message, int lineNumber, const QString& /* sourceID */) override;
 
 				virtual void executeLink(const QUrl& url);
 
+			private Q_SLOTS:
+				// Qt 6: QWebEnginePage::certificateError is now a SIGNAL on the
+				// page (not a virtual hook). To honour ignore_ssl_errors_ we
+				// connect this slot in the constructor and call
+				// acceptCertificate()/rejectCertificate() on the error object.
+				void onCertificateError(const QWebEngineCertificateError& error);
+
 			private:
+				// Wire the certificateError signal -> onCertificateError slot.
+				// Shared by both constructors.
+				void connectCertificateErrorHandler_();
+
 				bool ignore_ssl_errors_;
 		};
 	}
