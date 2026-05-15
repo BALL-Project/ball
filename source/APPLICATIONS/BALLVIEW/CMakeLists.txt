@@ -48,6 +48,29 @@ ADD_EXECUTABLE(BALLView
 
 TARGET_LINK_LIBRARIES(BALLView ${BALLVIEW_DEP_LIBRARIES})
 
+# macOS bundle identity — populates BALLView.app/Contents/Info.plist via the
+# cmake/MacOSXBundleInfo.plist.in template (Phase 05.1 plan 14, BACKLOG D5;
+# CFBundleIdentifier per CONTEXT.md D-10).
+# Required for Apple notarization (Phase 8): notarytool rejects bundles with
+# empty CFBundleIdentifier; Developer ID code-signing validates the identifier
+# against the certificate's authorized bundle IDs. The identifier is also the
+# stable key for macOS preferences, sandbox identity, and LaunchServices
+# "Open With" entries — changing it post-distribution requires user-pref
+# migration, so it is fixed here at v1.6 release time.
+IF(APPLE)
+	SET_TARGET_PROPERTIES(BALLView PROPERTIES
+		MACOSX_BUNDLE                      TRUE
+		MACOSX_BUNDLE_GUI_IDENTIFIER       "de.uni-tuebingen.ball.ballview"
+		MACOSX_BUNDLE_BUNDLE_NAME          "BALLView"
+		MACOSX_BUNDLE_BUNDLE_VERSION       "${PROJECT_VERSION}"
+		MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION}"
+		MACOSX_BUNDLE_LONG_VERSION_STRING  "BALLView ${PROJECT_VERSION}"
+		MACOSX_BUNDLE_COPYRIGHT            "© BALL maintainers. LGPL-2.1."
+		MACOSX_BUNDLE_INFO_STRING          "BALLView ${PROJECT_VERSION} — molecular visualization (LGPL-2.1)"
+		MACOSX_BUNDLE_ICON_FILE            "BALLView.icns"
+	)
+ENDIF()
+
 #Setup the translations
 INCLUDE(BALLViewTranslations)
 
