@@ -266,9 +266,17 @@ namespace BALL
 		{
 			if (surface_drawing_precision_ < 0.1) return false;
 				
-			if (drawing_precision_  < 0 || drawing_precision_ > BALL_VIEW_MAXIMAL_DRAWING_PRECISION ||
-					drawing_mode_ 			< 0 || drawing_mode_ > BALL_VIEW_MAXIMAL_DRAWING_MODE ||
-					transparency_ 			> 255)
+			// Bounds-check rationale (per phase 05.1 plan 04):
+			//   * `drawing_precision_ < 0` is MEANINGFUL — DrawingPrecision has
+			//     DRAWING_PRECISION_INVALID = -1, so this catches the invalid sentinel.
+			//   * The `> BALL_VIEW_MAXIMAL_DRAWING_PRECISION` / `> BALL_VIEW_MAXIMAL_DRAWING_MODE`
+			//     halves are TAUTOLOGICAL: the enum's largest enumerator (3) is strictly less
+			//     than the MAXIMAL macros (4), so clang emits
+			//     -Wtautological-constant-out-of-range-compare. Dropped.
+			//   * `drawing_mode_ < 0` was also tautological — DrawingMode has only
+			//     non-negative enumerators. Dropped.
+			if (drawing_precision_ < 0 ||
+					transparency_ > 255)
 			{
 				return false;
 			}
