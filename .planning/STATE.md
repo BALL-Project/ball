@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.6
 milestone_name: milestone
 status: executing
-stopped_at: "Phase 05.1 Plan 06 complete (Task A6 — -Wstringop-truncation strncpy audit). Audited all 10 gcc-flagged strncpy sites from CI run 25899905204 case-by-case and applied Remediation B (memcpy + explicit nul-termination) uniformly. 4 sites in PDB writers (PDBFileGeneral.C:381 format-string assembly, PDBFileDetails.C:1460/1553 residue_name writers, PDBFileDetails.C:1785 SEQRES residue-name slot) + 6 sites in the CIF lexer (CIFParserLexer.l:90/117/135/200/207/223). Extended to 7 structurally-identical unflagged neighbours in PDBFileDetails.C (1473 'UNK' literal, 1777 nucleotide-name replace, 1783 generic res_name fallback, 1802 helix_ID, 1842/1847 sheet_ID, 1867 turn_ID) and via a static inline `CIF_copy_text()` helper in the .l prelude to all 17 lexer rules (the 11 unflagged ones share the same latent nul-termination concern). Decision: chose Remediation B over Remediation A (std::string) because every destination is a fixed-width PDB record field or Bison %union char[N] consumed by C-string APIs (printf %-3s, String() ctors) where a std::string conversion would force boundary churn; rejected Remediation C (#pragma suppress) because the warnings flag a real nul-termination concern. Added explicit `#include <cstring>` to both PDB .C files (was transitively reachable via BALL/COMMON/debug.h but defence against future include-order shuffling). 13 unflagged residual strncpy sites in BALL (DATATYPE/string.C n-1 idiom, COMMON/logStream.C and FORMAT/lineBasedFile.C runtime-derived bounds, CONCEPT/classTest.h .size() bound, FORMAT/PDBdefs.h ×8 short-literal sources) deliberately left untouched — gcc didn't flag them and they're out of A6's scope. Local build green via `cmake --build build/macos-homebrew --target BALL -j 8`; zero -Wstringop-truncation on the 3 edited files. Tri-OS CI verification (count drops to 0 on next Linux gcc run) follows on push."
-last_stopped_at: "Phase 05.1 Plan 02 complete (Task A2 — C4311 pointer truncation T*→long end-to-end audit; previous stopped_at, retained for traceability)."
-last_updated: "2026-05-15T16:35:00Z"
+stopped_at: "Phase 05.1 Plan 14 complete (Task D5 — BALLView.app CFBundleIdentifier + bundle-identity fields, Phase 8 notarization prerequisite). The v1.6.0 macOS bundle's Info.plist carried empty strings for CFBundleIdentifier, CFBundleName, CFBundleVersion, CFBundleShortVersionString, CFBundleLongVersionString, CFBundleGetInfoString, NSHumanReadableCopyright. Forensic root cause: cmake/MacOSXBundleInfo.plist.in already used the standard `${MACOSX_BUNDLE_*}` substitution placeholders, but only MACOSX_BUNDLE_ICON_FILE was being set on the BALLView target — every other identity variable defaulted to empty. Fix: chose Option A (set target properties) over Option B (template hardcode) because the template was already correct; added an `IF(APPLE) SET_TARGET_PROPERTIES(BALLView PROPERTIES MACOSX_BUNDLE_*) ENDIF()` block in source/APPLICATIONS/BALLVIEW/CMakeLists.txt after `TARGET_LINK_LIBRARIES`. CFBundleIdentifier chosen as `de.uni-tuebingen.ball.ballview` per CONTEXT.md D-10 (institutional reverse-DNS — BALL originated at Universität Tübingen — strongest provenance for a Developer ID Application certificate registered to the institution in Phase 8; BACKLOG D5 recommends this as the default of the three candidates over org.ball-project.ballview / de.ball-project.ballview); Task 1 decision checkpoint auto-resolved per the executor's no-clarifying-questions policy and the CONTEXT.md D-10 default. CMake configure smoke-tested clean via `cmake -S . -B build/d5-test -DBALL_HAS_VIEW=ON -DBALL_PYTHON_SUPPORT=OFF` — needed `-DBALL_PYTHON_SUPPORT=OFF` because the default-ON BALL_PYTHON_SUPPORT requires SIP which is documented as removed/disabled but the CMake option still defaults ON (pre-existing project-config wart, NOT D5's scope, NOT a deviation). Phase 8 notarization prerequisite cleared — notarytool no longer rejects on empty CFBundleIdentifier and Developer ID code-signing can validate the identifier against the certificate's authorized bundle IDs. macOS preferences / sandbox / LaunchServices identity now stabilized."
+last_stopped_at: "Phase 05.1 Plan 06 complete (Task A6 — -Wstringop-truncation strncpy audit; previous stopped_at, retained for traceability)."
+last_updated: "2026-05-15T17:30:00Z"
 progress:
   total_phases: 20
   completed_phases: 7
   total_plans: 39
-  completed_plans: 34
-  percent: 87
+  completed_plans: 35
+  percent: 90
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -25,11 +25,11 @@ progress:
 ## Current Position
 
 Phase: 05.1 (build-warnings-and-latent-bugs) — EXECUTING
-Plan: 11 of 14
+Plan: 12 of 14
 **Phase:** 05.1
-**Plans:** 10 of 14 complete (05.1-01, 05.1-02, 05.1-03, 05.1-04, 05.1-05, 05.1-06, 05.1-07, 05.1-09, 05.1-10, 05.1-11); next: remaining Tier-D tasks (05.1-12 D3 ccache, 05.1-13 D4 Windows release --config Release, 05.1-14 D5 BALLView.app bundle identity) and 05.1-08 (B3 C4251 pragma re-measurement after B1+B2 land)
+**Plans:** 11 of 14 complete (05.1-01, 05.1-02, 05.1-03, 05.1-04, 05.1-05, 05.1-06, 05.1-07, 05.1-09, 05.1-10, 05.1-11, 05.1-14); next: remaining Tier-D tasks (05.1-12 D3 ccache, 05.1-13 D4 Windows release --config Release) and 05.1-08 (B3 C4251 pragma re-measurement after B1+B2 land)
 **Status:** Ready to execute
-**Progress:** [████████▊░] 87% (of total milestone, 34/39 plans)
+**Progress:** [█████████░] 90% (of total milestone, 35/39 plans)
 
 ```
 Phase 1     [x]  Build Baseline
