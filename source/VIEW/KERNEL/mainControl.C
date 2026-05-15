@@ -186,7 +186,11 @@ namespace BALL
 			if (BALLView_data_path != 0)
 			{
 #ifdef BALL_OS_WINDOWS
-				SetEnvironmentVariable("BALL_DATA_PATH", BALLView_data_path); 
+				// Phase 5.1 carry-forward: use *A suffix explicitly. Under UNICODE
+				// (which Qt 6 enables on MSVC), SetEnvironmentVariable remaps to
+				// SetEnvironmentVariableW which expects LPCWSTR; our literals are
+				// char*. SetEnvironmentVariableA accepts char* unconditionally.
+				SetEnvironmentVariableA("BALL_DATA_PATH", BALLView_data_path);
 #else
 				char* key = const_cast<char*>("BALL_DATA_PATH=");
 				setenv(key,BALLView_data_path,true);
