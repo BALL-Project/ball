@@ -108,7 +108,7 @@ Added 2026-05-16 when v1.6.2 milestone opened. Each REQ maps to one of the 7 in-
 
 ### Tiny dead-code + grammar cleanups
 
-- [ ] **DEADCODE-01** (Phase 999.21): Stubbed `DockResultFile::attributesToHashMap(const QXmlAttributes&)` Qt 5 SAX overload removed from header + impl; CMake build still green
+- [x] **DEADCODE-01** (Phase 999.21): Stubbed `DockResultFile::attributesToHashMap(const QXmlAttributes&)` Qt 5 SAX overload removed from header + impl; CMake build still green — Complete 2026-05-16 (commit 914622d8f; 30 lines removed; local macOS BALL build green; Phase 5 BLOCKER-A closed)
 - [x] **WARN-CENSUS-01** (Phase 999.22, CENSUS-ONLY): Tri-OS warning census published at `.planning/phases/999.22-warning-census/CENSUS.md` with per-warning-category × file-path × likely-cause categorization into (a)/(b)/(c) deferral buckets; three follow-up backlog stubs filed (999.22a/b/c). **No warning execution in v1.6.2** per Open Q3 resolution. — Complete 2026-05-16 (CI run 25970862407; 200 remaining -Wdeprecated-copy on Linux vs pre-fix estimate ~3,716; 95% reduction from parallel-session; 999.22a/b/c stubs filed in ROADMAP.md)
 - [ ] **GRAMMAR-01** (Phase 999.23, STRETCH — may defer to v1.7): CIF Bison grammar shift-reduce conflict count reconciled (3 vs 5 per BACKLOG/SUMMARY); each conflict either confirmed-benign-and-documented or fixed at the grammar rule
 
@@ -215,7 +215,7 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | TRIAGE-01 | Phase 999.14 — GitHub issue + PR triage | Complete (v1.6.2, 2026-05-16) — 82 net closes; audit trail in decisions.md |
 | TRIAGE-02 | Phase 999.14 — Stale-doc audit bundled task | Complete (v1.6.2, 2026-05-16) — 7 VERIFICATION.md files audited; f176b8b already applied; STALE-DOCS-AUDIT.md |
 | TRIAGE-03 | Phase 999.14 — 5-PR legacy bundle merge | Complete (v1.6.2, 2026-05-16) — #600 closed-obsolete; #640 merged 9c6d868; #554/#546/#550 C++ slice merged 45dce69 |
-| DEADCODE-01 | Phase 999.21 — DockResultFile QtXml dead-code cleanup | Pending (v1.6.2) |
+| DEADCODE-01 | Phase 999.21 — DockResultFile QtXml dead-code cleanup | Complete (v1.6.2, 2026-05-16) — commit 914622d8f; 30 lines removed; BALL macOS build green |
 | WARN-CENSUS-01 | Phase 999.22 — Tier-C warning census (CENSUS-ONLY) | Complete (v1.6.2, 2026-05-16) — CENSUS.md at phases/999.22-warning-census/; 200 remaining -Wdeprecated-copy on Linux; 999.22a/b/c stubs filed |
 | GRAMMAR-01 | Phase 999.23 — CIF Bison grammar audit (STRETCH) | Pending (v1.6.2 or v1.7) |
 

@@ -1264,10 +1264,11 @@ Plans:
 **Estimated effort:** 1 hour. Single-file (header + impl); single-commit change; no behaviour delta on any code path BALL actually exercises.
 
 **Requirements:** `DEADCODE-01` — see `REQUIREMENTS.md` v1.6.2 section.
-**Plans:** 0 (single-task PLAN when promoted).
+
+**Status (2026-05-16): COMPLETE.** Done inline by Claude (no executor spawn); 30 lines removed across header + impl in commit `914622d8f`. Phase 5 BLOCKER-A closed. Local macOS BALL build green; tri-OS CI verification on the commit's run. See [999.21-01-SUMMARY.md](phases/999.21-dockresultfile-dead-code/999.21-01-SUMMARY.md).
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens; trivial fit anywhere in v1.6.2 cycle)
+- [x] [999.21-01-SUMMARY.md](phases/999.21-dockresultfile-dead-code/999.21-01-SUMMARY.md) — inline dead-code removal — COMPLETE 2026-05-16
 
 ### Phase 999.22: Warning census (CENSUS-ONLY — Tier-C + residual C4910/C4834) (BACKLOG · TARGETED FOR v1.6.2)
 

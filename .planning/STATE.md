@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
-status: verifying
-stopped_at: Completed 09-test-suite-triage 09-01-PLAN.md
-last_updated: "2026-05-16T21:35:58.065Z"
-last_activity: 2026-05-16
+status: milestone-content-complete
+stopped_at: Phase 999.21 DEADCODE-01 closed inline — all 12 v1.6.2 REQs marked Complete; ready for release-notes + tag
+last_updated: "2026-05-16T21:45:00Z"
+last_activity: 2026-05-16 — Phase 999.21 closed (914622d8f); v1.6.2 milestone content-complete (12/12 REQs)
 progress:
   total_phases: 52
-  completed_phases: 17
+  completed_phases: 18
   total_plans: 52
-  completed_plans: 53
-  percent: 33
+  completed_plans: 54
+  percent: 35
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.22 — Tier-C warning census complete (WARN-CENSUS-01 done); next: Phase 9 test-suite triage (TEST-CLOSE-01/02) or DEADCODE-01 (Phase 999.21)
+**Current Focus:** v1.6.2 milestone CONTENT-COMPLETE — all 12 REQs marked Complete (BUILD-ACCEL-01..05 + TRIAGE-01/02/03 + TEST-CLOSE-01/02 + WARN-CENSUS-01 + DEADCODE-01). GRAMMAR-01 stretch deferred to v1.7. Ready for RELEASE-NOTES-v1.6.2.md finalization (draft in 7f2e851a) + git tag.
 
 ## Current Position
 
-Phase: 999.22 (warning-census) — COMPLETE
+Phase: 999.21 (dockresultfile-dead-code) — COMPLETE (final v1.6.2 substantive phase)
 Plan: 1 of 1
-Status: Phase complete — ready for verification
+Status: Milestone content-complete — release-notes + tag remain
 Last activity: 2026-05-16
 
 ## Performance Metrics
