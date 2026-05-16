@@ -1615,7 +1615,12 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 		multimap<unsigned int, unsigned int>::iterator size_iter;
 		for (ccs_iter=ccs_tmp.begin(); ccs_iter!=ccs_tmp.end(); ++ccs_iter)
 		{
-			cc_sizes.insert(make_pair(ccs_iter->second.size(), ccs_iter->first));
+			// Explicit narrowing cast from size_t → unsigned int to satisfy
+			// the multimap<unsigned int, unsigned int> key type and silence
+			// MSVC C4267 (Windows LLP64: size_t is 64-bit, unsigned int is
+			// 32-bit). CC sizes never exceed UINT_MAX in practice — the
+			// container fits in process memory long before this overflows.
+			cc_sizes.insert(make_pair(static_cast<unsigned int>(ccs_iter->second.size()), ccs_iter->first));
 		}
 		
 		// STEP 3: Write information in return data structures

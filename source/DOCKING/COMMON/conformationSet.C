@@ -43,7 +43,10 @@ namespace BALL
 		sn.takeSnapShot(conformation);
 		structures_.push_back(sn);
 
-		Conformation c(snapshot_order_.size(), score);
+		// Explicit narrowing cast from size_t → Index (int32_t/long) to
+		// silence MSVC C4267 on LLP64 (Conformation = pair<Index, float>).
+		// Snapshot count never approaches INT32_MAX in any real docking run.
+		Conformation c(static_cast<Index>(snapshot_order_.size()), score);
 		snapshot_order_.push_back(c);
 	}
 

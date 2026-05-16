@@ -444,7 +444,11 @@ namespace BALL
 				saveframe_names.insert(content.saveframe.framename, data.size()-1);
 		//	saveframe_categories.insert(content.saveframe.category,data.size()-1);
 			}
-			saveframe_categories.insert(std::pair<String, Index>( content.saveframe.category, data.size()-1));
+			// Explicit narrowing cast from size_t → Index (int32_t/long) to
+			// silence MSVC C4267 on LLP64 (data.size() is size_t = 64-bit,
+			// Index is 32-bit). data is a small per-block container; values
+			// well under INT32_MAX.
+			saveframe_categories.insert(std::pair<String, Index>( content.saveframe.category, static_cast<Index>(data.size()-1)));
 			//std::cout << "insertDatacontent(): category " << content.saveframe.category << " has now " << saveframe_categories.count(content.saveframe.category) << " entries"  <<  std::endl;
 			/*if (saveframe_categories.count(content.saveframe.category) == 0)
 			{
