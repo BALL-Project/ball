@@ -180,20 +180,42 @@ status; Windows part stays dormant until a contributor has Windows access.
 Commit `54da903` becomes the first piece of Phase 999.7 work; record it as
 such in 999.7's progress notes.
 
-### Promoted from backlog: Phase 999.2 Ninja build-generator switch (2026-05-16)
+### Promoted from backlog: Phase 999.2 Ninja build-generator switch — COMPLETE (2026-05-16)
 
-Was [`BACKLOG · TARGETED FOR v2.0`](.planning/ROADMAP.md#phase-9992-ninja-build-generator-switch-active--promoted--v161)
+Was [`BACKLOG · TARGETED FOR v2.0`](.planning/ROADMAP.md#phase-9992-ninja-build-generator-switch-complete--v161--2026-05-16)
 in the v2.0 substrate-modernization bundle. Promoted into v1.6.1 active on
-2026-05-16. **Why now, not v2.0:** With Phase 4's Windows `blocking: true`
-flip, every CI cycle eats ~80 min of Windows wall-clock under MSBuild
-(baseline: run 25899905204 Windows Build = 4625s). Two prep commits
-(`d5f5566` Windows `--parallel`, `9c932eb` choco install ccache) already
-landed; the third move — flip the generator to Ninja + provision ninja on
-all three runners — pays back its own implementation cost on the first
-re-run. Pure build-tooling change; risk surface is CI YAML +
-`CMakePresets.json` only, NOT BALL/VIEW source — clears the v1.6.1 scope
-discipline bar. Also makes the standing "Windows >2× macOS/Linux disable"
-policy tractable. Work plan: [.planning/phases/999.2-ninja-generator-switch/PLAN.md](.planning/phases/999.2-ninja-generator-switch/PLAN.md).
+2026-05-16, landed and verified the same day. **Why now, not v2.0:** With
+Phase 4's Windows `blocking: true` flip, every CI cycle was eating ~80 min
+of Windows wall-clock under MSBuild (baseline: run 25899905204 Windows
+Build = 4625s, CMAKE_<LANG>_COMPILER_LAUNCHER=ccache silently ignored by
+MSBuild). Two prep commits (`d5f5566` Windows `--parallel`, `9c932eb`
+choco install ccache) had already landed; the third move — flip the
+generator to Ninja + provision ninja on all three runners — paid back its
+own implementation cost on the first warm-cache re-run. Pure build-tooling
+change; risk surface was CI YAML + `CMakePresets.json` only, NOT BALL/VIEW
+source — cleared the v1.6.1 scope-discipline bar.
+
+**Result (CI run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453)):**
+
+| Metric | Before (MSBuild baseline) | After cold-cache (Ninja, run 1) | After warm-cache (Ninja, run 2) |
+|---|---:|---:|---:|
+| Windows Build step | 4625s | 4818s (populating cache) | **55s** (87× speedup) |
+| Windows total job | ~80 min | ~85 min | **~4.7 min** |
+| ccache hit rate | 0% (ignored) | 0% (cold) | **~98.9%** (wall-clock-derived) |
+| macOS Build | 67s | 31s | 39s (runner noise) |
+| Linux Build | 99s | 25s | 34s (runner noise) |
+
+Windows total job ~4.7 min is well under the 10-min standing
+conditional-disable threshold — the `continue-on-error: false` Windows
+blocking flip from Phase 04-04 (Plan 04-04 Task 3) holds with
+genuine per-iteration headroom.
+
+Implementation:
+[PLAN.md](.planning/phases/999.2-ninja-generator-switch/PLAN.md),
+[999.2-SUMMARY.md](.planning/phases/999.2-ninja-generator-switch/999.2-SUMMARY.md).
+Commits: `68f8f86` (planning), `1141881` (CMakePresets Ninja),
+`0bd1c16` (CI ninja installs + msvc-dev-cmd), `bbac526` (ccache stats
+instrumentation), `88ce213` (phase close).
 
 ## Out of scope (defer to v1.7 / v1.6.2 / later)
 
