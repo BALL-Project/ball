@@ -20,6 +20,13 @@ predecessor: v1.6 (which shipped as v1.6.0 with broken Windows installer + empty
 > change: Phase 5.2 PR triage moved OUT of v1.6.1 (deferred to v1.6.2) per
 > codex's "scope drift" finding. Release.yml Qt 5 → Qt 6 added as critical
 > pre-tag fix. B3 measurement made explicit.
+>
+> **Re-revised 2026-05-16** post-roadmap-audit ([`ROADMAP-AUDIT-V1.6.2.md`](ROADMAP-AUDIT-V1.6.2.md)):
+> Phase 5.2 reference below is **STALE**. Per audit §B and user direction,
+> the 5-PR legacy bundle (#640, #600, #554, #550, #546) is folded into
+> [Phase 999.14](ROADMAP.md) as a named subtask, not a separate Phase 5.2.
+> All references to "Phase 5.2" below should be read as "Phase 999.14
+> with the 5-PR legacy bundle subtask" — 999.14's target is v1.6.2.
 
 ## Goal
 

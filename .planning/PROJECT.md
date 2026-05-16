@@ -48,15 +48,22 @@ non-negotiable outcome.
 - **1.6 = modernized foundation.** This milestone makes BALL/BALLView build and render on current toolchains (macOS/Linux/Windows) — it is *not* a UI-polish release.
 - **1.6.1 = strict corrective patch** — re-ships v1.6.0 with the Windows installer fixed, macOS Info.plist populated, `release.yml` matching the Qt 6 codebase, the config color-defaults user bug fixed (Phase 4.1), and Phase 5.1's source-level cleanup verified on tri-OS CI.
 - **1.7 = "BALLView Refresh"** — the UI/UX modernization (SEED-001), a separate milestone gated on GSD Phase 5 (Qt 6).
-- **2.0 = substrate modernization + breaking-API cleanup.** Carries the post-v1.7 infrastructure transitions:
+- **2.0 = KERNEL redesign + substrate modernization.** Lead phase: KERNEL v2.0 (per 2026-05-16 user direction "2.0 should start with the kernel"). Co-shipping substrate transitions:
+  - **999.24** — KERNEL redesign (LEAD) per [KERNELV2.md](KERNELV2.md): MoleculeStore (SoA) parallel-model migration; K0-K4 task breakdown; 22-34 months total
   - **999.6** — PIPE-01 renderer pipeline rewrite (fixed-function GL → QRhi)
   - **999.9** — INIFile → YAML config-format migration
-  - **999.10** — Remote-control architectural cleanup (deprecate TCP server/client from libBALL + libVIEW; narrow REST server moves INTO BALLView the application; PyBALL SDK class wraps it for Python users; supersedes 999.3)
-  - **999.11** — In-tree Flex/Bison mmCIF parser → [gemmi](https://gemmi.readthedocs.io) (drops a custom-grammar maintenance liability; gains modern PDB-tested parser used by CCP4, Phenix, RDKit-CIF)
-  - **999.12** — Audit + remove (or un-deprecate) all `BALL_DEPRECATED` / `BALL_VIEW_DEPRECATED` markers (~30 files across DOCKING/GENETICDOCK, VIEW/WIDGETS, VIEW/DIALOGS, VIEW/RENDERING, PYTHON). v2.0 is the natural breaking-removal slot; Plan-05.1-09 precedent: un-deprecate (not delete) when no replacement exists and the class is still load-bearing. Runs LAST in v2.0 so the other phases' deprecation removals (999.6 / 999.10 / Phase 6) have already cleared their slices.
-  - **999.13** — Read the Docs documentation site at `ball-project.readthedocs.io` — Sphinx + Breathe (C++ API ref from Doxygen) + autodoc (PyBALL SDK from docstrings) + Swagger UI page for the REST API (consumes `doc/REST-API.yaml` authored by 999.10). First-ever centralised BALL docs portal; closes the "no online API reference" gap that v2.0's signed-installer + Python-SDK + REST-API surface makes visible.
+  - **999.11** — In-tree Flex/Bison mmCIF parser → [gemmi](https://gemmi.readthedocs.io)
+  - **999.12** — Audit + remove (or un-deprecate) all `BALL_DEPRECATED` / `BALL_VIEW_DEPRECATED` markers (~30 files). Runs LAST in v2.0 so the other phases' deprecation removals have already cleared their slices.
 
-  Six phases in total, five substrate/API changes plus one documentation-infrastructure addition that makes the v2.0 surface discoverable. Each is correctness-sensitive or credibility-load-bearing: bundled under a single major-version bump because users expect breaking-but-documented behavior changes (render backend swap, file-format churn, wire-protocol + library-API change, mmCIF parser swap, deprecated-API removal) plus the docs portal that explains them. Phase 5 SPIKE-02 locked the GL-Core → QRhi split-pattern for v2; 999.9 / 999.10 / 999.11 / 999.12 / 999.13 keep the v2 theme coherent. 999.10 reshapes the library boundary — remote control is no longer a libBALL concern. 999.12 hardens the API: the deprecation markers stop being a "someday" signal and become an enforced "removed in v2.0." 999.13 makes the cleaned-up API discoverable: the first central BALL docs portal at `ball-project.readthedocs.io`. *(999.2 Ninja build-generator switch was originally in this v2.0 substrate bundle; promoted out to v1.6.1 on 2026-05-16 — pure CI-side tooling change with zero source impact, paid back its own implementation cost on first re-run after the Windows-blocking flip.)*
+  v2.0 ships when KERNEL v2.0.0 (K0-K3-minimum + K4) AND all four substrate phases complete. KERNEL leads (K0+K1 establish MoleculeStore foundation); the other four substrate phases run in parallel or after K0+K1.
+
+- **2.1 = PyBALL bulk wrap.** [Phase 999.15](ROADMAP.md) wraps the v2.0 MoleculeStore facade per [PYBALLV2.md](PYBALLV2.md); Phase 6 v1.6.x bake-off picks the tool.
+
+- **2.2 = REST API + PyBALL SDK.** [Phase 999.10](ROADMAP.md) — deprecate TCP server/client from libBALL+libVIEW; narrow REST server moves INTO BALLView the application; PyBALL SDK class wraps it for Python users; supersedes 999.3. Sequenced after v2.0 KERNEL + v2.1 PyBALL wrap so REST endpoints target the stable MoleculeStore facade.
+
+- **2.3 = Read the Docs portal.** [Phase 999.13](ROADMAP.md) — Sphinx + Breathe (C++ API ref) + autodoc (PyBALL SDK from docstrings) + Swagger UI page consuming v2.2's REST OpenAPI spec. Last v2.x phase; needs all upstream phases shipped for content.
+
+  *(Per 2026-05-16 roadmap discussion: the original v2.0 substrate bundle [999.6/9/10/11/12/13] was reshuffled — 999.10 moved to v2.2 and 999.13 to v2.3 to sequence after KERNEL v2.0 establishes the stable data layout; 999.2 Ninja was promoted out to v1.6.1 earlier.)*
 - This resolves the version-numbering collision with the Claude Design Handover package (which internally assumed "1.6 = UI refresh").
 
 ### Out of Scope

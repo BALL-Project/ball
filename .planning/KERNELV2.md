@@ -1,10 +1,16 @@
-# KERNELV2.md — BALL 2.1 Kernel Redesign Plan
+# KERNELV2.md — BALL 2.0 Kernel Redesign Plan (LEAD v2.0 PHASE)
 
 **Status:** PLANNING — adopted after 2 rounds of Codex peer review
-**Target release:** BALL 2.1 (with v2.1-preview milestone after K2)
-**Predecessor:** BALL 2.0 (post-1.6 baseline)
+**Target release:** BALL 2.0 (LEAD v2.0 phase per 2026-05-16 user direction "2.0 should start with the kernel"; with v2.0-preview milestone after K2)
+**Predecessor:** BALL 1.7 (UI refresh + Phase 8 packaging)
 **Created:** 2026-05-16
-**Last revised:** 2026-05-16 (post-Codex Round 3; v3 baseline)
+**Last revised:** 2026-05-16 — rebranded v2.1 → v2.0 (frontmatter + §1 release milestones). Body-text references to "v2.1-preview / v2.1.0 / v2.1.1+ / v2.1 final" elsewhere in this document should be read as "v2.0-preview / v2.0.0 / v2.0.1+ / v2.0 final" until a phase-promotion edit pass closes them out.
+
+> **v2.x reshape note (2026-05-16):**
+> - **v2.0** = this phase (KERNEL, LEAD) + 4 substrate phases (999.6 PIPE-01 + 999.9 YAML + 999.11 gemmi + 999.12 deprecated removal)
+> - **v2.1** = [Phase 999.15](ROADMAP.md) PyBALL bulk wrap (targeting v2.0 MoleculeStore facade)
+> - **v2.2** = [Phase 999.10](ROADMAP.md) REST API + PyBALL SDK
+> - **v2.3** = [Phase 999.13](ROADMAP.md) Read the Docs portal
 
 ---
 
@@ -27,10 +33,10 @@ Instead, this plan proposes a **parallel-model migration**: introduce a `Molecul
 
 | Milestone | Scope | Calendar Time |
 |---|---|---|
-| **v2.1-preview** | K0 + K1 + K2 (foundation + nonbonded SoA + compiled selection) | **8–14 months** |
-| **v2.1.0** | + K3 minimum (FORMAT + MOLMEC bonded + SCORING) + K4 Python | **16–24 months total** |
-| **v2.1.1+** | Remaining K3 subsystems (DOCKING, QSAR, NMR, XRAY, STRUCTURE) | **+6–10 months** |
-| **v2.1 final** | All of K0–K4 complete | **22–34 months total** |
+| **v2.0-preview** | K0 + K1 + K2 (foundation + nonbonded SoA + compiled selection) | **8–14 months** |
+| **v2.0.0** | + K3 minimum (FORMAT + MOLMEC bonded + SCORING) + K4 Python-binding bridge | **16–24 months total** |
+| **v2.0.1+** | Remaining K3 subsystems (DOCKING, QSAR, NMR, XRAY, STRUCTURE) | **+6–10 months** |
+| **v2.0 final** | All of K0–K4 complete | **22–34 months total** |
 
 ### Compatibility promise
 

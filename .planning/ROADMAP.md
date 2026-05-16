@@ -20,7 +20,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 999.2: Ninja build generator switch** — Switched all three `ci-*` CMake presets from MSBuild/Make → Ninja so Windows CI stops paying the 77-min MSBuild tax and the already-wired `COMPILER_LAUNCHER=ccache` becomes load-bearing. **Result: Windows Build dropped from 4818s cold → 55s warm (87× speedup; ~98.9% effective ccache hit rate). Windows total job ~4.7min, well under the 10min standing-disable threshold.** Cold-cache builds still ~85min total, but amortized cost across a dev-iteration cycle (1 cold + many warm) is dramatically lower. Pure CI-side tooling change, zero source impact. Verified on CI run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempt 1: cold-cache green; attempt 2: warm-cache 55s Windows Build). See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). Completed 2026-05-16.
 - [ ] **Phase 6: Python Bindings (autowrap+Cython vs nanobind bake-off, TARGETED FOR v1.6.x)** — Empirically decide the binding generator by building both against a 7-case cross-platform BALL slice. Tool decision is the deliverable. Detailed plan: [`PYBALLV2.md`](PYBALLV2.md) §6. If gates pass, [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) fires in v2.1.
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
-- [ ] **Phase 8: Packaging & Distribution** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); documented build-from-source for Linux/Windows; license/distribution review
+- [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
 - [ ] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)*
 
 ## Phase Details
@@ -220,7 +220,7 @@ Plans:
 **Status**: Removed from the v1.6 active roadmap per the Codex review. Networking is not core value, and the Boost.Asio code already *compiles* (the API breakage was fixed in Phase 1). The proper `TCPServer` rework + unit test is 1.6.x polish, tracked as backlog **999.3**. `NET-01` moved to REQUIREMENTS.md "Deferred (1.6.x)".
 **Plans**: TBD
 
-### Phase 8: Packaging & Distribution
+### Phase 8: Packaging & Distribution (TARGETED FOR v1.7)
 **Goal**: BALLView is shippable: a **signed and notarized** macOS bundle plus a **signed** Windows installer, plus an honest, documented build-from-source story for Linux, plus a license/distribution review. v1.6.0 already ships *unsigned* best-effort installers via `release.yml` (commit `a186fb5`) — Phase 8 replaces that with the signed/notarized pipeline so users stop seeing Gatekeeper / SmartScreen warnings. (Original Codex-reviewed scope was macOS bundle + Linux/Windows from-source; expanded 2026-05-15 to include Windows signed installer based on the v1.6.0 release feedback.)
 **Depends on**: Phase 5 (Qt 6 build is what gets packaged)
 **Requirements**: PKG-01, PKG-02, PKG-03, PKG-04 (Windows signed installer — added 2026-05-15)
@@ -439,11 +439,11 @@ Plans:
 
 Plans: none (phase closed).
 
-### Phase 999.8: Auto-Update via Sparkle + WinSparkle (BACKLOG · DORMANT)
+### Phase 999.8: Auto-Update via Sparkle + WinSparkle (BACKLOG · TARGETED FOR v1.7 · sequenced after Phase 8)
 
 **Goal:** BALLView checks for new releases on launch and prompts the user to install — Sparkle on macOS, WinSparkle on Windows. Eliminates the "manually re-download from GitHub Releases" friction for v1.x → v1.x+1 updates.
-**Why DORMANT, not active:** Phase 8 ships installers WITHOUT auto-update — captured as a deliberate Phase 8 deferral (Decision #5, 2026-05-15) because auto-update is non-trivial enough (appcast hosting, signed update manifests, key management, rollback handling) to be its own backlog phase. Phase 8 unblocks this — Sparkle + WinSparkle integrate INTO the installer pipeline.
-**Depends on:** Phase 5 (Qt 6 — Sparkle hooks into QApplication event loop), Phase 8 (Packaging — signing infrastructure must exist first), project decision on appcast hosting (GitHub Pages vs ball-project.org vs CDN bucket)
+**Why v1.7, sequenced after Phase 8:** Phase 8 ships installers WITHOUT auto-update — captured as a deliberate Phase 8 deferral (Decision #5, 2026-05-15) because auto-update is non-trivial enough (appcast hosting, signed update manifests, key management, rollback handling) to be its own backlog phase. Phase 8 unblocks this — Sparkle + WinSparkle integrate INTO the installer pipeline. Both phases targeted v1.7 per 2026-05-16 user direction.
+**Depends on:** Phase 5 (Qt 6 — Sparkle hooks into QApplication event loop, DONE), Phase 8 (Packaging — signing infrastructure must exist first; v1.7), project decision on appcast hosting (GitHub Pages vs ball-project.org vs CDN bucket)
 **Reference:** [`.planning/phases/999.8-auto-update-sparkle-winsparkle/AUTO-UPDATE-BACKLOG.md`](phases/999.8-auto-update-sparkle-winsparkle/AUTO-UPDATE-BACKLOG.md) — full scope (Sparkle vs WinSparkle integration, appcast hosting options, key management, recommended 3-plan structure)
 **Requirements:** TBD
 
@@ -506,7 +506,7 @@ Estimated effort: ~2 weeks if no force-field parameter regression appears; longe
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; not before v1.6.x ships stable AND v1.7 UI work is mostly done — the YAML config migration touches force-field parameter loading which downstream-affects every chemistry calculation, so it lands after the modernization + UI churn settles)
 
-### Phase 999.10: Deprecate remote-control from BALL proper; narrow REST API + PyBALL SDK (BACKLOG · TARGETED FOR v2.1 · SEQUENCED AFTER KERNEL v2.1 K0+K1)
+### Phase 999.10: Deprecate remote-control from BALL proper; narrow REST API + PyBALL SDK (BACKLOG · TARGETED FOR v2.2 · sequenced after KERNEL v2.0 K0+K1)
 
 **Goal:** **Remove all remote-control infrastructure from BALL the library** and replace it with a narrow REST API hosted **in the BALLView application** (not in libBALL), accompanied by a PyBALL class/SDK that wraps the REST calls for Python users. Remote control is no longer a BALL-library concern; it's a BALLView-application concern with a Python SDK.
 
@@ -530,19 +530,17 @@ Plans:
 | Standalone CLI | `BALLVIEWClient` utility (`source/APPLICATIONS/UTILITIES/BALLVIEWClient.C`) | deleted; users call PyBALL or `curl` |
 | Wire format | binary `Composite` stream over raw TCP | HTTP + JSON (with `chemical/x-pdb` content-types for structures) |
 
-**Milestone target: v2.1, sequenced after KERNEL v2.1 K0+K1 lands** (2026-05-16 user decision in roadmap discussion — moved from v2.0 to v2.1). Rationale: KERNEL v2.1 (Phase [999.24](#phase-99924-kernel-v21-redesign--moleculestore-soa-parallel-model-migration-backlog--targeted-for-v21)) introduces `MoleculeStore` as the canonical hot-path data structure. The REST API surface 999.10 exposes should target the post-KERNEL-v2.1 layout (MoleculeStore handle facade), not the pre-rewrite Composite hierarchy — otherwise 999.10's endpoints would expose Composite types that get supplanted by 999.24's K3 (FORMAT/MOLMEC/SCORING migration). Sequence: 999.24 K0+K1 (foundation + nonbonded SoA) lands → 999.10 designs REST endpoints over the MoleculeStore facade → ships in v2.1.0 alongside 999.24 K3 first wave.
+**Milestone target: v2.2, sequenced after KERNEL v2.0 K0+K1 lands AND PyBALL v2.1 bulk wrap ships** (2026-05-16 user direction — v2.x reshape: v2.0=KERNEL, v2.1=PyBALL wrap, v2.2=this entry, v2.3=RTD docs). Rationale: KERNEL v2.0 (Phase [999.24](#phase-99924-kernel-redesign--moleculestore-soa-parallel-model-migration-backlog--targeted-for-v20--lead-v20-phase)) introduces `MoleculeStore` as the canonical hot-path data structure; PyBALL v2.1 ([999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off)) wraps the v2.0 surface. The REST API surface 999.10 exposes targets the post-MoleculeStore facade with PyBALL SDK classes built on top — both upstreams must be stable before REST endpoints are designed.
 
-**v2.0 substrate-modernization theme (now slimmer; 999.10 moved out):**
-- **999.6** — PIPE-01 renderer pipeline rewrite (fixed-function GL → QRhi)
-- **999.9** — INIFile → YAML config-format migration
-- **999.11** — In-tree mmCIF parser → gemmi
-- **999.12** — Remove deprecated code from core library
+**v2.x release sequence (per 2026-05-16 user direction "2.0 should start with the kernel"):**
+- **v2.0** = [Phase 999.24](#phase-99924-kernel-redesign--moleculestore-soa-parallel-model-migration-backlog--targeted-for-v20--lead-v20-phase) KERNEL redesign (LEAD) + 4 substrate phases (999.6 PIPE-01 + 999.9 YAML + 999.11 gemmi + 999.12 deprecated removal).
+- **v2.1** = [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) PyBALL bulk wrap targeting v2.0 MoleculeStore facade.
+- **v2.2** = this entry (REST API + PyBALL SDK over MoleculeStore).
+- **v2.3** = [Phase 999.13](#phase-99913-convert-doxygen-docs-to-read-the-docs--swagger-ui-for-rest-api-backlog--targeted-for-v23--last-v2x-phase) Read the Docs consuming the v2.2 REST OpenAPI spec.
 
-These four substrate transitions are correctness-sensitive but **independent of KERNEL** and don't touch the wire-protocol surface. They land together as v2.0; 999.10 + 999.13 + 999.15 + 999.24 land together as v2.1.
+**Supersedes backlog 999.3** (Networking rework — modernize existing `TCPServer` onto modern Boost.Asio acceptor/socket model + unit test). 999.3's goal was to *modernize* the BALL-proper networking code. 999.10's goal is to *remove* it. If 999.10 promotes, 999.3 is moot — close as superseded. The only path 999.3 survives is if 999.10 is itself deferred past v2.2 AND BALL still needs the TCP server for legacy clients in the interim (unlikely — Phase 6 v1.6.x bake-off + 999.15 v2.1 bulk wrap will take the PyBALL SDK along and obviate the need).
 
-**Supersedes backlog 999.3** (Networking rework — modernize existing `TCPServer` onto modern Boost.Asio acceptor/socket model + unit test). 999.3's goal was to *modernize* the BALL-proper networking code. 999.10's goal is to *remove* it. If 999.10 promotes, 999.3 is moot — close as superseded. The only path 999.3 survives is if 999.10 is itself deferred past v2.1 AND BALL still needs the TCP server for legacy clients in the interim (unlikely — Phase 6 v1.6.x bake-off + 999.15 v2.1 bulk wrap will take the PyBALL SDK along and obviate the need).
-
-**Why BACKLOG, not active in v1.6.x or v1.7:** Not core value (build + render on 3 OSes). The TCP server already compiles (the `boost::asio` API breakage was fixed in Phase 1) and `BALL::VIEW::ServerWidget` is `BALL_DEPRECATED` but not removed, so external clients that still use it continue to work in v1.6.x. v1.7 is the UI refresh, not the wire-protocol/library-API refresh. Pushing this into v1.6.x or v1.7 would force users to migrate twice (once for UI, again for protocol). v2.1 (post-KERNEL K0+K1) makes the migration a single break against a stable data layout.
+**Why BACKLOG, not active in v1.6.x or v1.7:** Not core value (build + render on 3 OSes). The TCP server already compiles (the `boost::asio` API breakage was fixed in Phase 1) and `BALL::VIEW::ServerWidget` is `BALL_DEPRECATED` but not removed, so external clients that still use it continue to work in v1.6.x. v1.7 is the UI refresh, not the wire-protocol/library-API refresh. v2.0/v2.1 establish the data layout + Python surface; v2.2 designs REST endpoints over the stable substrate.
 
 **Scope (in scope):**
 
@@ -631,13 +629,14 @@ Plans:
 - **Substantial code reduction:** 7 files (CIFFile.{h,C} + Lexer.l + Parser.y + Bison/Flex CMake glue) → ~1 file (CIFFile.{h,C} as a thin gemmi adapter). Removes the project's only Flex+Bison dependency for this format (PDB/MOL2/etc. still use Bison; Bison stays in the build for those).
 - **mmJSON + mmCIF + binary CIF (BinCIF) parity** — gemmi reads all three with one API; BALL today only reads CIF. Even if BALL doesn't expose all formats publicly, the floor is higher.
 
-**Milestone target: v2.0.** Joins the (slimmer post-2026-05-16 reshape) v2.0 substrate-modernization theme:
+**Milestone target: v2.0.** Joins the (post-2026-05-16 reshape) v2.0 bundle:
+- **999.24** — KERNEL redesign (LEAD v2.0 phase per user direction "2.0 should start with the kernel"); MoleculeStore foundation that the other v2.0 substrate phases can build on
 - **999.6** — PIPE-01 renderer pipeline rewrite (GL → QRhi)
 - **999.9** — INIFile → YAML config-format migration
 - **999.11** — In-tree mmCIF parser → gemmi adoption
 - **999.12** — Remove deprecated code from core library
 
-All four are correctness-sensitive substrate changes that **don't depend on KERNEL v2.1 changes**. v2.0 lands these four together. *(999.2 Ninja generator was originally in this bundle; promoted out to v1.6.1 on 2026-05-16 since it's a pure CI-side tooling change with zero source impact and the Windows-blocking flip made it pay back its own implementation cost on first re-run — see [Phase 999.2 entry above](#phase-9992-ninja-build-generator-switch-active--promoted--v161).)* *(999.10 REST API was also originally in the v2.0 bundle; moved to v2.1 on 2026-05-16 to sequence after KERNEL v2.1 K0+K1 — REST API surface needs to target the post-MoleculeStore data layout, not the pre-rewrite Composite hierarchy.)*
+All five are correctness-sensitive substrate changes. KERNEL leads (K0+K1 = MoleculeStore foundation); the other four can run in parallel or after K0+K1. v2.0 ships when all five complete. *(999.2 Ninja generator was originally in this bundle; promoted out to v1.6.1 on 2026-05-16 — pure CI-side tooling change with zero source impact.)* *(999.10 REST API + 999.13 RTD docs + 999.15 PyBALL wrap were considered for v2.0 in earlier drafts; per 2026-05-16 user direction they shifted to v2.1/v2.2/v2.3 to sequence after KERNEL v2.0 establishes the stable MoleculeStore data layout.)*
 
 **Scope (in scope):**
 
@@ -778,7 +777,7 @@ Estimated effort: ~2-3 weeks. Plan 1 (audit) is the most contentious — each cl
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before 999.6, 999.10, Phase 6, and v1.7 have landed their slices. This phase is the v2.0 "mop up" — it inherits the cleaner deprecation list after the other transitions.)
 
-### Phase 999.13: Convert Doxygen docs to Read the Docs (+ Swagger UI for REST API) (BACKLOG · TARGETED FOR v2.1 · LAST v2.1 PHASE)
+### Phase 999.13: Convert Doxygen docs to Read the Docs (+ Swagger UI for REST API) (BACKLOG · TARGETED FOR v2.3 · LAST v2.x PHASE)
 
 **Goal:** Convert BALL's existing Doxygen-only C++ API documentation (659 header files carrying `/** ... */` comments across 25 modules — STRUCTURE/QSAR/VIEW/KERNEL/FORMAT/etc.) into a hosted [Read the Docs](https://about.readthedocs.com/) site at `ball-project.readthedocs.io`. The Doxygen comments stay in the source (single source-of-truth, no per-class rewrite), but the OUTPUT format flips from "locally-built HTML you only see if you run `cmake --build --target doc`" to "online portal with stable URL + search + cross-references + version selector." The same site also publishes a Swagger UI page rendering Phase 999.10's REST API spec ([`doc/REST-API.yaml`](doc/REST-API.yaml)) — interactive endpoint browser without rebuilding BALL.
 
@@ -797,7 +796,7 @@ The Doxygen-to-RTD conversion is the primary goal; the Swagger UI is a natural a
 
 For a v2.0 release shipping signed installers (Phase 8) + a Python SDK (PyBALL via Phase 6) + a REST API (Phase 999.10), having no docs portal is a credibility gap. Read the Docs is the de-facto C++/Python scientific-software docs solution (used by NumPy, SciPy, RDKit, OpenBabel, gemmi, scikit-learn, …). It's free for OSS, integrates with GitHub, builds Sphinx docs automatically on every push, hosts at a stable URL.
 
-**Milestone target: v2.0.** Final piece of the v2.0 substrate-modernization story — once BALL ships installable + scriptable + remotely controllable, the docs need to be too.
+**Milestone target: v2.3** (per 2026-05-16 v2.x reshape — was v2.0, then v2.1, then v2.3 as the cascade settled). LAST v2.x phase. Sequencing chain: KERNEL v2.0 (999.24) → PyBALL v2.1 wrap (999.15) → REST API v2.2 (999.10) authors `doc/REST-API.yaml` → v2.3 RTD consumes it via Swagger UI. The docs portal needs all three upstream phases shipped before it has meaningful content to render. Once BALL ships installable (Phase 8 v1.7) + scriptable (999.15 v2.1) + remotely controllable (999.10 v2.2), the docs portal makes the v2.x surface discoverable.
 
 **Scope (in scope):**
 
@@ -860,7 +859,7 @@ Estimated effort: ~2-3 weeks. Plan 2 (Breathe integration) is the trickiest beca
 **Plans:** 0 plans (6 sketched above)
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when 999.10 + Phase 6 + Phase 8 + 999.15 have all landed; do NOT promote earlier — the docs site needs real content to ship, and that content comes from those upstream phases. Note: with 999.10 sequenced after KERNEL v2.1 K0+K1 per 2026-05-16 roadmap discussion, 999.13 effectively becomes the **last v2.1 phase**, after 999.10 + 999.15 + KERNEL v2.1 K0..K3 all ship.)
+- [ ] TBD (promote with /gsd-review-backlog when 999.10 + Phase 6 + Phase 8 + 999.15 + KERNEL v2.0 (999.24) have all landed; do NOT promote earlier — the docs site needs real content to ship, and that content comes from those upstream phases. Note: per 2026-05-16 v2.x reshape, 999.13 is the **last v2.x phase** (v2.3), shipping after KERNEL v2.0 + PyBALL v2.1 + REST v2.2 all land.)
 
 ### Phase 999.14: GitHub issue + PR triage and cleanup (BACKLOG · v1.6.x HOUSEKEEPING)
 
@@ -1327,7 +1326,7 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens, OR defer to v1.7)
 
-### Phase 999.24: KERNEL v2.1 redesign — MoleculeStore (SoA) parallel-model migration (BACKLOG · TARGETED FOR v2.1)
+### Phase 999.24: KERNEL redesign — MoleculeStore (SoA) parallel-model migration (BACKLOG · TARGETED FOR v2.0 · LEAD v2.0 PHASE)
 
 > **Implementation-ready scope:** [`KERNELV2.md`](KERNELV2.md) — 554-line plan, post-Codex peer-reviewed v3. Read it before promoting this phase. Mirrors the [PYBALLV2.md](PYBALLV2.md) pattern for substantive multi-month design docs.
 
@@ -1342,27 +1341,61 @@ Plans:
 - **K3 (FORMAT + MOLMEC bonded + SCORING + DOCKING + QSAR + NMR + XRAY + STRUCTURE):** subsystems incrementally moved to MoleculeStore as the canonical hot-path source.
 - **K4 (Python):** PyBALL exposes MoleculeStore handle facade alongside (not replacing) Composite bindings.
 
-**Release milestones (per KERNELV2.md §1):**
-- **v2.1-preview:** K0 + K1 + K2 — 8-14 months
-- **v2.1.0:** + K3 minimum (FORMAT + MOLMEC bonded + SCORING) + K4 Python — 16-24 months total
-- **v2.1.1+:** Remaining K3 subsystems — +6-10 months
-- **v2.1 final:** All K0-K4 — 22-34 months total
+**Release milestones (per KERNELV2.md §1; rebranded v2.1 → v2.0 per 2026-05-16 user direction):**
+- **v2.0-preview:** K0 + K1 + K2 — 8-14 months
+- **v2.0.0:** + K3 minimum (FORMAT + MOLMEC bonded + SCORING) + K4 Python-binding bridge — 16-24 months total
+- **v2.0.1+:** Remaining K3 subsystems — +6-10 months
+- **v2.0 final:** All K0-K4 — 22-34 months total
 
-**Compatibility promise (locked in KERNELV2.md):** Source-compatible across v2.0 → v2.1 (existing client code recompiles unchanged); ABI-compatible for all KERNEL+CONCEPT exported types; file formats unchanged in v2.1; `BALL_FOREACH_*` macros preserved (deprecated for new internal code only).
+**Compatibility promise (locked in KERNELV2.md):** Source-compatible across v1.7 → v2.0 (existing client code recompiles unchanged); ABI-compatible for all KERNEL+CONCEPT exported types; file formats unchanged in v2.0; `BALL_FOREACH_*` macros preserved (deprecated for new internal code only).
 
-**Memory budget:** Hot-path additional footprint ≤150 B/atom (SoA columns + adjacency + selection). Composite shadow unchanged; total memory does not decrease in v2.1.
+**Memory budget:** Hot-path additional footprint ≤150 B/atom (SoA columns + adjacency + selection). Composite shadow unchanged; total memory does not decrease in v2.0.
 
-**Depends on:** [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) (K4 Python step needs the new PyBALL binding generator). Plus the v2.0 substrate phases (999.6/9/10/11/12/13) need to land first so the API surface KERNEL v2.1 targets is stable.
+**Sequencing within v2.0 (per 2026-05-16 user direction "2.0 should start with the kernel"):**
+- KERNEL v2.0 K0+K1 lands FIRST in v2.0 — establishes MoleculeStore as the canonical hot-path data structure.
+- v2.0 substrate phases (999.6 PIPE-01, 999.9 YAML config, 999.11 gemmi, 999.12 deprecated removal) land in parallel or after K0+K1.
+- v2.0 ships when KERNEL v2.0.0 (K0-K3-minimum + K4) AND the 4 substrate phases are all done.
 
-**Coordination point with Phase 999.15:** Both target v2.1; both touch BALL's outer surface. KERNEL v2.1 changes the C++ data layout that PyBALL wraps; PYBALLV2.md needs to know whether to wrap Composite-only (current path), MoleculeStore-only (v2.1-final), or both (transition state). Sequence: 999.15 P6 bake-off → KERNEL v2.1 K0+K1 land (foundation + nonbonded) → 999.15 bulk wrap targets Composite + MoleculeStore handle facade simultaneously.
+**Cross-version sequencing:**
+- v2.0 → KERNEL + 4 substrate phases (this entry + 999.6 + 999.9 + 999.11 + 999.12).
+- v2.1 → [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) PyBALL bulk wrap targeting the v2.0 MoleculeStore handle facade.
+- v2.2 → [Phase 999.10](#phase-99910-deprecate-remote-control-from-ball-proper-narrow-rest-api--pyball-sdk-backlog--targeted-for-v22--sequenced-after-kernel-v20-k0k1-) REST API + PyBALL SDK over MoleculeStore.
+- v2.3 → [Phase 999.13](#phase-99913-convert-doxygen-docs-to-read-the-docs--swagger-ui-for-rest-api-backlog--targeted-for-v23) Read the Docs portal consuming the REST OpenAPI spec.
 
-**Reference:** [`KERNELV2.md`](KERNELV2.md) for the detailed 554-line plan. Adopted post-Codex Round 3 review (v3 baseline).
+**Reference:** [`KERNELV2.md`](KERNELV2.md) for the detailed 554-line plan. Adopted post-Codex Round 3 review (v3 baseline). The doc still uses "v2.1" terminology in places — the rebrand to v2.0 is captured here and in KERNELV2.md frontmatter; remaining v2.1 mentions in KERNELV2.md body text should be read as v2.0 until the doc gets a full pass during phase promotion.
 
-**Requirements:** TBD (likely `KERNEL-V21-01..04` mapped to K0..K3 + `KERNEL-V21-05` for K4 Python).
+**Requirements:** TBD (likely `KERNEL-V2-01..04` mapped to K0..K3 + `KERNEL-V2-05` for K4 Python).
 **Plans:** 0 (will mirror KERNELV2.md §K0-K4 task breakdown when promoted; K0 is the natural first PLAN).
 
 Plans:
-- [ ] TBD (promote when v2.0 substrate phases tag; do NOT promote concurrently with v1.6.x patches OR v2.0 substrate work — KERNEL touches everything and needs a clean baseline)
+- [ ] TBD (promote first thing when v1.7 tags — KERNEL is the v2.0 lead phase. Co-sequenced with the 4 v2.0 substrate phases [999.6/9/11/12], which can run in parallel with K2+K3 after K0+K1 lands.)
+
+### Phase 999.25: v1.7 closure documentation pass + v1.6 → v1.7 retrospective + audit-procedure capture (BACKLOG · TARGETED FOR v1.7 CLOSURE)
+
+**Goal:** At v1.7 close, do a deliberate documentation pass capturing three things: (1) audit-procedure lessons learned from the 2026-05 audit cycle (so future audits don't trip on the same stale-doc traps), (2) a retrospective comparing v1.6 baseline (frozen-2022) vs v1.7 delivered (UI refresh + packaging + bake-off + all the v1.6.x patches in between), (3) user-facing docs cleanup if any tutorials/READMEs/build instructions are still pre-v1.6 era.
+
+**Why v1.7 closure (not v1.6.2 or v2.0):** v1.6.x is patch-shape so adding a retrospective there muddies the strict-corrective scope. v2.0 is the substrate bundle — too early for a v1.x retrospective. v1.7 close is the natural moment: v1.6 → v1.7 modernization is complete; v2.0 substrate rewrite is the next big break.
+
+**Scope:**
+1. **Audit-procedure doc** (`docs/audit-procedure.md` or `.planning/audit-procedure.md`) — capture the lessons from the 2026-05 audit cycle:
+   - Verify implementation against source, not planning docs (ContourSurface false-positive lesson)
+   - Cross-check VERIFICATION.md against sibling HUMAN-UAT.md before treating findings as current (CR-01/02/03 false-positive lesson)
+   - Resolution-log frontmatter pattern (added to 05-VERIFICATION.md in commit `f176b8b`) — apply consistently for new phase verifications
+   - When in doubt, grep + read code; don't trust 30-day-old docs
+2. **v1.6 → v1.7 retrospective** (`.planning/retrospective-v1.6-v1.7.md`) — what shipped per phase, what slipped, what got deferred to v2.0, lessons learned per release. Patterned on standard project retrospectives. ~3-5 pages.
+3. **User-facing docs audit** — `doc/TUTORIAL/*.tex`, `README.md`, `BUILD-*.md`, any `doc/*.pdf` references — check for pre-v1.6 references (Qt 5 mentions, `ball_contrib` mentions, SIP 4 mentions, "make sure XDR is installed" mentions). Update or mark deprecated.
+
+**Estimated effort:** 2-4 days. Mostly writing + grep-then-read passes. Could split into a writing-heavy first day + audit-passes across remaining days.
+
+**Why this matters:** The 2026-05 audit cycle exposed two false-positive backlog entries (ContourSurface, CR-01/02/03) both rooted in stale planning docs that disagreed with source. Capturing the procedure now reduces the cost of future audits. The retrospective is project-management hygiene; the user-facing docs audit catches what v1.6.x patches accumulated against pre-v1.6 documentation.
+
+**Requirements:** TBD (likely `DOC-V17-01: closure docs published`).
+**Plans:** 0 (single PLAN with three tasks when promoted).
+
+**Promotion trigger:** v1.7 has tagged. Run as the final v1.7 closure item before v2.0 kicks off.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog after v1.7 tags; do NOT promote during v1.7 active work — retrospective needs a stable v1.7 state to compare against)
 
 ---
 *Roadmap created: 2026-05-14*
