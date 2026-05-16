@@ -45,6 +45,9 @@ namespace BALL
 		///	Default constructor.
 		MMFF94ParametersBase();
 
+		///	Copy constructor (defaulted; pairs with user-provided operator= per rule-of-three).
+		MMFF94ParametersBase(const MMFF94ParametersBase&) = default;
+
 		///	Destructor.
 		virtual ~MMFF94ParametersBase() {};
 
