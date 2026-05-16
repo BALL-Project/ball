@@ -18,7 +18,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 5: Qt 6 Migration + Renderer Backend Spike** - Build against Qt 6 and replace deprecated VIEW APIs (keep the compat-profile GL path working), then a time-boxed renderer-backend decision spike behind the Phase 02.1 boundary *(former Phase 05.1 folded in — it must prototype against Qt 6)* *(complete 2026-05-15; 8 plans 05-01..05-08; SPIKE-01 delivered with documented caveats per the PIPE-01 downstream-init blocker; SPIKE-02 decision: split-pattern — GL-Core for v1.6.x → QRhi for v2)*
 - [x] **Phase 5.1: Build Warnings & Latent Bug Cleanup** - Fix latent bugs and tame the warning surface surfaced by Phase 4's tri-OS CI (C4717 `getline` recursion, C4311 pointer truncation on Windows, C4910 dll-export mismatch, `-Wself-assign-field`, `-Wformat-overflow`); Codex CLI cross-checked. *(inserted 2026-05-15 — captures Phase 4 follow-ups; runs after Phase 5 so Qt 6 deprecation noise clears first; complete 2026-05-15 with 14/14 plans landed — full Tier A bug fixes + Tier B Windows DLL hygiene + Tier D build configuration; retroactive Windows CI validation expected on next clean tri-OS run once the Linux `aqtinstall` Qt 6.5.3 cancellation cascade is fixed separately)*
 - [x] **Phase 999.2: Ninja build generator switch** — Switched all three `ci-*` CMake presets from MSBuild/Make → Ninja so Windows CI stops paying the 77-min MSBuild tax and the already-wired `COMPILER_LAUNCHER=ccache` becomes load-bearing. **Result: Windows Build dropped from 4818s cold → 55s warm (87× speedup; ~98.9% effective ccache hit rate). Windows total job ~4.7min, well under the 10min standing-disable threshold.** Cold-cache builds still ~85min total, but amortized cost across a dev-iteration cycle (1 cold + many warm) is dramatically lower. Pure CI-side tooling change, zero source impact. Verified on CI run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempt 1: cold-cache green; attempt 2: warm-cache 55s Windows Build). See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). Completed 2026-05-16.
-- [ ] **Phase 6: Python Bindings** - Decide the binding generator via a vertical slice (5-10 core classes), then commit *(restructured per Codex review — was a single under-scoped criterion)*
+- [ ] **Phase 6: Python Bindings (autowrap+Cython vs nanobind bake-off, TARGETED FOR v1.6.x)** — Empirically decide the binding generator by building both against a 7-case cross-platform BALL slice. Tool decision is the deliverable. Detailed plan: [`PYBALLV2.md`](PYBALLV2.md) §6. If gates pass, [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) fires in v2.1.
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); documented build-from-source for Linux/Windows; license/distribution review
 - [ ] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)*
@@ -198,15 +198,23 @@ Plans:
 - [x] 05.1-08-PLAN.md — B3: C4251 STL-members-of-DLL-exported-classes pragma scope decision (re-measure after B1+B2 land; full / narrow / skip) *(complete 2026-05-15; chose D-06 default `full-pragma` per the plan's explicit fallback policy ("If Build never started... apply the default decision — the pragma is safe-by-default and the measurement can be retroactively validated when CI stabilizes") — two consecutive post-B1+B2 Windows CI runs were cancelled mid-build by the unrelated Linux `aqtinstall` Qt 6.5.3 failure (out of scope per plan context), preventing reliable C4251 re-measurement; added `#pragma warning(disable: 4251)` inside the existing `#ifdef BALL_COMPILER_MSVC` block at `include/BALL/COMMON/global.h:54` with a 14-line rationale comment documenting the Phase 4 vcpkg-pin precondition (single MSVC toolchain + STL ABI across libBALL + every client TU) that makes the disable cosmetic-only; the narrow push/pop window at `exception.h:16-19` becomes redundant on Windows but is kept as belt-and-suspenders; local BALL build green via `cmake --build build/ci-macos --target BALL -j 8`; retroactive validation expected on next clean tri-OS CI run; commit 9c34b24; Phase 5.1 now 14/14 complete)*
 
 
-### Phase 6: Python Bindings
-**Goal**: Re-establish BALL's Python bindings on a supported Python (3.12+) and a maintained binding generator — via a decision-first vertical slice, not a blind full migration of all 237 `.sip` files. Restructured per the Codex review (SIP 6 migration vs a pybind11/nanobind rewrite are different projects; the generator must be *chosen* on evidence).
-**Depends on**: Phase 3 (C++17 codebase), Phase 4 (modern dependency system)
-**Requirements**: PY-01, PY-02
-**Success Criteria** (what must be TRUE):
-  1. A vertical slice binds and imports 5-10 representative core BALL classes, proving ownership/lifetime, exception translation, STL-container handling, and build packaging — for the candidate generator(s)
-  2. A decision record names the chosen generator (SIP 6 or pybind11/nanobind) with rationale and a scoped plan for the remaining bindings
-  3. The chosen generator builds against Python 3.12+ and the slice module imports and exercises core BALL classes from a Python interpreter
-**Plans**: TBD
+### Phase 6: Python Bindings — autowrap+Cython vs nanobind bake-off (TARGETED FOR v1.6.x)
+
+> **Implementation-ready scope:** [`PYBALLV2.md`](PYBALLV2.md) §6 — the bake-off plan. Read PYBALLV2.md before promoting this phase; the §6 task breakdown (P6-01 SIP behavior inventory + P6-02 autowrap track + P6-03 nanobind track + P6-04 bake-off decision) and the hard stop/pivot gates in PYBALLV2.md §10 are the authoritative scope.
+
+**Goal**: Empirically decide BALL's Python-bindings tool (autowrap+Cython vs nanobind) by running both against a real cross-platform vertical slice of seven BALL classes. **The tool decision is the deliverable**, not a premise. If the chosen tool passes the hard stop/pivot gates, the v2.1 bulk wrap fires as [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off).
+
+**Depends on**: Phase 3 (C++17 codebase), Phase 4 (modern dependency system), Phase 5 (Qt 6 baseline), Phase 5.1 (build-warning cleanup).
+**Requirements**: PY-01, PY-02 (per PYBALLV2.md §6 — see acceptance criteria there).
+
+**Success criteria** (per PYBALLV2.md §6 + §10):
+  1. The seven slice cases (Vector3 template, Atom Composite+iterators+ownership, PDBFile exceptions+I/O, HBondProcessor Composite/apply Python-override, RegularData3D NumPy/buffer interop, OWNED-pointer Composite case, StringHashMap mapped container) build green and pass behavior tests on **macOS-arm64 + linux-x64 + windows-x64**, under both candidate tools.
+  2. Quantitative comparison table (compile time, wheel size, runtime overhead, lines-of-binding-code, API-parity gap, Windows pain points) recorded in `.planning/phases/06-python-bindings/04-BAKE-OFF-DECISION.md`.
+  3. The chosen tool passes ALL PYBALLV2.md §10 hard stop/pivot gates (tri-OS green; behavior spec parity; exception/iterator/ownership parity; perf within 2× of SIP 4 baseline; wheel import ≤ 500 ms).
+
+**Estimated effort:** 7.5 weeks per PYBALLV2.md §2 (P6-01 1.5w + P6-02 3w + P6-03 2.5w + P6-04 0.5w). Possible to land within a single v1.6.x cycle if 2 engineers parallelize the autowrap and nanobind tracks.
+
+**Plans**: TBD (mirror PYBALLV2.md §6's P6-01..P6-04 task breakdown when promoted).
 
 ### Phase 7: Networking Rework — DEFERRED TO BACKLOG 999.3
 **Status**: Removed from the v1.6 active roadmap per the Codex review. Networking is not core value, and the Boost.Asio code already *compiles* (the API breakage was fixed in Phase 1). The proper `TCPServer` rework + unit test is 1.6.x polish, tracked as backlog **999.3**. `NET-01` moved to REQUIREMENTS.md "Deferred (1.6.x)".
@@ -260,7 +268,7 @@ Plans:
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. **Carry-forward (RESOLVED 2026-05-16):** B3 baseline measured at 3495 → 0 on first clean tri-OS green run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453); see [05.1-08-SUMMARY.md](phases/05.1-build-warnings-and-latent-bugs/05.1-08-SUMMARY.md) + [05.1-UAT.md](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). | 2026-05-15 |
 | **999.2 Ninja build generator switch** | 6/6 | **Complete** (v1.6.1, promoted + landed 2026-05-16) — Windows Build 4818s cold → **55s warm** (87× speedup, ~98.9% effective ccache hit). Windows total job ~4.7min, under the 10min standing-disable threshold. CI verified on run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempts 1+2). Zero source impact. See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). | 2026-05-16 |
-| 6. Python Bindings | 0/0 | Not started | - |
+| 6. Python Bindings (bake-off, v1.6.x) | 0/4 | Not started — autowrap+Cython vs nanobind bake-off per [PYBALLV2.md](PYBALLV2.md) §6; 7-case slice, tri-OS, 7.5 wk | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
 | 9. Test Suite Triage | (partial) | **In Progress (v1.6.2)** — CI wiring + Linux coverage job + PR test-results check landed (commits b2bb718 + 61bf5a7, 2026-05-15); v1.6.0 baseline captured at 99.0% (291/294) on macOS-arm64 with `BALL_DATA_PATH` set. Remaining: triage the 3 baseline failures (`Directory_test`, `AmberFF_test`, `AssignBondOrderProcessor_test2`) + flip gatekeeper from `continue-on-error: true` to blocking once green-list stable. | (in progress) |
@@ -891,9 +899,15 @@ Plans:
 **Requirements:** TBD (likely a single `MAINT-01: open issue + PR count reduced to genuinely-actionable set` on promotion).
 **Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
 
-**Estimated effort:** 1-3 days depending on open-item count. `gh` API rate limits + per-item read cost dominate; the actual `gh close` calls are seconds. Run after the v1.6.1 release ships so the "fixed-by" commit hashes are stable on `main`/`master`.
+**Estimated effort:** 1-3 days for the issue+PR triage itself; +0.5 day for the stale-doc audit task below; +2-5 days for the named 5-PR legacy bundle subtask (depends on triage outcomes per the table below). **Total: 3-9 days.**
 
 **Promotion trigger:** v1.6.1 has tagged + shipped. Then promote with `/gsd-review-backlog 999.14`. Do NOT promote concurrently with active Phase work — triage benefits from a stable HEAD so fix-commit references don't shift mid-pass. **Target milestone: v1.6.2** (per ROADMAP-AUDIT-V1.6.2.md §B; supersedes the former Phase 999.5 Open-PR-triage entry).
+
+**Bundled doc-hygiene task: VERIFICATION.md ↔ HUMAN-UAT.md reconciliation (per ROADMAP-AUDIT-V1.6.2.md §E):**
+
+Scan all `.planning/phases/**/*VERIFICATION.md` files for stale findings whose resolution lives in a sibling `*HUMAN-UAT.md`. ROADMAP-AUDIT v1+v2 were both misled by reading `05-VERIFICATION.md` as current-state when its CR-01/02/03 + gl_profile rows were actually resolved in the HUMAN-UAT rolling log. Same pattern likely exists in other phases.
+
+Per-VERIFICATION.md check (~10 files in tree): does a sibling `*HUMAN-UAT.md` exist? If yes, do the resolution dates in HUMAN-UAT post-date VERIFICATION rows marked FAIL/LATENT/UNRESOLVED? If yes, add the same "⚠ STALE FINDINGS — Resolution log in [HUMAN-UAT.md]" banner pattern that landed on `05-VERIFICATION.md` in commit `f176b8b`. Add a `resolution_log:` frontmatter field to each affected file. ~0.5 day total.
 
 **Named subtask: "5-PR legacy bundle" (per [`MILESTONE-CONTEXT.md:270-279`](MILESTONE-CONTEXT.md) Phase 5.2 carve-out, folded into 999.14 per ROADMAP-AUDIT-V1.6.2.md §B):**
 
@@ -1309,6 +1323,43 @@ Plans:
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens, OR defer to v1.7)
+
+### Phase 999.24: KERNEL v2.1 redesign — MoleculeStore (SoA) parallel-model migration (BACKLOG · TARGETED FOR v2.1)
+
+> **Implementation-ready scope:** [`KERNELV2.md`](KERNELV2.md) — 554-line plan, post-Codex peer-reviewed v3. Read it before promoting this phase. Mirrors the [PYBALLV2.md](PYBALLV2.md) pattern for substantive multi-month design docs.
+
+**Goal:** Modernize BALL's KERNEL subsystem hot paths from Composite-pattern object graph traversal to a **MoleculeStore** (SoA columns + handle facade) parallel-model migration — without breaking the Composite-based object model that 2,463 sites + 207k LOC + persisted file formats + the entire PYTHON binding surface depend on.
+
+**Why parallel-model, not clean-room replacement:** Two rounds of Codex peer review confirmed the Composite layout is structurally welded to file-format persistence, the binary `Atom`/`Bond` layout, RTTI selection, and 111 `BALL_FOREACH_*` macro sites. A clean-room replacement would force a binary ABI break, file-format break, and break every downstream user. Instead the plan introduces `MoleculeStore` *alongside* Composite — hot paths route through the store; legacy code continues using Composite — with sync state in an external registry keyed on `System*` so no Atom/Composite binary layout changes are needed.
+
+**Scope (KERNELV2.md §K0-K4):**
+- **K0 (foundation):** MoleculeStore data structure + external sync registry.
+- **K1 (nonbonded SoA):** Force-field nonbonded inner loops (MOLMEC AMBER/CHARMM/MMFF94) route through MoleculeStore columns.
+- **K2 (compiled selection):** Selection/Expression queries compiled and cached (no more per-atom AST re-walk).
+- **K3 (FORMAT + MOLMEC bonded + SCORING + DOCKING + QSAR + NMR + XRAY + STRUCTURE):** subsystems incrementally moved to MoleculeStore as the canonical hot-path source.
+- **K4 (Python):** PyBALL exposes MoleculeStore handle facade alongside (not replacing) Composite bindings.
+
+**Release milestones (per KERNELV2.md §1):**
+- **v2.1-preview:** K0 + K1 + K2 — 8-14 months
+- **v2.1.0:** + K3 minimum (FORMAT + MOLMEC bonded + SCORING) + K4 Python — 16-24 months total
+- **v2.1.1+:** Remaining K3 subsystems — +6-10 months
+- **v2.1 final:** All K0-K4 — 22-34 months total
+
+**Compatibility promise (locked in KERNELV2.md):** Source-compatible across v2.0 → v2.1 (existing client code recompiles unchanged); ABI-compatible for all KERNEL+CONCEPT exported types; file formats unchanged in v2.1; `BALL_FOREACH_*` macros preserved (deprecated for new internal code only).
+
+**Memory budget:** Hot-path additional footprint ≤150 B/atom (SoA columns + adjacency + selection). Composite shadow unchanged; total memory does not decrease in v2.1.
+
+**Depends on:** [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) (K4 Python step needs the new PyBALL binding generator). Plus the v2.0 substrate phases (999.6/9/10/11/12/13) need to land first so the API surface KERNEL v2.1 targets is stable.
+
+**Coordination point with Phase 999.15:** Both target v2.1; both touch BALL's outer surface. KERNEL v2.1 changes the C++ data layout that PyBALL wraps; PYBALLV2.md needs to know whether to wrap Composite-only (current path), MoleculeStore-only (v2.1-final), or both (transition state). Sequence: 999.15 P6 bake-off → KERNEL v2.1 K0+K1 land (foundation + nonbonded) → 999.15 bulk wrap targets Composite + MoleculeStore handle facade simultaneously.
+
+**Reference:** [`KERNELV2.md`](KERNELV2.md) for the detailed 554-line plan. Adopted post-Codex Round 3 review (v3 baseline).
+
+**Requirements:** TBD (likely `KERNEL-V21-01..04` mapped to K0..K3 + `KERNEL-V21-05` for K4 Python).
+**Plans:** 0 (will mirror KERNELV2.md §K0-K4 task breakdown when promoted; K0 is the natural first PLAN).
+
+Plans:
+- [ ] TBD (promote when v2.0 substrate phases tag; do NOT promote concurrently with v1.6.x patches OR v2.0 substrate work — KERNEL touches everything and needs a clean baseline)
 
 ---
 *Roadmap created: 2026-05-14*
