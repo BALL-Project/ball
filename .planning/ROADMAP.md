@@ -268,6 +268,7 @@ Plans:
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. **Carry-forward (RESOLVED 2026-05-16):** B3 baseline measured at 3495 → 0 on first clean tri-OS green run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453); see [05.1-08-SUMMARY.md](phases/05.1-build-warnings-and-latent-bugs/05.1-08-SUMMARY.md) + [05.1-UAT.md](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). | 2026-05-15 |
 | **999.2 Ninja build generator switch** | 6/6 | **Complete** (v1.6.1, promoted + landed 2026-05-16) — Windows Build 4818s cold → **55s warm** (87× speedup, ~98.9% effective ccache hit). Windows total job ~4.7min, under the 10min standing-disable threshold. CI verified on run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempts 1+2). Zero source impact. See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). | 2026-05-16 |
+| **v1.6.2 omnibus** (Qt 6.8 LTS bump, ARM Linux baseline, warning-execution + GL silence, latent bug flush) | — | **Complete** (v1.6.2, 2026-05-16) — 43 commits since v1.6.1 across two parallel work streams. Headline metrics: Qt floor `6.5 → 6.8 LTS` globally (`95a1e9f`); `linux-arm64` (`ubuntu-24.04-arm`) added to CI matrix and flipped to blocking after 2 consecutive greens (`d10da9a`); warning surface cut from ~4 000 (linux-arm64) / ~2 400 (linux-x64) / ~1 800 (macos-arm64) / ~700 (windows-x64) to **<10 actionable warnings on every platform**; coverage Linux job green for the first time (Phase 999.27); real `va_start` UB fix in `PDBFile::writeRecord_` (`c6ecd48`); 6× discarded-bool latent silent-failure fixes in QFile::open() download sites (`82dba3c` + `24c044f`); macOS GL deprecation noise silenced via `GL_SILENCE_DEPRECATION` (`d730518`). Codex CLI adversarial review applied to the immediate-fix shortlist before execution. Final pre-tag verifying run: 25970862407. See [RELEASE-NOTES-v1.6.2.md](../RELEASE-NOTES-v1.6.2.md). | 2026-05-16 |
 | 6. Python Bindings (bake-off, v2.1 first step) | 0/4 | Not started — autowrap+Cython vs nanobind bake-off per [PYBALLV2.md](PYBALLV2.md) §6; 7-case slice, tri-OS, 7.5 wk. Moved from v1.6.x → v2.1 per 2026-05-16 user direction ("PyBALL changes should move to 2.x"); runs as FIRST step of v2.1, before 999.15 bulk wrap. | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
@@ -1356,6 +1357,64 @@ Single-line edit in [`include/BALL/KERNEL/atom.h:1033-1035`](../include/BALL/KER
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.28: v1.6.2 warning-execution omnibus + Apple-GL silence (COMPLETE · 2026-05-16)
+
+**Goal:** Drive every blocking-platform warning count from the post-v1.6.1 baseline (~4 000 / 2 400 / 1 800 / 700 across linux-arm64, linux-x64, macos-arm64, windows-x64) to under ~10 actionable warnings per platform, without touching architectural patterns and without risking regression to the v1.6.1 binary surface. Real latent bug fixes that fell out of the cleanup are part of the deliverable, not a side-effect.
+
+**Why now (v1.6.2, not v1.7):** The Phase 999.22 census-only policy held the line through v1.6.1 to keep scope tight, but post-Qt-6.8-bump (`95a1e9f`) the warning surface noise had grown large enough to bury real signal — the `va_start` UB in `PDBFile::writeRecord_` and the 6 silent `QFile::open()` failure sites are both real latent bugs only caught by reading the warning logs. Executing the immediate-fix shortlist now closes the signal-to-noise gap before further phase work.
+
+**Approach:** Two parallel work streams, both folded in:
+
+**Stream A — file-by-file warning category execution** (parallel agent work; commits `5ef5509`, `d77aab3`, `94fcd73`, `85d991d`, `3519c34`, `cb392cc`, `c947b2d`):
+- `-Wcatch-value` → catch polymorphic `BALL::Exception::*` by `const&` (35 sites)
+- Latin-1 source bytes → ASCII in TODO comments (fixes MSVC C4828)
+- `sprintf` / `vsprintf` → `snprintf` / `vsnprintf` (all platforms; fixes Apple SDK deprecation advisory + general security improvement)
+- `-Woverloaded-virtual` sweep on QSAR `simpleBase.h` subclasses (~40 `using SimpleBase::operator=;` decls in `simpleDescriptors.h` siblings; kills the largest single warning category — ~2 800 hits on linux-arm64)
+- Init-list reorder + dead-write removal + empty-body-loop clarification
+- GCC `-Wmaybe-uninitialized` false-positive suppression on system headers
+
+**Stream B — Codex-CLI-reviewed shortlist execution** (commits `c6ecd48`, `82dba3c`, `24c044f`, `d730518`, `0a75ede`):
+- **P0 real UB:** `PDBFile::writeRecord_` `va_start` on default-promotable enum parameter — signature changed from `(PDB::RecordType, ...)` → `(int record_type, ...)` with internal cast-back. Latent since C++17 adoption.
+- **P1 broad warning kills:** defaulted copy-assign on `(Const)BidirectionalIterator` + `(Const)RandomAccessIterator` (~740 -Wdeprecated-copy hits).
+- **P1 Qt 6 mechanical migrations:** `QMouseEvent::globalPos()` → `globalPosition().toPoint()` (6 sites); `QByteArray::count()` → `size()` (6 sites); `QDomDocument::setContent` 5-arg → `ParseOptions` overload (2 sites); `QMenu::addAction` arg-order swap (4 sites).
+- **P1 small cleanups:** `kekulizer.h` `AtomInfo` member init; `glRenderer` ctor mem-init reorder; drop dead `pm.createAlphaMask()` × 2; fold `QTranslator::load()` result; `Hash_test.C` `char* → const char*`.
+- **Windows MSVC trio:** C4834 in `simpleDownloader.C:134` (real latent silent-failure bug); cross-platform `-DBOOST_BIND_GLOBAL_PLACEHOLDERS`; `-D_WIN32_WINNT=0x0A00` on Windows.
+- **C4834 sibling sweep:** 5 sites the original census missed — `dockResultFile.C:586,594,602`, `downloadPDBFile.C:125`, `downloadElectronDensity.C:167`. All real latent silent-failure bugs.
+- **macOS GL silence:** `GL_SILENCE_DEPRECATION` on the `VIEW` target via Apple's documented escape hatch — eliminates ~1 500 deprecation warnings on macOS until v2.0 Metal/MoltenVK migration.
+- **C4267 narrowing mop-up:** 3 sites where `size_t` was implicitly narrowing to `BALL::Index` (32-bit on Windows LLP64) — explicit `static_cast<Index>()` at `CIFFile.C:447`, `binaryFingerprintMethods.C:1618`, `conformationSet.C:46`.
+
+**Codex CLI adversarial review:** Before executing the Stream B shortlist, the censused fix list was fed through `codex exec --sandbox read-only` for an independent senior-C++/Qt6 reviewer pass. Codex caught two census errors before they shipped: A1 named the wrong subclass set (real sites were 40 classes in `simpleDescriptors.h`, not 8); B4 was a misread (the cited site returned by reference, not by value — no dangling). Result file: `/tmp/ci-warnings/CODEX-REVIEW.md`.
+
+**Latent bug fixes flushed out by the cleanup process:**
+
+| File | Bug | Severity |
+|---|---|---|
+| `PDBFileGeneral.C:1602` | `va_start` UB on default-promoted enum parameter | **Real UB; latent since C++17 adoption** |
+| `simpleDownloader.C:134` | `QFile::open()` failure produced zero-byte download with no diagnostic | Real latent silent failure |
+| `dockResultFile.C:586,594,602` | Same pattern × 3 — truncated docking-file output on open failure | Real latent silent failure |
+| `downloadPDBFile.C:125` | Same pattern → cryptic "no atoms found" parser failure | Real latent UX bug |
+| `downloadElectronDensity.C:167` | Same pattern → DSN6 parser failure on zero-byte map file | Real latent UX bug |
+| `hashGrid.C` neighbour table | ARM gcc unsigned-char default narrowed `-1` literals (build failure on ARM) | Build-blocking on ARM |
+
+**Verifying run:** [25970862407](https://github.com/BALL-Project/ball/actions/runs/25970862407) — all blocking jobs green; coverage Linux green for the second consecutive run (Phase 999.27 stable).
+
+**Out of scope (preserved for v1.7 / v2.0):**
+- Phase 999.22 (b) PIPE-01-dependent warning categories — still v2.0.
+- Phase 999.22 (c) per-site code-review subset — still v1.7 alongside UI refresh.
+- GENETICDOCK self-deprecation chain (`GenericGene`, `GeneticAlgorithm`, etc., ~120 `[[deprecated]]` markers) — architectural decision, not a 1.6.x patch.
+- DCDFile.C:1 C4828 reported by run 25968675219 — file is clean ASCII on HEAD; not reproducible locally. Re-check next CI run.
+
+**Requirements (delivered):**
+- `WARN-EXEC-OMNIBUS-01` ✓ — all blocking platforms under 10 actionable warnings on tag commit.
+- `WARN-EXEC-OMNIBUS-02` ✓ — no behavior regression vs v1.6.1 (Phase 9 gatekeeper green on tag commit).
+- `LATENT-PDB-VA-START-01` ✓ — `PDBFile::writeRecord_` no longer UB.
+- `LATENT-QFILE-OPEN-01` ✓ — 6 discarded-bool sites now log + bail on failure.
+- `MACOS-GL-SILENCE-01` ✓ — `GL_SILENCE_DEPRECATION` defined for VIEW target; Apple-GL warnings = 0 on macOS.
+
+Plans:
+- [x] Stream A executed inline across 7 commits — COMPLETE 2026-05-16
+- [x] Stream B executed inline across 5 commits — COMPLETE 2026-05-16
 
 ### Phase 999.27: Coverage-build Linux compile-clean trio (COMPLETE · 2026-05-16)
 
