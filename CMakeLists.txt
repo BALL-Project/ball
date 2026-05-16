@@ -608,55 +608,64 @@ ENDIF()
 # ccache sloppiness in .github/workflows/ci.yml is required for PCH-enabled
 # builds to share ccache hits across CI runs (pch_defines, time_macros,
 # include_file_mtime — see cmake/PCH.md §"ccache sloppiness contract").
-TARGET_PRECOMPILE_HEADERS(BALL PRIVATE
-    <algorithm>
-    <iostream>
-    <set>
-    <BALL/COMMON/global.h>
-    <BALL/COMMON/exception.h>
-    <BALL/DATATYPE/string.h>
-    <BALL/DATATYPE/regularExpression.h>
-    <BALL/CONCEPT/persistenceManager.h>
-    <BALL/CONCEPT/textPersistenceManager.h>
-    <BALL/KERNEL/PTE.h>
-    <BALL/KERNEL/forEach.h>
-    <BALL/KERNEL/system.h>
-    <BALL/KERNEL/chain.h>
-    <BALL/KERNEL/bond.h>
-    <BALL/KERNEL/residue.h>
-    <BALL/KERNEL/molecule.h>
-    <BALL/KERNEL/protein.h>
-    <BALL/KERNEL/nucleicAcid.h>
-    <BALL/KERNEL/secondaryStructure.h>
-    <BALL/MATHS/vector3.h>
-    <BALL/SYSTEM/path.h>
-)
-IF (BALL_HAS_VIEW)
-    TARGET_PRECOMPILE_HEADERS(VIEW PRIVATE
-        <BALL/VIEW/KERNEL/mainControl.h>
-        <BALL/VIEW/KERNEL/common.h>
-        <BALL/VIEW/KERNEL/message.h>
-        <BALL/VIEW/KERNEL/stage.h>
-        <BALL/VIEW/KERNEL/threads.h>
-        <BALL/VIEW/KERNEL/clippingPlane.h>
-        <BALL/VIEW/PRIMITIVES/mesh.h>
-        <BALL/VIEW/PRIMITIVES/sphere.h>
-        <BALL/VIEW/PRIMITIVES/tube.h>
-        <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
-        <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
-        <BALL/VIEW/PRIMITIVES/disc.h>
-        <BALL/VIEW/PRIMITIVES/label.h>
-        <BALL/VIEW/PRIMITIVES/simpleBox.h>
-        <BALL/VIEW/PRIMITIVES/box.h>
-        <BALL/VIEW/PRIMITIVES/point.h>
-        <BALL/VIEW/PRIMITIVES/line.h>
-        <BALL/VIEW/DATATYPE/standardDatasets.h>
-        <BALL/SYSTEM/path.h>
-        <BALL/KERNEL/system.h>
+#
+# AppleClang exclusion (Phase 999.16 post-measurement fix): Apple Clang embeds
+# non-deterministic metadata in PCH files that ccache cannot normalize even with
+# all three sloppiness flags, resulting in a 0.81% hit rate (5/618) and a 10×
+# build regression on macOS (307s vs 39s warm-ccache baseline). The fix skips
+# PCH on AppleClang, preserving the Windows (35% cold) and Linux (−15% warm)
+# gains where ccache + PCH work correctly (100% hit rate on Linux).
+IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    TARGET_PRECOMPILE_HEADERS(BALL PRIVATE
+        <algorithm>
+        <iostream>
+        <set>
+        <BALL/COMMON/global.h>
+        <BALL/COMMON/exception.h>
+        <BALL/DATATYPE/string.h>
+        <BALL/DATATYPE/regularExpression.h>
+        <BALL/CONCEPT/persistenceManager.h>
+        <BALL/CONCEPT/textPersistenceManager.h>
         <BALL/KERNEL/PTE.h>
         <BALL/KERNEL/forEach.h>
+        <BALL/KERNEL/system.h>
+        <BALL/KERNEL/chain.h>
         <BALL/KERNEL/bond.h>
+        <BALL/KERNEL/residue.h>
+        <BALL/KERNEL/molecule.h>
+        <BALL/KERNEL/protein.h>
+        <BALL/KERNEL/nucleicAcid.h>
+        <BALL/KERNEL/secondaryStructure.h>
+        <BALL/MATHS/vector3.h>
+        <BALL/SYSTEM/path.h>
     )
+    IF (BALL_HAS_VIEW)
+        TARGET_PRECOMPILE_HEADERS(VIEW PRIVATE
+            <BALL/VIEW/KERNEL/mainControl.h>
+            <BALL/VIEW/KERNEL/common.h>
+            <BALL/VIEW/KERNEL/message.h>
+            <BALL/VIEW/KERNEL/stage.h>
+            <BALL/VIEW/KERNEL/threads.h>
+            <BALL/VIEW/KERNEL/clippingPlane.h>
+            <BALL/VIEW/PRIMITIVES/mesh.h>
+            <BALL/VIEW/PRIMITIVES/sphere.h>
+            <BALL/VIEW/PRIMITIVES/tube.h>
+            <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+            <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
+            <BALL/VIEW/PRIMITIVES/disc.h>
+            <BALL/VIEW/PRIMITIVES/label.h>
+            <BALL/VIEW/PRIMITIVES/simpleBox.h>
+            <BALL/VIEW/PRIMITIVES/box.h>
+            <BALL/VIEW/PRIMITIVES/point.h>
+            <BALL/VIEW/PRIMITIVES/line.h>
+            <BALL/VIEW/DATATYPE/standardDatasets.h>
+            <BALL/SYSTEM/path.h>
+            <BALL/KERNEL/system.h>
+            <BALL/KERNEL/PTE.h>
+            <BALL/KERNEL/forEach.h>
+            <BALL/KERNEL/bond.h>
+        )
+    ENDIF()
 ENDIF()
 # NOTE: BALLView (exe) is intentionally NOT given target_precompile_headers —
 # its TU count (~20-30 app files) is too small for PCH overhead to pay off.

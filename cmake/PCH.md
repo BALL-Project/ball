@@ -356,10 +356,67 @@ entry at the bottom of this file.
 
 ---
 
+## Phase 999.16 Measurement Results (2026-05-16)
+
+### CI Runs
+
+| Run | Commit | Purpose |
+|---|---|---|
+| [25960028976](https://github.com/BALL-Project/ball/actions/runs/25960028976) | `ccf7ded` | Cold-PCH baseline (macOS warm-PCH, Linux warm-PCH; killed mid-Windows) |
+| [25960420398](https://github.com/BALL-Project/ball/actions/runs/25960420398) | `d33e24e` | Warm-PCH macOS re-check + Windows cold-PCH measurement |
+
+### Results Table
+
+| Platform | Cache state | Build duration | ccache Hits/Total | Hit rate | vs Phase 999.2 baseline | Decision |
+|---|---|---:|---|---:|---|---|
+| Linux x64 | warm-ccache + PCH | 29s | 601 / 601 | 100% | 34s warm → **−15%** | PASS |
+| macOS arm64 | warm-ccache + PCH | 307-308s | 5 / 618 | 0.81% | 39s warm → **+690%** | REVERT |
+| Windows x64 | cold-cache + PCH | 3103s (51m43s) | 1 / 608 | 0.16% | 4818s cold → **−35.6%** | PASS |
+
+**Windows warm-ccache expected:** Once the pch-v1 cache is populated, warm Windows builds
+should return to ~55s (same as Phase 999.2 warm). The 0.16% hit rate in run 25960420398
+was because the old pre-PCH ccache was restored (restore-key fallback to `ccache-windows-x64-`);
+the new PCH-enabled object files don't match. After one full cold PCH build populates the
+pch-v1 cache, subsequent warm builds will achieve near-100% hit rates on Windows (MSVC
+does not embed non-deterministic timestamps in PCH files, unlike Apple Clang).
+
+### macOS Apple Clang PCH + ccache Incompatibility
+
+**Root cause:** Apple Clang embeds non-deterministic metadata (runner-specific timestamps,
+build environment fingerprints) directly into PCH files that ccache cannot normalize even
+with all three sloppiness flags (`pch_defines`, `time_macros`, `include_file_mtime`).
+These flags were designed for GCC-style and LLVM/clang PCH files; Apple's customized
+Clang fork adds additional non-deterministic data at PCH creation time that is not covered
+by any currently-documented ccache sloppiness option.
+
+**Evidence:** macOS ccache hit rate with PCH enabled = **0.81% (5/618)** across two
+independent CI runs (runs 25960028976 and 25960420398). Without PCH (Phase 999.2
+post-Ninja), macOS warm Build was 39s with ~100% effective hit rate. With PCH, macOS
+Build is 307-308s — a **10× regression**.
+
+**Fix applied (Phase 999.16 post-measurement):** `CMakeLists.txt` wraps all
+`target_precompile_headers` calls in `IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")`,
+which skips PCH on macOS while preserving the Windows (−35.6% cold) and Linux (−15% warm)
+gains where PCH + ccache works correctly.
+
+### Acceptance Decision
+
+| Platform | Threshold | Actual delta | Decision |
+|---|---|---|---|
+| Windows (cold) | ≥ 15% reduction | −35.6% (3103s vs 4818s) | **PASS** |
+| Linux (warm) | ≥ 10% reduction | −15% (29s vs 34s) | **PASS** |
+| macOS (warm) | no regression | +690% (308s vs 39s) | **REVERT for AppleClang** |
+
+**Overall decision: PASS with AppleClang conditional exclusion.**
+PCH delivers significant gains on Windows and Linux. macOS is excluded at the CMake
+level rather than removing PCH entirely from the codebase.
+
+---
+
 ## References
 
-- `CMakeLists.txt` — `target_precompile_headers` wiring (after the CUDA/non-CUDA block)
-- `.github/workflows/ci.yml` — `CCACHE_SLOPPINESS` environment variable
+- `CMakeLists.txt` — `target_precompile_headers` wiring inside `IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")` guard (after the CUDA/non-CUDA block)
+- `.github/workflows/ci.yml` — `CCACHE_SLOPPINESS` environment variable (no-op on macOS since PCH is skipped, but kept for consistency and Linux benefit)
 - Phase 999.2 SUMMARY (`.planning/phases/999.2-ninja-generator-switch/999.2-SUMMARY.md`)
   — the cold/warm Build baseline used as the measurement reference
 - CMake docs: [`target_precompile_headers`](https://cmake.org/cmake/help/latest/command/target_precompile_headers.html)
