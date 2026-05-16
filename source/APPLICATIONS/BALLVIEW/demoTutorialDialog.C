@@ -592,7 +592,7 @@ void DemoTutorialDialog::nextStepDemo_()
 			system_->apply(getFragmentDB().build_bonds);
 			getMainControl()->update(*system_, true);
 		}
-		catch(Exception::FileNotFound e)
+		catch(const Exception::FileNotFound& e)
 		{
 			Log.error() << (String)tr("Could not open") << " " << e.getFilename() << std::endl;
 			return;

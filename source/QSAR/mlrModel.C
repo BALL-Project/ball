@@ -45,7 +45,7 @@ namespace BALL
 			{
 				training_result_ = m.colPivHouseholderQr().solve(descriptor_matrix_.transpose()*Y_);
 			}
-			catch(BALL::Exception::GeneralException e)
+			catch(const BALL::Exception::GeneralException&)
 			{
 				training_result_.resize(0, 0);
 				throw Exception::SingularMatrixError(__FILE__, __LINE__, "Matrix for MLR training is singular!! Check that descriptor_matrix_ does not contain empty columns!"); 

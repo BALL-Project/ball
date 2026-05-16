@@ -74,7 +74,7 @@ namespace BALL
 				{
 					input>>m;
 				}
-				catch(BALL::Exception::ParseError e)
+				catch(const BALL::Exception::ParseError&)
 				{
 					throw Exception::WrongFileFormat(__FILE__, __LINE__, file);
 				}
@@ -198,7 +198,7 @@ namespace BALL
 				{
 					mol=input.read();
 				}
-				catch(BALL::Exception::ParseError e)
+				catch(const BALL::Exception::ParseError&)
 				{
 					throw Exception::WrongFileFormat(__FILE__,__LINE__,file);
 				}
@@ -289,7 +289,7 @@ namespace BALL
 
 							Y_[it->second].push_back(response_value);
 						}
-						catch(BALL::Exception::InvalidFormat g)
+						catch(const BALL::Exception::InvalidFormat&)
 						{
 							Y_[it->second].push_back(0);
 							if(invalidSubstances_.find(n) == invalidSubstances_.end())
@@ -310,7 +310,7 @@ namespace BALL
 								descriptor_matrix_[it->second].push_back(String(mol->getProperty(name).getString()).toDouble());
 							}
 							// descriptors with invalid entries will be removed ...
-							catch(BALL::Exception::InvalidFormat g)
+							catch(const BALL::Exception::InvalidFormat&)
 							{
 								descriptor_matrix_[it->second].push_back(0);
 								if(newInvalidDescriptors.find(it->second) == newInvalidDescriptors.end())
@@ -396,7 +396,7 @@ namespace BALL
 				{
 					m = input.read();
 				}
-				catch(BALL::Exception::ParseError e)
+				catch(const BALL::Exception::ParseError&)
 				{
 					throw Exception::WrongFileFormat(__FILE__, __LINE__, file);
 				}
@@ -457,7 +457,7 @@ namespace BALL
 								descriptor_matrix_[des].push_back(String(m->getNamedProperty(i).getString()).toDouble());
 							}
 							// descriptors with invalid entries will be removed ...
-							catch(BALL::Exception::InvalidFormat g)
+							catch(const BALL::Exception::InvalidFormat&)
 							{
 								descriptor_matrix_[des].push_back(0);
 								if (tmp.find(i) == tmp.end())
@@ -485,7 +485,7 @@ namespace BALL
 								Y_[act].push_back(String(m->getNamedProperty(i).getString()).toDouble());
 								act++; act_it++;
 							}
-							catch(BALL::Exception::InvalidFormat g) 
+							catch(const BALL::Exception::InvalidFormat&) 
 							{
 								//String a="property '";
 								//a = a + m.getNamedProperty(i).getString() + "' is no numerical value!";
@@ -1094,7 +1094,7 @@ namespace BALL
 							String s; getline(line_stream, s, sep[0]);
 							descriptor_matrix_[no].push_back(s.toDouble());
 						}	
-						catch(BALL::Exception::InvalidFormat g) 
+						catch(const BALL::Exception::InvalidFormat&) 
 						{
 							descriptor_matrix_[no].push_back(0);
 							if (tmp.find(i) == tmp.end())
@@ -1116,7 +1116,7 @@ namespace BALL
 							{
 								Y_[old_no_y+i-(prop-no_y)].push_back(value.toDouble());
 							}
-							catch(BALL::Exception::InvalidFormat g) 
+							catch(const BALL::Exception::InvalidFormat&) 
 							{
 								throw Exception::PropertyError(__FILE__, __LINE__, file, line, "Some properties for activities are not numerical values!"); 
 							}

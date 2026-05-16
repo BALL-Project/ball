@@ -131,7 +131,7 @@ namespace BALL
 							model_->model_val->crossValidation(k, 0);
 						}
 					}
-					catch(Exception::NoPCAVariance e)
+					catch(const Exception::NoPCAVariance&)
 					{   
 						// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
 						model_->descriptor_IDs_.erase(last_insert);
@@ -285,7 +285,7 @@ namespace BALL
 							model_->model_val->crossValidation(k, 0);
 						}
 					}
-					catch(Exception::NoPCAVariance e)
+					catch(const Exception::NoPCAVariance&)
 					{   // if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
 						model_->descriptor_IDs_.erase(last_insertion);
 						continue;
@@ -446,7 +446,7 @@ namespace BALL
 						model_->model_val->crossValidation(k, 0);
 					}
 				}
-				catch(Exception::NoPCAVariance e)
+				catch(const Exception::NoPCAVariance&)
 				{   
 					// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
 					model_->descriptor_IDs_.erase(last_insertion);
@@ -482,7 +482,7 @@ namespace BALL
 						model_->model_val->crossValidation(k, 0);
 					}
 				}
-				catch(Exception::NoPCAVariance e)
+				catch(const Exception::NoPCAVariance&)
 				{ 
 					// if selected descriptor(s) yield no PCA eigenvectors, ignore this combination of descriptors!
 					model_->descriptor_IDs_.erase(last_insertion);

@@ -2274,7 +2274,7 @@ Log.info()  << "NMRStarfile::assignShifts(): number of mismatched residues: "
 		{
 			try {
 				result = value.toInt();
-			} catch (Exception::InvalidFormat) {
+			} catch (const Exception::InvalidFormat&) {
 				// invalid format => INT_VALUE_NA
 			}
 		}

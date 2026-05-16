@@ -17,7 +17,7 @@ Spectrum<RegularData1D, Peak1D>::Spectrum(const std::vector<Peak1D>& peaks, cons
 		{
 			data_.getClosestValue(sticks_[i].getPosition()) = sticks_[i].getIntensity();
 		} 
-		catch (Exception::OutOfGrid e)
+		catch (const Exception::OutOfGrid& )
 		{
 			if (sticks_[i].getPosition() != 0)
 			{
@@ -43,7 +43,7 @@ Spectrum<RegularData2D, Peak2D>::Spectrum(const std::vector<Peak2D>& peaks, cons
 		{
 			data_.getClosestValue(sticks_[i].getPosition()) = sticks_[i].getIntensity();
 		} 
-		catch (Exception::OutOfGrid e)
+		catch (const Exception::OutOfGrid& )
 		{
 #ifdef DEBUG
 			Log.error() << "Error in Spectrum(): point " << sticks_[i].getPosition() 
@@ -132,7 +132,7 @@ double Spectrum<RegularData1D, Peak1D>::difference(const Spectrum<RegularData1D,
 			try {
 				their_value = their_data(pos);
 			} 
-			catch (Exception::OutOfGrid e)
+			catch (const Exception::OutOfGrid& )
 			{
 				continue;
 			}
@@ -174,7 +174,7 @@ std::cout << "CMP myInt : " << integral << " their int: " << their_integral << s
 			try {
 				their_value = their_data(pos);
 			} 
-			catch (Exception::OutOfGrid e)
+			catch (const Exception::OutOfGrid& )
 			{
 				continue;
 			}

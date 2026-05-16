@@ -184,7 +184,7 @@ void ScoringOptimizer::evaluate(double* correlation, double* R2, double* RMSE, S
 			}
 			delete sdf;
 		}
-		catch(BALL::Exception::GeneralException e)
+		catch(const BALL::Exception::GeneralException& e)
 		{
 			cout<<e.getName()<<" : "<<e.getMessage()<<endl;
 			cout<<"Error for this complex, skipping it!"<<endl;

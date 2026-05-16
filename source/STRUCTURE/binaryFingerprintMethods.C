@@ -290,7 +290,7 @@ bool BinaryFingerprintMethods::parseBinaryFingerprint(const String& fprint, vect
 					features.push_back(fp_split[i].toUnsignedShort() + 1);
 				}
 			}
-			catch (Exception::InvalidFormat e)
+			catch (const Exception::InvalidFormat&)
 			{
 				// Fingerprint is invalid
 				features.clear();

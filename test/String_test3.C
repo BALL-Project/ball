@@ -144,7 +144,7 @@ CHECK(short toShort() const)
 	{
 		STATUS("Caught the right one!")
 	}
-	catch (Exception::GeneralException e)
+	catch (const Exception::GeneralException& e)
 	{
 		STATUS(e)
 	}

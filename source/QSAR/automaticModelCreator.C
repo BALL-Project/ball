@@ -32,7 +32,7 @@ void AutomaticModelCreator::optimizeParameters(Model* model)
 		KernelModel* km = dynamic_cast<KernelModel*>(model);
 		if (km) km->kernel->gridSearch(0.25, 20, 0, 5); 
 	}
-	catch(Exception::SingularMatrixError e)
+	catch(const Exception::SingularMatrixError&)
 	{
 		// do nothing; we just cannot optimize the model before feature selection
 	}
@@ -77,7 +77,7 @@ Model* AutomaticModelCreator::generateModel()
 		{
 			reg_entry = registry.getEntry(model_id);
 		}
-		catch(BALL::Exception::GeneralException e)
+		catch(const BALL::Exception::GeneralException&)
 		{
 			// a model with the current id does not exist
 			continue;

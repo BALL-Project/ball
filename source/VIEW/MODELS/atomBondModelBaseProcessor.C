@@ -157,7 +157,7 @@ namespace BALL
 			{
 				rpp.calculateSSSR(rings_, *residue);
 			}
-			catch (Exception::GeneralException e)
+			catch (const Exception::GeneralException& e)
 			{
 				Log.warn() << "Exception of type " << e.getName() << " occurred in line "
 					         << e.getLine() << " of " << e.getFile() << endl;

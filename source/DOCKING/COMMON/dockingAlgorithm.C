@@ -546,7 +546,7 @@ namespace BALL
 					}
 				}
 			}
-			catch(BALL::Exception::GeneralException e)
+			catch(const BALL::Exception::GeneralException& e)
 			{
 				Log.level(20)<<"Error for compound "<<mol_no<<" ! Skipping this compound."<<endl;
 

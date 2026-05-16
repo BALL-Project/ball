@@ -387,7 +387,7 @@ namespace BALL
 					}
 				}
 			}
-			catch (BALL::Exception::GeneralException e)
+			catch (const BALL::Exception::GeneralException& e)
 			{
 				cout<<e.getMessage()<<endl;
 				cout<<"Error! Skipping this molecule!"<<endl;
