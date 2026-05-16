@@ -891,7 +891,9 @@ namespace BALL
 			QAction* action;
 			if(slot && receiver)
 			{
-				action = popup->addAction(name.c_str(), receiver, slot, accel);
+				// Qt 6: addAction signature changed — shortcut moved from
+				// last to second argument (text, shortcut, receiver, slot).
+				action = popup->addAction(name.c_str(), accel, receiver, slot);
 			}
 			else
 			{

@@ -637,26 +637,25 @@ if (!openNbr)
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
 		
-		QString errorStr;
-		int errorLine;
-		int errorColumn;
-
 		QFile file((filepath.c_str()));
-		if (!file.open(QFile::ReadOnly | QFile::Text)) 
+		if (!file.open(QFile::ReadOnly | QFile::Text))
 		{
 			Log.error() << "HybridisationProcessor: cannot read file " << filename << std::endl;
 			Log.error() << "Reason was: " << file.errorString().toStdString() << std::endl;
 			return 1;
 		}
 
-		// read the document
+		// read the document — Qt 6.5+ ParseOptions overload (replaces the
+		// deprecated 5-arg setContent with out-params).
 		QDomDocument domDocument;
-		if (!domDocument.setContent(&file, true, &errorStr, &errorLine,
-					&errorColumn)) 
+		const auto parse_result =
+			domDocument.setContent(&file, QDomDocument::ParseOption::UseNamespaceProcessing);
+		if (!parse_result)
 		{
-			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn 
-									<<  " of file " << filename << endl;
-			Log.error() << "Reason was: " << errorStr.toStdString() << std::endl;
+			Log.error() << "Parse error in line " << parse_result.errorLine
+			            << " column " << parse_result.errorColumn
+			            << " of file " << filename << endl;
+			Log.error() << "Reason was: " << parse_result.errorMessage.toStdString() << std::endl;
 			return 1;
 		}
 		// get the root element...

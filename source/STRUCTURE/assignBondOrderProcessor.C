@@ -637,10 +637,6 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 			throw Exception::FileNotFound(__FILE__, __LINE__, options[Option::INIFile]);
 		}
 
-		QString errorStr;
-		int errorLine;
-		int errorColumn;
-
 		QFile file((inifilename.c_str()));
 		if (!file.open(QFile::ReadOnly | QFile::Text))
 		{
@@ -649,13 +645,18 @@ cout << "preassignPenaltyClasses_:" << preassignPenaltyClasses_() << " precomput
 			return 1;
 		}
 
-		// read the document
+		// read the document — Qt 6.5+ ParseOptions overload returning
+		// ParseResult (replaces the deprecated 5-arg setContent which took
+		// out-params for errorStr/Line/Column).
 		QDomDocument domDocument;
-		if (!domDocument.setContent(&file, true, &errorStr, &errorLine,
-					&errorColumn))
+		const auto parse_result =
+			domDocument.setContent(&file, QDomDocument::ParseOption::UseNamespaceProcessing);
+		if (!parse_result)
 		{
-			Log.error() << "Parse error in line " << errorLine << " column " << errorColumn <<  " of file " << inifilename << endl;
-			Log.error() << "Reason was: " << errorStr.toStdString() << std::endl;
+			Log.error() << "Parse error in line " << parse_result.errorLine
+			            << " column " << parse_result.errorColumn
+			            << " of file " << inifilename << endl;
+			Log.error() << "Reason was: " << parse_result.errorMessage.toStdString() << std::endl;
 			return 1;
 		}
 

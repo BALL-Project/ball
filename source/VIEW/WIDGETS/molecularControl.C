@@ -486,10 +486,12 @@ namespace BALL
 			context_menu_.addSeparator();
 
 			// -----------------------------------> AtomContainer
-			count_items_action_ = context_menu_.addAction(tr("Count items"), this, SLOT(countItems()), 0);
-			atom_overview_ = context_menu_.addAction(tr("Atom Overview"), this, SLOT(showAtomOverview()), 0);
+			// Qt 6: addAction's trailing-shortcut int overload was removed.
+			// All three of these passed `0` (no shortcut) — drop the arg.
+			count_items_action_ = context_menu_.addAction(tr("Count items"), this, SLOT(countItems()));
+			atom_overview_ = context_menu_.addAction(tr("Atom Overview"), this, SLOT(showAtomOverview()));
 			atom_overview_selection_ = context_menu_.addAction(tr("Atom Overview for Selection"), this,
-																												SLOT(showAtomOverviewForSelection()), 0);
+																												SLOT(showAtomOverviewForSelection()));
 			// <----------------------------------- AtomContainer
 
 			context_menu_.addSeparator();

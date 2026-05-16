@@ -180,8 +180,8 @@ namespace BALL
 
 		result = download_(th);
 
-		array.resize(tmp_array.count());
-		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.count(), &array[0]);
+		array.resize(tmp_array.size());
+		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.size(), &array[0]);
 
 		return result;
 	}
@@ -199,8 +199,8 @@ namespace BALL
 		SimpleDownloaderHelper::UPThread th(url_, &data_array, &tmp_array, this);
 
 		int result = download_(th);
-		response.resize(tmp_array.count());
-		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.count(), &response[0]);
+		response.resize(tmp_array.size());
+		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.size(), &response[0]);
 
 		return result;
 	}
@@ -224,8 +224,8 @@ namespace BALL
 		SimpleDownloaderHelper::UPThread th(url_, &file, &tmp_array, this);
 
 		int result = download_(th);
-		response.resize(tmp_array.count());
-		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.count(), &response[0]);
+		response.resize(tmp_array.size());
+		std::copy(tmp_array.data(), tmp_array.data() + tmp_array.size(), &response[0]);
 
 		return result;
 	}

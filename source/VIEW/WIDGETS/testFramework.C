@@ -285,7 +285,7 @@ bool TestFramework::eventFilter(QObject* obj, QEvent* e)
 	// for mouse events: take widget under the mouse cursor
 	if (me != 0) 
 	{
-		widget_ = qApp->widgetAt(me->globalPos());
+		widget_ = qApp->widgetAt(me->globalPosition().toPoint());
 		if (widget_ == 0) return false;
 		if (widget_->objectName() == "" &&
 				widget_->actions().size() == 0)
@@ -295,7 +295,7 @@ bool TestFramework::eventFilter(QObject* obj, QEvent* e)
 		}
 		o = widget_;
 
-		QPoint global = me->globalPos();
+		QPoint global = me->globalPosition().toPoint();
 		// if we can not get local coordinates: abort
  		QPoint local = widget_->mapFromGlobal(global);
 		if (local.x() < 0 || local.y() < 0 ||

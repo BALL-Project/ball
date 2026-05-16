@@ -105,8 +105,12 @@ namespace BALL
 				drawed_other_object_(false),
 				drawed_mesh_(false),
 				GLU_quadric_obj_(0),
-				orthographic_zoom_(10.f),
-				pixel_ratio_(1.f)
+				// Mem-init order MUST match declaration order in glRenderer.h
+				// (pixel_ratio_ at :484 declared BEFORE orthographic_zoom_ at
+				// :522). Swapping these silences -Wreorder; the actual init
+				// sequence is determined by declaration order regardless.
+				pixel_ratio_(1.f),
+				orthographic_zoom_(10.f)
 		{
 		}
 

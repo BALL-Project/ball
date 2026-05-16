@@ -43,10 +43,15 @@ namespace BALL
 		BALL_INLINE ConstBidirectionalIterator()  {}
 	
 		///
-		BALL_INLINE ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator) 
+		BALL_INLINE ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator)
 			:	Base(iterator)
 		{
 		}
+
+		/// Defaulted copy-assignment — silences -Wdeprecated-copy (the
+		/// implicit copy-assign was deprecated by the user-provided copy
+		/// ctor above; default-generated assign matches the implicit one).
+		ConstBidirectionalIterator& operator = (const ConstBidirectionalIterator&) = default;
 
 		///
 		BALL_INLINE ~ConstBidirectionalIterator()  {}
@@ -281,10 +286,12 @@ namespace BALL
 	
 		/// Copy constructor
 		BALL_INLINE BidirectionalIterator(const BidirectionalIterator& iterator)
-			
 			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
+
+		/// Defaulted copy-assignment — silences -Wdeprecated-copy.
+		BidirectionalIterator& operator = (const BidirectionalIterator&) = default;
 
 		/// Destructor
 		BALL_INLINE ~BidirectionalIterator()  {}

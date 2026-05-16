@@ -1538,8 +1538,12 @@ namespace BALL
     File::getFileStream() << tag << line_buffer << '\n';
 	}
 
-  void PDBFile::writeRecord_(PDB::RecordType record, ...)
+  void PDBFile::writeRecord_(int record_type, ...)
   {
+		// `record_type` is declared `int` to satisfy va_start's
+		// no-default-promotion requirement (see header). Cast back to the
+		// strong enum for switch + format-table lookups below.
+		const PDB::RecordType record = static_cast<PDB::RecordType>(record_type);
 
 		// Update book keeping records.
 		switch (record)
@@ -1599,7 +1603,7 @@ namespace BALL
 		// Write the record using the appropriate format definitions
 		va_list var_args;
 ;
-		va_start(var_args, record);		
+		va_start(var_args, record_type);
 
     static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
 		vsprintf(line_buffer, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);

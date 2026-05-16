@@ -144,8 +144,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 			QTranslator* translator = new QTranslator(&application);
 			Q_FOREACH(QString s, dpaths)
 			{
-				translator->load(loc, s + "BALLView/translations");
-				if (!translator->isEmpty())
+				// Fold load() result into the guard — Qt 6 marks
+				// QTranslator::load() [[nodiscard]]; relying on isEmpty()
+				// alone discards the bool indicating load success.
+				if (translator->load(loc, s + "BALLView/translations") && !translator->isEmpty())
 				{
 					QCoreApplication::installTranslator(translator);
 					break;

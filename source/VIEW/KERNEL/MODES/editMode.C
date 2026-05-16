@@ -348,7 +348,7 @@ namespace BALL
 				if (scene_->getCurrentAtom() != 0)
 				{
 					getMainControl()->selectCompositeRecursive(scene_->getCurrentAtom(), true);
-					mouse_pos_old_ = mouse_pos_new_ = evt->globalPos();
+					mouse_pos_old_ = mouse_pos_new_ = evt->globalPosition().toPoint();
 					temp_move_ = true;
 					return;
 				}

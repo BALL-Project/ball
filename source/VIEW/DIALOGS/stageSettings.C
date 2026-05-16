@@ -417,7 +417,9 @@ namespace BALL
 				p.drawPath(text_path);
 				p.end();
 
-				pm.createAlphaMask();
+				// Removed dead `pm.createAlphaMask();` call: the return is
+				// `[[nodiscard]]` in Qt 6 and the call has no useful side
+				// effect when the result is discarded (Qt 6 ctor census).
 
 				QSplashScreen* splash = new QSplashScreen(QGuiApplication::screens().value(i), QPixmap::fromImage(pm));
 				splash->show();

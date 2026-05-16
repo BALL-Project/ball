@@ -3470,7 +3470,9 @@ namespace BALL
 			p.drawText(text_pos_x, text_pos_y, c.c_str());
 			p.end();
 
-			pm.createAlphaMask();
+			// Removed dead `pm.createAlphaMask();` call: Qt 6 marks return
+			// `[[nodiscard]]` and the call has no useful side effect when
+			// the result is discarded (Qt 6 ctor census).
 			QCursor cursor(QPixmap::fromImage(pm), 0, 0);
 			QWidget::setCursor(cursor);
 		}

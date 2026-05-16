@@ -44,10 +44,13 @@ namespace BALL
 		BALL_INLINE ConstRandomAccessIterator()  {}
 	
 		///
-		BALL_INLINE ConstRandomAccessIterator(const ConstRandomAccessIterator& iterator) 
+		BALL_INLINE ConstRandomAccessIterator(const ConstRandomAccessIterator& iterator)
 			:	Base(iterator)
 		{
 		}
+
+		/// Defaulted copy-assignment — silences -Wdeprecated-copy.
+		ConstRandomAccessIterator& operator = (const ConstRandomAccessIterator&) = default;
 
 		///
 		BALL_INLINE ~ConstRandomAccessIterator()  {}
@@ -434,10 +437,13 @@ namespace BALL
 		BALL_INLINE RandomAccessIterator()  {}
 	
 		///
-		BALL_INLINE RandomAccessIterator(const RandomAccessIterator& iterator) 
+		BALL_INLINE RandomAccessIterator(const RandomAccessIterator& iterator)
 			:	Base(iterator)
 		{
 		}
+
+		/// Defaulted copy-assignment — silences -Wdeprecated-copy.
+		RandomAccessIterator& operator = (const RandomAccessIterator&) = default;
 
 		///
 		BALL_INLINE ~RandomAccessIterator()  {}

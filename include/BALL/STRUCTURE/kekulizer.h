@@ -43,11 +43,11 @@ namespace BALL
 			bool operator < (const AtomInfo& info) const;
 			AtomInfo& operator = (const AtomInfo& ai) ;
 
-			// THE atom 
-			Atom* atom;
+			// THE atom
+			Atom* atom = nullptr;
 
 			// bond to be set to a double bond
-			Bond* double_bond;
+			Bond* double_bond = nullptr;
 
 			// aromatic bonds
 			std::vector<Bond*> abonds;
@@ -56,16 +56,16 @@ namespace BALL
 			std::vector<Position> partner_id;
 
 			// current number of double bonds for this atom
-			Index curr_double;
+			Index curr_double = 0;
 
 			// minumum possible number of double bonds for this atom
-			Index min_double;
-			
+			Index min_double = 0;
+
 			// maximum possible number of double bonds for this atom
-			Index max_double;
-			
+			Index max_double = 0;
+
 			// number of double bonds for this atom to be uncharged
-			Index uncharged_double;
+			Index uncharged_double = 0;
 		};
 
 		public:

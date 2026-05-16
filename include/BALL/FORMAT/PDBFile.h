@@ -757,8 +757,16 @@ namespace BALL
 				This method updates the internal book keeping data structure required
 				for writing the MASTER record.
 				@see PDB::RecordType
+
+				The first parameter is declared `int` (not `PDB::RecordType`) so
+				the immediately-following `va_start` does not trigger
+				`-Wvarargs` "undefined behavior" — `va_start` requires the
+				anchor parameter to be a type that does not undergo default
+				argument promotion (enums can be promoted to `int`). Callers
+				continue to pass `PDB::RECORD_TYPE__*` constants unchanged
+				since enum constants implicitly convert to `int`.
 		*/
-		void writeRecord_(PDB::RecordType record, ...);
+		void writeRecord_(int record_type, ...);
 		void writeCONECTRecords_(PDB::Structure::ConectAtomList& cl);
 
 		/** Write a record to the stream using a predefined format string.

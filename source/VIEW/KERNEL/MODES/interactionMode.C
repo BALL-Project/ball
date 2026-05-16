@@ -51,7 +51,7 @@ namespace BALL
 
 		void InteractionMode::mouseMoveEvent(QMouseEvent* evt)
 		{
-			mouse_pos_new_ = evt->globalPos();
+			mouse_pos_new_ = evt->globalPosition().toPoint();
 
 			mouseMoveEventImpl_(evt);
 
@@ -60,7 +60,7 @@ namespace BALL
 
 		void InteractionMode::mousePressEvent(QMouseEvent* evt)
 		{
-			mouse_pos_new_ = evt->globalPos();
+			mouse_pos_new_ = evt->globalPosition().toPoint();
 
 			mousePressEventImpl_(evt);
 
@@ -69,7 +69,7 @@ namespace BALL
 
 		void InteractionMode::mouseReleaseEvent(QMouseEvent* evt)
 		{
-			mouse_pos_new_ = evt->globalPos();
+			mouse_pos_new_ = evt->globalPosition().toPoint();
 
 			mouseReleaseEventImpl_(evt);
 
