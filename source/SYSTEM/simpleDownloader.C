@@ -131,7 +131,17 @@ namespace BALL
 		DLHelper::DLHelper(HelperThread* caller, QNetworkReply* reply, const String& path)
 			: BasicHelper(caller, reply), file_(path.c_str())
 		{
-			file_.open(QIODevice::WriteOnly);
+			// Qt 6 marks QFile::open() [[nodiscard]] (MSVC C4834). The result
+			// also IS meaningful: if open fails, the subsequent file_.write()
+			// in finished() silently no-ops and the user gets an empty target
+			// file with no diagnostic. Log on failure so the caller can see
+			// the problem rather than discovering a zero-byte download later.
+			if (!file_.open(QIODevice::WriteOnly))
+			{
+				Log.error() << "DLHelper: cannot open '" << path
+				            << "' for writing: "
+				            << file_.errorString().toStdString() << "\n";
+			}
 			QObject::connect(reply, SIGNAL(downloadProgress(qint64, qint64)),
 												this,   SLOT(receivedData()));
 		}

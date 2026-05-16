@@ -81,6 +81,15 @@ ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	## NOMINMAX nor QT_NO_KEYWORDS actually reaches the compiler.
 	LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "/DNOMINMAX")
 
+	## Explicit Windows target version. Without this, including <boost/asio.hpp>
+	## (via source/SYSTEM/networking.C) emits a #pragma message asking the
+	## developer to define _WIN32_WINNT and silently defaults to Windows 7
+	## (0x0601). Pin to Windows 10 (0x0A00) — matches the actual CI target
+	## (windows-2025 runner) and BALL's de-facto floor. Defined for ALL TUs,
+	## not just networking.C, so any header that gates on _WIN32_WINNT sees
+	## the same value (avoids one-definition-rule mismatches across TUs).
+	LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "/D_WIN32_WINNT=0x0A00")
+
 	## if requested, produce a parallel solution
 	OPTION(BALL_BUILD_SOLUTION_PARALLEL OFF)
 	IF (BALL_BUILD_SOLUTION_PARALLEL)

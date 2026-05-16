@@ -333,6 +333,15 @@ LIST(APPEND BALL_DEP_LIBRARIES Qt6::Core
                                Qt6::Xml)
 LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DQT_NO_KEYWORDS")
 
+# Boost 1.73+ deprecates the global-namespace bind placeholders (_1, _2, ...)
+# in `<boost/bind.hpp>`. BALL's `source/SYSTEM/networking.C` uses `boost::bind`
+# with the global placeholders style; until the file is migrated to
+# `<boost/bind/bind.hpp>` + `using namespace boost::placeholders;` (separate
+# Phase 999.10 REST API rework — see ROADMAP), define the opt-in macro Boost
+# itself recommends to retain the current behavior without the deprecation
+# warning. Cross-platform; same effect on Linux/macOS/Windows.
+LIST(APPEND BALL_PROJECT_COMPILE_DEFNS "-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+
 # Phase 5 spike: QRhi arm of BALL_SPIKE_BACKEND option (Plan 05-06).
 # QRhiWidget requires Qt 6.7+. Defer the version-floor check until after
 # FIND_PACKAGE(Qt6 ... Core ...) has populated Qt6Core_VERSION; if the floor
