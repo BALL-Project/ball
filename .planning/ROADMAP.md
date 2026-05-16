@@ -848,6 +848,53 @@ Estimated effort: ~2-3 weeks. Plan 2 (Breathe integration) is the trickiest beca
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when 999.10 + Phase 6 + Phase 8 have all landed; do NOT promote earlier — the docs site needs real content to ship, and that content comes from those upstream phases.)
 
+### Phase 999.14: GitHub issue + PR triage and cleanup (BACKLOG · v1.6.x HOUSEKEEPING)
+
+**Goal:** Triage every open issue and pull request on `BALL-Project/ball` and close everything that is already resolved, obsolete, or stale, leaving a clean backlog that reflects genuinely actionable work. Document the decision per item so the audit trail exists.
+
+**Why now (v1.6.x slot, not v2.0):** The repo was frozen at a 2022 commit for years. The current v1.6 modernization (Phases 1, 2, 02.1, 02.2, 3, 4, 4.1, 5, 5.1) silently fixes a substantial chunk of what's in flight — issues that were filed against the dead build, against pre-Qt6 APIs, against the dropped `ball_contrib` dependency, against pre-C++17 source — those need to be closed *with cross-references to the commits/PRs that fixed them*, not left to rot. Doing this in v1.6.x (not v2.0) means:
+- Users hitting old issues on Google land on a closed-with-context page, not a year-old open thread.
+- The remaining open issue/PR set after triage is a faithful representation of v2.0's actual scope, not noise.
+- Pre-v2.0 stale PRs are easier to close before they conflict with the v2.0 substrate-modernization wave (PIPE-01 renderer rewrite, INIFile→YAML, gemmi mmCIF, REST API rewrite, Doxygen→RTD docs).
+
+**Supersedes:** [Phase 999.5 (Open-PR triage)](#phase-9995-open-pr-triage-backlog) — that phase was PR-only and narrower; this entry covers both issues and PRs and is the work that should actually run. When 999.14 is promoted, mark 999.5 as superseded with a back-reference.
+
+**Scope:**
+
+*Triage categories (each open issue/PR gets exactly one):*
+1. **close-as-fixed** — Resolved by a specific landed commit or PR in the v1.6-modernization branch. Requires cross-referencing the fix-commit before closing. Examples: any issue about the build failing on macOS Apple Silicon (fixed by Phase 1), any PR against `QGLWidget` rendering (fixed by Phase 2), anything mentioning `ball_contrib` (made moot by Phase 4).
+2. **close-as-obsolete** — Targets an abandoned subsystem or a pre-Qt6 / pre-C++17 code path that no longer exists in current `main` (or `v1.6-modernization`). Examples: changes to deleted dead code, SIP Python bindings (Phase 6 will pick a new generator), pre-Qt 6 `QGLWidget` paths, the dead `ball_contrib` tree.
+3. **close-as-stale** — No activity in ≥ 3 years (suggested threshold; tunable on promotion) AND not on the v1.6/v2.0 critical path. Templated close with an "if this is still relevant, reopen with a current-codebase reproducer" note so legitimately-affected users can resurface.
+4. **keep** — Still actionable against the current codebase; either v1.6.x scope or v2.0 substrate-modernization scope. Add a label (`v1.6.1`, `v1.7`, `v2.0`, etc.) reflecting target milestone.
+5. **needs-investigation** — Cannot confidently categorize without a deeper read (reproducer required, fix-commit search inconclusive, depends on a v2.0 phase decision not yet locked). Park as a follow-up triage round.
+
+*Tasks (when promoted):*
+1. **Enumerate.** `gh issue list --state open --limit 500 --json number,title,labels,createdAt,updatedAt,author` + `gh pr list --state open --limit 500 --json number,title,labels,createdAt,updatedAt,author,headRefName`. Snapshot both lists to `.planning/triage-999.14/{issues,prs}-baseline.json` so the audit trail captures the pre-triage state.
+2. **Categorize.** Per item: read body + comments, grep the v1.6-modernization branch for related fix commits (`git log --grep`, `git log --diff-filter` on affected files), assign one of the 5 categories. For close-as-fixed: record the exact commit hash that fixed it. For close-as-stale: record last-activity date.
+3. **Cross-reference (close-as-fixed only).** Before closing, verify the cited fix commit is actually on the v1.6-modernization branch and that the fix matches the issue's symptom. Inadequate cross-reference is a red flag — re-categorize as needs-investigation.
+4. **Bulk-close with templated comments.** Separate template per category — see "Templates" below. Comments cite Phase numbers and commit hashes; obsolete close cites the API/subsystem deletion; stale close invites reopening with a current reproducer. Use `gh issue close --comment` and `gh pr close --comment`.
+5. **Document the decisions.** Write `.planning/triage-999.14/decisions.md` with one row per item: number, title, category, fix-commit (if applicable), close-comment-snippet, decided-by (Claude or maintainer), date. This is the audit trail.
+
+*Templates (close comments):*
+- **fixed**: `"This was resolved by the v1.6 modernization work. Specifically: {commit-hash} ({short-message}) in Phase {N}. Closing as fixed — please reopen with a reproducer against `v1.6-modernization` if the issue persists."`
+- **obsolete**: `"This targets {subsystem}, which was {removed | replaced} during Phase {N}. {subsystem} is no longer part of the build. Closing as obsolete. If similar functionality exists elsewhere in BALL today, please file a new issue against the current code."`
+- **stale**: `"Closing as stale (no activity since {date}, more than 3 years). If this is still relevant against current `v1.6-modernization`, please reopen with a fresh reproducer and we'll triage promptly."`
+
+**Out of scope (DO NOT do during this triage):**
+- Reviewing/merging individual PRs that fall in the "keep" category — that is per-PR work, handled by whoever owns the affected subsystem.
+- Re-categorizing already-closed issues (only open items).
+- Closing issues that have active comments in the last 90 days regardless of category (user is engaged; needs human judgment, not automated triage).
+
+**Requirements:** TBD (likely a single `MAINT-01: open issue + PR count reduced to genuinely-actionable set` on promotion).
+**Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
+
+**Estimated effort:** 1-3 days depending on open-item count. `gh` API rate limits + per-item read cost dominate; the actual `gh close` calls are seconds. Run after the v1.6.1 release ships so the "fixed-by" commit hashes are stable on `main`/`master`.
+
+**Promotion trigger:** v1.6.1 has tagged + shipped. Then promote with `/gsd-review-backlog 999.14`. Do NOT promote concurrently with active Phase work — triage benefits from a stable HEAD so fix-commit references don't shift mid-pass.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog after v1.6.1 tags)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
