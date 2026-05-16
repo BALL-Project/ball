@@ -17,7 +17,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 4.1: Config Color-Defaults Fix** - Stop persisted `~/.BALLView` config from silently shadowing compiled element/residue color defaults *(promoted from backlog 999.4 — real user-facing bug)* *(2026-05-15: 2 initial plans landed, verifier flagged 3 BLOCKERs (CR-01 override-signature mismatch made read path dead code; CR-02 `getSectionLastLine` off-by-one; CR-03 unguarded parse throws); 3 gap-closure plans (04.1-03/04/05) closed all three plus 4 bundled warnings; second-pass verifier confirmed 8/8 must-haves at runtime. Total: 5 plans, 5 waves, ~60 min.)* (completed 2026-05-15)
 - [x] **Phase 5: Qt 6 Migration + Renderer Backend Spike** - Build against Qt 6 and replace deprecated VIEW APIs (keep the compat-profile GL path working), then a time-boxed renderer-backend decision spike behind the Phase 02.1 boundary *(former Phase 05.1 folded in — it must prototype against Qt 6)* *(complete 2026-05-15; 8 plans 05-01..05-08; SPIKE-01 delivered with documented caveats per the PIPE-01 downstream-init blocker; SPIKE-02 decision: split-pattern — GL-Core for v1.6.x → QRhi for v2)*
 - [x] **Phase 5.1: Build Warnings & Latent Bug Cleanup** - Fix latent bugs and tame the warning surface surfaced by Phase 4's tri-OS CI (C4717 `getline` recursion, C4311 pointer truncation on Windows, C4910 dll-export mismatch, `-Wself-assign-field`, `-Wformat-overflow`); Codex CLI cross-checked. *(inserted 2026-05-15 — captures Phase 4 follow-ups; runs after Phase 5 so Qt 6 deprecation noise clears first; complete 2026-05-15 with 14/14 plans landed — full Tier A bug fixes + Tier B Windows DLL hygiene + Tier D build configuration; retroactive Windows CI validation expected on next clean tri-OS run once the Linux `aqtinstall` Qt 6.5.3 cancellation cascade is fixed separately)*
-- [~] **Phase 999.2: Ninja build generator switch** `[in progress]` — Switch all three `ci-*` CMake presets from MSBuild/Make → Ninja so Windows CI stops paying the 77-min MSBuild tax and the already-wired `COMPILER_LAUNCHER=ccache` becomes load-bearing (MSBuild silently ignores it; Ninja honors it). *(Promoted from backlog v2.0 → v1.6.1 active on 2026-05-16; v1.6.1 milestone now expanded to include 999.2 because Windows CI wall-clock — 77min serial baseline measured on run 25899905204, currently being re-measured post-`--parallel` fix — is blocking dev iteration speed. Pure CI-side tooling change, zero source impact. See Phase 999.2 entry in Backlog/Active section below for full rationale.)*
+- [x] **Phase 999.2: Ninja build generator switch** — Switched all three `ci-*` CMake presets from MSBuild/Make → Ninja so Windows CI stops paying the 77-min MSBuild tax and the already-wired `COMPILER_LAUNCHER=ccache` becomes load-bearing. **Result: Windows Build dropped from 4818s cold → 55s warm (87× speedup; ~98.9% effective ccache hit rate). Windows total job ~4.7min, well under the 10min standing-disable threshold.** Cold-cache builds still ~85min total, but amortized cost across a dev-iteration cycle (1 cold + many warm) is dramatically lower. Pure CI-side tooling change, zero source impact. Verified on CI run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempt 1: cold-cache green; attempt 2: warm-cache 55s Windows Build). See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). Completed 2026-05-16.
 - [ ] **Phase 6: Python Bindings** - Decide the binding generator via a vertical slice (5-10 core classes), then commit *(restructured per Codex review — was a single under-scoped criterion)*
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); documented build-from-source for Linux/Windows; license/distribution review
@@ -259,7 +259,7 @@ Plans:
 | 4.1 Config Color-Defaults Fix | 5/5 | Complete   | 2026-05-15 |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
-| **999.2 Ninja build generator switch** | 0/6 | **In Progress** (v1.6.1, promoted 2026-05-16) — single-PLAN tooling phase, tasks 999.2-01..06. Prep commits already landed: `d5f5566` Windows `--parallel`, `9c932eb` choco ccache. Pays back its own implementation cost on the first Windows CI re-run (77-min baseline measured on run 25899905204). | (active) |
+| **999.2 Ninja build generator switch** | 6/6 | **Complete** (v1.6.1, promoted + landed 2026-05-16) — Windows Build 4818s cold → **55s warm** (87× speedup, ~98.9% effective ccache hit). Windows total job ~4.7min, under the 10min standing-disable threshold. CI verified on run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempts 1+2). Zero source impact. See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). | 2026-05-16 |
 | 6. Python Bindings | 0/0 | Not started | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
@@ -284,7 +284,7 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
 
-### Phase 999.2: Ninja build generator switch (ACTIVE · PROMOTED → v1.6.1)
+### Phase 999.2: Ninja build generator switch (COMPLETE · v1.6.1 · 2026-05-16)
 
 **Status:** Promoted from backlog v2.0 → v1.6.1 active on **2026-05-16**.
 Trigger: with Phase 4's Windows `blocking: true` flip, every CI cycle eats
@@ -331,9 +331,16 @@ Removes the rationale for keeping 999.2 in the v2.0 substrate bundle.
 a multi-PLAN code phase — task IDs 999.2-01..06)
 
 Plans:
-- [ ] [PLAN.md](phases/999.2-ninja-generator-switch/PLAN.md) — single-file
+- [x] [PLAN.md](phases/999.2-ninja-generator-switch/PLAN.md) — single-file
   phase plan with tasks 999.2-01 (planning retarget) through 999.2-06
-  (phase close)
+  (phase close). Result: [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md)
+  — Windows Build dropped from 4818s cold → **55s warm**
+  (87× speedup, ~98.9% effective ccache hit rate);
+  Windows total job ~4.7 min, clearing the 10-min
+  standing-disable threshold; macOS/Linux numbers steady
+  (already ccache-warm pre-switch). CI verified on
+  [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453)
+  attempts 1 (cold-cache green) and 2 (warm-cache 55s Windows).
 
 ### Phase 999.3: Networking rework (BACKLOG · LIKELY SUPERSEDED BY 999.10)
 
