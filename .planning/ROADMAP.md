@@ -1661,6 +1661,28 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog at v1.7 cycle open)
 
+### Phase 999.35: OOS-PR-merge regression fix — PeptideCapProcessor/Peptides/RotamerLibrary (BACKLOG · v1.6.2 OR v1.7)
+
+**Goal:** Fix the 3 test regressions introduced by the parallel-session PR merge (commit 45dce6971, Phase 999.14, feat: merge C++ slice of PRs #546 #554 #550):
+1. `PeptideCapProcessor_test` — `prot->countAtoms()` returns 171 vs expected 169. PRO.db added 1OB/1OH atoms (HYP variant) but bonds 40/41 reference 2OB/2OH which don't exist in the standard PRO residue, causing 2 extra atoms.
+2. `Peptides_test` — `ThreeLetterCode('b')` returns "ASX" vs expected "UNK"; `IsOneLetterCode('b')` returns true vs expected false. The PR extended `one_letter_codes` to include 'B'=ASX/'Z'=GLX for ambiguity codes; the tests expected the old behavior.
+3. `RotamerLibrary_test` — `rc.getStatus()` returns false (0) vs expected 1 in multiple assertions. Related to the broken 2OB/2OH bond references in PRO.db that cause FragmentDB to fail, cascading into RotamerLibrary status checks.
+
+**Root cause:** `data/fragments/PRO.db` change in 45dce6971 adds bonds 40/41 to 2OB/2OH atoms that only exist in the HYP variant — not in the Default/PRO variant. The bonds should only be in the HYP-specific Delete/Add section, not in the Default bonds list. `source/STRUCTURE/peptides.C` added ambiguity one-letter codes ('B', 'Z') without updating the test expectations.
+
+**Fix options:**
+1. **Preferred:** Correct `data/fragments/PRO.db` so bonds 40/41 are HYP-only (not in Default PRO). Then update `Peptides_test` to assert 'b' → "ASX" (the chemically correct behavior) and 'B' as a valid one-letter code.
+2. **Alternative:** Revert the PRO.db + peptides.C portion of 45dce6971 (keep PR #546 and PR #554 changes, revert PR #550 hydroxyproline data changes that are incorrectly structured).
+
+**Quarantine applied (Phase 9, TEST-CLOSE-01 triage deviation):** `PeptideCapProcessor_test`, `Peptides_test`, `RotamerLibrary_test` marked `WILL_FAIL TRUE` in `test/CMakeLists.txt`. See 09-TRIAGE.md deviation notes.
+
+**Estimated effort:** 2-4 hours (fragment DB format investigation + test update).
+**Plans:** 0.
+**Promotion trigger:** v1.6.2 or v1.7, after verifying the PRO.db HYP-section structure.
+
+Plans:
+- [ ] TBD (promote when capacity allows; unblock by reverting PRO.db bonds or fixing HYP section)
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.
