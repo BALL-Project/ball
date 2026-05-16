@@ -260,6 +260,7 @@ jobs:
           name: ninja-log-${{ matrix.os }}-${{ github.sha }}
           path: build/ci-macos/.ninja_log
           retention-days: 90
+          include-hidden-files: true
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — wires the BALL unit-test
@@ -435,6 +436,7 @@ jobs:
           name: ninja-log-${{ matrix.os }}-${{ github.sha }}
           path: build/ci-linux/.ninja_log
           retention-days: 90
+          include-hidden-files: true
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — see macOS counterpart
@@ -613,6 +615,7 @@ jobs:
           name: ninja-log-windows-x64-${{ github.sha }}
           path: build\ci-windows\.ninja_log
           retention-days: 90
+          include-hidden-files: true
 
       # ======================================================================
       # Render smoke check (D-08) — macOS native, Linux under xvfb + software
