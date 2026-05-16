@@ -164,7 +164,19 @@ namespace BALL
 					String temp_filename = VIEW::createTemporaryFilename();
 
 					QFile outfile(temp_filename.c_str());
-					outfile.open(QIODevice::ReadWrite);
+					// QFile::open() is [[nodiscard]] in Qt 6 (MSVC C4834). If
+					// open fails, write() silently no-ops; downstream parsers
+					// (DSN6File etc.) then see a zero-byte file with cryptic
+					// failure modes. Log + bail out cleanly.
+					if (!outfile.open(QIODevice::ReadWrite))
+					{
+						Log.error() << "downloadElectronDensity: cannot open temp file '"
+						            << temp_filename << "' for writing: "
+						            << outfile.errorString().toStdString() << std::endl;
+						delete set;
+						delete d3;
+						return;
+					}
 
 					outfile.write(current_reply_->readAll());
 					outfile.close();

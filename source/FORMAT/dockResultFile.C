@@ -583,29 +583,55 @@ namespace BALL
 			file_->write(s.c_str());
 			file_->write("<dockingfile>");
 
-			resultfile_->open(QIODevice::ReadOnly | QIODevice::Text);
-			while(!resultfile_->atEnd())
+			// QFile::open() is [[nodiscard]] in Qt 6 (MSVC C4834). The bool
+			// matters: on failure, atEnd() returns true and the copy loop
+			// silently runs zero times — the downstream consumer gets a
+			// truncated docking-file with no diagnostic. Log + skip the
+			// section on open failure.
+			if (resultfile_->open(QIODevice::ReadOnly | QIODevice::Text))
 			{
-				QByteArray data = resultfile_->read(buffersize);
-				file_->write(data);
+				while(!resultfile_->atEnd())
+				{
+					QByteArray data = resultfile_->read(buffersize);
+					file_->write(data);
+				}
+				resultfile_->close();
 			}
-			resultfile_->close();
+			else
+			{
+				Log.error() << "DockResultFile: cannot open result file: "
+				            << resultfile_->errorString().toStdString() << endl;
+			}
 
-			receptorfile_->open(QIODevice::ReadOnly | QIODevice::Text);
-			while(!receptorfile_->atEnd())
+			if (receptorfile_->open(QIODevice::ReadOnly | QIODevice::Text))
 			{
-				QByteArray data = receptorfile_->read(buffersize);
-				file_->write(data);
+				while(!receptorfile_->atEnd())
+				{
+					QByteArray data = receptorfile_->read(buffersize);
+					file_->write(data);
+				}
+				receptorfile_->close();
 			}
-			receptorfile_->close();
+			else
+			{
+				Log.error() << "DockResultFile: cannot open receptor file: "
+				            << receptorfile_->errorString().toStdString() << endl;
+			}
 
-			ligandfile_->open(QIODevice::ReadOnly | QIODevice::Text);
-			while(!ligandfile_->atEnd())
+			if (ligandfile_->open(QIODevice::ReadOnly | QIODevice::Text))
 			{
-				QByteArray data = ligandfile_->read(buffersize);
-				file_->write(data);
+				while(!ligandfile_->atEnd())
+				{
+					QByteArray data = ligandfile_->read(buffersize);
+					file_->write(data);
+				}
+				ligandfile_->close();
 			}
-			ligandfile_->close();
+			else
+			{
+				Log.error() << "DockResultFile: cannot open ligand file: "
+				            << ligandfile_->errorString().toStdString() << endl;
+			}
 
 			file_->write("\n</dockingfile>");
 

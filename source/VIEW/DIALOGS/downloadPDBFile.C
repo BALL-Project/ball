@@ -122,7 +122,18 @@ namespace BALL
 					String temp_filename = VIEW::createTemporaryFilename();
 					
 					QFile outfile(temp_filename.c_str());
-					outfile.open(QIODevice::ReadWrite);
+					// QFile::open() is [[nodiscard]] in Qt 6 (MSVC C4834). If
+					// open fails, the subsequent write() silently no-ops and
+					// the downstream PDB parse sees a zero-byte file → cryptic
+					// "no atoms found" failure. Log + bail out cleanly.
+					if (!outfile.open(QIODevice::ReadWrite))
+					{
+						Log.error() << "downloadPDBFile: cannot open temp file '"
+						            << temp_filename << "' for writing: "
+						            << outfile.errorString().toStdString() << std::endl;
+						delete system;
+						return;
+					}
 
 					outfile.write(current_reply_->readAll());
 					outfile.close();
