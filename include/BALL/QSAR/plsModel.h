@@ -37,6 +37,7 @@ namespace BALL
 
 				~PLSModel();
 
+				using LinearModel::operator=;
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				

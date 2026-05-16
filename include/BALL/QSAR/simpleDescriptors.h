@@ -44,6 +44,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		MolecularWeight& operator = (const MolecularWeight& mw);
 		//@}
 	};
@@ -79,6 +80,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfBonds& operator = (const NumberOfBonds& nb);
 		//@}
 	};
@@ -113,6 +115,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfSingleBonds& operator = (const NumberOfSingleBonds& nsb);
 		//@}
 	};
@@ -148,6 +151,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfDoubleBonds& operator = (const NumberOfDoubleBonds& ndb);
 		//@}
 	};
@@ -183,6 +187,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfTripleBonds& operator = (const NumberOfTripleBonds& ntb);
 		//@}		
 	};
@@ -217,6 +222,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfAromaticBonds& operator = (const NumberOfAromaticBonds& nab);
 		//@}
 	};
@@ -251,6 +257,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfAtoms& operator = (const NumberOfAtoms& na);
 		//@}
 	};
@@ -285,6 +292,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfBoron& operator = (const NumberOfBoron& nb);
 		//@}
 	};
@@ -319,6 +327,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfCarbon& operator = (const NumberOfCarbon& nc);
 		//@}
 	};
@@ -353,6 +362,7 @@ namespace BALL
 		//@{
 		/** Assignment Operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfNitrogen& operator = (const NumberOfNitrogen& nn);
 		//@}
 	};
@@ -386,6 +396,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfOxygen& operator = (const NumberOfOxygen& no);
 		//@}
 	};
@@ -420,6 +431,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfFlourine& operator = (const NumberOfFlourine& nf);
 		//@}
 	};
@@ -454,6 +466,7 @@ namespace BALL
 		//7
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfPhosphorus& operator = (const NumberOfPhosphorus& np);
 		//@}
 	};
@@ -488,6 +501,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfSulfur& operator = (const NumberOfSulfur& ns);
 		//@}
 	};
@@ -522,6 +536,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfChlorine& operator = (const NumberOfChlorine& nc);
 		//@}
 	};
@@ -556,6 +571,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfBromine& operator = (const NumberOfBromine& nb);
 		//@}
 	};
@@ -590,6 +606,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfIodine& operator = (const NumberOfIodine& ni);
 		//@}
 	};
@@ -624,6 +641,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfHydrogen& operator = (const NumberOfHydrogen& nh);
 		//@}
 	};
@@ -658,6 +676,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		FormalCharge& operator = (const FormalCharge& fc);
 		//@}		
 	};
@@ -694,6 +713,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfHeavyAtoms& operator = (const NumberOfHeavyAtoms& nha);
 		//@}
 	};
@@ -733,6 +753,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		MeanAtomInformationContent& operator = (const MeanAtomInformationContent& maic);
 		//@}
 	};
@@ -767,6 +788,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		AtomInformationContent& operator = (const AtomInformationContent& aic);
 		//@}
 		
@@ -809,6 +831,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfRotatableSingleBonds& operator = (const NumberOfRotatableSingleBonds& nrsb);
 		//@}
 	};
@@ -845,6 +868,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		RelNumberOfRotatableSingleBonds& operator = (const RelNumberOfRotatableSingleBonds& rnrsb);
 		//@}
 
@@ -886,6 +910,7 @@ namespace BALL
 		//@{
 		/** Assignment Operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfAromaticAtoms& operator = (const NumberOfAromaticAtoms& naa);
 		//@}
 	};
@@ -921,6 +946,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfHeavyBonds& operator = (const NumberOfHeavyBonds& nhb);
 		//@}
 	};
@@ -956,6 +982,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfRotatableBonds& operator = (const NumberOfRotatableBonds& nrb);
 		//@}
 	};
@@ -992,6 +1019,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		RelNumberOfRotatableBonds& operator = (const RelNumberOfRotatableBonds& rnrb);
 		//@}
 
@@ -1034,6 +1062,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		VertexAdjacency& operator = (const VertexAdjacency& va);
 		//@}
 
@@ -1079,6 +1108,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		VertexAdjacencyEquality& operator = (const VertexAdjacencyEquality& vae);
 		//@}
 
@@ -1144,6 +1174,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfHydrogenBondAcceptors& operator = (const NumberOfHydrogenBondAcceptors& nhba);
 		//@}
 
@@ -1208,6 +1239,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfHydrogenBondDonors& operator = (const NumberOfHydrogenBondDonors& nhbd);
 		//@}
 
@@ -1272,6 +1304,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		NumberOfHydrophobicAtoms& operator = (const NumberOfHydrophobicAtoms& nha);
 		//@}
 
@@ -1315,6 +1348,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		BondPolarizabilities& operator = (const BondPolarizabilities& bp);
 		//@}
 	};
@@ -1350,6 +1384,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		AtomicPolarizabilities& operator = (const AtomicPolarizabilities& ap);
 		//@}		
 	};
@@ -1384,6 +1419,7 @@ namespace BALL
 		//@{
 		/** Assignment Operator
 		*/
+		using SimpleBase::operator =;
 		SizeOfSSSR& operator = (const SizeOfSSSR& sssr);
 		//@}		
 	};
@@ -1419,6 +1455,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		PrincipalMomentOfInertia& operator = (const PrincipalMomentOfInertia& pmi);
 		//@}
 	};
@@ -1455,6 +1492,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		PrincipalMomentOfInertiaX& operator = (const PrincipalMomentOfInertiaX& pmix);
 		//@}
 	};
@@ -1490,6 +1528,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		PrincipalMomentOfInertiaY& operator = (const PrincipalMomentOfInertiaY& pmiy);
 		//@}
 	};
@@ -1526,6 +1565,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using SimpleBase::operator =;
 		PrincipalMomentOfInertiaZ& operator = (const PrincipalMomentOfInertiaZ& pmiz);
 		//@}
 	};

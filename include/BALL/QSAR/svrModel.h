@@ -28,6 +28,8 @@ namespace BALL
 				SVRModel(const QSARData& q, int k_type, double p1, double p2);
 
 				~SVRModel();
+
+				using KernelModel::operator=;
 				//@}
 				
 	

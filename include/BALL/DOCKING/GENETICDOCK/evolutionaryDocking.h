@@ -78,6 +78,7 @@ namespace BALL
 
 			/** The setup routines.
 			 */
+			using DockingAlgorithm::setup;
 			virtual void setup(System & ligand, BALL::ScoringFunction * sf, Options & new_options);
 
 			virtual void setup(System & ligand, BALL::ScoringFunction * sf);

@@ -30,6 +30,8 @@ namespace BALL
 				MLRModel(const QSARData& q);
 
 				~MLRModel();
+
+				using LinearModel::operator=;
 				//@}
 				
 				/** @name Accessors

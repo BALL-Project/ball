@@ -32,6 +32,8 @@ namespace BALL{
 				SNBModel(const QSARData& q);
 
 				~SNBModel();
+
+				using BayesModel::operator=;
 				//@}
 				
 				

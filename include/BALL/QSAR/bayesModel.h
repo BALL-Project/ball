@@ -21,6 +21,8 @@ namespace BALL
 
 				BayesModel(const QSARData& q);
 
+				using ClassificationModel::operator=;
+
 				virtual bool isTrained() = 0;
 
 				/** calculate the probability for the specified feature to assume the given value for each class

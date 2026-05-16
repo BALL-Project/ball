@@ -18,6 +18,7 @@ namespace BALL
 		protected:
 			void setup_();
 			const Protein* protein_;
+			using Rescoring::generateScoreContributions_;
 			void generateScoreContributions_(vector<vector<double> >* matrix, vector<double>* v);
 	};
 }

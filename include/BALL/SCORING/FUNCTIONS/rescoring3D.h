@@ -25,6 +25,7 @@ namespace BALL
 
             void setup_();
 
+            using Rescoring::generateScoreContributions_;
             void generateScoreContributions_(Molecule* mol, std::vector<std::vector<double> >* matrix, std::vector<double>* v);
 
             /** Obtain score-contributions for a single atom. Overloaded by class Rescoring4D */

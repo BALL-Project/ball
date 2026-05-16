@@ -89,6 +89,7 @@ namespace BALL
 			/// Equality operator
 			bool operator == (const PLP& anb) throw();
 
+			using ForceFieldComponent::setup;
 			/** Setup this component according to the given options. */
 			bool setup(Options& options);
 

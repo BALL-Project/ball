@@ -27,6 +27,8 @@ namespace BALL{
 				LDAModel(const QSARData& q);
 
 				~LDAModel();
+
+				using ClassificationModel::operator=;
 				//@}
 				
 				

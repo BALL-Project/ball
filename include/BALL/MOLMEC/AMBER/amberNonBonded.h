@@ -108,6 +108,7 @@ namespace BALL
 		virtual bool setup();
 
 
+		using ForceFieldComponent::setup;
 		/** Setup this component according to the given options and store the ForceFieldParameters in par */
 		bool setup(Options& options, ForceFieldParameters& par);
 

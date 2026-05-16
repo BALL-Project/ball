@@ -26,9 +26,10 @@ namespace BALL
 				LinearModel(const QSARData& q);
 		
 				~LinearModel();
-				
+
+				using RegressionModel::operator=;
 				virtual void operator=(const LinearModel& m);
-				
+
 				//@}
 				
 				

@@ -31,6 +31,7 @@ namespace BALL
 
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
+				using Model::operator=;
 				virtual void operator=(const RegressionModel& m);
 				//@}
 				
@@ -75,7 +76,8 @@ namespace BALL
 				 */
 				//@{
 				virtual void calculateOffsets() = 0;
-				
+
+				using Model::readDescriptorInformationFromFile;
 				void readDescriptorInformationFromFile(std::ifstream& in, int no_descriptors, bool transformation, int no_coefficients);
 				
 				void saveDescriptorInformationToFile(std::ofstream& out);

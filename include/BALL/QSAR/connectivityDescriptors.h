@@ -45,6 +45,7 @@ namespace BALL
 		//@{
 		/** Assignment operator
 		*/
+		using ConnectivityBase::operator =;
 		ZagrebIndex& operator = (const ZagrebIndex& zi);
 		//@}
 		
@@ -90,6 +91,7 @@ namespace BALL
 		//@{
 		/** Assignment Operator
 		*/
+		using ConnectivityBase::operator =;
 		BalabanIndexJ& operator = (const BalabanIndexJ& bij);
 		//@}
 	};

@@ -31,7 +31,9 @@ namespace BALL{
 				SVMModel(const QSARData& q);
 
 				virtual ~SVMModel();
-				//@}			
+
+				using ClassificationModel::operator=;
+				//@}
 				
 				
 		};

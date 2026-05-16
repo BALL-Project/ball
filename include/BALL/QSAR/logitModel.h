@@ -26,6 +26,7 @@ namespace BALL{
 
 				~LogitModel();
 
+				using ClassificationModel::operator=;
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				

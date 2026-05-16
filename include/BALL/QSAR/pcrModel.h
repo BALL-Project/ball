@@ -36,6 +36,8 @@ namespace BALL
 				PCRModel(const QSARData& q, double frac_var=0.99);
 
 				~PCRModel();
+
+				using LinearModel::operator=;
 				//@}
 				
 				/** @name Accessors

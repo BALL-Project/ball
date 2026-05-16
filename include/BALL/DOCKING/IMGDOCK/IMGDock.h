@@ -82,6 +82,7 @@ namespace BALL
 
 			/**	@name	Accessors  */
 			//@{
+			using DockingAlgorithm::setup;
 			void setup(System& receptor, System& ligand, Options& new_options);
 
 			void setup(System& receptor, System& ligand);

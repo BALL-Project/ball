@@ -34,6 +34,7 @@ namespace BALL
 
 				~NBModel();
 
+				using BayesModel::operator=;
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				

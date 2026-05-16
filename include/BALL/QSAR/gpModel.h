@@ -35,6 +35,7 @@ namespace BALL
 
 				~GPModel();
 
+				using KernelModel::operator=;
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 				//@}
 				

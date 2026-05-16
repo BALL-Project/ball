@@ -54,6 +54,7 @@ namespace BALL
 
 			void clear();
 
+			using ScoringComponent::setup;
 			virtual bool setup(Options& options);
 
 			/** This function needs to be called once for every new ligand */

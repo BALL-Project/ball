@@ -36,6 +36,7 @@ namespace BALL
 				
 				~ClassificationModel();
 
+				using Model::operator=;
 				virtual void operator=(ClassificationModel& m);
 				//@}
 				

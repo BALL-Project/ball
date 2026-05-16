@@ -38,6 +38,8 @@ namespace BALL
 				KPCRModel(const QSARData& q, const LinearModel& lm, int column);
 
 				~KPCRModel();
+
+				using KernelModel::operator=;
 				//@}
 				
 				
