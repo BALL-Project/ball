@@ -36,14 +36,14 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # 2026-05-16: bumped macos-14 → macos-26 (Tahoe) and windows-2022 →
-          # windows-2025 to match ci.yml's free-runner version bumps. Same
-          # vCPU / RAM as before; newer toolchain (Xcode 16+ clang on macOS,
-          # latest MSVC 14.4x + Windows SDK 10.0.26100 on Windows). The
-          # release pipeline builds and packages against the same OS users
-          # are running.
+          # 2026-05-16: macOS reverted to macos-14 (Sonoma) to match OpenMS
+          # parity (see ci.yml's matching comment). Windows stays on
+          # windows-2025 (newer MSVC + SDK; OpenMS uses this too). The
+          # macOS bundle's runtime target is macOS 26 (Tahoe) via the
+          # D4-mac ad-hoc resign — exercised at user install time, not at
+          # CI build time, so Sonoma CI is sufficient.
           - os: macos-arm64
-            runner: macos-26
+            runner: macos-14
           - os: windows-x64
             runner: windows-2025
 

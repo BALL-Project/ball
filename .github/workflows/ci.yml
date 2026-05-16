@@ -52,15 +52,15 @@ jobs:
           # Mirrors BUILD-macos.md verbatim: the Homebrew dep line, the cmake
           # configure invocation, and the `make BALL VIEW BALLView` target set.
           #
-          # 2026-05-16: bumped from `macos-14` (Sonoma) to `macos-26` (Tahoe)
-          # — Tahoe is the OS BALL's runtime crash reports + ad-hoc resign
-          # workaround (release.yml D4-mac, the Namespace CODESIGNING Code 2
-          # SIGKILL fix) were specifically aimed at. CI now builds against
-          # the same OS users are running. Free hosted runner; same 3 vCPU
-          # / 7 GB as macos-14, just newer toolchain (clang from Xcode 16+,
-          # newer SDK).
+          # 2026-05-16: reverted macos-26 (Tahoe) → macos-14 (Sonoma) to
+          # match OpenMS's known-stable position. release.yml's D4-mac
+          # ad-hoc resign workaround targets macOS 26 at runtime, but CI
+          # build/test doesn't need to run on Tahoe — the bundle gets
+          # validated on user's macOS 26 at install time. Bump back to
+          # macos-26 when OpenMS moves OR when a Tahoe-specific build
+          # bug needs CI coverage.
           - os: macos-arm64
-            runner: macos-26
+            runner: macos-14
             blocking: true
             smoke: true
             ccache_dir: ~/Library/Caches/ccache
@@ -78,6 +78,27 @@ jobs:
             blocking: true
             smoke: true
             ccache_dir: ~/.cache/ccache
+            qt_host: linux
+
+          # ---- Linux ARM64 (Ubuntu) — non-blocking initial -----------------
+          # 2026-05-16: added to match OpenMS's CI matrix. Catches ARM-
+          # specific bugs (alignment, char-signedness, byte-order, pointer-
+          # truncation regressions like Plan 05.1-02 C4311) that x86_64
+          # hides. ubuntu-24.04-arm is a free standard hosted runner since
+          # late 2024. Same dep-install path as linux-x64; only the Qt
+          # install differs (jurplel/install-qt-action needs host:
+          # linux_arm64 instead of linux for ARM Qt 6 binaries).
+          #
+          # Non-blocking initially (continue-on-error via matrix.blocking)
+          # to absorb any first-run surprises. Flip to blocking once a
+          # green-on-arm baseline is recorded — same pattern as the
+          # Windows flip on 2026-05-15.
+          - os: linux-arm64
+            runner: ubuntu-24.04-arm
+            blocking: false
+            smoke: true
+            ccache_dir: ~/.cache/ccache
+            qt_host: linux_arm64
 
           # ---- Windows — BLOCKING (flipped 2026-05-15, Plan 04-04 Task 3) ------
           # Phase 4: real vcpkg manifest + choco flex/bison provisioning. The
@@ -231,7 +252,7 @@ jobs:
       # Linux — apt deps + the BUILD-macos.md flow adapted to Linux paths.
       # ======================================================================
       - name: Cache apt archives (Linux)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         uses: actions/cache@v5
         with:
           # Phase 5.1 Plan 12 (Task D3): scope the cached path to `*.deb` only.
@@ -256,7 +277,7 @@ jobs:
             apt-${{ matrix.os }}-
 
       - name: Install dependencies (Linux / apt)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         run: |
           # D-06: apt equivalents of the Homebrew set, + build tooling + ccache,
           # + xvfb/software-Mesa for the headless render smoke check (D-08).
@@ -287,7 +308,7 @@ jobs:
           # confirms the per-platform optional-dependency policy.
 
       - name: Install Qt 6 (Linux — jurplel/install-qt-action / aqtinstall)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         # D-01 + D-02 (Plan 05-04): Ubuntu 24.04 apt ships Qt 6.4.2, below the
         # D-01 6.5 LTS floor. jurplel/install-qt-action wraps aqtinstall and
         # downloads the official Qt build from download.qt.io into the runner
@@ -306,12 +327,14 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: '6.5.*'
-          host: 'linux'
+          # matrix.qt_host = 'linux' for x86_64, 'linux_arm64' for ARM.
+          # Both pull official Qt 6.5+ binaries from download.qt.io.
+          host: ${{ matrix.qt_host }}
           target: 'desktop'
           cache: true
 
       - name: Configure (Linux)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         run: |
           # D-07: preset is the single source of truth for Linux paths.
           # bison/flex at /usr/bin, USE_LPSOLVE=OFF (non-PIC liblpsolve55.a),
@@ -320,7 +343,7 @@ jobs:
           cmake --preset ci-linux -DBALL_LICENSE=GPL
 
       - name: Build (Linux)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         run: |
           # D-07: the BUILD-macos.md target set, Release.
           # Phase 999.2: zero ccache stats before / dump after — see the
@@ -334,14 +357,14 @@ jobs:
       # for the rationale + flip-to-blocking trigger.
       # ----------------------------------------------------------------------
       - name: Build BALL test suite (Linux — Phase 9 gatekeeper, non-blocking)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         continue-on-error: true
         timeout-minutes: 45
         run: |
           cmake --build build/ci-linux --target build_tests -j$(nproc)
 
       - name: Run BALL test suite (Linux — Phase 9 gatekeeper, non-blocking)
-        if: matrix.os == 'linux-x64'
+        if: startsWith(matrix.os, 'linux-')
         continue-on-error: true
         timeout-minutes: 60
         run: |
@@ -352,7 +375,7 @@ jobs:
                 --output-junit ${{ github.workspace }}/ball-tests-linux.xml || true
 
       - name: Upload test results (Linux)
-        if: always() && matrix.os == 'linux-x64'
+        if: always() && startsWith(matrix.os, 'linux-')
         uses: actions/upload-artifact@v4
         with:
           name: ball-tests-linux-${{ github.run_id }}
