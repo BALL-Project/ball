@@ -2082,22 +2082,6 @@ namespace BALL
 			return String(s.toLatin1().data());
 		}
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-		// Qt 5 SAX overload; Qt 6 removed QXmlAttributes entirely. All BALL
-		// readers in this file go through QXmlStreamReader (xmlIn_->attributes())
-		// which returns QXmlStreamAttributes, so this overload is dead under
-		// Qt 6 -- temporarily stubbed pending a full QtXml SAX -> QXmlStreamReader
-		// audit (BLOCKER-A in deferred-items.md).
-		void DockResultFile::attributesToHashMap(const QXmlAttributes& attributes, HashMap<String,String>& map)
-		{
-			map.clear();
-			for(int i=0;i<attributes.length();i++)
-			{
-				map[attributes.qName(i).toStdString()] = attributes.value(i).toStdString();
-			}
-		}
-#endif
-
 		void DockResultFile::attributesToHashMap(const QXmlStreamAttributes &attributes, HashMap<String,String>& map)
 		{
 			// Qt 5 / Qt 6 SAX-vs-StreamReader semantic delta (review WR-03):
