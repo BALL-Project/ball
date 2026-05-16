@@ -239,12 +239,43 @@ jobs:
         with:
           arch: x64
 
-      - name: Configure (Windows)
+      - name: Free disk space before vcpkg (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
+          # GitHub windows-2025 runner ships with ~14 GB free on C:\. Cold
+          # vcpkg builds of Qt6 + Boost from source generate ~10+ GB of
+          # buildtrees AND ~3 GB of installed/, easily exhausting C:\ and
+          # killing the runner's diag-log writer (the failure mode seen on
+          # run 25971072146 for v1.6.2). Pre-prune known-large unused dirs
+          # so the cold-cache release pipeline has headroom.
+          $before = (Get-PSDrive C).Free / 1GB
+          Write-Host ("Free space before cleanup: {0:N1} GB" -f $before)
+          # Android SDK (~7 GB, not used by BALL)
+          Remove-Item -Recurse -Force "C:\Android" -ErrorAction SilentlyContinue
+          # Pre-installed JDK variants (~2 GB; cmake doesn't need them)
+          Remove-Item -Recurse -Force "C:\Program Files\Java" -ErrorAction SilentlyContinue
+          # Hosted toolcache unused languages (Ruby, Python <3.12, Go, Node)
+          Remove-Item -Recurse -Force "C:\hostedtoolcache\windows\Ruby" -ErrorAction SilentlyContinue
+          Remove-Item -Recurse -Force "C:\hostedtoolcache\windows\go" -ErrorAction SilentlyContinue
+          $after = (Get-PSDrive C).Free / 1GB
+          Write-Host ("Free space after cleanup:  {0:N1} GB (gained {1:N1} GB)" -f $after, ($after - $before))
+
+      - name: Configure (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        env:
+          # vcpkg --clean-after-build deletes buildtrees + packages + downloads
+          # after each port finishes, dramatically reducing peak disk use during
+          # cold installs. Trades a small per-port overhead (delete a few GB)
+          # for ~10 GB peak-disk headroom — critical on the standard windows
+          # runner. Has no effect on warm-cache runs (cached binaries skip the
+          # build phase entirely).
+          VCPKG_INSTALL_OPTIONS: --clean-after-build
+        run: |
           $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
           Write-Host "VCPKG_ROOT=$env:VCPKG_ROOT"
+          Write-Host "VCPKG_INSTALL_OPTIONS=$env:VCPKG_INSTALL_OPTIONS"
           cmake --preset ci-windows `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe"
