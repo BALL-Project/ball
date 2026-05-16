@@ -1636,6 +1636,31 @@ To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
+### Phase 999.34: Windows test gatekeeper (BACKLOG · v1.7 OR LATER)
+
+**Goal:** Bring up the Windows test gatekeeper to parity with macOS + Linux — wire `ctest` into the Windows CI job with `BALL_DATA_PATH` export + `WILL_FAIL TRUE` quarantines mirrored from macOS/Linux + flip to blocking. Today the Windows CI job builds but does not run tests; the gatekeeper flip in TEST-CLOSE-02 covered macOS + Linux only.
+
+**Why deferred (per [PHASE-9-BASELINE.md:84](phases/09-test-suite-triage/PHASE-9-BASELINE.md)):** vcpkg + MSVC test integration is non-trivial — the test binaries link against BALL.dll which lives in `build/ci-windows/bin/` and needs `PATH` adjustment for the test runner to find it. Worth a real investigation slot, not bundled into TEST-CLOSE-02's gatekeeper flip.
+
+**Scope (when promoted):**
+1. Wire `ctest` into the Windows CI build step (currently build-only).
+2. Set `$env:PATH = "build\ci-windows\bin;$env:PATH"` so test binaries find BALL.dll.
+3. Export `BALL_DATA_PATH=$env:GITHUB_WORKSPACE\data`.
+4. Baseline the Windows test results (likely 3 failures mirror macOS/Linux + some Windows-specific filesystem differences for Directory_test).
+5. Apply quarantines to mirror the macOS+Linux decisions from [09-TRIAGE.md](phases/09-test-suite-triage/09-TRIAGE.md): `AssignBondOrderProcessor_test2` marked `WILL_FAIL TRUE`; AmberFF_test should pass on MSVC x64 (Intel-compatible FP path, same as Linux GCC).
+6. Flip Windows test gatekeeper to blocking in ci.yml + release.yml.
+
+**Out of scope:** changes to BALL test sources (mirror existing decisions, don't re-triage).
+
+**Requirements:** carries no new REQ ID; satisfies a v1.7 follow-on for the deferred-Windows-test concern in TEST-CLOSE-01/02 closure notes.
+**Estimated effort:** 1-2 days (mostly CI shape + path debugging on a Windows runner).
+**Plans:** 0 (single-task PLAN when promoted).
+
+**Promotion trigger:** v1.7 cycle. Also: AssignBondOrderProcessor fine-penalty fix (if landed from Phase 999.34 sub-task) should be mirrored here before the Windows flip.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog at v1.7 cycle open)
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.

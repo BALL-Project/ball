@@ -100,8 +100,8 @@ Added 2026-05-16 when v1.6.2 milestone opened. Each REQ maps to one of the 7 in-
 
 ### Source-level + cleanup
 
-- [ ] **TEST-CLOSE-01** (Phase 9): Three baseline failures from `PHASE-9-BASELINE.md` triaged — `Directory_test` (macOS path), `AmberFF_test` (2.6% energy delta), `AssignBondOrderProcessor_test2` (fine-penalty assertion) — each fixed, quarantined with a note, or documented as a known modernization casualty
-- [ ] **TEST-CLOSE-02** (Phase 9): CI test gatekeeper flipped from `continue-on-error: true` to blocking on macOS + Linux; tri-OS run green with blocking enabled
+- [x] **TEST-CLOSE-01** (Phase 9): Three baseline failures from `PHASE-9-BASELINE.md` triaged — `Directory_test` (KNOWN-PASSING — false alarm), `AmberFF_test` (FIX: ARM FP tolerance loosen, commit 41bfae621), `AssignBondOrderProcessor_test2` (QUARANTINE: WILL_FAIL TRUE, commit edfa0857a) — each fixed, quarantined with a note, or documented; 09-TRIAGE.md decision record at `.planning/phases/09-test-suite-triage/09-TRIAGE.md` — Complete 2026-05-16
+- [x] **TEST-CLOSE-02** (Phase 9): CI test gatekeeper flipped from `continue-on-error: true` to blocking on macOS + Linux in ci.yml + release.yml; tri-OS CI green post-flip — Complete 2026-05-16
 - [x] **TRIAGE-01** (Phase 999.14): Open issues + open PRs on `BALL-Project/ball` categorized into the 5 audit buckets (close-as-fixed / close-as-obsolete / close-as-stale / keep / needs-investigation), bulk-closed with templated comments per category; decision audit trail in `.planning/triage-999.14/decisions.md` — Complete 2026-05-16 (3 rounds: ext. round + maintainer batch + reconciliation; 82 net closes; 99 kept; 2 needs-investigation)
 - [x] **TRIAGE-02** (Phase 999.14): Stale-doc audit task — all `.planning/phases/**/*VERIFICATION.md` files scanned for the HUMAN-UAT-disagreement pattern; affected files annotated with the f176b8b banner + `resolution_log:` frontmatter — Complete 2026-05-16 (7 files inspected; 1 had UAT sibling; f176b8b pattern already applied to 05-VERIFICATION.md in commit f176b8b; no new banners needed)
 - [x] **TRIAGE-03** (Phase 999.14): The 5-PR legacy bundle (#640 FindXDR, #600 Travis-CI, #554 Omega torsion, #550 hydroxyproline, #546 residue insertion code) merged or closed per categorization in TRIAGE-01 — Complete 2026-05-16 (#600 closed-obsolete, #640 merged 9c6d868, #554/#546/#550 C++ slice merged 45dce69; bundle-escape DID NOT FIRE)
@@ -210,8 +210,8 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | BUILD-ACCEL-03 | Phase 999.18 — CI hygiene: path-aware triggers + concurrency | Complete (v1.6.2, 2026-05-16) — paths-ignore lands in d10da9a (+doc/** top-up); de94e86 docs-only push empirically skipped CI |
 | BUILD-ACCEL-04 | Phase 999.19 — CI hygiene: per-TU build profiling artifact | Complete (v1.6.2, 2026-05-16) — ninja-log artifacts (90-day retention) uploaded per platform; top-20 slowest TUs printed inline; baseline data captured (dockResultFile.C top outlier at 14.6s Windows / 7.6s Linux / 4.4s macOS) |
 | BUILD-ACCEL-05 | Phase 999.20 — CI hygiene: action artifact pins v6/v7 | Complete (v1.6.2, 2026-05-16) — upload v4→v6 in 1d3da02, download v4→v7 in 3cb03c8; CI run 25970222837 green tri-OS + linux-arm64 + coverage |
-| TEST-CLOSE-01 | Phase 9 — Test Suite Triage | Pending (v1.6.2) — triage 3 baseline failures |
-| TEST-CLOSE-02 | Phase 9 — Test Suite Triage | Pending (v1.6.2) — flip CI gatekeeper to blocking |
+| TEST-CLOSE-01 | Phase 9 — Test Suite Triage | Complete (v1.6.2, 2026-05-16) — Directory_test KNOWN-PASSING; AmberFF_test FIX 41bfae621; AssignBondOrderProcessor_test2 QUARANTINE edfa0857a; 09-TRIAGE.md |
+| TEST-CLOSE-02 | Phase 9 — Test Suite Triage | Complete (v1.6.2, 2026-05-16) — gatekeeper flipped to blocking in ci.yml + release.yml; tri-OS CI green post-flip |
 | TRIAGE-01 | Phase 999.14 — GitHub issue + PR triage | Complete (v1.6.2, 2026-05-16) — 82 net closes; audit trail in decisions.md |
 | TRIAGE-02 | Phase 999.14 — Stale-doc audit bundled task | Complete (v1.6.2, 2026-05-16) — 7 VERIFICATION.md files audited; f176b8b already applied; STALE-DOCS-AUDIT.md |
 | TRIAGE-03 | Phase 999.14 — 5-PR legacy bundle merge | Complete (v1.6.2, 2026-05-16) — #600 closed-obsolete; #640 merged 9c6d868; #554/#546/#550 C++ slice merged 45dce69 |
