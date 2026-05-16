@@ -83,10 +83,16 @@ SET_TESTS_PROPERTIES (
 #   is isolated to the fine-penalty branch. Algorithmic fix estimated >2h.
 #   Backlog: Phase 999.34 (Windows test gatekeeper + bondorder fine-penalty).
 #   Re-examine in v1.7 / v2.0 cycle.
-SET_TESTS_PROPERTIES (
-	AssignBondOrderProcessor_test2
-	PROPERTIES WILL_FAIL TRUE
-)
+#
+#   NOTE (2026-05-16 Rule-1 fix): WILL_FAIL applies only on Apple Silicon (the
+#   failure platform). Linux x64/arm64 pass this test cleanly; unconditional
+#   WILL_FAIL causes an "unexpected pass" error on Linux (ctest exit 8).
+IF (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+	SET_TESTS_PROPERTIES (
+		AssignBondOrderProcessor_test2
+		PROPERTIES WILL_FAIL TRUE
+	)
+ENDIF()
 
 # Regressions from parallel-session PR merge (commit 45dce6971, Phase 999.14,
 # feat: merge C++ slice of PRs #546 #554 #550). These tests broke because the
