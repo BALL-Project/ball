@@ -1,6 +1,7 @@
 ---
 phase: 05-qt-6-migration-4b-renderer-backend-decision-spike
 verified: 2026-05-15T12:00:00Z
+resolution_log: 05-HUMAN-UAT.md  # ROLLING RESOLUTION LOG — SOURCE OF TRUTH for current state of CR-01/02/03 + gl_profile
 status: passed
 status_pre_resolution: human_needed
 resolved: 2026-05-15T13:30:00Z
@@ -27,9 +28,15 @@ human_verification:
 
 # Phase 5: Qt 6 Migration + Renderer Backend Decision Spike — Verification Report
 
+> ## ⚠ STALE FINDINGS — Resolution log is in [`05-HUMAN-UAT.md`](05-HUMAN-UAT.md)
+>
+> This document is a **snapshot at phase close (2026-05-15)**. The "FAIL / LATENT" rows for **CR-01 (`HTMLPage::certificateError`)**, **CR-02 (`QSignalMapper::mapped` → `mappedInt`)**, **CR-03 (`QLayout::setMargin`)**, and the macOS **gl_profile** assertion are all **RESOLVED** in subsequent commits. The rolling-resolution log [`05-HUMAN-UAT.md`](05-HUMAN-UAT.md) records the actual fix commits (`fb0f7ed`..`1271a2a` for CR-01/02/03; `7b28685` for gl_profile relaxation).
+>
+> Two roadmap audits (ROADMAP-AUDIT-V1.6.2.md v1 + v2) were misled by reading this VERIFICATION snapshot without cross-checking the HUMAN-UAT log. **For current state, always read `05-HUMAN-UAT.md` first.** The structured findings below remain accurate as of 2026-05-15T12:00 but should be treated as historical context, not actionable to-dos.
+
 **Phase Goal:** Qt 6 migration baseline (Qt 6.5 LTS floor) + SPIKE-01 (two prototype renderer backends: GL-core + QRhi) + SPIKE-02 (decision record naming the chosen backend with per-platform criteria and a scoped PIPE-01 task list).
 **Verified:** 2026-05-15T12:00:00Z
-**Status:** passed *(was human_needed; resolved 2026-05-15T13:30:00Z — see frontmatter `resolution` and `05-HUMAN-UAT.md`)*
+**Status:** passed *(was human_needed; resolved 2026-05-15T13:30:00Z — see frontmatter `resolution`, `resolution_log: 05-HUMAN-UAT.md`)*
 **Re-verification:** No — initial verification.
 
 ## Goal Achievement

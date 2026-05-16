@@ -258,12 +258,12 @@ Plans:
 | 4. Dependency System Overhaul | 4/4 | Complete — CI green on all 4 jobs (incl. Windows blocking) on run 25899905204 | 2026-05-15 |
 | 4.1 Config Color-Defaults Fix | 5/5 | Complete   | 2026-05-15 |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
-| 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
+| 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. **Carry-forward (RESOLVED 2026-05-16):** B3 baseline measured at 3495 → 0 on first clean tri-OS green run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453); see [05.1-08-SUMMARY.md](phases/05.1-build-warnings-and-latent-bugs/05.1-08-SUMMARY.md) + [05.1-UAT.md](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). | 2026-05-15 |
 | **999.2 Ninja build generator switch** | 6/6 | **Complete** (v1.6.1, promoted + landed 2026-05-16) — Windows Build 4818s cold → **55s warm** (87× speedup, ~98.9% effective ccache hit). Windows total job ~4.7min, under the 10min standing-disable threshold. CI verified on run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempts 1+2). Zero source impact. See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). | 2026-05-16 |
 | 6. Python Bindings | 0/0 | Not started | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
-| 9. Test Suite Triage | 0/0 | Not started | - |
+| 9. Test Suite Triage | (partial) | **In Progress (v1.6.2)** — CI wiring + Linux coverage job + PR test-results check landed (commits b2bb718 + 61bf5a7, 2026-05-15); v1.6.0 baseline captured at 99.0% (291/294) on macOS-arm64 with `BALL_DATA_PATH` set. Remaining: triage the 3 baseline failures (`Directory_test`, `AmberFF_test`, `AssignBondOrderProcessor_test2`) + flip gatekeeper from `continue-on-error: true` to blocking once green-list stable. | (in progress) |
 
 ---
 
@@ -353,9 +353,9 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
 
-### Phase 999.4: Config shadows compiled color defaults — PROMOTED to Phase 4.1
+### Phase 999.4: Config shadows compiled color defaults — COMPLETED via Phase 4.1 (2026-05-15)
 
-**Status:** Promoted to active **Phase 4.1: Config Color-Defaults Fix** on 2026-05-14 (real user-facing bug; only workaround is deleting `~/.BALLView`). See the Phase 4.1 detail section above.
+**Status:** Promoted to active **Phase 4.1: Config Color-Defaults Fix** on 2026-05-14; landed and verified 2026-05-15 (5 plans, 8/8 must-haves verified, CONFIG-01 satisfied at runtime). See the Phase 4.1 detail section above and the Progress table.
 
 ### Phase 999.4b: Residue color persistence — apply Phase 4.1 fix pattern to ResidueNameColorProcessor (BACKLOG)
 
@@ -390,19 +390,11 @@ this is a pure persistence-format change, no UX implications.
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
 
-### Phase 999.5: Open-PR triage (BACKLOG)
+### Phase 999.5: Open-PR triage — CLOSED as superseded by Phase 999.14 (2026-05-16)
 
-**Goal:** Review every open pull request on `BALL-Project/ball` in GitHub — triage each one against the current state of the codebase.
-**Why:** The repo was frozen at a 2022 commit; open PRs predate the 1.6 modernization work and may be stale, superseded by the patches/phases already landed, or still valuable. They need a deliberate merge / close / defer decision rather than being left to rot.
-**Scope sketch:**
-  - Enumerate all open PRs (`gh pr list`).
-  - For each: assess relevance to v1.6 modernization (or a later milestone), check for conflicts with work already done (Phases 1–02.2), decide merge / rebase-then-merge / close / defer-to-milestone, and record the rationale.
-  - Output: a triage table (PR #, title, decision, rationale).
-**Requirements:** TBD
-**Plans:** 0 plans
+**Status:** Superseded by [Phase 999.14 (GitHub issue + PR triage and cleanup)](#phase-99914-github-issue--pr-triage-and-cleanup-backlog--v16x-housekeeping) per ROADMAP-AUDIT-V1.6.2.md §B. 999.14 covers both issues AND PRs across 5 triage categories; this entry was PR-only and narrower. The named "5-PR legacy bundle" (#640, #600, #554, #550, #546) referenced in `MILESTONE-CONTEXT.md:270-279` is captured as a subtask inside 999.14.
 
-Plans:
-- [ ] TBD (promote with /gsd-review-backlog when ready)
+**Original scope** (preserved for history): Review every open pull request on `BALL-Project/ball` in GitHub — triage each one against the current state of the codebase. The repo was frozen at a 2022 commit; open PRs predate the 1.6 modernization work and may be stale, superseded by the patches/phases already landed, or still valuable.
 
 ### Phase 999.6: PIPE-01 — Pipeline Rewrite (OpenGL fixed-function → modern backend) (BACKLOG · DORMANT)
 
@@ -423,17 +415,23 @@ Plans:
 Plans:
 - [ ] TBD (do NOT promote before Phase 5 + SPIKE-02 complete)
 
-### Phase 999.7: Qt 6 Linux + Windows Bring-Up and CI Fixup (BACKLOG · DORMANT)
+### Phase 999.7: Qt 6 Linux + Windows Bring-Up and CI Fixup (BACKLOG · DORMANT · MOSTLY CLOSED — only Windows driver capture remains)
 
-**Goal:** Bring Linux and Windows runtime to parity with the Phase 5 macOS Qt 6 baseline. Phase 5 delivered the migration end-to-end on macOS-arm64 (configure + link + smoke green); Linux and Windows were deferred because three CI/tooling carry-forwards (aqtinstall module syntax, vcpkg baseline drift, Windows hardware) blocked the matrix.
-**Why DORMANT, not active:** Phase 5.1 is the next active phase (warnings + latent bugs from Phase 4's tri-OS CI). Folding Linux/Windows Qt 6 bring-up into 5.1 would blur its scope. Promote when Phase 5.1 closes AND a contributor has Windows access (or the project decides to ship v1.6.0 macOS-only with a "build from source, unverified" footnote for Linux/Windows).
-**Scope:** (1) Resolve SEED-005-1 (Linux aqtinstall) + green Linux build + smoke. (2) Resolve SEED-005-2 (Windows vcpkg baseline) + SEED-005-3 (Windows VM driver capture) + green Windows build + smoke. (3) One-line macOS CI assertion relaxation (`gl_profile=(compatibility|none)`) — Apple GL 2.1 emits `none`, not `compatibility`. (4) Optional: SEED-005-4 post-PIPE-01 spike re-capture once full render works.
-**Depends on:** Phase 5 (DONE), Phase 5.1 (NOT YET DONE — sequencing only, not technical)
-**Reference:** [`.planning/phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md`](phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md) — consolidated scope + per-seed effort
-**Requirements:** QT6-01-LINUX, QT6-01-WINDOWS (new, TBD on promotion); the existing QT6-01 stays "macOS verified" via Phase 5
+**Audit update (2026-05-16, ROADMAP-AUDIT-V1.6.2.md §C3):** The original scope was substantially closed by other phases:
+- (1) Linux aqtinstall — RESOLVED in commit `54da903` (Phase 5.1 D2/D3/D6) + run [25899905204](https://github.com/BALL-Project/ball/actions/runs/25899905204) Linux green.
+- (2) Windows vcpkg baseline + build — RESOLVED via Phase 4 vcpkg + Phase 5.1 Tier-B DLL hygiene + Phase 999.2 Ninja switch (Windows Build 4818s → 55s; run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) tri-OS green).
+- (3) macOS `gl_profile=(compatibility|none)` relaxation — RESOLVED in commit `7b28685` (folded into the same --fix sweep that closed CR-01/02/03; see [`05-HUMAN-UAT.md:23`](phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-HUMAN-UAT.md)).
+- (4) **Windows VM driver-behaviour capture — STILL OPEN.** SEED-005-3.
+
+**Remaining scope (narrowed):** SEED-005-3 Windows driver capture (documentation deliverable — `BALLVIEW_GL_DIAG` log on a representative Windows host: GL vendor/renderer/version/profile + MSAA sample counts + driver warnings). Optional: SEED-005-4 post-PIPE-01 recapture once Phase 999.6 renderer rewrite lands.
+
+**Why still DORMANT, not v1.6.2:** Windows driver capture is a documentation step, not a code fix; post-PIPE-01 recapture is the more useful version. Defer to v2.0 (post-PIPE-01) unless a Windows-access contributor surfaces sooner.
+
+**Reference:** [`.planning/phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md`](phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md) — consolidated scope + per-seed effort (pre-audit; SEEDs 1/2/3-relaxation/CI sections are stale per the above).
+**Requirements:** QT6-01-LINUX (CLOSED by Phase 4 + 999.2), QT6-01-WINDOWS (CLOSED by Phase 5.1 + 999.2). No remaining requirement under this phase.
 
 Plans:
-- [ ] TBD (do NOT promote before Phase 5.1 closes; needs Windows access)
+- [ ] TBD (defer to v2.0 post-PIPE-01 OR promote earlier if Windows-access contributor available)
 
 ### Phase 999.8: Auto-Update via Sparkle + WinSparkle (BACKLOG · DORMANT)
 
@@ -897,7 +895,21 @@ Plans:
 
 **Estimated effort:** 1-3 days depending on open-item count. `gh` API rate limits + per-item read cost dominate; the actual `gh close` calls are seconds. Run after the v1.6.1 release ships so the "fixed-by" commit hashes are stable on `main`/`master`.
 
-**Promotion trigger:** v1.6.1 has tagged + shipped. Then promote with `/gsd-review-backlog 999.14`. Do NOT promote concurrently with active Phase work — triage benefits from a stable HEAD so fix-commit references don't shift mid-pass.
+**Promotion trigger:** v1.6.1 has tagged + shipped. Then promote with `/gsd-review-backlog 999.14`. Do NOT promote concurrently with active Phase work — triage benefits from a stable HEAD so fix-commit references don't shift mid-pass. **Target milestone: v1.6.2** (per ROADMAP-AUDIT-V1.6.2.md §B; supersedes the former Phase 999.5 Open-PR-triage entry).
+
+**Named subtask: "5-PR legacy bundle" (per [`MILESTONE-CONTEXT.md:270-279`](MILESTONE-CONTEXT.md) Phase 5.2 carve-out, folded into 999.14 per ROADMAP-AUDIT-V1.6.2.md §B):**
+
+Five specific 2015-2017 PRs deserve named tracking inside 999.14's categorization pass — they were explicitly cited by codex synthesis review of v1.6.1 as v1.6.2 deferrals:
+
+| PR | Year | Plan | Likely category | Notes |
+|----|------|------|-----------------|-------|
+| [#640 FindXDR](https://github.com/BALL-Project/ball/pull/640) | 2017 | A | close-as-obsolete OR rebase-and-merge | Quick check during triage: `grep -rn "XDR\|FindXDR" CMakeLists.txt include/ source/` — if XDR is gone, close as obsolete; if still in use, rebase. |
+| [#600 Travis-CI](https://github.com/BALL-Project/ball/pull/600) | 2016 | B | close-as-obsolete (`.travis.yml` is dead post-GH-Actions) + cherry-pick orthogonal changes | Phase 02.2 + 5.1 made GitHub Actions the CI; Travis is irrelevant. |
+| [#554 Omega torsion angles](https://github.com/BALL-Project/ball/pull/554) | 2015 | C | rebase-and-merge (C++ slice); SIP portion defers to 999.15 | Touches `residue.C`; bundle with #546 (same file). |
+| [#550 Hydroxyproline (HYP) residue](https://github.com/BALL-Project/ball/pull/550) | 2015 | D | rebase-and-merge | Touches `residue.C`; sequence after C or bundle. |
+| [#546 Residue with insertion code](https://github.com/BALL-Project/ball/pull/546) | 2015 | C | rebase-and-merge (C++ slice); SIP portion defers to 999.15 | Touches `residue.C`; bundle with #554 (same file). |
+
+**Bundle escape clause:** if triage finds the rebase work exceeds ~3 days actual effort (per Codex review: don't pre-split phases for speculative work), spin out the merge work as Phase 5.2 at that point. Default: keep inside 999.14 as the codex-recommended path.
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog after v1.6.1 tags)
@@ -1227,6 +1239,78 @@ Plans:
 
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.21: DockResultFile QtXml dead-code cleanup (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Remove the stubbed Qt 5 SAX overload `DockResultFile::attributesToHashMap(const QXmlAttributes&)` that has been dead code since Phase 5 Qt 6 migration (commit `3691232` stubbed it under `#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)`).
+
+**Why now (v1.6.2):** Surfaced by ROADMAP-AUDIT-V1.6.2.md §A3. Originally deferred from Phase 5.1 as BLOCKER-A2 ([`.planning/phases/05-qt-6-migration-4b-renderer-backend-decision-spike/deferred-items.md:44`](phases/05-qt-6-migration-4b-renderer-backend-decision-spike/deferred-items.md)); the suggested home was "Phase 5.1 build-warnings/latent-bugs cleanup" but it never landed there. All current BALL readers use the modern `QXmlStreamReader` path, so the stubbed overload is purely dead code — a faint cognitive load on future readers + a small surface for future Qt-version-bump confusion. Tiny effort to fix; fits patch release.
+
+**Scope:**
+1. Drop the dead `QXmlAttributes` parameter overload from [`include/BALL/FORMAT/dockResultFile.h`](../include/BALL/FORMAT/dockResultFile.h) (signature only; no callers exist).
+2. Remove the stubbed implementation body from [`source/FORMAT/dockResultFile.C`](../source/FORMAT/dockResultFile.C).
+3. Clean up the `#if QT_VERSION` guard (no longer needed).
+4. Clean up the `#include <QtXml/...>` header reference if it becomes orphaned.
+
+**Out of scope:** Any work on the live `QXmlStreamReader` path. Any other QtXml usages elsewhere in BALL (audit during this phase, file a separate stub if found).
+
+**Estimated effort:** 1 hour. Single-file (header + impl); single-commit change; no behaviour delta on any code path BALL actually exercises.
+
+**Requirements:** none (dead-code removal).
+**Plans:** 0 (single-task PLAN when promoted).
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens; trivial fit anywhere in v1.6.2 cycle)
+
+### Phase 999.22: Warning census + (a)-subset cleanup — Tier-C + residual C4910/C4834 (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Produce a structured census of the deferred Tier-C warning surface (~3700 instances of `-Wdeprecated-copy`, `-Wunqualified-std-cast-call`, `-Wcatch-value` on macOS/Linux + residual 307×C4910 + 9×C4834 on Windows) and execute only the (a)-subset that is "mechanical fix now in a patch release." Defer everything else to v1.7 (real per-site code review) or v2.0 (will dissolve when Phase 999.6 PIPE-01 renderer rewrite lands).
+
+**Why census-and-split, not wholesale (per ROADMAP-AUDIT-V1.6.2.md §A1 + Codex adversarial review):** wholesale ~3700-warning cleanup is not patch-release shape. Source planning docs say "v1.6.2 OR v1.7" — split decision lives in this census, not in pre-commitment. Many of these will vanish when Phase 999.6 rewrites the renderer; cleaning them now would be wasted work.
+
+**Scope:**
+1. **Census** (`.planning/phases/999.22-warning-census/CENSUS.md`): full breakdown per warning category × file path × likely-cause classification:
+   - (a) Mechanical-fix-now-in-v1.6.2 — e.g., `-Wdeprecated-copy` for copy constructors that should be `= default`; simple `-Wcatch-value` lifts. Target: subset small enough to fit a patch.
+   - (b) Defer-to-v2.0 — fixed-function OpenGL deprecation noise that Phase 999.6 dissolves.
+   - (c) Defer-to-v1.7 — needs real per-site code review (correctness/intent questions).
+2. **Execute (a) subset only.** Cap at 1 week of execution; if (a) exceeds the cap during census, push the excess to (c).
+3. **Spin out two follow-up backlog stubs:** "999.22b: warnings deferred to v1.7" and "999.22c: warnings deferred to v2.0 (await 999.6)" — both as bookkeeping entries pointing at the census doc.
+4. **Include residual Windows warnings** in the census: 307×C4910 + 9×C4834 documented in [`05.1-UAT.md:65`](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). Note: `atom.h` documents an intentional warning tradeoff per Phase 5.1 — preserve.
+
+**Out of scope:**
+- Anything reachable by the planned Phase 999.6 (PIPE-01) renderer rewrite.
+- Tier-A / Tier-B / Tier-D warnings — those were Phase 5.1 scope and are closed.
+- Bison `-Wconflicts-sr` grammar conflicts — separate Phase 999.23.
+
+**Estimated effort:** Census 2-3 days; (a)-subset cleanup TBD by census but capped at 1 week. **Total: ≤2 weeks.** If census reveals (a) is empty, the phase closes with the two follow-up backlog stubs and zero execution work — that's a valid outcome.
+
+**Requirements:** TBD (likely `WARN-01: tri-OS warning census published + (a) subset closed` on promotion).
+**Plans:** 0 (single PLAN with census-task + execute-(a)-task when promoted).
+
+**Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
+
+**Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.
+
+**Why now (v1.6.2 OR v1.7):** Originally deferred from Phase 5.1 as a "separate investigation" ([`05.1-CONTEXT.md:61`](phases/05.1-build-warnings-and-latent-bugs/05.1-CONTEXT.md)). Documented as "real ambiguities worth investigating" in [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md). Per-conflict triage: confirm benign (default-precedence-resolves-correctly) or fix grammar rule. Isolated grammar work; one parser; no architectural dependency. Cheap to dispatch.
+
+**Scope:**
+1. Reconcile the conflict count — run `bison -W CIFParserParser.y` cleanly and capture the verbatim conflict report.
+2. For each conflict: examine the grammar rule + Bison's default action; confirm-benign or fix.
+3. Document outcome in `.planning/phases/999.23-cif-grammar-audit/AUDIT.md` (per-conflict table).
+4. **Out of scope:** The other 7 Bison grammars in tree (parsedFunction, GAMESSDatParser, GAMESSLogParser, smartsParser, smilesParser, expressionParser, GAFFCESParser) — no documented audit evidence yet. Spin out a separate v1.7 backlog stub if evidence of conflicts in any of them surfaces during this phase.
+
+**Estimated effort:** 1-2 days depending on whether any conflict needs a real grammar fix. Defer to v1.7 if v1.6.2 fills up — not patch-release-critical.
+
+**Requirements:** none (grammar-conflict cleanup).
+**Plans:** 0 (single-task PLAN when promoted).
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens, OR defer to v1.7)
 
 ---
 *Roadmap created: 2026-05-14*

@@ -38,13 +38,9 @@
 
 ## Critical Bugs (Pre-existing)
 
-**ContourSurface Operator== Latent Bug:**
-- Issue: `include/BALL/DATATYPE/contourSurface.h` line 107 — `operator==` references non-existent member `data.data_` (should be `Surface::operator==(data)`)
-- Files: `include/BALL/DATATYPE/contourSurface.h`
-- Trigger: Comparing two `TContourSurface` instances using `==`
-- Symptoms: Compiler error (unresolved member reference) or runtime memory access violation
-- Workaround: Do not use `operator==` on contour surfaces
-- Fix approach: Change implementation to delegate to base class: `return Surface::operator==(surface);` (or appropriate base comparison)
+**ContourSurface Operator== — NOT A BUG (entry retained for history):**
+- Status: Verified 2026-05-16 by ROADMAP-AUDIT-V1.6.2.md §D1 — implementation at `include/BALL/DATATYPE/contourSurface.h:302-306` correctly returns `((threshold_ == data.threshold_) && Surface::operator == (data))`. The original concerns audit (2026-05-14) inspected only the declaration at line 107 and inferred a defect; the implementation lives lower in the same template-inline header and is correct.
+- Action: none. Lesson for future audits: verify implementation lines, not just declarations, before flagging template-inline classes as bugs.
 
 ---
 
