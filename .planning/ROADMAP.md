@@ -17,6 +17,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 4.1: Config Color-Defaults Fix** - Stop persisted `~/.BALLView` config from silently shadowing compiled element/residue color defaults *(promoted from backlog 999.4 — real user-facing bug)* *(2026-05-15: 2 initial plans landed, verifier flagged 3 BLOCKERs (CR-01 override-signature mismatch made read path dead code; CR-02 `getSectionLastLine` off-by-one; CR-03 unguarded parse throws); 3 gap-closure plans (04.1-03/04/05) closed all three plus 4 bundled warnings; second-pass verifier confirmed 8/8 must-haves at runtime. Total: 5 plans, 5 waves, ~60 min.)* (completed 2026-05-15)
 - [x] **Phase 5: Qt 6 Migration + Renderer Backend Spike** - Build against Qt 6 and replace deprecated VIEW APIs (keep the compat-profile GL path working), then a time-boxed renderer-backend decision spike behind the Phase 02.1 boundary *(former Phase 05.1 folded in — it must prototype against Qt 6)* *(complete 2026-05-15; 8 plans 05-01..05-08; SPIKE-01 delivered with documented caveats per the PIPE-01 downstream-init blocker; SPIKE-02 decision: split-pattern — GL-Core for v1.6.x → QRhi for v2)*
 - [x] **Phase 5.1: Build Warnings & Latent Bug Cleanup** - Fix latent bugs and tame the warning surface surfaced by Phase 4's tri-OS CI (C4717 `getline` recursion, C4311 pointer truncation on Windows, C4910 dll-export mismatch, `-Wself-assign-field`, `-Wformat-overflow`); Codex CLI cross-checked. *(inserted 2026-05-15 — captures Phase 4 follow-ups; runs after Phase 5 so Qt 6 deprecation noise clears first; complete 2026-05-15 with 14/14 plans landed — full Tier A bug fixes + Tier B Windows DLL hygiene + Tier D build configuration; retroactive Windows CI validation expected on next clean tri-OS run once the Linux `aqtinstall` Qt 6.5.3 cancellation cascade is fixed separately)*
+- [~] **Phase 999.2: Ninja build generator switch** `[in progress]` — Switch all three `ci-*` CMake presets from MSBuild/Make → Ninja so Windows CI stops paying the 77-min MSBuild tax and the already-wired `COMPILER_LAUNCHER=ccache` becomes load-bearing (MSBuild silently ignores it; Ninja honors it). *(Promoted from backlog v2.0 → v1.6.1 active on 2026-05-16; v1.6.1 milestone now expanded to include 999.2 because Windows CI wall-clock — 77min serial baseline measured on run 25899905204, currently being re-measured post-`--parallel` fix — is blocking dev iteration speed. Pure CI-side tooling change, zero source impact. See Phase 999.2 entry in Backlog/Active section below for full rationale.)*
 - [ ] **Phase 6: Python Bindings** - Decide the binding generator via a vertical slice (5-10 core classes), then commit *(restructured per Codex review — was a single under-scoped criterion)*
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); documented build-from-source for Linux/Windows; license/distribution review
@@ -258,6 +259,7 @@ Plans:
 | 4.1 Config Color-Defaults Fix | 5/5 | Complete   | 2026-05-15 |
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. Carry-forward: B3 baseline measurement on next clean tri-OS CI run. | 2026-05-15 |
+| **999.2 Ninja build generator switch** | 0/6 | **In Progress** (v1.6.1, promoted 2026-05-16) — single-PLAN tooling phase, tasks 999.2-01..06. Prep commits already landed: `d5f5566` Windows `--parallel`, `9c932eb` choco ccache. Pays back its own implementation cost on the first Windows CI re-run (77-min baseline measured on run 25899905204). | (active) |
 | 6. Python Bindings | 0/0 | Not started | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
@@ -282,24 +284,56 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when ready)
 
-### Phase 999.2: Ninja build generator (BACKLOG · TARGETED FOR v2.0)
+### Phase 999.2: Ninja build generator switch (ACTIVE · PROMOTED → v1.6.1)
 
-**Goal:** Switch the default CMake generator from Make/MSBuild to **Ninja** across all three platforms.
-**Why:** Faster incremental builds and consistent parallelism everywhere; on Windows it replaces slow MSBuild and makes the legacy `ball_contrib` "do not use -j" hazard moot (contrib is already obsolete on macOS/Linux). Pure build-tooling change — **zero source changes**, just `cmake -G Ninja`.
+**Status:** Promoted from backlog v2.0 → v1.6.1 active on **2026-05-16**.
+Trigger: with Phase 4's Windows `blocking: true` flip, every CI cycle eats
+~80 min of Windows wall-clock under MSBuild. Switching to Ninja + ccache
+(prep commits already landed: `d5f5566` Windows `--parallel`, `9c932eb`
+choco install ccache) pays back its own implementation cost on the first
+re-run and makes the standing "Windows >2× macOS/Linux disable" policy
+tractable. Pure build-tooling change — zero source changes.
+
+**Goal:** Switch the CI CMake generator from per-platform Make/MSBuild to
+**Ninja (single-config)** across all three `ci-*` presets so Windows stops
+paying the MSBuild tax and `CMAKE_<LANG>_COMPILER_LAUNCHER=ccache`
+(already wired in the `ci-windows` preset since Phase 4) actually takes
+effect — MSBuild silently ignores `COMPILER_LAUNCHER`; Ninja honors it.
+
 **Cross-platform impact sketch:**
-  - **macOS:** `brew install ninja`; `cmake -G Ninja`. Faster rebuilds, better core utilization than Make. Update `BUILD-macos.md`. Low risk.
-  - **Linux:** `apt/dnf install ninja-build`; `cmake -G Ninja`. Same benefits. Low risk.
-  - **Windows:** Biggest win — replaces MSBuild (`cmake -G Ninja` in a VS dev shell, or `Ninja Multi-Config`). Eliminates the `ball_contrib` `/maxcpucount`/`-j` undefined-behaviour warning entirely. Slightly more setup (Ninja must be on PATH).
-  - **CI (Phase 9):** the GH Actions matrix should standardize on `-G Ninja` on all three runners — simpler, faster, uniform.
-  - **Risk:** Low. CMake fully supports Ninja; the only watch-items are non-standard custom commands / `add_custom_command` ordering and any code that shells out assuming Makefile targets. BALL's CMake is fairly standard. Best sequenced *after* Phase 4 (dependency overhaul, DONE) and *with* Phase 9 (CI, in flight) so it lands once, matrix-wide.
+  - **macOS:** `brew install ninja`; `"generator": "Ninja"` in
+    `ci-macos`. Already ccache-warm in ~3 min; Ninja-vs-Make is a wash,
+    marginal cold-cache improvement. Low risk.
+  - **Linux:** `apt install ninja-build`; `"generator": "Ninja"` in
+    `ci-linux`. Same shape as macOS. Low risk.
+  - **Windows:** Biggest win — replaces MSBuild (`cmake -G Ninja` after
+    `ilammy/msvc-dev-cmd@v1` sets up `vcvars64.bat`). Unlocks
+    ccache-on-MSVC (the prep commit `9c932eb` already preinstalls
+    ccache; the launcher in the `ci-windows` preset becomes load-bearing
+    once Ninja is the generator). Baseline (run 25899905204): 4625s.
+  - **CI:** the three `ci-*` presets in `CMakePresets.json` are the
+    sole edit surface; local-developer presets unchanged.
+  - **Risk:** Low. CMake fully supports Ninja; BALL's BISON/FLEX
+    custom commands use the generator-agnostic `BISON_TARGET` /
+    `FLEX_TARGET` macros (see [`source/FORMAT/sources.cmake`](../../source/FORMAT/sources.cmake)).
+    Best sequenced AFTER Phase 4 (DONE), Phase 5 (DONE), Phase 5.1
+    (DONE) — done.
 
-**Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme — build-tooling transition with no source impact, but the per-platform `BUILD-*.md` docs change. Sequenced AFTER 999.7 (Linux + Windows Qt 6 bring-up) so the cross-platform Ninja switch lands once on a green tri-OS baseline. The `CMakePresets.json` from Phase 4 already abstracts the per-platform configure; flipping the generator is a single `"generator": "Ninja"` field on each preset.
+**Milestone target: v1.6.1.** Carrying out a pure-tooling,
+zero-source-impact change inside a strict-corrective patch milestone is
+acceptable per the v1.6.1 scope discipline
+([`MILESTONE-CONTEXT.md` §"Scope discipline"](../MILESTONE-CONTEXT.md)):
+risk surface is CI YAML + `CMakePresets.json`, NOT BALL/VIEW source.
+Removes the rationale for keeping 999.2 in the v2.0 substrate bundle.
 
-**Requirements:** TBD
-**Plans:** 5/5 plans complete
+**Requirements:** none (build-tooling change; no REQ delta)
+**Plans:** 6 tasks in a single PLAN.md (this is a tooling phase, not
+a multi-PLAN code phase — task IDs 999.2-01..06)
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens)
+- [ ] [PLAN.md](phases/999.2-ninja-generator-switch/PLAN.md) — single-file
+  phase plan with tasks 999.2-01 (planning retarget) through 999.2-06
+  (phase close)
 
 ### Phase 999.3: Networking rework (BACKLOG · LIKELY SUPERSEDED BY 999.10)
 
@@ -584,13 +618,12 @@ Plans:
 - **mmJSON + mmCIF + binary CIF (BinCIF) parity** — gemmi reads all three with one API; BALL today only reads CIF. Even if BALL doesn't expose all formats publicly, the floor is higher.
 
 **Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme:
-- **999.2** — Ninja build generator
 - **999.6** — PIPE-01 renderer pipeline rewrite (GL → QRhi)
 - **999.9** — INIFile → YAML config-format migration
 - **999.10** — TCP/Composite remote-control → REST API + PyBALL SDK
 - **999.11** — In-tree mmCIF parser → gemmi adoption
 
-All five are correctness-sensitive substrate changes; bundled v2.0 break keeps the major-version transition coherent.
+All four are correctness-sensitive substrate changes; bundled v2.0 break keeps the major-version transition coherent. *(999.2 Ninja generator was originally in this bundle; promoted out to v1.6.1 on 2026-05-16 since it's a pure CI-side tooling change with zero source impact and the Windows-blocking flip made it pay back its own implementation cost on first re-run — see [Phase 999.2 entry above](#phase-9992-ninja-build-generator-switch-active--promoted--v161).)*
 
 **Scope (in scope):**
 
