@@ -258,7 +258,7 @@ jobs:
 
       - name: Upload .ninja_log artifact (${{ matrix.os }})
         if: (success() || failure()) && matrix.os == 'macos-arm64'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ninja-log-${{ matrix.os }}-${{ github.sha }}
           path: build/ci-macos/.ninja_log
@@ -302,7 +302,7 @@ jobs:
 
       - name: Upload test results (macOS)
         if: always() && matrix.os == 'macos-arm64'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ball-tests-macos-${{ github.run_id }}
           path: ball-tests-macos.xml
@@ -435,7 +435,7 @@ jobs:
 
       - name: Upload .ninja_log artifact (${{ matrix.os }})
         if: (success() || failure()) && startsWith(matrix.os, 'linux-')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ninja-log-${{ matrix.os }}-${{ github.sha }}
           path: build/ci-linux/.ninja_log
@@ -466,7 +466,7 @@ jobs:
 
       - name: Upload test results (Linux)
         if: always() && startsWith(matrix.os, 'linux-')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ball-tests-linux-${{ github.run_id }}
           path: ball-tests-linux.xml
@@ -616,7 +616,7 @@ jobs:
 
       - name: Upload .ninja_log artifact (windows-x64)
         if: (success() || failure()) && matrix.os == 'windows-x64'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ninja-log-windows-x64-${{ github.sha }}
           path: build\ci-windows\.ninja_log
@@ -683,7 +683,7 @@ jobs:
       - name: Upload spike smoke log (macOS — GLCore backend)
         if: matrix.smoke && matrix.os == 'macos-arm64'
         continue-on-error: true
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: spike-smoke-log-glcore-macos
           path: /tmp/ballview-spike-smoke.log
@@ -722,7 +722,7 @@ jobs:
       # leaves both in a temp dir on failure (D-05 debugging intent).
       - name: Upload render-smoke artifacts on failure
         if: failure() && matrix.smoke
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: render-smoke-${{ matrix.os }}
           path: |
@@ -755,7 +755,7 @@ jobs:
 
       - name: Upload openbabel-smoke artifacts on failure
         if: failure() && matrix.smoke
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: openbabel-smoke-${{ matrix.os }}
           path: /tmp/04-03-smoke.log
@@ -901,7 +901,7 @@ jobs:
 
       - name: Upload coverage HTML report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-html-${{ github.run_id }}
           path: coverage-report/
@@ -909,7 +909,7 @@ jobs:
 
       - name: Upload coverage Cobertura XML (for Codecov / GitHub Insights)
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-xml-${{ github.run_id }}
           path: coverage-report/coverage.xml

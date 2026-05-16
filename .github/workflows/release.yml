@@ -123,7 +123,7 @@ jobs:
 
       - name: Upload test results (macOS — release)
         if: always() && matrix.os == 'macos-arm64'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ball-tests-macos-release-${{ steps.resolve.outputs.ref }}-${{ github.run_id }}
           path: ball-tests-macos-release.xml
@@ -340,7 +340,7 @@ jobs:
       # Upload workflow artifact (consumed by the release job below)
       # =====================================================================
       - name: Upload workflow artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.resolve.outputs.asset }}
           path: ${{ steps.resolve.outputs.asset }}
