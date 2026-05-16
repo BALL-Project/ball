@@ -1141,6 +1141,93 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
+### Phase 999.18: CI hygiene — path-aware triggers + concurrency groups (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Stop docs-only / planning-only pushes from cancelling in-progress code-build CI runs. Today, every push to `v1.6-modernization` triggers the full CI matrix and the `cancel-in-progress: true` concurrency policy ([ci.yml:19-21](.github/workflows/ci.yml#L19)) cancels any running build — including 60-80-minute cold-cache Windows builds — even when the new push only touches `.planning/**` or `*.md` files. Measured cancellation rate on the 2026-05-16 development burst: **8 of last 10 runs cancelled (80%)**, ~80 wasted Windows runner-minutes in a single hour. Lost 5 cold-cache Windows measurements during Phase 999.2 development because of this.
+
+**Why now (v1.6.2, not later):** The pain is observed, measured, and ongoing — every multi-session day during active development on `v1.6-modernization` will hit it. Each cancelled cold-cache Windows run wastes ~30-80min of runner compute that produced no signal. The fix is a workflow-config-only change (no source impact, fully reversible), so v1.6.x scope-discipline is satisfied. Deferring to v2.0 means paying the cancellation tax through every v2.0 substrate phase too.
+
+**Scope:**
+1. **Split workflow triggers by path.** Two options to evaluate during planning:
+   - *Option A — `paths-ignore` on main CI:* Add `paths-ignore: ['.planning/**', '**/*.md', 'docs/**']` to `ci.yml`'s `push:` + `pull_request:` triggers. Docs-only pushes simply don't trigger CI at all. Cleanest if no docs validation is needed.
+   - *Option B — separate workflow for docs:* Keep `ci.yml` for code+CI changes; add `docs.yml` for `.planning/**` + `*.md` paths that runs only lint/link-check. Each has its own concurrency group. Better if you want some basic validation on docs.
+2. **Pick option, document the decision** in the workflow comment block (the existing comment at [ci.yml:3-6](.github/workflows/ci.yml#L3) is the natural place).
+3. **Verify cancellation behavior** by running a controlled experiment: push a docs-only change while a Windows build is running; confirm the Windows build completes uncancelled.
+4. **Update `.planning/MILESTONE-CONTEXT.md`** with a note about the trigger policy so future contributors understand why docs pushes don't show CI status.
+
+**Out of scope (DO NOT do during this phase):**
+- Per-job concurrency groups (e.g. "cancel macOS but let Windows finish") — that's a future optimization; the path-aware fix removes 80% of the pain cheaply.
+- Removing `cancel-in-progress` entirely — code-change pushes legitimately should cancel stale runs to keep the queue moving.
+- Auto-rebase-on-main hooks or merge-queue setup — separate scope.
+
+**Requirements:** TBD (likely a single `CI-HYGIENE-01: docs-only pushes do not cancel running code-build CI runs` on promotion).
+**Plans:** 0 plans (4 tasks sketched above; would run as a single PLAN.md when promoted).
+
+**Estimated effort:** 0.5 day. ~10 lines of workflow YAML + one controlled experiment.
+
+**Promotion trigger:** Anytime in v1.6.2 cycle; no dependencies. Promote with `/gsd-review-backlog 999.18`.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.19: Per-TU build profiling artifact (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Upload Ninja's per-TU build timing log (`build/ci-{platform}/.ninja_log`) as a CI artifact on every run, and generate a top-N-slowest-TUs summary in the Build step output. Today `bbac526` instruments ccache hit/miss counts, but there's no per-TU duration data — so we don't know *which* TUs dominate cold-build time, which makes 999.16's PCH header set selection a guessing game.
+
+**Why now (v1.6.2, not later):** 999.16 (PCH) needs this data to pick the right headers to precompile. Without it, 999.16 either picks headers by intuition (BALL/CONCEPT/*, Boost, Qt — probably right but unverified) or has to run its own one-off profiling pass. Folding the profiling into the standing CI gives 999.16 the data for free *and* surfaces the same data for every future phase that touches build performance (999.12 dead code, 999.21 unity builds if pursued, header hygiene refactors). The instrumentation is also a prerequisite for any future "Windows Build step exceeded 2× recent baseline" regression alert. Self-justifying compounding tool, fits the v1.6.2 "small wins" envelope.
+
+**Scope:**
+1. **Upload `.ninja_log` per platform.** Add an `actions/upload-artifact` step after each Build step that uploads `build/ci-${platform}/.ninja_log` keyed on `ninja-log-${platform}-${github.sha}`. Retention: 30 days (matches the existing test-result artifact convention at [ci.yml:300-302](.github/workflows/ci.yml#L300)).
+2. **In-step top-N summary.** Add a `awk` or Python one-liner to the Build step that parses `.ninja_log` (4-column TSV: `start-ms`, `end-ms`, `mtime`, `path`) and prints the 20 slowest TUs to the job output. ~10 lines, no extra dependencies.
+3. **(Optional, behind a step flag) `clang -ftime-trace` integration.** On Linux clang builds (none today; this is an opt-in for future PRs that want per-TU per-pass breakdown), the `-ftime-trace` flag emits Chrome-trace JSON. Add the build flag + upload step gated on a workflow_dispatch input. Skip if effort >1h — the `.ninja_log` summary alone covers 80% of the value.
+4. **Document the artifact in `.planning/codebase/STACK.md`** or a new `.planning/codebase/CI-ARTIFACTS.md` so future contributors know where to look for per-TU timing data when investigating slow builds.
+
+**Out of scope (DO NOT do during this phase):**
+- Storing build-time history in a database / dashboard. That's a v2.0+ infrastructure question; the per-run artifact is enough for ad-hoc analysis.
+- Comparing runs / regression alerting (separate future phase; 999.19 only provides the data).
+- MSVC equivalent of `-ftime-trace` (`/d2cgsummary`) — Windows + MSVC is the slowest platform and would benefit most, but `/d2cgsummary` output is less analysis-friendly than Clang's. Defer to follow-up if Windows-specific drill-down becomes needed.
+
+**Requirements:** TBD (likely a single `PROFILE-01: every CI run uploads per-TU build timing artifact; top-20 slowest TUs printed to job log` on promotion).
+**Plans:** 0 plans (3-4 tasks sketched above; would run as a single PLAN.md when promoted).
+
+**Estimated effort:** 0.5 day. Pure CI instrumentation; no source impact.
+
+**Dependencies:** None to land, but blocks the *full* value of 999.16 (PCH header set selection) — 999.19 should land first so 999.16 can use real data instead of intuition.
+
+**Promotion trigger:** Anytime in v1.6.2 cycle; recommended before 999.16. Promote with `/gsd-review-backlog 999.19`.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.20: Bump action artifact pins to v6/v7 (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Update GitHub Actions artifact action pins from `actions/upload-artifact@v4` → v6 and `actions/download-artifact@v4` → v7 across all three workflows (`ci.yml`, `release.yml`, and 999.19's new uploads when it lands). Already noted as carried-over deferred work from Phase 5.1 in [MILESTONE-CONTEXT.md:229](.planning/MILESTONE-CONTEXT.md#L229).
+
+**Why now (v1.6.2):** Already tagged for v1.6.2 in the milestone deferred list — this entry promotes it from a deferral-table line item to an actual backlog phase so it gets scheduled and tracked rather than rotting. The v4→v6 / v4→v7 jumps cross breaking-change majors (auto-merging removed, deprecation of older Node runtime), so the bump needs validation, not blind acceptance. Pure CI hygiene; no source impact.
+
+**Scope:**
+1. **Audit all `actions/upload-artifact` and `actions/download-artifact` invocations.** Currently `ci.yml:297-302`, `ci.yml:493-505`, and `release.yml` (TBD locations). Capture the current invocation + arguments per call site.
+2. **Read v4→v6 and v4→v7 changelogs.** Surface every breaking change in scope: artifact name collision behavior, retention defaults, compression options, immutability defaults.
+3. **Bump pins one at a time, verify CI green per bump.** Don't bundle both bumps in one commit — bisect-friendliness matters if a downstream check breaks. Order: `upload@v4 → v6` first (more touch points), then `download@v4 → v7`.
+4. **Update [MILESTONE-CONTEXT.md:229](.planning/MILESTONE-CONTEXT.md#L229)** to mark this deferral resolved.
+
+**Out of scope (DO NOT do during this phase):**
+- Switching to non-GitHub artifact stores (S3, Azure Blob) — that's a v2.0 infra question.
+- Bumping other action pins (`actions/checkout`, `actions/cache`) — those are independent, not part of the carry-over deferred set.
+- Adding new artifact uploads (999.19 territory).
+
+**Requirements:** TBD (likely a single `CI-PIN-01: artifact action pins on v6/v7 with green tri-OS CI` on promotion).
+**Plans:** 0 plans (4 tasks sketched above; would run as a single PLAN.md when promoted).
+
+**Estimated effort:** 0.5 day. Mechanical pin bumps + breaking-change validation.
+
+**Dependencies:** None. Land independently. If 999.19 lands first, its new upload step picks up v6 automatically as part of this phase's sweep.
+
+**Promotion trigger:** Anytime in v1.6.2 cycle. Promote with `/gsd-review-backlog 999.20`.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
