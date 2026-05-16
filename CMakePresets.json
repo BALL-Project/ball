@@ -49,6 +49,7 @@
     {
       "name": "ci-macos",
       "inherits": "macos-homebrew",
+      "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "ccache",
         "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
@@ -58,6 +59,7 @@
     {
       "name": "ci-linux",
       "inherits": "linux-system",
+      "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "ccache",
         "CMAKE_CXX_COMPILER_LAUNCHER": "ccache",
@@ -67,6 +69,7 @@
     {
       "name": "ci-windows",
       "inherits": "windows-vcpkg",
+      "generator": "Ninja",
       "cacheVariables": {
         "CMAKE_C_COMPILER_LAUNCHER": "ccache",
         "CMAKE_CXX_COMPILER_LAUNCHER": "ccache"
