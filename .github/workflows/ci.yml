@@ -77,21 +77,14 @@ jobs:
           # If it regresses, fix or revert this flip — do not silently drop to
           # continue-on-error.
           #
-          # 2026-05-16: bumped from `windows-2022` (4 vCPU, standard hosted) to
-          # `windows-2022-large` (BALL-Project org-provisioned larger hosted
-          # runner, 8 vCPU tier). Earlier attempt at `windows-2022-xlarge` was
-          # reverted (7b1ba7d) because that label wasn't provisioned; the
-          # 8-vCPU large tier IS provisioned. Requires the label to exist in
-          # the org's larger-runner config (Settings → Actions → Runners →
-          # Larger runners). If it doesn't, the job queues indefinitely — fall
-          # back by reverting this one line. Justification: BALL's cold-cache
-          # Windows build is the cross-platform bottleneck; the 8-core tier
-          # roughly doubles concurrent cl.exe processes vs the 4-core standard.
-          # cl.exe's serial header-parse phase becomes the new floor at ~8-12
-          # cores, so the 8-core tier captures most of the achievable speedup
-          # while leaving the 16-core xlarge as future headroom.
+          # 2026-05-16: Attempted windows-2022-xlarge (reverted: 7b1ba7d) and
+          # windows-2022-large (both labels not provisioned in BALL-Project org
+          # larger-runner config — both queued indefinitely). Falling back to
+          # windows-2022 (4 vCPU, standard hosted GitHub runner) — which IS
+          # available and has been used for all prior Windows CI. A future
+          # larger-runner provisioning step can retry the bump.
           - os: windows-x64
-            runner: windows-2022-large
+            runner: windows-2022
             blocking: true
             smoke: false
             ccache_dir: C:\Users\runneradmin\AppData\Local\ccache

@@ -38,12 +38,11 @@ jobs:
         include:
           - os: macos-arm64
             runner: macos-14
-          # 2026-05-16: bumped from `windows-2022` to `windows-2022-large`
-          # (BALL-Project org-provisioned larger hosted runner, 8 vCPU tier)
-          # — mirrors the same bump in ci.yml. Earlier attempt at xlarge
-          # reverted because that label wasn't provisioned; the large tier is.
+          # 2026-05-16: falling back to windows-2022 — both windows-2022-xlarge
+          # and windows-2022-large queued indefinitely (labels not provisioned
+          # in BALL-Project org). Mirrors the same fallback in ci.yml.
           - os: windows-x64
-            runner: windows-2022-large
+            runner: windows-2022
 
     steps:
       - name: Resolve target ref
