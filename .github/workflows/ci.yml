@@ -135,7 +135,12 @@ jobs:
         if: matrix.os == 'macos-arm64'
         run: |
           # D-07: the BUILD-macos.md target set, Release.
+          # Phase 999.2: zero ccache stats before the Build, dump them after,
+          # so the per-run cache-hit ratio is visible in the workflow log
+          # (the warm-vs-cold delta is the key metric for the Ninja switch).
+          ccache --zero-stats
           cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
+          ccache --show-stats --verbose
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — wires the BALL unit-test
@@ -277,7 +282,11 @@ jobs:
         if: matrix.os == 'linux-x64'
         run: |
           # D-07: the BUILD-macos.md target set, Release.
+          # Phase 999.2: zero ccache stats before / dump after — see the
+          # matching block in "Build (macOS)" for rationale.
+          ccache --zero-stats
           cmake --build --preset ci-linux --target BALL VIEW BALLView -j$(nproc)
+          ccache --show-stats --verbose
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — see macOS counterpart
@@ -416,7 +425,13 @@ jobs:
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
+          # Phase 999.2: zero ccache stats before / dump after — under Ninja,
+          # CMAKE_<LANG>_COMPILER_LAUNCHER=ccache (from the ci-windows preset)
+          # is finally honored, so the post-build stats are the load-bearing
+          # measurement for whether the switch is paying off.
+          & ccache --zero-stats
           cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release --parallel $env:NUMBER_OF_PROCESSORS
+          & ccache --show-stats --verbose
 
       # ======================================================================
       # Render smoke check (D-08) — macOS native, Linux under xvfb + software
