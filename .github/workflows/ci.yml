@@ -247,7 +247,10 @@ jobs:
           set +o pipefail
           if [ -f build/ci-macos/.ninja_log ]; then
             echo "=== Top-20 slowest TUs (${{ matrix.os }}) ==="
-            awk -F'\t' 'NF>=5 {printf "%8d ms  %s\n", $2-$1, $5}' build/ci-macos/.ninja_log \
+            # ninja log v7: start_ms TAB end_ms TAB mtime TAB output_path TAB cmd_hash
+            # Filter to CMakeFiles/ entries (source files only) to exclude
+            # generated files (autogen/mocs_compilation.cpp etc).
+            awk -F'\t' 'NF>=5 && $4 ~ /CMakeFiles\// {printf "%8d ms  %s\n", $2-$1, $4}' build/ci-macos/.ninja_log \
               | sort -rn | head -20
           else
             echo "WARN: .ninja_log not found at build/ci-macos/.ninja_log"
@@ -423,7 +426,8 @@ jobs:
           set +o pipefail
           if [ -f build/ci-linux/.ninja_log ]; then
             echo "=== Top-20 slowest TUs (${{ matrix.os }}) ==="
-            awk -F'\t' 'NF>=5 {printf "%8d ms  %s\n", $2-$1, $5}' build/ci-linux/.ninja_log \
+            # ninja log v7: field 4 = output_path, field 5 = cmd_hash.
+            awk -F'\t' 'NF>=5 && $4 ~ /CMakeFiles\// {printf "%8d ms  %s\n", $2-$1, $4}' build/ci-linux/.ninja_log \
               | sort -rn | head -20
           else
             echo "WARN: .ninja_log not found at build/ci-linux/.ninja_log"
@@ -598,10 +602,12 @@ jobs:
           $logPath = "build\ci-windows\.ninja_log"
           if (Test-Path $logPath) {
             Write-Host "=== Top-20 slowest TUs (windows-x64) ==="
+            # ninja log v7: field[3] = output_path, field[4] = cmd_hash (0-indexed).
+            # Filter to CMakeFiles\ entries (source compilations only).
             Get-Content $logPath | ForEach-Object {
               $f = $_ -split "`t"
-              if ($f.Length -ge 5) {
-                [PSCustomObject]@{ ms = [int]$f[1] - [int]$f[0]; tu = $f[4] }
+              if ($f.Length -ge 5 -and $f[3] -match 'CMakeFiles\\') {
+                [PSCustomObject]@{ ms = [int]$f[1] - [int]$f[0]; tu = $f[3] }
               }
             } | Sort-Object -Property ms -Descending | Select-Object -First 20 | Format-Table -AutoSize
           } else {
