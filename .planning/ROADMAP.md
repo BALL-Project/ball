@@ -1077,6 +1077,66 @@ Each task has a one-line goal and explicit, verifiable success criteria. Tasks n
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog after v2.0 ships; do NOT promote earlier — v2.0's 999.10 REST API decision affects whether `pyInterpreter.{h,C}` survives, and 999.10's ABI changes would invalidate any wrapping work done before it lands.)
 
+### Phase 999.16: Build acceleration — precompiled headers for BALL + VIEW (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Add CMake-native precompiled headers (`target_precompile_headers`, CMake 3.16+) for the `BALL` and `VIEW` library targets, pre-compiling the heavy include set (Qt, Boost, Eigen, `BALL/CONCEPT/*`, `BALL/COMMON/*`) once per target instead of N times per TU. Cross-platform — affects all three CI runners.
+
+**Why now (v1.6.2, not v2.0):** With Phase 999.2 landed, the cold-cache Windows Build step is the only remaining build-time pain point on `v1.6-modernization`: warm cache is 55s but cold cache (first push of a feature branch, after eviction, after high-fanout header change) is ~80min. PCH typically delivers 20-40% cold-build speedup on template-heavy C++ — BALL's heavy Boost/Eigen/Qt include surface is exactly the workload PCH is designed for. The change is mechanical (handful of lines in `CMakeLists.txt`), per-target opt-in, and trivially reversible — fits v1.6.2's "small wins, no substrate change" envelope. Deferring to v2.0 would mean v2.0's substrate-modernization phases (PIPE-01 renderer rewrite, INIFile→YAML, gemmi mmCIF, REST API rewrite) pay the cold-cache tax on every CI iteration of every PR. Cheap to land now, compounds across every future build.
+
+**Scope:**
+1. **Pick the header set per target.** Audit `source/{KERNEL,CONCEPT,COMMON,DATATYPE,MATHS,SYSTEM}/*.C` for the most-included headers via `grep -h '#include' | sort | uniq -c | sort -rn`; the top ~10-20 are the PCH candidates. Same exercise for `source/VIEW/*.C` (Qt + GL headers dominate). Document the chosen set inline in `CMakeLists.txt` so future drift is visible.
+2. **Wire `target_precompile_headers(BALL PRIVATE ...)` and `target_precompile_headers(VIEW PRIVATE ...)`** with the chosen header lists. `PRIVATE` (not `PUBLIC`) so downstream consumers aren't forced to share PCH state. Skip BALLView (the exe target) — its TU count is small enough that PCH overhead isn't worth it.
+3. **Verify ccache compatibility.** ccache 4.x has known PCH integration quirks (`sloppiness = pch_defines,time_macros,include_file_mtime` is typically required). Add the `sloppiness` setting to the ccache config step in `.github/workflows/ci.yml` for all three platforms. Without this, PCH-enabled builds can silently bust ccache hits.
+4. **Measure delta on cold + warm CI.** Trigger one cold-cache run (push that invalidates the ccache key entirely) and one warm-cache run (rerun on same SHA). Report Build-step times per platform pre/post. Acceptance: ≥15% cold-cache Build-step reduction on Windows, ≥10% on Linux/macOS. If smaller — investigate header set; if negative — revert and document why.
+5. **Document in `cmake/PCH.md`** which targets have PCH, which headers, and the ccache sloppiness requirement. Future drift (someone adds a heavy header to one of the PCH'd targets) needs a documented home for "did this get audited?"
+
+**Out of scope (DO NOT do during this phase):**
+- PCH on test targets (test build is non-blocking + Phase 9 territory).
+- PCH on `BALLView` exe (small TU count, not worth complexity).
+- Header hygiene pass (forward-decls instead of full `#include`s in public headers) — separate, slow-burn refactor; not coupled to PCH wins.
+- Switching the compiler-launcher integration (clang-cl, distcc, sccache cloud backend) — separate phases if pursued.
+
+**Requirements:** TBD (likely a single `BUILD-PCH-01: cold-cache Windows Build step reduced ≥15% measured on tri-OS CI` on promotion).
+**Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
+
+**Estimated effort:** 0.5-1 day. Wiring is ~20 lines of CMake; the time is in picking the right header set + measuring delta cleanly under the concurrency-group churn that bit the Phase 999.2 measurements.
+
+**Promotion trigger:** Anytime in v1.6.2 cycle; no upstream dependencies. Promote with `/gsd-review-backlog 999.16`.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.17: Build acceleration — cache Windows CMake build tree across CI runs (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Cache the Windows CMake build tree (`build/ci-windows/CMakeCache.txt`, `build.ninja`, `CMakeFiles/`, `vcpkg_installed/`) across CI runs via `actions/cache`, keyed on the hash of structural files (`CMakeLists.txt`, `cmake/**`, `vcpkg.json`, `CMakePresets.json`). Collapse the now-dominant warm-cache `Configure (Windows)` step (~2m 32s post-Phase 999.2) to seconds when nothing structural changed.
+
+**Why now (v1.6.2, not v2.0):** Post-Phase 999.2, the warm-cache Windows job is `4m 49s` total — of which `Configure (Windows)` accounts for `2m 32s` (vcpkg toolchain restore + FIND_PACKAGE chains + CMake regenerate). Build step is now `55s`. So `Configure` is now the largest single contributor to warm Windows job time; cutting it to seconds takes typical warm Windows from ~5min to ~2min total. Linux/macOS `Configure` is already 5-15s; not worth caching those. The change is contained to `.github/workflows/ci.yml` — no source impact, fully reversible.
+
+**Scope:**
+1. **Identify the safe-to-cache subset of `build/ci-windows/`.** `CMakeCache.txt`, `CMakeFiles/`, `build.ninja`, `vcpkg_installed/` are the high-value entries. `Win32/` (object files) is OUT — that's ccache's job, not build-tree cache's. Document the include/exclude list in the workflow comment.
+2. **Add an `actions/cache` step before `Configure (Windows)`** keyed on `windows-buildtree-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json', 'source/**/CMakeLists.txt') }}` with restore-key `windows-buildtree-`. On hit: skip configure (or run a fast `cmake --build --preset ci-windows -- regenerate.phony` no-op). On miss: full Configure, then save.
+3. **Verify Ninja's incremental-build robustness across cache restores.** Ninja's `.ninja_deps` and `.ninja_log` track per-TU dependency timestamps; restoring them from a different runner's filesystem can confuse Ninja if mtimes drift. Mitigation: use `cmake --build --regenerate-no-test` or set `CMAKE_NINJA_OUTPUT_PATH_PREFIX` consistently. Document the chosen approach.
+4. **Confirm vcpkg_installed restoration works alongside the vcpkg binary cache.** The two are different — `vcpkg_installed/` is the resolved per-build artifact set; the binary archives cache (already in place at [ci.yml:335](.github/workflows/ci.yml#L335)) is the source of those artifacts. Caching `vcpkg_installed/` is what removes the multi-minute "install vcpkg packages" portion of Configure.
+5. **Measure delta on warm CI.** Trigger one warm-cache rerun (same SHA, same structural-file hash). Acceptance: ≥80% reduction in `Configure (Windows)` step time. If smaller — investigate which sub-step survives the cache; if Ninja chooses to re-run all CMake configures despite the restored cache, the chosen safe-subset is wrong.
+
+**Out of scope (DO NOT do during this phase):**
+- Caching the Linux/macOS build tree — Configure on those platforms is small (5-15s); cache save/restore overhead would dominate.
+- Caching `Win32/` object files — that's ccache's job and ccache is already wired.
+- Reorganizing the vcpkg binary cache step (already working).
+- Changing the CMake generator (Ninja stays).
+
+**Requirements:** TBD (likely a single `BUILD-CACHE-01: warm-cache Windows Configure step reduced ≥80% measured on tri-OS CI` on promotion).
+**Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
+
+**Estimated effort:** 0.5-1 day. ~20 lines of workflow YAML + one measurement cycle. Most of the time is debugging Ninja's incremental-build behavior across restored caches (task 3); if Ninja silently re-runs all configures regardless of the restored tree, scope drops to "cache `vcpkg_installed/` only" which is a 3× simpler change with most of the win.
+
+**Dependencies:** None. Layers cleanly with 999.16 (PCH) — 999.16 attacks cold-cache Build, 999.17 attacks warm-cache Configure. Land in either order.
+
+**Promotion trigger:** Anytime in v1.6.2 cycle. Promote with `/gsd-review-backlog 999.17`.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*

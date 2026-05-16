@@ -1,0 +1,260 @@
+#Generated with autowrap 0.27.0 and Cython (Parser) 3.2.4
+#cython: c_string_encoding=ascii
+#cython: embedsignature=False
+from  enum            import IntEnum as _PyEnum
+import sys as _sys
+from  cpython         cimport Py_buffer
+from  cpython         cimport bool as pybool_t
+from  libcpp.string   cimport string as libcpp_string
+from  libcpp.string   cimport string as libcpp_utf8_string
+from  libcpp.string   cimport string as libcpp_utf8_output_string
+from  libcpp.set      cimport set as libcpp_set
+from  libcpp.vector   cimport vector as libcpp_vector
+from  libcpp.vector   cimport vector as libcpp_vector_as_np
+from  libcpp.pair     cimport pair as libcpp_pair
+from  libcpp.map      cimport map  as libcpp_map
+from  libcpp.unordered_map cimport unordered_map as libcpp_unordered_map
+from  libcpp.unordered_set cimport unordered_set as libcpp_unordered_set
+from  libcpp.deque    cimport deque as libcpp_deque
+from  libcpp.list     cimport list as libcpp_list
+from  libcpp.optional cimport optional as libcpp_optional
+from  libcpp.string_view cimport string_view as libcpp_string_view
+from  libcpp          cimport bool
+from  libc.string     cimport const_char, memcpy
+from  cython.operator cimport dereference as deref, preincrement as inc, address as address
+from  AutowrapRefHolder      cimport AutowrapRefHolder
+from  AutowrapPtrHolder      cimport AutowrapPtrHolder
+from  AutowrapConstPtrHolder cimport AutowrapConstPtrHolder
+from  libcpp.memory   cimport shared_ptr
+cdef extern from "<functional>" namespace "std" nogil:
+    cdef cppclass cpp_hash "std::hash" [T]:
+        cpp_hash() except +
+        size_t operator()(const T&) except +
+from SimpleVec cimport SimpleVec as _SimpleVec
+
+cdef extern from "autowrap_tools.hpp":
+    char * _cast_const_away(char *)# Registry for scoped enum classes defined in this module
+_scoped_enum_registry = {}
+
+def _get_scoped_enum_class(name, fallback=None):
+    '''Look up a scoped enum class by name, searching across sibling modules.
+
+    In multi-module builds, scoped enums may be defined in one module but used
+    in another. This function provides cross-module lookup by:
+    1. First checking the local module registry (fastest path)
+    2. Then searching all sibling modules in the same package via sys.modules
+
+    Args:
+        name: The enum class name (e.g., '_PySpectrumType')
+        fallback: Value to return if enum not found. Defaults to int for type checks,
+                  or can be set to a callable like (lambda x: x) for conversions.
+
+    Returns the enum class if found, or the fallback value if not found.
+    '''
+    if fallback is None:
+        fallback = int
+    # Fast path: check local registry first
+    if name in _scoped_enum_registry:
+        return _scoped_enum_registry[name]
+    # Slow path: search sibling modules in the same package
+    # Determine our package prefix (e.g., 'mypackage.' from 'mypackage._module_4')
+    _current_module = _sys.modules.get(__name__)
+    if _current_module is not None:
+        _pkg = getattr(_current_module, '__package__', None) or __name__.rsplit('.', 1)[0]
+        _pkg_prefix = _pkg + '.'
+        for mod_name, mod in list(_sys.modules.items()):
+            if mod is not None and (mod_name.startswith(_pkg_prefix) or mod_name == _pkg):
+                enum_cls = getattr(mod, name, None)
+                if enum_cls is not None:
+                    # Cache for future lookups
+                    _scoped_enum_registry[name] = enum_cls
+                    return enum_cls
+    # Fallback
+    return fallback 
+
+cdef class SimpleVec:
+    """
+    Cython implementation of _SimpleVec
+
+    A 3-vector exposing constructors, arithmetic operators,
+    comparison, and a throw-bearing divideBy method. POC for
+    validating the autowrap+Cython toolchain end-to-end.
+    """
+
+    cdef shared_ptr[_SimpleVec] inst
+
+    def __dealloc__(self):
+         self.inst.reset()
+
+    
+    def _init_0(self):
+        """
+        _init_0(self) -> None
+        """
+        self.inst = shared_ptr[_SimpleVec](new _SimpleVec())
+    
+    def _init_1(self, double x , double y , double z ):
+        """
+        _init_1(self, x: float , y: float , z: float ) -> None
+        """
+        assert isinstance(x, float), 'arg x wrong type'
+        assert isinstance(y, float), 'arg y wrong type'
+        assert isinstance(z, float), 'arg z wrong type'
+    
+    
+    
+        self.inst = shared_ptr[_SimpleVec](new _SimpleVec((<double>x), (<double>y), (<double>z)))
+    
+    def _init_2(self, SimpleVec other ):
+        """
+        _init_2(self, other: SimpleVec ) -> None
+        """
+        assert isinstance(other, SimpleVec), 'arg other wrong type'
+    
+        self.inst = shared_ptr[_SimpleVec](new _SimpleVec((deref(other.inst.get()))))
+    
+    def __init__(self, *args , **kwargs):
+        """
+        .. rubric:: Overload:
+        .. py:function:: __init__(self, ) -> None
+          :noindex:
+        
+        .. rubric:: Overload:
+        .. py:function:: __init__(self, x: float , y: float , z: float ) -> None
+          :noindex:
+        
+        .. rubric:: Overload:
+        .. py:function:: __init__(self, other: SimpleVec ) -> None
+          :noindex:
+    
+        """
+        if not args:
+             self._init_0(*args)
+        elif (len(args)==3) and (isinstance(args[0], float)) and (isinstance(args[1], float)) and (isinstance(args[2], float)):
+             self._init_1(*args)
+        elif (len(args)==1) and (isinstance(args[0], SimpleVec)):
+             self._init_2(*args)
+        else:
+               raise Exception('can not handle type of %s' % (args,))
+    
+    def divideBy(self, double s ):
+        """
+        divideBy(self, s: float ) -> SimpleVec
+        """
+        assert isinstance(s, float), 'arg s wrong type'
+    
+        cdef _SimpleVec * _r = new _SimpleVec(self.inst.get().divideBy((<double>s)))
+        cdef SimpleVec py_result = SimpleVec.__new__(SimpleVec)
+        py_result.inst = shared_ptr[_SimpleVec](_r)
+        return py_result
+    
+    def getX(self):
+        """
+        getX(self) -> float
+        """
+        cdef double _r = self.inst.get().getX()
+        py_result = <double>_r
+        return py_result
+    
+    def getY(self):
+        """
+        getY(self) -> float
+        """
+        cdef double _r = self.inst.get().getY()
+        py_result = <double>_r
+        return py_result
+    
+    def getZ(self):
+        """
+        getZ(self) -> float
+        """
+        cdef double _r = self.inst.get().getZ()
+        py_result = <double>_r
+        return py_result
+    
+    def length(self):
+        """
+        length(self) -> float
+        """
+        cdef double _r = self.inst.get().length()
+        py_result = <double>_r
+        return py_result
+    
+    def negate(self):
+        """
+        negate(self) -> SimpleVec
+        """
+        cdef _SimpleVec * _r = new _SimpleVec(self.inst.get().negate())
+        cdef SimpleVec py_result = SimpleVec.__new__(SimpleVec)
+        py_result.inst = shared_ptr[_SimpleVec](_r)
+        return py_result
+    
+    def normalize(self):
+        """
+        normalize(self) -> SimpleVec
+        """
+        cdef _SimpleVec * _r = new _SimpleVec(self.inst.get().normalize())
+        cdef SimpleVec py_result = SimpleVec.__new__(SimpleVec)
+        py_result.inst = shared_ptr[_SimpleVec](_r)
+        return py_result
+    
+    def __add__(SimpleVec self, SimpleVec other not None):
+        cdef _SimpleVec * this = self.inst.get()
+        cdef _SimpleVec * that = other.inst.get()
+        cdef _SimpleVec applied = deref(this) + deref(that)
+        cdef SimpleVec result = SimpleVec.__new__(SimpleVec)
+        result.inst = shared_ptr[_SimpleVec](new _SimpleVec(applied))
+        return result
+    
+    def __sub__(SimpleVec self, SimpleVec other not None):
+        cdef _SimpleVec * this = self.inst.get()
+        cdef _SimpleVec * that = other.inst.get()
+        cdef _SimpleVec applied = deref(this) - deref(that)
+        cdef SimpleVec result = SimpleVec.__new__(SimpleVec)
+        result.inst = shared_ptr[_SimpleVec](new _SimpleVec(applied))
+        return result
+    
+    def repr(self):
+        """
+        repr(self) -> Union[bytes, str]
+        """
+        cdef libcpp_utf8_string _r = self.inst.get().repr()
+        py_result = <libcpp_string>_r
+        return py_result
+    
+    def setX(self, double v ):
+        """
+        setX(self, v: float ) -> None
+        """
+        assert isinstance(v, float), 'arg v wrong type'
+    
+        self.inst.get().setX((<double>v))
+    
+    def setY(self, double v ):
+        """
+        setY(self, v: float ) -> None
+        """
+        assert isinstance(v, float), 'arg v wrong type'
+    
+        self.inst.get().setY((<double>v))
+    
+    def setZ(self, double v ):
+        """
+        setZ(self, v: float ) -> None
+        """
+        assert isinstance(v, float), 'arg v wrong type'
+    
+        self.inst.get().setZ((<double>v))
+    
+    def __richcmp__(self, other, op):
+        if op not in (2, 3):
+           op_str = {0: '<', 2: '==', 4: '>', 1: '<=', 3: '!=', 5: '>='}[op]
+           raise NotImplementedError("Comparison operator %s not implemented" % op_str)
+        if not isinstance(other, SimpleVec):
+           raise NotImplementedError("Comparison currently only allowed with objects of the same type. Use isinstance and define yourself.")
+        cdef SimpleVec other_casted = other
+        cdef SimpleVec self_casted = self
+        if op==2:
+            return deref(self_casted.inst.get()) == deref(other_casted.inst.get())
+        if op==3:
+            return deref(self_casted.inst.get()) != deref(other_casted.inst.get()) 
