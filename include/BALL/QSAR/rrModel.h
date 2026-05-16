@@ -31,6 +31,8 @@ namespace BALL
 				RRModel(const QSARData& q, double lambda=0.003);
 
 				~RRModel();
+
+				using MLRModel::operator=;
 				//@}
 				
 				/** @name Accessors

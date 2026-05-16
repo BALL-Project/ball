@@ -26,6 +26,8 @@ namespace BALL
 				ALLModel(const QSARData& q, double kw=4);
 
 				~ALLModel();
+
+				using NonLinearModel::operator=;
 				//@}
 				
 				/** @name Accessors

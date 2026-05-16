@@ -23,6 +23,8 @@ namespace BALL
 				 */
 				//@{
 				KNNModel(const QSARData& q, int k=3);
+
+				using ALLModel::operator=;
 				//@}
 				
 				void calculateWeights(Eigen::MatrixXd& dist, Eigen::VectorXd& w);

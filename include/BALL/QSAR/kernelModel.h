@@ -45,7 +45,8 @@ namespace BALL
 				virtual void readFromFile(string filename);
 				
 				virtual Eigen::VectorXd predict(const vector<double>& substance, bool transform);
-				
+
+				using NonLinearModel::operator=;
 				void operator=(const Model& m);
 
 				EIGEN_MAKE_ALIGNED_OPERATOR_NEW
