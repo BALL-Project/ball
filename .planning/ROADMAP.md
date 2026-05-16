@@ -917,7 +917,7 @@ Five specific 2015-2017 PRs deserve named tracking inside 999.14's categorizatio
 **Bundle escape clause:** if triage finds the rebase work exceeds ~3 days actual effort (per Codex review: don't pre-split phases for speculative work), spin out the merge work as Phase 5.2 at that point. Default: keep inside 999.14 as the codex-recommended path.
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog after v1.6.1 tags)
+- [x] [999.14-01-PLAN.md](phases/999.14-github-issue-pr-triage/999.14-01-PLAN.md) — TRIAGE-01 + TRIAGE-02 + TRIAGE-03 bundled execution (complete 2026-05-16)
 
 ### Phase 999.15: PyBALL wrapping rewrite (BACKLOG · TARGETED FOR v2.1 · CONDITIONAL on Phase 6 bake-off)
 

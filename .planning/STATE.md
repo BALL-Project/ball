@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: OR v1.7)
 status: executing
-stopped_at: Phase 999.20 complete — build-accel cluster closed; next Phase 9 test-suite triage
-last_updated: "2026-05-16T19:30:00Z"
-last_activity: 2026-05-16 — Phase 999.20 closed (upload-artifact v4→v6 in 1d3da02, download-artifact v4→v7 in 3cb03c8; CI run 25970222837 green; BUILD-ACCEL-05 complete; 5-phase build-accel cluster done)
+stopped_at: Phase 999.14 complete — TRIAGE-01/02/03 done; next Phase 9 test-suite triage or DEADCODE-01
+last_updated: "2026-05-16T21:00:00Z"
+last_activity: 2026-05-16 — Phase 999.14 closed (TRIAGE-01: 82 net closes; TRIAGE-02: 7 VERIFICATION.md audited; TRIAGE-03: all 5 PRs dispositioned — #640 merged 9c6d868, #554/#546/#550 C++ slice 45dce69, #600 closed-obsolete; TRIAGE-01/02/03 marked Complete in REQUIREMENTS.md)
 progress:
   total_phases: 40
-  completed_phases: 14
+  completed_phases: 15
   total_plans: 52
-  completed_plans: 50
-  percent: 29
+  completed_plans: 51
+  percent: 30
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.20 — artifact pin bumps (complete); build-accel cluster closed; next Phase 9 test-suite triage
+**Current Focus:** Phase 999.14 — GitHub issue + PR triage complete (TRIAGE-01/02/03 done); next: Phase 9 test-suite triage (TEST-CLOSE-01/02) or DEADCODE-01
 
 ## Current Position
 
-Phase: 999.20 (action-artifact-pins) — COMPLETE
+Phase: 999.14 (github-issue-pr-triage) — COMPLETE
 Plan: 1 of 1
-Status: Phase complete — BUILD-ACCEL-05 marked Complete (upload-artifact v4→v6 in 1d3da02; download-artifact v4→v7 in 3cb03c8; CI run 25970222837 green tri-OS+linux-arm64+coverage; no artifact-name collisions; 5-phase build-accel cluster fully closed)
+Status: Phase complete — TRIAGE-01 (82 net closes from 181 baseline items; decisions.md audit trail), TRIAGE-02 (7 VERIFICATION.md audited; f176b8b pattern confirmed on 05-VERIFICATION.md), TRIAGE-03 (5-PR bundle: #640 merged 9c6d868 FindXDR refactor; #554/#546/#550 C++ slice merged 45dce69; #600 closed-obsolete; bundle-escape DID NOT FIRE)
 Last activity: 2026-05-16
 
 ## Performance Metrics
@@ -76,6 +76,7 @@ Last activity: 2026-05-16
 | Phase 999.17-windows-build-tree-cache P01 | ~120 (dominated by CI wall-clock) | 2 tasks | 1 files (ci.yml) + 3 measurement commits |
 | Phase 999.19-per-tu-build-profiling P01 | ~3.5h (dominated by CI wall-clock + parallel-session interference + rate-limit waits) | 2 tasks | 1 files (ci.yml) + 2 Rule-1 deviation commits |
 | Phase 999.20-action-artifact-pins P01 | ~45min (dominated by CI watch + parallel-session concurrency cancellations) | 3 tasks | 2 files (ci.yml + release.yml) + MILESTONE-CONTEXT.md + REQUIREMENTS.md |
+| Phase 999.14-github-issue-pr-triage P01 | ~2h (multi-session; prior rounds + this session for TRIAGE-02 + TRIAGE-03 + state updates) | 5 tasks | 18 files (3 baseline JSON + decisions.md + STALE-DOCS-AUDIT.md + SUMMARY.md + 8 C++ files from 5-PR bundle + ROADMAP.md + REQUIREMENTS.md + STATE.md) |
 
 ## Accumulated Context
 
@@ -137,6 +138,7 @@ Last activity: 2026-05-16
 - [Phase 05.1]: Plan 05.1-12 (Task D3 — Linux ccache cache-save tar failure; diagnosis-first). **Diagnosis corrected BACKLOG D3's step attribution**: the recurring `/usr/bin/tar exit code 2` warning is on the Linux **apt-archives** cache step (`path: /var/cache/apt/archives`), NOT the **ccache** step which has been saving cleanly all along. Surveyed 15 recent CI runs on v1.6-modernization via `gh run view --log` — 7/7 successful Linux runs that reached the post-job cache phase emit the warning (chronic, not transient — the other 8 runs aborted pre-cache due to unrelated plan-11 D2 pin-bump iteration build failures). Forensic root cause from run 25899905204: tar fails specifically on `../../../../../var/cache/apt/archives/lock` (root:root, 0640) + `../../../../../var/cache/apt/archives/partial` (root:root, 0700) — both unreadable to the unprivileged `runner` user on GitHub-hosted Ubuntu runners. The actions/cache fallback (a second tar invocation that excludes the failing entries) then succeeds: `Cache saved with key: ccache-linux-x64-...` follows the warning by 2-3 seconds. So the warning is definitionally cosmetic (cache IS saved) but a 100%-recurring red herring that misleads readers. Fix = narrow `path: /var/cache/apt/archives` → `path: /var/cache/apt/archives/*.deb` in ci.yml's "Cache apt archives (Linux)" step — 1 substantive line + 17 doc-comment lines preserving the diagnosis trail in-source. Addresses root cause by construction: the `.deb` archives (proof: `Get:40 .../ccache_4.5.1-1_amd64.deb` in every run log) are the only content `apt-get install` downloads and the only content the cache restore needs; `lock` + `partial/` are runtime APT state that doesn't belong in a cache. **Decision (autonomously resolved per no-clarifying-questions mode)**: chose `narrow-cached-path` (a 5th option) over the four plan-listed checkpoint options (split-cache-key / pre-save-cleanup / permissions-fix / no-fix-transient) because none mapped cleanly to apt-cache vs. ccache once the BACKLOG mis-attribution was uncovered — `permissions-fix` is closest in spirit, but the right fix isn't `chmod` (the runner can't sudo-chmod root-owned APT lock files and shouldn't try). The four ruled-out root causes from BACKLOG were systematically eliminated: cache size > 10 GB → false (saved cache = 152 MB compressed); runner disk pressure → false (tar exit 2 was at per-file open() boundary, not ENOSPC at write); corrupted state → false (same two specific paths fail on every run, deterministic); transient → false (7/7 recurrence). **Rule 1 deviation**: corrected the BACKLOG D3 step attribution from ccache to apt-archives and documented the correction in SUMMARY + this decision entry so future maintainers don't re-investigate the ccache step on the same evidence. YAML parses clean (python3 yaml.safe_load); all plan-11 v5 action pins (checkout@v5, cache@v5 ×3, cache/restore@v5, cache/save@v5) preserved unchanged across the edit; macOS Homebrew cache, Windows vcpkg cache, ccache step itself all untouched. Verification of the fix's effect (no `Failed to save` warning + cache hit on next-next run) deferred to next CI run. Commit 1321336.
 - [Phase 999.16]: PCH excluded for macOS (AppleClang); retained for Linux/Windows
 - [Phase 999.17]: BUILD-ACCEL-02 complete — actions/cache@v5 step caches Windows CMake build tree; warm-cache Configure (Windows) reduced from 149s to 63s (−57.7%); full scope retained (≥50% threshold met); restore-key prefix fallback provides ~49% speedup on structural-change runs
+- [Phase 999.14]: TRIAGE-01 (82 net closes from 181 baseline; templated close comments; 3-round pass: externals + maintainer batch + reconciliation), TRIAGE-02 (f176b8b stale-findings pattern already on 05-VERIFICATION.md; 0 new banners; STALE-DOCS-AUDIT.md written), TRIAGE-03 (5-PR bundle: #640 FindXDR cherry-picked 9c6d868; #554/#546/#550 C++ slice 45dce69; #600 closed-obsolete; bundle-escape DID NOT FIRE). Key decision: PRs #554/#546/#550 applied as C++-slice-only (SIP deferred to Phase 999.15). Post-triage state: 95 issues + 4 PRs open (95 + 3 named bundle = previous 4 PRs minus the named bundle = 0).
 
 ### Roadmap Evolution
 
