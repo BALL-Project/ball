@@ -38,6 +38,11 @@ jobs:
     # matrix field so macOS/Linux stay blocking and Windows flips to required in
     # Phase 4 with a one-line matrix change (`blocking: true`).
     continue-on-error: ${{ !matrix.blocking }}
+    # Phase 999.16 (BUILD-ACCEL-01): ccache + PCH compatibility requires these
+    # sloppiness keys. Without them, PCH-enabled builds silently bust ccache hits.
+    # See cmake/PCH.md §"ccache sloppiness contract" for per-flag rationale.
+    env:
+      CCACHE_SLOPPINESS: "pch_defines,time_macros,include_file_mtime"
     strategy:
       # Don't let one OS failing cancel the others — we want the full picture.
       fail-fast: false
@@ -71,8 +76,19 @@ jobs:
           # build is repeatably green (CI run 25899905204 + this commit's run).
           # If it regresses, fix or revert this flip — do not silently drop to
           # continue-on-error.
+          #
+          # 2026-05-16: bumped from `windows-2022` (4 vCPU, standard hosted) to
+          # `windows-2022-xlarge` (BALL-Project org-provisioned larger hosted
+          # runner). Requires the label to exist in the org's larger-runner
+          # config (Settings → Actions → Runners → Larger runners). If it
+          # doesn't, the job queues indefinitely — fall back by reverting this
+          # one line. Justification: BALL's cold-cache Windows build is the
+          # cross-platform bottleneck; more cores cuts wall-time roughly
+          # linearly until cl.exe's serial header-parse phase becomes the new
+          # floor (typically ~8-12 cores worth of useful parallelism for this
+          # workload).
           - os: windows-x64
-            runner: windows-2022
+            runner: windows-2022-xlarge
             blocking: true
             smoke: false
             ccache_dir: C:\Users\runneradmin\AppData\Local\ccache
@@ -89,8 +105,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ matrix.ccache_dir }}
-          key: ccache-${{ matrix.os }}-${{ github.sha }}
+          key: ccache-${{ matrix.os }}-pch-v1-${{ github.sha }}
           restore-keys: |
+            ccache-${{ matrix.os }}-pch-v1-
             ccache-${{ matrix.os }}-
 
       # ======================================================================
@@ -429,8 +446,15 @@ jobs:
           # CMAKE_<LANG>_COMPILER_LAUNCHER=ccache (from the ci-windows preset)
           # is finally honored, so the post-build stats are the load-bearing
           # measurement for whether the switch is paying off.
+          #
+          # 2026-05-16: dropped `--parallel $env:NUMBER_OF_PROCESSORS` so Ninja
+          # uses its tuned default (`nproc + 2`) instead of capping at `nproc`.
+          # On the new windows-2022-xlarge runner that means more concurrent
+          # cl.exe processes per cycle. Vestigial flag from the MSBuild era
+          # (where `--parallel N` mapped to `/maxcpucount:N`); under Ninja the
+          # flag's cap was actively reducing concurrency vs the default.
           & ccache --zero-stats
-          cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release --parallel $env:NUMBER_OF_PROCESSORS
+          cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release
           & ccache --show-stats --verbose
 
       # ======================================================================

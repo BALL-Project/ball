@@ -601,6 +601,66 @@ ELSE()
 	ENDIF()
 ENDIF()
 
+# Precompiled headers — Phase 999.16 (BUILD-ACCEL-01).
+# Header set chosen per cmake/PCH.md audit. PRIVATE = downstream consumers
+# (PyBALL, test targets, BALLView exe) do not inherit the PCH state, keeping
+# each target's compile environment independent.
+# ccache sloppiness in .github/workflows/ci.yml is required for PCH-enabled
+# builds to share ccache hits across CI runs (pch_defines, time_macros,
+# include_file_mtime — see cmake/PCH.md §"ccache sloppiness contract").
+TARGET_PRECOMPILE_HEADERS(BALL PRIVATE
+    <algorithm>
+    <iostream>
+    <set>
+    <BALL/COMMON/global.h>
+    <BALL/COMMON/exception.h>
+    <BALL/DATATYPE/string.h>
+    <BALL/DATATYPE/regularExpression.h>
+    <BALL/CONCEPT/persistenceManager.h>
+    <BALL/CONCEPT/textPersistenceManager.h>
+    <BALL/KERNEL/PTE.h>
+    <BALL/KERNEL/forEach.h>
+    <BALL/KERNEL/system.h>
+    <BALL/KERNEL/chain.h>
+    <BALL/KERNEL/bond.h>
+    <BALL/KERNEL/residue.h>
+    <BALL/KERNEL/molecule.h>
+    <BALL/KERNEL/protein.h>
+    <BALL/KERNEL/nucleicAcid.h>
+    <BALL/KERNEL/secondaryStructure.h>
+    <BALL/MATHS/vector3.h>
+    <BALL/SYSTEM/path.h>
+)
+IF (BALL_HAS_VIEW)
+    TARGET_PRECOMPILE_HEADERS(VIEW PRIVATE
+        <BALL/VIEW/KERNEL/mainControl.h>
+        <BALL/VIEW/KERNEL/common.h>
+        <BALL/VIEW/KERNEL/message.h>
+        <BALL/VIEW/KERNEL/stage.h>
+        <BALL/VIEW/KERNEL/threads.h>
+        <BALL/VIEW/KERNEL/clippingPlane.h>
+        <BALL/VIEW/PRIMITIVES/mesh.h>
+        <BALL/VIEW/PRIMITIVES/sphere.h>
+        <BALL/VIEW/PRIMITIVES/tube.h>
+        <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
+        <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
+        <BALL/VIEW/PRIMITIVES/disc.h>
+        <BALL/VIEW/PRIMITIVES/label.h>
+        <BALL/VIEW/PRIMITIVES/simpleBox.h>
+        <BALL/VIEW/PRIMITIVES/box.h>
+        <BALL/VIEW/PRIMITIVES/point.h>
+        <BALL/VIEW/PRIMITIVES/line.h>
+        <BALL/VIEW/DATATYPE/standardDatasets.h>
+        <BALL/SYSTEM/path.h>
+        <BALL/KERNEL/system.h>
+        <BALL/KERNEL/PTE.h>
+        <BALL/KERNEL/forEach.h>
+        <BALL/KERNEL/bond.h>
+    )
+ENDIF()
+# NOTE: BALLView (exe) is intentionally NOT given target_precompile_headers —
+# its TU count (~20-30 app files) is too small for PCH overhead to pay off.
+
 ## all the dependency libraries are linked into libBALL.so, except Qt and CUDA which are still dynamic
 LIST(APPEND BALL_DEP_LIBRARIES
 	${BOOST_LIBRARIES}
