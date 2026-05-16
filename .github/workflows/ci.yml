@@ -69,7 +69,7 @@ jobs:
           # apt equivalents of the Homebrew set + xvfb/software-Mesa for the
           # headless render smoke check (D-08). Phase 5 D-02: runner bumped
           # from ubuntu-22.04 to ubuntu-24.04 (newer GCC + ships glibc/Mesa
-          # current enough for Qt 6.5+ via jurplel/install-qt-action). The
+          # current enough for Qt 6.8 LTS via jurplel/install-qt-action). The
           # apt-shipped Qt on 24.04 is 6.4.2 (below the D-01 6.5 floor), so
           # the Qt 6 install is provisioned through jurplel/install-qt-action
           # rather than apt — see the dedicated step below.
@@ -79,15 +79,20 @@ jobs:
             smoke: true
             ccache_dir: ~/.cache/ccache
             qt_host: linux
+            qt_version: '6.8.*'   # Qt 6.8 LTS — D-01 revised floor (2026-05-16)
 
           # ---- Linux ARM64 (Ubuntu) — non-blocking initial -----------------
           # 2026-05-16: added to match OpenMS's CI matrix. Catches ARM-
           # specific bugs (alignment, char-signedness, byte-order, pointer-
           # truncation regressions like Plan 05.1-02 C4311) that x86_64
           # hides. ubuntu-24.04-arm is a free standard hosted runner since
-          # late 2024. Same dep-install path as linux-x64; only the Qt
-          # install differs (jurplel/install-qt-action needs host:
-          # linux_arm64 instead of linux for ARM Qt 6 binaries).
+          # late 2024.
+          #
+          # Qt 6.8 LTS is the BALL-wide floor (D-01 revised 2026-05-16, was
+          # 6.5). The bump was driven by ARM: aqtinstall has NO Linux ARM64
+          # desktop binaries for Qt 6.5/6.6/6.7 — they were first published
+          # with Qt 6.8 LTS (Oct 2024). Bumping x86_64 to 6.8 too keeps the
+          # toolchain uniform across the matrix.
           #
           # Non-blocking initially (continue-on-error via matrix.blocking)
           # to absorb any first-run surprises. Flip to blocking once a
@@ -99,6 +104,7 @@ jobs:
             smoke: true
             ccache_dir: ~/.cache/ccache
             qt_host: linux_arm64
+            qt_version: '6.8.*'
 
           # ---- Windows — BLOCKING (flipped 2026-05-15, Plan 04-04 Task 3) ------
           # Phase 4: real vcpkg manifest + choco flex/bison provisioning. The
@@ -286,7 +292,7 @@ jobs:
           # qtbase5-dev-tools / libqt5opengl5-dev / qttools5-dev) are REMOVED.
           # Ubuntu 24.04 apt ships Qt 6.4.2 which is below the D-01 6.5 floor;
           # Qt is installed through jurplel/install-qt-action in the dedicated
-          # step below (aqtinstall, pinned to Qt 6.5.*). xvfb + Mesa stay for
+          # step below (aqtinstall, pinned to Qt 6.8.*). xvfb + Mesa stay for
           # the headless smoke check; non-Qt deps unchanged.
           # Phase 999.2: `ninja-build` provisioned for the Ninja generator
           # switch — the ci-linux preset now declares "generator": "Ninja".
@@ -310,12 +316,12 @@ jobs:
       - name: Install Qt 6 (Linux — jurplel/install-qt-action / aqtinstall)
         if: startsWith(matrix.os, 'linux-')
         # D-01 + D-02 (Plan 05-04): Ubuntu 24.04 apt ships Qt 6.4.2, below the
-        # D-01 6.5 LTS floor. jurplel/install-qt-action wraps aqtinstall and
+        # D-01 6.8 LTS floor (revised 2026-05-16, was 6.5). jurplel/install-qt-action wraps aqtinstall and
         # downloads the official Qt build from download.qt.io into the runner
         # workspace; the install location is exposed as Qt6_DIR so CMake's
         # FIND_PACKAGE(Qt6 6.5 ...) resolves cleanly.
         #
-        # `modules:` is intentionally omitted. aqt v3.3.0 on Qt 6.5+ rejects
+        # `modules:` is intentionally omitted. aqt v3.3.0 on Qt 6.8 LTS rejects
         # qtbase, qtopengl, AND qttools as module names — they are all part of
         # the default Qt 6 install on Linux, not separately-installable add-on
         # modules. BALL's actual Qt 6 requirements (Core, Network, Xml, OpenGL,
@@ -326,9 +332,11 @@ jobs:
         # D-05: NO qt5compat — clean break.
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.5.*'
-          # matrix.qt_host = 'linux' for x86_64, 'linux_arm64' for ARM.
-          # Both pull official Qt 6.5+ binaries from download.qt.io.
+          # matrix.qt_version = '6.8.*' on both x86_64 and ARM (post-2026-05-16
+          # D-01 floor revision). matrix.qt_host = 'linux' / 'linux_arm64'.
+          # Both pull official Qt 6.8+ desktop binaries from download.qt.io
+          # — Qt 6.8 is the first version with Linux ARM64 desktop binaries.
+          version: ${{ matrix.qt_version }}
           host: ${{ matrix.qt_host }}
           target: 'desktop'
           cache: true
@@ -709,7 +717,7 @@ jobs:
       - name: Install dependencies + gcovr
         run: |
           # Phase 5.1 carry-forward (2026-05-16): apt's qt6-base-dev on
-          # Ubuntu 24.04 is 6.4.2 — BELOW the D-01 6.5 LTS floor in
+          # Ubuntu 24.04 is 6.4.2 — BELOW the D-01 6.8 LTS floor (revised 2026-05-16, was 6.5) in
           # CMakeLists.txt. The Qt 6 install moves to jurplel/install-qt-action
           # in the next step (mirrors the regular Linux build job, which
           # had the same issue resolved by Phase 5 / Plan 05-04 D-02).
@@ -725,13 +733,14 @@ jobs:
 
       - name: Install Qt 6 (Linux — jurplel/install-qt-action / aqtinstall)
         # Mirrors the main build job's Qt 6 install — same version pin
-        # (6.5.* / D-01 LTS floor) so the coverage build matches the
-        # blocking build's Qt surface bit-for-bit. `modules:` omitted
-        # per the same finding (aqt v3.3.0 rejects qtbase/qtopengl/qttools
-        # as separately-installable; they're in the default Qt 6 install).
+        # (6.8.* / D-01 LTS floor, revised 2026-05-16) so the coverage
+        # build matches the blocking build's Qt surface bit-for-bit.
+        # `modules:` omitted per the same finding (aqt v3.3.0 rejects
+        # qtbase/qtopengl/qttools as separately-installable; they're in
+        # the default Qt 6 install).
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.5.*'
+          version: '6.8.*'
           host: 'linux'
           target: 'desktop'
           cache: true

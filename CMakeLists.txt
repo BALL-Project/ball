@@ -93,7 +93,14 @@ ENDIF()
 # Pinned inline at each find_package call site (or via the SET below for Qt).
 #
 #   CMake   3.21  — CMakePresets.json schema v3 + toolchainFile support
-#   Qt6     6.5   — Qt 6.5 LTS floor (D-01); Homebrew ships unversioned qt 6.x, vcpkg ships qtbase
+#   Qt6     6.8   — Qt 6.8 LTS floor (D-01 revised 2026-05-16, was 6.5 LTS).
+#                   Bumped to capture Linux ARM64 desktop binaries (aqtinstall
+#                   first publishes those at 6.8) so the ARM CI matrix entry
+#                   can install Qt via the same jurplel/install-qt-action path
+#                   as x86_64. 6.8 is also LTS (support through 2027); the
+#                   "LTS floor" rationale from the original D-01 still holds.
+#                   Homebrew's `qt` is 6.11+, vcpkg's qtbase tracks recent
+#                   Qt — both already satisfy the new floor without changes.
 #   Boost   1.70  — config-mode BoostConfig.cmake is reliable from 1.70+
 #   Eigen3  3.4   — first Eigen with stable Eigen3Config.cmake (covers the 5.x line; see note at FIND_PACKAGE)
 #   TBB    2021.0 — first oneTBB release shipping TBBConfig.cmake / TBB::tbb target
@@ -287,9 +294,12 @@ IF (BALL_SPIKE_BACKEND STREQUAL "GLCore")
 ENDIF()
 IF (BALL_SPIKE_BACKEND STREQUAL "QRhi")
     # QRhiWidget (the embedding mechanism for QRhi inside a QWidget hierarchy)
-    # only ships in Qt 6.7+. The project's D-01 floor is Qt 6.5. If the resolved
-    # Qt version is too old, emit a clear actionable WARNING and do NOT set the
-    # compile defn -- the spike sources then stay out of the build.
+    # only ships in Qt 6.7+. The project's D-01 floor is now Qt 6.8 (LTS),
+    # so the version check below is satisfied by construction — keep the
+    # version guard for defensive purposes (Phase 5 spike comment retained).
+    # If the resolved Qt version is too old, emit a clear actionable
+    # WARNING and do NOT set the compile defn — the spike sources then
+    # stay out of the build.
     # NOTE: Qt6_VERSION is set by FIND_PACKAGE(Qt6 ...) further below, but the
     # version variables `Qt6Core_VERSION` / `Qt6Widgets_VERSION` populated by
     # FIND_PACKAGE are not yet in scope at this point in CMakeLists.txt -- the
@@ -314,7 +324,7 @@ IF(QTDIR)
 	INCLUDE_DIRECTORIES(BEFORE "${QTDIR}/include")
 ENDIF()
 
-SET(QT_MIN_VERSION 6.5)
+SET(QT_MIN_VERSION 6.8)
 
 FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED Core Network Xml)
 
