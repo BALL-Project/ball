@@ -230,6 +230,32 @@ jobs:
           ccache --show-stats --verbose
 
       # ----------------------------------------------------------------------
+      # Phase 999.19 (BUILD-ACCEL-04): per-TU build profiling instrumentation.
+      # Runs after the Build step (even on Build failure) so the artifact is
+      # available for diagnosing slow-then-failed runs. Uses bash shell on
+      # macOS/Linux, pwsh on Windows. Artifact retention: 90 days.
+      # ----------------------------------------------------------------------
+      - name: Top-20 slowest TUs (${{ matrix.os }})
+        if: (success() || failure()) && matrix.os == 'macos-arm64'
+        shell: bash
+        run: |
+          if [ -f build/ci-macos/.ninja_log ]; then
+            echo "=== Top-20 slowest TUs (${{ matrix.os }}) ==="
+            awk -F'\t' 'NF>=5 {printf "%8d ms  %s\n", $2-$1, $5}' build/ci-macos/.ninja_log \
+              | sort -rn | head -20
+          else
+            echo "WARN: .ninja_log not found at build/ci-macos/.ninja_log"
+          fi
+
+      - name: Upload .ninja_log artifact (${{ matrix.os }})
+        if: (success() || failure()) && matrix.os == 'macos-arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ninja-log-${{ matrix.os }}-${{ github.sha }}
+          path: build/ci-macos/.ninja_log
+          retention-days: 90
+
+      # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — wires the BALL unit-test
       # tree (`test/`, 295 files, EXCLUDE_FROM_ALL by default) into the CI
       # matrix so regressions surface as soon as they happen. Initially
@@ -378,6 +404,27 @@ jobs:
           ccache --zero-stats
           cmake --build --preset ci-linux --target BALL VIEW BALLView -j$(nproc)
           ccache --show-stats --verbose
+
+      # Phase 999.19 (BUILD-ACCEL-04): per-TU build profiling (Linux).
+      - name: Top-20 slowest TUs (${{ matrix.os }})
+        if: (success() || failure()) && startsWith(matrix.os, 'linux-')
+        shell: bash
+        run: |
+          if [ -f build/ci-linux/.ninja_log ]; then
+            echo "=== Top-20 slowest TUs (${{ matrix.os }}) ==="
+            awk -F'\t' 'NF>=5 {printf "%8d ms  %s\n", $2-$1, $5}' build/ci-linux/.ninja_log \
+              | sort -rn | head -20
+          else
+            echo "WARN: .ninja_log not found at build/ci-linux/.ninja_log"
+          fi
+
+      - name: Upload .ninja_log artifact (${{ matrix.os }})
+        if: (success() || failure()) && startsWith(matrix.os, 'linux-')
+        uses: actions/upload-artifact@v4
+        with:
+          name: ninja-log-${{ matrix.os }}-${{ github.sha }}
+          path: build/ci-linux/.ninja_log
+          retention-days: 90
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — see macOS counterpart
@@ -530,6 +577,32 @@ jobs:
           & ccache --zero-stats
           cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release
           & ccache --show-stats --verbose
+
+      # Phase 999.19 (BUILD-ACCEL-04): per-TU build profiling (Windows).
+      - name: Top-20 slowest TUs (windows-x64)
+        if: (success() || failure()) && matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          $logPath = "build\ci-windows\.ninja_log"
+          if (Test-Path $logPath) {
+            Write-Host "=== Top-20 slowest TUs (windows-x64) ==="
+            Get-Content $logPath | ForEach-Object {
+              $f = $_ -split "`t"
+              if ($f.Length -ge 5) {
+                [PSCustomObject]@{ ms = [int]$f[1] - [int]$f[0]; tu = $f[4] }
+              }
+            } | Sort-Object -Property ms -Descending | Select-Object -First 20 | Format-Table -AutoSize
+          } else {
+            Write-Host "WARN: .ninja_log not found at $logPath"
+          }
+
+      - name: Upload .ninja_log artifact (windows-x64)
+        if: (success() || failure()) && matrix.os == 'windows-x64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ninja-log-windows-x64-${{ github.sha }}
+          path: build\ci-windows\.ninja_log
+          retention-days: 90
 
       # ======================================================================
       # Render smoke check (D-08) — macOS native, Linux under xvfb + software
