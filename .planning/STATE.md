@@ -4,14 +4,14 @@ milestone: v1.6.2
 milestone_name: OR v1.7)
 status: verifying
 stopped_at: Phase 4.1 context gathered
-last_updated: "2026-05-16T12:16:05.801Z"
+last_updated: "2026-05-16T17:30:00Z"
 last_activity: 2026-05-16
 progress:
   total_phases: 40
-  completed_phases: 10
+  completed_phases: 11
   total_plans: 52
-  completed_plans: 46
-  percent: 25
+  completed_plans: 47
+  percent: 26
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.16 — pch-ball-view
+**Current Focus:** Phase 999.17 — windows-build-tree-cache (complete)
 
 ## Current Position
 
-Phase: 999.16 (pch-ball-view) — EXECUTING
+Phase: 999.17 (windows-build-tree-cache) — COMPLETE
 Plan: 1 of 1
-Status: Phase complete — ready for verification
+Status: Phase complete — BUILD-ACCEL-02 marked Complete
 Last activity: 2026-05-16
 
 ## Performance Metrics
@@ -73,6 +73,7 @@ Last activity: 2026-05-16
 | Phase 04.1-config-color-defaults-fix P04 | 5 | 2 tasks | 1 files |
 | Phase 04.1-config-color-defaults-fix P05 | 10 | 1 tasks | 1 files |
 | Phase 999.16-pch-ball-view P01 | 269 | 3 tasks | 3 files |
+| Phase 999.17-windows-build-tree-cache P01 | ~120 (dominated by CI wall-clock) | 2 tasks | 1 files (ci.yml) + 3 measurement commits |
 
 ## Accumulated Context
 
@@ -132,7 +133,8 @@ Last activity: 2026-05-16
 - [Phase 05.1]: Plan 05.1-10 (Task D1 — Qt5LinguistTools / qttools missing on Windows vcpkg, absorbs D6 root cause per CONTEXT.md). Combined option (a) + (b) for defence-in-depth. Option (a) was already complete on this branch: `vcpkg.json:8` declares `qttools` (the Qt 6 successor to `qt5-tools`), which provisions Qt6LinguistTools + windeployqt + lupdate + lrelease on the Windows runner. Discovery showed BACKLOG.md §D6 still marked `v1.6-modernization` HEAD as "STILL MISSING `qttools`" but the manifest had since been updated. Option (b) added this commit: changed `FIND_PACKAGE(Qt6LinguistTools ${QT_MIN_VERSION})` at CMakeLists.txt:344 to `FIND_PACKAGE(Qt6LinguistTools ${QT_MIN_VERSION} QUIET)` and downgraded the follow-up `MESSAGE(WARNING "Qt6LinguistTools not found: BALLView translations cannot be created and compiled.")` to `MESSAGE(STATUS "Qt6LinguistTools not found — translations disabled (add 'qttools' to vcpkg.json on Windows or install qttools via system Qt to enable).")`. Added a 6-line documentary comment block above the find_package call explaining the D1/D6 context and why STATUS is correct (translations are strictly i18n; missing them doesn't prevent the build or running BALLView, only affects `QApplication::translate()` string lookup). `QUIET` suppresses CMake's built-in "By not providing FindQt6LinguistTools.cmake" warning that the bare form emitted on the Windows Configure step — that warning fires regardless of whether the surrounding code handles the absent case. `cmake/BALLViewTranslations.cmake:6-8` already early-`RETURN()`s when `Qt6LinguistTools_FOUND` is false, so the translation pipeline correctly no-ops on absent tools. macOS / Linux: unaffected (system Qt provides LinguistTools; both conditional branches are dead). Rule 2 deviation — applied option (b) on top of already-landed (a) for defence-in-depth (a local dev build without vcpkg, or a Qt install that didn't ship LinguistTools, would otherwise still trip the built-in CMake warning even with manifest declaring qttools). Verification deferred to next Windows CI Configure step (expected: zero `FindQt6LinguistTools.cmake` warnings). Commit 1b1e557.
 - [Phase 05.1]: Plan 05.1-13 (Task D4 — Windows release LNK1104 `tbb12_debug.lib` / `--config Release` missing on multi-config generator). **No-op verification plan**: both target lines were already in place. release.yml fixed by `381c129` on v1.6-modernization and synced to master via `8b2667a` + `afa00c2`; ci.yml had `--config Release` since `e63f061` (Phase 04-04 Windows wire-up, 2026-05-14) — which predates the 2026-05-15 release run that surfaced the gap in release.yml. **BACKLOG D4 attribution correction**: the BACKLOG entry claimed both workflows had the gap; `git blame -L 313,316 .github/workflows/ci.yml` proves ci.yml's line 315 has had `--config Release` from the very first commit that wired the real Windows job — there was no parallel gap. Only release.yml ever did: it was a brand-new workflow (`a186fb5`) whose author copied the Windows build recipe without `--config Release`. Closed out per the plan's explicit decision-default policy (no-clarifying-questions mode, `\"If both files already contain --config Release ... document that and close out with a no-op commit + SUMMARY\"`). All success criteria verified at plan-start: 1 grep match each in release.yml:193 + ci.yml:315 (token order differs but cmake parses both identically), 0 `--config Debug` matches on Windows build line, both YAML files parse clean, plan-11 v5 action pins preserved, plan-12 `*.deb` apt-cache narrowing at ci.yml:159 preserved. Downstream verification already validated by `afa00c2` v1.6.0 consolidation: Windows installer shipped, ci.yml Windows job continuously green/blocking since `f3802ee`. Documentation-only deviation (not Rule 1) — correcting BACKLOG D4's misattribution in SUMMARY so future maintainers don't re-investigate ci.yml on the (incorrect) BACKLOG hypothesis. No source change, no per-task code commit — only the SUMMARY + STATE + ROADMAP metadata commit lands.
 - [Phase 05.1]: Plan 05.1-12 (Task D3 — Linux ccache cache-save tar failure; diagnosis-first). **Diagnosis corrected BACKLOG D3's step attribution**: the recurring `/usr/bin/tar exit code 2` warning is on the Linux **apt-archives** cache step (`path: /var/cache/apt/archives`), NOT the **ccache** step which has been saving cleanly all along. Surveyed 15 recent CI runs on v1.6-modernization via `gh run view --log` — 7/7 successful Linux runs that reached the post-job cache phase emit the warning (chronic, not transient — the other 8 runs aborted pre-cache due to unrelated plan-11 D2 pin-bump iteration build failures). Forensic root cause from run 25899905204: tar fails specifically on `../../../../../var/cache/apt/archives/lock` (root:root, 0640) + `../../../../../var/cache/apt/archives/partial` (root:root, 0700) — both unreadable to the unprivileged `runner` user on GitHub-hosted Ubuntu runners. The actions/cache fallback (a second tar invocation that excludes the failing entries) then succeeds: `Cache saved with key: ccache-linux-x64-...` follows the warning by 2-3 seconds. So the warning is definitionally cosmetic (cache IS saved) but a 100%-recurring red herring that misleads readers. Fix = narrow `path: /var/cache/apt/archives` → `path: /var/cache/apt/archives/*.deb` in ci.yml's "Cache apt archives (Linux)" step — 1 substantive line + 17 doc-comment lines preserving the diagnosis trail in-source. Addresses root cause by construction: the `.deb` archives (proof: `Get:40 .../ccache_4.5.1-1_amd64.deb` in every run log) are the only content `apt-get install` downloads and the only content the cache restore needs; `lock` + `partial/` are runtime APT state that doesn't belong in a cache. **Decision (autonomously resolved per no-clarifying-questions mode)**: chose `narrow-cached-path` (a 5th option) over the four plan-listed checkpoint options (split-cache-key / pre-save-cleanup / permissions-fix / no-fix-transient) because none mapped cleanly to apt-cache vs. ccache once the BACKLOG mis-attribution was uncovered — `permissions-fix` is closest in spirit, but the right fix isn't `chmod` (the runner can't sudo-chmod root-owned APT lock files and shouldn't try). The four ruled-out root causes from BACKLOG were systematically eliminated: cache size > 10 GB → false (saved cache = 152 MB compressed); runner disk pressure → false (tar exit 2 was at per-file open() boundary, not ENOSPC at write); corrupted state → false (same two specific paths fail on every run, deterministic); transient → false (7/7 recurrence). **Rule 1 deviation**: corrected the BACKLOG D3 step attribution from ccache to apt-archives and documented the correction in SUMMARY + this decision entry so future maintainers don't re-investigate the ccache step on the same evidence. YAML parses clean (python3 yaml.safe_load); all plan-11 v5 action pins (checkout@v5, cache@v5 ×3, cache/restore@v5, cache/save@v5) preserved unchanged across the edit; macOS Homebrew cache, Windows vcpkg cache, ccache step itself all untouched. Verification of the fix's effect (no `Failed to save` warning + cache hit on next-next run) deferred to next CI run. Commit 1321336.
-- [Phase ?]: PCH excluded for macOS (AppleClang); retained for Linux/Windows
+- [Phase 999.16]: PCH excluded for macOS (AppleClang); retained for Linux/Windows
+- [Phase 999.17]: BUILD-ACCEL-02 complete — actions/cache@v5 step caches Windows CMake build tree; warm-cache Configure (Windows) reduced from 149s to 63s (−57.7%); full scope retained (≥50% threshold met); restore-key prefix fallback provides ~49% speedup on structural-change runs
 
 ### Roadmap Evolution
 

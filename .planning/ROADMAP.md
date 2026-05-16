@@ -1136,9 +1136,11 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
-### Phase 999.17: Build acceleration — cache Windows CMake build tree across CI runs (BACKLOG · TARGETED FOR v1.6.2)
+### Phase 999.17: Build acceleration — cache Windows CMake build tree across CI runs (COMPLETE · v1.6.2 · 2026-05-16)
 
 **Goal:** Cache the Windows CMake build tree (`build/ci-windows/CMakeCache.txt`, `build.ninja`, `CMakeFiles/`, `vcpkg_installed/`) across CI runs via `actions/cache`, keyed on the hash of structural files (`CMakeLists.txt`, `cmake/**`, `vcpkg.json`, `CMakePresets.json`). Collapse the now-dominant warm-cache `Configure (Windows)` step (~2m 32s post-Phase 999.2) to seconds when nothing structural changed.
+
+**Outcome (2026-05-16):** BUILD-ACCEL-02 complete. Warm-cache Configure (Windows) reduced from 149s to 63s (−57.7%). Full scope retained (≥50% threshold). Restore-key prefix fallback provides ~49% speedup on structural-change runs (76s). All 3 platforms green. SUMMARY: `.planning/phases/999.17-windows-build-tree-cache/999.17-01-SUMMARY.md`.
 
 **Why now (v1.6.2, not v2.0):** Post-Phase 999.2, the warm-cache Windows job is `4m 49s` total — of which `Configure (Windows)` accounts for `2m 32s` (vcpkg toolchain restore + FIND_PACKAGE chains + CMake regenerate). Build step is now `55s`. So `Configure` is now the largest single contributor to warm Windows job time; cutting it to seconds takes typical warm Windows from ~5min to ~2min total. Linux/macOS `Configure` is already 5-15s; not worth caching those. The change is contained to `.github/workflows/ci.yml` — no source impact, fully reversible.
 
@@ -1165,7 +1167,7 @@ Plans:
 **Promotion trigger:** Anytime in v1.6.2 cycle. Promote with `/gsd-review-backlog 999.17`.
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+- [x] 999.17-01 — Add actions/cache@v5 step + measure cold/warm/structural-change CI cycles (COMPLETE, commit 58a0178+77cde3e+00d2c6f)
 
 ### Phase 999.18: CI hygiene — path-aware triggers + concurrency groups (BACKLOG · TARGETED FOR v1.6.2)
 
