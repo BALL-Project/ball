@@ -1355,6 +1355,42 @@ Single-line edit in [`include/BALL/KERNEL/atom.h:1033-1035`](../include/BALL/KER
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
+### Phase 999.27: Coverage-build Linux compile-clean trio (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Make the non-blocking coverage CI job compile-clean on Linux Qt 6.8 by fixing three concrete defects surfaced when the coverage build (`-g -fprofile-arcs`) uses a different PCH variant than the release build and stops masking pre-existing source/include hygiene issues. Currently the `coverage (Linux, gcov, non-blocking)` job fails at the **Build BALL + tests** step on every push to v1.6-modernization; all three platforms' release builds remain green. Fixing these flips coverage to green without changing any release-build behavior.
+
+**Why now (v1.6.2, not v2.0):** Coverage failures hide real coverage regressions — every run today shows ❌ on the coverage tile, so future genuine gcovr/test-suite regressions become indistinguishable from this carry-forward noise. All three fixes are one-liners or short edits, fit cleanly in the v1.6.2 "small wins, no substrate change" envelope, and don't touch the renderer/threading hotspots. Surfaced by CI run [25963533636](https://github.com/BALL-Project/ball/actions/runs/25963533636) (post-Qt-6.8-bump + ARM Linux baseline, 2026-05-16).
+
+**Defects to fix:**
+
+1. **`source/VIEW/DIALOGS/networkPreferences.C:44`** — unqualified `endl` in `~NetworkPreferences` log statement. Under coverage PCH ordering, Qt's `<QtCore/qtextstream.h>` (pulled in via `QColorDialog → qaction.h → qdebug.h`) brings `Qt::endl` into scope alongside `std::endl`, leaving unqualified `endl` undeclared. Release PCH escapes it because `-O3 -DNDEBUG` invalidates differently than `-g -fprofile-arcs`. **Fix:** qualify as `std::endl`. One-line edit.
+
+2. **`source/VIEW/DIALOGS/modifyRepresentationDialog.C:106-107`** — Qt 6 deprecation warning on `QMessageBox::critical(QWidget*, QString, QString, int, int, int)` (six-int legacy overload). **Fix:** switch to the `StandardButtons` overload: `QMessageBox::critical(this, tr("BALLView"), msg, QMessageBox::Ok)`. ~2-line edit. Emits warning, not error, but cleanup pairs naturally with this phase.
+
+3. **`include/BALL/MOLMEC/MMFF94/MMFF94Parameters.h:52` + `:525`** — `-Wdeprecated-copy` on `MMFF94ESParameters` copy ctor because base class `MMFF94ParametersBase` has user-provided `operator=` but no user-provided copy ctor (rule-of-three violation). **Fix:** add `MMFF94ParametersBase(const MMFF94ParametersBase&) = default;` to the base. ~1-line edit. Warning, not error; fold in opportunistically since the diff sits next to (1) and (2).
+
+**Out of scope:**
+- The whole-tree Tier-C warning cleanup — that remains Phase 999.22 (census-only).
+- Any structural fix to the `MMFF94ParametersBase` rule-of-three story beyond defaulting copy ctor (full rule-of-five conversion is v2.0 substrate work, not patch-release shaped).
+- PCH ordering changes — defect 1 is fixed at the source site, not by reshuffling PCH includes.
+
+**Estimated effort:** ~30 minutes total (3 edits + commit + CI verify coverage tile flips green). Single-plan phase.
+
+**Requirements:**
+- `COV-CLEAN-01` — coverage Linux build compiles end-to-end (Build BALL + tests step ✓ on v1.6-modernization HEAD).
+- `WARN-VIEW-ENDL-01` — `networkPreferences.C` uses `std::endl` (no unqualified `endl` survives the diff).
+- `WARN-VIEW-QMSGBOX-01` — `modifyRepresentationDialog.C` `QMessageBox::critical` call uses the `StandardButtons` overload.
+- `WARN-MMFF94-COPY-01` — `MMFF94ParametersBase` declares explicit `= default` copy ctor; `-Wdeprecated-copy` does not fire on `MMFF94ESParameters`.
+
+To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Plans:** 0 (single plan when promoted).
+
+**Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies; trivially co-landable with Phases 999.26 (atom.h C4910 suppress) and 999.23 (CIF grammar audit) as the "v1.6.2 small-wins bundle."
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.
