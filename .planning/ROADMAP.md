@@ -722,17 +722,7 @@ Plans:
 
 The remaining deprecated surface is concentrated in three areas:
 
-*1. DOCKING/GENETICDOCK subsystem (~11 classes — all BALL_DEPRECATED):*
-- `BALL::GeneticAlgorithm` ([geneticAlgorithm.h:23](include/BALL/DOCKING/GENETICDOCK/geneticAlgorithm.h#L23))
-- `BALL::EvolutionaryDocking` ([evolutionaryDocking.h:34](include/BALL/DOCKING/GENETICDOCK/evolutionaryDocking.h#L34))
-- `BALL::DockProblem` ([dockProblem.h:35](include/BALL/DOCKING/GENETICDOCK/dockProblem.h#L35))
-- `BALL::GenericGene` / `DoubleGene` / `QuaternionGene` ([genes.h:18,57,107](include/BALL/DOCKING/GENETICDOCK/genes.h#L18))
-- `BALL::GenericParameter` / `DoubleParameter` / `QuaternionParameter` ([parameter.h:14,47,73](include/BALL/DOCKING/GENETICDOCK/parameter.h#L14))
-- `BALL::RotateBonds` + `BALL::RotateBond` ([rotateBonds.h:22](include/BALL/DOCKING/GENETICDOCK/rotateBonds.h#L22), [rotateBond.h:25](include/BALL/DOCKING/GENETICDOCK/rotateBond.h#L25))
-
-**Disposition decision (audit at promotion time):** is GENETICDOCK still a live docking algorithm anyone uses, or is it dead code marked-for-removal-without-follow-through? The whole subsystem may be either:
-- **Live but mismarked** — apply Plan-05.1-09 pattern: remove the markers, keep the code (Note: Plan 05.1-09 already un-deprecated `GeneticIndividual` for exactly this reason)
-- **Dead** — delete the entire `DOCKING/GENETICDOCK/` directory + clear out references. Decision driver: any active research codebase building on top of EvolutionaryDocking? Maintainer call.
+*1. DOCKING/GENETICDOCK subsystem — **SLICE HANDLED BY [Phase 999.29](#phase-99929-remove-dockinggeneticdock-dead-subsystem-backlog--targeted-for-v162--pull-forward-from-99912-v20-slice) (v1.6.2 pull-forward, 2026-05-16):*** audit completed against [run 25970222837](https://github.com/BALL-Project/ball/actions/runs/25970222837); zero external references / UI / tests / docs — disposition confirmed **delete**. Scope removed from 999.12: ~11 classes (`GeneticAlgorithm`, `EvolutionaryDocking`, `DockProblem`, `GenericGene/DoubleGene/QuaternionGene`, `GenericParameter/DoubleParameter/QuaternionParameter`, `RotateBonds/RotateBond`, `GeneticIndividual`). 18 files / 2722 LOC delete + 2 sources.cmake line removals lands in 999.29; 999.12's remaining v2.0 scope is the VIEW/WIDGETS + VIEW/DIALOGS slices below.
 
 *2. VIEW/WIDGETS legacy UI (non-Python — 4 classes):*
 - `BALL::VIEW::MyTextBrowser` + `HelpViewer` ([helpViewer.h:24,62](include/BALL/VIEW/WIDGETS/helpViewer.h#L24)) — likely Qt 5 → Qt 6 unported help-system widgets
@@ -1449,6 +1439,150 @@ Plans:
 Plans:
 - [x] Fix-and-land trio executed inline (3 commits: `78ecda5`, `2497369`, `b98b63a`) — COMPLETE 2026-05-16
 
+### Phase 999.29: Remove DOCKING/GENETICDOCK dead subsystem (BACKLOG · TARGETED FOR v1.6.2 · pull-forward from 999.12 v2.0 slice)
+
+**Goal:** Delete the entire `include/BALL/DOCKING/GENETICDOCK/` + `source/DOCKING/GENETICDOCK/` directories and the two `INCLUDE(...)` lines that wire them into the build. 18 files, 2722 LOC removed. Eliminates ~150 deprecation warnings from every platform build (`-Wdeprecated-declarations` on `GeneticAlgorithm`, `EvolutionaryDocking`, `DockProblem`, `GenericGene/DoubleGene/QuaternionGene`, `GenericParameter/DoubleParameter/QuaternionParameter`, `RotateBonds/RotateBond`, `GeneticIndividual`).
+
+**Why now (v1.6.2, not v2.0):** Phase 999.12 (BACKLOG · v2.0) catalogued the GENETICDOCK slice with the explicit decision branch "**delete** the entire directory OR **un-deprecate**" pending audit. Audit completed against [run 25970222837](https://github.com/BALL-Project/ball/actions/runs/25970222837) (commit `cb392cc`, 2026-05-16): **zero external references** across `include/`, `source/`, `APPLICATIONS/`, `test/`, `source/PYTHON/`; **zero UI exposure** — `DockingController` only registers `Geometric Fit`, no `GENETIC_*` enum, no dialog/UI string references; **zero test coverage**; **zero documentation references** in `doc/` or any `*.md`. The "user — is this load-bearing?" question has a definitive answer: it isn't. Pulling forward to v1.6.2 takes ~150 warnings to zero today instead of carrying them through every CI run until v2.0, and shrinks Phase 999.12's scope by its single largest slice. Mechanical, isolated, reversible — fits the v1.6.2 "small wins" envelope despite the LOC count, because no external API or behavior changes.
+
+**Scope:**
+- `rm -rf include/BALL/DOCKING/GENETICDOCK/` (9 headers + `sources.cmake`, 968 LOC)
+- `rm -rf source/DOCKING/GENETICDOCK/` (9 sources + `sources.cmake`, 1754 LOC)
+- Delete `INCLUDE(source/DOCKING/GENETICDOCK/sources.cmake)` from `source/DOCKING/sources.cmake:5`
+- Delete `INCLUDE(include/BALL/DOCKING/GENETICDOCK/sources.cmake)` from `include/BALL/DOCKING/sources.cmake:5`
+- Update Phase 999.12 entry to note GENETICDOCK slice handled by 999.29 (scope shrinks to VIEW/WIDGETS legacy UI + VIEW/DIALOGS/RENDERING residual)
+- One-line `RELEASE-NOTES-v1.6.2.md` entry: "Removed dead GENETICDOCK subsystem — was deprecated since pre-v1.6, never exposed in UI, no callers"
+
+**Out of scope:**
+- The other Phase 999.12 deprecation slices (VIEW/WIDGETS HelpViewer/MyTextBrowser/ComboBoxDelegate/HotkeyTable, VIEW/DIALOGS ExportGeometryDialog, RENDERING residuals) — those have potential UI/feature implications and stay v2.0.
+- Any audit of whether the GENETICDOCK *algorithm* (genetic-algorithm-based docking) should be re-implemented under a different surface in the future — separate question, separate phase if ever.
+
+**Estimated effort:** ~30 minutes total (2 directory deletes + 2 `sources.cmake` line edits + CI verify all platforms compile-clean + ~150-warning drop on every platform).
+
+**Requirements:**
+- `DEADCODE-02` — `find include source -path '*GENETICDOCK*'` returns no results post-fix.
+- `DEADCODE-03` — `grep -rn "GeneticAlgorithm\|EvolutionaryDocking\|GenericGene\|GeneticIndividual\|DockProblem\|RotateBonds" include/ source/ test/` matches only `CommandlineParser::registerOptional/MandatoryDoubleParameter` (unrelated, in BALL::FORMAT).
+- `DEADCODE-04` — every platform's `-Wdeprecated-declarations` count drops by ≥150 vs. pre-fix baseline.
+
+To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies; trivially co-landable with Phase 999.30 (PixelFormat) and 999.31 (QSAR) as a v1.6.2 "warning-cleanup omnibus 2" bundle.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.30: VIEW::PixelFormat rule-of-three (BACKLOG · TARGETED FOR v1.6.2 · 999.27 follow-on)
+
+**Goal:** Add explicit `PixelFormat(const PixelFormat&) = default;` to [`include/BALL/VIEW/RENDERING/pixelFormat.h:162`](../include/BALL/VIEW/RENDERING/pixelFormat.h#L162) (adjacent to the existing user-provided `operator=`). One-line edit; eliminates **125 instances** of `-Wdeprecated-copy` from every Linux build — the single largest warning cluster on Linux x64 / ARM64 / coverage. Same defect class as Phase 999.27 defect 3 (`MMFF94ParametersBase`); same fix.
+
+**Why now (v1.6.2):** 999.27 demonstrated the pattern (1-line `= default` on the base class kills the whole derived-class warning cascade); `PixelFormat` is the same shape and the largest remaining instance (125 vs. MMFF94ParametersBase's ~6). Mechanical, no behavior change (the synthesized copy already does the right thing — this just makes the pairing explicit so `-Wdeprecated-copy` stops firing). Sits exactly inside the v1.6.2 "small wins" envelope.
+
+**Defect:** Per [run 25970222837](https://github.com/BALL-Project/ball/actions/runs/25970222837) (cb392cc, 2026-05-16): `include/BALL/VIEW/RENDERING/renderTarget.h` triggers 123 of the 125 hits (every `FrameBufferFormat` ctor and every place a `PixelFormat&` member is copy-initialized); 2 more from `source/VIEW/RENDERING/renderWindow.C`.
+
+**Out of scope:** Same as 999.27 — no rule-of-five conversion, no PCH changes, no other rule-of-three sites (those are tracked in 999.22 census or get their own follow-on phases as the pattern repeats).
+
+**Estimated effort:** ~5 minutes (1-line edit + CI verify).
+
+**Requirements:**
+- `WARN-VIEW-PIXELFMT-01` — `PixelFormat` declares explicit `= default` copy ctor; `-Wdeprecated-copy` does not fire on `FrameBufferFormat` / `renderTarget.h` / `renderWindow.C`.
+
+To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Promotion trigger:** anytime in v1.6.2 cycle; bundle with 999.29 / 999.31 as warning-cleanup omnibus 2.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.31: QSAR virtual `operator=` overloaded-virtual silence (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Silence the 22 `-Woverloaded-virtual` warnings emitted by GCC across the QSAR Model inheritance chain (`Model.h` → `regressionModel.h` → `linearModel.h` → `mlrModel.h` → `rrModel.h`). The implicitly-synthesized `RRModel& RRModel::operator=(const RRModel&)` hides the virtual `operator=` chain even though the `using <Base>::operator=` declarations are present at every intermediate level — GCC's `-Woverloaded-virtual` heuristic still fires because the synthesized signature differs from the virtual one (return type `RRModel&` vs. `void`).
+
+**Why now (v1.6.2):** Whole cluster lives in 3 headers and one ancestral declaration. The using-chain is *almost* right — Plan-05.1-style audit revealed: `Model::operator=(const Model&)` is `virtual void`; every derived class provides `using Base::operator=` plus its own `virtual void operator=(const Derived&)`. The missing link is at the leaves (`MLRModel`, `RRModel`) which only chain *one level up*. Fix: add `RRModel& operator=(const RRModel&) = default;` + extend the `using` chain at the leaf classes, OR remove `virtual` from the Model::operator= declaration (cleaner but API-shape change — defer to v2.0). v1.6.2 takes the patch-shape fix.
+
+**Defect (3 sites):**
+- [`include/BALL/QSAR/Model.h:48`](../include/BALL/QSAR/Model.h#L48) — `virtual void operator=(const Model& m);` (virtual ROOT of the chain)
+- [`include/BALL/QSAR/regressionModel.h:35`](../include/BALL/QSAR/regressionModel.h#L35) — `virtual void operator=(const RegressionModel& m);` (hidden by RRModel synthesized)
+- [`include/BALL/QSAR/linearModel.h:31`](../include/BALL/QSAR/linearModel.h#L31) — `virtual void operator=(const LinearModel& m);` (same)
+
+**Fix:** Add explicit `= default` copy assignments at `MLRModel` + `RRModel` (and any other leaf derived class that lacks one), and ensure the `using` chain is complete. **Adversarial check:** confirm no code path relies on virtual dispatch through `operator=` (polymorphic assignment is generally a code smell; if any caller does `Model* m = ...; *m = other_model;` and expects polymorphic behavior, the v1.6.2 fix is insufficient and must defer to v2.0). Grep the tree for such patterns before applying.
+
+**Out of scope:**
+- Redesigning QSAR's polymorphic assignment story (v2.0 territory; pairs with `Phase 999.24` KERNEL redesign).
+- Other `-Woverloaded-virtual` sites outside QSAR (the renderer hierarchy `Renderer::renderRepresentations_(const RepresentationList&)` vs. `GLRenderer::renderRepresentations_(BufferMode)` is its own story — separate hit count, separate phase if pursued).
+
+**Estimated effort:** ~30 minutes (3-5 line edits + adversarial-grep audit + CI verify 22-warning drop).
+
+**Requirements:**
+- `WARN-QSAR-OVERVIRT-01` — `-Woverloaded-virtual` count on `include/BALL/QSAR/{Model,regressionModel,linearModel}.h` drops to zero on Linux GCC.
+
+To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Promotion trigger:** anytime in v1.6.2 cycle; bundle with 999.29 / 999.30.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.32: test-suite -Wunused-comparison cleanup (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Silence the 69 `-Wunused-comparison` warnings emitted by clang on macOS across `test/Bit_test.C` and `test/Substring_test.C`. The pattern is `TEST_EXCEPTION(Exception::NullPointer, b0 == true)` — the comparison expression's *side-effect* (throwing from `Bit::operator==` when null) is intentional, but clang's static analyzer sees the bool result as discarded.
+
+**Why now (v1.6.2):** Largest single warning cluster on macOS (69 of 175 total). Trivially localizable — only 2 test files. Fix is mechanical: wrap the inner expression in a `(void)` cast, OR (cleaner) update the `TEST_EXCEPTION` macro body in [`include/BALL/CONCEPT/classTest.h`](../include/BALL/CONCEPT/classTest.h) to `(void)(_expr_)` once. The macro-level fix is preferred — single edit, fixes all current + future sites — but requires care: `cb392cc` recently touched `classTest.h` (TEST_REAL_EQUAL bracing), so the change should pair-review against that commit's intent. Adversarial check: confirm `(void)` cast doesn't suppress legitimate compile errors in the test bodies.
+
+**Defect (sample sites):**
+- [`test/Bit_test.C:140,167,194`](../test/Bit_test.C#L140) — `b0 == true`, `b0 != true` inside `TEST_EXCEPTION`
+- [`test/Substring_test.C:282-283`](../test/Substring_test.C#L282) — same pattern
+
+**Fix options (pick at promotion):**
+1. **Macro-level:** update `TEST_EXCEPTION` to internally `(void)(_expr_)`. Single edit; covers all test files; aligns with `cb392cc`'s precedent for cleaning up `classTest.h`.
+2. **Per-site:** wrap each comparison in `(void)(b0 == true)`. Touches only the 2 test files; safer against macro-level regressions but more LOC.
+
+**Out of scope:**
+- The 2 `-Wunused-value` + 1 `-Wliteral-conversion` + 2 `-Wliteral-range` on macOS (separate, fewer hits, lower priority).
+- `-Wunused-parameter` cleanup (26 instances on Linux; deliberate API-shape preservation; tracked in 999.22 census).
+
+**Estimated effort:** ~20 minutes (decide macro vs. per-site; apply; CI verify 69-warning drop on macOS).
+
+**Requirements:**
+- `WARN-TEST-UNUSEDCMP-01` — `-Wunused-comparison` count on `test/*.C` drops to zero on macOS clang.
+
+To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Promotion trigger:** anytime in v1.6.2 cycle; cleanly co-landable with 999.29/30/31.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
+### Phase 999.33: PoseClustering Boost.Graph -Wmaybe-uninitialized suppression (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Suppress the 5 `-Wmaybe-uninitialized` warnings emitted by GCC 13 on Linux Release builds — all 5 are inside `/usr/include/boost/graph/detail/` (Boost.Graph 1.83+) instantiated through `BALL::PoseClustering::ClusterProperties`'s `boost::adjacency_list<vecS, vecS, directedS, ClusterProperties, ...>`. These are **GCC false-positives** from Boost.Graph + Boost.Optional interaction on edge iterators — Boost upstream issue, not a BALL bug. Confirmed by inspection (the `boost::optional` `m_src` / `_M_current` fields are initialized by `optional`'s construction path, but GCC's flow analysis loses the connection across template/lambda boundaries).
+
+**Why now (v1.6.2):** Only 5 warnings, but they live in the highest-severity category (potential UB) and Linux release CI surfaces them on every push — they dilute the "high-severity" signal that `-Wmaybe-uninitialized` is meant to give for *real* uninitialized reads. `cb392cc` already established the surgical-suppression precedent (GCC `-Wdangling-reference` false-positive in `coloringSettingsDialog.C` solved by source-site refactor rather than blanket `-Wno-`). Same approach here: wrap the two `boost/graph/adjacency_list.hpp` includes in [`include/BALL/DOCKING/COMMON/poseClustering.h:50,53`](../include/BALL/DOCKING/COMMON/poseClustering.h#L50) with `#pragma GCC diagnostic push / ignored "-Wmaybe-uninitialized" / pop`.
+
+**Defect:** All 5 warnings flow from instantiation of `boost::detail::out_edge_iter` / `boost::detail::adj_list_edge_iterator` / `boost::optional` chain for `PoseClustering::ClusterProperties`. Backtrace shows the warnings firing in:
+- `/usr/include/c++/13/bits/stl_algobase.h:262`
+- `/usr/include/boost/graph/detail/adj_list_edge_iterator.hpp:80`
+- `/usr/include/boost/graph/detail/adjacency_list.hpp:148`
+
+**Fix:** Wrap the two `boost/graph/adjacency_list.hpp` includes in `poseClustering.h` with `#pragma GCC diagnostic push` / `#pragma GCC diagnostic ignored "-Wmaybe-uninitialized"` / `#pragma GCC diagnostic pop`. Surgical — affects only PoseClustering's include site, doesn't touch any other Boost.Graph user. **Do not** use blanket `-Wno-maybe-uninitialized` at the build-flag level — it would hide real bugs elsewhere.
+
+**Adversarial check:** Confirm the warnings are clang-clean already (they don't fire on macOS clang in the same workload) — verified against [run 25970222837](https://github.com/BALL-Project/ball/actions/runs/25970222837) macos-arm64 log: 0 `-Wmaybe-uninitialized` hits. This confirms the GCC-specific false-positive shape; `#pragma GCC diagnostic` is exactly the right granularity.
+
+**Out of scope:**
+- Bug-reporting upstream to Boost.Graph (separate, not blocking).
+- The 1 `-Warray-bounds` warning on Linux (separate cluster; pair with 999.22 census).
+
+**Estimated effort:** ~10 minutes (wrap 2 includes + CI verify 5-warning drop on linux-x64/arm64).
+
+**Requirements:**
+- `WARN-POSECLUSTER-MAYBEUNINIT-01` — `-Wmaybe-uninitialized` count on linux-x64 GCC Release build drops to zero (or to whatever real-bug subset remains after PoseClustering is suppressed).
+
+To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Promotion trigger:** anytime in v1.6.2 cycle; trivially co-landable with 999.29/30/31/32 as warning-cleanup omnibus 2.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.
@@ -1456,12 +1590,13 @@ Plans:
 **Why now (v1.6.2 OR v1.7):** Originally deferred from Phase 5.1 as a "separate investigation" ([`05.1-CONTEXT.md:61`](phases/05.1-build-warnings-and-latent-bugs/05.1-CONTEXT.md)). Documented as "real ambiguities worth investigating" in [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md). Per-conflict triage: confirm benign (default-precedence-resolves-correctly) or fix grammar rule. Isolated grammar work; one parser; no architectural dependency. Cheap to dispatch.
 
 **Scope:**
-1. Reconcile the conflict count — run `bison -W CIFParserParser.y` cleanly and capture the verbatim conflict report.
+1. Reconcile the conflict count — run `bison -W CIFParserParser.y` cleanly and capture the verbatim conflict report. (Current latest CI run [25970222837](https://github.com/BALL-Project/ball/actions/runs/25970222837) reports **5 shift/reduce conflicts** for CIFParserParser.y on Bison 3.8.2 — locks the count for the audit.)
 2. For each conflict: examine the grammar rule + Bison's default action; confirm-benign or fix.
-3. Document outcome in `.planning/phases/999.23-cif-grammar-audit/AUDIT.md` (per-conflict table).
-4. **Out of scope:** The other 7 Bison grammars in tree (parsedFunction, GAMESSDatParser, GAMESSLogParser, smartsParser, smilesParser, expressionParser, GAFFCESParser) — no documented audit evidence yet. Spin out a separate v1.7 backlog stub if evidence of conflicts in any of them surfaces during this phase.
+3. **Fold-in: address the 19 `-Wformat-truncation=` warnings emitted by Bison-generated `CIFParserParser.C` on Linux GCC** (rules 198-243 in `CIFParserParser.y` use `snprintf` into 2550-byte buffers with `%s`-formatted parts up to 5099 bytes — every one a "could truncate" diagnostic). Audit: either raise the buffer size, switch to `std::string`/`fmt::format`-style growth, or accept truncation and silence with `[[maybe_unused]]` / explicit `snprintf` return check. Largest single warning category on Linux (19 hits) outside the `-Wdeprecated-*` clusters.
+4. Document outcome in `.planning/phases/999.23-cif-grammar-audit/AUDIT.md` (per-conflict table + format-truncation disposition).
+5. **Out of scope:** The other 7 Bison grammars in tree (parsedFunction, GAMESSDatParser, GAMESSLogParser, smartsParser, smilesParser, expressionParser, GAFFCESParser) — no documented audit evidence yet. Spin out a separate v1.7 backlog stub if evidence of conflicts in any of them surfaces during this phase.
 
-**Estimated effort:** 1-2 days depending on whether any conflict needs a real grammar fix. Defer to v1.7 if v1.6.2 fills up — not patch-release-critical.
+**Estimated effort:** 1-2 days depending on whether any conflict needs a real grammar fix (+ format-truncation cleanup adds ~30 min). Defer to v1.7 if v1.6.2 fills up — not patch-release-critical.
 
 **Requirements:** `GRAMMAR-01` (STRETCH) — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 (single-task PLAN when promoted).
