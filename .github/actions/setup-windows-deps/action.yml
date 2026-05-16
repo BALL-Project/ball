@@ -1,11 +1,10 @@
 name: 'Setup Windows build dependencies'
 description: >-
   Canonical Windows tooling install for BALL CI: provisions flex/bison
-  (winflexbison3) and ccache via Chocolatey in a single `choco install`
-  invocation. This is THE place to add any future Windows-only build
-  tool — e.g. `ninja` for Phase 999.2's generator switch should be folded
-  into the same choco call here, not added as a sibling step in each
-  workflow.
+  (winflexbison3), ccache, and ninja via Chocolatey in a single
+  `choco install` invocation. This is THE place to add any future
+  Windows-only build tool — fold it into the same choco call here, not
+  as a sibling step in each workflow.
 
   Consumers: .github/workflows/ci.yml (build (windows-x64) matrix entry)
   and .github/workflows/release.yml (release Windows job). Both call this
@@ -14,15 +13,23 @@ description: >-
   ccache: cache directory is %LOCALAPPDATA%\ccache (ccache 4.x default on
   Windows). The actions/cache step in ci.yml already targets that path.
 
+  ninja (Phase 999.2): folded in 2026-05-16 when the ci-windows CMake
+  preset switched to "generator": "Ninja" (so ccache's
+  CMAKE_<LANG>_COMPILER_LAUNCHER becomes effective — MSBuild silently
+  ignored it). release.yml installs ninja too but still uses its own
+  generator unless a future commit flips it; the extra ~5s install is
+  benign.
+
 runs:
   using: 'composite'
   steps:
-    - name: choco install winflexbison3 + ccache
+    - name: choco install winflexbison3 + ccache + ninja
       shell: pwsh
       run: |
-        choco install winflexbison3 ccache -y --no-progress
+        choco install winflexbison3 ccache ninja -y --no-progress
         # Confirm executables are reachable (mirrors the per-tool probes
         # that the inline steps did before consolidation).
         & "C:\ProgramData\chocolatey\bin\win_flex.exe" --version
         & "C:\ProgramData\chocolatey\bin\win_bison.exe" --version
         & ccache --version
+        & ninja --version

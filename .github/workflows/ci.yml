@@ -113,8 +113,12 @@ jobs:
           # source (currently 6.11.x, well above the D-01 6.5 floor). The
           # `macos-homebrew` CMake preset's CMAKE_PREFIX_PATH already points
           # at /opt/homebrew/opt/qt (not qt@5) — see Plan 05-01 SUMMARY.
+          # Phase 999.2: `ninja` provisioned alongside ccache — the ci-macos
+          # preset now declares "generator": "Ninja" so `ninja` must be on PATH
+          # at configure time. Homebrew installs ninja as `/opt/homebrew/bin/ninja`
+          # which is already on the runner PATH.
           brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison
-          brew install ccache
+          brew install ccache ninja
 
       - name: Configure (macOS)
         if: matrix.os == 'macos-arm64'
@@ -217,9 +221,14 @@ jobs:
           # Qt is installed through jurplel/install-qt-action in the dedicated
           # step below (aqtinstall, pinned to Qt 6.5.*). xvfb + Mesa stay for
           # the headless smoke check; non-Qt deps unchanged.
+          # Phase 999.2: `ninja-build` provisioned for the Ninja generator
+          # switch — the ci-linux preset now declares "generator": "Ninja".
+          # `ninja-build` is in the Ubuntu main archive; apt no-ops cleanly
+          # if already present in the runner image. `make` retained for any
+          # ad-hoc sub-invocation; harmless under Ninja.
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            cmake make g++ ccache \
+            cmake make ninja-build g++ ccache \
             libboost-all-dev libeigen3-dev libfftw3-dev libtbb-dev libglew-dev \
             libopenbabel-dev libsvm-dev flex bison \
             xvfb mesa-utils libgl1-mesa-dri
@@ -339,14 +348,27 @@ jobs:
           restore-keys: |
             vcpkg-${{ matrix.os }}-
 
-      # Windows tooling install: flex/bison + ccache via a single composite
-      # action so each workflow has one call site for "the Windows deps."
-      # See .github/actions/setup-windows-deps/action.yml — that is the
-      # canonical place to add future Windows-only tools (e.g. ninja for
-      # Phase 999.2).
-      - name: Set up Windows build deps (flex/bison + ccache)
+      # Windows tooling install: flex/bison + ccache + ninja via a single
+      # composite action so each workflow has one call site for "the Windows
+      # deps." See .github/actions/setup-windows-deps/action.yml — ninja
+      # was folded in 2026-05-16 (Phase 999.2) so the ci-windows CMake
+      # preset can declare "generator": "Ninja" with no per-workflow drift.
+      - name: Set up Windows build deps (flex/bison + ccache + ninja)
         if: matrix.os == 'windows-x64'
         uses: ./.github/actions/setup-windows-deps
+
+      # Phase 999.2: with Ninja replacing MSBuild, `cl.exe` is invoked
+      # directly and needs the `vcvars64.bat` environment (PATH, INCLUDE,
+      # LIB, LIBPATH, etc.). MSBuild had this implicit via the VS project
+      # files; Ninja does not. `ilammy/msvc-dev-cmd@v1` is the canonical
+      # GitHub Actions wrapper around `vcvarsall.bat x64` — sets every env
+      # var for the remaining steps of THIS job (it modifies the runner's
+      # exported env, not just the current shell).
+      - name: Set up MSVC environment (Windows — vcvars64 for Ninja)
+        if: matrix.os == 'windows-x64'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
