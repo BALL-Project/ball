@@ -895,6 +895,181 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog after v1.6.1 tags)
 
+### Phase 999.15: PyBALL wrapping rewrite — autowrap + Cython, Python 3 only, autogen-first (BACKLOG · TARGETED FOR v2.1)
+
+**Goal:** Replace BALL's current SIP-4.9-based Python bindings with a **Cython-based, autowrap-generated** binding layer that (a) is Python-3-only, (b) covers a substantially broader API surface than today's hand-curated subset, (c) keeps in sync with the C++ headers via codegen rather than manual edits, and (d) eliminates the SIP 4.x deprecation liability before the SIP toolchain stops working on new Python releases.
+
+**Why now (v2.1, not v1.6.x or v2.0):**
+- The current 237 hand-written `.sip` files under [`source/PYTHON/EXTENSIONS/{BALL,VIEW}/`](source/PYTHON/EXTENSIONS/) are SIP 4.9 (BALL's `CMakeLists.txt` declares `FIND_PACKAGE(SIP 4.9 REQUIRED)`). SIP 4 is **deprecated**; SIP 6 is the current line. The PyQt project moved to SIP 6 years ago, and the top-level `sip` module Python import that SIP 4 used is itself deprecated ([openSUSE PyQt packaging notes](https://en.opensuse.org/openSUSE:Packaging_PyQt_and_SIP)).
+- BALL's Python bindings are **currently disabled in CI** ([`CMakePresets.json`](CMakePresets.json) → `"BALL_PYTHON_SUPPORT": "OFF"` in all three `ci-*` presets) precisely because SIP 4.9 + Python 3.10+ + Qt 6 is a fragile build matrix.
+- v2.0 substrate-modernization phases (999.6 PIPE-01, 999.9 INIFile→YAML, 999.10 REST API + PyBALL SDK, 999.11 gemmi, 999.12 deprecated removal) are heavy and *don't* depend on the wrapping rewrite — running the bindings work in parallel would conflict. v2.1 is the natural slot once v2.0 has landed and the wrapped API surface is stable.
+- The existing **Phase 6 (Python Bindings)** in the active phase list is scoped as "decide the binding generator via a vertical slice (5-10 core classes), then commit." This 999.15 entry **supersedes Phase 6**: the generator decision is made (autowrap + Cython, see "Recommended path" below) and the work moves to v2.1 as a fuller rewrite. When 999.15 is promoted, mark Phase 6 as superseded with a back-reference. *(If a maintainer prefers the original vertical-slice approach, this entry can be downgraded back to a Phase 6 scope; see "Open questions" #1.)*
+
+**Confirmation of "Python 2 era" claim (audited 2026-05-16):** the C-side glue ([`source/PYTHON/pyCAPIKernel.C`](source/PYTHON/pyCAPIKernel.C)) actually uses **Python 3 C API** idioms (`PyBytes_AsString`, `PyUnicode_AsUTF8`, `PyDict_*`), and `CMakeLists.txt` calls `FIND_PACKAGE(Python3 COMPONENTS Interpreter Development)`. So the Python 3 transition is **partially done at the C level**. The legacy piece is the **wrapping generator (SIP 4.9)** + the 237 `.sip` files that were originally authored for SIP 4 and target a pre-modern wrapping idiom. This phase therefore is "lift the *wrapping toolchain* to Python 3 era," not "lift the C API to Python 3" — the latter is mostly already done.
+
+---
+
+#### 1. State of the art (C++ → Python wrapping, 2026)
+
+Six tools considered. Each in one paragraph with how-it-generates / C++ feature support / build integration / ecosystem traction / maintenance status:
+
+- **[SWIG](https://eathealthy365.com/swig-explained-bridging-c-with-python-java-more/)** — 25+ years, multi-language (Python/Java/C#/Ruby/Go), parses C++ headers via `.i` interface files. Can wrap **unmodified** code, which is its killer feature for legacy libraries. Generates large binaries with significant runtime overhead. Template support is partial — heavy template metaprogramming routinely breaks the SWIG parser. CMake integration via `FindSWIG`. Used by gem5, but gem5 [migrated to pybind11 in 2017](https://m5-dev.m5sim.narkive.com/HvO7oauT/ge-change-in-public-gem5-master-python-use-pybind11-instead-of-swig-for-python-wrappers) citing maintenance burden. Still actively maintained but not the modern recommendation for Python-only targets.
+
+- **[Boost.Python](https://www.boost.org/doc/libs/release/libs/python/doc/html/index.html)** — Legacy, manual binding code. Compared to nanobind, [~11× larger binaries](https://nanobind.readthedocs.io/en/latest/benchmark.html). Heavy Boost dependency. Largely superseded by pybind11 (which started life as a Boost.Python rewrite). Not recommended for new projects.
+
+- **[SIP 6](https://python-sip.readthedocs.io/en/stable/introduction.html)** — Current SIP line, by Riverbank Computing (PyQt). Requires `.sip` DSL files (a Python-ish syntax describing C++ classes to wrap). Mature; powers PyQt5/PyQt6. Adding `%MinimumABIVersion` is now required (deprecation warning otherwise; ["The use of the %MinimumABIVersion directive will be required in SIP v7"](https://python-sip.readthedocs.io/en/stable/releases.html)). For BALL: SIP 4 → SIP 6 migration is feasible but **keeps the manual `.sip` file maintenance burden** — the very thing this phase aims to eliminate.
+
+- **[pybind11](https://pybind11.readthedocs.io)** — Header-only, modern C++17, no codegen, just `PYBIND11_MODULE` macros that you write by hand for each class. Battle-tested at scale (CERN, scipy, PyTorch's C++ glue, GTSAM). Mature, stable, large community. **Downsides**: slow compile (~4× slower than nanobind), large binaries (~3-5× bigger than nanobind), runtime overhead (~10× higher than nanobind for class passing). For BALL: would require **hand-writing bindings for every class** — same maintenance shape as SIP, different syntax. Per the [Rubin Observatory's LSST migration notes](https://community.lsst.org/t/using-pybind11-instead-of-swig-to-wrap-c-code/1096), pybind11 is the modern default *for manual wrapping*.
+
+- **[nanobind](https://nanobind.readthedocs.io)** — pybind11's spiritual successor by the same author (Wenzel Jakob), released 2022, actively maintained ([changelog through 2026](https://nanobind.readthedocs.io/en/latest/changelog.html)). C++17 minimum. Targets a smaller C++ subset on purpose. Benchmarks: [~4× faster compile, ~5× smaller binaries, ~10× lower runtime overhead than pybind11](https://nanobind.readthedocs.io/en/latest/benchmark.html); supports Python's Stable ABI (one binary for many Python versions). Virtual functions via trampoline classes (`NB_TRAMPOLINE` macro), multiple inheritance supported but with documented gotchas in deep hierarchies. **Same manual-wrapping shape as pybind11** — still no codegen, you write the bindings yourself.
+
+- **[autowrap (OpenMS)](https://github.com/OpenMS/autowrap) + [Cython](https://cython.org)** — Codegen tool that consumes annotated `.pxd` files (Cython's C++ declaration syntax) and emits Cython `.pyx` wrapper code, which Cython then compiles to a Python extension. Developed for and battle-tested by [pyOpenMS](https://pyopenms.readthedocs.io/en/release_2.5.0/wrap_classes.html) — has wrapped **>4100 C++ method calls** in a production scientific-software setting. **Python 3 only** (requires Python ≥ 3.9), Cython ≥ 3.0 (audited 2026-05-16 via `GET /OpenMS/autowrap` README — release 0.27.0 dated 2026-01-14, active CI, 879 commits). Supports template classes, enums, free functions, static methods, STL container converters, automatic C++ exception → Python exception mapping, correct reference counting. Author's stated approach: "code generator handles 95% of all use cases; the remaining 5% are still wrapped manually." Build integration via `setup.py`/`pip install -e`; can also be invoked from CMake. **This is the codegen+wrapping combination the user requested.**
+
+- **[Cython directly (no autowrap)](https://cython.org)** — manual `.pyx`/`.pxd` files. Without a generator, hand-writing 700+ class wrappers is comparable maintenance burden to the SIP status quo. Only useful as a fallback for the 5% of classes autowrap can't handle.
+
+- **[cppyy](https://cppyy.readthedocs.io)** (mentioned for completeness) — runtime introspection via Cling JIT. Powerful (handles templates, virtual functions, multiple inheritance with near-zero binding code). But requires Cling at runtime (heavy dependency), and ROOT-derived ecosystem skews toward HEP. Not recommended for BALL: the runtime dependency is too heavy for a downstream-friendly scientific library.
+
+##### Recommended path: **autowrap + Cython**, with **nanobind as an optional escape hatch** for hot paths
+
+**Why autowrap + Cython wins for BALL specifically:**
+
+1. **It is the only option in the comparison that is codegen-first.** The user's explicit goal is "kept in sync via codegen rather than manual edits." pybind11, nanobind, SIP (4 or 6) all require hand-written bindings per class — the maintenance burden the user wants to eliminate. SWIG is codegen-ish but generates from `.i` files that you still write per class. Only autowrap consumes existing C++ declarations (via Cython's `.pxd` syntax, which can be partially auto-generated from headers) and emits bindings, with the explicit 95/5 split stated by its author.
+2. **It is proven at BALL-comparable scale.** pyOpenMS wrapped >4100 C++ method calls. BALL's surface (the relevant subset; see Impact Analysis §2 below) is in the same order of magnitude. OpenMS and BALL are both C++ scientific-software libraries with templates, processors, factories, and Composite hierarchies; the pyOpenMS precedent is direct evidence the approach scales to BALL.
+3. **Python 3 only** is exactly what we want — no Python 2 retention burden. The SIP 4.9 → SIP 6 migration would re-open Python 2/3 compatibility questions in places.
+4. **STL converters out of the box.** BALL's API surface is full of `std::vector<Atom*>`, `std::map<String, ...>`, `HashMap<Position, ColorRGBA>` etc. — autowrap converts these to Python lists/dicts/etc. automatically.
+5. **Cython → C exception mapping is automatic.** BALL throws `BALL::Exception::*` (see [`include/BALL/COMMON/exception.h`](include/BALL/COMMON/exception.h)). Cython's `except +` clause turns these into Python exceptions without per-method work.
+6. **Active maintenance (release 0.27.0 on 2026-01-14).** Not abandonware.
+
+**Why nanobind is the optional escape hatch:** if profiling after the autowrap rollout shows a few BALL hot paths (probably KERNEL iterator-loop trampolines, `Composite::apply` traversals, or QSAR matrix accessors) bottleneck on wrapping overhead, those *specific* classes can be re-wrapped with nanobind without disturbing the autowrap-generated bulk. nanobind's runtime overhead floor is the lowest of any tool surveyed. This is a v2.2 follow-up, not v2.1 in-scope.
+
+**Rejected options + why:**
+- SIP 6 → keeps the manual-`.sip`-file burden; doesn't deliver the user's autogen goal. Migration cost ≈ rewrite cost; no payoff.
+- pybind11/nanobind alone → manual wrapping per class; not codegen-first. nanobind would be better for the 237 classes but still 237 hand-written wrappers.
+- SWIG → multi-language is not a BALL goal (no Java/C# users on the roadmap), and SWIG's template-parsing limitations are exactly the wrong fit for BALL's heavy template usage in QSAR/STRUCTURE/MATHS.
+- cppyy → runtime Cling dependency is too heavy for a downstream-friendly conda-forge BALL package.
+
+---
+
+#### 2. Impact analysis on BALL
+
+*(BALL surface numbers per repo grep on `v1.6-modernization` branch as of 2026-05-16: **762 `.C` TUs** under `source/`, **683 `.h` files** under `include/`, **237 `.sip` files** under `source/PYTHON/EXTENSIONS/{BALL,VIEW}/`.)*
+
+**Subset of public API to wrap (target surface):**
+- **`include/BALL/KERNEL/*.h`** — molecular hierarchy (`System`, `Molecule`, `Residue`, `Chain`, `Atom`, `Bond`, `PDBAtom`, `PTE_`). MUST wrap; the core of any scientific use.
+- **`include/BALL/FORMAT/*.h`** — file I/O (`PDBFile`, `MOL2File`, `HINFile`, `KCFFile`, `NMRStarFile`, `DCDFile`, `INIFile`). MUST wrap; users want to read/write structures from Python.
+- **`include/BALL/STRUCTURE/*.h`** — structural algorithms (`HBondProcessor`, `SmartsParser`, `BindingPocketProcessor`, `FragmentDB`, `RotamerLibrary`). HIGH-PRIORITY; the analysis-script user surface.
+- **`include/BALL/COMMON/*.h`** — `Exception::*`, `Position`, `Size`, `Index`. Wraps automatically (Cython converters).
+- **`include/BALL/DATATYPE/*.h`** — `String`, `HashMap`, `List`, `BitVector`, `Quaternion`, `Vector3`. Lower priority since most map to Python natives via Cython STL converters.
+- **`include/BALL/MATHS/*.h`** — `Matrix3x3`, `Vector3`, `Vector4`, geometric primitives. MEDIUM priority.
+- **`include/BALL/MOLMEC/*.h`** — molecular mechanics (AMBER, MMFF94, force-field interfaces). HIGH priority for the scripting user.
+- **`include/BALL/ENERGY/*.h`**, **`include/BALL/SOLVATION/*.h`**, **`include/BALL/NMR/*.h`** — domain modules. MEDIUM priority; wrap based on existing `.sip` precedent (whatever the SIP wrappers covered, the new wrappers should at minimum match).
+- **`include/BALL/QSAR/*.h`**, **`include/BALL/DOCKING/*.h`**, **`include/BALL/SCORING/*.h`** — large modules with heavy template usage. CAUTION: template instantiation depth here is where autowrap will hit the 5% manual-wrap edge cases.
+- **`include/BALL/VIEW/*.h`** — DELIBERATELY OUT OF SCOPE for v2.1. Wrapping VIEW (GUI classes, OpenGL renderers, Qt-derived widgets) requires careful Qt-binding integration (PyQt6 / Qt-for-Python) and re-opens the Qt 6 transition story. Defer to v2.2 or later. Keep VIEW unwrapped in v2.1; the BALLView GUI is the canonical "use VIEW from C++" surface and Python scripting users want core BALL, not VIEW.
+
+**Hardest BALL idioms (where the 5% manual-wrap work concentrates):**
+- **Composite hierarchy + `apply(UnaryProcessor<T>&)`** — pyOpenMS hit similar issues with template-based visitors. autowrap can wrap the specific instantiations (`UnaryProcessor<Atom>`, `UnaryProcessor<Residue>`, `UnaryProcessor<Bond>`, etc.) but a Python-side override (Python class inheriting from a processor and overriding `operator()`) requires a trampoline equivalent. **Likely the largest manual-wrap pocket**; budget ~1 week.
+- **Heavy template instantiation (`HashMap<K,V>`, `List<T>`, `Vector3<T>`, force-field templates)** — autowrap handles instantiated templates but the `.pxd` declarations need each instantiation enumerated. Workable but verbose; budget another week.
+- **Smart pointers / ownership** — BALL uses raw pointers in most places, occasional `boost::shared_ptr`. Cython needs explicit ownership annotations (`ptr_owned`, `ptr_unowned`). Per-class decision.
+- **Factories returning base-class pointers** (`ModelProcessor`, `Renderer`, `Representation`) — autowrap can wrap, but downcasting from Python requires extra glue. Document the pattern once, replicate.
+- **Iterators** — BALL's iterator classes (`AtomIterator`, `ResidueIterator`, etc.) need Python iterator protocol mapping. Cython provides this via `__iter__`/`__next__` patterns; not hard but per-class boilerplate. autowrap handles via annotations.
+- **Operator overloading** (`operator+`, `operator*` on `Vector3`) — Cython supports; per-class declaration in `.pxd`.
+
+**Existing PyBALL test / example surface to keep working:**
+- The single `.py` script in tree is [`source/PYTHON/EXTENSIONS/BALL.py`](source/PYTHON/EXTENSIONS/BALL.py) — a 2-line wrapper that imports both `BALLCore` and `VIEW` modules. v2.1 must keep this import path stable (`from BALLCore import *` should still work post-rewrite). The `VIEW` import becomes optional (out of scope for v2.1).
+- The 237 `.sip` files transitively name the API surface that *was* wrapped historically — they are the **specification of v2.1's minimum coverage target**. Audit task (999.15-01): enumerate every class+method in the existing `.sip` files; the new autowrap output MUST cover at least the same surface plus the broader-API expansion.
+- The BALL test tree (`source/*/test/`) is C++-only; no PyBALL tests exist today. v2.1 should add Python-side smoke tests for the wrapped API.
+
+**Downstream user migration path:**
+- Existing PyBALL users: there are very few (the SIP build has been broken/disabled for a while). New users encounter `pip install pyball` → autowrap-built wheel; no learning curve since both old SIP API and new Cython API expose the same C++ class hierarchy with the same method names.
+- Anaconda / conda-forge: the package recipe needs updating from SIP 4 → autowrap+Cython. Modest packaging change. Coordinate with conda-forge BALL feedstock maintainer.
+
+---
+
+#### 3. What this phase makes obsolete
+
+Each item below was verified against the current repo before claiming. **Confidence levels: VERIFIED (grep-confirmed), LIKELY (reasoned from architecture), DEPENDS (conditional on a follow-up decision).**
+
+- **VERIFIED — `source/PYTHON/EXTENSIONS/BALL/*.sip`** (104 files per `find source/PYTHON/EXTENSIONS/BALL -name '*.sip' | wc -l`) — the entire SIP-format C++→Python wrapping spec for libBALL. Replaced by autowrap-generated wrappers from annotated `.pxd` files.
+- **VERIFIED — `source/PYTHON/EXTENSIONS/VIEW/*.sip`** (133 files in the VIEW subset). Most can be deleted because VIEW wrapping is deferred; the few that document the BALL-side of VIEW interactions move to v2.2 when VIEW gets wrapped.
+- **VERIFIED — `source/PYTHON/EXTENSIONS/BALL/BALLPyMacros.h` + `pyBALLSipHelper.h/C`** — SIP-specific helper macros and bridge code. Become unused once SIP is gone.
+- **VERIFIED — `include/BALL/PYTHON/EXTENSIONS/pyBALLSipHelper.h` + helpers** — same shape, SIP-specific.
+- **VERIFIED — `cmake/FindSIP.cmake` + `cmake/FindSIP.py`** — CMake module to locate SIP. Becomes dead code; delete.
+- **VERIFIED — `FIND_PACKAGE(SIP 4.9 REQUIRED)` in `CMakeLists.txt`** plus the surrounding `BALL_PYTHON_SUPPORT` block (~10 lines) — replaced with `find_package(Python3 ...)` + `find_package(Cython ...)` + autowrap invocation as a custom CMake target.
+- **LIKELY — `source/EXTENSIONS/JUPYTER/CMakeLists.txt`** — the BALL Jupyter integration probably depends on PyBALL via SIP; needs audit at 999.15-01 time to confirm whether (a) it's already broken in tree, (b) it would just work against the new bindings (same Python module names), or (c) requires its own port. **Don't delete blindly.**
+- **DEPENDS — `BALLAXY / PresentaBall / Galaxy` integrations** — historical PyBALL consumers. If any external project still depends on the SIP-generated `BALLCore.so` ABI specifically (not just the Python module API), the v2.1 rewrite breaks them. Audit task 999.15-02 must check whether these projects are still alive and, if so, what their integration shape is.
+- **DEPENDS — Python 2 build/CI path** — VERIFIED **not present** in current tree (`CMakeLists.txt` only references `Python3`; no `Python2` find). So there is no Python 2 path to delete; the user's premise of "Python 2 build/CI path needs removal" doesn't apply to the current state. This is good news — one less migration.
+- **VERIFIED — `BALL_PYTHON_SUPPORT: OFF` in `CMakePresets.json`** — currently disabled in CI for all three platforms. The v2.1 work flips this to `ON` after the bindings are green on a test matrix.
+
+**Items NOT made obsolete (preserved):**
+- `source/PYTHON/pyCAPIKernel.{h,C}` + `pyInterpreter.{h,C}` + `pyKernel.{h,C}` + `pyServer.{h,C}` — these are the **embedded Python interpreter** in BALLView (lets users script BALL from inside the running application). Independent of the C++→Python wrapping question; stays. Uses Python 3 C API already (audit 2026-05-16); minor cleanup possible but not required by this phase.
+- All C++ source under `source/` and `include/BALL/` — zero changes to BALL itself; this is a wrapping-layer rewrite, not a library rewrite.
+
+---
+
+#### 4. Phase outline (numbered tasks, when promoted to active)
+
+Each task has a one-line goal and explicit, verifiable success criteria. Tasks numbered `999.15-NN`.
+
+**999.15-01: Audit current PyBALL surface + dependents.**
+- *Action:* Enumerate every class and method declared in the 237 `.sip` files. Output: `.planning/phases/999.15-pyball-rewrite/01-SURFACE-AUDIT.md` with a table of (class, methods, header, used-by-`.sip-file`, downstream-dependent-known). Also audit `source/EXTENSIONS/JUPYTER/` and reach out to BALLAXY/PresentaBall maintainers about ABI vs API dependence.
+- *Success criteria:* (a) Table has ≥1 row per `.sip` file (count = 237 baseline). (b) Audit document lists every external consumer of `BALLCore.so` known to the maintainers. (c) The "v2.1 minimum coverage" set is locked: an explicit subset of the 237 that the new wrappers MUST cover by ABI-compatible API.
+
+**999.15-02: POC — wrap a representative BALL subset with autowrap.**
+- *Action:* Pick 5 classes spanning the difficulty range: `PTE_` (trivial enum-like), `Vector3` (operator-heavy template), `Atom` (KERNEL composite member with iterators), `PDBFile` (FORMAT class with file I/O exceptions), `HBondProcessor` (STRUCTURE processor with `apply` semantics). Write `.pxd` files, run autowrap, build the resulting Cython module, write a Python smoke test that exercises each.
+- *Success criteria:* (a) `pip install -e .` builds the POC module on macOS-arm64. (b) Smoke test passes: read a PDB file, iterate atoms, compute H-bonds, get vector arithmetic results. (c) Document the 5% manual-wrap edge cases hit in `.planning/phases/999.15-pyball-rewrite/02-POC-FINDINGS.md` (almost certainly: the `apply(UnaryProcessor<Atom>&)` pattern + override-in-Python).
+
+**999.15-03: Establish autowrap CMake integration + tri-OS build matrix.**
+- *Action:* Add a `cmake/FindAutowrap.cmake` (or inline `find_program`) + an `add_custom_command` that runs autowrap on the input `.pxd` files at build time. Update the three `ci-*` CMake presets in [`CMakePresets.json`](CMakePresets.json) to flip `BALL_PYTHON_SUPPORT: ON`. Update `.github/workflows/ci.yml` to install autowrap + Cython + Python dev headers on all three runners (Homebrew on macOS, apt on Linux, pip in a Windows venv).
+- *Success criteria:* (a) `cmake --build` on all three platforms produces the POC Cython module green. (b) The POC smoke test runs and passes on all three platforms in CI. (c) The Windows path is documented (vcpkg / pip / msys2 interplay; Cython on Windows historically has rough edges).
+
+**999.15-04: Full surface wrap — KERNEL + FORMAT + COMMON + DATATYPE + MATHS.**
+- *Action:* Generate `.pxd` files for these five modules (the "must-wrap" core from §2). Use the POC's edge-case findings to handle templates, iterators, operators. Build, test, fix.
+- *Success criteria:* (a) All public classes in these five modules are accessible from Python. (b) Smoke tests cover: opening every supported file format, iterating the Composite hierarchy, vector/matrix math, exception propagation. (c) The previously SIP-wrapped KERNEL+FORMAT API is at minimum reachable from Python (audit cross-check against 999.15-01's table).
+
+**999.15-05: STRUCTURE + MOLMEC + ENERGY + SOLVATION + NMR wrap.**
+- *Action:* Same shape as 999.15-04, second tier of modules. STRUCTURE has the `apply(processor)` patterns that 999.15-02 derisked; MOLMEC has the heavy force-field templates.
+- *Success criteria:* (a) Force-field minimization (AMBER, MMFF94) runs end-to-end from Python on a real input PDB. (b) H-bond detection, secondary structure assignment via Python. (c) NMR shift prediction (NMRStarFile + NMRDescriptors) reachable from Python.
+
+**999.15-06: QSAR + DOCKING + SCORING wrap (heavy templates — schedule last).**
+- *Action:* These modules have the deepest template usage. Expect to hit autowrap's 5% manual-wrap edge cases here. Possibly nanobind the worst offenders if compile time blows up.
+- *Success criteria:* (a) At least 80% of the previously SIP-wrapped QSAR/DOCKING/SCORING surface is reachable from Python (the 20% manual-only). (b) The 20% gap is documented with rationale per class. (c) Compile time for the full PyBALL extension on a 4-core runner is ≤ 15 min.
+
+**999.15-07: Deprecate + remove SIP layer.**
+- *Action:* Delete the 237 `.sip` files, `FindSIP.cmake`, `BALLPyMacros.h`, `pyBALLSipHelper.{h,C}`. Remove `FIND_PACKAGE(SIP 4.9 REQUIRED)` from `CMakeLists.txt`. Update `BALL.py` if the import path needs adjustment.
+- *Success criteria:* (a) No `.sip` files remain under `source/PYTHON/EXTENSIONS/`. (b) `grep -r SIP source/PYTHON include/BALL/PYTHON CMakeLists.txt cmake/` returns nothing meaningful (only natural-language doc references). (c) Build is green; Python smoke tests still pass.
+
+**999.15-08: Documentation + downstream migration guide.**
+- *Action:* Write `docs/python/migration-from-sip.md` (or `BUILD-pyball.md` if no Sphinx site yet — depends on whether 999.13 has shipped). Document: per-class API mapping (old SIP → new Cython), known behavior differences, how to rebuild downstream packages. Coordinate with conda-forge BALL feedstock for the recipe change.
+- *Success criteria:* (a) Migration doc exists in the docs site (or repo if pre-999.13). (b) conda-forge feedstock PR opened (separate repo; trackable). (c) A canonical example script (e.g., "load PDB, find H-bonds, write MOL2") works on the new bindings and is added to `docs/python/cookbook.md`.
+
+**999.15-09 (OPTIONAL): nanobind escape hatch for hot paths.**
+- *Action:* Profile the autowrap-generated bindings on representative workloads (load 1000-residue protein, iterate atoms, compute pairwise distances, run force-field single-point energy). Identify the 3-5 hottest wrapping-overhead bottlenecks. Re-wrap those *specific* classes with nanobind.
+- *Success criteria:* (a) Profiling report identifies bottlenecks with numbers. (b) Re-wrapped hot paths show ≥3× speedup vs autowrap baseline. (c) Mixed nanobind+autowrap build is green on tri-OS CI.
+- *Skip if:* profiling shows no bottlenecks that justify a second binding tool's complexity.
+
+**Estimated effort:** 999.15-01..04 = ~4-6 weeks (core wrap + POC + CMake). 999.15-05..06 = ~3-4 weeks (rest of API). 999.15-07..08 = ~1-2 weeks (cleanup + docs). 999.15-09 optional. **Total realistic budget: 2-3 months** for one engineer; faster with two if 999.15-05 and 999.15-06 parallelize cleanly (they don't share files but they share infrastructure).
+
+---
+
+#### 5. Risks & open questions
+
+1. **Qt / PyQt6 interaction with BALLView Python scripting.** BALLView embeds a Python interpreter (`pyInterpreter.h/C`). When VIEW eventually gets wrapped (v2.2), the Python side of VIEW will need to coexist with PyQt6 in the same process. Autowrap-generated Cython modules and PyQt6's SIP6-generated modules can coexist (they don't share ABI), but signal/slot threading and Qt event-loop integration need design work. **For v2.1 this is deferred** (VIEW out of scope), but flag for v2.2 planning.
+2. **Performance regressions vs raw C++.** Most PyBALL users use it for scripting (load file, transform, save), not numerical inner loops, so wrapping overhead is acceptable. But the QSAR module sometimes feeds Python ML pipelines (descriptor matrices → scikit-learn). If autowrap's per-call overhead is high vs SIP 4 on the descriptor-matrix accessors, that's a regression. **Mitigation:** 999.15-09 (nanobind for hot paths) addresses this.
+3. **ABI compatibility with conda-forge BALL.** The conda-forge `ball` package historically shipped PyBALL as part of the install. The new autowrap-generated module name should match (`BALLCore`, `VIEW`) so import paths in downstream scripts don't break. **Action:** coordinate with conda-forge feedstock maintainer before 999.15-07 lands.
+4. **Cython on Windows.** Cython compilation on Windows historically requires either MSVC or MinGW + the right Python headers in the right place. vcpkg doesn't provide Cython (Cython is pip-installed). The Windows CI matrix in 999.15-03 needs a hardened path. **Mitigation:** the recently-landed Windows Ninja + ccache work (Phase 999.2) helps; ccache-on-MSVC works for both BALL and the generated Cython modules.
+5. **Maintenance commitment.** Autowrap had a 2026-01-14 release (active) but only 78 GitHub stars and a small (≤20) contributor base. If autowrap stagnates between v2.1 and v3.0, we'd need either to fork it or to migrate again. **Mitigation:** the `.pxd` files are standard Cython syntax; they'd survive a switch to a different `.pxd`→`.pyx` codegen tool with limited refactoring (or be hand-edited as plain Cython if autowrap dies — same situation as today's manual `.sip` files, except the input format is industry-standard Cython instead of vendor-specific SIP).
+6. **OPEN: do we keep the embedded interpreter (`pyInterpreter.{h,C}`)?** Phase 999.10 (REST API + PyBALL SDK) reshapes how Python interacts with BALL: instead of an in-process embedded Python, users would run a separate Python process talking REST to BALLView. If 999.10 lands first and we decide the embedded interpreter is redundant, that's another ~4 files to delete in 999.15-07's scope. **Decision deferred** until 999.10 has shipped.
+7. **OPEN: target Python version floor.** Python 3.9 is autowrap's minimum (audited 2026-05-16). Cython 3 is the floor too. The conda-forge `ball` feedstock currently builds for Python 3.10 / 3.11 / 3.12 / 3.13. Should 999.15 commit to a Python 3.10+ floor (matches conda-forge), or 3.9+ (matches autowrap's minimum)? **Recommend 3.10+** to match the wider scientific-Python ecosystem; 3.9 is in security-only mode.
+8. **OPEN: Phase 6 (active list) vs Phase 999.15 (this entry).** Phase 6 is on the active phase list as a v1.6 "decide-the-generator vertical slice." This entry supersedes that scope but targets v2.1. **Decision needed before either is promoted:** delete Phase 6 from the active list entirely? Downgrade it to "deferred to 999.15"? Or keep it as a v1.6 micro-version vertical slice (wrap 5-10 classes with autowrap, prove the chain, defer the full rewrite to v2.1)? The vertical-slice option is appealing as a de-risk for 999.15 — it'd cover 999.15-01/02/03 inside v1.6 and leave 04..09 for v2.1.
+
+**Requirements:** TBD (likely a single `PYTHON-01: PyBALL wrapping ported off SIP 4.9 to autowrap+Cython, ≥80% API coverage parity` on promotion).
+**Plans:** 0 plans (9 tasks sketched above; would unfold as PLAN.md files numbered 999.15-01-PLAN.md through 999.15-09-PLAN.md when promoted to active).
+
+**Reference:** [pyOpenMS wrapping workflow docs](https://pyopenms.readthedocs.io/en/release_2.5.0/wrap_classes.html) — the direct template for the autowrap approach. [nanobind benchmarks](https://nanobind.readthedocs.io/en/latest/benchmark.html) for the optional escape-hatch comparison numbers. [SIP release notes](https://python-sip.readthedocs.io/en/stable/releases.html) for the SIP 4 → SIP 6 deprecation timeline that makes this phase necessary.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog after v2.0 ships; do NOT promote earlier — v2.0's 999.10 REST API decision affects whether `pyInterpreter.{h,C}` survives, and 999.10's ABI changes would invalidate any wrapping work done before it lands.)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
