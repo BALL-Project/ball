@@ -95,22 +95,28 @@ jobs:
           cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
 
       # ----------------------------------------------------------------------
-      # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — mirrors the ci.yml
+      # Phase 9 gatekeeper (BLOCKING — TEST-CLOSE-02) — mirrors the ci.yml
       # gatekeeper so release builds ALSO surface unit test regressions.
       # Tests run AFTER the BALLView build (the binary the user gets in the
       # installer must build green; tests give us confidence in correctness
       # of the binary that ships).
+      # Three baseline failures triaged in 09-TRIAGE.md (Phase 9, 2026-05-16).
+      # Windows test gatekeeper deferred to Phase 999.34.
       # ----------------------------------------------------------------------
-      - name: Build BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+      # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
+      # after 3 baseline failures triaged in 09-TRIAGE.md.
+      - name: Build BALL test suite (macOS — Phase 9 gatekeeper, blocking)
         if: matrix.os == 'macos-arm64'
-        continue-on-error: true
+        continue-on-error: false
         timeout-minutes: 45
         run: |
           cmake --build build/ci-macos --target build_tests -j$(sysctl -n hw.ncpu)
 
-      - name: Run BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+      # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
+      # after 3 baseline failures triaged in 09-TRIAGE.md.
+      - name: Run BALL test suite (macOS — Phase 9 gatekeeper, blocking)
         if: matrix.os == 'macos-arm64'
-        continue-on-error: true
+        continue-on-error: false
         timeout-minutes: 60
         run: |
           cd build/ci-macos
@@ -118,8 +124,9 @@ jobs:
           # post-mortem (v1.6.0 local baseline: 50/294 fail without it,
           # 3/294 fail with it).
           export BALL_DATA_PATH="${{ github.workspace }}/data"
+          # TEST-CLOSE-02: || true removed — this step is now blocking.
           ctest --output-on-failure --timeout 120 \
-                --output-junit ${{ github.workspace }}/ball-tests-macos-release.xml || true
+                --output-junit ${{ github.workspace }}/ball-tests-macos-release.xml
 
       - name: Upload test results (macOS — release)
         if: always() && matrix.os == 'macos-arm64'

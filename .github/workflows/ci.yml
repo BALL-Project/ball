@@ -266,24 +266,27 @@ jobs:
           include-hidden-files: true
 
       # ----------------------------------------------------------------------
-      # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — wires the BALL unit-test
-      # tree (`test/`, 295 files, EXCLUDE_FROM_ALL by default) into the CI
-      # matrix so regressions surface as soon as they happen. Initially
-      # continue-on-error: true because the suite was never run post the C++17
-      # migration + dep overhaul + Phase 5 Qt 6 port — Phase 9 triage triages
-      # the existing failures (fix / quarantine / known-casualty) and flips
-      # this to blocking once the green-list is stable. See ROADMAP Phase 9.
+      # Phase 9 gatekeeper (BLOCKING — TEST-CLOSE-02) — the BALL unit-test
+      # tree (`test/`, 295 files) is now a load-bearing CI gate on macOS +
+      # Linux. Three baseline failures triaged in 09-TRIAGE.md (Phase 9,
+      # 2026-05-16): Directory_test KNOWN-PASSING; AmberFF_test FIX (ARM FP
+      # tolerance); AssignBondOrderProcessor_test2 QUARANTINE (WILL_FAIL TRUE).
+      # Windows test gatekeeper deferred to Phase 999.34.
       # ----------------------------------------------------------------------
-      - name: Build BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+      # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
+      # after 3 baseline failures triaged in 09-TRIAGE.md.
+      - name: Build BALL test suite (macOS — Phase 9 gatekeeper, blocking)
         if: matrix.os == 'macos-arm64'
-        continue-on-error: true
+        continue-on-error: false
         timeout-minutes: 45
         run: |
           cmake --build build/ci-macos --target build_tests -j$(sysctl -n hw.ncpu)
 
-      - name: Run BALL test suite (macOS — Phase 9 gatekeeper, non-blocking)
+      # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
+      # after 3 baseline failures triaged in 09-TRIAGE.md.
+      - name: Run BALL test suite (macOS — Phase 9 gatekeeper, blocking)
         if: matrix.os == 'macos-arm64'
-        continue-on-error: true
+        continue-on-error: false
         timeout-minutes: 60
         run: |
           cd build/ci-macos
@@ -297,8 +300,10 @@ jobs:
           # 2h timeouts set in test/CMakeLists.txt and will hit this cap —
           # acceptable for the gatekeeper, Phase 9 decides which to skip).
           export BALL_DATA_PATH="${{ github.workspace }}/data"
+          # TEST-CLOSE-02: || true removed — this step is now blocking.
+          # ctest exits non-zero if any non-WILL_FAIL test fails.
           ctest --output-on-failure --timeout 120 \
-                --output-junit ${{ github.workspace }}/ball-tests-macos.xml || true
+                --output-junit ${{ github.workspace }}/ball-tests-macos.xml
 
       - name: Upload test results (macOS)
         if: always() && matrix.os == 'macos-arm64'
@@ -443,26 +448,31 @@ jobs:
           include-hidden-files: true
 
       # ----------------------------------------------------------------------
-      # Phase 9 gatekeeper (PARTIAL — NON-BLOCKING) — see macOS counterpart
-      # for the rationale + flip-to-blocking trigger.
+      # Phase 9 gatekeeper (BLOCKING — TEST-CLOSE-02) — see macOS counterpart.
+      # Windows test gatekeeper deferred to Phase 999.34.
       # ----------------------------------------------------------------------
-      - name: Build BALL test suite (Linux — Phase 9 gatekeeper, non-blocking)
+      # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
+      # after 3 baseline failures triaged in 09-TRIAGE.md.
+      - name: Build BALL test suite (Linux — Phase 9 gatekeeper, blocking)
         if: startsWith(matrix.os, 'linux-')
-        continue-on-error: true
+        continue-on-error: false
         timeout-minutes: 45
         run: |
           cmake --build build/ci-linux --target build_tests -j$(nproc)
 
-      - name: Run BALL test suite (Linux — Phase 9 gatekeeper, non-blocking)
+      # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
+      # after 3 baseline failures triaged in 09-TRIAGE.md.
+      - name: Run BALL test suite (Linux — Phase 9 gatekeeper, blocking)
         if: startsWith(matrix.os, 'linux-')
-        continue-on-error: true
+        continue-on-error: false
         timeout-minutes: 60
         run: |
           cd build/ci-linux
           # See macOS counterpart — BALL_DATA_PATH is the make-or-break env var.
           export BALL_DATA_PATH="${{ github.workspace }}/data"
+          # TEST-CLOSE-02: || true removed — this step is now blocking.
           ctest --output-on-failure --timeout 120 \
-                --output-junit ${{ github.workspace }}/ball-tests-linux.xml || true
+                --output-junit ${{ github.workspace }}/ball-tests-linux.xml
 
       - name: Upload test results (Linux)
         if: always() && startsWith(matrix.os, 'linux-')
