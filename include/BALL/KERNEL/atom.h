@@ -1032,6 +1032,15 @@ namespace BALL
 // pre-fix pattern because of the MSVC implicit-instantiation quirk.
 #ifdef BALL_COMPILER_MSVC
 #include <vector>
+// Phase 999.26 (v1.6.2): the next declaration produces the literal C4910
+// pattern when compiling libBALL itself (BALL_EXPORT → __declspec(dllexport)
+// + extern). MSVC's complaint is cosmetic — it still honors the dllexport
+// and the symbol exports correctly; the warning is the only cost. Narrow
+// `suppress` (next-statement-only) silences the 307 instances on this site
+// without affecting other potential C4910 sites elsewhere in the tree.
+// The architectural alternative (move the extern decl to a client-only
+// header) is a v2.0 candidate documented in 999.26's "out of scope."
+#pragma warning(suppress: 4910)
 extern template class BALL_EXPORT std::vector<Atom*>;
 #endif
 
