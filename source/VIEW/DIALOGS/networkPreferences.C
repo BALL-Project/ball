@@ -40,9 +40,9 @@ namespace BALL
 		NetworkPreferences::~NetworkPreferences()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class NetworkPreferences" << endl;
-			#endif 
+				Log.error() << "Destructing object " << (void *)this
+										<< " of class NetworkPreferences" << std::endl;
+			#endif
 		}
 
 		void NetworkPreferences::proxyModeChanged(int proxy_mode)
