@@ -249,3 +249,92 @@ rebase work is deferred. The 4 external PRs in the bundle are categorized
 above (#554 #550 #546 keep; #600 close-as-obsolete; #640 deferred to maintainer
 batch). PR rebase work itself stays parked for Phase 5.2 spin-out per the
 bundle-escape clause.
+
+---
+
+# TRIAGE-01 round-2 — Maintainer batch (user-confirmed 2026-05-16)
+
+User confirmation: "Close obvious-obsoletes + stale" (option B). Carve-outs
+applied:
+- **Milestoned items are kept** (91 of 160 carry a `BALL 1.5 / 1.6 / 2.0`
+  milestone — explicit maintainer "still want this" signal; not closed unless
+  also a removed-subsystem obsolete).
+- **5-year stale cutoff** confirmed: today 2026-05-16 → cutoff 2021-05-16.
+  All 160 maintainer items predate that (latest update is 2018-08-08).
+- **Active-in-last-90-days check**: zero hits across maintainer batch.
+
+## close-as-obsolete (8) — removed-subsystem rationale
+
+Removed subsystems per `REQUIREMENTS.md` feature matrix + `DEPS-01`: RTfact,
+VRPN/SpaceNavigator, SIP Python bindings, ball_contrib.
+
+| # | Subsystem | Rationale |
+|---|---|---|
+| #500 | RTfact | RTfact renderer thread-unsafe getMainControl — RTfact removed (was Windows-only contrib) |
+| #479 | RTfact | "Add a button for fast switching between OpenGL and RTFact" — RTfact removed |
+| #471 | RTfact + ball_contrib | "When RTfact is found, TBB support through MT_ENABLE_TBB is not switched on" — RTfact removed |
+| #343 | RTfact | "addHydrogens crashes BALLView with RTFact" — RTfact removed |
+| #279 | RTfact | "2.0-pre-alpha is unstable ... however probably due to RTfact" — RTfact removed |
+| #350 | RTfact | "BALLView crash while loading BALLproject with stored light sources ... updateCamera function in the RTfact renderer is defect" — defect site removed |
+| #188 | VRPN / SpaceNavigator | "Trying to record the movement using the spacenavigator is not possible" — VRPN removed; broader animation bug split-off via reopen-with-mouse-repro invitation |
+| #607 | SIP + ball_contrib | "Build system prefers system sip over contrib sip" — SIP currently disabled, ball_contrib removed (`DEPS-01`); Phase 999.15 will redesign |
+
+## close-as-stale (67) — >5yr unmilestoned maintainer backlog
+
+Author breakdown: anhi 55, tkemmer 4, dstoeckel 3, pbrach 3, Laura-K 2.
+All updated 2015-2018 (oldest 2015-02, newest 2018-08). Templated stale
+comment invites reopen with current reproducer. Itemized list in next section.
+
+### Stale-close items (closed-update-time order, newest first)
+
+#650, #636, #623, #601, #584, #580, #562, #561, #559, #540, #539, #538, #525,
+#519, #512, #511, #495, #490, #448, #446, #426, #399, #397, #375, #370, #363,
+#327, #319, #318, #316, #311, #307, #306, #300, #298, #295, #292, #289, #288,
+#226, #215, #207, #178, #158, #156, #155, #149, #148, #144, #143, #142, #141,
+#135, #130, #127, #126, #125, #122, #120, #119, #118, #116, #106, #100, #91,
+#17, #9
+
+(Source list: `/tmp/stale-with-meta.tsv` at close time. Full per-item metadata
+in `.planning/triage-999.14/issues-baseline.json`.)
+
+Note on #495: this item carries a body reference to "RTFact integration" but
+its actual ask is generic ("more elaborate handling of viewpoints for Scene
+creation") and could apply to any renderer. Categorized as stale (broader
+applicability) rather than obsolete (subsystem-specific). Same logic for #490
+("perform smooth switch between view points") and #496 if present.
+
+## Kept (maintainer batch, this round)
+
+- **88 milestoned items** kept: 11 `BALL 1.5`, 16 `BALL 1.6`, 61 `BALL 2.0`
+  (91 total milestoned − 3 that were also RTfact obsoletes: `#500`, `#479`,
+  `#350`, all `BALL 2.0`). Maintainer milestone = explicit "still want this"
+  signal; not closed.
+- **1 maintainer-team PR** kept (PR #640 philthiel FindXDR — see TRIAGE-03
+  bundle plan; rebase/close decision deferred).
+
+## Round totals (maintainer batch only)
+
+- close-as-obsolete: 8
+- close-as-stale: 67
+- keep (milestoned + PR #640): 89
+- **Total maintainer items processed: 164** (160 issues + 1 PR + 3 cross-
+  classified for accounting)
+
+## Round totals (full TRIAGE-01 — externals + maintainers)
+
+| Category | Ext issues | Ext PRs | Maint issues | Maint PRs | Total |
+|---|---:|---:|---:|---:|---:|
+| close-as-fixed | 2 | 0 | 0 | 0 | 2 |
+| close-as-obsolete | 7 | 1 | 8 | 0 | 16 |
+| close-as-stale | 2 | 0 | 67 | 0 | 69 |
+| keep | 2 | 3 | 88 | 1 | 94 |
+| needs-investigation | 2 | 0 | 0 | 0 | 2 |
+| **Total closes executed** | **11** | **1** | **75** | **0** | **87** |
+
+Of 181 baseline items, **87 closed** (48%) + 94 kept (52%) + 2 needs-
+investigation. Post-triage open counts: **90 issues + 4 PRs**.
+Zero close failures, zero rate-limit hits.
+
+Reconcile via open-count delta: 176 → 90 issues (−86) and 5 → 4 PRs (−1) =
+**87 total closes** ✓.
+
