@@ -78,17 +78,20 @@ jobs:
           # continue-on-error.
           #
           # 2026-05-16: bumped from `windows-2022` (4 vCPU, standard hosted) to
-          # `windows-2022-xlarge` (BALL-Project org-provisioned larger hosted
-          # runner). Requires the label to exist in the org's larger-runner
-          # config (Settings → Actions → Runners → Larger runners). If it
-          # doesn't, the job queues indefinitely — fall back by reverting this
-          # one line. Justification: BALL's cold-cache Windows build is the
-          # cross-platform bottleneck; more cores cuts wall-time roughly
-          # linearly until cl.exe's serial header-parse phase becomes the new
-          # floor (typically ~8-12 cores worth of useful parallelism for this
-          # workload).
+          # `windows-2022-large` (BALL-Project org-provisioned larger hosted
+          # runner, 8 vCPU tier). Earlier attempt at `windows-2022-xlarge` was
+          # reverted (7b1ba7d) because that label wasn't provisioned; the
+          # 8-vCPU large tier IS provisioned. Requires the label to exist in
+          # the org's larger-runner config (Settings → Actions → Runners →
+          # Larger runners). If it doesn't, the job queues indefinitely — fall
+          # back by reverting this one line. Justification: BALL's cold-cache
+          # Windows build is the cross-platform bottleneck; the 8-core tier
+          # roughly doubles concurrent cl.exe processes vs the 4-core standard.
+          # cl.exe's serial header-parse phase becomes the new floor at ~8-12
+          # cores, so the 8-core tier captures most of the achievable speedup
+          # while leaving the 16-core xlarge as future headroom.
           - os: windows-x64
-            runner: windows-2022
+            runner: windows-2022-large
             blocking: true
             smoke: false
             ccache_dir: C:\Users\runneradmin\AppData\Local\ccache
