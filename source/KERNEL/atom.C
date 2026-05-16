@@ -676,8 +676,19 @@ namespace BALL
 #   include <BALL/KERNEL/atom.iC>
 # endif
 
-#ifdef BALL_COMPILER_MSVC
-	template class BALL_EXPORT std::vector<Atom*>;
-#endif
+// Phase 5.1 carry-forward (CI run 25948256780 verification):
+// Plan 05.1-07 added `template class BALL_EXPORT std::vector<Atom*>;`
+// here to provide a single TU-local definition matching the extern
+// declaration in atom.h:1010. That worked for vector3 (value-element)
+// but broke atom (pointer-element) — libBALL.dll exported the symbol as
+// a strong global; libVIEW.dll's cartoonModel.obj + editMode.obj
+// implicit-instantiate the same template AND emit strong symbols
+// (MSVC's `extern template class` doesn't reliably suppress pointer-
+// element-vector implicit instantiation). Linker sees duplicates →
+// LNK2005 in VIEW.dll's link. Revert this addition; atom.h's bare
+// `extern template class` declaration stays. libVIEW's TUs implicit-
+// instantiate as COMDATs (weak symbols), linker dedupes, no LNK2005.
+// vector3 keeps Plan 05.1-07's pattern intact (value-element vectors
+// don't have the same MSVC quirk).
 
 } // namespace BALL
