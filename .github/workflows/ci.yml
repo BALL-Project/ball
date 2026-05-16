@@ -348,6 +348,19 @@ jobs:
           & "C:\ProgramData\chocolatey\bin\win_flex.exe" --version
           & "C:\ProgramData\chocolatey\bin\win_bison.exe" --version
 
+      # Preinstall ccache so the Phase 999.2 Ninja switch can use it without
+      # a second round-trip. NO-OP for build time on the current MSBuild
+      # generator: CMAKE_<LANG>_COMPILER_LAUNCHER is ignored by the Visual
+      # Studio generator. The actions/cache step above already targets
+      # %LOCALAPPDATA%\ccache (ccache 4.x default on Windows), so once Ninja
+      # lands the cache will populate without further config.
+      - name: Install ccache (Windows — choco, prep for Phase 999.2 Ninja)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          choco install ccache -y --no-progress
+          & ccache --version
+
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh

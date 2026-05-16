@@ -210,6 +210,16 @@ jobs:
         run: |
           choco install winflexbison3 -y
 
+      # Preinstall ccache so the Phase 999.2 Ninja switch can use it without
+      # a second round-trip. NO-OP for build time on the current MSBuild
+      # generator (Visual Studio ignores CMAKE_<LANG>_COMPILER_LAUNCHER).
+      - name: Install ccache (Windows — choco, prep for Phase 999.2 Ninja)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          choco install ccache -y --no-progress
+          & ccache --version
+
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
