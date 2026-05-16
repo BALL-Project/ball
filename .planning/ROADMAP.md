@@ -506,7 +506,7 @@ Estimated effort: ~2 weeks if no force-field parameter regression appears; longe
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; not before v1.6.x ships stable AND v1.7 UI work is mostly done — the YAML config migration touches force-field parameter loading which downstream-affects every chemistry calculation, so it lands after the modernization + UI churn settles)
 
-### Phase 999.10: Deprecate remote-control from BALL proper; narrow REST API + PyBALL SDK (BACKLOG · TARGETED FOR v2.0)
+### Phase 999.10: Deprecate remote-control from BALL proper; narrow REST API + PyBALL SDK (BACKLOG · TARGETED FOR v2.1 · SEQUENCED AFTER KERNEL v2.1 K0+K1)
 
 **Goal:** **Remove all remote-control infrastructure from BALL the library** and replace it with a narrow REST API hosted **in the BALLView application** (not in libBALL), accompanied by a PyBALL class/SDK that wraps the REST calls for Python users. Remote control is no longer a BALL-library concern; it's a BALLView-application concern with a Python SDK.
 
@@ -530,16 +530,19 @@ Plans:
 | Standalone CLI | `BALLVIEWClient` utility (`source/APPLICATIONS/UTILITIES/BALLVIEWClient.C`) | deleted; users call PyBALL or `curl` |
 | Wire format | binary `Composite` stream over raw TCP | HTTP + JSON (with `chemical/x-pdb` content-types for structures) |
 
-**Milestone target: v2.0.** Joins the existing v2.0 substrate-modernization theme:
+**Milestone target: v2.1, sequenced after KERNEL v2.1 K0+K1 lands** (2026-05-16 user decision in roadmap discussion — moved from v2.0 to v2.1). Rationale: KERNEL v2.1 (Phase [999.24](#phase-99924-kernel-v21-redesign--moleculestore-soa-parallel-model-migration-backlog--targeted-for-v21)) introduces `MoleculeStore` as the canonical hot-path data structure. The REST API surface 999.10 exposes should target the post-KERNEL-v2.1 layout (MoleculeStore handle facade), not the pre-rewrite Composite hierarchy — otherwise 999.10's endpoints would expose Composite types that get supplanted by 999.24's K3 (FORMAT/MOLMEC/SCORING migration). Sequence: 999.24 K0+K1 (foundation + nonbonded SoA) lands → 999.10 designs REST endpoints over the MoleculeStore facade → ships in v2.1.0 alongside 999.24 K3 first wave.
+
+**v2.0 substrate-modernization theme (now slimmer; 999.10 moved out):**
 - **999.6** — PIPE-01 renderer pipeline rewrite (fixed-function GL → QRhi)
 - **999.9** — INIFile → YAML config-format migration
-- **999.10** — Remote-control architectural cleanup: out of libBALL, into BALLView + PyBALL SDK
+- **999.11** — In-tree mmCIF parser → gemmi
+- **999.12** — Remove deprecated code from core library
 
-All three are correctness-sensitive substrate transitions. Grouping under v2.0 keeps the major-version break coherent. A 1.x → 2.0 user expects render-backend swap, file-format churn, AND the wire-protocol/library-API change. None belong in a 1.x patch.
+These four substrate transitions are correctness-sensitive but **independent of KERNEL** and don't touch the wire-protocol surface. They land together as v2.0; 999.10 + 999.13 + 999.15 + 999.24 land together as v2.1.
 
-**Supersedes backlog 999.3** (Networking rework — modernize existing `TCPServer` onto modern Boost.Asio acceptor/socket model + unit test). 999.3's goal was to *modernize* the BALL-proper networking code. 999.10's goal is to *remove* it. If 999.10 promotes, 999.3 is moot — close as superseded. The only path 999.3 survives is if 999.10 is itself deferred past v2.0 AND BALL still needs the TCP server for legacy clients in the interim (unlikely — Phase 6 will likely take the PyBALL SDK along for the v1.7 ride and obviate the need).
+**Supersedes backlog 999.3** (Networking rework — modernize existing `TCPServer` onto modern Boost.Asio acceptor/socket model + unit test). 999.3's goal was to *modernize* the BALL-proper networking code. 999.10's goal is to *remove* it. If 999.10 promotes, 999.3 is moot — close as superseded. The only path 999.3 survives is if 999.10 is itself deferred past v2.1 AND BALL still needs the TCP server for legacy clients in the interim (unlikely — Phase 6 v1.6.x bake-off + 999.15 v2.1 bulk wrap will take the PyBALL SDK along and obviate the need).
 
-**Why BACKLOG, not active in v1.6.x or v1.7:** Not core value (build + render on 3 OSes). The TCP server already compiles (the `boost::asio` API breakage was fixed in Phase 1) and `BALL::VIEW::ServerWidget` is `BALL_DEPRECATED` but not removed, so external clients that still use it continue to work in v1.6.x. v1.7 is the UI refresh, not the wire-protocol/library-API refresh. Pushing this into v1.6.x or v1.7 would force users to migrate twice (once for UI, again for protocol). v2.0 makes the migration a single break.
+**Why BACKLOG, not active in v1.6.x or v1.7:** Not core value (build + render on 3 OSes). The TCP server already compiles (the `boost::asio` API breakage was fixed in Phase 1) and `BALL::VIEW::ServerWidget` is `BALL_DEPRECATED` but not removed, so external clients that still use it continue to work in v1.6.x. v1.7 is the UI refresh, not the wire-protocol/library-API refresh. Pushing this into v1.6.x or v1.7 would force users to migrate twice (once for UI, again for protocol). v2.1 (post-KERNEL K0+K1) makes the migration a single break against a stable data layout.
 
 **Scope (in scope):**
 
@@ -628,13 +631,13 @@ Plans:
 - **Substantial code reduction:** 7 files (CIFFile.{h,C} + Lexer.l + Parser.y + Bison/Flex CMake glue) → ~1 file (CIFFile.{h,C} as a thin gemmi adapter). Removes the project's only Flex+Bison dependency for this format (PDB/MOL2/etc. still use Bison; Bison stays in the build for those).
 - **mmJSON + mmCIF + binary CIF (BinCIF) parity** — gemmi reads all three with one API; BALL today only reads CIF. Even if BALL doesn't expose all formats publicly, the floor is higher.
 
-**Milestone target: v2.0.** Joins the v2.0 substrate-modernization theme:
+**Milestone target: v2.0.** Joins the (slimmer post-2026-05-16 reshape) v2.0 substrate-modernization theme:
 - **999.6** — PIPE-01 renderer pipeline rewrite (GL → QRhi)
 - **999.9** — INIFile → YAML config-format migration
-- **999.10** — TCP/Composite remote-control → REST API + PyBALL SDK
 - **999.11** — In-tree mmCIF parser → gemmi adoption
+- **999.12** — Remove deprecated code from core library
 
-All four are correctness-sensitive substrate changes; bundled v2.0 break keeps the major-version transition coherent. *(999.2 Ninja generator was originally in this bundle; promoted out to v1.6.1 on 2026-05-16 since it's a pure CI-side tooling change with zero source impact and the Windows-blocking flip made it pay back its own implementation cost on first re-run — see [Phase 999.2 entry above](#phase-9992-ninja-build-generator-switch-active--promoted--v161).)*
+All four are correctness-sensitive substrate changes that **don't depend on KERNEL v2.1 changes**. v2.0 lands these four together. *(999.2 Ninja generator was originally in this bundle; promoted out to v1.6.1 on 2026-05-16 since it's a pure CI-side tooling change with zero source impact and the Windows-blocking flip made it pay back its own implementation cost on first re-run — see [Phase 999.2 entry above](#phase-9992-ninja-build-generator-switch-active--promoted--v161).)* *(999.10 REST API was also originally in the v2.0 bundle; moved to v2.1 on 2026-05-16 to sequence after KERNEL v2.1 K0+K1 — REST API surface needs to target the post-MoleculeStore data layout, not the pre-rewrite Composite hierarchy.)*
 
 **Scope (in scope):**
 
@@ -775,7 +778,7 @@ Estimated effort: ~2-3 weeks. Plan 1 (audit) is the most contentious — each cl
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v2.0 cycle opens; do NOT promote before 999.6, 999.10, Phase 6, and v1.7 have landed their slices. This phase is the v2.0 "mop up" — it inherits the cleaner deprecation list after the other transitions.)
 
-### Phase 999.13: Convert Doxygen docs to Read the Docs (+ Swagger UI for REST API) (BACKLOG · TARGETED FOR v2.0)
+### Phase 999.13: Convert Doxygen docs to Read the Docs (+ Swagger UI for REST API) (BACKLOG · TARGETED FOR v2.1 · LAST v2.1 PHASE)
 
 **Goal:** Convert BALL's existing Doxygen-only C++ API documentation (659 header files carrying `/** ... */` comments across 25 modules — STRUCTURE/QSAR/VIEW/KERNEL/FORMAT/etc.) into a hosted [Read the Docs](https://about.readthedocs.com/) site at `ball-project.readthedocs.io`. The Doxygen comments stay in the source (single source-of-truth, no per-class rewrite), but the OUTPUT format flips from "locally-built HTML you only see if you run `cmake --build --target doc`" to "online portal with stable URL + search + cross-references + version selector." The same site also publishes a Swagger UI page rendering Phase 999.10's REST API spec ([`doc/REST-API.yaml`](doc/REST-API.yaml)) — interactive endpoint browser without rebuilding BALL.
 
@@ -857,7 +860,7 @@ Estimated effort: ~2-3 weeks. Plan 2 (Breathe integration) is the trickiest beca
 **Plans:** 0 plans (6 sketched above)
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when 999.10 + Phase 6 + Phase 8 have all landed; do NOT promote earlier — the docs site needs real content to ship, and that content comes from those upstream phases.)
+- [ ] TBD (promote with /gsd-review-backlog when 999.10 + Phase 6 + Phase 8 + 999.15 have all landed; do NOT promote earlier — the docs site needs real content to ship, and that content comes from those upstream phases. Note: with 999.10 sequenced after KERNEL v2.1 K0+K1 per 2026-05-16 roadmap discussion, 999.13 effectively becomes the **last v2.1 phase**, after 999.10 + 999.15 + KERNEL v2.1 K0..K3 all ship.)
 
 ### Phase 999.14: GitHub issue + PR triage and cleanup (BACKLOG · v1.6.x HOUSEKEEPING)
 
