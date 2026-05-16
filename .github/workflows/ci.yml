@@ -106,6 +106,24 @@ jobs:
             ccache-${{ matrix.os }}-pch-v1-
             ccache-${{ matrix.os }}-
 
+      # Phase 999.17 (BUILD-ACCEL-02): cache the Windows CMake build tree so warm-cache
+      # Configure step skips the 2m32s vcpkg+CMake-configure rebuild when nothing
+      # structural changed (CMakeLists.txt / cmake/** / vcpkg.json / CMakePresets.json).
+      # Cache scope is the configure-output set ONLY — object files come from ccache,
+      # not from this cache. Windows-only; macOS+Linux configure in <30s already.
+      - name: Cache Windows CMake build tree
+        if: matrix.os == 'windows-x64'
+        uses: actions/cache@v5
+        with:
+          path: |
+            build/ci-windows/CMakeCache.txt
+            build/ci-windows/CMakeFiles/
+            build/ci-windows/build.ninja
+            build/ci-windows/vcpkg_installed/
+          key: ci-windows-cmake-tree-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json') }}
+          restore-keys: |
+            ci-windows-cmake-tree-
+
       # ======================================================================
       # macOS — Homebrew deps + the verbatim BUILD-macos.md flow.
       # ======================================================================
