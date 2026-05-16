@@ -220,7 +220,7 @@ namespace BALL
 		setlocale(LC_NUMERIC, "C"); \
 		char buffer[128]; \
 	\
-		sprintf(buffer, format_string, t); \
+		snprintf(buffer, sizeof(buffer), format_string, t); \
 		assign(buffer);\
 	}\
 
@@ -319,7 +319,7 @@ namespace BALL
 	{ \
 		char buffer[128]; \
 	\
-		sprintf(buffer, format_string, t); \
+		snprintf(buffer, sizeof(buffer), format_string, t); \
 	\
 		assign(buffer);\
 	}

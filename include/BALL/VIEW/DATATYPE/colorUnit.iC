@@ -6,7 +6,7 @@ BALL_INLINE
 ColorUnit::operator String () const
 {
   char temp[4];
-  sprintf(&temp[0], "%x", (unsigned char)(value_ * 255.0));
+  snprintf(&temp[0], sizeof(temp), "%x", (unsigned char)(value_ * 255.0));
   return String(&temp[0]);
 }
 

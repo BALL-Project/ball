@@ -1527,7 +1527,7 @@ namespace BALL
 
 		va_list args;
 		va_start(args, tag);
-		vsprintf(line_buffer, format, args);
+		vsnprintf(line_buffer, sizeof(line_buffer), format, args);
 		va_end(args);
 
     // Terminate each line with a line break and a zero to indicate
@@ -1606,7 +1606,7 @@ namespace BALL
 		va_start(var_args, record_type);
 
     static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
-		vsprintf(line_buffer, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
+		vsnprintf(line_buffer, sizeof(line_buffer), PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
 
 		va_end(var_args);
 

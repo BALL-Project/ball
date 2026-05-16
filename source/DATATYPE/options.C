@@ -243,21 +243,21 @@ namespace BALL
 	void Options::setInteger(const String& key, const long value)
 	{
 		static char buffer[MAX_ENTRY_LENGTH + 1];
-		sprintf(buffer, "%ld", value);			
+		snprintf(buffer, sizeof(buffer), "%ld", value);			
 		set(key, &(buffer[0]));
 	}
 
 	void Options::setReal(const String& key, const double value)
 	{
 		char buffer[MAX_ENTRY_LENGTH + 1];
-		sprintf(buffer, "%f", value);
+		snprintf(buffer, sizeof(buffer), "%f", value);
 		set(key, buffer);
 	}
 
 	void Options::setVector(const String& key, const Vector3& value)
 	{
 		char buffer[MAX_ENTRY_LENGTH + 1];
-		sprintf(buffer, "(%f %f %f)", value.x, value.y, value.z);
+		snprintf(buffer, sizeof(buffer), "(%f %f %f)", value.x, value.y, value.z);
 		set(key, buffer);
 	}
 

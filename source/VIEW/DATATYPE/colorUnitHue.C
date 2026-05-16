@@ -150,7 +150,8 @@ namespace BALL
 			
 		void ColorUnitHue::get(char* char_ptr) const
 		{
-			sprintf(char_ptr, "%x", (unsigned char)(value_ * 255.0));
+			// Caller-owned buffer; legacy API. "%x" + NUL for a uchar fits in 4.
+			snprintf(char_ptr, 4, "%x", (unsigned char)(value_ * 255.0));
 		}
 
 		void ColorUnitHue::set(const String& s)
@@ -167,7 +168,7 @@ namespace BALL
 		void ColorUnitHue::get(String& s) const
 		{
 			char temp[6];
-			sprintf(&temp[0], "%x", (unsigned char)(value_ * 360.0));
+			snprintf(&temp[0], sizeof(temp), "%x", (unsigned char)(value_ * 360.0));
 			s.set(&temp[0]);
 		}
 

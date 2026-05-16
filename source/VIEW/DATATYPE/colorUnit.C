@@ -169,7 +169,8 @@ namespace BALL
 			
 		void ColorUnit::get(char* char_ptr) const
 		{
-			sprintf(char_ptr, "%x", (unsigned char)(value_ * 255.0));
+			// Caller-owned buffer; legacy API. "%x" + NUL for a uchar fits in 4.
+			snprintf(char_ptr, 4, "%x", (unsigned char)(value_ * 255.0));
 		}
 
 		void ColorUnit::set(const String& s)
@@ -188,7 +189,7 @@ namespace BALL
 		{
 			char temp[4];
 
-			sprintf(&temp[0], "%x", (unsigned char)(value_ * 255.0));
+			snprintf(&temp[0], sizeof(temp), "%x", (unsigned char)(value_ * 255.0));
 
 			values.set(&temp[0]);
 		}

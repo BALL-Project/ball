@@ -81,11 +81,11 @@ namespace BALL
 		{
 			char temp[10];
 
-			sprintf(&temp[0], "%02x%02x%02x%02x",
+			snprintf(&temp[0], sizeof(temp), "%02x%02x%02x%02x",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
 
-			return String(&temp[0]);  
+			return String(&temp[0]);
 		}
 
 		void ColorRGBA::set(const ColorRGBA& color)
@@ -132,7 +132,9 @@ namespace BALL
 
 		void ColorRGBA::get(char *char_ptr) const
 		{
-			sprintf(char_ptr, "%2X%2X%2X%2X",
+			// Caller-owned buffer; legacy API. "%2X%2X%2X%2X" + NUL needs >= 9 bytes
+			// for any (uchar, uchar, uchar, uchar). 9 is the smallest safe size.
+			snprintf(char_ptr, 9, "%2X%2X%2X%2X",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
 
@@ -159,7 +161,7 @@ namespace BALL
 		{
 			char temp[9];
 
-			sprintf(temp, "%2X%2X%2X%2X",
+			snprintf(temp, sizeof(temp), "%2X%2X%2X%2X",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
 

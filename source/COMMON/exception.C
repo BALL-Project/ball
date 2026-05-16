@@ -112,11 +112,11 @@ namespace BALL
 				message_ = "the given index was too small: ";
 				char buf[40];
 
-				sprintf(buf, "%ld", (long)index);
+				snprintf(buf, sizeof(buf), "%ld", (long)index);
 				message_ += buf;
 				message_ += " (size = ";
 
-				sprintf(buf, "%ld", (long)size);
+				snprintf(buf, sizeof(buf), "%ld", (long)size);
 				message_ += buf;
 				message_ += ")";
 
@@ -131,11 +131,11 @@ namespace BALL
 				message_ = "the given index was too large: ";
 				char buf[40];
 
-				sprintf(buf, "%ld", (long)index);
+				snprintf(buf, sizeof(buf), "%ld", (long)index);
 				message_ += buf;
 				message_ += " (size = ";
 
-				sprintf(buf, "%ld", (long)size);
+				snprintf(buf, sizeof(buf), "%ld", (long)size);
 				message_ += buf;
 				message_ += ")";
 
@@ -149,7 +149,7 @@ namespace BALL
 				message_ = "unable to allocate enough memory (size = ";
 				char buf[40];
 
-				sprintf(buf, "%ld", (long)size_);
+				snprintf(buf, sizeof(buf), "%ld", (long)size_);
 				message_ += buf;
 				message_ += " bytes) ";
 
@@ -166,7 +166,7 @@ namespace BALL
 			{
 				message_ = "the given size was too small: ";
 				char buf[40];
-				sprintf(buf, "%ld", (long)size);
+				snprintf(buf, sizeof(buf), "%ld", (long)size);
 				
 				message_ += buf;
 				globalHandler.setMessage(message_);
@@ -185,7 +185,7 @@ namespace BALL
 			{
 				message_ = "the given size was not expected: ";
 				char buf[40];
-				sprintf(buf, "%ld", (long)size);
+				snprintf(buf, sizeof(buf), "%ld", (long)size);
 				
 				message_ += buf;
 				globalHandler.setMessage(message_);
@@ -195,11 +195,11 @@ namespace BALL
 				:	GeneralException(file, line, "IllegalPosition:", "")
 			{
 				char buf1[40];
-				sprintf(buf1, "%f", x);
+				snprintf(buf1, sizeof(buf1), "%f", x);
 				char buf2[40];
-				sprintf(buf2, "%f", y);
+				snprintf(buf2, sizeof(buf2), "%f", y);
 				char buf3[40];
-				sprintf(buf3, "%f", z);
+				snprintf(buf3, sizeof(buf3), "%f", z);
 
 				message_ += "(";
 				message_ += buf1;

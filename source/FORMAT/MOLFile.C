@@ -593,7 +593,7 @@ namespace BALL
 	void MOLFile::writeCountsLine_(const MOLFile::CountsStruct& counts)
 	{
 		static char buf[81];
-		sprintf(buf, counts_format_.c_str(), 
+		snprintf(buf, sizeof(buf), counts_format_.c_str(), 
 						counts.number_of_atoms,
 						counts.number_of_bonds,
 						counts.number_of_atom_lists,
@@ -665,7 +665,7 @@ namespace BALL
 	void MOLFile::writeAtomLine_(const MOLFile::AtomStruct& atom)
 	{
 		static char buf[80];
-		sprintf(buf,  atom_format_.c_str(), 
+		snprintf(buf, sizeof(buf),  atom_format_.c_str(), 
 						atom.position.x,
 						atom.position.y,
 						atom.position.z,
@@ -718,7 +718,7 @@ namespace BALL
 	void MOLFile::writeBondLine_(const MOLFile::BondStruct& bond)
 	{
 		static char buf[80];
-		sprintf(buf, bond_format_.c_str(),
+		snprintf(buf, sizeof(buf), bond_format_.c_str(),
 						bond.first_atom,
 						bond.second_atom,
 						bond.type,

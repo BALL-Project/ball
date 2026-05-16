@@ -70,12 +70,12 @@ namespace BALL
 		{
 			char temp[10];
 
-			sprintf(&temp[0], "%x%x%x",
+			snprintf(&temp[0], sizeof(temp), "%x%x%x",
 				(short)hue_,
 				(unsigned char)saturation_,
 				(unsigned char)value_);
 
-			return String(&temp[0]);  
+			return String(&temp[0]);
 		}
 
 		void ColorHSV::set
@@ -124,7 +124,9 @@ namespace BALL
 
 		void ColorHSV::get(char* char_ptr) const
 		{
-			sprintf(char_ptr, "%x%x%x",
+			// Caller-owned buffer; assume sufficient space (legacy API).
+			// 16 chars covers "%x%x%x" for any (short, uchar, uchar) triple.
+			snprintf(char_ptr, 16, "%x%x%x",
 							(short)hue_, (unsigned char)saturation_,
 							(unsigned char)value_);
 		}
@@ -145,11 +147,11 @@ namespace BALL
 		{
 			char temp[10];
 
-			sprintf(&temp[0], "%x%x%x",
+			snprintf(&temp[0], sizeof(temp), "%x%x%x",
 							(short)hue_, (unsigned char)saturation_,
 							(unsigned char)value_);
 
-			s.set(&temp[0]);  
+			s.set(&temp[0]);
 		}
 
 		void ColorHSV::swap(ColorHSV& color_HSV)
