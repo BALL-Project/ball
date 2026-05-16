@@ -1310,6 +1310,51 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
+### Phase 999.26: Suppress residual C4910 on atom.h (BACKLOG · TARGETED FOR v1.6.2)
+
+**Goal:** Silence the 307 residual `warning C4910` instances on [`include/BALL/KERNEL/atom.h:1035`](../include/BALL/KERNEL/atom.h#L1035) with a single-line `#pragma warning(suppress: 4910)` directive. Cosmetic-only fix; zero behavior change. Closes the documented Phase 5.1 trade-off recorded in [05.1-07-SUMMARY.md](phases/05.1-build-warnings-and-latent-bugs/05.1-07-SUMMARY.md) + [05.1-UAT.md test 4](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md) (PARTIAL-PASS).
+
+**Why now (v1.6.2, not v2.0):** v1.6.1 acceptance recorded C4910 as the only outright "WARNING UNCLEAN" on the post-Phase-5.1 Windows MSVC build (down from 722 pre-fix, but still 307 from the atom.h `extern template class BALL_EXPORT std::vector<Atom*>;` line — see census in [05.1-UAT.md test 4](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md)). The fix is a one-line `#pragma warning(suppress: 4910)`, fits the v1.6.2 "small wins, no substrate change" envelope. Census-only Phase 999.22 keeps the broader Tier-C cleanup deferred; this surgical fix takes one specific warning category to zero without violating 999.22's CENSUS-ONLY policy because it's not a "warning execution" pass — it's a single suppression matching BALL's existing per-warning idiom at [exception.h:18](../include/BALL/COMMON/exception.h#L18).
+
+**Root cause (recorded for future maintainers):**
+- `BALL::Atom` is `BALL_EXPORT`. Multiple BALL_EXPORT classes (e.g. `Composite` tree fragments) contain `std::vector<Atom*>` members.
+- When libBALL is compiled, the `BALL_EXPORT` on those classes propagates `__declspec(dllexport)` to their inline destructor/operator= which implicit-instantiate `std::vector<Atom*>`. libBALL.dll exports `std::vector<Atom*>::~vector` and `operator=` as strong symbols.
+- libVIEW's `cartoonModel.obj` + `editMode.obj` transitively include atom.h. Pointer-element `std::vector<T*>` (under MSVC) shares representation across all `T*` instantiations and `extern template class` doesn't reliably suppress implicit instantiation in client TUs — without a dllimport hint, libVIEW emits its own strong symbols → LNK2005 at link time.
+- atom.h restores the pre-Plan-05.1-07 pattern (`extern template class BALL_EXPORT std::vector<Atom*>;`) so client TUs see the BALL_EXPORT → dllimport mapping and don't implicit-instantiate. This works but trips C4910 in libBALL's own TUs (where BALL_EXPORT → dllexport, contradicting `extern`).
+- The warning is harmless — MSVC honors the dllexport (libBALL DOES emit the symbols) and the `extern` is treated as "this is also imported by clients elsewhere." Build succeeds; symbols are exported correctly; C4910 is just noise.
+
+**Scope:**
+
+Single-line edit in [`include/BALL/KERNEL/atom.h:1033-1035`](../include/BALL/KERNEL/atom.h#L1033):
+
+```cpp
+ #ifdef BALL_COMPILER_MSVC
+ #include <vector>
++#  pragma warning(suppress: 4910)
+ extern template class BALL_EXPORT std::vector<Atom*>;
+ #endif
+```
+
+`#pragma warning(suppress: ...)` is MSVC-specific syntax that suppresses for the *next statement only* — narrower than push/pop. Doesn't affect any other compiler (the surrounding `#ifdef BALL_COMPILER_MSVC` already gates the whole block).
+
+**Verification:** Post-fix CI run's Windows MSVC log should show **0 × C4910 on atom.h:1035** (down from 307). Other C4910 sites (if any future code accidentally writes the same contradictory pattern) remain unsuppressed — the narrow `suppress` directive doesn't leak.
+
+**Out of scope:**
+- The 9 residual C4834 warnings — those are pre-existing `[[nodiscard]]` discard sites outside Plan 05.1-09's scope. Census-only via Phase 999.22; execution deferred to v1.7-track per the same policy.
+- Architectural fix (Option D in the C4910 research: move the extern decl to a client-only header). That eliminates the warning at source rather than suppressing — but requires creating a new header, updating ~5 VIEW TU includes, and re-verifying tri-OS green. Not patch-release shaped. Capture as a possible v2.0 cleanup if anyone wants a fully clean Windows build.
+- Other pointer-element-vector extern declarations elsewhere in the tree (none surveyed yet; atom.h is the only documented one). If 999.22's census surfaces more, fold into this phase or its v1.7 sibling.
+
+**Estimated effort:** ~15 minutes (edit + commit + CI verify). Single-plan phase.
+
+**Requirements:** `WARN-MSVC-C4910-01` — suppress C4910 on atom.h:1035 specifically; verify post-fix Windows MSVC log shows 0 × C4910 on this site. To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
+
+**Plans:** 0 (single plan when promoted).
+
+**Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies; trivially co-landable with Phase 999.22 census pass (would shift census's "C4910 ×307 on atom.h" entry to "C4910 ×0 — suppressed in 999.26").
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.
