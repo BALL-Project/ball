@@ -611,6 +611,17 @@ ELSE()
 	ENDIF()
 ENDIF()
 
+# macOS — Apple deprecated all of OpenGL system-wide in 10.14 (2018). BALL's
+# renderer is fixed-function GL until the v2.0 Metal/MoltenVK migration; in the
+# meantime use Apple's defined escape hatch (GL_SILENCE_DEPRECATION) so the
+# ~1500 `-Wdeprecated-declarations` warnings on glRenderer.iC don't bury real
+# issues in CI logs. Apple-published; recommended in the deprecation notice
+# itself ("Define GL_SILENCE_DEPRECATION to silence these warnings"). Removal
+# trigger: v2.0 renderer rewrite (ROADMAP Phase 999.6 PIPE-01).
+IF(APPLE AND BALL_HAS_VIEW)
+	TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC GL_SILENCE_DEPRECATION)
+ENDIF()
+
 # Precompiled headers — Phase 999.16 (BUILD-ACCEL-01).
 # Header set chosen per cmake/PCH.md audit. PRIVATE = downstream consumers
 # (PyBALL, test targets, BALLView exe) do not inherit the PCH state, keeping

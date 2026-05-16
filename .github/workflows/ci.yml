@@ -239,6 +239,12 @@ jobs:
         if: (success() || failure()) && matrix.os == 'macos-arm64'
         shell: bash
         run: |
+          # Disable pipefail for this block — `sort -rn | head -20` causes
+          # `sort` to receive SIGPIPE when `head` exits after 20 lines, and
+          # under GH Actions bash's default pipefail this becomes exit code
+          # 2 which fails the step (and the whole job, now that ARM is
+          # blocking). The telemetry itself is purely informational.
+          set +o pipefail
           if [ -f build/ci-macos/.ninja_log ]; then
             echo "=== Top-20 slowest TUs (${{ matrix.os }}) ==="
             awk -F'\t' 'NF>=5 {printf "%8d ms  %s\n", $2-$1, $5}' build/ci-macos/.ninja_log \
@@ -410,6 +416,10 @@ jobs:
         if: (success() || failure()) && startsWith(matrix.os, 'linux-')
         shell: bash
         run: |
+          # Disable pipefail — see macOS sibling step for rationale.
+          # `sort | head` SIGPIPE under default pipefail = step fails =
+          # blocking job fails on purely informational telemetry.
+          set +o pipefail
           if [ -f build/ci-linux/.ninja_log ]; then
             echo "=== Top-20 slowest TUs (${{ matrix.os }}) ==="
             awk -F'\t' 'NF>=5 {printf "%8d ms  %s\n", $2-$1, $5}' build/ci-linux/.ninja_log \
