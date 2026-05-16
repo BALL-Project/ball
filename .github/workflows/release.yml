@@ -36,13 +36,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # 2026-05-16: bumped macos-14 → macos-26 (Tahoe) and windows-2022 →
+          # windows-2025 to match ci.yml's free-runner version bumps. Same
+          # vCPU / RAM as before; newer toolchain (Xcode 16+ clang on macOS,
+          # latest MSVC 14.4x + Windows SDK 10.0.26100 on Windows). The
+          # release pipeline builds and packages against the same OS users
+          # are running.
           - os: macos-arm64
-            runner: macos-14
-          # 2026-05-16: falling back to windows-2022 — both windows-2022-xlarge
-          # and windows-2022-large queued indefinitely (labels not provisioned
-          # in BALL-Project org). Mirrors the same fallback in ci.yml.
+            runner: macos-26
           - os: windows-x64
-            runner: windows-2022
+            runner: windows-2025
 
     steps:
       - name: Resolve target ref

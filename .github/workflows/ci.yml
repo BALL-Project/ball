@@ -51,8 +51,16 @@ jobs:
           # ---- macOS (Apple Silicon) — blocking ----------------------------
           # Mirrors BUILD-macos.md verbatim: the Homebrew dep line, the cmake
           # configure invocation, and the `make BALL VIEW BALLView` target set.
+          #
+          # 2026-05-16: bumped from `macos-14` (Sonoma) to `macos-26` (Tahoe)
+          # — Tahoe is the OS BALL's runtime crash reports + ad-hoc resign
+          # workaround (release.yml D4-mac, the Namespace CODESIGNING Code 2
+          # SIGKILL fix) were specifically aimed at. CI now builds against
+          # the same OS users are running. Free hosted runner; same 3 vCPU
+          # / 7 GB as macos-14, just newer toolchain (clang from Xcode 16+,
+          # newer SDK).
           - os: macos-arm64
-            runner: macos-14
+            runner: macos-26
             blocking: true
             smoke: true
             ccache_dir: ~/Library/Caches/ccache
@@ -80,11 +88,13 @@ jobs:
           # 2026-05-16: Attempted windows-2022-xlarge (reverted: 7b1ba7d) and
           # windows-2022-large (both labels not provisioned in BALL-Project org
           # larger-runner config — both queued indefinitely). Falling back to
-          # windows-2022 (4 vCPU, standard hosted GitHub runner) — which IS
-          # available and has been used for all prior Windows CI. A future
-          # larger-runner provisioning step can retry the bump.
+          # the free standard hosted GitHub runner, now bumped from
+          # `windows-2022` to `windows-2025` — same 4 vCPU / 16 GB, newer
+          # toolchain (VS 2022 17.x with latest MSVC 14.4x cl.exe + Windows
+          # SDK 10.0.26100). May surface new MSVC warning categories
+          # (handle per Phase 999.22 census policy if they appear).
           - os: windows-x64
-            runner: windows-2022
+            runner: windows-2025
             blocking: true
             smoke: false
             ccache_dir: C:\Users\runneradmin\AppData\Local\ccache
