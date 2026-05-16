@@ -32,7 +32,12 @@ namespace BALL
 {
 	namespace __private
 	{
-		extern const char BALL_EXPORT neighbour_table_[27][3];
+		// `signed char` (not bare `char`) — table stores -1/0/+1 neighbour
+		// offsets. On ARM Linux gcc, plain `char` defaults to UNSIGNED, so
+		// `-1` in the initializer narrows and -Wnarrowing errors. Explicit
+		// `signed char` makes the intent portable across signed-char (x86_64
+		// gcc/clang) and unsigned-char (ARM gcc) defaults.
+		extern const signed char BALL_EXPORT neighbour_table_[27][3];
 	}
 
 	template <typename Item> class HashGrid3;

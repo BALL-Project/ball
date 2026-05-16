@@ -9,7 +9,9 @@ namespace BALL
 {
 	namespace __private
 	{
-		const char neighbour_table_[27][3] =
+		// `signed char` — see hashGrid.h for portability rationale (ARM gcc
+		// defaults `char` to unsigned, breaks -Wnarrowing on -1 literals).
+		const signed char neighbour_table_[27][3] =
 		{
 			{ 0,  0,  0 }, { 0,  0, -1 }, { 0,  0,  1 },
 			{ 0, -1, -1 }, { 0, -1,  0 }, { 0, -1,  1 },
