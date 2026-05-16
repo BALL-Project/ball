@@ -163,6 +163,10 @@ namespace BALL
 				Log.error() << "No next residue!" << endl;
 			}
 		}
+		else
+		{
+			Log.error() << "Has no torsion Psi! (" << getFullName() << ")" << endl;
+		}
 
 		return result;
 	}
@@ -227,6 +231,10 @@ namespace BALL
 				Log.error() << "No previous residue!" << endl;
 			}
 		}
+		else
+		{
+			Log.error() << "Has no torsion Phi! (" << getFullName() << ")" << endl;
+		}
 
 		return result;
 	}
@@ -243,8 +251,8 @@ namespace BALL
 		{
 			return false;
 		}
-		// the torsion angle phi is not defined for
-		// the N-terminus
+		// the torsion angle omega is not defined for
+		// the C-terminus
 		return  !isCTerminal() && hasProperty(PROPERTY__AMINO_ACID);
 	}
 
@@ -551,9 +559,15 @@ namespace BALL
 				full_name += suffix;
 			}
 		}
-		if (type == ADD_RESIDUE_ID || type == ADD_VARIANT_EXTENSIONS_AND_ID)
+		if (type == ADD_RESIDUE_ID || type == ADD_VARIANT_EXTENSIONS_AND_ID ||
+		    type == ADD_RESIDUE_ID_AND_INSERTION_CODE || type == ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE)
 		{
 			full_name += String(getID());
+		}
+		if (BALL_RESIDUE_DEFAULT_INSERTION_CODE != insertion_code_ &&
+		    (type == ADD_RESIDUE_ID_AND_INSERTION_CODE || type == ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE))
+		{
+			full_name += String(getInsertionCode());
 		}
 
 		return full_name;

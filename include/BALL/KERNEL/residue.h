@@ -79,10 +79,14 @@ namespace BALL
 			NO_VARIANT_EXTENSIONS,
 			/// Add the residue variant extensions (e.g. '-C' for C-terminal residues)
 			ADD_VARIANT_EXTENSIONS,
-			// Add the residue ID separated by a colon
-      ADD_RESIDUE_ID,
-      // Add the residue ID and the residue extension
-      ADD_VARIANT_EXTENSIONS_AND_ID
+			/// Add the residue ID, expected to be numeric, directly following the residue name
+			ADD_RESIDUE_ID,
+			/// Add the residue ID right after the residue extension (if available) or the name (otherwise).
+			ADD_VARIANT_EXTENSIONS_AND_ID,
+			/// After the residue ID show the insertion code
+			ADD_RESIDUE_ID_AND_INSERTION_CODE,
+			/// All: show the residue name with its optional extension, then the ID with its optional insertion code and the residue extension
+			ADD_VARIANT_EXTENSIONS_AND_ID_AND_INSERTION_CODE
 		};
 
 		//@}
