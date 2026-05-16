@@ -53,11 +53,12 @@ decision record, cross-referenced from 09-01-SUMMARY.md.
 | **Test file** | `test/AssignBondOrderProcessor_test2.C` |
 | **Failing assertion** | Line 1010: `TEST_EQUAL(compareBondOrder(sys), true)` — got 0, expected 1 |
 | **CHECK block** | `Option::USE_FINE_PENALTY` (lines 990-1011) |
-| **Disposition** | **QUARANTINE** — `set_tests_properties(AssignBondOrderProcessor_test2 PROPERTIES WILL_FAIL TRUE)` in `test/CMakeLists.txt`. Backlog stub filed as Phase 999.34. |
+| **Disposition** | **QUARANTINE** — `set_tests_properties(AssignBondOrderProcessor_test2 PROPERTIES WILL_FAIL TRUE)` in `test/CMakeLists.txt`, Apple Silicon only. Backlog stub filed as Phase 999.34. |
 | **Root cause** | The `USE_FINE_PENALTY` option triggers an alternate ILP/heuristic branch in `source/STRUCTURE/assignBondOrderProcessor.C`. Test 1 of the same processor passes (default code path), but Test 2's fine-penalty path produces incorrect bond-order assignment for `AMPTRB10_kek_sol0.mol2`. Investigation: `abop.apply(5)` is expected to return the 5th solution with correct bond orders, but `compareBondOrder()` returns false. This is a real algorithmic bug or parameter drift in the fine-penalty branch — not amenable to a quick fix. Per plan heuristic: ">2h investigation → QUARANTINE". |
-| **Fix applied** | `test/CMakeLists.txt`: added `set_tests_properties(AssignBondOrderProcessor_test2 PROPERTIES WILL_FAIL TRUE)` with comment block explaining the quarantine and backlog stub reference. |
-| **Commit** | edfa0857a |
-| **ctest behaviour post-triage** | Expected-failure (ctest treats as green via WILL_FAIL TRUE) |
+| **Platform scope** | macOS Apple Silicon (arm64) only. Linux x64 and Linux arm64 PASS this test. |
+| **Fix applied** | `test/CMakeLists.txt`: WILL_FAIL TRUE wrapped in `IF(APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")` guard (commit edfa0857a). Rule-1 follow-up (103c79930): corrected unconditional WILL_FAIL which caused ctest exit 8 on Linux (unexpected-pass). |
+| **Commits** | edfa0857a (quarantine), 103c79930 (platform-scope fix) |
+| **ctest behaviour post-triage** | macOS ARM64: Expected-failure (WILL_FAIL TRUE, green). Linux x64/arm64: Passes normally (WILL_FAIL not applied). |
 
 **Backlog stub:** Phase 999.34 — AssignBondOrderProcessor fine-penalty code path
 
@@ -104,6 +105,6 @@ Per Rule 1 (auto-fix bugs) + time budget: **QUARANTINED** all 3 with `WILL_FAIL 
 | Directory_test | KNOWN-PASSING (false alarm) | N/A | PASSES |
 | AmberFF_test | FIX (ARM FP tolerance loosen) | 41bfae621 | PASSES |
 | AssignBondOrderProcessor_test2 | QUARANTINE (WILL_FAIL TRUE) | edfa0857a | Expected-failure (green) |
-| PeptideCapProcessor_test | QUARANTINE (OOS PR-merge regression, WILL_FAIL TRUE) | see deviation commit | Expected-failure (green) |
-| Peptides_test | QUARANTINE (OOS PR-merge regression, WILL_FAIL TRUE) | see deviation commit | Expected-failure (green) |
-| RotamerLibrary_test | QUARANTINE (OOS PR-merge regression, WILL_FAIL TRUE) | see deviation commit | Expected-failure (green) |
+| PeptideCapProcessor_test | QUARANTINE (OOS PR-merge regression, WILL_FAIL TRUE) | 3f861f9b8 | Expected-failure (green) |
+| Peptides_test | QUARANTINE (OOS PR-merge regression, WILL_FAIL TRUE) | 3f861f9b8 | Expected-failure (green) |
+| RotamerLibrary_test | QUARANTINE (OOS PR-merge regression, WILL_FAIL TRUE) | 3f861f9b8 | Expected-failure (green) |
