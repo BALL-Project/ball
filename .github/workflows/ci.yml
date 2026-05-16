@@ -163,6 +163,8 @@ jobs:
       # structural changed (CMakeLists.txt / cmake/** / vcpkg.json / CMakePresets.json).
       # Cache scope is the configure-output set ONLY — object files come from ccache,
       # not from this cache. Windows-only; macOS+Linux configure in <30s already.
+      # ci.yml itself is NOT in hashFiles() — editing this comment triggers a warm run
+      # that exercises the cache-HIT path without invalidating the cmake-tree key.
       - name: Cache Windows CMake build tree
         if: matrix.os == 'windows-x64'
         uses: actions/cache@v5
