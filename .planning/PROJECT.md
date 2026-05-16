@@ -41,7 +41,7 @@ non-negotiable outcome.
 - [ ] **GSD Phase 8** — Packaging & distribution: notarizable macOS bundle; documented Linux/Windows build-from-source; license review
 - [ ] **GSD Phase 9** — Test suite triage: wire the `test/` tree into `ctest`, triage failures *(the build matrix moved to 02.2)*
 
-*(GSD Phase 7 "Networking Rework" deferred to backlog 999.3 per the Codex review — not core value, the Asio code already compiles. Backlog also: 999.1 UI maintainer questions, 999.2 Ninja generator.)*
+*(GSD Phase 7 "Networking Rework" deferred to backlog 999.3 per the Codex review — not core value, the Asio code already compiles. Backlog also: 999.1 UI maintainer questions. 999.2 Ninja generator was promoted from backlog → v1.6.1 active on 2026-05-16 — pure CI-side tooling change; see [Phase 999.2 in ROADMAP.md](ROADMAP.md#phase-9992-ninja-build-generator-switch-active--promoted--v161).)*
 
 ### Release Policy
 
@@ -49,7 +49,6 @@ non-negotiable outcome.
 - **1.6.1 = strict corrective patch** — re-ships v1.6.0 with the Windows installer fixed, macOS Info.plist populated, `release.yml` matching the Qt 6 codebase, the config color-defaults user bug fixed (Phase 4.1), and Phase 5.1's source-level cleanup verified on tri-OS CI.
 - **1.7 = "BALLView Refresh"** — the UI/UX modernization (SEED-001), a separate milestone gated on GSD Phase 5 (Qt 6).
 - **2.0 = substrate modernization + breaking-API cleanup.** Carries the post-v1.7 infrastructure transitions:
-  - **999.2** — Ninja replaces Make/MSBuild as the default CMake generator (faster + more uniform cross-platform builds)
   - **999.6** — PIPE-01 renderer pipeline rewrite (fixed-function GL → QRhi)
   - **999.9** — INIFile → YAML config-format migration
   - **999.10** — Remote-control architectural cleanup (deprecate TCP server/client from libBALL + libVIEW; narrow REST server moves INTO BALLView the application; PyBALL SDK class wraps it for Python users; supersedes 999.3)
@@ -57,7 +56,7 @@ non-negotiable outcome.
   - **999.12** — Audit + remove (or un-deprecate) all `BALL_DEPRECATED` / `BALL_VIEW_DEPRECATED` markers (~30 files across DOCKING/GENETICDOCK, VIEW/WIDGETS, VIEW/DIALOGS, VIEW/RENDERING, PYTHON). v2.0 is the natural breaking-removal slot; Plan-05.1-09 precedent: un-deprecate (not delete) when no replacement exists and the class is still load-bearing. Runs LAST in v2.0 so the other phases' deprecation removals (999.6 / 999.10 / Phase 6) have already cleared their slices.
   - **999.13** — Read the Docs documentation site at `ball-project.readthedocs.io` — Sphinx + Breathe (C++ API ref from Doxygen) + autodoc (PyBALL SDK from docstrings) + Swagger UI page for the REST API (consumes `doc/REST-API.yaml` authored by 999.10). First-ever centralised BALL docs portal; closes the "no online API reference" gap that v2.0's signed-installer + Python-SDK + REST-API surface makes visible.
 
-  Seven phases in total, six substrate/API changes plus one documentation-infrastructure addition that makes the v2.0 surface discoverable. Each is correctness-sensitive or credibility-load-bearing: bundled under a single major-version bump because users expect breaking-but-documented behavior changes (build-tooling switch, render backend swap, file-format churn, wire-protocol + library-API change, mmCIF parser swap, deprecated-API removal) plus the docs portal that explains them. Phase 5 SPIKE-02 locked the GL-Core → QRhi split-pattern for v2; 999.2 / 999.9 / 999.10 / 999.11 / 999.12 / 999.13 keep the v2 theme coherent. 999.10 reshapes the library boundary — remote control is no longer a libBALL concern. 999.12 hardens the API: the deprecation markers stop being a "someday" signal and become an enforced "removed in v2.0." 999.13 makes the cleaned-up API discoverable: the first central BALL docs portal at `ball-project.readthedocs.io`.
+  Six phases in total, five substrate/API changes plus one documentation-infrastructure addition that makes the v2.0 surface discoverable. Each is correctness-sensitive or credibility-load-bearing: bundled under a single major-version bump because users expect breaking-but-documented behavior changes (render backend swap, file-format churn, wire-protocol + library-API change, mmCIF parser swap, deprecated-API removal) plus the docs portal that explains them. Phase 5 SPIKE-02 locked the GL-Core → QRhi split-pattern for v2; 999.9 / 999.10 / 999.11 / 999.12 / 999.13 keep the v2 theme coherent. 999.10 reshapes the library boundary — remote control is no longer a libBALL concern. 999.12 hardens the API: the deprecation markers stop being a "someday" signal and become an enforced "removed in v2.0." 999.13 makes the cleaned-up API discoverable: the first central BALL docs portal at `ball-project.readthedocs.io`. *(999.2 Ninja build-generator switch was originally in this v2.0 substrate bundle; promoted out to v1.6.1 on 2026-05-16 — pure CI-side tooling change with zero source impact, paid back its own implementation cost on first re-run after the Windows-blocking flip.)*
 - This resolves the version-numbering collision with the Claude Design Handover package (which internally assumed "1.6 = UI refresh").
 
 ### Out of Scope

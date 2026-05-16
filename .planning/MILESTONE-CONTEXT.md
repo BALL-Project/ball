@@ -180,6 +180,21 @@ status; Windows part stays dormant until a contributor has Windows access.
 Commit `54da903` becomes the first piece of Phase 999.7 work; record it as
 such in 999.7's progress notes.
 
+### Promoted from backlog: Phase 999.2 Ninja build-generator switch (2026-05-16)
+
+Was [`BACKLOG · TARGETED FOR v2.0`](.planning/ROADMAP.md#phase-9992-ninja-build-generator-switch-active--promoted--v161)
+in the v2.0 substrate-modernization bundle. Promoted into v1.6.1 active on
+2026-05-16. **Why now, not v2.0:** With Phase 4's Windows `blocking: true`
+flip, every CI cycle eats ~80 min of Windows wall-clock under MSBuild
+(baseline: run 25899905204 Windows Build = 4625s). Two prep commits
+(`d5f5566` Windows `--parallel`, `9c932eb` choco install ccache) already
+landed; the third move — flip the generator to Ninja + provision ninja on
+all three runners — pays back its own implementation cost on the first
+re-run. Pure build-tooling change; risk surface is CI YAML +
+`CMakePresets.json` only, NOT BALL/VIEW source — clears the v1.6.1 scope
+discipline bar. Also makes the standing "Windows >2× macOS/Linux disable"
+policy tractable. Work plan: [.planning/phases/999.2-ninja-generator-switch/PLAN.md](.planning/phases/999.2-ninja-generator-switch/PLAN.md).
+
 ## Out of scope (defer to v1.7 / v1.6.2 / later)
 
 | Item | Why deferred | Target |
