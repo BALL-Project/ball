@@ -1,17 +1,17 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.6.2
-milestone_name: OR v1.7)
-status: executing
-stopped_at: Phase 999.22 complete — WARN-CENSUS-01 done; next Phase 9 test-suite triage or DEADCODE-01
-last_updated: "2026-05-16T22:30:00Z"
-last_activity: 2026-05-16 — Phase 999.22 closed (WARN-CENSUS-01: tri-OS census from CI run 25970862407; 200 remaining -Wdeprecated-copy on Linux vs ~3,716 pre-fix estimate — 95% reduction from parallel-session; 999.22a/b/c stubs filed in ROADMAP.md; WARN-CENSUS-01 marked Complete in REQUIREMENTS.md)
+milestone_name: · 2026-05-16)
+status: verifying
+stopped_at: Completed 09-test-suite-triage 09-01-PLAN.md
+last_updated: "2026-05-16T21:35:58.065Z"
+last_activity: 2026-05-16
 progress:
-  total_phases: 40
-  completed_phases: 16
+  total_phases: 52
+  completed_phases: 17
   total_plans: 52
-  completed_plans: 52
-  percent: 32
+  completed_plans: 53
+  percent: 33
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -26,7 +26,7 @@ progress:
 
 Phase: 999.22 (warning-census) — COMPLETE
 Plan: 1 of 1
-Status: Phase complete — WARN-CENSUS-01: tri-OS census from CI run 25970862407 (commit 0a75edede); 200 Linux -Wdeprecated-copy remaining (95% reduction from ~3,716 pre-fix estimate by parallel-session); CENSUS.md at phases/999.22-warning-census/CENSUS.md; 999.22a/b/c stubs filed in ROADMAP.md; WARN-CENSUS-01 marked Complete in REQUIREMENTS.md
+Status: Phase complete — ready for verification
 Last activity: 2026-05-16
 
 ## Performance Metrics
@@ -78,6 +78,7 @@ Last activity: 2026-05-16
 | Phase 999.20-action-artifact-pins P01 | ~45min (dominated by CI watch + parallel-session concurrency cancellations) | 3 tasks | 2 files (ci.yml + release.yml) + MILESTONE-CONTEXT.md + REQUIREMENTS.md |
 | Phase 999.14-github-issue-pr-triage P01 | ~2h (multi-session; prior rounds + this session for TRIAGE-02 + TRIAGE-03 + state updates) | 5 tasks | 18 files (3 baseline JSON + decisions.md + STALE-DOCS-AUDIT.md + SUMMARY.md + 8 C++ files from 5-PR bundle + ROADMAP.md + REQUIREMENTS.md + STATE.md) |
 | Phase 999.22-warning-census P01 | ~45min | 3 tasks | 7 files (3 raw warning logs + CENSUS.md + SUMMARY.md + ROADMAP.md + REQUIREMENTS.md) |
+| Phase 09-test-suite-triage P01 | 110min | 6 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -142,6 +143,11 @@ Last activity: 2026-05-16
 - [Phase 999.16]: PCH excluded for macOS (AppleClang); retained for Linux/Windows
 - [Phase 999.17]: BUILD-ACCEL-02 complete — actions/cache@v5 step caches Windows CMake build tree; warm-cache Configure (Windows) reduced from 149s to 63s (−57.7%); full scope retained (≥50% threshold met); restore-key prefix fallback provides ~49% speedup on structural-change runs
 - [Phase 999.14]: TRIAGE-01 (82 net closes from 181 baseline; templated close comments; 3-round pass: externals + maintainer batch + reconciliation), TRIAGE-02 (f176b8b stale-findings pattern already on 05-VERIFICATION.md; 0 new banners; STALE-DOCS-AUDIT.md written), TRIAGE-03 (5-PR bundle: #640 FindXDR cherry-picked 9c6d868; #554/#546/#550 C++ slice 45dce69; #600 closed-obsolete; bundle-escape DID NOT FIRE). Key decision: PRs #554/#546/#550 applied as C++-slice-only (SIP deferred to Phase 999.15). Post-triage state: 95 issues + 4 PRs open (95 + 3 named bundle = previous 4 PRs minus the named bundle = 0).
+- [Phase ?]: AmberFF_test: FIX via PRECISION(200.0) — Linux x64 CI passes (run 25970862407), confirming ARM FP precision as root cause
+- [Phase ?]: AssignBondOrderProcessor_test2: QUARANTINE (WILL_FAIL TRUE, macOS ARM64 only) — fine-penalty ILP path bug, >2h fix, backlog Phase 999.34
+- [Phase ?]: Directory_test: KNOWN-PASSING — passes with correct BALL_DATA_PATH set; PHASE-9-BASELINE.md was a false alarm
+- [Phase ?]: PeptideCapProcessor/Peptides/RotamerLibrary: QUARANTINE Rule-1 — OOS regression from commit 45dce6971 PR #550; backlog Phase 999.35
+- [Phase ?]: Gatekeeper flip: blocking on macOS + Linux (ci.yml + release.yml), || true removed; Windows gatekeeper deferred to Phase 999.34
 
 ### Roadmap Evolution
 
@@ -184,7 +190,7 @@ Last activity: 2026-05-16
 
 **Previous last action:** Phase 5 Plan 05 (GL-core spike + Qt 6 link bring-up) executed — 7 commits, 74 files. New files: `include/BALL/VIEW/RENDERING/RENDERERS/coreGLRenderer.h` + `source/VIEW/RENDERING/RENDERERS/coreGLRenderer.C` (both carry the THROWAWAY-SPIKE provenance header). SPIKE-01 (GL-core arm) deliverable met: CoreGLRenderer overrides Renderer::renderRepresentations_() + capabilities() + pickObjects() (R32UI color-buffer FBO + glReadPixels readback) + does NOT implement per-primitive immediate-mode virtuals. CMakeLists.txt new BALL_SPIKE_BACKEND option (OFF | GLCore | QRhi, default OFF) + rendererFactory.h Kind::OpenGL_Core under #ifdef BALL_SPIKE_BACKEND_GLCORE + rendererFactory.C env-var BALLVIEW_USE_SPIKE_BACKEND=1 runtime gate + makeRenderer/makeSurface OpenGL_Core arms. sources.cmake compiles coreGLRenderer.C only under the spike option. .github/workflows/ci.yml: non-blocking macOS-only "Spike smoke check (macOS — GLCore backend)" step + actions/upload-artifact for the captured log (Plan 08 SPIKE-02 reference artifact). MAJOR DEVIATION / BLOCKER cascade required to ship Qt 6 link-green BALLView — first time since Plan 05-02: BLOCKER-B (mutex.h: template QMutexLocker<QMutex> + Qt 6 QMutex no-recursive, commit 204de36), BLOCKER-A (dockResultFile QtXml SAX stub under #if QT_VERSION<6,0,0 — full QXmlStreamReader port deferred as BLOCKER-A2, commit 3691232), BLOCKER-D widened (28 sites of Qt::WindowFlags=0, commit d33f58d), BLOCKER-E new (14-bucket Qt 6 API surface sweep across 37 files: QString::null, Qt::MidButton, QtWidgets/QAction header, QOpenGLFramebufferObject module move, QWebEnginePage module move, QTableWidgetItem::setBackgroundColor, QList/Tree::setItem{Selected,Expanded}, QWheelEvent::delta/pos, QString::sprintf, QFontMetrics::width, QLineF::intersect, QPalette::foreground/background, QStyleOption::init, QApplication::globalStrut, QLayout::setMargin, QPainter::setRedirected, qVariantFromValue, QSpontaneKeyEvent::setSpontaneous, HTMLPage::certificateError signal-conversion, rotateMode.C QFlags ambiguous operator, labelDialog.ui autoCompletion, downloadElectronDensity.C QFile incomplete-type, commit a0c28bc). Default-build BALLView runs and emits a valid BALLVIEW_GL_DIAG line (gl_version="2.1 Metal - 90.5"); gl_profile=none rather than =compatibility because Apple's GL 2.1 implementation does not expose Core/Compat distinction at v2.1 (NOT a regression — Plan 05-04 grep may need to relax on Apple Silicon). Spike-build runs the factory env-var gate correctly (CoreGLRenderer constructed, confirmed by stdout marker) but BALLView crashes early before initializeGL — expected throwaway-spike limitation: downstream pipeline calls GLRenderer-specific virtuals the bare-bones spike does not implement; PIPE-01 scope. scene.C touched in 2 mechanical setMargin->setContentsMargins lines (Qt 6 API sweep) — Phase 02.1 boundary preserved (no renderer-wiring change). Commits: 204de36, 3691232, d33f58d, a0c28bc, 93a59cd, de96561, c47bf43.
 
-**Stopped at:** Phase 4.1 context gathered
+**Stopped at:** Completed 09-test-suite-triage 09-01-PLAN.md
 
 **Previous stopped at:** Phase 05.1 Plan 05 complete (Task A5 -Wformat-overflow fix — d46b942; 20 sprintf → snprintf swaps in source/FORMAT/CIFParserParser.y using sizeof($$) which yields CIFPARSER_LINE_LENGTH=2550 via the Bison %union; libBALL build green on macos-arm64 / Qt 6.11; zero -Wformat-overflow on the regenerated CIFParserParser.C; tri-OS CI verification follows on push)
 

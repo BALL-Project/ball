@@ -21,7 +21,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] **Phase 6: Python Bindings (autowrap+Cython vs nanobind bake-off, TARGETED FOR v2.1 — FIRST STEP OF v2.1)** — Empirically decide the binding generator by building both against a 7-case cross-platform BALL slice. Tool decision is the deliverable. Detailed plan: [`PYBALLV2.md`](PYBALLV2.md) §6. Moved out of v1.6.x to v2.1 per 2026-05-16 user direction ("PyBALL changes should move to 2.x"). Sequenced as the first step of the v2.1 PyBALL milestone, BEFORE [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) bulk wrap.
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
-- [ ] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)*
+- [x] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)* (completed 2026-05-16)
 
 ## Phase Details
 
@@ -272,7 +272,7 @@ Plans:
 | 6. Python Bindings (bake-off, v2.1 first step) | 0/4 | Not started — autowrap+Cython vs nanobind bake-off per [PYBALLV2.md](PYBALLV2.md) §6; 7-case slice, tri-OS, 7.5 wk. Moved from v1.6.x → v2.1 per 2026-05-16 user direction ("PyBALL changes should move to 2.x"); runs as FIRST step of v2.1, before 999.15 bulk wrap. | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
-| 9. Test Suite Triage | (partial) | **In Progress (v1.6.2)** — CI wiring + Linux coverage job + PR test-results check landed (commits b2bb718 + 61bf5a7, 2026-05-15); v1.6.0 baseline captured at 99.0% (291/294) on macOS-arm64 with `BALL_DATA_PATH` set. Remaining: triage the 3 baseline failures (`Directory_test`, `AmberFF_test`, `AssignBondOrderProcessor_test2`) + flip gatekeeper from `continue-on-error: true` to blocking once green-list stable. | (in progress) |
+| 9. Test Suite Triage | 1/1 | Complete   | 2026-05-16 |
 
 ---
 
@@ -336,7 +336,7 @@ risk surface is CI YAML + `CMakePresets.json`, NOT BALL/VIEW source.
 Removes the rationale for keeping 999.2 in the v2.0 substrate bundle.
 
 **Requirements:** none (build-tooling change; no REQ delta)
-**Plans:** 6 tasks in a single PLAN.md (this is a tooling phase, not
+**Plans:** 1/1 plans complete
 a multi-PLAN code phase — task IDs 999.2-01..06)
 
 Plans:
