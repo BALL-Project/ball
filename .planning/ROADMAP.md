@@ -241,7 +241,7 @@ Plans:
 ### Phase 9: Test Suite Triage
 **Goal**: The existing `test/` tree is wired into `ctest` and its failures are triaged. (The 3-platform *build* matrix moved to Phase 02.2 per the Codex review — this phase is the remaining test-suite work.)
 **Depends on**: Phase 02.2 (the CI matrix this extends), Phase 3, Phase 4 (the test tree builds against the modernized toolchain/deps)
-**Requirements**: CI-02
+**Requirements**: CI-02 (legacy v1 — partially met by the landed CI wiring), `TEST-CLOSE-01` + `TEST-CLOSE-02` (v1.6.2 — the remaining failure-triage + gatekeeper-flip work; see `REQUIREMENTS.md` v1.6.2 section).
 **Success Criteria** (what must be TRUE):
   1. The `test/` tree (currently `EXCLUDE_FROM_ALL`) is wired into the build and `ctest` runs in CI on all three platforms
   2. Test failures are triaged — each is fixed, quarantined with a tracking note, or documented as a known modernization casualty
@@ -898,7 +898,7 @@ Plans:
 - Re-categorizing already-closed issues (only open items).
 - Closing issues that have active comments in the last 90 days regardless of category (user is engaged; needs human judgment, not automated triage).
 
-**Requirements:** TBD (likely a single `MAINT-01: open issue + PR count reduced to genuinely-actionable set` on promotion).
+**Requirements:** `TRIAGE-01` (open-issue+PR categorization+bulk-close), `TRIAGE-02` (stale-doc audit bundled task), `TRIAGE-03` (5-PR legacy bundle merge) — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
 
 **Estimated effort:** 1-3 days for the issue+PR triage itself; +0.5 day for the stale-doc audit task below; +2-5 days for the named 5-PR legacy bundle subtask (depends on triage outcomes per the table below). **Total: 3-9 days.**
@@ -1126,7 +1126,7 @@ Plans:
 - Header hygiene pass (forward-decls instead of full `#include`s in public headers) — separate, slow-burn refactor; not coupled to PCH wins.
 - Switching the compiler-launcher integration (clang-cl, distcc, sccache cloud backend) — separate phases if pursued.
 
-**Requirements:** TBD (likely a single `BUILD-PCH-01: cold-cache Windows Build step reduced ≥15% measured on tri-OS CI` on promotion).
+**Requirements:** `BUILD-ACCEL-01` — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
 
 **Estimated effort:** 0.5-1 day. Wiring is ~20 lines of CMake; the time is in picking the right header set + measuring delta cleanly under the concurrency-group churn that bit the Phase 999.2 measurements.
@@ -1155,7 +1155,7 @@ Plans:
 - Reorganizing the vcpkg binary cache step (already working).
 - Changing the CMake generator (Ninja stays).
 
-**Requirements:** TBD (likely a single `BUILD-CACHE-01: warm-cache Windows Configure step reduced ≥80% measured on tri-OS CI` on promotion).
+**Requirements:** `BUILD-ACCEL-02` — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
 
 **Estimated effort:** 0.5-1 day. ~20 lines of workflow YAML + one measurement cycle. Most of the time is debugging Ninja's incremental-build behavior across restored caches (task 3); if Ninja silently re-runs all configures regardless of the restored tree, scope drops to "cache `vcpkg_installed/` only" which is a 3× simpler change with most of the win.
@@ -1186,7 +1186,7 @@ Plans:
 - Removing `cancel-in-progress` entirely — code-change pushes legitimately should cancel stale runs to keep the queue moving.
 - Auto-rebase-on-main hooks or merge-queue setup — separate scope.
 
-**Requirements:** TBD (likely a single `CI-HYGIENE-01: docs-only pushes do not cancel running code-build CI runs` on promotion).
+**Requirements:** `BUILD-ACCEL-03` — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 plans (4 tasks sketched above; would run as a single PLAN.md when promoted).
 
 **Estimated effort:** 0.5 day. ~10 lines of workflow YAML + one controlled experiment.
@@ -1213,7 +1213,7 @@ Plans:
 - Comparing runs / regression alerting (separate future phase; 999.19 only provides the data).
 - MSVC equivalent of `-ftime-trace` (`/d2cgsummary`) — Windows + MSVC is the slowest platform and would benefit most, but `/d2cgsummary` output is less analysis-friendly than Clang's. Defer to follow-up if Windows-specific drill-down becomes needed.
 
-**Requirements:** TBD (likely a single `PROFILE-01: every CI run uploads per-TU build timing artifact; top-20 slowest TUs printed to job log` on promotion).
+**Requirements:** `BUILD-ACCEL-04` — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 plans (3-4 tasks sketched above; would run as a single PLAN.md when promoted).
 
 **Estimated effort:** 0.5 day. Pure CI instrumentation; no source impact.
@@ -1242,7 +1242,7 @@ Plans:
 - Bumping other action pins (`actions/checkout`, `actions/cache`) — those are independent, not part of the carry-over deferred set.
 - Adding new artifact uploads (999.19 territory).
 
-**Requirements:** TBD (likely a single `CI-PIN-01: artifact action pins on v6/v7 with green tri-OS CI` on promotion).
+**Requirements:** `BUILD-ACCEL-05` — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 plans (4 tasks sketched above; would run as a single PLAN.md when promoted).
 
 **Estimated effort:** 0.5 day. Mechanical pin bumps + breaking-change validation.
@@ -1270,7 +1270,7 @@ Plans:
 
 **Estimated effort:** 1 hour. Single-file (header + impl); single-commit change; no behaviour delta on any code path BALL actually exercises.
 
-**Requirements:** none (dead-code removal).
+**Requirements:** `DEADCODE-01` — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 (single-task PLAN when promoted).
 
 Plans:
@@ -1302,7 +1302,7 @@ Plans:
 
 **Estimated effort:** **1-2 days** (was 3-5 days when execution was in scope). Single-pass tri-OS build, capture warnings, categorize, write CENSUS.md + 3 backlog stubs. Done.
 
-**Requirements:** TBD (likely `WARN-01: tri-OS warning census published with 3-way categorization`).
+**Requirements:** `WARN-CENSUS-01` (CENSUS-ONLY) — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 (single-task PLAN: "generate CENSUS.md + 3 deferral stubs" when promoted).
 
 **Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies.
@@ -1324,7 +1324,7 @@ Plans:
 
 **Estimated effort:** 1-2 days depending on whether any conflict needs a real grammar fix. Defer to v1.7 if v1.6.2 fills up — not patch-release-critical.
 
-**Requirements:** none (grammar-conflict cleanup).
+**Requirements:** `GRAMMAR-01` (STRETCH) — see `REQUIREMENTS.md` v1.6.2 section.
 **Plans:** 0 (single-task PLAN when promoted).
 
 Plans:

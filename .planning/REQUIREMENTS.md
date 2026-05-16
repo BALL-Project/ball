@@ -86,6 +86,32 @@ Requirements for the v1.6 release. Derived from `/Users/kohlbach/Claude/BALL/ROA
 
 - [ ] **CI-02**: The `test/` tree is wired into the build and `ctest` runs in CI, with failures triaged (fixed / quarantined with a note / documented as a known modernization casualty)
 
+## v1.6.2 Requirements (Build acceleration + scope-cleanup patch release)
+
+Added 2026-05-16 when v1.6.2 milestone opened. Each REQ maps to one of the 7 in-scope phases + 1 stretch from [`MILESTONE-CONTEXT.md`](MILESTONE-CONTEXT.md).
+
+### Build acceleration cluster
+
+- [ ] **BUILD-ACCEL-01** (Phase 999.16): `target_precompile_headers(BALL PRIVATE ...)` + `target_precompile_headers(VIEW PRIVATE ...)` wired with auditable header sets; ccache `sloppiness = pch_defines,time_macros,include_file_mtime` configured on all 3 CI runners; cold-cache Windows Build step measurably reduced (target ≥15%); decision documented in `cmake/PCH.md`
+- [ ] **BUILD-ACCEL-02** (Phase 999.17): Windows CMake build tree (`build/ci-windows/{CMakeCache.txt,CMakeFiles/,build.ninja,vcpkg_installed/}`) cached across CI runs via `actions/cache`, keyed on hash of `CMakeLists.txt`+`cmake/**`+`vcpkg.json`+`CMakePresets.json`; warm-cache `Configure (Windows)` step collapses from ~2.5 min to seconds
+- [ ] **BUILD-ACCEL-03** (Phase 999.18): CI workflow triggers are path-aware (planning-only / doc-only changes skip the build matrix); concurrency groups cancel obsolete in-flight runs on rapid pushes to the same branch
+- [ ] **BUILD-ACCEL-04** (Phase 999.19): Per-TU build profiling artifact (Ninja `.ninja_log` + parsed timing breakdown) uploaded as a workflow artifact for every Build job; identifies compile-time outliers for future targeted optimization
+- [ ] **BUILD-ACCEL-05** (Phase 999.20): GitHub Actions artifact pins bumped — `upload-artifact@v4 → v6`, `download-artifact@v4 → v7`; CI still green on a tri-OS run post-bump
+
+### Source-level + cleanup
+
+- [ ] **TEST-CLOSE-01** (Phase 9): Three baseline failures from `PHASE-9-BASELINE.md` triaged — `Directory_test` (macOS path), `AmberFF_test` (2.6% energy delta), `AssignBondOrderProcessor_test2` (fine-penalty assertion) — each fixed, quarantined with a note, or documented as a known modernization casualty
+- [ ] **TEST-CLOSE-02** (Phase 9): CI test gatekeeper flipped from `continue-on-error: true` to blocking on macOS + Linux; tri-OS run green with blocking enabled
+- [ ] **TRIAGE-01** (Phase 999.14): Open issues + open PRs on `BALL-Project/ball` categorized into the 5 audit buckets (close-as-fixed / close-as-obsolete / close-as-stale / keep / needs-investigation), bulk-closed with templated comments per category; decision audit trail in `.planning/triage-999.14/decisions.md`
+- [ ] **TRIAGE-02** (Phase 999.14): Stale-doc audit task — all `.planning/phases/**/*VERIFICATION.md` files scanned for the HUMAN-UAT-disagreement pattern; affected files annotated with the f176b8b banner + `resolution_log:` frontmatter
+- [ ] **TRIAGE-03** (Phase 999.14): The 5-PR legacy bundle (#640 FindXDR, #600 Travis-CI, #554 Omega torsion, #550 hydroxyproline, #546 residue insertion code) merged or closed per categorization in TRIAGE-01
+
+### Tiny dead-code + grammar cleanups
+
+- [ ] **DEADCODE-01** (Phase 999.21): Stubbed `DockResultFile::attributesToHashMap(const QXmlAttributes&)` Qt 5 SAX overload removed from header + impl; CMake build still green
+- [ ] **WARN-CENSUS-01** (Phase 999.22, CENSUS-ONLY): Tri-OS warning census published at `.planning/phases/999.22-warning-census/CENSUS.md` with per-warning-category × file-path × likely-cause categorization into (a)/(b)/(c) deferral buckets; three follow-up backlog stubs filed (999.22a/b/c). **No warning execution in v1.6.2** per Open Q3 resolution.
+- [ ] **GRAMMAR-01** (Phase 999.23, STRETCH — may defer to v1.7): CIF Bison grammar shift-reduce conflict count reconciled (3 vs 5 per BACKLOG/SUMMARY); each conflict either confirmed-benign-and-documented or fixed at the grammar rule
+
 ## Feature Matrix
 
 Status of optional components for v1.6 — produced/verified by **FEAT-01** in Phase 4, confirmed against Phase 4 research. Initial classification from the Phase 1 review; Phase 4 adds per-platform availability notes and states the user-visible impact of absence.
@@ -176,13 +202,27 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | PKG-01 | Phase 8 — Packaging & Distribution | Pending |
 | PKG-02 | Phase 8 — Packaging & Distribution | Pending |
 | PKG-03 | Phase 8 — Packaging & Distribution | Pending |
-| CI-02 | Phase 9 — Test Suite Triage | Pending |
+| CI-02 | Phase 9 — Test Suite Triage | Pending — CI wiring landed (commits `b2bb718`+`61bf5a7`); 3 failures remain — see TEST-CLOSE-01/02 (v1.6.2) |
 | NET-01 | Deferred (1.6.x) — backlog 999.3 | Deferred |
 | PIPE-01 | Deferred (v2) — backlog 999.6 — *de-risked + scoped by Phase 5 SPIKE-02* | Deferred |
+| BUILD-ACCEL-01 | Phase 999.16 — Build acceleration: PCH | Pending (v1.6.2) |
+| BUILD-ACCEL-02 | Phase 999.17 — Build acceleration: Windows tree cache | Pending (v1.6.2) |
+| BUILD-ACCEL-03 | Phase 999.18 — CI hygiene: path-aware triggers + concurrency | Pending (v1.6.2) |
+| BUILD-ACCEL-04 | Phase 999.19 — CI hygiene: per-TU build profiling artifact | Pending (v1.6.2) |
+| BUILD-ACCEL-05 | Phase 999.20 — CI hygiene: action artifact pins v6/v7 | Pending (v1.6.2) |
+| TEST-CLOSE-01 | Phase 9 — Test Suite Triage | Pending (v1.6.2) — triage 3 baseline failures |
+| TEST-CLOSE-02 | Phase 9 — Test Suite Triage | Pending (v1.6.2) — flip CI gatekeeper to blocking |
+| TRIAGE-01 | Phase 999.14 — GitHub issue + PR triage | Pending (v1.6.2) |
+| TRIAGE-02 | Phase 999.14 — Stale-doc audit bundled task | Pending (v1.6.2) |
+| TRIAGE-03 | Phase 999.14 — 5-PR legacy bundle merge | Pending (v1.6.2) |
+| DEADCODE-01 | Phase 999.21 — DockResultFile QtXml dead-code cleanup | Pending (v1.6.2) |
+| WARN-CENSUS-01 | Phase 999.22 — Tier-C warning census (CENSUS-ONLY) | Pending (v1.6.2) |
+| GRAMMAR-01 | Phase 999.23 — CIF Bison grammar audit (STRETCH) | Pending (v1.6.2 or v1.7) |
 
 **Coverage:**
-- v1 requirements: 38 active (BUILD ×4, RENDER ×8, ARCH ×4, CI/DIAG ×2, LANG ×3, DEPS ×6, CONFIG ×1, QT6 ×2, SPIKE ×2, PY ×2, PKG ×3, CI-02 ×1) + NET-01 deferred to 1.6.x
-- Mapped to phases: 38 ✓
+- v1 requirements: 38 active + NET-01 deferred to 1.6.x
+- v1.6.2 requirements: 12 (BUILD-ACCEL ×5 + TEST-CLOSE ×2 + TRIAGE ×3 + DEADCODE-01 + WARN-CENSUS-01) + GRAMMAR-01 stretch
+- Mapped to phases: 50 active + 1 deferred + 1 v2 ✓
 - Unmapped: 0
 - v2: PIPE-01 (full pipeline rewrite — now de-risked by the Phase 5 backend spike)
 

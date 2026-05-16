@@ -1,17 +1,16 @@
 ---
 gsd_state_version: 1.0
 milestone: v1.6.2
-milestone_name: "Build acceleration + scope-cleanup patch release"
-predecessor: v1.6.1 (tagged 2026-05-16, commit 8e5495a)
-status: "v1.6.1 tagged 2026-05-16; v1.6.2 milestone-context resolved (7 phases + 1 stretch; ~7-13 days effort). Open Qs settled 2026-05-16: Phase 6 PyBALL bake-off → v2.1 (moved out); 999.14 triage first then 5-PR bundle; 999.22 census-only no execution; RELEASE-NOTES drafted at tag time. Ready for /gsd-new-milestone v1.6.2 + per-phase planning starting with build-accel cluster (999.16-999.20)."
-stopped_at: v1.6.2 scope locked; ready for GSD planning
-last_updated: "2026-05-16T23:30:00.000Z"
+milestone_name: Build acceleration + scope-cleanup patch release
+status: planning
+last_updated: "2026-05-16T09:00:47.318Z"
+last_activity: 2026-05-16
 progress:
-  total_phases: 27
-  completed_phases: 9
-  total_plans: 44
-  completed_plans: 44
-  percent: 33
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -24,33 +23,10 @@ progress:
 
 ## Current Position
 
-Phase: 04.1 (config-color-defaults-fix) — EXECUTING
-Plan: 2 of 2
-**Phase:** 05.1 — done
-**Plans:** 14 of 14 complete (05.1-01..05.1-14)
-**Status:** Phase complete — ready for verification
-**Progress:** [██████████] 100%
-
-```
-Phase 1     [x]  Build Baseline
-Phase 2     [x]  Rendering Port (4a)        — human-verified on macOS
-Phase 02.1  [x]  Renderer boundary extraction
-Phase 02.2  [x]  CI and build-smoke matrix  — CI green on all 4 jobs
-Phase 3     [x]  Language Modernization     — C++17, CI green on all 4 jobs
-Phase 4     [x]  Dependency System Overhaul — CI green on all 4 jobs incl. Windows blocking
-Phase 4.1   [ ]  Config Color-Defaults Fix  (promoted from backlog 999.4) <- NEXT (or skip to Phase 5.1)
-Phase 5     [x]  Qt 6 Migration (4b) + Renderer Backend Spike  (former Phase 05.1 folded in) — SPIKE-02 split decision: GL-Core for v1.6.x → QRhi for v2
-Phase 5.1   [x]  Build Warnings & Latent Bug Cleanup  (inserted 2026-05-15 — 14/14 plans complete; retroactive Windows CI validation pending on next clean tri-OS run)
-Phase 6     [ ]  Python Bindings
-Phase 8     [ ]  Packaging & Distribution
-Phase 9     [ ]  Test Suite Triage
-(Phase 7 Networking → backlog 999.3)
-(Backlog 999.6 PIPE-01 — UNBLOCKED; SPIKE-02 decision record exists → ready for /gsd-review-backlog promotion)
-```
-
-NOTE: the real next phase is **Phase 4**. gsd-tools has a recurring decimal-phase
-bug (`phase complete` mis-reported `next_phase: 05.1` after Phase 3) — hand-verify
-roadmap/STATE after any gsd-tools phase op.
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-05-16 — Milestone v1.6.2 started
 
 ## Performance Metrics
 

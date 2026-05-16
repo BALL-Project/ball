@@ -14,6 +14,23 @@ BALLView must **build and visibly render molecules** on macOS, Linux, and Window
 from current, supported dependencies — the 3D scene working cross-platform is the
 non-negotiable outcome.
 
+## Current Milestone: v1.6.2 — Build acceleration + scope-cleanup patch release
+
+**Started:** 2026-05-16 (after v1.6.1 tagged on commit `8e5495a`)
+
+**Goal:** Faster CI, cleaner tracker, deferred cleanups closed — patch shape, not feature shape. Big chunk of work, but mostly corrective.
+
+**Target features (7 phases + 1 stretch, ~7-13 days effort):**
+- **Build acceleration cluster (5):** PCH (999.16), Windows CMake build-tree cache (999.17), path-aware CI triggers + concurrency groups (999.18), per-TU build profiling artifact (999.19), action artifact pins v6/v7 (999.20)
+- **Phase 9 close:** triage 3 baseline failures + flip CI gatekeeper to blocking
+- **Issue + PR triage (999.14):** 5-category triage of open issues + open PRs (triage first), stale-doc audit alongside, 5-PR legacy bundle merge as clean tail (#640, #600, #554, #550, #546)
+- **Dead-code cleanups (2):** DockResultFile QtXml dead overload (999.21, ~1h), Tier-C warning census-only (999.22, no execution)
+- **Stretch:** CIF Bison grammar audit (999.23)
+
+**Out of scope (deferred to v1.7 / v2.x):** Phase 6 PyBALL bake-off (→ v2.1 first step per 2026-05-16 user direction), Phase 8 packaging + signed installers (→ v1.7), 999.8 auto-update (→ v1.7), 999.1 UI maintainer questions (→ v1.7), 999.4b residue color persistence (→ v1.7), SEED-001 BALLView UI Refresh (→ v1.7), Tier-C warning execution (→ v1.7/v2.0 per 999.22 census split-list).
+
+**Detailed scope:** [`MILESTONE-CONTEXT.md`](MILESTONE-CONTEXT.md). Predecessor: [`MILESTONE-CONTEXT-v1.6.1.md`](MILESTONE-CONTEXT-v1.6.1.md).
+
 ## Requirements
 
 ### Validated
