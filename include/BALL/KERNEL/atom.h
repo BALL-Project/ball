@@ -1006,20 +1006,22 @@ namespace BALL
 
 // required for visual studio
 //
-// Phase 5.1 carry-forward (post-Plan-05.1-07 measurement):
-// Guarded by !BALL_BUILD_DLL — emit the extern template declaration ONLY in
-// client TUs that link AGAINST libBALL.dll, NOT in libBALL's own TUs. When
-// compiling libBALL itself, the matching `template class BALL_EXPORT
-// std::vector<Atom*>;` definition in atom.C is the export source; an
-// unguarded extern declaration in the header tripped MSVC C4910 ×6 because
-// MSVC's pointer-element-vector implicit instantiation interacted with the
-// dllexport definition. vector3.h's same pattern does not trip because
-// value-element vectors do not share the implicit instantiation path.
+// Phase 5.1 carry-forward (revised after CI run 25945710758):
+// Earlier attempt guarded this with !BALL_BUILD_DLL to suppress C4910 in
+// libBALL's own TUs. That hid the declaration from libVIEW's TUs too —
+// which transitively include atom.h and implicitly instantiate
+// std::vector<Atom*> as STRONG symbols. libBALL's `template class
+// BALL_EXPORT` definition in atom.C also emits strong symbols. Linker
+// then saw duplicates and emitted LNK2005 on the destructor + operator=
+// in cartoonModel.obj / editMode.obj inside libVIEW.dll's link.
+//
+// The extern template declaration MUST be visible to ALL client TUs
+// (libVIEW + downstream consumers) so they suppress implicit
+// instantiation. C4910 on libBALL's own TUs is a *warning* (not error)
+// and harmless — the cost of MSVC's pointer-element-vector quirk.
 #ifdef BALL_COMPILER_MSVC
-# ifndef BALL_BUILD_DLL
-#  include <vector>
+#include <vector>
 extern template class std::vector<Atom*>;
-# endif
 #endif
 
 # ifndef BALL_NO_INLINE_FUNCTIONS
