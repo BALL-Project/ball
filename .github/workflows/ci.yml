@@ -7,8 +7,22 @@ name: CI
 on:
   push:
     branches: [master, v1.6-modernization]
+    # Docs-only commits don't change build inputs — skip the full 4-OS rebuild
+    # (saves ~45-60 min of runner time per ROADMAP/CLAUDE.md push). Source-of-
+    # truth for "what affects the build" is anything outside .planning/ and
+    # top-level .md files. The list is paths-IGNORE (deny-list) rather than
+    # paths (allow-list) so any new code dir is in-scope by default — fail-safe
+    # toward retriggering, not toward skipping.
+    paths-ignore:
+      - '.planning/**'
+      - '**.md'
+      - 'LICENSE*'
   pull_request:
     branches: [master, v1.6-modernization]
+    paths-ignore:
+      - '.planning/**'
+      - '**.md'
+      - 'LICENSE*'
 
 # Read-only token: this workflow only builds + checks, it never writes back.
 permissions:
@@ -81,7 +95,7 @@ jobs:
             qt_host: linux
             qt_version: '6.8.*'   # Qt 6.8 LTS — D-01 revised floor (2026-05-16)
 
-          # ---- Linux ARM64 (Ubuntu) — non-blocking initial -----------------
+          # ---- Linux ARM64 (Ubuntu) — blocking -----------------------------
           # 2026-05-16: added to match OpenMS's CI matrix. Catches ARM-
           # specific bugs (alignment, char-signedness, byte-order, pointer-
           # truncation regressions like Plan 05.1-02 C4311) that x86_64
@@ -94,13 +108,14 @@ jobs:
           # with Qt 6.8 LTS (Oct 2024). Bumping x86_64 to 6.8 too keeps the
           # toolchain uniform across the matrix.
           #
-          # Non-blocking initially (continue-on-error via matrix.blocking)
-          # to absorb any first-run surprises. Flip to blocking once a
-          # green-on-arm baseline is recorded — same pattern as the
+          # FLIP TO BLOCKING 2026-05-16: two consecutive green ARM Linux
+          # runs (25963533636 + 25963900386) on the Qt 6.8 baseline,
+          # post-hashGrid signed-char fix (fdea8c7). ARM is now a peer of
+          # linux-x64/macos-arm64/windows-x64 — same pattern as the
           # Windows flip on 2026-05-15.
           - os: linux-arm64
             runner: ubuntu-24.04-arm
-            blocking: false
+            blocking: true
             smoke: true
             ccache_dir: ~/.cache/ccache
             qt_host: linux_arm64
