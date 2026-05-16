@@ -7,7 +7,9 @@
 
 namespace BALL
 {
-template class BALL_EXPORT TVector3<float>;
+// BALL_EXPORT on an explicit template instantiation is redundant once the
+// primary template already carries visibility attributes (GCC -Wattributes).
+template class TVector3<float>;
 
 #ifdef BALL_COMPILER_MSVC
 	template class BALL_EXPORT std::vector<Vector3>;

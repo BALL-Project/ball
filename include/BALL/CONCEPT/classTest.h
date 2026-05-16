@@ -323,17 +323,19 @@ int main(int argc, char **argv)\
 		\ingroup ClassTest
 */
 #define TEST_REAL_EQUAL(a,b)  \
-	TEST::this_test = fabs((a) - (b)) < TEST::precision; \
-	TEST::test = TEST::test && TEST::this_test;\
-	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 	{\
-		if (!TEST::newline)\
+		TEST::this_test = fabs((a) - (b)) < TEST::precision; \
+		TEST::test = TEST::test && TEST::this_test;\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
-			TEST::newline = true;\
-			std::cout << std::endl;\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+			std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 		}\
- 		std::cout << "    (line " << __LINE__ << " TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
-		std::cout << (TEST::this_test ? " + " : " - ") << std::endl;\
 	}\
 
 /**	Generic equality macro.

@@ -134,8 +134,11 @@ namespace BALL
 					for (Position p=0; p<(Position)table->rowCount(); p++)
 					{
 						// NOTE: do not remove the scope here; there is a class member Element flying around somewhere...
-						BALL::Element const& e = PTE_::getElement(ascii(table->item(p, 0)->text()));
-						
+						// Bind the symbol-temporary to a named local first so GCC 13's
+						// -Wdangling-reference doesn't trip on the inner expression.
+						const String symbol = ascii(table->item(p, 0)->text());
+						BALL::Element const& e = PTE_::getElement(symbol);
+
 						if ((e.getAtomicNumber() > 0) && (e.getAtomicNumber() < table->rowCount()))
 						{
 							colors[e.getAtomicNumber()] = table->item(p, 1)->background().color();
@@ -180,7 +183,8 @@ namespace BALL
 
 				for (Position p = 0; p < (Position)element_table_->rowCount(); ++p)
 				{
-					BALL::Element const& e = PTE_::getElement(ascii(element_table_->item(p, 0)->text()));
+					const String symbol = ascii(element_table_->item(p, 0)->text());
+					BALL::Element const& e = PTE_::getElement(symbol);
 
 					if (e.getAtomicNumber() == 0 || e.getAtomicNumber() > Element::NUMBER_OF_ELEMENTS)
 					{

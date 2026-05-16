@@ -56,6 +56,7 @@ namespace BALL
 
 		RenderSetup::RenderSetup(const RenderSetup& rs)
 			: QThread(),
+				boost::enable_shared_from_this<RenderSetup>(rs),
 				renderer(rs.renderer),
 				target(rs.target),
 				rendering_paused_(rs.rendering_paused_),

@@ -30,9 +30,10 @@ namespace BALL
 	{
 	}
 
-	// copy constructor 
+	// copy constructor
 	ForceFieldComponent::ForceFieldComponent(const ForceFieldComponent& force_field_component)
-		: force_field_(force_field_component.force_field_),
+		: ScoringComponent(force_field_component),
+			force_field_(force_field_component.force_field_),
 			energy_(force_field_component.energy_),
 			name_(force_field_component.name_),
 			enabled_(force_field_component.enabled_)
