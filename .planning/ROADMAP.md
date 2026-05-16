@@ -415,23 +415,21 @@ Plans:
 Plans:
 - [ ] TBD (do NOT promote before Phase 5 + SPIKE-02 complete)
 
-### Phase 999.7: Qt 6 Linux + Windows Bring-Up and CI Fixup (BACKLOG · DORMANT · MOSTLY CLOSED — only Windows driver capture remains)
+### Phase 999.7: Qt 6 Linux + Windows Bring-Up and CI Fixup — CLOSED (2026-05-16, all scope resolved)
 
-**Audit update (2026-05-16, ROADMAP-AUDIT-V1.6.2.md §C3):** The original scope was substantially closed by other phases:
+**Status:** All four original scope items are RESOLVED:
 - (1) Linux aqtinstall — RESOLVED in commit `54da903` (Phase 5.1 D2/D3/D6) + run [25899905204](https://github.com/BALL-Project/ball/actions/runs/25899905204) Linux green.
 - (2) Windows vcpkg baseline + build — RESOLVED via Phase 4 vcpkg + Phase 5.1 Tier-B DLL hygiene + Phase 999.2 Ninja switch (Windows Build 4818s → 55s; run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) tri-OS green).
-- (3) macOS `gl_profile=(compatibility|none)` relaxation — RESOLVED in commit `7b28685` (folded into the same --fix sweep that closed CR-01/02/03; see [`05-HUMAN-UAT.md:23`](phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-HUMAN-UAT.md)).
-- (4) **Windows VM driver-behaviour capture — STILL OPEN.** SEED-005-3.
+- (3) macOS `gl_profile=(compatibility|none)` relaxation — RESOLVED in commit `7b28685` (see [`05-HUMAN-UAT.md:23`](phases/05-qt-6-migration-4b-renderer-backend-decision-spike/05-HUMAN-UAT.md)).
+- (4) Windows VM bring-up — RESOLVED 2026-05-16 (user-confirmed: BALLView tested on a Windows VM, working perfectly since v1.6). SEED-005-3 driver-capture-as-documentation is no longer blocking; the more useful artifact is the post-PIPE-01 capture (SEED-005-4) which falls naturally out of Phase 999.6's v2.0 work.
 
-**Remaining scope (narrowed):** SEED-005-3 Windows driver capture (documentation deliverable — `BALLVIEW_GL_DIAG` log on a representative Windows host: GL vendor/renderer/version/profile + MSAA sample counts + driver warnings). Optional: SEED-005-4 post-PIPE-01 recapture once Phase 999.6 renderer rewrite lands.
+**Requirements:** QT6-01-LINUX (CLOSED by Phase 4 + 999.2), QT6-01-WINDOWS (CLOSED by Phase 5.1 + 999.2 + user-verified Windows VM run 2026-05-16).
 
-**Why still DORMANT, not v1.6.2:** Windows driver capture is a documentation step, not a code fix; post-PIPE-01 recapture is the more useful version. Defer to v2.0 (post-PIPE-01) unless a Windows-access contributor surfaces sooner.
+**Carry-forward:** SEED-005-4 (post-PIPE-01 Windows driver-behaviour recapture) folds into Phase 999.6 v2.0 work — not a separate phase. Documented in 999.6 scope when promoted.
 
-**Reference:** [`.planning/phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md`](phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md) — consolidated scope + per-seed effort (pre-audit; SEEDs 1/2/3-relaxation/CI sections are stale per the above).
-**Requirements:** QT6-01-LINUX (CLOSED by Phase 4 + 999.2), QT6-01-WINDOWS (CLOSED by Phase 5.1 + 999.2). No remaining requirement under this phase.
+**Reference:** [`.planning/phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md`](phases/999.7-qt6-linux-windows-bringup/QT6-LINUX-WINDOWS-BACKLOG.md) — pre-closure scope doc; preserved for history.
 
-Plans:
-- [ ] TBD (defer to v2.0 post-PIPE-01 OR promote earlier if Windows-access contributor available)
+Plans: none (phase closed).
 
 ### Phase 999.8: Auto-Update via Sparkle + WinSparkle (BACKLOG · DORMANT)
 
