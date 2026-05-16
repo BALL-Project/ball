@@ -3,6 +3,9 @@
 # CMake configuration for BALL
 # http://www.ball-project.org
 #
+# Phase 999.17 structural-change test: this comment changes the hashFiles()
+# key for ci-windows-cmake-tree, forcing a cache MISS to verify key invalidation.
+#
 ########################################################
 
 CMAKE_MINIMUM_REQUIRED(VERSION 3.21...3.31 FATAL_ERROR)
