@@ -76,7 +76,7 @@ CHECK(PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals, c
 	std::vector<Coefficients> naught;
 	test = (poly2.getCoefficients() == naught);
 	TEST_EQUAL(test, false)
-	// ?????: Spezialfälle
+	// TODO: cover edge cases
 RESULT
 
 
@@ -91,7 +91,7 @@ CHECK(void clear() throw())
 	std::vector<Coefficients> c3;
 	test = (c2 == c3);
 	TEST_EQUAL(test, true);
-	// ?????: Spezialfälle
+	// TODO: cover edge cases
 RESULT
 
 
@@ -106,7 +106,7 @@ CHECK(void set(Size degree, const std::vector<Interval>& intervals, const std::v
 	std::vector<Coefficients> naught;
 	test = (poly2.getCoefficients() == naught);
 	TEST_EQUAL(test, false)
-	// ?????: Spezialfälle
+	// TODO: cover edge cases
 RESULT
 
 

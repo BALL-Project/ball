@@ -86,7 +86,7 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(const PairExpRDFIntegrator& int
 	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
 	// ?????: Konstanten
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 
@@ -97,7 +97,7 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(double alpha, double C1, double
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
 	// ?????: Konstanten
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 
@@ -111,7 +111,7 @@ CHECK(PairExpRDFIntegrator::clear())
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
 	TEST_EQUAL(test, true);
 	// ?????: Konstanten
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 
@@ -127,7 +127,7 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator& operator =
 	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
 	// ?????: Konstanten
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 

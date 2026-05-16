@@ -111,7 +111,7 @@ namespace BALL
 
 	bool DCDFile::operator == (const DCDFile& file) const
 	{
-		// ?????: Header vergleichen. Was heiﬂt gleich eigentlich in diesem Fall?
+		// TODO: compare headers. What does "equal" actually mean in this case?
 		return (TrajectoryFile::operator == (file));
 	}
 

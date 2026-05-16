@@ -82,7 +82,7 @@ CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator& 
 	test = ((a == A) && (b == B) && (c == C) && (d == D));
 	TEST_EQUAL(test, true);
 	// ?????: Konstanten
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 
@@ -116,7 +116,7 @@ CHECK(Pair6_12RDFIntegrator::clear())
 	integrator.getConstants(a, b, c, d);
 	test = ((a == 0.0) && (b == 0.0) && (c == 0.0) && (d == 0.0));
 	TEST_EQUAL(test, true);
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 
@@ -135,7 +135,7 @@ CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator& operator =
 	int2.getConstants(a, b, c, d);
 	test = ((a == 1.0) && (b == 2.0) && (c == 3.0) && (d == 4.0));
 	TEST_EQUAL(test, true);
-	// ?????: false, Spezialfälle
+	// TODO: cover false-result and edge cases
 RESULT
 
 
