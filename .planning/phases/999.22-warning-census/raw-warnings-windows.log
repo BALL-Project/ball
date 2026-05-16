@@ -1,0 +1,4 @@
+build (windows-x64)	Build (Windows)	2026-05-16T19:33:40.3968481Z source/FORMAT/GAMESSDatParserParser.y: warning: 3 shift/reduce conflicts [-Wconflicts-sr]
+build (windows-x64)	Build (Windows)	2026-05-16T19:33:40.5055179Z source/FORMAT/CIFParserParser.y: warning: 5 shift/reduce conflicts [-Wconflicts-sr]
+build (windows-x64)	Build (Windows)	2026-05-16T19:33:41.2294164Z source/STRUCTURE/smartsParserParser.y: warning: 26 shift/reduce conflicts [-Wconflicts-sr]
+build (windows-x64)	Build (Windows)	2026-05-16T19:36:33.2498457Z C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Tools\MSVC\14.44.35207\include\utility(303): warning C4267: 'initializing': conversion from 'size_t' to '_Ty1', possible loss of data
