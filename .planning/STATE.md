@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: OR v1.7)
 status: executing
-stopped_at: Phase 999.14 complete — TRIAGE-01/02/03 done; next Phase 9 test-suite triage or DEADCODE-01
-last_updated: "2026-05-16T21:00:00Z"
-last_activity: 2026-05-16 — Phase 999.14 closed (TRIAGE-01: 82 net closes; TRIAGE-02: 7 VERIFICATION.md audited; TRIAGE-03: all 5 PRs dispositioned — #640 merged 9c6d868, #554/#546/#550 C++ slice 45dce69, #600 closed-obsolete; TRIAGE-01/02/03 marked Complete in REQUIREMENTS.md)
+stopped_at: Phase 999.22 complete — WARN-CENSUS-01 done; next Phase 9 test-suite triage or DEADCODE-01
+last_updated: "2026-05-16T22:30:00Z"
+last_activity: 2026-05-16 — Phase 999.22 closed (WARN-CENSUS-01: tri-OS census from CI run 25970862407; 200 remaining -Wdeprecated-copy on Linux vs ~3,716 pre-fix estimate — 95% reduction from parallel-session; 999.22a/b/c stubs filed in ROADMAP.md; WARN-CENSUS-01 marked Complete in REQUIREMENTS.md)
 progress:
   total_phases: 40
-  completed_phases: 15
+  completed_phases: 16
   total_plans: 52
-  completed_plans: 51
-  percent: 30
+  completed_plans: 52
+  percent: 32
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.14 — GitHub issue + PR triage complete (TRIAGE-01/02/03 done); next: Phase 9 test-suite triage (TEST-CLOSE-01/02) or DEADCODE-01
+**Current Focus:** Phase 999.22 — Tier-C warning census complete (WARN-CENSUS-01 done); next: Phase 9 test-suite triage (TEST-CLOSE-01/02) or DEADCODE-01 (Phase 999.21)
 
 ## Current Position
 
-Phase: 999.14 (github-issue-pr-triage) — COMPLETE
+Phase: 999.22 (warning-census) — COMPLETE
 Plan: 1 of 1
-Status: Phase complete — TRIAGE-01 (82 net closes from 181 baseline items; decisions.md audit trail), TRIAGE-02 (7 VERIFICATION.md audited; f176b8b pattern confirmed on 05-VERIFICATION.md), TRIAGE-03 (5-PR bundle: #640 merged 9c6d868 FindXDR refactor; #554/#546/#550 C++ slice merged 45dce69; #600 closed-obsolete; bundle-escape DID NOT FIRE)
+Status: Phase complete — WARN-CENSUS-01: tri-OS census from CI run 25970862407 (commit 0a75edede); 200 Linux -Wdeprecated-copy remaining (95% reduction from ~3,716 pre-fix estimate by parallel-session); CENSUS.md at phases/999.22-warning-census/CENSUS.md; 999.22a/b/c stubs filed in ROADMAP.md; WARN-CENSUS-01 marked Complete in REQUIREMENTS.md
 Last activity: 2026-05-16
 
 ## Performance Metrics
@@ -77,11 +77,14 @@ Last activity: 2026-05-16
 | Phase 999.19-per-tu-build-profiling P01 | ~3.5h (dominated by CI wall-clock + parallel-session interference + rate-limit waits) | 2 tasks | 1 files (ci.yml) + 2 Rule-1 deviation commits |
 | Phase 999.20-action-artifact-pins P01 | ~45min (dominated by CI watch + parallel-session concurrency cancellations) | 3 tasks | 2 files (ci.yml + release.yml) + MILESTONE-CONTEXT.md + REQUIREMENTS.md |
 | Phase 999.14-github-issue-pr-triage P01 | ~2h (multi-session; prior rounds + this session for TRIAGE-02 + TRIAGE-03 + state updates) | 5 tasks | 18 files (3 baseline JSON + decisions.md + STALE-DOCS-AUDIT.md + SUMMARY.md + 8 C++ files from 5-PR bundle + ROADMAP.md + REQUIREMENTS.md + STATE.md) |
+| Phase 999.22-warning-census P01 | ~45min | 3 tasks | 7 files (3 raw warning logs + CENSUS.md + SUMMARY.md + ROADMAP.md + REQUIREMENTS.md) |
 
 ## Accumulated Context
 
 ### Decisions
 
+- [Phase 999.22-warning-census]: Tier-C surface dramatically reduced by parallel-session (10 commits pre-census): ~3,716 pre-fix estimate → 200 remaining Linux -Wdeprecated-copy (95% reduction). 999.22a/b/c stubs reflect the actual post-fix scope: (a) ~226 mechanical, (b) ~125 VIEW/RENDERING PixelFormat (blocked-by-999.6), (c) ~111 per-site review.
+- [Phase 999.22-warning-census]: renderTarget.h PixelFormat -Wdeprecated-copy cluster (123 warnings, 41 TUs) categorized (b) — deferred to v2.0 after Phase 999.6 PIPE-01 renderer rewrite. Executing in v1.6.x or v1.7 is wasted work.
 - Abandon `ball_contrib`; build against Homebrew/system deps (macOS/Linux) and vcpkg (Windows). Already proven on macOS Tahoe.
 - Phase 4a (GSD Phase 2): `QOpenGLWidget` + compatibility profile, deferring Qt 6 and the pipeline rewrite to Phase 4b (GSD Phase 5). Smallest change that restores rendering on all 3 OSes.
 - Phase 4a threading: hybrid model — interactive GL on the GUI thread via `paintGL()`, raytracer stays a CPU-buffer worker thread.
