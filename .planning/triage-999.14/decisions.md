@@ -338,3 +338,60 @@ Zero close failures, zero rate-limit hits.
 Reconcile via open-count delta: 176 → 90 issues (−86) and 5 → 4 PRs (−1) =
 **87 total closes** ✓.
 
+---
+
+# TRIAGE-01 round-3 — Reconciliation pass (actionable-stale reopens)
+
+User feedback after round-2 surfaced a rule mismatch: the resume-message rule
+said "if 3+ years stale BUT actionable description, file as keep not stale" —
+my round-2 proxy was `unmilestoned → stale`, which swept up some items with
+concrete bug descriptions. Reconciliation: reopen the most clearly-actionable
+items as `keep`.
+
+## Reopened (5)
+
+| # | Title | Reason it's actionable |
+|---|---|---|
+| #636 | Memory leak in DisplayProperties | Concrete memory leak, specific subsystem |
+| #601 | NMR/spectrum.iC: computeMoments() does nothing | Specific function, specific failure |
+| #540 | Infinite loop in SDGenerator | Specific algorithm, clear failure mode |
+| #289 | Splitted surface crashes BALL - project files | Specific crash path with repro context |
+| #539 | AromaticityProcessor fails on certain molecules | Specific subsystem with category of failure |
+
+Each reopened with a follow-up comment:
+> Reopened on triage review — this has a concrete, actionable bug description
+> (per Phase 999.14 TRIAGE-01 reconciliation against the strict-rule pass).
+> Moving back into the open backlog as a `keep` item. Still no current
+> milestone; no commitment to a fix timeline. If the bug no longer reproduces
+> against `v1.6-modernization` (BALLView v1.6.1 shipped 2026-05-16), a quick
+> "no longer reproducible" comment would help us close it confidently.
+
+## Left closed (5 borderline-actionable)
+
+| # | Title | Why borderline |
+|---|---|---|
+| #584 | AmberFF_test fails intermittently | Flaky-test, reproducer-thin |
+| #562 | MMFF94 Error in setup() function | Title is vague ("Error in") — no repro |
+| #559 | BallView bug: object at cursor is not the good one | Vague — "is not the good one" |
+| #448 | Windows Debug builds run with disabled Python support | Build-config, not a runtime bug; SIP path being redesigned |
+| #295 | Possible error in Amber HydrogenBond force calculation | "Possible" — not a confirmed bug |
+
+Reporter can still reopen per the templated stale comment.
+
+## Updated round totals (post-reconciliation)
+
+| Category | Externals | Maintainers | Total |
+|---|---:|---:|---:|
+| close-as-fixed | 2 | 0 | 2 |
+| close-as-obsolete | 7 issues + 1 PR | 8 | 16 |
+| close-as-stale | 2 | **62** | 64 |
+| keep | 2 issues + 3 PRs | **93** issues + 1 PR | 99 |
+| needs-investigation | 2 | 0 | 2 |
+| **Closes (net)** | **11 issues + 1 PR** | **70 issues** | **82** |
+
+- Gross closes: 87
+- Reopens: 5
+- **Net closes today: 82** (81 issues + 1 PR)
+- Post-triage open counts: **95 issues + 4 PRs** (up from round-2 post-state
+  of 90 + 4 due to the 5 reopens).
+
