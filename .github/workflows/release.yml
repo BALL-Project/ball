@@ -294,20 +294,24 @@ jobs:
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
-          # --no-angle: vcpkg's qtbase port (Qt 6) doesn't include the
-          #   ANGLE library (libGLESv2.dll / libEGL.dll — Windows OpenGL ES
-          #   on D3D translator). Without --no-angle, windeployqt fails
-          #   with "libGLESv2.dll does not exist" trying to deploy it.
-          #   BALL uses GLEW + hardware OpenGL anyway — ANGLE isn't needed.
-          # --no-opengl-sw: skip opengl32sw.dll (software-Mesa OpenGL
-          #   fallback). BALL requires hardware OpenGL; the software path
-          #   isn't useful here and tends to surface similar "DLL does not
-          #   exist" failures depending on vcpkg port config.
+          # 2026-05-16 Phase 5.1 carry-forward (release.yml Qt 6 alignment):
+          # Qt 6's windeployqt DROPPED the `--no-angle` flag — ANGLE itself
+          # was removed from Qt 6 (Qt 6 uses native OpenGL or QRhi, no longer
+          # needs the OpenGL-ES → D3D translator). Passing `--no-angle` on
+          # Qt 6 produces a hard `Unknown option 'no-angle'.` and exits 1.
+          # Drop it. The Phase 5.1 macOS Qt 5 → Qt 6 sweep missed this Windows-
+          # side counterpart — surfaced in release.yml run 25957687204 (the
+          # second v1.6.1 release attempt).
+          #
+          # --no-opengl-sw: still valid on Qt 6 — skips opengl32sw.dll
+          # (software-Mesa OpenGL fallback). BALL requires hardware OpenGL;
+          # the software path isn't useful here and tends to surface
+          # similar "DLL does not exist" failures depending on vcpkg port config.
           # See Phase 5.1 backlog D1/D6 for the broader Qt 6 deploy-tooling
-          # surface (qttools port required, ANGLE/SW skipped, etc.).
+          # surface (qttools port required, SW path skipped, etc.).
           & "${{ steps.locate-win.outputs.windeployqt }}" --release `
               --no-translations --no-system-d3d-compiler --no-compiler-runtime `
-              --no-angle --no-opengl-sw `
+              --no-opengl-sw `
               "${{ steps.locate-win.outputs.exe }}"
 
       - name: Bundle data/ next to .exe (Windows)
