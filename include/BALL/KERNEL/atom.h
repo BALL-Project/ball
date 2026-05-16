@@ -1006,22 +1006,33 @@ namespace BALL
 
 // required for visual studio
 //
-// Phase 5.1 carry-forward (revised after CI run 25945710758):
-// Earlier attempt guarded this with !BALL_BUILD_DLL to suppress C4910 in
-// libBALL's own TUs. That hid the declaration from libVIEW's TUs too —
-// which transitively include atom.h and implicitly instantiate
-// std::vector<Atom*> as STRONG symbols. libBALL's `template class
-// BALL_EXPORT` definition in atom.C also emits strong symbols. Linker
-// then saw duplicates and emitted LNK2005 on the destructor + operator=
-// in cartoonModel.obj / editMode.obj inside libVIEW.dll's link.
+// Phase 5.1 carry-forward — revert to PRE-Plan-05.1-07 pattern after CI
+// run 25950352121 still hit LNK2005 ×2 in libVIEW.dll's link, despite
+// (a) removing the !BALL_BUILD_DLL guard and (b) deleting atom.C's
+// `template class BALL_EXPORT std::vector<Atom*>;`. Diagnosis revised:
+// libBALL's BALL_EXPORT classes containing std::vector<Atom*> members
+// (e.g. Composite tree fragments) propagate dllexport through implicit
+// instantiation of the vector's destructor + operator=, making libBALL.dll
+// emit them as strong globals regardless of atom.C's contents. libVIEW's
+// cartoonModel.obj + editMode.obj implicit-instantiate the same template
+// AS STRONG symbols because a bare `extern template class` (no BALL_EXPORT)
+// doesn't tell MSVC the symbol is imported from libBALL.dll.
 //
-// The extern template declaration MUST be visible to ALL client TUs
-// (libVIEW + downstream consumers) so they suppress implicit
-// instantiation. C4910 on libBALL's own TUs is a *warning* (not error)
-// and harmless — the cost of MSVC's pointer-element-vector quirk.
+// The PRE-Plan-05.1-07 pattern includes BALL_EXPORT here. In client TUs
+// (libVIEW + downstream consumers), BALL_EXPORT expands to dllimport,
+// telling MSVC "use the imported symbol from libBALL.dll, don't
+// instantiate locally." In libBALL's own TUs, BALL_EXPORT expands to
+// dllexport — combined with `extern`, that trips C4910 ("'__declspec(dllexport)'
+// and 'extern' are incompatible on an explicit instantiation"). C4910 is
+// a WARNING (not error); MSVC still emits the export. The build works.
+//
+// vector3.h's Plan-05.1-07 pattern (no BALL_EXPORT on header decl,
+// matching `template class BALL_EXPORT` in vector3.C) keeps its benefit
+// for value-element vectors. Pointer-element vectors (Atom*) need the
+// pre-fix pattern because of the MSVC implicit-instantiation quirk.
 #ifdef BALL_COMPILER_MSVC
 #include <vector>
-extern template class std::vector<Atom*>;
+extern template class BALL_EXPORT std::vector<Atom*>;
 #endif
 
 # ifndef BALL_NO_INLINE_FUNCTIONS
