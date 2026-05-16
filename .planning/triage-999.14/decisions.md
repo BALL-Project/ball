@@ -395,3 +395,32 @@ Reporter can still reopen per the templated stale comment.
 - Post-triage open counts: **95 issues + 4 PRs** (up from round-2 post-state
   of 90 + 4 due to the 5 reopens).
 
+---
+
+# TRIAGE-03 — 5-PR legacy bundle final dispositions (Phase 999.14-01 Task 4)
+
+Completed: 2026-05-16. Bundle-escape clause: **DID NOT FIRE** (all 5 PRs
+dispositioned within this session's budget). No Phase 5.2 spinout needed.
+
+| PR | Title | Final state | Commit / note | Elapsed effort |
+|---|---|---|---|---|
+| #600 | Add Travis-CI integration | closed-as-obsolete | Closed round-1 (2026-05-16); `.travis.yml` dead post-GH-Actions Phase 02.2 | <10 min |
+| #640 | FindXDR.cmake refactor | merged-with-commit | `9c6d868` cherry-picked d6044e2+bd50baf; XDR still in use → not obsolete | ~20 min |
+| #554 | Omega torsion angles | merged-C++-slice | `45dce69` C++ slice applied; SIP deferred to Phase 999.15 | ~30 min (bundled) |
+| #546 | Residue insertion code | merged-C++-slice | `45dce69` C++ slice applied; SIP deferred to Phase 999.15 | (bundled with #554) |
+| #550 | Hydroxyproline HYP | merged-C++-slice | `45dce69` C++ slice applied; SIP deferred to Phase 999.15 | (bundled with #554) |
+
+## Notes
+
+- PR #640 (FindXDR): XDR is still used — XDRPersistenceManager.h, CMakeLists.txt
+  `INCLUDE(BALLConfigXDR)`, `${XDR_LIBRARIES}`. Cherry-picked both commits onto
+  v1.6-modernization; no conflicts; libBALL build green.
+
+- PRs #554 + #546 + #550 (residue.C bundle): Applied C++ portions only. SIP
+  (.sip) files excluded per plan — Phase 999.15 will redo Python bindings with
+  a modern generator. libBALL build green (cmake --build build/ci-macos --target
+  BALL -j 8 exit 0).
+
+- Bundle-escape clause: Total elapsed ~1 hour for all 5 PRs. Well within 3-day
+  budget. Remaining open PRs: 0 from the named bundle.
+
