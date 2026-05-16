@@ -902,9 +902,13 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog after v1.6.1 tags)
 
-### Phase 999.15: PyBALL wrapping rewrite — autowrap + Cython, Python 3 only, autogen-first (BACKLOG · TARGETED FOR v2.1)
+### Phase 999.15: PyBALL wrapping rewrite (BACKLOG · TARGETED FOR v2.1 · CONDITIONAL on Phase 6 bake-off)
 
-**Goal:** Replace BALL's current SIP-4.9-based Python bindings with a **Cython-based, autowrap-generated** binding layer that (a) is Python-3-only, (b) covers a substantially broader API surface than today's hand-curated subset, (c) keeps in sync with the C++ headers via codegen rather than manual edits, and (d) eliminates the SIP 4.x deprecation liability before the SIP toolchain stops working on new Python releases.
+> **Implementation-ready plan:** [`PYBALLV2.md`](PYBALLV2.md) supersedes the outline below. The outline below is preserved as the high-level summary; PYBALLV2.md has the 4-round CODEX-reviewed detail, working autowrap POC at [`pyball-poc/poc1-simple/`](pyball-poc/poc1-simple/), and the 26-40 engineer-week planning envelope. Read PYBALLV2.md before promoting this phase.
+
+> **Important restructuring (per PYBALLV2.md):** the autowrap+Cython recommendation is a **candidate pending Phase 6 bake-off**, NOT a pre-committed decision. Phase 6 (in the active phase list, "Python Bindings") becomes the cross-platform bake-off comparing autowrap+Cython vs nanobind on a real seven-case BALL slice. Phase 999.15 only fires if the chosen tool passes hard stop/pivot gates (see PYBALLV2.md §10). If autowrap wins → execute the autowrap plan in PYBALLV2.md. If nanobind wins → execute the variant plan in PYBALLV2.md §11 (29-40 weeks instead of 25.5-32.5).
+
+**Goal:** Replace BALL's current SIP-4.9-based Python bindings with a modern, Python-3-only binding layer that (a) covers a substantially broader API surface than today's hand-curated subset, (b) keeps in sync with the C++ headers (codegen-first if autowrap wins the bake-off; otherwise hand-written from PYBALLV2.md §11 templates), and (c) eliminates the SIP 4.x deprecation liability before the SIP toolchain stops working on new Python releases.
 
 **Why now (v2.1, not v1.6.x or v2.0):**
 - The current 237 hand-written `.sip` files under [`source/PYTHON/EXTENSIONS/{BALL,VIEW}/`](source/PYTHON/EXTENSIONS/) are SIP 4.9 (BALL's `CMakeLists.txt` declares `FIND_PACKAGE(SIP 4.9 REQUIRED)`). SIP 4 is **deprecated**; SIP 6 is the current line. The PyQt project moved to SIP 6 years ago, and the top-level `sip` module Python import that SIP 4 used is itself deprecated ([openSUSE PyQt packaging notes](https://en.opensuse.org/openSUSE:Packaging_PyQt_and_SIP)).
