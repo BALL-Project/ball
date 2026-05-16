@@ -394,7 +394,7 @@ jobs:
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
-          cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release
+          cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release --parallel $env:NUMBER_OF_PROCESSORS
 
       # ======================================================================
       # Render smoke check (D-08) — macOS native, Linux under xvfb + software

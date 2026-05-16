@@ -237,7 +237,7 @@ jobs:
           # which the x64-windows-release overlay triplet doesn't build.
           # See Phase 5.1 backlog Task D4 for the post-mortem on the v1.6.0
           # release workflow run 25908337693 that surfaced this.
-          cmake --build --preset ci-windows --config Release --target BALL VIEW BALLView
+          cmake --build --preset ci-windows --config Release --target BALL VIEW BALLView --parallel $env:NUMBER_OF_PROCESSORS
 
       - name: Locate BALLView.exe + windeployqt (Windows)
         if: matrix.os == 'windows-x64'
