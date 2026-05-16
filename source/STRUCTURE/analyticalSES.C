@@ -113,7 +113,11 @@ namespace BALL
 		atom_areas.clear();
 		for (Position i = 0; i < atoms.size(); ++i)
 		{
-			atom_areas.insert(std::pair<const Atom*, float>(atoms[i], tmp_atom_areas[i]));
+			// Explicit double -> float narrowing. The connolly_ Fortran routine returns
+			// double-precision atom areas; the HashMap<const Atom*, float> API contract
+			// stores float (saves 4 bytes/atom; SES rounding error is dominated by
+			// surface tessellation anyway). Cast documents the intent + silences C4244.
+			atom_areas.insert(std::pair<const Atom*, float>(atoms[i], static_cast<float>(tmp_atom_areas[i])));
 		}
 
 		// free the input fields
