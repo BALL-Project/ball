@@ -103,8 +103,8 @@ namespace BALL
 					}
 					catch(...)
 					{
-						QMessageBox::critical(this, tr("BALLView"), tr("Please enter a correct numerical value for the split distance!"), 
-															 QMessageBox::Ok, Qt::NoButton);
+						QMessageBox::critical(this, tr("BALLView"), tr("Please enter a correct numerical value for the split distance!"),
+															 QMessageBox::Ok);
 						return;
 					}
 				}
