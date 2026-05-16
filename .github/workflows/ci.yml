@@ -88,7 +88,7 @@ jobs:
           # floor (typically ~8-12 cores worth of useful parallelism for this
           # workload).
           - os: windows-x64
-            runner: windows-2022-xlarge
+            runner: windows-2022
             blocking: true
             smoke: false
             ccache_dir: C:\Users\runneradmin\AppData\Local\ccache
