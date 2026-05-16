@@ -54,6 +54,7 @@ These five close the remaining marginal wins:
 3. **[Phase 999.18](ROADMAP.md) — Path-aware CI triggers + concurrency groups** — skip CI runs on doc-only / planning-only changes. Concurrency groups cancel obsolete runs on rapid pushes. ~0.5 day.
 4. **[Phase 999.19](ROADMAP.md) — Per-TU build profiling artifact** — ninja `.compile_commands.json` + timing breakdown uploaded as a CI artifact. Future-proof for identifying compile-time outliers. ~0.5 day.
 5. **[Phase 999.20](ROADMAP.md) — Bump action artifact pins to v6/v7** — `upload-artifact@v4 → v6`, `download-artifact@v4 → v7`. Was Phase 5.1 D-deferred (cross-breaking-change majors). ~0.5 day.
+   **Resolved 2026-05-16 (Phase 999.20):** upload v4→v6 in `1d3da02`, download v4→v7 in `3cb03c8`; both CI-green at time of commit (run 25970222837 — tri-OS + linux-arm64 + coverage, all pass). No artifact-name collisions observed (all names include `${{ github.sha }}` or `${{ github.run_id }}` suffix; single-matrix bare name `spike-smoke-log-glcore-macos` guarded by `matrix.os == 'macos-arm64'`). BUILD-ACCEL-05 closed.
 
 ### Source-level + cleanup (2 phases, ~5-12 days total)
 
