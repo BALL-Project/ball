@@ -1,10 +1,11 @@
 ---
 gsd_state_version: 1.0
-milestone: v1.6
-milestone_name: milestone
-status: "Phase 4.1 complete — 5 plans (2 initial + 3 gap-closure); 8/8 must-haves verified; CONFIG-01 satisfied at runtime. Next phase candidate: Phase 6 (Python Bindings) or Phase 8 (Packaging & Distribution)."
-stopped_at: Phase 4.1 verified passed
-last_updated: "2026-05-15T22:30:00.000Z"
+milestone: v1.6.2
+milestone_name: "Build acceleration + scope-cleanup patch release"
+predecessor: v1.6.1 (tagged 2026-05-16, commit 8e5495a)
+status: "v1.6.1 tagged 2026-05-16; v1.6.2 milestone-context drafted (8 phases + 1 stretch; ~11-21 days effort). Awaiting /gsd-new-milestone v1.6.2 to promote backlog entries to active. Next: pick a Phase 6 sequencing strategy (Open Q #1 in MILESTONE-CONTEXT.md), then promote the build-accel cluster (999.16-999.20) which is the lowest-coupling work."
+stopped_at: v1.6.1 tagged; v1.6.2 ready to start
+last_updated: "2026-05-16T23:00:00.000Z"
 progress:
   total_phases: 27
   completed_phases: 9
