@@ -17,12 +17,14 @@ on:
       - '.planning/**'
       - '**.md'
       - 'LICENSE*'
+      - 'doc/**'
   pull_request:
     branches: [master, v1.6-modernization]
     paths-ignore:
       - '.planning/**'
       - '**.md'
       - 'LICENSE*'
+      - 'doc/**'
 
 # Read-only token: this workflow only builds + checks, it never writes back.
 permissions:
