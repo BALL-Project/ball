@@ -207,9 +207,24 @@ jobs:
       # Windows tooling install: flex/bison + ccache via a single composite
       # action. See .github/actions/setup-windows-deps/action.yml — that is
       # the canonical place to add future Windows-only tools.
-      - name: Set up Windows build deps (flex/bison + ccache)
+      - name: Set up Windows build deps (flex/bison + ccache + ninja)
         if: matrix.os == 'windows-x64'
         uses: ./.github/actions/setup-windows-deps
+
+      # Phase 999.2: with Ninja replacing MSBuild, cl.exe is invoked directly
+      # and needs the vcvars64.bat environment (PATH, INCLUDE, LIB, LIBPATH).
+      # MSBuild had this implicit via VS project files; Ninja does not.
+      # Without this step, CMake falls back to whatever C++ compiler is on
+      # PATH (often MinGW gcc on GitHub Windows runners), which fails on
+      # Windows headers (`LARGE_INTEGER not declared`, etc.) — exactly what
+      # blocked release run 25955116618. ilammy/msvc-dev-cmd@v1 is the
+      # canonical GitHub Actions wrapper around vcvarsall.bat x64. Mirrors
+      # the ci.yml setup added in Phase 999.2-03.
+      - name: Set up MSVC environment (Windows — vcvars64 for Ninja)
+        if: matrix.os == 'windows-x64'
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
