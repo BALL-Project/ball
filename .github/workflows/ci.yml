@@ -339,27 +339,14 @@ jobs:
           restore-keys: |
             vcpkg-${{ matrix.os }}-
 
-      - name: Install flex/bison (Windows — winflexbison3 via choco)
+      # Windows tooling install: flex/bison + ccache via a single composite
+      # action so each workflow has one call site for "the Windows deps."
+      # See .github/actions/setup-windows-deps/action.yml — that is the
+      # canonical place to add future Windows-only tools (e.g. ninja for
+      # Phase 999.2).
+      - name: Set up Windows build deps (flex/bison + ccache)
         if: matrix.os == 'windows-x64'
-        shell: pwsh
-        run: |
-          choco install winflexbison3 -y
-          # Confirm executables are reachable
-          & "C:\ProgramData\chocolatey\bin\win_flex.exe" --version
-          & "C:\ProgramData\chocolatey\bin\win_bison.exe" --version
-
-      # Preinstall ccache so the Phase 999.2 Ninja switch can use it without
-      # a second round-trip. NO-OP for build time on the current MSBuild
-      # generator: CMAKE_<LANG>_COMPILER_LAUNCHER is ignored by the Visual
-      # Studio generator. The actions/cache step above already targets
-      # %LOCALAPPDATA%\ccache (ccache 4.x default on Windows), so once Ninja
-      # lands the cache will populate without further config.
-      - name: Install ccache (Windows — choco, prep for Phase 999.2 Ninja)
-        if: matrix.os == 'windows-x64'
-        shell: pwsh
-        run: |
-          choco install ccache -y --no-progress
-          & ccache --version
+        uses: ./.github/actions/setup-windows-deps
 
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
