@@ -1359,41 +1359,38 @@ Single-line edit in [`include/BALL/KERNEL/atom.h:1033-1035`](../include/BALL/KER
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
-### Phase 999.27: Coverage-build Linux compile-clean trio (BACKLOG · TARGETED FOR v1.6.2)
+### Phase 999.27: Coverage-build Linux compile-clean trio (COMPLETE · 2026-05-16)
 
-**Goal:** Make the non-blocking coverage CI job compile-clean on Linux Qt 6.8 by fixing three concrete defects surfaced when the coverage build (`-g -fprofile-arcs`) uses a different PCH variant than the release build and stops masking pre-existing source/include hygiene issues. Currently the `coverage (Linux, gcov, non-blocking)` job fails at the **Build BALL + tests** step on every push to v1.6-modernization; all three platforms' release builds remain green. Fixing these flips coverage to green without changing any release-build behavior.
+**Goal:** Make the non-blocking coverage CI job compile-clean on Linux Qt 6.8 by fixing three concrete defects surfaced when the coverage build (`-DCMAKE_BUILD_TYPE=Debug -fprofile-arcs -ftest-coverage`) stops masking pre-existing source/include hygiene issues. The `coverage (Linux, gcov, non-blocking)` job had been failing at the **Build BALL + tests** step on every push to v1.6-modernization; all three platforms' release builds stayed green. Fixed without changing any release-build behavior.
 
-**Why now (v1.6.2, not v2.0):** Coverage failures hide real coverage regressions — every run today shows ❌ on the coverage tile, so future genuine gcovr/test-suite regressions become indistinguishable from this carry-forward noise. All three fixes are one-liners or short edits, fit cleanly in the v1.6.2 "small wins, no substrate change" envelope, and don't touch the renderer/threading hotspots. Surfaced by CI run [25963533636](https://github.com/BALL-Project/ball/actions/runs/25963533636) (post-Qt-6.8-bump + ARM Linux baseline, 2026-05-16).
+**Root cause (corrected from original BACKLOG-era PCH theory):** The original entry guessed PCH ordering / `-O3 -DNDEBUG` invalidation. The actual mechanism is simpler: [`cmake/BALLConfiguration.cmake:12-14`](../cmake/BALLConfiguration.cmake) gates `BALL_VIEW_DEBUG=TRUE` only when `CMAKE_BUILD_TYPE STREQUAL "Debug"`. The coverage job passes `-DCMAKE_BUILD_TYPE=Debug`; the regular Linux build job does not. The offending unqualified `endl` lives inside a `#ifdef BALL_VIEW_DEBUG` block in `~NetworkPreferences`, so the regular Linux build never compiles it and never sees the ambiguity (Qt's `qtextstream.h` introducing `Qt::endl` into scope via `QColorDialog → qaction.h → qdebug.h`). PCH ordering is incidental — once the offending TU is actually compiled, ANY include chain pulling in Qt's text-stream header trips it. Fixed at the source site (`std::endl`).
 
-**Defects to fix:**
+**Why now (v1.6.2, not v2.0):** Coverage failures hide real coverage regressions — every run shows ❌ on the coverage tile, so future genuine gcovr/test-suite regressions become indistinguishable from this carry-forward noise. All three fixes are one-liners or short edits, fit cleanly in the v1.6.2 "small wins, no substrate change" envelope, and don't touch the renderer/threading hotspots. Surfaced by CI run [25963533636](https://github.com/BALL-Project/ball/actions/runs/25963533636) (post-Qt-6.8-bump + ARM Linux baseline, 2026-05-16); reproduced and diagnosed against failing CI run [25968675219](https://github.com/BALL-Project/ball/actions/runs/25968675219) on commit `061a823`.
 
-1. **`source/VIEW/DIALOGS/networkPreferences.C:44`** — unqualified `endl` in `~NetworkPreferences` log statement. Under coverage PCH ordering, Qt's `<QtCore/qtextstream.h>` (pulled in via `QColorDialog → qaction.h → qdebug.h`) brings `Qt::endl` into scope alongside `std::endl`, leaving unqualified `endl` undeclared. Release PCH escapes it because `-O3 -DNDEBUG` invalidates differently than `-g -fprofile-arcs`. **Fix:** qualify as `std::endl`. One-line edit.
+**Defects fixed:**
 
-2. **`source/VIEW/DIALOGS/modifyRepresentationDialog.C:106-107`** — Qt 6 deprecation warning on `QMessageBox::critical(QWidget*, QString, QString, int, int, int)` (six-int legacy overload). **Fix:** switch to the `StandardButtons` overload: `QMessageBox::critical(this, tr("BALLView"), msg, QMessageBox::Ok)`. ~2-line edit. Emits warning, not error, but cleanup pairs naturally with this phase.
+1. **`source/VIEW/DIALOGS/networkPreferences.C:44`** — unqualified `endl` in `~NetworkPreferences` `BALL_VIEW_DEBUG` log statement. Qt's `<QtCore/qtextstream.h>` (pulled in via the VIEW PCH chain `QColorDialog → qaction.h → qdebug.h`) introduces `Qt::endl` into scope, leaving the unqualified token undeclared once the ifdef'd block is compiled (i.e. when `BALL_VIEW_DEBUG=TRUE`, which only happens under Debug build). Sibling call at line 76 already used `std::endl`. **Fix:** qualify as `std::endl`. Commit `78ecda5`. **THE actual build-blocking error** — the only `error:` in the failing log; the other two are warnings.
 
-3. **`include/BALL/MOLMEC/MMFF94/MMFF94Parameters.h:52` + `:525`** — `-Wdeprecated-copy` on `MMFF94ESParameters` copy ctor because base class `MMFF94ParametersBase` has user-provided `operator=` but no user-provided copy ctor (rule-of-three violation). **Fix:** add `MMFF94ParametersBase(const MMFF94ParametersBase&) = default;` to the base. ~1-line edit. Warning, not error; fold in opportunistically since the diff sits next to (1) and (2).
+2. **`source/VIEW/DIALOGS/modifyRepresentationDialog.C:106-107`** — Qt 6 `-Wdeprecated-declarations` on `QMessageBox::critical(QWidget*, QString, QString, int, int, int)` (six-int legacy overload). **Fix:** switch to the `StandardButtons` overload: `QMessageBox::critical(this, tr("BALLView"), msg, QMessageBox::Ok)` — drops the trailing `Qt::NoButton` default-button slot (no `StandardButtons` analog; `Ok` is single-button default). Warning, not error; folded in opportunistically. Commit `2497369`. (Note: `dockDialog.C`, `dockResultDialog.C` carry the same deprecated **constructor** overload — different signature, separately tracked in Phase 999.22 census.)
 
-**Out of scope:**
-- The whole-tree Tier-C warning cleanup — that remains Phase 999.22 (census-only).
-- Any structural fix to the `MMFF94ParametersBase` rule-of-three story beyond defaulting copy ctor (full rule-of-five conversion is v2.0 substrate work, not patch-release shaped).
-- PCH ordering changes — defect 1 is fixed at the source site, not by reshuffling PCH includes.
+3. **`include/BALL/MOLMEC/MMFF94/MMFF94Parameters.h:52`** — `-Wdeprecated-copy` on `MMFF94ESParameters` / `MMFF94VDWParameters` / `MMFF94PlaneParameters` copy ctors because base class `MMFF94ParametersBase` has user-provided `operator=` but no user-provided copy ctor (rule-of-three violation). **Fix:** add `MMFF94ParametersBase(const MMFF94ParametersBase&) = default;` to the base — pairs at the inheritance root so all derived classes inherit the explicit pairing. Warning, not error; folded in opportunistically. Commit `b98b63a`.
 
-**Estimated effort:** ~30 minutes total (3 edits + commit + CI verify coverage tile flips green). Single-plan phase.
+**Verifying run:** [25968988067](https://github.com/BALL-Project/ball/actions/runs/25968988067) on commit `c0d439c` — all 8 jobs green, including `coverage (Linux, gcov, non-blocking)` for the first time in the v1.6-modernization branch's recorded history (✓ Build BALL + tests, ✓ Run test suite under coverage, ✓ Generate coverage report).
 
-**Requirements:**
-- `COV-CLEAN-01` — coverage Linux build compiles end-to-end (Build BALL + tests step ✓ on v1.6-modernization HEAD).
-- `WARN-VIEW-ENDL-01` — `networkPreferences.C` uses `std::endl` (no unqualified `endl` survives the diff).
-- `WARN-VIEW-QMSGBOX-01` — `modifyRepresentationDialog.C` `QMessageBox::critical` call uses the `StandardButtons` overload.
-- `WARN-MMFF94-COPY-01` — `MMFF94ParametersBase` declares explicit `= default` copy ctor; `-Wdeprecated-copy` does not fire on `MMFF94ESParameters`.
+**Out of scope (preserved for v2.0 / Phase 999.22):**
+- Whole-tree Tier-C warning cleanup — remains Phase 999.22 (census-only).
+- Full rule-of-five conversion of `MMFF94ParametersBase` — v2.0 substrate work, not patch-release shaped.
+- PCH ordering changes — defect 1 was fixed at the source site, not by reshuffling PCH includes.
+- The other `QMessageBox` constructor-form deprecations in `dockDialog.C` / `dockResultDialog.C` (different overload, different surface).
 
-To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
-
-**Plans:** 0 (single plan when promoted).
-
-**Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies; trivially co-landable with Phases 999.26 (atom.h C4910 suppress) and 999.23 (CIF grammar audit) as the "v1.6.2 small-wins bundle."
+**Requirements (delivered):**
+- `COV-CLEAN-01` ✓ — coverage Linux build compiles end-to-end (Build BALL + tests ✓ on `c0d439c`).
+- `WARN-VIEW-ENDL-01` ✓ — `networkPreferences.C` uses `std::endl`; no unqualified `endl` in file.
+- `WARN-VIEW-QMSGBOX-01` ✓ — `modifyRepresentationDialog.C` uses `StandardButtons` overload.
+- `WARN-MMFF94-COPY-01` ✓ — `MMFF94ParametersBase` declares explicit `= default` copy ctor; `-Wdeprecated-copy` no longer fires on `MMFF94ESParameters` / siblings.
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+- [x] Fix-and-land trio executed inline (3 commits: `78ecda5`, `2497369`, `b98b63a`) — COMPLETE 2026-05-16
 
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
