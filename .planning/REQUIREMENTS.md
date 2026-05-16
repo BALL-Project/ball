@@ -95,7 +95,7 @@ Added 2026-05-16 when v1.6.2 milestone opened. Each REQ maps to one of the 7 in-
 - [x] **BUILD-ACCEL-01** (Phase 999.16): `target_precompile_headers(BALL PRIVATE ...)` + `target_precompile_headers(VIEW PRIVATE ...)` wired with auditable header sets; ccache `sloppiness = pch_defines,time_macros,include_file_mtime` configured on all 3 CI runners; cold-cache Windows Build step measurably reduced (target ≥15%); decision documented in `cmake/PCH.md`
 - [x] **BUILD-ACCEL-02** (Phase 999.17): Windows CMake build tree (`build/ci-windows/{CMakeCache.txt,CMakeFiles/,build.ninja,vcpkg_installed/}`) cached across CI runs via `actions/cache`, keyed on hash of `CMakeLists.txt`+`cmake/**`+`vcpkg.json`+`CMakePresets.json`; warm-cache `Configure (Windows)` step collapses from ~2.5 min to seconds
 - [x] **BUILD-ACCEL-03** (Phase 999.18): CI workflow triggers are path-aware (planning-only / doc-only changes skip the build matrix); concurrency groups cancel obsolete in-flight runs on rapid pushes to the same branch
-- [ ] **BUILD-ACCEL-04** (Phase 999.19): Per-TU build profiling artifact (Ninja `.ninja_log` + parsed timing breakdown) uploaded as a workflow artifact for every Build job; identifies compile-time outliers for future targeted optimization
+- [x] **BUILD-ACCEL-04** (Phase 999.19): Per-TU build profiling artifact (Ninja `.ninja_log` + parsed timing breakdown) uploaded as a workflow artifact for every Build job; identifies compile-time outliers for future targeted optimization
 - [ ] **BUILD-ACCEL-05** (Phase 999.20): GitHub Actions artifact pins bumped — `upload-artifact@v4 → v6`, `download-artifact@v4 → v7`; CI still green on a tri-OS run post-bump
 
 ### Source-level + cleanup
@@ -208,7 +208,7 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | BUILD-ACCEL-01 | Phase 999.16 — Build acceleration: PCH | Complete (v1.6.2, 2026-05-16) — Windows cold -35.6% (4818s→3103s), Linux -15%, macOS -13% (AppleClang excluded) |
 | BUILD-ACCEL-02 | Phase 999.17 — Build acceleration: Windows tree cache | Complete (v1.6.2, 2026-05-16) — warm Configure -57.7% (149s→63s); restore-key fallback on structural change 76s |
 | BUILD-ACCEL-03 | Phase 999.18 — CI hygiene: path-aware triggers + concurrency | Complete (v1.6.2, 2026-05-16) — paths-ignore lands in d10da9a (+doc/** top-up); de94e86 docs-only push empirically skipped CI |
-| BUILD-ACCEL-04 | Phase 999.19 — CI hygiene: per-TU build profiling artifact | Pending (v1.6.2) |
+| BUILD-ACCEL-04 | Phase 999.19 — CI hygiene: per-TU build profiling artifact | Complete (v1.6.2, 2026-05-16) — ninja-log artifacts (90-day retention) uploaded per platform; top-20 slowest TUs printed inline; baseline data captured (dockResultFile.C top outlier at 14.6s Windows / 7.6s Linux / 4.4s macOS) |
 | BUILD-ACCEL-05 | Phase 999.20 — CI hygiene: action artifact pins v6/v7 | Pending (v1.6.2) |
 | TEST-CLOSE-01 | Phase 9 — Test Suite Triage | Pending (v1.6.2) — triage 3 baseline failures |
 | TEST-CLOSE-02 | Phase 9 — Test Suite Triage | Pending (v1.6.2) — flip CI gatekeeper to blocking |

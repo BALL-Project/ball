@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: OR v1.7)
 status: executing
-stopped_at: Phase 999.18 complete — ready for 999.19
-last_updated: "2026-05-16T17:45:00Z"
-last_activity: 2026-05-16 — Phase 999.18 closed (paths-ignore + doc/** top-up)
+stopped_at: Phase 999.19 complete — ready for 999.20 (artifact pin bumps)
+last_updated: "2026-05-16T19:00:00Z"
+last_activity: 2026-05-16 — Phase 999.19 closed (per-TU ninja-log profiling artifact live; BUILD-ACCEL-04 complete)
 progress:
   total_phases: 40
-  completed_phases: 12
+  completed_phases: 13
   total_plans: 52
-  completed_plans: 48
-  percent: 27
+  completed_plans: 49
+  percent: 28
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.18 — path-aware-ci-triggers (complete); next 999.19 per-TU profiling
+**Current Focus:** Phase 999.19 — per-TU build profiling (complete); next 999.20 artifact pin bumps
 
 ## Current Position
 
-Phase: 999.18 (path-aware-ci-triggers) — COMPLETE
+Phase: 999.19 (per-tu-build-profiling) — COMPLETE
 Plan: 1 of 1
-Status: Phase complete — BUILD-ACCEL-03 marked Complete (paths-ignore landed in d10da9a + doc/** top-up; empirical experiment passed via de94e86 skip)
+Status: Phase complete — BUILD-ACCEL-04 marked Complete (ninja-log artifacts live in CI run 25968675219; 4-platform coverage; top-20 TU print corrected to $4/output_path; include-hidden-files: true required)
 Last activity: 2026-05-16
 
 ## Performance Metrics
@@ -74,6 +74,7 @@ Last activity: 2026-05-16
 | Phase 04.1-config-color-defaults-fix P05 | 10 | 1 tasks | 1 files |
 | Phase 999.16-pch-ball-view P01 | 269 | 3 tasks | 3 files |
 | Phase 999.17-windows-build-tree-cache P01 | ~120 (dominated by CI wall-clock) | 2 tasks | 1 files (ci.yml) + 3 measurement commits |
+| Phase 999.19-per-tu-build-profiling P01 | ~3.5h (dominated by CI wall-clock + parallel-session interference + rate-limit waits) | 2 tasks | 1 files (ci.yml) + 2 Rule-1 deviation commits |
 
 ## Accumulated Context
 

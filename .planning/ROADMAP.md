@@ -1200,7 +1200,7 @@ Plans:
 Plans:
 - [x] [999.18-01-PLAN.md](phases/999.18-path-aware-ci-triggers/999.18-01-PLAN.md) — paths-ignore + controlled-experiment verification — COMPLETE 2026-05-16
 
-### Phase 999.19: Per-TU build profiling artifact (BACKLOG · TARGETED FOR v1.6.2)
+### Phase 999.19: Per-TU build profiling artifact (COMPLETE · 2026-05-16)
 
 **Goal:** Upload Ninja's per-TU build timing log (`build/ci-{platform}/.ninja_log`) as a CI artifact on every run, and generate a top-N-slowest-TUs summary in the Build step output. Today `bbac526` instruments ccache hit/miss counts, but there's no per-TU duration data — so we don't know *which* TUs dominate cold-build time, which makes 999.16's PCH header set selection a guessing game.
 
@@ -1227,7 +1227,7 @@ Plans:
 **Promotion trigger:** Anytime in v1.6.2 cycle; recommended before 999.16. Promote with `/gsd-review-backlog 999.19`.
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+- [x] [999.19-01-PLAN.md](phases/999.19-per-tu-build-profiling/999.19-01-PLAN.md) — ninja-log artifact upload + top-20 TU print per platform — COMPLETE 2026-05-16
 
 ### Phase 999.20: Bump action artifact pins to v6/v7 (BACKLOG · TARGETED FOR v1.6.2)
 
