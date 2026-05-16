@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: OR v1.7)
-status: verifying
-stopped_at: Phase 4.1 context gathered
-last_updated: "2026-05-16T17:30:00Z"
-last_activity: 2026-05-16
+status: executing
+stopped_at: Phase 999.18 complete — ready for 999.19
+last_updated: "2026-05-16T17:45:00Z"
+last_activity: 2026-05-16 — Phase 999.18 closed (paths-ignore + doc/** top-up)
 progress:
   total_phases: 40
-  completed_phases: 11
+  completed_phases: 12
   total_plans: 52
-  completed_plans: 47
-  percent: 26
+  completed_plans: 48
+  percent: 27
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.17 — windows-build-tree-cache (complete)
+**Current Focus:** Phase 999.18 — path-aware-ci-triggers (complete); next 999.19 per-TU profiling
 
 ## Current Position
 
-Phase: 999.17 (windows-build-tree-cache) — COMPLETE
+Phase: 999.18 (path-aware-ci-triggers) — COMPLETE
 Plan: 1 of 1
-Status: Phase complete — BUILD-ACCEL-02 marked Complete
+Status: Phase complete — BUILD-ACCEL-03 marked Complete (paths-ignore landed in d10da9a + doc/** top-up; empirical experiment passed via de94e86 skip)
 Last activity: 2026-05-16
 
 ## Performance Metrics

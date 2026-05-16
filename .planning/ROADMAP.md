@@ -1195,8 +1195,10 @@ Plans:
 
 **Promotion trigger:** Anytime in v1.6.2 cycle; no dependencies. Promote with `/gsd-review-backlog 999.18`.
 
+**Status (2026-05-16): COMPLETE.** Landed in two commits: `d10da9a` (parallel session — paths-ignore for `.planning/**`, `**.md`, `LICENSE*` on push+pull_request, + bonus linux-arm64 blocking flip) and follow-on `+doc/**` top-up (this plan close). Task 2 (controlled experiment) satisfied empirically: docs-only commit `de94e86` did NOT trigger CI in the GH Actions run list — paths-ignore works as designed. See [999.18-01-SUMMARY.md](phases/999.18-path-aware-ci-triggers/999.18-01-SUMMARY.md).
+
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+- [x] [999.18-01-PLAN.md](phases/999.18-path-aware-ci-triggers/999.18-01-PLAN.md) — paths-ignore + controlled-experiment verification — COMPLETE 2026-05-16
 
 ### Phase 999.19: Per-TU build profiling artifact (BACKLOG · TARGETED FOR v1.6.2)
 
