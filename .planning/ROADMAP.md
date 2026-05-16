@@ -1296,12 +1296,65 @@ Plans:
 **Estimated effort:** **1-2 days** (was 3-5 days when execution was in scope). Single-pass tri-OS build, capture warnings, categorize, write CENSUS.md + 3 backlog stubs. Done.
 
 **Requirements:** `WARN-CENSUS-01` (CENSUS-ONLY) — see `REQUIREMENTS.md` v1.6.2 section.
-**Plans:** 0 (single-task PLAN: "generate CENSUS.md + 3 deferral stubs" when promoted).
+**Plans:** 1 plan executed (census complete 2026-05-16).
 
 **Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies.
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+- [x] [999.22-01-PLAN.md](phases/999.22-warning-census/999.22-01-PLAN.md) - Generate CENSUS.md + file 999.22a/b/c backlog stubs
+
+### Phase 999.22a: Mechanical Tier-C warning fixes (BACKLOG · TARGETED FOR v1.7)
+
+**Goal:** Execute the (a) mechanical-fix subset of the 999.22 Tier-C warning census — `-Wdeprecated-copy` `= default`-ing on MMFF94 parameter structs (create.h, cosineTorsion.h, scattered MOLMEC/FORMAT/NMR/QSAR), Qt 6 API migrations (`QMouseEvent::x()/.y()` → `position()`, deprecated dialog APIs, Eigen SVD API), sprintf → snprintf on KCFFile.C/logStream.C/GAMESSDatFile.C residuals. Per CENSUS.md, **~161 `-Wdeprecated-copy`** + **~65 `-Wdeprecated-declarations`** = **~226 warnings** (~73% of the remaining Tier-C surface).
+
+**Why now (v1.7):** Mechanical formula-driven; CI-bot safe. Bundled with v1.7's UI refresh so the noise floor drops before QSAR/etc warnings get audited per-site (999.22c). Post-parallel-session the surface is small enough (~226 warnings) that execution is a 1-2 day sweep, not the original 3-5 day estimate.
+
+**Scope:** Execute the (a)-tagged rows from `.planning/phases/999.22-warning-census/CENSUS.md` per-file. Re-measure delta vs the census baseline (CI run 25970862407 on commit 0a75edede). **Excludes:** atom.h (`INTENTIONAL — PRESERVE` flag in census; see 05.1-07/08-SUMMARY.md rationale). Excludes (b) and (c) categories. Excludes renderTarget.h/renderWindow.C PixelFormat cluster (categorized as (b) — Phase 999.6 dissolves them).
+
+**Requirements:** carries no new REQ ID; satisfies the v1.7 follow-on for WARN-CENSUS-01.
+**Estimated effort:** 1-2 days (per category × per file mechanical pass + tri-OS green CI re-verify). Original 3-5 day estimate was pre-parallel-session; actual surface is ~6× smaller.
+**Plans:** 0 (single-task PLAN when promoted; uses CENSUS.md as the work list).
+**Promotion trigger:** anytime in v1.7 cycle.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog in v1.7 cycle)
+
+### Phase 999.22b: Fixed-function OpenGL deprecation warning cleanup (BACKLOG · v2.0 · BLOCKED-BY-999.6)
+
+**Goal:** Execute the (b) defer-to-v2.0 subset of the 999.22 census — fixed-function OpenGL deprecation warnings (**~125 instances** per CENSUS.md) emitted from `include/BALL/VIEW/RENDERING/renderTarget.h` (PixelFormat, 123 instances across 41 TUs) and `source/VIEW/RENDERING/renderWindow.C` (2 instances). Phase 999.6 PIPE-01 renderer rewrite will delete these call sites.
+
+**Why blocked-by-999.6:** Cleaning these in v1.6.x or v1.7 is wasted work — the `PixelFormat` struct in renderTarget.h and the entire fixed-function rendering path are targeted for deletion/replacement in the 999.6 PIPE-01 rewrite. Either the 999.6 rewrite naturally zeroes them out (best case) or a 1-day cleanup sweep handles the residual after 999.6 lands.
+
+**Scope:** Run as a follow-up to 999.6 PIPE-01 (NOT before). Re-measure (b)-tagged rows from CENSUS.md post-999.6 — most should be gone (renderTarget.h itself may be deleted or rewritten). Any residual: clean per the mechanical formula in 999.22a (add `= default` copy-ctor to `PixelFormat` or its successor class).
+
+**Requirements:** carries no new REQ ID; satisfies the v2.0 follow-on for WARN-CENSUS-01.
+**Estimated effort:** 0-1 days post-999.6 (mostly verification that 999.6 did the work; small cleanup of residuals if any).
+**Plans:** 0 (single-task PLAN when promoted).
+**Promotion trigger:** AFTER Phase 999.6 (PIPE-01) lands. Do NOT promote earlier.
+
+Plans:
+- [ ] TBD (promote AFTER Phase 999.6 PIPE-01 lands)
+
+### Phase 999.22c: Per-site code review for non-mechanical Tier-C warnings (BACKLOG · TARGETED FOR v1.7)
+
+**Goal:** Execute the (c) defer-to-v1.7 per-site review subset of the 999.22 census — **~14 `-Wdeprecated-copy`** + **~28 `-Wdeprecated-declarations`** + **~69 `-Wunused-comparison`** = **~111 warnings** where intent or correctness questions block a mechanical fix. Includes:
+- `source/VIEW/DIALOGS/dockDialog.C` — `RadiusRuleProcessor`/`ChargeRuleProcessor` copy-assigned in dialog code; copy semantics may be unintentional
+- `include/BALL/MOLMEC/COMMON/forceFieldComponent.h` — ForceFieldComponent copy semantics affect all MOLMEC subclasses; non-trivially safe to default
+- `include/BALL/VIEW/KERNEL/message.h` — Message base class copy in the COMPOSITE event pipeline; may have load-bearing semantics
+- `include/BALL/DOCKING/GENETICDOCK/geneticIndividual.h` + `.C` — `GenericGene` deprecated attribute; callers need per-site migration verification
+- `test/EnumeratorIndex_test.C` + `Substring_test.C` + `ConstRandomAccessIterator_test.C` + `Bit_test.C` — `-Wunused-comparison` in test code; could be intentional test idioms
+
+**Why now (v1.7):** Each site needs a real review — copy-semantics intentional or accidental, deprecated class migration path available or blocked, comparison idiom in tests intentional or bug. Bundles cleanly with v1.7's UI refresh because the audit cadence (slow, deliberate) matches.
+
+**Scope:** Per-site review of (c)-tagged rows from CENSUS.md. Per row: keep-as-is + annotate (intentional), fix mechanically (recategorize as 999.22a-residual), or fix per-site with rationale comment.
+
+**Requirements:** carries no new REQ ID; satisfies the v1.7 follow-on for WARN-CENSUS-01.
+**Estimated effort:** 1-2 days (slower than 999.22a because it's per-site reasoning, not formula).
+**Plans:** 0 (single-task PLAN when promoted).
+**Promotion trigger:** v1.7 cycle. Can run in parallel with 999.22a; reviews different files.
+
+Plans:
+- [ ] TBD (promote with /gsd-review-backlog in v1.7 cycle)
 
 ### Phase 999.26: Suppress residual C4910 on atom.h (BACKLOG · TARGETED FOR v1.6.2)
 
