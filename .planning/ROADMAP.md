@@ -1370,24 +1370,40 @@ Plans:
 Plans:
 - [ ] TBD (promote first thing when v1.7 tags — KERNEL is the v2.0 lead phase. Co-sequenced with the 4 v2.0 substrate phases [999.6/9/11/12], which can run in parallel with K2+K3 after K0+K1 lands.)
 
-### Phase 999.25: v1.7 closure documentation pass + v1.6 → v1.7 retrospective + audit-procedure capture (BACKLOG · TARGETED FOR v1.7 CLOSURE)
+### Phase 999.25: v1.7 closure documentation pass + **v1.4 → v1.7** retrospective + audit-procedure capture (BACKLOG · TARGETED FOR v1.7 CLOSURE)
 
-**Goal:** At v1.7 close, do a deliberate documentation pass capturing three things: (1) audit-procedure lessons learned from the 2026-05 audit cycle (so future audits don't trip on the same stale-doc traps), (2) a retrospective comparing v1.6 baseline (frozen-2022) vs v1.7 delivered (UI refresh + packaging + bake-off + all the v1.6.x patches in between), (3) user-facing docs cleanup if any tutorials/READMEs/build instructions are still pre-v1.6 era.
+**Goal:** At v1.7 close, do a deliberate documentation pass capturing three things: (1) audit-procedure lessons learned from the 2026-05 audit cycle (so future audits don't trip on the same stale-doc traps), (2) a **v1.4 → v1.7 retrospective** comparing BALL's last properly-documented release era (~2002-2010 CVS-era state, with `doc/TUTORIAL/*` carrying `$Id$` strings dating to 2002-2004) against v1.7 delivered (UI refresh + packaging + all the v1.6.x modernization in between), (3) user-facing docs cleanup — the tutorials/READMEs/build instructions that have NOT been touched since the v1.4 era.
 
-**Why v1.7 closure (not v1.6.2 or v2.0):** v1.6.x is patch-shape so adding a retrospective there muddies the strict-corrective scope. v2.0 is the substrate bundle — too early for a v1.x retrospective. v1.7 close is the natural moment: v1.6 → v1.7 modernization is complete; v2.0 substrate rewrite is the next big break.
+**Why v1.4 (not v1.6) as the retrospective baseline:** The v1.6 modernization treated the 2022 git-history baseline (`d85d2dd`, "[CMake] Disable MPI support by default") as its starting point — but BALL's user-facing docs are far older. `doc/TUTORIAL/` files carry CVS `$Id$` keywords from 2002-2004 (e.g., `$Id: tutorial2.C,v 1.4 2002/02/27 12:25:08 sturm Exp $`); README, BUILD-* instructions reference deprecated workflows (XDR, `ball_contrib`, SIP 4, Qt 4/5 paths). v1.4 was the last "BALL is freshly documented" era; v1.5, v1.6, the long freeze, and v1.6.x modernization all happened without a corresponding docs refresh. v1.7 closure is the right moment to acknowledge the actual ~20-year arc and update the docs against the modernized reality.
+
+**Why v1.7 closure (not v1.6.2 or v2.0):** v1.6.x is patch-shape; adding a 20-year-arc retrospective there muddies the strict-corrective scope. v2.0 is the substrate-modernization bundle — too early for a v1.x retrospective. v1.7 close is the natural moment: v1.4 → v1.7 modernization arc is conceptually complete; v2.0 substrate rewrite is the next big break, and the v1.x docs should be coherent before that break lands.
 
 **Scope:**
+
 1. **Audit-procedure doc** (`docs/audit-procedure.md` or `.planning/audit-procedure.md`) — capture the lessons from the 2026-05 audit cycle:
    - Verify implementation against source, not planning docs (ContourSurface false-positive lesson)
    - Cross-check VERIFICATION.md against sibling HUMAN-UAT.md before treating findings as current (CR-01/02/03 false-positive lesson)
    - Resolution-log frontmatter pattern (added to 05-VERIFICATION.md in commit `f176b8b`) — apply consistently for new phase verifications
    - When in doubt, grep + read code; don't trust 30-day-old docs
-2. **v1.6 → v1.7 retrospective** (`.planning/retrospective-v1.6-v1.7.md`) — what shipped per phase, what slipped, what got deferred to v2.0, lessons learned per release. Patterned on standard project retrospectives. ~3-5 pages.
-3. **User-facing docs audit** — `doc/TUTORIAL/*.tex`, `README.md`, `BUILD-*.md`, any `doc/*.pdf` references — check for pre-v1.6 references (Qt 5 mentions, `ball_contrib` mentions, SIP 4 mentions, "make sure XDR is installed" mentions). Update or mark deprecated.
 
-**Estimated effort:** 2-4 days. Mostly writing + grep-then-read passes. Could split into a writing-heavy first day + audit-passes across remaining days.
+2. **v1.4 → v1.7 retrospective** (`.planning/retrospective-v1.4-v1.7.md`) — capture the full ~20-year modernization arc:
+   - **Era baselines:** v1.4 (~2002-2010 CVS-era, the last "freshly documented" release; build system was CVS + Autotools; Qt 3; Python 2 SIP 4; ball_contrib in tree; XDR-based persistence). v1.7 (2026; CMake + Homebrew/vcpkg; Qt 6.5; Python 3.12+; no ball_contrib; tri-OS CI; signed installers).
+   - **Per-subsystem deltas:** build system (CVS+Autotools → CMake+vcpkg), language (C++98/03 → C++17), GUI (Qt 3 → Qt 6.5), Python (SIP 4 → autowrap/Cython or nanobind — depending on Phase 6 bake-off), GL (fixed-function → planned QRhi), packaging (manual builds → notarized macOS + signed Windows installers), CI (none → tri-OS GH Actions matrix + coverage + JUnit), tests (manual → ctest gatekeeper).
+   - **Milestone summary** for v1.6 line (10 phases, 6 patches) + v1.7 line (UI refresh + packaging).
+   - **What got deferred to v2.0** — KERNEL redesign (the substrate that v1.x preserved); REST API rewrite; deprecated-code removal; YAML config; gemmi mmCIF.
+   - **Lessons learned per release** — the v1.6.1 strict-corrective approach worked; the v1.6.2 build-acceleration cluster bought 87× Windows CI speedup; the audit-doc trap (stale docs misleading audits) recurred twice in the 2026-05 cycle.
+   - Patterned on standard project retrospectives. ~5-8 pages.
 
-**Why this matters:** The 2026-05 audit cycle exposed two false-positive backlog entries (ContourSurface, CR-01/02/03) both rooted in stale planning docs that disagreed with source. Capturing the procedure now reduces the cost of future audits. The retrospective is project-management hygiene; the user-facing docs audit catches what v1.6.x patches accumulated against pre-v1.6 documentation.
+3. **User-facing docs audit** — focus on docs that haven't been touched since the v1.4 era. Signals to grep for:
+   - **CVS `$Id$` keywords** in `doc/TUTORIAL/`, `doc/examples/` — anything with a year < 2018 is suspect; verify before declaring obsolete.
+   - **Deprecated-workflow references:** "make sure XDR is installed", `ball_contrib`, SIP 4 / pyqt4 / pyqt5, Qt 4 / Qt 5 build paths, `qmake`, fixed-function GL tutorials.
+   - **Tutorial code samples** in `doc/TUTORIAL/*.tex` + `doc/examples/TUTORIAL/*.C` — do they still compile against the v1.7 API? Probably not. Either update samples, mark as historical, or delete.
+   - **README.md + BUILD-*.md** — these are the user's first contact. Verify build commands work against v1.7 reality on all 3 OSes.
+   - **`data/` references** — file format docs need a check against current support.
+
+**Estimated effort:** 4-7 days (was 2-4 for v1.6→v1.7 scope; expanded for the longer arc). Mostly writing + extensive grep-then-read passes against `doc/TUTORIAL/`. Could split into a writing-heavy first 2 days (audit-procedure + retrospective) + 3-5 days of user-facing docs audit + targeted updates.
+
+**Why this matters:** The 2026-05 audit cycle exposed two false-positive backlog entries (ContourSurface, CR-01/02/03) both rooted in stale planning docs that disagreed with source. Capturing the procedure now reduces the cost of future audits. The v1.4 → v1.7 retrospective is project-management hygiene; the user-facing docs audit catches ~20 years of doc-rot that the v1.6 modernization deliberately scoped out (the modernization was code-focused; docs were carry-forward).
 
 **Requirements:** TBD (likely `DOC-V17-01: closure docs published`).
 **Plans:** 0 (single PLAN with three tasks when promoted).
