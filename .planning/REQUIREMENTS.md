@@ -92,7 +92,7 @@ Added 2026-05-16 when v1.6.2 milestone opened. Each REQ maps to one of the 7 in-
 
 ### Build acceleration cluster
 
-- [ ] **BUILD-ACCEL-01** (Phase 999.16): `target_precompile_headers(BALL PRIVATE ...)` + `target_precompile_headers(VIEW PRIVATE ...)` wired with auditable header sets; ccache `sloppiness = pch_defines,time_macros,include_file_mtime` configured on all 3 CI runners; cold-cache Windows Build step measurably reduced (target ≥15%); decision documented in `cmake/PCH.md`
+- [x] **BUILD-ACCEL-01** (Phase 999.16): `target_precompile_headers(BALL PRIVATE ...)` + `target_precompile_headers(VIEW PRIVATE ...)` wired with auditable header sets; ccache `sloppiness = pch_defines,time_macros,include_file_mtime` configured on all 3 CI runners; cold-cache Windows Build step measurably reduced (target ≥15%); decision documented in `cmake/PCH.md`
 - [ ] **BUILD-ACCEL-02** (Phase 999.17): Windows CMake build tree (`build/ci-windows/{CMakeCache.txt,CMakeFiles/,build.ninja,vcpkg_installed/}`) cached across CI runs via `actions/cache`, keyed on hash of `CMakeLists.txt`+`cmake/**`+`vcpkg.json`+`CMakePresets.json`; warm-cache `Configure (Windows)` step collapses from ~2.5 min to seconds
 - [ ] **BUILD-ACCEL-03** (Phase 999.18): CI workflow triggers are path-aware (planning-only / doc-only changes skip the build matrix); concurrency groups cancel obsolete in-flight runs on rapid pushes to the same branch
 - [ ] **BUILD-ACCEL-04** (Phase 999.19): Per-TU build profiling artifact (Ninja `.ninja_log` + parsed timing breakdown) uploaded as a workflow artifact for every Build job; identifies compile-time outliers for future targeted optimization

@@ -1127,7 +1127,7 @@ Plans:
 - Switching the compiler-launcher integration (clang-cl, distcc, sccache cloud backend) — separate phases if pursued.
 
 **Requirements:** `BUILD-ACCEL-01` — see `REQUIREMENTS.md` v1.6.2 section.
-**Plans:** 0 plans (5 tasks sketched above; would run as a single PLAN.md when promoted).
+**Plans:** 1/1 plans complete
 
 **Estimated effort:** 0.5-1 day. Wiring is ~20 lines of CMake; the time is in picking the right header set + measuring delta cleanly under the concurrency-group churn that bit the Phase 999.2 measurements.
 
