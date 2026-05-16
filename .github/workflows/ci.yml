@@ -657,14 +657,33 @@ jobs:
 
       - name: Install dependencies + gcovr
         run: |
+          # Phase 5.1 carry-forward (2026-05-16): apt's qt6-base-dev on
+          # Ubuntu 24.04 is 6.4.2 — BELOW the D-01 6.5 LTS floor in
+          # CMakeLists.txt. The Qt 6 install moves to jurplel/install-qt-action
+          # in the next step (mirrors the regular Linux build job, which
+          # had the same issue resolved by Phase 5 / Plan 05-04 D-02).
+          # Don't install apt's qt6-* here — would just waste disk +
+          # confuse find_package's search path.
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            cmake make g++ ccache \
-            qt6-base-dev qt6-base-dev-tools qt6-tools-dev qt6-tools-dev-tools libqt6opengl6-dev \
+            cmake make g++ ccache ninja-build \
             libboost-all-dev libeigen3-dev libfftw3-dev libtbb-dev libglew-dev \
             libopenbabel-dev libsvm-dev flex bison \
             xvfb mesa-utils libgl1-mesa-dri \
             gcovr lcov
+
+      - name: Install Qt 6 (Linux — jurplel/install-qt-action / aqtinstall)
+        # Mirrors the main build job's Qt 6 install — same version pin
+        # (6.5.* / D-01 LTS floor) so the coverage build matches the
+        # blocking build's Qt surface bit-for-bit. `modules:` omitted
+        # per the same finding (aqt v3.3.0 rejects qtbase/qtopengl/qttools
+        # as separately-installable; they're in the default Qt 6 install).
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.5.*'
+          host: 'linux'
+          target: 'desktop'
+          cache: true
 
       - name: Configure (Linux + ENABLE_COVERAGE_TESTING)
         run: |
