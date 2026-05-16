@@ -37,7 +37,7 @@ non-negotiable outcome.
 - [ ] **GSD Phase 4** — Dependency system overhaul: delete `ball_contrib`, Homebrew/system + vcpkg, config-mode `Find*.cmake`, `CMakePresets.json`, feature matrix
 - [ ] **GSD Phase 5** *(orig. "4b")* — Qt 6 migration; deprecated VIEW APIs replaced; compat-profile GL path kept working *(split from the old oversized "Qt 6 + Pipeline")*
 - [ ] **GSD Phase 05.1** — Renderer backend decision spike: prototype GL-core vs QRhi behind the 02.1 boundary; recorded decision *(de-risks the v2 `PIPE-01` rewrite)*
-- [ ] **GSD Phase 6** — Python bindings: decision-first vertical slice (5-10 core classes), then commit to a generator
+- [ ] **GSD Phase 6** — Python bindings autowrap+Cython vs nanobind bake-off (TARGETED FOR v2.1 — FIRST STEP; moved from v1.6.x per 2026-05-16 user direction "PyBALL changes should move to 2.x"). 7-case cross-platform vertical slice per [PYBALLV2.md](PYBALLV2.md) §6. Tool decision is the deliverable; if gates pass, [Phase 999.15](ROADMAP.md) bulk wrap follows in v2.1.
 - [ ] **GSD Phase 8** — Packaging & distribution: notarizable macOS bundle; documented Linux/Windows build-from-source; license review
 - [ ] **GSD Phase 9** — Test suite triage: wire the `test/` tree into `ctest`, triage failures *(the build matrix moved to 02.2)*
 
@@ -57,7 +57,7 @@ non-negotiable outcome.
 
   v2.0 ships when KERNEL v2.0.0 (K0-K3-minimum + K4) AND all four substrate phases complete. KERNEL leads (K0+K1 establish MoleculeStore foundation); the other four substrate phases run in parallel or after K0+K1.
 
-- **2.1 = PyBALL bulk wrap.** [Phase 999.15](ROADMAP.md) wraps the v2.0 MoleculeStore facade per [PYBALLV2.md](PYBALLV2.md); Phase 6 v1.6.x bake-off picks the tool.
+- **2.1 = PyBALL — bake-off + bulk wrap.** First step: [Phase 6](ROADMAP.md) autowrap+Cython vs nanobind bake-off (moved from v1.6.x per 2026-05-16 user direction). Tool decision is the deliverable. Second step (conditional on Phase 6 gates passing): [Phase 999.15](ROADMAP.md) bulk wrap targeting the v2.0 MoleculeStore facade per [PYBALLV2.md](PYBALLV2.md).
 
 - **2.2 = REST API + PyBALL SDK.** [Phase 999.10](ROADMAP.md) — deprecate TCP server/client from libBALL+libVIEW; narrow REST server moves INTO BALLView the application; PyBALL SDK class wraps it for Python users; supersedes 999.3. Sequenced after v2.0 KERNEL + v2.1 PyBALL wrap so REST endpoints target the stable MoleculeStore facade.
 

@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: "Build acceleration + scope-cleanup patch release"
 predecessor: v1.6.1 (tagged 2026-05-16, commit 8e5495a)
-status: "v1.6.1 tagged 2026-05-16; v1.6.2 milestone-context drafted (8 phases + 1 stretch; ~11-21 days effort). Awaiting /gsd-new-milestone v1.6.2 to promote backlog entries to active. Next: pick a Phase 6 sequencing strategy (Open Q #1 in MILESTONE-CONTEXT.md), then promote the build-accel cluster (999.16-999.20) which is the lowest-coupling work."
-stopped_at: v1.6.1 tagged; v1.6.2 ready to start
-last_updated: "2026-05-16T23:00:00.000Z"
+status: "v1.6.1 tagged 2026-05-16; v1.6.2 milestone-context resolved (7 phases + 1 stretch; ~7-13 days effort). Open Qs settled 2026-05-16: Phase 6 PyBALL bake-off → v2.1 (moved out); 999.14 triage first then 5-PR bundle; 999.22 census-only no execution; RELEASE-NOTES drafted at tag time. Ready for /gsd-new-milestone v1.6.2 + per-phase planning starting with build-accel cluster (999.16-999.20)."
+stopped_at: v1.6.2 scope locked; ready for GSD planning
+last_updated: "2026-05-16T23:30:00.000Z"
 progress:
   total_phases: 27
   completed_phases: 9

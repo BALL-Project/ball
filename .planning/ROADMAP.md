@@ -18,7 +18,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 5: Qt 6 Migration + Renderer Backend Spike** - Build against Qt 6 and replace deprecated VIEW APIs (keep the compat-profile GL path working), then a time-boxed renderer-backend decision spike behind the Phase 02.1 boundary *(former Phase 05.1 folded in — it must prototype against Qt 6)* *(complete 2026-05-15; 8 plans 05-01..05-08; SPIKE-01 delivered with documented caveats per the PIPE-01 downstream-init blocker; SPIKE-02 decision: split-pattern — GL-Core for v1.6.x → QRhi for v2)*
 - [x] **Phase 5.1: Build Warnings & Latent Bug Cleanup** - Fix latent bugs and tame the warning surface surfaced by Phase 4's tri-OS CI (C4717 `getline` recursion, C4311 pointer truncation on Windows, C4910 dll-export mismatch, `-Wself-assign-field`, `-Wformat-overflow`); Codex CLI cross-checked. *(inserted 2026-05-15 — captures Phase 4 follow-ups; runs after Phase 5 so Qt 6 deprecation noise clears first; complete 2026-05-15 with 14/14 plans landed — full Tier A bug fixes + Tier B Windows DLL hygiene + Tier D build configuration; retroactive Windows CI validation expected on next clean tri-OS run once the Linux `aqtinstall` Qt 6.5.3 cancellation cascade is fixed separately)*
 - [x] **Phase 999.2: Ninja build generator switch** — Switched all three `ci-*` CMake presets from MSBuild/Make → Ninja so Windows CI stops paying the 77-min MSBuild tax and the already-wired `COMPILER_LAUNCHER=ccache` becomes load-bearing. **Result: Windows Build dropped from 4818s cold → 55s warm (87× speedup; ~98.9% effective ccache hit rate). Windows total job ~4.7min, well under the 10min standing-disable threshold.** Cold-cache builds still ~85min total, but amortized cost across a dev-iteration cycle (1 cold + many warm) is dramatically lower. Pure CI-side tooling change, zero source impact. Verified on CI run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempt 1: cold-cache green; attempt 2: warm-cache 55s Windows Build). See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). Completed 2026-05-16.
-- [ ] **Phase 6: Python Bindings (autowrap+Cython vs nanobind bake-off, TARGETED FOR v1.6.x)** — Empirically decide the binding generator by building both against a 7-case cross-platform BALL slice. Tool decision is the deliverable. Detailed plan: [`PYBALLV2.md`](PYBALLV2.md) §6. If gates pass, [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) fires in v2.1.
+- [ ] **Phase 6: Python Bindings (autowrap+Cython vs nanobind bake-off, TARGETED FOR v2.1 — FIRST STEP OF v2.1)** — Empirically decide the binding generator by building both against a 7-case cross-platform BALL slice. Tool decision is the deliverable. Detailed plan: [`PYBALLV2.md`](PYBALLV2.md) §6. Moved out of v1.6.x to v2.1 per 2026-05-16 user direction ("PyBALL changes should move to 2.x"). Sequenced as the first step of the v2.1 PyBALL milestone, BEFORE [Phase 999.15](#phase-99915-pyball-wrapping-rewrite-backlog--targeted-for-v21--conditional-on-phase-6-bake-off) bulk wrap.
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
 - [ ] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)*
@@ -198,7 +198,7 @@ Plans:
 - [x] 05.1-08-PLAN.md — B3: C4251 STL-members-of-DLL-exported-classes pragma scope decision (re-measure after B1+B2 land; full / narrow / skip) *(complete 2026-05-15; chose D-06 default `full-pragma` per the plan's explicit fallback policy ("If Build never started... apply the default decision — the pragma is safe-by-default and the measurement can be retroactively validated when CI stabilizes") — two consecutive post-B1+B2 Windows CI runs were cancelled mid-build by the unrelated Linux `aqtinstall` Qt 6.5.3 failure (out of scope per plan context), preventing reliable C4251 re-measurement; added `#pragma warning(disable: 4251)` inside the existing `#ifdef BALL_COMPILER_MSVC` block at `include/BALL/COMMON/global.h:54` with a 14-line rationale comment documenting the Phase 4 vcpkg-pin precondition (single MSVC toolchain + STL ABI across libBALL + every client TU) that makes the disable cosmetic-only; the narrow push/pop window at `exception.h:16-19` becomes redundant on Windows but is kept as belt-and-suspenders; local BALL build green via `cmake --build build/ci-macos --target BALL -j 8`; retroactive validation expected on next clean tri-OS CI run; commit 9c34b24; Phase 5.1 now 14/14 complete)*
 
 
-### Phase 6: Python Bindings — autowrap+Cython vs nanobind bake-off (TARGETED FOR v1.6.x)
+### Phase 6: Python Bindings — autowrap+Cython vs nanobind bake-off (TARGETED FOR v2.1 — FIRST STEP)
 
 > **Implementation-ready scope:** [`PYBALLV2.md`](PYBALLV2.md) §6 — the bake-off plan. Read PYBALLV2.md before promoting this phase; the §6 task breakdown (P6-01 SIP behavior inventory + P6-02 autowrap track + P6-03 nanobind track + P6-04 bake-off decision) and the hard stop/pivot gates in PYBALLV2.md §10 are the authoritative scope.
 
@@ -268,7 +268,7 @@ Plans:
 | 5. Qt 6 Migration (4b) + Renderer Backend Spike | 8/8 | Complete — Plans 01-08 complete (CMake bring-up, source renames, QSurfaceFormat compat, CI matrix + Qt5 lint, GL-core spike, QRhi spike + Qt 6 link bring-up, driver-behaviour record, SPIKE-02 decision: GL-Core for v1.6.x → QRhi for v2) | 2026-05-15 |
 | 5.1 Build Warnings & Latent Bug Cleanup | 14/14 | Complete — Tier A: C4717 getline + C4311 pointer-trunc audit + -Wself-assign-field + -Wtautological + -Wformat-overflow CIF + -Wstringop-truncation; Tier B: C4910 BALL_EXPORT vector3/atom + C4834/C4996 GeneticIndividual+regressionModel + B3 C4251 pragma; Tier D: D1 Qt5LinguistTools + D2 Node-20 pin bump + D3 apt-cache narrowing + D4 Windows --config Release + D5 BALLView.app CFBundleIdentifier. **Carry-forward (RESOLVED 2026-05-16):** B3 baseline measured at 3495 → 0 on first clean tri-OS green run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453); see [05.1-08-SUMMARY.md](phases/05.1-build-warnings-and-latent-bugs/05.1-08-SUMMARY.md) + [05.1-UAT.md](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). | 2026-05-15 |
 | **999.2 Ninja build generator switch** | 6/6 | **Complete** (v1.6.1, promoted + landed 2026-05-16) — Windows Build 4818s cold → **55s warm** (87× speedup, ~98.9% effective ccache hit). Windows total job ~4.7min, under the 10min standing-disable threshold. CI verified on run [25953405453](https://github.com/BALL-Project/ball/actions/runs/25953405453) (attempts 1+2). Zero source impact. See [999.2-SUMMARY.md](phases/999.2-ninja-generator-switch/999.2-SUMMARY.md). | 2026-05-16 |
-| 6. Python Bindings (bake-off, v1.6.x) | 0/4 | Not started — autowrap+Cython vs nanobind bake-off per [PYBALLV2.md](PYBALLV2.md) §6; 7-case slice, tri-OS, 7.5 wk | - |
+| 6. Python Bindings (bake-off, v2.1 first step) | 0/4 | Not started — autowrap+Cython vs nanobind bake-off per [PYBALLV2.md](PYBALLV2.md) §6; 7-case slice, tri-OS, 7.5 wk. Moved from v1.6.x → v2.1 per 2026-05-16 user direction ("PyBALL changes should move to 2.x"); runs as FIRST step of v2.1, before 999.15 bulk wrap. | - |
 | 7. Networking Rework | — | Deferred to backlog 999.3 | - |
 | 8. Packaging & Distribution | 0/0 | Not started | - |
 | 9. Test Suite Triage | (partial) | **In Progress (v1.6.2)** — CI wiring + Linux coverage job + PR test-results check landed (commits b2bb718 + 61bf5a7, 2026-05-15); v1.6.0 baseline captured at 99.0% (291/294) on macOS-arm64 with `BALL_DATA_PATH` set. Remaining: triage the 3 baseline failures (`Directory_test`, `AmberFF_test`, `AssignBondOrderProcessor_test2`) + flip gatekeeper from `continue-on-error: true` to blocking once green-list stable. | (in progress) |
@@ -1276,30 +1276,34 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens; trivial fit anywhere in v1.6.2 cycle)
 
-### Phase 999.22: Warning census + (a)-subset cleanup — Tier-C + residual C4910/C4834 (BACKLOG · TARGETED FOR v1.6.2)
+### Phase 999.22: Warning census (CENSUS-ONLY — Tier-C + residual C4910/C4834) (BACKLOG · TARGETED FOR v1.6.2)
 
-**Goal:** Produce a structured census of the deferred Tier-C warning surface (~3700 instances of `-Wdeprecated-copy`, `-Wunqualified-std-cast-call`, `-Wcatch-value` on macOS/Linux + residual 307×C4910 + 9×C4834 on Windows) and execute only the (a)-subset that is "mechanical fix now in a patch release." Defer everything else to v1.7 (real per-site code review) or v2.0 (will dissolve when Phase 999.6 PIPE-01 renderer rewrite lands).
+**Goal:** Produce a structured census of the deferred Tier-C warning surface (~3700 instances of `-Wdeprecated-copy`, `-Wunqualified-std-cast-call`, `-Wcatch-value` on macOS/Linux + residual 307×C4910 + 9×C4834 on Windows). **Census-only scope per 2026-05-16 Open Q3 resolution — no warning execution in v1.6.2.** The census + deferral split-list IS the deliverable; actual warning fixes land later per category.
 
-**Why census-and-split, not wholesale (per ROADMAP-AUDIT-V1.6.2.md §A1 + Codex adversarial review):** wholesale ~3700-warning cleanup is not patch-release shape. Source planning docs say "v1.6.2 OR v1.7" — split decision lives in this census, not in pre-commitment. Many of these will vanish when Phase 999.6 rewrites the renderer; cleaning them now would be wasted work.
+**Why census-only (per 2026-05-16 Open Q3 resolution):** earlier audit draft proposed census + execute the mechanical (a)-subset. User direction: do census-only, file 3 deferral backlog stubs, ship v1.6.2 with no actual warning reduction. Cheapest scope; preserves the patch-release shape; defers the real cleanup decisions to the right milestone targets.
 
-**Scope:**
-1. **Census** (`.planning/phases/999.22-warning-census/CENSUS.md`): full breakdown per warning category × file path × likely-cause classification:
-   - (a) Mechanical-fix-now-in-v1.6.2 — e.g., `-Wdeprecated-copy` for copy constructors that should be `= default`; simple `-Wcatch-value` lifts. Target: subset small enough to fit a patch.
-   - (b) Defer-to-v2.0 — fixed-function OpenGL deprecation noise that Phase 999.6 dissolves.
-   - (c) Defer-to-v1.7 — needs real per-site code review (correctness/intent questions).
-2. **Execute (a) subset only.** Cap at 1 week of execution; if (a) exceeds the cap during census, push the excess to (c).
-3. **Spin out two follow-up backlog stubs:** "999.22b: warnings deferred to v1.7" and "999.22c: warnings deferred to v2.0 (await 999.6)" — both as bookkeeping entries pointing at the census doc.
-4. **Include residual Windows warnings** in the census: 307×C4910 + 9×C4834 documented in [`05.1-UAT.md:65`](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). Note: `atom.h` documents an intentional warning tradeoff per Phase 5.1 — preserve.
+**Scope (CENSUS-ONLY):**
 
-**Out of scope:**
+1. **Generate the census** at `.planning/phases/999.22-warning-census/CENSUS.md`: full breakdown per warning category × file path × likely-cause classification. Each warning entry tagged with one of:
+   - (a) **Mechanical-fix** — e.g., `-Wdeprecated-copy` for copy constructors that should be `= default`; simple `-Wcatch-value` lifts. Defer to **v1.7** OR a small follow-on v1.6.3 cycle.
+   - (b) **Defer-to-v2.0** — fixed-function OpenGL deprecation noise that Phase 999.6 PIPE-01 renderer rewrite dissolves. Cleaning these in v1.6.x is wasted work.
+   - (c) **Defer-to-v1.7** — needs real per-site code review (correctness/intent questions).
+2. **Include residual Windows warnings:** 307×C4910 + 9×C4834 documented in [`05.1-UAT.md:65`](phases/05.1-build-warnings-and-latent-bugs/05.1-UAT.md). Note: `atom.h` documents an intentional warning tradeoff per Phase 5.1 — flag in census but preserve in code.
+3. **File 3 deferral backlog stubs:**
+   - `999.22a` — execute (a) mechanical-fix subset (target: v1.7 OR a v1.6.3 cycle if one materializes)
+   - `999.22b` — (b) subset, blocked-by-999.6 PIPE-01 renderer rewrite (v2.0 dependent)
+   - `999.22c` — (c) per-site code-review subset (v1.7 alongside the UI refresh)
+
+**Out of scope (per 2026-05-16 Open Q3 resolution):**
+- **Any warning execution** in v1.6.2 — that's what the 3 backlog stubs are for.
 - Anything reachable by the planned Phase 999.6 (PIPE-01) renderer rewrite.
 - Tier-A / Tier-B / Tier-D warnings — those were Phase 5.1 scope and are closed.
 - Bison `-Wconflicts-sr` grammar conflicts — separate Phase 999.23.
 
-**Estimated effort:** Census 2-3 days; (a)-subset cleanup TBD by census but capped at 1 week. **Total: ≤2 weeks.** If census reveals (a) is empty, the phase closes with the two follow-up backlog stubs and zero execution work — that's a valid outcome.
+**Estimated effort:** **1-2 days** (was 3-5 days when execution was in scope). Single-pass tri-OS build, capture warnings, categorize, write CENSUS.md + 3 backlog stubs. Done.
 
-**Requirements:** TBD (likely `WARN-01: tri-OS warning census published + (a) subset closed` on promotion).
-**Plans:** 0 (single PLAN with census-task + execute-(a)-task when promoted).
+**Requirements:** TBD (likely `WARN-01: tri-OS warning census published with 3-way categorization`).
+**Plans:** 0 (single-task PLAN: "generate CENSUS.md + 3 deferral stubs" when promoted).
 
 **Promotion trigger:** anytime in v1.6.2 cycle; no upstream dependencies.
 

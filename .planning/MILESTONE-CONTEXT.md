@@ -36,10 +36,12 @@ landscape gets censused (not all-cleaned).
 > *"v1.6.2: faster CI, cleaner tracker, deferred cleanups closed —
 > patch shape, not feature shape."*
 
-## In scope (8 phases)
+## In scope (7 phases + 1 stretch; revised post-2026-05-16 open-Q resolution)
 
 Drawn from the post-2026-05-16 ROADMAP-AUDIT-V1.6.2.md + roadmap
-discussion outcome. Effort estimates per ROADMAP entries.
+discussion outcome + 2026-05-16 open-questions resolution (see §"Resolved questions" below). Effort estimates per ROADMAP entries.
+
+**Open Q1 resolution:** Phase 6 (PyBALL bake-off) moves OUT of v1.6.x → **v2.1** as the first step of the PyBALL milestone (before [Phase 999.15](ROADMAP.md) bulk wrap). User direction: "PyBALL changes should move to 2.x." v1.6.2 effort drops from 11-21 days to **~7-13 days** with Phase 6 removed; v1.6.2 ships in a tight ~2-week window.
 
 ### Build-acceleration cluster (5 phases, ~3-5 days total)
 
@@ -53,22 +55,23 @@ These five close the remaining marginal wins:
 4. **[Phase 999.19](ROADMAP.md) — Per-TU build profiling artifact** — ninja `.compile_commands.json` + timing breakdown uploaded as a CI artifact. Future-proof for identifying compile-time outliers. ~0.5 day.
 5. **[Phase 999.20](ROADMAP.md) — Bump action artifact pins to v6/v7** — `upload-artifact@v4 → v6`, `download-artifact@v4 → v7`. Was Phase 5.1 D-deferred (cross-breaking-change majors). ~0.5 day.
 
-### Source-level + cleanup (3 phases, ~5-9 days total)
+### Source-level + cleanup (2 phases, ~5-12 days total)
 
-6. **[Phase 6](ROADMAP.md) — Python Bindings (autowrap+Cython vs nanobind bake-off)** per [PYBALLV2.md](PYBALLV2.md) §6 — 7-case cross-platform vertical slice; tool decision is the deliverable. **7.5 weeks** if both tracks run sequentially; **~4 weeks** if 2 engineers parallelize the autowrap and nanobind tracks. Could slip to v1.6.3 if v1.6.2 fills up — the v1.6.x label is forgiving.
-7. **[Phase 9](ROADMAP.md) — Test Suite Triage (close)** — CI wiring already landed in `b2bb718` + `61bf5a7`; baseline at 99.0% (291/294) on macOS with `BALL_DATA_PATH` set. Remaining: triage 3 failures (`Directory_test`, `AmberFF_test`, `AssignBondOrderProcessor_test2`) + flip CI gatekeeper from `continue-on-error: true` to blocking. ~2-3 days.
-8. **[Phase 999.14](ROADMAP.md) — GitHub issue + PR triage + bundled tasks** — (a) 5-category triage of open issues + open PRs (1-3 days); (b) **stale-doc audit** scanning all `*VERIFICATION.md` files for the HUMAN-UAT-disagreement pattern that misled the 2026-05 ROADMAP-AUDIT (0.5 day); (c) **5-PR legacy bundle** (#640 FindXDR, #600 Travis-CI, #554 Omega torsion, #550 hydroxyproline, #546 residue insertion code) — categorize and merge/close per audit-decided plans (2-5 days depending on rebase complexity). Total 3-9 days.
+6. **[Phase 9](ROADMAP.md) — Test Suite Triage (close)** — CI wiring already landed in `b2bb718` + `61bf5a7`; baseline at 99.0% (291/294) on macOS with `BALL_DATA_PATH` set. Remaining: triage 3 failures (`Directory_test`, `AmberFF_test`, `AssignBondOrderProcessor_test2`) + flip CI gatekeeper from `continue-on-error: true` to blocking. ~2-3 days.
+7. **[Phase 999.14](ROADMAP.md) — GitHub issue + PR triage + bundled tasks** (per Open Q2 resolution: **triage first, then 5-PR bundle**) — (a) 5-category triage of open issues + open PRs (1-3 days, runs FIRST against the freshly-tagged v1.6.1 HEAD to clear noise); (b) **stale-doc audit** scanning all `*VERIFICATION.md` files for the HUMAN-UAT-disagreement pattern that misled the 2026-05 ROADMAP-AUDIT (0.5 day, runs alongside triage); (c) **5-PR legacy bundle** (#640 FindXDR, #600 Travis-CI, #554 Omega torsion, #550 hydroxyproline, #546 residue insertion code) — runs LAST after triage clears the categorization (2-5 days depending on rebase complexity). Total 3-9 days.
+
+**Phase 6 (PyBALL bake-off) — moved to v2.1 per Open Q1.** No longer v1.6.x scope. Becomes the first step of the v2.1 PyBALL milestone, sequenced before [Phase 999.15](ROADMAP.md) bulk wrap. PYBALLV2.md §6 + §10 hard stop/pivot gates remain authoritative.
 
 ### Tiny dead-code + grammar cleanups (2 phases, ~1.5-3 days total)
 
-9. **[Phase 999.21](ROADMAP.md) — DockResultFile QtXml dead-code cleanup** — drop the dead `QXmlAttributes` overload that was stubbed under `#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)`. Was Phase 5.1 BLOCKER-A2, never picked up. ~1 hour.
-10. **[Phase 999.22](ROADMAP.md) — Warning census + (a)-subset cleanup** — census of deferred Tier-C warnings (~3700) + residual Windows C4910/C4834. **NOT a wholesale cleanup**; produces a v1.7 split-list + executes only the (a) mechanical-fix-now subset. ~3-5 days. If (a) is empty, phase closes with just the census doc + split-stub backlog entries.
+8. **[Phase 999.21](ROADMAP.md) — DockResultFile QtXml dead-code cleanup** — drop the dead `QXmlAttributes` overload that was stubbed under `#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)`. Was Phase 5.1 BLOCKER-A2, never picked up. ~1 hour.
+9. **[Phase 999.22](ROADMAP.md) — Warning census (CENSUS-ONLY per Open Q3)** — census of deferred Tier-C warnings (~3700) + residual Windows C4910/C4834. **Census-only — no execution.** Produces `.planning/phases/999.22-warning-census/CENSUS.md` + 3 backlog stubs: (a) mechanical-fix-now → deferred to v1.7 OR v2.0 depending on PIPE-01 dependency, (b) defer-to-v2.0-PIPE-01-dissolves, (c) defer-to-v1.7-needs-per-site-review. v1.6.2 ships with no actual warning reduction; the census IS the deliverable. ~1-2 days (was 3-5 with execution).
 
 ### Stretch (defer to v1.7 if v1.6.2 fills up)
 
-11. **[Phase 999.23](ROADMAP.md) — CIF Bison grammar audit** — 3-5 shift-reduce conflicts in the CIF parser (count needs reconciliation). 1-2 days. Defer to v1.7 if v1.6.2 budget tight.
+10. **[Phase 999.23](ROADMAP.md) — CIF Bison grammar audit** — 3-5 shift-reduce conflicts in the CIF parser (count needs reconciliation). 1-2 days. Defer to v1.7 if v1.6.2 budget tight.
 
-**Total v1.6.2 effort estimate:** 11-21 days if Phase 6 runs sequentially in-cycle; substantially less if Phase 6 slips to v1.6.3 (Phase 6 dominates the budget at 7.5 weeks single-engineer / ~4 weeks dual-engineer).
+**Total v1.6.2 effort estimate: ~7-13 days** (build-accel 3-5d + Phase 9 close 2-3d + 999.14 triage 3-9d + 999.21 1h + 999.22 census 1-2d + 999.23 stretch 1-2d). Tight ~2-week patch window. With Phase 6 deferred to v2.x (per Open Q1) and 999.22 reduced to census-only (per Open Q3), the cycle ships substantially faster than the original 11-21 day estimate.
 
 ## Out of scope (defer to v1.7 / v2.x / later)
 
@@ -89,14 +92,15 @@ These five close the remaining marginal wins:
 
 ## Release criteria (proposed)
 
-A v1.6.2 release is shippable when **all six** are true:
+A v1.6.2 release is shippable when **all five** are true (post-2026-05-16 open-Q resolution; was 6; criterion 5 removed because Phase 6 moved to v2.x):
 
 1. **All 5 build-acceleration phases (999.16-999.20) landed** AND CI green on a clean tri-OS run.
 2. **Phase 9 close: CI gatekeeper flipped to blocking** on macOS + Linux; remaining 3 baseline failures either fixed, quarantined, or documented as known-modernization-casualty.
 3. **Phase 999.14 triage complete:** open-issue + open-PR counts reduced to genuinely-actionable set; 5-PR legacy bundle resolved (merge or close per category); stale-doc audit closed.
-4. **Phase 999.21 + 999.22 landed:** DockResultFile dead code removed; Tier-C warning census published + (a) subset cleaned.
-5. **Phase 6 bake-off decision recorded** OR explicitly deferred to v1.6.3 (the tool-choice doc is the deliverable; not all bulk wrap needs to land).
-6. **Both installers attached to the GitHub Release** — Windows zip + macOS arm64 zip — and the GitHub Release is **published**, not draft. (Same criterion as v1.6.1 #6.) Per the v1.6.2 corrective shape, no signing/notarization gate (that's v1.7's Phase 8).
+4. **Phase 999.21 + 999.22 landed:** DockResultFile dead code removed; Tier-C warning census published (census-only per Open Q3 — no warning fixes in v1.6.2; (a)/(b)/(c) deferral stubs filed).
+5. **Both installers attached to the GitHub Release** — Windows zip + macOS arm64 zip — and the GitHub Release is **published**, not draft. (Same criterion as v1.6.1 #6.) Per the v1.6.2 corrective shape, no signing/notarization gate (that's v1.7's Phase 8).
+
+**Release notes (per Open Q4):** `.planning/RELEASE-NOTES-v1.6.2.md` is **drafted at v1.6.2 tag time**, not pre-populated during the cycle. Same shape as v1.6.1's release notes, written from the actual landed work rather than the plan.
 
 ## Carry-over from v1.6.1 STATE
 
@@ -115,22 +119,23 @@ Nothing else from v1.6.1 carries an open-action label into v1.6.2.
 When `/gsd-new-milestone v1.6.2` is run, the resulting changes are:
 
 - **Promote 999.16, 999.17, 999.18, 999.19, 999.20, 999.21, 999.22** from BACKLOG to active.
-- **Promote Phase 6** from active-not-started to active-in-progress (with the bake-off scope per PYBALLV2.md §6).
+- **Phase 6 stays in active-list but retargets v2.1** (per Open Q1 — PyBALL changes move to 2.x; Phase 6 becomes the first step of v2.1, before [999.15](ROADMAP.md) bulk wrap).
 - **Promote Phase 9** from "Not started" to "In Progress" (Phase 9 detail section already records the partial-progress state).
-- **Promote 999.14** from BACKLOG to active (with all 3 bundled subtasks).
+- **Promote 999.14** from BACKLOG to active (with all 3 bundled subtasks; **triage runs first** per Open Q2, then stale-doc audit alongside, then 5-PR bundle as a clean tail).
+- **999.22 scope locked to census-only** per Open Q3 — produces split-list + 3 deferral backlog stubs; no warning execution.
 - **Promote 999.23** to active OR leave in backlog targeting v1.7 (depending on cycle capacity at promotion time).
 - **STATE.md frontmatter:** `milestone: v1.6.1 → v1.6.2`; `status: planning`.
 
-## Open questions
+## Resolved questions (2026-05-16 user decisions)
 
-1. **Phase 6 timing in v1.6.2 — sequential or parallel tracks?** PYBALLV2.md §6 estimates 7.5 weeks sequential. If you want v1.6.2 to ship in a reasonable window, either (a) 2 engineers parallelize autowrap and nanobind tracks (~4 weeks), or (b) Phase 6 slips to v1.6.3 and v1.6.2 ships without the bake-off result. Recommend (a) if a second engineer is available; otherwise (b).
-2. **Phase 999.14 promotion order — triage first, or 5-PR bundle first?** Triage benefits from a stable HEAD; 5-PR bundle is independent rebase work. Recommend triage first (fast, clears noise), then 5-PR bundle as a follow-on.
-3. **Phase 999.22 warning census — wholesale audit or census-only?** Per audit §A1, the explicit scope is census + (a)-subset only (NOT wholesale ~3700 cleanup). Confirm that's still the call before promotion.
-4. **v1.6.2 release notes shape** — does v1.6.2 get its own RELEASE-NOTES-v1.6.2.md (mirror the v1.6.1 pattern), or fold into the existing release-notes infrastructure?
+1. **Phase 6 timing → MOVED OUT of v1.6.x to v2.1** (user direction: "PyBALL changes should move to 2.x"). Becomes the first step of the v2.1 PyBALL milestone, before [999.15](ROADMAP.md) bulk wrap. v1.6.2 effort drops to ~7-13 days as a result.
+2. **Phase 999.14 promotion order → triage first, then 5-PR bundle.** Stale-doc audit runs alongside triage. 5-PR bundle is the clean tail.
+3. **Phase 999.22 scope → census-only, no execution.** Produces the census doc + 3 deferral backlog stubs ((a) mechanical defer to v1.7/v2.0, (b) defer-to-v2.0-PIPE-01-dissolves, (c) defer-to-v1.7-needs-per-site-review). v1.6.2 ships with no actual warning reduction.
+4. **v1.6.2 release notes → mirror v1.6.1 pattern but draft at tag time, not now.** No `.planning/RELEASE-NOTES-v1.6.2.md` file pre-populated during the cycle; written from landed work when v1.6.2 is ready to tag.
 
 ## Next action
 
 Run `/gsd-new-milestone v1.6.2` once you're ready to commit. The workflow
 picks this file up and short-circuits its requirements-gathering step.
-The eight (+1 stretch) phases above are ready to promote with
+The seven (+1 stretch) phases above are ready to promote with
 `/gsd-review-backlog 999.NN` per phase as needed.

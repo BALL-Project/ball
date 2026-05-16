@@ -14,7 +14,7 @@ PyBALL today is built on **SIP 4.9** with **237 hand-written `.sip` files** (171
 
 This plan proposes replacing SIP 4 in **two staged phases**:
 
-1. **Phase 6 (kept active in v1.6)**: a real cross-platform bake-off comparing **autowrap+Cython 3** against **nanobind** (and optionally SIP 6 as an incumbent baseline) on the same vertical slice of BALL classes covering all the hard patterns (templates, ownership transfer, exceptions, iterators, Composite/processor callbacks, file I/O, NumPy interop). **Tool decision is the output of Phase 6, not its premise.**
+1. **Phase 6 (TARGETED FOR v2.1, FIRST STEP of v2.1 PyBALL milestone)**: a real cross-platform bake-off comparing **autowrap+Cython 3** against **nanobind** (and optionally SIP 6 as an incumbent baseline) on the same vertical slice of BALL classes covering all the hard patterns (templates, ownership transfer, exceptions, iterators, Composite/processor callbacks, file I/O, NumPy interop). **Tool decision is the output of Phase 6, not its premise.** *(Originally targeted v1.6.x; moved to v2.1 on 2026-05-16 per user direction "PyBALL changes should move to 2.x". Sequenced before [Phase 999.15](ROADMAP.md) bulk wrap.)*
 2. **Phase 999.15 (targeted v2.1)**: the bulk wrap. Only fires after Phase 6 picks a tool AND the chosen tool passes the hard stop/pivot gate (see §10). If autowrap wins → execute the autowrap-specific plan below. If nanobind wins → execute the nanobind-specific variant of the plan (sketched in §11).
 
 **Why this restructuring (the v1 → v2 change):** The honest counter-signal to autowrap is that **pyOpenMS — the canonical autowrap reference — is running a 350-hour GSoC 2026 project explicitly evaluating nanobind as a replacement**, citing "maintenance overhead, compile times, and certain Python integration features" with current autowrap+Cython (source: [openms.de/news/gsoc2026/](https://openms.de/news/gsoc2026/)). This is an *evaluation*, not a migration commitment — autowrap is still actively used and maintained — but the signal cannot be wished away. The right response is to do the same evaluation for BALL ourselves, on a real BALL slice, with the same instrumented criteria, before committing.
@@ -127,7 +127,7 @@ These come from reading BALL headers + .sip files, not from POC build attempts. 
 
 ## 6. Detailed phase plan (revised; bake-off first, then bulk wrap)
 
-### Phase 6 (retained, in v1.6 active list): the bake-off
+### Phase 6 (TARGETED FOR v2.1 FIRST STEP, retained in active list): the bake-off
 
 **Goal:** Empirically pick the binding generator for v2.1's bulk wrap. **The tool decision is the deliverable, not a premise.**
 
@@ -181,7 +181,7 @@ Only fires if Phase 6 passes hard stop/pivot gates. If autowrap+Cython wins, thi
 
 ## 7. Where this slots in the existing roadmap (revised)
 
-- **Phase 6 (Python Bindings) — RETAINED.** Originally scoped as "decide the generator via a vertical slice." v2 confirms that scope and makes it the bake-off described in §6. **Do NOT delete Phase 6 from the active phase list.**
+- **Phase 6 (Python Bindings) — RETAINED, RETARGETED TO v2.1.** Originally scoped as "decide the generator via a vertical slice." v2 confirms that scope and makes it the bake-off described in §6. **Do NOT delete Phase 6 from the active phase list.** *(2026-05-16 update: per user direction "PyBALL changes should move to 2.x", Phase 6 milestone target moved from v1.6.x to v2.1 — first step of the v2.1 PyBALL milestone, before [Phase 999.15](ROADMAP.md) bulk wrap. The bake-off scope itself is unchanged.)*
 - **Phase 999.15 (PyBALL wrapping rewrite — bulk) — CONDITIONAL.** Only fires if Phase 6 passes the hard stop/pivot gates. Target milestone v2.1.
 
 Dependency on other phases:
