@@ -205,7 +205,7 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 | CI-02 | Phase 9 — Test Suite Triage | Pending — CI wiring landed (commits `b2bb718`+`61bf5a7`); 3 failures remain — see TEST-CLOSE-01/02 (v1.6.2) |
 | NET-01 | Deferred (1.6.x) — backlog 999.3 | Deferred |
 | PIPE-01 | Deferred (v2) — backlog 999.6 — *de-risked + scoped by Phase 5 SPIKE-02* | Deferred |
-| BUILD-ACCEL-01 | Phase 999.16 — Build acceleration: PCH | Pending (v1.6.2) |
+| BUILD-ACCEL-01 | Phase 999.16 — Build acceleration: PCH | Complete (v1.6.2, 2026-05-16) — Windows cold -35.6% (4818s→3103s), Linux -15%, macOS -13% (AppleClang excluded) |
 | BUILD-ACCEL-02 | Phase 999.17 — Build acceleration: Windows tree cache | Pending (v1.6.2) |
 | BUILD-ACCEL-03 | Phase 999.18 — CI hygiene: path-aware triggers + concurrency | Pending (v1.6.2) |
 | BUILD-ACCEL-04 | Phase 999.19 — CI hygiene: per-TU build profiling artifact | Pending (v1.6.2) |
