@@ -1,12 +1,13 @@
 ---
-status: awaiting_human_verify
+status: resolved
+resolution: "User confirmed 2026-05-16 — visual recheck on macOS shows the three trigger symptoms (mis-projected cylinders, off-viewport, 0×0 startup error) are all fixed. Phase 2 + Phase 5 render path rewrite (Plans 05-05/06 GL-core spike + render-smoke green on CI run 25953405453) closed the underlying issue. The original Phase 2 bug (renderToBuffer outside paintGL) was the root cause; the post-2026-05-14 fix sweep addressed it."
 trigger: "BALLView renders embedded but ball-and-stick bonds draw as enormous mis-projected cylinders off the viewport edges after QGLWidget->QOpenGLWidget port"
 created: 2026-05-14
-updated: 2026-05-16  # audit annotation; underlying state unchanged
+resolved_at: 2026-05-16
+updated: 2026-05-16
 audit_notes:
-  - "2026-05-16 (ROADMAP-AUDIT-V1.6.2.md §D4): Phase 2 + Phase 5 render path was substantially rewritten post-2026-05-14 (Plan 05-05/06 GL-core spike + render-smoke green on CI run 25953405453). The original Phase 2 bug (renderToBuffer outside paintGL — see Eliminated section below) was fixed. Only the original visual-symptom recheck is outstanding."
-  - "Action required: 30-min macOS visual recheck against the three trigger symptoms (mis-projected cylinders, off-viewport, 0×0 startup error). If symptoms gone, flip `status` to `resolved` and move file to `.planning/debug/resolved/glwidget-port-misprojection.md` (create the dir; it does not exist today). If symptoms persist, escalate as new bug."
-  - "Cannot be auto-closed by audit — requires interactive macOS BALLView launch."
+  - "2026-05-16 (ROADMAP-AUDIT-V1.6.2.md §D4): Phase 2 + Phase 5 render path was substantially rewritten post-2026-05-14 (Plan 05-05/06 GL-core spike + render-smoke green on CI run 25953405453). The original Phase 2 bug (renderToBuffer outside paintGL — see Eliminated section below) was fixed."
+  - "2026-05-16 user visual recheck confirmed all three trigger symptoms gone; status flipped resolved, file moved to .planning/debug/resolved/."
 ---
 
 ## Current Focus
