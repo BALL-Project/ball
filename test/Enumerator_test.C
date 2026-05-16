@@ -124,7 +124,7 @@ RESULT
 CHECK(Iterator end())
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>::Iterator it = enumerator.begin();
-	for ( ; it != enumerator.end(); ++it, counter++)  ; // just count
+	for ( ; it != enumerator.end(); ++it, counter++) { /* just count */ }
 	TEST_EQUAL(enumerator.countVariants(), 10000);
 	
 	TEST_EQUAL(counter, 10000)
@@ -140,7 +140,7 @@ CHECK(ConstIterator end() const )
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>& c_enumerator(enumerator);
 	Enumerator<String, String::iterator, char>::ConstIterator it = c_enumerator.begin();
-	for ( ; it != c_enumerator.end(); ++it, counter++)  ; // just count
+	for ( ; it != c_enumerator.end(); ++it, counter++) { /* just count */ }
 	TEST_EQUAL(counter, 10000)
 RESULT
 

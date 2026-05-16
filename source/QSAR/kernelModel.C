@@ -56,8 +56,7 @@ namespace BALL
 
 		void KernelModel::calculateOffsets()
 		{
-			Eigen::MatrixXd residuals = (K_*training_result_)-Y_;	
-			int no_act = training_result_.cols();
+			Eigen::MatrixXd residuals = (K_*training_result_)-Y_;
 			offsets_ = residuals.colwise().sum() / training_result_.rows();
 		}
 
@@ -95,12 +94,7 @@ namespace BALL
 			
 			ofstream out(filename.c_str());
 			
-			const Eigen::MatrixXd* coeffErrors = validation->getCoefficientStdErrors();
-			bool sterr = 0;
-			if (coeffErrors->cols() != 0)
-			{
-				sterr = 1;
-			}
+			validation->getCoefficientStdErrors();
 			bool centered_data = 0;
 			bool centered_y = 0;
 			if (descriptor_transformations_.cols() != 0)

@@ -231,14 +231,9 @@ namespace BALL
 			ofstream out(filename.c_str());
 			
 			bool centered_data = 0;
-			bool centered_y = 0;
 			if (descriptor_transformations_.cols() != 0)
 			{
 				centered_data = 1;
-				if (y_transformations_.cols() != 0)
-				{
-					centered_y = 1;
-				}
 			}
 			
 			int sel_features = descriptor_IDs_.size();

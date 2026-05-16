@@ -66,7 +66,7 @@ namespace BALL
 		for (Position i = 0; i < ntds.size(); ++i)
 		{
 			bond_assignments.push_back(new FPTBondOrderAssignment_(*this, ntds[i], max_penalty));
-		  Penalty result = bond_assignments[i]->compute();
+		  bond_assignments[i]->compute();
 		}
 
 		// initialize backtracking

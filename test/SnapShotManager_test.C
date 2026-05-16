@@ -80,7 +80,6 @@ RESULT
 CHECK(full_test)
 	System system;
 	PDBFile pfile(BALL_TEST_DATA_PATH(DCDFile_test.pdb));
-	Size nr_of_atoms = system.countAtoms();
 	pfile.read(system);
 	system.getAtom(0)->setPosition(Vector3(1,2,1111));
 	DCDFile dcd(BALL_TEST_DATA_PATH(DCD_test2.dcd), std::ios::in);

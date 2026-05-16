@@ -605,12 +605,8 @@ namespace BALL
 
 		void StageSettings::screenCountChanged(int number)
 		{
-			// first, get the old mappings
-			int old_control = controlScreen_comboBox->currentIndex();
-			int old_left    = leftEyeScreen_comboBox->currentIndex();
-			int old_right   = rightEyeScreen_comboBox->currentIndex();
-
-			// TODO: we need a heuristic to map the old values to sensible new ones...
+			// TODO: capture the current control/left/right combo selections and
+			// heuristically remap them when the screen count changes.
 
 			controlScreen_comboBox->clear();
 			controlScreen_comboBox->addItem(tr("disabled"));

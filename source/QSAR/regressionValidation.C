@@ -246,14 +246,8 @@ namespace BALL
 			{
 				setTestLine(i, i, back_transform); 
 			}
-			testAllSubstances(transform); 
+			testAllSubstances(transform);
 			R2_ = quality_;
-			
-			int col = model_->data->descriptor_matrix_.size();
-			if (!model_->descriptor_IDs_.empty())
-			{
-				col = model_->descriptor_IDs_.size();
-			}
 		}
 
 

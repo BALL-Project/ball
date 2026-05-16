@@ -485,8 +485,6 @@ namespace BALL
 
 					QImage image(width, height, QImage::Format_RGB888);
 
-					Size line_width = width*3;
-
 					QRgb value;
 					for (Position current_line = 0; current_line < height; ++current_line)
 					{

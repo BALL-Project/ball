@@ -113,19 +113,17 @@ RESULT
 CHECK(apply to a protein)
 	SideChainPlacementProcessor scpp;	
 
-	System sys;	
-	PDBFile mol(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in); 
+	System sys;
+	PDBFile mol(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in);
 	mol >> sys;
-	Protein* prot = sys.getProtein(0);
 RESULT
 
 CHECK(apply to a chain)
 	SideChainPlacementProcessor scpp;	
 
-	System sys;	
-	PDBFile mol(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in); 
+	System sys;
+	PDBFile mol(BALL_TEST_DATA_PATH(SideChainPlacementProcessor_test.pdb), std::ios::in);
 	mol >> sys;
-	Chain* chain3 = (sys.getProtein(0)->getChain(2));
 
 RESULT
 

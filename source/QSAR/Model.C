@@ -179,15 +179,14 @@ namespace BALL
 				col = descriptor_IDs_.size();
 			}
 			descriptor_names_.resize(col);
-			bool transform = 0; bool y_transform = 0; 
+			bool transform = 0;
 			if (data->descriptor_transformations_.size() != 0)
 			{
-				transform = 1; 
-				descriptor_transformations_.resize(2, col); 
+				transform = 1;
+				descriptor_transformations_.resize(2, col);
 				if (data->y_transformations_.size() != 0)
 				{
-					y_transformations_.resize(2, data->Y_.size()); 
-					y_transform = 1; 
+					y_transformations_.resize(2, data->Y_.size());
 				}
 			}
 			bool xlabels = 0;

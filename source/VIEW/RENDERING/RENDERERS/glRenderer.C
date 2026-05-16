@@ -91,6 +91,7 @@ namespace BALL
 				right_(1),
 				top_(1),
 				bottom_(-1),
+				pixel_ratio_(1.f),
 				GL_spheres_list_(0),
 				GL_tubes_list_(0),
 				GL_boxes_list_(0),
@@ -105,11 +106,6 @@ namespace BALL
 				drawed_other_object_(false),
 				drawed_mesh_(false),
 				GLU_quadric_obj_(0),
-				// Mem-init order MUST match declaration order in glRenderer.h
-				// (pixel_ratio_ at :484 declared BEFORE orthographic_zoom_ at
-				// :522). Swapping these silences -Wreorder; the actual init
-				// sequence is determined by declaration order regardless.
-				pixel_ratio_(1.f),
 				orthographic_zoom_(10.f)
 		{
 		}

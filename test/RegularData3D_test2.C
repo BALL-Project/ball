@@ -15,7 +15,6 @@ using namespace BALL;
 using namespace std;
 
 String filename;
-RegularData3D*	grid;
 
 CHECK([EXTRA]operator >> (instream& os, RegularData3D&))
 RESULT

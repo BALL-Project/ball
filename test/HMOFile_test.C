@@ -154,8 +154,7 @@ RESULT
 
 CHECK(std::vector<String> const& getComments() const)
 	HMOFile const& f_const = f;
-	std::vector<String> const& comments = f_const.getComments();
-	TEST_EQUAL(f.getComments().size(), 1)
+	TEST_EQUAL(f_const.getComments().size(), 1)
 RESULT
 
 CHECK(virtual bool write(Surface const& surface))

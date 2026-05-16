@@ -18,7 +18,6 @@ START_TEST(String)
 using namespace BALL;
 using std::string;
 
-String* s;
 String* s2;
 String halloh("Halloh");
 
