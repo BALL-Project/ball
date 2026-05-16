@@ -1229,7 +1229,7 @@ Plans:
 Plans:
 - [x] [999.19-01-PLAN.md](phases/999.19-per-tu-build-profiling/999.19-01-PLAN.md) — ninja-log artifact upload + top-20 TU print per platform — COMPLETE 2026-05-16
 
-### Phase 999.20: Bump action artifact pins to v6/v7 (BACKLOG · TARGETED FOR v1.6.2)
+### Phase 999.20: Bump action artifact pins to v6/v7 (**COMPLETE** · v1.6.2 · 2026-05-16)
 
 **Goal:** Update GitHub Actions artifact action pins from `actions/upload-artifact@v4` → v6 and `actions/download-artifact@v4` → v7 across all three workflows (`ci.yml`, `release.yml`, and 999.19's new uploads when it lands). Already noted as carried-over deferred work from Phase 5.1 in [MILESTONE-CONTEXT.md:229](.planning/MILESTONE-CONTEXT.md#L229).
 
@@ -1246,17 +1246,15 @@ Plans:
 - Bumping other action pins (`actions/checkout`, `actions/cache`) — those are independent, not part of the carry-over deferred set.
 - Adding new artifact uploads (999.19 territory).
 
-**Requirements:** `BUILD-ACCEL-05` — see `REQUIREMENTS.md` v1.6.2 section.
-**Plans:** 0 plans (4 tasks sketched above; would run as a single PLAN.md when promoted).
+**Requirements:** `BUILD-ACCEL-05` — see `REQUIREMENTS.md` v1.6.2 section. **COMPLETE.**
+**Plans:** 1 plan executed (999.20-01-PLAN.md; 3 tasks).
 
-**Estimated effort:** 0.5 day. Mechanical pin bumps + breaking-change validation.
+**Actual effort:** ~45 min (dominated by CI watch + parallel-session concurrency cancellations).
 
-**Dependencies:** None. Land independently. If 999.19 lands first, its new upload step picks up v6 automatically as part of this phase's sweep.
-
-**Promotion trigger:** Anytime in v1.6.2 cycle. Promote with `/gsd-review-backlog 999.20`.
+**Result:** upload-artifact@v6 (10 sites ci.yml + 2 release.yml), download-artifact@v7 (1 ci.yml + 1 release.yml). No artifact-name collisions. CI run 25970222837 green tri-OS+linux-arm64+coverage. Closes BUILD-ACCEL-05 and the 5-phase build-accel cluster.
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
+- [x] 999.20-01 — action artifact pin sweep v4→v6/v7 (commit 1d3da02 upload, 3cb03c8 download)
 
 ### Phase 999.21: DockResultFile QtXml dead-code cleanup (BACKLOG · TARGETED FOR v1.6.2)
 
