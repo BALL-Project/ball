@@ -17,6 +17,17 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
+#ifdef BALL_UI_V2
+// Phase 999.45 — BALLView Refresh: Workspace consolidation.
+#	include <BALL/VIEW/KERNEL/workspaceManager.h>
+#	include <BALL/VIEW/WIDGETS/projectDock.h>
+#	include <BALL/VIEW/WIDGETS/bottomDrawer.h>
+#	include <QtWidgets/QStatusBar>
+#	include <QtWidgets/QMenu>
+#	include <QtWidgets/QInputDialog>
+#	include <QtWidgets/QLineEdit>
+#	include <QtGui/QAction>
+#endif
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -113,9 +124,29 @@ namespace BALL
 		new PubChemDialog          (this, "PubChemDialog");
 		new UndoManagerDialog      (this, "UndoManagerDialog");
 
-		addDockWidget(Qt::LeftDockWidgetArea, new MolecularControl(this, ((String)tr("Structures")).c_str()));
-		addDockWidget(Qt::LeftDockWidgetArea, new GeometricControl(this, ((String)tr("Representations")).c_str()));
-		addDockWidget(Qt::TopDockWidgetArea,  new DatasetControl(this, ((String)tr("Datasets")).c_str()));
+		// Phase 999.45 — Workspace consolidation. Under BALL_UI_V2 the
+		// 3 project-related controls are tabified into a single
+		// left-rail ProjectDock group (Handover §5.1). Without the
+		// flag (legacy / Classic path) keep the original 5-dock
+		// layout — this IS the Classic preset by definition.
+		MolecularControl* mol_ctrl = new MolecularControl(this, ((String)tr("Structures")).c_str());
+		GeometricControl* geom_ctrl = new GeometricControl(this, ((String)tr("Representations")).c_str());
+		DatasetControl* dataset_ctrl = new DatasetControl(this, ((String)tr("Datasets")).c_str());
+
+#ifdef BALL_UI_V2
+		// All 3 docks need to be in the same dock-area (left) before
+		// tabifyDockWidget can group them. ProjectDock::tabify moves
+		// DatasetControl off the top area into the left tab group.
+		addDockWidget(Qt::LeftDockWidgetArea, mol_ctrl);
+		addDockWidget(Qt::LeftDockWidgetArea, geom_ctrl);
+		addDockWidget(Qt::LeftDockWidgetArea, dataset_ctrl);
+		VIEW::ProjectDock::tabify(this, mol_ctrl, geom_ctrl, dataset_ctrl);
+#else
+		addDockWidget(Qt::LeftDockWidgetArea, mol_ctrl);
+		addDockWidget(Qt::LeftDockWidgetArea, geom_ctrl);
+		addDockWidget(Qt::TopDockWidgetArea,  dataset_ctrl);
+#endif
+
 		DatasetControl* dc = DatasetControl::getInstance(0);
 		dc->registerController(new RegularData3DController());
 		dc->registerController(new TrajectoryController());
@@ -124,8 +155,13 @@ namespace BALL
 
 //  NOTE: raytraceable grids have been deferred until 1.4/2.0
 //		dc->registerController(new RaytraceableGridController());
-		
+
+#ifndef BALL_UI_V2
+		// Classic-only: DatasetControl ships hidden by default in the
+		// legacy layout. Under BALL_UI_V2 it lives as a tab inside
+		// ProjectDock and is always-visible-as-a-tab.
 		DatasetControl::getInstance(0)->hide();
+#endif
 
 		// For Demo, Tutorial, and RayTracing 
 		new DemoTutorialDialog(this, ((String)tr("BALLViewDemo")).c_str());
@@ -134,8 +170,38 @@ namespace BALL
 
 		new LabelDialog(        this, ((String)tr("LabelDialog")).c_str());
 		new MolecularStructure(	this, ((String)tr("MolecularStructure")).c_str());
- 		addDockWidget(Qt::BottomDockWidgetArea, new LogView(      this, ((String)tr("Logs")).c_str()));
-		addDockWidget(Qt::BottomDockWidgetArea, new FileObserver( this, ((String)tr("FileObserver")).c_str()));
+
+		// Phase 999.45 — Workspace consolidation. The bottom area:
+		//   BALL_UI_V2 OFF: legacy 5-dock layout — LogView +
+		//                   FileObserver as separate bottom docks.
+		//   BALL_UI_V2 ON : both are reused as the two tabs of the
+		//                   BottomDrawer (collapsible 24px↔240px).
+		//                   We still construct LogView + FileObserver
+		//                   first so their objectName + ModularWidget
+		//                   message-bus registration matches the legacy
+		//                   path; BottomDrawer extracts their inner
+		//                   widgets and hides the outer dock chrome.
+		LogView* log_view = new LogView(this, ((String)tr("Logs")).c_str());
+		FileObserver* file_obs = new FileObserver(this, ((String)tr("FileObserver")).c_str());
+
+#ifdef BALL_UI_V2
+		// objectName-s for WorkspaceManager preset addressing. Set
+		// before the BottomDrawer constructor so the outer docks have
+		// stable identities when WorkspaceManager hides them.
+		log_view->setObjectName("LogView");
+		file_obs->setObjectName("FileObserver");
+		addDockWidget(Qt::BottomDockWidgetArea, log_view);
+		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
+		// BottomDrawer takes ownership of presenting Logs + Files; the
+		// two legacy docks remain registered ModularWidgets but their
+		// outer QDockWidget shells are hidden (BottomDrawer::buildBody
+		// calls hide() on them).
+		BottomDrawer* drawer = new BottomDrawer(log_view, file_obs, this);
+		addDockWidget(Qt::BottomDockWidgetArea, drawer);
+#else
+ 		addDockWidget(Qt::BottomDockWidgetArea, log_view);
+		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
+#endif
 
 		setupPluginHandlers_();
 		Scene::stereoBufferSupportTest();
@@ -373,6 +439,82 @@ namespace BALL
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!
 		restoreWindows();
+
+#ifdef BALL_UI_V2
+		// Phase 999.45 — Workspace consolidation.
+		//
+		// Build the View > Workspace submenu (Task 9): 3 built-in
+		// presets + Save current as... + dynamically populated
+		// user-defined presets (rebuilt on aboutToShow).
+		QMenu* windows_menu = initPopupMenu(MainControl::WINDOWS, UIOperationMode::MODE_ADVANCED);
+		if (windows_menu != 0)
+		{
+			windows_menu->addSeparator();
+			QMenu* ws_menu = windows_menu->addMenu(tr("Workspace"));
+			ws_menu->setObjectName("workspaceMenu");
+
+			VIEW::WorkspaceManager& wm = VIEW::WorkspaceManager::instance();
+			QAction* default_act  = ws_menu->addAction(wm.presetDisplayName(VIEW::WorkspaceManager::Default));
+			QAction* classic_act  = ws_menu->addAction(wm.presetDisplayName(VIEW::WorkspaceManager::Classic));
+			QAction* focused_act  = ws_menu->addAction(wm.presetDisplayName(VIEW::WorkspaceManager::Focused));
+			connect(default_act, &QAction::triggered, this, [this]() {
+				VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Default, this);
+			});
+			connect(classic_act, &QAction::triggered, this, [this]() {
+				VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Classic, this);
+			});
+			connect(focused_act, &QAction::triggered, this, [this]() {
+				VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Focused, this);
+			});
+
+			ws_menu->addSeparator();
+			QAction* save_act = ws_menu->addAction(tr("Save current as…"));
+			connect(save_act, &QAction::triggered, this, [this]() {
+				bool ok = false;
+				const QString name = QInputDialog::getText(
+				    this, tr("Save Workspace"), tr("Preset name:"),
+				    QLineEdit::Normal, QString(), &ok);
+				if (ok && !name.isEmpty())
+				{
+					VIEW::WorkspaceManager::instance().save(this, name);
+				}
+			});
+
+			// Rebuild user-defined entries each time the submenu opens
+			// — the set is dynamic (users can save while the app is
+			// running). Strategy: remove every action AFTER save_act
+			// and rebuild from WorkspaceManager::userPresets().
+			connect(ws_menu, &QMenu::aboutToShow, this, [ws_menu, save_act]() {
+				// Drop everything after save_act.
+				const QList<QAction*> all = ws_menu->actions();
+				bool past_save = false;
+				for (QAction* a : all)
+				{
+					if (past_save) ws_menu->removeAction(a);
+					if (a == save_act) past_save = true;
+				}
+				const QStringList user_names = VIEW::WorkspaceManager::instance().userPresets();
+				if (!user_names.isEmpty()) ws_menu->addSeparator();
+				for (const QString& name : user_names)
+				{
+					QAction* a = ws_menu->addAction(name);
+					Mainframe* self = static_cast<Mainframe*>(ws_menu->parent()->parent());
+					QObject::connect(a, &QAction::triggered, [self, name]() {
+						VIEW::WorkspaceManager::instance().load(self, name);
+					});
+				}
+			});
+		}
+
+		// Phase 999.45 Task 8 — status-bar workspace label (right end).
+		VIEW::WorkspaceStatusLabel* ws_label = new VIEW::WorkspaceStatusLabel(this);
+		statusBar()->addPermanentWidget(ws_label->label());
+
+		// Phase 999.45 Task 5 — apply Default preset on first show.
+		// (User-stored preference overrides this in main.C after the
+		// migration prompt; see the [Workspace] currentPreset key.)
+		VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Default, this);
+#endif
 	}
 
 	void Mainframe::about()

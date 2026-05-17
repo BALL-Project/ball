@@ -5,9 +5,12 @@
 // order of includes is important: first qapplication, then BALL includes
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
 #include <QtCore/QTranslator>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
+#include <QtCore/QFile>
+#include <QtCore/QSettings>
 #include <QtCore/QTimer>
 #include <QtGui/QSurfaceFormat>
 
@@ -25,6 +28,17 @@
 #  include <BALL/VIEW/KERNEL/theme/themeManager.h>
 #endif
 // === end Phase 999.40 ======================================================
+
+// === Phase 999.45: Workspace consolidation + config migration ==============
+// Pre-mainframe migration of legacy ~/.BALLView to platform-correct path
+// + post-show first-run prompt asking the user to opt into the new
+// Default workspace or keep their old layout as Classic. .pre-v2.bak
+// auto-backup written before either step touches anything.
+#ifdef BALL_UI_V2
+#  include <BALL/VIEW/KERNEL/configMigration.h>
+#  include <BALL/VIEW/KERNEL/workspaceManager.h>
+#endif
+// === end Phase 999.45 ======================================================
 
 // === Phase 999.8-full: Sparkle + WinSparkle auto-update ====================
 // Re-applied 2026-05-17 after concurrent index-staging with Phase 999.40
@@ -213,6 +227,44 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		}
 	}
 
+	// =============== Phase 999.45: pre-mainframe config migration =====================
+	// Run the legacy ~/.BALLView → platform-correct standard-paths
+	// migration once, BEFORE constructing Mainframe (which loads
+	// preferences from the legacy file via MainControl). Also write
+	// a .pre-v2.bak auto-backup of the legacy file so even a failed
+	// migration cannot corrupt the user's existing preferences.
+	//
+	// All gated on BALL_UI_V2 — pre-flag-flip builds keep the legacy
+	// ~/.BALLView path verbatim.
+#ifdef BALL_UI_V2
+	{
+		const QString legacy_path = QString::fromStdString(home_dir.c_str()) + "/.BALLView";
+		const QString backup_path = QString::fromStdString(home_dir.c_str()) + "/.BALLView.pre-v2.bak";
+		const QString target_path = BALL::VIEW::ConfigMigration::targetConfigPath();
+
+		// Step 1: auto-backup if legacy exists AND target doesn't (i.e.
+		// we are about to migrate). Don't clobber an existing .bak —
+		// user may have multiple v2-upgrade attempts.
+		if (QFile::exists(legacy_path) && !QFile::exists(target_path) && !QFile::exists(backup_path))
+		{
+			if (!QFile::copy(legacy_path, backup_path))
+			{
+				BALL::Log.warn() << "Phase 999.45: could not write pre-v2 backup to "
+				                 << backup_path.toStdString() << std::endl;
+			}
+		}
+
+		// Step 2: run migration. Idempotent — no-op if target exists.
+		const BALL::VIEW::MigrationResult mres = BALL::VIEW::ConfigMigration::run(legacy_path);
+		if (mres.performed)
+		{
+			BALL::Log.info() << "Phase 999.45: migrated " << mres.sourcePath.toStdString()
+			                 << " → " << mres.targetPath.toStdString() << std::endl;
+		}
+	}
+#endif
+	// =============== end Phase 999.45 pre-mainframe migration =========================
+
 	// =============== initialize Mainframe ============================================
 	// Create the mainframe.
 	BALL::Mainframe mainframe(0, "Mainframe");
@@ -229,6 +281,61 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	// Show the main window.
 	mainframe.show();
+
+	// =============== Phase 999.45: first-run workspace prompt =========================
+	// After Mainframe is constructed AND shown (so the user sees the
+	// new Default workspace as the backdrop for the choice), prompt
+	// the user once to opt into the new layout or keep their old one
+	// as Classic.
+	//
+	// Persisted via QSettings under [Workspace]/firstRunPromptSeen.
+	// Only fires when:
+	//   1. A migration actually performed (i.e. user had a legacy
+	//      ~/.BALLView — fresh installs get Default silently), AND
+	//   2. The prompt has not been answered before.
+#ifdef BALL_UI_V2
+	{
+		const QString target_path = BALL::VIEW::ConfigMigration::targetConfigPath();
+		QSettings prefs(target_path, QSettings::IniFormat);
+		const bool prompt_seen = prefs.value("Workspace/firstRunPromptSeen", false).toBool();
+		const bool migrated = prefs.contains("Migration/migrated_from");
+
+		if (migrated && !prompt_seen)
+		{
+			QMessageBox box(&mainframe);
+			box.setWindowTitle(QCoreApplication::translate("Phase999_45", "Refreshed workspace available"));
+			box.setText(QCoreApplication::translate("Phase999_45",
+			    "BALLView has a refreshed default workspace."));
+			box.setInformativeText(QCoreApplication::translate("Phase999_45",
+			    "Switch to it, or keep your current layout? "
+			    "(You can change later from View → Workspace.)"));
+			QPushButton* try_new = box.addButton(
+			    QCoreApplication::translate("Phase999_45", "Try the new workspace"),
+			    QMessageBox::AcceptRole);
+			QPushButton* keep_old = box.addButton(
+			    QCoreApplication::translate("Phase999_45", "Keep my layout (Classic)"),
+			    QMessageBox::RejectRole);
+			box.setDefaultButton(try_new);
+			box.exec();
+
+			if (box.clickedButton() == keep_old)
+			{
+				BALL::VIEW::WorkspaceManager::instance().apply(
+				    BALL::VIEW::WorkspaceManager::Classic, &mainframe);
+				prefs.setValue("Workspace/currentPreset", "Classic");
+			}
+			else
+			{
+				// Try-new is the default; Default preset was already
+				// applied by Mainframe::show().
+				prefs.setValue("Workspace/currentPreset", "Default");
+			}
+			prefs.setValue("Workspace/firstRunPromptSeen", true);
+			prefs.sync();
+		}
+	}
+#endif
+	// =============== end Phase 999.45 first-run prompt ================================
 
 	// === Phase 999.8-full: Sparkle + WinSparkle init =======================
 	// Both init after mainframe.show() per spike caveat — Sparkle/WinSparkle
