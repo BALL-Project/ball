@@ -2,6 +2,7 @@ PROJECT(BALLView)
 
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
+	aboutDialog.C
 	demoTutorialDialog.C
 	main.C
 	mainframe.C
@@ -9,6 +10,10 @@ SET(SOURCES_LIST
 # Phase 999.42: icons.C (XPM bucky_64x64_xpm array) removed; mainframe.C
 # now uses VIEW::Icons::get("ball-app") which loads the SVG from the
 # theme.qrc resource bundle (see source/VIEW/KERNEL/theme/icons/lucide/ball-app.svg).
+# Phase 999.43: aboutDialog.ui deleted; aboutDialog.{h,C} hand-coded against
+# the shared widget set (SectionHeader + FormRow) and authors.json. The .ui
+# is gone — there is no fallback path needed since this compiles in both
+# BALL_UI_V2 ON and OFF builds.
 
 # === Phase 999.8-full: Sparkle (macOS) auto-update integration ===============
 # Detect vendored Sparkle.xcframework. The vendor script
@@ -39,12 +44,12 @@ ENDIF()
 
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
+	aboutDialog.h
 	demoTutorialDialog.h
 	mainframe.h
 )
 
 SET(UI_SOURCES_LIST
-	aboutDialog.ui
 	demoTutorialDialog.ui
 )
 

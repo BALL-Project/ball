@@ -3,6 +3,7 @@
 //
 
 #include "mainframe.h"
+#include "aboutDialog.h"   // Phase 999.43: hand-coded About dialog (replaces aboutDialog.ui)
 #include "demoTutorialDialog.h"
 
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
@@ -31,7 +32,8 @@
 
 #include <BALL/CONCEPT/moleculeObjectCreator.h>
 
-#include "ui_aboutDialog.h"
+// Phase 999.43: ui_aboutDialog.h removed — AboutDialog is hand-coded
+// (see aboutDialog.h included at the top of this file).
 
 #include <BALL/PLUGIN/pluginManager.h>
 #include <BALL/VIEW/PLUGIN/inputDevPluginHandler.h>
@@ -355,26 +357,13 @@ namespace BALL
 
 	void Mainframe::about()
 	{
-		// Display about dialog
-		QDialog w;
- 		Ui_AboutDialog about;
-		about.setupUi(&w);
-		QString version = QString(tr("QT ")) + qVersion() + "(mt)";
-		about.qt_version_label->setText(version);
-		QFont font = about.BALLView_version_label->font();
-		about.BALLView_version_label->setText(QString("BALLView ") + BALL_RELEASE_STRING);
-		font.setPixelSize(18);
-		about.BALLView_version_label->setFont(font);
-		about.BALL_version_label->setText(__DATE__);
-
-		// find the BALLView log
-		Path p;
-		String logo_path = p.find("graphics/logo.png");
-
-		if (logo_path != "")
-			about.BALLView_logo_label->setPixmap(QPixmap(logo_path.c_str()));
-
-		w.exec(); 
+		// Phase 999.43: hand-coded AboutDialog (see aboutDialog.h). The
+		// dialog composes its own layout from the shared widget set
+		// (SectionHeader + FormRow) and loads the author list from
+		// data/BALLView/about/authors.json, so this slot just constructs
+		// and exec()s it.
+		VIEW::AboutDialog dlg(this);
+		dlg.exec();
 	}
 
 	void Mainframe::changeEvent(QEvent* evt)
