@@ -1039,6 +1039,15 @@ namespace BALL
 		void writeStoreAtomType_(short t);
 		void writeStoreFormalCharge_(short fc);
 
+		public:
+		// K0.3b.8: public accessors so Bond + future container handles
+		// can route bond/membership updates through the same store this
+		// atom is bound to. Both are O(1) loads from the handle. Returns
+		// nullptr/0 if the atom hasn't been bound (shouldn't happen
+		// post-K0.3b.1; defensive only).
+		MoleculeStore* getStore() const     { return store_; }
+		std::uint32_t  getStoreIndex() const { return store_idx_; }
+
 	};
 
 // required for visual studio

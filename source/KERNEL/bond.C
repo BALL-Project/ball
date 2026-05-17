@@ -3,6 +3,8 @@
 //
 
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/atom.h>          // K0.3b.8: needed for getStore()
+#include <BALL/KERNEL/moleculeStore.h> // K0.3b.8: needed for add_bond
 
 using namespace::std;
 namespace BALL
@@ -98,7 +100,7 @@ namespace BALL
 		++(first.number_of_bonds_);
 		++(second.number_of_bonds_);
 
-		// keep the order 
+		// keep the order
 		if (first < second)
 		{
 			bond.first_ = &first;
@@ -108,6 +110,19 @@ namespace BALL
 		{
 			bond.first_ = &second;
 			bond.second_ = &first;
+		}
+
+		// v2.0 KERNEL replacement (K0.3b.8): mirror the bond into the
+		// MoleculeStore bond table if both atoms share a store. This is
+		// the forward-compatible shadow; v1.x bond_[] arrays remain
+		// canonical. Bond handle migration (own store_ + bond_record_idx_
+		// fields) is K0.3b.9.
+		if (first.getStore() != 0 && first.getStore() == second.getStore())
+		{
+			first.getStore()->add_bond(
+				first.getStoreIndex(),
+				second.getStoreIndex(),
+				static_cast<std::uint8_t>(bond.getOrder()));
 		}
 
 		return &bond;
