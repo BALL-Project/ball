@@ -243,42 +243,84 @@ jobs:
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
-          # GitHub windows-2025 runner ships with ~14 GB free on C:\. Cold
-          # vcpkg builds of Qt6 + Boost from source generate ~10+ GB of
-          # buildtrees AND ~3 GB of installed/, easily exhausting C:\ and
-          # killing the runner's diag-log writer (the failure mode seen on
-          # run 25971072146 for v1.6.2). Pre-prune known-large unused dirs
-          # so the cold-cache release pipeline has headroom.
+          # v1.6.2 release-pipeline learning: starting free disk on windows-2025
+          # is ~32 GB (NOT ~14 GB as docs suggested), but cold vcpkg Qt6 + Boost
+          # easily consumes 30+ GB of buildtrees and OOM-kills the runner's
+          # diag-log writer. Previous cleanup (Android SDK, JDK) only gained
+          # 1.2 GB because those paths don't exist on windows-2025.
+          # This iteration removes the actual large bloat: hosted toolcache
+          # languages we don't use (Python <3.12, Ruby, PyPy, Java JDK, Go),
+          # browser installs (Chrome, Firefox), pre-installed DB servers,
+          # Strawberry Perl. Verified-present paths only; absent paths
+          # SilentlyContinue (no failure).
           $before = (Get-PSDrive C).Free / 1GB
           Write-Host ("Free space before cleanup: {0:N1} GB" -f $before)
-          # Android SDK (~7 GB, not used by BALL)
-          Remove-Item -Recurse -Force "C:\Android" -ErrorAction SilentlyContinue
-          # Pre-installed JDK variants (~2 GB; cmake doesn't need them)
-          Remove-Item -Recurse -Force "C:\Program Files\Java" -ErrorAction SilentlyContinue
-          # Hosted toolcache unused languages (Ruby, Python <3.12, Go, Node)
-          Remove-Item -Recurse -Force "C:\hostedtoolcache\windows\Ruby" -ErrorAction SilentlyContinue
-          Remove-Item -Recurse -Force "C:\hostedtoolcache\windows\go" -ErrorAction SilentlyContinue
+
+          $targets = @(
+            # Hosted toolcache languages (each typically 1-3 GB)
+            "C:\hostedtoolcache\windows\PyPy",
+            "C:\hostedtoolcache\windows\Ruby",
+            "C:\hostedtoolcache\windows\Java_Temurin-Hotspot_jdk",
+            "C:\hostedtoolcache\windows\Java_Adopt_jdk",
+            "C:\hostedtoolcache\windows\go",
+            "C:\hostedtoolcache\windows\node",
+            # Old Python versions (keep 3.12+ in case vcpkg or cmake helper needs)
+            "C:\hostedtoolcache\windows\Python\3.7.*",
+            "C:\hostedtoolcache\windows\Python\3.8.*",
+            "C:\hostedtoolcache\windows\Python\3.9.*",
+            "C:\hostedtoolcache\windows\Python\3.10.*",
+            "C:\hostedtoolcache\windows\Python\3.11.*",
+            # Browser installs (cmake build doesn't use them)
+            "C:\Program Files\Google\Chrome",
+            "C:\Program Files\Mozilla Firefox",
+            "C:\Program Files (x86)\Google",
+            "C:\Program Files (x86)\Mozilla Firefox",
+            # Pre-installed DB servers (BALL build doesn't use them)
+            "C:\Program Files\PostgreSQL",
+            "C:\Program Files\MongoDB",
+            "C:\Program Files\MySQL",
+            "C:\Program Files\Microsoft SQL Server",
+            # Strawberry Perl (cmake's Perl finder picks chocolatey or Git Bash perl first)
+            "C:\Strawberry",
+            # JDK variants outside hostedtoolcache
+            "C:\Program Files\Java",
+            "C:\Program Files\Eclipse Adoptium",
+            "C:\Program Files\Microsoft\jdk*",
+            # Old VS variants if present (keep 2022, primary)
+            "C:\Program Files (x86)\Microsoft Visual Studio\2019"
+          )
+
+          foreach ($t in $targets) {
+            if (Test-Path $t) {
+              try {
+                Remove-Item -Recurse -Force $t -ErrorAction Stop
+                Write-Host ("  removed: {0}" -f $t)
+              } catch {
+                Write-Host ("  skip (in use): {0}" -f $t)
+              }
+            }
+          }
+
           $after = (Get-PSDrive C).Free / 1GB
           Write-Host ("Free space after cleanup:  {0:N1} GB (gained {1:N1} GB)" -f $after, ($after - $before))
 
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
-        env:
-          # vcpkg --clean-after-build deletes buildtrees + packages + downloads
-          # after each port finishes, dramatically reducing peak disk use during
-          # cold installs. Trades a small per-port overhead (delete a few GB)
-          # for ~10 GB peak-disk headroom — critical on the standard windows
-          # runner. Has no effect on warm-cache runs (cached binaries skip the
-          # build phase entirely).
-          VCPKG_INSTALL_OPTIONS: --clean-after-build
         run: |
           $env:VCPKG_ROOT = $env:VCPKG_INSTALLATION_ROOT
           Write-Host "VCPKG_ROOT=$env:VCPKG_ROOT"
-          Write-Host "VCPKG_INSTALL_OPTIONS=$env:VCPKG_INSTALL_OPTIONS"
+          # Pass --clean-after-build via CMake cache variable, NOT env var.
+          # vcpkg's manifest-mode cmake integration honors the CMake
+          # VCPKG_INSTALL_OPTIONS variable; the env-var spelling is for
+          # the standalone `vcpkg install` CLI and was silently ignored in
+          # the v1.6.2 attempt-2 release (cold-vcpkg OOM'd despite the
+          # env setting). The list-form ";" separator is required so cmake
+          # treats it as a list value.
           cmake --preset ci-windows `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
-            -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe"
+            -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe" `
+            "-DVCPKG_INSTALL_OPTIONS=--clean-after-build"
 
       - name: Save vcpkg binary cache (Windows)
         if: always() && matrix.os == 'windows-x64' && steps.vcpkg-cache.outputs.cache-hit != 'true'
