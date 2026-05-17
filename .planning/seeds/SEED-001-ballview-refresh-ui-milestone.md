@@ -12,6 +12,8 @@ v1.8_remainder: Handover Phase 4 (Inspector) + Phase 5 (Workspace) + Phase 6 (Me
 
 > **Status change 2026-05-17:** dormant → promoted-subset. User directed "roll the BALLView refresh into the tail-end of v1.7" — the foundation + maintainer-independent subset lands in v1.7 as **Wave 4** (phases 999.40-999.43, all behind `BALL_UI_V2` build flag default OFF). The 5 architecturally-heavier phases forward to **v1.8** as a dedicated UI marketing release where they ship with the flag flip. See `.planning/v1.7-PLAN.md` Wave 4 section + `.planning/ROADMAP.md` phases 999.40-999.48 for the routing.
 
+> **Maintainer answers received 2026-05-17:** Q1 = keep inline menubar (NOT macOS-native global); Q2 = retire Classic 5-dock after one release (v1.8 ships both with picker, v1.9 deletes); **Q3 = single neutral theme only (no Light/Dark/Follow-System)**; Q4 = community translation round during v1.8 cycle. Q3 departs from Handover recommendation. Impact: 999.42 + 999.43 still ship in v1.7 tail (value reframes from "dark mode unlock" to "OS-palette inheritance hygiene"); ThemeManager (999.40) built single-theme; `QStyleHints::colorScheme()` reactor wired but inactive; v1.8 Phase 999.48 sub-deliverable "dark-mode finalize" drops. Full answer record: `.planning/MAINTAINER-QUESTIONS-999.1.md`.
+
 ---
 
 # SEED-001: Milestone 2 — "BALLView Refresh" UI/UX modernization

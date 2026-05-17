@@ -278,27 +278,40 @@ Plans:
 
 ## Backlog
 
-### Phase 999.1: BALLView UI maintainer open-questions (BACKLOG · PUBLISH-READY · NOW GATES v1.7 Wave 4 + v1.8)
+### Phase 999.1: BALLView UI maintainer open-questions (RESOLVED · 2026-05-17)
 
-**Goal:** Get BALL maintainer decisions on 4 UI questions from the Claude Design Handover package — long lead time, raise before Milestone 2 ("BALLView Refresh", SEED-001) reaches its Inspector phase.
-**Questions:**
+**Status:** **RESOLVED** — maintainer answers received 2026-05-17 (in-session structured-question flow; no GitHub issue published).
+
+**Answers:**
+
+| # | Question | Answer | Vs Handover rec |
+|---|---|---|---|
+| Q1 | macOS menu bar | **Keep inline menubar** (cross-platform consistency) | DEPARTS (rec: native global) |
+| Q2 | Classic 5-dock workspace | **Retire after one release** (v1.8 = both with sunset; v1.9 removes Classic) | matches rec |
+| Q3 | Theme picker scope | **Single neutral theme only** (no Light/Dark/Follow-System) | DEPARTS (rec: Follow-System) |
+| Q4 | Translation churn | **Accept; community round during v1.8 cycle** | matches rec |
+
+**Impacts (propagated to ROADMAP Phases 999.42/.43/.46/.48 + v1.7-PLAN.md Wave 4):**
+
+- **Q1 → Phase 999.46 (menu reorg + command palette, v1.8):** skip `QAction::setMenuRole` plumbing. Cross-platform-consistent menu structure stays.
+- **Q2 → Phases 999.44 + 999.45 (Inspector + Workspace, v1.8):** design accommodates Classic-coexistence period. v1.8 ships both layouts with picker; v1.9 deletes Classic.
+- **Q3 → Phases 999.42 + 999.43 (v1.7 tail) + 999.48 (v1.8):**
+  - 999.42 + 999.43 still ship in v1.7 tail — value reframes from "unlock dark mode" to "design-system consistency + OS palette inheritance" (palette removal still useful even single-theme; Qt applies system widget styling natively).
+  - 999.48 sub-deliverable "dark-mode finalize" drops (no dark mode to finalize). Phase scope shrinks.
+  - 999.40 ThemeManager built single-theme — `QStyleHints::colorScheme()` reactor wired but inactive (no harm; future-proofs if maintainer reverses Q3).
+- **Q4 → Phase 999.46 (v1.8) timing:** v1.8 ships English + best-effort de_DE; community translation round during v1.8 cycle; v1.8.x point release picks up completed translations. No v1.8 ship-date blocker.
+
+**Original 4 questions (preserved for history):**
   1. macOS menu bar — keep inline, or use the native global menubar via `QAction::setMenuRole`?
   2. Legacy 5-dock "Classic" workspace — keep as a long-term opt-in preset, or retire after one release?
   3. Theme picker — ship one neutral theme, or Light/Dark/Follow-System? (handover recommends Follow-System)
   4. Translation churn — the menu re-org invalidates ~40% of `BALLView-de_DE.ts`; plan a community translation round.
 
-**Status (revised 2026-05-17):** Questions written up issue-ready in `.planning/MAINTAINER-QUESTIONS-999.1.md` (2026-05-14) — **awaiting publication to maintainers**. With SEED-001 promoted to v1.7 tail-end Wave 4 (2026-05-17), these now gate concrete work:
-- **Q3 (theme picker scope)** gates v1.7 Phase 999.42 (palette removal) + Phase 999.43 (simple dialogs). If unanswered before v1.7 RC, those two phases forward to v1.8. Phases 999.40 (design system foundation) + 999.41 (SVG icons) are maintainer-independent and ship in v1.7 tail-end regardless.
-- **Q1 (macOS menu) + Q4 (translation)** gate v1.8 Phase 999.46 (menu reorg + command palette).
-- **Q2 (workspace classic vs new)** gates v1.8 Phase 999.44 (Inspector) + Phase 999.45 (Workspace consolidation).
-
-**Action:** publish the 4 questions as a GitHub issue NOW — long lead time means maintainer answers may not return for weeks. Publication requires explicit human authorization (auto `gh issue create` was blocked as unauthorized write per `MAINTAINER-QUESTIONS-999.1.md`).
-
-**Requirements:** TBD
-**Reference:** `.planning/MAINTAINER-QUESTIONS-999.1.md`, `.planning/DESIGN-HANDOVER-INTEGRATION.md`, `.planning/seeds/SEED-001-ballview-refresh-ui-milestone.md`, `.planning/v1.7-PLAN.md` Wave 4
+**Requirements:** N/A (process phase, no REQ-IDs).
+**Reference:** `.planning/MAINTAINER-QUESTIONS-999.1.md` (full answer record), `.planning/DESIGN-HANDOVER-INTEGRATION.md`, `.planning/seeds/SEED-001-ballview-refresh-ui-milestone.md`, `.planning/v1.7-PLAN.md` Wave 4
 
 Plans:
-- [ ] TBD (no further planning needed; just `gh issue create` once human-authorized)
+- [x] N/A — no plan needed; questions were a decision-gathering activity, completed when answers received
 
 ### Phase 999.2: Ninja build generator switch (COMPLETE · v1.6.1 · 2026-05-16)
 
@@ -1936,17 +1949,17 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.40 lands)
 
-### Phase 999.42: BALLView Refresh — QSS theming, palette removal (Handover Phase 1) (BACKLOG · CONDITIONAL ON MAINTAINER-Q3 · v1.7 OR v1.8)
+### Phase 999.42: BALLView Refresh — QSS theming, palette removal (Handover Phase 1) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Remove every `<palette>` block from every `.ui` file in the tree so dialogs inherit the OS / theme palette set by 999.40's ThemeManager. Required for dark mode + Follow-System theming to work coherently across all dialogs.
+**Goal:** Remove every `<palette>` block from every `.ui` file in the tree so dialogs inherit the OS / theme palette set by 999.40's ThemeManager. Even without dark-mode/Follow-System, this is hygiene — Qt then applies system widget styling natively (lighter chrome on macOS, native on Windows).
 
-**Why conditional:** Gates on **Phase 999.1 maintainer-Q3** (theme picker scope: single neutral vs Light/Dark/Follow-System). Handover recommends Follow-System; if the maintainer accepts that recommendation before v1.7 RC, 999.42 ships in v1.7 tail. If undecided, forward to v1.8.
+**Status (revised 2026-05-17):** UNCONDITIONAL in v1.7 Wave 4 — Phase 999.1 maintainer-Q3 resolved (single neutral theme). Value reframes from "unlock dark mode" to "design-system consistency + OS palette inheritance." Phase still ships in v1.7 tail because palette removal is hygienic regardless of theme-picker breadth.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/01-phase-theming.md`.
 
-**Depends on:** 999.40 (consumes ThemeManager); 999.1-Q3 (maintainer answer to gate v1.7 vs v1.8).
+**Depends on:** 999.40 (consumes ThemeManager).
 
-**Scope:** strip `<palette>` blocks from ~30 `.ui` files in `source/VIEW/DIALOGS/`. Mechanical; no behavior change beyond dark-mode unlock.
+**Scope:** strip `<palette>` blocks from ~30 `.ui` files in `source/VIEW/DIALOGS/`. Mechanical; no behavior change beyond consistent OS palette inheritance.
 
 **Requirements:** TBD (likely `UIV2-THM-01: palette-free .ui files`).
 
@@ -1955,17 +1968,17 @@ Plans:
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (gate on maintainer-Q3 + 999.40)
+- [ ] TBD (promote with /gsd-plan-phase after 999.40 lands)
 
-### Phase 999.43: BALLView Refresh — Simple-dialog cleanup (Handover Phase 3) (BACKLOG · CONDITIONAL ON 999.42 · v1.7 OR v1.8)
+### Phase 999.43: BALLView Refresh — Simple-dialog cleanup (Handover Phase 3) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Apply the new design system + theme + idiom to the small, low-risk dialogs first. Build muscle memory for the Inspector overhaul (v1.8 Phase 999.44).
+**Goal:** Apply the new design system + idiom to the small, low-risk dialogs first. Build muscle memory for the Inspector overhaul (v1.8 Phase 999.44).
 
-**Why conditional:** Gates on 999.42 (palette removal is a prereq for theme-consistent simple dialogs). Same v1.7-vs-v1.8 split as 999.42.
+**Status (revised 2026-05-17):** UNCONDITIONAL in v1.7 Wave 4 — Phase 999.1 maintainer-Q3 resolved (single neutral theme). Value reframes from "themed dark/light dialogs" to "design-system consistency across simple dialogs." Phase still ships in v1.7 tail.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/03-phase-simple-dialogs.md`.
 
-**Depends on:** 999.42 (themed `.ui` substrate); 999.41 (SVG icons available).
+**Depends on:** 999.42 (palette-free substrate); 999.41 (SVG icons available).
 
 **Scope:** the simple dialogs (per Handover doc — Preferences-style panes, About, Preferences > Display tab, etc.) get new layouts + the design system applied.
 
@@ -1974,7 +1987,7 @@ Plans:
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (gate on 999.42)
+- [ ] TBD (promote with /gsd-plan-phase after 999.42 lands)
 
 ### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (BACKLOG · TARGETED FOR v1.8)
 
@@ -2014,13 +2027,17 @@ Plans:
 
 **Goal:** Re-author the top menu bar around **tasks** rather than C++ namespaces. Introduce `Cmd/Ctrl+K` **command palette** exposing every action by name (modern app standard).
 
-**Why v1.8:** Menu reorg touches **every** `.ui` menu file + invalidates ~40% of `BALLView-de_DE.ts` translations. Gates on maintainer-Q1 (macOS native menubar) + maintainer-Q4 (translation churn timing).
+**Why v1.8:** Menu reorg touches **every** `.ui` menu file + invalidates ~40% of `BALLView-de_DE.ts` translations.
+
+**Maintainer-Q1 + Q4 resolved 2026-05-17:**
+- **Q1 = "Keep inline menubar"** → SKIP `QAction::setMenuRole` plumbing. Menu structure stays cross-platform-consistent (inline per-window), no macOS-native global-menubar work.
+- **Q4 = "Accept; community round during v1.8 cycle"** → v1.8 ships English + best-effort de_DE; community translators called for in v1.8 RC notes; v1.8.x picks up completed translations. NOT a v1.8 ship-date blocker.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/06-phase-menus.md`.
 
-**Depends on:** 999.44 + 999.45 (new layout context), maintainer-Q1 + Q4.
+**Depends on:** 999.44 + 999.45 (new layout context). Maintainer gates RESOLVED.
 
-**Estimated effort:** ~2-3 weeks (menu work) + community translation round (parallel, time-elapsed-only, not engineering effort).
+**Estimated effort:** ~2 weeks (menu work; reduced from 2-3 weeks because no macOS-native menu role plumbing per Q1). Community translation round (parallel, time-elapsed-only, not engineering effort).
 
 **Plans:** 0.
 
@@ -2042,15 +2059,17 @@ Plans:
 Plans:
 - [ ] TBD (v1.8; lands after 999.46)
 
-### Phase 999.48: BALLView Refresh — Accessibility + dark-mode finalize (Handover Phase 8) (BACKLOG · TARGETED FOR v1.8 · LAST UI PHASE)
+### Phase 999.48: BALLView Refresh — Accessibility + `BALL_UI_V2` default flip (Handover Phase 8, scope-reduced) (BACKLOG · TARGETED FOR v1.8 · LAST UI PHASE)
 
-**Goal:** Close out the revitalization — harden accessibility, finalize dark mode, add per-user font scaling, audit tab order, ship the remaining quality-of-life details. Also: flip `BALL_UI_V2=ON` as default, making v1.8 the first release where the new UI is the new normal.
+**Goal:** Close out the revitalization — harden accessibility, add per-user font scaling, audit tab order, ship the remaining quality-of-life details. Also: flip `BALL_UI_V2=ON` as default, making v1.8 the first release where the new UI is the new normal.
 
-**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/08-phase-a11y.md`.
+**Scope-reduced 2026-05-17:** maintainer-Q3 answer (single neutral theme) drops the original "finalize dark mode" sub-deliverable — there's no dark mode to finalize. ThemeManager (built in 999.40) stays single-theme; `QStyleHints::colorScheme()` reactor is wired but inactive. Phase scope shrinks from ~1-2 weeks to ~1 week.
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/08-phase-a11y.md` (with the dark-mode finalize sub-section treated as out-of-scope per Q3).
 
 **Depends on:** every other UI Refresh phase (999.40-999.47).
 
-**Estimated effort:** ~1-2 weeks.
+**Estimated effort:** ~1 week (was ~1-2 weeks; dark-mode finalize drop saves ~half).
 
 **Plans:** 0.
 
