@@ -117,37 +117,53 @@ assumed parallel-model). Honest: at sub-1.0 FTE this stretches to
 
 ---
 
-## 6. Test-deletion verification — open work
+## 6. Test-deletion list — verified
 
-Per D10 the green-bar target is "the 65 baseline tests minus those
-that exercise deleted classes." Exact count needs verification because
-some iterator-trait tests may use `std::vector<int>` rather than
-`Composite` as their fixture — those stay; the rest go.
+Per D10 the K0 green-bar is "the 65 baseline tests minus those that
+exercise deleted classes." Verified 2026-05-17 by inspecting each
+candidate's actual `#include` set + transitive dependencies (item V1
+of §7 is now closed; see §7 below).
 
-Confirmed deletes (16 tests):
-- `Composite_test1`..`Composite_test6` (6)
-- `CompositeIteratorTraits_test`,
-  `CompositeAncestorIteratorTraits_test`,
-  `CompositeChildcompositeIteratorTraits_test`,
-  `CompositeCompositeIteratorTraits_test` (4)
-- `PropertyManager_test`, `NamedProperty_test`, `Selectable_test` (3)
-- `PersistentObject_test`, `PersistenceManager_test`,
-  `TextPersistenceManager_test` (3)
+**16 definite deletes** (test source `#include`s a header for a
+deleted class):
 
-Candidate deletes (0-7 tests, verify in §7 work):
-- `BaseIterator_test`, `ConstForwardIterator_test`,
-  `ForwardIterator_test`, `ConstBidirectionalIterator_test`,
-  `BidirectionalIterator_test`, `ConstRandomAccessIterator_test`,
-  `RandomAccessIterator_test`
+| Test | Pulls | Reason |
+|---|---|---|
+| `Composite_test1`..`Composite_test6` | `composite.h` (all 6) | D2 |
+| `CompositeIteratorTraits_test` | `composite.h` + `iterator.h` | D2 |
+| `CompositeAncestorIteratorTraits_test` | `composite.h` + `iterator.h` | D2 |
+| `CompositeChildcompositeIteratorTraits_test` | `composite.h` + `iterator.h` | D2 |
+| `CompositeCompositeIteratorTraits_test` | `composite.h` | D2 |
+| `PropertyManager_test` | `property.h` | D3 |
+| `NamedProperty_test` | `property.h` | D3 |
+| `Selectable_test` | `selectable.h` | D4 |
+| `PersistentObject_test` | `persistentObject.h` + `persistenceManager.h` | D12 (no PersistentObject base; new v2 format owns its own test) |
+| `PersistenceManager_test` | `persistenceManager.h` + `atom.h` (Atom persistence virtuals deleted) | D12 |
+| `TextPersistenceManager_test` | `textPersistenceManager.h` + `composite.h` + `bond.h` | D2 + D12 |
 
-Possible additional deletes (verify in §7):
-- `Embeddable_test` (Embeddable is a CONCEPT class; verify dependence
-  on Composite)
-- `DefaultProcessors_test` (processor-on-Composite tests)
-- `Object_test`, `Factory_test`, `AutoDeletable_test`, `LogStream_test`
-  (verify — these are likely Composite-independent)
+**Definitely stay** (verified Composite-/Property-/Selectable-/
+PersistentObject-independent by transitive include audit):
 
-K0 green-bar target: between **42 and 49 tests**, settled by §7.
+| Test | Why it stays |
+|---|---|
+| `BaseIterator_test` | Builds its own `VectorIteratorTraits_<DataType>` over `std::vector`. Tests the iterator-template API only. |
+| `ConstForwardIterator_test`, `ForwardIterator_test` | Same fixture pattern as BaseIterator_test. |
+| `ConstBidirectionalIterator_test`, `BidirectionalIterator_test` | Same pattern. |
+| `ConstRandomAccessIterator_test`, `RandomAccessIterator_test` | Same pattern. |
+| `Object_test`, `Factory_test`, `AutoDeletable_test`, `LogStream_test`, `Embeddable_test` | Each pulls only its own header; none reference Composite/Property/Selectable in implementation (the one Composite mention in `autoDeletable.h` is a doc-comment only). |
+
+**Rewrite-or-defer (1 test): `DefaultProcessors_test`** — Uses
+`Composite::apply(processor)` against `System`. With Composite removed
+the visitor pattern needs a new dispatch (likely `MoleculeStore::apply()`
++ container handle delegation in K0.4). The test also pulls FORMAT
+(`HINFile.h`) and STRUCTURE (`defaultProcessors.h`), so it cannot
+build in core-only anyway. K0 disposition: **defer to when STRUCTURE
+is re-enabled.** Removed from the K0 green-bar.
+
+**K0 green-bar target: 48 tests** (65 − 16 confirmed deletes − 1 deferred).
+
+This number is locked. Any further reductions or rewrites land as
+explicit follow-on plans.
 
 ---
 
@@ -155,12 +171,12 @@ K0 green-bar target: between **42 and 49 tests**, settled by §7.
 
 These items must close before `/gsd-plan-phase` is invoked on K0:
 
-- **V1 — Iterator-trait test fixtures.** Read each of the 7 generic
-  iterator-trait tests + the 4 specific Composite iterator-trait tests
-  + Embeddable_test + DefaultProcessors_test + Object_test +
-  Factory_test + AutoDeletable_test. For each: does it transitively
-  include `composite.h` / `selectable.h` / `property.h`? If yes,
-  delete. Output: definitive 42-49 test list for the K0 green-bar.
+- **V1 — Iterator-trait test fixtures.** ✅ **CLOSED 2026-05-17.** All
+  7 generic iterator-trait tests, all 5 specific Composite
+  iterator-trait tests, `Embeddable_test`, `DefaultProcessors_test`,
+  `Object_test`, `Factory_test`, `AutoDeletable_test`, `LogStream_test`
+  audited. Result: see §6. K0 green-bar = 48 tests (16 deletes +
+  1 deferred).
 
 - **V2 — Friend-class audit list.** Grep KERNEL+CONCEPT for the 9
   `friend class` sites. For each: which class is the friend? What
