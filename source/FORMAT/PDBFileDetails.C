@@ -1669,7 +1669,7 @@ namespace BALL
 		char* date = asctime(localtime(&current_time));
 		char PDB_date_format[10];
 		
-		sprintf(PDB_date_format, "%2.2s-%c%c%c-%2.2s",
+		snprintf(PDB_date_format, sizeof(PDB_date_format), "%2.2s-%c%c%c-%2.2s",
 						date + 8, toupper(date[4]), toupper(date[5]),
 						toupper(date[6]), date + 22);
 		writeRecord_(PDB::RECORD_TYPE__HEADER, info.getName().c_str(),

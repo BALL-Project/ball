@@ -394,11 +394,8 @@ namespace BALL
 				text.append("\n");
 			}
 			
-			QMessageBox mb("Docking Options", text, 
-										QMessageBox::NoIcon, 
-										QMessageBox::Ok, 
-										QMessageBox::NoButton, 
-										QMessageBox::NoButton);
+			QMessageBox mb(QMessageBox::NoIcon, "Docking Options", text,
+										QMessageBox::Ok);
 			mb.exec();
 		}
 		
@@ -446,11 +443,8 @@ namespace BALL
 				}
 			}
 			
-			QMessageBox mb("Scoring Options", text, 
-										QMessageBox::NoIcon, 
-										QMessageBox::Ok, 
-										QMessageBox::NoButton, 
-										QMessageBox::NoButton);
+			QMessageBox mb(QMessageBox::NoIcon, "Scoring Options", text,
+										QMessageBox::Ok);
 			mb.exec();
 		}
 		 

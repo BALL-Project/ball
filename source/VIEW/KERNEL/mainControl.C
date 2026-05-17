@@ -2135,8 +2135,8 @@ namespace BALL
 	{
 		if (isBusy()) return;
 
-		if (QMessageBox::question(this, tr("Quickload"), tr("Do you really want to quickload?"), 
-					QMessageBox::Yes| QMessageBox::Default, QMessageBox::No|QMessageBox::Escape) 
+		if (QMessageBox::question(this, tr("Quickload"), tr("Do you really want to quickload?"),
+					QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes)
 						== QMessageBox::Yes)
 		{
 			quickLoad();

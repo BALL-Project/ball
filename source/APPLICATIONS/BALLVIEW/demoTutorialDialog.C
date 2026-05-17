@@ -584,7 +584,7 @@ void DemoTutorialDialog::nextStepDemo_()
 				msg += (String)tr("It should be found in") + " " + file_name;
 
 				QMessageBox::critical(0, tr("Error while starting BALLView Demo"), msg.c_str(),
-						QMessageBox::Ok, Qt::NoButton, Qt::NoButton);
+						QMessageBox::Ok);
 				return;
 			}
 			

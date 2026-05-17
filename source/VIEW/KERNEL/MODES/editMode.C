@@ -276,8 +276,8 @@ namespace BALL
 			}
 			else
 			{
-				draw_to.x = evt->x();
-				draw_to.y = evt->y();
+				draw_to.x = static_cast<int>(evt->position().x());
+				draw_to.y = static_cast<int>(evt->position().y());
 			}
 
 			scene_->setCurrentAtom(last_atom);
@@ -361,7 +361,7 @@ namespace BALL
 				name += String(atom_number_);
 				++atom_number_;
 				PDBAtom* a = new PDBAtom(PTE[atomic_number], name);
-				insert_(evt->x(), evt->y(), *a);
+				insert_(static_cast<int>(evt->position().x()), static_cast<int>(evt->position().y()), *a);
 				scene_->setCurrentAtom(a);
 
 				//store the Operation in undo_
@@ -453,7 +453,7 @@ namespace BALL
 			{
 				// project the new atom on the plane of the old atom
 				scene_->setCurrentAtom(atom);
-				Vector3 new_pos = scene_->mapViewportTo3D(evt->x(), evt->y());
+				Vector3 new_pos = scene_->mapViewportTo3D(static_cast<int>(evt->position().x()), static_cast<int>(evt->position().y()));
 
 				// test if the two atoms would have the same position
 				if (fabs((scene_->getCurrentAtom()->getPosition() - new_pos).getLength()) < 0.02)

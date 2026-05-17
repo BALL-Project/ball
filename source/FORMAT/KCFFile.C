@@ -74,8 +74,8 @@ namespace BALL
 			
 			// Make sure the type is in the set of KEGG types????
 			// Blanks?
-			sprintf(buffer, "             %d %s %s %6.4f %6.4f %s\n", 
-							count, type.c_str(), ai->getElement().getSymbol().c_str(), 
+			snprintf(buffer, BALL_MAX_LINE_LENGTH, "             %d %s %s %6.4f %6.4f %s\n",
+							count, type.c_str(), ai->getElement().getSymbol().c_str(),
 							ai->getPosition().x, ai->getPosition().y, comment.c_str());
 			os << buffer;
 			
@@ -99,7 +99,7 @@ namespace BALL
 				// Write every bond just once				
 				if (bi->getFirstAtom() == &*ai)
 				{
-					sprintf(buffer, "          %4d %4d %4d %1d%s\n", 
+					snprintf(buffer, BALL_MAX_LINE_LENGTH, "          %4d %4d %4d %1d%s\n",
 									count, index1, index2, bi->getOrder(), comment.c_str());
 					os << buffer;
 					++count;

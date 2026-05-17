@@ -87,8 +87,8 @@ namespace BALL
 		AtomConstIterator atIt;
 		for (atIt = system.beginAtom(); +atIt; ++atIt)
 		{
-			char line[255]; 
-			sprintf(line, " %s %.1f % 8f % 8f % 8f",
+			char line[255];
+			snprintf(line, sizeof(line), " %s %.1f % 8f % 8f % 8f",
 										atIt->getElement().getSymbol().c_str(),
 										(float)atIt->getElement().getAtomicNumber(),
 										atIt->getPosition().x,

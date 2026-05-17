@@ -729,11 +729,9 @@ namespace BALL
 						(systems2->currentText() == "<select>") || 
 						(systems1->currentText() == systems2->currentText()))
 				{
-					QMessageBox error_message("Error","Please select two different docking partners!", 
-																		QMessageBox::Critical,
-																		QMessageBox::Ok,
-																		QMessageBox::NoButton,
-																		QMessageBox::NoButton);
+					QMessageBox error_message(QMessageBox::Critical, "Error",
+																		"Please select two different docking partners!",
+																		QMessageBox::Ok);
 					error_message.exec();
 					return;
 				}
@@ -741,11 +739,9 @@ namespace BALL
 			// if no algorithm is chosen => Error message!
 			if (algorithms->currentText() == "<select>")
 			{
-				QMessageBox error_message("Error", "Please select docking algorithm!",
-																	QMessageBox::Critical,
-																	QMessageBox::Ok,
-																	QMessageBox::NoButton,
-																	QMessageBox::NoButton);
+				QMessageBox error_message(QMessageBox::Critical, "Error",
+																	"Please select docking algorithm!",
+																	QMessageBox::Ok);
 				error_message.exec();
 				return;
 			}

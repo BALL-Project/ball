@@ -1599,14 +1599,19 @@ bool BinaryFingerprintMethods::connectedComponents(const vector<unsigned int>& s
 		boost::unordered_map<unsigned int, boost::unordered_map<unsigned int, unsigned int> >::iterator ccs_iter;
 		BOOST_FOREACH(Vertex current_vertex, vertices(sim_graph))
 		{
-			if (ccs_tmp.find(ds->find_set(current_vertex)) == ccs_tmp.end())
+			// Explicit narrowing cast from Vertex (boost::graph_traits
+			// vertex_descriptor, unsigned __int64 on Windows LLP64) to
+			// unsigned int — the map key type. Vertex counts never approach
+			// UINT_MAX in practice; sibling-cluster fix to v1.6.2 commit
+			// 0a75ede which fixed the cc_sizes.insert site below.
+			if (ccs_tmp.find(static_cast<unsigned int>(ds->find_set(current_vertex))) == ccs_tmp.end())
 			{
-				ccs_tmp[ds->find_set(current_vertex)] = boost::unordered_map<unsigned int, unsigned int>();
+				ccs_tmp[static_cast<unsigned int>(ds->find_set(current_vertex))] = boost::unordered_map<unsigned int, unsigned int>();
 			}
-			
+
 // 			ccs_tmp[ds->find_set(current_vertex)][current_vertex] = ccs_tmp[ds->find_set(current_vertex)].size();
-			ccs_tmp[ds->find_set(current_vertex)].insert(make_pair(current_vertex, 0));
-			ccs_tmp[ds->find_set(current_vertex)][current_vertex] = ccs_tmp[ds->find_set(current_vertex)].size();
+			ccs_tmp[static_cast<unsigned int>(ds->find_set(current_vertex))].insert(make_pair(static_cast<unsigned int>(current_vertex), 0u));
+			ccs_tmp[static_cast<unsigned int>(ds->find_set(current_vertex))][static_cast<unsigned int>(current_vertex)] = static_cast<unsigned int>(ccs_tmp[static_cast<unsigned int>(ds->find_set(current_vertex))].size());
 		}
 		
 		

@@ -107,10 +107,10 @@ namespace BALL
 				
 				if (dfm->wasAborted())
 				{
-					if (QMessageBox::question(0, "Request","Do you want to see the current Result?", 
-																		 QMessageBox::Yes,
-																		 QMessageBox::No,
-																		 QMessageBox::NoButton))
+					if (QMessageBox::question(0, "Request", "Do you want to see the current Result?",
+																		 QMessageBox::Yes | QMessageBox::No,
+																		 QMessageBox::No)
+									== QMessageBox::No)
 					{
 						return;
 					}

@@ -66,9 +66,9 @@ namespace BALL
 			{
 				public:
 
-					MyMouseEvent(Type type, const QPoint & position, Qt::MouseButton button, 
+					MyMouseEvent(Type type, const QPoint & position, Qt::MouseButton button,
 											 Qt::MouseButtons buttons, Qt::KeyboardModifiers modifiers)
-						: QMouseEvent(type, position, button, buttons, modifiers) {}
+						: QMouseEvent(type, QPointF(position), QPointF(position), button, buttons, modifiers) {}
 			};
 
 			class MyEventThread

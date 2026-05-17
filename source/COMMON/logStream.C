@@ -180,7 +180,7 @@ namespace BALL
 						break;
 
 					case 'l': // append the loglevel
-						sprintf(buf, "%d", level);
+						snprintf(buf, sizeof(buffer), "%d", level);
 						result.append(buf);
 						break;
 
