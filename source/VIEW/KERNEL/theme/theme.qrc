@@ -1,0 +1,14 @@
+<!--
+  Phase 999.40 — BALLView Refresh theme resource bundle.
+
+  Per maintainer-Q3 (`.planning/MAINTAINER-QUESTIONS-999.1.md`):
+    SINGLE NEUTRAL THEME ONLY — no light/dark/follow-system variants.
+
+  The ThemeManager singleton loads this via the alias path
+  `:/theme/theme-neutral.qss` at app startup (gated on BALL_UI_V2).
+-->
+<RCC>
+    <qresource prefix="/theme">
+        <file alias="theme-neutral.qss">theme-neutral.qss</file>
+    </qresource>
+</RCC>

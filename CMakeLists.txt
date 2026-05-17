@@ -280,6 +280,14 @@ ENDIF()
 SET(UPDATE_TRANSLATIONS OFF CACHE BOOL "If enabled, translations are update")
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
+## Phase 999.40 — BALLView Refresh (Handover Phase 0).
+## When ON, ThemeManager initialises at startup and applies the neutral
+## QSS stylesheet. When OFF (default), all theme code is built but never
+## instantiated — the user-visible app is bit-for-bit identical to the
+## pre-refresh baseline. Per maintainer-Q3 the v1.7 refresh ships a
+## single neutral theme only (no light/dark/follow-system modes).
+OPTION(BALL_UI_V2 "Enable revitalized BALLView UI (Phase 999.40+, Handover Phase 0)" OFF)
+
 ## Phase 5 renderer-backend spike (THROWAWAY prototype — Plan 05-05 / 05-06).
 ## Selects between OFF (default, production fixed-function path), "GLCore"
 ## (Plan 05-05 GL 3.2+ core-profile prototype), and "QRhi" (Plan 05-06 prototype).
@@ -629,6 +637,16 @@ ENDIF()
 # trigger: v2.0 renderer rewrite (ROADMAP Phase 999.6 PIPE-01).
 IF(APPLE AND BALL_HAS_VIEW)
 	TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC GL_SILENCE_DEPRECATION)
+ENDIF()
+
+# Phase 999.40 — gate the ThemeManager init call in BALLView/main.C and
+# any future BALL_UI_V2 branches inside VIEW on the cmake flag. PUBLIC
+# so downstream consumers (BALLView executable) also see the macro when
+# they include VIEW headers — the #ifdef BALL_UI_V2 block in main.C
+# requires this.
+IF(BALL_HAS_VIEW AND BALL_UI_V2)
+	TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC BALL_UI_V2)
+	MESSAGE(STATUS "BALL_UI_V2 enabled — BALLView Refresh (Handover Phase 0+) compiled in")
 ENDIF()
 
 # Precompiled headers — Phase 999.16 (BUILD-ACCEL-01).
