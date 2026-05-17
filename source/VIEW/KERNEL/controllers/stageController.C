@@ -4,9 +4,10 @@
 // Phase 999.44 — StageController implementation.
 //
 
+#include <BALL/VIEW/KERNEL/controllers/stageController.h>
+
 #ifdef BALL_UI_V2
 
-#include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/COMMON/logStream.h>

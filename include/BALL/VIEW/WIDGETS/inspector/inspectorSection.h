@@ -16,12 +16,16 @@
 #ifndef BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORSECTION_H
 #define BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORSECTION_H
 
-// Phase 999.44: Inspector classes are only used inside #ifdef
-// BALL_UI_V2 code paths. The header itself stays unconditional so
-// AUTOMOC's preprocessor scan finds Q_OBJECT; the implementation
-// .C file is wrapped with #ifdef BALL_UI_V2 so the OFF cell
-// compiles an empty TU and the linked binary carries no Inspector
-// symbols at all.
+// Phase 999.44: Inspector classes are only used inside BALL_UI_V2
+// code paths. The whole class declaration is gated so AUTOMOC's
+// OFF-cell preprocessor scan finds no Q_OBJECT (no moc generated;
+// no dangling slot/vtable references at OFF-cell link time). The
+// ON-cell preprocessor IS told about BALL_UI_V2 via the VIEW
+// target's PUBLIC compile definition (CMakeLists.txt:654) and
+// AUTOMOC's MOC_DEFINITIONS list includes BALL_UI_V2 — verified
+// by inspecting VIEW_autogen/AutogenInfo.json after configure.
+
+#ifdef BALL_UI_V2
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>
@@ -116,4 +120,5 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
+#endif // BALL_UI_V2
 #endif // BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORSECTION_H

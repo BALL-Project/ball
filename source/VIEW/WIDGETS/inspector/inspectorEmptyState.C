@@ -4,9 +4,10 @@
 // Phase 999.44 — InspectorEmptyState implementation.
 //
 
+#include <BALL/VIEW/WIDGETS/inspector/inspectorEmptyState.h>
+
 #ifdef BALL_UI_V2
 
-#include <BALL/VIEW/WIDGETS/inspector/inspectorEmptyState.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>
 
 #include <QtGui/QFont>

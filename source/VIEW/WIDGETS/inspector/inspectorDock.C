@@ -4,9 +4,10 @@
 // Phase 999.44 — InspectorDock implementation.
 //
 
+#include <BALL/VIEW/WIDGETS/inspector/inspectorDock.h>
+
 #ifdef BALL_UI_V2
 
-#include <BALL/VIEW/WIDGETS/inspector/inspectorDock.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
 
 #include <QtWidgets/QWidget>

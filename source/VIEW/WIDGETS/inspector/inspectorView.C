@@ -4,9 +4,10 @@
 // Phase 999.44 — InspectorView implementation.
 //
 
+#include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
+
 #ifdef BALL_UI_V2
 
-#include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorBody.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorEmptyState.h>

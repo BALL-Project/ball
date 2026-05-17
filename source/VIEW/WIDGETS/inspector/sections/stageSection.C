@@ -4,9 +4,10 @@
 // Phase 999.44 — StageSection implementation.
 //
 
+#include <BALL/VIEW/WIDGETS/inspector/sections/stageSection.h>
+
 #ifdef BALL_UI_V2
 
-#include <BALL/VIEW/WIDGETS/inspector/sections/stageSection.h>
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/WIDGETS/swatchButton.h>
 #include <BALL/VIEW/WIDGETS/labeledSlider.h>

@@ -4,9 +4,9 @@
 // Phase 999.44 — InspectorTabs implementation.
 //
 
-#ifdef BALL_UI_V2
-
 #include <BALL/VIEW/WIDGETS/inspector/inspectorTabs.h>
+
+#ifdef BALL_UI_V2
 
 #include <QtCore/QObject>
 

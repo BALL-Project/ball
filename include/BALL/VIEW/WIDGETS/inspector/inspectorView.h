@@ -10,8 +10,9 @@
 #ifndef BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORVIEW_H
 #define BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORVIEW_H
 
-// Phase 999.44: header unconditional for AUTOMOC; implementation
-// wraps body with #ifdef BALL_UI_V2.
+// Phase 999.44: gated by BALL_UI_V2 (see inspectorSection.h).
+
+#ifdef BALL_UI_V2
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>
@@ -90,4 +91,5 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
+#endif // BALL_UI_V2
 #endif // BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORVIEW_H

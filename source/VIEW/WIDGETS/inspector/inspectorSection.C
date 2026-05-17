@@ -4,9 +4,10 @@
 // Phase 999.44 — InspectorSection implementation.
 //
 
+#include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
+
 #ifdef BALL_UI_V2
 
-#include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
 #include <BALL/VIEW/WIDGETS/sectionHeader.h>
 
 #include <QtCore/QPropertyAnimation>
