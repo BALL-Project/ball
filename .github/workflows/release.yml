@@ -49,6 +49,16 @@ jobs:
             runner: macos-14
           - os: windows-x64
             runner: windows-2025
+          # Phase 8c (PKG-LINUX-01): Linux SKUs ship LGPL-only (no FFTW)
+          # per FFTW-GPL-DECISION.md (SHIP-LGPL-ONLY until a GPL-compliance
+          # owner is named). AppImage + DEB + RPM full tooling is staged in
+          # follow-on Phase 8c.2; this matrix entry produces a CPack tarball
+          # so v1.7 RC has a Linux artifact even before the full installer
+          # SKUs land.
+          - os: linux-x64
+            runner: ubuntu-24.04
+          - os: linux-arm64
+            runner: ubuntu-24.04-arm
 
     steps:
       - name: Resolve target ref
@@ -61,10 +71,13 @@ jobs:
             REF="${{ github.ref_name }}"
           fi
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
-          # macOS now ships a .dmg (Phase 8a, PKG-MAC-03); Windows + others
-          # remain .zip until their respective Phase 8 slices land.
+          # macOS ships .dmg (Phase 8a, PKG-MAC-03); Linux ships .tar.gz
+          # (Phase 8c part-1, PKG-LINUX-01 — .AppImage / .deb / .rpm
+          # follow-on in Phase 8c part-2); Windows .zip until 8b's NSIS
+          # installer lands.
           case "${{ matrix.os }}" in
             macos-*) ASSET_EXT="dmg" ;;
+            linux-*) ASSET_EXT="tar.gz" ;;
             *)       ASSET_EXT="zip" ;;
           esac
           echo "asset=BALLView-${REF}-${{ matrix.os }}.${ASSET_EXT}" >> "$GITHUB_OUTPUT"
@@ -355,6 +368,69 @@ jobs:
             "${CODESIGN_FLAG[@]}" \
             "$DMG" "$STAGE"
           ls -lh "$DMG"
+
+      # =====================================================================
+      # Linux x86_64 + arm64 — Phase 8c (PKG-LINUX-01) part-1
+      # SHIP-LGPL-ONLY per .planning/phases/08c-packaging-linux/
+      # 08c-FFTW-GPL-DECISION.md (no GPL-compliance owner named for v1.7).
+      # Configure runs without FFTW; build produces BALL+VIEW+BALLView and
+      # CPack rolls a portable .tar.gz. AppImage + .deb + .rpm full
+      # packaging deferred to Phase 8c part-2 (linuxdeploy-plugin-qt +
+      # CPack DEB/RPM generators).
+      # =====================================================================
+      - name: Install dependencies (Linux / apt)
+        if: startsWith(matrix.os, 'linux-')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential cmake ninja-build flex bison ccache \
+            libboost-all-dev libeigen3-dev libglew-dev libtbb-dev \
+            libopenbabel-dev liblpsolve55-dev libsvm-dev \
+            xvfb mesa-utils libgl1-mesa-dev libglu1-mesa-dev \
+            patchelf
+          # NOTE: NO libfftw3-dev — SHIP-LGPL-ONLY per FFTW-GPL-DECISION.md.
+
+      - name: Install Qt 6 (Linux — jurplel/install-qt-action / aqtinstall)
+        if: startsWith(matrix.os, 'linux-')
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.*'
+          host: ${{ matrix.os == 'linux-arm64' && 'linux_arm64' || 'linux' }}
+          target: desktop
+          modules: 'qtimageformats'
+          cache: true
+
+      - name: Configure (Linux)
+        if: startsWith(matrix.os, 'linux-')
+        run: |
+          cmake --preset ci-linux \
+            -DBALL_HAS_FFTW=OFF \
+            -DCMAKE_INSTALL_PREFIX=/usr
+
+      - name: Build (Linux)
+        if: startsWith(matrix.os, 'linux-')
+        run: cmake --build --preset ci-linux --target BALL VIEW BALLView
+
+      - name: Package (Linux — CPack tar.gz)
+        if: startsWith(matrix.os, 'linux-')
+        shell: bash
+        run: |
+          cd build/ci-linux
+          # CPack TGZ generator — portable tarball with BALLView + libs
+          # + data/. Bundle Qt 6 runtime via linuxdeploy in a follow-on
+          # commit; for now, tarball includes Qt as linked-not-bundled
+          # (user must have Qt 6.8+ installed). README.txt notes the
+          # dependency.
+          cpack -G TGZ -B "$GITHUB_WORKSPACE/dist"
+          ls -lh "$GITHUB_WORKSPACE/dist"
+          # Rename to the resolve.outputs.asset filename for upload step
+          ARCHIVE=$(ls "$GITHUB_WORKSPACE/dist"/*.tar.gz | head -1)
+          if [ -z "$ARCHIVE" ]; then
+            echo "::error::No .tar.gz produced by cpack -G TGZ"
+            exit 1
+          fi
+          cp "$ARCHIVE" "$GITHUB_WORKSPACE/${{ steps.resolve.outputs.asset }}"
+          ls -lh "$GITHUB_WORKSPACE/${{ steps.resolve.outputs.asset }}"
 
       # =====================================================================
       # Windows x64 — vcpkg manifest, ci-windows preset, windeployqt

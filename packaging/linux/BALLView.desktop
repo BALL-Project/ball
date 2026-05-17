@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=BALLView
+GenericName=Molecular Visualization
+Comment=Molecular modeling and visualization for the BALL framework
+Exec=BALLView %F
+Icon=BALLView
+Terminal=false
+Categories=Science;Chemistry;Education;
+Keywords=molecule;chemistry;biochemistry;visualization;3D;
+MimeType=chemical/x-pdb;chemical/x-mol2;chemical/x-mdl-sdfile;chemical/x-mdl-molfile;chemical/x-xyz;
+StartupNotify=true
