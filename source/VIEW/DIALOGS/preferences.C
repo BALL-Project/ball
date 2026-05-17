@@ -194,9 +194,34 @@ namespace BALL
 			raise();
 		}
 
+		bool Preferences::showStackByName(const String& stack_name)
+		{
+			// Phase 999.44 Plan 02 — Tools › Legacy Settings handler.
+			// Walk every registered PreferencesEntry's stack pages and
+			// open the one whose label matches @p stack_name.
+			QWidget* target = 0;
+			for (HashSet<PreferencesEntry*>::Iterator it = entries_.begin(); +it; ++it)
+			{
+				PreferencesEntry* entry = *it;
+				if (entry == 0) continue;
+				for (auto& p : entry->getStackPages())
+				{
+					if (p.second == stack_name)
+					{
+						target = p.first;
+						break;
+					}
+				}
+				if (target != 0) break;
+			}
+			if (target == 0) return false;
+			showEntry(target);
+			return true;
+		}
+
 		void Preferences::showEntry(QWidget* child)
 		{
-			if (!widget_to_item_.has(child)) 
+			if (!widget_to_item_.has(child))
 			{
 				widget_stack->setCurrentIndex(0);
 				return;

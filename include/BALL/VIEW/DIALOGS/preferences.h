@@ -135,7 +135,14 @@ namespace BALL
 			
 			/// Show the given page
 			void showEntry(QWidget* page);
-						
+
+			/** Show the stack page whose label matches @p stack_name
+			    (the string passed to PreferencesEntry::setWidgetStackName()).
+			    Returns true if a matching page was found and selected.
+			    Phase 999.44 Plan 02 — Tools › Legacy Settings handler.
+			*/
+			bool showStackByName(const String& stack_name);
+
 			///
 			void entrySelected();
 

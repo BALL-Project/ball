@@ -19,7 +19,14 @@ namespace BALL
 {
 	using namespace BALL::VIEW;
 
-	class Mainframe	
+#ifdef BALL_UI_V2
+	namespace VIEW
+	{
+		class InspectorDock;
+	}
+#endif
+
+	class Mainframe
 		: public BALL::VIEW::MainControl
 	{
 		Q_OBJECT
@@ -42,7 +49,7 @@ namespace BALL
 
 		/// Catch key events
 		bool eventFilter(QObject*, QEvent* e);
-			
+
 		/// remove all loaded Molecules and Representations, reset Coloring options
 		void reset();
 
@@ -56,6 +63,16 @@ namespace BALL
 		/// wired into the Tools menu when BALL_UI_V2 is ON AND the
 		/// build is a debug build (!NDEBUG). See iconBrowser.h.
 		void openIconBrowser();
+
+		/// Phase 999.44 Plan 02: open a legacy Preferences stack page
+		/// by its setWidgetStackName(...) string. Handler for the
+		/// Tools › Legacy Settings ▸ <name> submenu entries.
+		void openLegacySetting(const QString& stackName);
+
+		/// Phase 999.44 Plan 02: show the first-run BALLView Refresh
+		/// migration notice (Display/Model/Material moved → Inspector).
+		/// One-shot, gated by [Inspector] firstRunMigrationNoticeShown.
+		void showInspectorMigrationNoticeIfNeeded_();
 #endif
 
 		protected:
@@ -65,6 +82,13 @@ namespace BALL
 			Scene* scene_;
 			QAction* save_project_action_;
 			QAction* qload_action_, *qsave_action_;
+
+#ifdef BALL_UI_V2
+			/// Phase 999.44 Plan 02: right-rail Inspector dock + its
+			/// View ▸ Hide Inspector menu action.
+			VIEW::InspectorDock* inspector_dock_;
+			QAction*             hide_inspector_action_;
+#endif
 	};
 
 } // namespace BALL

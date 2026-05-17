@@ -22,8 +22,14 @@
 #	include <BALL/VIEW/KERNEL/workspaceManager.h>
 #	include <BALL/VIEW/WIDGETS/projectDock.h>
 #	include <BALL/VIEW/WIDGETS/bottomDrawer.h>
+// Phase 999.44 Plan 02 — Unified Inspector mainframe wiring.
+#	include <BALL/VIEW/WIDGETS/inspector/inspectorDock.h>
+#	include <BALL/VIEW/KERNEL/legacySettingsHelper.h>
+#	include <QtCore/QSettings>
+#	include <QtCore/QDir>
 #	include <QtWidgets/QStatusBar>
 #	include <QtWidgets/QMenu>
+#	include <QtWidgets/QMessageBox>
 #	include <QtWidgets/QInputDialog>
 #	include <QtWidgets/QLineEdit>
 #	include <QtGui/QAction>
@@ -70,6 +76,10 @@ namespace BALL
 			save_project_action_(0),
 			qload_action_(0),
 			qsave_action_(0)
+#ifdef BALL_UI_V2
+			, inspector_dock_(0)
+			, hide_inspector_action_(0)
+#endif
 	{
 		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
 		qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -114,6 +124,32 @@ namespace BALL
 
 		if (fullscreen_action_)
 			fullscreen_action_->setIcon(VIEW::Icons::get("actions/view-fullscreen"));
+
+#ifdef BALL_UI_V2
+		// Phase 999.44 Plan 02 — View ▸ Hide Inspector (checkable, Ctrl+\).
+		// "Hide" semantics: checked == hidden, unchecked == visible. We
+		// flip into setChecked(false) on first show so the action label
+		// reflects "Hide Inspector" while the dock is visible.
+		{
+			String desc = "Shortcut|Display|Hide_Inspector";
+			hide_inspector_action_ = insertMenuEntry(
+				MainControl::DISPLAY,
+				(String)tr("Hide Inspector"),
+				/*receiver*/ 0, /*slot*/ 0,
+				desc,
+				QKeySequence(QStringLiteral("Ctrl+\\")),
+				UIOperationMode::MODE_ADVANCED);
+			if (hide_inspector_action_ && inspector_dock_)
+			{
+				hide_inspector_action_->setCheckable(true);
+				hide_inspector_action_->setChecked(false);  // dock visible by default
+				connect(hide_inspector_action_, &QAction::toggled,
+				        this, [this](bool hidden) {
+					if (inspector_dock_) inspector_dock_->setVisible(!hidden);
+				});
+			}
+		}
+#endif
 
 		insertPopupMenuSeparator(DISPLAY, UIOperationMode::MODE_ADVANCED);
 		initPopupMenu(DISPLAY_VIEWPOINT);
@@ -198,6 +234,13 @@ namespace BALL
 		// calls hide() on them).
 		BottomDrawer* drawer = new BottomDrawer(log_view, file_obs, this);
 		addDockWidget(Qt::BottomDockWidgetArea, drawer);
+
+		// Phase 999.44 Plan 02 — Unified Inspector dock (right rail).
+		// Sub-PR 4.1 finish: registers the dock InspectorView builds in
+		// 999.44 Plan 01. WorkspaceManager presets address it by the
+		// inspectorDock objectName the dock sets in its constructor.
+		inspector_dock_ = new VIEW::InspectorDock(this, tr("Inspector"));
+		addDockWidget(Qt::RightDockWidgetArea, inspector_dock_);
 #else
  		addDockWidget(Qt::BottomDockWidgetArea, log_view);
 		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
@@ -253,6 +296,35 @@ namespace BALL
 		                         UIOperationMode::MODE_ADVANCED);
 		if (action)
 			setMenuHint(action, (String)tr("Phase 999.43: browse theme.qrc icons (debug builds only)"));
+#endif
+
+#ifdef BALL_UI_V2
+		// Phase 999.44 Plan 02 — Tools › Legacy Settings submenu.
+		// Sub-PR 4.6 finish: surfaces the 12 inventoried legacy
+		// preferences-stack pages (Display / Lighting / Models / ...)
+		// during the BALLView Refresh migration window. Each entry
+		// opens the Preferences dialog at the matching stack page.
+		// Phase 999.48 §8.8 removes the entire submenu when the legacy
+		// dialogs are deleted.
+		{
+			QMenu* tools_menu = initPopupMenu(MainControl::TOOLS, UIOperationMode::MODE_ADVANCED);
+			if (tools_menu)
+			{
+				tools_menu->addSeparator();
+				QMenu* legacy_menu = tools_menu->addMenu(tr("Legacy Settings"));
+				legacy_menu->setObjectName("legacySettingsMenu");
+				const QStringList names = VIEW::LegacySettingsHelper::legacyStackNames();
+				for (const QString& stack_name : names)
+				{
+					QAction* a = legacy_menu->addAction(
+						VIEW::LegacySettingsHelper::displayName(stack_name));
+					const QString captured = stack_name;
+					connect(a, &QAction::triggered, this, [this, captured]() {
+						openLegacySetting(captured);
+					});
+				}
+			}
+		}
 #endif
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
@@ -514,6 +586,12 @@ namespace BALL
 		// (User-stored preference overrides this in main.C after the
 		// migration prompt; see the [Workspace] currentPreset key.)
 		VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Default, this);
+
+		// Phase 999.44 Plan 02 — first-run BALLView Refresh migration
+		// notice (Display/Model/Material moved to the Inspector). Runs
+		// AFTER WorkspaceManager has settled the dock layout so the
+		// user sees the Inspector dock behind the message box.
+		showInspectorMigrationNoticeIfNeeded_();
 #endif
 	}
 
@@ -537,6 +615,52 @@ namespace BALL
 		VIEW::IconBrowser* dlg = new VIEW::IconBrowser(this);
 		dlg->setAttribute(Qt::WA_DeleteOnClose, true);
 		dlg->show();
+	}
+
+	void Mainframe::openLegacySetting(const QString& stackName)
+	{
+		// Phase 999.44 Plan 02 — Tools › Legacy Settings handler.
+		// Resolves stackName → matching PreferencesEntry stack page via
+		// Preferences::showStackByName, then shows the dialog. The
+		// resolution is implemented inside Preferences because its
+		// entries_ map is protected.
+		VIEW::Preferences* prefs = getPreferences();
+		if (prefs == 0)
+		{
+			Log.warn() << "[Mainframe::openLegacySetting] Preferences dialog not available." << std::endl;
+			return;
+		}
+
+		prefs->show();
+		const String target_name(stackName.toUtf8().constData());
+		if (!prefs->showStackByName(target_name))
+		{
+			Log.warn()
+				<< "[Mainframe::openLegacySetting] No PreferencesEntry stack page named '"
+				<< stackName.toUtf8().constData()
+				<< "' is registered; opening the default page instead." << std::endl;
+		}
+	}
+
+	void Mainframe::showInspectorMigrationNoticeIfNeeded_()
+	{
+		// Phase 999.44 Plan 02 — one-shot migration notice on first
+		// BALL_UI_V2 launch. Storage: [Inspector] firstRunMigrationNoticeShown
+		// in ~/.BALLView (shared with InspectorView's INI persistence).
+		QSettings s(QDir::homePath() + QStringLiteral("/.BALLView"),
+		            QSettings::IniFormat);
+		s.beginGroup(QStringLiteral("Inspector"));
+		const bool shown = s.value(QStringLiteral("firstRunMigrationNoticeShown"),
+		                           false).toBool();
+		if (!shown)
+		{
+			QMessageBox::information(this,
+				VIEW::LegacySettingsHelper::migrationNoticeTitle(),
+				VIEW::LegacySettingsHelper::migrationNoticeBody());
+			s.setValue(QStringLiteral("firstRunMigrationNoticeShown"), true);
+		}
+		s.endGroup();
+		s.sync();
 	}
 #endif
 
