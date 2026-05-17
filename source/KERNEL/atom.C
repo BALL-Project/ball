@@ -65,6 +65,25 @@ namespace BALL
 	{
 		store_->set_type_name(store_idx_, std::string(s.c_str()));
 	}
+	void Atom::writeStoreElement_(const Element* e)
+	{
+		// Mirror Element* as atomic number into uint8 column. Null Element
+		// stores as 0 (unknown).
+		store_->element_index(store_idx_) =
+			(e == 0) ? 0 : static_cast<std::uint8_t>(e->getAtomicNumber());
+	}
+	void Atom::writeStoreRadius_(float r)
+	{
+		store_->radius(store_idx_) = r;
+	}
+	void Atom::writeStoreAtomType_(short t)
+	{
+		store_->atom_type(store_idx_) = t;
+	}
+	void Atom::writeStoreFormalCharge_(short fc)
+	{
+		store_->formal_charge(store_idx_) = fc;
+	}
 
 	Atom::Atom()
 		: Composite(),
@@ -84,13 +103,19 @@ namespace BALL
 		  force_(BALL_ATOM_DEFAULT_FORCE)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a/3/4/5/6 dual-write: mirror initial fields into store.
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror initial fields into store.
 		store_->position(store_idx_) = position_;
 		store_->charge(store_idx_) = charge_;
 		store_->velocity(store_idx_) = velocity_;
 		store_->force(store_idx_) = force_;
 		store_->set_name(store_idx_, std::string(name_.c_str()));
 		store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+		store_->radius(store_idx_) = radius_;
+		store_->atom_type(store_idx_) = type_;
+		store_->formal_charge(store_idx_) = formal_charge_;
+		store_->element_index(store_idx_) =
+			(element_ == 0) ? 0
+			                : static_cast<std::uint8_t>(element_->getAtomicNumber());
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
@@ -111,13 +136,19 @@ namespace BALL
 		  force_(atom.force_)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a/3/4/5/6 dual-write: mirror initial fields into store.
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror initial fields into store.
 		store_->position(store_idx_) = position_;
 		store_->charge(store_idx_) = charge_;
 		store_->velocity(store_idx_) = velocity_;
 		store_->force(store_idx_) = force_;
 		store_->set_name(store_idx_, std::string(name_.c_str()));
 		store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+		store_->radius(store_idx_) = radius_;
+		store_->atom_type(store_idx_) = type_;
+		store_->formal_charge(store_idx_) = formal_charge_;
+		store_->element_index(store_idx_) =
+			(element_ == 0) ? 0
+			                : static_cast<std::uint8_t>(element_->getAtomicNumber());
 	}
 
 	Atom::Atom
@@ -142,13 +173,19 @@ namespace BALL
 		  force_(force)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a/3/4/5/6 dual-write: mirror initial fields into store.
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror initial fields into store.
 		store_->position(store_idx_) = position_;
 		store_->charge(store_idx_) = charge_;
 		store_->velocity(store_idx_) = velocity_;
 		store_->force(store_idx_) = force_;
 		store_->set_name(store_idx_, std::string(name_.c_str()));
 		store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+		store_->radius(store_idx_) = radius_;
+		store_->atom_type(store_idx_) = type_;
+		store_->formal_charge(store_idx_) = formal_charge_;
+		store_->element_index(store_idx_) =
+			(element_ == 0) ? 0
+			                : static_cast<std::uint8_t>(element_->getAtomicNumber());
 	}
 
 	Atom::~Atom()
@@ -214,20 +251,26 @@ namespace BALL
 		element_ = &PTE[s];
 		pm.readPrimitive(formal_charge_, "formal_charge_");
 		pm.readPrimitive(charge_, "charge_");
-		// K0.3b.3 dual-write: mirror persisted charge into store.
-		if (store_) store_->charge(store_idx_) = charge_;
 		pm.readPrimitive(radius_, "radius_");
 		pm.readPrimitive(name_, "name_");
 		pm.readPrimitive(type_name_, "type_name_");
-		// K0.3b.6 dual-write: mirror persisted names into store pool.
-		if (store_)
-		{
-			store_->set_name(store_idx_, std::string(name_.c_str()));
-			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
-		}
 		Index tmp_type;
 		pm.readPrimitive(tmp_type, "type_");
 		type_ = (Atom::Type)tmp_type;
+		// K0.3b.3/6/7 dual-write: mirror persisted scalars + element +
+		// names into store columns/pool.
+		if (store_)
+		{
+			store_->charge(store_idx_) = charge_;
+			store_->formal_charge(store_idx_) = formal_charge_;
+			store_->radius(store_idx_) = radius_;
+			store_->atom_type(store_idx_) = type_;
+			store_->element_index(store_idx_) =
+				(element_ == 0) ? 0
+				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+			store_->set_name(store_idx_, std::string(name_.c_str()));
+			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+		}
 
 		pm.readStorableObject(position_, "position_");
 		pm.readStorableObject(velocity_, "velocity_");
@@ -266,7 +309,7 @@ namespace BALL
 		charge_ = atom.charge_;
 		velocity_ = atom.velocity_;
 		force_ = atom.force_;
-		// K0.3b.2a/3/4/5/6 dual-write: mirror new fields into store cols.
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror new fields into store cols.
 		if (store_)
 		{
 			store_->position(store_idx_) = position_;
@@ -275,6 +318,12 @@ namespace BALL
 			store_->force(store_idx_) = force_;
 			store_->set_name(store_idx_, std::string(name_.c_str()));
 			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+			store_->radius(store_idx_) = radius_;
+			store_->atom_type(store_idx_) = type_;
+			store_->formal_charge(store_idx_) = formal_charge_;
+			store_->element_index(store_idx_) =
+				(element_ == 0) ? 0
+				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
 		}
   }
 
@@ -294,7 +343,7 @@ namespace BALL
 		charge_ = atom.charge_;
 		velocity_ = atom.velocity_;
 		force_ = atom.force_;
-		// K0.3b.2a/3/4/5/6 dual-write: mirror new fields into store cols.
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror new fields into store cols.
 		if (store_)
 		{
 			store_->position(store_idx_) = position_;
@@ -303,6 +352,12 @@ namespace BALL
 			store_->force(store_idx_) = force_;
 			store_->set_name(store_idx_, std::string(name_.c_str()));
 			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+			store_->radius(store_idx_) = radius_;
+			store_->atom_type(store_idx_) = type_;
+			store_->formal_charge(store_idx_) = formal_charge_;
+			store_->element_index(store_idx_) =
+				(element_ == 0) ? 0
+				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
 		}
 
 		return *this;
@@ -339,25 +394,30 @@ namespace BALL
 		std::swap(charge_, atom.charge_);
 		std::swap(velocity_, atom.velocity_);
 		std::swap(force_, atom.force_);
-		// K0.3b.2a/3/4/5/6 dual-write: mirror swapped fields into store.
-		if (store_)
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror swapped fields into store.
+		auto mirror_all = [](MoleculeStore* st, std::uint32_t idx,
+		                     const Vector3& pos, float ch, const Vector3& vel,
+		                     const Vector3& f, const String& nm, const String& tnm,
+		                     float r, short t, short fc, const Element* el)
 		{
-			store_->position(store_idx_) = position_;
-			store_->charge(store_idx_) = charge_;
-			store_->velocity(store_idx_) = velocity_;
-			store_->force(store_idx_) = force_;
-			store_->set_name(store_idx_, std::string(name_.c_str()));
-			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
-		}
-		if (atom.store_)
-		{
-			atom.store_->position(atom.store_idx_) = atom.position_;
-			atom.store_->charge(atom.store_idx_) = atom.charge_;
-			atom.store_->velocity(atom.store_idx_) = atom.velocity_;
-			atom.store_->force(atom.store_idx_) = atom.force_;
-			atom.store_->set_name(atom.store_idx_, std::string(atom.name_.c_str()));
-			atom.store_->set_type_name(atom.store_idx_, std::string(atom.type_name_.c_str()));
-		}
+			if (!st) return;
+			st->position(idx) = pos;
+			st->charge(idx)   = ch;
+			st->velocity(idx) = vel;
+			st->force(idx)    = f;
+			st->set_name(idx, std::string(nm.c_str()));
+			st->set_type_name(idx, std::string(tnm.c_str()));
+			st->radius(idx)   = r;
+			st->atom_type(idx) = t;
+			st->formal_charge(idx) = fc;
+			st->element_index(idx) =
+				(el == 0) ? 0 : static_cast<std::uint8_t>(el->getAtomicNumber());
+		};
+		mirror_all(store_, store_idx_, position_, charge_, velocity_, force_,
+		           name_, type_name_, radius_, type_, formal_charge_, element_);
+		mirror_all(atom.store_, atom.store_idx_, atom.position_, atom.charge_,
+		           atom.velocity_, atom.force_, atom.name_, atom.type_name_,
+		           atom.radius_, atom.type_, atom.formal_charge_, atom.element_);
 	}
 
 	Molecule* Atom::getMolecule()
@@ -755,7 +815,7 @@ namespace BALL
 		velocity_.set(BALL_ATOM_DEFAULT_VELOCITY);
 		force_.set(BALL_ATOM_DEFAULT_FORCE);
 
-		// K0.3b.2a/3/4/5/6 dual-write: mirror cleared fields into store.
+		// K0.3b.2a/3/4/5/6/7 dual-write: mirror cleared fields into store.
 		if (store_)
 		{
 			store_->position(store_idx_) = position_;
@@ -764,6 +824,12 @@ namespace BALL
 			store_->force(store_idx_) = force_;
 			store_->set_name(store_idx_, std::string(name_.c_str()));
 			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
+			store_->radius(store_idx_) = radius_;
+			store_->atom_type(store_idx_) = type_;
+			store_->formal_charge(store_idx_) = formal_charge_;
+			store_->element_index(store_idx_) =
+				(element_ == 0) ? 0
+				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
 		}
 
 		delete interactions;

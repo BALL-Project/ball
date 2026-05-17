@@ -6,6 +6,8 @@ BALL_INLINE
 void Atom::setElement(const Element& element)
 {
 	element_ = &element;
+	// K0.3b.7 dual-write: mirror element atomic number into store column.
+	if (store_) writeStoreElement_(&element);
 }
 
 BALL_INLINE
@@ -32,6 +34,8 @@ BALL_INLINE
 void Atom::setFormalCharge(Index charge)
 {
 	formal_charge_ = charge;
+	// K0.3b.7 dual-write: mirror into store column.
+	if (store_) writeStoreFormalCharge_(static_cast<short>(charge));
 }
 
 BALL_INLINE
@@ -112,6 +116,8 @@ BALL_INLINE
 void Atom::setRadius(float radius)
 {
 	radius_ = radius;
+	// K0.3b.7 dual-write: mirror into store column.
+	if (store_) writeStoreRadius_(radius);
 }
 
 BALL_INLINE
@@ -124,6 +130,8 @@ BALL_INLINE
 void Atom::setType(Type type)
 {
 	type_ = type;
+	// K0.3b.7 dual-write: mirror into store column.
+	if (store_) writeStoreAtomType_(type);
 }
 
 BALL_INLINE
