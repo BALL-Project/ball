@@ -49,6 +49,9 @@ SET(SOURCES_LIST
 	# Static data — compiles in both BALL_UI_V2 cells. Mainframe wires
 	# the submenu under the ifdef in a follow-up plan.
 	legacySettingsHelper.C
+	# Phase 999.46 (Handover §6.1) — CommandRegistry. Body is wholly
+	# gated behind #ifdef BALL_UI_V2; OFF cell produces an empty TU.
+	commandRegistry.C
 )
 
 # Phase 999.45 — workspaceManager.h has Q_OBJECT (both WorkspaceManager
