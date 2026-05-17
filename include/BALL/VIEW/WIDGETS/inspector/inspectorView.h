@@ -6,6 +6,13 @@
 // reads + writes the [Inspector] INI group for visible-state /
 // current-tab / per-section collapsed persistence.
 //
+// Plan 02: registered on the right rail by mainframe; Plan 03 adds
+// the Selection tab (attachSelectionTab / setSelection); Plan 04
+// adds the Representation tab (attachRepresentationTab /
+// setRepresentations / setActiveRepresentation); Plan 05 adds the
+// Scene tab (attachSceneTab); Plan 06 cuts over StageController
+// apply() to mutating.
+//
 
 #ifndef BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORVIEW_H
 #define BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORVIEW_H
