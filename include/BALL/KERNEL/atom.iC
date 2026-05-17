@@ -80,6 +80,8 @@ BALL_INLINE
 void Atom::setName(const String& name)
 {
 	name_ = name;
+	// K0.3b.6 dual-write: mirror into store string pool.
+	if (store_) writeStoreName_(name);
 }
 
 BALL_INLINE
@@ -134,6 +136,8 @@ BALL_INLINE
 void Atom::setTypeName(const String& type_name)
 {
 	type_name_ = type_name;
+	// K0.3b.6 dual-write: mirror into store string pool.
+	if (store_) writeStoreTypeName_(type_name);
 }
 
 BALL_INLINE
