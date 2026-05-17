@@ -4,9 +4,7 @@
 # include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_ICONLOADER_H
-# include <BALL/VIEW/KERNEL/iconLoader.h>
-#endif
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 
 #include <QtWidgets/QMenu>
 #include <QtGui/QAction>
@@ -77,7 +75,7 @@ namespace BALL
 
 			//Setup the add_button
 			ui_.add_button->setVisible(is_editable_);
-			ui_.add_button->setIcon(IconLoader::instance().getIcon("actions/list-add"));
+			ui_.add_button->setIcon(Icons::get("actions/list-add"));
 
 			//Create the menu which is used for the addition of new properties
 			//Ideally this should be replaced by some kind of registry
@@ -476,9 +474,8 @@ namespace BALL
 		void PropEditorWidget::setupUi_()
 		{
 			ui_.setupUi(this);
-			IconLoader& loader= IconLoader::instance();
-			ui_.delete_button->setIcon(loader.getIcon("actions/edit-delete"));
-			ui_.duplicate_button->setIcon(loader.getIcon("actions/edit-copy"));
+			ui_.delete_button->setIcon(Icons::get("actions/edit-delete"));
+			ui_.duplicate_button->setIcon(Icons::get("actions/edit-copy"));
 			connect(ui_.delete_button, SIGNAL(clicked()), this, SIGNAL(deleteProperty()));
 			connect(ui_.duplicate_button, SIGNAL(clicked()), this, SIGNAL(duplicateProperty()));
 		}
