@@ -25,6 +25,15 @@ SET(SOURCES_LIST
 	labeledSlider.C
 	sectionHeader.C
 	swatchButton.C
+	# Phase 999.44 — Unified Inspector shell + sections. Each TU is
+	# fully gated by #ifdef BALL_UI_V2 in its body so listing them
+	# unconditionally keeps the OFF cell's symbol table identical to
+	# the pre-999.44 baseline.
+	inspector/inspectorSection.C
+	inspector/inspectorTabs.C
+	inspector/inspectorBody.C
+	inspector/inspectorView.C
+	inspector/inspectorDock.C
 	# Phase 999.45 — Workspace consolidation: ProjectDock (left-rail
 	# tabified group of Structures/Reps/Datasets) + BottomDrawer
 	# (24px↔240px animated dock with Logs/FileObserver tabs). Both
