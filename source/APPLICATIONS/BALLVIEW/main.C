@@ -19,6 +19,13 @@
 
 #include <iostream>
 
+// === Phase 999.40: ThemeManager init (BALL_UI_V2 build flag) ===============
+// Single neutral theme per maintainer-Q3 — Handover Phase 0.
+#ifdef BALL_UI_V2
+#  include <BALL/VIEW/KERNEL/theme/themeManager.h>
+#endif
+// === end Phase 999.40 ======================================================
+
 void logMessages(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
 	BALL::String s(message.toStdString());
@@ -69,6 +76,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	QSurfaceFormat::setDefaultFormat(BALL::VIEW::GLRenderWindow::gl_format_);
 
 	QApplication application(argc, argv);
+
+	// === Phase 999.40: ThemeManager init (BALL_UI_V2 build flag) ===========
+	// Apply the neutral QSS stylesheet immediately after QApplication ctor
+	// and BEFORE any widgets are constructed so the first paint is themed.
+	// Single neutral theme per maintainer-Q3 — Handover Phase 0.
+	// No-op when BALL_UI_V2 is OFF (the default in v1.7).
+#ifdef BALL_UI_V2
+	BALL::VIEW::ThemeManager::instance().init(&application);
+#endif
+	// === end Phase 999.40 ==================================================
 
 #ifdef Q_OS_MACOS
 	// Resolve BALL_DATA_PATH for the macOS .app bundle.

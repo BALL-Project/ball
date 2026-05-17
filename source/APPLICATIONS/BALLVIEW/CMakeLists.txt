@@ -8,6 +8,33 @@ SET(SOURCES_LIST
 	mainframe.C
 )
 
+# === Phase 999.8-full: Sparkle (macOS) auto-update integration ===============
+# Detect vendored Sparkle.xcframework. The vendor script
+# packaging/macos/vendor-sparkle.sh downloads + extracts it (see
+# .planning/phases/999.8-auto-update-sparkle-winsparkle/999.8-SPIKE.md §1).
+# When absent (local dev clones, unsigned CI fallback path), BALL_HAS_SPARKLE
+# is OFF and the sparkle_bridge.mm shim compiles a no-op stub — BALLView
+# builds and runs without auto-update.
+SET(BALL_SPARKLE_XCFRAMEWORK "${CMAKE_SOURCE_DIR}/packaging/macos/Sparkle.xcframework")
+IF(APPLE AND EXISTS "${BALL_SPARKLE_XCFRAMEWORK}")
+	SET(BALL_HAS_SPARKLE ON)
+	MESSAGE(STATUS "BALLView: Sparkle auto-update ENABLED (vendored XCFramework found)")
+ELSE()
+	SET(BALL_HAS_SPARKLE OFF)
+	IF(APPLE)
+		MESSAGE(STATUS "BALLView: Sparkle auto-update DISABLED (run packaging/macos/vendor-sparkle.sh to enable)")
+	ENDIF()
+ENDIF()
+
+IF(APPLE)
+	# Compile sparkle_bridge.mm as Objective-C++ on macOS only. The .mm
+	# extension triggers OBJCXX automatically; we explicitly enable the
+	# language to keep CMake's compiler detection deterministic.
+	ENABLE_LANGUAGE(OBJCXX)
+	LIST(APPEND SOURCES_LIST sparkle_bridge.mm)
+ENDIF()
+# === end Phase 999.8-full ===================================================
+
 ### the list of all files requiring a moc run ###
 SET(MOC_SOURCES_LIST
 	demoTutorialDialog.h
@@ -47,6 +74,44 @@ ADD_EXECUTABLE(BALLView
 )
 
 TARGET_LINK_LIBRARIES(BALLView ${BALLVIEW_DEP_LIBRARIES})
+
+# === Phase 999.8-full: Sparkle (macOS) link + framework install =============
+IF(APPLE AND BALL_HAS_SPARKLE)
+	TARGET_COMPILE_DEFINITIONS(BALLView PRIVATE BALL_HAS_SPARKLE=1)
+	# Add the XCFramework's macOS slice to the framework search path. The
+	# .xcframework bundle contains macos-arm64_x86_64/Sparkle.framework
+	# which is what the linker resolves. Sparkle ships pre-signed; the
+	# Phase 8a `codesign --deep --force` pass re-signs it under BALL's
+	# Developer ID + hardened runtime (R-sparkle-helper-sign mitigation —
+	# see 999.8-SPIKE.md §5).
+	TARGET_LINK_OPTIONS(BALLView PRIVATE
+		-F${BALL_SPARKLE_XCFRAMEWORK}/macos-arm64_x86_64
+	)
+	TARGET_LINK_LIBRARIES(BALLView "-framework Sparkle")
+	# Install Sparkle.framework into Contents/Frameworks/ AFTER macdeployqt
+	# runs (release.yml orders these correctly — macdeployqt first, then
+	# Sparkle is copied in by the post-build step driven from
+	# BALLViewInstallFix.cmake.in's downstream hook).
+ENDIF()
+# === Phase 999.8-full: WinSparkle (Windows) link =============================
+IF(WIN32)
+	# winsparkle vcpkg port exposes the unofficial::winsparkle::winsparkle
+	# imported target. find_package is best-effort: when the port isn't
+	# installed (older vcpkg manifests, or local dev without --vcpkg), we
+	# fall through and BALL_HAS_WINSPARKLE stays OFF — main.C's stub
+	# compiles in and BALLView ships without auto-update on that build.
+	FIND_PACKAGE(unofficial-winsparkle CONFIG QUIET)
+	IF(TARGET unofficial::winsparkle::winsparkle)
+		SET(BALL_HAS_WINSPARKLE ON)
+		TARGET_COMPILE_DEFINITIONS(BALLView PRIVATE BALL_HAS_WINSPARKLE=1)
+		TARGET_LINK_LIBRARIES(BALLView unofficial::winsparkle::winsparkle)
+		MESSAGE(STATUS "BALLView: WinSparkle auto-update ENABLED (vcpkg port found)")
+	ELSE()
+		SET(BALL_HAS_WINSPARKLE OFF)
+		MESSAGE(STATUS "BALLView: WinSparkle auto-update DISABLED (winsparkle vcpkg port not installed)")
+	ENDIF()
+ENDIF()
+# === end Phase 999.8-full ===================================================
 
 # macOS bundle identity — populates BALLView.app/Contents/Info.plist via the
 # cmake/MacOSXBundleInfo.plist.in template (Phase 05.1 plan 14, BACKLOG D5;

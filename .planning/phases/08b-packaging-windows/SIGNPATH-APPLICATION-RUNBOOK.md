@@ -188,5 +188,28 @@ bus-factor procedure.
 
 ---
 
+## 10. Files to sign (artifact-configuration-slug `installer`)
+
+The SignPath project `ballview`, signing-policy `release-signing`, artifact-
+configuration `installer` MUST enumerate every executable PE inside the NSIS
+installer wrapper. Otherwise un-enumerated DLLs ship unsigned and trigger
+SmartScreen prompts when their export functions are first invoked (Phase
+999.8-full surfaced this as R-winsparkle-dll-signing — see
+`.planning/phases/999.8-auto-update-sparkle-winsparkle/999.8-SPIKE.md` §5).
+
+Current files to enumerate:
+
+- `BALLView-*-installer.exe` — the NSIS outer wrapper
+- `BALLView.exe` — the main application binary
+- `WinSparkle.dll` — the auto-update worker (Phase 999.8-full); INVOKED when
+  the user clicks "Check for Updates" or on the scheduled background check.
+  Unsigned → SmartScreen warning on first auto-update attempt, defeating
+  the entire signed-installer UX.
+
+Append future third-party DLLs here as they enter the bundle (e.g., if Phase
+999.8 follow-on adds a SignPath-signed updater helper).
+
+---
+
 **Status:** AGENT-DRAFTED — awaiting human to fill §4 (named admins) and
 execute §1-§6 (submit the application).

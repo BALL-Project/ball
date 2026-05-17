@@ -101,6 +101,18 @@ FILE(INSTALL @CMAKE_SOURCE_DIR@/data DESTINATION ${BALLVIEW_BUNDLE_DIR_CONTENTS}
 EXECUTE_PROCESS(COMMAND @QT_DEPLOY_EXECUTABLE@ ${BALLVIEW_BUNDLE_DIR})
 
 
+# Phase 999.8-full: bundle Sparkle.xcframework AFTER macdeployqt so the deploy
+# tool doesn't try to re-process Sparkle's bundled helpers (Autoupdate.app
+# Mach-O has its own signature — Phase 8a's `codesign --deep --force` covers
+# it; see 999.8-SPIKE.md §1 R-sparkle-helper-sign). Skipped when Sparkle
+# isn't vendored (local dev without packaging/macos/Sparkle.xcframework).
+SET(BALL_SPARKLE_FRAMEWORK_SRC "@CMAKE_SOURCE_DIR@/packaging/macos/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework")
+IF(EXISTS "${BALL_SPARKLE_FRAMEWORK_SRC}")
+	FILE(INSTALL "${BALL_SPARKLE_FRAMEWORK_SRC}" DESTINATION ${BALLVIEW_BUNDLE_DIR_FRAMEWORKS} USE_SOURCE_PERMISSIONS)
+	MESSAGE(STATUS "Bundled Sparkle.framework into BALLView.app/Contents/Frameworks/")
+ENDIF()
+
+
 # Finally, apply manual fixes
 FOREACH(ITEM_TO_FIX ${ITEMS_TO_FIX})
 	FIX_BUNDLE_ITEM(${ITEM_TO_FIX})

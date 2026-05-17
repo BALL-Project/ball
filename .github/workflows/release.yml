@@ -89,6 +89,42 @@ jobs:
           ref: ${{ steps.resolve.outputs.ref }}
 
       # =====================================================================
+      # Phase 999.8-full: Ed25519 auto-update key presence gate.
+      # Fails the job EARLY (before any expensive build/sign work) if the
+      # production Ed25519 pubkey secret is missing on a non-dev tag. This
+      # prevents accidentally shipping binaries that embed the placeholder
+      # pubkey from Phase 999.8-full scaffolding — once such a binary is
+      # in users' hands, ALL their installs become un-updatable forever.
+      # See .planning/phases/999.8-auto-update-sparkle-winsparkle/ED25519-KEY-RUNBOOK.md.
+      #
+      # Dev tags (prefix `dev-`) and workflow_dispatch with draft=true skip
+      # the gate — local pre-release smoke tests don't need the prod key.
+      # =====================================================================
+      - name: Ed25519 auto-update key presence gate (Phase 999.8-full)
+        shell: bash
+        env:
+          AUTOUPDATE_ED25519_PUBLIC_KEY: ${{ secrets.AUTOUPDATE_ED25519_PUBLIC_KEY }}
+        run: |
+          REF="${{ steps.resolve.outputs.ref }}"
+          IS_DRAFT="${{ github.event.inputs.draft || 'false' }}"
+          case "$REF" in
+            dev-*|*-dev|*-rc*|*-alpha*|*-beta*)
+              echo "Dev/RC tag $REF — skipping Ed25519 key gate."
+              exit 0 ;;
+          esac
+          if [ "$IS_DRAFT" = "true" ]; then
+            echo "Draft release requested — skipping Ed25519 key gate."
+            exit 0
+          fi
+          if [ -z "$AUTOUPDATE_ED25519_PUBLIC_KEY" ]; then
+            echo "::error::AUTOUPDATE_ED25519_PUBLIC_KEY secret is unset on a production tag ($REF)."
+            echo "::error::Shipping with a placeholder pubkey would permanently brick auto-update for every install."
+            echo "::error::See .planning/phases/999.8-auto-update-sparkle-winsparkle/ED25519-KEY-RUNBOOK.md to procure the key."
+            exit 1
+          fi
+          echo "Ed25519 production pubkey present — gate passed."
+
+      # =====================================================================
       # macOS arm64 — Homebrew Qt 6, ci-macos preset, macdeployqt
       #
       # Phase 5.1 critical fix (codex review CRITICAL #1, 2026-05-15):
@@ -261,6 +297,36 @@ jobs:
             echo "::warning::data/ not found at repo root — .app may be missing runtime resources"
           fi
 
+      # =====================================================================
+      # Phase 999.8-full: vendor Sparkle.xcframework into the bundle.
+      # CMake's BALLViewInstallFix.cmake.in handles local `cmake --install`
+      # paths, but the CI release path uses macdeployqt directly without
+      # going through that script. We replicate the install-time copy here
+      # so Sparkle.framework is in Contents/Frameworks/ BEFORE the codesign
+      # `--deep --force` sweep — otherwise notarization sees an unsigned
+      # framework and rejects the bundle (R-sparkle-helper-sign mitigation,
+      # 999.8-SPIKE.md §5).
+      #
+      # No-op when packaging/macos/Sparkle.xcframework doesn't exist yet
+      # (first-run before vendor-sparkle.sh has been executed). The
+      # auto-update path is then a runtime no-op (BALL_HAS_SPARKLE off).
+      # =====================================================================
+      - name: Bundle Sparkle.framework into the .app (macOS — Phase 999.8-full)
+        if: matrix.os == 'macos-arm64'
+        shell: bash
+        run: |
+          SRC="packaging/macos/Sparkle.xcframework/macos-arm64_x86_64/Sparkle.framework"
+          DEST="${{ steps.locate-mac.outputs.app }}/Contents/Frameworks"
+          if [ -d "$SRC" ]; then
+            mkdir -p "$DEST"
+            cp -R "$SRC" "$DEST/"
+            echo "Bundled Sparkle.framework into BALLView.app"
+            ls -la "$DEST/Sparkle.framework"
+          else
+            echo "::warning::Sparkle.xcframework not vendored — auto-update DISABLED for this build."
+            echo "::warning::Run packaging/macos/vendor-sparkle.sh on a maintainer workstation and commit the result before the v1.7.0 production tag."
+          fi
+
       - name: Codesign BALLView.app with Developer ID + hardened runtime (macOS)
         if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
         env:
@@ -330,6 +396,36 @@ jobs:
           spctl --assess --type execute --verbose=4 \
             "${{ steps.locate-mac.outputs.app }}" 2>&1 | tee /tmp/spctl-assess.log
           grep -q 'source=Notarized Developer ID' /tmp/spctl-assess.log
+
+      # =====================================================================
+      # Phase 999.8-full: Sparkle.framework smoke test.
+      # Asserts the vendored framework is (a) present and (b) co-signed by
+      # the Phase 8a `codesign --deep --force` pass. Runs AFTER the codesign
+      # step so it validates the actual post-signing state.
+      # Skipped on the unsigned-fallback path (no framework, no signature
+      # to verify).
+      # =====================================================================
+      - name: Sparkle.framework smoke test (macOS — Phase 999.8-full)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
+        shell: bash
+        run: |
+          APP="${{ steps.locate-mac.outputs.app }}"
+          FW="$APP/Contents/Frameworks/Sparkle.framework"
+          if [ ! -d "$FW" ]; then
+            echo "::warning::Sparkle.framework not bundled — auto-update disabled for this build."
+            echo "::warning::This is expected before packaging/macos/vendor-sparkle.sh runs once."
+            exit 0
+          fi
+          echo "Sparkle.framework present — verifying signature..."
+          codesign --verify --deep --strict --verbose=2 "$FW" 2>&1 | tail -10
+          # Autoupdate.app helper has its own Mach-O signature — explicitly
+          # verify it (R-sparkle-helper-sign — 999.8-SPIKE.md §5).
+          AUTOUPDATE=$(find "$FW" -name "Autoupdate.app" -type d | head -1)
+          if [ -n "$AUTOUPDATE" ]; then
+            echo "Verifying Autoupdate.app helper signature..."
+            codesign --verify --deep --strict --verbose=2 "$AUTOUPDATE" 2>&1 | tail -5
+          fi
+          echo "Sparkle.framework smoke test PASSED."
 
       - name: Build signed .dmg via create-dmg (macOS)
         if: matrix.os == 'macos-arm64'
@@ -806,6 +902,44 @@ jobs:
               --no-opengl-sw `
               "${{ steps.locate-win.outputs.exe }}"
 
+      # =====================================================================
+      # Phase 999.8-full: bundle WinSparkle.dll alongside BALLView.exe.
+      # windeployqt only copies Qt DLLs — third-party DLLs like WinSparkle
+      # are left where vcpkg installed them, so we copy explicitly.
+      # vcpkg's x64-windows-release triplet drops the DLL under
+      # build/ci-windows/vcpkg_installed/x64-windows-release/bin/WinSparkle.dll.
+      # NSIS later picks it up from the deploy dir.
+      # =====================================================================
+      - name: Bundle WinSparkle.dll alongside BALLView.exe (Phase 999.8-full)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          $dll = Get-ChildItem -Path build\ci-windows\vcpkg_installed -Filter WinSparkle.dll -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $dll) {
+            Write-Host "::warning::WinSparkle.dll not found in vcpkg_installed — winsparkle vcpkg port may not have built. Auto-update DISABLED for this build."
+            exit 0
+          }
+          Copy-Item -Path $dll.FullName -Destination "${{ steps.locate-win.outputs.deploy_dir }}" -Force
+          Write-Host "Bundled WinSparkle.dll: $($dll.FullName) -> ${{ steps.locate-win.outputs.deploy_dir }}"
+
+      - name: WinSparkle.dll smoke test (Phase 999.8-full)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          $dll = Join-Path "${{ steps.locate-win.outputs.deploy_dir }}" "WinSparkle.dll"
+          $exe = "${{ steps.locate-win.outputs.exe }}"
+          if (-not (Test-Path $dll)) {
+            Write-Host "::warning::WinSparkle.dll not bundled alongside BALLView.exe — auto-update disabled for this build."
+            Write-Host "::warning::Expected at: $dll"
+            exit 0
+          }
+          $exeDir = Split-Path $exe -Parent
+          if ($exeDir -ne "${{ steps.locate-win.outputs.deploy_dir }}") {
+            Write-Host "::warning::BALLView.exe is not in deploy_dir (Phase 8b layout assumption); copying WinSparkle.dll to BALLView.exe's directory as a fallback."
+            Copy-Item -Path $dll -Destination $exeDir -Force
+          }
+          Write-Host "WinSparkle.dll smoke test PASSED."
+
       - name: Bundle data/ next to .exe (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
@@ -1093,3 +1227,120 @@ jobs:
               --repo "$GITHUB_REPOSITORY" \
               "${ASSETS[@]}"
           fi
+
+  # =========================================================================
+  # Phase 999.8-full: publish appcast XML to gh-pages.
+  # Runs AFTER `release` so the .dmg + .exe are already attached to the GH
+  # Release (URLs in the appcast entries point at those assets).
+  # Gated on AUTOUPDATE_ED25519_PRIVATE_KEY being set — without it, signing
+  # is impossible and Sparkle/WinSparkle would reject the appcast entry on
+  # the client. Maintainers running pre-key smoke releases skip this job
+  # entirely (Sparkle/WinSparkle just don't find a new entry — graceful
+  # degradation, no error in the installed app).
+  # See .planning/phases/999.8-auto-update-sparkle-winsparkle/APPCAST-PUBLISHING-RUNBOOK.md.
+  # =========================================================================
+  publish-appcast:
+    name: Publish appcast (Phase 999.8-full)
+    needs: release
+    if: success() && github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Resolve ref
+        id: resolve
+        shell: bash
+        run: |
+          REF="${{ github.ref_name }}"
+          # Strip leading 'v' to get the sparkle:version attribute value.
+          VERSION="${REF#v}"
+          echo "ref=$REF" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "pubdate=$(date -u +'%a, %d %b %Y %H:%M:%S +0000')" >> "$GITHUB_OUTPUT"
+
+      - name: Ed25519 private key presence check
+        shell: bash
+        env:
+          AUTOUPDATE_ED25519_PRIVATE_KEY: ${{ secrets.AUTOUPDATE_ED25519_PRIVATE_KEY }}
+        run: |
+          if [ -z "$AUTOUPDATE_ED25519_PRIVATE_KEY" ]; then
+            echo "::warning::AUTOUPDATE_ED25519_PRIVATE_KEY secret unset — skipping appcast publish."
+            echo "::warning::Installed BALLView clients will not see this release as an update."
+            echo "::warning::See .planning/phases/999.8-auto-update-sparkle-winsparkle/ED25519-KEY-RUNBOOK.md."
+            exit 0
+          fi
+          echo "Ed25519 private key present — proceeding with appcast publish."
+
+      - name: Checkout gh-pages branch
+        if: ${{ env.AUTOUPDATE_ED25519_PRIVATE_KEY != '' }}
+        uses: actions/checkout@v5
+        env:
+          AUTOUPDATE_ED25519_PRIVATE_KEY: ${{ secrets.AUTOUPDATE_ED25519_PRIVATE_KEY }}
+        with:
+          ref: gh-pages
+          path: gh-pages-checkout
+          fetch-depth: 1
+
+      - name: Fetch release asset metadata
+        if: ${{ env.AUTOUPDATE_ED25519_PRIVATE_KEY != '' }}
+        env:
+          AUTOUPDATE_ED25519_PRIVATE_KEY: ${{ secrets.AUTOUPDATE_ED25519_PRIVATE_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          gh release view "${{ steps.resolve.outputs.ref }}" \
+            --repo "${{ github.repository }}" \
+            --json assets > /tmp/release-assets.json
+          cat /tmp/release-assets.json | jq '.assets[] | {name, size, url: .url}'
+
+      - name: Download .dmg + .exe assets for signing
+        if: ${{ env.AUTOUPDATE_ED25519_PRIVATE_KEY != '' }}
+        env:
+          AUTOUPDATE_ED25519_PRIVATE_KEY: ${{ secrets.AUTOUPDATE_ED25519_PRIVATE_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          mkdir -p /tmp/release-bin
+          cd /tmp/release-bin
+          gh release download "${{ steps.resolve.outputs.ref }}" \
+            --repo "${{ github.repository }}" \
+            --pattern "*.dmg" --pattern "*installer.exe" || true
+          ls -lh /tmp/release-bin/
+
+      - name: Sign assets + update appcast XMLs
+        if: ${{ env.AUTOUPDATE_ED25519_PRIVATE_KEY != '' }}
+        env:
+          AUTOUPDATE_ED25519_PRIVATE_KEY: ${{ secrets.AUTOUPDATE_ED25519_PRIVATE_KEY }}
+          APPCAST_REF: ${{ steps.resolve.outputs.ref }}
+          APPCAST_VERSION: ${{ steps.resolve.outputs.version }}
+          APPCAST_PUBDATE: ${{ steps.resolve.outputs.pubdate }}
+          APPCAST_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEY_FILE="$(mktemp)"
+          trap 'rm -f "$KEY_FILE"' EXIT
+          printf '%s' "$AUTOUPDATE_ED25519_PRIVATE_KEY" > "$KEY_FILE"
+          MACOS_DMG=$(ls /tmp/release-bin/*macos-arm64*.dmg 2>/dev/null | head -1 || true)
+          WIN_EXE=$(ls /tmp/release-bin/*windows-x64*installer.exe 2>/dev/null | head -1 || true)
+          export APPCAST_MACOS_DMG="$MACOS_DMG"
+          export APPCAST_WIN_EXE="$WIN_EXE"
+          export APPCAST_KEY_FILE="$KEY_FILE"
+          python3 scripts/publish_appcast.py
+
+      - name: Commit + push gh-pages
+        if: ${{ env.AUTOUPDATE_ED25519_PRIVATE_KEY != '' }}
+        env:
+          AUTOUPDATE_ED25519_PRIVATE_KEY: ${{ secrets.AUTOUPDATE_ED25519_PRIVATE_KEY }}
+        working-directory: gh-pages-checkout
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add appcast-macos.xml appcast-windows.xml || true
+          if git diff --cached --quiet; then
+            echo "No appcast changes to commit (no .dmg/.exe assets matched?)"
+            exit 0
+          fi
+          git commit -m "appcast: ${{ steps.resolve.outputs.ref }}"
+          git push origin gh-pages

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  BALLView Windows auto-update appcast.
+
+  Phase 999.8-full. Hosted at:
+    https://ball-project.github.io/ball/appcast-windows.xml
+  via the `gh-pages` branch of BALL-Project/ball (see
+  .planning/phases/999.8-auto-update-sparkle-winsparkle/APPCAST-PUBLISHING-RUNBOOK.md).
+
+  Single Ed25519 keypair signs both this and appcast-macos.xml — WinSparkle
+  0.8+ supports Sparkle-compatible Ed25519 (999.8-SPIKE.md §2).
+-->
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>BALLView Windows Updates</title>
+    <link>https://ball-project.github.io/ball/appcast-windows.xml</link>
+    <description>BALLView molecular visualization — Windows auto-update feed.</description>
+    <language>en</language>
+
+    <item>
+      <title>BALLView 1.7.0 (template — replaced on first release)</title>
+      <pubDate>Sun, 17 May 2026 12:00:00 +0000</pubDate>
+      <sparkle:releaseNotesLink>
+        https://github.com/BALL-Project/ball/releases/tag/v1.7.0
+      </sparkle:releaseNotesLink>
+      <enclosure
+        url="https://github.com/BALL-Project/ball/releases/download/v1.7.0/BALLView-v1.7.0-windows-x64-installer.exe"
+        sparkle:version="1.7.0"
+        sparkle:os="windows"
+        length="0"
+        type="application/octet-stream"
+        sparkle:edSignature="PLACEHOLDER_REPLACED_BY_PUBLISH_APPCAST_JOB" />
+    </item>
+  </channel>
+</rss>

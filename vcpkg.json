@@ -28,6 +28,7 @@
     "fftw3",
     "glew",
     "tbb",
-    "libsvm"
+    "libsvm",
+    "winsparkle"
   ]
 }
