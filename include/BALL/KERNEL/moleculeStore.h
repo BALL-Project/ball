@@ -163,9 +163,27 @@ namespace BALL
 		Bond*       bond_back_ptr(std::uint32_t i) const   { return bond_back_ptr_[i]; }
 		void        set_bond_back_ptr(std::uint32_t i, Bond* p) { bond_back_ptr_[i] = p; }
 
-		// Returns all bond-record indices that touch atom i. Linear scan in
-		// the K0.2 skeleton; CSR adjacency lands in K0.3.
+		// Number of bonds incident to atom i. O(1) after CSR rebuild.
+		std::size_t bond_degree(Index i) const;
+
+		// Returns the indices of all bonds incident to atom i. O(degree(i))
+		// after CSR rebuild. Rebuild happens lazily on first call after a
+		// bond mutation. CSR replaces the K0.2 linear scan per D15.
 		std::vector<std::uint32_t> bonds_of(Index i) const;
+
+		// Iterate bonds incident to atom i without materialising a vector.
+		// `fn(bond_idx)` is invoked once per incident bond.
+		template <typename F>
+		void for_each_bond_of(Index i, F&& fn) const
+		{
+			ensure_csr_();
+			const std::uint32_t lo = bond_csr_off_[i];
+			const std::uint32_t hi = bond_csr_off_[i + 1];
+			for (std::uint32_t k = lo; k < hi; ++k)
+			{
+				fn(bond_csr_idx_[k]);
+			}
+		}
 
 		//@}
 		/**	@name Generation + dirty-tracking
@@ -205,6 +223,15 @@ namespace BALL
 		// Bond table.
 		std::vector<BondRecord>   bonds_;
 		std::vector<Bond*>        bond_back_ptr_;
+
+		// CSR adjacency: bond_csr_off_[i] = first bond-list index for atom i;
+		// bond_csr_off_[i+1] - bond_csr_off_[i] = degree of atom i.
+		// bond_csr_idx_ stores bond indices (into bonds_) sorted by source
+		// atom. Rebuilt lazily; mutated by add_bond invalidates csr_dirty_.
+		mutable std::vector<std::uint32_t> bond_csr_off_;
+		mutable std::vector<std::uint32_t> bond_csr_idx_;
+		mutable bool                       csr_dirty_ = true;
+		void ensure_csr_() const;
 
 		Generation generation_           = 0;
 		Generation selection_generation_ = 0;

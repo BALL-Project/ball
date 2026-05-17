@@ -160,4 +160,77 @@ CHECK(BondRecord layout budget)
 	TEST_EQUAL(sizeof(BondRecord) <= 16, true)
 RESULT
 
+CHECK(CSR adjacency: bond_degree + bonds_of post K0.2b)
+	// D15: CSR adjacency is mandatory; this checks the lazy rebuild path
+	// produces correct degree counts and incident-bond lists.
+	MoleculeStore store;
+	store.reserve(8);
+	auto a = store.allocate_atom();
+	auto b = store.allocate_atom();
+	auto c = store.allocate_atom();
+	auto d = store.allocate_atom();
+
+	auto e_ab = store.add_bond(a, b);
+	auto e_ac = store.add_bond(a, c);
+	auto e_bc = store.add_bond(b, c);
+	auto e_cd = store.add_bond(c, d);
+
+	TEST_EQUAL(store.bond_degree(a), 2)  // a-b, a-c
+	TEST_EQUAL(store.bond_degree(b), 2)  // a-b, b-c
+	TEST_EQUAL(store.bond_degree(c), 3)  // a-c, b-c, c-d
+	TEST_EQUAL(store.bond_degree(d), 1)  // c-d
+
+	auto bonds_of_c = store.bonds_of(c);
+	TEST_EQUAL(bonds_of_c.size(), 3)
+	// Order is by source-atom traversal; just check all three present
+	bool has_ac = false, has_bc = false, has_cd = false;
+	for (auto i : bonds_of_c)
+	{
+		if (i == e_ac) has_ac = true;
+		if (i == e_bc) has_bc = true;
+		if (i == e_cd) has_cd = true;
+	}
+	TEST_EQUAL(has_ac && has_bc && has_cd, true)
+
+	// for_each_bond_of: avoid vector materialisation
+	int count = 0;
+	store.for_each_bond_of(a, [&](std::uint32_t /*bi*/) { ++count; });
+	TEST_EQUAL(count, 2)
+RESULT
+
+CHECK(CSR invalidates on add_bond / allocate_atom)
+	MoleculeStore store;
+	store.reserve(8);
+	auto a = store.allocate_atom();
+	auto b = store.allocate_atom();
+	store.add_bond(a, b);
+	TEST_EQUAL(store.bond_degree(a), 1)
+
+	// Add a new atom + a new bond; CSR should rebuild lazily.
+	auto c = store.allocate_atom();
+	store.add_bond(a, c);
+	TEST_EQUAL(store.bond_degree(a), 2)
+	TEST_EQUAL(store.bond_degree(c), 1)
+RESULT
+
+CHECK(CSR perf: 10k atoms / 30k bonds bond_degree pass)
+	// Sanity check that whole-system traversal is O(N+B), not O(N*B).
+	// This used to be O(N^2) with the linear bonds_of() scan.
+	MoleculeStore store;
+	const std::size_t N = 10000;
+	const std::size_t B = 30000;
+	store.reserve(N);
+	for (std::size_t i = 0; i < N; ++i) (void)store.allocate_atom();
+	for (std::size_t k = 0; k < B; ++k)
+	{
+		std::uint32_t i = static_cast<std::uint32_t>(k % N);
+		std::uint32_t j = static_cast<std::uint32_t>((k + 1) % N);
+		store.add_bond(i, j);
+	}
+	std::size_t total = 0;
+	for (std::size_t i = 0; i < N; ++i) total += store.bond_degree(i);
+	// Each bond contributes 2 to total degree.
+	TEST_EQUAL(total, 2 * B)
+RESULT
+
 END_TEST

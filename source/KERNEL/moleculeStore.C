@@ -35,6 +35,9 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 	// get_name(i) on a fresh atom returns "".
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 
+	// CSR offsets array depends on n_atoms; invalidate so next query rebuilds.
+	csr_dirty_ = true;
+
 	bump_generation_if_reallocated_(old_cap);
 	return idx;
 }
@@ -138,20 +141,61 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 	r.flags = 0;
 	bonds_.push_back(r);
 	bond_back_ptr_.push_back(nullptr);
+	csr_dirty_ = true;
 	return static_cast<std::uint32_t>(bonds_.size() - 1);
+}
+
+// CSR rebuild — single pass O(N_atoms + N_bonds). Called lazily on the
+// first bonds_of() / bond_degree() / for_each_bond_of() after any bond
+// mutation that toggled csr_dirty_.
+void MoleculeStore::ensure_csr_() const
+{
+	if (!csr_dirty_) return;
+
+	const std::size_t n_atoms = positions_.size();
+	bond_csr_off_.assign(n_atoms + 1, 0);
+
+	// Count degree per atom (each bond contributes to two atoms).
+	for (const auto& b : bonds_)
+	{
+		++bond_csr_off_[b.a + 1];
+		if (b.a != b.b) ++bond_csr_off_[b.b + 1];
+	}
+	// Prefix-sum: bond_csr_off_[i] is now the start index for atom i.
+	for (std::size_t i = 1; i <= n_atoms; ++i)
+	{
+		bond_csr_off_[i] += bond_csr_off_[i - 1];
+	}
+	// Fill bond_csr_idx_ using a cursor copy of the offsets.
+	std::vector<std::uint32_t> cursor(bond_csr_off_.begin(), bond_csr_off_.begin() + n_atoms);
+	bond_csr_idx_.assign(bond_csr_off_[n_atoms], 0u);
+	for (std::size_t k = 0; k < bonds_.size(); ++k)
+	{
+		const auto& b = bonds_[k];
+		bond_csr_idx_[cursor[b.a]++] = static_cast<std::uint32_t>(k);
+		if (b.a != b.b)
+		{
+			bond_csr_idx_[cursor[b.b]++] = static_cast<std::uint32_t>(k);
+		}
+	}
+
+	csr_dirty_ = false;
+}
+
+std::size_t MoleculeStore::bond_degree(Index i) const
+{
+	ensure_csr_();
+	return bond_csr_off_[i + 1] - bond_csr_off_[i];
 }
 
 std::vector<std::uint32_t> MoleculeStore::bonds_of(Index i) const
 {
-	std::vector<std::uint32_t> out;
-	for (std::size_t k = 0; k < bonds_.size(); ++k)
-	{
-		if (bonds_[k].a == i || bonds_[k].b == i)
-		{
-			out.push_back(static_cast<std::uint32_t>(k));
-		}
-	}
-	return out;
+	ensure_csr_();
+	const std::uint32_t lo = bond_csr_off_[i];
+	const std::uint32_t hi = bond_csr_off_[i + 1];
+	return std::vector<std::uint32_t>(
+		bond_csr_idx_.begin() + lo,
+		bond_csr_idx_.begin() + hi);
 }
 
 } // namespace BALL
