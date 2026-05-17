@@ -327,7 +327,16 @@ namespace BALL
 		description = "Shortcut|Help|About";
 		action = insertMenuEntry(MainControl::HELP, (String)tr("About"), this, SLOT(about()), description);
 		if (action)
+		{
 			setMenuHint(action, (String)tr("Show informations on this version of BALLView"));
+			// Phase 999.46 Task 4 (Handover §06 macOS notes + §09
+			// cross-platform). Apply unconditionally; Qt is a no-op
+			// on Linux/Windows and a positive relocation on macOS
+			// where AboutRole moves the action into the BALLView
+			// application menu (per Maintainer Q1: keep inline menubar
+			// + DO use per-action standard menu roles).
+			action->setMenuRole(QAction::AboutRole);
+		}
 
 #if defined(BALL_UI_V2) && !defined(NDEBUG)
 		// Phase 999.43: Tools › Icon Browser. Dev-only menu entry so

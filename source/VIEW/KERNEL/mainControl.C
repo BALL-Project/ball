@@ -620,9 +620,17 @@ namespace BALL
 			insertPopupMenuSeparator(MainControl::FILE, UIOperationMode::MODE_ADVANCED);
 
 			String description = "Shortcut|File|Quit";
-			insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp, 
+			QAction* quit_action = insertMenuEntry(MainControl::FILE, (String)tr("&Quit"), qApp,
 											SLOT(quit()), description,
 											QKeySequence("Ctrl+Q"), UIOperationMode::MODE_ADVANCED);
+			// Phase 999.46 Task 4 (Handover §06 macOS notes + §09
+			// cross-platform). Apply unconditionally — Qt is a
+			// no-op on Linux/Windows and a positive relocation on
+			// macOS where the standard role makes Qt move the
+			// action into the BALLView application menu (per
+			// Maintainer Q1: keep inline menubar but DO use
+			// per-action standard roles for the 3 standard items).
+			if (quit_action) quit_action->setMenuRole(QAction::QuitRole);
 
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasPages())
@@ -630,11 +638,16 @@ namespace BALL
 				insertPopupMenuSeparator(MainControl::EDIT, UIOperationMode::MODE_ADVANCED);
 
 				String description = "Shortcut|Edit|Preferences";
-				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_, 
+				preferences_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Preferences"), preferences_dialog_,
 																							SLOT(show()), description,
 																							QKeySequence("Ctrl+Z"), UIOperationMode::MODE_ADVANCED);
-				
-				if (preferences_action_) preferences_action_->setIcon(Icons::get("categories/preferences"));
+
+				if (preferences_action_)
+				{
+					preferences_action_->setIcon(Icons::get("categories/preferences"));
+					// Phase 999.46 Task 4 — see Quit comment above.
+					preferences_action_->setMenuRole(QAction::PreferencesRole);
+				}
 			}
 
 			fetchPreferences(preferences_file_);
