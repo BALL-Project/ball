@@ -931,8 +931,10 @@ namespace BALL
 		
 			QLabel*             simulation_icon_;
 			QLabel*             rep_label_;
-			static const char  *simulation_running_xpm_[];
-			static const char  *simulation_stoped_xpm_[];
+			// Phase 999.42: simulation_running_xpm_ + simulation_stoped_xpm_
+			// declarations removed. The "simulation running" status-bar
+			// indicator now uses VIEW::Icons::get("actions/simulation-running")
+			// (the _stoped_ array was a declared-but-never-defined orphan).
 			Position 					  rep_label_nr_;
 
 			String 							working_dir_;

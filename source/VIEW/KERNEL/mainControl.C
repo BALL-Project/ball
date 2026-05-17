@@ -84,29 +84,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-		const char* MainControl::simulation_running_xpm_[] =
-		{
-				"16 14 4 1",
-				"   c None",
-				".  c black",
-				"X  c red",
-				"o  c gray50",
-				"     .........  ",
-				"     .XXXXXX.o  ",
-				"    .XXXXXX.o   ",
-				"    .XXXXX.o    ",
-				"   .XXXXX.o     ",
-				"   .XXXX.....   ",
-				"  .XXXXXXXX.o   ",
-				"  .....XXX.o    ",
-				"   oo.XXX.o     ",
-				"     .XX.o      ",
-				"    .XX.o       ",
-				"    .X.o        ",
-				"   .X.o         ",
-				"   ..o          "
-		};        
-			
+		// Phase 999.42: simulation_running_xpm_ array deleted — the status-bar
+		// "simulation running" indicator now loads VIEW::Icons::get("actions/simulation-running")
+		// (theme.qrc → lucide/activity.svg). See setup_() below.
 
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 			:	QMainWindow(parent),
@@ -293,9 +273,11 @@ namespace BALL
 			simulation_icon_->setMinimumSize(14,20);
 			simulation_icon_->setToolTip(tr("simulation running"));
 			statusBar()->addPermanentWidget(simulation_icon_, false );
-			QPixmap icon(simulation_running_xpm_);
-
-			simulation_icon_->setPixmap(icon);
+			// Phase 999.42: load the icon via the SVG façade instead of the
+			// removed simulation_running_xpm_ array. The status-bar widget is
+			// 14x20 logical px (fixed by the surrounding setMaximumSize call),
+			// so we pixmap the icon at the matching small size.
+			simulation_icon_->setPixmap(Icons::get("actions/simulation-running").pixmap(14, 14));
 			simulation_icon_->hide();
 			simulation_icon_->setFrameShape(QLabel::NoFrame);
 			simulation_icon_->setFrameShadow(QLabel::Plain);
