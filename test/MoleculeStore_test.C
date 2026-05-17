@@ -213,6 +213,42 @@ CHECK(CSR invalidates on add_bond / allocate_atom)
 	TEST_EQUAL(store.bond_degree(c), 1)
 RESULT
 
+CHECK(BorrowedColumnRef RAII release path)
+	MoleculeStore store;
+	store.reserve(8);
+	auto i = store.allocate_atom();
+	store.position(i) = Vector3(1.f, 2.f, 3.f);
+
+	{
+		BorrowedColumnRef<Vector3> b(store, store.position(i));
+#ifndef NDEBUG
+		TEST_EQUAL(store.borrowed_ref_count(), 1)
+#endif
+		TEST_EQUAL(*b, Vector3(1.f, 2.f, 3.f))
+		// Mutating via the borrowed ref is fine.
+		*b = Vector3(9.f, 9.f, 9.f);
+		TEST_EQUAL(store.position(i), Vector3(9.f, 9.f, 9.f))
+	}
+#ifndef NDEBUG
+	TEST_EQUAL(store.borrowed_ref_count(), 0)
+#endif
+
+	// After the borrow is released, mutation is fine again.
+	(void)store.allocate_atom();
+RESULT
+
+CHECK(BorrowedColumnRef allows non-resizing operations while borrowed)
+	MoleculeStore store;
+	store.reserve(16);
+	auto i = store.allocate_atom();
+	store.position(i) = Vector3(1.f, 2.f, 3.f);
+
+	BorrowedColumnRef<Vector3> b(store, store.position(i));
+	// Allocate within reserved capacity: no realloc, no assertion fire.
+	for (int k = 0; k < 10; ++k) (void)store.allocate_atom();
+	TEST_EQUAL(*b, Vector3(1.f, 2.f, 3.f))
+RESULT
+
 CHECK(CSR perf: 10k atoms / 30k bonds bond_degree pass)
 	// Sanity check that whole-system traversal is O(N+B), not O(N*B).
 	// This used to be O(N^2) with the linear bonds_of() scan.

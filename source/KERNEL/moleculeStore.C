@@ -15,6 +15,12 @@ MoleculeStore::~MoleculeStore() = default;
 MoleculeStore::Index MoleculeStore::allocate_atom()
 {
 	const std::size_t old_cap = positions_.capacity();
+	// If this insert would cause a reallocation, no live refs into the
+	// store columns may exist. D7 amendment enforcement.
+	if (positions_.size() == positions_.capacity())
+	{
+		assert_no_borrowed_refs_("allocate_atom (would reallocate)");
+	}
 	const Index idx = static_cast<Index>(positions_.size());
 
 	positions_.emplace_back(Vector3(0.f, 0.f, 0.f));
@@ -45,6 +51,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 void MoleculeStore::reserve(std::size_t n)
 {
 	if (n <= positions_.capacity()) return;
+	assert_no_borrowed_refs_("reserve (growing capacity)");
 	const std::size_t old_cap = positions_.capacity();
 
 	positions_.reserve(n);
@@ -66,6 +73,7 @@ void MoleculeStore::reserve(std::size_t n)
 
 void MoleculeStore::compact()
 {
+	assert_no_borrowed_refs_("compact");
 	const std::size_t old_cap = positions_.capacity();
 
 	positions_.shrink_to_fit();

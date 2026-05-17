@@ -16,7 +16,10 @@
 # include <BALL/MATHS/vector3.h>
 #endif
 
+#include <cassert>
 #include <cstdint>
+#include <cstdio>
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -198,6 +201,51 @@ namespace BALL
 		void mark_selection_dirty()                  { ++selection_generation_; }
 
 		//@}
+		/**	@name Live-reference enforcement (D7 amendment, K0.2c)
+
+				D7 contract: reference-return getters (Vector3& getPosition()
+				etc.) are valid only while no store-resizing mutation is in
+				flight. Generation check on the handle catches stale handles
+				but cannot catch already-escaped Vector3& references.
+
+				Enforcement: callers that take a reference wrap the borrow in
+				a `BorrowedColumnRef` RAII helper which increments
+				`borrowed_ref_count_` on construction and decrements on
+				destruction. Mutating operations (allocate_atom that
+				reallocates, reserve growing capacity, compact) assert that
+				`borrowed_ref_count_ == 0` in debug builds.
+
+				Release builds elide the count and the assertion; documented
+				as undefined-behavior contract.
+		*/
+		//@{
+
+#ifndef NDEBUG
+		void borrow_ref_inc_() const                 { ++borrowed_ref_count_; }
+		void borrow_ref_dec_() const                 { assert(borrowed_ref_count_ > 0); --borrowed_ref_count_; }
+		std::size_t borrowed_ref_count() const       { return borrowed_ref_count_; }
+		void assert_no_borrowed_refs_(const char* op) const
+		{
+			if (borrowed_ref_count_ != 0)
+			{
+				std::fprintf(stderr,
+					"FATAL: MoleculeStore::%s called while %zu reference(s) "
+					"into store columns are still live. This would invalidate "
+					"those references. Caller must release Vector3& / float& "
+					"borrows (via BorrowedColumnRef RAII) before any "
+					"resize/compact/allocate beyond capacity.\n",
+					op, borrowed_ref_count_);
+				std::abort();
+			}
+		}
+#else
+		void borrow_ref_inc_() const                 {}
+		void borrow_ref_dec_() const                 {}
+		std::size_t borrowed_ref_count() const       { return 0; }
+		void assert_no_borrowed_refs_(const char*) const {}
+#endif
+
+		//@}
 
 		private:
 
@@ -236,6 +284,43 @@ namespace BALL
 		Generation generation_           = 0;
 		Generation selection_generation_ = 0;
 		StableId   next_stable_id_       = 1;
+
+#ifndef NDEBUG
+		mutable std::size_t borrowed_ref_count_ = 0;
+#endif
+	};
+
+	/**	RAII helper that borrows a typed reference into a MoleculeStore
+			column while incrementing the store's borrowed_ref_count_.
+			Use this whenever code holds a Vector3& / float& / short& into
+			the store across non-trivial work. Destructor releases the
+			borrow.
+
+			In release builds, the helper is a thin wrapper with no overhead
+			(borrow inc/dec are no-ops).
+	*/
+	template <typename T>
+	class BALL_EXPORT BorrowedColumnRef
+	{
+		public:
+		BorrowedColumnRef(const MoleculeStore& s, T& ref) noexcept
+			: store_(&s), ref_(&ref) { store_->borrow_ref_inc_(); }
+		~BorrowedColumnRef() noexcept { if (store_) store_->borrow_ref_dec_(); }
+
+		BorrowedColumnRef(const BorrowedColumnRef&)            = delete;
+		BorrowedColumnRef& operator=(const BorrowedColumnRef&) = delete;
+		BorrowedColumnRef(BorrowedColumnRef&& o) noexcept
+			: store_(o.store_), ref_(o.ref_) { o.store_ = nullptr; }
+		BorrowedColumnRef& operator=(BorrowedColumnRef&&) = delete;
+
+		T&       get()        { return *ref_; }
+		const T& get() const  { return *ref_; }
+		T*       operator->() { return ref_; }
+		T&       operator*()  { return *ref_; }
+
+		private:
+		const MoleculeStore* store_;
+		T*                   ref_;
 	};
 
 } // namespace BALL
