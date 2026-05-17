@@ -7,7 +7,6 @@
 #include <BALL/VIEW/RENDERING/RENDERERS/glRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/RENDERERS/STLRenderer.h>
-#include <BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h>
 #include <BALL/VIEW/RENDERING/glRenderWindow.h>
 
 #ifdef BALL_HAS_RTFACT
@@ -99,9 +98,6 @@ namespace BALL
 					case Kind::STL:
 						return new STLRenderer;
 
-					case Kind::VRML:
-						return new VRMLRenderer;
-
 					default:
 						return 0;
 				}
@@ -142,7 +138,6 @@ namespace BALL
 
 					case Kind::POV:
 					case Kind::STL:
-					case Kind::VRML:
 						// File renderers have no on-screen surface -- scene.C does
 						// not construct a window for them. Keep parity.
 						return 0;

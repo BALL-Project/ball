@@ -70,8 +70,10 @@ namespace BALL {
 					/// Renders into a POVRay file
 					POV_RENDERER,
 
-					/// Renders into a VRML file (deprecated)
-					VRML_RENDERER,
+					// VRML_RENDERER removed v1.7 (Phase 999.37): VRMLRenderer
+					// class deleted. This enum value was unused — no caller
+					// passed it. Other enum values keep their existing integer
+					// positions; downstream switches don't break.
 
 					/// Renders into an STL file
 					STL_RENDERER,

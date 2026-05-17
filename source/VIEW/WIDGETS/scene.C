@@ -116,7 +116,7 @@ namespace BALL
 
 		Position Scene::screenshot_nr_ = 100000;
 		Position Scene::pov_nr_ = 100000;
-		Position Scene::vrml_nr_ = 100000;
+		Position Scene::stl_nr_ = 100000;   // renamed from vrml_nr_ v1.7 (Phase 999.37)
 		bool Scene::offscreen_rendering_ = true;
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
@@ -1007,7 +1007,10 @@ namespace BALL
 
 			inifile.appendSection("EXPORT");
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
-			inifile.insertValue("EXPORT", "VRMLNR", String(vrml_nr_));
+			// Key renamed from "VRMLNR" → "STLNR" v1.7 (Phase 999.37).
+			// Reader (fetchPreferences) prefers STLNR, falls back to VRMLNR
+			// once for graceful migration from pre-v1.7 configs.
+			inifile.insertValue("EXPORT", "STLNR", String(stl_nr_));
 
 
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
@@ -1034,9 +1037,18 @@ namespace BALL
 				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
 			}
 
-			if (inifile.hasEntry("EXPORT", "VRMLNR"))
+			// v1.7 (Phase 999.37): key renamed VRMLNR → STLNR. Prefer the
+			// new key; fall back to the old one once for backward-compat
+			// migration from pre-v1.7 configs. After this read the writer
+			// emits only STLNR, so the legacy key naturally fades over time
+			// (next save scrubs it).
+			if (inifile.hasEntry("EXPORT", "STLNR"))
 			{
-				vrml_nr_ = inifile.getValue("EXPORT", "VRMLNR").toUnsignedInt();
+				stl_nr_ = inifile.getValue("EXPORT", "STLNR").toUnsignedInt();
+			}
+			else if (inifile.hasEntry("EXPORT", "VRMLNR"))
+			{
+				stl_nr_ = inifile.getValue("EXPORT", "VRMLNR").toUnsignedInt();
 			}
 
 
@@ -1446,9 +1458,12 @@ namespace BALL
 							UIOperationMode::MODE_ADVANCED);
 			setIcon(pov_action, "mimetype/text-x-povray", false);
 
-			description = "Shortcut|File|Export|VRML";
+			// Menu description renamed from "Shortcut|File|Export|VRML" v1.7
+			// (Phase 999.37) — the underlying action always wrote STL via
+			// STLRenderer; the "VRML" name was historical dishonesty.
+			description = "Shortcut|File|Export|STL";
 			insertMenuEntry(MainControl::FILE_EXPORT, tr("3D Prototyping Export"), this,
-							SLOT(showExportVRMLDialog()), description, QKeySequence(),
+							SLOT(showExportSTLDialog()), description, QKeySequence(),
 							tr("Export a stl file from the scene"),
 							UIOperationMode::MODE_ADVANCED);
 
@@ -2019,13 +2034,15 @@ namespace BALL
 			updateGL();
 		}
 
-		//Opens a dialog in which parts of the scene can be exported as stl files
-		void Scene::showExportVRMLDialog()
+		//Opens a dialog in which parts of the scene can be exported as stl files.
+		// Renamed from showExportVRMLDialog v1.7 (Phase 999.37) — VRMLRenderer
+		// was removed; this function has always written STL via STLRenderer.
+		void Scene::showExportSTLDialog()
 		{
 			bool change = false;
 			Position count = 0;
 			ExportGeometryDialog ts;
-			ts.setFilename(QString::number(vrml_nr_));
+			ts.setFilename(QString::number(stl_nr_));
 			ts.exec();
 
 			bool *checked = ts.reps;
@@ -2126,7 +2143,7 @@ namespace BALL
 					count ++;
 				}
 				setWorkingDirFromFilename_(ascii(filename));
-				vrml_nr_ ++;
+				stl_nr_ ++;
 			}
 			getMainControl()->redrawAllRepresentations();
 		}

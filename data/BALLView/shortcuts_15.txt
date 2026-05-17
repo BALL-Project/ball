@@ -47,7 +47,7 @@ Shortcut|Edit|Select
 Shortcut|Edit|Invert_Selection	
 Shortcut|File|Export|PNG	
 Shortcut|File|Export|POVRay	
-Shortcut|File|Export|VRML	
+Shortcut|File|Export|STL
 Shortcut|File|Open_Structure	Ctrl+O
 Shortcut|File|Open|Dataset|3D_Grid	
 Shortcut|File|Open|Dataset|DockResult	

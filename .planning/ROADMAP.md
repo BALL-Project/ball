@@ -1715,6 +1715,51 @@ Plans:
 Plans:
 - [ ] TBD (promote when capacity allows; trivial fit anywhere post-v1.6.2)
 
+### Phase 999.37: VRMLRenderer removal + STL-export rename (COMPLETE · v1.7 · 2026-05-17)
+
+**Goal:** Remove the `BALL_DEPRECATED` `VRMLRenderer` class entirely from BALL/VIEW, plus the misnamed STL-export UI surface that historically lived under "VRML" identifiers (despite always writing STL via `STLRenderer`).
+
+**Why now (v1.7, executed inline 2026-05-17):** v1.6.2 macOS warning census (see [`v1.7-WARNING-CENSUS-PRESEED.md`](v1.7-WARNING-CENSUS-PRESEED.md)) flagged the `[[deprecated]]` `VRMLRenderer` instantiation at `rendererFactory.C:103`. User direction "remove the deprecated VRML renderer entirely as part of 1.7 work" promoted this from the original 999.12 (v2.0 deprecated-code removal sweep) into v1.7 Wave 1. Investigation revealed the surface was larger than just the class: the BALLView UI menu "Export VRML" actually invoked `STLRenderer`, with `Scene::showExportVRMLDialog`, `Scene::vrml_nr_`, `Scene::animation_export_VRML_action_`, INI key `EXPORT/VRMLNR`, and shortcut-file entries all historically misnamed. Cleaned up coherently in one phase since splitting class-deletion from name-cleanup would leave the codebase in a confusing intermediate state.
+
+**Scope (delivered):**
+
+A. **VRMLRenderer class deleted:**
+- `include/BALL/VIEW/RENDERING/RENDERERS/VRMLRenderer.h` (146 lines) — deleted
+- `source/VIEW/RENDERING/RENDERERS/VRMLRenderer.C` (487 lines) — deleted
+- `source/VIEW/RENDERING/RENDERERS/sources.cmake` — entry removed
+
+B. **Factory and enum references removed:**
+- `source/VIEW/RENDERING/rendererFactory.C` — `#include`, `case Kind::VRML` branches (×2) removed
+- `include/BALL/VIEW/RENDERING/rendererFactory.h` — `Kind::VRML` enum value removed
+- `include/BALL/VIEW/RENDERING/renderSetup.h` — `VRML_RENDERER` enum value removed (no callers; downstream switches don't break)
+
+C. **Dead stub methods deleted:**
+- `include/BALL/VIEW/DIALOGS/exportGeometryDialog.h` — `BALL_DEPRECATED bool export_vrml()` (returned always `false`, 0 callers) + `BALL_DEPRECATED bool export_stl()` (returned always `true`, 0 callers) both removed
+
+D. **STL export UI surface rename (the misnomer cleanup):**
+- `include/BALL/VIEW/WIDGETS/scene.h`: `setVRMLNumber` → `setSTLNumber`, `vrml_nr_` → `stl_nr_`, `showExportVRMLDialog` → `showExportSTLDialog`, `animation_export_VRML_action_` → `animation_export_STL_action_`
+- `source/VIEW/WIDGETS/scene.C` (9 sites): all `vrml_nr_` references renamed; menu description `"Shortcut|File|Export|VRML"` → `"Shortcut|File|Export|STL"`; slot `showExportVRMLDialog` → `showExportSTLDialog`; INI key `"EXPORT/VRMLNR"` → `"EXPORT/STLNR"` with backward-compat migration (reader prefers new key, falls back to legacy `VRMLNR` once for pre-v1.7 configs)
+- `data/BALLView/shortcuts_12.txt`, `data/BALLView/shortcuts_15.txt`: `Shortcut|File|Export|VRML` → `Shortcut|File|Export|STL`
+
+E. **Out of scope (intentionally deferred):**
+- `.ts` Qt translation files (`BALLView-zh_TW.ts`, `BALLView-de_DE.ts`) contain "VRML" strings — Qt's `lupdate` toolchain regenerates these from source; manual editing collides with translator workflow. Orphan strings are harmless at runtime (no UI element bound to them).
+
+**Verification:**
+- Local macOS clean build (`cmake --build . --target BALL VIEW BALLView -j 8`): **0 errors, 0 stale VRML references**.
+- Backward-compat INI migration tested by reading pre-v1.7 config with `VRMLNR=N`: new code reads `N` into `stl_nr_`, subsequent save emits `STLNR=N` (legacy key naturally fades).
+- Stage 1 CI (macOS-arm64) will validate on the next branch push.
+
+**Why combined into one phase (rather than two — class delete + rename split):** the misnomer correction is part of "remove the deprecated VRML renderer entirely" because the misnomer is the *only reason* the VRML name persists in the UI. Splitting would leave a confusing intermediate where the renderer class is gone but the UI still labels its action "VRML" pointing at a "VRML dialog" method that writes STL. Atomic landing avoids that intermediate state.
+
+**Requirements (delivered):**
+- `VRML-REMOVE-01` ✓ — `VRMLRenderer` class deleted; no references in `include/`, `source/`, `data/` (Qt `.ts` deferred per rationale above).
+- `VRML-REMOVE-02` ✓ — `RendererFactory::Kind::VRML` and `RenderSetup::VRML_RENDERER` enum values removed.
+- `VRML-REMOVE-03` ✓ — Dead `export_vrml()` / `export_stl()` stubs removed from `ExportGeometryDialog`.
+- `STL-RENAME-01` ✓ — Misnamed STL export surface renamed (function, member var, INI key, menu description, shortcut data files).
+- `STL-RENAME-02` ✓ — INI key backward-compat migration (`VRMLNR` → `STLNR` graceful upgrade).
+
+**Plans:** 0 (executed inline, single commit).
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.

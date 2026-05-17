@@ -37,8 +37,12 @@ namespace BALL
 				OpenGL_Fixed,   ///< today's GLRenderer (fixed-function compat profile)
 				Raytracer,      ///< CPU raytracer (BALL_HAS_RTFACT)
 				POV,            ///< POV-Ray file renderer
-				STL,            ///< STL file renderer
-				VRML            ///< VRML file renderer
+				STL             ///< STL file renderer
+				// VRML removed v1.7 (Phase 999.37): VRMLRenderer class was
+				// BALL_DEPRECATED and unused in the BALLView UI (the menu item
+				// labeled "Export VRML" actually invoked the STL renderer; the
+				// surface was renamed to Export STL in this phase). No on-disk
+				// .wrl format anywhere in the codebase consumed VRMLRenderer.
 #ifdef BALL_SPIKE_BACKEND_GLCORE
 				,
 				/// THROWAWAY: GL 3.2+ core-profile renderer spike (Phase 5 / Plan 05-05).

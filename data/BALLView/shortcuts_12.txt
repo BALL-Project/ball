@@ -72,7 +72,7 @@ Shortcut|Display|Viewpoint|Reset_Camera
 Shortcut|Tools|Grid|Visualize_3D_Grid	
 Shortcut|Build|Build_from_SMILES	
 Shortcut|Tools|Grid|Calculate_normalized_grid	
-Shortcut|File|Export|VRML	
+Shortcut|File|Export|STL
 Shortcut|Display|Animation|Clear	
 Shortcut|Display|Viewpoint|Set_Viewpoint	Ctrl+N
 Shortcut|Edit|Clear_Clipboard	

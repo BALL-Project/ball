@@ -425,7 +425,12 @@ namespace BALL
 				static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
 				///
-				static void setVRMLNumber(Position pos) {vrml_nr_ = pos;}
+				/// Counter setter for the auto-incrementing STL export filename.
+				/// Renamed from setVRMLNumber v1.7 (Phase 999.37): VRMLRenderer
+				/// was removed; this counter has always referred to STL export
+				/// (the underlying export was never VRML — the misnomer dates
+				/// to a long-ago format switch).
+				static void setSTLNumber(Position pos) {stl_nr_ = pos;}
 
 				///
 				void rotate(float degree_right, float degree_up);
@@ -543,8 +548,12 @@ namespace BALL
 				/// show an dialog to save an PNG file to
 				void showExportPNGDialog();
 
-				/// opens the VIEW/DIALOGS/GeometryExportDialog for vrml and stl export
-				void showExportVRMLDialog();
+				/// opens the VIEW/DIALOGS/GeometryExportDialog for STL export.
+				/// Renamed from showExportVRMLDialog v1.7 (Phase 999.37): the
+				/// implementation always wrote STL via STLRenderer; VRML was
+				/// only the historical menu label. The function name now
+				/// matches the actual behavior.
+				void showExportSTLDialog();
 
 				/// Enable or disable model previews e.g. while rotating
 				void setPreview(bool state) { use_preview_ = state; }
@@ -865,7 +874,7 @@ namespace BALL
 				// Menu entry IDs
 				QAction *no_stereo_action_, *enter_stereo_action_, *active_stereo_action_, *dual_stereo_action_, *dual_stereo_different_display_action_;
 				QAction *record_animation_action_, *start_animation_action_, *clear_animation_action_, *cancel_animation_action_;
-				QAction *animation_export_POV_action_, *animation_export_VRML_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
+				QAction *animation_export_POV_action_, *animation_export_STL_action_, 	*animation_export_PNG_action_, *animation_repeat_action_;
 
 #ifdef BALL_HAS_RTFACT
                 QAction *toggle_continuous_loop_action_;
@@ -906,8 +915,10 @@ namespace BALL
 				static Position screenshot_nr_;
 				// nr of last pov file export
 				static Position pov_nr_;
-				//nr of last vrml or stl export
-				static Position vrml_nr_;
+				// nr of last STL export (renamed from vrml_nr_ v1.7 / Phase
+				// 999.37 — VRMLRenderer removed; this counter always tracked
+				// STL exports despite the historical name)
+				static Position stl_nr_;
 
 				std::list<Camera> animation_points_;
 				AnimationThread* animation_thread_;
