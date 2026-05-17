@@ -139,6 +139,23 @@ IF (BALL_HAS_VIEW)
 		ELSE()
 			ADD_TEST(${test} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${test} "-v")
 		ENDIF()
+		# Phase 999.49 hotfix: VIEW tests instantiate QApplication and
+		# require a Qt platform plugin. CI Linux runners have no X
+		# display + lack libxcb-cursor0 (only required by the xcb
+		# platform plugin since Qt 6.5), so xcb-platform init aborts
+		# at QApplication construction with "could not connect to
+		# display" + "xcb-cursor0 needed". Force every VIEW_TEST to
+		# the headless `offscreen` platform plugin, which has no X /
+		# wayland / xcb-cursor dep tree. The plugin ships with every
+		# Qt 6 distribution we use (linux-x64 + linux-arm64 +
+		# macos-arm64 + windows-x64 all list it in `Available
+		# platform plugins are: ... offscreen ...`). Surfaced by
+		# CI run 26002675865 on a32de26f3f (tabOrder_test
+		# Subprocess-aborted on linux-x64 only — linux-arm64 happened
+		# to have xcb-cursor0 from its base image).
+		SET_TESTS_PROPERTIES(${test} PROPERTIES
+			ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+		)
 	ENDFOREACH()
 
 	LIST(APPEND ALL_TESTS ${VIEW_TESTS})
