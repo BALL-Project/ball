@@ -161,6 +161,7 @@ SET(BALL_KERNEL_TESTS
 	AtomBondIteratorTraits_test
 	Extractors_test
 	StdIteratorWrapper_test
+	MoleculeStore_test
 )
 
 SET(BALL_MOLMEC_TESTS

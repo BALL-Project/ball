@@ -50,6 +50,7 @@ IF(BALL_CORE_ONLY)
 		AtomIterator_test
 		AtomBondIteratorTraits_test
 		Extractors_test
+		MoleculeStore_test
 	)
 	SET(BALL_TESTS
 		BALL_BASIC_TESTS
