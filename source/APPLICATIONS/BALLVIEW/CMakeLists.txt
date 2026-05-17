@@ -3,10 +3,12 @@ PROJECT(BALLView)
 ### list all filenames of the directory here ###
 SET(SOURCES_LIST
 	demoTutorialDialog.C
-	icons.C
 	main.C
 	mainframe.C
 )
+# Phase 999.42: icons.C (XPM bucky_64x64_xpm array) removed; mainframe.C
+# now uses VIEW::Icons::get("ball-app") which loads the SVG from the
+# theme.qrc resource bundle (see source/VIEW/KERNEL/theme/icons/lucide/ball-app.svg).
 
 # === Phase 999.8-full: Sparkle (macOS) auto-update integration ===============
 # Detect vendored Sparkle.xcframework. The vendor script

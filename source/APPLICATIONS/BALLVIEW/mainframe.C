@@ -3,7 +3,6 @@
 //
 
 #include "mainframe.h"
-#include "icons.h"
 #include "demoTutorialDialog.h"
 
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
@@ -69,7 +68,7 @@ namespace BALL
 		// setup main window
 		// ---------------------
 		setWindowTitle(tr("BALLView"));
-		setWindowIcon(QPixmap(bucky_64x64_xpm));
+		setWindowIcon(VIEW::Icons::get("ball-app"));
 		// make sure submenus are the first 
 		initPopupMenu(FILE_OPEN);
 		initPopupMenu(EDIT);
