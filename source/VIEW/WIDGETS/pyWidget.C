@@ -648,7 +648,15 @@ namespace BALL
 
 			Path p;
 
-			String startup = p.find("python/pywidget_init.py");
+			// Phase 999.25b: the legacy `pywidget_init.py` startup script was
+			// self-marked DEPRECATED since BALL 1.5 ("not maintained — use view_utils
+			// instead"). It was removed in v1.7. The replacement startup script is
+			// `view_utils.py`, which the deprecation notice in the old file pointed at.
+			// This branch is only reachable when BALL_PYTHON_SUPPORT=ON (gated in
+			// source/VIEW/WIDGETS/sources.cmake); v1.7 builds with PYTHON_SUPPORT=OFF
+			// so this code path is dormant. It is updated here for the v2.1 PyBALL v2
+			// rewrite (Phase 999.15) which will turn the flag back on.
+			String startup = p.find("python/view_utils.py");
 			if (!openFile(startup, true))
 			{
 				Log.error() << (String)tr("Could not find startup script. Please set the correct path to the data path!") << std::endl;
@@ -931,7 +939,9 @@ namespace BALL
 			if (!is_current) script_edit_->clear();
 			script_mode_ = true;
 			stop_script_ = false;
-			full_silent_ = filename.hasSuffix("pywidget_init.py");
+			// Phase 999.25b: pywidget_init.py was deleted (DEPRECATED since 1.5);
+			// view_utils.py is the replacement startup script.
+			full_silent_ = filename.hasSuffix("view_utils.py");
 
 			if (run) appendText(((String)"> " + (String)tr("executing script from ") + filename + "\n").c_str(), false, true);
 			else     appendText(((String)"> " + (String)tr("loading script from ") + filename + "\n").c_str(), false, true);
