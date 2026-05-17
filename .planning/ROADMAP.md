@@ -2239,11 +2239,11 @@ Plans:
   time. Both macOS-arm64 cells (ON + OFF) verified locally: BALLView.app
   links green, `menuMapping_test` PASSED.
 
-### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (COMPLETE · v1.7 WAVE 4)
 
 **Goal:** Replace the standalone *Demo / Tutorial* dialog + `Welcome.rtf` with an in-product welcome screen on first launch. Refresh the Help viewer to use Markdown (drop the QtWebEngine dependency where avoidable — already removed from build per existing Phase 5 work).
 
-**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4. Closes the loop on user-facing modernization — first 30 seconds matter.
+**Status (2026-05-17, COMPLETE):** 7 commits landed on `v1.7-modernization` (4fcaebfc5f WelcomeScreen widget · 403789ea5e samples+thumbnails · 4bc14349b2 mainframe wiring · c829e95402 MarkdownHelpViewer · d9ba1884c6 ballview:// scheme registration · 543658f72f tutorial Markdown migration · c6472c8376 Welcome.rtf retirement). All 8 sub-deliverables shipped. CI run 26001813912 dispatched. Scope-trims documented in 999.47-SUMMARY.md: 3 sample protein slots ship as BPTI-derived placeholders pending 999.48 asset pipeline; thumbnails are single-density 320×200 (the @2× pipeline is 999.48 scope); demoTutorialDialog.* stays in tree per 999.48's existing legacy-file deletion roster. 999.48 dispatch unblocked.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/07-phase-onboarding.md`.
 
