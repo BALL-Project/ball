@@ -17,15 +17,18 @@ namespace BALL
 
 	namespace VIEW
 	{
-		// TODO(v1.8): Replace this loader with a ThemedIconEngine per the
-		// BALLView Refresh Handover Phase 2 §2.2 design (per-DPR tint cache,
-		// QIconEngine subclass, mode-aware tint colors --ink-soft/--ink/
-		// --accent/--ink-muted). Deferred from Phase 999.41 because
-		// maintainer-Q3 freezes the single neutral theme for v1.7 — when Q3
-		// is revisited (light/dark/follow-system re-introduction), this is
-		// the upgrade path. Until then, 999.41's SVG-preferred wedge inside
-		// loadIcon_() (BALL_UI_V2-gated) is sufficient. See also 999.42
-		// for the call-site escalation that pairs with the engine swap.
+		// Phase 999.42: ThemedIconEngine LANDED — see
+		// `BALL/VIEW/KERNEL/theme/themedIconEngine.h` for the per-DPR
+		// state-tinted SVG renderer (Normal/Active/Selected/Disabled tints
+		// per QIcon::Mode). Public entry point is
+		// `BALL::VIEW::Icons::get(name)` in
+		// `BALL/VIEW/KERNEL/theme/iconRegistry.h`. Under BALL_UI_V2 it
+		// routes to the engine; under !BALL_UI_V2 it delegates here.
+		//
+		// NEW CALL SITES MUST use Icons::get() — IconLoader is preserved
+		// as the BALL_UI_V2=OFF fallback path and for plugin ABI compat
+		// for one release. Slated for removal in v2.0 (see BALL_DEPRECATED
+		// annotation below).
 		/**
 		 * This class is an icon loader for the VIEW classes.
 		 * It handles icon themes as defined in the freedesktop.org standard.
@@ -82,7 +85,12 @@ namespace BALL
 				 * Retrieve the icon identified by name from the directory.
 				 *
 				 * @param The icons name. A usual example looks like: "actions/document-save"
+				 *
+				 * @deprecated Phase 999.42: use BALL::VIEW::Icons::get(name)
+				 *             (see BALL/VIEW/KERNEL/theme/iconRegistry.h).
+				 *             Slated for removal in v2.0.
 				 */
+				[[deprecated("Phase 999.42 — use BALL::VIEW::Icons::get from theme/iconRegistry.h")]]
 				const QIcon& getIcon(const String& name);
 
 			private:

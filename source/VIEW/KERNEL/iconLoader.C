@@ -144,10 +144,14 @@ namespace BALL
 			// PNG-from-disk walk below, so this branch is purely additive —
 			// every icon key that doesn't have an SVG keeps loading its PNG.
 			//
-			// TODO(v1.8): once maintainer-Q3 is revisited and we need per-
-			// mode tinting (--ink-soft / --ink / --accent / --ink-muted),
-			// replace this branch with the Handover Phase 2 ThemedIconEngine
-			// — see Handover doc § 2.2 for the design.
+			// Phase 999.42 NOTE: state-aware tinting (Normal/Active/Selected/
+			// Disabled — --ink-soft / --ink / --accent / --ink-muted) now
+			// lives in `BALL::VIEW::Theme::ThemedIconEngine` (see
+			// `BALL/VIEW/KERNEL/theme/themedIconEngine.h`). New call sites
+			// should reach the engine via `BALL::VIEW::Icons::get(name)`
+			// from `BALL/VIEW/KERNEL/theme/iconRegistry.h` rather than the
+			// IconLoader singleton — IconLoader survives as the BALL_UI_V2=OFF
+			// fallback and for plugin ABI compat (slated for removal in v2.0).
 			{
 				const QString svg_path =
 					QStringLiteral(":/icons/") + QString(name.c_str()) + ".svg";

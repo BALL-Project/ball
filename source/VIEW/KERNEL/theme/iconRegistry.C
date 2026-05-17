@@ -36,7 +36,16 @@ namespace BALL
 				// We copy the cached QIcon (cheap — Qt QIcon shares its
 				// implementation via implicit-sharing) so the caller doesn't
 				// hold a reference into the IconLoader's HashMap.
+				//
+				// Suppress the IconLoader::getIcon deprecation warning at
+				// this call site: we are the OFF-flag fallback, and this is
+				// precisely the use the deprecation marker exempts. End
+				// users see the warning at THEIR call sites if they bypass
+				// the façade.
+#				pragma GCC diagnostic push
+#				pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 				return IconLoader::instance().getIcon(String(name));
+#				pragma GCC diagnostic pop
 #endif
 			}
 
