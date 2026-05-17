@@ -1,0 +1,36 @@
+Lucide icons — https://lucide.dev
+Pinned version: v0.460.0
+SPDX-License-Identifier: ISC
+
+ISC License
+
+Copyright (c) 2024 Lucide Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---
+
+Vendored subset used in BALLView v1.7 (Phase 999.41):
+
+  folder-open.svg, save.svg, maximize.svg, minimize-2.svg, octagon-x.svg,
+  ruler.svg, plus.svg, trash-2.svg, copy.svg, atom.svg, shrink.svg,
+  link-2.svg, settings.svg, help-circle.svg
+
+All paths are unmodified from upstream lucide-static@0.460.0 except for
+the addition of an XML declaration + a one-line provenance comment in
+each file. The stroke uses `currentColor` so the icons inherit the
+hosting widget's text color under the BALLView neutral QSS theme
+(maintainer-Q3: single neutral theme only).
+
+To refresh: download a new lucide-static release tarball, copy the
+14 SVGs by name, re-apply the header. No build-time download.
