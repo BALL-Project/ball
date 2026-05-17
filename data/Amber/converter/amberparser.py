@@ -1,3 +1,14 @@
+"""
+Amber parameter file parser.
+
+NOTE (v1.7): This module does ``import BALL``, which requires the SIP
+Python bindings. SIP bindings are DISABLED in v1.7
+(``BALL_PYTHON_SUPPORT=OFF`` in every ``ci-*`` CMake preset). This
+parser therefore cannot be used standalone in v1.7. Phase 999.15
+(targeted for v2.1) rewrites the Python binding surface — at which
+point this module will need a corresponding update.
+"""
+
 import re
 import BALL
 from parametrization import *
@@ -165,7 +176,7 @@ class InParser:
 			ball_name = self.__lookup(residue, name, suffix)
 
 			if ball_name is None:
-				print "Unknown atom: " + residue + suffix + ":" + name
+				print("Unknown atom: " + residue + suffix + ":" + name)
 				continue
 
 			atom = self.params.getAtom(ball_name)
@@ -185,7 +196,7 @@ class InParser:
 
 			ball_name = self.__lookup(residue, name, suffix)
 			if ball_name is None:
-				print "Unknown atom for IMPROPER torsions: " + residue + suffix + ":" + name
+				print("Unknown atom for IMPROPER torsions: " + residue + suffix + ":" + name)
 				continue
 
 			self.params.impropers.append(ball_name)
@@ -199,7 +210,7 @@ class InParser:
 			try:
 				f = open(file)
 			except:
-				print "Could not open %s for reading" % file
+				print("Could not open %s for reading" % file)
 				exit(-1)
 
 			lines = f.readlines()
