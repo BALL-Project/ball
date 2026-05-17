@@ -100,19 +100,30 @@ namespace BALL
 		// ---------------------
 		setWindowTitle(tr("BALLView"));
 		setWindowIcon(VIEW::Icons::get("ball-app"));
-		// make sure submenus are the first 
+		// make sure submenus are the first.
+		//
+		// Phase 999.46 — under BALL_UI_V2 the top-level order is:
+		//   File · Edit · Select · View · Compute · Scripts · Window · Help
+		// Insertion order into the menubar determines left-to-right
+		// rendering; the legacy enum IDs are re-titled by initPopupMenu's
+		// v2 branch (DISPLAY → View, MOLECULARMECHANICS → Compute,
+		// TOOLS → Scripts, WINDOWS → Window). SELECT is the new
+		// top-level menu.
 		initPopupMenu(FILE_OPEN);
 		initPopupMenu(EDIT);
-		initPopupMenu(BUILD);
-		initPopupMenu(DISPLAY);
-		initPopupMenu(MOLECULARMECHANICS);
-		initPopupMenu(TOOLS);
+#ifdef BALL_UI_V2
+		initPopupMenu(MainControl::SELECT);
+#endif
+		initPopupMenu(BUILD);  // v2: routes into Edit › Structure (no top-level item)
+		initPopupMenu(DISPLAY);  // v2: titled "View"
+		initPopupMenu(MOLECULARMECHANICS);  // v2: titled "Compute"
+		initPopupMenu(TOOLS);  // v2: titled "Scripts"
 	#ifdef BALL_PYTHON_SUPPORT
 		initPopupMenu(TOOLS_PYTHON);
 		initPopupMenu(MainControl::USER);
 	#endif
-		initPopupMenu(WINDOWS);
-		initPopupMenu(MACRO);
+		initPopupMenu(WINDOWS);  // v2: titled "Window"
+		initPopupMenu(MACRO);    // v2: routes into Scripts › Macros
 
 		// ---------------------
 		// Logstream setup -----
@@ -379,13 +390,50 @@ namespace BALL
 		}
 		
 		
+#ifdef BALL_UI_V2
+		// Phase 999.46 — Window menu lists the 3 workspace presets
+		// from 999.45 (Default / Classic / Focused). Selecting a
+		// preset calls WorkspaceManager::apply(...) on the running
+		// Mainframe; WorkspaceManager emits presetChanged so any
+		// other UI (status label, palette) stays in sync.
+		{
+			QMenu* window_menu = initPopupMenu(MainControl::WINDOWS, UIOperationMode::MODE_ADVANCED);
+			if (window_menu)
+			{
+				window_menu->addSeparator();
+				QMenu* presets_menu = window_menu->addMenu(tr("Workspace Preset"));
+				presets_menu->setObjectName("workspacePresetsMenu");
+				const auto add_preset = [this, presets_menu](VIEW::WorkspaceManager::Preset p, const QString& label) {
+					QAction* a = presets_menu->addAction(label);
+					a->setObjectName(QString("workspace-preset-") + label.toLower());
+					connect(a, &QAction::triggered, this, [this, p]() {
+						VIEW::WorkspaceManager::instance().apply(p, this);
+					});
+				};
+				add_preset(VIEW::WorkspaceManager::Default, tr("Default"));
+				add_preset(VIEW::WorkspaceManager::Classic, tr("Classic"));
+				add_preset(VIEW::WorkspaceManager::Focused, tr("Focused"));
+			}
+		}
+#endif
+
+		// Phase 999.46 §06 — Invert/Clear Selection move from Edit
+		// to the new top-level Select menu under BALL_UI_V2. OFF
+		// cell keeps the legacy Edit location for Classic-preset
+		// muscle memory.
+#ifdef BALL_UI_V2
+		const MainControl::PopUpID kSelectionMenu = MainControl::SELECT;
+#else
+		const MainControl::PopUpID kSelectionMenu = MainControl::EDIT;
+#endif
+
 		description = "Shortcut|Edit|Invert_Selection";
-		complement_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Invert Selection"), this, 
-																									 SLOT(complementSelection()), description, QKeySequence(), 
+		complement_selection_action_ = insertMenuEntry(kSelectionMenu, (String)tr("Invert Selection"), this,
+																									 SLOT(complementSelection()), description, QKeySequence(),
 																									 UIOperationMode::MODE_ADVANCED);
 
 		description = "Shortcut|Edit|Clear_Selection";
-		clear_selection_action_ = insertMenuEntry(MainControl::EDIT, (String)tr("Clear Selection"), this, 
+		clear_selection_action_ = insertMenuEntry(kSelectionMenu, (String)tr("Clear Selection"), this,
 																							SLOT(clearSelection()), description, QKeySequence(),
 																							UIOperationMode::MODE_ADVANCED);
 

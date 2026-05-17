@@ -204,7 +204,30 @@ namespace BALL
 
 				/// Help menu
 				/// @deprecated Help system has been removed. This enumerator will also be removed in the next release.
-				HELP = 10800
+				HELP = 10800,
+
+				/// Phase 999.46 — new top-level "Select" menu (8-menu remap
+				/// per Handover §06). Holds Invert / Clear /
+				/// By-Expression. Under BALL_UI_V2 OFF this enum value is
+				/// unused (the call-sites that target SELECT are
+				/// ifdef-gated to fall back to EDIT in the OFF cell).
+				SELECT = 10900,
+
+				/// Phase 999.46 — "Edit > Structure" submenu. Receives
+				/// the actions previously living on the Build top-level
+				/// menu under BALL_UI_V2. The legacy BUILD top-level enum
+				/// is retitled and re-routed in initPopupMenu's v2 branch.
+				EDIT_STRUCTURE = 10901,
+
+				/// Phase 999.46 — "View > Workspace" submenu.
+				VIEW_WORKSPACE = 10902,
+
+				/// Phase 999.46 — "Compute > Energy" submenu.
+				COMPUTE_ENERGY = 10903,
+
+				/// Phase 999.46 — "Scripts > Macros" submenu (Macro top-level
+				/// retargeted under BALL_UI_V2).
+				SCRIPTS_MACROS = 10904
 			};
 
 			//@}

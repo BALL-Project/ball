@@ -370,10 +370,26 @@ namespace BALL
 					menu = addMenu(tr("&Edit"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case BUILD:
+#ifdef BALL_UI_V2
+					// Phase 999.46 §06-phase-menus.md — Build › Add Hydrogens
+					// / Generate Peptide / Generate Crystal move under
+					// Edit › Structure. Reuse the same BUILD id so existing
+					// callers don't change; redirect at construction.
+					menu = initPopupMenu(EDIT, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("&Structure"));
+#else
 					menu = addMenu(tr("&Build"), UIOperationMode::MODE_ADVANCED);
+#endif
 					break;
 				case DISPLAY:
+#ifdef BALL_UI_V2
+					// Phase 999.46 — Display renames to View (Handover §06).
+					// All existing DISPLAY callers land in View.
+					menu = addMenu(tr("&View"), UIOperationMode::MODE_ADVANCED);
+#else
 					menu = addMenu(tr("&Display"), UIOperationMode::MODE_ADVANCED);
+#endif
 					break;
 				case DISPLAY_VIEWPOINT:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
@@ -395,7 +411,7 @@ namespace BALL
 					if (menu)
 						menu = menu->addMenu(tr("&Animation"));
 					break;
-#ifdef BALL_HAS_RTFACT	
+#ifdef BALL_HAS_RTFACT
 				case DISPLAY_CONTINUOUSLOOP:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
 					if (menu)
@@ -403,7 +419,15 @@ namespace BALL
 					break;
 #endif
 				case MOLECULARMECHANICS:
+#ifdef BALL_UI_V2
+					// Phase 999.46 — Molecular Mechanics top-level renames
+					// to Compute (Handover §06). Minimize / Dynamics / Abort
+					// land in Compute via the existing MOLECULARMECHANICS
+					// callers.
+					menu = addMenu(tr("&Compute"), UIOperationMode::MODE_ADVANCED);
+#else
 					menu = addMenu(tr("&Molecular Mechanics"), UIOperationMode::MODE_ADVANCED);
+#endif
 					break;
 				case CHOOSE_FF:
 					menu = initPopupMenu(MOLECULARMECHANICS, UIOperationMode::MODE_ADVANCED);
@@ -411,7 +435,16 @@ namespace BALL
 						menu = menu->addMenu(tr("Force Field"));
 					break;
 				case TOOLS:
+#ifdef BALL_UI_V2
+					// Phase 999.46 — Tools top-level renames to Scripts
+					// (Handover §06). All existing TOOLS callers land in
+					// Scripts. The Tools › Legacy Settings submenu wired
+					// in 999.44 Plan 02 also re-roots under Scripts;
+					// rename to "Legacy Settings" stays correct.
+					menu = addMenu(tr("&Scripts"), UIOperationMode::MODE_ADVANCED);
+#else
 					menu = addMenu(tr("&Tools"), UIOperationMode::MODE_ADVANCED);
+#endif
 					break;
 				case TOOLS_GRID:
 					menu = NULL;
@@ -423,14 +456,60 @@ namespace BALL
 					}
 					break;
 				case WINDOWS:
+#ifdef BALL_UI_V2
+					// Phase 999.46 — Windows → Window (single word) per
+					// Handover §06.
+					menu = addMenu(tr("&Window"), UIOperationMode::MODE_ADVANCED);
+#else
 					menu = addMenu(tr("&Windows"), UIOperationMode::MODE_ADVANCED);
+#endif
 					break;
 				case MACRO:
+#ifdef BALL_UI_V2
+					// Phase 999.46 — Macros top-level retargets to
+					// Scripts › Macros (Handover §06). Existing MACRO
+					// callers (testFramework.C: macro record/run/abort)
+					// land in the submenu without per-callsite edits.
+					menu = initPopupMenu(TOOLS, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("Macros"));
+#else
 					menu = addMenu(tr("Macros"), UIOperationMode::MODE_ADVANCED);
+#endif
 					break;
 				case HELP:
 					menu = addMenu(tr("&Help"), UIOperationMode::MODE_KIOSK);
 					break;
+#ifdef BALL_UI_V2
+				// Phase 999.46 — new top-level Select menu (Handover §06,
+				// 8-menu remap). Holds Invert / Clear / By-Expression.
+				case SELECT:
+					menu = addMenu(tr("&Select"), UIOperationMode::MODE_ADVANCED);
+					break;
+				// Phase 999.46 — explicit submenu IDs for callers that
+				// want to target them directly (otherwise the convenience
+				// re-routing via BUILD / etc. covers most use).
+				case EDIT_STRUCTURE:
+					menu = initPopupMenu(EDIT, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("&Structure"));
+					break;
+				case VIEW_WORKSPACE:
+					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("&Workspace"));
+					break;
+				case COMPUTE_ENERGY:
+					menu = initPopupMenu(MOLECULARMECHANICS, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("&Energy"));
+					break;
+				case SCRIPTS_MACROS:
+					menu = initPopupMenu(TOOLS, UIOperationMode::MODE_ADVANCED);
+					if (menu)
+						menu = menu->addMenu(tr("Macros"));
+					break;
+#endif
 				default:
 					return 0;
 			}
