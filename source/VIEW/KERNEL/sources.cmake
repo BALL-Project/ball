@@ -30,6 +30,12 @@ SET(SOURCES_LIST
 	# Mainframe only wires them in under the BALL_UI_V2 ifdef.
 	workspaceManager.C
 	configMigration.C
+	# Phase 999.44 — BALLView Refresh: *Controller extraction subtree.
+	# The exemplar StageController lands in this plan; 8 more controllers
+	# (Light/Camera/Stereo/Model/Coloring/Material/Label/Clipping) are
+	# enumerated in controllers/PATTERN.md and follow in the v1.7 RC
+	# patch cycle. Body gated by #ifdef BALL_UI_V2 — empty TU when OFF.
+	controllers/stageController.C
 )
 
 # Phase 999.45 — workspaceManager.h has Q_OBJECT (both WorkspaceManager
