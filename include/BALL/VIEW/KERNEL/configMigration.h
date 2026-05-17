@@ -45,7 +45,7 @@ namespace BALL
 		/**
 		 *  Result of a ConfigMigration::run() invocation.
 		 */
-		struct BALL_EXPORT MigrationResult
+		struct BALL_VIEW_EXPORT MigrationResult
 		{
 			/// True if a copy was actually performed.
 			bool performed = false;
@@ -66,7 +66,7 @@ namespace BALL
 		 *
 		 *  Called once on first launch from main.C under BALL_UI_V2.
 		 */
-		class BALL_EXPORT ConfigMigration
+		class BALL_VIEW_EXPORT ConfigMigration
 		{
 			public:
 				/**

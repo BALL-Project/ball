@@ -70,7 +70,7 @@ namespace BALL
 		 *
 		 *  @see ProjectDock, BottomDrawer, ConfigMigration
 		 */
-		class BALL_EXPORT WorkspaceManager : public QObject
+		class BALL_VIEW_EXPORT WorkspaceManager : public QObject
 		{
 			Q_OBJECT
 
@@ -177,7 +177,7 @@ namespace BALL
 		 *  Added to the right end of Mainframe's status bar under
 		 *  BALL_UI_V2 (Phase 999.45 Handover §5.5).
 		 */
-		class BALL_EXPORT WorkspaceStatusLabel : public QObject
+		class BALL_VIEW_EXPORT WorkspaceStatusLabel : public QObject
 		{
 			Q_OBJECT
 

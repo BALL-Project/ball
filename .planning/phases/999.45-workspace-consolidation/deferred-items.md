@@ -89,7 +89,33 @@ referenced when the flag is OFF.
 **ON cell:** builds cleanly with full BALLView executable, including
 all 999.45 + 999.44 source files (verified locally at HEAD).
 
-## Windows MSVC BALL_VIEW_EXPORT linkage bug on WorkspaceManager (caught by Phase 999.44 CI)
+## ~~Windows MSVC BALL_VIEW_EXPORT linkage bug on WorkspaceManager~~ FIXED (Phase 999.45 follow-up)
+
+**Resolution (2026-05-17, post-CI run 25996765175):** Root cause was
+`workspaceManager.h` + `configMigration.h` using the wrong export macro —
+`BALL_EXPORT` (the BALL DLL's export attribute) instead of
+`BALL_VIEW_EXPORT` (the VIEW DLL's). On Windows MSVC, the two DLLs have
+distinct export contracts; the moc-generated `staticMetaObject` definition
+was tagged dllimport (because BALL_EXPORT in a VIEW TU resolves to import
+when not building the BALL DLL), conflicting with the moc-generated definition.
+
+Fixed by replacing `BALL_EXPORT` → `BALL_VIEW_EXPORT` in 4 declarations:
+  - workspaceManager.h `class WorkspaceManager` (line 73)
+  - workspaceManager.h `class WorkspaceStatusLabel` (line 180)
+  - configMigration.h `struct MigrationResult` (line 48)
+  - configMigration.h `class ConfigMigration` (line 69)
+
+All other 999.45 classes (`ProjectDock`, `BottomDrawer`) already used
+`BALL_VIEW_EXPORT` correctly. Verified by comparison against
+`mainControl.h`, `molecularControl.h`, and the 999.44 Inspector headers
+— all use `BALL_VIEW_EXPORT`.
+
+**Original diagnostic notes preserved below for traceability:**
+
+---
+
+**Discovered:** CI run 25996765175 on HEAD `1d76af2e70` (Phase 999.44 plan 01 verification push)
+**Status:** out of 999.44 scope — owned by Phase 999.45 follow-up
 
 **Discovered:** CI run 25996765175 on HEAD `1d76af2e70` (Phase 999.44 plan 01 verification push)
 **Status:** out of 999.44 scope — owned by Phase 999.45 follow-up
