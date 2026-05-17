@@ -29,8 +29,13 @@ import pathlib
 # spanning multiple lines. The palette block is always wrapped in a
 # <property name="palette"> opener, so we anchor on that to avoid greedy
 # matches across unrelated <property> blocks.
+#
+# We tolerate the legacy Qt-Designer-3 / Qt-4 syntax `name="palette" >`
+# (space before the closing angle bracket) as well as the modern
+# `name="palette">` (no space). Both forms exist in this codebase
+# because some .ui files were last edited under Qt 4 Designer.
 PALETTE_PROPERTY = re.compile(
-    r"^[ \t]*<property name=\"palette\">\s*"
+    r"^[ \t]*<property name=\"palette\"\s*>\s*"
     r"<palette>.*?</palette>\s*"
     r"</property>\s*\n",
     re.DOTALL | re.MULTILINE,
@@ -41,7 +46,7 @@ PALETTE_PROPERTY = re.compile(
 # resaved). We do NOT touch <font> blocks that contain actual
 # specifications (size, family, bold, etc.) — those represent intent.
 EMPTY_FONT_PROPERTY = re.compile(
-    r"^[ \t]*<property name=\"font\">\s*"
+    r"^[ \t]*<property name=\"font\"\s*>\s*"
     r"<font>\s*</font>\s*"
     r"</property>\s*\n",
     re.MULTILINE,
