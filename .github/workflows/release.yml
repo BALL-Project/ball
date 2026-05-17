@@ -499,8 +499,15 @@ jobs:
       - name: Configure (Linux)
         if: startsWith(matrix.os, 'linux-')
         run: |
+          # Phase 8c part-2 bugfix (v1.7.0-rc1 post-mortem, 2026-05-18):
+          # BALL_ENABLE_PACKAGING gates `INCLUDE(BALLPackageConfig)` in the
+          # top-level CMakeLists.txt (line 983-985). Without it the CPack
+          # generator list ("TGZ;DEB;RPM") is never registered and `cpack`
+          # below dies with "CPack generator not specified". Surfaced in
+          # release run 26005037681 on the v1.7.0-rc1 tag.
           cmake --preset ci-linux \
             -DBALL_HAS_FFTW=OFF \
+            -DBALL_ENABLE_PACKAGING=ON \
             -DCMAKE_INSTALL_PREFIX=/usr
 
       - name: Build (Linux)
@@ -525,12 +532,20 @@ jobs:
         shell: bash
         run: |
           cd build/ci-linux
-          # cmake install populates the staging tree CPack rolls into all
-          # three generator outputs. CMAKE_INSTALL_PREFIX=/usr was set at
-          # configure time so the .deb/.rpm install to FHS-correct paths.
-          cmake --install . --prefix /usr --strip || true
-          # Phase 8c part-2: CPACK_GENERATOR is set to "TGZ;DEB;RPM" in
-          # cmake/BALLPackageConfig.cmake. Single cpack call emits all 3.
+          # Phase 8c part-2 bugfix (v1.7.0-rc1 post-mortem, 2026-05-18):
+          # The previous `cmake --install . --prefix /usr --strip || true`
+          # line was vestigial and harmful — it tried to install to the
+          # runner's real /usr/bin (EACCES on a non-root runner), and CPack
+          # already runs its own internal install into _CPack_Packages/
+          # before rolling the .tar.gz / .deb / .rpm. The `|| true` was
+          # supposed to swallow the failure but the resulting `CMake Error`
+          # message confused the post-mortem. Drop the line entirely; CPack
+          # handles staging via CMAKE_INSTALL_PREFIX=/usr set at configure.
+          #
+          # CPACK_GENERATOR ("TGZ;DEB;RPM") is registered by
+          # cmake/BALLPackageConfig.cmake, which is now included thanks to
+          # BALL_ENABLE_PACKAGING=ON at configure time. Single cpack call
+          # emits all 3 generators.
           cpack -B "$GITHUB_WORKSPACE/dist"
           ls -lh "$GITHUB_WORKSPACE/dist"
           # Locate each artifact (CPack uses CPACK_PACKAGE_FILE_NAME for
@@ -823,9 +838,19 @@ jobs:
           # the v1.6.2 attempt-2 release (cold-vcpkg OOM'd despite the
           # env setting). The list-form ";" separator is required so cmake
           # treats it as a list value.
+          # Phase 8c part-2 bugfix (v1.7.0-rc1 post-mortem, 2026-05-18):
+          # BALL_ENABLE_PACKAGING gates `INCLUDE(BALLPackageConfig)` which
+          # in turn registers all CPACK_NSIS_* variables (per-user install
+          # root, MUI icons, Start Menu links, EXTRA_INSTALL_COMMANDS, etc.)
+          # used by the `Build NSIS installer (Windows)` step below. Without
+          # this the resulting installer ships with CPack defaults only
+          # (machine-wide install, no icons, no Start Menu shortcuts) and
+          # the post-build filename grep on `BALLView-*-installer.exe`
+          # silently slips into the legacy `BALL-*.exe` fallback.
           cmake --preset ci-windows `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe" `
+            -DBALL_ENABLE_PACKAGING=ON `
             "-DVCPKG_INSTALL_OPTIONS=--clean-after-build"
 
       - name: Save vcpkg binary cache (Windows)

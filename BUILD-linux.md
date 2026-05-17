@@ -40,9 +40,12 @@ export CMAKE_PREFIX_PATH=$HOME/Qt/6.8.3/gcc_64:$CMAKE_PREFIX_PATH
 ```bash
 cmake --preset ci-linux \
   -DBALL_HAS_FFTW=OFF \
+  -DBALL_ENABLE_PACKAGING=ON \
   -DCMAKE_INSTALL_PREFIX=/usr
 cmake --build --preset ci-linux --target BALL VIEW BALLView
 ```
+
+`BALL_ENABLE_PACKAGING=ON` is required if you intend to run `cpack` later (see §5a) — without it the CMake build never includes `BALLPackageConfig.cmake` and `cpack` errors with "CPack generator not specified".
 
 The `ci-linux` preset sets Ninja generator, ccache compiler-launcher, and Qt 6.8 LTS floor checks.
 
@@ -66,7 +69,10 @@ export BALL_DATA_PATH=$PWD/data
 sudo apt-get install -y dpkg-dev rpm desktop-file-utils file
 
 cd build/ci-linux
-cmake --install . --prefix /usr --strip
+# NOTE: do NOT pre-install via `cmake --install . --prefix /usr` here. CPack
+# runs its own staged install into _CPack_Packages/ before each generator
+# rolls its artifact — a manual install to a system prefix (/usr) only
+# fails with EACCES on non-root systems and adds nothing CPack needs.
 cpack -B $PWD/dist
 ls dist/
 # Produces (under dist/):
