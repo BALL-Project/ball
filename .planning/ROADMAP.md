@@ -2099,22 +2099,59 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.43 lands shared widgets)
 
-### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (BACKLOG · TARGETED FOR v1.8)
+### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Replace the five-docks-on-startup layout with a sane default — left "Project" dock, right Inspector dock (Phase 999.44), bottom collapsed drawer for Logs/FileObserver. Expose a "Workspace" picker so power users keep their old layout if they want.
+**Goal:** Replace the five-docks-on-startup layout with a sane default — left "Project" dock, right Inspector dock (999.44), bottom collapsed drawer for Logs/FileObserver. Expose a "Workspace" picker (Default / Classic / Focused) so power users keep their old layout if they want.
 
-**Why v1.8:** Pairs with 999.44 Inspector (right-rail dock is part of the new default). Gates on maintainer-Q2 (Classic 5-dock retire vs keep-as-opt-in).
+**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4. Maintainer-Q2 RESOLVED (Classic-coexistence period; new **Phase 999.49** deletes Classic post-999.48 in the same v1.7 RC cycle). Pairs with 999.44 Inspector. Can run in parallel with 999.44 (different file trees: Inspector is `source/VIEW/WIDGETS/inspector/*`, Workspace is `source/VIEW/WIDGETS/projectDock.*` + `bottomDrawer.*` + `KERNEL/workspaceManager.*` + `KERNEL/configMigration.C`).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/05-phase-workspace.md`.
 
-**Depends on:** 999.44 (Inspector lives in this new layout), maintainer-Q2.
+**Depends on:** 999.43 (shared widgets), 999.44 dock-area conventions (the right rail dock area is registered by 999.44); maintainer-Q2 RESOLVED.
 
-**Estimated effort:** ~1-2 weeks.
+**Scope (ProjectDock — Handover §5.1):**
+- **`ProjectDock`** (`source/VIEW/WIDGETS/projectDock.{h,C}`) on the LEFT with **3 tabs at top (28px tab bar with accent underline)**: **Structures** (reuses `MolecularControl`) / **Representations** (reuses `GeometricControl`) / **Datasets** (reuses `DatasetControl`). Dock title bar hidden — tab bar serves as identity.
+
+**Scope (BottomDrawer — Handover §5.2):**
+- **`BottomDrawer`** (`source/VIEW/WIDGETS/bottomDrawer.{h,C}`) — `QDockWidget` whose collapsed state is a **24px strip** with chevron + label ("Logs · 12 new"). Click → expands to **240px**. Drag → resizes. Chevron rotates with `QPropertyAnimation`. Contents: `QTabBar` switching between `LogView` and `FileObserver`.
+
+**Scope (WorkspaceManager — Handover §5.3):**
+- **`WorkspaceManager`** (`source/VIEW/KERNEL/workspaceManager.{h,C}`) with **3 presets (NOT 2 — Focused is the third)**: `Default` / `Classic` / `Focused` / `UserDefined`. `apply(Preset)` / `save(name)` / `load(name)` / `userPresets()` API.
+- **Shipped `.layout` files** in `data/BALLView/workspaces/`: `default.layout`, `classic.layout`, `focused.layout` — each a binary `QMainWindow::saveState()` blob plus a small JSON sidecar with the dock visibility map. User-saved layouts go under `~/.BALLView/workspaces/`.
+
+**Scope (first-run migration — Handover §5.4):**
+- **First-run migration prompt** on first launch *after* upgrading to a Phase-5-enabled build: detect previous (5-dock) layout in `~/.BALLView` and prompt:
+  > *BALLView has a refreshed default workspace.* Switch to it, or keep your current layout (you can switch later from View → Workspace).
+  - **Try new workspace** (default)
+  - **Keep my layout** (preserved as **"User Default"**)
+- **`~/.BALLView.pre-v2.bak` auto-backup** of the pre-upgrade layout file (mitigates the "users with custom layouts lose them on upgrade" risk).
+
+**Scope (status-bar workspace label — Handover §5.5):**
+- Right end of status bar shows active workspace name as a clickable label. Clicking opens popup with preset list + "Save current as…".
+
+**Scope (configMigration.C — Handover §09-cross-platform.md §"File system paths"):**
+- **`source/VIEW/KERNEL/configMigration.C`** — migrate legacy `~/.BALLView` file into the new platform-correct paths on first launch with `BALL_UI_V2`:
+  - Linux: `~/.config/BALLView/` + `~/.cache/BALLView/`
+  - macOS: `~/Library/Preferences/BALLView/` + `~/Library/Caches/BALLView/`
+  - Windows: `%APPDATA%/BALLView/` + `%LOCALAPPDATA%/BALLView/Cache/`
+  - Workspaces also migrate: `~/.config/BALLView/workspaces/` etc.
+- Required because the `[Inspector]` INI schema added by 999.44 + `[Appearance]` schema added by 999.48 change the on-disk format; the migration step is the right place to bridge.
+
+**Acceptance criteria:**
+- Fresh launch (no `.BALLView` file) → Default workspace: Project dock left, Inspector right, scene center, Drawer collapsed.
+- `View › Workspace › Classic` restores the pre-revitalization 5-dock layout.
+- Workspace state persists across restart even after switching presets multiple times.
+- Bottom drawer expand/collapse animated at 200 ms with no content reflow flicker.
+- Status-bar workspace label updates immediately on preset change.
+- Upgrade path preserves the user's old layout as "User Default" if they choose "Keep my layout."
+- `configMigration.C` migrates legacy `~/.BALLView` to platform-correct paths on first launch with `BALL_UI_V2`.
+
+**Estimated effort:** ~1.5-2 weeks (was ~1-2; `configMigration.C` adds ~3 days, picker-with-3-presets unchanged from 2-preset estimate).
 
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (v1.8; lands after 999.44)
+- [ ] TBD (promote with /gsd-plan-phase in parallel with 999.44 after 999.43 lands)
 
 ### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (BACKLOG · TARGETED FOR v1.8)
 
