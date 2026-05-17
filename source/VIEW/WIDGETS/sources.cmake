@@ -24,6 +24,7 @@ SET(SOURCES_LIST
 	formRow.C
 	labeledSlider.C
 	sectionHeader.C
+	swatchButton.C
 	shortcutTableView.C
 	SDWidget.C
 	testFramework.C
