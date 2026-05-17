@@ -61,7 +61,21 @@ namespace BALL
 		 *   - isEnabled: optional gating predicate; defaults to
 		 *     `action->isEnabled()`.
 		 */
-		struct BALL_VIEW_EXPORT Command
+		// Phase 999.46 / CI 26000130897 fix — Command struct is a
+		// pure POD (only Qt + STL members; no virtual). Marking it
+		// BALL_VIEW_EXPORT on MSVC made consumers see all special
+		// members as __declspec(dllimport) and the link failed
+		// because the optimizer elided the defaulted definitions
+		// in libVIEW.dll. Solution: don't dllexport the POD at all
+		// — let each TU instantiate its own inline implicit
+		// special members (which is what Qt's QList<T> expects
+		// anyway: T must be CopyConstructible + MoveConstructible
+		// + Destructible at the use site, not across DLL boundary).
+		// CommandRegistry (the *class* with public API) keeps its
+		// BALL_VIEW_EXPORT — its methods do need to cross the DLL
+		// boundary, and they're non-defaulted so the optimizer
+		// can't elide.
+		struct Command
 		{
 			QString id;
 			QString title;
@@ -72,19 +86,6 @@ namespace BALL
 			std::function<void()> trigger;
 			std::function<bool()> isEnabled;
 			QPointer<QAction> action;
-
-			// Explicit special members — needed for MSVC dllexport
-			// (implicit/inline ctors+dtors don't get exported across
-			// the DLL boundary; consumers in test/menuMapping_test.C
-			// then see __declspec(dllimport) symbols that don't
-			// exist in VIEW.dll). Defining out-of-line in the .C TU
-			// gets us proper exports under all 3 toolchains.
-			Command();
-			~Command();
-			Command(const Command&);
-			Command(Command&&) noexcept;
-			Command& operator=(const Command&);
-			Command& operator=(Command&&) noexcept;
 		};
 
 		/** Phase 999.46 §6.1 — process-singleton registry that
