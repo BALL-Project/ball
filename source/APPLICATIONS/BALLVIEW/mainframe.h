@@ -13,6 +13,8 @@
 # include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
+#include <QtCore/QStringList>
+#include <QtCore/QUrl>
 #include <QtWidgets/QWidget>
 
 namespace BALL
@@ -25,6 +27,7 @@ namespace BALL
 		class InspectorDock;
 		class SelectionInspectorAdapter;
 		class RepresentationInspectorAdapter;
+		class WelcomeScreen;  // Phase 999.47 §7.1
 	}
 #endif
 
@@ -75,6 +78,43 @@ namespace BALL
 		/// migration notice (Display/Model/Material moved → Inspector).
 		/// One-shot, gated by [Inspector] firstRunMigrationNoticeShown.
 		void showInspectorMigrationNoticeIfNeeded_();
+
+		// --- Phase 999.47 (Handover §7) Onboarding ---
+
+		/// Show the WelcomeScreen panel (swap centralWidget). No-op when
+		/// already showing or when a composite is loaded.
+		void showWelcomeScreen_();
+
+		/// Hide the WelcomeScreen panel (swap centralWidget back to
+		/// the Scene). No-op when WelcomeScreen not currently mounted.
+		void hideWelcomeScreen_();
+
+		/// Append a path to the WelcomeScreen recent-files list +
+		/// persist via QSettings. Called from openFileTriggered_().
+		void rememberRecentFile_(const QString& path);
+
+		/// Read recent-files from QSettings and push to the
+		/// WelcomeScreen widget. Called once at construction.
+		void loadRecentFiles_();
+
+		/// Compare BALL_VERSION to QSettings[/Onboarding/lastVersion];
+		/// if different, surface the What's-new card and persist the
+		/// new value. Idempotent within one launch.
+		void maybeShowWhatsNew_();
+
+		/// Mount the in-app `ballview://` URL handler so help-doc
+		/// "Try this →" links route to the CommandRegistry. Called
+		/// from the constructor.
+		void installBallviewUrlHandler_();
+
+	private Q_SLOTS:
+
+		void onWelcomeOpenFileRequested_();
+		void onWelcomeOpenFromPdbRequested_();
+		void onWelcomeRecentFileRequested_(const QString& path);
+		void onWelcomeSampleRequested_(const QString& absolutePath);
+		void onWelcomeSkipToggled_(bool skip);
+		void onBallviewUrlInvoked_(const QUrl& url);
 #endif
 
 		protected:
@@ -98,6 +138,15 @@ namespace BALL
 			/// listens for RepresentationMessage and updates the
 			/// Inspector Representation tab.
 			VIEW::RepresentationInspectorAdapter* representation_adapter_;
+			/// Phase 999.47 §7.1 — WelcomeScreen panel mounted as the
+			/// centralWidget when no composite is open.
+			VIEW::WelcomeScreen*              welcome_screen_;
+			/// Phase 999.47 — running list of recent-files paths,
+			/// persisted via QSettings[/Onboarding/recentFiles].
+			QStringList                       recent_files_;
+			/// Phase 999.47 — true after maybeShowWhatsNew_() runs,
+			/// to keep the card from re-showing mid-session.
+			bool                              whats_new_shown_this_launch_;
 #endif
 	};
 

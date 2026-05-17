@@ -31,6 +31,12 @@
 // Phase 999.46 — CommandPalette (Cmd/Ctrl+K) + CommandRegistry.
 #	include <BALL/VIEW/WIDGETS/commandPalette.h>
 #	include <BALL/VIEW/KERNEL/commandRegistry.h>
+// Phase 999.47 (Handover §7) — WelcomeScreen + ballview:// scheme.
+#	include <BALL/VIEW/WIDGETS/welcomeScreen.h>
+#	include <QtCore/QFileInfo>
+#	include <QtCore/QStandardPaths>
+#	include <QtCore/QUrlQuery>
+#	include <QtGui/QDesktopServices>
 #	include <QtGui/QShortcut>
 #	include <QtCore/QSettings>
 #	include <QtCore/QDir>
@@ -88,6 +94,8 @@ namespace BALL
 			, hide_inspector_action_(0)
 			, selection_adapter_(0)
 			, representation_adapter_(0)
+			, welcome_screen_(0)                  // Phase 999.47 §7.1
+			, whats_new_shown_this_launch_(false) // Phase 999.47 §7.6
 #endif
 	{
 		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
@@ -302,6 +310,36 @@ namespace BALL
 		// Stage/Scene.
 		if (inspector_dock_ != 0 && inspector_dock_->view() != 0)
 			inspector_dock_->view()->attachSceneTab(scene_->getStage(), scene_);
+
+		// Phase 999.47 (Handover §7.1) — WelcomeScreen panel. Constructed
+		// lazily but parented to `this` so QObject ownership disposes it
+		// at shutdown. Initially mounted because composite_manager_ is
+		// empty at startup; swapped back to scene_ by checkMenus() once a
+		// composite is loaded.
+		welcome_screen_ = new VIEW::WelcomeScreen(this);
+		connect(welcome_screen_, &VIEW::WelcomeScreen::openFileRequested,
+		        this, &Mainframe::onWelcomeOpenFileRequested_);
+		connect(welcome_screen_, &VIEW::WelcomeScreen::openFromPdbRequested,
+		        this, &Mainframe::onWelcomeOpenFromPdbRequested_);
+		connect(welcome_screen_, &VIEW::WelcomeScreen::recentFileRequested,
+		        this, &Mainframe::onWelcomeRecentFileRequested_);
+		connect(welcome_screen_, &VIEW::WelcomeScreen::sampleRequested,
+		        this, &Mainframe::onWelcomeSampleRequested_);
+		connect(welcome_screen_, &VIEW::WelcomeScreen::skipOnStartupToggled,
+		        this, &Mainframe::onWelcomeSkipToggled_);
+
+		loadRecentFiles_();
+		installBallviewUrlHandler_();
+
+		// Check the "skip on startup" preference. Default: surface
+		// the WelcomeScreen on first launch, hidden when skip is set.
+		{
+			QSettings s;
+			const bool skip = s.value(QStringLiteral("Onboarding/skipOnStartup"),
+			                          false).toBool();
+			if (!skip)
+				showWelcomeScreen_();
+		}
 #endif
 
 		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
@@ -562,7 +600,231 @@ namespace BALL
 		save_project_action_->setEnabled(!composites_locked_);
 		qload_action_->setEnabled(!composites_locked_);
 		qsave_action_->setEnabled(!composites_locked_);
+
+#ifdef BALL_UI_V2
+		// Phase 999.47 §7.1 — surface or dismiss the WelcomeScreen
+		// based on the current composite count. This is the natural
+		// hook because checkMenus() runs after every composite
+		// insert/remove via MainControl::checkMenus() plumbing.
+		if (welcome_screen_ != 0)
+		{
+			if (composite_manager_.getNumberOfComposites() == 0)
+			{
+				QSettings s;
+				const bool skip = s.value(QStringLiteral("Onboarding/skipOnStartup"),
+				                          false).toBool();
+				if (!skip)
+					showWelcomeScreen_();
+			}
+			else
+			{
+				hideWelcomeScreen_();
+			}
+		}
+#endif
 	}
+
+#ifdef BALL_UI_V2
+	void Mainframe::showWelcomeScreen_()
+	{
+		if (welcome_screen_ == 0) return;
+		if (centralWidget() == welcome_screen_) return;
+
+		// Refresh recent-files + maybe show what's new each time we
+		// surface — cheap.
+		welcome_screen_->setRecentFiles(recent_files_);
+		maybeShowWhatsNew_();
+
+		// Re-parent Scene off the central slot but DON'T destroy it
+		// (it owns OpenGL context state). takeCentralWidget() returns
+		// the previous widget without deleting it.
+		QWidget* prev = takeCentralWidget();
+		if (prev != welcome_screen_ && prev != 0)
+			prev->setParent(this);
+		setCentralWidget(welcome_screen_);
+	}
+
+	void Mainframe::hideWelcomeScreen_()
+	{
+		if (welcome_screen_ == 0) return;
+		if (centralWidget() != welcome_screen_) return;
+		if (scene_ == 0) return;
+
+		QWidget* prev = takeCentralWidget();
+		if (prev != 0 && prev != scene_)
+			prev->setParent(this);
+		setCentralWidget(scene_);
+	}
+
+	void Mainframe::loadRecentFiles_()
+	{
+		QSettings s;
+		recent_files_ = s.value(QStringLiteral("Onboarding/recentFiles"))
+		                .toStringList();
+		// Drop any entries that no longer exist on disk.
+		QStringList alive;
+		for (const QString& p : recent_files_)
+			if (QFileInfo::exists(p))
+				alive << p;
+		recent_files_ = alive.mid(0, 10);
+		if (welcome_screen_ != 0)
+			welcome_screen_->setRecentFiles(recent_files_);
+	}
+
+	void Mainframe::rememberRecentFile_(const QString& path)
+	{
+		if (path.isEmpty()) return;
+		recent_files_.removeAll(path);
+		recent_files_.prepend(path);
+		while (recent_files_.size() > 10) recent_files_.removeLast();
+		QSettings s;
+		s.setValue(QStringLiteral("Onboarding/recentFiles"), recent_files_);
+		if (welcome_screen_ != 0)
+			welcome_screen_->setRecentFiles(recent_files_);
+	}
+
+	void Mainframe::maybeShowWhatsNew_()
+	{
+		if (whats_new_shown_this_launch_) return;
+		whats_new_shown_this_launch_ = true;
+
+		// BALL_RELEASE_STRING is provided by build/include/BALL/CONFIG/config.h
+		// (generated from cmake/config.h.in). Macro string-literal at preproc
+		// time so QStringLiteral can consume it.
+		const QString current = QString::fromLatin1(BALL_RELEASE_STRING);
+		QSettings s;
+		const QString last = s.value(
+			QStringLiteral("Onboarding/lastVersion")).toString();
+		if (last == current) return;
+
+		// Persist eagerly so a crash during render still counts as
+		// "shown" — better than re-showing every launch on a flaky box.
+		s.setValue(QStringLiteral("Onboarding/lastVersion"), current);
+
+		// Resolve the bundled what's-new markdown.
+		try
+		{
+			BALL::Path p;
+			BALL::String resolved = p.find("BALLView/help/whatsnew/1.7.md");
+			if (!resolved.isEmpty() && welcome_screen_ != 0)
+				welcome_screen_->showWhatsNew(
+					QString::fromStdString(std::string(resolved)));
+		}
+		catch (...) { /* swallow — what's-new is best-effort */ }
+	}
+
+	void Mainframe::installBallviewUrlHandler_()
+	{
+		// Phase 999.47 §7.3 — in-app ballview:// scheme handler.
+		// macOS LSEnvironment / CFBundleURLSchemes plumbing lives in
+		// MacOSXBundleInfo.plist.in; this is the in-process side that
+		// dispatches once Qt receives the URL via QFileOpenEvent /
+		// QDesktopServices::openUrl.
+		QDesktopServices::setUrlHandler(
+			QStringLiteral("ballview"),
+			this,
+			"onBallviewUrlInvoked_");
+	}
+
+	void Mainframe::onWelcomeOpenFileRequested_()
+	{
+		MolecularFileDialog* dlg = MolecularFileDialog::getInstance(0);
+		// readFiles() surfaces the QFileDialog; the openFile(String)
+		// overload requires a pre-resolved filename and is the path
+		// used by recent-file + sample clicks below.
+		if (dlg) dlg->readFiles();
+	}
+
+	void Mainframe::onWelcomeOpenFromPdbRequested_()
+	{
+		// Surface the PubChem download dialog if available — the
+		// PDB downloader is wired separately via downloadPDBFile.
+		PubChemDialog* dlg = PubChemDialog::getInstance(0);
+		if (dlg) dlg->show();
+	}
+
+	void Mainframe::onWelcomeRecentFileRequested_(const QString& path)
+	{
+		if (path.isEmpty()) return;
+		MolecularFileDialog* dlg = MolecularFileDialog::getInstance(0);
+		if (dlg && dlg->openFile(String(path.toStdString())))
+			rememberRecentFile_(path);
+	}
+
+	void Mainframe::onWelcomeSampleRequested_(const QString& absolutePath)
+	{
+		if (absolutePath.isEmpty()) return;
+		MolecularFileDialog* dlg = MolecularFileDialog::getInstance(0);
+		if (dlg && dlg->openFile(String(absolutePath.toStdString())))
+			rememberRecentFile_(absolutePath);
+	}
+
+	void Mainframe::onWelcomeSkipToggled_(bool skip)
+	{
+		QSettings s;
+		s.setValue(QStringLiteral("Onboarding/skipOnStartup"), skip);
+	}
+
+	void Mainframe::onBallviewUrlInvoked_(const QUrl& url)
+	{
+		// ballview://open?pdb=1ubq → download via PubChem dialog.
+		// ballview://command/<id>  → CommandRegistry dispatch.
+		const QString host = url.host();
+		const QString path = url.path();
+
+		if (host == QStringLiteral("open"))
+		{
+			QUrlQuery q(url);
+			const QString pdb = q.queryItemValue(QStringLiteral("pdb"));
+			if (!pdb.isEmpty())
+			{
+				// Surface the PDB downloader; user confirms the fetch.
+				DownloadPDBFile* dlg = DownloadPDBFile::getInstance(0);
+				if (dlg)
+				{
+					// No public "pre-fill the ID" API; just surface
+					// the dialog. A future iteration could push a
+					// pre-filled query when the dialog grows that hook.
+					(void) pdb;
+					dlg->show();
+				}
+				return;
+			}
+			const QString file = q.queryItemValue(QStringLiteral("file"));
+			if (!file.isEmpty())
+			{
+				MolecularFileDialog* dlg = MolecularFileDialog::getInstance(0);
+				if (dlg) dlg->openFile(String(file.toStdString()));
+				return;
+			}
+		}
+		else if (host == QStringLiteral("command"))
+		{
+			// Phase 999.46 CommandRegistry dispatch — look up the
+			// Command by id and invoke its trigger; mirrors the
+			// CommandPalette dispatch path at commandPalette.C:375.
+			const QString id = path.startsWith('/') ? path.mid(1) : path;
+			if (!id.isEmpty())
+			{
+				auto& reg = VIEW::CommandRegistry::instance();
+				const QList<VIEW::Command> all = reg.all();
+				for (const VIEW::Command& c : all)
+				{
+					if (c.id == id)
+					{
+						if (c.trigger)
+						{
+							c.trigger();
+							reg.noteTriggered(c.id);
+						}
+						return;
+					}
+				}
+			}
+		}
+		// Unhandled — silent (caller likely external; logging would noise).
+	}
+#endif
 
 	void Mainframe::show()
 	{
