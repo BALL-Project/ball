@@ -56,5 +56,8 @@
         <file alias="actions/chevron-down.svg">icons/lucide/chevron-down.svg</file>
         <file alias="actions/chevron-right.svg">icons/lucide/chevron-right.svg</file>
         <file alias="actions/reset.svg">icons/lucide/rotate-ccw.svg</file>
+        <!-- Phase 999.45: chevron-up paired with the existing chevron-down.
+             Used by BottomDrawer (24px↔240px collapsed/expanded toggle). -->
+        <file alias="actions/chevron-up.svg">icons/lucide/chevron-up.svg</file>
     </qresource>
 </RCC>
