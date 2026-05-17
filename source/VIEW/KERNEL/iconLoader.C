@@ -4,6 +4,7 @@
 #include <BALL/VIEW/KERNEL/iconLoader.h>
 
 #include <QtCore/QDir>
+#include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtGui/QIcon>
 
@@ -126,9 +127,47 @@ namespace BALL
 
 		QIcon* IconLoader::loadIcon_(const String& name)
 		{
+#ifdef BALL_UI_V2
+			// === Phase 999.41 — BALLView Refresh: SVG-preferred wedge =========
+			// When BALL_UI_V2 is ON, first try a compiled-in SVG from the
+			// theme.qrc resource bundle under the `:/icons/<name>.svg` prefix
+			// (see source/VIEW/KERNEL/theme/theme.qrc for the BALLView-key
+			// aliases that map e.g. "actions/quicksave" → Lucide's save.svg).
+			//
+			// Per maintainer-Q3 (single neutral theme) we ship the SVG as
+			// authored — the Lucide stroke uses currentColor which Qt resolves
+			// against the hosting widget's QSS text color at paint time. No
+			// custom QIconEngine, no per-DPR cache: Qt 6's built-in
+			// QSvgIconEngine handles HiDPI rendering correctly already.
+			//
+			// If the resource is absent we fall through to the legacy
+			// PNG-from-disk walk below, so this branch is purely additive —
+			// every icon key that doesn't have an SVG keeps loading its PNG.
+			//
+			// TODO(v1.8): once maintainer-Q3 is revisited and we need per-
+			// mode tinting (--ink-soft / --ink / --accent / --ink-muted),
+			// replace this branch with the Handover Phase 2 ThemedIconEngine
+			// — see Handover doc § 2.2 for the design.
+			{
+				const QString svg_path =
+					QStringLiteral(":/icons/") + QString(name.c_str()) + ".svg";
+				if (QFile::exists(svg_path))
+				{
+					QIcon* result = new QIcon(svg_path);
+					if (!result->isNull())
+					{
+						icon_map_[name] = result;
+						return result;
+					}
+					delete result;
+				}
+			}
+			// === end Phase 999.41 wedge =======================================
+#endif
+
 			const QString filename = QString(name.c_str()) + ".png";
 
-			for (QStringList::iterator it = icon_dirs_.begin(); it != icon_dirs_.end(); ++it) 
+			for (QStringList::iterator it = icon_dirs_.begin(); it != icon_dirs_.end(); ++it)
 			{
 				QDir base_dir(*it);
 
