@@ -23,7 +23,6 @@
 
 #include <BALL/COMMON/global.h>
 
-#ifdef BALL_UI_V2
 
 #include <QtCore/QHash>
 #include <QtCore/QString>
@@ -116,6 +115,5 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2
 
 #endif // BALL_VIEW_KERNEL_THEME_THEMEDICONENGINE_H

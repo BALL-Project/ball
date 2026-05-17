@@ -24,9 +24,7 @@
 
 // === Phase 999.40: ThemeManager init (BALL_UI_V2 build flag) ===============
 // Single neutral theme per maintainer-Q3 — Handover Phase 0.
-#ifdef BALL_UI_V2
 #  include <BALL/VIEW/KERNEL/theme/themeManager.h>
-#endif
 // === end Phase 999.40 ======================================================
 
 // === Phase 999.45: Workspace consolidation + config migration ==============
@@ -34,10 +32,8 @@
 // + post-show first-run prompt asking the user to opt into the new
 // Default workspace or keep their old layout as Classic. .pre-v2.bak
 // auto-backup written before either step touches anything.
-#ifdef BALL_UI_V2
 #  include <BALL/VIEW/KERNEL/configMigration.h>
 #  include <BALL/VIEW/KERNEL/workspaceManager.h>
-#endif
 // === end Phase 999.45 ======================================================
 
 // === Phase 999.8-full: Sparkle + WinSparkle auto-update ====================
@@ -115,9 +111,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	// and BEFORE any widgets are constructed so the first paint is themed.
 	// Single neutral theme per maintainer-Q3 — Handover Phase 0.
 	// No-op when BALL_UI_V2 is OFF (the default in v1.7).
-#ifdef BALL_UI_V2
 	BALL::VIEW::ThemeManager::instance().init(&application);
-#endif
 	// === end Phase 999.40 ==================================================
 
 #ifdef Q_OS_MACOS
@@ -236,7 +230,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	//
 	// All gated on BALL_UI_V2 — pre-flag-flip builds keep the legacy
 	// ~/.BALLView path verbatim.
-#ifdef BALL_UI_V2
 	{
 		const QString legacy_path = QString::fromStdString(home_dir.c_str()) + "/.BALLView";
 		const QString backup_path = QString::fromStdString(home_dir.c_str()) + "/.BALLView.pre-v2.bak";
@@ -262,7 +255,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 			                 << " → " << mres.targetPath.toStdString() << std::endl;
 		}
 	}
-#endif
 	// =============== end Phase 999.45 pre-mainframe migration =========================
 
 	// =============== initialize Mainframe ============================================
@@ -293,7 +285,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	//   1. A migration actually performed (i.e. user had a legacy
 	//      ~/.BALLView — fresh installs get Default silently), AND
 	//   2. The prompt has not been answered before.
-#ifdef BALL_UI_V2
 	{
 		const QString target_path = BALL::VIEW::ConfigMigration::targetConfigPath();
 		QSettings prefs(target_path, QSettings::IniFormat);
@@ -334,7 +325,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 			prefs.sync();
 		}
 	}
-#endif
 	// =============== end Phase 999.45 first-run prompt ================================
 
 	// === Phase 999.8-full: Sparkle + WinSparkle init =======================

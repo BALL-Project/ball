@@ -11,7 +11,6 @@
 
 // Phase 999.44: gated by BALL_UI_V2 (see inspectorSection.h).
 
-#ifdef BALL_UI_V2
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>
@@ -79,5 +78,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2
 #endif // BALL_VIEW_WIDGETS_INSPECTOR_SECTIONS_STAGESECTION_H

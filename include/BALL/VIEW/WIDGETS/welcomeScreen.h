@@ -16,7 +16,6 @@
 #	include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_UI_V2
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -143,5 +142,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2
 #endif // BALL_VIEW_WIDGETS_WELCOMESCREEN_H

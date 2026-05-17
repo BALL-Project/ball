@@ -169,7 +169,6 @@ namespace BALL
 			StringHashMap<String> classes_to_files_;
 		};
 
-#ifdef BALL_UI_V2
 
 		/** Phase 999.47 §7.3 — Markdown-rendering help viewer.
 		 *
@@ -219,7 +218,6 @@ namespace BALL
 				QString current_dir_;
 		};
 
-#endif // BALL_UI_V2
 
 } } // namespaces
 

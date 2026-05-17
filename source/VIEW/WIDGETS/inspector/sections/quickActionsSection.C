@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/sections/quickActionsSection.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
@@ -69,4 +68,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

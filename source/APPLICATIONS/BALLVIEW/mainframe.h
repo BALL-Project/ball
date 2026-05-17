@@ -21,7 +21,6 @@ namespace BALL
 {
 	using namespace BALL::VIEW;
 
-#ifdef BALL_UI_V2
 	namespace VIEW
 	{
 		class InspectorDock;
@@ -29,7 +28,6 @@ namespace BALL
 		class RepresentationInspectorAdapter;
 		class WelcomeScreen;  // Phase 999.47 §7.1
 	}
-#endif
 
 	class Mainframe
 		: public BALL::VIEW::MainControl
@@ -63,7 +61,6 @@ namespace BALL
 
 		void checkMenus();
 
-#ifdef BALL_UI_V2
 		/// Phase 999.43 dev-only: open the IconBrowser dialog. Only
 		/// wired into the Tools menu when BALL_UI_V2 is ON AND the
 		/// build is a debug build (!NDEBUG). See iconBrowser.h.
@@ -115,7 +112,6 @@ namespace BALL
 		void onWelcomeSampleRequested_(const QString& absolutePath);
 		void onWelcomeSkipToggled_(bool skip);
 		void onBallviewUrlInvoked_(const QUrl& url);
-#endif
 
 		protected:
 			void changeEvent(QEvent* evt);
@@ -125,7 +121,6 @@ namespace BALL
 			QAction* save_project_action_;
 			QAction* qload_action_, *qsave_action_;
 
-#ifdef BALL_UI_V2
 			/// Phase 999.44 Plan 02: right-rail Inspector dock + its
 			/// View ▸ Hide Inspector menu action.
 			VIEW::InspectorDock*              inspector_dock_;
@@ -147,7 +142,6 @@ namespace BALL
 			/// Phase 999.47 — true after maybeShowWhatsNew_() runs,
 			/// to keep the card from re-showing mid-session.
 			bool                              whats_new_shown_this_launch_;
-#endif
 	};
 
 } // namespace BALL

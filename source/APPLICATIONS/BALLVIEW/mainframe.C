@@ -5,9 +5,7 @@
 #include "mainframe.h"
 #include "aboutDialog.h"   // Phase 999.43: hand-coded About dialog (replaces aboutDialog.ui)
 #include "demoTutorialDialog.h"
-#ifdef BALL_UI_V2
 #	include "iconBrowser.h"  // Phase 999.43: dev-only icon browser
-#endif
 
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/KERNEL/theme/tokens.h>  // Phase 999.41: kIconToolbar
@@ -17,7 +15,6 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/fileObserver.h>
-#ifdef BALL_UI_V2
 // Phase 999.45 — BALLView Refresh: Workspace consolidation.
 #	include <BALL/VIEW/KERNEL/workspaceManager.h>
 #	include <BALL/VIEW/WIDGETS/projectDock.h>
@@ -46,7 +43,6 @@
 #	include <QtWidgets/QInputDialog>
 #	include <QtWidgets/QLineEdit>
 #	include <QtGui/QAction>
-#endif
 #include <BALL/VIEW/DIALOGS/pubchemDialog.h>
 #include <BALL/VIEW/DIALOGS/undoManagerDialog.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
@@ -89,14 +85,12 @@ namespace BALL
 			save_project_action_(0),
 			qload_action_(0),
 			qsave_action_(0)
-#ifdef BALL_UI_V2
 			, inspector_dock_(0)
 			, hide_inspector_action_(0)
 			, selection_adapter_(0)
 			, representation_adapter_(0)
 			, welcome_screen_(0)                  // Phase 999.47 §7.1
 			, whats_new_shown_this_launch_(false) // Phase 999.47 §7.6
-#endif
 	{
 		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
 		qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -123,9 +117,7 @@ namespace BALL
 		// top-level menu.
 		initPopupMenu(FILE_OPEN);
 		initPopupMenu(EDIT);
-#ifdef BALL_UI_V2
 		initPopupMenu(MainControl::SELECT);
-#endif
 		initPopupMenu(BUILD);  // v2: routes into Edit › Structure (no top-level item)
 		initPopupMenu(DISPLAY);  // v2: titled "View"
 		initPopupMenu(MOLECULARMECHANICS);  // v2: titled "Compute"
@@ -153,7 +145,6 @@ namespace BALL
 		if (fullscreen_action_)
 			fullscreen_action_->setIcon(VIEW::Icons::get("actions/view-fullscreen"));
 
-#ifdef BALL_UI_V2
 		// Phase 999.44 Plan 02 — View ▸ Hide Inspector (checkable, Ctrl+\).
 		// "Hide" semantics: checked == hidden, unchecked == visible. We
 		// flip into setChecked(false) on first show so the action label
@@ -177,7 +168,6 @@ namespace BALL
 				});
 			}
 		}
-#endif
 
 		insertPopupMenuSeparator(DISPLAY, UIOperationMode::MODE_ADVANCED);
 		initPopupMenu(DISPLAY_VIEWPOINT);
@@ -197,7 +187,6 @@ namespace BALL
 		GeometricControl* geom_ctrl = new GeometricControl(this, ((String)tr("Representations")).c_str());
 		DatasetControl* dataset_ctrl = new DatasetControl(this, ((String)tr("Datasets")).c_str());
 
-#ifdef BALL_UI_V2
 		// All 3 docks need to be in the same dock-area (left) before
 		// tabifyDockWidget can group them. ProjectDock::tabify moves
 		// DatasetControl off the top area into the left tab group.
@@ -205,11 +194,6 @@ namespace BALL
 		addDockWidget(Qt::LeftDockWidgetArea, geom_ctrl);
 		addDockWidget(Qt::LeftDockWidgetArea, dataset_ctrl);
 		VIEW::ProjectDock::tabify(this, mol_ctrl, geom_ctrl, dataset_ctrl);
-#else
-		addDockWidget(Qt::LeftDockWidgetArea, mol_ctrl);
-		addDockWidget(Qt::LeftDockWidgetArea, geom_ctrl);
-		addDockWidget(Qt::TopDockWidgetArea,  dataset_ctrl);
-#endif
 
 		DatasetControl* dc = DatasetControl::getInstance(0);
 		dc->registerController(new RegularData3DController());
@@ -220,12 +204,6 @@ namespace BALL
 //  NOTE: raytraceable grids have been deferred until 1.4/2.0
 //		dc->registerController(new RaytraceableGridController());
 
-#ifndef BALL_UI_V2
-		// Classic-only: DatasetControl ships hidden by default in the
-		// legacy layout. Under BALL_UI_V2 it lives as a tab inside
-		// ProjectDock and is always-visible-as-a-tab.
-		DatasetControl::getInstance(0)->hide();
-#endif
 
 		// For Demo, Tutorial, and RayTracing 
 		new DemoTutorialDialog(this, ((String)tr("BALLViewDemo")).c_str());
@@ -248,7 +226,6 @@ namespace BALL
 		LogView* log_view = new LogView(this, ((String)tr("Logs")).c_str());
 		FileObserver* file_obs = new FileObserver(this, ((String)tr("FileObserver")).c_str());
 
-#ifdef BALL_UI_V2
 		// objectName-s for WorkspaceManager preset addressing. Set
 		// before the BottomDrawer constructor so the outer docks have
 		// stable identities when WorkspaceManager hides them.
@@ -291,10 +268,6 @@ namespace BALL
 		// Phase 999.44 Plan 05 — Scene tab is wired post-scene_
 		// construction (further down) because the Stage lives on the
 		// Scene widget which doesn't exist yet at this point.
-#else
- 		addDockWidget(Qt::BottomDockWidgetArea, log_view);
-		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
-#endif
 
 		setupPluginHandlers_();
 		Scene::stereoBufferSupportTest();
@@ -302,7 +275,6 @@ namespace BALL
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 
-#ifdef BALL_UI_V2
 		// Phase 999.44 Plan 05 — Scene tab completion (sub-PR 4.5).
 		// Now that the Scene + its Stage exist, attach the Scene-tab
 		// sections (Camera / Lights / Stage / Stereo / Background)
@@ -340,7 +312,6 @@ namespace BALL
 			if (!skip)
 				showWelcomeScreen_();
 		}
-#endif
 
 		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
 
@@ -397,7 +368,6 @@ namespace BALL
 			setMenuHint(action, (String)tr("Phase 999.43: browse theme.qrc icons (debug builds only)"));
 #endif
 
-#ifdef BALL_UI_V2
 		// Phase 999.44 Plan 02 — Tools › Legacy Settings submenu.
 		// Sub-PR 4.6 finish: surfaces the 12 inventoried legacy
 		// preferences-stack pages (Display / Lighting / Models / ...)
@@ -424,7 +394,6 @@ namespace BALL
 				}
 			}
 		}
-#endif
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
@@ -441,7 +410,6 @@ namespace BALL
 		}
 		
 		
-#ifdef BALL_UI_V2
 		// Phase 999.46 — Window menu lists the 3 workspace presets
 		// from 999.45 (Default / Classic / Focused). Selecting a
 		// preset calls WorkspaceManager::apply(...) on the running
@@ -466,17 +434,12 @@ namespace BALL
 				add_preset(VIEW::WorkspaceManager::Focused, tr("Focused"));
 			}
 		}
-#endif
 
 		// Phase 999.46 §06 — Invert/Clear Selection move from Edit
 		// to the new top-level Select menu under BALL_UI_V2. OFF
 		// cell keeps the legacy Edit location for Classic-preset
 		// muscle memory.
-#ifdef BALL_UI_V2
 		const MainControl::PopUpID kSelectionMenu = MainControl::SELECT;
-#else
-		const MainControl::PopUpID kSelectionMenu = MainControl::EDIT;
-#endif
 
 		description = "Shortcut|Edit|Invert_Selection";
 		complement_selection_action_ = insertMenuEntry(kSelectionMenu, (String)tr("Invert Selection"), this,
@@ -488,7 +451,6 @@ namespace BALL
 																							SLOT(clearSelection()), description, QKeySequence(),
 																							UIOperationMode::MODE_ADVANCED);
 
-#ifdef BALL_UI_V2
 		// Phase 999.46 Task 5 (Handover §6.3) — CommandPalette
 		// floating sheet. Construct after all menu entries are
 		// registered with the CommandRegistry so the first open()
@@ -505,7 +467,6 @@ namespace BALL
 			sc->setContext(Qt::ApplicationShortcut);
 			connect(sc, &QShortcut::activated, palette, &VIEW::CommandPalette::open);
 		}
-#endif
 
  		qApp->installEventFilter(this);
 
@@ -514,7 +475,6 @@ namespace BALL
 
 	Mainframe::~Mainframe()
 	{
-#ifdef BALL_UI_V2
 		// Phase 999.44 Plan 03/04 — destroy the bus adapters before
 		// the Inspector view they point at goes away (the view is
 		// owned by inspector_dock_ which Qt deletes via the QWidget
@@ -523,7 +483,6 @@ namespace BALL
 		representation_adapter_ = 0;
 		delete selection_adapter_;
 		selection_adapter_ = 0;
-#endif
 		#ifdef BALL_PYTHON_SUPPORT
 			PyInterpreter::finalize();
 		#endif
@@ -601,7 +560,6 @@ namespace BALL
 		qload_action_->setEnabled(!composites_locked_);
 		qsave_action_->setEnabled(!composites_locked_);
 
-#ifdef BALL_UI_V2
 		// Phase 999.47 §7.1 — surface or dismiss the WelcomeScreen
 		// based on the current composite count. This is the natural
 		// hook because checkMenus() runs after every composite
@@ -621,10 +579,8 @@ namespace BALL
 				hideWelcomeScreen_();
 			}
 		}
-#endif
 	}
 
-#ifdef BALL_UI_V2
 	void Mainframe::showWelcomeScreen_()
 	{
 		if (welcome_screen_ == 0) return;
@@ -824,7 +780,6 @@ namespace BALL
 		}
 		// Unhandled — silent (caller likely external; logging would noise).
 	}
-#endif
 
 	void Mainframe::show()
 	{
@@ -843,12 +798,8 @@ namespace BALL
 			// Phase 999.41 — BALLView Refresh: 22→20 logical px under
 			// BALL_UI_V2 (denser, modern; renderer handles HiDPI scaling).
 			// Constant lives in source/VIEW/KERNEL/theme/tokens.h (999.40).
-#ifdef BALL_UI_V2
 			tb->setIconSize(QSize(BALL::VIEW::Theme::kIconToolbar,
 			                      BALL::VIEW::Theme::kIconToolbar));
-#else
-			tb->setIconSize(QSize(22,22));
-#endif
 			addToolBar(Qt::TopToolBarArea, tb);
 		}
 
@@ -900,7 +851,6 @@ namespace BALL
 		// to restore the window state again!
 		restoreWindows();
 
-#ifdef BALL_UI_V2
 		// Phase 999.45 — Workspace consolidation.
 		//
 		// Build the View > Workspace submenu (Task 9): 3 built-in
@@ -980,7 +930,6 @@ namespace BALL
 		// AFTER WorkspaceManager has settled the dock layout so the
 		// user sees the Inspector dock behind the message box.
 		showInspectorMigrationNoticeIfNeeded_();
-#endif
 	}
 
 	void Mainframe::about()
@@ -994,7 +943,6 @@ namespace BALL
 		dlg.exec();
 	}
 
-#ifdef BALL_UI_V2
 	void Mainframe::openIconBrowser()
 	{
 		// Phase 999.43: open the dev-only IconBrowser dialog. Slot is
@@ -1050,7 +998,6 @@ namespace BALL
 		s.endGroup();
 		s.sync();
 	}
-#endif
 
 	void Mainframe::changeEvent(QEvent* evt)
 	{

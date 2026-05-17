@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -179,4 +178,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/sections/cameraSection.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 #include <BALL/VIEW/WIDGETS/formRow.h>
@@ -79,4 +78,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

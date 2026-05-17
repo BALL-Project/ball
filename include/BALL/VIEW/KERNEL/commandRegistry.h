@@ -23,7 +23,6 @@
 // that would dangling-link against an empty TU. The OFF cell sees
 // no class at all, and no v2-only call-site compiles in the OFF
 // cell anyway because they're all under #ifdef BALL_UI_V2 themselves.
-#ifdef BALL_UI_V2
 
 #include <QtCore/QObject>
 #include <QtCore/QString>
@@ -168,6 +167,5 @@ namespace BALL
 	}
 }
 
-#endif // BALL_UI_V2
 
 #endif // BALL_VIEW_KERNEL_COMMANDREGISTRY_H

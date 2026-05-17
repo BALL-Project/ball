@@ -17,7 +17,6 @@
 #ifndef BALL_APPLICATIONS_BALLVIEW_ICONBROWSER_H
 #define BALL_APPLICATIONS_BALLVIEW_ICONBROWSER_H
 
-#ifdef BALL_UI_V2
 
 #include <QtWidgets/QDialog>
 
@@ -54,6 +53,5 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2
 
 #endif // BALL_APPLICATIONS_BALLVIEW_ICONBROWSER_H

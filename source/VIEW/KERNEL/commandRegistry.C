@@ -8,7 +8,6 @@
 
 #include <BALL/VIEW/KERNEL/commandRegistry.h>
 
-#ifdef BALL_UI_V2
 
 #include <QtCore/QString>
 #include <QtCore/QStringList>
@@ -232,4 +231,3 @@ namespace BALL
 	}
 }
 
-#endif // BALL_UI_V2

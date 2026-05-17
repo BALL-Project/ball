@@ -15,7 +15,6 @@
 #	include <BALL/COMMON/global.h>
 #endif
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/commandRegistry.h>
 
@@ -142,6 +141,5 @@ namespace BALL
 	}
 }
 
-#endif // BALL_UI_V2
 
 #endif // BALL_VIEW_WIDGETS_COMMANDPALETTE_H

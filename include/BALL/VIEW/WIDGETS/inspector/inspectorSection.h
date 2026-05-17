@@ -25,7 +25,6 @@
 // AUTOMOC's MOC_DEFINITIONS list includes BALL_UI_V2 — verified
 // by inspecting VIEW_autogen/AutogenInfo.json after configure.
 
-#ifdef BALL_UI_V2
 
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/COMMON/global.h>
@@ -120,5 +119,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2
 #endif // BALL_VIEW_WIDGETS_INSPECTOR_INSPECTORSECTION_H

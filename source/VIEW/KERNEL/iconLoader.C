@@ -127,7 +127,6 @@ namespace BALL
 
 		QIcon* IconLoader::loadIcon_(const String& name)
 		{
-#ifdef BALL_UI_V2
 			// === Phase 999.41 — BALLView Refresh: SVG-preferred wedge =========
 			// When BALL_UI_V2 is ON, first try a compiled-in SVG from the
 			// theme.qrc resource bundle under the `:/icons/<name>.svg` prefix
@@ -167,7 +166,6 @@ namespace BALL
 				}
 			}
 			// === end Phase 999.41 wedge =======================================
-#endif
 
 			const QString filename = QString(name.c_str()) + ".png";
 

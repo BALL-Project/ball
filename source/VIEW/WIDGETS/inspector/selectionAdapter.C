@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/selectionAdapter.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -53,4 +52,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

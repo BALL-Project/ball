@@ -5,7 +5,6 @@
 
 #include <BALL/VIEW/WIDGETS/commandPalette.h>
 
-#ifdef BALL_UI_V2
 
 #include <QtCore/QEvent>
 #include <QtCore/QSize>
@@ -442,4 +441,3 @@ namespace BALL
 	}
 }
 
-#endif // BALL_UI_V2

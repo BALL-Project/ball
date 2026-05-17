@@ -11,11 +11,9 @@
 #include <BALL/VIEW/KERNEL/modelInformation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
-#ifdef BALL_UI_V2
 // Phase 999.46 Task 2 — auto-register every menu QAction with the
 // CommandRegistry so the Cmd/Ctrl+K palette can find them all.
 #	include <BALL/VIEW/KERNEL/commandRegistry.h>
-#endif
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
@@ -370,7 +368,6 @@ namespace BALL
 					menu = addMenu(tr("&Edit"), UIOperationMode::MODE_ADVANCED);
 					break;
 				case BUILD:
-#ifdef BALL_UI_V2
 					// Phase 999.46 §06-phase-menus.md — Build › Add Hydrogens
 					// / Generate Peptide / Generate Crystal move under
 					// Edit › Structure. Reuse the same BUILD id so existing
@@ -378,18 +375,11 @@ namespace BALL
 					menu = initPopupMenu(EDIT, UIOperationMode::MODE_ADVANCED);
 					if (menu)
 						menu = menu->addMenu(tr("&Structure"));
-#else
-					menu = addMenu(tr("&Build"), UIOperationMode::MODE_ADVANCED);
-#endif
 					break;
 				case DISPLAY:
-#ifdef BALL_UI_V2
 					// Phase 999.46 — Display renames to View (Handover §06).
 					// All existing DISPLAY callers land in View.
 					menu = addMenu(tr("&View"), UIOperationMode::MODE_ADVANCED);
-#else
-					menu = addMenu(tr("&Display"), UIOperationMode::MODE_ADVANCED);
-#endif
 					break;
 				case DISPLAY_VIEWPOINT:
 					menu = initPopupMenu(DISPLAY, UIOperationMode::MODE_ADVANCED);
@@ -419,15 +409,11 @@ namespace BALL
 					break;
 #endif
 				case MOLECULARMECHANICS:
-#ifdef BALL_UI_V2
 					// Phase 999.46 — Molecular Mechanics top-level renames
 					// to Compute (Handover §06). Minimize / Dynamics / Abort
 					// land in Compute via the existing MOLECULARMECHANICS
 					// callers.
 					menu = addMenu(tr("&Compute"), UIOperationMode::MODE_ADVANCED);
-#else
-					menu = addMenu(tr("&Molecular Mechanics"), UIOperationMode::MODE_ADVANCED);
-#endif
 					break;
 				case CHOOSE_FF:
 					menu = initPopupMenu(MOLECULARMECHANICS, UIOperationMode::MODE_ADVANCED);
@@ -435,16 +421,12 @@ namespace BALL
 						menu = menu->addMenu(tr("Force Field"));
 					break;
 				case TOOLS:
-#ifdef BALL_UI_V2
 					// Phase 999.46 — Tools top-level renames to Scripts
 					// (Handover §06). All existing TOOLS callers land in
 					// Scripts. The Tools › Legacy Settings submenu wired
 					// in 999.44 Plan 02 also re-roots under Scripts;
 					// rename to "Legacy Settings" stays correct.
 					menu = addMenu(tr("&Scripts"), UIOperationMode::MODE_ADVANCED);
-#else
-					menu = addMenu(tr("&Tools"), UIOperationMode::MODE_ADVANCED);
-#endif
 					break;
 				case TOOLS_GRID:
 					menu = NULL;
@@ -456,16 +438,11 @@ namespace BALL
 					}
 					break;
 				case WINDOWS:
-#ifdef BALL_UI_V2
 					// Phase 999.46 — Windows → Window (single word) per
 					// Handover §06.
 					menu = addMenu(tr("&Window"), UIOperationMode::MODE_ADVANCED);
-#else
-					menu = addMenu(tr("&Windows"), UIOperationMode::MODE_ADVANCED);
-#endif
 					break;
 				case MACRO:
-#ifdef BALL_UI_V2
 					// Phase 999.46 — Macros top-level retargets to
 					// Scripts › Macros (Handover §06). Existing MACRO
 					// callers (testFramework.C: macro record/run/abort)
@@ -473,14 +450,10 @@ namespace BALL
 					menu = initPopupMenu(TOOLS, UIOperationMode::MODE_ADVANCED);
 					if (menu)
 						menu = menu->addMenu(tr("Macros"));
-#else
-					menu = addMenu(tr("Macros"), UIOperationMode::MODE_ADVANCED);
-#endif
 					break;
 				case HELP:
 					menu = addMenu(tr("&Help"), UIOperationMode::MODE_KIOSK);
 					break;
-#ifdef BALL_UI_V2
 				// Phase 999.46 — new top-level Select menu (Handover §06,
 				// 8-menu remap). Holds Invert / Clear / By-Expression.
 				case SELECT:
@@ -509,7 +482,6 @@ namespace BALL
 					if (menu)
 						menu = menu->addMenu(tr("Macros"));
 					break;
-#endif
 				default:
 					return 0;
 			}
@@ -985,7 +957,6 @@ namespace BALL
 			if (description != "")
 				shortcut_registry_.registerShortcut(description, action);
 
-#ifdef BALL_UI_V2
 			// Phase 999.46 Task 2 — auto-register every menu QAction
 			// with the CommandRegistry so the Cmd/Ctrl+K command
 			// palette (Task 5) sees it without any per-callsite
@@ -997,7 +968,6 @@ namespace BALL
 			category.remove(QLatin1Char('&'));
 			if (category.isEmpty()) category = QStringLiteral("Uncategorized");
 			CommandRegistry::instance().registerFromAction(action, category);
-#endif
 
 			return action;
 		}

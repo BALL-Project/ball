@@ -15,13 +15,11 @@
 #include <QtGui/QTextCursor>
 #include <QtWidgets/QToolBar>
 
-#ifdef BALL_UI_V2
 // Phase 999.47 §7.3 — MarkdownHelpViewer support.
 #	include <QtCore/QFile>
 #	include <QtCore/QFileInfo>
 #	include <QtCore/QTextStream>
 #	include <QtGui/QDesktopServices>
-#endif
 
 using namespace std;
 
@@ -431,7 +429,6 @@ namespace BALL
 		}
 
 
-#ifdef BALL_UI_V2
 
 		// Phase 999.47 §7.3 — MarkdownHelpViewer impl.
 
@@ -482,7 +479,6 @@ namespace BALL
 			QTextBrowser::doSetSource(name, type);
 		}
 
-#endif // BALL_UI_V2
 
 	} // VIEW
 } // namespace BALL

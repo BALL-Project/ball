@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/COMMON/logStream.h>
@@ -77,4 +76,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

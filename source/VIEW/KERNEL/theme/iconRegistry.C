@@ -7,12 +7,7 @@
 
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>
 
-#ifdef BALL_UI_V2
 #	include <BALL/VIEW/KERNEL/theme/themedIconEngine.h>
-#else
-#	include <BALL/VIEW/KERNEL/iconLoader.h>
-#	include <BALL/DATATYPE/string.h>
-#endif
 
 namespace BALL
 {
@@ -23,7 +18,6 @@ namespace BALL
 
 			QIcon get(const char* name)
 			{
-#ifdef BALL_UI_V2
 				// QIcon takes ownership of the engine pointer (Qt convention).
 				// Each call returns a fresh QIcon; the per-engine pixmap cache
 				// lives for the lifetime of that QIcon. Call sites typically
@@ -31,22 +25,6 @@ namespace BALL
 				// high. If a caller burns through QIcons it pays a fresh-render
 				// cost which is still <1 ms per icon at Lucide-subset sizes.
 				return QIcon(new Theme::ThemedIconEngine(QString::fromLatin1(name)));
-#else
-				// Legacy path: delegate to the existing IconLoader singleton.
-				// We copy the cached QIcon (cheap — Qt QIcon shares its
-				// implementation via implicit-sharing) so the caller doesn't
-				// hold a reference into the IconLoader's HashMap.
-				//
-				// Suppress the IconLoader::getIcon deprecation warning at
-				// this call site: we are the OFF-flag fallback, and this is
-				// precisely the use the deprecation marker exempts. End
-				// users see the warning at THEIR call sites if they bypass
-				// the façade.
-#				pragma GCC diagnostic push
-#				pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-				return IconLoader::instance().getIcon(String(name));
-#				pragma GCC diagnostic pop
-#endif
 			}
 
 		} // namespace Icons

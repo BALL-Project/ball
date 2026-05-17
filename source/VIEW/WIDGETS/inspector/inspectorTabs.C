@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/inspectorTabs.h>
 
-#ifdef BALL_UI_V2
 
 #include <QtCore/QObject>
 
@@ -68,4 +67,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

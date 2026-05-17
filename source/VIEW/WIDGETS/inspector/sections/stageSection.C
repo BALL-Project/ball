@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/sections/stageSection.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/WIDGETS/swatchButton.h>
@@ -150,4 +149,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

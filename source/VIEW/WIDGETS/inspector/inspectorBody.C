@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/inspectorBody.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
 
@@ -128,4 +127,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2

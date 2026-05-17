@@ -6,7 +6,6 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/sections/materialSection.h>
 
-#ifdef BALL_UI_V2
 
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
 #include <BALL/VIEW/WIDGETS/formRow.h>
@@ -135,4 +134,3 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_UI_V2
