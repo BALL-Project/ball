@@ -334,10 +334,35 @@ namespace BALL
 
 		void CommandPalette::onQueryChanged(const QString& text)
 		{
-			// Phase 999.46 §6.4 — ?/>/: prefix mode detection lives
-			// in the model's setQuery; the delegate's help-mode is
-			// flipped here based on the leading char.
+			// Phase 999.46 §6.4 — ?/>/: prefix mode detection.
+			//
+			//   ?  → help mode: delegate switches to 2-line rows
+			//        with prominent description; the model uses
+			//        a wider match (title + description).
+			//   >  → file mode: only commands whose category is
+			//        "File" (Open Recent etc.).
+			//   :  → navigation mode: workspace presets +
+			//        inspector jumps + recent files (commands
+			//        whose id starts with view.workspace., window.,
+			//        view.inspector., or file.recent.).
+			//   (plain) → fuzzy search all commands.
+			//
+			// The model handles the search-set selection in
+			// setQuery; here we flip the delegate render mode
+			// based on the leading char so help mode gets
+			// taller rows with the description visible.
 			delegate_->setHelpMode(text.startsWith(QLatin1Char('?')));
+
+			// Update the placeholder to hint at the active mode.
+			if (text.startsWith(QLatin1Char('?')))
+				line_->setToolTip(tr("Help mode — type to filter; descriptions shown"));
+			else if (text.startsWith(QLatin1Char('>')))
+				line_->setToolTip(tr("File mode — file actions only (Open / Recent / …)"));
+			else if (text.startsWith(QLatin1Char(':')))
+				line_->setToolTip(tr("Navigation — workspaces, inspector jumps, recent files"));
+			else
+				line_->setToolTip(QString());
+
 			model_->setQuery(text);
 			if (model_->rowCount() > 0)
 				list_->setCurrentIndex(model_->index(0));
