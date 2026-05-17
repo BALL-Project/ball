@@ -1,10 +1,17 @@
 ---
 id: SEED-001
-status: dormant
+status: promoted-subset
 planted: 2026-05-14
 planted_during: BALLView 1.6 Modernization · Phase 2 (Rendering Port)
-trigger_when: Phase 5 (Qt 6 + Pipeline) is complete — Qt 6.5 is a hard prerequisite
+trigger_when: Phase 5 (Qt 6 + Pipeline) is complete — Qt 6.5 is a hard prerequisite (SATISFIED — Qt 6.8 LTS floor since v1.6.2)
 scope: Large
+promotion: 2026-05-17 — user direction "roll the BALLView refresh into the tail-end of v1.7"
+v1.7_subset: Handover Phase 0 (design system foundation, BALL_UI_V2 OFF default) + Phase 2 (SVG/HiDPI icons) + conditional Phase 1 (palette removal) + conditional Phase 3 (simple dialogs) → ROADMAP phases 999.40-999.43; see v1.7-PLAN.md Wave 4
+v1.8_remainder: Handover Phase 4 (Inspector) + Phase 5 (Workspace) + Phase 6 (Menus + palette) + Phase 7 (Onboarding) + Phase 8 (a11y) → ROADMAP phases 999.44-999.48; v1.8 = dedicated UI marketing release with BALL_UI_V2=ON default flip
+---
+
+> **Status change 2026-05-17:** dormant → promoted-subset. User directed "roll the BALLView refresh into the tail-end of v1.7" — the foundation + maintainer-independent subset lands in v1.7 as **Wave 4** (phases 999.40-999.43, all behind `BALL_UI_V2` build flag default OFF). The 5 architecturally-heavier phases forward to **v1.8** as a dedicated UI marketing release where they ship with the flag flip. See `.planning/v1.7-PLAN.md` Wave 4 section + `.planning/ROADMAP.md` phases 999.40-999.48 for the routing.
+
 ---
 
 # SEED-001: Milestone 2 — "BALLView Refresh" UI/UX modernization

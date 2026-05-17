@@ -278,7 +278,7 @@ Plans:
 
 ## Backlog
 
-### Phase 999.1: BALLView UI maintainer open-questions (BACKLOG)
+### Phase 999.1: BALLView UI maintainer open-questions (BACKLOG · PUBLISH-READY · NOW GATES v1.7 Wave 4 + v1.8)
 
 **Goal:** Get BALL maintainer decisions on 4 UI questions from the Claude Design Handover package — long lead time, raise before Milestone 2 ("BALLView Refresh", SEED-001) reaches its Inspector phase.
 **Questions:**
@@ -286,12 +286,19 @@ Plans:
   2. Legacy 5-dock "Classic" workspace — keep as a long-term opt-in preset, or retire after one release?
   3. Theme picker — ship one neutral theme, or Light/Dark/Follow-System? (handover recommends Follow-System)
   4. Translation churn — the menu re-org invalidates ~40% of `BALLView-de_DE.ts`; plan a community translation round.
-**Status:** Questions written up issue-ready in `.planning/MAINTAINER-QUESTIONS-999.1.md` (2026-05-14) — awaiting publication to maintainers.
+
+**Status (revised 2026-05-17):** Questions written up issue-ready in `.planning/MAINTAINER-QUESTIONS-999.1.md` (2026-05-14) — **awaiting publication to maintainers**. With SEED-001 promoted to v1.7 tail-end Wave 4 (2026-05-17), these now gate concrete work:
+- **Q3 (theme picker scope)** gates v1.7 Phase 999.42 (palette removal) + Phase 999.43 (simple dialogs). If unanswered before v1.7 RC, those two phases forward to v1.8. Phases 999.40 (design system foundation) + 999.41 (SVG icons) are maintainer-independent and ship in v1.7 tail-end regardless.
+- **Q1 (macOS menu) + Q4 (translation)** gate v1.8 Phase 999.46 (menu reorg + command palette).
+- **Q2 (workspace classic vs new)** gates v1.8 Phase 999.44 (Inspector) + Phase 999.45 (Workspace consolidation).
+
+**Action:** publish the 4 questions as a GitHub issue NOW — long lead time means maintainer answers may not return for weeks. Publication requires explicit human authorization (auto `gh issue create` was blocked as unauthorized write per `MAINTAINER-QUESTIONS-999.1.md`).
+
 **Requirements:** TBD
-**Reference:** `.planning/MAINTAINER-QUESTIONS-999.1.md`, `.planning/DESIGN-HANDOVER-INTEGRATION.md`, `.planning/seeds/SEED-001-ballview-refresh-ui-milestone.md`
+**Reference:** `.planning/MAINTAINER-QUESTIONS-999.1.md`, `.planning/DESIGN-HANDOVER-INTEGRATION.md`, `.planning/seeds/SEED-001-ballview-refresh-ui-milestone.md`, `.planning/v1.7-PLAN.md` Wave 4
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog when ready)
+- [ ] TBD (no further planning needed; just `gh issue create` once human-authorized)
 
 ### Phase 999.2: Ninja build generator switch (COMPLETE · v1.6.1 · 2026-05-16)
 
@@ -1868,7 +1875,190 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog after v1.7 tags; do NOT promote during v1.7 active work — retrospective needs a stable v1.7 state to compare against)
 
+### Phase 999.40: BALLView Refresh — Design system & QSS foundation (Handover Phase 0) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+
+**Goal:** Land the design-token vocabulary, base QSS stylesheet, and `BALL_UI_V2` build-flag plumbing that every later BALLView Refresh phase depends on. **No user-visible change** — `BALL_UI_V2` defaults OFF in this phase; the foundation is dormant until 999.41/.42/.43 (v1.7 tail) and 999.44-.48 (v1.8) opt in.
+
+**Why now (v1.7 tail-end, not v1.8):** User direction 2026-05-17 — "roll the BALLView refresh into the tail-end of v1.7." Foundation is maintainer-decision-independent (Q1-Q4 don't apply to 999.40) so it ships unblocked. Land the substrate during v1.7 packaging/auto-update lead time; v1.8 then flips `BALL_UI_V2=ON` and lands the heavier UI phases (Inspector, Workspace, Menus, Onboarding, a11y).
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/00-principles.md` — the Handover's Phase 0 doc has the full scope, design steps, file list, and acceptance criteria. Drops in with light adaptation.
+
+**Scope (in):**
+- `include/BALL/VIEW/KERNEL/theme/tokens.h` — design tokens as a single C++ header (color, spacing, type scale)
+- `source/VIEW/KERNEL/theme/theme.qrc` — Qt resource bundling light + dark `.qss` stylesheets
+- `source/VIEW/KERNEL/theme/ThemeManager.{h,C}` — singleton that loads the right stylesheet at startup, reacts to `QStyleHints::colorScheme()` changes (Qt 6.5+; we're on Qt 6.8 LTS)
+- `BALL_UI_V2` CMake option, default OFF
+- Behind-flag wiring: when `BALL_UI_V2=ON`, ThemeManager init runs in BALLView main; when OFF, classic palette stays
+
+**Scope (out):**
+- Any `.ui` file edits (Handover Phase 1 = Phase 999.42, conditional v1.7 OR v1.8)
+- Icon replacement (Handover Phase 2 = Phase 999.41 v1.7)
+- Any visible change in the OFF default
+
+**Hard prerequisite:** Qt 6.5+ for `QStyleHints::colorScheme()` — **satisfied** since v1.6.2 (Qt 6.8 LTS floor).
+
+**Requirements:** TBD (likely `UIV2-FND-01: ThemeManager + tokens.h + theme.qrc + BALL_UI_V2 flag`)
+
+**Estimated effort:** ~1 week.
+
+**Plans:** 0 (single PLAN with 4 tasks when promoted: tokens header, theme.qrc, ThemeManager, BALL_UI_V2 build-flag wiring).
+
+Plans:
+- [ ] TBD (promote with /gsd-plan-phase during v1.7 tail-end)
+
+### Phase 999.41: BALLView Refresh — SVG icons + HiDPI pipeline (Handover Phase 2) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+
+**Goal:** Replace the XPM bitmap icon system with an SVG-based, theme-aware, HiDPI-correct icon pipeline. Pure mechanical asset work; no UX decisions; no maintainer dependencies.
+
+**Why now (v1.7 tail-end):** Maintainer-decision-independent + Handover docs are ready + pairs naturally with 999.40's ThemeManager (theme-aware icon tinting). Land in v1.7 tail.
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/02-phase-icons.md`.
+
+**Depends on:** 999.40 (uses ThemeManager for theme-aware tinting).
+
+**Scope (in):**
+- New SVG icon set (Handover doc specifies the source / licensing — likely Lucide or Phosphor, MIT)
+- Qt resource file replacing the XPM `.qrc`
+- `IconLoader` update (or new class) to load SVG + tint per theme
+- All ~30 XPM icon references in `source/VIEW/` migrate to new IDs
+- HiDPI: rely on Qt 6's native scaling for SVG (no per-pixel-ratio variants needed)
+
+**Scope (out):**
+- Changing which icons appear where (UX decision — defer to v1.8 menu reorg 999.46)
+- New icons for actions that don't have one today (out of scope; cleanup, not addition)
+
+**Requirements:** TBD (likely `UIV2-ICN-01: SVG icon pipeline replaces XPM`)
+
+**Estimated effort:** ~1-1.5 weeks (mostly per-call-site icon-ID migration).
+
+**Plans:** 0 (single PLAN with 3 tasks when promoted).
+
+Plans:
+- [ ] TBD (promote with /gsd-plan-phase after 999.40 lands)
+
+### Phase 999.42: BALLView Refresh — QSS theming, palette removal (Handover Phase 1) (BACKLOG · CONDITIONAL ON MAINTAINER-Q3 · v1.7 OR v1.8)
+
+**Goal:** Remove every `<palette>` block from every `.ui` file in the tree so dialogs inherit the OS / theme palette set by 999.40's ThemeManager. Required for dark mode + Follow-System theming to work coherently across all dialogs.
+
+**Why conditional:** Gates on **Phase 999.1 maintainer-Q3** (theme picker scope: single neutral vs Light/Dark/Follow-System). Handover recommends Follow-System; if the maintainer accepts that recommendation before v1.7 RC, 999.42 ships in v1.7 tail. If undecided, forward to v1.8.
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/01-phase-theming.md`.
+
+**Depends on:** 999.40 (consumes ThemeManager); 999.1-Q3 (maintainer answer to gate v1.7 vs v1.8).
+
+**Scope:** strip `<palette>` blocks from ~30 `.ui` files in `source/VIEW/DIALOGS/`. Mechanical; no behavior change beyond dark-mode unlock.
+
+**Requirements:** TBD (likely `UIV2-THM-01: palette-free .ui files`).
+
+**Estimated effort:** ~1 week.
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (gate on maintainer-Q3 + 999.40)
+
+### Phase 999.43: BALLView Refresh — Simple-dialog cleanup (Handover Phase 3) (BACKLOG · CONDITIONAL ON 999.42 · v1.7 OR v1.8)
+
+**Goal:** Apply the new design system + theme + idiom to the small, low-risk dialogs first. Build muscle memory for the Inspector overhaul (v1.8 Phase 999.44).
+
+**Why conditional:** Gates on 999.42 (palette removal is a prereq for theme-consistent simple dialogs). Same v1.7-vs-v1.8 split as 999.42.
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/03-phase-simple-dialogs.md`.
+
+**Depends on:** 999.42 (themed `.ui` substrate); 999.41 (SVG icons available).
+
+**Scope:** the simple dialogs (per Handover doc — Preferences-style panes, About, Preferences > Display tab, etc.) get new layouts + the design system applied.
+
+**Estimated effort:** ~1-1.5 weeks.
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (gate on 999.42)
+
+### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (BACKLOG · TARGETED FOR v1.8)
+
+**Goal:** Collapse the modal-dialog soup (Display, Model, Material, Light, Stage, Stereo, Clipping, Coloring, Label, Modify Representation — 10+ dialogs) into a single **right-rail Inspector dock** with collapsible sections, live preview, and tabs organized by *subject* (Selection · Representation · Scene · Stage).
+
+**Why v1.8 not v1.7-tail:** Biggest single architectural piece in the entire Refresh — replaces 10+ modal dialogs with one dock + tabs + live preview. Gates on **maintainer-Q2** (workspace classic-vs-new). Deserves its own marketing release.
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/04-phase-inspector.md`.
+
+**Depends on:** 999.40 (theme foundation), 999.41 (SVG icons), 999.42 (palette removal), 999.43 (simple-dialog patterns), maintainer-Q2.
+
+**Estimated effort:** ~3-4 weeks (the Handover doc has detailed acceptance criteria).
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (v1.8 promotion; do NOT start before v1.7 closes + maintainer-Q2 answered)
+
+### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (BACKLOG · TARGETED FOR v1.8)
+
+**Goal:** Replace the five-docks-on-startup layout with a sane default — left "Project" dock, right Inspector dock (Phase 999.44), bottom collapsed drawer for Logs/FileObserver. Expose a "Workspace" picker so power users keep their old layout if they want.
+
+**Why v1.8:** Pairs with 999.44 Inspector (right-rail dock is part of the new default). Gates on maintainer-Q2 (Classic 5-dock retire vs keep-as-opt-in).
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/05-phase-workspace.md`.
+
+**Depends on:** 999.44 (Inspector lives in this new layout), maintainer-Q2.
+
+**Estimated effort:** ~1-2 weeks.
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (v1.8; lands after 999.44)
+
+### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (BACKLOG · TARGETED FOR v1.8)
+
+**Goal:** Re-author the top menu bar around **tasks** rather than C++ namespaces. Introduce `Cmd/Ctrl+K` **command palette** exposing every action by name (modern app standard).
+
+**Why v1.8:** Menu reorg touches **every** `.ui` menu file + invalidates ~40% of `BALLView-de_DE.ts` translations. Gates on maintainer-Q1 (macOS native menubar) + maintainer-Q4 (translation churn timing).
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/06-phase-menus.md`.
+
+**Depends on:** 999.44 + 999.45 (new layout context), maintainer-Q1 + Q4.
+
+**Estimated effort:** ~2-3 weeks (menu work) + community translation round (parallel, time-elapsed-only, not engineering effort).
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (v1.8; lands after 999.45)
+
+### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (BACKLOG · TARGETED FOR v1.8)
+
+**Goal:** Replace the standalone *Demo / Tutorial* dialog + `Welcome.rtf` with an in-product welcome screen on first launch. Refresh the Help viewer to use Markdown (drop the QtWebEngine dependency where avoidable — already removed from build per existing Phase 5 work).
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/07-phase-onboarding.md`.
+
+**Depends on:** 999.40-999.46 (the new look the welcome screen showcases).
+
+**Estimated effort:** ~1-2 weeks.
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (v1.8; lands after 999.46)
+
+### Phase 999.48: BALLView Refresh — Accessibility + dark-mode finalize (Handover Phase 8) (BACKLOG · TARGETED FOR v1.8 · LAST UI PHASE)
+
+**Goal:** Close out the revitalization — harden accessibility, finalize dark mode, add per-user font scaling, audit tab order, ship the remaining quality-of-life details. Also: flip `BALL_UI_V2=ON` as default, making v1.8 the first release where the new UI is the new normal.
+
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/08-phase-a11y.md`.
+
+**Depends on:** every other UI Refresh phase (999.40-999.47).
+
+**Estimated effort:** ~1-2 weeks.
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (v1.8 closing phase; flips BALL_UI_V2 default ON)
+
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
 *Revised 2026-05-14 (consolidation): backlog 999.4 promoted to active Phase 4.1 (Config Color-Defaults Fix, CONFIG-01); former standalone Phase 05.1 (renderer backend spike) folded into Phase 5 since it must prototype against Qt 6.*
+*Revised 2026-05-17 (BALLView Refresh promotion): SEED-001 promoted-subset → 9 new phases 999.40-999.48 mapping Handover Phases 0-8; v1.7 takes the foundation + maintainer-independent subset (999.40 + 999.41 + conditional 999.42/.43), v1.8 takes the architecturally-heavier phases (999.44 Inspector, 999.45 Workspace, 999.46 Menus, 999.47 Onboarding, 999.48 a11y) as a dedicated UI marketing release with BALL_UI_V2=ON default flip. Phase 999.1 maintainer questions status: publish-ready, now gates concrete v1.7 + v1.8 work.*
