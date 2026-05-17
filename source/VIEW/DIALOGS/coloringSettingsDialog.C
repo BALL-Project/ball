@@ -231,16 +231,62 @@ namespace BALL
 				}
 			}
 
-			String residue_names, residue_name_colors;
-
-			for (Index i=0; i<residue_table_->rowCount(); ++i)
+			// D-01 + D-06 (Phase 999.4b — Phase 4.1 element-path pattern carried forward to
+			// residues): write only residue-color entries that DIFFER from the live compiled
+			// ResidueNameColorProcessor defaults. The persisted file no longer contains a
+			// shadow copy of the full residue palette, structurally eliminating the bug class
+			// where a saved full-table block silently shadows the compiled defaults.
 			{
-				residue_names       += ascii(residue_table_->item(i, 0)->text()) + ";";
-				residue_name_colors += (String)(static_cast<ColorRGBA>(residue_table_->item(i, 1)->background().color())) + ";";
-			}
+				ResidueNameColorProcessor live_defaults;
+				const StringHashMap<ColorRGBA>& defaults_map = live_defaults.getColorMap();
 
-			inifile.insertValue("COLORING_OPTIONS", "ResidueNames",      residue_names);
-			inifile.insertValue("COLORING_OPTIONS", "ResidueNameColors", residue_name_colors);
+				String overrides_serialized;
+
+				for (Index i = 0; i < residue_table_->rowCount(); ++i)
+				{
+					String residue_name = ascii(residue_table_->item(i, 0)->text());
+					if (residue_name.isEmpty() || residue_name == "---") continue;
+
+					ColorRGBA dialog_color(residue_table_->item(i, 1)->background().color());
+
+					StringHashMap<ColorRGBA>::ConstIterator dit = defaults_map.find(residue_name);
+
+					bool differs = (dit == defaults_map.end()) ||
+					               ((String)dialog_color != (String)dit->second);
+
+					if (differs)
+					{
+						overrides_serialized += residue_name + ":" + (String)dialog_color + ";";
+					}
+				}
+
+				if (!overrides_serialized.empty())
+				{
+					// INIFile upsert idiom (Phase 4.1 Issue 1 carry-forward): insertValue no-ops if
+					// key exists; setValue no-ops if key absent — the pair covers both call sites.
+					if (!inifile.insertValue("COLORING_OPTIONS", "ResidueNameColorOverrides", overrides_serialized))
+					{
+						inifile.setValue("COLORING_OPTIONS", "ResidueNameColorOverrides", overrides_serialized);
+					}
+				}
+				else
+				{
+					// No overrides: remove any stale ResidueNameColorOverrides= line from a prior write.
+					if (inifile.hasEntry("COLORING_OPTIONS", "ResidueNameColorOverrides"))
+					{
+						INIFile::LineIterator it  = inifile.getSectionFirstLine("COLORING_OPTIONS");
+						INIFile::LineIterator end = inifile.getSectionLastLine("COLORING_OPTIONS").getSectionNextLine();
+						for (; it != end; ++it)
+						{
+							if ((*it).hasPrefix("ResidueNameColorOverrides="))
+							{
+								inifile.deleteLine(it);
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
 
 		void ColoringSettingsDialog::readPreferenceEntries(const INIFile& inifile)
@@ -349,29 +395,98 @@ namespace BALL
 				}
 			}
 
-			if (    inifile.hasEntry("COLORING_OPTIONS", "ResidueNames")
-				   && inifile.hasEntry("COLORING_OPTIONS", "ResidueNameColors"))
+			// Phase 999.4b residue-path read (mirrors the Phase 4.1 element-path read above).
+			// D-05 conflict rule: legacy-discard branch (step 1) runs first so that when both
+			// ResidueNames=/ResidueNameColors= and ResidueNameColorOverrides= are present, the
+			// legacy keys are dropped and the new key wins — both-present is handled by construction.
+
+			// Step 1 — D-03: silently discard any legacy ResidueNames= line from pre-Phase-999.4b configs.
+			if (inifile.hasEntry("COLORING_OPTIONS", "ResidueNames"))
 			{
-				String residue_names       = inifile.getValue("COLORING_OPTIONS", "ResidueNames");
-				String residue_name_colors = inifile.getValue("COLORING_OPTIONS", "ResidueNameColors");
-
-				std::vector<String> split_names;
-				residue_names.split(split_names);
-
-				std::vector<String> split_colors;
-				residue_name_colors.split(split_colors);
-
-				if (split_names.size() != split_colors.size())
+				INIFile::LineIterator it  = const_cast<INIFile&>(inifile).getSectionFirstLine("COLORING_OPTIONS");
+				INIFile::LineIterator end = const_cast<INIFile&>(inifile).getSectionLastLine("COLORING_OPTIONS").getSectionNextLine();
+				for (; it != end; ++it)
 				{
-					Log.warn() << "ColoringSettingsDialog::fetchPreferences: residue name coloring in inifile is invalid!" << std::endl;
+					if ((*it).hasPrefix("ResidueNames="))
+					{
+						const_cast<INIFile&>(inifile).deleteLine(it);
+						Log.info() << "ColoringSettingsDialog: dropping legacy ResidueNames= block (Phase 999.4b migration; compiled defaults will be used for untouched residues)" << std::endl;
+						break;
+					}
 				}
-
-				std::vector<ColorRGBA> split_color_rgba(split_colors.size());
-				for (Position i=0; i<split_color_rgba.size(); ++i)
+			}
+			// Also drop the companion legacy ResidueNameColors= key.
+			if (inifile.hasEntry("COLORING_OPTIONS", "ResidueNameColors"))
+			{
+				INIFile::LineIterator it  = const_cast<INIFile&>(inifile).getSectionFirstLine("COLORING_OPTIONS");
+				INIFile::LineIterator end = const_cast<INIFile&>(inifile).getSectionLastLine("COLORING_OPTIONS").getSectionNextLine();
+				for (; it != end; ++it)
 				{
-					split_color_rgba[i] = ColorRGBA(split_colors[i]);
+					if ((*it).hasPrefix("ResidueNameColors="))
+					{
+						const_cast<INIFile&>(inifile).deleteLine(it);
+						break;
+					}
 				}
-				residue_table_->setContent(split_names, split_color_rgba);
+			}
+
+			// Step 2 — D-05.1: parse the new ResidueNameColorOverrides= key if present and
+			// apply override colors into residue_table_ for each matching residue name. The
+			// table has already been populated with compiled defaults in setDefaultValues_();
+			// untouched rows therefore retain the compiled defaults (no shadow-default risk).
+			//
+			// Intentional asymmetry with the Phase 4.1 element path: NO all-white sanity check
+			// here. The compiled residue palette contains legitimately-white entries — GLY
+			// {255,255,255} and ALA {216,255,255} at standardColorProcessor.C:204-205 — so an
+			// all-white override for those residues is INDISTINGUISHABLE from a legitimate user
+			// choice. Adding the element-path's white-drop check would corrupt valid user data.
+			if (inifile.hasEntry("COLORING_OPTIONS", "ResidueNameColorOverrides"))
+			{
+				String overrides_raw = inifile.getValue("COLORING_OPTIONS", "ResidueNameColorOverrides");
+
+				std::vector<String> tokens;
+				overrides_raw.split(tokens, ";");
+
+				for (Position t = 0; t < (Position)tokens.size(); ++t)
+				{
+					if (tokens[t].isEmpty()) continue;
+
+					std::vector<String> parts;
+					tokens[t].split(parts, ":");
+
+					if (parts.size() != 2 || parts[0].isEmpty() || parts[1].isEmpty()) continue;
+
+					// Phase 4.1 Issue 2 carry-forward: ColorRGBA(const String&) reads 6 or 8 chars
+					// without bounds checking in release builds; throws InvalidRange in BALL_VIEW_DEBUG.
+					if (parts[1].size() != 6 && parts[1].size() != 8)
+					{
+						Log.warn() << "ColoringSettingsDialog: dropping malformed residue override token '"
+						           << tokens[t] << "' (color hex must be 6 or 8 chars)" << std::endl;
+						continue;
+					}
+
+					ColorRGBA override_color;
+					try
+					{
+						override_color = ColorRGBA(parts[1]);
+					}
+					catch (const Exception::GeneralException&)
+					{
+						Log.warn() << "ColoringSettingsDialog: dropping unparseable residue override token '"
+						           << tokens[t] << "' (parse exception)" << std::endl;
+						continue;
+					}
+
+					// Find the matching row in residue_table_ by name and apply the override color.
+					for (Position p = 0; p < (Position)residue_table_->rowCount(); ++p)
+					{
+						if (ascii(residue_table_->item(p, 0)->text()) == parts[0])
+						{
+							residue_table_->item(p, 1)->setBackground(override_color.getQColor());
+							break;
+						}
+					}
+				}
 			}
 		}
 
