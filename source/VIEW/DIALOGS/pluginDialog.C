@@ -3,7 +3,7 @@
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/pluginDialog.h>
@@ -169,10 +169,8 @@ namespace BALL
 
 			setObjectName(name);
 
-			IconLoader& icon_loader = IconLoader::instance();
-
-			ui_->plugin_dir_button_add->setIcon(icon_loader.getIcon("actions/list-add"));
-			ui_->plugin_dir_button_remove->setIcon(icon_loader.getIcon("actions/edit-delete"));
+			ui_->plugin_dir_button_add->setIcon(Icons::get("actions/list-add"));
+			ui_->plugin_dir_button_remove->setIcon(Icons::get("actions/edit-delete"));
 
 			// register all visible childs
 			registerWidgets_();
