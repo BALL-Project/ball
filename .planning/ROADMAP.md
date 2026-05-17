@@ -1950,11 +1950,11 @@ Plans:
 **Plans:** 1 plan
 - [x] 999.41-01-PLAN.md — vendor 14 SVGs, extend theme.qrc, link Qt6::Svg, add SVG-preferred branch to IconLoader, bump toolbar size, leave breadcrumbs (6 commits + 2 docs commits)
 
-### Phase 999.42: BALLView Refresh — QSS theming + palette removal + 999.41 icon carry-overs (Handover Phase 1 + Phase 2 tail) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.42: BALLView Refresh — QSS theming + palette removal + 999.41 icon carry-overs (Handover Phase 1 + Phase 2 tail) — COMPLETED 2026-05-17 (v1.7 Wave 4)
 
 **Goal:** Remove every `<palette>` block from every `.ui` file in the tree so dialogs inherit the OS / theme palette set by 999.40's ThemeManager — AND close out the 999.41 SVG-icon carry-overs (ThemedIconEngine for state tints, call-site rewrites, XPM array deletion, packaging icon regen). Even without dark-mode/Follow-System, palette removal is hygiene — Qt then applies system widget styling natively (lighter chrome on macOS, native on Windows).
 
-**Status (revised 2026-05-17 audit pull-in):** UNCONDITIONAL in v1.7 Wave 4 — Phase 999.1 maintainer-Q3 resolved (single neutral theme). Value reframes from "unlock dark mode" to "design-system consistency + OS palette inheritance." Phase still ships in v1.7 because palette removal is hygienic regardless of theme-picker breadth. **Scope expanded per audit:** absorbs 999.41 forwarded carry-overs (the v1.7 999.41 PLAN was the build-flag-gated wedge subset; the rest of Handover Phase 2 lands here).
+**Status (2026-05-17):** COMPLETED — single PLAN, 17 commits (1 chore + 7 feat + 8 refactor + 5 docs), macOS-arm64 ON + OFF builds green for every per-task commit. Reality vs Handover counts: 7 `.ui` files with palette (not 38), 22 IconLoader call sites (not 28), 3 XPM arrays (matches). ThemedIconEngine + IconRegistry façade landed; 22 call sites migrated to `Icons::get` (per-file atomic commits); all 3 XPM arrays + `icons.{h,C}` deleted; 3 new Lucide SVGs vendored. **Deferrals (documented breadcrumbs in SUMMARY):** lupdate refresh (10k-line drift unrelated to palette; → `chore(i18n)`); .icns/.ico regen (toolchain not universal on CI runners + bespoke artwork also Phase 8; → Phase 8 packaging). See [999.42-01-SUMMARY.md](phases/999.42-theming-palette-removal/999.42-01-SUMMARY.md).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/01-phase-theming.md` + `02-phase-icons.md` §2.2 + §2.3 + §2.4 + §2.6.
 
@@ -1982,12 +1982,10 @@ Plans:
 - Walk-through of the ~25 user-visible dialogs in `BALL_UI_V2=ON` mode shows them adopting the new theme; `BALL_UI_V2=OFF` walk-through shows native system palette (old hardcoded beige gone everywhere).
 - `coloringSettingsDialog` residue swatches visually unchanged (semantic colors preserved via code path).
 
-**Estimated effort:** ~1.5-2 weeks (was ~1 week — palette half + carry-overs).
+**Estimated effort:** ~1.5-2 weeks (was ~1 week — palette half + carry-overs). **Actual: ~75 minutes** (much smaller real-world surface than the Handover doc projected, plus per-task local smoke-builds rather than waiting on CI for each gate).
 
-**Plans:** 0.
-
-Plans:
-- [ ] TBD (promote with /gsd-plan-phase after 999.40 lands; ci.yml ui_v2 axis ✅ landed 2026-05-17)
+**Plans:** 1 plan
+- [x] 999.42-01-PLAN.md — palette strip + ThemedIconEngine + IconRegistry + 22 call-site migration + 3 XPM array deletion (17 commits)
 
 ### Phase 999.43: BALLView Refresh — Simple-dialog cleanup + shared widget set (Handover Phase 3) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 

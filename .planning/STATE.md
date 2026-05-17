@@ -80,6 +80,7 @@ Last activity: 2026-05-17
 | Phase 999.22-warning-census P01 | ~45min | 3 tasks | 7 files (3 raw warning logs + CENSUS.md + SUMMARY.md + ROADMAP.md + REQUIREMENTS.md) |
 | Phase 09-test-suite-triage P01 | 110min | 6 tasks | 8 files |
 | Phase 999.34-windows-test-gatekeeper P01 | ~45min (dominated by parallel-agent 999.42 CI cancellation churn — push-routed via temp branch to avoid bundling OOS commits) | 5 tasks | 5 files (2 workflow + 2 docs + test/CMakeLists fine-penalty note) + 2 created (PLAN, SUMMARY) |
+| Phase 999.42-theming-palette-removal P01 | ~75min (palette strip + ThemedIconEngine + IconRegistry + 22 call-site migration + 3 XPM array deletion + 12 audits/breadcrumbs/deferrals; concurrent 999.34 agent caused 1 cherry-pick rebase round midway, surfaced not reverted per OOS-feedback) | 13 tasks (12 planned + 9c) | 36 files (11 created [engine + registry + 3 svgs + 4 inventory/script + 3 audit docs]; 23 modified [7 .ui + 8 call-site .C + 3 XPM cleanups + theme.qrc + sources.cmake + iconLoader.{h,C} + iconRegistry.C + mainframe.C + 3 .h]; 2 deleted [icons.{h,C}]) |
 
 ## Accumulated Context
 
