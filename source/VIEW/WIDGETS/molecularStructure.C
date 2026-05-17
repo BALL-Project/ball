@@ -333,7 +333,13 @@ namespace BALL
 			{
                 if (!RTTI::isKindOf<AtomContainer>(*it))
 				{
-					Log.error() << (String)tr("ResidueChecker: cannot apply to a") << " " << typeid(**it).name()
+					// Bind the dereferenced Composite to a const ref so
+					// typeid's potentially-evaluated operand is explicit
+					// (silences -Wpotentially-evaluated-expression; *it is
+					// a plain pointer deref with no side effects, runtime
+					// type is needed for the diagnostic message).
+					const Composite& bad = **it;
+					Log.error() << (String)tr("ResidueChecker: cannot apply to a") << " " << typeid(bad).name()
 						          << " " << (String)tr("object") << std::endl;
 					continue;
 				}

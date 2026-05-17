@@ -180,7 +180,12 @@ void ConnectionObject::dump(ostream& s, Size depth) const
 	list<ConnectionObject*>::const_iterator it = children_connection_objects_.begin();
 	for (Position p = 0; p < children_connection_objects_.size(); p++)
 	{
-		s << String(p) + ": " << *it  << "  " << typeid(**it).name() << std::endl;
+		// Bind the dereferenced child to a const ref so typeid's
+		// potentially-evaluated operand is explicit (silences
+		// -Wpotentially-evaluated-expression; *it is a plain pointer
+		// deref with no side effects, runtime type is needed here).
+		const ConnectionObject& child = **it;
+		s << String(p) + ": " << *it  << "  " << typeid(child).name() << std::endl;
 		(*it)->dump(s, depth +1);
 		it++;
 	}
