@@ -64,16 +64,16 @@ decision record, cross-referenced from 09-01-SUMMARY.md.
 
 ---
 
-## Windows test gatekeeper: deferred to Phase 999.34
+## Windows test gatekeeper: DELIVERED 2026-05-17 in Phase 999.34
 
-Per [PHASE-9-BASELINE.md:84](PHASE-9-BASELINE.md), Windows tests were NOT wired into CI in this phase. After the macOS + Linux gatekeeper flip in TEST-CLOSE-02, Windows test gatekeeper remains non-blocking/absent.
+Per [PHASE-9-BASELINE.md:84](PHASE-9-BASELINE.md), Windows tests were NOT wired into CI in this phase. After the macOS + Linux gatekeeper flip in TEST-CLOSE-02, Windows test gatekeeper remained non-blocking/absent — until Phase 999.34.
 
-**Filed 2026-05-16:** Phase 999.34 — Windows test gatekeeper (see ROADMAP.md) covers:
-- Wire ctest into the Windows CI build step
-- Set `PATH=%cd%\build\ci-windows\bin;%PATH%` for BALL.dll discovery
-- Export `BALL_DATA_PATH=%GITHUB_WORKSPACE%\data`
-- Baseline Windows test results + apply quarantine mirrors
-- Flip Windows gatekeeper to blocking
+**Filed 2026-05-16, landed 2026-05-17:** [Phase 999.34 — Windows test gatekeeper](../999.34-windows-test-gatekeeper/999.34-01-SUMMARY.md) delivered:
+- Wired ctest into the Windows CI build step (`ci.yml` + `release.yml`)
+- Extended `$env:PATH` with both `build\ci-windows\bin` (BALL.dll + VIEW.dll) AND `build\ci-windows\vcpkg_installed\x64-windows-release\bin` (Qt6 + Boost) so test EXEs in `bin\TEST\` resolve all DLLs
+- Exported `BALL_DATA_PATH=${{ github.workspace }}\data`
+- Verified the existing quarantines apply correctly on Windows without changes (MSVC x64 = Intel-compatible FP path = passes the AssignBondOrderProcessor_test2 + AmberFF_test that fail on Apple Silicon)
+- Flipped Windows gatekeeper to blocking (`continue-on-error: false`)
 
 ---
 

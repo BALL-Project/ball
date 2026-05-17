@@ -1658,30 +1658,33 @@ To add to `REQUIREMENTS.md` v1.6.2 section when promoted.
 Plans:
 - [ ] TBD (promote with /gsd-review-backlog when v1.6.2 milestone opens)
 
-### Phase 999.34: Windows test gatekeeper (BACKLOG · v1.7 OR LATER)
+### Phase 999.34: Windows test gatekeeper (COMPLETE · v1.7 · 2026-05-17)
 
 **Goal:** Bring up the Windows test gatekeeper to parity with macOS + Linux — wire `ctest` into the Windows CI job with `BALL_DATA_PATH` export + `WILL_FAIL TRUE` quarantines mirrored from macOS/Linux + flip to blocking. Today the Windows CI job builds but does not run tests; the gatekeeper flip in TEST-CLOSE-02 covered macOS + Linux only.
 
 **Why deferred (per [PHASE-9-BASELINE.md:84](phases/09-test-suite-triage/PHASE-9-BASELINE.md)):** vcpkg + MSVC test integration is non-trivial — the test binaries link against BALL.dll which lives in `build/ci-windows/bin/` and needs `PATH` adjustment for the test runner to find it. Worth a real investigation slot, not bundled into TEST-CLOSE-02's gatekeeper flip.
 
-**Scope (when promoted):**
-1. Wire `ctest` into the Windows CI build step (currently build-only).
-2. Set `$env:PATH = "build\ci-windows\bin;$env:PATH"` so test binaries find BALL.dll.
-3. Export `BALL_DATA_PATH=$env:GITHUB_WORKSPACE\data`.
-4. Baseline the Windows test results (likely 3 failures mirror macOS/Linux + some Windows-specific filesystem differences for Directory_test).
-5. Apply quarantines to mirror the macOS+Linux decisions from [09-TRIAGE.md](phases/09-test-suite-triage/09-TRIAGE.md): `AssignBondOrderProcessor_test2` marked `WILL_FAIL TRUE`; AmberFF_test should pass on MSVC x64 (Intel-compatible FP path, same as Linux GCC).
-6. Flip Windows test gatekeeper to blocking in ci.yml + release.yml.
+**Delivered (Phase 999.34, 2026-05-17):**
+1. Added "Build BALL test suite (Windows)" + "Run BALL test suite (Windows)" + "Upload test results (Windows)" steps to `.github/workflows/ci.yml`'s windows-x64 branch (commit 5f0c9462b0).
+2. Mirrored the same three steps into `.github/workflows/release.yml` so tag-triggered release builds also gate on the Windows test suite (commit 92a85ad821).
+3. PATH discovery: both steps extend `$env:PATH` with `build\ci-windows\bin` (BALL.dll + VIEW.dll) AND `build\ci-windows\vcpkg_installed\x64-windows-release\bin` (Qt6 + Boost DLLs) so test EXEs in `bin\TEST\` resolve every DLL they link against.
+4. `BALL_DATA_PATH` exported to `${{ github.workspace }}\data` (same convention as macOS/Linux).
+5. JUnit XML uploaded under `ball-tests-windows-ui_v2_*.xml` (ci.yml) / `ball-tests-windows-release.xml` (release.yml); the existing test-report job's `ball-tests-*` glob picks up the Windows artifacts automatically and merges them into the unified Check Run summary.
+6. Quarantine inheritance verified — no Windows-specific WILL_FAIL gates needed:
+   - `AssignBondOrderProcessor_test2` stays Apple-arm64-only (MSVC x64 = Intel-compatible FP path, passes like Linux).
+   - `PeptideCapProcessor_test` / `Peptides_test` / `RotamerLibrary_test` are already unconditional WILL_FAIL TRUE; expected-fail on Windows the same way they are on macOS/Linux.
+   - `AmberFF_test` runs the loosened-ARM-tolerance assertions but the strict path still passes on Intel/MSVC.
+7. Both `# Windows test gatekeeper deferred to Phase 999.34.` comments at the macOS + Linux gatekeeper preambles flipped to "landed in Phase 999.34" pointers.
+8. `continue-on-error: false` on both steps — Windows test failure now blocks the Windows job (and therefore the whole matrix on `needs:` aggregation).
 
-**Out of scope:** changes to BALL test sources (mirror existing decisions, don't re-triage).
+**Out of scope (preserved from BACKLOG framing):** changes to BALL test sources (mirror existing decisions, don't re-triage). The AssignBondOrderProcessor fine-penalty fix mentioned as a promotion-trigger note is NOT bundled here — that remains a future v1.7/v2.0 algorithmic task tracked under the same backlog row.
 
 **Requirements:** carries no new REQ ID; satisfies a v1.7 follow-on for the deferred-Windows-test concern in TEST-CLOSE-01/02 closure notes.
-**Estimated effort:** 1-2 days (mostly CI shape + path debugging on a Windows runner).
-**Plans:** 0 (single-task PLAN when promoted).
-
-**Promotion trigger:** v1.7 cycle. Also: AssignBondOrderProcessor fine-penalty fix (if landed from Phase 999.34 sub-task) should be mirrored here before the Windows flip.
+**Estimated effort (actual):** ~45min implementation + first-CI-run baseline. Vs. the 1-2 day estimate the path-debugging risk was lower than feared (the macOS/Linux gatekeepers already worked out the BALL_DATA_PATH + ctest invocation shape; only the Windows PATH-extension for DLL discovery was new).
+**Plans:** 1 ([999.34-01-PLAN.md](phases/999.34-windows-test-gatekeeper/999.34-01-PLAN.md) / [999.34-01-SUMMARY.md](phases/999.34-windows-test-gatekeeper/999.34-01-SUMMARY.md)).
 
 Plans:
-- [ ] TBD (promote with /gsd-review-backlog at v1.7 cycle open)
+- [x] [999.34-01-PLAN.md](phases/999.34-windows-test-gatekeeper/999.34-01-PLAN.md) — Windows test gatekeeper bring-up — 2026-05-17
 
 ### Phase 999.35: OOS-PR-merge regression fix — PeptideCapProcessor/Peptides/RotamerLibrary (BACKLOG · v1.6.2 OR v1.7)
 

@@ -81,8 +81,9 @@ SET_TESTS_PROPERTIES (
 #   assignment for AMPTRB10_kek_sol0.mol2 when the 5th solution is requested.
 #   AssignBondOrderProcessor_test1 (default code path) passes — the regression
 #   is isolated to the fine-penalty branch. Algorithmic fix estimated >2h.
-#   Backlog: Phase 999.34 (Windows test gatekeeper + bondorder fine-penalty).
-#   Re-examine in v1.7 / v2.0 cycle.
+#   Backlog: Phase 999.34 closed 2026-05-17 (Windows test gatekeeper only); the
+#   AssignBondOrderProcessor fine-penalty algorithmic fix is a separate v1.7 /
+#   v2.0 cycle task (no dedicated phase stub yet — re-file if/when picked up).
 #
 #   NOTE (2026-05-16 Rule-1 fix): WILL_FAIL applies only on Apple Silicon (the
 #   failure platform). Linux x64/arm64 pass this test cleanly; unconditional
