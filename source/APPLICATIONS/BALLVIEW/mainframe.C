@@ -6,7 +6,7 @@
 #include "icons.h"
 #include "demoTutorialDialog.h"
 
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/KERNEL/theme/tokens.h>  // Phase 999.41: kIconToolbar
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
@@ -98,7 +98,7 @@ namespace BALL
 																				 UIOperationMode::MODE_ADVANCED);
 
 		if (fullscreen_action_)
-			fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+			fullscreen_action_->setIcon(VIEW::Icons::get("actions/view-fullscreen"));
 
 		insertPopupMenuSeparator(DISPLAY, UIOperationMode::MODE_ADVANCED);
 		initPopupMenu(DISPLAY_VIEWPOINT);
@@ -179,7 +179,7 @@ namespace BALL
 			setMenuHint(stop_simulation_action_, (String)tr("Abort a running simulation"));
 			insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
-			stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
+			stop_simulation_action_->setIcon(VIEW::Icons::get("actions/process-stop"));
 		}
 		
 		
@@ -327,13 +327,12 @@ namespace BALL
 
 						Path path;
 
-						IconLoader& loader = IconLoader::instance();
-						qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
+						qload_action_ = new QAction(VIEW::Icons::get("actions/quickopen-file"), tr("quickload"), this);
 						qload_action_->setObjectName("quickload");
 						connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
 						tb->addAction(qload_action_);
 
-						qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
+						qsave_action_ = new QAction(VIEW::Icons::get("actions/quicksave"), tr("quicksave"), this);
 						qsave_action_->setObjectName("quicksave");
 						connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
 						tb->addAction(qsave_action_);
@@ -386,14 +385,14 @@ namespace BALL
 			{
 				if (fullscreen_action_ != 0)
 				{
-					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-restore"));
+					fullscreen_action_->setIcon(VIEW::Icons::get("actions/view-restore"));
 				}
 			}
 			else
 			{
 				if (fullscreen_action_ != 0)
 				{
-					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+					fullscreen_action_->setIcon(VIEW::Icons::get("actions/view-fullscreen"));
 				}
 			}
 		}
