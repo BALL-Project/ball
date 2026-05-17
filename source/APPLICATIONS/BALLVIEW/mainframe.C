@@ -31,6 +31,8 @@
 // Phase 999.47 (Handover §7) — WelcomeScreen + ballview:// scheme.
 #	include <BALL/VIEW/WIDGETS/welcomeScreen.h>
 #	include <QtCore/QFileInfo>
+#	include <QtCore/QRegularExpression>
+#	include <QtCore/QSet>
 #	include <QtCore/QStandardPaths>
 #	include <QtCore/QUrlQuery>
 #	include <QtGui/QDesktopServices>
@@ -725,7 +727,15 @@ namespace BALL
 	void Mainframe::onBallviewUrlInvoked_(const QUrl& url)
 	{
 		// ballview://open?pdb=1ubq → download via PubChem dialog.
-		// ballview://command/<id>  → CommandRegistry dispatch.
+		// ballview://open?file=... → molecular file open (validated allow-list).
+		// ballview://command/<id>  → CommandRegistry dispatch (allow-list).
+		//
+		// v1.7 RC1 security hardening (C-1/C-2/C-3): all three branches
+		// validate their input before acting. The scheme is reachable from
+		// untrusted callers (browser link, mailto attachment, foreign-app
+		// QDesktopServices), so every payload is treated as adversarial.
+		// On rejection: log a warning + return silently (no error dialog —
+		// silent failure is the right security UX for a URL-scheme handler).
 		const QString host = url.host();
 		const QString path = url.path();
 
@@ -735,6 +745,16 @@ namespace BALL
 			const QString pdb = q.queryItemValue(QStringLiteral("pdb"));
 			if (!pdb.isEmpty())
 			{
+				// C-3 — PDB id grammar check. RCSB ids are exactly four
+				// alphanumeric chars. Reject anything else silently to
+				// prevent the pre-fill hook (DownloadPDBFile::setPdbId)
+				// from inheriting an attacker-controlled payload.
+				static const QRegularExpression kPdbIdRe(QStringLiteral("^[A-Za-z0-9]{4}$"));
+				if (!kPdbIdRe.match(pdb).hasMatch())
+				{
+					Log.warn() << "ballview://open?pdb= rejected: not a 4-char PDB id" << std::endl;
+					return;
+				}
 				// Surface the PDB downloader; user confirms the fetch.
 				// v1.7 RC patch (#999.47-followup) — DownloadPDBFile now
 				// exposes setPdbId so the ID arrives pre-filled.
@@ -749,32 +769,112 @@ namespace BALL
 			const QString file = q.queryItemValue(QStringLiteral("file"));
 			if (!file.isEmpty())
 			{
+				// C-2 — file path validation. The handler receives the raw
+				// query string from an untrusted caller; validate before
+				// passing through to MolecularFileDialog::openFile().
+				//
+				// 1. Reject UNC paths up front (Windows network shares —
+				//    a UNC like \\evil-host\share\foo.pdb would cause an
+				//    SMB fetch with the user's creds attached).
+				if (file.startsWith(QStringLiteral("\\\\")) || file.startsWith(QStringLiteral("//")))
+				{
+					Log.warn() << "ballview://open?file= rejected: UNC path" << std::endl;
+					return;
+				}
+				// 2. Canonicalize. canonicalFilePath returns empty for
+				//    nonexistent paths and broken symlinks, which collapses
+				//    most directory-traversal attacks.
+				const QFileInfo fi(file);
+				const QString canonical = fi.canonicalFilePath();
+				if (canonical.isEmpty())
+				{
+					Log.warn() << "ballview://open?file= rejected: path does not resolve" << std::endl;
+					return;
+				}
+				// 3. Defence-in-depth: after canonicalization the path
+				//    should NOT still contain `..`. (canonicalFilePath
+				//    collapses these; this catches the pathological case
+				//    where a `..` literal appears in a real filename.)
+				if (canonical.contains(QStringLiteral("..")))
+				{
+					Log.warn() << "ballview://open?file= rejected: '..' in canonical path" << std::endl;
+					return;
+				}
+				// 4. Extension allow-list — molecular files only.
+				static const QSet<QString> kMolExts = {
+					QStringLiteral("pdb"),
+					QStringLiteral("mol2"),
+					QStringLiteral("mol"),
+					QStringLiteral("sdf"),
+					QStringLiteral("xyz"),
+					QStringLiteral("cif"),
+					QStringLiteral("mmcif"),
+					QStringLiteral("hin")
+				};
+				const QString ext = QFileInfo(canonical).suffix().toLower();
+				if (!kMolExts.contains(ext))
+				{
+					Log.warn() << "ballview://open?file= rejected: extension '"
+					           << ext.toStdString() << "' not in molecular allow-list" << std::endl;
+					return;
+				}
+				// 5. Readability check.
+				if (!QFileInfo(canonical).isReadable())
+				{
+					Log.warn() << "ballview://open?file= rejected: file not readable" << std::endl;
+					return;
+				}
 				MolecularFileDialog* dlg = MolecularFileDialog::getInstance(0);
-				if (dlg) dlg->openFile(String(file.toStdString()));
+				if (dlg) dlg->openFile(String(canonical.toStdString()));
 				return;
 			}
 		}
 		else if (host == QStringLiteral("command"))
 		{
+			// C-1 — Command id allow-list. The CommandRegistry is fully
+			// populated with EVERY menu action of the app (Phase 999.46);
+			// invoking arbitrary ids from a URL scheme is a privilege
+			// escalation. We whitelist only the small set of ids that
+			// make sense for a deep-link entry point (open file, recent
+			// files, switch workspace, surface the palette).
+			//
+			// To add a new id: add it to kCommandAllowList AND verify
+			// the Command has no destructive side-effect that an
+			// untrusted caller could weaponize (e.g. NOT file.save,
+			// NOT edit.delete, NOT preferences.reset).
+			static const QSet<QString> kCommandAllowList = {
+				QStringLiteral("file.open"),
+				QStringLiteral("file.openRecent"),
+				QStringLiteral("view.workspace.default"),
+				QStringLiteral("view.workspace.focused"),
+				QStringLiteral("view.showCommandPalette")
+			};
 			// Phase 999.46 CommandRegistry dispatch — look up the
 			// Command by id and invoke its trigger; mirrors the
 			// CommandPalette dispatch path at commandPalette.C:375.
 			const QString id = path.startsWith('/') ? path.mid(1) : path;
-			if (!id.isEmpty())
+			if (id.isEmpty())
 			{
-				auto& reg = VIEW::CommandRegistry::instance();
-				const QList<VIEW::Command> all = reg.all();
-				for (const VIEW::Command& c : all)
+				return;
+			}
+			if (!kCommandAllowList.contains(id))
+			{
+				Log.warn() << "ballview://command/ rejected: id '"
+				           << id.toStdString() << "' not in allow-list" << std::endl;
+				return;
+			}
+			auto& reg = VIEW::CommandRegistry::instance();
+			const QList<VIEW::Command> all = reg.all();
+			for (const VIEW::Command& c : all)
+			{
+				if (c.id == id)
 				{
-					if (c.id == id)
+					if (c.trigger)
 					{
-						if (c.trigger)
-						{
-							c.trigger();
-							reg.noteTriggered(c.id);
-						}
-						return;
+						c.trigger();
+						reg.noteTriggered(c.id);
 					}
+					return;
 				}
 			}
 		}
