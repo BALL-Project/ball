@@ -425,10 +425,37 @@ namespace BALL
 						triggerCurrent_();
 						return true;
 					case Qt::Key_Tab:
-						// Handover §6.3 — Tab accepts current line text.
-						// Phase 999.46: pass-through (no completion logic
-						// this RC; deferred to v1.7.x patch).
+					{
+						// Handover §6.3 — Tab completes to the currently-
+						// selected (default: top) match's title, keeping
+						// any active prefix sigil so prefix mode survives.
+						// v1.7 RC patch landed the actual completion;
+						// 999.46 shipped the consume-pass-through stub.
+						if (n <= 0) return true;
+						const int target_row = (row >= 0) ? row : 0;
+						const Command c = model_->commandAt(target_row);
+						const QString cur_text = line_->text();
+						QChar prefix;
+						if (!cur_text.isEmpty()
+								&& (cur_text.at(0) == QLatin1Char('?')
+								 || cur_text.at(0) == QLatin1Char('>')
+								 || cur_text.at(0) == QLatin1Char(':')))
+						{
+							prefix = cur_text.at(0);
+						}
+						QString completed = c.title;
+						if (!prefix.isNull())
+							completed.prepend(prefix);
+						// Block re-querying on this synthetic edit so
+						// the selection stays anchored on the match the
+						// user just accepted; the user can press Tab
+						// again, or Enter to fire.
+						line_->blockSignals(true);
+						line_->setText(completed);
+						line_->setCursorPosition(completed.length());
+						line_->blockSignals(false);
 						return true;
+					}
 					case Qt::Key_Escape:
 						close();
 						return true;
