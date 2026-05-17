@@ -176,7 +176,13 @@ jobs:
               # include/BALL/VIEW/WIDGETS/inspector/ header subtree (Plan 03+
               # added Q_OBJECT classes that AUTOMOC discovers only when the
               # Inspector flag is ON).
-              if echo "$CHANGED" | grep -qE '^(source/VIEW/KERNEL/theme/|include/BALL/VIEW/KERNEL/theme/|source/VIEW/KERNEL/iconLoader\.[hC]$|include/BALL/VIEW/KERNEL/iconLoader\.h$|source/VIEW/KERNEL/controllers/|include/BALL/VIEW/KERNEL/controllers/|source/VIEW/KERNEL/legacySettingsHelper\.[hC]$|include/BALL/VIEW/KERNEL/legacySettingsHelper\.h$|source/APPLICATIONS/BALLVIEW/mainframe\.C$|source/APPLICATIONS/BALLVIEW/mainframe\.h$|CMakeLists\.txt$|vcpkg\.json$|source/APPLICATIONS/BALLVIEW/.*(inspector|workspace|commandPalette|welcomeScreen)|source/VIEW/WIDGETS/.*(inspector|workspace|commandPalette|welcomeScreen)|include/BALL/VIEW/WIDGETS/.*(inspector|workspace|commandPalette|welcomeScreen))'; then
+              # Extended 999.46 (2026-05-17): adds commandRegistry.{h,C}
+              # + mainControl.{h,C} (Task 2 insertMenuEntry hook + Task 3
+              # initPopupMenu BALL_UI_V2 branches + Task 4 setMenuRole) +
+              # menuMapping_test (test/menuMapping_test.C +
+              # test/cmake/VIEWTestExecutables.cmake) so windows-x64
+              # ui_v2=ON re-runs when any of these files change.
+              if echo "$CHANGED" | grep -qE '^(source/VIEW/KERNEL/theme/|include/BALL/VIEW/KERNEL/theme/|source/VIEW/KERNEL/iconLoader\.[hC]$|include/BALL/VIEW/KERNEL/iconLoader\.h$|source/VIEW/KERNEL/controllers/|include/BALL/VIEW/KERNEL/controllers/|source/VIEW/KERNEL/legacySettingsHelper\.[hC]$|include/BALL/VIEW/KERNEL/legacySettingsHelper\.h$|source/VIEW/KERNEL/commandRegistry\.[hC]$|include/BALL/VIEW/KERNEL/commandRegistry\.h$|source/VIEW/KERNEL/mainControl\.[hC]$|include/BALL/VIEW/KERNEL/mainControl\.h$|test/menuMapping_test\.C$|test/cmake/VIEWTestExecutables\.cmake$|source/APPLICATIONS/BALLVIEW/mainframe\.C$|source/APPLICATIONS/BALLVIEW/mainframe\.h$|CMakeLists\.txt$|vcpkg\.json$|source/APPLICATIONS/BALLVIEW/.*(inspector|workspace|commandPalette|welcomeScreen)|source/VIEW/WIDGETS/.*(inspector|workspace|commandPalette|welcomeScreen)|include/BALL/VIEW/WIDGETS/.*(inspector|workspace|commandPalette|welcomeScreen))'; then
                 ui_v2_paths_match="true"
               fi
             fi
