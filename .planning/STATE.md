@@ -25,9 +25,9 @@ progress:
 ## Current Position
 
 Phase: v1.7 Wave 4 — BALLView Refresh
-Plan: 999.44-01 PARTIAL-COMPLETE (Unified Inspector: shell + empty states + Controller-extraction pattern + StageController exemplar + StageSection + LegacySettingsHelper static data — 6 commits; 4 sections + 8 Controllers + mainframe wiring deferred to v1.7 RC patch cycle with breadcrumb)
-Status: 999.44 + 999.45 both partial-complete; remaining v1.7 Wave 4 = 999.44-RC-patch (mainframe wiring + 12 remaining sections + 8 remaining Controllers) → 999.46 menus+command palette → 999.47 keybindings+macOS standard-role → 999.48 BALL_UI_V2 flag flip → 999.49 Classic delete
-Last activity: 2026-05-17 — 999.44 plan 01 PARTIAL-COMPLETE (architecture + pattern landed; sections/controllers deferred to RC patch cycle per scope-trim contract; libVIEW links green BALL_UI_V2=ON macOS-arm64; CI run 25996552601 in flight)
+Plan: 999.44 COMPLETE — Plans 01-06 landed (architecture + mainframe wiring + 3 tabs + 9 Controllers + StageController cut-over); Plan 07 (pixel-diff tests) DEFERRED to v1.7 RC patch per operating-contract scope-trim guidance. 9 commits in continuation session (Plans 02-06 + docs closure).
+Status: 999.44 + 999.45 both COMPLETE; remaining v1.7 Wave 4 = 999.44-04b RC patch (Label + Clipping sections) + 8 Controller cut-over plans (mechanical per StageController exemplar) + Plan 07 pixel-diff tests → 999.46 menus+command palette → 999.47 keybindings+macOS standard-role → 999.48 BALL_UI_V2 flag flip → 999.49 Classic delete. **999.46 dispatch unblocked.**
+Last activity: 2026-05-17 — Phase 999.44 continuation COMPLETE (Plans 02-06 landed + closure docs; macOS-arm64 BALL_UI_V2={ON,OFF} green per commit; CI dispatched for each Plan)
 
 ## Performance Metrics
 
