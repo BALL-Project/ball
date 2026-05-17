@@ -1957,7 +1957,7 @@ Plans:
 
 **Depends on:** 999.40 (consumes ThemeManager); 999.41 (the SVG-preferred loader wedge already exists; this phase closes out the rest).
 
-**Cross-cutting CI prerequisite:** extend `.github/workflows/ci.yml` matrix with `ui_v2: [ON, OFF]` axis BEFORE this phase dispatches (per Handover §09-cross-platform.md §"CI matrix"). Current ci.yml uses a dynamically-computed matrix (`detect-platforms` job line 80); the `ui_v2` axis additions live in the consumed matrix JSON, not as a static `matrix:` block — author as a separate `ci.yml`-only PR before dispatching this phase's PLAN.md.
+**Cross-cutting CI prerequisite:** ✅ DONE 2026-05-17 — `.github/workflows/ci.yml` matrix now carries the `ui_v2: [ON, OFF]` axis (per Handover §09-cross-platform.md §"CI matrix" + §10 CI gate 6). Implementation: `detect-platforms` job emits a `ui_v2` field on every matrix entry; doubled to `[ON, OFF]` on UI_V2-relevant paths (theme/, mainframe.C, CMakeLists.txt, etc.) and on schedule/dispatch/maintenance-branch triggers; single `ui_v2: OFF` per OS otherwise. Each Configure step threads `-DBALL_UI_V2=${{ matrix.ui_v2 }}`. Drop the axis post-999.48 §8.7 flag-REMOVAL (drop steps documented in `ci.yml` `WHEN TO DROP` comment block).
 
 **Scope (palette-removal half — Handover Phase 1):**
 - Strip `<palette>` blocks from **~30 `.ui` files** (~52 in tree, ~38 with palette per Handover §01). Inventory step writes `revitalization/inventory/phase-1-ui-files.txt` + `phase-1-with-palette.txt`.
@@ -1984,7 +1984,7 @@ Plans:
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (promote with /gsd-plan-phase after 999.40 lands + ci.yml ui_v2 axis lands)
+- [ ] TBD (promote with /gsd-plan-phase after 999.40 lands; ci.yml ui_v2 axis ✅ landed 2026-05-17)
 
 ### Phase 999.43: BALLView Refresh — Simple-dialog cleanup + shared widget set (Handover Phase 3) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
