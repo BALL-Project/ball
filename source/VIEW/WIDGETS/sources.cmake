@@ -34,6 +34,7 @@ SET(SOURCES_LIST
 	inspector/inspectorBody.C
 	inspector/inspectorView.C
 	inspector/inspectorDock.C
+	inspector/inspectorEmptyState.C
 	# Phase 999.45 — Workspace consolidation: ProjectDock (left-rail
 	# tabified group of Structures/Reps/Datasets) + BottomDrawer
 	# (24px↔240px animated dock with Logs/FileObserver tabs). Both

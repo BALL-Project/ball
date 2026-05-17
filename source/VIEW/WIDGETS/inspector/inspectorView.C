@@ -9,6 +9,7 @@
 #include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorBody.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/inspectorEmptyState.h>
 
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
@@ -65,6 +66,16 @@ namespace BALL
 
 			// Initial sync of tab → body.
 			body_->setCurrentTab(tabs_->currentTabIndex());
+
+			// Default empty states for all three tabs. Section binding
+			// (Task 5) replaces these with real sections when the model
+			// has something to show.
+			body_->setEmptyState(InspectorTabs::TabIndex::Selection,
+			                     InspectorEmptyState::forNoSelection(body_));
+			body_->setEmptyState(InspectorTabs::TabIndex::Representation,
+			                     InspectorEmptyState::forNoRepresentation(body_));
+			body_->setEmptyState(InspectorTabs::TabIndex::Scene,
+			                     InspectorEmptyState::forNoScene(body_));
 		}
 
 		InspectorView::~InspectorView()
