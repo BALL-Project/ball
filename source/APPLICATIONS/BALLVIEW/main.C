@@ -26,6 +26,25 @@
 #endif
 // === end Phase 999.40 ======================================================
 
+// === Phase 999.8-full: Sparkle + WinSparkle auto-update ====================
+// Re-applied 2026-05-17 after concurrent index-staging with Phase 999.40
+// dropped these hunks from commit 75347315a4. See 999.8-SPIKE.md for design
+// + ED25519-KEY-RUNBOOK.md for production-key procurement.
+//
+// macOS: extern "C" entry point exposed by sparkle_bridge.mm (.mm compiled
+//        as Objective-C++). When BALL_HAS_SPARKLE is OFF the .mm compiles
+//        to a no-op stub so the symbol exists either way and main.C does
+//        not need a CMake-time conditional around the call site.
+// Windows: WinSparkle C API called directly. BALL_HAS_WINSPARKLE gates the
+//        #include + call at build time.
+#ifdef Q_OS_MACOS
+extern "C" void ball_sparkle_init(void);
+#endif
+#ifdef BALL_HAS_WINSPARKLE
+#  include <winsparkle.h>
+#endif
+// === end Phase 999.8-full ==================================================
+
 void logMessages(QtMsgType type, const QMessageLogContext& context, const QString& message)
 {
 	BALL::String s(message.toStdString());
@@ -210,6 +229,25 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	// Show the main window.
 	mainframe.show();
+
+	// === Phase 999.8-full: Sparkle + WinSparkle init =======================
+	// Both init after mainframe.show() per spike caveat — Sparkle/WinSparkle
+	// expect the main window to exist before they wire their update-check UI.
+	// Both kick a background update check that surfaces UI only if a newer
+	// release is available; quiet startup on the happy path.
+#ifdef Q_OS_MACOS
+	ball_sparkle_init();
+#endif
+#ifdef BALL_HAS_WINSPARKLE
+	win_sparkle_set_appcast_url("https://ball-project.github.io/ball/appcast-windows.xml");
+	// EdDSA Ed25519 public key registered as a GitHub secret + injected via
+	// release.yml. See ED25519-KEY-RUNBOOK.md for production-key procurement.
+	win_sparkle_init();
+	// Cleanup at app exit — paired with init above.
+	QObject::connect(&application, &QCoreApplication::aboutToQuit,
+	                 [] { win_sparkle_cleanup(); });
+#endif
+	// === end Phase 999.8-full ==============================================
 
 	// =============== parsing command line arguments ==================================
 	// If there are additional command line arguments, interpret them as files to open or logging flag.
