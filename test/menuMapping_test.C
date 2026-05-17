@@ -17,10 +17,8 @@
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 
-#ifdef BALL_UI_V2
 #include <BALL/VIEW/KERNEL/commandRegistry.h>
 #include <QtGui/QAction>
-#endif
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -101,12 +99,8 @@ CHECK(PopUpID_SCRIPTS_MACROS_submenu)
 RESULT
 
 // ----------------------------------------------------------------
-// CommandRegistry - only available under BALL_UI_V2 (the OFF cell
-// has no class declaration at all). In the OFF cell these checks
-// are no-ops by virtue of being inside the #ifdef.
+// CommandRegistry — always available post-999.48 flag removal.
 // ----------------------------------------------------------------
-
-#ifdef BALL_UI_V2
 
 CHECK(CommandRegistry_round_trip_register_search_recent)
 	CommandRegistry::instance().clearForTest();
@@ -171,7 +165,5 @@ CHECK(CommandRegistry_search_empty_for_non_matching_query)
 
 	CommandRegistry::instance().clearForTest();
 RESULT
-
-#endif // BALL_UI_V2
 
 END_TEST

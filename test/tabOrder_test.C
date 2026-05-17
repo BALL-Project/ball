@@ -14,7 +14,6 @@
 #include <BALL/CONCEPT/classTest.h>
 #include <BALLTestConfig.h>
 
-#ifdef BALL_UI_V2
 #include <BALL/VIEW/WIDGETS/swatchButton.h>
 #include <BALL/VIEW/WIDGETS/labeledSlider.h>
 #include <BALL/VIEW/WIDGETS/sectionHeader.h>
@@ -25,14 +24,11 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QSlider>
 #include <QtWidgets/QToolButton>
-#endif
 
 using namespace BALL;
 using namespace BALL::VIEW;
 
 START_TEST(TabOrder)
-
-#ifdef BALL_UI_V2
 // QApplication is required for any QWidget construction.
 int argc = 1;
 char argv0[] = "tabOrder_test";
@@ -111,13 +107,5 @@ CHECK(InspectorSection_accessibleName_matches_title)
 	std::string name = s.accessibleName().toStdString();
 	TEST_EQUAL(name, std::string("Properties"))
 RESULT
-
-#else
-// BALL_UI_V2 OFF — skip the entire suite as a single trivially-passing
-// check so the OFF-cell CI matrix entry stays green.
-CHECK(BALL_UI_V2_OFF_skips_a11y_tests)
-	TEST_EQUAL(true, true)
-RESULT
-#endif
 
 END_TEST

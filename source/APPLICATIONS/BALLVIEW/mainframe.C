@@ -351,14 +351,14 @@ namespace BALL
 			action->setMenuRole(QAction::AboutRole);
 		}
 
-#if defined(BALL_UI_V2) && !defined(NDEBUG)
+#ifndef NDEBUG
 		// Phase 999.43: Tools › Icon Browser. Dev-only menu entry so
 		// the design team can spot-check the theme.qrc bundle without
 		// firing up a debugger. Production release builds (NDEBUG)
 		// don't get this menu — only the menu wiring is conditional;
-		// the IconBrowser class itself compiles whenever BALL_UI_V2
-		// is ON so a debug rebuild can flip the menu on without
-		// touching the build system.
+		// the IconBrowser class itself always compiles so a debug
+		// rebuild can flip the menu on without touching the build system.
+		// (BALL_UI_V2 condition removed by 999.48 flag-removal pass.)
 		description = "Shortcut|Tools|IconBrowser";
 		action = insertMenuEntry(MainControl::TOOLS, (String)tr("Icon Browser (dev)"),
 		                         this, SLOT(openIconBrowser()), description,
