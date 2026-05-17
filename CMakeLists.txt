@@ -280,16 +280,9 @@ ENDIF()
 SET(UPDATE_TRANSLATIONS OFF CACHE BOOL "If enabled, translations are update")
 OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and graphical user interfaces" ON)
 
-## Phase 999.40 — BALLView Refresh (Handover Phase 0).
-## When ON, ThemeManager initialises at startup and applies the neutral
-## QSS stylesheet. When OFF (default), all theme code is built but never
-## instantiated — the user-visible app is bit-for-bit identical to the
-## pre-refresh baseline. Per maintainer-Q3 the v1.7 refresh ships a
-## single neutral theme only (no light/dark/follow-system modes).
-## Phase 999.48 §8.7 step (a): flag DEFAULT FLIP from OFF → ON.
-## v1.7 BALLView Refresh becomes the default. Users can still override
-## with -DBALL_UI_V2=OFF until step (b) removes the flag entirely.
-OPTION(BALL_UI_V2 "Enable revitalized BALLView UI (Phase 999.40+, Handover Phase 0)" ON)
+## Phase 999.40 — BALLView Refresh (Handover Phase 0). The OPTION is
+## removed in Phase 999.48 §8.7 step (b) — the revitalized UI is now
+## the only UI. ThemeManager initialises unconditionally in main.C.
 
 ## Phase 5 renderer-backend spike (THROWAWAY prototype — Plan 05-05 / 05-06).
 ## Selects between OFF (default, production fixed-function path), "GLCore"
@@ -648,15 +641,10 @@ IF(APPLE AND BALL_HAS_VIEW)
 	TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC GL_SILENCE_DEPRECATION)
 ENDIF()
 
-# Phase 999.40 — gate the ThemeManager init call in BALLView/main.C and
-# any future BALL_UI_V2 branches inside VIEW on the cmake flag. PUBLIC
-# so downstream consumers (BALLView executable) also see the macro when
-# they include VIEW headers — the #ifdef BALL_UI_V2 block in main.C
-# requires this.
-IF(BALL_HAS_VIEW AND BALL_UI_V2)
-	TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC BALL_UI_V2)
-	MESSAGE(STATUS "BALL_UI_V2 enabled — BALLView Refresh (Handover Phase 0+) compiled in")
-ENDIF()
+# Phase 999.48 §8.7 step (b) — TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC
+# BALL_UI_V2) removed. The BALL_UI_V2 macro and its OPTION block were
+# deleted in commit 71d8c4819a + this commit — the revitalized UI is
+# now unconditional.
 
 # Precompiled headers — Phase 999.16 (BUILD-ACCEL-01).
 # Header set chosen per cmake/PCH.md audit. PRIVATE = downstream consumers
@@ -796,18 +784,13 @@ IF (BALL_HAS_VIEW)
 )
 
 	IF(MSVC)
-		# Phase 999.46 — root-caused 2026-05-17 from windows-x64 ui_v2=ON linker
-		# failures: legacy SET_TARGET_PROPERTIES(VIEW PROPERTIES COMPILE_DEFINITIONS ...)
-		# overwrote the VIEW target's own COMPILE_DEFINITIONS, wiping the
-		# BALL_UI_V2 definition that TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC
-		# BALL_UI_V2) had added at line ~654. Result: VIEW.dll compiled with
-		# BALL_VIEW_BUILD_DLL but WITHOUT BALL_UI_V2, so every
-		# `#ifdef BALL_UI_V2`-gated class body (InspectorDock/View/Adapters +
-		# CommandPalette) was empty → no symbols exported; BALLView.exe
-		# inherited BALL_UI_V2 via INTERFACE_COMPILE_DEFINITIONS (PUBLIC
-		# propagation) and saw class declarations, called them, linker died.
-		# Modern fix: TARGET_COMPILE_DEFINITIONS PRIVATE — appends to both
-		# COMPILE_DEFINITIONS lists without overwriting either.
+		# Phase 999.46 lesson preserved: use TARGET_COMPILE_DEFINITIONS
+		# PRIVATE, NOT SET_TARGET_PROPERTIES COMPILE_DEFINITIONS — the latter
+		# overwrites the target's existing COMPILE_DEFINITIONS list rather
+		# than appending. Phase 999.48 §8.7 step (b) removed the BALL_UI_V2
+		# macro the original Phase 999.46 fix preserved; this comment is
+		# kept so future maintainers don't reintroduce the SET_TARGET_
+		# PROPERTIES anti-pattern when adding new VIEW-only definitions.
 		TARGET_COMPILE_DEFINITIONS(VIEW PRIVATE BALL_VIEW_BUILD_DLL)
 		SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} /NODEFAULTLIB:libcmt")
 	ENDIF()
