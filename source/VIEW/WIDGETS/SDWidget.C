@@ -1,6 +1,6 @@
 #include <BALL/VIEW/WIDGETS/SDWidget.h>
 
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
@@ -50,7 +50,7 @@ namespace BALL
 			//Todo: Add a nice icon
 			QAction* export_image = new QAction(tr("Export image"), this);
 
-			export_image->setIcon(IconLoader::instance().getIcon("actions/document-save"));
+			export_image->setIcon(Icons::get("actions/document-save"));
 
 			addAction(export_image);
 			connect(export_image, SIGNAL(triggered()), this, SLOT(exportImage_()));
