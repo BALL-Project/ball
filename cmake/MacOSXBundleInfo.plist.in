@@ -41,5 +41,23 @@
 		<key>LANG</key>
 		<string>en</string>
 	</dict>
+	<!-- Phase 999.47 §7.3 — ballview:// URL scheme registration.
+	     Lets help docs / external links route into the BALLView
+	     CommandRegistry + open dialogs. The in-process handler is
+	     installed by Mainframe::installBallviewUrlHandler_ via
+	     QDesktopServices::setUrlHandler. -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>BALLView URL Scheme</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ballview</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
 </dict>
 </plist>

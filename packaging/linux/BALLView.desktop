@@ -9,5 +9,5 @@ Icon=BALLView
 Terminal=false
 Categories=Science;Chemistry;Education;
 Keywords=molecule;chemistry;biochemistry;visualization;3D;
-MimeType=chemical/x-pdb;chemical/x-mol2;chemical/x-mdl-sdfile;chemical/x-mdl-molfile;chemical/x-xyz;
+MimeType=chemical/x-pdb;chemical/x-mol2;chemical/x-mdl-sdfile;chemical/x-mdl-molfile;chemical/x-xyz;x-scheme-handler/ballview;
 StartupNotify=true

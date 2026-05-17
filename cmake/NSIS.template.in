@@ -688,6 +688,16 @@ Section "-Core installation"
   Push "Contact"
   Push "@CPACK_NSIS_CONTACT@"
   Call ConditionalAddToRegisty
+
+  ; Phase 999.47 §7.3 — ballview:// URL scheme registration.
+  ; HKCR\ballview class points at BALLView.exe with %1 for the URL.
+  ; In-process dispatch is handled by
+  ; Mainframe::installBallviewUrlHandler_ via QDesktopServices.
+  WriteRegStr SHCTX "Software\Classes\ballview" "" "URL:BALLView Protocol"
+  WriteRegStr SHCTX "Software\Classes\ballview" "URL Protocol" ""
+  WriteRegStr SHCTX "Software\Classes\ballview\DefaultIcon" "" "$INSTDIR\bin\BALLView.exe,0"
+  WriteRegStr SHCTX "Software\Classes\ballview\shell\open\command" "" '"$INSTDIR\bin\BALLView.exe" "%1"'
+
   !insertmacro MUI_INSTALLOPTIONS_READ $INSTALL_DESKTOP "NSIS.InstallOptions.ini" "Field 5" "State"
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
   
@@ -844,6 +854,9 @@ Section "Uninstall"
 
   ; Remove the registry entries.
   DeleteRegKey SHCTX "Software\@CPACK_PACKAGE_VENDOR@\@CPACK_PACKAGE_INSTALL_REGISTRY_KEY@"
+
+  ; Phase 999.47 §7.3 — drop the ballview:// scheme registration.
+  DeleteRegKey SHCTX "Software\Classes\ballview"
 
   ; Removes all optional components
   !insertmacro SectionList "RemoveSection_CPack"
