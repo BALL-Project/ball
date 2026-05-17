@@ -793,9 +793,19 @@ IF (BALL_HAS_VIEW)
 )
 
 	IF(MSVC)
-		## Do we really need this?
-		SET(VIEW_COMPILE_DEFINITIONS ${COMPILE_DEFINITIONS} "BALL_VIEW_BUILD_DLL" CACHE INTERNAL "")
-		SET_TARGET_PROPERTIES(VIEW PROPERTIES COMPILE_DEFINITIONS "${VIEW_COMPILE_DEFINITIONS}")
+		# Phase 999.46 — root-caused 2026-05-17 from windows-x64 ui_v2=ON linker
+		# failures: legacy SET_TARGET_PROPERTIES(VIEW PROPERTIES COMPILE_DEFINITIONS ...)
+		# overwrote the VIEW target's own COMPILE_DEFINITIONS, wiping the
+		# BALL_UI_V2 definition that TARGET_COMPILE_DEFINITIONS(VIEW PUBLIC
+		# BALL_UI_V2) had added at line ~654. Result: VIEW.dll compiled with
+		# BALL_VIEW_BUILD_DLL but WITHOUT BALL_UI_V2, so every
+		# `#ifdef BALL_UI_V2`-gated class body (InspectorDock/View/Adapters +
+		# CommandPalette) was empty → no symbols exported; BALLView.exe
+		# inherited BALL_UI_V2 via INTERFACE_COMPILE_DEFINITIONS (PUBLIC
+		# propagation) and saw class declarations, called them, linker died.
+		# Modern fix: TARGET_COMPILE_DEFINITIONS PRIVATE — appends to both
+		# COMPILE_DEFINITIONS lists without overwriting either.
+		TARGET_COMPILE_DEFINITIONS(VIEW PRIVATE BALL_VIEW_BUILD_DLL)
 		SET(VIEW_LINK_FLAGS "${VIEW_LINK_FLAGS} /NODEFAULTLIB:libcmt")
 	ENDIF()
 ENDIF()
