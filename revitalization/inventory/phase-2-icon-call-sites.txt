@@ -1,0 +1,58 @@
+source/EXTENSIONS/VRPN/include/VRPNPlugin.h:25:				const QPixmap* getIcon() const;
+source/EXTENSIONS/VRPN/source/VRPNPlugin.C:29:		const QPixmap* VRPNPlugin::getIcon() const
+source/EXTENSIONS/BALLAXY/include/BALLaxyPlugin.h:32:				const QPixmap* getIcon() const;
+source/EXTENSIONS/BALLAXY/source/BALLaxyPlugin.C:36:		const QPixmap* BALLaxyPlugin::getIcon() const
+source/EXTENSIONS/PRESENTABALL/include/PresentaBALLPlugin.h:32:				const QPixmap* getIcon() const;
+source/EXTENSIONS/SPACENAV/include/spaceNavigatorPlugin.h:26:				const QPixmap* getIcon() const;
+source/EXTENSIONS/SPACENAV/source/spaceNavigatorPlugin.C:34:		const QPixmap* SpaceNavigatorPlugin::getIcon() const
+source/EXTENSIONS/PRESENTABALL/source/PresentaBALLPlugin.C:37:		const QPixmap* PresentaBALLPlugin::getIcon() const
+source/EXTENSIONS/VRPNHD/include/VRPNHDPlugin.h:26:				const QPixmap* getIcon() const;
+source/EXTENSIONS/VRPNHD/source/VRPNHDPlugin.C:30:		const QPixmap* VRPNHDPlugin::getIcon() const
+source/EXTENSIONS/JUPYTER/include/jupyterPlugin.h:41:				const QPixmap* getIcon() const override { return &icon_; };
+source/VIEW/DIALOGS/pluginDialog.C:77:					return ptr ? *(ptr->getIcon()) : QVariant();
+source/VIEW/DIALOGS/pluginDialog.C:172:			IconLoader& icon_loader = IconLoader::instance();
+source/VIEW/DIALOGS/pluginDialog.C:174:			ui_->plugin_dir_button_add->setIcon(icon_loader.getIcon("actions/list-add"));
+source/VIEW/DIALOGS/pluginDialog.C:175:			ui_->plugin_dir_button_remove->setIcon(icon_loader.getIcon("actions/edit-delete"));
+source/VIEW/KERNEL/MODES/editMode.C:56:			IconLoader& loader = IconLoader::instance();
+source/VIEW/KERNEL/MODES/editMode.C:69:				main_action_->setIcon(loader.getIcon("actions/mode-edit"));
+source/VIEW/KERNEL/MODES/editMode.C:78:				element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), tr("Set element"), this);
+source/VIEW/KERNEL/MODES/editMode.C:87:				bond_action_ = new QAction(loader.getIcon("actions/create-bond"), tr("Create Bond"), this);
+source/VIEW/WIDGETS/scene.C:1272:			IconLoader& loader = IconLoader::instance();
+source/VIEW/WIDGETS/scene.C:1480:				switch_grid_->setIcon(loader.getIcon("actions/measure"));
+source/VIEW/WIDGETS/scene.C:1499:				toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
+source/VIEW/WIDGETS/scene.C:1534:				bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
+source/VIEW/WIDGETS/scene.C:1545:				optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
+source/VIEW/WIDGETS/scene.C:1556:				add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
+source/VIEW/WIDGETS/propertyEditor.C:80:			ui_.add_button->setIcon(IconLoader::instance().getIcon("actions/list-add"));
+source/VIEW/WIDGETS/propertyEditor.C:479:			IconLoader& loader= IconLoader::instance();
+source/VIEW/WIDGETS/propertyEditor.C:480:			ui_.delete_button->setIcon(loader.getIcon("actions/edit-delete"));
+source/VIEW/WIDGETS/propertyEditor.C:481:			ui_.duplicate_button->setIcon(loader.getIcon("actions/edit-copy"));
+source/VIEW/KERNEL/iconLoader.C:20:		QMutex IconLoader::mutex_;
+source/VIEW/KERNEL/iconLoader.C:21:		boost::shared_ptr<IconLoader> IconLoader::loader_;
+source/VIEW/KERNEL/iconLoader.C:23:		IconLoader::IconLoader()
+source/VIEW/KERNEL/iconLoader.C:24:			: invalid_(new QIcon())
+source/VIEW/KERNEL/iconLoader.C:34:		IconLoader::IconLoader(const QStringList& icon_dirs)
+source/VIEW/KERNEL/iconLoader.C:35:			: invalid_(new QIcon()), icon_dirs_(icon_dirs)
+source/VIEW/KERNEL/iconLoader.C:40:		IconLoader::IconLoader(const std::list<String>& icon_dirs)
+source/VIEW/KERNEL/iconLoader.C:41:			: invalid_(new QIcon())
+source/VIEW/KERNEL/iconLoader.C:51:		IconLoader::~IconLoader()
+source/VIEW/KERNEL/iconLoader.C:61:		void IconLoader::setup_()
+source/VIEW/KERNEL/iconLoader.C:71:		void IconLoader::appendIconPath(const String& path)
+source/VIEW/KERNEL/iconLoader.C:76:		const QIcon& IconLoader::getIcon(const String& name)
+source/VIEW/KERNEL/iconLoader.C:102:				Log.error() << "IconLoader: Could not find the icon " << name << std::endl;
+source/VIEW/KERNEL/iconLoader.C:109:		IconLoader& IconLoader::instance()
+source/VIEW/KERNEL/iconLoader.C:119:					loader_ = boost::shared_ptr<IconLoader>(new IconLoader());
+source/VIEW/KERNEL/iconLoader.C:128:		QIcon* IconLoader::loadIcon_(const String& name)
+source/VIEW/KERNEL/iconLoader.C:156:					QIcon* result = new QIcon(svg_path);
+source/VIEW/KERNEL/iconLoader.C:196:							result = new QIcon();
+source/VIEW/KERNEL/modularWidget.C:251:			action->setIcon(IconLoader::instance().getIcon(filename.c_str()));
+source/VIEW/KERNEL/mainControl.C:571:				if (preferences_action_) preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
+source/VIEW/WIDGETS/SDWidget.C:53:			export_image->setIcon(IconLoader::instance().getIcon("actions/document-save"));
+source/VIEW/KERNEL/theme/theme.qrc:14:  `icons/lucide/`, so `IconLoader::loadIcon_` only has to try the
+source/APPLICATIONS/BALLVIEW/mainframe.C:101:			fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));
+source/APPLICATIONS/BALLVIEW/mainframe.C:182:			stop_simulation_action_->setIcon(IconLoader::instance().getIcon("actions/process-stop"));
+source/APPLICATIONS/BALLVIEW/mainframe.C:330:						IconLoader& loader = IconLoader::instance();
+source/APPLICATIONS/BALLVIEW/mainframe.C:331:						qload_action_ = new QAction(loader.getIcon("actions/quickopen-file"), tr("quickload"), this);
+source/APPLICATIONS/BALLVIEW/mainframe.C:336:						qsave_action_ = new QAction(loader.getIcon("actions/quicksave"), tr("quicksave"), this);
+source/APPLICATIONS/BALLVIEW/mainframe.C:389:					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-restore"));
+source/APPLICATIONS/BALLVIEW/mainframe.C:396:					fullscreen_action_->setIcon(IconLoader::instance().getIcon("actions/view-fullscreen"));

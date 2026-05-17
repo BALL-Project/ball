@@ -1,0 +1,7 @@
+source/APPLICATIONS/BALLVIEW/aboutDialog.ui
+source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui
+source/VIEW/DIALOGS/contourSurfaceDialog.ui
+source/VIEW/DIALOGS/materialSettings.ui
+source/VIEW/DIALOGS/modifyRepresentationDialog.ui
+source/VIEW/DIALOGS/peptideDialog.ui
+source/VIEW/DIALOGS/snapShotVisualisation.ui
