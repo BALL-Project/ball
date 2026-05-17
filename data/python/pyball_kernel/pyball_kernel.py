@@ -1,3 +1,29 @@
+"""
+PyBALL Jupyter kernel.
+
+NOTE (v1.7): This Jupyter kernel relies on TWO subsystems that are
+DISABLED / non-existent in the v1.7 build:
+
+1. The SIP Python bindings for BALL/VIEW
+   (``BALL_PYTHON_SUPPORT=OFF`` in every ``ci-*`` CMake preset).
+
+2. A Python server socket inside BALLView listening on
+   ``127.0.0.1:8897``. That socket was provided by the old PyBALL
+   embedded interpreter, which was disabled together with the SIP
+   bindings. v1.7 BALLView does not start a server on this port.
+
+The kernel is preserved as the architecture reference for the
+successor work:
+
+  - Phase 999.15 (targeted for v2.1) — rewrites the BALL/VIEW Python
+    binding surface with a modern generator.
+  - Phase 999.10 (targeted for v2.2) — replaces the in-process Python
+    socket with a proper REST API hosted by BALLView, accompanied by
+    a PyBALL SDK that wraps the REST calls. Once 999.10 lands, this
+    kernel becomes obsolete and should be deleted or rewritten as a
+    thin REST-client wrapper.
+"""
+
 from ipykernel.kernelbase import Kernel
 from ipython_genutils.py3compat import safe_unicode
 
