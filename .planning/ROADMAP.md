@@ -2153,26 +2153,61 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase in parallel with 999.44 after 999.43 lands)
 
-### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (BACKLOG · TARGETED FOR v1.8)
+### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Re-author the top menu bar around **tasks** rather than C++ namespaces. Introduce `Cmd/Ctrl+K` **command palette** exposing every action by name (modern app standard).
+**Goal:** Re-author the top menu bar around **tasks** rather than C++ namespaces, and introduce `Cmd/Ctrl+K` **command palette** that exposes every action in the app by name.
 
-**Why v1.8:** Menu reorg touches **every** `.ui` menu file + invalidates ~40% of `BALLView-de_DE.ts` translations.
+**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4 per "keep everything in 1.7." Menu reorg touches every `.ui` menu file + invalidates ~40% of `BALLView-de_DE.ts` translations. Maintainer gates RESOLVED.
 
-**Maintainer-Q1 + Q4 resolved 2026-05-17:**
-- **Q1 = "Keep inline menubar"** → SKIP `QAction::setMenuRole` plumbing. Menu structure stays cross-platform-consistent (inline per-window), no macOS-native global-menubar work.
-- **Q4 = "Accept; community round during v1.8 cycle"** → v1.8 ships English + best-effort de_DE; community translators called for in v1.8 RC notes; v1.8.x picks up completed translations. NOT a v1.8 ship-date blocker.
+**Maintainer-Q1 + Q4 (RESOLVED 2026-05-17, Q4 re-pinned per audit):**
+- **Q1 = "Keep inline menubar"** → SKIP full QMenuBar global-menu mode. **DO** `QAction::setMenuRole(QAction::AboutRole / PreferencesRole / QuitRole)` for the 3 standard items on macOS — this is the auto-relocation Qt does at the per-action level, fully compatible with the inline-menubar Q1 answer (the Q1 SKIP is about the global-menubar mode, not standard-role plumbing).
+- **Q4 = "Accept; community round during v1.7 cycle (re-pinned from v1.8 per audit)"** → v1.7 ships English + best-effort de_DE; community translators called for in v1.7 RC notes; v1.7.x point releases pick up completed translations. NOT a v1.7 ship-date blocker.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/06-phase-menus.md`.
 
 **Depends on:** 999.44 + 999.45 (new layout context). Maintainer gates RESOLVED.
 
-**Estimated effort:** ~2 weeks (menu work; reduced from 2-3 weeks because no macOS-native menu role plumbing per Q1). Community translation round (parallel, time-elapsed-only, not engineering effort).
+**Scope (CommandRegistry — Handover §6.1):**
+- **`source/VIEW/KERNEL/commandRegistry.{h,C}`** — singleton owning the canonical list of all `Command` records (`id` / `title` / `category` / `description` / `shortcut` / `icon` / `trigger` / `isEnabled` fn ptrs).
+- **Auto-registration in `MainControl::insertMenuEntry`** — every `insertMenuEntry` call gains an internal `registerCommand()` call so registration is automatic.
+- **Plugin `setCategory()` hook** (Handover §Risks) — plugin API gets a `setCategory()` hook; default category is `Scripts` (mitigates "plugin-defined menu entries land in unexpected places" risk).
+
+**Scope (menu remap — Handover §6.2):**
+- **18-row mapping table → 8 top-level menus**: **File · Edit · Select · View · Compute · Scripts · Window · Help** (all single-word, all task-coded, matches PyMOL / ChimeraX / Blender patterns).
+- Full mapping per Handover §06-phase-menus.md §"New menu bar mapping" — moves Edit › Invert/Clear/By-Expression → new **Select** menu; Build › * → Edit › Structure ›; Display › * → View › *; Molecular Mechanics › * → **Compute** ›; Tools › * → **Scripts** ›; Macro › * → Scripts › Macros ›; Windows → Window.
+- **Every existing accelerator stays mapped to the same action** (Alt+X Fullscreen, Alt+C Abort, Ctrl+O Open, etc.). The `Shortcut|...` description strings in `mainframe.C` are the contract.
+- **`source/VIEW/test/menuMapping_test.C`** — unit test asserts every old shortcut still resolves to a command with the expected title (mechanical change-detector).
+
+**Scope (commandPalette widget — Handover §6.3):**
+- **`source/VIEW/WIDGETS/commandPalette.{h,C}`** — floating sheet centered on main window, **560 px wide**, activated by `Cmd+K` (macOS) / `Ctrl+K` (Linux/Windows).
+- `QLineEdit` at top with placeholder "Type a command, or ?". Results below: **fuzzy-matched** commands with category chip + shortcut + icon, up to 8 visible, scroll for more. **Recent commands at top when query empty.**
+- `Enter` triggers, `Esc` closes, `Tab` accepts current. Implementation: `QListView` over `QSortFilterProxyModel` with custom delegate.
+- **`?` / `>` / `:` modes** (Handover §6.4):
+  - `>` prefix: only file actions (jump to Open Recent).
+  - `?` prefix: command-help mode; result rows show description + shortcut prominently.
+  - `:` prefix: jump to inspector section.
+  - *(plain text)*: fuzzy search all commands.
+
+**Scope (i18n / translation workflow — Handover §10-migration-playbook.md §"Translation workflow", re-pinned per audit #10):**
+- Run `lupdate-qt5 source -ts data/BALLView/translations/*.ts` after the menu reorg.
+- **`[i18n]` commit-prefix discipline** for translation-update commits.
+- **Translator mailing-list announce** with a diff of new strings — included in v1.7 RC notes.
+- **Follow-up translation PRs land in v1.7.x patch cycle** (Q4 re-pinned from v1.8 cycle per audit pull-in).
+- DON'T block the phase PR on translations.
+
+**Acceptance criteria:**
+- New menu layout matches mapping table; 8 top-level menus.
+- `Cmd/Ctrl+K` opens palette; typing "ene" matches "Minimize Energy" and "Compute Energy…".
+- Every shortcut in the v1 audit still works (`menuMapping_test.C` green).
+- About / Preferences / Quit auto-relocate to the macOS application menu via `setMenuRole(...Standard)`.
+- Translation regeneration produces a known set of new untranslated strings; no string deleted accidentally.
+
+**Estimated effort:** ~2 weeks (menu work; reduced from 2-3 weeks because no macOS global-menubar mode work per Q1). Community translation round (parallel, time-elapsed-only, not engineering effort).
 
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (v1.8; lands after 999.45)
+- [ ] TBD (promote with /gsd-plan-phase after 999.45 lands)
 
 ### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (BACKLOG · TARGETED FOR v1.8)
 
