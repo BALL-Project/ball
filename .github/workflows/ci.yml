@@ -26,6 +26,18 @@ on:
       - 'LICENSE*'
       - 'doc/**'
 
+  # CI-HARDEN-W1 (Stage 2.5 — v1.7-PLAN.md): weekly cross-platform run
+  # catches Windows/Linux surprises BEFORE Stage 3 closure-gate promotion.
+  # Cheaper than full-matrix-always; eliminates the v1.6.2-style closure
+  # crunch by warming Windows + ARM Linux every Monday morning UTC.
+  schedule:
+    - cron: '0 6 * * 1'
+
+  # Manual trigger — any maintainer can force a full-matrix run before
+  # high-risk phase work, e.g. before tagging an RC. Choose extra-matrix
+  # axes via input if needed in the future.
+  workflow_dispatch:
+
 # Read-only token: this workflow only builds + checks, it never writes back.
 permissions:
   contents: read
@@ -38,21 +50,130 @@ concurrency:
 
 jobs:
   # --------------------------------------------------------------------------
-  # build — the 3-OS Release matrix (D-07, D-11).
+  # detect-platforms — CI-HARDEN-W1 (v1.7-PLAN Stage 2.5).
   #
-  # Single job, `strategy.matrix.include` with one entry per OS. Every per-OS
-  # specific (runner label, dep-install command, configure command, build
-  # command, whether the job blocks, whether the smoke check runs) lives IN the
-  # matrix entry — nothing is scattered into `if:` chains across steps. Adding a
-  # future axis (e.g. the `ui_v2` axis) is a matter of adding `include:` entries,
-  # not rewriting the job (D-11).
+  # Computes which OS matrix entries to dispatch based on the trigger:
+  #   - Stage 1 default (push/PR on v1.7-modernization): macOS only
+  #   - Schedule (weekly Monday 06:00 UTC): full matrix (macOS + Linux + Windows)
+  #   - workflow_dispatch (manual): full matrix
+  #   - push/PR touching high-risk paths (cmake/, ci.yml, vcpkg.json, CIFParser,
+  #     atom.h, VIEW/, CMakeLists.txt): full matrix
+  #   - master, v1.6-modernization branches: full matrix (legacy + maintenance)
+  #
+  # The high-risk paths list is the empirical surface where cross-platform
+  # regressions historically hide:
+  #   - cmake/**, CMakeLists.txt, CMakePresets.json   build system
+  #   - .github/workflows/**                          CI workflow itself
+  #   - vcpkg.json                                    Windows dep graph
+  #   - source/FORMAT/CIFParser*                      Bison parser (gcc -Wformat-truncation)
+  #   - include/BALL/KERNEL/atom.h                    MSVC C4910 pointer-vector
+  #   - include/BALL/VIEW/**, source/VIEW/**          Qt 6 / GL surface
+  #
+  # The dynamic matrix outputs JSON consumed by the `build` job below via
+  # `fromJSON()`. This is the cleanest GHA pattern for trigger-aware matrix
+  # composition; matrix-entry-level `if:` is not supported by the runner.
+  # --------------------------------------------------------------------------
+  detect-platforms:
+    name: detect-platforms (CI-HARDEN-W1)
+    runs-on: ubuntu-24.04
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+      cross_platform: ${{ steps.set.outputs.cross_platform }}
+    steps:
+      - uses: actions/checkout@v5
+      # paths-filter only meaningful on push/PR (schedule/workflow_dispatch
+      # have no diff). For those triggers we skip the filter and force full.
+      - id: filter
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            cross_platform:
+              - 'cmake/**'
+              - 'CMakeLists.txt'
+              - 'CMakePresets.json'
+              - '.github/workflows/**'
+              - 'vcpkg.json'
+              - 'source/FORMAT/CIFParser*'
+              - 'include/BALL/KERNEL/atom.h'
+              - 'include/BALL/VIEW/**'
+              - 'source/VIEW/**'
+      - id: set
+        shell: bash
+        run: |
+          # Decide whether to dispatch the full matrix.
+          cross_platform="false"
+          if [[ "${{ github.event_name }}" == "schedule" ]] || \
+             [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
+             [[ "${{ github.ref_name }}" == "master" ]] || \
+             [[ "${{ github.ref_name }}" == "v1.6-modernization" ]] || \
+             [[ "${{ steps.filter.outputs.cross_platform }}" == "true" ]]; then
+            cross_platform="true"
+          fi
+          echo "cross_platform=${cross_platform}" >> "$GITHUB_OUTPUT"
+
+          # The macOS entry is ALWAYS included (Stage 1 default).
+          # The Linux + Windows entries are added when cross_platform=true.
+          # Keep the JSON structure identical to the v1.6-modernization
+          # static matrix entries so all downstream steps see the same
+          # matrix.os / matrix.runner / matrix.qt_host / etc.
+          MAC_ENTRY='{
+            "os": "macos-arm64",
+            "runner": "macos-14",
+            "blocking": true,
+            "smoke": true,
+            "ccache_dir": "~/Library/Caches/ccache"
+          }'
+          LINUX_X64_ENTRY='{
+            "os": "linux-x64",
+            "runner": "ubuntu-24.04",
+            "blocking": true,
+            "smoke": true,
+            "ccache_dir": "~/.cache/ccache",
+            "qt_host": "linux",
+            "qt_version": "6.8.*"
+          }'
+          LINUX_ARM64_ENTRY='{
+            "os": "linux-arm64",
+            "runner": "ubuntu-24.04-arm",
+            "blocking": true,
+            "smoke": true,
+            "ccache_dir": "~/.cache/ccache",
+            "qt_host": "linux_arm64",
+            "qt_version": "6.8.*"
+          }'
+          WINDOWS_ENTRY='{
+            "os": "windows-x64",
+            "runner": "windows-2025",
+            "blocking": true,
+            "smoke": false,
+            "ccache_dir": "C:\\Users\\runneradmin\\AppData\\Local\\ccache"
+          }'
+          if [[ "${cross_platform}" == "true" ]]; then
+            INCLUDE="[${MAC_ENTRY},${LINUX_X64_ENTRY},${LINUX_ARM64_ENTRY},${WINDOWS_ENTRY}]"
+          else
+            INCLUDE="[${MAC_ENTRY}]"
+          fi
+          # Strip newlines so the JSON fits on one line for $GITHUB_OUTPUT
+          INCLUDE_ONELINE=$(echo "$INCLUDE" | tr -d '\n' | tr -s ' ')
+          echo "matrix={\"include\":${INCLUDE_ONELINE}}" >> "$GITHUB_OUTPUT"
+          echo "::notice::cross_platform=${cross_platform}; matrix dispatch:"
+          echo "$INCLUDE_ONELINE" | jq -r '.[] | "  - " + .os' || echo "$INCLUDE_ONELINE"
+
+  # --------------------------------------------------------------------------
+  # build — the dynamic-matrix Release build (D-07, D-11).
+  #
+  # Matrix shape now driven by detect-platforms above. macOS always runs
+  # (Stage 1 default); Linux + Windows run on schedule, workflow_dispatch,
+  # high-risk-path push/PR, or maintenance branches.
   # --------------------------------------------------------------------------
   build:
+    needs: detect-platforms
     name: build (${{ matrix.os }})
     runs-on: ${{ matrix.runner }}
-    # D-03: the Windows job is non-blocking. `continue-on-error` is driven off a
-    # matrix field so macOS/Linux stay blocking and Windows flips to required in
-    # Phase 4 with a one-line matrix change (`blocking: true`).
+    # D-03: continue-on-error driven off matrix.blocking. macOS/Linux/Windows
+    # are all "blocking: true" in the JSON above; the field is preserved so
+    # future axes (e.g. spike backends) can flip without rewriting downstream.
     continue-on-error: ${{ !matrix.blocking }}
     # Phase 999.16 (BUILD-ACCEL-01): ccache + PCH compatibility requires these
     # sloppiness keys. Without them, PCH-enabled builds silently bust ccache hits.
@@ -62,69 +183,7 @@ jobs:
     strategy:
       # Don't let one OS failing cancel the others — we want the full picture.
       fail-fast: false
-      matrix:
-        include:
-          # ---- macOS (Apple Silicon) — blocking ----------------------------
-          # Mirrors BUILD-macos.md verbatim: the Homebrew dep line, the cmake
-          # configure invocation, and the `make BALL VIEW BALLView` target set.
-          #
-          # 2026-05-16: reverted macos-26 (Tahoe) → macos-14 (Sonoma) to
-          # match OpenMS's known-stable position. release.yml's D4-mac
-          # ad-hoc resign workaround targets macOS 26 at runtime, but CI
-          # build/test doesn't need to run on Tahoe — the bundle gets
-          # validated on user's macOS 26 at install time. Bump back to
-          # macos-26 when OpenMS moves OR when a Tahoe-specific build
-          # bug needs CI coverage.
-          - os: macos-arm64
-            runner: macos-14
-            blocking: true
-            smoke: true
-            ccache_dir: ~/Library/Caches/ccache
-
-          # =====================================================================
-          # v1.7 CI MATRIX GATING — see .planning/v1.7-PLAN.md
-          #
-          # Stage 1 (CURRENT): macOS-arm64 ONLY for initial v1.7 phase work.
-          # Stage 2 (when ≥4 of 6 W1 phases land): uncomment linux-x64 + linux-arm64
-          # Stage 3 (v1.7 closure gate): uncomment windows-x64
-          #
-          # Rationale: fastest iteration cycle for early phase work; Linux as
-          # cross-arch+toolchain net once phases stabilise; Windows last because
-          # it's the slowest+flakiest surface (v1.6.2 release pipeline took 5
-          # iterations on the Windows package alone). Each phase's PLAN must
-          # include a "Linux smoke verify" step before marking COMPLETE so
-          # cross-platform compile regressions surface at phase-boundary, not at
-          # stage-2 promotion.
-          #
-          # To promote stages: uncomment the matrix entries below + bump the
-          # comment block. Do NOT add `if:` conditions — the matrix shape IS
-          # the documentation.
-          # =====================================================================
-
-          # ---- STAGE 2 (commented out) — Linux (Ubuntu) blocking -----------
-          # - os: linux-x64
-          #   runner: ubuntu-24.04
-          #   blocking: true
-          #   smoke: true
-          #   ccache_dir: ~/.cache/ccache
-          #   qt_host: linux
-          #   qt_version: '6.8.*'   # Qt 6.8 LTS — D-01 revised floor
-
-          # ---- STAGE 2 (commented out) — Linux ARM64 (Ubuntu) blocking ----
-          # - os: linux-arm64
-          #   runner: ubuntu-24.04-arm
-          #   blocking: true
-          #   smoke: true
-          #   ccache_dir: ~/.cache/ccache
-          #   qt_host: linux_arm64
-          #   qt_version: '6.8.*'
-
-          # ---- STAGE 3 (commented out) — Windows blocking ------------------
-          # - os: windows-x64
-          #   runner: windows-2025
-          #   blocking: true
-          #   smoke: false
-          #   ccache_dir: C:\Users\runneradmin\AppData\Local\ccache
+      matrix: ${{ fromJSON(needs.detect-platforms.outputs.matrix) }}
 
     steps:
       - name: Checkout
