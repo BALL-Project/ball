@@ -10,6 +10,7 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
 #include <QtCore/QDirIterator>
+#include <QtCore/QLockFile>
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDateTime>
 
@@ -135,13 +136,16 @@ namespace BALL
 				return r;
 			}
 
+			// Cheap pre-lock skip: if the target already exists, no need
+			// to even acquire the lock. Re-checked under the lock below
+			// for the TOCTOU-collapse pass (C-6).
 			if (QFile::exists(r.targetPath))
 			{
-				// Already migrated on a prior run — idempotent no-op.
 				return r;
 			}
 
-			// mkpath target directory.
+			// mkpath target directory (must happen before lock acquisition
+			// so the lock file's directory exists).
 			const QString targetDir = QFileInfo(r.targetPath).absolutePath();
 			if (!QDir().mkpath(targetDir))
 			{
@@ -150,11 +154,70 @@ namespace BALL
 				return r;
 			}
 
-			// Copy the main INI file.
-			if (!QFile::copy(legacyPath, r.targetPath))
+			// v1.7-RC1 C-6 — QLockFile guard. Two BALLView launches racing
+			// the first-run migration could both observe `exists(target)
+			// == false`, both copy, and the second clobber the first. The
+			// lock serializes the critical region; on contention the
+			// loser returns another_instance=true (caller treats as
+			// "try again next launch").
+			QLockFile lock(targetDir + "/.ball-migration.lock");
+			lock.setStaleLockTime(60000);  // 60s — covers slow SMB homedirs
+			if (!lock.tryLock(2000))
 			{
-				r.error = QString("Copy failed: %1 → %2").arg(legacyPath).arg(r.targetPath);
+				BALL::Log.warn() << "ConfigMigration: another instance holds the migration lock; deferring." << std::endl;
+				r.another_instance = true;
+				return r;
+			}
+
+			// C-6 TOCTOU collapse: re-check target existence AFTER lock.
+			// The pre-lock exists() check above may have raced with a
+			// peer that just finished — without this we would attempt
+			// a copy onto a pre-existing target.
+			if (QFile::exists(r.targetPath))
+			{
+				return r;
+			}
+
+			// v1.7-RC1 C-4 — atomic copy. Write to <target>.tmp, append
+			// the migration marker into the .tmp, then rename(.tmp →
+			// target) atomically. A crash mid-write leaves the .tmp behind
+			// (cleaned on next launch by tryRemove below) and the user's
+			// preferences in their pre-migration state — never half-copied.
+			const QString tmpPath = r.targetPath + QStringLiteral(".tmp");
+			// Clean up any orphaned .tmp from a previous crashed run.
+			if (QFile::exists(tmpPath))
+			{
+				QFile::remove(tmpPath);
+			}
+
+			if (!QFile::copy(legacyPath, tmpPath))
+			{
+				r.error = QString("Copy failed: %1 → %2").arg(legacyPath).arg(tmpPath);
 				BALL::Log.warn() << "ConfigMigration: " << r.error.toStdString() << std::endl;
+				return r;
+			}
+
+			// C-4 — append the migration marker to the .tmp BEFORE the
+			// atomic rename so the rename publishes a complete file.
+			if (!appendMigrationMarker(tmpPath, legacyPath))
+			{
+				BALL::Log.warn() << "ConfigMigration: could not append migration marker to "
+				                 << tmpPath.toStdString() << std::endl;
+				// Don't fail the whole migration over a marker write —
+				// continue to the atomic rename so the user still gets
+				// their preferences migrated.
+			}
+
+			// C-4 — atomic publish. QFile::rename is rename(2) on POSIX
+			// (atomic) and MoveFileExW(MOVEFILE_REPLACE_EXISTING) on
+			// Windows (atomic on NTFS). On failure, delete the .tmp and
+			// leave the legacy file untouched — caller will retry on
+			// next launch.
+			if (!QFile::rename(tmpPath, r.targetPath))
+			{
+				r.error = QString("Atomic rename failed: %1 → %2").arg(tmpPath).arg(r.targetPath);
+				BALL::Log.warn() << "ConfigMigration: " << r.error.toStdString() << std::endl;
+				QFile::remove(tmpPath);
 				return r;
 			}
 
@@ -162,6 +225,8 @@ namespace BALL
 			// layout convention: ~/.BALLView_workspaces/ as a sibling
 			// directory. (BALL pre-v2 didn't actually have user
 			// workspaces, but defensive: pick it up if present.)
+			// Runs AFTER the atomic config rename — if the main INI made
+			// it through, the workspaces copy is best-effort gravy.
 			const QString legacyWorkspacesDir = legacyPath + "_workspaces";
 			if (QDir(legacyWorkspacesDir).exists())
 			{
@@ -175,14 +240,6 @@ namespace BALL
 					// Continue — the main INI did land; workspaces is a
 					// best-effort copy.
 				}
-			}
-
-			// Append migration marker.
-			if (!appendMigrationMarker(r.targetPath, legacyPath))
-			{
-				BALL::Log.warn() << "ConfigMigration: could not append migration marker to "
-				                 << r.targetPath.toStdString() << std::endl;
-				// Don't fail the whole migration over a marker write.
 			}
 
 			r.performed = true;

@@ -50,6 +50,12 @@ namespace BALL
 			/// True if a copy was actually performed.
 			bool performed = false;
 
+			/// True iff another BALLView instance held the migration
+			/// lock and this run deferred — callers should treat as
+			/// "try again next launch", not as an error to surface.
+			/// (v1.7-RC1 C-6 — QLockFile TOCTOU guard.)
+			bool another_instance = false;
+
 			/// Absolute path of the legacy source file.
 			QString sourcePath;
 

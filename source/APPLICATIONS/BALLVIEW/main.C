@@ -240,21 +240,57 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		// Step 1: auto-backup if legacy exists AND target doesn't (i.e.
 		// we are about to migrate). Don't clobber an existing .bak —
 		// user may have multiple v2-upgrade attempts.
+		//
+		// v1.7-RC1 C-5 hard-abort: if the backup fails AND the legacy
+		// file is present (i.e. we WOULD be about to mutate user state),
+		// skip the migration entirely. The previous warn-and-continue
+		// flow could leave the user without a safety net if the
+		// subsequent migration step then crashed mid-copy.
+		bool skip_migration = false;
 		if (QFile::exists(legacy_path) && !QFile::exists(target_path) && !QFile::exists(backup_path))
 		{
 			if (!QFile::copy(legacy_path, backup_path))
 			{
-				BALL::Log.warn() << "Phase 999.45: could not write pre-v2 backup to "
-				                 << backup_path.toStdString() << std::endl;
+				BALL::Log.error() << "Phase 999.45: pre-v2 backup FAILED — deferring migration to next launch. "
+				                  << "Source: " << legacy_path.toStdString()
+				                  << "  Target: " << backup_path.toStdString() << std::endl;
+				skip_migration = true;
+				// One-time user notice — investigate disk / permissions.
+				// QSettings sentinel sits ALONGSIDE the target (not AT
+				// it — writing the target here would defeat the
+				// idempotent-migration check). Best-effort: if even the
+				// sentinel cannot be written, fall back to nagging on
+				// every relaunch (acceptable — user is already in a
+				// degraded state and needs to act).
+				const QString nag_path = QFileInfo(target_path).absolutePath()
+				                       + "/.ball-migration-status.ini";
+				QSettings nag(nag_path, QSettings::IniFormat);
+				if (!nag.value(QStringLiteral("Migration/backupFailedNoticeShown"), false).toBool())
+				{
+					QMessageBox::warning(0, "BALLView v1.7 migration deferred",
+						QString("Backup of your existing ~/.BALLView settings could not be written.\n\n"
+						        "v1.7 migration has been deferred so your settings are not modified.\n\n"
+						        "Please check disk space and write permissions on:\n  %1\n\n"
+						        "Then restart BALLView.")
+						.arg(QFileInfo(backup_path).absolutePath()));
+					nag.setValue(QStringLiteral("Migration/backupFailedNoticeShown"), true);
+				}
 			}
 		}
 
 		// Step 2: run migration. Idempotent — no-op if target exists.
-		const BALL::VIEW::MigrationResult mres = BALL::VIEW::ConfigMigration::run(legacy_path);
-		if (mres.performed)
+		if (!skip_migration)
 		{
-			BALL::Log.info() << "Phase 999.45: migrated " << mres.sourcePath.toStdString()
-			                 << " → " << mres.targetPath.toStdString() << std::endl;
+			const BALL::VIEW::MigrationResult mres = BALL::VIEW::ConfigMigration::run(legacy_path);
+			if (mres.performed)
+			{
+				BALL::Log.info() << "Phase 999.45: migrated " << mres.sourcePath.toStdString()
+				                 << " → " << mres.targetPath.toStdString() << std::endl;
+			}
+			else if (mres.another_instance)
+			{
+				BALL::Log.warn() << "Phase 999.45: migration deferred — another BALLView instance was running." << std::endl;
+			}
 		}
 	}
 	// =============== end Phase 999.45 pre-mainframe migration =========================
