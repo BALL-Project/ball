@@ -178,11 +178,12 @@ namespace BALL
 		new PubChemDialog          (this, "PubChemDialog");
 		new UndoManagerDialog      (this, "UndoManagerDialog");
 
-		// Phase 999.45 — Workspace consolidation. Under BALL_UI_V2 the
-		// 3 project-related controls are tabified into a single
-		// left-rail ProjectDock group (Handover §5.1). Without the
-		// flag (legacy / Classic path) keep the original 5-dock
-		// layout — this IS the Classic preset by definition.
+		// Phase 999.45 — Workspace consolidation. The 3 project-related
+		// controls are tabified into a single left-rail ProjectDock
+		// group (Handover §5.1). (Phase 999.48 removed the BALL_UI_V2
+		// build-flag gating; Phase 999.49 retired the named legacy
+		// 5-dock "Classic" preset — the new Default workspace is the
+		// only built-in tabified layout.)
 		MolecularControl* mol_ctrl = new MolecularControl(this, ((String)tr("Structures")).c_str());
 		GeometricControl* geom_ctrl = new GeometricControl(this, ((String)tr("Representations")).c_str());
 		DatasetControl* dataset_ctrl = new DatasetControl(this, ((String)tr("Datasets")).c_str());
@@ -410,10 +411,10 @@ namespace BALL
 		}
 		
 		
-		// Phase 999.46 — Window menu lists the 3 workspace presets
-		// from 999.45 (Default / Classic / Focused). Selecting a
-		// preset calls WorkspaceManager::apply(...) on the running
-		// Mainframe; WorkspaceManager emits presetChanged so any
+		// Phase 999.46 — Window menu lists the built-in workspace presets
+		// from 999.45 (Default / Focused — Classic retired in 999.49).
+		// Selecting a preset calls WorkspaceManager::apply(...) on the
+		// running Mainframe; WorkspaceManager emits presetChanged so any
 		// other UI (status label, palette) stays in sync.
 		{
 			QMenu* window_menu = initPopupMenu(MainControl::WINDOWS, UIOperationMode::MODE_ADVANCED);
@@ -430,15 +431,15 @@ namespace BALL
 					});
 				};
 				add_preset(VIEW::WorkspaceManager::Default, tr("Default"));
-				add_preset(VIEW::WorkspaceManager::Classic, tr("Classic"));
 				add_preset(VIEW::WorkspaceManager::Focused, tr("Focused"));
 			}
 		}
 
-		// Phase 999.46 §06 — Invert/Clear Selection move from Edit
-		// to the new top-level Select menu under BALL_UI_V2. OFF
-		// cell keeps the legacy Edit location for Classic-preset
-		// muscle memory.
+		// Phase 999.46 §06 — Invert/Clear Selection live in the
+		// top-level Select menu. (Pre-999.48 this was gated by
+		// BALL_UI_V2 with an Edit-menu fallback for "Classic-preset
+		// muscle memory"; 999.48 retired the flag and 999.49 retired
+		// the Classic preset entirely.)
 		const MainControl::PopUpID kSelectionMenu = MainControl::SELECT;
 
 		description = "Shortcut|Edit|Invert_Selection";
@@ -865,13 +866,9 @@ namespace BALL
 
 			VIEW::WorkspaceManager& wm = VIEW::WorkspaceManager::instance();
 			QAction* default_act  = ws_menu->addAction(wm.presetDisplayName(VIEW::WorkspaceManager::Default));
-			QAction* classic_act  = ws_menu->addAction(wm.presetDisplayName(VIEW::WorkspaceManager::Classic));
 			QAction* focused_act  = ws_menu->addAction(wm.presetDisplayName(VIEW::WorkspaceManager::Focused));
 			connect(default_act, &QAction::triggered, this, [this]() {
 				VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Default, this);
-			});
-			connect(classic_act, &QAction::triggered, this, [this]() {
-				VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Classic, this);
 			});
 			connect(focused_act, &QAction::triggered, this, [this]() {
 				VIEW::WorkspaceManager::instance().apply(VIEW::WorkspaceManager::Focused, this);

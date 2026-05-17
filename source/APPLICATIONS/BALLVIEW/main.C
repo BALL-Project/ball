@@ -5,7 +5,6 @@
 // order of includes is important: first qapplication, then BALL includes
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QPushButton>
 #include <QtCore/QTranslator>
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDir>
@@ -30,8 +29,11 @@
 // === Phase 999.45: Workspace consolidation + config migration ==============
 // Pre-mainframe migration of legacy ~/.BALLView to platform-correct path
 // + post-show first-run prompt asking the user to opt into the new
-// Default workspace or keep their old layout as Classic. .pre-v2.bak
+// Default workspace or keep their legacy 5-dock layout. .pre-v2.bak
 // auto-backup written before either step touches anything.
+// (Phase 999.49 retired the named "Classic" preset; the "Keep my layout"
+// branch now just leaves Mainframe's pre-Default 5-dock construction
+// in place and persists currentPreset=UserDefined.)
 #  include <BALL/VIEW/KERNEL/configMigration.h>
 #  include <BALL/VIEW/KERNEL/workspaceManager.h>
 // === end Phase 999.45 ======================================================
@@ -277,8 +279,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	// =============== Phase 999.45: first-run workspace prompt =========================
 	// After Mainframe is constructed AND shown (so the user sees the
 	// new Default workspace as the backdrop for the choice), prompt
-	// the user once to opt into the new layout or keep their old one
-	// as Classic.
+	// the user once to opt into the new layout or keep their legacy
+	// 5-dock layout. (Phase 999.49: the named "Classic" preset is
+	// retired; the keep-legacy branch persists currentPreset=UserDefined
+	// rather than naming a retired built-in preset.)
 	//
 	// Persisted via QSettings under [Workspace]/firstRunPromptSeen.
 	// Only fires when:
@@ -289,16 +293,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		const QString target_path = BALL::VIEW::ConfigMigration::targetConfigPath();
 		QSettings prefs(target_path, QSettings::IniFormat);
 
-		// === Phase 999.49: Classic preset auto-migration ====================
-		// The Classic preset was retired in v1.7 (maintainer-Q2 commitment).
+		// === Phase 999.49: legacy preset auto-migration =====================
+		// The 5-dock preset was retired in v1.7 (maintainer-Q2 commitment).
 		// Users carrying [Workspace]/currentPreset="Classic" from a v1.6.x
-		// install — or from a v1.7-pre install that exercised the Phase 999.45
-		// first-run "Keep my layout (Classic)" branch — get silently remapped
-		// to "Default" here, BEFORE any downstream code path tries to look up
-		// the (now-deleted) Classic enum value via a QString round-trip.
+		// install — or from a v1.7-pre install that exercised the
+		// Phase 999.45 first-run "Keep my layout" branch under the old
+		// labelling — get silently remapped to "Default" here, BEFORE
+		// any downstream code path tries to look up the (now-deleted)
+		// enum value via a QString round-trip.
 		//
 		// User-saved presets ([Workspace]/userDefined__*) are untouched —
-		// only the canonical built-in name "Classic" is rewritten.
+		// only the canonical built-in name is rewritten.
 		//
 		// Idempotent: subsequent launches read "Default" and no-op the
 		// remap. RELEASE-NOTES-v1.7.md documents the change.
@@ -306,7 +311,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 		{
 			prefs.setValue("Workspace/currentPreset", "Default");
 			prefs.sync();
-			BALL::Log.info() << "v1.7 migration: legacy Classic workspace preset retired — falling back to Default. (User-defined presets are unaffected.)" << std::endl;
+			BALL::Log.info() << "v1.7 migration: legacy 5-dock workspace preset retired — falling back to Default. (User-defined presets are unaffected.)" << std::endl;
 		}
 		// === end Phase 999.49 auto-migration ================================
 
@@ -315,34 +320,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 		if (migrated && !prompt_seen)
 		{
+			// Phase 999.49 simplified this prompt: the original two-button
+			// "Try new / Keep my layout (Classic)" choice no longer makes
+			// sense once the Classic preset is deleted — there's no
+			// restorable named preset to "keep" anymore. Surface the
+			// change as a one-button informational notice; users who
+			// want to rearrange docks can do so via View → Workspace
+			// → Save current as… afterwards.
 			QMessageBox box(&mainframe);
-			box.setWindowTitle(QCoreApplication::translate("Phase999_45", "Refreshed workspace available"));
-			box.setText(QCoreApplication::translate("Phase999_45",
-			    "BALLView has a refreshed default workspace."));
-			box.setInformativeText(QCoreApplication::translate("Phase999_45",
-			    "Switch to it, or keep your current layout? "
-			    "(You can change later from View → Workspace.)"));
-			QPushButton* try_new = box.addButton(
-			    QCoreApplication::translate("Phase999_45", "Try the new workspace"),
+			box.setIcon(QMessageBox::Information);
+			box.setWindowTitle(QCoreApplication::translate("Phase999_49", "Refreshed workspace"));
+			box.setText(QCoreApplication::translate("Phase999_49",
+			    "BALLView's default workspace has been refreshed in v1.7."));
+			box.setInformativeText(QCoreApplication::translate("Phase999_49",
+			    "The legacy 5-dock layout has been retired. You can switch "
+			    "between Default and Focused presets, or save your own, "
+			    "from View → Workspace."));
+			box.addButton(
+			    QCoreApplication::translate("Phase999_49", "Got it"),
 			    QMessageBox::AcceptRole);
-			QPushButton* keep_old = box.addButton(
-			    QCoreApplication::translate("Phase999_45", "Keep my layout (Classic)"),
-			    QMessageBox::RejectRole);
-			box.setDefaultButton(try_new);
 			box.exec();
 
-			if (box.clickedButton() == keep_old)
-			{
-				BALL::VIEW::WorkspaceManager::instance().apply(
-				    BALL::VIEW::WorkspaceManager::Classic, &mainframe);
-				prefs.setValue("Workspace/currentPreset", "Classic");
-			}
-			else
-			{
-				// Try-new is the default; Default preset was already
-				// applied by Mainframe::show().
-				prefs.setValue("Workspace/currentPreset", "Default");
-			}
+			// Default preset is already applied by Mainframe::show().
+			prefs.setValue("Workspace/currentPreset", "Default");
 			prefs.setValue("Workspace/firstRunPromptSeen", true);
 			prefs.sync();
 		}
