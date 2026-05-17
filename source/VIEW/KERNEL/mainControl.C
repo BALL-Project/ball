@@ -10,7 +10,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/modelInformation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
@@ -568,7 +568,7 @@ namespace BALL
 																							SLOT(show()), description,
 																							QKeySequence("Ctrl+Z"), UIOperationMode::MODE_ADVANCED);
 				
-				if (preferences_action_) preferences_action_->setIcon(IconLoader::instance().getIcon("categories/preferences"));
+				if (preferences_action_) preferences_action_->setIcon(Icons::get("categories/preferences"));
 			}
 
 			fetchPreferences(preferences_file_);
