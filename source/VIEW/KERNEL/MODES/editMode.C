@@ -22,7 +22,7 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 
@@ -53,8 +53,6 @@ namespace BALL
 
 		void EditMode::createActions_()
 		{
-			IconLoader& loader = IconLoader::instance();
-
 			String description = "Shortcut|Display|Edit_Mode";
 			main_action_ = scene_->insertMenuEntry(MainControl::DISPLAY, tr("Edit Mode"), 0,
 			                                       0, description, QKeySequence("Ctrl+E"),
@@ -66,7 +64,7 @@ namespace BALL
 				main_action_->setToolTip(tr("Switch to edit mode, e.g. draw your own molecule"));
 
 				main_action_->setCheckable(true);
-				main_action_->setIcon(loader.getIcon("actions/mode-edit"));
+				main_action_->setIcon(Icons::get("actions/mode-edit"));
 				connect(main_action_, SIGNAL(triggered()), SLOT(modeChangeSlot_()));
 			}
 
@@ -75,7 +73,7 @@ namespace BALL
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
 				description = "Shortcut|EditMode|SetElement";
-				element_action_ = new QAction(loader.getIcon("actions/molecule-set-element"), tr("Set element"), this);
+				element_action_ = new QAction(Icons::get("actions/molecule-set-element"), tr("Set element"), this);
 				element_action_->setToolTip(tr("Edit mode: Choose element for next atom, to modify atom under cursor: Double left click"));
 				element_action_->setObjectName(element_action_->text());
 				connect(element_action_, SIGNAL(triggered()), this, SLOT(changeAtomElementTriggered_()));
@@ -84,7 +82,7 @@ namespace BALL
 				qmenu->addAction(element_action_);
 
 				description = "Shortcut|EditMode|CreateBond";
-				bond_action_ = new QAction(loader.getIcon("actions/create-bond"), tr("Create Bond"), this);
+				bond_action_ = new QAction(Icons::get("actions/create-bond"), tr("Create Bond"), this);
 				bond_action_->setToolTip(tr("Edit mode: If two atoms are selected, create a single bond between them"));
 				bond_action_->setObjectName(bond_action_->text());
 				connect(bond_action_, SIGNAL(triggered()), this, SLOT(createBond_()));
