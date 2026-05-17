@@ -43,6 +43,7 @@ namespace BALL
 	class SecondaryStructure;
 	class Molecule;
 	class MolecularInteractions;
+	class MoleculeStore;  // v2.0 KERNEL replacement (K0.3b.1)
 
 	/** Atom class.
 			A class representing atoms.
@@ -1001,6 +1002,27 @@ namespace BALL
 
 		///
 		void swapLastBond_(const Atom* atom);
+
+		// v2.0 KERNEL replacement (K0.3b.1): every Atom is bound to a slot
+		// in a MoleculeStore. Default-constructed atoms are bound to a
+		// process-global "orphan store" until they are inserted into a
+		// System (which will later migrate the slot to the System's store
+		// per D5/D16). For K0.3b.1 the binding is purely additive — no
+		// getter or setter uses these fields yet. Per-field migration
+		// happens in K0.3b.2..N.
+		MoleculeStore* store_           = 0;
+		std::uint32_t  store_idx_       = 0;
+		std::uint64_t  store_generation_ = 0;
+
+		// Static helper: process-global orphan MoleculeStore. Lazily
+		// constructed on first call. Thread-safe under the C++17
+		// function-local-static guarantee.
+		static MoleculeStore& globalOrphanStore_();
+
+		// Bind this Atom to a slot in `store`. Called by every Atom ctor;
+		// in K0.3b.1 only the orphan store is used. K0.3b.N+ adds
+		// adoption-into-System migration paths.
+		void bindToStore_(MoleculeStore& store);
 
 	};
 

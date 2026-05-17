@@ -11,6 +11,7 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecularInteractions.h>
+#include <BALL/KERNEL/moleculeStore.h>  // K0.3b.1
 
 #include <algorithm>
 
@@ -18,6 +19,25 @@ using namespace::std;
 
 namespace BALL
 {
+	// v2.0 KERNEL replacement (K0.3b.1): process-global orphan store.
+	// Atoms that aren't yet inserted into a System live here. Function-
+	// local-static gives thread-safe lazy init (C++17 [stmt.dcl] p4).
+	// K0.3b.N will add System-side adoption that migrates slots out of
+	// the orphan store into the per-System store.
+	MoleculeStore& Atom::globalOrphanStore_()
+	{
+		static MoleculeStore orphan;
+		return orphan;
+	}
+
+	void Atom::bindToStore_(MoleculeStore& store)
+	{
+		store_ = &store;
+		store_idx_ = store.allocate_atom();
+		store_generation_ = store.generation();
+		store.set_back_ptr(store_idx_, this);
+	}
+
 	Atom::Atom()
 		: Composite(),
 		  PropertyManager(),
@@ -35,6 +55,7 @@ namespace BALL
 		  velocity_(BALL_ATOM_DEFAULT_VELOCITY),
 		  force_(BALL_ATOM_DEFAULT_FORCE)
 	{
+		bindToStore_(globalOrphanStore_());
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
@@ -54,6 +75,7 @@ namespace BALL
 		  velocity_(atom.velocity_),
 		  force_(atom.force_)
 	{
+		bindToStore_(globalOrphanStore_());
 	}
 
 	Atom::Atom
@@ -77,6 +99,7 @@ namespace BALL
 		  velocity_(velocity),
 		  force_(force)
 	{
+		bindToStore_(globalOrphanStore_());
 	}
 
 	Atom::~Atom()
