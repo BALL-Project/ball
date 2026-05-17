@@ -71,6 +71,16 @@ Phase 999.48 will remove the `Tools › Legacy Settings` submenu
 once every section is wired and every Controller has migrated its
 `apply()` path.
 
+## 999.44 closure snapshot (2026-05-17)
+
+After Phase 999.44 Plans 02-06 landed in the continuation session:
+all 9 Controllers exist, 1 cut-over complete (StageController, Plan
+06), 8 read-only mirrors awaiting individual cut-over plans in the
+v1.7 RC patch cycle. The cut-over recipe is the
+StageController::apply() shape in
+`source/VIEW/KERNEL/controllers/stageController.C`; copy + modify
+per Controller.
+
 ## Renderer-interface-boundary binding
 
 `CameraController` + `StereoController` + (parts of) `StageController`
