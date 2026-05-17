@@ -614,7 +614,7 @@ jobs:
             Write-Warning "data/ not found at repo root — bundle may be missing runtime resources"
           }
 
-      - name: Zip deploy dir (Windows)
+      - name: Zip deploy dir (Windows — portable .zip, kept alongside NSIS installer during v1.7 transition)
         if: matrix.os == 'windows-x64'
         shell: pwsh
         run: |
@@ -622,15 +622,165 @@ jobs:
           Get-Item "${{ github.workspace }}\${{ steps.resolve.outputs.asset }}" | Select-Object Length,Name
 
       # =====================================================================
-      # Upload workflow artifact (consumed by the release job below)
+      # Phase 8b: CPack NSIS installer (Windows)
+      # Decisions 1+3+4 in .planning/phases/08-packaging-and-distribution/
+      # 08-INSTALLER-FORMATS-RESEARCH.md: NSIS generator, per-user install
+      # to %LOCALAPPDATA%\Programs (no UAC), English-only chrome.
       # =====================================================================
-      - name: Upload workflow artifact
+      - name: Install NSIS (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        run: |
+          # NSIS is preinstalled on windows-2025 runners (verify before install
+          # to avoid chocolatey churn); install only if missing.
+          $nsis = Get-Command makensis -ErrorAction SilentlyContinue
+          if (-not $nsis) {
+            Write-Host "NSIS not on PATH; installing via Chocolatey..."
+            choco install nsis -y --no-progress
+          } else {
+            Write-Host "NSIS already available: $($nsis.Source)"
+          }
+
+      - name: Build NSIS installer (Windows)
+        if: matrix.os == 'windows-x64'
+        id: nsis-build
+        shell: pwsh
+        run: |
+          cd build/ci-windows
+          # CPack -G NSIS reads CPACK_* vars from cmake/BALLPackageConfig.cmake.
+          # Per-user install root (no admin); modernized for v1.7 (drop MSVC
+          # 2010-2015 hardcoding; English-only chrome).
+          cpack -G NSIS -C Release --verbose
+          $installer = Get-ChildItem -Filter "BALLView-*-installer.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if (-not $installer) {
+            # Fallback: CPack may emit a slightly different name if the
+            # CPACK_PACKAGE_FILE_NAME suffix logic doesn't apply.
+            $installer = Get-ChildItem -Filter "*.exe" -ErrorAction SilentlyContinue |
+              Where-Object { $_.Name -like "BALL*" -or $_.Name -like "*Setup*" } |
+              Select-Object -First 1
+          }
+          if (-not $installer) {
+            Write-Host "::error::NSIS installer .exe not produced by CPack"
+            Get-ChildItem -Filter "*.exe" | Format-Table Name,Length
+            exit 1
+          }
+          # Move the installer to the workspace root for predictable upload path.
+          $installerName = "BALLView-${{ steps.resolve.outputs.ref }}-windows-x64-installer.exe"
+          $installerDest = Join-Path $env:GITHUB_WORKSPACE $installerName
+          Move-Item -Path $installer.FullName -Destination $installerDest -Force
+          Write-Host "Installer produced: $installerName ($((Get-Item $installerDest).Length) bytes)"
+          "installer_name=$installerName" >> $env:GITHUB_OUTPUT
+          "installer_path=$installerDest" >> $env:GITHUB_OUTPUT
+
+      - name: Compute SHA256 for Windows installer (always-on integrity check)
+        if: matrix.os == 'windows-x64'
+        id: installer-sha
+        shell: pwsh
+        run: |
+          # SHA256 published in release body so users can verify the unsigned
+          # installer matches what GitHub Actions built — independent integrity
+          # anchor when Authenticode signing isn't available yet. See
+          # packaging/windows/README-SMARTSCREEN.md for the user-facing flow.
+          $hash = (Get-FileHash "${{ steps.nsis-build.outputs.installer_path }}" -Algorithm SHA256).Hash.ToLower()
+          Write-Host "SHA256: $hash"
+          "sha256=$hash" >> $env:GITHUB_OUTPUT
+          # Also write a sidecar file so the release job can read it later.
+          "$hash  ${{ steps.nsis-build.outputs.installer_name }}" | Out-File -FilePath "${{ steps.nsis-build.outputs.installer_path }}.sha256" -Encoding ascii -NoNewline
+
+      # =====================================================================
+      # Upload workflow artifacts.
+      #
+      # Order (Windows only — Phase 8b):
+      #   1. Upload portable .zip (macOS + Linux + Windows) — unconditional.
+      #   2. Upload unsigned installer .exe — captures the artifact-id used
+      #      by SignPath (the SignPath action takes a github-artifact-id
+      #      input pointing at an already-uploaded artifact).
+      #   3. SignPath step (gated) — submits the artifact-id to SignPath,
+      #      blocks on UI approval, downloads signed .exe.
+      #   4. Re-upload signed installer (gated) — same artifact name +
+      #      `overwrite: true` so downstream `download-artifact` sees the
+      #      signed version. Also re-emits the SHA256 sidecar.
+      # When the SignPath secret is absent, steps 3+4 skip and the unsigned
+      # installer uploaded at step 2 is what the release job picks up.
+      # =====================================================================
+      - name: Upload workflow artifact (portable .zip, macOS + Linux + Windows)
         uses: actions/upload-artifact@v6
         with:
           name: ${{ steps.resolve.outputs.asset }}
           path: ${{ steps.resolve.outputs.asset }}
           if-no-files-found: error
           retention-days: 30
+
+      - name: Upload workflow artifact (Windows NSIS installer .exe — unsigned)
+        if: matrix.os == 'windows-x64'
+        id: upload-unsigned-installer
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.nsis-build.outputs.installer_name }}
+          path: |
+            ${{ steps.nsis-build.outputs.installer_path }}
+            ${{ steps.nsis-build.outputs.installer_path }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      # ---------------------------------------------------------------------
+      # Phase 8b Task 3: signtool integration via SignPath Foundation GitHub
+      # Action — GATED on secret presence. When SIGNPATH_API_TOKEN is unset
+      # (current state: foundation review pending), the step skips silently
+      # and the unsigned installer ships per the Plan B deliverable. See
+      # .planning/phases/08b-packaging-windows/SECRETS-RUNBOOK.md for the
+      # secret-configuration procedure and the bus-factor recovery flow.
+      #
+      # The action takes the github-artifact-id of the unsigned installer
+      # uploaded above, submits to SignPath, waits for an admin to click
+      # "approve" in the foundation UI (intentional anti-supply-chain-attack
+      # control), and downloads the signed .exe into signed-installer/.
+      # ---------------------------------------------------------------------
+      - name: Sign installer via SignPath Foundation (Windows — gated on cert)
+        if: matrix.os == 'windows-x64' && env.SIGNPATH_API_TOKEN != ''
+        id: signpath-sign
+        env:
+          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+        uses: signpath/github-action-submit-signing-request@v1
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ secrets.SIGNPATH_ORG_ID }}
+          project-slug: 'ballview'
+          signing-policy-slug: 'release-signing'
+          artifact-configuration-slug: 'installer'
+          github-artifact-id: ${{ steps.upload-unsigned-installer.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: 'signed-installer'
+
+      - name: Recompute SHA256 + re-upload signed installer (Windows — gated)
+        if: matrix.os == 'windows-x64' && env.SIGNPATH_API_TOKEN != ''
+        shell: pwsh
+        run: |
+          $signed = Get-ChildItem -Path "signed-installer" -Filter "*.exe" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($signed) {
+            Move-Item -Path $signed.FullName -Destination "${{ steps.nsis-build.outputs.installer_path }}" -Force
+            Write-Host "Signed installer replaces unsigned: $($signed.Name) → ${{ steps.nsis-build.outputs.installer_name }}"
+            # Recompute SHA256 — the signed binary has a different hash than
+            # the unsigned one because Authenticode embeds the signature
+            # block into the .exe.
+            $hash = (Get-FileHash "${{ steps.nsis-build.outputs.installer_path }}" -Algorithm SHA256).Hash.ToLower()
+            "$hash  ${{ steps.nsis-build.outputs.installer_name }}" | Out-File -FilePath "${{ steps.nsis-build.outputs.installer_path }}.sha256" -Encoding ascii -NoNewline
+            Write-Host "SHA256 (signed): $hash"
+          } else {
+            Write-Host "::warning::SignPath step ran but no signed artifact found under signed-installer/"
+          }
+
+      - name: Re-upload signed installer artifact (Windows — gated)
+        if: matrix.os == 'windows-x64' && env.SIGNPATH_API_TOKEN != ''
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ steps.nsis-build.outputs.installer_name }}
+          path: |
+            ${{ steps.nsis-build.outputs.installer_path }}
+            ${{ steps.nsis-build.outputs.installer_path }}.sha256
+          if-no-files-found: error
+          retention-days: 30
+          overwrite: true
 
   release:
     name: Create GitHub Release
@@ -658,11 +808,33 @@ jobs:
 
       - name: List artifacts
         run: |
-          find artifacts -type f \( -name "*.zip" -o -name "*.dmg" \) -exec ls -lh {} \;
+          find artifacts -type f \( -name "*.zip" -o -name "*.dmg" -o -name "*.exe" \) -exec ls -lh {} \;
+
+      - name: Extract Windows installer SHA256 (Phase 8b — emit into release body)
+        id: win-sha
+        shell: bash
+        run: |
+          # Phase 8b: every release publishes the Windows installer SHA256 in
+          # the release body so end users can verify the unsigned binary
+          # matches what GitHub Actions built. See
+          # packaging/windows/README-SMARTSCREEN.md for the user-facing flow.
+          # If the .sha256 sidecar is missing (e.g., upstream NSIS step
+          # failed), emit the placeholder string — release-body emission
+          # still works; users see a clear "see artifact list" hint.
+          SHA_FILE=$(find artifacts -type f -name "*.sha256" -path "*windows-x64*" 2>/dev/null | head -1)
+          if [ -n "$SHA_FILE" ] && [ -f "$SHA_FILE" ]; then
+            SHA256=$(awk '{print $1}' "$SHA_FILE")
+            echo "win_sha256=$SHA256" >> "$GITHUB_OUTPUT"
+            echo "Windows installer SHA256: $SHA256"
+          else
+            echo "win_sha256=see artifact list (sha256 sidecar missing)" >> "$GITHUB_OUTPUT"
+            echo "::warning::No .sha256 sidecar found under artifacts/ for Windows installer"
+          fi
 
       - name: Create / update GitHub Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WIN_SHA256: ${{ steps.win-sha.outputs.win_sha256 }}
         shell: bash
         run: |
           REF="${{ steps.resolve.outputs.ref }}"
@@ -671,26 +843,32 @@ jobs:
             DRAFT_FLAG="--draft"
           fi
 
-          BODY=$(cat <<'EOF'
+          # Phase 8b: release body now references the SmartScreen README +
+          # publishes the installer SHA256 for integrity verification.
+          # Heredoc uses unquoted EOF so $WIN_SHA256 + $REF expand.
+          BODY=$(cat <<EOF
           Installers built from this tag.
 
-          - **macOS:** download the `.dmg`, double-click to mount, drag `BALLView.app` to `/Applications`. Signed + notarized (Phase 8a) — no Gatekeeper prompt expected on macOS 14+ / macOS 26+. If the cert is still pending procurement, the `.dmg` ships unsigned: right-click → Open → confirm on first launch, or run `xattr -dr com.apple.quarantine /Applications/BALLView.app` once.
-          - **Windows:** download the `.zip`, extract. Windows SmartScreen will warn — choose "More info → Run anyway". Signing is Phase 8b (SignPath).
+          - **macOS:** download the \`.dmg\`, double-click to mount, drag \`BALLView.app\` to \`/Applications\`. Signed + notarized (Phase 8a) — no Gatekeeper prompt expected on macOS 14+ / macOS 26+. If the cert is still pending procurement, the \`.dmg\` ships unsigned: right-click → Open → confirm on first launch, or run \`xattr -dr com.apple.quarantine /Applications/BALLView.app\` once.
+          - **Windows:** download the \`.exe\` installer (NSIS, per-user install to \`%LOCALAPPDATA%\\Programs\\BALLView\` — no admin/UAC required). Windows SmartScreen will warn on first run until the SignPath Foundation OSS signing cert lands (Phase 8b). Click **More info → Run anyway** to proceed. See [packaging/windows/README-SMARTSCREEN.md](https://github.com/BALL-Project/ball/blob/${REF}/packaging/windows/README-SMARTSCREEN.md) for the full guide + integrity verification flow.
+            **Windows installer SHA256:** \`${WIN_SHA256}\`
+            A portable \`.zip\` (extract-and-run, no installer) is also available for users who don't want a Start Menu entry.
 
-          Build from source: see `BUILD-macos.md` (macOS), the GitHub Actions CI workflow at the same tag for the Linux + Windows recipes.
+          Build from source: see \`BUILD-macos.md\` (macOS), the GitHub Actions CI workflow at the same tag for the Linux + Windows recipes.
 
           Linux: build from source — Linux installers are Phase 8c.
           EOF
           )
 
           # If the release doesn't exist yet, create it. Otherwise update assets.
-          # Collect both .zip (Windows) and .dmg (macOS, Phase 8a) into a
-          # single shell glob — Bash's nullglob handles the empty case if
-          # one platform's artifact is missing.
+          # Collect .zip (portable / macOS legacy), .dmg (macOS Phase 8a), and
+          # .exe (Windows installer Phase 8b) into a single shell glob —
+          # Bash's nullglob handles the empty case if one platform's artifact
+          # is missing.
           shopt -s nullglob
-          ASSETS=( artifacts/*/*.zip artifacts/*/*.dmg )
+          ASSETS=( artifacts/*/*.zip artifacts/*/*.dmg artifacts/*/*.exe )
           if [ ${#ASSETS[@]} -eq 0 ]; then
-            echo "::error::No artifacts found to upload (expected .zip and/or .dmg under artifacts/)"
+            echo "::error::No artifacts found to upload (expected .zip, .dmg, and/or .exe under artifacts/)"
             exit 1
           fi
 
