@@ -5,6 +5,13 @@
 // BALLView tutorial example
 // ------------------------
 // visualise the bounding box of a molecular structure
+//
+// Build status (v1.7):
+// This tutorial is shipped as source under doc/examples/TUTORIAL/ and is
+// NOT compiled by the main CMake build. It is intended as a worked example
+// referenced by doc/TUTORIAL/glBoundingBox.tex. To build it out-of-tree,
+// link against the installed libBALL + libVIEW with -lBALL -lVIEW and the
+// appropriate -I include path pointing at the BALL installation prefix.
 
 // BALL includes
 #include <BALL/common.h>
@@ -175,7 +182,13 @@ int main(int argc, char **argv)
 		rep->insert(**it);
 	}
   mainframe.insert(*rep);
-  mainframe.update(*rep);
+  // Refresh the Representation via the message bus. Note: MainControl::update()
+  // takes a Composite&, and Representation does NOT derive from Composite in the
+  // v1.7 tree — the historical `mainframe.update(*rep)` call was a latent type
+  // error. The modern idiom is to send a RepresentationMessage of type UPDATE.
+  RepresentationMessage* update_msg =
+    new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+  mainframe.sendMessage(*update_msg);
 
 	Stage stage;
 	stage.getCamera().setViewPoint(Vector3(0,0,0));	
