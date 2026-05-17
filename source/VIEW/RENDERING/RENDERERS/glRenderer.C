@@ -1156,9 +1156,17 @@ namespace BALL
 			// The legacy Qt4-era GL-widget format helper was removed. It did
 			// two things: convert to GL-native byte order and flip vertically.
 			// Format_RGBA8888 is GL byte order on little-endian (all targets);
-			// flipped(Qt::Vertical) supplies the vertical flip (Qt 6 replacement
-			// for the deprecated mirrored() no-arg form).
-			QImage gldata = pm.convertToFormat(QImage::Format_RGBA8888).flipped(Qt::Vertical);
+			// mirrored(false, true) supplies the vertical flip.
+			//
+			// IMPORTANT (Phase 999.22a fix follow-up): `flipped(Qt::Orientations)`
+			// is Qt 6.9+ — NOT available in our Qt 6.8 LTS floor (broke linux-x64
+			// + linux-arm64 + windows-x64 in CI run 25990564557; macOS passed
+			// because Homebrew has Qt 6.11). The 2-arg `mirrored(bool, bool)`
+			// form is NOT deprecated until later Qt versions and is the
+			// correct portable replacement for the deprecated no-arg
+			// `mirrored()` on Qt 6.8 LTS. When the project floor moves to
+			// Qt 6.9+, this can switch back to `flipped(Qt::Vertical)`.
+			QImage gldata = pm.convertToFormat(QImage::Format_RGBA8888).mirrored(false, true);
 
 			glPushAttrib(GL_BLEND);
 			glEnable(GL_BLEND);
