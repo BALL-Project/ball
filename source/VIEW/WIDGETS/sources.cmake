@@ -41,6 +41,13 @@ SET(SOURCES_LIST
 	inspector/sections/selectionSummarySection.C
 	inspector/sections/propertiesSection.C
 	inspector/sections/quickActionsSection.C
+	# Phase 999.44 Plan 04 — Representation tab (3 sections live,
+	# Label + Clipping deferred to 999.44-04b RC patch).
+	inspector/representationAdapter.C
+	inspector/sections/repHeaderSection.C
+	inspector/sections/modelSection.C
+	inspector/sections/coloringSection.C
+	inspector/sections/materialSection.C
 	# Phase 999.45 — Workspace consolidation: ProjectDock (left-rail
 	# tabified group of Structures/Reps/Datasets) + BottomDrawer
 	# (24px↔240px animated dock with Logs/FileObserver tabs). Both

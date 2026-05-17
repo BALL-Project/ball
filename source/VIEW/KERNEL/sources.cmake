@@ -31,11 +31,16 @@ SET(SOURCES_LIST
 	workspaceManager.C
 	configMigration.C
 	# Phase 999.44 — BALLView Refresh: *Controller extraction subtree.
-	# The exemplar StageController lands in this plan; 8 more controllers
-	# (Light/Camera/Stereo/Model/Coloring/Material/Label/Clipping) are
-	# enumerated in controllers/PATTERN.md and follow in the v1.7 RC
-	# patch cycle. Body gated by #ifdef BALL_UI_V2 — empty TU when OFF.
+	# The exemplar StageController landed in Plan 01; Plan 04 adds 5
+	# more read-only mirror Controllers for the Representation tab
+	# (Model/Coloring/Material/Label/Clipping). Body gated by
+	# #ifdef BALL_UI_V2 — empty TU when OFF.
 	controllers/stageController.C
+	controllers/modelController.C
+	controllers/coloringController.C
+	controllers/materialController.C
+	controllers/labelController.C
+	controllers/clippingController.C
 	# Phase 999.44 — Tools › Legacy Settings interim home helper.
 	# Static data — compiles in both BALL_UI_V2 cells. Mainframe wires
 	# the submenu under the ifdef in a follow-up plan.

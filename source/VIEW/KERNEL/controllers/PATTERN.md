@@ -36,15 +36,24 @@ end-to-end before adding a new Controller.
 
 | # | Controller            | Source dialog                                                           | Status                              |
 |---|-----------------------|-------------------------------------------------------------------------|-------------------------------------|
-| 1 | StageController       | `source/VIEW/DIALOGS/stageSettings.C` (720 LOC)                         | LANDED 999.44 (read-only mirror)    |
-| 2 | LightController       | `source/VIEW/DIALOGS/lightSettings.C` (538 LOC)                         | TODO(999.44-RC-patch)               |
-| 3 | CameraController      | `source/VIEW/DIALOGS/setCamera.C` (94 LOC)                              | TODO(999.44-RC-patch)               |
-| 4 | StereoController      | `source/VIEW/DIALOGS/stereoSettingsDialog.C` (159 LOC)                  | TODO(999.44-RC-patch)               |
-| 5 | ModelController       | `source/VIEW/DIALOGS/modelSettingsDialog.C` (385 LOC)                   | TODO(999.44-RC-patch)               |
-| 6 | ColoringController    | `source/VIEW/DIALOGS/coloringSettingsDialog.C` (878 LOC)                | TODO(999.44-RC-patch)               |
-| 7 | MaterialController    | `source/VIEW/DIALOGS/materialSettings.C` (280 LOC)                      | TODO(999.44-RC-patch)               |
-| 8 | LabelController       | `source/VIEW/DIALOGS/labelDialog.C` (227 LOC)                           | TODO(999.44-RC-patch)               |
-| 9 | ClippingController    | `source/VIEW/DIALOGS/clippingDialog.C` (119 LOC) + `setClippingPlane.C` (92 LOC) | TODO(999.44-RC-patch)               |
+| 1 | StageController       | `source/VIEW/DIALOGS/stageSettings.C` (720 LOC)                         | LANDED 999.44 Plan 01 (read-only)   |
+| 2 | LightController       | `source/VIEW/DIALOGS/lightSettings.C` (538 LOC)                         | TODO(999.44-05)                     |
+| 3 | CameraController      | `source/VIEW/DIALOGS/setCamera.C` (94 LOC)                              | TODO(999.44-05)                     |
+| 4 | StereoController      | `source/VIEW/DIALOGS/stereoSettingsDialog.C` (159 LOC)                  | TODO(999.44-05)                     |
+| 5 | ModelController       | `source/VIEW/DIALOGS/modelSettingsDialog.C` (385 LOC)                   | LANDED 999.44 Plan 04 (read-only)   |
+| 6 | ColoringController    | `source/VIEW/DIALOGS/coloringSettingsDialog.C` (878 LOC)                | LANDED 999.44 Plan 04 (read-only)   |
+| 7 | MaterialController    | `source/VIEW/DIALOGS/materialSettings.C` (280 LOC)                      | LANDED 999.44 Plan 04 (read-only)   |
+| 8 | LabelController       | `source/VIEW/DIALOGS/labelDialog.C` (227 LOC)                           | LANDED 999.44 Plan 04 (read-only)   |
+| 9 | ClippingController    | `source/VIEW/DIALOGS/clippingDialog.C` (119 LOC) + `setClippingPlane.C` (92 LOC) | LANDED 999.44 Plan 04 (read-only)   |
+
+## Mutation cut-over status
+
+- StageController — 999.44 Plan 06 (this phase).
+- All other Controllers — deferred to v1.7 RC patch cycle; sections
+  bind to read-only mirrors so the user sees live values but does not
+  yet drive mutation through the new path. The legacy dialogs
+  (reachable via Tools › Legacy Settings) own mutation during the
+  migration window.
 
 Total deferred LOC: ~3072 across 9 dialog files (8 controllers — Clipping merges the
 two clipping dialogs into one Controller per Handover §architecture).

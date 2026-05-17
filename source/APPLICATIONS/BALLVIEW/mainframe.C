@@ -26,6 +26,7 @@
 #	include <BALL/VIEW/WIDGETS/inspector/inspectorDock.h>
 #	include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
 #	include <BALL/VIEW/WIDGETS/inspector/selectionAdapter.h>
+#	include <BALL/VIEW/WIDGETS/inspector/representationAdapter.h>
 #	include <BALL/VIEW/KERNEL/legacySettingsHelper.h>
 #	include <QtCore/QSettings>
 #	include <QtCore/QDir>
@@ -82,6 +83,7 @@ namespace BALL
 			, inspector_dock_(0)
 			, hide_inspector_action_(0)
 			, selection_adapter_(0)
+			, representation_adapter_(0)
 #endif
 	{
 		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
@@ -255,6 +257,14 @@ namespace BALL
 		inspector_dock_->view()->attachSelectionTab(this);
 		selection_adapter_ = new VIEW::SelectionInspectorAdapter(
 			this, inspector_dock_->view());
+
+		// Phase 999.44 Plan 04 — Representation tab wiring (sub-PRs
+		// 4.3 + 4.4). Lazy-attach the Representation tab; spawn the
+		// RepresentationInspectorAdapter so each RepresentationMessage
+		// triggers a refresh of the rep list / active Representation.
+		inspector_dock_->view()->attachRepresentationTab();
+		representation_adapter_ = new VIEW::RepresentationInspectorAdapter(
+			this, inspector_dock_->view());
 #else
  		addDockWidget(Qt::BottomDockWidgetArea, log_view);
 		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
@@ -375,9 +385,12 @@ namespace BALL
 	Mainframe::~Mainframe()
 	{
 #ifdef BALL_UI_V2
-		// Phase 999.44 Plan 03 — destroy the selection adapter before
-		// the Inspector view it points at goes away (the view is owned
-		// by inspector_dock_ which Qt deletes via the QWidget tree).
+		// Phase 999.44 Plan 03/04 — destroy the bus adapters before
+		// the Inspector view they point at goes away (the view is
+		// owned by inspector_dock_ which Qt deletes via the QWidget
+		// tree).
+		delete representation_adapter_;
+		representation_adapter_ = 0;
 		delete selection_adapter_;
 		selection_adapter_ = 0;
 #endif

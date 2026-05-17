@@ -24,6 +24,7 @@ namespace BALL
 	{
 		class InspectorDock;
 		class SelectionInspectorAdapter;
+		class RepresentationInspectorAdapter;
 	}
 #endif
 
@@ -93,6 +94,10 @@ namespace BALL
 			/// forwards ControlSelectionMessage / NewSelectionMessage
 			/// into the Inspector Selection tab.
 			VIEW::SelectionInspectorAdapter*  selection_adapter_;
+			/// Phase 999.44 Plan 04: representation adapter that
+			/// listens for RepresentationMessage and updates the
+			/// Inspector Representation tab.
+			VIEW::RepresentationInspectorAdapter* representation_adapter_;
 #endif
 	};
 

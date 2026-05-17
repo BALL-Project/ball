@@ -37,6 +37,14 @@ namespace BALL
 		class PropertiesSection;
 		class QuickActionsSection;
 		class MainControl;
+		class Representation;
+		class RepHeaderSection;
+		class ModelSection;
+		class ColoringSection;
+		class MaterialSection;
+		class ModelController;
+		class ColoringController;
+		class MaterialController;
 
 		/**
 		 * Root content widget hosted inside the InspectorDock. Owns the
@@ -98,6 +106,31 @@ namespace BALL
 				 */
 				void setSelection(const std::list<Composite*>& selection);
 
+				/**
+				 * Phase 999.44 Plan 04 — Representation-tab population.
+				 * Constructs the Representation tab sections on first
+				 * call (lazy) and binds them to read-only mirror
+				 * Controllers. The active Representation feeds into
+				 * each Controller's setRepresentation slot.
+				 */
+				void attachRepresentationTab();
+
+				/**
+				 * Replace the Representation-tab content with the
+				 * given list of representations + the chosen active
+				 * Representation. Empty list restores the noRepresentation
+				 * empty state.
+				 */
+				void setRepresentations(const std::list<Representation*>& reps,
+				                        Representation* active);
+
+				/**
+				 * Phase 999.44 Plan 04 — Switch which Representation
+				 * the Model/Coloring/Material sections edit. Called by
+				 * the RepHeaderSection picker.
+				 */
+				void setActiveRepresentation(Representation* rep);
+
 			private Q_SLOTS:
 				void onTabChanged_(int index);
 				void onSectionToggled_(bool expanded);
@@ -115,6 +148,17 @@ namespace BALL
 				PropertiesSection*       selection_properties_;
 				QuickActionsSection*     selection_actions_;
 				bool                     selection_sections_added_;
+
+				// Phase 999.44 Plan 04 — Representation-tab sections +
+				// Controllers. Lazy-built in attachRepresentationTab.
+				RepHeaderSection*        rep_header_;
+				ModelSection*            model_section_;
+				ColoringSection*         coloring_section_;
+				MaterialSection*         material_section_;
+				ModelController*         model_controller_;
+				ColoringController*      coloring_controller_;
+				MaterialController*      material_controller_;
+				bool                     representation_sections_added_;
 		};
 
 	} // namespace VIEW

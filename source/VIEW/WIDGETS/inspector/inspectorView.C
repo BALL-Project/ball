@@ -14,6 +14,13 @@
 #include <BALL/VIEW/WIDGETS/inspector/sections/selectionSummarySection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/propertiesSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/quickActionsSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/repHeaderSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/modelSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/coloringSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/materialSection.h>
+#include <BALL/VIEW/KERNEL/controllers/modelController.h>
+#include <BALL/VIEW/KERNEL/controllers/coloringController.h>
+#include <BALL/VIEW/KERNEL/controllers/materialController.h>
 
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
@@ -50,7 +57,15 @@ namespace BALL
 				selection_summary_(nullptr),
 				selection_properties_(nullptr),
 				selection_actions_(nullptr),
-				selection_sections_added_(false)
+				selection_sections_added_(false),
+				rep_header_(nullptr),
+				model_section_(nullptr),
+				coloring_section_(nullptr),
+				material_section_(nullptr),
+				model_controller_(nullptr),
+				coloring_controller_(nullptr),
+				material_controller_(nullptr),
+				representation_sections_added_(false)
 		{
 			setObjectName("inspectorView");
 
@@ -228,6 +243,65 @@ namespace BALL
 
 			selection_summary_->updateForSelection(selection);
 			selection_properties_->updateForSelection(selection);
+		}
+
+		void InspectorView::attachRepresentationTab()
+		{
+			// Phase 999.44 Plan 04 — construct read-only mirror
+			// Controllers + sections for the Representation tab. The
+			// Controllers are owned by InspectorView and re-pointed at
+			// the active Representation via setActiveRepresentation().
+			if (model_controller_ != nullptr) return;
+
+			model_controller_    = new ModelController(nullptr, this);
+			coloring_controller_ = new ColoringController(nullptr, this);
+			material_controller_ = new MaterialController(nullptr, this);
+
+			rep_header_       = new RepHeaderSection(body_);
+			model_section_    = new ModelSection(model_controller_, body_);
+			coloring_section_ = new ColoringSection(coloring_controller_, body_);
+			material_section_ = new MaterialSection(material_controller_, body_);
+
+			// The header's picker drives setActiveRepresentation.
+			connect(rep_header_, &RepHeaderSection::representationPicked,
+			        this, &InspectorView::setActiveRepresentation);
+		}
+
+		void InspectorView::setRepresentations(const std::list<Representation*>& reps,
+		                                       Representation* active)
+		{
+			if (model_controller_ == nullptr) attachRepresentationTab();
+
+			if (reps.empty())
+			{
+				if (representation_sections_added_)
+				{
+					body_->setEmptyState(InspectorTabs::TabIndex::Representation,
+					                     InspectorEmptyState::forNoRepresentation(body_));
+					representation_sections_added_ = false;
+				}
+				setActiveRepresentation(nullptr);
+				return;
+			}
+
+			if (!representation_sections_added_)
+			{
+				addSection(InspectorTabs::TabIndex::Representation, rep_header_);
+				addSection(InspectorTabs::TabIndex::Representation, model_section_);
+				addSection(InspectorTabs::TabIndex::Representation, coloring_section_);
+				addSection(InspectorTabs::TabIndex::Representation, material_section_);
+				representation_sections_added_ = true;
+			}
+
+			rep_header_->updateRepresentations(reps, active);
+			setActiveRepresentation(active);
+		}
+
+		void InspectorView::setActiveRepresentation(Representation* rep)
+		{
+			if (model_controller_)    model_controller_->setRepresentation(rep);
+			if (coloring_controller_) coloring_controller_->setRepresentation(rep);
+			if (material_controller_) material_controller_->setRepresentation(rep);
 		}
 
 	} // namespace VIEW
