@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "_comment": "Phase 999.43 — extracted from the legacy aboutDialog.ui hardcoded label. Loaded by AboutDialog::loadAuthors_() via BALL_DATA_PATH lookup. Append new contributors here in alphabetical-by-surname-within-cohort order (current order matches the historical .ui list).",
+  "authors": [
+    "Anna Katharina Hildebrandt",
+    "Thomas Kemmer",
+    "Stefan Nickels",
+    "Daniel Stöckel",
+    "Philipp Thiel",
+    "Oliver Kohlbacher",
+    "Hans-Peter Lenhof",
+    "Andreas Hildebrandt"
+  ]
+}
