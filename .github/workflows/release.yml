@@ -622,11 +622,31 @@ jobs:
           fi
 
           # Run linuxdeploy with the Qt plugin.
+          # Phase 8c part-2 bugfix (v1.7.0-rc1 post-mortem, 2026-05-18):
+          # `cmake --install` puts libBALL.so.* + libVIEW.so.* under
+          # AppDir/usr/lib/x86_64-linux-gnu/ (the Debian/Ubuntu multiarch
+          # path inferred from GNUInstallDirs), but linuxdeploy's standard
+          # search root is AppDir/usr/lib/ only — it does NOT recurse into
+          # the multiarch subdir, so it fails with
+          #   ERROR: Could not find dependency: libVIEW.so.1.6
+          # Two fixes are needed:
+          #   1. Export LD_LIBRARY_PATH so linuxdeploy's ldd-style probe
+          #      finds the SOs at all.
+          #   2. Pass each .so explicitly via `--library` so linuxdeploy
+          #      copies them into the AppImage payload (LD_LIBRARY_PATH
+          #      alone resolves the symbol but doesn't trigger bundling).
+          MULTIARCH_LIB="$APPDIR/usr/lib/$(uname -m)-linux-gnu"
+          export LD_LIBRARY_PATH="$MULTIARCH_LIB:${LD_LIBRARY_PATH:-}"
+          LIB_FLAGS=()
+          for so in "$MULTIARCH_LIB"/libBALL.so.* "$MULTIARCH_LIB"/libVIEW.so.*; do
+            [ -f "$so" ] && LIB_FLAGS+=(--library "$so")
+          done
           cd "$RUNNER_TEMP"
           "$RUNNER_TEMP/ld/linuxdeploy.AppImage" \
             --appdir "$APPDIR" \
             --desktop-file "$GITHUB_WORKSPACE/packaging/linux/BALLView.desktop" \
             --icon-file "$GITHUB_WORKSPACE/packaging/linux/BALLView.svg" \
+            "${LIB_FLAGS[@]}" \
             --plugin qt \
             --output appimage
 
