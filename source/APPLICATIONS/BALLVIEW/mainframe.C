@@ -28,6 +28,10 @@
 #	include <BALL/VIEW/WIDGETS/inspector/selectionAdapter.h>
 #	include <BALL/VIEW/WIDGETS/inspector/representationAdapter.h>
 #	include <BALL/VIEW/KERNEL/legacySettingsHelper.h>
+// Phase 999.46 — CommandPalette (Cmd/Ctrl+K) + CommandRegistry.
+#	include <BALL/VIEW/WIDGETS/commandPalette.h>
+#	include <BALL/VIEW/KERNEL/commandRegistry.h>
+#	include <QtGui/QShortcut>
 #	include <QtCore/QSettings>
 #	include <QtCore/QDir>
 #	include <QtWidgets/QStatusBar>
@@ -446,6 +450,24 @@ namespace BALL
 																							SLOT(clearSelection()), description, QKeySequence(),
 																							UIOperationMode::MODE_ADVANCED);
 
+#ifdef BALL_UI_V2
+		// Phase 999.46 Task 5 (Handover §6.3) — CommandPalette
+		// floating sheet. Construct after all menu entries are
+		// registered with the CommandRegistry so the first open()
+		// already shows the full command surface.
+		//
+		// Shortcut: Ctrl+K on Linux/Windows; Qt::CTRL translates
+		// to ⌘K on macOS automatically. We use QShortcut with
+		// Qt::ApplicationShortcut so the palette opens regardless
+		// of which widget has focus.
+		{
+			auto* palette = new VIEW::CommandPalette(this);
+			palette->setObjectName("commandPalette");
+			auto* sc = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_K), this);
+			sc->setContext(Qt::ApplicationShortcut);
+			connect(sc, &QShortcut::activated, palette, &VIEW::CommandPalette::open);
+		}
+#endif
 
  		qApp->installEventFilter(this);
 

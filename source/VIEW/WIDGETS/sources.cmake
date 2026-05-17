@@ -64,6 +64,9 @@ SET(SOURCES_LIST
 	SDWidget.C
 	testFramework.C
 	textEditorWidget.C
+	# Phase 999.46 (Handover §6.3) — CommandPalette. Whole TU gated
+	# behind #ifdef BALL_UI_V2; OFF cell produces an empty TU.
+	commandPalette.C
 )
 
 IF(BALL_HAS_QTWEBENGINE)
