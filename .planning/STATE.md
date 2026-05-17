@@ -24,9 +24,9 @@ progress:
 
 ## Current Position
 
-Phase: v1.6.2 release-tag pre-flight regression fix
-Plan: 1 of 1 (inline)
-Status: Waiting on CI run 25982872250 (in_progress, cold cmake-tree cache by design)
+Phase: v1.7 Wave 4 — BALLView Refresh
+Plan: 999.43-01 COMPLETE (shared widgets + AboutDialog rewrite + 10-dialog QSS hook + IconBrowser dev tool)
+Status: Phase 999.43 complete; unblocks parallel dispatch of 999.44 (Inspector — hard-depends on 4 shared widgets) ∥ 999.45 (Workspace consolidation, different file tree)
 Last activity: 2026-05-17
 
 ## Performance Metrics
@@ -81,6 +81,7 @@ Last activity: 2026-05-17
 | Phase 09-test-suite-triage P01 | 110min | 6 tasks | 8 files |
 | Phase 999.34-windows-test-gatekeeper P01 | ~45min (dominated by parallel-agent 999.42 CI cancellation churn — push-routed via temp branch to avoid bundling OOS commits) | 5 tasks | 5 files (2 workflow + 2 docs + test/CMakeLists fine-penalty note) + 2 created (PLAN, SUMMARY) |
 | Phase 999.42-theming-palette-removal P01 | ~75min (palette strip + ThemedIconEngine + IconRegistry + 22 call-site migration + 3 XPM array deletion + 12 audits/breadcrumbs/deferrals; concurrent 999.34 agent caused 1 cherry-pick rebase round midway, surfaced not reverted per OOS-feedback) | 13 tasks (12 planned + 9c) | 36 files (11 created [engine + registry + 3 svgs + 4 inventory/script + 3 audit docs]; 23 modified [7 .ui + 8 call-site .C + 3 XPM cleanups + theme.qrc + sources.cmake + iconLoader.{h,C} + iconRegistry.C + mainframe.C + 3 .h]; 2 deleted [icons.{h,C}]) |
+| Phase 999.43-simple-dialog-cleanup P01 | ~35min (4 shared widgets [SectionHeader + FormRow + LabeledSlider + SwatchButton — load-bearing for 999.44 Inspector]; AboutDialog hand-coded rewrite [~180 LOC] + authors.json extraction + aboutDialog.ui deleted; 10 simple dialogs get `ballviewDialog` dynamic property QSS hook; shortcutDialog search field already existed end-to-end — Refresh-language polish [placeholderText + clearButtonEnabled] instead of redundant new wiring; IconBrowser dev tool gated on BALL_UI_V2 && !NDEBUG; local-verified both UI_V2=ON and UI_V2=OFF cells warning-clean) | 11 tasks + PLAN + SUMMARY | 33 files (16 created [4 widget header+source pairs = 8, AboutDialog .h+.C, IconBrowser .h+.C, authors.json, 3 SVGs, PLAN]; 16 modified [sources.cmake + theme.qrc + BALLVIEW CMakeLists + mainframe.{h,C} + 10 dialog .ui files + ROADMAP + STATE]; 1 deleted [aboutDialog.ui]) |
 
 ## Accumulated Context
 

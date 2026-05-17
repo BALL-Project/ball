@@ -1987,7 +1987,7 @@ Plans:
 **Plans:** 1 plan
 - [x] 999.42-01-PLAN.md — palette strip + ThemedIconEngine + IconRegistry + 22 call-site migration + 3 XPM array deletion (17 commits)
 
-### Phase 999.43: BALLView Refresh — Simple-dialog cleanup + shared widget set (Handover Phase 3) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.43: BALLView Refresh — Simple-dialog cleanup + shared widget set (Handover Phase 3) (COMPLETE 2026-05-17)
 
 **Goal:** Apply the new design system + idiom to the small, low-risk dialogs first AND ship the shared widget set that Phase 999.44 Inspector hard-depends on. Build muscle memory before the Inspector overhaul.
 
@@ -2028,12 +2028,16 @@ Plans:
 - No regression in `Tab` order (verified with keyboard-only navigation).
 - All `.ts` translations re-validated; missing strings re-added with English fallback.
 
-**Estimated effort:** ~1.5 weeks (was ~1-1.5; the shared-widget set adds ~2-3 days but pays back fully into 999.44 sequencing).
+**Estimated effort:** ~1.5 weeks (was ~1-1.5; the shared-widget set adds ~2-3 days but pays back fully into 999.44 sequencing). **Actual:** ~35 minutes (much smaller real-world surface — shared widgets are ~50-90 LOC each per spec, AboutDialog rewrite ~180 LOC including the authors.json loader, dialog QSS hook was a one-line dynamic-property add per file, the shortcutDialog search field already existed end-to-end so only polish was needed, IconBrowser shipped minimal per the spec's "optional debug dialog" framing).
 
-**Plans:** 0.
+**Plans:** 1 plan
+- [x] 999.43-01-PLAN.md — 4 shared widgets + AboutDialog rewrite + 10-dialog QSS hookup + shortcutDialog polish + IconBrowser dev tool (12 commits)
 
-Plans:
-- [ ] TBD (promote with /gsd-plan-phase after 999.42 lands)
+**Scope-trims forwarded (with breadcrumbs in 999.43-01-SUMMARY.md):**
+- Deep page-rewrite of each Preferences page as a hand-coded QWidget subclass using SectionHeader + FormRow → forwarded to **Phase 999.46** (Tools › Legacy Settings retirement — natural home for the deep rewrites since it owns the legacy migration).
+- `setCamera` / `setClippingPlane` → Inspector panel conversion → **Phase 999.44** (already explicit per ROADMAP lines 2018-2019).
+- IconBrowser theme.qrc auto-scan + CI missing-icon gate → **Phase 999.46** (build-system change better landed with the dev-tools polish pass).
+- `_test.C` unit tests for 4 shared widgets → **Phase 999.46** (BALL test framework needs QApplication+display setup that's better landed with proper widget-test infrastructure work).
 
 ### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
