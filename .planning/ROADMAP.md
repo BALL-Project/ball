@@ -286,20 +286,21 @@ Plans:
 
 | # | Question | Answer | Vs Handover rec |
 |---|---|---|---|
-| Q1 | macOS menu bar | **Keep inline menubar** (cross-platform consistency) | DEPARTS (rec: native global) |
-| Q2 | Classic 5-dock workspace | **Retire after one release** (v1.8 = both with sunset; v1.9 removes Classic) | matches rec |
+| Q1 | macOS menu bar | **Keep inline menubar** (cross-platform consistency); `QAction::setMenuRole(...Standard)` for About/Prefs/Quit is fine (per-action standard-role plumbing, not full global-menubar mode) | DEPARTS (rec: native global) |
+| Q2 | Classic 5-dock workspace | **Retire after one release** — Phase 999.45 ships both with picker; **Phase 999.49 deletes Classic** post-flag-removal in same v1.7 RC cycle (re-pinned 2026-05-17 audit pull-in from v1.9 → v1.7) | matches rec |
 | Q3 | Theme picker scope | **Single neutral theme only** (no Light/Dark/Follow-System) | DEPARTS (rec: Follow-System) |
-| Q4 | Translation churn | **Accept; community round during v1.8 cycle** | matches rec |
+| Q4 | Translation churn | **Accept; community round during v1.7 cycle** (re-pinned 2026-05-17 audit pull-in from v1.8 → v1.7) | matches rec |
 
-**Impacts (propagated to ROADMAP Phases 999.42/.43/.46/.48 + v1.7-PLAN.md Wave 4):**
+**Impacts (propagated to ROADMAP Phases 999.42/.43/.44/.45/.46/.47/.48/.49 + v1.7-PLAN.md Wave 4):**
 
-- **Q1 → Phase 999.46 (menu reorg + command palette, v1.8):** skip `QAction::setMenuRole` plumbing. Cross-platform-consistent menu structure stays.
-- **Q2 → Phases 999.44 + 999.45 (Inspector + Workspace, v1.8):** design accommodates Classic-coexistence period. v1.8 ships both layouts with picker; v1.9 deletes Classic.
-- **Q3 → Phases 999.42 + 999.43 (v1.7 tail) + 999.48 (v1.8):**
-  - 999.42 + 999.43 still ship in v1.7 tail — value reframes from "unlock dark mode" to "design-system consistency + OS palette inheritance" (palette removal still useful even single-theme; Qt applies system widget styling natively).
-  - 999.48 sub-deliverable "dark-mode finalize" drops (no dark mode to finalize). Phase scope shrinks.
+- **Q1 → Phase 999.46 (menu reorg + command palette, v1.7 Wave 4):** skip full QMenuBar global-menubar mode. DO `QAction::setMenuRole(QAction::AboutRole / PreferencesRole / QuitRole)` for the 3 standard items on macOS (this is per-action standard-role plumbing — fully compatible with the inline-menubar Q1 answer).
+- **Q2 → Phases 999.44 + 999.45 + 999.49 (Inspector + Workspace + Classic-delete, all v1.7 Wave 4):** 999.44 design accommodates Classic-coexistence period; 999.45 ships Default/Classic/Focused picker; **999.49 deletes Classic** in the same v1.7 RC cycle post-999.48 flag removal.
+- **Q3 → Phases 999.42 + 999.43 + 999.48 (all v1.7 Wave 4):**
+  - 999.42 + 999.43 ship — value reframes from "unlock dark mode" to "design-system consistency + OS palette inheritance" (palette removal still useful even single-theme; Qt applies system widget styling natively).
+  - 999.48 sub-deliverable "dark-mode finalize" drops AND §8.6 theme-picker UI drops (no dark mode to finalize, no Light/Dark/Follow-System picker).
   - 999.40 ThemeManager built single-theme — `QStyleHints::colorScheme()` reactor wired but inactive (no harm; future-proofs if maintainer reverses Q3).
-- **Q4 → Phase 999.46 (v1.8) timing:** v1.8 ships English + best-effort de_DE; community translation round during v1.8 cycle; v1.8.x point release picks up completed translations. No v1.8 ship-date blocker.
+  - **999.42 ThemedIconEngine state-tints (Normal/Active/Selected/Disabled) are NOT theme-tints and Q3 does NOT block them.**
+- **Q4 → Phase 999.46 (v1.7 Wave 4) timing:** v1.7 ships English + best-effort de_DE; community translation round during v1.7 cycle; v1.7.x point releases pick up completed translations. No v1.7 ship-date blocker. `[i18n]` commit-prefix discipline.
 
 **Original 4 questions (preserved for history):**
   1. macOS menu bar — keep inline, or use the native global menubar via `QAction::setMenuRole`?
@@ -1890,22 +1891,22 @@ Plans:
 
 ### Phase 999.40: BALLView Refresh — Design system & QSS foundation (Handover Phase 0) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Land the design-token vocabulary, base QSS stylesheet, and `BALL_UI_V2` build-flag plumbing that every later BALLView Refresh phase depends on. **No user-visible change** — `BALL_UI_V2` defaults OFF in this phase; the foundation is dormant until 999.41/.42/.43 (v1.7 tail) and 999.44-.48 (v1.8) opt in.
+**Goal:** Land the design-token vocabulary, base QSS stylesheet, and `BALL_UI_V2` build-flag plumbing that every later BALLView Refresh phase depends on. **No user-visible change** — `BALL_UI_V2` defaults OFF in this phase; the foundation is dormant until 999.41/.42/.43/.44/.45/.46/.47 opt in (per audit pull-in: all in v1.7 Wave 4); 999.48 flips the default ON and then REMOVES the flag entirely.
 
-**Why now (v1.7 tail-end, not v1.8):** User direction 2026-05-17 — "roll the BALLView refresh into the tail-end of v1.7." Foundation is maintainer-decision-independent (Q1-Q4 don't apply to 999.40) so it ships unblocked. Land the substrate during v1.7 packaging/auto-update lead time; v1.8 then flips `BALL_UI_V2=ON` and lands the heavier UI phases (Inspector, Workspace, Menus, Onboarding, a11y).
+**Why now (v1.7 Wave 4):** User direction 2026-05-17 — "roll the BALLView refresh into the tail-end of v1.7" + audit pull-in "keep everything in 1.7." Foundation is maintainer-decision-independent (Q1-Q4 don't apply to 999.40) so it ships unblocked. Lands the substrate during v1.7 packaging/auto-update lead time; subsequent phases consume it; 999.48 flips ON-default + removes the flag.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/00-principles.md` — the Handover's Phase 0 doc has the full scope, design steps, file list, and acceptance criteria. Drops in with light adaptation.
 
 **Scope (in):**
 - `include/BALL/VIEW/KERNEL/theme/tokens.h` — design tokens as a single C++ header (color, spacing, type scale)
-- `source/VIEW/KERNEL/theme/theme.qrc` — Qt resource bundling light + dark `.qss` stylesheets
-- `source/VIEW/KERNEL/theme/ThemeManager.{h,C}` — singleton that loads the right stylesheet at startup, reacts to `QStyleHints::colorScheme()` changes (Qt 6.5+; we're on Qt 6.8 LTS)
-- `BALL_UI_V2` CMake option, default OFF
+- `source/VIEW/KERNEL/theme/theme.qrc` — Qt resource bundling the single neutral `.qss` stylesheet (per Q3)
+- `source/VIEW/KERNEL/theme/ThemeManager.{h,C}` — singleton that loads the stylesheet at startup; `QStyleHints::colorScheme()` reactor wired but inactive per Q3 single-neutral-theme (future-proofs if Q3 reverses)
+- `BALL_UI_V2` CMake option, default OFF (flipped ON in 999.48, then removed in 999.48 §8.7)
 - Behind-flag wiring: when `BALL_UI_V2=ON`, ThemeManager init runs in BALLView main; when OFF, classic palette stays
 
 **Scope (out):**
-- Any `.ui` file edits (Handover Phase 1 = Phase 999.42, conditional v1.7 OR v1.8)
-- Icon replacement (Handover Phase 2 = Phase 999.41 v1.7)
+- Any `.ui` file edits (Handover Phase 1 = Phase 999.42)
+- Icon replacement (Handover Phase 2 = Phase 999.41 / carry-overs in 999.42)
 - Any visible change in the OFF default
 
 **Hard prerequisite:** Qt 6.5+ for `QStyleHints::colorScheme()` — **satisfied** since v1.6.2 (Qt 6.8 LTS floor).
@@ -1923,7 +1924,7 @@ Plans:
 
 **Goal:** Replace the XPM bitmap icon system with an SVG-based, theme-aware, HiDPI-correct icon pipeline. Pure mechanical asset work; no UX decisions; no maintainer dependencies.
 
-**Status (2026-05-17):** COMPLETED — single PLAN, 6 implementation commits + 1 docs amendment + 1 final docs commit, ON + OFF macOS builds green. v1.7 subset only: build-flag-gated SVG-preferred wedge inside `IconLoader::loadIcon_` rather than replacing all 28 call sites. 14 Lucide v0.460.0 SVGs vendored under `source/VIEW/KERNEL/theme/icons/lucide/` and aliased onto BALLView's existing icon-key namespace via the 999.40 `theme.qrc`. Toolbar size 22→20 logical px under `BALL_UI_V2`. ThemedIconEngine with per-DPR tint cache deferred to v1.8 (gated on maintainer-Q3 revisit). XPM bucky + remaining bitmap-window-icon cleanup forwarded to 999.42 + Phase 8. See [999.41-01-SUMMARY.md](phases/999.41-svg-icons-hidpi/999.41-01-SUMMARY.md).
+**Status (2026-05-17):** COMPLETED — single PLAN, 6 implementation commits + 1 docs amendment + 1 final docs commit, ON + OFF macOS builds green. v1.7 subset only: build-flag-gated SVG-preferred wedge inside `IconLoader::loadIcon_` rather than replacing all 28 call sites. 14 Lucide v0.460.0 SVGs vendored under `source/VIEW/KERNEL/theme/icons/lucide/` and aliased onto BALLView's existing icon-key namespace via the 999.40 `theme.qrc`. Toolbar size 22→20 logical px under `BALL_UI_V2`. **Carry-overs (per 2026-05-17 audit) all forwarded to 999.42, not v1.8:** ThemedIconEngine with state-tint cache (Normal/Active/Selected/Disabled — NOT theme tints; Q3 does NOT block this), 28 `IconLoader::getIcon` call-site rewrites, XPM array deletion (`bucky_64x64_xpm` + 2 others), `.icns`/`.ico` regen. See [999.41-01-SUMMARY.md](phases/999.41-svg-icons-hidpi/999.41-01-SUMMARY.md).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/02-phase-icons.md`.
 
@@ -1935,10 +1936,10 @@ Plans:
 - Qt6::Svg linked into VIEW (unconditional, link surface uniform across flag values)
 - `IconLoader::loadIcon_` SVG-preferred branch under `#ifdef BALL_UI_V2` (zero call-site churn; PNG fallback intact)
 - Toolbar size 22→20 logical px at `mainframe.C:295` under `#ifdef BALL_UI_V2`
-- TODO breadcrumbs at `icons.h`, `iconLoader.h`, `iconLoader.C` for 999.42 + v1.8 + Phase 8
+- TODO breadcrumbs at `icons.h`, `iconLoader.h`, `iconLoader.C` for 999.42 (carry-overs absorbed there per audit) + Phase 8 packaging
 
 **Scope (forwarded):**
-- ThemedIconEngine (per-DPR tint cache, mode-aware tints) → v1.8 (depends on Q3 revisit)
+- ThemedIconEngine (per-DPR tint cache, state-aware tints — Normal/Active/Selected/Disabled, NOT theme tints) → **999.42 carry-over** (re-pinned from v1.8 per 2026-05-17 audit; Q3 does NOT block state tints since they're interaction-state not theme)
 - Replacing remaining XPM uses (`bucky_64x64_xpm`, `mini_ray_xpm_`, `simulation_running_xpm_`) → 999.42 + Phase 8
 - `.icns`/`.ico` regeneration + app icon refresh → Phase 8 packaging
 - Linux/Windows smoke builds → next Wave-4 phase (this phase was macOS-only per orchestrator scope)
@@ -2278,25 +2279,115 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.46 lands)
 
-### Phase 999.48: BALLView Refresh — Accessibility + `BALL_UI_V2` default flip (Handover Phase 8, scope-reduced) (BACKLOG · TARGETED FOR v1.8 · LAST UI PHASE)
+### Phase 999.48: BALLView Refresh — Accessibility + `BALL_UI_V2` default flip + flag REMOVAL + legacy file DELETION (Handover Phase 8, scope-reduced) (BACKLOG · TARGETED FOR v1.7 WAVE 4 · LAST UI PHASE BEFORE 999.49)
 
-**Goal:** Close out the revitalization — harden accessibility, add per-user font scaling, audit tab order, ship the remaining quality-of-life details. Also: flip `BALL_UI_V2=ON` as default, making v1.8 the first release where the new UI is the new normal.
+**Goal:** Close out the revitalization — harden accessibility, add per-user font scaling, audit tab order, ship the remaining quality-of-life details. **Three distinct in-phase steps:** (a) flip `BALL_UI_V2=ON` as default; (b) per Handover §8.7 REMOVE the flag entirely (delete all `#ifdef BALL_UI_V2` pairs); (c) per Handover §8.8 DELETE the 9 named legacy `.{C,h,ui}` files that the Inspector replaced.
 
-**Scope-reduced 2026-05-17:** maintainer-Q3 answer (single neutral theme) drops the original "finalize dark mode" sub-deliverable — there's no dark mode to finalize. ThemeManager (built in 999.40) stays single-theme; `QStyleHints::colorScheme()` reactor is wired but inactive. Phase scope shrinks from ~1-2 weeks to ~1 week.
+**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4 per "keep everything in 1.7." Scope-reduced 2026-05-17 per Q3: drops "dark-mode finalize" + drops "theme picker UI" sub-deliverables (no dark mode, no Light/Dark/Follow-System UI per Q3). `QStyleHints::colorScheme()` reactor stays wired but inactive (future-proofs if Q3 reverses).
 
-**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/08-phase-a11y.md` (with the dark-mode finalize sub-section treated as out-of-scope per Q3).
+**Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/08-phase-a11y.md` (with §8.6 theme picker DROPPED per Q3; dark-mode finalize sub-section also DROPPED per Q3).
 
 **Depends on:** every other UI Refresh phase (999.40-999.47).
 
-**Estimated effort:** ~1 week (was ~1-2 weeks; dark-mode finalize drop saves ~half).
+**Scope (a11y core — Handover §8.1, §8.2):**
+- **Tab-order audit** through every dialog + main window. `QWidget::setTabOrder` deterministic order: section header (focusable for Space-to-collapse) → body controls L-R T-B → footer actions.
+- **`source/VIEW/test/tabOrder_test.C`** — walks the tab chain via `focusNextChild()` and asserts the order matches a per-dialog manifest.
+- **`QAccessible` roles on 4 named custom widgets:** `SwatchButton` → `QAccessible::Button` (name "Color: <hex>"); `LabeledSlider` → `QAccessible::Slider` (name from `label`); `SectionHeader` → `QAccessible::Heading` (level 2); `InspectorSection` → `QAccessible::Section` (name from title). (WelcomeScreen cards: `QAccessible::ListItem`.)
+
+**Scope (text-size pref — Handover §8.3):**
+- Add to `Preferences › Appearance`: **Radio: Normal (100%) / Large (115%) / Extra Large (130%)**.
+- Applies via `qApp->setFont(...)` on the base font. **Persistence schema:** `~/.BALLView` `[Appearance] textScale=` (integer percent or enum).
+- Test at 130% that: 3D scene unaffected; Inspector + Project dock fit at min window size (1280×800); Welcome screen reflows.
+
+**Scope (contrast check — Handover §8.4):**
+- **`revitalization/scripts/contrast-check.py`** — reads token pairs (foreground/background combinations from `data/BALLView/theme/theme.qss`) and asserts each pair meets **WCAG 2.1 AA: 4.5:1 for body, 3:1 for large text and UI components.**
+- Note: Q3-driven single-theme scope means we run the check against the single neutral theme, not theme-light + theme-dark.
+- Record any token adjustments in `revitalization/inventory/contrast-changes.md`.
+
+**Scope (tooltip audit + CI lint — Handover §8.5):**
+- For every `QAction` + every tool button: `setToolTip(QString("%1 (%2)").arg(text, shortcut.toString(QKeySequence::NativeText)))` + `setStatusTip(<longer one-line hint>)`.
+- **CI tooltip-lint script** — walks the source tree counting `addAction(...)` calls without paired `setToolTip` and fails CI if any new ones land.
+
+**Scope (THE FLIP — Handover §8.7, step (a)):**
+- **`BALL_UI_V2=ON` becomes the CMake default.** Edit `CMakeLists.txt` so `option(BALL_UI_V2 ... ON)`.
+- Release-note item: *"BALLView 1.7 ships with the revitalized UI as default. The legacy UI flag is being removed in this same release."*
+
+**Scope (THE REMOVAL — Handover §8.7, step (b)) — explicitly distinct from the FLIP:**
+- **Delete all `#ifdef BALL_UI_V2` / `#endif` pairs** in every source file: replace each with the new-UI branch (delete the else). Sources: every file the 999.40-999.47 phases touched while behind the flag.
+- **Delete the `option(BALL_UI_V2 ...)` block in `CMakeLists.txt`.**
+- Grep-asserted: `grep -r "BALL_UI_V2" source/ include/ CMakeLists.txt` returns 0 matches (test fixtures excepted).
+- Drop the `ui_v2: [ON, OFF]` axis from `.github/workflows/ci.yml` (the dynamically-computed matrix; the OFF path no longer exists).
+
+**Scope (THE DELETION — Handover §8.8) — 9 named legacy files:**
+- Delete the following `.{C,h,ui}` triples (and their `sources.cmake` entries):
+  1. `displayProperties.{C,h,ui}`
+  2. `modelSettingsDialog.{C,h,ui}`
+  3. `materialSettings.{C,h,ui}`
+  4. `lightSettings.{C,h,ui}`
+  5. `stageSettings.{C,h,ui}`
+  6. `stereoSettingsDialog.{C,h,ui}`
+  7. `clippingDialog.{C,h,ui}`
+  8. `coloringSettingsDialog.{C,h,ui}`
+  9. `labelDialog.{C,h,ui}` (functionality folded into Inspector LabelSection)
+- **Delete `Tools › Legacy Settings` submenu entries + the submenu itself** (the interim home added by 999.44 sub-PR 4.6).
+- **Shared controller code extracted in 999.44 STAYS** — only the view layer is deleted.
+
+**Scope (DROPPED per Q3):**
+- **§8.6 Theme picker UI EXPLICITLY DROPPED** per Q3 single-neutral-theme. Re-affirming here so a future planner doesn't add it back from the Handover doc.
+
+**Acceptance criteria:**
+- WCAG 2.1 AA contrast pass on the single neutral theme.
+- Keyboard-only walkthrough: load PDB → change representation → apply coloring → save image — all without mouse.
+- All custom widgets expose appropriate `QAccessible` roles (verified via `QAccessibleWidget` introspection in `tabOrder_test.C`).
+- Text-size pref scales UI without clipping at 130% on a 1280×800 window.
+- **No `BALL_UI_V2` references remain anywhere in the tree** (flag-REMOVAL acceptance).
+- Legacy settings dialog files removed; `grep -r "ModelSettingsDialog" source/` matches only the new Inspector section's symbol references.
+- All three CI platforms green; CI tooltip-lint passing; `ui_v2` axis dropped from ci.yml.
+
+**Estimated effort:** ~1.5 weeks (was ~1; dark-mode finalize + theme picker drops save time, but the 3-step a/b/c sequence + 9-file deletion + ci.yml axis drop add it back).
 
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (v1.8 closing phase; flips BALL_UI_V2 default ON)
+- [ ] TBD (last UI phase before 999.49 Classic-delete; flips BALL_UI_V2 default ON, then removes the flag entirely)
+
+### Phase 999.49: Delete Classic 5-dock workspace (Q2 commitment) (BACKLOG · TARGETED FOR v1.7 WAVE 4 · LAST WAVE-4 PHASE)
+
+**Goal:** Honor the **Q2 = "Retire Classic after one release"** commitment by deleting the Classic 5-dock workspace artifacts. The picker (added in 999.45) becomes **Default / Focused only**.
+
+**Status (NEW 2026-05-17 audit):** New phase per audit action item #1 — owns the Q2 deletion commitment that the original v1.7-PLAN had vaguely sequenced to "v1.9" but never explicitly owned. With the audit pull-in collapsing the original v1.8 forwarding back into v1.7, "one release later" means "after 999.48 settles in the same v1.7 RC cycle" — the deletion gets owned end-to-end inside v1.7.
+
+**Reference:** [SEED-001](seeds/SEED-001-ballview-refresh-ui-milestone.md) + [MAINTAINER-QUESTIONS-999.1.md Q2](MAINTAINER-QUESTIONS-999.1.md).
+
+**Trigger:** 999.48 lands (flag REMOVAL complete; legacy files DELETED; one stable release cycle of the new default workspace has passed in the v1.7 RC stream).
+
+**Depends on:** 999.48 (legacy file deletion + flag removal — the Classic-delete is the natural follow-up).
+
+**Scope:**
+- **Delete the `Classic` preset** from `WorkspaceManager` (`source/VIEW/KERNEL/workspaceManager.{h,C}`) — remove the enum value, the `apply(Classic)` branch, and the `classic.layout` enum-to-file mapping.
+- **Delete the `.layout` file**: `data/BALLView/workspaces/classic.layout`.
+- **Delete the first-run migration prompt** (added in 999.45 §5.4) — the "Try new workspace" vs "Keep my layout" prompt's "Keep my layout" path preserved the 5-dock layout as "User Default". After 999.49, users who chose "Keep my layout" still have their layout preserved as a `UserDefined` preset (no data loss) — just the named "Classic" preset goes away.
+- **Picker becomes Default / Focused only** (plus any `UserDefined` presets the user has saved). Status-bar workspace label updates accordingly.
+- Update `View › Workspace › Classic` menu entry → remove.
+- Release-note item: *"The Classic 5-dock workspace preset has been removed in v1.7.x. User-saved layouts and the Default/Focused presets are unaffected."*
+
+**Acceptance criteria:**
+- `grep -rn "Classic\b" source/VIEW/KERNEL/workspaceManager.*` returns 0 matches.
+- `data/BALLView/workspaces/classic.layout` does not exist.
+- `View › Workspace` menu lists Default + Focused + any UserDefined presets, no Classic.
+- Users who previously had Classic active fall back to Default (or to a `UserDefined` preset if they had saved one).
+- No regression on Default / Focused / UserDefined preset application.
+
+**Estimated effort:** ~3 days.
+
+**Plans:** 0.
+
+Plans:
+- [ ] TBD (last Wave 4 phase; promote after 999.48 lands)
 
 ---
 *Roadmap created: 2026-05-14*
 *Mirrors `/Users/kohlbach/Claude/BALL/ROADMAP-1.6.md` (phases 1, 2, 3, 4a, 4b, 5, 6, 7, 8). Revised 2026-05-14 after Codex adversarial review — cheap fixes applied; structural changes (early CI phase, Phase 5 split, diagnostics requirement, feature matrix) pending a deliberate roadmap revision.*
 *Revised 2026-05-14 (consolidation): backlog 999.4 promoted to active Phase 4.1 (Config Color-Defaults Fix, CONFIG-01); former standalone Phase 05.1 (renderer backend spike) folded into Phase 5 since it must prototype against Qt 6.*
 *Revised 2026-05-17 (BALLView Refresh promotion): SEED-001 promoted-subset → 9 new phases 999.40-999.48 mapping Handover Phases 0-8; v1.7 takes the foundation + maintainer-independent subset (999.40 + 999.41 + conditional 999.42/.43), v1.8 takes the architecturally-heavier phases (999.44 Inspector, 999.45 Workspace, 999.46 Menus, 999.47 Onboarding, 999.48 a11y) as a dedicated UI marketing release with BALL_UI_V2=ON default flip. Phase 999.1 maintainer questions status: publish-ready, now gates concrete v1.7 + v1.8 work.*
+*Revised 2026-05-17 (BALLView Refresh audit pull-in): per user direction "keep everything in 1.7" — phases 999.44-999.48 re-pinned from v1.8 → v1.7 Wave 4; new Phase 999.49 (Classic-delete, Q2 commitment) appended; SEED-001 status promoted-subset → promoted-full; v1.7 final ships with BALL_UI_V2=ON default; 999.42 absorbs 999.41 carry-overs (ThemedIconEngine state-tints, call-site rewrites, XPM array deletion, .icns/.ico regen); 999.48 distinguishes flag-default-FLIP from flag-REMOVAL and absorbs Handover §8.8 9-file DELETION; Q4 translation round re-pinned from v1.8 → v1.7 cycle. v1.8 milestone scope wholly TBD as of this audit.*
