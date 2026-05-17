@@ -67,6 +67,11 @@ SET(SOURCES_LIST
 	# Phase 999.46 (Handover §6.3) — CommandPalette. Whole TU gated
 	# behind #ifdef BALL_UI_V2; OFF cell produces an empty TU.
 	commandPalette.C
+	# Phase 999.47 (Handover §7.1) — WelcomeScreen. Whole TU gated
+	# behind #ifdef BALL_UI_V2; OFF cell produces an empty TU (same
+	# pattern as commandPalette.C — see CMakeLists.txt note about
+	# the BALL_UI_V2 propagation fix at 62f52fa2cf).
+	welcomeScreen.C
 )
 
 IF(BALL_HAS_QTWEBENGINE)
