@@ -12,6 +12,9 @@
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/COMMON/logStream.h>
 
+// std::clamp is used by colorRGBAToQColor_ below.
+#include <algorithm>
+
 namespace BALL
 {
 	namespace VIEW
@@ -104,21 +107,37 @@ namespace BALL
 
 		void StageController::apply()
 		{
-			// TODO(999.44-RC-patch): mirror StageSettings::saveSettingsToStage_().
-			// During the migration window the legacy StageSettings dialog
-			// still owns the actual mutation path; this controller is a
-			// read-only mirror so the Inspector StageSection can show
-			// live values while we wait for the cut-over plan.
-			Log.info()
-				<< "[StageController::apply] STUB — legacy StageSettings owns the "
-				   "actual mutation until the 999.44-RC-patch cut-over plan lands. "
-				   "Mirrored values: bg=("
-				<< background_color_.red() << ","
-				<< background_color_.green() << ","
-				<< background_color_.blue() << ") coordSys="
-				<< (show_coordinate_system_ ? "on" : "off")
-				<< " fog=" << fog_intensity_
-				<< std::endl;
+			// Phase 999.44 Plan 06 — cut-over complete. Push the
+			// mirrored fields to the live Stage. Both legacy
+			// StageSettings::apply() and the Inspector StageSection /
+			// BackgroundSection now mutate the Stage through this
+			// single method — consistency-by-construction per Handover
+			// §risks. The legacy dialog continues to call its own
+			// apply() body for the fields this controller does NOT
+			// yet mirror (vertex-buffer toggle, downsampling, etc.);
+			// those follow the same migration recipe as new Q_PROPERTY
+			// surface lands on the controller.
+			if (stage_ == nullptr)
+			{
+				Log.warn() << "[StageController::apply] no Stage attached — skipping." << std::endl;
+				return;
+			}
+
+			// background_color_ is QColor; Stage stores ColorRGBA.
+			// ColorRGBA::set(const QColor&) handles the 0..255 →
+			// 0..1 (ColorUnit) conversion + alpha.
+			ColorRGBA c;
+			c.set(background_color_);
+			stage_->setBackgroundColor(c);
+
+			stage_->showCoordinateSystem(show_coordinate_system_);
+			stage_->setFogIntensity(fog_intensity_);
+			stage_->setEyeDistance(eye_distance_);
+			stage_->setFocalDistance(focal_distance_);
+
+			// Emit appliedStub so callers wired during the migration
+			// window keep observing the apply signal. (Renamed in the
+			// 999.48 cleanup to applied().)
 			Q_EMIT appliedStub();
 		}
 

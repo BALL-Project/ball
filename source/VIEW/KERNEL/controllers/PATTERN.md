@@ -36,7 +36,7 @@ end-to-end before adding a new Controller.
 
 | # | Controller            | Source dialog                                                           | Status                              |
 |---|-----------------------|-------------------------------------------------------------------------|-------------------------------------|
-| 1 | StageController       | `source/VIEW/DIALOGS/stageSettings.C` (720 LOC)                         | LANDED 999.44 Plan 01 (read-only)   |
+| 1 | StageController       | `source/VIEW/DIALOGS/stageSettings.C` (720 LOC)                         | CUT-OVER 999.44 Plan 06 (mutating)  |
 | 2 | LightController       | `source/VIEW/DIALOGS/lightSettings.C` (538 LOC)                         | LANDED 999.44 Plan 05 (read-only)   |
 | 3 | CameraController      | `source/VIEW/DIALOGS/setCamera.C` (94 LOC)                              | LANDED 999.44 Plan 05 (read-only)   |
 | 4 | StereoController      | `source/VIEW/DIALOGS/stereoSettingsDialog.C` (159 LOC)                  | LANDED 999.44 Plan 05 (read-only)   |
@@ -48,12 +48,16 @@ end-to-end before adding a new Controller.
 
 ## Mutation cut-over status
 
-- StageController — 999.44 Plan 06 (this phase).
-- All other Controllers — deferred to v1.7 RC patch cycle; sections
-  bind to read-only mirrors so the user sees live values but does not
-  yet drive mutation through the new path. The legacy dialogs
-  (reachable via Tools › Legacy Settings) own mutation during the
-  migration window.
+- StageController — **CUT-OVER COMPLETE in 999.44 Plan 06.**
+  apply() now pushes mirrored fields to Stage (backgroundColor /
+  coordinate-system / fog / eye-distance / focal-distance). Both
+  legacy StageSettings dialog and Inspector StageSection +
+  BackgroundSection mutate the Stage via this single method.
+- All other 8 Controllers — read-only mirror; cut-over deferred to
+  v1.7 RC patch cycle. Sections bind to mirrors so users see live
+  values; legacy dialogs (reachable via Tools › Legacy Settings) own
+  mutation during the migration window. Cut-over recipe is the
+  StageController::apply() shape — copy-paste-modify per controller.
 
 Total deferred LOC: ~3072 across 9 dialog files (8 controllers — Clipping merges the
 two clipping dialogs into one Controller per Handover §architecture).
