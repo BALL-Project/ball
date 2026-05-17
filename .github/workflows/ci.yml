@@ -80,34 +80,59 @@ jobs:
       matrix: ${{ steps.set.outputs.matrix }}
       cross_platform: ${{ steps.set.outputs.cross_platform }}
     steps:
+      # fetch-depth: 0 needed so the path-change diff (next step) can
+      # reach the base SHA. dorny/paths-filter@v3 hit "fatal: shallow
+      # file has changed since we read it" on the first CI-HARDEN-W1 run
+      # (commit 9750fdd) because the default shallow clone (depth 1)
+      # can't reach the push event's `before` SHA. Full clone avoids the
+      # paths-filter action's internal git-deepen race entirely.
       - uses: actions/checkout@v5
-      # paths-filter only meaningful on push/PR (schedule/workflow_dispatch
-      # have no diff). For those triggers we skip the filter and force full.
-      - id: filter
-        if: github.event_name == 'push' || github.event_name == 'pull_request'
-        uses: dorny/paths-filter@v3
         with:
-          filters: |
-            cross_platform:
-              - 'cmake/**'
-              - 'CMakeLists.txt'
-              - 'CMakePresets.json'
-              - '.github/workflows/**'
-              - 'vcpkg.json'
-              - 'source/FORMAT/CIFParser*'
-              - 'include/BALL/KERNEL/atom.h'
-              - 'include/BALL/VIEW/**'
-              - 'source/VIEW/**'
+          fetch-depth: 0
       - id: set
         shell: bash
         run: |
-          # Decide whether to dispatch the full matrix.
+          # Decide whether to dispatch the full matrix. Replaces the
+          # earlier dorny/paths-filter@v3 step with explicit git-diff
+          # logic for robustness + zero third-party action surface.
           cross_platform="false"
+          changed_paths_match="false"
+
+          # Path-aware detection is meaningful only for push + pull_request.
+          # schedule, workflow_dispatch, and maintenance branches force full
+          # matrix unconditionally below.
+          if [[ "${{ github.event_name }}" == "push" ]] || \
+             [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+              BASE_SHA="${{ github.event.pull_request.base.sha }}"
+            else
+              BASE_SHA="${{ github.event.before }}"
+            fi
+            # On first-push-to-new-branch the before SHA is all-zeros;
+            # in that case there's no diff to compute → force full matrix.
+            if [[ "$BASE_SHA" == "0000000000000000000000000000000000000000" ]]; then
+              echo "::notice::First push to new branch — forcing cross_platform=true"
+              changed_paths_match="true"
+            elif ! git rev-parse --verify --quiet "$BASE_SHA" >/dev/null 2>&1; then
+              echo "::warning::Base SHA $BASE_SHA not reachable; defaulting to cross_platform=true (safe fallback)"
+              changed_paths_match="true"
+            else
+              CHANGED=$(git diff --name-only "$BASE_SHA" HEAD)
+              echo "Changed files in this push:"
+              echo "$CHANGED" | sed 's/^/  /'
+              # Match against the high-risk path patterns (regex, anchored
+              # at start). Any match → cross_platform=true.
+              if echo "$CHANGED" | grep -qE '^(cmake/|CMakeLists\.txt|CMakePresets\.json|\.github/workflows/|vcpkg\.json|source/FORMAT/CIFParser|include/BALL/KERNEL/atom\.h|include/BALL/VIEW/|source/VIEW/)'; then
+                changed_paths_match="true"
+              fi
+            fi
+          fi
+
           if [[ "${{ github.event_name }}" == "schedule" ]] || \
              [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
              [[ "${{ github.ref_name }}" == "master" ]] || \
              [[ "${{ github.ref_name }}" == "v1.6-modernization" ]] || \
-             [[ "${{ steps.filter.outputs.cross_platform }}" == "true" ]]; then
+             [[ "$changed_paths_match" == "true" ]]; then
             cross_platform="true"
           fi
           echo "cross_platform=${cross_platform}" >> "$GITHUB_OUTPUT"
