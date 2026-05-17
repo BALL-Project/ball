@@ -58,7 +58,15 @@ jobs:
             REF="${{ github.ref_name }}"
           fi
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
-          echo "asset=BALLView-${REF}-${{ matrix.os }}.zip" >> "$GITHUB_OUTPUT"
+          # macOS ships as DMG (canonical macOS distribution format — double-clickable
+          # Finder mount with the .app inside). Windows ships as .zip (no MSI yet — that
+          # is Phase 8 with SignPath). Cross-ref user direction 2026-05-17 after v1.6.2
+          # initial release shipped .zip and was flagged for re-package.
+          if [ "${{ matrix.os }}" = "macos-arm64" ]; then
+            echo "asset=BALLView-${REF}-${{ matrix.os }}.dmg" >> "$GITHUB_OUTPUT"
+          else
+            echo "asset=BALLView-${REF}-${{ matrix.os }}.zip" >> "$GITHUB_OUTPUT"
+          fi
           echo "Resolved ref: $REF"
 
       - name: Checkout (at resolved tag)
@@ -194,15 +202,43 @@ jobs:
           # the `--prepared:`/`--validated:` lines from --verbose=2 are
           # progress, not errors.
 
-      - name: Zip .app (macOS)
+      - name: Create DMG (macOS)
         if: matrix.os == 'macos-arm64'
         shell: bash
         run: |
+          # Ship .app inside a compressed read-only DMG — the canonical macOS
+          # distribution format (Finder double-click → mount → drag .app to
+          # Applications). Was .zip via `ditto -c -k` in the v1.6.2 initial
+          # release; user flagged 2026-05-17 that DMG is required going forward.
+          # See ROADMAP Phase 8 note for the future signed/notarized DMG path.
           APP_DIR=$(dirname "${{ steps.locate-mac.outputs.app }}")
           APP_NAME=$(basename "${{ steps.locate-mac.outputs.app }}")
-          cd "$APP_DIR"
-          ditto -c -k --sequesterRsrc --keepParent "$APP_NAME" "${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
-          ls -lh "${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
+          DMG_PATH="${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
+
+          # UDZO = zlib-compressed read-only (the standard for distribution).
+          # Volume name "BALLView" controls the mount point that appears in
+          # Finder. `-srcfolder` points at the directory whose contents become
+          # the DMG root — using the directory that contains BALLView.app means
+          # the mounted DMG shows just the .app (no extra wrapper folder).
+          # Stage the .app alone under a temp staging dir to avoid pulling in
+          # sibling build artifacts (BALLView.app's siblings include CMake
+          # ephemera that we don't want on the DMG).
+          STAGE=$(mktemp -d)
+          cp -R "$APP_DIR/$APP_NAME" "$STAGE/"
+
+          hdiutil create \
+            -volname "BALLView" \
+            -srcfolder "$STAGE" \
+            -ov \
+            -format UDZO \
+            -fs HFS+ \
+            "$DMG_PATH"
+
+          rm -rf "$STAGE"
+
+          # Verify + report size
+          hdiutil verify "$DMG_PATH"
+          ls -lh "$DMG_PATH"
 
       # =====================================================================
       # Windows x64 — vcpkg manifest, ci-windows preset, windeployqt
@@ -506,7 +542,8 @@ jobs:
 
       - name: List artifacts
         run: |
-          find artifacts -type f -name "*.zip" -exec ls -lh {} \;
+          # macOS ships .dmg, Windows ships .zip — glob both.
+          find artifacts -type f \( -name "*.dmg" -o -name "*.zip" \) -exec ls -lh {} \;
 
       - name: Create / update GitHub Release
         env:
@@ -522,7 +559,7 @@ jobs:
           BODY=$(cat <<'EOF'
           **Unsigned best-effort installers** built from this tag.
 
-          - **macOS:** download the `.zip`, unzip, drag `BALLView.app` anywhere. Gatekeeper will block on first launch — right-click → Open → confirm, or run `xattr -dr com.apple.quarantine BALLView.app` once before launching.
+          - **macOS:** download the `.dmg`, double-click to mount, drag `BALLView.app` to `/Applications` (or anywhere). Gatekeeper will block on first launch — right-click → Open → confirm, or run `xattr -dr com.apple.quarantine /Applications/BALLView.app` once before launching.
           - **Windows:** download the `.zip`, extract. Windows SmartScreen will warn — choose "More info → Run anyway".
 
           Both binaries are **not code-signed or notarized**. That work is Phase 8 ("Packaging & Distribution") in the roadmap.
@@ -536,14 +573,15 @@ jobs:
           # If the release doesn't exist yet, create it. Otherwise update assets.
           if gh release view "$REF" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "Release $REF exists — uploading assets (clobber)"
-            for f in artifacts/*/*.zip; do
-              gh release upload "$REF" "$f" --clobber --repo "$GITHUB_REPOSITORY"
+            for f in artifacts/*/*.dmg artifacts/*/*.zip; do
+              [ -f "$f" ] && gh release upload "$REF" "$f" --clobber --repo "$GITHUB_REPOSITORY"
             done
           else
             echo "Creating release $REF $DRAFT_FLAG"
+            ASSETS=$(find artifacts -type f \( -name "*.dmg" -o -name "*.zip" \))
             gh release create "$REF" $DRAFT_FLAG \
               --title "BALLView $REF" \
               --notes "$BODY" \
               --repo "$GITHUB_REPOSITORY" \
-              artifacts/*/*.zip
+              $ASSETS
           fi

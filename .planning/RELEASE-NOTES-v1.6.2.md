@@ -152,6 +152,8 @@ Final pre-tag CI run: **25982872250** (commit `c9d8de38`) — verifies the BALL_
 
 (Prior "successful" run 25977136797 on `046271ec` showed `success` in the GH job summary BUT logs reveal the Windows VIEW.dll link failure was masked by the 999.17 cache — see the BALL_EXPORT regression row in the Latent-bug table above. The v1→v2 cache bump in `c9d8de38` is what makes the next run an honest signal.)
 
-Final commit on `v1.6-modernization` at tag time: `c9d8de38` (`ci(999.17): bump Windows cmake-tree cache key v1→v2 to force cold rebuild`). Two earlier release.yml hardening commits from the parallel session (`99cced76` disk cleanup, `046271ec` VCPKG_INSTALL_OPTIONS, `2de65117` vcpkg cache cross-ref, `357d13e4` artifact upload) were chasing the wrong root cause of the same regression — they remain in tree as useful defensive Windows runner hygiene but were not the actual fix.
+Final commit on `v1.6-modernization` at tag time (iteration 5): `<release.yml-dmg-fix-commit>` (`ci(release): ship macOS as DMG (replace .zip)`). Predecessor iteration 4 at `aa7412537` shipped `.zip` for macOS — flagged by user 2026-05-17 right after publishing iteration 4. iteration 5 swaps in `hdiutil create -format UDZO` for the macOS packaging step + updates the release-body install instructions accordingly. Phase 8's `create-dmg` upgrade (signed/notarized + branded background) sits on top of this stopgap as planned.
 
-Tag: `v1.6.2` → GitHub Release artifacts (macOS `.dmg`, Linux `.AppImage`, Windows `.exe`) produced by `release.yml` on tag push.
+Earlier release.yml hardening commits from the parallel session (`99cced76` disk cleanup, `046271ec` VCPKG_INSTALL_OPTIONS, `2de65117` vcpkg cache cross-ref, `357d13e4` artifact upload) were chasing the wrong root cause of the BALL_EXPORT regression — they remain in tree as useful defensive Windows runner hygiene but were not the actual fix.
+
+Tag: `v1.6.2` → GitHub Release artifacts (macOS `.dmg`, Windows `.zip`) produced by `release.yml` on tag push. Linux: build from source — no Linux installer in this release (Phase 8 v1.7 work).
