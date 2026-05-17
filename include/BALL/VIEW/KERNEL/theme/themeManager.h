@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 // Phase 999.40 — BALLView Refresh ThemeManager (Handover Phase 0).
+// Phase 999.48 — adds TextScale enum + applyTextScale() per Handover §8.3.
 //
 // Singleton that loads the neutral .qss stylesheet at startup. Per
 // maintainer-Q3 (`.planning/MAINTAINER-QUESTIONS-999.1.md`) the v1.7
@@ -59,6 +60,10 @@ namespace BALL
 			 * Wires the `QStyleHints::colorSchemeChanged` signal so a future
 			 * reversal of maintainer-Q3 (re-introducing light/dark/follow)
 			 * has a hook to dispatch on. The handler is currently a no-op.
+			 *
+			 * Phase 999.48 §8.3 — also loads the persisted text scale from
+			 * QSettings `[Appearance]/textScale` (default 100) and applies
+			 * it to qApp's base font via setFont().
 			 */
 			void init(QApplication* app);
 
@@ -68,10 +73,32 @@ namespace BALL
 			 */
 			void applyTheme();
 
+			/// Text-size preference per Handover §8.3.
+			enum TextScale
+			{
+				ScaleNormal     = 100,   ///< 100 % — default
+				ScaleLarge      = 115,   ///< 115 %
+				ScaleExtraLarge = 130    ///< 130 %
+			};
+
+			/// Current text scale (percent, default 100).
+			int textScale() const { return text_scale_; }
+
+			/**
+			 * Set the text scale (Normal / Large / Extra Large, expressed
+			 * as a percent). Applies via qApp->setFont() on the base font
+			 * and persists to QSettings under [Appearance]/textScale.
+			 * No-op if @p scale equals the current value or is out of range.
+			 */
+			void setTextScale(int scale);
+
 			Q_SIGNALS:
 
 			/// Emitted after a successful applyTheme().
 			void themeChanged();
+
+			/// Emitted after a successful setTextScale().
+			void textScaleChanged(int newScale);
 
 			private Q_SLOTS:
 
@@ -95,8 +122,13 @@ namespace BALL
 			/// Read the neutral QSS bytes out of the compiled-in resource.
 			static QString loadStylesheet_();
 
+			/// Apply text_scale_ to qApp's font; cached base point-size used.
+			void applyTextScale_();
+
 			QApplication* app_;
 			bool          initialised_;
+			int           text_scale_;        ///< current scale (percent)
+			int           base_point_size_;   ///< qApp base font pt size cached at init
 		};
 
 	} // namespace VIEW

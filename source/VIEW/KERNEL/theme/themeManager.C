@@ -3,13 +3,16 @@
 //
 // Phase 999.40 — BALLView Refresh ThemeManager implementation
 // (Handover Phase 0). Single-theme per maintainer-Q3.
+// Phase 999.48 — adds text-size preference per Handover §8.3.
 //
 
 #include <BALL/VIEW/KERNEL/theme/themeManager.h>
 
 #include <QtCore/QFile>
 #include <QtCore/QIODevice>
+#include <QtCore/QSettings>
 #include <QtCore/QTextStream>
+#include <QtGui/QFont>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QStyleHints>
 #include <QtWidgets/QApplication>
@@ -40,7 +43,9 @@ namespace BALL
 		ThemeManager::ThemeManager()
 			: QObject(nullptr),
 			  app_(nullptr),
-			  initialised_(false)
+			  initialised_(false),
+			  text_scale_(ScaleNormal),
+			  base_point_size_(0)
 		{
 		}
 
@@ -67,6 +72,27 @@ namespace BALL
 				}
 				initialised_ = true;
 			}
+
+			// Phase 999.48 §8.3 — text-size preference. Cache the base
+			// point size (so we can rescale relative to it on subsequent
+			// changes), load the persisted scale, and apply it. Default
+			// scale is ScaleNormal (100%) — first run is a no-op.
+			QFont base = app_->font();
+			base_point_size_ = base.pointSize() > 0 ? base.pointSize() : 13;
+
+			QSettings settings;
+			text_scale_ = settings.value(QStringLiteral("Appearance/textScale"),
+			                              int(ScaleNormal)).toInt();
+			// Clamp to the supported set; out-of-range falls back to Normal.
+			if (text_scale_ != ScaleNormal && text_scale_ != ScaleLarge
+			    && text_scale_ != ScaleExtraLarge)
+			{
+				text_scale_ = ScaleNormal;
+			}
+			if (text_scale_ != ScaleNormal)
+			{
+				applyTextScale_();
+			}
 		}
 
 		void ThemeManager::applyTheme()
@@ -79,6 +105,39 @@ namespace BALL
 				app_->setStyleSheet(sheet);
 				Q_EMIT themeChanged();
 			}
+		}
+
+		void ThemeManager::setTextScale(int scale)
+		{
+			// Validate the value against the public enum. Silently no-op
+			// on out-of-range / no-change.
+			if (scale != ScaleNormal && scale != ScaleLarge && scale != ScaleExtraLarge)
+			{
+				return;
+			}
+			if (scale == text_scale_) return;
+
+			text_scale_ = scale;
+
+			QSettings settings;
+			settings.setValue(QStringLiteral("Appearance/textScale"), text_scale_);
+
+			applyTextScale_();
+			Q_EMIT textScaleChanged(text_scale_);
+		}
+
+		void ThemeManager::applyTextScale_()
+		{
+			if (app_ == nullptr || base_point_size_ <= 0) return;
+
+			QFont f = app_->font();
+			// Compute the new point size from the cached base × scale/100.
+			// Use float math then round to nearest int to avoid drift on
+			// repeated rescales. setFont() triggers a full UI relayout.
+			const int new_pt = qRound(base_point_size_ * (text_scale_ / 100.0));
+			if (new_pt <= 0) return;
+			f.setPointSize(new_pt);
+			app_->setFont(f);
 		}
 
 		void ThemeManager::onSystemColorSchemeChanged()
