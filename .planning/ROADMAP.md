@@ -1919,35 +1919,32 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase during v1.7 tail-end)
 
-### Phase 999.41: BALLView Refresh — SVG icons + HiDPI pipeline (Handover Phase 2) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.41: BALLView Refresh — SVG icons + HiDPI pipeline (Handover Phase 2) — COMPLETED 2026-05-17 (v1.7 Wave 4)
 
 **Goal:** Replace the XPM bitmap icon system with an SVG-based, theme-aware, HiDPI-correct icon pipeline. Pure mechanical asset work; no UX decisions; no maintainer dependencies.
 
-**Why now (v1.7 tail-end):** Maintainer-decision-independent + Handover docs are ready + pairs naturally with 999.40's ThemeManager (theme-aware icon tinting). Land in v1.7 tail.
+**Status (2026-05-17):** COMPLETED — single PLAN, 6 implementation commits + 1 docs amendment + 1 final docs commit, ON + OFF macOS builds green. v1.7 subset only: build-flag-gated SVG-preferred wedge inside `IconLoader::loadIcon_` rather than replacing all 28 call sites. 14 Lucide v0.460.0 SVGs vendored under `source/VIEW/KERNEL/theme/icons/lucide/` and aliased onto BALLView's existing icon-key namespace via the 999.40 `theme.qrc`. Toolbar size 22→20 logical px under `BALL_UI_V2`. ThemedIconEngine with per-DPR tint cache deferred to v1.8 (gated on maintainer-Q3 revisit). XPM bucky + remaining bitmap-window-icon cleanup forwarded to 999.42 + Phase 8. See [999.41-01-SUMMARY.md](phases/999.41-svg-icons-hidpi/999.41-01-SUMMARY.md).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/02-phase-icons.md`.
 
-**Depends on:** 999.40 (uses ThemeManager for theme-aware tinting).
+**Depends on:** 999.40 (uses `theme.qrc` for resource bundling; `tokens.h` for the 20-px icon size constant).
 
-**Scope (in):**
-- New SVG icon set (Handover doc specifies the source / licensing — likely Lucide or Phosphor, MIT)
-- Qt resource file replacing the XPM `.qrc`
-- `IconLoader` update (or new class) to load SVG + tint per theme
-- All ~30 XPM icon references in `source/VIEW/` migrate to new IDs
-- HiDPI: rely on Qt 6's native scaling for SVG (no per-pixel-ratio variants needed)
+**Scope (delivered):**
+- Lucide v0.460.0 14-SVG subset vendored (ISC license)
+- `theme.qrc` extended with `<qresource prefix="/icons">` aliases mapping BALLView keys → Lucide files
+- Qt6::Svg linked into VIEW (unconditional, link surface uniform across flag values)
+- `IconLoader::loadIcon_` SVG-preferred branch under `#ifdef BALL_UI_V2` (zero call-site churn; PNG fallback intact)
+- Toolbar size 22→20 logical px at `mainframe.C:295` under `#ifdef BALL_UI_V2`
+- TODO breadcrumbs at `icons.h`, `iconLoader.h`, `iconLoader.C` for 999.42 + v1.8 + Phase 8
 
-**Scope (out):**
-- Changing which icons appear where (UX decision — defer to v1.8 menu reorg 999.46)
-- New icons for actions that don't have one today (out of scope; cleanup, not addition)
+**Scope (forwarded):**
+- ThemedIconEngine (per-DPR tint cache, mode-aware tints) → v1.8 (depends on Q3 revisit)
+- Replacing remaining XPM uses (`bucky_64x64_xpm`, `mini_ray_xpm_`, `simulation_running_xpm_`) → 999.42 + Phase 8
+- `.icns`/`.ico` regeneration + app icon refresh → Phase 8 packaging
+- Linux/Windows smoke builds → next Wave-4 phase (this phase was macOS-only per orchestrator scope)
 
-**Requirements:** TBD (likely `UIV2-ICN-01: SVG icon pipeline replaces XPM`)
-
-**Estimated effort:** ~1-1.5 weeks (mostly per-call-site icon-ID migration).
-
-**Plans:** 0 (single PLAN with 3 tasks when promoted).
-
-Plans:
-- [ ] TBD (promote with /gsd-plan-phase after 999.40 lands)
+**Plans:** 1 plan
+- [x] 999.41-01-PLAN.md — vendor 14 SVGs, extend theme.qrc, link Qt6::Svg, add SVG-preferred branch to IconLoader, bump toolbar size, leave breadcrumbs (6 commits + 2 docs commits)
 
 ### Phase 999.42: BALLView Refresh — QSS theming, palette removal (Handover Phase 1) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
