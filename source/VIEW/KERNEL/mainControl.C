@@ -11,6 +11,11 @@
 #include <BALL/VIEW/KERNEL/modelInformation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
+#ifdef BALL_UI_V2
+// Phase 999.46 Task 2 — auto-register every menu QAction with the
+// CommandRegistry so the Cmd/Ctrl+K palette can find them all.
+#	include <BALL/VIEW/KERNEL/commandRegistry.h>
+#endif
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
@@ -887,6 +892,20 @@ namespace BALL
 
 			if (description != "")
 				shortcut_registry_.registerShortcut(description, action);
+
+#ifdef BALL_UI_V2
+			// Phase 999.46 Task 2 — auto-register every menu QAction
+			// with the CommandRegistry so the Cmd/Ctrl+K command
+			// palette (Task 5) sees it without any per-callsite
+			// changes. Category = parent-menu title with the Qt
+			// mnemonic ampersand stripped. Plugins can re-bucket
+			// post-registration via
+			// CommandRegistry::overrideCategory(action, new_cat).
+			QString category = popup->title();
+			category.remove(QLatin1Char('&'));
+			if (category.isEmpty()) category = QStringLiteral("Uncategorized");
+			CommandRegistry::instance().registerFromAction(action, category);
+#endif
 
 			return action;
 		}
