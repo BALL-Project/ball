@@ -36,6 +36,10 @@ SET(SOURCES_LIST
 	# enumerated in controllers/PATTERN.md and follow in the v1.7 RC
 	# patch cycle. Body gated by #ifdef BALL_UI_V2 — empty TU when OFF.
 	controllers/stageController.C
+	# Phase 999.44 — Tools › Legacy Settings interim home helper.
+	# Static data — compiles in both BALL_UI_V2 cells. Mainframe wires
+	# the submenu under the ifdef in a follow-up plan.
+	legacySettingsHelper.C
 )
 
 # Phase 999.45 — workspaceManager.h has Q_OBJECT (both WorkspaceManager
