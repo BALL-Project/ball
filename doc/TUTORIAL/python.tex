@@ -1,6 +1,18 @@
+\noindent
+\fbox{\parbox{0.95\textwidth}{%
+\textbf{Status note (v1.7):} The SIP-based Python bindings described in
+this chapter are DISABLED in the v1.7 build
+(\texttt{BALL\_PYTHON\_SUPPORT=OFF} in every \texttt{ci-*} CMake preset).
+The chapter below is preserved for historical reference and as a feature
+corpus. Phase~999.15 (targeted for v2.1) is the planned rewrite using a
+modern Python binding generator. See \texttt{.planning/PYBALLV2.md} and
+the ROADMAP entry for Phase~999.15.
+}}
+\vspace{1em}
+
 \section{Overview}
 
-\Index{Python} is an object-oriented scripting language~\cite{Python} that is 
+\Index{Python} is an object-oriented scripting language~\cite{Python} that is
 well-suited both as a language for embedding scripts into BALL applications and
 as a rapid prototyping language using the underlying BALL objects.
 BALL provides Python bindings for most of its classes in order to allow 
