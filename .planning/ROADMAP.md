@@ -2380,11 +2380,11 @@ Plans:
 Plans:
 - [x] [999.48-PLAN.md](phases/999.48-a11y-flag-flip-removal/999.48-PLAN.md) → [999.48-SUMMARY.md](phases/999.48-a11y-flag-flip-removal/999.48-SUMMARY.md) — single-plan phase landing 13/15 sub-deliverables (a11y pass + default flip + flag REMOVAL across 76 files + ci.yml ui_v2 axis drop); 9-file legacy DELETION + Tools › Legacy Settings retirement deferred to v1.7 RC patch with breadcrumb (cluster lynchpin displayProperties.C still on production rendering path).
 
-### Phase 999.49: Delete Classic 5-dock workspace (Q2 commitment) (BACKLOG · TARGETED FOR v1.7 WAVE 4 · LAST WAVE-4 PHASE)
+### Phase 999.49: Delete Classic 5-dock workspace (Q2 commitment) (COMPLETE · v1.7 WAVE 4 · 2026-05-17 · LAST WAVE-4 PHASE — v1.7-RC1 UNBLOCKED)
 
 **Goal:** Honor the **Q2 = "Retire Classic after one release"** commitment by deleting the Classic 5-dock workspace artifacts. The picker (added in 999.45) becomes **Default / Focused only**.
 
-**Status (NEW 2026-05-17 audit):** New phase per audit action item #1 — owns the Q2 deletion commitment that the original v1.7-PLAN had vaguely sequenced to "v1.9" but never explicitly owned. With the audit pull-in collapsing the original v1.8 forwarding back into v1.7, "one release later" means "after 999.48 settles in the same v1.7 RC cycle" — the deletion gets owned end-to-end inside v1.7.
+**Status (2026-05-17 COMPLETE):** 8/8 sub-deliverables landed in 5 commits across ~15 min wall-clock. WorkspaceManager::Classic enum value deleted (numeric value 1 permanently retired); classic.layout file deleted; Window+View > Workspace menus stripped of Classic action; Phase 999.45 first-run prompt simplified from two-button "Try new / Keep my layout (Classic)" to a one-button informational notice (the legacy 5-dock layout is no longer restorable post-deletion since Mainframe::show() applies Default before the prompt opens); auto-migration of `[Workspace]/currentPreset=Classic` → `Default` on first launch with v1.7 protects upgrade-from-v1.6.x + upgrade-from-v1.7-pre users; RELEASE-NOTES-v1.7 draft populated. Local macOS-arm64 build green; CI run 26002675865 dispatched on a32de26f3f. 1 OOS commit observed concurrently (f846562eea — 999.48 hotfix scrubbing 3 missed BALL_UI_V2 #ifdef sites from maintainer; kept, surfaced). **Wave 4 of v1.7 complete; v1.7-RC1 ready to tag** modulo pre-existing 999.48 deferred-items (9-file legacy DELETION) and v1.6.2 pre-tag regression follow-ups (not v1.7-blocking). See [999.49-SUMMARY.md](phases/999.49-classic-dock-delete/999.49-SUMMARY.md).
 
 **Reference:** [SEED-001](seeds/SEED-001-ballview-refresh-ui-milestone.md) + [MAINTAINER-QUESTIONS-999.1.md Q2](MAINTAINER-QUESTIONS-999.1.md).
 
@@ -2409,10 +2409,10 @@ Plans:
 
 **Estimated effort:** ~3 days.
 
-**Plans:** 0.
+**Plans:** 1.
 
 Plans:
-- [ ] TBD (last Wave 4 phase; promote after 999.48 lands)
+- [x] [999.49-PLAN.md](phases/999.49-classic-dock-delete/999.49-PLAN.md) → [999.49-SUMMARY.md](phases/999.49-classic-dock-delete/999.49-SUMMARY.md) — single-plan phase landing 8/8 sub-deliverables (enum + apply() branch + .layout file + 2 menu wirings + first-run prompt + auto-migration + RELEASE-NOTES). 5 commits + ~15 min wall-clock. Migration-before-deletion ordering preserves users transitioning through v1.6.x → v1.7-RC1 from carrying an unrecognized preset name in their INI.
 
 ---
 *Roadmap created: 2026-05-14*
