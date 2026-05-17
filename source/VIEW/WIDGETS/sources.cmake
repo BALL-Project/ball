@@ -20,6 +20,8 @@ SET(SOURCES_LIST
 	molecularStructure.C
 	propertyEditor.C
 	scene.C
+	# Phase 999.43 — shared widgets (load-bearing for 999.44 Inspector).
+	sectionHeader.C
 	shortcutTableView.C
 	SDWidget.C
 	testFramework.C
