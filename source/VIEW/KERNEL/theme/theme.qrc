@@ -1,14 +1,46 @@
 <!--
-  Phase 999.40 — BALLView Refresh theme resource bundle.
+  Phase 999.40 + 999.41 — BALLView Refresh theme + icon resource bundle.
 
   Per maintainer-Q3 (`.planning/MAINTAINER-QUESTIONS-999.1.md`):
     SINGLE NEUTRAL THEME ONLY — no light/dark/follow-system variants.
 
-  The ThemeManager singleton loads this via the alias path
+  The ThemeManager singleton loads the stylesheet via the alias path
   `:/theme/theme-neutral.qss` at app startup (gated on BALL_UI_V2).
+
+  Phase 999.41 (SVG icons + HiDPI): the `/icons` prefix exposes the
+  vendored Lucide v0.460.0 subset under BALLView's existing icon-key
+  naming convention (`actions/<name>.svg`, `categories/<name>.svg`).
+  Aliases map each BALLView key to the Lucide source file in
+  `icons/lucide/`, so `IconLoader::loadIcon_` only has to try the
+  resource path `:/icons/<name>.svg` — no per-name C++ mapping
+  required. See `iconLoader.C` for the SVG-preferred lookup wedge.
+
+  Multi-aliasing (e.g. quicksave + document-save both → save.svg) is
+  intentional: BALLView calls them by distinct keys but visually they
+  should be the same glyph under the v1.7 design language.
 -->
 <RCC>
     <qresource prefix="/theme">
         <file alias="theme-neutral.qss">theme-neutral.qss</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <!-- BALLView "actions/*" namespace -->
+        <file alias="actions/quickopen-file.svg">icons/lucide/folder-open.svg</file>
+        <file alias="actions/quicksave.svg">icons/lucide/save.svg</file>
+        <file alias="actions/document-save.svg">icons/lucide/save.svg</file>
+        <file alias="actions/view-fullscreen.svg">icons/lucide/maximize.svg</file>
+        <file alias="actions/view-restore.svg">icons/lucide/minimize-2.svg</file>
+        <file alias="actions/process-stop.svg">icons/lucide/octagon-x.svg</file>
+        <file alias="actions/measure.svg">icons/lucide/ruler.svg</file>
+        <file alias="actions/list-add.svg">icons/lucide/plus.svg</file>
+        <file alias="actions/edit-delete.svg">icons/lucide/trash-2.svg</file>
+        <file alias="actions/edit-copy.svg">icons/lucide/copy.svg</file>
+        <file alias="actions/molecule-add-hydrogens.svg">icons/lucide/atom.svg</file>
+        <file alias="actions/molecule-minimize.svg">icons/lucide/shrink.svg</file>
+        <file alias="actions/molecule-assign-bond-orders.svg">icons/lucide/link-2.svg</file>
+        <!-- BALLView "categories/*" namespace -->
+        <file alias="categories/preferences.svg">icons/lucide/settings.svg</file>
+        <!-- Spare: available for future tooltip/help affordances -->
+        <file alias="actions/help-hint.svg">icons/lucide/help-circle.svg</file>
     </qresource>
 </RCC>
