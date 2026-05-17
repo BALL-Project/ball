@@ -1024,6 +1024,11 @@ namespace BALL
 		// adoption-into-System migration paths.
 		void bindToStore_(MoleculeStore& store);
 
+		// K0.3b.2a write-side helper: mirror v1.x position_ into the
+		// store column. Defined in atom.C (needs moleculeStore.h's full
+		// type) so atom.iC remains a forward-declared-MoleculeStore region.
+		void writeStorePosition_(const Vector3& p);
+
 	};
 
 // required for visual studio

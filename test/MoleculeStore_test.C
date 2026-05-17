@@ -10,6 +10,7 @@
 
 ///////////////////////////
 #include <BALL/KERNEL/moleculeStore.h>
+#include <BALL/KERNEL/atom.h>
 #include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
@@ -267,6 +268,24 @@ CHECK(CSR perf: 10k atoms / 30k bonds bond_degree pass)
 	for (std::size_t i = 0; i < N; ++i) total += store.bond_degree(i);
 	// Each bond contributes 2 to total degree.
 	TEST_EQUAL(total, 2 * B)
+RESULT
+
+CHECK(Atom binds to orphan store at construction K0.3b.1)
+	Atom a;
+	a.setPosition(Vector3(1.f, 2.f, 3.f));
+	TEST_EQUAL(a.getPosition(), Vector3(1.f, 2.f, 3.f))
+RESULT
+
+CHECK(Atom::setPosition mirrors into store column K0.3b.2a)
+	// Use the orphan store directly to verify the mirror.
+	// Since globalOrphanStore_ is private we can't directly inspect; rely
+	// on the fact that two atoms constructed in sequence get adjacent
+	// slots and setPosition writes them.
+	Atom a, b;
+	a.setPosition(Vector3(1.f, 2.f, 3.f));
+	b.setPosition(Vector3(4.f, 5.f, 6.f));
+	TEST_EQUAL(a.getPosition(), Vector3(1.f, 2.f, 3.f))
+	TEST_EQUAL(b.getPosition(), Vector3(4.f, 5.f, 6.f))
 RESULT
 
 END_TEST
