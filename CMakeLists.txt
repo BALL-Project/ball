@@ -367,7 +367,12 @@ IF (BALL_SPIKE_BACKEND_QRHI_REQUESTED)
 ENDIF()
 
 IF (BALL_HAS_VIEW)
-	FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets OpenGLWidgets)
+	# Phase 999.41: Svg added — backs QSvgIconEngine for the BALLView Refresh
+	# SVG icon wedge (compiled-in Lucide subset under :/icons/). Required even
+	# when BALL_UI_V2 is OFF so VIEW links uniformly across build configurations
+	# — at runtime the SVG-preferred path is dormant when the flag is OFF
+	# (iconLoader.C falls through to the PNG-from-disk walk).
+	FIND_PACKAGE(Qt6 ${QT_MIN_VERSION} REQUIRED OpenGL PrintSupport Test Widgets OpenGLWidgets Svg)
 	# Phase 5.1 D1 (root-cause D6): On Windows, Qt6LinguistTools ships with the vcpkg
 	# `qttools` port, which is declared in vcpkg.json. macOS/Linux get it from system
 	# Qt. QUIET suppresses CMake's built-in "By not providing FindQt6LinguistTools.cmake"
@@ -385,7 +390,8 @@ IF (BALL_HAS_VIEW)
 	                               Qt6::PrintSupport
 	                               Qt6::Test
 	                               Qt6::Widgets
-	                               Qt6::OpenGLWidgets)
+	                               Qt6::OpenGLWidgets
+	                               Qt6::Svg)
 
 	# THROWAWAY SPIKE (Plan 05-06): the QRhi spike sources (rhiRenderer.C +
 	# qtRhiSurface.C) include <rhi/qrhi.h>, which lives in Qt's private API
