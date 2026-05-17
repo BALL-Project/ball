@@ -38,11 +38,23 @@ namespace BALL
 		store.set_back_ptr(store_idx_, this);
 	}
 
-	// K0.3b.2a: write-side helper, called from atom.iC setPosition()
-	// (which only forward-declares MoleculeStore via atom.h).
+	// K0.3b.2a/3: write-side helpers, called from atom.iC setters
+	// (which only forward-declare MoleculeStore via atom.h).
 	void Atom::writeStorePosition_(const Vector3& p)
 	{
 		store_->position(store_idx_) = p;
+	}
+	void Atom::writeStoreCharge_(float c)
+	{
+		store_->charge(store_idx_) = c;
+	}
+	void Atom::writeStoreVelocity_(const Vector3& v)
+	{
+		store_->velocity(store_idx_) = v;
+	}
+	void Atom::writeStoreForce_(const Vector3& f)
+	{
+		store_->force(store_idx_) = f;
 	}
 
 	Atom::Atom()
@@ -63,8 +75,11 @@ namespace BALL
 		  force_(BALL_ATOM_DEFAULT_FORCE)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a dual-write: mirror initial position into store column.
+		// K0.3b.2a/3/4/5 dual-write: mirror initial fields into store.
 		store_->position(store_idx_) = position_;
+		store_->charge(store_idx_) = charge_;
+		store_->velocity(store_idx_) = velocity_;
+		store_->force(store_idx_) = force_;
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
@@ -85,8 +100,11 @@ namespace BALL
 		  force_(atom.force_)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a dual-write: mirror initial position into store column.
+		// K0.3b.2a/3/4/5 dual-write: mirror initial fields into store.
 		store_->position(store_idx_) = position_;
+		store_->charge(store_idx_) = charge_;
+		store_->velocity(store_idx_) = velocity_;
+		store_->force(store_idx_) = force_;
 	}
 
 	Atom::Atom
@@ -111,8 +129,11 @@ namespace BALL
 		  force_(force)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a dual-write: mirror initial position into store column.
+		// K0.3b.2a/3/4/5 dual-write: mirror initial fields into store.
 		store_->position(store_idx_) = position_;
+		store_->charge(store_idx_) = charge_;
+		store_->velocity(store_idx_) = velocity_;
+		store_->force(store_idx_) = force_;
 	}
 
 	Atom::~Atom()
@@ -178,6 +199,8 @@ namespace BALL
 		element_ = &PTE[s];
 		pm.readPrimitive(formal_charge_, "formal_charge_");
 		pm.readPrimitive(charge_, "charge_");
+		// K0.3b.3 dual-write: mirror persisted charge into store.
+		if (store_) store_->charge(store_idx_) = charge_;
 		pm.readPrimitive(radius_, "radius_");
 		pm.readPrimitive(name_, "name_");
 		pm.readPrimitive(type_name_, "type_name_");
@@ -186,10 +209,15 @@ namespace BALL
 		type_ = (Atom::Type)tmp_type;
 
 		pm.readStorableObject(position_, "position_");
-		// K0.3b.2a dual-write: mirror persisted position into store.
-		if (store_) store_->position(store_idx_) = position_;
 		pm.readStorableObject(velocity_, "velocity_");
 		pm.readStorableObject(force_, "force_");
+		// K0.3b.2a/4/5 dual-write: mirror persisted vectors into store.
+		if (store_)
+		{
+			store_->position(store_idx_) = position_;
+			store_->velocity(store_idx_) = velocity_;
+			store_->force(store_idx_) = force_;
+		}
 
 		pm.readPrimitive(number_of_bonds_, "number_of_bonds_");
 		Size n;
@@ -217,8 +245,14 @@ namespace BALL
 		charge_ = atom.charge_;
 		velocity_ = atom.velocity_;
 		force_ = atom.force_;
-		// K0.3b.2a dual-write: mirror new position into store column.
-		if (store_) store_->position(store_idx_) = position_;
+		// K0.3b.2a/3/4/5 dual-write: mirror new fields into store columns.
+		if (store_)
+		{
+			store_->position(store_idx_) = position_;
+			store_->charge(store_idx_) = charge_;
+			store_->velocity(store_idx_) = velocity_;
+			store_->force(store_idx_) = force_;
+		}
   }
 
 	Atom& Atom::operator = (const Atom& atom)
@@ -237,8 +271,14 @@ namespace BALL
 		charge_ = atom.charge_;
 		velocity_ = atom.velocity_;
 		force_ = atom.force_;
-		// K0.3b.2a dual-write: mirror new position into store column.
-		if (store_) store_->position(store_idx_) = position_;
+		// K0.3b.2a/3/4/5 dual-write: mirror new fields into store columns.
+		if (store_)
+		{
+			store_->position(store_idx_) = position_;
+			store_->charge(store_idx_) = charge_;
+			store_->velocity(store_idx_) = velocity_;
+			store_->force(store_idx_) = force_;
+		}
 
 		return *this;
 	}
@@ -274,9 +314,21 @@ namespace BALL
 		std::swap(charge_, atom.charge_);
 		std::swap(velocity_, atom.velocity_);
 		std::swap(force_, atom.force_);
-		// K0.3b.2a dual-write: mirror swapped positions into store columns.
-		if (store_) store_->position(store_idx_) = position_;
-		if (atom.store_) atom.store_->position(atom.store_idx_) = atom.position_;
+		// K0.3b.2a/3/4/5 dual-write: mirror swapped fields into store.
+		if (store_)
+		{
+			store_->position(store_idx_) = position_;
+			store_->charge(store_idx_) = charge_;
+			store_->velocity(store_idx_) = velocity_;
+			store_->force(store_idx_) = force_;
+		}
+		if (atom.store_)
+		{
+			atom.store_->position(atom.store_idx_) = atom.position_;
+			atom.store_->charge(atom.store_idx_) = atom.charge_;
+			atom.store_->velocity(atom.store_idx_) = atom.velocity_;
+			atom.store_->force(atom.store_idx_) = atom.force_;
+		}
 	}
 
 	Molecule* Atom::getMolecule()
@@ -674,8 +726,14 @@ namespace BALL
 		velocity_.set(BALL_ATOM_DEFAULT_VELOCITY);
 		force_.set(BALL_ATOM_DEFAULT_FORCE);
 
-		// K0.3b.2a dual-write: mirror cleared position into store column.
-		if (store_) store_->position(store_idx_) = position_;
+		// K0.3b.2a/3/4/5 dual-write: mirror cleared fields into store.
+		if (store_)
+		{
+			store_->position(store_idx_) = position_;
+			store_->charge(store_idx_) = charge_;
+			store_->velocity(store_idx_) = velocity_;
+			store_->force(store_idx_) = force_;
+		}
 
 		delete interactions;
 		interactions = 0;

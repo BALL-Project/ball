@@ -18,6 +18,8 @@ BALL_INLINE
 void Atom::setCharge(float charge)
 {
 	charge_ = charge;
+	// K0.3b.3 dual-write: mirror into store column.
+	if (store_) writeStoreCharge_(charge);
 }
 
 BALL_INLINE
@@ -144,6 +146,8 @@ BALL_INLINE
 void Atom::setVelocity(const Vector3& velocity)
 {
 	velocity_.set(velocity);
+	// K0.3b.4 dual-write: mirror into store column.
+	if (store_) writeStoreVelocity_(velocity);
 }
 
 BALL_INLINE
@@ -162,6 +166,8 @@ BALL_INLINE
 void Atom::setForce(const Vector3& force)
 {
 	force_.set(force);
+	// K0.3b.5 dual-write: mirror into store column.
+	if (store_) writeStoreForce_(force);
 }
 
 BALL_INLINE
