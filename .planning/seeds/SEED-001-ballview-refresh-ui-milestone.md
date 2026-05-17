@@ -1,18 +1,19 @@
 ---
 id: SEED-001
-status: promoted-subset
+status: promoted-full
 planted: 2026-05-14
 planted_during: BALLView 1.6 Modernization · Phase 2 (Rendering Port)
 trigger_when: Phase 5 (Qt 6 + Pipeline) is complete — Qt 6.5 is a hard prerequisite (SATISFIED — Qt 6.8 LTS floor since v1.6.2)
 scope: Large
 promotion: 2026-05-17 — user direction "roll the BALLView refresh into the tail-end of v1.7"
-v1.7_subset: Handover Phase 0 (design system foundation, BALL_UI_V2 OFF default) + Phase 2 (SVG/HiDPI icons) + conditional Phase 1 (palette removal) + conditional Phase 3 (simple dialogs) → ROADMAP phases 999.40-999.43; see v1.7-PLAN.md Wave 4
-v1.8_remainder: Handover Phase 4 (Inspector) + Phase 5 (Workspace) + Phase 6 (Menus + palette) + Phase 7 (Onboarding) + Phase 8 (a11y) → ROADMAP phases 999.44-999.48; v1.8 = dedicated UI marketing release with BALL_UI_V2=ON default flip
+v1.7_full: All 8 Handover phases (Phase 0 design system + Phase 1 palette removal + Phase 2 SVG/HiDPI icons + Phase 3 simple dialogs + Phase 4 Inspector + Phase 5 Workspace + Phase 6 Menus + palette + Phase 7 Onboarding + Phase 8 a11y) → ROADMAP phases 999.40-999.48 + NEW 999.49 Classic-delete; full Wave 4 in v1.7-PLAN.md. v1.7 final ships with BALL_UI_V2=ON default (Handover-Phase-8 flip lands in v1.7, not v1.8). v1.8 milestone scope wholly TBD as of 2026-05-17 audit pull-in.
 ---
 
-> **Status change 2026-05-17:** dormant → promoted-subset. User directed "roll the BALLView refresh into the tail-end of v1.7" — the foundation + maintainer-independent subset lands in v1.7 as **Wave 4** (phases 999.40-999.43, all behind `BALL_UI_V2` build flag default OFF). The 5 architecturally-heavier phases forward to **v1.8** as a dedicated UI marketing release where they ship with the flag flip. See `.planning/v1.7-PLAN.md` Wave 4 section + `.planning/ROADMAP.md` phases 999.40-999.48 for the routing.
+> **Status change 2026-05-17 (audit pull-in):** promoted-subset → promoted-full. Per user direction "keep everything in 1.7" (audit follow-up to original "roll the BALLView refresh into the tail-end of v1.7"), the previously-deferred v1.8 remainder (Inspector/Workspace/Menus/Onboarding/a11y = Handover Phases 4-8) pulled into v1.7 Wave 4 alongside the original v1.7-subset (Phases 0-3). A new **Phase 999.49** (Delete Classic 5-dock workspace, Q2 commitment) appended after 999.48. Sequencing accommodates the longer Wave 4 by running 999.44 (Inspector) and 999.45 (Workspace) in parallel — different file trees. See `.planning/v1.7-PLAN.md` Wave 4 + `.planning/ROADMAP.md` phases 999.40-999.49.
 
-> **Maintainer answers received 2026-05-17:** Q1 = keep inline menubar (NOT macOS-native global); Q2 = retire Classic 5-dock after one release (v1.8 ships both with picker, v1.9 deletes); **Q3 = single neutral theme only (no Light/Dark/Follow-System)**; Q4 = community translation round during v1.8 cycle. Q3 departs from Handover recommendation. Impact: 999.42 + 999.43 still ship in v1.7 tail (value reframes from "dark mode unlock" to "OS-palette inheritance hygiene"); ThemeManager (999.40) built single-theme; `QStyleHints::colorScheme()` reactor wired but inactive; v1.8 Phase 999.48 sub-deliverable "dark-mode finalize" drops. Full answer record: `.planning/MAINTAINER-QUESTIONS-999.1.md`.
+> **Status change 2026-05-17 (original):** dormant → promoted-subset. User directed "roll the BALLView refresh into the tail-end of v1.7" — the foundation + maintainer-independent subset lands in v1.7 as **Wave 4** (phases 999.40-999.43, all behind `BALL_UI_V2` build flag default OFF). At that time the 5 architecturally-heavier phases were forwarded to v1.8; the audit-pull-in (above) supersedes that forwarding.
+
+> **Maintainer answers received 2026-05-17:** Q1 = keep inline menubar (`QAction::setMenuRole(...Standard)` for About/Prefs/Quit is fine, just not full QMenuBar global-menu mode); Q2 = retire Classic 5-dock after one release (Phase 999.45 ships both with picker, **Phase 999.49 deletes Classic** post-flag-removal in the same v1.7 RC cycle per audit pull-in); **Q3 = single neutral theme only (no Light/Dark/Follow-System)**; Q4 = community translation round during the **v1.7** cycle (re-pinned from v1.8 per audit). Q3 departs from Handover recommendation. Impact: 999.42 + 999.43 ship in v1.7 tail (value reframes from "dark mode unlock" to "OS-palette inheritance hygiene"); ThemeManager (999.40) built single-theme; `QStyleHints::colorScheme()` reactor wired but inactive; Phase 999.48 sub-deliverable "dark-mode finalize" drops; **999.42 ThemedIconEngine state-tints (Normal/Active/Selected/Disabled) are NOT theme-tints and Q3 does NOT block them**. Full answer record: `.planning/MAINTAINER-QUESTIONS-999.1.md`.
 
 ---
 
