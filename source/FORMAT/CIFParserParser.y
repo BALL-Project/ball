@@ -35,6 +35,16 @@ string textfield_helper;
 #endif
 %}
 /*         bison declarations      */
+
+/* AUDIT 999.23: 5 shift-reduce conflicts confirmed benign by per-conflict
+ * triage in .planning/phases/999.23-cif-grammar-audit/AUDIT.md.
+ * Bison's default "prefer shift" matches CIF 1.1 §2.1/§2.2 greedy
+ * value-token + whitespace-coalescing semantics in all 5 cases (states
+ * 24, 33, 38, 61, 83). If this count changes, the new conflict is
+ * unaudited — re-run Phase 999.23 triage before bumping the number.
+ */
+%expect 5
+
 %union {
 	char  	text[CIFPARSER_LINE_LENGTH];
 	int	  	integer;

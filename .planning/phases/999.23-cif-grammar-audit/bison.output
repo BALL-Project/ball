@@ -1,0 +1,1365 @@
+State 24 conflicts: 1 shift/reduce
+State 33 conflicts: 1 shift/reduce
+State 38 conflicts: 1 shift/reduce
+State 61 conflicts: 1 shift/reduce
+State 83 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: CIF $end
+
+    1 CIF: optional_whitespace optional_datablock
+
+    2 optional_datablock: %empty
+    3                   | datablock_list optional_whitespace
+
+    4 datablock_list: datablock
+    5               | datablock_list optional_whitespace datablock
+
+    6 datablock: data_heading TK_WHITESPACE
+    7          | data_heading TK_WHITESPACE datablock_content TK_WHITESPACE
+
+    8 data_heading: TK_DATA_HEADING
+
+    9 datablock_content: data_items
+   10                  | saveframe
+   11                  | datablock_content TK_WHITESPACE data_items
+   12                  | datablock_content TK_WHITESPACE saveframe
+
+   13 data_items: tag optional_whitespace value
+   14           | tag TK_WHITESPACE
+   15           | loop tag_list optional_whitespace loop_body optional_whitespace TK_STOP
+
+   16 loop: TK_LOOP
+
+   17 tag_list: TK_WHITESPACE tag
+   18         | tag_list optional_whitespace tag
+
+   19 loop_body: value
+   20          | loop_body optional_whitespace value
+
+   21 saveframe: TK_SAVE save_heading TK_WHITESPACE save_frame_content optional_whitespace TK_SAVE
+
+   22 save_heading: TK_SAVE_HEADING
+
+   23 save_frame_content: data_items
+   24                   | save_frame_content TK_WHITESPACE data_items
+   25                   | save_frame_content data_items
+
+   26 optional_whitespace: %empty
+   27                    | TK_WHITESPACE optional_whitespace
+
+   28 tag: TK_UNDERSCORE value
+
+   29 value: value_helper_start
+
+   30 value_helper_start: TK_VALUE
+   31                   | TK_VALUE single_quote_helper value_helper
+   32                   | TK_VALUE single_quote_helper
+   33                   | TK_VALUE TK_UNDERSCORE value_helper
+   34                   | TK_OPEN_SINGLE_QUOTE single_quoted_string
+   35                   | TK_OPEN_DOUBLE_QUOTE double_quoted_string
+   36                   | TK_TEXTFIELD textfield_line TK_TEXTFIELD
+
+   37 value_helper: TK_VALUE
+   38             | TK_VALUE single_quote_helper value_helper
+   39             | TK_VALUE single_quote_helper
+   40             | TK_VALUE TK_UNDERSCORE value_helper
+
+   41 single_quote_helper: TK_SINGLE_QUOTE
+   42                    | TK_SINGLE_QUOTE single_quote_helper
+
+   43 single_quoted_string: TK_CLOSE_SINGLE_QUOTE
+   44                     | TK_VALUE single_quoted_string
+   45                     | TK_WHITESPACE single_quoted_string
+   46                     | TK_VALUE TK_UNDERSCORE single_quoted_string
+   47                     | TK_SINGLE_QUOTE single_quoted_string
+   48                     | TK_DOUBLE_QUOTE single_quoted_string
+
+   49 double_quoted_string: TK_CLOSE_DOUBLE_QUOTE
+   50                     | TK_VALUE double_quoted_string
+   51                     | TK_VALUE TK_UNDERSCORE double_quoted_string
+   52                     | TK_WHITESPACE double_quoted_string
+   53                     | TK_DOUBLE_QUOTE double_quoted_string
+   54                     | TK_SINGLE_QUOTE double_quoted_string
+
+   55 textfield_line: %empty
+   56               | TK_TEXTFIELD_LINE textfield_line
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    error (256)
+    TK_WHITESPACE <text> (258) 6 7 11 12 14 17 21 24 27 45 52
+    TK_DATA_HEADING <text> (259) 8
+    TK_SAVE_HEADING <text> (260) 22
+    TK_SAVE (261) 21
+    TK_VALUE <text> (262) 30 31 32 33 37 38 39 40 44 46 50 51
+    TK_LOOP (263) 16
+    TK_STOP (264) 15
+    TK_SINGLE_QUOTE (265) 41 42 47 54
+    TK_OPEN_SINGLE_QUOTE (266) 34
+    TK_CLOSE_SINGLE_QUOTE (267) 43
+    TK_DOUBLE_QUOTE (268) 48 53
+    TK_OPEN_DOUBLE_QUOTE (269) 35
+    TK_CLOSE_DOUBLE_QUOTE (270) 49
+    TK_UNDERSCORE (271) 28 33 40 46 51
+    TK_TEXTFIELD (272) 36
+    TK_TEXTFIELD_LINE <text> (273) 56
+
+
+Nonterminals, with rules where they appear
+
+    $accept (19)
+        on left: 0
+    CIF (20)
+        on left: 1
+        on right: 0
+    optional_datablock (21)
+        on left: 2 3
+        on right: 1
+    datablock_list (22)
+        on left: 4 5
+        on right: 3 5
+    datablock (23)
+        on left: 6 7
+        on right: 4 5
+    data_heading (24)
+        on left: 8
+        on right: 6 7
+    datablock_content (25)
+        on left: 9 10 11 12
+        on right: 7 11 12
+    data_items (26)
+        on left: 13 14 15
+        on right: 9 11 23 24 25
+    loop (27)
+        on left: 16
+        on right: 15
+    tag_list (28)
+        on left: 17 18
+        on right: 15 18
+    loop_body (29)
+        on left: 19 20
+        on right: 15 20
+    saveframe (30)
+        on left: 21
+        on right: 10 12
+    save_heading (31)
+        on left: 22
+        on right: 21
+    save_frame_content (32)
+        on left: 23 24 25
+        on right: 21 24 25
+    optional_whitespace <text> (33)
+        on left: 26 27
+        on right: 1 3 5 13 15 18 20 21 27
+    tag <text> (34)
+        on left: 28
+        on right: 13 14 17 18
+    value <text> (35)
+        on left: 29
+        on right: 13 19 20 28
+    value_helper_start <text> (36)
+        on left: 30 31 32 33 34 35 36
+        on right: 29
+    value_helper <text> (37)
+        on left: 37 38 39 40
+        on right: 31 33 38 40
+    single_quote_helper <text> (38)
+        on left: 41 42
+        on right: 31 32 38 39 42
+    single_quoted_string <text> (39)
+        on left: 43 44 45 46 47 48
+        on right: 34 44 45 46 47 48
+    double_quoted_string <text> (40)
+        on left: 49 50 51 52 53 54
+        on right: 35 50 51 52 53 54
+    textfield_line <text> (41)
+        on left: 55 56
+        on right: 36 56
+
+
+State 0
+
+    0 $accept: . CIF $end
+
+    TK_WHITESPACE  shift, and go to state 1
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    CIF                  go to state 2
+    optional_whitespace  go to state 3
+
+
+State 1
+
+   27 optional_whitespace: TK_WHITESPACE . optional_whitespace
+
+    TK_WHITESPACE  shift, and go to state 1
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    optional_whitespace  go to state 4
+
+
+State 2
+
+    0 $accept: CIF . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 CIF: optional_whitespace . optional_datablock
+
+    TK_DATA_HEADING  shift, and go to state 6
+
+    $default  reduce using rule 2 (optional_datablock)
+
+    optional_datablock  go to state 7
+    datablock_list      go to state 8
+    datablock           go to state 9
+    data_heading        go to state 10
+
+
+State 4
+
+   27 optional_whitespace: TK_WHITESPACE optional_whitespace .
+
+    $default  reduce using rule 27 (optional_whitespace)
+
+
+State 5
+
+    0 $accept: CIF $end .
+
+    $default  accept
+
+
+State 6
+
+    8 data_heading: TK_DATA_HEADING .
+
+    $default  reduce using rule 8 (data_heading)
+
+
+State 7
+
+    1 CIF: optional_whitespace optional_datablock .
+
+    $default  reduce using rule 1 (CIF)
+
+
+State 8
+
+    3 optional_datablock: datablock_list . optional_whitespace
+    5 datablock_list: datablock_list . optional_whitespace datablock
+
+    TK_WHITESPACE  shift, and go to state 1
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    optional_whitespace  go to state 11
+
+
+State 9
+
+    4 datablock_list: datablock .
+
+    $default  reduce using rule 4 (datablock_list)
+
+
+State 10
+
+    6 datablock: data_heading . TK_WHITESPACE
+    7          | data_heading . TK_WHITESPACE datablock_content TK_WHITESPACE
+
+    TK_WHITESPACE  shift, and go to state 12
+
+
+State 11
+
+    3 optional_datablock: datablock_list optional_whitespace .
+    5 datablock_list: datablock_list optional_whitespace . datablock
+
+    TK_DATA_HEADING  shift, and go to state 6
+
+    $default  reduce using rule 3 (optional_datablock)
+
+    datablock     go to state 13
+    data_heading  go to state 10
+
+
+State 12
+
+    6 datablock: data_heading TK_WHITESPACE .
+    7          | data_heading TK_WHITESPACE . datablock_content TK_WHITESPACE
+
+    TK_SAVE        shift, and go to state 14
+    TK_LOOP        shift, and go to state 15
+    TK_UNDERSCORE  shift, and go to state 16
+
+    $default  reduce using rule 6 (datablock)
+
+    datablock_content  go to state 17
+    data_items         go to state 18
+    loop               go to state 19
+    saveframe          go to state 20
+    tag                go to state 21
+
+
+State 13
+
+    5 datablock_list: datablock_list optional_whitespace datablock .
+
+    $default  reduce using rule 5 (datablock_list)
+
+
+State 14
+
+   21 saveframe: TK_SAVE . save_heading TK_WHITESPACE save_frame_content optional_whitespace TK_SAVE
+
+    TK_SAVE_HEADING  shift, and go to state 22
+
+    save_heading  go to state 23
+
+
+State 15
+
+   16 loop: TK_LOOP .
+
+    $default  reduce using rule 16 (loop)
+
+
+State 16
+
+   28 tag: TK_UNDERSCORE . value
+
+    TK_VALUE              shift, and go to state 24
+    TK_OPEN_SINGLE_QUOTE  shift, and go to state 25
+    TK_OPEN_DOUBLE_QUOTE  shift, and go to state 26
+    TK_TEXTFIELD          shift, and go to state 27
+
+    value               go to state 28
+    value_helper_start  go to state 29
+
+
+State 17
+
+    7 datablock: data_heading TK_WHITESPACE datablock_content . TK_WHITESPACE
+   11 datablock_content: datablock_content . TK_WHITESPACE data_items
+   12                  | datablock_content . TK_WHITESPACE saveframe
+
+    TK_WHITESPACE  shift, and go to state 30
+
+
+State 18
+
+    9 datablock_content: data_items .
+
+    $default  reduce using rule 9 (datablock_content)
+
+
+State 19
+
+   15 data_items: loop . tag_list optional_whitespace loop_body optional_whitespace TK_STOP
+
+    TK_WHITESPACE  shift, and go to state 31
+
+    tag_list  go to state 32
+
+
+State 20
+
+   10 datablock_content: saveframe .
+
+    $default  reduce using rule 10 (datablock_content)
+
+
+State 21
+
+   13 data_items: tag . optional_whitespace value
+   14           | tag . TK_WHITESPACE
+
+    TK_WHITESPACE  shift, and go to state 33
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    optional_whitespace  go to state 34
+
+
+State 22
+
+   22 save_heading: TK_SAVE_HEADING .
+
+    $default  reduce using rule 22 (save_heading)
+
+
+State 23
+
+   21 saveframe: TK_SAVE save_heading . TK_WHITESPACE save_frame_content optional_whitespace TK_SAVE
+
+    TK_WHITESPACE  shift, and go to state 35
+
+
+State 24
+
+   30 value_helper_start: TK_VALUE .
+   31                   | TK_VALUE . single_quote_helper value_helper
+   32                   | TK_VALUE . single_quote_helper
+   33                   | TK_VALUE . TK_UNDERSCORE value_helper
+
+    TK_SINGLE_QUOTE  shift, and go to state 36
+    TK_UNDERSCORE    shift, and go to state 37
+
+    TK_UNDERSCORE  [reduce using rule 30 (value_helper_start)]
+    $default       reduce using rule 30 (value_helper_start)
+
+    single_quote_helper  go to state 38
+
+    shift/reduce conflict on token TK_UNDERSCORE:
+       30 value_helper_start: TK_VALUE .
+       33 value_helper_start: TK_VALUE . TK_UNDERSCORE value_helper
+      Example: TK_WHITESPACE TK_UNDERSCORE TK_VALUE . TK_UNDERSCORE TK_VALUE
+      Shift derivation
+        tag_list
+        `-> 17: TK_WHITESPACE tag
+                              `-> 28: TK_UNDERSCORE value
+                                                    `-> 29: value_helper_start
+                                                            `-> 33: TK_VALUE . value_helper
+                                                                               `-> 37: TK_UNDERSCORE TK_VALUE
+      Reduce derivation
+        tag_list
+        `-> 18: tag_list                                                               optional_whitespace tag
+                `-> 17: TK_WHITESPACE tag                                              `-> 18: %empty      `-> 28: TK_UNDERSCORE value
+                                      `-> 28: TK_UNDERSCORE value                                                                `-> 29: value_helper_start
+                                                            `-> 29: value_helper_start                                                   `-> 30: TK_VALUE
+                                                                    `-> 30: TK_VALUE .
+
+
+
+State 25
+
+   34 value_helper_start: TK_OPEN_SINGLE_QUOTE . single_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 39
+    TK_VALUE               shift, and go to state 40
+    TK_SINGLE_QUOTE        shift, and go to state 41
+    TK_CLOSE_SINGLE_QUOTE  shift, and go to state 42
+    TK_DOUBLE_QUOTE        shift, and go to state 43
+
+    single_quoted_string  go to state 44
+
+
+State 26
+
+   35 value_helper_start: TK_OPEN_DOUBLE_QUOTE . double_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 45
+    TK_VALUE               shift, and go to state 46
+    TK_SINGLE_QUOTE        shift, and go to state 47
+    TK_DOUBLE_QUOTE        shift, and go to state 48
+    TK_CLOSE_DOUBLE_QUOTE  shift, and go to state 49
+
+    double_quoted_string  go to state 50
+
+
+State 27
+
+   36 value_helper_start: TK_TEXTFIELD . textfield_line TK_TEXTFIELD
+
+    TK_TEXTFIELD_LINE  shift, and go to state 51
+
+    $default  reduce using rule 55 (textfield_line)
+
+    textfield_line  go to state 52
+
+
+State 28
+
+   28 tag: TK_UNDERSCORE value .
+
+    $default  reduce using rule 28 (tag)
+
+
+State 29
+
+   29 value: value_helper_start .
+
+    $default  reduce using rule 29 (value)
+
+
+State 30
+
+    7 datablock: data_heading TK_WHITESPACE datablock_content TK_WHITESPACE .
+   11 datablock_content: datablock_content TK_WHITESPACE . data_items
+   12                  | datablock_content TK_WHITESPACE . saveframe
+
+    TK_SAVE        shift, and go to state 14
+    TK_LOOP        shift, and go to state 15
+    TK_UNDERSCORE  shift, and go to state 16
+
+    $default  reduce using rule 7 (datablock)
+
+    data_items  go to state 53
+    loop        go to state 19
+    saveframe   go to state 54
+    tag         go to state 21
+
+
+State 31
+
+   17 tag_list: TK_WHITESPACE . tag
+
+    TK_UNDERSCORE  shift, and go to state 16
+
+    tag  go to state 55
+
+
+State 32
+
+   15 data_items: loop tag_list . optional_whitespace loop_body optional_whitespace TK_STOP
+   18 tag_list: tag_list . optional_whitespace tag
+
+    TK_WHITESPACE  shift, and go to state 1
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    optional_whitespace  go to state 56
+
+
+State 33
+
+   14 data_items: tag TK_WHITESPACE .
+   27 optional_whitespace: TK_WHITESPACE . optional_whitespace
+
+    TK_WHITESPACE  shift, and go to state 1
+
+    TK_WHITESPACE  [reduce using rule 14 (data_items)]
+    TK_SAVE        reduce using rule 14 (data_items)
+    TK_LOOP        reduce using rule 14 (data_items)
+    TK_UNDERSCORE  reduce using rule 14 (data_items)
+    $default       reduce using rule 26 (optional_whitespace)
+
+    optional_whitespace  go to state 4
+
+    shift/reduce conflict on token TK_WHITESPACE:
+       14 data_items: tag TK_WHITESPACE .
+       27 optional_whitespace: . TK_WHITESPACE optional_whitespace
+      First example: tag TK_WHITESPACE . TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock
+        `-> 7: tag optional_whitespace                                               datablock_content TK_WHITESPACE
+                   `-> 27: TK_WHITESPACE optional_whitespace                         `-> 9: %empty
+                                         `-> 27: . TK_WHITESPACE optional_whitespace
+                                                                 `-> 27: %empty
+      Second example: data_heading tag TK_WHITESPACE . TK_WHITESPACE
+      Reduce derivation
+        datablock
+        `-> 7: data_heading datablock_content                  TK_WHITESPACE
+                            `-> 9: data_items
+                                   `-> 14: tag TK_WHITESPACE .
+
+
+
+State 34
+
+   13 data_items: tag optional_whitespace . value
+
+    TK_VALUE              shift, and go to state 24
+    TK_OPEN_SINGLE_QUOTE  shift, and go to state 25
+    TK_OPEN_DOUBLE_QUOTE  shift, and go to state 26
+    TK_TEXTFIELD          shift, and go to state 27
+
+    value               go to state 57
+    value_helper_start  go to state 29
+
+
+State 35
+
+   21 saveframe: TK_SAVE save_heading TK_WHITESPACE . save_frame_content optional_whitespace TK_SAVE
+
+    TK_LOOP        shift, and go to state 15
+    TK_UNDERSCORE  shift, and go to state 16
+
+    data_items          go to state 58
+    loop                go to state 19
+    save_frame_content  go to state 59
+    tag                 go to state 21
+
+
+State 36
+
+   41 single_quote_helper: TK_SINGLE_QUOTE .
+   42                    | TK_SINGLE_QUOTE . single_quote_helper
+
+    TK_SINGLE_QUOTE  shift, and go to state 36
+
+    $default  reduce using rule 41 (single_quote_helper)
+
+    single_quote_helper  go to state 60
+
+
+State 37
+
+   33 value_helper_start: TK_VALUE TK_UNDERSCORE . value_helper
+
+    TK_VALUE  shift, and go to state 61
+
+    value_helper  go to state 62
+
+
+State 38
+
+   31 value_helper_start: TK_VALUE single_quote_helper . value_helper
+   32                   | TK_VALUE single_quote_helper .
+
+    TK_VALUE  shift, and go to state 61
+
+    TK_VALUE  [reduce using rule 32 (value_helper_start)]
+    $default  reduce using rule 32 (value_helper_start)
+
+    value_helper  go to state 63
+
+    shift/reduce conflict on token TK_VALUE:
+       32 value_helper_start: TK_VALUE single_quote_helper .
+       37 value_helper: . TK_VALUE
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper . TK_VALUE TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                  TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                   TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 37: . TK_VALUE
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                            optional_whitespace
+               `-> 4: datablock                                                                                                                                                                          `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                  TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                  optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                          `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                 `-> 30: TK_VALUE
+                                                                                                     `-> 32: TK_VALUE single_quote_helper .
+
+    shift/reduce conflict on token TK_VALUE:
+       32 value_helper_start: TK_VALUE single_quote_helper .
+       38 value_helper: . TK_VALUE single_quote_helper value_helper
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper . TK_VALUE single_quote_helper value_helper TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                   TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                                    TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 38: . TK_VALUE single_quote_helper value_helper
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                                           optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                                         `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                 TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                  optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                          `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                 `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                     `-> 32: TK_VALUE single_quote_helper .
+
+    shift/reduce conflict on token TK_VALUE:
+       32 value_helper_start: TK_VALUE single_quote_helper .
+       39 value_helper: . TK_VALUE single_quote_helper
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper . TK_VALUE single_quote_helper TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                      TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                       TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 39: . TK_VALUE single_quote_helper
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                              optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                            `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                    TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                  optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                          `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                 `-> 32: TK_VALUE single_quote_helper
+                                                                                                     `-> 32: TK_VALUE single_quote_helper .
+
+    shift/reduce conflict on token TK_VALUE:
+       32 value_helper_start: TK_VALUE single_quote_helper .
+       40 value_helper: . TK_VALUE TK_UNDERSCORE value_helper
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper . TK_VALUE TK_UNDERSCORE value_helper TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                             TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                              TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 40: . TK_VALUE TK_UNDERSCORE value_helper
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                                     optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                                   `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                           TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                  optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                          `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                 `-> 33: TK_VALUE TK_UNDERSCORE value_helper
+                                                                                                     `-> 32: TK_VALUE single_quote_helper .
+
+
+
+State 39
+
+   45 single_quoted_string: TK_WHITESPACE . single_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 39
+    TK_VALUE               shift, and go to state 40
+    TK_SINGLE_QUOTE        shift, and go to state 41
+    TK_CLOSE_SINGLE_QUOTE  shift, and go to state 42
+    TK_DOUBLE_QUOTE        shift, and go to state 43
+
+    single_quoted_string  go to state 64
+
+
+State 40
+
+   44 single_quoted_string: TK_VALUE . single_quoted_string
+   46                     | TK_VALUE . TK_UNDERSCORE single_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 39
+    TK_VALUE               shift, and go to state 40
+    TK_SINGLE_QUOTE        shift, and go to state 41
+    TK_CLOSE_SINGLE_QUOTE  shift, and go to state 42
+    TK_DOUBLE_QUOTE        shift, and go to state 43
+    TK_UNDERSCORE          shift, and go to state 65
+
+    single_quoted_string  go to state 66
+
+
+State 41
+
+   47 single_quoted_string: TK_SINGLE_QUOTE . single_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 39
+    TK_VALUE               shift, and go to state 40
+    TK_SINGLE_QUOTE        shift, and go to state 41
+    TK_CLOSE_SINGLE_QUOTE  shift, and go to state 42
+    TK_DOUBLE_QUOTE        shift, and go to state 43
+
+    single_quoted_string  go to state 67
+
+
+State 42
+
+   43 single_quoted_string: TK_CLOSE_SINGLE_QUOTE .
+
+    $default  reduce using rule 43 (single_quoted_string)
+
+
+State 43
+
+   48 single_quoted_string: TK_DOUBLE_QUOTE . single_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 39
+    TK_VALUE               shift, and go to state 40
+    TK_SINGLE_QUOTE        shift, and go to state 41
+    TK_CLOSE_SINGLE_QUOTE  shift, and go to state 42
+    TK_DOUBLE_QUOTE        shift, and go to state 43
+
+    single_quoted_string  go to state 68
+
+
+State 44
+
+   34 value_helper_start: TK_OPEN_SINGLE_QUOTE single_quoted_string .
+
+    $default  reduce using rule 34 (value_helper_start)
+
+
+State 45
+
+   52 double_quoted_string: TK_WHITESPACE . double_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 45
+    TK_VALUE               shift, and go to state 46
+    TK_SINGLE_QUOTE        shift, and go to state 47
+    TK_DOUBLE_QUOTE        shift, and go to state 48
+    TK_CLOSE_DOUBLE_QUOTE  shift, and go to state 49
+
+    double_quoted_string  go to state 69
+
+
+State 46
+
+   50 double_quoted_string: TK_VALUE . double_quoted_string
+   51                     | TK_VALUE . TK_UNDERSCORE double_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 45
+    TK_VALUE               shift, and go to state 46
+    TK_SINGLE_QUOTE        shift, and go to state 47
+    TK_DOUBLE_QUOTE        shift, and go to state 48
+    TK_CLOSE_DOUBLE_QUOTE  shift, and go to state 49
+    TK_UNDERSCORE          shift, and go to state 70
+
+    double_quoted_string  go to state 71
+
+
+State 47
+
+   54 double_quoted_string: TK_SINGLE_QUOTE . double_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 45
+    TK_VALUE               shift, and go to state 46
+    TK_SINGLE_QUOTE        shift, and go to state 47
+    TK_DOUBLE_QUOTE        shift, and go to state 48
+    TK_CLOSE_DOUBLE_QUOTE  shift, and go to state 49
+
+    double_quoted_string  go to state 72
+
+
+State 48
+
+   53 double_quoted_string: TK_DOUBLE_QUOTE . double_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 45
+    TK_VALUE               shift, and go to state 46
+    TK_SINGLE_QUOTE        shift, and go to state 47
+    TK_DOUBLE_QUOTE        shift, and go to state 48
+    TK_CLOSE_DOUBLE_QUOTE  shift, and go to state 49
+
+    double_quoted_string  go to state 73
+
+
+State 49
+
+   49 double_quoted_string: TK_CLOSE_DOUBLE_QUOTE .
+
+    $default  reduce using rule 49 (double_quoted_string)
+
+
+State 50
+
+   35 value_helper_start: TK_OPEN_DOUBLE_QUOTE double_quoted_string .
+
+    $default  reduce using rule 35 (value_helper_start)
+
+
+State 51
+
+   56 textfield_line: TK_TEXTFIELD_LINE . textfield_line
+
+    TK_TEXTFIELD_LINE  shift, and go to state 51
+
+    $default  reduce using rule 55 (textfield_line)
+
+    textfield_line  go to state 74
+
+
+State 52
+
+   36 value_helper_start: TK_TEXTFIELD textfield_line . TK_TEXTFIELD
+
+    TK_TEXTFIELD  shift, and go to state 75
+
+
+State 53
+
+   11 datablock_content: datablock_content TK_WHITESPACE data_items .
+
+    $default  reduce using rule 11 (datablock_content)
+
+
+State 54
+
+   12 datablock_content: datablock_content TK_WHITESPACE saveframe .
+
+    $default  reduce using rule 12 (datablock_content)
+
+
+State 55
+
+   17 tag_list: TK_WHITESPACE tag .
+
+    $default  reduce using rule 17 (tag_list)
+
+
+State 56
+
+   15 data_items: loop tag_list optional_whitespace . loop_body optional_whitespace TK_STOP
+   18 tag_list: tag_list optional_whitespace . tag
+
+    TK_VALUE              shift, and go to state 24
+    TK_OPEN_SINGLE_QUOTE  shift, and go to state 25
+    TK_OPEN_DOUBLE_QUOTE  shift, and go to state 26
+    TK_UNDERSCORE         shift, and go to state 16
+    TK_TEXTFIELD          shift, and go to state 27
+
+    loop_body           go to state 76
+    tag                 go to state 77
+    value               go to state 78
+    value_helper_start  go to state 29
+
+
+State 57
+
+   13 data_items: tag optional_whitespace value .
+
+    $default  reduce using rule 13 (data_items)
+
+
+State 58
+
+   23 save_frame_content: data_items .
+
+    $default  reduce using rule 23 (save_frame_content)
+
+
+State 59
+
+   21 saveframe: TK_SAVE save_heading TK_WHITESPACE save_frame_content . optional_whitespace TK_SAVE
+   24 save_frame_content: save_frame_content . TK_WHITESPACE data_items
+   25                   | save_frame_content . data_items
+
+    TK_WHITESPACE  shift, and go to state 79
+    TK_LOOP        shift, and go to state 15
+    TK_UNDERSCORE  shift, and go to state 16
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    data_items           go to state 80
+    loop                 go to state 19
+    optional_whitespace  go to state 81
+    tag                  go to state 21
+
+
+State 60
+
+   42 single_quote_helper: TK_SINGLE_QUOTE single_quote_helper .
+
+    $default  reduce using rule 42 (single_quote_helper)
+
+
+State 61
+
+   37 value_helper: TK_VALUE .
+   38             | TK_VALUE . single_quote_helper value_helper
+   39             | TK_VALUE . single_quote_helper
+   40             | TK_VALUE . TK_UNDERSCORE value_helper
+
+    TK_SINGLE_QUOTE  shift, and go to state 36
+    TK_UNDERSCORE    shift, and go to state 82
+
+    TK_UNDERSCORE  [reduce using rule 37 (value_helper)]
+    $default       reduce using rule 37 (value_helper)
+
+    single_quote_helper  go to state 83
+
+    shift/reduce conflict on token TK_UNDERSCORE:
+       37 value_helper: TK_VALUE .
+       40 value_helper: TK_VALUE . TK_UNDERSCORE value_helper
+      Example: TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper TK_VALUE . TK_UNDERSCORE TK_VALUE
+      Shift derivation
+        tag_list
+        `-> 17: TK_WHITESPACE tag
+                              `-> 28: TK_UNDERSCORE value
+                                                    `-> 29: value_helper_start
+                                                            `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                 `-> 40: TK_VALUE . value_helper
+                                                                                                                    `-> 37: TK_UNDERSCORE TK_VALUE
+      Reduce derivation
+        tag_list
+        `-> 18: tag_list                                                                                                    optional_whitespace tag
+                `-> 17: TK_WHITESPACE tag                                                                                   `-> 18: %empty      `-> 28: TK_UNDERSCORE value
+                                      `-> 28: TK_UNDERSCORE value                                                                                                     `-> 29: value_helper_start
+                                                            `-> 29: value_helper_start                                                                                        `-> 30: TK_VALUE
+                                                                    `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                         `-> 37: TK_VALUE .
+
+
+
+State 62
+
+   33 value_helper_start: TK_VALUE TK_UNDERSCORE value_helper .
+
+    $default  reduce using rule 33 (value_helper_start)
+
+
+State 63
+
+   31 value_helper_start: TK_VALUE single_quote_helper value_helper .
+
+    $default  reduce using rule 31 (value_helper_start)
+
+
+State 64
+
+   45 single_quoted_string: TK_WHITESPACE single_quoted_string .
+
+    $default  reduce using rule 45 (single_quoted_string)
+
+
+State 65
+
+   46 single_quoted_string: TK_VALUE TK_UNDERSCORE . single_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 39
+    TK_VALUE               shift, and go to state 40
+    TK_SINGLE_QUOTE        shift, and go to state 41
+    TK_CLOSE_SINGLE_QUOTE  shift, and go to state 42
+    TK_DOUBLE_QUOTE        shift, and go to state 43
+
+    single_quoted_string  go to state 84
+
+
+State 66
+
+   44 single_quoted_string: TK_VALUE single_quoted_string .
+
+    $default  reduce using rule 44 (single_quoted_string)
+
+
+State 67
+
+   47 single_quoted_string: TK_SINGLE_QUOTE single_quoted_string .
+
+    $default  reduce using rule 47 (single_quoted_string)
+
+
+State 68
+
+   48 single_quoted_string: TK_DOUBLE_QUOTE single_quoted_string .
+
+    $default  reduce using rule 48 (single_quoted_string)
+
+
+State 69
+
+   52 double_quoted_string: TK_WHITESPACE double_quoted_string .
+
+    $default  reduce using rule 52 (double_quoted_string)
+
+
+State 70
+
+   51 double_quoted_string: TK_VALUE TK_UNDERSCORE . double_quoted_string
+
+    TK_WHITESPACE          shift, and go to state 45
+    TK_VALUE               shift, and go to state 46
+    TK_SINGLE_QUOTE        shift, and go to state 47
+    TK_DOUBLE_QUOTE        shift, and go to state 48
+    TK_CLOSE_DOUBLE_QUOTE  shift, and go to state 49
+
+    double_quoted_string  go to state 85
+
+
+State 71
+
+   50 double_quoted_string: TK_VALUE double_quoted_string .
+
+    $default  reduce using rule 50 (double_quoted_string)
+
+
+State 72
+
+   54 double_quoted_string: TK_SINGLE_QUOTE double_quoted_string .
+
+    $default  reduce using rule 54 (double_quoted_string)
+
+
+State 73
+
+   53 double_quoted_string: TK_DOUBLE_QUOTE double_quoted_string .
+
+    $default  reduce using rule 53 (double_quoted_string)
+
+
+State 74
+
+   56 textfield_line: TK_TEXTFIELD_LINE textfield_line .
+
+    $default  reduce using rule 56 (textfield_line)
+
+
+State 75
+
+   36 value_helper_start: TK_TEXTFIELD textfield_line TK_TEXTFIELD .
+
+    $default  reduce using rule 36 (value_helper_start)
+
+
+State 76
+
+   15 data_items: loop tag_list optional_whitespace loop_body . optional_whitespace TK_STOP
+   20 loop_body: loop_body . optional_whitespace value
+
+    TK_WHITESPACE  shift, and go to state 1
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    optional_whitespace  go to state 86
+
+
+State 77
+
+   18 tag_list: tag_list optional_whitespace tag .
+
+    $default  reduce using rule 18 (tag_list)
+
+
+State 78
+
+   19 loop_body: value .
+
+    $default  reduce using rule 19 (loop_body)
+
+
+State 79
+
+   24 save_frame_content: save_frame_content TK_WHITESPACE . data_items
+   27 optional_whitespace: TK_WHITESPACE . optional_whitespace
+
+    TK_WHITESPACE  shift, and go to state 1
+    TK_LOOP        shift, and go to state 15
+    TK_UNDERSCORE  shift, and go to state 16
+
+    $default  reduce using rule 26 (optional_whitespace)
+
+    data_items           go to state 87
+    loop                 go to state 19
+    optional_whitespace  go to state 4
+    tag                  go to state 21
+
+
+State 80
+
+   25 save_frame_content: save_frame_content data_items .
+
+    $default  reduce using rule 25 (save_frame_content)
+
+
+State 81
+
+   21 saveframe: TK_SAVE save_heading TK_WHITESPACE save_frame_content optional_whitespace . TK_SAVE
+
+    TK_SAVE  shift, and go to state 88
+
+
+State 82
+
+   40 value_helper: TK_VALUE TK_UNDERSCORE . value_helper
+
+    TK_VALUE  shift, and go to state 61
+
+    value_helper  go to state 89
+
+
+State 83
+
+   38 value_helper: TK_VALUE single_quote_helper . value_helper
+   39             | TK_VALUE single_quote_helper .
+
+    TK_VALUE  shift, and go to state 61
+
+    TK_VALUE  [reduce using rule 39 (value_helper)]
+    $default  reduce using rule 39 (value_helper)
+
+    value_helper  go to state 90
+
+    shift/reduce conflict on token TK_VALUE:
+       39 value_helper: TK_VALUE single_quote_helper .
+       37 value_helper: . TK_VALUE
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper TK_VALUE single_quote_helper . TK_VALUE TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                       TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                                        TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 38: TK_VALUE single_quote_helper value_helper
+                                                                                                                                                                        `-> 37: . TK_VALUE
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                                                 optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                                               `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                       TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                                                       optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                                                               `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                                                      `-> 30: TK_VALUE
+                                                                                                     `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                          `-> 39: TK_VALUE single_quote_helper .
+
+    shift/reduce conflict on token TK_VALUE:
+       39 value_helper: TK_VALUE single_quote_helper .
+       38 value_helper: . TK_VALUE single_quote_helper value_helper
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper TK_VALUE single_quote_helper . TK_VALUE single_quote_helper value_helper TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                                        TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                                                                         TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 38: TK_VALUE single_quote_helper value_helper
+                                                                                                                                                                        `-> 38: . TK_VALUE single_quote_helper value_helper
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                                                                                optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                                                                              `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                                                      TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                                                       optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                                                               `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                                                      `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                     `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                          `-> 39: TK_VALUE single_quote_helper .
+
+    shift/reduce conflict on token TK_VALUE:
+       39 value_helper: TK_VALUE single_quote_helper .
+       39 value_helper: . TK_VALUE single_quote_helper
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper TK_VALUE single_quote_helper . TK_VALUE single_quote_helper TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                           TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                                                            TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 38: TK_VALUE single_quote_helper value_helper
+                                                                                                                                                                        `-> 39: . TK_VALUE single_quote_helper
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                                                                   optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                                                                 `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                                         TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                                                       optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                                                               `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                                                      `-> 32: TK_VALUE single_quote_helper
+                                                                                                     `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                          `-> 39: TK_VALUE single_quote_helper .
+
+    shift/reduce conflict on token TK_VALUE:
+       39 value_helper: TK_VALUE single_quote_helper .
+       40 value_helper: . TK_VALUE TK_UNDERSCORE value_helper
+      Example: data_heading TK_WHITESPACE TK_UNDERSCORE TK_VALUE single_quote_helper TK_VALUE single_quote_helper . TK_VALUE TK_UNDERSCORE value_helper TK_WHITESPACE TK_WHITESPACE
+      Shift derivation
+        datablock_list
+        `-> 4: datablock
+               `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                                  TK_WHITESPACE
+                                                 `-> 9: data_items
+                                                        `-> 14: tag                                                                                                                                                   TK_WHITESPACE
+                                                                `-> 28: TK_UNDERSCORE value
+                                                                                      `-> 29: value_helper_start
+                                                                                              `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                   `-> 38: TK_VALUE single_quote_helper value_helper
+                                                                                                                                                                        `-> 40: . TK_VALUE TK_UNDERSCORE value_helper
+      Reduce derivation
+        optional_datablock
+        `-> 3: datablock_list                                                                                                                                                                                                                                          optional_whitespace
+               `-> 4: datablock                                                                                                                                                                                                                                        `-> 27: TK_WHITESPACE optional_whitespace
+                      `-> 7: data_heading TK_WHITESPACE datablock_content                                                                                                                                                                                TK_WHITESPACE                       `-> 27: %empty
+                                                        `-> 9: data_items
+                                                               `-> 13: tag                                                                                                       optional_whitespace value
+                                                                       `-> 28: TK_UNDERSCORE value                                                                               `-> 13: %empty      `-> 29: value_helper_start
+                                                                                             `-> 29: value_helper_start                                                                                      `-> 33: TK_VALUE TK_UNDERSCORE value_helper
+                                                                                                     `-> 31: TK_VALUE single_quote_helper value_helper
+                                                                                                                                          `-> 39: TK_VALUE single_quote_helper .
+
+
+
+State 84
+
+   46 single_quoted_string: TK_VALUE TK_UNDERSCORE single_quoted_string .
+
+    $default  reduce using rule 46 (single_quoted_string)
+
+
+State 85
+
+   51 double_quoted_string: TK_VALUE TK_UNDERSCORE double_quoted_string .
+
+    $default  reduce using rule 51 (double_quoted_string)
+
+
+State 86
+
+   15 data_items: loop tag_list optional_whitespace loop_body optional_whitespace . TK_STOP
+   20 loop_body: loop_body optional_whitespace . value
+
+    TK_VALUE              shift, and go to state 24
+    TK_STOP               shift, and go to state 91
+    TK_OPEN_SINGLE_QUOTE  shift, and go to state 25
+    TK_OPEN_DOUBLE_QUOTE  shift, and go to state 26
+    TK_TEXTFIELD          shift, and go to state 27
+
+    value               go to state 92
+    value_helper_start  go to state 29
+
+
+State 87
+
+   24 save_frame_content: save_frame_content TK_WHITESPACE data_items .
+
+    $default  reduce using rule 24 (save_frame_content)
+
+
+State 88
+
+   21 saveframe: TK_SAVE save_heading TK_WHITESPACE save_frame_content optional_whitespace TK_SAVE .
+
+    $default  reduce using rule 21 (saveframe)
+
+
+State 89
+
+   40 value_helper: TK_VALUE TK_UNDERSCORE value_helper .
+
+    $default  reduce using rule 40 (value_helper)
+
+
+State 90
+
+   38 value_helper: TK_VALUE single_quote_helper value_helper .
+
+    $default  reduce using rule 38 (value_helper)
+
+
+State 91
+
+   15 data_items: loop tag_list optional_whitespace loop_body optional_whitespace TK_STOP .
+
+    $default  reduce using rule 15 (data_items)
+
+
+State 92
+
+   20 loop_body: loop_body optional_whitespace value .
+
+    $default  reduce using rule 20 (loop_body)
