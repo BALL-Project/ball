@@ -79,6 +79,7 @@ Last activity: 2026-05-17
 | Phase 999.14-github-issue-pr-triage P01 | ~2h (multi-session; prior rounds + this session for TRIAGE-02 + TRIAGE-03 + state updates) | 5 tasks | 18 files (3 baseline JSON + decisions.md + STALE-DOCS-AUDIT.md + SUMMARY.md + 8 C++ files from 5-PR bundle + ROADMAP.md + REQUIREMENTS.md + STATE.md) |
 | Phase 999.22-warning-census P01 | ~45min | 3 tasks | 7 files (3 raw warning logs + CENSUS.md + SUMMARY.md + ROADMAP.md + REQUIREMENTS.md) |
 | Phase 09-test-suite-triage P01 | 110min | 6 tasks | 8 files |
+| Phase 999.34-windows-test-gatekeeper P01 | ~45min (dominated by parallel-agent 999.42 CI cancellation churn — push-routed via temp branch to avoid bundling OOS commits) | 5 tasks | 5 files (2 workflow + 2 docs + test/CMakeLists fine-penalty note) + 2 created (PLAN, SUMMARY) |
 
 ## Accumulated Context
 
@@ -148,6 +149,7 @@ Last activity: 2026-05-17
 - [Phase ?]: Directory_test: KNOWN-PASSING — passes with correct BALL_DATA_PATH set; PHASE-9-BASELINE.md was a false alarm
 - [Phase ?]: PeptideCapProcessor/Peptides/RotamerLibrary: QUARANTINE Rule-1 — OOS regression from commit 45dce6971 PR #550; backlog Phase 999.35
 - [Phase ?]: Gatekeeper flip: blocking on macOS + Linux (ci.yml + release.yml), || true removed; Windows gatekeeper deferred to Phase 999.34
+- [Phase 999.34]: Windows test gatekeeper closed (2026-05-17). ci.yml + release.yml both have 3-step Windows test pattern (Build BALL test suite / Run BALL test suite / Upload test results) at parity with macOS + Linux. PATH double-extension (`build\ci-windows\bin` for BALL.dll+VIEW.dll PLUS `build\ci-windows\vcpkg_installed\x64-windows-release\bin` for Qt6+Boost) so test EXEs in `bin\TEST\` resolve all DLLs — without this every test exits STATUS_DLL_NOT_FOUND (0xc0000135). No Windows-specific WILL_FAIL gates needed: AssignBondOrderProcessor_test2 stays Apple-arm64-only (MSVC x64 = Intel-compatible FP path = passes like Linux); OOS PR-merge data regressions (PeptideCapProcessor/Peptides/RotamerLibrary) are already unconditional WILL_FAIL TRUE. Push-routed via temp branch to keep parallel-agent 999.42's locally-committed-but-unpushed work isolated; my SUMMARY commit dc66c91f5c landed on origin/v1.7-modernization without bundling 999.42's 3 in-flight commits. AssignBondOrderProcessor fine-penalty algorithmic fix decoupled from 999.34 (was incorrectly bundled in test/CMakeLists.txt comment; corrected to be a separate v1.7/v2.0 future task).
 
 ### Roadmap Evolution
 
