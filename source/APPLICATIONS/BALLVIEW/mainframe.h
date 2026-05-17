@@ -51,6 +51,13 @@ namespace BALL
 
 		void checkMenus();
 
+#ifdef BALL_UI_V2
+		/// Phase 999.43 dev-only: open the IconBrowser dialog. Only
+		/// wired into the Tools menu when BALL_UI_V2 is ON AND the
+		/// build is a debug build (!NDEBUG). See iconBrowser.h.
+		void openIconBrowser();
+#endif
+
 		protected:
 			void changeEvent(QEvent* evt);
 			void setupPluginHandlers_();

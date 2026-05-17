@@ -4,6 +4,11 @@ PROJECT(BALLView)
 SET(SOURCES_LIST
 	aboutDialog.C
 	demoTutorialDialog.C
+	# Phase 999.43: IconBrowser dev tool. The file compiles to an empty TU
+	# when BALL_UI_V2 is OFF (via #ifdef wrapping in iconBrowser.C) so it
+	# is safe to keep in the unconditional source list — the matrix's
+	# UI-V2-OFF cells still link the same TU set.
+	iconBrowser.C
 	main.C
 	mainframe.C
 )
@@ -46,6 +51,12 @@ ENDIF()
 SET(MOC_SOURCES_LIST
 	aboutDialog.h
 	demoTutorialDialog.h
+	# Phase 999.43: iconBrowser.h has Q_OBJECT inside a BALL_UI_V2 ifdef;
+	# CMAKE_AUTOMOC is ON project-wide so moc will be invoked on the
+	# header when the macro expands, and produce an empty moc output
+	# (no Q_OBJECT visible) when the flag is OFF. Listed here for
+	# explicitness / discoverability.
+	iconBrowser.h
 	mainframe.h
 )
 

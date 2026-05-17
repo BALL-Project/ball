@@ -5,6 +5,9 @@
 #include "mainframe.h"
 #include "aboutDialog.h"   // Phase 999.43: hand-coded About dialog (replaces aboutDialog.ui)
 #include "demoTutorialDialog.h"
+#ifdef BALL_UI_V2
+#	include "iconBrowser.h"  // Phase 999.43: dev-only icon browser
+#endif
 
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/KERNEL/theme/tokens.h>  // Phase 999.41: kIconToolbar
@@ -168,6 +171,23 @@ namespace BALL
 		action = insertMenuEntry(MainControl::HELP, (String)tr("About"), this, SLOT(about()), description);
 		if (action)
 			setMenuHint(action, (String)tr("Show informations on this version of BALLView"));
+
+#if defined(BALL_UI_V2) && !defined(NDEBUG)
+		// Phase 999.43: Tools › Icon Browser. Dev-only menu entry so
+		// the design team can spot-check the theme.qrc bundle without
+		// firing up a debugger. Production release builds (NDEBUG)
+		// don't get this menu — only the menu wiring is conditional;
+		// the IconBrowser class itself compiles whenever BALL_UI_V2
+		// is ON so a debug rebuild can flip the menu on without
+		// touching the build system.
+		description = "Shortcut|Tools|IconBrowser";
+		action = insertMenuEntry(MainControl::TOOLS, (String)tr("Icon Browser (dev)"),
+		                         this, SLOT(openIconBrowser()), description,
+		                         QKeySequence(),
+		                         UIOperationMode::MODE_ADVANCED);
+		if (action)
+			setMenuHint(action, (String)tr("Phase 999.43: browse theme.qrc icons (debug builds only)"));
+#endif
 
 		// TODO: why is this done here and not, e.g., in mainControl()???
 		description = "Shortcut|MolecularMechanics|Abort_Calculation";
@@ -365,6 +385,18 @@ namespace BALL
 		VIEW::AboutDialog dlg(this);
 		dlg.exec();
 	}
+
+#ifdef BALL_UI_V2
+	void Mainframe::openIconBrowser()
+	{
+		// Phase 999.43: open the dev-only IconBrowser dialog. Slot is
+		// always present when BALL_UI_V2 is ON; the menu wiring above
+		// gates the user-visible entry on !NDEBUG.
+		VIEW::IconBrowser* dlg = new VIEW::IconBrowser(this);
+		dlg->setAttribute(Qt::WA_DeleteOnClose, true);
+		dlg->show();
+	}
+#endif
 
 	void Mainframe::changeEvent(QEvent* evt)
 	{
