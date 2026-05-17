@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 // Phase 999.43 — BALLView Refresh: SwatchButton implementation.
+// Phase 999.48 — a11y: QAccessible name/description per Handover §8.2.
 //
 
 #include <BALL/VIEW/WIDGETS/swatchButton.h>
@@ -23,6 +24,13 @@ namespace BALL
 			setObjectName(QStringLiteral("swatchButton"));
 			setCursor(Qt::PointingHandCursor);
 			setFocusPolicy(Qt::StrongFocus);
+
+			// Phase 999.48 §8.2 — a11y. QAbstractButton already exposes
+			// QAccessible::Button via Qt's default factory; we just need
+			// to keep the accessibleName in sync with the colour and add
+			// a localized description for screen readers.
+			setAccessibleName(tr("Color: %1").arg(color_.name(QColor::HexRgb)));
+			setAccessibleDescription(tr("Color swatch. Activate to open the color picker."));
 		}
 
 		SwatchButton::SwatchButton(QWidget* parent)
@@ -40,6 +48,9 @@ namespace BALL
 			if (!c.isValid()) return;
 			if (c == color_) return;        // no spurious notifications
 			color_ = c;
+			// Phase 999.48 §8.2 — keep accessibleName synced with the
+			// displayed colour so screen readers announce updates.
+			setAccessibleName(tr("Color: %1").arg(color_.name(QColor::HexRgb)));
 			update();
 			Q_EMIT colorChanged(color_);
 		}

@@ -2,12 +2,14 @@
 // vi: set ts=2:
 //
 // Phase 999.43 — BALLView Refresh: SectionHeader implementation.
+// Phase 999.48 — a11y: QAccessible::Heading role + name per Handover §8.2.
 // See `include/BALL/VIEW/WIDGETS/sectionHeader.h` for design.
 //
 
 #include <BALL/VIEW/WIDGETS/sectionHeader.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>
 
+#include <QtGui/QAccessible>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -56,6 +58,18 @@ namespace BALL
 			layout->addWidget(chevron_);
 			layout->addWidget(title_label_);
 			layout->addWidget(rule, /*stretch=*/1);
+
+			// Phase 999.48 §8.2 — a11y. The header is logically a
+			// QAccessible::Heading at level 2. Qt's default factory exposes
+			// the QLabel as text; setting accessibleName on the root widget
+			// (the SectionHeader) gives the heading semantics, and the
+			// chevron remains a button (focusable for keyboard collapse).
+			setAccessibleName(title);
+			setAccessibleDescription(tr("Section header. Activate the chevron to collapse or expand the section."));
+			// Make the chevron tab-reachable for keyboard a11y (override
+			// the NoFocus policy set above for the visual hover affordance).
+			chevron_->setFocusPolicy(Qt::StrongFocus);
+			chevron_->setAccessibleName(tr("Toggle %1 section").arg(title));
 		}
 
 		SectionHeader::~SectionHeader() = default;
@@ -68,6 +82,9 @@ namespace BALL
 		void SectionHeader::setTitle(const QString& t)
 		{
 			if (title_label_) title_label_->setText(t);
+			// Phase 999.48 §8.2 — keep a11y name in sync.
+			setAccessibleName(t);
+			if (chevron_) chevron_->setAccessibleName(tr("Toggle %1 section").arg(t));
 		}
 
 		void SectionHeader::setExpanded(bool expanded)

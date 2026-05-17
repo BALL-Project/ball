@@ -2,6 +2,7 @@
 // vi: set ts=2:
 //
 // Phase 999.43 — BALLView Refresh: LabeledSlider implementation.
+// Phase 999.48 — a11y: QAccessible name/description per Handover §8.2.
 //
 
 #include <BALL/VIEW/WIDGETS/labeledSlider.h>
@@ -74,6 +75,18 @@ namespace BALL
 			connect(spin_, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
 			        this, &LabeledSlider::onSpinChanged_);
 			connect(reset_button_, &QToolButton::clicked, this, &LabeledSlider::reset);
+
+			// Phase 999.48 §8.2 — a11y. QSlider already exposes
+			// QAccessible::Slider via Qt's default factory; for the
+			// composite container we mirror the units string into the
+			// accessibleName so screen readers announce e.g. "Opacity, 50%".
+			// Subclasses (in calling code) override accessibleName per
+			// instance via setAccessibleName().
+			if (!units.isEmpty())
+			{
+				slider_->setAccessibleName(units);
+				spin_->setAccessibleName(units);
+			}
 		}
 
 		LabeledSlider::~LabeledSlider() = default;

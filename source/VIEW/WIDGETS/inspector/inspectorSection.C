@@ -2,6 +2,8 @@
 // vi: set ts=2:
 //
 // Phase 999.44 — InspectorSection implementation.
+// Phase 999.48 — a11y: QAccessible::Pane (Section equivalent) role + name
+//                per Handover §8.2.
 //
 
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
@@ -40,6 +42,14 @@ namespace BALL
 
 			connect(header_, &SectionHeader::expandedChanged,
 			        this, &InspectorSection::onHeaderToggled_);
+
+			// Phase 999.48 §8.2 — a11y. Per Handover, InspectorSection maps
+			// to QAccessible::Section. Qt 6's role enumeration uses Pane for
+			// generic group containers; combined with accessibleName, screen
+			// readers announce the section title before recursing into
+			// content. The SectionHeader child supplies the heading semantic.
+			setAccessibleName(title);
+			setAccessibleDescription(tr("Inspector section: %1.").arg(title));
 		}
 
 		InspectorSection::~InspectorSection() = default;
