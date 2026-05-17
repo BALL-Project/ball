@@ -5,13 +5,54 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
+#ifndef BALL_CORE_ONLY
 #include <BALL/STRUCTURE/geometricProperties.h>
+#endif
+#include <BALL/KERNEL/atom.h>
+#include <BALL/MATHS/vector3.h>
+#include <BALL/MATHS/angle.h>
 #include <BALL/COMMON/exception.h>
+#include <cmath>
 
 using namespace::std;
 
-namespace BALL 
+namespace BALL
 {
+
+#ifdef BALL_CORE_ONLY
+	// BALL 2.0 KERNEL replacement, K0.1: inline copy of
+	// STRUCTURE::calculateTorsionAngle so KERNEL doesn't link into
+	// STRUCTURE under BALL_CORE_ONLY. Original at
+	// source/STRUCTURE/geometricProperties.C; verbatim port.
+	static Angle calculateTorsionAngle(const Atom& a1, const Atom& a2,
+	                                   const Atom& a3, const Atom& a4)
+	{
+		Vector3 a12(a2.getPosition() - a1.getPosition());
+		Vector3 a23(a3.getPosition() - a2.getPosition());
+		Vector3 a34(a4.getPosition() - a3.getPosition());
+
+		Vector3 n12(a12 % a23);
+		Vector3 n34(a23 % a34);
+
+		if (n12 == Vector3::getZero() || n34 == Vector3::getZero())
+		{
+			throw(Exception::IllegalPosition(__FILE__, __LINE__, 0, 0, 0));
+		}
+
+		n12.normalize();
+		n34.normalize();
+
+		Vector3 cross_n12_n34(n12 % n34);
+		float direction = cross_n12_n34 * a23;
+		float scalar_product = n12 * n34;
+
+		if (scalar_product > 1.0) scalar_product = 1.0;
+		if (scalar_product < -1.0) scalar_product = -1.0;
+		Angle a(std::acos(scalar_product));
+		if (direction < 0) a = -a;
+		return a;
+	}
+#endif
 
 	Residue::Residue()
 		:	Fragment(),

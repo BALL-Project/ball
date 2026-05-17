@@ -1719,8 +1719,9 @@ namespace BALL
 		return ring_atoms_;
 	}
 
+#ifndef BALL_CORE_ONLY
 	/////////////////////////////////////////////////////////////////
-	
+
 	HashMap<Molecule*, TimeStamp> SMARTSPredicate::call_time_map_;
 	Molecule SMARTSPredicate::dummy_molecule_;
 
@@ -1786,6 +1787,7 @@ namespace BALL
 
 		return matches_.has((Atom*)&atom);
 	}
+#endif // BALL_CORE_ONLY
 
 
 } // namespace BALL

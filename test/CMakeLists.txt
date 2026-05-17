@@ -17,6 +17,50 @@ ENDIF()
 INCLUDE(cmake/BALLTestExecutables.cmake)
 INCLUDE(cmake/VIEWTestExecutables.cmake)
 
+# v2.0 KERNEL replacement: when BALL_CORE_ONLY, override BALL_TESTS to
+# the K0 green-bar subset (35 tests buildable without FORMAT/MOLMEC/
+# STRUCTURE). The 13 deleted-by-K0 tests in BALL_KERNEL_TESTS that pull
+# FORMAT/MOLMEC/STRUCTURE are excluded; the 16 tests for deleted classes
+# (Composite/PropertyManager/Selectable/PersistentObject) stay in
+# BALL_CONCEPTS_TESTS for now and get pruned in K0.2-K0.6 as their
+# subject classes are removed.
+# See .planning/v2.x/KERNEL-V2-DECISIONS.md §6.
+IF(BALL_CORE_ONLY)
+	SET(BALL_CORE_KERNEL_TESTS
+		PTE_test
+		Atom_test1
+		Atom_test2
+		Bond_test
+		AtomContainer_test1
+		AtomContainer_test2
+		Fragment_test
+		Chain_test
+		Molecule_test
+		SecondaryStructure_test
+		System_test
+		Protein_test
+		PDBAtom_test
+		NucleicAcid_test
+		Nucleotide_test
+		ExpressionPredicate_test
+		ExpressionTree_test
+		KernelPredicate_test
+		ForEach_test
+		GlobalKernel_test
+		AtomIterator_test
+		AtomBondIteratorTraits_test
+		Extractors_test
+	)
+	SET(BALL_TESTS
+		BALL_BASIC_TESTS
+		BALL_MATHS_TESTS
+		BALL_SYSTEM_TESTS
+		BALL_DATATYPE_TESTS
+		BALL_CONCEPTS_TESTS
+		BALL_CORE_KERNEL_TESTS
+	)
+ENDIF()
+
 ## BASIC
 ADD_CUSTOM_TARGET(BASIC_TESTS)
 ADD_DEPENDENCIES(BASIC_TESTS ${BALL_BASIC_TESTS})
@@ -61,12 +105,15 @@ ENDFOREACH()
 # Set the timeout of some tests to 2h
 # This is needed for the memcheck running on the CI server
 # which takes _very_ long
+# (Skipped under BALL_CORE_ONLY — these tests are in SCORING/STRUCTURE.)
+IF(NOT BALL_CORE_ONLY)
 SET_TESTS_PROPERTIES (
 	ScoringFunction_test
 	AssignBondOrderProcessor_test1
 	AssignBondOrderProcessor_test2
 	PROPERTIES TIMEOUT 7200
 )
+ENDIF()
 
 # Phase 9 triage quarantines (TEST-CLOSE-01, 2026-05-16):
 # Tests marked WILL_FAIL TRUE run but are expected to fail; ctest treats them
@@ -87,7 +134,7 @@ SET_TESTS_PROPERTIES (
 #   NOTE (2026-05-16 Rule-1 fix): WILL_FAIL applies only on Apple Silicon (the
 #   failure platform). Linux x64/arm64 pass this test cleanly; unconditional
 #   WILL_FAIL causes an "unexpected pass" error on Linux (ctest exit 8).
-IF (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+IF (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64" AND NOT BALL_CORE_ONLY)
 	SET_TESTS_PROPERTIES (
 		AssignBondOrderProcessor_test2
 		PROPERTIES WILL_FAIL TRUE
@@ -120,12 +167,14 @@ ENDIF()
 #   to return false when fragment application fails.
 #
 # All three: filed as Phase 999.35 backlog (OOS-PR-merge-regression-fix).
+IF(NOT BALL_CORE_ONLY)
 SET_TESTS_PROPERTIES (
 	PeptideCapProcessor_test
 	Peptides_test
 	RotamerLibrary_test
 	PROPERTIES WILL_FAIL TRUE
 )
+ENDIF()
 
 IF (BALL_HAS_VIEW)
 	FOREACH(test ${VIEW_TESTS})

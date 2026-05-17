@@ -23,6 +23,7 @@
 #	include <BALL/KERNEL/expression.h>
 #endif
 
+#ifndef BALL_CORE_ONLY
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
 # include <BALL/STRUCTURE/smartsMatcher.h>
 #endif
@@ -34,6 +35,7 @@
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
 # include <BALL/QSAR/ringPerceptionProcessor.h>
 #endif
+#endif // BALL_CORE_ONLY
 
 namespace BALL 
 {
@@ -893,6 +895,7 @@ namespace BALL
 
 	};
 
+#ifndef BALL_CORE_ONLY
 	/** Predicate for using smarts
 	 */
 	class BALL_EXPORT SMARTSPredicate
@@ -908,10 +911,10 @@ namespace BALL
 
 		///
 		virtual ~SMARTSPredicate();
-	
+
 		BALL_CREATE(SMARTSPredicate)
 
-		/** 
+		/**
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
@@ -926,6 +929,7 @@ namespace BALL
 		static Molecule dummy_molecule_;
 		mutable HashSet<Atom*> matches_;
 	};
+#endif // BALL_CORE_ONLY
 
 
 	//@}	
