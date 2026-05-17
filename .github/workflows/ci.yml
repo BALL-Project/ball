@@ -1180,6 +1180,15 @@ jobs:
           # eliminated every site; this step prevents regressions.
           bash scripts/check-no-legacy-qt6-symbols.sh "$GITHUB_WORKSPACE"
 
+      - name: Tooltip lint (Phase 999.48 §8.5)
+        run: |
+          # Phase 999.48 — addAction-without-setToolTip gate. Catches
+          # gross tooltip omissions in new UI work (a TU that calls
+          # addAction inline with a string literal / tr(...) / new
+          # QAction but never sets a tooltip). Pre-existing baseline
+          # gaps are listed in the script's ALLOW_LIST with rationale.
+          python3 revitalization/scripts/tooltip-lint.py
+
   # --------------------------------------------------------------------------
   # coverage — Phase 9 partial promotion (NON-BLOCKING) — code coverage on
   # Linux GCC using BALL's existing ENABLE_COVERAGE_TESTING CMake option
