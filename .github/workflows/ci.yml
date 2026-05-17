@@ -176,9 +176,16 @@ jobs:
             build/ci-windows/CMakeFiles/
             build/ci-windows/build.ninja
             build/ci-windows/vcpkg_installed/
-          key: ci-windows-cmake-tree-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json') }}
+          # v2 suffix forces cache invalidation after the cb392cc4 BALL_EXPORT
+          # masking bug (2026-05-17): the previous key didn't include source-
+          # file hashes, so source-only defects in DLL-export contracts could
+          # be masked by a warm cached CMakeFiles/. Bumping the version suffix
+          # forces a cold rebuild that catches the BALL_EXPORT restoration in
+          # 9042af07 and any similar future regression. Follow-up Phase 999.36
+          # is filed to add a per-source-hash invalidation arm.
+          key: ci-windows-cmake-tree-v2-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json') }}
           restore-keys: |
-            ci-windows-cmake-tree-
+            ci-windows-cmake-tree-v2-
 
       # ======================================================================
       # macOS — Homebrew deps + the verbatim BUILD-macos.md flow.
