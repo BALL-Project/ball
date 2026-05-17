@@ -85,7 +85,61 @@ ELSEIF(APPLE)
 
 	SET(CPACK_GENERATOR DragNDrop)
 ELSE()
+	# ====================================================================
+	# Linux (Phase 8c part-2): TGZ + DEB + RPM generators side-by-side.
+	# AppImage is NOT a CPack generator — it's produced out-of-band via
+	# linuxdeploy + linuxdeploy-plugin-qt in .github/workflows/release.yml
+	# from the CMake `install` tree. The TGZ generator is retained as the
+	# portable fallback (Phase 8c part-1, PKG-LINUX-01).
+	#
+	# Dependency lists are derived from BUILD-linux.md's apt install line.
+	# CPACK_DEBIAN_PACKAGE_DEPENDS is a literal string (not auto-resolved
+	# via dpkg-shlibdeps) — predictable across runner-vs-target dpkg
+	# versions; the SHLIBDEPS auto-mode was rejected during plan review
+	# because the CI runner's installed Qt 6.8 (jurplel/install-qt-action)
+	# is NOT an apt-managed package and dpkg-shlibdeps cannot resolve its
+	# Qt 6 SONAMEs to apt package names. The explicit DEPENDS line below
+	# names the apt packages a user must have installed on the target.
+	# ====================================================================
 	SET(CPACK_STRIP_FILES "bin/BALLView bin/libBALL.so bin/libVIEW.so")
+	SET(CPACK_GENERATOR "TGZ;DEB;RPM")
+
+	# Architecture: derive via `dpkg --print-architecture` for the DEB
+	# generator (amd64 / arm64 / etc.); CPack auto-fills the RPM
+	# architecture from CMAKE_SYSTEM_PROCESSOR.
+	EXECUTE_PROCESS(
+		COMMAND dpkg --print-architecture
+		OUTPUT_VARIABLE BALL_DEB_ARCH
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+		ERROR_QUIET
+	)
+	IF (BALL_DEB_ARCH)
+		SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "${BALL_DEB_ARCH}")
+	ENDIF()
+
+	# Package file-name suffix: BALLView-lgpl-1.7.0-linux-x86_64.{tar.gz,...}
+	# Matches the workflow's expected output filenames.
+	SET(CPACK_PACKAGE_FILE_NAME "BALLView-lgpl-${PROJECT_VERSION}-linux-${CMAKE_SYSTEM_PROCESSOR}")
+
+	# --- CPack DEB generator (Debian / Ubuntu) -------------------------
+	SET(CPACK_DEBIAN_PACKAGE_MAINTAINER "BALL Project <ball-project@example.org>")
+	SET(CPACK_DEBIAN_PACKAGE_SECTION "science")
+	SET(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+	SET(CPACK_DEBIAN_PACKAGE_HOMEPAGE "https://ball-project.org")
+	# Runtime dependencies derived from BUILD-linux.md's apt install line.
+	# Boost is given as an `|`-alternation between 1.83 (Ubuntu 24.04) and
+	# 1.74 (Debian 12) so the .deb installs cleanly on both.
+	SET(CPACK_DEBIAN_PACKAGE_DEPENDS
+		"libqt6core6 (>= 6.8), libqt6gui6 (>= 6.8), libqt6widgets6 (>= 6.8), libqt6opengl6 (>= 6.8), libqt6openglwidgets6 (>= 6.8), libboost-system1.83.0 | libboost-system1.74.0, libtbb12, libeigen3-dev, libopenbabel7 | libopenbabel-dev")
+
+	# --- CPack RPM generator (Fedora / RHEL / openSUSE) ----------------
+	SET(CPACK_RPM_PACKAGE_LICENSE "LGPLv2+")
+	SET(CPACK_RPM_PACKAGE_GROUP "Sciences/Chemistry")
+	SET(CPACK_RPM_PACKAGE_URL "https://ball-project.org")
+	SET(CPACK_RPM_PACKAGE_REQUIRES
+		"qt6-qtbase >= 6.8, qt6-qtbase-gui >= 6.8, qt6-qtopengl >= 6.8, boost, tbb, eigen3, openbabel")
+	# Non-relocatable: BALL_DATA_PATH discovery assumes a fixed prefix.
+	SET(CPACK_RPM_PACKAGE_RELOCATABLE FALSE)
 ENDIF()
 
 INCLUDE(CPack)

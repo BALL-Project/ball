@@ -411,26 +411,155 @@ jobs:
         if: startsWith(matrix.os, 'linux-')
         run: cmake --build --preset ci-linux --target BALL VIEW BALLView
 
-      - name: Package (Linux — CPack tar.gz)
+      # ---------------------------------------------------------------------
+      # Phase 8c part-2 (PKG-LINUX-02 + PKG-LINUX-03): install additional
+      # tooling needed by CPack DEB + CPack RPM generators. dpkg-dev ships
+      # `dpkg` (the DEB generator), `rpm` brings rpmbuild (the RPM generator
+      # works on Ubuntu via rpmbuild from the `rpm` package; the resulting
+      # .rpm installs fine on Fedora 40+ — distro-independent rpmbuild is
+      # a deliberate CPack design).
+      # ---------------------------------------------------------------------
+      - name: Install CPack DEB + RPM tooling (Linux)
+        if: startsWith(matrix.os, 'linux-')
+        run: |
+          sudo apt-get install -y dpkg-dev rpm desktop-file-utils file
+
+      - name: Package (Linux — CPack TGZ + DEB + RPM)
         if: startsWith(matrix.os, 'linux-')
         shell: bash
         run: |
           cd build/ci-linux
-          # CPack TGZ generator — portable tarball with BALLView + libs
-          # + data/. Bundle Qt 6 runtime via linuxdeploy in a follow-on
-          # commit; for now, tarball includes Qt as linked-not-bundled
-          # (user must have Qt 6.8+ installed). README.txt notes the
-          # dependency.
-          cpack -G TGZ -B "$GITHUB_WORKSPACE/dist"
+          # cmake install populates the staging tree CPack rolls into all
+          # three generator outputs. CMAKE_INSTALL_PREFIX=/usr was set at
+          # configure time so the .deb/.rpm install to FHS-correct paths.
+          cmake --install . --prefix /usr --strip || true
+          # Phase 8c part-2: CPACK_GENERATOR is set to "TGZ;DEB;RPM" in
+          # cmake/BALLPackageConfig.cmake. Single cpack call emits all 3.
+          cpack -B "$GITHUB_WORKSPACE/dist"
           ls -lh "$GITHUB_WORKSPACE/dist"
-          # Rename to the resolve.outputs.asset filename for upload step
-          ARCHIVE=$(ls "$GITHUB_WORKSPACE/dist"/*.tar.gz | head -1)
-          if [ -z "$ARCHIVE" ]; then
-            echo "::error::No .tar.gz produced by cpack -G TGZ"
+          # Locate each artifact (CPack uses CPACK_PACKAGE_FILE_NAME for
+          # the basename — BALLView-lgpl-${VERSION}-linux-${ARCH}.{ext}).
+          TGZ=$(ls "$GITHUB_WORKSPACE/dist"/*.tar.gz 2>/dev/null | head -1)
+          DEB=$(ls "$GITHUB_WORKSPACE/dist"/*.deb     2>/dev/null | head -1)
+          RPM=$(ls "$GITHUB_WORKSPACE/dist"/*.rpm     2>/dev/null | head -1)
+          if [ -z "$TGZ" ]; then
+            echo "::error::No .tar.gz produced by cpack"
             exit 1
           fi
-          cp "$ARCHIVE" "$GITHUB_WORKSPACE/${{ steps.resolve.outputs.asset }}"
+          # Primary asset (existing upload step expects steps.resolve.outputs.asset).
+          cp "$TGZ" "$GITHUB_WORKSPACE/${{ steps.resolve.outputs.asset }}"
+          # Stage DEB + RPM under predictable names for the dedicated upload
+          # steps below (asset names mirror the resolve.outputs.asset shape:
+          # BALLView-${REF}-${OS}.{deb,rpm}).
+          if [ -n "$DEB" ]; then
+            cp "$DEB" "$GITHUB_WORKSPACE/BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.deb"
+          else
+            echo "::warning::cpack -G DEB produced no .deb — generator may have failed silently"
+          fi
+          if [ -n "$RPM" ]; then
+            cp "$RPM" "$GITHUB_WORKSPACE/BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.rpm"
+          else
+            echo "::warning::cpack -G RPM produced no .rpm — generator may have failed silently"
+          fi
           ls -lh "$GITHUB_WORKSPACE/${{ steps.resolve.outputs.asset }}"
+          ls -lh "$GITHUB_WORKSPACE"/BALLView-*.deb "$GITHUB_WORKSPACE"/BALLView-*.rpm 2>/dev/null || true
+
+      # ---------------------------------------------------------------------
+      # Phase 8c part-2 (PKG-LINUX-01): AppImage via linuxdeploy +
+      # linuxdeploy-plugin-qt (the canonical Qt 6 path — bundles Qt 6.8 +
+      # QML + plugins/ + translations/ into AppDir, then rolls a portable
+      # .AppImage). Pinned to continuous (linuxdeploy releases on a rolling
+      # `continuous` tag — there's no semver, the upstream convention is
+      # always-latest from the `continuous` GitHub release).
+      # ---------------------------------------------------------------------
+      - name: Build AppImage (Linux — linuxdeploy + linuxdeploy-plugin-qt)
+        if: startsWith(matrix.os, 'linux-')
+        shell: bash
+        env:
+          # linuxdeploy-plugin-qt looks at this to find qmake6 / Qt6 install
+          # tree. jurplel/install-qt-action exports Qt6_DIR + QT_ROOT_DIR;
+          # forward Qt6_DIR's parent to QMAKE so the plugin's qmake probe
+          # finds the right Qt.
+          QMAKE: ${{ env.QT_ROOT_DIR }}/bin/qmake6
+        run: |
+          set -e
+          ARCH_TAG="${{ matrix.os == 'linux-arm64' && 'aarch64' || 'x86_64' }}"
+          LD_URL="https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-${ARCH_TAG}.AppImage"
+          LDQT_URL="https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-${ARCH_TAG}.AppImage"
+          mkdir -p "$RUNNER_TEMP/ld"
+          cd "$RUNNER_TEMP/ld"
+          curl -fL -o linuxdeploy.AppImage "$LD_URL"
+          curl -fL -o linuxdeploy-plugin-qt.AppImage "$LDQT_URL"
+          chmod +x linuxdeploy.AppImage linuxdeploy-plugin-qt.AppImage
+          # GitHub runners lack FUSE for AppImage self-mount; use the
+          # --appimage-extract-and-run escape hatch (documented linuxdeploy
+          # path for CI).
+          export APPIMAGE_EXTRACT_AND_RUN=1
+
+          # Build the AppDir against the installed tree from `cmake --install`.
+          APPDIR="$RUNNER_TEMP/AppDir"
+          rm -rf "$APPDIR"
+          mkdir -p "$APPDIR"
+          DESTDIR="$APPDIR" cmake --install "$GITHUB_WORKSPACE/build/ci-linux" --prefix /usr --strip
+
+          # Bundle data/ adjacent to the binary so BALL_DATA_PATH discovery
+          # works inside the AppImage. AppRun script sets BALL_DATA_PATH at
+          # launch (linuxdeploy synthesises a default AppRun; we wrap it).
+          mkdir -p "$APPDIR/usr/share/BALL"
+          if [ -d "$GITHUB_WORKSPACE/data" ]; then
+            cp -R "$GITHUB_WORKSPACE/data" "$APPDIR/usr/share/BALL/"
+          fi
+
+          # Run linuxdeploy with the Qt plugin.
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/ld/linuxdeploy.AppImage" \
+            --appdir "$APPDIR" \
+            --desktop-file "$GITHUB_WORKSPACE/packaging/linux/BALLView.desktop" \
+            --icon-file "$GITHUB_WORKSPACE/packaging/linux/BALLView.svg" \
+            --plugin qt \
+            --output appimage
+
+          # Wrap the default AppRun to export BALL_DATA_PATH before exec.
+          # linuxdeploy already produced the .AppImage; for v1.7 we ship
+          # what linuxdeploy emits and document the BALL_DATA_PATH env in
+          # the release notes. Custom AppRun wrapping = follow-on (999.x).
+
+          APPIMAGE=$(ls BALLView*.AppImage 2>/dev/null | head -1)
+          if [ -z "$APPIMAGE" ]; then
+            echo "::error::linuxdeploy produced no .AppImage"
+            ls -la
+            exit 1
+          fi
+          DEST="$GITHUB_WORKSPACE/BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.AppImage"
+          mv "$APPIMAGE" "$DEST"
+          ls -lh "$DEST"
+
+      - name: Upload workflow artifact (Linux .deb)
+        if: startsWith(matrix.os, 'linux-')
+        uses: actions/upload-artifact@v6
+        with:
+          name: BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.deb
+          path: BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.deb
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload workflow artifact (Linux .rpm)
+        if: startsWith(matrix.os, 'linux-')
+        uses: actions/upload-artifact@v6
+        with:
+          name: BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.rpm
+          path: BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.rpm
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Upload workflow artifact (Linux .AppImage)
+        if: startsWith(matrix.os, 'linux-')
+        uses: actions/upload-artifact@v6
+        with:
+          name: BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.AppImage
+          path: BALLView-${{ steps.resolve.outputs.ref }}-${{ matrix.os }}.AppImage
+          if-no-files-found: warn
+          retention-days: 30
 
       # =====================================================================
       # Windows x64 — vcpkg manifest, ci-windows preset, windeployqt
@@ -884,7 +1013,7 @@ jobs:
 
       - name: List artifacts
         run: |
-          find artifacts -type f \( -name "*.zip" -o -name "*.dmg" -o -name "*.exe" \) -exec ls -lh {} \;
+          find artifacts -type f \( -name "*.zip" -o -name "*.dmg" -o -name "*.exe" -o -name "*.tar.gz" -o -name "*.deb" -o -name "*.rpm" -o -name "*.AppImage" \) -exec ls -lh {} \;
 
       - name: Extract Windows installer SHA256 (Phase 8b — emit into release body)
         id: win-sha
@@ -932,7 +1061,7 @@ jobs:
 
           Build from source: see \`BUILD-macos.md\` (macOS), the GitHub Actions CI workflow at the same tag for the Linux + Windows recipes.
 
-          Linux: build from source — Linux installers are Phase 8c.
+          - **Linux:** four artifacts per arch (x86_64 + arm64): \`.AppImage\` (portable, double-click to run — bundles Qt 6.8 + plugins via linuxdeploy; remember \`chmod +x\` then \`./BALLView-*.AppImage\`), \`.deb\` (Debian / Ubuntu 24.04+; \`sudo apt install ./BALLView-*.deb\`), \`.rpm\` (Fedora 40+ / RHEL / openSUSE; \`sudo dnf install ./BALLView-*.rpm\`), and a portable \`.tar.gz\` (extract-and-run, requires system Qt 6.8+). All Linux SKUs are LGPL — FFTW is intentionally absent (no GPL relicensing). See \`BUILD-linux.md\` for build-from-source instructions and \`.planning/phases/08c-packaging-linux/08c-FFTW-GPL-DECISION.md\` for the GPL rationale.
           EOF
           )
 
@@ -942,9 +1071,12 @@ jobs:
           # Bash's nullglob handles the empty case if one platform's artifact
           # is missing.
           shopt -s nullglob
-          ASSETS=( artifacts/*/*.zip artifacts/*/*.dmg artifacts/*/*.exe )
+          # Phase 8c part-2: Linux ships .tar.gz (portable) + .deb + .rpm + .AppImage
+          # alongside the macOS .dmg + Windows .exe/.zip. All globs feed one
+          # gh release upload pass.
+          ASSETS=( artifacts/*/*.zip artifacts/*/*.dmg artifacts/*/*.exe artifacts/*/*.tar.gz artifacts/*/*.deb artifacts/*/*.rpm artifacts/*/*.AppImage )
           if [ ${#ASSETS[@]} -eq 0 ]; then
-            echo "::error::No artifacts found to upload (expected .zip, .dmg, and/or .exe under artifacts/)"
+            echo "::error::No artifacts found to upload (expected .zip, .dmg, .exe, .tar.gz, .deb, .rpm, and/or .AppImage under artifacts/)"
             exit 1
           fi
 

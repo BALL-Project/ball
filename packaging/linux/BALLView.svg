@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  BALLView placeholder AppImage icon — Phase 8c part-2.
+  Replaceable with a real SVG (or a rendered PNG via linuxdeploy
+  `--icon-file packaging/linux/BALLView.svg`) without touching CI.
+  Per linuxdeploy docs, an SVG icon at 256x256 viewport is preferred
+  for AppImage's hicolor-theme thumbnailer.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <radialGradient id="ball" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fff"/>
+      <stop offset="40%" stop-color="#6aa3ff"/>
+      <stop offset="100%" stop-color="#0a3b8a"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" rx="36" fill="#10202c"/>
+  <circle cx="96" cy="96" r="48" fill="url(#ball)"/>
+  <circle cx="170" cy="116" r="36" fill="url(#ball)"/>
+  <circle cx="120" cy="178" r="42" fill="url(#ball)"/>
+  <line x1="96" y1="96" x2="170" y2="116" stroke="#cfd8e3" stroke-width="6" stroke-linecap="round"/>
+  <line x1="170" y1="116" x2="120" y2="178" stroke="#cfd8e3" stroke-width="6" stroke-linecap="round"/>
+  <line x1="96" y1="96" x2="120" y2="178" stroke="#cfd8e3" stroke-width="6" stroke-linecap="round"/>
+</svg>
