@@ -1,46 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de_DE">
+<TS version="2.1" language="de_DE">
 <context>
     <name>AboutDialog</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.ui" line="495"/>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="157"/>
         <source>About BALLView</source>
-        <translation>Über BALLView</translation>
+        <translation type="vanished">Über BALLView</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="158"/>
-        <source>Andreas Moll
-Andreas Hildebrandt
-Heiko Klein
-Oliver Kohlbacher</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="162"/>
         <source>O&amp;K</source>
-        <translation>O&amp;K</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="163"/>
-        <source>Alt+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="164"/>
-        <source>QT Version</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="165"/>
-        <source>(BALL 1.0)</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/aboutDialog.h" line="166"/>
-        <source>&lt;h1&gt;&lt;b&gt;BALLView 1.0&lt;/b&gt;&lt;/h1&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">O&amp;K</translation>
     </message>
 </context>
 <context>
@@ -51,163 +20,163 @@ Oliver Kohlbacher</source>
         <translation>Amber Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="50"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="59"/>
         <source>AMBER Parameters</source>
         <oldsource>Amber Options</oldsource>
         <translation>AMBER Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="95"/>
         <source>van der Waals 1-4 scaling factor</source>
         <translation>van der Waals 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="96"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="114"/>
         <source>Electrostatic 1-4 scaling factor</source>
         <translation>Elektrostatik 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="115"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="133"/>
         <source>Electrostatic cutoff/cuton distance</source>
         <translation>Elektrostatik cutoff/cuton Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="134"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="152"/>
         <source>van der Waals cutoff/cuton distance</source>
         <translation>van der Waals cutoff/cuton Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="156"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="174"/>
         <source>Nonbonded cutoff distance</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="454"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="472"/>
         <source>Dielectric Constant</source>
         <translation>Dielektrizitätskonstante</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="487"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="514"/>
         <source>constant</source>
         <translation>konstant</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="509"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="536"/>
         <source>distance dependent</source>
         <translation>abstandsabhängig</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="525"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="552"/>
         <source>Charge and Type Assignment</source>
         <translation>Ladungs- und Typzuweisung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="546"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="582"/>
         <source>Assign charges</source>
         <translation>Ladungen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="562"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="598"/>
         <source>Assign type names</source>
         <translation>Typnamen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="578"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="614"/>
         <source>Assign (numeric) types</source>
         <translation>Numerische Typen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="594"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="630"/>
         <source>Overwrite charges</source>
         <translation>Ladungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="610"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="646"/>
         <source>Overwrite type names</source>
         <translation>Typnamen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="623"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="659"/>
         <source>Setup Error Handling</source>
         <translation>Setup Fehlerbehandlung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="650"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="695"/>
         <source>Maximum number of unassigned atoms before aborting setup</source>
         <translation>Maximale Anzahl nicht zugewiesener Atome bevor Setup Abbruch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="685"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="730"/>
         <source>Parameter Set</source>
         <translation>Parameterdatei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="718"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="772"/>
         <source>Filename</source>
         <translation>Dateiname</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="768"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="822"/>
         <source>Browse your computer for amber file</source>
         <translation>Computer nach AMBER-Datei durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="771"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="825"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="804"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="867"/>
         <source>Close and save options.</source>
         <translation>Schließen und Einstellungen speichern.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="832"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="895"/>
         <source>Close window and discard changes.</source>
         <translation>Fenster schließen und Änderungen verwerfen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="857"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="920"/>
         <source>Reset all settings to default values.</source>
         <translation>Alle Einstellungen auf Standardeinstellungen zurücksetzen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="807"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="870"/>
         <source>O&amp;K</source>
         <translation>O&amp;K</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="835"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="898"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="860"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="923"/>
         <source>Defaults</source>
         <translation type="unfinished">Voreinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="872"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="935"/>
         <source>Components</source>
         <translation>Komponenten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="887"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="959"/>
         <source>Stretches</source>
         <translation>Stretches (Bindungslängen)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="897"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="969"/>
         <source>Bends</source>
         <translation>Bends (Bindungswinkel)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="907"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="979"/>
         <source>Torsions</source>
         <translation>Torsionen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="917"/>
+        <location filename="../../../source/VIEW/DIALOGS/amberConfigurationDialog.ui" line="989"/>
         <source>NonBonded</source>
         <translation>Ungebundene Wechselwirkungen</translation>
     </message>
@@ -220,142 +189,187 @@ Oliver Kohlbacher</source>
         <translation>Optionen zur Zuweisung von Bindungsordnungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="42"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="49"/>
         <source>Basic</source>
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="171"/>
         <source>Bond Order Assignment</source>
-        <translation>Bindungsordnungszuweisung</translation>
+        <translation type="vanished">Bindungsordnungszuweisung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="183"/>
         <source>In Addition to Unknown Bond Orders:</source>
-        <translation>Zusätzlich zu unbekannten Bindungsordnungen:</translation>
+        <translation type="vanished">Zusätzlich zu unbekannten Bindungsordnungen:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="190"/>
         <source>Overwrite Bond Order Single</source>
-        <translation>Einfachbindungen überschreiben</translation>
+        <translation type="vanished">Einfachbindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="200"/>
         <source>Overwrite Bond Order Double</source>
-        <translation>Zweifachbindungen überschreiben</translation>
+        <translation type="vanished">Zweifachbindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="210"/>
         <source>Overwrite Bond Order Triple</source>
-        <translation>Dreifachbindungen überschreiben</translation>
+        <translation type="vanished">Dreifachbindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="223"/>
         <source>Overwrite Selected Bonds</source>
-        <translation>Ausgewählte Bindungen überschreiben</translation>
+        <translation type="vanished">Ausgewählte Bindungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="48"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="151"/>
         <source>Number of Solutions</source>
         <translation>Anzahl an Lösungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="63"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="166"/>
         <source>single solution</source>
         <translation>eine Lösung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="82"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="185"/>
         <source>all optimal solutions</source>
         <translation>alle optimalen Lösungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="95"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="198"/>
         <source>all optimal solutions but max.</source>
         <translation>alle optimalen Lösungen jedoch max.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="133"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="236"/>
         <source>all solutions but max.</source>
         <translation>alle Lösungen jedoch max.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="236"/>
         <source>Aromatic Rings</source>
-        <translation>Aromatische Ringe</translation>
+        <translation type="vanished">Aromatische Ringe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="251"/>
         <source>Kekulize Bonds</source>
-        <translation>Bindungen kekulisieren</translation>
+        <translation type="vanished">Bindungen kekulisieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="261"/>
         <source>Assign Bond Order Aromatic</source>
-        <translation>Aromatische Bindungsordnung zuweisen</translation>
+        <translation type="vanished">Aromatische Bindungsordnung zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="283"/>
         <source>Hydrogens</source>
-        <translation>Wasserstoffe</translation>
+        <translation type="vanished">Wasserstoffe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="301"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="622"/>
         <source>Add Hydrogens</source>
         <translation>Wasserstoffe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="328"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="423"/>
         <source>Advanced</source>
         <translation>Erweitert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="334"/>
         <source>Parameter Set</source>
-        <translation>Parametersatz</translation>
+        <translation type="vanished">Parametersatz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="361"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="55"/>
+        <source>Atomic Valence Penalty Rules</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="82"/>
         <source>Path</source>
         <translation>Pfad</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="414"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="135"/>
         <source>Browse your computer for amber file</source>
         <translation>Computer nach AMBER-Datei durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="417"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="138"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="430"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="274"/>
         <source>Algorithm</source>
         <translation>Algorithmus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="445"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="289"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="435"/>
         <source>A-Star</source>
         <translation>A-Stern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="455"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="299"/>
+        <source>FPT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="306"/>
         <source>ILP</source>
         <translation>ILP</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="468"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="319"/>
+        <source>Handling of Aromatic Rings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="334"/>
+        <source>Kekulize bonds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="344"/>
+        <source>Assign bond order Aromatic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="357"/>
+        <source>Restrictions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="369"/>
+        <source>In addition to unknown bond orders:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="376"/>
+        <source>Overwrite bond order Single</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="386"/>
+        <source>Overwrite bond order Double</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="396"/>
+        <source>Overwrite bond order Triple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="409"/>
+        <source>Overwrite selected bonds</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="441"/>
         <source>Penalty Balance Factor</source>
         <translation>Strafterm-Skalierung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="491"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="473"/>
         <source>Atom type</source>
         <translation>Atomtyp</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="517"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderConfigurationDialog.ui" line="499"/>
         <source>Bond Length</source>
         <translation>Bindungslänge</translation>
     </message>
@@ -373,22 +387,22 @@ Oliver Kohlbacher</source>
         <translation>Ergebnisse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="154"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="90"/>
         <source>Apply to selected System</source>
         <translation>Auf ausgewähltes System anwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="180"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="125"/>
         <source>Add as new</source>
         <translation>Als neu hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="193"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="138"/>
         <source>Compute Next Solution</source>
         <translation>Nächste Lösung berechnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="206"/>
+        <location filename="../../../source/VIEW/DIALOGS/assignBondOrderResultsDialog.ui" line="151"/>
         <source>Close</source>
         <translation>Schließen</translation>
     </message>
@@ -402,3470 +416,2226 @@ Oliver Kohlbacher</source>
     </message>
 </context>
 <context>
-    <name>BALL::APPLICATION::BALLVIEW::mainframe</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>BALL::Mainframe</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="68"/>
-        <source>BALLView</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="93"/>
         <source>Toggle Fullscreen</source>
-        <translation>Umschalten zu Fullscreen</translation>
+        <translation type="vanished">Umschalten zu Fullscreen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="102"/>
         <source>MolecularFileDialog</source>
-        <translation>Moleküldatei Dialog</translation>
+        <translation type="vanished">Moleküldatei Dialog</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="103"/>
         <source>DownloadPDBFile</source>
-        <translation>PDB-Datei herunterladen</translation>
+        <translation type="vanished">PDB-Datei herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="104"/>
         <source>DownloadElectronDensity</source>
-        <translation>Elektronendichte-Datei herunterladen</translation>
+        <translation type="vanished">Elektronendichte-Datei herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="105"/>
         <source>PubChemDialog</source>
-        <translation>PubChem Dialog</translation>
+        <translation type="vanished">PubChem Dialog</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="106"/>
         <source>PluginDialog</source>
-        <translation>Plugin Dialog</translation>
+        <translation type="vanished">Plugin Dialog</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="107"/>
-        <source>UndoManagerDialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="109"/>
         <source>Structures</source>
-        <translation>Strukturen</translation>
+        <translation type="vanished">Strukturen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="110"/>
         <source>Representations</source>
-        <translation>Repräsentationen</translation>
+        <translation type="vanished">Repräsentationen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="111"/>
         <source>Datasets</source>
-        <translation>Datensätze</translation>
+        <translation type="vanished">Datensätze</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="123"/>
         <source>BALLViewDemo</source>
-        <translation>BALLView Einführung</translation>
+        <translation type="vanished">BALLView Einführung</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="133"/>
         <source>BALL Docu</source>
-        <translation>BALL Dokumentation</translation>
+        <translation type="vanished">BALL Dokumentation</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="145"/>
         <source>LabelDialog</source>
-        <translation>Label Dialog</translation>
+        <translation type="vanished">Label Dialog</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="146"/>
         <source>MolecularStructure</source>
-        <translation>Molekülstruktur</translation>
+        <translation type="vanished">Molekülstruktur</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="147"/>
         <source>Logs</source>
-        <translation>Protokoll</translation>
+        <translation type="vanished">Protokoll</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="148"/>
         <source>FileObserver</source>
-        <translation type="unfinished">Datei beobachten</translation>
+        <translation type="obsolete">Datei beobachten</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="151"/>
-        <source>3D View</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="155"/>
         <source>DisplayProperties</source>
-        <translation type="unfinished">Repräsentationseigenschaften</translation>
+        <translation type="obsolete">Repräsentationseigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="167"/>
-        <source>Python Interpreter</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="175"/>
         <source>Project</source>
-        <translation>Projekt</translation>
+        <translation type="vanished">Projekt</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="179"/>
         <source>Save Project</source>
-        <translation>Projekt speichern</translation>
+        <translation type="vanished">Projekt speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="186"/>
         <source>About</source>
-        <translation>Info</translation>
+        <translation type="vanished">Info</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="187"/>
         <source>Show informations on this version of BALLView</source>
-        <translation>Informationen über diese BALLView Version anzeigen</translation>
+        <translation type="vanished">Informationen über diese BALLView Version anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="190"/>
         <source>How to cite</source>
-        <translation type="unfinished">Korrekt zitieren</translation>
+        <translation type="obsolete">Korrekt zitieren</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="191"/>
         <source>Show infos on how to cite BALL and BALLView</source>
-        <translation>Informationen über BALL und BALLView Zitationen anzeigen</translation>
+        <translation type="vanished">Informationen über BALL und BALLView Zitationen anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="195"/>
         <source>Abort Calculation</source>
-        <translation>Berechnung abbrechen</translation>
+        <translation type="vanished">Berechnung abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="200"/>
         <source>Abort a running simulation</source>
-        <translation>Simulation abbrechen</translation>
+        <translation type="vanished">Simulation abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="205"/>
         <source>Invert Selection</source>
-        <translation>Auswahl umkehren</translation>
+        <translation type="vanished">Auswahl umkehren</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="209"/>
         <source>Clear Selection</source>
-        <translation>Auswahl zurücksetzen</translation>
+        <translation type="vanished">Auswahl zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="215"/>
         <source>Ready.</source>
-        <translation>Bereit.</translation>
+        <translation type="vanished">Bereit.</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="299"/>
         <source>cite</source>
-        <translation type="unfinished">Zitieren</translation>
+        <translation type="obsolete">Zitieren</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="313"/>
         <source>Main Toolbar</source>
-        <translation type="unfinished">Hauptwerkzeugleiste</translation>
+        <translation type="obsolete">Hauptwerkzeugleiste</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="330"/>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="331"/>
         <source>quickload</source>
-        <translation>öffnen</translation>
+        <translation type="vanished">öffnen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="336"/>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="337"/>
         <source>quicksave</source>
-        <translation>speichern</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/mainframe.C" line="364"/>
-        <source>QT </source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>BALL::QSAR</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="1"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
+        <translation type="vanished">speichern</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ColorButton</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/colorButton.C" line="74"/>
         <source>Select color</source>
-        <translation>Wähle Farbe</translation>
+        <translation type="vanished">Wähle Farbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/colorButton.C" line="76"/>
         <source>Choose color</source>
-        <translation>Wähle Farbe</translation>
+        <translation type="vanished">Wähle Farbe</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::DataPage</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="521"/>
         <source>Descriptors</source>
-        <translation>Deskriptoren</translation>
+        <translation type="vanished">Deskriptoren</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::DisplayProperties</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/displayProperties.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/displayProperties.C" line="81"/>
         <source>Create</source>
-        <translation type="unfinished">Erzeuge</translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::DragLogView</name>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/logView.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
+        <translation type="obsolete">Erzeuge</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::EditableScene</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="107"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="116"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="126"/>
         <source>Edit Controls</source>
-        <translation>Editierleiste</translation>
+        <translation type="vanished">Editierleiste</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="188"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="894"/>
         <source>Edit Mode</source>
-        <translation>Editiermodus</translation>
+        <translation type="vanished">Editiermodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="190"/>
         <source>Create and modify molecular structures</source>
-        <translation>Erzeugen und modifizieren molekularer Strukturen</translation>
+        <translation type="vanished">Erzeugen und modifizieren molekularer Strukturen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="191"/>
         <source>Switch to edit mode, e.g. draw your own molecule</source>
-        <translation>Wechsel zum Editiermodus, z.B. Zeichnen eines Moleküls</translation>
+        <translation type="vanished">Wechsel zum Editiermodus, z.B. Zeichnen eines Moleküls</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="203"/>
         <source>Quickly optimize bond orders</source>
-        <translation>Schnelle Berechnung der Bindungsordnung</translation>
+        <translation type="vanished">Schnelle Berechnung der Bindungsordnung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="205"/>
         <source>Compute the bond orders of the highlighted structures</source>
-        <translation>Berechnung der Bindungsordnung der ausgewählten Struktur</translation>
+        <translation type="vanished">Berechnung der Bindungsordnung der ausgewählten Struktur</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="212"/>
         <source>Quickly optimize structure</source>
-        <translation>Schnelle Optimierung der geometrischen Struktur</translation>
+        <translation type="vanished">Schnelle Optimierung der geometrischen Struktur</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="214"/>
         <source>Quickly optimize the highlighted structure</source>
-        <translation>Schnelle Optimierung der gewählten Struktur</translation>
+        <translation type="vanished">Schnelle Optimierung der gewählten Struktur</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="220"/>
         <source>Saturate with Hydrogens</source>
-        <translation>Fülle freie Valenzen mit Wasserstoff auf</translation>
+        <translation type="vanished">Fülle freie Valenzen mit Wasserstoff auf</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="221"/>
         <source>Saturate the highlighted structure with hydrogens (with regards to formal charges)</source>
-        <translation>Fülle freie Valenzen der gewählten Struktur mit Wasserstoff auf (formale Ladungen werden berücksichtigt)</translation>
+        <translation type="vanished">Fülle freie Valenzen der gewählten Struktur mit Wasserstoff auf (formale Ladungen werden berücksichtigt)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="230"/>
         <source>Set element</source>
-        <translation>Wahl eines chemisches Elementes</translation>
+        <translation type="vanished">Wahl eines chemisches Elementes</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="231"/>
         <source>Edit mode: Choose element for next atom, to modify atom under cursor: Double left click</source>
-        <translation>Editiermodus: Wahl eines chemischen Elementes für das nächste Atom. Zum modifizieren eines Atoms</translation>
+        <translation type="vanished">Editiermodus: Wahl eines chemischen Elementes für das nächste Atom. Zum modifizieren eines Atoms</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="240"/>
         <source>Create Bond</source>
-        <translation>Erzeuge Bindung</translation>
+        <translation type="vanished">Erzeuge Bindung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="241"/>
         <source>Edit mode: If two atoms are selected, create a single bond between them</source>
-        <translation>Editiermodus: Erstellen einer Bindungen falls zwei Atome ausgewählt wurde</translation>
+        <translation type="vanished">Editiermodus: Erstellen einer Bindungen falls zwei Atome ausgewählt wurde</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="252"/>
         <source>Create new molecule</source>
-        <translation>Erzeugen eines neuen Moleküls</translation>
+        <translation type="vanished">Erzeugen eines neuen Moleküls</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="254"/>
         <source>Create a new molecule for editing</source>
-        <translation>Erzeugen eines neuen Moleküls für den Editiermodus</translation>
+        <translation type="vanished">Erzeugen eines neuen Moleküls für den Editiermodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="256"/>
         <source>Edit Control toolbar</source>
-        <translation>Editier Werkzeugleiste</translation>
+        <translation type="vanished">Editier Werkzeugleiste</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="313"/>
         <source>Warning: no AtomContainer highlighted</source>
-        <translation>Warning: kein AtomContainer markiert</translation>
+        <translation type="vanished">Warning: kein AtomContainer markiert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="373"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="618"/>
         <source>Added atom of type </source>
-        <translation>Ein Atom wurde hinzugefügt vom Typ</translation>
+        <translation type="vanished">Ein Atom wurde hinzugefügt vom Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="373"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="618"/>
         <source> at position (</source>
-        <translation>an Position</translation>
+        <translation type="vanished">an Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="441"/>
         <source>Set bond order to </source>
-        <translation>Setzte Bindungsordnung zu</translation>
+        <translation type="vanished">Setzte Bindungsordnung zu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="592"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1236"/>
         <source>Added a bond</source>
-        <translation>Eine Bindung wurde hinzugefügt</translation>
+        <translation type="vanished">Eine Bindung wurde hinzugefügt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="603"/>
         <source>Aborting, since both atoms would have the same location!</source>
-        <translation>Abbruch, da beide Atome die selbe Position hätten!</translation>
+        <translation type="vanished">Abbruch, da beide Atome die selbe Position hätten!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="632"/>
         <source>Added bond of type </source>
-        <translation>Eine Bindung wurde hinzugefügt vom Typ</translation>
+        <translation type="vanished">Eine Bindung wurde hinzugefügt vom Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="637"/>
         <source>Added a bond and an atom</source>
-        <translation>Eine Bindung und ein Atom wurden hinzugefügt</translation>
+        <translation type="vanished">Eine Bindung und ein Atom wurden hinzugefügt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="649"/>
         <source>single</source>
-        <translation>einfach</translation>
+        <translation type="vanished">einfach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="652"/>
         <source>double</source>
-        <translation>zweifach</translation>
+        <translation type="vanished">zweifach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="655"/>
         <source>triple</source>
-        <translation>dreifach</translation>
+        <translation type="vanished">dreifach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="658"/>
         <source>quadruple</source>
-        <translation>vierfach</translation>
+        <translation type="vanished">vierfach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="661"/>
         <source>aromatic</source>
-        <translation>aromatisch</translation>
+        <translation type="vanished">aromatisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="664"/>
         <source>unknown</source>
-        <translation>unbekannt</translation>
+        <translation type="vanished">unbekannt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="787"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="807"/>
         <source>Please highlight exactly one AtomContainer for insertion of the created atoms!</source>
-        <translation>Bitte markieren Sie genau einen AtomContainer um neue Atome zu erstellen!</translation>
+        <translation type="vanished">Bitte markieren Sie genau einen AtomContainer um neue Atome zu erstellen!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="882"/>
         <source>Rotate Mode</source>
-        <translation>Rotiermodus</translation>
+        <translation type="vanished">Rotiermodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="886"/>
         <source>Picking Mode</source>
-        <translation>Auswahlmodus</translation>
+        <translation type="vanished">Auswahlmodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="890"/>
         <source>Move Mode</source>
-        <translation>Schiebemodus</translation>
+        <translation type="vanished">Schiebemodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="902"/>
         <source>Atom Properties</source>
-        <translation>Atom Eigenschaften</translation>
+        <translation type="vanished">Atom Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="903"/>
         <source>Move Atom</source>
-        <translation>Verschiebe Atom</translation>
+        <translation type="vanished">Verschiebe Atom</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="904"/>
         <source>Delete Atom</source>
-        <translation>Lösche Atom</translation>
+        <translation type="vanished">Lösche Atom</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="905"/>
         <source>Change Atom Element</source>
-        <translation>Ändere chemisches Element</translation>
+        <translation type="vanished">Ändere chemisches Element</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="909"/>
         <source>Set formal charge</source>
-        <translation>Setze Formalladung</translation>
+        <translation type="vanished">Setze Formalladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="925"/>
         <source>Delete Bond</source>
-        <translation>Lösche Bindung</translation>
+        <translation type="vanished">Lösche Bindung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="930"/>
         <source>Change bond order</source>
-        <translation>Ändere Bindungsordnung</translation>
+        <translation type="vanished">Ändere Bindungsordnung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="932"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1318"/>
         <source>Single</source>
-        <translation>Einfach</translation>
+        <translation type="vanished">Einfach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="933"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1319"/>
         <source>Double</source>
-        <translation>Zweifach</translation>
+        <translation type="vanished">Zweifach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="934"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1320"/>
         <source>Triple</source>
-        <translation>Dreifach</translation>
+        <translation type="vanished">Dreifach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="935"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1321"/>
         <source>Quadruple</source>
-        <translation>Vierfach</translation>
+        <translation type="vanished">Vierfach</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="936"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1322"/>
         <source>Aromatic</source>
-        <translation>Aromatisch</translation>
+        <translation type="vanished">Aromatisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="937"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1323"/>
         <source>Unknown</source>
-        <translation>Unbekannt</translation>
+        <translation type="vanished">Unbekannt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="974"/>
         <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <translation type="vanished">Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="982"/>
         <source>Aromatic rings</source>
-        <translation>Aromatische Ringe</translation>
+        <translation type="vanished">Aromatische Ringe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="983"/>
         <source>Pyrrole</source>
-        <translation>Pyrrol</translation>
+        <translation type="vanished">Pyrrol</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="984"/>
         <source>Benzene</source>
-        <translation>Benzen</translation>
+        <translation type="vanished">Benzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="985"/>
         <source>Indole</source>
-        <translation>Indol</translation>
+        <translation type="vanished">Indol</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="989"/>
         <source>Amino acids</source>
-        <translation>Aminosäure</translation>
+        <translation type="vanished">Aminosäure</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="993"/>
         <source>Nucleic acids</source>
-        <translation>Nukleinsäure</translation>
+        <translation type="vanished">Nukleinsäure</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1011"/>
         <source>Alanine</source>
-        <translation>Alanin</translation>
+        <translation type="vanished">Alanin</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1012"/>
         <source>Cytosine</source>
-        <translation>Cytosin</translation>
+        <translation type="vanished">Cytosin</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1013"/>
         <source>Guanine</source>
-        <translation>Guanin</translation>
+        <translation type="vanished">Guanin</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1014"/>
         <source>Thymine</source>
-        <translation>Thymin</translation>
+        <translation type="vanished">Thymin</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1015"/>
         <source>Uracil</source>
-        <translation>Uracil</translation>
+        <translation type="vanished">Uracil</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1160"/>
         <source>Internal error! Too many atoms selected.</source>
-        <translation>Interner Fehler! Zu viele Atome sind ausgewählt.</translation>
+        <translation type="vanished">Interner Fehler! Zu viele Atome sind ausgewählt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1166"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1171"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1255"/>
         <source>Please select exactly two atoms.</source>
-        <translation>Bitte wählen Sie genau zwei Atome aus.</translation>
+        <translation type="vanished">Bitte wählen Sie genau zwei Atome aus.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1210"/>
         <source>EditableScene: Internal error! </source>
-        <translation>Interner Fehler der EditableScene!</translation>
+        <translation type="vanished">Interner Fehler der EditableScene!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1468"/>
         <source>Setting element to </source>
-        <translation>Setze chemisches Element auf</translation>
+        <translation type="vanished">Setze chemisches Element auf</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1600"/>
         <source>Added </source>
-        <translation>Es wurden </translation>
+        <translation type="vanished">Es wurden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1600"/>
         <source> hydrogens.</source>
-        <translation> Wasserstoffe hinzugefügt.</translation>
+        <translation type="vanished"> Wasserstoffe hinzugefügt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1633"/>
         <source>Please highlight exactly one AtomContainer!</source>
-        <translation>Bitte markieren Sie genau einen AtomContainer!</translation>
+        <translation type="vanished">Bitte markieren Sie genau einen AtomContainer!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1664"/>
         <source>The given parameter file does not exist! Using default!</source>
-        <translation>Die gewählte Parameterdatei existiert nicht! Stattdessen wird die Standarddatei benutzt!</translation>
+        <translation type="vanished">Die gewählte Parameterdatei existiert nicht! Stattdessen wird die Standarddatei benutzt!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1705"/>
         <source>Could not find a valid bond order assignment.</source>
-        <translation>Es konnte keine gültige Bindungsordnungszuweisung berechnet werden.</translation>
+        <translation type="vanished">Es konnte keine gültige Bindungsordnungszuweisung berechnet werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1710"/>
         <source>Found </source>
-        <translation>Es wurden </translation>
+        <translation type="vanished">Es wurden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1710"/>
         <source> bond order assignments.</source>
-        <translation> Bindungsordnungszuweisungen berechnet.</translation>
+        <translation type="vanished"> Bindungsordnungszuweisungen berechnet.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1712"/>
         <source>Result AssignBondOrderProcessor: </source>
-        <translation>Ergbenis der Bindungsordnungsberechnung: </translation>
+        <translation type="vanished">Ergbenis der Bindungsordnungsberechnung: </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1720"/>
         <source>Solution </source>
-        <translation>Lösung </translation>
+        <translation type="vanished">Lösung </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1721"/>
         <source>has penalty</source>
-        <translation>hat Bewertung</translation>
+        <translation type="vanished">hat Bewertung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1751"/>
         <source>Optimizing Structure...</source>
-        <translation>Strukturoptimierung...</translation>
+        <translation type="vanished">Strukturoptimierung...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1947"/>
-        <location filename="../../../source/VIEW/WIDGETS/editableScene.C" line="1969"/>
         <source>Internal error! </source>
-        <translation>Interner Fehler! </translation>
+        <translation type="vanished">Interner Fehler! </translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::GeometricControl</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="44"/>
-        <source>ModifyRepresentationDialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="53"/>
         <source>[visible] Index</source>
-        <translation>[sichtbar]</translation>
+        <translation type="vanished">[sichtbar]</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="54"/>
         <source>Model</source>
-        <translation>Modell</translation>
+        <translation type="vanished">Modell</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="55"/>
         <source>Built from</source>
-        <translation>Erstellt von</translation>
+        <translation type="vanished">Erstellt von</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="56"/>
         <source>Color</source>
-        <translation>Farbe</translation>
+        <translation type="vanished">Farbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="57"/>
         <source>Properties</source>
-        <translation>Eigenschaften</translation>
+        <translation type="vanished">Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="60"/>
         <source>List of the representations</source>
-        <translation>Liste der Repräsentationen</translation>
+        <translation type="vanished">Liste der Repräsentationen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="61"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="62"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="63"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="64"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="65"/>
         <source>column</source>
-        <translation>Spalte</translation>
+        <translation type="vanished">Spalte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="61"/>
         <source>visible flag</source>
-        <translation>Sichtbarkeit</translation>
+        <translation type="vanished">Sichtbarkeit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="62"/>
         <source>model type</source>
-        <translation>Modelltyp</translation>
+        <translation type="vanished">Modelltyp</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="63"/>
         <source>name of the molecular entity the model was created from</source>
-        <translation>Name der molekularen Einheit von der das Model erstellt wurde</translation>
+        <translation type="vanished">Name der molekularen Einheit von der das Model erstellt wurde</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="64"/>
         <source>used coloring method</source>
-        <translation>verwendete Färbemethode</translation>
+        <translation type="vanished">verwendete Färbemethode</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="65"/>
         <source>number of used molecular entities, number of geometric objects</source>
-        <translation>Anzahl der verwendeten molekularen Einheiten, Anzahl geometrischer Objekte</translation>
+        <translation type="vanished">Anzahl der verwendeten molekularen Einheiten, Anzahl geometrischer Objekte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="71"/>
         <source>Hide/Show</source>
-        <translation>Ausblenden/Einblenden</translation>
+        <translation type="vanished">Ausblenden/Einblenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="72"/>
         <source>Flip</source>
-        <translation>Vertauschen</translation>
+        <translation type="vanished">Vertauschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="73"/>
         <source>Set to position...</source>
-        <translation>Setze auf Position...</translation>
+        <translation type="vanished">Setze auf Position...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="74"/>
         <source>Set to x axis</source>
-        <translation>Setzte x-Achse</translation>
+        <translation type="vanished">Setzte x-Achse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="75"/>
         <source>Set to y axis</source>
-        <translation>Setzte y-Achse</translation>
+        <translation type="vanished">Setzte y-Achse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="76"/>
         <source>Set to z axis</source>
-        <translation>Setzte z-Achse</translation>
+        <translation type="vanished">Setzte z-Achse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="77"/>
         <source>Clip &lt;-&gt; Cap</source>
-        <translation type="unfinished">Clip &lt;-&gt; Cap</translation>
+        <translation type="obsolete">Clip &lt;-&gt; Cap</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="78"/>
         <source>Select Representations</source>
-        <translation>Wähle Repräsentation</translation>
+        <translation type="vanished">Wähle Repräsentation</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="92"/>
         <source>Tried to add an already inserted Representation in </source>
-        <translation>Repräsentation wurde schon hinzugefügt in </translation>
+        <translation type="vanished">Repräsentation wurde schon hinzugefügt in </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="205"/>
         <source>Unknown Type of RepresentationMessage in </source>
-        <translation>Unbekannter Typ einer Repräsentationsmeldung in </translation>
+        <translation type="vanished">Unbekannter Typ einer Repräsentationsmeldung in </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="228"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="229"/>
         <source>Focus</source>
-        <translation>Fokusieren</translation>
+        <translation type="vanished">Fokusieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="230"/>
         <source>Duplicate</source>
-        <translation>Kopie erstellen</translation>
+        <translation type="vanished">Kopie erstellen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="231"/>
         <source>Move</source>
-        <translation>Schieben</translation>
+        <translation type="vanished">Schieben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="234"/>
         <source>Save Surface</source>
-        <translation>Oberfläche speichern</translation>
+        <translation type="vanished">Oberfläche speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="235"/>
         <source>Select Atoms</source>
-        <translation>Atom auswählen</translation>
+        <translation type="vanished">Atom auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="236"/>
         <source>Modify Model</source>
-        <translation>Model ändern</translation>
+        <translation type="vanished">Model ändern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="237"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="512"/>
         <source>Modify Representation</source>
-        <translation>Darstellung verändern</translation>
+        <translation type="vanished">Darstellung verändern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="238"/>
         <source>Rename</source>
-        <translation>Umbenennen</translation>
+        <translation type="vanished">Umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="242"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="506"/>
         <source>Clipping Plane</source>
-        <translation>Clipping Ebene</translation>
+        <translation type="vanished">Clipping Ebene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="320"/>
         <source>Could not delete Representation while update is running!</source>
-        <translation>Repräsentationen können nicht während eines Updates gelöscht werden!</translation>
+        <translation type="vanished">Repräsentationen können nicht während eines Updates gelöscht werden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="332"/>
         <source>Deleted representation.</source>
-        <translation>Lösche Repräsentation.</translation>
+        <translation type="vanished">Lösche Repräsentation.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="341"/>
         <source>Deleted Clipping Plane.</source>
-        <translation>Lösche Clipping Ebene.</translation>
+        <translation type="vanished">Lösche Clipping Ebene.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="364"/>
         <source>No changes to representations allowed, while simulation is running or creating new representations!</source>
-        <translation>Repräsentationen können nicht während eines Updates geändert werden!</translation>
+        <translation type="vanished">Repräsentationen können nicht während eines Updates geändert werden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="444"/>
         <source>Representation from </source>
-        <translation>Repräsentation von </translation>
+        <translation type="vanished">Repräsentation von </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="507"/>
         <source>Add an OpenGL Clipping Plane to the Scene</source>
-        <translation>Füge OpenGL Clipping Ebene zur Szene hinzu</translation>
+        <translation type="vanished">Füge OpenGL Clipping Ebene zur Szene hinzu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="510"/>
         <source>Surface</source>
-        <translation>Oberfläche</translation>
+        <translation type="vanished">Oberfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="538"/>
         <source>Set plane</source>
-        <translation>Positioniere Ebene</translation>
+        <translation type="vanished">Positioniere Ebene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="714"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="841"/>
         <source>CappingPlane</source>
-        <translation>Capping Ebene</translation>
+        <translation type="vanished">Capping Ebene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="718"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="841"/>
         <source>ClippingPlane</source>
-        <translation>Clipping Ebene</translation>
+        <translation type="vanished">Clipping Ebene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="720"/>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="757"/>
         <source>hidden</source>
-        <translation>ausblenden</translation>
+        <translation type="vanished">ausblenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="804"/>
         <source>Cannot switch Representation on/off now!</source>
-        <translation>Repräsentation kann gerade nicht an/aus-geblendet werden!</translation>
+        <translation type="vanished">Repräsentation kann gerade nicht an/aus-geblendet werden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="860"/>
         <source>Export Surface</source>
-        <translation>Speichere Oberfläche</translation>
+        <translation type="vanished">Speichere Oberfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="875"/>
         <source>Read Surface</source>
-        <translation>Lese Oberfläche</translation>
+        <translation type="vanished">Lese Oberfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="906"/>
         <source>Rename a Representation</source>
-        <translation>Repräsentation umbenennen</translation>
+        <translation type="vanished">Repräsentation umbenennen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/geometricControl.C" line="907"/>
         <source>Enter new name:</source>
-        <translation>Neuer Name:</translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::Hotkey</name>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="222"/>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="238"/>
-        <source>Could not parse Hotkey </source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Neuer Name:</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::InputDataDialog</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="59"/>
         <source>Save to File</source>
-        <translation>Speichern als</translation>
+        <translation type="vanished">Speichern als</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="62"/>
         <source>Compounds</source>
-        <translation>Compounds</translation>
+        <translation type="vanished">Compounds</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="95"/>
         <source>No data available, please execute pipeline first.</source>
-        <translation>Keine Daten verfügbar, bitte führen Sie zuerst die Pipeline durch.</translation>
+        <translation type="vanished">Keine Daten verfügbar, bitte führen Sie zuerst die Pipeline durch.</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="104"/>
         <source>Descriptors in </source>
-        <translation type="unfinished">Deskriptoren in</translation>
+        <translation type="obsolete">Deskriptoren in</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="116"/>
         <source>Save File as</source>
-        <translation>Speichere Datei unter</translation>
+        <translation type="vanished">Speichere Datei unter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="117"/>
         <source>_compounds</source>
-        <translation type="unfinished">_compounds</translation>
+        <translation type="obsolete">_compounds</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataDialog.C" line="118"/>
         <source>text</source>
-        <translation>Text</translation>
+        <translation type="vanished">Text</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::InputDataItem</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/inputDataItem.C" line="223"/>
         <source>Plot data</source>
-        <translation type="unfinished">Daten auftragen</translation>
+        <translation type="obsolete">Daten auftragen</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::KernelParameterPage</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="105"/>
         <source>Kernel Parameters</source>
-        <translation type="unfinished">Kernel Parameter</translation>
+        <translation type="obsolete">Kernel Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="109"/>
         <source>Kernel function:</source>
-        <translation type="unfinished">Kernel Funktion:</translation>
+        <translation type="obsolete">Kernel Funktion:</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="113"/>
         <source>polynomial</source>
-        <translation type="unfinished">polynomial</translation>
+        <translation type="obsolete">polynomial</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="114"/>
-        <source>radial basis</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="115"/>
         <source>sigmoid</source>
-        <translation type="unfinished">sigmoidal</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="116"/>
-        <source>individual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="125"/>
-        <source>Parameter 1:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="140"/>
-        <source>Parameter 2:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="154"/>
-        <source>String 1:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="155"/>
-        <source>String 2:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="182"/>
-        <source>Kernel Function</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="183"/>
-        <source>Kernel Function:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">sigmoidal</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::LogView</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/logView.C" line="143"/>
         <source>Clear Logs</source>
-        <translation>Protokoll bereinigen</translation>
+        <translation type="vanished">Protokoll bereinigen</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::MainControl</name>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="116"/>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="280"/>
         <source>BALLView Preferences</source>
-        <translation>BALLView Einstellungen</translation>
+        <translation type="vanished">BALLView Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="202"/>
-        <source>Critical error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="203"/>
         <source>Could not read the FragmentDB data!
 </source>
-        <translation>Fragment Datenbank konnte nicht gelesen werden!\n</translation>
+        <translation type="vanished">Fragment Datenbank konnte nicht gelesen werden!\n</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="218"/>
         <source>Datapath Error</source>
-        <translation>Fehler im Daten Pfad</translation>
+        <translation type="vanished">Fehler im Daten Pfad</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="218"/>
         <source>Could not read the FragmentDB</source>
-        <translation>Fragment Datenbank konnte nicht gelesen werden</translation>
+        <translation type="vanished">Fragment Datenbank konnte nicht gelesen werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="234"/>
         <source>MainMenuBar</source>
-        <translation>Hauptmenu</translation>
+        <translation type="vanished">Hauptmenu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="245"/>
         <source>update of model running</source>
-        <translation>Aktualisierung des aktuellen Models</translation>
+        <translation type="vanished">Aktualisierung des aktuellen Models</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="257"/>
         <source>simulation running</source>
-        <translation>Simulation läuft</translation>
+        <translation type="vanished">Simulation läuft</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="317"/>
         <source>&amp;File</source>
-        <translation>Datei</translation>
+        <translation type="vanished">Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="320"/>
         <source>&amp;Open</source>
-        <translation>&amp;Öffnen</translation>
+        <translation type="vanished">&amp;Öffnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="323"/>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="368"/>
         <source>&amp;Grids</source>
-        <translation>&amp;Gitter</translation>
+        <translation type="vanished">&amp;Gitter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="326"/>
         <source>&amp;Import</source>
-        <translation>&amp;Importieren</translation>
+        <translation type="vanished">&amp;Importieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="329"/>
         <source>&amp;Export</source>
-        <translation>&amp;Exportieren</translation>
+        <translation type="vanished">&amp;Exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="332"/>
         <source>&amp;Monitor File</source>
-        <translation>Datei beobachten</translation>
+        <translation type="vanished">Datei beobachten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="335"/>
         <source>&amp;Edit</source>
-        <translation>B&amp;earbeiten</translation>
+        <translation type="vanished">B&amp;earbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="338"/>
         <source>&amp;Build</source>
-        <translation>&amp;Generiere</translation>
+        <translation type="vanished">&amp;Generiere</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="341"/>
         <source>&amp;Display</source>
-        <translation>Ansicht</translation>
+        <translation type="vanished">Ansicht</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="344"/>
         <source>&amp;Viewpoint</source>
-        <translation>Viewpoint</translation>
+        <translation type="vanished">Viewpoint</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="347"/>
         <source>&amp;Create</source>
-        <translation>&amp;Erzeugen</translation>
+        <translation type="vanished">&amp;Erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="350"/>
         <source>&amp;Stereo</source>
-        <translation>&amp;Stereoskopie</translation>
+        <translation type="vanished">&amp;Stereoskopie</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="353"/>
         <source>&amp;Animation</source>
-        <translation>&amp;Animation</translation>
+        <translation type="vanished">&amp;Animation</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="356"/>
         <source>&amp;Molecular Mechanics</source>
-        <translation>&amp;Molekulare Mechanik</translation>
+        <translation type="vanished">&amp;Molekulare Mechanik</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="359"/>
         <source>Force Field</source>
-        <translation>Kraftfeld</translation>
+        <translation type="vanished">Kraftfeld</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="362"/>
         <source>&amp;Tools</source>
-        <translation>Werkzeuge</translation>
+        <translation type="vanished">Werkzeuge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="365"/>
         <source>&amp;Python</source>
-        <translation>&amp;Python</translation>
+        <translation type="vanished">&amp;Python</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="371"/>
         <source>&amp;Windows</source>
-        <translation>Fenster</translation>
+        <translation type="vanished">Fenster</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="374"/>
         <source>&amp;User</source>
-        <translation>Ben&amp;utzer</translation>
+        <translation type="vanished">Ben&amp;utzer</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="377"/>
         <source>Macros</source>
-        <translation>Makros</translation>
+        <translation type="vanished">Makros</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="380"/>
         <source>&amp;Help</source>
-        <translation>&amp;Hilfe</translation>
+        <translation type="vanished">&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="489"/>
         <source>&amp;Quit</source>
-        <translation>Schließen</translation>
+        <translation type="vanished">Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="499"/>
         <source>Preferences</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="860"/>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="873"/>
         <source>Cant apply preferences while beeing busy!</source>
-        <translation>Einstellungen können gerade nicht angewendet werden!</translation>
+        <translation type="vanished">Einstellungen können gerade nicht angewendet werden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="897"/>
         <source>Language Changed</source>
-        <translation>Die Sprache wurde geändert</translation>
+        <translation type="vanished">Die Sprache wurde geändert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="898"/>
         <source>Changing the language only takes effect after restarting BALLView.</source>
-        <translation>Ein Wechsel der Sprache ist erst nach einem Neustart von BALLView wirksam.</translation>
+        <translation type="vanished">Ein Wechsel der Sprache ist erst nach einem Neustart von BALLView wirksam.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1085"/>
         <source> objects selected.</source>
-        <translation> Objekte selektiert.</translation>
+        <translation type="vanished"> Objekte selektiert.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1129"/>
         <source>Properties of atom</source>
-        <translation>Eigenschaften des Atoms</translation>
+        <translation type="vanished">Eigenschaften des Atoms</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1129"/>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="vanished">Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1130"/>
         <source>Typename</source>
-        <translation>Typname</translation>
+        <translation type="vanished">Typname</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1131"/>
         <source>Position</source>
-        <translation>Position</translation>
+        <translation type="vanished">Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1134"/>
         <source>Charge</source>
-        <translation>Ladung</translation>
+        <translation type="vanished">Ladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1142"/>
         <source>Distance between atom </source>
-        <translation>Abstand zwischen Atom</translation>
+        <translation type="vanished">Abstand zwischen Atom</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1143"/>
         <source>and</source>
-        <translation>und</translation>
+        <translation type="vanished">und</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1150"/>
         <source>Bond order</source>
-        <translation>Bindungsordnung</translation>
+        <translation type="vanished">Bindungsordnung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1157"/>
         <source>aromatic</source>
-        <translation>aromatisch</translation>
+        <translation type="vanished">aromatisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1169"/>
         <source>Angle between atoms </source>
-        <translation>Winkel zwischen Atomen</translation>
+        <translation type="vanished">Winkel zwischen Atomen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1186"/>
         <source>Torsion angle between atoms </source>
-        <translation>Torsionswinkel zwischen Atomen</translation>
+        <translation type="vanished">Torsionswinkel zwischen Atomen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1422"/>
         <source>Could not restore settings of main windows</source>
-        <translation>Einstellungen des Hauptfensters konnten nicht wiederhergestellt werden</translation>
+        <translation type="vanished">Einstellungen des Hauptfensters konnten nicht wiederhergestellt werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1501"/>
         <source>Could not delete Representation while update is running!</source>
-        <translation>Repräsentationen können nicht während eines Updates gelöscht werden!</translation>
+        <translation type="vanished">Repräsentationen können nicht während eines Updates gelöscht werden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1555"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1584"/>
         <source>Terminating calculation ...</source>
-        <translation>Berechnung wird beendet ...</translation>
+        <translation type="vanished">Berechnung wird beendet ...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1599"/>
         <source>Calculation terminated.</source>
-        <translation>Berechnung beendet.</translation>
+        <translation type="vanished">Berechnung beendet.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1678"/>
         <source>Empty logging file name</source>
-        <translation>Leerer Protokoll-Datei Name</translation>
+        <translation type="vanished">Leerer Protokoll-Datei Name</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1782"/>
         <source>Can not write projectfile</source>
-        <translation>Projektdatei kann nicht geschrieben werden</translation>
+        <translation type="vanished">Projektdatei kann nicht geschrieben werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1820"/>
         <source>Could not load project file, while update is running!</source>
-        <translation>Projektdatei kann während Update nicht geladen werden!</translation>
+        <translation type="vanished">Projektdatei kann während Update nicht geladen werden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1831"/>
         <source>Could not open the project file</source>
-        <translation>Projektdatei kann nicht geöffnet werden</translation>
+        <translation type="vanished">Projektdatei kann nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1832"/>
         <source>it doesnt seem to exist.</source>
-        <translation>Existiert möglicherweise nicht.</translation>
+        <translation type="vanished">Existiert möglicherweise nicht.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1845"/>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1852"/>
         <source>Error while reading project file, could not read INIFile.</source>
-        <translation>Fehler beim Lesen der Projektdatei, INI-Datei konnte nicht gelesen werden.</translation>
+        <translation type="vanished">Fehler beim Lesen der Projektdatei, INI-Datei konnte nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1897"/>
         <source>Error while reading project file, could not read molecule.</source>
-        <translation>Fehler beim Lesen der Projektdatei, Molekül konnte nicht gelesen werden.</translation>
+        <translation type="vanished">Fehler beim Lesen der Projektdatei, Molekül konnte nicht gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1939"/>
         <source>Could not read Camera position from project.</source>
-        <translation>Kameraposition konnte nicht aus Projekt gelesen werden.</translation>
+        <translation type="vanished">Kameraposition konnte nicht aus Projekt gelesen werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1966"/>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1986"/>
         <source>Select a project file</source>
-        <translation>Wähle eine Projektdatei</translation>
+        <translation type="vanished">Wähle eine Projektdatei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1978"/>
         <source>Saved project to </source>
-        <translation>Projekt wurde gespeichert unter</translation>
+        <translation type="vanished">Projekt wurde gespeichert unter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1999"/>
         <source>Quickload</source>
-        <translation>Schnell Laden</translation>
+        <translation type="vanished">Schnell Laden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="1999"/>
         <source>Do you really want to quickload?</source>
-        <translation>Wollen Sie wirklich schnell laden?</translation>
+        <translation type="vanished">Wollen Sie wirklich schnell laden?</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2030"/>
         <source>quick saving...</source>
-        <translation>Schnell Speichern...</translation>
+        <translation type="vanished">Schnell Speichern...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2038"/>
         <source>quick saving finished</source>
-        <translation>Speichern abgeschlossen</translation>
+        <translation type="vanished">Speichern abgeschlossen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2043"/>
         <source>quick loading...</source>
-        <translation>Schnell Laden...</translation>
+        <translation type="vanished">Schnell Laden...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2060"/>
         <source>quick loading finished</source>
-        <translation>Laden abgeschloassen</translation>
+        <translation type="vanished">Laden abgeschloassen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2144"/>
         <source>Could not open file </source>
-        <translation>Datei konnte nicht geöffnet werden </translation>
+        <translation type="vanished">Datei konnte nicht geöffnet werden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2145"/>
         <source>because no file extension exists.</source>
-        <translation>da Dateierweiterung unbekannt.</translation>
+        <translation type="vanished">da Dateierweiterung unbekannt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2151"/>
         <source>Opening file </source>
-        <translation>Öffne Datei </translation>
+        <translation type="vanished">Öffne Datei </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2170"/>
         <source>Dont know how to open </source>
-        <translation>Datei kann nicht geöffnet werden </translation>
+        <translation type="vanished">Datei kann nicht geöffnet werden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/mainControl.C" line="2171"/>
         <source>. This extension is not supported.</source>
-        <translation>. Dateierweiterung unbekannt.</translation>
+        <translation type="vanished">. Dateierweiterung unbekannt.</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::MainWindow</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="291"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="326"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="362"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1057"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1197"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1305"/>
         <source>Error</source>
-        <translation>Fehler</translation>
+        <translation type="vanished">Fehler</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="291"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="326"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="362"/>
         <source>Invalid activity ID</source>
-        <translation type="unfinished">Ungültige activity ID</translation>
+        <translation type="obsolete">Ungültige activity ID</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="386"/>
         <source>Some class labels of this input file are not discrete values! Creation of a classification model is therefore not possible.</source>
-        <translation type="unfinished">Die Eingabedatei enthält für einige Klassen Label keine diskreten Werte, deshalb kann kein Klassifikationsmodel erstellt werden.</translation>
+        <translation type="obsolete">Die Eingabedatei enthält für einige Klassen Label keine diskreten Werte, deshalb kann kein Klassifikationsmodel erstellt werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="462"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="508"/>
         <source>Invalid value</source>
-        <translation type="unfinished">Ungültiger Wert</translation>
+        <translation type="obsolete">Ungültiger Wert</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="537"/>
         <source>About QuEasyViz</source>
-        <translation>Über QuEasyViz</translation>
+        <translation type="vanished">Über QuEasyViz</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="555"/>
-        <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="556"/>
         <source>Exit the application</source>
-        <translation type="unfinished">Anwendung schließen</translation>
+        <translation type="obsolete">Anwendung schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="559"/>
         <source>&amp;About</source>
-        <translation type="unfinished">Über QuEasyViz</translation>
+        <translation type="obsolete">Über QuEasyViz</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="560"/>
         <source>Show the application&apos;s About box</source>
-        <translation type="unfinished">Anzeigen der QuEasyViz Info Box</translation>
+        <translation type="obsolete">Anzeigen der QuEasyViz Info Box</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="563"/>
         <source>&amp;Clear Desktop</source>
-        <translation type="unfinished">Bereinige Desktop</translation>
+        <translation type="obsolete">Bereinige Desktop</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="564"/>
-        <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="565"/>
         <source>Clear the desktop</source>
-        <translation type="unfinished">Bereinige Desktop</translation>
+        <translation type="obsolete">Bereinige Desktop</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="568"/>
         <source>&amp;Delete Selection</source>
-        <translation type="unfinished">Lösche Auswahl</translation>
+        <translation type="obsolete">Lösche Auswahl</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="569"/>
         <source>Delete the selected Item from the pipeline</source>
-        <translation type="unfinished">Lösche gewählte Objekte der Pipeline</translation>
+        <translation type="obsolete">Lösche gewählte Objekte der Pipeline</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="570"/>
-        <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="576"/>
         <source>&amp;Execute Pipeline</source>
-        <translation type="unfinished">Pipeline ausführen</translation>
+        <translation type="obsolete">Pipeline ausführen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="577"/>
-        <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="578"/>
         <source>Execute the Pipeline</source>
-        <translation type="unfinished">Pipeline Ausführen</translation>
+        <translation type="obsolete">Pipeline Ausführen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="581"/>
         <source>&amp;Restore Pipeline</source>
-        <translation type="unfinished">Wiederherstellen der Pipeline</translation>
+        <translation type="obsolete">Wiederherstellen der Pipeline</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="582"/>
-        <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="583"/>
         <source>Restore a Pipeline</source>
-        <translation type="unfinished">Wiederherstellen der Pipeline</translation>
+        <translation type="obsolete">Wiederherstellen der Pipeline</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="586"/>
         <source>Save Pipeline</source>
-        <translation type="unfinished">Pipeline speichern</translation>
+        <translation type="obsolete">Pipeline speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="587"/>
         <source>Save the Pipeline</source>
-        <translation type="unfinished">Pipeline speichern</translation>
+        <translation type="obsolete">Pipeline speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="588"/>
-        <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="627"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1073"/>
         <source>Save File as</source>
-        <translation type="unfinished">Speichere Datei unter</translation>
+        <translation type="obsolete">Speichere Datei unter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="554"/>
         <source>Close</source>
-        <translation type="unfinished">Schließen</translation>
+        <translation type="obsolete">Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="629"/>
         <source>Graphic</source>
-        <translation type="unfinished">Graphik</translation>
+        <translation type="obsolete">Graphik</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="641"/>
         <source>&amp;File</source>
-        <translation type="unfinished">Datei</translation>
+        <translation type="obsolete">Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="644"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished">B&amp;earbeiten</translation>
+        <translation type="obsolete">B&amp;earbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="645"/>
         <source>&amp;Preferences</source>
-        <translation type="unfinished">Eigenschaften</translation>
+        <translation type="obsolete">Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="646"/>
-        <source>Ctrl+P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="650"/>
         <source>&amp;Windows</source>
-        <translation>Fenster</translation>
+        <translation type="vanished">Fenster</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="654"/>
         <source>&amp;Help</source>
-        <translation>&amp;Hilfe</translation>
+        <translation type="vanished">&amp;Hilfe</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="655"/>
         <source>&amp;Documentation</source>
-        <translation>&amp;Dokumentation</translation>
+        <translation type="vanished">&amp;Dokumentation</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="672"/>
         <source>General settings</source>
-        <translation type="unfinished">Allgemeine Einstellungen</translation>
+        <translation type="obsolete">Allgemeine Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="682"/>
         <source>Show documentation at start-up?</source>
-        <translation type="unfinished">Anzeigen der Dokumentation beim Start?</translation>
+        <translation type="obsolete">Anzeigen der Dokumentation beim Start?</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="691"/>
-        <source>Cluster submit settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="694"/>
         <source>Queue submitting command</source>
-        <translation type="unfinished">Kommando zum Einreihen in die Warteschlange</translation>
+        <translation type="obsolete">Kommando zum Einreihen in die Warteschlange</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="702"/>
         <source>Path to QuEasyRun</source>
-        <translation type="unfinished">Pfad zu QuEasyRun</translation>
+        <translation type="obsolete">Pfad zu QuEasyRun</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="709"/>
         <source>Send email when job is finished?</source>
-        <translation type="unfinished">Soll email</translation>
+        <translation type="obsolete">Soll email</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="714"/>
-        <source>Email address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="747"/>
-        <source>File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="755"/>
         <source>Print</source>
-        <translation type="unfinished">Drucken</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="762"/>
-        <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="764"/>
-        <source>zoom in</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="765"/>
-        <source>+</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="768"/>
-        <source>zoom out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="769"/>
-        <source>-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="775"/>
-        <source>Submit job</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="816"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="989"/>
-        <source> </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="825"/>
-        <source>Source Filebrowser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="847"/>
-        <source>Linear regression models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="848"/>
-        <source>Nonlinear regression models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="849"/>
-        <source>Classification models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="875"/>
-        <source>Models</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="894"/>
-        <source>Feature Selection</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="912"/>
-        <source>Validation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="927"/>
-        <source>Progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="939"/>
-        <source>Documentation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="989"/>
-        <source>No item selected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1046"/>
-        <source>Open File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1046"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1073"/>
-        <source>Pipeline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1107"/>
-        <source>SDF data saving error </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1107"/>
-        <source>SDF Input must be assigned a file to be saved to!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1124"/>
-        <source>CSV saving error </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1124"/>
-        <source>CSV Item must be assigned a file to be saved to!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1142"/>
-        <source>Input-partition saving error </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1142"/>
-        <source>Item must be assigned a file to be saved to!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1157"/>
-        <source>Model saving error </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1157"/>
-        <source>Model must be assigned a file to be saved to!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1172"/>
-        <source>Validation saving error </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1172"/>
-        <source>Validation must be assigned a file to be saved to!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1187"/>
-        <source>Prediction saving error </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1187"/>
-        <source>Prediction must be assigned a file to be saved to!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1326"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1793"/>
-        <source>No pipeline</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1326"/>
-        <source>There is no pipeline to be excuted yet!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1359"/>
-        <source>Warning:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1359"/>
-        <source>Pipeline has not changed,
-so there was nothing to be done!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1434"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1438"/>
-        <source>Pipeline-archive reading error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1434"/>
-        <source>No conf-file found in archive!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1438"/>
-        <source>More than one conf-file found in archive!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1448"/>
-        <source>Pipeline reading error</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1793"/>
-        <source>There is no pipeline yet!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1814"/>
-        <source>Desired quality statistic</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/mainWindow.C" line="1057"/>
-        <source>Invalid Pipeline</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Drucken</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ModelConfigurationDialog</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="191"/>
         <source>Model Properties</source>
-        <translation>Model Eigenschaften</translation>
+        <translation type="vanished">Model Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="197"/>
         <source>Descriptors</source>
-        <translation>Deskriptoren</translation>
+        <translation type="vanished">Deskriptoren</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="246"/>
         <source>Model Parameters</source>
-        <translation>Model Parameter</translation>
+        <translation type="vanished">Model Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="256"/>
         <source>Kernel Parameters</source>
-        <translation type="unfinished">Kernel Parameter</translation>
+        <translation type="obsolete">Kernel Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="266"/>
         <source>Optimize Parameters</source>
-        <translation>Optimiere Parameter</translation>
+        <translation type="vanished">Optimiere Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="313"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="352"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="369"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="389"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="556"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="560"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="564"/>
         <source>Error</source>
-        <translation>Fehler</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="313"/>
-        <source>Invalid model parameter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="352"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="369"/>
-        <source>Invalid kernel parameter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="389"/>
-        <source>Invalid kernel string(s)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="556"/>
-        <source>Invalid number of model parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="560"/>
-        <source>Invalid number of kernel parameters</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialog.C" line="564"/>
-        <source>Model creation failed</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Fehler</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ModelInformation</name>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="33"/>
         <source>Line</source>
-        <translation>Draht</translation>
+        <translation type="vanished">Draht</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="35"/>
         <source>Stick</source>
-        <translation>Stäbchen</translation>
+        <translation type="vanished">Stäbchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="37"/>
         <source>Ball and Stick</source>
-        <translation>Kugel-Stab</translation>
+        <translation type="vanished">Kugel-Stab</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="39"/>
-        <source>VDW</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="41"/>
-        <source>SES</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="43"/>
-        <source>SAS</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="45"/>
         <source>Contour Surface</source>
-        <translation>Konturoberfläche</translation>
+        <translation type="vanished">Konturoberfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="47"/>
         <source>Grid Slice</source>
-        <translation>Gitter Scheiben</translation>
+        <translation type="vanished">Gitter Scheiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="49"/>
         <source>Grid Volume</source>
-        <translation>Gitter Volumen</translation>
+        <translation type="vanished">Gitter Volumen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="51"/>
         <source>Field Lines</source>
-        <translation>Feldlinien</translation>
+        <translation type="vanished">Feldlinien</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="53"/>
-        <source>Backbone</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="55"/>
-        <source>Cartoon</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="57"/>
         <source>Ribbon</source>
-        <translation>Band</translation>
+        <translation type="vanished">Band</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="59"/>
         <source>H-Bonds</source>
-        <translation>Wasserstoffbrücken</translation>
+        <translation type="vanished">Wasserstoffbrücken</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="61"/>
         <source>Forces</source>
-        <translation>Kräfte</translation>
+        <translation type="vanished">Kräfte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="63"/>
         <source>Label</source>
-        <translation>Bezeichner</translation>
+        <translation type="vanished">Bezeichner</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="65"/>
         <source>Informations</source>
-        <translation>Informationen</translation>
+        <translation type="vanished">Informationen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="67"/>
         <source>Coordinate System</source>
-        <translation>Koordinatensystem</translation>
+        <translation type="vanished">Koordinatensystem</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="69"/>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="71"/>
         <source>Unknown</source>
-        <translation>Unbekannt</translation>
+        <translation type="vanished">Unbekannt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="79"/>
         <source>by element</source>
-        <translation>nach Element</translation>
+        <translation type="vanished">nach Element</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="81"/>
         <source>by residue index</source>
-        <translation>nach Residuen Index</translation>
+        <translation type="vanished">nach Residuen Index</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="83"/>
         <source>by residue name</source>
-        <translation>nach Residuen Name</translation>
+        <translation type="vanished">nach Residuen Name</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="85"/>
         <source>by secondary structure</source>
-        <translation>nach Sekundärstruktur</translation>
+        <translation type="vanished">nach Sekundärstruktur</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="87"/>
         <source>by atom charge</source>
-        <translation>nach Atomladung</translation>
+        <translation type="vanished">nach Atomladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="89"/>
         <source>by atom distance</source>
-        <translation>nach Atom Distanz</translation>
+        <translation type="vanished">nach Atom Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="91"/>
         <source>by temperature factor</source>
-        <translation>nach Temperaturfaktor</translation>
+        <translation type="vanished">nach Temperaturfaktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="93"/>
         <source>by occupancy</source>
-        <translation>nach Besetzungszahl</translation>
+        <translation type="vanished">nach Besetzungszahl</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="95"/>
         <source>by forces</source>
-        <translation>nach Kräften</translation>
+        <translation type="vanished">nach Kräften</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="97"/>
         <source>by residue type</source>
-        <translation>nach Residuen Typ</translation>
+        <translation type="vanished">nach Residuen Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="99"/>
         <source>by chain</source>
-        <translation>nach Kette</translation>
+        <translation type="vanished">nach Kette</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="101"/>
         <source>by molecule</source>
-        <translation>nach Molekül</translation>
+        <translation type="vanished">nach Molekül</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="103"/>
         <source>custom</source>
-        <translation>individuell</translation>
+        <translation type="vanished">individuell</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="105"/>
-        <location filename="../../../source/VIEW/KERNEL/modelInformation.C" line="107"/>
         <source>unknown</source>
-        <translation>unbekannt</translation>
+        <translation type="vanished">unbekannt</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ModelItem</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="588"/>
-        <source>Save model</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="592"/>
-        <source>Load model</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="596"/>
-        <source>Show Properties</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="642"/>
         <source>Save File as</source>
-        <translation type="unfinished">Speichere Datei unter</translation>
+        <translation type="obsolete">Speichere Datei unter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="642"/>
-        <source>text (*.txt)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="648"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="664"/>
         <source>Error</source>
-        <translation type="unfinished">Fehler</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="670"/>
-        <source>Open Model</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelItem.C" line="670"/>
-        <source>models (*.mod)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Fehler</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ModelParameterPage</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="50"/>
         <source>Model Parameters</source>
-        <translation type="unfinished">Model Parameter</translation>
+        <translation type="obsolete">Model Parameter</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ModelPropertiesDialog</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="44"/>
-        <source>Apply</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="45"/>
         <source>Optimize Parameters</source>
-        <translation type="unfinished">Optimiere Parameter</translation>
+        <translation type="obsolete">Optimiere Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="51"/>
-        <source>k-fold cross validation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="115"/>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="126"/>
         <source>Error</source>
-        <translation type="unfinished">Fehler</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="115"/>
-        <source>Invalid parameter</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelPropertiesDialog.C" line="126"/>
-        <source>Invalid k</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Fehler</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ModelPropertiesPage</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="397"/>
         <source>Model Parameters</source>
-        <translation type="unfinished">Model Parameter</translation>
+        <translation type="obsolete">Model Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/modelConfigurationDialogPages.C" line="412"/>
         <source>Kernel Parameters</source>
-        <translation type="unfinished">Kernel Parameter</translation>
+        <translation type="obsolete">Kernel Parameter</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::MolecularControl</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="96"/>
         <source>MolecularControlList</source>
-        <translation>Molekül Bedienleistenliste</translation>
+        <translation type="vanished">Molekül Bedienleistenliste</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="97"/>
-        <source>Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="97"/>
-        <source>highlight</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="98"/>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="vanished">Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="99"/>
         <source>checked</source>
-        <translation>ausgewählt</translation>
+        <translation type="vanished">ausgewählt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="124"/>
         <source>Clear</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="126"/>
         <source>Clear the selection.</source>
-        <translation>Auswahl zurücksetzen.</translation>
+        <translation type="vanished">Auswahl zurücksetzen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="133"/>
         <source>Help</source>
-        <translation>Hilfe</translation>
+        <translation type="vanished">Hilfe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="135"/>
         <source>Show a help dialog.</source>
-        <translation>Hilfsdialog anzeigen.</translation>
+        <translation type="vanished">Hilfsdialog anzeigen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="141"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="417"/>
         <source>Select</source>
-        <translation>Auswählen</translation>
+        <translation type="vanished">Auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="146"/>
         <source>Apply the current expression.</source>
-        <translation>Aktuellen Ausdruck anwenden.</translation>
+        <translation type="vanished">Aktuellen Ausdruck anwenden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="181"/>
         <source>Paste a copied or cuted object into current selected object.</source>
-        <translation>Einfügen eines kopierten oder ausgeschnittenen Objektes in das gerade ausgewählte Objekt.</translation>
+        <translation type="vanished">Einfügen eines kopierten oder ausgeschnittenen Objektes in das gerade ausgewählte Objekt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="188"/>
         <source>Invalid Combination, cant paste into this entity.</source>
-        <translation>Ungültige Kombination, Einfügen in dieses Objekt nicht möglich.</translation>
+        <translation type="vanished">Ungültige Kombination, Einfügen in dieses Objekt nicht möglich.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="195"/>
         <source>One item must be selected to paste into.</source>
-        <translation>Zum Einfügen muss ein Objekt ausgewählt sein.</translation>
+        <translation type="vanished">Zum Einfügen muss ein Objekt ausgewählt sein.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="196"/>
         <source>No copied/cuted object.</source>
-        <translation>Kein kopiertes oder ausgeschnittenens Objekt vorhanden.</translation>
+        <translation type="vanished">Kein kopiertes oder ausgeschnittenens Objekt vorhanden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="197"/>
         <source>Simulation running, cant paste meanwhile</source>
-        <translation>Simulation läuft, währenddessen kein Einfögen möglich</translation>
+        <translation type="vanished">Simulation läuft, währenddessen kein Einfögen möglich</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="198"/>
         <source>Update of Representation running, cant paste meanwhile</source>
-        <translation>Aktualisierung einer Repräsentation, währenddessen kein Einfügen möglich</translation>
+        <translation type="vanished">Aktualisierung einer Repräsentation, währenddessen kein Einfügen möglich</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="210"/>
         <source>No item copied/cuted or simulation running</source>
-        <translation>Keine Aktion möglich</translation>
+        <translation type="vanished">Keine Aktion möglich</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="214"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="655"/>
         <source>Clear the items in the clipboard</source>
-        <translation>Zurücksetzten der Zwischenablage</translation>
+        <translation type="vanished">Zurücksetzten der Zwischenablage</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="223"/>
         <source>No item selected or simulation running</source>
-        <translation>Keine Aktion möglich</translation>
+        <translation type="vanished">Keine Aktion möglich</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="372"/>
         <source>ContextMenu</source>
-        <translation>Kontextmenu</translation>
+        <translation type="vanished">Kontextmenu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="373"/>
         <source>ModelMenu</source>
-        <translation>Modelmenu</translation>
+        <translation type="vanished">Modelmenu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="375"/>
         <source>Custom</source>
-        <translation>Eigene</translation>
+        <translation type="vanished">Eigene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="384"/>
         <source>ColorMenu</source>
-        <translation>Farbmenu</translation>
+        <translation type="vanished">Farbmenu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="411"/>
         <source>Create Representation</source>
-        <translation>Erzeuge eine Repräsentation</translation>
+        <translation type="vanished">Erzeuge eine Repräsentation</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="414"/>
         <source>Edit</source>
-        <translation>Bearbeiten</translation>
+        <translation type="vanished">Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="418"/>
         <source>Deselect</source>
-        <translation>Auswahl zurücksetzen</translation>
+        <translation type="vanished">Auswahl zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="421"/>
         <source>Focus</source>
-        <translation>Fokusieren</translation>
+        <translation type="vanished">Fokusieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="425"/>
         <source>Count items</source>
-        <translation>Abzählen der Objekte</translation>
+        <translation type="vanished">Abzählen der Objekte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="426"/>
         <source>Atom Overview</source>
-        <translation>Atomübersicht</translation>
+        <translation type="vanished">Atomübersicht</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="427"/>
         <source>Atom Overview for Selection</source>
-        <translation>Atomübersicht für Auswahl</translation>
+        <translation type="vanished">Atomübersicht für Auswahl</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="432"/>
         <source>Properties</source>
-        <translation>Eigenschaften</translation>
+        <translation type="vanished">Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="435"/>
         <source>Show Bonds</source>
-        <translation>Bindungen anzeigen</translation>
+        <translation type="vanished">Bindungen anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="439"/>
         <source>Collapse all</source>
-        <translation>Alles verbergen</translation>
+        <translation type="vanished">Alles verbergen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="440"/>
         <source>Expand all</source>
-        <translation>Alles aufzeigen</translation>
+        <translation type="vanished">Alles aufzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="441"/>
         <source>Highlight Selection</source>
-        <translation>Markiere Auswahl</translation>
+        <translation type="vanished">Markiere Auswahl</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="443"/>
         <source>Show Secondary Structures</source>
-        <translation>Sekundärstruktur anzeigen</translation>
+        <translation type="vanished">Sekundärstruktur anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="451"/>
         <source>Cut</source>
-        <translation>Ausschneiden</translation>
+        <translation type="vanished">Ausschneiden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="452"/>
         <source>Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="vanished">Kopieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="453"/>
         <source>Paste</source>
-        <translation>Einfügen</translation>
+        <translation type="vanished">Einfügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="454"/>
         <source>Delete</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="456"/>
         <source>Move</source>
-        <translation>Schieben</translation>
+        <translation type="vanished">Schieben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="501"/>
         <source>Atom has no bonds!</source>
-        <translation>Atom hat keine Bindungen!</translation>
+        <translation type="vanished">Atom hat keine Bindungen!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="534"/>
         <source>Composite is from file</source>
-        <translation>Composite stammt aus Datei</translation>
+        <translation type="vanished">Composite stammt aus Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="538"/>
         <source>Composite is not from file</source>
-        <translation>Composite stammt nicht aus Datei</translation>
+        <translation type="vanished">Composite stammt nicht aus Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="592"/>
         <source>No changes allowed, while simulation is running or creating new representations!</source>
-        <translation>Keine Änderungen erlaubt während laufender Simulation oder Erstellung neuer Repräsentationen!</translation>
+        <translation type="vanished">Keine Änderungen erlaubt während laufender Simulation oder Erstellung neuer Repräsentationen!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="628"/>
         <source>&amp;Select</source>
-        <translation>Au&amp;swählen</translation>
+        <translation type="vanished">Au&amp;swählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="629"/>
         <source>Select a molecular object to see its position in the scene or to mark it for a simulation</source>
-        <translation>Auswahl eines molekularen Objektes um dessen Position in der Szene anzuzeigen oder es für eine Simulation zu markieren</translation>
+        <translation type="vanished">Auswahl eines molekularen Objektes um dessen Position in der Szene anzuzeigen oder es für eine Simulation zu markieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="631"/>
         <source>&amp;Deselect</source>
-        <translation>Auswahl zurücksetzen</translation>
+        <translation type="vanished">Auswahl zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="632"/>
         <source>Deselect a molecular object.</source>
-        <translation>Objekt aus Auswahl herausnehmen.</translation>
+        <translation type="vanished">Objekt aus Auswahl herausnehmen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="638"/>
         <source>Cu&amp;t</source>
-        <translation>Auschneiden</translation>
+        <translation type="vanished">Auschneiden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="642"/>
         <source>&amp;Copy</source>
-        <translation>Kopieren</translation>
+        <translation type="vanished">Kopieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="646"/>
         <source>&amp;Paste</source>
-        <translation>Einfügen</translation>
+        <translation type="vanished">Einfügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="653"/>
         <source>Clear Clipboard</source>
-        <translation>Zwischenablage zurücksetzten</translation>
+        <translation type="vanished">Zwischenablage zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="663"/>
         <source>Distance Label</source>
-        <translation>Distanz Label</translation>
+        <translation type="vanished">Distanz Label</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="665"/>
         <source>Render a label for the distance between two highlighted atoms</source>
-        <translation>Erzeugen einer Distanzanzeige zwischen zwei markierten Atomen</translation>
+        <translation type="vanished">Erzeugen einer Distanzanzeige zwischen zwei markierten Atomen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="668"/>
         <source>Angle Label</source>
-        <translation>Winkel Label</translation>
+        <translation type="vanished">Winkel Label</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="670"/>
         <source>Render a label for the angle between three highlighted atoms</source>
-        <translation>Erzeugen einer Winkelanzeige zwischen drei markierten Atomen</translation>
+        <translation type="vanished">Erzeugen einer Winkelanzeige zwischen drei markierten Atomen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="884"/>
         <source>copied </source>
-        <translation>Kopiert wurden </translation>
+        <translation type="vanished">Kopiert wurden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="884"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="904"/>
         <source> objects</source>
-        <translation> Objekte kopiert</translation>
+        <translation type="vanished"> Objekte kopiert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="904"/>
         <source>Pasted </source>
-        <translation>Eingefügt wurden </translation>
+        <translation type="vanished">Eingefügt wurden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="924"/>
         <source>Could not paste, no or more than 1 item selected!</source>
-        <translation>Einfügen nicht möglich da keines oder mehr als 1 Objekt ausgewählt ist!</translation>
+        <translation type="vanished">Einfügen nicht möglich da keines oder mehr als 1 Objekt ausgewählt ist!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="974"/>
         <source>Composite </source>
-        <translation>Composite </translation>
+        <translation type="vanished">Composite </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="974"/>
         <source> already added!</source>
-        <translation> wurde schon hinzugefügt!</translation>
+        <translation type="vanished"> wurde schon hinzugefügt!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1094"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1099"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1104"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1109"/>
         <source> Residues</source>
-        <translation> Residuen</translation>
+        <translation type="vanished"> Residuen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1112"/>
         <source> Atoms</source>
-        <translation> Atome</translation>
+        <translation type="vanished"> Atome</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1113"/>
         <source> Bonds</source>
-        <translation> Bindungen</translation>
+        <translation type="vanished"> Bindungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1133"/>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1154"/>
         <source>Invalid expression </source>
-        <translation>Ungültiger Ausdruck </translation>
+        <translation type="vanished">Ungültiger Ausdruck </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1177"/>
         <source>Selected </source>
-        <translation>Ausgewählt wurden </translation>
+        <translation type="vanished">Ausgewählt wurden </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1177"/>
         <source> atoms.</source>
-        <translation> Atome.</translation>
+        <translation type="vanished"> Atome.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/molecularControl.C" line="1426"/>
         <source>Cannot select items now!</source>
-        <translation type="unfinished">Auswahl von Objekten jetzt nicht möglich!</translation>
+        <translation type="obsolete">Auswahl von Objekten jetzt nicht möglich!</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::PluginDialog</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="144"/>
         <source>Load Plugin</source>
-        <translation>Plugin laden</translation>
+        <translation type="vanished">Plugin laden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="219"/>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="301"/>
         <source>Deactivate</source>
-        <translation>Deaktivieren</translation>
+        <translation type="vanished">Deaktivieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="223"/>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="296"/>
         <source>Activate</source>
-        <translation>Aktivieren</translation>
+        <translation type="vanished">Aktivieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.C" line="250"/>
         <source>Select a plugin directory</source>
-        <translation>Wähle ein Plugin-Verzeichnis</translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::PredictionItem</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/predictionItem.C" line="225"/>
-        <source>Plot predictions</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Wähle ein Plugin-Verzeichnis</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::PredictionResultDialog</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/predictionResultDialog.C" line="65"/>
-        <source>Predicted Activity Values</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/predictionResultDialog.C" line="179"/>
         <source>Save File as</source>
-        <translation type="unfinished">Speichere Datei unter</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/predictionResultDialog.C" line="179"/>
-        <source>text (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Speichere Datei unter</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::PubChemDialog</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="50"/>
         <source>Add</source>
-        <translation>Hinzufügen</translation>
+        <translation type="vanished">Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="51"/>
         <source>Clear Results</source>
-        <translation>Ergebnisse löschen</translation>
+        <translation type="vanished">Ergebnisse löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="59"/>
         <source>Results</source>
-        <translation>Ergebnisse</translation>
+        <translation type="vanished">Ergebnisse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="123"/>
         <source>Invalid SMILES expression!</source>
-        <translation>Ungültiger SMILES Ausdruck!</translation>
+        <translation type="vanished">Ungültiger SMILES Ausdruck!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="129"/>
         <source>Generated from SMILES </source>
-        <translation>Erzeugt aus SMILES </translation>
+        <translation type="vanished">Erzeugt aus SMILES </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="196"/>
         <source>Secondary structure plotting failed</source>
-        <translation>Zeichnen der Strukture fehlgeschlagen</translation>
+        <translation type="vanished">Zeichnen der Strukture fehlgeschlagen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="278"/>
-        <source>PubChem</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="279"/>
         <source>Download a file from pubchem</source>
-        <translation>Datei von PubChem herunterladen</translation>
+        <translation type="vanished">Datei von PubChem herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="282"/>
         <source>Build from SMILES</source>
-        <translation>Erzeuge aus SMILES</translation>
+        <translation type="vanished">Erzeuge aus SMILES</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="283"/>
         <source>Create a structure from a SMILES expression</source>
-        <translation>Erzeuge Struktur aus SMILES Ausdruck</translation>
+        <translation type="vanished">Erzeuge Struktur aus SMILES Ausdruck</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="298"/>
         <source>Error in connecting to PubChem!</source>
-        <translation>Fehler beim Verbinden zu PubChem!</translation>
+        <translation type="vanished">Fehler beim Verbinden zu PubChem!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="318"/>
         <source>Error in parsing PubChem esearch results!</source>
-        <translation>Fehler beim parsen der PubChem Ergebnisse!</translation>
+        <translation type="vanished">Fehler beim parsen der PubChem Ergebnisse!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="334"/>
         <source>Downloading </source>
-        <translation>Herunterladen von </translation>
+        <translation type="vanished">Herunterladen von </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="334"/>
         <source> entries</source>
-        <translation> Objekten</translation>
+        <translation type="vanished"> Objekten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="341"/>
         <source>No entries found!</source>
-        <translation>Keine Einträge gefunden!</translation>
+        <translation type="vanished">Keine Einträge gefunden!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="437"/>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.C" line="457"/>
         <source>Error in parsing PubChem esummary results!</source>
-        <translation>Fehler beim parsen der PubChem Ergebnisse!</translation>
+        <translation type="vanished">Fehler beim parsen der PubChem Ergebnisse!</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::PyWidget</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="345"/>
         <source>Output for single Python commands</source>
-        <translation>Ausgabe für einzelne Python Kommandos</translation>
+        <translation type="vanished">Ausgabe für einzelne Python Kommandos</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="354"/>
         <source>Enter a Python command and press return for execution. Cursor right at end of line for completion, Enter or Shift-F1 for documentation.</source>
-        <translation>Zur Ausführung ein Python Kommando eingeben und mit  &quot;Enter&quot; bestätigen. Für Kommandovervollständigung den &quot;Cursor rechts&quot; an jeweiligem rechten Zeilenende drücken. Dokumentation über &quot;Shift F1&quot;.</translation>
+        <translation type="vanished">Zur Ausführung ein Python Kommando eingeben und mit  &quot;Enter&quot; bestätigen. Für Kommandovervollständigung den &quot;Cursor rechts&quot; an jeweiligem rechten Zeilenende drücken. Dokumentation über &quot;Shift F1&quot;.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="370"/>
         <source>Instant Mode</source>
-        <translation>Direktmodus</translation>
+        <translation type="vanished">Direktmodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="384"/>
         <source>Scripting Mode</source>
-        <translation>Skriptmodus</translation>
+        <translation type="vanished">Skriptmodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="404"/>
         <source>Run</source>
-        <translation>Skript starten</translation>
+        <translation type="vanished">Skript starten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="409"/>
         <source>Save as</source>
-        <translation>Speichern unter</translation>
+        <translation type="vanished">Speichern unter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="414"/>
         <source>Load</source>
-        <translation>Laden</translation>
+        <translation type="vanished">Laden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="419"/>
         <source>Clear</source>
-        <translation>Zurücksetzten</translation>
+        <translation type="vanished">Zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="441"/>
         <source>Output of Python scripts</source>
-        <translation>Ausgabe des Pythonskripts</translation>
+        <translation type="vanished">Ausgabe des Pythonskripts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="464"/>
         <source>Load Python Script</source>
-        <translation>Lade Pythonskript</translation>
+        <translation type="vanished">Lade Pythonskript</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="465"/>
         <source>Save Python Script</source>
-        <translation>Speichere Pythonskript</translation>
+        <translation type="vanished">Speichere Pythonskript</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="466"/>
         <source>Exec Python Script</source>
-        <translation>Ausführen eines Pythonskripts</translation>
+        <translation type="vanished">Ausführen eines Pythonskripts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="467"/>
         <source>Run Current Script</source>
-        <translation>Aktuelles Skript starten</translation>
+        <translation type="vanished">Aktuelles Skript starten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="468"/>
         <source>Abort Python Script</source>
-        <translation>Abbrechen des Pythonskripts</translation>
+        <translation type="vanished">Abbrechen des Pythonskripts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="469"/>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="812"/>
         <source>Export History</source>
-        <translation>Befehlshistorie speichern</translation>
+        <translation type="vanished">Befehlshistorie speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="470"/>
         <source>Clear Editor</source>
-        <translation>Editor zurücksetzten</translation>
+        <translation type="vanished">Editor zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="479"/>
         <source>No Python support available:</source>
-        <translation>Kein Python verfügbar:</translation>
+        <translation type="vanished">Kein Python verfügbar:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="655"/>
         <source>Ready</source>
-        <translation>Bereit</translation>
+        <translation type="vanished">Bereit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="822"/>
         <source>Could not export history to file </source>
-        <translation>Befehlshistorie konnte nicht gespeichert werden in Datei </translation>
+        <translation type="vanished">Befehlshistorie konnte nicht gespeichert werden in Datei </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="848"/>
         <source>Could not save script to </source>
-        <translation>Skript konnte nicht gespeichert werden unter </translation>
+        <translation type="vanished">Skript konnte nicht gespeichert werden unter </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="926"/>
         <source>executing script from </source>
-        <translation>Ausgeführt wird Skript </translation>
+        <translation type="vanished">Ausgeführt wird Skript </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="927"/>
         <source>loading script from </source>
-        <translation>Geladen wird Skript </translation>
+        <translation type="vanished">Geladen wird Skript </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="935"/>
         <source>Could not find file </source>
-        <translation>Datei konnte nicht gefunden werden: </translation>
+        <translation type="vanished">Datei konnte nicht gefunden werden: </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="989"/>
         <source>Finished.</source>
-        <translation>Beendet.</translation>
+        <translation type="vanished">Beendet.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1145"/>
         <source>ERROR: no interpreter running!
 </source>
-        <translation>FEHLER: Pythoninterpreter funktionier nicht!\n</translation>
+        <translation type="vanished">FEHLER: Pythoninterpreter funktionier nicht!\n</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1326"/>
-        <source>BALL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="482"/>
         <source>No Python support available! (See PyWidget)</source>
-        <translation>Kein Python verfügbar! (Siehe Python Fenster)</translation>
+        <translation type="vanished">Kein Python verfügbar! (Siehe Python Fenster)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="536"/>
         <source>Problem mapping key</source>
-        <translation>Problem bei Befehlszuordnung</translation>
+        <translation type="vanished">Problem bei Befehlszuordnung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="555"/>
         <source>Problem unmapping key</source>
-        <translation>Problem bei Befehlszuordnung</translation>
+        <translation type="vanished">Problem bei Befehlszuordnung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="616"/>
         <source>Run a Python script</source>
-        <translation>Ausführen eines Pythonskripts</translation>
+        <translation type="vanished">Ausführen eines Pythonskripts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="622"/>
         <source>Modify</source>
-        <translation>Ändern</translation>
+        <translation type="vanished">Ändern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="623"/>
         <source>Manage user defined Python commands</source>
-        <translation>Verwaltung benutzerspezifischer Pythonkommandos</translation>
+        <translation type="vanished">Verwaltung benutzerspezifischer Pythonkommandos</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="643"/>
         <source>Could not find startup script. Please set the correct path to the data path!</source>
-        <translation>Startskript konnte nicht gefunden werden. Bitte korrekten Pfad zum data-Verzeichnis setzten!</translation>
+        <translation type="vanished">Startskript konnte nicht gefunden werden. Bitte korrekten Pfad zum data-Verzeichnis setzten!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="644"/>
         <source>To do so set the environment variable BALL_DATA_PATH or BALLVIEW_DATA_PATH.</source>
-        <translation>Setzen Sie dazu die Umgebungsvariable BALL_DATA_PATH oder BALLVIEW_DATA_PATH.</translation>
+        <translation type="vanished">Setzen Sie dazu die Umgebungsvariable BALL_DATA_PATH oder BALLVIEW_DATA_PATH.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="677"/>
         <source>Aborting Python script</source>
-        <translation>Abbruch des Pythonskripts</translation>
+        <translation type="vanished">Abbruch des Pythonskripts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="738"/>
         <source>Finished script successfully</source>
-        <translation>Skript wurde erfolgreich beendet</translation>
+        <translation type="vanished">Skript wurde erfolgreich beendet</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="739"/>
         <source>Error occurred in Script</source>
-        <translation>Fehler im Skript</translation>
+        <translation type="vanished">Fehler im Skript</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="838"/>
         <source>Save script</source>
-        <translation>Skript speichern</translation>
+        <translation type="vanished">Skript speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="879"/>
         <source>Choose a Python script</source>
-        <translation>Wähle ein Pythonskript</translation>
+        <translation type="vanished">Wähle ein Pythonskript</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="881"/>
         <source>Python Scripts</source>
-        <translation>Pythonskripte</translation>
+        <translation type="vanished">Pythonskripte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="972"/>
         <source> of file </source>
-        <translation> von Datei </translation>
+        <translation type="vanished"> von Datei </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="972"/>
-        <source>Error in line </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="979"/>
         <source>Aborted script</source>
-        <translation>Abbruch des Pythonskripts</translation>
+        <translation type="vanished">Abbruch des Pythonskripts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="980"/>
         <source>aborted...</source>
-        <translation>Abbrechen...</translation>
+        <translation type="vanished">Abbrechen...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="990"/>
         <source>Finished script.</source>
-        <translation>Skript beendet.</translation>
+        <translation type="vanished">Skript beendet.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1375"/>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1387"/>
         <source>No completion found</source>
-        <translation>Keine Kommandovervollständigung gefunden</translation>
+        <translation type="vanished">Keine Kommandovervollständigung gefunden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1597"/>
         <source>Create script</source>
-        <translation>Erzeuge ein Skript</translation>
+        <translation type="vanished">Erzeuge ein Skript</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1600"/>
         <source>Clear history</source>
-        <translation>Befehlshistorie zurücksetzten</translation>
+        <translation type="vanished">Befehlshistorie zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1637"/>
         <source>Help for: </source>
-        <translation>Hilfe für:</translation>
+        <translation type="vanished">Hilfe für:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1691"/>
         <source>Could not create temp file in user home dir! Please save script manualy once.</source>
-        <translation>Es konnte keine temporäre Datei im Homeverzeichnis erzeugt werden! Bitte speichern Sie das Skript einmal manuell.</translation>
+        <translation type="vanished">Es konnte keine temporäre Datei im Homeverzeichnis erzeugt werden! Bitte speichern Sie das Skript einmal manuell.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1700"/>
         <source>Editor is empty, aborting...</source>
-        <translation>Editor ist leer, deshalb wird abgebrochen...</translation>
+        <translation type="vanished">Editor ist leer, deshalb wird abgebrochen...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/pyWidget.C" line="1718"/>
         <source>Could not write to file! Please save script manualy once.</source>
-        <translation>Datei konnte nicht geschrieben werden! Bitte speichern Sie das Skript einmal manuell.</translation>
+        <translation type="vanished">Datei konnte nicht geschrieben werden! Bitte speichern Sie das Skript einmal manuell.</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::RepresentationManager</name>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/representationManager.C" line="357"/>
         <source>Can not store a representation for items of multiple systems.</source>
-        <translation>Repräsentationen mehrere Systeme können nicht gespeichert werden.</translation>
+        <translation type="vanished">Repräsentationen mehrere Systeme können nicht gespeichert werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/KERNEL/representationManager.C" line="516"/>
         <source>Error while reading project file! Aborting...</source>
-        <translation>Fehler beim lesen der Projektdatei! Abbruch...</translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::SDWidget</name>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/SDWidget.C" line="51"/>
-        <location filename="../../../source/VIEW/WIDGETS/SDWidget.C" line="317"/>
-        <source>Export image</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Fehler beim lesen der Projektdatei! Abbruch...</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::Scene</name>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1"/>
-        <source></source>
-        <comment>Necessary for lupdate.</comment>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="132"/>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="186"/>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="228"/>
         <source>3D View Controls</source>
-        <translation type="unfinished">3D Bedienelemente</translation>
+        <translation type="obsolete">3D Bedienelemente</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="454"/>
         <source>Unknown type of SceneMessage in </source>
-        <translation>Unbekannte Scene-Message in </translation>
+        <translation type="vanished">Unbekannte Scene-Message in </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="517"/>
-        <source>FPS </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="900"/>
-        <source>ViewPoint:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="904"/>
-        <source>LookAt:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="908"/>
-        <source>LookUp</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1095"/>
         <source>Error rendering representation...</source>
-        <translation>Fehler beim Renderen der Repräsentation...</translation>
+        <translation type="vanished">Fehler beim Renderen der Repräsentation...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1103"/>
         <source>Successfully exported Scene...</source>
-        <translation>Szene wurde erfolgreich exportiert...</translation>
+        <translation type="vanished">Szene wurde erfolgreich exportiert...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1108"/>
         <source>Error while exporting Scene...</source>
-        <translation>Fehler beim Export der Szene...</translation>
+        <translation type="vanished">Fehler beim Export der Szene...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1365"/>
         <source>Could not read lighting settings from Inifile</source>
-        <translation type="unfinished">Licht-Eigenschaften könnten nicht aus der Ini-Datei gelesen werden</translation>
+        <translation type="obsolete">Licht-Eigenschaften könnten nicht aus der Ini-Datei gelesen werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1392"/>
         <source>Show Coordinate System</source>
-        <translation type="unfinished">Koordinatensystem anzeigen</translation>
+        <translation type="obsolete">Koordinatensystem anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1393"/>
         <source>Show a coordinate system</source>
-        <translation type="unfinished">Koordinatensystem anzeigen</translation>
+        <translation type="obsolete">Koordinatensystem anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1395"/>
         <source>at origin</source>
-        <translation>am Ursprung</translation>
+        <translation type="vanished">am Ursprung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1398"/>
         <source>here</source>
-        <translation>hier</translation>
+        <translation type="vanished">hier</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1401"/>
         <source>Add new GL Window</source>
-        <translation type="unfinished">Hinzufügen eines GL Fensters</translation>
+        <translation type="obsolete">Hinzufügen eines GL Fensters</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1405"/>
         <source>Record</source>
-        <translation>Aufnehmen</translation>
+        <translation type="vanished">Aufnehmen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1407"/>
         <source>Record an animation for later processing</source>
-        <translation>Eine Animation für spätere Verwendung aufnehmen</translation>
+        <translation type="vanished">Eine Animation für spätere Verwendung aufnehmen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1411"/>
         <source>Clear</source>
-        <translation>Löschen</translation>
+        <translation type="vanished">Löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1417"/>
-        <source>Start</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1421"/>
-        <source>Stop</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1428"/>
         <source>Export PNG</source>
-        <translation>PNG exportieren</translation>
+        <translation type="vanished">PNG exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1433"/>
         <source>Export POV</source>
-        <translation>POVRay exportieren</translation>
+        <translation type="vanished">POVRay exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1439"/>
         <source>Repeat</source>
-        <translation>Wiederholung</translation>
+        <translation type="vanished">Wiederholung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1447"/>
         <source>No Stereo</source>
-        <translation>Kein Stereo</translation>
+        <translation type="vanished">Kein Stereo</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1453"/>
         <source>Shutter Glasses</source>
-        <translation>Shutter Brillen</translation>
+        <translation type="vanished">Shutter Brillen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1458"/>
         <source>Side by Side</source>
-        <translation>Seite an Seite</translation>
+        <translation type="vanished">Seite an Seite</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1464"/>
         <source>Side by Side on Different Displays</source>
-        <translation>Seite an Seite auf unterschiedlichen Displays</translation>
+        <translation type="vanished">Seite an Seite auf unterschiedlichen Displays</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1473"/>
         <source>&amp;Store Viewpoint</source>
-        <translation>Viewpoint &amp;Speichern</translation>
+        <translation type="vanished">Viewpoint &amp;Speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1475"/>
         <source>Store the current viewpoint</source>
-        <translation>Speichern des aktuellen Viewpoints</translation>
+        <translation type="vanished">Speichern des aktuellen Viewpoints</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1477"/>
         <source>&amp;Restore Viewpoint</source>
-        <translation>Viewpoint wiede&amp;rherstellen</translation>
+        <translation type="vanished">Viewpoint wiede&amp;rherstellen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1479"/>
         <source>Restore the viewpoint</source>
-        <translation>Wiederherstellen des Viewpoints</translation>
+        <translation type="vanished">Wiederherstellen des Viewpoints</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1484"/>
         <source>Show Vie&amp;wpoint</source>
-        <translation>Vie&amp;wpoint anzeigen</translation>
+        <translation type="vanished">Vie&amp;wpoint anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1486"/>
         <source>Print the coordinates of the current viewpoint</source>
-        <translation>Anzeigen der aktuellen Viewpoint Koordinaten</translation>
+        <translation type="vanished">Anzeigen der aktuellen Viewpoint Koordinaten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1490"/>
         <source>Set Viewpoi&amp;nt</source>
-        <translation>Viewpoi&amp;nt setzen</translation>
+        <translation type="vanished">Viewpoi&amp;nt setzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1492"/>
         <source>Move the viewpoint to the given coordinates</source>
-        <translation>Setzte Viewpoint auf gegebene Koordinaten</translation>
+        <translation type="vanished">Setzte Viewpoint auf gegebene Koordinaten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1494"/>
         <source>Rese&amp;t Camera</source>
-        <translation>Kamera zurückse&amp;tzen</translation>
+        <translation type="vanished">Kamera zurückse&amp;tzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1496"/>
         <source>Reset the camera to the orgin (0,0,0)</source>
-        <translation type="unfinished">Zurücksetzen der Kamera auf den Ursprung</translation>
+        <translation type="obsolete">Zurücksetzen der Kamera auf den Ursprung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1499"/>
         <source>Limit View Volume</source>
-        <translation>Beschränkung des View Volumes</translation>
+        <translation type="vanished">Beschränkung des View Volumes</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1503"/>
         <source>PNG...</source>
-        <translation type="unfinished">PNG...</translation>
+        <translation type="obsolete">PNG...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1505"/>
         <source>Export a PNG image file from the Scene</source>
-        <translation>Exportieren der Szene als PNG</translation>
+        <translation type="vanished">Exportieren der Szene als PNG</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1509"/>
         <source>POVRa&amp;y scene</source>
-        <translation>POVRa&amp;y Szene</translation>
+        <translation type="vanished">POVRa&amp;y Szene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1513"/>
         <source>Export a POVRay file from the Scene</source>
-        <translation>Exportieren der Szene als POVRay Datei</translation>
+        <translation type="vanished">Exportieren der Szene als POVRay Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1517"/>
         <source>3D Prototyping Export</source>
-        <translation type="unfinished">Export als 3D Prototyp</translation>
+        <translation type="obsolete">Export als 3D Prototyp</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1519"/>
         <source>Export a VRML or stl file from the scene</source>
-        <translation>Export der Szene als VRML oder stl Datei</translation>
+        <translation type="vanished">Export der Szene als VRML oder stl Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1524"/>
         <source>&amp;Rotate Mode</source>
-        <translation>&amp;Rotiermodus</translation>
+        <translation type="vanished">&amp;Rotiermodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1527"/>
         <source>Switch to rotate/zoom mode</source>
-        <translation>Wechsel zum Rotier / Zoommodus</translation>
+        <translation type="vanished">Wechsel zum Rotier / Zoommodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1535"/>
         <source>&amp;Picking Mode</source>
-        <translation>Auswahlmodus</translation>
+        <translation type="vanished">Auswahlmodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1538"/>
         <source>Switch to picking mode, e.g. to identify single atoms or groups</source>
-        <translation>Wechsel zum Auswahlmodus um z.B. einzelne Atome oder Atomgruppen zu bestimmen</translation>
+        <translation type="vanished">Wechsel zum Auswahlmodus um z.B. einzelne Atome oder Atomgruppen zu bestimmen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1546"/>
         <source>Move Mode</source>
-        <translation>Schiebemodus</translation>
+        <translation type="vanished">Schiebemodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1549"/>
         <source>Switch to move mode, e.g. move selected items</source>
-        <translation>Wechsel zum Schiebemodus um z.B. ausgewählte Atome zu verschieben</translation>
+        <translation type="vanished">Wechsel zum Schiebemodus um z.B. ausgewählte Atome zu verschieben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1557"/>
         <source>Show ruler</source>
-        <translation>Linealraster anzeigen</translation>
+        <translation type="vanished">Linealraster anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1569"/>
         <source>Print</source>
-        <translation>Drucken</translation>
+        <translation type="vanished">Drucken</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1571"/>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2705"/>
         <source>Scene</source>
-        <translation>Szene</translation>
+        <translation type="vanished">Szene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="1580"/>
         <source>3D View Control toolbar</source>
-        <translation type="unfinished">3D Betrachtungskontrollleiste</translation>
+        <translation type="obsolete">3D Betrachtungskontrollleiste</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2101"/>
         <source>Object at cursor is </source>
-        <translation type="unfinished">Objekt am Cursor ist</translation>
+        <translation type="obsolete">Objekt am Cursor ist</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2490"/>
         <source>printing..</source>
-        <translation>drucken..</translation>
+        <translation type="vanished">drucken..</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2500"/>
         <source>finished printing</source>
-        <translation>Drucken beendet</translation>
+        <translation type="vanished">Drucken beendet</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2506"/>
-        <source>BALLView_screenshot</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2510"/>
         <source>Exporting PNG to </source>
-        <translation type="unfinished">Speichere PNG unter</translation>
+        <translation type="obsolete">Speichere PNG unter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2521"/>
         <source>Export PNG File</source>
-        <translation>PNG Datei speichern</translation>
+        <translation type="vanished">PNG Datei speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2582"/>
         <source>Saved PNG to </source>
-        <translation>PNG wude gespeichert unter</translation>
+        <translation type="vanished">PNG wude gespeichert unter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2583"/>
         <source>Could not save PNG</source>
-        <translation>PNG konnte nicht gespeichert werden</translation>
+        <translation type="vanished">PNG konnte nicht gespeichert werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2590"/>
         <source>BALLView_pov_</source>
-        <translation type="unfinished">BALLView_pov_</translation>
+        <translation type="obsolete">BALLView_pov_</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2596"/>
         <source>Saved POVRay to </source>
-        <translation>POVRay wurde gespeichert unter </translation>
+        <translation type="vanished">POVRay wurde gespeichert unter </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2597"/>
         <source>Could not save POVRay to </source>
-        <translation type="unfinished">POVRay konnte nicht gespeichert werden</translation>
+        <translation type="obsolete">POVRay konnte nicht gespeichert werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2603"/>
         <source>Export POVRay File</source>
-        <translation>POVRay Datei speichern</translation>
+        <translation type="vanished">POVRay Datei speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2630"/>
         <source>Could not export POV to </source>
-        <translation>POVRay Datei konnte nicht gespeichert werden als </translation>
+        <translation type="vanished">POVRay Datei konnte nicht gespeichert werden als </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2634"/>
         <source>Exported POV to </source>
-        <translation>POVRay wurde gespeichert unter</translation>
+        <translation type="vanished">POVRay wurde gespeichert unter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2732"/>
-        <source>blubb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2759"/>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2815"/>
         <source>left eye</source>
-        <translation>linkes Auge</translation>
+        <translation type="vanished">linkes Auge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2779"/>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="2835"/>
         <source>right eye</source>
-        <translation>rechtes Auge</translation>
+        <translation type="vanished">rechtes Auge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="3175"/>
         <source>Setup view volume</source>
-        <translation>Aufbau des View Volume</translation>
+        <translation type="vanished">Aufbau des View Volume</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/WIDGETS/scene.C" line="3175"/>
         <source>Enter volume length:</source>
-        <translation>Eingabe der Volume Länge:</translation>
+        <translation type="vanished">Eingabe der Volume Länge:</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ShortcutDialog</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="33"/>
         <source>Shortcuts</source>
-        <translation>Tastenkürzel</translation>
+        <translation type="vanished">Tastenkürzel</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="72"/>
         <source>Choose a file to import shortcuts from</source>
-        <translation>Wähle Datei zum Import der Tastaturkürzel</translation>
+        <translation type="vanished">Wähle Datei zum Import der Tastaturkürzel</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="79"/>
         <source>Could not import shortcuts from file </source>
-        <translation>Wähle Datei zum Import der Tastaturkürzel</translation>
+        <translation type="vanished">Wähle Datei zum Import der Tastaturkürzel</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="95"/>
         <source>Choose a File to export Shortcuts</source>
-        <translation>Wähle Datei zum Export der Tastaturkürzel</translation>
+        <translation type="vanished">Wähle Datei zum Export der Tastaturkürzel</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="105"/>
         <source>Could not export shortcuts to file </source>
-        <translation>Tastaturkürzel konnten nicht exportiert werden</translation>
+        <translation type="vanished">Tastaturkürzel konnten nicht exportiert werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="114"/>
         <source>Default Shortcuts (Version 1.3)</source>
-        <translation>Standard-Tastenkürzel (Version 1.3)</translation>
+        <translation type="vanished">Standard-Tastenkürzel (Version 1.3)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="118"/>
         <source>Legacy Shortcuts (Version 1.2)</source>
-        <translation>Abwärtskompatible Tastenkürzel (Version 1.2)</translation>
+        <translation type="vanished">Abwärtskompatible Tastenkürzel (Version 1.2)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="122"/>
         <source>Custom</source>
-        <translation>Eigene</translation>
+        <translation type="vanished">Eigene</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="129"/>
         <source>Could not load legacy shortcuts.</source>
-        <translation>Tastaturkürzel konnten nicht geladen werden.</translation>
+        <translation type="vanished">Tastaturkürzel konnten nicht geladen werden.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="148"/>
         <source>Could not load shortcuts from file </source>
-        <translation>Tastaturkürzel konnten nicht geladen werden aus Datei</translation>
+        <translation type="vanished">Tastaturkürzel konnten nicht geladen werden aus Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.C" line="153"/>
         <source>Successfully loaded shortcuts from file </source>
-        <translation>Tastaturkürzel erfolgreich geladen</translation>
-    </message>
-</context>
-<context>
-    <name>BALL::VIEW::ValidationItem</name>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/validationItem.C" line="216"/>
-        <source>Plot all predictions</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">Tastaturkürzel erfolgreich geladen</translation>
     </message>
 </context>
 <context>
     <name>BALL::VIEW::ValidationResultDialog</name>
     <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/validationResultDialog.C" line="59"/>
-        <source>Validation Results</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/validationResultDialog.C" line="168"/>
         <source>Save File as</source>
-        <translation type="unfinished">Speichere Datei unter</translation>
-    </message>
-    <message>
-        <location filename="../../../source/APPLICATIONS/QuEasyViz/validationResultDialog.C" line="168"/>
-        <source>text (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Speichere Datei unter</translation>
     </message>
 </context>
 <context>
@@ -3936,178 +2706,178 @@ so there was nothing to be done!</source>
         <translation>CHARMM Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="52"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="70"/>
         <source>Close window and save changes</source>
         <translation>Schließen und Einstellungen speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="55"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="73"/>
         <source>O&amp;K</source>
         <translation>O&amp;K</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="92"/>
         <source>Close window and discard changes</source>
         <translation>Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="95"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="93"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="111"/>
         <source>Reset settings to default values</source>
         <translation>Auf Voreinstellung zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="96"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="114"/>
         <source>Defaults</source>
         <translation>Voreinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="114"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="132"/>
         <source>Options</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="135"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="162"/>
         <source>Electrostatic 1-4 scaling factor</source>
         <translatorcomment>Elektrostatik 1-4 Skalierungsfaktor</translatorcomment>
         <translation>Elektrostatik 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="295"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="322"/>
         <source>Solvation cutoff/cuton distance (EEF1 only)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="311"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="338"/>
         <source>van der Waals 1-4 scaling factor</source>
         <translation type="unfinished">van der Waals 1-4 Skalierungsfaktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="327"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="354"/>
         <source>Nonbonded cutoff distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="505"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="532"/>
         <source>Electrostatic cutoff/cuton distance</source>
         <translation type="unfinished">Elektrostatik cutoff/cuton Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="543"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="570"/>
         <source>van der Waals cutoff/cuton distance</source>
         <translation type="unfinished">van der Waals cutoff/cuton Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="640"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="667"/>
         <source>Dielectric Constant</source>
         <translation type="unfinished">Dielektrizitätskonstante</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="658"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="694"/>
         <source>constant</source>
         <translation>konstant</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="674"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="710"/>
         <source>distance dependent</source>
         <translation type="unfinished">abstandsabhängig</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="687"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="723"/>
         <source>Components</source>
         <translation>Komponenten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="702"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="747"/>
         <source>Solvation (EEF1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="712"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="757"/>
         <source>NonBonded</source>
         <translation type="unfinished">Ungebundene Wechselwirkungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="722"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="767"/>
         <source>Improper Torsions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="732"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="777"/>
         <source>Torsions</source>
         <translation type="unfinished">Torsionen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="742"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="787"/>
         <source>Stretches</source>
         <translation type="unfinished">Stretches (Bindungslängen)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="752"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="797"/>
         <source>Bends</source>
         <translation type="unfinished">Bends (Bindungswinkel)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="765"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="810"/>
         <source>Charge and Type Assignment</source>
         <translation type="unfinished">Ladungs- und Typzuweisung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="780"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="834"/>
         <source>Overwrite type names</source>
         <translation type="unfinished">Typnamen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="790"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="844"/>
         <source>Assign charges</source>
         <translation>Ladungen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="800"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="854"/>
         <source>Assign type names</source>
         <translation>Typnamen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="810"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="864"/>
         <source>Assign (numeric types)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="820"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="874"/>
         <source>Overwrite charges</source>
         <translation>Ladungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="833"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="887"/>
         <source>Parameter Set</source>
         <translation type="unfinished">Parametersatz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="860"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="923"/>
         <source>Filename</source>
         <translation type="unfinished">Dateiname</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="910"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="973"/>
         <source>Browse your computer for CHARMM file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="913"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="976"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="926"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="989"/>
         <source>Setup Error Handling</source>
         <translation type="unfinished">Setup Fehlerbehandlung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="975"/>
+        <location filename="../../../source/VIEW/DIALOGS/charmmConfigurationDialog.ui" line="1047"/>
         <source>Maximum number of unassigned atoms before aborting setup</source>
         <translation>Maximale Anzahl nicht zugewiesener Atome bevor Setup Abbruch</translation>
     </message>
@@ -4115,32 +2885,32 @@ so there was nothing to be done!</source>
 <context>
     <name>ClippingDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="16"/>
+        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="14"/>
         <source>Clipping Dialog</source>
         <translation>Clipping-Dialog</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="31"/>
+        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="29"/>
         <source>Select the representations to be clipped by this plane:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="44"/>
+        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="42"/>
         <source>O&amp;K</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="47"/>
+        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="45"/>
         <source>Alt+K</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="66"/>
+        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="64"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="69"/>
+        <location filename="../../../source/VIEW/DIALOGS/clippingDialog.ui" line="67"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
@@ -4153,216 +2923,226 @@ so there was nothing to be done!</source>
         <translation type="unfinished">Färbungs-Einstellungs-Dialog</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="49"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="82"/>
         <source>middle color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="56"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="89"/>
         <source>Edit color for last residue</source>
         <translation type="unfinished">Farbe für letzten Rest bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="66"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="99"/>
         <source>Edit color for first residue</source>
         <translation type="unfinished">Farbe für ersten Rest bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="73"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="106"/>
         <source>first residue color</source>
         <translation type="unfinished">Farbe erster Rest</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="80"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="113"/>
         <source>last residue color</source>
         <translation type="unfinished">Farbe letzter Rest</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="128"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="167"/>
         <source>positive charge color</source>
         <translation>Farbe positive Ladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="135"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="174"/>
         <source>negative charge color</source>
         <translation>Farbe negative Ladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="142"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="181"/>
         <source>neutral charge color</source>
         <translation>Farbe neutrale Ladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="149"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="188"/>
         <source>Edit color for negative charges. Colors are interpolated between the positive and negative colors.</source>
         <translation type="unfinished">Farbe für negative Ladungen bearbeiten. Farben werden aus den Farben für positive und negative Ladungen interpoliert.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="159"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="198"/>
         <source>Edit color for positive charges. Colors are interpolated between the positive and negative colors.</source>
         <translation type="unfinished">Farbe für positive Ladungen bearbeiten. Farben werden aus den Farben für positive und negative Ladungen interpoliert.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="263"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="311"/>
         <source>show selected items in Selection color</source>
         <translation type="unfinished">Ausgewählte Objekte in Auswahl-Farbe anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="225"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="273"/>
         <source>max distance</source>
         <translation>maximaler Abstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="193"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="36"/>
+        <source>Reset element colors to compiled defaults (Phase 4.1 — D-02)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="39"/>
+        <source>Reset element colors to defaults</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="241"/>
         <source>max distance color</source>
         <translation>Farbe maximaler Abstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="200"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="248"/>
         <source>null distance color</source>
         <translation type="unfinished">Farbe kein Abstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="207"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="255"/>
         <source>Select color for null distance. Colors will be interpolated between null and max distance.</source>
         <translation type="unfinished">Farbe für keinen Abstand bearbeiten. Farben werden aus den Farben für keinen und maximalen Abstand interpoliert.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="214"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="262"/>
         <source>Select color for max distance. Colors will be interpolated between null and max distance.</source>
         <translation type="unfinished">Farbe für maximalen Abstand bearbeiten. Farben werden aus den Farben für keinen und maximalen Abstand interpoliert.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="301"/>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="399"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="358"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="465"/>
         <source>unassigned color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="308"/>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="392"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="365"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="458"/>
         <source>minimum color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="318"/>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="526"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="375"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="610"/>
         <source>max value</source>
         <translation>Maximalwert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="325"/>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="385"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="382"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="451"/>
         <source>maximum color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="449"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="524"/>
         <source>strand color</source>
         <translation>Farbe Strang</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="456"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="531"/>
         <source>turn color</source>
         <translation type="unfinished">Farbe Turn</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="463"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="538"/>
         <source>coil color</source>
         <translation type="unfinished">Farbe Coil</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="476"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="551"/>
         <source>helix color</source>
         <translation type="unfinished">Farbe Helix</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="543"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="627"/>
         <source>min color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="550"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="634"/>
         <source>min value</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="557"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="641"/>
         <source>max color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="564"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="648"/>
         <source>Edit mininum color value</source>
         <translation type="unfinished">Minimalen Farbwert bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="597"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="681"/>
         <source>Edit maximum color value</source>
         <translation type="unfinished">Maximalen Farbwert bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="652"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="745"/>
         <source>Edit color for basic groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="673"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="766"/>
         <source>hydrophobic color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="666"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="759"/>
         <source>Edit color for non distinct groups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="439"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="514"/>
         <source>Change helix color for </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="645"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="738"/>
         <source>basic color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="659"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="752"/>
         <source>aromatic color</source>
         <translation type="unfinished"> </translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="638"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="731"/>
         <source>Edit color for acidic groups</source>
         <translation>Farbe für saure Gruppen bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="708"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="801"/>
         <source>Edit color for polar groups</source>
         <translation>Farbe für polare Gruppen bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="694"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="787"/>
         <source>Edit color for hydrophobic groups</source>
         <translation>Farbe für hydrophobe Gruppen bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="701"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="794"/>
         <source>other color</source>
         <translation>Andere Farbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="687"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="780"/>
         <source>polar color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="631"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="724"/>
         <source>acidic color</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="680"/>
+        <location filename="../../../source/VIEW/DIALOGS/coloringSettingsDialog.ui" line="773"/>
         <source>Edit color for aromatic groups</source>
         <translation>Farbe für aromatische Gruppen bearbeiten</translation>
     </message>
@@ -4370,82 +3150,90 @@ so there was nothing to be done!</source>
 <context>
     <name>CompositePropertiesData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="36"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="32"/>
         <source>Properties</source>
         <translation>Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="68"/>
         <source>OK</source>
-        <translation>&amp;OK</translation>
+        <translation type="vanished">&amp;OK</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="90"/>
         <source>Cancel</source>
-        <translation>&amp;Schließen</translation>
+        <translation type="vanished">&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="99"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="197"/>
         <source>Atoms</source>
         <translation>Atome</translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="131"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="227"/>
         <source>Position (Å)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="164"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="258"/>
         <source>Formal charge</source>
         <translation>Formal-Ladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="197"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="289"/>
         <source>Charge (e)</source>
         <translation>Ladung (e)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="230"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="320"/>
         <source>Force (pN)</source>
         <translation>Kraft (pN)</translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="260"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="348"/>
         <source>Velocity (Å/ps)</source>
         <translation>Geschwindigkeit (Å/ps)</translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="306"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="392"/>
         <source>Radius (Å)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="339"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="423"/>
         <source>Element</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="372"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="454"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="402"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="482"/>
         <source>Type name</source>
         <translation type="unfinished">Typ-Name</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="434"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="496"/>
+        <source>Tab 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="121"/>
         <source>Residues</source>
         <translation type="unfinished">Reste</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="466"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="48"/>
+        <source>Tab 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="151"/>
         <source>ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="542"/>
+        <location filename="../../../source/VIEW/DIALOGS/compositeProperties.ui" line="80"/>
         <source>Name</source>
         <translation></translation>
     </message>
@@ -4493,7 +3281,7 @@ so there was nothing to be done!</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/contourSurfaceDialog.ui" line="504"/>
+        <location filename="../../../source/VIEW/DIALOGS/contourSurfaceDialog.ui" line="239"/>
         <source>Threshold</source>
         <translation>Schwellenwert</translation>
     </message>
@@ -4502,19 +3290,16 @@ so there was nothing to be done!</source>
     <name>DemoTutorialDialogData</name>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="22"/>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="83"/>
         <source>Form1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="51"/>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="84"/>
         <source>Cancel</source>
         <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialog.ui" line="64"/>
-        <location filename="../../../source/APPLICATIONS/BALLVIEW/demoTutorialDialogData.h" line="85"/>
         <source>Next</source>
         <translation>Nächstes</translation>
     </message>
@@ -4687,226 +3472,226 @@ so there was nothing to be done!</source>
 <context>
     <name>DockDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="36"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="32"/>
         <source>Docking Options</source>
         <translation>Docking-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="52"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="57"/>
         <source>General</source>
         <translation>Allgemein</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="72"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="84"/>
         <source>Docking Partners</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="109"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="128"/>
         <source>Docking Algorithm</source>
         <translation>Docking-Algorithmus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="122"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="150"/>
         <source>&lt;select&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="130"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="166"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="158"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="201"/>
         <source>Advanced...</source>
         <translation>Erweitert...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="148"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="174"/>
         <source>Scoring</source>
         <translation>Bewertung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="184"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="217"/>
         <source>Options</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="196"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="238"/>
         <source>number of best docked structures </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="223"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="263"/>
         <source>100</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="233"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="273"/>
         <source>verbosity of algorithm</source>
         <translation>Ausführlichkeitsstufe des Algorithmus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="254"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="292"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="278"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="314"/>
         <source>Euler angles</source>
         <translation>Eulerwinkel</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="298"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="341"/>
         <source>psi &lt;font size=&quot;-1&quot;&gt;max&lt;/font&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="313"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="354"/>
         <source>delta psi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="320"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="361"/>
         <source>delta phi</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="335"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="374"/>
         <source>phi &lt;font size=&quot;-1&quot;&gt;min&lt;/font&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="342"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="381"/>
         <source>phi &lt;font size=&quot;-1&quot;&gt;max&lt;/font&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="349"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="388"/>
         <source>theta &lt;font size=&quot;-1&quot;&gt;max&lt;/font&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="356"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="395"/>
         <source>psi &lt;font size=&quot;-1&quot;&gt;min&lt;/font&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="369"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="385"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="401"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="408"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="424"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="440"/>
         <source>-15</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="417"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="433"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="449"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="456"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="472"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="488"/>
         <source>15</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="479"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="495"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="511"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="516"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="532"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="548"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="521"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="558"/>
         <source>theta &lt;font size=&quot;-1&quot;&gt;min&lt;/font&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="528"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="565"/>
         <source>delta theta</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="539"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="731"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="576"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="789"/>
         <source>Processors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="559"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="603"/>
         <source>Charges Config File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="577"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="713"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="630"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="773"/>
         <source>by rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="590"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="697"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="643"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="757"/>
         <source>from table</source>
         <translation>aus Tabelle</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="600"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="653"/>
         <source>charges/PARSE.crg</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="607"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="654"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="660"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="714"/>
         <source>solvation/PARSE.rul</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="617"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="624"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="664"/>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="678"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="670"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="677"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="724"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="738"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="642"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="693"/>
         <source>Radii Config File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="671"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="731"/>
         <source>radii/PARSE.siz</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="743"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="810"/>
         <source>build Bonds</source>
         <translation>Bindungen erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="750"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="817"/>
         <source>addHydrogens</source>
         <translation>Wasserstoffe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="757"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="824"/>
         <source>normalize names</source>
         <translation type="unfinished">Namen anpassen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="764"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="831"/>
         <source>assign charges</source>
         <translation>Ladungen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="774"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="841"/>
         <source>assign radii</source>
         <translation>Radien zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="799"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="875"/>
         <source>OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="809"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="885"/>
         <source>Cancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="816"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockDialog.ui" line="892"/>
         <source>Reset</source>
         <translation>&amp;Zurücksetzen</translation>
     </message>
@@ -4914,27 +3699,27 @@ so there was nothing to be done!</source>
 <context>
     <name>DockProgressDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="21"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="20"/>
         <source>Docking Progress</source>
         <translation>Docking-Fortschritt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="41"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="47"/>
         <source>&lt;b&gt;Chosen Parameters&lt;/b&gt;</source>
         <translation>&lt;b&gt;Ausgewählte Parameter&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="120"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="131"/>
         <source>Pause</source>
         <translation>&amp;Pause</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="148"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="157"/>
         <source>Remaining time:</source>
         <translation>Verbleibende Zeit:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="169"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockProgressDialog.ui" line="176"/>
         <source>Abort</source>
         <translation>&amp;Abbrechen</translation>
     </message>
@@ -4942,32 +3727,32 @@ so there was nothing to be done!</source>
 <context>
     <name>DockResultDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="24"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="20"/>
         <source>Docking Results</source>
         <translation>Docking-Ergebnisse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="82"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="93"/>
         <source>Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="108"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="116"/>
         <source>Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="123"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="129"/>
         <source>Show snapshot</source>
         <translation>Momentaufnahme anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="140"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="144"/>
         <source>Delete Scoring</source>
         <translation type="unfinished">Bewertung löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="155"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="157"/>
         <source>Scoring Options</source>
         <translation type="unfinished">Bewertungs-Einstellungen</translation>
     </message>
@@ -4977,32 +3762,32 @@ so there was nothing to be done!</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="201"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="199"/>
         <source>Redock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="216"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="212"/>
         <source>Docking Options</source>
         <translation>Docking-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="237"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="231"/>
         <source>Reranking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="257"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="258"/>
         <source>New Scoring</source>
         <translation>Neue Bewertung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="275"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="274"/>
         <source>Advanced...</source>
         <translation>Erweitert...</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="346"/>
+        <location filename="../../../source/VIEW/DIALOGS/dockResultDialog.ui" line="341"/>
         <source>snapshot</source>
         <translation>Momentaufnahme</translation>
     </message>
@@ -5010,93 +3795,93 @@ so there was nothing to be done!</source>
 <context>
     <name>DownloadElectronDensityData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="13"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="14"/>
         <source>Download an electron density</source>
         <translation>Elektronendichte herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="34"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="35"/>
         <source>Download PDB file</source>
         <translation>PDB-Datei herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="37"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="38"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="62"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="63"/>
         <source>Close window</source>
         <translation>Fenster schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="65"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="66"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="68"/>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="99"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="69"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="100"/>
         <source>Alt+A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="93"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="94"/>
         <source>Abort download</source>
         <translation>Download abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="96"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="97"/>
         <source>&amp;Abort</source>
         <translation>&amp;Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="115"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="116"/>
         <source>Enter PDB ID</source>
         <translation>PDB-ID eingeben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="143"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="144"/>
         <source>EDS Options</source>
         <translation>EDS Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="155"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="156"/>
         <source>Map Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="171"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="172"/>
         <source>Download PDB File</source>
         <translation>PDB Datei herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="185"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="186"/>
         <source>2Fobs - Fcalc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="190"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="191"/>
         <source>Fobs - Fcalc</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="205"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="206"/>
         <source>Entry ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="221"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="222"/>
         <source>Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="235"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="236"/>
         <source>Uppsala Electron-Density Server</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="240"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadElectronDensity.ui" line="241"/>
         <source>Electron Microscopy Data Bank</source>
         <translation></translation>
     </message>
@@ -5109,48 +3894,53 @@ so there was nothing to be done!</source>
         <translation>Struktur-Datei von www.rcsb.org downloaden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="29"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="127"/>
         <source>PDB ID</source>
         <translation>PDB-ID</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="39"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="36"/>
         <source>Enter PDB ID</source>
         <translation>PDB-ID eingeben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="64"/>
         <source>Download PDB file</source>
         <translation>PDB-Datei herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="67"/>
         <source>Download</source>
         <translation>Herunterladen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="121"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="111"/>
         <source>Close window</source>
         <translation>Fenster schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="124"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="114"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="105"/>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="127"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="137"/>
+        <source>Biological Assembly</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="95"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="117"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="99"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="89"/>
         <source>Abort download</source>
         <translation>Download abbrechen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="102"/>
+        <location filename="../../../source/VIEW/DIALOGS/downloadPDBFile.ui" line="92"/>
         <source>&amp;Abort</source>
         <translation>&amp;Abbrechen</translation>
     </message>
@@ -5158,14 +3948,12 @@ so there was nothing to be done!</source>
 <context>
     <name>EditOperationDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editOperationDialog.ui" line="16"/>
         <source>Undo list</source>
-        <translation>Historie</translation>
+        <translation type="vanished">Historie</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editOperationDialog.ui" line="28"/>
         <source>undo</source>
-        <translation>Rückgängig</translation>
+        <translation type="vanished">Rückgängig</translation>
     </message>
 </context>
 <context>
@@ -5184,33 +3972,33 @@ so there was nothing to be done!</source>
 <context>
     <name>EditSingleShortcutData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="29"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="33"/>
         <source>Customize shortcut</source>
         <translation>Shortcut anpassen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="48"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="52"/>
         <source>Custom Shortcut</source>
         <translation>Eigener Shortcut</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="64"/>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="67"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="68"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="71"/>
         <source>Define a customized shortcut by pressing the correspoding keys</source>
         <translation type="unfinished">Einen individuellen Shortcut durch Drücken der zugehörigen Tasten definieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="70"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="74"/>
         <source>Dialog for defining customized shortcuts.</source>
         <translation>Dialog zur Definition individueller Tastaturkürzel.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="73"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="77"/>
         <source>Please type a key sequence!</source>
         <translation>Bitte Tastenfolge eingeben!</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="90"/>
+        <location filename="../../../source/VIEW/DIALOGS/editSingleShortcut.ui" line="94"/>
         <source>None</source>
         <translation>Keine</translation>
     </message>
@@ -5248,24 +4036,20 @@ so there was nothing to be done!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="195"/>
         <source>File Format</source>
-        <translation>Dateiformat</translation>
+        <translation type="vanished">Dateiformat</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="204"/>
         <source>Export selected representations </source>
-        <translation>Ausgewählte Repräsentationen exportieren</translation>
+        <translation type="vanished">Ausgewählte Repräsentationen exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="207"/>
         <source>Export as VRML file</source>
-        <translation>Als VRML-Datei exportieren</translation>
+        <translation type="vanished">Als VRML-Datei exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="220"/>
         <source>Export as stl file</source>
-        <translation>Als stl-Datei exportieren</translation>
+        <translation type="vanished">Als stl-Datei exportieren</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/exportGeometryDialog.ui" line="34"/>
@@ -5311,230 +4095,230 @@ so there was nothing to be done!</source>
         <translation>FDPB-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="34"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="52"/>
         <source>Structure Preparations</source>
         <translation type="unfinished">Strukturvorbereitung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="46"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="73"/>
         <source>add hydrogens</source>
         <translation>Wasserstoffe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="53"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="80"/>
         <source>normalize atom names</source>
         <translation type="unfinished">Atomnamen anpassen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="60"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="87"/>
         <source>build bonds</source>
         <translation>Bindungen erstellen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="67"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="94"/>
         <source>assign radii</source>
         <translation>Radien zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="104"/>
         <source>assign charges</source>
         <translation>Ladungen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="90"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="117"/>
         <source>FDPB Parameters</source>
         <translation>FDPB-Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="108"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="144"/>
         <source>Boundary Condition</source>
         <translation type="unfinished">Randbedingung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="132"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="177"/>
         <source>focusing</source>
         <translation>Scharfeinstellung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="154"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="199"/>
         <source>zero</source>
         <translation>Null</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="176"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="221"/>
         <source>dipole</source>
         <translation>Dipol</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="198"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="243"/>
         <source>Debye</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="217"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="262"/>
         <source>Coulomb</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="233"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="278"/>
         <source>Charge Distribution</source>
         <translation>Ladungsverteilung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="245"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="299"/>
         <source>trilinear</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="255"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="296"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="309"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="359"/>
         <source>uniform</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="274"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="328"/>
         <source>Dielectric Smoothing</source>
         <translation type="unfinished">Dielektrische Glättung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="286"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="349"/>
         <source>none</source>
         <translation>keine</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="303"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="366"/>
         <source>harmonic</source>
         <translation>harmonisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="327"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="399"/>
         <source>1000</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="349"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="421"/>
         <source>probe radius</source>
         <translation type="unfinished">Sondenradius</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="368"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="440"/>
         <source>spacing</source>
         <translation>Abstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="387"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="459"/>
         <source>ion radius</source>
         <translation>Ionen-Radius</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="406"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="478"/>
         <source>78.0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="422"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="494"/>
         <source>298</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="444"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="516"/>
         <source>max iterations</source>
         <translation type="unfinished">max Iterationen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="463"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="535"/>
         <source>border</source>
         <translation>Rand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="476"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="562"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="548"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="634"/>
         <source>2.0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="492"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="564"/>
         <source>1.0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="508"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="580"/>
         <source>0.0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="530"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="602"/>
         <source>temperature</source>
         <translation>Temperatur</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="549"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="621"/>
         <source>dielectric constant of solvent</source>
         <translation>Dielektrizitätskonstante des Lösungsmittels</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="578"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="650"/>
         <source>5.0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="594"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="666"/>
         <source>1.4</source>
         <translation>Ionenstärke</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="616"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="688"/>
         <source>ionic strength</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="635"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="707"/>
         <source>dielectric constant of solute</source>
         <translation>Dielektrizitätskonstante des gelösten Stoffes</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="689"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="770"/>
         <source>Radius Assignment</source>
         <translation type="unfinished">Radius-Zuweisung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="701"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="778"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="791"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="877"/>
         <source>solvation/PARSE.rul</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="711"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="802"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="801"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="901"/>
         <source>from table</source>
         <translation>aus Tabelle</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="721"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="735"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="771"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="788"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="811"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="825"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="870"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="887"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="728"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="818"/>
         <source>radii/PARSE.siz</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="742"/>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="764"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="832"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="863"/>
         <source>by rules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="752"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="842"/>
         <source>Charge Assignment</source>
         <translation>Ladungs-Zuweisung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="795"/>
+        <location filename="../../../source/VIEW/DIALOGS/FDPBDialog.ui" line="894"/>
         <source>charges/PARSE.crg</source>
         <translation></translation>
     </message>
@@ -5542,131 +4326,298 @@ so there was nothing to be done!</source>
 <context>
     <name>FieldLinesDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="13"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="14"/>
         <source>Create Field Lines</source>
         <translation type="unfinished">Feldlinien erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="28"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="39"/>
         <source>Advanced Options</source>
         <translation>Erweiterte Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="48"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="66"/>
         <source>max steps</source>
         <translation>Maximale Anzahl an Schritten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="63"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="79"/>
         <source>tolerance</source>
         <translation>Toleranz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="78"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="92"/>
         <source>interpolation steps</source>
         <translation>Interpolationsschritte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="85"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="99"/>
         <source>10000</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="92"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="106"/>
         <source>0.0001</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="115"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="129"/>
         <source>Seed Mode</source>
         <translation type="unfinished">Startpositionen-Modus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="131"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="154"/>
         <source>from Atoms</source>
         <translation>Atompositionen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="177"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="207"/>
         <source>number of start points per atom (12^X)</source>
         <translation>Anzahl der Startpunkte pro Atom (12^X)</translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="192"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="220"/>
         <source>distance from atoms (0.1 Å * X)</source>
         <translation>Atompositionen (0.1 Å * X)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="200"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="228"/>
         <source>Monte Carlo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="220"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="255"/>
         <source>number of lines</source>
         <translation>Anzahl der Linien</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="268"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="312"/>
         <source>Create</source>
         <translation>&amp;Erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="275"/>
+        <location filename="../../../source/VIEW/DIALOGS/fieldLinesDialog.ui" line="319"/>
         <source>Cancel</source>
         <translation>&amp;Schließen</translation>
     </message>
 </context>
 <context>
+    <name>GenerateCrystalDialogData</name>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="14"/>
+        <source>Build a Crystal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="42"/>
+        <source>Crystal Parameters</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="54"/>
+        <source>Cell angles</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="67"/>
+        <source>Cell axes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="80"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Y&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="97"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Z&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="114"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;gamma&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="131"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;beta&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="148"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;alpha&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="165"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;X&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="315"/>
+        <source>P 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="320"/>
+        <source>I 4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="334"/>
+        <source>Space group</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="348"/>
+        <source>Select System</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="361"/>
+        <source>1opd</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="366"/>
+        <source>2ovc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="380"/>
+        <source> use crystal info of system (e.g. as read from PDB)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="394"/>
+        <source>Generate Crystal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="406"/>
+        <source>Generate Asymmetric Unit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="419"/>
+        <source>Generate unit cell</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="477"/>
+        <source>Generate packing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="595"/>
+        <source>Draw unit cell outline</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="611"/>
+        <source>:at</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="627"/>
+        <source>:from</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="643"/>
+        <source>:to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="656"/>
+        <source>a</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="669"/>
+        <source>b</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/generateCrystalDialog.ui" line="682"/>
+        <source>c</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>GeometricFitDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="30"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="26"/>
         <source>Geometric Fit Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="59"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="71"/>
         <source>near radius</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="84"/>
         <source>penalty value for mobile partner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="93"/>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="288"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="103"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="286"/>
         <source>1.0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="111"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="119"/>
         <source>surface thickness</source>
         <translation>Oberflächendicke</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="126"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="132"/>
         <source>degree interval for rotation</source>
         <translation type="unfinished">Grad-Intervall für Rotation</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="141"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="145"/>
         <source>number of peaks for each rotation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="178"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="180"/>
         <source>Connolly</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="183"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="185"/>
         <source>van der Waals</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="188"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="190"/>
         <source>FTDock</source>
         <translation></translation>
     </message>
@@ -5676,52 +4627,52 @@ so there was nothing to be done!</source>
         <translation>Oberflächen-Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="225"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="223"/>
         <source>penalty value for static partner</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="244"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="242"/>
         <source>-15</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="266"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="264"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="310"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="308"/>
         <source>1.8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="332"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="330"/>
         <source>20</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="354"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="352"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="372"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="368"/>
         <source>grid spacing</source>
         <translation type="unfinished">Rastermaß (Grid-Abstand)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="396"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="390"/>
         <source>Reset</source>
         <translation>&amp;Zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="417"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="409"/>
         <source>OK</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="441"/>
+        <location filename="../../../source/VIEW/DIALOGS/geometricFitDialog.ui" line="431"/>
         <source>Cancel</source>
         <translation>&amp;Schließen</translation>
     </message>
@@ -5874,221 +4825,239 @@ Farben</translation>
         <translation>Gitter auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="211"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="220"/>
         <source>To render a grid, it must have a power of two resolution in all directions. If this is not the case, a new grid will be created.</source>
         <translation>Um ein Grid zu rendern, muss die Auflösung in alle Richtungen eine Zweierpotenz sein. Ist dies nicht der Fall, wird ein neues Gitter erzeugt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="214"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="223"/>
         <source>resize needed</source>
         <translation>Größenanpassung notwendig</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="53"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="62"/>
         <source>Visualize as</source>
         <translation>Visualisieren als</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="60"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="69"/>
         <source>Plane</source>
         <translation>Fläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="65"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="74"/>
         <source>Dots</source>
         <translation>Punkte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="86"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="95"/>
         <source>dot size</source>
         <translation>Punktgröße</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="109"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="118"/>
         <source>number dots</source>
         <translation type="unfinished">Anzahl der Punkte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="70"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="79"/>
         <source>Volume</source>
         <translation>Volumen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="151"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="160"/>
         <source>number slices</source>
         <translation type="unfinished">Anzahl der Scheiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="202"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="211"/>
         <source>Misc</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="221"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="230"/>
         <source>Render also the outlines of the grid</source>
         <translation type="unfinished">Ausreißer ebenfalls rendern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="224"/>
+        <location filename="../../../source/VIEW/DIALOGS/gridVisualizationDialog.ui" line="233"/>
         <source>render grid outline</source>
         <translation>Gitterabgrenzung rendern</translation>
     </message>
 </context>
 <context>
+    <name>HTMLViewErrorWidget</name>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/HTMLViewErrorWidget.ui" line="20"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/HTMLViewErrorWidget.ui" line="52"/>
+        <source>:(</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/WIDGETS/HTMLViewErrorWidget.ui" line="85"/>
+        <source>Your graphics device driver (nouveau) is known to cause issues with WebEngine, including freezes and crashes of BALLView and your operating system. Thus, WebEngine support has been disabled. You can re-enable it through the &quot;General&quot; settings dialog at your own risk.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>LabelDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="36"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="32"/>
         <source>Create label</source>
         <translation>Beschriftung erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="51"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="56"/>
         <source>Mode</source>
         <translation>Modus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="63"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="77"/>
         <source>one label for all items</source>
         <translation>Eine Beschriftung für alle Objekte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="73"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="87"/>
         <source>one label for every residue</source>
         <translation>Eine Beschriftung für jede Residue</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="80"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="94"/>
         <source>one label for every item</source>
         <translation>Eine Beschriftung für jedes Objekt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="87"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="101"/>
         <source>one label for every atom</source>
         <translation>Eine Beschriftung für jedes Atom</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="97"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="111"/>
         <source>Color</source>
         <translation>Farbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="115"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="138"/>
         <source>Label Color</source>
         <translation>Beschriftungsfarbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="137"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="160"/>
         <source>Edit label color</source>
         <translation>Beschriftungsfarbe bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="140"/>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="223"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="163"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="250"/>
         <source>Select</source>
         <translation>Auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="150"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="173"/>
         <source>Font</source>
         <translation>Schriftart</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="187"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="216"/>
         <source>Font Preview</source>
         <translation>Schriftart Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="196"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="225"/>
         <source>Font Test label</source>
         <translation>Schriftart-Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="220"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="247"/>
         <source>Select the font</source>
         <translation>Schriftart auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="248"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="275"/>
         <source>Add the label(s) for all highlighted items in the list of molecules</source>
         <translation>Beschriftung(en) für alle markierten Objekte in der Molekülliste hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="251"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="278"/>
         <source>&amp;Apply</source>
         <translation>&amp;Anwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="254"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="281"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="279"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="306"/>
         <source>Close window without creating label</source>
         <translation>Fenster schließen ohne eine Beschriftung zu erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="282"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="309"/>
         <source>&amp;Close</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="285"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="312"/>
         <source>Alt+C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="295"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="322"/>
         <source>Text</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="316"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="352"/>
         <source>Enter a text here</source>
         <translation>Hier Text einfügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="341"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="374"/>
         <source>Select a special text tag to add</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="345"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="378"/>
         <source>Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="350"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="383"/>
         <source>Residue ID</source>
         <translation>Residuen-ID</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="355"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="388"/>
         <source>Atom Type</source>
         <translation>Atomtyp</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="360"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="393"/>
         <source>Atom Type Name</source>
         <translation>Atom-Typ-Name</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="365"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="398"/>
         <source>Atom Charge</source>
         <translation>Atomladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="370"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="403"/>
         <source>Element</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="381"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="414"/>
         <source>Add the selected text tag</source>
         <translation>Füge ausgewählten Text hinzu</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="384"/>
+        <location filename="../../../source/VIEW/DIALOGS/labelDialog.ui" line="417"/>
         <source>Add</source>
         <translation>Hinzufügen</translation>
     </message>
@@ -6101,202 +5070,222 @@ Farben</translation>
         <translation>Licht-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="49"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="44"/>
         <source>Create a new light</source>
         <translation>Neues Licht erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="52"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="47"/>
         <source>&amp;Add</source>
         <translation>&amp;Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="55"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="50"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="33"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="28"/>
         <source>Lights list. Max 8 lights supported</source>
         <translation>Lichter-Liste: Maximal 8 Lichter unterstützt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="71"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="66"/>
         <source>Remove a light</source>
         <translation>EIn Licht entfernen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="69"/>
         <source>&amp;Remove</source>
         <translation>&amp;Entfernen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="72"/>
         <source>Alt+R</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="341"/>
-        <source>p1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="355"/>
-        <source>p2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="369"/>
-        <source>p3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="184"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="171"/>
         <source>Intensity</source>
         <translation>Intensität</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="252"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="222"/>
         <source>Color</source>
         <translation>Farbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="265"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="268"/>
         <source>Color of the light</source>
         <translation>Farbe des Lichts</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="278"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="248"/>
         <source>open a color dialog</source>
         <translation type="unfinished">Farben-Dialog öffnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="281"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="251"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="203"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="281"/>
         <source>Select intensity of light source</source>
         <translation>Lichtquellen-Intensität wählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="242"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="212"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="291"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="306"/>
+        <source>const</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="320"/>
+        <source>linear</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="334"/>
+        <source>quadratic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="351"/>
         <source>Type</source>
         <translation>Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="317"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="357"/>
         <source>Light from an infinite distance (position needed for angle of rays)</source>
         <translation type="unfinished">Licht aus unendlicher Entfernung (Position für Strahlenwinkel benötigt)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="320"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="360"/>
         <source>Directional</source>
         <translation>Gerichtet</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="307"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="370"/>
         <source>Light from a specific position</source>
         <translation type="unfinished">Licht von einer spezifischen Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="310"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="373"/>
         <source>Point</source>
         <translation>Punkt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="297"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="380"/>
         <source>Ambient light doesnt have a specific position source</source>
         <translation type="unfinished">Umgebungslicht hat keine spezifische Quelle oder Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="300"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="383"/>
         <source>Ambient</source>
         <translation>Umgebung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="88"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="83"/>
         <source>Orientation</source>
         <translation>Ausrichtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="94"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="89"/>
         <source>Keep lightsource relative to camera</source>
         <translation type="unfinished">LIchtquelle relativ zur Kamera bewegen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="97"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="92"/>
         <source>relative to camera</source>
         <translation>relativ zur Kamera</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="107"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="102"/>
         <source>Keep lightsource static</source>
         <translation>Lichtquelle bleibt statisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="110"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="105"/>
         <source>absolute</source>
         <translation>absolut</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="117"/>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="376"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="112"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="341"/>
         <source>Position z</source>
         <translation>z-Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="124"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="119"/>
         <source>Position</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="131"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="126"/>
         <source>Direction y</source>
         <translation>y-Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="138"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="133"/>
         <source>Direction z</source>
         <translation>z-Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="145"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="140"/>
         <source>Direction x</source>
         <translation>x-Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="152"/>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="362"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="147"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="327"/>
         <source>Position y</source>
         <translation>y-Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="159"/>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="348"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="154"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="313"/>
         <source>Position x</source>
         <translation>x-Position</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="166"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="161"/>
         <source>Direction</source>
         <translation>Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="190"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="177"/>
         <source>Factor</source>
         <translation>Faktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="335"/>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="235"/>
+        <source>max. Factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="258"/>
+        <source>maximal Intensity factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="261"/>
+        <source>500</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="300"/>
         <source>Attenuation</source>
         <translation type="unfinished">Dämpfung</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/lightSettings.ui" line="396"/>
+        <source>automatic update</source>
+        <translation type="unfinished">Automatische Aktualisierung</translation>
     </message>
 </context>
 <context>
@@ -6307,167 +5296,167 @@ Farben</translation>
         <translation>MMFF94-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="64"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="82"/>
         <source>Close and save options</source>
         <translation>Schließen und Optionen speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="67"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="85"/>
         <source>O&amp;K</source>
         <translation>&amp;OK</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="92"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="110"/>
         <source>Close window and discard changes</source>
         <translation>Fenster schließen und Änderungen verwerfen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="95"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="113"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="117"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="135"/>
         <source>Reset all settings to default values</source>
         <translation>Alle Einstellungen auf Voreinstellungen zurücksetzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="120"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="138"/>
         <source>Defaults</source>
         <translation>Voreinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="138"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="156"/>
         <source>Switching options</source>
         <translation type="unfinished">Einstellungen ändern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="412"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="439"/>
         <source>Nonbonded cutoff distance</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="434"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="461"/>
         <source>van der Waals cutoff/cuton distance</source>
         <translation type="unfinished">van der Waals cutoff/cuton Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="456"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="483"/>
         <source>Electrostatic cutoff/cuton distance</source>
         <translation type="unfinished">Elektrostatik cutoff/cuton Distanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="478"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="505"/>
         <source>Dielectric Constant</source>
         <translation>Dielektrizitätskonstante</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="511"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="547"/>
         <source>constant</source>
         <translation>konstant</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="533"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="569"/>
         <source>distance dependent</source>
         <translation>abstandsabhängig</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="543"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="579"/>
         <source>Setup Error Handling</source>
         <translation>Setup Fehlerbehandlung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="570"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="615"/>
         <source>Maximum number of unassigned atoms before aborting setup</source>
         <translation>Maximale Anzahl nicht zugewiesener Atome bevor Setup Abbruch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="605"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="650"/>
         <source>Parameter Set</source>
         <translation>Parametersatz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="638"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="692"/>
         <source>Folder</source>
         <translation>Ordner</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="688"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="742"/>
         <source>Browse your computer for amber file</source>
         <translation>Computer nach AMBER-Dateien durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="691"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="745"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="704"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="758"/>
         <source>Components</source>
         <translation>Komponenten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="719"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="782"/>
         <source>Stretches</source>
         <translation type="unfinished">Stretches (Bindungslängen)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="729"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="792"/>
         <source>Bends</source>
         <translation type="unfinished">Bends (Bindungswinkel)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="739"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="802"/>
         <source>StretchBends</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="749"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="812"/>
         <source>Torsions</source>
         <translation>Torsionen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="759"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="822"/>
         <source>OutOfPlane</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="769"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="832"/>
         <source>VDW</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="779"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="842"/>
         <source>Electrostatics</source>
         <translation type="unfinished">Elektrostatik</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="798"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="861"/>
         <source>Charge and Type Assignment</source>
         <translation>Ladungs- und Typzuweisung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="819"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="891"/>
         <source>Assign charges</source>
         <translation>Ladungen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="835"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="907"/>
         <source>Assign type names</source>
         <translation>Typnamen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="851"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="923"/>
         <source>Assign (numeric) types</source>
         <translation>Numerische Typen zuweisen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="867"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="939"/>
         <source>Overwrite charges</source>
         <translation>Ladungen überschreiben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="883"/>
+        <location filename="../../../source/VIEW/DIALOGS/MMFF94ConfigurationDialog.ui" line="955"/>
         <source>Overwrite type names</source>
         <translation>Typnamen überschreiben</translation>
     </message>
@@ -6475,64 +5464,88 @@ Farben</translation>
 <context>
     <name>MainControlPreferencesData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="32"/>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="36"/>
         <source>MainControlPreferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="137"/>
         <source>Language Preferences</source>
-        <translation>Sprach-Einstellungen</translation>
+        <translation type="vanished">Sprach-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="144"/>
         <source>Default</source>
-        <translation>Standard</translation>
+        <translation type="vanished">Standard</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="173"/>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="170"/>
         <source>Writes the information from the Logs window into a file</source>
         <translation type="unfinished">Schreibt die Informationen des Protokoll-Fensters in eine Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="176"/>
         <source>enable logging to file</source>
-        <translation type="unfinished">Aktiviere Schreiben des Protokoll in Datei</translation>
+        <translation type="obsolete">Aktiviere Schreiben des Protokoll in Datei</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="38"/>
         <source>GUI Style</source>
-        <translation>Graphische Benutzeroberfläche</translation>
+        <translation type="vanished">Graphische Benutzeroberfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="50"/>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="54"/>
         <source>Select a GUI style to alter the appearance of BALLView</source>
         <translation>Stil der graphischen Benutzteroberfläche von BALLView auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="60"/>
         <source>General font</source>
-        <translation>Allgemeine Schriftart</translation>
+        <translation type="vanished">Allgemeine Schriftart</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="91"/>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="94"/>
         <source>Font Preview</source>
         <translation>Schriftart Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="100"/>
         <source>Font Test label</source>
-        <translation>Schriftart-Vorschau</translation>
+        <translation type="vanished">Schriftart-Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="122"/>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="42"/>
+        <source>Theme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="64"/>
+        <source>Font</source>
+        <translation type="unfinished">Schriftart</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="103"/>
+        <source>Font test label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="125"/>
         <source>Select the font</source>
         <translation>Schriftart auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="125"/>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="128"/>
         <source>Select</source>
         <translation>Auswählen</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="140"/>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="173"/>
+        <source>Enable logging to file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/mainControlPreferences.ui" line="183"/>
+        <source>Disable driver incompatibility checks (Warning: Might cause crashes!)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6543,56 +5556,36 @@ Farben</translation>
         <translation>Materialeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="643"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="174"/>
         <source>Specularity</source>
         <translation>Reflexionseigenschaften</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="54"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="651"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1277"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="182"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="303"/>
         <source>color</source>
         <translation>Farbe</translation>
     </message>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="79"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="664"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1290"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="195"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="316"/>
         <source>Select</source>
         <translation>Auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="587"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1160"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1786"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1839"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1899"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="118"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="222"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="343"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="396"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="453"/>
         <source>factor</source>
         <translation>Faktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1201"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="263"/>
         <source>1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1216"/>
-        <source>Renderer</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1222"/>
-        <source>OpenGL</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1232"/>
-        <source>POVRay</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1242"/>
-        <source>RTFact</source>
         <translation></translation>
     </message>
     <message>
@@ -6601,43 +5594,43 @@ Farben</translation>
         <translation>Umgebungsintensität</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="628"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="159"/>
         <source>0.1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1269"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="295"/>
         <source>Reflectiveness</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1818"/>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1937"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="375"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="491"/>
         <source>0</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1833"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="390"/>
         <source>Shininess</source>
         <translation>Glanz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1877"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="434"/>
         <source>77</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1893"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="447"/>
         <source>Transparency</source>
         <translation>Transparenz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1953"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="507"/>
         <source>%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="1969"/>
+        <location filename="../../../source/VIEW/DIALOGS/materialSettings.ui" line="520"/>
         <source>automatic update</source>
         <translation>Automatische Aktualisierung</translation>
     </message>
@@ -6645,157 +5638,157 @@ Farben</translation>
 <context>
     <name>MinimizationDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="33"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="32"/>
         <source>Energy Minimization</source>
         <translation>Energieminimierung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="45"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="53"/>
         <source>Algorithm</source>
         <translation>Algorithmus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="57"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="74"/>
         <source>Steepest Descent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="64"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="81"/>
         <source>Conjugate Gradient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="71"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="88"/>
         <source>L-BFGS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="78"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="95"/>
         <source>Shifted LVMM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="106"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="123"/>
         <source>Close window without energy minimization</source>
         <translation>Fenster schließen ohne Energieminimierung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="109"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="126"/>
         <source>Cancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="137"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="154"/>
         <source>Start minimization</source>
         <translation>Minimierung beginnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="140"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="157"/>
         <source>&amp;Minimize</source>
         <translation>&amp;Start</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="143"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="160"/>
         <source>Alt+M</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="156"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="173"/>
         <source>Force Field</source>
         <translation>Kraftfeld</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="174"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="200"/>
         <source>AMBER</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="193"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="219"/>
         <source>CHARMM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="209"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="235"/>
         <source>MMFF94</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="225"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="251"/>
         <source>Edit force field options</source>
         <translation>Kraftfeld-Einstellungen bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="228"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="254"/>
         <source>&amp;Force field options</source>
         <translation>Kraftfeld-&amp;Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="231"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="257"/>
         <source>Alt+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="241"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="267"/>
         <source>Options</source>
         <translation>Einstellungen</translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="259"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="294"/>
         <source>kJ/(mol Å)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="278"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="313"/>
         <source>iterations</source>
         <translation>Iterationen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="297"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="332"/>
         <source>Maximum gradient for convergence</source>
         <translation type="unfinished">Maximaler Gradient für Konvergenz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="316"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="351"/>
         <source>Maximum number of iterations</source>
         <translation>Maximale Anzahl an Iterationen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="335"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="370"/>
         <source>kJ/mol</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="371"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="404"/>
         <source>Number of iterations made for energy minimization</source>
         <translation type="unfinished">Für Energieminimierung benötigte Schritte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="374"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="407"/>
         <source>10</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="416"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="447"/>
         <source>0.0001</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="458"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="487"/>
         <source>0.5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="483"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="512"/>
         <source>Maximum energy difference</source>
         <translation>Maximale Energiedifferenz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="513"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="540"/>
         <source>500</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="538"/>
+        <location filename="../../../source/VIEW/DIALOGS/minimizationDialog.ui" line="565"/>
         <source>Redraw screen after</source>
         <translation>Bildschirmaktualisierung nach</translation>
     </message>
@@ -6810,7 +5803,7 @@ Farben</translation>
     <message>
         <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="41"/>
         <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="101"/>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="859"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="886"/>
         <source>cylinder radius</source>
         <translation type="unfinished">Zylinder-Radius</translation>
     </message>
@@ -6906,13 +5899,13 @@ Farben</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="775"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="784"/>
         <source>Ladder Model</source>
         <translation>Sprossenleiter-Modell</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="688"/>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="790"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="697"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="808"/>
         <source>base radius</source>
         <translation>Basen-Radius</translation>
     </message>
@@ -6922,34 +5915,34 @@ Farben</translation>
         <translation type="unfinished">Basen-Cartoon</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="736"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="745"/>
         <source>backbone radius</source>
         <translation>Backbone-Radius</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="913"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="940"/>
         <source>max length</source>
         <translation>Maximale Länge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="955"/>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="971"/>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="1005"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="982"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="998"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="1032"/>
         <source>Length of the drawn vector is: log(v * 10**8) * scaling  </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="958"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="985"/>
         <source>scaling (exponent)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="1018"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="1045"/>
         <source>base size</source>
         <translation>Basengröße</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="1072"/>
+        <location filename="../../../source/VIEW/DIALOGS/modelSettingsDialog.ui" line="1099"/>
         <source>offset</source>
         <translation type="unfinished">Verschiebung</translation>
     </message>
@@ -6967,101 +5960,101 @@ Farben</translation>
         <translation type="unfinished">Färben nach Grid</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="50"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="71"/>
         <source>Select grid</source>
         <translation>Gitter auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="610"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="171"/>
         <source>Select</source>
         <translation>&amp;Auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="89"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="110"/>
         <source>Custom Color</source>
         <translation type="unfinished">Eigene Farbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="632"/>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="751"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="193"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="312"/>
         <source>Select level of transparency</source>
         <translation>Durchscheingrad wählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="663"/>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="729"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="224"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="290"/>
         <source>Transparency</source>
         <translation>Transparenz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="679"/>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="782"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="240"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="343"/>
         <source>0%</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="695"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="256"/>
         <source>apply to selection only</source>
         <translation>Nur auf Auswahl anwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="701"/>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="713"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="262"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="274"/>
         <source>Drawing Mode</source>
         <translation type="unfinished">Zeichenmodus</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="826"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="387"/>
         <source>dots</source>
         <translation>Punkte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="831"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="392"/>
         <source>wireframe</source>
         <translation>Drahtmodell</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="836"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="397"/>
         <source>solid</source>
         <translation type="unfinished">kompakt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="841"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="402"/>
         <source>toon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="848"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="409"/>
         <source>Material Setting</source>
         <translation>Materialeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="854"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="415"/>
         <source>Split</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="866"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="427"/>
         <source>Split Surface</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="878"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="439"/>
         <source>within distance from selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="897"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="458"/>
         <source>1</source>
         <translation></translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="919"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="480"/>
         <source>Å</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="932"/>
+        <location filename="../../../source/VIEW/DIALOGS/modifyRepresentationDialog.ui" line="493"/>
         <source>by selection</source>
         <translation type="unfinished">durch Auswahl</translation>
     </message>
@@ -7069,187 +6062,187 @@ Farben</translation>
 <context>
     <name>MolecularDynamicsDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="36"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="32"/>
         <source>MolecularDynamicsSimulation</source>
         <translation>Moleküldynamik-Simulation</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="77"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="80"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="104"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="105"/>
         <source>Start simulation</source>
         <translation>Simulation beginnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="107"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="108"/>
         <source>&amp;Simulate</source>
         <translation>&amp;Start</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="110"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="111"/>
         <source>Alt+S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="131"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="130"/>
         <source>Trajectory</source>
         <translation>Bewegungsablauf</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="154"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="160"/>
         <source>Write trajectories to file in order to be able to watch snapshots</source>
         <translation>Schreibe Bewegungsabläufe in eine Datei, um Momentaufnahmen verfolgen zu können</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="157"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="163"/>
         <source>save to</source>
         <translation>Speichern unter:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="164"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="170"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="197"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="201"/>
         <source>trajectory.dcd</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="219"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="223"/>
         <source>Force Field</source>
         <translation>Kraftfeld</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="234"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="247"/>
         <source>AMBER</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="247"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="260"/>
         <source>CHARMM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="257"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="270"/>
         <source>MMFF94</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="273"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="286"/>
         <source>Alter force field options</source>
         <translation>Kraftfeld-Einstellungen ändern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="276"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="289"/>
         <source>&amp;ForceField Options</source>
         <translation>Kraftfeld-&amp;Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="279"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="292"/>
         <source>Alt+F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="289"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="302"/>
         <source>Ensemble</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="304"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="326"/>
         <source>canonical</source>
         <translation>kanonisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="320"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="342"/>
         <source>microcanonical</source>
         <translation>mikro-kanonisch</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="333"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="355"/>
         <source>Parameters</source>
         <translation>Parameter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="381"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="410"/>
         <source>steps between refresh</source>
         <translation type="unfinished">Schritte pro Wiederholrate</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="406"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="435"/>
         <source>ps)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="431"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="460"/>
         <source>number of steps</source>
         <translation>Anzahl der Schritte:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="461"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="488"/>
         <source>Timesteps in which snapshots are taken</source>
         <translation type="unfinished">Zeitschritte, nach denen eine Momentaufnahme gemacht wird</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="464"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="491"/>
         <source>0.0001</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="500"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="525"/>
         <source>1000</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="528"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="553"/>
         <source>ps</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="564"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="587"/>
         <source>1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="580"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="603"/>
         <source>0.01</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="602"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="625"/>
         <source>(total time:</source>
         <translation>(Gesamtzeit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="627"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="650"/>
         <source>timestep</source>
         <translation>Zeitschritt:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="663"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="684"/>
         <source>Temperature in which the simulation runs</source>
         <translation>Temperatur, bei der die Simulation läuft</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="666"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="687"/>
         <source>300</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="709"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="728"/>
         <source>temperature</source>
         <translation>Temperatur:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="734"/>
+        <location filename="../../../source/VIEW/DIALOGS/molecularDynamicsDialog.ui" line="753"/>
         <source>K</source>
         <translation></translation>
     </message>
@@ -7257,120 +6250,120 @@ Farben</translation>
 <context>
     <name>NetworkPreferencesData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="32"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="36"/>
         <source>NetworkPreferences</source>
         <translation>Netzwerk-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="38"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="42"/>
         <source>HTTP Transfers</source>
         <translation>HTTP-Übertragungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="58"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="62"/>
         <source>proxy type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="66"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="70"/>
         <source>No Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="71"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="75"/>
         <source>DefaultProxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="76"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="80"/>
         <source>Socks5Proxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="81"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="85"/>
         <source>HttpProxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="86"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="90"/>
         <source>HttpCachingProxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="91"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="95"/>
         <source>FtpCachingProxy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="104"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="108"/>
         <source>Proxy Settings:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="126"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="130"/>
         <source>host</source>
         <translation>Host:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="162"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="166"/>
         <source>port</source>
         <translation>Port:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="289"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="293"/>
         <source>Downloads from www.PDB.org</source>
         <translation>Downloads von www.PDB.org</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="329"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="320"/>
+        <source>http://files.rcsb.org/download/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="333"/>
         <source>.pdb</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="342"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="346"/>
         <source>URL suffix</source>
         <translation>URL-Suffix:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="303"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="307"/>
         <source>URL prefix</source>
         <translation>URL-Präfix:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="201"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="205"/>
         <source>login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="243"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="247"/>
         <source>password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="276"/>
+        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="280"/>
         <source>NOTE: If given, proxy passwords are stored in cleartext in BALLView.ini!</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/networkPreferences.ui" line="316"/>
-        <source>http://www.rcsb.org/pdb/files/</source>
-        <translation></translation>
     </message>
 </context>
 <context>
     <name>OpenSavePreferencesData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="14"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="18"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="20"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="24"/>
         <source>PDB Options</source>
         <translation>PDB-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="32"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="45"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
@@ -7381,27 +6374,27 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="41"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="54"/>
         <source>Load all Models from PDB file</source>
         <translation>Alle Modelle aus PDB-Datei laden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="51"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="64"/>
         <source>Project Files</source>
         <translation type="unfinished">Projektdateien</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="63"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="85"/>
         <source>Output Format:</source>
         <translation type="unfinished">Ausgabeformat:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="70"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="92"/>
         <source>binary</source>
         <translation>Binär</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="80"/>
+        <location filename="../../../source/VIEW/DIALOGS/openSavePreferences.ui" line="102"/>
         <source>ascii</source>
         <translation>ASCII</translation>
     </message>
@@ -7409,147 +6402,147 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>PTEDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="24"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="20"/>
         <source>Peridodic Table of Elements</source>
         <translation>Periodensystem der Elemente</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="47"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="50"/>
         <source>Main elements</source>
         <translation type="unfinished">Die wichtigsten Elemente</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="70"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="71"/>
         <source>Se</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="91"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="90"/>
         <source>Br</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="112"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="109"/>
         <source>Kr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="125"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="122"/>
         <source>Ar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="138"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="135"/>
         <source>Cl</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="151"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="148"/>
         <source>S</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="164"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="161"/>
         <source>P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="177"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="174"/>
         <source>Si</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="190"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="187"/>
         <source>Al</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="203"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="200"/>
         <source>Mg</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="216"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="213"/>
         <source>Be</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="229"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="226"/>
         <source>B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="242"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="239"/>
         <source>C</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="255"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="252"/>
         <source>N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="268"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="265"/>
         <source>O</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="281"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="278"/>
         <source>F</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="294"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="291"/>
         <source>Ne</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="307"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="304"/>
         <source>He</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="320"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="317"/>
         <source>Li</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="333"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="330"/>
         <source>Na</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="354"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="349"/>
         <source>Ca</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="375"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="368"/>
         <source>Ga</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="396"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="387"/>
         <source>Ge</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="417"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="406"/>
         <source>As</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="438"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="425"/>
         <source>K</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="451"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="438"/>
         <source>H</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="459"/>
+        <location filename="../../../source/VIEW/DIALOGS/PTEDialog.ui" line="446"/>
         <source>All elements</source>
         <translation>Alle Elemente</translation>
     </message>
@@ -7557,27 +6550,27 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ParsedFunctionDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="13"/>
+        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="14"/>
         <source>Parsed Function</source>
         <translation type="unfinished">Analysierte Funktion</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="34"/>
+        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="35"/>
         <source>&amp;OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="62"/>
+        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="63"/>
         <source>&amp;Cancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="81"/>
+        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="82"/>
         <source>Y-axis</source>
         <translation>Y-Achse</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="104"/>
+        <location filename="../../../source/VIEW/DIALOGS/parsedFunctionDialog.ui" line="105"/>
         <source>X-axis</source>
         <translation>X-Achse</translation>
     </message>
@@ -7585,262 +6578,287 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>PeptideDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="33"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="32"/>
         <source>PeptideBuilder</source>
         <translation type="unfinished">Peptid-Generator</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="75"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="99"/>
         <source>Ala</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="96"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="118"/>
         <source>Arg</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="117"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="137"/>
         <source>Asn</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="138"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="156"/>
         <source>Asp</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="169"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="194"/>
         <source>Cys</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="190"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="213"/>
         <source>Gln</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="211"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="232"/>
         <source>Glu</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="232"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="251"/>
         <source>Gly</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="263"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="289"/>
         <source>His</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="284"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="308"/>
         <source>Ile</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="305"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="327"/>
         <source>Leu</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="326"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="346"/>
         <source>Lys</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="357"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="384"/>
         <source>Met</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="378"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="403"/>
         <source>Phe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="399"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="422"/>
         <source>Pro</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="420"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="441"/>
         <source>Ser</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="451"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="479"/>
         <source>Thr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="472"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="498"/>
         <source>Trp</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="493"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="517"/>
         <source>Tyr</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="514"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="536"/>
         <source>Val</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="525"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="547"/>
         <source>Sequence</source>
         <translation type="unfinished">Sequenz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1007"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="560"/>
         <source>Enter amino acids</source>
         <translation>Aminosäuren eingeben</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1029"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="582"/>
         <source>Build peptide</source>
         <translation>Peptid generieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1032"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="585"/>
         <source>&amp;Build</source>
         <translation type="unfinished">&amp;Generiere</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1035"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="588"/>
         <source>Alt+B</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1057"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="610"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1060"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="613"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1067"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="620"/>
         <source>Backbone</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1079"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="641"/>
         <source>Other</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1086"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="648"/>
         <source>Beta sheet</source>
         <translation>Beta-Faltblatt</translation>
     </message>
-    <message utf8="true">
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1101"/>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1166"/>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1187"/>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="672"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="733"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="754"/>
         <source>°</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1108"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="679"/>
         <source>Omega:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1129"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="698"/>
         <source>180</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1156"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="723"/>
         <source>-58</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1173"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="740"/>
         <source>Psi:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1180"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="747"/>
         <source>Phi:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1211"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="776"/>
         <source>-47</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="1223"/>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="788"/>
         <source>Alpha helix</source>
         <translation>Alpha-Helix</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/peptideDialog.ui" line="798"/>
+        <source>Neutral caps</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PluginDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="14"/>
+        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="18"/>
         <source>Configure Plugins</source>
         <translation>Plugins konfigurieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="39"/>
+        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="26"/>
         <source>Plugin Directories:</source>
         <translation>Plugin-Verzeichnisse:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="52"/>
+        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="93"/>
         <source>Plugin:</source>
         <translation>Plugin:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="49"/>
         <source>Add</source>
         <translation type="unfinished">Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="99"/>
+        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="65"/>
         <source>Remove </source>
         <translation type="unfinished">Entfernen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="132"/>
         <source>Activate all Plugins</source>
-        <translation>Alle Plugins aktivieren</translation>
+        <translation type="vanished">Alle Plugins aktivieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="157"/>
+        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="110"/>
         <source>Activate</source>
         <translation>Aktivieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pluginDialog.ui" line="167"/>
         <source>Settings</source>
-        <translation>Einstellungen</translation>
+        <translation type="vanished">Einstellungen</translation>
     </message>
 </context>
 <context>
     <name>PreferencesData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/preferences.ui" line="14"/>
+        <location filename="../../../source/VIEW/DIALOGS/preferences.ui" line="18"/>
         <source>Preferences</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/preferences.ui" line="30"/>
+        <location filename="../../../source/VIEW/DIALOGS/preferences.ui" line="34"/>
         <source>Entries</source>
         <translation>Einträge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/preferences.ui" line="59"/>
+        <location filename="../../../source/VIEW/DIALOGS/preferences.ui" line="63"/>
         <source>Please select an (child) entry on the left side!</source>
         <translation type="unfinished">Bitte einen Eintrag auf der linken Seite auwählen!</translation>
+    </message>
+</context>
+<context>
+    <name>PropEditorWidget</name>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/propEditorWidget.ui" line="17"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/propEditorWidget.ui" line="24"/>
+        <location filename="../../../source/VIEW/DIALOGS/propEditorWidget.ui" line="31"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PropertyEditor</name>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/propertyEditor.ui" line="34"/>
+        <source>...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7851,18 +6869,28 @@ p, li { white-space: pre-wrap; }
         <translation>PubChem anfragen oder aus SMILES erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="84"/>
+        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="128"/>
         <source>SMILES</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="97"/>
+        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="158"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="163"/>
+        <source>CID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="42"/>
         <source>Generate</source>
         <translation>Erzeugen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="119"/>
-        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="138"/>
+        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="29"/>
+        <location filename="../../../source/VIEW/DIALOGS/pubchemDialog.ui" line="147"/>
         <source>PubChem</source>
         <translation></translation>
     </message>
@@ -7870,77 +6898,77 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>PythonSettingsData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="14"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="18"/>
         <source>Python</source>
         <translation type="unfinished">Python</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="27"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="31"/>
         <source>Startup script</source>
         <translation>Startskript</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="46"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="50"/>
         <source>Browse</source>
         <translation type="unfinished">Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="59"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="63"/>
         <source>Clear</source>
         <translation>Zurücksetzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="69"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="73"/>
         <source>Font for the internal editor</source>
         <translation>Schriftart des internen Editors</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="92"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="95"/>
         <source>Font Preview</source>
         <translation>Schriftart Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="101"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="104"/>
         <source>Font Test label</source>
         <translation>Schriftart-Vorschau</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="111"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="114"/>
         <source>Select the font</source>
         <translation>Schriftart auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="114"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="117"/>
         <source>Select</source>
         <translation>Auswählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="159"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="168"/>
         <source>Remove a hotkey, select the row (with the field to the left)</source>
         <translation type="unfinished">Lösche einen Hotkey</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="162"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="171"/>
         <source>&amp;Remove</source>
         <translation>&amp;Entfernen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="165"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="174"/>
         <source>Alt+R</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="185"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="181"/>
         <source>Add a new hotkey</source>
         <translation>Neuen Hotkey hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="188"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="184"/>
         <source>&amp;Add new</source>
         <translation>&amp;Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="191"/>
+        <location filename="../../../source/VIEW/DIALOGS/pythonSettings.ui" line="187"/>
         <source>Alt+A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7948,109 +6976,109 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>RaytraceableContourSurfaceDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="16"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="17"/>
         <source>Ray-traced Contour Surface Options</source>
         <translation type="unfinished">Ray-getracte Höhenflächen Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="31"/>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="145"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="32"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="137"/>
         <source>add contour surface</source>
         <translation>Hinzufügen einer Höhenfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="34"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="35"/>
         <source>Contour Threshold Value</source>
         <translation>Wert der Höhenfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="49"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="50"/>
         <source>choose a contour Surface threshold of value</source>
         <translation>Wahl des Werts der Höhenfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="52"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="53"/>
         <source>slider to chose a threshold of a new contour surface</source>
         <translation>Schieberegler zur Wahl des Werts der Höhenfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="75"/>
         <source>contour surface threshold value</source>
         <comment>contour surface threshold value</comment>
         <translation>Wert der Höhenfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="93"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="91"/>
         <source>add</source>
         <translation>Hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="109"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="104"/>
         <source>add contour surface and close</source>
         <comment>add a contour</comment>
         <translation>Hinzufügen einer Höhenfläche und Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="112"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="107"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="128"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="120"/>
         <source>cancel dialog</source>
         <comment>cancel dialog</comment>
         <translation>Schließen des Dialogs</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="131"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="123"/>
         <source>cancel</source>
         <translation>Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="148"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="140"/>
         <source>Contour Threshold Range</source>
         <translation>Wertebereich der Höhenfläche</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="163"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="155"/>
         <source>min</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="176"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="168"/>
         <source>max</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="189"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="181"/>
         <source>steps</source>
         <translation>Schritte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="205"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="194"/>
         <source>set the contour threshold range to default values</source>
         <comment>set the range values to default values</comment>
         <translation>Standardwertebereich für Höhenkonturflächen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="208"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="197"/>
         <source>auto</source>
         <translation>Standardeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="221"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="210"/>
         <source>set the number of steps</source>
         <comment>range steps</comment>
         <translation>Anzahl Schritte setzen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="234"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="223"/>
         <source>set the maximum theshold</source>
         <comment>maximum threshold</comment>
         <translation>Obere Grenze des Wertebereichs</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="247"/>
+        <location filename="../../../source/VIEW/DIALOGS/raytraceableContourSurfaceDialog.ui" line="236"/>
         <source>set the minimum threshold</source>
         <comment>minimum threshold</comment>
         <translation>Untere Grenze des Wertebereichs</translation>
@@ -8059,466 +7087,281 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>RunGAMESSDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="16"/>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="54"/>
         <source>Run GAMESS</source>
-        <translation type="unfinished">Starte GAMESS</translation>
+        <translation type="obsolete">Starte GAMESS</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="28"/>
         <source>Cancel</source>
-        <translation>Schließen</translation>
+        <translation type="vanished">Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="41"/>
         <source>Save GAMESS Input File</source>
-        <translation>GAMESS-Eingabedatei speichern</translation>
+        <translation type="vanished">GAMESS-Eingabedatei speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="71"/>
         <source>Control</source>
-        <translation type="unfinished">Steuerung</translation>
+        <translation type="obsolete">Steuerung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="83"/>
         <source>Command Line</source>
-        <translation>Kommandozeile</translation>
+        <translation type="vanished">Kommandozeile</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="95"/>
         <source>Command to execute</source>
-        <translation>Auszuführender Befehl</translation>
+        <translation type="vanished">Auszuführender Befehl</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="108"/>
-        <source>rungms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="122"/>
-        <source>Beyond HF</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="146"/>
         <source>Moller - Plesset</source>
-        <translation>Moller-Plesset</translation>
+        <translation type="vanished">Moller-Plesset</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="159"/>
         <source>Coupled Cluster</source>
-        <translation type="unfinished">Coupled Cluster</translation>
+        <translation type="obsolete">Coupled Cluster</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="172"/>
         <source>CI computation</source>
-        <translation>CI-Berechnung</translation>
+        <translation type="vanished">CI-Berechnung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="187"/>
         <source>Level 2 (2)</source>
-        <translation>Ebene 2 (2)</translation>
+        <translation type="vanished">Ebene 2 (2)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="192"/>
         <source>Skip / Level 0 (0)</source>
-        <translation type="unfinished">Überspringen / Level 0 (0)</translation>
+        <translation type="obsolete">Überspringen / Level 0 (0)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="207"/>
         <source>Linearized (LCCD)</source>
-        <translation type="unfinished">Linearisiert (LCCD)</translation>
+        <translation type="obsolete">Linearisiert (LCCD)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="212"/>
-        <source>Double Excitations (CCD)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="217"/>
-        <source>Single and Double Excitations (CCSD)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="222"/>
         <source>CCSD + non-iterative triples (CCSD(T))</source>
-        <translation type="unfinished">CCSD + nicht iterative Tripel (CCSD(T))</translation>
+        <translation type="obsolete">CCSD + nicht iterative Tripel (CCSD(T))</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="227"/>
         <source>Renormalized CC (R-CC)</source>
-        <translation type="unfinished">Normalisiertes CC (R-CC)</translation>
+        <translation type="obsolete">Normalisiertes CC (R-CC)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="232"/>
         <source>Completely Renormalized CC (CR-CC)</source>
-        <translation type="unfinished">Vollständig normalisiertes CC (CR-CC)</translation>
+        <translation type="obsolete">Vollständig normalisiertes CC (CR-CC)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="237"/>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="272"/>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="495"/>
         <source>None (None)</source>
-        <translation type="unfinished">Keine</translation>
+        <translation type="obsolete">Keine</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="252"/>
         <source>Unitary Group (GUGA)</source>
-        <translation>Einheitliche Gruppe (GUGA)</translation>
+        <translation type="vanished">Einheitliche Gruppe (GUGA)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="257"/>
-        <source>Ames Laboratory (ALDET)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="262"/>
-        <source>Full Second Order CI (FSOCI)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="267"/>
         <source>Determinant CI (GENCI)</source>
-        <translation type="unfinished">Bestimmendes CI (GENCI)</translation>
+        <translation type="obsolete">Bestimmendes CI (GENCI)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="287"/>
         <source>Molecular Properties</source>
-        <translation type="unfinished">Molekül-Eigenschaften</translation>
+        <translation type="obsolete">Molekül-Eigenschaften</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="299"/>
         <source>Total Molecular Charge</source>
-        <translation>Molekül-Gesamtladung</translation>
+        <translation type="vanished">Molekül-Gesamtladung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="331"/>
         <source>Multiplicity</source>
-        <translation>Mehrwertigkeit</translation>
+        <translation type="vanished">Mehrwertigkeit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="364"/>
         <source>Run options</source>
-        <translation>Durchlauf-Einstellungen</translation>
+        <translation type="vanished">Durchlauf-Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="376"/>
         <source>SCF type</source>
-        <translation>SCF-Typ</translation>
+        <translation type="vanished">SCF-Typ</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="389"/>
         <source>Run type</source>
-        <translation>Durchlauftyp</translation>
+        <translation type="vanished">Durchlauftyp</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="402"/>
         <source>Maximum Number of SCF Iterations</source>
-        <translation>Maximale Anzahl an SCF-Iterationen</translation>
+        <translation type="vanished">Maximale Anzahl an SCF-Iterationen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="431"/>
         <source>Execution type</source>
-        <translation>Ausführungsart</translation>
+        <translation type="vanished">Ausführungsart</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="445"/>
         <source>Perform the run (RUN)</source>
-        <translation type="unfinished">Start (RUN)</translation>
+        <translation type="obsolete">Start (RUN)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="450"/>
         <source>Check only, no WF or Energy Evaluation (CHECK)</source>
-        <translation>Nur überprüfen, keine WF- oder Energieauswertung (CHECK)</translation>
+        <translation type="vanished">Nur überprüfen, keine WF- oder Energieauswertung (CHECK)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="455"/>
         <source>Show Debug Info (DEBUG)</source>
-        <translation>Fehlerbeseitigungsinformationen anzeigen (DEBUG)</translation>
+        <translation type="vanished">Fehlerbeseitigungsinformationen anzeigen (DEBUG)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="470"/>
         <source>Restricted Hartree Fock (RHF)</source>
-        <translation type="unfinished">Begrenztes Hartree Fock (RHF)</translation>
+        <translation type="obsolete">Begrenztes Hartree Fock (RHF)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="475"/>
         <source>Unrestricted Hartree Fock (UHF)</source>
-        <translation type="unfinished">Unbegrenztes Hartree Fock (UHF)</translation>
+        <translation type="obsolete">Unbegrenztes Hartree Fock (UHF)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="480"/>
-        <source>Restricted open shell HF high spin (ROHF)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="485"/>
         <source>Generalized Valence bond wavefunction (GVB)</source>
-        <translation type="unfinished">Verallgemeinerte Ladungszahl-Bindungs-Wellenfunktion (GVB)</translation>
+        <translation type="obsolete">Verallgemeinerte Ladungszahl-Bindungs-Wellenfunktion (GVB)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="490"/>
         <source>Multiconfigurational SCF wavefunction (MCSCF)</source>
-        <translation type="unfinished">Mehrfachstrukturmäßige SCF-Wellenfunktion (MCSCF)</translation>
+        <translation type="obsolete">Mehrfachstrukturmäßige SCF-Wellenfunktion (MCSCF)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="510"/>
         <source>Molecular Energy (ENERGY)</source>
-        <translation type="unfinished">Molekülenergie (ENERGY)</translation>
+        <translation type="obsolete">Molekülenergie (ENERGY)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="515"/>
         <source>Molecular Energy + Gradient (GRADIENT)</source>
-        <translation>Molekülenergie + Gradient (GRADIENT)</translation>
+        <translation type="vanished">Molekülenergie + Gradient (GRADIENT)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="520"/>
         <source>Molecular Energy + Gradiant + Hessian (HESSIAN)</source>
-        <translation type="unfinished">Molekülenergie + Gradient + Hessematrix (HESSIAN)</translation>
+        <translation type="obsolete">Molekülenergie + Gradient + Hessematrix (HESSIAN)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="525"/>
         <source>Geometry Optimization with analytical Gradient (OPTIMIZE)</source>
-        <translation type="unfinished">Geometrieoptimierung mit analytischem Gradienten (OPTIMIZE)</translation>
+        <translation type="obsolete">Geometrieoptimierung mit analytischem Gradienten (OPTIMIZE)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="530"/>
         <source>Non Gradient total Energy Minimization (TRUDGE)</source>
-        <translation type="unfinished">Gesamtenergie-Minimierung ohne Gradient (TRUDGE)</translation>
+        <translation type="obsolete">Gesamtenergie-Minimierung ohne Gradient (TRUDGE)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="535"/>
         <source>Saddle Point Localization (SADPOINT)</source>
-        <translation>Sattelpunkt-Lokalisierung (SADPOINT)</translation>
+        <translation type="vanished">Sattelpunkt-Lokalisierung (SADPOINT)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="540"/>
         <source>Follow Intrinsic Reaction Coordinate (IRC)</source>
-        <translation>Spezifischen Reaktionskoordinaten folgen (IRC)</translation>
+        <translation type="vanished">Spezifischen Reaktionskoordinaten folgen (IRC)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="545"/>
-        <source>Anharmonic Vibrational Corrections (VSCF)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="550"/>
         <source>Follow Dynamic Reaction Coordinate (DRC)</source>
-        <translation>Dynamischen Reaktionskoordinaten folgen (DRC)</translation>
+        <translation type="vanished">Dynamischen Reaktionskoordinaten folgen (DRC)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="555"/>
         <source>Global MC Optimization of effective Fragment Positions (GLOBOPT)</source>
-        <translation type="unfinished">Globale MC-Optimierung wirkungsvoller Fragmentpositionen (GLOBOPT)</translation>
+        <translation type="obsolete">Globale MC-Optimierung wirkungsvoller Fragmentpositionen (GLOBOPT)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="560"/>
         <source>Trace Gradient Extremal (DRADEXTR)</source>
-        <translation type="unfinished">Gradienten-Extremale finden (DRADEXTR)</translation>
+        <translation type="obsolete">Gradienten-Extremale finden (DRADEXTR)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="565"/>
         <source>Scan Energy Cross Sections (SURFACE)</source>
-        <translation type="unfinished">Energieüberlappungs-Bereiche prüfen (SURFACE)</translation>
+        <translation type="obsolete">Energieüberlappungs-Bereiche prüfen (SURFACE)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="570"/>
         <source>Calculate Properties (PROP)</source>
-        <translation>Eigenschaften berechnen (PROP)</translation>
+        <translation type="vanished">Eigenschaften berechnen (PROP)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="575"/>
         <source>Momomer Energy Decomposition (MOROKUMA)</source>
-        <translation type="unfinished">Monomer-Energie-Aufteilung (MOROKUMA)</translation>
+        <translation type="obsolete">Monomer-Energie-Aufteilung (MOROKUMA)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="580"/>
         <source>Radiative Transition Moment / Spin-Orbit Coupling (TRANSITN)</source>
-        <translation type="unfinished">Strahlungsübergangs-Moment / Spin-Orbit-Kopplung</translation>
+        <translation type="obsolete">Strahlungsübergangs-Moment / Spin-Orbit-Kopplung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="585"/>
         <source>Apply Finite Electric Fields (FFIELD)</source>
-        <translation>Finite Electric Fields anwenden (FFIELD)</translation>
+        <translation type="vanished">Finite Electric Fields anwenden (FFIELD)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="590"/>
         <source>Time Dependent Polarizabilities (TDHF)</source>
-        <translation>Zeitabhängige Polarisierbarkeiten (TDHF)</translation>
+        <translation type="vanished">Zeitabhängige Polarisierbarkeiten (TDHF)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="595"/>
         <source>Create Effective Fragment Potential (MAKEFP)</source>
-        <translation>Tatsächliches Fragment-Potential erzeugen (MAKEFP)</translation>
+        <translation type="vanished">Tatsächliches Fragment-Potential erzeugen (MAKEFP)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="603"/>
         <source>Basis Set</source>
-        <translation>Basismenge</translation>
+        <translation type="vanished">Basismenge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="615"/>
         <source>Basis Type</source>
-        <translation>Basistyp</translation>
+        <translation type="vanished">Basistyp</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="627"/>
         <source>Gaussian Basis Set Name</source>
-        <translation type="unfinished">Name der Gauß&apos;schen Basismenge</translation>
+        <translation type="obsolete">Name der Gauß&apos;schen Basismenge</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="641"/>
-        <source>Pople N-31G Split Valence Set (N31)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="646"/>
-        <source>Pople N-21G Split Valence Set (N21)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="651"/>
-        <source>Pople N-311G Triple Split Set (N311)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="656"/>
-        <source>Huzinaga 3 Gaussian Minimal (MINI)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="661"/>
-        <source>Huzinage 21 Split Valence Set (MIDI)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="666"/>
-        <source>Pople STO-NG Minimal Set (STO)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="671"/>
-        <source>Double Zeta Valence Set (DZV)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="676"/>
-        <source>Dunning/Hay Double Zeta Set (DH)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="681"/>
-        <source>Triple Zeta Valence Set (TZV)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="686"/>
-        <source>McLean/Chandler Triple Split Set (MC)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="691"/>
-        <source>ECP: Stevens,Basch et al. Valence Set (SBKJC)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="696"/>
-        <source>ECP: Hay/Wat Valence Basis (HW)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="701"/>
         <source>Semi-Empirical MNDO (MNDO)</source>
-        <translation>Semiempirisches MNDO (MNDO)</translation>
+        <translation type="vanished">Semiempirisches MNDO (MNDO)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="706"/>
         <source>Semi-Empirical AM1 (AM1)</source>
-        <translation>Semiempirisches AM1 (AM1)</translation>
+        <translation type="vanished">Semiempirisches AM1 (AM1)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="711"/>
         <source>Semi-Empirical (PM3)</source>
-        <translation type="unfinished">Semiempirisch (PM3)</translation>
+        <translation type="obsolete">Semiempirisch (PM3)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="725"/>
-        <source>Number of Gaussians per Core Shell</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="754"/>
         <source>Number of Heavy Atom Polarization Functions</source>
-        <translation type="unfinished">Anzahl der Polarisationsfunktionen für schwere Atome</translation>
+        <translation type="obsolete">Anzahl der Polarisationsfunktionen für schwere Atome</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="786"/>
         <source>Number of Heavy Atom f-type Polarization Functions</source>
-        <translation type="unfinished">Anzahl der f-Typ-Polarisationsfunktionen für schwere Atome</translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="818"/>
-        <source>Add Diffuse sp Shell to Heavy Atoms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/runGAMESSDialog.ui" line="844"/>
-        <source>Add Diffuse s Shell to Hydrogens</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Anzahl der f-Typ-Polarisationsfunktionen für schwere Atome</translation>
     </message>
 </context>
 <context>
     <name>SetCameraData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="28"/>
+        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="30"/>
         <source>Set Camera</source>
         <translation>Kameraeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="80"/>
         <source>Set camera to new coordinates</source>
-        <translation type="unfinished">Anwenden und Schließen. Kamera auf neue Koordinaten setzten</translation>
+        <translation type="obsolete">Anwenden und Schließen. Kamera auf neue Koordinaten setzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="83"/>
         <source>O&amp;K</source>
-        <translation>O&amp;K</translation>
+        <translation type="vanished">O&amp;K</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="86"/>
-        <source>Alt+K</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="122"/>
         <source>Close window without reseting camera</source>
-        <translation type="unfinished">Schließen und Einstellungen verwerfen. Schlißen ohne Kamera zu setzten</translation>
+        <translation type="obsolete">Schließen und Einstellungen verwerfen. Schlißen ohne Kamera zu setzten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="125"/>
         <source>C&amp;ancel</source>
-        <translation type="unfinished">Abbre&amp;chen</translation>
+        <translation type="obsolete">Abbre&amp;chen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="128"/>
-        <source>Alt+A</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="171"/>
+        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="38"/>
         <source>View point</source>
         <translation>Blickpunkt</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="184"/>
+        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="54"/>
         <source>Look at</source>
         <translation>Blickrichtung</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/setCamera.ui" line="74"/>
+        <source>Look up</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SetClippingData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="28"/>
+        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="30"/>
         <source>Set clipping plane position</source>
         <translation type="unfinished">Clipping-Plane-Position verändern</translation>
     </message>
@@ -8548,17 +7391,17 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="188"/>
+        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="186"/>
         <source>Set camera to new coordinates</source>
         <translation>Anwenden und Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="191"/>
+        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="189"/>
         <source>O&amp;K</source>
         <translation>O&amp;K</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="194"/>
+        <location filename="../../../source/VIEW/DIALOGS/setClippingPlane.ui" line="192"/>
         <source>Alt+K</source>
         <translation></translation>
     </message>
@@ -8566,63 +7409,72 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>ShortcutDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="6"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="18"/>
         <source>Shortcuts</source>
         <translation>Tastenkürzel</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="12"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="24"/>
         <source>Edit Shortcuts</source>
         <translation>Tastenkürzel bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="67"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="80"/>
+        <source>Filter shortcuts by action name…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="90"/>
         <source>Clear</source>
         <translation>Löschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="97"/>
         <source>Search:</source>
         <translation>Suchen:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="84"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="107"/>
         <source>Load/Save Shortcuts from File</source>
         <translation>Tastenkürzel laden/speichern</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="105"/>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="133"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="137"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="165"/>
         <source>Browse your computer for filedestination of the export</source>
         <translation>Computer nach Zielort für den Export durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="108"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="140"/>
         <source>Import</source>
         <translation>Importieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="136"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="168"/>
         <source>Export</source>
         <translation>Exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="155"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="187"/>
         <source>Use Predefined Shortcuts:</source>
         <translation>Vordefinierte Tastenkürzel verwenden:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="163"/>
-        <source>Default Shortcuts (Version 1.3)</source>
-        <translation>Standard-Tastenkürzel (Version 1.3)</translation>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="195"/>
+        <source>Default Shortcuts (Version 1.5)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="168"/>
+        <source>Default Shortcuts (Version 1.3)</source>
+        <translation type="vanished">Standard-Tastenkürzel (Version 1.3)</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="200"/>
         <source>Legacy Shortcuts (Version 1.2)</source>
         <translation>Abwärtskompatible Tastenkürzel (Version 1.2)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="173"/>
+        <location filename="../../../source/VIEW/DIALOGS/shortcutDialog.ui" line="205"/>
         <source>Custom</source>
         <translation>Eigene</translation>
     </message>
@@ -8630,165 +7482,165 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>SnapshotVisualisationDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="25"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="26"/>
         <source>Snapshot Visualisation</source>
         <translation type="unfinished">Momentaufnahmen-Darstellung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="37"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="47"/>
         <source>Navigation</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="74"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="100"/>
         <source>First snapshot</source>
         <translation>Erste Momentaufnahme</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="77"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="103"/>
         <source>|&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="98"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="122"/>
         <source>&lt;&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="119"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="141"/>
         <source>One snapshot backwards</source>
         <translation>Eine Momentaufnahme zurück</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="122"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="144"/>
         <source>&lt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="143"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="163"/>
         <source>One snapshot further</source>
         <translation>Eine Momentaufnahme weiter</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="146"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="166"/>
         <source>&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="167"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="185"/>
         <source>&gt;&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="188"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="204"/>
         <source>Last snapshot</source>
         <translation>Letzte Momentaufnahme</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="191"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="207"/>
         <source>&gt;|</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="206"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="222"/>
         <source>Current</source>
         <translation>Aktuell</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="247"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="263"/>
         <source>Snapshots</source>
         <translation>Momentaufnahmen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="298"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="314"/>
         <source>Close window</source>
         <translation>Fenster schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="301"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="317"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="304"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="320"/>
         <source>Alt+A</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="317"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="333"/>
         <source>Play snapshots </source>
         <translation>Momentaufnahmen abspielen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="320"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="336"/>
         <source>A&amp;nimate</source>
         <translation>A&amp;nimieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="323"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="339"/>
         <source>Alt+N</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="333"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="349"/>
         <source>Animation</source>
         <translation>Animation</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="348"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="373"/>
         <source>Repeat</source>
         <translation>Wiederholung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="366"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="400"/>
         <source>Rock</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="376"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="410"/>
         <source>Loop</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="386"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="420"/>
         <source>Don&apos;t loop</source>
         <translation>Kein Loop</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="419"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="462"/>
         <source>Start</source>
         <translation>Beginn</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="454"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="497"/>
         <source>End</source>
         <translation>Ende</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="477"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="520"/>
         <source>Speed</source>
         <translation>Geschwindigkeit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1000"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="582"/>
         <source>Select animation speed</source>
         <translation>Animationsgeschwindigkeit wählen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1041"/>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1044"/>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1060"/>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1063"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="632"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="635"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="651"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="654"/>
         <source>Export one PNG image for each Snapshot.</source>
         <translation>Ein PNG-Bild für jede Momentaufnahme exportieren.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1047"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="638"/>
         <source>export POVRay</source>
         <translation>POVRay exportieren</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="1066"/>
+        <location filename="../../../source/VIEW/DIALOGS/snapShotVisualisation.ui" line="657"/>
         <source>export PNGs</source>
         <translation>PNGs exportieren</translation>
     </message>
@@ -8811,331 +7663,551 @@ p, li { white-space: pre-wrap; }
         <translation>Hintergrundfarbe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="75"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="171"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="41"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="123"/>
         <source>Edit</source>
         <translation>Bearbeiten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="139"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="105"/>
         <source>Capping planes work almost like clipping planes, but create a solid volume.</source>
         <translation>Capping-Ebenen ähneln Clipping-Ebenen, erzeugen aber ein abgeschlossenes Volumen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="142"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="108"/>
         <source>Capping</source>
         <translation>Capping</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="184"/>
         <source>Color for Caping planes</source>
-        <translation>Farbe der Capping-Ebenen</translation>
+        <translation type="vanished">Farbe der Capping-Ebenen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="164"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="130"/>
         <source>Transparency</source>
         <translation>Transparenz</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="218"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="166"/>
         <source>Misc</source>
         <translation>Sonstiges</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="227"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="237"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="247"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="175"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="185"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="195"/>
         <source>Show the lightsources in the 3D view for easier positioning.</source>
         <translation type="unfinished">Anzeigen der Lichtquellen in der 3D-Ansicht zur leichteren Ausrichtung.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="230"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="178"/>
         <source>Show lightsources in Scene</source>
         <translation>Lichtquellen in der Scene anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="240"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="188"/>
         <source>Show frames per second (FPS)</source>
         <translation>Bildrate (FPS) anzeigen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="250"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="198"/>
         <source>Use faster preview models</source>
         <translation type="unfinished">Schnellere Vorschaumodelle verwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="260"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="208"/>
         <source>Should simple lines be smoothed by OpenGL? Enabling this options can lead to cluttered wireframe and line representations.</source>
         <translation>Sollen linienbasierte Modelle (Drahtgitter- und Linienmodell) durch OpenGL geglättet werden? Das Aktivieren dieser Option kann zu Unübersichtlichkeit führen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="263"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="211"/>
         <source>Smooth Lines</source>
         <translation>Linien glätten</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="290"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="238"/>
         <source>The fog is currently not exported to POVRay</source>
         <translation>Hinweis: Der Nebel wird derzeit nicht nach POVRay exportiert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="293"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="241"/>
         <source>Use Fog</source>
         <translation>Nebel verwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="308"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="311"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="256"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="259"/>
         <source>Intensity of fog</source>
         <translation>Nebelintensität</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="119"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="330"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="540"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="595"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="687"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="760"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="85"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="278"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="353"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="630"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="685"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="812"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="893"/>
         <source>min</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="126"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="337"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="547"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="585"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="677"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="715"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="92"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="285"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="373"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="637"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="675"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="802"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="883"/>
         <source>max</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="97"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="63"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="320"/>
         <source>Smoothness of the interpolation between stored 3D positions.</source>
         <translation type="unfinished">Glattheitsgrad der Interpolation zwischen gespeicherten 3D-Positionen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="353"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="150"/>
+        <source>Color</source>
+        <translation type="unfinished">Farbe</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="307"/>
+        <source>Downsampling factor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="399"/>
+        <source>1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="417"/>
         <source>Use Environment Maps</source>
         <translation>Benutze Environment Maps</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="368"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="432"/>
         <source>up-direction</source>
         <translation type="unfinished">oben (x,y,z)</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="375"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="439"/>
         <source>Direction x</source>
         <translation>x-Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="382"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="446"/>
         <source>Direction y</source>
         <translation>y-Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="389"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="453"/>
         <source>Direction z</source>
         <translation>z-Richtung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="399"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="463"/>
         <source>texture</source>
         <translation>Textur</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="427"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="491"/>
         <source>Browse your computer for amber file</source>
         <translation>Computer nach AMBER-Dateien durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="430"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="494"/>
         <source>Browse</source>
         <translation>Durchsuchen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="443"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="507"/>
         <source>Screenshots can also be created through offscreen rendering, which enables images larger than the screen resolution. Uncheck this if there are poblems with the resulting images.</source>
         <translation>Screenshots können auch via Offscreen-Rendering erstellt werden, was Bilder oberhalb der Bildschirmauflösung ermöglicht. Deaktivieren Sie diese Option, wenn es Probleme mit den resultierenden Bildern gibt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="446"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="510"/>
         <source>Use offscreen rendering for PNGs</source>
         <translation>Benutze Offscreen-Rendering für PNGs</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="473"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="546"/>
         <source>resolution factor</source>
         <translation>Bildauflösungsfaktor</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="515"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="569"/>
+        <source>Rendering Method</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="577"/>
+        <source>OpenGl</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="587"/>
+        <source>Real time ray tracing (RTfact)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="605"/>
         <source>Change sensitivity of mouse wheel. Higher sensitivity means more movement with less moving the wheel.</source>
         <translation type="unfinished">Einstellung der Mausradempfindlichkeit. Höhere Empfindlichkeit führt zu mehr Bewegung beim Scrollen.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="518"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="608"/>
         <source>Mouse wheel sensitivity</source>
         <translation>Mausradempfindlichkeit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="560"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="650"/>
         <source>Change the mouse sensitivity. Greater sensitivity means greater mouse movement on the screen with less movement of the mouse.</source>
         <translation type="unfinished">Einstellung der Mausempfindlichkeit. Höhere Empfindlichkeit führt zu größeren Bewegungen bei gleicher Maushandhabung.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="563"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="653"/>
         <source>Mouse sensitivity</source>
         <translation>Mausempfindlichkeit</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="627"/>
         <source>Stereo: Eye points distance</source>
-        <translation type="unfinished">Stereo: Augenabstand</translation>
+        <translation type="obsolete">Stereo: Augenabstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="642"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="900"/>
         <source>The greater the eye point distance is the greater is the stereo effect.</source>
         <translation>Je größer der Augenabstand ist, desto größer ist der Stereoeffekt.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="667"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="725"/>
-        <source>99.9</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="700"/>
         <source>Stereo: focal distance</source>
-        <translation>Stereo: Brennweite</translation>
+        <translation type="vanished">Stereo: Brennweite</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="783"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="943"/>
         <source>Swap side by side stereo</source>
         <translation type="unfinished">Rechtes und linkes Auge vertauschen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="796"/>
         <source>eye level: </source>
-        <translation>Augenhöhe:</translation>
+        <translation type="vanished">Augenhöhe:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="803"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="725"/>
         <source>180</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="813"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="837"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="861"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="735"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="759"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="783"/>
         <source>cm</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="820"/>
         <source>eye distance: </source>
-        <translation>Augenabstand:</translation>
+        <translation type="vanished">Augenabstand:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="827"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="749"/>
         <source>6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="844"/>
         <source>distance to screen: </source>
-        <translation>Abstand zum Bildschirm:</translation>
+        <translation type="vanished">Abstand zum Bildschirm:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="851"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="773"/>
         <source>150</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="904"/>
         <source>compute default</source>
-        <translation type="unfinished">sinnvolle Ausgangswerte berechnen</translation>
+        <translation type="obsolete">sinnvolle Ausgangswerte berechnen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="927"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="937"/>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="947"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1632"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1642"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1652"/>
         <source>undefined</source>
         <translation>undefiniert</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="995"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1700"/>
         <source>Renderer:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="963"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1668"/>
         <source>Version:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="979"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="712"/>
+        <source>Viewer Position</source>
+        <translation type="unfinished">Position des Betrachters</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="718"/>
+        <source>Eye level: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="742"/>
+        <source>Eye distance: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="766"/>
+        <source>Distance to screen: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="793"/>
+        <source>Update Automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="819"/>
+        <source>Focal distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="832"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="848"/>
+        <source>600.0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="931"/>
+        <source>Eye points distance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="963"/>
+        <source>Compute from Scene</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="991"/>
+        <source>Specify the control display</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="994"/>
+        <source>Control Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1011"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1054"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1074"/>
+        <source>Select a Screen</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1020"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1087"/>
+        <source>Select a Renderer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1031"/>
+        <source>Specify the stereo displays</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1034"/>
+        <source>Stereo Screens</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1046"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1286"/>
+        <source>Left Eye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1066"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1432"/>
+        <source>Right Eye</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1104"/>
+        <source>Stereo Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1113"/>
+        <source>Interlaced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1123"/>
+        <source>Side by Side</source>
+        <translation type="unfinished">Seite an Seite</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1133"/>
+        <source>Top Bottom</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1143"/>
+        <source>Active Stereo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1153"/>
+        <source>Anaglyph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1160"/>
+        <source>Custom</source>
+        <translation type="unfinished">Eigene</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1176"/>
+        <source>Advanced Settings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1182"/>
+        <source>The parameters for interlaced stereo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1209"/>
+        <source>stride</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1219"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1249"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1318"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1349"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1412"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1419"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1464"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1488"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1512"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1536"/>
+        <source>px</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1239"/>
+        <source>offset</source>
+        <translation type="unfinished">Verschiebung</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1283"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1429"/>
+        <source>The parameters for side by side stereo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1301"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1447"/>
+        <source>xmin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1325"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1471"/>
+        <source>ymin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1332"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1495"/>
+        <source>width</source>
+        <translation type="unfinished">Breite</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1356"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1519"/>
+        <source>height</source>
+        <translation type="unfinished">Höhe</translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1582"/>
+        <source>Identify Displays</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1602"/>
+        <source>Protect against override</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1684"/>
         <source>Vendor:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1007"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1712"/>
         <source>Extensions supported by your graphics card</source>
         <translation>Erweiterungen, die von Ihrer Grafikkarte unterstützt werden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1016"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1721"/>
         <source>Select to use OpenGL vertex buffer. Results in greater performance.</source>
         <translation>Wähle Benutzung vom OpenGL vertex buffer für schnellere Ausführung.</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1019"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1724"/>
         <source>Use OpenGL Vertex Buffer Objects</source>
         <translation>Benutze OpenGL Vertex Buffer Objekte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1029"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1734"/>
         <source>Projection Transformations:</source>
         <translation>Projektions-Transformationen:</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1038"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1743"/>
         <source>perspective projection</source>
         <translation>Perspektivische Projektion</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1051"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1756"/>
         <source>orthographic projection</source>
         <translation>Orthographische Projektion</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1067"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1772"/>
         <source>Resolution</source>
         <translation>Bildauflösung</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1073"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1778"/>
         <source>spheres detail level</source>
         <translation>Feinheit der Triangulationsdichte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1106"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1811"/>
         <source>tube points</source>
         <translation type="unfinished">Röhrenpunkte</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1099"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1804"/>
         <source>3</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1135"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="1840"/>
         <source>20</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="88"/>
+        <location filename="../../../source/VIEW/DIALOGS/stageSettings.ui" line="54"/>
         <source>Animation Smoothness</source>
         <translation>Glattheitsgrad der Animation</translation>
     </message>
@@ -9143,106 +8215,106 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>StereoSettingsDialogData</name>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="25"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="26"/>
         <source>Set Camera</source>
         <translation>Kameraeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="40"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="50"/>
         <source>Screen Size</source>
         <translation>Bildschirmgröße</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="52"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="62"/>
         <source>height</source>
         <translation>Höhe</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="65"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="75"/>
         <source>width</source>
         <translation>Breite</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="98"/>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="111"/>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="144"/>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="157"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="108"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="121"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="154"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="167"/>
         <source>cm</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="122"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="132"/>
         <source>Viewer Position</source>
         <translation>Position des Betrachters</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="170"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="180"/>
         <source>height relative to screen</source>
         <translation>Augenhöhe relativ zur Bildschirmunterkante</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="193"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="203"/>
         <source>distance from screen</source>
         <translation>Bildschirmabstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="201"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="211"/>
         <source>Stereo Settings</source>
         <translation>Steroskopische Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="213"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="223"/>
         <source>eye separation</source>
         <translation>Augenabstand</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="226"/>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="272"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="236"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="282"/>
         <source>A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="249"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="259"/>
         <source>focal distance</source>
         <translation>Brennweite</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="285"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="295"/>
         <source>Reset to Standard</source>
         <translation>Standardeinstellungen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="321"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="338"/>
         <source>Set camera to new coordinates</source>
         <translation>Anwenden und Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="324"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="341"/>
         <source>O&amp;K</source>
         <translation>O&amp;K</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="327"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="344"/>
         <source>Alt+K</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="337"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="354"/>
         <source>&amp;Apply</source>
         <translation>&amp;Anwenden</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="364"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="379"/>
         <source>Close window without reseting camera</source>
         <translation>Schließen und Einstellungen verwerfen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="367"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="382"/>
         <source>C&amp;ancel</source>
         <translation>&amp;Schließen</translation>
     </message>
     <message>
-        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="370"/>
+        <location filename="../../../source/VIEW/DIALOGS/stereoSettingsDialog.ui" line="385"/>
         <source>Alt+A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9299,6 +8371,14 @@ p, li { white-space: pre-wrap; }
         <location filename="../../../source/VIEW/DIALOGS/undoManagerDialog.ui" line="91"/>
         <source>&amp;Close</source>
         <translation>&amp;Schließen</translation>
+    </message>
+</context>
+<context>
+    <name>editorPDBInfoDialog</name>
+    <message>
+        <location filename="../../../source/VIEW/DIALOGS/editorPDBInfoDialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
