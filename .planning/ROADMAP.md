@@ -2033,22 +2033,71 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.42 lands)
 
-### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (BACKLOG · TARGETED FOR v1.8)
+### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Collapse the modal-dialog soup (Display, Model, Material, Light, Stage, Stereo, Clipping, Coloring, Label, Modify Representation — 10+ dialogs) into a single **right-rail Inspector dock** with collapsible sections, live preview, and tabs organized by *subject* (Selection · Representation · Scene · Stage).
+**Goal:** Collapse the modal-dialog soup (Display, Model, Material, Light, Stage, Stereo, Clipping, Coloring, Label, Modify Representation — 10+ dialogs) into a single **right-rail Inspector dock** with collapsible sections, live preview, and tabs organized by *subject* (Selection · Representation · Scene).
 
-**Why v1.8 not v1.7-tail:** Biggest single architectural piece in the entire Refresh — replaces 10+ modal dialogs with one dock + tabs + live preview. Gates on **maintainer-Q2** (workspace classic-vs-new). Deserves its own marketing release.
+**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4 per user direction "keep everything in 1.7." Biggest single architectural piece in the entire Refresh — replaces 10+ modal dialogs with one dock + tabs + live preview. Maintainer-Q2 RESOLVED (Classic-coexistence design); sequencing accommodates running 999.44 ‖ 999.45 in parallel (different file trees).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/04-phase-inspector.md`.
 
-**Depends on:** 999.40 (theme foundation), 999.41 (SVG icons), 999.42 (palette removal), 999.43 (simple-dialog patterns), maintainer-Q2.
+**Depends on:** 999.40 (theme foundation), 999.41 + 999.42 carry-overs (SVG icons + `Icons::get`), 999.42 (palette removal), 999.43 (4 shared widgets — `SectionHeader` / `FormRow` / `LabeledSlider` / `SwatchButton`), maintainer-Q2 RESOLVED.
 
-**Estimated effort:** ~3-4 weeks (the Handover doc has detailed acceptance criteria).
+**Renderer-interface boundary (SEED-001 step 5):** bind to the **post-Phase-02.1 renderer interface** (`Renderer` / `RenderSurface`), NOT today's GL types — several replaced dialogs touch renderer/scene settings. See `.planning/RENDERER-INTERFACE-BOUNDARY.md` for the contract.
+
+**Scope (6 named sub-PRs per Handover §04-phase-inspector.md §"Sub-PR breakdown"):**
+| Sub-PR | Title | LOC est. | Behind `BALL_UI_V2` |
+|--------|-------|----------|---------------------|
+| **4.1** | Inspector shell + tabs + dock plumbing | ~600 | yes |
+| **4.2** | Selection tab + selection bus | ~800 | yes |
+| **4.3** | Representation tab: Model + Coloring | ~1200 | yes |
+| **4.4** | Representation tab: Material + Label + Clip | ~900 | yes |
+| **4.5** | Scene tab: Camera + Lights + Stage + Stereo | ~1100 | yes |
+| **4.6** | Legacy dialog deprecation + retire flag | ~200 | merged once 4.1-4.5 stable |
+
+**Scope (architecture):**
+- **`InspectorDock`** (`QDockWidget`, right area) → **`InspectorView`** (root) → **`InspectorTabs`** (`QTabBar`, 3 tabs) + **`InspectorBody`** (`QStackedWidget`).
+- **3 tabs with ~13 named sections replacing 10+ legacy dialogs:**
+  - **Selection** — `SelectionSummarySection` + `PropertiesSection` + `QuickActionsSection`.
+  - **Representation** — `RepHeaderSection` + `ModelSection` (← `ModelSettingsDialog`) + `ColoringSection` (← `ColoringSettings`) + `MaterialSection` (← `MaterialSettings`) + `LabelSection` (← `LabelDialog`) + `ClipSection` (← `ClippingDialog`).
+  - **Scene** — `CameraSection` (← `SetCamera`) + `LightsSection` (← `LightSettings`) + `StageSection` (← `StageSettings`) + `StereoSection` (← `StereoSettings`) + `BackgroundSection`.
+
+**Scope (`*Controller` extraction — PRIMARY RISK MITIGATION per Handover §Risks):**
+- **Pre-refactor commit:** extract business logic from each legacy dialog `.C` into a `*Controller` class. Both surfaces (legacy dialog + new Inspector section) use the same controller — consistency between the two during the coexistence period is GUARANTEED by construction, not by message-bus discipline. This is the single biggest risk mitigation in the Inspector phase.
+
+**Scope (live-preview + persistence + UX):**
+- **Live 100ms-debounced commits** — every control commits on change with a 100 ms debounce; no "Apply" buttons.
+- **Section state persistence** in `~/.BALLView` under `[Inspector]` INI schema:
+  ```ini
+  [Inspector]
+  visible=true
+  tab=Representation
+  Selection.Properties=expanded
+  Representation.Model=expanded
+  Representation.Coloring=expanded
+  Representation.Material=collapsed
+  ```
+  Read on construction, write on every change.
+- **Collapse animation** — `QPropertyAnimation` on `maximumHeight`, duration 160 ms, easing `OutCubic`. Section header is a 36px row: 12px chevron, 14pt semibold title, spacer, optional mini-icons (reset, help).
+- **Empty states** — when no selection / no representation / no scene state, the relevant tab shows an illustrated empty state (see Handover mockup).
+- **`Tools › Legacy Settings` interim home** — legacy dialogs remain reachable from `Tools › Legacy Settings › …` for one release WITH a one-time first-launch migration notice ("Display, Model, Material, Light, and other settings are now in the Inspector on the right. Old dialogs are still accessible under Tools › Legacy Settings."). **Flag: 999.48 §8.8 REMOVES `Tools › Legacy Settings` submenu entirely.**
+
+**Acceptance criteria:**
+- Right-rail Inspector visible on launch with `BALL_UI_V2=ON`.
+- Loading a PDB and selecting a residue updates Selection tab live.
+- Switching representation in the Project dock (999.45) updates Representation tab live.
+- All controls debounce-commit at 100 ms; no flicker / no excessive re-renders.
+- Section collapse state persists across restart (`[Inspector]` schema written + read correctly).
+- Inspector hideable via `View › Hide Inspector` and `⌘\` / `Ctrl+\`.
+- Legacy dialogs still reachable from `Tools › Legacy Settings` and produce identical scene state changes (controller-shared invariant).
+- Pixel-diff regression against Handover mockups < 5% per tab.
+
+**Estimated effort:** ~3-4 weeks (longest pole in Wave 4 — run parallel with 999.45 which touches different file trees).
 
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (v1.8 promotion; do NOT start before v1.7 closes + maintainer-Q2 answered)
+- [ ] TBD (promote with /gsd-plan-phase after 999.43 lands shared widgets)
 
 ### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (BACKLOG · TARGETED FOR v1.8)
 
