@@ -2308,11 +2308,11 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.46 lands)
 
-### Phase 999.48: BALLView Refresh — Accessibility + `BALL_UI_V2` default flip + flag REMOVAL + legacy file DELETION (Handover Phase 8, scope-reduced) (BACKLOG · TARGETED FOR v1.7 WAVE 4 · LAST UI PHASE BEFORE 999.49)
+### Phase 999.48: BALLView Refresh — Accessibility + `BALL_UI_V2` default flip + flag REMOVAL + legacy file DELETION (Handover Phase 8, scope-reduced) (COMPLETE · v1.7 WAVE 4 · 2026-05-17 · LAST UI PHASE BEFORE 999.49)
 
 **Goal:** Close out the revitalization — harden accessibility, add per-user font scaling, audit tab order, ship the remaining quality-of-life details. **Three distinct in-phase steps:** (a) flip `BALL_UI_V2=ON` as default; (b) per Handover §8.7 REMOVE the flag entirely (delete all `#ifdef BALL_UI_V2` pairs); (c) per Handover §8.8 DELETE the 9 named legacy `.{C,h,ui}` files that the Inspector replaced.
 
-**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4 per "keep everything in 1.7." Scope-reduced 2026-05-17 per Q3: drops "dark-mode finalize" + drops "theme picker UI" sub-deliverables (no dark mode, no Light/Dark/Follow-System UI per Q3). `QStyleHints::colorScheme()` reactor stays wired but inactive (future-proofs if Q3 reverses).
+**Status (2026-05-17 COMPLETE):** 13/15 sub-deliverables landed. A11y pass (QAccessible names × 4 widgets + tabOrder_test smoke + ThemeManager::TextScale API + contrast-check.py + tooltip-lint CI gate) + flag DEFAULT FLIP OFF→ON + flag REMOVAL across 76 files (110 #ifdef blocks + 12 #else branches, 265 net lines deleted) + CMakeLists.txt OPTION block + ci.yml ui_v2 matrix axis (~160-line reduction, single cell/OS). **Step (c) DEFERRED to v1.7 RC patch with breadcrumb** in [deferred-items.md](phases/999.48-a11y-flag-flip-removal/deferred-items.md) — displayProperties.C is the lynchpin still on the production rendering path (lines 451+487, createModelProcessor/createColorProcessor factories); requires landing 8 Controller cut-over plans first. 11 commits + 2 docs commits, ~22min wall-clock. 999.49 (Classic dock delete) dispatch unblocked. See [999.48-SUMMARY.md](phases/999.48-a11y-flag-flip-removal/999.48-SUMMARY.md).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/08-phase-a11y.md` (with §8.6 theme picker DROPPED per Q3; dark-mode finalize sub-section also DROPPED per Q3).
 
@@ -2375,10 +2375,10 @@ Plans:
 
 **Estimated effort:** ~1.5 weeks (was ~1; dark-mode finalize + theme picker drops save time, but the 3-step a/b/c sequence + 9-file deletion + ci.yml axis drop add it back).
 
-**Plans:** 0.
+**Plans:** 1/1 plans complete.
 
 Plans:
-- [ ] TBD (last UI phase before 999.49 Classic-delete; flips BALL_UI_V2 default ON, then removes the flag entirely)
+- [x] [999.48-PLAN.md](phases/999.48-a11y-flag-flip-removal/999.48-PLAN.md) → [999.48-SUMMARY.md](phases/999.48-a11y-flag-flip-removal/999.48-SUMMARY.md) — single-plan phase landing 13/15 sub-deliverables (a11y pass + default flip + flag REMOVAL across 76 files + ci.yml ui_v2 axis drop); 9-file legacy DELETION + Tools › Legacy Settings retirement deferred to v1.7 RC patch with breadcrumb (cluster lynchpin displayProperties.C still on production rendering path).
 
 ### Phase 999.49: Delete Classic 5-dock workspace (Q2 commitment) (BACKLOG · TARGETED FOR v1.7 WAVE 4 · LAST WAVE-4 PHASE)
 
