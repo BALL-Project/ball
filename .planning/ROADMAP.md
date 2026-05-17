@@ -2105,11 +2105,11 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.43 lands shared widgets)
 
-### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (COMPLETE · v1.7 Wave 4 · 2026-05-17)
 
 **Goal:** Replace the five-docks-on-startup layout with a sane default — left "Project" dock, right Inspector dock (999.44), bottom collapsed drawer for Logs/FileObserver. Expose a "Workspace" picker (Default / Classic / Focused) so power users keep their old layout if they want.
 
-**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4. Maintainer-Q2 RESOLVED (Classic-coexistence period; new **Phase 999.49** deletes Classic post-999.48 in the same v1.7 RC cycle). Pairs with 999.44 Inspector. Can run in parallel with 999.44 (different file trees: Inspector is `source/VIEW/WIDGETS/inspector/*`, Workspace is `source/VIEW/WIDGETS/projectDock.*` + `bottomDrawer.*` + `KERNEL/workspaceManager.*` + `KERNEL/configMigration.C`).
+**Status:** **COMPLETE 2026-05-17.** 8/8 sub-items shipped: `ProjectDock` (left-rail tabify helper), `BottomDrawer` (24px↔240px QPropertyAnimation), `WorkspaceManager` (3-preset singleton with JSON descriptors), 3 `.layout` files, first-run QMessageBox prompt, `~/.BALLView.pre-v2.bak` auto-backup, status-bar clickable `WorkspaceStatusLabel`, `ConfigMigration` (legacy `~/.BALLView` → XDG/AppSupport/AppData via `QStandardPaths::AppConfigLocation`). Local macOS-arm64 smoke build: BALL_UI_V2=ON → BALLView app links clean; OFF cell blocked by pre-existing 999.44 Inspector vtable issue (logged for 999.44 follow-up; 999.45 sources compile clean in both cells). See [999.45-01-SUMMARY.md](phases/999.45-workspace-consolidation/999.45-01-SUMMARY.md) for full task table, decisions, and deferred items.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/05-phase-workspace.md`.
 
@@ -2154,10 +2154,10 @@ Plans:
 
 **Estimated effort:** ~1.5-2 weeks (was ~1-2; `configMigration.C` adds ~3 days, picker-with-3-presets unchanged from 2-preset estimate).
 
-**Plans:** 0.
+**Plans:** 1/1 plan complete.
 
 Plans:
-- [ ] TBD (promote with /gsd-plan-phase in parallel with 999.44 after 999.43 lands)
+- [x] [999.45-01-PLAN.md](phases/999.45-workspace-consolidation/999.45-01-PLAN.md) — 11-task plan. Result: [999.45-01-SUMMARY.md](phases/999.45-workspace-consolidation/999.45-01-SUMMARY.md). 7 source commits (PLAN + 4 feat + 1 feat + 1 docs final) under the `(999.45/NN)` scope prefix. Note: deferred items in [deferred-items.md](phases/999.45-workspace-consolidation/deferred-items.md) flag two 999.44-owned issues surfaced during 999.45 execution (cmake macro — already resolved by concurrent 999.44 agent; OFF-cell Q_OBJECT vtable ifdef — pending 999.44 fix).
 
 ### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
