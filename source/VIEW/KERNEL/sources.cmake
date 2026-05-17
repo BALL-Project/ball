@@ -25,11 +25,11 @@ SET(SOURCES_LIST
 	theme/themeManager.C
 	theme/themedIconEngine.C
 	theme/iconRegistry.C
-	# Phase 999.45 — BALLView Refresh: Workspace consolidation. The class
-	# compiles in both BALL_UI_V2=ON and OFF cells (Q_OBJECT singleton in
-	# VIEW); Mainframe only wires it in under the ifdef. ConfigMigration
-	# (Task 6) is added to this list when it lands.
+	# Phase 999.45 — BALLView Refresh: Workspace consolidation. Both
+	# classes compile in BALL_UI_V2=ON and OFF cells (ifdef-free);
+	# Mainframe only wires them in under the BALL_UI_V2 ifdef.
 	workspaceManager.C
+	configMigration.C
 )
 
 # Phase 999.45 — workspaceManager.h has Q_OBJECT (both WorkspaceManager
