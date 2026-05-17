@@ -66,6 +66,13 @@ namespace BALL
 				*/
 				void setSuffix(String s) { suffix_ = s;}
 
+				/** Pre-fill the PDB ID input field.
+						Used by the `ballview://open?pdb=<id>` URL handler so the
+						user lands in the downloader with the ID already populated.
+						Pass an empty string to clear the current selection.
+				*/
+				void setPdbId(const String& id);
+
 				///
 				void checkMenu(MainControl& mc);
 

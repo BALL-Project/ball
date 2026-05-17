@@ -736,13 +736,12 @@ namespace BALL
 			if (!pdb.isEmpty())
 			{
 				// Surface the PDB downloader; user confirms the fetch.
+				// v1.7 RC patch (#999.47-followup) — DownloadPDBFile now
+				// exposes setPdbId so the ID arrives pre-filled.
 				DownloadPDBFile* dlg = DownloadPDBFile::getInstance(0);
 				if (dlg)
 				{
-					// No public "pre-fill the ID" API; just surface
-					// the dialog. A future iteration could push a
-					// pre-filled query when the dialog grows that hook.
-					(void) pdb;
+					dlg->setPdbId(String(pdb.toStdString()));
 					dlg->show();
 				}
 				return;

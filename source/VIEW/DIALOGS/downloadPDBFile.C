@@ -79,6 +79,15 @@ namespace BALL
 			setIcon(menu_id_, "actions/download-pdb", true);
 		}
 
+		void DownloadPDBFile::setPdbId(const String& id)
+		{
+			// pdbId is the editable QComboBox declared in
+			// ui_downloadPDBFile.h. setEditText drives both the
+			// visible line edit and currentText(), so slotDownload
+			// will pick the new id up unmodified.
+			pdbId->setEditText(QString::fromStdString(id));
+		}
+
 		void DownloadPDBFile::slotDownload()
 		{
 			String id = ascii(pdbId->currentText());
