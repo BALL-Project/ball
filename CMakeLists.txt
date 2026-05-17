@@ -286,7 +286,10 @@ OPTION(BALL_HAS_VIEW "Compile BALL's VIEW library required for visualization and
 ## instantiated — the user-visible app is bit-for-bit identical to the
 ## pre-refresh baseline. Per maintainer-Q3 the v1.7 refresh ships a
 ## single neutral theme only (no light/dark/follow-system modes).
-OPTION(BALL_UI_V2 "Enable revitalized BALLView UI (Phase 999.40+, Handover Phase 0)" OFF)
+## Phase 999.48 §8.7 step (a): flag DEFAULT FLIP from OFF → ON.
+## v1.7 BALLView Refresh becomes the default. Users can still override
+## with -DBALL_UI_V2=OFF until step (b) removes the flag entirely.
+OPTION(BALL_UI_V2 "Enable revitalized BALLView UI (Phase 999.40+, Handover Phase 0)" ON)
 
 ## Phase 5 renderer-backend spike (THROWAWAY prototype — Plan 05-05 / 05-06).
 ## Selects between OFF (default, production fixed-function path), "GLCore"
