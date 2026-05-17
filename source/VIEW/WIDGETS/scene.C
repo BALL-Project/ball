@@ -16,7 +16,7 @@
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -1269,7 +1269,6 @@ namespace BALL
 		// ###########################MENUES##################################
 		void Scene::initializeWidget(MainControl& main_control)
 		{
-			IconLoader& loader = IconLoader::instance();
 			setMinimumSize(10, 10);
 
 			main_control.initPopupMenu(MainControl::DISPLAY);
@@ -1477,7 +1476,7 @@ namespace BALL
 				connect(switch_grid_, SIGNAL(triggered()), this, SLOT(switchShowGrid()));
 				switch_grid_->setCheckable(true);
 				switch_grid_->setChecked(false);
-				switch_grid_->setIcon(loader.getIcon("actions/measure"));
+				switch_grid_->setIcon(Icons::get("actions/measure"));
 				toolbar_actions_view_controls_.push_back(switch_grid_);
 				shortcut_registry->registerShortcut(description, switch_grid_);
 
@@ -1496,7 +1495,7 @@ namespace BALL
 				connect(toggle_continuous_loop_action_, SIGNAL(triggered()), this, SLOT(toggleContinuousLoop()));
                 toggle_continuous_loop_action_->setCheckable(true);
 				toggle_continuous_loop_action_->setChecked(false);
-				toggle_continuous_loop_action_->setIcon(loader.getIcon("actions/continuous-loop"));
+				toggle_continuous_loop_action_->setIcon(Icons::get("actions/continuous-loop"));
 				toolbar_actions_view_controls_.push_back(toggle_continuous_loop_action_);
 				shortcut_registry->registerShortcut(description, toggle_continuous_loop_action_);
 			}
@@ -1531,7 +1530,7 @@ namespace BALL
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
 				description = "Shortcut|QuicklyAssignBondOrders";
-				bondorders_action_ = new QAction(loader.getIcon("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
+				bondorders_action_ = new QAction(Icons::get("actions/molecule-assign-bond-orders"), tr("Quickly optimize bond orders"), this);
 				bondorders_action_->setObjectName(bondorders_action_->text());
 				bondorders_action_->setToolTip(tr("Compute the bond orders of the highlighted structures"));
 				connect(bondorders_action_, SIGNAL(triggered()), this, SLOT(computeBondOrders()));
@@ -1542,7 +1541,7 @@ namespace BALL
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
 				description = "Shortcut|QuicklyOptimizeStructure";
-				optimize_action_ = new QAction(loader.getIcon("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
+				optimize_action_ = new QAction(Icons::get("actions/molecule-minimize"), tr("Quickly optimize structure"), this);
 				optimize_action_->setObjectName(optimize_action_->text());
 				optimize_action_->setToolTip(tr("Quickly optimize the highlighted structure"));
 				connect(optimize_action_, SIGNAL(triggered()), this, SLOT(optimizeStructure()));
@@ -1553,7 +1552,7 @@ namespace BALL
 			if (UIOperationMode::instance().getMode() <= UIOperationMode::MODE_ADVANCED)
 			{
 				description = "Shortcut|SaturateWithHydrogens";
-				add_hydrogens_action_ = new QAction(loader.getIcon("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
+				add_hydrogens_action_ = new QAction(Icons::get("actions/molecule-add-hydrogens"), tr("Saturate with Hydrogens"), this);
 				add_hydrogens_action_->setToolTip(tr("Saturate the highlighted structure with hydrogens (with regards to formal charges)"));
 				add_hydrogens_action_->setObjectName(add_hydrogens_action_->text());
 				connect(add_hydrogens_action_, SIGNAL(triggered()), this, SLOT(saturateWithHydrogens()));
