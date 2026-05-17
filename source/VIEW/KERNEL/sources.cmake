@@ -25,7 +25,19 @@ SET(SOURCES_LIST
 	theme/themeManager.C
 	theme/themedIconEngine.C
 	theme/iconRegistry.C
+	# Phase 999.45 — BALLView Refresh: Workspace consolidation. The class
+	# compiles in both BALL_UI_V2=ON and OFF cells (Q_OBJECT singleton in
+	# VIEW); Mainframe only wires it in under the ifdef. ConfigMigration
+	# (Task 6) is added to this list when it lands.
+	workspaceManager.C
 )
+
+# Phase 999.45 — workspaceManager.h has Q_OBJECT (both WorkspaceManager
+# itself AND the inline WorkspaceStatusLabel companion). CMAKE_AUTOMOC is
+# project-wide ON for VIEW, but Q_OBJECT in a header without a paired .C
+# of the same name needs to be listed explicitly so moc is invoked on the
+# header.
+SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} workspaceManager.C)
 
 SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} serverWidget.C)
 
