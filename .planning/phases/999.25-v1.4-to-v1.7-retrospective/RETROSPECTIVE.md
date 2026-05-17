@@ -138,26 +138,46 @@ runbook in `APPCAST-PUBLISHING-RUNBOOK.md`. Sparkle hooks into the
 QApplication event loop and runs the v1.x → v1.x+1 update flow without
 the user re-visiting GitHub Releases.
 
-### 4.4 BALLView Refresh — Wave 4 design-system foundation (Phase 999.40-999.43)
+### 4.4 BALLView Refresh — full Wave 4 (Phase 999.40-999.49)
 
 A handover package (`/Users/kohlbach/Claude/BALL/Claude Design Handover/`)
-specifies 8 UI revitalization phases. v1.7 ships the **foundation
-subset** (Phases 999.40-999.43) **behind the `BALL_UI_V2` CMake flag,
-which defaults OFF**. v1.7 RC ships with the classic UI; users can opt
-in via `-DBALL_UI_V2=ON`. v1.8 flips the default and lands the heavier
-phases (999.44 Unified Inspector, 999.45 Workspace consolidation,
-999.46 Menus + command palette, 999.47 Onboarding, 999.48 a11y).
+specifies 8 UI revitalization phases. **As of 2026-05-17 user direction
+("keep everything in 1.7"), v1.7 ships the full Refresh** — all 8
+Handover phases mapped to ROADMAP §999.40-999.48, plus §999.49
+(Classic-dock delete per Q2). The original v1.7 / v1.8 split is
+superseded; SEED-001 status changed `promoted-subset` → `promoted-full`.
+
+Phases land **behind the `BALL_UI_V2` CMake flag** (default OFF through
+999.47), then **999.48 flips the default ON and removes the flag**
+(per Handover §8.7-8.8). v1.7 RC stages can be tested with the flag
+either way; v1.7 final ships `BALL_UI_V2=ON` default — matching
+Handover intent (Phase 8 was always the flip-owner regardless of
+release boundary) and giving the new UI a real validation window
+in the v1.7 RC cycle.
 
 Maintainer-question resolutions (2026-05-17, Phase 999.1):
 - macOS menu bar: keep inline, do NOT use `QAction::setMenuRole`
-- Classic 5-dock workspace: retire after v1.8
-- Theme picker: **single neutral theme** (no Light/Dark/Follow-System)
-- Translation churn: community translation round during v1.8 cycle
+  (About/Preferences/Quit get `setMenuRole(...Standard)` — Q1-compatible
+  per 999.46)
+- Classic 5-dock workspace: ships alongside Default + Focused in 999.45,
+  deleted by 999.49 (same v1.7 RC cycle)
+- Theme picker: **single neutral theme** (no Light/Dark/Follow-System).
+  ThemedIconEngine still ships (in 999.42) but for state tints
+  — Normal/Active/Selected/Disabled — not theme tints.
+- Translation churn: community translation round during v1.7 RC cycle
+  (Q4 re-pinned from v1.8 to v1.7 along with the Refresh pull-in);
+  `[i18n]` commit-prefix discipline + translator mailing-list announce
+  in v1.7 RC notes per 999.46.
 
 The single-theme decision (Q3) reframed Phase 999.42's value from
-"dark-mode unlock" to "OS-palette inheritance hygiene". 999.42 still
-ships in v1.7 tail; the Phase 999.48 sub-deliverable "dark-mode
-finalize" drops.
+"dark-mode unlock" to "OS-palette inheritance hygiene + state-tint
+icon engine". The Phase 999.48 sub-deliverable "dark-mode finalize"
+drops; the flag-removal + 9-file legacy deletion (Handover §8.7-8.8)
+remain.
+
+Wave 4 mass: ~10-13 weeks of net-new UI work, re-baselining the
+v1.7-RC-1 tag timeline to ~2.5-3 months. Sequencing:
+`999.42 → 999.43 → 999.44 ∥ 999.45 → 999.46 → 999.47 → 999.48 → 999.49`.
 
 ### 4.5 Dual-SKU Linux packaging scaffold (Phase 08c)
 
@@ -195,7 +215,10 @@ the v1.6 era:
 
 ### 5.1 Unresolved at v1.7 tag
 
-Items that did not close inside v1.7 and survive into v1.8 / v2.0.
+Items that did not close inside v1.7 and survive into v2.0+.
+(Per 2026-05-17 user direction the v1.8 milestone is empty —
+BALLView Refresh fully pulled into v1.7 — so this section now
+projects directly to v2.0.)
 
 | Item | Where | Disposition |
 |---|---|---|
@@ -208,7 +231,7 @@ Items that did not close inside v1.7 and survive into v1.8 / v2.0.
 | **CIF Bison grammar shift-reduce conflicts** | Phase 999.23 | 5 shift/reduce conflicts on Bison 3.8.2 + 19 `-Wformat-truncation` warnings on the generated parser. Audit phase queued. |
 | **No `BUILD-windows.md`** | Doc-tree gap | `BUILD-macos.md` and `BUILD-linux.md` ship. The Windows from-source build path lives in `.github/workflows/ci.yml` + `vcpkg.json` + Phase 08b runbooks but lacks a single from-source guide for downstream users. Filed as a gap by Phase 999.25 (this retrospective). |
 | **Doc-rot in `doc/TUTORIAL/`** | Phase 999.25b (parallel async sweep) | Tutorial sample compile-check + update sweep runs async post-v1.7-tag (2-5 days). Most v1.4-era samples likely fail against the v1.7 API. |
-| **Translation churn** | Phase 999.46 (v1.8) | `BALLView-de_DE.ts` and `BALLView-zh_TW.ts` carry orphan VRML strings + ~40% stale from the v1.8 menu reorg. Community translation round runs during v1.8 cycle. |
+| **Translation churn** | Phase 999.46 (v1.7 Wave 4) | `BALLView-de_DE.ts` and `BALLView-zh_TW.ts` carry orphan VRML strings + ~40% stale from the v1.7 menu reorg (999.46 §menu-remap). Community translation round runs during v1.7 RC cycle (Q4 re-pinned 2026-05-17). `[i18n]` commit-prefix discipline + translator mailing-list announce in v1.7 RC notes. |
 
 ### 5.2 Deferred to v2.0+
 
@@ -233,8 +256,9 @@ These are explicit out-of-scope items from `.planning/v1.7-PLAN.md`
 
 ### 5.3 Active seeds (`.planning/seeds/`)
 
-- `SEED-001-ballview-refresh-ui-milestone.md` — promoted-subset (Phases
-  999.40-999.43 in v1.7; 999.44-999.48 in v1.8).
+- `SEED-001-ballview-refresh-ui-milestone.md` — promoted-full (Phases
+  999.40-999.49 all in v1.7; full Handover scope pulled in 2026-05-17
+  per user direction "keep everything in 1.7").
 - `SEED-005-1-ci-aqtinstall-modules-fixup.md` — resolved by Phase 5.1 D2/D3/D6 + commit `54da903`.
 - `SEED-005-2-ci-vcpkg-baseline-fixup.md` — resolved by Phase 4 vcpkg manifest + Phase 5.1 Tier-B.
 - `SEED-005-3-windows-vm-driver-capture.md` — superseded; user-verified Windows VM render 2026-05-16.
