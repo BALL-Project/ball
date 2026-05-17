@@ -11,12 +11,38 @@
 #include <BALL/VIEW/KERNEL/theme/tokens.h>
 
 #include <QtCore/QFile>
+#include <QtCore/QMutexLocker>
 #include <QtGui/QColor>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QImage>
 #include <QtGui/QPainter>
 #include <QtGui/QScreen>
 #include <QtSvg/QSvgRenderer>
+
+#include <cmath>
+
+namespace
+{
+	/// v1.7-RC1 C-7 — DPR bucket quantizer. System DPRs are typically
+	/// {1.0, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0}; the visual difference
+	/// between adjacent buckets is below human-perceptible for icon
+	/// rasterization, but each unique DPR creates a separate cache
+	/// entry. Collapse onto a small fixed bucket set to bound cache
+	/// growth.
+	qreal quantize_dpr(qreal dpr)
+	{
+		static const qreal kBuckets[] = { 1.0, 1.5, 2.0, 3.0 };
+		qreal best = kBuckets[0];
+		for (qreal b : kBuckets)
+		{
+			if (std::abs(dpr - b) < std::abs(dpr - best))
+			{
+				best = b;
+			}
+		}
+		return best;
+	}
+} // anonymous
 
 namespace BALL
 {
@@ -27,7 +53,8 @@ namespace BALL
 
 			ThemedIconEngine::ThemedIconEngine(const QString& name)
 				: QIconEngine(),
-				  name_(name)
+				  name_(name),
+				  cache_(64)  // v1.7-RC1 C-7 — bound per-engine cache to 64 entries (LRU)
 			{
 				// Allow callers to pass either the bare key ("actions/foo") or
 				// the full resource path (":/icons/actions/foo.svg"). Normalize
@@ -141,15 +168,36 @@ namespace BALL
 				{
 					dpr = QGuiApplication::primaryScreen()->devicePixelRatio();
 				}
+				// v1.7-RC1 C-7 — quantize DPR to a small bucket set BEFORE
+				// key construction so non-integral system DPRs collapse
+				// (1.25 → 1.5, 1.75 → 2.0, 2.5 → 2.0, …). Visual diff
+				// below human-perceptible for icon sizes.
+				const qreal bucketed = quantize_dpr(dpr);
 
-				const QString key = cacheKey_(size, mode, dpr);
-				const auto hit = cache_.find(key);
-				if (hit != cache_.end())
+				const QString key = cacheKey_(size, mode, bucketed);
+
+				// v1.7-RC1 C-8 — single mutex guards both lookup and insert.
+				// QCache::object returns a pointer that QCache OWNS — we
+				// copy the QPixmap before releasing the lock so the
+				// returned value survives any concurrent eviction.
 				{
-					return hit.value();
+					QMutexLocker locker(&cache_mutex_);
+					if (QPixmap* hit = cache_.object(key))
+					{
+						return *hit;  // copy under lock
+					}
 				}
-				QPixmap rendered = render_(size, mode, dpr);
-				cache_.insert(key, rendered);
+
+				// Render OUTSIDE the lock — render_() does no cache_
+				// access and can be costly (QSvgRenderer + raster).
+				QPixmap rendered = render_(size, mode, bucketed);
+
+				{
+					QMutexLocker locker(&cache_mutex_);
+					// QCache::insert takes ownership of the QPixmap*;
+					// cost defaults to 1 so 64 entries fit our 64 capacity.
+					cache_.insert(key, new QPixmap(rendered));
+				}
 				return rendered;
 			}
 

@@ -24,7 +24,8 @@
 #include <BALL/COMMON/global.h>
 
 
-#include <QtCore/QHash>
+#include <QtCore/QCache>
+#include <QtCore/QMutex>
 #include <QtCore/QString>
 #include <QtGui/QIconEngine>
 #include <QtGui/QPixmap>
@@ -89,12 +90,28 @@ namespace BALL
 					/// SVG resource path, e.g. `:/icons/actions/quicksave.svg`.
 					QString name_;
 
-					/// Cache key = "{size.w}x{size.h}@{dpr}x{mode}".
+					/// Cache key = "{size.w}x{size.h}@{bucketedDpr}x{mode}".
 					/// Mode is encoded as a single int per QIcon::Mode.
 					/// Cache lives for the lifetime of the engine instance; engines
 					/// themselves are pooled inside QIcons constructed via
 					/// IconRegistry, so cache hit rate is high in practice.
-					mutable QHash<QString, QPixmap> cache_;
+					///
+					/// v1.7-RC1 C-7 — switched from QHash to QCache with a
+					/// 64-entry per-engine cap to bound memory. With raw DPR
+					/// keys an unfortunate user (3 monitors at 1.0, 1.5, 2.0
+					/// + size variants + 4 modes) could grow unbounded;
+					/// QCache evicts on LRU. DPR is also quantized to
+					/// {1.0, 1.5, 2.0, 3.0} buckets before key construction
+					/// so non-integral system DPRs collapse onto the
+					/// nearest bucket.
+					///
+					/// v1.7-RC1 C-8 — cache_mutex_ serializes all access to
+					/// cache_. QIcon may dispatch paints from worker threads
+					/// in some Qt builds (QGraphicsScene cache, QML); the
+					/// mutex is mandatory regardless of GUI-thread
+					/// expectations.
+					mutable QCache<QString, QPixmap> cache_;
+					mutable QMutex cache_mutex_;
 
 					/// Convert a QIcon::Mode to the matching tint color from
 					/// tokens.h (kInkSoft / kInk / kAccent / kInkMuted).
