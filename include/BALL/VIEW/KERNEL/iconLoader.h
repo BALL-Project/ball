@@ -17,6 +17,15 @@ namespace BALL
 
 	namespace VIEW
 	{
+		// TODO(v1.8): Replace this loader with a ThemedIconEngine per the
+		// BALLView Refresh Handover Phase 2 §2.2 design (per-DPR tint cache,
+		// QIconEngine subclass, mode-aware tint colors --ink-soft/--ink/
+		// --accent/--ink-muted). Deferred from Phase 999.41 because
+		// maintainer-Q3 freezes the single neutral theme for v1.7 — when Q3
+		// is revisited (light/dark/follow-system re-introduction), this is
+		// the upgrade path. Until then, 999.41's SVG-preferred wedge inside
+		// loadIcon_() (BALL_UI_V2-gated) is sufficient. See also 999.42
+		// for the call-site escalation that pairs with the engine swap.
 		/**
 		 * This class is an icon loader for the VIEW classes.
 		 * It handles icon themes as defined in the freedesktop.org standard.
