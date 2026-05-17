@@ -2209,20 +2209,74 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.45 lands)
 
-### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (BACKLOG · TARGETED FOR v1.8)
+### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
 **Goal:** Replace the standalone *Demo / Tutorial* dialog + `Welcome.rtf` with an in-product welcome screen on first launch. Refresh the Help viewer to use Markdown (drop the QtWebEngine dependency where avoidable — already removed from build per existing Phase 5 work).
+
+**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4. Closes the loop on user-facing modernization — first 30 seconds matter.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/07-phase-onboarding.md`.
 
 **Depends on:** 999.40-999.46 (the new look the welcome screen showcases).
 
-**Estimated effort:** ~1-2 weeks.
+**Scope (WelcomeScreen widget — Handover §7.1):**
+- **`source/VIEW/WIDGETS/welcomeScreen.{h,C}`** — `QWidget` placed inside the central area when `composite_manager_.getNumberOfComposites() == 0` and `BALL_UI_V2`. **NOT a modal dialog** — a panel rendered in place of the scene placeholder.
+- 720 px max-width content, vertically centered, comfortable padding.
+- Header: app icon (96 px) + product name + tagline + version.
+- **3 big action buttons in a row**: **Open file…** / **Open from PDB / PubChem…** / **Recent…**.
+- "Recent" section: list of up to 5 recently opened files (filename, muted path, last-modified date).
+- "Sample structures" strip: **6 image cards (160×100)** with caption + action.
+- Footer: "What's new in 1.7" link if user just upgraded; "Skip this screen on startup" toggle.
+
+**Scope (6 curated sample structures — Handover §7.2; NEEDS BUNDLING DECISION):**
+| Sample | File | Why |
+|---|---|---|
+| DNA double helix | `1bna.pdb` | Classic, fast load, looks good |
+| Small protein | `1ubq.pdb` (ubiquitin) | Pedagogical |
+| Enzyme + ligand | `1stp.pdb` (streptavidin–biotin) | Shows ligand handling |
+| Membrane | `1ymg.pdb` | Surface + transparency demo |
+| Small molecule | `caffeine.mol2` | Small-molecule path |
+| MD trajectory | `dialanine_md.dcd` + `dialanine.pdb` | Trajectory player demo |
+
+- **OPEN: data path + install rules** for the bundled samples — likely `data/BALLView/samples/` with a sources.cmake-equivalent install hook; check if BALL's existing `BALL_DATA_PATH` install logic covers this, else add. Each sample needs a citation in `samples/README.md` (all 6 are from the public PDB — copyright fine).
+- **Thumbnails**: pre-bundled PNGs rendered at **320×200 @ 2× DPR** (so 640×400 physical). Lazy-decode on visible to keep first-run cold-start fast.
+
+**Scope ("What's new" card — Handover §7.6):**
+- When app version differs from last-seen version in `~/.BALLView`:
+  - Welcome screen shows "New in 1.7" card with 3 bullets.
+  - Dismissible chip in status bar links to longer changelog.
+  - **Auto-dismiss after 2 minutes of use without dismiss.**
+- Source: curated `data/BALLView/help/whatsnew/1.7.md`.
+
+**Scope (HelpViewer rewrite — Handover §7.3):**
+- **`source/VIEW/WIDGETS/helpViewer.{h,C}`** rewritten using **`QTextBrowser::setMarkdown(...)`** (Qt 5.14+; Qt 6 has it improved). Drop `QWebEngineView` dependency for built-in help — already removed from the BALL build per existing Phase 5 work. (Keep WebEngine ONLY for genuine PubChem / RCSB browsers; built-in help no longer uses it.)
+- **Custom `ballview://` URL scheme handler** — intercepted by `helpViewer::setSource` override and dispatched to the `CommandRegistry` (999.46). Lets help docs include "Try this →" links that actually run a command. Example: `ballview://command/file.openPdb`.
+
+**Scope (tutorial migration — Handover §7.4):**
+- The existing `demoTutorialDialog.C` content (a sequence of `QLabel`+`QPushButton` slides) converts to **6 Markdown files with frontmatter** under `data/BALLView/help/tutorial/`:
+  - `01-welcome.md`, `02-loading.md`, `03-models.md`, `04-selection.md`, `05-coloring.md`, `06-saving.md`.
+  - Frontmatter schema: `title:` + `order:` + `prev:` + `next:`.
+- Tutorial navigation lives inside the HelpViewer with prev/next chrome.
+
+**Scope (deletions):**
+- **Delete `Welcome.rtf`** (`source/APPLICATIONS/BALLVIEW/Welcome.rtf`).
+- **Delete `demoTutorialDialog.{C,h,ui}`** (`source/APPLICATIONS/BALLVIEW/demoTutorialDialog.*`).
+- Update sources.cmake.
+
+**Acceptance criteria:**
+- Fresh launch shows WelcomeScreen.
+- Clicking "Open file…" routes to existing `MolecularFileDialog`.
+- Sample structures load on click; thumbnails crisp at 2×.
+- Markdown tutorial files render in new HelpViewer; in-doc action links work.
+- No `QWebEngineView` instantiated in built-in help paths.
+- "What's new" card appears after a simulated version bump and disappears on dismiss (auto-dismiss after 2 min).
+
+**Estimated effort:** ~1.5 weeks.
 
 **Plans:** 0.
 
 Plans:
-- [ ] TBD (v1.8; lands after 999.46)
+- [ ] TBD (promote with /gsd-plan-phase after 999.46 lands)
 
 ### Phase 999.48: BALLView Refresh — Accessibility + `BALL_UI_V2` default flip (Handover Phase 8, scope-reduced) (BACKLOG · TARGETED FOR v1.8 · LAST UI PHASE)
 
