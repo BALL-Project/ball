@@ -15,6 +15,14 @@
 #include <QtGui/QTextCursor>
 #include <QtWidgets/QToolBar>
 
+#ifdef BALL_UI_V2
+// Phase 999.47 §7.3 — MarkdownHelpViewer support.
+#	include <QtCore/QFile>
+#	include <QtCore/QFileInfo>
+#	include <QtCore/QTextStream>
+#	include <QtGui/QDesktopServices>
+#endif
+
 using namespace std;
 
 namespace BALL
@@ -421,6 +429,60 @@ namespace BALL
 			
 			return docu_entries_[widget];
 		}
+
+
+#ifdef BALL_UI_V2
+
+		// Phase 999.47 §7.3 — MarkdownHelpViewer impl.
+
+		MarkdownHelpViewer::MarkdownHelpViewer(QWidget* parent)
+			: QTextBrowser(parent)
+		{
+			setReadOnly(true);
+			setOpenExternalLinks(true);
+			setOpenLinks(true);
+		}
+
+		MarkdownHelpViewer::~MarkdownHelpViewer() = default;
+
+		bool MarkdownHelpViewer::loadMarkdownFile(const QString& path)
+		{
+			QFile f(path);
+			if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+				return false;
+			QTextStream in(&f);
+			const QString md = in.readAll();
+			f.close();
+
+			QFileInfo fi(path);
+			current_dir_ = fi.absolutePath();
+			setSearchPaths(QStringList() << current_dir_);
+
+			setMarkdown(md);
+			return true;
+		}
+
+		void MarkdownHelpViewer::setMarkdownSource(const QString& md)
+		{
+			setMarkdown(md);
+		}
+
+		void MarkdownHelpViewer::doSetSource(const QUrl& name,
+		                                    QTextDocument::ResourceType type)
+		{
+			// Phase 999.47 §7.3 — intercept the ballview:// scheme.
+			// QDesktopServices::openUrl forwards to the in-process
+			// handler installed by Mainframe::installBallviewUrlHandler_
+			// which dispatches to CommandRegistry / open dialogs.
+			if (name.scheme() == QStringLiteral("ballview"))
+			{
+				QDesktopServices::openUrl(name);
+				return;
+			}
+			QTextBrowser::doSetSource(name, type);
+		}
+
+#endif // BALL_UI_V2
 
 	} // VIEW
 } // namespace BALL

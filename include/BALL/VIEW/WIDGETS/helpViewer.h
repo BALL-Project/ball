@@ -11,6 +11,7 @@
 #	include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
+#include <QtCore/QUrl>
 #include <QtWidgets/QTextBrowser>
 
 namespace BALL
@@ -167,7 +168,59 @@ namespace BALL
 			HashMap<const QObject*, String> docu_entries_;
 			StringHashMap<String> classes_to_files_;
 		};
-  	
+
+#ifdef BALL_UI_V2
+
+		/** Phase 999.47 §7.3 — Markdown-rendering help viewer.
+		 *
+		 *  Renders a markdown source file via QTextBrowser::setMarkdown
+		 *  (Qt 5.14+; we're on Qt 6 — fully supported). Intercepts the
+		 *  `ballview://` URL scheme via setSource(...) so help docs can
+		 *  embed "Try this →" links that dispatch through the
+		 *  CommandRegistry (Phase 999.46).
+		 *
+		 *  This is a *new* widget — the legacy MyTextBrowser /
+		 *  HelpViewer pair stays in tree (OFF cell still references it)
+		 *  and is queued for deletion in 999.48 alongside the
+		 *  flag-removal pass.
+		 */
+		class BALL_VIEW_EXPORT MarkdownHelpViewer : public QTextBrowser
+		{
+			Q_OBJECT
+
+			public:
+
+				explicit MarkdownHelpViewer(QWidget* parent = nullptr);
+				~MarkdownHelpViewer() override;
+
+				/** Load and render a markdown file by absolute path. */
+				bool loadMarkdownFile(const QString& path);
+
+				/** Render markdown text directly. */
+				void setMarkdownSource(const QString& md);
+
+			protected:
+
+				/** Override of QTextBrowser::doSetSource that intercepts
+				 *  `ballview://` URLs and routes them to the in-app
+				 *  handler (QDesktopServices::openUrl which mainframe
+				 *  forwards to onBallviewUrlInvoked_).
+				 *
+				 *  Note: Qt 6 made setSource() non-virtual and moved
+				 *  the extension point to doSetSource() — this is the
+				 *  documented Qt 6 way to intercept link navigation.
+				 */
+				void doSetSource(const QUrl& name,
+				                 QTextDocument::ResourceType type =
+				                   QTextDocument::UnknownResource) override;
+
+			private:
+
+				QString current_dir_;
+		};
+
+#endif // BALL_UI_V2
+
 } } // namespaces
 
 #endif // BALL_VIEW_WIDGETS_HELPVIEWER_H
