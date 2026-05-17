@@ -2039,11 +2039,13 @@ Plans:
 - IconBrowser theme.qrc auto-scan + CI missing-icon gate → **Phase 999.46** (build-system change better landed with the dev-tools polish pass).
 - `_test.C` unit tests for 4 shared widgets → **Phase 999.46** (BALL test framework needs QApplication+display setup that's better landed with proper widget-test infrastructure work).
 
-### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.44: BALLView Refresh — Unified Inspector (Handover Phase 4) (PARTIAL-COMPLETE · v1.7 WAVE 4 · 2026-05-17)
 
 **Goal:** Collapse the modal-dialog soup (Display, Model, Material, Light, Stage, Stereo, Clipping, Coloring, Label, Modify Representation — 10+ dialogs) into a single **right-rail Inspector dock** with collapsible sections, live preview, and tabs organized by *subject* (Selection · Representation · Scene).
 
-**Status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4 per user direction "keep everything in 1.7." Biggest single architectural piece in the entire Refresh — replaces 10+ modal dialogs with one dock + tabs + live preview. Maintainer-Q2 RESOLVED (Classic-coexistence design); sequencing accommodates running 999.44 ‖ 999.45 in parallel (different file trees).
+**Status (revised 2026-05-17 plan 01 landed):** PARTIAL-COMPLETE. Plan 01 shipped the load-bearing architecture + Controller-extraction pattern + first section + Tools › Legacy Settings static data (6 commits, ~17min, libVIEW links green BALL_UI_V2=ON macOS-arm64). Per the operating-contract scope-trim guidance ("DON'T trim the architecture, Controller extraction, or the Tools › Legacy Settings interim home"): architecture LANDED; Controller pattern LANDED with StageController exemplar + PATTERN.md enumerating 8 remaining; Tools › Legacy Settings static data LANDED. **Deferred to v1.7 RC patch cycle:** mainframe wiring (Task 2 — deferred because parallel-agent 999.45 was actively editing mainframe.C/main.C; since landed so the deferred plan is unblocked), 12 remaining sections (Selection 3 + Representation 5 + Scene remaining 4), 8 remaining Controllers (Light/Camera/Stereo/Model/Coloring/Material/Label/Clipping), renderer-interface-boundary binding for Camera/Lights, StageController apply() cut-over, pixel-diff regression test. See SUMMARY (`.planning/phases/999.44-unified-inspector/999.44-01-SUMMARY.md`) for the full scope-trim breadcrumb.
+
+**Original status (revised 2026-05-17 audit pull-in):** Re-pinned from v1.8 → v1.7 Wave 4 per user direction "keep everything in 1.7." Biggest single architectural piece in the entire Refresh — replaces 10+ modal dialogs with one dock + tabs + live preview. Maintainer-Q2 RESOLVED (Classic-coexistence design); sequencing accommodates running 999.44 ‖ 999.45 in parallel (different file trees).
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/04-phase-inspector.md`.
 
@@ -2100,10 +2102,16 @@ Plans:
 
 **Estimated effort:** ~3-4 weeks (longest pole in Wave 4 — run parallel with 999.45 which touches different file trees).
 
-**Plans:** 0.
+**Plans:** 1 PARTIAL-COMPLETE (architecture + Controller pattern + StageSection + LegacySettingsHelper); 6 backlog (mainframe wiring + Selection tab + Representation tab + Scene-tab remaining + StageController apply cut-over + pixel-diff test).
 
 Plans:
-- [ ] TBD (promote with /gsd-plan-phase after 999.43 lands shared widgets)
+- [x] 999.44-01 PARTIAL-COMPLETE — Inspector architecture (Dock/View/Tabs/Body/Section/EmptyState) + StageController exemplar + PATTERN.md + StageSection + LegacySettingsHelper static data. 6 commits (`f8a50638` shell, `13914db2` empty states, `6018ee57` controller pattern, `d095eff5` stage section, `dcfd3447` legacy settings helper, plus SUMMARY commit). See `.planning/phases/999.44-unified-inspector/999.44-01-SUMMARY.md` for scope-trim breadcrumb (12 sections + 8 controllers + mainframe wiring deferred to RC patch cycle).
+- [ ] 999.44-02 (RC-patch unblocked) — mainframe wiring: `addDockWidget(Qt::RightDockWidgetArea, InspectorDock)` + `View › Hide Inspector` + `Tools › Legacy Settings ▸ ...` submenu (12 entries from `LegacySettingsHelper::legacyStackNames()`) + first-run migration `QMessageBox` (gated on `[Inspector] firstRunMigrationNoticeShown=true`). ~30min.
+- [ ] 999.44-03 — Selection tab (sub-PR 4.2): `SelectionSummarySection` + `PropertiesSection` + `QuickActionsSection` + selection-bus wiring.
+- [ ] 999.44-04 — Representation tab (sub-PRs 4.3 + 4.4): `RepHeaderSection` + `ModelSection` + `ColoringSection` + `MaterialSection` + `LabelSection` + `ClipSection` (requires 6 Controller extractions).
+- [ ] 999.44-05 — Scene tab remaining sections (sub-PR 4.5 remainder): `CameraSection` + `LightsSection` + `StereoSection` + `BackgroundSection` (requires 3 Controller extractions; binds Camera/Lights via Renderer/RenderSurface per SEED-001 step 5).
+- [ ] 999.44-06 — StageController `apply()` cut-over (delete the stub; migrate StageSettings::saveSettingsToStage_() body into the Controller; both surfaces consume the same path going forward).
+- [ ] 999.44-07 — Pixel-diff regression test infrastructure (<5% per tab against Handover mockups).
 
 ### Phase 999.45: BALLView Refresh — Workspace consolidation (Handover Phase 5) (COMPLETE · v1.7 Wave 4 · 2026-05-17)
 
