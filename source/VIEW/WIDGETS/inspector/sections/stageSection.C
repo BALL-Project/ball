@@ -88,7 +88,15 @@ namespace BALL
 			}
 		}
 
-		StageSection::~StageSection() = default;
+		StageSection::~StageSection()
+		{
+			// v1.7-RC1 I-1 — flush pending debounced edit on destruction.
+			if (debounce_.isActive())
+			{
+				debounce_.stop();
+				onDebounceFire_();
+			}
+		}
 
 		void StageSection::scheduleApply_()
 		{

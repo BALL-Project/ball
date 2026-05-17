@@ -130,7 +130,18 @@ namespace BALL
 			}
 		}
 
-		ModelSection::~ModelSection() = default;
+		ModelSection::~ModelSection()
+		{
+			// v1.7-RC1 I-1 — flush any pending debounced edit before
+			// destruction so a final user change isn't silently dropped
+			// (e.g. user adjusts transparency then closes the dock
+			// within DEBOUNCE_MS).
+			if (debounce_.isActive())
+			{
+				debounce_.stop();
+				onDebounceFire_();
+			}
+		}
 
 		void ModelSection::scheduleApply_() { debounce_.start(); }
 

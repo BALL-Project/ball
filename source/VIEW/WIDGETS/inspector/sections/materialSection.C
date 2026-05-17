@@ -82,7 +82,15 @@ namespace BALL
 			}
 		}
 
-		MaterialSection::~MaterialSection() = default;
+		MaterialSection::~MaterialSection()
+		{
+			// v1.7-RC1 I-1 — flush pending debounced edit on destruction.
+			if (debounce_.isActive())
+			{
+				debounce_.stop();
+				onDebounceFire_();
+			}
+		}
 
 		void MaterialSection::onAmbientChanged_(int v)
 		{

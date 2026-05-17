@@ -89,7 +89,15 @@ namespace BALL
 			}
 		}
 
-		ColoringSection::~ColoringSection() = default;
+		ColoringSection::~ColoringSection()
+		{
+			// v1.7-RC1 I-1 — flush pending debounced edit on destruction.
+			if (debounce_.isActive())
+			{
+				debounce_.stop();
+				onDebounceFire_();
+			}
+		}
 
 		void ColoringSection::onMethodChosen_(int idx)
 		{

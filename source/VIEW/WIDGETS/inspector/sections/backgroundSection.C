@@ -52,7 +52,15 @@ namespace BALL
 			}
 		}
 
-		BackgroundSection::~BackgroundSection() = default;
+		BackgroundSection::~BackgroundSection()
+		{
+			// v1.7-RC1 I-1 — flush pending debounced edit on destruction.
+			if (debounce_.isActive())
+			{
+				debounce_.stop();
+				onDebounceFire_();
+			}
+		}
 
 		void BackgroundSection::onColorPicked_(const QColor& c)
 		{

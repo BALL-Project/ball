@@ -79,7 +79,15 @@ namespace BALL
 			}
 		}
 
-		StereoSection::~StereoSection() = default;
+		StereoSection::~StereoSection()
+		{
+			// v1.7-RC1 I-1 — flush pending debounced edit on destruction.
+			if (debounce_.isActive())
+			{
+				debounce_.stop();
+				onDebounceFire_();
+			}
+		}
 
 		void StereoSection::onEnabledToggled_(bool b)
 		{
