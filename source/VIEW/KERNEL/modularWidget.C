@@ -5,7 +5,7 @@
 #include <BALL/VIEW/KERNEL/modularWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <QtWidgets/QMenuBar>
@@ -248,7 +248,7 @@ namespace BALL
 		{
 			if (!action) return;
 
-			action->setIcon(IconLoader::instance().getIcon(filename.c_str()));
+			action->setIcon(Icons::get(filename.c_str()));
 
 			if (add_to_main_toolbar)
 			{
