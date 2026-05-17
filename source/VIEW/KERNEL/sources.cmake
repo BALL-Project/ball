@@ -24,6 +24,7 @@ SET(SOURCES_LIST
 	UIOperationMode.C
 	theme/themeManager.C
 	theme/themedIconEngine.C
+	theme/iconRegistry.C
 )
 
 SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} serverWidget.C)
