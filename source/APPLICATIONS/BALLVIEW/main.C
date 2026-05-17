@@ -288,6 +288,28 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	{
 		const QString target_path = BALL::VIEW::ConfigMigration::targetConfigPath();
 		QSettings prefs(target_path, QSettings::IniFormat);
+
+		// === Phase 999.49: Classic preset auto-migration ====================
+		// The Classic preset was retired in v1.7 (maintainer-Q2 commitment).
+		// Users carrying [Workspace]/currentPreset="Classic" from a v1.6.x
+		// install — or from a v1.7-pre install that exercised the Phase 999.45
+		// first-run "Keep my layout (Classic)" branch — get silently remapped
+		// to "Default" here, BEFORE any downstream code path tries to look up
+		// the (now-deleted) Classic enum value via a QString round-trip.
+		//
+		// User-saved presets ([Workspace]/userDefined__*) are untouched —
+		// only the canonical built-in name "Classic" is rewritten.
+		//
+		// Idempotent: subsequent launches read "Default" and no-op the
+		// remap. RELEASE-NOTES-v1.7.md documents the change.
+		if (prefs.value("Workspace/currentPreset").toString() == QLatin1String("Classic"))
+		{
+			prefs.setValue("Workspace/currentPreset", "Default");
+			prefs.sync();
+			BALL::Log.info() << "v1.7 migration: legacy Classic workspace preset retired — falling back to Default. (User-defined presets are unaffected.)" << std::endl;
+		}
+		// === end Phase 999.49 auto-migration ================================
+
 		const bool prompt_seen = prefs.value("Workspace/firstRunPromptSeen", false).toBool();
 		const bool migrated = prefs.contains("Migration/migrated_from");
 
