@@ -1,7 +1,19 @@
+"""
+view_utils — convenience aliases for the most commonly used BALLView
+Python entry points.
+
+NOTE (v1.7): This module imports from ``BALL`` and ``VIEW``, which
+requires the SIP Python bindings. SIP bindings are DISABLED in v1.7
+(``BALL_PYTHON_SUPPORT=OFF`` in every ``ci-*`` CMake preset). The
+module therefore cannot be imported standalone in v1.7. It is
+preserved as the feature surface that Phase 999.15 (targeted for
+v2.1) rewrites against a modern Python binding generator.
+"""
+
 from BALL import Atom, Path, PDBAtom, Vector3, atoms, residues
 from VIEW import *
 
-__version__ = '1.5'
+__version__ = '1.7'
 
 """
 	I. Convenience access
