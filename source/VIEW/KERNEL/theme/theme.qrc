@@ -42,5 +42,12 @@
         <file alias="categories/preferences.svg">icons/lucide/settings.svg</file>
         <!-- Spare: available for future tooltip/help affordances -->
         <file alias="actions/help-hint.svg">icons/lucide/help-circle.svg</file>
+        <!-- Phase 999.42: paired with the XPM-array removal in
+             mainframe.C / mainControl.C / serverWidget.C. ball-app is
+             a placeholder; the bespoke app-icon artwork ships via
+             Phase 8 packaging (see ball-app.svg header for details). -->
+        <file alias="ball-app.svg">icons/lucide/ball-app.svg</file>
+        <file alias="actions/simulation-running.svg">icons/lucide/activity.svg</file>
+        <file alias="actions/raytracing.svg">icons/lucide/zap.svg</file>
     </qresource>
 </RCC>
