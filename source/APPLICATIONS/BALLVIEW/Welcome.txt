@@ -1,0 +1,19 @@
+BALLView 1.7
+
+BALLView is a free molecular modeling and visualization tool. It provides
+fast OpenGL-based rendering of molecular structures, molecular mechanics
+methods (energy minimization and MD simulation using the AMBER and CHARMM
+force fields), calculation and visualization of electrostatic properties
+(FDPB), and analysis of protein structures.
+
+The 1.7 release ships the BALLView Refresh: a consolidated workspace with
+a unified Inspector, a Cmd/Ctrl-K command palette, a new in-product
+welcome screen, six curated sample structures, and a Markdown-based help
+system.
+
+BALLView is built on BALL (the Biochemical Algorithms Library), developed
+in the groups of Andreas Hildebrandt (Johannes Gutenberg University,
+Mainz), Oliver Kohlbacher (Eberhard Karls University, Tübingen), and
+Hans-Peter Lenhof (Saarland University, Saarbrücken).
+
+Learn more: https://ball-project.org
