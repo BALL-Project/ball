@@ -21,6 +21,7 @@ SET(SOURCES_LIST
 	propertyEditor.C
 	scene.C
 	# Phase 999.43 — shared widgets (load-bearing for 999.44 Inspector).
+	formRow.C
 	sectionHeader.C
 	shortcutTableView.C
 	SDWidget.C
