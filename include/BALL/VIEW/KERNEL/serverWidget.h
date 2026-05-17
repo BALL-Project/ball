@@ -319,7 +319,9 @@ namespace BALL
 
 			ServerPreferences  *server_preferences_;
 			QLabel 					   *server_icon_;
-			static const char  *mini_ray_xpm_[];
+			// Phase 999.42: mini_ray_xpm_ removed. The "VIEW server status"
+			// icon now loads via VIEW::Icons::get("actions/raytracing")
+			// (theme.qrc → lucide/zap.svg).
 		};
 
 

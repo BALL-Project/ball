@@ -5,6 +5,7 @@
 #include <BALL/VIEW/KERNEL/serverWidget.h>
 #include <BALL/CONCEPT/client.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -20,28 +21,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		const char* ServerWidget::mini_ray_xpm_[] =
-		{
-        "16 14 4 1",
-        "   c None",
-        ".  c black",
-        "X  c yellow",
-        "o  c gray50",
-        "     .........  ",
-        "     .XXXXXX.o  ",
-        "    .XXXXXX.o   ",
-        "    .XXXXX.o    ",
-        "   .XXXXX.o     ",
-        "   .XXXX.....   ",
-        "  .XXXXXXXX.o   ",
-        "  .....XXX.o    ",
-        "   oo.XXX.o     ",
-        "     .XX.o      ",
-        "    .XX.o       ",
-        "    .X.o        ",
-        "   .X.o         ",
-        "   ..o          "
-		};        
+		// Phase 999.42: mini_ray_xpm_ array deleted — the status-bar
+		// "raytracing" indicator now uses Icons::get("actions/raytracing")
+		// (theme.qrc → lucide/zap.svg). See indicator setup below.
   
 		ServerWidget::NotCompositeObject::NotCompositeObject(const char* file, int line)
 			:	Exception::GeneralException(file, line, string("NotCompositeObject"), string("received an non composite object!"))
@@ -122,10 +104,11 @@ namespace BALL
 			server_icon_ = new QLabel(main_control.statusBar());
 			main_control.statusBar()->addPermanentWidget(server_icon_);
 //   			QToolTip::add(server_icon_, "VIEW server status");
-			QPixmap icon(mini_ray_xpm_);
-
+			// Phase 999.42: replace QPixmap(mini_ray_xpm_) with SVG via the
+			// Icons::get façade. Same 14x14 logical size to match the
+			// surrounding setMaximumSize(14,20).
   		server_icon_->setFrameShape(QLabel::NoFrame);
-			server_icon_->setPixmap(icon);
+			server_icon_->setPixmap(Icons::get("actions/raytracing").pixmap(14, 14));
 			server_icon_->setMaximumSize(14,20);
 			server_icon_->setMinimumSize(14,20);
 			server_icon_->show();
