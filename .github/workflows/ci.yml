@@ -448,7 +448,7 @@ jobs:
       # Linux. Three baseline failures triaged in 09-TRIAGE.md (Phase 9,
       # 2026-05-16): Directory_test KNOWN-PASSING; AmberFF_test FIX (ARM FP
       # tolerance); AssignBondOrderProcessor_test2 QUARANTINE (WILL_FAIL TRUE).
-      # Windows test gatekeeper deferred to Phase 999.34.
+      # Windows test gatekeeper landed in Phase 999.34 (see Windows block below).
       # ----------------------------------------------------------------------
       # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
       # after 3 baseline failures triaged in 09-TRIAGE.md.
@@ -633,7 +633,7 @@ jobs:
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (BLOCKING — TEST-CLOSE-02) — see macOS counterpart.
-      # Windows test gatekeeper deferred to Phase 999.34.
+      # Windows test gatekeeper landed in Phase 999.34 (see Windows block below).
       # ----------------------------------------------------------------------
       # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
       # after 3 baseline failures triaged in 09-TRIAGE.md.
@@ -932,6 +932,66 @@ jobs:
           path: build\ci-windows\.ninja_log
           retention-days: 90
           include-hidden-files: true
+
+      # ----------------------------------------------------------------------
+      # Phase 9 gatekeeper (BLOCKING — Phase 999.34, 2026-05-17) — Windows
+      # parity with the macOS + Linux gatekeepers above. Promoted from BACKLOG
+      # in Phase 999.34 (Windows test gatekeeper bring-up); see ROADMAP.md and
+      # .planning/phases/999.34-windows-test-gatekeeper/999.34-01-SUMMARY.md.
+      #
+      # Quarantine inheritance (test/CMakeLists.txt):
+      #  - AssignBondOrderProcessor_test2 — Apple-arm64-only WILL_FAIL (FP
+      #    fine-penalty bug specific to Apple Silicon FMA); MSVC x64 uses the
+      #    Intel-compatible FP path so this test PASSES on Windows like Linux.
+      #  - PeptideCapProcessor_test / Peptides_test / RotamerLibrary_test —
+      #    platform-independent OOS PR-merge data regressions (Phase 999.35),
+      #    unconditional WILL_FAIL TRUE; expected-fail on Windows the same way.
+      #
+      # Windows DLL discovery: the test EXEs land in build\ci-windows\bin\TEST\
+      # (test/CMakeLists.txt) but BALL.dll + VIEW.dll live in
+      # build\ci-windows\bin\, and Qt6 + Boost DLLs live in
+      # build\ci-windows\vcpkg_installed\x64-windows-release\bin\. Windows
+      # searches the EXE's own dir first and then PATH, so we must extend PATH
+      # with BOTH of those directories before invoking ctest.
+      # ----------------------------------------------------------------------
+      - name: Build BALL test suite (Windows — Phase 9 gatekeeper, blocking)
+        if: matrix.os == 'windows-x64'
+        continue-on-error: false
+        timeout-minutes: 45
+        shell: pwsh
+        run: |
+          cmake --build build\ci-windows --target build_tests --config Release
+
+      - name: Run BALL test suite (Windows — Phase 9 gatekeeper, blocking)
+        if: matrix.os == 'windows-x64'
+        continue-on-error: false
+        timeout-minutes: 60
+        shell: pwsh
+        run: |
+          cd build\ci-windows
+          # BALL_DATA_PATH MUST be set — see macOS gatekeeper for the post-mortem.
+          $env:BALL_DATA_PATH = "${{ github.workspace }}\data"
+          # Windows DLL search path: extend PATH so test EXEs (in bin\TEST\)
+          # find BALL.dll + VIEW.dll (in bin\) and Qt6 + Boost DLLs (in
+          # vcpkg_installed\x64-windows-release\bin\). Without this, every
+          # test exits with STATUS_DLL_NOT_FOUND (0xc0000135) and ctest reports
+          # mass failures unrelated to the BALL code under test.
+          $env:PATH = "$PWD\bin;$PWD\vcpkg_installed\x64-windows-release\bin;$env:PATH"
+          # Phase 999.34 (2026-05-17): gatekeeper is BLOCKING; ctest exits
+          # non-zero if any non-WILL_FAIL test fails. ui_v2 in JUnit filename
+          # so ON + OFF cells don't clobber each other's output at the
+          # test-report merge step (same rationale as macOS sibling).
+          ctest --output-on-failure --timeout 120 `
+                --output-junit "${{ github.workspace }}\ball-tests-windows-ui_v2_${{ matrix.ui_v2 }}.xml"
+
+      - name: Upload test results (Windows)
+        if: always() && matrix.os == 'windows-x64'
+        uses: actions/upload-artifact@v6
+        with:
+          name: ball-tests-windows-ui_v2_${{ matrix.ui_v2 }}-${{ github.run_id }}
+          path: ball-tests-windows-ui_v2_${{ matrix.ui_v2 }}.xml
+          if-no-files-found: warn
+          retention-days: 30
 
       # ======================================================================
       # Render smoke check (D-08) — macOS native, Linux under xvfb + software
