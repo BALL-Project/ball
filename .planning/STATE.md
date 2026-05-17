@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
-status: milestone-content-complete
-stopped_at: Phase 999.21 DEADCODE-01 closed inline — all 12 v1.6.2 REQs marked Complete; ready for release-notes + tag
-last_updated: "2026-05-16T21:45:00Z"
-last_activity: 2026-05-16 — Phase 999.21 closed (914622d8f); v1.6.2 milestone content-complete (12/12 REQs)
+status: pre-tag-regression-fix
+stopped_at: Awaiting CI run 25982872250 (c9d8de38) — cold-cache Windows verification of BALL_EXPORT regression fix (9042af07) before v1.6.2 tag
+last_updated: "2026-05-17T05:55:00Z"
+last_activity: 2026-05-17 — caught cb392cc4 BALL_EXPORT vector3.C regression masked by 999.17 cache; fix in 9042af07; cache key bumped v1→v2 in c9d8de38; 999.36 backlog stub filed; waiting on cold Windows verification before tag
 progress:
-  total_phases: 52
+  total_phases: 53
   completed_phases: 18
-  total_plans: 52
+  total_plans: 53
   completed_plans: 54
-  percent: 35
+  percent: 34
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,14 +20,14 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** v1.6.2 milestone CONTENT-COMPLETE — all 12 REQs marked Complete (BUILD-ACCEL-01..05 + TRIAGE-01/02/03 + TEST-CLOSE-01/02 + WARN-CENSUS-01 + DEADCODE-01). GRAMMAR-01 stretch deferred to v1.7. Ready for RELEASE-NOTES-v1.6.2.md finalization (draft in 7f2e851a) + git tag.
+**Current Focus:** v1.6.2 pre-tag — content-complete (all 12 REQs) BUT caught a Windows link regression at the tag boundary: cb392cc4 removed BALL_EXPORT from vector3.C TVector3<float> instantiation (MSVC dllexport contract). ci.yml masked it via Phase 999.17 cmake-tree cache (key doesn't hash sources); release.yml exposed it (different cache scope). Fixed in 9042af07 + GCC -Wattributes pragma scope. Cache key bumped v1→v2 in c9d8de38 to force cold rebuild. Follow-up Phase 999.36 filed for source-aware cache key. RELEASE-NOTES-v1.6.2.md updated with full regression+fix narrative. Tag pending cold Windows green.
 
 ## Current Position
 
-Phase: 999.21 (dockresultfile-dead-code) — COMPLETE (final v1.6.2 substantive phase)
-Plan: 1 of 1
-Status: Milestone content-complete — release-notes + tag remain
-Last activity: 2026-05-16
+Phase: v1.6.2 release-tag pre-flight regression fix
+Plan: 1 of 1 (inline)
+Status: Waiting on CI run 25982872250 (in_progress, cold cmake-tree cache by design)
+Last activity: 2026-05-17
 
 ## Performance Metrics
 

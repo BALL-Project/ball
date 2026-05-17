@@ -114,6 +114,7 @@ Independent of the warning count, several real bugs were flushed out by the clea
 | `downloadPDBFile.C:125` | Same pattern → cryptic "no atoms found" parser failure | Real latent UX bug |
 | `downloadElectronDensity.C:167` | Same pattern → DSN6 parser failure on zero-byte map file | Real latent UX bug |
 | `hashGrid.C` neighbour table | ARM gcc unsigned-char default narrowed `-1` literals (build failure on ARM) | Build-blocking on ARM |
+| `vector3.C:12` BALL_EXPORT regression | `cb392cc4` dropped `BALL_EXPORT` on the `template class TVector3<float>;` explicit instantiation citing GCC -Wattributes. Correct on GCC but WRONG on MSVC where the explicit instantiation is the single point that attaches `__declspec(dllexport)`. BALL.dll stopped exporting TVector3<float>::* symbols → VIEW.dll failed to link with 35 unresolved externals on `release.yml` Windows runs `25977139490` / `25974049283` / `25971072146`. **ci.yml masked it for ~12 hours** because the Phase 999.17 cmake-tree cache key didn't include source-file hashes — restored stale CMakeFiles/ kept downstream linkage looking green. Fixed in `9042af07` (restore BALL_EXPORT + wrap in `#pragma GCC diagnostic ignored "-Wattributes"` so the GCC warning intent of cb392cc4 is preserved without breaking the load-bearing MSVC export). Cache key bumped v1→v2 in `c9d8de38` to force a cold rebuild verifying the fix. Follow-up backlog Phase 999.36 filed to add per-source-hash arm to the cache key so this masking class can't recur. | Real build-blocking on MSVC; release.yml-gating |
 
 ### Build acceleration cluster (Phases 999.16-999.20)
 
@@ -147,8 +148,10 @@ The 5-phase build-acceleration cluster shipped end-to-end, closing all 5 `BUILD-
 
 ## Verification
 
-Final pre-tag CI run: **25977136797** (commit `046271ec`) — all blocking jobs green (lint ✓, linux-arm64 ✓, linux-x64 ✓, macos-arm64 ✓, windows-x64 ✓, Phase 9 gatekeeper ✓, coverage ✓). Test suite passing across all blocking platforms.
+Final pre-tag CI run: **25982872250** (commit `c9d8de38`) — verifies the BALL_EXPORT restoration in `9042af07` against a forced-cold Windows cmake-tree cache (key bumped v1 → v2). Expected outcome: all blocking jobs green (lint ✓, linux-arm64 ✓, linux-x64 ✓, macos-arm64 ✓, windows-x64 ✓ cold, Phase 9 gatekeeper ✓, coverage ✓), confirming the regression fix holds without the prior cache-masking. Test suite passing across all blocking platforms.
 
-Final commit on `v1.6-modernization`: `046271ec` (release.yml hardening: aggressive disk cleanup + `VCPKG_INSTALL_OPTIONS=--clean-after-build` for Windows release builds — pre-emptive fix for the Windows runner disk pressure).
+(Prior "successful" run 25977136797 on `046271ec` showed `success` in the GH job summary BUT logs reveal the Windows VIEW.dll link failure was masked by the 999.17 cache — see the BALL_EXPORT regression row in the Latent-bug table above. The v1→v2 cache bump in `c9d8de38` is what makes the next run an honest signal.)
+
+Final commit on `v1.6-modernization` at tag time: `c9d8de38` (`ci(999.17): bump Windows cmake-tree cache key v1→v2 to force cold rebuild`). Two earlier release.yml hardening commits from the parallel session (`99cced76` disk cleanup, `046271ec` VCPKG_INSTALL_OPTIONS, `2de65117` vcpkg cache cross-ref, `357d13e4` artifact upload) were chasing the wrong root cause of the same regression — they remain in tree as useful defensive Windows runner hygiene but were not the actual fix.
 
 Tag: `v1.6.2` → GitHub Release artifacts (macOS `.dmg`, Linux `.AppImage`, Windows `.exe`) produced by `release.yml` on tag push.

@@ -1684,6 +1684,37 @@ Plans:
 Plans:
 - [ ] TBD (promote when capacity allows; unblock by reverting PRO.db bonds or fixing HYP section)
 
+### Phase 999.36: Source-aware Windows cmake-tree cache key (BACKLOG · v1.6.3 OR v1.7)
+
+**Goal:** Extend the Phase 999.17 (BUILD-ACCEL-02) Windows cmake-tree cache key to include hashes of source files that participate in MSVC DLL-export contracts — currently the key is `hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json')` which misses any source edit that changes export semantics without changing build configuration.
+
+**Why now (filed 2026-05-17 as direct follow-up to the cb392cc4 / 9042af07 incident):** During the v1.6.2 release-tag prep window the parallel session landed `cb392cc4` (drop redundant BALL_EXPORT on vector3.C TVector3<float> instantiation, citing GCC -Wattributes). That source edit silently broke BALL.dll's MSVC export of TVector3<float> symbols. ci.yml masked the defect for ~12 hours because the 999.17 cache key did not include `source/MATHS/vector3.C`'s hash: warm cache restored a pre-regression CMakeFiles/ with a stale BALL.lib import library, VIEW.dll linked from the stale import, and the job greenlit. release.yml caught it (different cache scope, cold cache on tag-trigger) but ate 3 runs (25977139490, 25974049283, 25971072146) before the source-defect was traced. Fixed in 9042af07 + cache key bumped v1 → v2 in c9d8de383 to force one cold rebuild — that's a stopgap, not a structural fix.
+
+**Scope:**
+1. **Identify the export-contract surface.** Scan tree for files containing `template class BALL_EXPORT` (canonical Phase 5.1 Plan 07 pattern). Today: `source/MATHS/vector3.C`, `source/KERNEL/atom.C` (per Phase 5.1 Plan 07 SUMMARY), possibly `source/MATHS/vector4.C` and other `.C` files in MATHS/. Lock the actual set via `grep -rn "template class BALL_EXPORT" source/`.
+2. **Extend the cache key.** Add a `hashFiles(...)` arm covering those files. Resulting key:
+   ```yaml
+   key: ci-windows-cmake-tree-v3-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json') }}-${{ hashFiles('source/**/*BALL_EXPORT*') }}
+   ```
+   (Or use `hashFiles('source/MATHS/vector3.C', 'source/KERNEL/atom.C', ...)` with the explicit list.)
+3. **Validate via controlled experiment.** Make a no-op edit to one of the listed files; confirm cache MISSES on the next CI run. Make an edit to an unlisted source file; confirm cache HITS (the warm-cache speedup is preserved for routine source-only changes).
+4. **Document in ci.yml comment + cmake/PCH.md sibling note.** Explain why this expanded key matters and how to add a new file to the list when introducing a new `template class BALL_EXPORT`.
+
+**Out of scope (DO NOT do during this phase):**
+- Switching to per-file ccache invalidation (orthogonal; ccache already does this for compile artifacts, what we need is build-tree cache invalidation).
+- Changing the Phase 999.17 cache PATH (`build/ci-windows/{CMakeCache.txt, CMakeFiles/, build.ninja, vcpkg_installed/}`) — still the right scope.
+- Backporting to release.yml — release.yml doesn't use this cache (tag-trigger ≠ branch-trigger), so the same masking class can't happen there.
+
+**Acceptance:** a controlled experiment shows the new cache key invalidates on edits to ANY file in the export-contract surface, while preserving warm-cache speedup for unrelated source edits. The cb392cc4-class of masking bug is structurally prevented.
+
+**Estimated effort:** 1-2 hours (one ci.yml edit + 2-3 controlled-experiment runs).
+**Plans:** 0 (single-task PLAN when promoted).
+
+**Promotion trigger:** v1.6.3 if one materializes, OR v1.7 cycle. No new REQ ID — satisfies a follow-on for BUILD-ACCEL-02 (Phase 999.17).
+
+Plans:
+- [ ] TBD (promote when capacity allows; trivial fit anywhere post-v1.6.2)
+
 ### Phase 999.23: CIF Bison grammar shift-reduce audit (BACKLOG · v1.6.2 OR v1.7)
 
 **Goal:** Audit and resolve (or document-as-benign) the shift-reduce conflicts emitted by Bison on [`source/FORMAT/CIFParserParser.y`](../source/FORMAT/CIFParserParser.y). Count needs reconciliation: [`05.1-BACKLOG.md:196`](phases/05.1-build-warnings-and-latent-bugs/05.1-BACKLOG.md) says 3 conflicts, [`05.1-05-SUMMARY.md:85`](phases/05.1-build-warnings-and-latent-bugs/05.1-05-SUMMARY.md) says 5 — first task is to lock the actual current count.
