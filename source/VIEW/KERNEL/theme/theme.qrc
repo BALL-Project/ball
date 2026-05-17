@@ -49,5 +49,12 @@
         <file alias="ball-app.svg">icons/lucide/ball-app.svg</file>
         <file alias="actions/simulation-running.svg">icons/lucide/activity.svg</file>
         <file alias="actions/raytracing.svg">icons/lucide/zap.svg</file>
+        <!-- Phase 999.43: shared-widget chevrons (SectionHeader) + reset
+             glyph (LabeledSlider). chevron-* used by the section header's
+             expand/collapse toggle; rotate-ccw aliased as 'actions/reset'
+             for the slider's revert-to-default button. -->
+        <file alias="actions/chevron-down.svg">icons/lucide/chevron-down.svg</file>
+        <file alias="actions/chevron-right.svg">icons/lucide/chevron-right.svg</file>
+        <file alias="actions/reset.svg">icons/lucide/rotate-ccw.svg</file>
     </qresource>
 </RCC>
