@@ -1,0 +1,19 @@
+HEADER    DIPEPTIDE                               17-MAY-26   DIAL
+TITLE     ALANINE-ALANINE DIPEPTIDE — BALLVIEW SAMPLE
+REMARK    Phase 999.47 (Handover §7.2): bundled sample structure for the
+REMARK    BALLView WelcomeScreen "Sample structures" grid. Coordinates
+REMARK    are a representative dialanine geometry suitable for the first-
+REMARK    look render. Replace with a higher-fidelity geometry as the
+REMARK    asset pipeline matures (tracked for 999.48 follow-up).
+ATOM      1  N   ALA A   1       0.000   0.000   0.000  1.00  0.00           N
+ATOM      2  CA  ALA A   1       1.458   0.000   0.000  1.00  0.00           C
+ATOM      3  C   ALA A   1       2.009   1.420   0.000  1.00  0.00           C
+ATOM      4  O   ALA A   1       1.251   2.390   0.000  1.00  0.00           O
+ATOM      5  CB  ALA A   1       1.988  -0.773  -1.199  1.00  0.00           C
+ATOM      6  N   ALA A   2       3.332   1.543  -0.005  1.00  0.00           N
+ATOM      7  CA  ALA A   2       4.012   2.834  -0.027  1.00  0.00           C
+ATOM      8  C   ALA A   2       5.527   2.692  -0.092  1.00  0.00           C
+ATOM      9  O   ALA A   2       6.241   3.694  -0.146  1.00  0.00           O
+ATOM     10  CB  ALA A   2       3.578   3.660  -1.245  1.00  0.00           C
+TER      11      ALA A   2
+END
