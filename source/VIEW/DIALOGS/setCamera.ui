@@ -10,6 +10,10 @@
     <height>153</height>
    </rect>
   </property>
+  <!-- Phase 999.43: ballviewDialog dynamic property → QSS hook for theme-neutral.qss -->
+  <property name="ballviewDialog" stdset="0">
+   <cstring>true</cstring>
+  </property>
   <property name="minimumSize">
    <size>
     <width>350</width>
