@@ -604,6 +604,34 @@ jobs:
           cmake --build --preset ci-windows --target BALL VIEW BALLView --config Release
           & ccache --show-stats --verbose
 
+      # Phase 999.28 follow-up — release-pipeline cross-ref vcpkg cache seed.
+      # Why: release.yml runs on tag-push refs, whose GitHub Actions cache
+      # scope is disjoint from this v1.6-modernization branch's scope. CI's
+      # warm vcpkg binary cache is invisible to the tag-triggered release
+      # workflow → release always cold-builds Qt6 + Boost from source on
+      # Windows (~2h, OOM-prone). Workaround: publish CI's vcpkg/archives
+      # as a workflow ARTIFACT (cross-ref accessible via `gh run download`).
+      # release.yml's seed step downloads the most recent successful
+      # artifact and stages it under %LOCALAPPDATA%\vcpkg\archives before
+      # cmake configure; vcpkg then hits the local archives and skips the
+      # from-source compile.
+      #
+      # Upload only when the actions/cache restore missed (i.e., archives
+      # are fresh from this run) — avoids redundant ~3GB uploads on every
+      # warm-cache CI run. `if: always()` covers both success + failure
+      # outcomes of the build so even a partial vcpkg install gets
+      # surfaced for release.yml.
+      - name: Upload vcpkg archives for release-pipeline reuse (Windows)
+        if: always() && matrix.os == 'windows-x64' && steps.vcpkg-cache.outputs.cache-hit != 'true'
+        uses: actions/upload-artifact@v6
+        with:
+          name: vcpkg-archives-windows
+          path: C:\Users\runneradmin\AppData\Local\vcpkg\archives
+          retention-days: 14
+          if-no-files-found: warn
+          compression-level: 0   # archives are already deflated .zips
+          overwrite: true
+
       # Phase 999.19 (BUILD-ACCEL-04): per-TU build profiling (Windows).
       - name: Top-20 slowest TUs (windows-x64)
         if: (success() || failure()) && matrix.os == 'windows-x64'

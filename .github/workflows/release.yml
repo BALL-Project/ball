@@ -207,6 +207,59 @@ jobs:
       # =====================================================================
       # Windows x64 — vcpkg manifest, ci-windows preset, windeployqt
       # =====================================================================
+
+      # Phase 999.28 follow-up — cross-ref vcpkg cache seed for the release
+      # pipeline. release.yml runs on TAG-push refs whose actions/cache
+      # scope is disjoint from any branch's scope, so CI's warm vcpkg
+      # cache on v1.6-modernization is invisible here. Workaround: CI
+      # uploads %LOCALAPPDATA%\vcpkg\archives as a workflow ARTIFACT
+      # (cross-ref accessible via gh API). This step downloads the most
+      # recent successful vcpkg-archives-windows artifact from the CI
+      # workflow and stages it under %LOCALAPPDATA%\vcpkg\archives BEFORE
+      # the actions/cache restore step. vcpkg then hits the seeded local
+      # archives during cmake configure and skips the ~2h from-source
+      # Qt6+Boost compile that has OOM'd this pipeline 4× on v1.6.2.
+      #
+      # Fail-soft: if no artifact exists (first run after this change,
+      # or beyond the 14-day retention window), continue without seeding
+      # and fall back to cold vcpkg.
+      - name: Seed vcpkg archives from CI artifact (Windows)
+        if: matrix.os == 'windows-x64'
+        shell: pwsh
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $stageDir = "C:\Users\runneradmin\AppData\Local\vcpkg\archives"
+          New-Item -ItemType Directory -Force -Path $stageDir | Out-Null
+          Write-Host "Looking for latest successful CI run on v1.6-modernization with vcpkg-archives-windows artifact..."
+
+          # Find the most recent successful CI workflow run on the branch
+          # that has the vcpkg-archives-windows artifact still within
+          # retention.
+          $runs = gh run list --workflow=CI --branch=v1.6-modernization --status=success --limit=20 --json databaseId | ConvertFrom-Json
+
+          $found = $false
+          foreach ($r in $runs) {
+            $rid = $r.databaseId
+            $artifacts = gh api "/repos/$env:GITHUB_REPOSITORY/actions/runs/$rid/artifacts" --jq '.artifacts[] | select(.name == "vcpkg-archives-windows" and .expired == false) | .id' 2>$null
+            if ($artifacts) {
+              Write-Host "Found vcpkg-archives-windows artifact in CI run $rid"
+              gh run download $rid --repo $env:GITHUB_REPOSITORY --name vcpkg-archives-windows --dir $stageDir
+              if ($LASTEXITCODE -eq 0) {
+                $count = (Get-ChildItem -Path $stageDir -Recurse -File | Measure-Object).Count
+                Write-Host "Staged $count vcpkg archive files under $stageDir"
+                $found = $true
+                break
+              } else {
+                Write-Host "Download failed for run $rid (exit $LASTEXITCODE); trying older run..."
+              }
+            }
+          }
+          if (-not $found) {
+            Write-Host "::warning::No vcpkg-archives-windows artifact found within retention; will cold-build vcpkg"
+          }
+
       - name: Restore vcpkg binary cache (Windows)
         id: vcpkg-cache
         if: matrix.os == 'windows-x64'
