@@ -41,6 +41,10 @@ SET(SOURCES_LIST
 	controllers/materialController.C
 	controllers/labelController.C
 	controllers/clippingController.C
+	# Phase 999.44 Plan 05 — Scene-tab remainder Controllers.
+	controllers/cameraController.C
+	controllers/lightController.C
+	controllers/stereoController.C
 	# Phase 999.44 — Tools › Legacy Settings interim home helper.
 	# Static data — compiles in both BALL_UI_V2 cells. Mainframe wires
 	# the submenu under the ifdef in a follow-up plan.

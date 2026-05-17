@@ -37,9 +37,9 @@ end-to-end before adding a new Controller.
 | # | Controller            | Source dialog                                                           | Status                              |
 |---|-----------------------|-------------------------------------------------------------------------|-------------------------------------|
 | 1 | StageController       | `source/VIEW/DIALOGS/stageSettings.C` (720 LOC)                         | LANDED 999.44 Plan 01 (read-only)   |
-| 2 | LightController       | `source/VIEW/DIALOGS/lightSettings.C` (538 LOC)                         | TODO(999.44-05)                     |
-| 3 | CameraController      | `source/VIEW/DIALOGS/setCamera.C` (94 LOC)                              | TODO(999.44-05)                     |
-| 4 | StereoController      | `source/VIEW/DIALOGS/stereoSettingsDialog.C` (159 LOC)                  | TODO(999.44-05)                     |
+| 2 | LightController       | `source/VIEW/DIALOGS/lightSettings.C` (538 LOC)                         | LANDED 999.44 Plan 05 (read-only)   |
+| 3 | CameraController      | `source/VIEW/DIALOGS/setCamera.C` (94 LOC)                              | LANDED 999.44 Plan 05 (read-only)   |
+| 4 | StereoController      | `source/VIEW/DIALOGS/stereoSettingsDialog.C` (159 LOC)                  | LANDED 999.44 Plan 05 (read-only)   |
 | 5 | ModelController       | `source/VIEW/DIALOGS/modelSettingsDialog.C` (385 LOC)                   | LANDED 999.44 Plan 04 (read-only)   |
 | 6 | ColoringController    | `source/VIEW/DIALOGS/coloringSettingsDialog.C` (878 LOC)                | LANDED 999.44 Plan 04 (read-only)   |
 | 7 | MaterialController    | `source/VIEW/DIALOGS/materialSettings.C` (280 LOC)                      | LANDED 999.44 Plan 04 (read-only)   |

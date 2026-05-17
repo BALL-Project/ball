@@ -45,6 +45,17 @@ namespace BALL
 		class ModelController;
 		class ColoringController;
 		class MaterialController;
+		class Stage;
+		class Scene;
+		class StageSection;
+		class StageController;
+		class CameraController;
+		class LightController;
+		class StereoController;
+		class CameraSection;
+		class LightsSection;
+		class StereoSection;
+		class BackgroundSection;
 
 		/**
 		 * Root content widget hosted inside the InspectorDock. Owns the
@@ -131,6 +142,15 @@ namespace BALL
 				 */
 				void setActiveRepresentation(Representation* rep);
 
+				/**
+				 * Phase 999.44 Plan 05 — Scene-tab completion.
+				 * Constructs the Camera/Lights/Stage/Stereo/Background
+				 * sections + their Controllers + binds to the live
+				 * Stage and Scene. Replaces the Scene-tab empty state
+				 * with the section stack.
+				 */
+				void attachSceneTab(Stage* stage, Scene* scene);
+
 			private Q_SLOTS:
 				void onTabChanged_(int index);
 				void onSectionToggled_(bool expanded);
@@ -159,6 +179,19 @@ namespace BALL
 				ColoringController*      coloring_controller_;
 				MaterialController*      material_controller_;
 				bool                     representation_sections_added_;
+
+				// Phase 999.44 Plan 05 — Scene-tab Controllers +
+				// sections. Lazy-built in attachSceneTab.
+				StageController*         stage_controller_;
+				CameraController*        camera_controller_;
+				LightController*         light_controller_;
+				StereoController*        stereo_controller_;
+				StageSection*            stage_section_;
+				CameraSection*           camera_section_;
+				LightsSection*           lights_section_;
+				StereoSection*           stereo_section_;
+				BackgroundSection*       background_section_;
+				bool                     scene_sections_added_;
 		};
 
 	} // namespace VIEW

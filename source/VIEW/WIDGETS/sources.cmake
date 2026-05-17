@@ -48,6 +48,11 @@ SET(SOURCES_LIST
 	inspector/sections/modelSection.C
 	inspector/sections/coloringSection.C
 	inspector/sections/materialSection.C
+	# Phase 999.44 Plan 05 — Scene tab remainder.
+	inspector/sections/cameraSection.C
+	inspector/sections/lightsSection.C
+	inspector/sections/stereoSection.C
+	inspector/sections/backgroundSection.C
 	# Phase 999.45 — Workspace consolidation: ProjectDock (left-rail
 	# tabified group of Structures/Reps/Datasets) + BottomDrawer
 	# (24px↔240px animated dock with Logs/FileObserver tabs). Both

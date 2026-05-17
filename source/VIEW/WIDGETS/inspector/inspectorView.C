@@ -21,6 +21,15 @@
 #include <BALL/VIEW/KERNEL/controllers/modelController.h>
 #include <BALL/VIEW/KERNEL/controllers/coloringController.h>
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
+#include <BALL/VIEW/KERNEL/controllers/stageController.h>
+#include <BALL/VIEW/KERNEL/controllers/cameraController.h>
+#include <BALL/VIEW/KERNEL/controllers/lightController.h>
+#include <BALL/VIEW/KERNEL/controllers/stereoController.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/stageSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/cameraSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/lightsSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/stereoSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/backgroundSection.h>
 
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
@@ -65,7 +74,17 @@ namespace BALL
 				model_controller_(nullptr),
 				coloring_controller_(nullptr),
 				material_controller_(nullptr),
-				representation_sections_added_(false)
+				representation_sections_added_(false),
+				stage_controller_(nullptr),
+				camera_controller_(nullptr),
+				light_controller_(nullptr),
+				stereo_controller_(nullptr),
+				stage_section_(nullptr),
+				camera_section_(nullptr),
+				lights_section_(nullptr),
+				stereo_section_(nullptr),
+				background_section_(nullptr),
+				scene_sections_added_(false)
 		{
 			setObjectName("inspectorView");
 
@@ -302,6 +321,35 @@ namespace BALL
 			if (model_controller_)    model_controller_->setRepresentation(rep);
 			if (coloring_controller_) coloring_controller_->setRepresentation(rep);
 			if (material_controller_) material_controller_->setRepresentation(rep);
+		}
+
+		void InspectorView::attachSceneTab(Stage* stage, Scene* scene)
+		{
+			// Phase 999.44 Plan 05 — Scene-tab construction.
+			// Idempotent: do nothing on re-attach (Controllers stay
+			// pointed at the original stage/scene; cut-over plan adds
+			// setStage/setScene swapping).
+			if (scene_sections_added_) return;
+
+			stage_controller_  = new StageController(stage, scene, this);
+			camera_controller_ = new CameraController(stage, this);
+			light_controller_  = new LightController(stage, this);
+			stereo_controller_ = new StereoController(stage, this);
+
+			stage_section_      = new StageSection(stage_controller_, body_);
+			camera_section_     = new CameraSection(camera_controller_, body_);
+			lights_section_     = new LightsSection(light_controller_, body_);
+			stereo_section_     = new StereoSection(stereo_controller_, body_);
+			background_section_ = new BackgroundSection(stage_controller_, body_);
+
+			// Section order per Handover §04 Scene tab:
+			// Camera → Lights → Stage → Stereo → Background.
+			addSection(InspectorTabs::TabIndex::Scene, camera_section_);
+			addSection(InspectorTabs::TabIndex::Scene, lights_section_);
+			addSection(InspectorTabs::TabIndex::Scene, stage_section_);
+			addSection(InspectorTabs::TabIndex::Scene, stereo_section_);
+			addSection(InspectorTabs::TabIndex::Scene, background_section_);
+			scene_sections_added_ = true;
 		}
 
 	} // namespace VIEW

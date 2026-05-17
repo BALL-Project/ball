@@ -265,6 +265,9 @@ namespace BALL
 		inspector_dock_->view()->attachRepresentationTab();
 		representation_adapter_ = new VIEW::RepresentationInspectorAdapter(
 			this, inspector_dock_->view());
+		// Phase 999.44 Plan 05 — Scene tab is wired post-scene_
+		// construction (further down) because the Stage lives on the
+		// Scene widget which doesn't exist yet at this point.
 #else
  		addDockWidget(Qt::BottomDockWidgetArea, log_view);
 		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
@@ -275,6 +278,16 @@ namespace BALL
 		scene_ = new Scene(this, ((String)tr("3D View")).c_str());
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
+
+#ifdef BALL_UI_V2
+		// Phase 999.44 Plan 05 — Scene tab completion (sub-PR 4.5).
+		// Now that the Scene + its Stage exist, attach the Scene-tab
+		// sections (Camera / Lights / Stage / Stereo / Background)
+		// with read-only mirror Controllers pointed at the live
+		// Stage/Scene.
+		if (inspector_dock_ != 0 && inspector_dock_->view() != 0)
+			inspector_dock_->view()->attachSceneTab(scene_->getStage(), scene_);
+#endif
 
 		new DisplayProperties(this, ((String)tr("DisplayProperties")).c_str());
 
