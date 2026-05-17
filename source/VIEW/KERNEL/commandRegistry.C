@@ -21,6 +21,23 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		// --- Command POD out-of-line special members ----------------
+		// Required for MSVC dllexport across the libVIEW DLL boundary
+		// (implicit/inline ctors+dtors don't get exported and the
+		// consumers — test/menuMapping_test, CommandPalette TU — then
+		// link against missing __declspec(dllimport) symbols).
+		// Defined =default so the codegen is identical to implicit;
+		// the difference is purely a linkage / dllexport visibility
+		// one. See commit a0e15f5 (CI 25999533400 fix).
+		Command::Command() = default;
+		Command::~Command() = default;
+		Command::Command(const Command&) = default;
+		Command::Command(Command&&) noexcept = default;
+		Command& Command::operator=(const Command&) = default;
+		Command& Command::operator=(Command&&) noexcept = default;
+
+		// --- CommandRegistry singleton -------------------------------
+
 		CommandRegistry& CommandRegistry::instance()
 		{
 			static CommandRegistry s_instance;

@@ -72,6 +72,19 @@ namespace BALL
 			std::function<void()> trigger;
 			std::function<bool()> isEnabled;
 			QPointer<QAction> action;
+
+			// Explicit special members — needed for MSVC dllexport
+			// (implicit/inline ctors+dtors don't get exported across
+			// the DLL boundary; consumers in test/menuMapping_test.C
+			// then see __declspec(dllimport) symbols that don't
+			// exist in VIEW.dll). Defining out-of-line in the .C TU
+			// gets us proper exports under all 3 toolchains.
+			Command();
+			~Command();
+			Command(const Command&);
+			Command(Command&&) noexcept;
+			Command& operator=(const Command&);
+			Command& operator=(Command&&) noexcept;
 		};
 
 		/** Phase 999.46 §6.1 — process-singleton registry that
