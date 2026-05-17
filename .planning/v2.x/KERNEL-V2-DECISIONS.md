@@ -1,9 +1,11 @@
 # KERNEL v2.0 — Locked Design Decisions
 
-**Status:** NORMATIVE. **Authored:** 2026-05-17. **Authoritative for K0.**
+**Status:** NORMATIVE. **Authored:** 2026-05-17. **Last amended:** 2026-05-17 (post Codex adversarial review). **Authoritative for K0.**
 **Branch:** `v2.0` (on top of `origin/v1.7-modernization`).
 **Companion docs:**
 - [`CORE-MOLECULESTORE-RESEARCH.md`](CORE-MOLECULESTORE-RESEARCH.md) — research / context (historical).
+- [`K0.3-FINDINGS.md`](K0.3-FINDINGS.md) — Atom2 prototype validation + Path-1/Path-2 migration shape.
+- [`K0-CODEX-REVIEW.md`](K0-CODEX-REVIEW.md) — adversarial review findings that forced the amendments below.
 - [`../KERNELV2.md`](../KERNELV2.md) — superseded for K0 by this doc (the parallel-model framing is no longer the plan; this doc commits to the store-as-source-of-truth replacement instead).
 
 This document records the design contract for the BALL 2.0 KERNEL rewrite,
@@ -24,14 +26,23 @@ Nucleotide / NucleicAcid / PDBAtom / System are **handles** layered on
 top of a per-System MoleculeStore that owns all per-atom data in
 struct-of-arrays columns.
 
-The Composite class is **deleted entirely**. PropertyManager and
-Selectable are **deleted entirely**. Their functionality is absorbed
-into MoleculeStore (selection bitmap; named-properties map with
-hot-promoted columns; modification + selection generation counters).
+**Amended 2026-05-17 (Codex review):** Composite, PropertyManager, and
+Selectable are NOT deleted entirely in K0 — they are reduced to **thin
+stubs** that exist for type compatibility with the existing test API
+surface (`AtomContainer::insertBefore(Atom&, Composite&)` etc. — see
+§6.5). Their *payload* (children pointers, tree machinery, named-
+property bag, selection bit, modification stamps) moves to
+MoleculeStore. The classes themselves stay as marker types whose
+operations are forwarded to the store. Full class deletion is
+deferred to v2.1 when downstream modules can be rewritten to use the
+new API. This is the only way to satisfy D10 (tests-only source-compat)
+without editing test sources.
 
 The on-wire persistence format **breaks at v2.0**. A new
 MoleculeStore-native binary format ships; v1.x files cannot be loaded
-directly; a one-shot `v1→v2` converter ships separately.
+directly; a one-shot `v1→v2` converter ships separately. K0.6 is split
+into a design subphase (K0.6a, spec the format + invariants + corpus)
+and an implementation subphase (K0.6b).
 
 ---
 
@@ -40,19 +51,21 @@ directly; a one-shot `v1→v2` converter ships separately.
 | # | Decision | Locked value |
 |---|---|---|
 | D1 | Composite framing | Store-as-ground-truth (NOT parallel-model from KERNELV2.md) |
-| D2 | Composite scope | **Full removal.** Class deleted. MoleculeStore owns hierarchy via CSR arrays |
-| D3 | PropertyManager scope | **Full removal.** Named properties live in MoleculeStore (hot-promoted to columns) |
-| D4 | Selectable scope | **Full removal.** Selection is a store-owned bitmap |
+| D2 | Composite scope | **Reduced to thin stub** (was: "Full removal"). Composite remains as a marker base class that AtomContainer/Molecule/Residue/etc. inherit so existing test API surface compiles. Composite's *data* (children/parent/sibling pointers, modification + selection stamps, properties bitset) moves to MoleculeStore CSR + per-store metadata. Composite methods become thin forwarders to the store. Full class deletion deferred to v2.1. [Amended 2026-05-17 per Codex review BLOCKER-1] |
+| D3 | PropertyManager scope | **Reduced to thin proxy** (was: "Full removal"). PropertyManager stays as a base class so AtomContainer/Bond/Atom can inherit it; methods forward to a per-store `properties_` table keyed by `(stable_id, name)`. Hot-promoted properties become typed store columns as an optimisation. Full deletion deferred to v2.1. [Amended 2026-05-17 per Codex review BLOCKER-1 + MEDIUM] |
+| D4 | Selectable scope | **Reduced to thin proxy** (was: "Full removal"). Selectable stays as a base class so subclasses inherit `isSelected()`/`select()`/`deselect()`; methods forward to the store's selection bitmap. Full deletion deferred to v2.1. [Amended 2026-05-17 per Codex review BLOCKER-1] |
 | D5 | Store ownership | **Per-System.** `System` holds `std::unique_ptr<MoleculeStore>` |
-| D6 | `Atom*` identity | **Preserved.** Handles are heap-allocated objects (~16-32 B). Pointer comparison, hashing, `std::set<Atom*>` work unchanged |
-| D7 | Reference-return getters | **Preserved.** `Vector3& getPosition()` returns `&store->positions[idx_]`. Invalidated only on store resize/compact (documented contract; debug-asserted via generation check) |
-| D8 | Stable-handle escape hatch | **Required.** Add `Vector3* getPositionPtr()` (and equivalents) for callers that need rebind-on-resize semantics. Re-resolves the column row each access |
+| D6 | `Atom*` identity | **Preserved.** Handles are heap-allocated objects (~24-32 B with vtable + inherited stub bases). Pointer comparison, hashing, `std::set<Atom*>` work unchanged. The store's `back_ptr_` column (8 B/atom) is part of the per-atom cost. [Amended 2026-05-17 per Codex review BLOCKER-2 — heap + back-pointer overhead now explicit] |
+| D7 | Reference-return getters | **Preserved with a hard live-reference contract.** `Vector3& getPosition()` returns `&store->positions[idx_]`. Reference is valid only while no store-resizing operation (`allocate_atom` beyond capacity, `reserve` growing capacity, `compact`, `insert`/`remove`) is called on the same store. Generation check on the *handle* (D8) catches stale handles; it cannot catch already-escaped `Vector3&`. **Debug builds enforce a "no-mutation-while-reference-live" rule** via a per-store `borrowed_ref_count_` counter incremented by `getPosition()` / `getForce()` / `getVelocity()` calls (RAII helper) and asserted-zero by every mutator. Release builds elide the check; documented as undefined-behavior contract. [Amended 2026-05-17 per Codex review HIGH-D7] |
+| D8 | Stable-handle escape hatch | **Required.** `Vector3* getPositionPtr()` re-resolves the column row each access. Survives store resize. For callers that can't comply with D7's live-reference contract. |
 | D9 | `Atom::interactions` public field | **Removed.** Sparse store column; getter access only |
-| D10 | Source-compat target | **Tests-only.** The post-deletion test subset (~49 tests, exact count from §6 verification) stays green with zero edits to test sources. Downstream modules (MOLMEC, STRUCTURE, etc.) are out of scope |
+| D10 | Source-compat target | **Tests-only.** The post-deletion test subset stays green with zero edits to test sources. Downstream modules (MOLMEC, STRUCTURE, etc.) are out of scope. **D10 only satisfiable because D2/D3/D4 are now "thin stub" rather than "full removal" — full deletion would require editing every test that uses `Composite&` / `PropertyManager*` / `Selectable` in signatures.** [Amended 2026-05-17 per Codex review BLOCKER-1] |
 | D11 | Compiled selection | **In K0.** Variant-based cached AST; Selector + Expression rewritten once |
-| D12 | Persistence format | **v2 break.** New MoleculeStore-native binary format; one-shot `v1→v2` converter ships separately as a CLI tool |
-| D13 | Memory budget gate | **HARD ≤160 B/atom total** (handle + store columns + bond CSR amortised), measured on 40k-atom benchmark |
+| D12 | Persistence format | **v2 break.** New MoleculeStore-native binary format. K0.6 split: K0.6a = format design + invariants + corpus spec (~2 weeks); K0.6b = implementation + v1→v2 converter (~3-4 weeks). [Amended 2026-05-17 per Codex review HIGH-Persistence] |
+| D13 | Memory budget gate | **Typical case ≤160 B/atom HARD** (handle + store columns + bond CSR amortised, at 3 bonds/atom — covers proteins, ligands, nucleic acids). **Worst case (≥10 bonds/atom, e.g. metal-organic frameworks, dense graphs) documented as out-of-budget** — bond storage alone exceeds 200 B/atom at that density. Worst-case workloads use a separate K0.6+ "compact-bond" representation that drops `bond_back_ptr_` and reconstructs handles lazily. [Amended 2026-05-17 per Codex review BLOCKER-2] |
 | D14 | Perf budget gate | **Iteration within 2× of baseline** (40k-atom System ≤0.13 s; baseline 0.067 s) |
+| D15 | Bond CSR adjacency | **MANDATORY in K0.2/K0.3, NOT optional polish.** Linear `bonds_of()` scan in the K0.2 skeleton becomes O(N²) for whole-system iteration; force-field loops are unusable without CSR. K0.3 work cannot ship without CSR in place. [Added 2026-05-17 per Codex review HIGH-Bond] |
+| D16 | Orphan atom store | **Single process-global "orphan store" for default-constructed atoms.** Was: lazy per-Atom MoleculeStore (proven unscalable in the K0.3a prototype — million-orphan-atom scenario = million heap stores). New default `Atom()` ctor borrows from the orphan store; `System::adopt(Atom&)` migrates the atom into the System's per-System store. [Added 2026-05-17 per Codex review HIGH-Lazy-Store; supersedes prototype design in `experiments/moleculeStore/atom_prototype.h`] |
 
 ---
 
@@ -97,23 +110,28 @@ header paths but their declarations are rewritten:
 ## 5. K0 phasing — what gets built when
 
 This supersedes the K0.1–K0.8 sketch in `CORE-MOLECULESTORE-RESEARCH.md`
-§5. The shape is similar but the scope (full removal + compiled
-selection + v2 format) is larger.
+§5. The shape is similar but the scope is larger and the order is
+revised post-Codex (CSR mandatory before facade; persistence split into
+design + implementation subphases).
 
-| Step | Scope | Weeks (1.0 FTE) | Gate |
-|---|---|---|---|
-| K0.1 | Build-fence: `BALL_CORE_ONLY=ON` CMake option; CI matrix entry; verify baseline tests green on the as-is tree | 1-2 | Configure clean on macOS/Linux; 49-test baseline runs |
-| K0.2 | `MoleculeStore` skeleton: columns + CSR + generation + selection bitmap + custom_props map. Standalone, no facade yet | 4-6 | `MoleculeStore_test.C` + `MoleculeStoreBond_test.C` green |
-| K0.3 | Atom + Bond facade rewrite: payload shrinks to (store, idx, gen); `atom.iC` getters/setters dispatch through store; reference-return contract enforced | 6-8 | Atom_test1/2 + Bond_test + AtomVector_test + AtomBondIteratorTraits_test + AtomIterator_test green |
-| K0.4 | Container facades + hierarchy: AtomContainer, Molecule, Residue, Chain, Fragment, SecondaryStructure, Protein, Nucleotide, NucleicAcid, PDBAtom, System rewritten on store CSR. New iterator templates (replace `BALL_KERNEL_DEFINE_ITERATOR_CREATORS` and `BALL_DECLARE_STD_ITERATOR_WRAPPER` with store-walking equivalents) | 6-8 | AtomContainer_test1/2 + Fragment_test + Chain_test + Molecule_test + System_test + Protein_test + Residue_test1/2 + PDBAtom_test + NucleicAcid_test + Nucleotide_test + SecondaryStructure_test green |
-| K0.5 | Compiled selection: variant-based AST + cache + parser re-entrancy fix. Expression / ExpressionTree / ExpressionParser / Selector rewritten | 3-4 | Expression_test + ExpressionTree_test + ExpressionParser_test + ExpressionPredicate_test + KernelPredicate_test + Selector_test + StandardPredicates_test1..4 + GlobalKernel_test green; Selector_test ≥10× faster than baseline |
-| K0.6 | Persistence v2: new binary format writer/reader; replace persistent virtuals on every handle | 3-4 | New `StoreFormat_test.C` green; round-trip identity on a curated corpus; v1→v2 converter sketch exists |
-| K0.7 | Memory + perf benchmark + budget verification: instrument 40k-atom workload, prove ≤160 B/atom + iteration ≤2× baseline | 1 | Both gates met; results recorded in `RELEASE-NOTES-v2.0.md` draft |
-| K0.8 | Cleanup + compat audit + release-notes draft: friend audit closure, public-API drift sweep, MILESTONE-CONTEXT-v2.0.md authored | 1-2 | All gates met; PR ready; planning artefacts complete |
+| Step | Scope | Weeks (1.0 FTE) | Gate | Status |
+|---|---|---|---|---|
+| K0.1 | Build-fence: `BALL_CORE_ONLY=ON` CMake option; CI matrix entry; verify baseline tests green | 1-2 | Configure clean on macOS/Linux; K0 baseline tests pass | ✅ DONE (d9d94f814) |
+| K0.2 | `MoleculeStore` skeleton: columns + generation + selection bitmap + custom_props map | 4-6 | `MoleculeStore_test` green | ✅ DONE (6cee65e3d) |
+| K0.2b | **CSR bond adjacency** (post-Codex: mandatory before facade work, not polish). Replace linear `bonds_of()` scan with CSR + incremental rebuild on bond add/remove | 1-2 | `MoleculeStore_test` extended with 100k-atom / 300k-bond bonds_of() perf check < 10 ms total | NEW (D15) |
+| K0.2c | **Live-reference contract enforcement** (post-Codex D7): per-store `borrowed_ref_count_` counter; RAII helper for getPosition()/getForce()/getVelocity(); mutator assertions | 1 | `MoleculeStore_test` extended with abort-on-mutate-while-borrowed check | NEW (D7 amendment) |
+| K0.3a | Atom2 prototype + findings | 1 | Prototype tests green; findings documented | ✅ DONE (19ab7e12d) |
+| K0.3b | Atom + Bond in-tree replacement, Path-2 phased migration. Per-field migration checklist enforces "no getter flip until all writers (incl. operator=/swap/clear_/friend Bond::createBond) migrated" | 6-8 | Atom_test1/2 + Bond_test + AtomVector_test + AtomBondIteratorTraits_test + AtomIterator_test green at each per-field commit | NEW (Path-2 amendment) |
+| K0.4 | Container facades + hierarchy: AtomContainer, Molecule, Residue, Chain, Fragment, SecondaryStructure, Protein, Nucleotide, NucleicAcid, PDBAtom, System rewritten on store CSR. New iterator templates (replace `BALL_KERNEL_DEFINE_ITERATOR_CREATORS` and `BALL_DECLARE_STD_ITERATOR_WRAPPER` with store-walking equivalents) | 6-8 | AtomContainer_test1/2 + Fragment_test + Chain_test + Molecule_test + System_test + Protein_test + Residue_test1/2 + PDBAtom_test + NucleicAcid_test + Nucleotide_test + SecondaryStructure_test green | |
+| K0.5 | Compiled selection: variant-based AST + cache + parser re-entrancy fix. Expression / ExpressionTree / ExpressionParser / Selector rewritten | 3-4 | Expression_test + ExpressionTree_test + ExpressionParser_test + ExpressionPredicate_test + KernelPredicate_test + Selector_test + StandardPredicates_test1..4 + GlobalKernel_test green; Selector_test ≥10× faster than baseline | |
+| K0.6a | **Persistence v2 design subphase** (post-Codex D12 amendment): spec the new binary format, identify invariants (atom ordering, bond endpoint stability, hierarchy reproduction, named-property roundtrip), build a curated v1.x corpus with edge cases (malformed-but-tolerated files, intermolecular bonds, dangling refs) | 2 | `STORE-FORMAT-SPEC.md` reviewed; corpus catalogued; invariant checklist signed off | NEW (D12 amendment) |
+| K0.6b | Persistence v2 implementation: writer + reader + v1→v2 converter | 3-4 | New `StoreFormat_test` green on the K0.6a corpus; round-trip identity verified | |
+| K0.7 | Memory + perf benchmark + budget verification: instrument 40k-atom (D14) + 100k-atom typical-bond (D13) workloads | 1 | Both gates met; worst-case-bond rationale documented; results in `RELEASE-NOTES-v2.0.md` draft | |
+| K0.8 | Cleanup + compat audit + release-notes draft: stub-class audit (D2/D3/D4 forwarders correctly delegate), public-API drift sweep, `MILESTONE-CONTEXT-v2.0.md` authored | 1-2 | All gates met; PR ready; planning artefacts complete | |
 
-**Total: 25-35 weeks at 1.0 FTE.** ~2× my earlier estimate (which
-assumed parallel-model). Honest: at sub-1.0 FTE this stretches to
-8-12 calendar months.
+**Total: 28-39 weeks at 1.0 FTE** (up from the earlier 25-35 — K0.2b CSR
++ K0.2c lease enforcement + K0.6a design split add ~3-4 weeks). Honest:
+at sub-1.0 FTE this stretches to 9-14 calendar months.
 
 ---
 
@@ -164,6 +182,31 @@ is re-enabled.** Removed from the K0 green-bar.
 
 This number is locked. Any further reductions or rewrites land as
 explicit follow-on plans.
+
+### 6.5 Composite stub keeps the test surface compiling
+
+**Post-Codex amendment 2026-05-17.** With D2 amended from "Full
+removal" to "thin stub", these test surfaces (which CANNOT be edited
+under D10) continue to type-check:
+
+- `AtomContainer::insertBefore(Atom&, Composite&)` /
+  `insertAfter(Atom&, Composite&)` — Composite stays as the parameter
+  type. Stub's forwarder uses store CSR to position the new atom.
+  See `test/AtomContainer_test2.C:177,190,223,236`.
+- `(Composite*)ac1` cast in `test/AtomContainer_test1.C:210` —
+  Composite stays as a base type that AtomContainer inherits.
+- `composite->create(true)` — Composite stub keeps `create()` as a
+  forwarder to AtomContainer::createDefault.
+- `PersistentObject* ptr = pm.readObject()` —
+  `test/AtomContainer_test1.C:267`. Persistence stays only enough
+  for the test to type-check; the actual round-trip is K0.6b. Some
+  persistence tests get **deferred** (not "deleted") and re-enabled
+  when K0.6b lands.
+
+So the K0 green-bar of 48 stays correct; what changes is the
+**implementation strategy** (stubs instead of deletions) and the
+**v2.1 horizon** (full deletion happens then, when test edits become
+acceptable).
 
 ---
 
