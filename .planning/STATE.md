@@ -4,14 +4,14 @@ milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: pre-tag-regression-fix
 stopped_at: Awaiting CI run 25982872250 (c9d8de38) — cold-cache Windows verification of BALL_EXPORT regression fix (9042af07) before v1.6.2 tag
-last_updated: "2026-05-17T16:35:00Z"
-last_activity: 2026-05-17 — Phase 999.44 plan 01 PARTIAL-COMPLETE (architecture + Controller-extraction pattern + StageSection + LegacySettingsHelper static-data landed; mainframe wiring + 12 sections + 8 controllers deferred to RC patch cycle per scope-trim contract). 999.45 also landed in parallel. libVIEW links green BALL_UI_V2=ON macOS-arm64; cross-OS CI 25996552601 in flight.
+last_updated: "2026-05-17T18:48:00Z"
+last_activity: 2026-05-17 — Phase 999.46 COMPLETE (Handover Phase 6, BALLView Refresh menus + command palette). 9 commits, ~13min wall-clock. CommandRegistry singleton + insertMenuEntry auto-register hook + 18-row menu remap to 8 task-coded top-levels (File·Edit·Select·View·Compute·Scripts·Window·Help) + macOS setMenuRole(...Standard) for About/Prefs/Quit + CommandPalette widget (Cmd/Ctrl+K, 560px sheet, fuzzy match, ?/>/: prefix modes) + menuMapping_test + lupdate refresh (113 new strings on de_DE) + I18N-WORKFLOW.md. All BALL_UI_V2-gated; OFF cell behaviorally identical. Both macOS-arm64 cells green locally; CI run 25999533400 dispatched on 4036b41555. 999.47 dispatch unblocked.
 progress:
   total_phases: 53
-  completed_phases: 18
+  completed_phases: 19
   total_plans: 53
-  completed_plans: 54
-  percent: 34
+  completed_plans: 55
+  percent: 36
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -25,9 +25,9 @@ progress:
 ## Current Position
 
 Phase: v1.7 Wave 4 — BALLView Refresh
-Plan: 999.44 COMPLETE — Plans 01-06 landed (architecture + mainframe wiring + 3 tabs + 9 Controllers + StageController cut-over); Plan 07 (pixel-diff tests) DEFERRED to v1.7 RC patch per operating-contract scope-trim guidance. 9 commits in continuation session (Plans 02-06 + docs closure).
-Status: 999.44 + 999.45 both COMPLETE; remaining v1.7 Wave 4 = 999.44-04b RC patch (Label + Clipping sections) + 8 Controller cut-over plans (mechanical per StageController exemplar) + Plan 07 pixel-diff tests → 999.46 menus+command palette → 999.47 keybindings+macOS standard-role → 999.48 BALL_UI_V2 flag flip → 999.49 Classic delete. **999.46 dispatch unblocked.**
-Last activity: 2026-05-17 — Phase 999.44 continuation COMPLETE (Plans 02-06 landed + closure docs; macOS-arm64 BALL_UI_V2={ON,OFF} green per commit; CI dispatched for each Plan)
+Plan: 999.46 COMPLETE — single-plan phase landing 8 tasks (CommandRegistry singleton + insertMenuEntry auto-register hook + 18-row menu remap to 8 top-level menus + macOS setMenuRole standard-role plumbing + CommandPalette widget with Cmd/Ctrl+K + ?/>/: prefix modes + menuMapping_test + lupdate refresh + I18N-WORKFLOW.md). 9 commits, ~13min wall-clock.
+Status: 999.44 + 999.45 + 999.46 all COMPLETE; remaining v1.7 Wave 4 = 999.44-04b RC patch (Label + Clipping sections, deferred) + 8 Controller cut-over plans (mechanical, deferred) + Plan 07 pixel-diff tests (deferred) → 999.47 onboarding → 999.48 BALL_UI_V2 flag flip → 999.49 Classic delete. **999.47 dispatch unblocked.**
+Last activity: 2026-05-17 — Phase 999.46 COMPLETE (Handover Phase 6 — menus + command palette); CI run 25999533400 dispatched on 4036b41555 (ui_v2 × 4-OS matrix in flight). macOS-arm64 BALL_UI_V2={ON,OFF} verified green locally + menuMapping_test PASSED on both cells.
 
 ## Performance Metrics
 

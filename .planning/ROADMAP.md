@@ -2173,7 +2173,7 @@ Plans:
 Plans:
 - [x] [999.45-01-PLAN.md](phases/999.45-workspace-consolidation/999.45-01-PLAN.md) — 11-task plan. Result: [999.45-01-SUMMARY.md](phases/999.45-workspace-consolidation/999.45-01-SUMMARY.md). 7 source commits (PLAN + 4 feat + 1 feat + 1 docs final) under the `(999.45/NN)` scope prefix. Note: deferred items in [deferred-items.md](phases/999.45-workspace-consolidation/deferred-items.md) flag two 999.44-owned issues surfaced during 999.45 execution (cmake macro — already resolved by concurrent 999.44 agent; OFF-cell Q_OBJECT vtable ifdef — pending 999.44 fix).
 
-### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.46: BALLView Refresh — Menus + command palette (Handover Phase 6) (COMPLETE · v1.7 WAVE 4 · 2026-05-17)
 
 **Goal:** Re-author the top menu bar around **tasks** rather than C++ namespaces, and introduce `Cmd/Ctrl+K` **command palette** that exposes every action in the app by name.
 
@@ -2224,10 +2224,20 @@ Plans:
 
 **Estimated effort:** ~2 weeks (menu work; reduced from 2-3 weeks because no macOS global-menubar mode work per Q1). Community translation round (parallel, time-elapsed-only, not engineering effort).
 
-**Plans:** 0.
+**Actual effort:** ~13 min execution wall-clock (9 commits, ~2300 LOC added net of translation refresh). CommandPalette + CommandRegistry singletons + 18-row menu remap + macOS standard-role plumbing + minimal test + i18n workflow doc + lupdate refresh all landed in one execution session.
+
+**Plans:** 1/1 plans complete.
 
 Plans:
-- [ ] TBD (promote with /gsd-plan-phase after 999.45 lands)
+- [x] [PLAN.md](phases/999.46-menus-command-palette/PLAN.md) — single-plan
+  phase covering all 8 tasks (CommandRegistry / auto-register hook / menu
+  remap / setMenuRole / CommandPalette / prefix-modes / menuMapping_test /
+  i18n refresh). Result:
+  [999.46-SUMMARY.md](phases/999.46-menus-command-palette/999.46-SUMMARY.md)
+  — CI run [25999533400](https://github.com/BALL-Project/ball/actions/runs/25999533400)
+  dispatched on `4036b41555`; ui_v2 × OS matrix in flight at phase-close
+  time. Both macOS-arm64 cells (ON + OFF) verified locally: BALLView.app
+  links green, `menuMapping_test` PASSED.
 
 ### Phase 999.47: BALLView Refresh — Onboarding (Handover Phase 7) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
