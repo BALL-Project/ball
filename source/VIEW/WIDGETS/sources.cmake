@@ -25,6 +25,11 @@ SET(SOURCES_LIST
 	labeledSlider.C
 	sectionHeader.C
 	swatchButton.C
+	# Phase 999.45 — Workspace consolidation: ProjectDock (left-rail
+	# tabified group of Structures/Reps/Datasets). Compiles in
+	# BALL_UI_V2=ON and OFF cells; Mainframe wires it under the ifdef.
+	# bottomDrawer.C added in 999.45-Task-3.
+	projectDock.C
 	shortcutTableView.C
 	SDWidget.C
 	testFramework.C
