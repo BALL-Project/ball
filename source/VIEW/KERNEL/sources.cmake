@@ -23,6 +23,7 @@ SET(SOURCES_LIST
 	threads.C
 	UIOperationMode.C
 	theme/themeManager.C
+	theme/themedIconEngine.C
 )
 
 SET(MOC_SOURCES_LIST ${MOC_SOURCES_LIST} serverWidget.C)
