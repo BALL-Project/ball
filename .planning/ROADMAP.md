@@ -1493,7 +1493,7 @@ Plans:
 Plans:
 - [x] Fix-and-land trio executed inline (3 commits: `78ecda5`, `2497369`, `b98b63a`) — COMPLETE 2026-05-16
 
-### Phase 999.29: Remove DOCKING/GENETICDOCK dead subsystem (BACKLOG · TARGETED FOR v1.6.2 · pull-forward from 999.12 v2.0 slice)
+### Phase 999.29: Remove DOCKING/GENETICDOCK dead subsystem (COMPLETE · v1.7 · 2026-05-17)
 
 **Goal:** Delete the entire `include/BALL/DOCKING/GENETICDOCK/` + `source/DOCKING/GENETICDOCK/` directories and the two `INCLUDE(...)` lines that wire them into the build. 18 files, 2722 LOC removed. Eliminates ~150 deprecation warnings from every platform build (`-Wdeprecated-declarations` on `GeneticAlgorithm`, `EvolutionaryDocking`, `DockProblem`, `GenericGene/DoubleGene/QuaternionGene`, `GenericParameter/DoubleParameter/QuaternionParameter`, `RotateBonds/RotateBond`, `GeneticIndividual`).
 
