@@ -79,6 +79,7 @@ jobs:
     outputs:
       matrix: ${{ steps.set.outputs.matrix }}
       cross_platform: ${{ steps.set.outputs.cross_platform }}
+      ui_v2_matrix: ${{ steps.set.outputs.ui_v2_matrix }}
     steps:
       # fetch-depth: 0 needed so the path-change diff (next step) can
       # reach the base SHA. dorny/paths-filter@v3 hit "fatal: shallow
@@ -98,6 +99,42 @@ jobs:
           cross_platform="false"
           changed_paths_match="false"
 
+          # ------------------------------------------------------------------
+          # ui_v2 axis (Wave 4 / Phase 999.40-999.48 — Handover §10 CI gate 6).
+          #
+          # WHY: every Wave 4 BALLView Refresh phase (999.40-999.48) lives
+          # behind the `BALL_UI_V2` CMake build flag (CMakeLists.txt:289).
+          # Per Handover §09-cross-platform.md §"CI matrix" + §10 CI gate 6,
+          # Wave 4 phases must validate ON + OFF until 999.48 §8.7 removes
+          # the flag entirely. The axis doubles the matrix (2× runners per
+          # OS) when relevant changes land — too expensive to do always, so
+          # path-aware: only forced when UI_V2-touching paths change OR a
+          # full cross-platform trigger fires (schedule / workflow_dispatch /
+          # maintenance branches).
+          #
+          # WHEN TO DROP: post-Phase-999.48 §8.7 flag removal — at that point
+          # `BALL_UI_V2` no longer exists, only ON behavior remains, and the
+          # axis becomes dead weight. Delete the `ui_v2_matrix` output, the
+          # `_ui_v2_paths_match` block, and the doubling loop below; revert
+          # MAC_ENTRY/LINUX_X64_ENTRY/etc. to their single-ui_v2-field form
+          # OR strip the field entirely + remove `-DBALL_UI_V2=...` from the
+          # Configure steps.
+          #
+          # PATH-AWARE DOUBLING RULE:
+          #  - Any change under source/VIEW/KERNEL/theme/, include/BALL/VIEW/
+          #    KERNEL/theme/, source/VIEW/KERNEL/iconLoader.{h,C}, BALLVIEW
+          #    mainframe.C, CMakeLists.txt, vcpkg.json, or any new
+          #    inspector/workspace/commandPalette/welcomeScreen file →
+          #    force `ui_v2: [ON, OFF]` (matrix doubles).
+          #  - Schedule / workflow_dispatch / maintenance branches → also
+          #    doubled (full validation surface).
+          #  - Otherwise → `ui_v2: [OFF]` only (single matrix entry per OS;
+          #    matches default user build, keeps PR CI cheap).
+          #  - Docs-only changes hit `paths-ignore` and skip CI entirely;
+          #    they never reach this step.
+          # ------------------------------------------------------------------
+          ui_v2_paths_match="false"
+
           # Path-aware detection is meaningful only for push + pull_request.
           # schedule, workflow_dispatch, and maintenance branches force full
           # matrix unconditionally below.
@@ -111,11 +148,13 @@ jobs:
             # On first-push-to-new-branch the before SHA is all-zeros;
             # in that case there's no diff to compute → force full matrix.
             if [[ "$BASE_SHA" == "0000000000000000000000000000000000000000" ]]; then
-              echo "::notice::First push to new branch — forcing cross_platform=true"
+              echo "::notice::First push to new branch — forcing cross_platform=true + ui_v2 doubled matrix"
               changed_paths_match="true"
+              ui_v2_paths_match="true"
             elif ! git rev-parse --verify --quiet "$BASE_SHA" >/dev/null 2>&1; then
-              echo "::warning::Base SHA $BASE_SHA not reachable; defaulting to cross_platform=true (safe fallback)"
+              echo "::warning::Base SHA $BASE_SHA not reachable; defaulting to cross_platform=true + ui_v2 doubled (safe fallback)"
               changed_paths_match="true"
+              ui_v2_paths_match="true"
             else
               CHANGED=$(git diff --name-only "$BASE_SHA" HEAD)
               echo "Changed files in this push:"
@@ -124,6 +163,14 @@ jobs:
               # at start). Any match → cross_platform=true.
               if echo "$CHANGED" | grep -qE '^(cmake/|CMakeLists\.txt|CMakePresets\.json|\.github/workflows/|vcpkg\.json|source/FORMAT/CIFParser|include/BALL/KERNEL/atom\.h|include/BALL/VIEW/|source/VIEW/)'; then
                 changed_paths_match="true"
+              fi
+              # UI_V2-relevant paths — see "PATH-AWARE DOUBLING RULE" above.
+              # Superset of the cross_platform patterns for theme/icon/
+              # mainframe surface; extends with the not-yet-existing
+              # inspector/workspace/commandPalette/welcomeScreen file
+              # patterns so changes in 999.44+ land doubled automatically.
+              if echo "$CHANGED" | grep -qE '^(source/VIEW/KERNEL/theme/|include/BALL/VIEW/KERNEL/theme/|source/VIEW/KERNEL/iconLoader\.[hC]$|include/BALL/VIEW/KERNEL/iconLoader\.h$|source/APPLICATIONS/BALLVIEW/mainframe\.C$|CMakeLists\.txt$|vcpkg\.json$|source/APPLICATIONS/BALLVIEW/.*(inspector|workspace|commandPalette|welcomeScreen)|source/VIEW/WIDGETS/.*(inspector|workspace|commandPalette|welcomeScreen))'; then
+                ui_v2_paths_match="true"
               fi
             fi
           fi
@@ -135,19 +182,37 @@ jobs:
              [[ "$changed_paths_match" == "true" ]]; then
             cross_platform="true"
           fi
+          # Full-validation triggers also force the doubled ui_v2 matrix —
+          # schedule/dispatch/maintenance branches are exactly when we want
+          # the broadest surface coverage.
+          if [[ "${{ github.event_name }}" == "schedule" ]] || \
+             [[ "${{ github.event_name }}" == "workflow_dispatch" ]] || \
+             [[ "${{ github.ref_name }}" == "master" ]] || \
+             [[ "${{ github.ref_name }}" == "v1.6-modernization" ]]; then
+            ui_v2_paths_match="true"
+          fi
           echo "cross_platform=${cross_platform}" >> "$GITHUB_OUTPUT"
+          echo "ui_v2_matrix=${ui_v2_paths_match}" >> "$GITHUB_OUTPUT"
 
           # The macOS entry is ALWAYS included (Stage 1 default).
           # The Linux + Windows entries are added when cross_platform=true.
           # Keep the JSON structure identical to the v1.6-modernization
           # static matrix entries so all downstream steps see the same
           # matrix.os / matrix.runner / matrix.qt_host / etc.
+          # ui_v2 field defaults to "OFF" in every base entry — matches the
+          # historical (pre-axis) default build and gives actionlint a static
+          # `ui_v2` property to type-check `matrix.ui_v2` references against
+          # (it can't see fields jq adds dynamically below). The doubling
+          # logic emits the field unconditionally as OFF or ON, so this
+          # literal value is only consumed when the doubling branch is NOT
+          # taken (single-OFF mode).
           MAC_ENTRY='{
             "os": "macos-arm64",
             "runner": "macos-14",
             "blocking": true,
             "smoke": true,
-            "ccache_dir": "~/Library/Caches/ccache"
+            "ccache_dir": "~/Library/Caches/ccache",
+            "ui_v2": "OFF"
           }'
           LINUX_X64_ENTRY='{
             "os": "linux-x64",
@@ -156,7 +221,8 @@ jobs:
             "smoke": true,
             "ccache_dir": "~/.cache/ccache",
             "qt_host": "linux",
-            "qt_version": "6.8.*"
+            "qt_version": "6.8.*",
+            "ui_v2": "OFF"
           }'
           LINUX_ARM64_ENTRY='{
             "os": "linux-arm64",
@@ -165,25 +231,41 @@ jobs:
             "smoke": true,
             "ccache_dir": "~/.cache/ccache",
             "qt_host": "linux_arm64",
-            "qt_version": "6.8.*"
+            "qt_version": "6.8.*",
+            "ui_v2": "OFF"
           }'
           WINDOWS_ENTRY='{
             "os": "windows-x64",
             "runner": "windows-2025",
             "blocking": true,
             "smoke": false,
-            "ccache_dir": "C:\\Users\\runneradmin\\AppData\\Local\\ccache"
+            "ccache_dir": "C:\\Users\\runneradmin\\AppData\\Local\\ccache",
+            "ui_v2": "OFF"
           }'
           if [[ "${cross_platform}" == "true" ]]; then
-            INCLUDE="[${MAC_ENTRY},${LINUX_X64_ENTRY},${LINUX_ARM64_ENTRY},${WINDOWS_ENTRY}]"
+            BASE_INCLUDE="[${MAC_ENTRY},${LINUX_X64_ENTRY},${LINUX_ARM64_ENTRY},${WINDOWS_ENTRY}]"
           else
-            INCLUDE="[${MAC_ENTRY}]"
+            BASE_INCLUDE="[${MAC_ENTRY}]"
+          fi
+
+          # ui_v2 axis materialization. jq merges each base entry with the
+          # ui_v2 field; when doubling, each entry expands to 2 cells.
+          # Result: every matrix entry carries a `ui_v2` field of "ON" or
+          # "OFF" which the Configure steps below consume as
+          # -DBALL_UI_V2=<matrix.ui_v2>. Single-OFF mode preserves
+          # the historical default-flag behaviour exactly (no extra runners).
+          if [[ "${ui_v2_paths_match}" == "true" ]]; then
+            INCLUDE=$(echo "$BASE_INCLUDE" | jq -c '[ .[] | . + {ui_v2: "ON"}, . + {ui_v2: "OFF"} ]')
+            echo "::notice::ui_v2 axis: doubled (ON+OFF) — Wave 4 validation per Handover §10 CI gate 6"
+          else
+            INCLUDE=$(echo "$BASE_INCLUDE" | jq -c '[ .[] | . + {ui_v2: "OFF"} ]')
+            echo "::notice::ui_v2 axis: OFF only (default; no UI_V2-relevant paths changed)"
           fi
           # Strip newlines so the JSON fits on one line for $GITHUB_OUTPUT
           INCLUDE_ONELINE=$(echo "$INCLUDE" | tr -d '\n' | tr -s ' ')
           echo "matrix={\"include\":${INCLUDE_ONELINE}}" >> "$GITHUB_OUTPUT"
-          echo "::notice::cross_platform=${cross_platform}; matrix dispatch:"
-          echo "$INCLUDE_ONELINE" | jq -r '.[] | "  - " + .os' || echo "$INCLUDE_ONELINE"
+          echo "::notice::cross_platform=${cross_platform}; ui_v2_matrix=${ui_v2_paths_match}; matrix dispatch:"
+          echo "$INCLUDE_ONELINE" | jq -r '.[] | "  - " + .os + " ui_v2=" + .ui_v2' || echo "$INCLUDE_ONELINE"
 
   # --------------------------------------------------------------------------
   # build — the dynamic-matrix Release build (D-07, D-11).
@@ -194,7 +276,10 @@ jobs:
   # --------------------------------------------------------------------------
   build:
     needs: detect-platforms
-    name: build (${{ matrix.os }})
+    # ui_v2 in the job name keeps the GitHub Actions UI legible when the
+    # matrix doubles — without it, both ON and OFF cells render as identical
+    # "build (macos-arm64)" rows and you can't tell which failed.
+    name: build (${{ matrix.os }} ui_v2=${{ matrix.ui_v2 }})
     runs-on: ${{ matrix.runner }}
     # D-03: continue-on-error driven off matrix.blocking. macOS/Linux/Windows
     # are all "blocking: true" in the JSON above; the field is preserved so
@@ -222,8 +307,15 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ matrix.ccache_dir }}
-          key: ccache-${{ matrix.os }}-pch-v1-${{ github.sha }}
+          # ui_v2 in the key so ON + OFF cells don't share a cache line —
+          # different `BALL_UI_V2` preprocessor defines produce different
+          # object hashes for ~every TU that includes a VIEW header. Without
+          # this, the second cell to hit the cache would see a "hit" for
+          # objects compiled with the wrong flag value and skip the rebuild.
+          key: ccache-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}-pch-v1-${{ github.sha }}
           restore-keys: |
+            ccache-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}-pch-v1-
+            ccache-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}-
             ccache-${{ matrix.os }}-pch-v1-
             ccache-${{ matrix.os }}-
 
@@ -250,8 +342,13 @@ jobs:
           # forces a cold rebuild that catches the BALL_EXPORT restoration in
           # 9042af07 and any similar future regression. Follow-up Phase 999.36
           # is filed to add a per-source-hash invalidation arm.
-          key: ci-windows-cmake-tree-v2-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json') }}
+          # ui_v2 suffix: the configured CMakeCache.txt records `BALL_UI_V2=ON`
+          # or `OFF`; reusing the OFF tree under ON (or vice versa) would
+          # short-circuit reconfigure with the wrong define. Keep both lines
+          # isolated.
+          key: ci-windows-cmake-tree-v2-ui_v2_${{ matrix.ui_v2 }}-${{ hashFiles('CMakeLists.txt', 'cmake/**', 'vcpkg.json', 'CMakePresets.json') }}
           restore-keys: |
+            ci-windows-cmake-tree-v2-ui_v2_${{ matrix.ui_v2 }}-
             ci-windows-cmake-tree-v2-
 
       # ======================================================================
@@ -290,7 +387,10 @@ jobs:
           # BALL_HAS_OPENBABEL=ON is already in the ci-macos preset's cacheVariables
           # (Plan 04-02) — the -DBALL_LICENSE=GPL flag is what actually enables the
           # GPL-block FIND_PACKAGE(OpenBabel3) call in CMakeLists.txt (Plan 04-03).
-          cmake --preset ci-macos -DBALL_LICENSE=GPL
+          # -DBALL_UI_V2=${{ matrix.ui_v2 }}: Wave 4 axis (see detect-platforms
+          # job comment). Default OFF until 999.48 §8.7 flag removal; doubled
+          # to ON+OFF on UI_V2-relevant pushes per Handover §10 CI gate 6.
+          cmake --preset ci-macos -DBALL_LICENSE=GPL -DBALL_UI_V2=${{ matrix.ui_v2 }}
 
       - name: Build (macOS)
         if: matrix.os == 'macos-arm64'
@@ -334,7 +434,10 @@ jobs:
         if: (success() || failure()) && matrix.os == 'macos-arm64'
         uses: actions/upload-artifact@v6
         with:
-          name: ninja-log-${{ matrix.os }}-${{ github.sha }}
+          # ui_v2 in artifact name: doubled matrix would collide on the
+          # shared `ninja-log-<os>-<sha>` key otherwise (actions/upload-
+          # artifact@v4+ rejects duplicates).
+          name: ninja-log-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}-${{ github.sha }}
           path: build/ci-macos/.ninja_log
           retention-days: 90
           include-hidden-files: true
@@ -376,15 +479,19 @@ jobs:
           export BALL_DATA_PATH="${{ github.workspace }}/data"
           # TEST-CLOSE-02: || true removed — this step is now blocking.
           # ctest exits non-zero if any non-WILL_FAIL test fails.
+          # ui_v2 in the JUnit filename so ON + OFF cells don't clobber each
+          # other's output (each cell runs on its own runner so the file
+          # collision would only manifest at the test-report job which
+          # `merge-multiple`s these — same-name files would race).
           ctest --output-on-failure --timeout 120 \
-                --output-junit ${{ github.workspace }}/ball-tests-macos.xml
+                --output-junit ${{ github.workspace }}/ball-tests-macos-ui_v2_${{ matrix.ui_v2 }}.xml
 
       - name: Upload test results (macOS)
         if: always() && matrix.os == 'macos-arm64'
         uses: actions/upload-artifact@v6
         with:
-          name: ball-tests-macos-${{ github.run_id }}
-          path: ball-tests-macos.xml
+          name: ball-tests-macos-ui_v2_${{ matrix.ui_v2 }}-${{ github.run_id }}
+          path: ball-tests-macos-ui_v2_${{ matrix.ui_v2 }}.xml
           if-no-files-found: warn
           retention-days: 30
 
@@ -482,7 +589,9 @@ jobs:
           # bison/flex at /usr/bin, USE_LPSOLVE=OFF (non-PIC liblpsolve55.a),
           # ccache, and BALL_HAS_OPENBABEL=ON are all set by ci-linux preset.
           # -DBALL_LICENSE=GPL: OpenBabel is GPL-gated (maintainer decision, Plan 04-01).
-          cmake --preset ci-linux -DBALL_LICENSE=GPL
+          # -DBALL_UI_V2=${{ matrix.ui_v2 }}: see macOS Configure step + the
+          # detect-platforms job comment for axis rationale + drop conditions.
+          cmake --preset ci-linux -DBALL_LICENSE=GPL -DBALL_UI_V2=${{ matrix.ui_v2 }}
 
       - name: Build (Linux)
         if: startsWith(matrix.os, 'linux-')
@@ -516,7 +625,8 @@ jobs:
         if: (success() || failure()) && startsWith(matrix.os, 'linux-')
         uses: actions/upload-artifact@v6
         with:
-          name: ninja-log-${{ matrix.os }}-${{ github.sha }}
+          # ui_v2 in artifact name — see macOS sibling rationale.
+          name: ninja-log-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}-${{ github.sha }}
           path: build/ci-linux/.ninja_log
           retention-days: 90
           include-hidden-files: true
@@ -545,15 +655,16 @@ jobs:
           # See macOS counterpart — BALL_DATA_PATH is the make-or-break env var.
           export BALL_DATA_PATH="${{ github.workspace }}/data"
           # TEST-CLOSE-02: || true removed — this step is now blocking.
+          # ui_v2 in JUnit filename — see macOS sibling.
           ctest --output-on-failure --timeout 120 \
-                --output-junit ${{ github.workspace }}/ball-tests-linux.xml
+                --output-junit ${{ github.workspace }}/ball-tests-linux-ui_v2_${{ matrix.ui_v2 }}.xml
 
       - name: Upload test results (Linux)
         if: always() && startsWith(matrix.os, 'linux-')
         uses: actions/upload-artifact@v6
         with:
-          name: ball-tests-linux-${{ github.run_id }}
-          path: ball-tests-linux.xml
+          name: ball-tests-linux-ui_v2_${{ matrix.ui_v2 }}-${{ github.run_id }}
+          path: ball-tests-linux-ui_v2_${{ matrix.ui_v2 }}.xml
           if-no-files-found: warn
           retention-days: 30
 
@@ -716,8 +827,11 @@ jobs:
           # bounding peak disk during cold installs to ~3 GB/port instead of
           # the cumulative ~30+ GB. Required to fit on the windows-2025
           # standard runner; ported from v1.6.2 release.yml commit 046271e.
+          # -DBALL_UI_V2=${{ matrix.ui_v2 }}: see macOS Configure step + the
+          # detect-platforms job comment for axis rationale + drop conditions.
           cmake --preset ci-windows `
             -DUSE_QTWEBENGINE=OFF `
+            -DBALL_UI_V2=${{ matrix.ui_v2 }} `
             -DBISON_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_bison.exe" `
             -DFLEX_EXECUTABLE="C:/ProgramData/chocolatey/bin/win_flex.exe" `
             "-DVCPKG_INSTALL_OPTIONS=--clean-after-build"
@@ -772,7 +886,14 @@ jobs:
       # archives dir may be empty (and we don't want to fail the whole
       # job just for the artifact upload).
       - name: Upload vcpkg archives for release-pipeline reuse (Windows)
-        if: success() && matrix.os == 'windows-x64'
+        # Restrict to the ui_v2=OFF cell: vcpkg port binaries are independent
+        # of BALL_UI_V2 (the flag affects BALL's own TUs only, not the vcpkg
+        # toolchain), so publishing from one cell is sufficient and avoids
+        # the doubled cells racing on `overwrite: true`. ui_v2=OFF is the
+        # historical/default build, matching what release.yml consumed prior
+        # to the axis split — least surprise. Drop the `matrix.ui_v2 ==`
+        # clause when the axis is removed post-999.48.
+        if: success() && matrix.os == 'windows-x64' && matrix.ui_v2 == 'OFF'
         uses: actions/upload-artifact@v6
         with:
           name: vcpkg-archives-windows
@@ -806,7 +927,8 @@ jobs:
         if: (success() || failure()) && matrix.os == 'windows-x64'
         uses: actions/upload-artifact@v6
         with:
-          name: ninja-log-windows-x64-${{ github.sha }}
+          # ui_v2 in artifact name — see macOS sibling rationale.
+          name: ninja-log-windows-x64-ui_v2_${{ matrix.ui_v2 }}-${{ github.sha }}
           path: build\ci-windows\.ninja_log
           retention-days: 90
           include-hidden-files: true
@@ -862,7 +984,7 @@ jobs:
         if: matrix.smoke && matrix.os == 'macos-arm64'
         continue-on-error: true
         run: |
-          cmake --preset ci-macos -DBALL_LICENSE=GPL -DBALL_SPIKE_BACKEND=GLCore
+          cmake --preset ci-macos -DBALL_LICENSE=GPL -DBALL_SPIKE_BACKEND=GLCore -DBALL_UI_V2=${{ matrix.ui_v2 }}
           cmake --build --preset ci-macos --target BALLView -j$(sysctl -n hw.ncpu)
           BALLVIEW_USE_SPIKE_BACKEND=1 bash .planning/phases/02.2-ci-and-build-smoke-matrix/scripts/render-smoke-check.sh \
             build/ci-macos/bin/BALLView.app/Contents/MacOS/BALLView 2>&1 \
@@ -873,7 +995,8 @@ jobs:
         continue-on-error: true
         uses: actions/upload-artifact@v6
         with:
-          name: spike-smoke-log-glcore-macos
+          # ui_v2 in artifact name — doubled cells would collide otherwise.
+          name: spike-smoke-log-glcore-macos-ui_v2_${{ matrix.ui_v2 }}
           path: /tmp/ballview-spike-smoke.log
           if-no-files-found: ignore
           retention-days: 30
@@ -912,7 +1035,8 @@ jobs:
         if: failure() && matrix.smoke
         uses: actions/upload-artifact@v6
         with:
-          name: render-smoke-${{ matrix.os }}
+          # ui_v2 in artifact name — doubled cells would collide otherwise.
+          name: render-smoke-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}
           path: |
             ${{ runner.temp }}/ballview-smoke.*
             /tmp/ballview-smoke.*
@@ -945,7 +1069,8 @@ jobs:
         if: failure() && matrix.smoke
         uses: actions/upload-artifact@v6
         with:
-          name: openbabel-smoke-${{ matrix.os }}
+          # ui_v2 in artifact name — doubled cells would collide otherwise.
+          name: openbabel-smoke-${{ matrix.os }}-ui_v2_${{ matrix.ui_v2 }}
           path: /tmp/04-03-smoke.log
           if-no-files-found: ignore
           retention-days: 7
