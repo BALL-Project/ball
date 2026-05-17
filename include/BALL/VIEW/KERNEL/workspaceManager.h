@@ -7,25 +7,27 @@
 
 // Phase 999.45 — BALLView Refresh: Workspace consolidation
 // =========================================================
+// (Phase 999.49 — Classic preset retired; only Default + Focused remain
+//  as built-in presets. See RELEASE-NOTES-v1.7 for the migration story.)
 //
-// WorkspaceManager owns the named-preset dock-layout API. Three built-in
+// WorkspaceManager owns the named-preset dock-layout API. Two built-in
 // presets ship with the application:
 //
 //   - Default  — ProjectDock (left) + InspectorDock (right) +
 //                BottomDrawer (bottom, collapsed). The refreshed default.
-//   - Classic  — legacy 5-dock layout (MolecularControl / GeometricControl
-//                left, DatasetControl top hidden, LogView / FileObserver
-//                bottom). Retained for the v1.7 RC cycle; Phase 999.49
-//                deletes Classic after the BALL_UI_V2 flag flip in 999.48.
 //   - Focused  — single-canvas, BottomDrawer collapsed, no side docks,
 //                toolbars hidden. For distraction-free work.
 //
-// Plus a UserDefined slot for user-saved layouts.
+// Plus a UserDefined slot for user-saved layouts. The legacy 5-dock
+// "Classic" preset that shipped with v1.7-pre was deleted in
+// Phase 999.49 per the maintainer-Q2 commitment; users carrying
+// [Workspace]/currentPreset="Classic" in their INI auto-migrate to
+// Default on first launch with v1.7 (see main.C).
 //
 // Built-in presets are described as JSON in data/BALLView/workspaces/
-// (default.layout / classic.layout / focused.layout). The JSON is a
-// portable, Qt-version-agnostic description of dock area + visibility +
-// size + toolbars. apply(Preset, QMainWindow*) walks the JSON and
+// (default.layout / focused.layout). The JSON is a portable,
+// Qt-version-agnostic description of dock area + visibility + size +
+// toolbars. apply(Preset, QMainWindow*) walks the JSON and
 // programmatically reconstructs the layout — this is more robust than
 // committing Qt-version-bound saveState() binary blobs to the data
 // tree, which would break across Qt 6.x point releases.
@@ -37,14 +39,13 @@
 // Persistence lives in BALLView's INI file (post-999.45-Task-6 migration
 // path: ~/.config/BALLView/BALLView.ini on Linux, equivalents on
 // macOS/Windows; pre-migration: ~/.BALLView). Section [Workspace]:
-//   currentPreset       = Default | Classic | Focused | UserDefined
+//   currentPreset       = Default | Focused | UserDefined
 //   firstRunPromptSeen  = 1
 //   userDefined.<name>  = <base64 saveState payload>
 //
-// All public API is safe to call with BALL_UI_V2 OFF — the class
-// compiles in both branches; Mainframe only wires it in under the
-// BALL_UI_V2 ifdef so OFF builds get the legacy layout for free
-// (which is, by definition, the Classic preset).
+// All public API is safe to call from any BALLView build — the class
+// compiles unconditionally now that Phase 999.48 removed the
+// BALL_UI_V2 build flag. Mainframe wires it in directly.
 
 #include <BALL/COMMON/global.h>
 
@@ -76,10 +77,17 @@ namespace BALL
 
 			public:
 				/// Built-in + user-defined preset identifiers.
+				///
+				/// Phase 999.49: the legacy `Classic = 1` value was retired.
+				/// Numeric values of `Default`, `Focused`, `UserDefined`
+				/// are preserved across the deletion so any persisted-as-int
+				/// pref (none in the shipping product — only the QString
+				/// names are persisted, but defensive against external
+				/// callers) does not silently re-interpret as another
+				/// preset. New presets MUST NOT reuse the value `1`.
 				enum Preset
 				{
 					Default = 0,
-					Classic = 1,
 					Focused = 2,
 					UserDefined = 3
 				};

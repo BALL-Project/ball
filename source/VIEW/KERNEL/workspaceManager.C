@@ -74,7 +74,6 @@ namespace BALL
 			switch (preset)
 			{
 				case Default:     return tr("Default");
-				case Classic:     return tr("Classic");
 				case Focused:     return tr("Focused");
 				case UserDefined: return tr("User Defined");
 			}
@@ -87,7 +86,6 @@ namespace BALL
 			switch (preset)
 			{
 				case Default:     filename = "default.layout"; break;
-				case Classic:     filename = "classic.layout"; break;
 				case Focused:     filename = "focused.layout"; break;
 				case UserDefined: return QString();  // not built-in
 			}
@@ -392,7 +390,6 @@ namespace BALL
 				});
 			};
 			addPresetAction(WorkspaceManager::Default);
-			addPresetAction(WorkspaceManager::Classic);
 			addPresetAction(WorkspaceManager::Focused);
 
 			menu.addSeparator();
