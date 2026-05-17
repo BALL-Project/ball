@@ -7,6 +7,7 @@
 #include "demoTutorialDialog.h"
 
 #include <BALL/VIEW/KERNEL/iconLoader.h>
+#include <BALL/VIEW/KERNEL/theme/tokens.h>  // Phase 999.41: kIconToolbar
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -292,7 +293,15 @@ namespace BALL
 		{
 			tb = new QToolBar("Main Toolbar", this);
 			tb->setObjectName("Main Toolbar");
+			// Phase 999.41 — BALLView Refresh: 22→20 logical px under
+			// BALL_UI_V2 (denser, modern; renderer handles HiDPI scaling).
+			// Constant lives in source/VIEW/KERNEL/theme/tokens.h (999.40).
+#ifdef BALL_UI_V2
+			tb->setIconSize(QSize(BALL::VIEW::Theme::kIconToolbar,
+			                      BALL::VIEW::Theme::kIconToolbar));
+#else
 			tb->setIconSize(QSize(22,22));
+#endif
 			addToolBar(Qt::TopToolBarArea, tb);
 		}
 
