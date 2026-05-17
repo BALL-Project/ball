@@ -1,16 +1,19 @@
 name: Release
 
-# Best-effort, UNSIGNED binary installer build for tagged releases. Trigger
-# manually with `gh workflow run release.yml -f tag=v1.6.0` (or via the
-# Actions UI). Future tags pushed in the v*.*.* shape will also auto-trigger.
+# Binary installer build for tagged releases. Trigger manually with
+# `gh workflow run release.yml -f tag=v1.7.0` (or via the Actions UI).
+# Future tags pushed in the v*.*.* shape will also auto-trigger.
 #
 # Scope: macOS arm64 + Windows x64 binary bundles, attached to a GitHub
-# Release. No code signing, no notarization, no Linux installer (Linux
-# users build from source per BUILD-macos.md).
+# Release. Linux installers are Phase 8c.
 #
-# Phase 8 (Packaging & Distribution) replaces this with a signed/notarized
-# pipeline. Until then: SmartScreen warns on Windows, Gatekeeper warns on
-# macOS — workaround documented in the release body below.
+# Signing status:
+# - macOS (Phase 8a): Developer ID Application + notarytool + stapled .dmg
+#   when MACOS_CERTIFICATE_BASE64 secret is set; falls back to ad-hoc
+#   resigned .dmg + Gatekeeper warning otherwise. See
+#   .planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md.
+# - Windows (Phase 8b): SignPath — still pending.
+# - Linux (Phase 8c): AppImage / .deb / .rpm — still pending.
 
 on:
   workflow_dispatch:
@@ -58,8 +61,14 @@ jobs:
             REF="${{ github.ref_name }}"
           fi
           echo "ref=$REF" >> "$GITHUB_OUTPUT"
-          echo "asset=BALLView-${REF}-${{ matrix.os }}.zip" >> "$GITHUB_OUTPUT"
-          echo "Resolved ref: $REF"
+          # macOS now ships a .dmg (Phase 8a, PKG-MAC-03); Windows + others
+          # remain .zip until their respective Phase 8 slices land.
+          case "${{ matrix.os }}" in
+            macos-*) ASSET_EXT="dmg" ;;
+            *)       ASSET_EXT="zip" ;;
+          esac
+          echo "asset=BALLView-${REF}-${{ matrix.os }}.${ASSET_EXT}" >> "$GITHUB_OUTPUT"
+          echo "Resolved ref: $REF (asset extension: ${ASSET_EXT})"
 
       - name: Checkout (at resolved tag)
         uses: actions/checkout@v5
@@ -82,7 +91,8 @@ jobs:
       - name: Install dependencies (macOS / Homebrew)
         if: matrix.os == 'macos-arm64'
         run: |
-          brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache
+          # Phase 8a (PKG-MAC-03): + create-dmg for the signed .dmg artifact.
+          brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache create-dmg
 
       - name: Configure (macOS)
         if: matrix.os == 'macos-arm64'
@@ -151,10 +161,79 @@ jobs:
           echo "app=$APP" >> "$GITHUB_OUTPUT"
           echo "Found: $APP"
 
+      # ----------------------------------------------------------------------
+      # Phase 8a — macOS code signing + notarization + .dmg packaging.
+      # See .planning/phases/08a-packaging-macos/08a-01-PLAN.md and
+      # .planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md.
+      #
+      # The signing path is gated on MACOS_CERTIFICATE_BASE64 being set —
+      # the fallback (no cert / pre-procurement) path skips signing and
+      # ships an unsigned-with-warning .dmg, matching v1.6 user UX while
+      # the cert is in flight. Once secrets land, every step below runs;
+      # the gate becomes a no-op.
+      # ----------------------------------------------------------------------
+      - name: Detect macOS signing readiness
+        if: matrix.os == 'macos-arm64'
+        id: mac-signing
+        shell: bash
+        env:
+          MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
+        run: |
+          if [ -n "$MACOS_CERTIFICATE_BASE64" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+            echo "macOS signing ENABLED — Developer ID cert + notarization path"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::MACOS_CERTIFICATE_BASE64 not set — building UNSIGNED .dmg (ad-hoc resign fallback). See 08a-SECRETS-RUNBOOK.md."
+          fi
+
+      - name: Import Apple Developer ID cert into CI keychain (macOS)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
+        env:
+          MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          MACOS_KEYCHAIN_PASSWORD: ${{ secrets.MACOS_KEYCHAIN_PASSWORD }}
+        run: |
+          # Create an ephemeral keychain so we never touch the runner's
+          # default login keychain (security best practice for CI).
+          KEYCHAIN_PATH="${RUNNER_TEMP}/ball-signing.keychain-db"
+          CERT_PATH="${RUNNER_TEMP}/cert.p12"
+
+          echo "$MACOS_CERTIFICATE_BASE64" | base64 --decode > "$CERT_PATH"
+
+          security create-keychain -p "$MACOS_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$MACOS_KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" \
+            -P "$MACOS_CERTIFICATE_PASSWORD" \
+            -A -t cert -f pkcs12 \
+            -k "$KEYCHAIN_PATH"
+          # Allow codesign to access the private key without password prompts.
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: \
+            -s -k "$MACOS_KEYCHAIN_PASSWORD" \
+            "$KEYCHAIN_PATH"
+
+          # Make our keychain the default search target for the duration
+          # of the job.
+          security list-keychain -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"' | xargs)
+          security default-keychain -d user -s "$KEYCHAIN_PATH"
+
+          # Sanity check — the signing identity must now be visible.
+          security find-identity -p codesigning -v "$KEYCHAIN_PATH"
+
+          # Wipe the .p12 from disk; the keychain copy is all we need.
+          rm -P "$CERT_PATH" 2>/dev/null || rm -f "$CERT_PATH"
+
       - name: macdeployqt (macOS)
         if: matrix.os == 'macos-arm64'
         run: |
           # Phase 5.1 carry-forward: qt (unversioned) is Qt 6 on current Homebrew.
+          # NOTE: we do NOT pass `-codesign=` here — macdeployqt's per-binary
+          # signing happens too early in the pipeline (before data/ is bundled
+          # and entitlements are applied). Phase 8a's `Codesign BALLView.app`
+          # step below performs the seal-the-whole-bundle signing with
+          # --deep + entitlements + hardened runtime.
           /opt/homebrew/opt/qt/bin/macdeployqt "${{ steps.locate-mac.outputs.app }}" -verbose=1
 
       - name: Bundle data/ into the .app (macOS)
@@ -169,40 +248,113 @@ jobs:
             echo "::warning::data/ not found at repo root — .app may be missing runtime resources"
           fi
 
-      - name: Ad-hoc resign bundle (macOS — required after macdeployqt + data bundling on macOS 26+)
-        if: matrix.os == 'macos-arm64'
+      - name: Codesign BALLView.app with Developer ID + hardened runtime (macOS)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
-          # MUST run AFTER macdeployqt AND AFTER bundling data/ — both modify
-          # the .app's contents and would invalidate any prior signature seal.
-          # This step is the LAST step before zipping.
-          #
-          # Why this is needed: macdeployqt rewrites install_name paths in
-          # bundled Qt frameworks, which invalidates the dylibs' original
-          # signatures. macOS 26's tightened CODESIGNING enforcement SIGKILLs
-          # bundles with internal signature inconsistency at load (before
-          # main() runs — confirmed against crash report ID
-          # D4252593-FDD2-4001-94FD-E36402AE15BE on macOS 26.4.1).
-          #
-          # The fix is an ad-hoc resign at the bundle level — replaces every
-          # modified dylib's signature with a no-identity signature that's
-          # still internally consistent, and produces the bundle-level
-          # _CodeSignature/CodeResources manifest macOS expects on load.
-          # Gatekeeper still complains (no Developer ID) — that's Phase 8.
+          # MUST run AFTER macdeployqt + data/ bundling — both modify the
+          # bundle contents and would invalidate any earlier signature seal.
+          # Phase 8a (PKG-MAC-01) — replaces the v1.6 ad-hoc resign step.
+          codesign --deep --force --options runtime \
+            --sign "$MACOS_SIGNING_IDENTITY" \
+            --entitlements packaging/macos/BALLView.entitlements \
+            --timestamp \
+            "${{ steps.locate-mac.outputs.app }}"
+          codesign --verify --deep --strict --verbose=2 \
+            "${{ steps.locate-mac.outputs.app }}" 2>&1 | tail -20
+
+      - name: Ad-hoc resign bundle (macOS — UNSIGNED fallback path only)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'false'
+        run: |
+          # Fallback path: Apple Developer cert not yet procured. Use the
+          # v1.6 ad-hoc resign to satisfy macOS 26's CODESIGNING enforcement
+          # at the bundle level (no Developer ID, no notarization — users
+          # get a Gatekeeper warning + `xattr -dr com.apple.quarantine`
+          # workaround). REMOVE this step once MACOS_CERTIFICATE_BASE64 is
+          # set; the signed path above replaces it.
           codesign --force --deep --sign - "${{ steps.locate-mac.outputs.app }}"
           codesign --verify --deep --strict --verbose=2 "${{ steps.locate-mac.outputs.app }}" 2>&1 | tail -10
-          # Strict verify exits 0 on success, non-zero on real failures —
-          # the `--prepared:`/`--validated:` lines from --verbose=2 are
-          # progress, not errors.
 
-      - name: Zip .app (macOS)
+      - name: Zip .app for notary submission (macOS)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
+        run: |
+          # notarytool requires .zip/.dmg/.pkg input. We zip the .app
+          # separately here (not the final .dmg) because the .dmg gets
+          # created *after* the .app's notarization ticket is stapled —
+          # otherwise stapler would have to staple the .dmg's enclosed
+          # .app post-mount, which create-dmg does not support.
+          ditto -c -k --sequesterRsrc --keepParent \
+            "${{ steps.locate-mac.outputs.app }}" \
+            "${{ runner.temp }}/BALLView-notarize.zip"
+
+      - name: Submit to Apple notary + wait (macOS)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
+        timeout-minutes: 60
+        env:
+          MACOS_APPLE_ID: ${{ secrets.MACOS_APPLE_ID }}
+          MACOS_TEAM_ID: ${{ secrets.MACOS_TEAM_ID }}
+          MACOS_NOTARY_PASSWORD: ${{ secrets.MACOS_NOTARY_PASSWORD }}
+        run: |
+          # Steady-state: 5-15 min. First-ever submission for a fresh
+          # bundle ID can take 8-12h — that priming submission must be
+          # done MANUALLY (see 08a-SECRETS-RUNBOOK.md Section 5) before
+          # the first tagged release.
+          xcrun notarytool submit \
+            "${{ runner.temp }}/BALLView-notarize.zip" \
+            --apple-id "$MACOS_APPLE_ID" \
+            --team-id "$MACOS_TEAM_ID" \
+            --password "$MACOS_NOTARY_PASSWORD" \
+            --wait
+
+      - name: Staple notarization ticket + spctl assess fail-fast (macOS)
+        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
+        run: |
+          xcrun stapler staple "${{ steps.locate-mac.outputs.app }}"
+          xcrun stapler validate "${{ steps.locate-mac.outputs.app }}"
+          # Fail-fast at CI time, not user-install time, if Gatekeeper
+          # would reject the bundle. The grep MUST find the magic string.
+          spctl --assess --type execute --verbose=4 \
+            "${{ steps.locate-mac.outputs.app }}" 2>&1 | tee /tmp/spctl-assess.log
+          grep -q 'source=Notarized Developer ID' /tmp/spctl-assess.log
+
+      - name: Build signed .dmg via create-dmg (macOS)
         if: matrix.os == 'macos-arm64'
         shell: bash
+        env:
+          MACOS_SIGNING_IDENTITY: ${{ secrets.MACOS_SIGNING_IDENTITY }}
         run: |
-          APP_DIR=$(dirname "${{ steps.locate-mac.outputs.app }}")
-          APP_NAME=$(basename "${{ steps.locate-mac.outputs.app }}")
-          cd "$APP_DIR"
-          ditto -c -k --sequesterRsrc --keepParent "$APP_NAME" "${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
-          ls -lh "${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
+          # create-dmg --codesign signs the .dmg outer wrapper with the
+          # Developer ID identity. The enclosed .app is already signed +
+          # stapled from prior steps. If signing is disabled (fallback
+          # path), --codesign is omitted and the .dmg ships unsigned.
+          APP="${{ steps.locate-mac.outputs.app }}"
+          APP_DIR=$(dirname "$APP")
+          # create-dmg refuses to overwrite — clean any stale output.
+          DMG="${{ github.workspace }}/${{ steps.resolve.outputs.asset }}"
+          rm -f "$DMG"
+
+          CODESIGN_FLAG=()
+          if [ "${{ steps.mac-signing.outputs.enabled }}" = "true" ]; then
+            CODESIGN_FLAG=(--codesign "$MACOS_SIGNING_IDENTITY")
+          fi
+
+          # Stage the .app alone in a clean source dir so create-dmg only
+          # includes BALLView.app (not stray build artifacts in APP_DIR).
+          STAGE="${RUNNER_TEMP}/dmg-stage"
+          rm -rf "$STAGE"
+          mkdir -p "$STAGE"
+          cp -R "$APP" "$STAGE/"
+
+          create-dmg \
+            --volname "BALLView ${{ steps.resolve.outputs.ref }}" \
+            --window-pos 200 120 --window-size 600 400 \
+            --icon-size 100 --icon "BALLView.app" 175 190 \
+            --hide-extension "BALLView.app" \
+            --app-drop-link 425 190 \
+            "${CODESIGN_FLAG[@]}" \
+            "$DMG" "$STAGE"
+          ls -lh "$DMG"
 
       # =====================================================================
       # Windows x64 — vcpkg manifest, ci-windows preset, windeployqt
@@ -506,7 +658,7 @@ jobs:
 
       - name: List artifacts
         run: |
-          find artifacts -type f -name "*.zip" -exec ls -lh {} \;
+          find artifacts -type f \( -name "*.zip" -o -name "*.dmg" \) -exec ls -lh {} \;
 
       - name: Create / update GitHub Release
         env:
@@ -520,23 +672,31 @@ jobs:
           fi
 
           BODY=$(cat <<'EOF'
-          **Unsigned best-effort installers** built from this tag.
+          Installers built from this tag.
 
-          - **macOS:** download the `.zip`, unzip, drag `BALLView.app` anywhere. Gatekeeper will block on first launch — right-click → Open → confirm, or run `xattr -dr com.apple.quarantine BALLView.app` once before launching.
-          - **Windows:** download the `.zip`, extract. Windows SmartScreen will warn — choose "More info → Run anyway".
-
-          Both binaries are **not code-signed or notarized**. That work is Phase 8 ("Packaging & Distribution") in the roadmap.
+          - **macOS:** download the `.dmg`, double-click to mount, drag `BALLView.app` to `/Applications`. Signed + notarized (Phase 8a) — no Gatekeeper prompt expected on macOS 14+ / macOS 26+. If the cert is still pending procurement, the `.dmg` ships unsigned: right-click → Open → confirm on first launch, or run `xattr -dr com.apple.quarantine /Applications/BALLView.app` once.
+          - **Windows:** download the `.zip`, extract. Windows SmartScreen will warn — choose "More info → Run anyway". Signing is Phase 8b (SignPath).
 
           Build from source: see `BUILD-macos.md` (macOS), the GitHub Actions CI workflow at the same tag for the Linux + Windows recipes.
 
-          Linux: build from source — no Linux installer in this release.
+          Linux: build from source — Linux installers are Phase 8c.
           EOF
           )
 
           # If the release doesn't exist yet, create it. Otherwise update assets.
+          # Collect both .zip (Windows) and .dmg (macOS, Phase 8a) into a
+          # single shell glob — Bash's nullglob handles the empty case if
+          # one platform's artifact is missing.
+          shopt -s nullglob
+          ASSETS=( artifacts/*/*.zip artifacts/*/*.dmg )
+          if [ ${#ASSETS[@]} -eq 0 ]; then
+            echo "::error::No artifacts found to upload (expected .zip and/or .dmg under artifacts/)"
+            exit 1
+          fi
+
           if gh release view "$REF" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
             echo "Release $REF exists — uploading assets (clobber)"
-            for f in artifacts/*/*.zip; do
+            for f in "${ASSETS[@]}"; do
               gh release upload "$REF" "$f" --clobber --repo "$GITHUB_REPOSITORY"
             done
           else
@@ -545,5 +705,5 @@ jobs:
               --title "BALLView $REF" \
               --notes "$BODY" \
               --repo "$GITHUB_REPOSITORY" \
-              artifacts/*/*.zip
+              "${ASSETS[@]}"
           fi

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!--
+    Hardened-runtime entitlements for BALLView.app
+    See .planning/phases/08-packaging-and-distribution/08-SIGNING-RESEARCH.md
+    section "Entitlements" for the rationale.
+  -->
+
+  <!-- REQUIRED: Qt loads bundled plugins (platforms/, styles/, imageformats/)
+       via dlopen at runtime. With hardened-runtime + library validation on,
+       macOS rejects those loads (team-id mismatch). Disabling library
+       validation is the standard Qt-app exception. -->
+  <key>com.apple.security.cs.disable-library-validation</key>
+  <true/>
+
+  <!-- DEFENSIVE: future-proof for Phase 6 Python embedding (PyPy/CPython
+       JIT pages). No-op without Python embedded. -->
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+</dict>
+</plist>

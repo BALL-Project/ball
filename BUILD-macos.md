@@ -78,6 +78,29 @@ build tree is always `build/<preset-name>/`. Debug variants can be added as
 `*-debug` presets that inherit the release one and override `CMAKE_BUILD_TYPE`
 without rewriting anything (D-07).
 
+## Code signing
+
+**Local builds do NOT sign or notarize the bundle.** Apple Developer ID
+signing + Apple notarization happen only in CI
+(`.github/workflows/release.yml`) on tag pushes.
+
+This means:
+
+- You do **not** need an Apple Developer ID for local development.
+- A locally-built `BALLView.app` carries no Developer ID signature; if
+  you move it to another machine, macOS Gatekeeper will block first
+  launch. Workaround: `xattr -dr com.apple.quarantine path/to/BALLView.app`
+  once, or right-click → Open → confirm.
+- The hardened-runtime entitlements live in
+  `packaging/macos/BALLView.entitlements` and are applied only by the CI
+  signing step. Local builds run without them.
+- Released `.dmg`s from tagged builds carry a Developer ID signature +
+  stapled notarization ticket and double-click cleanly on macOS 14 / 26.
+
+The signing pipeline, GitHub secrets, and 2-human recovery procedure are
+documented in
+`.planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md`.
+
 ## Notes
 
 - `ball_contrib` is NOT used and should not be revived — the build
