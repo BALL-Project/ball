@@ -1985,19 +1985,48 @@ Plans:
 Plans:
 - [ ] TBD (promote with /gsd-plan-phase after 999.40 lands + ci.yml ui_v2 axis lands)
 
-### Phase 999.43: BALLView Refresh — Simple-dialog cleanup (Handover Phase 3) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
+### Phase 999.43: BALLView Refresh — Simple-dialog cleanup + shared widget set (Handover Phase 3) (BACKLOG · TARGETED FOR v1.7 WAVE 4)
 
-**Goal:** Apply the new design system + idiom to the small, low-risk dialogs first. Build muscle memory for the Inspector overhaul (v1.8 Phase 999.44).
+**Goal:** Apply the new design system + idiom to the small, low-risk dialogs first AND ship the shared widget set that Phase 999.44 Inspector hard-depends on. Build muscle memory before the Inspector overhaul.
 
-**Status (revised 2026-05-17):** UNCONDITIONAL in v1.7 Wave 4 — Phase 999.1 maintainer-Q3 resolved (single neutral theme). Value reframes from "themed dark/light dialogs" to "design-system consistency across simple dialogs." Phase still ships in v1.7 tail.
+**Status (revised 2026-05-17 audit pull-in):** UNCONDITIONAL in v1.7 Wave 4 — Phase 999.1 maintainer-Q3 resolved (single neutral theme). Value reframes from "themed dark/light dialogs" to "design-system consistency across simple dialogs." Phase still ships in v1.7. **Scope expanded per audit:** shared-widget set is explicitly load-bearing for 999.44 — separated out so the Inspector phase can author against a stable widget vocabulary.
 
 **Source:** `/Users/kohlbach/Claude/BALL/Claude Design Handover/revitalization/03-phase-simple-dialogs.md`.
 
-**Depends on:** 999.42 (palette-free substrate); 999.41 (SVG icons available).
+**Depends on:** 999.42 (palette-free substrate); 999.41 + 999.42 carry-overs (SVG icons + `Icons::get` available).
 
-**Scope:** the simple dialogs (per Handover doc — Preferences-style panes, About, Preferences > Display tab, etc.) get new layouts + the design system applied.
+**Scope (shared widgets — load-bearing for 999.44 Inspector):** under `source/VIEW/WIDGETS/` add **4 widgets**, each ~50 LOC, no business logic:
+- **`SectionHeader`** (`sectionHeader.{h,C}`) — labeled section divider used inside dialogs and the Inspector; 11px uppercase-tracked label with a hairline rule.
+- **`FormRow`** (`formRow.{h,C}`) — row helper: label left, control right, optional inline help text below. Replaces ad-hoc `QHBoxLayout` patterns.
+- **`LabeledSlider`** (`labeledSlider.{h,C}`) — slider + numeric readout + reset button; used in dozens of places.
+- **`SwatchButton`** (`swatchButton.{h,C}`) — replacement for `ColorButton` that respects theme contrast.
 
-**Estimated effort:** ~1-1.5 weeks.
+**Scope (About dialog rewrite — hand-coded, no `.ui`):**
+- **Delete `aboutDialog.ui`.** Implement `aboutDialog.C` from scratch (~120 LOC). Fixed width 480 px, height grows with content. App icon (`Icons::get("ball-app")`, 64 px) + product name in 22 pt display + version in 12 pt monospace. "Built with" section listing Qt / Python / OpenGL renderer (one `FormRow` each). "Authors" section sourced from new `data/BALLView/about/authors.json` (stops being hardcoded). Footer: rich-text links to website / issue tracker / license with `setOpenExternalLinks(true)`. Single right-aligned "Close" button.
+
+**Scope (10 named dialogs restyled):**
+1. `preferences.ui` — keep tree-on-left/stack-on-right pattern; restyle each page as `QWidget` subclass using `SectionHeader` + `FormRow`; no more groupbox nesting.
+2. `shortcutDialog.ui` — single `QTreeView` over category-grouped model; search field at top (live filter); inline edit (click cell → recorder lights up, press combo, Enter to confirm, Esc to cancel); per-row "Reset to default" + bottom "Restore all".
+3. `editSingleShortcut.ui`
+4. `pluginDialog.ui`
+5. `networkPreferences.ui`
+6. `openSavePreferences.ui`
+7. `pythonSettings.ui`
+8. `mainControlPreferences.ui`
+9. `setCamera.ui` (restyle only; conversion to Inspector panel happens in 999.44)
+10. `setClippingPlane.ui` (restyle only; conversion to Inspector panel happens in 999.44)
+
+**Scope (icon-browser dev tool — Handover §02-phase-icons.md §2.7):**
+- Optional debug dialog `Tools › Icon Browser` hidden behind `BALL_UI_V2 && BALL_DEBUG`; shows the whole `IconRegistry` as a grid. Catches missing icons in CI by name lookup.
+
+**Acceptance criteria:**
+- About dialog matches the Handover `mockups.html` "About" board.
+- All Preferences pages use `SectionHeader` + `FormRow`; no nested `QGroupBox` beyond 1 level.
+- Shortcut dialog supports search + inline recording (the highest-value UX improvement in this phase).
+- No regression in `Tab` order (verified with keyboard-only navigation).
+- All `.ts` translations re-validated; missing strings re-added with English fallback.
+
+**Estimated effort:** ~1.5 weeks (was ~1-1.5; the shared-widget set adds ~2-3 days but pays back fully into 999.44 sequencing).
 
 **Plans:** 0.
 
