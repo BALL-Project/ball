@@ -30,6 +30,10 @@ using namespace BALL::VIEW;
 
 START_TEST(TabOrder)
 // QApplication is required for any QWidget construction.
+// Force the offscreen QPA platform so this headless test never
+// tries to connect to an X server / Wayland compositor / etc.
+// CI runners have no display; offscreen ships with every Qt 6.
+qputenv("QT_QPA_PLATFORM", "offscreen");
 int argc = 1;
 char argv0[] = "tabOrder_test";
 char* argv[] = { argv0, nullptr };
