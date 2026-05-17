@@ -88,3 +88,58 @@ referenced when the flag is OFF.
 
 **ON cell:** builds cleanly with full BALLView executable, including
 all 999.45 + 999.44 source files (verified locally at HEAD).
+
+## Windows MSVC BALL_VIEW_EXPORT linkage bug on WorkspaceManager (caught by Phase 999.44 CI)
+
+**Discovered:** CI run 25996765175 on HEAD `1d76af2e70` (Phase 999.44 plan 01 verification push)
+**Status:** out of 999.44 scope — owned by Phase 999.45 follow-up
+
+Both windows-x64 cells (ui_v2=ON AND ui_v2=OFF) failed compiling
+`moc_workspaceManager.cpp` with:
+
+```
+moc_workspaceManager.cpp(61): error C2491:
+  'BALL::VIEW::WorkspaceManager::staticMetaObject':
+  definition of dllimport static data member not allowed
+
+moc_workspaceManager.cpp(153): error C2491:
+  'BALL::VIEW::WorkspaceStatusLabel::staticMetaObject':
+  definition of dllimport static data member not allowed
+```
+
+Plus matching warnings on `qt_static_metacall` / `metaObject` / vtable
+("inconsistent dll linkage").
+
+**Root cause:** the `BALL_VIEW_EXPORT` macro (which expands to
+`__declspec(dllexport)` when BUILDING the VIEW DLL and `__declspec(dllimport)`
+otherwise — controlled by `VIEW_EXPORTS` or equivalent) is being mis-emitted
+as **`__declspec(dllimport)`** during the VIEW shared-library build itself,
+so MSVC refuses to define the Q_OBJECT meta-object's `staticMetaObject` as
+"dllimport". The compile is happening as if the TU were importing, not
+exporting, the symbol.
+
+Most likely cause: `workspaceManager.h` is being included in a TU that
+doesn't set the right "we are building VIEW" preprocessor flag, OR the
+`#include` order leaves a stale `BALL_VIEW_EXPORT` definition.
+
+**Inspector + Controller + StageSection + LegacySettingsHelper compile
+cleanly on Windows** — they all use `BALL_VIEW_EXPORT` identically and
+none of them appear in the error list.
+
+**Reproduction:** push any commit to v1.7-modernization; Windows cells fail.
+This was masked by the 999.45 SUMMARY's "local BALL_UI_V2=ON full BALLView
+build clean on macOS-arm64" — Windows wasn't locally tested, and the
+parallel agent's CI run was cancelled before its OFF cell completed.
+
+**Resolution paths (for 999.45 agent or a v1.7 RC patch):**
+1. Check whether `workspaceManager.h` is using a non-standard `BALL_VIEW_EXPORT`
+   placement (compare against `mainControl.h` or `geometricControl.h` — both
+   compile fine on Windows).
+2. Verify the WorkspaceStatusLabel `Q_OBJECT` is in a class with the
+   `BALL_VIEW_EXPORT` macro applied correctly (inline class definitions
+   inside a header sometimes need explicit per-class export attributes).
+3. Bisect-check by temporarily removing `BALL_VIEW_EXPORT` from one of the
+   two classes and seeing whether the C2491 error follows the macro.
+
+**Inspector classes are unaffected:** all 6 macos + linux cells (both ON
+and OFF) pass on the same CI run.
