@@ -1,16 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import sys
 
 from amberparser import *
 
 def printUsage():
-	print "\nUsage: ./parmConvert.py -i filename [-m file1 .. fileN] [-o output_file]\n"
-	print "paramConvert accepts the following parameters:"
-	print "\t--help                      Show this help and exit."
-	print "\t-p,--parm filename          The pram*.dat file which should be processed"
-	print "\t-i,--in file1, .. , fileN   The .in files that should be processed"
-	print "\t-m,--mod	file1 .. fileN   A list of frcmod files"
+	print("\nUsage: ./parmConvert.py -i filename [-m file1 .. fileN] [-o output_file]\n")
+	print("paramConvert accepts the following parameters:")
+	print("\t--help                      Show this help and exit.")
+	print("\t-p,--parm filename          The pram*.dat file which should be processed")
+	print("\t-i,--in file1, .. , fileN   The .in files that should be processed")
+	print("\t-m,--mod	file1 .. fileN   A list of frcmod files")
 
 
 inputFile=""
@@ -44,13 +44,13 @@ while i < len(sys.argv):
 			i += 1
 		modFiles=sys.argv[start:i]
 	else:
-		print "Unknown parameter " + sys.argv[i]
+		print("Unknown parameter " + sys.argv[i])
 		printUsage()
 		exit(-1)
 	i += 1
 
 if inputFile == "":
-	print "You must specify an input file!"
+	print("You must specify an input file!")
 	printUsage()
 	exit(-1)
 
@@ -66,7 +66,7 @@ if outputFile == "":
 try:
 	output = open(outputFile, "w")
 except:
-	print "Could not open " + outputFile + " for writing"
+	print("Could not open " + outputFile + " for writing")
 	exit(-1)
 
 #line = input.readline()
