@@ -24,6 +24,8 @@
 #	include <BALL/VIEW/WIDGETS/bottomDrawer.h>
 // Phase 999.44 Plan 02 — Unified Inspector mainframe wiring.
 #	include <BALL/VIEW/WIDGETS/inspector/inspectorDock.h>
+#	include <BALL/VIEW/WIDGETS/inspector/inspectorView.h>
+#	include <BALL/VIEW/WIDGETS/inspector/selectionAdapter.h>
 #	include <BALL/VIEW/KERNEL/legacySettingsHelper.h>
 #	include <QtCore/QSettings>
 #	include <QtCore/QDir>
@@ -79,6 +81,7 @@ namespace BALL
 #ifdef BALL_UI_V2
 			, inspector_dock_(0)
 			, hide_inspector_action_(0)
+			, selection_adapter_(0)
 #endif
 	{
 		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
@@ -241,6 +244,17 @@ namespace BALL
 		// inspectorDock objectName the dock sets in its constructor.
 		inspector_dock_ = new VIEW::InspectorDock(this, tr("Inspector"));
 		addDockWidget(Qt::RightDockWidgetArea, inspector_dock_);
+
+		// Phase 999.44 Plan 03 — Selection tab wiring (sub-PR 4.2).
+		// 1. Build the 3 Selection-tab sections (kept hidden behind
+		//    the empty state until the first non-empty selection).
+		// 2. Spawn the SelectionInspectorAdapter as a child
+		//    ConnectionObject of this MainControl so it receives
+		//    ControlSelectionMessage / NewSelectionMessage and
+		//    forwards the live selection into the Inspector.
+		inspector_dock_->view()->attachSelectionTab(this);
+		selection_adapter_ = new VIEW::SelectionInspectorAdapter(
+			this, inspector_dock_->view());
 #else
  		addDockWidget(Qt::BottomDockWidgetArea, log_view);
 		addDockWidget(Qt::BottomDockWidgetArea, file_obs);
@@ -360,6 +374,13 @@ namespace BALL
 
 	Mainframe::~Mainframe()
 	{
+#ifdef BALL_UI_V2
+		// Phase 999.44 Plan 03 — destroy the selection adapter before
+		// the Inspector view it points at goes away (the view is owned
+		// by inspector_dock_ which Qt deletes via the QWidget tree).
+		delete selection_adapter_;
+		selection_adapter_ = 0;
+#endif
 		#ifdef BALL_PYTHON_SUPPORT
 			PyInterpreter::finalize();
 		#endif

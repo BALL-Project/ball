@@ -23,6 +23,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class InspectorDock;
+		class SelectionInspectorAdapter;
 	}
 #endif
 
@@ -86,8 +87,12 @@ namespace BALL
 #ifdef BALL_UI_V2
 			/// Phase 999.44 Plan 02: right-rail Inspector dock + its
 			/// View ▸ Hide Inspector menu action.
-			VIEW::InspectorDock* inspector_dock_;
-			QAction*             hide_inspector_action_;
+			VIEW::InspectorDock*              inspector_dock_;
+			QAction*                          hide_inspector_action_;
+			/// Phase 999.44 Plan 03: selection-bus adapter that
+			/// forwards ControlSelectionMessage / NewSelectionMessage
+			/// into the Inspector Selection tab.
+			VIEW::SelectionInspectorAdapter*  selection_adapter_;
 #endif
 	};
 

@@ -11,6 +11,9 @@
 #include <BALL/VIEW/WIDGETS/inspector/inspectorBody.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/inspectorEmptyState.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/selectionSummarySection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/propertiesSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/quickActionsSection.h>
 
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
@@ -43,7 +46,11 @@ namespace BALL
 			: QWidget(parent),
 				tabs_(nullptr),
 				body_(nullptr),
-				loading_(false)
+				loading_(false),
+				selection_summary_(nullptr),
+				selection_properties_(nullptr),
+				selection_actions_(nullptr),
+				selection_sections_added_(false)
 		{
 			setObjectName("inspectorView");
 
@@ -170,6 +177,57 @@ namespace BALL
 			}
 			s.endGroup();
 			s.sync();
+		}
+
+		void InspectorView::attachSelectionTab(MainControl* main_control)
+		{
+			// Phase 999.44 Plan 03 — construct the 3 Selection-tab
+			// sections. They sit on the tab page initially as the empty
+			// state placeholder; setSelection swaps them in on the
+			// first non-empty selection.
+			if (selection_summary_ == nullptr)
+			{
+				selection_summary_    = new SelectionSummarySection(body_);
+				selection_properties_ = new PropertiesSection(body_);
+				selection_actions_    = new QuickActionsSection(main_control, body_);
+			}
+		}
+
+		void InspectorView::setSelection(const std::list<Composite*>& selection)
+		{
+			// Lazy-create on first call if the caller forgot to
+			// attachSelectionTab (defensive — no MainControl* available
+			// here, so QuickActionsSection won't have one and its
+			// buttons will be no-ops).
+			if (selection_summary_ == nullptr)
+				attachSelectionTab(nullptr);
+
+			if (selection.empty())
+			{
+				// Restore the empty-state placeholder. The empty state
+				// owns the tab again until the next non-empty selection.
+				if (selection_sections_added_)
+				{
+					body_->setEmptyState(InspectorTabs::TabIndex::Selection,
+					                     InspectorEmptyState::forNoSelection(body_));
+					selection_sections_added_ = false;
+				}
+				return;
+			}
+
+			// Non-empty selection: swap sections in (idempotent — addSection
+			// uses Body's append path; we install once and re-use across
+			// updates).
+			if (!selection_sections_added_)
+			{
+				addSection(InspectorTabs::TabIndex::Selection, selection_summary_);
+				addSection(InspectorTabs::TabIndex::Selection, selection_properties_);
+				addSection(InspectorTabs::TabIndex::Selection, selection_actions_);
+				selection_sections_added_ = true;
+			}
+
+			selection_summary_->updateForSelection(selection);
+			selection_properties_->updateForSelection(selection);
 		}
 
 	} // namespace VIEW

@@ -36,6 +36,11 @@ SET(SOURCES_LIST
 	inspector/inspectorDock.C
 	inspector/inspectorEmptyState.C
 	inspector/sections/stageSection.C
+	# Phase 999.44 Plan 03 — Selection tab.
+	inspector/selectionAdapter.C
+	inspector/sections/selectionSummarySection.C
+	inspector/sections/propertiesSection.C
+	inspector/sections/quickActionsSection.C
 	# Phase 999.45 — Workspace consolidation: ProjectDock (left-rail
 	# tabified group of Structures/Reps/Datasets) + BottomDrawer
 	# (24px↔240px animated dock with Logs/FileObserver tabs). Both

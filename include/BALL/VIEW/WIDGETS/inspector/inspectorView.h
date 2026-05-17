@@ -23,12 +23,20 @@
 #include <QtCore/QTimer>
 #include <QtWidgets/QWidget>
 
+#include <list>
+
 namespace BALL
 {
+	class Composite;
+
 	namespace VIEW
 	{
 		class InspectorBody;
 		class InspectorSection;
+		class SelectionSummarySection;
+		class PropertiesSection;
+		class QuickActionsSection;
+		class MainControl;
 
 		/**
 		 * Root content widget hosted inside the InspectorDock. Owns the
@@ -73,6 +81,23 @@ namespace BALL
 				/** Write [Inspector] group from the view into QSettings (debounced via state_writer_). */
 				void scheduleStateWrite();
 
+				/**
+				 * Phase 999.44 Plan 03 — Selection tab population.
+				 * Construct (lazily on first call) the 3 Selection-tab
+				 * sections and bind them to @p main_control. After this
+				 * call, setSelection(...) routes selection updates to
+				 * those sections.
+				 */
+				void attachSelectionTab(MainControl* main_control);
+
+				/**
+				 * Update the Selection-tab sections with the given
+				 * composite selection. Empty list → restore empty
+				 * state; non-empty → swap sections in and update
+				 * their per-section content.
+				 */
+				void setSelection(const std::list<Composite*>& selection);
+
 			private Q_SLOTS:
 				void onTabChanged_(int index);
 				void onSectionToggled_(bool expanded);
@@ -84,8 +109,12 @@ namespace BALL
 				QTimer state_writer_;
 				bool loading_;  // suppress writes during loadState()
 
-				// (We track section pointers indirectly via Qt's object-tree;
-				// expanded-state writes walk children via findChildren<>().)
+				// Phase 999.44 Plan 03 — Selection-tab section pointers.
+				// Created lazily in attachSelectionTab; nullptr until then.
+				SelectionSummarySection* selection_summary_;
+				PropertiesSection*       selection_properties_;
+				QuickActionsSection*     selection_actions_;
+				bool                     selection_sections_added_;
 		};
 
 	} // namespace VIEW
