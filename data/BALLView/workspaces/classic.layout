@@ -1,0 +1,38 @@
+{
+  "_comment": "Phase 999.45 — BALLView Refresh: Classic workspace preset (Handover §5.3 + maintainer-Q2). The legacy 5-dock layout, kept alongside Default for one release; Phase 999.49 deletes it after 999.48 flips BALL_UI_V2 ON. Loaded by VIEW::WorkspaceManager::apply(Classic).",
+  "preset": "Classic",
+  "version": 1,
+  "docks": [
+    {
+      "name": "MolecularControl",
+      "area": "left",
+      "visible": true,
+      "size": 240
+    },
+    {
+      "name": "GeometricControl",
+      "area": "left",
+      "visible": true,
+      "size": 240
+    },
+    {
+      "name": "DatasetControl",
+      "area": "top",
+      "visible": false,
+      "size": 0
+    },
+    {
+      "name": "LogView",
+      "area": "bottom",
+      "visible": true,
+      "size": 120
+    },
+    {
+      "name": "FileObserver",
+      "area": "bottom",
+      "visible": true,
+      "size": 120
+    }
+  ],
+  "toolbarsVisible": true
+}

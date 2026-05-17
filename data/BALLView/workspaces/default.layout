@@ -1,0 +1,26 @@
+{
+  "_comment": "Phase 999.45 — BALLView Refresh: Default workspace preset (Handover §5.3). Loaded by VIEW::WorkspaceManager::apply(Default) via BALL_DATA_PATH lookup.",
+  "preset": "Default",
+  "version": 1,
+  "docks": [
+    {
+      "name": "projectDock",
+      "area": "left",
+      "visible": true,
+      "size": 280
+    },
+    {
+      "name": "inspectorDock",
+      "area": "right",
+      "visible": true,
+      "size": 320
+    },
+    {
+      "name": "bottomDrawer",
+      "area": "bottom",
+      "visible": true,
+      "size": 24
+    }
+  ],
+  "toolbarsVisible": true
+}

@@ -1,0 +1,14 @@
+{
+  "_comment": "Phase 999.45 — BALLView Refresh: Focused workspace preset (Handover §5.3). Distraction-free single-canvas mode — no side docks, BottomDrawer kept collapsed for log access, all toolbars hidden. Loaded by VIEW::WorkspaceManager::apply(Focused).",
+  "preset": "Focused",
+  "version": 1,
+  "docks": [
+    {
+      "name": "bottomDrawer",
+      "area": "bottom",
+      "visible": true,
+      "size": 24
+    }
+  ],
+  "toolbarsVisible": false
+}
