@@ -616,13 +616,16 @@ jobs:
       # cmake configure; vcpkg then hits the local archives and skips the
       # from-source compile.
       #
-      # Upload only when the actions/cache restore missed (i.e., archives
-      # are fresh from this run) — avoids redundant ~3GB uploads on every
-      # warm-cache CI run. `if: always()` covers both success + failure
-      # outcomes of the build so even a partial vcpkg install gets
-      # surfaced for release.yml.
+      # Upload on every successful Windows build (cache hit or miss):
+      # the archives directory contains the same content regardless of
+      # source — what matters is that the artifact exists for release.yml
+      # to pull. `overwrite: true` ensures each successful CI run refreshes
+      # the artifact in place; no stale 14-day-old artifacts.
+      # `if-no-files-found: warn` because on a partial-failure run the
+      # archives dir may be empty (and we don't want to fail the whole
+      # job just for the artifact upload).
       - name: Upload vcpkg archives for release-pipeline reuse (Windows)
-        if: always() && matrix.os == 'windows-x64' && steps.vcpkg-cache.outputs.cache-hit != 'true'
+        if: success() && matrix.os == 'windows-x64'
         uses: actions/upload-artifact@v6
         with:
           name: vcpkg-archives-windows
