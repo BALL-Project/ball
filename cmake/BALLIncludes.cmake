@@ -96,6 +96,22 @@ INCLUDE(include/BALL/ENERGY/sources.cmake)
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
+#
+# B3.1 (Track B Wave 3, 2026-05-18): MOLMEC is the next wave but the
+# audit assumption that MOLMEC depends ONLY on FORMAT+STRUCTURE+core
+# turned out to be optimistic — MMFF94, AMBER (GAFFTypeProcessor),
+# and COMMON/forceFieldComponent reach forward into QSAR
+# (RingPerceptionProcessor, AromaticityProcessor) and SCORING
+# (ScoringComponent). Force-field implementations are a single
+# co-evolved subsystem with QSAR/SCORING, so Wave 3 in practice has
+# to land MOLMEC + QSAR + SCORING together (or ship a MOLMEC subset
+# excluding the actual force fields, which buys very little).
+#
+# Track B B3.x sub-phases (deferred to next session — too large for
+# one iteration): MOLMEC core (COMMON-minus-FFC + MINIMIZATION +
+# PARAMETER + MDSIMULATION) → QSAR (50 sources) → SCORING force-field
+# bits → AMBER + MMFF94 + CHARMM force fields → trajectory FORMAT
+# re-enable.
 IF(NOT BALL_CORE_ONLY)
 	INCLUDE(source/MOLMEC/sources.cmake)
 	INCLUDE(include/BALL/MOLMEC/sources.cmake)

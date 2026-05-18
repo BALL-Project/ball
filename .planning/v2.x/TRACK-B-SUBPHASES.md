@@ -48,11 +48,10 @@ wave is one or more sub-phases below.
 | **B2.1** | Wave 2a: XRAY (3 sources) | XRAY tests | green |
 | **B2.2** | Wave 2b: NMR (17 sources) | NMR tests | green |
 | **B2.3** | Wave 2c: ENERGY (5 sources) | ENERGY tests | green |
-| **B3.1** | Wave 3: MOLMEC (57 sources — largest single module) | MOLMEC tests | green |
+| **B3.1** | Wave 3 cluster: **MOLMEC + QSAR + SCORING-force-field** (revised 2026-05-18 — see decision log §3) | Combined module surface | green |
 | **B3.2** | Codex Round 11 — Track B Wave 3 review (MOLMEC + force-field integration) | review doc | verdict: go for Wave 4 |
-| **B4.1** | Wave 4a: QSAR (50 sources) | QSAR tests | green |
-| **B4.2** | Wave 4b: SOLVATION (16 sources) | SOLVATION tests | green |
-| **B5.1** | Wave 5: SCORING (47 sources) | SCORING tests | green |
+| **B4.1** | Wave 4: SOLVATION (16 sources) — split from prior Wave 4 since QSAR moved to B3.1 | SOLVATION tests | green |
+| **B5.1** | Wave 5: SCORING (47 sources) — remaining SCORING after B3.1 took the FF subset | SCORING tests | green |
 | **B6.1** | Wave 6: DOCKING (16 sources) | DOCKING tests | green |
 | **B6.2** | Codex Round 12 — Track B full-stack review (FORMAT → DOCKING) | review doc | verdict: go for Wave 7 (PYTHON) gated on bake-off |
 | **B7.x** | Wave 7: PYTHON bindings — gated on Phase 6 binding-tool bake-off (`OPEN-QUESTIONS.md` Q1) | bake-off result + chosen tool's binding skeleton | v2.1 work; not v2.0.x |
@@ -106,3 +105,20 @@ Each module re-enable wave is "done" when:
 - **PYTHON bindings (Wave 7)** depend on the bake-off outcome from
   `OPEN-QUESTIONS.md` Q1. Until that decision lands they're effectively
   out-of-scope.
+- **2026-05-18 (§3) — Wave 3 cluster revision:** the original audit
+  in `MODULE-REENABLE-PLAN.md` assumed MOLMEC depends only on
+  FORMAT+STRUCTURE+core. A B3.1 attempt found that MMFF94, AMBER
+  (`GAFFTypeProcessor`), and COMMON/`forceFieldComponent` reach
+  forward into QSAR (`RingPerceptionProcessor`, `AromaticityProcessor`)
+  and SCORING (`ScoringComponent`). Force-field implementations and
+  ring-perception/aromaticity have been a single co-evolved subsystem
+  since the early 2000s of BALL development, so they have to land
+  together. Wave 3 is therefore **MOLMEC + QSAR + the force-field
+  portion of SCORING** as one cluster, then SOLVATION (Wave 4),
+  remaining SCORING (Wave 5), DOCKING (Wave 6) follow.
+- **Current state (2026-05-18, post B2.3):** K0+B0+B1+B2 complete.
+  CORE_ONLY ctest 162/162 PASS (1 disabled = TextPersistenceManager
+  PDBInfo round-trip — v2.1 backlog). Modules in:
+  CONCEPT, COMMON, DATATYPE, KERNEL, MATHS, SYSTEM (always-on core);
+  PLUGIN, FORMAT (subset), STRUCTURE (subset), XRAY, NMR, ENERGY
+  (Track B Wave 0–2). Wave 3 cluster pending in a separate session.
