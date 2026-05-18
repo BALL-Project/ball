@@ -36,7 +36,12 @@
         <file alias="actions/edit-delete.svg">icons/lucide/trash-2.svg</file>
         <file alias="actions/edit-copy.svg">icons/lucide/copy.svg</file>
         <file alias="actions/molecule-add-hydrogens.svg">icons/lucide/atom.svg</file>
-        <file alias="actions/molecule-minimize.svg">icons/lucide/shrink.svg</file>
+        <!-- v1.7.0-rc2 UFG-14 polish: swapped shrink.svg → target.svg. The
+             "shrink" glyph reads as scale-down (UI gesture) but the actual
+             semantic is energy-minimize (find the lowest-energy
+             conformation). target.svg ("converge to optimum") is the
+             closest semantic fit in the Lucide v0.460.0 catalog. -->
+        <file alias="actions/molecule-minimize.svg">icons/lucide/target.svg</file>
         <file alias="actions/molecule-assign-bond-orders.svg">icons/lucide/link-2.svg</file>
         <!-- BALLView "categories/*" namespace -->
         <file alias="categories/preferences.svg">icons/lucide/settings.svg</file>
@@ -80,6 +85,16 @@
         <file alias="actions/create-bond.svg">icons/lucide/link.svg</file>
         <file alias="actions/continuous-loop.svg">icons/lucide/repeat.svg</file>
         <file alias="actions/screenshot.svg">icons/lucide/camera.svg</file>
+        <!-- v1.7.0-rc2 UFG-14: interaction-mode toolbar buttons (Scene
+             toolbar — select-rectangular, transform-move, transform-rotate)
+             were rendering blank in rc2. These actions are constructed
+             unconditionally during Scene initialization, so the missing
+             icons surfaced as blank slots on the main scene toolbar for
+             every user. See pickingMode.C:28, moveMode.C:51,
+             rotateMode.C:30. -->
+        <file alias="actions/select-rectangular.svg">icons/lucide/square-dashed-mouse-pointer.svg</file>
+        <file alias="actions/transform-move.svg">icons/lucide/move.svg</file>
+        <file alias="actions/transform-rotate.svg">icons/lucide/rotate-3d.svg</file>
         <!-- NOTE: scene.C also references 'mimetype/text-x-povray' but that
              action is menu-only (add_to_main_toolbar=false in setIcon
              call). Resolution deferred — POV-Ray output is rare and the

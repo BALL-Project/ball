@@ -62,6 +62,11 @@ namespace BALL
 			"actions/create-bond",
 			"actions/continuous-loop",
 			"actions/screenshot",
+			// v1.7.0-rc2 UFG-14: interaction-mode toolbar buttons
+			// (Scene toolbar slots that rendered blank in rc2).
+			"actions/select-rectangular",
+			"actions/transform-move",
+			"actions/transform-rotate",
 			// categories/* —
 			"categories/preferences",
 			// v1.7.0-rc2 UFG-01:

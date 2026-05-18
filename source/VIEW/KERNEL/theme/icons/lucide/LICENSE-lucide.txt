@@ -40,6 +40,14 @@ Vendored subset used in BALLView v1.7 (Phase 999.41 + v1.7.0-rc2):
     download.svg, cloud-download.svg, flask-conical.svg, monitor.svg,
     focus.svg, pencil.svg, tag.svg, link.svg, repeat.svg, camera.svg
 
+  v1.7.0-rc2 UFG-14 (4 glyphs — remaining Scene-toolbar interaction modes
+                     + molecule-minimize semantic polish):
+    square-dashed-mouse-pointer.svg, move.svg, rotate-3d.svg, target.svg
+    target.svg replaces shrink.svg as the alias target for
+    "actions/molecule-minimize" (semantic fit: energy-minimize means
+    "converge to optimum," not "scale down"). shrink.svg remains in the
+    vendored set for potential future use.
+
 All paths are unmodified from upstream lucide-static@0.460.0 except for
 the addition of an XML declaration + a one-line provenance comment in
 each file. The stroke uses `currentColor` so the icons inherit the
