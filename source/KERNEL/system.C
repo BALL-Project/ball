@@ -56,6 +56,36 @@ namespace BALL
 	//   5. Migrate the (now-safe) bonds whose partners ARE in dst
 	//   6. release_atom(source slot)
 	//   7. Update atom.store_/store_idx_/store_generation_
+	// 2026-05-18 (Codex R12 fix K8): predicate version of the
+	// bonded-atom safety gate. Returns true iff adopt() would succeed
+	// for `atom`. Callers (AtomContainer::prepend/append/insert) must
+	// check this BEFORE inserting into the Composite tree — pre-fix,
+	// the tree mutation happened first and adopt() could soft-reject
+	// later, leaving the atom in the tree but bound to its old (e.g.,
+	// orphan) store. Now AtomContainer skips both tree insertion and
+	// adopt() when canAdopt returns false, keeping the two halves
+	// (Composite tree membership + store binding) in sync.
+	bool System::canAdopt(const Atom& atom) const
+	{
+		const MoleculeStore* src = atom.getStore();
+		const MoleculeStore* dst = store_.get();
+		if (src == dst) return true;          // already adopted; no-op succeeds
+		if (src == nullptr) return true;      // unbound; adopt is a no-op
+		// Bonded-atom safety gate (K0.4.5): every partner must already
+		// be in `dst`, or the bond would orphan when src releases the slot.
+		// adoptSubtree handles multi-atom subtrees with internal bonds in
+		// one batched migration; single-atom adopt cannot.
+		for (Size bi = 0; bi < atom.countBonds(); ++bi)
+		{
+			const Atom* partner = atom.getPartnerAtom(bi);
+			if (partner == nullptr) continue;
+			const MoleculeStore* psrc = partner->getStore();
+			if (psrc == dst) continue;        // safe: partner already in dst
+			return false;                     // partner elsewhere — unsafe
+		}
+		return true;
+	}
+
 	void System::adopt(Atom& atom)
 	{
 		MoleculeStore* src = atom.getStore();
@@ -63,16 +93,13 @@ namespace BALL
 		if (src == dst) return;          // already in this System's store
 		if (src == nullptr) return;      // unbound atom (shouldn't happen post-K0.3b.1)
 
-		// K0.4.5: bonded-atom safety gate. If any bond's partner lives in
-		// a store other than dst, the bond would be orphaned when src
-		// released the source slot. Refuse and tell the caller to use
-		// adoptSubtree instead.
-		for (Size bi = 0; bi < atom.countBonds(); ++bi)
+		// K0.4.5 + R12 K8: bonded-atom safety gate via canAdopt(). The
+		// log-warn-and-return path stays as a safety net for callers
+		// that didn't pre-check; AtomContainer now pre-checks via
+		// canAdopt() and skips the entire prepend+adopt sequence on
+		// false.
+		if (!canAdopt(atom))
 		{
-			const Atom* partner = atom.getPartnerAtom(bi);
-			if (partner == nullptr) continue;
-			MoleculeStore* psrc = partner->getStore();
-			if (psrc == dst) continue;   // safe: partner already in dst
 			Log.warn() << "System::adopt(Atom&): refusing to adopt bonded "
 				"atom whose partner lives in another store; use "
 				"adoptSubtree(AtomContainer&) instead." << std::endl;

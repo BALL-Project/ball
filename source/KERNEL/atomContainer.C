@@ -280,21 +280,40 @@ namespace BALL
 		return size;
 	}
 
+	// 2026-05-18 (Codex R12 fix K8): pre-check canAdopt() BEFORE
+	// Composite-tree insertion. Pre-fix, `Composite::prependChild` ran
+	// first, then `sys->adopt(atom)` could soft-reject (bonded atom
+	// with partner in another store), leaving the atom in this
+	// container's tree but still bound to its old store. Now if adopt
+	// would fail, the whole prepend+adopt sequence is skipped — caller
+	// gets the same Log.warn but tree state stays consistent.
 	void AtomContainer::prepend(Atom& atom)
 	{
+		System* sys = findRootSystem_(this);
+		if (sys != nullptr && !sys->canAdopt(atom))
+		{
+			(void) sys->adopt(atom);   // emits the Log.warn; no-op otherwise
+			return;
+		}
 		Composite::prependChild(atom);
 		// K0.4.3 auto-adopt: if rooted under a System, migrate the atom
 		// from its current store (typically orphan) into the System's
 		// store. Single-atom insert path; bond migration is trivial
 		// (atom has no bonds to other atoms in src yet, or partner is
 		// already in dst).
-		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
+		if (sys != nullptr) sys->adopt(atom);
 	}
 
 	void AtomContainer::append(Atom &atom)
 	{
+		System* sys = findRootSystem_(this);
+		if (sys != nullptr && !sys->canAdopt(atom))
+		{
+			(void) sys->adopt(atom);
+			return;
+		}
 		Composite::appendChild(atom);
-		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
+		if (sys != nullptr) sys->adopt(atom);
 	}
 
 	void AtomContainer::insert(Atom &atom)
@@ -304,14 +323,27 @@ namespace BALL
 
 	void AtomContainer::insertBefore(Atom &atom, Composite& before)
 	{
+		System* sys = findRootSystem_(this);
+		if (sys != nullptr && !sys->canAdopt(atom))
+		{
+			(void) sys->adopt(atom);
+			return;
+		}
 		before.Composite::insertBefore(atom);
-		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
+		if (sys != nullptr) sys->adopt(atom);
 	}
 
 	void AtomContainer::insertAfter(Atom& atom, Composite &after)
 	{
+		// R12 fix K8: pre-check canAdopt before tree insertion.
+		System* sys = findRootSystem_(this);
+		if (sys != nullptr && !sys->canAdopt(atom))
+		{
+			(void) sys->adopt(atom);
+			return;
+		}
 		after.Composite::insertAfter(atom);
-		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
+		if (sys != nullptr) sys->adopt(atom);
 	}
 
 	bool AtomContainer::remove(Atom& atom)

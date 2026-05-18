@@ -313,7 +313,15 @@ void MoleculeStore::compact()
 	back_ptr_.shrink_to_fit();
 	is_freed_.shrink_to_fit();
 
-	bump_generation_if_reallocated_(old_cap);
+	// 2026-05-18 (Codex R12 fix K5): bump generation unconditionally.
+	// Pre-fix only bumped on capacity change, but the documented
+	// contract is "compact() invalidates all borrowed refs". Even if
+	// shrink_to_fit() chose not to reallocate (free space below
+	// implementation threshold), the contract said callers couldn't
+	// hold refs across compact() — so bumping unconditionally matches
+	// the contract and only costs a 64-bit increment.
+	(void) old_cap;  // K5 fix: was used by the now-removed conditional bump
+	++generation_;
 }
 
 void MoleculeStore::bump_generation_if_reallocated_(std::size_t old_cap)

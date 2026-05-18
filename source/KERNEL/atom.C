@@ -86,33 +86,48 @@ namespace BALL
 
 	// K0.3b.2a/3: write-side helpers, called from atom.iC setters
 	// (which only forward-declare MoleculeStore via atom.h).
+	//
+	// 2026-05-18 (Codex R12 fix K12): every helper now calls
+	// ensureStoreBinding_() first. Pre-fix, after ~System nulled
+	// store_ pointers on its atoms, calling setPosition/setName/etc.
+	// on a detached atom would dereference null store_ and crash.
+	// ensureStoreBinding_() rebinds the handle to the orphan store
+	// (no-op if still attached), so detached mutation flows safely
+	// rather than crashing or being silently dropped.
 	void Atom::writeStorePosition_(const Vector3& p)
 	{
+		ensureStoreBinding_();
 		store_->position(store_idx_) = p;
 	}
 	void Atom::writeStoreCharge_(float c)
 	{
+		ensureStoreBinding_();
 		store_->charge(store_idx_) = c;
 	}
 	void Atom::writeStoreVelocity_(const Vector3& v)
 	{
+		ensureStoreBinding_();
 		store_->velocity(store_idx_) = v;
 	}
 	void Atom::writeStoreForce_(const Vector3& f)
 	{
+		ensureStoreBinding_();
 		store_->force(store_idx_) = f;
 	}
 	void Atom::writeStoreName_(const String& s)
 	{
+		ensureStoreBinding_();
 		// MoleculeStore::set_name takes std::string.
 		store_->set_name(store_idx_, std::string(s.c_str()));
 	}
 	void Atom::writeStoreTypeName_(const String& s)
 	{
+		ensureStoreBinding_();
 		store_->set_type_name(store_idx_, std::string(s.c_str()));
 	}
 	void Atom::writeStoreElement_(const Element* e)
 	{
+		ensureStoreBinding_();
 		// Mirror Element* as atomic number into uint8 column. Null Element
 		// stores as 0 (unknown).
 		store_->element_index(store_idx_) =
@@ -122,18 +137,24 @@ namespace BALL
 	{
 		// K0.3b.LATER.7: resolve atomic-number column entry to PTE element
 		// reference. atomic_number 0 maps to Element::UNKNOWN via PTE[0].
+		// Read path: if detached, return Element::UNKNOWN (no rebind on
+		// read — read of detached handle returns sensible default).
+		if (store_ == nullptr) return PTE[(Position)0];
 		return PTE[(Position)store_->element_index(store_idx_)];
 	}
 	void Atom::writeStoreRadius_(float r)
 	{
+		ensureStoreBinding_();
 		store_->radius(store_idx_) = r;
 	}
 	void Atom::writeStoreAtomType_(short t)
 	{
+		ensureStoreBinding_();
 		store_->atom_type(store_idx_) = t;
 	}
 	void Atom::writeStoreFormalCharge_(short fc)
 	{
+		ensureStoreBinding_();
 		store_->formal_charge(store_idx_) = fc;
 	}
 
@@ -877,27 +898,33 @@ namespace BALL
 
 	void Atom::clear_()
 	{
-		// K0.4.8: clear_ is called from destroy()/~Atom AND from the
-		// user-facing clear(). For the destroy path the slot is about
-		// to be released anyway, so a null store_ is fine to skip. For
-		// the user-facing path callers expect their atom to retain a
-		// store binding; if it's detached (post-~System), re-bind to
-		// orphan so the defaults land somewhere.
+		// K0.4.8 + R12 fix K12: clear_ is called from BOTH destroy()/~Atom
+		// AND user-facing clear(). For the destroy path, ~Atom will run
+		// release_atom only if store_ is non-null, so skipping payload
+		// resets when store_ is null is correct (the slot is being torn
+		// down anyway). For the user-facing path, callers expect a clean
+		// handle ready for reuse; the writeStoreXxx_ helpers now all call
+		// ensureStoreBinding_() (R12 fix K12), so they rebind a detached
+		// handle to the orphan store before writing. Route all payload
+		// writes through the helpers for uniform detached-handle handling.
 		if (store_ == nullptr)
 		{
-			// destroy()-path: skip; ~Atom won't release a null store.
+			// destroy()-path. ~Atom will skip release_atom on null store_,
+			// so payload reset is a no-op. Just tear down side state.
 			delete interactions;
 			interactions = 0;
 			destroyBonds();
 			return;
 		}
-		// K0.3b.LATER.1-10: payload fields store-backed; clear straight through.
-		store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
-		store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
-		store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
-		store_->force(store_idx_) = Vector3(BALL_ATOM_DEFAULT_FORCE);
-		store_->set_name(store_idx_, std::string(BALL_ATOM_DEFAULT_NAME));
-		store_->set_type_name(store_idx_, std::string(BALL_ATOM_DEFAULT_TYPE_NAME));
+		// K0.3b.LATER.1-10: payload fields store-backed; routed through
+		// writeStoreXxx_ helpers (which call ensureStoreBinding_ for the
+		// detached-handle case — though here store_ is already non-null).
+		writeStorePosition_(Vector3(BALL_ATOM_DEFAULT_POSITION));
+		writeStoreCharge_(BALL_ATOM_DEFAULT_CHARGE);
+		writeStoreVelocity_(Vector3(BALL_ATOM_DEFAULT_VELOCITY));
+		writeStoreForce_(Vector3(BALL_ATOM_DEFAULT_FORCE));
+		writeStoreName_(String(BALL_ATOM_DEFAULT_NAME));
+		writeStoreTypeName_(String(BALL_ATOM_DEFAULT_TYPE_NAME));
 		writeStoreRadius_(BALL_ATOM_DEFAULT_RADIUS);
 		writeStoreAtomType_(static_cast<short>(BALL_ATOM_DEFAULT_TYPE));
 		writeStoreFormalCharge_(static_cast<short>(BALL_ATOM_DEFAULT_FORMAL_CHARGE));

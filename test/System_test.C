@@ -448,20 +448,37 @@ CHECK(void splice(System& system) throw())
 RESULT
 
 CHECK([EXTRA]destroyBonds())
+	// 2026-05-18 (Codex R12 K8 fix update): the v2.0 K0 store contract
+	// disallows adopting an atom whose bond partners live in another
+	// store (would orphan the bond). Pre-K8 fix this was a soft-reject
+	// that silently inserted into the Composite tree without migrating
+	// — buggy but exercised by the old version of this test. Now
+	// canAdopt() pre-checks and the whole prepend+adopt skips. The
+	// correct v2.0 idiom for the original test intent ("destroyBonds()
+	// removes intra-system bonds, leaves external bonds alone") is to
+	// add atoms FIRST (single-atom canAdopt always succeeds: no bonds
+	// yet) then create bonds AFTER all endpoints are in the right
+	// store.
 	System s1;
 	Molecule m1;
 	Atom a1, a2, a3, a4;
 	s1.append(m1);
-	a1.createBond(a2);
-	a1.createBond(a3);
-	a1.createBond(a4);
-	a3.createBond(a4);
+	// Atoms get adopted into s1's store as they're added (no bonds yet,
+	// so canAdopt succeeds for each).
 	m1.append(a1);
 	m1.append(a2);
+	// Now create bonds. a1, a2 are in s1's store; a3, a4 in orphan.
+	a1.createBond(a2);   // intra-s1 bond
+	a1.createBond(a3);   // cross-store bond (a1 in s1, a3 in orphan)
+	a1.createBond(a4);   // cross-store bond
+	a3.createBond(a4);   // intra-orphan bond
 	s1.destroyBonds();
-	TEST_EQUAL(a1.countBonds(), 0)	
-	TEST_EQUAL(a2.countBonds(), 0)	
-	TEST_EQUAL(a3.countBonds(), 1)	
+	// destroyBonds removes bonds owned by s1. a1's bonds to a3, a4 live
+	// in s1's bond store (a1 is the s1-side endpoint), so they're gone.
+	// a3-a4 lives in the orphan bond store, untouched.
+	TEST_EQUAL(a1.countBonds(), 0)
+	TEST_EQUAL(a2.countBonds(), 0)
+	TEST_EQUAL(a3.countBonds(), 1)
 RESULT
 
 TextPersistenceManager pm;

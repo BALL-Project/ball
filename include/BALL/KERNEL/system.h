@@ -203,6 +203,20 @@ namespace BALL
 		*/
 		Size countNucleotides() const;
 
+		// 2026-05-18 (Codex R12 fix K10): re-expose AtomContainer's
+		// Atom/AtomContainer insert/append/prepend overloads. System's
+		// own Molecule overloads below would otherwise HIDE the
+		// inherited ones, forcing callers into the awkward
+		// `sys.AtomContainer::insert(*atom)` workaround documented in
+		// systemJson.C. Matches the pattern Molecule uses (molecule.h
+		// lines 133-187).
+		using AtomContainer::insert;
+		using AtomContainer::insertBefore;
+		using AtomContainer::insertAfter;
+		using AtomContainer::append;
+		using AtomContainer::prepend;
+		using AtomContainer::remove;
+
 		/** Prepend a molecule at position 0.
 				@param molecule the molecule to prepend
 		*/
@@ -314,6 +328,16 @@ namespace BALL
 				be preserved.
 		*/
 		void adopt(Atom& atom);
+
+		/** 2026-05-18 (Codex R12 fix K8): predicate that returns true
+		    iff `atom` can safely be adopted into this System's store
+		    without leaving a bonded cross-store inconsistency. Used by
+		    AtomContainer::prepend/append/insert to check BEFORE
+		    Composite-tree insertion — pre-fix, the tree was mutated
+		    first and then adopt() could soft-reject, leaving the atom
+		    in the tree but bound to the orphan store. Mirrors the
+		    safety gate in `adopt()` exactly. */
+		bool canAdopt(const Atom& atom) const;
 
 		/** Adopt an entire AtomContainer subtree into this System's
 				store in three passes:

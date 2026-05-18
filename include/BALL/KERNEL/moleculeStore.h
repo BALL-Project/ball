@@ -263,6 +263,24 @@ namespace BALL
 		*/
 		//@{
 
+		// 2026-05-18 (Codex R12 K9): THREAD-SAFETY CONTRACT for bond
+		// mutation. add_bond / remove_bond / remove_bonds_between AND
+		// the CSR-rebuild path (ensure_csr_) all touch `bonds_`,
+		// `bond_free_list_`, `bond_csr_off_`, `bond_csr_idx_`, and
+		// `csr_dirty_` without synchronisation. Callers must serialise
+		// access:
+		//   - Orphan store: bonds are never created on the orphan store
+		//     in the current codebase (default Atom() doesn't bond;
+		//     only Atom::createBond / Bond ctor allocates a bond record
+		//     after the atom has been adopted into a per-System store).
+		//     So orphan + bond is not a contention point.
+		//   - Per-System store: standard usage is single-threaded per
+		//     System. Multi-thread bond mutation on the same per-System
+		//     store is UNDEFINED BEHAVIOUR — caller must wrap with an
+		//     external mutex.
+		// v2.1 backlog: V21-BOND-MUTEX would add a per-store mutex if
+		// concurrent bond mutation becomes a real use case (e.g.,
+		// parallel force-field setup that builds bonds from atom pairs).
 		std::uint32_t add_bond(Index a, Index b,
 		                       std::uint8_t order = 1,
 		                       std::uint8_t type = 0);
