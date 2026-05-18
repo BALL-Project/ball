@@ -37,6 +37,19 @@ namespace BALL
 			col->setSpacing(6);
 
 			enabled_box_  = new QCheckBox(content);
+			// UFG-11 follow-up — StereoController::apply() deliberately does NOT
+			// consume `enabled_` (renderer-mode plumbing lands with the Renderer/
+			// RenderSurface cut-over per SEED-001 step 5). Until then, exposing
+			// an editable checkbox is a UX trap: the user toggles it and nothing
+			// happens in the rendered scene. Disable + tooltip-redirect to the
+			// legacy Display › Stereo menu, which still owns the actual mode
+			// switch. Re-enable in v1.7.x when StereoController is wired through
+			// the renderer-mode boundary.
+			enabled_box_->setEnabled(false);
+			enabled_box_->setToolTip(tr(
+				"Stereo mode toggle is wired through Display › Stereo menu "
+				"in v1.7.0. Inspector toggle re-enables once the renderer-mode "
+				"plumbing lands (v1.7.x)."));
 			eye_slider_   = new LabeledSlider(0, 200,
 				controller_ ? static_cast<int>(controller_->eyeDistance() * 10.0f) : 0,
 				QStringLiteral(""), content);
