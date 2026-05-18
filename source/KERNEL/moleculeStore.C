@@ -5,12 +5,18 @@
 //
 
 #include <BALL/KERNEL/moleculeStore.h>
+// K0.5.5: invalidate this store's cached CompiledExpressions on dtor so
+// the cache doesn't hold dangling MoleculeStore* keys past our lifetime.
+#include <BALL/KERNEL/compiledExpression.h>
 
 namespace BALL
 {
 
 MoleculeStore::MoleculeStore() = default;
-MoleculeStore::~MoleculeStore() = default;
+MoleculeStore::~MoleculeStore()
+{
+	CompiledExpressionCache::instance().invalidate_store(this);
+}
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give
 // thread-safe lazy init (C++17 [stmt.dcl] p4).

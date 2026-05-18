@@ -17,6 +17,8 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>  // K0.5.3 integration check
+#include <atomic>                    // K0.5.5 concurrent-parse test
+#include <thread>                    // K0.5.5 concurrent-parse test
 ///////////////////////////
 
 START_TEST(CompiledExpression)
@@ -499,6 +501,55 @@ CHECK(K0.5.4 user-registered predicate routes through OwnedPred)
 	std::vector<std::uint8_t> bm;
 	compiled->evaluate(sys.getStore(), bm);
 	TEST_EQUAL(bm[a->getStoreIndex()], compiled->evaluate_one(*a) ? 1 : 0)
+RESULT
+
+CHECK(K0.5.5 ExpressionParser parse() is serialised under mutex (TSAN-friendly))
+	// Spec §6. Concurrent ExpressionParser::parse() calls used to race on
+	// the static ExpressionParser::state and on the Flex/Bison process-
+	// global lexer/parser state. K0.5.5 wraps parse() in a mutex to
+	// serialise it. This test exercises N threads compiling DIFFERENT
+	// expressions against ONE shared store. Without the lock, this used
+	// to crash or yield wrong results under TSAN; with the lock, every
+	// thread should get the correct compiled AST.
+	System sys;
+	Atom *c1 = new Atom; c1->setElement(PTE[Element::CARBON]); sys.adopt(*c1);
+	Atom *o1 = new Atom; o1->setElement(PTE[Element::OXYGEN]); sys.adopt(*o1);
+	auto& store = sys.getStore();
+	CompiledExpressionCache::instance().clear();
+
+	const int n_threads = 8;
+	const int n_iters   = 50;
+	std::vector<std::thread> ts;
+	std::atomic<int> errors{0};
+
+	auto worker = [&](int tid)
+	{
+		const std::string srcs[3] = {
+			"element(C)",
+			"element(O)",
+			"element(C) OR element(O)"
+		};
+		for (int i = 0; i < n_iters; ++i)
+		{
+			const std::string& src = srcs[(tid + i) % 3];
+			try
+			{
+				Expression e(String(src.c_str()));
+				bool rc = e(*c1);
+				bool ro = e(*o1);
+				// Cross-check against expected truth table.
+				bool exp_c = (src == "element(C)") || (src.find("OR") != std::string::npos);
+				bool exp_o = (src == "element(O)") || (src.find("OR") != std::string::npos);
+				if (rc != exp_c || ro != exp_o) ++errors;
+			}
+			catch (...) { ++errors; }
+		}
+	};
+
+	for (int t = 0; t < n_threads; ++t) ts.emplace_back(worker, t);
+	for (auto& th : ts) th.join();
+
+	TEST_EQUAL(errors.load(), 0)
 RESULT
 
 CHECK(K0.5.4 fast-path + OwnedPred coexist inside one AST)

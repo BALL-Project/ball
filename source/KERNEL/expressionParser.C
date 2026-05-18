@@ -4,11 +4,36 @@
 
 #include <BALL/KERNEL/expressionParser.h>
 
+#include <mutex>
+
 // defined in the lexer (expressionParserLexer.l)
 extern void ExpressionParser_initBuffer(const char* buf);
 extern void ExpressionParser_delBuffer();
 extern void ExpressionParser_destroy();
 extern int ExpressionParserparse();
+
+namespace
+{
+	// K0.5.5 (Codex Round 4 follow-up; spec §6): ExpressionParser holds
+	// process-global state (BALL::ExpressionParser::state member, plus the
+	// generated Flex/Bison machinery's hidden globals — yyin, yytext, the
+	// LALR stack, etc.). Two threads calling parse() concurrently corrupt
+	// both. We choose the minimal correct fix: serialise parse() under
+	// this mutex. The proper Flex/Bison-reentrant rewrite is deferred
+	// (would require regenerating the parser with %define api.pure full
+	// + flex %option reentrant + threading the State* through every
+	// yylex/yyparse signature — invasive and bison-version-sensitive).
+	//
+	// The performance impact is negligible because K0.5.2's
+	// CompiledExpressionCache hits before parse() on every repeated
+	// source string. A given expression is parsed once per process
+	// regardless of caller-thread count.
+	std::mutex& expressionParserMutex_()
+	{
+		static std::mutex m;
+		return m;
+	}
+}
 
 namespace BALL
 {
@@ -135,25 +160,29 @@ namespace BALL
 
 	void ExpressionParser::parse(const String& s)
 	{
+		// K0.5.5: serialise parse() across threads. See the anonymous-
+		// namespace comment in this file for the design rationale.
+		std::lock_guard<std::mutex> lk(expressionParserMutex_());
+
 		// clear former contents
 		if (syntax_tree_ != 0)
 		{
 			delete syntax_tree_;
 			syntax_tree_ = 0;
 		}
-		
+
 
 		// make the internals of this parser available for all
 		state.current_parser = this;
-		state.buffer = s.c_str();	
+		state.buffer = s.c_str();
 		state.char_count = 0;
 		state.tree = 0;
-    
+
 		try
 		{
 			ExpressionParser_initBuffer(state.buffer);
 			ExpressionParserparse();
-			ExpressionParser_delBuffer();		
+			ExpressionParser_delBuffer();
 
 			// the tree's mine now...
 			syntax_tree_ = state.tree;
@@ -163,7 +192,7 @@ namespace BALL
 		{
 			ExpressionParser_delBuffer();
 			throw e;
-		}		
+		}
 	}
 	
 	struct ExpressionParser::State ExpressionParser::state;
