@@ -922,6 +922,14 @@ jobs:
       # ======================================================================
       - name: Render smoke check (macOS — native)
         if: matrix.smoke && matrix.os == 'macos-arm64'
+        env:
+          # v1.7.0-rc3 R8 follow-up: bump default 60s timeout to 180s.
+          # Cumulative Wave-4 fixes (Inspector + Workspace + WelcomeScreen +
+          # CommandPalette + RC3 UFG-08/17 mainframe central-widget shuffle)
+          # added enough widget-construction work on startup that the 60s
+          # window is insufficient on github-hosted macOS runners. Local
+          # smoke completes in <10s; CI runners are slower + cold.
+          BALLVIEW_SMOKE_TIMEOUT: "180"
         run: |
           # Preset puts the binary at build/ci-macos/; pass explicitly so the
           # script's autodetect (which looks in build/bin/) is not needed.
@@ -990,6 +998,10 @@ jobs:
           LIBGL_ALWAYS_SOFTWARE: 1
           # Plan 01 script honors this prefix; it does not hardcode xvfb.
           BALLVIEW_SMOKE_RUNNER: xvfb-run -a
+          # v1.7.0-rc3 R8 follow-up — same rationale as the macOS step above.
+          # llvmpipe + xvfb is slower than the macOS native path so the bump
+          # matters more here.
+          BALLVIEW_SMOKE_TIMEOUT: "180"
         run: |
           # Preset puts the binary at build/ci-linux/; pass explicitly so the
           # script's autodetect (which looks in build/bin/) is not needed.
