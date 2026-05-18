@@ -108,13 +108,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 
 	QApplication application(argc, argv);
 
-	// === Phase 999.40: ThemeManager init (BALL_UI_V2 build flag) ===========
-	// Apply the neutral QSS stylesheet immediately after QApplication ctor
-	// and BEFORE any widgets are constructed so the first paint is themed.
-	// Single neutral theme per maintainer-Q3 — Handover Phase 0.
-	// No-op when BALL_UI_V2 is OFF (the default in v1.7).
+	// === Phase 999.40 / 999.48: ThemeManager init =========================
+	// Apply the neutral QSS stylesheet immediately after the QApplication
+	// ctor and BEFORE any widgets are constructed so the first paint is
+	// themed. Single neutral theme per maintainer-Q3 — Handover Phase 0.
+	// Phase 999.48 §8.7 removed the BALL_UI_V2 build flag: ThemeManager
+	// init is now unconditional and the neutral theme is always active.
 	BALL::VIEW::ThemeManager::instance().init(&application);
-	// === end Phase 999.40 ==================================================
+	// === end ThemeManager init =============================================
 
 #ifdef Q_OS_MACOS
 	// Resolve BALL_DATA_PATH for the macOS .app bundle.
