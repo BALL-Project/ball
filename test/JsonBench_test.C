@@ -102,10 +102,14 @@ CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITHOUT per-atom properties)
 	TEST_EQUAL(dst.countAtoms(),     N)
 	TEST_EQUAL(dst.countMolecules(), n_mols)
 
-	// Soft gates: save/load each under 30s on the synthetic workload.
-	// If we ever blow these gates, K0.7 perf-recovery work is needed.
-	TEST_EQUAL(save_ms < 30000.0, true)
-	TEST_EQUAL(load_ms < 30000.0, true)
+	// K0.8 (Codex R9 finding 4): gates tightened from K0.7.4's loose
+	// 30s tripwires (which would miss 100× regressions) to values
+	// closer to the observed ~232ms save / ~3.8s load on Darwin arm64
+	// release. Headroom kept for slower CI machines + cold-cache runs;
+	// catches 5-10× regression early without false-flagging on
+	// Apple-Silicon-vs-x86 disparity.
+	TEST_EQUAL(save_ms < 5000.0,  true)   // observed ~232 ms; gate at ~20× headroom
+	TEST_EQUAL(load_ms < 30000.0, true)   // observed ~3.8s;  gate at ~7× headroom for CI variance
 RESULT
 
 CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITH per-atom properties)
@@ -134,8 +138,10 @@ CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITH per-atom properties)
 	std::cerr << "  [K0.7.4] load(100k, +3 props/atom): " << load_ms << " ms" << std::endl;
 
 	TEST_EQUAL(dst.countAtoms(),     N)
-	TEST_EQUAL(save_ms < 60000.0, true)
-	TEST_EQUAL(load_ms < 60000.0, true)
+	// K0.8: tightened. Observed ~375 ms save / ~4.1s load on Darwin
+	// arm64. Properties roughly double both vs no-props.
+	TEST_EQUAL(save_ms < 10000.0, true)   // observed ~375 ms; ~25× headroom
+	TEST_EQUAL(load_ms < 60000.0, true)   // observed ~4.1s; CI variance buffer
 RESULT
 
 END_TEST
