@@ -185,6 +185,51 @@ void MoleculeStore::reserve(std::size_t n)
 	bump_generation_if_reallocated_(old_cap);
 }
 
+void MoleculeStore::clear()
+{
+	// K0.6.2: full reset. Drops every atom, bond, name intern, free-list
+	// entry, CSR cache. Used by loadStoreJSON to wipe a non-empty
+	// destination before populating from the document; the slot indices
+	// in the document assume sequential allocation from 0, which the
+	// free-list-reuse path of allocate_atom would break.
+	assert_no_borrowed_refs_("clear");
+
+	positions_.clear();
+	velocities_.clear();
+	forces_.clear();
+	charges_.clear();
+	radii_.clear();
+	atom_types_.clear();
+	formal_charges_.clear();
+	element_indices_.clear();
+	selection_.clear();
+	name_offsets_.clear();
+	type_name_offsets_.clear();
+	name_strings_.clear();
+	type_name_strings_.clear();
+	stable_ids_.clear();
+	back_ptr_.clear();
+	is_freed_.clear();
+
+	string_pool_.clear();
+	string_intern_.clear();
+
+	bonds_.clear();
+	bond_back_ptr_.clear();
+	bond_free_list_.clear();
+	bond_csr_off_.clear();
+	bond_csr_idx_.clear();
+	csr_dirty_ = true;
+
+	free_list_.clear();
+
+	// Generation advances unconditionally — any held column reference is
+	// now invalid.
+	++generation_;
+	++selection_generation_;
+	next_stable_id_ = 1;
+}
+
 void MoleculeStore::compact()
 {
 	assert_no_borrowed_refs_("compact");

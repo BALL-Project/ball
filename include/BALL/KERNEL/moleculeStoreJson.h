@@ -45,6 +45,24 @@ namespace BALL
 	                               std::ostream&        os,
 	                               int                  indent = -1);
 
+	/** Populate `store` from a JSON document read from `is` (K0.6.2).
+
+			Expects the schema written by saveStoreJSON (this version's
+			MOLECULE_STORE_JSON_VERSION). The store is cleared first: every
+			existing slot is released, every bond removed. After reading,
+			the store has size() == document.size, live_atom_count ==
+			document.live_atom_count, bond_count == document.bonds.size().
+
+			Throws Exception::ParseError on:
+				- malformed JSON
+				- missing required top-level keys
+				- format_version > MOLECULE_STORE_JSON_VERSION (no forward-
+					compat policy yet — K0.6.3 may relax this for minor bumps)
+				- column-length mismatch vs document.size
+	*/
+	BALL_EXPORT void loadStoreJSON(MoleculeStore& store,
+	                               std::istream&  is);
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_MOLECULESTOREJSON_H

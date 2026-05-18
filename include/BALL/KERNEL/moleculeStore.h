@@ -211,6 +211,14 @@ namespace BALL
 		// Shrink columns to fit. Always advances generation (drops references).
 		void  compact();
 
+		// K0.6.2: full reset to a fresh-construction state. Drops all
+		// atoms, bonds, name interns, free-list entries, CSR caches.
+		// Advances generation. Used by loadStoreJSON to wipe a non-empty
+		// destination before populating from the document — release_atom
+		// alone leaves slots on the free-list, which then collide with
+		// the document's slot-index assumptions during reload.
+		void  clear();
+
 		// Current logical size + capacity. NB: size() includes freed slots
 		// (they remain in the column to preserve back_ptr indices for other
 		// live atoms). live_atom_count() returns size() - free_list_size.
