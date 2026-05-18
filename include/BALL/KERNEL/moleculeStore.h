@@ -177,13 +177,31 @@ namespace BALL
 		                       std::uint8_t order = 1,
 		                       std::uint8_t type = 0);
 
-		std::size_t bond_count() const               { return bonds_.size(); }
+		// K0.3c.2: remove a bond from the store. Tombstones the record
+		// (BondRecord::flags |= FLAG_DEAD) and pushes the index onto
+		// bond_free_list_ for reuse by future add_bond. Idempotent.
+		// CSR rebuild skips dead bonds.
+		void remove_bond(std::uint32_t bond_idx);
+
+		// Convenience: remove every bond connecting atoms (a, b) in either
+		// direction. Returns the number of bonds removed (typically 0 or 1).
+		std::size_t remove_bonds_between(Index a, Index b);
+
+		// True if bond record at index i is tombstoned.
+		bool is_bond_dead(std::uint32_t i) const { return (bonds_[i].flags & FLAG_BOND_DEAD) != 0; }
+
+		std::size_t bond_count() const               { return bonds_.size(); }   // includes dead
+		std::size_t live_bond_count() const          { return bonds_.size() - bond_free_list_.size(); }
+		std::size_t dead_bond_count() const          { return bond_free_list_.size(); }
 		BondRecord& bond(std::uint32_t i)            { return bonds_[i]; }
 		const BondRecord& bond(std::uint32_t i) const{ return bonds_[i]; }
 
 		// Bond handle back-pointers (parallel to bonds_).
 		Bond*       bond_back_ptr(std::uint32_t i) const   { return bond_back_ptr_[i]; }
 		void        set_bond_back_ptr(std::uint32_t i, Bond* p) { bond_back_ptr_[i] = p; }
+
+		// Bit on BondRecord::flags marking a tombstoned record.
+		static constexpr std::uint16_t FLAG_BOND_DEAD = 0x0001;
 
 		// Number of bonds incident to atom i. O(1) after CSR rebuild.
 		std::size_t bond_degree(Index i) const;
@@ -308,6 +326,10 @@ namespace BALL
 		// K0.3c.1: free-list of slot indices released by release_atom().
 		// allocate_atom() pops from here before extending the columns.
 		std::vector<Index> free_list_;
+
+		// K0.3c.2: free-list of bond-record indices tombstoned by
+		// remove_bond. add_bond pops from here before appending.
+		std::vector<std::uint32_t> bond_free_list_;
 
 #ifndef NDEBUG
 		mutable std::size_t borrowed_ref_count_ = 0;

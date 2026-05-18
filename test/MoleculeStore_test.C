@@ -11,6 +11,7 @@
 ///////////////////////////
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>          // K0.3c.2: delete bond needs full type
 #include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
@@ -346,6 +347,70 @@ CHECK(Atom destructor releases orphan store slot K0.3c.1)
 	// inside orphan_inspector).
 	const std::size_t after_live = orphan_inspector();
 	TEST_EQUAL(after_live <= baseline_live + 2, true)
+RESULT
+
+CHECK(MoleculeStore::remove_bond + tombstones + reuse K0.3c.2)
+	MoleculeStore store;
+	store.reserve(8);
+	auto a = store.allocate_atom();
+	auto b = store.allocate_atom();
+	auto c = store.allocate_atom();
+
+	auto e0 = store.add_bond(a, b);
+	auto e1 = store.add_bond(b, c);
+	auto e2 = store.add_bond(a, c);
+	TEST_EQUAL(store.bond_count(), 3)
+	TEST_EQUAL(store.live_bond_count(), 3)
+	TEST_EQUAL(store.dead_bond_count(), 0)
+	TEST_EQUAL(store.bond_degree(b), 2)
+
+	store.remove_bond(e1);
+	TEST_EQUAL(store.bond_count(), 3)               // total includes dead
+	TEST_EQUAL(store.live_bond_count(), 2)
+	TEST_EQUAL(store.dead_bond_count(), 1)
+	TEST_EQUAL(store.is_bond_dead(e1), true)
+	TEST_EQUAL(store.bond_degree(b), 1)             // a-b remains
+	TEST_EQUAL(store.bond_degree(c), 1)             // a-c remains
+
+	// add_bond should reuse tombstoned slot e1
+	auto e3 = store.add_bond(a, b);
+	TEST_EQUAL(e3, e1)
+	TEST_EQUAL(store.is_bond_dead(e1), false)       // reused
+	TEST_EQUAL(store.bond_count(), 3)               // no growth
+	TEST_EQUAL(store.live_bond_count(), 3)
+	TEST_EQUAL(store.dead_bond_count(), 0)
+
+	// remove_bond is idempotent
+	store.remove_bond(e1);
+	store.remove_bond(e1);
+	TEST_EQUAL(store.dead_bond_count(), 1)
+RESULT
+
+CHECK(remove_bonds_between K0.3c.2)
+	MoleculeStore store;
+	store.reserve(4);
+	auto a = store.allocate_atom();
+	auto b = store.allocate_atom();
+	store.add_bond(a, b);
+	store.add_bond(b, a);  // duplicate, reverse order
+	TEST_EQUAL(store.live_bond_count(), 2)
+	TEST_EQUAL(store.bond_degree(a), 2)
+	TEST_EQUAL(store.remove_bonds_between(a, b), 2u)
+	TEST_EQUAL(store.live_bond_count(), 0)
+	TEST_EQUAL(store.bond_degree(a), 0)
+RESULT
+
+CHECK(Bond::~Bond removes store-side bond record K0.3c.2)
+	// Use Atom + createBond, then destroy the bond. Store should reflect.
+	Atom a, b;
+	Bond* bond = a.createBond(b);
+	auto* store = a.getStore();
+	TEST_EQUAL(store == b.getStore(), true)
+	auto ai = a.getStoreIndex();
+	TEST_EQUAL(store->bond_degree(ai), 1)
+	delete bond;                                    // ~Bond -> arrangeBonds_
+	TEST_EQUAL(a.countBonds(), 0)                   // v1.x cleared
+	TEST_EQUAL(store->bond_degree(ai), 0)           // store cleared too
 RESULT
 
 CHECK(CSR rebuild skips bonds touching freed atoms K0.3c.1)

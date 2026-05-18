@@ -210,6 +210,22 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
                                       std::uint8_t order,
                                       std::uint8_t type)
 {
+	// K0.3c.2: prefer reusing a tombstoned slot before extending.
+	if (!bond_free_list_.empty())
+	{
+		const std::uint32_t idx = bond_free_list_.back();
+		bond_free_list_.pop_back();
+		BondRecord& r = bonds_[idx];
+		r.a = a;
+		r.b = b;
+		r.order = order;
+		r.type = type;
+		r.flags = 0;        // clear FLAG_BOND_DEAD on reuse
+		bond_back_ptr_[idx] = nullptr;
+		csr_dirty_ = true;
+		return idx;
+	}
+
 	BondRecord r;
 	r.a = a;
 	r.b = b;
@@ -220,6 +236,37 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 	bond_back_ptr_.push_back(nullptr);
 	csr_dirty_ = true;
 	return static_cast<std::uint32_t>(bonds_.size() - 1);
+}
+
+// K0.3c.2: tombstone a bond record and push onto bond_free_list_.
+// Idempotent (returns immediately if already dead).
+void MoleculeStore::remove_bond(std::uint32_t bond_idx)
+{
+	if (bond_idx >= bonds_.size()) return;             // defensive
+	if (is_bond_dead(bond_idx))    return;             // already dead
+
+	bonds_[bond_idx].flags |= FLAG_BOND_DEAD;
+	bond_back_ptr_[bond_idx] = nullptr;
+	bond_free_list_.push_back(bond_idx);
+	csr_dirty_ = true;
+}
+
+// Remove every bond between atoms a and b (in either direction).
+// Returns count removed.
+std::size_t MoleculeStore::remove_bonds_between(Index a, Index b)
+{
+	std::size_t removed = 0;
+	for (std::uint32_t k = 0; k < bonds_.size(); ++k)
+	{
+		if (is_bond_dead(k)) continue;
+		const auto& br = bonds_[k];
+		if ((br.a == a && br.b == b) || (br.a == b && br.b == a))
+		{
+			remove_bond(k);
+			++removed;
+		}
+	}
+	return removed;
 }
 
 // CSR rebuild — single pass O(N_atoms + N_bonds). Called lazily on the
@@ -233,12 +280,12 @@ void MoleculeStore::ensure_csr_() const
 	bond_csr_off_.assign(n_atoms + 1, 0);
 
 	// Count degree per atom (each bond contributes to two atoms).
-	// K0.3c.1: skip bonds that touch a freed slot. Until K0.3c.2 wires
-	// bond removal, dead bonds may sit in bonds_ pointing at freed
-	// atoms; they should not show up in any atom's degree count.
+	// K0.3c.1: skip bonds touching a freed slot.
+	// K0.3c.2: skip tombstoned bonds.
 	auto is_live_bond = [this](const BondRecord& b) -> bool
 	{
-		return !is_freed(b.a) && !is_freed(b.b);
+		return ((b.flags & FLAG_BOND_DEAD) == 0)
+		    && !is_freed(b.a) && !is_freed(b.b);
 	};
 	for (const auto& b : bonds_)
 	{

@@ -229,8 +229,20 @@ namespace BALL
 
   void Bond::arrangeBonds_()
 	{
+		// K0.3c.2: mirror bond removal into the store. arrangeBonds_ is the
+		// chokepoint where Bond destruction tears down the v1.x bond_[]
+		// arrays on both endpoint atoms; do the store-side counterpart
+		// here. Idempotent at the store level (remove_bonds_between
+		// handles the "no such bond" case).
 		if (first_ != 0 && second_ != 0)
 		{
+			MoleculeStore* s = first_->getStore();
+			if (s != nullptr && s == second_->getStore())
+			{
+				s->remove_bonds_between(first_->getStoreIndex(),
+				                        second_->getStoreIndex());
+			}
+
 			if (first_->number_of_bonds_ > 0)
 			{
 				first_->swapLastBond_(second_);
