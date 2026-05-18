@@ -40,7 +40,7 @@ namespace BALL
 		const bool is_orphan = (&store == &MoleculeStore::orphanStore());
 		if (is_orphan)
 		{
-			std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+			std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex());
 			store_ = &store;
 			store_idx_ = store.allocate_atom(this);
 			store_generation_ = store.generation();
@@ -87,51 +87,76 @@ namespace BALL
 	// K0.3b.2a/3: write-side helpers, called from atom.iC setters
 	// (which only forward-declare MoleculeStore via atom.h).
 	//
-	// 2026-05-18 (Codex R12 fix K12): every helper now calls
-	// ensureStoreBinding_() first. Pre-fix, after ~System nulled
-	// store_ pointers on its atoms, calling setPosition/setName/etc.
-	// on a detached atom would dereference null store_ and crash.
-	// ensureStoreBinding_() rebinds the handle to the orphan store
-	// (no-op if still attached), so detached mutation flows safely
-	// rather than crashing or being silently dropped.
+	// 2026-05-18 layered fixes:
+	// - R12 K12: every helper calls ensureStoreBinding_() first, so a
+	//   detached atom (post-~System) re-binds to orphan before write
+	//   instead of dereferencing null store_.
+	// - V21-ORPHAN-MUTATOR-LOCK (R11 fix A complement): if bound to the
+	//   orphan store, the actual store write happens under the orphan
+	//   mutex. Pre-fix, only the Atom() ctor initial-writes block held
+	//   the mutex; post-ctor setters (setName/setCharge/setPosition
+	//   called from worker code) ran lock-free and could race with
+	//   another thread's ctor allocate_atom that triggers a column
+	//   reallocation. The R11 64k pre-reserve made this rare; this
+	//   change makes it impossible (or at least, defers it to the
+	//   already-mutex-protected reallocation path).
+	//
+	//   ORPHAN_WRITE_LOCK_(stmt): if store_ is the orphan store, run
+	//   `stmt` under the orphan mutex; otherwise run it directly. Used
+	//   to wrap each helper's actual column write.
+	#define BALL_ATOM_ORPHAN_WRITE_LOCK_(stmt) \
+		do { \
+			if (store_ == &MoleculeStore::orphanStore()) { \
+				std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex()); \
+				stmt; \
+			} else { \
+				stmt; \
+			} \
+		} while (0)
+
 	void Atom::writeStorePosition_(const Vector3& p)
 	{
 		ensureStoreBinding_();
-		store_->position(store_idx_) = p;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->position(store_idx_) = p);
 	}
 	void Atom::writeStoreCharge_(float c)
 	{
 		ensureStoreBinding_();
-		store_->charge(store_idx_) = c;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->charge(store_idx_) = c);
 	}
 	void Atom::writeStoreVelocity_(const Vector3& v)
 	{
 		ensureStoreBinding_();
-		store_->velocity(store_idx_) = v;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->velocity(store_idx_) = v);
 	}
 	void Atom::writeStoreForce_(const Vector3& f)
 	{
 		ensureStoreBinding_();
-		store_->force(store_idx_) = f;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->force(store_idx_) = f);
 	}
 	void Atom::writeStoreName_(const String& s)
 	{
 		ensureStoreBinding_();
 		// MoleculeStore::set_name takes std::string.
-		store_->set_name(store_idx_, std::string(s.c_str()));
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(
+			store_->set_name(store_idx_, std::string(s.c_str()))
+		);
 	}
 	void Atom::writeStoreTypeName_(const String& s)
 	{
 		ensureStoreBinding_();
-		store_->set_type_name(store_idx_, std::string(s.c_str()));
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(
+			store_->set_type_name(store_idx_, std::string(s.c_str()))
+		);
 	}
 	void Atom::writeStoreElement_(const Element* e)
 	{
 		ensureStoreBinding_();
 		// Mirror Element* as atomic number into uint8 column. Null Element
 		// stores as 0 (unknown).
-		store_->element_index(store_idx_) =
+		const std::uint8_t ei =
 			(e == 0) ? 0 : static_cast<std::uint8_t>(e->getAtomicNumber());
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->element_index(store_idx_) = ei);
 	}
 	const Element& Atom::readStoreElement_() const
 	{
@@ -139,24 +164,30 @@ namespace BALL
 		// reference. atomic_number 0 maps to Element::UNKNOWN via PTE[0].
 		// Read path: if detached, return Element::UNKNOWN (no rebind on
 		// read — read of detached handle returns sensible default).
+		// NOTE: read does not take orphan mutex. Reads of column entries
+		// race against concurrent reallocate; the 64k pre-reserve makes
+		// this safe in practice. V21+ work to add full read-side locking
+		// is filed if needed.
 		if (store_ == nullptr) return PTE[(Position)0];
 		return PTE[(Position)store_->element_index(store_idx_)];
 	}
 	void Atom::writeStoreRadius_(float r)
 	{
 		ensureStoreBinding_();
-		store_->radius(store_idx_) = r;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->radius(store_idx_) = r);
 	}
 	void Atom::writeStoreAtomType_(short t)
 	{
 		ensureStoreBinding_();
-		store_->atom_type(store_idx_) = t;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->atom_type(store_idx_) = t);
 	}
 	void Atom::writeStoreFormalCharge_(short fc)
 	{
 		ensureStoreBinding_();
-		store_->formal_charge(store_idx_) = fc;
+		BALL_ATOM_ORPHAN_WRITE_LOCK_(store_->formal_charge(store_idx_) = fc);
 	}
+
+	#undef BALL_ATOM_ORPHAN_WRITE_LOCK_
 
 	// 2026-05-18 (Codex R11 fix A): the orphan-store mutex must be held
 	// across the initial-writes block following bindToStore_, not just
@@ -171,7 +202,7 @@ namespace BALL
 	#define BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_(initial_writes_block) \
 		do { \
 			if (store_ == &MoleculeStore::orphanStore()) { \
-				std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex()); \
+				std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex()); \
 				initial_writes_block \
 			} else { \
 				initial_writes_block \
@@ -270,7 +301,7 @@ namespace BALL
 			// bindToStore_/release on other threads.
 			if (store_ == &MoleculeStore::orphanStore())
 			{
-				std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+				std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex());
 				store_->release_atom(store_idx_);
 			}
 			else

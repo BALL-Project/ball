@@ -100,7 +100,14 @@ namespace BALL
 		// source slot when src == orphan) must hold orphanMutex() across
 		// the entire mutation.
 		static MoleculeStore& orphanStore();
-		static std::mutex&    orphanMutex();
+		// V21-ORPHAN-MUTATOR-LOCK: switched from std::mutex to
+		// std::recursive_mutex. The Atom() ctor (R11 fix A) holds this
+		// across its initial-writes block AND those initial writes go
+		// through the writeStoreXxx_ helpers which (V21-ORPHAN-MUTATOR-
+		// LOCK) also try to acquire the lock. Non-recursive mutex would
+		// deadlock. Recursive lets the ctor own the lock and the helpers
+		// re-enter freely. Per-process singleton overhead is negligible.
+		static std::recursive_mutex& orphanMutex();
 
 		// MoleculeStore is non-copyable for now; cloning copies are a v2.0.x
 		// follow-on (D12 persistence-format work).

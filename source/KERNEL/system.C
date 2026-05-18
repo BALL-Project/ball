@@ -172,7 +172,7 @@ namespace BALL
 		// 5: release source slot. K0.4.6: orphan store needs the lock.
 		if (src == &MoleculeStore::orphanStore())
 		{
-			std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+			std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex());
 			src->release_atom(src_idx);
 		}
 		else
@@ -305,7 +305,7 @@ namespace BALL
 			for (const auto& e : entries) { if (e.src == orphan) { any_orphan = true; break; } }
 			if (any_orphan)
 			{
-				std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+				std::lock_guard<std::recursive_mutex> lk(MoleculeStore::orphanMutex());
 				for (const auto& e : entries)
 				{
 					e.src->release_atom(e.src_idx);

@@ -116,9 +116,9 @@ MoleculeStore& MoleculeStore::orphanStore()
 	});
 	return orphan;
 }
-std::mutex& MoleculeStore::orphanMutex()
+std::recursive_mutex& MoleculeStore::orphanMutex()
 {
-	static std::mutex m;
+	static std::recursive_mutex m;
 	return m;
 }
 
