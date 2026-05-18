@@ -26,6 +26,7 @@ class QPushButton;
 class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
+class QPaintEvent;
 class QTimer;
 
 namespace BALL
@@ -78,6 +79,21 @@ namespace BALL
 				 *  the preference.
 				 */
 				bool isSkipOnStartupChecked() const;
+
+			protected:
+
+				/** v1.7.0-rc2 UFG-08 — opaque paint. WelcomeScreen
+				 *  takes over the central-widget slot from a Scene
+				 *  (QWidget hosting a GLRenderWindow). Without an
+				 *  explicit fill, the macOS QPA composer can leak the
+				 *  previous OpenGL backing surface through gaps in the
+				 *  WelcomeScreen layout, producing a "blank central
+				 *  area" on first launch. Mirror the UFG-05 pattern
+				 *  used by SectionHeader: opt into WA_OpaquePaintEvent
+				 *  and fill the dirty rect with the Window palette
+				 *  colour here.
+				 */
+				void paintEvent(QPaintEvent* event) override;
 
 			Q_SIGNALS:
 

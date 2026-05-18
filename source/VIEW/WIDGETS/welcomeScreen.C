@@ -14,6 +14,8 @@
 #include <QtCore/QTimer>
 #include <QtCore/QUrl>
 #include <QtGui/QFont>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileIconProvider>
@@ -95,6 +97,16 @@ namespace BALL
 		{
 			setObjectName(QStringLiteral("welcomeScreen"));
 
+			// v1.7.0-rc2 UFG-08 — opaque paint. See paintEvent() below
+			// and the matching design note in welcomeScreen.h. The pair
+			// (WA_OpaquePaintEvent + setAutoFillBackground + explicit
+			// fillRect in paintEvent) guarantees the entire central area
+			// is cleared on every paint pass so the previous Scene's
+			// OpenGL backing surface cannot bleed through. Same pattern
+			// as SectionHeader's UFG-05 fix.
+			setAttribute(Qt::WA_OpaquePaintEvent, true);
+			setAutoFillBackground(true);
+
 			// Outer layout: vertically centered 720px-max content
 			// column. We nest a fixed-width inner widget inside an
 			// outer stretched layout to achieve the centering.
@@ -132,6 +144,21 @@ namespace BALL
 		}
 
 		WelcomeScreen::~WelcomeScreen() = default;
+
+		void WelcomeScreen::paintEvent(QPaintEvent* event)
+		{
+			// v1.7.0-rc2 UFG-08 — explicit opaque fill, mirrors
+			// SectionHeader::paintEvent (UFG-05). WA_OpaquePaintEvent
+			// tells Qt to skip the parent-background fill; we honour the
+			// promise by filling the dirty rect with the Window palette
+			// colour ourselves. setAutoFillBackground alone is not enough
+			// once WA_OpaquePaintEvent is set — Qt disables the
+			// auto-background step on opaque widgets to avoid
+			// double-paint. The 720-px-max inner column then paints its
+			// children on top.
+			QPainter p(this);
+			p.fillRect(event->rect(), palette().color(QPalette::Window));
+		}
 
 		void WelcomeScreen::buildHeader_(QVBoxLayout* root)
 		{

@@ -124,6 +124,23 @@ namespace BALL
 		// ---------------------
 		setWindowTitle(tr("BALLView"));
 		setWindowIcon(VIEW::Icons::get("ball-app"));
+
+		// v1.7.0-rc2 UFG-08 — opt into the macOS unified
+		// title-and-toolbar chrome HERE in the constructor, BEFORE any
+		// setCentralWidget() call (Scene → WelcomeScreen flip later in
+		// this ctor). Qt's docs require this attribute be set early so
+		// the NSWindow style mask + content-layout machinery is in the
+		// final shape before the central widget's first paint. The
+		// original UFG-02 placement inside Mainframe::show() runs AFTER
+		// the central widget was already set to WelcomeScreen and
+		// re-laid the window out from under the central widget — the
+		// resulting paint-timing mismatch is the root cause of UFG-08
+		// (blank central area). UFG-02's intent (native NSToolbar look)
+		// is preserved because the toolbar added later in show() picks
+		// up the unified attribute automatically. No-op on non-mac.
+		#ifdef Q_OS_MACOS
+			setUnifiedTitleAndToolBarOnMac(true);
+		#endif
 		// make sure submenus are the first.
 		//
 		// Phase 999.46 — under BALL_UI_V2 the top-level order is:
@@ -615,8 +632,24 @@ namespace BALL
 		// the previous widget without deleting it.
 		QWidget* prev = takeCentralWidget();
 		if (prev != welcome_screen_ && prev != 0)
+		{
+			// v1.7.0-rc2 UFG-08 — explicitly hide the prior central
+			// widget (typically the Scene's QOpenGLWidget host). On
+			// macOS the QPA composer keeps detached OpenGL surfaces
+			// alive long enough to leak through the new central widget
+			// on first paint; hiding pulls the surface from the
+			// composition tree. Re-parenting alone is not enough.
 			prev->setParent(this);
+			prev->hide();
+		}
 		setCentralWidget(welcome_screen_);
+		// v1.7.0-rc2 UFG-08 — explicit show()+raise() to force Qt to
+		// schedule a paint immediately after the swap. Without this,
+		// on macOS the first paint can be deferred past the next event
+		// loop turn and the central area stays blank.
+		welcome_screen_->show();
+		welcome_screen_->raise();
+		welcome_screen_->update();
 	}
 
 	void Mainframe::hideWelcomeScreen_()
@@ -627,8 +660,17 @@ namespace BALL
 
 		QWidget* prev = takeCentralWidget();
 		if (prev != 0 && prev != scene_)
+		{
+			// v1.7.0-rc2 UFG-08 — hide the previous central widget
+			// (the WelcomeScreen). Symmetric counterpart to the
+			// hide+raise pattern in showWelcomeScreen_().
 			prev->setParent(this);
+			prev->hide();
+		}
 		setCentralWidget(scene_);
+		scene_->show();
+		scene_->raise();
+		scene_->update();
 	}
 
 	void Mainframe::loadRecentFiles_()
@@ -918,17 +960,14 @@ namespace BALL
 			                      BALL::VIEW::Theme::kIconToolbar));
 			addToolBar(Qt::TopToolBarArea, tb);
 
-			// UFG-02 (Fix 2): opt into the macOS unified title-and-toolbar
-			// chrome. Without this, the toolbar renders as a separate
-			// strip with visible drag handles below the title bar instead
-			// of the native translucent NSToolbar look that integrates
-			// with the window's title bar. Handover §09-cross-platform.md
-			// row 30 explicitly requires this on macOS. No-op on other
-			// platforms (the Qt header still declares the method for ABI
-			// symmetry but the implementation is a stub off-mac).
-			#ifdef Q_OS_MACOS
-				setUnifiedTitleAndToolBarOnMac(true);
-			#endif
+			// UFG-02 / UFG-08: setUnifiedTitleAndToolBarOnMac(true) is
+			// now called once in the Mainframe constructor, BEFORE the
+			// first setCentralWidget(). Calling it here in show() (as
+			// UFG-02's original rc2 fix did) ran after the WelcomeScreen
+			// was already installed as the central widget and triggered
+			// a layout invalidation that left the central area blank on
+			// first paint (UFG-08). The toolbar added above still picks
+			// up the unified look from the early attribute.
 		}
 
 		MainControl::show();
