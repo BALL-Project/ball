@@ -18,10 +18,27 @@ namespace BALL
 			: QTabBar(parent)
 		{
 			setObjectName("inspectorTabs");
-			setExpanding(true);
+			// v1.7.0-rc2 UFG-04 — label elision fix.
+			//
+			// rc1 painted the tab strip with setExpanding(true) +
+			// setUsesScrollButtons(false). Under that combination Qt
+			// distributes the available width equally across the 3 tabs;
+			// when the InspectorDock's natural width is the rc1 default
+			// (~180 px) each tab gets ~60 px and the labels collapse to
+			// "Sele...", "Represent...", "Sc...". Per UFG-04 the labels
+			// must render in full.
+			//
+			// Fix: stop expanding (so each tab fits its label), disable
+			// eliding outright, and fall back to scroll buttons if the
+			// dock is dragged narrower than the natural tab strip. The
+			// matching minimumWidth on InspectorDock (see inspectorDock.C)
+			// ensures the default-opened dock is wide enough that the
+			// scroll buttons never appear in practice.
+			setExpanding(false);
+			setElideMode(Qt::ElideNone);
 			setDrawBase(false);
 			setShape(QTabBar::RoundedNorth);
-			setUsesScrollButtons(false);
+			setUsesScrollButtons(true);
 
 			addTab(tr("Selection"));
 			addTab(tr("Representation"));
