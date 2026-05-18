@@ -15,6 +15,9 @@
 #include <BALL/KERNEL/moleculeStoreJson.h>
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
+#include <cstring>
+#include <cstdint>
+#include <limits>
 #include <sstream>
 #include <vector>
 #include <string>
@@ -326,8 +329,197 @@ CHECK(K0.6.2 column-length mismatch rejected with ParseError)
 		"\"generation\":0,\"atoms\":{\"positions\":[[0,0,0]],\"velocities\":[],"
 		"\"forces\":[],\"charges\":[],\"radii\":[],\"atom_types\":[],"
 		"\"formal_charges\":[],\"element_indices\":[],\"selection\":[],"
-		"\"names\":[],\"type_names\":[],\"stable_ids\":[],\"is_freed\":[]},"
-		"\"bonds\":[]}";
+		"\"names\":[],\"type_names\":[],\"stable_ids\":[],"
+		"\"is_freed\":[]},\"bonds\":[]}";
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+// ============================================================
+// K0.6.3 — schema versioning + invariants + bit-exact float +
+//          stable_id round-trip
+// ============================================================
+
+CHECK(K0.6.3 writer emits format_minor + float_format header)
+	MoleculeStore s;
+	std::ostringstream os;
+	saveStoreJSON(s, os);
+	json doc = json::parse(os.str());
+	TEST_EQUAL(doc.contains("format_minor"), true)
+	TEST_EQUAL(doc["format_minor"].get<int>(), MOLECULE_STORE_JSON_VERSION_MINOR)
+	TEST_EQUAL(doc["float_format"].get<std::string>(), std::string("decimal"))
+RESULT
+
+CHECK(K0.6.3 reader accepts higher-minor docs silently)
+	// Forge a doc with format_minor 999 but the correct major + columns.
+	std::string forged =
+		"{\"format_version\":1,\"format_minor\":999,"
+		"\"float_format\":\"decimal\","
+		"\"size\":0,\"live_atom_count\":0,\"generation\":0,"
+		"\"atoms\":{\"positions\":[],\"velocities\":[],\"forces\":[],"
+		"\"charges\":[],\"radii\":[],\"atom_types\":[],"
+		"\"formal_charges\":[],\"element_indices\":[],\"selection\":[],"
+		"\"names\":[],\"type_names\":[],\"stable_ids\":[],"
+		"\"is_freed\":[]},\"bonds\":[],\"future_top_level_key\":42}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	// Higher minor + an unknown top-level key should not throw.
+	loadStoreJSON(dst, is);
+	TEST_EQUAL(dst.size(), 0u)
+RESULT
+
+CHECK(K0.6.3 K0.6.1/.2 docs without format_minor still load)
+	// Pre-K0.6.3 documents omitted format_minor entirely. Reader must
+	// treat the absence as minor=0 (forward-compat with old writers).
+	std::string forged =
+		"{\"format_version\":1,\"size\":0,\"live_atom_count\":0,"
+		"\"generation\":0,\"atoms\":{\"positions\":[],\"velocities\":[],"
+		"\"forces\":[],\"charges\":[],\"radii\":[],\"atom_types\":[],"
+		"\"formal_charges\":[],\"element_indices\":[],\"selection\":[],"
+		"\"names\":[],\"type_names\":[],\"stable_ids\":[],"
+		"\"is_freed\":[]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	loadStoreJSON(dst, is);
+	TEST_EQUAL(dst.size(), 0u)
+RESULT
+
+CHECK(K0.6.3 bit-exact float round-trip survives edge cases)
+	MoleculeStore src;
+	auto a = src.allocate_atom();
+	auto b = src.allocate_atom();
+	auto c = src.allocate_atom();
+	auto d = src.allocate_atom();
+	auto e = src.allocate_atom();
+
+	// Edge-case floats: pi, denormal, +0, -0, +inf.
+	src.position(a) = Vector3(3.141592653589793f, 0.f, 0.f);
+	src.charge(a)   = 3.141592653589793f;
+	// Smallest positive denormal (about 1.4e-45).
+	src.charge(b)   = std::numeric_limits<float>::denorm_min();
+	src.charge(c)   = +0.0f;
+	src.charge(d)   = -0.0f;
+	src.charge(e)   = std::numeric_limits<float>::infinity();
+
+	std::ostringstream os;
+	saveStoreJSON(src, os, -1, JsonFloatFormat::BIT_EXACT_HEX);
+	// Confirm the JSON contains hex strings (not decimal floats).
+	json doc = json::parse(os.str());
+	TEST_EQUAL(doc["float_format"].get<std::string>(), std::string("bit_exact_hex"))
+	TEST_EQUAL(doc["atoms"]["charges"][a].is_string(), true)
+
+	MoleculeStore dst;
+	std::istringstream is(os.str());
+	loadStoreJSON(dst, is);
+
+	// Bit-exact round-trip — memcmp the IEEE-754 bits, not float ==
+	// (which would treat -0 == +0 and NaN != NaN).
+	auto bits_of = [](float f) {
+		std::uint32_t b; std::memcpy(&b, &f, sizeof(b)); return b;
+	};
+	TEST_EQUAL(bits_of(dst.charge(a)), bits_of(3.141592653589793f))
+	TEST_EQUAL(bits_of(dst.charge(b)), bits_of(std::numeric_limits<float>::denorm_min()))
+	TEST_EQUAL(bits_of(dst.charge(c)), bits_of(+0.0f))
+	TEST_EQUAL(bits_of(dst.charge(d)), bits_of(-0.0f))
+	TEST_EQUAL(bits_of(dst.charge(e)), bits_of(std::numeric_limits<float>::infinity()))
+	// Position x coord round-trips exactly too.
+	TEST_EQUAL(bits_of(dst.position(a).x), bits_of(3.141592653589793f))
+RESULT
+
+CHECK(K0.6.3 decimal docs still round-trip when reader uses auto-decode)
+	// Reader auto-detects per element: writer using DECIMAL emits
+	// numbers; reader's decode_float_ takes the number path. This
+	// protects against accidental hex/decimal mixing.
+	MoleculeStore src;
+	auto a = src.allocate_atom();
+	src.charge(a) = 1.5f;
+	std::ostringstream os;
+	saveStoreJSON(src, os, -1, JsonFloatFormat::DECIMAL);
+	MoleculeStore dst;
+	std::istringstream is(os.str());
+	loadStoreJSON(dst, is);
+	TEST_EQUAL(dst.charge(0), 1.5f)
+RESULT
+
+CHECK(K0.6.3 stable_ids round-trip and reseed next_stable_id_)
+	MoleculeStore src;
+	auto a = src.allocate_atom();
+	auto b = src.allocate_atom();
+	auto c = src.allocate_atom();
+	const auto id_a = src.stable_id(a);
+	const auto id_b = src.stable_id(b);
+	const auto id_c = src.stable_id(c);
+	// IDs should be 1, 2, 3 for a fresh store.
+	TEST_EQUAL(id_a, 1u)
+	TEST_EQUAL(id_b, 2u)
+	TEST_EQUAL(id_c, 3u)
+
+	std::ostringstream os;
+	saveStoreJSON(src, os);
+	MoleculeStore dst;
+	std::istringstream is(os.str());
+	loadStoreJSON(dst, is);
+
+	// IDs preserved.
+	TEST_EQUAL(dst.stable_id(0), id_a)
+	TEST_EQUAL(dst.stable_id(1), id_b)
+	TEST_EQUAL(dst.stable_id(2), id_c)
+	// next_stable_id_ should be reseeded past the max, so a NEW
+	// allocation gets id 4 (not 1, which would collide with id_a).
+	auto fresh = dst.allocate_atom();
+	TEST_EQUAL(dst.stable_id(fresh) >= 4u, true)
+RESULT
+
+CHECK(K0.6.3 element_index out-of-range rejected)
+	std::string forged =
+		"{\"format_version\":1,\"size\":1,\"live_atom_count\":1,"
+		"\"generation\":0,\"atoms\":{\"positions\":[[0,0,0]],"
+		"\"velocities\":[[0,0,0]],\"forces\":[[0,0,0]],"
+		"\"charges\":[0],\"radii\":[0],\"atom_types\":[0],"
+		"\"formal_charges\":[0],\"element_indices\":[999],"
+		"\"selection\":[0],\"names\":[\"X\"],\"type_names\":[\"X\"],"
+		"\"stable_ids\":[1],\"is_freed\":[0]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.6.3 selection-must-be-0-or-1 rejected)
+	std::string forged =
+		"{\"format_version\":1,\"size\":1,\"live_atom_count\":1,"
+		"\"generation\":0,\"atoms\":{\"positions\":[[0,0,0]],"
+		"\"velocities\":[[0,0,0]],\"forces\":[[0,0,0]],"
+		"\"charges\":[0],\"radii\":[0],\"atom_types\":[0],"
+		"\"formal_charges\":[0],\"element_indices\":[0],"
+		"\"selection\":[2],\"names\":[\"X\"],\"type_names\":[\"X\"],"
+		"\"stable_ids\":[1],\"is_freed\":[0]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.6.3 bond endpoint out-of-range rejected)
+	std::string forged =
+		"{\"format_version\":1,\"size\":2,\"live_atom_count\":2,"
+		"\"generation\":0,\"atoms\":{\"positions\":[[0,0,0],[0,0,0]],"
+		"\"velocities\":[[0,0,0],[0,0,0]],\"forces\":[[0,0,0],[0,0,0]],"
+		"\"charges\":[0,0],\"radii\":[0,0],\"atom_types\":[0,0],"
+		"\"formal_charges\":[0,0],\"element_indices\":[0,0],"
+		"\"selection\":[0,0],\"names\":[\"A\",\"B\"],"
+		"\"type_names\":[\"A\",\"B\"],\"stable_ids\":[1,2],"
+		"\"is_freed\":[0,0]},"
+		// bond.b = 5 is past size=2 -> reject
+		"\"bonds\":[{\"a\":0,\"b\":5,\"order\":1,\"type\":0,\"flags\":0}]}";
+	MoleculeStore dst;
 	std::istringstream is(forged);
 	bool threw = false;
 	try { loadStoreJSON(dst, is); }

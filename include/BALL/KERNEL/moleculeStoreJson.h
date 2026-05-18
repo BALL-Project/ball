@@ -23,9 +23,40 @@ namespace BALL
 	class MoleculeStore;
 
 	/** K0.6 JSON schema version emitted by saveStoreJSON.
-			Bumped whenever the on-disk layout changes incompatibly.
+
+			K0.6.3 split into major/minor:
+				- MAJOR bump on incompatible layout change (rename/remove
+					of an existing column, change of a field type's
+					semantics). Readers REJECT documents with a higher
+					major than they support.
+				- MINOR bump on backward-compatible additions (new
+					optional top-level keys, new optional bond fields).
+					Readers SILENTLY ACCEPT a higher minor and ignore
+					unknown keys; older readers don't see new data but
+					still load the rest.
+			On-disk doc carries `format_version` (the major, kept for
+			K0.6.1/.2 compat: docs written by K0.6.1 had this == 1, no
+			minor) and `format_minor` (added in K0.6.3, default 0).
 	*/
-	constexpr int MOLECULE_STORE_JSON_VERSION = 1;
+	constexpr int MOLECULE_STORE_JSON_VERSION       = 1;   // major
+	constexpr int MOLECULE_STORE_JSON_VERSION_MINOR = 1;   // bumped K0.6.3
+
+	/** Float encoding selector for saveStoreJSON.
+			- DECIMAL (default): the nlohmann::json default — readable,
+				round-trips to a decimal-correct float, but not guaranteed
+				bit-exact across reader/writer/compiler combinations.
+			- BIT_EXACT_HEX: every float is emitted as a "0x%08x" string
+				of the IEEE-754 bit pattern. Bit-exact for normals,
+				subnormals, +/-0, +/-infinity, and signaling/quiet NaNs.
+				Use this for MD trajectory replay or any regression
+				baseline where decimal drift matters. Reader auto-detects
+				per-element (string -> hex decode; number -> decimal).
+	*/
+	enum class JsonFloatFormat
+	{
+		DECIMAL,
+		BIT_EXACT_HEX
+	};
 
 	/** Write `store` to `os` as a JSON document.
 
@@ -43,7 +74,8 @@ namespace BALL
 	*/
 	BALL_EXPORT void saveStoreJSON(const MoleculeStore& store,
 	                               std::ostream&        os,
-	                               int                  indent = -1);
+	                               int                  indent = -1,
+	                               JsonFloatFormat      floats = JsonFloatFormat::DECIMAL);
 
 	/** Populate `store` from a JSON document read from `is` (K0.6.2).
 

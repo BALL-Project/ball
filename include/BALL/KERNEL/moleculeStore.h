@@ -133,6 +133,15 @@ namespace BALL
 
 		StableId       stable_id(Index i) const      { return stable_ids_[i]; }
 
+		// K0.6.3: internal override used ONLY by loadStoreJSON to restore
+		// per-atom stable_ids from a saved document. Trailing underscore
+		// marks it as not part of the public allocator contract — callers
+		// outside the JSON reader should let allocate_atom assign ids.
+		// Caller is responsible for keeping next_stable_id_ sane via
+		// reseed_next_stable_id_(); this method doesn't bump it.
+		void           set_stable_id_for_load_(Index i, StableId id) { stable_ids_[i] = id; }
+		void           reseed_next_stable_id_(StableId next)         { if (next > next_stable_id_) next_stable_id_ = next; }
+
 		Atom*          back_ptr(Index i) const       { return back_ptr_[i]; }
 		void           set_back_ptr(Index i, Atom* p){ back_ptr_[i] = p; }
 
