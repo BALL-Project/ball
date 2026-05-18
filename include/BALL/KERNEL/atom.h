@@ -984,20 +984,16 @@ namespace BALL
 		// to MoleculeStore::element_indices_[store_idx_] (uint8 atomic
 		// number). getElement() resolves via PTE[number].
 		///
-		float           radius_;
-		///
-		Type            type_;
-		///
 		unsigned char		number_of_bonds_;
 		///
 		Bond*						bond_[MAX_NUMBER_OF_BONDS];
-		///
-		Index           formal_charge_;
 		// K0.3b.LATER.1: Vector3 position_ DELETED. Authority moved to
 		// MoleculeStore::positions_[store_idx_]. getPosition() returns
 		// a reference into that column.
 		// K0.3b.LATER.2-4: charge_, velocity_, force_ DELETED.
 		// Authority in MoleculeStore::{charges_,velocities_,forces_}[idx].
+		// K0.3b.LATER.8-10: radius_, type_, formal_charge_ DELETED.
+		// Authority in MoleculeStore::{radii_,atom_types_,formal_charges_}[idx].
 		///
 		//@}
 

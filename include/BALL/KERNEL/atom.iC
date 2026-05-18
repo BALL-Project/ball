@@ -32,15 +32,14 @@ float Atom::getCharge() const
 BALL_INLINE
 void Atom::setFormalCharge(Index charge)
 {
-	formal_charge_ = charge;
-	// K0.3b.7 dual-write: mirror into store column.
-	if (store_) writeStoreFormalCharge_(static_cast<short>(charge));
+	// K0.3b.LATER.10: store is sole authority.
+	writeStoreFormalCharge_(static_cast<short>(charge));
 }
 
 BALL_INLINE
 Index Atom::getFormalCharge() const
 {
-	return formal_charge_;
+	return static_cast<Index>(store_->formal_charge(store_idx_));
 }
 
 BALL_INLINE
@@ -115,29 +114,27 @@ const Vector3& Atom::getPosition() const
 BALL_INLINE
 void Atom::setRadius(float radius)
 {
-	radius_ = radius;
-	// K0.3b.7 dual-write: mirror into store column.
-	if (store_) writeStoreRadius_(radius);
+	// K0.3b.LATER.8: store is sole authority.
+	writeStoreRadius_(radius);
 }
 
 BALL_INLINE
 float Atom::getRadius() const
 {
-	return radius_;
+	return store_->radius(store_idx_);
 }
 
 BALL_INLINE
 void Atom::setType(Type type)
 {
-	type_ = type;
-	// K0.3b.7 dual-write: mirror into store column.
-	if (store_) writeStoreAtomType_(type);
+	// K0.3b.LATER.9: store is sole authority.
+	writeStoreAtomType_(type);
 }
 
 BALL_INLINE
 Atom::Type Atom::getType() const
 {
-	return type_;
+	return static_cast<Type>(store_->atom_type(store_idx_));
 }
 
 BALL_INLINE
