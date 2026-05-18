@@ -1614,8 +1614,15 @@ namespace BALL
 				bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
 			if (optimize_action_)
 				optimize_action_->setEnabled(selected_system_or_molecule && !busy);
+			// UFG-15 (v1.7.0-rc3): align toolbar Add-Hydrogens enable-gate with
+			// the menu version (MolecularStructure::checkMenu: one_system &&
+			// composites_muteable). The prior selected_system_or_molecule gate
+			// was strictly narrower (required exactly-one System/Molecule in
+			// the highlight list) and silently suppressed the toolbar precisely
+			// when users expected it. Now both menu and toolbar enable whenever
+			// a system exists and BALL is not busy.
 			if (add_hydrogens_action_)
-				add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
+				add_hydrogens_action_->setEnabled(selected_system && !busy);
 
 			if (new_molecule_action_)
 				new_molecule_action_->setEnabled(!busy);
@@ -3902,23 +3909,21 @@ namespace BALL
 
 		void Scene::saturateWithHydrogens()
 		{
+			// UFG-15 (v1.7.0-rc3): the toolbar "Add hydrogens" action previously
+			// invoked AddHydrogenProcessor here. Users reported the toolbar action
+			// was a no-op while the equivalent menu entry (Build → Add Hydrogens)
+			// worked. Root cause: codex review confirmed the rebuild path
+			// (MainControl::update → updateRepresentationsOf → rep->update(true))
+			// was intact, but the toolbar and menu used entirely different
+			// chemistry algorithms — AddHydrogenProcessor (toolbar) vs
+			// FragmentDB::add_hydrogens + build_bonds (menu). For toolbar/menu
+			// parity, delegate to MolecularStructure::addHydrogens() — the
+			// single source of truth for the "Add Hydrogens" semantic.
 			if (getMainControl()->isBusy()) return;
 
-			deselect(false);
-			list<AtomContainer*> containers = getContainers();
-			if (containers.size() < 1) return;
-			AtomContainer* ac = *containers.begin();
-			RingPerceptionProcessor rpp;
-			vector<vector<Atom*> > rings;
-			rpp.calculateSSSR(rings, *ac);
-			rings = rpp.getAllSmallRings();
-
-			AddHydrogenProcessor ahp;
-			ahp.setRings(rings);
-			ac->apply(ahp);
-			String nr = ahp.getNumberOfAddedHydrogens();
-			setStatusbarText((String)tr("Added ") + nr + (String)tr(" hydrogens."), true);
-			getMainControl()->update(*ac, true);
+			MolecularStructure* ms = MolecularStructure::getInstance(0);
+			if (ms == 0) return;
+			ms->addHydrogens();
 		}
 
 
