@@ -458,10 +458,30 @@ namespace BALL
 		Type		bond_type_;
 		//@}
 
+		public:
+		// K0.3c.3: store-side bond record index, set when the bond is
+		// mirrored into the MoleculeStore (via Bond::createBond). 0 if
+		// not yet bound (treat with care; use first_->getStore() to detect
+		// whether the bond has a store-side mirror). Public so that
+		// Bond::setOrder / setType can update the store side; could be
+		// promoted to private with friend setter helpers if encapsulation
+		// matters more than ergonomics later.
+		std::uint32_t bond_record_idx_ = 0;
+
 		private:
 
 		void arrangeBonds_();
 		void clear_();
+
+		// K0.3c.3 helpers: mirror metadata into the store's BondRecord.
+		// Defined in bond.C (needs moleculeStore.h's full type) so bond.iC
+		// stays forward-decl-only.
+		void writeStoreOrder_(Order o);
+		void writeStoreType_(Type t);
+
+		// K0.3c.5: register this bond in the store after pointer fixup
+		// during persistentRead. Called from Bond::finalize().
+		void finalize_storeMirror_();
 	};
 
 # ifndef BALL_NO_INLINE_FUNCTIONS

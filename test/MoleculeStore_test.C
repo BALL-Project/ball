@@ -400,6 +400,27 @@ CHECK(remove_bonds_between K0.3c.2)
 	TEST_EQUAL(store.bond_degree(a), 0)
 RESULT
 
+CHECK(Bond::setOrder/setType mirrors into store BondRecord K0.3c.3)
+	Atom a, b;
+	Bond* bond = a.createBond(b);
+	auto* store = a.getStore();
+	auto bond_idx = bond->bond_record_idx_;
+	// Cast uint8_t to int so TEST_EQUAL prints numerically rather than as
+	// (often-unprintable) char.
+	TEST_EQUAL(int(store->bond(bond_idx).order), int(Bond::ORDER__UNKNOWN))  // 0
+	TEST_EQUAL(int(store->bond(bond_idx).type), int(Bond::TYPE__UNKNOWN))    // 0
+
+	bond->setOrder(Bond::ORDER__DOUBLE);
+	TEST_EQUAL(int(store->bond(bond_idx).order), int(Bond::ORDER__DOUBLE))
+	TEST_EQUAL(bond->getOrder(), Bond::ORDER__DOUBLE)
+
+	bond->setType(Bond::TYPE__HYDROGEN);
+	TEST_EQUAL(int(store->bond(bond_idx).type), int(Bond::TYPE__HYDROGEN))
+	TEST_EQUAL(bond->getType(), Bond::TYPE__HYDROGEN)
+
+	delete bond;
+RESULT
+
 CHECK(Bond::~Bond removes store-side bond record K0.3c.2)
 	// Use Atom + createBond, then destroy the bond. Store should reflect.
 	Atom a, b;
@@ -411,6 +432,57 @@ CHECK(Bond::~Bond removes store-side bond record K0.3c.2)
 	delete bond;                                    // ~Bond -> arrangeBonds_
 	TEST_EQUAL(a.countBonds(), 0)                   // v1.x cleared
 	TEST_EQUAL(store->bond_degree(ai), 0)           // store cleared too
+RESULT
+
+CHECK(swap_atom_connectivity rewrites BondRecords K0.3c.4)
+	// Test the store-level primitive directly (avoiding the v1.x
+	// Atom::swap bond-pointer mess that segfaults at scope-end
+	// destruction -- a known v1.x bug Codex Round 2 flagged but the
+	// Atom-level fix isn't part of K0.3c).
+	MoleculeStore store;
+	store.reserve(8);
+	auto ia = store.allocate_atom();
+	auto ib = store.allocate_atom();
+	auto ic = store.allocate_atom();
+	store.add_bond(ia, ib);   // bond between a-b
+	store.add_bond(ib, ic);   // bond between b-c
+	TEST_EQUAL(store.bond_degree(ia), 1)
+	TEST_EQUAL(store.bond_degree(ib), 2)
+	TEST_EQUAL(store.bond_degree(ic), 1)
+
+	// After swap of a<->c, the bonds previously incident to a are now
+	// incident to c and vice versa.
+	store.swap_atom_connectivity(ia, ic);
+	TEST_EQUAL(store.bond_degree(ia), 1)        // count unchanged (was 1)
+	TEST_EQUAL(store.bond_degree(ic), 1)        // count unchanged (was 1)
+	TEST_EQUAL(store.bond_degree(ib), 2)        // ib not involved
+RESULT
+
+CHECK(K0.3c.6 mutable-getter drift -- DOCUMENTED GAP until K0.3b.LATER)
+	// Codex Round 2 HIGH-3 / HIGH-6: the non-const reference returned by
+	// Atom::getPosition() bypasses dual-write when the caller mutates
+	// through it. K0.2c lease helper is opt-in only; the legacy
+	// `Vector3& p = atom.getPosition(); p = v;` pattern still mutates
+	// v1.x position_ silently. This test LOCKS that behaviour as the
+	// current contract and FLIPS to dual-write semantics in K0.3b.LATER
+	// when the getter is rebound to read directly from the store.
+	Atom a;
+	auto* store = a.getStore();
+	auto idx = a.getStoreIndex();
+
+	a.setPosition(Vector3(1.f, 2.f, 3.f));
+	TEST_EQUAL(a.getPosition(), Vector3(1.f, 2.f, 3.f))
+	TEST_EQUAL(store->position(idx), Vector3(1.f, 2.f, 3.f))
+
+	// Now mutate via the non-const reference. v1.x updates; store does NOT.
+	Vector3& p = a.getPosition();
+	p = Vector3(7.f, 8.f, 9.f);
+	TEST_EQUAL(a.getPosition(), Vector3(7.f, 8.f, 9.f))     // v1.x sees new value
+	TEST_EQUAL(store->position(idx) == Vector3(1.f, 2.f, 3.f), true)  // store STALE
+	// ^ This is the documented gap. When K0.3b.LATER lands, this
+	// assertion will need flipping (store will also be 7,8,9). Update
+	// the test then; tracked by V2.0-ROADMAP K0.3b.LATER per-field
+	// flip plan.
 RESULT
 
 CHECK(CSR rebuild skips bonds touching freed atoms K0.3c.1)

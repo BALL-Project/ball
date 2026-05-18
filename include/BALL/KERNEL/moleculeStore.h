@@ -200,6 +200,12 @@ namespace BALL
 		Bond*       bond_back_ptr(std::uint32_t i) const   { return bond_back_ptr_[i]; }
 		void        set_bond_back_ptr(std::uint32_t i, Bond* p) { bond_back_ptr_[i] = p; }
 
+		// K0.3c.4: rewrite every live BondRecord so .a/.b reference
+		// indices are swapped (i↔j). Matches v1.x Atom::swap semantics
+		// of "atom1 now has atom2's bond connectivity, in-place." Self-
+		// bond between i and j is symmetric and survives unchanged.
+		void swap_atom_connectivity(Index i, Index j);
+
 		// Bit on BondRecord::flags marking a tombstoned record.
 		static constexpr std::uint16_t FLAG_BOND_DEAD = 0x0001;
 

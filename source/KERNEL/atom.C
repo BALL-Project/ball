@@ -405,6 +405,15 @@ namespace BALL
 		std::swap(charge_, atom.charge_);
 		std::swap(velocity_, atom.velocity_);
 		std::swap(force_, atom.force_);
+		// K0.3c.4: swap atom-connectivity in the store so the bond graph
+		// reflects the v1.x bond_[] swap that just happened above. Only
+		// makes sense when both atoms share a store (cross-store swap is
+		// not a defined operation in v1.x or v2.0).
+		if (store_ != nullptr && store_ == atom.store_)
+		{
+			store_->swap_atom_connectivity(store_idx_, atom.store_idx_);
+		}
+
 		// K0.3b.2a/3/4/5/6/7 dual-write: mirror swapped fields into store.
 		auto mirror_all = [](MoleculeStore* st, std::uint32_t idx,
 		                     const Vector3& pos, float ch, const Vector3& vel,

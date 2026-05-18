@@ -40,6 +40,10 @@ void Bond::finalize()
 		first_ = second_;
 		second_ = tmp;
 	}
+	// K0.3c.5: mirror the loaded bond into the store. finalize() runs
+	// after pointer fixup so first_/second_ are valid; this is the
+	// canonical "the bond exists for real now" hook.
+	finalize_storeMirror_();
 }
 
 BALL_INLINE
@@ -112,6 +116,8 @@ BALL_INLINE
 void Bond::setOrder(Bond::Order bond_order)
 {
 	bond_order_ = bond_order;
+	// K0.3c.3 dual-write: mirror order into store BondRecord.
+	writeStoreOrder_(bond_order);
 }
 	
 BALL_INLINE	
@@ -130,6 +136,8 @@ BALL_INLINE
 void Bond::setType(Type bond_type)
 {
 	bond_type_ = bond_type;
+	// K0.3c.3 dual-write: mirror type into store BondRecord.
+	writeStoreType_(bond_type);
 }
 	
 BALL_INLINE

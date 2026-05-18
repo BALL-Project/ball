@@ -251,6 +251,26 @@ void MoleculeStore::remove_bond(std::uint32_t bond_idx)
 	csr_dirty_ = true;
 }
 
+// K0.3c.4: swap atom-connectivity in every live BondRecord so a bond
+// previously incident to i is now incident to j (and vice versa). Used
+// by Atom::swap to keep the store's bond graph consistent with the
+// v1.x bond_[] arrays that get swapped at the Atom layer.
+void MoleculeStore::swap_atom_connectivity(Index i, Index j)
+{
+	if (i == j) return;
+	for (auto& b : bonds_)
+	{
+		if (b.flags & FLAG_BOND_DEAD) continue;
+		// Symmetric self-bond (b.a == i && b.b == j) ends up swapped twice
+		// and is invariant, which is the correct semantics.
+		if (b.a == i)      b.a = j;
+		else if (b.a == j) b.a = i;
+		if (b.b == i)      b.b = j;
+		else if (b.b == j) b.b = i;
+	}
+	csr_dirty_ = true;
+}
+
 // Remove every bond between atoms a and b (in either direction).
 // Returns count removed.
 std::size_t MoleculeStore::remove_bonds_between(Index a, Index b)

@@ -112,17 +112,18 @@ namespace BALL
 			bond.second_ = &first;
 		}
 
-		// v2.0 KERNEL replacement (K0.3b.8): mirror the bond into the
-		// MoleculeStore bond table if both atoms share a store. This is
-		// the forward-compatible shadow; v1.x bond_[] arrays remain
-		// canonical. Bond handle migration (own store_ + bond_record_idx_
-		// fields) is K0.3b.9.
+		// v2.0 KERNEL replacement (K0.3b.8 + K0.3c.3): mirror the bond into
+		// the MoleculeStore bond table if both atoms share a store, and
+		// record the resulting bond_record_idx_ on the Bond so subsequent
+		// setOrder / setType / etc. can mirror to the store-side record.
 		if (first.getStore() != 0 && first.getStore() == second.getStore())
 		{
-			first.getStore()->add_bond(
+			bond.bond_record_idx_ = first.getStore()->add_bond(
 				first.getStoreIndex(),
 				second.getStoreIndex(),
-				static_cast<std::uint8_t>(bond.getOrder()));
+				static_cast<std::uint8_t>(bond.getOrder()),
+				static_cast<std::uint8_t>(bond.getType()));
+			first.getStore()->set_bond_back_ptr(bond.bond_record_idx_, &bond);
 		}
 
 		return &bond;
@@ -225,6 +226,62 @@ namespace BALL
 		s << "  second atom: " << second_ << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
+	}
+
+	// K0.3c.3: store-mirror helpers. Both look up the same MoleculeStore
+	// via first_->getStore() (Bond's identity is rooted on first_). If
+	// first_ is null or the bond has no store-side mirror, the call is a
+	// no-op (defensive: handles Bonds created before adoption).
+	void Bond::writeStoreOrder_(Order o)
+	{
+		if (first_ == 0) return;
+		MoleculeStore* s = first_->getStore();
+		if (s == nullptr) return;
+		if (bond_record_idx_ >= s->bond_count()) return;
+		if (s->is_bond_dead(bond_record_idx_)) return;
+		s->bond(bond_record_idx_).order = static_cast<std::uint8_t>(o);
+	}
+
+	void Bond::writeStoreType_(Type t)
+	{
+		if (first_ == 0) return;
+		MoleculeStore* s = first_->getStore();
+		if (s == nullptr) return;
+		if (bond_record_idx_ >= s->bond_count()) return;
+		if (s->is_bond_dead(bond_record_idx_)) return;
+		s->bond(bond_record_idx_).type = static_cast<std::uint8_t>(t);
+	}
+
+	// K0.3c.5: post-pointer-fixup mirror into the store. Called from
+	// Bond::finalize() during persistentRead. Same shape as the
+	// Bond::createBond mirror in this file but works for already-
+	// constructed Bond objects whose first_/second_ were rebuilt by
+	// the PersistenceManager.
+	void Bond::finalize_storeMirror_()
+	{
+		if (first_ == 0 || second_ == 0) return;
+		MoleculeStore* s = first_->getStore();
+		if (s == nullptr || s != second_->getStore()) return;
+		// Avoid double-registration: createBond may have already mirrored,
+		// in which case bond_record_idx_ is set and valid. Check that the
+		// recorded slot points back at this Bond before treating the bond
+		// as already-registered.
+		if (bond_record_idx_ < s->bond_count()
+		 && !s->is_bond_dead(bond_record_idx_)
+		 && s->bond_back_ptr(bond_record_idx_) == this)
+		{
+			// Already mirrored. Refresh metadata.
+			s->bond(bond_record_idx_).order = static_cast<std::uint8_t>(bond_order_);
+			s->bond(bond_record_idx_).type  = static_cast<std::uint8_t>(bond_type_);
+			return;
+		}
+		// Not yet mirrored; do it now.
+		bond_record_idx_ = s->add_bond(
+			first_->getStoreIndex(),
+			second_->getStoreIndex(),
+			static_cast<std::uint8_t>(bond_order_),
+			static_cast<std::uint8_t>(bond_type_));
+		s->set_bond_back_ptr(bond_record_idx_, this);
 	}
 
   void Bond::arrangeBonds_()
