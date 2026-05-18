@@ -274,6 +274,41 @@ namespace BALL
 		// outer QDockWidget shells are hidden (BottomDrawer::buildBody
 		// calls hide() on them).
 		BottomDrawer* drawer = new BottomDrawer(log_view, file_obs, this);
+
+		// UFG-17 — LogView + FileObserver double-attach fix (codex option B).
+		// BottomDrawer reparents their inner widgets (logView->widget(),
+		// fileObserver->widget()) into its own QStackedWidget. But the
+		// outer QDockWidget shells of log_view + file_obs are still
+		// participants in QMainWindow's bottom dock-area layout from the
+		// addDockWidget() calls above. When the user expands the drawer
+		// (UFG-06 animateTo + resizeDocks), Qt's bottom-area layout
+		// reasserts those legacy docks — producing the floating "Logs"
+		// panel + 3 stacked "Logs / Clear / Select" rows. Strip the
+		// outer dock layout participation here; the ModularWidget
+		// message-bus registration + ConnectionObject parent chain is
+		// independent of QMainWindow dock membership, so LogView still
+		// receives Log.info() / Log.error() into its inner text_edit_.
+		removeDockWidget(log_view);
+		removeDockWidget(file_obs);
+		log_view->hide();
+		file_obs->hide();
+		// Suppress the legacy Window-menu toggleViewAction() entries so
+		// the user can't resurrect the stale dock shells (which would
+		// re-trigger the double-attach paint bug). DockWidget::
+		// initializeWidget() registered window_menu_entry_ =
+		// toggleViewAction() in the Windows menu; flip both off and
+		// hide so they don't appear.
+		if (QAction* a = log_view->toggleViewAction())
+		{
+			a->setVisible(false);
+			a->setEnabled(false);
+		}
+		if (QAction* a = file_obs->toggleViewAction())
+		{
+			a->setVisible(false);
+			a->setEnabled(false);
+		}
+
 		addDockWidget(Qt::BottomDockWidgetArea, drawer);
 
 		// Phase 999.44 Plan 02 — Unified Inspector dock (right rail).
