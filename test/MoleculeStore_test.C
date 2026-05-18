@@ -288,4 +288,88 @@ CHECK(Atom::setPosition mirrors into store column K0.3b.2a)
 	TEST_EQUAL(b.getPosition(), Vector3(4.f, 5.f, 6.f))
 RESULT
 
+CHECK(MoleculeStore::release_atom + allocate_atom slot reuse K0.3c.1)
+	MoleculeStore store;
+	store.reserve(8);
+	auto i = store.allocate_atom();
+	auto j = store.allocate_atom();
+	auto k = store.allocate_atom();
+	TEST_EQUAL(store.size(), 3)
+	TEST_EQUAL(store.live_atom_count(), 3)
+	TEST_EQUAL(store.freed_slot_count(), 0)
+	TEST_EQUAL(store.is_freed(j), false)
+
+	store.release_atom(j);
+	TEST_EQUAL(store.size(), 3)               // size doesn't shrink
+	TEST_EQUAL(store.live_atom_count(), 2)    // but live count does
+	TEST_EQUAL(store.freed_slot_count(), 1)
+	TEST_EQUAL(store.is_freed(j), true)
+	TEST_EQUAL(store.is_freed(i), false)
+	TEST_EQUAL(store.is_freed(k), false)
+	TEST_EQUAL(store.back_ptr(j), nullptr)    // freed sentinel
+
+	// Allocate again -- should reuse the freed slot j.
+	auto m = store.allocate_atom();
+	TEST_EQUAL(m, j)                          // reuse confirmed
+	TEST_EQUAL(store.size(), 3)               // still 3 (no growth)
+	TEST_EQUAL(store.live_atom_count(), 3)
+	TEST_EQUAL(store.freed_slot_count(), 0)
+	TEST_EQUAL(store.is_freed(m), false)      // freed flag cleared on reuse
+
+	// Double-release is idempotent
+	store.release_atom(m);
+	TEST_EQUAL(store.freed_slot_count(), 1)
+	store.release_atom(m);                    // second release: no-op
+	TEST_EQUAL(store.freed_slot_count(), 1)
+RESULT
+
+CHECK(Atom destructor releases orphan store slot K0.3c.1)
+	// Construct + destroy many Atoms in a loop. The orphan store's
+	// live_atom_count should stay bounded; freed_slot_count should
+	// grow then plateau as allocate_atom reuses freed slots.
+	const auto& orphan_inspector = []() -> std::size_t {
+		// Indirect: create one atom and read its store to get a handle
+		// on globalOrphanStore_.
+		Atom probe;
+		auto* s = probe.getStore();
+		return s ? s->live_atom_count() : 0;
+	};
+	const std::size_t baseline_live = orphan_inspector();
+
+	for (int n = 0; n < 100; ++n)
+	{
+		Atom temp;
+		temp.setPosition(Vector3(float(n), 0.f, 0.f));
+	}
+	// After the loop, all 100 atoms are destroyed; orphan store live
+	// count should be back near baseline (allowing for the probe atom
+	// inside orphan_inspector).
+	const std::size_t after_live = orphan_inspector();
+	TEST_EQUAL(after_live <= baseline_live + 2, true)
+RESULT
+
+CHECK(CSR rebuild skips bonds touching freed atoms K0.3c.1)
+	MoleculeStore store;
+	store.reserve(8);
+	auto a = store.allocate_atom();
+	auto b = store.allocate_atom();
+	auto c = store.allocate_atom();
+
+	store.add_bond(a, b);   // bond 0
+	store.add_bond(b, c);   // bond 1
+	store.add_bond(a, c);   // bond 2
+
+	TEST_EQUAL(store.bond_degree(a), 2)
+	TEST_EQUAL(store.bond_degree(b), 2)
+	TEST_EQUAL(store.bond_degree(c), 2)
+
+	// Free atom b. Bonds 0 + 1 touch b and should drop out of CSR.
+	store.release_atom(b);
+	TEST_EQUAL(store.bond_degree(a), 1)   // only a-c remains
+	TEST_EQUAL(store.bond_degree(c), 1)   // only a-c remains
+	// b is freed; querying its bond_degree returns its CSR slice which
+	// should be empty since the prefix-sum skipped all 2 incident bonds.
+	TEST_EQUAL(store.bond_degree(b), 0)
+RESULT
+
 END_TEST

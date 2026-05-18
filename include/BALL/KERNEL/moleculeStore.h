@@ -134,9 +134,24 @@ namespace BALL
 		*/
 		//@{
 
-		// Allocate a new atom slot. Returns its index. Generation advances if
-		// the column vectors had to reallocate.
+		// Allocate a new atom slot. Returns its index. If a freed slot
+		// exists on the free-list (from a previous release_atom call) it
+		// is reused; otherwise a new slot is appended. Generation advances
+		// only when the column vectors actually reallocate.
 		Index allocate_atom();
+
+		// Release a slot back to the free-list. Called from ~Atom (K0.3c.1).
+		// Clears back_ptr_[i] = nullptr (the "freed" sentinel) and pushes
+		// i onto free_list_ for reuse. Does NOT compact the columns.
+		// Does NOT remove incident bonds — that's K0.3c.2's responsibility
+		// (bond removal in store + CSR-rebuild skip).
+		void release_atom(Index i);
+
+		// True if slot i has been released by release_atom().
+		// Distinct from "back_ptr == nullptr" because back_ptr is null
+		// transiently for freshly-allocated-but-not-yet-bound slots too.
+		// Used by CSR rebuild to skip dead bonds touching freed slots.
+		bool is_freed(Index i) const { return is_freed_[i] != 0; }
 
 		// Reserve N slots up front so subsequent allocate_atom() calls don't
 		// reallocate (the "reserve discipline" of the D7 reference contract).
@@ -145,9 +160,13 @@ namespace BALL
 		// Shrink columns to fit. Always advances generation (drops references).
 		void  compact();
 
-		// Current logical size + capacity.
-		std::size_t size() const     { return positions_.size(); }
-		std::size_t capacity() const { return positions_.capacity(); }
+		// Current logical size + capacity. NB: size() includes freed slots
+		// (they remain in the column to preserve back_ptr indices for other
+		// live atoms). live_atom_count() returns size() - free_list_size.
+		std::size_t size() const             { return positions_.size(); }
+		std::size_t capacity() const         { return positions_.capacity(); }
+		std::size_t live_atom_count() const  { return positions_.size() - free_list_.size(); }
+		std::size_t freed_slot_count() const { return free_list_.size(); }
 
 		//@}
 		/**	@name Bond table
@@ -265,6 +284,7 @@ namespace BALL
 		std::vector<std::uint32_t> type_name_offsets_;
 		std::vector<StableId>     stable_ids_;
 		std::vector<Atom*>        back_ptr_;
+		std::vector<std::uint8_t> is_freed_;       // K0.3c.1 freed-slot bitset
 
 		std::string               string_pool_;
 
@@ -284,6 +304,10 @@ namespace BALL
 		Generation generation_           = 0;
 		Generation selection_generation_ = 0;
 		StableId   next_stable_id_       = 1;
+
+		// K0.3c.1: free-list of slot indices released by release_atom().
+		// allocate_atom() pops from here before extending the columns.
+		std::vector<Index> free_list_;
 
 #ifndef NDEBUG
 		mutable std::size_t borrowed_ref_count_ = 0;

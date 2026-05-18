@@ -14,6 +14,38 @@ MoleculeStore::~MoleculeStore() = default;
 
 MoleculeStore::Index MoleculeStore::allocate_atom()
 {
+	// K0.3c.1: try to reuse a freed slot first. Free-list reuse never
+	// triggers a column reallocation (slot is still in-place), so D7
+	// reference-stability is preserved trivially.
+	if (!free_list_.empty())
+	{
+		const Index idx = free_list_.back();
+		free_list_.pop_back();
+		is_freed_[idx] = 0;   // clear freed flag on reuse
+		// Reset the slot's columns to defaults (reused slot was zeroed at
+		// release_atom but defensive).
+		positions_[idx]       = Vector3(0.f, 0.f, 0.f);
+		velocities_[idx]      = Vector3(0.f, 0.f, 0.f);
+		forces_[idx]          = Vector3(0.f, 0.f, 0.f);
+		charges_[idx]         = 0.f;
+		radii_[idx]           = 0.f;
+		atom_types_[idx]      = 0;
+		formal_charges_[idx]  = 0;
+		element_indices_[idx] = 0;
+		selection_[idx]       = 0;
+		name_offsets_[idx]    = 0;
+		type_name_offsets_[idx] = 0;
+		stable_ids_[idx]      = next_stable_id_++;
+		// back_ptr_[idx] cleared on release_atom; will be set by caller's
+		// set_back_ptr(idx, this). For now stays nullptr (= "freed"); the
+		// Atom ctor's bindToStore_ immediately overwrites it. There's a
+		// brief window between allocate_atom returning and bindToStore_
+		// setting back_ptr where is_freed(idx) is still true. K0.4
+		// transactional adopt() must handle this.
+		csr_dirty_ = true;
+		return idx;
+	}
+
 	const std::size_t old_cap = positions_.capacity();
 	// If this insert would cause a reallocation, no live refs into the
 	// store columns may exist. D7 amendment enforcement.
@@ -36,6 +68,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 	type_name_offsets_.emplace_back(0);
 	stable_ids_.emplace_back(next_stable_id_++);
 	back_ptr_.emplace_back(nullptr);
+	is_freed_.emplace_back(0);              // K0.3c.1: fresh slot is live
 
 	// Make sure offset 0 in the string pool is always an empty C-string so
 	// get_name(i) on a fresh atom returns "".
@@ -46,6 +79,40 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 
 	bump_generation_if_reallocated_(old_cap);
 	return idx;
+}
+
+// K0.3c.1: release a slot back to the free-list. Clears back_ptr_ as the
+// "freed" sentinel; subsequent CSR rebuilds (ensure_csr_) skip bonds that
+// touch freed slots. Bond removal proper is K0.3c.2 — for now, dangling
+// bond records pointing at freed atoms are tolerated and filtered out at
+// query time.
+void MoleculeStore::release_atom(Index i)
+{
+	if (i >= back_ptr_.size())   return;   // defensive
+	if (is_freed_[i] != 0)       return;   // already freed (idempotent)
+
+	is_freed_[i] = 1;
+	back_ptr_[i] = nullptr;
+	// Zero the columns at the freed slot. Not required for correctness
+	// (back_ptr_==nullptr is the sentinel), but keeps debugging cleaner
+	// and helps subsequent allocate_atom reuse skip the defensive reset.
+	positions_[i]       = Vector3(0.f, 0.f, 0.f);
+	velocities_[i]      = Vector3(0.f, 0.f, 0.f);
+	forces_[i]          = Vector3(0.f, 0.f, 0.f);
+	charges_[i]         = 0.f;
+	radii_[i]           = 0.f;
+	atom_types_[i]      = 0;
+	formal_charges_[i]  = 0;
+	element_indices_[i] = 0;
+	selection_[i]       = 0;
+	name_offsets_[i]    = 0;
+	type_name_offsets_[i] = 0;
+	// stable_ids_[i] is not reset; the freed-then-reallocated slot gets
+	// a fresh stable id from next_stable_id_++ on reuse. Old stable ids
+	// don't collide.
+
+	free_list_.push_back(i);
+	csr_dirty_ = true;
 }
 
 void MoleculeStore::reserve(std::size_t n)
@@ -67,6 +134,7 @@ void MoleculeStore::reserve(std::size_t n)
 	type_name_offsets_.reserve(n);
 	stable_ids_.reserve(n);
 	back_ptr_.reserve(n);
+	is_freed_.reserve(n);
 
 	bump_generation_if_reallocated_(old_cap);
 }
@@ -89,6 +157,7 @@ void MoleculeStore::compact()
 	type_name_offsets_.shrink_to_fit();
 	stable_ids_.shrink_to_fit();
 	back_ptr_.shrink_to_fit();
+	is_freed_.shrink_to_fit();
 
 	bump_generation_if_reallocated_(old_cap);
 }
@@ -164,8 +233,16 @@ void MoleculeStore::ensure_csr_() const
 	bond_csr_off_.assign(n_atoms + 1, 0);
 
 	// Count degree per atom (each bond contributes to two atoms).
+	// K0.3c.1: skip bonds that touch a freed slot. Until K0.3c.2 wires
+	// bond removal, dead bonds may sit in bonds_ pointing at freed
+	// atoms; they should not show up in any atom's degree count.
+	auto is_live_bond = [this](const BondRecord& b) -> bool
+	{
+		return !is_freed(b.a) && !is_freed(b.b);
+	};
 	for (const auto& b : bonds_)
 	{
+		if (!is_live_bond(b)) continue;
 		++bond_csr_off_[b.a + 1];
 		if (b.a != b.b) ++bond_csr_off_[b.b + 1];
 	}
@@ -180,6 +257,7 @@ void MoleculeStore::ensure_csr_() const
 	for (std::size_t k = 0; k < bonds_.size(); ++k)
 	{
 		const auto& b = bonds_[k];
+		if (!is_live_bond(b)) continue;
 		bond_csr_idx_[cursor[b.a]++] = static_cast<std::uint32_t>(k);
 		if (b.a != b.b)
 		{

@@ -191,6 +191,17 @@ namespace BALL
 	Atom::~Atom()
 	{
 		destroy();
+		// K0.3c.1: release this atom's store slot. Without this, every
+		// Atom() construction leaked a slot for the process lifetime.
+		// Note: destroy() above triggers v1.x bond cleanup; K0.3c.2 will
+		// also wire store-side bond removal so the freed slot's incident
+		// bond records get tombstoned (currently CSR-rebuild filters
+		// them via is_freed()).
+		if (store_ != nullptr)
+		{
+			store_->release_atom(store_idx_);
+			store_ = nullptr;  // defensive — handle is now invalid
+		}
 	}
 
 	void Atom::clear()
