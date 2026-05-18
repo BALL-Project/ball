@@ -1159,6 +1159,27 @@ jobs:
           "installer_name=$installerName" >> $env:GITHUB_OUTPUT
           "installer_path=$installerDest" >> $env:GITHUB_OUTPUT
 
+      # ---------------------------------------------------------------------
+      # v1.7.0-rc1 NSIS post-mortem (2026-05-18): when `cpack -G NSIS` fails,
+      # the actual makensis.exe output is written to
+      # build/ci-windows/_CPack_Packages/win64/NSIS/NSISOutput.log
+      # which CPack itself names in the error message but does not upload.
+      # Without that log, the next iteration is blind. Upload it as a
+      # workflow artifact on failure so we can read it directly.
+      # ---------------------------------------------------------------------
+      - name: Upload NSIS diagnostic logs on failure (Windows)
+        if: failure() && matrix.os == 'windows-x64'
+        uses: actions/upload-artifact@v6
+        with:
+          name: nsis-failure-logs-${{ steps.resolve.outputs.ref }}-${{ github.run_id }}
+          path: |
+            build/ci-windows/_CPack_Packages/**/NSIS/NSISOutput.log
+            build/ci-windows/_CPack_Packages/**/NSIS/project.nsi
+            build/ci-windows/CPackConfig.cmake
+            build/ci-windows/CPackSourceConfig.cmake
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Compute SHA256 for Windows installer (always-on integrity check)
         if: matrix.os == 'windows-x64'
         id: installer-sha
