@@ -48,6 +48,16 @@ Vendored subset used in BALLView v1.7 (Phase 999.41 + v1.7.0-rc2):
     "converge to optimum," not "scale down"). shrink.svg remains in the
     vendored set for potential future use.
 
+  v1.7.0-rc3 UFG-16 (1 glyph — Add Hydrogens semantic clarity):
+    droplets.svg
+    droplets.svg replaces atom.svg as the alias target for
+    "actions/molecule-add-hydrogens". The atom glyph reads as
+    "atom/molecule" (a noun, electron-orbital styling) rather than the
+    additive "add hydrogens" operation users expect on the toolbar slot.
+    droplets has the cleanest chemistry/water-H association in the
+    v0.460.0 catalog. atom.svg remains vendored in case a composed
+    atom-plus-badge glyph lands as v1.7.1 polish.
+
 All paths are unmodified from upstream lucide-static@0.460.0 except for
 the addition of an XML declaration + a one-line provenance comment in
 each file. The stroke uses `currentColor` so the icons inherit the

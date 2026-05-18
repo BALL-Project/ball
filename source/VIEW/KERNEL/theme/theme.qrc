@@ -35,7 +35,14 @@
         <file alias="actions/list-add.svg">icons/lucide/plus.svg</file>
         <file alias="actions/edit-delete.svg">icons/lucide/trash-2.svg</file>
         <file alias="actions/edit-copy.svg">icons/lucide/copy.svg</file>
-        <file alias="actions/molecule-add-hydrogens.svg">icons/lucide/atom.svg</file>
+        <!-- v1.7.0-rc3 UFG-16: swapped atom.svg → droplets.svg. The atom
+             glyph (electron-orbital styling) reads as "atom/molecule" — a
+             noun, not the additive operation users expect on the "Add
+             Hydrogens" toolbar slot. droplets.svg has the cleanest
+             chemistry/water-H semantic association in the Lucide v0.460.0
+             catalog; atom.svg remains vendored in case a composed
+             atom-plus-badge glyph lands later as v1.7.1 polish. -->
+        <file alias="actions/molecule-add-hydrogens.svg">icons/lucide/droplets.svg</file>
         <!-- v1.7.0-rc2 UFG-14 polish: swapped shrink.svg → target.svg. The
              "shrink" glyph reads as scale-down (UI gesture) but the actual
              semantic is energy-minimize (find the lowest-energy
