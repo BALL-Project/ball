@@ -994,8 +994,8 @@ namespace BALL
 		// K0.3b.LATER.1: Vector3 position_ DELETED. Authority moved to
 		// MoleculeStore::positions_[store_idx_]. getPosition() returns
 		// a reference into that column.
-		///
-		float           charge_;
+		// K0.3b.LATER.2: float charge_ DELETED. Authority in
+		// MoleculeStore::charges_[store_idx_].
 		///
 		Vector3         velocity_;
 		///

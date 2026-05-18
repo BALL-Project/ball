@@ -19,15 +19,14 @@ const Element& Atom::getElement() const
 BALL_INLINE
 void Atom::setCharge(float charge)
 {
-	charge_ = charge;
-	// K0.3b.3 dual-write: mirror into store column.
-	if (store_) writeStoreCharge_(charge);
+	// K0.3b.LATER.2: charge_ v1.x field deleted; store is sole authority.
+	writeStoreCharge_(charge);
 }
 
 BALL_INLINE
 float Atom::getCharge() const
 {
-	return charge_;
+	return store_->charge(store_idx_);
 }
 
 BALL_INLINE
