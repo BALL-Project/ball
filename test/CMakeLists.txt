@@ -77,6 +77,7 @@ IF(BALL_CORE_ONLY)
 		# because of the PR #550 data regression (separate from B1.2 enable
 		# work). RotamerLibrary_test stays out (rotamerLibrary.C trimmed).
 		FragmentDB_test
+		DefaultProcessors_test
 		NormalizeNamesProcessor_test
 		PeptideBuilder_test
 		PeptideCapProcessor_test

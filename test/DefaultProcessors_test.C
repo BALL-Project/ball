@@ -75,8 +75,20 @@ CHECK(AssignRadiusProcessor::Processor::Result operator()(Atom& atom))
 	HINFile f(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.hin));
   System S;
 	f >> S;
-	S.insert(m1);
-	S.insert(m2);
+	// 2026-05-18 (TEST-DEFAULT-PROCESSORS fix): under K0 store-bound atom
+	// lifetimes, re-inserting the static m1/m2 (already in `s`) into a
+	// local S leaves dangling cross-System references that fault at
+	// atexit. Use local throwaway molecules with the same a1/a2 atom
+	// names to preserve test intent (expect 2 "Cannot assign" errors
+	// for atoms whose names aren't in DefaultProcessor_test.1).
+	Molecule local_m1, local_m2;
+	Atom local_a1, local_a2;
+	local_a1.setName("a1");
+	local_a2.setName("a2");
+	local_m1.insert(local_a1);
+	local_m2.insert(local_a2);
+	S.insert(local_m1);
+	S.insert(local_m2);
 	StringHashMap<float> shm;
 	ifstream infile(BALL_TEST_DATA_PATH(DefaultProcessor_test.1));
 	String name;  
@@ -165,10 +177,17 @@ CHECK(AssignChargeProcessor::Processor::Result operator()(Atom& atom))
 	HINFile f(BALL_TEST_DATA_PATH(AnisotropyShiftProcessor_test.hin));
   System S;
 	f >> S;
-	S.insert(m1);
-	m1.insert(a1);
-	S.insert(m2);
-	m2.insert(a2);
+	// 2026-05-18 (TEST-DEFAULT-PROCESSORS fix): same pattern as CHECK #6
+	// above — use local throwaway m/a instead of reusing m1/m2/a1/a2
+	// from the file scope, which would double-insert under K0.
+	Molecule local_m1, local_m2;
+	Atom local_a1, local_a2;
+	local_a1.setName("a1");
+	local_a2.setName("a2");
+	local_m1.insert(local_a1);
+	local_m2.insert(local_a2);
+	S.insert(local_m1);
+	S.insert(local_m2);
 	TEST_EQUAL(S.countAtoms(), 33)
 	StringHashMap<float> shm;
 	ifstream infile(BALL_TEST_DATA_PATH(DefaultProcessor_test.1));
