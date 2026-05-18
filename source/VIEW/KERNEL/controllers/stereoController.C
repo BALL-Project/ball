@@ -2,12 +2,26 @@
 // vi: set ts=2:
 //
 // Phase 999.44 Plan 05 — StereoController implementation.
+// UFG-11 cut-over (v1.7-modernization) — apply() now writes
+// eye/focal distance + swap-side-by-side to the attached Stage and
+// triggers a Scene redraw, mirroring the legacy
+// StereoSettingsDialog::apply() backend
+// (source/VIEW/DIALOGS/stereoSettingsDialog.C:109-115) and the
+// stereo-swap mutation in StageSettings::apply()
+// (source/VIEW/DIALOGS/stageSettings.C:254). The "enabled" toggle is
+// renderer-mode state owned by Scene's stereo plumbing
+// (Renderer::setStereoMode); we mirror the field but leave the actual
+// renderer-mode switch to the legacy Display › Stereo menu entry
+// until the StereoController/Renderer-interface binding lands per
+// SEED-001 step 5.
 //
 
 #include <BALL/VIEW/KERNEL/controllers/stereoController.h>
 
 
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -47,11 +61,37 @@ namespace BALL
 
 		void StereoController::apply()
 		{
-			Log.info() << "[StereoController::apply] STUB — legacy StereoSettingsDialog "
-				"owns mutation. enabled=" << (enabled_ ? "true" : "false")
-				<< " eye=" << eye_distance_
-				<< " focal=" << focal_distance_
-				<< " swapSBS=" << (swap_sbs_ ? "true" : "false") << std::endl;
+			// UFG-11 cut-over — push mirrored eye/focal distance +
+			// swap-side-by-side flag to the attached Stage. Mirrors the
+			// legacy StereoSettingsDialog::apply() backend
+			// (stereoSettingsDialog.C:109-115) and StageSettings::apply()
+			// stereo-swap mutation (stageSettings.C:254). enabled_ is
+			// renderer-mode state — stays a controller-side mirror until
+			// SEED-001 step 5 wires StereoController through the
+			// Renderer / RenderSurface boundary.
+			if (stage_ == nullptr)
+			{
+				Log.warn() << "[StereoController::apply] no Stage attached — skipping." << std::endl;
+				return;
+			}
+
+			MainControl* mc = MainControl::getInstance(0);
+			if (mc != nullptr && mc->isBusy())
+			{
+				Log.info() << "[StereoController::apply] MainControl busy — deferring." << std::endl;
+				return;
+			}
+
+			stage_->setEyeDistance(eye_distance_);
+			stage_->setFocalDistance(focal_distance_);
+			stage_->setSwapSideBySideStereo(swap_sbs_);
+
+			Scene* scene = Scene::getInstance(0);
+			if (scene != nullptr)
+			{
+				scene->update();
+			}
+
 			Q_EMIT appliedStub();
 		}
 
