@@ -952,8 +952,33 @@ jobs:
           Write-Host "Found: $($exe.FullName)"
           "exe=$($exe.FullName)" >> $env:GITHUB_OUTPUT
           "deploy_dir=$($exe.Directory.FullName)" >> $env:GITHUB_OUTPUT
-          # windeployqt ships in vcpkg's installed Qt 6 tools dir
-          $wdq = Get-ChildItem -Path build\ci-windows\vcpkg_installed -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          # windeployqt ships in vcpkg's installed Qt 6 tools dir.
+          # Phase 8c part-2 bugfix (v1.7.0-rc1 post-mortem, 2026-05-18):
+          # vcpkg installs Qt 6 binaries into BOTH x64-windows (default
+          # debug+release triplet for build-host tools) AND
+          # x64-windows-release (the release-only overlay triplet that
+          # BALLView actually links against). Each triplet has its OWN
+          # copy of windeployqt.exe with its OWN qtpaths.exe sibling, and
+          # windeployqt resolves DLL dependencies relative to the
+          # qtpaths.exe in its directory — NOT relative to the BALLView.exe
+          # being deployed. The previous `Select-Object -First 1` picked
+          # whichever windeployqt sorted first (x64-windows in practice),
+          # so windeployqt then tried to resolve Qt6Svg.dll out of
+          # x64-windows/bin/ — but the x64-windows triplet is empty under
+          # bin/ on a release-only build, so windeployqt fails with:
+          #   Unable to find dependent libraries of ... Qt6Svg.dll :
+          #   Cannot open '.../x64-windows/bin/Qt6Svg.dll': The system
+          #   cannot find the file specified.
+          # Fix: prefer the windeployqt from x64-windows-release/ (the
+          # triplet BALLView actually links). Fall back to the generic
+          # match only if the release-only triplet is somehow missing.
+          $wdqRelease = Get-ChildItem -Path build\ci-windows\vcpkg_installed\x64-windows-release -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($wdqRelease) {
+            $wdq = $wdqRelease
+          } else {
+            Write-Host "::warning::windeployqt.exe not found under x64-windows-release — falling back to the first match anywhere under vcpkg_installed (may fail Qt6Svg.dll lookup)."
+            $wdq = Get-ChildItem -Path build\ci-windows\vcpkg_installed -Filter windeployqt.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1
+          }
           if (-not $wdq) {
             Write-Host "::error::windeployqt.exe not found in vcpkg_installed"
             Get-ChildItem -Path build\ci-windows -Filter "windeployqt*" -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 | ForEach-Object { Write-Host $_.FullName }
