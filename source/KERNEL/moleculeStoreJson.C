@@ -7,6 +7,8 @@
 
 #include <BALL/KERNEL/moleculeStoreJson.h>
 #include <BALL/KERNEL/moleculeStore.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/propertyJson.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
 
@@ -104,6 +106,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	json type_names   = json::array();
 	json stable_ids   = json::array();
 	json is_freed     = json::array();
+	json properties   = json::array();   // K0.6.5b per-atom PropertyManager bag
 
 	positions.get_ptr<json::array_t*>()->reserve(n);
 	velocities.get_ptr<json::array_t*>()->reserve(n);
@@ -118,6 +121,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	type_names.get_ptr<json::array_t*>()->reserve(n);
 	stable_ids.get_ptr<json::array_t*>()->reserve(n);
 	is_freed.get_ptr<json::array_t*>()->reserve(n);
+	properties.get_ptr<json::array_t*>()->reserve(n);
 
 	for (std::size_t i = 0; i < n; ++i)
 	{
@@ -143,6 +147,18 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 		type_names.push_back(store.get_type_name(i));
 		stable_ids.push_back(static_cast<std::uint64_t>(store.stable_id(i)));
 		is_freed.push_back(store.is_freed(i) ? 1 : 0);
+
+		// K0.6.5b: per-atom PropertyManager bag. Lives on the heap-
+		// allocated Atom handle (PropertyManager is a base class), so
+		// we reach it via back_ptr. Empty {} if no handle (freed slot
+		// or pre-bind slot).
+		json prop_obj = json::object();
+		const Atom* handle = store.back_ptr(static_cast<MoleculeStore::Index>(i));
+		if (handle != nullptr)
+		{
+			detail::properties_to_json(*handle, &prop_obj);
+		}
+		properties.push_back(std::move(prop_obj));
 	}
 
 	atoms["positions"]      = std::move(positions);
@@ -158,6 +174,7 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	atoms["type_names"]     = std::move(type_names);
 	atoms["stable_ids"]     = std::move(stable_ids);
 	atoms["is_freed"]       = std::move(is_freed);
+	atoms["properties"]     = std::move(properties);   // K0.6.5b
 
 	// --- Bond table ------------------------------------------------------
 	json bonds = json::array();
@@ -274,6 +291,15 @@ void json_obj_to_store(MoleculeStore& store, const void* json_in)
 			require_(a.contains(col),       col);
 			require_(a[col].is_array(),     col);
 			require_(a[col].size() == n,    col);
+		}
+		// K0.6.5b: "properties" column is OPTIONAL — store-only loader
+		// has no Atom handles to attach to, so it's silently ignored
+		// here. systemJson loader handles the property restore through
+		// the live handles via its own slot-mapping path.
+		if (a.contains("properties"))
+		{
+			require_(a["properties"].is_array(),   "properties must be array");
+			require_(a["properties"].size() == n,  "properties length != size");
 		}
 
 		// Wipe, reserve, populate. reserve avoids per-slot reallocation so

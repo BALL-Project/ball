@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/moleculeStoreJson.h>
+#include <BALL/KERNEL/propertyJson.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
 
@@ -60,6 +61,12 @@ void saveSystemJSON(const System& sys, std::ostream& os, int indent,
 	doc["format_minor"]   = SYSTEM_JSON_VERSION_MINOR;
 	doc["name"]           = std::string(sys.getName().c_str());
 
+	// K0.6.5b: System's own PropertyManager bag (System inherits via
+	// AtomContainer -> Composite -> PropertyManager).
+	json sys_props = json::object();
+	detail::properties_to_json(sys, &sys_props);
+	if (!sys_props.empty()) doc["properties"] = std::move(sys_props);
+
 	// Embed the MoleculeStore body under "store" via the detail helper
 	// (no string round-trip).
 	json store_doc;
@@ -68,9 +75,16 @@ void saveSystemJSON(const System& sys, std::ostream& os, int indent,
 	    &store_doc, float_fmt);
 	doc["store"] = std::move(store_doc);
 
-	// Walk molecules; for each, list its atoms' store indices.
-	json molecules = json::array();
+	// Walk molecules; for each, list its atoms' store indices AND its
+	// own PropertyManager bag (K0.6.5b).
+	// Also track which store slots are claimed by ANY molecule so we
+	// can emit the unclaimed-but-live slots as System-level orphan
+	// atoms separately.
 	System& mut_sys = const_cast<System&>(sys);
+	const std::size_t store_n = mut_sys.getStore().size();
+	std::vector<bool> in_a_molecule(store_n, false);
+
+	json molecules = json::array();
 	const Size nmol = mut_sys.countMolecules();
 	molecules.get_ptr<json::array_t*>()->reserve(nmol);
 	for (Position mi = 0; mi < nmol; ++mi)
@@ -79,16 +93,39 @@ void saveSystemJSON(const System& sys, std::ostream& os, int indent,
 		if (m == nullptr) continue;
 		json mol_obj;
 		mol_obj["name"] = std::string(m->getName().c_str());
+
+		// K0.6.5b: per-molecule properties.
+		json mol_props = json::object();
+		detail::properties_to_json(*m, &mol_props);
+		if (!mol_props.empty()) mol_obj["properties"] = std::move(mol_props);
+
 		json atom_indices = json::array();
 		atom_indices.get_ptr<json::array_t*>()->reserve(m->countAtoms());
 		for (AtomIterator it = m->beginAtom(); +it; ++it)
 		{
-			atom_indices.push_back(static_cast<std::uint32_t>(it->getStoreIndex()));
+			const std::uint32_t idx = static_cast<std::uint32_t>(it->getStoreIndex());
+			atom_indices.push_back(idx);
+			if (idx < store_n) in_a_molecule[idx] = true;
 		}
 		mol_obj["atom_indices"] = std::move(atom_indices);
 		molecules.push_back(std::move(mol_obj));
 	}
 	doc["molecules"] = std::move(molecules);
+
+	// K0.6.5b: System-level orphan atoms — live store slots NOT
+	// claimed by any Molecule. Emitted as a sibling array so the
+	// reader can re-attach them as direct System children.
+	json orphan = json::array();
+	MoleculeStore& store = mut_sys.getStore();
+	for (std::size_t i = 0; i < store_n; ++i)
+	{
+		if (store.is_freed(i)) continue;
+		if (in_a_molecule[i])  continue;
+		if (store.back_ptr(static_cast<MoleculeStore::Index>(i)) == nullptr) continue;
+		orphan.push_back(static_cast<std::uint32_t>(i));
+	}
+	if (!orphan.empty())
+		doc["system_atom_indices"] = std::move(orphan);
 
 	os << doc.dump(indent);
 }
@@ -148,12 +185,17 @@ void loadSystemJSON(System& sys, std::istream& is)
 		if (doc.contains("name"))
 			sys.setName(String(doc["name"].get<std::string>().c_str()));
 
+		// K0.6.5b: restore System's own PropertyManager bag.
+		if (doc.contains("properties"))
+			detail::json_to_properties(sys, &doc["properties"]);
+
 		// Pre-create Atom handles for every live save-slot. Freed slots
 		// get no handle — they'll be allocated + immediately released
 		// in the store to preserve the slot-count for bond translation.
 		// Atoms are NEW (orphan-bound); molecule.insert below reparents
 		// + triggers System adoption.
 		std::vector<Atom*> atom_by_save_idx(n, nullptr);
+		std::vector<bool>  saw_in_molecule(n, false);
 		for (std::size_t i = 0; i < n; ++i)
 		{
 			const int freed_i = a["is_freed"][i].get<int>();
@@ -183,13 +225,52 @@ void loadSystemJSON(System& sys, std::istream& is)
 				m->setName(String(mol_obj["name"].get<std::string>().c_str()));
 			sys.insert(*m);
 
+			// K0.6.5b: per-molecule PropertyManager bag.
+			if (mol_obj.contains("properties"))
+				detail::json_to_properties(*m, &mol_obj["properties"]);
+
 			for (const auto& idx_json : mol_obj["atom_indices"])
 			{
 				const std::uint32_t save_idx = idx_json.get<std::uint32_t>();
 				require_(save_idx < n,                "atom_indices[i] out of [0, size)");
 				require_(atom_by_save_idx[save_idx],  "atom_indices[i] references freed slot");
 				m->insert(*atom_by_save_idx[save_idx]);
+				saw_in_molecule[save_idx] = true;
 			}
+		}
+
+		// K0.6.5b: orphan atoms — System direct children not in any
+		// Molecule. Insert their pre-created handles straight into sys.
+		if (doc.contains("system_atom_indices"))
+		{
+			const json& orphan = doc["system_atom_indices"];
+			require_(orphan.is_array(), "system_atom_indices must be array");
+			for (const auto& idx_json : orphan)
+			{
+				const std::uint32_t save_idx = idx_json.get<std::uint32_t>();
+				require_(save_idx < n,               "system_atom_indices[i] out of [0, size)");
+				require_(atom_by_save_idx[save_idx], "system_atom_indices[i] references freed slot");
+				require_(!saw_in_molecule[save_idx],
+					"system_atom_indices[i] also listed inside a molecule");
+				// AtomContainer::insert(Atom&) wires both the Composite-
+				// tree side (System becomes the atom's parent so
+				// countAtoms sees it) AND the store-side auto-adopt via
+				// the K0.4.3 hook. System::insert(Molecule&) hides the
+				// inherited overload, so call it through the base.
+				sys.AtomContainer::insert(*atom_by_save_idx[save_idx]);
+				saw_in_molecule[save_idx] = true;   // mark as placed
+			}
+		}
+
+		// K0.6.5b: any live save-slot not placed in a molecule OR
+		// system_atom_indices is a data inconsistency. The writer marks
+		// every live atom in one of those two arrays.
+		for (std::size_t i = 0; i < n; ++i)
+		{
+			if (atom_by_save_idx[i] != nullptr && !saw_in_molecule[i])
+				throw Exception::ParseError(__FILE__, __LINE__,
+					"live save-slot not referenced by any molecule or system_atom_indices",
+					"K0.6.5b: orphan-atom contract violation");
 		}
 
 		// Build save_idx -> fresh_store_idx map. After all molecule
@@ -230,6 +311,16 @@ void loadSystemJSON(System& sys, std::istream& is)
 			store.set_selected(fi, sel != 0);
 			store.set_name(fi,      a["names"][i].get<std::string>());
 			store.set_type_name(fi, a["type_names"][i].get<std::string>());
+
+			// K0.6.5b: per-atom PropertyManager bag, restored via the
+			// fresh atom handle.
+			if (a.contains("properties") && a["properties"].is_array()
+			    && i < a["properties"].size())
+			{
+				Atom* h = atom_by_save_idx[i];
+				if (h != nullptr)
+					detail::json_to_properties(*h, &a["properties"][i]);
+			}
 		}
 
 		// Restore bonds via the slot map. Bonds whose endpoints map to
