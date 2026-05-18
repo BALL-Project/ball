@@ -20,7 +20,7 @@ IF(POLICY CMP0167)
 ENDIF()
 
 
-PROJECT("BALL" VERSION 1.6.0) # 1.6.0-dev (pre-release)
+PROJECT("BALL" VERSION 1.7.0) # 1.7.0 — BALLView Refresh (Wave 4)
 
 
 ########################################################
