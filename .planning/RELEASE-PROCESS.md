@@ -119,3 +119,93 @@ tag) adds **one step** before the existing close-out:
   precedent for branching off the working modernization HEAD; under the
   new convention, future analogous handovers branch off `master` once
   it tracks the latest release)
+- `.planning/v1.7.x-PATCH-QUEUE.md` — items deferred during v1.7.0 RC
+  cycle; source of truth for v1.7.x patch-cycle planning
+
+---
+
+## Lessons learned (v1.7.0 RC cycle — pin to memory)
+
+These are the root-cause patterns that bit during the v1.7.0 RC
+iteration cycle (rc1 → rc4) and must not be repeated in subsequent
+UI-heavy releases. Each pattern is named so a future release engineer
+can grep for it in a fresh RC bug report.
+
+### LL-01 — "Hidden QOpenGLWidget" trap
+
+**Pattern:** Qt's `QOpenGLWidget` defers `initializeGL()` until the
+widget receives its first `show` event. If a startup central-widget
+swap keeps a `QOpenGLWidget` hidden (e.g. v1.7's UFG-08 WelcomeScreen
+swap), Qt **never** creates the GL context, so the renderer's
+backing state stays zero-initialized. The first asynchronous
+Representation message that hits `GLRenderer::renderSphere_` then null
+derefs.
+
+**Surface area:** any code path that creates a Representation
+(WelcomeScreen sample-click, Build-Peptide, File→Open, drag-drop)
+crashes with the same `GLRenderer::renderSphere_+offset` signature.
+
+**Fix shape:** force lazy GL init synchronously during startup by
+calling `QOpenGLWidget::grabFramebuffer()` on the hidden widget —
+this is Qt's only documented sync-force path. Do this in the
+Mainframe ctor BEFORE the central-widget swap. Idempotent guard via
+the widget's existing `gl_initialized_` flag.
+
+**Reference fix:** commit `45d6e2819b` ("force Scene initializeGL
+before WelcomeScreen swap"), `Scene::forceGLContextRealization()`.
+
+### LL-02 — "Render-smoke needs the widget visible" trap
+
+**Pattern:** A render-smoke check that calls `Scene::exportPNG()` to
+verify GL rendering will not work if the build is configured for a
+WelcomeScreen-as-startup-central-widget pattern, because the
+QOpenGLWidget never receives a show event (same LL-01 root cause).
+
+**Fix shape:** an `BALLVIEW_NO_WELCOME=1` env var that
+`Mainframe::showWelcomeScreen_()` early-returns on, set by the smoke
+check before launching BALLView. Preserves the user-facing
+WelcomeScreen flow.
+
+**Reference fix:** commit `65859dbccc` ("env-var to skip WelcomeScreen
+in smoke-check") + LL-01 fix (which makes the env var theoretically
+unnecessary, but keep the env-var path for smoke-check isolation
+independent of GL-init plumbing).
+
+### LL-03 — "Opaque-paint contract gets MISSED on placeholder widgets"
+
+**Pattern:** Custom paint widgets that opt into composition via
+`Qt::WA_OpaquePaintEvent` + `setAutoFillBackground` + a `paintEvent`
+override are easy to forget on empty-state / placeholder widgets,
+because those widgets only render when their owning container is
+otherwise empty — they don't appear in the common-case visual review.
+Result: previous-frame artifacts ghost through (UFG-10, UFG-19).
+
+**Fix shape:** every widget that participates in opaque-paint
+composition (including empty-state factories like
+`InspectorEmptyState::forNoRepresentation`) must apply the same
+4-line opaque-paint contract. Centralize via a helper or via shared
+ctors so opt-in is the default for the widget family.
+
+**Reference fix:** commit `a2b856d461` (UFG-19,
+`InspectorEmptyState`), patterned after `c14428d98b` (UFG-10) +
+`1b4a8dd299` (UFG-05).
+
+### LL-04 — "ccache `include_file_mtime` masks config.h regeneration"
+
+**Pattern:** A PROJECT VERSION bump in `CMakeLists.txt` regenerates
+`include/BALL/CONFIG/config.h` (it embeds the version), but ccache
+configured with `include_file_mtime` sloppiness ignores config.h
+content changes — so `VersionInfo_test` compiles against the stale
+old version and fails on Linux. Symptoms: only Linux fails, only
+`VersionInfo_test`, only on a version-bump commit, only when ccache
+is warm.
+
+**Fix shape:**
+1. Bump the CI ccache cache key (e.g. v1 → v2) on the
+   version-bump commit so all platforms get cold ccache.
+2. Set `CCACHE_EXTRAFILES=include/BALL/CONFIG/config.h.in` in the CI
+   env so ccache invalidates cached objects whenever the .in template
+   changes.
+
+**Reference fix:** commit `65d334792f` ("bump ccache key v1→v2 +
+CCACHE_EXTRAFILES").
