@@ -13,10 +13,14 @@
 #	include <BALL/KERNEL/expressionParser.h>
 #endif
 
+#include <memory>
+
 namespace BALL
 {
 	class Atom;
 	class ExpressionTree;
+	class CompiledExpression;
+	class MoleculeStore;
 
 	/**
 	 * The class \ref Expression provides a frontend to \ref ExpressionTree.
@@ -163,6 +167,16 @@ namespace BALL
 		/** Get the creation methods.
 		*/
 		const StringHashMap<CreationMethod>& getCreationMethods() const;
+
+		/** K0.5.3: get the compiled fast-path AST bound to `store`, building
+				it on demand via CompiledExpressionCache. Returns nullptr if
+				the source contains a predicate that the K0.5 compiler does not
+				yet handle (operator()() then falls back to the legacy
+				ExpressionTree path). The returned shared_ptr is owned by the
+				process-global cache; do not delete.
+		*/
+		std::shared_ptr<const CompiledExpression>
+		    getCompiled(MoleculeStore& store) const;
 
 		//@}
 		/** @name Assignment 

@@ -4,6 +4,9 @@
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
+#include <BALL/KERNEL/compiledExpression.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/CONCEPT/factory.h>
 
 using namespace::std;
@@ -104,6 +107,27 @@ namespace BALL
 
 	bool Expression::operator () (const Atom& atom) const
 	{
+		// K0.5.3: prefer the compiled fast path. CompiledExpression's
+		// evaluate_one runs the variant-dispatched leaf evaluator with no
+		// virtual calls; the cache makes the per-evaluation lookup O(1)
+		// after the first compile.
+		MoleculeStore* store = atom.getStore();
+		if (store != nullptr && expression_string_.size() > 0
+		    && expression_string_ != String("<not initialized>"))
+		{
+			try
+			{
+				auto compiled = CompiledExpressionCache::instance()
+					.get_or_compile(*store, std::string(expression_string_.c_str()));
+				return compiled->evaluate_one(atom);
+			}
+			catch (Exception::ParseError&)
+			{
+				// K0.5.2/K0.5.4 transitional: the compiler doesn't yet
+				// cover every legacy predicate (inRing, SMARTS, ...).
+				// Fall through to the v1.x ExpressionTree path.
+			}
+		}
 		if (expression_tree_ != 0)
 		{
 			return expression_tree_->operator () (atom);
@@ -112,6 +136,28 @@ namespace BALL
 		{
 			Log.error() << "Expression::operator (): no expression set" << endl;
 			return false;
+		}
+	}
+
+	// K0.5.3: public accessor for the compiled fast-path AST. Returns
+	// nullptr if the source can't be lowered (so callers can choose to
+	// take the legacy ExpressionTree path explicitly).
+	std::shared_ptr<const CompiledExpression>
+	Expression::getCompiled(MoleculeStore& store) const
+	{
+		if (expression_string_.size() == 0
+		    || expression_string_ == String("<not initialized>"))
+		{
+			return nullptr;
+		}
+		try
+		{
+			return CompiledExpressionCache::instance()
+				.get_or_compile(store, std::string(expression_string_.c_str()));
+		}
+		catch (Exception::ParseError&)
+		{
+			return nullptr;
 		}
 	}
 

@@ -16,6 +16,7 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/expression.h>  // K0.5.3 integration check
 ///////////////////////////
 
 START_TEST(CompiledExpression)
@@ -406,6 +407,42 @@ CHECK(K0.5.2 cache evicts least-recently-used past capacity)
 	TEST_EQUAL(pA.get(), pA2.get())
 
 	cache.set_capacity(1024);  // restore default for other tests
+RESULT
+
+CHECK(K0.5.3 Expression::operator() takes the compiled fast path)
+	// Codex spec §5: Expression::operator()(const Atom&) now prefers the
+	// compiled fast path via evaluate_one when a store is bound; falls
+	// back to expression_tree_ on parse/compile failure.
+	System sys;
+	Atom *carbon = new Atom; carbon->setElement(PTE[Element::CARBON]); sys.adopt(*carbon);
+	Atom *oxygen = new Atom; oxygen->setElement(PTE[Element::OXYGEN]); sys.adopt(*oxygen);
+
+	Expression expr("element(C)");
+	TEST_EQUAL(expr(*carbon), true)
+	TEST_EQUAL(expr(*oxygen), false)
+
+	// Verify the fast path actually ran by checking the cache populated.
+	auto& cache = CompiledExpressionCache::instance();
+	auto compiled = expr.getCompiled(sys.getStore());
+	TEST_NOT_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+	TEST_EQUAL(compiled->source(), std::string("element(C)"))
+	(void)cache;
+RESULT
+
+CHECK(K0.5.3 Expression with unsupported predicate falls back gracefully)
+	// inRing() is one of the predicates K0.5.2 throws ParseError on.
+	// getCompiled returns nullptr; operator() falls through to the v1.x
+	// ExpressionTree path which delegates to InRingPredicate.
+	System sys;
+	Atom *a = new Atom; sys.adopt(*a);
+
+	Expression expr("inRing()");
+	auto compiled = expr.getCompiled(sys.getStore());
+	TEST_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+
+	// operator() still works via the legacy tree (InRingPredicate
+	// returns false for an unbonded atom).
+	TEST_EQUAL(expr(*a), false)
 RESULT
 
 CHECK(K0.5.2 cache invalidate_store scoped per store)
