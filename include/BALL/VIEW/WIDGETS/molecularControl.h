@@ -50,6 +50,16 @@ class BALL_VIEW_EXPORT MolecularControl
 	: public GenericControl
 {
 	// for internal usage only:
+	//
+	// UFG-07: single-column tree. The Type and Checked columns were removed.
+	// BALL composite-selection state (`Composite::isSelected()`) is now
+	// communicated via a custom foreground color on the Name text, returned
+	// from `data(0, Qt::ForegroundRole)` below. We DO NOT use Qt's default
+	// row-highlight palette for this — Qt's row highlight remains reserved
+	// for the user's cursor/keyboard selection (the dual selection contract
+	// documented at mainControl.h:379). See SelectionInspectorAdapter and
+	// MainControl::getMolecularControlSelection() — those continue to track
+	// Qt row highlight, NOT BALL composite-selection.
 	class MyTreeWidgetItem
 		: public QTreeWidgetItem
 	{
@@ -60,6 +70,19 @@ class BALL_VIEW_EXPORT MolecularControl
 			MyTreeWidgetItem(QTreeWidgetItem* parent, QStringList& sl, Composite* composite);
 
 			void init_();
+
+			/** UFG-07: override Qt::ForegroundRole on column 0 so that
+			 *  BALL-selected composites render their name in a distinguishable
+			 *  highlight color. All other roles fall through to the base.
+			 */
+			QVariant data(int column, int role) const override;
+
+			/** UFG-07: public wrapper around the protected
+			 *  QTreeWidgetItem::emitDataChanged() so MolecularControl can
+			 *  force a foreground-color repaint after toggling BALL
+			 *  composite-selection.
+			 */
+			void notifyDataChanged() { emitDataChanged(); }
 
 			Composite* composite;
 	};

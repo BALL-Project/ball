@@ -89,11 +89,46 @@ namespace BALL
 
 		void MolecularControl::MyTreeWidgetItem::init_()
 		{
-			setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-			
-			// force QT to show checkboxes!
-			setCheckState(2, Qt::Checked);
-			if (!composite->isSelected()) setCheckState(2, Qt::Unchecked);
+			// UFG-07: single-column tree, no checkbox.
+			// Drop Qt::ItemIsUserCheckable — the Checked column is gone and
+			// BALL composite-selection is now toggled via row-click (see
+			// MolecularControl::onItemClicked) and visualised via the
+			// Qt::ForegroundRole override below (MyTreeWidgetItem::data).
+			setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+			// Accessibility: the previous checkbox cue is gone. Expose the
+			// selection state via the accessible description so screen
+			// readers can still announce it. This is updated on toggle in
+			// onItemClicked() / setSelection_().
+			setData(0, Qt::AccessibleDescriptionRole,
+			        composite && composite->isSelected()
+			          ? QObject::tr("selected")
+			          : QObject::tr("not selected"));
+		}
+
+		QVariant MolecularControl::MyTreeWidgetItem::data(int column, int role) const
+		{
+			// UFG-07: convey BALL composite-selection via name-text color.
+			// We intentionally do NOT use the palette's `highlight()` role
+			// (Qt reserves that for the row-cursor highlight). Instead we
+			// pick the palette `link()` color, which contrasts in both
+			// light and dark modes and does not collide with the row
+			// highlight rect that Qt paints when a row is the cursor
+			// focus / multi-select target.
+			if (column == 0 && role == Qt::ForegroundRole
+			    && composite != 0 && composite->isSelected())
+			{
+				const QTreeWidget* tw = treeWidget();
+				if (tw != 0)
+				{
+					// `link()` gives a strong, theme-appropriate accent in
+					// both Fusion and macOS-native palettes (blue-ish in
+					// light themes, teal-ish in dark themes), and is NOT
+					// the same role Qt uses for QPalette::Highlight.
+					return QVariant(QBrush(tw->palette().link().color()));
+				}
+			}
+			return QTreeWidgetItem::data(column, role);
 		}
 
 
@@ -131,10 +166,13 @@ namespace BALL
 			glay->addLayout(lay, 2, 0);
 
 			listview->setObjectName("MolecularControlList");
-			listview->headerItem()->setText(0, tr("Name") + " ["+ tr("highlight") + "]");
-			listview->headerItem()->setText(1, tr("Type"));
-			listview->headerItem()->setText(2, tr("checked"));
-			listview->resizeColumnToContents(2);
+			// UFG-07: single-column tree. The previous Type and Checked
+			// columns are gone. BALL composite-selection is conveyed by a
+			// custom name-text color (see MyTreeWidgetItem::data()) and is
+			// toggled by clicking the row (see onItemClicked).
+			listview->setColumnCount(1);
+			listview->headerItem()->setText(0, tr("Name"));
+			listview->setHeaderHidden(true);
 			listview->resizeColumnToContents(0);
 			lay->addWidget(listview,0, 0, 1, -1);
 
@@ -1049,23 +1087,29 @@ namespace BALL
 			enableUpdates_(true);
 		}
 
-		// set the checkboxes according to the selection in the MainControl
+		// UFG-07: previously this rewrote the column-2 checkbox to mirror
+		// `Composite::isSelected()`. With the Checked column removed, we
+		// now force a name-text repaint (Qt::ForegroundRole is computed
+		// on the fly by MyTreeWidgetItem::data) and keep the accessible
+		// description in sync. The QTreeWidget repaints by reacting to
+		// `emitDataChanged()`. We deliberately do NOT touch
+		// `listview->selectedItems()` here — that is the Qt row-highlight
+		// selection (used by SelectionInspectorAdapter via
+		// MainControl::getMolecularControlSelection) and must stay
+		// independent of BALL composite-selection.
 		void MolecularControl::setSelection_(bool /*open*/, bool /*force*/)
-		{	
-			//if (!force) open = false;
-
+		{
 			QTreeWidgetItemIterator qit(listview);
 			while (*qit != 0)
 			{
-				Composite* c = ((MyTreeWidgetItem*)*qit)->composite;
-				if (c->isSelected())
-				{
-					(*qit)->setCheckState(2, Qt::Checked);
-				}
-				else
-				{
-					(*qit)->setCheckState(2, Qt::Unchecked);
-				}
+				MyTreeWidgetItem* it = static_cast<MyTreeWidgetItem*>(*qit);
+				Composite* c = it->composite;
+				const bool sel = (c != 0 && c->isSelected());
+
+				it->setData(0, Qt::AccessibleDescriptionRole,
+				            sel ? tr("selected") : tr("not selected"));
+				// Force the view to re-query data(0, Qt::ForegroundRole).
+				it->notifyDataChanged();
 				qit++;
 			}
 
@@ -1257,11 +1301,11 @@ namespace BALL
 				}
 			}
 
-			// create an entry for this composite
-			QString type = getInformationVisitor_().getTypeName().c_str();
-
+			// UFG-07: Type column is gone; the QStringList now carries only
+			// the Name column. The type information is still surfaced in
+			// the context menu and Inspector and via getInformationVisitor_.
 			QStringList sl;
-			sl << name << type;
+			sl << name;
 
 			// create a new list item
 			MyTreeWidgetItem* new_item = 0;
@@ -1560,7 +1604,11 @@ namespace BALL
 			while (*qit != 0)
 			{
 				QTreeWidgetItem* item = *qit;
-				if (item->checkState(2) == Qt::Checked)
+				// UFG-07: was `item->checkState(2) == Qt::Checked` — the
+				// column-2 checkbox is gone, read the BALL composite
+				// selection directly.
+				Composite* comp = static_cast<MyTreeWidgetItem*>(item)->composite;
+				if (comp != 0 && comp->isSelected())
 				{
 					items.push_back(item);
 
@@ -1673,23 +1721,32 @@ namespace BALL
 			DockWidget::writePreferences(inifile);
 		}
 
-		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int col)
+		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int /*col*/)
 		{
-			if (col != 2) return;
-			bool checked = (item->checkState(2) == Qt::Checked);
+			// UFG-07: was gated on `col == 2` (the old checkbox column).
+			// With the single-column redesign the entire row is the
+			// affordance — clicking the name toggles BALL composite
+			// selection. The visual cue is the name-text color
+			// (MyTreeWidgetItem::data + setSelection_).
+			if (item == 0) return;
+			MyTreeWidgetItem* mitem = static_cast<MyTreeWidgetItem*>(item);
+			Composite* c = mitem->composite;
+			if (c == 0) return;
 
 			if (getMainControl()->isBusy())
 			{
-				if (checked) item->setCheckState(2, Qt::Unchecked);
-				else 				 item->setCheckState(2, Qt::Checked);
-
-				VIEW::getMainControl()->setStatusbarText((String)tr("Cannot select items now!"), true);
+				VIEW::getMainControl()->setStatusbarText(
+					(String)tr("Cannot select items now!"), true);
 				return;
 			}
 
+			const bool was_selected = c->isSelected();
 			list<Composite*> l;
-			l.push_back(((MyTreeWidgetItem*)item)->composite);
-			newSelection_(l, checked);
+			l.push_back(c);
+			// `newSelection_(list, selected)` interprets `selected == true`
+			// as "make these BALL-selected" and `false` as "deselect them",
+			// so we pass `!was_selected` to toggle.
+			newSelection_(l, !was_selected);
 		}
 
 		void MolecularControl::showAtomOverview()
