@@ -20,11 +20,25 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ---
 
-Vendored subset used in BALLView v1.7 (Phase 999.41):
+Vendored subset used in BALLView v1.7 (Phase 999.41 + v1.7.0-rc2):
 
-  folder-open.svg, save.svg, maximize.svg, minimize-2.svg, octagon-x.svg,
-  ruler.svg, plus.svg, trash-2.svg, copy.svg, atom.svg, shrink.svg,
-  link-2.svg, settings.svg, help-circle.svg
+  Phase 999.41 (14 glyphs):
+    folder-open.svg, save.svg, maximize.svg, minimize-2.svg, octagon-x.svg,
+    ruler.svg, plus.svg, trash-2.svg, copy.svg, atom.svg, shrink.svg,
+    link-2.svg, settings.svg, help-circle.svg
+
+  Phase 999.41 (additional — ball-app, activity, zap):
+    ball-app.svg (bespoke), activity.svg, zap.svg
+
+  Phase 999.43 (chevron + reset):
+    chevron-down.svg, chevron-right.svg, rotate-ccw.svg
+
+  Phase 999.45 (chevron-up):
+    chevron-up.svg
+
+  v1.7.0-rc2 UFG-01 (10 glyphs — toolbar slots that rendered blank in rc1):
+    download.svg, cloud-download.svg, flask-conical.svg, monitor.svg,
+    focus.svg, pencil.svg, tag.svg, link.svg, repeat.svg, camera.svg
 
 All paths are unmodified from upstream lucide-static@0.460.0 except for
 the addition of an XML declaration + a one-line provenance comment in
@@ -33,4 +47,4 @@ hosting widget's text color under the BALLView neutral QSS theme
 (maintainer-Q3: single neutral theme only).
 
 To refresh: download a new lucide-static release tarball, copy the
-14 SVGs by name, re-apply the header. No build-time download.
+SVGs by name, re-apply the header. No build-time download.

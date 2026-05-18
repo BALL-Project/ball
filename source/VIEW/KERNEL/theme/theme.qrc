@@ -59,5 +59,30 @@
         <!-- Phase 999.45: chevron-up paired with the existing chevron-down.
              Used by BottomDrawer (24px↔240px collapsed/expanded toggle). -->
         <file alias="actions/chevron-up.svg">icons/lucide/chevron-up.svg</file>
+        <!-- v1.7.0-rc2 UFG-01: toolbar slots that were rendering blank in
+             rc1. These wire the BALLView dialogs' addToolBarEntries icons
+             (file-open, PDB / Electron-Density / PubChem downloads, display
+             properties, focus camera) through to vendored Lucide glyphs.
+             See LICENSE-lucide.txt for the v0.460.0 provenance + the
+             extended vendored subset list. -->
+        <file alias="actions/document-open.svg">icons/lucide/folder-open.svg</file>
+        <file alias="actions/download-pdb.svg">icons/lucide/download.svg</file>
+        <file alias="actions/download-electrondensity.svg">icons/lucide/cloud-download.svg</file>
+        <file alias="actions/download-pubchem.svg">icons/lucide/flask-conical.svg</file>
+        <file alias="categories/preferences-display.svg">icons/lucide/monitor.svg</file>
+        <file alias="actions/object-focus.svg">icons/lucide/focus.svg</file>
+        <!-- v1.7.0-rc2 UFG-01: edit-mode + scene secondary toolbars. The
+             edit mode is hidden behind a debug-flag in shipping builds but
+             the actions are constructed unconditionally; missing icons
+             would surface as blank slots when the toolbar is exposed. -->
+        <file alias="actions/mode-edit.svg">icons/lucide/pencil.svg</file>
+        <file alias="actions/molecule-set-element.svg">icons/lucide/tag.svg</file>
+        <file alias="actions/create-bond.svg">icons/lucide/link.svg</file>
+        <file alias="actions/continuous-loop.svg">icons/lucide/repeat.svg</file>
+        <file alias="actions/screenshot.svg">icons/lucide/camera.svg</file>
+        <!-- NOTE: scene.C also references 'mimetype/text-x-povray' but that
+             action is menu-only (add_to_main_toolbar=false in setIcon
+             call). Resolution deferred — POV-Ray output is rare and the
+             menu entry remains usable without a glyph. -->
     </qresource>
 </RCC>

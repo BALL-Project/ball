@@ -49,8 +49,23 @@ namespace BALL
 			"actions/chevron-down",
 			"actions/chevron-right",
 			"actions/reset",
+			// Phase 999.45 additions:
+			"actions/chevron-up",
+			// v1.7.0-rc2 UFG-01: toolbar-visible additions.
+			"actions/document-open",
+			"actions/download-pdb",
+			"actions/download-electrondensity",
+			"actions/download-pubchem",
+			"actions/object-focus",
+			"actions/mode-edit",
+			"actions/molecule-set-element",
+			"actions/create-bond",
+			"actions/continuous-loop",
+			"actions/screenshot",
 			// categories/* —
 			"categories/preferences",
+			// v1.7.0-rc2 UFG-01:
+			"categories/preferences-display",
 			// app icon —
 			"ball-app",
 		};
