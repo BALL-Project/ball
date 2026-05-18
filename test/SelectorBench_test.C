@@ -27,6 +27,7 @@
 #include <BALL/KERNEL/expressionTree.h>
 #include <BALL/KERNEL/compiledExpression.h>
 #include <BALL/KERNEL/moleculeStore.h>
+#include <BALL/FORMAT/PDBFile.h>           // TRACK-B-SELECTOR-CORPUS-VERIFY
 #include <algorithm>
 #include <chrono>
 #include <iostream>
@@ -218,6 +219,58 @@ CHECK(K0.5.6 OwnedPred slow path stays within 2x of v1.x)
 	// Soft gate: OwnedPred must be at least 0.5x (i.e. no worse than 2x
 	// slower than v1.x). Typically 0.8-1.2x in practice.
 	TEST_EQUAL((v1_ms / v2_ms) >= 0.5, true)
+RESULT
+
+CHECK(TRACK-B-SELECTOR-CORPUS-VERIFY: speedup on real PDB structure (2ptc_H))
+	// 2026-05-18 (R11 probe J follow-up): the K0.7.2 100k-atom benchmark
+	// above uses a synthetic corpus (rotating element/name distribution).
+	// Codex R11 flagged that the 61.8× speedup claim was never pinned
+	// against an actual PDB-loaded structure once B1.1 made PDBFile
+	// available in CORE_ONLY. This CHECK closes that gap.
+	//
+	// 2ptc_H.pdb is trypsin (BPTI inhibitor complex variant) — 4587
+	// atoms. Smaller corpus than the synthetic 100k, so per-leaf
+	// speedup will be lower (constant overhead dominates more), but
+	// this independently verifies the claim on realistic atom/element/
+	// name distributions, real bond topology, and real residue
+	// hierarchy.
+	System sys;
+	{
+		PDBFile pdb(BALL_TEST_DATA_PATH(2ptc_H.pdb));
+		pdb >> sys;
+		pdb.close();
+	}
+	const std::size_t corpus_size = sys.countAtoms();
+	std::cerr << "  [TRACK-B] PDB corpus 2ptc_H: " << corpus_size << " atoms" << std::endl;
+	TEST_NOT_EQUAL(corpus_size, 0)
+
+	const char* queries[] = {
+		"element(C)",          // dominant element in proteins
+		"name(CA)",            // alpha-carbon backbone
+		"element(N)",
+		"element(C) AND name(CA)",
+	};
+
+	const int iters = 10;  // smaller corpus → more iterations to keep timing stable
+	std::vector<double> ratios;
+	for (const char* q : queries)
+	{
+		Pair p = time_pair_(sys, q, iters);
+		ratios.push_back(p.ratio);
+	}
+
+	std::vector<double> sorted = ratios;
+	std::sort(sorted.begin(), sorted.end());
+	const double median = sorted[sorted.size() / 2];
+	std::cerr << "  [TRACK-B] median speedup on real PDB ("
+		<< corpus_size << " atoms) = " << median << "x" << std::endl;
+
+	// Gate at ≥3× — much weaker than the synthetic 10× because at ~4.5k
+	// atoms the per-call overhead (compile, dispatch, AST walk) takes a
+	// proportionally larger share of total time. Real-world workloads at
+	// PDB scale still see meaningful improvement; the synthetic 10× claim
+	// scales with corpus size.
+	TEST_EQUAL(median >= 3.0, true)
 RESULT
 
 END_TEST
