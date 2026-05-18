@@ -59,18 +59,26 @@ QMainWindow QToolBar::separator {
     margin: 4px 4px;
 }
 
-QMenuBar {
+/* UFG-02 (Fix 1): scope QMenuBar to a direct child of QMainWindow so we
+ * don't override macOS's global app menu styling. On macOS the menubar
+ * widget is reparented into the system menu and the local in-window one
+ * is hidden; scoping the rule to `QMainWindow > QMenuBar` keeps the
+ * Linux/Windows in-window menubar styled while leaving Cocoa's global
+ * menu untouched. The previous bare `QMenuBar` rule fought QMacStyle
+ * and produced a styled-but-invisible local menubar that consumed
+ * layout space on macOS. */
+QMainWindow > QMenuBar {
     background-color: #efeff1;
     color: #1a1c1f;
     border-bottom: 1px solid #e1e3e8;
 }
 
-QMenuBar::item {
+QMainWindow > QMenuBar::item {
     background: transparent;
     padding: 4px 8px;
 }
 
-QMenuBar::item:selected {
+QMainWindow > QMenuBar::item:selected {
     background-color: #e7efff;
     color: #1a1c1f;
 }
@@ -147,7 +155,16 @@ QGroupBox::title {
     background-color: #f7f7f8;
 }
 
-QPushButton {
+/* UFG-02 (Fix 1): scope QPushButton / QToolButton rules to widgets that
+ * live inside the QMainWindow chrome (toolbar, docks, inspector). Bare
+ * `QPushButton` / `QToolButton` selectors override QMacStyle entirely
+ * for every dialog top-level on macOS, killing native focus rings,
+ * pressed states, and the rounded Aqua button look. Dialogs (Preferences,
+ * About, MolecularFileDialog, PubChem, etc.) open as separate top-level
+ * windows — not descendants of any QMainWindow — so this scoping leaves
+ * them on QMacStyle while the main window's toolbar/dock buttons stay
+ * themed for visual consistency on all platforms. */
+QMainWindow QPushButton {
     background-color: #ffffff;
     color: #1a1c1f;
     border: 1px solid #e1e3e8;
@@ -156,24 +173,24 @@ QPushButton {
     min-height: 20px;
 }
 
-QPushButton:hover {
+QMainWindow QPushButton:hover {
     background-color: #efeff1;
 }
 
-QPushButton:pressed {
+QMainWindow QPushButton:pressed {
     background-color: #e7efff;
 }
 
-QPushButton:default {
+QMainWindow QPushButton:default {
     border: 1px solid #2a6fdb;
 }
 
-QPushButton:disabled {
+QMainWindow QPushButton:disabled {
     color: #7a7f87;
     background-color: #f7f7f8;
 }
 
-QToolButton {
+QMainWindow QToolButton {
     background-color: transparent;
     color: #1a1c1f;
     border: 1px solid transparent;
@@ -181,13 +198,13 @@ QToolButton {
     padding: 4px;
 }
 
-QToolButton:hover {
+QMainWindow QToolButton:hover {
     background-color: #ffffff;
     border-color: #e1e3e8;
 }
 
-QToolButton:checked,
-QToolButton:pressed {
+QMainWindow QToolButton:checked,
+QMainWindow QToolButton:pressed {
     background-color: #e7efff;
     border-color: #e1e3e8;
 }
