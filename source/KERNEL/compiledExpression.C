@@ -19,7 +19,9 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/expressionParser.h>
+#include <BALL/KERNEL/expressionPredicate.h>
 #include <BALL/KERNEL/expressionTree.h>
 #include <BALL/COMMON/exception.h>
 
@@ -166,9 +168,13 @@ namespace
 		}
 	}
 
-	// Leaves that K0.5.1 does not yet implement. Treat as "always false"
-	// for now so partially-compiled expressions evaluate without crashing;
-	// the spec earmarks K0.5.1.b / K0.5.4 for the real implementations.
+	// Ancestor-walk leaves (ResidueNamePred / ChainPred / etc.) currently
+	// stay always-false. K0.5.4 reaches the same behavioural coverage by
+	// LOWERING those source-level predicates into OwnedPred at parse time
+	// (using the v1.x ResiduePredicate / ChainPredicate / etc. instances),
+	// rather than adding a separate per-leaf back-pointer walk for each
+	// kind. The K0.5.1 leaf evaluators below remain reachable only if a
+	// caller hand-builds an AST that uses these node kinds directly.
 	void eval_(const SolventLeaf&,    const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
 	void eval_(const BackboneLeaf&,   const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
 	void eval_(const ResidueNamePred&,const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
@@ -177,7 +183,23 @@ namespace
 	void eval_(const ProteinPred&,    const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
 	void eval_(const MoleculePred&,   const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
 	void eval_(const HybridLeaf&,     const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
-	void eval_(const OwnedPred&,      const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
+
+	// K0.5.4: OwnedPred slow path. Walk live slots; build a transient
+	// Atom* handle from the store back-pointer; call the held v1.x
+	// ExpressionPredicate via its virtual operator(). One virtual call
+	// per atom — strictly slower than the column scan, but the only way
+	// to evaluate ring/SMARTS/user-registered predicates.
+	void eval_(const OwnedPred& p, const MoleculeStore& s, std::vector<Byte>& out)
+	{
+		const Byte* freed = s.is_freed_data();
+		const std::size_t n = s.size();
+		for (std::size_t i = 0; i < n; ++i)
+		{
+			if (freed[i]) { out[i] = 0; continue; }
+			Atom* a = s.back_ptr(static_cast<MoleculeStore::Index>(i));
+			out[i] = (a != nullptr && (*p.impl)(*a)) ? 1 : 0;
+		}
+	}
 
 	// Inner-node evaluators. AND = bitwise AND of child bitmaps;
 	// OR  = bitwise OR; NOT = invert (live atoms only).
@@ -274,7 +296,10 @@ namespace
 	bool eval1_(const ProteinPred&,     const Atom&) { return false; }
 	bool eval1_(const MoleculePred&,    const Atom&) { return false; }
 	bool eval1_(const HybridLeaf&,      const Atom&) { return false; }
-	bool eval1_(const OwnedPred&,       const Atom&) { return false; }
+	bool eval1_(const OwnedPred& p, const Atom& a) {
+		// K0.5.4: per-atom slow path. Delegates to the held v1.x predicate.
+		return p.impl != nullptr && (*p.impl)(a);
+	}
 
 	bool eval1_(const std::unique_ptr<AndNode>& node, const Atom& a) {
 		for (const PredNode& c : node->children)
@@ -371,7 +396,8 @@ namespace
 	}
 
 	PredNode lower_leaf_(const ExpressionParser::SyntaxTree& node,
-	                     MoleculeStore& store)
+	                     MoleculeStore& store,
+	                     const Expression* expr)
 	{
 		const std::string name = node.predicate.c_str();
 		const std::string arg  = node.argument.c_str();
@@ -410,34 +436,54 @@ namespace
 			return NumberOfBondsPred{op, static_cast<std::uint8_t>(parse_int_(tail)), 0};
 		}
 
-		// K0.5.4 will route remaining registered predicates through
-		// OwnedPred. K0.5.2 only handles the fast-path subset above.
+		// K0.5.4: predicate isn't one of the fast-path leaves. If an
+		// Expression registry was provided AND the name is registered
+		// there, instantiate the v1.x predicate and wrap it in OwnedPred.
+		// This covers ring, SMARTS, hybridization, residue/chain/protein/
+		// molecule, secondary-structure, nucleotide, user-registered, etc.
+		if (expr != nullptr && expr->hasPredicate(String(name.c_str())))
+		{
+			ExpressionPredicate* impl = expr->getPredicate(
+				String(name.c_str()), String(arg.c_str()));
+			if (impl == nullptr)
+			{
+				throw Exception::ParseError(__FILE__, __LINE__, name,
+					"K0.5.4: registered predicate factory returned nullptr");
+			}
+			OwnedPred owned;
+			owned.impl     = std::unique_ptr<ExpressionPredicate>(impl);
+			owned.name     = name;
+			owned.argument = arg;
+			return owned;
+		}
+
 		throw Exception::ParseError(__FILE__, __LINE__, name,
-			"K0.5.2 compiler does not yet support this predicate (see K0.5.4 OwnedPred)");
+			"unknown predicate (not in K0.5 fast path, not registered with Expression)");
 	}
 
 	PredNode lower_node_(const ExpressionParser::SyntaxTree& node,
-	                     MoleculeStore& store)
+	                     MoleculeStore& store,
+	                     const Expression* expr)
 	{
 		// A SyntaxTree node can be a leaf (LEAF type or no children) or an
 		// AND/OR with children. `negate` wraps any node in a NotNode.
 		PredNode lowered;
 		if (node.type == ExpressionTree::LEAF || node.children.empty())
 		{
-			lowered = lower_leaf_(node, store);
+			lowered = lower_leaf_(node, store, expr);
 		}
 		else if (node.type == ExpressionTree::AND)
 		{
 			auto a = std::make_unique<AndNode>();
 			for (auto* child : node.children)
-				a->children.emplace_back(lower_node_(*child, store));
+				a->children.emplace_back(lower_node_(*child, store, expr));
 			lowered = std::move(a);
 		}
 		else if (node.type == ExpressionTree::OR)
 		{
 			auto o = std::make_unique<OrNode>();
 			for (auto* child : node.children)
-				o->children.emplace_back(lower_node_(*child, store));
+				o->children.emplace_back(lower_node_(*child, store, expr));
 			lowered = std::move(o);
 		}
 		else
@@ -462,7 +508,20 @@ CompiledExpression::compile(MoleculeStore& store,
 {
 	ExpressionParser parser;
 	parser.parse(String(source.c_str()));
-	PredNode root = lower_node_(parser.getSyntaxTree(), store);
+	PredNode root = lower_node_(parser.getSyntaxTree(), store, /*expr=*/nullptr);
+	return std::make_shared<const CompiledExpression>(
+	    std::move(root), source, pred_set_hash);
+}
+
+std::shared_ptr<const CompiledExpression>
+CompiledExpression::compile(MoleculeStore& store,
+                            const Expression& expr,
+                            std::size_t pred_set_hash)
+{
+	const std::string source = std::string(expr.getExpressionString().c_str());
+	ExpressionParser parser;
+	parser.parse(String(source.c_str()));
+	PredNode root = lower_node_(parser.getSyntaxTree(), store, &expr);
 	return std::make_shared<const CompiledExpression>(
 	    std::move(root), source, pred_set_hash);
 }
@@ -517,6 +576,30 @@ CompiledExpressionCache::get_or_compile(MoleculeStore& store, const std::string&
 	impl_->index.emplace(k, impl_->lru.begin());
 
 	// evict LRU on overflow
+	while (impl_->lru.size() > impl_->capacity_)
+	{
+		auto& victim = impl_->lru.back();
+		impl_->index.erase(victim.first);
+		impl_->lru.pop_back();
+	}
+	return compiled;
+}
+
+std::shared_ptr<const CompiledExpression>
+CompiledExpressionCache::get_or_compile(MoleculeStore& store, const Expression& expr)
+{
+	const std::string source = std::string(expr.getExpressionString().c_str());
+	Key k{source, &store};
+	auto it = impl_->index.find(k);
+	if (it != impl_->index.end())
+	{
+		impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
+		return it->second->second;
+	}
+	// K0.5.4: Expression-aware compile so OwnedPred can wrap ring/SMARTS/etc.
+	auto compiled = CompiledExpression::compile(store, expr);
+	impl_->lru.emplace_front(k, compiled);
+	impl_->index.emplace(k, impl_->lru.begin());
 	while (impl_->lru.size() > impl_->capacity_)
 	{
 		auto& victim = impl_->lru.back();

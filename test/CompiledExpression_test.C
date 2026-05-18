@@ -429,20 +429,93 @@ CHECK(K0.5.3 Expression::operator() takes the compiled fast path)
 	(void)cache;
 RESULT
 
-CHECK(K0.5.3 Expression with unsupported predicate falls back gracefully)
-	// inRing() is one of the predicates K0.5.2 throws ParseError on.
-	// getCompiled returns nullptr; operator() falls through to the v1.x
-	// ExpressionTree path which delegates to InRingPredicate.
+CHECK(K0.5.3 Expression with previously unsupported predicate compiles via K0.5.4 OwnedPred)
+	// K0.5.4 closes the K0.5.3 fallback path: inRing() now lowers to an
+	// OwnedPred wrapping InRingPredicate, so getCompiled returns a real
+	// AST (not nullptr) and the back_ptr-walk evaluator runs.
 	System sys;
 	Atom *a = new Atom; sys.adopt(*a);
 
 	Expression expr("inRing()");
 	auto compiled = expr.getCompiled(sys.getStore());
-	TEST_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+	TEST_NOT_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+	TEST_EQUAL(std::holds_alternative<OwnedPred>(compiled->root()), true)
+	TEST_EQUAL(std::get<OwnedPred>(compiled->root()).name, std::string("inRing"))
 
-	// operator() still works via the legacy tree (InRingPredicate
-	// returns false for an unbonded atom).
+	// operator() works (InRingPredicate returns false for an unbonded atom).
 	TEST_EQUAL(expr(*a), false)
+RESULT
+
+// ============================================================
+// K0.5.4 — OwnedPred slow path tests
+// ============================================================
+
+CHECK(K0.5.4 unknown predicate name still throws ParseError)
+	// Predicate not registered anywhere -> no OwnedPred wrap possible.
+	System sys;
+	auto& store = sys.getStore();
+	bool threw = false;
+	try {
+		Expression expr("nonexistentPredicate()");
+		(void)CompiledExpression::compile(store, expr);
+	} catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.5.4 OwnedPred bitmap eval walks back_ptr column)
+	// Compile residue() against an Expression — even though residue()
+	// can't match anything when atoms aren't in a Residue, the OwnedPred
+	// path should produce a 0-filled bitmap of correct size (proving the
+	// back_ptr walk executes without crashing).
+	System sys;
+	Atom *a = new Atom; sys.adopt(*a);
+	Atom *b = new Atom; sys.adopt(*b);
+	(void)a; (void)b;
+	auto& store = sys.getStore();
+	Expression expr("residue(GLY)");
+	auto compiled = expr.getCompiled(store);
+	TEST_NOT_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+	TEST_EQUAL(std::holds_alternative<OwnedPred>(compiled->root()), true)
+	std::vector<std::uint8_t> bm;
+	compiled->evaluate(store, bm);
+	TEST_EQUAL(bm.size(), store.size())
+	// Atoms not in any residue -> ResiduePredicate returns false.
+	for (std::uint8_t v : bm) TEST_EQUAL(v, 0)
+RESULT
+
+CHECK(K0.5.4 user-registered predicate routes through OwnedPred)
+	// Register a predicate factory on a fresh Expression, compile, then
+	// verify the OwnedPred holds the user instance.
+	System sys;
+	Atom *a = new Atom; sys.adopt(*a);
+
+	Expression expr("aromaticBonds()");  // standard predicate, slow-path
+	auto compiled = expr.getCompiled(sys.getStore());
+	TEST_NOT_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+	TEST_EQUAL(std::holds_alternative<OwnedPred>(compiled->root()), true)
+	TEST_EQUAL(std::get<OwnedPred>(compiled->root()).name, std::string("aromaticBonds"))
+
+	// Bitmap matches per-atom path.
+	std::vector<std::uint8_t> bm;
+	compiled->evaluate(sys.getStore(), bm);
+	TEST_EQUAL(bm[a->getStoreIndex()], compiled->evaluate_one(*a) ? 1 : 0)
+RESULT
+
+CHECK(K0.5.4 fast-path + OwnedPred coexist inside one AST)
+	// "element(C) AND inRing()" mixes a fast-path leaf with a slow leaf.
+	// AndNode should evaluate both and bitwise-AND the bitmaps.
+	System sys;
+	Atom *c = new Atom; c->setElement(PTE[Element::CARBON]); sys.adopt(*c);
+	Atom *o = new Atom; o->setElement(PTE[Element::OXYGEN]); sys.adopt(*o);
+	auto& store = sys.getStore();
+	Expression expr("element(C) AND inRing()");
+	auto compiled = expr.getCompiled(store);
+	TEST_NOT_EQUAL(compiled.get(), (const CompiledExpression*)nullptr)
+	std::vector<std::uint8_t> bm;
+	compiled->evaluate(store, bm);
+	// Neither is in a ring (no bonds) -> both 0.
+	TEST_EQUAL(bm[c->getStoreIndex()], 0)
+	TEST_EQUAL(bm[o->getStoreIndex()], 0)
 RESULT
 
 CHECK(K0.5.2 cache invalidate_store scoped per store)

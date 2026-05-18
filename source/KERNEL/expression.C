@@ -117,15 +117,19 @@ namespace BALL
 		{
 			try
 			{
+				// K0.5.4: use the Expression-aware overload so any
+				// registered predicate (ring/SMARTS/user-registered/
+				// ancestor-walk) lowers to an OwnedPred instead of
+				// throwing.
 				auto compiled = CompiledExpressionCache::instance()
-					.get_or_compile(*store, std::string(expression_string_.c_str()));
+					.get_or_compile(*store, *this);
 				return compiled->evaluate_one(atom);
 			}
 			catch (Exception::ParseError&)
 			{
-				// K0.5.2/K0.5.4 transitional: the compiler doesn't yet
-				// cover every legacy predicate (inRing, SMARTS, ...).
-				// Fall through to the v1.x ExpressionTree path.
+				// Should only happen now on genuine syntax errors or a
+				// predicate that isn't even registered. Fall through to
+				// the v1.x ExpressionTree path which has the same try/throw.
 			}
 		}
 		if (expression_tree_ != 0)
@@ -152,8 +156,9 @@ namespace BALL
 		}
 		try
 		{
+			// K0.5.4: Expression-aware overload.
 			return CompiledExpressionCache::instance()
-				.get_or_compile(store, std::string(expression_string_.c_str()));
+				.get_or_compile(store, *this);
 		}
 		catch (Exception::ParseError&)
 		{

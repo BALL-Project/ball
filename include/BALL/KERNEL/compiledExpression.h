@@ -32,6 +32,7 @@ namespace BALL
 {
 	class Atom;
 	class MoleculeStore;
+	class Expression;
 
 	/** Compiled-selection AST node taxonomy (K0.5).
 
@@ -188,6 +189,19 @@ namespace BALL
 		            const std::string& source,
 		            std::size_t pred_set_hash = 0);
 
+		/** K0.5.4: compile against the predicate registry of `expr`. Any
+				predicate name that is registered with the Expression but is
+				not one of the K0.5.2 fast-path leaves is lowered into an
+				OwnedPred (slow-path back_ptr walk per spec §4.3) instead of
+				throwing ParseError. Use this overload from Expression's own
+				compile entry point so e.g. inRing() / SMARTS() / user-
+				registered predicates all round-trip through CompiledExpression.
+		*/
+		static std::shared_ptr<const CompiledExpression>
+		    compile(MoleculeStore& store,
+		            const Expression& expr,
+		            std::size_t pred_set_hash = 0);
+
 		private:
 		PredNode    root_;
 		std::string source_;
@@ -232,6 +246,12 @@ namespace BALL
 				and returns the new shared_ptr. */
 		std::shared_ptr<const CompiledExpression>
 		    get_or_compile(MoleculeStore& store, const std::string& source);
+
+		/** K0.5.4 Expression-aware overload: uses the predicate registry on
+				`expr` to lower previously-unsupported leaves into OwnedPred.
+		*/
+		std::shared_ptr<const CompiledExpression>
+		    get_or_compile(MoleculeStore& store, const Expression& expr);
 
 		/** Forget any cached entries that name `store`. Call from
 				MoleculeStore::compact() (K0.5.6 wiring) and ~MoleculeStore. */
