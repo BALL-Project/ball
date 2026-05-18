@@ -95,6 +95,25 @@ namespace BALL
 	BALL_EXPORT void loadStoreJSON(MoleculeStore& store,
 	                               std::istream&  is);
 
+	/** K0.6.5 internal helpers — emit / consume the MoleculeStore JSON
+			as a nested nlohmann::json object instead of via std::ostream.
+			Lets the System-level writer/reader embed the store under the
+			"store" key without serialising to a string first. Declared in
+			detail:: rather than as private members so System's TU can use
+			them without making MoleculeStoreJson a friend.
+
+			Forward-declared by void* to keep nlohmann::json out of the
+			public header; the .C casts back. NOT for caller use — only
+			moleculeStoreJson.C + systemJson.C call these.
+	*/
+	namespace detail {
+		BALL_EXPORT void store_to_json_obj(const MoleculeStore& s,
+		                                   void* json_out,
+		                                   JsonFloatFormat ff);
+		BALL_EXPORT void json_obj_to_store(MoleculeStore& s,
+		                                   const void* json_in);
+	}
+
 } // namespace BALL
 
 #endif // BALL_KERNEL_MOLECULESTOREJSON_H

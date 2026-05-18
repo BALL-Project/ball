@@ -163,6 +163,7 @@ SET(BALL_KERNEL_TESTS
 	StdIteratorWrapper_test
 	MoleculeStore_test
 	MoleculeStoreJson_test
+	SystemJson_test
 	CompiledExpression_test
 	SelectorBench_test
 )

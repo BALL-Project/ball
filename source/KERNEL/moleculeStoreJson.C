@@ -58,13 +58,19 @@ namespace
 namespace BALL
 {
 
-void saveStoreJSON(const MoleculeStore& store, std::ostream& os, int indent,
-                   JsonFloatFormat float_fmt)
+// K0.6.5 internal helper: emit the MoleculeStore as a nlohmann::json
+// object (not a string). Caller owns the json. Used by both the
+// public saveStoreJSON below AND by saveSystemJSON which embeds this
+// under "store".
+namespace detail
+{
+
+void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatFormat float_fmt)
 {
 	using nlohmann::json;
+	json& doc = *static_cast<json*>(json_out);
 	const std::size_t n = store.size();
 
-	json doc;
 	// K0.6.3b (Codex R7 OPEN-3): document_type discriminator. Future
 	// K0.6.5 documents will write "System"; this reader will reject
 	// anything that isn't "MoleculeStore", and a v1.x reader written
@@ -170,7 +176,17 @@ void saveStoreJSON(const MoleculeStore& store, std::ostream& os, int indent,
 		});
 	}
 	doc["bonds"] = std::move(bonds);
+}
 
+} // namespace detail
+
+// K0.6.1 public writer — thin wrapper over detail::store_to_json_obj
+// + std::ostream dump. Kept as-is for caller compat.
+void saveStoreJSON(const MoleculeStore& store, std::ostream& os, int indent,
+                   JsonFloatFormat float_fmt)
+{
+	nlohmann::json doc;
+	detail::store_to_json_obj(store, &doc, float_fmt);
 	os << doc.dump(indent);
 }
 
@@ -199,27 +215,22 @@ namespace
 	}
 } // namespace
 
-void loadStoreJSON(MoleculeStore& store, std::istream& is)
+namespace detail
+{
+
+// K0.6.5 internal helper: consume a pre-parsed nlohmann::json object
+// into `store`. Caller is responsible for parsing JSON from a stream
+// first (see loadStoreJSON for the standalone wrapper that does that).
+// Used by both the public loadStoreJSON AND by loadSystemJSON which
+// extracts the embedded "store" sub-object.
+void json_obj_to_store(MoleculeStore& store, const void* json_in)
 {
 	using nlohmann::json;
+	const json& doc = *static_cast<const json*>(json_in);
 
-	// K0.6.3b (Codex R7 OPEN-4): comprehensive parse-error boundary.
-	// Every nlohmann::json access below can throw json::type_error /
-	// json::out_of_range; std::stoul in hex_to_float_ can throw
-	// std::invalid_argument / std::out_of_range. All routed through
-	// ParseError so the public API surface is exception-typed cleanly.
-	json doc;
-	try
-	{
-		is >> doc;
-	}
-	catch (const json::parse_error& e)
-	{
-		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
-			"K0.6.2: JSON parse failure");
-	}
-
-	try
+	// K0.6.3b parse-error boundary applies the same way — any nlohmann
+	// type_error / std::stoul exception inside this body gets rethrown
+	// as ParseError by the calling wrapper.
 	{
 		// Header invariants.
 		require_(doc.is_object(),                       "top-level must be object");
@@ -370,25 +381,47 @@ void loadStoreJSON(MoleculeStore& store, std::istream& is)
 			if (freed[i].get<int>() != 0)
 				store.release_atom(static_cast<MoleculeStore::Index>(i));
 	}
+}
+
+} // namespace detail
+
+// K0.6.2 public reader — parses JSON from `is`, dispatches into
+// detail::json_obj_to_store, and routes all parse / type-error /
+// std::stoul exceptions through Exception::ParseError so the public
+// API surface stays cleanly typed (K0.6.3b boundary).
+void loadStoreJSON(MoleculeStore& store, std::istream& is)
+{
+	using nlohmann::json;
+	json doc;
+	try
+	{
+		is >> doc;
+	}
+	catch (const json::parse_error& e)
+	{
+		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
+			"K0.6.2: JSON parse failure");
+	}
+	try
+	{
+		detail::json_obj_to_store(store, &doc);
+	}
 	catch (const Exception::ParseError&)
 	{
-		throw; // already typed
+		throw;
 	}
 	catch (const json::exception& e)
 	{
-		// nlohmann type_error, out_of_range, etc.
 		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
 			"K0.6.3b: JSON access error");
 	}
 	catch (const std::invalid_argument& e)
 	{
-		// std::stoul on a malformed hex string
 		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
 			"K0.6.3b: malformed bit-exact float (invalid hex)");
 	}
 	catch (const std::out_of_range& e)
 	{
-		// std::stoul value out of u32 range, or vector subscript via .at
 		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
 			"K0.6.3b: numeric out-of-range");
 	}

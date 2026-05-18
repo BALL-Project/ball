@@ -19,6 +19,7 @@ SET(SOURCES_LIST
 	molecule.C
 	moleculeStore.C
 	moleculeStoreJson.C
+	systemJson.C
 	nucleicAcid.C
 	nucleotide.C
 	PDBAtom.C

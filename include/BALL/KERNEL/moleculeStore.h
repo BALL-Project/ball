@@ -33,6 +33,10 @@ namespace BALL
 {
 	class Atom;
 	class Bond;
+	class MoleculeStore;
+	// K0.6.5: forward-declare the JSON loader helper so MoleculeStore
+	// can friend it without pulling moleculeStoreJson.h into this header.
+	namespace detail { void json_obj_to_store(MoleculeStore& s, const void* json_in); }
 
 	/**	Bond record (struct-of-arrays bond table row).
 			12 bytes; first/second atom indices (uint32) + bond order (uint8) +
@@ -142,10 +146,14 @@ namespace BALL
 		// - next_stable_id_ is reseeded past max(ids) inside the method
 		// - throws Exception::InvalidArgument on size mismatch or duplicate
 		// Friended to the JSON loader's translation unit only.
+		// K0.6.5 refactor: loadStoreJSON delegates to detail::json_obj_to_store,
+		// so the friend now names the helper too.
 		private:
 		friend void loadStoreJSON(MoleculeStore&, std::istream&);
 		void restore_stable_ids_for_load_(const std::vector<StableId>& ids);
 		public:
+		// detail::json_obj_to_store needs the same access.
+		friend void detail::json_obj_to_store(MoleculeStore&, const void*);
 
 		Atom*          back_ptr(Index i) const       { return back_ptr_[i]; }
 		void           set_back_ptr(Index i, Atom* p){ back_ptr_[i] = p; }
