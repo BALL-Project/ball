@@ -72,6 +72,16 @@ INCLUDE(include/BALL/STRUCTURE/sources.cmake)
 INCLUDE(source/XRAY/sources.cmake)
 INCLUDE(include/BALL/XRAY/sources.cmake)
 
+# B2.2 (Track B Wave 2b, 2026-05-18): NMR re-enabled unconditionally.
+# 15 sources (anisotropy/EF/empiricalHS/HBond/haighMallion/johnsonBovey/
+# randomCoil shift processors + spectrum/peak/peakList +
+# createSpectrumProcessor + clear + experiment + shiftModel + shiftModule).
+# Deps: CONCEPT, DATATYPE, FORMAT (Wave 1a, in), KERNEL, MATHS,
+# STRUCTURE (Wave 1b subset, in — uses geometricProperties only),
+# SYSTEM. No MOLMEC/QSAR/DOCKING/ENERGY dep, so safe to add now.
+INCLUDE(source/NMR/sources.cmake)
+INCLUDE(include/BALL/NMR/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
@@ -81,9 +91,6 @@ IF(NOT BALL_CORE_ONLY)
 
 	INCLUDE(source/MOLMEC/sources.cmake)
 	INCLUDE(include/BALL/MOLMEC/sources.cmake)
-
-	INCLUDE(source/NMR/sources.cmake)
-	INCLUDE(include/BALL/NMR/sources.cmake)
 
 	INCLUDE(source/PYTHON/sources.cmake)
 	INCLUDE(include/BALL/PYTHON/sources.cmake)

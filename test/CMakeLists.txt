@@ -91,6 +91,12 @@ IF(BALL_CORE_ONLY)
 		BALL_DATATYPE_TESTS
 		BALL_CONCEPTS_TESTS
 		BALL_CORE_KERNEL_TESTS
+		# B2.2 (Track B Wave 2b, 2026-05-18): NMR tests come back as a
+		# group; the NMR module headers only pull FORMAT + STRUCTURE
+		# (Wave 1 subsets, in) + KERNEL + DATATYPE — all CORE_ONLY-
+		# compatible. HBondProcessor_test is listed under NMR_TESTS
+		# but tests STRUCTURE/HBondProcessor.h (B1.2 subset, in).
+		BALL_NMR_TESTS
 	)
 ENDIF()
 
