@@ -147,6 +147,26 @@ namespace BALL
 		std::string        get_name(Index i) const;
 		std::string        get_type_name(Index i) const;
 
+		// K0.5.1: intern a string into the store's pool and return its
+		// stable offset. Used by the compiled-selection compiler to turn
+		// AtomNamePred("CA") into a precomputed name_offset that can be
+		// 32-bit-compared against name_offsets_[i] in the inner loop —
+		// no string compare, no hash, no allocation.
+		std::uint32_t      intern_name(const std::string& s);
+		std::uint32_t      intern_type_name(const std::string& s);
+
+		// K0.5.1: raw-pointer column accessors for the bitmap eval loop.
+		// Valid for the lifetime of the underlying vector storage; same
+		// D7 reference-stability contract — invalidated by reserve/compact/
+		// allocate-beyond-capacity. Eval loops re-fetch the pointer per
+		// evaluate() call.
+		const std::uint8_t*  element_indices_data()    const { return element_indices_.data(); }
+		const float*         charges_data()            const { return charges_.data(); }
+		const std::uint32_t* name_offsets_data()       const { return name_offsets_.data(); }
+		const std::uint32_t* type_name_offsets_data()  const { return type_name_offsets_.data(); }
+		const std::uint8_t*  selection_data()          const { return selection_.data(); }
+		const std::uint8_t*  is_freed_data()           const { return is_freed_.data(); }
+
 		// K0.3b.LATER.5+6: live String columns are the authority for
 		// Atom::getName() / getTypeName(). The string_pool_ + offset path
 		// remains the persistence-side representation (StoreFormat). set_name

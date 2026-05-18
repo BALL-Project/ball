@@ -259,6 +259,29 @@ void MoleculeStore::set_type_name(Index i, const std::string& s)
 	type_name_offsets_[i] = off;
 }
 
+// K0.5.1: intern a string into string_pool_ + string_intern_ without
+// binding it to any specific atom slot. Returns the offset for use as
+// a precompiled constant inside a CompiledExpression leaf. Empty string
+// maps to offset 0 (the pool's reserved empty-string slot).
+std::uint32_t MoleculeStore::intern_name(const std::string& s)
+{
+	if (string_pool_.empty()) string_pool_.push_back('\0');
+	if (s.empty()) return 0;
+	auto it = string_intern_.find(s);
+	if (it != string_intern_.end()) return it->second;
+	const std::uint32_t off = static_cast<std::uint32_t>(string_pool_.size());
+	string_pool_.append(s);
+	string_pool_.push_back('\0');
+	string_intern_.emplace(s, off);
+	return off;
+}
+std::uint32_t MoleculeStore::intern_type_name(const std::string& s)
+{
+	// type names share the same pool + intern table as names, since they
+	// are both string-pool offsets and the same string would dedup.
+	return intern_name(s);
+}
+
 std::string MoleculeStore::get_name(Index i) const
 {
 	if (string_pool_.empty()) return std::string();
