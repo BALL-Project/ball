@@ -68,12 +68,19 @@ tag) adds **one step** before the existing close-out:
 
 1. Final phase commits + push (existing)
 2. v1.7-RC1 tag → release.yml → smoke artifacts (existing)
-3. Address RC findings → v1.7.0 tag → release.yml → ship (existing)
-4. **NEW:** `master` fast-forward to v1.7.0; open v1.8-modernization off
+3. **NEW (UI-heavy releases):** user-feedback gate — see
+   `.planning/v1.7-USER-FEEDBACK-GATE.md`. After RC artifacts land,
+   the user exercises the UI across all 4 platforms and signs off OR
+   surfaces blockers. Final tag is BLOCKED until the gate closes.
+   This is now a standing convention for any release whose changeset
+   includes user-visible UI churn (BALLView Refresh in v1.7;
+   future analogues).
+4. Address RC findings → v1.7.0 tag → release.yml → ship (existing)
+5. **NEW:** `master` fast-forward to v1.7.0; open v1.8-modernization off
    the v1.7.0 tag
-5. Update `.github/workflows/ci.yml` `branches: [...]` lists to drop
+6. Update `.github/workflows/ci.yml` `branches: [...]` lists to drop
    completed-cycle branches if they're no longer being patched
-6. Archive `v1.7-modernization` branch (don't delete — keeps git-blame
+7. Archive `v1.7-modernization` branch (don't delete — keeps git-blame
    navigable for the release window's commits)
 
 ### Applies to all release flavors

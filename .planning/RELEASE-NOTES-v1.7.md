@@ -56,4 +56,30 @@ The auto-migration is a one-shot rewrite of the `[Workspace]/currentPreset` INI 
 
 ---
 
+## Known issues at RC1
+
+These issues are present in v1.7.0-rc1 and are under triage. See
+`.planning/v1.7-USER-FEEDBACK-GATE.md` for status; final disposition
+will be either "fixed before v1.7.0 final tag" or "deferred to v1.7.x
+patch cycle with workaround."
+
+- **Some toolbar icons are missing glyphs** (UFG-01). The XPM→SVG icon
+  migration in Phase 999.42 covered ~22 named call sites; some toolbar
+  entries added in 999.45 / 999.46 may need additional icons registered
+  in the IconRegistry. Buttons work; only the visual glyph is missing.
+- **macOS rendering glitches** (UFG-02). Visual artifacts in the
+  refreshed UI on macOS specifically. Triaging the root cause —
+  likely QSS rules applied to widgets that prefer native macOS chrome,
+  or a Phase 999.45 dock-layout interaction with the GL canvas.
+- **Representation + Coloring changes don't propagate to the scene**
+  (UFG-03). The Unified Inspector's Representation tab shows controls
+  but changes don't update the rendered molecule. Tracked to deferred
+  Controller cut-overs (Phase 999.44 Plans 04a-04h, ~3072 LOC of
+  controller-extraction work pulled forward from v1.8). Workaround:
+  use `Tools › Legacy Settings ▸` to access the original dialogs while
+  the Controllers are completed.
+
+---
+
 *Draft created 2026-05-17 during Phase 999.49. Sections marked "to be expanded" will be filled in as v1.7 Wave 4 phases finalize and at RC1 tag time.*
+*Known-issues section added 2026-05-18 at user-feedback gate open.*
