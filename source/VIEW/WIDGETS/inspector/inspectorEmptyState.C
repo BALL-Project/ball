@@ -11,6 +11,9 @@
 
 #include <QtGui/QFont>
 #include <QtGui/QIcon>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QPalette>
 #include <QtGui/QPixmap>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
@@ -69,6 +72,15 @@ namespace BALL
 			setObjectName("inspectorEmptyState");
 			setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
+			// UFG-19 fix — declare opaque paint + auto-fill background so
+			// stale pixels from prior Inspector content (e.g. the MATERIAL
+			// section header from a representation that was just deselected)
+			// don't bleed through this widget. paintEvent() below honours
+			// the opaque contract by filling the full rect with the
+			// palette's Window colour before children draw.
+			setAttribute(Qt::WA_OpaquePaintEvent);
+			setAutoFillBackground(true);
+
 			QVBoxLayout* root = new QVBoxLayout(this);
 			root->setContentsMargins(24, 32, 24, 32);
 			root->setSpacing(12);
@@ -104,6 +116,19 @@ namespace BALL
 		}
 
 		InspectorEmptyState::~InspectorEmptyState() = default;
+
+		void InspectorEmptyState::paintEvent(QPaintEvent* event)
+		{
+			// UFG-19 fix — fill the dirty rect with the palette Window
+			// colour before letting child widgets (icon / title / body
+			// labels) paint on top. Without this, the WA_OpaquePaintEvent
+			// contract would be violated and Qt would skip its automatic
+			// background fill, causing the prior-frame Inspector content
+			// (MATERIAL section title strip, etc.) to remain visible.
+			QPainter painter(this);
+			painter.fillRect(event->rect(), palette().color(QPalette::Window));
+			QWidget::paintEvent(event);
+		}
 
 		InspectorEmptyState* InspectorEmptyState::forNoSelection(QWidget* parent)
 		{

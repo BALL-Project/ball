@@ -21,6 +21,7 @@
 #include <QtWidgets/QWidget>
 
 class QLabel;
+class QPaintEvent;
 
 namespace BALL
 {
@@ -62,6 +63,19 @@ namespace BALL
 				static InspectorEmptyState* forNoSelection(QWidget* parent = nullptr);
 				static InspectorEmptyState* forNoRepresentation(QWidget* parent = nullptr);
 				static InspectorEmptyState* forNoScene(QWidget* parent = nullptr);
+
+			protected:
+				/**
+				 * UFG-19 fix — paint opaque QPalette::Window background
+				 * before children render. Without this, the empty-state
+				 * widget inherits a transparent background and stale
+				 * pixels from prior Inspector content (e.g. the MATERIAL
+				 * section title from a representation that was just
+				 * deselected) bleed through. Mirrors the UFG-05 / UFG-10
+				 * paint pattern already applied to QUICK ACTIONS and the
+				 * per-tab title strip widgets.
+				 */
+				void paintEvent(QPaintEvent* event) override;
 
 			private:
 				QLabel* icon_;
