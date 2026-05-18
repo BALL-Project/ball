@@ -3,12 +3,13 @@
 //
 // BALL 2.0 KERNEL — K0.5.6 compiled-selection benchmark.
 // Spec §7.3 + V2.0-ROADMAP K0.5 gate row.
+// K0.7.2 update: corpus 50k -> 100k, gate tightened from >=5x to the
+// design >=10x (Codex R6 OPEN-5 closed). Slow-path OwnedPred test
+// keeps its smaller 10k corpus (ring detection is O(N) per atom).
 //
-// Builds a synthetic 50k-atom System with representative element/name
+// Builds a synthetic 100k-atom System with representative element/name
 // distribution, then times the v1.x ExpressionTree per-atom path
-// against the new CompiledExpression bitmap path. Asserts a
-// conservative >=5x speedup gate (CI-noise safe); the full >=10x
-// K0.5 gate is verified in K0.7's broader perf phase.
+// against the new CompiledExpression bitmap path.
 //
 // Reports the actual speedup so failures still surface in the test
 // log.
@@ -138,8 +139,8 @@ namespace
 
 START_TEST(SelectorBench)
 
-CHECK(K0.5.6 fast-path selection >=5x faster than v1.x ExpressionTree)
-	const std::size_t N = 50000;
+CHECK(K0.7.2 fast-path selection >=10x faster than v1.x ExpressionTree (100k corpus))
+	const std::size_t N = 100000;
 	const int iters = 5;
 	System sys;
 	build_corpus_(sys, N);
@@ -160,15 +161,16 @@ CHECK(K0.5.6 fast-path selection >=5x faster than v1.x ExpressionTree)
 		ratios.push_back(p.ratio);
 	}
 
-	// Gate: median ratio >= 5x. Conservative vs the K0.5 design gate
-	// (10x) to absorb CI noise; the full 10x verification lives in K0.7
-	// with longer iter counts + a 100k corpus.
+	// K0.7.2: gate tightened from K0.5.6's >=5x (CI-noise safe) to the
+	// K0.5 design gate of >=10x. With 100k atoms and the observed
+	// per-leaf speedup of ~50x on Darwin arm64 release, the gate has
+	// ample headroom against CI noise.
 	std::vector<double> sorted = ratios;
 	std::sort(sorted.begin(), sorted.end());
 	const double median = sorted[sorted.size() / 2];
-	std::cerr << "  [K0.5.6] median speedup across "
+	std::cerr << "  [K0.7.2] median speedup across "
 		<< sorted.size() << " queries = " << median << "x" << std::endl;
-	TEST_EQUAL(median >= 5.0, true)
+	TEST_EQUAL(median >= 10.0, true)
 RESULT
 
 CHECK(K0.5.6 OwnedPred slow path stays within 2x of v1.x)

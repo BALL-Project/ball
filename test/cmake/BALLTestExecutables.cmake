@@ -164,6 +164,7 @@ SET(BALL_KERNEL_TESTS
 	MoleculeStore_test
 	MoleculeStoreJson_test
 	SystemJson_test
+	Sizeof_test
 	CompiledExpression_test
 	SelectorBench_test
 )

@@ -53,6 +53,7 @@ IF(BALL_CORE_ONLY)
 		MoleculeStore_test
 		MoleculeStoreJson_test
 		SystemJson_test
+		Sizeof_test
 		CompiledExpression_test
 		SelectorBench_test
 	)
