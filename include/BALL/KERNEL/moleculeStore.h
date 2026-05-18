@@ -16,6 +16,10 @@
 # include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -129,6 +133,13 @@ namespace BALL
 		void               set_type_name(Index i, const std::string& s);
 		std::string        get_name(Index i) const;
 		std::string        get_type_name(Index i) const;
+
+		// K0.3b.LATER.5+6: live String columns are the authority for
+		// Atom::getName() / getTypeName(). The string_pool_ + offset path
+		// remains the persistence-side representation (StoreFormat). set_name
+		// keeps both in sync; release_atom / clear / reserve handle both.
+		const String&      name(Index i) const       { return name_strings_[i]; }
+		const String&      type_name(Index i) const  { return type_name_strings_[i]; }
 
 		//@}
 		/**	@name Lifecycle
@@ -320,6 +331,11 @@ namespace BALL
 		std::vector<std::uint8_t> selection_;
 		std::vector<std::uint32_t> name_offsets_;
 		std::vector<std::uint32_t> type_name_offsets_;
+		// K0.3b.LATER.5+6: live String columns. Sole authority for
+		// Atom::getName/getTypeName reads. Pool + offsets remain for the
+		// persistence/binary format.
+		std::vector<String>        name_strings_;
+		std::vector<String>        type_name_strings_;
 		std::vector<StableId>     stable_ids_;
 		std::vector<Atom*>        back_ptr_;
 		std::vector<std::uint8_t> is_freed_;       // K0.3c.1 freed-slot bitset

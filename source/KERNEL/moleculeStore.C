@@ -46,6 +46,8 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 		selection_[idx]       = 0;
 		name_offsets_[idx]    = 0;
 		type_name_offsets_[idx] = 0;
+		name_strings_[idx].clear();
+		type_name_strings_[idx].clear();
 		stable_ids_[idx]      = next_stable_id_++;
 		// back_ptr_[idx] cleared on release_atom; will be set by caller's
 		// set_back_ptr(idx, this). For now stays nullptr (= "freed"); the
@@ -77,6 +79,8 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 	selection_.emplace_back(0);
 	name_offsets_.emplace_back(0);          // 0 = empty (string_pool_[0] = '\0')
 	type_name_offsets_.emplace_back(0);
+	name_strings_.emplace_back();           // K0.3b.LATER.5: default empty String
+	type_name_strings_.emplace_back();      // K0.3b.LATER.6
 	stable_ids_.emplace_back(next_stable_id_++);
 	back_ptr_.emplace_back(nullptr);
 	is_freed_.emplace_back(0);              // K0.3c.1: fresh slot is live
@@ -118,6 +122,8 @@ void MoleculeStore::release_atom(Index i)
 	selection_[i]       = 0;
 	name_offsets_[i]    = 0;
 	type_name_offsets_[i] = 0;
+	name_strings_[i].clear();
+	type_name_strings_[i].clear();
 	// stable_ids_[i] is not reset; the freed-then-reallocated slot gets
 	// a fresh stable id from next_stable_id_++ on reuse. Old stable ids
 	// don't collide.
@@ -143,6 +149,8 @@ void MoleculeStore::reserve(std::size_t n)
 	selection_.reserve(n);
 	name_offsets_.reserve(n);
 	type_name_offsets_.reserve(n);
+	name_strings_.reserve(n);
+	type_name_strings_.reserve(n);
 	stable_ids_.reserve(n);
 	back_ptr_.reserve(n);
 	is_freed_.reserve(n);
@@ -166,6 +174,8 @@ void MoleculeStore::compact()
 	selection_.shrink_to_fit();
 	name_offsets_.shrink_to_fit();
 	type_name_offsets_.shrink_to_fit();
+	name_strings_.shrink_to_fit();
+	type_name_strings_.shrink_to_fit();
 	stable_ids_.shrink_to_fit();
 	back_ptr_.shrink_to_fit();
 	is_freed_.shrink_to_fit();
@@ -191,6 +201,9 @@ void MoleculeStore::bump_generation_if_reallocated_(std::size_t old_cap)
 
 void MoleculeStore::set_name(Index i, const std::string& s)
 {
+	// K0.3b.LATER.5: mirror into live String column (sole authority for
+	// Atom::getName reads). Pool path stays for persistence.
+	name_strings_[i] = String(s.c_str());
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 	if (s.empty()) { name_offsets_[i] = 0; return; }
 	auto it = string_intern_.find(s);
@@ -208,6 +221,8 @@ void MoleculeStore::set_name(Index i, const std::string& s)
 
 void MoleculeStore::set_type_name(Index i, const std::string& s)
 {
+	// K0.3b.LATER.6: mirror into live String column.
+	type_name_strings_[i] = String(s.c_str());
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 	if (s.empty()) { type_name_offsets_[i] = 0; return; }
 	auto it = string_intern_.find(s);

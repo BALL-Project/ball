@@ -46,7 +46,8 @@ Index Atom::getFormalCharge() const
 BALL_INLINE
 const String& Atom::getName() const
 {
-	return name_;
+	// K0.3b.LATER.5: store is sole authority.
+	return store_->name(store_idx_);
 }
 
 BALL_INLINE
@@ -82,9 +83,8 @@ const SecondaryStructure* Atom::getSecondaryStructure() const
 BALL_INLINE
 void Atom::setName(const String& name)
 {
-	name_ = name;
-	// K0.3b.6 dual-write: mirror into store string pool.
-	if (store_) writeStoreName_(name);
+	// K0.3b.LATER.5: store is sole authority.
+	writeStoreName_(name);
 }
 
 BALL_INLINE
@@ -143,15 +143,14 @@ Atom::Type Atom::getType() const
 BALL_INLINE
 void Atom::setTypeName(const String& type_name)
 {
-	type_name_ = type_name;
-	// K0.3b.6 dual-write: mirror into store string pool.
-	if (store_) writeStoreTypeName_(type_name);
+	// K0.3b.LATER.6: store is sole authority.
+	writeStoreTypeName_(type_name);
 }
 
 BALL_INLINE
 String Atom::getTypeName() const
 {
-	return type_name_;
+	return store_->type_name(store_idx_);
 }
 
 BALL_INLINE

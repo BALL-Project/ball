@@ -975,10 +975,11 @@ namespace BALL
 		///
 		static AtomIndexList		free_list_;
 
-		///
-		String          name_;
-		///
-		String          type_name_;
+		// K0.3b.LATER.5+6: String name_, type_name_ DELETED. Authority moved
+		// to MoleculeStore::{name_strings_,type_name_strings_}[store_idx_].
+		// getName/getTypeName return const String& into those columns; the
+		// string_pool_ + offsets path is now used only by the persistence
+		// format.
 		///
 		const Element*  element_;
 		///
