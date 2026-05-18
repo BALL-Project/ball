@@ -21,6 +21,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 namespace BALL
@@ -324,6 +325,15 @@ namespace BALL
 		std::vector<std::uint8_t> is_freed_;       // K0.3c.1 freed-slot bitset
 
 		std::string               string_pool_;
+
+		// K0.3c.9: intern table mapping string content -> offset in
+		// string_pool_. set_name / set_type_name consult this before
+		// appending so duplicate writes (e.g. every default Atom() ctor
+		// dual-writing the type-name "?") reuse a single pool entry.
+		// Long-running processes no longer leak string_pool_ space
+		// monotonically. Empty string keeps the offset-0 fast path and
+		// is not stored in the map.
+		std::unordered_map<std::string, std::uint32_t> string_intern_;
 
 		// Bond table.
 		std::vector<BondRecord>   bonds_;

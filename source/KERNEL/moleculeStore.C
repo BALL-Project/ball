@@ -181,26 +181,46 @@ void MoleculeStore::bump_generation_if_reallocated_(std::size_t old_cap)
 	}
 }
 
-// String pool: append-only. Each set_name stores a fresh copy, even if a
-// duplicate exists; this trades pool size for write speed. K0.6 will add a
-// dedup pass.
+// String pool: append-only, but K0.3c.9 deduplicates writes via an
+// intern table (string_intern_). Repeated set_name(i, "X") calls reuse
+// the same string_pool_ offset instead of appending. Without this,
+// every Atom() ctor's K0.3b.6 dual-write of the default type-name "?"
+// would leak 2 bytes per construction (Codex Round 3 HIGH-7).
+// release_atom does not reclaim pool space; the intern table keeps
+// pool size bounded by the unique-string count.
 
 void MoleculeStore::set_name(Index i, const std::string& s)
 {
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 	if (s.empty()) { name_offsets_[i] = 0; return; }
-	name_offsets_[i] = static_cast<std::uint32_t>(string_pool_.size());
+	auto it = string_intern_.find(s);
+	if (it != string_intern_.end())
+	{
+		name_offsets_[i] = it->second;
+		return;
+	}
+	const std::uint32_t off = static_cast<std::uint32_t>(string_pool_.size());
 	string_pool_.append(s);
 	string_pool_.push_back('\0');
+	string_intern_.emplace(s, off);
+	name_offsets_[i] = off;
 }
 
 void MoleculeStore::set_type_name(Index i, const std::string& s)
 {
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 	if (s.empty()) { type_name_offsets_[i] = 0; return; }
-	type_name_offsets_[i] = static_cast<std::uint32_t>(string_pool_.size());
+	auto it = string_intern_.find(s);
+	if (it != string_intern_.end())
+	{
+		type_name_offsets_[i] = it->second;
+		return;
+	}
+	const std::uint32_t off = static_cast<std::uint32_t>(string_pool_.size());
 	string_pool_.append(s);
 	string_pool_.push_back('\0');
+	string_intern_.emplace(s, off);
+	type_name_offsets_[i] = off;
 }
 
 std::string MoleculeStore::get_name(Index i) const

@@ -574,6 +574,83 @@ CHECK(K0.4.2 sequential adoption -- known limitation: bond orphans)
 	delete bond;
 RESULT
 
+CHECK(K0.3c.9 string-pool intern dedupe -- repeated set_name reuses offset)
+	// Codex Round 3 HIGH-7: without an intern table, set_name(i, "ABC")
+	// called 100 times would append "ABC\0" 100 times (400 bytes) to
+	// string_pool_. With the intern table, "ABC\0" is appended once
+	// (4 bytes), and all 100 atoms share the same offset.
+	MoleculeStore store;
+	store.reserve(128);
+	const std::size_t pool_before = store.string_pool().size();
+	std::uint32_t shared_offset = 0;
+	for (int n = 0; n < 100; ++n)
+	{
+		auto idx = store.allocate_atom();
+		store.set_name(idx, "ABC");
+		if (n == 0) shared_offset = store.name_offset(idx);
+		// Every atom's name_offset must match the first -- proves dedupe.
+		TEST_EQUAL(store.name_offset(idx), shared_offset)
+	}
+	// Pool grew by at most 5 bytes: initial '\0' (if not already there)
+	// + "ABC\0" appended ONCE. Tight upper bound = pool_before + 5.
+	TEST_EQUAL(store.string_pool().size() <= pool_before + 5, true)
+	// Round-trip: every atom reads back "ABC".
+	for (int n = 0; n < 100; ++n)
+	{
+		TEST_EQUAL(store.get_name(static_cast<MoleculeStore::Index>(n)), "ABC")
+	}
+RESULT
+
+CHECK(K0.3c.9 string-pool intern preserves distinct strings)
+	// 10 distinct names -> pool grows by 10 entries (one per unique).
+	MoleculeStore store;
+	store.reserve(16);
+	const std::size_t pool_before = store.string_pool().size();
+	const char* names[10] = {"A","B","C","D","E","F","G","H","I","J"};
+	std::uint32_t offsets[10];
+	for (int n = 0; n < 10; ++n)
+	{
+		auto idx = store.allocate_atom();
+		store.set_name(idx, names[n]);
+		offsets[n] = store.name_offset(idx);
+	}
+	// All 10 offsets must be distinct.
+	for (int n = 0; n < 10; ++n)
+		for (int m = n + 1; m < 10; ++m)
+			TEST_NOT_EQUAL(offsets[n], offsets[m])
+	// Pool grew by exactly 10 * 2 bytes (each "X\0"), plus possibly the
+	// initial '\0' if pool was empty.
+	const std::size_t grew = store.string_pool().size() - pool_before;
+	TEST_EQUAL(grew >= 20u && grew <= 21u, true)
+	// Round-trip.
+	for (int n = 0; n < 10; ++n)
+	{
+		TEST_EQUAL(store.get_name(static_cast<MoleculeStore::Index>(n)),
+		           std::string(names[n]))
+	}
+RESULT
+
+CHECK(K0.3c.9 default-Atom type-name does not leak string_pool)
+	// Codex Round 3 HIGH-7 proof: every Atom() ctor's K0.3b.6 dual-write
+	// appends "?\0" for the default type name. release_atom does NOT
+	// reclaim string_pool space. Without the intern table, 1000
+	// construct/destroy cycles leak 2000 bytes. With the intern table,
+	// "?" interns once and the pool stays bounded.
+	Atom probe;
+	auto* orphan = probe.getStore();
+	const std::size_t pool_before = orphan->string_pool().size();
+	for (int n = 0; n < 1000; ++n)
+	{
+		Atom temp;
+		(void)temp;
+	}
+	const std::size_t pool_after = orphan->string_pool().size();
+	const std::size_t grew = pool_after - pool_before;
+	// Bounded growth: a small constant (the "?" type-name intern entry
+	// at most, if it wasn't already there). << 2000 bytes.
+	TEST_EQUAL(grew < 16u, true)
+RESULT
+
 CHECK(K0.3c.6 mutable-getter drift -- DOCUMENTED GAP until K0.3b.LATER)
 	// Codex Round 2 HIGH-3 / HIGH-6: the non-const reference returned by
 	// Atom::getPosition() bypasses dual-write when the caller mutates
