@@ -44,8 +44,8 @@
     <node>32<value>OXT C s</value></node>
     <node>33<value>1H N s</value></node>
     <node>34<value>2H N s</value></node>
-    <node>40<value>2OB CB s</value></node>
-    <node>41<value>2OH 2OB s</value></node>
+    <node>40<value>1OB CB s</value></node>
+    <node>41<value>1OH 1OB s</value></node>
   </node>
 	<node>Connections
 		<node>N-term<value>N C-term s 1.33 0.5</value></node>
@@ -60,8 +60,8 @@
 				<node>OXT</node>
 				<node>1H</node>
 				<node>2H</node>
-				<node>2OB</node>
-				<node>2OH</node>
+				<node>1OB</node>
+				<node>1OH</node>
 			</node>
 		</node>
 		<node>HYP
@@ -73,8 +73,8 @@
 			</node>
 		<node>PRO-M
 			<node>Delete
-				<node>2OB</node>
-				<node>2OH</node>
+				<node>1OB</node>
+				<node>1OH</node>
 			</node>
 			<node>Properties
 				<node>C_TERMINAL</node>
@@ -83,8 +83,8 @@
 		</node>
 		<node>PRO-C
 			<node>Delete
-				<node>2OB</node>
-				<node>2OH</node>
+				<node>1OB</node>
+				<node>1OH</node>
 				<node>1H</node>
 				<node>2H</node>
 			</node>
@@ -94,8 +94,8 @@
 		</node>
  		<node>PRO-N
  			<node>Delete
-				<node>2OB</node>
-				<node>2OH</node>
+				<node>1OB</node>
+				<node>1OH</node>
 	 			<node>OXT</node>
  			</node>
  			<node>Properties

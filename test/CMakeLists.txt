@@ -250,10 +250,11 @@ IF(BALL_CORE_ONLY)
 		PROPERTIES WILL_FAIL TRUE
 	)
 ENDIF()
-SET_TESTS_PROPERTIES (
-	PeptideCapProcessor_test
-	PROPERTIES WILL_FAIL TRUE
-)
+# (B1.2 left PeptideCapProcessor_test + Peptides_test WILL_FAIL for the
+# PR #550 data regression. Both lifted in 2026-05-18 v2.1 cleanup:
+# Peptides_test ASX/GLX expectations updated [c5373707d];
+# PeptideCapProcessor_test PRO.db 2OB/2OH → 1OB/1OH bond+delete refs
+# fixed in this commit. Both now real-pass in CORE_ONLY and full builds.)
 IF(NOT BALL_CORE_ONLY)
 SET_TESTS_PROPERTIES (
 	RotamerLibrary_test
