@@ -83,18 +83,31 @@ INCLUDE(source/EXTENSIONS/BALLPluginComponents.cmake)
 ##       *end* of this list; otherwise, the automatic fixing of import library names will omit all components 
 ##       that come after it
 SET(BALL_COMPONENTS
- ${COMPONENT_LIBBALL} 
- ${COMPONENT_LIBVIEW} 
- ${COMPONENT_LIBBALL_DEV} 
+ ${COMPONENT_LIBBALL}
+ ${COMPONENT_LIBVIEW}
+ ${COMPONENT_LIBBALL_DEV}
  ${COMPONENT_LIBVIEW_DEV}
- ${COMPONENT_PYTHON_BINDINGS_BALL}
- ${COMPONENT_PYTHON_BINDINGS_VIEW}
  ${COMPONENT_DOCUMENTATION_EXAMPLES}
  ${COMPONENT_DOCUMENTATION_HTML}
  ${COMPONENT_DOCUMENTATION_PDF}
  "Unspecified"
  ${COMPONENT_PLUGINS}
 )
+
+# Phase 8b post-mortem (v1.7.0-rc1, 2026-05-18): PythonBindings
+# components were unconditionally listed here even when
+# BALL_PYTHON_SUPPORT=OFF, causing NSIS makensis.exe to abort with
+# "unknown variable/constant {PythonBindings}" on Windows packaging
+# because the SET_COMPONENT_DEPENDENCIES macros below registered
+# CPack component dependencies on an effectively-empty component.
+# Gate inclusion on BALL_PYTHON_SUPPORT so non-Python builds (the
+# default v1.7 CI preset) produce a clean NSIS installer.
+IF(BALL_PYTHON_SUPPORT)
+	LIST(APPEND BALL_COMPONENTS
+		${COMPONENT_PYTHON_BINDINGS_BALL}
+		${COMPONENT_PYTHON_BINDINGS_VIEW}
+	)
+ENDIF()
 
 LIST(APPEND BALL_COMPONENTS ${COMPONENT_BALLVIEW})
 
@@ -132,20 +145,26 @@ IF (NOT COMPONENT_LIBBALL_DEV STREQUAL ${COMPONENT_LIBVIEW_DEV})
 
 ENDIF()
 
-SET_COMPONENT_NAME(${COMPONENT_PYTHON_BINDINGS_BALL} 
-	"BALL Python bindings"
-	"The Python bindings can be used to develop fully functional BALL-based applications completely in Python. In addition, they allow to freely script BALLView"
-)
-SET_COMPONENT_DEPENDENCIES(${COMPONENT_PYTHON_BINDINGS_BALL} ${COMPONENT_LIBBALL})
-
-IF (NOT COMPONENT_PYTHON_BINDINGS_BALL STREQUAL ${COMPONENT_PYTHON_BINDINGS_VIEW})
-
-	SET_COMPONENT_NAME(${COMPONENT_PYTHON_BINDINGS_VIEW} 
+# Phase 8b post-mortem (v1.7.0-rc1, 2026-05-18): see BALL_COMPONENTS
+# guard above. Gate the per-component registration on BALL_PYTHON_SUPPORT
+# so the NSIS template doesn't emit Deselect_required_by_Runtime macros
+# referencing the undefined {PythonBindings} component.
+IF(BALL_PYTHON_SUPPORT)
+	SET_COMPONENT_NAME(${COMPONENT_PYTHON_BINDINGS_BALL}
 		"BALL Python bindings"
 		"The Python bindings can be used to develop fully functional BALL-based applications completely in Python. In addition, they allow to freely script BALLView"
 	)
-	SET_COMPONENT_DEPENDENCIES(${COMPONENT_PYTHON_BINDINGS_VIEW} "${COMPONENT_LIBVIEW} ${COMPONENT_PYTHON_BINDINGS_BALL}")
+	SET_COMPONENT_DEPENDENCIES(${COMPONENT_PYTHON_BINDINGS_BALL} ${COMPONENT_LIBBALL})
 
+	IF (NOT COMPONENT_PYTHON_BINDINGS_BALL STREQUAL ${COMPONENT_PYTHON_BINDINGS_VIEW})
+
+		SET_COMPONENT_NAME(${COMPONENT_PYTHON_BINDINGS_VIEW}
+			"BALL Python bindings"
+			"The Python bindings can be used to develop fully functional BALL-based applications completely in Python. In addition, they allow to freely script BALLView"
+		)
+		SET_COMPONENT_DEPENDENCIES(${COMPONENT_PYTHON_BINDINGS_VIEW} "${COMPONENT_LIBVIEW} ${COMPONENT_PYTHON_BINDINGS_BALL}")
+
+	ENDIF()
 ENDIF()
 
 SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_HTML}
