@@ -1,19 +1,29 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// BALL 2.0 — K0.7.3 per-atom memory budget verification.
+// BALL 2.0 — K0.7.3 per-atom memory budget — MODELED (not measured).
 // D13 target: typical workload ≤160 B/atom (column data + handle).
 //
-// Builds a 100k-atom System and measures:
+// Codex R9 finding: this file MODELS the per-atom footprint via
+// sizeof + capacity arithmetic; it does NOT do RSS / heap sampling.
+// The model omits:
+//   * allocator overhead (per-block headers, alignment slack)
+//   * std::vector capacity slack beyond modeled rows
+//   * std::string SSO bookkeeping in name_strings_/type_name_strings_
+//   * property bag heap allocations (named_properties_ vector storage)
+//
+// Numbers from this test are architectural accounting; for real-process
+// RSS use a platform-specific tool (mach task_info on macOS, /proc on
+// Linux) outside the test harness.
+//
+// Builds a 100k-atom System and reports:
 //   1. Per-atom column row cost (constant; from K0.7.1)
 //   2. Per-atom string-pool contribution (intern-dedup amortised)
 //   3. Per-atom handle cost (sizeof(Atom) — dominated by base classes)
-//   4. Per-atom Composite-tree overhead (parent + child pointers etc.,
-//      bundled into sizeof(Atom) per K0.7.1)
-//   5. Per-bond cost (BondRecord = 12 B in store; Bond* handle is 288 B
-//      but only allocated when v1.x Bond is materialised)
 //
-// Reports breakdown + total; gates against D13 budget.
+// Gates the SoA-column slice against D13; the full-handle total is
+// reported but NOT gated because D2/D3/D4's thin-stub bases push it
+// over budget by design — full reduction is v2.1 work.
 //
 
 #include <BALL/CONCEPT/classTest.h>
