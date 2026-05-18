@@ -220,15 +220,6 @@ ENDIF()
 # regression — Phase 9 09-TRIAGE.md). RotamerLibrary_test only exists
 # in full builds (rotamerLibrary.C is B1.2-trimmed).
 #
-# PersistenceManager_test — QUARANTINED in CORE_ONLY ONLY (B1.2, 2026-05-18)
-#   Line 321: TEST_EQUAL(noc, 18) gets 15, expects 18. The 3 missing
-#   classes are the D2/D3/D4 stub bases (Composite, PropertyManager,
-#   Selectable) that K0 removed. This is a documented v2.0 breaking
-#   change (see RELEASE-NOTES-v2.0.md). Test was failing pre-B1.2 but
-#   not in the K0 24-binary green-bar sweep; surfaces in broader ctest.
-#   v2.1 backlog: refresh test's expected class count to 15 or rework
-#   to enumerate dynamically (TEST-PM-CLASS-COUNT).
-#
 # Expression_test — QUARANTINED in CORE_ONLY ONLY (B1.2, 2026-05-18)
 #   Expects 27 predicates, gets 26. The missing predicate is SMARTS,
 #   which needs RingPerceptionProcessor + AromaticityProcessor (QSAR,
@@ -236,17 +227,24 @@ ENDIF()
 #   B1.2's STRUCTURE subset (QSAR cascade). Lifts in Wave 4 when QSAR
 #   re-enables and SmartsMatcher comes back.
 #
-# B1.3 (Codex R10 fix #5, 2026-05-18): the PersistenceManager / Expression
-# quarantines are gated by BALL_CORE_ONLY because both recover in full
-# builds (PersistenceManager: legacy class count is restored when the
-# D2/D3/D4 stubs are still registered via CONCEPT/Composite/etc;
-# Expression: SMARTS comes back with QSAR). Unguarded WILL_FAIL would
-# cause CTest "unexpected pass" (exit 8) in the full build.
+# 2026-05-18 (post B2.x cleanup): PersistenceManager_test +
+# TextPersistenceManager_test quarantines REMOVED. The
+# `#ifndef BALL_CORE_ONLY` guards around the PDBRecords/PDBInfo/
+# CrystalInfo registrations in source/CONCEPT/persistenceManager.C
+# were stale (FORMAT B1.1 + XRAY B2.1 made those classes available
+# in CORE_ONLY). Lifting the guards: (1) PersistenceManager_test's
+# getNumberOfClasses() now returns 18 as expected; (2)
+# TextPersistenceManager_test's PDBInfo round-trip CHECK passes.
+# Both tests now run + pass in both modes; no quarantine needed.
+#
+# B1.3 (Codex R10 fix #5): Expression quarantine gated by
+# BALL_CORE_ONLY because it recovers in full builds (SMARTS comes
+# back with QSAR). Unguarded WILL_FAIL would cause CTest "unexpected
+# pass" (exit 8) in the full build.
 # Peptides_test/PeptideCapProcessor_test stay unconditional — the
 # regression is in data files (PRO.db) which apply to both modes.
 IF(BALL_CORE_ONLY)
 	SET_TESTS_PROPERTIES (
-		PersistenceManager_test
 		Expression_test
 		PROPERTIES WILL_FAIL TRUE
 	)
@@ -256,26 +254,6 @@ SET_TESTS_PROPERTIES (
 	Peptides_test
 	PROPERTIES WILL_FAIL TRUE
 )
-
-# TextPersistenceManager_test — DISABLED in CORE_ONLY (B1.2/B2.1)
-#
-# Pre-B1.2: hard SEGFAULT at process exit (heap-System destruction).
-# Post-B1.2 dtor fix: still fails on the [EXTRA] full_test1 round-
-# trip CHECK at line 657 — TextPersistenceManager can't deserialize
-# PDBInfo (countAtoms(s2)=0 vs s.countAtoms()=454). PDBInfo isn't
-# registered with TextPersistenceManager's createObject() factory.
-# The test still segfaults at exit on direct invocation (manual run
-# returns exit=0 but ctest sees SegFault — likely a libc++ atexit
-# ordering thing with the unregistered-object error path).
-#
-# WILL_FAIL doesn't catch signal crashes, so we keep DISABLED and
-# track via v2.1 backlog (TEST-TPM-PDBINFO).
-IF(BALL_CORE_ONLY)
-	SET_TESTS_PROPERTIES (
-		TextPersistenceManager_test
-		PROPERTIES DISABLED TRUE
-	)
-ENDIF()
 IF(NOT BALL_CORE_ONLY)
 SET_TESTS_PROPERTIES (
 	RotamerLibrary_test

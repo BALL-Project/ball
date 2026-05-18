@@ -9,11 +9,12 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
-#ifndef BALL_CORE_ONLY
-# include <BALL/XRAY/crystalInfo.h>
-# include <BALL/FORMAT/PDBRecords.h>
-# include <BALL/FORMAT/PDBInfo.h>
-#endif
+// B2.1+ (Track B Waves 1a/2a, 2026-05-18): FORMAT (B1.1) and XRAY
+// (B2.1) are now in unconditionally, so the PDB/Crystal headers can
+// be included without a CORE_ONLY gate.
+#include <BALL/XRAY/crystalInfo.h>
+#include <BALL/FORMAT/PDBRecords.h>
+#include <BALL/FORMAT/PDBInfo.h>
 
 // #define BALL_DEBUG_PERSISTENCE
 
@@ -124,19 +125,22 @@ namespace BALL
 		REGISTER_CLASS(System)
 		REGISTER_CLASS(Molecule)
 		REGISTER_CLASS(PDBAtom)
-#ifndef BALL_CORE_ONLY
+		// B2.1+ (Track B Waves 1a/2a, 2026-05-18): PDBRecords + PDBInfo
+		// come from FORMAT (B1.1 subset, in) and CrystalInfo from XRAY
+		// (B2.1, in). These are now available unconditionally in
+		// CORE_ONLY builds too, so the persistence-manager class table
+		// can register them. Closes TEST-PM-CLASS-COUNT (expected 18
+		// got 15) and TEST-TPM-PDBINFO ("Cannot create object of
+		// unregistered class BALL::PDBInfo!" → segfault) in one stroke.
 		REGISTER_CLASS(PDBRecords)
 		REGISTER_CLASS(PDBInfo)
-#endif
 		REGISTER_CLASS(Residue)
 		REGISTER_CLASS(Chain)
 		REGISTER_CLASS(Protein)
 		REGISTER_CLASS(SecondaryStructure)
 		REGISTER_CLASS(NucleicAcid)
 		REGISTER_CLASS(Nucleotide)
-#ifndef BALL_CORE_ONLY
 		REGISTER_CLASS(CrystalInfo)
-#endif
 		#undef REGISTER_CLASS
 	}
 
