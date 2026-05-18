@@ -157,15 +157,31 @@ namespace BALL
 	{
 		public:
 
+		// 2026-05-18 (V21-COMPILED-EXPR-GENERATION-CHECK, Codex R13.2):
+		// CompiledExpression remembers (store_*, generation_at_compile)
+		// at compile time. evaluate() throws Exception::InvalidArgument
+		// ("CompiledExpression stale: store has been compacted or
+		// cleared") if the store's current generation no longer matches.
+		// Caller (typically through CompiledExpressionCache or
+		// Expression::operator()) is expected to recompile and retry.
+		// The cache itself already drops entries on invalidate_store;
+		// the new check protects shared_ptr<CompiledExpression> instances
+		// held outside the cache from operating on stale intern offsets
+		// after compact() or clear().
 		CompiledExpression(PredNode root,
 		                   std::string source,
-		                   std::size_t pred_set_hash);
+		                   std::size_t pred_set_hash,
+		                   const MoleculeStore* store_at_compile = nullptr,
+		                   std::uint64_t compile_generation = 0);
 		~CompiledExpression();
 
 		CompiledExpression(const CompiledExpression&)            = delete;
 		CompiledExpression& operator=(const CompiledExpression&) = delete;
 		CompiledExpression(CompiledExpression&&)            noexcept;
 		CompiledExpression& operator=(CompiledExpression&&) noexcept;
+
+		std::uint64_t        compile_generation() const   { return compile_generation_; }
+		const MoleculeStore* store_at_compile() const     { return store_at_compile_; }
 
 		/** Bitmap evaluation (K0.5.1 will implement).
 				`out_bitmap[i] == 1` iff root evaluates true for store atom i.
@@ -210,9 +226,11 @@ namespace BALL
 		            std::size_t pred_set_hash = 0);
 
 		private:
-		PredNode    root_;
-		std::string source_;
-		std::size_t pred_set_hash_;
+		PredNode             root_;
+		std::string          source_;
+		std::size_t          pred_set_hash_;
+		const MoleculeStore* store_at_compile_  = nullptr;
+		std::uint64_t        compile_generation_ = 0;
 	};
 
 	/** K0.5.2 LRU cache of compiled expressions, keyed on (source string,

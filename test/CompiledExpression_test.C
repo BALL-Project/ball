@@ -588,4 +588,37 @@ CHECK(K0.5.2 cache invalidate_store scoped per store)
 	TEST_EQUAL(cache.size(), 1u)
 RESULT
 
+CHECK(V21-COMPILED-EXPR-GENERATION-CHECK: evaluate throws after compact)
+	// Compile against the store at gen=0, then mutate the store in a
+	// way that bumps generation (compact). evaluate() must throw
+	// rather than operate with stale offsets.
+	System sys;
+	Molecule m;
+	sys.append(m);
+	Atom* a = new Atom;
+	a->setName("XX");
+	m.append(*a);
+
+	auto compiled = CompiledExpression::compile(sys.getStore(), std::string("name(XX)"));
+	TEST_NOT_EQUAL(compiled.get(), nullptr)
+
+	std::vector<std::uint8_t> bm;
+	compiled->evaluate(sys.getStore(), bm);
+	std::size_t hits = 0;
+	for (auto v : bm) hits += v;
+	TEST_EQUAL(hits, 1u)
+
+	// Compact bumps generation_; cached intern offsets may now be stale.
+	sys.getStore().compact();
+	TEST_NOT_EQUAL(compiled->compile_generation(), sys.getStore().generation())
+	TEST_EXCEPTION(Exception::InvalidArgument, compiled->evaluate(sys.getStore(), bm))
+
+	// A fresh compile against the new generation works again.
+	auto compiled2 = CompiledExpression::compile(sys.getStore(), std::string("name(XX)"));
+	compiled2->evaluate(sys.getStore(), bm);
+	hits = 0;
+	for (auto v : bm) hits += v;
+	TEST_EQUAL(hits, 1u)
+RESULT
+
 END_TEST

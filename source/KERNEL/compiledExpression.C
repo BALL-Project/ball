@@ -37,10 +37,14 @@ namespace BALL
 
 CompiledExpression::CompiledExpression(PredNode root,
                                        std::string source,
-                                       std::size_t pred_set_hash)
+                                       std::size_t pred_set_hash,
+                                       const MoleculeStore* store_at_compile,
+                                       std::uint64_t compile_generation)
 	: root_(std::move(root)),
 	  source_(std::move(source)),
-	  pred_set_hash_(pred_set_hash)
+	  pred_set_hash_(pred_set_hash),
+	  store_at_compile_(store_at_compile),
+	  compile_generation_(compile_generation)
 {
 }
 
@@ -389,6 +393,26 @@ namespace
 void CompiledExpression::evaluate(const MoleculeStore& store,
                                   std::vector<std::uint8_t>& out_bitmap) const
 {
+	// 2026-05-18 (V21-COMPILED-EXPR-GENERATION-CHECK, Codex R13.2):
+	// Reject stale CompiledExpression. If this was compiled against
+	// a different store, or the same store's generation has bumped
+	// (compact/clear/reserve), the cached intern_name offsets baked
+	// into the AST leaves no longer point at the right strings.
+	// Throw rather than silently produce wrong results.
+	if (store_at_compile_ != nullptr && store_at_compile_ != &store)
+	{
+		throw Exception::InvalidArgument(__FILE__, __LINE__,
+			"CompiledExpression::evaluate: store mismatch "
+			"(compiled against a different MoleculeStore)");
+	}
+	if (store_at_compile_ != nullptr
+	    && store.generation() != compile_generation_)
+	{
+		throw Exception::InvalidArgument(__FILE__, __LINE__,
+			"CompiledExpression::evaluate: stale (store has been "
+			"compacted, cleared, or reserved since compile — recompile "
+			"and retry)");
+	}
 	out_bitmap.assign(store.size(), 0);
 	eval_node_(root_, store, out_bitmap);
 }
@@ -577,8 +601,10 @@ CompiledExpression::compile(MoleculeStore& store,
 	ExpressionParser parser;
 	parser.parse(String(source.c_str()));
 	PredNode root = lower_node_(parser.getSyntaxTree(), store, /*expr=*/nullptr);
+	// V21-COMPILED-EXPR-GENERATION-CHECK: capture (store*, generation)
+	// at compile time so evaluate() can detect staleness.
 	return std::make_shared<const CompiledExpression>(
-	    std::move(root), source, pred_set_hash);
+	    std::move(root), source, pred_set_hash, &store, store.generation());
 }
 
 std::shared_ptr<const CompiledExpression>
@@ -591,7 +617,7 @@ CompiledExpression::compile(MoleculeStore& store,
 	parser.parse(String(source.c_str()));
 	PredNode root = lower_node_(parser.getSyntaxTree(), store, &expr);
 	return std::make_shared<const CompiledExpression>(
-	    std::move(root), source, pred_set_hash);
+	    std::move(root), source, pred_set_hash, &store, store.generation());
 }
 
 // ============================================================
