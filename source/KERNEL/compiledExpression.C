@@ -419,6 +419,32 @@ void CompiledExpression::evaluate(const MoleculeStore& store,
 
 bool CompiledExpression::evaluate_one(const Atom& atom) const
 {
+	// 2026-05-18 (R14.1 fix): same staleness check as evaluate(), via
+	// Atom::getStore() (which may be null for a fully-detached atom).
+	// Pre-fix, Expression::operator()(Atom) → cache.get_or_compile →
+	// evaluate_one would silently use stale intern offsets if the
+	// caller held a shared_ptr<CompiledExpression> compiled before
+	// the atom's store was compacted.
+	if (store_at_compile_ != nullptr)
+	{
+		const MoleculeStore* atom_store = atom.getStore();
+		if (atom_store != nullptr && atom_store != store_at_compile_)
+		{
+			throw Exception::InvalidArgument(__FILE__, __LINE__,
+				"CompiledExpression::evaluate_one: atom belongs to a "
+				"different MoleculeStore than this expression was compiled against");
+		}
+		// If atom_store is null (detached atom), skip generation check —
+		// evaluator below tolerates the detached case.
+		if (atom_store != nullptr
+		    && atom_store->generation() != compile_generation_)
+		{
+			throw Exception::InvalidArgument(__FILE__, __LINE__,
+				"CompiledExpression::evaluate_one: stale (store has "
+				"been compacted, cleared, or reserved since compile — "
+				"recompile and retry)");
+		}
+	}
 	return eval_one_(root_, atom);
 }
 

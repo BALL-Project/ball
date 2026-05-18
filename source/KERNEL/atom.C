@@ -375,7 +375,7 @@ namespace BALL
 		Index tmp_formal_charge;
 		float tmp_radius;
 		pm.readPrimitive(tmp_formal_charge, "formal_charge_");
-		{ float tmp_ch; pm.readPrimitive(tmp_ch, "charge_"); store_->charge(store_idx_) = tmp_ch; }
+		{ float tmp_ch; pm.readPrimitive(tmp_ch, "charge_"); writeStoreCharge_(tmp_ch); }
 		pm.readPrimitive(tmp_radius, "radius_");
 		// K0.3b.LATER.5+6: read into temporaries, then write through to store.
 		String tmp_name, tmp_type_name;
@@ -389,13 +389,14 @@ namespace BALL
 		writeStoreRadius_(tmp_radius);
 		writeStoreAtomType_(static_cast<short>(tmp_type));
 		writeStoreElement_(tmp_element);
-		store_->set_name(store_idx_, std::string(tmp_name.c_str()));
-		store_->set_type_name(store_idx_, std::string(tmp_type_name.c_str()));
+		// R14.2 fix: route through writeStoreXxx_ helpers (orphan-lock + rebind).
+		writeStoreName_(tmp_name);
+		writeStoreTypeName_(tmp_type_name);
 
-		// K0.3b.LATER.1+3+4: vectors land directly in store columns.
-		{ Vector3 tmp_pos;   pm.readStorableObject(tmp_pos,   "position_"); store_->position(store_idx_) = tmp_pos; }
-		{ Vector3 tmp_vel;   pm.readStorableObject(tmp_vel,   "velocity_"); store_->velocity(store_idx_) = tmp_vel; }
-		{ Vector3 tmp_force; pm.readStorableObject(tmp_force, "force_");    store_->force(store_idx_)    = tmp_force; }
+		// K0.3b.LATER.1+3+4: vectors land in store columns via lock-safe helpers.
+		{ Vector3 tmp_pos;   pm.readStorableObject(tmp_pos,   "position_"); writeStorePosition_(tmp_pos); }
+		{ Vector3 tmp_vel;   pm.readStorableObject(tmp_vel,   "velocity_"); writeStoreVelocity_(tmp_vel); }
+		{ Vector3 tmp_force; pm.readStorableObject(tmp_force, "force_");    writeStoreForce_(tmp_force); }
 
 		pm.readPrimitive(number_of_bonds_, "number_of_bonds_");
 		Size n;
@@ -415,21 +416,19 @@ namespace BALL
     Composite::set(atom, deep);
     PropertyManager::operator = (atom);
 
-    // K0.3b.LATER.5-10: name/type_name/element/radius/type/formal_charge
-    // deleted; store-mirror below.
+    // K0.3b.LATER.5-10 + R14.2 fix: payload fields land via lock-safe
+    // writeStoreXxx_ helpers (orphan-mutex + ensureStoreBinding).
     number_of_bonds_ = 0;
-		const Vector3  src_pos     = atom.getPosition();
-		const Element& src_element = atom.getElement();
-		store_->position(store_idx_) = src_pos;
-		store_->charge(store_idx_) = atom.getCharge();
-		store_->velocity(store_idx_) = atom.getVelocity();
-		store_->force(store_idx_) = atom.getForce();
-		store_->set_name(store_idx_, std::string(atom.getName().c_str()));
-		store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
+		writeStorePosition_(atom.getPosition());
+		writeStoreCharge_(atom.getCharge());
+		writeStoreVelocity_(atom.getVelocity());
+		writeStoreForce_(atom.getForce());
+		writeStoreName_(atom.getName());
+		writeStoreTypeName_(atom.getTypeName());
 		writeStoreRadius_(atom.getRadius());
 		writeStoreAtomType_(static_cast<short>(atom.getType()));
 		writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
-		writeStoreElement_(&src_element);
+		writeStoreElement_(&atom.getElement());
   }
 
 	Atom& Atom::operator = (const Atom& atom)
@@ -440,20 +439,18 @@ namespace BALL
 		Composite::operator =(atom);
 		PropertyManager::operator = (atom);
 
-		// K0.3b.LATER.5-10: payload fields deleted; store-mirror below.
+		// K0.3b.LATER.5-10 + R14.2 fix: route through lock-safe helpers.
 		number_of_bonds_ = 0;
-		const Vector3  src_pos     = atom.getPosition();
-		const Element& src_element = atom.getElement();
-		store_->position(store_idx_) = src_pos;
-		store_->charge(store_idx_) = atom.getCharge();
-		store_->velocity(store_idx_) = atom.getVelocity();
-		store_->force(store_idx_) = atom.getForce();
-		store_->set_name(store_idx_, std::string(atom.getName().c_str()));
-		store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
+		writeStorePosition_(atom.getPosition());
+		writeStoreCharge_(atom.getCharge());
+		writeStoreVelocity_(atom.getVelocity());
+		writeStoreForce_(atom.getForce());
+		writeStoreName_(atom.getName());
+		writeStoreTypeName_(atom.getTypeName());
 		writeStoreRadius_(atom.getRadius());
 		writeStoreAtomType_(static_cast<short>(atom.getType()));
 		writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
-		writeStoreElement_(&src_element);
+		writeStoreElement_(&atom.getElement());
 
 		return *this;
 	}
@@ -514,20 +511,24 @@ namespace BALL
 		const Snap self_snap  = capture(*this);
 		const Snap other_snap = capture(atom);
 
+		// R14.2 fix: route writes through lock-safe writeStoreXxx_
+		// helpers so orphan-bound atoms get the orphan mutex during
+		// payload write. Direct st->* pre-fix could race with another
+		// thread's orphan ctor allocate_atom.
 		auto apply = [](Atom& target, const Snap& s) {
 			if (target.store_ == nullptr) return;
-			MoleculeStore* st = target.store_;
-			const std::uint32_t i = target.store_idx_;
-			st->position(i)      = s.position;
-			st->velocity(i)      = s.velocity;
-			st->force(i)         = s.force;
-			st->charge(i)        = s.charge;
-			st->radius(i)        = s.radius;
-			st->atom_type(i)     = s.atom_type;
-			st->formal_charge(i) = s.formal_charge;
-			st->element_index(i) = s.element_index;
-			st->set_name(i, std::string(s.name.c_str()));
-			st->set_type_name(i, std::string(s.type_name.c_str()));
+			target.writeStorePosition_(s.position);
+			target.writeStoreVelocity_(s.velocity);
+			target.writeStoreForce_(s.force);
+			target.writeStoreCharge_(s.charge);
+			target.writeStoreRadius_(s.radius);
+			target.writeStoreAtomType_(s.atom_type);
+			target.writeStoreFormalCharge_(s.formal_charge);
+			// element_index is uint8 atomic-number; reverse-resolve via PTE.
+			const Element* el = &PTE[(Position)s.element_index];
+			target.writeStoreElement_(el);
+			target.writeStoreName_(s.name);
+			target.writeStoreTypeName_(s.type_name);
 		};
 		apply(*this, other_snap);
 		apply(atom,  self_snap);

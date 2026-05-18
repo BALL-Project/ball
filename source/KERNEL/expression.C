@@ -123,7 +123,22 @@ namespace BALL
 				// throwing.
 				auto compiled = CompiledExpressionCache::instance()
 					.get_or_compile(*store, *this);
-				return compiled->evaluate_one(atom);
+				try
+				{
+					return compiled->evaluate_one(atom);
+				}
+				catch (Exception::InvalidArgument&)
+				{
+					// 2026-05-18 (R14.1 catch + recompile): generation
+					// staleness check fired. Invalidate this store's
+					// cached entries (typically because compact() bumped
+					// generation between get_or_compile and evaluate_one
+					// on a hot path) and recompile.
+					CompiledExpressionCache::instance().invalidate_store(store);
+					auto compiled2 = CompiledExpressionCache::instance()
+						.get_or_compile(*store, *this);
+					return compiled2->evaluate_one(atom);
+				}
 			}
 			catch (Exception::ParseError&)
 			{
