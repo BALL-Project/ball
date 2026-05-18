@@ -163,6 +163,7 @@ SET(BALL_KERNEL_TESTS
 	StdIteratorWrapper_test
 	MoleculeStore_test
 	StoreFormat_test
+	CompiledExpression_test
 )
 
 SET(BALL_MOLMEC_TESTS

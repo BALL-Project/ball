@@ -7,6 +7,7 @@ SET(SOURCES_LIST
 	atomContainer.C
 	bond.C
 	chain.C
+	compiledExpression.C
 	expression.C
 	expressionPredicate.C
 	expressionTree.C
