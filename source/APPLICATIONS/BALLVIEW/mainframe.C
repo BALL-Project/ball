@@ -654,6 +654,16 @@ namespace BALL
 
 	void Mainframe::showWelcomeScreen_()
 	{
+		// v1.7.0-rc3 R8: bypass for headless / smoke-check runs. The
+		// render-smoke-check.sh script sets BALLVIEW_NO_WELCOME=1 so
+		// Scene stays the central widget from ctor; without this the
+		// WelcomeScreen-as-startup-central-widget keeps Scene's
+		// QOpenGLWidget hidden, initializeGL() never fires, smoke
+		// check times out waiting for BALLVIEW_GL_DIAG. Cheap env-var
+		// check; no impact on interactive use. See R8 in
+		// .planning/RC3-MASTER-PLAN.md.
+		if (qEnvironmentVariableIsSet("BALLVIEW_NO_WELCOME")) return;
+
 		if (welcome_screen_ == 0) return;
 		if (centralWidget() == welcome_screen_) return;
 

@@ -126,6 +126,14 @@ echo "render-smoke-check: log        = ${LOG_PATH}"
 #    `-export-png` flag. Bound the run with a watchdog so a hung GUI cannot
 #    wedge CI; the `-export-png` handler quits BALLView itself on success.
 # ----------------------------------------------------------------------------
+# v1.7.0-rc3 R8 workaround: prevent the WelcomeScreen-as-startup-
+# central-widget swap (UFG-08) from keeping Scene's QOpenGLWidget
+# hidden, which prevents initializeGL() from firing and starves the
+# smoke check of the BALLVIEW_GL_DIAG oracle line. Mainframe's
+# showWelcomeScreen_() honors this env var as an early-return.
+# No effect on interactive runs (env var only set here).
+export BALLVIEW_NO_WELCOME=1
+
 # shellcheck disable=SC2086
 ${SMOKE_RUNNER} "${BALLVIEW_BIN}" -export-png "${PNG_PATH}" "${SMOKE_INPUT}" \
 	> "${LOG_PATH}" 2>&1 &
