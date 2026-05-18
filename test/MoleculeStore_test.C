@@ -580,17 +580,12 @@ CHECK(K0.4.3 adoptSubtree preserves intra-subtree bonds)
 	delete bond;
 RESULT
 
-CHECK(K0.4.2 sequential adoption -- known limitation: bond orphans)
-	// Multi-step adoption (adopt a then adopt b separately) is a
-	// degenerate case in K0.4.2: when a adopts first, the bond stays
-	// in orphan; a's orphan slot is freed; CSR rebuild skips the bond
-	// (touches freed slot); when b adopts, the bond is invisible.
-	// Result: bond becomes orphaned in orphan store and dies with it.
-	//
-	// K0.4.3 will fix this by adopting all atoms contiguously through
-	// AtomContainer::insert, so both endpoints adopt before any slot
-	// release happens. Test locks the current K0.4.2 behavior so a
-	// future fix can flip the assertion.
+CHECK(K0.4.5 sequential adoption -- bonded atom refused (no state change))
+	// Codex Round 4 HIGH-3: pre-K0.4.5, single-atom adopt of a bonded
+	// atom orphaned its bond (the source slot was freed, CSR-skipped
+	// the bond with a freed endpoint, the partner's later adopt never
+	// saw the bond). K0.4.5 closes the hole by refusing the adopt and
+	// emitting a warning telling the caller to use adoptSubtree.
 	Atom a, b;
 	Bond* bond = a.createBond(b);
 	auto* orphan = a.getStore();
@@ -598,12 +593,15 @@ CHECK(K0.4.2 sequential adoption -- known limitation: bond orphans)
 
 	System sys;
 	auto* sys_store = &sys.getStore();
-	sys.adopt(a);
-	sys.adopt(b);
+	(void)sys_store;
+	sys.adopt(a);    // refused: b is in orphan, not sys_store
+	sys.adopt(b);    // refused: a is in orphan, not sys_store
 
-	// K0.4.2 current behavior: bond stays orphaned (was in orphan,
-	// but freed-slot CSR-skip hides it from b's migration scan).
-	// K0.4.3 will make this assert sys_store instead.
+	// K0.4.5 behavior: both atoms still in orphan; bond still in orphan;
+	// no orphaning, no silent data loss. Callers wanting to migrate
+	// bonded subgraphs must use adoptSubtree (covered by other tests).
+	TEST_EQUAL(a.getStore(), orphan)
+	TEST_EQUAL(b.getStore(), orphan)
 	TEST_EQUAL(bond->bond_store_, orphan)
 
 	delete bond;

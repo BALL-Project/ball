@@ -36,21 +36,47 @@ namespace BALL
 	// K0.4.2: System.adopt(Atom&) — migrates atom from current store
 	// (typically orphan) into this System's per-instance store.
 	//
+	// K0.4.5 (Codex Round 4 HIGH-3): single-atom adopt is ONLY safe for
+	// atoms with zero bonds, or whose bonds' partners are already in the
+	// target store. Adopting an atom whose bond partners are in a third
+	// store (typically the orphan store) would orphan those bonds: the
+	// source slot is released, its bond records have a freed endpoint,
+	// and CSR filters them out — the bond becomes invisible to the
+	// partner's future adopt(). Callers with mixed-store bonded atoms
+	// must use adoptSubtree(AtomContainer&), which migrates atoms in
+	// three batched passes that keep bond endpoints reachable.
+	//
 	// Sequence:
-	//   1. Snapshot all atom payload columns from the source store
-	//   2. allocate_atom(&atom) in target store (atomic bind, K0.3c.8)
-	//   3. Copy payload to new slot
-	//   4. For each bond incident to atom in source store: if partner
-	//      is also in target store, re-add bond there + tombstone in
-	//      source; else leave in source for the partner's future adopt
-	//   5. release_atom(source slot)
-	//   6. Update atom.store_/store_idx_/store_generation_
+	//   1. Reject if atom has bonds whose partners aren't in dst (logged
+	//      warning + early return; no state change)
+	//   2. Snapshot all atom payload columns from the source store
+	//   3. allocate_atom(&atom) in target store (atomic bind, K0.3c.8)
+	//   4. Copy payload to new slot
+	//   5. Migrate the (now-safe) bonds whose partners ARE in dst
+	//   6. release_atom(source slot)
+	//   7. Update atom.store_/store_idx_/store_generation_
 	void System::adopt(Atom& atom)
 	{
 		MoleculeStore* src = atom.getStore();
 		MoleculeStore* dst = store_.get();
 		if (src == dst) return;          // already in this System's store
 		if (src == nullptr) return;      // unbound atom (shouldn't happen post-K0.3b.1)
+
+		// K0.4.5: bonded-atom safety gate. If any bond's partner lives in
+		// a store other than dst, the bond would be orphaned when src
+		// released the source slot. Refuse and tell the caller to use
+		// adoptSubtree instead.
+		for (Size bi = 0; bi < atom.countBonds(); ++bi)
+		{
+			const Atom* partner = atom.getPartnerAtom(bi);
+			if (partner == nullptr) continue;
+			MoleculeStore* psrc = partner->getStore();
+			if (psrc == dst) continue;   // safe: partner already in dst
+			Log.warn() << "System::adopt(Atom&): refusing to adopt bonded "
+				"atom whose partner lives in another store; use "
+				"adoptSubtree(AtomContainer&) instead." << std::endl;
+			return;
+		}
 
 		const std::uint32_t src_idx = atom.getStoreIndex();
 
