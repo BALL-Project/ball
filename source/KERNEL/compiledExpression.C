@@ -77,6 +77,41 @@ namespace
 	                const MoleculeStore& store,
 	                std::vector<Byte>& out);
 
+	// 2026-05-18 (Codex R6 FYI-6 — AndNode tmp-bitmap reuse): each AND
+	// and OR inner-node evaluation used to allocate a fresh
+	// `std::vector<Byte> tmp(n)` per call. For a tree of depth D evaluated
+	// E times that's O(D*E) heap allocations per evaluate() pass. Switch
+	// to a thread-local depth-indexed scratch pool: vector slots keep
+	// their capacity across evaluations so the allocation amortises to
+	// O(D) once. Each AND/OR scope acquires pool[scratch_depth++], hands
+	// it to children, releases on scope exit.
+	struct ScratchPool
+	{
+		std::vector<std::vector<Byte>> bufs;
+		std::size_t depth = 0;
+	};
+	inline ScratchPool& scratch_pool_()
+	{
+		static thread_local ScratchPool pool;
+		return pool;
+	}
+	struct ScratchScope
+	{
+		ScratchPool& pool;
+		std::vector<Byte>& buf;
+		explicit ScratchScope(std::size_t n) : pool(scratch_pool_()),
+			buf((pool.depth < pool.bufs.size()
+			       ? pool.bufs[pool.depth]
+			       : (pool.bufs.emplace_back(), pool.bufs.back())))
+		{
+			++pool.depth;
+			if (buf.size() < n) buf.resize(n);
+		}
+		~ScratchScope() { --pool.depth; }
+		ScratchScope(const ScratchScope&) = delete;
+		ScratchScope& operator=(const ScratchScope&) = delete;
+	};
+
 	// Fast-path leaf evaluators. Each writes  out[i] = 0 | 1  for every
 	// store slot i (freed slots already pre-zeroed by the dispatcher).
 	void eval_(const TrueLeaf&, const MoleculeStore& s,
@@ -210,13 +245,18 @@ namespace
 
 	// Inner-node evaluators. AND = bitwise AND of child bitmaps;
 	// OR  = bitwise OR; NOT = invert (live atoms only).
+	// 2026-05-18 (R6 FYI-6 fix): the per-call `std::vector<Byte> tmp(n)`
+	// was replaced with ScratchScope, which borrows a depth-indexed
+	// thread-local buffer that retains its capacity across evaluations.
 	void eval_(const std::unique_ptr<AndNode>& node,
 	           const MoleculeStore& s, std::vector<Byte>& out)
 	{
 		const std::size_t n = s.size();
 		if (node->children.empty()) { std::memset(out.data(), 1, n); return; }
 		eval_node_(node->children[0], s, out);
-		std::vector<Byte> tmp(n);
+		if (node->children.size() == 1) return;
+		ScratchScope scratch(n);
+		std::vector<Byte>& tmp = scratch.buf;
 		for (std::size_t c = 1; c < node->children.size(); ++c)
 		{
 			eval_node_(node->children[c], s, tmp);
@@ -229,7 +269,9 @@ namespace
 		const std::size_t n = s.size();
 		if (node->children.empty()) { std::memset(out.data(), 0, n); return; }
 		eval_node_(node->children[0], s, out);
-		std::vector<Byte> tmp(n);
+		if (node->children.size() == 1) return;
+		ScratchScope scratch(n);
+		std::vector<Byte>& tmp = scratch.buf;
 		for (std::size_t c = 1; c < node->children.size(); ++c)
 		{
 			eval_node_(node->children[c], s, tmp);
