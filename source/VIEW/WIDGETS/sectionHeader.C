@@ -10,6 +10,8 @@
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>
 
 #include <QtGui/QAccessible>
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 #include <QtWidgets/QFrame>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -27,6 +29,28 @@ namespace BALL
 				title_label_(nullptr)
 		{
 			setObjectName(QStringLiteral("sectionHeader"));
+			// v1.7.0-rc2 UFG-05 — paint a solid background.
+			//
+			// rc1 left SectionHeader as a plain QWidget with no
+			// background — Qt's default for a QWidget is "transparent
+			// where the child layout doesn't draw", so the gaps around
+			// the chevron / label / rule passed pixels straight through
+			// to whatever was painted underneath. When the parent
+			// InspectorSection ran its expand/collapse QPropertyAnimation
+			// on the content widget's maximumHeight, sibling sections
+			// shifted up/down through the header's region and left
+			// fragments of QComboBox / QLabel text overlapping the
+			// header glyphs ("OPENG/SACCOUTH" in the bug screenshot,
+			// fragments of "OpenGL" + "Saccharide" bleeding through
+			// the "REPRESENTATION" title).
+			//
+			// Fix: opt into Qt::WA_OpaquePaintEvent + paint the window
+			// palette colour ourselves in paintEvent. This guarantees
+			// the entire header rect is cleared on every paint pass, so
+			// stale pixels from underneath can never persist regardless
+			// of the parent's animation state.
+			setAttribute(Qt::WA_OpaquePaintEvent, true);
+			setAutoFillBackground(true);
 
 			chevron_ = new QToolButton(this);
 			chevron_->setObjectName(QStringLiteral("sectionHeaderChevron"));
@@ -103,6 +127,25 @@ namespace BALL
 		void SectionHeader::onChevronClicked()
 		{
 			toggle();
+		}
+
+		void SectionHeader::paintEvent(QPaintEvent* event)
+		{
+			// v1.7.0-rc2 UFG-05 — explicit opaque fill.
+			//
+			// WA_OpaquePaintEvent makes Qt promise the widget will paint
+			// every pixel of its area itself (and skip the parent-background
+			// fill that would otherwise run before paintEvent). We honor
+			// that promise here: fill the dirty rect with the Window
+			// palette colour. setAutoFillBackground() alone is not enough
+			// when WA_OpaquePaintEvent is set — Qt explicitly disables the
+			// background-fill step on opaque widgets to avoid double-paint.
+			QPainter p(this);
+			p.fillRect(event->rect(), palette().color(QPalette::Window));
+			// Don't call QWidget::paintEvent — the child widgets (chevron,
+			// label, rule) paint themselves via the layout / repaint chain.
+			// Calling the base would re-run the (now no-op) background
+			// step but adds no glyphs.
 		}
 
 		void SectionHeader::updateChevronIcon_()

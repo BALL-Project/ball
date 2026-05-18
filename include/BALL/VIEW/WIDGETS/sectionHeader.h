@@ -73,6 +73,20 @@ namespace BALL
 			private Q_SLOTS:
 				void onChevronClicked();
 
+			protected:
+				/**
+				 * v1.7.0-rc2 UFG-05 — explicit opaque fill of the
+				 * header rect on every paint pass. Prevents stale
+				 * pixels from underneath the widget (e.g. neighbouring
+				 * Inspector sections during the expand/collapse
+				 * QPropertyAnimation) from bleeding through the
+				 * header's chevron / title / rule gaps.
+				 *
+				 * Paired with `setAttribute(Qt::WA_OpaquePaintEvent)`
+				 * in the constructor.
+				 */
+				void paintEvent(QPaintEvent* event) override;
+
 			private:
 				bool expanded_;
 				QToolButton* chevron_;
