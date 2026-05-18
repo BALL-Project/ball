@@ -164,6 +164,7 @@ SET(BALL_KERNEL_TESTS
 	MoleculeStore_test
 	StoreFormat_test
 	CompiledExpression_test
+	SelectorBench_test
 )
 
 SET(BALL_MOLMEC_TESTS

@@ -53,6 +53,7 @@ IF(BALL_CORE_ONLY)
 		MoleculeStore_test
 		StoreFormat_test
 		CompiledExpression_test
+		SelectorBench_test
 	)
 	SET(BALL_TESTS
 		BALL_BASIC_TESTS
