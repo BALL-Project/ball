@@ -24,6 +24,13 @@ INCLUDE(include/BALL/MATHS/sources.cmake)
 INCLUDE(source/SYSTEM/sources.cmake)
 INCLUDE(include/BALL/SYSTEM/sources.cmake)
 
+# B0.1 (Track B Wave 0, 2026-05-18): PLUGIN re-enabled unconditionally.
+# Has zero deps on other disabled modules (per MODULE-REENABLE-PLAN.md
+# audit) so the toggle is safe even with BALL_CORE_ONLY=ON. Smoke-tests
+# the BALL_CORE_ONLY-removal path before the FORMAT/STRUCTURE waves.
+INCLUDE(source/PLUGIN/sources.cmake)
+INCLUDE(include/BALL/PLUGIN/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
@@ -39,9 +46,6 @@ IF(NOT BALL_CORE_ONLY)
 
 	INCLUDE(source/NMR/sources.cmake)
 	INCLUDE(include/BALL/NMR/sources.cmake)
-
-	INCLUDE(source/PLUGIN/sources.cmake)
-	INCLUDE(include/BALL/PLUGIN/sources.cmake)
 
 	INCLUDE(source/PYTHON/sources.cmake)
 	INCLUDE(include/BALL/PYTHON/sources.cmake)
