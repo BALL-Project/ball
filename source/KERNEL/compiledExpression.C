@@ -28,6 +28,7 @@
 #include <algorithm>
 #include <cctype>
 #include <cstring>
+#include <deque>
 #include <list>
 #include <unordered_map>
 
@@ -85,9 +86,18 @@ namespace
 	// their capacity across evaluations so the allocation amortises to
 	// O(D) once. Each AND/OR scope acquires pool[scratch_depth++], hands
 	// it to children, releases on scope exit.
+	//
+	// 2026-05-18 (Codex R11 BUG fix): the storage was originally
+	// `std::vector<std::vector<Byte>>`. With std::vector's
+	// re-allocate-on-grow semantics, a nested ScratchScope that pushes
+	// past the outer vector's capacity invalidates the outer scope's
+	// `buf` reference into the same vector — use-after-realloc on
+	// e.g. `element(C) AND (element(N) OR element(O))`. Fix: switch to
+	// std::deque which guarantees that references to existing elements
+	// remain valid across push_back/emplace_back.
 	struct ScratchPool
 	{
-		std::vector<std::vector<Byte>> bufs;
+		std::deque<std::vector<Byte>> bufs;
 		std::size_t depth = 0;
 	};
 	inline ScratchPool& scratch_pool_()
@@ -593,6 +603,9 @@ std::size_t CompiledExpressionCache::KeyHash::operator()(const Key& k) const noe
 	std::size_t p = std::hash<const void*>{}(static_cast<const void*>(k.store));
 	// Mix store ptr into the hash.
 	h ^= p + 0x9e3779b97f4a7c15ULL + (h << 6) + (h >> 2);
+	// 2026-05-18 (R11 fix E): mix pred_set_hash so cache slots split per
+	// predicate-factory registry.
+	h ^= k.pred_set_hash + 0x9e3779b97f4a7c15ULL + (h << 6) + (h >> 2);
 	return h;
 }
 
@@ -648,10 +661,33 @@ CompiledExpressionCache& CompiledExpressionCache::instance()
 // — if another thread compiled the same entry concurrently, we use
 // theirs and drop our copy.
 
+// 2026-05-18 (R11 fix E): hash an Expression's predicate-factory
+// registry. Combines name + factory-pointer for every (name, CreationMethod)
+// entry. Two Expressions whose registries differ in any entry get
+// different hashes → different cache slots. Order-independent (XOR
+// reduce). Computed in O(N) once per get_or_compile call (only on the
+// Expression-aware overload); cache hits cost just one std::size_t copy.
+static std::size_t pred_set_hash_of_(const Expression& expr)
+{
+	std::size_t h = 0;
+	const auto& methods = expr.getCreationMethods();
+	for (auto it = methods.begin(); it != methods.end(); ++it)
+	{
+		std::size_t name_h = std::hash<std::string>{}(std::string(it->first.c_str()));
+		std::size_t fn_h   = std::hash<const void*>{}(
+			reinterpret_cast<const void*>(it->second));
+		h ^= name_h + 0x9e3779b97f4a7c15ULL + (name_h << 6) + (name_h >> 2);
+		h ^= fn_h   + 0x9e3779b97f4a7c15ULL + (fn_h   << 6) + (fn_h   >> 2);
+	}
+	return h;
+}
+
 std::shared_ptr<const CompiledExpression>
 CompiledExpressionCache::get_or_compile(MoleculeStore& store, const std::string& source)
 {
-	Key k{source, &store};
+	// Standard predicate set → pred_set_hash=0. The Expression-aware
+	// overload below computes a real hash from expr.getCreationMethods().
+	Key k{source, &store, /*pred_set_hash=*/0};
 	{
 		std::lock_guard<std::mutex> lk(impl_->mtx);
 		auto it = impl_->index.find(k);
@@ -686,7 +722,7 @@ std::shared_ptr<const CompiledExpression>
 CompiledExpressionCache::get_or_compile(MoleculeStore& store, const Expression& expr)
 {
 	const std::string source = std::string(expr.getExpressionString().c_str());
-	Key k{source, &store};
+	Key k{source, &store, pred_set_hash_of_(expr)};
 	{
 		std::lock_guard<std::mutex> lk(impl_->mtx);
 		auto it = impl_->index.find(k);

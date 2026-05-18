@@ -233,7 +233,21 @@ namespace BALL
 		{
 			std::string    source;
 			MoleculeStore* store;
-			bool operator==(const Key& o) const { return store == o.store && source == o.source; }
+			// 2026-05-18 (Codex R11 fix E): the cache used to key on
+			// (source, store) only. Two Expression instances with the
+			// same source string and same store BUT different registered
+			// predicate factories (`Expression::registerPredicate`) would
+			// hit the cached CompiledExpression — silently producing the
+			// wrong selection for the predicate that differs. Adding the
+			// per-Expression predicate-set hash to the key splits the
+			// cache slots. The string-only get_or_compile uses
+			// pred_set_hash=0 (standard predicate set).
+			std::size_t    pred_set_hash;
+			bool operator==(const Key& o) const {
+				return store == o.store
+				    && pred_set_hash == o.pred_set_hash
+				    && source == o.source;
+			}
 		};
 		struct KeyHash
 		{

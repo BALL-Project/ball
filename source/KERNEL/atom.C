@@ -137,6 +137,26 @@ namespace BALL
 		store_->formal_charge(store_idx_) = fc;
 	}
 
+	// 2026-05-18 (Codex R11 fix A): the orphan-store mutex must be held
+	// across the initial-writes block following bindToStore_, not just
+	// during the allocate_atom call inside bindToStore_. Otherwise, after
+	// bindToStore_ releases the mutex, another thread can enter
+	// bindToStore_ → allocate_atom → push_back which reallocates the
+	// orphan-store columns; the first thread's mid-flight
+	// `store_->position(store_idx_) = p` re-evaluates `position(store_idx_)`
+	// against a now-stale base pointer and writes to freed memory.
+	// MoleculeStore_test K0.4.6 HIGH-4 stress was flaking ~3% on this race.
+	// Helper macro keeps the 3 Atom ctors readable.
+	#define BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_(initial_writes_block) \
+		do { \
+			if (store_ == &MoleculeStore::orphanStore()) { \
+				std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex()); \
+				initial_writes_block \
+			} else { \
+				initial_writes_block \
+			} \
+		} while (0)
+
 	Atom::Atom()
 		: Composite(),
 		  PropertyManager(),
@@ -146,17 +166,20 @@ namespace BALL
 	{
 		bindToStore_(globalOrphanStore_());
 		// K0.3b.LATER.1-10: all atom-payload fields are now store-backed;
-		// write defaults straight through.
-		store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
-		store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
-		store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
-		store_->force(store_idx_) = Vector3(BALL_ATOM_DEFAULT_FORCE);
-		store_->set_name(store_idx_, std::string(BALL_ATOM_DEFAULT_NAME));
-		store_->set_type_name(store_idx_, std::string(BALL_ATOM_DEFAULT_TYPE_NAME));
-		writeStoreRadius_(BALL_ATOM_DEFAULT_RADIUS);
-		writeStoreAtomType_(static_cast<short>(BALL_ATOM_DEFAULT_TYPE));
-		writeStoreFormalCharge_(static_cast<short>(BALL_ATOM_DEFAULT_FORMAL_CHARGE));
-		writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
+		// write defaults straight through. Under orphan-store binding, the
+		// writes are serialised via the orphan mutex (R11 fix A).
+		BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_({
+			store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
+			store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
+			store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
+			store_->force(store_idx_) = Vector3(BALL_ATOM_DEFAULT_FORCE);
+			store_->set_name(store_idx_, std::string(BALL_ATOM_DEFAULT_NAME));
+			store_->set_type_name(store_idx_, std::string(BALL_ATOM_DEFAULT_TYPE_NAME));
+			writeStoreRadius_(BALL_ATOM_DEFAULT_RADIUS);
+			writeStoreAtomType_(static_cast<short>(BALL_ATOM_DEFAULT_TYPE));
+			writeStoreFormalCharge_(static_cast<short>(BALL_ATOM_DEFAULT_FORMAL_CHARGE));
+			writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
+		});
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
@@ -167,17 +190,19 @@ namespace BALL
 			number_of_bonds_(0)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.LATER.1-10: copy all store-backed fields via source getters.
-		store_->position(store_idx_) = atom.getPosition();
-		store_->charge(store_idx_) = atom.getCharge();
-		store_->velocity(store_idx_) = atom.getVelocity();
-		store_->force(store_idx_) = atom.getForce();
-		store_->set_name(store_idx_, std::string(atom.getName().c_str()));
-		store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
-		writeStoreRadius_(atom.getRadius());
-		writeStoreAtomType_(static_cast<short>(atom.getType()));
-		writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
-		writeStoreElement_(&atom.getElement());
+		// K0.3b.LATER.1-10 + R11 fix A: copy under orphan mutex.
+		BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_({
+			store_->position(store_idx_) = atom.getPosition();
+			store_->charge(store_idx_) = atom.getCharge();
+			store_->velocity(store_idx_) = atom.getVelocity();
+			store_->force(store_idx_) = atom.getForce();
+			store_->set_name(store_idx_, std::string(atom.getName().c_str()));
+			store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
+			writeStoreRadius_(atom.getRadius());
+			writeStoreAtomType_(static_cast<short>(atom.getType()));
+			writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
+			writeStoreElement_(&atom.getElement());
+		});
 	}
 
 	Atom::Atom
@@ -192,18 +217,22 @@ namespace BALL
 		  number_of_bonds_(0)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.LATER.1-10: write ctor args straight through to the store.
-		store_->position(store_idx_) = position;
-		store_->charge(store_idx_) = charge;
-		store_->velocity(store_idx_) = velocity;
-		store_->force(store_idx_) = force;
-		store_->set_name(store_idx_, std::string(name.c_str()));
-		store_->set_type_name(store_idx_, std::string(type_name.c_str()));
-		writeStoreRadius_(radius);
-		writeStoreAtomType_(static_cast<short>(type));
-		writeStoreFormalCharge_(static_cast<short>(formal_charge));
-		writeStoreElement_(&element);
+		// K0.3b.LATER.1-10 + R11 fix A: write ctor args under orphan mutex.
+		BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_({
+			store_->position(store_idx_) = position;
+			store_->charge(store_idx_) = charge;
+			store_->velocity(store_idx_) = velocity;
+			store_->force(store_idx_) = force;
+			store_->set_name(store_idx_, std::string(name.c_str()));
+			store_->set_type_name(store_idx_, std::string(type_name.c_str()));
+			writeStoreRadius_(radius);
+			writeStoreAtomType_(static_cast<short>(type));
+			writeStoreFormalCharge_(static_cast<short>(formal_charge));
+			writeStoreElement_(&element);
+		});
 	}
+
+	#undef BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_
 
 	Atom::~Atom()
 	{

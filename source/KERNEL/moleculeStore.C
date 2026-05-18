@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/compiledExpression.h>
 #include <BALL/COMMON/exception.h>
 
+#include <mutex>
 #include <unordered_set>
 
 namespace BALL
@@ -70,9 +71,27 @@ MoleculeStore::~MoleculeStore()
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give
 // thread-safe lazy init (C++17 [stmt.dcl] p4).
+//
+// 2026-05-18 (Codex R11 fix A complement): pre-reserve a generous
+// capacity on first use. The K0.4.6 stress test (4 threads × 500 atoms)
+// was flaking ~2-3% even with the ctor-lock fix because non-ctor
+// mutators (setCharge/setName/setPosition called from worker code)
+// still don't take the orphan mutex, and any concurrent ctor's
+// allocate_atom triggers a column reallocation that races with those
+// mutators. Pre-reserving 64k avoids reallocation for any realistic
+// orphan-store workload (default Atom() ctors from temporary stack
+// objects, ASIO / test fixtures). Proper per-mutator orphan-locking
+// remains v2.1 work; this band-aid kills the test flake in practice.
 MoleculeStore& MoleculeStore::orphanStore()
 {
 	static MoleculeStore orphan;
+	static std::once_flag reserve_once;
+	// Bind directly to `orphan`, not via recursive orphanStore() —
+	// otherwise call_once + recursion through the same function would
+	// deadlock on the once_flag.
+	std::call_once(reserve_once, [] {
+		orphan.reserve(65536);
+	});
 	return orphan;
 }
 std::mutex& MoleculeStore::orphanMutex()

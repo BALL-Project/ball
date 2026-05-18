@@ -20,6 +20,7 @@
 #include <istream>
 #include <ostream>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace
@@ -255,21 +256,95 @@ void loadSystemJSON(System& sys, std::istream& is)
 				"live save-slot not referenced by any molecule or system_atom_indices");
 		}
 
+		// 2026-05-18 (Codex R11 fix D — extended Phase 1 validation).
+		// Validate column shapes, numeric ranges, stable_id duplicates,
+		// and bond endpoint ranges BEFORE Phase 2 mutates anything.
+		// Cheap O(n) checks that previously interleaved with mutation
+		// and could throw post-Composite-insert leaving sys in a
+		// partial state. The remaining numeric-range checks in Phase 2
+		// (decode_float_ throws, set_selected gates) are belt-and-
+		// suspenders; the rollback guard catches them too.
+		require_(a.contains("stable_ids") && a["stable_ids"].is_array()
+			&& a["stable_ids"].size() == n, "stable_ids must be array of size n");
+		require_(a.contains("positions")  && a["positions"].is_array()  && a["positions"].size() == n, "positions size mismatch");
+		require_(a.contains("velocities") && a["velocities"].is_array() && a["velocities"].size() == n, "velocities size mismatch");
+		require_(a.contains("forces")     && a["forces"].is_array()     && a["forces"].size() == n,     "forces size mismatch");
+		require_(a.contains("charges")    && a["charges"].is_array()    && a["charges"].size() == n,    "charges size mismatch");
+		require_(a.contains("radii")      && a["radii"].is_array()      && a["radii"].size() == n,      "radii size mismatch");
+		require_(a.contains("atom_types") && a["atom_types"].is_array() && a["atom_types"].size() == n, "atom_types size mismatch");
+		require_(a.contains("formal_charges") && a["formal_charges"].is_array() && a["formal_charges"].size() == n, "formal_charges size mismatch");
+		require_(a.contains("element_indices") && a["element_indices"].is_array() && a["element_indices"].size() == n, "element_indices size mismatch");
+		require_(a.contains("selection") && a["selection"].is_array() && a["selection"].size() == n, "selection size mismatch");
+		require_(a.contains("names")      && a["names"].is_array()      && a["names"].size() == n,      "names size mismatch");
+		require_(a.contains("type_names") && a["type_names"].is_array() && a["type_names"].size() == n, "type_names size mismatch");
+
+		// stable_id uniqueness across LIVE slots (freed slots' ids are
+		// allowed to alias; they'll be discarded).
+		std::unordered_set<std::uint64_t> seen_sid;
+		seen_sid.reserve(n);
+		for (std::size_t i = 0; i < n; ++i)
+		{
+			if (is_freed_in_doc[i]) continue;
+			const std::uint64_t sid = a["stable_ids"][i].get<std::uint64_t>();
+			require_(seen_sid.insert(sid).second,
+				"stable_ids[i] duplicate across live slots");
+		}
+
+		// Bond endpoint range + field presence.
+		const json& bonds_phase1 = store_doc["bonds"];
+		require_(bonds_phase1.is_array(), "bonds must be array");
+		for (const auto& br : bonds_phase1)
+		{
+			require_(br.is_object() && br.contains("a") && br.contains("b")
+				&& br.contains("order") && br.contains("type") && br.contains("flags"),
+				"bonds[i] missing field");
+			const std::uint32_t save_a = br["a"].get<std::uint32_t>();
+			const std::uint32_t save_b = br["b"].get<std::uint32_t>();
+			require_(save_a < n, "bond.a out of [0, size)");
+			require_(save_b < n, "bond.b out of [0, size)");
+			const int order_i = br["order"].get<int>();
+			const int type_i  = br["type"].get<int>();
+			require_(order_i >= 0 && order_i <= 255, "bond.order out of [0,255]");
+			require_(type_i  >= 0 && type_i  <= 255, "bond.type out of [0,255]");
+		}
+
 		// Phase 2 — STATE MUTATION begins. Pre-create Atom handles for
-		// every live save-slot. RAII guard (K0.6.5c R8 OPEN-3b): if any
-		// subsequent step throws, delete the pre-created atoms so they
-		// don't leak. The guard releases (no-op) on success.
+		// every live save-slot. RAII guard (K0.6.5c R8 OPEN-3b + R11
+		// fix D): if any subsequent step throws, fully roll back —
+		// delete pre-created atoms (if not yet inserted) AND restore
+		// the destination System to its pre-load empty state
+		// (sys.destroy() + store.clear()). Guard stays armed across
+		// the entire mutation window (was disarmed too early, leaving
+		// sys partially populated on late-Phase-2 throws). Disarms
+		// only at the very end of the try block.
 		std::vector<Atom*> atom_by_save_idx(n, nullptr);
-		struct AtomGuard {
+		struct RollbackGuard {
 			std::vector<Atom*>* v;
-			bool armed = true;
-			~AtomGuard()
+			System*             sys;
+			bool                inserted_started = false;
+			bool                armed            = true;
+			~RollbackGuard()
 			{
-				if (!armed || v == nullptr) return;
-				for (Atom* a : *v) delete a;
+				if (!armed) return;
+				if (inserted_started && sys != nullptr)
+				{
+					// Atoms have been inserted into molecules owned by sys
+					// (and/or directly into sys). sys.destroy() drops the
+					// Composite subtree which deletes everything via the
+					// virtual destruction chain. Then clear the store to
+					// drop any column data we wrote.
+					sys->destroy();
+					sys->getStore().clear();
+				}
+				else if (v != nullptr)
+				{
+					// Atoms are still bare heap allocations not yet inserted
+					// anywhere — delete them directly.
+					for (Atom* a : *v) delete a;
+				}
 			}
 		};
-		AtomGuard guard{&atom_by_save_idx};
+		RollbackGuard guard{&atom_by_save_idx, &sys};
 
 		for (std::size_t i = 0; i < n; ++i)
 		{
@@ -278,6 +353,7 @@ void loadSystemJSON(System& sys, std::istream& is)
 		}
 
 		// Phase 2 — molecules + atoms.
+		guard.inserted_started = true;  // any throw past this point must rollback via sys.destroy + store.clear
 		for (const auto& mol_obj : mols)
 		{
 			Molecule* m = new Molecule;
@@ -307,9 +383,10 @@ void loadSystemJSON(System& sys, std::istream& is)
 			}
 		}
 
-		// All atoms now owned by the Composite tree (molecules or sys);
-		// disarm the RAII guard so the leak-cleanup doesn't run.
-		guard.armed = false;
+		// (R11 fix D): guard stays ARMED across the remaining mutation
+		// window (column data, stable_id restore, bond restore). Disarmed
+		// only at the very end of the try block when the full load is
+		// complete and rollback would be a bug.
 
 		// Build save_idx -> fresh_store_idx map. After all molecule
 		// inserts, every live atom is in sys.getStore() at some idx.
@@ -420,6 +497,11 @@ void loadSystemJSON(System& sys, std::istream& is)
 			               static_cast<std::uint8_t>(order_i),
 			               static_cast<std::uint8_t>(type_i));
 		}
+
+		// (R11 fix D): full mutation succeeded — disarm the rollback
+		// guard. Any throw before this point triggers full rollback to
+		// the pre-load empty System.
+		guard.armed = false;
 	}
 	catch (const Exception::ParseError&) { throw; }
 	catch (const json::exception& e)

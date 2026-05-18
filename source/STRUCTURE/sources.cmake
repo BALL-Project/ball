@@ -55,6 +55,10 @@ SET(SOURCES_LIST
 	graphFace.C
 	graphVertex.C
 	HBondProcessor.C
+	# R11 fix F (2026-05-18): added — was missing from both core and
+	# full-build lists. Depends only on KERNEL + STRUCTURE, no MOLMEC/QSAR
+	# cascade; safe for CORE_ONLY.
+	simpleMolecularGraph.C
 	mutator.C
 	nucleotideMapping.C
 	numericalSAS.C
