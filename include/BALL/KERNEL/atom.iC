@@ -157,41 +157,39 @@ String Atom::getTypeName() const
 BALL_INLINE
 void Atom::setVelocity(const Vector3& velocity)
 {
-	velocity_.set(velocity);
-	// K0.3b.4 dual-write: mirror into store column.
-	if (store_) writeStoreVelocity_(velocity);
+	// K0.3b.LATER.3: velocity_ v1.x field deleted.
+	writeStoreVelocity_(velocity);
 }
 
 BALL_INLINE
 Vector3& Atom::getVelocity()
 {
-	return velocity_;
+	return store_->velocity(store_idx_);
 }
 
 BALL_INLINE
 const Vector3& Atom::getVelocity() const
 {
-	return velocity_;
+	return store_->velocity(store_idx_);
 }
 
 BALL_INLINE
 void Atom::setForce(const Vector3& force)
 {
-	force_.set(force);
-	// K0.3b.5 dual-write: mirror into store column.
-	if (store_) writeStoreForce_(force);
+	// K0.3b.LATER.4: force_ v1.x field deleted.
+	writeStoreForce_(force);
 }
 
 BALL_INLINE
 Vector3& Atom::getForce()
 {
-	return force_;
+	return store_->force(store_idx_);
 }
 
 BALL_INLINE
 const Vector3& Atom::getForce() const
 {
-	return force_;
+	return store_->force(store_idx_);
 }
 
 BALL_INLINE
