@@ -242,13 +242,19 @@ SET_TESTS_PROPERTIES (
 	PROPERTIES WILL_FAIL TRUE
 )
 
-# TextPersistenceManager_test segfaults at exit (PDBInfo unregistered)
-# rather than returning a non-zero exit. WILL_FAIL doesn't catch signal
-# crashes — exclude from the CORE_ONLY test group entirely. Test still
-# runs in full builds (BALL_CONCEPTS_TESTS is in BALL_TESTS in both
-# modes; we strip TextPersistenceManager_test from CTest only).
-# v2.1 backlog: register PDBInfo with TextPersistenceManager or drop
-# the [EXTRA] full_test1 PDBFile round-trip CHECK (TEST-TPM-PDBINFO).
+# TextPersistenceManager_test — DISABLED in CORE_ONLY (B1.2/B2.1)
+#
+# Pre-B1.2: hard SEGFAULT at process exit (heap-System destruction).
+# Post-B1.2 dtor fix: still fails on the [EXTRA] full_test1 round-
+# trip CHECK at line 657 — TextPersistenceManager can't deserialize
+# PDBInfo (countAtoms(s2)=0 vs s.countAtoms()=454). PDBInfo isn't
+# registered with TextPersistenceManager's createObject() factory.
+# The test still segfaults at exit on direct invocation (manual run
+# returns exit=0 but ctest sees SegFault — likely a libc++ atexit
+# ordering thing with the unregistered-object error path).
+#
+# WILL_FAIL doesn't catch signal crashes, so we keep DISABLED and
+# track via v2.1 backlog (TEST-TPM-PDBINFO).
 IF(BALL_CORE_ONLY)
 	SET_TESTS_PROPERTIES (
 		TextPersistenceManager_test

@@ -80,22 +80,24 @@ ADD_BALL_SOURCES("FORMAT" "${SOURCES_LIST}")
 ADD_BALL_PARSER_LEXER("FORMAT" "CIFParser" "CIFParser")
 ADD_BALL_PARSER_LEXER("FORMAT" "GAMESSDatParser" "GAMESSDatParser")
 
-# B1.1 auxiliary: MOLMEC/COMMON/snapShot.C and XRAY/crystalInfo.C are
-# pulled in so the FORMAT files that reference SnapShot / CrystalInfo
-# (PDBFileDetails.C for CRYST1 record interpretation) link cleanly.
-# snapShot.C is header-only-dep self-contained; crystalInfo.C only needs
-# FORMAT (which is now in). Both auxiliaries get pulled OUT in their
-# proper Wave 3 (MOLMEC) / Wave 2 (XRAY) re-enable commits.
+# B1.1 auxiliary: MOLMEC/COMMON/snapShot.C is pulled in so the FORMAT
+# files that reference SnapShot (PDBFileDetails.C for HELIX-like
+# record interpretation) link cleanly. snapShot.C is header-only-dep
+# self-contained.
 #
 # B1.3 (Codex R10 fix #6, 2026-05-18): gate the aux pulls on
 # BALL_CORE_ONLY. In full builds the MOLMEC and XRAY sources.cmake
-# files are INCLUDE()d via cmake/BALLIncludes.cmake (lines 56-77) and
-# already add snapShot.C / crystalInfo.C. ADD_BALL_SOURCES doesn't
-# dedupe (cmake/BALLMacros.cmake `ADD_BALL_SOURCES` appends to
-# BALL_sources unconditionally) so unguarded inclusion here double-
-# adds the .C files into the link line — duplicate-symbol errors on
-# strict linkers.
+# files are INCLUDE()d via cmake/BALLIncludes.cmake and already add
+# snapShot.C / crystalInfo.C. ADD_BALL_SOURCES doesn't dedupe
+# (cmake/BALLMacros.cmake `ADD_BALL_SOURCES` appends to BALL_sources
+# unconditionally) so unguarded inclusion here would double-add the
+# .C files into the link line — duplicate-symbol errors on strict
+# linkers.
+#
+# B2.1 (Track B Wave 2a, 2026-05-18): crystalInfo.C aux pull REMOVED;
+# XRAY module is now re-enabled unconditionally (see
+# cmake/BALLIncludes.cmake) so crystalInfo.C comes in via XRAY's own
+# sources.cmake. snapShot.C aux pull stays until MOLMEC Wave 3.
 IF(BALL_CORE_ONLY)
 	ADD_BALL_SOURCES("MOLMEC/COMMON" "snapShot.C")
-	ADD_BALL_SOURCES("XRAY"          "crystalInfo.C")
 ENDIF()

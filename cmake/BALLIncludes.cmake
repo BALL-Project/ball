@@ -62,6 +62,16 @@ INCLUDE(include/BALL/FORMAT/sources.cmake)
 INCLUDE(source/STRUCTURE/sources.cmake)
 INCLUDE(include/BALL/STRUCTURE/sources.cmake)
 
+# B2.1 (Track B Wave 2a, 2026-05-18): XRAY re-enabled unconditionally.
+# Tiny module (3 sources: crystalGenerator, crystalInfo,
+# spaceGroupParameters). Depends on FORMAT (Wave 1a, enabled) and
+# STRUCTURE/geometricProperties + geometricTransformations (Wave 1b,
+# kept in subset). Provides X-ray crystallography support — unlocks
+# CRYST1 record interpretation in PDBFileDetails and the bpti.pdb
+# round-trip path in TextPersistenceManager_test.
+INCLUDE(source/XRAY/sources.cmake)
+INCLUDE(include/BALL/XRAY/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
@@ -89,7 +99,4 @@ IF(NOT BALL_CORE_ONLY)
 
 	INCLUDE(source/DOCKING/sources.cmake)
 	INCLUDE(include/BALL/DOCKING/sources.cmake)
-
-	INCLUDE(source/XRAY/sources.cmake)
-	INCLUDE(include/BALL/XRAY/sources.cmake)
 ENDIF()
