@@ -285,4 +285,146 @@ CHECK(K0.5.1 evaluate_one mirrors bitmap for And + Element + Charge)
 	TEST_EQUAL(ce.evaluate_one(*a), false)
 RESULT
 
+// ============================================================
+// K0.5.2 — parser->AST + LRU cache tests
+// ============================================================
+
+CHECK(K0.5.2 compile element(C) parses + evaluates correctly)
+	System sys;
+	Atom *c1 = new Atom; c1->setElement(PTE[Element::CARBON]); sys.adopt(*c1);
+	Atom *o1 = new Atom; o1->setElement(PTE[Element::OXYGEN]); sys.adopt(*o1);
+	auto& store = sys.getStore();
+	auto ce = CompiledExpression::compile(store, "element(C)");
+	std::vector<std::uint8_t> bm;
+	ce->evaluate(store, bm);
+	TEST_EQUAL(bm[c1->getStoreIndex()], 1)
+	TEST_EQUAL(bm[o1->getStoreIndex()], 0)
+RESULT
+
+CHECK(K0.5.2 compile name(CA) interns into store pool)
+	System sys;
+	Atom *ca = new Atom; ca->setName("CA"); sys.adopt(*ca);
+	Atom *cb = new Atom; cb->setName("CB"); sys.adopt(*cb);
+	auto& store = sys.getStore();
+	auto ce = CompiledExpression::compile(store, "name(CA)");
+	std::vector<std::uint8_t> bm;
+	ce->evaluate(store, bm);
+	TEST_EQUAL(bm[ca->getStoreIndex()], 1)
+	TEST_EQUAL(bm[cb->getStoreIndex()], 0)
+RESULT
+
+CHECK(K0.5.2 compile charge(<0) parses CmpOp prefix)
+	System sys;
+	Atom *a = new Atom; a->setCharge(-1.f); sys.adopt(*a);
+	Atom *b = new Atom; b->setCharge( 1.f); sys.adopt(*b);
+	auto& store = sys.getStore();
+	auto ce = CompiledExpression::compile(store, "charge(<0)");
+	std::vector<std::uint8_t> bm;
+	ce->evaluate(store, bm);
+	TEST_EQUAL(bm[a->getStoreIndex()], 1)
+	TEST_EQUAL(bm[b->getStoreIndex()], 0)
+RESULT
+
+CHECK(K0.5.2 compile AND/OR/NOT compose via parser)
+	System sys;
+	Atom *c_neg = new Atom; c_neg->setElement(PTE[Element::CARBON]); c_neg->setCharge(-1.f); sys.adopt(*c_neg);
+	Atom *c_pos = new Atom; c_pos->setElement(PTE[Element::CARBON]); c_pos->setCharge( 1.f); sys.adopt(*c_pos);
+	Atom *o_neg = new Atom; o_neg->setElement(PTE[Element::OXYGEN]); o_neg->setCharge(-1.f); sys.adopt(*o_neg);
+	auto& store = sys.getStore();
+	std::vector<std::uint8_t> bm;
+
+	auto ce_and = CompiledExpression::compile(store, "element(C) AND charge(<0)");
+	ce_and->evaluate(store, bm);
+	TEST_EQUAL(bm[c_neg->getStoreIndex()], 1)
+	TEST_EQUAL(bm[c_pos->getStoreIndex()], 0)
+	TEST_EQUAL(bm[o_neg->getStoreIndex()], 0)
+
+	auto ce_or = CompiledExpression::compile(store, "element(C) OR element(O)");
+	ce_or->evaluate(store, bm);
+	TEST_EQUAL(bm[c_neg->getStoreIndex()], 1)
+	TEST_EQUAL(bm[c_pos->getStoreIndex()], 1)
+	TEST_EQUAL(bm[o_neg->getStoreIndex()], 1)
+
+	auto ce_not = CompiledExpression::compile(store, "!element(C)");
+	ce_not->evaluate(store, bm);
+	TEST_EQUAL(bm[c_neg->getStoreIndex()], 0)
+	TEST_EQUAL(bm[c_pos->getStoreIndex()], 0)
+	TEST_EQUAL(bm[o_neg->getStoreIndex()], 1)
+RESULT
+
+CHECK(K0.5.2 unsupported predicate throws ParseError)
+	System sys;
+	auto& store = sys.getStore();
+	bool threw = false;
+	try { (void)CompiledExpression::compile(store, "inRing()"); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.5.2 cache hit returns the same shared_ptr instance)
+	System sys;
+	Atom *a = new Atom; a->setElement(PTE[Element::CARBON]); sys.adopt(*a);
+	auto& store = sys.getStore();
+	auto& cache = CompiledExpressionCache::instance();
+	cache.clear();
+
+	auto p1 = cache.get_or_compile(store, "element(C)");
+	auto p2 = cache.get_or_compile(store, "element(C)");
+	TEST_EQUAL(p1.get(), p2.get())     // same instance
+	TEST_EQUAL(cache.size(), 1u)
+
+	auto p3 = cache.get_or_compile(store, "element(O)");
+	TEST_NOT_EQUAL(p1.get(), p3.get())
+	TEST_EQUAL(cache.size(), 2u)
+RESULT
+
+CHECK(K0.5.2 cache evicts least-recently-used past capacity)
+	System sys;
+	Atom *a = new Atom; sys.adopt(*a);
+	auto& store = sys.getStore();
+	auto& cache = CompiledExpressionCache::instance();
+	cache.clear();
+	cache.set_capacity(3);
+
+	auto pA = cache.get_or_compile(store, "true()");        // A LRU
+	auto pB = cache.get_or_compile(store, "false()");       // B
+	auto pC = cache.get_or_compile(store, "selected()");    // C MRU
+	(void)pC;
+	TEST_EQUAL(cache.size(), 3u)
+
+	// Touching A promotes it to MRU; inserting D should evict B.
+	(void)cache.get_or_compile(store, "true()");
+	(void)cache.get_or_compile(store, "element(C)");        // D
+	TEST_EQUAL(cache.size(), 3u)
+
+	// "false()" should now be evicted; compiling it again creates a new ptr.
+	auto pB2 = cache.get_or_compile(store, "false()");
+	TEST_NOT_EQUAL(pB.get(), pB2.get())
+
+	// "true()" still cached (since we touched it before D was inserted).
+	auto pA2 = cache.get_or_compile(store, "true()");
+	TEST_EQUAL(pA.get(), pA2.get())
+
+	cache.set_capacity(1024);  // restore default for other tests
+RESULT
+
+CHECK(K0.5.2 cache invalidate_store scoped per store)
+	System sys1, sys2;
+	Atom *a1 = new Atom; sys1.adopt(*a1);
+	Atom *a2 = new Atom; sys2.adopt(*a2);
+	auto& cache = CompiledExpressionCache::instance();
+	cache.clear();
+
+	(void)cache.get_or_compile(sys1.getStore(), "true()");
+	(void)cache.get_or_compile(sys2.getStore(), "true()");
+	TEST_EQUAL(cache.size(), 2u)
+
+	cache.invalidate_store(&sys1.getStore());
+	TEST_EQUAL(cache.size(), 1u)
+	// sys2's entry survives.
+	auto p = cache.get_or_compile(sys2.getStore(), "true()");
+	(void)p;
+	TEST_EQUAL(cache.size(), 1u)
+RESULT
+
 END_TEST

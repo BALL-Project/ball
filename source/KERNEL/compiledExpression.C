@@ -18,8 +18,16 @@
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/expressionParser.h>
+#include <BALL/KERNEL/expressionTree.h>
+#include <BALL/COMMON/exception.h>
 
+#include <algorithm>
+#include <cctype>
 #include <cstring>
+#include <list>
+#include <unordered_map>
 
 namespace BALL
 {
@@ -298,6 +306,267 @@ void CompiledExpression::evaluate(const MoleculeStore& store,
 bool CompiledExpression::evaluate_one(const Atom& atom) const
 {
 	return eval_one_(root_, atom);
+}
+
+// ============================================================
+// K0.5.2 — parser -> AST lowerer
+// ============================================================
+namespace
+{
+	// Trim leading/trailing ASCII whitespace.
+	std::string trim_(const std::string& s)
+	{
+		std::size_t b = 0, e = s.size();
+		while (b < e && std::isspace(static_cast<unsigned char>(s[b]))) ++b;
+		while (e > b && std::isspace(static_cast<unsigned char>(s[e - 1]))) --e;
+		return s.substr(b, e - b);
+	}
+
+	// Parse a comparison-prefixed numeric argument:
+	//   "<0.5", "<=0.5", "=0.5", "==0.5", ">=0.5", ">0.5", or bare "0.5" -> EQ.
+	// Returns true on success and writes op + value. Throws on malformed.
+	bool parse_cmp_(const std::string& raw, CmpOp& op, std::string& tail)
+	{
+		const std::string s = trim_(raw);
+		if (s.empty()) return false;
+		std::size_t i = 0;
+		if (s[0] == '<')
+		{
+			if (s.size() > 1 && s[1] == '=') { op = CmpOp::LE; i = 2; }
+			else                              { op = CmpOp::LT; i = 1; }
+		}
+		else if (s[0] == '>')
+		{
+			if (s.size() > 1 && s[1] == '=') { op = CmpOp::GE; i = 2; }
+			else                              { op = CmpOp::GT; i = 1; }
+		}
+		else if (s[0] == '=')
+		{
+			op = CmpOp::EQ;
+			i = (s.size() > 1 && s[1] == '=') ? 2 : 1;
+		}
+		else
+		{
+			op = CmpOp::EQ;
+		}
+		tail = trim_(s.substr(i));
+		return !tail.empty();
+	}
+
+	float parse_float_(const std::string& s)
+	{
+		try { return std::stof(s); }
+		catch (...)
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, s, "expected numeric argument");
+		}
+	}
+	int parse_int_(const std::string& s)
+	{
+		try { return std::stoi(s); }
+		catch (...)
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, s, "expected integer argument");
+		}
+	}
+
+	PredNode lower_leaf_(const ExpressionParser::SyntaxTree& node,
+	                     MoleculeStore& store)
+	{
+		const std::string name = node.predicate.c_str();
+		const std::string arg  = node.argument.c_str();
+
+		if (name == "true")     return TrueLeaf{};
+		if (name == "false")    return FalseLeaf{};
+		if (name == "selected") return SelectedLeaf{};
+
+		if (name == "element")
+		{
+			const Element& el = PTE[String(arg.c_str())];
+			return ElementPred{static_cast<std::uint8_t>(el.getAtomicNumber())};
+		}
+		if (name == "name")
+		{
+			return AtomNamePred{store.intern_name(arg)};
+		}
+		if (name == "type")
+		{
+			return AtomTypePred{store.intern_type_name(arg)};
+		}
+		if (name == "charge")
+		{
+			CmpOp op = CmpOp::EQ;
+			std::string tail;
+			if (!parse_cmp_(arg, op, tail))
+				throw Exception::ParseError(__FILE__, __LINE__, arg, "charge() needs an argument");
+			return ChargeRange{op, parse_float_(tail)};
+		}
+		if (name == "numberOfBonds")
+		{
+			CmpOp op = CmpOp::EQ;
+			std::string tail;
+			if (!parse_cmp_(arg, op, tail))
+				throw Exception::ParseError(__FILE__, __LINE__, arg, "numberOfBonds() needs an argument");
+			return NumberOfBondsPred{op, static_cast<std::uint8_t>(parse_int_(tail)), 0};
+		}
+
+		// K0.5.4 will route remaining registered predicates through
+		// OwnedPred. K0.5.2 only handles the fast-path subset above.
+		throw Exception::ParseError(__FILE__, __LINE__, name,
+			"K0.5.2 compiler does not yet support this predicate (see K0.5.4 OwnedPred)");
+	}
+
+	PredNode lower_node_(const ExpressionParser::SyntaxTree& node,
+	                     MoleculeStore& store)
+	{
+		// A SyntaxTree node can be a leaf (LEAF type or no children) or an
+		// AND/OR with children. `negate` wraps any node in a NotNode.
+		PredNode lowered;
+		if (node.type == ExpressionTree::LEAF || node.children.empty())
+		{
+			lowered = lower_leaf_(node, store);
+		}
+		else if (node.type == ExpressionTree::AND)
+		{
+			auto a = std::make_unique<AndNode>();
+			for (auto* child : node.children)
+				a->children.emplace_back(lower_node_(*child, store));
+			lowered = std::move(a);
+		}
+		else if (node.type == ExpressionTree::OR)
+		{
+			auto o = std::make_unique<OrNode>();
+			for (auto* child : node.children)
+				o->children.emplace_back(lower_node_(*child, store));
+			lowered = std::move(o);
+		}
+		else
+		{
+			throw Exception::ParseError(__FILE__, __LINE__, node.predicate,
+				"unknown SyntaxTree node type");
+		}
+		if (node.negate)
+		{
+			auto n = std::make_unique<NotNode>();
+			n->child = std::move(lowered);
+			lowered = std::move(n);
+		}
+		return lowered;
+	}
+} // namespace
+
+std::shared_ptr<const CompiledExpression>
+CompiledExpression::compile(MoleculeStore& store,
+                            const std::string& source,
+                            std::size_t pred_set_hash)
+{
+	ExpressionParser parser;
+	parser.parse(String(source.c_str()));
+	PredNode root = lower_node_(parser.getSyntaxTree(), store);
+	return std::make_shared<const CompiledExpression>(
+	    std::move(root), source, pred_set_hash);
+}
+
+// ============================================================
+// K0.5.2 — process-global LRU cache
+// ============================================================
+std::size_t CompiledExpressionCache::KeyHash::operator()(const Key& k) const noexcept
+{
+	std::size_t h = std::hash<std::string>{}(k.source);
+	std::size_t p = std::hash<const void*>{}(static_cast<const void*>(k.store));
+	// Mix store ptr into the hash.
+	h ^= p + 0x9e3779b97f4a7c15ULL + (h << 6) + (h >> 2);
+	return h;
+}
+
+struct CompiledExpressionCache::Impl
+{
+	using Entry  = std::pair<Key, std::shared_ptr<const CompiledExpression>>;
+	using LruIt  = std::list<Entry>::iterator;
+
+	std::list<Entry>                         lru;        // front = MRU, back = LRU
+	std::unordered_map<Key, LruIt, KeyHash>  index;
+	std::size_t                              capacity_ = 1024;
+};
+
+CompiledExpressionCache::CompiledExpressionCache()
+	: impl_(std::make_unique<Impl>())
+{}
+CompiledExpressionCache::~CompiledExpressionCache() = default;
+
+CompiledExpressionCache& CompiledExpressionCache::instance()
+{
+	static CompiledExpressionCache cache;
+	return cache;
+}
+
+std::shared_ptr<const CompiledExpression>
+CompiledExpressionCache::get_or_compile(MoleculeStore& store, const std::string& source)
+{
+	Key k{source, &store};
+	auto it = impl_->index.find(k);
+	if (it != impl_->index.end())
+	{
+		// hit: promote to MRU front
+		impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
+		return it->second->second;
+	}
+	// miss: compile + insert
+	auto compiled = CompiledExpression::compile(store, source);
+	impl_->lru.emplace_front(k, compiled);
+	impl_->index.emplace(k, impl_->lru.begin());
+
+	// evict LRU on overflow
+	while (impl_->lru.size() > impl_->capacity_)
+	{
+		auto& victim = impl_->lru.back();
+		impl_->index.erase(victim.first);
+		impl_->lru.pop_back();
+	}
+	return compiled;
+}
+
+void CompiledExpressionCache::invalidate(const Key& key)
+{
+	auto it = impl_->index.find(key);
+	if (it == impl_->index.end()) return;
+	impl_->lru.erase(it->second);
+	impl_->index.erase(it);
+}
+
+void CompiledExpressionCache::invalidate_store(MoleculeStore* store)
+{
+	for (auto it = impl_->lru.begin(); it != impl_->lru.end(); )
+	{
+		if (it->first.store == store)
+		{
+			impl_->index.erase(it->first);
+			it = impl_->lru.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
+}
+
+void CompiledExpressionCache::clear()
+{
+	impl_->index.clear();
+	impl_->lru.clear();
+}
+
+std::size_t CompiledExpressionCache::size() const     { return impl_->lru.size(); }
+std::size_t CompiledExpressionCache::capacity() const { return impl_->capacity_; }
+void CompiledExpressionCache::set_capacity(std::size_t n)
+{
+	impl_->capacity_ = n;
+	while (impl_->lru.size() > impl_->capacity_)
+	{
+		auto& victim = impl_->lru.back();
+		impl_->index.erase(victim.first);
+		impl_->lru.pop_back();
+	}
 }
 
 } // namespace BALL

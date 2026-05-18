@@ -173,10 +173,79 @@ namespace BALL
 		std::size_t        pred_set_hash() const   { return pred_set_hash_; }
 		const PredNode&    root() const            { return root_; }
 
+		/** K0.5.2: parse `source` and lower the resulting SyntaxTree into
+				a CompiledExpression bound to `store`. String-literal leaves
+				(AtomName, AtomType) intern their arguments into the store's
+				pool, so the resulting CompiledExpression is store-specific.
+				Throws Exception::ParseError on syntax errors or unsupported
+				predicate names. K0.5.2 supports the fast-path predicates
+				only ({true, false, selected, element, name, type, charge,
+				numberOfBonds, AND, OR, NOT}); K0.5.4 will extend to
+				OwnedPred for ring/SMARTS/user predicates.
+		*/
+		static std::shared_ptr<const CompiledExpression>
+		    compile(MoleculeStore& store,
+		            const std::string& source,
+		            std::size_t pred_set_hash = 0);
+
 		private:
 		PredNode    root_;
 		std::string source_;
 		std::size_t pred_set_hash_;
+	};
+
+	/** K0.5.2 LRU cache of compiled expressions, keyed on (source string,
+			MoleculeStore*). Per-process singleton via `instance()`. Default
+			capacity 1024 entries; evicts least-recently-used on insert
+			past capacity. Cached entries remain valid until either:
+				- evicted by capacity pressure;
+				- explicitly removed via invalidate() / clear();
+				- the originating store calls compact() (intern table may
+					reshuffle offsets — K0.5.6 will wire compact()->clear).
+
+			\ingroup  KernelSelection
+	*/
+	class BALL_EXPORT CompiledExpressionCache
+	{
+		public:
+		struct Key
+		{
+			std::string    source;
+			MoleculeStore* store;
+			bool operator==(const Key& o) const { return store == o.store && source == o.source; }
+		};
+		struct KeyHash
+		{
+			std::size_t operator()(const Key& k) const noexcept;
+		};
+
+		CompiledExpressionCache();
+		~CompiledExpressionCache();
+		CompiledExpressionCache(const CompiledExpressionCache&)            = delete;
+		CompiledExpressionCache& operator=(const CompiledExpressionCache&) = delete;
+
+		static CompiledExpressionCache& instance();
+
+		/** Look up `source` for `store`. If present, returns the cached
+				shared_ptr and marks it MRU. If absent, compiles via
+				CompiledExpression::compile, installs, evicts LRU on overflow,
+				and returns the new shared_ptr. */
+		std::shared_ptr<const CompiledExpression>
+		    get_or_compile(MoleculeStore& store, const std::string& source);
+
+		/** Forget any cached entries that name `store`. Call from
+				MoleculeStore::compact() (K0.5.6 wiring) and ~MoleculeStore. */
+		void invalidate_store(MoleculeStore* store);
+
+		void invalidate(const Key& key);
+		void clear();
+		std::size_t size() const;
+		std::size_t capacity() const;
+		void set_capacity(std::size_t n);
+
+		private:
+		struct Impl;
+		std::unique_ptr<Impl> impl_;
 	};
 
 } // namespace BALL
