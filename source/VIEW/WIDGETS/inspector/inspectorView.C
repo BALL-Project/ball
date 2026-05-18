@@ -197,6 +197,33 @@ namespace BALL
 		{
 			if (index < 0 || index > 2) return;
 			body_->setCurrentTab(static_cast<InspectorTabs::TabIndex>(index));
+
+			// UFG-12 fix — when the user switches *to* the Scene tab,
+			// resync the Scene-tab Controllers from live Stage/Scene
+			// state so the widgets show current values instead of stale
+			// defaults left from construction. Without this hook, the
+			// Background colour swatch, Ambient slider, eye/focal
+			// distances etc. show whatever the controllers were last
+			// asked about (often the post-construct defaults: black
+			// background, ambient 0.3, eye/focal 0). The Representation
+			// tab has the same potential staleness; we resync those
+			// controllers too when their tab is selected.
+			InspectorTabs::TabIndex tab =
+				static_cast<InspectorTabs::TabIndex>(index);
+			if (tab == InspectorTabs::TabIndex::Scene)
+			{
+				if (stage_controller_)  stage_controller_->revert();
+				if (camera_controller_) camera_controller_->revert();
+				if (light_controller_)  light_controller_->revert();
+				if (stereo_controller_) stereo_controller_->revert();
+			}
+			else if (tab == InspectorTabs::TabIndex::Representation)
+			{
+				if (model_controller_)    model_controller_->revert();
+				if (coloring_controller_) coloring_controller_->revert();
+				if (material_controller_) material_controller_->revert();
+			}
+
 			scheduleStateWrite();
 		}
 
