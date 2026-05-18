@@ -87,25 +87,46 @@ SET(BALL_COMPONENTS
  ${COMPONENT_LIBVIEW}
  ${COMPONENT_LIBBALL_DEV}
  ${COMPONENT_LIBVIEW_DEV}
- ${COMPONENT_DOCUMENTATION_EXAMPLES}
- ${COMPONENT_DOCUMENTATION_HTML}
- ${COMPONENT_DOCUMENTATION_PDF}
  "Unspecified"
  ${COMPONENT_PLUGINS}
 )
 
-# Phase 8b post-mortem (v1.7.0-rc1, 2026-05-18): PythonBindings
-# components were unconditionally listed here even when
-# BALL_PYTHON_SUPPORT=OFF, causing NSIS makensis.exe to abort with
-# "unknown variable/constant {PythonBindings}" on Windows packaging
-# because the SET_COMPONENT_DEPENDENCIES macros below registered
-# CPack component dependencies on an effectively-empty component.
-# Gate inclusion on BALL_PYTHON_SUPPORT so non-Python builds (the
-# default v1.7 CI preset) produce a clean NSIS installer.
+# Phase 8b post-mortem (v1.7.0-rc1, 2026-05-18) — NSIS-installer
+# clean-component gating:
+#
+# Modern NSIS 3.x treats unknown component-IDs in
+# Deselect_required_by_<X> macros as a hard error and aborts
+# makensis with "warning 6000: unknown variable/constant {<X>}".
+# Components listed in BALL_COMPONENTS but never installed-into
+# (because their gating OPTION is OFF, or the producing target
+# is missing in the CI build) generate those macros, killing
+# the installer compile.
+#
+# History of this gate cascade (per re-roll):
+#   - v1.7.0-rc1 #5 — d5e268d290: gate PythonBindings on
+#     BALL_PYTHON_SUPPORT (SIP disabled by default in v1.7).
+#   - v1.7.0-rc1 #6 — this commit: gate Documentation*
+#     components on BUILD_DOCUMENTATION (Doxygen never runs on
+#     CI release runners, so the doc components are always
+#     empty here).
+#
+# Custom builds that DO produce docs (developer machines with
+# Doxygen + a `cmake --build . --target doc` invocation before
+# packaging) can opt in via -DBUILD_DOCUMENTATION=ON.
+OPTION(BUILD_DOCUMENTATION "Build + install API documentation (Doxygen HTML/PDF + examples)" OFF)
+
 IF(BALL_PYTHON_SUPPORT)
 	LIST(APPEND BALL_COMPONENTS
 		${COMPONENT_PYTHON_BINDINGS_BALL}
 		${COMPONENT_PYTHON_BINDINGS_VIEW}
+	)
+ENDIF()
+
+IF(BUILD_DOCUMENTATION)
+	LIST(APPEND BALL_COMPONENTS
+		${COMPONENT_DOCUMENTATION_EXAMPLES}
+		${COMPONENT_DOCUMENTATION_HTML}
+		${COMPONENT_DOCUMENTATION_PDF}
 	)
 ENDIF()
 
@@ -167,30 +188,37 @@ IF(BALL_PYTHON_SUPPORT)
 	ENDIF()
 ENDIF()
 
-SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_HTML}
-	"BALL html Documentation"
-	"This package contains the full documentation to the BALL and VIEW libraries in html format"
-)
-SET_COMPONENT_DEPENDENCIES(${COMPONENT_DOCUMENTATION_HTML} ${COMPONENT_LIBBALL})
-
-IF (NOT COMPONENT_DOCUMENTATION_HTML STREQUAL ${COMPONENT_DOCUMENTATION_PDF})
-
-	SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_PDF}
-		"BALL PDF Documentation"
-		"This package contains the full documentation to the BALL and VIEW libraries in PDF format"
+# Phase 8b post-mortem (v1.7.0-rc1 #6, 2026-05-18): same gate as
+# the BALL_COMPONENTS list above. Doc components register CPack
+# dependencies on COMPONENT_LIBBALL — those dependency macros land
+# in the NSIS Deselect_required_by_Runtime expansion and fail
+# makensis if the component itself was never installed-into.
+IF(BUILD_DOCUMENTATION)
+	SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_HTML}
+		"BALL html Documentation"
+		"This package contains the full documentation to the BALL and VIEW libraries in html format"
 	)
-	SET_COMPONENT_DEPENDENCIES(${COMPONENT_DOCUMENTATION_PDF} ${COMPONENT_LIBBALL})
+	SET_COMPONENT_DEPENDENCIES(${COMPONENT_DOCUMENTATION_HTML} ${COMPONENT_LIBBALL})
 
-ENDIF()
+	IF (NOT COMPONENT_DOCUMENTATION_HTML STREQUAL ${COMPONENT_DOCUMENTATION_PDF})
 
-IF (NOT COMPONENT_DOCUMENTATION_EXAMPLES STREQUAL ${COMPONENT_DOCUMENTATION_PDF})
+		SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_PDF}
+			"BALL PDF Documentation"
+			"This package contains the full documentation to the BALL and VIEW libraries in PDF format"
+		)
+		SET_COMPONENT_DEPENDENCIES(${COMPONENT_DOCUMENTATION_PDF} ${COMPONENT_LIBBALL})
 
-	SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_EXAMPLES}
-		"BALL Usage Examples"
-		"This package contains a number of examples showing the use of BALL as a library and python module"
-	)
-	SET_COMPONENT_DEPENDENCIES(${COMPONENT_DOCUMENTATION_EXAMPLES} ${COMPONENT_LIBBALL})
+	ENDIF()
 
+	IF (NOT COMPONENT_DOCUMENTATION_EXAMPLES STREQUAL ${COMPONENT_DOCUMENTATION_PDF})
+
+		SET_COMPONENT_NAME(${COMPONENT_DOCUMENTATION_EXAMPLES}
+			"BALL Usage Examples"
+			"This package contains a number of examples showing the use of BALL as a library and python module"
+		)
+		SET_COMPONENT_DEPENDENCIES(${COMPONENT_DOCUMENTATION_EXAMPLES} ${COMPONENT_LIBBALL})
+
+	ENDIF()
 ENDIF()
 
 SET_COMPONENT_NAME(${COMPONENT_BALLVIEW} 
