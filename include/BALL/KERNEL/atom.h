@@ -409,8 +409,11 @@ namespace BALL
 			/// Set the atom name.
 			void setName(const String& name);
 
-			/// Return the atom name
-			const String& getName() const;
+			/// Return the atom name. v2.0: by value (was const String&) — the
+			/// name lives in a MoleculeStore column whose String storage can
+			/// move on growth, so returning a reference would alias dangling
+			/// memory across allocate/reserve/compact.
+			String getName() const;
 
 			/** Assemble a fully specified atom name.
 					This method returns at fully specified atom name as used for charge and 
@@ -977,9 +980,10 @@ namespace BALL
 
 		// K0.3b.LATER.5+6: String name_, type_name_ DELETED. Authority moved
 		// to MoleculeStore::{name_strings_,type_name_strings_}[store_idx_].
-		// getName/getTypeName return const String& into those columns; the
-		// string_pool_ + offsets path is now used only by the persistence
-		// format.
+		// getName/getTypeName return  String  by value (K0.4.4 — Round 4
+		// HIGH-6: returning a ref into a std::vector<String> column would
+		// dangle across allocate/reserve/compact). The string_pool_ +
+		// offsets path is used only by the persistence format.
 		// K0.3b.LATER.7: const Element* element_ DELETED. Authority moved
 		// to MoleculeStore::element_indices_[store_idx_] (uint8 atomic
 		// number). getElement() resolves via PTE[number].

@@ -14,6 +14,7 @@
 #include <BALL/KERNEL/bond.h>          // K0.3c.2: delete bond needs full type
 #include <BALL/KERNEL/system.h>        // K0.4.2: System.adopt test
 #include <BALL/KERNEL/molecule.h>      // K0.4.3: adoptSubtree test
+#include <BALL/KERNEL/PTE.h>           // K0.4.4: PTE[Element::*] in swap tests
 #include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
@@ -729,6 +730,110 @@ CHECK(CSR rebuild skips bonds touching freed atoms K0.3c.1)
 	// b is freed; querying its bond_degree returns its CSR slice which
 	// should be empty since the prefix-sum skipped all 2 incident bonds.
 	TEST_EQUAL(store.bond_degree(b), 0)
+RESULT
+
+CHECK(K0.4.4 Atom::swap same-store full-payload exchange)
+	// Codex Round 4 HIGH-2: same-store swap had two independent paths.
+	// K0.4.4 unified them. Verify every store-backed payload exchanges.
+	System sys;
+	Atom* a = new Atom; sys.adopt(*a);
+	Atom* b = new Atom; sys.adopt(*b);
+	a->setPosition(Vector3(1.f, 2.f, 3.f));
+	a->setCharge(0.5f);
+	a->setVelocity(Vector3(10.f, 11.f, 12.f));
+	a->setForce(Vector3(20.f, 21.f, 22.f));
+	a->setName("ATOM_A");
+	a->setTypeName("TYPE_A");
+	a->setRadius(1.5f);
+	a->setType((Atom::Type)7);
+	a->setFormalCharge(2);
+	a->setElement(PTE[Element::CARBON]);
+
+	b->setPosition(Vector3(100.f, 200.f, 300.f));
+	b->setCharge(-1.5f);
+	b->setVelocity(Vector3(110.f, 111.f, 112.f));
+	b->setForce(Vector3(120.f, 121.f, 122.f));
+	b->setName("ATOM_B");
+	b->setTypeName("TYPE_B");
+	b->setRadius(2.5f);
+	b->setType((Atom::Type)9);
+	b->setFormalCharge(-3);
+	b->setElement(PTE[Element::OXYGEN]);
+
+	a->swap(*b);
+
+	TEST_EQUAL(a->getPosition(), Vector3(100.f, 200.f, 300.f))
+	TEST_EQUAL(a->getCharge(), -1.5f)
+	TEST_EQUAL(a->getVelocity(), Vector3(110.f, 111.f, 112.f))
+	TEST_EQUAL(a->getForce(), Vector3(120.f, 121.f, 122.f))
+	TEST_EQUAL(a->getName(), String("ATOM_B"))
+	TEST_EQUAL(a->getTypeName(), String("TYPE_B"))
+	TEST_EQUAL(a->getRadius(), 2.5f)
+	TEST_EQUAL((int)a->getType(), 9)
+	TEST_EQUAL(a->getFormalCharge(), -3)
+	TEST_EQUAL(a->getElement(), PTE[Element::OXYGEN])
+
+	TEST_EQUAL(b->getPosition(), Vector3(1.f, 2.f, 3.f))
+	TEST_EQUAL(b->getCharge(), 0.5f)
+	TEST_EQUAL(b->getVelocity(), Vector3(10.f, 11.f, 12.f))
+	TEST_EQUAL(b->getForce(), Vector3(20.f, 21.f, 22.f))
+	TEST_EQUAL(b->getName(), String("ATOM_A"))
+	TEST_EQUAL(b->getTypeName(), String("TYPE_A"))
+	TEST_EQUAL(b->getRadius(), 1.5f)
+	TEST_EQUAL((int)b->getType(), 7)
+	TEST_EQUAL(b->getFormalCharge(), 2)
+	TEST_EQUAL(b->getElement(), PTE[Element::CARBON])
+RESULT
+
+CHECK(K0.4.4 Atom::swap cross-store full-payload exchange)
+	// Codex Round 4 HIGH-1: cross-store swap previously skipped
+	// position/charge/velocity/force entirely (gated on same-store).
+	// K0.4.4 snapshot-write model handles both stores symmetrically.
+	System sys1, sys2;
+	Atom* a = new Atom; sys1.adopt(*a);
+	Atom* b = new Atom; sys2.adopt(*b);
+	TEST_NOT_EQUAL(a->getStore(), b->getStore())
+
+	a->setPosition(Vector3(1.f, 2.f, 3.f));
+	a->setCharge(0.5f);
+	a->setName("ATOM_A");
+	a->setElement(PTE[Element::CARBON]);
+
+	b->setPosition(Vector3(100.f, 200.f, 300.f));
+	b->setCharge(-1.5f);
+	b->setName("ATOM_B");
+	b->setElement(PTE[Element::OXYGEN]);
+
+	a->swap(*b);
+
+	// Position + charge MUST swap even across stores.
+	TEST_EQUAL(a->getPosition(), Vector3(100.f, 200.f, 300.f))
+	TEST_EQUAL(a->getCharge(), -1.5f)
+	TEST_EQUAL(a->getName(), String("ATOM_B"))
+	TEST_EQUAL(a->getElement(), PTE[Element::OXYGEN])
+	TEST_EQUAL(b->getPosition(), Vector3(1.f, 2.f, 3.f))
+	TEST_EQUAL(b->getCharge(), 0.5f)
+	TEST_EQUAL(b->getName(), String("ATOM_A"))
+	TEST_EQUAL(b->getElement(), PTE[Element::CARBON])
+RESULT
+
+CHECK(K0.4.4 getName by-value survives store growth (HIGH-6))
+	// Codex Round 4 HIGH-6: pre-K0.4.4 getName returned const String&
+	// into a vector<String> column; growth would dangle the ref. Now
+	// returns by value. Test: capture a name, then allocate enough atoms
+	// to force the store column vector to reallocate, then re-check the
+	// captured value is intact.
+	System sys;
+	Atom* keep = new Atom; sys.adopt(*keep);
+	keep->setName("PERSIST");
+	String captured = keep->getName();
+	for (int i = 0; i < 256; ++i)
+	{
+		Atom* tmp = new Atom;
+		sys.adopt(*tmp);
+	}
+	TEST_EQUAL(captured, String("PERSIST"))
+	TEST_EQUAL(keep->getName(), String("PERSIST"))
 RESULT
 
 END_TEST

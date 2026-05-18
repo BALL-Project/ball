@@ -356,10 +356,8 @@ namespace BALL
 		Composite::swap(atom);
 		PropertyManager::swap(atom);
 
-		// K0.3b.LATER.5-10: name/type_name/element/radius/type/formal_charge
-		// deleted; swap via store columns (handled in the mirror_all block
-		// below).
-
+		// Swap the residual handle-local bond array + count first; those
+		// fields still live on the Atom handle (D2 thin-stub stance).
 		Bond *temp_bond = 0;
 		for (int i = 0; i < MAX_NUMBER_OF_BONDS;++i)
 		{
@@ -367,68 +365,74 @@ namespace BALL
 			bond_[i] = atom.bond_[i];
 			atom.bond_[i] = temp_bond;
 		}
-
 		std::swap(number_of_bonds_, atom.number_of_bonds_);
-		// K0.3b.LATER.1: position_ deleted; swap store columns directly.
-		if (store_ != nullptr && store_ == atom.store_)
-		{
-			std::swap(store_->position(store_idx_),
-			          store_->position(atom.store_idx_));
-		}
-		// K0.3b.LATER.2: charge_ deleted; swap store columns.
-		if (store_ != nullptr && store_ == atom.store_)
-		{
-			std::swap(store_->charge(store_idx_),
-			          store_->charge(atom.store_idx_));
-		}
-		// K0.3b.LATER.3-4: velocity_/force_ deleted; swap store columns.
-		if (store_ != nullptr && store_ == atom.store_)
-		{
-			std::swap(store_->velocity(store_idx_), store_->velocity(atom.store_idx_));
-			std::swap(store_->force(store_idx_), store_->force(atom.store_idx_));
-		}
-		// K0.3c.4: swap atom-connectivity in the store so the bond graph
-		// reflects the v1.x bond_[] swap that just happened above. Only
-		// makes sense when both atoms share a store (cross-store swap is
-		// not a defined operation in v1.x or v2.0).
+
+		// K0.4.4 (Codex Round 4 HIGH-1 + HIGH-2): unified snapshot+write
+		// model for ALL store-backed payload fields. The pre-K0.4.4 code
+		// had two independent swap paths (direct std::swap of vector/
+		// charge columns gated on same-store, plus a separate mirror_all
+		// snapshot-write for names/element/scalars). Cross-store swap
+		// dropped the position/charge/velocity/force exchange entirely.
+		// The unified path below snapshots both atoms' full payload BEFORE
+		// touching either, then writes the exchanged snapshots back. Works
+		// the same way for same-store and cross-store atoms.
+
+		struct Snap {
+			Vector3 position;
+			Vector3 velocity;
+			Vector3 force;
+			float   charge;
+			float   radius;
+			short   atom_type;
+			short   formal_charge;
+			std::uint8_t element_index;
+			String  name;
+			String  type_name;
+		};
+		auto capture = [](const Atom& a) -> Snap {
+			Snap s{};
+			if (a.store_ == nullptr) return s;
+			s.position      = a.store_->position(a.store_idx_);
+			s.velocity      = a.store_->velocity(a.store_idx_);
+			s.force         = a.store_->force(a.store_idx_);
+			s.charge        = a.store_->charge(a.store_idx_);
+			s.radius        = a.store_->radius(a.store_idx_);
+			s.atom_type     = a.store_->atom_type(a.store_idx_);
+			s.formal_charge = a.store_->formal_charge(a.store_idx_);
+			s.element_index = a.store_->element_index(a.store_idx_);
+			s.name          = a.store_->name(a.store_idx_);
+			s.type_name     = a.store_->type_name(a.store_idx_);
+			return s;
+		};
+		const Snap self_snap  = capture(*this);
+		const Snap other_snap = capture(atom);
+
+		auto apply = [](Atom& target, const Snap& s) {
+			if (target.store_ == nullptr) return;
+			MoleculeStore* st = target.store_;
+			const std::uint32_t i = target.store_idx_;
+			st->position(i)      = s.position;
+			st->velocity(i)      = s.velocity;
+			st->force(i)         = s.force;
+			st->charge(i)        = s.charge;
+			st->radius(i)        = s.radius;
+			st->atom_type(i)     = s.atom_type;
+			st->formal_charge(i) = s.formal_charge;
+			st->element_index(i) = s.element_index;
+			st->set_name(i, std::string(s.name.c_str()));
+			st->set_type_name(i, std::string(s.type_name.c_str()));
+		};
+		apply(*this, other_snap);
+		apply(atom,  self_snap);
+
+		// K0.3c.4: same-store bond-connectivity swap rewrites BondRecord
+		// .a/.b endpoints so the store bond graph follows the handle-side
+		// bond_[] swap above. Cross-store swap leaves the bond records
+		// alone; partial bond migration across stores isn't defined.
 		if (store_ != nullptr && store_ == atom.store_)
 		{
 			store_->swap_atom_connectivity(store_idx_, atom.store_idx_);
 		}
-
-		// K0.3b.LATER.5-10: name/type_name/element/radius/type/formal_charge
-		// now store-backed. Snapshot both atoms' store-resident state BEFORE
-		// the swap mirror, then write it back exchanged.
-		const String  self_name  = (store_ ? store_->name(store_idx_) : String());
-		const String  self_tname = (store_ ? store_->type_name(store_idx_) : String());
-		const String  other_name  = (atom.store_ ? atom.store_->name(atom.store_idx_) : String());
-		const String  other_tname = (atom.store_ ? atom.store_->type_name(atom.store_idx_) : String());
-		const std::uint8_t  self_elem  = (store_ ? store_->element_index(store_idx_) : 0);
-		const std::uint8_t  other_elem = (atom.store_ ? atom.store_->element_index(atom.store_idx_) : 0);
-		const float self_radius  = (store_ ? store_->radius(store_idx_) : 0.f);
-		const float other_radius = (atom.store_ ? atom.store_->radius(atom.store_idx_) : 0.f);
-		const short self_type   = (store_ ? store_->atom_type(store_idx_) : 0);
-		const short other_type  = (atom.store_ ? atom.store_->atom_type(atom.store_idx_) : 0);
-		const short self_fc     = (store_ ? store_->formal_charge(store_idx_) : 0);
-		const short other_fc    = (atom.store_ ? atom.store_->formal_charge(atom.store_idx_) : 0);
-
-		auto mirror_all = [](MoleculeStore* st, std::uint32_t idx,
-		                     const String& nm, const String& tnm,
-		                     float r, short t, short fc, std::uint8_t en)
-		{
-			if (!st) return;
-			st->set_name(idx, std::string(nm.c_str()));
-			st->set_type_name(idx, std::string(tnm.c_str()));
-			st->radius(idx)   = r;
-			st->atom_type(idx) = t;
-			st->formal_charge(idx) = fc;
-			st->element_index(idx) = en;
-		};
-		mirror_all(store_, store_idx_,
-		           other_name, other_tname, other_radius, other_type, other_fc, other_elem);
-		mirror_all(atom.store_, atom.store_idx_,
-		           self_name, self_tname,
-		           self_radius, self_type, self_fc, self_elem);
 	}
 
 	Molecule* Atom::getMolecule()

@@ -43,9 +43,11 @@ Index Atom::getFormalCharge() const
 }
 
 BALL_INLINE
-const String& Atom::getName() const
+String Atom::getName() const
 {
-	// K0.3b.LATER.5: store is sole authority.
+	// K0.3b.LATER.5 + K0.4.4: store is sole authority. Returns by value
+	// (was const String& v1.x) so callers can't accidentally hold a
+	// reference into the store column past a reallocation.
 	return store_->name(store_idx_);
 }
 
