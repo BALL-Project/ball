@@ -18,6 +18,21 @@ namespace BALL
 			: QTabBar(parent)
 		{
 			setObjectName("inspectorTabs");
+			// v1.7.0-rc2 UFG-09 — opaque background. Without this the
+			// tab strip's inter-tab spacing + the trailing margin to the
+			// right of the last tab passes pixels through to whatever
+			// paints underneath the InspectorView. On the empty-state
+			// (no document loaded) path the first paint pass races with
+			// the dock's resize-to-minimum-width (280 px, see
+			// inspectorDock.C), and a width-clipped "Selecti" rendering
+			// from the BEFORE-resize pass remains visible underneath
+			// the fully-rendered "Selection" of the AFTER-resize pass.
+			// User sees `Selecti | Selection | Representation | Scene`.
+			// Forcing the tab strip to fill its background covers the
+			// stale pixels every time the bar repaints. QTabBar already
+			// draws its own tabs opaquely via the style; we only need
+			// to fill the inter-tab gaps and the right margin.
+			setAutoFillBackground(true);
 			// v1.7.0-rc2 UFG-04 — label elision fix.
 			//
 			// rc1 painted the tab strip with setExpanding(true) +

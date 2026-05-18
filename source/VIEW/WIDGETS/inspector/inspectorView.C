@@ -86,6 +86,19 @@ namespace BALL
 				scene_sections_added_(false)
 		{
 			setObjectName("inspectorView");
+			// v1.7.0-rc2 UFG-09 + UFG-10 — opaque background. The
+			// InspectorView is the root container holding the tab strip
+			// + the QStackedWidget body. UFG-05 fixed the SectionHeader
+			// glyphs but left the area BETWEEN sections (and behind the
+			// QUICK ACTIONS section title + the per-tab title strip in
+			// the Representation tab) transparent. The result is the
+			// `QUICK AC` truncation + `REPRESENTATION` / `ENTATION`
+			// ghosting reported in UFG-10, and the same family of
+			// duplication ghost reported in UFG-09 around the tab strip.
+			// Mirror the SectionHeader UFG-05 pattern at the root
+			// container level so every paint pass clears the entire
+			// Inspector area before children re-paint on top.
+			setAutoFillBackground(true);
 
 			QVBoxLayout* root = new QVBoxLayout(this);
 			root->setContentsMargins(0, 0, 0, 0);
