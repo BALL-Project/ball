@@ -32,8 +32,19 @@ namespace BALL
 
 		void LabelController::apply()
 		{
-			Log.info() << "[LabelController::apply] STUB — legacy LabelDialog "
-				"owns mutation. text='" << label_text_.toUtf8().constData()
+			// UFG-11 audit decision — Latent stub, no Inspector consumer
+			// in v1.7. The Inspector does not add a LabelSection
+			// (see source/VIEW/WIDGETS/inspector/inspectorView.C —
+			// only RepHeader / Model / Coloring / Material are wired
+			// on the Representation tab as of v1.7.0-rc3). Cut-over
+			// deferred to v1.7.x when the Label section lands as part
+			// of the "Inspector feature parity with legacy dialogs"
+			// tracking work. Mutation continues to flow through the
+			// legacy LabelDialog reachable via Tools > Legacy Settings
+			// during the migration window.
+			Log.info() << "[LabelController::apply] STUB — no Inspector consumer "
+				"in v1.7; legacy LabelDialog owns mutation. text='"
+				<< label_text_.toUtf8().constData()
 				<< "' type=" << label_type_
 				<< " fontSize=" << font_size_ << std::endl;
 			Q_EMIT appliedStub();

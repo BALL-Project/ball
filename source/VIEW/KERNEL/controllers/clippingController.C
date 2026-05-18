@@ -33,8 +33,19 @@ namespace BALL
 
 		void ClippingController::apply()
 		{
-			Log.info() << "[ClippingController::apply] STUB — legacy ClippingDialog "
-				"owns mutation. enabled=" << (enabled_ ? "true" : "false")
+			// UFG-11 audit decision — Latent stub, no Inspector consumer
+			// in v1.7. The Inspector does not add a ClippingSection
+			// (see source/VIEW/WIDGETS/inspector/inspectorView.C —
+			// only RepHeader / Model / Coloring / Material are wired
+			// on the Representation tab as of v1.7.0-rc3). Cut-over
+			// deferred to v1.7.x when the Clipping section lands as
+			// part of the "Inspector feature parity with legacy
+			// dialogs" tracking work. Mutation continues to flow
+			// through the legacy ClippingDialog reachable via Tools >
+			// Legacy Settings during the migration window.
+			Log.info() << "[ClippingController::apply] STUB — no Inspector consumer "
+				"in v1.7; legacy ClippingDialog owns mutation. enabled="
+				<< (enabled_ ? "true" : "false")
 				<< " offset=" << offset_
 				<< " capped=" << (capped_ ? "true" : "false") << std::endl;
 			Q_EMIT appliedStub();
