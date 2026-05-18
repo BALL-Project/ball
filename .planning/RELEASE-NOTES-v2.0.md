@@ -224,18 +224,65 @@ the full-fat number under budget.
 
 ## Known gaps
 
-- **K0.6.4 (v1→v2 converter)** — deferred to Track B. The
-  `TextPersistenceManager` path is buildable in core but the PDB/HIN
-  read side needs the FORMAT module which K0 disabled. Lands in a
-  follow-on patch once FORMAT re-enables.
-- **Full v1.x test surface** — `Expression_test`, `Selector_test`,
-  `ExpressionParser_test`, `StandardPredicates_test1..4` are
-  excluded from the K0 core build because they include
-  `BALL/FORMAT/PDBFile.h`. K0.5's selector speedup claim holds on
-  the buildable subset (`ExpressionPredicate_test`, `ExpressionTree_test`,
-  `KernelPredicate_test`, `GlobalKernel_test`) plus the new
-  `CompiledExpression_test` and `SelectorBench_test`. Full
-  verification happens after Track B FORMAT/STRUCTURE re-enable.
+### Track B partial-module surface
+
+v2.0 ships a re-enabled-by-default Track B Wave 1 (B1.1 FORMAT + B1.2
+STRUCTURE) on top of the K0 core. To keep the link surface clean
+without pulling MOLMEC/QSAR/DOCKING, both modules ship as **subsets**
+in the `BALL_CORE_ONLY=ON` build:
+
+**FORMAT (30 of 38 sources)** — kept: PDB (`PDBFile`, `PDBInfo`,
+`PDBdefs`, `PDBRecords`), HIN, INI, simple small-molecule formats
+(XYZ, KCF, MOLFile, SDFile, MOPACInput/Output, JCAMP, HMOFile,
+antechamber, bruker NMR, GAMESS), generic-mol, CCP4, CIFFile, DSN6,
+amiraMesh, pubchem, parameters/parameterSection, lineBasedFile,
+commandlineParser, resourceFile. **Trimmed (link-error if called):**
+`MOL2File` (needs GAFFTypeProcessor — MOLMEC+QSAR, Wave 3-4),
+`DCDFile` / `TRRFile` / `trajectoryFile{,Factory}` (need SnapShot[Manager]
+— MOLMEC, Wave 3), `NMRStarFile` (needs Peptides::NameConverter —
+STRUCTURE Wave 1b), `SCWRLRotamerFile` (needs Rotamer/RotamerLibrary
+— STRUCTURE Wave 1b cycle close), `dockResultFile` (needs
+Result::ResultData — DOCKING, Wave 6), `molFileFactory` (DockResultFile
+typeinfo).
+
+**STRUCTURE (~47 of 60+ sources)** — kept: FragmentDB, ResidueChecker,
+DefaultProcessors, Peptides{,Builder,CapProcessor},
+NormalizeNamesProcessor, SecondaryStructureProcessor,
+connectedComponents, disulfid, mutator, nucleotideMapping,
+numericalSAS, analyticalSES, reducedSurface, SES*/SAS*/RS* surface
+stack, triangulated* mesh, structureMapper, RMSDMinimizer, UCK,
+binaryFingerprintMethods, bindingPocketProcessor, atomBijection,
+HBondProcessor, secondaryStructureProcessor. **Trimmed (link-error
+if called):** `rotamerLibrary`, `sideChainPlacementProcessor` (need
+SCWRLRotamerFile — Wave 1b cycle close); `ringAnalyser`, `sdGenerator`,
+`hybridisationProcessor`, `buildBondsProcessor`,
+`assignBondOrderProcessor` + `STRUCTURE/BONDORDERS/` sub-tree,
+`kekulizer`, `smartsMatcher`, `atomTyper`, `molecularSimilarity`
+(need RingPerceptionProcessor/AromaticityProcessor — QSAR, Wave 4);
+`addHydrogenProcessor`, `RDFParameter`, `DNAMutator` (need
+MMFF94StretchParameters / ForceFieldParameters / AmberFF — MOLMEC,
+Wave 3).
+
+Setting `BALL_CORE_ONLY=OFF` enables the full module surface (all
+FORMAT + STRUCTURE + ENERGY + MOLMEC + NMR + PYTHON + QSAR + SCORING +
+SOLVATION + DOCKING + XRAY). v2.0.x patch releases close the trim
+list wave-by-wave; the v2.1 milestone removes `BALL_CORE_ONLY` as a
+build-time concept.
+
+- **K0.6.4 (v1→v2 converter)** — DELIVERED in Track B B0.2 (commit
+  `83e82da0a`). `convertV1BalToV2JSON()` is in `BALL/KERNEL/v1ToV2JsonConverter.h`.
+  Reads via `TextPersistenceManager`, writes via the new `saveSystemJSON`
+  path. Round-trip verified on 3 fixtures (atoms, molecules, properties).
+- **Full v1.x test surface** — re-enabled in B1.1+B1.2. `Expression_test`,
+  `Selector_test`, `ExpressionParser_test`, `StandardPredicates_test1..4`,
+  `Residue_test1/2`, `StdIteratorWrapper_test`, plus 7 STRUCTURE tests
+  (FragmentDB_test, NormalizeNamesProcessor_test, PeptideBuilder_test,
+  PeptideCapProcessor_test, Peptides_test, ResidueChecker_test,
+  SecondaryStructureProcessor_test) all build and (mostly) pass under
+  `BALL_CORE_ONLY=ON`. K0.5's selector speedup claim is verified on
+  the v1.x corpus via `Selector_test`. 4 documented quarantines remain
+  (PersistenceManager_test, Expression_test, Peptides_test,
+  PeptideCapProcessor_test — see `test/CMakeLists.txt` for each).
 - **JSON load batching** — load is 15× slower than save (4s for
   100k atoms). Per-atom heap allocation + K0.4 adoption + Composite-
   tree insertion is the bottleneck. v2.1 candidate.

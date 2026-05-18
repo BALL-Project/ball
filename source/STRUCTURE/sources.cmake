@@ -1,4 +1,14 @@
-INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
+# B1.3 (Codex R10 fix #3, 2026-05-18): BONDORDERS sub-tree gated on
+# !BALL_CORE_ONLY. Its files (AStarBondOrderStrategy, FPTBondOrderStrategy,
+# branchAndBoundBondOrderStrategy, KGreedyBondOrderStrategy,
+# bondOrderAssignmentStrategy, bondOrderAssignment, partialBondOrderAssignment,
+# ILPBondOrderStrategy) all #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
+# and exist as helpers for AssignBondOrderProcessor. With
+# assignBondOrderProcessor.C trimmed in CORE_ONLY (QSAR cascade), the
+# bond-order surface is half-implemented and should not be exposed.
+IF(NOT BALL_CORE_ONLY)
+	INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
+ENDIF()
 
 ### list all filenames of the directory here ###
 # B1.2 (Track B Wave 1b, 2026-05-18): minimum-viable STRUCTURE enable.
@@ -87,6 +97,28 @@ SET(SOURCES_LIST
 
 IF(BALL_HAS_OPENBABEL)
 	LIST(APPEND SOURCES_LIST logP.C)
+ENDIF()
+
+# B1.3 (Codex R10 fix, 2026-05-18): restore CORE_ONLY-trimmed STRUCTURE
+# sources in full builds. These files need MOLMEC/QSAR/FORMAT-SCWRL
+# symbols that only exist when BALL_CORE_ONLY=OFF.
+IF(NOT BALL_CORE_ONLY)
+	LIST(APPEND SOURCES_LIST
+		DNAMutator.C
+		RDFParameter.C
+		addHydrogenProcessor.C
+		assignBondOrderProcessor.C
+		buildBondsProcessor.C
+		hybridisationProcessor.C
+		ringAnalyser.C
+		smartsMatcher.C
+		atomTyper.C
+		kekulizer.C
+		molecularSimilarity.C
+		rotamerLibrary.C
+		sideChainPlacementProcessor.C
+		sdGenerator.C
+	)
 ENDIF()
 
 ADD_BALL_SOURCES("STRUCTURE" "${SOURCES_LIST}")

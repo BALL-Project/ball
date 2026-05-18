@@ -39,14 +39,26 @@ INCLUDE(include/BALL/PLUGIN/sources.cmake)
 INCLUDE(source/FORMAT/sources.cmake)
 INCLUDE(include/BALL/FORMAT/sources.cmake)
 
-# B1.2 (Track B Wave 1b, 2026-05-18): STRUCTURE re-enabled unconditionally.
-# Lynchpin: provides FragmentDB, ResidueChecker, Peptides::NameConverter
-# (unblocks Expression_test SMARTSPredicate count), Rotamer/RotamerLibrary
-# (unblocks SCWRLRotamerFile re-add), bond perception, ring analyser,
-# secondary structure processor. STRUCTURE depends only on FORMAT + core
-# per MODULE-REENABLE-PLAN.md §1 (besides the trimmed Wave 3 MOLMEC bits
-# below). 60+ STRUCTURE sources come in at once; the trim list below
-# excludes those that need MOLMEC/QSAR/DOCKING.
+# B1.2 (Track B Wave 1b, 2026-05-18): STRUCTURE re-enabled — SUBSET.
+# In CORE_ONLY mode ~47 of 60+ STRUCTURE sources are compiled. Provides:
+# FragmentDB, ResidueChecker, DefaultProcessors, Peptides{,Builder,
+# CapProcessor}, NormalizeNamesProcessor, SecondaryStructureProcessor,
+# connectedComponents, disulfid, numericalSAS, analyticalSES,
+# reducedSurface, SES*/SAS*/RS* surface stack, triangulated* mesh,
+# structureMapper, RMSDMinimizer, UCK, binaryFingerprintMethods,
+# bindingPocketProcessor, atomBijection.
+#
+# B1.3 (Codex R10 fix, 2026-05-18): TRIMMED in CORE_ONLY (see
+# source/STRUCTURE/sources.cmake for the full list + reasons):
+# rotamerLibrary, sideChainPlacementProcessor, ringAnalyser, sdGenerator,
+# hybridisationProcessor, buildBondsProcessor, assignBondOrderProcessor
+# (and the BONDORDERS/ sub-tree that depends on it), kekulizer,
+# smartsMatcher, atomTyper, molecularSimilarity, addHydrogenProcessor,
+# RDFParameter, DNAMutator. These come back as MOLMEC (Wave 3), QSAR
+# (Wave 4), and FORMAT-SCWRLRotamerFile (Wave 1b cycle close) re-enable.
+# Until then, STRUCTURE headers compile but calls into trimmed
+# implementations are link errors — public v2.0 users should consult
+# RELEASE-NOTES-v2.0.md §"Track B partial-module surface".
 INCLUDE(source/STRUCTURE/sources.cmake)
 INCLUDE(include/BALL/STRUCTURE/sources.cmake)
 

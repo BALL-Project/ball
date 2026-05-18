@@ -201,10 +201,11 @@ ENDIF()
 #
 # All three: filed as Phase 999.35 backlog (OOS-PR-merge-regression-fix).
 # PeptideCapProcessor_test + Peptides_test stay quarantined in both
-# BALL_CORE_ONLY (B1.2 re-enable) and full builds. RotamerLibrary_test
-# only exists in full builds (rotamerLibrary.C is B1.2-trimmed).
+# BALL_CORE_ONLY (B1.2 re-enable) and full builds (PR #550 data
+# regression — Phase 9 09-TRIAGE.md). RotamerLibrary_test only exists
+# in full builds (rotamerLibrary.C is B1.2-trimmed).
 #
-# PersistenceManager_test — QUARANTINED (B1.2, 2026-05-18)
+# PersistenceManager_test — QUARANTINED in CORE_ONLY ONLY (B1.2, 2026-05-18)
 #   Line 321: TEST_EQUAL(noc, 18) gets 15, expects 18. The 3 missing
 #   classes are the D2/D3/D4 stub bases (Composite, PropertyManager,
 #   Selectable) that K0 removed. This is a documented v2.0 breaking
@@ -213,17 +214,31 @@ ENDIF()
 #   v2.1 backlog: refresh test's expected class count to 15 or rework
 #   to enumerate dynamically (TEST-PM-CLASS-COUNT).
 #
-# Expression_test — QUARANTINED (B1.2, 2026-05-18)
+# Expression_test — QUARANTINED in CORE_ONLY ONLY (B1.2, 2026-05-18)
 #   Expects 27 predicates, gets 26. The missing predicate is SMARTS,
 #   which needs RingPerceptionProcessor + AromaticityProcessor (QSAR,
 #   Wave 4) to fully link. STRUCTURE/smartsMatcher.C is trimmed in
 #   B1.2's STRUCTURE subset (QSAR cascade). Lifts in Wave 4 when QSAR
 #   re-enables and SmartsMatcher comes back.
+#
+# B1.3 (Codex R10 fix #5, 2026-05-18): the PersistenceManager / Expression
+# quarantines are gated by BALL_CORE_ONLY because both recover in full
+# builds (PersistenceManager: legacy class count is restored when the
+# D2/D3/D4 stubs are still registered via CONCEPT/Composite/etc;
+# Expression: SMARTS comes back with QSAR). Unguarded WILL_FAIL would
+# cause CTest "unexpected pass" (exit 8) in the full build.
+# Peptides_test/PeptideCapProcessor_test stay unconditional — the
+# regression is in data files (PRO.db) which apply to both modes.
+IF(BALL_CORE_ONLY)
+	SET_TESTS_PROPERTIES (
+		PersistenceManager_test
+		Expression_test
+		PROPERTIES WILL_FAIL TRUE
+	)
+ENDIF()
 SET_TESTS_PROPERTIES (
 	PeptideCapProcessor_test
 	Peptides_test
-	PersistenceManager_test
-	Expression_test
 	PROPERTIES WILL_FAIL TRUE
 )
 

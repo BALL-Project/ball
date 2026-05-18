@@ -8,13 +8,15 @@ SET(DIRECTORY source/FORMAT)
 # HIN parsing. Most other FORMAT files (DCD/TRR trajectories, MOL2
 # with GAFF typing, SCWRLRotamer, dockResultFile, NMRStar) require
 # downstream-module symbols (MOLMEC, STRUCTURE, DOCKING, QSAR) that
-# Track B Waves 2-6 enable later. Those files come back as their
-# respective module re-enables happen.
+# Track B Waves 2-6 enable later.
 #
-# Kept: base infrastructure + PDB + HIN + generic-mol + INI + simple
-# small-molecule formats (XYZ, KCF, MOLFile, JCAMP, MOPAC input/output,
-# HMOFile, antechamber, bruker NMR, GAMESS, SDFile, CCP4 / DSN6 /
-# CIFFile electron density / pubchem downloader).
+# B1.3 (Codex R10 fix, 2026-05-18): the trim list applies ONLY in
+# BALL_CORE_ONLY mode. In full builds, MOLMEC/STRUCTURE/DOCKING/QSAR
+# are all compiled in and their callers (MMFF94::specificSetup calling
+# Kekuliser, Pair6_12InteractionEnergyProcessor calling RDFParameter,
+# DockingAlgorithm needing DockResultFile typeinfo) require the full
+# FORMAT surface to link. CORE_ONLY trims the subset that cascades
+# back into the disabled extension modules.
 SET(SOURCES_LIST
 	amiraMeshFile.C
 	antechamberFile.C
@@ -49,13 +51,30 @@ SET(SOURCES_LIST
 	XYZFile.C
 )
 
-# B1.1: trimmed out for Wave-by-Wave re-enable:
-# - DCDFile.C / TRRFile.C / trajectoryFile{,Factory}.C  : need SnapShot[Manager] (MOLMEC, Wave 3)
-# - dockResultFile.C                                    : needs Result::ResultData (DOCKING, Wave 6)
-# - NMRStarFile.C                                       : needs Peptides::NameConverter (STRUCTURE, Wave 1b)
-# - MOL2File.C                                          : needs GAFFTypeProcessor (MOLMEC + QSAR, Wave 3-4)
-# - SCWRLRotamerFile.C                                  : needs Rotamer/RotamerLibrary (STRUCTURE, Wave 1b)
-# - molFileFactory.C                                    : references DockResultFile typeinfo; comes back with dockResultFile.C
+# B1.3 (Codex R10 fix #6, 2026-05-18): in full builds, restore the
+# CORE_ONLY-trimmed FORMAT sources. These are the files that need
+# MOLMEC / STRUCTURE / DOCKING / QSAR symbols which are only available
+# when BALL_CORE_ONLY=OFF. Per-file dependency:
+# - DCDFile.C / TRRFile.C / trajectoryFile{,Factory}.C  : need SnapShot[Manager] (MOLMEC)
+# - dockResultFile.C                                    : needs Result::ResultData (DOCKING)
+# - NMRStarFile.C                                       : needs Peptides::NameConverter (STRUCTURE)
+# - MOL2File.C                                          : needs GAFFTypeProcessor (MOLMEC + QSAR)
+# - SCWRLRotamerFile.C                                  : needs Rotamer/RotamerLibrary (STRUCTURE)
+# - molFileFactory.C                                    : references DockResultFile typeinfo
+IF(NOT BALL_CORE_ONLY)
+	LIST(APPEND SOURCES_LIST
+		DCDFile.C
+		TRRFile.C
+		trajectoryFile.C
+		trajectoryFileFactory.C
+		dockResultFile.C
+		NMRStarFile.C
+		MOL2File.C
+		SCWRLRotamerFile.C
+		molFileFactory.C
+	)
+ENDIF()
+
 ADD_BALL_SOURCES("FORMAT" "${SOURCES_LIST}")
 
 ADD_BALL_PARSER_LEXER("FORMAT" "CIFParser" "CIFParser")
@@ -67,5 +86,16 @@ ADD_BALL_PARSER_LEXER("FORMAT" "GAMESSDatParser" "GAMESSDatParser")
 # snapShot.C is header-only-dep self-contained; crystalInfo.C only needs
 # FORMAT (which is now in). Both auxiliaries get pulled OUT in their
 # proper Wave 3 (MOLMEC) / Wave 2 (XRAY) re-enable commits.
-ADD_BALL_SOURCES("MOLMEC/COMMON" "snapShot.C")
-ADD_BALL_SOURCES("XRAY"          "crystalInfo.C")
+#
+# B1.3 (Codex R10 fix #6, 2026-05-18): gate the aux pulls on
+# BALL_CORE_ONLY. In full builds the MOLMEC and XRAY sources.cmake
+# files are INCLUDE()d via cmake/BALLIncludes.cmake (lines 56-77) and
+# already add snapShot.C / crystalInfo.C. ADD_BALL_SOURCES doesn't
+# dedupe (cmake/BALLMacros.cmake `ADD_BALL_SOURCES` appends to
+# BALL_sources unconditionally) so unguarded inclusion here double-
+# adds the .C files into the link line — duplicate-symbol errors on
+# strict linkers.
+IF(BALL_CORE_ONLY)
+	ADD_BALL_SOURCES("MOLMEC/COMMON" "snapShot.C")
+	ADD_BALL_SOURCES("XRAY"          "crystalInfo.C")
+ENDIF()

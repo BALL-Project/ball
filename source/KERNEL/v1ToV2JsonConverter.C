@@ -55,16 +55,13 @@ bool convertV1BalToV2JSON(std::istream& in, std::ostream& out)
 	// migration tooling, not a hot-path serialiser.
 	saveSystemJSON(*sys, out, /*indent=*/2);
 
-	// NB: heap-allocated System destruction (`delete sys`) currently
-	// crashes at process exit on certain K0 builds — a pre-existing
-	// destruction-order issue between the per-System store, the global
-	// orphan store, and the global CompiledExpressionCache. Reproduced
-	// outside this converter with a trivial `new System; insert atom;
-	// delete sys` sequence. Tracked separately; not introduced by B0.2.
-	// For interactive migration tooling this is harmless (process is
-	// exiting anyway). Workaround for library callers: keep the
-	// PersistentObject* alive past the converter and let normal
-	// stack-scoped cleanup happen at caller's level.
+	// B1.2 (2026-05-18): the heap-allocated `delete sys` is now safe.
+	// Previously this crashed at process exit because the global
+	// CompiledExpressionCache could be destroyed BEFORE the per-System
+	// MoleculeStore. The B1.2 destruction-order fix in
+	// source/KERNEL/moleculeStore.C touches the cache singleton at the
+	// head of every MoleculeStore constructor, pinning it to construct
+	// first (and therefore destruct last per C++17 [basic.start.term]).
 	delete sys;
 	return true;
 }
