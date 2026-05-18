@@ -12,18 +12,37 @@ namespace BALL
 MoleculeStore::MoleculeStore() = default;
 MoleculeStore::~MoleculeStore() = default;
 
-// K0.3c.8 atomic back-ptr binding. Allocate AND set back_ptr in one
-// call so there's no transient state where is_freed(idx) is false but
-// back_ptr(idx) is nullptr. Always prefer this when the caller knows
-// the owning handle at allocation time.
+// K0.4.6: orphan-store singleton + mutex. Function-local statics give
+// thread-safe lazy init (C++17 [stmt.dcl] p4).
+MoleculeStore& MoleculeStore::orphanStore()
+{
+	static MoleculeStore orphan;
+	return orphan;
+}
+std::mutex& MoleculeStore::orphanMutex()
+{
+	static std::mutex m;
+	return m;
+}
+
+// K0.3c.8 / K0.4.6: atomic back-ptr binding. Single function with an
+// optional caller-supplied back_ptr; the bare-pointer no-arg overload
+// forwards with back_ptr=nullptr. The non-null path writes back_ptr
+// BEFORE clearing is_freed_ so a concurrent reader of an in-flight slot
+// never observes (is_freed==false, back_ptr==nullptr). Combined with
+// the orphan-store mutex held in Atom::bindToStore_, this closes the
+// Round 4 MEDIUM-8 window.
 MoleculeStore::Index MoleculeStore::allocate_atom(Atom* back_ptr)
 {
-	const Index idx = allocate_atom();
-	back_ptr_[idx] = back_ptr;
-	return idx;
+	return allocate_atom_with_back_ptr_(back_ptr);
 }
 
 MoleculeStore::Index MoleculeStore::allocate_atom()
+{
+	return allocate_atom_with_back_ptr_(nullptr);
+}
+
+MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 {
 	// K0.3c.1: try to reuse a freed slot first. Free-list reuse never
 	// triggers a column reallocation (slot is still in-place), so D7
@@ -32,7 +51,8 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 	{
 		const Index idx = free_list_.back();
 		free_list_.pop_back();
-		is_freed_[idx] = 0;   // clear freed flag on reuse
+		back_ptr_[idx] = back_ptr;   // K0.4.6: write back_ptr BEFORE clearing is_freed_
+		is_freed_[idx] = 0;
 		// Reset the slot's columns to defaults (reused slot was zeroed at
 		// release_atom but defensive).
 		positions_[idx]       = Vector3(0.f, 0.f, 0.f);
@@ -49,12 +69,9 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 		name_strings_[idx].clear();
 		type_name_strings_[idx].clear();
 		stable_ids_[idx]      = next_stable_id_++;
-		// back_ptr_[idx] cleared on release_atom; will be set by caller's
-		// set_back_ptr(idx, this). For now stays nullptr (= "freed"); the
-		// Atom ctor's bindToStore_ immediately overwrites it. There's a
-		// brief window between allocate_atom returning and bindToStore_
-		// setting back_ptr where is_freed(idx) is still true. K0.4
-		// transactional adopt() must handle this.
+		// back_ptr already written above (K0.4.6); for the nullptr-caller
+		// case the slot is live-but-unbound, which is acceptable because
+		// the caller is by contract about to bind it.
 		csr_dirty_ = true;
 		return idx;
 	}
@@ -82,7 +99,11 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 	name_strings_.emplace_back();           // K0.3b.LATER.5: default empty String
 	type_name_strings_.emplace_back();      // K0.3b.LATER.6
 	stable_ids_.emplace_back(next_stable_id_++);
-	back_ptr_.emplace_back(nullptr);
+	// K0.4.6: write back_ptr BEFORE marking the slot live (is_freed_=0).
+	// A concurrent reader sequenced after the is_freed_ store will see a
+	// valid back_ptr; a reader sequenced before sees a freed slot. The
+	// (is_freed=false, back_ptr=nullptr) tearing window is closed.
+	back_ptr_.emplace_back(back_ptr);
 	is_freed_.emplace_back(0);              // K0.3c.1: fresh slot is live
 
 	// Make sure offset 0 in the string pool is always an empty C-string so

@@ -7,6 +7,7 @@
 #include <BALL/KERNEL/atom.h>            // K0.4.2: adopt(Atom&)
 #include <BALL/KERNEL/bond.h>            // K0.4.2: bond migration in adopt
 #include <string>                        // K0.4.2: std::string for name copy
+#include <mutex>                         // K0.4.6: orphan-store mutex
 
 namespace BALL
 {
@@ -141,8 +142,16 @@ namespace BALL
 			src->remove_bond(bond_idx);
 		});
 
-		// 5: release source slot
-		src->release_atom(src_idx);
+		// 5: release source slot. K0.4.6: orphan store needs the lock.
+		if (src == &MoleculeStore::orphanStore())
+		{
+			std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+			src->release_atom(src_idx);
+		}
+		else
+		{
+			src->release_atom(src_idx);
+		}
 
 		// 6: update Atom handle
 		// Reach in via friend or by exposed mutator. For simplicity
@@ -260,10 +269,28 @@ namespace BALL
 			});
 		}
 
-		// Pass 3: release src slots.
-		for (const auto& e : entries)
+		// Pass 3: release src slots. K0.4.6: orphan source needs the
+		// orphan mutex; group all orphan releases under one lock to avoid
+		// repeated acquire/release.
 		{
-			e.src->release_atom(e.src_idx);
+			MoleculeStore* orphan = &MoleculeStore::orphanStore();
+			bool any_orphan = false;
+			for (const auto& e : entries) { if (e.src == orphan) { any_orphan = true; break; } }
+			if (any_orphan)
+			{
+				std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+				for (const auto& e : entries)
+				{
+					e.src->release_atom(e.src_idx);
+				}
+			}
+			else
+			{
+				for (const auto& e : entries)
+				{
+					e.src->release_atom(e.src_idx);
+				}
+			}
 		}
 	}
 

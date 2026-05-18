@@ -16,6 +16,7 @@
 #include <BALL/KERNEL/molecule.h>      // K0.4.3: adoptSubtree test
 #include <BALL/KERNEL/PTE.h>           // K0.4.4: PTE[Element::*] in swap tests
 #include <BALL/MATHS/vector3.h>
+#include <thread>                     // K0.4.6: concurrent orphan-store test
 ///////////////////////////
 
 START_TEST(MoleculeStore)
@@ -813,6 +814,38 @@ CHECK(K0.4.4 Atom::swap cross-store full-payload exchange)
 	TEST_EQUAL(b->getCharge(), 0.5f)
 	TEST_EQUAL(b->getName(), String("ATOM_A"))
 	TEST_EQUAL(b->getElement(), PTE[Element::CARBON])
+RESULT
+
+CHECK(K0.4.6 concurrent orphan-store Atom construction is race-free (HIGH-4))
+	// Codex Round 4 HIGH-4: orphan store mutated from every default Atom()
+	// ctor and ~Atom across all threads. Without the orphan mutex, concurrent
+	// allocate_atom/release_atom races vector pushes + free-list pops and
+	// can corrupt store columns. K0.4.6 added MoleculeStore::orphanMutex()
+	// to serialise orphan-only mutators.
+	//
+	// This test is a stress proxy: spawn 4 threads, each constructs +
+	// destroys 500 default atoms. Without the lock this used to occasionally
+	// hit ASan/UBSan failures or assertion crashes; with it, the store
+	// remains consistent.
+	auto worker = []() {
+		for (int i = 0; i < 500; ++i)
+		{
+			Atom a;       // bindToStore_ on orphan
+			a.setCharge(static_cast<float>(i));
+			// destructor runs at scope exit -> release_atom on orphan
+		}
+	};
+	std::thread t1(worker), t2(worker), t3(worker), t4(worker);
+	t1.join(); t2.join(); t3.join(); t4.join();
+	// Orphan store should still be in a consistent state after 2000 alloc/release.
+	// No specific count assertion (it depends on prior tests) — the lack of
+	// data races / asserts / crashes IS the assertion. Sanity-check we can
+	// still allocate and release one more atom.
+	{
+		Atom probe;
+		probe.setName("PROBE_OK");
+		TEST_EQUAL(probe.getName(), String("PROBE_OK"))
+	}
 RESULT
 
 CHECK(K0.4.4 getName by-value survives store growth (HIGH-6))

@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <mutex>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -80,6 +81,18 @@ namespace BALL
 
 		MoleculeStore();
 		~MoleculeStore();
+
+		// K0.4.6 (Codex Round 4 HIGH-4): process-global orphan store +
+		// its serialising mutex. The orphan store hosts every default-
+		// constructed Atom until adopted by a System, so it sees writes
+		// from every thread that constructs/destroys atoms. Per-System
+		// stores remain single-threaded by the D5 contract and do NOT
+		// take this lock. Callers that mutate the orphan (Atom::bindToStore_,
+		// ~Atom releasing back to orphan, System::adopt releasing the
+		// source slot when src == orphan) must hold orphanMutex() across
+		// the entire mutation.
+		static MoleculeStore& orphanStore();
+		static std::mutex&    orphanMutex();
 
 		// MoleculeStore is non-copyable for now; cloning copies are a v2.0.x
 		// follow-on (D12 persistence-format work).
@@ -316,6 +329,13 @@ namespace BALL
 		//@}
 
 		private:
+
+		// K0.4.6: unified allocation path with optional back_ptr binding;
+		// the public allocate_atom() / allocate_atom(Atom*) overloads
+		// forward to this helper. Writes back_ptr_ BEFORE marking the slot
+		// live so a concurrent reader never sees the (is_freed==false,
+		// back_ptr==nullptr) tear.
+		Index allocate_atom_with_back_ptr_(Atom* back_ptr);
 
 		void bump_generation_if_reallocated_(std::size_t old_cap);
 

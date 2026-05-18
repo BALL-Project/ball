@@ -14,32 +14,43 @@
 #include <BALL/KERNEL/moleculeStore.h>  // K0.3b.1
 
 #include <algorithm>
+#include <mutex>
 
 using namespace::std;
 
 namespace BALL
 {
-	// v2.0 KERNEL replacement (K0.3b.1): process-global orphan store.
-	// Atoms that aren't yet inserted into a System live here. Function-
-	// local-static gives thread-safe lazy init (C++17 [stmt.dcl] p4).
-	// K0.3b.N will add System-side adoption that migrates slots out of
-	// the orphan store into the per-System store.
+	// K0.3b.1 / K0.4.6: process-global orphan store now lives on
+	// MoleculeStore::orphanStore() with a serialising mutex on
+	// MoleculeStore::orphanMutex(). This accessor remains for the
+	// existing in-tree callers; it forwards to the canonical singleton.
 	MoleculeStore& Atom::globalOrphanStore_()
 	{
-		static MoleculeStore orphan;
-		return orphan;
+		return MoleculeStore::orphanStore();
 	}
 
 	void Atom::bindToStore_(MoleculeStore& store)
 	{
-		// K0.3c.8: atomic slot + back-ptr binding. Previously this was
-		// two-step (allocate then set_back_ptr) which created a window
-		// where is_freed(idx) == false but back_ptr(idx) == nullptr;
-		// any concurrent or recursive store visitor would dereference
-		// the null. Closed by the new allocate_atom(this) overload.
-		store_ = &store;
-		store_idx_ = store.allocate_atom(this);
-		store_generation_ = store.generation();
+		// K0.3c.8 / K0.4.6: atomic slot + back-ptr binding. The unified
+		// allocate_atom(this) path writes back_ptr_ BEFORE clearing
+		// is_freed_, so no concurrent reader can see a live-but-unbound
+		// slot. For the orphan store, the orphan mutex additionally
+		// serialises the column mutation against other Atom() ctors and
+		// ~Atom calls running on other threads.
+		const bool is_orphan = (&store == &MoleculeStore::orphanStore());
+		if (is_orphan)
+		{
+			std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+			store_ = &store;
+			store_idx_ = store.allocate_atom(this);
+			store_generation_ = store.generation();
+		}
+		else
+		{
+			store_ = &store;
+			store_idx_ = store.allocate_atom(this);
+			store_generation_ = store.generation();
+		}
 	}
 
 	// K0.4.2: retarget handle to a new store + slot after System::adopt
@@ -189,7 +200,17 @@ namespace BALL
 		// them via is_freed()).
 		if (store_ != nullptr)
 		{
-			store_->release_atom(store_idx_);
+			// K0.4.6: serialise orphan-store release against concurrent
+			// bindToStore_/release on other threads.
+			if (store_ == &MoleculeStore::orphanStore())
+			{
+				std::lock_guard<std::mutex> lk(MoleculeStore::orphanMutex());
+				store_->release_atom(store_idx_);
+			}
+			else
+			{
+				store_->release_atom(store_idx_);
+			}
 			store_ = nullptr;  // defensive — handle is now invalid
 		}
 	}
