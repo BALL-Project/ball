@@ -23,6 +23,18 @@ namespace BALL
 				stack_(nullptr)
 		{
 			setObjectName("inspectorBody");
+			// v1.7.0-rc2 UFG-10 — opaque background. InspectorBody
+			// hosts the per-tab QScrollArea + the InspectorSection
+			// columns. The gap between the section-collapse animation
+			// (InspectorSection's QPropertyAnimation on maximumHeight)
+			// and the SectionHeader's UFG-05 fix leaves transient
+			// transparent strips above the QUICK ACTIONS section header
+			// and inside the per-tab content area — visible as the
+			// `QUICK AC` truncation and `REPRESENTATION` / `ENTATION`
+			// ghosts reported in UFG-10. Filling the body background
+			// closes the gap so any animation in-between frames cannot
+			// show stale pixels.
+			setAutoFillBackground(true);
 
 			QVBoxLayout* outer = new QVBoxLayout(this);
 			outer->setContentsMargins(0, 0, 0, 0);
@@ -43,12 +55,25 @@ namespace BALL
 			scroll->setWidgetResizable(true);
 			scroll->setFrameShape(QFrame::NoFrame);
 			scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+			// v1.7.0-rc2 UFG-10 — opaque scroll-area viewport.
+			// QScrollArea defaults to a transparent viewport on macOS;
+			// without this fill, the per-tab content area's 8-px outer
+			// margin (set in `lay->setContentsMargins(8, 8, 8, 8)` below)
+			// shows through to whatever painted last under the body and
+			// leaves the QUICK ACTIONS section title ghosted as
+			// "QUICK AC" across the dirty rect boundary.
+			scroll->setAutoFillBackground(true);
+			if (QWidget* vp = scroll->viewport()) vp->setAutoFillBackground(true);
 
 			QWidget* contents = new QWidget(scroll);
 			QVBoxLayout* lay = new QVBoxLayout(contents);
 			lay->setContentsMargins(8, 8, 8, 8);
 			lay->setSpacing(8);
 			lay->addStretch(1);
+			// v1.7.0-rc2 UFG-10 — opaque inner contents widget. Same
+			// rationale as the scroll viewport fill above: the column
+			// between sections must clear stale pixels on every paint.
+			contents->setAutoFillBackground(true);
 
 			scroll->setWidget(contents);
 
