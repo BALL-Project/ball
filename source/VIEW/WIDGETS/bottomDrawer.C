@@ -12,11 +12,14 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QMainWindow>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabBar>
 #include <QtWidgets/QToolButton>
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QSizePolicy>
+
+#include <algorithm>
 
 namespace BALL
 {
@@ -175,16 +178,22 @@ namespace BALL
 				// Make sure body is visible BEFORE the animation so we
 				// don't see an empty cavity during expansion.
 				body_->setVisible(true);
+				// Drop the minimumHeight floor to kCollapsedHeight so the
+				// animation can start from the 24 px collapsed strip.
+				// animateTo() handles raising maximumHeight to make room
+				// for the animation to grow into, and we explicitly nudge
+				// the parent QMainWindow's dock-area layout so the bottom
+				// row actually grows past 24 px (animating maximumHeight
+				// alone is not enough for QDockWidget in a QMainWindow).
 				setMinimumHeight(kCollapsedHeight);
-				// Lift the maximumHeight cap so the animation can grow
-				// past kCollapsedHeight; animateTo() drives the visible
-				// value.
-				setMaximumHeight(kExpandedHeight);
 				animateTo(kExpandedHeight);
 			}
 			else
 			{
 				chevron_->setIcon(VIEW::Icons::get("actions/chevron-up"));
+				// Drop the floor first so the animation can shrink past
+				// the prior expanded minimumHeight (if any).
+				setMinimumHeight(kCollapsedHeight);
 				animateTo(kCollapsedHeight);
 			}
 		}
@@ -197,9 +206,35 @@ namespace BALL
 		void BottomDrawer::animateTo(int targetHeight)
 		{
 			height_animation_->stop();
-			height_animation_->setStartValue(maximumHeight());
+			// Drive maximumHeight from the current rendered height (what
+			// the user actually sees) to the target. Using
+			// maximumHeight() as the start would give a 240->240 no-op
+			// after the previous animation's finished slot lifted the
+			// cap to QWIDGETSIZE_MAX, or a 24->24 no-op the first time
+			// (because the constructor pins both min and max to
+			// kCollapsedHeight). The visible-height delta is the only
+			// thing that translates to motion the user perceives.
+			const int currentHeight = height();
+			// Raise the cap so the animation has room to grow into. We
+			// need cap >= targetHeight for the animation's endValue to
+			// take effect, and cap >= currentHeight so we don't clamp
+			// the current visible value on the way up.
+			setMaximumHeight(std::max(currentHeight, targetHeight));
+			height_animation_->setStartValue(currentHeight);
 			height_animation_->setEndValue(targetHeight);
 			height_animation_->start();
+
+			// Force the parent QMainWindow's dock-area layout to allocate
+			// the new row size. Animating maximumHeight on a QDockWidget
+			// is not enough — QMainWindow's dock layout caches the
+			// previous row geometry and will not re-grow it without an
+			// explicit resizeDocks() hint. Without this, the chevron
+			// click flips expanded_ and the body is shown, but the dock
+			// row stays at 24 px and the body has zero visible pixels.
+			if (QMainWindow* mw = qobject_cast<QMainWindow*>(parentWidget()))
+			{
+				mw->resizeDocks({this}, {targetHeight}, Qt::Vertical);
+			}
 		}
 
 	} // namespace VIEW
