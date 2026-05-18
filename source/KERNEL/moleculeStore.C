@@ -41,7 +41,28 @@ void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& id
 		next_stable_id_ = max_id + 1;
 }
 
-MoleculeStore::MoleculeStore() = default;
+// B1.2 (Track B Wave 1b, 2026-05-18): destruction-order fix.
+// Pre-fix repro: `new System; new Atom; insert; delete sys` exited
+// with SIGSEGV (139) at process teardown — the Meyers singleton for
+// CompiledExpressionCache::instance() could be destroyed BEFORE the
+// orphan-store MoleculeStore (and any other heap-System) destructor
+// ran, because nothing forced the cache singleton's construction to
+// precede the orphan store's. C++17 [basic.start.term] p2 guarantees
+// reverse construction order for thread-storage-duration and static-
+// storage-duration objects, so touching the cache singleton inside
+// the MoleculeStore constructor pins the cache to construct first
+// and therefore destruct last. Cost is one mutex acquire + map check
+// at first per-process MoleculeStore creation (cheap, one-off).
+//
+// This is what was previously filed as the "K0 heap-System destruction
+// crash" background chip; lifting it now unblocks the segfault-on-exit
+// across the B1.2 test surface (FragmentDB_test, DefaultProcessors_test,
+// NormalizeNamesProcessor_test, PeptideBuilder_test,
+// SecondaryStructureProcessor_test, v1ToV2JsonConverter call sites).
+MoleculeStore::MoleculeStore()
+{
+	(void) CompiledExpressionCache::instance();
+}
 MoleculeStore::~MoleculeStore()
 {
 	CompiledExpressionCache::instance().invalidate_store(this);

@@ -1,20 +1,43 @@
 INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
 
 ### list all filenames of the directory here ###
+# B1.2 (Track B Wave 1b, 2026-05-18): minimum-viable STRUCTURE enable.
+# Goal: unblock FragmentDB_test / DefaultProcessors_test / Peptides_test
+# / PeptideBuilder_test / PeptideCapProcessor_test / ResidueChecker_test
+# / NormalizeNamesProcessor_test / surface-tests / RMSD-related tests
+# without flipping MOLMEC/QSAR on (those are Waves 3-4).
+#
+# Trimmed (require MOLMEC, QSAR, or trimmed FORMAT bits — see also
+# the trim list in source/FORMAT/sources.cmake):
+# - DNAMutator.C              : AmberFF, EnergyMinimizer (MOLMEC, Wave 3)
+# - RDFParameter.C            : ForceFieldParameters, AtomTypes (MOLMEC, Wave 3)
+# - addHydrogenProcessor.C    : MMFF94StretchParameters (MOLMEC, Wave 3)
+# - assignBondOrderProcessor.C: AromaticityProcessor, RingPerceptionProcessor (QSAR, Wave 4)
+# - buildBondsProcessor.C     : RingPerceptionProcessor (QSAR, Wave 4)
+# - hybridisationProcessor.C  : RingPerceptionProcessor (QSAR, Wave 4)
+# - ringAnalyser.C            : RingPerceptionProcessor (QSAR, Wave 4)
+# - smartsMatcher.C           : RingPerceptionProcessor (QSAR, Wave 4)
+# - atomTyper.C               : transitive SmartsMatcher
+# - kekulizer.C               : transitive SmartsMatcher
+# - molecularSimilarity.C     : transitive SmartsMatcher
+# - rotamerLibrary.C          : SCWRLRotamerFile (FORMAT-trimmed; Wave 1b cycle)
+# - sideChainPlacementProcessor.C : transitive RotamerLibrary
+# - sdGenerator.C             : transitive RingAnalyser (uses Ring/CFS APIs)
+#
+# Note: SMARTSPredicate (KERNEL/standardPredicates.h) #includes
+# <BALL/STRUCTURE/smartsMatcher.h>. Header is present and compiles
+# because it doesn't pull RingPerceptionProcessor at parse time, but the
+# SMARTS expression-predicate count fails by 1 in Expression_test ("27
+# expected, got 26") until QSAR comes back in Wave 4. Documented gap.
 SET(SOURCES_LIST
-	addHydrogenProcessor.C
 	analyticalSES.C
-	assignBondOrderProcessor.C
 	atomBijection.C
-	atomTyper.C
 	binaryFingerprintMethods.C
 	bindingPocketProcessor.C
-	buildBondsProcessor.C
 	connectedComponentsProcessor.C
 	connolly.C
 	defaultProcessors.C
 	disulfidBondProcessor.C
-	DNAMutator.C
 	fragmentDB.C
 	geometricProperties.C
 	geometricTransformations.C
@@ -22,9 +45,6 @@ SET(SOURCES_LIST
 	graphFace.C
 	graphVertex.C
 	HBondProcessor.C
-	hybridisationProcessor.C
-	kekulizer.C
-	molecularSimilarity.C
 	mutator.C
 	nucleotideMapping.C
 	numericalSAS.C
@@ -34,27 +54,22 @@ SET(SOURCES_LIST
 	radialDistributionFunction.C
 	reconstructFragmentProcessor.C
 	RDFIntegrator.C
-	RDFParameter.C
 	RDFSection.C
 	reducedSurface.C
 	residueChecker.C
 	rGroupAssembler.C
-	ringAnalyser.C
 	RSEdge.C
 	RSFace.C
 	RSVertex.C
 	SASEdge.C
 	SASFace.C
 	SASVertex.C
-	sdGenerator.C
 	SESEdge.C
 	SESFace.C
 	SESVertex.C
 	secondaryStructureProcessor.C
-	sideChainPlacementProcessor.C
 	smilesParser.C
 	smartsParser.C
-	smartsMatcher.C
 	solventAccessibleSurface.C
 	solventExcludedSurface.C
 	structureMapper.C
@@ -67,7 +82,6 @@ SET(SOURCES_LIST
 	triangulatedSurface.C
 	UCK.C
 	residueRotamerSet.C
-	rotamerLibrary.C
 	RMSDMinimizer.C
 )
 

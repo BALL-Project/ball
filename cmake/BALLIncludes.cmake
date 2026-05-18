@@ -39,6 +39,17 @@ INCLUDE(include/BALL/PLUGIN/sources.cmake)
 INCLUDE(source/FORMAT/sources.cmake)
 INCLUDE(include/BALL/FORMAT/sources.cmake)
 
+# B1.2 (Track B Wave 1b, 2026-05-18): STRUCTURE re-enabled unconditionally.
+# Lynchpin: provides FragmentDB, ResidueChecker, Peptides::NameConverter
+# (unblocks Expression_test SMARTSPredicate count), Rotamer/RotamerLibrary
+# (unblocks SCWRLRotamerFile re-add), bond perception, ring analyser,
+# secondary structure processor. STRUCTURE depends only on FORMAT + core
+# per MODULE-REENABLE-PLAN.md §1 (besides the trimmed Wave 3 MOLMEC bits
+# below). 60+ STRUCTURE sources come in at once; the trim list below
+# excludes those that need MOLMEC/QSAR/DOCKING.
+INCLUDE(source/STRUCTURE/sources.cmake)
+INCLUDE(include/BALL/STRUCTURE/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
@@ -63,9 +74,6 @@ IF(NOT BALL_CORE_ONLY)
 
 	INCLUDE(source/SOLVATION/sources.cmake)
 	INCLUDE(include/BALL/SOLVATION/sources.cmake)
-
-	INCLUDE(source/STRUCTURE/sources.cmake)
-	INCLUDE(include/BALL/STRUCTURE/sources.cmake)
 
 	INCLUDE(source/DOCKING/sources.cmake)
 	INCLUDE(include/BALL/DOCKING/sources.cmake)
