@@ -157,9 +157,22 @@ namespace BALL
 
 			///
 			void setModelSettingsDialog(ModelSettingsDialog* dialog);
-	
+
 			///
 			void setColoringSettingsDialog(ColoringSettingsDialog* dialog);
+
+			/** Accessor for the owned ModelSettingsDialog (may be null
+			 *  if initializePreferencesTab() has not run yet). Added in
+			 *  UFG-03 so the per-Representation Inspector controllers
+			 *  can reuse the legacy processor-factory paths without
+			 *  duplicating their internals.
+			 */
+			ModelSettingsDialog* getModelSettingsDialog() { return model_settings_; }
+
+			/** Accessor for the owned ColoringSettingsDialog (may be
+			 *  null if initializePreferencesTab() has not run yet).
+			 */
+			ColoringSettingsDialog* getColoringSettingsDialog() { return coloring_settings_; }
 	
 			public Q_SLOTS:
 					
