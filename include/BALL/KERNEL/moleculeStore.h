@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
+#include <iosfwd>      // K0.6.5c: friend decls for loadStoreJSON/loadSystemJSON
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -34,9 +35,12 @@ namespace BALL
 	class Atom;
 	class Bond;
 	class MoleculeStore;
+	class System;
 	// K0.6.5: forward-declare the JSON loader helper so MoleculeStore
 	// can friend it without pulling moleculeStoreJson.h into this header.
 	namespace detail { void json_obj_to_store(MoleculeStore& s, const void* json_in); }
+	// K0.6.5c: forward-declare System loader for the same reason.
+	void loadSystemJSON(System& sys, std::istream& is);
 
 	/**	Bond record (struct-of-arrays bond table row).
 			12 bytes; first/second atom indices (uint32) + bond order (uint8) +
@@ -145,11 +149,16 @@ namespace BALL
 		// - each id must be unique (verified by hashset)
 		// - next_stable_id_ is reseeded past max(ids) inside the method
 		// - throws Exception::InvalidArgument on size mismatch or duplicate
-		// Friended to the JSON loader's translation unit only.
-		// K0.6.5 refactor: loadStoreJSON delegates to detail::json_obj_to_store,
-		// so the friend now names the helper too.
+		// Friended to the JSON loaders (both store-only and System) so
+		// they can call restore_stable_ids_for_load_ — kept private to
+		// preserve the "unique stable_id per live atom" invariant
+		// against accidental external callers. K0.6.3b made it private;
+		// K0.6.5 refactor moved store load via detail::json_obj_to_store;
+		// K0.6.5c extends the friend to loadSystemJSON which builds its
+		// own fresh-index-keyed StableId vector.
 		private:
 		friend void loadStoreJSON(MoleculeStore&, std::istream&);
+		friend void loadSystemJSON(System&, std::istream&);
 		void restore_stable_ids_for_load_(const std::vector<StableId>& ids);
 		public:
 		// detail::json_obj_to_store needs the same access.

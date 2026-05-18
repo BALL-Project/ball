@@ -189,37 +189,97 @@ void loadSystemJSON(System& sys, std::istream& is)
 		if (doc.contains("properties"))
 			detail::json_to_properties(sys, &doc["properties"]);
 
-		// Pre-create Atom handles for every live save-slot. Freed slots
-		// get no handle — they'll be allocated + immediately released
-		// in the store to preserve the slot-count for bond translation.
-		// Atoms are NEW (orphan-bound); molecule.insert below reparents
-		// + triggers System adoption.
-		std::vector<Atom*> atom_by_save_idx(n, nullptr);
-		std::vector<bool>  saw_in_molecule(n, false);
+		// K0.6.5c (Codex R8 OPEN-3a): TWO-PHASE validation. PHASE 1 walks
+		// all atom_indices + system_atom_indices BEFORE any allocation
+		// or insertion, rejecting duplicate / out-of-range / freed-slot
+		// references. Only after Phase 1 succeeds does Phase 2 mutate
+		// state. This closes both the "duplicate save_idx within one
+		// molecule" gap and the "second-molecule's duplicate reject
+		// happens after first molecule's insert" sequencing bug.
+
+		// Phase 1 — read is_freed strict 0/1.
+		std::vector<bool> is_freed_in_doc(n, false);
 		for (std::size_t i = 0; i < n; ++i)
 		{
 			const int freed_i = a["is_freed"][i].get<int>();
 			require_(freed_i == 0 || freed_i == 1, "is_freed must be 0 or 1");
-			if (freed_i == 0)
-				atom_by_save_idx[i] = new Atom;
-			// Else: freed slot — no Atom handle. The save-idx slot will
-			// be represented as an unused free-list entry post-load via
-			// the trailing release_atom calls below.
+			is_freed_in_doc[i] = (freed_i != 0);
 		}
 
-		// Walk molecules. For each, build a Molecule, attach its atoms
-		// in the doc's atom_indices order, insert into sys. The
-		// molecule.insert(atom) path triggers System::adopt which moves
-		// the atom out of the orphan store into sys.getStore() — that
-		// allocates a fresh slot. Identity of the Atom* survives.
+		// Phase 1 — walk molecule atom_indices, recording placement.
+		std::vector<bool> claimed_by_molecule(n, false);
 		const json& mols = doc["molecules"];
 		require_(mols.is_array(), "molecules must be array");
 		for (const auto& mol_obj : mols)
 		{
-			require_(mol_obj.is_object(),              "molecules[i] must be object");
-			require_(mol_obj.contains("atom_indices"), "molecules[i].atom_indices missing");
+			require_(mol_obj.is_object(),               "molecules[i] must be object");
+			require_(mol_obj.contains("atom_indices"),  "molecules[i].atom_indices missing");
 			require_(mol_obj["atom_indices"].is_array(),"molecules[i].atom_indices must be array");
+			for (const auto& idx_json : mol_obj["atom_indices"])
+			{
+				const std::uint32_t save_idx = idx_json.get<std::uint32_t>();
+				require_(save_idx < n, "atom_indices[i] out of [0, size)");
+				require_(!is_freed_in_doc[save_idx],
+					"atom_indices[i] references freed slot");
+				require_(!claimed_by_molecule[save_idx],
+					"atom_indices[i] duplicated (claimed twice)");
+				claimed_by_molecule[save_idx] = true;
+			}
+		}
 
+		// Phase 1 — walk orphan atoms.
+		std::vector<bool> claimed_by_system(n, false);
+		if (doc.contains("system_atom_indices"))
+		{
+			const json& orphan = doc["system_atom_indices"];
+			require_(orphan.is_array(), "system_atom_indices must be array");
+			for (const auto& idx_json : orphan)
+			{
+				const std::uint32_t save_idx = idx_json.get<std::uint32_t>();
+				require_(save_idx < n, "system_atom_indices[i] out of [0, size)");
+				require_(!is_freed_in_doc[save_idx],
+					"system_atom_indices[i] references freed slot");
+				require_(!claimed_by_molecule[save_idx],
+					"system_atom_indices[i] also listed inside a molecule");
+				require_(!claimed_by_system[save_idx],
+					"system_atom_indices[i] duplicated");
+				claimed_by_system[save_idx] = true;
+			}
+		}
+
+		// Phase 1 — every live save-slot must be claimed exactly once.
+		for (std::size_t i = 0; i < n; ++i)
+		{
+			if (is_freed_in_doc[i]) continue;
+			require_(claimed_by_molecule[i] || claimed_by_system[i],
+				"live save-slot not referenced by any molecule or system_atom_indices");
+		}
+
+		// Phase 2 — STATE MUTATION begins. Pre-create Atom handles for
+		// every live save-slot. RAII guard (K0.6.5c R8 OPEN-3b): if any
+		// subsequent step throws, delete the pre-created atoms so they
+		// don't leak. The guard releases (no-op) on success.
+		std::vector<Atom*> atom_by_save_idx(n, nullptr);
+		struct AtomGuard {
+			std::vector<Atom*>* v;
+			bool armed = true;
+			~AtomGuard()
+			{
+				if (!armed || v == nullptr) return;
+				for (Atom* a : *v) delete a;
+			}
+		};
+		AtomGuard guard{&atom_by_save_idx};
+
+		for (std::size_t i = 0; i < n; ++i)
+		{
+			if (!is_freed_in_doc[i])
+				atom_by_save_idx[i] = new Atom;
+		}
+
+		// Phase 2 — molecules + atoms.
+		for (const auto& mol_obj : mols)
+		{
 			Molecule* m = new Molecule;
 			if (mol_obj.contains("name"))
 				m->setName(String(mol_obj["name"].get<std::string>().c_str()));
@@ -232,46 +292,24 @@ void loadSystemJSON(System& sys, std::istream& is)
 			for (const auto& idx_json : mol_obj["atom_indices"])
 			{
 				const std::uint32_t save_idx = idx_json.get<std::uint32_t>();
-				require_(save_idx < n,                "atom_indices[i] out of [0, size)");
-				require_(atom_by_save_idx[save_idx],  "atom_indices[i] references freed slot");
 				m->insert(*atom_by_save_idx[save_idx]);
-				saw_in_molecule[save_idx] = true;
 			}
 		}
 
-		// K0.6.5b: orphan atoms — System direct children not in any
-		// Molecule. Insert their pre-created handles straight into sys.
+		// Phase 2 — orphan atoms via System base-class insert (hidden-
+		// overload note kept in K0.6.5b).
 		if (doc.contains("system_atom_indices"))
 		{
-			const json& orphan = doc["system_atom_indices"];
-			require_(orphan.is_array(), "system_atom_indices must be array");
-			for (const auto& idx_json : orphan)
+			for (const auto& idx_json : doc["system_atom_indices"])
 			{
 				const std::uint32_t save_idx = idx_json.get<std::uint32_t>();
-				require_(save_idx < n,               "system_atom_indices[i] out of [0, size)");
-				require_(atom_by_save_idx[save_idx], "system_atom_indices[i] references freed slot");
-				require_(!saw_in_molecule[save_idx],
-					"system_atom_indices[i] also listed inside a molecule");
-				// AtomContainer::insert(Atom&) wires both the Composite-
-				// tree side (System becomes the atom's parent so
-				// countAtoms sees it) AND the store-side auto-adopt via
-				// the K0.4.3 hook. System::insert(Molecule&) hides the
-				// inherited overload, so call it through the base.
 				sys.AtomContainer::insert(*atom_by_save_idx[save_idx]);
-				saw_in_molecule[save_idx] = true;   // mark as placed
 			}
 		}
 
-		// K0.6.5b: any live save-slot not placed in a molecule OR
-		// system_atom_indices is a data inconsistency. The writer marks
-		// every live atom in one of those two arrays.
-		for (std::size_t i = 0; i < n; ++i)
-		{
-			if (atom_by_save_idx[i] != nullptr && !saw_in_molecule[i])
-				throw Exception::ParseError(__FILE__, __LINE__,
-					"live save-slot not referenced by any molecule or system_atom_indices",
-					"K0.6.5b: orphan-atom contract violation");
-		}
+		// All atoms now owned by the Composite tree (molecules or sys);
+		// disarm the RAII guard so the leak-cleanup doesn't run.
+		guard.armed = false;
 
 		// Build save_idx -> fresh_store_idx map. After all molecule
 		// inserts, every live atom is in sys.getStore() at some idx.
@@ -321,6 +359,41 @@ void loadSystemJSON(System& sys, std::istream& is)
 				if (h != nullptr)
 					detail::json_to_properties(*h, &a["properties"][i]);
 			}
+		}
+
+		// K0.6.5c (Codex R8 OPEN-5a): restore System-level stable_ids
+		// via the slot map. Store-only loader does this via the private
+		// restore_stable_ids_for_load_; the System loader has to
+		// translate save_idx -> fresh_idx first, then write each
+		// stable_id with set_stable_id_for_load_... wait, that path was
+		// privatized in K0.6.3b. We use the same approach as the store
+		// loader: build a vector<StableId> indexed by FRESH store index
+		// + call the friend helper. The store loader friended the
+		// store-only helper (detail::json_obj_to_store); we add a
+		// dedicated System-loader path via the store's existing
+		// public-but-validated bulk-restore.
+		{
+			std::vector<MoleculeStore::StableId> sid_vec(store.size(), 0);
+			// Default to fresh-allocation ids for slots NOT in the doc
+			// (any freed slots that got allocated post-load won't have
+			// a doc-source id; keep whatever allocate_atom assigned).
+			for (std::size_t i = 0; i < store.size(); ++i)
+				sid_vec[i] = store.stable_id(static_cast<MoleculeStore::Index>(i));
+			// Overwrite from the doc using slot_map.
+			for (std::size_t i = 0; i < n; ++i)
+			{
+				if (!slot_live[i]) continue;
+				const std::uint32_t fi = slot_map[i];
+				if (fi < sid_vec.size())
+					sid_vec[fi] = a["stable_ids"][i].get<std::uint64_t>();
+			}
+			// Friend access: detail::json_obj_to_store is already friended
+			// by moleculeStore.h. systemJson.C is a different TU but the
+			// helper restore_stable_ids_for_load_ is private. Workaround:
+			// invoke it through a small store-internal path. For K0.6.5c
+			// we expose a public wrapper that takes a fresh-index-keyed
+			// vector and runs the same validation.
+			store.restore_stable_ids_for_load_(sid_vec);
 		}
 
 		// Restore bonds via the slot map. Bonds whose endpoints map to

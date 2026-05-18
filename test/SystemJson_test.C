@@ -371,6 +371,181 @@ CHECK(K0.6.5b OBJECT-typed property survives as NONE placeholder)
 	TEST_EQUAL(saw_dropped, true)
 RESULT
 
+// ============================================================
+// K0.6.5c — R8 OPEN remediation tests
+// ============================================================
+
+CHECK(K0.6.5c indexed BitVector property round-trip)
+	// R8 OPEN-8: indexed (BitVector) properties weren't write/read tested
+	// in K0.6.5b. Verify the sparse-bits emit/load path.
+	System src;
+	// Set a few bits at sparse indices.
+	src.setProperty(static_cast<Property>(3));
+	src.setProperty(static_cast<Property>(17));
+	src.setProperty(static_cast<Property>(99));
+
+	std::ostringstream os;
+	saveSystemJSON(src, os);
+	System dst;
+	std::istringstream is(os.str());
+	loadSystemJSON(dst, is);
+
+	TEST_EQUAL(dst.hasProperty(static_cast<Property>(3)),   true)
+	TEST_EQUAL(dst.hasProperty(static_cast<Property>(17)),  true)
+	TEST_EQUAL(dst.hasProperty(static_cast<Property>(99)),  true)
+	TEST_EQUAL(dst.hasProperty(static_cast<Property>(42)),  false)
+RESULT
+
+CHECK(K0.6.5c System-level stable_ids round-trip via System loader)
+	// R8 OPEN-5a: System loader was validating stable_ids column length
+	// but not restoring the ids — broke cross-session identity. K0.6.5c
+	// adds the restore via store.restore_stable_ids_for_load_ with a
+	// fresh-index-keyed StableId vector.
+	System src;
+	Molecule* m = new Molecule;
+	src.insert(*m);
+	Atom* a1 = new Atom; m->insert(*a1);
+	Atom* a2 = new Atom; m->insert(*a2);
+	Atom* a3 = new Atom; m->insert(*a3);
+
+	const auto id_a1 = a1->getStore()->stable_id(a1->getStoreIndex());
+	const auto id_a2 = a2->getStore()->stable_id(a2->getStoreIndex());
+	const auto id_a3 = a3->getStore()->stable_id(a3->getStoreIndex());
+
+	std::ostringstream os;
+	saveSystemJSON(src, os);
+	System dst;
+	std::istringstream is(os.str());
+	loadSystemJSON(dst, is);
+
+	// Walk in molecule-iteration order; each loaded atom keeps its
+	// original stable_id.
+	int n_walked = 0;
+	int matched = 0;
+	for (AtomIterator it = dst.getMolecule(0)->beginAtom(); +it; ++it)
+	{
+		const auto sid = it->getStore()->stable_id(it->getStoreIndex());
+		if (sid == id_a1 || sid == id_a2 || sid == id_a3) ++matched;
+		++n_walked;
+	}
+	TEST_EQUAL(n_walked, 3)
+	TEST_EQUAL(matched,  3)
+RESULT
+
+CHECK(K0.6.5c duplicate atom_index within a molecule rejected before mutation)
+	// R8 OPEN-3a: pre-K0.6.5c, a doc listing the same save_idx twice
+	// in one molecule's atom_indices wouldn't be caught (saw_in_molecule
+	// was set AFTER insertion, never checked inside the molecule loop).
+	// K0.6.5c's Phase 1 validation catches it before any state mutation.
+	System src;
+	Molecule* m = new Molecule; src.insert(*m);
+	Atom* a = new Atom; m->insert(*a);
+	std::ostringstream os; saveSystemJSON(src, os);
+
+	json doc = json::parse(os.str());
+	// Splice atom_indices to list slot 0 twice.
+	doc["molecules"][0]["atom_indices"] = json::array({0, 0});
+	// The single-atom doc has size=1, so the duplicate triggers the
+	// uniqueness check; the over-count also makes "live save-slot 0
+	// claimed twice" the failure mode.
+	std::string forged = doc.dump();
+
+	System dst;
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadSystemJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+	// State must not have mutated — dst stays empty.
+	TEST_EQUAL(dst.countMolecules(), 0u)
+	TEST_EQUAL(dst.countAtoms(),     0u)
+RESULT
+
+CHECK(K0.6.5c combined integration: 2 molecules + orphan + bonds + properties at every level)
+	// R8 OPEN-5c: no single test exercised the full feature surface.
+	// Build the trickiest representative System and verify round-trip
+	// preserves every layer.
+	System src;
+	src.setName("INTEGRATION");
+	src.setProperty(std::string("sys_prop"), 7);
+
+	Molecule* m1 = new Molecule; m1->setName("M1");
+	m1->setProperty(std::string("mol_prop"), String("first"));
+	src.insert(*m1);
+	Atom* m1a = new Atom; m1a->setName("M1A");
+	m1a->setProperty(std::string("atom_prop"), -0.3f);
+	m1a->setElement(PTE[Element::CARBON]);
+	m1->insert(*m1a);
+	Atom* m1b = new Atom; m1b->setName("M1B");
+	m1b->setElement(PTE[Element::NITROGEN]);
+	m1->insert(*m1b);
+
+	Molecule* m2 = new Molecule; m2->setName("M2");
+	src.insert(*m2);
+	Atom* m2a = new Atom; m2a->setName("M2A");
+	m2a->setElement(PTE[Element::OXYGEN]);
+	m2->insert(*m2a);
+
+	// Orphan atom directly on the System.
+	Atom* orph = new Atom; orph->setName("ORPHAN");
+	orph->setElement(PTE[Element::SULFUR]);
+	src.AtomContainer::insert(*orph);
+
+	// Bonds: intra-molecule (m1a-m1b) + cross-molecule (m1a-m2a).
+	src.getStore().add_bond(m1a->getStoreIndex(), m1b->getStoreIndex(), 1, 0);
+	src.getStore().add_bond(m1a->getStoreIndex(), m2a->getStoreIndex(), 1, 0);
+
+	TEST_EQUAL(src.countMolecules(), 2u)
+	TEST_EQUAL(src.countAtoms(),     4u)
+	TEST_EQUAL(src.getStore().live_bond_count(), 2u)
+
+	std::ostringstream os;
+	saveSystemJSON(src, os);
+	System dst;
+	std::istringstream is(os.str());
+	loadSystemJSON(dst, is);
+
+	TEST_EQUAL(dst.getName(),                    String("INTEGRATION"))
+	TEST_EQUAL(dst.countMolecules(),             2u)
+	TEST_EQUAL(dst.countAtoms(),                 4u)
+	TEST_EQUAL(dst.getStore().live_bond_count(), 2u)
+	TEST_EQUAL(dst.getMolecule(0)->getName(),    String("M1"))
+	TEST_EQUAL(dst.getMolecule(0)->countAtoms(), 2u)
+	TEST_EQUAL(dst.getMolecule(1)->getName(),    String("M2"))
+	TEST_EQUAL(dst.getMolecule(1)->countAtoms(), 1u)
+
+	// Verify properties at every level survived.
+	bool sys_ok = false;
+	for (Position i = 0; i < dst.countNamedProperties(); ++i)
+	{
+		const NamedProperty& np = dst.getNamedProperty(i);
+		if (np.getName() == std::string("sys_prop") && np.getInt() == 7) sys_ok = true;
+	}
+	TEST_EQUAL(sys_ok, true)
+
+	bool mol_ok = false;
+	for (Position i = 0; i < dst.getMolecule(0)->countNamedProperties(); ++i)
+	{
+		const NamedProperty& np = dst.getMolecule(0)->getNamedProperty(i);
+		if (np.getName() == std::string("mol_prop") && np.getString() == String("first"))
+			mol_ok = true;
+	}
+	TEST_EQUAL(mol_ok, true)
+
+	bool atom_ok = false;
+	for (AtomIterator it = dst.getMolecule(0)->beginAtom(); +it; ++it)
+	{
+		if (it->getName() != String("M1A")) continue;
+		for (Position i = 0; i < it->countNamedProperties(); ++i)
+		{
+			const NamedProperty& np = it->getNamedProperty(i);
+			if (np.getName() == std::string("atom_prop") && np.getFloat() == -0.3f)
+				atom_ok = true;
+		}
+	}
+	TEST_EQUAL(atom_ok, true)
+RESULT
+
 CHECK(K0.6.5 atom_index out-of-range rejected)
 	// Build a doc with 1 atom + 1 molecule referencing atom_index 5.
 	System src;
