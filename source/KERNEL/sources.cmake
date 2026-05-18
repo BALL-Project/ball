@@ -17,6 +17,7 @@ SET(SOURCES_LIST
 	molecularInteractions.C
 	molecule.C
 	moleculeStore.C
+	storeFormat.C
 	nucleicAcid.C
 	nucleotide.C
 	PDBAtom.C
