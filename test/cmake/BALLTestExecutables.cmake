@@ -162,7 +162,7 @@ SET(BALL_KERNEL_TESTS
 	Extractors_test
 	StdIteratorWrapper_test
 	MoleculeStore_test
-	StoreFormat_test
+	MoleculeStoreJson_test
 	CompiledExpression_test
 	SelectorBench_test
 )

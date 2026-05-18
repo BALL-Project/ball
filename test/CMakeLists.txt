@@ -51,7 +51,7 @@ IF(BALL_CORE_ONLY)
 		AtomBondIteratorTraits_test
 		Extractors_test
 		MoleculeStore_test
-		StoreFormat_test
+		MoleculeStoreJson_test
 		CompiledExpression_test
 		SelectorBench_test
 	)
