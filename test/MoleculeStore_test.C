@@ -12,6 +12,7 @@
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>          // K0.3c.2: delete bond needs full type
+#include <BALL/KERNEL/system.h>        // K0.4.2: System.adopt test
 #include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
@@ -504,6 +505,73 @@ CHECK(K0.3c.10 for_each_bond_of snapshot is mutation-safe)
 	});
 	TEST_EQUAL(n_callbacks, 2)
 	TEST_EQUAL(store.bond_degree(a), 0)
+RESULT
+
+CHECK(K0.4.2 System.adopt migrates atom payload)
+	Atom a;
+	a.setPosition(Vector3(1.f, 2.f, 3.f));
+	a.setCharge(0.5f);
+	auto* orphan = a.getStore();
+	auto orphan_idx = a.getStoreIndex();
+	TEST_EQUAL(orphan->position(orphan_idx), Vector3(1.f, 2.f, 3.f))
+
+	System sys;
+	auto* sys_store = &sys.getStore();
+	TEST_NOT_EQUAL(sys_store, orphan)
+	const auto orphan_live_before = orphan->live_atom_count();
+
+	sys.adopt(a);
+
+	// After adopt: a is in sys_store, no longer in orphan.
+	TEST_EQUAL(a.getStore(), sys_store)
+	TEST_NOT_EQUAL(a.getStore(), orphan)
+	TEST_EQUAL(sys_store->live_atom_count(), 1u)
+	TEST_EQUAL(orphan->live_atom_count(), orphan_live_before - 1)
+	TEST_EQUAL(orphan->is_freed(orphan_idx), true)
+
+	// Payload preserved.
+	TEST_EQUAL(a.getPosition(), Vector3(1.f, 2.f, 3.f))
+	TEST_EQUAL(a.getCharge(), 0.5f)
+	TEST_EQUAL(sys_store->position(a.getStoreIndex()), Vector3(1.f, 2.f, 3.f))
+RESULT
+
+CHECK(K0.4.2 System.adopt idempotent when already in store)
+	Atom a;
+	System sys;
+	sys.adopt(a);
+	auto idx_after_first = a.getStoreIndex();
+	sys.adopt(a);   // no-op
+	TEST_EQUAL(a.getStoreIndex(), idx_after_first)
+	TEST_EQUAL(sys.getStore().live_atom_count(), 1u)
+RESULT
+
+CHECK(K0.4.2 sequential adoption -- known limitation: bond orphans)
+	// Multi-step adoption (adopt a then adopt b separately) is a
+	// degenerate case in K0.4.2: when a adopts first, the bond stays
+	// in orphan; a's orphan slot is freed; CSR rebuild skips the bond
+	// (touches freed slot); when b adopts, the bond is invisible.
+	// Result: bond becomes orphaned in orphan store and dies with it.
+	//
+	// K0.4.3 will fix this by adopting all atoms contiguously through
+	// AtomContainer::insert, so both endpoints adopt before any slot
+	// release happens. Test locks the current K0.4.2 behavior so a
+	// future fix can flip the assertion.
+	Atom a, b;
+	Bond* bond = a.createBond(b);
+	auto* orphan = a.getStore();
+	TEST_EQUAL(bond->bond_store_, orphan)
+
+	System sys;
+	auto* sys_store = &sys.getStore();
+	sys.adopt(a);
+	sys.adopt(b);
+
+	// K0.4.2 current behavior: bond stays orphaned (was in orphan,
+	// but freed-slot CSR-skip hides it from b's migration scan).
+	// K0.4.3 will make this assert sys_store instead.
+	TEST_EQUAL(bond->bond_store_, orphan)
+
+	delete bond;
 RESULT
 
 CHECK(K0.3c.6 mutable-getter drift -- DOCUMENTED GAP until K0.3b.LATER)

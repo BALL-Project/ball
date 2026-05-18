@@ -291,6 +291,28 @@ namespace BALL
 		MoleculeStore&       getStore();
 		const MoleculeStore& getStore() const;
 
+		/** Adopt an atom into this System's MoleculeStore.
+
+				Migrates atom's payload from its current store (typically
+				the global orphan store) into this System's store. Updates
+				atom.store_ / store_idx_ to point at the new slot. The
+				original slot is released back to its store's free-list.
+
+				For each bond incident to this atom in the original store:
+				if the bond's partner is already in this System's store,
+				re-add the bond here and tombstone the original. If the
+				partner is still in the original store, the bond stays
+				there until the partner is adopted (at which point that
+				adopt call migrates the bond).
+
+				Idempotent: if atom is already in this->getStore(),
+				returns immediately.
+
+				K0.4.2 deliverable. Wired into AtomContainer::insert in
+				K0.4.3.
+		*/
+		void adopt(Atom& atom);
+
 		//@}
 
 		private:

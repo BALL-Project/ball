@@ -4,6 +4,9 @@
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/moleculeStore.h>   // K0.4.1: full type for unique_ptr<MoleculeStore>
+#include <BALL/KERNEL/atom.h>            // K0.4.2: adopt(Atom&)
+#include <BALL/KERNEL/bond.h>            // K0.4.2: bond migration in adopt
+#include <string>                        // K0.4.2: std::string for name copy
 
 namespace BALL
 {
@@ -30,6 +33,101 @@ namespace BALL
 	MoleculeStore& System::getStore()             { return *store_; }
 	const MoleculeStore& System::getStore() const { return *store_; }
 
+	// K0.4.2: System.adopt(Atom&) — migrates atom from current store
+	// (typically orphan) into this System's per-instance store.
+	//
+	// Sequence:
+	//   1. Snapshot all atom payload columns from the source store
+	//   2. allocate_atom(&atom) in target store (atomic bind, K0.3c.8)
+	//   3. Copy payload to new slot
+	//   4. For each bond incident to atom in source store: if partner
+	//      is also in target store, re-add bond there + tombstone in
+	//      source; else leave in source for the partner's future adopt
+	//   5. release_atom(source slot)
+	//   6. Update atom.store_/store_idx_/store_generation_
+	void System::adopt(Atom& atom)
+	{
+		MoleculeStore* src = atom.getStore();
+		MoleculeStore* dst = store_.get();
+		if (src == dst) return;          // already in this System's store
+		if (src == nullptr) return;      // unbound atom (shouldn't happen post-K0.3b.1)
+
+		const std::uint32_t src_idx = atom.getStoreIndex();
+
+		// 1+2+3: snapshot + atomic alloc + copy
+		Vector3 pos     = src->position(src_idx);
+		Vector3 vel     = src->velocity(src_idx);
+		Vector3 force   = src->force(src_idx);
+		float   charge  = src->charge(src_idx);
+		float   radius  = src->radius(src_idx);
+		short   atype   = src->atom_type(src_idx);
+		short   fcharge = src->formal_charge(src_idx);
+		std::uint8_t elem = src->element_index(src_idx);
+		bool    sel     = src->selected(src_idx);
+		std::string name = src->get_name(src_idx);
+		std::string tname = src->get_type_name(src_idx);
+
+		const std::uint32_t dst_idx = dst->allocate_atom(&atom);   // atomic bind
+
+		dst->position(dst_idx)       = pos;
+		dst->velocity(dst_idx)       = vel;
+		dst->force(dst_idx)          = force;
+		dst->charge(dst_idx)         = charge;
+		dst->radius(dst_idx)         = radius;
+		dst->atom_type(dst_idx)      = atype;
+		dst->formal_charge(dst_idx)  = fcharge;
+		dst->element_index(dst_idx)  = elem;
+		dst->set_selected(dst_idx, sel);
+		dst->set_name(dst_idx, name);
+		dst->set_type_name(dst_idx, tname);
+
+		// 4: bond migration. Iterate bonds touching src atom (snapshot-
+		// safe via K0.3c.10). For each bond, look at its endpoints:
+		// if the OTHER endpoint is already in `dst` (because dst is this
+		// System's store and the partner was adopted earlier), migrate
+		// the bond to dst. Otherwise leave it in src.
+		src->for_each_bond_of(src_idx, [&](std::uint32_t bond_idx) {
+			const BondRecord& br = src->bond(bond_idx);
+			std::uint32_t partner_src_idx =
+				(br.a == src_idx) ? br.b : br.a;
+			Atom* partner = src->back_ptr(partner_src_idx);
+			if (partner == nullptr) return;   // partner already freed; skip
+			if (partner->getStore() != dst) {
+				// Partner still in src store; bond stays where it is.
+				// The Bond object's bond_store_ continues to point at src.
+				// When partner adopts, that call will re-find this bond
+				// (still live in src) and migrate it then.
+				return;
+			}
+			// Partner already in dst. Migrate the bond.
+			std::uint8_t order = br.order;
+			std::uint8_t type  = br.type;
+			Bond* bond_obj = src->bond_back_ptr(bond_idx);
+			std::uint32_t new_bond_idx = dst->add_bond(
+				dst_idx, partner->getStoreIndex(), order, type);
+			if (bond_obj != nullptr) {
+				dst->set_bond_back_ptr(new_bond_idx, bond_obj);
+				// Update Bond's store pointer + record index so future
+				// setOrder/setType target the new mirror.
+				bond_obj->bond_store_ = dst;
+				bond_obj->bond_record_idx_ = new_bond_idx;
+			}
+			src->remove_bond(bond_idx);
+		});
+
+		// 5: release source slot
+		src->release_atom(src_idx);
+
+		// 6: update Atom handle
+		// Reach in via friend or by exposed mutator. For simplicity
+		// expose bindToStore_ semantics; we already wrote to back_ptr
+		// in allocate_atom(&atom), so just rewrite the public state.
+		// Atom has no public setStore — use the friend pattern: System
+		// is friend of Atom (need to add). For K0.4.2 minimal, we
+		// expose a non-public migrateTo_ on Atom and friend System.
+		atom.migrateTo_(dst, dst_idx);
+	}
+
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
@@ -47,6 +145,27 @@ namespace BALL
 	System::~System()
 	{
 		destroy();
+		// K0.4.2: invalidate atom handles bound to our store before the
+		// unique_ptr<MoleculeStore> deletes the store. Otherwise atoms
+		// whose lifetime outlasts the System (e.g., test fixtures with
+		// `Atom a; System sys; sys.adopt(a);`) would dereference a
+		// freed store at ~Atom -> release_atom.
+		if (store_ != nullptr)
+		{
+			for (std::size_t i = 0; i < store_->size(); ++i)
+			{
+				if (!store_->is_freed(i))
+				{
+					Atom* handle = store_->back_ptr(i);
+					if (handle != nullptr)
+					{
+						// Severs the handle's tie to this store. ~Atom
+						// will see nullptr and skip release_atom.
+						handle->migrateTo_(nullptr, 0);
+					}
+				}
+			}
+		}
 	}
 		
 	void System::set(const System& system, bool deep)

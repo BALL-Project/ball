@@ -42,6 +42,21 @@ namespace BALL
 		store_generation_ = store.generation();
 	}
 
+	// K0.4.2: retarget handle to a new store + slot after System::adopt
+	// migrates the payload. Called only by System::adopt; the new slot
+	// is already allocated (atomically with back_ptr=this) by adopt
+	// before this is invoked.
+	//
+	// Also called from ~System with new_store == nullptr to sever the
+	// handle's tie to a store that's about to be destroyed; the Atom
+	// destructor then skips release_atom (since store_ is null).
+	void Atom::migrateTo_(MoleculeStore* new_store, std::uint32_t new_idx)
+	{
+		store_     = new_store;
+		store_idx_ = new_idx;
+		store_generation_ = (new_store != nullptr) ? new_store->generation() : 0;
+	}
+
 	// K0.3b.2a/3: write-side helpers, called from atom.iC setters
 	// (which only forward-declare MoleculeStore via atom.h).
 	void Atom::writeStorePosition_(const Vector3& p)

@@ -1048,6 +1048,11 @@ namespace BALL
 		MoleculeStore* getStore() const     { return store_; }
 		std::uint32_t  getStoreIndex() const { return store_idx_; }
 
+		// K0.4.2: friend-style API for System::adopt() to retarget the
+		// atom's store binding atomically after migration. Underscore
+		// suffix marks it as in-tree-only; not for downstream code.
+		void migrateTo_(MoleculeStore* new_store, std::uint32_t new_idx);
+
 	};
 
 // required for visual studio
