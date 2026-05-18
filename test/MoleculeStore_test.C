@@ -848,6 +848,35 @@ CHECK(K0.4.6 concurrent orphan-store Atom construction is race-free (HIGH-4))
 	}
 RESULT
 
+CHECK(K0.4.7 BorrowedColumnRef opt-in enforcement documented (HIGH-5))
+	// Codex Round 4 HIGH-5: clarify that raw Atom::getPosition/etc. do
+	// NOT auto-wrap their return in BorrowedColumnRef, so the
+	// borrowed_ref_count_ debug guard only fires for callers that
+	// EXPLICITLY opt in. This test pins down the documented behaviour
+	// so the contract doesn't silently change.
+	MoleculeStore store;
+	store.reserve(8);
+	auto idx = store.allocate_atom();
+	#ifndef NDEBUG
+		// 1. Bare ref does NOT bump the counter.
+		Vector3& bare = store.position(idx);
+		(void)bare;
+		TEST_EQUAL(store.borrowed_ref_count(), 0u)
+
+		// 2. Explicit BorrowedColumnRef DOES bump the counter; release
+		//    on RAII scope exit decrements it back to zero.
+		{
+			BorrowedColumnRef<Vector3> guarded(store, store.position(idx));
+			TEST_EQUAL(store.borrowed_ref_count(), 1u)
+			guarded.get() = Vector3(7.f, 8.f, 9.f);
+		}
+		TEST_EQUAL(store.borrowed_ref_count(), 0u)
+	#endif
+	// In release builds, the counter is a no-op (always 0); no behaviour
+	// to assert. The contract holds: raw getter = UB on stale ref;
+	// BorrowedColumnRef = machine-checked in debug.
+RESULT
+
 CHECK(K0.4.4 getName by-value survives store growth (HIGH-6))
 	// Codex Round 4 HIGH-6: pre-K0.4.4 getName returned const String&
 	// into a vector<String> column; growth would dangle the ref. Now

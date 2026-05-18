@@ -282,19 +282,33 @@ namespace BALL
 		void mark_selection_dirty()                  { ++selection_generation_; }
 
 		//@}
-		/**	@name Live-reference enforcement (D7 amendment, K0.2c)
+		/**	@name Live-reference enforcement (D7 amendment, K0.2c, audited K0.4.7)
 
 				D7 contract: reference-return getters (Vector3& getPosition()
 				etc.) are valid only while no store-resizing mutation is in
 				flight. Generation check on the handle catches stale handles
 				but cannot catch already-escaped Vector3& references.
 
-				Enforcement: callers that take a reference wrap the borrow in
-				a `BorrowedColumnRef` RAII helper which increments
-				`borrowed_ref_count_` on construction and decrements on
-				destruction. Mutating operations (allocate_atom that
-				reallocates, reserve growing capacity, compact) assert that
-				`borrowed_ref_count_ == 0` in debug builds.
+				**K0.4.7 enforcement audit (Codex Round 4 HIGH-5):** the raw
+				reference-returning getters (`Atom::getPosition()`,
+				`Atom::getVelocity()`, `Atom::getForce()`) do NOT auto-wrap
+				their result in a `BorrowedColumnRef`, so they do NOT bump
+				`borrowed_ref_count_` and the `assert_no_borrowed_refs_`
+				debug guard will not fire on a subsequent reallocating
+				operation. This is a **documented contract**: callers that
+				intend to hold a column reference across mutating store
+				operations MUST explicitly construct a `BorrowedColumnRef`
+				(see helper below) to opt in to the debug-build guard.
+				Without opt-in, dangling references are undefined behaviour
+				in both debug and release.
+
+				Wrapping every getter result implicitly would change the
+				return type, breaking the v1.x-compatible signature surface
+				the rest of the codebase relies on. The trade-off chosen for
+				v2.0: keep the natural reference API, document the lifetime
+				rules, and offer opt-in machine enforcement for code that
+				wants it. K0.5 / K0.6 will progressively migrate hot
+				kernel-internal call sites that DO want enforcement.
 
 				Release builds elide the count and the assertion; documented
 				as undefined-behavior contract.
