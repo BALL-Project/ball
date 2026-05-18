@@ -82,13 +82,21 @@ INCLUDE(include/BALL/XRAY/sources.cmake)
 INCLUDE(source/NMR/sources.cmake)
 INCLUDE(include/BALL/NMR/sources.cmake)
 
+# B2.3 (Track B Wave 2c, 2026-05-18): ENERGY re-enabled unconditionally.
+# 5 sources (atomicContactEnergy, composedEnergyProcessor, coulomb,
+# distanceCoulomb, energyProcessor). Deps: CONCEPT, DATATYPE, KERNEL,
+# MATHS, STRUCTURE (Wave 1b subset, in — uses geometricProperties,
+# geometricTransformations only), SYSTEM. No MOLMEC/QSAR/FORMAT dep —
+# the energy processors are pure functional algorithms over atom
+# positions/charges. Provides ENERGY tests: AtomicContactEnergy_test,
+# ComposedEnergyProcessor_test, EnergyProcessor_test, OoiEnergy_test.
+INCLUDE(source/ENERGY/sources.cmake)
+INCLUDE(include/BALL/ENERGY/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
 IF(NOT BALL_CORE_ONLY)
-	INCLUDE(source/ENERGY/sources.cmake)
-	INCLUDE(include/BALL/ENERGY/sources.cmake)
-
 	INCLUDE(source/MOLMEC/sources.cmake)
 	INCLUDE(include/BALL/MOLMEC/sources.cmake)
 

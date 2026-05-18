@@ -97,6 +97,15 @@ IF(BALL_CORE_ONLY)
 		# compatible. HBondProcessor_test is listed under NMR_TESTS
 		# but tests STRUCTURE/HBondProcessor.h (B1.2 subset, in).
 		BALL_NMR_TESTS
+		# B2.3 (Track B Wave 2c, 2026-05-18): ENERGY tests — 3 of 4.
+		# OoiEnergy_test #includes BALL/SOLVATION/ooiEnergy.h which
+		# pulls MOLMEC; re-enables in Wave 3 (MOLMEC) + Wave 4 (SOLVATION).
+		BALL_CORE_ENERGY_TESTS
+	)
+	SET(BALL_CORE_ENERGY_TESTS
+		AtomicContactEnergy_test
+		ComposedEnergyProcessor_test
+		EnergyProcessor_test
 	)
 ENDIF()
 
