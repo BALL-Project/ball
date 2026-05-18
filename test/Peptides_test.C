@@ -54,7 +54,13 @@ CHECK(OneLetterCode(const String& aa))
 RESULT											
 
 CHECK(ThreeLetterCode(char aa))
-	TEST_EQUAL(ThreeLetterCode('b'), "UNK")
+	// 2026-05-18 (post PR #550): 'B' (and 'b' via toupper) maps to
+	// "ASX" — IUPAC ambiguity code for ASN/ASP. Same for 'Z' → "GLX".
+	// Test pre-#550 expected "UNK"; updated to track current code.
+	TEST_EQUAL(ThreeLetterCode('b'), "ASX")
+	TEST_EQUAL(ThreeLetterCode('B'), "ASX")
+	TEST_EQUAL(ThreeLetterCode('z'), "GLX")
+	TEST_EQUAL(ThreeLetterCode('Z'), "GLX")
 	TEST_EQUAL(ThreeLetterCode('?'), "UNK")
 	TEST_EQUAL(ThreeLetterCode('a'), "ALA")
 	TEST_EQUAL(ThreeLetterCode('A'), "ALA")
@@ -80,7 +86,13 @@ CHECK(ThreeLetterCode(char aa))
 RESULT
  	
 CHECK(IsOneLetterCode(char aa))
-	TEST_EQUAL(IsOneLetterCode('b'), false)
+	// 2026-05-18 (post PR #550): 'b'/'B' (ASX) and 'z'/'Z' (GLX) are
+	// now valid one-letter ambiguity codes; test pre-#550 expected
+	// them to be invalid. Updated to track current code.
+	TEST_EQUAL(IsOneLetterCode('b'), true)
+	TEST_EQUAL(IsOneLetterCode('B'), true)
+	TEST_EQUAL(IsOneLetterCode('z'), true)
+	TEST_EQUAL(IsOneLetterCode('Z'), true)
 	TEST_EQUAL(IsOneLetterCode('?'), false)
 	TEST_EQUAL(IsOneLetterCode('a'), true)
 	TEST_EQUAL(IsOneLetterCode('A'), true)
@@ -160,7 +172,8 @@ CHECK(OneLetterToThreeLetter(const OneLetterAASequence& sequence))
 	it++;
 	TEST_EQUAL(*it, "GLY")
 	it++;
-	TEST_EQUAL(*it, "UNK")
+	// 2026-05-18 (post PR #550): 'Z' is now GLX (ambiguity code), not UNK.
+	TEST_EQUAL(*it, "GLX")
 	it++;
 	TEST_EQUAL(*it, "UNK")
 RESULT
