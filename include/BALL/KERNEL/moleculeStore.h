@@ -246,7 +246,31 @@ namespace BALL
 		// reallocate (the "reserve discipline" of the D7 reference contract).
 		void  reserve(std::size_t n);
 
-		// Shrink columns to fit. Always advances generation (drops references).
+		// Shrink columns to fit. Always advances generation (drops
+		// references).
+		//
+		// 2026-05-18 (Codex R13.2): COMPACT IS NOT SAFE TO RUN
+		// CONCURRENTLY WITH CompiledExpression::evaluate() on the same
+		// store. compact() rebuilds the string_pool_ + intern table
+		// (V21-STRING-POOL-COMPACT, 25bfcd58e). The cache invalidate
+		// call inside compact() drops cached compiled expressions, so
+		// future get_or_compile re-compiles against the fresh offsets.
+		// But any CompiledExpression instance currently being executed
+		// (held via shared_ptr in another thread) still references the
+		// OLD intern offsets — calling evaluate() concurrently with
+		// compact() is a data race on name_offsets_/type_name_offsets_
+		// AND a logical bug (cached offset constants point into the
+		// new pool at a different string).
+		//
+		// Caller contract: serialise compact() against all evaluate()
+		// calls on the same store. Equivalent to "compact() requires
+		// exclusive access to the store". The bond/orphan mutexes
+		// don't help here because evaluate() doesn't take them.
+		//
+		// v2.1 backlog (V21-COMPILED-EXPR-GENERATION-CHECK): add a
+		// per-evaluate generation check inside CompiledExpression so
+		// stale offsets trigger a recompile-and-retry instead of UB.
+		// Until then, single-thread-per-store-or-external-mutex.
 		void  compact();
 
 		// K0.6.2: full reset to a fresh-construction state. Drops all

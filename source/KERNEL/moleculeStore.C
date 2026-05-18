@@ -141,6 +141,12 @@ MoleculeStore::Index MoleculeStore::allocate_atom()
 
 MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 {
+	// 2026-05-18 (R13.4 fix): allocate the stable_id FIRST. If
+	// next_stable_id_alloc_() throws on UINT64_MAX overflow, no
+	// column or free-list state has been mutated — the store stays
+	// at its pre-call shape.
+	const StableId new_sid = next_stable_id_alloc_();
+
 	// K0.3c.1: try to reuse a freed slot first. Free-list reuse never
 	// triggers a column reallocation (slot is still in-place), so D7
 	// reference-stability is preserved trivially.
@@ -165,7 +171,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 		type_name_offsets_[idx] = 0;
 		name_strings_[idx].clear();
 		type_name_strings_[idx].clear();
-		stable_ids_[idx]      = next_stable_id_alloc_();
+		stable_ids_[idx]      = new_sid;
 		// back_ptr already written above (K0.4.6); for the nullptr-caller
 		// case the slot is live-but-unbound, which is acceptable because
 		// the caller is by contract about to bind it.
@@ -195,7 +201,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 	type_name_offsets_.emplace_back(0);
 	name_strings_.emplace_back();           // K0.3b.LATER.5: default empty String
 	type_name_strings_.emplace_back();      // K0.3b.LATER.6
-	stable_ids_.emplace_back(next_stable_id_alloc_());
+	stable_ids_.emplace_back(new_sid);      // R13.4: pre-allocated above
 	// K0.4.6: write back_ptr BEFORE marking the slot live (is_freed_=0).
 	// A concurrent reader sequenced after the is_freed_ store will see a
 	// valid back_ptr; a reader sequenced before sees a freed slot. The
