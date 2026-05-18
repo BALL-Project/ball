@@ -778,6 +778,32 @@ namespace BALL
 				 */
 				void initializeGLContext();
 
+				/** Force the underlying QOpenGLWidget to realize its GL context
+				 *  + run initializeGL()/initializeGLContext() synchronously, even
+				 *  when the Scene has never been shown.
+				 *
+				 *  Background (v1.7.0-rc3 UFG-18 — RC3 critical blocker):
+				 *  Phase 999.47 introduced the WelcomeScreen-as-startup-central
+				 *  -widget pattern (UFG-08). When the user clicks a sample
+				 *  structure on the WelcomeScreen, Mainframe loads it and the
+				 *  resulting RepresentationMessage drives Scene's
+				 *  bufferRepresentation → GLRenderer::renderSphere_ before
+				 *  Scene's QOpenGLWidget has ever been shown. Lazy initializeGL
+				 *  therefore has not fired, GLRenderer's RenderSetup state is
+				 *  zero, and renderSphere_ dereferences a null pointer (the
+				 *  EXC_BAD_ACCESS at offset 0x100 reported in UFG-18).
+				 *
+				 *  This calls grabFramebuffer() on the internal GLRenderWindow,
+				 *  which Qt documents as a synchronous force of initializeGL()
+				 *  + paintGL() on QOpenGLWidget regardless of visibility. Cheap
+				 *  (one off-screen blit of an unsized widget) and idempotent —
+				 *  subsequent calls just return a cached framebuffer.
+				 *
+				 *  Mainframe calls this once after Scene construction, before
+				 *  the first showWelcomeScreen_() swap.
+				 */
+				void forceGLContextRealization();
+
 			protected:
 
 				/** Render the visualization.

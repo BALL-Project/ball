@@ -3466,6 +3466,26 @@ namespace BALL
 			renderers_[main_renderer_]->start();
 		}
 
+		void Scene::forceGLContextRealization()
+		{
+			// v1.7.0-rc3 UFG-18 — force the lazy QOpenGLWidget context creation
+			// to happen NOW, even though Scene has never been shown. See the
+			// header docstring for the full root-cause story (renderSphere_
+			// crash on Welcome-screen sample-click).
+			//
+			// grabFramebuffer() is the supported Qt 5 way to drive
+			// initializeGL() + paintGL() on a hidden QOpenGLWidget synchronously.
+			// It returns a QImage of the off-screen content; we discard it.
+			//
+			// Idempotent — already-initialized widgets just re-blit, and the
+			// `gl_initialized_` guard in initializeGLContext() prevents
+			// re-running Scene's GL setup.
+			if (main_display_ == 0) return;
+			if (gl_initialized_) return;
+
+			(void) main_display_->grabFramebuffer();
+		}
+
 		void Scene::setCursor(String c)
 		{
 			Path path;

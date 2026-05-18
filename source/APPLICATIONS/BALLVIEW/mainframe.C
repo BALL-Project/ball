@@ -346,6 +346,22 @@ namespace BALL
 		setCentralWidget(scene_);
 		setAcceptDrops(true);
 
+		// v1.7.0-rc3 UFG-18 (RC3 critical blocker) — force Scene's
+		// QOpenGLWidget to realize its GL context + run initializeGL()
+		// /initializeGLContext() NOW, while Scene is still the central
+		// widget and BEFORE the WelcomeScreen swap below.
+		//
+		// Without this, the WelcomeScreen-as-startup-central-widget pattern
+		// (UFG-08) keeps Scene's QOpenGLWidget hidden — lazy initializeGL
+		// never fires. The user then clicks a sample structure on
+		// WelcomeScreen, Mainframe loads the molecule, and the resulting
+		// RepresentationMessage drives GLRenderer::renderSphere_ against
+		// zero-initialized RenderSetup state → EXC_BAD_ACCESS at offset
+		// 0x100 (UFG-18 crash trace). This is the interactive-run
+		// manifestation of R8; the smoke-check workaround
+		// (BALLVIEW_NO_WELCOME=1) bypasses it for headless runs only.
+		scene_->forceGLContextRealization();
+
 		// Phase 999.44 Plan 05 — Scene tab completion (sub-PR 4.5).
 		// Now that the Scene + its Stage exist, attach the Scene-tab
 		// sections (Camera / Lights / Stage / Stereo / Background)
