@@ -308,10 +308,31 @@ namespace BALL
 				Idempotent: if atom is already in this->getStore(),
 				returns immediately.
 
-				K0.4.2 deliverable. Wired into AtomContainer::insert in
-				K0.4.3.
+				K0.4.2 deliverable. Note: sequential adoption of bonded
+				partners loses the bond (orphans in src store). Use
+				adoptSubtree() for multi-atom subtrees where bonds must
+				be preserved.
 		*/
 		void adopt(Atom& atom);
+
+		/** Adopt an entire AtomContainer subtree into this System's
+				store in three passes:
+
+				1. Snapshot + allocate dst slots + copy payloads for every
+				   descendant Atom (atomic via K0.3c.8 allocate_atom)
+				2. Migrate every bond touching any of the adopted atoms
+				   (all partners are now in dst, so no orphan case)
+				3. Release src slots
+
+				This preserves bonds where both endpoints are in the
+				inserted subtree. Bonds with one endpoint outside the
+				subtree (already in dst from a prior insert) also migrate
+				cleanly. Bonds crossing to another orphan/store stay in
+				their original location.
+
+				K0.4.3 deliverable. Wired into AtomContainer::insert.
+		*/
+		void adoptSubtree(AtomContainer& container);
 
 		//@}
 

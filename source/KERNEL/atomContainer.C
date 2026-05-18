@@ -5,10 +5,27 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/global.h>
+#include <BALL/KERNEL/system.h>          // K0.4.3: auto-adopt into root System
+#include <BALL/CONCEPT/composite.h>      // ancestor lookup
+#include <BALL/COMMON/rtti.h>            // RTTI::getDefault<System>
 
 using namespace::std;
 namespace BALL
 {
+
+	// K0.4.3 helper: walk up the Composite tree to find the root System.
+	// Returns nullptr if this AtomContainer isn't rooted under a System.
+	// File-local helper used by all the auto-adopting insert/prepend/append
+	// overloads below.
+	static System* findRootSystem_(Composite* node)
+	{
+		// Self-or-ancestor lookup. getAncestor with the System type
+		// returns the nearest System enclosing this node, or null if none.
+		if (node == nullptr) return nullptr;
+		// If this node itself is a System, that's the root.
+		if (System* self = dynamic_cast<System*>(node)) return self;
+		return node->getAncestor(RTTI::getDefault<System>());
+	}
 
 	AtomContainer::AtomContainer()
 		:	Composite(),
@@ -266,11 +283,18 @@ namespace BALL
 	void AtomContainer::prepend(Atom& atom)
 	{
 		Composite::prependChild(atom);
+		// K0.4.3 auto-adopt: if rooted under a System, migrate the atom
+		// from its current store (typically orphan) into the System's
+		// store. Single-atom insert path; bond migration is trivial
+		// (atom has no bonds to other atoms in src yet, or partner is
+		// already in dst).
+		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
 	}
 
 	void AtomContainer::append(Atom &atom)
 	{
 		Composite::appendChild(atom);
+		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
 	}
 
 	void AtomContainer::insert(Atom &atom)
@@ -281,11 +305,13 @@ namespace BALL
 	void AtomContainer::insertBefore(Atom &atom, Composite& before)
 	{
 		before.Composite::insertBefore(atom);
+		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
 	}
 
 	void AtomContainer::insertAfter(Atom& atom, Composite &after)
 	{
 		after.Composite::insertAfter(atom);
+		if (System* sys = findRootSystem_(this)) sys->adopt(atom);
 	}
 
 	bool AtomContainer::remove(Atom& atom)
@@ -368,11 +394,16 @@ namespace BALL
 	void AtomContainer::prepend(AtomContainer& atom_container)
 	{
 		Composite::prependChild(atom_container);
+		// K0.4.3 batch auto-adopt: subtree's atoms migrate together,
+		// preserving intra-subtree bonds (closes the K0.4.2 sequential-
+		// adopt orphan-bond limitation).
+		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
 	}
 
 	void AtomContainer::append(AtomContainer& atom_container)
 	{
 		Composite::appendChild(atom_container);
+		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
 	}
 
 	void AtomContainer::insert(AtomContainer& atom_container)
@@ -383,11 +414,13 @@ namespace BALL
 	void AtomContainer::insertBefore(AtomContainer& atom_container, Composite& before)
 	{
 		before.Composite::insertBefore(atom_container);
+		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
 	}
 
 	void AtomContainer::insertAfter(AtomContainer& atom_container, Composite& after)
 	{
 		after.Composite::insertAfter(atom_container);
+		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
 	}
 
 	void AtomContainer::spliceBefore(AtomContainer& atom_container)

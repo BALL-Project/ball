@@ -128,6 +128,119 @@ namespace BALL
 		atom.migrateTo_(dst, dst_idx);
 	}
 
+	// K0.4.3: System.adoptSubtree(AtomContainer&) — three-pass batch
+	// adoption that preserves bonds. Closes the K0.4.2 limitation where
+	// sequential single-atom adopt() orphaned bonds when both endpoints
+	// were inserted separately.
+	//
+	// Pass 1 (snapshot + allocate dst slots): for each Atom in the
+	//   subtree, snapshot its payload from src, allocate a dst slot
+	//   atomically with back_ptr=&atom, copy payload columns. Record
+	//   each atom's old (src, src_idx) tuple in a local table.
+	//
+	// Pass 2 (bond migration): for each (atom, src, src_idx), iterate
+	//   the bonds incident in src (mutation-safe via K0.3c.10). For
+	//   each bond:
+	//     - If the partner atom is also in dst (either because it was
+	//       adopted in pass 1 or because it was already in dst from a
+	//       prior insert): re-add the bond in dst, update bond_back_ptr
+	//       and Bond's bond_store_/bond_record_idx_, then tombstone the
+	//       original in src.
+	//     - Else (partner in another store): leave the bond in src.
+	//
+	// Pass 3 (release src slots): for each (src, src_idx), release the
+	//   slot. By this point, all bonds touching it have either migrated
+	//   to dst (and been removed from src) or stayed in src with the
+	//   slot's partner still live.
+	void System::adoptSubtree(AtomContainer& container)
+	{
+		MoleculeStore* dst = store_.get();
+
+		// Collect atoms + their old (src, src_idx) before we mutate.
+		struct AtomEntry { Atom* atom; MoleculeStore* src; std::uint32_t src_idx; };
+		std::vector<AtomEntry> entries;
+
+		AtomIterator it = container.beginAtom();
+		for (; +it; ++it)
+		{
+			Atom& a = *it;
+			MoleculeStore* src = a.getStore();
+			if (src == dst) continue;          // already in our store
+			if (src == nullptr) continue;      // unbound
+			entries.push_back({&a, src, a.getStoreIndex()});
+		}
+
+		// Pass 1: snapshot + allocate dst slots + copy payloads.
+		std::vector<std::uint32_t> dst_indices;
+		dst_indices.reserve(entries.size());
+		for (const auto& e : entries)
+		{
+			Vector3 pos = e.src->position(e.src_idx);
+			Vector3 vel = e.src->velocity(e.src_idx);
+			Vector3 force = e.src->force(e.src_idx);
+			float ch = e.src->charge(e.src_idx);
+			float r = e.src->radius(e.src_idx);
+			short at = e.src->atom_type(e.src_idx);
+			short fc = e.src->formal_charge(e.src_idx);
+			std::uint8_t el = e.src->element_index(e.src_idx);
+			bool sel = e.src->selected(e.src_idx);
+			std::string nm = e.src->get_name(e.src_idx);
+			std::string tn = e.src->get_type_name(e.src_idx);
+
+			std::uint32_t di = dst->allocate_atom(e.atom);
+			dst->position(di) = pos;
+			dst->velocity(di) = vel;
+			dst->force(di) = force;
+			dst->charge(di) = ch;
+			dst->radius(di) = r;
+			dst->atom_type(di) = at;
+			dst->formal_charge(di) = fc;
+			dst->element_index(di) = el;
+			dst->set_selected(di, sel);
+			dst->set_name(di, nm);
+			dst->set_type_name(di, tn);
+
+			e.atom->migrateTo_(dst, di);
+			dst_indices.push_back(di);
+		}
+
+		// Pass 2: bond migration. By now, every atom in entries has
+		// atom->getStore() == dst. So partner.getStore() == dst means
+		// the partner is migratable.
+		for (std::size_t k = 0; k < entries.size(); ++k)
+		{
+			const auto& e = entries[k];
+			// Iterate bonds incident to the OLD src slot.
+			e.src->for_each_bond_of(e.src_idx, [&](std::uint32_t bond_idx) {
+				const BondRecord& br = e.src->bond(bond_idx);
+				std::uint32_t partner_src_idx = (br.a == e.src_idx) ? br.b : br.a;
+				Atom* partner = e.src->back_ptr(partner_src_idx);
+				if (partner == nullptr) return;     // partner already freed; skip
+				if (partner->getStore() != dst) return;  // partner not in dst yet
+
+				std::uint8_t order = br.order;
+				std::uint8_t type  = br.type;
+				Bond* bond_obj = e.src->bond_back_ptr(bond_idx);
+
+				std::uint32_t new_bond_idx = dst->add_bond(
+					dst_indices[k], partner->getStoreIndex(), order, type);
+				if (bond_obj != nullptr)
+				{
+					dst->set_bond_back_ptr(new_bond_idx, bond_obj);
+					bond_obj->bond_store_ = dst;
+					bond_obj->bond_record_idx_ = new_bond_idx;
+				}
+				e.src->remove_bond(bond_idx);
+			});
+		}
+
+		// Pass 3: release src slots.
+		for (const auto& e : entries)
+		{
+			e.src->release_atom(e.src_idx);
+		}
+	}
+
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
@@ -328,14 +441,17 @@ namespace BALL
 		return size;
 	}
 
+	// K0.4.3: delegate to AtomContainer overloads so the auto-adopt
+	// hooks fire. Molecule is-a AtomContainer; the AtomContainer base
+	// methods handle the Composite::*Child wiring + adoptSubtree call.
 	void System::prepend(Molecule& molecule)
 	{
-		Composite::prependChild(molecule);
+		AtomContainer::prepend(static_cast<AtomContainer&>(molecule));
 	}
 
 	void System::append(Molecule& molecule)
 	{
-		Composite::appendChild(molecule);
+		AtomContainer::append(static_cast<AtomContainer&>(molecule));
 	}
 
 	void System::insert(Molecule& molecule)
@@ -345,12 +461,12 @@ namespace BALL
 
 	void System::insertBefore(Molecule& molecule, Composite& before)
 	{
-		before.Composite::insertBefore(molecule);
+		AtomContainer::insertBefore(static_cast<AtomContainer&>(molecule), before);
 	}
 
 	void System::insertAfter(Molecule& molecule, Composite& after)
 	{
-		after.Composite::insertAfter(molecule);
+		AtomContainer::insertAfter(static_cast<AtomContainer&>(molecule), after);
 	}
 
 	bool System::remove(Molecule& molecule)

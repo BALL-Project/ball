@@ -13,6 +13,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>          // K0.3c.2: delete bond needs full type
 #include <BALL/KERNEL/system.h>        // K0.4.2: System.adopt test
+#include <BALL/KERNEL/molecule.h>      // K0.4.3: adoptSubtree test
 #include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
@@ -543,6 +544,39 @@ CHECK(K0.4.2 System.adopt idempotent when already in store)
 	sys.adopt(a);   // no-op
 	TEST_EQUAL(a.getStoreIndex(), idx_after_first)
 	TEST_EQUAL(sys.getStore().live_atom_count(), 1u)
+RESULT
+
+CHECK(K0.4.3 adoptSubtree preserves intra-subtree bonds)
+	// Closes the K0.4.2 sequential-adopt orphan-bond limitation by
+	// adopting all atoms in a container as one batch.
+	System sys;
+	auto* sys_store = &sys.getStore();
+
+	// Build a Molecule subtree with two bonded atoms BEFORE inserting
+	// into the System. The atoms live in the orphan store at this point.
+	Molecule mol;
+	Atom* a = new Atom;
+	Atom* b = new Atom;
+	mol.insert(*a);   // orphan -> mol; mol not yet in System; still orphan
+	mol.insert(*b);
+	Bond* bond = a->createBond(*b);
+	auto* orphan = a->getStore();
+	TEST_NOT_EQUAL(orphan, sys_store)
+	TEST_EQUAL(bond->bond_store_, orphan)
+
+	// Insert the molecule into the System. AtomContainer::insert
+	// (AtomContainer&) -> adoptSubtree migrates a, b, and bond
+	// atomically.
+	sys.insert(mol);
+
+	// Both atoms now in sys_store; bond migrated too.
+	TEST_EQUAL(a->getStore(), sys_store)
+	TEST_EQUAL(b->getStore(), sys_store)
+	TEST_EQUAL(bond->bond_store_, sys_store)
+	TEST_EQUAL(sys_store->bond_degree(a->getStoreIndex()), 1u)
+	TEST_EQUAL(sys_store->bond_degree(b->getStoreIndex()), 1u)
+
+	delete bond;
 RESULT
 
 CHECK(K0.4.2 sequential adoption -- known limitation: bond orphans)
