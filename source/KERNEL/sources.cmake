@@ -21,6 +21,7 @@ SET(SOURCES_LIST
 	moleculeStoreJson.C
 	propertyJson.C
 	systemJson.C
+	v1ToV2JsonConverter.C
 	nucleicAcid.C
 	nucleotide.C
 	PDBAtom.C
