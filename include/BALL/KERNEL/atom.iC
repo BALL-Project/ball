@@ -91,25 +91,26 @@ void Atom::setName(const String& name)
 BALL_INLINE
 void Atom::setPosition(const Vector3& position)
 {
-	position_.set(position);
-	// K0.3b.2a dual-write: mirror into store column. Definition of
-	// MoleculeStore::position() is required here -- callers including
-	// atom.iC also need moleculeStore.h. atom.h forward-declares
-	// MoleculeStore; this implementation is in setPosition_writeStore_()
-	// in atom.C so atom.iC stays light.
-	if (store_) writeStorePosition_(position);
+	// K0.3b.LATER.1: position_ v1.x field deleted; store is now the
+	// sole authority. setPosition writes directly via helper (also used
+	// by persistentRead). store_ is guaranteed non-null between
+	// bindToStore_ (in every ctor) and the System destructor's
+	// migrateTo_(nullptr) -- so no null check here on the hot path.
+	writeStorePosition_(position);
 }
 
 BALL_INLINE
 Vector3& Atom::getPosition()
 {
-	return position_;
+	// K0.3b.LATER.1: store-backed. Reference is valid until the store
+	// reallocates (D7 contract; debug-enforceable via K0.2c lease).
+	return store_->position(store_idx_);
 }
 
 BALL_INLINE
 const Vector3& Atom::getPosition() const
 {
-	return position_;
+	return store_->position(store_idx_);
 }
 
 BALL_INLINE

@@ -21,6 +21,14 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+// K0.3b.LATER.1: atom.iC's getPosition() dereferences store_, so we
+// need MoleculeStore's full type at every site that includes atom.h.
+// This is a deliberately wide include since virtually every Atom user
+// also needs the store. Forward-decl no longer suffices.
+#ifndef BALL_KERNEL_MOLECULESTORE_H
+#	include <BALL/KERNEL/moleculeStore.h>
+#endif
+
 // Defines for default values for an atom
 #define BALL_ATOM_DEFAULT_ELEMENT &Element::UNKNOWN
 #define BALL_ATOM_DEFAULT_CHARGE     0
@@ -983,8 +991,9 @@ namespace BALL
 		Bond*						bond_[MAX_NUMBER_OF_BONDS];
 		///
 		Index           formal_charge_;
-		///
-		Vector3         position_;
+		// K0.3b.LATER.1: Vector3 position_ DELETED. Authority moved to
+		// MoleculeStore::positions_[store_idx_]. getPosition() returns
+		// a reference into that column.
 		///
 		float           charge_;
 		///

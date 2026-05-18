@@ -685,14 +685,12 @@ CHECK(K0.3c.9 default-Atom type-name does not leak string_pool)
 	TEST_EQUAL(grew < 16u, true)
 RESULT
 
-CHECK(K0.3c.6 mutable-getter drift -- DOCUMENTED GAP until K0.3b.LATER)
-	// Codex Round 2 HIGH-3 / HIGH-6: the non-const reference returned by
-	// Atom::getPosition() bypasses dual-write when the caller mutates
-	// through it. K0.2c lease helper is opt-in only; the legacy
-	// `Vector3& p = atom.getPosition(); p = v;` pattern still mutates
-	// v1.x position_ silently. This test LOCKS that behaviour as the
-	// current contract and FLIPS to dual-write semantics in K0.3b.LATER
-	// when the getter is rebound to read directly from the store.
+CHECK(K0.3c.6 mutable-getter drift -- CLOSED in K0.3b.LATER.1)
+	// Originally a Codex Round 2 HIGH-3 / HIGH-6 documented gap: the
+	// non-const reference returned by Atom::getPosition() bypassed
+	// dual-write when the caller mutated through it. With the K0.3b.LATER.1
+	// getter flip, getPosition returns a reference INTO the store column,
+	// so all mutations land there directly. Drift closed.
 	Atom a;
 	auto* store = a.getStore();
 	auto idx = a.getStoreIndex();
@@ -701,15 +699,12 @@ CHECK(K0.3c.6 mutable-getter drift -- DOCUMENTED GAP until K0.3b.LATER)
 	TEST_EQUAL(a.getPosition(), Vector3(1.f, 2.f, 3.f))
 	TEST_EQUAL(store->position(idx), Vector3(1.f, 2.f, 3.f))
 
-	// Now mutate via the non-const reference. v1.x updates; store does NOT.
+	// Mutate via the non-const reference. Store updates too (was stale
+	// before K0.3b.LATER.1).
 	Vector3& p = a.getPosition();
 	p = Vector3(7.f, 8.f, 9.f);
-	TEST_EQUAL(a.getPosition(), Vector3(7.f, 8.f, 9.f))     // v1.x sees new value
-	TEST_EQUAL(store->position(idx) == Vector3(1.f, 2.f, 3.f), true)  // store STALE
-	// ^ This is the documented gap. When K0.3b.LATER lands, this
-	// assertion will need flipping (store will also be 7,8,9). Update
-	// the test then; tracked by V2.0-ROADMAP K0.3b.LATER per-field
-	// flip plan.
+	TEST_EQUAL(a.getPosition(), Vector3(7.f, 8.f, 9.f))
+	TEST_EQUAL(store->position(idx), Vector3(7.f, 8.f, 9.f))  // no longer stale
 RESULT
 
 CHECK(CSR rebuild skips bonds touching freed atoms K0.3c.1)

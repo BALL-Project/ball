@@ -116,14 +116,13 @@ namespace BALL
 		  type_(BALL_ATOM_DEFAULT_TYPE),
 		  number_of_bonds_(0),
 		  formal_charge_(BALL_ATOM_DEFAULT_FORMAL_CHARGE),
-		  position_(BALL_ATOM_DEFAULT_POSITION),
 		  charge_(BALL_ATOM_DEFAULT_CHARGE),
 		  velocity_(BALL_ATOM_DEFAULT_VELOCITY),
 		  force_(BALL_ATOM_DEFAULT_FORCE)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror initial fields into store.
-		store_->position(store_idx_) = position_;
+		// K0.3b.LATER.1: position v1.x field deleted; store is now sole.
+		store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
 		store_->charge(store_idx_) = charge_;
 		store_->velocity(store_idx_) = velocity_;
 		store_->force(store_idx_) = force_;
@@ -149,14 +148,13 @@ namespace BALL
 		  type_(atom.type_),
 			number_of_bonds_(0),
 		  formal_charge_(atom.formal_charge_),
-		  position_(atom.position_),
 		  charge_(atom.charge_),
 		  velocity_(atom.velocity_),
 		  force_(atom.force_)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror initial fields into store.
-		store_->position(store_idx_) = position_;
+		// K0.3b.LATER.1: position v1.x field deleted; copy from source via getter.
+		store_->position(store_idx_) = atom.getPosition();
 		store_->charge(store_idx_) = charge_;
 		store_->velocity(store_idx_) = velocity_;
 		store_->force(store_idx_) = force_;
@@ -186,14 +184,13 @@ namespace BALL
 		  type_(type),
 		  number_of_bonds_(0),
 		  formal_charge_(formal_charge),
-		  position_(position),
 		  charge_(charge),
 		  velocity_(velocity),
 		  force_(force)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror initial fields into store.
-		store_->position(store_idx_) = position_;
+		// K0.3b.LATER.1: position v1.x field deleted; use ctor arg directly.
+		store_->position(store_idx_) = position;
 		store_->charge(store_idx_) = charge_;
 		store_->velocity(store_idx_) = velocity_;
 		store_->force(store_idx_) = force_;
@@ -258,7 +255,7 @@ namespace BALL
 			pm.writePrimitive(type_name_, "type_name_");
 			pm.writePrimitive((Index)type_, "type_");
 
-			pm.writeStorableObject(position_, "position_");
+			pm.writeStorableObject(getPosition(), "position_");
 			pm.writeStorableObject(velocity_, "velocity_");
 			pm.writeStorableObject(force_, "force_");
 
@@ -302,13 +299,20 @@ namespace BALL
 			store_->set_type_name(store_idx_, std::string(type_name_.c_str()));
 		}
 
-		pm.readStorableObject(position_, "position_");
+		// K0.3b.LATER.1: read position into a local; write through to
+		// store (the only authority). velocity_ and force_ still v1.x
+		// fields awaiting their per-field flip.
+		{
+			Vector3 tmp_pos;
+			pm.readStorableObject(tmp_pos, "position_");
+			if (store_) store_->position(store_idx_) = tmp_pos;
+		}
 		pm.readStorableObject(velocity_, "velocity_");
 		pm.readStorableObject(force_, "force_");
-		// K0.3b.2a/4/5 dual-write: mirror persisted vectors into store.
+		// K0.3b.4/5 dual-write: mirror persisted vectors into store
+		// (position already written above).
 		if (store_)
 		{
-			store_->position(store_idx_) = position_;
 			store_->velocity(store_idx_) = velocity_;
 			store_->force(store_idx_) = force_;
 		}
@@ -335,14 +339,15 @@ namespace BALL
 		type_ = atom.type_;
     number_of_bonds_ = 0;
 		formal_charge_ = atom.formal_charge_;
-		position_ = atom.position_;
 		charge_ = atom.charge_;
 		velocity_ = atom.velocity_;
 		force_ = atom.force_;
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror new fields into store cols.
+		// K0.3b.LATER.1: position via getter (store is source of truth)
+		const Vector3 src_pos = atom.getPosition();
+		// K0.3b.3/4/5/6/7 dual-write: mirror new fields into store cols.
 		if (store_)
 		{
-			store_->position(store_idx_) = position_;
+			store_->position(store_idx_) = src_pos;
 			store_->charge(store_idx_) = charge_;
 			store_->velocity(store_idx_) = velocity_;
 			store_->force(store_idx_) = force_;
@@ -369,14 +374,15 @@ namespace BALL
 		number_of_bonds_ = 0;
 		type_ = atom.type_;
 		formal_charge_ = atom.formal_charge_;
-		position_ = atom.position_;
 		charge_ = atom.charge_;
 		velocity_ = atom.velocity_;
 		force_ = atom.force_;
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror new fields into store cols.
+		// K0.3b.LATER.1: position via getter (store is source of truth)
+		const Vector3 src_pos = atom.getPosition();
+		// K0.3b.3/4/5/6/7 dual-write: mirror new fields into store cols.
 		if (store_)
 		{
-			store_->position(store_idx_) = position_;
+			store_->position(store_idx_) = src_pos;
 			store_->charge(store_idx_) = charge_;
 			store_->velocity(store_idx_) = velocity_;
 			store_->force(store_idx_) = force_;
@@ -420,7 +426,12 @@ namespace BALL
 		std::swap(type_, atom.type_);
 		std::swap(number_of_bonds_, atom.number_of_bonds_);
 		std::swap(formal_charge_, atom.formal_charge_);
-		std::swap(position_, atom.position_);
+		// K0.3b.LATER.1: position_ deleted; swap store columns directly.
+		if (store_ != nullptr && store_ == atom.store_)
+		{
+			std::swap(store_->position(store_idx_),
+			          store_->position(atom.store_idx_));
+		}
 		std::swap(charge_, atom.charge_);
 		std::swap(velocity_, atom.velocity_);
 		std::swap(force_, atom.force_);
@@ -433,14 +444,14 @@ namespace BALL
 			store_->swap_atom_connectivity(store_idx_, atom.store_idx_);
 		}
 
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror swapped fields into store.
+		// K0.3b.3/4/5/6/7 dual-write: mirror swapped fields into store.
+		// (position omitted -- already swapped at store level above.)
 		auto mirror_all = [](MoleculeStore* st, std::uint32_t idx,
-		                     const Vector3& pos, float ch, const Vector3& vel,
+		                     float ch, const Vector3& vel,
 		                     const Vector3& f, const String& nm, const String& tnm,
 		                     float r, short t, short fc, const Element* el)
 		{
 			if (!st) return;
-			st->position(idx) = pos;
 			st->charge(idx)   = ch;
 			st->velocity(idx) = vel;
 			st->force(idx)    = f;
@@ -452,9 +463,9 @@ namespace BALL
 			st->element_index(idx) =
 				(el == 0) ? 0 : static_cast<std::uint8_t>(el->getAtomicNumber());
 		};
-		mirror_all(store_, store_idx_, position_, charge_, velocity_, force_,
+		mirror_all(store_, store_idx_, charge_, velocity_, force_,
 		           name_, type_name_, radius_, type_, formal_charge_, element_);
-		mirror_all(atom.store_, atom.store_idx_, atom.position_, atom.charge_,
+		mirror_all(atom.store_, atom.store_idx_, atom.charge_,
 		           atom.velocity_, atom.force_, atom.name_, atom.type_name_,
 		           atom.radius_, atom.type_, atom.formal_charge_, atom.element_);
 	}
@@ -790,7 +801,7 @@ namespace BALL
 		s << "  type name: " << type_name_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  position: " << position_ << endl;
+		s << "  position: " << getPosition() << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  radius: " << radius_ << endl;
@@ -849,15 +860,16 @@ namespace BALL
 		radius_ = BALL_ATOM_DEFAULT_RADIUS;
 		type_ = BALL_ATOM_DEFAULT_TYPE;
 		formal_charge_ = BALL_ATOM_DEFAULT_FORMAL_CHARGE;
-		position_.set(BALL_ATOM_DEFAULT_POSITION);
+		// K0.3b.LATER.1: position_ v1.x field deleted; clear via store
+		// (handled in the dual-write block below).
 		charge_ = BALL_ATOM_DEFAULT_CHARGE;
 		velocity_.set(BALL_ATOM_DEFAULT_VELOCITY);
 		force_.set(BALL_ATOM_DEFAULT_FORCE);
 
-		// K0.3b.2a/3/4/5/6/7 dual-write: mirror cleared fields into store.
+		// K0.3b.3/4/5/6/7 dual-write: mirror cleared fields into store.
 		if (store_)
 		{
-			store_->position(store_idx_) = position_;
+			store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
 			store_->charge(store_idx_) = charge_;
 			store_->velocity(store_idx_) = velocity_;
 			store_->force(store_idx_) = force_;
