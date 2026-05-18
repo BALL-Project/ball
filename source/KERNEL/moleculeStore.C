@@ -42,28 +42,20 @@ void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& id
 		next_stable_id_ = max_id + 1;
 }
 
-// B1.2 (Track B Wave 1b, 2026-05-18): destruction-order fix.
-// Pre-fix repro: `new System; new Atom; insert; delete sys` exited
-// with SIGSEGV (139) at process teardown — the Meyers singleton for
-// CompiledExpressionCache::instance() could be destroyed BEFORE the
-// orphan-store MoleculeStore (and any other heap-System) destructor
-// ran, because nothing forced the cache singleton's construction to
-// precede the orphan store's. C++17 [basic.start.term] p2 guarantees
-// reverse construction order for thread-storage-duration and static-
-// storage-duration objects, so touching the cache singleton inside
-// the MoleculeStore constructor pins the cache to construct first
-// and therefore destruct last. Cost is one mutex acquire + map check
-// at first per-process MoleculeStore creation (cheap, one-off).
-//
-// This is what was previously filed as the "K0 heap-System destruction
-// crash" background chip; lifting it now unblocks the segfault-on-exit
-// across the B1.2 test surface (FragmentDB_test, DefaultProcessors_test,
-// NormalizeNamesProcessor_test, PeptideBuilder_test,
-// SecondaryStructureProcessor_test, v1ToV2JsonConverter call sites).
-MoleculeStore::MoleculeStore()
-{
-	(void) CompiledExpressionCache::instance();
-}
+// Destruction-order is no longer load-bearing on this ctor.
+// History:
+//   B1.2 (commit 14f10fdd1): added `(void) CompiledExpressionCache::instance()`
+//     here to pin the cache singleton to construct before any MoleculeStore,
+//     so the cache would (per C++17 [basic.start.term]) destruct after them.
+//     Fixed the original heap-System SIGSEGV at process exit.
+//   DTOR-HARDEN (commit f79910675): switched CompiledExpressionCache to a
+//     leaky-immortal heap singleton whose destructor never runs. The
+//     destruction-order concern became structurally impossible.
+//   V21-DROP-CACHE-CTOR-PIN (this commit): pin removed. The dtor at line
+//     below can call CompiledExpressionCache::instance() at any point in
+//     process teardown and always get a valid cache, with or without prior
+//     ctor-side touch.
+MoleculeStore::MoleculeStore() = default;
 MoleculeStore::~MoleculeStore()
 {
 	CompiledExpressionCache::instance().invalidate_store(this);
