@@ -449,7 +449,29 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR cmd_line, int)
 	// event loop is running and the scene has had time to load and render.
 	if (export_png_path != "")
 	{
-		QTimer::singleShot(4000, &application, [&export_png_path, &application]() {
+		// R8 (RC3 render-smoke regression): UFG-08's WelcomeScreen-as-startup-
+		// centralWidget swap leaves Scene's QOpenGLWidget detached + hidden
+		// until the user dismisses Welcome (or loads a composite, which is
+		// brittle — checkMenus() may not fire before the export timer). A
+		// hidden QOpenGLWidget never gets a surface, so initializeGL() (the
+		// site of BALLVIEW_GL_DIAG and of the renderSetup init the export
+		// path relies on) is never invoked. Force Scene back as the central
+		// widget BEFORE application.exec() so the first show-event of the
+		// event loop creates Scene's GL context, then the 4000ms timer below
+		// has a live context for exportPNG(). hideWelcomeScreen_() is safe
+		// to call when WelcomeScreen is not currently mounted — it early-
+		// returns. Preserves UFG-08's interactive WelcomeScreen-on-startup
+		// behavior (only `-export-png` runs hit this branch). See
+		// .planning/RC3-MASTER-PLAN.md R8 for the bisection rationale.
+		mainframe.hideWelcomeScreen_();
+
+		QTimer::singleShot(4000, &application, [&export_png_path, &application, &mainframe]() {
+			// Belt-and-suspenders: if some other code path (checkMenus on an
+			// empty composite, e.g. when no molecule arg was supplied) re-
+			// surfaced WelcomeScreen between mainframe.show() and the timer,
+			// swap it back here as well. Cheap no-op when not mounted.
+			mainframe.hideWelcomeScreen_();
+
 			BALL::VIEW::Scene* scene = BALL::VIEW::Scene::getInstance(0);
 			if (scene == 0)
 			{
