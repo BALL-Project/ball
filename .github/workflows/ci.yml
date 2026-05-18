@@ -207,8 +207,17 @@ jobs:
     # Phase 999.16 (BUILD-ACCEL-01): ccache + PCH compatibility requires these
     # sloppiness keys. Without them, PCH-enabled builds silently bust ccache hits.
     # See cmake/PCH.md §"ccache sloppiness contract" for per-flag rationale.
+    #
+    # v1.7.0-rc2 fix (2026-05-18): include the generated config.h in
+    # CCACHE_EXTRAFILES so PROJECT VERSION bumps (and any other CMake-
+    # configured macros) properly invalidate cached compilations. Without
+    # this the VersionInfo_test fails after a version bump because libBALL
+    # is rebuilt from cache against the OLD BALL_RELEASE_STRING while the
+    # test TU compiles fresh against the NEW one. Diagnosed from CI run
+    # 26016813212 linux-x64 build (test #6/295 VersionInfo_test FAILED).
     env:
       CCACHE_SLOPPINESS: "pch_defines,time_macros,include_file_mtime"
+      CCACHE_EXTRAFILES: "${{ github.workspace }}/include/BALL/CONFIG/config.h.in"
     strategy:
       # Don't let one OS failing cancel the others — we want the full picture.
       fail-fast: false
@@ -229,9 +238,14 @@ jobs:
           # Phase 999.48 §8.7 step (b) — ui_v2 suffix removed from the
           # cache key with the BALL_UI_V2 flag's removal. Single-cell
           # per OS now reuses the same line every build.
-          key: ccache-${{ matrix.os }}-pch-v1-${{ github.sha }}
+          # v1.7.0-rc2 (2026-05-18) — bump cache key prefix v1 → v2 to
+          # invalidate 1.6.0-era cached object files that survived the
+          # PROJECT VERSION 1.6.0 → 1.7.0 bump and caused
+          # VersionInfo_test to fail on Linux. Paired with the
+          # CCACHE_EXTRAFILES addition above for the long-term fix.
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
           restore-keys: |
-            ccache-${{ matrix.os }}-pch-v1-
+            ccache-${{ matrix.os }}-pch-v2-
             ccache-${{ matrix.os }}-
 
       # Phase 999.17 (BUILD-ACCEL-02): cache the Windows CMake build tree so warm-cache
