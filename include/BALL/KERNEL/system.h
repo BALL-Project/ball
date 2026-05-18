@@ -25,10 +25,14 @@
 #	include <BALL/KERNEL/nucleotideIterator.h>
 #endif
 
+#include <memory>  // K0.4.1: std::unique_ptr<MoleculeStore>
+
 #define BALL_SYSTEM_DEFAULT_NAME   ""
 
-namespace BALL 
+namespace BALL
 {
+	class MoleculeStore;  // K0.4.1 forward decl
+
 	/** System class.
 			This class is used to represent a system, i.e., a collection
 			of molecules. \par
@@ -273,6 +277,29 @@ namespace BALL
 		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, SecondaryStructure, secondaryStructures)
 		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, Nucleotide, nucleotides)
 		BALL_DECLARE_STD_ITERATOR_WRAPPER(System, NucleicAcid, nucleicAcids)
+
+		//@}
+		/** @name v2.0 MoleculeStore (K0.4.1)
+		*/
+		//@{
+
+		/** Get the per-System MoleculeStore. Every System owns one;
+				atoms inserted into this System are adopted into this store
+				(via Atom-side bind / migration from the orphan store).
+				See KERNEL-V2-DECISIONS.md D5 and V2.0-ROADMAP.md K0.4.
+		*/
+		MoleculeStore&       getStore();
+		const MoleculeStore& getStore() const;
+
+		//@}
+
+		private:
+
+		// K0.4.1: per-System MoleculeStore. Owned via unique_ptr so the
+		// System destructor cleans it up. Forward-declared to keep this
+		// header light; defined in system.C where moleculeStore.h is
+		// included.
+		std::unique_ptr<MoleculeStore> store_;
 	};
 } // namespace BALL
 

@@ -3,25 +3,32 @@
 //
 
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/moleculeStore.h>   // K0.4.1: full type for unique_ptr<MoleculeStore>
 
-namespace BALL 
+namespace BALL
 {
 
 	System::System()
-		:	AtomContainer()
+		:	AtomContainer(),
+			store_(std::make_unique<MoleculeStore>())   // K0.4.1
 	{
 	}
-		
+
 	System::System(const System& system, bool deep)
-		: AtomContainer()
+		: AtomContainer(),
+			store_(std::make_unique<MoleculeStore>())   // K0.4.1
 	{
 		set(system, deep);
 	}
-		
+
 	System::System(const String& name)
-		:	AtomContainer(name)
+		:	AtomContainer(name),
+			store_(std::make_unique<MoleculeStore>())   // K0.4.1
 	{
 	}
+
+	MoleculeStore& System::getStore()             { return *store_; }
+	const MoleculeStore& System::getStore() const { return *store_; }
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
   {
