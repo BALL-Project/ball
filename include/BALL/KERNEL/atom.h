@@ -980,8 +980,9 @@ namespace BALL
 		// getName/getTypeName return const String& into those columns; the
 		// string_pool_ + offsets path is now used only by the persistence
 		// format.
-		///
-		const Element*  element_;
+		// K0.3b.LATER.7: const Element* element_ DELETED. Authority moved
+		// to MoleculeStore::element_indices_[store_idx_] (uint8 atomic
+		// number). getElement() resolves via PTE[number].
 		///
 		float           radius_;
 		///
@@ -1044,6 +1045,10 @@ namespace BALL
 		void writeStoreRadius_(float r);
 		void writeStoreAtomType_(short t);
 		void writeStoreFormalCharge_(short fc);
+		// K0.3b.LATER.7: out-of-line getElement helper so atom.iC need not
+		// pull in PTE.h. Resolves the store's atomic_number column entry
+		// back to a PTE Element reference.
+		const Element& readStoreElement_() const;
 
 		public:
 		// K0.3b.8: public accessors so Bond + future container handles

@@ -91,6 +91,12 @@ namespace BALL
 		store_->element_index(store_idx_) =
 			(e == 0) ? 0 : static_cast<std::uint8_t>(e->getAtomicNumber());
 	}
+	const Element& Atom::readStoreElement_() const
+	{
+		// K0.3b.LATER.7: resolve atomic-number column entry to PTE element
+		// reference. atomic_number 0 maps to Element::UNKNOWN via PTE[0].
+		return PTE[(Position)store_->element_index(store_idx_)];
+	}
 	void Atom::writeStoreRadius_(float r)
 	{
 		store_->radius(store_idx_) = r;
@@ -109,15 +115,14 @@ namespace BALL
 		  PropertyManager(),
 		  interactions(0),
 		  store_interactions_disabled_(0),
-		  element_(BALL_ATOM_DEFAULT_ELEMENT),
 		  radius_(BALL_ATOM_DEFAULT_RADIUS),
 		  type_(BALL_ATOM_DEFAULT_TYPE),
 		  number_of_bonds_(0),
 		  formal_charge_(BALL_ATOM_DEFAULT_FORMAL_CHARGE)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.LATER.1-6: position/charge/velocity/force/name/type_name now
-		// store-backed; write defaults straight through.
+		// K0.3b.LATER.1-7: all atom-payload fields are now store-backed;
+		// write defaults straight through.
 		store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
 		store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
 		store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
@@ -127,9 +132,7 @@ namespace BALL
 		store_->radius(store_idx_) = radius_;
 		store_->atom_type(store_idx_) = type_;
 		store_->formal_charge(store_idx_) = formal_charge_;
-		store_->element_index(store_idx_) =
-			(element_ == 0) ? 0
-			                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+		writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)
@@ -137,14 +140,13 @@ namespace BALL
 		  PropertyManager(atom),
 		  interactions(0),
 		  store_interactions_disabled_(0),
-		  element_(atom.element_),
 		  radius_(atom.radius_),
 		  type_(atom.type_),
 			number_of_bonds_(0),
 		  formal_charge_(atom.formal_charge_)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.LATER.1-6: copy all store-backed fields via source getters.
+		// K0.3b.LATER.1-7: copy all store-backed fields via source getters.
 		store_->position(store_idx_) = atom.getPosition();
 		store_->charge(store_idx_) = atom.getCharge();
 		store_->velocity(store_idx_) = atom.getVelocity();
@@ -154,9 +156,7 @@ namespace BALL
 		store_->radius(store_idx_) = radius_;
 		store_->atom_type(store_idx_) = type_;
 		store_->formal_charge(store_idx_) = formal_charge_;
-		store_->element_index(store_idx_) =
-			(element_ == 0) ? 0
-			                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+		writeStoreElement_(&atom.getElement());
 	}
 
 	Atom::Atom
@@ -168,14 +168,13 @@ namespace BALL
 		  PropertyManager(),
 		  interactions(0),
 		  store_interactions_disabled_(0),
-		  element_(&element),
 		  radius_(radius),
 		  type_(type),
 		  number_of_bonds_(0),
 		  formal_charge_(formal_charge)
 	{
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.LATER.1-6: write ctor args straight through to the store.
+		// K0.3b.LATER.1-7: write ctor args straight through to the store.
 		store_->position(store_idx_) = position;
 		store_->charge(store_idx_) = charge;
 		store_->velocity(store_idx_) = velocity;
@@ -185,9 +184,7 @@ namespace BALL
 		store_->radius(store_idx_) = radius_;
 		store_->atom_type(store_idx_) = type_;
 		store_->formal_charge(store_idx_) = formal_charge_;
-		store_->element_index(store_idx_) =
-			(element_ == 0) ? 0
-			                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+		writeStoreElement_(&element);
 	}
 
 	Atom::~Atom()
@@ -233,7 +230,7 @@ namespace BALL
 			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this),
 														 "PropertyManager");
 
-			pm.writePrimitive((String)element_->getSymbol(), "element_");
+			pm.writePrimitive((String)getElement().getSymbol(), "element_");
 			pm.writePrimitive(formal_charge_, "formal_charge_");
 			pm.writePrimitive(getCharge(), "charge_");
 			pm.writePrimitive(radius_, "radius_");
@@ -261,7 +258,8 @@ namespace BALL
 
 		String s;
 		pm.readPrimitive(s, "element_");
-		element_ = &PTE[s];
+		// K0.3b.LATER.7: element_ deleted; resolve via PTE and write to store.
+		const Element* tmp_element = &PTE[s];
 		pm.readPrimitive(formal_charge_, "formal_charge_");
 		{ float tmp_ch; pm.readPrimitive(tmp_ch, "charge_"); if (store_) store_->charge(store_idx_) = tmp_ch; }
 		pm.readPrimitive(radius_, "radius_");
@@ -272,17 +270,14 @@ namespace BALL
 		Index tmp_type;
 		pm.readPrimitive(tmp_type, "type_");
 		type_ = (Atom::Type)tmp_type;
-		// K0.3b.6/7 dual-write: mirror persisted scalars + element +
-		// names into store columns/pool.
-		// (charge was already written from tmp_ch above; K0.3b.LATER.2)
+		// K0.3b.LATER.5-7: mirror persisted scalars + element + names
+		// into store columns/pool (charge already written above).
 		if (store_)
 		{
 			store_->formal_charge(store_idx_) = formal_charge_;
 			store_->radius(store_idx_) = radius_;
 			store_->atom_type(store_idx_) = type_;
-			store_->element_index(store_idx_) =
-				(element_ == 0) ? 0
-				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+			writeStoreElement_(tmp_element);
 			store_->set_name(store_idx_, std::string(tmp_name.c_str()));
 			store_->set_type_name(store_idx_, std::string(tmp_type_name.c_str()));
 		}
@@ -318,15 +313,14 @@ namespace BALL
     Composite::set(atom, deep);
     PropertyManager::operator = (atom);
 
-    element_ = atom.element_;
-    // K0.3b.LATER.5+6: name_/type_name_ deleted; store-mirror below.
+    // K0.3b.LATER.5-7: name/type_name/element deleted; store-mirror below.
     radius_ = atom.radius_;
 		type_ = atom.type_;
     number_of_bonds_ = 0;
 		formal_charge_ = atom.formal_charge_;
 		// K0.3b.LATER.1: position via getter (store is source of truth)
 		const Vector3 src_pos = atom.getPosition();
-		// K0.3b.3/4/5/6/7 dual-write: mirror new fields into store cols.
+		const Element& src_element = atom.getElement();
 		if (store_)
 		{
 			store_->position(store_idx_) = src_pos;
@@ -338,9 +332,7 @@ namespace BALL
 			store_->radius(store_idx_) = radius_;
 			store_->atom_type(store_idx_) = type_;
 			store_->formal_charge(store_idx_) = formal_charge_;
-			store_->element_index(store_idx_) =
-				(element_ == 0) ? 0
-				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+			writeStoreElement_(&src_element);
 		}
   }
 
@@ -349,15 +341,14 @@ namespace BALL
 		Composite::operator =(atom);
 		PropertyManager::operator = (atom);
 
-		// K0.3b.LATER.5+6: name_/type_name_ deleted; store-mirror below.
-		element_ = atom.element_;
+		// K0.3b.LATER.5-7: name/type_name/element deleted; store-mirror below.
 		radius_ = atom.radius_;
 		number_of_bonds_ = 0;
 		type_ = atom.type_;
 		formal_charge_ = atom.formal_charge_;
 		// K0.3b.LATER.1: position via getter (store is source of truth)
 		const Vector3 src_pos = atom.getPosition();
-		// K0.3b.3/4/5/6/7 dual-write: mirror new fields into store cols.
+		const Element& src_element = atom.getElement();
 		if (store_)
 		{
 			store_->position(store_idx_) = src_pos;
@@ -369,9 +360,7 @@ namespace BALL
 			store_->radius(store_idx_) = radius_;
 			store_->atom_type(store_idx_) = type_;
 			store_->formal_charge(store_idx_) = formal_charge_;
-			store_->element_index(store_idx_) =
-				(element_ == 0) ? 0
-				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+			writeStoreElement_(&src_element);
 		}
 
 		return *this;
@@ -382,12 +371,8 @@ namespace BALL
 		Composite::swap(atom);
 		PropertyManager::swap(atom);
 
-		const Element *temp_element = element_;
-		element_ = atom.element_;
-		atom.element_ = temp_element;
-
-		// K0.3b.LATER.5+6: name_/type_name_ deleted; swap via store columns
-		// (handled in the mirror_all block below).
+		// K0.3b.LATER.5-7: name/type_name/element deleted; swap via store
+		// columns (handled in the mirror_all block below).
 
 		float temp = radius_;
 		radius_ = atom.radius_;
@@ -431,18 +416,19 @@ namespace BALL
 			store_->swap_atom_connectivity(store_idx_, atom.store_idx_);
 		}
 
-		// K0.3b.LATER.5+6: name/type_name now store-backed. Snapshot both
-		// atoms' names BEFORE the swap mirror, then write them back exchanged.
+		// K0.3b.LATER.5-7: name/type_name/element now store-backed. Snapshot
+		// both atoms' store-resident state BEFORE the swap mirror, then write
+		// it back exchanged.
 		const String  self_name  = (store_ ? store_->name(store_idx_) : String());
 		const String  self_tname = (store_ ? store_->type_name(store_idx_) : String());
 		const String  other_name  = (atom.store_ ? atom.store_->name(atom.store_idx_) : String());
 		const String  other_tname = (atom.store_ ? atom.store_->type_name(atom.store_idx_) : String());
+		const std::uint8_t  self_elem  = (store_ ? store_->element_index(store_idx_) : 0);
+		const std::uint8_t  other_elem = (atom.store_ ? atom.store_->element_index(atom.store_idx_) : 0);
 
-		// K0.3b.3/4/5/6/7 dual-write: mirror swapped scalar/element fields
-		// into store. (position omitted -- already swapped at store level above.)
 		auto mirror_all = [](MoleculeStore* st, std::uint32_t idx,
 		                     const String& nm, const String& tnm,
-		                     float r, short t, short fc, const Element* el)
+		                     float r, short t, short fc, std::uint8_t en)
 		{
 			if (!st) return;
 			st->set_name(idx, std::string(nm.c_str()));
@@ -450,14 +436,13 @@ namespace BALL
 			st->radius(idx)   = r;
 			st->atom_type(idx) = t;
 			st->formal_charge(idx) = fc;
-			st->element_index(idx) =
-				(el == 0) ? 0 : static_cast<std::uint8_t>(el->getAtomicNumber());
+			st->element_index(idx) = en;
 		};
 		mirror_all(store_, store_idx_,
-		           other_name, other_tname, radius_, type_, formal_charge_, element_);
+		           other_name, other_tname, radius_, type_, formal_charge_, other_elem);
 		mirror_all(atom.store_, atom.store_idx_,
 		           self_name, self_tname,
-		           atom.radius_, atom.type_, atom.formal_charge_, atom.element_);
+		           atom.radius_, atom.type_, atom.formal_charge_, self_elem);
 	}
 
 	Molecule* Atom::getMolecule()
@@ -747,9 +732,12 @@ namespace BALL
 
 	bool Atom::isValid() const
 	{
+		// K0.3b.LATER.7: element_ deleted; readStoreElement_ always returns a
+		// valid PTE reference (index 0 = Element::UNKNOWN). The pre-flip
+		// "element_ == 0" check rejected null pointers, which the API never
+		// produced anyway; we drop it.
 		if (!Composite::isValid()
-				|| !PropertyManager::isValid()
-				|| element_ == 0)
+				|| !PropertyManager::isValid())
 		{
 			return false;
 		}
@@ -776,7 +764,7 @@ namespace BALL
 		Composite::dump(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  element: " << *element_ << endl;
+		s << "  element: " << getElement() << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  formal charge: " << formal_charge_ << endl;
@@ -844,12 +832,10 @@ namespace BALL
 
 	void Atom::clear_()
 	{
-		element_ = BALL_ATOM_DEFAULT_ELEMENT;
 		radius_ = BALL_ATOM_DEFAULT_RADIUS;
 		type_ = BALL_ATOM_DEFAULT_TYPE;
 		formal_charge_ = BALL_ATOM_DEFAULT_FORMAL_CHARGE;
-		// K0.3b.LATER.1-6: position/charge/velocity/force/name/type_name
-		// store-backed; clear straight through.
+		// K0.3b.LATER.1-7: payload fields store-backed; clear straight through.
 
 		if (store_)
 		{
@@ -862,9 +848,7 @@ namespace BALL
 			store_->radius(store_idx_) = radius_;
 			store_->atom_type(store_idx_) = type_;
 			store_->formal_charge(store_idx_) = formal_charge_;
-			store_->element_index(store_idx_) =
-				(element_ == 0) ? 0
-				                : static_cast<std::uint8_t>(element_->getAtomicNumber());
+			writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
 		}
 
 		delete interactions;

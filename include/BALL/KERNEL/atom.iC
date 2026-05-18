@@ -5,15 +5,15 @@
 BALL_INLINE
 void Atom::setElement(const Element& element)
 {
-	element_ = &element;
-	// K0.3b.7 dual-write: mirror element atomic number into store column.
-	if (store_) writeStoreElement_(&element);
+	// K0.3b.LATER.7: store is sole authority.
+	writeStoreElement_(&element);
 }
 
 BALL_INLINE
 const Element& Atom::getElement() const
 {
-	return *element_;
+	// K0.3b.LATER.7: out-of-line to avoid pulling PTE.h into atom.iC.
+	return readStoreElement_();
 }
 
 BALL_INLINE
