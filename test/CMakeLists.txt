@@ -59,6 +59,19 @@ IF(BALL_CORE_ONLY)
 		V1ToV2JsonConverter_test
 		CompiledExpression_test
 		SelectorBench_test
+		# B1.1 (Track B Wave 1a, 2026-05-18): tests re-enabled once
+		# FORMAT (subset) compiled into libBALL. These were deferred
+		# from K0 because they #include <BALL/FORMAT/PDBFile.h>.
+		Expression_test
+		ExpressionParser_test
+		Selector_test
+		StandardPredicates_test1
+		StandardPredicates_test2
+		StandardPredicates_test3
+		StandardPredicates_test4
+		Residue_test1
+		Residue_test2
+		StdIteratorWrapper_test
 	)
 	SET(BALL_TESTS
 		BALL_BASIC_TESTS

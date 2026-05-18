@@ -31,15 +31,20 @@ INCLUDE(include/BALL/SYSTEM/sources.cmake)
 INCLUDE(source/PLUGIN/sources.cmake)
 INCLUDE(include/BALL/PLUGIN/sources.cmake)
 
+# B1.1 (Track B Wave 1, 2026-05-18): FORMAT re-enabled unconditionally.
+# Depends only on core (no other disabled-module deps per
+# MODULE-REENABLE-PLAN.md §1). Unblocks 9 downstream modules and the
+# ~11 deferred Expression/Selector/StandardPredicates/Residue tests
+# that #include <BALL/FORMAT/PDBFile.h>.
+INCLUDE(source/FORMAT/sources.cmake)
+INCLUDE(include/BALL/FORMAT/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
 IF(NOT BALL_CORE_ONLY)
 	INCLUDE(source/ENERGY/sources.cmake)
 	INCLUDE(include/BALL/ENERGY/sources.cmake)
-
-	INCLUDE(source/FORMAT/sources.cmake)
-	INCLUDE(include/BALL/FORMAT/sources.cmake)
 
 	INCLUDE(source/MOLMEC/sources.cmake)
 	INCLUDE(include/BALL/MOLMEC/sources.cmake)
