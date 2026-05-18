@@ -149,6 +149,10 @@ namespace BALL
 			delete syntax_tree_;
 		}
 
+		// K0.5.8 (Codex Round 6 OPEN-3): ExpressionParser_destroy() touches
+		// the generated Flex/Bison globals; must hold the same mutex as
+		// parse() to avoid racing a concurrent parse on another thread.
+		std::lock_guard<std::mutex> lk(expressionParserMutex_());
 		ExpressionParser_destroy();
 	}
 

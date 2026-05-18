@@ -184,20 +184,27 @@ namespace
 	void eval_(const MoleculePred&,   const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
 	void eval_(const HybridLeaf&,     const MoleculeStore& s, std::vector<Byte>& out) { std::memset(out.data(), 0, s.size()); }
 
-	// K0.5.4: OwnedPred slow path. Walk live slots; build a transient
-	// Atom* handle from the store back-pointer; call the held v1.x
-	// ExpressionPredicate via its virtual operator(). One virtual call
-	// per atom — strictly slower than the column scan, but the only way
-	// to evaluate ring/SMARTS/user-registered predicates.
+	// K0.5.4+K0.5.8: OwnedPred slow path. Build a FRESH v1.x predicate
+	// instance per evaluate() (Codex Round 6 OPEN-2), so stateful
+	// predicates (ring caches, SMARTS state) can't leak across calls
+	// or across cached re-uses. The factory is the v1.x CreationMethod
+	// (`void* (*)()`); we wrap the result in unique_ptr for cleanup.
+	// One virtual call per atom — strictly slower than column scan,
+	// but the only way to evaluate ring/SMARTS/user-registered preds.
 	void eval_(const OwnedPred& p, const MoleculeStore& s, std::vector<Byte>& out)
 	{
+		if (p.factory == nullptr) { std::memset(out.data(), 0, s.size()); return; }
+		std::unique_ptr<ExpressionPredicate> pred(
+			reinterpret_cast<ExpressionPredicate*>((*p.factory)()));
+		if (pred == nullptr) { std::memset(out.data(), 0, s.size()); return; }
+		pred->setArgument(String(p.argument.c_str()));
 		const Byte* freed = s.is_freed_data();
 		const std::size_t n = s.size();
 		for (std::size_t i = 0; i < n; ++i)
 		{
 			if (freed[i]) { out[i] = 0; continue; }
 			Atom* a = s.back_ptr(static_cast<MoleculeStore::Index>(i));
-			out[i] = (a != nullptr && (*p.impl)(*a)) ? 1 : 0;
+			out[i] = (a != nullptr && (*pred)(*a)) ? 1 : 0;
 		}
 	}
 
@@ -297,8 +304,14 @@ namespace
 	bool eval1_(const MoleculePred&,    const Atom&) { return false; }
 	bool eval1_(const HybridLeaf&,      const Atom&) { return false; }
 	bool eval1_(const OwnedPred& p, const Atom& a) {
-		// K0.5.4: per-atom slow path. Delegates to the held v1.x predicate.
-		return p.impl != nullptr && (*p.impl)(a);
+		// K0.5.4+K0.5.8: build a fresh predicate per call (avoids
+		// stateful-predicate cross-call corruption — Codex R6 OPEN-2).
+		if (p.factory == nullptr) return false;
+		std::unique_ptr<ExpressionPredicate> pred(
+			reinterpret_cast<ExpressionPredicate*>((*p.factory)()));
+		if (pred == nullptr) return false;
+		pred->setArgument(String(p.argument.c_str()));
+		return (*pred)(a);
 	}
 
 	bool eval1_(const std::unique_ptr<AndNode>& node, const Atom& a) {
@@ -438,20 +451,23 @@ namespace
 
 		// K0.5.4: predicate isn't one of the fast-path leaves. If an
 		// Expression registry was provided AND the name is registered
-		// there, instantiate the v1.x predicate and wrap it in OwnedPred.
-		// This covers ring, SMARTS, hybridization, residue/chain/protein/
-		// molecule, secondary-structure, nucleotide, user-registered, etc.
+		// there, lower into an OwnedPred holding (factory, name, arg).
+		// K0.5.8: stores the factory pointer (not an instance) so each
+		// evaluate() builds a fresh predicate — stateful v1.x predicates
+		// (ring caches, SMARTS state) can't leak across evals.
 		if (expr != nullptr && expr->hasPredicate(String(name.c_str())))
 		{
-			ExpressionPredicate* impl = expr->getPredicate(
-				String(name.c_str()), String(arg.c_str()));
-			if (impl == nullptr)
+			auto& methods = expr->getCreationMethods();
+			Expression::CreationMethod factory = nullptr;
+			if (methods.has(String(name.c_str())))
+				factory = methods[String(name.c_str())];
+			if (factory == nullptr)
 			{
 				throw Exception::ParseError(__FILE__, __LINE__, name,
-					"K0.5.4: registered predicate factory returned nullptr");
+					"K0.5.8: registered factory missing");
 			}
 			OwnedPred owned;
-			owned.impl     = std::unique_ptr<ExpressionPredicate>(impl);
+			owned.factory  = reinterpret_cast<OwnedPred::Factory>(factory);
 			owned.name     = name;
 			owned.argument = arg;
 			return owned;
@@ -546,6 +562,11 @@ struct CompiledExpressionCache::Impl
 	std::list<Entry>                         lru;        // front = MRU, back = LRU
 	std::unordered_map<Key, LruIt, KeyHash>  index;
 	std::size_t                              capacity_ = 1024;
+	// K0.5.8 (Codex Round 6 OPEN-1): mutator mutex. Pre-K0.5.8 the
+	// cache had no synchronisation; concurrent get_or_compile from
+	// different threads (or get_or_compile racing ~MoleculeStore's
+	// invalidate_store) corrupted the LRU list + unordered_map.
+	mutable std::mutex                       mtx;
 };
 
 CompiledExpressionCache::CompiledExpressionCache()
@@ -559,28 +580,44 @@ CompiledExpressionCache& CompiledExpressionCache::instance()
 	return cache;
 }
 
+// K0.5.8: cache mutators take impl_->mtx. We DROP the cache lock
+// before calling CompiledExpression::compile() because compile itself
+// takes the (separate) parser mutex inside parse(); holding both
+// risks deadlock if parse later grows to call back into the cache.
+// On the slow path we then re-acquire the cache lock and double-check
+// — if another thread compiled the same entry concurrently, we use
+// theirs and drop our copy.
+
 std::shared_ptr<const CompiledExpression>
 CompiledExpressionCache::get_or_compile(MoleculeStore& store, const std::string& source)
 {
 	Key k{source, &store};
-	auto it = impl_->index.find(k);
-	if (it != impl_->index.end())
 	{
-		// hit: promote to MRU front
-		impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
-		return it->second->second;
+		std::lock_guard<std::mutex> lk(impl_->mtx);
+		auto it = impl_->index.find(k);
+		if (it != impl_->index.end())
+		{
+			impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
+			return it->second->second;
+		}
 	}
-	// miss: compile + insert
 	auto compiled = CompiledExpression::compile(store, source);
-	impl_->lru.emplace_front(k, compiled);
-	impl_->index.emplace(k, impl_->lru.begin());
-
-	// evict LRU on overflow
-	while (impl_->lru.size() > impl_->capacity_)
 	{
-		auto& victim = impl_->lru.back();
-		impl_->index.erase(victim.first);
-		impl_->lru.pop_back();
+		std::lock_guard<std::mutex> lk(impl_->mtx);
+		auto it = impl_->index.find(k);
+		if (it != impl_->index.end())
+		{
+			impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
+			return it->second->second;
+		}
+		impl_->lru.emplace_front(k, compiled);
+		impl_->index.emplace(k, impl_->lru.begin());
+		while (impl_->lru.size() > impl_->capacity_)
+		{
+			auto& victim = impl_->lru.back();
+			impl_->index.erase(victim.first);
+			impl_->lru.pop_back();
+		}
 	}
 	return compiled;
 }
@@ -590,27 +627,39 @@ CompiledExpressionCache::get_or_compile(MoleculeStore& store, const Expression& 
 {
 	const std::string source = std::string(expr.getExpressionString().c_str());
 	Key k{source, &store};
-	auto it = impl_->index.find(k);
-	if (it != impl_->index.end())
 	{
-		impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
-		return it->second->second;
+		std::lock_guard<std::mutex> lk(impl_->mtx);
+		auto it = impl_->index.find(k);
+		if (it != impl_->index.end())
+		{
+			impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
+			return it->second->second;
+		}
 	}
-	// K0.5.4: Expression-aware compile so OwnedPred can wrap ring/SMARTS/etc.
 	auto compiled = CompiledExpression::compile(store, expr);
-	impl_->lru.emplace_front(k, compiled);
-	impl_->index.emplace(k, impl_->lru.begin());
-	while (impl_->lru.size() > impl_->capacity_)
 	{
-		auto& victim = impl_->lru.back();
-		impl_->index.erase(victim.first);
-		impl_->lru.pop_back();
+		std::lock_guard<std::mutex> lk(impl_->mtx);
+		auto it = impl_->index.find(k);
+		if (it != impl_->index.end())
+		{
+			impl_->lru.splice(impl_->lru.begin(), impl_->lru, it->second);
+			return it->second->second;
+		}
+		impl_->lru.emplace_front(k, compiled);
+		impl_->index.emplace(k, impl_->lru.begin());
+		while (impl_->lru.size() > impl_->capacity_)
+		{
+			auto& victim = impl_->lru.back();
+			impl_->index.erase(victim.first);
+			impl_->lru.pop_back();
+		}
 	}
 	return compiled;
 }
 
 void CompiledExpressionCache::invalidate(const Key& key)
 {
+	std::lock_guard<std::mutex> lk(impl_->mtx);
 	auto it = impl_->index.find(key);
 	if (it == impl_->index.end()) return;
 	impl_->lru.erase(it->second);
@@ -619,6 +668,7 @@ void CompiledExpressionCache::invalidate(const Key& key)
 
 void CompiledExpressionCache::invalidate_store(MoleculeStore* store)
 {
+	std::lock_guard<std::mutex> lk(impl_->mtx);
 	for (auto it = impl_->lru.begin(); it != impl_->lru.end(); )
 	{
 		if (it->first.store == store)
@@ -635,14 +685,24 @@ void CompiledExpressionCache::invalidate_store(MoleculeStore* store)
 
 void CompiledExpressionCache::clear()
 {
+	std::lock_guard<std::mutex> lk(impl_->mtx);
 	impl_->index.clear();
 	impl_->lru.clear();
 }
 
-std::size_t CompiledExpressionCache::size() const     { return impl_->lru.size(); }
-std::size_t CompiledExpressionCache::capacity() const { return impl_->capacity_; }
+std::size_t CompiledExpressionCache::size() const
+{
+	std::lock_guard<std::mutex> lk(impl_->mtx);
+	return impl_->lru.size();
+}
+std::size_t CompiledExpressionCache::capacity() const
+{
+	std::lock_guard<std::mutex> lk(impl_->mtx);
+	return impl_->capacity_;
+}
 void CompiledExpressionCache::set_capacity(std::size_t n)
 {
+	std::lock_guard<std::mutex> lk(impl_->mtx);
 	impl_->capacity_ = n;
 	while (impl_->lru.size() > impl_->capacity_)
 	{

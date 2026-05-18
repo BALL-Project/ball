@@ -87,18 +87,25 @@ namespace BALL
 	/// only bonds with `order == order_filter` are counted.
 	struct NumberOfBondsPred { CmpOp op; std::uint8_t n; std::uint8_t order_filter; };
 
-	/** Slow-path leaf — owns a v1.x ExpressionPredicate instance whose
+	/** Slow-path leaf — descriptor for a v1.x ExpressionPredicate whose
 			evaluation cannot be vectorised over the store (ring detection,
 			SMARTS, user-registered custom predicates). Per-atom evaluation
 			falls back to virtual dispatch through the Atom back-pointer.
+
+			K0.5.8 (Codex Round 6 OPEN-2): the leaf stores a FACTORY (and
+			the argument string) rather than a shared instance, so each
+			evaluate() / evaluate_one() builds a fresh predicate. Some v1.x
+			predicates carry per-call cached state; sharing one instance
+			across cached evaluations corrupted that state.
 			`name` + `argument` are kept so two OwnedPreds with identical
 			source can be hashed/compared for cache de-dup.
 	*/
 	struct OwnedPred
 	{
-		std::unique_ptr<ExpressionPredicate> impl;
-		std::string                          name;
-		std::string                          argument;
+		typedef void* (*Factory)();
+		Factory     factory;     // Expression::CreationMethod handle
+		std::string name;
+		std::string argument;
 	};
 
 	// Forward declarations for boxed recursive node alternatives.
