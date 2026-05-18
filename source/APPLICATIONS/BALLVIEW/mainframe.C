@@ -94,7 +94,23 @@ namespace BALL
 			, welcome_screen_(0)                  // Phase 999.47 §7.1
 			, whats_new_shown_this_launch_(false) // Phase 999.47 §7.6
 	{
-		// Fixes a major problem with Qt WebEngine 5.5 when being used in a DockWidget
+		// Fixes a major problem with Qt WebEngine 5.x when being used in
+		// a DockWidget (issue from the 999.40-era investigation; still
+		// relevant — Qt WebEngine remains a runtime dependency via
+		// VIEW/WIDGETS/HTMLPage + HTMLView and the EXTENSIONS plugins
+		// PresentaBALL / Jupyter / BALLaxy).
+		//
+		// macOS caveat (Qt 6 / Apple Silicon): Qt::AA_DontCreateNativeWidgetSiblings
+		// is known to interact poorly with QOpenGLWidget reparenting on
+		// Qt 6 — the GL drawable can flicker (drop briefly) during dock
+		// reflow or central-widget swap because the native NSView for the
+		// GL surface is recreated rather than the sibling QWidget being
+		// promoted to native. The flicker is cosmetic, brief, and only
+		// fires on layout changes that move the Scene across docks
+		// (rare in normal use). Removing the attribute would re-trigger
+		// the WebEngine-in-DockWidget rendering corruption, so we accept
+		// the GL flicker as the lesser evil for v1.7. Revisit after the
+		// Phase 4b Qt 6 / QtWebEngineCore audit.
 		qApp->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 
 		registerThis();
@@ -901,6 +917,18 @@ namespace BALL
 			tb->setIconSize(QSize(BALL::VIEW::Theme::kIconToolbar,
 			                      BALL::VIEW::Theme::kIconToolbar));
 			addToolBar(Qt::TopToolBarArea, tb);
+
+			// UFG-02 (Fix 2): opt into the macOS unified title-and-toolbar
+			// chrome. Without this, the toolbar renders as a separate
+			// strip with visible drag handles below the title bar instead
+			// of the native translucent NSToolbar look that integrates
+			// with the window's title bar. Handover §09-cross-platform.md
+			// row 30 explicitly requires this on macOS. No-op on other
+			// platforms (the Qt header still declares the method for ABI
+			// symmetry but the implementation is a stub off-mac).
+			#ifdef Q_OS_MACOS
+				setUnifiedTitleAndToolBarOnMac(true);
+			#endif
 		}
 
 		MainControl::show();
