@@ -475,6 +475,24 @@ namespace BALL
 		mutable bool                       csr_dirty_ = true;
 		void ensure_csr_() const;
 
+		// V21-BOND-MUTEX (Codex R12 K9): per-store mutex protecting
+		// every mutation of bonds_, bond_back_ptr_, bond_free_list_,
+		// bond_csr_off_, bond_csr_idx_, and csr_dirty_. add_bond,
+		// remove_bond, remove_bonds_between, swap_atom_connectivity,
+		// and ensure_csr_ all take this. Reads via bond(i),
+		// bond_back_ptr(i), bonds_of(i), bond_degree(i),
+		// for_each_bond_of(i, fn) call ensure_csr_ which is mutex-
+		// protected; the subsequent reads of the now-stable CSR /
+		// bonds_ vectors are NOT mutex-protected — caller must keep
+		// the returned references/iterators valid by not invoking
+		// any bond mutator concurrently. This matches the
+		// D7-reference-stability contract pattern.
+		mutable std::mutex bond_mutex_;
+
+		// V21-BOND-MUTEX: lock-free helper called from remove_bond and
+		// remove_bonds_between. Caller must hold bond_mutex_.
+		void remove_bond_unsafe_(std::uint32_t bond_idx);
+
 		// V21-STABLE-ID-OVERFLOW (Codex R12 K7): allocate next stable_id
 		// with UINT64_MAX wraparound check. Throws Exception::OutOfMemory
 		// rather than silently re-issuing 0. Called from allocate_atom paths.

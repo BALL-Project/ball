@@ -450,6 +450,7 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
                                       std::uint8_t order,
                                       std::uint8_t type)
 {
+	std::lock_guard<std::mutex> lk(bond_mutex_);  // V21-BOND-MUTEX
 	// K0.3c.2: prefer reusing a tombstoned slot before extending.
 	if (!bond_free_list_.empty())
 	{
@@ -480,7 +481,10 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 
 // K0.3c.2: tombstone a bond record and push onto bond_free_list_.
 // Idempotent (returns immediately if already dead).
-void MoleculeStore::remove_bond(std::uint32_t bond_idx)
+// V21-BOND-MUTEX: internal helper that does NOT take bond_mutex_.
+// Caller must already hold it. Used by remove_bond (which locks)
+// and remove_bonds_between (which locks once then calls this in loop).
+void MoleculeStore::remove_bond_unsafe_(std::uint32_t bond_idx)
 {
 	if (bond_idx >= bonds_.size()) return;             // defensive
 	if (is_bond_dead(bond_idx))    return;             // already dead
@@ -491,12 +495,19 @@ void MoleculeStore::remove_bond(std::uint32_t bond_idx)
 	csr_dirty_ = true;
 }
 
+void MoleculeStore::remove_bond(std::uint32_t bond_idx)
+{
+	std::lock_guard<std::mutex> lk(bond_mutex_);  // V21-BOND-MUTEX
+	remove_bond_unsafe_(bond_idx);
+}
+
 // K0.3c.4: swap atom-connectivity in every live BondRecord so a bond
 // previously incident to i is now incident to j (and vice versa). Used
 // by Atom::swap to keep the store's bond graph consistent with the
 // v1.x bond_[] arrays that get swapped at the Atom layer.
 void MoleculeStore::swap_atom_connectivity(Index i, Index j)
 {
+	std::lock_guard<std::mutex> lk(bond_mutex_);  // V21-BOND-MUTEX
 	if (i == j) return;
 	for (auto& b : bonds_)
 	{
@@ -515,6 +526,7 @@ void MoleculeStore::swap_atom_connectivity(Index i, Index j)
 // Returns count removed.
 std::size_t MoleculeStore::remove_bonds_between(Index a, Index b)
 {
+	std::lock_guard<std::mutex> lk(bond_mutex_);  // V21-BOND-MUTEX
 	std::size_t removed = 0;
 	for (std::uint32_t k = 0; k < bonds_.size(); ++k)
 	{
@@ -522,7 +534,7 @@ std::size_t MoleculeStore::remove_bonds_between(Index a, Index b)
 		const auto& br = bonds_[k];
 		if ((br.a == a && br.b == b) || (br.a == b && br.b == a))
 		{
-			remove_bond(k);
+			remove_bond_unsafe_(k);                // already locked
 			++removed;
 		}
 	}
@@ -534,6 +546,12 @@ std::size_t MoleculeStore::remove_bonds_between(Index a, Index b)
 // mutation that toggled csr_dirty_.
 void MoleculeStore::ensure_csr_() const
 {
+	// V21-BOND-MUTEX: lock + double-check pattern. If csr_dirty_ is
+	// false on the unlocked initial check we can skip the lock entirely
+	// (fast path). On dirty, acquire mutex, re-check (another thread
+	// may have rebuilt while we waited), then rebuild.
+	if (!csr_dirty_) return;
+	std::lock_guard<std::mutex> lk(bond_mutex_);
 	if (!csr_dirty_) return;
 
 	const std::size_t n_atoms = positions_.size();
