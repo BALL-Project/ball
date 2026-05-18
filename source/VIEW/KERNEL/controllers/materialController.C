@@ -2,12 +2,23 @@
 // vi: set ts=2:
 //
 // Phase 999.44 Plan 04 — MaterialController implementation.
+// UFG-03 cut-over (v1.7-modernization) — apply() now mutates the
+// attached Representation's material through the Scene's per-rep
+// material path (Scene::updateMaterialForRepresentation), which is
+// the same backend the legacy MaterialSettings dialog calls. Material
+// is per-rep state on the Scene/Renderer, not on the Representation
+// itself, so the StageController-style "apply to rep_" pattern routes
+// through Scene::getInstance(0) here.
 //
 
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
 
 
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/CONCEPT/property.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -35,21 +46,122 @@ namespace BALL
 
 		void MaterialController::revert()
 		{
-			// Material settings live on the Representation's color
-			// processor / model processor at varying levels; for the
-			// read-only mirror we keep the default values populated in
-			// the constructor. The cut-over plan migrates the legacy
-			// MaterialSettings::apply() machinery into apply() and
-			// gains read access on revert().
+			// Pull per-rep material if present, else fall back to the
+			// Stage's default material so the inspector mirrors what the
+			// scene will actually render. Colors (ambient/specular/
+			// reflective) are not part of the v1.7 controller's
+			// Q_PROPERTY surface — preserved on apply() by reading
+			// existing values.
+			if (rep_ == nullptr) return;
+
+			Stage::Material material;
+			bool have_material = false;
+
+			if (rep_->hasProperty("Rendering::Material"))
+			{
+				NamedProperty mat_property = rep_->getProperty("Rendering::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = mat_property.getSmartObject();
+				Stage::Material* mat_cast = dynamic_cast<Stage::Material*>(mat_ptr.get());
+				if (mat_cast != nullptr)
+				{
+					material = *mat_cast;
+					have_material = true;
+				}
+			}
+
+			if (!have_material)
+			{
+				Scene* scene = Scene::getInstance(0);
+				if (scene != nullptr && scene->getStage() != nullptr)
+				{
+					material = scene->getStage()->getMaterial();
+					have_material = true;
+				}
+			}
+
+			if (!have_material) return;
+
+			if (ambient_ != material.ambient_intensity)
+			{
+				ambient_ = material.ambient_intensity;
+				Q_EMIT ambientFactorChanged(ambient_);
+			}
+			if (diffuse_ != material.reflective_intensity)
+			{
+				// "Diffuse" in the controller maps to the legacy
+				// dialog's "Reflectiveness" intensity — same field,
+				// renamed in the inspector copy. Keep the mapping
+				// consistent on both revert() and apply().
+				diffuse_ = material.reflective_intensity;
+				Q_EMIT diffuseFactorChanged(diffuse_);
+			}
+			if (specular_ != material.specular_intensity)
+			{
+				specular_ = material.specular_intensity;
+				Q_EMIT specularFactorChanged(specular_);
+			}
+			if (shininess_ != material.shininess)
+			{
+				shininess_ = material.shininess;
+				Q_EMIT shininessChanged(shininess_);
+			}
 		}
 
 		void MaterialController::apply()
 		{
-			Log.info() << "[MaterialController::apply] STUB — legacy MaterialSettings "
-				"owns mutation. Mirrored ambient=" << ambient_
-				<< " diffuse=" << diffuse_
-				<< " specular=" << specular_
-				<< " shininess=" << shininess_ << std::endl;
+			if (rep_ == nullptr)
+			{
+				Log.warn() << "[MaterialController::apply] no Representation attached — skipping." << std::endl;
+				return;
+			}
+
+			MainControl* mc = MainControl::getInstance(0);
+			if (mc != nullptr && mc->isBusy())
+			{
+				Log.info() << "[MaterialController::apply] MainControl busy — deferring." << std::endl;
+				return;
+			}
+
+			Scene* scene = Scene::getInstance(0);
+			if (scene == nullptr || scene->getStage() == nullptr)
+			{
+				Log.warn() << "[MaterialController::apply] no Scene/Stage available — skipping." << std::endl;
+				return;
+			}
+
+			// Seed from existing per-rep material (if any) so we keep
+			// any color the user picked through the legacy dialog;
+			// only overwrite the intensity / shininess fields that
+			// the inspector controller mirrors.
+			Stage::Material material;
+			bool seeded = false;
+
+			if (rep_->hasProperty("Rendering::Material"))
+			{
+				NamedProperty mat_property = rep_->getProperty("Rendering::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = mat_property.getSmartObject();
+				Stage::Material* mat_cast = dynamic_cast<Stage::Material*>(mat_ptr.get());
+				if (mat_cast != nullptr)
+				{
+					material = *mat_cast;
+					seeded = true;
+				}
+			}
+			if (!seeded)
+			{
+				material = scene->getStage()->getMaterial();
+			}
+
+			material.ambient_intensity    = ambient_;
+			material.reflective_intensity = diffuse_;
+			material.specular_intensity   = specular_;
+			material.shininess            = std::max(shininess_, 0.1f);
+			// transparency stays as-is; per-rep transparency is owned
+			// by the ModelController (transparency_slider on the
+			// legacy modal mirrors to Representation::setTransparency).
+
+			scene->updateMaterialForRepresentation(rep_, material);
+
 			Q_EMIT appliedStub();
 		}
 
@@ -83,4 +195,3 @@ namespace BALL
 
 	} // namespace VIEW
 } // namespace BALL
-
