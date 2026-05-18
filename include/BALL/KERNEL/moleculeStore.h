@@ -500,6 +500,11 @@ namespace BALL
 		// remove_bonds_between. Caller must hold bond_mutex_.
 		void remove_bond_unsafe_(std::uint32_t bond_idx);
 
+		// V21-STRING-POOL-COMPACT (Codex R12 K4): rebuild string_pool_
+		// + string_intern_ from the live name/type_name columns,
+		// reclaiming space from freed slots. Called from compact().
+		void rebuild_string_pool_();
+
 		// V21-STABLE-ID-OVERFLOW (Codex R12 K7): allocate next stable_id
 		// with UINT64_MAX wraparound check. Throws Exception::OutOfMemory
 		// rather than silently re-issuing 0. Called from allocate_atom paths.

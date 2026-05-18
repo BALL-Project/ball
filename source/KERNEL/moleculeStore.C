@@ -343,6 +343,14 @@ void MoleculeStore::compact()
 	back_ptr_.shrink_to_fit();
 	is_freed_.shrink_to_fit();
 
+	// 2026-05-18 (V21-STRING-POOL-COMPACT, Codex R12 K4):
+	// Rebuild string_pool_ + string_intern_ from the live
+	// name_strings_/type_name_strings_ columns. The pool was append-
+	// only and grew monotonically over a long-running process; freed
+	// slots never released their pool space. Now compact() reclaims
+	// it. Cost: O(N_live_atoms) string copies + hash inserts.
+	rebuild_string_pool_();
+
 	// 2026-05-18 (Codex R12 fix K5): bump generation unconditionally.
 	// Pre-fix only bumped on capacity change, but the documented
 	// contract is "compact() invalidates all borrowed refs". Even if
@@ -352,6 +360,50 @@ void MoleculeStore::compact()
 	// the contract and only costs a 64-bit increment.
 	(void) old_cap;  // K5 fix: was used by the now-removed conditional bump
 	++generation_;
+
+	// V21-STRING-POOL-COMPACT: cached CompiledExpression instances
+	// may have baked-in intern_name offsets that just became stale.
+	// Invalidate every cached expression for this store.
+	CompiledExpressionCache::instance().invalidate_store(this);
+}
+
+// V21-STRING-POOL-COMPACT: rebuild the string pool + intern table
+// from scratch using only the strings referenced by LIVE atom slots.
+// Internal helper called from compact(). Updates name_offsets_ and
+// type_name_offsets_ to point into the fresh pool.
+void MoleculeStore::rebuild_string_pool_()
+{
+	std::string                                    new_pool;
+	std::unordered_map<std::string, std::uint32_t> new_intern;
+	new_pool.push_back('\0');                       // reserved offset 0 = empty string
+
+	auto intern = [&](const std::string& s) -> std::uint32_t
+	{
+		if (s.empty()) return 0;
+		auto it = new_intern.find(s);
+		if (it != new_intern.end()) return it->second;
+		const std::uint32_t off = static_cast<std::uint32_t>(new_pool.size());
+		new_pool.append(s);
+		new_pool.push_back('\0');
+		new_intern.emplace(s, off);
+		return off;
+	};
+
+	for (std::size_t i = 0; i < positions_.size(); ++i)
+	{
+		if (is_freed_[i])
+		{
+			// Freed slots: drop their pool refs. Use offset 0 (empty).
+			name_offsets_[i] = 0;
+			type_name_offsets_[i] = 0;
+			continue;
+		}
+		name_offsets_[i]      = intern(std::string(name_strings_[i].c_str()));
+		type_name_offsets_[i] = intern(std::string(type_name_strings_[i].c_str()));
+	}
+
+	string_pool_   = std::move(new_pool);
+	string_intern_ = std::move(new_intern);
 }
 
 void MoleculeStore::bump_generation_if_reallocated_(std::size_t old_cap)

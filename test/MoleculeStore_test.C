@@ -926,4 +926,34 @@ CHECK(K0.4.4 getName by-value survives store growth (HIGH-6))
 	TEST_EQUAL(keep->getName(), String("PERSIST"))
 RESULT
 
+CHECK(V21-STRING-POOL-COMPACT: compact reclaims pool from freed slots)
+	// Build a System, insert N atoms with UNIQUE names (so each name
+	// occupies its own pool slot), then drop all but one and compact.
+	// Pre-V21: pool stays at the post-insert size forever.
+	// Post-V21: pool shrinks to roughly just the survivor's name.
+	System sys;
+	Molecule m;
+	sys.append(m);
+	const int N = 256;
+	std::vector<Atom*> atoms;
+	atoms.reserve(N);
+	for (int i = 0; i < N; ++i)
+	{
+		Atom* a = new Atom;
+		a->setName(String("unique_atom_name_") + String(i));
+		m.append(*a);
+		atoms.push_back(a);
+	}
+	const std::size_t pool_full = sys.getStore().string_pool().size();
+	TEST_EQUAL(pool_full > 1000, true)   // ~16 chars × 256 names + overhead
+
+	// Delete all but the first atom and compact.
+	for (int i = 1; i < N; ++i) delete atoms[i];
+	sys.getStore().compact();
+	const std::size_t pool_compact = sys.getStore().string_pool().size();
+	// Expected: ~25 chars for one name + null sentinel + offset 0.
+	TEST_EQUAL(pool_compact < 100, true)
+	TEST_EQUAL(atoms[0]->getName(), String("unique_atom_name_0"))
+RESULT
+
 END_TEST
