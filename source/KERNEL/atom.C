@@ -32,10 +32,14 @@ namespace BALL
 
 	void Atom::bindToStore_(MoleculeStore& store)
 	{
+		// K0.3c.8: atomic slot + back-ptr binding. Previously this was
+		// two-step (allocate then set_back_ptr) which created a window
+		// where is_freed(idx) == false but back_ptr(idx) == nullptr;
+		// any concurrent or recursive store visitor would dereference
+		// the null. Closed by the new allocate_atom(this) overload.
 		store_ = &store;
-		store_idx_ = store.allocate_atom();
+		store_idx_ = store.allocate_atom(this);
 		store_generation_ = store.generation();
-		store.set_back_ptr(store_idx_, this);
 	}
 
 	// K0.3b.2a/3: write-side helpers, called from atom.iC setters

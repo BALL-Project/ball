@@ -138,7 +138,13 @@ namespace BALL
 		// exists on the free-list (from a previous release_atom call) it
 		// is reused; otherwise a new slot is appended. Generation advances
 		// only when the column vectors actually reallocate.
+		//
+		// K0.3c.8: the back_ptr-aware overload binds the back pointer in
+		// the same call to close the window where is_freed(idx) is false
+		// but back_ptr(idx) is null. Callers that immediately bind a
+		// handle (e.g. Atom::bindToStore_) should always use this form.
 		Index allocate_atom();
+		Index allocate_atom(Atom* back_ptr);
 
 		// Release a slot back to the free-list. Called from ~Atom (K0.3c.1).
 		// Clears back_ptr_[i] = nullptr (the "freed" sentinel) and pushes
@@ -217,18 +223,25 @@ namespace BALL
 		// bond mutation. CSR replaces the K0.2 linear scan per D15.
 		std::vector<std::uint32_t> bonds_of(Index i) const;
 
-		// Iterate bonds incident to atom i without materialising a vector.
-		// `fn(bond_idx)` is invoked once per incident bond.
+		// Iterate bonds incident to atom i. `fn(bond_idx)` is invoked
+		// once per incident bond.
+		//
+		// K0.3c.10 mutation-safe: snapshot the CSR slice into a local
+		// before invoking the callback so callers may safely call
+		// store-mutating ops (remove_bond, allocate_atom, etc.) from
+		// within the callback without corrupting the outer iteration.
+		// Cost: one vector allocation per call; the slice is typically
+		// degree(i) which is small (<= ~6 for organic chemistry).
 		template <typename F>
 		void for_each_bond_of(Index i, F&& fn) const
 		{
 			ensure_csr_();
 			const std::uint32_t lo = bond_csr_off_[i];
 			const std::uint32_t hi = bond_csr_off_[i + 1];
-			for (std::uint32_t k = lo; k < hi; ++k)
-			{
-				fn(bond_csr_idx_[k]);
-			}
+			std::vector<std::uint32_t> snapshot(
+				bond_csr_idx_.begin() + lo,
+				bond_csr_idx_.begin() + hi);
+			for (std::uint32_t bi : snapshot) fn(bi);
 		}
 
 		//@}

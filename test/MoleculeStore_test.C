@@ -458,6 +458,54 @@ CHECK(swap_atom_connectivity rewrites BondRecords K0.3c.4)
 	TEST_EQUAL(store.bond_degree(ib), 2)        // ib not involved
 RESULT
 
+CHECK(K0.3c.7 Bond owns store_ pointer)
+	// bond_store_ should be set at createBond time and survive even if
+	// first_/second_'s getStore() result changes (which it will during
+	// K0.4 adoption).
+	Atom a, b;
+	Bond* bond = a.createBond(b);
+	TEST_NOT_EQUAL(bond->bond_store_, static_cast<MoleculeStore*>(nullptr))
+	TEST_EQUAL(bond->bond_store_, a.getStore())
+	TEST_EQUAL(bond->bond_store_, b.getStore())
+	bond->setOrder(Bond::ORDER__DOUBLE);
+	TEST_EQUAL(int(bond->bond_store_->bond(bond->bond_record_idx_).order),
+	           int(Bond::ORDER__DOUBLE))
+	delete bond;
+RESULT
+
+CHECK(K0.3c.8 atomic allocate_atom + back_ptr set)
+	MoleculeStore store;
+	store.reserve(8);
+	int dummy = 0;
+	auto* fake_atom = reinterpret_cast<Atom*>(&dummy);
+	auto idx = store.allocate_atom(fake_atom);
+	// is_freed must be false AND back_ptr must be set in one call --
+	// no transient state where one is true and the other null.
+	TEST_EQUAL(store.is_freed(idx), false)
+	TEST_EQUAL(store.back_ptr(idx), fake_atom)
+RESULT
+
+CHECK(K0.3c.10 for_each_bond_of snapshot is mutation-safe)
+	MoleculeStore store;
+	store.reserve(8);
+	auto a = store.allocate_atom();
+	auto b = store.allocate_atom();
+	auto c = store.allocate_atom();
+	store.add_bond(a, b);
+	store.add_bond(a, c);
+	TEST_EQUAL(store.bond_degree(a), 2)
+
+	// Callback removes each bond as it iterates. With snapshot, both
+	// callbacks fire; bond_degree drops to 0.
+	int n_callbacks = 0;
+	store.for_each_bond_of(a, [&](std::uint32_t bi) {
+		++n_callbacks;
+		store.remove_bond(bi);
+	});
+	TEST_EQUAL(n_callbacks, 2)
+	TEST_EQUAL(store.bond_degree(a), 0)
+RESULT
+
 CHECK(K0.3c.6 mutable-getter drift -- DOCUMENTED GAP until K0.3b.LATER)
 	// Codex Round 2 HIGH-3 / HIGH-6: the non-const reference returned by
 	// Atom::getPosition() bypasses dual-write when the caller mutates

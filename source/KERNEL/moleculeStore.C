@@ -12,6 +12,17 @@ namespace BALL
 MoleculeStore::MoleculeStore() = default;
 MoleculeStore::~MoleculeStore() = default;
 
+// K0.3c.8 atomic back-ptr binding. Allocate AND set back_ptr in one
+// call so there's no transient state where is_freed(idx) is false but
+// back_ptr(idx) is nullptr. Always prefer this when the caller knows
+// the owning handle at allocation time.
+MoleculeStore::Index MoleculeStore::allocate_atom(Atom* back_ptr)
+{
+	const Index idx = allocate_atom();
+	back_ptr_[idx] = back_ptr;
+	return idx;
+}
+
 MoleculeStore::Index MoleculeStore::allocate_atom()
 {
 	// K0.3c.1: try to reuse a freed slot first. Free-list reuse never

@@ -461,12 +461,16 @@ namespace BALL
 		public:
 		// K0.3c.3: store-side bond record index, set when the bond is
 		// mirrored into the MoleculeStore (via Bond::createBond). 0 if
-		// not yet bound (treat with care; use first_->getStore() to detect
-		// whether the bond has a store-side mirror). Public so that
-		// Bond::setOrder / setType can update the store side; could be
-		// promoted to private with friend setter helpers if encapsulation
-		// matters more than ergonomics later.
+		// not yet bound; bond_store_ being null is the canonical "no
+		// mirror" indicator.
 		std::uint32_t bond_record_idx_ = 0;
+		// K0.3c.7: explicit store ownership. The bond's mirror lives in
+		// THIS store regardless of what first_->getStore() returns now.
+		// Decoupling matters during K0.4 adoption when one endpoint
+		// moves from orphan to a per-System store while the other
+		// hasn't migrated yet; bond_store_ ensures setOrder / setType
+		// continue to address the correct store record.
+		MoleculeStore* bond_store_ = nullptr;
 
 		private:
 
