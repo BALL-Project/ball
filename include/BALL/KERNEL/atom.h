@@ -1064,6 +1064,12 @@ namespace BALL
 		// suffix marks it as in-tree-only; not for downstream code.
 		void migrateTo_(MoleculeStore* new_store, std::uint32_t new_idx);
 
+		// K0.4.8: re-bind to orphan store if currently detached (store_
+		// is null after ~System severs the handle). Called from any
+		// mutation path so the write lands somewhere instead of being
+		// silently dropped. No-op if already bound.
+		void ensureStoreBinding_();
+
 	};
 
 // required for visual studio

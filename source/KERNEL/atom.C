@@ -68,6 +68,22 @@ namespace BALL
 		store_generation_ = (new_store != nullptr) ? new_store->generation() : 0;
 	}
 
+	// K0.4.8 (Codex Round 4 MEDIUM-9): the old persistentRead / set /
+	// operator= / clear_ paths all carried "if (store_) ..." gates that
+	// silently dropped payload writes when the handle was detached. The
+	// detached state only happens after ~System nulls its atoms'
+	// store_ pointers — at which point further mutation either drops
+	// data or crashes. K0.4.8 restores correctness by re-binding the
+	// detached handle to the orphan store before any mutation, so the
+	// data flows somewhere safe instead of being silently lost.
+	void Atom::ensureStoreBinding_()
+	{
+		if (store_ == nullptr)
+		{
+			bindToStore_(MoleculeStore::orphanStore());
+		}
+	}
+
 	// K0.3b.2a/3: write-side helpers, called from atom.iC setters
 	// (which only forward-declare MoleculeStore via atom.h).
 	void Atom::writeStorePosition_(const Vector3& p)
@@ -261,6 +277,9 @@ namespace BALL
 
 	void Atom::persistentRead(PersistenceManager& pm)
 	{
+		// K0.4.8: rebind detached handles to orphan so reads don't drop.
+		ensureStoreBinding_();
+
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
@@ -275,7 +294,7 @@ namespace BALL
 		Index tmp_formal_charge;
 		float tmp_radius;
 		pm.readPrimitive(tmp_formal_charge, "formal_charge_");
-		{ float tmp_ch; pm.readPrimitive(tmp_ch, "charge_"); if (store_) store_->charge(store_idx_) = tmp_ch; }
+		{ float tmp_ch; pm.readPrimitive(tmp_ch, "charge_"); store_->charge(store_idx_) = tmp_ch; }
 		pm.readPrimitive(tmp_radius, "radius_");
 		// K0.3b.LATER.5+6: read into temporaries, then write through to store.
 		String tmp_name, tmp_type_name;
@@ -285,31 +304,17 @@ namespace BALL
 		pm.readPrimitive(tmp_type, "type_");
 		// K0.3b.LATER.5-10: mirror persisted scalars + element + names
 		// into store columns/pool (charge already written above).
-		if (store_)
-		{
-			writeStoreFormalCharge_(static_cast<short>(tmp_formal_charge));
-			writeStoreRadius_(tmp_radius);
-			writeStoreAtomType_(static_cast<short>(tmp_type));
-			writeStoreElement_(tmp_element);
-			store_->set_name(store_idx_, std::string(tmp_name.c_str()));
-			store_->set_type_name(store_idx_, std::string(tmp_type_name.c_str()));
-		}
+		writeStoreFormalCharge_(static_cast<short>(tmp_formal_charge));
+		writeStoreRadius_(tmp_radius);
+		writeStoreAtomType_(static_cast<short>(tmp_type));
+		writeStoreElement_(tmp_element);
+		store_->set_name(store_idx_, std::string(tmp_name.c_str()));
+		store_->set_type_name(store_idx_, std::string(tmp_type_name.c_str()));
 
-		// K0.3b.LATER.1: read position into a local; write through to
-		// store (the only authority). velocity_ and force_ still v1.x
-		// fields awaiting their per-field flip.
-		{
-			Vector3 tmp_pos;
-			pm.readStorableObject(tmp_pos, "position_");
-			if (store_) store_->position(store_idx_) = tmp_pos;
-		}
-		{ Vector3 tmp_vel; pm.readStorableObject(tmp_vel, "velocity_"); if (store_) store_->velocity(store_idx_) = tmp_vel; }
-		{ Vector3 tmp_force; pm.readStorableObject(tmp_force, "force_"); if (store_) store_->force(store_idx_) = tmp_force; }
-		// K0.3b.4/5 dual-write: mirror persisted vectors into store
-		// (position already written above).
-		if (store_)
-		{
-		}
+		// K0.3b.LATER.1+3+4: vectors land directly in store columns.
+		{ Vector3 tmp_pos;   pm.readStorableObject(tmp_pos,   "position_"); store_->position(store_idx_) = tmp_pos; }
+		{ Vector3 tmp_vel;   pm.readStorableObject(tmp_vel,   "velocity_"); store_->velocity(store_idx_) = tmp_vel; }
+		{ Vector3 tmp_force; pm.readStorableObject(tmp_force, "force_");    store_->force(store_idx_)    = tmp_force; }
 
 		pm.readPrimitive(number_of_bonds_, "number_of_bonds_");
 		Size n;
@@ -323,6 +328,9 @@ namespace BALL
 
   void Atom::set(const Atom& atom, bool deep)
   {
+    // K0.4.8: rebind detached handle to orphan so writes don't drop.
+    ensureStoreBinding_();
+
     Composite::set(atom, deep);
     PropertyManager::operator = (atom);
 
@@ -331,23 +339,23 @@ namespace BALL
     number_of_bonds_ = 0;
 		const Vector3  src_pos     = atom.getPosition();
 		const Element& src_element = atom.getElement();
-		if (store_)
-		{
-			store_->position(store_idx_) = src_pos;
-			store_->charge(store_idx_) = atom.getCharge();
-			store_->velocity(store_idx_) = atom.getVelocity();
-			store_->force(store_idx_) = atom.getForce();
-			store_->set_name(store_idx_, std::string(atom.getName().c_str()));
-			store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
-			writeStoreRadius_(atom.getRadius());
-			writeStoreAtomType_(static_cast<short>(atom.getType()));
-			writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
-			writeStoreElement_(&src_element);
-		}
+		store_->position(store_idx_) = src_pos;
+		store_->charge(store_idx_) = atom.getCharge();
+		store_->velocity(store_idx_) = atom.getVelocity();
+		store_->force(store_idx_) = atom.getForce();
+		store_->set_name(store_idx_, std::string(atom.getName().c_str()));
+		store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
+		writeStoreRadius_(atom.getRadius());
+		writeStoreAtomType_(static_cast<short>(atom.getType()));
+		writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
+		writeStoreElement_(&src_element);
   }
 
 	Atom& Atom::operator = (const Atom& atom)
 	{
+		// K0.4.8: rebind detached handle to orphan so writes don't drop.
+		ensureStoreBinding_();
+
 		Composite::operator =(atom);
 		PropertyManager::operator = (atom);
 
@@ -355,19 +363,16 @@ namespace BALL
 		number_of_bonds_ = 0;
 		const Vector3  src_pos     = atom.getPosition();
 		const Element& src_element = atom.getElement();
-		if (store_)
-		{
-			store_->position(store_idx_) = src_pos;
-			store_->charge(store_idx_) = atom.getCharge();
-			store_->velocity(store_idx_) = atom.getVelocity();
-			store_->force(store_idx_) = atom.getForce();
-			store_->set_name(store_idx_, std::string(atom.getName().c_str()));
-			store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
-			writeStoreRadius_(atom.getRadius());
-			writeStoreAtomType_(static_cast<short>(atom.getType()));
-			writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
-			writeStoreElement_(&src_element);
-		}
+		store_->position(store_idx_) = src_pos;
+		store_->charge(store_idx_) = atom.getCharge();
+		store_->velocity(store_idx_) = atom.getVelocity();
+		store_->force(store_idx_) = atom.getForce();
+		store_->set_name(store_idx_, std::string(atom.getName().c_str()));
+		store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
+		writeStoreRadius_(atom.getRadius());
+		writeStoreAtomType_(static_cast<short>(atom.getType()));
+		writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
+		writeStoreElement_(&src_element);
 
 		return *this;
 	}
@@ -843,20 +848,31 @@ namespace BALL
 
 	void Atom::clear_()
 	{
-		// K0.3b.LATER.1-10: payload fields store-backed; clear straight through.
-		if (store_)
+		// K0.4.8: clear_ is called from destroy()/~Atom AND from the
+		// user-facing clear(). For the destroy path the slot is about
+		// to be released anyway, so a null store_ is fine to skip. For
+		// the user-facing path callers expect their atom to retain a
+		// store binding; if it's detached (post-~System), re-bind to
+		// orphan so the defaults land somewhere.
+		if (store_ == nullptr)
 		{
-			store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
-			store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
-			store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
-			store_->force(store_idx_) = Vector3(BALL_ATOM_DEFAULT_FORCE);
-			store_->set_name(store_idx_, std::string(BALL_ATOM_DEFAULT_NAME));
-			store_->set_type_name(store_idx_, std::string(BALL_ATOM_DEFAULT_TYPE_NAME));
-			writeStoreRadius_(BALL_ATOM_DEFAULT_RADIUS);
-			writeStoreAtomType_(static_cast<short>(BALL_ATOM_DEFAULT_TYPE));
-			writeStoreFormalCharge_(static_cast<short>(BALL_ATOM_DEFAULT_FORMAL_CHARGE));
-			writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
+			// destroy()-path: skip; ~Atom won't release a null store.
+			delete interactions;
+			interactions = 0;
+			destroyBonds();
+			return;
 		}
+		// K0.3b.LATER.1-10: payload fields store-backed; clear straight through.
+		store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
+		store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
+		store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
+		store_->force(store_idx_) = Vector3(BALL_ATOM_DEFAULT_FORCE);
+		store_->set_name(store_idx_, std::string(BALL_ATOM_DEFAULT_NAME));
+		store_->set_type_name(store_idx_, std::string(BALL_ATOM_DEFAULT_TYPE_NAME));
+		writeStoreRadius_(BALL_ATOM_DEFAULT_RADIUS);
+		writeStoreAtomType_(static_cast<short>(BALL_ATOM_DEFAULT_TYPE));
+		writeStoreFormalCharge_(static_cast<short>(BALL_ATOM_DEFAULT_FORMAL_CHARGE));
+		writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
 
 		delete interactions;
 		interactions = 0;

@@ -848,6 +848,36 @@ CHECK(K0.4.6 concurrent orphan-store Atom construction is race-free (HIGH-4))
 	}
 RESULT
 
+CHECK(K0.4.8 detached-handle mutation rebinds to orphan (MEDIUM-9))
+	// Codex Round 4 MEDIUM-9: pre-K0.4.8 paths through persistentRead /
+	// set / operator= / clear_ silently dropped writes when the Atom's
+	// store_ was null (the post-~System detached state). K0.4.8 added
+	// ensureStoreBinding_() that re-binds to orphan first, so the data
+	// flows somewhere safe.
+	//
+	// We can't easily simulate ~System on a System owning the atom
+	// without destroying the test System. Instead, mimic detachment by
+	// migrating manually then verify a subsequent setName lands.
+	Atom* a = new Atom;
+	// At this point a is bound to orphan. Force-detach by migrating to
+	// nullptr (simulating ~System's invalidate-handles loop).
+	a->migrateTo_(nullptr, 0);
+	TEST_EQUAL(a->getStore(), (MoleculeStore*)nullptr)
+
+	// Pre-K0.4.8: this set() would have silently dropped writes (store_
+	// was null, gates skipped). K0.4.8: ensureStoreBinding_ rebinds to
+	// orphan first; the write lands.
+	Atom src;
+	src.setName("RECOVERED");
+	src.setPosition(Vector3(42.f, 43.f, 44.f));
+	a->set(src, false);
+	TEST_NOT_EQUAL(a->getStore(), (MoleculeStore*)nullptr)
+	TEST_EQUAL(a->getName(), String("RECOVERED"))
+	TEST_EQUAL(a->getPosition(), Vector3(42.f, 43.f, 44.f))
+
+	delete a;
+RESULT
+
 CHECK(K0.4.7 BorrowedColumnRef opt-in enforcement documented (HIGH-5))
 	// Codex Round 4 HIGH-5: clarify that raw Atom::getPosition/etc. do
 	// NOT auto-wrap their return in BorrowedColumnRef, so the
