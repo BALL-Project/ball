@@ -10,11 +10,30 @@
 #include <BALL/KERNEL/compiledExpression.h>
 #include <BALL/COMMON/exception.h>
 
+#include <limits>
 #include <mutex>
 #include <unordered_set>
 
 namespace BALL
 {
+
+// 2026-05-18 (V21-STABLE-ID-OVERFLOW, Codex R12 K7):
+// Allocate the next stable_id and check for UINT64_MAX wraparound.
+// On a 64-bit counter at 1 ns per allocation that's ~584 years
+// until exhaustion — practically unreachable in any real workload —
+// but a careless test that resets next_stable_id_ to a high value
+// via the loader's max_id+1 path or a deliberately adversarial JSON
+// could brush against it. Throwing OutOfMemory (closest existing
+// exception type for "resource exhausted") makes the failure
+// explicit rather than silently wrapping to 0 and re-issuing live
+// ids — which would break the "unique stable_id per live atom"
+// invariant catastrophically.
+MoleculeStore::StableId MoleculeStore::next_stable_id_alloc_()
+{
+	if (next_stable_id_ == std::numeric_limits<StableId>::max())
+		throw Exception::OutOfMemory(__FILE__, __LINE__, 0);
+	return next_stable_id_++;
+}
 
 // K0.6.3b: checked bulk restore. Called only by loadStoreJSON via the
 // friend declaration in moleculeStore.h. Throws if the caller violates
@@ -38,8 +57,19 @@ void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& id
 
 	for (std::size_t i = 0; i < ids.size(); ++i)
 		stable_ids_[i] = ids[i];
-	if (max_id + 1 > next_stable_id_)
+	// V21-STABLE-ID-OVERFLOW: bump only if needed AND not wrapping.
+	// If max_id == UINT64_MAX, future allocations will throw on the
+	// first next_stable_id_alloc_() call rather than silently
+	// re-issuing 0.
+	if (max_id < std::numeric_limits<StableId>::max()
+	    && max_id + 1 > next_stable_id_)
+	{
 		next_stable_id_ = max_id + 1;
+	}
+	else if (max_id == std::numeric_limits<StableId>::max())
+	{
+		next_stable_id_ = std::numeric_limits<StableId>::max();
+	}
 }
 
 // Destruction-order is no longer load-bearing on this ctor.
@@ -135,7 +165,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 		type_name_offsets_[idx] = 0;
 		name_strings_[idx].clear();
 		type_name_strings_[idx].clear();
-		stable_ids_[idx]      = next_stable_id_++;
+		stable_ids_[idx]      = next_stable_id_alloc_();
 		// back_ptr already written above (K0.4.6); for the nullptr-caller
 		// case the slot is live-but-unbound, which is acceptable because
 		// the caller is by contract about to bind it.
@@ -165,7 +195,7 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 	type_name_offsets_.emplace_back(0);
 	name_strings_.emplace_back();           // K0.3b.LATER.5: default empty String
 	type_name_strings_.emplace_back();      // K0.3b.LATER.6
-	stable_ids_.emplace_back(next_stable_id_++);
+	stable_ids_.emplace_back(next_stable_id_alloc_());
 	// K0.4.6: write back_ptr BEFORE marking the slot live (is_freed_=0).
 	// A concurrent reader sequenced after the is_freed_ store will see a
 	// valid back_ptr; a reader sequenced before sees a freed slot. The
@@ -213,7 +243,7 @@ void MoleculeStore::release_atom(Index i)
 	name_strings_[i].clear();
 	type_name_strings_[i].clear();
 	// stable_ids_[i] is not reset; the freed-then-reallocated slot gets
-	// a fresh stable id from next_stable_id_++ on reuse. Old stable ids
+	// a fresh stable id from next_stable_id_alloc_() on reuse. Old stable ids
 	// don't collide.
 
 	free_list_.push_back(i);

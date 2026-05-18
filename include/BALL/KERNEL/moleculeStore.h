@@ -475,6 +475,11 @@ namespace BALL
 		mutable bool                       csr_dirty_ = true;
 		void ensure_csr_() const;
 
+		// V21-STABLE-ID-OVERFLOW (Codex R12 K7): allocate next stable_id
+		// with UINT64_MAX wraparound check. Throws Exception::OutOfMemory
+		// rather than silently re-issuing 0. Called from allocate_atom paths.
+		StableId next_stable_id_alloc_();
+
 		Generation generation_           = 0;
 		Generation selection_generation_ = 0;
 		StableId   next_stable_id_       = 1;
