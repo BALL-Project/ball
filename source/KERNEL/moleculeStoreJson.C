@@ -65,6 +65,12 @@ void saveStoreJSON(const MoleculeStore& store, std::ostream& os, int indent,
 	const std::size_t n = store.size();
 
 	json doc;
+	// K0.6.3b (Codex R7 OPEN-3): document_type discriminator. Future
+	// K0.6.5 documents will write "System"; this reader will reject
+	// anything that isn't "MoleculeStore", and a v1.x reader written
+	// against an older minor will refuse to silently partial-load a
+	// System doc.
+	doc["document_type"]    = "MoleculeStore";
 	doc["format_version"]   = MOLECULE_STORE_JSON_VERSION;        // major
 	doc["format_minor"]     = MOLECULE_STORE_JSON_VERSION_MINOR;  // K0.6.3
 	doc["float_format"]     = (float_fmt == JsonFloatFormat::BIT_EXACT_HEX
@@ -197,6 +203,11 @@ void loadStoreJSON(MoleculeStore& store, std::istream& is)
 {
 	using nlohmann::json;
 
+	// K0.6.3b (Codex R7 OPEN-4): comprehensive parse-error boundary.
+	// Every nlohmann::json access below can throw json::type_error /
+	// json::out_of_range; std::stoul in hex_to_float_ can throw
+	// std::invalid_argument / std::out_of_range. All routed through
+	// ParseError so the public API surface is exception-typed cleanly.
 	json doc;
 	try
 	{
@@ -208,123 +219,179 @@ void loadStoreJSON(MoleculeStore& store, std::istream& is)
 			"K0.6.2: JSON parse failure");
 	}
 
-	// Header invariants.
-	require_(doc.is_object(),                       "top-level must be object");
-	require_(doc.contains("format_version"),        "missing format_version");
-	require_(doc.contains("size"),                  "missing size");
-	require_(doc.contains("atoms"),                 "missing atoms");
-	require_(doc.contains("bonds"),                 "missing bonds");
-
-	const int  version  = doc["format_version"].get<int>();
-	require_(version <= MOLECULE_STORE_JSON_VERSION,
-		"format_version higher than this build supports");
-	require_(version >= 1, "format_version must be >= 1");
-	// K0.6.3: format_minor is OPTIONAL — K0.6.1/.2 docs predate the
-	// minor field. Higher-minor docs are loadable (we ignore unknown
-	// top-level keys); lower-minor is fine too.
-
-	const std::size_t n = doc["size"].get<std::size_t>();
-
-	const json& a = doc["atoms"];
-	require_(a.is_object(), "atoms must be object");
-	// Every column must be present and length n. This catches truncated
-	// files and column/size mismatches cheaply before any allocation.
-	static const char* kColumns[] = {
-		"positions", "velocities", "forces", "charges", "radii",
-		"atom_types", "formal_charges", "element_indices", "selection",
-		"names", "type_names", "stable_ids", "is_freed"
-	};
-	for (const char* col : kColumns)
+	try
 	{
-		require_(a.contains(col),       col);
-		require_(a[col].is_array(),     col);
-		require_(a[col].size() == n,    col);
+		// Header invariants.
+		require_(doc.is_object(),                       "top-level must be object");
+		require_(doc.contains("format_version"),        "missing format_version");
+		require_(doc.contains("size"),                  "missing size");
+		require_(doc.contains("atoms"),                 "missing atoms");
+		require_(doc.contains("bonds"),                 "missing bonds");
+
+		// K0.6.3b (Codex R7 OPEN-3): document_type discriminator. If the
+		// field is absent we accept (K0.6.1/.2 docs predate it). If
+		// present, it MUST be "MoleculeStore" — K0.6.5 will emit "System"
+		// docs that this reader is not designed to load.
+		if (doc.contains("document_type"))
+		{
+			const std::string dtype = doc["document_type"].get<std::string>();
+			require_(dtype == "MoleculeStore",
+				"document_type is not 'MoleculeStore' (loadStoreJSON only handles MoleculeStore docs)");
+		}
+
+		const int  version  = doc["format_version"].get<int>();
+		require_(version <= MOLECULE_STORE_JSON_VERSION,
+			"format_version higher than this build supports");
+		require_(version >= 1, "format_version must be >= 1");
+		// K0.6.3: format_minor is OPTIONAL — K0.6.1/.2 docs predate the
+		// minor field. Higher-minor docs are loadable (we ignore unknown
+		// top-level keys); lower-minor is fine too.
+
+		const std::size_t n = doc["size"].get<std::size_t>();
+
+		const json& a = doc["atoms"];
+		require_(a.is_object(), "atoms must be object");
+		// Every column must be present and length n. This catches truncated
+		// files and column/size mismatches cheaply before any allocation.
+		static const char* kColumns[] = {
+			"positions", "velocities", "forces", "charges", "radii",
+			"atom_types", "formal_charges", "element_indices", "selection",
+			"names", "type_names", "stable_ids", "is_freed"
+		};
+		for (const char* col : kColumns)
+		{
+			require_(a.contains(col),       col);
+			require_(a[col].is_array(),     col);
+			require_(a[col].size() == n,    col);
+		}
+
+		// Wipe, reserve, populate. reserve avoids per-slot reallocation so
+		// the bond table's slot indices stay consistent during load.
+		reset_store_(store);
+		store.reserve(n + 8);
+
+		std::vector<MoleculeStore::StableId> stable_id_buf;
+		stable_id_buf.reserve(n);
+
+		// K0.6.3b (Codex R7 OPEN-5): is_freed strict-0/1 + cross-check
+		// live_atom_count == count(is_freed==0). live_atom_count is
+		// optional (K0.6.1/.2 emitted it but a fuzzed doc may omit it);
+		// if present we check; if absent we trust is_freed.
+		std::size_t live_count_from_freed = 0;
+
+		for (std::size_t i = 0; i < n; ++i)
+		{
+			const auto idx = store.allocate_atom();   // sequential -> i
+			(void)idx;
+			const json& p = a["positions"][i];
+			const json& v = a["velocities"][i];
+			const json& f = a["forces"][i];
+			require_(p.is_array() && p.size() == 3, "positions[i] not [x,y,z]");
+			require_(v.is_array() && v.size() == 3, "velocities[i] not [x,y,z]");
+			require_(f.is_array() && f.size() == 3, "forces[i] not [x,y,z]");
+			// Floats auto-decode via decode_float_ (string=hex, number=decimal).
+			store.position(i)      = Vector3(decode_float_(p[0]), decode_float_(p[1]), decode_float_(p[2]));
+			store.velocity(i)      = Vector3(decode_float_(v[0]), decode_float_(v[1]), decode_float_(v[2]));
+			store.force(i)         = Vector3(decode_float_(f[0]), decode_float_(f[1]), decode_float_(f[2]));
+			store.charge(i)        = decode_float_(a["charges"][i]);
+			store.radius(i)        = decode_float_(a["radii"][i]);
+			store.atom_type(i)     = static_cast<short>(a["atom_types"][i].get<int>());
+			store.formal_charge(i) = static_cast<short>(a["formal_charges"][i].get<int>());
+
+			// Range invariants. element_index is u8 (0..255); we don't
+			// tighten to PTE bound here because future PTE additions
+			// need to round-trip.
+			const int eli = a["element_indices"][i].get<int>();
+			require_(eli >= 0 && eli <= 255, "element_index out of [0,255]");
+			store.element_index(i) = static_cast<std::uint8_t>(eli);
+
+			const int sel = a["selection"][i].get<int>();
+			require_(sel == 0 || sel == 1, "selection must be 0 or 1");
+			store.set_selected(i, sel != 0);
+
+			// K0.6.3b: is_freed now strict 0/1 (was: any non-zero treated
+			// as freed). Lax acceptance let corrupted docs canonicalize
+			// silently.
+			const int freed_i = a["is_freed"][i].get<int>();
+			require_(freed_i == 0 || freed_i == 1, "is_freed must be 0 or 1");
+			if (freed_i == 0) ++live_count_from_freed;
+
+			store.set_name(i,      a["names"][i].get<std::string>());
+			store.set_type_name(i, a["type_names"][i].get<std::string>());
+
+			stable_id_buf.push_back(a["stable_ids"][i].get<std::uint64_t>());
+		}
+
+		// K0.6.3b: cross-check live_atom_count if the field is present.
+		if (doc.contains("live_atom_count"))
+		{
+			const std::size_t declared = doc["live_atom_count"].get<std::size_t>();
+			require_(declared == live_count_from_freed,
+				"live_atom_count != count(is_freed == 0)");
+		}
+
+		// K0.6.3b: single bulk-restore stable_ids (replaces former pair
+		// of underscore-public setters). Internally validates uniqueness
+		// + reseeds next_stable_id_.
+		store.restore_stable_ids_for_load_(stable_id_buf);
+
+		// Bond table — single pass; tombstoned bonds were stripped at write.
+		const json& bonds = doc["bonds"];
+		for (const auto& br : bonds)
+		{
+			require_(br.is_object() && br.contains("a") && br.contains("b")
+				&& br.contains("order") && br.contains("type") && br.contains("flags"),
+				"bonds[i] missing field");
+			const auto bond_a    = br["a"].get<std::uint32_t>();
+			const auto bond_b    = br["b"].get<std::uint32_t>();
+			// K0.6.3b: endpoints must reference allocated slots (< n).
+			// The CSR rebuild later filters out bonds whose endpoint
+			// ends up freed via the is_freed-replay pass, so a bond
+			// landing on what becomes a freed slot is acceptable —
+			// behaviour matches the writer's serialized state.
+			require_(bond_a < n, "bond.a out of [0, size)");
+			require_(bond_b < n, "bond.b out of [0, size)");
+			const int order_i = br["order"].get<int>();
+			const int type_i  = br["type"].get<int>();
+			require_(order_i >= 0 && order_i <= 255, "bond.order out of [0,255]");
+			require_(type_i  >= 0 && type_i  <= 255, "bond.type out of [0,255]");
+			const auto order_v   = static_cast<std::uint8_t>(order_i);
+			const auto type_v    = static_cast<std::uint8_t>(type_i);
+			store.add_bond(bond_a, bond_b, order_v, type_v);
+			// flags field is read for forward-compat but not yet honored;
+			// FLAG_BOND_DEAD wouldn't make sense for a freshly-added bond.
+		}
+
+		// Last: replay release_atom on is_freed[i]==1 so the bond table's
+		// indices stayed valid through population. CSR rebuild on next bond
+		// query will skip the freed slots' bonds.
+		const json& freed = a["is_freed"];
+		for (std::size_t i = 0; i < n; ++i)
+			if (freed[i].get<int>() != 0)
+				store.release_atom(static_cast<MoleculeStore::Index>(i));
 	}
-
-	// Wipe, reserve, populate. reserve avoids per-slot reallocation so
-	// the bond table's slot indices stay consistent during load.
-	reset_store_(store);
-	store.reserve(n + 8);
-
-	MoleculeStore::StableId max_stable_id = 0;
-	for (std::size_t i = 0; i < n; ++i)
+	catch (const Exception::ParseError&)
 	{
-		const auto idx = store.allocate_atom();   // sequential -> i
-		(void)idx;
-		const json& p = a["positions"][i];
-		const json& v = a["velocities"][i];
-		const json& f = a["forces"][i];
-		require_(p.is_array() && p.size() == 3, "positions[i] not [x,y,z]");
-		require_(v.is_array() && v.size() == 3, "velocities[i] not [x,y,z]");
-		require_(f.is_array() && f.size() == 3, "forces[i] not [x,y,z]");
-		// K0.6.3: floats auto-decode via decode_float_ (string=hex,
-		// number=decimal) — handles both DECIMAL and BIT_EXACT_HEX
-		// writer output transparently.
-		store.position(i)      = Vector3(decode_float_(p[0]), decode_float_(p[1]), decode_float_(p[2]));
-		store.velocity(i)      = Vector3(decode_float_(v[0]), decode_float_(v[1]), decode_float_(v[2]));
-		store.force(i)         = Vector3(decode_float_(f[0]), decode_float_(f[1]), decode_float_(f[2]));
-		store.charge(i)        = decode_float_(a["charges"][i]);
-		store.radius(i)        = decode_float_(a["radii"][i]);
-		store.atom_type(i)     = static_cast<short>(a["atom_types"][i].get<int>());
-		store.formal_charge(i) = static_cast<short>(a["formal_charges"][i].get<int>());
-
-		// K0.6.3 range invariants. element_index is u8 (0..255); we
-		// don't tighten to the PTE upper bound here because Element::
-		// UNKNOWN at 0 + future PTE additions both need to round-trip.
-		const int eli = a["element_indices"][i].get<int>();
-		require_(eli >= 0 && eli <= 255, "element_index out of [0,255]");
-		store.element_index(i) = static_cast<std::uint8_t>(eli);
-
-		const int sel = a["selection"][i].get<int>();
-		require_(sel == 0 || sel == 1, "selection must be 0 or 1");
-		store.set_selected(i, sel != 0);
-
-		store.set_name(i,      a["names"][i].get<std::string>());
-		store.set_type_name(i, a["type_names"][i].get<std::string>());
-
-		// K0.6.3: restore stable_id from the document. Earlier K0.6.2
-		// note: stable_ids were read but not patched, which broke
-		// cross-session identity. Now we write through the loader hook
-		// and reseed next_stable_id_ after the loop so future allocs
-		// don't collide with restored ids.
-		const auto sid = a["stable_ids"][i].get<std::uint64_t>();
-		store.set_stable_id_for_load_(static_cast<MoleculeStore::Index>(i), sid);
-		if (sid > max_stable_id) max_stable_id = sid;
+		throw; // already typed
 	}
-	store.reseed_next_stable_id_(max_stable_id + 1);
-
-	// Bond table — single pass; tombstoned bonds were stripped at write.
-	const json& bonds = doc["bonds"];
-	for (const auto& br : bonds)
+	catch (const json::exception& e)
 	{
-		require_(br.is_object() && br.contains("a") && br.contains("b")
-			&& br.contains("order") && br.contains("type") && br.contains("flags"),
-			"bonds[i] missing field");
-		const auto bond_a    = br["a"].get<std::uint32_t>();
-		const auto bond_b    = br["b"].get<std::uint32_t>();
-		// K0.6.3 range invariants. Bond endpoints must be live slots
-		// (the writer skips dead bonds; a dead-bond endpoint here is
-		// either corruption or a hand-edit).
-		require_(bond_a < n, "bond.a out of [0, size)");
-		require_(bond_b < n, "bond.b out of [0, size)");
-		const int order_i = br["order"].get<int>();
-		const int type_i  = br["type"].get<int>();
-		require_(order_i >= 0 && order_i <= 255, "bond.order out of [0,255]");
-		require_(type_i  >= 0 && type_i  <= 255, "bond.type out of [0,255]");
-		const auto order_v   = static_cast<std::uint8_t>(order_i);
-		const auto type_v    = static_cast<std::uint8_t>(type_i);
-		store.add_bond(bond_a, bond_b, order_v, type_v);
-		// flags field is read for forward-compat but not yet honored;
-		// FLAG_BOND_DEAD wouldn't make sense for a freshly-added bond.
+		// nlohmann type_error, out_of_range, etc.
+		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
+			"K0.6.3b: JSON access error");
 	}
-
-	// Last: replay release_atom on is_freed[i]==1 so the bond table's
-	// indices stayed valid through population. CSR rebuild on next bond
-	// query will skip the freed slots' bonds.
-	const json& freed = a["is_freed"];
-	for (std::size_t i = 0; i < n; ++i)
-		if (freed[i].get<int>() != 0)
-			store.release_atom(static_cast<MoleculeStore::Index>(i));
+	catch (const std::invalid_argument& e)
+	{
+		// std::stoul on a malformed hex string
+		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
+			"K0.6.3b: malformed bit-exact float (invalid hex)");
+	}
+	catch (const std::out_of_range& e)
+	{
+		// std::stoul value out of u32 range, or vector subscript via .at
+		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
+			"K0.6.3b: numeric out-of-range");
+	}
 }
 
 } // namespace BALL

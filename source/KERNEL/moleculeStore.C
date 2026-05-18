@@ -8,9 +8,38 @@
 // K0.5.5: invalidate this store's cached CompiledExpressions on dtor so
 // the cache doesn't hold dangling MoleculeStore* keys past our lifetime.
 #include <BALL/KERNEL/compiledExpression.h>
+#include <BALL/COMMON/exception.h>
+
+#include <unordered_set>
 
 namespace BALL
 {
+
+// K0.6.3b: checked bulk restore. Called only by loadStoreJSON via the
+// friend declaration in moleculeStore.h. Throws if the caller violates
+// the stable_id uniqueness invariant.
+void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& ids)
+{
+	if (ids.size() != positions_.size())
+		throw Exception::InvalidArgument(__FILE__, __LINE__,
+			"restore_stable_ids_for_load_: ids.size() != store size()");
+
+	std::unordered_set<StableId> seen;
+	seen.reserve(ids.size());
+	StableId max_id = 0;
+	for (StableId id : ids)
+	{
+		if (!seen.insert(id).second)
+			throw Exception::InvalidArgument(__FILE__, __LINE__,
+				"restore_stable_ids_for_load_: duplicate stable_id");
+		if (id > max_id) max_id = id;
+	}
+
+	for (std::size_t i = 0; i < ids.size(); ++i)
+		stable_ids_[i] = ids[i];
+	if (max_id + 1 > next_stable_id_)
+		next_stable_id_ = max_id + 1;
+}
 
 MoleculeStore::MoleculeStore() = default;
 MoleculeStore::~MoleculeStore()

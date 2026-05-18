@@ -507,6 +507,122 @@ CHECK(K0.6.3 selection-must-be-0-or-1 rejected)
 	TEST_EQUAL(threw, true)
 RESULT
 
+CHECK(K0.6.3b writer emits document_type discriminator)
+	MoleculeStore s;
+	std::ostringstream os;
+	saveStoreJSON(s, os);
+	json doc = json::parse(os.str());
+	TEST_EQUAL(doc["document_type"].get<std::string>(), std::string("MoleculeStore"))
+RESULT
+
+CHECK(K0.6.3b wrong document_type rejected with ParseError)
+	std::string forged =
+		"{\"document_type\":\"System\",\"format_version\":1,"
+		"\"format_minor\":1,\"size\":0,\"live_atom_count\":0,"
+		"\"generation\":0,\"atoms\":{\"positions\":[],\"velocities\":[],"
+		"\"forces\":[],\"charges\":[],\"radii\":[],\"atom_types\":[],"
+		"\"formal_charges\":[],\"element_indices\":[],\"selection\":[],"
+		"\"names\":[],\"type_names\":[],\"stable_ids\":[],"
+		"\"is_freed\":[]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.6.3b malformed hex float -> ParseError not std::invalid_argument)
+	std::string forged =
+		"{\"document_type\":\"MoleculeStore\",\"format_version\":1,"
+		"\"format_minor\":1,\"size\":1,\"live_atom_count\":1,"
+		"\"generation\":0,\"atoms\":{"
+		"\"positions\":[[\"0xZZZZZZZZ\",[0],[0]]],"
+		"\"velocities\":[[0,0,0]],\"forces\":[[0,0,0]],"
+		"\"charges\":[0],\"radii\":[0],\"atom_types\":[0],"
+		"\"formal_charges\":[0],\"element_indices\":[0],"
+		"\"selection\":[0],\"names\":[\"X\"],\"type_names\":[\"X\"],"
+		"\"stable_ids\":[1],\"is_freed\":[0]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw_parse  = false;
+	bool threw_other = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&)     { threw_parse  = true; }
+	catch (...)                        { threw_other = true; }
+	// Must be a ParseError, not a leaked std::invalid_argument.
+	TEST_EQUAL(threw_parse,  true)
+	TEST_EQUAL(threw_other, false)
+RESULT
+
+CHECK(K0.6.3b is_freed strict-0/1 rejected when value is 2)
+	std::string forged =
+		"{\"document_type\":\"MoleculeStore\",\"format_version\":1,"
+		"\"format_minor\":1,\"size\":1,\"live_atom_count\":1,"
+		"\"generation\":0,\"atoms\":{"
+		"\"positions\":[[0,0,0]],\"velocities\":[[0,0,0]],"
+		"\"forces\":[[0,0,0]],\"charges\":[0],\"radii\":[0],"
+		"\"atom_types\":[0],\"formal_charges\":[0],"
+		"\"element_indices\":[0],\"selection\":[0],\"names\":[\"X\"],"
+		"\"type_names\":[\"X\"],\"stable_ids\":[1],\"is_freed\":[2]},"
+		"\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.6.3b live_atom_count cross-check)
+	// size=2, is_freed=[0,0] -> 2 live; declared live_atom_count=1 should reject.
+	std::string forged =
+		"{\"document_type\":\"MoleculeStore\",\"format_version\":1,"
+		"\"format_minor\":1,\"size\":2,\"live_atom_count\":1,"
+		"\"generation\":0,\"atoms\":{"
+		"\"positions\":[[0,0,0],[0,0,0]],"
+		"\"velocities\":[[0,0,0],[0,0,0]],"
+		"\"forces\":[[0,0,0],[0,0,0]],"
+		"\"charges\":[0,0],\"radii\":[0,0],\"atom_types\":[0,0],"
+		"\"formal_charges\":[0,0],\"element_indices\":[0,0],"
+		"\"selection\":[0,0],\"names\":[\"A\",\"B\"],"
+		"\"type_names\":[\"A\",\"B\"],\"stable_ids\":[1,2],"
+		"\"is_freed\":[0,0]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&) { threw = true; }
+	TEST_EQUAL(threw, true)
+RESULT
+
+CHECK(K0.6.3b duplicate stable_id rejected)
+	// size=2 with two atoms sharing stable_id=42 -> reject via
+	// restore_stable_ids_for_load_ duplicate check.
+	std::string forged =
+		"{\"document_type\":\"MoleculeStore\",\"format_version\":1,"
+		"\"format_minor\":1,\"size\":2,\"live_atom_count\":2,"
+		"\"generation\":0,\"atoms\":{"
+		"\"positions\":[[0,0,0],[0,0,0]],"
+		"\"velocities\":[[0,0,0],[0,0,0]],"
+		"\"forces\":[[0,0,0],[0,0,0]],"
+		"\"charges\":[0,0],\"radii\":[0,0],\"atom_types\":[0,0],"
+		"\"formal_charges\":[0,0],\"element_indices\":[0,0],"
+		"\"selection\":[0,0],\"names\":[\"A\",\"B\"],"
+		"\"type_names\":[\"A\",\"B\"],\"stable_ids\":[42,42],"
+		"\"is_freed\":[0,0]},\"bonds\":[]}";
+	MoleculeStore dst;
+	std::istringstream is(forged);
+	bool threw_parse        = false;
+	bool threw_invalid_arg  = false;
+	try { loadStoreJSON(dst, is); }
+	catch (Exception::ParseError&)     { threw_parse = true; }
+	catch (Exception::InvalidArgument&){ threw_invalid_arg = true; }
+	// Either typed exception is acceptable (both are clear errors); we
+	// just don't want a raw nlohmann/std exception to leak.
+	TEST_EQUAL(threw_parse || threw_invalid_arg, true)
+RESULT
+
 CHECK(K0.6.3 bond endpoint out-of-range rejected)
 	std::string forged =
 		"{\"format_version\":1,\"size\":2,\"live_atom_count\":2,"
