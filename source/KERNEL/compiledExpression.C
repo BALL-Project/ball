@@ -576,8 +576,26 @@ CompiledExpressionCache::~CompiledExpressionCache() = default;
 
 CompiledExpressionCache& CompiledExpressionCache::instance()
 {
-	static CompiledExpressionCache cache;
-	return cache;
+	// 2026-05-18 (Codex R10 DTOR-HARDEN): leaky-immortal singleton.
+	// Previously this was a Meyers singleton (`static CompiledExpressionCache
+	// cache; return cache;`). B1.2 fixed the destruction-order crash by
+	// touching this from the MoleculeStore constructor, pinning the cache
+	// to construct before any store and therefore destruct after them. That
+	// works but is implicit and depends on every store-creation path going
+	// through that constructor — Codex R10 flagged this as fragile.
+	//
+	// Switching to a heap-allocated singleton that's never destroyed (the
+	// classic "immortal singleton" pattern) makes the destruction-order
+	// concern structurally impossible: ~MoleculeStore can call
+	// instance().invalidate_store() at any point in process teardown and
+	// always get a valid cache. Cost: ~few KB leaked at process exit (the
+	// cache state + LRU list + index map). Acceptable for a process-global
+	// singleton — exit is exit.
+	//
+	// This also lets the MoleculeStore() constructor pin be removed in a
+	// future commit (kept for now as belt-and-suspenders).
+	static CompiledExpressionCache* cache = new CompiledExpressionCache();
+	return *cache;
 }
 
 // K0.5.8: cache mutators take impl_->mtx. We DROP the cache lock
