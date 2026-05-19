@@ -124,6 +124,30 @@ tag) adds **one step** before the existing close-out:
 
 ---
 
+## Release history
+
+| Tag        | Date       | Commit       | Notes                                                                     |
+|------------|------------|--------------|---------------------------------------------------------------------------|
+| `v1.6.0`   | 2026-05-13 |              | Initial v1.6 ship — unsigned                                              |
+| `v1.6.1`   | 2026-05-16 |              | Ninja switch + smoke harness                                              |
+| `v1.6.2`   | 2026-05-17 |              | Precompiled headers groundwork, action pins, build accel                  |
+| `v1.7.0`   | 2026-05-19 | `97d4c4d62d` | BALLView Refresh ship — Wave 4 (999.40-999.49) + 32 UFG fixes; unsigned   |
+
+**v1.7.0 release notes:**
+- Final ship after 6 RCs (rc1 → rc6) addressing 32 UFGs from user-feedback validation
+- Wave 4 phases 999.40-999.49 all complete: design system, SVG icons, QSS theming,
+  simple-dialog cleanup, Unified Inspector, Workspace consolidation, Menus + Command
+  Palette, Onboarding, accessibility + BALL_UI_V2 flag removal, Classic-dock retirement
+- Phase 8 (signing/notarization) explicitly deferred to v1.7.1 pending institutional
+  Apple Developer Program enrollment for Universität Tübingen
+- Phase 999.8 (auto-update via Sparkle/WinSparkle) deferred to v1.7.1, blocked by Phase 8
+- `master` fast-forwarded to v1.7.0 via force-push (new convention per this doc § Why);
+  4 prior master-only commits superseded or already cherry-picked into v1.7.0
+- UFG-23 (SES surface triangle vanishing during rotation) deferred to v1.7.1 — needs
+  empirical GPU-bisection session
+
+---
+
 ## Lessons learned (v1.7.0 RC cycle — pin to memory)
 
 These are the root-cause patterns that bit during the v1.7.0 RC
