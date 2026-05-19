@@ -863,6 +863,25 @@ namespace BALL
 				if (!is_in_move_mode) showFilename();
 			}
 
+			// UFG-27 (rc5 follow-up) — unified selection model. Qt's
+			// QTreeWidget native ExtendedSelection produces the row
+			// cursor selection (blue highlight, range-extending on
+			// shift-click, toggle on cmd-click). The user expects that
+			// cursor selection to drive BALL composite selection (the
+			// yellow scene highlight + per-atom isSelected() flag), not
+			// be a separate orthogonal concern. Sync BALL composite
+			// selection to selected_ here. `enableUpdates_(false)`
+			// suppresses re-entry via the message cascade that
+			// clearSelection + newSelection_ would otherwise trigger.
+			enableUpdates_(false);
+			getMainControl()->clearSelection();
+			if (!selected_.empty())
+			{
+				list<Composite*> sync_list = selected_;
+				newSelection_(sync_list, /*selected=*/true);
+			}
+			enableUpdates_(true);
+
 			// sent new selection through tree
 			ControlSelectionMessage* message = new ControlSelectionMessage;
 			message->setSelection(selected_);
@@ -1723,30 +1742,25 @@ namespace BALL
 
 		void MolecularControl::onItemClicked(QTreeWidgetItem* item, int /*col*/)
 		{
-			// UFG-07: was gated on `col == 2` (the old checkbox column).
-			// With the single-column redesign the entire row is the
-			// affordance — clicking the name toggles BALL composite
-			// selection. The visual cue is the name-text color
-			// (MyTreeWidgetItem::data + setSelection_).
+			// UFG-27 (rc5 follow-up) — Qt's QTreeWidget native
+			// ExtendedSelection (set in GenericControl ctor) already
+			// handles single-click / shift-click range / cmd-click
+			// toggle natively against the cursor selection. The
+			// `itemSelectionChanged` signal then fires `updateSelection`
+			// which syncs BALL composite selection to the cursor
+			// selection. We no longer toggle BALL here — that would
+			// double-trigger with updateSelection and cancel each
+			// other out. The click handler stays for the busy-check
+			// status bar message and possible future per-row UX
+			// (e.g., double-click to centre camera) — but does not
+			// mutate selection state itself.
 			if (item == 0) return;
-			MyTreeWidgetItem* mitem = static_cast<MyTreeWidgetItem*>(item);
-			Composite* c = mitem->composite;
-			if (c == 0) return;
-
 			if (getMainControl()->isBusy())
 			{
 				VIEW::getMainControl()->setStatusbarText(
 					(String)tr("Cannot select items now!"), true);
 				return;
 			}
-
-			const bool was_selected = c->isSelected();
-			list<Composite*> l;
-			l.push_back(c);
-			// `newSelection_(list, selected)` interprets `selected == true`
-			// as "make these BALL-selected" and `false` as "deselect them",
-			// so we pass `!was_selected` to toggle.
-			newSelection_(l, !was_selected);
 		}
 
 		void MolecularControl::showAtomOverview()
