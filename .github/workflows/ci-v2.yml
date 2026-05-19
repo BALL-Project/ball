@@ -1,0 +1,147 @@
+name: CI v2.0 (CORE_ONLY)
+
+# A4 — Phase A polish: dedicated CI workflow for the v2.0 milestone branch.
+#
+# The existing `ci.yml` workflow targets v1.6/v1.7 with full BALL builds
+# (BALL_CORE_ONLY=OFF) on a 3-OS matrix. v2.0 currently has a pre-existing
+# full-build link issue (TBB 2023 ABI mismatch + missing libSVM; documented
+# as FULL-BUILD-TBB-LIBSVM in RELEASE-NOTES-v2.0.md, deferred to v2.0.x).
+# Adding v2.0 to the main CI branch list would generate persistent red runs
+# that aren't actionable until that backlog item lands.
+#
+# This workflow runs BALL_CORE_ONLY=ON which is the documented v2.0
+# kernel test matrix (164/164 PASS). It also runs the K0.4.6 HIGH-4
+# concurrent-allocate stress over MoleculeStore_test for 100 iterations —
+# the same stress that caught the orphan-store race that R11/V21-ORPHAN-
+# MUTATOR-LOCK closed.
+#
+# Trigger: push + PR on the v2.0 branch. Once Track B closes and v2.0.x
+# fixes the TBB/libSVM link, this workflow gets folded back into ci.yml's
+# matrix.
+
+on:
+  push:
+    branches: [v2.0]
+    paths-ignore:
+      - '.planning/**'
+      - '**.md'
+      - 'LICENSE*'
+      - 'doc/**'
+  pull_request:
+    branches: [v2.0]
+    paths-ignore:
+      - '.planning/**'
+      - '**.md'
+      - 'LICENSE*'
+      - 'doc/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-v2-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  core-only-tests:
+    name: CORE_ONLY ctest + MoleculeStore stress (macOS arm64)
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0     # phase artifact trail uses git log/blame
+
+      - name: Install dependencies (Homebrew)
+        # Mirrors the v2.0 dev setup: Qt5 + Boost + Eigen3 + nlohmann/json
+        # is vendored at include/BALL/EXTERNAL/nlohmann_json.hpp so no brew
+        # install needed there.
+        run: |
+          brew update
+          brew install --quiet qt@5 boost eigen flex bison cmake ninja
+          brew link --quiet --force qt@5
+          echo "Qt5_DIR=$(brew --prefix qt@5)/lib/cmake/Qt5" >> $GITHUB_ENV
+          echo "PATH=$(brew --prefix bison)/bin:$(brew --prefix flex)/bin:$PATH" >> $GITHUB_ENV
+
+      - name: Configure CORE_ONLY
+        run: |
+          cmake -S . -B build -GNinja \
+            -DBALL_CORE_ONLY=ON \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DBALL_HAS_VIEW=OFF
+
+      - name: Build libBALL + tests
+        run: |
+          cmake --build build --target BALL build_tests -j
+
+      - name: ctest sweep (164/164 expected)
+        env:
+          BALL_DATA_PATH: ${{ github.workspace }}/data
+        run: |
+          cd build
+          # --timeout 120 caps individual hangs. 1 documented WILL_FAIL
+          # (Expression_test in CORE_ONLY — gated until QSAR re-enable
+          # in Wave 3). Expected: 164/164 PASS.
+          ctest --output-on-failure --timeout 120 \
+                --output-junit ${{ github.workspace }}/ball-v2-tests.xml
+
+      - name: MoleculeStore_test 100-run stress
+        env:
+          BALL_DATA_PATH: ${{ github.workspace }}/data
+        run: |
+          # Catches the K0.4.6 HIGH-4 orphan-store race regression
+          # (was ~3% flake rate pre-V21-ORPHAN-MUTATOR-LOCK; now 0/100).
+          # Any single failure here means the orphan-store concurrent-
+          # allocate path has regressed and the kernel needs reinspection.
+          fail=0
+          for i in $(seq 1 100); do
+            if ! ./build/bin/TEST/MoleculeStore_test > /dev/null 2>&1; then
+              fail=$((fail+1))
+              echo "::warning::Iteration $i failed"
+            fi
+          done
+          echo "MoleculeStore_test stress: ${fail}/100 fails"
+          if [ $fail -gt 0 ]; then
+            echo "::error::MoleculeStore_test stress regressed (${fail}/100 fails; threshold is 0)"
+            exit 1
+          fi
+
+      - name: Heap-System destruction smoke test
+        env:
+          BALL_DATA_PATH: ${{ github.workspace }}/data
+        run: |
+          # Build the documented heap-System repro and verify it exits
+          # cleanly. Pre-DTOR-HARDEN this was SIGSEGV at process exit;
+          # now (f79910675 + 4b01405b5 + 1464fc8a1) it's exit 0.
+          cat > /tmp/heap_sys_repro.C <<'EOF'
+          #include <BALL/KERNEL/system.h>
+          #include <BALL/KERNEL/molecule.h>
+          #include <BALL/KERNEL/atom.h>
+          int main() {
+              using namespace BALL;
+              System* s = new System;
+              Molecule* m = new Molecule;
+              Atom* a = new Atom;
+              m->insert(*a);
+              s->insert(*m);
+              delete s;
+              return 0;
+          }
+          EOF
+          c++ -std=c++17 -I include -I build -I $(brew --prefix)/include \
+              /tmp/heap_sys_repro.C \
+              -L build/lib -lBALL -Wl,-rpath,$(pwd)/build/lib \
+              -o /tmp/heap_sys_repro
+          /tmp/heap_sys_repro
+          echo "Heap-System repro: exit $?"
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ball-v2-tests-${{ github.run_id }}
+          path: ball-v2-tests.xml
+          if-no-files-found: warn
+          retention-days: 30
