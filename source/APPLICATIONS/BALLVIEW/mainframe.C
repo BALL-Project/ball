@@ -1019,6 +1019,17 @@ namespace BALL
 			// Constant lives in source/VIEW/KERNEL/theme/tokens.h (999.40).
 			tb->setIconSize(QSize(BALL::VIEW::Theme::kIconToolbar,
 			                      BALL::VIEW::Theme::kIconToolbar));
+			// UFG-20 (rc4 validation) — let users surface action labels.
+			// Default is `ToolButtonIconOnly` so the rc4 icon-only look is
+			// preserved. `ToolButtonFollowStyle` engages Apple's native
+			// right-click-toolbar customization menu on macOS ("Icon and
+			// Text" / "Icon Only" / "Text Only"), which lets the user
+			// discover what each rightmost icon does without hover-tooltip
+			// flakiness. On Linux / Windows the style follows the desktop
+			// theme. The setToolTip() audit on contributing dialogs (see
+			// `MolecularStructure::addToolBarEntries` et al.) ensures the
+			// hover affordance is also clear.
+			tb->setToolButtonStyle(Qt::ToolButtonFollowStyle);
 			addToolBar(Qt::TopToolBarArea, tb);
 
 			// UFG-02 / UFG-08: setUnifiedTitleAndToolBarOnMac(true) is
@@ -1053,13 +1064,21 @@ namespace BALL
 
 						Path path;
 
-						qload_action_ = new QAction(VIEW::Icons::get("actions/quickopen-file"), tr("quickload"), this);
+						// UFG-20 — discoverable display text + tooltip.
+						// Action `text()` is used for the toolbar label
+						// (when `ToolButtonFollowStyle` shows text); the
+						// explicit `setToolTip()` ensures the hover
+						// affordance is a complete noun phrase even when
+						// the toolbar is in icon-only mode.
+						qload_action_ = new QAction(VIEW::Icons::get("actions/quickopen-file"), tr("Quick Load"), this);
 						qload_action_->setObjectName("quickload");
+						qload_action_->setToolTip(tr("Quick Load (restore most recently quick-saved scene)"));
 						connect(qload_action_, SIGNAL(triggered()), this, SLOT(quickLoadConfirm()));
 						tb->addAction(qload_action_);
 
-						qsave_action_ = new QAction(VIEW::Icons::get("actions/quicksave"), tr("quicksave"), this);
+						qsave_action_ = new QAction(VIEW::Icons::get("actions/quicksave"), tr("Quick Save"), this);
 						qsave_action_->setObjectName("quicksave");
+						qsave_action_->setToolTip(tr("Quick Save (snapshot current scene to a quick-load slot)"));
 						connect(qsave_action_, SIGNAL(triggered()), this, SLOT(quickSave()));
 						tb->addAction(qsave_action_);
 
