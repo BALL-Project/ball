@@ -1050,3 +1050,143 @@ internal storage details.
 
 *Third revision 2026-05-19 post-R19 P1 close. Next: R19 fix
 commit, then P2 (thin-handle flip).*
+
+---
+
+# Fourth revision post-R20 (2026-05-19 P2 plan NO-GO + pivot)
+
+R20 verdict on P2 plan: **NO-GO** (8 BLOCKERs). The plan
+underestimated how entrenched Atom's bases are. See
+`V21-CODEX-REVIEW-ROUND20.md`.
+
+**Maintainer decision (2026-05-19):** "The RTTI thing can
+disappear, resolving the composite model. Instead we go with
+option B."
+
+Option B = two-phase flip: v2.1 ships side-table state in
+parallel with v0 inline state; v2.2 deletes the v0 inline state
+and flips inheritance.
+
+## D36. Two-phase thin-handle flip across v2.1 + v2.2
+
+**Revises and supersedes D26a/D26 for the v2.1 milestone scope.**
+
+**v2.1 scope (replaces original P2-P6 plan):**
+
+- Side-table state is **maintained in parallel** with v0 inline
+  Composite / PropertyManager / Selectable state. Every mutation
+  through the v0 API also writes to the matching side table.
+- `Atom` continues to inherit `Composite + PropertyManager +
+  Selectable` exactly as in v2.0. **No inheritance change in v2.1.**
+- `sizeof(Atom)` stays at 360 B in v2.1. The D13 budget miss
+  documented in v2.0 remains documented; v2.1 does NOT close
+  that gap.
+- v2.1's headline shifts from "thin handles deliver D13 budget"
+  to "side-table infrastructure + JSON improvements + column
+  properties + RTTI cleanup, paving the way for v2.2's thin
+  handles."
+
+**v2.2 scope (NEW, separate milestone):**
+
+- After all consumers have moved off Atom-RTTI surface (D37 below),
+  delete `Composite + PropertyManager + Selectable` from Atom's
+  inheritance chain.
+- Replace with `D17Composite / D17PropertyManager / D17Selectable`
+  empty shim bases (with `BALL_EMPTY_BASES`).
+- Delete v0 inline state from `Composite`; reads come exclusively
+  from side tables.
+- `sizeof(Atom)` drops to ≤32 B; D13 budget closed.
+
+**Why this is safer than original P2:**
+
+- v2.1 has 100% source compatibility. Track B consumers don't
+  change.
+- v2.1 bake time on real workloads validates the side-table
+  invariants BEFORE the inheritance flip.
+- v2.2's flip is then mechanical (consumer code already updated;
+  inheritance change is the last step).
+- Two adversarial-review cycles (v2.1 close + v2.2 plan) instead
+  of trying to ship the flip atomically.
+
+**Drawback acknowledged:** v2.1 does not deliver the D13 win.
+Documented in `RELEASE-NOTES-v2.1.md` (drafted at P6).
+
+## D37. Atom-RTTI surface removal (v2.1 prerequisite for v2.2 flip)
+
+**Decision:** v2.1 removes Atom-specific RTTI usage from BALL
+kernel code (24 sites surveyed). VIEW + APPLICATIONS keep theirs
+for now (54 sites; addressed in Phase 4 / BALLView 1.6 roadmap).
+
+**Scope:**
+
+- `dynamic_cast<Atom*>(composite_ptr)` → replaced with explicit
+  store-handle check, or refactored to take `Atom*` directly.
+- `RTTI::isKindOf<Atom>(&composite)` → same.
+- All v2.1 kernel sites (24) closed.
+- VIEW + APPLICATIONS (54) tracked as V21-VIEW-RTTI follow-up,
+  closed by v2.2 inheritance flip prep.
+
+**Audit (2026-05-19):**
+- KERNEL/STRUCTURE/FORMAT/QSAR/MOLMEC/SCORING/SOLVATION/DOCKING/
+  ENERGY/NMR/CONCEPT: 24 sites.
+- VIEW + APPLICATIONS: 54 sites.
+
+**Implementation phase:** P3 (renamed from P2 in the original
+plan; v2.1's P2 becomes "parallel side-table maintenance," P3
+becomes "RTTI removal," P4-P6 as originally planned).
+
+## Revised v2.1 phase plan (supersedes original P0-P6)
+
+| Phase | Subject | Status |
+|---|---|---|
+| P0 | Design lock | ✅ DONE (R17/R17b/R17c GO) |
+| P1 | Side-table infrastructure storage | ✅ DONE (commits 173374553..ac3e142df) |
+| **P2** | **Parallel side-table maintenance** (renamed) — wire Composite/PropertyManager/Selectable mutations to dual-write side tables alongside v0 inline state. NO inheritance change. | NEXT |
+| **P3** | **Atom-RTTI removal** (NEW) — 24 kernel sites cleaned up. VIEW/APPLICATIONS deferred. | After P2 |
+| P4 | JSON closures — V21-LOAD-BATCH, V21-BOND-PROPERTY-JSON, V21-ELEMENT-INSTANCE-ID | After P3 |
+| P5 | Perf + benchmarks — V21-STORE-ITER-API, V21-CI-PERF-GATES, V21-MEDIAN-OF-N-BENCH | After P4 |
+| P6 | Release — v2.1.0-rc1 → v2.1.0 | After P5 |
+
+D33b cadence applies: each phase gets planning (Rxx) + close (Rxx+1) Codex reviews.
+
+## D38. v2.2 milestone scope (formalised)
+
+**v2.2 scope (placeholder; detailed plan deferred to v2.2-P0):**
+- Delete Composite + PropertyManager + Selectable from Atom's
+  inheritance chain.
+- Apply BALL_EMPTY_BASES to D17* shim bases.
+- Delete v0 inline state from Composite.
+- Migrate VIEW + APPLICATIONS off Atom-RTTI (parallel with Phase 4
+  BALLView refresh).
+- sizeof(Atom) ≤ 32 B; D13 budget closed.
+- v2.2 ABI break is intentional and announced.
+
+v2.2 is NOT a separate branch yet — it's a milestone marker. v2.1
+finishes first.
+
+---
+
+## Revised cross-decision summary (post-R20 pivot)
+
+| # | Decision | Status |
+|---|---|---|
+| D22b CompositeNode 5-link | CLOSED |
+| D23b PropertyManager column registry | CLOSED |
+| D24b selected_bits_ atomic-array | CLOSED |
+| D26a EBO macro | CLOSED (macro defined; application deferred to v2.2 by D36) |
+| D30a backward-read JSON demux | CLOSED |
+| D31b CompositeNode encapsulation + grep gate | CLOSED |
+| D32b backport policy | CLOSED |
+| D33b review cadence | CLOSED |
+| D34c MSVC CI defers to v2.1.0-rc1 | CLOSED |
+| D35 internal/experimental accessor classification | CLOSED |
+| **D36 two-phase flip across v2.1+v2.2** | **NEW, closes R20 NO-GO** |
+| **D37 Atom-RTTI removal (24 kernel sites)** | **NEW** |
+| **D38 v2.2 milestone scope placeholder** | **NEW** |
+
+**P2 entry gate (revised):** P2 is now "parallel side-table
+maintenance." No inheritance change. Lower risk than the original
+P2; should pass R20b cleanly.
+
+*Fourth revision 2026-05-19 post-R20. Next: rewrite P2-PLAN.md
+to match revised scope; R20b on the rewrite; then P2 execution.*
