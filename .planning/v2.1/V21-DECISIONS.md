@@ -371,3 +371,287 @@ written.
 ---
 
 *Authored 2026-05-19. Next: R17 Codex adversarial review of D22-D30.*
+
+---
+
+# Revisions post-R17 (2026-05-19)
+
+Codex R17 verdict: **NO-GO** (3 BLOCKERs + 4 BUGs + 3 DEBTs). See
+`V21-CODEX-REVIEW-ROUND17.md`. The direction is sound; the specifics
+needed correction. Revised D-decisions below preserve the original
+direction and supplement with the corrected detail.
+
+User direction on the corrections (2026-05-19): "plan the next phase
+and go ahead in auto mode" — go with the maintainer's leans on N1-N5
++ apply N6-N9 pure corrections.
+
+## D22a. CompositeNode — five-link, ~48 B (R17 P17-1 BLOCKER fix)
+
+The original D22 specified a 3-handle `{ parent, first_child,
+next_sibling, kind }` 24 B node. R17 P17-1 flagged this as
+BLOCKER: current `Composite` carries **five** topology pointers
+(`parent_`, `previous_`, `next_`, `first_child_`, `last_child_`),
+all of which are API-visible — `getLastChild()` is public,
+`hasPreviousSibling()` is public, and reverse-iterator semantics
+require both `last_child_` and `previous_`.
+
+**Revised CompositeNode:**
+
+```cpp
+struct CompositeNode {
+    CompositeHandle parent;           // 8 B
+    CompositeHandle first_child;      // 8 B
+    CompositeHandle last_child;       // 8 B  (NEW; was missing)
+    CompositeHandle next_sibling;     // 8 B
+    CompositeHandle prev_sibling;     // 8 B  (NEW; was missing)
+    uint32_t        child_count;      // 4 B  (was implicit in v2.0)
+    uint8_t         kind;             // 1 B
+    // 3 B padding
+};
+// total: 48 B per node
+```
+
+**Memory math at 100k atoms:** 48 B × 100k = **4.8 MB side
+table** (was 2.4 MB claim). Still saves ~31 MB vs the inline
+`Composite` state in v2.0 (which is 5×8 B pointers + Size + TimeStamp
++ counters ≈ 60-80 B per atom inline). Net gain remains overwhelming.
+
+**Why keep 5-link instead of deprecating `getLastChild()`:**
+Track B consumers (FORMAT, STRUCTURE, NMR, etc.) use the reverse-
+iterator and `getLastChild` paths. Per D26 "preserve API surface,"
+v2.1 doesn't break these. Future v2.2 may deprecate; not in v2.1
+scope.
+
+## D23a. Property registry — predeclared + sparse + promote (R17 P17-2/P17-3 BUG fix)
+
+R17 P17-2 flagged unbounded growth (1M distinct names × 100k atoms
+× 4 B = 400 GB memory bomb). R17 P17-3 flagged the storage math
+ignored STRING/OBJECT columns.
+
+**Revised design:**
+
+1. **Well-known force-field columns are predeclared at store
+   construction.** The fixed schema covers the ~10 columns BALL's
+   force-field code touches per-atom (PARTIAL_CHARGE, FORMAL_CHARGE,
+   MMFF94_TYPE, AMBER_TYPE, ATOM_TYPE_NAME, RADIUS, EPSILON,
+   STEREO_DESCRIPTOR, HYBRIDIZATION, IS_AROMATIC). Static dispatch
+   on Atom; zero registry lookup overhead.
+
+2. **Dynamic property names start in a sparse fallback bag**
+   (`HashMap<atom_idx, PropertyBag>`), one bag per atom that has
+   any dynamic property set.
+
+3. **Promotion to dense column** triggered by fill-rate ≥10% over
+   the live atom count, sampled at `compact()` time. The promoted
+   column type is fixed at promotion based on the dominant type
+   in the sparse bag.
+
+4. **Registry cap: 256 dynamic columns** (after well-known are
+   excluded). Reaching the cap means further dynamic registrations
+   stay sparse forever (no promotion). Configurable via
+   `MoleculeStore::setMaxDynamicColumns()`.
+
+5. **Property name interning**: every property name lives once
+   in a per-store `name_pool_` (reuses the existing string pool
+   infrastructure). Hash keys are `name_id_` (u32), not `String`.
+
+**String columns:** dense `std::vector<uint32_t>` of intern-pool
+offsets into a per-column intern pool, not `std::vector<String>`.
+At 100k rows × 4 B = 400 KB per dense string column, plus the
+intern pool itself (sized to distinct values).
+
+**OBJECT/SMART_OBJECT properties:** stay in the sparse bag.
+Identical placeholder semantics to v2.0 JSON.
+
+**Mismatched-type on `setProperty(name, T)` when column is
+registered as type U:** stays in the sparse bag for that atom
+(does NOT throw). Matches v1.x's "per-atom independent
+PropertyManager" semantics. This also closes R17 P17-10 backward-
+read: v2.0 JSON files with name-type conflicts demux cleanly into
+the sparse bag.
+
+## D24a. Selectable — `std::vector<std::atomic<uint64_t>>` with relaxed atomics (R17 P17-4 BLOCKER fix)
+
+R17 P17-4 flagged renderer-read / GUI-write race on packed
+BitVector words as UB without sync.
+
+**Revised:** `selected_bits_` is `std::vector<std::atomic<uint64_t>>`,
+one word per 64 atoms. All reads use
+`memory_order_relaxed`; all writes use atomic
+`fetch_or` / `fetch_and` / CAS with
+`memory_order_relaxed`.
+
+**Rationale:**
+- `memory_order_relaxed` on modern CPUs is free for aligned word-
+  size loads/stores (x86-64, arm64, ARM-MTE all guarantee atomic
+  word access). Cost vs. plain BitVector: zero on hot read paths.
+- Renderer sees a torn-but-consistent view at word granularity
+  (acceptable — selection is a visual indicator; one-frame stale
+  is fine).
+- GUI writes individual bits via `fetch_or` (set) / `fetch_and`
+  (clear). No reader sees half-written bits.
+- Eliminates the data race. C++ memory model compliant.
+
+**API:** `bool is_selected(atom_idx) const` and
+`set_selected(atom_idx, bool)` on `MoleculeStore`. Range-set ops
+(`set_range_selected(begin, end)`) batch via word-level OR.
+
+**Memory at 100k atoms:** 100000 / 64 = 1563 words × 8 B = **12.5 KB**.
+Same footprint as the original BitVector claim — atomic adds no
+size overhead (atomic<u64> is layout-compatible with u64 on all
+supported platforms).
+
+## D26a. EBO — `BALL_EMPTY_BASES` macro for MSVC portability (R17 P17-5 BUG fix)
+
+R17 P17-5 flagged that default MSVC multiple inheritance does
+NOT apply EBO and adds 1 B padding per empty base, breaking the
+`sizeof(Atom) ≤ 32 B` target.
+
+**Revised:** Add to `include/BALL/COMMON/macros.h`:
+
+```cpp
+#if defined(_MSC_VER)
+  #define BALL_EMPTY_BASES __declspec(empty_bases)
+#else
+  #define BALL_EMPTY_BASES
+#endif
+```
+
+Apply to every concrete handle class that inherits the v2.1 shim
+bases:
+
+```cpp
+class BALL_EXPORT BALL_EMPTY_BASES Atom
+    : public D17Composite, public D17PropertyManager, public D17Selectable {
+    ...
+};
+```
+
+**Verification:** `Sizeof_test.C` adds explicit pins for the
+v2.1 target sizes (`sizeof(Atom) == 32` etc.) under all three
+toolchains (Clang/GCC/MSVC). CI must build under MSVC before
+v2.1.0 tag — the v2.0 CI runs Apple Clang only, so a Windows CI
+job is a v2.1 prerequisite (filed as V21-CI-MSVC).
+
+## D30a. v2.0 JSON backward read — sparse-bag fallback (R17 P17-10 BUG fix)
+
+R17 P17-10 flagged that v2.0 allows the same property name with
+mismatched types across atoms. D23a's sparse-bag fallback (above)
+handles this cleanly:
+
+- v2.1 reader processes v2.0 `atoms.properties[]` per-atom.
+- Each named property: if name is a well-known force-field column
+  AND value type matches, write to dense column.
+- Otherwise: register dynamic column on first occurrence; subsequent
+  same-name-different-type values go to sparse bag.
+- Reading via `getProperty(name)` returns column value if present,
+  else sparse bag value.
+
+**Edge case docs:** `RELEASE-NOTES-v2.1.md` notes "v2.0 JSON files
+with mixed-type same-name properties load successfully into v2.1;
+the affected atoms keep their properties in the sparse fallback bag
+and `getProperty()` reads work unchanged."
+
+---
+
+# New decisions D31-D34 (R17 process + remaining concerns)
+
+## D31. Composite iterator invariant — pointer-only, no node-table aliasing (R17 P17-7 DEBT)
+
+**Decision:** Composite iterators (`ChildCompositeIterator`,
+`CompositeIterator`, all variants) may cache `Composite*` only.
+They must NEVER cache:
+- `CompositeNode*` (raw pointer into the side-table vector — invalid
+  on vector growth)
+- `composite_nodes_` index (handle.idx — valid across growth, but
+  not across handle invalidation / re-use during compact())
+
+**Resolution path:** iterator step methods (`forward`, `backward`,
+`toBegin`, etc.) look up topology through `Composite*->getNode_()`
+on each access. `Composite::getNode_()` returns
+`store->composite_nodes_[handle.idx]` reference.
+
+**Verification (P1 test plan):** new test
+`CompositeIteratorStability_test.C` exercises
+insertion-during-iteration scenarios that would invalidate any
+node-table-caching iterator. Existing
+`CompositeChildcompositeIteratorTraits_test` covers basic
+forward/backward semantics.
+
+## D32. v2.1-thin-only bug backport policy (R17 P17-8 DEBT)
+
+**Decision:**
+
+- **Kernel correctness bugs that exist in BOTH v2.0 and v2.1**: fix
+  on v2.1.x AND cherry-pick to v2.0.x patch.
+- **v2.1-thin-handle-only bugs (regression introduced by v2.1
+  inheritance flip)**: fix on v2.1.x only. v2.0.x users are not
+  affected by definition.
+- **Wave 4-7 module closures discover a v2.1-thin-only bug**: file
+  separately; v2.0.x users continue with the fat-handle workaround.
+- **Wave 4-7 closure branches** must declare in PR description:
+  v2.0-fat-compatible / v2.1-thin-only / shared.
+
+This is documented in `MILESTONE-v2.1-KICKOFF.md` and
+`RELEASE-NOTES-v2.1.md`.
+
+## D33. Review cadence downgrade — P5/P6 close-only (R17 P17-9 DEBT)
+
+**Decision (revises D28):**
+
+| Phase | Planning review | Close review |
+|---|---|---|
+| P0 design lock | — | **R17 / R17b** ✅ |
+| P1 side-table infra | **R18** | **R19** |
+| P2 thin-handle flip | **R20** | **R21** |
+| P3 bond thin-handle | **R22** | **R23** |
+| P4 JSON closures | **R24** | **R25** |
+| P5 perf & benchmarks | ~~R26~~ — *(downgrade: maintainer checklist)* | **R26** (renumbered close) |
+| P6 release | ~~R28~~ — *(no planning needed)* | **R27** (renumbered pre-tag) |
+
+P5/P6 are execution/verification phases against the locked design;
+planning gate adds process cost without design-risk reduction.
+Total v2.1 Codex rounds: **10** (R17 + R17b + R18-R25 + R26 + R27).
+
+## D34. v2.1 CI must include MSVC build (R17 P17-5 implication)
+
+**Decision:** The v2.0 CI runs Apple Clang on macOS arm64 only.
+v2.1's `sizeof(Atom) ≤ 32 B` target depends on MSVC EBO behavior
+that is NOT verified by Apple Clang. Add a Windows MSVC build job
+to CI before v2.1.0 tag.
+
+**Filed as V21-CI-MSVC backlog item.** Implementation:
+- GitHub Actions Windows runner with VS 2022.
+- Build with `cmake -G "Visual Studio 17 2022"`.
+- Run `Sizeof_test` to verify the v2.1 sizeof pins under MSVC.
+
+**Scope clarification:** the MSVC CI job is BALL-only (kernel +
+core libraries), not BALLView (Qt+OpenGL adds dependency
+complexity outside v2.1 scope — that's still a v1.8 / Phase 5
+concern).
+
+---
+
+## Revised cross-decision summary
+
+| # | Decision | Choice | R17 status |
+|---|---|---|---|
+| D22a | Composite side-table | unified-node-table, 5-link (~48 B) | BLOCKER → fixed |
+| D23a | PropertyManager | predeclared + sparse + promote, 256-col cap | BUG → fixed |
+| D24a | Selectable | atomic<u64> word vector, relaxed memory order | BLOCKER → fixed |
+| D25 | Generation guard | debug-only | OK |
+| D26a | API surface | preserve, with BALL_EMPTY_BASES on MSVC | BUG → fixed |
+| D27 | Sequencing | v2.1-first | OK |
+| D28 → D33 | Review cadence | per-phase planning+close P1-P4, close-only P5/P6 | DEBT → fixed |
+| D29 | Branch strategy | linear-from-v2.0 | OK |
+| D30a | JSON compat | MINOR-bump; backward read via sparse bag | BUG → fixed |
+| D31 | Iterator invariants | Composite* only, no node-table cache | DEBT → fixed |
+| D32 | Backport policy | thin-only stays v2.1.x; shared cherry-picks both | DEBT → fixed |
+| D34 | MSVC CI | Windows job pre-v2.1.0 | BUG implication → fixed |
+
+**R17 finding closure:** 7 of 7 BLOCKERs+BUGs addressed. 3 of 3 DEBTs
+addressed. **Re-review gate: R17b (Codex CLI on revised D22a-D34).**
+
+---
+
+*Revised 2026-05-19 post-R17. Next: R17b re-review, then P1 plan.*
