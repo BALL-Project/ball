@@ -1677,7 +1677,25 @@ namespace BALL
 			// TODO: does this work for dependent renderers?
 			QPaintDevice* current_dev = dynamic_cast<QPaintDevice*>(renderer->target);
 
-			if (show_fps_ && current_dev)
+			// UFG-26 (rc5 follow-up) — QPainter must NOT begin on a
+			// QOpenGLWidget outside paintGL(). For GL renderers the
+			// target IS a QOpenGLWidget; trying to `QPainter p(target)`
+			// from this event-handler context throws ~50 QPainter
+			// warnings per render frame ("Paint device returned engine
+			// == 0, type: 3" followed by a cascade of "Painter not
+			// active" failures). The GL path renders FPS / info-string
+			// overlay text from inside GLRenderWindow::paintGL() via
+			// its own renderText() helper that creates a transient
+			// QPainter only while the QOpenGLWidget is in its paint
+			// cycle. So skip the QPainter overlay+text block here for
+			// OPENGL_RENDERER targets; only the buffered-renderer path
+			// (raytracer etc.) needs it because those targets are
+			// regular QPaintDevices, not GL widgets.
+			const bool can_qpaint_target =
+				current_dev != nullptr
+				&& renderer->getRendererType() != RenderSetup::OPENGL_RENDERER;
+
+			if (show_fps_ && can_qpaint_target)
 			{
 				QFontMetrics fm(default_font_);
 				QRect r = fm.boundingRect(fps_string.c_str());
@@ -1686,7 +1704,7 @@ namespace BALL
 				renderText_(fps_point, fps_string.c_str(), current_dev);
 			}
 
-			if (info_string_ != "")
+			if (info_string_ != "" && can_qpaint_target)
 			{
 				// account for differently sized windows
 				float xscale = current_dev->width()  / width();
@@ -1696,7 +1714,7 @@ namespace BALL
 			}
 
 			// and paint our overlay, if we have one
-			if (has_overlay_ && current_dev)
+			if (has_overlay_ && can_qpaint_target)
 			{
 				QPainter painter(current_dev);
 				painter.drawPicture(0, 0, overlay_);
