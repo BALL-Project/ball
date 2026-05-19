@@ -84,9 +84,11 @@ namespace BALL
   Processor::Result Selector::operator () (Composite& composite)
   {
 		// if the composite is an atom, we apply the expression tree...
-        if (RTTI::isKindOf<Atom>(&composite))
+		// v2.1 P3.2 (D41.1): centralised detail::compositeAsAtom_ helper
+		// replaces direct RTTI. ShiftModule-style base interface stable.
+		if (Atom* atom_ptr = detail::compositeAsAtom_(&composite))
 		{
-			Atom& atom = dynamic_cast<Atom&>(composite);
+			Atom& atom = *atom_ptr;
 			if (expression_.operator () (atom))
 			{
 				// select the atoms and increase the atom counter

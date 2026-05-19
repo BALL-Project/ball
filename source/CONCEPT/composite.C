@@ -82,6 +82,22 @@ namespace BALL
 		return v;
 	}
 
+	// v2.1 P3.2 (D41.1 + R22): centralised dynamic_cast<Atom*>
+	// helper bodies. Declarations in include/BALL/CONCEPT/composite.h
+	// in namespace BALL::detail. CORE_ONLY-module callers route their
+	// Atom-RTTI through these (CI grep gate enforces at P3 close).
+	namespace detail
+	{
+		Atom* compositeAsAtom_(Composite* c) noexcept
+		{
+			return c ? dynamic_cast<Atom*>(c) : nullptr;
+		}
+		const Atom* compositeAsAtom_(const Composite* c) noexcept
+		{
+			return c ? dynamic_cast<const Atom*>(c) : nullptr;
+		}
+	}
+
 	// v2.1 P2.1.0 + P2.1.1: default store-reach hook walks the parent
 	// chain to find a Composite that overrides this method (System or
 	// Atom). Returns the first non-null store; nullptr if no ancestor

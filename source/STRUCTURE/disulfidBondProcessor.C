@@ -221,11 +221,17 @@ namespace BALL
 			Residue* res2 = reinterpret_cast<Residue*>(composite2);
 			success = connect(res1, res2, toggle);
 		}
-        else if (RTTI::isKindOf<Atom>(composite1) && RTTI::isKindOf<Atom>(composite2))
+		// v2.1 P3.2 (D41.1): centralised detail::compositeAsAtom_.
+		else if (Atom* atom1 = detail::compositeAsAtom_(composite1))
 		{
-				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
-				Atom* atom2 = reinterpret_cast<Atom*>(composite2);
+			if (Atom* atom2 = detail::compositeAsAtom_(composite2))
+			{
 				success = connect(atom1, atom2, toggle);
+			}
+			else
+			{
+				Log.warn() << "DisulfidBondProcessor: Mixed Atom/non-Atom inputs. Allowed objects are atoms or residues." << endl;
+			}
 		}
 		else
 		{
@@ -366,11 +372,17 @@ namespace BALL
 			Residue* res2 = reinterpret_cast<Residue*>(composite2);
 			success = disconnect(res1, res2);
 		}
-        else if (RTTI::isKindOf<Atom>(composite1) && RTTI::isKindOf<Atom>(composite2))
+		// v2.1 P3.2 (D41.1): centralised detail::compositeAsAtom_.
+		else if (Atom* atom1 = detail::compositeAsAtom_(composite1))
 		{
-				Atom* atom1 = reinterpret_cast<Atom*>(composite1);
-				Atom* atom2 = reinterpret_cast<Atom*>(composite2);
+			if (Atom* atom2 = detail::compositeAsAtom_(composite2))
+			{
 				success = disconnect(atom1, atom2);
+			}
+			else
+			{
+				Log.warn() << "DisulfidBondProcessor: Mixed Atom/non-Atom inputs. Allowed objects are atoms or residues." << endl;
+			}
 		}
 		else
 		{

@@ -2276,6 +2276,25 @@ B		*/
 #	endif
 
 
+	// v2.1 P3 (D41.1 + R22): centralised dynamic_cast<Atom*> helper.
+	// All CORE_ONLY-module Atom-RTTI usage routes through this single
+	// helper after P3 — the CI grep gate enforces. v2.2 inheritance
+	// flip replaces this ONE function with a store-handle-based
+	// identity check; the 24 callsites that use this helper don't
+	// need individual updates at that flip.
+	//
+	// Declarations only — the dynamic_cast body needs Atom complete,
+	// which composite.h can't include (cyclic). Bodies live in
+	// source/CONCEPT/composite.C, which already includes atom.h.
+	// Callers must include <BALL/KERNEL/atom.h> to use the returned
+	// Atom*; the helper declaration alone compiles with the forward
+	// decl at line 49.
+	namespace detail
+	{
+		Atom*       compositeAsAtom_(Composite* c) noexcept;
+		const Atom* compositeAsAtom_(const Composite* c) noexcept;
+	} // namespace detail
+
 } // namespace BALL
 
 #endif // BALL_CONCEPT_COMPOSITE_H

@@ -196,13 +196,14 @@ namespace BALL
 		Size                              size;
 
 
-		for (composite_it = reference_composite_->beginComposite(); 
-				 composite_it != reference_composite_->endComposite(); ++composite_it) 
+		for (composite_it = reference_composite_->beginComposite();
+				 composite_it != reference_composite_->endComposite(); ++composite_it)
 		{
-            if (RTTI::isKindOf<Atom>(&*composite_it))
+			// v2.1 P3.2 (D41.1): centralised detail::compositeAsAtom_ helper.
+			if (const Atom* atom_p = detail::compositeAsAtom_(&*composite_it))
 			{
-				atom_ptr = RTTI::castTo<Atom>(*composite_it);
-				reference_atoms.push_back(atom_ptr);	
+				atom_ptr = atom_p;
+				reference_atoms.push_back(atom_ptr);
 			}
 		}
 

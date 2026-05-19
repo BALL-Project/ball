@@ -992,7 +992,9 @@ namespace BALL
 		AtomContainer::ChildCompositeConstIterator children_it;
 		for (children_it = frag_it->beginChildComposite(); +children_it; ++children_it)
 		{
-            if (RTTI::isKindOf<Atom>(&*children_it))
+			// v2.1 P3.2 (D41.1): centralised detail::compositeAsAtom_.
+			// Preserves direct-children-only semantic (per R22 P22-4).
+			if (detail::compositeAsAtom_(&*children_it))
 				return true;
 		}
 
