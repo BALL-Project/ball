@@ -93,37 +93,37 @@ INCLUDE(include/BALL/NMR/sources.cmake)
 INCLUDE(source/ENERGY/sources.cmake)
 INCLUDE(include/BALL/ENERGY/sources.cmake)
 
+# Cluster A (2026-05-19): SCORING + MOLMEC re-enabled as a single
+# pair-landing. Discovery: MOLMEC/COMMON/forceFieldComponent inherits
+# SCORING/COMMON/ScoringComponent; SCORING/COMMON/scoringComponent.C
+# is clean (no DOCKING/QSAR). The dirty SCORING/COMMON files
+# (scoringFunction.C, scoringOptimizer.C, diffScoringFunction.C,
+# diffGridBasedScoring.C, rescorer.C) pull DOCKING + QSAR — gated in
+# their own sources.cmake. MOLMEC/AMBER + MMFF94 pull QSAR
+# transitively — gated in MOLMEC/sources.cmake. The remaining MOLMEC
+# subdirs (CHARMM + COMMON + MINIMIZATION + MDSIMULATION + PARAMETER)
+# now link cleanly. Brings SnapShot[Manager] in so FORMAT trajectory
+# files (DCDFile, TRRFile, trajectoryFile{,Factory}) can also lift.
+INCLUDE(source/SCORING/sources.cmake)
+INCLUDE(include/BALL/SCORING/sources.cmake)
+INCLUDE(source/MOLMEC/sources.cmake)
+INCLUDE(include/BALL/MOLMEC/sources.cmake)
+
 # Conditional: extension modules. Disabled by BALL_CORE_ONLY=ON for the
 # v2.0 KERNEL-replacement work (D10 / KERNEL-V2-DECISIONS.md). Re-enabled
 # module-by-module as we broaden scope.
 #
-# B3.1 (Track B Wave 3, 2026-05-18): MOLMEC is the next wave but the
-# audit assumption that MOLMEC depends ONLY on FORMAT+STRUCTURE+core
-# turned out to be optimistic — MMFF94, AMBER (GAFFTypeProcessor),
-# and COMMON/forceFieldComponent reach forward into QSAR
-# (RingPerceptionProcessor, AromaticityProcessor) and SCORING
-# (ScoringComponent). Force-field implementations are a single
-# co-evolved subsystem with QSAR/SCORING, so Wave 3 in practice has
-# to land MOLMEC + QSAR + SCORING together (or ship a MOLMEC subset
-# excluding the actual force fields, which buys very little).
-#
-# Track B B3.x sub-phases (deferred to next session — too large for
-# one iteration): MOLMEC core (COMMON-minus-FFC + MINIMIZATION +
-# PARAMETER + MDSIMULATION) → QSAR (50 sources) → SCORING force-field
-# bits → AMBER + MMFF94 + CHARMM force fields → trajectory FORMAT
-# re-enable.
+# Cluster B (planned post-Cluster A): QSAR + DOCKING + SCORING
+# COMPONENTS/FUNCTIONS + AMBER + MMFF94. Together they unblock the
+# remaining SCORING/COMMON trim, the STRUCTURE bits still gated
+# (addHydrogenProcessor, smartsMatcher, etc.), full FORMAT, and the
+# remaining v2.1 architectural items.
 IF(NOT BALL_CORE_ONLY)
-	INCLUDE(source/MOLMEC/sources.cmake)
-	INCLUDE(include/BALL/MOLMEC/sources.cmake)
-
 	INCLUDE(source/PYTHON/sources.cmake)
 	INCLUDE(include/BALL/PYTHON/sources.cmake)
 
 	INCLUDE(source/QSAR/sources.cmake)
 	INCLUDE(include/BALL/QSAR/sources.cmake)
-
-	INCLUDE(source/SCORING/sources.cmake)
-	INCLUDE(include/BALL/SCORING/sources.cmake)
 
 	INCLUDE(source/SOLVATION/sources.cmake)
 	INCLUDE(include/BALL/SOLVATION/sources.cmake)

@@ -49,24 +49,23 @@ SET(SOURCES_LIST
 	pubchemDownloader.C
 	resourceFile.C
 	XYZFile.C
+	# Cluster A (2026-05-19): trajectory files now linkable since
+	# MOLMEC/COMMON/snapShot.C + snapShotManager.C are in.
+	DCDFile.C
+	TRRFile.C
+	trajectoryFile.C
+	trajectoryFileFactory.C
 )
 
-# B1.3 (Codex R10 fix #6, 2026-05-18): in full builds, restore the
-# CORE_ONLY-trimmed FORMAT sources. These are the files that need
-# MOLMEC / STRUCTURE / DOCKING / QSAR symbols which are only available
-# when BALL_CORE_ONLY=OFF. Per-file dependency:
-# - DCDFile.C / TRRFile.C / trajectoryFile{,Factory}.C  : need SnapShot[Manager] (MOLMEC)
-# - dockResultFile.C                                    : needs Result::ResultData (DOCKING)
-# - NMRStarFile.C                                       : needs Peptides::NameConverter (STRUCTURE)
-# - MOL2File.C                                          : needs GAFFTypeProcessor (MOLMEC + QSAR)
-# - SCWRLRotamerFile.C                                  : needs Rotamer/RotamerLibrary (STRUCTURE)
-# - molFileFactory.C                                    : references DockResultFile typeinfo
+# Cluster B-blocked FORMAT files (still need QSAR/DOCKING/STRUCTURE
+# rotamer):
+# - dockResultFile.C    : needs Result::ResultData (DOCKING)
+# - NMRStarFile.C       : needs Peptides::NameConverter (STRUCTURE)
+# - MOL2File.C          : needs GAFFTypeProcessor (MOLMEC AMBER + QSAR)
+# - SCWRLRotamerFile.C  : needs Rotamer/RotamerLibrary (STRUCTURE — rotamerLibrary trimmed)
+# - molFileFactory.C    : references DockResultFile typeinfo
 IF(NOT BALL_CORE_ONLY)
 	LIST(APPEND SOURCES_LIST
-		DCDFile.C
-		TRRFile.C
-		trajectoryFile.C
-		trajectoryFileFactory.C
 		dockResultFile.C
 		NMRStarFile.C
 		MOL2File.C
@@ -80,24 +79,9 @@ ADD_BALL_SOURCES("FORMAT" "${SOURCES_LIST}")
 ADD_BALL_PARSER_LEXER("FORMAT" "CIFParser" "CIFParser")
 ADD_BALL_PARSER_LEXER("FORMAT" "GAMESSDatParser" "GAMESSDatParser")
 
-# B1.1 auxiliary: MOLMEC/COMMON/snapShot.C is pulled in so the FORMAT
-# files that reference SnapShot (PDBFileDetails.C for HELIX-like
-# record interpretation) link cleanly. snapShot.C is header-only-dep
-# self-contained.
-#
-# B1.3 (Codex R10 fix #6, 2026-05-18): gate the aux pulls on
-# BALL_CORE_ONLY. In full builds the MOLMEC and XRAY sources.cmake
-# files are INCLUDE()d via cmake/BALLIncludes.cmake and already add
-# snapShot.C / crystalInfo.C. ADD_BALL_SOURCES doesn't dedupe
-# (cmake/BALLMacros.cmake `ADD_BALL_SOURCES` appends to BALL_sources
-# unconditionally) so unguarded inclusion here would double-add the
-# .C files into the link line — duplicate-symbol errors on strict
-# linkers.
-#
-# B2.1 (Track B Wave 2a, 2026-05-18): crystalInfo.C aux pull REMOVED;
-# XRAY module is now re-enabled unconditionally (see
-# cmake/BALLIncludes.cmake) so crystalInfo.C comes in via XRAY's own
-# sources.cmake. snapShot.C aux pull stays until MOLMEC Wave 3.
-IF(BALL_CORE_ONLY)
-	ADD_BALL_SOURCES("MOLMEC/COMMON" "snapShot.C")
-ENDIF()
+# Cluster A (2026-05-19): snapShot.C aux pull REMOVED. MOLMEC's
+# COMMON subdir is now re-enabled unconditionally (see
+# cmake/BALLIncludes.cmake) so snapShot.C + snapShotManager.C come in
+# via MOLMEC/COMMON/sources.cmake. Both crystalInfo.C (B2.1) and
+# snapShot.C (Cluster A) aux pulls are now retired; FORMAT depends
+# only on its own sources + the already-in MOLMEC/XRAY modules.

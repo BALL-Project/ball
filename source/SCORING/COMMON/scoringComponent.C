@@ -212,11 +212,19 @@ double ScoringComponent::scaleScore(double score) const
 		// BACK-transform accoring to normalization of the binding free energies of the traning data set
 		if (scoring_function_ != 0)
 		{
+#ifndef BALL_CORE_ONLY
+			// Cluster A (2026-05-19): ScoringFunction::getExpEnergyStddev
+			// is defined in scoringFunction.C which is trimmed in
+			// CORE_ONLY (DOCKING/Constraint linkage). The back-transform
+			// path is unreachable from MOLMEC's ForceFieldComponent
+			// (its updateScore doesn't bind a ScoringFunction). Skip in
+			// CORE_ONLY; restored when DOCKING re-enables.
 			double act_stddev = scoring_function_->getExpEnergyStddev();
 			if (act_stddev > 0.01)
 			{
 				scaled_score *= act_stddev;
 			}
+#endif
 		}
 		else
 		{

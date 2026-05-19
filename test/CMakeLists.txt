@@ -104,11 +104,35 @@ IF(BALL_CORE_ONLY)
 		# OoiEnergy_test #includes BALL/SOLVATION/ooiEnergy.h which
 		# pulls MOLMEC; re-enables in Wave 3 (MOLMEC) + Wave 4 (SOLVATION).
 		BALL_CORE_ENERGY_TESTS
+		# Cluster A (2026-05-19): MOLMEC subset re-enabled (CHARMM +
+		# MINIMIZATION + MDSIMULATION + PARAMETER + COMMON; skip AMBER
+		# + MMFF94 which need QSAR). Apply applicable MOLMEC tests:
+		# - AmberFF_test, MMFF94_test stay out (their .C live in the
+		#   trimmed AMBER + MMFF94 subdirs)
+		# - The rest of BALL_MOLMEC_TESTS should compile cleanly
+		BALL_CORE_MOLMEC_TESTS
 	)
 	SET(BALL_CORE_ENERGY_TESTS
 		AtomicContactEnergy_test
 		ComposedEnergyProcessor_test
 		EnergyProcessor_test
+	)
+	# Minimizer tests (EnergyMinimizer, SteepestDescent, ConjugateGradient,
+	# StrangLBFGS, ShiftedLVMM 1/2/3) all instantiate AmberFF as a
+	# driver — AmberFF lives in MOLMEC/AMBER which is trimmed (needs
+	# QSAR — Cluster B). LineSearch_test doesn't use AmberFF. Same for
+	# CharmmFF_test{1,2} which use CharmmFF (in our subset).
+	SET(BALL_CORE_MOLMEC_TESTS
+		Gradient_test
+		AtomVector_test
+		MolmecSupport_test
+		SnapShot_test
+		SnapShotManager_test
+		ForceField_test
+		CharmmFF_test1
+		CharmmFF_test2
+		LineSearch_test
+		AtomTypes_test
 	)
 ENDIF()
 
