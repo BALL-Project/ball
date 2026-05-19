@@ -9,6 +9,8 @@
 
 #include <BALL/VIEW/WIDGETS/inspector/inspectorSection.h>
 
+#include <QtGui/QPainter>
+#include <QtGui/QPaintEvent>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QScrollArea>
 #include <QtWidgets/QVBoxLayout>
@@ -35,6 +37,18 @@ namespace BALL
 			// closes the gap so any animation in-between frames cannot
 			// show stale pixels.
 			setAutoFillBackground(true);
+			// v1.7.0-rc5 UFG-22 — strengthen UFG-10 opaque-paint
+			// contract. On macOS Qt 6.8 + Metal backing,
+			// `setAutoFillBackground` alone only fills the body
+			// background on its OWN paintEvent — but the body never
+			// receives its own paintEvent because the QStackedWidget
+			// child fully covers it, so the framebuffer keeps stale
+			// pixels from outgoing tabs (e.g. Selection-tab
+			// QuickActionsSection header text bleeds through onto the
+			// Representation tab as "QUICK AC"). `WA_OpaquePaintEvent`
+			// + custom `paintEvent` below force an explicit fillRect
+			// across the entire body bounding rect on every paint pass.
+			setAttribute(Qt::WA_OpaquePaintEvent, true);
 
 			QVBoxLayout* outer = new QVBoxLayout(this);
 			outer->setContentsMargins(0, 0, 0, 0);
@@ -48,6 +62,21 @@ namespace BALL
 		}
 
 		InspectorBody::~InspectorBody() = default;
+
+		void InspectorBody::paintEvent(QPaintEvent* event)
+		{
+			// UFG-22 — explicit opaque fill across the entire body
+			// bounding rect. With `WA_OpaquePaintEvent` set, Qt expects
+			// us to fully cover the widget's rect ourselves. We fill
+			// with the palette Window colour so the area BETWEEN the
+			// QStackedWidget's hidden-page leftover pixels and the
+			// visible-page children's covered rects gets overwritten
+			// instead of inheriting whatever last painted underneath
+			// (which on macOS Metal-backing is the previously-shown
+			// page's section header text).
+			QPainter p(this);
+			p.fillRect(event->rect(), palette().color(QPalette::Window));
+		}
 
 		QWidget* InspectorBody::makePage_(TabPage& tp)
 		{
@@ -121,6 +150,13 @@ namespace BALL
 			// Insert before the trailing stretch (always the last layout item).
 			int insertAt = tp.layout->count() > 0 ? tp.layout->count() - 1 : 0;
 			tp.layout->insertWidget(insertAt, section);
+			// UFG-22 (rc5 follow-up) — sections are constructed with
+			// `hide()` in InspectorView so they don't float as
+			// children of body_ at (0,0) before being attached to a
+			// tab. Now that the section IS in a layout, show it. Qt's
+			// `setParent()` during `insertWidget()` does NOT
+			// auto-show, so this explicit call is required.
+			section->show();
 		}
 
 		void InspectorBody::setEmptyState(InspectorTabs::TabIndex idx, QWidget* emptyState)

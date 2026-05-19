@@ -20,6 +20,7 @@
 
 #include <QtWidgets/QWidget>
 
+class QPaintEvent;
 class QStackedWidget;
 class QVBoxLayout;
 
@@ -69,6 +70,21 @@ namespace BALL
 
 				/** Remove (delete) all sections from the given tab. */
 				void clearSections(InspectorTabs::TabIndex idx);
+
+			protected:
+				/**
+				 * UFG-22 (rc4 validation) — opaque-paint contract.
+				 * Explicit `fillRect` with `palette().color(QPalette::Window)`
+				 * across the entire widget rect on every paint pass. On
+				 * macOS Qt 6.8 + Metal backing, `setAutoFillBackground`
+				 * alone is insufficient because the body never receives
+				 * its own paint event (children fully cover it), so the
+				 * framebuffer keeps stale pixels from outgoing
+				 * QStackedWidget pages. Custom paintEvent forces the
+				 * overwrite. Mirrors the UFG-05 / UFG-10 / UFG-19 paint
+				 * pattern.
+				 */
+				void paintEvent(QPaintEvent* event) override;
 
 			private:
 				struct TabPage
