@@ -58,7 +58,17 @@ namespace BALL
 	};
 
 	// v2.1 D22b: 8-byte handle pointing into the side-table node array.
-	// kind + 32-bit idx + 3 B padding. Null handle = {NONE, 0}.
+	// kind + 32-bit idx + 3 B padding. Null handle = idx == 0 (idx 0
+	// is reserved as a sentinel; the side table's composite_nodes_
+	// vector preallocates a dummy entry at slot 0 so allocate_composite_node_
+	// returns idx >= 1).
+	//
+	// Why idx-based null check instead of kind-based: Composite
+	// subclasses that don't override compositeKindForSideTable_()
+	// (in v2.1, all non-Atom kinds — Molecule, Chain, Residue, ...)
+	// get allocated with kind=NONE. A kind-based null check would
+	// mark their (valid) handles as null. The idx-based check works
+	// regardless of kind. (P2.1.1 fix; D22b sizing math unchanged.)
 	struct CompositeHandle
 	{
 		CompositeKind  kind = CompositeKind::NONE;
@@ -66,7 +76,7 @@ namespace BALL
 		std::uint16_t  _pad1 = 0;
 		std::uint32_t  idx   = 0;
 
-		bool isNull() const { return kind == CompositeKind::NONE; }
+		bool isNull() const { return idx == 0; }
 
 		bool operator==(const CompositeHandle& o) const
 		{ return kind == o.kind && idx == o.idx; }

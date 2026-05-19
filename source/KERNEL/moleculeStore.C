@@ -127,6 +127,15 @@ CompositeHandle MoleculeStoreSideTables::allocate_composite_node_(CompositeKind 
 {
 	CompositeHandle h;
 	h.kind = kind;
+	// P2.1.1 fix: idx=0 is the null sentinel. Reserve composite_nodes_[0]
+	// as a dummy slot so any real allocation has idx >= 1. The check
+	// triggers only on the very first allocate for this store.
+	if (composite_nodes_.empty())
+	{
+		// Push the dummy at idx=0 (kind=NONE, all-null topology). Never
+		// handed out; never recycled.
+		composite_nodes_.push_back(CompositeNode{});
+	}
 	if (!composite_free_list_.empty())
 	{
 		h.idx = composite_free_list_.back();

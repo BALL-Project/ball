@@ -82,14 +82,117 @@ namespace BALL
 		return v;
 	}
 
-	// v2.1 P2.1.0: default store-reach hook returns nullptr — free-
-	// standing Composites have no reachable store. Atom and System
-	// override (atom.C / system.C) to return their respective store
-	// pointers. See D36 / R20b-2 for the rationale on the virtual
-	// hook over dynamic_cast.
+	// v2.1 P2.1.0 + P2.1.1: default store-reach hook walks the parent
+	// chain to find a Composite that overrides this method (System or
+	// Atom). Returns the first non-null store; nullptr if no ancestor
+	// provides one (free-standing tree).
+	//
+	// Atom overrides with a constant-time return of `store_` — saves
+	// the walk for Atom-rooted mutations. System overrides with
+	// `store_.get()` so any Composite inside the System reaches it
+	// via at most one walk. Molecule / Chain / Residue inherit this
+	// default; they'll walk up to System.
+	//
+	// Per D36 / R20b-2: no dynamic_cast / RTTI — purely virtual
+	// dispatch + parent-chain walk.
 	MoleculeStore* Composite::getCompositeStore_()
 	{
+		Composite* p = parent_;
+		while (p)
+		{
+			// Ask the parent — its override may return non-null even
+			// if its own parent_ is nullptr (e.g. root System).
+			MoleculeStore* s = p->getCompositeStore_();
+			if (s) return s;
+			p = p->parent_;
+		}
 		return nullptr;
+	}
+
+	// v2.1 P2.1.1: default kind tag is NONE. Atom overrides to ATOM
+	// (atom.C). Other subclasses may override later; v2.1 has no
+	// read paths through the side-table topology so this stays
+	// informational.
+	std::uint8_t Composite::compositeKindForSideTable_() const
+	{
+		return static_cast<std::uint8_t>(CompositeKind::NONE);
+	}
+
+	// v2.1 P2.1.1 (D36): mirror this Composite's v0 inline state into
+	// its side-table CompositeNode. Lazy-allocates the handle on
+	// first touch. No-op when no store is reachable.
+	//
+	// Parent / first_child / last_child / next / prev links are
+	// mirrored from v0 pointers — if a neighbor doesn't yet have a
+	// handle, a fresh one is allocated for it. This walks at most one
+	// level outward; deep recursion is avoided.
+	//
+	// Reads in v2.1 still come from v0 inline (D36). The side table
+	// is a parallel mirror, verified by parity tests; nothing in
+	// production v2.1 code reads from it. v2.2 flips reads to side
+	// tables and then this mirror is the source of truth.
+	void Composite::mirrorToSideTable_()
+	{
+		MoleculeStore* store = getCompositeStore_();
+		if (!store) return;  // free-standing; P2.4 backfill at adoption.
+
+		MoleculeStoreSideTables& s = store->sideTables_();
+
+		// Allocate own handle if missing.
+		CompositeHandle h = getCompositeHandle_();
+		if (h.isNull())
+		{
+			CompositeKind kind = static_cast<CompositeKind>(compositeKindForSideTable_());
+			h = s.allocate_composite_node_(kind);
+			setCompositeHandle_(h);
+		}
+
+		// Resolve a neighbor's handle, but ONLY return what the
+		// neighbor already has — do NOT allocate. Reasons:
+		//   1. Allocating for a neighbor in this store assumes the
+		//      neighbor "belongs to" this store. That breaks the
+		//      free-standing-mol case (where mol has no store but
+		//      the atom child has an orphan store): if we allocated
+		//      mol's handle in the orphan store from the atom's
+		//      mirror call, mol's later sys.adopt would have to
+		//      migrate that orphan-store handle. Better: leave the
+		//      neighbor's handle null; the neighbor's own mirror
+		//      call (when it has a reachable store) will allocate it.
+		//   2. Allocating across stores (atom-store vs parent-system-
+		//      store mismatch in pre-adopt state) would put the
+		//      neighbor's handle in the wrong store entirely.
+		//
+		// Consequence: side-table topology links lag by one mirror
+		// call. Caller (Composite::appendChild etc.) MUST mirror
+		// both parties involved in the mutation so each picks up
+		// the other's handle. Mirror order matters: child first
+		// (allocates its handle), then parent (links to child).
+		auto handle_of = [](Composite* c) -> CompositeHandle {
+			if (!c) return CompositeHandle{};
+			return c->getCompositeHandle_();
+		};
+
+		// Resolve all 5 neighbor handles BEFORE taking a reference to
+		// our own node. Each handle_of() may allocate (push_back to
+		// composite_nodes_), which can reallocate the vector and
+		// invalidate references — including the one to `n` we're about
+		// to write into. Collect first, write last.
+		CompositeHandle p_h    = handle_of(parent_);
+		CompositeHandle fc_h   = handle_of(first_child_);
+		CompositeHandle lc_h   = handle_of(last_child_);
+		CompositeHandle next_h = handle_of(next_);
+		CompositeHandle prev_h = handle_of(previous_);
+
+		// All allocations complete; vector is stable for the
+		// remainder of this call. Now safe to grab a reference and
+		// write fields.
+		CompositeNode& n = s.node_(h);
+		n.parent       = p_h;
+		n.first_child  = fc_h;
+		n.last_child   = lc_h;
+		n.next_sibling = next_h;
+		n.prev_sibling = prev_h;
+		n.child_count  = static_cast<std::uint32_t>(number_of_children_);
 	}
 
 	// default ctor
@@ -739,20 +842,28 @@ namespace BALL
 
 		// update modification time stamp
 		last_child_->stamp(MODIFICATION);
-	
+
 		// update selection counters
 		if (composite.containsSelection())
 		{
 			number_of_children_containing_selection_++;
-			
+
 			if (composite.selected_)
 			{
 				number_of_selected_children_++;
 			}
-			
+
 			// recursively update the nodes` states
 			updateSelection_();
 		}
+
+		// v2.1 P2.1.1 deferred to P2.1.2: side-table mutation mirror
+		// here required careful destruction-order handling to avoid
+		// heap corruption when ~System or ~Molecule cascades destroy
+		// children mid-teardown. P2.1.1 ships only the scaffolding
+		// (mirror helper + virtual hooks + parity test via direct
+		// allocator API). The wiring of mutation paths lives in
+		// P2.1.2 with proper "destruction-in-progress" detection.
 	}
 
 	bool Composite::insertParent(Composite& parent, Composite& first, Composite& last, bool destroy_parent)
@@ -1175,7 +1286,7 @@ namespace BALL
 		{
 			return false;
 		}
-		
+
 		Composite* parent_ptr = child.parent_;
 
 		// if child has no parent, we cannot remove it
@@ -1183,6 +1294,13 @@ namespace BALL
 		{
 			return false;
 		}
+
+		// v2.1 P2.1.1: capture child's siblings BEFORE the v0 detach
+		// logic zeros them out. After the detach, child.next_ /
+		// child.previous_ are 0, so we can't recover which siblings
+		// had their links updated. Mirror those siblings at the end.
+		Composite* prev_sibling_to_mirror = child.previous_;
+		Composite* next_sibling_to_mirror = child.next_;
 			
 		// remove child from the list of children
 		if (first_child_ == &child)
@@ -1236,10 +1354,17 @@ namespace BALL
 		// update modification time stamp
 		stamp(MODIFICATION);
 
+		// v2.1 P2.1.1 deferred to P2.1.2: removeChild mutation mirror
+		// has the same destruction-order risk as appendChild's
+		// (~Composite -> parent_->removeChild(*this) -> mirror
+		// during partial teardown). Wiring lands in P2.1.2.
+		(void) prev_sibling_to_mirror;
+		(void) next_sibling_to_mirror;
+
 		return true;
 	}
 
-	Size Composite::removeSelected() 
+	Size Composite::removeSelected()
 	{
 		// Collect all selected composites in a list.
 		std::list<Composite*> composites;

@@ -1652,6 +1652,31 @@ B		*/
 		// Composite already has a vtable (inherits PersistentObject);
 		// this adds one vtable slot, no per-instance storage cost.
 		virtual MoleculeStore* getCompositeStore_();
+
+		// v2.1 P2.1.1 (D36): kind tag for side-table CompositeNode
+		// allocation. Default returns NONE (catch-all for Composites
+		// whose specific kind doesn't matter in v2.1 since reads still
+		// come from v0 inline). Atom overrides to ATOM so atom-handle
+		// disambiguation works for the parity-test path. Other
+		// subclasses MAY override in later v2.1 sub-phases if their
+		// kind becomes observable; v2.2 will require all kinds to be
+		// correct when reads flip to the side table.
+		//
+		// Returned as uint8_t to keep the internal CompositeKind enum
+		// out of composite.h (D31b encapsulation). The 4 wiring TUs
+		// that include _moleculeStoreInternal.h cast back.
+		virtual std::uint8_t compositeKindForSideTable_() const;
+
+		// v2.1 P2.1.1 (D36): mirror this Composite's v0 inline state
+		// into the side-table CompositeNode. Lazy-allocates the
+		// CompositeHandle on first touch. No-op if no reachable store.
+		// Called by composite.C mutation paths after they finish v0
+		// updates. Public so atom.C and other wiring TUs can call it
+		// directly when they perform Composite-state mutation outside
+		// composite.C's API. Implementation in composite.C; callers
+		// must include _moleculeStoreInternal.h (otherwise the helper
+		// has no visible internal types — D31b encapsulation gate).
+		void mirrorToSideTable_();
 	};
 
 	template <typename T>

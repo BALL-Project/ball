@@ -1065,6 +1065,14 @@ namespace BALL
 		// orphan-store atoms reach the orphan side tables.
 		MoleculeStore* getCompositeStore_() override { return store_; }
 
+		// v2.1 P2.1.1 (D36): kind tag for side-table CompositeNode.
+		// Atom returns ATOM (the high-volume kind). Other Composite
+		// subclasses inherit the NONE default in v2.1; their kind
+		// becomes observable only at v2.2 when reads flip to side
+		// tables (D38). 1u == CompositeKind::ATOM per
+		// _moleculeStoreInternal.h.
+		std::uint8_t compositeKindForSideTable_() const override { return 1u; }
+
 		// K0.4.2: friend-style API for System::adopt() to retarget the
 		// atom's store binding atomically after migration. Underscore
 		// suffix marks it as in-tree-only; not for downstream code.

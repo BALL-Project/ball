@@ -55,14 +55,17 @@ CHECK(allocate_composite_node_ -- append path)
 
 	CompositeHandle h0 = s.allocate_composite_node_(CompositeKind::ATOM);
 	TEST_EQUAL(h0.kind == CompositeKind::ATOM, true)
-	TEST_EQUAL(h0.idx, 0u)
-	TEST_EQUAL(s.composite_nodes_.size(), 1u)
+	// P2.1.1 fix: idx=0 reserved as null sentinel; first allocation
+	// yields idx >= 1. composite_nodes_ size is 2 (dummy at 0 + h0
+	// at 1).
+	TEST_EQUAL(h0.idx, 1u)
+	TEST_EQUAL(s.composite_nodes_.size(), 2u)
 	TEST_EQUAL(s.composite_free_list_.size(), 0u)
 
 	CompositeHandle h1 = s.allocate_composite_node_(CompositeKind::MOLECULE);
 	TEST_EQUAL(h1.kind == CompositeKind::MOLECULE, true)
-	TEST_EQUAL(h1.idx, 1u)
-	TEST_EQUAL(s.composite_nodes_.size(), 2u)
+	TEST_EQUAL(h1.idx, 2u)
+	TEST_EQUAL(s.composite_nodes_.size(), 3u)
 
 	// Topology starts zeroed.
 	const CompositeNode& n0 = s.node_(h0);
@@ -80,11 +83,12 @@ CHECK(release_composite_node_ + free-list reuse)
 
 	CompositeHandle h0 = s.allocate_composite_node_(CompositeKind::ATOM);
 	CompositeHandle h1 = s.allocate_composite_node_(CompositeKind::ATOM);
-	TEST_EQUAL(s.composite_nodes_.size(), 2u)
+	// P2.1.1 fix: dummy at idx=0 + h0 at idx=1 + h1 at idx=2 = size 3.
+	TEST_EQUAL(s.composite_nodes_.size(), 3u)
 
 	// Release h0: vector size unchanged, free list grows.
 	s.release_composite_node_(h0);
-	TEST_EQUAL(s.composite_nodes_.size(), 2u)
+	TEST_EQUAL(s.composite_nodes_.size(), 3u)
 	TEST_EQUAL(s.composite_free_list_.size(), 1u)
 
 	// Topology is zeroed on release (no stale links).
@@ -95,7 +99,7 @@ CHECK(release_composite_node_ + free-list reuse)
 	CompositeHandle h2 = s.allocate_composite_node_(CompositeKind::BOND);
 	TEST_EQUAL(h2.idx, h0.idx)
 	TEST_EQUAL(h2.kind == CompositeKind::BOND, true)
-	TEST_EQUAL(s.composite_nodes_.size(), 2u)
+	TEST_EQUAL(s.composite_nodes_.size(), 3u)
 	TEST_EQUAL(s.composite_free_list_.size(), 0u)
 
 	// Releasing the null handle is a no-op.
@@ -413,20 +417,85 @@ CHECK(P2.1.0 -- Composite::getCompositeStore_() virtual hook)
 	}
 
 	{
-		// Tree: Molecule inserted into System. Molecule itself still
-		// returns nullptr (no override on Molecule); the System parent's
-		// override is what side-table maintenance reaches in P2.1.1+.
+		// Tree: Molecule inserted into System. Molecule doesn't
+		// override getCompositeStore_; the default walks parent chain
+		// to System whose override returns its store. So once mol is
+		// inside sys, mol's getCompositeStore_() returns sys's store.
 		System sys;
 		Molecule mol;
 		Atom a;
 		mol.insert(a);
 		sys.insert(mol);
-		TEST_EQUAL(mol.getCompositeStore_(), (MoleculeStore*)nullptr)
 		TEST_NOT_EQUAL(sys.getCompositeStore_(), (MoleculeStore*)nullptr)
-		// The atom moves to System's store via adoptSubtree.
+		// mol reaches sys's store via parent-chain walk.
+		TEST_EQUAL(mol.getCompositeStore_(), sys.getCompositeStore_())
+		// The atom moves to System's store via adoptSubtree, so its
+		// direct override returns the same store.
 		TEST_EQUAL(a.getCompositeStore_(), sys.getCompositeStore_())
 	}
 RESULT
+
+CHECK(P2.1.1 -- mirrorToSideTable_ direct API)
+	// P2.1.1 scope: scaffolding only. The mutation-path wiring of
+	// appendChild/removeChild/etc. was attempted but the cascading
+	// destructor mirror calls (when ~System tears down children
+	// mid-teardown) corrupted the heap. P2.1.2 ships the wiring with
+	// proper destruction-in-progress detection.
+	//
+	// This test exercises the mirror helper DIRECTLY (not through
+	// Composite mutations) so the helper's contract is locked
+	// independently of the wiring sequence.
+	Atom a_parent;
+	Atom a_c1;
+	Atom a_c2;
+
+	// Call mirror directly on isolated atoms. Each gets a handle in
+	// the orphan store via its Atom::getCompositeStore_ override.
+	// They have no parent_ so nodes get default-topology (all-null
+	// neighbors, child_count=0).
+	a_parent.mirrorToSideTable_();
+	a_c1.mirrorToSideTable_();
+	a_c2.mirrorToSideTable_();
+
+	MoleculeStore* store = a_parent.getCompositeStore_();
+	TEST_NOT_EQUAL(store, (MoleculeStore*)nullptr)
+	MoleculeStoreSideTables& s = store->sideTables_();
+
+	CompositeHandle p_h  = a_parent.getCompositeHandle_();
+	CompositeHandle c1_h = a_c1.getCompositeHandle_();
+	CompositeHandle c2_h = a_c2.getCompositeHandle_();
+	TEST_EQUAL(p_h.isNull(), false)
+	TEST_EQUAL(c1_h.isNull(), false)
+	TEST_EQUAL(c2_h.isNull(), false)
+
+	TEST_EQUAL(p_h.kind == CompositeKind::ATOM, true)
+	TEST_EQUAL(c1_h.kind == CompositeKind::ATOM, true)
+	TEST_EQUAL(c2_h.kind == CompositeKind::ATOM, true)
+
+	// All three atoms are free-standing -- their nodes have null
+	// neighbors and child_count=0.
+	const CompositeNode& p_n  = s.node_(p_h);
+	const CompositeNode& c1_n = s.node_(c1_h);
+	const CompositeNode& c2_n = s.node_(c2_h);
+	TEST_EQUAL(p_n.parent.isNull(),  true)
+	TEST_EQUAL(p_n.child_count, 0u)
+	TEST_EQUAL(c1_n.parent.isNull(), true)
+	TEST_EQUAL(c1_n.child_count, 0u)
+	TEST_EQUAL(c2_n.parent.isNull(), true)
+	TEST_EQUAL(c2_n.child_count, 0u)
+RESULT
+
+CHECK(P2.1.1 -- free-standing non-Atom Composite gets no handle)
+	// Molecule has no override of getCompositeStore_ -- the default
+	// walks parent (null) -> returns nullptr -> mirror is a no-op.
+	// Confirms the design: only Composites with a reachable store
+	// get handles, and free-standing non-Atom Composites stay
+	// unrepresented in any store's side table.
+	Molecule mol_free;
+	mol_free.mirrorToSideTable_();
+	TEST_EQUAL(mol_free.getCompositeHandle_().isNull(), true)
+RESULT
+
 
 CHECK(sizeof pins -- D22b CompositeHandle 8 B / CompositeNode 48 B)
 	// These are static_asserted in _moleculeStoreInternal.h but pin
