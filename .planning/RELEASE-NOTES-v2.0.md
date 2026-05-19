@@ -1,14 +1,24 @@
-# BALL 2.0 — Release Notes (DRAFT)
+# BALL 2.0 — Release Notes
 
-**Status:** DRAFT for tag. **Authored:** 2026-05-18 by K0.8.
+**Status:** READY FOR TAG. **Authored:** 2026-05-18 by K0.8.
+**Last revised:** 2026-05-19 (Phase A polish; D17–D21; R10–R14 closures).
 
 BALL 2.0 ships a redesigned kernel: atoms and bonds live in a SoA
 `MoleculeStore` per System, with Atom and Bond as thin handles. The
 old text-based persistence is replaced by a JSON format. Selection
-queries compile to a variant AST that runs 10–80× faster than v1.x
-for typical molecular workloads. The `BALLView` GUI continues to
-build against this kernel; full module re-enable (FORMAT, STRUCTURE,
-MOLMEC, …) is Track B work happening in parallel.
+queries compile to a variant AST that runs 11–85× faster than v1.x
+for typical molecular workloads, independently verified on both
+synthetic (100k atoms) and real PDB (2ptc_H, 4587 atoms) corpora.
+The kernel is mutex-correct for all default-Atom mutations on the
+process-global orphan store, lifetime-correct against process
+teardown, and generation-checked against `compact()`/`clear()` for
+all compiled-selection paths.
+
+Track B Waves 0-2 (PLUGIN, FORMAT subset, STRUCTURE subset, XRAY,
+NMR, ENERGY) have re-enabled 9 modules and brought the test suite
+back to **164/164 passing** under `BALL_CORE_ONLY=ON`. Wave 3
+(MOLMEC + QSAR + SCORING force-field cluster) is in flight; full
+module re-enable continues post-v2.0.
 
 This document is the user-facing summary. The phase-by-phase audit
 trail lives in `.planning/v2.x/`.
@@ -121,11 +131,62 @@ v2.1.
 ### Adversarial review
 
 Codex CLI was run as the second-opinion reviewer at every major
-phase boundary. Nine review rounds across K0 (R1 architecture,
-R2 design lock, R3 K0.3c, R4 K0.3b.LATER + K0.4, R5 manual, R6 K0.5,
-R7 K0.6.0-K0.6.3, R8 K0.6.5b, R9 K0.7). Every HIGH and OPEN finding
-was closed before the next phase began; FYI items were either fixed
-inline or routed to v2.1 with explicit documentation.
+phase boundary. **Fourteen** review rounds across K0 + Track B +
+kernel hardening:
+
+- K0: R1 architecture, R2 design lock, R3 K0.3c, R4 K0.3b.LATER + K0.4,
+  R5 manual, R6 K0.5, R7 K0.6.0-K0.6.3, R8 K0.6.5b, R9 K0.7.
+- Track B: R10 Wave 1 (FORMAT + STRUCTURE subset + dtor fix).
+- Kernel: R11 broad-scope (5 [BUG]s in K0.5-B2 — orphan-store locking,
+  ScratchScope use-after-realloc, loadSystemJSON rollback, cache key
+  predicate-registry identity, simpleMolecularGraph.C missing).
+- Kernel compactness/correctness: R12 (5 [BUG]s — compact()
+  generation bump, AtomContainer adopt-after-insert ordering, bond
+  CSR thread-safety, hidden System::insert overloads, detached
+  Atom mutation null-deref + 9 architectural [DEBT]s).
+- v2.1 hardening sanity: R13 (2 [BUG]s — stable_id alloc throw-after-commit,
+  compact()/evaluate concurrency) + R14 (2 [BUG]s — evaluate_one staleness,
+  persistentRead/set/op=/swap orphan-lock coverage).
+
+Every [BUG] caught was fixed in the same review cycle. [DEBT] items
+either landed in this release or are documented as v2.1 backlog
+with complexity estimates.
+
+### Kernel correctness layers (2026-05-18 hardening)
+
+The v2.0 kernel ships with explicit thread-safety + lifetime
+contracts on every mutation path:
+
+- **Heap-System destruction** (commit f79910675): CompiledExpressionCache
+  is a leaky-immortal heap singleton; ~MoleculeStore can invalidate
+  cached compiled expressions at any point in process teardown.
+  Closes the original SIGSEGV-at-exit crash.
+- **Orphan-store serialization** (commits 4b01405b5, 1464fc8a1): every
+  default-Atom construction, copy-construction, parameterized
+  construction, destruction, `setName`/`setCharge`/`setPosition`/etc.,
+  `persistentRead`, `set`, `operator=`, and `swap` run under the
+  orphan mutex (`std::recursive_mutex`) when bound to the orphan
+  store. Pre-reserves 64k slots on first orphan-store use.
+- **Per-store bond mutex** (commit 0b77d65e5): `add_bond`,
+  `remove_bond`, `remove_bonds_between`, `swap_atom_connectivity`,
+  and `ensure_csr_` are mutex-protected; reads of CSR/bonds_ are
+  lock-free with documented D7-style "no concurrent mutator"
+  contract.
+- **CompiledExpression staleness check** (commits 38453fecf, 1464fc8a1):
+  evaluate + evaluate_one throw `InvalidArgument` on store mismatch
+  or post-compact generation bump; Expression::operator() catches
+  and recompiles transparently.
+- **String pool reclamation** (commit 25bfcd58e): `compact()` rebuilds
+  the pool + intern table from live atoms, reclaiming dead-slot
+  strings; invalidates cached compiled expressions.
+- **Stable-ID overflow guard** (commits 853e94da4, 58a26d81a): UINT64_MAX
+  guard throws OutOfMemory rather than wrapping. Allocation hoisted
+  before slot commit so an overflow throw leaves the store at
+  pre-call shape.
+
+Decisions D17–D21 in `KERNEL-V2-DECISIONS.md` document each of these
+with cross-references to the originating Codex round and the
+implementing commit hash.
 
 ---
 
@@ -278,19 +339,24 @@ build-time concept.
   `Residue_test1/2`, `StdIteratorWrapper_test`, plus 7 STRUCTURE tests
   (FragmentDB_test, NormalizeNamesProcessor_test, PeptideBuilder_test,
   PeptideCapProcessor_test, Peptides_test, ResidueChecker_test,
-  SecondaryStructureProcessor_test) all build and (mostly) pass under
-  `BALL_CORE_ONLY=ON`. K0.5's selector speedup claim is verified on
-  the v1.x corpus via `Selector_test`. 4 documented quarantines remain
-  (PersistenceManager_test, Expression_test, Peptides_test,
-  PeptideCapProcessor_test — see `test/CMakeLists.txt` for each).
+  SecondaryStructureProcessor_test) all build and pass under
+  `BALL_CORE_ONLY=ON`. K0.5's selector speedup claim is independently
+  verified on the v1.x PDB corpus via `SelectorBench_test` (median
+  19.4× on real 2ptc_H.pdb at 4587 atoms; commit 7dda295ca).
+  **Only one documented quarantine remains**: Expression_test
+  (`WILL_FAIL TRUE` in CORE_ONLY; lifts when QSAR re-enables in
+  Wave 3). PersistenceManager_test + TextPersistenceManager_test +
+  DefaultProcessors_test + Peptides_test + PeptideCapProcessor_test
+  quarantines were lifted in commits 287fd1e47 / 81f8b5453 /
+  c5373707d / 9b5f89b50.
 - **JSON load batching** — load is 15× slower than save (4s for
   100k atoms). Per-atom heap allocation + K0.4 adoption + Composite-
   tree insertion is the bottleneck. v2.1 candidate.
+- **AndNode tmp-bitmap reuse** — DELIVERED (commit daf33bc7c +
+  fix in commit 725448d4e). Thread-local depth-indexed
+  `std::deque<std::vector<Byte>>` scratch pool amortises AND/OR
+  inner-node allocation from O(D·E) to O(D) once.
 - **Element-instance round-trip** — see *Breaking changes* above.
-- **AndNode tmp-bitmap allocation** — each AND/OR/NOT inner node
-  allocates one scratch `std::vector<uint8>` per evaluation. Bounded
-  by tree depth, not child count. Not on the hot path for typical
-  ASTs; v2.1 perf-debt item if profiling demands.
 - **Tighter perf gates** — JSON I/O test gates (30s save / 30s load)
   are tripwires, not regression-pins. v2.1 should calibrate against
   CI machine variance.
@@ -301,27 +367,35 @@ build-time concept.
 |---|---|---|
 | D2/D3/D4 actual removal | K0 design + R9 | `sizeof(Atom)` 360→64 B → D13 met for all workloads |
 | JSON load batching | R7+R8+R9 | save/load 15× ratio closed |
-| AndNode tmp-bitmap reuse | R6 FYI-6 | minor selector perf win for deep ASTs |
 | Element-instance id-table | R4 MEDIUM-7 | custom Element round-trip |
 | CI-calibrated perf gates | R9 finding 4 | regression detection at ~2× drift, not 100× |
 | Median-of-N for release-claim perf numbers | R9 finding 6 | reproducible numbers in marketing copy |
+| V21-ATOM-THIN-HANDLE | R12 K1 | sizeof(Atom) 360 B → ~24 B (D13 budget hit) |
+| V21-BOND-THIN-HANDLE | R12 K2 | sizeof(Bond) 288 B → ~16 B |
+| V21-COMPOSITE-SIDE-TABLE | R12 K3 | Composite linkage moves to side table |
+| V21-SPARSE-PROPERTY-MAP | R12 K15 | PropertyManager → side table by store_idx |
+| V21-STORE-ITER-API | R12 K16 | define order semantics for store iter |
+| V21-HANDLE-GENERATION-GUARD | R12 K1 | wire store_generation_ check into Atom accesses |
+| FULL-BUILD-TBB-LIBSVM | R10 | TBB 2023 ABI + libSVM full-build link issue |
 
 ---
 
 ## Test counts at tag
 
-- **Kernel core sweep:** 24 binaries (Atom1/2, Bond, System, Molecule,
-  Fragment, Chain, Protein, PDBAtom, SecondaryStructure, NucleicAcid,
-  Nucleotide, AtomContainer1/2, AtomIterator, AtomBondIteratorTraits,
-  Extractors, ExpressionPredicate, ExpressionTree, KernelPredicate,
-  GlobalKernel, MoleculeStore, MoleculeStoreJson, SystemJson,
-  CompiledExpression, SelectorBench, Sizeof, MemoryBudget, JsonBench)
-- **K0.5 sub-tests:** 25+ CompiledExpression CHECKs + 2 SelectorBench CHECKs
-- **K0.6 sub-tests:** 42 (5 K0.6.1 + 8 K0.6.2 + 8 K0.6.3 + 6 K0.6.3b +
-  6 K0.6.5 + 5 K0.6.5b + 4 K0.6.5c)
-- **K0.7 sub-tests:** 7 (5 Sizeof + 2 MemoryBudget + 2 JsonBench)
+- **CORE_ONLY ctest:** **164/164 PASS** · 0 disabled · 1 documented
+  WILL_FAIL (Expression_test SMARTS, gated by `BALL_CORE_ONLY`, lifts
+  in Wave 3).
+- **MoleculeStore_test 100-run stress:** 0/100 flakes (down from ~3%
+  pre-R11 baseline).
+- **Heap-System `delete sys` repro:** exit 0 (no SEGV).
+- **Selector speedup verified:** median 48.2× on synthetic 100k
+  atoms; median 19.4× on real 2ptc_H.pdb (4587 atoms; commit
+  7dda295ca). Worst-case AND query still 11.8× over v1.x.
 
-All green at tag time.
+Kernel test suite: 24 K0+B0 binaries + 7 NMR + 3 ENERGY + 7 STRUCTURE
++ FORMAT-subset + XRAY + 3 v1.x expression tests + 4
+StandardPredicates + Residue1/2 + Selector + ExpressionParser +
+StdIteratorWrapper = 164 total.
 
 ---
 
