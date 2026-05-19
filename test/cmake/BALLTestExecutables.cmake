@@ -262,6 +262,13 @@ SET(BALL_STRUCTURE_TESTS
 	AtomBijection_test
 	BinaryFingerprintMethods_test
 	BindingPocketProcessor_test
+	# Cluster B step 3 (Codex R16 C-B4 fix): moved here from
+	# BALL_KERNEL_TESTS — the 3 STRUCTURE tests had been listed only
+	# in KERNEL group, so when CB-3 dedupe removed them from
+	# BALL_CORE_KERNEL_TESTS the CORE_ONLY build silently dropped them.
+	DefaultProcessors_test
+	FragmentDB_test
+	NormalizeNamesProcessor_test
 	ConnectedComponentsProcessor_test
 	DisulfidBondProcessor_test
 	Enumerator_test

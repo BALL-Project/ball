@@ -269,19 +269,13 @@ ENDIF()
 #   Previously WILL_FAIL'd in full builds. CB-3 brought rotamerLibrary.C
 #   into CORE_ONLY too, and re-tested — passes in both modes.
 #
-# SmilesParser_test — QUARANTINED (2026-05-19, TEST-SMILES-PARSER)
-#   getSystem().countAtoms() returns 0 instead of 5 for all SMILES
-#   inputs (line 76, 114). The SMILES parser produces no atoms —
-#   likely a v2.0 kernel interaction (Atom auto-adopt path from
-#   temporary parser-internal containers differs from v1.x).
-#   Files: source/STRUCTURE/smilesParser.C + smilesParserParser.C.
-#   SmartsParser_test PASSES with shared parser infrastructure, so
-#   the issue is SMILES-specific. Filed as v2.0.x backlog
-#   (TEST-SMILES-PARSER).
-SET_TESTS_PROPERTIES (
-	SmilesParser_test
-	PROPERTIES WILL_FAIL TRUE
-)
+# SmilesParser_test — QUARANTINE LIFTED (Codex R16 C-B1, 2026-05-19)
+# Root cause: smilesParser.C built atoms in orphan store with bonds,
+# inserted empty molecule into system FIRST, then tried to adopt
+# bonded orphan atoms one-by-one — K0's canAdopt() rejected each
+# (partners still in orphan). Fix: build molecule off-system, insert
+# atoms into it, THEN insert populated molecule into system →
+# adoptSubtree handles the bonded multi-atom migration correctly.
 
 IF (BALL_HAS_VIEW)
 	FOREACH(test ${VIEW_TESTS})

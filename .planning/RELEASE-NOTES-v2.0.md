@@ -360,6 +360,20 @@ build-time concept.
 - **Tighter perf gates** — JSON I/O test gates (30s save / 30s load)
   are tripwires, not regression-pins. v2.1 should calibrate against
   CI machine variance.
+- **Bond PropertyManager bag — not in K0.6 JSON** (Codex R16 C-B7,
+  2026-05-19): the K0.6 JSON persistence path serialises the
+  per-atom + per-molecule + per-system PropertyManager bags, plus
+  the BondRecord `(a, b, order, type, flags)` tuple. The Bond
+  *handle's* `PropertyManager` bag (used by MMFF94 for `MMFF94SBMB`,
+  `MMFF94RBL`, MMFF94 bond-type discriminator; `VIRTUAL__BOND`
+  marker; HBondProcessor annotations) is NOT serialised. Most BALL
+  workloads don't use bond properties — they're set ephemerally
+  during force-field setup and computed fresh on every load. v2.1
+  backlog item: V21-BOND-PROPERTY-JSON. Implementation requires
+  exposing bond_back_ptr_[i] in the writer and finding the Bond
+  handle for property restore in the reader (Bond handle isn't
+  stored in the store; it's heap-owned by the AtomContainer
+  hierarchy).
 
 ## Things deferred to v2.1
 

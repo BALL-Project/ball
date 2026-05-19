@@ -154,14 +154,23 @@ namespace BALL
 		// fill up empty valences with hydrogens
 		addMissingHydrogens();
 
-		// Transfer all atoms into a new molecule.
+		// 2026-05-19 (Codex R16 C-B1 fix): build the molecule
+		// OFF-system first, then insert the populated molecule INTO
+		// the system. The AtomContainer::insert(AtomContainer&) path
+		// triggers System::adoptSubtree which handles bonded multi-
+		// atom migration correctly. Pre-fix, this code inserted an
+		// empty molecule into the system first and then tried to
+		// single-Atom-adopt each bonded orphan atom one by one;
+		// K0's canAdopt() rejects every such call because each
+		// atom's bond partners are still in the orphan store. Net
+		// result was countAtoms()=0 on the parsed System.
 		Molecule* molecule = new Molecule;
-		system_.insert(*molecule);
 		for (Position i = 0; i < all_atoms_.size(); i++)
 		{
-			molecule->insert(*all_atoms_[i]);
+			molecule->insert(*all_atoms_[i]);   // off-system insert: no adopt
 		}
-		
+		system_.insert(*molecule);              // triggers adoptSubtree
+
 		// Clean up the pointers to these atoms.
 		all_atoms_.clear();
 	}
