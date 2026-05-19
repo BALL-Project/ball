@@ -5,6 +5,8 @@
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
 
+#include <cstdint>  // v2.1 P1.3: std::uint64_t composite_handle_packed_
+
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
@@ -42,9 +44,20 @@
 #endif
 
 ///
-namespace BALL 
+namespace BALL
 {
 	class Atom;
+
+	// v2.1 P1.3 (D22b + D31b): forward declarations for opaque
+	// CompositeHandle / CompositeTopologyView. Full types live in
+	// include/BALL/KERNEL/_moleculeStoreInternal.h. The
+	// `composite_handle_packed_` member below stores 8 bytes
+	// matching `sizeof(CompositeHandle) == 8`; composite.C memcpy's
+	// between the opaque uint64 and the typed struct. Calls to the
+	// accessors below require including the internal header (return
+	// types incomplete otherwise) — D31b encapsulation gate.
+	struct CompositeHandle;
+	struct CompositeTopologyView;
 
 	/**	Composite Class.
 			This class implements a variant of the composite design pattern. A
@@ -1581,7 +1594,7 @@ B		*/
 		void destroyChildren_();
 
 		// private attributes
-		
+
 		Size 						number_of_children_;
 		Composite*			parent_;
 		Composite* 			previous_;
@@ -1594,6 +1607,34 @@ B		*/
 		Size						number_of_children_containing_selection_;
 		TimeStamp				selection_stamp_;
 		TimeStamp				modification_stamp_;
+
+		// v2.1 P1.3 (D22b + D31b): opaque 8-byte slot for the
+		// CompositeHandle (kind + idx) that this Composite occupies in
+		// its owning MoleculeStore's composite_nodes_ side table. Layout
+		// matches the CompositeHandle struct in
+		// include/BALL/KERNEL/_moleculeStoreInternal.h byte-for-byte;
+		// composite.C memcpy's between the two. Stored opaquely here so
+		// public headers do not include the internal header (preserves
+		// D31b encapsulation — see CI grep gate).
+		//
+		// P1-transient: this 8 B contribution to sizeof(Composite)
+		// disappears at P2 along with the rest of Composite's state
+		// when D17Composite becomes the empty shim base. Default 0 =
+		// "no handle allocated yet"; non-zero kind byte indicates
+		// allocation.
+		std::uint64_t   composite_handle_packed_ = 0;
+
+	public:
+		// v2.1 P1.3 accessors. Implemented in composite.C; callers must
+		// include _moleculeStoreInternal.h for the return / parameter
+		// types to be complete. Free-function-style design avoids
+		// putting MoleculeStore-internal types into the Composite class
+		// definition. Public because the wiring TUs (per D31b) need
+		// access without a friend declaration; the encapsulation comes
+		// from the type-incompleteness gate, not access control.
+		CompositeHandle       getCompositeHandle_() const;
+		void                  setCompositeHandle_(CompositeHandle h);
+		CompositeTopologyView getNode_() const;
 	};
 
 	template <typename T>

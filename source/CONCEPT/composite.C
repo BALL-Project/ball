@@ -11,13 +11,65 @@
 
 #include <BALL/KERNEL/atom.h>
 
+// v2.1 P1.3 (D31b): private internal header for CompositeHandle +
+// CompositeTopologyView types. composite.C is one of the 4 named
+// wiring TUs allowed to include this. Public headers (composite.h,
+// composite.iC, anything #include-able by user code) MUST NOT
+// include this — the CI grep gate enforces.
+#include <BALL/KERNEL/_moleculeStoreInternal.h>
+
+#include <cstring>  // std::memcpy for handle (un)packing
+
 using namespace std;
 
-namespace BALL 
+namespace BALL
 {
 
 	UnaryPredicate<Composite> Composite::DEFAULT_UNARY_PREDICATE;
 	UnaryProcessor<Composite> Composite::DEFAULT_PROCESSOR;
+
+	// v2.1 P1.3: opaque handle (un)packing. composite.h stores the
+	// handle as std::uint64_t composite_handle_packed_ to keep the
+	// public header free of the internal types. composite.C is allowed
+	// to memcpy between the opaque slot and the typed struct because
+	// CompositeHandle is POD and the static_assert in
+	// _moleculeStoreInternal.h pins sizeof == 8.
+	static_assert(sizeof(CompositeHandle) == sizeof(std::uint64_t),
+		"CompositeHandle layout must match opaque uint64_t slot");
+
+	CompositeHandle Composite::getCompositeHandle_() const
+	{
+		CompositeHandle h;
+		std::memcpy(&h, &composite_handle_packed_, sizeof h);
+		return h;
+	}
+
+	void Composite::setCompositeHandle_(CompositeHandle h)
+	{
+		std::memcpy(&composite_handle_packed_, &h, sizeof h);
+	}
+
+	// v2.1 P1.3 + D31b: return Composite topology by-value as
+	// Composite*. Iterator code can consume this without ever naming
+	// CompositeNode — the side-table type stays encapsulated.
+	//
+	// Note: P1.3 reads the v2.0 inline pointers directly. Reading
+	// from composite_nodes_ instead is a P2 concern (the inheritance-
+	// flip phase) — until then the side table is not yet populated
+	// because P1.3 ships the *infrastructure* only, not the mutation
+	// mirror. See the P1 plan's P1.3 row and the maintainer decision
+	// dated 2026-05-19 in V21-CODEX-REVIEW-ROUND17C.md.
+	CompositeTopologyView Composite::getNode_() const
+	{
+		CompositeTopologyView v;
+		v.parent       = parent_;
+		v.first_child  = first_child_;
+		v.last_child   = last_child_;
+		v.next_sibling = next_;
+		v.prev_sibling = previous_;
+		v.child_count  = static_cast<std::uint32_t>(number_of_children_);
+		return v;
+	}
 
 	// default ctor
 	Composite::Composite()

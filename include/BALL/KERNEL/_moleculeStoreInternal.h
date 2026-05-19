@@ -138,12 +138,33 @@ namespace BALL
 		// idx is per-kind, so handle.kind disambiguates between two
 		// allocations both reporting idx=42.
 		//
-		// In P1.2 these are populated lazily by Composite mutations
-		// (P1.3 wiring) — a Composite that has not yet been mutated
-		// via the new APIs has no entry. P2 will flip the contract so
-		// every Composite has an entry from construction.
+		// In P1.2/P1.3 these are populated by explicit
+		// allocate_composite_node_ / release_composite_node_ calls.
+		// P2 wires Composite mutations to maintain the table; P1.3
+		// ships only the infrastructure, with the SideTableParity_test
+		// exercising allocate/release round-trip.
 		std::vector<CompositeNode>   composite_nodes_;
 		std::vector<std::uint32_t>   composite_free_list_;
+
+		// v2.1 P1.3 allocator: hands out a fresh CompositeHandle of the
+		// given kind. The returned handle's idx is either pulled from
+		// composite_free_list_ (recycled) or appended to composite_nodes_.
+		// The new node's topology fields are all NONE/null.
+		//
+		// Thread-safety: caller is the owning MoleculeStore; D16
+		// (single-thread per-store mutation) applies. No internal lock.
+		CompositeHandle allocate_composite_node_(CompositeKind kind);
+
+		// v2.1 P1.3 release: returns the node's slot to the free list
+		// after zeroing its topology. Idempotent on NULL handle.
+		void            release_composite_node_(CompositeHandle h);
+
+		// v2.1 P1.3 accessor: returns a reference to the node for the
+		// given handle. Asserts on NULL handle or out-of-range idx.
+		// Reference invalidates on composite_nodes_ vector growth —
+		// callers must not hold across allocate_composite_node_ calls.
+		CompositeNode&       node_(CompositeHandle h);
+		const CompositeNode& node_(CompositeHandle h) const;
 	};
 
 } // namespace BALL

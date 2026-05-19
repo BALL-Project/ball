@@ -13,6 +13,7 @@
 #include <BALL/KERNEL/_moleculeStoreInternal.h>
 #include <BALL/COMMON/exception.h>
 
+#include <cassert>
 #include <limits>
 #include <mutex>
 #include <unordered_set>
@@ -115,6 +116,55 @@ MoleculeStoreSideTables& MoleculeStore::sideTables_()
 const MoleculeStoreSideTables& MoleculeStore::sideTables_() const
 {
 	return *side_tables_;
+}
+
+// v2.1 P1.3: allocate a fresh composite-node slot. Free-list pop or
+// vector append. Returned handle's topology fields are all NONE/null
+// — caller (P2 wiring code) sets parent/sibling/child as part of the
+// mutation it's mirroring.
+CompositeHandle MoleculeStoreSideTables::allocate_composite_node_(CompositeKind kind)
+{
+	CompositeHandle h;
+	h.kind = kind;
+	if (!composite_free_list_.empty())
+	{
+		h.idx = composite_free_list_.back();
+		composite_free_list_.pop_back();
+		// Reset the recycled node — old topology must not leak through.
+		composite_nodes_[h.idx] = CompositeNode{};
+		composite_nodes_[h.idx].kind = kind;
+	}
+	else
+	{
+		h.idx = static_cast<std::uint32_t>(composite_nodes_.size());
+		CompositeNode n;
+		n.kind = kind;
+		composite_nodes_.push_back(n);
+	}
+	return h;
+}
+
+void MoleculeStoreSideTables::release_composite_node_(CompositeHandle h)
+{
+	if (h.isNull()) return;
+	assert(h.idx < composite_nodes_.size());
+	// Zero topology so a use-after-release that doesn't go through the
+	// handle map at least reads NONE/null instead of stale links.
+	composite_nodes_[h.idx] = CompositeNode{};
+	composite_free_list_.push_back(h.idx);
+}
+
+CompositeNode& MoleculeStoreSideTables::node_(CompositeHandle h)
+{
+	assert(!h.isNull());
+	assert(h.idx < composite_nodes_.size());
+	return composite_nodes_[h.idx];
+}
+const CompositeNode& MoleculeStoreSideTables::node_(CompositeHandle h) const
+{
+	assert(!h.isNull());
+	assert(h.idx < composite_nodes_.size());
+	return composite_nodes_[h.idx];
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

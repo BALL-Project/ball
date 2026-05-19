@@ -170,6 +170,7 @@ SET(BALL_KERNEL_TESTS
 	V1ToV2JsonConverter_test
 	CompiledExpression_test
 	SelectorBench_test
+	SideTableParity_test
 )
 
 SET(BALL_MOLMEC_TESTS
