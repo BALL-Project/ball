@@ -498,6 +498,18 @@ namespace BALL
 				Position prepareGridTextures(const RegularData3D& grid, const ColorMap& map);
 
 				void updateGL();
+
+				/** UFG-25 — push the Stage's current background color
+				    + fog intensity to all attached renderers and
+				    schedule a repaint. Mirrors the relevant lines of
+				    `applyPreferences()` (lines 1142-1155 of scene.C)
+				    without invoking the full preferences-dialog state
+				    machine. Called by `StageController::apply()` so
+				    Inspector edits to the Scene tab Background +
+				    Stage swatches actually re-issue `glClearColor()`
+				    on the next paint cycle. */
+				void refreshSceneRenderState();
+
 				///
 				void initializePreferencesTab(Preferences &preferences);
 

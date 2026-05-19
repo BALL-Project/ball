@@ -1129,6 +1129,21 @@ namespace BALL
 		// independent of BALL composite-selection.
 		void MolecularControl::setSelection_(bool /*open*/, bool /*force*/)
 		{
+			// UFG-31 (rc5 follow-up) — two-way sync. UFG-27 made cursor
+			// selection drive BALL composite selection. When BALL
+			// selection changes externally (e.g., Quick Actions' Clear
+			// Selection / Invert Selection buttons → mc->clearSelection()
+			// / mc->complementSelection() → NewSelectionMessage →
+			// reactToMessages_ → setSelection_), we must ALSO update
+			// the cursor selection to match. Otherwise the next
+			// updateSelection (e.g., from a subsequent click) would
+			// re-sync BALL FROM cursor selection and undo the external
+			// change. Guard with ignore_messages_ so the
+			// itemSelectionChanged signal fired by setSelected() does
+			// not recursively re-enter updateSelection.
+			const bool restore_ignore = ignore_messages_;
+			ignore_messages_ = true;
+
 			QTreeWidgetItemIterator qit(listview);
 			while (*qit != 0)
 			{
@@ -1140,7 +1155,26 @@ namespace BALL
 				            sel ? tr("selected") : tr("not selected"));
 				// Force the view to re-query data(0, Qt::ForegroundRole).
 				it->notifyDataChanged();
+				// Two-way sync: cursor selection mirrors BALL selection.
+				if (it->isSelected() != sel)
+					it->setSelected(sel);
 				qit++;
+			}
+
+			ignore_messages_ = restore_ignore;
+
+			// Refresh selected_ so internal callers (cut / paste / etc.)
+			// see the post-sync state without going through the public
+			// updateSelection slot (which would recurse via the sync
+			// block we just bypassed).
+			selected_.clear();
+			QTreeWidgetItemIterator sit(listview);
+			while (*sit != 0)
+			{
+				MyTreeWidgetItem* it = static_cast<MyTreeWidgetItem*>(*sit);
+				if (it->isSelected() && it->composite != 0)
+					selected_.push_back(it->composite);
+				sit++;
 			}
 
 			getMainControl()->printSelectionInfos();

@@ -135,18 +135,23 @@ namespace BALL
 			stage_->setEyeDistance(eye_distance_);
 			stage_->setFocalDistance(focal_distance_);
 
-			// UFG-25 (rc4 validation) — Stage::setBackgroundColor()
+			// UFG-25 (rc4 → rc5 → rc5-followup) — Stage::setBackgroundColor()
 			// only stores the new value in the Stage struct. The
-			// actual GL clear color is set in GLRenderer::initializeGL
-			// once at startup; subsequent background changes are
-			// invisible until something else triggers a Scene
-			// repaint that re-issues `glClearColor()`. Calling
-			// `Scene::updateGL()` here schedules a paintGL pass that
-			// re-reads stage_->getBackgroundColor() and re-issues
-			// glClearColor. Same fix covers fog/coordinate-system
-			// changes that also feed into the GL render state.
+			// actual `glClearColor()` requires a separate call to
+			// `RenderSetup::updateBackgroundColor()` per renderer,
+			// and the fog intensity needs `setFogIntensity()` on the
+			// GL renderer (these are what the legacy Stage Preferences
+			// dialog does in `Scene::applyPreferences` lines
+			// 1142-1155). Just calling `updateGL()` repaints with the
+			// OLD glClearColor cached on the renderer.
+			//
+			// `Scene::refreshSceneRenderState()` is the new public
+			// helper that does the renderers loop + updateGL — mirroring
+			// the applyPreferences path. Covers background + fog;
+			// coordinate-system toggle propagates via the existing
+			// stage_->showCoordinateSystem() above.
 			if (scene_ != nullptr)
-				scene_->updateGL();
+				scene_->refreshSceneRenderState();
 
 			// Emit appliedStub so callers wired during the migration
 			// window keep observing the apply signal. (Renamed in the

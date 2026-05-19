@@ -3260,6 +3260,24 @@ namespace BALL
 			paintGL();
 		}
 
+		void Scene::refreshSceneRenderState()
+		{
+			// UFG-25 (rc5 follow-up) — Inspector edits to background
+			// color / fog need to drive glClearColor + fog state into
+			// the active renderer just like the legacy Stage
+			// Preferences dialog does. Replicate the subset of
+			// applyPreferences() that pushes per-frame GL state, then
+			// schedule a repaint via updateGL().
+			if (main_display_ != nullptr) main_display_->makeCurrent();
+			for (Position i = 0; i < renderers_.size(); ++i)
+			{
+				renderers_[i]->updateBackgroundColor();
+				if (renderers_[i]->getRendererType() == RenderSetup::OPENGL_RENDERER)
+					renderers_[i]->renderer->setFogIntensity((float)stage_->getFogIntensity());
+			}
+			updateGL();
+		}
+
 		void Scene::setOffScreenRendering(bool enabled, Size factor)
 		{
 			offscreen_rendering_ = enabled;
