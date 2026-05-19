@@ -110,7 +110,22 @@ namespace BALL
 
 			if (colors.size() != getNames().size())
 			{
-				BALLVIEW_DEBUG;
+				// v1.7.x (2026-05-19) — was BALLVIEW_DEBUG (alarming
+				// "Please notify on GitHub" message). The size mismatch
+				// fires PREDICTABLY for every user with a pre-v1.7 BALLView
+				// INI config: the Phase 4.1 ColoringSettingsDialog migration
+				// changed the color-table entry count, and stale INI blocks
+				// with the old count flow through colorTable's parse path
+				// before the dialog's "dropping legacy Elements= block"
+				// migration kicks in. The code already returns false here
+				// and the caller falls back to compiled defaults — the
+				// behaviour is correct; only the log noise is wrong.
+				// Downgrade to Log.info so the diagnostic value is preserved
+				// without scaring users into filing GitHub issues.
+				Log.info() << "ColorTable: dropping stale config block — "
+				           << colors.size() << " colors found, "
+				           << getNames().size() << " expected (likely pre-v1.7 BALLView config; "
+				           << "compiled defaults will be used)" << std::endl;
 				return false;
 			}
 

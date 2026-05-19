@@ -285,14 +285,28 @@ namespace BALL
 				{
 					if (!epo->setValue(value))
 					{
-						BALLVIEW_DEBUG;
+						// v1.7.x (2026-05-19) — was BALLVIEW_DEBUG. False
+						// return from setValue() is an EXPECTED outcome
+						// when a pre-v1.7 BALLView INI config flows in with
+						// stale field-counts (Phase 4.1 ColoringSettingsDialog
+						// migration). The widget already falls back to
+						// compiled defaults. See colorTable.C:113 for the
+						// matching log downgrade.
+						QString objname = widget->objectName();
+						Log.info() << "PreferencesEntry: ExtendedPreferencesObject "
+						           << (objname.isEmpty() ? "(unnamed)" : objname.toStdString())
+						           << " rejected stale config value; using compiled defaults" << std::endl;
 					}
 				}
                 else if (RTTI::isKindOf<PreferencesObject>(widget))
 				{
 					if (!(dynamic_cast<PreferencesObject*>(widget))->setValue(value))
 					{
-						BALLVIEW_DEBUG;
+						// Same rationale as above — pre-v1.7 INI migration noise.
+						QString objname = widget->objectName();
+						Log.info() << "PreferencesEntry: PreferencesObject "
+						           << (objname.isEmpty() ? "(unnamed)" : objname.toStdString())
+						           << " rejected stale config value; using compiled defaults" << std::endl;
 					}
 				}
                 else if (RTTI::isKindOf<QSlider>(widget))
