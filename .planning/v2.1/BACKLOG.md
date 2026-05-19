@@ -1,0 +1,59 @@
+# v2.1 Backlog
+
+Items tracked for v2.1 milestone but **not blocking** v2.1.0 release. Each
+gets a tracking ID, current status, and target milestone.
+
+## Active backlog (closed by v2.1.0 if possible; otherwise documented as
+v2.1.x or v2.2 follow-up)
+
+### V21-MSVC-CI-PORTABILITY
+
+**Status:** Open. Non-blocking v2.1.0 per D34d.
+**Source:** R21 P21-11 / R21-F3, formalised in R21b P21b-7.
+
+Add a Windows MSVC + vcpkg GHA job to `.github/workflows/ci-v2.yml`
+that runs the CORE_ONLY build + ctest sweep. Currently the codebase
+has never been built on Windows; vcpkg setup is part of Phase 4
+(BALLView 1.6 modernization), not v2.1's kernel work.
+
+D34d demoted this from v2.1.0-rc1 prep (D34c original) to v2.2 P0/P2
+because D40 dropped the `sizeof(Atom) ≤ 32 B` target from v2.1.
+Without that target, MSVC EBO verification is no longer a release
+gate.
+
+**v2.1 status:** non-blocking. Apple Clang macOS arm64 remains the
+sole enforced CI target.
+**v2.2 status:** required before v2.2's inheritance flip claims
+`sizeof(Atom) ≤ 32 B` (BALL_EMPTY_BASES needs MSVC verification then).
+
+Scope when implemented:
+1. vcpkg manifest for Qt5 + Boost + Eigen3 + flex + bison + cmake
+2. CMakeLists adjustments for MSVC link flags (`/EHsc`,
+   `_USE_MATH_DEFINES`)
+3. Resolution of any MSVC source incompatibilities
+4. CI matrix expansion to include `windows-2022`
+
+---
+
+## Documentation-only backlog items
+
+(These exist as design notes / commitments that don't affect code
+state, but tracked here for visibility.)
+
+- **V21-VIEW-RTTI** (D37): 54 Atom-RTTI sites in VIEW + APPLICATIONS.
+  v2.1 only removes the 24 sites in CORE_ONLY modules. VIEW removal
+  is part of Phase 4 (BALLView 1.6 modernization) prep.
+- **V21-MUTATION-WIRING** (D39): The `Composite` / `PropertyManager`
+  / `Selectable` mutation-path wiring that fills side tables in
+  parallel with v0 inline state is **deferred to v2.2** alongside
+  the inheritance flip. v2.1 ships side-table scaffolding only.
+- **V21-BIT-PROPERTY-COLUMN** (R20c-2): bit-property mirrors live in
+  the sparse_bag with a typed `SparseKey { kind, name_id/bit_idx }`.
+  Packed-bool columns are a v2.2 candidate if profiling shows the
+  sparse path is a bottleneck.
+
+---
+
+## Closed (delivered in v2.1 milestone)
+
+(none yet — v2.1 in progress)

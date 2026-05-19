@@ -107,8 +107,10 @@ What v2.1 does NOT ship:
 - Mutation wiring (v2.2)
 - Inheritance flip (v2.2)
 - D13 budget closure (v2.2)
-- Windows MSVC CI (D34c → moved to v2.1.0-rc1 prep, may slip
-  to v2.2 if Phase 4 vcpkg isn't ready)
+- Windows MSVC CI (D34d → moved fully to v2.2 P0/P2 since
+  v2.1 dropped the sizeof target that motivated D34c. Tracked
+  as `V21-MSVC-CI-PORTABILITY` in `.planning/v2.1/BACKLOG.md`;
+  non-blocking for v2.1.0)
 
 ## Phase plan
 
@@ -144,7 +146,7 @@ and refactor in place**:
 
 | # | Subject | Strategy |
 |---|---|---|
-| P3.1 | **Per-site classification.** Read each of the 24 sites; assign one of three categories: (T) typed-call-path-available — caller's context already knows it's an Atom, refactor to take `Atom*` directly; (S) store-backed-identity — caller has a Composite* but can query `store->back_ptr(idx)` or similar to confirm it's an Atom; (V) visitor-needed — genuine tree-discrimination case requiring runtime dispatch. | per-site spreadsheet in P3.1 commit message |
+| P3.1 | **Per-site classification.** Read each of the 24 sites; assign one of three categories: (T) typed-call-path-available — caller's context already knows it's an Atom, refactor to take `Atom*` directly; (S) store-backed-identity — caller has a Composite* but can query `store->back_ptr(idx)` or similar to confirm it's an Atom; (V) visitor-needed — genuine tree-discrimination case requiring runtime dispatch. | checked-in artifact `.planning/v2.1/P3-CLASSIFICATION.md` listing all 24 sites with category, replacement plan, and test/grep coverage (per R21b P21b-2; commit-message-only spreadsheets are too easy to lose). |
 | P3.2 | Remove (T) typed-call-path sites | refactor in place; tests of touched module pass |
 | P3.3 | Remove (S) store-backed sites | use `Atom::getStore()` / `back_ptr_` / `store_idx_` for identity check; no new virtual |
 | P3.4 | Remove (V) visitor sites — ONLY if (T)/(S) don't apply | introduce minimal visitor pattern if needed; document why (T)/(S) wasn't sufficient |
@@ -196,10 +198,10 @@ claim; existing MoleculeStoreJson_test verifies correctness.
 
 | # | Subject | Deliverable |
 |---|---|---|
-| P5.1 | V21-STORE-ITER-API | New public `MoleculeStore::iterAtoms()` / `iterBonds()` returning lightweight iterators that skip `Atom*` materialisation. Hot loops can use this; existing v0 iteration paths unchanged. |
-| P5.2 | V21-CI-PERF-GATES | **Concrete calibration methodology (R21 P21-8):** collect 5 clean CI runs per benchmark on GHA macos-15 baseline (Apple Clang Release CORE_ONLY). Each benchmark internally runs N=5 iterations; report median + min/max + coefficient of variation. Gate at `max(2 × baseline_median, baseline_median + 6 × MAD)` (MAD = median absolute deviation; robust to outliers). Benchmarks with CoV > 30% are marked "advisory" (warning-only) until calibration improves. |
+| P5.1 | V21-STORE-ITER-API | New public `MoleculeStore::iterAtoms()` / `iterBonds()` returning lightweight iterators that skip `Atom*` materialisation. Hot loops can use this; existing v0 iteration paths unchanged. **Deliverable per R21b P21b-8:** checked-in API design memo `.planning/v2.1/P5-STORE-ITER-API.md` covering signature, value-category (yields `Atom*` for v2.2 forward-compat per R21 P21-7), iterator-invalidation contract under store mutation, and a usage example. R26 close review (renumbered from R27) verifies the API design AND its v2.2 forward-compat. |
+| P5.2 | V21-CI-PERF-GATES | **Concrete calibration methodology (R21 P21-8 + R21b P21b-4):** collect 5 clean CI baseline runs per benchmark on GHA macos-15 baseline (Apple Clang Release CORE_ONLY). Each benchmark internally runs N=5 iterations; report median + min/max + coefficient of variation. Gate at `max(2 × baseline_median, baseline_median + 6 × MAD)`. Baselines are **collected ONCE on the clean v2.1 baseline + pinned in a checked-in baseline file** (`.planning/v2.1/PERF-BASELINES.json` or similar); refreshed only via an explicit "perf baseline refresh" PR after intentional benchmark or runner drift review. Routine CI does NOT re-collect baselines (otherwise CI gets expensive and flaky). Benchmarks with CoV > 30% on the baseline run are marked "advisory" (warning-only) until calibration improves. |
 | P5.3 | V21-MEDIAN-OF-N-BENCH | Bench harness refactor to report median + p99 + MAD across N runs; release-claim numbers reproducible. |
-| P5.4 | Generation-guard `BALL_DEBUG` mode (R21 P21-9) | Per D25: in `BALL_DEBUG` builds, every Atom handle deref asserts `handle.generation == store->generation_`. **Verification required:** (a) #ifdef BALL_DEBUG wraps the entire check in inline getters in `atom.iC`; (b) release build's disassembly (or `nm`/`strings`) of `Atom::getPosition()` etc. shows no compare against `generation_`; (c) new debug-mode test asserts that stale-handle deref traps. CI runs both release + debug suites. |
+| P5.4 | Generation-guard `BALL_DEBUG` mode (R21 P21-9 + R21b P21b-5) | Per D25: in `BALL_DEBUG` builds, every Atom handle deref asserts `handle.generation == store->generation_`. **Verification — three levels:** (a) **CI-enforced:** `ctest -R "GenerationGuard"` runs the debug-only stale-handle trap test (new test `GenerationGuard_test` lands with P5.4); CI gate fails if missing. (b) **CI-enforced grep:** new CI step `grep -l "generation_" build/lib/libBALL.dylib.symbols` (extracted via `nm -gU`) fails if release lib exports a `generation_` symbol reference from inline-getter code (only debug build should). (c) **Manual close-review:** R26 (P5 close review) inspects release-build `objdump -d` of `Atom::getPosition()` etc. to confirm no compare-against-generation_ in hot getter assembly. If the grep approach proves unreliable across toolchain versions, level (b) is documented as manual review and a follow-up backlog item tracks automation. |
 | P5.5 | Close review (R27) | Codex reviews perf gates + iter API completeness + generation-guard #ifdef proof |
 
 **Risk:** STORE-ITER-API is new public API surface (per D33b
@@ -230,15 +232,18 @@ forward-compatible with v2.2's inheritance flip.
 | R23 | P3 close | needed |
 | R24 | P4 planning — JSON closures + load-batch design (post-profile) | needed (JSON load/schema changes user-visible) |
 | R25 | P4 close | needed |
-| ~~R26~~ | ~~P5 planning~~ — **downgraded to maintainer checklist** | P5 is mostly mechanical: perf gates + bench harness + #ifdef guard. STORE-ITER-API is a short API surface — handled in a small API-design memo in P5.1 commit message rather than full Codex round. |
-| R26 (was R27) | P5 close | needed (perf claim verification) |
-| R27 (was R28) | v2.1.0-rc1 pre-tag | needed |
+| ~~R26 planning~~ | ~~P5 planning~~ — **downgraded** | P5 perf/bench/#ifdef work is mostly mechanical. STORE-ITER-API is the only public-API surface in P5; covered by the checked-in `P5-STORE-ITER-API.md` design memo (per R21b P21b-8) reviewed in R26 close. |
+| R26 (renumbered) | P5 close — includes STORE-ITER-API design review + v2.2 forward-compat | needed |
+| R27 (renumbered) | v2.1.0-rc1 pre-tag | needed |
 
-Total revised: **6 more Codex rounds** (R21 + R21b + R22-R23 + R24-R25 + R26 + R27).
+**Round count after R21b:** R22, R23, R24, R25, R26, R27 remain
+= **6 rounds AFTER this R21b iteration**. (R21+R21b are the
+current roadmap-review cluster; counted separately from the
+phase-execution rounds.)
 
 R21b needs to GO before P3 starts. Per the convergence pattern
-(R20→R20d took 4 rounds), expect 1-2 more iterations after this
-revision.
+(R20→R20d took 4 rounds), expect 0-1 more iterations after this
+second revision.
 
 ## Risk register (v2.1 milestone level)
 
@@ -254,12 +259,13 @@ revision.
   win; the gate is "improvement," not "specific magnitude."
 - **R-V21.D (MEDIUM):** P5 STORE-ITER-API design needs to
   forward-compat with v2.2's inheritance flip. Mitigation:
-  R26 planning review explicitly evaluates the v2.2-flip
-  compatibility.
-- **R-V21.E (LOW):** Windows MSVC CI (D34c) may slip past
-  v2.1.0 if Phase 4 vcpkg isn't ready. Mitigation: documented
-  as a v2.1.x backlog item; doesn't block v2.1.0 if CI runs
-  Apple Clang only.
+  the checked-in `P5-STORE-ITER-API.md` design memo (per
+  P5.1) makes the API contract explicit; R26 close review
+  evaluates the v2.2-flip compatibility against the memo.
+- **R-V21.E (RESOLVED):** Windows MSVC CI deferral resolved
+  by D34d — moved entirely to v2.2. v2.1.0 ships with Apple
+  Clang macOS arm64 as the only enforced CI target.
+  V21-MSVC-CI-PORTABILITY tracked in `.planning/v2.1/BACKLOG.md`.
 
 ## Estimated timeline
 
