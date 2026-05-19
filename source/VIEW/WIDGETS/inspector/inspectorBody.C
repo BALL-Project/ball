@@ -86,6 +86,21 @@ namespace BALL
 		void InspectorBody::setCurrentTab(InspectorTabs::TabIndex idx)
 		{
 			stack_->setCurrentIndex(static_cast<int>(idx));
+
+			// UFG-22 belt-and-braces — invalidate the incoming page's
+			// QScrollArea viewport so its full-rect repaint happens on
+			// the next paint cycle. InspectorView::onTabChanged_ also
+			// calls `body_->repaint()` synchronously, but doing both
+			// covers the case where the QScrollArea's viewport rect
+			// caches its own dirty region independent of the body.
+			const int i = static_cast<int>(idx);
+			if (i >= 0 && i < 3 && pages_[i].page)
+			{
+				if (QScrollArea* sa = qobject_cast<QScrollArea*>(pages_[i].page))
+				{
+					if (QWidget* vp = sa->viewport()) vp->update();
+				}
+			}
 		}
 
 		void InspectorBody::addSection(InspectorTabs::TabIndex idx, InspectorSection* section)

@@ -198,6 +198,32 @@ namespace BALL
 			if (index < 0 || index > 2) return;
 			body_->setCurrentTab(static_cast<InspectorTabs::TabIndex>(index));
 
+			// UFG-22 fix — force a full-rect repaint of the body widget
+			// after a tab switch. QStackedWidget switches pages by
+			// hide/show but does NOT issue a paint event on the body
+			// area between sections — and on macOS Qt 6.8 + Metal
+			// backing, the framebuffer keeps the previous frame's
+			// pixels until something explicitly overwrites them. UFG-10
+			// added `setAutoFillBackground(true)` on InspectorBody,
+			// which fills the body's background on its OWN paint event,
+			// but the body widget never GETS that event on a tab switch
+			// because its bounding rect is fully covered by its
+			// children's covered rects. Result: stale pixels from the
+			// outgoing page (e.g. the Selection page's QuickActionsSection
+			// header) ghost through where the incoming page's children
+			// don't cover ("QUICK AC" overlapping "REPRESENTATION").
+			//
+			// Forcing `body_->repaint()` (synchronous, not `update()`)
+			// after `setCurrentTab` guarantees the body fills its full
+			// rect with QPalette::Window before the incoming page's
+			// children paint on top. The QScrollArea viewport update_
+			// below is belt-and-braces in case the scroll area's own
+			// viewport rect needs an explicit invalidation.
+			if (body_)
+			{
+				body_->repaint();
+			}
+
 			// UFG-12 fix — when the user switches *to* the Scene tab,
 			// resync the Scene-tab Controllers from live Stage/Scene
 			// state so the widgets show current values instead of stale
