@@ -1,0 +1,373 @@
+# BALL 2.1 — Decision Log
+
+**Status:** P0 design lock (in progress).
+**Authored:** 2026-05-19.
+**Companion:** `MILESTONE-v2.1-KICKOFF.md`.
+
+D-decisions continue the v2.0 series (`KERNEL-V2-DECISIONS.md` ends
+at D21). v2.1 starts at **D22**.
+
+Each decision: question → options considered → chosen path →
+rationale → impact on other decisions / phases.
+
+---
+
+## D22. Composite side-table: unified per-store node table
+
+**Question:** Where does the Composite tree live once Atom no longer
+inherits from Composite?
+
+**Chosen:** **A. Unified per-store `vector<CompositeNode>` indexed by
+`(kind, idx)`.**
+
+**Rationale:**
+- Atom is the high-volume case (100k+ per System), but Molecule /
+  Chain / Residue / System are also Composites. A unified table
+  amortises the side-storage infra across all five kinds.
+- Compact layout: one `CompositeNode { parent_handle, first_child,
+  next_sibling, kind: u8 }` per composite member.
+- Lookup by handle is O(1) — `composite_nodes_[handle.idx]`.
+- Avoids the half-gain trap of per-Atom heap `Composite*` (Option B
+  would cost ~96 B/atom and lose most of the v2.1 win).
+- Avoids the read-only-derived trap of Option C (we need
+  `Atom::insert(*child)` patterns to keep working for v1.x compat).
+
+**Impact:**
+- `MoleculeStore` grows a `composite_nodes_` SoA column.
+- Every Composite-derived class gets a `composite_handle_` lookup
+  key instead of inline `parent_/child_/sibling_` pointers.
+- Each Composite kind registers a tag (`COMPOSITE_KIND_ATOM`, ...)
+  for the `(kind, idx)` discriminator.
+- Tree mutation (`appendChild`, `removeChild`) becomes a store
+  operation under the existing per-store mutex contract.
+
+**Sizing:** `CompositeNode` ≈ 24 B (3× u64 handle + 1 byte kind +
+padding). At 100k atoms that's 2.4 MB additional side storage —
+well under the 36 MB we save from dropping the inline Composite
+state on Atom (360 B × 100k = 36 MB).
+
+---
+
+## D23. PropertyManager → pre-allocated per-store columns (NOT sparse)
+
+**Question:** Dense vector, sparse HashMap, or hybrid inline-spill?
+
+**Chosen:** **A, refined: per-property typed columns in the store,
+pre-allocated to store capacity.**
+
+**Rationale (maintainer correction over the kickoff doc's lean):**
+
+The kickoff doc assumed properties are sparse (most atoms have 0
+properties) and recommended `HashMap<atom_idx, PropertyBag>`. The
+maintainer's correction: **in BALL's actual usage pattern,
+properties are assigned in bulk across all atoms at the same time**
+(atom-typing pass writes MMFF94_TYPE on every atom; charge-assign
+pass writes PARTIAL_CHARGE on every atom; etc.). The sparse-map
+assumption is wrong.
+
+So we move from "bag-per-atom" to **"column-per-property, indexed
+by atom_idx"**:
+
+```cpp
+// In MoleculeStore:
+class PropertyColumnRegistry {
+    HashMap<String, PropertyColumnHandle> by_name_;
+    std::vector<std::unique_ptr<PropertyColumnBase>> columns_;
+public:
+    template<typename T>
+    PropertyColumnHandle registerColumn(const String& name);
+
+    PropertyColumnHandle find(const String& name) const;
+    PropertyColumnBase& column(PropertyColumnHandle h);
+};
+
+class PropertyColumn<T> : public PropertyColumnBase {
+    std::vector<T> data_;           // sized to store capacity
+    BitVector      present_;        // 1 bit per atom — is this prop set?
+public:
+    void set(atom_idx i, const T& v);
+    bool isSet(atom_idx i) const;
+    const T& get(atom_idx i) const;
+    void clear(atom_idx i);
+};
+```
+
+**Storage cost (100k atoms, 5 typical force-field props):**
+- 5 × 4 B float column = 2 MB
+- 5 × 12.5 KB BitVector = 62.5 KB
+- Registry overhead: ~200 B
+
+Vs the v2.0 per-atom PropertyManager bag, which is ~88 B inline +
+heap-allocated value entries. At 100k atoms with 5 props each,
+v2.0 uses ~8.8 MB of inline + heap allocations + map-rebalance
+churn during atom-typing. v2.1 column approach is **~4× smaller**
+and avoids the realloc cascade.
+
+**Trade-off — what we lose:**
+- Properties with very low fill rate (e.g. one atom out of 100k has
+  a debug marker) waste a column allocation. Mitigated by:
+  (a) the `present_` BitVector means unset slots are 0 cost beyond
+  the 1-bit flag, and
+  (b) typed columns can use sentinel values (NaN for float, empty
+  string for String) to skip the BitVector for fully-dense props.
+- Type punning: `PropertyManager` today is type-erased. We need to
+  preserve that surface — `setProperty(name, NamedProperty)` looks
+  up the registry; if the type doesn't match the registered column
+  type, it throws `InvalidArgument`. Same observable behaviour as
+  v1.x's mismatched-type assertion.
+
+**Impact:**
+- v2.0's `PropertyManager` is preserved as a thin facade that
+  forwards every operation to the per-store column registry.
+- Bond properties: same column infra in the bond table. Closes
+  V21-BOND-PROPERTY-JSON for free — columns serialise as-is to
+  K0.6 JSON.
+- The Bond properties used by force fields (MMFF94SBMB,
+  MMFF94RBL, VIRTUAL__BOND) become known column types, registered
+  at first use.
+
+**Open sub-question (deferred to P1):** Do we hoist a fixed schema
+of "well-known" columns (PARTIAL_CHARGE, FORMAL_CHARGE, MMFF94_TYPE,
+AMBER_TYPE, etc.) into typed accessors on Atom directly, bypassing
+the registry? Probably yes for the 5-10 most-touched ones — cuts a
+HashMap lookup off the hot path. Defer the list to a P1 benchmark.
+
+---
+
+## D24. Selectable: packed BitVector, not byte-vector
+
+**Question:** Atomic per-bit, or single-threaded contract?
+**Refined by user:** "store this as a bitvector."
+
+**Chosen:** **Single-thread per-System contract (per D16), backed by
+a packed BitVector (8× smaller than the kickoff's `vector<uint8_t>`
+suggestion).**
+
+**Rationale:**
+- D16 already commits us to single-thread per-System mutation. No
+  reason to pay atomic cost for selection bits.
+- BitVector packing: 100k atoms = 12.5 KB instead of 100 KB. Fits
+  comfortably in L2 cache on modern CPUs; full-store scan for
+  "iterate all selected atoms" stays in cache.
+- BALL already has `BALL::BitVector` in `DATATYPE` — reuse, not
+  reinvent. Use `BALL::BitVector` (or `std::vector<uint64_t>` with
+  inline bit ops if the BitVector API gets in the way of hot
+  loops).
+
+**Impact:**
+- `MoleculeStore` gets a `selected_` BitVector column, sized to
+  store capacity.
+- `Atom::select()` / `isSelected()` / `deselect()` redirect to
+  store. Composite-tree downward propagation (`select()` on a
+  Molecule selects all its atoms) becomes a range-set on the
+  BitVector — much faster than v1.x's per-atom recursion.
+- Selection-aware queries (`Selector` "is selected" predicate)
+  benefit: scan one BitVector instead of dereferencing every
+  Atom*.
+
+---
+
+## D25. Stale-handle generation guard: debug-only
+
+**Question:** Always-on, debug-only, or opt-in RAII?
+**Chosen:** **B. Debug-only via `BALL_DEBUG`.**
+
+**Rationale:**
+- The kickoff lean was C (opt-in RAII). The maintainer's call:
+  release builds pay zero for handle validation; debug builds
+  trap on misuse.
+- Matches the v2.0 contract: stale-handle detection in v2.0 is
+  generation-counter-based and per-evaluate (CompiledExpression
+  D17). Atom handles in release builds today have no per-deref
+  check either — v2.1 doesn't regress that.
+- Production workloads (renderer hot loops, batch processors) get
+  full speed. Bugs surface in `BALL_DEBUG` builds and CI debug
+  runs.
+- Opt-in RAII (C) adds an API surface (`BorrowedAtom`) consumers
+  would need to migrate to. Debug-only is invisible to consumer
+  code.
+
+**Impact:**
+- Every Atom getter/setter in release mode: zero cost change vs
+  v2.0.
+- In `BALL_DEBUG`: each handle deref asserts
+  `handle.generation == store->generation_`. On mismatch, throw
+  `InvalidArgument` with file/line of the deref site.
+- CI gains a "debug-suite run" job to catch handle-staleness
+  regressions across the full test surface (cost: ~30% slower
+  than release ctest).
+
+---
+
+## D26. v2.0 → v2.1 public API: preserve the surface
+
+**Question:** Break the Atom-as-Composite surface, keep it, or
+deprecate-then-remove?
+
+**Chosen:** **A. Preserve the surface; redirect to side tables.**
+
+**Rationale:**
+- The whole point of v2.0's D2/D3/D4 thin-stub compromise was to
+  preserve the public API surface while moving the storage. v2.1
+  finishes the storage move; consumers shouldn't have to rewrite
+  to benefit.
+- Track B clusters (FORMAT, STRUCTURE, QSAR, DOCKING, MOLMEC) use
+  the Composite + PropertyManager + Selectable surfaces
+  extensively. Breaking them would propagate fix-up work across
+  the entire downstream ecosystem.
+- Performance cost of preserving the surface: one extra indirect
+  call per Composite-tree access. Hot loops should use the new
+  `MoleculeStore::iterAtoms()` API (V21-STORE-ITER-API) directly
+  anyway.
+- Deprecation pass (C) deferred to v2.2 if at all — gives consumers
+  a release cycle to migrate hot paths to store-native APIs
+  voluntarily.
+
+**Impact:**
+- Atom inherits from `D17Composite`, `D17PropertyManager`,
+  `D17Selectable` shim classes that forward to the side tables.
+- Method signatures unchanged. `atom->getParent()`, `atom->select()`,
+  `atom->setProperty(...)` — identical to v2.0.
+- The shim classes have no per-instance state (empty bases, EBO
+  collapses them) — sizeof contribution is 0 B.
+- Tests in Track B continue to pass without source changes.
+
+---
+
+## D27. Sequencing: v2.1 ships before v2.0.x patches close Wave 4-7
+
+**Question:** Block on v2.0.x patches, or ship in parallel?
+**Chosen:** **v2.1 ships first.**
+
+**Rationale:**
+- The thin-handle refactor is foundational; Wave 4-7 module
+  closures are independent and can ride on either v2.0.x or v2.1.
+- Doing v2.0.x first delays v2.1 by 4-8 weeks for work that doesn't
+  unblock anything in v2.1's critical path.
+- If Wave 4-7 closures uncover kernel bugs, they can land as v2.1
+  patches (v2.1.1, v2.1.2) — same upstream branch.
+
+**Impact:**
+- v2.0.x maintenance line: only critical fixes (security, kernel
+  correctness regressions found in production). No feature work.
+- Wave 4-7 closures retarget to v2.1.x patch releases.
+
+---
+
+## D28. Adversarial review cadence: per-phase, design + post-implementation
+
+**Question:** R17/R18 only, or sub-round per phase?
+**Chosen:** **Per-phase, with Codex review at BOTH the planning gate
+AND the implementation close of each phase.**
+
+**Rationale (user direction):**
+> "make sure you do an adversarial review in the planning and at the
+> end of a phase for review and fix/gap closing."
+
+This is stricter than the kickoff's "R17/R18 only" lean. The v2.0
+pattern showed Codex reviews caught bugs the implementation didn't
+self-detect (R11's 5 bugs, R12's 5 bugs, R13's 2 bugs, R14's 2
+bugs, R16's 3 bugs). v2.1's surgery on Atom inheritance is higher-
+risk than v2.0's K0.5 / K0.6 phases; per-phase guardrails are
+proportional to the risk.
+
+**Schedule (review IDs continue from R16):**
+
+| Phase | Planning review | Close review |
+|---|---|---|
+| **P0 design lock** | — (covered by P1 planning review) | **R17** — design lock sanity |
+| **P1 side-table infra** | **R18** — P1 plan review | **R19** — P1 close review |
+| **P2 thin-handle flip** | **R20** — P2 plan review | **R21** — P2 close review |
+| **P3 bond thin-handle** | **R22** — P3 plan review | **R23** — P3 close review |
+| **P4 JSON closures** | **R24** — P4 plan review | **R25** — P4 close review |
+| **P5 perf & benchmarks** | **R26** — P5 plan review | **R27** — P5 close review |
+| **P6 release** | — | **R28** — pre-tag review |
+
+**Impact:** 12 Codex review rounds across v2.1 (vs 7 in v2.0).
+Budget: ~1 day per round for the review + fix cycle.
+
+---
+
+## D29. Branch strategy: v2.1 linear from v2.0
+
+**Question:** Linear from v2.0, or rebase / merge cadence?
+**Chosen:** **Linear `v2.1` branch from the v2.0.0 tag.**
+
+**Rationale:**
+- Master is still v1.x — no rebase target exists.
+- v2.0 branch is now in maintenance mode (D27); the v2.1 work
+  doesn't need to track v2.0 commits.
+- Any v2.0.x critical fix that's relevant to v2.1 (kernel
+  correctness) can be cherry-picked onto v2.1.
+
+**Impact:**
+- `origin/v2.1` is the v2.1 development branch.
+- v2.1 PRs target `v2.1`, not `master`.
+- After v2.1.0 final tag, merge v2.1 → master (or rebase master to
+  fast-forward, depending on what's accumulated on master).
+
+---
+
+## D30. JSON forward/backward compatibility: not required
+
+**Question:** Keep K0.6 schema byte-compatible, or MINOR bump?
+**Chosen:** **MINOR bump. No forward-compat requirement.**
+
+**Rationale (user direction):** "not required."
+
+- v2.1 can add fields (e.g., per-property-column type tags, bond
+  PropertyManager columns for V21-BOND-PROPERTY-JSON) without
+  backward-compat reader logic.
+- K0.6 MAJOR stays at 1; MINOR bumps to 1.1 for v2.1.
+- v2.0 readers loading v2.1 JSON: fail cleanly with
+  `Exception::ParseError("schema MINOR 1.1 > reader 1.0")`.
+- v2.1 readers loading v2.0 JSON: supported (backward read). v2.1
+  reader recognises missing MINOR-1.1 fields and substitutes
+  defaults.
+
+**Impact:**
+- V21-LOAD-BATCH free to reorganise the JSON layout (e.g., bulk-
+  column arrays instead of per-atom records) since byte-compat
+  isn't required.
+- V21-BOND-PROPERTY-JSON adds new top-level `bond_property_columns`
+  section without breaking the writer.
+- Documented in RELEASE-NOTES-v2.1.md as "v2.0 JSON loads in v2.1;
+  v2.1 JSON does not load in v2.0".
+
+---
+
+## Cross-decision summary
+
+| Decision | Choice (1-word) |
+|---|---|
+| D22 Composite side-table | unified-node-table |
+| D23 PropertyManager | per-store-columns |
+| D24 Selectable | packed-BitVector |
+| D25 Generation guard | debug-only |
+| D26 API surface | preserve |
+| D27 Sequencing | v2.1-first |
+| D28 Review cadence | per-phase-x2 |
+| D29 Branch strategy | linear-from-v2.0 |
+| D30 JSON compat | MINOR-bump, no fwd-compat |
+
+---
+
+## Implementation consequences (P1 prep)
+
+D22 (unified node table) + D23 (column-per-property) + D24
+(BitVector) all push storage into `MoleculeStore`. **P1's
+deliverable: extend `MoleculeStore` with three new SoA segments —
+`composite_nodes_`, `property_columns_`, `selected_bits_` — fully
+populated and tested, with Atom/Composite/PropertyManager/Selectable
+still inheriting as in v2.0.** P2 then flips the inheritance.
+
+D25 (debug-only guard) + D26 (preserve API) mean the P1 → P2 flip
+is internal-only. Consumer code is unaffected.
+
+D28 (per-phase reviews ×2) means R17 lands immediately after this
+decisions doc commits — review the P0 design before any P1 code is
+written.
+
+---
+
+*Authored 2026-05-19. Next: R17 Codex adversarial review of D22-D30.*
