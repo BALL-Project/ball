@@ -1231,17 +1231,16 @@ namespace BALL
 		// BALLView hangs after "Enabling Vertex Buffer" until the
 		// 60s watchdog kills it. Use the same BALLVIEW_NO_WELCOME=1
 		// env var that the smoke script already sets to also suppress
-		// the migration notice. Marks the QSettings shown-flag as
-		// true so the notice doesn't appear next time either, which
-		// matches headless-runner intent.
+		// the migration notice.
+		//
+		// Refinement: do NOT set the firstRunMigrationNoticeShown flag
+		// in headless mode. Otherwise a developer who runs the smoke
+		// check on their own dev box (which uses ~/.BALLView shared
+		// with their interactive runs) would never see the migration
+		// notice on later interactive launches. The flag is only set
+		// when a real user has actually seen the message.
 		if (qEnvironmentVariableIsSet("BALLVIEW_NO_WELCOME"))
 		{
-			QSettings s(QDir::homePath() + QStringLiteral("/.BALLView"),
-			            QSettings::IniFormat);
-			s.beginGroup(QStringLiteral("Inspector"));
-			s.setValue(QStringLiteral("firstRunMigrationNoticeShown"), true);
-			s.endGroup();
-			s.sync();
 			return;
 		}
 
