@@ -20,7 +20,8 @@ build/*
 build*/*
 out/*
 .vs/*
-CMakeFiles/*
+CMakeFiles/
+**/CMakeFiles/
 source/autom4te.cache
 source/Makefile
 source/config.lic
@@ -41,3 +42,26 @@ source/TEST/data/SideChainPlacementProcessor_test_output_pre_1.pdb
 CMakeLists.txt.user
 a.out
 .claude/
+
+# in-source CMake build artifacts (legacy; prefer out-of-source builds in build/)
+CMakeCache.txt
+CMakeDoxyfile.in
+CMakeDoxygenDefaults.cmake
+CTestTestfile.cmake
+DartConfiguration.tcl
+Makefile
+Testing/
+cmake_install.cmake
+cmake/BALLConfig.cmake
+cmake/BALLConfigVersion.cmake
+cmake/BALLExport.cmake
+doc/doxygen/Doxyfile
+doc/doxygen/Doxyfile_dot
+doc/doxygen/Doxyfile_inc
+include/BALL/PYTHON/BALLPythonConfig.h
+source/BENCHMARKS/BALLBenchmarkConfig.h
+test/BALLTestConfig.h
+.qt/
+
+# BALL ClassTest harness sandbox temp files
+_AAAAA*.TMP
