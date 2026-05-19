@@ -10,7 +10,11 @@ INCLUDE(source/MOLMEC/COMMON/sources.cmake)
 INCLUDE(source/MOLMEC/MINIMIZATION/sources.cmake)
 INCLUDE(source/MOLMEC/MDSIMULATION/sources.cmake)
 INCLUDE(source/MOLMEC/PARAMETER/sources.cmake)
-IF(NOT BALL_CORE_ONLY)
-	INCLUDE(source/MOLMEC/AMBER/sources.cmake)
-	INCLUDE(source/MOLMEC/MMFF94/sources.cmake)
-ENDIF()
+# Cluster B step 3 (2026-05-19): AMBER re-enabled. Its GAFFTypeProcessor
+# needs QSAR (CB-1 in). Its amberNonBonded.C has a circular dep with
+# SCORING/COMPONENTS/advElectrostatic.h — both restore in the same
+# Cluster B step.
+INCLUDE(source/MOLMEC/AMBER/sources.cmake)
+# Cluster B step 3 (2026-05-19): MMFF94 re-enabled. Needs QSAR
+# (CB-1 in) for ring + aromaticity + atom typing.
+INCLUDE(source/MOLMEC/MMFF94/sources.cmake)

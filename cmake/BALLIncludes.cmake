@@ -129,13 +129,20 @@ INCLUDE(include/BALL/MOLMEC/sources.cmake)
 INCLUDE(source/QSAR/sources.cmake)
 INCLUDE(include/BALL/QSAR/sources.cmake)
 
+# Cluster B step 3 (2026-05-19): SOLVATION re-enabled. Provides FDPB
+# (Poisson-Boltzmann) for SCORING/COMPONENTS/PB.C and related.
+# Depends on MOLMEC + QSAR — both in.
+INCLUDE(source/SOLVATION/sources.cmake)
+INCLUDE(include/BALL/SOLVATION/sources.cmake)
+
+# Cluster B step 3 (2026-05-19): DOCKING re-enabled. Provides
+# Constraint/PharmacophoreConstraint/SideChainOptimizer for
+# SCORING/COMMON/scoringFunction + SCORING/COMPONENTS. Depends on
+# MOLMEC + QSAR + STRUCTURE — all in.
+INCLUDE(source/DOCKING/sources.cmake)
+INCLUDE(include/BALL/DOCKING/sources.cmake)
+
 IF(NOT BALL_CORE_ONLY)
 	INCLUDE(source/PYTHON/sources.cmake)
 	INCLUDE(include/BALL/PYTHON/sources.cmake)
-
-	INCLUDE(source/SOLVATION/sources.cmake)
-	INCLUDE(include/BALL/SOLVATION/sources.cmake)
-
-	INCLUDE(source/DOCKING/sources.cmake)
-	INCLUDE(include/BALL/DOCKING/sources.cmake)
 ENDIF()

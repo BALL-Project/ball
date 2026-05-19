@@ -57,22 +57,17 @@ SET(SOURCES_LIST
 	trajectoryFileFactory.C
 )
 
-# Cluster B-blocked FORMAT files (still need QSAR/DOCKING/STRUCTURE
-# rotamer):
-# - dockResultFile.C    : needs Result::ResultData (DOCKING)
-# - NMRStarFile.C       : needs Peptides::NameConverter (STRUCTURE)
-# - MOL2File.C          : needs GAFFTypeProcessor (MOLMEC AMBER + QSAR)
-# - SCWRLRotamerFile.C  : needs Rotamer/RotamerLibrary (STRUCTURE — rotamerLibrary trimmed)
-# - molFileFactory.C    : references DockResultFile typeinfo
-IF(NOT BALL_CORE_ONLY)
-	LIST(APPEND SOURCES_LIST
-		dockResultFile.C
-		NMRStarFile.C
-		MOL2File.C
-		SCWRLRotamerFile.C
-		molFileFactory.C
-	)
-ENDIF()
+# Cluster B step 3 (2026-05-19): all remaining FORMAT files restored.
+# DOCKING (dockResultFile), STRUCTURE rotamerLibrary (SCWRLRotamerFile),
+# MOLMEC AMBER (MOL2File via GAFFType), Peptides::NameConverter
+# (NMRStarFile) — all now in.
+LIST(APPEND SOURCES_LIST
+	dockResultFile.C
+	NMRStarFile.C
+	MOL2File.C
+	SCWRLRotamerFile.C
+	molFileFactory.C
+)
 
 ADD_BALL_SOURCES("FORMAT" "${SOURCES_LIST}")
 

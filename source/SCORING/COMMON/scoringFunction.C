@@ -3,6 +3,9 @@
 //
 #include <BALL/SCORING/COMMON/scoringFunction.h>
 
+// Cluster B step 3 (2026-05-19): DOCKING is now in. All ifdef
+// gates that fenced off Constraint/SideChainOptimizer in earlier
+// Cluster A/B drafts are dropped.
 #include <BALL/DOCKING/COMMON/sideChainOptimizer.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecularInteractions.h>

@@ -1,14 +1,6 @@
-# B1.3 (Codex R10 fix #3, 2026-05-18): BONDORDERS sub-tree gated on
-# !BALL_CORE_ONLY. Its files (AStarBondOrderStrategy, FPTBondOrderStrategy,
-# branchAndBoundBondOrderStrategy, KGreedyBondOrderStrategy,
-# bondOrderAssignmentStrategy, bondOrderAssignment, partialBondOrderAssignment,
-# ILPBondOrderStrategy) all #include <BALL/STRUCTURE/assignBondOrderProcessor.h>
-# and exist as helpers for AssignBondOrderProcessor. With
-# assignBondOrderProcessor.C trimmed in CORE_ONLY (QSAR cascade), the
-# bond-order surface is half-implemented and should not be exposed.
-IF(NOT BALL_CORE_ONLY)
-	INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
-ENDIF()
+# Cluster B step 3 (2026-05-19): BONDORDERS sub-tree restored.
+# assignBondOrderProcessor.C is back in CB-3; helpers can link now.
+INCLUDE(source/STRUCTURE/BONDORDERS/sources.cmake)
 
 ### list all filenames of the directory here ###
 # B1.2 (Track B Wave 1b, 2026-05-18): minimum-viable STRUCTURE enable.
@@ -119,19 +111,23 @@ LIST(APPEND SOURCES_LIST
 	sdGenerator.C
 )
 
-# Cluster B step 5 (CB-5, planned): these still need MOLMEC AMBER /
-# MMFF94 + SCORING/COMPONENTS, both Cluster B post-CB-1 follow-ups.
-# Stay gated for now.
-IF(NOT BALL_CORE_ONLY)
-	LIST(APPEND SOURCES_LIST
-		DNAMutator.C
-		RDFParameter.C
-		addHydrogenProcessor.C
-		assignBondOrderProcessor.C
-		rotamerLibrary.C
-		sideChainPlacementProcessor.C
-	)
-ENDIF()
+# Cluster B step 3 (2026-05-19): remaining STRUCTURE files restored.
+# DNAMutator + addHydrogenProcessor need MOLMEC's AmberFF/MMFF94
+# (now in CB-3). RDFParameter needs MOLMEC ForceFieldParameters (in).
+# assignBondOrderProcessor needs QSAR (in). rotamerLibrary needs
+# FORMAT SCWRLRotamerFile — STILL trimmed (CB-8). sideChainPlacementProcessor
+# depends on rotamerLibrary — stay gated.
+# Cluster B step 3 (2026-05-19): all STRUCTURE files unconditionally
+# in. Rotamer-related files re-enabled now that FORMAT/SCWRLRotamerFile
+# is also restored in this Cluster B landing.
+LIST(APPEND SOURCES_LIST
+	DNAMutator.C
+	RDFParameter.C
+	addHydrogenProcessor.C
+	assignBondOrderProcessor.C
+	rotamerLibrary.C
+	sideChainPlacementProcessor.C
+)
 
 ADD_BALL_SOURCES("STRUCTURE" "${SOURCES_LIST}")
 

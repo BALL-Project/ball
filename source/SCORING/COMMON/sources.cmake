@@ -38,25 +38,28 @@ SET(DIRECTORY source/SCORING/COMMON)
 # ScoringComponent's one ScoringFunction->getExpEnergyStddev() call
 # is the only blocker; wrapped in #ifndef BALL_CORE_ONLY in
 # source/SCORING/COMMON/scoringComponent.C.
+# Cluster B step 3 (2026-05-19): scoringFunction restored. Its
+# two QSAR/DOCKING-dependent code paths (createStaticLigandFragments
+# uses RingPerception, setupFlexibleResidues_'s automatic branch
+# uses SideChainOptimizer) need ifdef gating since DOCKING is still
+# in CB-7. We restore the .C file but expect DOCKING-pulling
+# methods to be guarded — see source/SCORING/COMMON/scoringFunction.C
+# for the gates. scoreGridSet/gridBasedScoring/diffScoringFunction
+# depend on scoringFunction → now linkable.
+# Cluster B step 3 (2026-05-19): full SCORING/COMMON restored
+# now that DOCKING is in. All files compile + link.
 SET(SOURCES_LIST
 	baseFunction.C
+	diffGridBasedScoring.C
+	diffScoringFunction.C
 	fermiBaseFunction.C
+	gridBasedScoring.C
 	linearBaseFunction.C
+	rescorer.C
+	scoreGridSet.C
 	scoringComponent.C
+	scoringFunction.C
+	scoringOptimizer.C
 )
-
-# Cluster A trim list — restored when DOCKING re-enables (Cluster B).
-# diffScoringFunction.C extends ScoringFunction; can't link without it.
-IF(NOT BALL_CORE_ONLY)
-	LIST(APPEND SOURCES_LIST
-		diffGridBasedScoring.C
-		diffScoringFunction.C
-		gridBasedScoring.C
-		rescorer.C
-		scoreGridSet.C
-		scoringFunction.C
-		scoringOptimizer.C
-	)
-ENDIF()
 
 ADD_BALL_SOURCES("SCORING/COMMON" "${SOURCES_LIST}")
