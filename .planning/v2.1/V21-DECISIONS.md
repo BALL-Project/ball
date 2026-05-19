@@ -1190,3 +1190,89 @@ P2; should pass R20b cleanly.
 
 *Fourth revision 2026-05-19 post-R20. Next: rewrite P2-PLAN.md
 to match revised scope; R20b on the rewrite; then P2 execution.*
+
+---
+
+# Fifth revision post-R21 (2026-05-19 v2.1 roadmap pivot)
+
+P2.1.1 attempted mutation wiring corrupted the heap via cascading
+~System destruction. D39 + D40 (below) defer mutation wiring to
+v2.2; v2.1 ships scaffolding + RTTI + JSON + perf.
+
+R21 verdict on the resulting roadmap: NEEDS-FIXES with 7 narrow
+revisions and 4 GO probes. All R21 NEEDS-FIXES revisions captured
+in V21-ROADMAP.md's second pass. D34c is revised here:
+
+## D34d. MSVC CI moves to v2.2 (revises D34c)
+
+**Revises D34c** (which moved Windows MSVC CI from "P1 close" to
+"v2.1.0-rc1 prep").
+
+**Decision per R21 P21-11 / R21-F3:** Since D40 explicitly removes
+the `sizeof(Atom) ≤ 32 B` target from v2.1, the MSVC EBO
+verification that motivated D34c is no longer a v2.1 release
+gate. Windows MSVC CI moves to **v2.2 P0/P2** where the sizeof
+target actually matters.
+
+**For v2.1:**
+- Apple Clang macOS arm64 remains the only enforced CI target
+- Windows portability is a non-blocking v2.1 backlog item
+  (filed as V21-MSVC-CI-PORTABILITY) — if the codebase builds on
+  Windows with vcpkg, great; if it doesn't, that's a v2.2 gate
+  not a v2.1 gate
+- BALL_EMPTY_BASES macro shipped in P1.1 still works on MSVC
+  when v2.2 needs it; it's a no-op on Clang/GCC currently
+
+**For v2.2:**
+- Windows MSVC GHA job lands in v2.2 P0 (before the inheritance
+  flip's sizeof claim is made)
+- Phase 4 (BALLView 1.6 vcpkg setup) becomes a v2.2 dependency
+
+## D41. New v2.1-internal decisions from R21 follow-ups
+
+Three small decisions promoted from R21 review:
+
+**D41.1 (R21 P21-4 / R21-F2):** v2.1 does NOT add
+`Composite::isAtom_()` virtual. Per-site refactor for the 24
+RTTI removal sites instead. v2.2 inheritance flip would make
+the virtual invalid anyway.
+
+**D41.2 (R21 P21-5 / R21-F1):** P4.1 V21-LOAD-BATCH is gated
+on a P4.0 profiling sub-step. The specific perf target ("8×
+load speedup") is conditional on the dominant bucket; the
+roadmap can't commit to a number without profile data.
+
+**D41.3 (R21 P21-8):** P5.2 perf gate calibration uses the
+`max(2 × median, median + 6 × MAD)` rule over 5 baseline runs.
+Benchmarks with CoV > 30% are advisory until variance settles.
+
+---
+
+## Revised cross-decision summary (post-R21 roadmap pivot)
+
+| # | Decision | Status |
+|---|---|---|
+| D22b CompositeNode 5-link | CLOSED |
+| D23b PropertyManager column registry | CLOSED |
+| D24b selected_bits_ atomic-array | CLOSED |
+| D25 generation guard | CLOSED (P5.4 verifies #ifdef proof) |
+| D26a EBO macro | CLOSED |
+| D27 Sequencing | CLOSED |
+| D29 Branch strategy | CLOSED (P6.6 explicit post-tag action) |
+| D30a backward-read JSON demux | CLOSED |
+| D31b CompositeNode encapsulation | CLOSED |
+| D32b backport policy | CLOSED |
+| D33b review cadence | revised → 6 rounds remaining (was 8) |
+| D34c → **D34d** MSVC CI moves to v2.2 | CLOSED |
+| D35 internal/experimental accessor classification | CLOSED |
+| D36 two-phase flip | CLOSED |
+| D37 Atom-RTTI removal scope | CLOSED |
+| D38 v2.2 milestone placeholder | CLOSED |
+| **D39 mutation wiring deferred to v2.2 (NEW from R21)** | CLOSED |
+| **D40 v2.1 deliverable summary + honest framing (NEW)** | CLOSED |
+| **D41.1 no `Composite::isAtom_()` (NEW)** | CLOSED |
+| **D41.2 P4.1 profile-driven target (NEW)** | CLOSED |
+| **D41.3 P5.2 calibration rule (NEW)** | CLOSED |
+
+*Fifth revision 2026-05-19 post-R21. Next: R21b on the revised
+roadmap.*
