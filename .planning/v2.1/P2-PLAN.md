@@ -94,9 +94,9 @@ because no shim-class work):
 | # | Subject | Deliverable | Gate |
 |---|---|---|---|
 | **P2.1** | Wire `Composite` mutations to maintain `composite_nodes_` | `source/CONCEPT/composite.C`: every mutation path adds side-table update under a `// V2.1 P2.1: side-table mirror` comment. Store-reach helper uses a VIRTUAL hook (R20b-2 fix): `Composite::getCompositeStore_()` returns nullptr default; `System::getCompositeStore_()` returns &store_; `Atom::getCompositeStore_()` returns store_. NO new `dynamic_cast<System*>` introduced (D37 RTTI hygiene preserved). | full ctest passes; `SideTableParity_test` extended to assert post-mutation parity for `appendChild + removeChild + insertBefore + insertAfter + spliceBefore + spliceAfter + splice + destroyChildren_` |
-| **P2.2** | Wire `PropertyManager` mutations to side tables | `source/CONCEPT/property.C`: every mutation path. Uses D23b sparse-first lookup precedence (well-known column fast-path; mismatched-type → sparse bag with override semantics). **Bit-property mutators IN SCOPE (R20b-3 fix):** `setProperty(Property)`, `clearProperty(Property)`, `toggleProperty(Property)` map to a packed bool column or stay sparse (P2.2.1 decides). Iteration via `beginNamedProperty/endNamedProperty` stays on v0 inline (v2.2's responsibility to replace). | parity asserted for `setProperty(INT/FLOAT/STRING)`, `setProperty(NamedProperty)`, `setProperty(Property)` bit mutator, `clearProperty` (both name + bit), `clear`, `swap`, `set`, `operator=`. Includes new explicit test that `setProperty("foo", 5)` then `beginNamedProperty()` still finds "foo". |
+| **P2.2** | Wire `PropertyManager` mutations to side tables — **Atom-instance only** (R20c-3 scope decision) | `source/CONCEPT/property.C`: every named-property mutation path checks `dynamic_cast<Atom*>(this) || /* better: */ this->getAtomIdx_()` (a new virtual `PropertyManager::getAtomIdx_()` that returns `(MoleculeStore*, atom_idx)` for Atom-derived PMs and `nullptr` for AtomContainer/Molecule/Residue/Bond PMs) — non-Atom PMs are v0-only in v2.1. Side-table writes use D23b sparse-first lookup precedence. **Bit-property mutators in scope, sparse-only (R20c-2 decision):** `setProperty(Property)`, `clearProperty(Property)`, `toggleProperty(Property)` go to the sparse_bag_ keyed by atom_idx with a synthetic name like `"_bit_<n>"` for Property bit `<n>`. Packed-bool column deferred to v2.2 if profiling shows it matters. Iteration via `beginNamedProperty/endNamedProperty` stays on v0 inline. | parity asserted for Atom's `setProperty(INT/FLOAT/STRING/NamedProperty/Property bit)`, `clearProperty` (name + bit), `toggleProperty`, `clear`, `swap`, `set`, `operator=`. Plus negative tests: `mol.setProperty("foo", 5)` (Molecule, non-Atom) does NOT write to side tables; `mol.getProperty("foo")` still returns 5 from v0 inline. |
 | **P2.3** | Wire `Selectable` mutations to `selected_bits_` | `source/CONCEPT/selectable.C`: every mutation path. Atomic word ops via `set_selected_`. Preserves tree-propagation counters on parent Composites (those stay on v0 inline, unchanged). | parity asserted for select/deselect/setSelected; tree-propagation tests in Selector_test continue to pass; SideTableParity_test docs that single-thread parity is the invariant — NOT a cross-thread renderer-sync guarantee. |
-| **P2.4** | Extend `System::adopt` + `adoptSubtree` for side-table migration **+ free-standing-subtree backfill** (R20b-1 fix) | `source/KERNEL/system.C`: 4-stream migration with **transactional semantics** (R20b-4 fix): (1) snapshot composite_handle + property column entries + sparse bag entries + selected bit on source; (2) allocate destination side-table rows; (3) write destination data; (4) only then release source rows. On registry-cap failure: keep source rows untouched and fall back to sparse (no partial mirror). **Backfill pass:** when `sys.insert(mol)` adopts a free-standing Composite subtree (Molecule/Chain/Residue) whose pre-adoption mutations were no-ops on side tables, walk the v0 inline tree DFS allocating destination `composite_nodes_` entries + reconstructing parent/first/last/prev/next links. Backfill applies to non-Atom Composite nodes in the subtree; Atom-local state migrates per the 4-stream rule. | adoption tests still pass; migration parity test asserts full side-table state matches v0 inline AFTER adopt completes; failure-mode test asserts source state is preserved if destination fails. |
+| **P2.4** | Extend `System::adopt` + `adoptSubtree` for side-table migration — **subtree transaction** (R20c-1 closure) | `source/KERNEL/system.C` implements an explicit **subtree transaction**: (1) **Scan phase:** DFS the source subtree; collect every Composite node's v0 inline state + every Atom's source-store side-table state (composite_handle, property column entries, sparse bag entries, selected bit). All snapshotted in a local `MigrationPlan` struct. NO destination writes yet. (2) **Allocate phase:** allocate every destination composite_nodes_ row needed + every destination atom row + dest property column entries via registerColumn (may throw on cap). If ANY allocation fails, the partial destination state is rolled back via the free list before returning the error; source side-table state is UNTOUCHED. (3) **Write phase:** write all destination topology (parent/first/last/prev/next handles) + property column entries + selected bits using the freshly-allocated destination handles. Cannot fail (all allocations done). (4) **Commit phase:** rewrite every source Atom's `store_` pointer + composite_handle to point at destination; release source side-table rows; bump destination generation. **Backfill:** identical algorithm even when source has no prior side-table state (free-standing subtree case from R20b-1): scan phase reads from v0 inline pointers, allocate+write phases populate the destination side-table from those. Atom-local state migrates per the 4-stream contract; non-Atom Composite nodes get topology-only entries (no property/selection migration since non-Atom PMs are v0-only per P2.2). | adoption tests still pass; new `AdoptionSideTableParity_test` covers: (a) adopt from System-A to System-B (cross-system migration); (b) sys.insert(mol) of free-standing molecule (backfill); (c) registry-cap-during-adopt failure preserves source. |
 | **P2.5** | `compact()` integration | `source/KERNEL/moleculeStore.C`: `compact()` calls `promote_sparse_` for any sparse property name above the 10% fill threshold; rebuilds `composite_nodes_` free list. Existing exclusive-access contract preserved. New stress test exercises repeated compact/adopt/mutate parity (P20b-6 follow-up). | promotion verified via parity test; compact() preserves parity; 100-run stress shows 0/100 parity drift. |
 
 Estimated effort: 1-2 days execution + R20b planning review +
@@ -160,8 +160,26 @@ perf phase if needed).
 
 ## Codex review gates (per D33b)
 
-- **R20b**: P2 planning review on THIS document (post-pivot).
+- **R20 / R20b / R20c / R20d**: P2 planning review iterations.
+  R20 NO-GO, R20b NEEDS-FIX, R20c NEEDS-FIX (narrow), R20d
+  expected GO after this revision.
 - **R21**: P2 close review after all 5 sub-phases land.
+
+## Test split (R20c-5 follow-up)
+
+P2's parity test suite is large enough to warrant splitting from a
+single monolithic `SideTableParity_test`. Per R20c-5:
+
+- `SideTableParity_test` (existing, P1 baseline) — handle/node/
+  column/sparse/atomic primitives.
+- `CompositeSideTableParity_test` (P2.1 new) — tree mutations.
+- `PropertySideTableParity_test` (P2.2 new) — named + bit + Atom-only.
+- `SelectionSideTableParity_test` (P2.3 new) — selection + tree
+  propagation interaction.
+- `AdoptionSideTableParity_test` (P2.4 new) — subtree transaction +
+  backfill + failure modes.
+
+Shared helpers stay in `SideTableParity_test.C` (or a `_helpers.h`).
 
 ## Next action
 
