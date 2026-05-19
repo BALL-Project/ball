@@ -13,6 +13,7 @@
 #include <BALL/KERNEL/_moleculeStoreInternal.h>
 #include <BALL/COMMON/exception.h>
 
+#include <algorithm>
 #include <cassert>
 #include <limits>
 #include <mutex>
@@ -165,6 +166,120 @@ const CompositeNode& MoleculeStoreSideTables::node_(CompositeHandle h) const
 	assert(!h.isNull());
 	assert(h.idx < composite_nodes_.size());
 	return composite_nodes_[h.idx];
+}
+
+// v2.1 P1.5 (D23b): promote-once. Materialise the named column if it
+// doesn't already exist, then transfer matching-type sparse entries
+// into it. Mismatched-type entries stay sparse. The name keeps a
+// dense column for the lifetime of the store after this call —
+// promote-once / never-demote prevents oscillation flapping per
+// D23b's R17b P17b-3 closure.
+//
+// Returns the number of sparse entries promoted (moved out of the
+// sparse bag and into the column).
+//
+// Called from P2 wiring code's compact() path; P1 just ships the
+// primitive.
+std::size_t MoleculeStoreSideTables::promote_sparse_(const std::string& name,
+                                                    PropertyColumnType t)
+{
+	PropertyColumnBase* col = property_columns_.findColumn(name);
+	if (!col)
+	{
+		col = property_columns_.registerColumn(name, t);
+		if (!col) return 0;  // cap reached; sparse stays.
+	}
+	if (col->type() != t) return 0;  // can't promote into mismatched-type column.
+
+	std::size_t moved = 0;
+	for (auto& kv : sparse_bag_)
+	{
+		std::uint32_t atom_idx = kv.first;
+		auto& vec = kv.second;
+		for (auto it = vec.begin(); it != vec.end(); )
+		{
+			if (it->name != name || it->type != t) { ++it; continue; }
+			// Copy matching-type sparse value into the dense column.
+			switch (t)
+			{
+				case PropertyColumnType::BOOL:
+					static_cast<PropertyColumn<bool>*>(col)->set(atom_idx, it->v_bool);
+					break;
+				case PropertyColumnType::INT:
+					static_cast<PropertyColumn<std::int32_t>*>(col)->set(atom_idx, it->v_int);
+					break;
+				case PropertyColumnType::UNSIGNED_INT:
+					static_cast<PropertyColumn<std::uint32_t>*>(col)->set(atom_idx, it->v_uint);
+					break;
+				case PropertyColumnType::FLOAT:
+					static_cast<PropertyColumn<float>*>(col)->set(atom_idx, it->v_float);
+					break;
+				case PropertyColumnType::DOUBLE:
+					static_cast<PropertyColumn<double>*>(col)->set(atom_idx, it->v_double);
+					break;
+				case PropertyColumnType::STRING:
+					static_cast<StringPropertyColumn*>(col)->set(atom_idx, it->v_string);
+					break;
+				default: break;
+			}
+			it = vec.erase(it);
+			++moved;
+		}
+	}
+	// Remove empty atom buckets.
+	for (auto it = sparse_bag_.begin(); it != sparse_bag_.end(); )
+	{
+		if (it->second.empty()) it = sparse_bag_.erase(it);
+		else ++it;
+	}
+	return moved;
+}
+
+// v2.1 P1.7 (D24b): owned atomic-word array, rebuilt under exclusive
+// access. We use unique_ptr<atomic<u64>[]> rather than
+// vector<atomic<u64>> because std::atomic is not Cpp17MoveInsertable
+// and libc++ rejects vector::resize/reserve/shrink_to_fit. Copy uses
+// relaxed atomic load/store, which is sound when the caller holds
+// exclusive write — there are no concurrent readers during resize
+// per D24b.
+void MoleculeStoreSideTables::resize_selected_bits_(std::size_t new_atom_capacity)
+{
+	std::size_t new_words = (new_atom_capacity + 63) / 64;
+	if (new_words == selected_bits_word_capacity_) return;
+
+	auto new_bits = std::make_unique<std::atomic<std::uint64_t>[]>(new_words);
+	std::size_t copy_words = std::min(selected_bits_word_capacity_, new_words);
+	for (std::size_t w = 0; w < copy_words; ++w)
+	{
+		new_bits[w].store(
+			selected_bits_[w].load(std::memory_order_relaxed),
+			std::memory_order_relaxed);
+	}
+	for (std::size_t w = copy_words; w < new_words; ++w)
+	{
+		new_bits[w].store(0, std::memory_order_relaxed);
+	}
+	selected_bits_                = std::move(new_bits);
+	selected_bits_word_capacity_  = new_words;
+}
+
+void MoleculeStoreSideTables::set_selected_(std::uint32_t i, bool v)
+{
+	std::size_t w = i >> 6;
+	std::uint64_t mask = std::uint64_t(1) << (i & 63);
+	assert(w < selected_bits_word_capacity_);
+	if (v)
+		selected_bits_[w].fetch_or(mask, std::memory_order_relaxed);
+	else
+		selected_bits_[w].fetch_and(~mask, std::memory_order_relaxed);
+}
+
+bool MoleculeStoreSideTables::is_selected_(std::uint32_t i) const
+{
+	std::size_t w = i >> 6;
+	if (w >= selected_bits_word_capacity_) return false;
+	std::uint64_t word = selected_bits_[w].load(std::memory_order_relaxed);
+	return (word & (std::uint64_t(1) << (i & 63))) != 0;
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

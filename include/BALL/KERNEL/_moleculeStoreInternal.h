@@ -28,6 +28,10 @@
 #include <atomic>
 #include <cstdint>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 namespace BALL
@@ -115,6 +119,298 @@ namespace BALL
 		std::uint32_t child_count  = 0;
 	};
 
+	// v2.1 P1.4 (D23b): property column infrastructure. The store-side
+	// replacement for the v2.0 per-atom PropertyManager bag. Force-
+	// field-typical workloads bulk-assign properties (atom typing,
+	// charge assignment), so per-property-name columns are the right
+	// shape, not sparse per-atom bags. See D23b for rationale.
+	//
+	// Type set: BOOL / INT / UNSIGNED_INT / FLOAT / DOUBLE / STRING.
+	// OBJECT / SMART_OBJECT live in the sparse fallback (P1.5).
+
+	enum class PropertyColumnType : std::uint8_t
+	{
+		NONE         = 0,
+		BOOL         = 1,
+		INT          = 2,
+		UNSIGNED_INT = 3,
+		FLOAT        = 4,
+		DOUBLE       = 5,
+		STRING       = 6,
+	};
+
+	// Abstract base. Carries the per-row presence bitmap (1 bit per
+	// atom) used to disambiguate "not set" from "set to default value".
+	// Set/get/clear typed access goes through PropertyColumn<T>.
+	class PropertyColumnBase
+	{
+		public:
+		virtual ~PropertyColumnBase() = default;
+
+		PropertyColumnType type() const            { return type_; }
+		const std::string& name() const            { return name_; }
+		std::size_t        capacity() const        { return size_; }
+
+		// Per-row presence query.
+		bool isSet(std::uint32_t i) const
+		{
+			if (i >= size_) return false;
+			return (present_[i >> 3] & (std::uint8_t(1) << (i & 7))) != 0;
+		}
+
+		// Reset row presence without touching typed data (caller's
+		// PropertyColumn<T> resets the value too via clear()).
+		void clearPresence_(std::uint32_t i)
+		{
+			if (i >= size_) return;
+			present_[i >> 3] &= std::uint8_t(~(std::uint8_t(1) << (i & 7)));
+		}
+
+		void setPresence_(std::uint32_t i)
+		{
+			ensureCapacity_(i + 1);
+			present_[i >> 3] |= std::uint8_t(1) << (i & 7);
+		}
+
+		// Grow the present_ bitmap (and underlying typed storage in
+		// PropertyColumn<T>) to hold at least `n` rows. Caller passes
+		// a callback that resizes typed storage. The virtual is
+		// implemented in PropertyColumn<T>.
+		virtual void resize(std::size_t n) = 0;
+
+		// Typed clear — PropertyColumn<T> resets the value AND
+		// clears the presence bit.
+		virtual void clear(std::uint32_t i) = 0;
+
+		protected:
+		PropertyColumnBase(PropertyColumnType t, std::string n)
+			: type_(t), name_(std::move(n))
+		{}
+
+		void ensureCapacity_(std::size_t n)
+		{
+			if (n <= size_) return;
+			std::size_t bytes = (n + 7) >> 3;
+			if (bytes > present_.size()) present_.resize(bytes, 0);
+			size_ = n;
+		}
+
+		PropertyColumnType        type_;
+		std::string               name_;
+		std::size_t               size_ = 0;
+		std::vector<std::uint8_t> present_;  // packed: bit i in byte (i/8)
+	};
+
+	// Typed column for BOOL/INT/UNSIGNED_INT/FLOAT/DOUBLE.
+	// String columns get a specialized class below because per-row
+	// std::string is too expensive (D23b's R17b P17b-3 fix: intern
+	// pool per column instead).
+	template <typename T>
+	class PropertyColumn : public PropertyColumnBase
+	{
+		public:
+		PropertyColumn(PropertyColumnType t, std::string n)
+			: PropertyColumnBase(t, std::move(n))
+		{}
+
+		void set(std::uint32_t i, T v)
+		{
+			ensureCapacity_(i + 1);
+			if (i >= data_.size()) data_.resize(i + 1, T{});
+			data_[i] = v;
+			setPresence_(i);
+		}
+
+		T get(std::uint32_t i) const
+		{
+			if (!isSet(i)) return T{};
+			return data_[i];
+		}
+
+		void clear(std::uint32_t i) override
+		{
+			clearPresence_(i);
+			if (i < data_.size()) data_[i] = T{};
+		}
+
+		void resize(std::size_t n) override
+		{
+			ensureCapacity_(n);
+			if (n > data_.size()) data_.resize(n, T{});
+		}
+
+		private:
+		std::vector<T> data_;
+	};
+
+	// String column with per-column intern pool. Storage per row is
+	// std::uint32_t (offset into pool_), not std::string. 8x smaller
+	// for repeated short atom-type-name values.
+	class StringPropertyColumn : public PropertyColumnBase
+	{
+		public:
+		explicit StringPropertyColumn(std::string n)
+			: PropertyColumnBase(PropertyColumnType::STRING, std::move(n))
+		{
+			// offset 0 is the canonical empty string. Stored as
+			// NUL-terminated entries in pool_.
+			pool_.push_back('\0');
+		}
+
+		void set(std::uint32_t i, const std::string& s)
+		{
+			ensureCapacity_(i + 1);
+			if (i >= offsets_.size()) offsets_.resize(i + 1, 0u);
+			offsets_[i] = intern_(s);
+			setPresence_(i);
+		}
+
+		std::string get(std::uint32_t i) const
+		{
+			if (!isSet(i)) return {};
+			return std::string(pool_.c_str() + offsets_[i]);
+		}
+
+		void clear(std::uint32_t i) override
+		{
+			clearPresence_(i);
+			if (i < offsets_.size()) offsets_[i] = 0u;
+		}
+
+		void resize(std::size_t n) override
+		{
+			ensureCapacity_(n);
+			if (n > offsets_.size()) offsets_.resize(n, 0u);
+		}
+
+		std::size_t poolSize() const { return pool_.size(); }
+
+		private:
+		std::uint32_t intern_(const std::string& s)
+		{
+			if (s.empty()) return 0u;
+			auto it = intern_map_.find(s);
+			if (it != intern_map_.end()) return it->second;
+			std::uint32_t off = static_cast<std::uint32_t>(pool_.size());
+			pool_.append(s);
+			pool_.push_back('\0');
+			intern_map_.emplace(s, off);
+			return off;
+		}
+
+		std::vector<std::uint32_t>                     offsets_;
+		std::string                                    pool_;
+		std::unordered_map<std::string, std::uint32_t> intern_map_;
+	};
+
+	// Registry: name -> column. Predeclares 10 well-known force-field
+	// columns at construction so they bypass the dynamic-cap accounting
+	// per D23b.
+	class PropertyColumnRegistry
+	{
+		public:
+		PropertyColumnRegistry()
+		{
+			predeclareWellKnown_();
+		}
+
+		PropertyColumnRegistry(const PropertyColumnRegistry&)            = delete;
+		PropertyColumnRegistry& operator=(const PropertyColumnRegistry&) = delete;
+
+		// Returns nullptr if the column doesn't exist.
+		PropertyColumnBase* findColumn(const std::string& name)
+		{
+			auto it = columns_.find(name);
+			return it == columns_.end() ? nullptr : it->second.get();
+		}
+
+		const PropertyColumnBase* findColumn(const std::string& name) const
+		{
+			auto it = columns_.find(name);
+			return it == columns_.end() ? nullptr : it->second.get();
+		}
+
+		// Register a new dynamic column of the given type. Returns
+		// nullptr and DOES NOT register if the cap is hit. Well-known
+		// names use registerWellKnown_ during predeclareWellKnown_ and
+		// don't count toward the cap.
+		PropertyColumnBase* registerColumn(const std::string& name,
+		                                   PropertyColumnType t)
+		{
+			// Already registered? Return existing (don't double-count).
+			if (auto* existing = findColumn(name)) return existing;
+			if (dynamic_count_ >= max_dynamic_) return nullptr;
+			++dynamic_count_;
+			auto* col = makeColumn_(name, t);
+			columns_.emplace(name, std::unique_ptr<PropertyColumnBase>(col));
+			return col;
+		}
+
+		std::size_t dynamicCount() const         { return dynamic_count_; }
+		std::size_t maxDynamic() const           { return max_dynamic_; }
+		void setMaxDynamic(std::size_t n)        { max_dynamic_ = n; }
+
+		bool isWellKnown(const std::string& name) const
+		{
+			return well_known_.count(name) > 0;
+		}
+
+		std::size_t columnCount() const          { return columns_.size(); }
+
+		private:
+		PropertyColumnBase* makeColumn_(const std::string& name,
+		                                PropertyColumnType t)
+		{
+			switch (t)
+			{
+				case PropertyColumnType::BOOL:
+					return new PropertyColumn<bool>(t, name);
+				case PropertyColumnType::INT:
+					return new PropertyColumn<std::int32_t>(t, name);
+				case PropertyColumnType::UNSIGNED_INT:
+					return new PropertyColumn<std::uint32_t>(t, name);
+				case PropertyColumnType::FLOAT:
+					return new PropertyColumn<float>(t, name);
+				case PropertyColumnType::DOUBLE:
+					return new PropertyColumn<double>(t, name);
+				case PropertyColumnType::STRING:
+					return new StringPropertyColumn(name);
+				default:
+					return nullptr;
+			}
+		}
+
+		void registerWellKnown_(const char* name, PropertyColumnType t)
+		{
+			auto* col = makeColumn_(name, t);
+			columns_.emplace(name, std::unique_ptr<PropertyColumnBase>(col));
+			well_known_.insert(name);
+		}
+
+		// D23b: 10 force-field-frequent columns predeclared. Anything
+		// touched by AmberFF / MMFF94 / charge-assignment passes goes
+		// here so the bulk-assign hot path skips registry lookup
+		// overhead and the dynamic-cap accounting.
+		void predeclareWellKnown_()
+		{
+			registerWellKnown_("PARTIAL_CHARGE",       PropertyColumnType::FLOAT);
+			registerWellKnown_("FORMAL_CHARGE",        PropertyColumnType::INT);
+			registerWellKnown_("MMFF94_TYPE",          PropertyColumnType::INT);
+			registerWellKnown_("AMBER_TYPE",           PropertyColumnType::STRING);
+			registerWellKnown_("RADIUS",               PropertyColumnType::FLOAT);
+			registerWellKnown_("EPSILON",              PropertyColumnType::FLOAT);
+			registerWellKnown_("HYBRIDIZATION",        PropertyColumnType::INT);
+			registerWellKnown_("IS_AROMATIC",          PropertyColumnType::BOOL);
+			registerWellKnown_("ATOM_TYPE_NAME",       PropertyColumnType::STRING);
+			registerWellKnown_("STEREO_DESCRIPTOR",    PropertyColumnType::INT);
+		}
+
+		std::unordered_map<std::string, std::unique_ptr<PropertyColumnBase>> columns_;
+		std::unordered_set<std::string> well_known_;
+		std::size_t                     dynamic_count_ = 0;
+		std::size_t                     max_dynamic_   = 65536;
+	};
+
 	// v2.1 P1.2: side-table state owned by every MoleculeStore. PImpl
 	// hides it from moleculeStore.h consumers. Only the 4 TUs listed
 	// at the top of this header touch it directly.
@@ -145,6 +441,131 @@ namespace BALL
 		// exercising allocate/release round-trip.
 		std::vector<CompositeNode>   composite_nodes_;
 		std::vector<std::uint32_t>   composite_free_list_;
+
+		// v2.1 P1.4 (D23b): typed property column registry. Well-known
+		// force-field columns are predeclared at construction (PARTIAL_
+		// CHARGE, FORMAL_CHARGE, MMFF94_TYPE, AMBER_TYPE, RADIUS,
+		// EPSILON, HYBRIDIZATION, IS_AROMATIC, ATOM_TYPE_NAME,
+		// STEREO_DESCRIPTOR) and don't count against the dynamic-name
+		// cap. P1.5 adds the sparse fallback bag for unregistered
+		// names. P2 wires PropertyManager mutations to maintain the
+		// columns alongside the v0 inline bag.
+		PropertyColumnRegistry       property_columns_;
+
+		// v2.1 P1.5 (D23b): sparse fallback for mismatched-type
+		// setProperty (per D23b sparse-first lookup precedence) and
+		// for dynamic property names that haven't crossed the
+		// promote-to-dense threshold. Outer key is atom_idx; inner
+		// is property name -> a small variant. P2 wiring populates
+		// this from PropertyManager mutations.
+		//
+		// Storage shape note: we store a parallel pair of (name, type
+		// tag, value) instead of a full NamedProperty to avoid pulling
+		// the PropertyManager headers into this internal file.
+		struct SparseProperty
+		{
+			std::string         name;
+			PropertyColumnType  type = PropertyColumnType::NONE;
+			// Inline union of the supported types. STRING uses
+			// std::string directly here (sparse entries are O(few per
+			// atom), so per-entry std::string cost is fine — the
+			// dense-column case is where interning matters).
+			bool                v_bool  = false;
+			std::int32_t        v_int   = 0;
+			std::uint32_t       v_uint  = 0;
+			float               v_float = 0.0f;
+			double              v_double = 0.0;
+			std::string         v_string;
+		};
+		std::unordered_map<std::uint32_t, std::vector<SparseProperty>> sparse_bag_;
+
+		// v2.1 P1.5: sparse-bag access primitives. P2 wiring builds the
+		// public setProperty / getProperty semantics from these.
+		SparseProperty*       sparse_find_(std::uint32_t atom_idx, const std::string& name)
+		{
+			auto it = sparse_bag_.find(atom_idx);
+			if (it == sparse_bag_.end()) return nullptr;
+			for (auto& p : it->second) if (p.name == name) return &p;
+			return nullptr;
+		}
+		const SparseProperty* sparse_find_(std::uint32_t atom_idx, const std::string& name) const
+		{
+			auto it = sparse_bag_.find(atom_idx);
+			if (it == sparse_bag_.end()) return nullptr;
+			for (auto& p : it->second) if (p.name == name) return &p;
+			return nullptr;
+		}
+
+		// Sparse insert/replace. Returns true if a fresh entry was
+		// created; false if an existing entry was overwritten.
+		bool sparse_set_(std::uint32_t atom_idx, const SparseProperty& p)
+		{
+			auto& vec = sparse_bag_[atom_idx];
+			for (auto& existing : vec)
+			{
+				if (existing.name == p.name)
+				{
+					existing = p;
+					return false;
+				}
+			}
+			vec.push_back(p);
+			return true;
+		}
+
+		// Erase a specific (atom, name). Returns true if found.
+		bool sparse_clear_(std::uint32_t atom_idx, const std::string& name)
+		{
+			auto it = sparse_bag_.find(atom_idx);
+			if (it == sparse_bag_.end()) return false;
+			auto& vec = it->second;
+			for (auto vi = vec.begin(); vi != vec.end(); ++vi)
+			{
+				if (vi->name == name)
+				{
+					vec.erase(vi);
+					if (vec.empty()) sparse_bag_.erase(it);
+					return true;
+				}
+			}
+			return false;
+		}
+
+		// v2.1 P1.5: promote-once policy. Called from compact() (P2
+		// wiring) for each name in sparse_bag_ whose fill rate has
+		// crossed the threshold. Moves the matching-type entries from
+		// sparse to a dense column; mismatched-type entries stay
+		// sparse. Returns the count of entries promoted.
+		std::size_t promote_sparse_(const std::string& name,
+		                            PropertyColumnType t);
+
+		// v2.1 P1.7 (D24b): selected-bit storage as an owned atomic
+		// word array rebuilt under exclusive store access. NOT a
+		// std::vector<std::atomic<u64>> because libc++ rejects that
+		// container template (atomic isn't Cpp17MoveInsertable, and
+		// MoleculeStore::compact() shrink_to_fit's its side vectors —
+		// see R17b P17b-N2). Caller (MoleculeStore::reserve_atoms /
+		// compact / dtor) is responsible for holding exclusive access
+		// across resize_selected_bits_; steady-state set / is_selected
+		// use relaxed atomics and require no lock per D24b + D16.
+		std::unique_ptr<std::atomic<std::uint64_t>[]> selected_bits_;
+		std::size_t selected_bits_word_capacity_ = 0;
+
+		// Grow the atomic array to cover at least new_atom_capacity
+		// atoms. Old contents are copied via relaxed atomic load/store.
+		// Caller holds exclusive write access — no concurrent readers
+		// during this call.
+		void resize_selected_bits_(std::size_t new_atom_capacity);
+
+		// Atomic per-bit set/clear/test. Word index is i/64; bit
+		// position is i%64. Caller is responsible for prior
+		// resize_selected_bits_(>= i+1) — set_selected does NOT grow
+		// the array because growth requires the exclusive contract.
+		// is_selected returns false (the C++ default) if i is out of
+		// bounds rather than asserting; callers that care about
+		// "explicitly cleared" vs "never set" must track separately.
+		void set_selected_(std::uint32_t i, bool v);
+		bool is_selected_(std::uint32_t i) const;
 
 		// v2.1 P1.3 allocator: hands out a fresh CompositeHandle of the
 		// given kind. The returned handle's idx is either pulled from

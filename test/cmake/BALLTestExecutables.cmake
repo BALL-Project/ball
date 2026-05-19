@@ -171,6 +171,7 @@ SET(BALL_KERNEL_TESTS
 	CompiledExpression_test
 	SelectorBench_test
 	SideTableParity_test
+	CompositeIteratorStability_test
 )
 
 SET(BALL_MOLMEC_TESTS

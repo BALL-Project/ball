@@ -59,12 +59,15 @@ IF(BALL_CORE_ONLY)
 		V1ToV2JsonConverter_test
 		CompiledExpression_test
 		SelectorBench_test
-		# v2.1 P1.3 (2026-05-19): infrastructure for the v2.1 side-table
-		# layer. Verifies CompositeHandle/Node allocate+release+free-list
-		# round-trip, Composite::getCompositeHandle_ memcpy round-trip,
-		# and Composite::getNode_ inline-topology view. Mutation-mirror
-		# parity assertions land in P2 alongside the inheritance flip.
+		# v2.1 P1.3-P1.7 (2026-05-19): infrastructure for the v2.1 side-
+		# table layer. SideTableParity_test verifies composite-node +
+		# property-column + sparse-bag + selected-bits round-trip.
+		# CompositeIteratorStability_test enforces D31 — iterators
+		# cache Composite* only, no CompositeNode* / vector index.
+		# Mutation-mirror parity assertions land in P2 alongside the
+		# inheritance flip.
 		SideTableParity_test
+		CompositeIteratorStability_test
 		# B1.1 (Track B Wave 1a, 2026-05-18): tests re-enabled once
 		# FORMAT (subset) compiled into libBALL. These were deferred
 		# from K0 because they #include <BALL/FORMAT/PDBFile.h>.
