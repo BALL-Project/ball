@@ -1019,17 +1019,13 @@ namespace BALL
 			// Constant lives in source/VIEW/KERNEL/theme/tokens.h (999.40).
 			tb->setIconSize(QSize(BALL::VIEW::Theme::kIconToolbar,
 			                      BALL::VIEW::Theme::kIconToolbar));
-			// UFG-20 (rc4 validation) — let users surface action labels.
-			// Default is `ToolButtonIconOnly` so the rc4 icon-only look is
-			// preserved. `ToolButtonFollowStyle` engages Apple's native
-			// right-click-toolbar customization menu on macOS ("Icon and
-			// Text" / "Icon Only" / "Text Only"), which lets the user
-			// discover what each rightmost icon does without hover-tooltip
-			// flakiness. On Linux / Windows the style follows the desktop
-			// theme. The setToolTip() audit on contributing dialogs (see
-			// `MolecularStructure::addToolBarEntries` et al.) ensures the
-			// hover affordance is also clear.
-			tb->setToolButtonStyle(Qt::ToolButtonFollowStyle);
+			// UFG-20 (rc4 → rc5 → rc5 follow-up) — user feedback after
+			// trying `ToolButtonTextBesideIcon`: too wide / cluttered.
+			// Reverted to icon-only with explicit setToolTip() audit on
+			// each action's discoverable text so hover-tooltip is the
+			// label affordance. macOS NSToolbar right-click menu still
+			// available for users who want to switch to text+icon.
+			tb->setToolButtonStyle(Qt::ToolButtonIconOnly);
 			addToolBar(Qt::TopToolBarArea, tb);
 
 			// UFG-02 / UFG-08: setUnifiedTitleAndToolBarOnMac(true) is
