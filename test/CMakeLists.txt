@@ -73,9 +73,11 @@ IF(BALL_CORE_ONLY)
 		Residue_test2
 		StdIteratorWrapper_test
 		# B1.2 (Track B Wave 1b, 2026-05-18): STRUCTURE-subset re-enabled
-		# tests. PeptideCapProcessor_test + Peptides_test stay WILL_FAIL
-		# because of the PR #550 data regression (separate from B1.2 enable
-		# work). RotamerLibrary_test stays out (rotamerLibrary.C trimmed).
+		# tests. Peptides_test and PeptideCapProcessor_test originally
+		# WILL_FAIL'd for the PR #550 data regression; lifted in commits
+		# c5373707d (ASX/GLX expectations) + 9b5f89b50 (PRO.db 1OB/1OH
+		# bond refs). Both now real-pass in CORE_ONLY and full builds.
+		# RotamerLibrary_test stays out (rotamerLibrary.C trimmed for B1.2).
 		FragmentDB_test
 		DefaultProcessors_test
 		NormalizeNamesProcessor_test
@@ -215,46 +217,40 @@ ENDIF()
 #   for PRO residue setup; the broken 2OB/2OH bond references cause getStatus()
 #   to return false when fragment application fails.
 #
-# All three: filed as Phase 999.35 backlog (OOS-PR-merge-regression-fix).
-# PeptideCapProcessor_test + Peptides_test stay quarantined in both
-# BALL_CORE_ONLY (B1.2 re-enable) and full builds (PR #550 data
-# regression — Phase 9 09-TRIAGE.md). RotamerLibrary_test only exists
-# in full builds (rotamerLibrary.C is B1.2-trimmed).
+# All three were filed as Phase 999.35 backlog (OOS-PR-merge-regression-fix).
+# Closure (2026-05-18, v2.1 cleanup):
+#   - Peptides_test (c5373707d): ASX/GLX one-letter-code test
+#     expectations updated to match peptides.C's PR #550 behavior.
+#   - PeptideCapProcessor_test (9b5f89b50): PRO.db patched so the
+#     hydroxyproline atoms reference 1OB/1OH consistently (was
+#     dangling 2OB/2OH references in the Bonds + Delete sections).
+#   - RotamerLibrary_test stays quarantined in full builds (rotamerLibrary.C
+#     is trimmed in B1.2's STRUCTURE subset until B3.1 cycle close).
 #
-# Expression_test — QUARANTINED in CORE_ONLY ONLY (B1.2, 2026-05-18)
+# 2026-05-18 PM+TPM quarantines REMOVED. The `#ifndef BALL_CORE_ONLY`
+# guards around PDBRecords/PDBInfo/CrystalInfo registrations in
+# source/CONCEPT/persistenceManager.C were stale (FORMAT B1.1 +
+# XRAY B2.1 made those classes available in CORE_ONLY). Lifting the
+# guards: PersistenceManager_test's getNumberOfClasses()=18 ✓;
+# TextPersistenceManager_test's PDBInfo round-trip CHECK ✓.
+#
+# Expression_test — QUARANTINED in CORE_ONLY ONLY
 #   Expects 27 predicates, gets 26. The missing predicate is SMARTS,
 #   which needs RingPerceptionProcessor + AromaticityProcessor (QSAR,
-#   Wave 4) to fully link. STRUCTURE/smartsMatcher.C is trimmed in
-#   B1.2's STRUCTURE subset (QSAR cascade). Lifts in Wave 4 when QSAR
-#   re-enables and SmartsMatcher comes back.
-#
-# 2026-05-18 (post B2.x cleanup): PersistenceManager_test +
-# TextPersistenceManager_test quarantines REMOVED. The
-# `#ifndef BALL_CORE_ONLY` guards around the PDBRecords/PDBInfo/
-# CrystalInfo registrations in source/CONCEPT/persistenceManager.C
-# were stale (FORMAT B1.1 + XRAY B2.1 made those classes available
-# in CORE_ONLY). Lifting the guards: (1) PersistenceManager_test's
-# getNumberOfClasses() now returns 18 as expected; (2)
-# TextPersistenceManager_test's PDBInfo round-trip CHECK passes.
-# Both tests now run + pass in both modes; no quarantine needed.
+#   Wave 3.1 cluster). STRUCTURE/smartsMatcher.C is trimmed in
+#   B1.2's STRUCTURE subset (QSAR cascade). Lifts when Wave 3
+#   re-enables QSAR and SmartsMatcher comes back.
 #
 # B1.3 (Codex R10 fix #5): Expression quarantine gated by
 # BALL_CORE_ONLY because it recovers in full builds (SMARTS comes
 # back with QSAR). Unguarded WILL_FAIL would cause CTest "unexpected
 # pass" (exit 8) in the full build.
-# Peptides_test/PeptideCapProcessor_test stay unconditional — the
-# regression is in data files (PRO.db) which apply to both modes.
 IF(BALL_CORE_ONLY)
 	SET_TESTS_PROPERTIES (
 		Expression_test
 		PROPERTIES WILL_FAIL TRUE
 	)
 ENDIF()
-# (B1.2 left PeptideCapProcessor_test + Peptides_test WILL_FAIL for the
-# PR #550 data regression. Both lifted in 2026-05-18 v2.1 cleanup:
-# Peptides_test ASX/GLX expectations updated [c5373707d];
-# PeptideCapProcessor_test PRO.db 2OB/2OH → 1OB/1OH bond+delete refs
-# fixed in this commit. Both now real-pass in CORE_ONLY and full builds.)
 IF(NOT BALL_CORE_ONLY)
 SET_TESTS_PROPERTIES (
 	RotamerLibrary_test
