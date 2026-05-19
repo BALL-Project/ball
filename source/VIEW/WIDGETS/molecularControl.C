@@ -1161,17 +1161,33 @@ namespace BALL
 			const bool restore_ignore = ignore_messages_;
 			ignore_messages_ = true;
 
+			// v1.7.x-14 (2026-05-19): only update items whose displayed
+			// selection state actually changed. The previous unconditional
+			// notifyDataChanged + setSelected fires per-item paint events
+			// + dataChanged signals on EVERY tree item, every time
+			// setSelection_ runs — for 1ubq + hydrogens that's ~5000 items
+			// × 2 calls per UFG-27 sync = ~10000 paint events per click.
+			// Compare against the prior AccessibleDescriptionRole value
+			// (which is what we're updating) and skip the heavy notify
+			// when there's no change.
+			const QString sel_label    = tr("selected");
+			const QString notsel_label = tr("not selected");
+
 			QTreeWidgetItemIterator qit(listview);
 			while (*qit != 0)
 			{
 				MyTreeWidgetItem* it = static_cast<MyTreeWidgetItem*>(*qit);
 				Composite* c = it->composite;
 				const bool sel = (c != 0 && c->isSelected());
+				const QString want = sel ? sel_label : notsel_label;
+				const QString have = it->data(0, Qt::AccessibleDescriptionRole).toString();
 
-				it->setData(0, Qt::AccessibleDescriptionRole,
-				            sel ? tr("selected") : tr("not selected"));
-				// Force the view to re-query data(0, Qt::ForegroundRole).
-				it->notifyDataChanged();
+				if (have != want)
+				{
+					it->setData(0, Qt::AccessibleDescriptionRole, want);
+					// Force the view to re-query data(0, Qt::ForegroundRole).
+					it->notifyDataChanged();
+				}
 				// Two-way sync: cursor selection mirrors BALL selection.
 				if (it->isSelected() != sel)
 					it->setSelected(sel);
