@@ -184,8 +184,28 @@ namespace BALL
 		void InspectorBody::clearSections(InspectorTabs::TabIndex idx)
 		{
 			TabPage& tp = pages_[static_cast<int>(idx)];
-			// Walk items; remove all InspectorSection children. Keep the
-			// trailing stretch and any empty state.
+			// UFG-32 (rc5 follow-up) — DO NOT delete sections here.
+			// InspectorView owns the sections via raw-pointer members
+			// (selection_summary_, model_section_, …) and reuses them
+			// across selection / representation transitions. The
+			// previous `w->deleteLater()` turned every subsequent
+			// addSection call into a dangling-pointer dereference,
+			// crashing at `QLayout::addChildWidget+96` when the user
+			// clicked a tree row right after my UFG-27 sync invoked
+			// `mc->clearSelection()` → NewSelectionMessage →
+			// setEmptyState → clearSections → schedule-delete, then
+			// the trailing ControlSelectionMessage tried to re-add
+			// the freshly-deleted sections.
+			//
+			// New behaviour: remove from the layout (and the tab's
+			// Qt parent linkage via setParent(nullptr) is intentionally
+			// avoided — Qt's `removeWidget` only detaches from the
+			// layout, leaving the widget as a child of its current Qt
+			// parent). Sections become hidden floating children of the
+			// scroll-area contents widget; the next addSection call
+			// re-inserts them cleanly. Hide them so they don't render
+			// at (0,0) in the meantime (same pattern as
+			// `attachSelectionTab`'s post-construction hide()).
 			for (int i = tp.layout->count() - 1; i >= 0; --i)
 			{
 				QLayoutItem* item = tp.layout->itemAt(i);
@@ -195,7 +215,7 @@ namespace BALL
 				if (qobject_cast<InspectorSection*>(w))
 				{
 					tp.layout->removeWidget(w);
-					w->deleteLater();
+					w->hide();
 				}
 			}
 		}
