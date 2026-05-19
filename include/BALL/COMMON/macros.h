@@ -392,6 +392,19 @@ namespace BALL
 
 #define BALL_DUMP_HEADER(os,cl,ob)               os << "Object: " << (void *)ob << " is instance of class: " << streamClassName(typeid(*ob)) << std::endl;
 #define BALL_DUMP_CLASS_HEADER(os,cl,ob)         os << "Object: " << (void *)ob << " is instance of class: " << #cl << ::std::endl;
-#define BALL_DUMP_STREAM_SUFFIX(os)              
+#define BALL_DUMP_STREAM_SUFFIX(os)
+
+// v2.1 P1.1 (Codex R17 P17-5 / D26a): default MSVC multiple-base
+// layout does NOT apply Empty Base Optimization and pads 1 byte per
+// empty base. v2.1 needs `__declspec(empty_bases)` on every concrete
+// class that inherits the (post-P2) empty shim bases — without it,
+// sizeof(Atom) misses the v2.1 ≤32 B target by 3-4 bytes on Windows.
+// Clang/GCC always apply EBO for distinct empty bases; macro expands
+// to nothing on those toolchains.
+#if defined(_MSC_VER)
+#  define BALL_EMPTY_BASES __declspec(empty_bases)
+#else
+#  define BALL_EMPTY_BASES
+#endif
 
 #endif // BALL_COMMON_MACROS_H
