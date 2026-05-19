@@ -390,15 +390,31 @@ namespace BALL
 
 		void MolecularStructure::addHydrogens()
 		{
-			if (getMainControl()->getMolecularControlSelection().size() == 0)
+			// v1.7.x-10 (2026-05-19): fall back to all systems when cursor
+			// selection is empty. Pre-UFG-27 the tree cursor selection was
+			// independent of BALL composite selection; users would highlight a
+			// row before clicking the toolbar. Post-UFG-27 cursor selection
+			// IS BALL composite selection, so users who load a molecule and
+			// click "Add Hydrogens" toolbar WITHOUT first clicking a row found
+			// the toolbar action silently no-op'd. The toolbar enable-gate in
+			// `Scene::checkMenu` already uses `MainControl::getSelectedSystem()`
+			// which DOES fall back to "the one loaded system" — so the action
+			// was visibly enabled but functionally dead. Mirror that fallback
+			// here so the action does what the enable-gate promises.
+			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
+			if (temp_selection_.empty())
 			{
-				return;
+				HashSet<Composite*> all = getMainControl()->getCompositeManager().getComposites();
+				for (HashSet<Composite*>::Iterator sit = all.begin(); +sit; ++sit)
+				{
+					temp_selection_.push_back(*sit);
+				}
+				if (temp_selection_.empty()) return;  // nothing loaded
 			}
 
 			setStatusbarText((String)tr("  > adding hydrogens ..."), true);
 
 			// copy the selection_, it can change after a changemessage event
-			list<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
 			list<Composite*>::const_iterator it = temp_selection_.begin();
 
 			Size number_of_hydrogens = 0;
