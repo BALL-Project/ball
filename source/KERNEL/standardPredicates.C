@@ -165,7 +165,9 @@ namespace BALL
 	{
 		if (atom.hasAncestor(RTTI::getDefault<Residue>()))
 		{
-			String name = RTTI::castTo<Atom>(atom)->getName();
+			// v2.1 P3.6 (R23): a redundant Atom-cast on an
+			// already-Atom& reference was removed; just use atom directly.
+			String name = atom.getName();
 			if ((name == "C") || (name == "N") || (name == "CA") || (name == "O"))
 			{
 				return true;

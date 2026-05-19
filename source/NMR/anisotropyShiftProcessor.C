@@ -296,13 +296,13 @@ namespace BALL
 	{
 		// Collect all effector bonds(C=O) and store them in eff_list_
 		// All protons are collected in proton_list_.
-		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
-		if (!detail::compositeAsAtom_(&composite))
+		// v2.1 P3.3 + P3.6 (D41.1): centralised detail::compositeAsAtom_;
+		// reuse the helper result for the cast (R23 cleanup).
+		const Atom* patom = detail::compositeAsAtom_(&composite);
+		if (!patom)
 		{
 			return Processor::CONTINUE;
 		}
-
-		const Atom* patom = RTTI::castTo<Atom>(composite);
 
 		if (patom->getElement() == PTE[Element::H])
 		{

@@ -195,8 +195,11 @@ namespace BALL
 
 			case TYPE__ATOM:
 			{
-				Atom* atom = RTTI::castTo<Atom>(composite);
-				temp = atom->getName();
+				// v2.1 P3.3 + P3.6 (D41.1 + R23): helper instead of castTo.
+				if (Atom* atom = detail::compositeAsAtom_(&composite))
+				{
+					temp = atom->getName();
+				}
 			}
 			break;
 			

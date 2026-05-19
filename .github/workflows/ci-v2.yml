@@ -67,10 +67,14 @@ jobs:
         # based identity; the 24 ex-call-sites need no individual
         # update at that flip.
         run: |
-          # Grep CORE_ONLY modules. Exceptions: composite.h/.iC/.C
-          # (helper + Composite::apply<Atom> specialization).
+          # Grep CORE_ONLY modules for Atom-RTTI in any form. Exception:
+          # source/CONCEPT/composite.C (the helper body) — documented.
+          # Patterns caught (R23 hardening):
+          #   - dynamic_cast<Atom*>, dynamic_cast<const Atom*>
+          #   - isKindOf<Atom>
+          #   - RTTI::castTo<Atom> (semantically equivalent dynamic_cast)
           violations=$(
-            grep -rn 'dynamic_cast<\s*\(const \)\?Atom\s*\*\?>\|isKindOf<Atom>' \
+            grep -rnE 'dynamic_cast<\s*(const\s+)?Atom\s*\*?\s*>|isKindOf<\s*Atom\s*>|castTo<\s*Atom\s*>' \
               --include='*.h' --include='*.C' --include='*.iC' \
               source/KERNEL/ source/STRUCTURE/ source/FORMAT/ \
               source/QSAR/ source/MOLMEC/ source/SCORING/ \
@@ -85,6 +89,11 @@ jobs:
             exit 1
           fi
           echo "D41.1 Atom-RTTI grep gate: PASS"
+          # Known limitations (documented v2.1.x cleanup):
+          # - Does NOT catch multi-line `dynamic_cast<\n  Atom*\n>`
+          # - Does NOT catch `dynamic_cast<Atom*const>` (uncommon)
+          # If those forms appear in practice, file a v2.1.x ticket to
+          # switch the gate to a clang-based AST query.
 
       - name: D31b grep gate -- CompositeNode encapsulation
         # v2.1 D31b (Codex R17 P17-7 / R17b P17b-N5 / R19-F1 closure):

@@ -173,7 +173,9 @@ namespace BALL
 				j++;
 				for (AtomIterator ai = ri->beginAtom(); +ai; ++ai)
 				{
-					Atom* atom = RTTI::castTo<Atom>((*ai));
+					// v2.1 P3.6 (R23): AtomIterator dereferences to Atom&;
+					// no Atom-RTTI needed.
+					Atom* atom = &(*ai);
 
 					// we store all oxygens as potential hydrogen bond acceptors
 					if (atom->getElement() == PTE[Element::O])

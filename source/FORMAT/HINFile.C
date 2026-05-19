@@ -459,7 +459,8 @@ namespace BALL
 						if (state == IN_RESIDUE) 
 						{
 							PDBAtom* prot_atom = new PDBAtom;
-							atom = RTTI::castTo<Atom>(*prot_atom);
+							// v2.1 P3.6 (R23): PDBAtom IS-A Atom; upcast trivially.
+							atom = prot_atom;
 							residue->insert(*prot_atom);
 
 							// check the atom flags, whether this is a PDB HETATM: 
