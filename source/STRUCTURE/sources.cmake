@@ -103,25 +103,33 @@ IF(BALL_HAS_OPENBABEL)
 	LIST(APPEND SOURCES_LIST logP.C)
 ENDIF()
 
-# B1.3 (Codex R10 fix, 2026-05-18): restore CORE_ONLY-trimmed STRUCTURE
-# sources in full builds. These files need MOLMEC/QSAR/FORMAT-SCWRL
-# symbols that only exist when BALL_CORE_ONLY=OFF.
+# Cluster B step 1+2 (2026-05-19): QSAR-dependent STRUCTURE files
+# come back into CORE_ONLY since QSAR (RingPerception, Aromaticity)
+# is now in. Circular dep: QSAR/simpleBase.C uses SmartsMatcher;
+# STRUCTURE/smartsMatcher.C uses RingPerception — must land
+# simultaneously.
+LIST(APPEND SOURCES_LIST
+	smartsMatcher.C
+	atomTyper.C
+	kekulizer.C
+	molecularSimilarity.C
+	ringAnalyser.C
+	hybridisationProcessor.C
+	buildBondsProcessor.C
+	sdGenerator.C
+)
+
+# Cluster B step 5 (CB-5, planned): these still need MOLMEC AMBER /
+# MMFF94 + SCORING/COMPONENTS, both Cluster B post-CB-1 follow-ups.
+# Stay gated for now.
 IF(NOT BALL_CORE_ONLY)
 	LIST(APPEND SOURCES_LIST
 		DNAMutator.C
 		RDFParameter.C
 		addHydrogenProcessor.C
 		assignBondOrderProcessor.C
-		buildBondsProcessor.C
-		hybridisationProcessor.C
-		ringAnalyser.C
-		smartsMatcher.C
-		atomTyper.C
-		kekulizer.C
-		molecularSimilarity.C
 		rotamerLibrary.C
 		sideChainPlacementProcessor.C
-		sdGenerator.C
 	)
 ENDIF()
 

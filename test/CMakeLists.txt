@@ -258,23 +258,13 @@ ENDIF()
 # guards: PersistenceManager_test's getNumberOfClasses()=18 ✓;
 # TextPersistenceManager_test's PDBInfo round-trip CHECK ✓.
 #
-# Expression_test — QUARANTINED in CORE_ONLY ONLY
-#   Expects 27 predicates, gets 26. The missing predicate is SMARTS,
-#   which needs RingPerceptionProcessor + AromaticityProcessor (QSAR,
-#   Wave 3.1 cluster). STRUCTURE/smartsMatcher.C is trimmed in
-#   B1.2's STRUCTURE subset (QSAR cascade). Lifts when Wave 3
-#   re-enables QSAR and SmartsMatcher comes back.
-#
-# B1.3 (Codex R10 fix #5): Expression quarantine gated by
-# BALL_CORE_ONLY because it recovers in full builds (SMARTS comes
-# back with QSAR). Unguarded WILL_FAIL would cause CTest "unexpected
-# pass" (exit 8) in the full build.
-IF(BALL_CORE_ONLY)
-	SET_TESTS_PROPERTIES (
-		Expression_test
-		PROPERTIES WILL_FAIL TRUE
-	)
-ENDIF()
+# Expression_test — QUARANTINE LIFTED (Cluster B step 1, 2026-05-19)
+#   Previously WILL_FAIL'd in CORE_ONLY because SMARTSPredicate's
+#   registration (in source/KERNEL/expression.C) was #ifdef'd on
+#   !BALL_CORE_ONLY since STRUCTURE/smartsMatcher.C was trimmed.
+#   CB-1 enabled QSAR + restored smartsMatcher; CB-1 also lifted the
+#   #ifdef gate around SMARTS registration. Expression_test now real-
+#   passes in both modes.
 IF(NOT BALL_CORE_ONLY)
 SET_TESTS_PROPERTIES (
 	RotamerLibrary_test

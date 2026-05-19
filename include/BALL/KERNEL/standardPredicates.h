@@ -23,7 +23,9 @@
 #	include <BALL/KERNEL/expression.h>
 #endif
 
-#ifndef BALL_CORE_ONLY
+// Cluster B step 1 (2026-05-19): SMARTSPredicate needs SmartsMatcher
+// (STRUCTURE) + AromaticityProcessor + RingPerceptionProcessor (QSAR).
+// All three are now in CORE_ONLY (CB-1 + STRUCTURE restore).
 #ifndef BALL_STRUCTURE_SMARTSMATCHER_H
 # include <BALL/STRUCTURE/smartsMatcher.h>
 #endif
@@ -35,7 +37,6 @@
 #ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
 # include <BALL/QSAR/ringPerceptionProcessor.h>
 #endif
-#endif // BALL_CORE_ONLY
 
 namespace BALL 
 {
@@ -895,7 +896,9 @@ namespace BALL
 
 	};
 
-#ifndef BALL_CORE_ONLY
+	// Cluster B step 1 (2026-05-19): SMARTSPredicate gate lifted —
+	// SmartsMatcher (STRUCTURE) + AromaticityProcessor +
+	// RingPerceptionProcessor (QSAR) are all in CORE_ONLY now.
 	/** Predicate for using smarts
 	 */
 	class BALL_EXPORT SMARTSPredicate
@@ -929,7 +932,6 @@ namespace BALL
 		static Molecule dummy_molecule_;
 		mutable HashSet<Atom*> matches_;
 	};
-#endif // BALL_CORE_ONLY
 
 
 	//@}	

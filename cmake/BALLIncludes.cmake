@@ -118,12 +118,20 @@ INCLUDE(include/BALL/MOLMEC/sources.cmake)
 # remaining SCORING/COMMON trim, the STRUCTURE bits still gated
 # (addHydrogenProcessor, smartsMatcher, etc.), full FORMAT, and the
 # remaining v2.1 architectural items.
+# Cluster B step 1 (2026-05-19): QSAR re-enabled unconditionally.
+# Depends only on KERNEL + STRUCTURE + SYSTEM + CONCEPT + MATHS +
+# DATATYPE + FORMAT — all already in CORE_ONLY. Unblocks STRUCTURE's
+# smartsMatcher/atomTyper/kekulizer/ringAnalyser/sdGenerator (CB-2),
+# AMBER's GAFFTypeProcessor (CB-5), MMFF94 (CB-5), and SCORING/COMPONENTS
+# bits that reference RingPerception (CB-3). Also lifts the
+# Expression_test SMARTSPredicate WILL_FAIL since SmartsMatcher
+# becomes linkable after CB-2.
+INCLUDE(source/QSAR/sources.cmake)
+INCLUDE(include/BALL/QSAR/sources.cmake)
+
 IF(NOT BALL_CORE_ONLY)
 	INCLUDE(source/PYTHON/sources.cmake)
 	INCLUDE(include/BALL/PYTHON/sources.cmake)
-
-	INCLUDE(source/QSAR/sources.cmake)
-	INCLUDE(include/BALL/QSAR/sources.cmake)
 
 	INCLUDE(source/SOLVATION/sources.cmake)
 	INCLUDE(include/BALL/SOLVATION/sources.cmake)

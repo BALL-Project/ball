@@ -300,9 +300,11 @@ namespace BALL
 		create_methods_.insert("charge", (PersistenceManager::CreateMethod)Factory<ChargePredicate>::createVoid);
 		create_methods_.insert("isAxial", (PersistenceManager::CreateMethod)Factory<AxialPredicate>::createVoid);
 		create_methods_.insert("is4C1", (PersistenceManager::CreateMethod)Factory<Conformation4C1Predicate>::createVoid);
-#ifndef BALL_CORE_ONLY
+		// Cluster B step 1 (2026-05-19): SMARTS predicate registration
+		// no longer gated by BALL_CORE_ONLY. SMARTSPredicate's link
+		// dependency (STRUCTURE/SmartsMatcher → QSAR/RingPerception) is
+		// now satisfied in both CORE_ONLY (Cluster B) and full builds.
 		create_methods_.insert("SMARTS", (PersistenceManager::CreateMethod)Factory<SMARTSPredicate>::createVoid);
-#endif
 	}
 
 }

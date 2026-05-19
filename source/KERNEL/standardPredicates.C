@@ -1719,7 +1719,7 @@ namespace BALL
 		return ring_atoms_;
 	}
 
-#ifndef BALL_CORE_ONLY
+	// Cluster B step 1 (2026-05-19): SMARTSPredicate gate lifted.
 	/////////////////////////////////////////////////////////////////
 
 	HashMap<Molecule*, TimeStamp> SMARTSPredicate::call_time_map_;
@@ -1787,7 +1787,6 @@ namespace BALL
 
 		return matches_.has((Atom*)&atom);
 	}
-#endif // BALL_CORE_ONLY
 
 
 } // namespace BALL
