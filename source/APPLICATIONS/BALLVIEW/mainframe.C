@@ -1222,6 +1222,29 @@ namespace BALL
 		// Phase 999.44 Plan 02 — one-shot migration notice on first
 		// BALL_UI_V2 launch. Storage: [Inspector] firstRunMigrationNoticeShown
 		// in ~/.BALLView (shared with InspectorView's INI persistence).
+		//
+		// v1.7.x-15 (2026-05-19): bypass the modal in headless smoke
+		// runs. The QMessageBox::information call runs a NESTED Qt
+		// event loop via QDialog::exec(), blocking the main thread
+		// until the user clicks OK. In smoke runs (`-export-png` flag
+		// from render-smoke-check.sh) there's no user to click —
+		// BALLView hangs after "Enabling Vertex Buffer" until the
+		// 60s watchdog kills it. Use the same BALLVIEW_NO_WELCOME=1
+		// env var that the smoke script already sets to also suppress
+		// the migration notice. Marks the QSettings shown-flag as
+		// true so the notice doesn't appear next time either, which
+		// matches headless-runner intent.
+		if (qEnvironmentVariableIsSet("BALLVIEW_NO_WELCOME"))
+		{
+			QSettings s(QDir::homePath() + QStringLiteral("/.BALLView"),
+			            QSettings::IniFormat);
+			s.beginGroup(QStringLiteral("Inspector"));
+			s.setValue(QStringLiteral("firstRunMigrationNoticeShown"), true);
+			s.endGroup();
+			s.sync();
+			return;
+		}
+
 		QSettings s(QDir::homePath() + QStringLiteral("/.BALLView"),
 		            QSettings::IniFormat);
 		s.beginGroup(QStringLiteral("Inspector"));
