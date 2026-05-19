@@ -264,7 +264,7 @@
   </connection>
   <connection>
    <sender>predefined_combo_box</sender>
-   <signal>currentIndexChanged(QString)</signal>
+   <signal>currentTextChanged(QString)</signal>
    <receiver>ShortcutDialogData</receiver>
    <slot>loadPredefinedShortcuts_(QString)</slot>
    <hints>
