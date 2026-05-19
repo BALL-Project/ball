@@ -358,6 +358,13 @@ namespace BALL
 		*/
 		void adoptSubtree(AtomContainer& container);
 
+		// v2.1 P2.1.0 (D36): override Composite's store-reach hook to
+		// return this System's owned MoleculeStore. Side-table
+		// maintenance on Composite mutations under this System
+		// (Molecule/Chain/Residue children) reaches the store via
+		// parent-chain walk → this override.
+		MoleculeStore* getCompositeStore_() override { return store_.get(); }
+
 		//@}
 
 		private:

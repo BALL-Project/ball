@@ -82,6 +82,16 @@ namespace BALL
 		return v;
 	}
 
+	// v2.1 P2.1.0: default store-reach hook returns nullptr — free-
+	// standing Composites have no reachable store. Atom and System
+	// override (atom.C / system.C) to return their respective store
+	// pointers. See D36 / R20b-2 for the rationale on the virtual
+	// hook over dynamic_cast.
+	MoleculeStore* Composite::getCompositeStore_()
+	{
+		return nullptr;
+	}
+
 	// default ctor
 	Composite::Composite()
 		:	PersistentObject(),

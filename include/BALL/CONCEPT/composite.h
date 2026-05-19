@@ -47,6 +47,7 @@
 namespace BALL
 {
 	class Atom;
+	class MoleculeStore;
 
 	// v2.1 P1.3 (D22b + D31b): forward declarations for opaque
 	// CompositeHandle / CompositeTopologyView. Full types live in
@@ -1635,6 +1636,22 @@ B		*/
 		CompositeHandle       getCompositeHandle_() const;
 		void                  setCompositeHandle_(CompositeHandle h);
 		CompositeTopologyView getNode_() const;
+
+		// v2.1 P2.1 (D36 + R20b-2 / R20d): virtual store-reach hook
+		// for parallel side-table maintenance. Default returns
+		// nullptr (free-standing Composite with no reachable store —
+		// side-table maintenance no-ops at the mutation point; P2.4
+		// backfill rebuilds at adoption time). Subclasses override:
+		//   Atom::getCompositeStore_()    returns store_
+		//   System::getCompositeStore_()  returns store_.get()
+		// All other Composite subclasses (Molecule, Chain, Residue,
+		// Bond, AtomContainer, ...) inherit the nullptr default in
+		// v2.1; their non-Atom PropertyManager state stays v0-only
+		// per D36/P2.2's Atom-only mirror scope.
+		//
+		// Composite already has a vtable (inherits PersistentObject);
+		// this adds one vtable slot, no per-instance storage cost.
+		virtual MoleculeStore* getCompositeStore_();
 	};
 
 	template <typename T>

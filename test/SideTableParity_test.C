@@ -385,6 +385,49 @@ CHECK(selected_bits_ -- resize + atomic set/clear/is_selected)
 	TEST_EQUAL(s.is_selected_(450), false)
 RESULT
 
+CHECK(P2.1.0 -- Composite::getCompositeStore_() virtual hook)
+	// v2.1 P2.1.0 (D36 + R20b-2 + R20d): virtual store-reach hook.
+	// Default Composite returns nullptr (free-standing); Atom returns
+	// store_; System returns store_.get(). Verified here so the
+	// dispatch contract is locked before P2.1.1 wires the actual
+	// composite-mutation maintenance.
+	{
+		// Free-standing non-Atom Composite: nullptr.
+		Molecule mol_free;
+		TEST_EQUAL(mol_free.getCompositeStore_(), (MoleculeStore*)nullptr)
+	}
+
+	{
+		// Atom: orphan store binding from default ctor.
+		Atom a;
+		MoleculeStore* atom_store = a.getCompositeStore_();
+		TEST_NOT_EQUAL(atom_store, (MoleculeStore*)nullptr)
+		TEST_EQUAL(atom_store, a.getStore())
+	}
+
+	{
+		// System: its own store_.
+		System sys;
+		MoleculeStore* sys_store = sys.getCompositeStore_();
+		TEST_NOT_EQUAL(sys_store, (MoleculeStore*)nullptr)
+	}
+
+	{
+		// Tree: Molecule inserted into System. Molecule itself still
+		// returns nullptr (no override on Molecule); the System parent's
+		// override is what side-table maintenance reaches in P2.1.1+.
+		System sys;
+		Molecule mol;
+		Atom a;
+		mol.insert(a);
+		sys.insert(mol);
+		TEST_EQUAL(mol.getCompositeStore_(), (MoleculeStore*)nullptr)
+		TEST_NOT_EQUAL(sys.getCompositeStore_(), (MoleculeStore*)nullptr)
+		// The atom moves to System's store via adoptSubtree.
+		TEST_EQUAL(a.getCompositeStore_(), sys.getCompositeStore_())
+	}
+RESULT
+
 CHECK(sizeof pins -- D22b CompositeHandle 8 B / CompositeNode 48 B)
 	// These are static_asserted in _moleculeStoreInternal.h but pin
 	// them in the test as well so a layout regression shows up in

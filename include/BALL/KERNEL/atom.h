@@ -1059,6 +1059,12 @@ namespace BALL
 		MoleculeStore* getStore() const     { return store_; }
 		std::uint32_t  getStoreIndex() const { return store_idx_; }
 
+		// v2.1 P2.1.0 (D36): override Composite's store-reach hook
+		// to return this atom's store binding directly. Saves the
+		// parent-chain walk for Atom-rooted mutations and ensures
+		// orphan-store atoms reach the orphan side tables.
+		MoleculeStore* getCompositeStore_() override { return store_; }
+
 		// K0.4.2: friend-style API for System::adopt() to retarget the
 		// atom's store binding atomically after migration. Underscore
 		// suffix marks it as in-tree-only; not for downstream code.
