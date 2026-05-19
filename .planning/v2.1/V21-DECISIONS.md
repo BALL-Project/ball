@@ -744,7 +744,7 @@ The dense column row for that atom becomes effectively shadowed
 but unread for that atom — wastes one slot but avoids the
 expensive "clear dense row" operation.
 
-**P17b-N3 BUG: Sparse bag unbounded.**
+**P17b-N3 BUG: dynamic property names unbounded.**
 
 Add cap: `MoleculeStore::setMaxDynamicPropertyNames(size_t)`,
 default **65536 distinct dynamic names per store**. On reaching the
@@ -752,6 +752,14 @@ cap, further `registerColumn(new_name)` and sparse-bag entries
 with new names throw `Exception::InvalidArgument("dynamic property
 name cap exceeded")`. Existing names continue to work. Well-known
 force-field columns are NOT counted against the cap.
+
+**Wording note (R17c P17c-3):** sparse-bag entries themselves are
+NOT separately byte-capped. They remain proportional to
+`(live_atoms × capped_dynamic_names)` worth of explicit
+`setProperty(name, ...)` calls. The cap bounds *name growth*; entry
+count is bounded by explicit assignments. Imprecise phrasing
+"bounded sparse bag" replaced with "bounded dynamic property
+names" throughout.
 
 **P17b-3 DEBT: Promotion hysteresis.**
 
@@ -879,7 +887,7 @@ perf gates (CI policy). All three warrant a planning review.
 
 P6 stays close-only; P6 is release-notes + tag + no new design.
 
-Total Codex rounds: **12** (R17 + R17b + R17c + R18-R25 + R26 + R27 + R28 = 13 ID slots; counting R17/R17b/R17c as the P0 cluster gives 11 phase reviews).
+Total Codex review invocations: **14** (P0 cluster 3 + P1-P5 ×2 + P6 close 1). Numeric ID slots: 12 (R17 + R18-R28), with R17b/R17c as suffixed repeats of the P0 design-lock review. The doc previously said "12 rounds" — corrected per R17c P17c-8 to distinguish actual invocations from ID slots.
 
 ## D34b. MSVC CI gate moves to P2 close (R17b P17b-10 DEBT fix)
 

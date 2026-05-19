@@ -70,7 +70,7 @@ P1 splits into 9 atomic commits, executed sequentially:
 |---|---|---|---|
 | **P1.1** | `BALL_EMPTY_BASES` macro | `include/BALL/COMMON/macros.h` | macro compiles on Clang; MSVC verification deferred to D34 CI |
 | **P1.2** | `CompositeHandle` + `CompositeNode` types + `composite_nodes_` storage | `include/BALL/KERNEL/moleculeStore.h`, `source/KERNEL/moleculeStore.C` (allocator + release + handle pool) | unit test creates / frees N nodes, asserts vector growth & handle stability |
-| **P1.3** | Wire `Composite` mutations to write `composite_nodes_` | `source/CONCEPT/composite.C` (every mutation path adds side-table update under a `// V2.1 P1: side-table mirror` comment) | full ctest passes; `SideTableParity_test` (skeleton) asserts post-mutation parity for `appendChild` + `removeChild` |
+| **P1.3** | Wire `Composite` mutations to write `composite_nodes_` | `source/CONCEPT/composite.C` (every mutation path — `appendChild`, `removeChild`, `insertBefore`, `insertAfter`, `spliceBefore`, `spliceAfter`, `splice`, `insertParent`, `destroyChildren_`, `destroy` — adds side-table update under a `// V2.1 P1.3: side-table mirror` comment). Per D31b, `composite.C` includes the private `_moleculeStoreInternal.h`; `composite.h` and `composite.iC` do NOT. | full ctest passes; `SideTableParity_test` (skeleton) asserts post-mutation parity for `appendChild` + `removeChild` |
 | **P1.4** | `PropertyColumnRegistry` + `PropertyColumn<T>` + well-known FF column predeclaration | `include/BALL/KERNEL/propertyColumns.h` + `.C`; predeclares PARTIAL_CHARGE / FORMAL_CHARGE / MMFF94_TYPE / AMBER_TYPE / RADIUS / EPSILON / HYBRIDIZATION / IS_AROMATIC / ATOM_TYPE_NAME / STEREO_DESCRIPTOR | unit test registers + sets + gets values across types; 256-col cap throws on overflow |
 | **P1.5** | Sparse fallback `HashMap<atom_idx, PropertyBag>` + dynamic-column promotion logic at `compact()` | `propertyColumns.C` (`promote_if_full_()` called from `MoleculeStore::compact`) | unit test fills sparse bag to ≥10%, asserts promotion to dense column on next compact() |
 | **P1.6** | Wire `PropertyManager` mutations to side tables | `source/CONCEPT/property.C` (every mutation path adds side-table update); v2.0 demux preserved (mismatched-type stays in sparse bag, no throw) | `SideTableParity_test` asserts post-setProperty parity for INT/FLOAT/STRING + mixed-type-same-name case |
@@ -136,6 +136,25 @@ Per D33 (revised review cadence):
 - **R19 (P1 close review):** after all 9 sub-phases land. Probes
   TBD; likely focused on actual parity correctness + perf
   parity.
+
+## MSVC CI scope during P1 (R17c P17c-9 clarification)
+
+Per D34b, the Windows GHA job starts running at P1 close on a
+v2.0-equivalent baseline. During P1, the Windows job runs:
+
+- **In scope for P1 close gating:** BALL/core build under
+  MSVC + VS 2022 (everything `BALL_CORE_ONLY=ON` compiles),
+  `SideTableParity_test` runs and passes, `Sizeof_test` runs (but
+  the v2.1 size pins are NOT yet required to hold — Atom still
+  inherits D2/D3/D4).
+- **NOT in scope for P1 close gating:** `sizeof(Atom) ≤ 32 B`
+  and `sizeof(Bond) ≤ 24 B` pins. Those become mandatory only at
+  **P2 close** when the thin-handle flip actually claims them.
+- **Why run MSVC at all in P1:** catches MSVC-specific build
+  breakage early on the side-table infra commits. Avoids a
+  surprise pile-up of Windows compile errors at the P2 close
+  gate. The `BALL_EMPTY_BASES` macro is in place so P2 can rely
+  on it without further per-file changes.
 
 ## Next action
 
