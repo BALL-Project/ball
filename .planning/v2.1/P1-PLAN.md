@@ -25,32 +25,49 @@ performance regression target met; just parity + correctness.
 - Generation-guard debug-mode macro (P5).
 - New store-native iteration API (P5).
 
-## Phase gate (success criteria)
+## Phase gate (success criteria) — REVISED 2026-05-19
 
-1. `MoleculeStore` carries:
-   - `composite_nodes_` (vector of `CompositeNode`, 5-link per D22a)
-   - `property_columns_` (registry + dense columns + sparse bag per D23a)
-   - `selected_bits_` (vector of `std::atomic<uint64_t>` per D24a)
-2. Every public Composite mutation API (`appendChild`,
-   `removeChild`, `insertBefore`, `insertAfter`, `clear`,
-   `destroyChildren`, all internal `splice_*_` helpers, etc.)
-   writes BOTH to the inline pointers AND to `composite_nodes_`.
-3. Every public PropertyManager mutation API (`setProperty`,
-   `clearProperty`, `clear`, `swap`, `set`, `operator=`) writes
-   BOTH to the inline `properties_` vector AND to the registry +
-   columns + sparse bag.
-4. Every public Selectable mutation (`select`, `deselect`,
-   `setSelected(bool)`, internal `select_`, `deselect_`) writes
-   BOTH to the inline `selected_` flag AND to `selected_bits_`.
-5. New test `SideTableParity_test` runs typical workloads
-   (Composite tree mutations, force-field property assignment,
-   selection toggle) and asserts side tables match inline state
-   exactly after each operation.
-6. All 282 v2.0 CORE_ONLY tests still PASS (zero regression).
-7. `MoleculeStore_test` 100-run stress: 0/100 flakes.
-8. `BALL_EMPTY_BASES` macro defined and applied to Atom + Bond
-   (preparation only; P2 actually exercises it).
-9. `CompositeIteratorStability_test` lands and passes (D31).
+**Revision note:** original P1 plan called for dual-write of every
+Composite / PropertyManager / Selectable mutation. The maintainer's
+2026-05-19 decision on R17c P17c-9 moved all mutation-mirror
+wiring to **P2**, since P2's inheritance flip is the natural
+moment to introduce side-table writes alongside the read flip.
+Doing dual-write in P1 would be deleted code at P2.
+
+The shipped P1 closure verifies:
+
+1. `MoleculeStore` carries the three new SoA segments via PImpl:
+   - `composite_nodes_` (vector of `CompositeNode`, 5-link per
+     D22b, 48 B per node)  ✅
+   - `property_columns_` (`PropertyColumnRegistry` with 10
+     well-known FF columns predeclared + typed columns + string
+     intern pool per column per D23b)  ✅
+   - `sparse_bag_` (unordered_map<atom_idx, vector<SparseProperty>>
+     fallback per D23b)  ✅
+   - `selected_bits_` (`unique_ptr<atomic<uint64_t>[]>` + word
+     capacity per D24b)  ✅
+2. Allocator / accessor primitives are correct and tested:
+   - `allocate_composite_node_` / `release_composite_node_` /
+     `node_` round-trip (SideTableParity_test)  ✅
+   - `Composite::getCompositeHandle_` / `setCompositeHandle_` /
+     `getNode_` opaque-slot round-trip + topology view  ✅
+   - `PropertyColumn<T>::set/get/clear/isSet` + presence bitmap  ✅
+   - `StringPropertyColumn` intern pool dedup  ✅
+   - registry `registerColumn` / `findColumn` / cap enforcement  ✅
+   - `sparse_set_/find_/clear_` + `promote_sparse_` matching-type
+     transfer  ✅
+   - `selected_bits_` `resize_/set_selected_/is_selected_` with
+     relaxed atomics  ✅
+3. **NO** mutation wiring (`Composite::appendChild`, `PropertyManager::
+   setProperty`, `Selectable::select` etc. continue to use v0 inline
+   state unchanged). P2 lands the dual-write atomically with the
+   inheritance flip.
+4. All v2.0 CORE_ONLY tests still PASS + 2 new tests:
+   - `SideTableParity_test`  ✅
+   - `CompositeIteratorStability_test`  ✅ (D31)
+   - Total: 284/284 PASS (was 282 in v2.0.0).
+5. `BALL_EMPTY_BASES` macro defined  ✅; application to concrete
+   classes happens at P2 with the inheritance flip.
 
 ## Phase budget
 
