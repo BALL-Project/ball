@@ -114,6 +114,55 @@ CHECK(removal mid-iteration -- removing the CURRENT node invalidates that iter)
 	TEST_EQUAL(&it.getTraits().getData(), &a2)
 RESULT
 
+CHECK(spliceBefore mid-iteration -- non-current node move preserves iterator)
+	// R19-F2 closure: D31 iterator-stability coverage expansion. Splice
+	// moves a child from one parent to another; tests that an iterator
+	// pointing at a NON-spliced node stays valid.
+	Molecule mol_a;
+	Molecule mol_b;
+	Atom a1, a2, a3;
+	mol_a.insert(a1);
+	mol_a.insert(a2);
+	mol_b.insert(a3);
+	TEST_EQUAL(mol_a.getDegree(), 2u)
+	TEST_EQUAL(mol_b.getDegree(), 1u)
+
+	Composite::ChildCompositeIterator it = mol_a.beginChildComposite();
+	TEST_EQUAL(&it.getTraits().getData(), &a1)
+
+	// spliceBefore moves mol_b's children before the call-site sibling.
+	// We don't move mol_a's children, so it's iterator stays valid.
+	mol_a.appendChild(mol_b);  // first make mol_b a child of mol_a
+	TEST_EQUAL(mol_a.getDegree(), 3u)
+	TEST_EQUAL(&it.getTraits().getData(), &a1)
+
+	++it;
+	TEST_EQUAL(&it.getTraits().getData(), &a2)
+RESULT
+
+CHECK(reverse_iterator wrapper -- ChildCompositeReverseIterator)
+	// D22b 5-link node design is verified by these reverse iterators
+	// because std::reverse_iterator wraps the BidirectionalIterator and
+	// calls operator--() under the hood, which walks last_child_ +
+	// previous_ links.
+	Molecule mol;
+	Atom a1, a2, a3;
+	mol.insert(a1);
+	mol.insert(a2);
+	mol.insert(a3);
+
+	Composite::ChildCompositeReverseIterator rit = mol.rbeginChildComposite();
+	// std::reverse_iterator's operator* dereferences (current-1).
+	// First reverse-position is the last child a3.
+	TEST_EQUAL(&(*rit), &a3)
+	++rit;
+	TEST_EQUAL(&(*rit), &a2)
+	++rit;
+	TEST_EQUAL(&(*rit), &a1)
+	++rit;
+	TEST_EQUAL(rit == mol.rendChildComposite(), true)
+RESULT
+
 CHECK(deep tree DFS -- CompositeIterator full preorder)
 	// Build mol -> a1, with a2 ALSO inside the tree (siblings).
 	// Composite tree mutations of unrelated branches do not invalidate

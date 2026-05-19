@@ -18,7 +18,8 @@
 // include this — the CI grep gate enforces.
 #include <BALL/KERNEL/_moleculeStoreInternal.h>
 
-#include <cstring>  // std::memcpy for handle (un)packing
+#include <cstring>       // std::memcpy for handle (un)packing
+#include <type_traits>   // R19 P19-1: is_trivially_copyable static_assert
 
 using namespace std;
 
@@ -36,6 +37,16 @@ namespace BALL
 	// _moleculeStoreInternal.h pins sizeof == 8.
 	static_assert(sizeof(CompositeHandle) == sizeof(std::uint64_t),
 		"CompositeHandle layout must match opaque uint64_t slot");
+	// R19 P19-1 hardening: memcpy between CompositeHandle and the
+	// opaque uint64_t slot is only safe if CompositeHandle is
+	// trivially-copyable AND has at-most-uint64_t alignment. Both
+	// conditions hold today (POD aggregate; static_assert below
+	// catches a future regression that adds a non-trivial member
+	// or stronger alignment requirement).
+	static_assert(std::is_trivially_copyable<CompositeHandle>::value,
+		"CompositeHandle must remain trivially-copyable for memcpy round-trip");
+	static_assert(alignof(CompositeHandle) <= alignof(std::uint64_t),
+		"CompositeHandle alignment must not exceed uint64_t alignment");
 
 	CompositeHandle Composite::getCompositeHandle_() const
 	{

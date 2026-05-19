@@ -1,6 +1,6 @@
-name: CI v2.0 (CORE_ONLY)
+name: CI v2.0 / v2.1 (CORE_ONLY)
 
-# A4 — Phase A polish: dedicated CI workflow for the v2.0 milestone branch.
+# A4 + v2.1 P1 close: dedicated CI workflow for the v2.x milestone branches.
 #
 # The existing `ci.yml` workflow targets v1.6/v1.7 with full BALL builds
 # (BALL_CORE_ONLY=OFF) on a 3-OS matrix. v2.0 currently has a pre-existing
@@ -21,14 +21,14 @@ name: CI v2.0 (CORE_ONLY)
 
 on:
   push:
-    branches: [v2.0]
+    branches: [v2.0, v2.1]
     paths-ignore:
       - '.planning/**'
       - '**.md'
       - 'LICENSE*'
       - 'doc/**'
   pull_request:
-    branches: [v2.0]
+    branches: [v2.0, v2.1]
     paths-ignore:
       - '.planning/**'
       - '**.md'
@@ -54,6 +54,27 @@ jobs:
         with:
           fetch-depth: 0     # phase artifact trail uses git log/blame
 
+      - name: D31b grep gate -- CompositeNode encapsulation
+        # v2.1 D31b (Codex R17 P17-7 / R17b P17b-N5 / R19-F1 closure):
+        # CompositeNode and composite_nodes_ must NEVER appear in
+        # public iterator-adjacent headers. They live ONLY in
+        # _moleculeStoreInternal.h (private) and the 4 wiring TUs
+        # that include it. This grep gate enforces structurally —
+        # blocks PRs that leak the type into headers consumed by
+        # iterator code, where stale CompositeNode* caching could
+        # silently break iterator stability under composite_nodes_
+        # vector growth.
+        run: |
+          if grep -rn 'CompositeNode\*\|composite_nodes_' \
+              include/BALL/CONCEPT/composite.h \
+              include/BALL/CONCEPT/composite.iC \
+              $(find include -name '*[Ii]terator*.h' -o -name '*[Ii]terator*.iC') \
+              2>/dev/null; then
+              echo "::error::D31b leak: CompositeNode* or composite_nodes_ leaked into iterator/public header"
+              exit 1
+          fi
+          echo "D31b grep gate: PASS"
+
       - name: Install dependencies (Homebrew)
         # Mirrors the v2.0 dev setup: Qt5 + Boost + Eigen3 + nlohmann/json
         # is vendored at include/BALL/EXTERNAL/nlohmann_json.hpp so no brew
@@ -76,14 +97,18 @@ jobs:
         run: |
           cmake --build build --target BALL build_tests -j
 
-      - name: ctest sweep (164/164 expected)
+      - name: ctest sweep (282 on v2.0, 284 on v2.1)
         env:
           BALL_DATA_PATH: ${{ github.workspace }}/data
         run: |
           cd build
-          # --timeout 120 caps individual hangs. 1 documented WILL_FAIL
-          # (Expression_test in CORE_ONLY — gated until QSAR re-enable
-          # in Wave 3). Expected: 164/164 PASS.
+          # Test count history:
+          #   v2.0   = 282/282 (v2.0.0 final, commit 7a8dc7caf)
+          #   v2.1+  = 284/284 (P1 close, commits 173374553..155a3e057;
+          #            +1 SideTableParity_test, +1 CompositeIteratorStability_test)
+          # --timeout 120 caps individual hangs. 0 WILL_FAIL on v2.0+.
+          # Single-threaded ctest avoids BALL ClassTest sandbox file
+          # collisions on the _AAAAA*.TMP fixture path.
           ctest --output-on-failure --timeout 120 \
                 --output-junit ${{ github.workspace }}/ball-v2-tests.xml
 

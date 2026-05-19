@@ -933,3 +933,120 @@ out-of-scope instruction.
 
 *Second revision 2026-05-19 post-R17b. Next: R17c re-review, then
 P1 execute.*
+
+---
+
+# Third revision post-R19 (2026-05-19 P1 close)
+
+R19 verdict: NEEDS-FIXES. Three findings: R19-F1 CI guardrails
+unwired, R19-F2 iterator-stability test coverage incomplete,
+R19-F3 public underscore accessors need API classification.
+
+R19-F1 splits into two parts:
+- D31b grep gate: actionable in P1 close. **Closed** in the same
+  commit that addresses R19 (added to `.github/workflows/ci-v2.yml`,
+  blocks PRs that leak CompositeNode* / composite_nodes_ into
+  iterator-adjacent public headers).
+- D34b Windows MSVC job: NOT actionable in P1 close. The codebase
+  has never been built on Windows; vcpkg setup is part of the
+  separate Phase 4 (BALLView 1.6 modernization) roadmap. Forcing
+  this gate at P1 close would block v2.1 on a parallel project
+  whose ETA is not v2.1's to set. **D34c (below) defers this.**
+
+R19-F2 partial closure: added splice + reverse-wrapper coverage
+to CompositeIteratorStability_test. clear/destroyChildren mid-
+iteration coverage is deferred to P2 (where the destroy paths
+are touched anyway for the inheritance flip; adding tests in
+isolation now would be redundant work).
+
+R19-F3 closed: D35 (below) classifies the public underscore
+accessors.
+
+## D34c. MSVC CI gate moves to v2.1.0-rc1 (R19-F1 revised)
+
+**Revises D34b.**
+
+D34b promised the Windows MSVC GHA job at P1 close. R19-F1 correctly
+flagged it as missing. Practical reality: the BALL codebase has never
+been built on Windows. The CLAUDE.md project brief notes "vcpkg for
+Windows is pending (Phase 4)" — Phase 4 is the BALLView 1.6
+modernization wave, NOT v2.1's kernel work. Adding Windows CI
+requires:
+1. vcpkg manifest for Qt5 + Boost + Eigen3 + flex + bison + cmake
+2. CMakeLists adjustments for MSVC-specific link flags (`/EHsc`,
+   `_USE_MATH_DEFINES`, etc.)
+3. Resolution of any MSVC-specific source incompatibilities
+   (currently unknown — never been compiled)
+
+That is a 1-2 day project of its own, blocked on Phase 4 sequencing.
+
+**Revised timing:**
+- **D34c.1 (NEW):** at v2.1.0-rc1 tag preparation (post-P5, pre-
+  release), Windows MSVC CI MUST be wired and green for the v2.1
+  kernel CORE_ONLY surface (with v2.1 sizeof pins active).
+- **D34c.2 (NEW):** P2 ships the inheritance flip and asserts
+  `sizeof(Atom) ≤ 32 B` on Apple Clang via the existing
+  `Sizeof_test`. Apple Clang and GCC apply EBO for distinct empty
+  bases; the v2.1 target sizes hold on both. MSVC verification
+  happens at rc1.
+- **D34c.3 (NEW):** Between P2 close and v2.1.0-rc1, a parallel
+  sub-track (V21-MSVC-CI) wires vcpkg + Windows builds. This is a
+  v2.1 backlog item that can run concurrently with P3-P5.
+- **D34c.4 (NEW):** If MSVC at rc1 reveals `sizeof(Atom) > 32 B`,
+  the fix is to add `BALL_EMPTY_BASES` to the affected classes
+  (the macro is already in place from P1.1). This is a
+  per-class, mechanical fix — not a redesign.
+
+Risk acknowledged: if MSVC EBO behavior differs more dramatically
+than `__declspec(empty_bases)` can handle, v2.1.0 may need a
+late-stage size-pin relaxation on Windows. This is documented as
+a known v2.1 release risk in MILESTONE-v2.1-KICKOFF.md.
+
+## D35. Public underscore accessors are internal/experimental, NOT v2.1 stable API (R19-F3 closure)
+
+`Composite::getCompositeHandle_`, `setCompositeHandle_`, and
+`getNode_` are public on the v2.1 P1.3 commit (39fb54415). The
+incomplete-return-type gate prevents accidental use without
+`_moleculeStoreInternal.h`, but they ARE in the public ABI.
+
+**Decision:** these accessors are **internal/experimental** and
+explicitly excluded from v2.1 stable API promises.
+
+- Documented in `RELEASE-NOTES-v2.1.md` (drafted at P6) under a
+  "Not stable for v2.2" section.
+- Trailing-underscore naming convention is the v2.1 marker for
+  this status.
+- v2.2 candidates: move to `protected` with a friend grant for
+  `MoleculeStoreSideTables`, or wrap behind a free-function API
+  in the internal header.
+
+This avoids API-freeze paralysis at v2.1.0 over still-evolving
+internal storage details.
+
+---
+
+## Revised cross-decision summary (post-R19)
+
+| # | Decision | Status |
+|---|---|---|
+| D22b CompositeNode 5-link | CLOSED |
+| D23b PropertyManager column registry | CLOSED |
+| D24b selected_bits_ atomic-array | CLOSED |
+| D26a EBO macro | CLOSED (macro defined; application at P2) |
+| D30a backward-read JSON demux | CLOSED |
+| D31b CompositeNode encapsulation + grep gate | CLOSED at P1 close (CI gate wired) |
+| D32b backport policy | CLOSED |
+| D33b review cadence | CLOSED |
+| D34c MSVC CI defers to rc1 (revised D34b) | CLOSED with rc1 gate |
+| D35 internal/experimental accessor classification | CLOSED |
+
+**P2 entry gate (R19 checklist):**
+1. ✅ D31b grep gate wired in CI
+2. ✅ CompositeHandle is_trivially_copyable + alignment static_asserts
+3. ✅ Iterator stability test expanded (splice + reverse wrapper)
+4. ✅ D35 API classification recorded
+5. ⏭ D34c MSVC CI deferred to rc1 (formal revision)
+6. ⏭ clear/destroyChildren iterator coverage deferred to P2
+
+*Third revision 2026-05-19 post-R19 P1 close. Next: R19 fix
+commit, then P2 (thin-handle flip).*
