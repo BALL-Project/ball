@@ -289,6 +289,20 @@ namespace BALL
 				selection_summary_    = new SelectionSummarySection(body_);
 				selection_properties_ = new PropertiesSection(body_);
 				selection_actions_    = new QuickActionsSection(main_control, body_);
+				// UFG-22 (rc5 follow-up) — sections are parented to
+				// body_ for ownership/lifetime, but they may not be
+				// added to a tab's QStackedWidget page layout until
+				// later (e.g. only when a non-empty selection arrives).
+				// Without an explicit hide() they show up as floating
+				// children at (0,0) of body_ — visible as the
+				// "Clear Selection / Invert Selection" buttons + Material
+				// header text bleeding through the Representation tab's
+				// empty-state placeholder in the rc4/rc5 user-feedback
+				// screenshot. `InspectorBody::addSection` calls show()
+				// when the section is actually inserted into a layout.
+				selection_summary_->hide();
+				selection_properties_->hide();
+				selection_actions_->hide();
 			}
 		}
 
@@ -345,6 +359,16 @@ namespace BALL
 			model_section_    = new ModelSection(model_controller_, body_);
 			coloring_section_ = new ColoringSection(coloring_controller_, body_);
 			material_section_ = new MaterialSection(material_controller_, body_);
+			// UFG-22 (rc5 follow-up) — sections must be hidden until
+			// the Representation tab actually gets a non-empty list of
+			// reps (`representation_sections_added_` becomes true via
+			// `addSection`). See the analogous hide() block in
+			// attachSelectionTab and the addSection() show() pair in
+			// inspectorBody.C for the full UFG-22 root-cause writeup.
+			rep_header_->hide();
+			model_section_->hide();
+			coloring_section_->hide();
+			material_section_->hide();
 
 			// The header's picker drives setActiveRepresentation.
 			connect(rep_header_, &RepHeaderSection::representationPicked,
