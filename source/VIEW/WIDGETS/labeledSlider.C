@@ -63,13 +63,27 @@ namespace BALL
 				reset_button_->setIcon(reset_icon);
 			}
 
+			// UFG-21 (rc4 validation) — layout-priority for narrow dock.
+			// At Inspector minimum width (280px from UFG-04), the row's
+			// total natural width exceeds the available column. Qt's
+			// QHBoxLayout then clips the LAST child (reset_button_) off
+			// the right edge — the visible defect in rc4. Fix: pin spin,
+			// units, and reset to their sizeHints (Fixed policy) and let
+			// the slider absorb the shrink (Expanding with a 40px floor
+			// so it stays interactive even on the narrowest dock).
+			slider_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+			slider_->setMinimumWidth(40);
+			spin_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+			units_label_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+			reset_button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+
 			QHBoxLayout* row = new QHBoxLayout(this);
 			row->setContentsMargins(0, 0, 0, 0);
 			row->setSpacing(8);
 			row->addWidget(slider_, /*stretch=*/1);
-			row->addWidget(spin_);
-			row->addWidget(units_label_);
-			row->addWidget(reset_button_);
+			row->addWidget(spin_,        /*stretch=*/0);
+			row->addWidget(units_label_, /*stretch=*/0);
+			row->addWidget(reset_button_,/*stretch=*/0);
 
 			connect(slider_, &QSlider::valueChanged, this, &LabeledSlider::onSliderChanged_);
 			connect(spin_, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
