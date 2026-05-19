@@ -31,17 +31,23 @@ major workstream.
 | K0.2 | MoleculeStore skeleton + CSR + live-ref contract | Done |
 | K0.3 | Atom-as-handle + dual-write, per-field flip | Done (.1-.7 dual-write; .LATER.1-10 flip; .c.1-10 fixes) |
 | K0.4 | Per-System store + adoption | Done (.1 ownership; .2 adopt; .3 auto-adopt; .4-.8 R4 fixes) |
-| K0.5 | Compiled selection ≥10× | Done (median 61.8× at 100k atoms; .0-.8 sub-phases) |
-| K0.6 | **Binary persistence v2** + v1→v2 converter | **PIVOTED to JSON** (maintainer decision 2026-05-18); converter deferred to Track B |
-| K0.7 | Memory + perf budget | Done — D13 documented as **PARTIAL** (SoA meets, full-handle misses by 3.1×) |
-| K0.8 | Release-notes + cleanup | This document + RELEASE-NOTES-v2.0.md |
+| K0.5 | Compiled selection ≥10× | Done (median 48.2× synth 100k / 19.4× real PDB 4587; .0-.8 sub-phases) |
+| K0.6 | **Binary persistence v2** + v1→v2 converter | **PIVOTED to JSON** (maintainer decision 2026-05-18); converter delivered in Track B B0.2 |
+| K0.7 | Memory + perf budget | Done — D13 documented as **PARTIAL** (SoA meets, full-handle misses by 3.1×); v2.1 backlog has the L-complexity thin-handle path to hit budget |
+| K0.8 | Release-notes + cleanup | RELEASE-NOTES-v2.0.md + this document |
+| **B0** | PLUGIN smoke + v1→v2 converter | Done (B0.1 PLUGIN, B0.2 converter; 24/24 + 3/3) |
+| **B1.1** | FORMAT module re-enable | Done (subset; 33/34 with B1.2 follow-up) |
+| **B1.2** | STRUCTURE module re-enable | Done (subset + heap-System dtor fix; 146/146) |
+| **B1.3** | Codex R10 review | Done (6 must-do fixes applied; Wave 1 CLOSED) |
+| **B2.1** | XRAY (Wave 2a) | Done (146/146) |
+| **B2.2** | NMR (Wave 2b) | Done (159/159) |
+| **B2.3** | ENERGY (Wave 2c) | Done (162/162; Wave 2 CLOSED) |
+| **v2.1 prep** | v2.1 backlog drive-by | 12+ items closed: 5 quarantines lifted + AndNode scratch + DTOR-HARDEN + JsonBench gates + V21-* hardening batch |
+| **R11/R12/R13/R14** | Kernel adversarial sanity | Done; 14 [BUG]s caught + fixed; D17-D21 added |
 
-The K0.6 pivot is the only material spec change. Rationale: typical
-BALL workloads (≤10k atoms) don't justify the 3–4 week custom-binary
-budget, JSON gives debuggability / schema evolution / portability
-for free, and a binary fast-path can be added later if profiling
-shows the JSON path is on the hot path. Decision captured in
-`K0.6-SUBPHASES.md` decision log.
+The K0.6 pivot is the only material spec change. Track B Waves 0-2
+closed cleanly; Wave 3 cluster (MOLMEC + QSAR + SCORING-FF) is the
+next phase, post-v2.0 tag.
 
 ---
 
@@ -75,10 +81,15 @@ shows the JSON path is on the hot path. Decision captured in
 | R7 | K0.6.0-K0.6.3 (writer + reader + schema) | 4 OPEN closed inline (K0.6.3b) | Done |
 | R8 | K0.6.5b (System + property + orphan) | 2 OPEN + 4 FYI; closed inline (K0.6.5c) | Done |
 | R9 | K0.7 perf | 0 OPEN; doc-only findings | D13 wording corrected; M-of-N + gate tightening → v2.1 |
+| **R10** | Track B Wave 1 (FORMAT + STRUCTURE subset integration) | NEEDS-FIXES → 6 must-do items applied | Wave 1 CLOSED |
+| **R11** | K0.5 → current broad-scope | 5 [BUG]s (orphan-store locking, ScratchScope realloc, loadSystemJSON rollback, cache key, simpleMolecularGraph) | All fixed in commit 725448d4e |
+| **R12** | Kernel compactness + correctness | 5 [BUG]s (compact gen-bump, adopt-after-insert, bond CSR thread-safety, hidden System::insert, detached null-deref) + 9 [DEBT]s | [BUG]s in 35b212c00; [DEBT]s as v2.1 backlog |
+| **R13** | V21-* hardening sanity | 2 [BUG]s (stable-id throw-after-commit, compact/evaluate concurrency) | Fixed in 58a26d81a |
+| **R14** | D17-D21 sanity | 2 [BUG]s (evaluate_one staleness, persistentRead/set/op=/swap orphan-lock gap) | Fixed in 1464fc8a1 |
 
-Every HIGH/OPEN closed before next phase. v2.0 ships with the FYI
-items documented in `RELEASE-NOTES-v2.0.md`'s "Things deferred to
-v2.1" table.
+Every HIGH/OPEN/BUG closed before the next phase or at the same
+cycle. v2.0 ships with FYI/DEBT items documented in
+`RELEASE-NOTES-v2.0.md`'s "Things deferred to v2.1" table.
 
 ---
 
@@ -111,6 +122,13 @@ K0-CODEX-REVIEW-ROUND6.md         R6 K0.5
 K0-CODEX-REVIEW-ROUND7.md         R7 K0.6.0-K0.6.3
 K0-CODEX-REVIEW-ROUND8.md         R8 K0.6.5b
 K0-CODEX-REVIEW-ROUND9.md         R9 K0.7
+K0-CODEX-REVIEW-ROUND10.md        R10 Track B Wave 1 (FORMAT + STRUCTURE)
+K0-CODEX-REVIEW-ROUND11.md        R11 broad-scope K0.5 → current
+K0-CODEX-REVIEW-ROUND12.md        R12 kernel compactness + correctness
+K0-CODEX-REVIEW-ROUND13.md        R13 V21-* sanity check
+TRACK-B-SUBPHASES.md              Track B sequencing + Wave 1-7 plan
+RELEASE-NOTES-v2.0.md             user-facing release notes
+MILESTONE-CONTEXT-v2.0.md         this document (project-level handover)
 ```
 
 ### Source artifacts
