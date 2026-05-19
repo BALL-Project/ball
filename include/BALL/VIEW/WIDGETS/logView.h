@@ -88,7 +88,13 @@ namespace BALL
 			public Q_SLOTS:
 
 			virtual void showGuestContextMenu(const QPoint&);
-			
+
+			/** UFG-24 — copy all log lines to the system clipboard.
+			    Invoked by the toolbar "Copy logs" button in the
+			    LogView guest container + the Edit ▸ Copy Logs to
+			    Clipboard menu entry. */
+			void copyLogsToClipboard();
+
 			/// Event filter logstream
 			bool eventFilter(QObject*, QEvent*);
 

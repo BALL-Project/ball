@@ -13,7 +13,13 @@
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <QtCore/QMimeData>
+#include <QtGui/QClipboard>
 #include <QtGui/QTextCursor>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 using namespace std;
 
@@ -57,7 +63,37 @@ namespace BALL
 				text_edit_(new DragLogView(this))
 		{
 			default_visible_ = false;
-			setGuest(*text_edit_);
+
+			// UFG-24 (rc4 validation) — wrap text_edit_ in a container
+			// with a small toolbar strip so the user has a
+			// discoverable "Copy logs" action without diving into
+			// menus or per-line right-click. The container becomes
+			// the DockWidget's guest, replacing the bare text_edit_.
+			QWidget* container = new QWidget(this);
+			QVBoxLayout* col = new QVBoxLayout(container);
+			col->setContentsMargins(4, 2, 4, 2);
+			col->setSpacing(2);
+
+			QHBoxLayout* toolbar = new QHBoxLayout();
+			toolbar->setContentsMargins(0, 0, 0, 0);
+			toolbar->setSpacing(6);
+			QPushButton* copy_btn = new QPushButton(tr("Copy logs"), container);
+			copy_btn->setToolTip(tr("Copy all log lines to the clipboard."));
+			QPushButton* clear_btn = new QPushButton(tr("Clear"), container);
+			clear_btn->setToolTip(tr("Clear the log view (does not stop further logging)."));
+			toolbar->addWidget(copy_btn);
+			toolbar->addWidget(clear_btn);
+			toolbar->addStretch(1);
+			col->addLayout(toolbar);
+			col->addWidget(text_edit_, /*stretch=*/1);
+
+			connect(copy_btn, &QPushButton::clicked, this, [this]() {
+				if (QApplication::clipboard())
+					QApplication::clipboard()->setText(text_edit_->toPlainText());
+			});
+			connect(clear_btn, &QPushButton::clicked, text_edit_, &QTextEdit::clear);
+
+			setGuest(*container);
  			text_edit_->setLineWrapMode(QTextEdit::WidgetWidth);
 			text_edit_->setAcceptRichText(false);
 			text_edit_->setReadOnly(true);
@@ -131,6 +167,18 @@ namespace BALL
 			insertMenuEntry(MainControl::EDIT, tr("Clear Logs"), text_edit_, SLOT(clear()),
 			                "Shortcut|MainControl|Edit|ClearLogs", QKeySequence(), tr(""),
 											UIOperationMode::MODE_ADVANCED);
+			// UFG-24 — second discoverability path (alongside the
+			// Copy logs button in the LogView toolbar).
+			insertMenuEntry(MainControl::EDIT, tr("Copy Logs to Clipboard"), this,
+			                SLOT(copyLogsToClipboard()),
+			                "Shortcut|MainControl|Edit|CopyLogs", QKeySequence(), tr(""),
+											UIOperationMode::MODE_ADVANCED);
+		}
+
+		void LogView::copyLogsToClipboard()
+		{
+			if (text_edit_ && QApplication::clipboard())
+				QApplication::clipboard()->setText(text_edit_->toPlainText());
 		}
 
 
