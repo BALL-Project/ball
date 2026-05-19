@@ -6,7 +6,7 @@ name: CI
 # `v1.6-modernization` is the active milestone branch.
 on:
   push:
-    branches: [master, v1.6-modernization, v1.7-modernization]
+    branches: [master, v1.6-modernization, v1.7-modernization, v1.7.1-modernization]
     # Docs-only commits don't change build inputs — skip the full 4-OS rebuild
     # (saves ~45-60 min of runner time per ROADMAP/CLAUDE.md push). Source-of-
     # truth for "what affects the build" is anything outside .planning/ and
@@ -19,7 +19,7 @@ on:
       - 'LICENSE*'
       - 'doc/**'
   pull_request:
-    branches: [master, v1.6-modernization, v1.7-modernization]
+    branches: [master, v1.6-modernization, v1.7-modernization, v1.7.1-modernization]
     paths-ignore:
       - '.planning/**'
       - '**.md'
