@@ -1,7 +1,16 @@
 # BALL 2.0 — Milestone Context
 
-**Status:** DRAFT for tag. **Authored:** 2026-05-18.
+**Status:** READY FOR TAG (v2.0.0-rc3 shipped 2026-05-19).
+**Authored:** 2026-05-18. **Last updated:** 2026-05-19 (post-rc3).
 **Companion:** `RELEASE-NOTES-v2.0.md` (user-facing summary).
+
+**Tag history:**
+
+| Tag | Commit | Date | Notes |
+|---|---|---|---|
+| v2.0.0-rc1 | 8fe2a8a39 | 2026-05-18 | K0.8 close + Track B Wave 0-2 |
+| v2.0.0-rc2 | 7d28f3768 | 2026-05-19 | R11-R14 kernel hardening + v2.1 backlog |
+| v2.0.0-rc3 | 34ec27420 | 2026-05-19 | Track B Wave 3 Clusters A+B + R15/R16 close |
 
 This document is the project-level handover for v2.0: what was
 shipped, why the design landed the way it did, what wasn't shipped
@@ -44,10 +53,17 @@ major workstream.
 | **B2.3** | ENERGY (Wave 2c) | Done (162/162; Wave 2 CLOSED) |
 | **v2.1 prep** | v2.1 backlog drive-by | 12+ items closed: 5 quarantines lifted + AndNode scratch + DTOR-HARDEN + JsonBench gates + V21-* hardening batch |
 | **R11/R12/R13/R14** | Kernel adversarial sanity | Done; 14 [BUG]s caught + fixed; D17-D21 added |
+| **B3 Cluster A** | MOLMEC subset (CHARMM/MIN/MD/PARAMETER) + SCORING/COMMON subset + FORMAT trajectories | Done at 47c7dd079 (174/174) |
+| **B3-R15** | Codex R15 — Cluster A sanity | Done (no [BUG]s; cluster-B sequencing corrected for SCORING/COMPONENTS dep) |
+| **B3 Cluster B step 1** | QSAR + STRUCTURE SmartsMatcher cluster (incl. SMARTSPredicate ungating) | Done at 2d6a820e3 (174/174) |
+| **B3 Cluster B closure** | SCORING/COMPONENTS + SCORING/FUNCTIONS + SOLVATION + DOCKING + AMBER + MMFF94 + STRUCTURE restore + remaining FORMAT | Done at 73a640a80 (279/279) |
+| **B3-R16** | Codex R16 — Cluster B sanity | Done; 3 [BUG]s: C-B1 SmilesParser adoption order + C-B4 missing tests fixed; C-B7 bond-prop JSON documented as v2.1 V21-BOND-PROPERTY-JSON; 282/282 at 34ec27420 |
+| **v2.0.0-rc3 tag** | Release-candidate 3 | Pushed to origin 2026-05-19 |
 
-The K0.6 pivot is the only material spec change. Track B Waves 0-2
-closed cleanly; Wave 3 cluster (MOLMEC + QSAR + SCORING-FF) is the
-next phase, post-v2.0 tag.
+The K0.6 pivot is the only material spec change. Track B Waves 0-3
+closed cleanly. Remaining Track B Waves (XRAY full + VIEW + Python
+bindings) are out of scope for v2.0 — they ship in v2.0.x patches or
+v2.1.
 
 ---
 
@@ -86,10 +102,16 @@ next phase, post-v2.0 tag.
 | **R12** | Kernel compactness + correctness | 5 [BUG]s (compact gen-bump, adopt-after-insert, bond CSR thread-safety, hidden System::insert, detached null-deref) + 9 [DEBT]s | [BUG]s in 35b212c00; [DEBT]s as v2.1 backlog |
 | **R13** | V21-* hardening sanity | 2 [BUG]s (stable-id throw-after-commit, compact/evaluate concurrency) | Fixed in 58a26d81a |
 | **R14** | D17-D21 sanity | 2 [BUG]s (evaluate_one staleness, persistentRead/set/op=/swap orphan-lock gap) | Fixed in 1464fc8a1 |
+| **R15** | Track B Wave 3 Cluster A | 0 [BUG]s; 1 planning correction (SCORING/COMPONENTS dep) | GO; cluster-B re-sequenced |
+| **R16** | Track B Wave 3 Cluster B | 3 [BUG]s (C-B1 SmilesParser adoption, C-B4 3 missing CORE_ONLY tests, C-B7 Bond PropertyManager JSON gap) | 2 fixed (34ec27420), 1 documented (V21-BOND-PROPERTY-JSON) |
 
 Every HIGH/OPEN/BUG closed before the next phase or at the same
 cycle. v2.0 ships with FYI/DEBT items documented in
 `RELEASE-NOTES-v2.0.md`'s "Things deferred to v2.1" table.
+
+**Total adversarial-review yield across R1-R16:** 19 [BUG]s caught
+and fixed in-cycle + 9 [DEBT]s deferred to v2.1 backlog. Zero
+[BUG]s shipped in rc3.
 
 ---
 
@@ -126,6 +148,9 @@ K0-CODEX-REVIEW-ROUND10.md        R10 Track B Wave 1 (FORMAT + STRUCTURE)
 K0-CODEX-REVIEW-ROUND11.md        R11 broad-scope K0.5 → current
 K0-CODEX-REVIEW-ROUND12.md        R12 kernel compactness + correctness
 K0-CODEX-REVIEW-ROUND13.md        R13 V21-* sanity check
+K0-CODEX-REVIEW-ROUND14.md        R14 D17-D21 sanity
+K0-CODEX-REVIEW-ROUND15.md        R15 Track B Wave 3 Cluster A
+K0-CODEX-REVIEW-ROUND16.md        R16 Track B Wave 3 Cluster B
 TRACK-B-SUBPHASES.md              Track B sequencing + Wave 1-7 plan
 RELEASE-NOTES-v2.0.md             user-facing release notes
 MILESTONE-CONTEXT-v2.0.md         this document (project-level handover)
@@ -232,4 +257,4 @@ and lands in K0.8 or v2.0.x patch.
 
 ---
 
-*Authored 2026-05-18 K0.8.*
+*Authored 2026-05-18 K0.8. Updated 2026-05-19 post-rc3 (Track B Wave 3 Clusters A+B + R15/R16 close).*
