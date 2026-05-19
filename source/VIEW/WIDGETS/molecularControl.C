@@ -870,17 +870,28 @@ namespace BALL
 			// cursor selection to drive BALL composite selection (the
 			// yellow scene highlight + per-atom isSelected() flag), not
 			// be a separate orthogonal concern. Sync BALL composite
-			// selection to selected_ here. `enableUpdates_(false)`
-			// suppresses re-entry via the message cascade that
-			// clearSelection + newSelection_ would otherwise trigger.
-			enableUpdates_(false);
+			// selection to selected_ here.
+			//
+			// IMPORTANT: must NOT use enableUpdates_(false/true) bracket
+			// here. enableUpdates_(true) calls updateSelection() as a
+			// side-effect (line 1668) — that triggers infinite recursion
+			// when called from within updateSelection itself (which is
+			// where this sync block runs). The recursion landed during
+			// PDB load via addComposite -> updateSelection chain and
+			// caused EXC_BAD_ACCESS stack overflow. Direct toggle of
+			// `ignore_messages_` is sufficient: the early-return guard
+			// at the top of this method (line 831) catches any
+			// message-cascade re-entry from clearSelection +
+			// newSelection_ while the flag is true.
+			const bool restore_ignore = ignore_messages_;
+			ignore_messages_ = true;
 			getMainControl()->clearSelection();
 			if (!selected_.empty())
 			{
 				list<Composite*> sync_list = selected_;
 				newSelection_(sync_list, /*selected=*/true);
 			}
-			enableUpdates_(true);
+			ignore_messages_ = restore_ignore;
 
 			// sent new selection through tree
 			ControlSelectionMessage* message = new ControlSelectionMessage;

@@ -352,10 +352,21 @@ namespace BALL
 
 		WorkspaceStatusLabel::~WorkspaceStatusLabel()
 		{
-			if (event_filter_installed_ && label_ != nullptr)
-			{
-				label_->removeEventFilter(this);
-			}
+			// UFG-30 (rc5 follow-up) — do NOT call
+			// label_->removeEventFilter(this) here. `label_` is a
+			// child QWidget of the same QMainWindow that owns this
+			// QObject; Qt's parent-child destruction order can tear
+			// label_ down BEFORE this dtor runs, leaving label_ as a
+			// dangling pointer. Calling removeEventFilter on that
+			// stale pointer crashes with KERN_INVALID_ADDRESS inside
+			// QObject::removeEventFilter at app shutdown.
+			//
+			// Qt automatically removes all event filters when the
+			// watched object is destroyed, so the explicit cleanup
+			// is unnecessary. `event_filter_installed_` is retained
+			// (currently unused) to document the install contract;
+			// future code can re-introduce a guarded removeEventFilter
+			// once it switches `label_` to QPointer<QLabel>.
 		}
 
 		bool WorkspaceStatusLabel::eventFilter(QObject* watched, QEvent* event)
