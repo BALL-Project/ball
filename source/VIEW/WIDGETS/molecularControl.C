@@ -863,34 +863,51 @@ namespace BALL
 				if (!is_in_move_mode) showFilename();
 			}
 
-			// UFG-27 (rc5 follow-up) — unified selection model. Qt's
-			// QTreeWidget native ExtendedSelection produces the row
-			// cursor selection (blue highlight, range-extending on
-			// shift-click, toggle on cmd-click). The user expects that
-			// cursor selection to drive BALL composite selection (the
-			// yellow scene highlight + per-atom isSelected() flag), not
-			// be a separate orthogonal concern. Sync BALL composite
-			// selection to selected_ here.
+			// UFG-27 (rc5 → v1.7.x-13 freeze fix). Sync BALL composite
+			// selection to cursor selection via DIFF — not via
+			// mc->clearSelection() which redraws ALL representations
+			// on every tree click. User reported a full-app freeze on
+			// every selection click in v1.7.0 + optimizer freezes on
+			// every minimization step (each step emits a
+			// ControlSelectionMessage that re-enters this path). Root
+			// cause: mc->clearSelection's `redrawAllRepresentations(true)`
+			// re-renders the entire scene (for a 1ubq + hydrogens
+			// system, ~1240 atoms × all visible representations) —
+			// O(scene) per click. Multiplied by N clicks or M
+			// minimization steps, the GUI thread saturates.
 			//
-			// IMPORTANT: must NOT use enableUpdates_(false/true) bracket
-			// here. enableUpdates_(true) calls updateSelection() as a
-			// side-effect (line 1668) — that triggers infinite recursion
-			// when called from within updateSelection itself (which is
-			// where this sync block runs). The recursion landed during
-			// PDB load via addComposite -> updateSelection chain and
-			// caused EXC_BAD_ACCESS stack overflow. Direct toggle of
-			// `ignore_messages_` is sufficient: the early-return guard
-			// at the top of this method (line 831) catches any
-			// message-cascade re-entry from clearSelection +
-			// newSelection_ while the flag is true.
+			// Diff-based approach: compute (old BALL selection) Δ (new
+			// cursor selection). Only deselect composites no longer in
+			// the new set + select composites newly added. newSelection_
+			// itself does `updateRepresentationsOf(root)` only for the
+			// roots of touched composites — O(touched), not O(scene).
+			//
+			// ignore_messages_ guard still protects against re-entry
+			// from any cascading NewSelectionMessage that newSelection_
+			// fires (line 831 early return at top of this method).
+			MainControl* mc = getMainControl();
+			HashSet<Composite*> old_sel = mc->getSelection();
+			HashSet<Composite*> new_sel;
+			for (Composite* c : selected_) new_sel.insert(c);
+
+			list<Composite*> to_deselect;
+			for (auto sit = old_sel.begin(); +sit; ++sit)
+			{
+				if (new_sel.find(*sit) == new_sel.end())
+					to_deselect.push_back(*sit);
+			}
+
+			list<Composite*> to_select;
+			for (auto sit = new_sel.begin(); +sit; ++sit)
+			{
+				if (old_sel.find(*sit) == old_sel.end())
+					to_select.push_back(*sit);
+			}
+
 			const bool restore_ignore = ignore_messages_;
 			ignore_messages_ = true;
-			getMainControl()->clearSelection();
-			if (!selected_.empty())
-			{
-				list<Composite*> sync_list = selected_;
-				newSelection_(sync_list, /*selected=*/true);
-			}
+			if (!to_deselect.empty()) newSelection_(to_deselect, /*selected=*/false);
+			if (!to_select.empty())   newSelection_(to_select,   /*selected=*/true);
 			ignore_messages_ = restore_ignore;
 
 			// sent new selection through tree
