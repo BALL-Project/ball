@@ -655,3 +655,273 @@ addressed. **Re-review gate: R17b (Codex CLI on revised D22a-D34).**
 ---
 
 *Revised 2026-05-19 post-R17. Next: R17b re-review, then P1 plan.*
+
+---
+
+# Second revision post-R17b (2026-05-19)
+
+Codex R17b verdict: **still NO-GO**. 2 new BLOCKERs (P17b-N1
+mismatched-type sparse override, P17b-N2 atomic vector
+non-Cpp17MoveInsertable) + 3 BUGs + 2 DEBTs introduced or
+incompletely closed by the first revision. See
+`V21-CODEX-REVIEW-ROUND17B.md`.
+
+User direction: continue auto-mode per the prior turn. Applying
+all R17b required fixes as a single revision.
+
+## D22b. CompositeNode memory math correction (R17b P17b-1 BUG fix)
+
+**Original claim (D22a):** "still saves ~31 MB vs the inline
+`Composite` state in v2.0."
+
+**Corrected:** the comparison is whole-handle shrink, not just
+the displaced Composite topology. With `sizeof(Atom)` going from
+360 B (v2.0) to ≤32 B (v2.1 target), gross savings are 32.8 MB
+per 100k atoms; net after the 4.8 MB `composite_nodes_` side
+table is **~28.0 MB saved per 100k atoms**, not 31.
+
+D13 budget accounting: side table is 48 B/atom (1/3 of the 160
+B/atom budget). The v2.1 target is full-handle ≤160 B/atom:
+
+```
+v2.0 inline state:    360 B/atom Atom + ~88 B PropertyManager bag
+v2.1 side state:       48 B composite_nodes + ~20 B prop columns + 0.125 B sel_bits
+                    = ~68 B/atom side
+v2.1 thin handle:     ≤32 B Atom (post-P2, with empty bases)
+v2.1 total:          ≤100 B/atom (well under 160 B budget)
+```
+
+Documented in `MILESTONE-v2.1-KICKOFF.md` success criteria.
+
+## D23b. PropertyManager — sparse-first lookup + bounded sparse bag (R17b P17b-N1/N3 BLOCKER/BUG fix)
+
+**P17b-N1 BLOCKER: setProperty replacement semantics.**
+
+v2.0 `setProperty(name, T)` erases any prior same-name property
+regardless of old type, then appends the new one
+(`source/CONCEPT/property.C:193`). D23a's "mismatched type stays
+in sparse bag" combined with D30a's "getProperty checks column
+first" returns stale dense values after a type-changing setProperty.
+
+**Revised lookup precedence (replaces D30a's column-first rule):**
+
+```cpp
+const NamedProperty* getProperty(const String& name, atom_idx i) const {
+    // 1. Sparse override takes precedence (D23b)
+    if (auto sparse = sparse_bag_.find(i); sparse != end()) {
+        if (auto prop = sparse->second.find(name); prop) return prop;
+    }
+    // 2. Then dense column
+    if (auto col = registry_.find_column(name); col) {
+        if (col->isSet(i)) return col->as_named_property(i);
+    }
+    return nullptr;
+}
+```
+
+**Revised setProperty:**
+
+```cpp
+void setProperty(const String& name, atom_idx i, T value) {
+    auto col = registry_.find_column(name);
+    if (col && col->type() == typeid(T)) {
+        // matching dense column — write to column, clear sparse
+        col->set(i, value);
+        sparse_bag_.clearProperty(i, name);  // tombstone effect
+    } else {
+        // mismatched type OR no dense column — write to sparse
+        // (this overrides any dense column read via precedence)
+        sparse_bag_.setProperty(i, name, value);
+        // do NOT clear col (other atoms may still use the dense column)
+    }
+}
+```
+
+This preserves v2.0 replacement semantics: a mismatched-type
+setProperty makes the sparse entry win on subsequent getProperty.
+The dense column row for that atom becomes effectively shadowed
+(getProperty returns sparse). Dense column slot stays allocated
+but unread for that atom — wastes one slot but avoids the
+expensive "clear dense row" operation.
+
+**P17b-N3 BUG: Sparse bag unbounded.**
+
+Add cap: `MoleculeStore::setMaxDynamicPropertyNames(size_t)`,
+default **65536 distinct dynamic names per store**. On reaching the
+cap, further `registerColumn(new_name)` and sparse-bag entries
+with new names throw `Exception::InvalidArgument("dynamic property
+name cap exceeded")`. Existing names continue to work. Well-known
+force-field columns are NOT counted against the cap.
+
+**P17b-3 DEBT: Promotion hysteresis.**
+
+Add policy: **promote once, never demote.** A promoted column
+stays dense for the lifetime of the store. Demotion would require
+moving column data back to sparse, which is expensive and creates
+flap behavior. Workload that sets-then-unsets a property keeps the
+column. Acceptable trade-off; documented.
+
+## D24b. selected_bits_ — `unique_ptr<atomic[]> + size_t` (R17b P17b-N2 BLOCKER fix)
+
+**P17b-N2 BLOCKER:** `std::vector<std::atomic<uint64_t>>` fails
+libc++ Cpp17MoveInsertable static assertion on `shrink_to_fit()`.
+
+**Revised:** owned atomic array rebuilt under exclusive lock:
+
+```cpp
+class MoleculeStore {
+    // ...
+    std::unique_ptr<std::atomic<uint64_t>[]> selected_bits_;
+    size_t                                    selected_bits_word_capacity_;
+    // ...
+
+    void resize_selected_bits_(size_t new_atom_capacity) {
+        // Caller holds the store's exclusive write lock.
+        size_t new_word_capacity = (new_atom_capacity + 63) / 64;
+        if (new_word_capacity == selected_bits_word_capacity_) return;
+
+        auto new_bits = std::make_unique<std::atomic<uint64_t>[]>(new_word_capacity);
+        // Copy existing words via relaxed load/store.
+        size_t copy_words = std::min(selected_bits_word_capacity_, new_word_capacity);
+        for (size_t w = 0; w < copy_words; ++w) {
+            new_bits[w].store(
+                selected_bits_[w].load(std::memory_order_relaxed),
+                std::memory_order_relaxed
+            );
+        }
+        // Zero new words.
+        for (size_t w = copy_words; w < new_word_capacity; ++w) {
+            new_bits[w].store(0, std::memory_order_relaxed);
+        }
+        selected_bits_ = std::move(new_bits);
+        selected_bits_word_capacity_ = new_word_capacity;
+    }
+};
+```
+
+`compact()` calls `resize_selected_bits_(live_atom_count + slack)`
+under its existing exclusive contract. `reserve_atoms()` calls
+it similarly. The relaxed atomic load/store during resize is safe
+because the caller holds exclusive write — no concurrent readers
+during resize.
+
+Steady-state read path (`is_selected(i)`) and write path
+(`set_selected(i, b)`) operate on the owned array using relaxed
+atomics. Zero extra cost vs. plain BitVector on aligned word
+access.
+
+API surface unchanged: `is_selected`, `set_selected`,
+`set_range_selected`.
+
+## D31b. CompositeNode hard encapsulation (R17b P17b-N5 / P17-7 DEBT fix)
+
+**Original (D31):** documentation + future test.
+
+**Revised:** structural enforcement.
+
+- `CompositeNode` and `composite_nodes_` are declared in a
+  private internal header `include/BALL/KERNEL/_moleculeStoreInternal.h`,
+  consumed only by `moleculeStore.C`, `composite.C`, and the
+  P1.3 wiring code.
+- `Composite::getNode_()` returns topology by value:
+  `CompositeTopologyView { Composite* parent, *first_child,
+  *last_child, *next, *prev; Size child_count; }` — no
+  `CompositeNode*` escapes.
+- CI grep gate (`.github/workflows/ci-v2.yml`):
+
+```bash
+if grep -rn "CompositeNode\*\|composite_nodes_" \
+      include/BALL/CONCEPT/composite.h \
+      include/BALL/CONCEPT/composite.iC \
+      $(find include -name "*Iterator*.h"); then
+    echo "ERROR: CompositeNode leaks into iterator/public header"
+    exit 1
+fi
+```
+
+Iterator implementations cannot name `CompositeNode` because the
+header isn't visible to them.
+
+## D32b. Backport policy — v2.0.x-only regression case (R17b P17b-8 DEBT fix)
+
+**Added clause to D32:**
+
+> **v2.0.x-only regression that v2.1's thin handle would have
+> prevented:** fix on v2.0.x with a regression test. If the same
+> public-API behavior exists in v2.1 (it should — D26 preserves
+> the surface), add the same test to v2.1 even if no code change
+> is needed there. This ensures the v2.1 surface stays
+> demonstrably correct on the case.
+
+Wave 4-7 closure branches must explicitly state in PR description:
+v2.0-fat-compatible / v2.1-thin-only / shared. The v2.0.x-only-
+regression case is now the fourth bucket.
+
+## D33b. Restore P5 planning review (R17b P17b-N4 BUG fix)
+
+**Original (D33):** P5/P6 planning reviews downgraded.
+
+**Revised:** P5 ships `V21-STORE-ITER-API` (public API surface),
+generation-guard finalization (consumer-visible RAII type), and
+perf gates (CI policy). All three warrant a planning review.
+
+**Final cadence (re-tabulated):**
+
+| Phase | Planning | Close |
+|---|---|---|
+| P0 design lock | — | R17 / R17b / **R17c** |
+| P1 side-table infra | R18 | R19 |
+| P2 thin-handle flip | R20 | R21 |
+| P3 bond thin-handle | R22 | R23 |
+| P4 JSON closures | R24 | R25 |
+| P5 perf & benchmarks | **R26** (restored) | R27 |
+| P6 release | — | R28 |
+
+P6 stays close-only; P6 is release-notes + tag + no new design.
+
+Total Codex rounds: **12** (R17 + R17b + R17c + R18-R25 + R26 + R27 + R28 = 13 ID slots; counting R17/R17b/R17c as the P0 cluster gives 11 phase reviews).
+
+## D34b. MSVC CI gate moves to P2 close (R17b P17b-10 DEBT fix)
+
+**Original (D34):** MSVC CI before v2.1.0 final tag.
+
+**Revised:** MSVC CI must run successfully before merging P2 (the
+thin-handle flip) to `v2.1`. P2 is where `sizeof(Atom) ≤ 32 B`
+is actually claimed; verifying it under MSVC at that moment is
+the right gate. Waiting until v2.1.0 final would mean discovering
+EBO failures after extensive consumer code already depends on the
+flip.
+
+Implementation: add the Windows GHA job in P1 close commit so it's
+running on a green-bar v2.0-equivalent baseline through P1, then
+fails P2 PR if MSVC `Sizeof_test` pins don't hold.
+
+---
+
+## Revised cross-decision summary (post-R17b)
+
+| # | Decision | Choice | Status |
+|---|---|---|---|
+| D22b | Composite side-table | 5-link 48 B node; ~28 MB net savings | CLOSED (math corrected) |
+| D23b | PropertyManager | predeclared + sparse-first lookup + 65k-name cap + promote-once | CLOSED (N1/N3 + promotion) |
+| D24b | Selectable | unique_ptr<atomic[]> + word_capacity + rebuild-under-lock | CLOSED (N2) |
+| D25 | Generation guard | debug-only | OK |
+| D26a | API surface | preserve, BALL_EMPTY_BASES on MSVC | OK |
+| D27 | Sequencing | v2.1-first | OK |
+| D29 | Branch strategy | linear-from-v2.0 | OK |
+| D30a | JSON compat | MINOR-bump, backward read via sparse override | refined by D23b precedence |
+| D31b | Iterator invariants | CompositeNode private to internal header + CI grep | CLOSED (N5) |
+| D32b | Backport policy | + v2.0.x-only regression bucket | CLOSED |
+| D33b | Review cadence | P5 planning restored | CLOSED (N4) |
+| D34b | MSVC CI | gate moves to P2 close | CLOSED |
+
+**R17b closure status:** 5/5 BUGs+BLOCKERs addressed. 2/2 DEBTs
+addressed. P17b-6 (bond identity) remains deferred to P3/P4 per
+out-of-scope instruction.
+
+**Re-review gate: R17c.**
+
+---
+
+*Second revision 2026-05-19 post-R17b. Next: R17c re-review, then
+P1 execute.*
