@@ -93,42 +93,70 @@ because no shim-class work):
 
 | # | Subject | Deliverable | Gate |
 |---|---|---|---|
-| **P2.1** | Wire `Composite` mutations to maintain `composite_nodes_` | `source/CONCEPT/composite.C`: every mutation path adds side-table update under a `// V2.1 P2.1: side-table mirror` comment. Side-table lookup reaches the store via `Composite::getCompositeStore_()` helper (walks parent chain up to `System`, returns its store; nullptr if free-standing). | full ctest passes; `SideTableParity_test` extended to assert post-mutation parity for `appendChild + removeChild + insertBefore + insertAfter + spliceBefore + spliceAfter + splice + destroyChildren_` |
-| **P2.2** | Wire `PropertyManager` mutations to side tables | `source/CONCEPT/property.C`: every mutation path. Uses D23b sparse-first lookup precedence (well-known column fast-path; mismatched-type → sparse bag with override semantics). | parity asserted for setProperty(INT/FLOAT/STRING) + clearProperty + clear + swap + operator= |
-| **P2.3** | Wire `Selectable` mutations to `selected_bits_` | `source/CONCEPT/selectable.C`: every mutation path. Atomic word ops via `set_selected_`. Preserves tree-propagation counters on parent Composites (those stay on v0 inline, unchanged). | parity asserted for select/deselect/setSelected; tree-propagation tests in Selector_test continue to pass |
-| **P2.4** | Extend `System::adopt` + `adoptSubtree` to migrate side-table state | `source/KERNEL/system.C`: when an atom is adopted from one store to another, migrate its composite_handle + property entries + selection bit. release_composite_node_ on the source side. | adoption tests still pass; migration parity test added to SideTableParity_test |
-| **P2.5** | `compact()` integration | `source/KERNEL/moleculeStore.C`: `compact()` calls `promote_sparse_` for any sparse property name above the 10% fill threshold; rebuilds `composite_nodes_` free list. | promotion verified via parity test; compact() preserves parity |
+| **P2.1** | Wire `Composite` mutations to maintain `composite_nodes_` | `source/CONCEPT/composite.C`: every mutation path adds side-table update under a `// V2.1 P2.1: side-table mirror` comment. Store-reach helper uses a VIRTUAL hook (R20b-2 fix): `Composite::getCompositeStore_()` returns nullptr default; `System::getCompositeStore_()` returns &store_; `Atom::getCompositeStore_()` returns store_. NO new `dynamic_cast<System*>` introduced (D37 RTTI hygiene preserved). | full ctest passes; `SideTableParity_test` extended to assert post-mutation parity for `appendChild + removeChild + insertBefore + insertAfter + spliceBefore + spliceAfter + splice + destroyChildren_` |
+| **P2.2** | Wire `PropertyManager` mutations to side tables | `source/CONCEPT/property.C`: every mutation path. Uses D23b sparse-first lookup precedence (well-known column fast-path; mismatched-type → sparse bag with override semantics). **Bit-property mutators IN SCOPE (R20b-3 fix):** `setProperty(Property)`, `clearProperty(Property)`, `toggleProperty(Property)` map to a packed bool column or stay sparse (P2.2.1 decides). Iteration via `beginNamedProperty/endNamedProperty` stays on v0 inline (v2.2's responsibility to replace). | parity asserted for `setProperty(INT/FLOAT/STRING)`, `setProperty(NamedProperty)`, `setProperty(Property)` bit mutator, `clearProperty` (both name + bit), `clear`, `swap`, `set`, `operator=`. Includes new explicit test that `setProperty("foo", 5)` then `beginNamedProperty()` still finds "foo". |
+| **P2.3** | Wire `Selectable` mutations to `selected_bits_` | `source/CONCEPT/selectable.C`: every mutation path. Atomic word ops via `set_selected_`. Preserves tree-propagation counters on parent Composites (those stay on v0 inline, unchanged). | parity asserted for select/deselect/setSelected; tree-propagation tests in Selector_test continue to pass; SideTableParity_test docs that single-thread parity is the invariant — NOT a cross-thread renderer-sync guarantee. |
+| **P2.4** | Extend `System::adopt` + `adoptSubtree` for side-table migration **+ free-standing-subtree backfill** (R20b-1 fix) | `source/KERNEL/system.C`: 4-stream migration with **transactional semantics** (R20b-4 fix): (1) snapshot composite_handle + property column entries + sparse bag entries + selected bit on source; (2) allocate destination side-table rows; (3) write destination data; (4) only then release source rows. On registry-cap failure: keep source rows untouched and fall back to sparse (no partial mirror). **Backfill pass:** when `sys.insert(mol)` adopts a free-standing Composite subtree (Molecule/Chain/Residue) whose pre-adoption mutations were no-ops on side tables, walk the v0 inline tree DFS allocating destination `composite_nodes_` entries + reconstructing parent/first/last/prev/next links. Backfill applies to non-Atom Composite nodes in the subtree; Atom-local state migrates per the 4-stream rule. | adoption tests still pass; migration parity test asserts full side-table state matches v0 inline AFTER adopt completes; failure-mode test asserts source state is preserved if destination fails. |
+| **P2.5** | `compact()` integration | `source/KERNEL/moleculeStore.C`: `compact()` calls `promote_sparse_` for any sparse property name above the 10% fill threshold; rebuilds `composite_nodes_` free list. Existing exclusive-access contract preserved. New stress test exercises repeated compact/adopt/mutate parity (P20b-6 follow-up). | promotion verified via parity test; compact() preserves parity; 100-run stress shows 0/100 parity drift. |
 
 Estimated effort: 1-2 days execution + R20b planning review +
 R21 close review.
 
-## Wiring approach detail (P2.1 reach-store helper)
+## Wiring approach detail (P2.1 reach-store helper — REVISED post-R20b)
 
 The fundamental challenge for parallel maintenance: when
 `composite.C`'s `appendChild(child)` runs, it needs to find the
 MoleculeStore to update the side table. The store isn't known to
 `Composite` directly.
 
-**Approach:** `Composite::getCompositeStore_()` walks the parent
-chain to find the root, casts to `System*` (via dynamic_cast for
-now — yes, P3 RTTI removal will replace this), and returns
-`System::getMoleculeStore()`. If no System ancestor (free-standing
-Composite tree), returns nullptr and the side-table maintenance
-is a no-op for that mutation.
+**Approach (R20b-2 fix — virtual hook, NOT dynamic_cast):**
 
-**Caching:** for tree mutations the store reaches don't change.
-Each Composite caches the store pointer the first time it's
-resolved; cache invalidates on parent change.
+```cpp
+class Composite {
+public:
+    // Default: free-standing Composite has no store.
+    virtual MoleculeStore* getCompositeStore_() { return nullptr; }
+};
+class Atom : public Composite, ... {
+public:
+    // Atom always has store_ from its v0 binding (orphan by default).
+    MoleculeStore* getCompositeStore_() override { return store_; }
+};
+class System : public AtomContainer {
+public:
+    // System owns its store; expose to side-table maintenance.
+    MoleculeStore* getCompositeStore_() override { return store_.get(); }
+};
+```
 
-**Free-standing Composites:** maintenance no-ops are intentional.
-Free-standing Composites are not in any store, so they have no
-side-table state to maintain.
+Composite already has a vtable (inherits PersistentObject); adding
+this virtual is free in space + 1 vtable slot.
 
-**Atom-specific shortcut:** Atom has `store_` directly. When
-the mutation is on an Atom subclass, `getCompositeStore_()` can
-just return `static_cast<Atom*>(this)->store_`. Saves the
-parent-chain walk. (Implementation detail: virtual override on
-Atom returns store_ directly.)
+For a Composite-mutation on `mol` where `mol` is a Molecule (no
+override), `getCompositeStore_()` returns nullptr → side-table
+maintenance no-ops at the mutation point. **The state is rebuilt
+at adoption time by P2.4's backfill pass.**
+
+**Free-standing Composite subtrees (R20b-1):**
+
+A common pattern: build `Molecule mol; Atom a; mol.insert(a);
+mol.insert(b); ...` BEFORE adding `mol` to any System. During
+construction, side-table mutations no-op on the Molecule node
+(nullptr store from `Composite::getCompositeStore_()` default).
+
+When `sys.insert(mol)` adopts the molecule, P2.4's backfill pass
+walks the v0 inline Composite subtree DFS, allocates destination
+`composite_nodes_` for each non-Atom Composite, rewrites
+parent/first/last/prev/next handles to match the v0 pointer
+structure, and migrates Atom-local state per the 4-stream rule.
+
+After backfill, the side table represents the full subtree
+correctly. Subsequent mutations on `mol` reach the System store
+via the parent chain → `System::getCompositeStore_()`.
+
+**Caching:** for tree mutations the store reach doesn't change.
+Cache the result on `Composite::store_cache_` (LOW priority; P5
+perf phase if needed).
 
 ## Codex review gates (per D33b)
 
