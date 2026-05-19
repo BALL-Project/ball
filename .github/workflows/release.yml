@@ -185,8 +185,19 @@ jobs:
       # ----------------------------------------------------------------------
       # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
       # after 3 baseline failures triaged in 09-TRIAGE.md.
+      #
+      # v1.7.x-09 (2026-05-19): test-build + test-run gated on
+      # BALLVIEW_RELEASE_GATEKEEPER_TESTS env var, default OFF. CI's
+      # ci.yml runs the BALL test suite on every push for the same
+      # commit; release.yml's tag-push duplicates that work and adds
+      # ~25 min to Windows critical path + ~4 min to macOS for no
+      # additional safety. The user-feedback gate (UFG) covers
+      # functional regressions CI can't catch via runtime exercise of
+      # the DMG. Re-enable for paranoid releases by setting
+      # BALLVIEW_RELEASE_GATEKEEPER_TESTS=1 at workflow_dispatch time
+      # OR by editing the conditional below.
       - name: Build BALL test suite (macOS — Phase 9 gatekeeper, blocking)
-        if: matrix.os == 'macos-arm64'
+        if: matrix.os == 'macos-arm64' && env.BALLVIEW_RELEASE_GATEKEEPER_TESTS == '1'
         continue-on-error: false
         timeout-minutes: 45
         run: |
@@ -195,7 +206,7 @@ jobs:
       # TEST-CLOSE-02 (Phase 9, 2026-05-16): gatekeeper flipped to blocking
       # after 3 baseline failures triaged in 09-TRIAGE.md.
       - name: Run BALL test suite (macOS — Phase 9 gatekeeper, blocking)
-        if: matrix.os == 'macos-arm64'
+        if: matrix.os == 'macos-arm64' && env.BALLVIEW_RELEASE_GATEKEEPER_TESTS == '1'
         continue-on-error: false
         timeout-minutes: 60
         run: |
@@ -928,8 +939,12 @@ jobs:
       # Mirrors the ci.yml Windows test gatekeeper (same step contents +
       # PATH/BALL_DATA_PATH setup; release-side JUnit filename + retention).
       # ----------------------------------------------------------------------
+      # v1.7.x-09 (2026-05-19): gated on env var BALLVIEW_RELEASE_GATEKEEPER_TESTS.
+      # See the macOS gatekeeper rationale comment above. CI on the same
+      # commit already validates Windows tests in 22 min; release.yml's
+      # duplicate adds 20+ min build + 5+ min run to the critical path.
       - name: Build BALL test suite (Windows — Phase 9 gatekeeper, blocking)
-        if: matrix.os == 'windows-x64'
+        if: matrix.os == 'windows-x64' && env.BALLVIEW_RELEASE_GATEKEEPER_TESTS == '1'
         continue-on-error: false
         timeout-minutes: 45
         shell: pwsh
@@ -937,7 +952,7 @@ jobs:
           cmake --build build\ci-windows --target build_tests --config Release
 
       - name: Run BALL test suite (Windows — Phase 9 gatekeeper, blocking)
-        if: matrix.os == 'windows-x64'
+        if: matrix.os == 'windows-x64' && env.BALLVIEW_RELEASE_GATEKEEPER_TESTS == '1'
         continue-on-error: false
         timeout-minutes: 60
         shell: pwsh
