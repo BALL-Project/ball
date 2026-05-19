@@ -220,11 +220,11 @@ namespace BALL
 
 		Processor::Result result = Processor::CONTINUE;
 
-                if (!system_ && RTTI::isKindOf<Atom>(&composite))
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		if (Atom* atom = !system_ ? detail::compositeAsAtom_(&composite) : nullptr)
 		{
-			Atom* atom = dynamic_cast<Atom*>(&composite);
-                        if  (RTTI::isKindOf<System>(&atom->getRoot()))
-			{	
+			if  (RTTI::isKindOf<System>(&atom->getRoot()))
+			{
 				system_ = dynamic_cast<System*>(&(atom->getRoot()));
 			}
 		}

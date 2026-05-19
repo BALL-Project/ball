@@ -24,9 +24,10 @@ namespace BALL
 
 	Processor::Result ClearShiftProcessor::operator () (Composite& composite)
 	{
-		// clear the checmical shift property (ShiftModule::PROPERTY__SHIFT)
-		// of the atom(if defined)
-		Atom* atom = dynamic_cast<Atom*>(&composite);
+		// Clear the chemical shift property (ShiftModule::PROPERTY__SHIFT)
+		// of the atom (if defined).
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		Atom* atom = detail::compositeAsAtom_(&composite);
 		if (atom != 0)
 		{
 			if (atom->hasProperty(ShiftModule::PROPERTY__SHIFT))

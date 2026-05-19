@@ -242,8 +242,9 @@ namespace BALL
 
 	Processor::Result ShiftModel::operator () (Composite& composite)
 	{
-		// Clear previsously assigned shifts and...
-		Atom* atom = dynamic_cast<Atom*>(&composite);
+		// Clear previously assigned shifts and...
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		Atom* atom = detail::compositeAsAtom_(&composite);
 		if (atom != 0)
 		{
 			atom->clearProperty(ShiftModule::PROPERTY__SHIFT);

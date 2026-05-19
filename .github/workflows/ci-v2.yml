@@ -54,6 +54,38 @@ jobs:
         with:
           fetch-depth: 0     # phase artifact trail uses git log/blame
 
+      - name: D41.1 grep gate -- Atom-RTTI removal (P3 close)
+        # v2.1 P3 (D41.1 + R22): every CORE_ONLY-module call site
+        # that needs to ask "is this Composite an Atom?" must route
+        # through BALL::detail::compositeAsAtom_(). The helper itself
+        # lives in source/CONCEPT/composite.C with declarations in
+        # include/BALL/CONCEPT/composite.h; both are documented
+        # exceptions. VIEW + APPLICATIONS are deferred per D37 /
+        # V21-VIEW-RTTI (54 sites, Phase 4 BALLView 1.6 territory).
+        #
+        # v2.2 inheritance flip replaces the ONE helper with handle-
+        # based identity; the 24 ex-call-sites need no individual
+        # update at that flip.
+        run: |
+          # Grep CORE_ONLY modules. Exceptions: composite.h/.iC/.C
+          # (helper + Composite::apply<Atom> specialization).
+          violations=$(
+            grep -rn 'dynamic_cast<\s*\(const \)\?Atom\s*\*\?>\|isKindOf<Atom>' \
+              --include='*.h' --include='*.C' --include='*.iC' \
+              source/KERNEL/ source/STRUCTURE/ source/FORMAT/ \
+              source/QSAR/ source/MOLMEC/ source/SCORING/ \
+              source/SOLVATION/ source/DOCKING/ source/ENERGY/ \
+              source/NMR/ source/CONCEPT/ 2>/dev/null \
+            | grep -v 'source/CONCEPT/composite\.C' \
+            || true
+          )
+          if [ -n "$violations" ]; then
+            echo "::error::D41.1 leak: Atom-RTTI usage outside the documented exception. Use BALL::detail::compositeAsAtom_(c) instead."
+            echo "$violations"
+            exit 1
+          fi
+          echo "D41.1 Atom-RTTI grep gate: PASS"
+
       - name: D31b grep gate -- CompositeNode encapsulation
         # v2.1 D31b (Codex R17 P17-7 / R17b P17b-N5 / R19-F1 closure):
         # CompositeNode and composite_nodes_ must NEVER appear in

@@ -33,7 +33,8 @@ namespace BALL
 
 	Processor::Result SimpleExperiment1D::operator () (Composite& composite)
 	{
-		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		Atom* atom_ptr = detail::compositeAsAtom_(&composite);
 		if ((atom_ptr != 0) && expression_(*atom_ptr))
 		{
 			// create a new peak at the end of the list

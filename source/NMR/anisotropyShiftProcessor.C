@@ -296,7 +296,8 @@ namespace BALL
 	{
 		// Collect all effector bonds(C=O) and store them in eff_list_
 		// All protons are collected in proton_list_.
-        if (!RTTI::isKindOf<Atom>(&composite))
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		if (!detail::compositeAsAtom_(&composite))
 		{
 			return Processor::CONTINUE;
 		}

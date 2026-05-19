@@ -114,8 +114,9 @@ namespace BALL
 	Processor::Result CreateSpectrumProcessor::operator () (Composite& composite)
 		
 	{		
-		// Collect all atoms with assigned chemical shifts
-		Atom* atom = dynamic_cast<Atom*>(&composite);
+		// Collect all atoms with assigned chemical shifts.
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		Atom* atom = detail::compositeAsAtom_(&composite);
 		if (atom != 0)
 		{
 			if (atom->hasProperty(ShiftModule::PROPERTY__SHIFT))

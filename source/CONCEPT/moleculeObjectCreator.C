@@ -70,13 +70,17 @@ namespace BALL
 	{
 		cout << "read object @ " << (void*)&po << endl;
 	
-        if (RTTI::isKindOf<Atom>(&po))
+		// v2.1 P3.3 (D41.1): the helper takes Composite*, but `po` is
+		// PersistentObject*. Chain through Composite* — note that
+		// `dynamic_cast<Composite*>` is NOT an Atom-RTTI use; the
+		// CI grep gate regex matches `dynamic_cast<.*Atom.*>` only.
+		Composite* as_composite = dynamic_cast<Composite*>(&po);
+		if (Atom* atom = detail::compositeAsAtom_(as_composite))
 		{
-			Atom*	atom = RTTI::castTo<Atom>(po);
 			cout << " read atom " << atom->getName() << endl;
-			
+
 			return (Composite *)atom;
-		} 
+		}
         else if (RTTI::isKindOf<Protein>(&po))
 		{
 			Protein*	p = RTTI::castTo<Protein>(po);

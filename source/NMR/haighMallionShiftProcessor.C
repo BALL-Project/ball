@@ -423,7 +423,8 @@ namespace BALL
 		} 
 
 		// Store all targets whose shift is to be calculated.
-		Atom* atom = dynamic_cast<Atom*>(&composite);
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		Atom* atom = detail::compositeAsAtom_(&composite);
 		if (atom != 0)
 		{
 			atom->clearProperty(PROPERTY__RING_CURRENT_SHIFT);

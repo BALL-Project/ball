@@ -469,10 +469,10 @@ namespace BALL
 			}
 		}
 
-		// Liste um Aromaten erweitert		
-        if (RTTI::isKindOf<Atom>(&composite))
-		{			
-			Atom* atom_ptr = RTTI::castTo<Atom>(composite);
+		// Liste um Aromaten erweitert.
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		if (Atom* atom_ptr = detail::compositeAsAtom_(&composite))
+		{
 			
 			for (Size counter = 0; counter < expressions_.size(); counter++)
 			{

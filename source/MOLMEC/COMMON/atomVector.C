@@ -71,7 +71,11 @@ namespace BALL
 		Composite::CompositeConstIterator it = composite.beginComposite();
 		for (; +it; ++it)
 		{
-			Atom* atom = const_cast<Atom*>(dynamic_cast<const Atom*>(&*it));
+			// v2.1 P3.4 (D41.1): centralised detail::compositeAsAtom_.
+			// Const-correctness: composite is const, so the helper
+			// returns const Atom*; const_cast preserves the existing
+			// API contract (AtomVector stores non-const Atom*).
+			Atom* atom = const_cast<Atom*>(detail::compositeAsAtom_(&*it));
 			if (atom != 0)
 			{
 				// store this atom only if it is selected or selected_only == false

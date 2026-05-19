@@ -76,10 +76,11 @@ namespace BALL
 		{
 			type_ = TYPE__FRAGMENT;
 		}	
-        else if (RTTI::isKindOf<Atom>(&composite))
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		else if (detail::compositeAsAtom_(&composite))
 		{
 			type_ = TYPE__ATOM;
-		}	
+		}
 	}
 
 	void MolecularInformation::getTypeName_()

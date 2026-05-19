@@ -311,9 +311,9 @@ namespace BALL
 	{
 		// Here, we collect all target bonds and
 		// all charged atoms (as effectors of the electric field).
-        if (RTTI::isKindOf<Atom>(&object))
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		if (Atom* atom_ptr = detail::compositeAsAtom_(&object))
 		{
-			Atom* atom_ptr = RTTI::castTo<Atom>(object);
 
 			// Assign the charge (if it is defined for this atom).
 			String full_name = atom_ptr->getFullName();

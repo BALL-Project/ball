@@ -64,8 +64,8 @@ namespace BALL
 
 	Processor::Result RandomCoilShiftProcessor::operator () (Composite& composite)	
 	{
-		// We are just interested in atoms.
-		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
+		// We are just interested in atoms. v2.1 P3.3 (D41.1).
+		Atom* atom_ptr = detail::compositeAsAtom_(&composite);
 		if (atom_ptr == 0)
 		{
 			return Processor::CONTINUE;

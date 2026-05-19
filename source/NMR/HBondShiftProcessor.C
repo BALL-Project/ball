@@ -409,9 +409,9 @@ namespace BALL
   Processor::Result HBondShiftProcessor::operator () (Composite& object)
 	{
 		// Here, we collect all possible acceptors and donors.
-        if (RTTI::isKindOf<Atom>(&object))
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		if (Atom* atom = detail::compositeAsAtom_(&object))
 		{
-			Atom* atom = RTTI::castTo<Atom>(object);
 
 			// Delete the old hydrogen bond shift contribution.
 			atom->clearProperty(PROPERTY__HBOND_SHIFT);

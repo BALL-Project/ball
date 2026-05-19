@@ -315,11 +315,10 @@ namespace BALL
 		// string the corresponding property computation.
 		
 		// If the composite is an atom ...
-        if (RTTI::isKindOf<Atom>(&composite))
+		// v2.1 P3.3 (D41.1): centralised detail::compositeAsAtom_.
+		if (Atom* atom = detail::compositeAsAtom_(&composite))
 		{
-			Atom* atom = dynamic_cast<Atom*>(&composite);
-			
-			// ...clear the property ... 
+			// ...clear the property ...
 			atom->clearProperty(PROPERTY__EHS_SHIFT);
 
 			// ... and compute all demanded properties for this atom type
