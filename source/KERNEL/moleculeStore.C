@@ -8,6 +8,9 @@
 // K0.5.5: invalidate this store's cached CompiledExpressions on dtor so
 // the cache doesn't hold dangling MoleculeStore* keys past our lifetime.
 #include <BALL/KERNEL/compiledExpression.h>
+// v2.1 P1.2 (D31b): private side-table state. Full type needed here for
+// std::unique_ptr<MoleculeStoreSideTables>'s destructor instantiation.
+#include <BALL/KERNEL/_moleculeStoreInternal.h>
 #include <BALL/COMMON/exception.h>
 
 #include <limits>
@@ -85,10 +88,33 @@ void MoleculeStore::restore_stable_ids_for_load_(const std::vector<StableId>& id
 //     below can call CompiledExpressionCache::instance() at any point in
 //     process teardown and always get a valid cache, with or without prior
 //     ctor-side touch.
-MoleculeStore::MoleculeStore() = default;
+// v2.1 P1.2: side-table state is owned per-store. Eager-construct in
+// the ctor body so accessors can return a valid reference without a
+// null check. The pImpl object is small (vector heads only, no
+// allocations yet) — composite_nodes_ allocates only when P1.3 wiring
+// actually inserts a node.
+MoleculeStore::MoleculeStore()
+	: side_tables_(std::make_unique<MoleculeStoreSideTables>())
+{
+}
 MoleculeStore::~MoleculeStore()
 {
 	CompiledExpressionCache::instance().invalidate_store(this);
+	// side_tables_ unique_ptr destructs here; the full
+	// MoleculeStoreSideTables type is visible because we included
+	// _moleculeStoreInternal.h at the top of this TU.
+}
+
+// v2.1 P1.2: side-table accessor. Public on the header but only
+// callable from TUs that include _moleculeStoreInternal.h (otherwise
+// the return type is incomplete — caller can't bind the reference).
+MoleculeStoreSideTables& MoleculeStore::sideTables_()
+{
+	return *side_tables_;
+}
+const MoleculeStoreSideTables& MoleculeStore::sideTables_() const
+{
+	return *side_tables_;
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

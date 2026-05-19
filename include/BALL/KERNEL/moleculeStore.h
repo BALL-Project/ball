@@ -25,6 +25,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iosfwd>      // K0.6.5c: friend decls for loadStoreJSON/loadSystemJSON
+#include <memory>      // v2.1 P1.2: unique_ptr<MoleculeStoreSideTables>
 #include <mutex>
 #include <string>
 #include <unordered_map>
@@ -36,6 +37,13 @@ namespace BALL
 	class Bond;
 	class MoleculeStore;
 	class System;
+	// v2.1 P1.2 (D31b): forward-decl of the side-table PImpl. Full
+	// type lives in include/BALL/KERNEL/_moleculeStoreInternal.h and
+	// is consumed only by moleculeStore.C, composite.C, property.C,
+	// selectable.C, and SideTableParity_test.C. The unique_ptr<>
+	// destructor materialises in moleculeStore.C where the full type
+	// is visible.
+	class MoleculeStoreSideTables;
 	// K0.6.5: forward-declare the JSON loader helper so MoleculeStore
 	// can friend it without pulling moleculeStoreJson.h into this header.
 	namespace detail { void json_obj_to_store(MoleculeStore& s, const void* json_in); }
@@ -545,6 +553,25 @@ namespace BALL
 		// K0.3c.2: free-list of bond-record indices tombstoned by
 		// remove_bond. add_bond pops from here before appending.
 		std::vector<std::uint32_t> bond_free_list_;
+
+		// v2.1 P1.2 (D22b + D31b): PImpl side-table state. Full type
+		// in include/BALL/KERNEL/_moleculeStoreInternal.h. P1.2 populates
+		// composite_nodes_ + free list; P1.4-P1.8 extend with property
+		// columns + selection bits. Atom/Composite/PropertyManager/
+		// Selectable continue to inherit + use inline state in v2.0
+		// shape through P1; P2 flips reads to the side tables.
+		std::unique_ptr<MoleculeStoreSideTables> side_tables_;
+
+		// v2.1 P1.2: accessor for the 4 wiring TUs (composite.C,
+		// property.C, selectable.C, moleculeStoreJson.C). Public so
+		// the wiring TUs can call without friend declarations; gated
+		// by the fact that only those TUs include
+		// _moleculeStoreInternal.h, so only they can name the return
+		// type. Anyone else gets a forward-decl-only error.
+		public:
+		MoleculeStoreSideTables&       sideTables_();
+		const MoleculeStoreSideTables& sideTables_() const;
+		private:
 
 #ifndef NDEBUG
 		mutable std::size_t borrowed_ref_count_ = 0;
