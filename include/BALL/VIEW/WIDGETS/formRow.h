@@ -44,8 +44,14 @@ namespace BALL
 			Q_OBJECT
 
 			public:
-				/** Default label-column min-width in device-independent pixels. */
-				static constexpr int LABEL_MIN_WIDTH = 140;
+				/** Default label-column min-width in device-independent pixels.
+				 * UFG-21 (rc4 validation) — dropped 140→90 so the value
+				 * column has room for slider + spin + units + reset
+				 * glyph at the InspectorDock's 280px minimum width. At
+				 * 90px the label still fits "Transparency" / "Specular"
+				 * / "Shininess" / "Ambient" etc. without ellipsis.
+				 */
+				static constexpr int LABEL_MIN_WIDTH = 90;
 
 				/**
 				 * Build a row. `control` must be non-null and is reparented

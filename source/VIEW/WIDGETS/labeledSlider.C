@@ -74,6 +74,12 @@ namespace BALL
 			slider_->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 			slider_->setMinimumWidth(40);
 			spin_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
+			// UFG-21 — tighter spin width: 3 digits max (0..128 for
+			// shininess, 0..100 for %-sliders) fits comfortably in
+			// 48px with the PlusMinus buttons. Default QSpinBox sizeHint
+			// computes ~70-80px which is wasteful at 280px-dock width.
+			spin_->setMaximumWidth(54);
+			spin_->setMinimumWidth(54);
 			units_label_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 			reset_button_->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
