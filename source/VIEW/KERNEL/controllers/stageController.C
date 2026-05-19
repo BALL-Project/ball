@@ -8,6 +8,7 @@
 
 
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/COMMON/logStream.h>
 
@@ -133,6 +134,19 @@ namespace BALL
 			stage_->setFogIntensity(fog_intensity_);
 			stage_->setEyeDistance(eye_distance_);
 			stage_->setFocalDistance(focal_distance_);
+
+			// UFG-25 (rc4 validation) — Stage::setBackgroundColor()
+			// only stores the new value in the Stage struct. The
+			// actual GL clear color is set in GLRenderer::initializeGL
+			// once at startup; subsequent background changes are
+			// invisible until something else triggers a Scene
+			// repaint that re-issues `glClearColor()`. Calling
+			// `Scene::updateGL()` here schedules a paintGL pass that
+			// re-reads stage_->getBackgroundColor() and re-issues
+			// glClearColor. Same fix covers fog/coordinate-system
+			// changes that also feed into the GL render state.
+			if (scene_ != nullptr)
+				scene_->updateGL();
 
 			// Emit appliedStub so callers wired during the migration
 			// window keep observing the apply signal. (Renamed in the
