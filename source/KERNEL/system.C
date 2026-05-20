@@ -98,11 +98,6 @@ namespace BALL
 		return true;
 	}
 
-	// v2.2 H2a (R36 fix): forward-decl of the incremental edge-append helper
-	// (defined in the anonymous namespace below) so adopt(Atom&) can call
-	// it. Same TU + anonymous namespace => same internal-linkage entity.
-	namespace { void mirrorAppendChildEdge_(Composite* parent, Composite* child, MoleculeStore* dst); }
-
 	void System::adopt(Atom& atom)
 	{
 		MoleculeStore* src = atom.getStore();
@@ -205,10 +200,10 @@ namespace BALL
 		// is friend of Atom (need to add). For K0.4.2 minimal, we
 		// expose a non-public migrateTo_ on Atom and friend System.
 		atom.migrateTo_(dst, dst_idx);
-
-		// v2.2 H2a (R36 fix): the atom now lives in dst with dst_idx. Append
-		// its ATOM edge to its v0 parent's row (O(1)). No-op if no row.
-		mirrorAppendChildEdge_(atom.getParent(), &atom, dst);
+		// v2.2 H2a (R36b): the container-table edge for this insert is
+		// mirrored by the AtomContainer insert method that called adopt()
+		// -- NOT here -- so it fires even when adopt early-returns on a
+		// same-store move (src == dst).
 	}
 
 	// K0.4.3: System.adoptSubtree(AtomContainer&) — three-pass batch
@@ -310,36 +305,6 @@ namespace BALL
 			return row;
 		}
 
-		// v2.2 H2a (R36 fix): append the SINGLE just-inserted child's edge to
-		// its v0 parent's row. O(1) -- so building a container N children at
-		// a time is O(N), not O(N^2) (the full-parent re-derive regressed
-		// JsonBench to a timeout). The child is already in dst (atoms
-		// migrated, child containers materialised); the OLD-parent edge (on
-		// reparent) was already removed by appendChild's removeChild mirror.
-		// No-op if the parent has no row (free-standing / the System root).
-		//
-		// NB: this appends (last position). It is exact for append/insert
-		// (the dominant + bulk-load case). Free-standing subtrees built with
-		// prepend/insertBefore THEN adopted get correct order from
-		// materialiseContainer_ (which reads v0 order). INCREMENTAL
-		// prepend/insertBefore/insertAfter into an ALREADY-ROOTED container
-		// is positionally approximate here and is tightened in H2b (D70/D72).
-		void mirrorAppendChildEdge_(Composite* parent, Composite* child, MoleculeStore* dst)
-		{
-			AtomContainer* pac = dynamic_cast<AtomContainer*>(parent);
-			if (pac == 0) return;
-			if (pac->getContainerRowStore_() != dst || pac->getContainerRow_() == 0) return;
-			std::uint32_t prow = pac->getContainerRow_();
-			if (Atom* a = detail::compositeAsAtom_(child))
-			{
-				dst->container_append_atom_(prow, a->getStoreIndex());
-			}
-			else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
-			{
-				if (cc->getContainerRowStore_() == dst && cc->getContainerRow_() != 0)
-					dst->container_append_container_(prow, cc->getContainerRow_());
-			}
-		}
 	} // anonymous namespace
 
 	void System::adoptSubtree(AtomContainer& container)
@@ -455,11 +420,11 @@ namespace BALL
 		// parent's row -- but only if the parent is a container with a row in
 		// dst (a top-level molecule's parent is the System, which is never a
 		// container row, so it stays a root: parent_container_idx == NONE).
+		// Materialise the adopted subtree's INTERNAL rows + edges. The edge
+		// linking this subtree's root under its v0 parent is mirrored by the
+		// AtomContainer insert method that called adoptSubtree (R36b) -- not
+		// here -- so it honours the insert position and same-store reparent.
 		materialiseContainer_(container, dst);
-		// Link the adopted root under its v0 parent by appending its edge
-		// (O(1); no duplicate on reparent since appendChild already removed
-		// the old edge; no-op when the parent is the System root).
-		mirrorAppendChildEdge_(container.getParent(), &container, dst);
 	}
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const

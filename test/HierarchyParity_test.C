@@ -672,4 +672,63 @@ CHECK(H2a -- reparent a container between rooted parents (no duplicate edges))
 	TEST_EQUAL(descTable(t, root), d)
 RESULT
 
+CHECK(H2a -- same-System atom move re-mirrors the new parent edge (R36b))
+	// adopt(Atom&) early-returns on a same-store move; the edge mirror lives
+	// in the AtomContainer insert method, so it still fires.
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("ALA");
+	Residue r2; r2.setName("GLY"); r2.setID("GLY");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	r1.insert(a1);
+	r2.insert(a2);
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t r1_row = r1.getContainerRow_();
+	std::uint32_t r2_row = r2.getContainerRow_();
+	TEST_EQUAL(store->container_child_count_(r1_row), 1u)
+	TEST_EQUAL(store->container_child_count_(r2_row), 1u)
+
+	r2.insert(a1);                          // move a1 from r1 to r2 (same store)
+	TEST_EQUAL(store->container_child_count_(r1_row), 0u)
+	TEST_EQUAL(store->container_child_count_(r2_row), 2u)
+
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
+CHECK(H2a -- positional insert into a rooted container preserves v0 order (R36b))
+	// prepend into an ALREADY-ROOTED container must keep v0 order in the
+	// mirror (the positional path re-derives the parent row from v0).
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	Residue r; r.setName("ALA"); r.setID("ALA");
+	PDBAtom a1; a1.setName("CA");
+	r.insert(a1);
+	ch.insert(r);
+	prot.insert(ch);
+	sys.insert(prot);                       // r rooted with [a1]
+
+	PDBAtom a2; a2.setName("N");
+	r.prepend(a2);                          // v0 order becomes [a2, a1]
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t r_row = r.getContainerRow_();
+	std::uint32_t root  = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)       // mirror order matches v0
+	TEST_EQUAL(store->container_child_(r_row, 0).idx, a2.getStoreIndex())  // a2 first
+	TEST_EQUAL(store->container_child_(r_row, 1).idx, a1.getStoreIndex())  // a1 second
+RESULT
+
 END_TEST

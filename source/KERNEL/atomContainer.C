@@ -6,12 +6,72 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/global.h>
 #include <BALL/KERNEL/system.h>          // K0.4.3: auto-adopt into root System
+#include <BALL/KERNEL/atom.h>            // v2.2 H2a: getStoreIndex for the mirror
+#include <BALL/KERNEL/moleculeStore.h>   // v2.2 H2a: container write accessors
 #include <BALL/CONCEPT/composite.h>      // ancestor lookup
 #include <BALL/COMMON/rtti.h>            // RTTI::getDefault<System>
 
 using namespace::std;
 namespace BALL
 {
+	// v2.2 H2a (R36b fix): the container-table mutation mirror for INSERTS
+	// lives here in the AtomContainer insert methods (NOT in adopt()/
+	// adoptSubtree()), so it fires regardless of whether adopt early-returns
+	// on a same-store move (R36b BLOCKER) and so the insert method's known
+	// position is honoured. v0 is the source of truth (D60); mirror is
+	// forward-only. `parent` is taken from child.getParent() (robust across
+	// receiver semantics). No-op if the parent has no container row
+	// (free-standing / System root -- materialised later at adoption).
+	namespace
+	{
+		// O(1): append the just-inserted child's edge. Exact for append/
+		// insert (the dominant + bulk case).
+		void mirrorAppendEdge_(Composite* parent, Composite* child)
+		{
+			AtomContainer* pac = dynamic_cast<AtomContainer*>(parent);
+			if (pac == 0) return;
+			MoleculeStore* dst = pac->getContainerRowStore_();
+			std::uint32_t  prow = pac->getContainerRow_();
+			if (dst == 0 || prow == 0) return;
+			if (Atom* a = detail::compositeAsAtom_(child))
+			{
+				dst->container_append_atom_(prow, a->getStoreIndex());
+			}
+			else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
+			{
+				if (cc->getContainerRowStore_() == dst && cc->getContainerRow_() != 0)
+					dst->container_append_container_(prow, cc->getContainerRow_());
+			}
+		}
+
+		// O(degree): re-derive the parent's row child list from the CURRENT
+		// v0 order. Used by the (rare) positional inserts (prepend/
+		// insertBefore/insertAfter) so the mirror preserves v0 order. Not on
+		// the bulk-append path, so no O(n^2).
+		void mirrorRederiveParent_(Composite* parent)
+		{
+			AtomContainer* pac = dynamic_cast<AtomContainer*>(parent);
+			if (pac == 0) return;
+			MoleculeStore* dst = pac->getContainerRowStore_();
+			std::uint32_t  prow = pac->getContainerRow_();
+			if (dst == 0 || prow == 0) return;
+			dst->container_clear_children_(prow);
+			for (Position i = 0; i < pac->getDegree(); ++i)
+			{
+				Composite* child = pac->getChild(static_cast<Index>(i));
+				if (Atom* a = detail::compositeAsAtom_(child))
+				{
+					dst->container_append_atom_(prow, a->getStoreIndex());
+				}
+				else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
+				{
+					if (cc->getContainerRowStore_() == dst && cc->getContainerRow_() != 0)
+						dst->container_append_container_(prow, cc->getContainerRow_());
+				}
+			}
+		}
+	} // anonymous namespace
+
 
 	// K0.4.3 helper: walk up the Composite tree to find the root System.
 	// Returns nullptr if this AtomContainer isn't rooted under a System.
@@ -303,6 +363,7 @@ namespace BALL
 		// (atom has no bonds to other atoms in src yet, or partner is
 		// already in dst).
 		if (sys != nullptr) sys->adopt(atom);
+		mirrorRederiveParent_(atom.getParent());   // v2.2 H2a (positional)
 	}
 
 	void AtomContainer::append(Atom &atom)
@@ -315,6 +376,7 @@ namespace BALL
 		}
 		Composite::appendChild(atom);
 		if (sys != nullptr) sys->adopt(atom);
+		mirrorAppendEdge_(atom.getParent(), &atom);   // v2.2 H2a
 	}
 
 	void AtomContainer::insert(Atom &atom)
@@ -332,6 +394,7 @@ namespace BALL
 		}
 		before.Composite::insertBefore(atom);
 		if (sys != nullptr) sys->adopt(atom);
+		mirrorRederiveParent_(atom.getParent());   // v2.2 H2a (positional)
 	}
 
 	void AtomContainer::insertAfter(Atom& atom, Composite &after)
@@ -345,6 +408,7 @@ namespace BALL
 		}
 		after.Composite::insertAfter(atom);
 		if (sys != nullptr) sys->adopt(atom);
+		mirrorRederiveParent_(atom.getParent());   // v2.2 H2a (positional)
 	}
 
 	bool AtomContainer::remove(Atom& atom)
@@ -431,12 +495,14 @@ namespace BALL
 		// preserving intra-subtree bonds (closes the K0.4.2 sequential-
 		// adopt orphan-bond limitation).
 		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
+		mirrorRederiveParent_(atom_container.getParent());   // v2.2 H2a (positional)
 	}
 
 	void AtomContainer::append(AtomContainer& atom_container)
 	{
 		Composite::appendChild(atom_container);
 		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
+		mirrorAppendEdge_(atom_container.getParent(), &atom_container);   // v2.2 H2a
 	}
 
 	void AtomContainer::insert(AtomContainer& atom_container)
@@ -448,12 +514,14 @@ namespace BALL
 	{
 		before.Composite::insertBefore(atom_container);
 		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
+		mirrorRederiveParent_(atom_container.getParent());   // v2.2 H2a (positional)
 	}
 
 	void AtomContainer::insertAfter(AtomContainer& atom_container, Composite& after)
 	{
 		after.Composite::insertAfter(atom_container);
 		if (System* sys = findRootSystem_(this)) sys->adoptSubtree(atom_container);
+		mirrorRederiveParent_(atom_container.getParent());   // v2.2 H2a (positional)
 	}
 
 	void AtomContainer::spliceBefore(AtomContainer& atom_container)
