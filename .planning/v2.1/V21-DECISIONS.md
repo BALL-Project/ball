@@ -1281,7 +1281,22 @@ roadmap.*
 
 # Sixth revision post-P4.2 (2026-05-20)
 
-## D42. V21-BOND-PROPERTY-JSON deferred to v2.2 (P4.2 findings)
+## D42. V21-BOND-PROPERTY-JSON deferred to v2.2 (P4.2 findings) — **SUPERSEDED by D42-REV**
+
+> **D42-REV (2026-05-20, maintainer reversal):** D42's deferral was
+> reversed. **V21-BOND-PROPERTY-JSON was IMPLEMENTED in v2.1 P4.2**
+> via option A from `P4.2-FINDINGS.md`: the System loader
+> reconstructs the Atom-side `Bond*` graph with `createBond` and
+> round-trips the Bond `PropertyManager` bag (commit `45df3714d`;
+> R25-hardened against the leak + duplicate-pair boundary cases in
+> `67827ad7c`). This ALSO closed D43 (the `atom.countBonds()==0`
+> fidelity gap) and the R16 C-B7 v2.0 known gap. Schema minor
+> bumped (store 1→2, system 0→1). The text below is retained as
+> the original deferral rationale (now historical); read the
+> "Impact" bullets as superseded.
+
+### Original D42 (historical — deferral, reversed by D42-REV)
+
 
 **Decision (maintainer, 2026-05-20):** Option C from
 `P4.2-FINDINGS.md`. V21-BOND-PROPERTY-JSON moves out of v2.1 P4 to
@@ -1308,7 +1323,13 @@ now is scaffolding v2.2 would rework.
 - `V21-BOND-PROPERTY-JSON` reclassified from v2.1 P4 to v2.2 in
   `.planning/v2.1/BACKLOG.md`.
 
-## D43. Latent bond round-trip-fidelity gap noted (not v2.1 scope)
+## D43. Latent bond round-trip-fidelity gap noted — **CLOSED in P4.2 (see D42-REV)**
+
+> **CLOSED 2026-05-20:** D43's `atom.countBonds()==0` gap was fixed
+> in P4.2 (the loader now reconstructs the `Bond*` graph via
+> `createBond`). The text below is the original observation.
+
+### Original D43 (historical — closed by P4.2)
 
 **Observation (not a decision to act in v2.1):** the System JSON
 round-trip does not reconstruct the Atom-side `Bond*` graph, so

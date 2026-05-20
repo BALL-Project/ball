@@ -30,7 +30,8 @@ independent wins**, deferring the flip to v2.2:
 
 - P1–P2: side-table scaffolding (the v2.2 flip's substrate).
 - P3: Atom-RTTI consolidation (29 sites → 1 helper) — v2.2 prep.
-- P4: JSON closures — **load 16× faster** + bond round-trip.
+- P4: JSON closures — **load 7–14× faster** (median-of-5; the
+  single-run no-props figure was ~16×) + bond round-trip.
 - P5: reproducible benchmark reporting.
 - P6: release.
 
@@ -47,7 +48,7 @@ the memory release. v2.2 is the thin-handle flip.
 | P1 | Side-table infra | Done — composite_nodes_ + property columns + sparse bag + selected bits; CompositeHandle/Node; R19 GO |
 | P2 | Parallel side-table maintenance | **Re-scoped** — scaffolding (virtual hook + helper) only; mutation wiring deferred to v2.2 (D39); R20→R20d |
 | P3 | Atom-RTTI removal | Done — 29 sites → `detail::compositeAsAtom_` + CI grep gate; R22 (NEEDS-FIXES, ShiftModule) → R23 close |
-| P4 | JSON closures | Done — P4.1 load 16× (R24) + P4.2 bond props/graph (R25 NEEDS-FIXES → fixed) + P4.4 schema bump; P4.3 dropped (misframed) |
+| P4 | JSON closures | Done — P4.1 load 7–14× (R24) + P4.2 bond props/graph (R25 NEEDS-FIXES → fixed) + P4.4 schema bump; P4.3 dropped (misframed) |
 | P5 | Perf + iter API + gen-guard | **Trimmed** to P5.3 median-bench only (R26); P5.1/P5.2-heavy/P5.4 → v2.2 (D44); R27 close GO |
 | P6 | Release | This document + RELEASE-NOTES-v2.1 + rc1 + R28 + v2.1.0 |
 

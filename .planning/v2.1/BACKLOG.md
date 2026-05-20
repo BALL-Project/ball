@@ -51,12 +51,13 @@ state, but tracked here for visibility.)
   the sparse_bag with a typed `SparseKey { kind, name_id/bit_idx }`.
   Packed-bool columns are a v2.2 candidate if profiling shows the
   sparse path is a bottleneck.
-- **V21-BOND-PROPERTY-JSON** (D42, was v2.1 P4.2 → now v2.2):
-  round-trip the Bond `PropertyManager` bag in K0.6 JSON. Blocked
-  in v2.1 because `loadSystemJSON` doesn't reconstruct the `Bond*`
-  heap objects that own the bags (see `P4.2-FINDINGS.md`). Natural
-  home is the v2.2 bond-thin-handle work where bonds become
-  store-native. Closes the R16 C-B7 v2.0 known gap.
+- **V21-BOND-PROPERTY-JSON** (D42 → D42-REV): **CLOSED in v2.1
+  P4.2** (commit 45df3714d; R25-hardened 67827ad7c). Initially
+  deferred per D42, then maintainer-reversed and implemented via
+  option A — the System loader reconstructs the `Bond*` graph with
+  `createBond` and round-trips the Bond `PropertyManager` bag.
+  Closes the R16 C-B7 v2.0 known gap. (Listed for history; no
+  longer outstanding.)
 - **V21-BOND-GRAPH-RECONSTRUCT** (D43): CLOSED in v2.1 P4.2 — the
   System JSON loader now reconstructs the Atom-side `Bond*` graph
   via `createBond` (commit 45df3714d / R25-hardened 67827ad7c).

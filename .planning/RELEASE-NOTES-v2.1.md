@@ -74,7 +74,12 @@ Two coupled v2.0 gaps closed:
 
 **Schema:** the K0.6 JSON minor version bumped (store 1→2, system
 0→1). v2.1 reads v2.0 JSON unchanged (bonds without a `properties`
-key load fine); v2.0 readers reject the higher minor.
+key load fine). The loaders gate only on the MAJOR version, so a
+v2.0 reader will **load** a v2.1 file and **silently ignore** the
+per-bond `properties` key (and any other unknown key) rather than
+reject it — the bond properties are simply dropped on the older
+reader. Forward-incompatibility is therefore lossy-but-graceful,
+not a hard error.
 
 **Caveat:** the System loader is Atom-consistent (one bond per atom
 pair). A store-level multigraph (multiple records for the same
@@ -87,9 +92,13 @@ store-only loader (`loadStoreJSON`) still preserves multigraphs.
 Every `dynamic_cast<Atom*>(...)`, `RTTI::isKindOf<Atom>(...)`, and
 `RTTI::castTo<Atom>(...)` in the CORE_ONLY modules (KERNEL,
 STRUCTURE, FORMAT, QSAR, MOLMEC, SCORING, SOLVATION, DOCKING,
-ENERGY, NMR, CONCEPT) — 29 sites total — now routes through a
-single `BALL::detail::compositeAsAtom_()` helper. A CI grep gate
-blocks reintroduction. No public API changed (NMR `ShiftModule`,
+ENERGY, NMR, CONCEPT) was removed — **29 Atom-RTTI uses in total**:
+24 `dynamic_cast`/`isKindOf` sites (P3.1 classification) plus 5
+`RTTI::castTo<Atom>` sites found in the P3 close review (R23). Of
+those, 26 now route through a single
+`BALL::detail::compositeAsAtom_()` helper and 3 were redundant
+casts on already-`Atom&` references that were simply dropped. A CI
+grep gate blocks reintroduction of any of the three patterns. No public API changed (NMR `ShiftModule`,
 `Selector`, `AtomVector` signatures are all preserved). The v2.2
 thin-handle flip then replaces **one** helper definition instead of
 chasing 29 call sites. (VIEW + APPLICATIONS RTTI — 54 sites — is
@@ -177,8 +186,11 @@ All deferrals are tracked in `.planning/v2.1/BACKLOG.md`.
 
 ## Upgrade notes
 
-- v2.1 reads v2.0 JSON unchanged. v2.0 cannot read v2.1 JSON
-  (higher schema minor — fails cleanly).
+- v2.1 reads v2.0 JSON unchanged. A v2.0 reader will load a v2.1
+  file too (the loaders gate on MAJOR version only) but silently
+  drops the v2.1-only per-bond `properties` — lossy, not a hard
+  error. Treat v2.1 JSON as forward-incompatible for bond
+  properties when consumed by older builds.
 - No public C++ API removed or changed signature. The new
   `BALL::detail::compositeAsAtom_` is an internal helper (not part
   of the stable surface).
