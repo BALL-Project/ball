@@ -13,7 +13,9 @@
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtCore/QSignalBlocker>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -63,6 +65,14 @@ namespace BALL
 					if (c->itemData(i).toInt() == value) return i;
 				return -1;
 			}
+
+			// Radii are mapped to the int-based LabeledSlider by *100
+			// (0.00–3.00 Å -> 0..300) and unmapped by /100.0f.
+			LabeledSlider* makeRadiusSlider_(QWidget* parent, float init)
+			{
+				return new LabeledSlider(0, 300, static_cast<int>(init * 100.0f),
+				                         QStringLiteral("Å"), parent);
+			}
 		}
 
 		ModelSection::ModelSection(ModelController* controller, QWidget* parent)
@@ -71,7 +81,13 @@ namespace BALL
 			                   parent),
 				controller_(controller),
 				model_type_(nullptr), drawing_mode_(nullptr),
-				precision_(nullptr), transparency_(nullptr)
+				precision_(nullptr), transparency_(nullptr),
+				type_options_(nullptr),
+				bs_sphere_radius_(nullptr), bs_bond_radius_(nullptr),
+				bs_dashed_bonds_(nullptr), stick_radius_(nullptr),
+				surface_probe_radius_(nullptr), cartoon_tube_radius_(nullptr),
+				page_empty_(0), page_ball_and_stick_(0), page_stick_(0),
+				page_surface_(0), page_cartoon_(0)
 		{
 			QWidget* content = new QWidget(this);
 			QVBoxLayout* col = new QVBoxLayout(content);
@@ -87,6 +103,71 @@ namespace BALL
 			col->addWidget(new FormRow(tr("Drawing"),     drawing_mode_, content));
 			col->addWidget(new FormRow(tr("Precision"),   precision_,    content));
 			col->addWidget(new FormRow(tr("Transparency"),transparency_, content));
+
+			// v1.7.x-16 — type-specific controls. One QStackedWidget page
+			// per model-type group; an empty page for types without extra
+			// options. The visible page tracks the selected model type.
+			type_options_ = new QStackedWidget(content);
+
+			// Empty page (default for types without extra options).
+			QWidget* empty_page = new QWidget(type_options_);
+			page_empty_ = type_options_->addWidget(empty_page);
+
+			// Ball & Stick page.
+			{
+				QWidget* page = new QWidget(type_options_);
+				QVBoxLayout* pcol = new QVBoxLayout(page);
+				pcol->setContentsMargins(0, 0, 0, 0);
+				pcol->setSpacing(6);
+				bs_sphere_radius_ = makeRadiusSlider_(page,
+					controller_ ? controller_->ballRadius() : 0.4f);
+				bs_bond_radius_   = makeRadiusSlider_(page,
+					controller_ ? controller_->ballStickBondRadius() : 0.2f);
+				bs_dashed_bonds_  = new QCheckBox(page);
+				bs_dashed_bonds_->setChecked(controller_ ? controller_->dashedBonds() : false);
+				pcol->addWidget(new FormRow(tr("Sphere radius"), bs_sphere_radius_, page));
+				pcol->addWidget(new FormRow(tr("Bond radius"),   bs_bond_radius_,   page));
+				pcol->addWidget(new FormRow(tr("Dashed bonds"),  bs_dashed_bonds_,  page));
+				page_ball_and_stick_ = type_options_->addWidget(page);
+			}
+
+			// Stick page.
+			{
+				QWidget* page = new QWidget(type_options_);
+				QVBoxLayout* pcol = new QVBoxLayout(page);
+				pcol->setContentsMargins(0, 0, 0, 0);
+				pcol->setSpacing(6);
+				stick_radius_ = makeRadiusSlider_(page,
+					controller_ ? controller_->stickRadius() : 0.2f);
+				pcol->addWidget(new FormRow(tr("Stick radius"), stick_radius_, page));
+				page_stick_ = type_options_->addWidget(page);
+			}
+
+			// Surface page (shared by SE and SA surfaces).
+			{
+				QWidget* page = new QWidget(type_options_);
+				QVBoxLayout* pcol = new QVBoxLayout(page);
+				pcol->setContentsMargins(0, 0, 0, 0);
+				pcol->setSpacing(6);
+				surface_probe_radius_ = makeRadiusSlider_(page,
+					controller_ ? controller_->surfaceProbeRadius() : 1.5f);
+				pcol->addWidget(new FormRow(tr("Probe radius"), surface_probe_radius_, page));
+				page_surface_ = type_options_->addWidget(page);
+			}
+
+			// Cartoon page.
+			{
+				QWidget* page = new QWidget(type_options_);
+				QVBoxLayout* pcol = new QVBoxLayout(page);
+				pcol->setContentsMargins(0, 0, 0, 0);
+				pcol->setSpacing(6);
+				cartoon_tube_radius_ = makeRadiusSlider_(page,
+					controller_ ? controller_->cartoonTubeRadius() : 0.4f);
+				pcol->addWidget(new FormRow(tr("Tube radius"), cartoon_tube_radius_, page));
+				page_cartoon_ = type_options_->addWidget(page);
+			}
+
+			col->addWidget(type_options_);
 
 			setContent(content);
 
@@ -117,6 +198,23 @@ namespace BALL
 			connect(transparency_, &LabeledSlider::valueChanged,
 			        this, &ModelSection::onTransparencyChanged_);
 
+			connect(bs_sphere_radius_, &LabeledSlider::valueChanged,
+			        this, &ModelSection::onBallRadiusChanged_);
+			connect(bs_bond_radius_, &LabeledSlider::valueChanged,
+			        this, &ModelSection::onBallStickBondRadiusChanged_);
+			connect(bs_dashed_bonds_, &QCheckBox::toggled,
+			        this, &ModelSection::onDashedBondsToggled_);
+			connect(stick_radius_, &LabeledSlider::valueChanged,
+			        this, &ModelSection::onStickRadiusChanged_);
+			connect(surface_probe_radius_, &LabeledSlider::valueChanged,
+			        this, &ModelSection::onSurfaceProbeRadiusChanged_);
+			connect(cartoon_tube_radius_, &LabeledSlider::valueChanged,
+			        this, &ModelSection::onCartoonTubeRadiusChanged_);
+
+			// Show the page matching the initial model type.
+			showPageForModelType_(controller_ ? controller_->modelType()
+			                                   : model_type_->currentData().toInt());
+
 			if (controller_)
 			{
 				connect(controller_, &ModelController::modelTypeChanged,
@@ -127,6 +225,18 @@ namespace BALL
 				        this, &ModelSection::onControllerPrecisionChanged_);
 				connect(controller_, &ModelController::transparencyChanged,
 				        this, &ModelSection::onControllerTransparencyChanged_);
+				connect(controller_, &ModelController::ballRadiusChanged,
+				        this, &ModelSection::onControllerBallRadiusChanged_);
+				connect(controller_, &ModelController::ballStickBondRadiusChanged,
+				        this, &ModelSection::onControllerBallStickBondRadiusChanged_);
+				connect(controller_, &ModelController::dashedBondsChanged,
+				        this, &ModelSection::onControllerDashedBondsChanged_);
+				connect(controller_, &ModelController::stickRadiusChanged,
+				        this, &ModelSection::onControllerStickRadiusChanged_);
+				connect(controller_, &ModelController::surfaceProbeRadiusChanged,
+				        this, &ModelSection::onControllerSurfaceProbeRadiusChanged_);
+				connect(controller_, &ModelController::cartoonTubeRadiusChanged,
+				        this, &ModelSection::onControllerCartoonTubeRadiusChanged_);
 
 				// v1.7.x-18 — per-section reset.
 				setResettable(true, tr("Reset Model settings to the "
@@ -152,10 +262,28 @@ namespace BALL
 
 		void ModelSection::scheduleApply_() { debounce_.start(); }
 
+		void ModelSection::showPageForModelType_(int t)
+		{
+			if (!type_options_) return;
+			int page = page_empty_;
+			switch (t)
+			{
+				case MODEL_BALL_AND_STICK: page = page_ball_and_stick_; break;
+				case MODEL_STICK:          page = page_stick_;          break;
+				case MODEL_SE_SURFACE:
+				case MODEL_SA_SURFACE:     page = page_surface_;        break;
+				case MODEL_CARTOON:        page = page_cartoon_;        break;
+				default:                   page = page_empty_;          break;
+			}
+			type_options_->setCurrentIndex(page);
+		}
+
 		void ModelSection::onModelTypeChosen_(int idx)
 		{
 			if (idx < 0 || !controller_) return;
-			controller_->setModelType(model_type_->itemData(idx).toInt());
+			int t = model_type_->itemData(idx).toInt();
+			controller_->setModelType(t);
+			showPageForModelType_(t);
 			scheduleApply_();
 		}
 
@@ -180,6 +308,48 @@ namespace BALL
 			scheduleApply_();
 		}
 
+		void ModelSection::onBallRadiusChanged_(int v)
+		{
+			if (!controller_) return;
+			controller_->setBallRadius(v / 100.0f);
+			scheduleApply_();
+		}
+
+		void ModelSection::onBallStickBondRadiusChanged_(int v)
+		{
+			if (!controller_) return;
+			controller_->setBallStickBondRadius(v / 100.0f);
+			scheduleApply_();
+		}
+
+		void ModelSection::onDashedBondsToggled_(bool on)
+		{
+			if (!controller_) return;
+			controller_->setDashedBonds(on);
+			scheduleApply_();
+		}
+
+		void ModelSection::onStickRadiusChanged_(int v)
+		{
+			if (!controller_) return;
+			controller_->setStickRadius(v / 100.0f);
+			scheduleApply_();
+		}
+
+		void ModelSection::onSurfaceProbeRadiusChanged_(int v)
+		{
+			if (!controller_) return;
+			controller_->setSurfaceProbeRadius(v / 100.0f);
+			scheduleApply_();
+		}
+
+		void ModelSection::onCartoonTubeRadiusChanged_(int v)
+		{
+			if (!controller_) return;
+			controller_->setCartoonTubeRadius(v / 100.0f);
+			scheduleApply_();
+		}
+
 		void ModelSection::onControllerModelTypeChanged_(int t)
 		{
 			int i = findIndexForData_(model_type_, t);
@@ -188,6 +358,7 @@ namespace BALL
 				QSignalBlocker b(model_type_);
 				model_type_->setCurrentIndex(i);
 			}
+			showPageForModelType_(t);
 		}
 
 		void ModelSection::onControllerDrawingModeChanged_(int m)
@@ -214,6 +385,65 @@ namespace BALL
 		{
 			if (transparency_->value() != t)
 				transparency_->setValue(t);
+		}
+
+		void ModelSection::onControllerBallRadiusChanged_(float v)
+		{
+			int iv = static_cast<int>(v * 100.0f);
+			if (bs_sphere_radius_->value() != iv)
+			{
+				QSignalBlocker b(bs_sphere_radius_);
+				bs_sphere_radius_->setValue(iv);
+			}
+		}
+
+		void ModelSection::onControllerBallStickBondRadiusChanged_(float v)
+		{
+			int iv = static_cast<int>(v * 100.0f);
+			if (bs_bond_radius_->value() != iv)
+			{
+				QSignalBlocker b(bs_bond_radius_);
+				bs_bond_radius_->setValue(iv);
+			}
+		}
+
+		void ModelSection::onControllerDashedBondsChanged_(bool v)
+		{
+			if (bs_dashed_bonds_->isChecked() != v)
+			{
+				QSignalBlocker b(bs_dashed_bonds_);
+				bs_dashed_bonds_->setChecked(v);
+			}
+		}
+
+		void ModelSection::onControllerStickRadiusChanged_(float v)
+		{
+			int iv = static_cast<int>(v * 100.0f);
+			if (stick_radius_->value() != iv)
+			{
+				QSignalBlocker b(stick_radius_);
+				stick_radius_->setValue(iv);
+			}
+		}
+
+		void ModelSection::onControllerSurfaceProbeRadiusChanged_(float v)
+		{
+			int iv = static_cast<int>(v * 100.0f);
+			if (surface_probe_radius_->value() != iv)
+			{
+				QSignalBlocker b(surface_probe_radius_);
+				surface_probe_radius_->setValue(iv);
+			}
+		}
+
+		void ModelSection::onControllerCartoonTubeRadiusChanged_(float v)
+		{
+			int iv = static_cast<int>(v * 100.0f);
+			if (cartoon_tube_radius_->value() != iv)
+			{
+				QSignalBlocker b(cartoon_tube_radius_);
+				cartoon_tube_radius_->setValue(iv);
+			}
 		}
 
 		void ModelSection::onDebounceFire_()

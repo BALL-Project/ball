@@ -18,6 +18,8 @@
 #include <QtCore/QTimer>
 
 class QComboBox;
+class QCheckBox;
+class QStackedWidget;
 
 namespace BALL
 {
@@ -40,10 +42,22 @@ namespace BALL
 				void onDrawingModeChosen_(int idx);
 				void onPrecisionChosen_(int idx);
 				void onTransparencyChanged_(int v);
+				void onBallRadiusChanged_(int v);
+				void onBallStickBondRadiusChanged_(int v);
+				void onDashedBondsToggled_(bool on);
+				void onStickRadiusChanged_(int v);
+				void onSurfaceProbeRadiusChanged_(int v);
+				void onCartoonTubeRadiusChanged_(int v);
 				void onControllerModelTypeChanged_(int t);
 				void onControllerDrawingModeChanged_(int m);
 				void onControllerPrecisionChanged_(int p);
 				void onControllerTransparencyChanged_(int t);
+				void onControllerBallRadiusChanged_(float v);
+				void onControllerBallStickBondRadiusChanged_(float v);
+				void onControllerDashedBondsChanged_(bool v);
+				void onControllerStickRadiusChanged_(float v);
+				void onControllerSurfaceProbeRadiusChanged_(float v);
+				void onControllerCartoonTubeRadiusChanged_(float v);
 				void onDebounceFire_();
 
 			private:
@@ -54,7 +68,24 @@ namespace BALL
 				QComboBox*       precision_;
 				LabeledSlider*   transparency_;
 
+				// v1.7.x-16 — type-specific controls in a QStackedWidget
+				// below the generic controls; the visible page tracks the
+				// selected model type.
+				QStackedWidget*  type_options_;
+				LabeledSlider*   bs_sphere_radius_;
+				LabeledSlider*   bs_bond_radius_;
+				QCheckBox*       bs_dashed_bonds_;
+				LabeledSlider*   stick_radius_;
+				LabeledSlider*   surface_probe_radius_;
+				LabeledSlider*   cartoon_tube_radius_;
+				int              page_empty_;
+				int              page_ball_and_stick_;
+				int              page_stick_;
+				int              page_surface_;
+				int              page_cartoon_;
+
 				void scheduleApply_();
+				void showPageForModelType_(int t);
 		};
 
 	} // namespace VIEW

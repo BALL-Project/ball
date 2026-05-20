@@ -40,6 +40,12 @@ namespace BALL
 			Q_PROPERTY(int drawingMode READ drawingMode WRITE setDrawingMode NOTIFY drawingModeChanged)
 			Q_PROPERTY(int drawingPrecision READ drawingPrecision WRITE setDrawingPrecision NOTIFY drawingPrecisionChanged)
 			Q_PROPERTY(int transparency READ transparency WRITE setTransparency NOTIFY transparencyChanged)
+			Q_PROPERTY(float ballRadius READ ballRadius WRITE setBallRadius NOTIFY ballRadiusChanged)
+			Q_PROPERTY(float ballStickBondRadius READ ballStickBondRadius WRITE setBallStickBondRadius NOTIFY ballStickBondRadiusChanged)
+			Q_PROPERTY(bool dashedBonds READ dashedBonds WRITE setDashedBonds NOTIFY dashedBondsChanged)
+			Q_PROPERTY(float stickRadius READ stickRadius WRITE setStickRadius NOTIFY stickRadiusChanged)
+			Q_PROPERTY(float surfaceProbeRadius READ surfaceProbeRadius WRITE setSurfaceProbeRadius NOTIFY surfaceProbeRadiusChanged)
+			Q_PROPERTY(float cartoonTubeRadius READ cartoonTubeRadius WRITE setCartoonTubeRadius NOTIFY cartoonTubeRadiusChanged)
 
 			public:
 				explicit ModelController(Representation* rep = nullptr,
@@ -54,6 +60,13 @@ namespace BALL
 				int drawingPrecision() const { return drawing_precision_; }
 				int transparency() const     { return transparency_; }
 
+				float ballRadius() const          { return ball_radius_; }
+				float ballStickBondRadius() const { return ball_stick_bond_radius_; }
+				bool  dashedBonds() const         { return dashed_bonds_; }
+				float stickRadius() const         { return stick_radius_; }
+				float surfaceProbeRadius() const  { return surface_probe_radius_; }
+				float cartoonTubeRadius() const   { return cartoon_tube_radius_; }
+
 			public Q_SLOTS:
 				void apply();
 				void revert();
@@ -63,11 +76,24 @@ namespace BALL
 				void setDrawingPrecision(int p);
 				void setTransparency(int t);
 
+				void setBallRadius(float v);
+				void setBallStickBondRadius(float v);
+				void setDashedBonds(bool v);
+				void setStickRadius(float v);
+				void setSurfaceProbeRadius(float v);
+				void setCartoonTubeRadius(float v);
+
 			Q_SIGNALS:
 				void modelTypeChanged(int t);
 				void drawingModeChanged(int m);
 				void drawingPrecisionChanged(int p);
 				void transparencyChanged(int t);
+				void ballRadiusChanged(float v);
+				void ballStickBondRadiusChanged(float v);
+				void dashedBondsChanged(bool v);
+				void stickRadiusChanged(float v);
+				void surfaceProbeRadiusChanged(float v);
+				void cartoonTubeRadiusChanged(float v);
 				void appliedStub();
 
 			private:
@@ -76,6 +102,13 @@ namespace BALL
 				int drawing_mode_;
 				int drawing_precision_;
 				int transparency_;
+				float ball_radius_;
+				float ball_stick_bond_radius_;
+				bool  dashed_bonds_;
+				float stick_radius_;
+				float surface_probe_radius_;
+				float cartoon_tube_radius_;
+				bool  params_dirty_;
 		};
 
 	} // namespace VIEW
