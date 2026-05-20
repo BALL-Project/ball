@@ -98,23 +98,33 @@ so a mutation hook can address it in O(1).
 `clear()`/`destroyChildren_`) **mirrors the detach iff `this` (the
 parent) is NOT being destroyed.**
 
-- Add a `being_destroyed_` flag to `Composite`. **Set it true at the
-  START of BOTH `Composite::destroy()` overloads** (before `clear()` /
-  child teardown) **AND at `~Composite` entry** as a backstop (R35
-  BLOCKER). The flag must be set BEFORE any child teardown runs.
-  - **Why `destroy()` not just `~Composite`:** every derived destructor
-    calls `destroy()` before the base `~Composite` runs —
-    `Atom::~Atom` (`source/KERNEL/atom.C:289`), `AtomContainer::
-    ~AtomContainer` (`atomContainer.C:52`), `Molecule`/`Residue`/`Chain`/
-    `System::~…` all call `destroy()` first. So child teardown happens in
-    `Composite::destroy()`/`clear()`, well before `~Composite`. Setting
-    the flag only in `~Composite` is too late: the cascade already ran.
+- Add a `being_destroyed_` flag to `Composite`. **Set it true as the
+  FIRST statement of each molecular DESTRUCTOR** — `~Atom`,
+  `~AtomContainer`, `~Molecule`, `~Protein`, `~NucleicAcid`, `~Chain`,
+  `~Residue`, `~Nucleotide`, `~SecondaryStructure`, `~Fragment`,
+  `~System` — plus `~Composite` as a backstop. **Do NOT set it in
+  `destroy()` or `clear()`** (R35b NEW HIGH).
+  - **Why the destructors, not `destroy()`:** `destroy()`/`clear()` are
+    ALSO called explicitly on a **live** object to empty it (the object
+    survives). That emptying MUST be mirrored (live container → empty
+    row). If the flag were set in `destroy()`, explicit `obj.destroy()`
+    would wrongly skip the emptying mirror and leave a stale row (R35b).
+    The destructor is the only unambiguous "this object will not survive"
+    signal. Each derived destructor calls `destroy()` to do its teardown,
+    so the flag set as the destructor's first line is in effect for the
+    whole cascade — and is NOT set during an explicit `destroy()` on a
+    live object (no destructor ran). The flag is never reset (an object
+    whose destructor set it is gone).
 - `removeChild`'s mirror hook checks **`this->being_destroyed_`** (the
-  PARENT's flag), not the child's.
-- **H2a tests must cover derived-destructor cascades** (`delete residue`,
-  `delete molecule`, `~System`) and assert no mirror write fired during
-  teardown (e.g. row count stable across the destruction; parity of the
-  surviving roots).
+  PARENT's flag), not the child's. Explicit `destroy()`/`clear()` on a
+  live parent (flag false) therefore mirror the child removals correctly;
+  destructor-driven teardown (flag true) skips them (the row leaks with
+  the dying object).
+- **H2a tests must cover BOTH** derived-destructor cascades (`delete
+  residue`/`delete molecule`/`~System` — assert no mirror write fired,
+  surviving roots parity-clean) AND explicit `destroy()`/`clear()` on a
+  live container (assert the row is emptied to match the now-empty v0
+  object).
 
 Why this is correct, traced against `~Composite`:
 
@@ -249,6 +259,36 @@ helper.
 - Ordering: atom-slot migration (existing `adoptSubtree`) runs first to
   produce the old→new atom-index map; materialization uses it for ATOM
   `ChildRef`s.
+- D73 materialization is the **single container-adoption path** (both
+  free-standing AND cross-System): it (re)builds rows from the v0 tree
+  regardless of any prior row state, so the H1a `migrate_subtree_from`
+  (container table→table) is **not** on the H2 adoption path — it remains
+  tested infra. (Atom slots still migrate store→store as today.)
+
+## D74. Container-row binding lifecycle (R35b NEW BLOCKER)
+
+A bare `container_row_idx_` is meaningless without knowing WHICH store's
+table it indexes — a container that moves between Systems would carry a
+stale index into the wrong table. Fix:
+
+- Bind **`{MoleculeStore* container_row_store_ = nullptr; std::uint32_t
+  container_row_idx_ = 0;}`** on `AtomContainer` (12 B; O(thousands)
+  containers; transitional, removed at H4).
+- **Self-healing rule:** every mirror hook first resolves the container's
+  current store `S = getCompositeStore_()`. If `container_row_store_ != S`
+  (including the `nullptr`→first-bind and the moved-between-stores cases),
+  the binding is **stale**: (re)materialize the container's row in `S`
+  (D73) and rebind `{container_row_store_=S, container_row_idx_=new}`. If
+  it matches, use `container_row_idx_` directly (O(1)). This makes
+  cross-System moves and destroy/re-adopt **self-healing** without the
+  migration walking v0; the previous store's row leaks (acceptable —
+  v0 = truth, unreachable).
+- **No release on destruction** (D69): the binding dies with the object;
+  rows are freed wholesale at `~System`. A container detached
+  (`removeChild`) but not destroyed keeps its binding; re-insertion into
+  the same store reuses it, into a different store re-materializes.
+- D73 adoption-materialization sets `{container_row_store_, container_
+  row_idx_}` on every materialized v0 object.
 
 ## Risks / open questions (R35 dispositions)
 
@@ -282,19 +322,25 @@ helper.
 | # | Contract |
 |---|---|
 | D67 | Per-mutation forward mirror hooks in v0 methods (v0 first, then table); retire (leave inert) the `composite_nodes_` mirror |
-| D68 | v0-container→row binding via a dedicated `AtomContainer::container_row_idx_` (NOT the `composite_handle_packed_` slot — R35 HIGH); atoms use `getStoreIndex`; lazy allocate-on-first-mirror |
-| D69 | Destruction guard: `being_destroyed_` set at the start of BOTH `Composite::destroy()` overloads (+ `~Composite` backstop), before child teardown — derived dtors call `destroy()` first (R35 BLOCKER); `removeChild` skips the mirror iff the PARENT is being destroyed (defuses P2.1.1) |
+| D68 | v0-container→row binding via dedicated `AtomContainer` members (NOT the `composite_handle_packed_` slot — R35 HIGH); atoms use `getStoreIndex`; lazy allocate-on-first-mirror; binding lifecycle in D74 |
+| D69 | Destruction guard: `being_destroyed_` set as the FIRST line of each molecular DESTRUCTOR (+ `~Composite` backstop), NOT in `destroy()`/`clear()` — so explicit `destroy()`/`clear()` on a LIVE object still mirrors the emptying (R35b NEW HIGH); `removeChild` skips the mirror iff the PARENT is being destroyed (defuses P2.1.1) |
 | D70 | Full mutation→ContainerTable-op mapping: positional moves = remove + positional-insert (not append-only `reparent_child`); `replace`/`insertParent`/`clear` non-auto-deletable/`swap` scoped; leaf-only selection hook (R35) |
 | D71 | Handle-yielding `AtomIterator`/container iterators/`apply` over `ChildRef`; consumers migrate in H3 |
 | D72 | H2a–H2d sub-phasing; parity asserted after every covered mutation (each sub-test exercises only the wired ops) |
-| D73 | Adoption materialization: recursive v0→table build at `System::adoptSubtree` for free-standing subtrees (R35 BLOCKER); D56 `migrate_subtree_from` is for store→store moves only |
+| D73 | Adoption materialization: recursive v0→table build at `System::adoptSubtree` — the single container-adoption path (free-standing AND cross-System); D56 `migrate_subtree_from` not on this path |
+| D74 | Container-row binding lifecycle: `{container_row_store_, container_row_idx_}` on `AtomContainer`; self-healing re-materialize on store mismatch; no release on destruction (R35b NEW BLOCKER) |
+
+**Selection (R35b note):** v0 recursive container select selects all
+descendant atoms. The mirror hooks only the per-atom leaf bit transition
+(one `bump_selection_up(±1)` each), so a container-level select fans out
+to N leaf hooks → N counter bumps, matching v0's per-atom counters. H2b
+adds nested-container select/deselect parity tests.
 
 ## Next action
 
-R35 returned NEEDS-FIXES (3 BLOCKER/HIGH on flag placement, free-standing
-adoption, slot reuse + positional moves + missing mutators). This revision
-addresses all: D69 sets the flag in `destroy()`; D73 adds adoption
-materialization; D68 uses a dedicated slot (no `composite_nodes_` churn);
-D70 fixes positional moves + adds `insertParent`/`replace`/`set`/`swap`
-scope + the live-`clear()` branch; the 5 open risks are dispositioned.
-Codex **R35b** re-reviews; on GO, implement H2a.
+R35 → NEEDS-FIXES (flag placement, free-standing adoption, slot reuse,
+positional moves, missing mutators) → revised → R35b → NEEDS-FIXES (2 NEW:
+binding lifecycle, `destroy()`-on-live flag). This revision: D69 moves the
+flag to the DESTRUCTORS (explicit `destroy()`/`clear()` on a live object
+mirrors correctly); D74 adds the `{store,idx}` binding + self-healing
+re-materialize. Codex **R35c** re-reviews; on GO, implement H2a.
