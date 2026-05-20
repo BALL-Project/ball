@@ -48,6 +48,20 @@ end-to-end before adding a new Controller.
 
 ## Mutation cut-over status
 
+> **CORRECTION (2026-05-20, v1.7.x-26 audit):** the snapshot below is
+> STALE. An audit of the actual `apply()` bodies found **7 of 9
+> controllers already mutate** their owner (Camera/Stereo/Light/Model/
+> Coloring/Material were cut over during the rc cycle under UFG-03 /
+> UFG-11, in addition to Stage). Only **Clipping** and **Label** remain
+> `Log.info` stubs — and neither has an Inspector consumer, so they
+> create no dual-path drift today. The remaining v1.7.x-24 work is
+> therefore **harmonizing the 7 divergent mutating `apply()`s onto one
+> command contract** (re-entrancy guard + undo-intent capture + uniform
+> validation/invalidation + single typed event), NOT migrating mirrors.
+> See `.planning/v1.7.x-24-CUTOVER-PLAN.md` for the accurate per-
+> controller inventory and execution checklist. The text below is
+> retained as the 999.44 historical record.
+
 - StageController — **CUT-OVER COMPLETE in 999.44 Plan 06.**
   apply() now pushes mirrored fields to Stage (backgroundColor /
   coordinate-system / fog / eye-distance / focal-distance). Both
