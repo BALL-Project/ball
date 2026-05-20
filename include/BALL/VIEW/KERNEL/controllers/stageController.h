@@ -90,6 +90,11 @@ namespace BALL
 				float eyeDistance() const { return eye_distance_; }
 				float focalDistance() const { return focal_distance_; }
 
+				/// v1.7.x-24 — true while apply() is mutating the Stage.
+				/// Notification slots that could re-trigger apply() must
+				/// early-return on this to break the re-entrancy cascade.
+				bool isApplying() const { return applying_; }
+
 			public Q_SLOTS:
 				/** Push the controller's mirrored state to the Stage/Scene. */
 				void apply();
@@ -128,6 +133,9 @@ namespace BALL
 				float  fog_intensity_;
 				float  eye_distance_;
 				float  focal_distance_;
+
+				// v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
+				bool   applying_;
 		};
 
 	} // namespace VIEW
