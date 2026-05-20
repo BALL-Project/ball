@@ -385,7 +385,15 @@ void ContainerTable::clear_reverse_edge_(ChildRef c)
 
 void ContainerTable::append_child(std::uint32_t parent_idx, ChildRef c)
 {
-	rows_[parent_idx].children.push_back(c);
+	// R36c idempotency: appending the child that is ALREADY the last child
+	// is a no-op. This mirrors v0 Composite::appendChild(), which no-ops
+	// when the argument is already last_child_ -- the insert mirror still
+	// calls through, and without this guard it would push a duplicate
+	// ChildRef. (A child legitimately appears at most once in a parent, so
+	// "ref == current last child" always means a re-append.)
+	std::vector<ChildRef>& kids = rows_[parent_idx].children;
+	if (!kids.empty() && kids.back() == c) return;
+	kids.push_back(c);
 	set_reverse_edge_(parent_idx, c);
 }
 

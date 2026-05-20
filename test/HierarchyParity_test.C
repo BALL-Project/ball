@@ -731,4 +731,37 @@ CHECK(H2a -- positional insert into a rooted container preserves v0 order (R36b)
 	TEST_EQUAL(store->container_child_(r_row, 1).idx, a1.getStoreIndex())  // a1 second
 RESULT
 
+CHECK(H2a -- re-appending an already-last child does not duplicate the edge (R36c))
+	// v0 Composite::appendChild no-ops when the child is already last; the
+	// mirror's append_child must be idempotent for that case (no dup edge).
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	Residue r; r.setName("ALA"); r.setID("ALA");
+	PDBAtom a1; a1.setName("N");
+	r.insert(a1);
+	ch.insert(r);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	MoleculeStore* store = r.getContainerRowStore_();
+	std::uint32_t r_row = r.getContainerRow_();
+	TEST_EQUAL(store->container_child_count_(r_row), 1u)
+
+	// Re-append the atom that is already r's last (only) child -> v0 no-op.
+	r.insert(a1);
+	TEST_EQUAL(store->container_child_count_(r_row), 1u)   // NOT duplicated
+
+	// Same for an already-last container child of the chain.
+	std::uint32_t ch_row = ch.getContainerRow_();
+	TEST_EQUAL(store->container_child_count_(ch_row), 1u)
+	ch.insert(r);                                          // r already last
+	TEST_EQUAL(store->container_child_count_(ch_row), 1u)  // NOT duplicated
+
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
 END_TEST
