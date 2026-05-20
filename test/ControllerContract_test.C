@@ -157,6 +157,19 @@ CHECK(StereoController::apply() persists eye/focal/swap to the Stage)
 	TEST_EQUAL(back.swapSideBySide(), true)
 RESULT
 
+CHECK(StereoController::apply() engages the re-entrancy guard)
+	Stage stage;
+	StereoController c(&stage);
+	c.setEyeDistance(2.0f);
+	bool guard_held_mid_apply = false;
+	QObject::connect(&c, &StereoController::appliedStub, &c, [&]() {
+		guard_held_mid_apply = c.isApplying();
+	});
+	c.apply();
+	TEST_EQUAL(guard_held_mid_apply, true)
+	TEST_EQUAL(c.isApplying(), false)
+RESULT
+
 CHECK(LightController::apply() persists the ambient intensity to the Stage)
 	Stage stage;
 	LightController c(&stage);
@@ -165,6 +178,19 @@ CHECK(LightController::apply() persists the ambient intensity to the Stage)
 
 	LightController back(&stage);
 	TEST_REAL_EQUAL(back.ambientIntensity(), 0.6f)
+RESULT
+
+CHECK(LightController::apply() engages the re-entrancy guard)
+	Stage stage;
+	LightController c(&stage);
+	c.setAmbientIntensity(0.6f);
+	bool guard_held_mid_apply = false;
+	QObject::connect(&c, &LightController::appliedStub, &c, [&]() {
+		guard_held_mid_apply = c.isApplying();
+	});
+	c.apply();
+	TEST_EQUAL(guard_held_mid_apply, true)
+	TEST_EQUAL(c.isApplying(), false)
 RESULT
 
 // Representation-attached controllers. These controllers' apply() are
