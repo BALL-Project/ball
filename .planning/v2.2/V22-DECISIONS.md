@@ -338,3 +338,134 @@ the largest milestone of the project; expect a research phase + many
 review rounds (R30+).
 
 *Post-R29 decision recorded 2026-05-20.*
+
+---
+
+# H0 confirmations + the container fork (2026-05-20)
+
+## D53. Milestone stays v2.2 (no v3.0 rename)
+
+**Decision (maintainer):** keep the milestone labelled **v2.2**,
+overriding D52.1's v3.0-rename recommendation. Rationale: the
+**entire 2.x line is a gradual shift from the 1.x architecture to a
+modernized 2.x SoA kernel.** The handle redesign is a continuation
+of that arc, not a separate major era — so a breaking change within
+2.x is justified by the line's stated purpose. (Semver purists
+would call it 3.0; the project treats 2.x as the modernization
+band.)
+
+**Implication:** v2.2 RELEASE-NOTES must be very loud about the
+breaking changes (the `V22-API-BREAK-LEDGER.md` + a prominent
+"Breaking changes" section), since the minor-version label
+under-signals the magnitude.
+
+## D54. Handle-validity check: BALL_DEBUG **and** Python wrappers
+
+**Decision (maintainer):** stale-handle detection
+(`handle.generation == store slot-generation`) is compiled in:
+- always in `BALL_DEBUG` builds (developer safety), AND
+- always in the **Python/SIP wrapper layer**, regardless of build
+  type — scripting is interactive and error-prone; a stale handle
+  in a Python session must raise a clean exception, not segfault.
+
+Release C++ builds (non-debug, non-Python) pay zero — the
+hot-path deref has no check.
+
+**Implication:** the handle deref has a `#if defined(BALL_DEBUG) ||
+defined(BALL_PYTHON_WRAPPER)` guard around the generation compare.
+The Python wrapper layer is compiled with `BALL_PYTHON_WRAPPER`
+defined. This needs a slot-generation counter on the store (per
+freed/reused slot), distinct from the structural `generation_`
+(per v2.1 D44's correction). Filed into H6 (generation guard).
+
+## D55. OPEN — container model: A1 (containers stay objects) vs A2 (hierarchy as store metadata)
+
+The maintainer's "do we still need atom containers?" + "ranges vs
+array of indices" questions open a fork that `V22-ARCH-HANDLE-MODEL.md`
+(written assuming **A1**) does not yet resolve. **This is the next
+design decision; H1 should not start until it's locked.**
+
+### Grounding facts (from the code, 2026-05-20)
+
+- The store has **no ordering contract** — free-list slot reuse
+  means store-index order ≠ composite-traversal order. "Ranges of
+  atom indices" per container would require a NEW ordering contract
+  + reorder-on-mutation (or reorder-at-compact).
+- `atom.getResidue()/getChain()/getMolecule()` walk UP the parent
+  chain (ancestor-by-type search).
+- `AtomContainer` is a rich object: `getAtom(pos)`, `getAtom(name)`,
+  `countAtoms`, `countAtomContainers`, `getSuperAtomContainer`,
+  `append/prepend/insert`, the atom + container iterators.
+
+### A1 — Containers stay C++ objects; atoms are handle leaves
+
+(What `V22-ARCH-HANDLE-MODEL.md` currently assumes.)
+- Molecule/Chain/Residue/System remain `Composite` objects.
+- Each container holds its atom children as **a per-container array
+  of store indices** (works with the free-list store; no ordering
+  contract needed).
+- `atom.getParent()` → the owning container object via the atom's
+  tree-link record.
+- **Pro:** preserves the `AtomContainer` API surface; smaller blast
+  radius; the container hierarchy code (PDB build, naming, residue
+  semantics) is largely unchanged.
+- **Con:** keeps a parallel object hierarchy alongside the SoA
+  store; not the "fully flat" modern end state. Atom grouping is an
+  array-of-indices per container (fine, but not range-cheap).
+
+### A2 — Hierarchy as store metadata; containers become views
+
+(What "do we still need atom containers?" points at.)
+- The hierarchy becomes **per-atom group-id columns**: each atom
+  row carries `molecule_id`, `chain_id`, `residue_id` (or a single
+  `parent_container_id`). A small side table holds container
+  metadata (residue name, chain id, …).
+- "Atoms of residue R" = a **CSR-style grouping** keyed by
+  `residue_id` (rebuilt on dirty, exactly like the existing bond
+  CSR) — OR a contiguous **range** `[begin_R, end_R)` IF the store
+  adopts an ordering contract (reorder at `compact()` so
+  traversal order == store order).
+- Container "objects" shrink to lightweight **handles/views** over
+  the metadata table; `AtomContainer` as a heavy object largely
+  disappears.
+- **Pro:** the genuinely modern flat-SoA topology (cf. MDAnalysis /
+  OpenMM topology); no per-atom-adjacent object hierarchy; cleanest
+  end state for the 2.x modernization arc.
+- **Con:** the **largest** break — kills the container object
+  hierarchy too, not just atom leaves; rewrites PDB build, naming,
+  residue/chain semantics, and every `getResidue()`-style consumer.
+  Substantially more than A1.
+
+### Ranges vs array (sub-answer, applies to A2)
+
+- **Per-atom group-id columns + CSR grouping** is the
+  free-list-friendly choice — no ordering contract, mirrors the
+  bond CSR already in the store. **Recommended base.**
+- **Contiguous ranges** are an *optional* `compact()`-time
+  optimization (reorder so a container's atoms are contiguous →
+  O(1) range, cache-optimal). Not a correctness requirement; layer
+  it on later if profiling wants it. Making ranges the *base* would
+  force expensive mid-array reordering on every atom insert.
+
+### Recommendation
+
+**A2 is the right end state** for the 2.x modernization arc (it's
+what the question is really asking for), but it is materially bigger
+than A1 and rewrites the container/PDB/naming layer. **A1 is a
+valid, much-lower-risk intermediate that still delivers the D13 atom
+memory win** (the container objects are O(thousands) — they don't
+move the D13 needle; only the atom handle does).
+
+**Pragmatic path:** do **A1 first** (atom/bond handles; containers
+stay objects) — this captures the entire D13 budget win, since the
+budget is per-atom and containers are negligible. Then evaluate A2
+(flatten the hierarchy) as a *separate* follow-on (v2.3 / later)
+once the handle infrastructure is proven. A2 doesn't help D13; it's
+an architecture-cleanliness + traversal-perf play.
+
+Grouping storage when A2 happens: per-atom group-id columns + CSR
+(base); contiguous ranges as a compact()-time optimization.
+
+**This needs the maintainer's call: A1-now-A2-later, or A2-now.**
+
+*H0 confirmations + container fork recorded 2026-05-20.*
