@@ -1610,22 +1610,20 @@ namespace BALL
 			bool selected_system_or_molecule =   (highl.size() == 1)
                 && (RTTI::isKindOf<System>(*lit) || RTTI::isKindOf<Molecule>(*lit) ) ;
 
-			// v1.7.x-12 — SELECTION-DRIVEN enable model (checkbox-free). Enable
-			// Bond Orders / Optimize / Add-Hydrogens only when the user has
-			// selected exactly one operable System/Molecule and BALL is not
-			// busy. This is the principled gate; it works correctly now that
-			// `selected_` (→ getMolecularControlSelection()) holds only the
-			// TOP-LEVEL selected composites (see molecularControl.C
-			// updateSelection). Previously the recursive selection inflated the
-			// highlight count, so highl.size()==1 was false and Optimize / the
-			// (UFG-15-loosened) Add-H gates misbehaved. With the source fixed,
-			// all three share the same gate — "act on what the user selected".
+			// v1.7.x-12 — Optimize / Add-Hydrogens operate on the ONE system,
+			// honoring whatever is selected WITHIN it (whole system, or a
+			// partial atom selection such as some hydrogens). So they enable on
+			// "a single system exists" (selected_system = !busy &&
+			// getSelectedSystem()), NOT on "a System/Molecule ROW is selected"
+			// — the latter wrongly disabled them whenever the user had picked
+			// individual atoms for a local minimization. Bond Orders genuinely
+			// needs exactly one System/Molecule, so it keeps the strict gate.
 			if (bondorders_action_)
 				bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
 			if (optimize_action_)
-				optimize_action_->setEnabled(selected_system_or_molecule && !busy);
+				optimize_action_->setEnabled(selected_system && !busy);
 			if (add_hydrogens_action_)
-				add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
+				add_hydrogens_action_->setEnabled(selected_system && !busy);
 
 			if (new_molecule_action_)
 				new_molecule_action_->setEnabled(!busy);
@@ -4144,15 +4142,6 @@ namespace BALL
 				return;
 			}
 
-			deselect();
-			list<AtomContainer*> containers = getContainers();
-			if (containers.size() < 1)
-			{
-				setStatusbarText((String)tr("Nothing to optimize — load a "
-					"structure first."), true);
-				return;
-			}
-
 			MolecularStructure* ms = MolecularStructure::getInstance(0);
 			if (ms == 0)
 			{
@@ -4161,27 +4150,41 @@ namespace BALL
 				return;
 			}
 
-			AtomContainer* ac = *containers.begin();
-			System* system = (System*)&ac->getRoot();
+			// v1.7.x-12 — optimize the ONE system, honoring the EXISTING
+			// selection. This method used to deselect() and then re-select the
+			// whole system, which CLOBBERED a user's partial selection (e.g.
+			// only some hydrogens picked for a local minimization). Instead:
+			// take the single system (getSelectedSystem() returns the sole
+			// loaded system, or the system of the current selection) and leave
+			// the selection untouched — runMinimization()/MDSimulation()
+			// already restrict movement to the selected atoms via
+			// ForceField::enableSelection() (an empty selection == whole
+			// system, so the no-selection case still optimizes everything).
+			System* system = getMainControl()->getSelectedSystem();
+			if (system == 0)
+			{
+				setStatusbarText((String)tr("Select a single system to "
+					"optimize."), true);
+				return;
+			}
 
 			setStatusbarText((String)tr("Optimizing Structure..."), true);
 
-			// highlight System for minimization
-			ControlSelectionMessage* nsm =  new ControlSelectionMessage();
-			list<Composite*> selection;
-			selection.push_back(system);
-			nsm->setSelection(selection);
-			notify_(nsm);
-
-			float range = 0.05;
-			PreciseTime pt;
-			boost::mt19937 rng(pt.now().getMicroSeconds());
-			boost::uniform_real<double> random(-range, range);
-
-			AtomIterator ait = ac->beginAtom();
-			for (; +ait; ++ait)
+			// The random "shake" (to escape local minima) only makes sense for
+			// a whole-system optimize. With a partial selection we minimize the
+			// selected atoms as-is and leave the rest of the structure undisturbed.
+			if (getMainControl()->getSelection().size() == 0)
 			{
-				ait->getPosition() += Vector3(random(rng), random(rng), random(rng));
+				float range = 0.05;
+				PreciseTime pt;
+				boost::mt19937 rng(pt.now().getMicroSeconds());
+				boost::uniform_real<double> random(-range, range);
+
+				AtomIterator ait = system->beginAtom();
+				for (; +ait; ++ait)
+				{
+					ait->getPosition() += Vector3(random(rng), random(rng), random(rng));
+				}
 			}
 			
 			Position current_ff_id = ms->getForceFieldID();
