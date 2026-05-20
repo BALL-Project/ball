@@ -33,6 +33,8 @@ namespace BALL
 			Q_OBJECT
 
 			Q_PROPERTY(int coloringMethod READ coloringMethod WRITE setColoringMethod NOTIFY coloringMethodChanged)
+			Q_PROPERTY(float valueMin READ valueMin WRITE setValueMin NOTIFY valueMinChanged)
+			Q_PROPERTY(float valueMax READ valueMax WRITE setValueMax NOTIFY valueMaxChanged)
 
 			public:
 				explicit ColoringController(Representation* rep = nullptr,
@@ -43,19 +45,27 @@ namespace BALL
 				void setRepresentation(Representation* rep);
 
 				int coloringMethod() const { return coloring_method_; }
+				float valueMin() const { return value_min_; }
+				float valueMax() const { return value_max_; }
 
 			public Q_SLOTS:
 				void apply();
 				void revert();
 				void setColoringMethod(int m);
+				void setValueMin(float v);
+				void setValueMax(float v);
 
 			Q_SIGNALS:
 				void coloringMethodChanged(int m);
+				void valueMinChanged(float v);
+				void valueMaxChanged(float v);
 				void appliedStub();
 
 			private:
 				Representation* rep_;
 				int coloring_method_;
+				float value_min_;
+				float value_max_;
 		};
 
 	} // namespace VIEW

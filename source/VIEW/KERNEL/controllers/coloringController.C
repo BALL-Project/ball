@@ -25,7 +25,8 @@ namespace BALL
 	{
 
 		ColoringController::ColoringController(Representation* rep, QObject* parent)
-			: QObject(parent), rep_(rep), coloring_method_(0)
+			: QObject(parent), rep_(rep), coloring_method_(0),
+				value_min_(0.0f), value_max_(100.0f)
 		{
 			revert();
 		}
@@ -47,6 +48,18 @@ namespace BALL
 			{
 				coloring_method_ = cm;
 				Q_EMIT coloringMethodChanged(cm);
+			}
+
+			// Pull the value range from the attached processor if it is
+			// one of the value-based (interpolating) color processors.
+			InterpolateColorProcessor* icp =
+				dynamic_cast<InterpolateColorProcessor*>(rep_->getColorProcessor());
+			if (icp != nullptr)
+			{
+				float vmin = icp->getMinValue();
+				if (vmin != value_min_) { value_min_ = vmin; Q_EMIT valueMinChanged(vmin); }
+				float vmax = icp->getMaxValue();
+				if (vmax != value_max_) { value_max_ = vmax; Q_EMIT valueMaxChanged(vmax); }
 			}
 		}
 
@@ -88,6 +101,18 @@ namespace BALL
 				rep_->setColoringMethod(new_method);
 			}
 
+			// Value-range parameters are live setters on the processor,
+			// so a min/max-only change needs no recreate — push them onto
+			// whatever processor is currently attached (newly created or
+			// pre-existing) before the color re-walk.
+			InterpolateColorProcessor* icp =
+				dynamic_cast<InterpolateColorProcessor*>(rep_->getColorProcessor());
+			if (icp != nullptr)
+			{
+				icp->setMinValue(value_min_);
+				icp->setMaxValue(value_max_);
+			}
+
 			// Color-only update: pass rebuild=false so the model
 			// processor isn't re-run. Representation::update with
 			// rebuild=false still re-walks the color processor over
@@ -102,6 +127,20 @@ namespace BALL
 			if (m == coloring_method_) return;
 			coloring_method_ = m;
 			Q_EMIT coloringMethodChanged(m);
+		}
+
+		void ColoringController::setValueMin(float v)
+		{
+			if (v == value_min_) return;
+			value_min_ = v;
+			Q_EMIT valueMinChanged(v);
+		}
+
+		void ColoringController::setValueMax(float v)
+		{
+			if (v == value_max_) return;
+			value_max_ = v;
+			Q_EMIT valueMaxChanged(v);
 		}
 
 	} // namespace VIEW
