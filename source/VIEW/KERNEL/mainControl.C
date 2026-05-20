@@ -729,10 +729,22 @@ namespace BALL
 			primitive_manager_.removedComposite(composite, update_representations_of_parent);
 
 			getSelection().erase(&composite);
-			
-			// remove childs of composite from selection 
-			if (!composite.isSelected() &&
-					composite.containsSelection())
+
+			// remove childs of composite from selection
+			//
+			// v1.7.x-12 (delete-crash fix) — this purge was previously gated
+			// on `!composite.isSelected()`. That was safe only while selecting
+			// a composite did NOT also select its descendants. Since the
+			// v1.7.x-13 selection sync calls selectCompositeRecursive(), a
+			// selected protein carries ALL its chains/residues/atoms in the
+			// selection set too. With the old guard, deleting that protein
+			// (composite.isSelected() == true) SKIPPED the descendant purge,
+			// leaving every descendant as a DANGLING pointer in the selection
+			// set once `delete &composite` freed them — a use-after-free that
+			// crashed in CompositeManager::remove the next time the selection
+			// was iterated. Purge descendants whenever any are selected,
+			// regardless of whether the composite itself is selected.
+			if (composite.containsSelection())
 			{
 				HashSet<Composite*>::Iterator cit = getSelection().begin();
 				list<Composite*> to_remove;
