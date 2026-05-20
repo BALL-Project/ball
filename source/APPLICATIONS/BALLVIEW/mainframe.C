@@ -9,6 +9,8 @@
 
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
 #include <BALL/VIEW/KERNEL/theme/tokens.h>  // Phase 999.41: kIconToolbar
+#include <BALL/VIEW/KERNEL/shortcutRegistry.h>  // v1.7.x-22: tooltip shortcut sweep
+#include <QtCore/QTimer>
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -1090,6 +1092,17 @@ namespace BALL
 						tb->addAction(stop_simulation_action_);
 						tb->addAction(preferences_action_);
 		}
+
+		// v1.7.x-22 — accessibility: append each action's keyboard shortcut to
+		// its tooltip ("Quick Save" → "Quick Save (⌘S)"). Deferred via
+		// singleShot(0) so it runs after the event loop has settled and ALL
+		// modular widgets have registered their shortcuts + loaded any
+		// user-customized key sequences from file. Idempotent, so the
+		// MainControl::show() re-entry path is harmless.
+		QTimer::singleShot(0, this, [this]() {
+			getShortcutRegistry().appendShortcutsToToolTips();
+		});
+
 		// we have changed the child widgets stored in the maincontrol (e.g. toolbars), so we have
 		// to restore the window state again!
 		restoreWindows();

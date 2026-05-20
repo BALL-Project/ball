@@ -53,6 +53,16 @@ namespace BALL
 				///
 				void registerShortcut(String description, QAction* shortcut);
 
+				/** v1.7.x-22 — append each registered action's keyboard shortcut
+				 *  to its tooltip, e.g. "Quick Save" → "Quick Save (⌘S)".
+				 *  Idempotent (skips actions whose tooltip already shows the
+				 *  shortcut) so it is safe to call after shortcuts are loaded /
+				 *  changed. Accessibility sweep: with icon-only toolbars the
+				 *  hover tooltip is the only label, so it should also surface the
+				 *  shortcut.
+				 */
+				void appendShortcutsToToolTips();
+
 				///
 				void clear();
 

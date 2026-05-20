@@ -8,6 +8,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 
 #include <QtGui/QAction>
+#include <QtGui/QKeySequence>
 
 namespace BALL
 {
@@ -209,6 +210,30 @@ namespace BALL
 		size_t ShortcutRegistry::size()
 		{
 			return shortcuts_.size();
+		}
+
+		void ShortcutRegistry::appendShortcutsToToolTips()
+		{
+			for (std::map<String, QAction*>::iterator it = shortcuts_.begin();
+			     it != shortcuts_.end(); ++it)
+			{
+				QAction* action = it->second;
+				if (action == 0) continue;
+
+				const QKeySequence ks = action->shortcut();
+				if (ks.isEmpty()) continue;
+
+				const QString sc = ks.toString(QKeySequence::NativeText);
+				if (sc.isEmpty()) continue;
+
+				QString tip = action->toolTip();
+				// Idempotent — don't append the shortcut twice.
+				if (tip.contains(sc)) continue;
+				// Fall back to the action text if no explicit tooltip was set.
+				if (tip.isEmpty()) tip = action->text();
+
+				action->setToolTip(tip + " (" + sc + ")");
+			}
 		}
 
 		bool ShortcutRegistry::hasDescription(const String& description)
