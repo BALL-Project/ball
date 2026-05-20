@@ -649,6 +649,73 @@ std::size_t MoleculeStore::container_table_size_() const
 	return side_tables_->container_table_.size();
 }
 
+// ============================================================
+// v2.2 H2a (D67/D70/D73): write-side container accessors — the
+// mutation-mirror surface. Bounds-guarded; public-typed.
+// ============================================================
+
+std::uint32_t MoleculeStore::container_create_(ContainerKind kind)
+{
+	return side_tables_->container_table_.allocate(kind);
+}
+
+void MoleculeStore::container_set_name_(std::uint32_t idx, const String& s)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return;
+	t.row(idx).name_offset = t.intern(std::string(s));
+}
+
+void MoleculeStore::container_set_id_(std::uint32_t idx, const String& s)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return;
+	t.row(idx).payload.id_offset = t.intern(std::string(s));
+}
+
+void MoleculeStore::container_set_insertion_code_(std::uint32_t idx, char c)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return;
+	t.row(idx).payload.insertion_code = c;
+}
+
+void MoleculeStore::container_set_ss_type_(std::uint32_t idx, std::uint8_t ty)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return;
+	t.row(idx).payload.ss_type = ty;
+}
+
+void MoleculeStore::container_append_atom_(std::uint32_t row, std::uint32_t atom_idx)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (row == 0 || row >= t.size()) return;
+	t.append_child(row, ChildRef{ChildRef::ATOM, atom_idx});
+}
+
+void MoleculeStore::container_append_container_(std::uint32_t parent_row, std::uint32_t child_row)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (parent_row == 0 || parent_row >= t.size()) return;
+	if (child_row == 0 || child_row >= t.size())   return;
+	t.append_child(parent_row, ChildRef{ChildRef::CONTAINER, child_row});
+}
+
+void MoleculeStore::container_remove_atom_(std::uint32_t row, std::uint32_t atom_idx)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (row == 0 || row >= t.size()) return;
+	t.remove_child(row, ChildRef{ChildRef::ATOM, atom_idx});
+}
+
+void MoleculeStore::container_remove_container_(std::uint32_t parent_row, std::uint32_t child_row)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (parent_row == 0 || parent_row >= t.size()) return;
+	t.remove_child(parent_row, ChildRef{ChildRef::CONTAINER, child_row});
+}
+
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give
 // thread-safe lazy init (C++17 [stmt.dcl] p4).
 //

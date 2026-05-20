@@ -1703,6 +1703,14 @@ B		*/
 		// must include _moleculeStoreInternal.h (otherwise the helper
 		// has no visible internal types — D31b encapsulation gate).
 		void mirrorToSideTable_();
+
+		// v2.2 H2a (D69/D70): mirror a child detach into the owning
+		// MoleculeStore's container table. Called by removeChild() AFTER
+		// the v0 detach. No-op when this (the parent) is being destroyed
+		// (forward-only — defuses the P2.1.1 destruction-cascade trap) or
+		// when this has no container row. Implementation in composite.C
+		// (needs moleculeStore.h for the write accessors).
+		void mirrorRemoveChild_(Composite& child);
 	};
 
 	template <typename T>

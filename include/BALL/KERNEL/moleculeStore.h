@@ -456,6 +456,24 @@ namespace BALL
 		// test for "no parent" without the internal type).
 		static constexpr std::uint32_t CONTAINER_NONE = 0xFFFFFFFFu;
 
+		// v2.2 H2a (D67/D70/D73): write-side container accessors — the
+		// mutation-mirror surface. Take/return ONLY public types so the
+		// CONCEPT-layer mirror (composite.C) and System::adoptSubtree
+		// (system.C) drive the table without naming the internal
+		// ContainerRow/ChildRef/ContainerTable types (D31b boundary).
+		// Forward-only mirror: callers never invoke these from a
+		// destructor cascade (the removeChild hook gates on
+		// being_destroyed_, D69). All idx-bounds-guarded.
+		std::uint32_t container_create_(ContainerKind kind);
+		void container_set_name_(std::uint32_t idx, const String& s);
+		void container_set_id_(std::uint32_t idx, const String& s);
+		void container_set_insertion_code_(std::uint32_t idx, char c);
+		void container_set_ss_type_(std::uint32_t idx, std::uint8_t t);
+		void container_append_atom_(std::uint32_t row, std::uint32_t atom_idx);
+		void container_append_container_(std::uint32_t parent_row, std::uint32_t child_row);
+		void container_remove_atom_(std::uint32_t row, std::uint32_t atom_idx);
+		void container_remove_container_(std::uint32_t parent_row, std::uint32_t child_row);
+
 		//@}
 		/**	@name Live-reference enforcement (D7 amendment, K0.2c, audited K0.4.7)
 

@@ -17,6 +17,7 @@
 // composite.iC, anything #include-able by user code) MUST NOT
 // include this — the CI grep gate enforces.
 #include <BALL/KERNEL/_moleculeStoreInternal.h>
+#include <BALL/KERNEL/moleculeStore.h>   // v2.2 H2a: container write accessors
 
 #include <cstring>       // std::memcpy for handle (un)packing
 #include <type_traits>   // R19 P19-1: is_trivially_copyable static_assert
@@ -209,6 +210,37 @@ namespace BALL
 		n.next_sibling = next_h;
 		n.prev_sibling = prev_h;
 		n.child_count  = static_cast<std::uint32_t>(number_of_children_);
+	}
+
+	// v2.2 H2a (D69/D70): mirror a child detach into the container table.
+	void Composite::mirrorRemoveChild_(Composite& child)
+	{
+		// FORWARD-ONLY: never mirror while THIS (the parent) is being
+		// destroyed (the P2.1.1 cascade trap). The dying parent's rows are
+		// freed wholesale at ~System; v0 remains the source of truth.
+		if (being_destroyed_) return;
+
+		// Resolve this parent's container row in its bound store. No row =>
+		// free-standing / not yet materialised => nothing to mirror (the
+		// table is built at adoption per D73).
+		MoleculeStore* store = getContainerRowStore_();
+		std::uint32_t  parent_row = getContainerRow_();
+		if (store == 0 || parent_row == 0) return;
+
+		// Child is an atom (leaf, addressed by store index) or a container
+		// (addressed by its own row, only if it lives in the SAME store).
+		if (Atom* a = detail::compositeAsAtom_(&child))
+		{
+			store->container_remove_atom_(parent_row, a->getStoreIndex());
+		}
+		else if (child.getContainerRowStore_() == store)
+		{
+			std::uint32_t child_row = child.getContainerRow_();
+			if (child_row != 0)
+			{
+				store->container_remove_container_(parent_row, child_row);
+			}
+		}
 	}
 
 	// default ctor
@@ -1375,12 +1407,19 @@ namespace BALL
 		// update modification time stamp
 		stamp(MODIFICATION);
 
-		// v2.1 P2.1.1 deferred to P2.1.2: removeChild mutation mirror
-		// has the same destruction-order risk as appendChild's
-		// (~Composite -> parent_->removeChild(*this) -> mirror
-		// during partial teardown). Wiring lands in P2.1.2.
 		(void) prev_sibling_to_mirror;
 		(void) next_sibling_to_mirror;
+
+		// v2.2 H2a (D69/D70): mirror the detach into the container table.
+		// FORWARD-ONLY (D45/D60): skip when THIS (the parent) is being
+		// destroyed — during a ~Composite cascade, destroyChildren_ deletes
+		// each child whose ~Composite calls parent_->removeChild(*this) on
+		// this mid-destruction parent; mirroring then would mutate a
+		// half-destroyed parent's row (the P2.1.1 trap). The dying parent's
+		// rows leak (freed wholesale at ~System); v0 stays source of truth.
+		// Explicit removeChild / clear() / destroy() on a LIVE parent
+		// (being_destroyed_ == false) DOES mirror.
+		mirrorRemoveChild_(child);
 
 		return true;
 	}

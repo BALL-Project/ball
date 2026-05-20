@@ -6,6 +6,18 @@
 #include <BALL/KERNEL/moleculeStore.h>   // K0.4.1: full type for unique_ptr<MoleculeStore>
 #include <BALL/KERNEL/atom.h>            // K0.4.2: adopt(Atom&)
 #include <BALL/KERNEL/bond.h>            // K0.4.2: bond migration in adopt
+// v2.2 H2a (D73): container-row materialisation needs the container types
+// (RTTI kind + payload getters) and the public container-kind enum.
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/nucleicAcid.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/nucleotide.h>
+#include <BALL/KERNEL/secondaryStructure.h>
+#include <BALL/KERNEL/fragment.h>
+#include <BALL/KERNEL/containerKind.h>
+#include <BALL/COMMON/rtti.h>
 #include <string>                        // K0.4.2: std::string for name copy
 #include <mutex>                         // K0.4.6: orphan-store mutex
 
@@ -214,6 +226,78 @@ namespace BALL
 	//   slot. By this point, all bonds touching it have either migrated
 	//   to dst (and been removed from src) or stayed in src with the
 	//   slot's partner still live.
+	namespace
+	{
+		// v2.2 H2a (D73): RTTI container-kind discrimination (most-derived
+		// first). Atom is NOT a container -- never reached here.
+		ContainerKind kindOfContainer_(const Composite& c)
+		{
+			if (RTTI::isKindOf<Protein>(&c))            return ContainerKind::PROTEIN;
+			if (RTTI::isKindOf<NucleicAcid>(&c))        return ContainerKind::NUCLEIC_ACID;
+			if (RTTI::isKindOf<Molecule>(&c))           return ContainerKind::MOLECULE;
+			if (RTTI::isKindOf<Residue>(&c))            return ContainerKind::RESIDUE;
+			if (RTTI::isKindOf<Nucleotide>(&c))         return ContainerKind::NUCLEOTIDE;
+			if (RTTI::isKindOf<SecondaryStructure>(&c)) return ContainerKind::SECONDARY_STRUCTURE;
+			if (RTTI::isKindOf<Chain>(&c))              return ContainerKind::CHAIN;
+			if (RTTI::isKindOf<Fragment>(&c))           return ContainerKind::FRAGMENT;
+			return ContainerKind::NONE;
+		}
+
+		// v2.2 H2a (D73): recursively materialise the container subtree
+		// rooted at `c` into dst's container table, binding each v0
+		// container to its row. Atoms are appended by their store index
+		// (already migrated to dst by the time this runs). Returns c's row.
+		// detail::compositeAsAtom_ is the gate-approved atom test (the
+		// D41.1 grep gate forbids dynamic_cast<Atom*>/isKindOf<Atom> in
+		// source/KERNEL).
+		std::uint32_t materialiseContainer_(AtomContainer& c, MoleculeStore* dst)
+		{
+			std::uint32_t row;
+			if (c.getContainerRowStore_() == dst && c.getContainerRow_() != 0)
+			{
+				row = c.getContainerRow_();             // idempotent re-entry
+			}
+			else
+			{
+				row = dst->container_create_(kindOfContainer_(c));
+				c.setContainerRowBinding_(dst, row);
+			}
+
+			dst->container_set_name_(row, c.getName());
+			if (const Protein* p = dynamic_cast<const Protein*>(&c))
+				dst->container_set_id_(row, p->getID());
+			else if (const NucleicAcid* na = dynamic_cast<const NucleicAcid*>(&c))
+				dst->container_set_id_(row, na->getID());
+			else if (const Residue* r = dynamic_cast<const Residue*>(&c))
+			{
+				dst->container_set_id_(row, r->getID());
+				dst->container_set_insertion_code_(row, r->getInsertionCode());
+			}
+			else if (const Nucleotide* nt = dynamic_cast<const Nucleotide*>(&c))
+			{
+				dst->container_set_id_(row, nt->getID());
+				dst->container_set_insertion_code_(row, nt->getInsertionCode());
+			}
+			else if (const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(&c))
+				dst->container_set_ss_type_(row, static_cast<std::uint8_t>(ss->getType()));
+
+			for (Position i = 0; i < c.getDegree(); ++i)
+			{
+				Composite* child = c.getChild(static_cast<Index>(i));
+				if (Atom* a = detail::compositeAsAtom_(child))
+				{
+					dst->container_append_atom_(row, a->getStoreIndex());
+				}
+				else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
+				{
+					std::uint32_t child_row = materialiseContainer_(*cc, dst);
+					dst->container_append_container_(row, child_row);
+				}
+			}
+			return row;
+		}
+	} // anonymous namespace
+
 	void System::adoptSubtree(AtomContainer& container)
 	{
 		MoleculeStore* dst = store_.get();
@@ -317,6 +401,23 @@ namespace BALL
 				{
 					e.src->release_atom(e.src_idx);
 				}
+			}
+		}
+
+		// Pass 4 (v2.2 H2a / D73): materialise the adopted container subtree
+		// into dst's container table. Atoms now report their dst store index
+		// (migrateTo_ updated them in Pass 1), so ATOM ChildRefs are built
+		// against the new indices. Then link the adopted root under its v0
+		// parent's row -- but only if the parent is a container with a row in
+		// dst (a top-level molecule's parent is the System, which is never a
+		// container row, so it stays a root: parent_container_idx == NONE).
+		std::uint32_t root_row = materialiseContainer_(container, dst);
+		Composite* parent = container.getParent();
+		if (AtomContainer* pac = dynamic_cast<AtomContainer*>(parent))
+		{
+			if (pac->getContainerRowStore_() == dst && pac->getContainerRow_() != 0)
+			{
+				dst->container_append_container_(pac->getContainerRow_(), root_row);
 			}
 		}
 	}

@@ -485,4 +485,133 @@ CHECK(layout pins -- ChildRef / ContainerPayload small + ContainerRow NONE senti
 	TEST_EQUAL(ContainerTable::NONE, 0xFFFFFFFFu)
 RESULT
 
+// ===== H2a: the PRODUCTION mirror (adoption materialisation + removeChild
+// hook + destruction guard), exercised through the real v0 API rather than
+// the by-hand mirror() helper above. =====
+
+CHECK(H2a -- production adoption (System::insert) mirrors the v0 tree)
+	System sys;
+	Protein prot;  prot.setName("PROT");  prot.setID("1ABC");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA"); r1.setID("ALA"); r1.setInsertionCode('A');
+	Residue r2;    r2.setName("GLY"); r2.setID("GLY");
+	SecondaryStructure ss; ss.setName("H1"); ss.setType(SecondaryStructure::HELIX);
+	Residue r3;    r3.setName("SER"); r3.setID("SER");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	PDBAtom a3; a3.setName("C");
+	PDBAtom a4; a4.setName("O");
+	r1.insert(a1); r1.insert(a2);
+	r2.insert(a3);
+	r3.insert(a4);
+	ss.insert(r3);
+	ch.insert(r1); ch.insert(r2); ch.insert(ss);
+	prot.insert(ch);
+	sys.insert(prot);   // production adoption materialises the whole subtree
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	TEST_NOT_EQUAL(store, (MoleculeStore*)nullptr)
+	std::uint32_t root = prot.getContainerRow_();
+	TEST_NOT_EQUAL(root, 0u)
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	std::string v0_desc; descV0(prot, v0_desc);
+	TEST_EQUAL(descTable(t, root), v0_desc)
+	TEST_EQUAL(t.row(root).parent_container_idx, ContainerTable::NONE)  // root
+RESULT
+
+CHECK(H2a -- removeChild mirrors a container + an atom detach)
+	System sys;
+	Protein prot;  prot.setName("PROT");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA"); r1.setID("ALA");
+	Residue r2;    r2.setName("GLY"); r2.setID("GLY");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	PDBAtom a3; a3.setName("C");
+	r1.insert(a1); r1.insert(a2);
+	r2.insert(a3);
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	// Detach a residue (container child) from the chain.
+	TEST_EQUAL(ch.removeChild(r2), true)
+	std::string d1; descV0(prot, d1);
+	TEST_EQUAL(descTable(t, root), d1)
+
+	// Detach an atom from a residue.
+	TEST_EQUAL(r1.removeChild(a1), true)
+	std::string d2; descV0(prot, d2);
+	TEST_EQUAL(descTable(t, root), d2)
+RESULT
+
+CHECK(H2a -- destroy() on a LIVE container mirrors its detach from the live parent)
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	Residue r; r.setName("ALA"); r.setID("ALA");
+	PDBAtom a; a.setName("N");
+	r.insert(a);
+	ch.insert(r);
+	prot.insert(ch);
+	sys.insert(prot);
+
+	MoleculeStore* store = ch.getContainerRowStore_();
+	std::uint32_t ch_row = ch.getContainerRow_();
+	TEST_EQUAL(store->container_child_count_(ch_row), 1u)   // chain has residue r
+
+	// destroy() on a LIVE residue first detaches it from its LIVE parent
+	// (chain.removeChild(r)) -> the H2a hook mirrors that (chain row loses
+	// r), since the chain is not being destroyed (D69). NB: emptying r's
+	// OWN row depends on the clear()/destroyChildren_ direct-detach branch
+	// for non-auto-deletable children, which is H2b scope (D70/D72) -- not
+	// asserted here.
+	r.destroy();
+	TEST_EQUAL(store->container_child_count_(ch_row), 0u)
+RESULT
+
+CHECK(H2a -- delete cascade detaches from the live parent + is heap-safe)
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	prot.insert(ch);
+	sys.insert(prot);
+
+	MoleculeStore* store = ch.getContainerRowStore_();
+	std::uint32_t ch_row = ch.getContainerRow_();
+
+	Residue* rh = new Residue; rh->setName("HEAP"); rh->setID("HIS");
+	PDBAtom* ah = new PDBAtom; ah->setName("CA");
+	rh->insert(*ah);
+	ch.insert(*rh);
+	TEST_EQUAL(store->container_child_count_(ch_row), 1u)
+
+	// ~Residue sets being_destroyed_ then detaches from the LIVE chain
+	// (mirrors: chain loses rh), then deletes its atom WITHOUT mirroring
+	// (rh being destroyed -> P2.1.1 trap avoided). Must not crash.
+	delete rh;
+	TEST_EQUAL(store->container_child_count_(ch_row), 0u)
+RESULT
+
+CHECK(H2a -- ~System wholesale teardown is crash-free under the guard)
+	{
+		System sys;
+		Protein* prot = new Protein; prot->setName("P");
+		Chain*   ch   = new Chain;   ch->setName("A");
+		Residue* r    = new Residue; r->setName("ALA");
+		PDBAtom* a    = new PDBAtom; a->setName("N");
+		r->insert(*a);
+		ch->insert(*r);
+		prot->insert(*ch);
+		sys.insert(*prot);
+	}  // ~System cascade-tears-down the owned subtree; every removeChild on
+	   // a being-destroyed parent skips the mirror (D69). No crash == pass.
+	TEST_EQUAL(true, true)
+RESULT
+
 END_TEST
