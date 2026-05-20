@@ -1,7 +1,12 @@
 # BALL v2.2 - Codex Review Round 33 (H1b Planning Gate)
 
-**Status:** NEEDS-FIXES  
-**Verdict:** Do not implement H1b until D63/D66 are tightened.  
+**Status:** Complete (R33 NEEDS-FIXES → revised → R33b GO)
+**Verdict:** R33 = NEEDS-FIXES; **R33b = GO -- implement H1b** (see the
+R33b re-review section appended below). All 5 findings (D63 H4-alias,
+D66a boundary, D64 EBO/layout, wrong-kind construction, u64 generation)
+closed; one non-blocking caveat: extend the D31b CI grep gate to also
+guard `containerHandle.h` against including `_moleculeStoreInternal.h`
+(tracked as an H1b implementation item).
 **Reviewer:** Codex CLI 0.128.0  
 **Subject:** H1b container value-handle types over the H1a `ContainerTable`
 
@@ -125,3 +130,17 @@ Precise fix list before H1b implementation:
 5. Decide/document `uint32_t` generation wrap policy.
 
 After those edits, the bounded H1b implementation can proceed without needing H2 traversal or v0 mirror wiring.
+
+## R33b re-review (post-fix)
+
+**Verdict:** GO -- implement H1b.
+
+Reviewed current branch tip `4a2722bc6` (`docs(v2.2 H1b): address R33 -- H4 migration audit + public type boundary`). The R33 blockers are closed in the revised H1b plan; no new blocking design hole found.
+
+- R33 HIGH (D63 H4 aliasing): **CLOSED**. The design now explicitly rejects `using Residue = ResidueHandle` as source-transparent, calls H4 a per-kind migration audit, requires deleting the v0 class plus forward/friend declarations and v0-only specializations, renames `ResidueHandle` to a real `Residue` class, then adds only the reverse compatibility alias `using ResidueHandle = Residue` (`.planning/v2.2/V22-H1b-DESIGN.md:52-72`). This direction avoids the forward-declaration/friend hazard because the canonical name remains a class, not an alias (`.planning/v2.2/V22-H1b-DESIGN.md:63-70`).
+- R33 HIGH (D66 public/private boundary): **CLOSED**. D66a moves `ContainerKind` to new public `containerKind.h`, has `_moleculeStoreInternal.h` include that header and stop defining a second enum, introduces public `ContainerChildRef`, and keeps `ChildRef` internal with conversion at scalar accessor boundaries (`.planning/v2.2/V22-H1b-DESIGN.md:193-208`). The accessor list returns only public types and is defined out-of-line in `moleculeStore.C`, which is consistent with the current PImpl pattern in `moleculeStore.h` (`.planning/v2.2/V22-H1b-DESIGN.md:209-225`, `include/BALL/KERNEL/moleculeStore.h:40-46`, `include/BALL/KERNEL/moleculeStore.h:571-587`). `containerHandle.h` is constrained to include only `moleculeStore.h` and `containerKind.h`, not `_moleculeStoreInternal.h` (`.planning/v2.2/V22-H1b-DESIGN.md:226-229`, `.planning/v2.2/V22-H1b-DESIGN.md:246-250`). The current internal shapes being hidden are exactly `ContainerKind`, `ChildRef`, `ContainerRow`, and `ContainerTable` (`include/BALL/KERNEL/_moleculeStoreInternal.h:445-456`, `include/BALL/KERNEL/_moleculeStoreInternal.h:463-475`, `include/BALL/KERNEL/_moleculeStoreInternal.h:499-510`, `include/BALL/KERNEL/_moleculeStoreInternal.h:517-553`). The listed scalar accessors cover the D66 getter surface: kind/name/parent/children/selection/generation/freed/table-size plus id/insertion-code/secondary-structure payload (`.planning/v2.2/V22-H1b-DESIGN.md:178-184`, `.planning/v2.2/V22-H1b-DESIGN.md:214-225`).
+- R33 MEDIUM (D64 EBO/layout): **CLOSED**. D64 now says the base is non-empty, so this is not EBO; inheritance is only for getter reuse, typed handles add no data members, `sizeof(ContainerHandleBase) == 24` is pinned, and every typed handle must match the base size in both header and test (`.planning/v2.2/V22-H1b-DESIGN.md:87-117`). The 24 B size is acceptable because the 16 B target is explicitly limited to high-volume Atom/Bond handles, while molecular containers are low-volume (`.planning/v2.2/V22-H1b-DESIGN.md:87-94`).
+- R33 MEDIUM (wrong-kind typed-handle construction): **CLOSED**. The raw typed constructor has a debug `assert()` against `container_kind_`, release misuse is documented UB under the existing Atom-style reference contract, and the normal narrowing path is release-checked `as<TypedHandle>()`/`asResidue()` returning a null typed handle on kind mismatch, with no RTTI (`.planning/v2.2/V22-H1b-DESIGN.md:119-131`). The H1b test deliverable also requires correct-kind and wrong-kind narrowing coverage (`.planning/v2.2/V22-H1b-DESIGN.md:251-256`).
+- R33 LOW (u32 generation wrap): **CLOSED**. D65 widens `ContainerRow::generation` to `std::uint64_t`, makes it monotonic per slot, bumps on release, preserves on reuse, and explicitly treats wrap as a non-issue for container slots (`.planning/v2.2/V22-H1b-DESIGN.md:143-155`). This corrects the current H1a implementation, where reuse/reset still zeroes the row generation (`source/KERNEL/moleculeStore.C:304-319`, `source/KERNEL/moleculeStore.C:326-331`; current field is `std::uint32_t` at `include/BALL/KERNEL/_moleculeStoreInternal.h:503-508`).
+
+**New findings:** none. One implementation-review note: the existing D31b workflow grep is still the older `CompositeNode*` / `composite_nodes_` gate over composite and iterator headers (`.github/workflows/ci-v2.yml:98-117`), so it will stay green if the H1b include rule is followed, but it does not by itself police future `ChildRef`/`ContainerRow` leaks in `containerHandle.h`. The design now states the correct boundary explicitly, so this is not a planning blocker.
