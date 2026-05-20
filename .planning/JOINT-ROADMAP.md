@@ -124,3 +124,47 @@ one PR per phase; all 3 platforms green every commit; every keyboard shortcut su
 ---
 *Joint roadmap collated 2026-05-14. Canonical sources remain `ball/.planning/ROADMAP.md`
 (Milestone 1) and `ball/.planning/seeds/SEED-001-*` (Milestone 2).*
+
+---
+
+## 2.x roadmap addition — full libBALL / libVIEW+BALLView / pyBALL separation
+
+**Added:** 2026-05-20 (maintainer directive, during v2.2 H2a).
+**Status:** roadmap item (not yet scheduled; sequence after the v2.2
+handle redesign stabilises the libBALL API surface).
+
+**Goal:** clean, independent separation of the three deliverables into
+their own repos + build systems + test suites:
+
+1. **libBALL (BALL 2.x)** — the C++ molecular-modelling kernel + domain
+   layers (COMMON…KERNEL…FORMAT/STRUCTURE/MOLMEC/QSAR/…). Its own repo,
+   CMake build, and ctest suite. No VIEW/Qt/Python dependency. This is
+   the foundation the other two consume.
+2. **libVIEW + BALLView** — the Qt/OpenGL rendering library + the GUI
+   application. Own repo + build + tests; depends on libBALL as an
+   external (installed/find_package) dependency, NOT a monorepo subdir.
+3. **pyBALL** — Python bindings, depending on libBALL (and libVIEW where
+   visualization bindings are needed). Own repo + build + tests.
+
+**Requirements:**
+- Each component builds independently from a clean checkout, consuming
+  its dependencies via a stable installed interface (CMake
+  `find_package(BALL)` / exported targets), not in-tree source coupling.
+- Independent CI per repo (libBALL CI must not require Qt; BALLView CI
+  pulls a built libBALL; pyBALL CI pulls libBALL/libVIEW).
+- Independent versioning + release cadence, with a documented
+  compatibility matrix (which BALLView/pyBALL works with which libBALL).
+- Independent test suites (libBALL ctest stands alone; VIEW/Python tests
+  live with their components).
+
+**Sequencing note:** do this AFTER the v2.2 handle redesign lands — the
+handle API is the libBALL public surface BALLView + pyBALL will consume,
+so separating before it stabilises would churn three repos. The v2.2
+work already keeps SIP/Python off and VIEW deferred to H7, which is
+compatible with a later clean split.
+
+**Open questions for scheduling:**
+- Repo topology: 3 sibling repos vs. libBALL repo + 2 dependents using
+  submodules/`FetchContent`/system-install.
+- Where the shared CMake package config + version files live.
+- Migration of the existing monorepo history (subtree split vs. fresh).
