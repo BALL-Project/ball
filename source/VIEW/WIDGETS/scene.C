@@ -1610,30 +1610,22 @@ namespace BALL
 			bool selected_system_or_molecule =   (highl.size() == 1)
                 && (RTTI::isKindOf<System>(*lit) || RTTI::isKindOf<Molecule>(*lit) ) ;
 
+			// v1.7.x-12 — SELECTION-DRIVEN enable model (checkbox-free). Enable
+			// Bond Orders / Optimize / Add-Hydrogens only when the user has
+			// selected exactly one operable System/Molecule and BALL is not
+			// busy. This is the principled gate; it works correctly now that
+			// `selected_` (→ getMolecularControlSelection()) holds only the
+			// TOP-LEVEL selected composites (see molecularControl.C
+			// updateSelection). Previously the recursive selection inflated the
+			// highlight count, so highl.size()==1 was false and Optimize / the
+			// (UFG-15-loosened) Add-H gates misbehaved. With the source fixed,
+			// all three share the same gate — "act on what the user selected".
 			if (bondorders_action_)
 				bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
-			// v1.7.x-11 — the toolbar Optimize icon "did nothing": it was gated
-			// on selected_system_or_molecule, i.e. EXACTLY ONE highlighted
-			// System/Molecule. Since the v1.7.x-13 selection sync selects a
-			// protein together with all its descendants, getMolecularControl-
-			// Selection() returns >1 composite, so highl.size()==1 is false and
-			// the action stayed DISABLED — a greyed-out button silently ignores
-			// clicks (so even the new status-bar feedback never fired). This is
-			// the very gate UFG-15 already loosened for Add-Hydrogens (below);
-			// apply the same fix to Optimize. optimizeStructure() works on the
-			// selected system (and falls back to all containers), so the
-			// "a system exists & not busy" gate is correct.
 			if (optimize_action_)
-				optimize_action_->setEnabled(selected_system && !busy);
-			// UFG-15 (v1.7.0-rc3): align toolbar Add-Hydrogens enable-gate with
-			// the menu version (MolecularStructure::checkMenu: one_system &&
-			// composites_muteable). The prior selected_system_or_molecule gate
-			// was strictly narrower (required exactly-one System/Molecule in
-			// the highlight list) and silently suppressed the toolbar precisely
-			// when users expected it. Now both menu and toolbar enable whenever
-			// a system exists and BALL is not busy.
+				optimize_action_->setEnabled(selected_system_or_molecule && !busy);
 			if (add_hydrogens_action_)
-				add_hydrogens_action_->setEnabled(selected_system && !busy);
+				add_hydrogens_action_->setEnabled(selected_system_or_molecule && !busy);
 
 			if (new_molecule_action_)
 				new_molecule_action_->setEnabled(!busy);

@@ -835,23 +835,35 @@ namespace BALL
 			selected_.clear();
 			context_composite_ = 0;
 
-			std::set<QTreeWidgetItem*> highlighted;
-			QList<QTreeWidgetItem *> items = getSelectedItems();
-			QList<QTreeWidgetItem *>::iterator it = items.begin();
-			for (; it != items.end(); it++)
+			// v1.7.x-12 — selection-driven model (checkbox-free). `selected_`
+			// holds ONLY the TOP-LEVEL highlighted composites: an item is
+			// included iff NONE of its ancestors (any level) is also
+			// highlighted. The previous guard only checked the IMMEDIATE
+			// parent and depended on parent-before-child iteration order, so
+			// descendants leaked into the list. That broke two things:
+			//   • operation enable-gates that expect "what the user picked"
+			//     (e.g. the Optimize/Add-H "exactly one System/Molecule"
+			//     check saw size>1 and stayed disabled), and
+			//   • delete-from-tree, where the leaked descendants were freed
+			//     when their ancestor was deleted → use-after-free.
+			// This list propagates to MainControl::getMolecularControl-
+			// Selection() (via the ControlSelectionMessage below) and is the
+			// single source of truth every operation + enable-gate reads. The
+			// FULL recursive highlight set used for 3D rendering is maintained
+			// separately in getSelection() via newSelection_/
+			// selectCompositeRecursive further down — so the visual highlight
+			// of a whole protein is unaffected.
+			QList<QTreeWidgetItem*> items = getSelectedItems();
+			std::set<QTreeWidgetItem*> sel_items(items.begin(), items.end());
+			for (QTreeWidgetItem* item : items)
 			{
-				QTreeWidgetItem* item = *it;
-				QTreeWidgetItem* parent = item->parent();
-				// we have to prevent inserting childs of already selected parents, 
-				// otherwise we get serious trouble
-				if (parent != 0 && highlighted.find(parent) != highlighted.end())
+				bool ancestor_selected = false;
+				for (QTreeWidgetItem* p = item->parent(); p != 0; p = p->parent())
 				{
-					highlighted.insert(item);
-					continue;
+					if (sel_items.count(p) != 0) { ancestor_selected = true; break; }
 				}
-
-				selected_.push_back(((MyTreeWidgetItem*) item)->composite);
-				highlighted.insert(item);
+				if (!ancestor_selected)
+					selected_.push_back(((MyTreeWidgetItem*) item)->composite);
 			}
 
 			if (selected_.size() > 0) context_composite_ = *selected_.begin();
