@@ -213,7 +213,7 @@ R30 said H1 + H3 are too coarse. Refined:
 |---|---|---|
 | **H1a** | (part of H1) | container row schema + container table + ordered-edge `ChildRef` storage + container orphan store — store-side only, no consumer change, parity test skeleton. |
 | **H1b** | (part of H1) | Atom/Bond/container value-handle TYPES reading from the store, alongside v0 objects (dual existence; v0 = source of truth per D60). |
-| **H2** | traversal API | handle-yielding iterators + `apply` over `ChildRef` edges + full mutation-mirror set + `HierarchyParity_test` green. |
+| **H2** | traversal API | handle-yielding iterators + `apply` over `ChildRef` edges + full mutation-mirror set + `HierarchyParity_test` green. **Carry-overs from H1a (R32):** (a) container-PROPERTY migration in `migrate_subtree_from` (H1a moves topology+payload+selection only; properties deferred) + a parity test for it; (b) the mutation-mirror wiring MUST use `ContainerTable::reparent_child` (remove-before-add) for moves/splices, never the bare attach ops, to avoid stale old-parent edges. |
 | **H3a** | consumer migration | KERNEL + STRUCTURE clusters. |
 | **H3b** | consumer migration | MOLMEC/QSAR/SCORING/DOCKING. |
 | **H3c** | consumer migration | **FORMAT (PDB/naming/residue — the heavy one)** + NMR/ENERGY/SOLVATION. |

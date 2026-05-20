@@ -414,10 +414,14 @@ CHECK(D56 -- detached subtree migrates orphan->System table)
 	ContainerTable& src = src_store.sideTables_().container_table_;
 	std::uint32_t src_root = mirror(ch, src);
 	std::string src_desc = descTable(src, src_root);
+	std::size_t src_live_before = src.live_count();   // chain + 2 residues = 3
+	TEST_EQUAL(src_live_before, 3u)
 
-	// Migrate into a destination table with an identity atom remap (the
-	// real System::adoptSubtree supplies the actual atom slot remap; the
-	// table-migration mechanics are what we exercise here).
+	// Migrate into a destination table with a COMPLETE atom remap (here an
+	// identity map -- the explicit same-index/test mode; the real
+	// System::adoptSubtree supplies the actual atom-slot remap). Build it
+	// by collecting every migrated atom (a complete map is mandatory: a
+	// missing entry throws, per R32 HIGH).
 	MoleculeStore dst_store;
 	ContainerTable& dst = dst_store.sideTables_().container_table_;
 	std::unordered_map<std::uint32_t, std::uint32_t> identity;
@@ -436,6 +440,42 @@ CHECK(D56 -- detached subtree migrates orphan->System table)
 	TEST_EQUAL(dst.row(dst_r1).parent_container_idx, dst_root)
 	const ChildRef dst_atom = dst.row(dst_r1).children[0];
 	TEST_EQUAL(dst.atom_parent(dst_atom.idx), dst_r1)
+
+	// R32 HIGH: it is a true MOVE -- the source subtree is released. All
+	// source rows freed and source atom reverse edges cleared.
+	TEST_EQUAL(src.live_count(), 0u)
+	TEST_EQUAL(src.is_freed(src_root), true)
+	TEST_EQUAL(src.atom_parent(a1.getStoreIndex()), ContainerTable::NONE)
+	TEST_EQUAL(src.atom_parent(a2.getStoreIndex()), ContainerTable::NONE)
+RESULT
+
+CHECK(R32 -- reparent_child does remove-before-add (no stale old-parent edge))
+	MoleculeStore store;
+	ContainerTable& t = store.sideTables_().container_table_;
+	std::uint32_t chA = t.allocate(ContainerKind::CHAIN);
+	std::uint32_t chB = t.allocate(ContainerKind::CHAIN);
+	std::uint32_t res = t.allocate(ContainerKind::RESIDUE);
+
+	// res starts under chA, with one atom under res.
+	t.append_child(chA, ChildRef(ChildRef::CONTAINER, res));
+	t.append_child(res, ChildRef(ChildRef::ATOM, 7));
+	TEST_EQUAL(t.row(res).parent_container_idx, chA)
+	TEST_EQUAL(t.row(chA).children.size(), 1u)
+
+	// Reparent the container child chA->chB: chA loses it, chB gains it,
+	// reverse edge updated, NO stale edge left in chA.
+	t.reparent_child(chB, ChildRef(ChildRef::CONTAINER, res));
+	TEST_EQUAL(t.row(chA).children.size(), 0u)
+	TEST_EQUAL(t.row(chB).children.size(), 1u)
+	TEST_EQUAL(t.row(chB).children[0].idx, res)
+	TEST_EQUAL(t.row(res).parent_container_idx, chB)
+
+	// Reparent an atom child likewise: old parent edge removed.
+	std::uint32_t res2 = t.allocate(ContainerKind::RESIDUE);
+	t.reparent_child(res2, ChildRef(ChildRef::ATOM, 7));
+	TEST_EQUAL(t.atom_parent(7), res2)
+	TEST_EQUAL(t.row(res).children.size(), 0u)
+	TEST_EQUAL(t.row(res2).children.size(), 1u)
 RESULT
 
 CHECK(layout pins -- ChildRef / ContainerPayload small + ContainerRow NONE sentinel)

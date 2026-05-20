@@ -419,6 +419,19 @@ bool ContainerTable::remove_child(std::uint32_t parent_idx, ChildRef c)
 	return false;
 }
 
+// R32 LOW: checked reparent. Detach `c` from its current parent (read
+// from the reverse edge) before re-attaching, so no stale old-parent
+// edge survives. Used by H2's move/splice mirror wiring.
+void ContainerTable::reparent_child(std::uint32_t new_parent, ChildRef c)
+{
+	std::uint32_t old_parent = (c.kind == ChildRef::CONTAINER)
+		? rows_[c.idx].parent_container_idx
+		: atom_parent(c.idx);
+	if (old_parent != NONE && old_parent < rows_.size())
+		remove_child(old_parent, c);
+	append_child(new_parent, c);
+}
+
 // D59/D46: walk parent_container_idx up from `start` (inclusive),
 // adjusting each row's selection_count by delta (+1 select, -1 deselect).
 // Underflow on an unbalanced deselect clamps at 0.
@@ -483,20 +496,54 @@ std::uint32_t ContainerTable::migrate_one_(
 		}
 		else
 		{
+			// R32 HIGH: a missing remap entry is a hard contract violation
+			// (cross-store migration requires a complete atom-slot map; an
+			// identity map is the explicit same-index/test mode). Silently
+			// falling back to the source index would mis-attach the edge to
+			// an unrelated destination atom slot.
 			auto it = atom_remap.find(c.idx);
-			std::uint32_t new_atom = (it == atom_remap.end()) ? c.idx : it->second;
-			append_child(new_idx, ChildRef{ChildRef::ATOM, new_atom});
+			if (it == atom_remap.end())
+			{
+				throw Exception::InvalidArgument(__FILE__, __LINE__,
+					"ContainerTable::migrate_subtree_from: atom_remap is "
+					"missing an entry for a migrated atom child; a complete "
+					"atom-slot remap is required (identity map for same-index "
+					"moves).");
+			}
+			append_child(new_idx, ChildRef{ChildRef::ATOM, it->second});
 		}
 	}
 	return new_idx;
 }
 
+// R32 HIGH: post-order release of the migrated source subtree. Reads each
+// row's children before freeing it; clears source atom reverse edges for
+// migrated atoms; frees source container rows.
+void ContainerTable::release_source_subtree_(ContainerTable& src, std::uint32_t src_idx)
+{
+	const std::vector<ChildRef> children = src.rows_[src_idx].children;
+	for (const ChildRef& c : children)
+	{
+		if (c.kind == ChildRef::CONTAINER)
+			release_source_subtree_(src, c.idx);
+		else
+			src.atom_parent_.erase(c.idx);  // migrated atom no longer parented here
+	}
+	src.release(src_idx);
+}
+
 std::uint32_t ContainerTable::migrate_subtree_from(
-	const ContainerTable& src, std::uint32_t src_root,
+	ContainerTable& src, std::uint32_t src_root,
 	const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap)
 {
+	// D56 migration is orphan-store -> System-store; a self-move is
+	// nonsensical and would free rows we just copied from.
+	assert(&src != this);
 	std::uint32_t new_root = migrate_one_(src, src_root, atom_remap);
 	rows_[new_root].parent_container_idx = NONE;  // caller re-parents under dest tree
+	// R32 HIGH: this is a true MOVE -- release the detached source subtree
+	// so the orphan table doesn't leak rows and stale source aliases fail.
+	release_source_subtree_(src, src_root);
 	return new_root;
 }
 

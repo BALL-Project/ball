@@ -572,6 +572,14 @@ namespace BALL
 		// Remove a child edge; clears the reverse edge. Returns true if found.
 		bool remove_child(std::uint32_t parent_idx, ChildRef c);
 
+		// Checked reparent (remove-before-add): detach `c` from its CURRENT
+		// parent (read from the reverse edge) then append under `new_parent`.
+		// Unlike the bare append/prepend/insert ops -- which assume `c` is
+		// not already attached elsewhere -- this leaves no stale old-parent
+		// edge. H2's mutation-mirror wiring uses this for moves/splices
+		// (R32 LOW: bare attach ops must be remove-before-add for reparents).
+		void reparent_child(std::uint32_t new_parent, ChildRef c);
+
 		// --- reverse edge: atom -> immediate container -------------------
 		// (kept as a map in H1a; promoted to a per-atom column at the flip)
 		std::uint32_t atom_parent(std::uint32_t atom_idx) const
@@ -615,18 +623,27 @@ namespace BALL
 			}
 		}
 
-		// --- D56 detached-subtree migration ------------------------------
-		// Copy the container subtree rooted at `src_root` out of `src` into
-		// *this, remapping container indices (and ChildRef CONTAINER idx +
-		// parent_container_idx) through a freshly built old->new map, and
-		// remapping ATOM child indices through `atom_remap` (the atom slot
-		// map the caller's adoptSubtree already produced; identity is legal
-		// for a same-index test). Names/ids are re-interned into this pool;
-		// payload, selection_count, and container properties are copied.
-		// The returned new-root row has parent_container_idx = NONE; the
-		// caller links it under the destination tree with a ChildRef op.
+		// --- D56 detached-subtree migration (a true MOVE) ----------------
+		// Move the container subtree rooted at `src_root` out of `src` into
+		// *this. The container rows are copied into *this -- remapping
+		// container indices (CONTAINER ChildRef idx + parent_container_idx)
+		// through a freshly built old->new map, and ATOM child indices
+		// through `atom_remap` (the atom slot map the caller's atom-side
+		// adoptSubtree already produced) -- then the SOURCE subtree is
+		// released: source rows are freed and source atom reverse edges for
+		// the migrated atoms are cleared. After the call `src` no longer
+		// owns the subtree (stale source aliases see freed/NONE rows; R32
+		// HIGH). Names/ids are re-interned into this pool; payload +
+		// selection_count are copied. Container PROPERTY migration (D59) is
+		// DEFERRED TO H2 with the full mutation-mirror wiring -- it is NOT
+		// copied here. `atom_remap` MUST be complete for every migrated atom
+		// (an identity map is the explicit same-index/test mode); a missing
+		// entry throws InvalidArgument rather than silently mis-attaching
+		// (R32 HIGH). The returned new-root row has parent_container_idx =
+		// NONE; the caller links it under the destination tree. Precondition:
+		// &src != this.
 		std::uint32_t migrate_subtree_from(
-			const ContainerTable& src,
+			ContainerTable& src,
 			std::uint32_t src_root,
 			const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap);
 
@@ -643,10 +660,13 @@ namespace BALL
 		void set_reverse_edge_(std::uint32_t parent_idx, ChildRef c);
 		// Helper: clear the reverse edge for a detached child.
 		void clear_reverse_edge_(ChildRef c);
-		// Recursive worker for migrate_subtree_from.
+		// Recursive copy worker for migrate_subtree_from (reads `src` only).
 		std::uint32_t migrate_one_(
 			const ContainerTable& src, std::uint32_t src_idx,
 			const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap);
+		// Post-order release of the migrated source subtree: clears source
+		// atom reverse edges for migrated atoms and frees source rows.
+		void release_source_subtree_(ContainerTable& src, std::uint32_t src_idx);
 	};
 
 	// v2.1 P1.2: side-table state owned by every MoleculeStore. PImpl
