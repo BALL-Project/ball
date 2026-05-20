@@ -242,7 +242,7 @@ reporting cleanup with no public API or CI-policy change.
 | P6.3 | v2.1.0-rc1 tag | Pre-tag review R28 |
 | P6.4 | Bake period | Wait for issue reports; iterate to rc2/rc3 if needed |
 | P6.5 | v2.1.0 final | Tag + GitHub release |
-| P6.6 | **Branch strategy after final tag (R21 P21-10 / R21-F4)** | Tag from `v2.1`. Merge `v2.1` → `master` (fast-forward if master hasn't diverged; otherwise rebase or merge-with-explicit-resolution). **DO NOT merge `v2.1` into `v2.0`** — v2.0 is the maintenance branch for v2.0.x patch releases; shared critical fixes are cherry-picked across `v2.0` ↔ `v2.1` ↔ `master` as needed per D32b's policy. After v2.1.0 final, the v2.2 milestone branch forks from `v2.1.0` tag (mirroring how `v2.1` forked from `v2.0.0`). |
+| P6.6 | **Branch strategy after final tag (R21 P21-10; maintainer decision 2026-05-20 = option B)** | Tag from `v2.1` (done: `v2.1.0`). **`v2.1` is NOT merged into `master`.** `master` stays v1.x; `v2.1` remains the v2.x line (mirrors how `v2.0.0` was left — tagged on its branch, master untouched). **DO NOT merge `v2.1` into `v2.0`** either — v2.0 is the v2.0.x maintenance branch; shared critical fixes are cherry-picked across `v2.0` ↔ `v2.1` per D32b. **The v2.2 milestone branch forks from the `v2.1.0` tag.** Whether/when the v2.x line becomes `master`'s trunk is deferred to a future milestone decision (option A remains available later). |
 
 ## Codex review cadence (per D33b, revised R21 P21-12)
 

@@ -165,4 +165,11 @@ v2.2 is the thin-handle flip. Its substrate is in place:
 4. **Targets**: `sizeof(Atom)` 368 → ~32 B; full-fat ≤160 B/atom
    (D13 met); MSVC EBO verification gates the sizeof claim (D34d).
 
-*Authored 2026-05-20 P6.*
+**Branch strategy (D29-REV, maintainer 2026-05-20 = option B):**
+`v2.1` is NOT merged into `master`. `master` stays v1.x; `v2.1`
+remains the v2.x line (same as `v2.0.0`). **The v2.2 milestone
+branch forks from the `v2.1.0` tag.** Promoting the v2.x line to
+`master`'s trunk is a deferred future-milestone decision, not part
+of v2.1.
+
+*Authored 2026-05-20 P6. Branch decision B recorded 2026-05-20.*

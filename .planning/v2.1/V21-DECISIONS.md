@@ -303,8 +303,15 @@ Budget: ~1 day per round for the review + fix cycle.
 **Impact:**
 - `origin/v2.1` is the v2.1 development branch.
 - v2.1 PRs target `v2.1`, not `master`.
-- After v2.1.0 final tag, merge v2.1 → master (or rebase master to
-  fast-forward, depending on what's accumulated on master).
+
+**D29-REV (maintainer decision 2026-05-20, option B):** After the
+`v2.1.0` final tag, `v2.1` is **NOT** merged into `master`.
+`master` stays v1.x; `v2.1` remains the v2.x line (same handling as
+`v2.0.0` — tagged on its branch, master untouched). The v2.2
+milestone forks from the `v2.1.0` tag. Promoting the v2.x line to
+`master`'s trunk (the original D29 "merge to master" intent /
+roadmap option A) is deferred to a future milestone decision; it is
+not part of v2.1.
 
 ---
 
