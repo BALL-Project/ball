@@ -120,14 +120,17 @@ CHECK(K0.7.3 100k-atom budget breakdown: store columns + handles)
 
 	// Gate 2: full-fat total (every atom has a live handle) is reported
 	// but NOT gated — the D2/D3/D4 thin-stub overhead pushes this over
-	// budget by design; full reduction is deferred to v2.1 per
-	// KERNEL-V2-DECISIONS.md. We document the gap so it's visible.
+	// budget by design; full reduction is deferred to v2.2 (thin-handle
+	// flip) per V21-DECISIONS.md. v2.1 actually nudged sizeof(Atom)
+	// 360 -> 368 B via the P1.3 transient side-table slot, which the
+	// v2.2 flip removes along with the D2/D3/D4 bases. We document the
+	// gap so it's visible.
 	if (total_per_atom > 160.0)
 	{
 		std::cerr << "  [K0.7.3] NOTE: full-fat budget " << total_per_atom
 			<< " B/atom exceeds D13 (160). Dominated by sizeof(Atom)="
-			<< sizeof(Atom) << " B handle (D2/D3/D4 thin-stub overhead;"
-			<< " full reduction deferred to v2.1)." << std::endl;
+			<< sizeof(Atom) << " B handle (D2/D3/D4 thin-stub overhead +"
+			<< " P1.3 slot; reduction is the v2.2 thin-handle flip)." << std::endl;
 	}
 RESULT
 

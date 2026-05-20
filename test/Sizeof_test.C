@@ -31,11 +31,12 @@ CHECK(K0.7.1 sizeof Atom handle pinned <= 512 bytes; surprise documented)
 	// children pointers, modification stamps, RTTI string),
 	// PropertyManager (named_properties_ vector + BitVector),
 	// Selectable (selection bit), plus virtual table.
-	// Initial measurement on Darwin arm64 release: 360 B. The 512 B
-	// upper bound here pins against silent regression; tighter
-	// budgeting + the option to fully delete D2/D3/D4 (currently
-	// deferred to v2.1) is what would bring this down.
-	std::cerr << "  [K0.7.1] sizeof(Atom)           = " << sizeof(Atom) << " B (observed: 360 on Darwin arm64)" << std::endl;
+	// Measurement history on Darwin arm64 release: v2.0 = 360 B;
+	// v2.1 = 368 B (+8 B from the P1.3 transient composite_handle_
+	// packed_ side-table slot). The 512 B upper bound pins against
+	// silent regression; the v2.2 thin-handle flip (delete D2/D3/D4
+	// inheritance) is what brings this down to the ~24-32 B target.
+	std::cerr << "  [K0.7.1] sizeof(Atom)           = " << sizeof(Atom) << " B (v2.0=360, v2.1=368 incl. P1.3 slot; v2.2 target ~32)" << std::endl;
 	TEST_EQUAL(sizeof(Atom) <= 512, true)
 RESULT
 
@@ -43,8 +44,10 @@ CHECK(K0.7.1 sizeof Bond handle pinned <= 512 bytes)
 	// Bond similar story: own data ~32 B (two Atom*, two store_idx,
 	// order/type byte, MoleculeStore*, bond_record_idx); rest is
 	// Composite + PropertyManager + Selectable overhead.
-	// Initial measurement on Darwin arm64 release: 288 B.
-	std::cerr << "  [K0.7.1] sizeof(Bond)           = " << sizeof(Bond) << " B (observed: 288 on Darwin arm64)" << std::endl;
+	// Measurement history on Darwin arm64 release: v2.0 = 288 B;
+	// v2.1 = 296 B (+8 B, same P1.3 composite_handle_packed_ slot,
+	// since Bond is also a Composite). v2.2 thin-handle target ~16 B.
+	std::cerr << "  [K0.7.1] sizeof(Bond)           = " << sizeof(Bond) << " B (v2.0=288, v2.1=296 incl. P1.3 slot; v2.2 target ~16)" << std::endl;
 	TEST_EQUAL(sizeof(Bond) <= 512, true)
 RESULT
 
