@@ -1322,7 +1322,8 @@ now is scaffolding v2.2 would rework.
 
 **Impact:**
 - v2.1 P4 scope is now: P4.0 (done) + P4.1 V21-LOAD-BATCH (done,
-  16× load) + P4.3 V21-ELEMENT-INSTANCE-ID + P4.4 schema bump.
+  7–14× load; ~16× single-run no-props) + P4.3 V21-ELEMENT-INSTANCE-ID
+  + P4.4 schema bump.
 - The R16 C-B7 known gap (Bond PropertyManager not in K0.6 JSON)
   carries forward to v2.2. Documented in RELEASE-NOTES-v2.1.md
   with `P4.2-FINDINGS.md` as the rationale.
@@ -1394,8 +1395,9 @@ P5.4 are deferred to v2.2.
 - D25 (generation guard, debug-only) is **superseded for v2.1**
   by D44 — it moves to v2.2 with the corrected slot-generation
   framing.
-- v2.1 still ships honestly per D40: JSON load 16× + bond
-  round-trip + RTTI cleanup + reproducible bench numbers, plus
-  v2.2 prep. No new public API, no fragile CI perf system.
+- v2.1 still ships honestly per D40: JSON load 7–14× (median-of-5;
+  the single-run no-props figure was ~16×) + bond round-trip +
+  RTTI cleanup + reproducible bench numbers, plus v2.2 prep. No new
+  public API, no fragile CI perf system.
 
 *Seventh revision 2026-05-20 post-R26. Next: execute P5.3.*
