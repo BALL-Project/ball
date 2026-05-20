@@ -4128,14 +4128,35 @@ namespace BALL
 
 		void Scene::optimizeStructure()
 		{
-			if (getMainControl()->isBusy()) return;
+			// v1.7.x-11 — the toolbar Optimize icon used to fail SILENTLY on
+			// every early return ("clicking the icon does nothing"). The most
+			// common cause is a previous calculation still running: this
+			// method runs minimize → MD → minimize and the threads are
+			// asynchronous, so a second click lands here while isBusy(). Give
+			// the user explicit feedback for every reason we bail.
+			if (getMainControl()->isBusy())
+			{
+				setStatusbarText((String)tr("Optimization is already running — "
+					"please wait for it to finish."), true);
+				return;
+			}
 
 			deselect();
 			list<AtomContainer*> containers = getContainers();
-			if (containers.size() < 1) return;
+			if (containers.size() < 1)
+			{
+				setStatusbarText((String)tr("Nothing to optimize — load a "
+					"structure first."), true);
+				return;
+			}
 
 			MolecularStructure* ms = MolecularStructure::getInstance(0);
-			if (ms == 0) return;
+			if (ms == 0)
+			{
+				setStatusbarText((String)tr("Cannot optimize: the molecular "
+					"structure engine is unavailable."), true);
+				return;
+			}
 
 			AtomContainer* ac = *containers.begin();
 			System* system = (System*)&ac->getRoot();
