@@ -74,6 +74,45 @@ CHECK(StageController::apply() persists the background colour to the Stage)
 	TEST_REAL_EQUAL(static_cast<float>(bg.getBlue()),  255.0f / 255.0f)
 RESULT
 
+// v1.7.x-24/25 — the re-entrancy guard contract. The guard is the
+// v1.7.x-13 freeze fix: a notification emitted mid-apply() must NOT be
+// able to synchronously re-run the mutation. apply() emits appliedStub()
+// at its tail *while the ControllerApplyGuard is still held*, so a slot
+// connected there observes isApplying() == true and any apply() it calls
+// re-enters and must early-return. These checks lock that in — without
+// them the guard could silently regress (the cut-over would still pass the
+// round-trip checks above, but the freeze would be back).
+CHECK(StageController::apply() is shielded against re-entrancy (v1.7.x-13 guard))
+	Stage stage;
+	StageController c(&stage, nullptr);
+	c.setFogIntensity(0.42f);
+
+	// From inside apply() (via appliedStub), confirm the guard is held, then
+	// attempt a re-entrant apply() with a DIFFERENT fog value. The guard must
+	// make that nested call a no-op, so the Stage keeps the value the outer
+	// apply() already pushed (0.42), not the 0.99 staged inside the slot.
+	bool guard_held_mid_apply = false;
+	bool attempted_reentry = false;
+	QObject::connect(&c, &StageController::appliedStub, &c, [&]() {
+		if (attempted_reentry) return;          // one-shot
+		attempted_reentry = true;
+		guard_held_mid_apply = c.isApplying();
+		c.setFogIntensity(0.99f);               // change the mirror only
+		c.apply();                              // re-entrant => must be shielded
+	});
+
+	c.apply();
+
+	TEST_EQUAL(guard_held_mid_apply, true)            // guard active during the emit
+	TEST_EQUAL(c.isApplying(), false)                 // RAII cleared it on return
+	TEST_REAL_EQUAL(stage.getFogIntensity(), 0.42f)   // shielded nested apply() pushed nothing
+
+	// The controller is not wedged: a later, non-reentrant apply() pushes the
+	// pending mirror value (0.99) normally.
+	c.apply();
+	TEST_REAL_EQUAL(stage.getFogIntensity(), 0.99f)
+RESULT
+
 CHECK(CameraController::apply() persists viewpoint + look-at to the Stage camera)
 	Stage stage;
 	CameraController c(&stage);
@@ -88,6 +127,20 @@ CHECK(CameraController::apply() persists viewpoint + look-at to the Stage camera
 	TEST_REAL_EQUAL(back.lookAt().x(),   4.0f)
 	TEST_REAL_EQUAL(back.lookAt().y(),   5.0f)
 	TEST_REAL_EQUAL(back.lookAt().z(),   6.0f)
+RESULT
+
+CHECK(CameraController::apply() engages the re-entrancy guard)
+	Stage stage;
+	CameraController c(&stage);
+	c.setPosition(QVector3D(1.0f, 2.0f, 3.0f));
+	c.setLookAt(QVector3D(4.0f, 5.0f, 6.0f));
+	bool guard_held_mid_apply = false;
+	QObject::connect(&c, &CameraController::appliedStub, &c, [&]() {
+		guard_held_mid_apply = c.isApplying();
+	});
+	c.apply();
+	TEST_EQUAL(guard_held_mid_apply, true)   // guard set for the duration of apply()
+	TEST_EQUAL(c.isApplying(), false)        // and RAII-cleared on return
 RESULT
 
 CHECK(StereoController::apply() persists eye/focal/swap to the Stage)
@@ -133,6 +186,19 @@ CHECK(ModelController::apply() persists model/precision/transparency to the Repr
 	TEST_EQUAL(back.transparency(), 64)
 RESULT
 
+CHECK(ModelController::apply() engages the re-entrancy guard)
+	Representation rep;
+	ModelController c(&rep);
+	c.setModelType(MODEL_VDW);
+	bool guard_held_mid_apply = false;
+	QObject::connect(&c, &ModelController::appliedStub, &c, [&]() {
+		guard_held_mid_apply = c.isApplying();
+	});
+	c.apply();
+	TEST_EQUAL(guard_held_mid_apply, true)
+	TEST_EQUAL(c.isApplying(), false)
+RESULT
+
 CHECK(ColoringController::apply() persists the coloring method to the Representation)
 	Representation rep;
 	ColoringController c(&rep);
@@ -141,6 +207,19 @@ CHECK(ColoringController::apply() persists the coloring method to the Representa
 
 	ColoringController back(&rep);
 	TEST_EQUAL(back.coloringMethod(), COLORING_CHAIN)
+RESULT
+
+CHECK(ColoringController::apply() engages the re-entrancy guard)
+	Representation rep;
+	ColoringController c(&rep);
+	c.setColoringMethod(COLORING_CHAIN);
+	bool guard_held_mid_apply = false;
+	QObject::connect(&c, &ColoringController::appliedStub, &c, [&]() {
+		guard_held_mid_apply = c.isApplying();
+	});
+	c.apply();
+	TEST_EQUAL(guard_held_mid_apply, true)
+	TEST_EQUAL(c.isApplying(), false)
 RESULT
 
 // MaterialController is NOT checked here: its apply() bails when
