@@ -229,3 +229,112 @@ the same gate that caught R17's BLOCKERs for v2.1. Then W1
 (mutation wiring) begins.
 
 *Authored 2026-05-20 W0.*
+
+---
+
+# Post-R29 strategic decision (2026-05-20)
+
+## D52. Option A — full handle-based API redesign (resolves R29 NO-GO)
+
+R29 NO-GO'd D45–D51: they answered the mechanical Q1–Q7 but not
+the conceptual core — after deleting `Atom : Composite`, BALL still
+passes atoms everywhere as `Composite&`/`Composite*` (iterators,
+visitors, predicates, processors, `dynamic_cast`). A side-table
+"tree node" is not a C++ `Composite` object.
+
+**Maintainer decision (2026-05-20): Option A.** Commit to the full
+handle-based API redesign. Atoms (and bonds) become value handles,
+not C++ objects in the `Composite` hierarchy. The traversal /
+visitor / predicate / iterator API surface is redesigned to operate
+on handles. `Atom : Composite` inheritance is deleted.
+
+This is the only option that actually reaches the D13 budget
+(option B re-introduces a per-atom heap object; option C/D leave
+D13 open). The maintainer accepts that this is an
+**architecture-wide, breaking, multi-phase effort** (the R20/R29
+wall is the codebase confirming the scope).
+
+### D52.1 — Version: this is v3.0, not v2.2
+
+A full handle redesign that breaks the public `Composite&`/`Atom&`
+API across all of BALL is, by semantic versioning, a **MAJOR**
+bump. **Recommendation: rename the milestone v2.2 → v3.0.** The
+`v2.2` branch + planning are carried forward as `v3.0` (the work is
+identical; only the label changes). Pending maintainer
+confirmation; until then the branch stays `v2.2` and docs say
+"v3.0 (currently on the v2.2 branch)".
+
+### D52.2 — The handle model (keystone)
+
+Detailed in `V22-ARCH-HANDLE-MODEL.md`. Summary:
+- `Atom` / `Bond` become small **value handles** `(store*, idx,
+  generation)` — copyable, ~16 B, no base classes.
+- All atom state (payload + tree links + properties + selection +
+  bonds) lives in the store / side tables, reached via the handle.
+- **Container Composites** (Molecule/Chain/Residue/SecondaryStructure/
+  Protein/NucleicAcid/Nucleotide/Fragment/System) **stay as C++
+  objects** (they are O(thousands), not O(100k) — their memory is
+  irrelevant). The tree is heterogeneous: containers are objects;
+  atoms are handle leaves.
+- Iteration / visitor / processor APIs gain handle-based forms
+  (`UnaryProcessor<Atom>` invoked with an `Atom` by value);
+  `AtomIterator` yields `Atom` by value.
+- `detail::compositeAsAtom_` is replaced by a tree-node-kind check
+  that constructs an `Atom` handle (no `dynamic_cast`).
+
+### D52.3 — R29's 7 required decisions, resolved under A
+
+1. **Identity model:** handle-based (D52.2). Atoms are value
+   handles; container Composites stay objects.
+2. **`Composite*`→`Atom*` replacement:** kind-tagged tree node +
+   handle construction; no cross-hierarchy `dynamic_cast`.
+3. **Iterator/traversal/visitor rewrite scope:** full — the
+   `Composite` traversal templates + `UnaryProcessor<Atom>`
+   dispatch + AtomIterator are redesigned for handles. This is the
+   bulk of the work and the source of the consumer breaks.
+4. **Destruction-mode rules:** D45 refined — the store owns all
+   atom rows; container teardown frees its child *handle list* (no
+   per-atom object dtor cascade, because atoms aren't objects).
+   The P2.1.1 trap dissolves: there are no per-Atom destructors
+   running mid-cascade.
+5. **Property API break list:** `NamedProperty&` /
+   `NamedPropertyIterator` / `BitVector&` mutable-reference returns
+   are **broken** (replaced by value accessors + a handle-scoped
+   property view). Enumerated in `V22-API-BREAK-LEDGER.md`.
+6. **Heterogeneous-tree storage:** containers inline; atoms in
+   `composite_nodes_`; the traversal API resolves both via a
+   uniform node abstraction that yields either a `Composite*`
+   (container) or an `Atom` handle (atom leaf).
+7. **SIP/Python policy:** Python/SIP stays **off** for the v3.0
+   handle phases (PyBALL v2 is a separate post-v3.0 effort); CI
+   proves SIP is not built. The bindings are rewritten when PyBALL
+   v2 happens, against the handle API.
+
+### D52.4 — D45–D51 status under A
+
+- **D45** (store owns rows) — REINFORCED + extended: with atoms as
+  handles, there are no per-Atom dtors at all; the trap dissolves.
+- **D46** (selection counters) — kept, on container Composites
+  (which stay objects); atom selection in `selected_bits_` bumps
+  container counters.
+- **D47** (AtomIterator unchanged) — SUPERSEDED: AtomIterator is
+  redesigned to yield handles. "Unchanged" was the wrong goal.
+- **D48** (adopt migrates side-table state) — kept.
+- **D49** (full PropertyManager forwarding) — SUPERSEDED by D52.3-5:
+  the mutable-reference surface is a controlled break, not a
+  transparent forward.
+- **D50** (controlled break) — ESCALATED: v3.0 is openly a breaking
+  release; the ledger now has an a-priori expected-break list
+  (D52.3-5).
+- **D51** (Bond unify) — kept, now coherent (Bond is also a handle).
+
+### D52.5 — Phasing reset for the redesign scale
+
+The W0–W7 phase plan in the kickoff is replaced by the
+handle-redesign phasing in `V22-ARCH-HANDLE-MODEL.md` (research →
+handle type → traversal/visitor API → consumer migration in module
+clusters → property surface → bond unify → VIEW → release). This is
+the largest milestone of the project; expect a research phase + many
+review rounds (R30+).
+
+*Post-R29 decision recorded 2026-05-20.*
