@@ -188,6 +188,14 @@ namespace BALL
 			/// Return true, if a Representation is currently beeing updated
 			bool updateRunning() const ;
 
+			/// v1.7.x-29 follow-up — diagnostic. When the update pipeline is
+			/// busy, log which of the three update sets is non-empty
+			/// (to_update_ / beeing_updated_ / beeing_rendered_) with a context
+			/// label, so a stuck-busy lockout (delete/select refused, toolbar
+			/// greyed) self-reports its cause in the log instead of needing a
+			/// live debugger. No-op when the pipeline is idle.
+			void logUpdateState(const char* context) const;
+
 			///
 			bool startRendering(Representation* rep);
 

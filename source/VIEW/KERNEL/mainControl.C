@@ -1693,6 +1693,7 @@ namespace BALL
 			if (getRepresentationManager().updateRunning())
 			{
 				setStatusbarText((String)tr("Could not delete Representation while update is running!"), true);
+				getRepresentationManager().logUpdateState("Representation delete"); // v1.7.x-29 self-diagnosis
 				return false;
 			}
 

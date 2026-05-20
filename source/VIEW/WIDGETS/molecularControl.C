@@ -1644,6 +1644,7 @@ namespace BALL
 		{
 			if(getMainControl()->isBusy()) {
 				setStatusbarText(tr("No changes allowed, while simulation is running or creating new representations!"), true);
+				getMainControl()->getRepresentationManager().logUpdateState("tree delete"); // v1.7.x-29 self-diagnosis
 				return;
 			}
 			was_delete_ = true;
@@ -1886,6 +1887,7 @@ namespace BALL
 			{
 				VIEW::getMainControl()->setStatusbarText(
 					(String)tr("Cannot select items now!"), true);
+				getMainControl()->getRepresentationManager().logUpdateState("tree selection"); // v1.7.x-29 self-diagnosis
 				return;
 			}
 		}

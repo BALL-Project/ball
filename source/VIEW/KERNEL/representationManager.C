@@ -667,12 +667,42 @@ bool RepresentationManager::updateRunning() const
 {
  	if (!update_mutex_.tryLock()) return true;
 
-	bool running = to_update_.size() > 0 	|| 
-			 beeing_updated_.size() > 0 			|| 
+	bool running = to_update_.size() > 0 	||
+			 beeing_updated_.size() > 0 			||
 			 beeing_rendered_.size() > 0;
 
  	update_mutex_.unlock();
 	return running;
+}
+
+void RepresentationManager::logUpdateState(const char* context) const
+{
+	// v1.7.x-29 follow-up — self-diagnosing instrument for the stuck-busy
+	// lockout. Called where a mutation is refused because updateRunning() is
+	// true; logs which of the three update sets is non-empty so a recurrence
+	// names its own cause (no live debugger needed). Non-blocking: if the
+	// mutex is held we report that rather than wait.
+	if (!update_mutex_.tryLock())
+	{
+		Log.warn() << "[update-pipeline] " << (context ? context : "")
+		           << " refused: update_mutex_ held (a worker is mid-update)." << std::endl;
+		return;
+	}
+
+	Size n_to_update      = to_update_.size();
+	Size n_beeing_updated = beeing_updated_.size();
+	Size n_beeing_rendered = beeing_rendered_.size();
+	update_mutex_.unlock();
+
+	if (n_to_update == 0 && n_beeing_updated == 0 && n_beeing_rendered == 0)
+		return; // idle — nothing to report
+
+	Log.warn() << "[update-pipeline] " << (context ? context : "")
+	           << " refused while updateRunning(): to_update=" << n_to_update
+	           << " beeing_updated=" << n_beeing_updated
+	           << " beeing_rendered=" << n_beeing_rendered
+	           << " (if these never drain, the app is locked out — see v1.7.x-29)."
+	           << std::endl;
 }
 
 
