@@ -16,15 +16,19 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/systemJson.h>
 #include <BALL/KERNEL/PTE.h>
+#include "BenchStats.h"        // v2.1 P5.3 median-of-N reporting
 #include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <vector>
 ///////////////////////////
 
 using namespace BALL;
 using clk = std::chrono::steady_clock;
+
+namespace { constexpr int kBenchRuns = 5; }   // v2.1 P5.3 median-of-N
 
 namespace
 {
@@ -79,40 +83,49 @@ CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITHOUT per-atom properties)
 	TEST_EQUAL(sys.countAtoms(),     N)
 	TEST_EQUAL(sys.countMolecules(), n_mols)
 
-	std::ostringstream os;
-	auto t0 = clk::now();
-	saveSystemJSON(sys, os);
-	auto t1 = clk::now();
-	const double save_ms      = std::chrono::duration<double, std::milli>(t1 - t0).count();
-	const std::size_t out_len = os.str().size();
+	// v2.1 P5.3 (V21-MEDIAN-OF-N-BENCH): time kBenchRuns saves + loads,
+	// report median + p99 + MAD + CoV, and gate on the MEDIAN sample
+	// (reproducible vs single-run). Existing fixed thresholds kept
+	// (D44 — no pinned-baseline CI comparator in v2.1).
+	std::string serialized;
+	std::vector<double> save_samples, load_samples;
+	std::size_t out_len = 0;
+	for (int run = 0; run < kBenchRuns; ++run)
+	{
+		std::ostringstream os;
+		auto t0 = clk::now();
+		saveSystemJSON(sys, os);
+		auto t1 = clk::now();
+		save_samples.push_back(std::chrono::duration<double, std::milli>(t1 - t0).count());
+		serialized = os.str();
+		out_len = serialized.size();
+	}
+	for (int run = 0; run < kBenchRuns; ++run)
+	{
+		System dst;
+		std::istringstream is(serialized);
+		auto t2 = clk::now();
+		loadSystemJSON(dst, is);
+		auto t3 = clk::now();
+		load_samples.push_back(std::chrono::duration<double, std::milli>(t3 - t2).count());
+		TEST_EQUAL(dst.countAtoms(),     N)
+		TEST_EQUAL(dst.countMolecules(), n_mols)
+	}
+
+	const BALLTest::BenchStats save_st = BALLTest::computeBenchStats(save_samples);
+	const BALLTest::BenchStats load_st = BALLTest::computeBenchStats(load_samples);
 	const double bytes_per_atom = double(out_len) / double(N);
+	std::cerr << "  [K0.7.4] save(100k, no props): " << (out_len / 1024)
+		<< " KB, " << bytes_per_atom << " B/atom JSON" << std::endl;
+	BALLTest::reportBenchStats("save(100k, no props)", save_st);
+	BALLTest::reportBenchStats("load(100k, no props)", load_st);
 
-	std::cerr << "  [K0.7.4] save(100k, no props)  : " << save_ms << " ms, "
-		<< (out_len / 1024) << " KB, " << bytes_per_atom << " B/atom JSON" << std::endl;
-
-	// Load round-trip + time it.
-	System dst;
-	std::istringstream is(os.str());
-	auto t2 = clk::now();
-	loadSystemJSON(dst, is);
-	auto t3 = clk::now();
-	const double load_ms = std::chrono::duration<double, std::milli>(t3 - t2).count();
-	std::cerr << "  [K0.7.4] load(100k, no props)  : " << load_ms << " ms" << std::endl;
-
-	TEST_EQUAL(dst.countAtoms(),     N)
-	TEST_EQUAL(dst.countMolecules(), n_mols)
-
-	// K0.8 + 2026-05-18 (Codex R9 finding 4, partial calibration):
-	// gates were 5000ms / 30000ms (K0.8) -> 1500ms / 10000ms.
-	// v2.1 P4.1 (V21-LOAD-BATCH, 2026-05-20): the loadSystemJSON
-	// O(n^2) CSR-rebuild was fixed (insert bucket 3414ms -> 13ms).
-	// Local post-fix: load(no-props) 220ms (was ~3588ms = 16x
-	// faster). Load gate tightened from 10000 to 2000ms: that's
-	// ~9x headroom over local + CI variance, and STILL catches the
-	// O(n^2) regression (which would bring load back to ~3500ms+,
-	// exceeding 2000). Save unchanged.
-	TEST_EQUAL(save_ms < 1500.0, true)
-	TEST_EQUAL(load_ms < 2000.0, true)
+	// K0.8 -> v2.1 P4.1: O(n^2) CSR rebuild fixed (load 16x faster,
+	// ~220ms median local). Gates kept at 1500/2000ms: ample headroom
+	// over local+CI variance, still catch the O(n^2) regression
+	// (~3500ms+). Gate on the MEDIAN (P5.3).
+	TEST_EQUAL(save_st.median < 1500.0, true)
+	TEST_EQUAL(load_st.median < 2000.0, true)
 RESULT
 
 CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITH per-atom properties)
@@ -121,33 +134,43 @@ CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITH per-atom properties)
 	System sys;
 	build_(sys, N, n_mols, /*with_properties=*/true);
 
-	std::ostringstream os;
-	auto t0 = clk::now();
-	saveSystemJSON(sys, os);
-	auto t1 = clk::now();
-	const double save_ms      = std::chrono::duration<double, std::milli>(t1 - t0).count();
-	const std::size_t out_len = os.str().size();
+	// v2.1 P5.3: median-of-N (see no-props CHECK above).
+	std::string serialized;
+	std::vector<double> save_samples, load_samples;
+	std::size_t out_len = 0;
+	for (int run = 0; run < kBenchRuns; ++run)
+	{
+		std::ostringstream os;
+		auto t0 = clk::now();
+		saveSystemJSON(sys, os);
+		auto t1 = clk::now();
+		save_samples.push_back(std::chrono::duration<double, std::milli>(t1 - t0).count());
+		serialized = os.str();
+		out_len = serialized.size();
+	}
+	for (int run = 0; run < kBenchRuns; ++run)
+	{
+		System dst;
+		std::istringstream is(serialized);
+		auto t2 = clk::now();
+		loadSystemJSON(dst, is);
+		auto t3 = clk::now();
+		load_samples.push_back(std::chrono::duration<double, std::milli>(t3 - t2).count());
+		TEST_EQUAL(dst.countAtoms(), N)
+	}
+
+	const BALLTest::BenchStats save_st = BALLTest::computeBenchStats(save_samples);
+	const BALLTest::BenchStats load_st = BALLTest::computeBenchStats(load_samples);
 	const double bytes_per_atom = double(out_len) / double(N);
+	std::cerr << "  [K0.7.4] save(100k, +3 props/atom): " << (out_len / 1024)
+		<< " KB, " << bytes_per_atom << " B/atom JSON" << std::endl;
+	BALLTest::reportBenchStats("save(100k, +3 props/atom)", save_st);
+	BALLTest::reportBenchStats("load(100k, +3 props/atom)", load_st);
 
-	std::cerr << "  [K0.7.4] save(100k, +3 props/atom): " << save_ms << " ms, "
-		<< (out_len / 1024) << " KB, " << bytes_per_atom << " B/atom JSON" << std::endl;
-
-	System dst;
-	std::istringstream is(os.str());
-	auto t2 = clk::now();
-	loadSystemJSON(dst, is);
-	auto t3 = clk::now();
-	const double load_ms = std::chrono::duration<double, std::milli>(t3 - t2).count();
-	std::cerr << "  [K0.7.4] load(100k, +3 props/atom): " << load_ms << " ms" << std::endl;
-
-	TEST_EQUAL(dst.countAtoms(),     N)
-	// K0.8 + 2026-05-18 recalibration: observed 322-332 ms save /
-	// 3799-3830 ms load. v2.1 P4.1 (2026-05-20): post O(n^2)-fix
-	// load (with props) 402ms (was ~3750ms = 9.3x faster). Load gate
-	// tightened from 10000 to 2500ms: ~6x headroom + CI variance,
-	// still catches the O(n^2) regression (~3800ms+). Save unchanged.
-	TEST_EQUAL(save_ms < 2000.0, true)
-	TEST_EQUAL(load_ms < 2500.0, true)
+	// v2.1 P4.1: post O(n^2)-fix load (with props) ~402ms median local.
+	// Gates kept at 2000/2500ms; gate on the MEDIAN (P5.3).
+	TEST_EQUAL(save_st.median < 2000.0, true)
+	TEST_EQUAL(load_st.median < 2500.0, true)
 RESULT
 
 END_TEST

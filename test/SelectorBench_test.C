@@ -28,6 +28,7 @@
 #include <BALL/KERNEL/compiledExpression.h>
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/FORMAT/PDBFile.h>           // TRACK-B-SELECTOR-CORPUS-VERIFY
+#include "BenchStats.h"                    // v2.1 P5.3 median-of-N reporting
 #include <algorithm>
 #include <chrono>
 #include <iostream>
@@ -166,12 +167,14 @@ CHECK(K0.7.2 fast-path selection >=10x faster than v1.x ExpressionTree (100k cor
 	// K0.5 design gate of >=10x. With 100k atoms and the observed
 	// per-leaf speedup of ~50x on Darwin arm64 release, the gate has
 	// ample headroom against CI noise.
-	std::vector<double> sorted = ratios;
-	std::sort(sorted.begin(), sorted.end());
-	const double median = sorted[sorted.size() / 2];
-	std::cerr << "  [K0.7.2] median speedup across "
-		<< sorted.size() << " queries = " << median << "x" << std::endl;
-	TEST_EQUAL(median >= 10.0, true)
+	//
+	// v2.1 P5.3 (V21-MEDIAN-OF-N-BENCH): report the speedup
+	// distribution across queries via the shared BenchStats helper
+	// (median + min/max + MAD + CoV) instead of a bare median, so the
+	// release-claim speedup number is reproducible with visible spread.
+	const BALLTest::BenchStats spd = BALLTest::computeBenchStats(ratios);
+	BALLTest::reportBenchStats("selector speedup across queries", spd, "x");
+	TEST_EQUAL(spd.median >= 10.0, true)
 RESULT
 
 CHECK(K0.5.6 OwnedPred slow path stays within 2x of v1.x)
