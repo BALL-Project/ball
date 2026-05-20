@@ -1276,3 +1276,50 @@ Benchmarks with CoV > 30% are advisory until variance settles.
 
 *Fifth revision 2026-05-19 post-R21. Next: R21b on the revised
 roadmap.*
+
+---
+
+# Sixth revision post-P4.2 (2026-05-20)
+
+## D42. V21-BOND-PROPERTY-JSON deferred to v2.2 (P4.2 findings)
+
+**Decision (maintainer, 2026-05-20):** Option C from
+`P4.2-FINDINGS.md`. V21-BOND-PROPERTY-JSON moves out of v2.1 P4 to
+the v2.2 milestone, bundled with V21-BOND-THIN-HANDLE.
+
+**Rationale:** P4.2's "clean win" premise (R16 C-B7 / R24 P24-6 —
+"read Bond's v0 PropertyManager directly") is correct on save but
+impossible on load. `loadSystemJSON` only restores store
+BondRecords; it never reconstructs the `Bond*` heap objects that
+own the PropertyManager bags (`atom.countBonds() == 0` after a
+System round-trip). Closing the round-trip requires reconstructing
+the Atom-side `Bond*` graph — materially bigger than "serialize one
+more bag," and entangled with the v2.2 bond-thin-handle redesign +
+mutation wiring (D39, already v2.2). Building Atom-side `bond_[]`
+wiring (Option A) or standalone bond-property columns (Option B)
+now is scaffolding v2.2 would rework.
+
+**Impact:**
+- v2.1 P4 scope is now: P4.0 (done) + P4.1 V21-LOAD-BATCH (done,
+  16× load) + P4.3 V21-ELEMENT-INSTANCE-ID + P4.4 schema bump.
+- The R16 C-B7 known gap (Bond PropertyManager not in K0.6 JSON)
+  carries forward to v2.2. Documented in RELEASE-NOTES-v2.1.md
+  with `P4.2-FINDINGS.md` as the rationale.
+- `V21-BOND-PROPERTY-JSON` reclassified from v2.1 P4 to v2.2 in
+  `.planning/v2.1/BACKLOG.md`.
+
+## D43. Latent bond round-trip-fidelity gap noted (not v2.1 scope)
+
+**Observation (not a decision to act in v2.1):** the System JSON
+round-trip does not reconstruct the Atom-side `Bond*` graph, so
+`atom.countBonds()` returns 0 after `loadSystemJSON` even though
+the store has the bonds. This is a pre-existing v2.0 fidelity gap,
+independent of bond *properties*. Filed as
+`V21-BOND-GRAPH-RECONSTRUCT` in the backlog; its natural home is
+the same v2.2 bond-thin-handle work (D42). Not patched in v2.1
+because the v2.2 redesign resolves the bond representation
+question wholesale rather than bolting Atom-side wiring onto the
+current dual representation.
+
+*Sixth revision 2026-05-20 post-P4.2. Next: P4.3
+V21-ELEMENT-INSTANCE-ID.*
