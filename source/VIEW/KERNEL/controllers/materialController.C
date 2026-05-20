@@ -19,6 +19,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/CONCEPT/property.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -30,7 +31,8 @@ namespace BALL
 			: QObject(parent),
 				rep_(rep),
 				ambient_(0.3f), diffuse_(0.7f),
-				specular_(0.2f), shininess_(30.0f)
+				specular_(0.2f), shininess_(30.0f),
+				applying_(false)
 		{
 			revert();
 		}
@@ -128,6 +130,14 @@ namespace BALL
 				Log.warn() << "[MaterialController::apply] no Scene/Stage available — skipping." << std::endl;
 				return;
 			}
+
+			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
+			// this apply() (e.g. the scene material refresh below)
+			// synchronously re-enters apply(), bail rather than re-running the
+			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
+			// The RAII guard clears the flag on every exit path.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
 
 			// Seed from existing per-rep material (if any) so we keep
 			// any color the user picked through the legacy dialog;

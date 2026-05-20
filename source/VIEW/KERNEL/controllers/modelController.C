@@ -19,6 +19,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -39,7 +40,8 @@ namespace BALL
 				stick_radius_(0.2f),
 				surface_probe_radius_(1.5f),
 				cartoon_tube_radius_(0.4f),
-				params_dirty_(false)
+				params_dirty_(false),
+				applying_(false)
 		{
 			revert();
 		}
@@ -107,6 +109,14 @@ namespace BALL
 				Log.info() << "[ModelController::apply] MainControl busy — deferring." << std::endl;
 				return;
 			}
+
+			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
+			// this apply() (e.g. the Representation::update() refresh below)
+			// synchronously re-enters apply(), bail rather than re-running the
+			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
+			// The RAII guard clears the flag on every exit path.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
 
 			ModelType new_type = static_cast<ModelType>(model_type_);
 			DrawingMode new_mode = static_cast<DrawingMode>(drawing_mode_);

@@ -50,6 +50,7 @@ namespace BALL
 				float diffuseFactor() const  { return diffuse_; }
 				float specularFactor() const { return specular_; }
 				float shininess() const      { return shininess_; }
+				bool isApplying() const      { return applying_; }
 
 			public Q_SLOTS:
 				void apply();
@@ -73,6 +74,7 @@ namespace BALL
 				float diffuse_;
 				float specular_;
 				float shininess_;
+				bool applying_;  // v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
 		};
 
 	} // namespace VIEW

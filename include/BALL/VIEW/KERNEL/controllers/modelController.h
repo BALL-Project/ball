@@ -59,6 +59,7 @@ namespace BALL
 				int drawingMode() const      { return drawing_mode_; }
 				int drawingPrecision() const { return drawing_precision_; }
 				int transparency() const     { return transparency_; }
+				bool isApplying() const      { return applying_; }
 
 				float ballRadius() const          { return ball_radius_; }
 				float ballStickBondRadius() const { return ball_stick_bond_radius_; }
@@ -109,6 +110,7 @@ namespace BALL
 				float surface_probe_radius_;
 				float cartoon_tube_radius_;
 				bool  params_dirty_;
+				bool  applying_;  // v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
 		};
 
 	} // namespace VIEW

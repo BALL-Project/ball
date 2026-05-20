@@ -24,10 +24,14 @@
 #include <BALLTestConfig.h>
 
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 #include <BALL/VIEW/KERNEL/controllers/stereoController.h>
 #include <BALL/VIEW/KERNEL/controllers/lightController.h>
+#include <BALL/VIEW/KERNEL/controllers/modelController.h>
+#include <BALL/VIEW/KERNEL/controllers/coloringController.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 
 #include <QtGui/QColor>
@@ -109,5 +113,39 @@ CHECK(LightController::apply() persists the ambient intensity to the Stage)
 	LightController back(&stage);
 	TEST_REAL_EQUAL(back.ambientIntensity(), 0.6f)
 RESULT
+
+// Representation-attached controllers. These controllers' apply() are
+// Scene-independent: DisplayProperties::getInstance(0) is null in this
+// headless test, so the per-method PROCESSOR-factory branch is skipped,
+// but rep_->setModelType / setColoringMethod / setTransparency still run
+// and Representation::update() is safe with no model_processor_/composites.
+CHECK(ModelController::apply() persists model/precision/transparency to the Representation)
+	Representation rep;
+	ModelController c(&rep);
+	c.setModelType(MODEL_VDW);
+	c.setDrawingPrecision(2);
+	c.setTransparency(64);
+	c.apply();
+
+	ModelController back(&rep);
+	TEST_EQUAL(back.modelType(), MODEL_VDW)
+	TEST_EQUAL(back.drawingPrecision(), 2)
+	TEST_EQUAL(back.transparency(), 64)
+RESULT
+
+CHECK(ColoringController::apply() persists the coloring method to the Representation)
+	Representation rep;
+	ColoringController c(&rep);
+	c.setColoringMethod(COLORING_CHAIN);
+	c.apply();
+
+	ColoringController back(&rep);
+	TEST_EQUAL(back.coloringMethod(), COLORING_CHAIN)
+RESULT
+
+// MaterialController is NOT checked here: its apply() bails when
+// Scene::getInstance(0) is null (material is per-rep state on the
+// Scene/Renderer, not on the Representation), so it is not headless-
+// testable — it is covered by the GUI path only.
 
 END_TEST

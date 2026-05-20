@@ -17,6 +17,7 @@
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -26,7 +27,8 @@ namespace BALL
 
 		ColoringController::ColoringController(Representation* rep, QObject* parent)
 			: QObject(parent), rep_(rep), coloring_method_(0),
-				value_min_(0.0f), value_max_(100.0f)
+				value_min_(0.0f), value_max_(100.0f),
+				applying_(false)
 		{
 			revert();
 		}
@@ -77,6 +79,14 @@ namespace BALL
 				Log.info() << "[ColoringController::apply] MainControl busy — deferring." << std::endl;
 				return;
 			}
+
+			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
+			// this apply() (e.g. the Representation::update() refresh below)
+			// synchronously re-enters apply(), bail rather than re-running the
+			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
+			// The RAII guard clears the flag on every exit path.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
 
 			ColoringMethod new_method = static_cast<ColoringMethod>(coloring_method_);
 			bool method_changed = (rep_->getColoringMethod() != new_method);

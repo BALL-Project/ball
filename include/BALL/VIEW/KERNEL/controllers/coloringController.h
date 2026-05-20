@@ -47,6 +47,7 @@ namespace BALL
 				int coloringMethod() const { return coloring_method_; }
 				float valueMin() const { return value_min_; }
 				float valueMax() const { return value_max_; }
+				bool isApplying() const { return applying_; }
 
 			public Q_SLOTS:
 				void apply();
@@ -66,6 +67,7 @@ namespace BALL
 				int coloring_method_;
 				float value_min_;
 				float value_max_;
+				bool applying_;  // v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
 		};
 
 	} // namespace VIEW
