@@ -182,7 +182,7 @@ in VIEW/APPLICATIONS).
 | P4.1 | V21-LOAD-BATCH | Design + implementation TARGETED at the dominant bucket from P4.0. If (b) dominates → batch Atom allocation. If (c) dominates → batch Composite insertion (defer adoption until all atoms allocated). If (d) dominates → batch column writes. JsonBench_test gates measurable improvement; the SPECIFIC numeric target ("8× load speedup" / "≤2× save:load ratio") is set in P4.1 commit message based on P4.0 profile + theoretical best-case for the chosen optimization. |
 | P4.2 | V21-BOND-PROPERTY-JSON — **IMPLEMENTED (D42→D42-REV)** | Initially deferred (premise falsified — `loadSystemJSON` didn't reconstruct `Bond*` objects; see `P4.2-FINDINGS.md`). Maintainer reversed: implemented via option A — the loader reconstructs the Atom-side `Bond*` graph with `createBond`, then round-trips the Bond `PropertyManager` bag. Closes R16 C-B7 + D43. R25-hardened (leak-safe `fresh` Bond + duplicate-pair collapse). Commits `45df3714d` + `67827ad7c`. |
 | P4.3 | V21-ELEMENT-INSTANCE-ID | Custom-Element round-trip via instance-id table. v2.0 placeholder behavior (pointer-identity loss) closed. |
-| P4.4 | JSON MINOR bump to 1.1 | schema version + reader/writer match. v2.0 readers fail cleanly on v2.1 JSON (per D30). |
+| P4.4 | JSON MINOR bump (store 1→2, system 0→1) | schema version + reader/writer match. Loaders gate on MAJOR only, so a v2.0 reader LOADS v2.1 JSON and silently drops the v2.1-only per-bond `properties` (lossy-but-graceful, not a clean reject — corrected per R28b; see D30 CORRECTION). |
 | P4.5 | Close review (R25) | Codex reviews JSON round-trip correctness + backward read + profile-driven design rationale |
 
 **Risk:** V21-LOAD-BATCH changes the JSON loader fast path —

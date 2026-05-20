@@ -318,21 +318,27 @@ Budget: ~1 day per round for the review + fix cycle.
 - v2.1 can add fields (e.g., per-property-column type tags, bond
   PropertyManager columns for V21-BOND-PROPERTY-JSON) without
   backward-compat reader logic.
-- K0.6 MAJOR stays at 1; MINOR bumps to 1.1 for v2.1.
-- v2.0 readers loading v2.1 JSON: fail cleanly with
-  `Exception::ParseError("schema MINOR 1.1 > reader 1.0")`.
-- v2.1 readers loading v2.0 JSON: supported (backward read). v2.1
-  reader recognises missing MINOR-1.1 fields and substitutes
-  defaults.
+- K0.6 MAJOR stays at 1; MINOR bumps for v2.1 (store 1→2,
+  system 0→1).
+- **CORRECTION (R28b, 2026-05-20):** the original D30 wording
+  claimed v2.0 readers "fail cleanly with ParseError on a higher
+  minor." That is NOT how the loaders behave. Both
+  `loadStoreJSON` and `loadSystemJSON` gate on the **MAJOR**
+  `format_version` only (`moleculeStoreJson.C:287-293`); a higher
+  **minor** is explicitly loadable and unknown keys are ignored.
+  So a v2.0 reader **loads** a v2.1 file and **silently drops**
+  the v2.1-only per-bond `properties` (lossy, not a hard error).
+  Forward-incompat is graceful-but-lossy, not a clean reject.
+- v2.1 readers loading v2.0 JSON: supported (backward read);
+  bonds without a `properties` key load with an empty bag.
 
 **Impact:**
-- V21-LOAD-BATCH free to reorganise the JSON layout (e.g., bulk-
-  column arrays instead of per-atom records) since byte-compat
-  isn't required.
-- V21-BOND-PROPERTY-JSON adds new top-level `bond_property_columns`
-  section without breaking the writer.
+- V21-LOAD-BATCH free to reorganise the JSON layout since
+  byte-compat isn't required.
+- V21-BOND-PROPERTY-JSON (P4.2, shipped) adds a per-bond
+  `properties` key inside the existing `bonds[]` records.
 - Documented in RELEASE-NOTES-v2.1.md as "v2.0 JSON loads in v2.1;
-  v2.1 JSON does not load in v2.0".
+  a v2.0 reader loads v2.1 JSON but silently drops bond properties".
 
 ---
 
