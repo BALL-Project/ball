@@ -1,6 +1,7 @@
-# BALLView v1.7 — BALLView Refresh (DRAFT)
+# BALLView v1.7 — BALLView Refresh
 
-**Status:** DRAFT — populated incrementally as v1.7 Wave 4 phases land. Will be finalized at v1.7-RC1 tag time.
+**Status:** v1.7.0 shipped 2026-05-19 (commit `97d4c4d62d`). v1.7.1 patch
+cycle in progress (see "v1.7.1 patch cycle" below).
 
 **v1.7 is the "BALLView Refresh" milestone.** It re-skins, re-arranges, and modernizes the BALLView GUI on top of the v1.6 rendering + build foundation, without changing the underlying molecular-modelling library surface. Net visual + UX changes are substantial; net behavioral changes to scripted/non-GUI workflows are zero.
 
@@ -9,8 +10,6 @@ If you're a non-GUI consumer of `libBALL` / `libVIEW`, **v1.7 is a transparent u
 ---
 
 ## What's new in v1.7
-
-(*Sections to be expanded as Wave 4 phases close. Headline list:*)
 
 - Neutral single-theme palette (Phase 999.40) + theming-palette removal (Phase 999.42)
 - Hi-DPI SVG icon set replaces the legacy XPM pixmap tree (Phase 999.41)
@@ -56,30 +55,67 @@ The auto-migration is a one-shot rewrite of the `[Workspace]/currentPreset` INI 
 
 ---
 
-## Known issues at RC1
+## v1.7.1 patch cycle
 
-These issues are present in v1.7.0-rc1 and are under triage. See
-`.planning/v1.7-USER-FEEDBACK-GATE.md` for status; final disposition
-will be either "fixed before v1.7.0 final tag" or "deferred to v1.7.x
-patch cycle with workaround."
+v1.7.1 is the post-ship stabilization cycle. All RC-era user-feedback
+items (UFG-01 … UFG-22, UFG-24 … UFG-27) shipped fixed in v1.7.0. The
+v1.7.1 patches address regressions and polish surfaced in post-ship
+acceptance testing. Full per-item detail: `.planning/v1.7.x-PATCH-QUEUE.md`.
 
-- **Some toolbar icons are missing glyphs** (UFG-01). The XPM→SVG icon
-  migration in Phase 999.42 covered ~22 named call sites; some toolbar
-  entries added in 999.45 / 999.46 may need additional icons registered
-  in the IconRegistry. Buttons work; only the visual glyph is missing.
-- **macOS rendering glitches** (UFG-02). Visual artifacts in the
-  refreshed UI on macOS specifically. Triaging the root cause —
-  likely QSS rules applied to widgets that prefer native macOS chrome,
-  or a Phase 999.45 dock-layout interaction with the GL canvas.
-- **Representation + Coloring changes don't propagate to the scene**
-  (UFG-03). The Unified Inspector's Representation tab shows controls
-  but changes don't update the rendered molecule. Tracked to deferred
-  Controller cut-overs (Phase 999.44 Plans 04a-04h, ~3072 LOC of
-  controller-extraction work pulled forward from v1.8). Workaround:
-  use `Tools › Legacy Settings ▸` to access the original dialogs while
-  the Controllers are completed.
+**Functional fixes**
+- **Add Hydrogens toolbar button** now works again (was a dead toolbar
+  action) — v1.7.x-10.
+- **Energy Optimization toolbar button** now works again and honours the
+  existing selection (optimizes the selected system) — v1.7.x-11/12.
+- **Select / optimize no longer freeze the app** — the per-click full-scene
+  rebuild + paint-storm that saturated the GUI thread is gone (diff-based
+  selection sync) — v1.7.x-13/14.
+- **Deleting a structure from the tree no longer crashes** (selection set
+  no longer retains freed descendants) — v1.7.x-27.
+- **Stuck "update is running" lock-out fixed** — a representation that
+  failed to buffer could pin the busy-state forever, silently refusing
+  selection + deletion and greying every toolbar action; the render lock is
+  now always released — v1.7.x-29.
+- **Selection mechanism** corrected: top-level-only selection (no
+  descendant leakage), pre-existing selection is preserved (optimize no
+  longer overwrites it), and a "expand selection to residues" quick action
+  was added — v1.7.x-12/19.
+- **Real RCSB sample structures** ship in place of the earlier placeholders.
+
+**UI / accessibility**
+- Inspector **Model** section gains type-specific controls (sphere/bond/
+  probe/tube radii) — v1.7.x-16.
+- Inspector **Coloring** section gains a per-method value range (min/max)
+  for value-based colorings — v1.7.x-17.
+- **Per-section reset-to-defaults** in the Inspector — v1.7.x-18.
+- **Text-size accessibility preference** (Normal / Large / XL) — v1.7.x-21.
+- **Tooltips + keyboard-shortcut hints** swept across actions — v1.7.x-22.
+- **Disabled toolbar/menu icons** now render visibly greyed (38% opacity)
+  so actionable vs unavailable is distinguishable — v1.7.x-28.
+- The POVRay scene-export action is now intentionally icon-less.
+
+**Internal / hardening** (no user-visible change)
+- Controller `apply()` re-entrancy guard across all presentation
+  controllers + a headless contract-test net (13 checks) — v1.7.x-24/25.
 
 ---
 
-*Draft created 2026-05-17 during Phase 999.49. Sections marked "to be expanded" will be filled in as v1.7 Wave 4 phases finalize and at RC1 tag time.*
-*Known-issues section added 2026-05-18 at user-feedback gate open.*
+## Known issues (v1.7.1)
+
+See `.planning/v1.7-USER-FEEDBACK-GATE.md` for status and investigation
+detail.
+
+- **SES surface triangles can drop out during rotation on Apple Silicon**
+  (UFG-23). When a Solvent-Excluded Surface is rendered Solid and rotated
+  interactively, some triangles momentarily disappear. Root cause is the
+  Apple OpenGL→Metal translation layer not faithfully honouring
+  fixed-function two-sided lighting (`GL_LIGHT_MODEL_TWO_SIDE`) for the
+  inconsistently-wound SES mesh — *not* a regression in BALL's renderer or
+  surface generator (both are functionally unchanged from v1.6). Under
+  investigation. **Workaround:** view the structure with a different model
+  (e.g. Ball-and-Stick / Cartoon), or rotate slowly.
+
+---
+
+*Created 2026-05-17 (Phase 999.49). v1.7.0 finalized 2026-05-19;*
+*v1.7.1 patch-cycle section + refreshed known-issues added 2026-05-20.*
