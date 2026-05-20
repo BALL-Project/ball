@@ -102,9 +102,12 @@
         <file alias="actions/select-rectangular.svg">icons/lucide/square-dashed-mouse-pointer.svg</file>
         <file alias="actions/transform-move.svg">icons/lucide/move.svg</file>
         <file alias="actions/transform-rotate.svg">icons/lucide/rotate-3d.svg</file>
-        <!-- NOTE: scene.C also references 'mimetype/text-x-povray' but that
-             action is menu-only (add_to_main_toolbar=false in setIcon
-             call). Resolution deferred — POV-Ray output is rare and the
-             menu entry remains usable without a glyph. -->
+        <!-- v1.7.x-06: scene.C's File › Export › POVRay scene action requests
+             'mimetype/text-x-povray'. POV-Ray is an offline ray tracer, so it
+             shares the lightning-bolt raytracing family with the in-app
+             'actions/raytracing.svg' (also zap.svg) — a coherent, honest glyph
+             rather than the blank-text fallback. Menu-only action, so this
+             never surfaced as a blank toolbar slot. -->
+        <file alias="mimetype/text-x-povray.svg">icons/lucide/zap.svg</file>
     </qresource>
 </RCC>
