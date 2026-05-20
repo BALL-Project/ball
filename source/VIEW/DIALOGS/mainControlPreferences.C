@@ -12,6 +12,9 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QStyleFactory>
 #include <QtWidgets/QFontDialog>
+#include <QtWidgets/QComboBox>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 
 #include <BALL/SYSTEM/path.h>
 
@@ -24,7 +27,8 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	: QWidget(parent, fl),
 		Ui_MainControlPreferencesData(),
 		PreferencesEntry(),
-		last_index_(0)
+		last_index_(0),
+		text_size_combo_(nullptr)
 {
 	setupUi(this);
 	setObjectName(name);
@@ -62,6 +66,24 @@ MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name
 	unregisterObject_(languageComboBox_);
 
 	connect( font_button, SIGNAL( clicked() ), this, SLOT( selectFont() ) );
+
+	// v1.7.x-21 — accessibility text-size scale, added under the font row of
+	// the font group box. Multiplies the chosen application font's point size
+	// in getFont(); applied app-wide via MainControl::applyPreferences().
+	text_size_combo_ = new QComboBox(this);
+	text_size_combo_->addItem(tr("Normal (100%)"),      QVariant(1.0));
+	text_size_combo_->addItem(tr("Large (125%)"),       QVariant(1.25));
+	text_size_combo_->addItem(tr("Extra Large (150%)"), QVariant(1.5));
+	text_size_combo_->setToolTip(tr("Scale all application text for "
+		"readability. Takes effect when you apply preferences."));
+	{
+		QHBoxLayout* ts_row = new QHBoxLayout();
+		ts_row->addWidget(new QLabel(tr("Text size:"), this));
+		ts_row->addWidget(text_size_combo_);
+		ts_row->addStretch(1);
+		// `verticalLayout` is the font group box's layout (see the .ui).
+		verticalLayout->addLayout(ts_row);
+	}
 }
 
 MainControlPreferences::~MainControlPreferences()
@@ -85,7 +107,23 @@ QStyle* MainControlPreferences::setStyle()
 
 QFont MainControlPreferences::getFont()
 {
-	return font_label->font();
+	// v1.7.x-21 — apply the accessibility text-size multiplier on top of the
+	// user's chosen font. The font_label always shows the unscaled base font;
+	// the combo scales it app-wide.
+	QFont f = font_label->font();
+	double m = 1.0;
+	if (text_size_combo_ != nullptr)
+	{
+		bool ok = false;
+		const double v = text_size_combo_->currentData().toDouble(&ok);
+		if (ok && v > 0.0) m = v;
+	}
+	if (m != 1.0)
+	{
+		if (f.pointSizeF() > 0.0)      f.setPointSizeF(f.pointSizeF() * m);
+		else if (f.pixelSize() > 0)    f.setPixelSize(qRound(f.pixelSize() * m));
+	}
+	return f;
 }
 
 void MainControlPreferences::enableLoggingToFile(bool state)
@@ -126,6 +164,11 @@ void MainControlPreferences::writePreferenceEntries(INIFile& inifile)
 	PreferencesEntry::writePreferenceEntries(inifile);
 	inifile.insertValue(inifile_section_name_, "style", ascii(style_box_->currentText()));
 	inifile.insertValue(inifile_section_name_, "language", ascii(languageComboBox_->currentData().toString()));
+	if (text_size_combo_ != nullptr)
+	{
+		inifile.insertValue(inifile_section_name_, "textScale",
+			ascii(QString::number(text_size_combo_->currentIndex())));
+	}
 }
 
 void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
@@ -147,6 +190,14 @@ void MainControlPreferences::readPreferenceEntries(const INIFile& inifile)
 
 		last_index_ = e;
 		languageComboBox_->setCurrentIndex(e);
+	}
+
+	if (text_size_combo_ != nullptr
+	    && inifile.hasEntry(inifile_section_name_, "textScale"))
+	{
+		const int idx = String(inifile.getValue(inifile_section_name_, "textScale")).toInt();
+		if (idx >= 0 && idx < text_size_combo_->count())
+			text_size_combo_->setCurrentIndex(idx);
 	}
 }
 

@@ -95,6 +95,11 @@ class BALL_VIEW_EXPORT MainControlPreferences
 
 	QFont font_;
 	int last_index_;
+
+	// v1.7.x-21 — accessibility text-size scale (Normal / Large / Extra
+	// Large). Created programmatically in the ctor; multiplies the chosen
+	// application font's point size in getFont().
+	QComboBox* text_size_combo_;
 };
   
 } } // namespace
