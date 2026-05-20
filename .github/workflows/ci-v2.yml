@@ -138,7 +138,7 @@ jobs:
         run: |
           cmake --build build --target BALL build_tests -j
 
-      - name: ctest sweep (282 on v2.0, 284 on v2.1)
+      - name: ctest sweep (282 on v2.0, 284 on v2.1, 285 on v2.2)
         env:
           BALL_DATA_PATH: ${{ github.workspace }}/data
         run: |
@@ -147,6 +147,8 @@ jobs:
           #   v2.0   = 282/282 (v2.0.0 final, commit 7a8dc7caf)
           #   v2.1+  = 284/284 (P1 close, commits 173374553..155a3e057;
           #            +1 SideTableParity_test, +1 CompositeIteratorStability_test)
+          #   v2.2 H1a = 285/285 (+1 HierarchyParity_test; container metadata
+          #            table parity skeleton, store-side only)
           # --timeout 120 caps individual hangs. 0 WILL_FAIL on v2.0+.
           # Single-threaded ctest avoids BALL ClassTest sandbox file
           # collisions on the _AAAAA*.TMP fixture path.

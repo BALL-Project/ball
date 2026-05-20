@@ -10,6 +10,7 @@
 //   - source/CONCEPT/property.C        (P1.6 PropertyManager mirror)
 //   - source/CONCEPT/selectable.C      (P1.8 Selectable mirror)
 //   - test/SideTableParity_test.C      (parity assertions)
+//   - test/HierarchyParity_test.C      (v2.2 H1a container-table parity)
 //
 // Anyone else including this header WILL be caught by the CI grep
 // gate in .github/workflows/ci-v2.yml. CompositeNode* MUST NOT leak
