@@ -1230,6 +1230,43 @@ namespace BALL
 
 			list<Composite*> sel = selected_;
 			selected_.clear();
+
+			// v1.7.x-12 (delete-from-tree CRASH fix) — `selected_` can
+			// contain BOTH a composite and its descendants. The guard in
+			// updateSelection() only rejects children of an *immediately*
+			// selected parent and depends on parent-before-child iteration
+			// order, and the recursive composite selection
+			// (selectCompositeRecursive) can mark descendant rows too — so
+			// descendants leak into the list. Deleting an ancestor (a System
+			// root) frees ALL its descendants via ~Composite, so a later loop
+			// iteration would call getMainControl()->remove() on an
+			// already-freed descendant → use-after-free. Disassembly of the
+			// crash confirms it: CompositeManager::remove faults at the
+			// virtual `delete &composite` (vtable pointer is garbage). Prune
+			// the deletion list to TOP-LEVEL composites only (drop any whose
+			// ancestor is also selected) and de-duplicate, so we never touch
+			// a composite freed earlier in the same pass.
+			{
+				HashSet<Composite*> sel_set;
+				for (Composite* c : sel) sel_set.insert(c);
+
+				list<Composite*> pruned;
+				HashSet<Composite*> seen;
+				for (Composite* c : sel)
+				{
+					if (c == 0 || seen.has(c)) continue;
+					seen.insert(c);
+
+					bool ancestor_selected = false;
+					for (Composite* p = c->getParent(); p != 0; p = p->getParent())
+					{
+						if (sel_set.has(p)) { ancestor_selected = true; break; }
+					}
+					if (!ancestor_selected) pruned.push_back(c);
+				}
+				sel = pruned;
+			}
+
 			list<Composite*>::iterator it = sel.begin();
 			for (; it != sel.end(); it++)
 			{

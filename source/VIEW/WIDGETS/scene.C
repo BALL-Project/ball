@@ -1612,8 +1612,19 @@ namespace BALL
 
 			if (bondorders_action_)
 				bondorders_action_->setEnabled(selected_system_or_molecule && !busy);
+			// v1.7.x-11 — the toolbar Optimize icon "did nothing": it was gated
+			// on selected_system_or_molecule, i.e. EXACTLY ONE highlighted
+			// System/Molecule. Since the v1.7.x-13 selection sync selects a
+			// protein together with all its descendants, getMolecularControl-
+			// Selection() returns >1 composite, so highl.size()==1 is false and
+			// the action stayed DISABLED — a greyed-out button silently ignores
+			// clicks (so even the new status-bar feedback never fired). This is
+			// the very gate UFG-15 already loosened for Add-Hydrogens (below);
+			// apply the same fix to Optimize. optimizeStructure() works on the
+			// selected system (and falls back to all containers), so the
+			// "a system exists & not busy" gate is correct.
 			if (optimize_action_)
-				optimize_action_->setEnabled(selected_system_or_molecule && !busy);
+				optimize_action_->setEnabled(selected_system && !busy);
 			// UFG-15 (v1.7.0-rc3): align toolbar Add-Hydrogens enable-gate with
 			// the menu version (MolecularStructure::checkMenu: one_system &&
 			// composites_muteable). The prior selected_system_or_molecule gate
