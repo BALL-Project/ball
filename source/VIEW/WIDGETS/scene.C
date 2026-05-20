@@ -1451,11 +1451,14 @@ namespace BALL
 			setIcon(screenshot_action, "actions/screenshot", false);
 
 			description = "Shortcut|File|Export|POVRay";
-			QAction* pov_action = insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this,
+			// POVRay export is a menu-only advanced action and is
+			// intentionally icon-less (per maintainer decision, v1.7.x): the
+			// previous mimetype/text-x-povray glyph never surfaced as a
+			// toolbar affordance, so no icon is mapped.
+			insertMenuEntry(MainControl::FILE_EXPORT, tr("POVRa&y scene"), this,
 							SLOT(exportPOVRay()), description, QKeySequence("Ctrl+Y"),
 							tr("Export a POVRay file from the Scene"),
 							UIOperationMode::MODE_ADVANCED);
-			setIcon(pov_action, "mimetype/text-x-povray", false);
 
 			// Menu description renamed from "Shortcut|File|Export|VRML" v1.7
 			// (Phase 999.37) — the underlying action always wrote STL via
