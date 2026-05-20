@@ -572,6 +572,11 @@ namespace BALL
 		// Remove a child edge; clears the reverse edge. Returns true if found.
 		bool remove_child(std::uint32_t parent_idx, ChildRef c);
 
+		// Clear ALL child edges of a row (and their reverse edges). Used by
+		// the H2a insert mirror to re-derive a parent's child list from the
+		// v0 order in one pass (idempotent, position-correct).
+		void clear_children(std::uint32_t parent_idx);
+
 		// Checked reparent (remove-before-add): detach `c` from its CURRENT
 		// parent (read from the reverse edge) then append under `new_parent`.
 		// Unlike the bare append/prepend/insert ops -- which assume `c` is

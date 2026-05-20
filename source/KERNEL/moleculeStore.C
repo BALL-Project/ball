@@ -429,6 +429,18 @@ bool ContainerTable::remove_child(std::uint32_t parent_idx, ChildRef c)
 	return false;
 }
 
+// H2a: clear all child edges of a row (and their reverse edges).
+void ContainerTable::clear_children(std::uint32_t parent_idx)
+{
+	if (parent_idx == 0 || parent_idx >= rows_.size()) return;
+	// Copy out before clearing -- clear_reverse_edge_ touches other rows /
+	// the atom_parent_ map, not this row's children vector, so iterating
+	// the live vector is fine, but copy for clarity + safety.
+	const std::vector<ChildRef> kids = rows_[parent_idx].children;
+	for (const ChildRef& c : kids) clear_reverse_edge_(c);
+	rows_[parent_idx].children.clear();
+}
+
 // R32 LOW: checked reparent. Detach `c` from its current parent (read
 // from the reverse edge) before re-attaching, so no stale old-parent
 // edge survives. Used by H2's move/splice mirror wiring.
@@ -714,6 +726,11 @@ void MoleculeStore::container_remove_container_(std::uint32_t parent_row, std::u
 	ContainerTable& t = side_tables_->container_table_;
 	if (parent_row == 0 || parent_row >= t.size()) return;
 	t.remove_child(parent_row, ChildRef{ChildRef::CONTAINER, child_row});
+}
+
+void MoleculeStore::container_clear_children_(std::uint32_t row)
+{
+	side_tables_->container_table_.clear_children(row);
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

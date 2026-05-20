@@ -614,4 +614,62 @@ CHECK(H2a -- ~System wholesale teardown is crash-free under the guard)
 	TEST_EQUAL(true, true)
 RESULT
 
+CHECK(H2a -- insert an atom into an already-rooted container mirrors the edge)
+	// R36 BLOCKER: single-atom insert into a rooted container must append
+	// the ATOM ChildRef (the adopt(Atom&) path now re-derives the parent).
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	Residue r; r.setName("ALA"); r.setID("ALA");
+	PDBAtom a1; a1.setName("N");
+	r.insert(a1);
+	ch.insert(r);
+	prot.insert(ch);
+	sys.insert(prot);                       // r materialised with 1 atom
+
+	MoleculeStore* store = r.getContainerRowStore_();
+	std::uint32_t r_row = r.getContainerRow_();
+	TEST_EQUAL(store->container_child_count_(r_row), 1u)
+
+	PDBAtom a2; a2.setName("CA");
+	r.insert(a2);                           // insert into the ALREADY-rooted r
+	TEST_EQUAL(store->container_child_count_(r_row), 2u)
+
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
+CHECK(H2a -- reparent a container between rooted parents (no duplicate edges))
+	// R36 BLOCKER: same-System reparent must not duplicate child rows
+	// (materialiseContainer_ is idempotent; the parent row is re-derived).
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain chA; chA.setName("A");
+	Chain chB; chB.setName("B");
+	Residue r; r.setName("ALA"); r.setID("ALA");
+	PDBAtom a; a.setName("N");
+	r.insert(a);
+	chA.insert(r);
+	prot.insert(chA);
+	prot.insert(chB);
+	sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t chA_row = chA.getContainerRow_();
+	std::uint32_t chB_row = chB.getContainerRow_();
+	TEST_EQUAL(store->container_child_count_(chA_row), 1u)
+	TEST_EQUAL(store->container_child_count_(chB_row), 0u)
+
+	chB.insert(r);                          // reparent r: chA -> chB
+	TEST_EQUAL(store->container_child_count_(chA_row), 0u)
+	TEST_EQUAL(store->container_child_count_(chB_row), 1u)
+
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
 END_TEST

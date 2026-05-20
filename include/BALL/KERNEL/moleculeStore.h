@@ -473,6 +473,9 @@ namespace BALL
 		void container_append_container_(std::uint32_t parent_row, std::uint32_t child_row);
 		void container_remove_atom_(std::uint32_t row, std::uint32_t atom_idx);
 		void container_remove_container_(std::uint32_t parent_row, std::uint32_t child_row);
+		// Clear a row's child list (+ reverse edges) so the insert mirror can
+		// re-derive it from the v0 child order in one idempotent pass.
+		void container_clear_children_(std::uint32_t row);
 
 		//@}
 		/**	@name Live-reference enforcement (D7 amendment, K0.2c, audited K0.4.7)
