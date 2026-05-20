@@ -14,8 +14,6 @@
 		<node>CB<value>C 1.34565 1.283736 -2.23033</value></node>
 		<node>1HB<value>H 2.062533 0.6767905 -2.785621</value></node>
 		<node>2HB<value>H 0.7182986 1.840951 -2.927554</value></node>
-		<node>1OB<value>O 0.7182986 1.840951 -2.927554</value></node>
-		<node>1OH<value>H 1.4182986 2.440951 -2.927554</value></node>
 		<node>CG<value>C 2.02933 2.275858 -1.278275</value></node>
 		<node>1HG<value>H 3.057449 1.966999 -1.081919</value></node>
 		<node>2HG<value>H 2.018846 3.280874 -1.702292</value></node>

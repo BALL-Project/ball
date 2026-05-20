@@ -1302,6 +1302,28 @@ namespace BALL
 			setStatusbarText((String)tr("Starting minimization..."), false);
 			ff.updateEnergy();
 
+			// v1.7.x-11 — refuse to minimize a structure the force field
+			// could not fully parameterize. Unassigned atoms make the
+			// nonbonded energy NaN; running the minimizer (and, from the
+			// toolbar Optimize path, the subsequent 500 K MD burst) would
+			// silently scramble coordinates into garbage and leave the
+			// user with "nothing happened". Abort cleanly with a clear
+			// message and leave the structure untouched. (Long-standing:
+			// amber96 has no parameters for the C-terminal carboxyl form
+			// BALL's prep produces on many structures — tracked in
+			// .planning/v1.7.x-PATCH-QUEUE.md v1.7.x-11.)
+			if (ff.getUnassignedAtoms().size() != 0)
+			{
+				Size n = ff.getUnassignedAtoms().size();
+				setStatusbarText((String)tr("Cannot minimize: ") + String(n)
+					+ (String)tr(" atom(s) have no force-field parameters "
+					              "(see Log). Structure left unchanged."), true);
+				Log.error() << "[runMinimization] aborted: " << n
+				            << " atom(s) could not be assigned force-field "
+				               "parameters; structure not modified." << std::endl;
+				return;
+			}
+
 			EnergyMinimizer* minimizer;
 			if (minimization_dialog_.getUseConjugateGradient())
 			{
@@ -1396,6 +1418,22 @@ namespace BALL
 			ForceField& ff = getForceField();
 
 			if (!setupForceField_(system, true)) return;
+
+			// v1.7.x-11 — same guard as runMinimization(): never run MD on a
+			// structure with unparameterized atoms (NaN forces would explode
+			// the trajectory and scramble coordinates). The toolbar Optimize
+			// path calls MDSimulation() between two minimizations.
+			if (ff.getUnassignedAtoms().size() != 0)
+			{
+				Size n = ff.getUnassignedAtoms().size();
+				setStatusbarText((String)tr("Cannot run MD: ") + String(n)
+					+ (String)tr(" atom(s) have no force-field parameters "
+					              "(see Log). Structure left unchanged."), true);
+				Log.error() << "[MDSimulation] aborted: " << n
+				            << " atom(s) could not be assigned force-field "
+				               "parameters; structure not modified." << std::endl;
+				return;
+			}
 
 			// Create an instance of the molecular dynamics simulation.
 			MolecularDynamics* mds = 0;
