@@ -388,8 +388,15 @@ namespace BALL
 
 		void WelcomeScreen::showWhatsNew(const QString& markdownFile)
 		{
+			// v1.7.x-26 — null immediately after deleteLater(): the early
+			// return below (file-open failure) would otherwise leave
+			// whats_new_card_ pointing at an object already scheduled for
+			// deletion, which onWhatsNewDismiss_() could then dereference.
 			if (whats_new_card_)
+			{
 				whats_new_card_->deleteLater();
+				whats_new_card_ = nullptr;
+			}
 
 			QFile f(markdownFile);
 			if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
