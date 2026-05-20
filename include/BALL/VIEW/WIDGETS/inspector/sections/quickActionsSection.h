@@ -41,11 +41,13 @@ namespace BALL
 			private Q_SLOTS:
 				void onClearClicked_();
 				void onInvertClicked_();
+				void onExpandToResiduesClicked_();   // v1.7.x-19
 
 			private:
 				MainControl* main_control_;
 				QPushButton* clear_btn_;
 				QPushButton* invert_btn_;
+				QPushButton* expand_btn_;            // v1.7.x-19
 		};
 
 	} // namespace VIEW

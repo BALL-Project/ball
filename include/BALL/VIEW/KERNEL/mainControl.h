@@ -786,6 +786,15 @@ namespace BALL
 			///
 			void complementSelection();
 
+			/** v1.7.x-19 — grow the current selection to whole residues.
+			 *  For every selected atom, select all atoms of its residue
+			 *  (atoms already selected at residue granularity are left as-is).
+			 *  Useful after picking a few atoms in the scene to operate on the
+			 *  full residues they belong to. No-op if nothing is selected or
+			 *  the selection touches no residue.
+			 */
+			void expandSelectionToResidues();
+
 			/** Clear Selection
 			 		Deselect all Composites and clear the selection list in the MainControl
 			*/

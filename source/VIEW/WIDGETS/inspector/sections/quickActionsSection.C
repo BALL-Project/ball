@@ -26,7 +26,8 @@ namespace BALL
 			                   parent),
 				main_control_(main_control),
 				clear_btn_(nullptr),
-				invert_btn_(nullptr)
+				invert_btn_(nullptr),
+				expand_btn_(nullptr)
 		{
 			QWidget* content = new QWidget(this);
 			QVBoxLayout* col = new QVBoxLayout(content);
@@ -39,9 +40,14 @@ namespace BALL
 
 			clear_btn_  = new QPushButton(tr("Clear Selection"), content);
 			invert_btn_ = new QPushButton(tr("Invert Selection"), content);
+			// v1.7.x-19 — grow the current atom selection to whole residues.
+			expand_btn_ = new QPushButton(tr("Expand to Residues"), content);
+			expand_btn_->setToolTip(tr("Select all atoms of every residue that "
+				"the current selection touches"));
 
 			row->addWidget(clear_btn_);
 			row->addWidget(invert_btn_);
+			row->addWidget(expand_btn_);
 			row->addStretch(1);
 			col->addLayout(row);
 
@@ -51,6 +57,8 @@ namespace BALL
 			        this, &QuickActionsSection::onClearClicked_);
 			connect(invert_btn_, &QPushButton::clicked,
 			        this, &QuickActionsSection::onInvertClicked_);
+			connect(expand_btn_, &QPushButton::clicked,
+			        this, &QuickActionsSection::onExpandToResiduesClicked_);
 		}
 
 		QuickActionsSection::~QuickActionsSection() = default;
@@ -63,6 +71,11 @@ namespace BALL
 		void QuickActionsSection::onInvertClicked_()
 		{
 			if (main_control_ != nullptr) main_control_->complementSelection();
+		}
+
+		void QuickActionsSection::onExpandToResiduesClicked_()
+		{
+			if (main_control_ != nullptr) main_control_->expandSelectionToResidues();
 		}
 
 	} // namespace VIEW

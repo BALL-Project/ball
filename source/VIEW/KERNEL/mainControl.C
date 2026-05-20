@@ -1848,7 +1848,7 @@ namespace BALL
 
 		void MainControl::complementSelectionHelper_(Composite& c)
 		{
-			if (c.isSelected()) 
+			if (c.isSelected())
 			{
 				deselectCompositeRecursive(&c, true);
 			}
@@ -1863,6 +1863,49 @@ namespace BALL
 					complementSelectionHelper_(*c.getChild(i));
 				}
 			}
+		}
+
+		void MainControl::expandSelectionToResidues()
+		{
+			// Snapshot the current selection — we mutate selection_ below.
+			HashSet<Composite*> snapshot = selection_;
+
+			// Collect the residues touched by the current selection.
+			HashSet<Composite*> residues;
+			for (HashSet<Composite*>::Iterator it = snapshot.begin(); +it; ++it)
+			{
+				Composite* c = *it;
+				Residue* res = 0;
+				Atom* atom = dynamic_cast<Atom*>(c);
+				if (atom != 0)
+				{
+					res = atom->getResidue();
+				}
+				else
+				{
+					res = dynamic_cast<Residue*>(c);
+				}
+				if (res != 0) residues.insert(res);
+			}
+
+			if (residues.isEmpty()) return;
+
+			// Select every atom of each touched residue.
+			for (HashSet<Composite*>::Iterator rit = residues.begin(); +rit; ++rit)
+			{
+				selectCompositeRecursive(*rit, true);
+			}
+
+			// Refresh the representations of every loaded root once (mirrors
+			// complementSelection's update pattern), then announce the change.
+			CompositeManager::iterator cit = getCompositeManager().begin();
+			for (; cit != getCompositeManager().end(); cit++)
+			{
+				updateRepresentationsOf(**cit, false);
+			}
+
+			notify_(new NewSelectionMessage);
+			printSelectionInfos();
 		}
 
 		void MainControl::enableLoggingToFile()
