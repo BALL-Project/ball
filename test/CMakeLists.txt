@@ -120,11 +120,22 @@ ENDIF()
 #   for PRO residue setup; the broken 2OB/2OH bond references cause getStatus()
 #   to return false when fragment application fails.
 #
-# All three: filed as Phase 999.35 backlog (OOS-PR-merge-regression-fix).
+# v1.7.x-11 (2026-05-20) — UN-QUARANTINED PeptideCapProcessor_test and
+# RotamerLibrary_test. Both were quarantined only because the 45dce6971
+# PR-merge injected phantom 1OB/1OH atoms into the proline fragment
+# template (data/fragments/PRO.db) — inflating proline atom counts
+# (PeptideCapProcessor: 171 vs expected 169) and breaking ResidueChecker /
+# RotamerLibrary fragment setup (getStatus() == false). That same data
+# defect broke energy optimization and was removed in
+# `fix(v1.7.x-11): remove phantom proline atoms (PRO.db)`. With the
+# phantoms gone both tests PASS, so leaving them WILL_FAIL would
+# (correctly) report an "unexpected pass". They are normal tests again.
+#
+# Peptides_test STAYS quarantined: its failure is an unrelated PR-#550
+# chemistry change (one-letter codes 'B'->ASX, 'Z'->GLX) where the test
+# itself needs updating. Tracked as Phase 999.35 backlog.
 SET_TESTS_PROPERTIES (
-	PeptideCapProcessor_test
 	Peptides_test
-	RotamerLibrary_test
 	PROPERTIES WILL_FAIL TRUE
 )
 
