@@ -1,6 +1,8 @@
 # Track A v2.2 Cluster R32 — Codex CLI Round 32 (2026-05-20)
-**Status:** Complete
-**Verdict:** NEEDS-FIXES -- do not start H1b until the D56 migration primitive is fixed
+**Status:** Complete (R32 NEEDS-FIXES → fixes in 6b339963f → R32b GO)
+**Verdict:** R32 = NEEDS-FIXES; **R32b = GO -- start H1b** (see the R32b
+re-review section appended below). The 2 HIGH + 2 LOW D56-migration
+findings are all closed; 2 non-blocking H2/H3 cautions recorded.
 **Reviewer:** Codex CLI 0.128.0
 **Subject:** v2.2 H1a close review (container metadata table + parity skeleton)
 
@@ -43,3 +45,19 @@ Two D56 gaps remain. First, atom remap misses silently fall back to the old atom
 3. Correct the property-migration comment/contract mismatch and record property migration as an H2 obligation.
 
 After those fixes, H1b can start with the remaining `ChildRef` reparenting guard as an H2 mutation-wiring follow-up.
+
+## R32b re-review (post-fix)
+
+**Verdict: GO -- start H1b.** I re-reviewed commit `6b339963f85cf849a16f08736a5cf9ddd8bd6bd6` against the four R32 findings and looked specifically for regressions in `release_source_subtree_`, the missing-remap throw path, and `reparent_child`. The original H1a blockers are closed. I am appending this re-review to `.planning/v2.2/V22-CODEX-REVIEW-ROUND32.md`.
+
+**Original finding 1 -- CLOSED.** `migrate_one_` no longer falls back to the source atom index. Atom children are looked up in `atom_remap`, and a missing entry throws `Exception::InvalidArgument` before attaching that atom edge (`source/KERNEL/moleculeStore.C:499-513`). The header now states that `atom_remap` is mandatory and complete, with identity remap only as the explicit same-index/test mode (`include/BALL/KERNEL/_moleculeStoreInternal.h:637-642`). This directly closes the mis-attachment risk from R32.
+
+**Original finding 2 -- CLOSED.** `migrate_subtree_from` is now a true move: the source parameter is non-const (`include/BALL/KERNEL/_moleculeStoreInternal.h:645-648`), migration copies into the destination, sets the new root detached (`source/KERNEL/moleculeStore.C:535-543`), then releases the source subtree (`source/KERNEL/moleculeStore.C:544-547`). `release_source_subtree_` snapshots each source row's children by value before recursing, clears migrated source atom reverse edges, and only then frees the source row (`source/KERNEL/moleculeStore.C:522-532`), so the post-order recursion does not hold invalidated references across `release()`. The strengthened parity test checks source live count, freed root, and cleared atom reverse edges after migration (`test/HierarchyParity_test.C:444-449`).
+
+**Original finding 3 -- CLOSED.** The migration contract no longer claims container properties are copied. The header explicitly says container property migration is deferred to H2 and not copied here (`include/BALL/KERNEL/_moleculeStoreInternal.h:637-639`), matching the implementation comment (`source/KERNEL/moleculeStore.C:487-489`). The H2 phasing table now carries the property-migration obligation and parity-test requirement (`.planning/v2.2/V22-H0-ADDENDUM.md:216`).
+
+**Original finding 4 -- CLOSED for H1a.** The bare attach ops still intentionally assume a not-already-attached child (`include/BALL/KERNEL/_moleculeStoreInternal.h:575-580`), but H1a now has `ContainerTable::reparent_child` for remove-before-add moves (`include/BALL/KERNEL/_moleculeStoreInternal.h:575-581`, `source/KERNEL/moleculeStore.C:425-432`). The new parity test covers both container and atom reparenting and verifies the old parent edge is removed (`test/HierarchyParity_test.C:452-479`). H2 still needs to be careful about ordered same-parent moves/splices because this helper appends; that is an H2 wiring concern, not an H1b blocker, and the addendum now says H2 must use the checked helper rather than bare attach ops for moves/splices (`.planning/v2.2/V22-H0-ADDENDUM.md:216`).
+
+**New findings from the fixes: none blocking.** `release_source_subtree_` is structurally safe for the H1a tree invariant: it copies the child vector before recursion and frees each row once in post-order (`source/KERNEL/moleculeStore.C:522-532`). The `&src != this` guard is an asserted precondition, not a runtime release-build check (`source/KERNEL/moleculeStore.C:539-542`), but the primitive is internal and D56 migration is cross-store orphan-to-system. The missing-remap throw can leave partially allocated destination rows and destination atom reverse edges from earlier copied siblings (`source/KERNEL/moleculeStore.C:477-513`); for H1a this is acceptable because a missing remap is a caller contract violation and the test/primitive path uses a throwaway destination on failure. Before production `System::adoptSubtree` relies on this against a live destination, H2/H3 should either pre-validate remap completeness or document that such exceptions are fatal to the attempted destination table state. `reparent_child` handles both CONTAINER and ATOM children by reading the correct reverse edge (`source/KERNEL/moleculeStore.C:427-429`); self-reparent removes then appends, so it is not a no-op and can change sibling order, another H2 ordered-splice detail rather than an H1b gate.
+
+**CTest confirmation.** `ctest --test-dir build -R '^HierarchyParity_test$' --output-on-failure` passed. Full suite confirmation is consistent with the change when run with the repository data path: `BALL_DATA_PATH=/Users/kohlbach/Claude/BALL2/data ctest --test-dir build --output-on-failure` reported **285/285 tests passed**. Running full ctest without that environment used the stale cache path `/usr/local/share/BALL/data` and produced unrelated data-dependent failures, so the valid confirmation is the `BALL_DATA_PATH=/Users/kohlbach/Claude/BALL2/data` run.
