@@ -190,23 +190,44 @@ introduces a new performance-sensitive code path. Mitigation:
 P4.0 profile gates the design; JsonBench_test gates the perf
 claim; existing MoleculeStoreJson_test verifies correctness.
 
-### P5 — Perf + iteration API + generation-guard
+### P5 — Benchmark reproducibility (TRIMMED per R26 / D44)
 
-**Goal:** complete the v2.1 perf/instrumentation story.
+**Goal:** make v2.1's release-claim perf numbers reproducible.
+Everything else originally in P5 (STORE-ITER-API, pinned-baseline
+CI gates, generation-guard) was deferred to v2.2 per R26 — see
+D44 in V21-DECISIONS.md and the deferral rationale below.
 
-**Sub-phases:**
+**Sub-phases (trimmed):**
 
 | # | Subject | Deliverable |
 |---|---|---|
-| P5.1 | V21-STORE-ITER-API | New public `MoleculeStore::iterAtoms()` / `iterBonds()` returning lightweight iterators that skip `Atom*` materialisation. Hot loops can use this; existing v0 iteration paths unchanged. **P5.1 creates** `.planning/v2.1/P5-STORE-ITER-API.md` as its first deliverable: API design memo covering signature, value-category (yields `Atom*` for v2.2 forward-compat per R21 P21-7), iterator-invalidation contract under store mutation, and a usage example. R26 close review (renumbered from R27) verifies the API design AND its v2.2 forward-compat. |
-| P5.2 | V21-CI-PERF-GATES | **Concrete calibration methodology (R21 P21-8 + R21b P21b-4):** collect 5 clean CI baseline runs per benchmark on GHA macos-15 baseline (Apple Clang Release CORE_ONLY). Each benchmark internally runs N=5 iterations; report median + min/max + coefficient of variation. Gate at `max(2 × baseline_median, baseline_median + 6 × MAD)`. **P5.2 creates** `.planning/v2.1/PERF-BASELINES.json` as the pinned baseline file (one-time collection on clean v2.1 baseline); refreshed only via an explicit "perf baseline refresh" PR after intentional benchmark or runner drift review. Routine CI does NOT re-collect baselines (otherwise CI gets expensive and flaky). Benchmarks with CoV > 30% on the baseline run are marked "advisory" (warning-only) until calibration improves. |
-| P5.3 | V21-MEDIAN-OF-N-BENCH | Bench harness refactor to report median + p99 + MAD across N runs; release-claim numbers reproducible. |
-| P5.4 | Generation-guard `BALL_DEBUG` mode (R21 P21-9 + R21b P21b-5 + R21c P21c-5) | Per D25: in `BALL_DEBUG` builds, every Atom handle deref asserts `handle.generation == store->generation_`. **Verification — two levels:** (a) **CI-enforced:** `ctest -R "GenerationGuard"` runs the debug-only stale-handle trap test (new test `GenerationGuard_test` lands with P5.4); CI gate fails if missing or stale handle doesn't trap. (b) **Manual close-review:** R26 (P5 close review) inspects release-build `objdump -d` of representative inline getters (`Atom::getPosition()`, `Atom::getName()`) to confirm no compare-against-`generation_` in hot getter assembly. (`nm -gU` grep was considered but rejected per R21c P21c-5: private member name + inline dereference + optimization stripping makes the grep false-negative-prone, not a meaningful proof.) If a sound automated release-build check is identified later, it lands as a v2.1.x backlog item. |
-| P5.5 | Close review (R27) | Codex reviews perf gates + iter API completeness + generation-guard #ifdef proof |
+| P5.3 | V21-MEDIAN-OF-N-BENCH | Add a small benchmark-reporting helper that runs the timed body N times and reports median + p99 + min/max + MAD + coefficient of variation. Apply to `JsonBench_test` (save/load) and `SelectorBench_test` (speedup). **Keep the existing fixed ctest pass/fail thresholds** — do NOT add a pinned-baseline CI comparator (deferred per D44). Net: release numbers become reproducible (median-of-N, not single-run) without a new CI policy. |
+| P5.5 | Close review (R27) | Codex reviews the bench-reporting helper for correctness (median/MAD math) + that no v2.2-shaped scaffolding leaked in. |
 
-**Risk:** STORE-ITER-API is new public API surface (per D33b
-this needed a planning review — handled in R26 below). Must be
-forward-compatible with v2.2's inheritance flip.
+**Deferred to v2.2 (R26 findings, D44):**
+- **P5.1 V21-STORE-ITER-API** — "skip Atom* materialisation" is
+  false in v2.1 (atoms are still heap `Atom*` with store
+  back_ptr; the objects already exist). The materialisation win
+  only arrives after the v2.2 thin-handle flip. Shipping a public
+  iterator API now would commit a value-category + invalidation
+  contract before the thin-handle shape is known. → v2.2.
+- **P5.2 V21-CI-PERF-GATES (pinned-baseline comparator)** — not
+  implementable by the current ClassTest harnesses without new
+  infra; over-built for single-platform macOS-arm64 CI; P4 already
+  tightened the gates that catch the known O(n²) regression. The
+  pinned `PERF-BASELINES.json` + `max(2×median, median+6×MAD)` +
+  GHA comparator → v2.2 (or v2.1.x). v2.1 keeps fixed thresholds.
+- **P5.4 generation-guard `BALL_DEBUG`** — `Atom::store_generation_`
+  exists, but a per-deref `store_generation_ == store_->generation()`
+  check would FALSE-TRIP on ordinary store growth/reserve/compact
+  (generation bumps on capacity change; the handle stays valid if
+  its slot exists). Correct stale-handle detection needs v2.2
+  slot-generation semantics + handle-refresh machinery. → v2.2,
+  bundled with the thin-handle lifecycle. Tracked as
+  `V21-GENERATION-GUARD` in BACKLOG.md.
+
+**Risk:** none material — P5.3 is a contained test-harness
+reporting cleanup with no public API or CI-policy change.
 
 ### P6 — Release
 

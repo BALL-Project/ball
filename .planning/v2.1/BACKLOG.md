@@ -57,12 +57,26 @@ state, but tracked here for visibility.)
   heap objects that own the bags (see `P4.2-FINDINGS.md`). Natural
   home is the v2.2 bond-thin-handle work where bonds become
   store-native. Closes the R16 C-B7 v2.0 known gap.
-- **V21-BOND-GRAPH-RECONSTRUCT** (D43, v2.2): the System JSON
-  round-trip does not rebuild the Atom-side `Bond*` graph;
-  `atom.countBonds() == 0` after `loadSystemJSON` even though the
-  store has the bonds. Pre-existing v2.0 fidelity gap, independent
-  of bond properties. Resolved by the v2.2 bond-representation
-  redesign rather than patched onto the current dual representation.
+- **V21-BOND-GRAPH-RECONSTRUCT** (D43): CLOSED in v2.1 P4.2 — the
+  System JSON loader now reconstructs the Atom-side `Bond*` graph
+  via `createBond` (commit 45df3714d / R25-hardened 67827ad7c).
+  `atom.countBonds()` is correct post-load. (Listed here for
+  history; no longer outstanding.)
+- **V21-STORE-ITER-API** (D44, was v2.1 P5.1 → now v2.2): public
+  `MoleculeStore::iterAtoms()/iterBonds()`. Deferred because the
+  "skip Atom* materialisation" win only exists after the v2.2
+  thin-handle flip; designing the public iterator contract now
+  risks v2.2 reshaping it.
+- **V21-CI-PERF-GATES** (D44, was v2.1 P5.2 → now v2.2/v2.1.x):
+  pinned-baseline CI comparator (`max(2×median, median+6×MAD)`,
+  CoV classification). Needs new harness infra; over-built for
+  single-platform CI. v2.1 keeps fixed ctest thresholds.
+- **V21-GENERATION-GUARD** (D44, was v2.1 P5.4 → now v2.2): the
+  `BALL_DEBUG` per-deref Atom-handle staleness check. The naive
+  `store_generation_ == store_->generation()` compare false-trips
+  on ordinary store growth/reserve/compact; correct detection
+  needs v2.2 slot-generation semantics + handle-refresh
+  machinery. Supersedes D25 for v2.1.
 
 ---
 

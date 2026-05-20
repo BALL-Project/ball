@@ -1323,3 +1323,52 @@ current dual representation.
 
 *Sixth revision 2026-05-20 post-P4.2. Next: P4.3
 V21-ELEMENT-INSTANCE-ID.*
+
+---
+
+# Seventh revision post-R26 (2026-05-20)
+
+## D44. P5 trimmed to median-of-N benchmark reporting only
+
+**Decision (R26 P5 planning review + maintainer "potentially
+revise, then execute"):** P5 is trimmed to P5.3
+(V21-MEDIAN-OF-N-BENCH) alone. P5.1, the heavy part of P5.2, and
+P5.4 are deferred to v2.2.
+
+**Rationale (R26, code-grounded):**
+- **P5.1 STORE-ITER-API → v2.2.** "Skip Atom* materialisation" is
+  not real in v2.1 — atoms are heap `Atom*` objects with a store
+  back_ptr; the objects already exist, so an iterator yielding
+  `Atom*` skips nothing. The win arrives only after the v2.2
+  thin-handle flip. Shipping the public API now would lock a
+  value-category/invalidation contract before the thin-handle
+  shape is known.
+- **P5.2 pinned-baseline CI gate → v2.2/v2.1.x.** The ClassTest
+  harnesses can't read a baseline file + compute
+  `max(2×median, median+6×MAD)` + classify CoV without new infra.
+  Over-built for single-platform CI; P4 already tightened the
+  gates that catch the known regression. v2.1 keeps fixed ctest
+  thresholds.
+- **P5.4 generation-guard → v2.2.** `Atom::store_generation_`
+  exists, but a per-deref equality check against
+  `store_->generation()` would FALSE-TRIP on ordinary store
+  growth/reserve/compact (the generation counter tracks
+  column-storage events, not handle staleness; a handle stays
+  valid if its slot exists). Correct detection needs v2.2
+  slot-generation semantics. Implementing the naive D25 check now
+  would be wrong. Tracked as `V21-GENERATION-GUARD`.
+- **P5.2 vs P5.3 ordering** was backwards (gates depend on the
+  median harness). With the gate deferred, only P5.3 remains.
+
+**Impact:**
+- v2.1 P5 scope = P5.3 only: a median-of-N benchmark-reporting
+  helper applied to JsonBench + SelectorBench, keeping existing
+  fixed thresholds. R27 close review.
+- D25 (generation guard, debug-only) is **superseded for v2.1**
+  by D44 — it moves to v2.2 with the corrected slot-generation
+  framing.
+- v2.1 still ships honestly per D40: JSON load 16× + bond
+  round-trip + RTTI cleanup + reproducible bench numbers, plus
+  v2.2 prep. No new public API, no fragile CI perf system.
+
+*Seventh revision 2026-05-20 post-R26. Next: execute P5.3.*
