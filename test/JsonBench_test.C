@@ -103,15 +103,16 @@ CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITHOUT per-atom properties)
 	TEST_EQUAL(dst.countMolecules(), n_mols)
 
 	// K0.8 + 2026-05-18 (Codex R9 finding 4, partial calibration):
-	// gates were 5000ms / 30000ms (K0.8). Recalibrated against 3
-	// repeated runs post AndNode-scratch + DTOR-HARDEN: save
-	// 207-260 ms, load 3534-3689 ms. Save tightened to ~5× headroom
-	// (still catches >10× regression). Load tightened to ~3× headroom
-	// (load has less natural margin and v2.1 JSON-load-batching may
-	// transiently move numbers around). True CI-derived baselines
-	// (median + 2σ across CI machines) remain v2.1 backlog.
-	TEST_EQUAL(save_ms < 1500.0,  true)
-	TEST_EQUAL(load_ms < 10000.0, true)
+	// gates were 5000ms / 30000ms (K0.8) -> 1500ms / 10000ms.
+	// v2.1 P4.1 (V21-LOAD-BATCH, 2026-05-20): the loadSystemJSON
+	// O(n^2) CSR-rebuild was fixed (insert bucket 3414ms -> 13ms).
+	// Local post-fix: load(no-props) 220ms (was ~3588ms = 16x
+	// faster). Load gate tightened from 10000 to 2000ms: that's
+	// ~9x headroom over local + CI variance, and STILL catches the
+	// O(n^2) regression (which would bring load back to ~3500ms+,
+	// exceeding 2000). Save unchanged.
+	TEST_EQUAL(save_ms < 1500.0, true)
+	TEST_EQUAL(load_ms < 2000.0, true)
 RESULT
 
 CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITH per-atom properties)
@@ -141,10 +142,12 @@ CHECK(K0.7.4 saveSystemJSON profile at 100k atoms WITH per-atom properties)
 
 	TEST_EQUAL(dst.countAtoms(),     N)
 	// K0.8 + 2026-05-18 recalibration: observed 322-332 ms save /
-	// 3799-3830 ms load over 3 runs. Properties roughly double both
-	// vs no-props. Save tightened to ~6× headroom, load to ~3×.
-	TEST_EQUAL(save_ms < 2000.0,  true)
-	TEST_EQUAL(load_ms < 10000.0, true)
+	// 3799-3830 ms load. v2.1 P4.1 (2026-05-20): post O(n^2)-fix
+	// load (with props) 402ms (was ~3750ms = 9.3x faster). Load gate
+	// tightened from 10000 to 2500ms: ~6x headroom + CI variance,
+	// still catches the O(n^2) regression (~3800ms+). Save unchanged.
+	TEST_EQUAL(save_ms < 2000.0, true)
+	TEST_EQUAL(load_ms < 2500.0, true)
 RESULT
 
 END_TEST

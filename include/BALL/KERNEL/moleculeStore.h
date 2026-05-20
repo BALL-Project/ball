@@ -376,6 +376,20 @@ namespace BALL
 		template <typename F>
 		void for_each_bond_of(Index i, F&& fn) const
 		{
+			// v2.1 P4.1 (V21-LOAD-BATCH, Codex R24): empty-bond-table
+			// fast path. When the store has zero bond records there are
+			// no incident bonds for any atom, so skip ensure_csr_()
+			// entirely. This is the load-time O(n^2) fix: the orphan
+			// store holds ~100k bondless atoms during a JSON load, and
+			// every per-atom adopt() re-dirties the CSR (via
+			// allocate_atom/release_atom) — without this guard each
+			// adopt's for_each_bond_of triggered a full O(n_atoms) CSR
+			// rebuild (the bond_csr_off_.assign), giving O(n^2). The
+			// guard makes the bondless case O(1) per call → O(n) total.
+			// The ensure_csr_() internal empty fast path alone is
+			// insufficient because the assign(n_atoms+1, 0) still runs
+			// per call when csr_dirty_ keeps being re-set.
+			if (bonds_.empty()) return;
 			ensure_csr_();
 			const std::uint32_t lo = bond_csr_off_[i];
 			const std::uint32_t hi = bond_csr_off_[i + 1];

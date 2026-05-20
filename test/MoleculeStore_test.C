@@ -204,6 +204,46 @@ CHECK(CSR adjacency: bond_degree + bonds_of post K0.2b)
 	TEST_EQUAL(count, 2)
 RESULT
 
+CHECK(P4.1 empty-bond fast path on a bondless store with valid indices)
+	// v2.1 P4.1 (V21-LOAD-BATCH, Codex R24): a store with allocated
+	// atoms but ZERO bond records must return empty adjacency from
+	// bond_degree / bonds_of / for_each_bond_of WITHOUT triggering the
+	// O(n_atoms) CSR rebuild. This is the load-time O(n^2) fix: the
+	// orphan store during a JSON load holds ~100k bondless atoms, and
+	// each per-atom adopt re-dirties the CSR; the guard makes the
+	// bond-scan primitives O(1) when bonds_ is empty.
+	MoleculeStore store;
+	store.reserve(16);
+	auto a0 = store.allocate_atom();
+	auto a1 = store.allocate_atom();
+	auto a2 = store.allocate_atom();
+
+	// No bonds added. All adjacency queries return empty, for valid
+	// indices, and must not throw / out-of-bounds.
+	TEST_EQUAL(store.bond_degree(a0), 0)
+	TEST_EQUAL(store.bond_degree(a1), 0)
+	TEST_EQUAL(store.bond_degree(a2), 0)
+	TEST_EQUAL(store.bonds_of(a0).size(), 0)
+	TEST_EQUAL(store.bonds_of(a2).size(), 0)
+	int cb = 0;
+	store.for_each_bond_of(a0, [&](std::uint32_t) { ++cb; });
+	store.for_each_bond_of(a2, [&](std::uint32_t) { ++cb; });
+	TEST_EQUAL(cb, 0)
+
+	// Allocate/release more atoms (which re-dirty the CSR) — queries
+	// stay correct + fast on the still-bondless store.
+	auto a3 = store.allocate_atom();
+	store.release_atom(a1);
+	TEST_EQUAL(store.bond_degree(a3), 0)
+	TEST_EQUAL(store.bond_degree(a0), 0)
+
+	// Adding a bond re-enables the full CSR path (correctness parity).
+	store.add_bond(a0, a2);
+	TEST_EQUAL(store.bond_degree(a0), 1)
+	TEST_EQUAL(store.bond_degree(a2), 1)
+	TEST_EQUAL(store.bond_degree(a3), 0)
+RESULT
+
 CHECK(CSR invalidates on add_bond / allocate_atom)
 	MoleculeStore store;
 	store.reserve(8);

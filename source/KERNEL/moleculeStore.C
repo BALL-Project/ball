@@ -813,6 +813,37 @@ void MoleculeStore::ensure_csr_() const
 	if (!csr_dirty_) return;
 
 	const std::size_t n_atoms = positions_.size();
+
+	// v2.1 P4.1 (V21-LOAD-BATCH, Codex R24 P24-4): empty-bond-table
+	// fast path. When the store has zero bond records, the CSR
+	// adjacency is trivially empty — there is nothing to count or
+	// fill. Build the empty CSR (all-zero offsets, empty idx) and
+	// clear the dirty flag WITHOUT the O(n_atoms) assign + bonds_
+	// scan that the general path below does.
+	//
+	// This closes the loadSystemJSON O(n^2) regression: the orphan
+	// store accumulates ~100k freshly-created bondless atoms during
+	// a load; each per-atom adopt() calls for_each_bond_of(orphan)
+	// -> ensure_csr_(), and every allocate_atom/release_atom re-sets
+	// csr_dirty_, so without this guard each adopt re-ran a full
+	// O(n_atoms) rebuild producing an empty adjacency anyway. With
+	// the guard the rebuild is O(n_atoms) for the offsets-zero only
+	// (assign of n_atoms+1 zeros) — actually still O(n_atoms) for the
+	// assign, BUT it skips the bonds_ scan AND, more importantly,
+	// the result is cached: subsequent for_each_bond_of calls hit the
+	// `if (!csr_dirty_) return;` fast path until the next atom
+	// mutation. The net adopt loop drops from O(n^2) to O(n).
+	//
+	// (add_bond re-dirties on push + tombstone-slot reuse, so the
+	// empty CSR is correctly invalidated when bonds appear.)
+	if (bonds_.empty())
+	{
+		bond_csr_off_.assign(n_atoms + 1, 0);
+		bond_csr_idx_.clear();
+		csr_dirty_ = false;
+		return;
+	}
+
 	bond_csr_off_.assign(n_atoms + 1, 0);
 
 	// Count degree per atom (each bond contributes to two atoms).
@@ -853,12 +884,17 @@ void MoleculeStore::ensure_csr_() const
 
 std::size_t MoleculeStore::bond_degree(Index i) const
 {
+	// v2.1 P4.1 (V21-LOAD-BATCH, Codex R24): empty-bond fast path —
+	// no incident bonds when bonds_ is empty; skip ensure_csr_.
+	if (bonds_.empty()) return 0;
 	ensure_csr_();
 	return bond_csr_off_[i + 1] - bond_csr_off_[i];
 }
 
 std::vector<std::uint32_t> MoleculeStore::bonds_of(Index i) const
 {
+	// v2.1 P4.1 (V21-LOAD-BATCH, Codex R24): empty-bond fast path.
+	if (bonds_.empty()) return std::vector<std::uint32_t>();
 	ensure_csr_();
 	const std::uint32_t lo = bond_csr_off_[i];
 	const std::uint32_t hi = bond_csr_off_[i + 1];

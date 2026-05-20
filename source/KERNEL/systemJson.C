@@ -227,6 +227,14 @@ void loadSystemJSON(System& sys, std::istream& is)
 		sys.destroy();
 		sys.getStore().clear();
 
+		// v2.1 P4.1 Layer 2 (V21-LOAD-BATCH): pre-reserve the
+		// destination store's SoA columns to the known atom count.
+		// Avoids ~17 incremental vector reallocations during the
+		// per-atom adopt phase. (Layer 1's empty-bond CSR fast path
+		// in moleculeStore.h is the primary O(n^2)->O(n) fix; this
+		// reserve is the complementary constant-factor win.)
+		sys.getStore().reserve(n + 64);
+
 		if (doc.contains("name"))
 			sys.setName(String(doc["name"].get<std::string>().c_str()));
 
