@@ -468,4 +468,55 @@ Grouping storage when A2 happens: per-atom group-id columns + CSR
 
 **This needs the maintainer's call: A1-now-A2-later, or A2-now.**
 
-*H0 confirmations + container fork recorded 2026-05-20.*
+### D55 RESOLVED — A2 (flat SoA topology, now)
+
+**Decision (maintainer 2026-05-20): A2.** Commit to the full flat
+SoA topology in v2.2. The molecular hierarchy becomes store
+metadata, not a C++ object tree. This is the genuine modern end
+state for the 2.x arc; the maintainer accepts the larger break
+(container/PDB/naming/residue layer) to avoid carrying a parallel
+object hierarchy.
+
+**Locked A2 model:**
+- **System** stays a C++ object — it owns the `MoleculeStore`.
+- **`MoleculeStore` gains a container metadata table:** one row per
+  Molecule/Chain/Residue/SecondaryStructure/Nucleotide/Fragment/
+  Protein/NucleicAcid — `{ kind, parent_container_idx, name,
+  type-specific fields, generation }`. O(thousands) rows; memory
+  irrelevant.
+- **Per-atom columns gain `parent_container_idx`** (the immediate
+  container row). The hierarchy is reconstructed by walking
+  container rows' `parent_container_idx` up to the System root.
+- **Container classes become value handles/views** —
+  `Molecule`/`Chain`/`Residue`/… are `{ store*, container_idx,
+  generation }` handles over the metadata table, same pattern as
+  `Atom`/`Bond`. No heavy `Composite` object per container.
+- **Grouping = CSR by `parent_container_idx`** (base; mirrors the
+  bond CSR). "Direct atoms of container C" = CSR lookup; "all atoms
+  under C" = recursive container-subtree walk + union. Contiguous
+  ranges remain an optional `compact()`-time optimization (reorder
+  so a container's atoms are contiguous), NOT a base requirement
+  (the free-list store has no ordering contract).
+- **`AtomContainer`** as a heavy object disappears; its API
+  (`getAtom`, `countAtoms`, `append/insert`, sub-container nav)
+  re-expresses on the container-handle + store grouping.
+- **`atom.getResidue()/getChain()/getMolecule()`** = walk the
+  container-row parent chain filtering by kind (was: walk Composite
+  parent pointers).
+
+**Consequences vs the A1-assuming `V22-ARCH-HANDLE-MODEL.md`:**
+- The whole molecular hierarchy (not just atoms/bonds) becomes
+  store-backed handles. `Composite` as a base class largely exits
+  the molecular kernel (System may keep a thin form as store owner).
+- Bigger consumer break: every `Molecule*`/`Chain*`/`Residue*`
+  consumer + PDB build + naming. Enumerated in the API-break ledger.
+- Does not change the D13 atom-memory math (containers were already
+  negligible); A2's value is architectural coherence + traversal
+  perf + killing the dual hierarchy, per the maintainer's modern-2.x
+  goal.
+
+`V22-ARCH-HANDLE-MODEL.md` is updated to the A2 model (container
+section rewritten). R30 reviews the A2 architecture.
+
+*H0 confirmations + container fork recorded 2026-05-20. D55
+resolved A2 2026-05-20.*
