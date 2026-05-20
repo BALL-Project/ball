@@ -134,7 +134,10 @@ namespace BALL
 		{
 			assertValid_();
 			ContainerChildRef c = store_->container_child_(idx_, i);
-			if (c.is_atom) return ContainerHandleBase();
+			// Null handle if the child is an atom OR the index is out of
+			// range (container_child_ returns {is_atom=false, idx=0} for an
+			// out-of-range i; idx 0 is the sentinel, never a real container).
+			if (c.is_atom || c.idx == 0) return ContainerHandleBase();
 			return ContainerHandleBase(*store_, c.idx);
 		}
 

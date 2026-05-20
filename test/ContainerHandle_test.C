@@ -122,6 +122,9 @@ CHECK(parent / child navigation + as<>() narrow)
 	TEST_EQUAL(rh.getChild(1).idx, 11u)
 	// An atom child resolves to a null container handle.
 	TEST_EQUAL((bool)rh.getChildContainer(0), false)
+	// R34 LOW: an out-of-range child index also yields a null handle
+	// (not a non-null handle bound to the sentinel row 0).
+	TEST_EQUAL((bool)rh.getChildContainer(99), false)
 
 	// Chain's first child is the residue container.
 	ContainerHandleBase chain_child = ContainerHandleBase(store, chain).getChildContainer(0);
