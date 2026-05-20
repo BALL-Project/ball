@@ -59,29 +59,38 @@ mapping, and the handle-yielding traversal layer.
   `~System`; individual destruction may orphan rows (acceptable — see
   D69).
 
-## D68. v0-object → container-row binding (reuse the 8-byte slot)
+## D68. v0-object → container-row binding (dedicated slot on AtomContainer)
 
 Each v0 **container** object needs to know its `ContainerTable` row index
 so a mutation hook can address it in O(1).
 
-- **Reuse `Composite::composite_handle_packed_`** (the existing 8-byte
-  slot, freed by retiring the `composite_nodes_` mirror) to store the
-  container row index. New accessors `getContainerRow_()/setContainerRow_
-  (u32)` read/write the low 32 bits; `0` = unbound (row 0 is the table
-  sentinel). No growth of `Composite`/`Atom` (the slot already exists).
-- **Atoms** do NOT use this slot for a row — an atom is a leaf addressed
-  by its `Atom::getStoreIndex()` (the existing handle index). The mirror
-  discriminates atom-vs-container children via `detail::compositeAsAtom_`
-  (still valid in dual existence; removed only at H4).
+- **Add a dedicated `std::uint32_t container_row_idx_ = 0` to
+  `AtomContainer`** (the base of every molecular container —
+  Molecule/Chain/Residue/Protein/SecondaryStructure/Nucleotide/
+  NucleicAcid/Fragment/System). `0` = unbound (row 0 is the sentinel).
+  +4 bytes per container; containers are O(thousands) so memory is
+  irrelevant. Transitional — removed at H4.
+  - **NOT reusing `Composite::composite_handle_packed_` (R35 HIGH).**
+    Reusing that slot while the old `getCompositeHandle_/
+    setCompositeHandle_/mirrorToSideTable_` APIs still interpret it as a
+    `CompositeHandle` is a footgun (a row index reinterpreted as handle
+    bytes could resurrect `composite_nodes_` state), and would force
+    rewriting `SideTableParity_test`. A dedicated slot leaves the
+    superseded `composite_nodes_` machinery completely untouched (dead
+    but inert; removed in a later cleanup, not H2).
+  - The mirror hook obtains the slot via `dynamic_cast<AtomContainer*>
+    (parent)` — in the molecular hierarchy the mutation receiver is
+    always an `AtomContainer`. (Atoms are leaves, never a parent.)
+- **Atoms** are addressed by `Atom::getStoreIndex()` (the existing handle
+  index), not a row. The mirror discriminates atom-vs-container children
+  via `detail::compositeAsAtom_` (valid in dual existence; removed at H4).
 - **Lazy allocate-on-first-mirror:** a container's row is allocated the
   first time it participates in a mirrored mutation while it has a
-  reachable store (`getCompositeStore_() != null`); the row index is
-  written back to the slot. A free-standing container (no store) is
-  mirrored later, at adoption (the orphan→System migration already
-  carries rows per D56).
-- **System** is the implicit root: it is not a container row; a
-  top-level molecule's `parent_container_idx == CONTAINER_NONE`
-  (matches H1a).
+  reachable store (`getCompositeStore_() != null`); the index is written
+  to `container_row_idx_`. Free-standing containers (no store) are NOT
+  mirrored during mutation — they are **materialized at adoption** (D73).
+- **System** is the implicit root: not a container row; a top-level
+  molecule's `parent_container_idx == CONTAINER_NONE` (matches H1a).
 
 ## D69. Destruction guard — the P2.1.1 trap defused
 
@@ -89,11 +98,23 @@ so a mutation hook can address it in O(1).
 `clear()`/`destroyChildren_`) **mirrors the detach iff `this` (the
 parent) is NOT being destroyed.**
 
-- Add a `being_destroyed_` flag to `Composite`, set **true at the very
-  start of `~Composite`** (before `destroyChildren_()`), and likewise at
-  the start of `destroy()`'s self-teardown.
+- Add a `being_destroyed_` flag to `Composite`. **Set it true at the
+  START of BOTH `Composite::destroy()` overloads** (before `clear()` /
+  child teardown) **AND at `~Composite` entry** as a backstop (R35
+  BLOCKER). The flag must be set BEFORE any child teardown runs.
+  - **Why `destroy()` not just `~Composite`:** every derived destructor
+    calls `destroy()` before the base `~Composite` runs —
+    `Atom::~Atom` (`source/KERNEL/atom.C:289`), `AtomContainer::
+    ~AtomContainer` (`atomContainer.C:52`), `Molecule`/`Residue`/`Chain`/
+    `System::~…` all call `destroy()` first. So child teardown happens in
+    `Composite::destroy()`/`clear()`, well before `~Composite`. Setting
+    the flag only in `~Composite` is too late: the cascade already ran.
 - `removeChild`'s mirror hook checks **`this->being_destroyed_`** (the
   PARENT's flag), not the child's.
+- **H2a tests must cover derived-destructor cascades** (`delete residue`,
+  `delete molecule`, `~System`) and assert no mirror write fired during
+  teardown (e.g. row count stable across the destruction; parity of the
+  surviving roots).
 
 Why this is correct, traced against `~Composite`:
 
@@ -130,18 +151,37 @@ empty children). `clear()` is distinct from `~Composite`.
 | `prependChild(C)` | `prepend_child(P, ref(C))` | |
 | `insertBefore(C)` *(C inserted before `this`)* | `insert_child_before(parentOf(this), ref(C), ref(this))` | v0 `insertBefore` inserts C as a sibling before the receiver |
 | `insertAfter(C)` | `insert_child_after(parentOf(this), ref(C), ref(this))` | |
-| `spliceBefore/After/splice(C)` | move each child of C under P at the splice point via `reparent_child` (remove-before-add, R32) | splice relocates C's children |
-| `swap(C)` | exchange the two rows' child lists + payload, fix reverse edges | mirror the v0 `swap` semantics |
+| `spliceBefore/After/splice(C)` | for each child of C: `remove_child` from C's row, then positional insert under P at the splice point | splice relocates C's children |
+| `swap(C)` | see swap scope below | mirror the v0 `swap` semantics |
 | `removeChild(C)` | `remove_child(P, ref(C))` **unless P.being_destroyed_** (D69) | clears reverse edge |
-| `clear()` (live) | `remove_child` per child (mirrors) → empty | not on a destructing object |
+| `replace(C)` | mirror as `insertBefore(C)` then `removeChild(this)` (v0 `replace` is exactly that, `composite.C:1085`) | composed of two mapped ops |
+| `insertParent(...)` (R35 HIGH) | allocate the new parent row, then move the sibling range under it via remove+positional-insert | used by PDB import (`PDBFileDetails.C:166/261/307`) |
+| `clear()` (live) | auto-deletable child → its `delete` re-enters `removeChild` (mirrors); **non-auto-deletable child → direct detach in v0 (`composite.C:1457`), so the clear hook must mirror that detach explicitly** (R35 MEDIUM) | skipped entirely when `being_destroyed_` |
+| `set`/`clone` (deep copy into a store-reachable dest) | `clone_` builds children via `appendChild` → already mapped; add explicit parity coverage | mostly covered by appendChild |
 | `setProperty/clearProperty` (container) | container property column / sparse bag keyed by row (D59) | atom props already store-backed |
-| `select/deselect` (atom) | `bump_selection_up(parentRow, ±1)` (D59) | walk the row parent chain |
-| **reparent (any move)** | always `reparent_child` (remove-before-add), never bare attach | R32 LOW |
-| container-PROPERTY migration | fill in `migrate_subtree_from` | H1a/R32 carry-over (now wired) |
+| `select/deselect` (atom leaf only) | `bump_selection_up(parentRow, ±1)` (D59) once | hook the LEAF bit transition, NOT `updateSelection_` (R35: avoid double-count) |
+| container-PROPERTY migration | fill in the adoption materialization (D73) | H1a/R32 carry-over |
 
-`ref(C)` = `ContainerChildRef`-style: `compositeAsAtom_(C)` →
-`ATOM(C.getStoreIndex())`, else `CONTAINER(C.getContainerRow_())`
-(allocating C's row first if unbound, D68).
+**Positional moves (R35 HIGH).** `reparent_child` always *appends*, so it
+cannot reproduce `prependChild`/`insertBefore`/`insertAfter` ordering.
+Therefore a move is mirrored as **`remove_child(old_parent, ref)` then
+the positional attach op** (`prepend_child` / `insert_child_before` /
+`insert_child_after` / `append_child`) on the new parent. `reparent_child`
+remains the convenience for the append-move case only.
+
+**`swap` scope (R35 HIGH).** v0 `swap` exchanges tree position + child
+lists + selection counters + properties + selectable state for two
+arbitrary `Composite` siblings (`composite.C:1511`). H2 supports:
+container↔container (exchange the two rows' child lists, payload,
+selection_count, properties, and fix all reverse edges incl. child atoms'
+`atom_parent_`) and atom↔atom (exchange the two ATOM ChildRefs' positions
+in their parents + `atom_parent_`). **atom↔container swap is excluded in
+H2** (not used in the molecular hierarchy) — asserted/guarded with a test
+that the unsupported case is rejected, not silently mis-mirrored.
+
+`ref(C)` = `compositeAsAtom_(C)` → `ATOM(C.getStoreIndex())`, else
+`CONTAINER(C.container_row_idx_)` (allocating C's row first if unbound,
+D68).
 
 ## D71. Handle-yielding traversal layer
 
@@ -180,45 +220,81 @@ structure, ordered `ChildRef` sequence, reverse parent links, payload,
 container properties, and selection counters (the R32 P31-4 comparator,
 now run incrementally).
 
-## Risks / open questions for R35
+## D73. Adoption materialization (free-standing subtrees) — R35 BLOCKER
 
-1. **Atom store-index timing in `removeChild` during `delete atom`:**
-   `~Atom` (derived) releases the atom slot before `~Composite` (base)
-   runs `parent->removeChild`. The mirror needs the atom's store index at
-   that point — confirm `getStoreIndex()` is still readable (the handle
-   fields are not zeroed until after, or capture earlier). May require
-   capturing the atom index in `~Atom` before slot release, or mirroring
-   the atom-detach from `~Atom` rather than `~Composite`.
-2. **`being_destroyed_` set in `~Composite` (base, runs last):** confirm
-   no derived destructor (`~AtomContainer`, `~Residue`, …) mutates
-   children before `~Composite` sets the flag. If any does, set the flag
-   earlier (a guarded entry in the most-derived path or `destroy()`).
-3. **Free-standing container mutation before adoption:** a `new Molecule;
-   m.insert(atom)` sequence mutates with no reachable store; the mirror
-   defers to adoption (D56 migration). Confirm the orphan store path
-   (D56) covers the full pre-adoption mutation set, or that deferral is
-   sound.
-4. **Selection counter double-count / `updateSelection_` interaction:**
-   the v0 selection counters and the table `selection_count` must not
-   diverge; confirm the mirror hooks the leaf `select/deselect`, not the
-   propagated `updateSelection_`, to avoid double counting.
-5. **`swap` semantics:** v0 `swap` exchanges position in the tree;
-   confirm the row-level child-list+payload exchange reproduces it
-   exactly (including reverse edges and any atom `parent_container_idx`).
+Free-standing containers have **no reachable store** (`Composite::
+getCompositeStore_()` returns null with no System ancestor), so the
+mirror cannot fire during free-standing mutation — and D56's
+`migrate_subtree_from` (table→table) requires a source row that was never
+allocated. So `new Molecule; m.insert(atom); m.insert(residue);
+sys.insert(m)` builds a v0 subtree with **no container rows at all**.
+
+**Decision:** adoption performs a **recursive v0→table materialization**.
+`System::adoptSubtree` (extended) walks the adopted v0 container subtree
+and, for every container lacking a row, allocates a row in the System
+store's `ContainerTable`, fills payload from the v0 object (name/id/
+insertion-code/ss-type/properties), binds `container_row_idx_`, and
+builds the `ChildRef` edges (container children recursively, atom children
+keyed by the now-migrated atom store index from the existing atom-slot
+adoption). This is the production form of the H1a parity-test `mirror()`
+helper.
+
+- Free-standing mutation is therefore a **no-op for the mirror** (nothing
+  to write); the table is built in one pass at adoption. Correct because
+  free-standing subtrees are never parity-checked until rooted.
+- D56 `migrate_subtree_from` remains the mechanism for **store→store**
+  moves (a subtree that already has rows in some store moving to another),
+  e.g. cross-System reparent. Adoption-from-free-standing uses
+  materialization. Both converge on the same table shape.
+- Ordering: atom-slot migration (existing `adoptSubtree`) runs first to
+  produce the old→new atom-index map; materialization uses it for ATOM
+  `ChildRef`s.
+
+## Risks / open questions (R35 dispositions)
+
+**Resolved by this revision:**
+- Risk #1 (atom-index timing): **R35 confirms the current order is safe** —
+  `Atom::~Atom` calls `destroy()` (→ `Composite::destroy` → live-parent
+  detach) BEFORE `release_atom()`, so `getStoreIndex()` is readable at the
+  mirror point and the slot is not yet reused. **Contract pinned:** the
+  live-parent detach mirror happens before `~Atom` releases the slot;
+  H2a will not move slot release earlier.
+- Risk #2 (flag-set ordering): resolved — flag set at start of both
+  `destroy()` overloads, before child teardown (D69).
+- Risk #3 (free-standing pre-adoption): resolved by D73 materialization.
+- Risk #4 (selection double-count): resolved — hook the leaf atom
+  select/deselect bit transition only, one `bump_selection_up(±1)`; do
+  NOT hook `updateSelection_` (D70).
+- Risk #5 (swap): scoped in D70 (container↔container, atom↔atom;
+  atom↔container excluded + tested).
+
+**Carried into implementation (verify with tests, not design):**
+
+- The exact `insertParent` sibling-range rewrite mapping (allocate new
+  parent row + move the range) — exercise against the PDB import paths.
+- `swap`'s container↔container reverse-edge fixup completeness (every
+  child atom's `atom_parent_` + every child container's
+  `parent_container_idx`).
+- The clear() non-auto-deletable direct-detach mirror branch.
 
 ## Decisions added
 
 | # | Contract |
 |---|---|
-| D67 | Per-mutation forward mirror hooks in v0 methods (v0 first, then table); retire the `composite_nodes_` mirror |
-| D68 | v0-container→row binding reuses the 8-byte `composite_handle_packed_` slot; atoms use `getStoreIndex`; lazy allocate-on-first-mirror |
-| D69 | Destruction guard: `being_destroyed_` set at `~Composite` entry; `removeChild` skips the mirror iff the PARENT is being destroyed (defuses P2.1.1) |
-| D70 | Full mutation→ContainerTable-op mapping (incl. reparent_child for all moves) |
+| D67 | Per-mutation forward mirror hooks in v0 methods (v0 first, then table); retire (leave inert) the `composite_nodes_` mirror |
+| D68 | v0-container→row binding via a dedicated `AtomContainer::container_row_idx_` (NOT the `composite_handle_packed_` slot — R35 HIGH); atoms use `getStoreIndex`; lazy allocate-on-first-mirror |
+| D69 | Destruction guard: `being_destroyed_` set at the start of BOTH `Composite::destroy()` overloads (+ `~Composite` backstop), before child teardown — derived dtors call `destroy()` first (R35 BLOCKER); `removeChild` skips the mirror iff the PARENT is being destroyed (defuses P2.1.1) |
+| D70 | Full mutation→ContainerTable-op mapping: positional moves = remove + positional-insert (not append-only `reparent_child`); `replace`/`insertParent`/`clear` non-auto-deletable/`swap` scoped; leaf-only selection hook (R35) |
 | D71 | Handle-yielding `AtomIterator`/container iterators/`apply` over `ChildRef`; consumers migrate in H3 |
-| D72 | H2a–H2d sub-phasing; parity asserted after every covered mutation |
+| D72 | H2a–H2d sub-phasing; parity asserted after every covered mutation (each sub-test exercises only the wired ops) |
+| D73 | Adoption materialization: recursive v0→table build at `System::adoptSubtree` for free-standing subtrees (R35 BLOCKER); D56 `migrate_subtree_from` is for store→store moves only |
 
 ## Next action
 
-Codex **R35** reviews this H2 design (is the destruction guard correct
-and complete, is the mutation mapping faithful, are the 5 open risks
-real/closed, is H2a a bounded first step?). On GO, implement H2a.
+R35 returned NEEDS-FIXES (3 BLOCKER/HIGH on flag placement, free-standing
+adoption, slot reuse + positional moves + missing mutators). This revision
+addresses all: D69 sets the flag in `destroy()`; D73 adds adoption
+materialization; D68 uses a dedicated slot (no `composite_nodes_` churn);
+D70 fixes positional moves + adds `insertParent`/`replace`/`set`/`swap`
+scope + the live-`clear()` branch; the 5 open risks are dispositioned.
+Codex **R35b** re-reviews; on GO, implement H2a.
