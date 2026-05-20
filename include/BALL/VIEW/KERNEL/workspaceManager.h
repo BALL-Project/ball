@@ -50,6 +50,7 @@
 #include <BALL/COMMON/global.h>
 
 #include <QtCore/QObject>
+#include <QtCore/QPointer>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 
@@ -202,7 +203,12 @@ namespace BALL
 
 			private:
 				QMainWindow* main_window_;
-				QLabel* label_;
+				// v1.7.x-26 — QPointer auto-nulls when label_ is destroyed
+				// (it is a child QWidget of main_window_ whose teardown order
+				// vs this QObject's dtor is unspecified). This makes the
+				// UFG-30 contract compiler-enforced rather than commented:
+				// the guarded removeEventFilter in the dtor is now safe.
+				QPointer<QLabel> label_;
 				bool event_filter_installed_;
 
 				// Intercept QEvent::MouseButtonPress on the QLabel to fire the popup.
