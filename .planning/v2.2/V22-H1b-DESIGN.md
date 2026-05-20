@@ -34,12 +34,7 @@ simultaneously be a value handle (it is a heavyweight `Composite`).
 **Decision.** During dual existence the handle types live in `BALL::`
 with a **`Handle` suffix**: `MoleculeHandle`, `ChainHandle`,
 `ResidueHandle`, `ProteinHandle`, `SecondaryStructureHandle`,
-`NucleotideHandle`, `NucleicAcidHandle`, `FragmentHandle`. At **H4 (the
-flip)** the v0 classes are deleted and each canonical name is restored as
-an alias of its handle (`using Residue = ResidueHandle;`) — or the handle
-is renamed and the alias retired. H3 consumer code written against
-`ResidueHandle` keeps compiling through the alias; new/canonical code uses
-`Residue`.
+`NucleotideHandle`, `NucleicAcidHandle`, `FragmentHandle`.
 
 - `Atom` / `Bond` keep their canonical names (already value handles since
   v2.0; no v0 object collision). Only the **container** kinds take the
@@ -54,43 +49,89 @@ is renamed and the alias retired. H3 consumer code written against
   renaming them in H1b is the opposite of non-invasive and churns the
   whole tree before any handle is even consumed.
 
-**Why suffix-then-alias is lowest risk:** H1b/H2 add NEW symbols (zero v0
+**The H4 flip is a canonical-name MIGRATION AUDIT, not a one-line alias
+(R33 HIGH-1).** A naive `using Residue = ResidueHandle;` is NOT
+source-transparent: it collides with existing `class Residue;` forward
+declarations (`include/BALL/KERNEL/atom.h:44-54`,
+`include/BALL/KERNEL/predicate.h:28`), `friend class Residue;`
+declarations, `Residue*`-vs-`ResidueHandle` overload sets that would
+collapse, and template/helpers keyed on `Residue`
+(`include/BALL/KERNEL/residue.h`). So at H4, per kind:
+
+1. Delete the v0 `Residue` class **and** its forward declarations + friend
+   declarations + any v0-only specializations.
+2. **Rename `ResidueHandle` → `Residue`** so the canonical name is a REAL
+   class again (not an alias). This is what makes forward declarations,
+   `friend class Residue;`, and specializations legal again.
+3. Add the compatibility alias in the SAFE direction —
+   `using ResidueHandle = Residue;` — so any H3-migrated code still
+   spelling `ResidueHandle` keeps compiling. (This direction has no
+   forward-decl/friend hazard because nothing forward-declares or
+   friend-declares `ResidueHandle`.)
+4. Audit + reconcile overload sets and template specializations that
+   previously distinguished `Residue` from `ResidueHandle`.
+
+Each kind's H4 migration is its own reviewed commit. D63's earlier
+"single mechanical pass / add alias" framing was too optimistic; the work
+is bounded and per-kind but it is a real audit.
+
+**Why suffix-now is still lowest risk:** H1b/H2 add NEW symbols (zero v0
 churn, tree stays green trivially). H3 migrates consumers cluster-by-
-cluster to `*Handle` names (each its own commit + review). H4's rename is
-a single mechanical pass (delete v0 class; add `using` alias) per kind,
-reviewable in isolation. The break ledger already anticipates the
-`*`→handle return changes (Class A); D63 just fixes the transitional
-spelling.
+cluster to `*Handle` names (each its own commit + review). The H4 audit
+above is per-kind and reviewable in isolation. The break ledger already
+anticipates the `*`→handle return changes (Class A); D63 fixes the
+transitional spelling and the (non-trivial) H4 procedure.
 
 ## D64. Handle shape: typed thin wrappers over a shared base
 
-Each container handle is a **value type, `{MoleculeStore* store_;
-std::uint32_t idx_; std::uint32_t generation_;}` = 16 B**, copyable, no
-base classes (mirrors the `Atom` handle's `{store,idx,gen}` triple). To
-avoid duplicating the common getters across 8 kinds:
+Each container handle is a **value type holding `{MoleculeStore* store_;
+std::uint32_t idx_; std::uint64_t generation_;}`** — 8 + 4 (+4 pad) + 8 =
+**24 B**, copyable, non-polymorphic. **Container handles are NOT held to
+the 16 B target** — that target is for `Atom`/`Bond` (the O(100k+)
+handles that are the entire D13 memory case); the molecular containers
+are O(thousands) so their handle size is irrelevant (per
+`V22-ARCH-HANDLE-MODEL.md`). The wider `u64 generation_` is deliberate —
+it removes the per-slot wrap concern entirely (R33 LOW; see D65).
 
-- A non-virtual base `ContainerHandleBase` holds the triple + the
-  kind-agnostic getters (`getKind`, `getName`, `getParent`, `isValid`,
-  `operator bool`, `countChildren`, child access). It is **not**
-  polymorphic — no vtable, EBO-friendly, 16 B.
-- Eight typed handles (`ResidueHandle`, …) derive from it (or contain it;
-  see below) and add only the kind-specific scalar getters
-  (`ResidueHandle::getID`/`getInsertionCode`, `ProteinHandle::getID`,
+To avoid duplicating the common getters across 8 kinds:
+
+- A **non-virtual, non-polymorphic** base `ContainerHandleBase` holds the
+  triple + the kind-agnostic getters (`getKind`, `getName`, `getParent`,
+  `isValid`, `operator bool`, `countChildren`, child access). No vtable.
+- Eight typed handles (`ResidueHandle`, …) **publicly inherit** it and add
+  ONLY kind-specific scalar getters (`ResidueHandle::getID`/
+  `getInsertionCode`, `ProteinHandle::getID`,
   `SecondaryStructureHandle::getType`, `NucleotideHandle::getID`/
-  `getInsertionCode`, `NucleicAcidHandle::getID`; `Molecule`/`Chain`/
-  `Fragment` add none). A debug-only `assertKind_()` in each typed ctor/
-  getter guards that the row's `kind` matches the handle type.
+  `getInsertionCode`, `NucleicAcidHandle::getID`; `MoleculeHandle`/
+  `ChainHandle`/`FragmentHandle` add none). They add **no data members**,
+  so each stays 24 B.
 
-**Composition vs inheritance:** use **public inheritance from a
-non-polymorphic `ContainerHandleBase`** (empty-base-optimisable, no
-vtable). This gives `ResidueHandle` the base getters directly and lets a
-typed handle slice to the base for kind-agnostic code, without the
-`Composite` machinery. (If MSVC EBO/sizeof proves troublesome at H7,
-fall back to composition + forwarding; the 16 B target is the gate.)
+**Inheritance rationale (R33 MEDIUM-1 correction):** the base is NOT
+empty (it carries the 24 B triple), so this is **not** an empty-base
+optimisation — EBO is irrelevant here. Inheritance is used purely for
+**getter reuse**; correctness depends only on the typed handles adding no
+members. This is pinned by `static_assert(sizeof(ResidueHandle) ==
+sizeof(ContainerHandleBase), ...)` for every kind, plus a
+`sizeof(ContainerHandleBase) == 24` pin, in the header and re-asserted in
+the test. (If MSVC layout ever diverges at H7, fall back to composition +
+forwarding; the static_asserts are the gate.)
 
-- Construction in H1b: `ResidueHandle(MoleculeStore& s, std::uint32_t
-  idx)` captures the row's current generation. A default-constructed
-  handle is the **null handle** (`store_ == nullptr`), `bool`-false.
+**Wrong-kind construction boundary (R33 MEDIUM-2).** A raw typed ctor on
+a row of the wrong kind must never silently read mismatched payload. The
+locked rule:
+- The public typed ctor `ResidueHandle(MoleculeStore& s, std::uint32_t
+  idx)` `assert()`s (debug) that `s.container_kind_(idx) ==
+  ContainerKind::RESIDUE`; in release it is UB on misuse (documented, same
+  class as the existing `Atom` reference contract).
+- The **safe, release-checked** path is a base→typed conversion:
+  `ContainerHandleBase::as<ResidueHandle>()` (or `asResidue()`) returns a
+  **null typed handle** when the row kind ≠ RESIDUE — no RTTI, just a
+  `kind` tag compare. `getParent()` returns a base handle; callers narrow
+  via `as<>` and get a null on mismatch. This is how downcasting works
+  with zero RTTI.
+- Construction in H1b: ctor captures the row's current generation; a
+  default-constructed handle is the **null handle** (`store_ == nullptr`),
+  `bool`-false.
 - No setters in H1b (read-only; D60 forbids handle→store writes while v0
   is the source of truth). Mutation mirroring is H2.
 
@@ -99,12 +140,19 @@ fall back to composition + forwarding; the 16 B target is the gate.)
 Per **D54**, validity is checked in `BALL_DEBUG` builds AND the
 `BALL_PYTHON_WRAPPER` layer; **zero cost in release C++**.
 
-- **Per-slot generation.** `ContainerRow::generation` (already present
-  from H1a) becomes a **monotonic per-slot counter**: `ContainerTable::
-  release()` **bumps** it (currently it resets to 0 — H1b fixes this so a
-  recycled slot invalidates stale handles), and `allocate()` **preserves**
-  the slot's generation on free-list reuse (fresh appended slots start at
-  0). Lifecycle: fresh=0 → release→1 (freed) → reuse→1 (live) → release→2…
+- **Per-slot generation.** `ContainerRow::generation` (present from H1a)
+  is **widened to `std::uint64_t`** and becomes a **monotonic per-slot
+  counter**: `ContainerTable::release()` **bumps** it (currently it resets
+  to 0 — H1b fixes this so a recycled slot invalidates stale handles), and
+  `allocate()` **preserves** the slot's generation on free-list reuse
+  (fresh appended slots start at 0). Lifecycle: fresh=0 → release→1
+  (freed) → reuse→1 (live) → release→2… The `u64` width makes wraparound a
+  non-issue (R33 LOW): a single slot would need 2^64 alloc/release cycles;
+  container memory is irrelevant so the wider counter costs nothing that
+  matters. This is a per-slot counter, **distinct** from the `Atom`
+  handle's coarse whole-store `store_generation_` (D54) — they do not
+  interact; a container handle validates against its row's slot
+  generation only.
 - **`isValid()`** = `store_ != nullptr && idx_ < table.size() &&
   !table.is_freed(idx_) && table.row(idx_).generation == generation_`.
   In debug/Python every getter calls `assertValid_()` first → clean
@@ -127,67 +175,113 @@ Per **D54**, validity is checked in `BALL_DEBUG` builds AND the
 H1b locks the handle shape + scalar read path; the handle-yielding
 iterators / `apply` / `atoms()` traversal are **H2**. The H1b surface:
 
-- `ContainerHandleBase`: `getKind()` (→ `ContainerKind`), `getName()`
-  (→ String/std::string from the table pool), `getParent()` (→ a base
-  handle for the parent row, null at root), `getParentIndex()`,
-  `countChildren()` (size of the `ChildRef` vector), `getChild(i)`
-  (→ a small `ChildRef`-shaped result the caller can resolve),
-  `getSelectionCount()`, `isValid()`, `operator bool`, `operator==`/`!=`
-  (compare store+idx+gen).
+- `ContainerHandleBase`: `getKind()` (→ **public** `ContainerKind`),
+  `getName()` (→ `String`/`std::string`), `getParent()` (→ a base handle
+  for the parent row, null at root), `getParentIndex()`, `countChildren()`,
+  `getChild(i)` (→ **public** `ContainerChildRef`), `getSelectionCount()`,
+  `isValid()`, `operator bool`, `operator==`/`!=` (compare store+idx+gen),
+  `as<TypedHandle>()` (release-checked narrow, null on kind mismatch).
 - Typed getters as in D64.
 - **Not in H1b:** `atoms()`, `residues()`, `AtomIterator`-style yields,
   `apply<T>`, any mutator. Those are H2.
 
-The getters are thin: each loads `table.row(idx_)` and reads a field /
-interns-back a string. O(1) except `getChild`/`countChildren` which are
-O(1)/O(deg). No allocation on the scalar path.
+The getters are thin: each calls a scalar `MoleculeStore` accessor (D66a)
+that loads `table.row(idx_)` and returns a public-typed value. O(1) except
+`countChildren`/`getChild` which are O(1). No allocation on the scalar
+path beyond the returned `std::string` for names/ids.
+
+### D66a. Encapsulation boundary — public types + scalar accessors (R33 HIGH-2)
+
+A *public* `containerHandle.h` must give handles read access to the
+container table **without** including `_moleculeStoreInternal.h` or naming
+`ContainerRow`/`ChildRef`/`ContainerTable` (the D31b CI gate forbids the
+internal types in public/iterator headers). Locked solution:
+
+1. **Move `ContainerKind` to a public header** — new
+   `include/BALL/KERNEL/containerKind.h`. `_moleculeStoreInternal.h`
+   `#include`s it and **stops defining its own** copy (single definition,
+   no ODR/name conflict). The enum is now part of the public handle API.
+2. **Introduce a public child-reference value type** `ContainerChildRef`
+   (in `containerKind.h` or `containerHandle.h`): `{ bool is_atom;
+   std::uint32_t idx; }` — `idx` is an atom store index when `is_atom`,
+   else a container row index. The internal `ChildRef` stays internal;
+   the scalar accessor converts internal→public at the boundary.
+3. **Public scalar accessors on `MoleculeStore`** (declared in
+   `moleculeStore.h`, which already forward-declares the side tables;
+   **defined out-of-line in `moleculeStore.C`** which already includes
+   `_moleculeStoreInternal.h`). Underscore-suffixed (in-tree handle
+   plumbing), returning only public types:
+   - `ContainerKind   container_kind_(std::uint32_t idx) const`
+   - `std::string     container_name_(std::uint32_t idx) const`
+   - `std::string     container_id_(std::uint32_t idx) const`
+   - `char            container_insertion_code_(std::uint32_t idx) const`
+   - `std::uint8_t    container_ss_type_(std::uint32_t idx) const`
+   - `std::uint32_t   container_parent_(std::uint32_t idx) const`
+   - `std::size_t     container_child_count_(std::uint32_t idx) const`
+   - `ContainerChildRef container_child_(std::uint32_t idx, std::size_t i) const`
+   - `std::uint32_t   container_selection_count_(std::uint32_t idx) const`
+   - `std::uint64_t   container_generation_(std::uint32_t idx) const`
+   - `bool            container_is_freed_(std::uint32_t idx) const`
+   - `std::size_t     container_table_size_() const`
+4. `containerHandle.h` includes `moleculeStore.h` + `containerKind.h`
+   **only** — never `_moleculeStoreInternal.h`. D31b gate stays green;
+   the handle header carries no internal type. The handle getters are
+   one-line forwards to these accessors.
+
+This is the same pattern as the existing atom-column accessors on
+`MoleculeStore` (e.g. `position(i)`, `name(i)`), just for container rows.
 
 ## H1b deliverables + tests
 
-1. `include/BALL/KERNEL/containerHandle.h` (+ `.C` if needed): the base +
-   8 typed handles, read-only getters, validity (debug/Python-gated).
-2. `ContainerTable` generation fix: bump-on-release, preserve-on-reuse;
-   add `generation(idx)` accessor for `isValid`.
-3. `ContainerHandle_test`: build a table (reuse the H1a mirror helper
-   pattern), wrap rows in typed handles, assert every getter reads the
-   row correctly; assert null-handle semantics; assert generation-based
-   staleness after release/reuse and after a migrate (the R31 alias
-   policy); assert `assertKind_` fires in debug on a wrong-kind wrap.
-4. Non-invasive: no v0 header touched except (if needed) a forward decl;
-   no `MoleculeStore`/`Atom` ABI change; CI grep gates unaffected (the
-   handle header does NOT include `_moleculeStoreInternal.h` publicly —
-   it needs container-table reads, so it either (a) routes through a thin
-   `MoleculeStore` accessor that returns scalar values, or (b) is itself
-   a documented internal-header consumer like the parity test). **Open
-   sub-question for R33:** which of (a)/(b) keeps the D31b encapsulation
-   gate intact — a public handle header must NOT leak the internal types.
+1. `include/BALL/KERNEL/containerKind.h` (NEW, public): the
+   `ContainerKind` enum + the `ContainerChildRef` value type.
+   `_moleculeStoreInternal.h` includes it and deletes its private
+   `ContainerKind`/`ChildRef`-public-surface duplication (the internal
+   `ChildRef` stays internal; `ContainerKind` becomes the shared public
+   definition).
+2. `MoleculeStore` scalar container accessors (D66a): declared in
+   `moleculeStore.h`, defined out-of-line in `moleculeStore.C`. Return
+   only public types. Plus the `ContainerTable` generation fix: widen
+   `ContainerRow::generation` to `u64`, bump-on-release, preserve-on-reuse.
+3. `include/BALL/KERNEL/containerHandle.h` (+ `.C` if needed): the
+   non-polymorphic base + 8 typed handles, read-only getters forwarding to
+   the scalar accessors, `as<>()` narrow, validity (debug/Python-gated),
+   `static_assert` size pins. Includes only `moleculeStore.h` +
+   `containerKind.h`.
+4. `ContainerHandle_test`: build a table (reuse the H1a mirror helper
+   pattern), wrap rows in typed handles, assert every getter reads the row
+   correctly; assert null-handle semantics; generation-based staleness
+   after release/reuse and after a migrate (the R31 alias policy);
+   `as<>()` narrowing (correct kind → valid, wrong kind → null);
+   parent/child relationships; payload-specific getters.
+5. Non-invasive: no v0 header touched; no `MoleculeStore`/`Atom` ABI
+   change (the scalar accessors are additive methods); CI grep gates
+   intact — `containerHandle.h` never includes `_moleculeStoreInternal.h`
+   (resolved in D66a). +1 test (ContainerHandle_test) → 286 ctest.
 
 ## Decisions added
 
 | # | Contract |
 |---|---|
-| D63 | Dual-existence naming: `*Handle` suffix in `BALL::`, aliased to canonical at H4 |
-| D64 | Handle shape: 16 B `{store,idx,gen}` typed thin wrappers over a non-polymorphic base |
-| D65 | Per-slot generation (bump-on-release) + debug/Python validity; detached-alias staleness is detectable |
+| D63 | Dual-existence naming: `*Handle` suffix in `BALL::`; H4 is a per-kind canonical-name migration audit (delete v0 class+fwd-decls+friends, rename `*Handle`→canonical, add reverse alias), not a one-line `using` |
+| D64 | Handle shape: 24 B `{store,u32 idx,u64 gen}` typed thin wrappers over a non-polymorphic base (NOT EBO — getter reuse; size pinned by static_assert); wrong-kind narrow via release-checked `as<>()`, debug-assert in raw ctor |
+| D65 | Per-slot `u64` generation (bump-on-release, preserve-on-reuse) + debug/Python validity; detached-alias staleness is detectable; no wrap concern |
 | D66 | H1b read-only getter surface; traversal/iterators deferred to H2 |
+| D66a | Encapsulation: public `ContainerKind` header + public `ContainerChildRef` value type + scalar `MoleculeStore` accessors (defined out-of-line); `containerHandle.h` never includes `_moleculeStoreInternal.h` — D31b gate intact |
 
-## Key open question for R33
+## Resolved open question (was: encapsulation boundary)
 
-The **encapsulation boundary** (D66 deliverable #4): a *public*
-`containerHandle.h` must give handles read access to `ContainerTable`
-rows WITHOUT leaking `ContainerRow`/`ChildRef`/`ContainerTable` into a
-public header (the D31b CI gate forbids the internal types in public/
-iterator headers). Options: (a) add scalar-returning accessors on
-`MoleculeStore` (e.g. `container_kind(idx)`, `container_name(idx)`,
-`container_parent(idx)`, `container_child(idx,i)`) that the handle calls —
-keeps the handle header free of internal types; (b) make the handle types
-themselves internal-header consumers (not public) until H3. R33 should
-confirm (a) is the right call and that the scalar-accessor surface on
-`MoleculeStore` is acceptable (it is the same pattern as the existing
-atom-column accessors).
+**Resolved in D66a (R33 HIGH-2):** option (a) — public `ContainerKind`
+header + public `ContainerChildRef` type + scalar `MoleculeStore`
+accessors defined out-of-line in `moleculeStore.C`. `containerHandle.h`
+includes only `moleculeStore.h` + `containerKind.h`, never the internal
+header. `ContainerKind` moves to the public header and the internal header
+includes (no longer redefines) it — single definition, no ODR conflict.
 
 ## Next action
 
-Codex **R33** reviews this H1b design (is the dual-existence naming sound,
-is the handle shape/validity correct, is the encapsulation boundary
-resolved, is H1b a bounded non-invasive step?). On GO, implement H1b.
+R33 returned NEEDS-FIXES (D63 H4-alias transparency + D66 boundary); this
+revision adds the H4 migration-audit procedure (D63), the public-type +
+scalar-accessor boundary (D66a), the 24 B/`u64`-generation + wrong-kind
+narrow + static_assert pins (D64/D65), and the generation-wrap resolution
+(D65). Codex **R33b** re-reviews; on GO, implement H1b.
