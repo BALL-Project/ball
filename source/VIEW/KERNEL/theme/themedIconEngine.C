@@ -141,10 +141,20 @@ namespace BALL
 					QPainter p(&img);
 					p.setCompositionMode(QPainter::CompositionMode_SourceIn);
 					const unsigned int rgb = tintForMode_(mode);
+					// v1.7.x-28 — disabled icons must read as clearly greyed-out.
+					// Tinting Disabled to kInkMuted alone was too subtle (#7a7f87
+					// vs the normal #4c5158 — two close mid-greys at full opacity,
+					// so users couldn't tell which toolbar buttons were
+					// actionable). Fade the Disabled state to ~38% opacity (the
+					// design-system disabled token). With CompositionMode_SourceIn
+					// the fill's alpha multiplies the SVG mask's alpha, so a
+					// semi-transparent tint yields a properly faded glyph.
+					const int alpha = (mode == QIcon::Disabled) ? 97 : 255;
 					const QColor tint(
 						static_cast<int>((rgb >> 16) & 0xFF),
 						static_cast<int>((rgb >>  8) & 0xFF),
-						static_cast<int>(rgb & 0xFF));
+						static_cast<int>(rgb & 0xFF),
+						alpha);
 					p.fillRect(img.rect(), tint);
 				}
 
