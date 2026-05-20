@@ -398,11 +398,28 @@ namespace BALL
 		BALL_DECLARE_STD_ITERATOR_WRAPPER(AtomContainer, Atom, atoms)
 		BALL_DECLARE_STD_ITERATOR_WRAPPER(AtomContainer, AtomContainer, atomContainers)
 
+		// v2.2 H2a (D68/D74): override the Composite container-row binding
+		// hooks. Stores {owning store, ContainerTable row index} of this
+		// container's mirror row so the composite.C mirror can address it
+		// in O(1) without naming AtomContainer (layering). 0/nullptr =
+		// unbound; the mirror self-heals (re-materialises) when the bound
+		// store != the current store (D74).
+		MoleculeStore* getContainerRowStore_() const override { return container_row_store_; }
+		std::uint32_t  getContainerRow_() const override      { return container_row_idx_; }
+		void setContainerRowBinding_(MoleculeStore* store, std::uint32_t row) override
+		{ container_row_store_ = store; container_row_idx_ = row; }
+
 		private:
 
 		/*_ The name of this container
 		*/
 		String  name_;
+
+		// v2.2 H2a (D74): container-table row binding. Transitional
+		// (removed at H4). 12 B on each container (O(thousands); memory
+		// irrelevant). Atoms do NOT carry this (they are leaves).
+		MoleculeStore* container_row_store_ = 0;
+		std::uint32_t  container_row_idx_   = 0;
 
 	};
 

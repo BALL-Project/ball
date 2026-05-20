@@ -25,6 +25,7 @@ namespace BALL
 
 	Fragment::~Fragment()
 	{
+		setBeingDestroyed_();  // v2.2 H2a (D69): before destroy()'s teardown
 		destroy();
 	}
 

@@ -1625,7 +1625,33 @@ B		*/
 		// allocation.
 		std::uint64_t   composite_handle_packed_ = 0;
 
+		// v2.2 H2a (D69): set true as the FIRST statement of every
+		// molecular destructor (and ~Composite as a backstop). The
+		// container-table mirror in removeChild() skips the detach mirror
+		// when the PARENT is being destroyed, so a destruction cascade
+		// never mutates a half-destroyed parent's mirror (the P2.1.1
+		// trap). NOT set by destroy()/clear() — those also run on LIVE
+		// objects and must mirror their emptying. Never reset.
+		bool            being_destroyed_ = false;
+
 	public:
+		// v2.2 H2a (D69) accessors.
+		bool isBeingDestroyed_() const { return being_destroyed_; }
+		void setBeingDestroyed_()      { being_destroyed_ = true; }
+
+		// v2.2 H2a (D68/D74): container-table row binding hooks. A
+		// molecular container (AtomContainer-derived) overrides these to
+		// store/return {owning store, row index} of its ContainerTable
+		// row; the mirror in composite.C reaches the binding through these
+		// virtuals without composite.h/.C naming the AtomContainer type
+		// (layering) or the internal table types (D31b). Default: no
+		// binding (Atom and free-standing Composites — atoms are leaves
+		// addressed by their store index, never a container row).
+		virtual MoleculeStore* getContainerRowStore_() const { return 0; }
+		virtual std::uint32_t  getContainerRow_() const      { return 0; }
+		virtual void setContainerRowBinding_(MoleculeStore* /*store*/,
+		                                     std::uint32_t /*row*/) {}
+
 		// v2.1 P1.3 accessors. Implemented in composite.C; callers must
 		// include _moleculeStoreInternal.h for the return / parameter
 		// types to be complete. Free-function-style design avoids

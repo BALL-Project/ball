@@ -256,6 +256,11 @@ namespace BALL
 	// destructor
 	Composite::~Composite()
 	{
+		// v2.2 H2a (D69) backstop: derived molecular destructors set this
+		// earlier (before their destroy()); set it here too for any direct
+		// Composite. The detach below (and the cascade in destroyChildren_)
+		// then skips the container-table mirror for this dying parent.
+		setBeingDestroyed_();
 		if (parent_ != 0)
 		{
 			parent_->removeChild(*this);

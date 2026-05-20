@@ -288,6 +288,7 @@ namespace BALL
 
 	Atom::~Atom()
 	{
+		setBeingDestroyed_();  // v2.2 H2a (D69): before destroy()'s teardown
 		destroy();
 		// K0.3c.1: release this atom's store slot. Without this, every
 		// Atom() construction leaked a slot for the process lifetime.

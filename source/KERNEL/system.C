@@ -337,6 +337,7 @@ namespace BALL
 
 	System::~System()
 	{
+		setBeingDestroyed_();  // v2.2 H2a (D69): before destroy()'s teardown
 		destroy();
 		// K0.4.2: invalidate atom handles bound to our store before the
 		// unique_ptr<MoleculeStore> deletes the store. Otherwise atoms
