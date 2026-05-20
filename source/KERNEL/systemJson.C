@@ -14,8 +14,10 @@
 #include <BALL/COMMON/exception.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
 
+#include <chrono>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <istream>
 #include <ostream>
@@ -25,6 +27,44 @@
 
 namespace
 {
+	// v2.1 P4.0: env-gated load profiler. Activated by setting
+	// BALL_JSON_LOAD_PROFILE=1; prints a per-phase breakdown of
+	// loadSystemJSON to stderr on completion. Zero behavioral cost
+	// when the env var is unset (the only per-iteration cost — the
+	// property-restore accumulator — is guarded by the `on` flag).
+	// Buckets map to the P4.0 roadmap categories:
+	//   parse    = nlohmann is >> doc
+	//   validate = Phase 1 + molecule-index validation
+	//   alloc    = new Atom loop
+	//   insert   = Composite-tree molecule/atom inserts + adoption
+	//   columns  = SoA store-column writes (positions/charges/...)
+	//   props    = per-atom PropertyManager bag restoration (subset of columns window)
+	//   stableid = stable-id bulk restore
+	//   bonds    = bond-record restore
+	struct LoadProfile
+	{
+		using clk = std::chrono::steady_clock;
+		bool on = false;
+		double parse_ms = 0, validate_ms = 0, alloc_ms = 0, insert_ms = 0,
+		       columns_ms = 0, props_ms = 0, stableid_ms = 0, bonds_ms = 0;
+		LoadProfile() { on = (std::getenv("BALL_JSON_LOAD_PROFILE") != nullptr); }
+		static clk::time_point now() { return clk::now(); }
+		static double ms(clk::time_point a, clk::time_point b)
+		{ return std::chrono::duration<double, std::milli>(b - a).count(); }
+		void report() const
+		{
+			if (!on) return;
+			std::fprintf(stderr,
+				"[json-load-profile] parse=%.1f validate=%.1f alloc=%.1f "
+				"insert=%.1f columns=%.1f (of which props=%.1f) stableid=%.1f "
+				"bonds=%.1f ms (total=%.1f)\n",
+				parse_ms, validate_ms, alloc_ms, insert_ms, columns_ms,
+				props_ms, stableid_ms, bonds_ms,
+				parse_ms + validate_ms + alloc_ms + insert_ms + columns_ms
+				+ stableid_ms + bonds_ms);
+		}
+	};
+
 	void require_(bool cond, const char* msg)
 	{
 		if (!cond)
@@ -134,6 +174,8 @@ void saveSystemJSON(const System& sys, std::ostream& os, int indent,
 void loadSystemJSON(System& sys, std::istream& is)
 {
 	using nlohmann::json;
+	LoadProfile prof;                       // v2.1 P4.0 profiler
+	auto t_start = LoadProfile::now();
 	json doc;
 	try
 	{
@@ -144,6 +186,8 @@ void loadSystemJSON(System& sys, std::istream& is)
 		throw Exception::ParseError(__FILE__, __LINE__, e.what(),
 			"K0.6.5: JSON parse failure");
 	}
+	auto t_after_parse = LoadProfile::now();
+	prof.parse_ms = LoadProfile::ms(t_start, t_after_parse);
 
 	try
 	{
@@ -346,11 +390,19 @@ void loadSystemJSON(System& sys, std::istream& is)
 		};
 		RollbackGuard guard{&atom_by_save_idx, &sys};
 
+		// v2.1 P4.0: validation window ends here (everything from the
+		// post-parse try{ to this point is Phase-1 / molecule-index
+		// validation + the destroy/clear + property header reads).
+		auto t_after_validate = LoadProfile::now();
+		prof.validate_ms = LoadProfile::ms(t_after_parse, t_after_validate);
+
 		for (std::size_t i = 0; i < n; ++i)
 		{
 			if (!is_freed_in_doc[i])
 				atom_by_save_idx[i] = new Atom;
 		}
+		auto t_after_alloc = LoadProfile::now();
+		prof.alloc_ms = LoadProfile::ms(t_after_validate, t_after_alloc);
 
 		// Phase 2 — molecules + atoms.
 		guard.inserted_started = true;  // any throw past this point must rollback via sys.destroy + store.clear
@@ -387,6 +439,10 @@ void loadSystemJSON(System& sys, std::istream& is)
 		// window (column data, stable_id restore, bond restore). Disarmed
 		// only at the very end of the try block when the full load is
 		// complete and rollback would be a bug.
+
+		// v2.1 P4.0: Composite-tree insert window ends here.
+		auto t_after_insert = LoadProfile::now();
+		prof.insert_ms = LoadProfile::ms(t_after_alloc, t_after_insert);
 
 		// Build save_idx -> fresh_store_idx map. After all molecule
 		// inserts, every live atom is in sys.getStore() at some idx.
@@ -434,9 +490,26 @@ void loadSystemJSON(System& sys, std::istream& is)
 			{
 				Atom* h = atom_by_save_idx[i];
 				if (h != nullptr)
-					detail::json_to_properties(*h, &a["properties"][i]);
+				{
+					// v2.1 P4.0: accumulate property-restore sub-time
+					// (guarded so the 100k chrono calls only happen when
+					// profiling is on).
+					if (prof.on)
+					{
+						auto pp0 = LoadProfile::now();
+						detail::json_to_properties(*h, &a["properties"][i]);
+						prof.props_ms += LoadProfile::ms(pp0, LoadProfile::now());
+					}
+					else
+					{
+						detail::json_to_properties(*h, &a["properties"][i]);
+					}
+				}
 			}
 		}
+		// v2.1 P4.0: column-write window (includes the props_ms subset).
+		auto t_after_columns = LoadProfile::now();
+		prof.columns_ms = LoadProfile::ms(t_after_insert, t_after_columns);
 
 		// K0.6.5c (Codex R8 OPEN-5a): restore System-level stable_ids
 		// via the slot map. Store-only loader does this via the private
@@ -472,6 +545,9 @@ void loadSystemJSON(System& sys, std::istream& is)
 			// vector and runs the same validation.
 			store.restore_stable_ids_for_load_(sid_vec);
 		}
+		// v2.1 P4.0: stable-id restore window.
+		auto t_after_stableid = LoadProfile::now();
+		prof.stableid_ms = LoadProfile::ms(t_after_columns, t_after_stableid);
 
 		// Restore bonds via the slot map. Bonds whose endpoints map to
 		// freed save-slots are silently skipped — same shape as the
@@ -497,6 +573,10 @@ void loadSystemJSON(System& sys, std::istream& is)
 			               static_cast<std::uint8_t>(order_i),
 			               static_cast<std::uint8_t>(type_i));
 		}
+
+		// v2.1 P4.0: bond-restore window.
+		prof.bonds_ms = LoadProfile::ms(t_after_stableid, LoadProfile::now());
+		prof.report();
 
 		// (R11 fix D): full mutation succeeded — disarm the rollback
 		// guard. Any throw before this point triggers full rollback to
