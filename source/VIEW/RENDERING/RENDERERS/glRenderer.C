@@ -806,22 +806,42 @@ namespace BALL
 				}
 			}
 
-			if (mode == REBUILD_DISPLAY_LISTS)
+			// v1.7.x-29 — startRendering() (above) put `rep` into the
+			// RepresentationManager's beeing_rendered_ set. finishedRendering()
+			// MUST run or updateRunning() stays true and the whole app wedges
+			// (selection + deletion refused, toolbar greyed). bufferRepresentation
+			// / render compile + replay the mesh/surface display list through
+			// Apple's GL→Metal layer and can throw; guard so the lock is always
+			// released. See the matching guard in Scene::handleRepresentationMessage_.
+			try
 			{
-				bufferRepresentation(repr);
-			}
-			else //	DIRECT_RENDERING:
-			{
-				render(repr);
-			}
-
-			if (show_preview_)
-			{
-				if (repr.getDrawingPrecision() != pbak)
+				if (mode == REBUILD_DISPLAY_LISTS)
 				{
-					// if previewing mode was used: reset the drawing precision
-					(*(Representation*)&repr).setDrawingPrecision(pbak);
+					bufferRepresentation(repr);
 				}
+				else //	DIRECT_RENDERING:
+				{
+					render(repr);
+				}
+
+				if (show_preview_)
+				{
+					if (repr.getDrawingPrecision() != pbak)
+					{
+						// if previewing mode was used: reset the drawing precision
+						(*(Representation*)&repr).setDrawingPrecision(pbak);
+					}
+				}
+			}
+			catch (std::exception& e)
+			{
+				Log.error() << "[GLRenderer] render/buffer of representation failed: " << e.what()
+				            << " — releasing render lock to avoid a stuck busy state." << std::endl;
+			}
+			catch (...)
+			{
+				Log.error() << "[GLRenderer] render/buffer of representation failed (unknown exception)"
+				            << " — releasing render lock to avoid a stuck busy state." << std::endl;
 			}
 
 			pm.finishedRendering(rep);

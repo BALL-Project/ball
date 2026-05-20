@@ -254,9 +254,33 @@ namespace BALL
 						RepresentationManager& pm = getMainControl()->getRepresentationManager();
 						if (pm.startRendering(rep))
 						{
-							for (Position i=0; i<renderers_.size(); ++i)
+							// v1.7.x-29 — startRendering() inserted `rep` into the
+							// RepresentationManager's `beeing_rendered_` set; that set
+							// MUST be drained by finishedRendering() or updateRunning()
+							// stays true forever, which pins isBusy() and silently locks
+							// the user out of selection AND deletion ("Cannot select
+							// items now!" / "Could not delete Representation while update
+							// is running!") and greys every toolbar action gated on
+							// !busy (Optimize / Bond-orders / Add-H). bufferRepresentation
+							// compiles the mesh/surface display list through the Apple
+							// GL→Metal layer and CAN throw; without this guard a single
+							// failed buffer permanently wedges the app. Always release.
+							try
 							{
-								renderers_[i]->bufferRepresentation(*rep);
+								for (Position i=0; i<renderers_.size(); ++i)
+								{
+									renderers_[i]->bufferRepresentation(*rep);
+								}
+							}
+							catch (std::exception& e)
+							{
+								Log.error() << "[Scene] bufferRepresentation failed: " << e.what()
+								            << " — releasing render lock to avoid a stuck busy state." << std::endl;
+							}
+							catch (...)
+							{
+								Log.error() << "[Scene] bufferRepresentation failed (unknown exception)"
+								            << " — releasing render lock to avoid a stuck busy state." << std::endl;
 							}
 
 							pm.finishedRendering(rep);
