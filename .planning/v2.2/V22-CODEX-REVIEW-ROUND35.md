@@ -1,7 +1,12 @@
 # BALL v2.2 H2 Planning Review - Round 35
 
-**Status:** NEEDS-FIXES  
-**Verdict:** H2 is not design-locked for H2a.  
+**Status:** Complete (R35 NEEDS-FIXES → R35b NEEDS-FIXES → R35c GO)
+**Verdict:** R35/R35b = NEEDS-FIXES; **R35c = GO — implement H2a** (see the
+R35b + R35c re-review sections appended below). The crux-risk H2 design
+converged over three rounds: destruction guard moved to the destructors
+(D69), free-standing adoption materialization (D73), dedicated binding
+slot + self-healing lifecycle (D68/D74), positional-move + insertParent/
+replace/swap/clear coverage (D70). No remaining H2a blockers.  
 **Reviewer:** Codex CLI 0.128.0  
 **Subject:** H2 mutation mirror + destruction guard + handle-yielding traversal
 
@@ -114,3 +119,18 @@ NEW BLOCKER: `container_row_idx_` has no store owner or lifecycle contract, so s
 NEW HIGH: the `being_destroyed_` flag is specified as set at `destroy()` entry but not reset for explicit public `destroy()` calls on objects that remain alive (`.planning/v2.2/V22-H2-DESIGN.md:101`). `Composite::destroy()` is a public teardown/reuse method, not only a destructor path (`source/CONCEPT/composite.C:1483`, `source/KERNEL/atomContainer.C:65`). If the flag is a permanent latch, later live removes from the same object will silently skip mirrors; if it is scoped, the design must say so and rely on the `~Composite` backstop for actual destructor teardown.
 
 Selection note: the leaf-only hook is directionally correct for recursive container selection because v0 `Composite::select_` recurses into descendants (`source/CONCEPT/composite.C:540`) and D70 hooks only atom leaf bit transitions (`.planning/v2.2/V22-H2-DESIGN.md:162`). Test it with `container.select()` and `container.deselect()` over nested residues to prove exactly one bump per descendant atom.
+
+## R35c re-review (post-fix-2)
+
+Verdict: GO -- implement H2a. The two R35b findings are closed, and I do not see a remaining H2a design blocker.
+
+- R35b NEW HIGH `destroy()`-on-live: CLOSED. D69 now sets `being_destroyed_` in molecular destructors, not in public `destroy()` / `clear()` (`.planning/v2.2/V22-H2-DESIGN.md:101`, `.planning/v2.2/V22-H2-DESIGN.md:105`). That preserves live `obj.destroy()` / `obj.clear()` mirroring (`.planning/v2.2/V22-H2-DESIGN.md:118`, `.planning/v2.2/V22-H2-DESIGN.md:152`) while still guarding destructor cascades before derived destructors call `destroy()` (`source/KERNEL/atomContainer.C:52`, `source/KERNEL/residue.C:78`, `source/KERNEL/system.C:338`). `~Composite` as a backstop runs after derived destruction and therefore does not double-handle: by then `parent_`/children are already detached or deleted, and the same parent-side flag rule still governs any remaining `removeChild` (`source/CONCEPT/composite.C:257`, `source/CONCEPT/composite.C:638`).
+- R35b NEW BLOCKER binding lifecycle/stale row: CLOSED. D74 adds the store-aware binding `{container_row_store_, container_row_idx_}` (`.planning/v2.2/V22-H2-DESIGN.md:274`) and requires every mirror hook to re-materialize on store mismatch, covering first bind and cross-System moves (`.planning/v2.2/V22-H2-DESIGN.md:277`). Same-store detach/reinsert intentionally reuses the binding (`.planning/v2.2/V22-H2-DESIGN.md:286`), and `~System` wholesale free is covered by no per-object release on destruction (`.planning/v2.2/V22-H2-DESIGN.md:286`). D73 also makes recursive materialization the single container-adoption path for both free-standing and cross-System adoption (`.planning/v2.2/V22-H2-DESIGN.md:262`), and D74 says that path writes the binding on every materialized v0 object (`.planning/v2.2/V22-H2-DESIGN.md:290`), so the next lazy mirror sees `container_row_store_ == getCompositeStore_()` and does not allocate a duplicate row.
+
+No new H2a blockers.
+
+Implementation notes to test in H2a:
+
+- Add explicit parity tests for `delete residue`/`delete molecule`/`~System` cascades and live `destroy()` / `clear()` on a rooted container, matching D69's required coverage (`.planning/v2.2/V22-H2-DESIGN.md:123`).
+- Add adoption/binding tests for first bind, cross-System move, same-store detach/reinsert, and post-adoption mutation to prove D73 eager materialization and D74 lazy self-healing do not double-allocate (`.planning/v2.2/V22-H2-DESIGN.md:262`, `.planning/v2.2/V22-H2-DESIGN.md:277`).
+- Keep `System` as implicit root: it is an `AtomContainer` in C++ (`include/BALL/KERNEL/system.h:42`) and therefore can carry the transitional slot, but D68 correctly says System itself has no container row and top-level molecules use `CONTAINER_NONE` as parent (`.planning/v2.2/V22-H2-DESIGN.md:92`).
