@@ -115,6 +115,20 @@ jobs:
               exit 1
           fi
           echo "D31b grep gate: PASS"
+          # v2.2 H1b (D66a / R33b caveat): the PUBLIC container-handle header
+          # must NEVER #include the private _moleculeStoreInternal.h. That is
+          # the only leak vector -- the internal ContainerRow/ChildRef/
+          # ContainerTable types are defined ONLY in that header, so without
+          # the include the compiler cannot name them (it reads the table via
+          # MoleculeStore's public scalar accessors instead). We grep for the
+          # include DIRECTIVE specifically so prose mentioning the type names
+          # in doc comments does not false-positive.
+          if grep -nE '^[[:space:]]*#[[:space:]]*include[[:space:]]*[<"].*_moleculeStoreInternal' \
+              include/BALL/KERNEL/containerHandle.h 2>/dev/null; then
+              echo "::error::D66a leak: containerHandle.h includes the private _moleculeStoreInternal.h"
+              exit 1
+          fi
+          echo "D66a container-handle boundary gate: PASS"
 
       - name: Install dependencies (Homebrew)
         # Mirrors the v2.0 dev setup: Qt5 + Boost + Eigen3 + nlohmann/json

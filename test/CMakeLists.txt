@@ -73,6 +73,10 @@ IF(BALL_CORE_ONLY)
 		# orphan->System migration), and asserts the mirror reproduces the
 		# tree. Store-side only; v0 tree stays source of truth (D60).
 		HierarchyParity_test
+		# v2.2 H1b (2026-05-20): container value-handle TYPES reading the
+		# container table via MoleculeStore scalar accessors. Exercises
+		# getters, null/stale semantics, parent/child nav, as<>() narrow.
+		ContainerHandle_test
 		CompositeIteratorStability_test
 		# B1.1 (Track B Wave 1a, 2026-05-18): tests re-enabled once
 		# FORMAT (subset) compiled into libBALL. These were deferred

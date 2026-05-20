@@ -308,12 +308,17 @@ std::uint32_t ContainerTable::allocate(ContainerKind kind)
 	{
 		idx = free_list_.back();
 		free_list_.pop_back();
+		// D65: PRESERVE the slot's generation across reuse (release already
+		// bumped it). A handle holding the pre-release generation must stay
+		// invalid even after the slot is recycled.
+		std::uint64_t gen = rows_[idx].generation;
 		rows_[idx] = ContainerRow{};
+		rows_[idx].generation = gen;
 	}
 	else
 	{
 		idx = static_cast<std::uint32_t>(rows_.size());
-		rows_.emplace_back();
+		rows_.emplace_back();  // fresh slot starts at generation 0
 	}
 	rows_[idx].kind = kind;
 	return idx;
@@ -327,7 +332,12 @@ void ContainerTable::release(std::uint32_t idx)
 {
 	if (idx == NONE || idx == 0 || idx >= rows_.size()) return;
 	if (rows_[idx].kind == ContainerKind::NONE) return;  // sentinel / already freed
+	// D65: BUMP the per-slot generation on release so any handle still
+	// holding the pre-release generation fails its validity check (stale),
+	// rather than reading a freed/recycled row.
+	std::uint64_t next_gen = rows_[idx].generation + 1;
 	rows_[idx] = ContainerRow{};   // clears children + kind=NONE
+	rows_[idx].generation = next_gen;
 	free_list_.push_back(idx);
 }
 
@@ -470,7 +480,6 @@ std::uint32_t ContainerTable::migrate_one_(
 	const char         ins_code = srow.payload.insertion_code;
 	const std::uint8_t ss_type  = srow.payload.ss_type;
 	const std::uint32_t sel_cnt = srow.selection_count;
-	const std::uint32_t gen     = srow.generation;
 	// Copy the child list out before recursion (recursion mutates rows_).
 	const std::vector<ChildRef> src_children = srow.children;
 
@@ -482,7 +491,9 @@ std::uint32_t ContainerTable::migrate_one_(
 		nrow.payload.insertion_code = ins_code;
 		nrow.payload.ss_type       = ss_type;
 		nrow.selection_count       = sel_cnt;
-		nrow.generation            = gen;
+		// D65: the destination row keeps the generation that allocate()
+		// assigned to its slot -- the source's generation is NOT copied
+		// (each slot owns its own monotonic counter).
 	}
 	// NB: container-property migration (D59) is deferred to H2 alongside
 	// the full mutation-mirror wiring; H1a migrates topology + payload +
@@ -545,6 +556,97 @@ std::uint32_t ContainerTable::migrate_subtree_from(
 	// so the orphan table doesn't leak rows and stale source aliases fail.
 	release_source_subtree_(src, src_root);
 	return new_root;
+}
+
+// ============================================================
+// v2.2 H1b (D66a): MoleculeStore scalar container accessors.
+// Read-only, public-typed bridge over the ContainerTable so the public
+// container-handle layer never names the internal row/edge/table types.
+// All bounds-guarded: an out-of-range / sentinel idx returns a benign
+// default rather than UB (handles also gate via isValid in debug).
+// ============================================================
+
+ContainerKind MoleculeStore::container_kind_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return ContainerKind::NONE;
+	return t.row(idx).kind;
+}
+
+std::string MoleculeStore::container_name_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return {};
+	return t.str(t.row(idx).name_offset);
+}
+
+std::string MoleculeStore::container_id_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return {};
+	return t.str(t.row(idx).payload.id_offset);
+}
+
+char MoleculeStore::container_insertion_code_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return ' ';
+	return t.row(idx).payload.insertion_code;
+}
+
+std::uint8_t MoleculeStore::container_ss_type_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return 0;
+	return t.row(idx).payload.ss_type;
+}
+
+std::uint32_t MoleculeStore::container_parent_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return CONTAINER_NONE;
+	return t.row(idx).parent_container_idx;  // == CONTAINER_NONE when root/detached
+}
+
+std::size_t MoleculeStore::container_child_count_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return 0;
+	return t.row(idx).children.size();
+}
+
+ContainerChildRef MoleculeStore::container_child_(std::uint32_t idx, std::size_t i) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return {};
+	const std::vector<ChildRef>& ch = t.row(idx).children;
+	if (i >= ch.size()) return {};
+	const ChildRef& c = ch[i];
+	return ContainerChildRef(c.kind == ChildRef::ATOM, c.idx);
+}
+
+std::uint32_t MoleculeStore::container_selection_count_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return 0;
+	return t.row(idx).selection_count;
+}
+
+std::uint64_t MoleculeStore::container_generation_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return 0;
+	return t.row(idx).generation;
+}
+
+bool MoleculeStore::container_is_freed_(std::uint32_t idx) const
+{
+	return side_tables_->container_table_.is_freed(idx);
+}
+
+std::size_t MoleculeStore::container_table_size_() const
+{
+	return side_tables_->container_table_.size();
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

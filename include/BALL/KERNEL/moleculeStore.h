@@ -20,6 +20,14 @@
 # include <BALL/DATATYPE/string.h>
 #endif
 
+// v2.2 H1b (D66a): public container-handle API types (ContainerKind +
+// ContainerChildRef). Pulled in here so the scalar container accessors
+// below — and the container-handle layer that calls them — never need
+// the private _moleculeStoreInternal.h (D31b boundary).
+#ifndef BALL_KERNEL_CONTAINERKIND_H
+# include <BALL/KERNEL/containerKind.h>
+#endif
+
 #include <cassert>
 #include <cstdint>
 #include <cstdio>
@@ -410,6 +418,43 @@ namespace BALL
 		// Mark the selection bitmap dirty (any selection_-mutating call should
 		// invoke this). Independent of structural generation.
 		void mark_selection_dirty()                  { ++selection_generation_; }
+
+		//@}
+		/**	@name Container metadata accessors (v2.2 H1b, D66a)
+
+				Scalar read accessors over the container metadata table
+				(ContainerTable, in the side-table PImpl). They return ONLY
+				public types (ContainerKind, ContainerChildRef, std::string,
+				scalars) so the public container-handle layer
+				(<BALL/KERNEL/containerHandle.h>) can forward to them without
+				ever naming the private ContainerRow/ChildRef/ContainerTable
+				types — keeping the D31b encapsulation boundary intact. Defined
+				out-of-line in moleculeStore.C where the internal header is
+				visible. `idx` is a container-row index (1-based; 0 is the
+				sentinel). Mirrors the existing atom-column accessor pattern.
+
+				Through H1b–H3 the container table is a verified mirror; the v0
+				object tree is the source of truth (D60).
+		*/
+		//@{
+
+		ContainerKind      container_kind_(std::uint32_t idx) const;
+		std::string        container_name_(std::uint32_t idx) const;
+		std::string        container_id_(std::uint32_t idx) const;
+		char               container_insertion_code_(std::uint32_t idx) const;
+		std::uint8_t       container_ss_type_(std::uint32_t idx) const;
+		std::uint32_t      container_parent_(std::uint32_t idx) const;
+		std::size_t        container_child_count_(std::uint32_t idx) const;
+		ContainerChildRef  container_child_(std::uint32_t idx, std::size_t i) const;
+		std::uint32_t      container_selection_count_(std::uint32_t idx) const;
+		std::uint64_t      container_generation_(std::uint32_t idx) const;
+		bool               container_is_freed_(std::uint32_t idx) const;
+		std::size_t        container_table_size_() const;
+
+		// Sentinel returned by container_parent_ for a root / detached
+		// container (mirrors ContainerRow::NONE; kept public so handles can
+		// test for "no parent" without the internal type).
+		static constexpr std::uint32_t CONTAINER_NONE = 0xFFFFFFFFu;
 
 		//@}
 		/**	@name Live-reference enforcement (D7 amendment, K0.2c, audited K0.4.7)

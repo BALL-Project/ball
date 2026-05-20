@@ -11,6 +11,7 @@
 //   - source/CONCEPT/selectable.C      (P1.8 Selectable mirror)
 //   - test/SideTableParity_test.C      (parity assertions)
 //   - test/HierarchyParity_test.C      (v2.2 H1a container-table parity)
+//   - test/ContainerHandle_test.C      (v2.2 H1b builds tables by hand)
 //
 // Anyone else including this header WILL be caught by the CI grep
 // gate in .github/workflows/ci-v2.yml. CompositeNode* MUST NOT leak
@@ -25,6 +26,10 @@
 
 #ifndef BALL_KERNEL_MOLECULESTORE_INTERNAL_H
 #define BALL_KERNEL_MOLECULESTORE_INTERNAL_H
+
+// v2.2 H1b (D66a): ContainerKind lives in this PUBLIC header (single
+// definition shared with the container-handle layer).
+#include <BALL/KERNEL/containerKind.h>
 
 #include <atomic>
 #include <cstdint>
@@ -439,21 +444,12 @@ namespace BALL
 	// written forward-only (never from a destructor).
 	// ============================================================
 
-	// D58: container kind tag. Atoms/Bonds are NOT containers -- they
-	// have their own SoA columns + bond table. This tag covers only the
-	// molecular-hierarchy container kinds.
-	enum class ContainerKind : std::uint8_t
-	{
-		NONE                = 0,
-		MOLECULE            = 1,
-		PROTEIN             = 2,
-		CHAIN               = 3,
-		RESIDUE             = 4,
-		SECONDARY_STRUCTURE = 5,
-		NUCLEOTIDE          = 6,
-		NUCLEIC_ACID        = 7,
-		FRAGMENT            = 8,
-	};
+	// D58: container kind tag. Defined in the PUBLIC header
+	// <BALL/KERNEL/containerKind.h> (D66a) so the public container-handle
+	// layer and this internal table share ONE ContainerKind type (no ODR
+	// conflict). Atoms/Bonds are NOT containers -- this tag covers only
+	// the molecular-hierarchy container kinds (Molecule/Chain/Residue/...).
+	// (enum ContainerKind is now in BALL:: via the include above.)
 
 	// D57: an ordered edge from a container to one child. A child is
 	// either a child container row (CONTAINER) or a child atom slot
@@ -505,7 +501,11 @@ namespace BALL
 		std::uint32_t         name_offset          = 0;   // common name
 		std::vector<ChildRef> children;                   // D57 source of truth
 		std::uint32_t         selection_count      = 0;   // D59 / D46
-		std::uint32_t         generation           = 0;
+		// D65: monotonic per-slot generation (u64 -> no wrap concern).
+		// Bumped on release, preserved on free-list reuse; a container
+		// handle validates against this. Distinct from the Atom handle's
+		// coarse whole-store generation.
+		std::uint64_t         generation           = 0;
 		ContainerPayload      payload;
 	};
 
