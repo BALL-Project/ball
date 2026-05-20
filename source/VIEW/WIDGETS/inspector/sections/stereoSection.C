@@ -89,6 +89,13 @@ namespace BALL
 				        this, &StereoSection::onControllerFocalChanged_);
 				connect(controller_, &StereoController::swapSideBySideChanged,
 				        this, &StereoSection::onControllerSwapChanged_);
+
+				// v1.7.x-18 — per-section reset.
+				setResettable(true, tr("Reset Stereo settings to the "
+				                       "scene's current values?"));
+				connect(this, &InspectorSection::resetRequested, this, [this]() {
+					if (controller_) { controller_->revert(); controller_->apply(); }
+				});
 			}
 		}
 

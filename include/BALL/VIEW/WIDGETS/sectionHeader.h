@@ -55,6 +55,17 @@ namespace BALL
 				QString title() const;
 				void setTitle(const QString& title);
 
+				/**
+				 * v1.7.x-18 — show/hide an optional reset-to-defaults
+				 * affordance (a small ↺ tool button) at the right of the
+				 * header, before the rule. Hidden by default. When the
+				 * user clicks it, `resetRequested()` is emitted. The owner
+				 * (InspectorSection) relays this to the section's
+				 * controller revert() after a confirm prompt.
+				 */
+				void setResetVisible(bool visible);
+				bool isResetVisible() const;
+
 			public Q_SLOTS:
 				/**
 				 * Set the expanded state. If the new state differs from
@@ -69,6 +80,9 @@ namespace BALL
 			Q_SIGNALS:
 				/** Emitted whenever the expanded state changes. */
 				void expandedChanged(bool expanded);
+
+				/** v1.7.x-18 — emitted when the reset affordance is clicked. */
+				void resetRequested();
 
 			private Q_SLOTS:
 				void onChevronClicked();
@@ -91,6 +105,7 @@ namespace BALL
 				bool expanded_;
 				QToolButton* chevron_;
 				QLabel* title_label_;
+				QToolButton* reset_btn_;   // v1.7.x-18 — optional reset affordance
 
 				void updateChevronIcon_();
 		};

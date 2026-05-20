@@ -86,6 +86,13 @@ namespace BALL
 			{
 				connect(controller_, &ColoringController::coloringMethodChanged,
 				        this, &ColoringSection::onControllerMethodChanged_);
+
+				// v1.7.x-18 — per-section reset.
+				setResettable(true, tr("Reset Coloring settings to the "
+				                       "representation's current values?"));
+				connect(this, &InspectorSection::resetRequested, this, [this]() {
+					if (controller_) { controller_->revert(); controller_->apply(); }
+				});
 			}
 		}
 

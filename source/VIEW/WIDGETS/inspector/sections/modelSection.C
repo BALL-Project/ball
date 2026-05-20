@@ -127,6 +127,13 @@ namespace BALL
 				        this, &ModelSection::onControllerPrecisionChanged_);
 				connect(controller_, &ModelController::transparencyChanged,
 				        this, &ModelSection::onControllerTransparencyChanged_);
+
+				// v1.7.x-18 — per-section reset.
+				setResettable(true, tr("Reset Model settings to the "
+				                       "representation's current values?"));
+				connect(this, &InspectorSection::resetRequested, this, [this]() {
+					if (controller_) { controller_->revert(); controller_->apply(); }
+				});
 			}
 		}
 

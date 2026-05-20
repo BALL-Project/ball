@@ -58,6 +58,13 @@ namespace BALL
 				        this, &LightsSection::onControllerLightCountChanged_);
 				connect(controller_, &LightController::ambientIntensityChanged,
 				        this, &LightsSection::onControllerAmbientChanged_);
+
+				// v1.7.x-18 — per-section reset.
+				setResettable(true, tr("Reset Lights settings to the "
+				                       "scene's current values?"));
+				connect(this, &InspectorSection::resetRequested, this, [this]() {
+					if (controller_) { controller_->revert(); controller_->apply(); }
+				});
 			}
 		}
 

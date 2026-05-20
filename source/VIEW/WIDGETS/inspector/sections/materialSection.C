@@ -79,6 +79,16 @@ namespace BALL
 				        this, &MaterialSection::onControllerSpecularChanged_);
 				connect(controller_, &MaterialController::shininessChanged,
 				        this, &MaterialSection::onControllerShininessChanged_);
+
+				// v1.7.x-18 — per-section reset. revert() re-reads the
+				// live Representation material into the controller (which
+				// re-emits the *Changed signals → the sliders resync), then
+				// apply() pushes it back through the scene-material backend.
+				setResettable(true, tr("Reset Material settings to the "
+				                       "representation's current values?"));
+				connect(this, &InspectorSection::resetRequested, this, [this]() {
+					if (controller_) { controller_->revert(); controller_->apply(); }
+				});
 			}
 		}
 

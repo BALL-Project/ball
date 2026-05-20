@@ -14,6 +14,7 @@
 #include <QtCore/QPropertyAnimation>
 #include <QtCore/QEasingCurve>
 #include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QMessageBox>
 
 namespace BALL
 {
@@ -29,7 +30,8 @@ namespace BALL
 				content_(nullptr),
 				root_layout_(nullptr),
 				anim_(nullptr),
-				expanded_max_height_(0)
+				expanded_max_height_(0),
+				reset_confirm_text_()
 		{
 			setObjectName("inspectorSection");
 			root_layout_ = new QVBoxLayout(this);
@@ -41,6 +43,9 @@ namespace BALL
 
 			connect(header_, &SectionHeader::expandedChanged,
 			        this, &InspectorSection::onHeaderToggled_);
+			// v1.7.x-18 — relay the header reset affordance.
+			connect(header_, &SectionHeader::resetRequested,
+			        this, &InspectorSection::onResetRequested_);
 
 			// Phase 999.48 §8.2 — a11y. Per Handover, InspectorSection maps
 			// to QAccessible::Section. Qt 6's role enumeration uses Pane for
@@ -87,6 +92,30 @@ namespace BALL
 		{
 			if (header_)
 				header_->setExpanded(expanded);
+		}
+
+		void InspectorSection::setResettable(bool resettable,
+		                                     const QString& confirm_text)
+		{
+			reset_confirm_text_ = confirm_text;
+			if (header_) header_->setResetVisible(resettable);
+		}
+
+		void InspectorSection::onResetRequested_()
+		{
+			// v1.7.x-18 — confirm (unless confirm text is empty) then
+			// emit resetRequested() for the subclass to wire to its
+			// controller's revert().
+			if (!reset_confirm_text_.isEmpty())
+			{
+				const QMessageBox::StandardButton answer =
+					QMessageBox::question(this, tr("Reset section"),
+						reset_confirm_text_,
+						QMessageBox::Reset | QMessageBox::Cancel,
+						QMessageBox::Cancel);
+				if (answer != QMessageBox::Reset) return;
+			}
+			Q_EMIT resetRequested();
 		}
 
 		void InspectorSection::onHeaderToggled_(bool expanded)

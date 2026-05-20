@@ -76,12 +76,34 @@ namespace BALL
 			rule->setFrameShadow(QFrame::Plain);
 			rule->setLineWidth(1);
 
+			// v1.7.x-18 — optional reset-to-defaults affordance. Hidden by
+			// default; sections that have a controller revert() call
+			// setResetVisible(true). Sits after the rule so it right-aligns.
+			reset_btn_ = new QToolButton(this);
+			reset_btn_->setObjectName(QStringLiteral("sectionHeaderReset"));
+			reset_btn_->setAutoRaise(true);
+			reset_btn_->setFocusPolicy(Qt::StrongFocus);
+			reset_btn_->setCursor(Qt::PointingHandCursor);
+			reset_btn_->setIconSize(QSize(14, 14));
+			reset_btn_->setToolTip(tr("Reset this section to defaults"));
+			reset_btn_->setAccessibleName(tr("Reset %1 section to defaults").arg(title));
+			{
+				QIcon reset_icon = Icons::get("actions/reset");
+				if (reset_icon.isNull())
+					reset_btn_->setText(QStringLiteral("↺"));  // ↺ fallback
+				else
+					reset_btn_->setIcon(reset_icon);
+			}
+			reset_btn_->setVisible(false);
+			connect(reset_btn_, &QToolButton::clicked, this, &SectionHeader::resetRequested);
+
 			QHBoxLayout* layout = new QHBoxLayout(this);
 			layout->setContentsMargins(0, 4, 0, 4);
 			layout->setSpacing(8);
 			layout->addWidget(chevron_);
 			layout->addWidget(title_label_);
 			layout->addWidget(rule, /*stretch=*/1);
+			layout->addWidget(reset_btn_);
 
 			// Phase 999.48 §8.2 — a11y. The header is logically a
 			// QAccessible::Heading at level 2. Qt's default factory exposes
@@ -97,6 +119,16 @@ namespace BALL
 		}
 
 		SectionHeader::~SectionHeader() = default;
+
+		void SectionHeader::setResetVisible(bool visible)
+		{
+			if (reset_btn_) reset_btn_->setVisible(visible);
+		}
+
+		bool SectionHeader::isResetVisible() const
+		{
+			return reset_btn_ != nullptr && reset_btn_->isVisible();
+		}
 
 		QString SectionHeader::title() const
 		{

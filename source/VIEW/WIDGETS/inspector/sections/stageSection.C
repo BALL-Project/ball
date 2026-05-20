@@ -85,6 +85,13 @@ namespace BALL
 				        this, &StageSection::onControllerCoordinateSystemChanged_);
 				connect(controller_, &StageController::fogIntensityChanged,
 				        this, &StageSection::onControllerFogIntensityChanged_);
+
+				// v1.7.x-18 — per-section reset.
+				setResettable(true, tr("Reset Stage settings to the "
+				                       "scene's current values?"));
+				connect(this, &InspectorSection::resetRequested, this, [this]() {
+					if (controller_) { controller_->revert(); controller_->apply(); }
+				});
 			}
 		}
 

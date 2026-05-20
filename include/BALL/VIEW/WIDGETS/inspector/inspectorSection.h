@@ -85,6 +85,18 @@ namespace BALL
 				/** Content widget (subclass plumbed via setContent()). */
 				QWidget* content() const { return content_; }
 
+				/**
+				 * v1.7.x-18 — enable the per-section reset-to-defaults
+				 * affordance. Shows a ↺ button in the header; when the
+				 * user activates it (and confirms), `resetRequested()` is
+				 * emitted. Subclasses with a controller connect this
+				 * signal to `controller_->revert()`.
+				 * @param confirm_text  prompt shown in the confirm dialog;
+				 *   empty disables the confirm (reset fires immediately).
+				 */
+				void setResettable(bool resettable,
+				                    const QString& confirm_text = QString());
+
 			public Q_SLOTS:
 				/**
 				 * Expand or collapse the section. Animates the content
@@ -97,6 +109,13 @@ namespace BALL
 				/** Emitted at the end of an animated collapse/expand cycle. */
 				void expandedChanged(bool expanded);
 
+				/**
+				 * v1.7.x-18 — emitted when the user activates the section's
+				 * reset affordance and confirms. Subclasses connect this to
+				 * their controller's revert().
+				 */
+				void resetRequested();
+
 			protected:
 				/**
 				 * Subclasses call this once in their constructor to install
@@ -106,6 +125,7 @@ namespace BALL
 
 			private Q_SLOTS:
 				void onHeaderToggled_(bool expanded);
+				void onResetRequested_();
 
 			private:
 				QString state_key_;
@@ -114,6 +134,7 @@ namespace BALL
 				QVBoxLayout* root_layout_;
 				QPropertyAnimation* anim_;
 				int expanded_max_height_;   // cached natural content height
+				QString reset_confirm_text_;  // v1.7.x-18 — confirm prompt (empty = no confirm)
 		};
 
 	} // namespace VIEW
