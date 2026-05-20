@@ -14,6 +14,10 @@ SET(BALL_VIEW_TESTS
 	# (Inspector dock tab-chain walk via focusNextChild() against a
 	# per-section manifest) deferred to v1.7 RC patch.
 	tabOrder_test
+	# v1.7.x-25 — controller command-contract safety net for the v1.7.x-24
+	# cut-over. Asserts set->apply->revert round-trips through the Stage for
+	# the four Stage-attached controllers (Stage/Camera/Stereo/Light).
+	ControllerContract_test
 )
 
 SET(VIEW_TESTS

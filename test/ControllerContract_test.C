@@ -1,0 +1,113 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// v1.7.x-25 — Controller command-contract tests.
+//
+// These are the regression safety-net for the v1.7.x-24 controller
+// cut-over. Each test asserts the *contract* of a presentation
+// Controller: setting a mirrored property and calling apply() must
+// persist that state to the single owner (the Stage), and a freshly
+// constructed Controller's revert() (run in its constructor) must read
+// the same value back. set -> apply -> (fresh controller) revert ==
+// original. This proves the Inspector mutation path actually reaches the
+// owner and is consistent by construction — exactly the property the
+// cut-over must not break.
+//
+// Scope: the four Stage-attached controllers, which are cleanly headless-
+// testable (their apply() guards the Scene/MainControl singletons, which
+// are absent in a unit test, so only the Stage is mutated). The
+// Representation-attached controllers (Model/Coloring/Material) need a
+// Representation + DisplayProperties fixture and are covered separately.
+//
+
+#include <BALL/CONCEPT/classTest.h>
+#include <BALLTestConfig.h>
+
+#include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/controllers/stageController.h>
+#include <BALL/VIEW/KERNEL/controllers/cameraController.h>
+#include <BALL/VIEW/KERNEL/controllers/stereoController.h>
+#include <BALL/VIEW/KERNEL/controllers/lightController.h>
+#include <BALL/VIEW/DATATYPE/colorRGBA.h>
+
+#include <QtGui/QColor>
+#include <QtGui/QVector3D>
+
+using namespace BALL;
+using namespace BALL::VIEW;
+
+START_TEST(ControllerContract)
+
+using namespace BALL::VIEW;
+
+CHECK(StageController::apply() persists float/bool state to the Stage)
+	Stage stage;
+	StageController c(&stage, nullptr);
+	c.setFogIntensity(0.42f);
+	c.setShowCoordinateSystem(true);
+	c.setEyeDistance(1.5f);
+	c.setFocalDistance(7.25f);
+	c.apply();
+
+	// A fresh controller's ctor calls revert(), pulling from the Stage.
+	StageController back(&stage, nullptr);
+	TEST_REAL_EQUAL(back.fogIntensity(), 0.42f)
+	TEST_EQUAL(back.showCoordinateSystem(), true)
+	TEST_REAL_EQUAL(back.eyeDistance(), 1.5f)
+	TEST_REAL_EQUAL(back.focalDistance(), 7.25f)
+RESULT
+
+CHECK(StageController::apply() persists the background colour to the Stage)
+	Stage stage;
+	StageController c(&stage, nullptr);
+	c.setBackgroundColor(QColor(0, 128, 255));
+	c.apply();
+	// Assert on the owner's ColorRGBA (0..1) with tolerance — the QColor
+	// round-trip truncates, but the stored channels are exact-ish floats.
+	const ColorRGBA& bg = stage.getBackgroundColor();
+	TEST_REAL_EQUAL(static_cast<float>(bg.getRed()),   0.0f)
+	TEST_REAL_EQUAL(static_cast<float>(bg.getGreen()), 128.0f / 255.0f)
+	TEST_REAL_EQUAL(static_cast<float>(bg.getBlue()),  255.0f / 255.0f)
+RESULT
+
+CHECK(CameraController::apply() persists viewpoint + look-at to the Stage camera)
+	Stage stage;
+	CameraController c(&stage);
+	c.setPosition(QVector3D(1.0f, 2.0f, 3.0f));
+	c.setLookAt(QVector3D(4.0f, 5.0f, 6.0f));   // distinct => not degenerate
+	c.apply();
+
+	CameraController back(&stage);
+	TEST_REAL_EQUAL(back.position().x(), 1.0f)
+	TEST_REAL_EQUAL(back.position().y(), 2.0f)
+	TEST_REAL_EQUAL(back.position().z(), 3.0f)
+	TEST_REAL_EQUAL(back.lookAt().x(),   4.0f)
+	TEST_REAL_EQUAL(back.lookAt().y(),   5.0f)
+	TEST_REAL_EQUAL(back.lookAt().z(),   6.0f)
+RESULT
+
+CHECK(StereoController::apply() persists eye/focal/swap to the Stage)
+	Stage stage;
+	StereoController c(&stage);
+	c.setEyeDistance(2.0f);
+	c.setFocalDistance(9.0f);
+	c.setSwapSideBySide(true);
+	c.apply();
+
+	StereoController back(&stage);
+	TEST_REAL_EQUAL(back.eyeDistance(), 2.0f)
+	TEST_REAL_EQUAL(back.focalDistance(), 9.0f)
+	TEST_EQUAL(back.swapSideBySide(), true)
+RESULT
+
+CHECK(LightController::apply() persists the ambient intensity to the Stage)
+	Stage stage;
+	LightController c(&stage);
+	c.setAmbientIntensity(0.6f);
+	c.apply();
+
+	LightController back(&stage);
+	TEST_REAL_EQUAL(back.ambientIntensity(), 0.6f)
+RESULT
+
+END_TEST
