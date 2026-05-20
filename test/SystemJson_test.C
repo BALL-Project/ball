@@ -12,6 +12,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>          // v2.1 P4.2: bond property round-trip test
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
@@ -180,6 +181,67 @@ CHECK(K0.6.5 bonds round-trip when restoring a small molecule)
 			found_order_2 = true;
 	}
 	TEST_EQUAL(found_order_2, true)
+RESULT
+
+CHECK(v2.1 P4.2 bond properties + Bond* graph round-trip via createBond)
+	// Build a System whose bonds are created via Atom::createBond (so
+	// Bond* heap objects exist with PropertyManager bags), set bond
+	// properties, round-trip, and verify both:
+	//  (a) D43: the Atom-side Bond* graph is reconstructed on load
+	//      (atom.countBonds() > 0, not just store.live_bond_count()).
+	//  (b) P4.2: the Bond PropertyManager bag round-trips.
+	System src;
+	Molecule* m = new Molecule;
+	m->setName("BONDPROP_DEMO");
+	src.insert(*m);
+	Atom* c = new Atom; c->setElement(PTE[Element::CARBON]); c->setName("C"); m->insert(*c);
+	Atom* o = new Atom; o->setElement(PTE[Element::OXYGEN]); o->setName("O"); m->insert(*o);
+
+	// Bond via createBond -> real Bond* heap object + store record.
+	Bond* b = c->createBond(*o);
+	b->setOrder(Bond::ORDER__DOUBLE);
+	b->setProperty(std::string("MMFF94SBMB"), true);
+	b->setProperty(std::string("rotatable"),  false);
+	b->setProperty(std::string("ff_label"),   String("CO_carbonyl"));
+
+	// Source side: Atom-side bond graph is live.
+	TEST_EQUAL(c->countBonds(), (Size)1)
+	TEST_EQUAL(o->countBonds(), (Size)1)
+	TEST_EQUAL(src.getStore().live_bond_count(), 1u)
+
+	std::ostringstream os;
+	saveSystemJSON(src, os);
+	System dst;
+	std::istringstream is(os.str());
+	loadSystemJSON(dst, is);
+
+	TEST_EQUAL(dst.countAtoms(), 2u)
+	TEST_EQUAL(dst.getStore().live_bond_count(), 1u)
+
+	// (a) D43: Atom-side Bond* graph reconstructed — countBonds() > 0.
+	AtomConstIterator ai = dst.beginAtom();
+	const Atom* dc = nullptr;
+	const Atom* doo = nullptr;
+	for (; +ai; ++ai)
+	{
+		if (ai->getName() == "C") dc = &*ai;
+		if (ai->getName() == "O") doo = &*ai;
+	}
+	TEST_NOT_EQUAL(dc,  (const Atom*)0)
+	TEST_NOT_EQUAL(doo, (const Atom*)0)
+	TEST_EQUAL(dc->countBonds(),  (Size)1)
+	TEST_EQUAL(doo->countBonds(), (Size)1)
+
+	// (b) P4.2: the restored Bond carries its properties + order.
+	const Bond* db = dc->getBond(0);
+	TEST_NOT_EQUAL(db, (const Bond*)0)
+	TEST_EQUAL(db->getOrder() == Bond::ORDER__DOUBLE, true)
+	TEST_EQUAL(db->hasProperty("MMFF94SBMB"), true)
+	TEST_EQUAL(db->getProperty("MMFF94SBMB").getBool(), true)
+	TEST_EQUAL(db->hasProperty("rotatable"), true)
+	TEST_EQUAL(db->getProperty("rotatable").getBool(), false)
+	TEST_EQUAL(db->hasProperty("ff_label"), true)
+	TEST_EQUAL(db->getProperty("ff_label").getString(), "CO_carbonyl")
 RESULT
 
 CHECK(K0.6.5 wrong document_type rejected)

@@ -37,7 +37,7 @@ namespace BALL
 			minor = additive.
 	*/
 	constexpr int SYSTEM_JSON_VERSION       = 1;   // major
-	constexpr int SYSTEM_JSON_VERSION_MINOR = 0;
+	constexpr int SYSTEM_JSON_VERSION_MINOR = 1;   // v2.1 P4.2: bond properties + Bond* graph reconstruction on load
 
 	/** Write `sys` to `os` as a JSON document with top-level
 			"document_type": "System".

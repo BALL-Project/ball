@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/moleculeStoreJson.h>
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>          // v2.1 P4.2: Bond is-a PropertyManager
 #include <BALL/KERNEL/propertyJson.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/EXTERNAL/nlohmann_json.hpp>
@@ -184,13 +185,29 @@ void store_to_json_obj(const MoleculeStore& store, void* json_out, JsonFloatForm
 	{
 		if (store.is_bond_dead(static_cast<std::uint32_t>(i))) continue;
 		const BondRecord& br = store.bond(static_cast<std::uint32_t>(i));
-		bonds.push_back({
+		json bond_json = {
 			{"a", br.a},
 			{"b", br.b},
 			{"order", br.order},
 			{"type",  br.type},
 			{"flags", br.flags}
-		});
+		};
+		// v2.1 P4.2 (V21-BOND-PROPERTY-JSON): the Bond handle's
+		// PropertyManager bag (MMFF94SBMB / MMFF94RBL / VIRTUAL__BOND /
+		// HBondProcessor annotations) lives on the heap Bond* object,
+		// reached via bond_back_ptr. Emit it inline with the bond
+		// record, keyed "properties", only when non-empty. Store-only
+		// JSON (no Bond* objects) has bond_back_ptr == null and emits
+		// no properties — clean. Schema MINOR bump covers the addition.
+		const Bond* bp = store.bond_back_ptr(static_cast<std::uint32_t>(i));
+		if (bp != nullptr)
+		{
+			json bprop = json::object();
+			detail::properties_to_json(*bp, &bprop);
+			if (!bprop.empty())
+				bond_json["properties"] = std::move(bprop);
+		}
+		bonds.push_back(std::move(bond_json));
 	}
 	doc["bonds"] = std::move(bonds);
 }

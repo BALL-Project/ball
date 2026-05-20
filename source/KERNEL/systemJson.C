@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>          // v2.1 P4.2: createBond + Bond setters
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/moleculeStoreJson.h>
 #include <BALL/KERNEL/propertyJson.h>
@@ -577,9 +578,32 @@ void loadSystemJSON(System& sys, std::istream& is)
 			const int type_i  = br["type"].get<int>();
 			require_(order_i >= 0 && order_i <= 255, "bond.order out of [0,255]");
 			require_(type_i  >= 0 && type_i  <= 255, "bond.type out of [0,255]");
-			store.add_bond(slot_map[save_a], slot_map[save_b],
-			               static_cast<std::uint8_t>(order_i),
-			               static_cast<std::uint8_t>(type_i));
+
+			// v2.1 P4.2 (V21-BOND-PROPERTY-JSON + D43): reconstruct the
+			// Atom-side Bond* graph via createBond — which also creates
+			// the store BondRecord AND wires bond_back_ptr — then restore
+			// order, type, and the Bond's PropertyManager bag. Pre-P4.2
+			// the loader called store.add_bond directly, leaving
+			// atom.countBonds()==0 post-load (the D43 fidelity gap);
+			// createBond closes that AND gives the bond a Bond* to hold
+			// its restored properties.
+			//
+			// Note: createBond enforces one bond per atom pair (Atom's
+			// inherent model). If the saved store held multiple records
+			// between the same pair (a store-level multigraph, not
+			// expressible via the Atom API), they collapse to one here.
+			// The store-only loader (json_obj_to_store) preserves the
+			// multigraph; the System loader is Atom-consistent.
+			Atom* atom_a = atom_by_save_idx[save_a];
+			Atom* atom_b = atom_by_save_idx[save_b];
+			Bond* bond = atom_a->createBond(*atom_b);
+			if (bond != nullptr)
+			{
+				bond->setOrder(static_cast<Bond::Order>(order_i));
+				bond->setType(static_cast<Bond::Type>(type_i));
+				if (br.contains("properties"))
+					detail::json_to_properties(*bond, &br["properties"]);
+			}
 		}
 
 		// v2.1 P4.0: bond-restore window.

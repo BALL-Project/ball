@@ -39,7 +39,7 @@ namespace BALL
 			minor) and `format_minor` (added in K0.6.3, default 0).
 	*/
 	constexpr int MOLECULE_STORE_JSON_VERSION       = 1;   // major
-	constexpr int MOLECULE_STORE_JSON_VERSION_MINOR = 1;   // bumped K0.6.3
+	constexpr int MOLECULE_STORE_JSON_VERSION_MINOR = 2;   // K0.6.3=1; v2.1 P4.2 bond "properties"=2
 
 	/** Float encoding selector for saveStoreJSON.
 			- DECIMAL (default): the nlohmann::json default — readable,
