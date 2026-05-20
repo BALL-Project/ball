@@ -67,6 +67,12 @@ IF(BALL_CORE_ONLY)
 		# Mutation-mirror parity assertions land in P2 alongside the
 		# inheritance flip.
 		SideTableParity_test
+		# v2.2 H1a (2026-05-20): container metadata table parity skeleton.
+		# Builds a v0 hierarchy, mirrors it into the store-side
+		# ContainerTable (ChildRef edges + payload + selection counters +
+		# orphan->System migration), and asserts the mirror reproduces the
+		# tree. Store-side only; v0 tree stays source of truth (D60).
+		HierarchyParity_test
 		CompositeIteratorStability_test
 		# B1.1 (Track B Wave 1a, 2026-05-18): tests re-enabled once
 		# FORMAT (subset) compiled into libBALL. These were deferred

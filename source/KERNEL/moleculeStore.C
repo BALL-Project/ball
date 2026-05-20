@@ -291,6 +291,215 @@ bool MoleculeStoreSideTables::is_selected_(std::uint32_t i) const
 	return (word & (std::uint64_t(1) << (i & 63))) != 0;
 }
 
+// ============================================================
+// v2.2 H1a (A2 flat SoA topology): ContainerTable implementation.
+// Store-side only -- the v0 object tree is the source of truth (D60);
+// this table is a verified mirror exercised by HierarchyParity_test.
+// ============================================================
+
+// D58: allocate a fresh container row. Reuse a freed slot if available
+// (recycled rows are reset so no stale children/links leak), else
+// append. Slot 0 is the reserved sentinel (pushed in the ctor), so the
+// first real allocation has idx == 1.
+std::uint32_t ContainerTable::allocate(ContainerKind kind)
+{
+	std::uint32_t idx;
+	if (!free_list_.empty())
+	{
+		idx = free_list_.back();
+		free_list_.pop_back();
+		rows_[idx] = ContainerRow{};
+	}
+	else
+	{
+		idx = static_cast<std::uint32_t>(rows_.size());
+		rows_.emplace_back();
+	}
+	rows_[idx].kind = kind;
+	return idx;
+}
+
+// Return a row to the free list after clearing it. Idempotent: a row
+// whose kind is already NONE is either the slot-0 sentinel or already
+// freed, so re-release is a no-op (no double-push). Caller must have
+// already detached the row from its parent's child list.
+void ContainerTable::release(std::uint32_t idx)
+{
+	if (idx == NONE || idx == 0 || idx >= rows_.size()) return;
+	if (rows_[idx].kind == ContainerKind::NONE) return;  // sentinel / already freed
+	rows_[idx] = ContainerRow{};   // clears children + kind=NONE
+	free_list_.push_back(idx);
+}
+
+bool ContainerTable::is_freed(std::uint32_t idx) const
+{
+	if (idx == 0 || idx >= rows_.size()) return false;  // slot 0 = sentinel, not "freed"
+	return rows_[idx].kind == ContainerKind::NONE;
+}
+
+std::uint32_t ContainerTable::intern(const std::string& s)
+{
+	if (s.empty()) return 0u;
+	auto it = string_intern_.find(s);
+	if (it != string_intern_.end()) return it->second;
+	std::uint32_t off = static_cast<std::uint32_t>(string_pool_.size());
+	string_pool_.append(s);
+	string_pool_.push_back('\0');
+	string_intern_.emplace(s, off);
+	return off;
+}
+
+std::size_t ContainerTable::child_ordinal_(std::uint32_t parent_idx, ChildRef c) const
+{
+	const auto& ch = rows_[parent_idx].children;
+	for (std::size_t i = 0; i < ch.size(); ++i)
+		if (ch[i] == c) return i;
+	return static_cast<std::size_t>(-1);
+}
+
+void ContainerTable::set_reverse_edge_(std::uint32_t parent_idx, ChildRef c)
+{
+	if (c.kind == ChildRef::CONTAINER)
+		rows_[c.idx].parent_container_idx = parent_idx;
+	else
+		atom_parent_[c.idx] = parent_idx;
+}
+
+void ContainerTable::clear_reverse_edge_(ChildRef c)
+{
+	if (c.kind == ChildRef::CONTAINER)
+		rows_[c.idx].parent_container_idx = NONE;
+	else
+		atom_parent_.erase(c.idx);
+}
+
+void ContainerTable::append_child(std::uint32_t parent_idx, ChildRef c)
+{
+	rows_[parent_idx].children.push_back(c);
+	set_reverse_edge_(parent_idx, c);
+}
+
+void ContainerTable::prepend_child(std::uint32_t parent_idx, ChildRef c)
+{
+	auto& ch = rows_[parent_idx].children;
+	ch.insert(ch.begin(), c);
+	set_reverse_edge_(parent_idx, c);
+}
+
+void ContainerTable::insert_child_before(std::uint32_t parent_idx, ChildRef c, ChildRef pivot)
+{
+	std::size_t ord = child_ordinal_(parent_idx, pivot);
+	if (ord == static_cast<std::size_t>(-1)) { append_child(parent_idx, c); return; }
+	auto& ch = rows_[parent_idx].children;
+	ch.insert(ch.begin() + static_cast<std::ptrdiff_t>(ord), c);
+	set_reverse_edge_(parent_idx, c);
+}
+
+void ContainerTable::insert_child_after(std::uint32_t parent_idx, ChildRef c, ChildRef pivot)
+{
+	std::size_t ord = child_ordinal_(parent_idx, pivot);
+	if (ord == static_cast<std::size_t>(-1)) { append_child(parent_idx, c); return; }
+	auto& ch = rows_[parent_idx].children;
+	ch.insert(ch.begin() + static_cast<std::ptrdiff_t>(ord + 1), c);
+	set_reverse_edge_(parent_idx, c);
+}
+
+bool ContainerTable::remove_child(std::uint32_t parent_idx, ChildRef c)
+{
+	auto& ch = rows_[parent_idx].children;
+	for (auto it = ch.begin(); it != ch.end(); ++it)
+	{
+		if (*it == c)
+		{
+			ch.erase(it);
+			clear_reverse_edge_(c);
+			return true;
+		}
+	}
+	return false;
+}
+
+// D59/D46: walk parent_container_idx up from `start` (inclusive),
+// adjusting each row's selection_count by delta (+1 select, -1 deselect).
+// Underflow on an unbalanced deselect clamps at 0.
+void ContainerTable::bump_selection_up(std::uint32_t start_container_idx, int delta)
+{
+	std::uint32_t cur = start_container_idx;
+	while (cur != NONE && cur != 0 && cur < rows_.size())
+	{
+		std::uint32_t& sc = rows_[cur].selection_count;
+		if (delta >= 0)
+			sc += static_cast<std::uint32_t>(delta);
+		else
+		{
+			std::uint32_t dec = static_cast<std::uint32_t>(-delta);
+			sc = (sc < dec) ? 0u : (sc - dec);
+		}
+		cur = rows_[cur].parent_container_idx;
+	}
+}
+
+// D56: recursive worker -- copy one src row into *this, recursing for
+// CONTAINER children (which builds the old->new remap implicitly via the
+// returned new index) and remapping ATOM children through atom_remap.
+// NB: allocate() / append_child() may reallocate rows_, so we never hold
+// a ContainerRow& across the child loop -- all writes index rows_ fresh.
+std::uint32_t ContainerTable::migrate_one_(
+	const ContainerTable& src, std::uint32_t src_idx,
+	const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap)
+{
+	const ContainerRow& srow = src.rows_[src_idx];
+	const ContainerKind kind = srow.kind;
+	// Snapshot scalar state before any allocation (srow is in `src`, not
+	// `*this`, so it stays valid -- but read it up front for clarity).
+	const std::string  name_str = src.str(srow.name_offset);
+	const std::string  id_str   = src.str(srow.payload.id_offset);
+	const char         ins_code = srow.payload.insertion_code;
+	const std::uint8_t ss_type  = srow.payload.ss_type;
+	const std::uint32_t sel_cnt = srow.selection_count;
+	const std::uint32_t gen     = srow.generation;
+	// Copy the child list out before recursion (recursion mutates rows_).
+	const std::vector<ChildRef> src_children = srow.children;
+
+	std::uint32_t new_idx = allocate(kind);
+	{
+		ContainerRow& nrow = rows_[new_idx];
+		nrow.name_offset           = intern(name_str);
+		nrow.payload.id_offset     = intern(id_str);
+		nrow.payload.insertion_code = ins_code;
+		nrow.payload.ss_type       = ss_type;
+		nrow.selection_count       = sel_cnt;
+		nrow.generation            = gen;
+	}
+	// NB: container-property migration (D59) is deferred to H2 alongside
+	// the full mutation-mirror wiring; H1a migrates topology + payload +
+	// names + selection counts only.
+	for (const ChildRef& c : src_children)
+	{
+		if (c.kind == ChildRef::CONTAINER)
+		{
+			std::uint32_t child_new = migrate_one_(src, c.idx, atom_remap);
+			append_child(new_idx, ChildRef{ChildRef::CONTAINER, child_new});
+		}
+		else
+		{
+			auto it = atom_remap.find(c.idx);
+			std::uint32_t new_atom = (it == atom_remap.end()) ? c.idx : it->second;
+			append_child(new_idx, ChildRef{ChildRef::ATOM, new_atom});
+		}
+	}
+	return new_idx;
+}
+
+std::uint32_t ContainerTable::migrate_subtree_from(
+	const ContainerTable& src, std::uint32_t src_root,
+	const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap)
+{
+	std::uint32_t new_root = migrate_one_(src, src_root, atom_remap);
+	rows_[new_root].parent_container_idx = NONE;  // caller re-parents under dest tree
+	return new_root;
+}
+
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give
 // thread-safe lazy init (C++17 [stmt.dcl] p4).
 //

@@ -421,6 +421,233 @@ namespace BALL
 		std::size_t                     max_dynamic_   = 65536;
 	};
 
+	// ============================================================
+	// v2.2 H1a (A2 flat SoA topology) -- container metadata table.
+	//
+	// D55/D58: the molecular hierarchy (Molecule/Chain/Residue/...) is
+	// store metadata, NOT a C++ Composite object tree. Each container is
+	// one ContainerRow; the row's ordered ChildRef vector (D57) is the
+	// SOURCE OF TRUTH for child order; the atom->container reverse edge
+	// is the atom_parent_ map (a per-atom column in the eventual flip,
+	// kept as a map here so H1a does not touch the hot atom-column path).
+	//
+	// H1a is store-side ONLY: nothing in the v0 consumer path reads or
+	// writes these tables yet. They are exercised + parity-checked by
+	// HierarchyParity_test. Dual existence (D60): the v0 object tree is
+	// the source of truth through H1-H3; this table is a verified mirror,
+	// written forward-only (never from a destructor).
+	// ============================================================
+
+	// D58: container kind tag. Atoms/Bonds are NOT containers -- they
+	// have their own SoA columns + bond table. This tag covers only the
+	// molecular-hierarchy container kinds.
+	enum class ContainerKind : std::uint8_t
+	{
+		NONE                = 0,
+		MOLECULE            = 1,
+		PROTEIN             = 2,
+		CHAIN               = 3,
+		RESIDUE             = 4,
+		SECONDARY_STRUCTURE = 5,
+		NUCLEOTIDE          = 6,
+		NUCLEIC_ACID        = 7,
+		FRAGMENT            = 8,
+	};
+
+	// D57: an ordered edge from a container to one child. A child is
+	// either a child container row (CONTAINER) or a child atom slot
+	// (ATOM); `kind` disambiguates which table `idx` indexes. The
+	// per-container vector<ChildRef> reproduces the v0 doubly-linked
+	// first_child_/next_ child list as indexed edges.
+	struct ChildRef
+	{
+		enum Kind : std::uint8_t { CONTAINER = 0, ATOM = 1 };
+		std::uint8_t  kind = CONTAINER;
+		std::uint32_t idx  = 0;
+
+		ChildRef() = default;
+		ChildRef(std::uint8_t k, std::uint32_t i) : kind(k), idx(i) {}
+
+		bool operator==(const ChildRef& o) const
+		{ return kind == o.kind && idx == o.idx; }
+		bool operator!=(const ChildRef& o) const { return !(*this == o); }
+	};
+
+	// D58: kind-specific scalar payload. Common state (name, parent,
+	// children, selection, generation) lives in ContainerRow; only the
+	// per-kind scalars live here.
+	//
+	// NOTE (D59 + R31 P31-3): Residue/Nucleotide enum-style flags
+	// (PROPERTY__AMINO_ACID, __C_TERMINAL, ...) are container PROPERTIES,
+	// not payload fields -- confirmed against residue.h `enum Property`.
+	// They live in container_properties_ / the sparse bag, not here.
+	struct ContainerPayload
+	{
+		// Protein/NucleicAcid/Residue/Nucleotide id -> offset into the
+		// container table string pool (0 = empty). Chain has NO id field
+		// (R31 follow-up #2): it uses the common ContainerRow::name_offset.
+		std::uint32_t id_offset      = 0;
+		// Residue/Nucleotide insertion code (default ' ').
+		char          insertion_code = ' ';
+		// SecondaryStructure::Type, cast to u8 (HELIX/STRAND/...).
+		std::uint8_t  ss_type        = 0;
+	};
+
+	// D58: one container metadata row. parent == NONE means a detached
+	// container (orphan store) or a direct child of the System root.
+	struct ContainerRow
+	{
+		static constexpr std::uint32_t NONE = 0xFFFFFFFFu;
+
+		ContainerKind         kind                 = ContainerKind::NONE;
+		std::uint32_t         parent_container_idx = NONE;
+		std::uint32_t         name_offset          = 0;   // common name
+		std::vector<ChildRef> children;                   // D57 source of truth
+		std::uint32_t         selection_count      = 0;   // D59 / D46
+		std::uint32_t         generation           = 0;
+		ContainerPayload      payload;
+	};
+
+	// v2.2 D55/D56/D57/D58/D59: the container metadata table. Owned by
+	// every MoleculeStore's side tables (so the process-global orphan
+	// store naturally provides the "container orphan store" of D56). A
+	// detached container's row lives in the orphan store's table until
+	// migrate_subtree_from() moves it into a System store (D56).
+	class ContainerTable
+	{
+		public:
+		static constexpr std::uint32_t NONE = ContainerRow::NONE;
+
+		ContainerTable()
+		{
+			// Slot 0 reserved as the NULL/sentinel row (mirrors the
+			// composite_nodes_ dummy-at-0 convention). allocate() returns
+			// idx >= 1; string pool offset 0 is the canonical empty string.
+			rows_.emplace_back();
+			string_pool_.push_back('\0');
+		}
+
+		ContainerTable(const ContainerTable&)            = delete;
+		ContainerTable& operator=(const ContainerTable&) = delete;
+
+		// --- lifecycle ---------------------------------------------------
+
+		// Allocate a fresh container row of the given kind. Reuses a freed
+		// slot if available, else appends. Returns the row index (>= 1).
+		std::uint32_t allocate(ContainerKind kind);
+
+		// Return a row's slot to the free list after clearing it. The row's
+		// children vector is cleared; callers must have already detached it
+		// from its parent's child list. Idempotent on NONE / slot 0.
+		void release(std::uint32_t idx);
+
+		ContainerRow&       row(std::uint32_t idx)       { return rows_[idx]; }
+		const ContainerRow& row(std::uint32_t idx) const { return rows_[idx]; }
+
+		// size() includes slot 0 + freed slots; live_count() excludes both.
+		std::size_t size() const       { return rows_.size(); }
+		std::size_t live_count() const { return rows_.size() - free_list_.size() - 1; }
+		std::size_t freed_count() const { return free_list_.size(); }
+		bool        is_freed(std::uint32_t idx) const;
+
+		// --- string pool (names + payload ids) ---------------------------
+
+		std::uint32_t intern(const std::string& s);
+		std::string   str(std::uint32_t offset) const
+		{ return std::string(string_pool_.c_str() + offset); }
+		std::size_t   pool_size() const { return string_pool_.size(); }
+
+		// --- D57 ordered child-edge operations ---------------------------
+		// Each op maintains BOTH the parent's children vector AND the
+		// reverse edge: parent_container_idx for CONTAINER children,
+		// atom_parent_ for ATOM children. insert_*_before/after splice at
+		// the pivot's ordinal; on a missing pivot they append (defensive
+		// -- correct mirroring always supplies a pivot already in the list).
+
+		void append_child (std::uint32_t parent_idx, ChildRef c);
+		void prepend_child(std::uint32_t parent_idx, ChildRef c);
+		void insert_child_before(std::uint32_t parent_idx, ChildRef c, ChildRef pivot);
+		void insert_child_after (std::uint32_t parent_idx, ChildRef c, ChildRef pivot);
+		// Remove a child edge; clears the reverse edge. Returns true if found.
+		bool remove_child(std::uint32_t parent_idx, ChildRef c);
+
+		// --- reverse edge: atom -> immediate container -------------------
+		// (kept as a map in H1a; promoted to a per-atom column at the flip)
+		std::uint32_t atom_parent(std::uint32_t atom_idx) const
+		{
+			auto it = atom_parent_.find(atom_idx);
+			return it == atom_parent_.end() ? NONE : it->second;
+		}
+		const std::unordered_map<std::uint32_t, std::uint32_t>& atom_parents() const
+		{ return atom_parent_; }
+
+		// --- D59 / D46 selection counters --------------------------------
+		// Walk parent_container_idx up from `start` (inclusive), adding
+		// `delta` to each row's selection_count. delta is +1 on select,
+		// -1 on deselect. Used by the eventual atom select() mirror; here
+		// the parity test drives it directly.
+		void bump_selection_up(std::uint32_t start_container_idx, int delta);
+
+		// --- D58/D59 container properties --------------------------------
+		// Same typed-column + sparse-bag mechanism as the atom side, keyed
+		// by container_idx instead of atom_idx. Residue flag bits + named
+		// container properties live here.
+		PropertyColumnRegistry container_properties_;
+
+		// --- traversal ---------------------------------------------------
+		// Preorder walk of the subtree rooted at `root_idx`. For each
+		// CONTAINER edge the visitor is invoked then the child is recursed;
+		// for each ATOM edge the atom visitor is invoked. Reproduces the v0
+		// Composite preorder over first_child_/next_.
+		//   on_container(std::uint32_t container_idx)
+		//   on_atom(std::uint32_t atom_idx)
+		template <typename CFn, typename AFn>
+		void preorder(std::uint32_t root_idx, CFn&& on_container, AFn&& on_atom) const
+		{
+			on_container(root_idx);
+			for (const ChildRef& c : rows_[root_idx].children)
+			{
+				if (c.kind == ChildRef::CONTAINER)
+					preorder(c.idx, on_container, on_atom);
+				else
+					on_atom(c.idx);
+			}
+		}
+
+		// --- D56 detached-subtree migration ------------------------------
+		// Copy the container subtree rooted at `src_root` out of `src` into
+		// *this, remapping container indices (and ChildRef CONTAINER idx +
+		// parent_container_idx) through a freshly built old->new map, and
+		// remapping ATOM child indices through `atom_remap` (the atom slot
+		// map the caller's adoptSubtree already produced; identity is legal
+		// for a same-index test). Names/ids are re-interned into this pool;
+		// payload, selection_count, and container properties are copied.
+		// The returned new-root row has parent_container_idx = NONE; the
+		// caller links it under the destination tree with a ChildRef op.
+		std::uint32_t migrate_subtree_from(
+			const ContainerTable& src,
+			std::uint32_t src_root,
+			const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap);
+
+		private:
+		std::vector<ContainerRow>  rows_;
+		std::vector<std::uint32_t> free_list_;
+		std::string                string_pool_;
+		std::unordered_map<std::string, std::uint32_t> string_intern_;
+		std::unordered_map<std::uint32_t, std::uint32_t> atom_parent_;
+
+		// Helper: position of `c` in parent's children, or npos.
+		std::size_t child_ordinal_(std::uint32_t parent_idx, ChildRef c) const;
+		// Helper: set the reverse edge for a freshly attached child.
+		void set_reverse_edge_(std::uint32_t parent_idx, ChildRef c);
+		// Helper: clear the reverse edge for a detached child.
+		void clear_reverse_edge_(ChildRef c);
+		// Recursive worker for migrate_subtree_from.
+		std::uint32_t migrate_one_(
+			const ContainerTable& src, std::uint32_t src_idx,
+			const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap);
+	};
+
 	// v2.1 P1.2: side-table state owned by every MoleculeStore. PImpl
 	// hides it from moleculeStore.h consumers. Only the 4 TUs listed
 	// at the top of this header touch it directly.
@@ -451,6 +678,14 @@ namespace BALL
 		// exercising allocate/release round-trip.
 		std::vector<CompositeNode>   composite_nodes_;
 		std::vector<std::uint32_t>   composite_free_list_;
+
+		// v2.2 H1a (D55/D56/D57/D58): the container metadata table -- the
+		// store-backed replacement for the molecular Composite object tree
+		// (Molecule/Chain/Residue/...). The orphan store's table is the
+		// "container orphan store" of D56. Store-side only in H1a; the v0
+		// object tree remains the source of truth (D60) and this is a
+		// verified mirror exercised by HierarchyParity_test.
+		ContainerTable               container_table_;
 
 		// v2.1 P1.4 (D23b): typed property column registry. Well-known
 		// force-field columns are predeclared at construction (PARTIAL_
