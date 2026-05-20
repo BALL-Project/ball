@@ -588,22 +588,61 @@ void loadSystemJSON(System& sys, std::istream& is)
 			// createBond closes that AND gives the bond a Bond* to hold
 			// its restored properties.
 			//
-			// Note: createBond enforces one bond per atom pair (Atom's
-			// inherent model). If the saved store held multiple records
-			// between the same pair (a store-level multigraph, not
-			// expressible via the Atom API), they collapse to one here.
-			// The store-only loader (json_obj_to_store) preserves the
-			// multigraph; the System loader is Atom-consistent.
+			// R25 hardening: own the fresh Bond locally and use the
+			// createBond(Bond&, Atom&) overload so the allocation is
+			// never leaked if Bond::createBond throws TooManyBonds
+			// before wiring (R25-2). Detect the duplicate-pair /
+			// self-bond cases explicitly (R25-1): createBond returns the
+			// existing bond (or null for a self-bond) rather than wiring
+			// `fresh`, in which case we delete `fresh` and skip — we do
+			// NOT overwrite the first bond's order/type/properties, and
+			// we warn on the store-multigraph collapse. The System
+			// loader is Atom-consistent (one bond per pair); the
+			// store-only loader (json_obj_to_store) preserves multigraphs.
 			Atom* atom_a = atom_by_save_idx[save_a];
 			Atom* atom_b = atom_by_save_idx[save_b];
-			Bond* bond = atom_a->createBond(*atom_b);
-			if (bond != nullptr)
+
+			Bond* fresh = new Bond;
+			Bond* bond  = nullptr;
+			try
 			{
-				bond->setOrder(static_cast<Bond::Order>(order_i));
-				bond->setType(static_cast<Bond::Type>(type_i));
-				if (br.contains("properties"))
-					detail::json_to_properties(*bond, &br["properties"]);
+				bond = atom_a->createBond(*fresh, *atom_b);
 			}
+			catch (const Exception::TooManyBonds& e)
+			{
+				// Atom-side degree would exceed MAX_NUMBER_OF_BONDS.
+				// Free our allocation (Bond::createBond throws before
+				// wiring it), then fail the load cleanly — the
+				// RollbackGuard tears down the partial System.
+				delete fresh;
+				throw Exception::ParseError(__FILE__, __LINE__, e.what(),
+					"K0.6.5: bond reconstruction exceeds Atom::MAX_NUMBER_OF_BONDS");
+			}
+
+			if (bond != fresh)
+			{
+				// createBond did NOT use our fresh Bond: either a
+				// self-bond (bond == nullptr) or a duplicate pair
+				// (bond == the existing Bond*). Free the unused
+				// allocation and skip — leave the first bond's
+				// order/type/properties intact.
+				delete fresh;
+				if (bond != nullptr)
+				{
+					Log.warn() << "loadSystemJSON: duplicate bond between the "
+						"same atom pair collapsed to one Atom-side Bond "
+						"(store multigraph not representable via the Atom "
+						"API); extra record's order/type/properties dropped."
+						<< std::endl;
+				}
+				continue;
+			}
+
+			// `fresh` was wired in as a new unique bond.
+			bond->setOrder(static_cast<Bond::Order>(order_i));
+			bond->setType(static_cast<Bond::Type>(type_i));
+			if (br.contains("properties"))
+				detail::json_to_properties(*bond, &br["properties"]);
 		}
 
 		// v2.1 P4.0: bond-restore window.

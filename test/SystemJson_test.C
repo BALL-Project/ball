@@ -244,6 +244,63 @@ CHECK(v2.1 P4.2 bond properties + Bond* graph round-trip via createBond)
 	TEST_EQUAL(db->getProperty("ff_label").getString(), "CO_carbonyl")
 RESULT
 
+CHECK(v2.1 P4.2 R25-9: no-property multi-bond round-trip reconstructs graph)
+	// An atom with 2 bonds, none carrying properties, must still get
+	// its Atom-side Bond* graph reconstructed (D43) post-load.
+	System src;
+	Molecule* m = new Molecule;
+	src.insert(*m);
+	Atom* cc = new Atom; cc->setName("CC"); m->insert(*cc);
+	Atom* n1 = new Atom; n1->setName("N1"); m->insert(*n1);
+	Atom* n2 = new Atom; n2->setName("N2"); m->insert(*n2);
+	cc->createBond(*n1);   // no properties
+	cc->createBond(*n2);   // no properties
+	TEST_EQUAL(cc->countBonds(), (Size)2)
+
+	std::ostringstream os;
+	saveSystemJSON(src, os);
+	System dst;
+	std::istringstream is(os.str());
+	loadSystemJSON(dst, is);
+
+	TEST_EQUAL(dst.countAtoms(), 3u)
+	TEST_EQUAL(dst.getStore().live_bond_count(), 2u)
+	const Atom* dcc = nullptr;
+	for (AtomConstIterator ai = dst.beginAtom(); +ai; ++ai)
+		if (ai->getName() == "CC") dcc = &*ai;
+	TEST_NOT_EQUAL(dcc, (const Atom*)0)
+	TEST_EQUAL(dcc->countBonds(), (Size)2)   // graph reconstructed
+RESULT
+
+CHECK(v2.1 P4.2 R25-1: duplicate store-bond pair collapses to one Atom bond)
+	// A store-level multigraph (two records for the same pair, added
+	// via store.add_bond, not expressible via the Atom API) must
+	// collapse to ONE Atom-side bond on load, NOT corrupt the count.
+	System src;
+	Molecule* m = new Molecule;
+	src.insert(*m);
+	Atom* a0 = new Atom; a0->setName("A0"); m->insert(*a0);
+	Atom* a1 = new Atom; a1->setName("A1"); m->insert(*a1);
+	// Two store records for the same pair (multigraph).
+	src.getStore().add_bond(a0->getStoreIndex(), a1->getStoreIndex(), 1, 0);
+	src.getStore().add_bond(a0->getStoreIndex(), a1->getStoreIndex(), 2, 0);
+	TEST_EQUAL(src.getStore().live_bond_count(), 2u)
+
+	std::ostringstream os;
+	saveSystemJSON(src, os);
+	System dst;
+	std::istringstream is(os.str());
+	loadSystemJSON(dst, is);   // emits a Log.warn about the collapse
+
+	// System loader is Atom-consistent: one bond per pair.
+	TEST_EQUAL(dst.getStore().live_bond_count(), 1u)
+	const Atom* da0 = nullptr;
+	for (AtomConstIterator ai = dst.beginAtom(); +ai; ++ai)
+		if (ai->getName() == "A0") da0 = &*ai;
+	TEST_NOT_EQUAL(da0, (const Atom*)0)
+	TEST_EQUAL(da0->countBonds(), (Size)1)
+RESULT
+
 CHECK(K0.6.5 wrong document_type rejected)
 	// Forge a doc with document_type "MoleculeStore" (would load via
 	// loadStoreJSON, not loadSystemJSON).
