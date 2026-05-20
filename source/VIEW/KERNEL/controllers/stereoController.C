@@ -22,6 +22,7 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -34,7 +35,8 @@ namespace BALL
 				enabled_(false),
 				eye_distance_(0.0f),
 				focal_distance_(0.0f),
-				swap_sbs_(false)
+				swap_sbs_(false),
+				applying_(false)
 		{
 			revert();
 		}
@@ -81,6 +83,14 @@ namespace BALL
 				Log.info() << "[StereoController::apply] MainControl busy — deferring." << std::endl;
 				return;
 			}
+
+			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
+			// this apply() (e.g. the scene update below) synchronously
+			// re-enters apply(), bail rather than re-running the mutation —
+			// this is the cascade class behind the v1.7.x-13 freeze. The RAII
+			// guard clears the flag on every exit path.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
 
 			stage_->setEyeDistance(eye_distance_);
 			stage_->setFocalDistance(focal_distance_);

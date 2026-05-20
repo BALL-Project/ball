@@ -49,6 +49,11 @@ namespace BALL
 				float focalDistance()  const { return focal_distance_; }
 				bool  swapSideBySide() const { return swap_sbs_; }
 
+				/// v1.7.x-24 — true while apply() is mutating the Stage.
+				/// Notification slots that could re-trigger apply() must
+				/// early-return on this to break the re-entrancy cascade.
+				bool isApplying() const { return applying_; }
+
 			public Q_SLOTS:
 				void apply();
 				void revert();
@@ -70,6 +75,9 @@ namespace BALL
 				float  eye_distance_;
 				float  focal_distance_;
 				bool   swap_sbs_;
+
+				// v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
+				bool   applying_;
 		};
 
 	} // namespace VIEW

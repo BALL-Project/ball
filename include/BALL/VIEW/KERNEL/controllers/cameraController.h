@@ -48,6 +48,11 @@ namespace BALL
 				QVector3D position() const { return position_; }
 				QVector3D lookAt()   const { return look_at_; }
 
+				/// v1.7.x-24 — true while apply() is mutating the Stage.
+				/// Notification slots that could re-trigger apply() must
+				/// early-return on this to break the re-entrancy cascade.
+				bool isApplying() const { return applying_; }
+
 			public Q_SLOTS:
 				void apply();
 				void revert();
@@ -63,6 +68,9 @@ namespace BALL
 				Stage* stage_;
 				QVector3D position_;
 				QVector3D look_at_;
+
+				// v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
+				bool   applying_;
 		};
 
 	} // namespace VIEW

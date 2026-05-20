@@ -19,6 +19,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
 #include <list>
@@ -30,7 +31,8 @@ namespace BALL
 
 		LightController::LightController(Stage* stage, QObject* parent)
 			: QObject(parent), stage_(stage),
-				light_count_(0), ambient_intensity_(0.3f)
+				light_count_(0), ambient_intensity_(0.3f),
+				applying_(false)
 		{
 			revert();
 		}
@@ -95,6 +97,14 @@ namespace BALL
 				Log.info() << "[LightController::apply] MainControl busy — deferring." << std::endl;
 				return;
 			}
+
+			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
+			// this apply() (e.g. the lightsUpdated() refresh below)
+			// synchronously re-enters apply(), bail rather than re-running the
+			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
+			// The RAII guard clears the flag on every exit path.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
 
 			// Snapshot non-ambient lights, clear, re-add them, then
 			// append one ambient at ambient_intensity_. This is the

@@ -15,6 +15,7 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/RENDERING/camera.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
 namespace BALL
@@ -40,7 +41,8 @@ namespace BALL
 		}
 
 		CameraController::CameraController(Stage* stage, QObject* parent)
-			: QObject(parent), stage_(stage)
+			: QObject(parent), stage_(stage),
+				applying_(false)
 		{
 			revert();
 		}
@@ -93,6 +95,14 @@ namespace BALL
 				Log.error() << "[CameraController::apply] viewPoint == lookAt — refusing to apply." << std::endl;
 				return;
 			}
+
+			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
+			// this apply() (e.g. the scene update below) synchronously
+			// re-enters apply(), bail rather than re-running the mutation —
+			// this is the cascade class behind the v1.7.x-13 freeze. The RAII
+			// guard clears the flag on every exit path.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
 
 			Camera& cam = stage_->getCamera();
 			cam.setViewPoint(vp);
