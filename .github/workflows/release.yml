@@ -8,9 +8,9 @@ name: Release
 # Release. Linux installers are Phase 8c.
 #
 # Signing status:
-# - macOS (Phase 8a): Developer ID Application + notarytool + stapled .dmg
-#   when MACOS_CERTIFICATE_BASE64 secret is set; falls back to ad-hoc
-#   resigned .dmg + Gatekeeper warning otherwise. See
+# - macOS (Phase 8a): LIVE since v1.7.1 — Developer ID Application +
+#   notarytool + stapled .dmg. MANDATORY: the job fails if the 7 MACOS_*
+#   secrets are absent (no unsigned fallback). See
 #   .planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md.
 # - Windows (Phase 8b): SignPath — still pending.
 # - Linux (Phase 8c): AppImage / .deb / .rpm — still pending.
@@ -247,11 +247,12 @@ jobs:
       # See .planning/phases/08a-packaging-macos/08a-01-PLAN.md and
       # .planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md.
       #
-      # The signing path is gated on MACOS_CERTIFICATE_BASE64 being set —
-      # the fallback (no cert / pre-procurement) path skips signing and
-      # ships an unsigned-with-warning .dmg, matching v1.6 user UX while
-      # the cert is in flight. Once secrets land, every step below runs;
-      # the gate becomes a no-op.
+      # Phase 8a went LIVE in v1.7.1 (2026-05-21): the Developer ID cert + all
+      # 7 MACOS_* secrets are provisioned (see 08a-SECRETS-RUNBOOK.md), so
+      # signing + notarization is now MANDATORY for macOS release artifacts.
+      # Unsigned shipping is no longer an accepted fallback — if the cert
+      # secret is missing we FAIL the job loudly rather than silently produce
+      # an unsigned .dmg.
       # ----------------------------------------------------------------------
       - name: Detect macOS signing readiness
         if: matrix.os == 'macos-arm64'
@@ -260,13 +261,12 @@ jobs:
         env:
           MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
         run: |
-          if [ -n "$MACOS_CERTIFICATE_BASE64" ]; then
-            echo "enabled=true" >> "$GITHUB_OUTPUT"
-            echo "macOS signing ENABLED — Developer ID cert + notarization path"
-          else
-            echo "enabled=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::MACOS_CERTIFICATE_BASE64 not set — building UNSIGNED .dmg (ad-hoc resign fallback). See 08a-SECRETS-RUNBOOK.md."
+          if [ -z "$MACOS_CERTIFICATE_BASE64" ]; then
+            echo "::error::MACOS_CERTIFICATE_BASE64 is not set. macOS release artifacts MUST be signed + notarized (Phase 8a, live since v1.7.1). Restore the 7 MACOS_* secrets per .planning/phases/08a-packaging-macos/08a-SECRETS-RUNBOOK.md."
+            exit 1
           fi
+          echo "enabled=true" >> "$GITHUB_OUTPUT"
+          echo "macOS signing ENABLED — Developer ID cert + notarization path"
 
       - name: Import Apple Developer ID cert into CI keychain (macOS)
         if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
@@ -375,17 +375,9 @@ jobs:
           codesign --verify --deep --strict --verbose=2 \
             "${{ steps.locate-mac.outputs.app }}" 2>&1 | tail -20
 
-      - name: Ad-hoc resign bundle (macOS — UNSIGNED fallback path only)
-        if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'false'
-        run: |
-          # Fallback path: Apple Developer cert not yet procured. Use the
-          # v1.6 ad-hoc resign to satisfy macOS 26's CODESIGNING enforcement
-          # at the bundle level (no Developer ID, no notarization — users
-          # get a Gatekeeper warning + `xattr -dr com.apple.quarantine`
-          # workaround). REMOVE this step once MACOS_CERTIFICATE_BASE64 is
-          # set; the signed path above replaces it.
-          codesign --force --deep --sign - "${{ steps.locate-mac.outputs.app }}"
-          codesign --verify --deep --strict --verbose=2 "${{ steps.locate-mac.outputs.app }}" 2>&1 | tail -10
+      # (v1.7.1) The pre-cert ad-hoc unsigned-resign fallback was removed —
+      # signing is mandatory now; the readiness gate above fails the job if
+      # the cert is absent, so there is no unsigned path to fall back to.
 
       - name: Zip .app for notary submission (macOS)
         if: matrix.os == 'macos-arm64' && steps.mac-signing.outputs.enabled == 'true'
