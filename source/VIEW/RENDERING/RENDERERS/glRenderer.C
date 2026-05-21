@@ -1188,7 +1188,14 @@ namespace BALL
 			// Qt 6.9+, this can switch back to `flipped(Qt::Vertical)`.
 			QImage gldata = pm.convertToFormat(QImage::Format_RGBA8888).mirrored(false, true);
 
-			glPushAttrib(GL_BLEND);
+			// NOTE: glPushAttrib takes attribute-GROUP bits, not enable tokens.
+			// This used to pass GL_BLEND (0x0BE2) — an enable token, not a valid
+			// group mask — so it pushed a garbage set of groups and LEAKED the
+			// blend-enable state onto subsequently-rendered geometry (e.g. an SES
+			// surface drawn after labels showed black-shard normal artifacts).
+			// GL_COLOR_BUFFER_BIT is the correct group: it saves+restores the blend
+			// enable, blend func/equation, and color writemask around glDrawPixels.
+			glPushAttrib(GL_COLOR_BUFFER_BIT);
 			glEnable(GL_BLEND);
 			glDrawPixels(pm.width(), pm.height(), GL_RGBA, GL_UNSIGNED_BYTE, gldata.bits());
 			glPopAttrib();
