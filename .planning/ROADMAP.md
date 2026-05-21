@@ -22,6 +22,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
 - [x] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)* (completed 2026-05-16)
+- [ ] **Phase 999.50: v1.7.2 build acceleration — Ward serializer de-boost** - Hand-roll a compact reader/writer for `poseClusteringSerialization.C` to drop the heaviest Boost compile-time component (v1.7.1 quarantined it; v1.7.2 eliminates it); regenerate the `.dat` fixture in the new format; add release.yml ccache reuse. Canonical plan: [`v1.7.2-BUILD-ACCEL-PLAN.md`](v1.7.2-BUILD-ACCEL-PLAN.md)
 
 ## Phase Details
 
@@ -2413,6 +2414,28 @@ Plans:
 
 Plans:
 - [x] [999.49-PLAN.md](phases/999.49-classic-dock-delete/999.49-PLAN.md) → [999.49-SUMMARY.md](phases/999.49-classic-dock-delete/999.49-SUMMARY.md) — single-plan phase landing 8/8 sub-deliverables (enum + apply() branch + .layout file + 2 menu wirings + first-run prompt + auto-migration + RELEASE-NOTES) + 1 Rule-3 hotfix for VIEW test offscreen-platform. 7 commits + ~30 min wall-clock. Migration-before-deletion ordering preserves users transitioning through v1.6.x → v1.7-RC1 from carrying an unrecognized preset name in their INI.
+
+### Phase 999.50: v1.7.2 build acceleration — Ward serializer de-boost (eliminate boost::serialization · build-accel cluster continuation)
+
+**Goal:** Drop `boost::serialization` (the single heaviest Boost component to compile) from the PoseClustering Ward-tree serializer. v1.7.1 already *quarantined* the cost into its own TU (`poseClusteringSerialization.C`, commit `5e10b27797`) so parallelism + ccache isolate it; v1.7.2 goes for *elimination* — a hand-rolled compact reader/writer drops that TU's compile from tens of minutes to seconds. `poseClustering.C` alone dominated the Windows release build (~57 min, per the 999.19 per-TU profiling data), and boost archives are the bulk of it.
+
+**Canonical plan:** [`v1.7.2-BUILD-ACCEL-PLAN.md`](v1.7.2-BUILD-ACCEL-PLAN.md) — the maintainer-authored spec for this phase (lead item ①, release.yml ccache ②, MSVC de-opt fallback ③). Downstream planner + executor MUST treat it as the source of truth.
+
+**Scope:**
+1. **① LEAD — hand-roll a compact cluster-tree serializer (BUILD-ACCEL-06).** In `source/DOCKING/COMMON/poseClusteringSerialization.C`, replace `boost::archive::{binary,text}_{i,o}archive` + `adj_list_serialize.hpp` + `ClusterProperties::serialize` with a hand-rolled reader/writer. Keep the public API (`serializeWardClusterTree(std::ostream&, bool binary)` / `deserializeWardClusterTree(std::istream&, bool binary)`) and the `bool binary` flag (selects binary vs text variant of the NEW format). Serialize exactly today's payload: graph order + root vertex index (`cluster_tree_[boost::graph_bundle]`), per-vertex `std::set<Index> poses` / `Size size` / `float merged_at`, and the directed edge list (parent→child); rebuild via `add_vertex`/`add_edge` then set the graph-bundle root. Prepend a magic + format-version header (e.g. `"BALLWARD\x01"`) so a wrong/old file fails loudly.
+2. **Format-break follow-through.** Old boost-serialized `.ward`/`.dat` trees will NOT load (acceptable — niche docking research format). Regenerate the committed fixture `test/data/PoseClustering_wardtree.dat` deterministically from existing test inputs in the new format so `PoseClustering_test3.C:360/366` read-back assertions (`extractClustersForThreshold(0.5)` → 6 clusters) still hold. Keep callers working: `source/APPLICATIONS/TOOLS/DockPoseClustering.C` (writer) + `source/APPLICATIONS/TOOLS/ExtractClustersFromWardTree.C:94` (reader). Note the break in RELEASE-NOTES v1.7.2 "Breaking changes".
+3. **② release.yml ccache reuse (BUILD-ACCEL-07).** `release.yml` installs ccache but never restores/saves a ccache build cache (only the vcpkg cache) — every tag builds cold. Add `actions/cache` for the ccache dir (key aligned with `ci.yml` where possible) so a release tag of an already-CI-built commit hits warm cache.
+4. **③ (fallback) MSVC `/O1` de-opt.** Only if anything heavy remains after ①: `set_source_files_properties(... COMPILE_OPTIONS "/O1")` for the specific slow TU on MSVC. Largely moot once ① lands.
+
+**Sequencing:** ① first (the real Windows-build-time killer), then ②. Land at the very start of v1.7.2.
+
+**Validation:** `PoseClustering_test3` (round-trip 290–449 + fixture read 359) and `PoseClustering_test1` (graphviz) pass; `poseClusteringSerialization.C` compiles in seconds; no `boost/archive` or `adj_list_serialize` includes remain in the tree. Tri-OS CI green.
+
+**Requirements:** `BUILD-ACCEL-06`, `BUILD-ACCEL-07` — see [`REQUIREMENTS.md`](REQUIREMENTS.md) build-accel cluster.
+
+**Estimated effort:** ~40–80 LOC + fixture regen + 1 CI yaml change. Low-medium. Risk: format break (handled via regen + magic header).
+
+**Plans:** 0 (to be created by `/gsd-plan-phase 999.50`).
 
 ---
 *Roadmap created: 2026-05-14*
