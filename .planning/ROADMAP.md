@@ -2493,7 +2493,7 @@ Plans:
 **Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-09 (PCH half); original [Phase 999.16](#) scope.
 **Requirements:** `BUILD-ACCEL-08`.
 **Depends on:** none. **Effort:** ~1 day. Pure build-config; per-TU profiling data already exists (999.19).
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.55`).
+**Plans:** 1 plan (999.55-01-PLAN.md — test-suite REUSE_FROM PCH + records reconciliation).
 
 ### Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (TARGETED FOR v1.7.x)
 
