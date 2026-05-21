@@ -12,6 +12,7 @@ SET(SOURCES_LIST
 	labelModel.C
 	lineModel.C
 	modelProcessor.C
+	modelProcessorFactory.C
 	standardColorProcessor.C
 	surfaceModel.C
 	vanDerWaalsModel.C
