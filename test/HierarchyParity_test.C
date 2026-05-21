@@ -178,6 +178,54 @@ namespace
 			});
 		return out;
 	}
+
+	// --- TOPOLOGY-ONLY descriptors (kind + child structure + atom indices,
+	// NO scalar identity fields). H2b mirrors TOPOLOGY (parent/child edges +
+	// selection); SCALAR-field mirroring (name/id/insertion-code/SS-type on
+	// clear()/swap()/post-root setters) is a tracked H2b carry-over (the
+	// collapse reworks scalars into role+payload, so the scalar mirror is
+	// built once against the collapsed model). Ops that mutate scalars --
+	// clear() (resets name/id) and swap() (exchanges name/id between two
+	// row-bound nodes) -- are checked for topology parity with these.
+	void descV0Topo(const Composite& c, std::string& out)
+	{
+		std::ostringstream os;
+		os << "C:" << static_cast<int>(kindOf(c)) << "|";
+		out += os.str();
+		for (Position i = 0; i < c.getDegree(); ++i)
+		{
+			const Composite* child = c.getChild(static_cast<Index>(i));
+			if (RTTI::isKindOf<Atom>(child))
+			{
+				const Atom* a = dynamic_cast<const Atom*>(child);
+				std::ostringstream as; as << "A:" << a->getStoreIndex() << "|";
+				out += as.str();
+			}
+			else
+			{
+				descV0Topo(*child, out);
+			}
+		}
+	}
+
+	std::string descTableTopo(const ContainerTable& t, std::uint32_t root)
+	{
+		std::string out;
+		t.preorder(root,
+			[&](std::uint32_t cidx)
+			{
+				const ContainerRow& r = t.row(cidx);
+				std::ostringstream os;
+				os << "C:" << static_cast<int>(r.kind) << "|";
+				out += os.str();
+			},
+			[&](std::uint32_t aidx)
+			{
+				std::ostringstream as; as << "A:" << aidx << "|";
+				out += as.str();
+			});
+		return out;
+	}
 }
 
 START_TEST(HierarchyParity)
@@ -760,6 +808,109 @@ CHECK(H2a -- re-appending an already-last child does not duplicate the edge (R36
 
 	std::uint32_t root = prot.getContainerRow_();
 	const ContainerTable& t = store->sideTables_().container_table_;
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
+// ===== H2b: the remaining topology mutations (splice / swap / clear /
+// replace), each mirrored by re-deriving the affected parent rows from v0
+// (order-independent; clear_children is vector-only). =====
+
+CHECK(H2b -- swap two sibling containers: terminates + topology stays faithful)
+	// Regression for the legacy Composite::swap same-parent infinite loop
+	// (in-place pointer surgery self-looped the sibling chain): this CHECK
+	// must TERMINATE. A sibling full-swap exchanges BOTH position AND children,
+	// so it is observationally topology-invariant -- the value here is that the
+	// swap mirror re-derives all four affected rows WITHOUT duplicating/losing
+	// edges (corruption would make table != v0). Scalar (name/id) exchange is
+	// NOT mirrored (tracked H2b carry-over), so compare topology only.
+	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("ALA");
+	Residue r2; r2.setName("GLY"); r2.setID("GLY");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	PDBAtom a3; a3.setName("C");
+	r1.insert(a1);                          // r1: 1 atom
+	r2.insert(a2); r2.insert(a3);           // r2: 2 atoms
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+	std::string before; descV0Topo(prot, before);
+	TEST_EQUAL(descTableTopo(t, root), before)
+
+	r1.swap(r2);                            // exchange position + children
+	std::string after; descV0Topo(prot, after);
+	TEST_EQUAL(descTableTopo(t, root), after)   // mirror re-derived, no corruption
+	TEST_EQUAL(before, after)               // sibling full-swap is topo-invariant
+RESULT
+
+CHECK(H2b -- splice relocates children + preserves parity)
+	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("ALA");
+	Residue r2; r2.setName("GLY"); r2.setID("GLY");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	PDBAtom a3; a3.setName("C");
+	r1.insert(a1); r1.insert(a2);
+	r2.insert(a3);
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	std::uint32_t r1_row = r1.getContainerRow_();
+	std::uint32_t r2_row = r2.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	r1.splice(r2);                          // r2's children -> r1; r2 emptied
+	TEST_EQUAL(store->container_child_count_(r1_row), 3u)  // a1,a2,a3
+	TEST_EQUAL(store->container_child_count_(r2_row), 0u)
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
+CHECK(H2b -- live clear() empties the row (incl. the re-derive path))
+	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
+	Residue r; r.setName("ALA"); r.setID("ALA");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	r.insert(a1); r.insert(a2);
+	ch.insert(r);
+	prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = r.getContainerRowStore_();
+	std::uint32_t r_row = r.getContainerRow_();
+	std::uint32_t root  = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+	TEST_EQUAL(store->container_child_count_(r_row), 2u)
+
+	r.clear();                              // r survives, emptied
+	TEST_EQUAL(store->container_child_count_(r_row), 0u)
+	// topology parity: r still in the tree under ch, now childless. (clear()
+	// ALSO resets r's scalar name/id to defaults; that scalar reset is NOT
+	// mirrored -- tracked H2b carry-over -- so compare topology only.)
+	std::string d; descV0Topo(prot, d);
+	TEST_EQUAL(descTableTopo(t, root), d)
+RESULT
+
+CHECK(H2b -- replace a rooted child with another rooted child preserves parity)
+	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("ALA");
+	Residue r2; r2.setName("GLY"); r2.setID("GLY");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	r1.insert(a1); r2.insert(a2);
+	ch.insert(r1); ch.insert(r2);           // both rooted/materialised
+	prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	r1.replace(r2);                         // r2 takes r1's slot; r1 detached
 	std::string d; descV0(prot, d);
 	TEST_EQUAL(descTable(t, root), d)
 RESULT

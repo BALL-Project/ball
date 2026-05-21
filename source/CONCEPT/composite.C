@@ -243,6 +243,54 @@ namespace BALL
 		}
 	}
 
+	// v2.2 H2b: append `child`'s edge to THIS container's row (O(1); the
+	// append case). FORWARD-ONLY; no-op when being destroyed or unrooted.
+	// append_child is itself idempotent against re-appending the last child.
+	void Composite::mirrorAppendChild_(Composite& child)
+	{
+		if (being_destroyed_) return;
+		MoleculeStore* store = getContainerRowStore_();
+		std::uint32_t  row   = getContainerRow_();
+		if (store == 0 || row == 0) return;
+		if (Atom* a = detail::compositeAsAtom_(&child))
+		{
+			store->container_append_atom_(row, a->getStoreIndex());
+		}
+		else if (child.getContainerRowStore_() == store
+		         && child.getContainerRow_() != 0)
+		{
+			store->container_append_container_(row, child.getContainerRow_());
+		}
+	}
+
+	// v2.2 H2b: re-derive THIS container's row child list from the CURRENT
+	// v0 child order (O(degree)). The positional / splice / swap / replace /
+	// insertParent / live-clear path. FORWARD-ONLY; no-op when being
+	// destroyed or unrooted. Children that are not (yet) in this store's
+	// table are skipped (materialised later at adoption).
+	void Composite::mirrorRederiveOwnRow_()
+	{
+		if (being_destroyed_) return;
+		MoleculeStore* store = getContainerRowStore_();
+		std::uint32_t  row   = getContainerRow_();
+		if (store == 0 || row == 0) return;
+		store->container_clear_children_(row);
+		for (Size i = 0; i < getDegree(); ++i)
+		{
+			Composite* child = getChild(static_cast<Index>(i));
+			if (child == 0) continue;
+			if (Atom* a = detail::compositeAsAtom_(child))
+			{
+				store->container_append_atom_(row, a->getStoreIndex());
+			}
+			else if (child->getContainerRowStore_() == store
+			         && child->getContainerRow_() != 0)
+			{
+				store->container_append_container_(row, child->getContainerRow_());
+			}
+		}
+	}
+
 	// default ctor
 	Composite::Composite()
 		:	PersistentObject(),
@@ -1125,8 +1173,13 @@ namespace BALL
 		{
 			insertBefore(composite);
 			parent_->removeChild(*this);
+			// v2.2 H2b: the parent now has `composite` in this's old slot.
+			// Composite::insertBefore above is NOT mirrored (only the
+			// AtomContainer wrapper is) and removeChild only removed `this`,
+			// so re-derive the affected parent from v0.
+			if (Composite* p = composite.getParent()) p->mirrorRederiveOwnRow_();
 		}
-	} 
+	}
 
 	void Composite::spliceBefore(Composite& composite)
 	{
@@ -1183,6 +1236,13 @@ namespace BALL
 		// update the modification time stamp
 		composite.stamp(MODIFICATION);
 		stamp(MODIFICATION);
+
+		// v2.2 H2b: composite's children were relocated under this (composite
+		// is now empty). Re-derive both rows from v0 (order-independent --
+		// clear_children is vector-only, so reverse edges are re-established
+		// to the correct final parent by each re-append).
+		mirrorRederiveOwnRow_();
+		composite.mirrorRederiveOwnRow_();
 	}
 
 	void  Composite::spliceAfter(Composite& composite)
@@ -1240,6 +1300,10 @@ namespace BALL
 		// update the modification time stamp
 		composite.stamp(MODIFICATION);
 		stamp(MODIFICATION);
+
+		// v2.2 H2b: composite's children relocated under this.
+		mirrorRederiveOwnRow_();
+		composite.mirrorRederiveOwnRow_();
 	}
 
 	void Composite::splice(Composite& composite)
@@ -1330,6 +1394,11 @@ namespace BALL
 		// update the modification time stamp
 		composite.stamp(MODIFICATION);
 		stamp(MODIFICATION);
+
+		// v2.2 H2b: composite was a child of this; its children replaced it
+		// in this's child list (composite is now detached + empty).
+		mirrorRederiveOwnRow_();
+		composite.mirrorRederiveOwnRow_();
 	}
 
 	bool Composite::removeChild(Composite& child)
@@ -1522,6 +1591,24 @@ namespace BALL
 
 		// update modification time stamp
 		stamp(MODIFICATION);
+
+		// v2.2 H2b: this container is now empty. Re-derive its row -> empty
+		// (self-guards on being_destroyed_, so a destructor-cascade clear()
+		// does NOT mirror -- the row is freed wholesale). This also covers
+		// the NON-auto-deletable branch above, which detaches children by
+		// direct pointer nulling (bypassing removeChild's mirror) -- R35
+		// MEDIUM, deferred from H2a.
+		mirrorRederiveOwnRow_();
+		// NOTE (H2b scope boundary): AtomContainer::clear()/Residue::clear()
+		// etc. ALSO reset scalar identity fields (name_/id_) to defaults AFTER
+		// this base call returns, so the row's stored scalars desync here.
+		// Mirroring SCALAR-field mutation (name/id/insertion-code/SS-type) is a
+		// distinct carry-over from the topology mirror (see V2X-ROADMAP H2
+		// carry-overs) -- deferred because the collapse (H1b') replaces typed
+		// name/id with role+payload, so the scalar mirror is (re)built once
+		// against the collapsed model rather than twice. The parity test
+		// asserts TOPOLOGY parity for clear()/swap(); scalar parity is covered
+		// when the scalar mirror lands.
 	}
 
 	void Composite::destroy()
@@ -1560,51 +1647,57 @@ namespace BALL
 			return;
 		}
 
-		// adjust first/last pointers of the parents (if necessary)
-		if (parent_ != 0)
-		{
-			if (parent_->first_child_ == this)
-			{
-				parent_->first_child_ = &composite;
-			} 
-			if (parent_->last_child_ == this) 
-			{
-				parent_->last_child_ = &composite;
-			}
-		}
-		if (composite.parent_ != 0)
-		{
-			if (composite.parent_->first_child_ == &composite)
-			{
-				composite.parent_->first_child_ = this;
-			} 
-			if (composite.parent_->last_child_ == &composite) 
-			{
-				composite.parent_->last_child_ = this;
-			}
-		}
-		std::swap(parent_, composite.parent_);
+		// --- v2.2 H2b: snapshot-then-apply position relink ---
+		// The legacy in-place pointer surgery here read sibling links it had
+		// already mutated, producing self-referential next_/previous_ chains
+		// (and corrupted parent first/last pointers) whenever the two nodes
+		// shared a parent or were adjacent siblings -- an infinite loop on the
+		// next sibling walk (e.g. determineSelection_). Production never swaps
+		// siblings (only cross-parent / root swaps, e.g. rigid_docking), so the
+		// bug was latent until the H2b sibling-swap parity test. Snapshot every
+		// link first, then apply: correct for all cases (siblings, adjacent,
+		// cross-parent) and identical to the old behaviour for the cross-parent
+		// path. (Moot at H4 -- the Composite tree is deleted -- but a live
+		// infinite loop must not ship.)
+		Composite* node_a = this;
+		Composite* node_b = &composite;
+		Composite* a_prev = node_a->previous_; Composite* a_next = node_a->next_;
+		Composite* b_prev = node_b->previous_; Composite* b_next = node_b->next_;
 
-		// adjust the next_ and previous_ pointers pointing to this and composite
-		if (previous_ != 0)
-		{
-			previous_->next_ = &composite;
-		}
-		if (next_ != 0)
-		{
-			next_->previous_ = &composite;
-		}
+		// parents' first/last child pointers (decided from the snapshot)
+		const bool ap_first_a = (node_a->parent_ != 0 && node_a->parent_->first_child_ == node_a);
+		const bool ap_last_a  = (node_a->parent_ != 0 && node_a->parent_->last_child_  == node_a);
+		const bool bp_first_b = (node_b->parent_ != 0 && node_b->parent_->first_child_ == node_b);
+		const bool bp_last_b  = (node_b->parent_ != 0 && node_b->parent_->last_child_  == node_b);
+		if (ap_first_a) node_a->parent_->first_child_ = node_b;
+		if (ap_last_a)  node_a->parent_->last_child_  = node_b;
+		if (bp_first_b) node_b->parent_->first_child_ = node_a;
+		if (bp_last_b)  node_b->parent_->last_child_  = node_a;
 
-		if (composite.previous_ != 0)
+		// external sibling neighbours (skip when the neighbour IS the other
+		// swap node -- that link is repaired by the adjacency fix-up below)
+		if (a_prev != 0 && a_prev != node_b) a_prev->next_     = node_b;
+		if (a_next != 0 && a_next != node_b) a_next->previous_ = node_b;
+		if (b_prev != 0 && b_prev != node_a) b_prev->next_     = node_a;
+		if (b_next != 0 && b_next != node_a) b_next->previous_ = node_a;
+
+		// swap the internal position links
+		std::swap(node_a->parent_,   node_b->parent_);
+		std::swap(node_a->previous_, node_b->previous_);
+		std::swap(node_a->next_,     node_b->next_);
+
+		// repair direct adjacency (the only links the swap above leaves
+		// self-referential when a and b were neighbours)
+		if (a_next == node_b)        // a was immediately before b -> ... b, a ...
 		{
-			composite.previous_->next_ = this;
+			node_a->previous_ = node_b;
+			node_b->next_     = node_a;
 		}
-		if (composite.next_ != 0)
+		else if (b_next == node_a)   // b was immediately before a -> ... a, b ...
 		{
-			composite.next_->previous_ = this;
+			node_b->previous_ = node_a;
+			node_a->next_     = node_b;
 		}
-		std::swap(previous_, composite.previous_);
-		std::swap(next_, composite.next_);
 
 		// adjust pointers to and from the composite`s children
 		Composite* composite_ptr = composite.first_child_;
@@ -1642,6 +1735,19 @@ namespace BALL
 		{
 			composite.parent_->determineSelection_();
 		}
+
+		// v2.2 H2b: swap exchanges BOTH tree position AND child lists, so up
+		// to four rows changed: this + composite (children swapped) and their
+		// (now swapped) parents (one child each swapped). Re-derive all four
+		// from v0 (order-independent: clear_children is vector-only, so each
+		// re-append re-establishes reverse edges to the correct final
+		// parent). atom<->container swap is excluded by D70 (an Atom is never
+		// a swap target in the molecular hierarchy); not guarded here beyond
+		// the row-kind discrimination in re-derive.
+		mirrorRederiveOwnRow_();
+		composite.mirrorRederiveOwnRow_();
+		if (Composite* p = getParent())           p->mirrorRederiveOwnRow_();
+		if (Composite* p = composite.getParent())  p->mirrorRederiveOwnRow_();
 	}
 
 	bool Composite::isDescendantOf(const Composite& composite) const

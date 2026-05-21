@@ -24,51 +24,18 @@ namespace BALL
 	// (free-standing / System root -- materialised later at adoption).
 	namespace
 	{
-		// O(1): append the just-inserted child's edge. Exact for append/
-		// insert (the dominant + bulk case).
+		// v2.2 H2b: these now delegate to the unified Composite mirror
+		// helpers (defined in composite.C), which both the AtomContainer
+		// insert methods AND the Composite-level topology ops (swap/clear/
+		// replace/insertParent/splice) share. `parent` is child.getParent()
+		// (robust). No-op when the parent has no container row.
 		void mirrorAppendEdge_(Composite* parent, Composite* child)
 		{
-			AtomContainer* pac = dynamic_cast<AtomContainer*>(parent);
-			if (pac == 0) return;
-			MoleculeStore* dst = pac->getContainerRowStore_();
-			std::uint32_t  prow = pac->getContainerRow_();
-			if (dst == 0 || prow == 0) return;
-			if (Atom* a = detail::compositeAsAtom_(child))
-			{
-				dst->container_append_atom_(prow, a->getStoreIndex());
-			}
-			else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
-			{
-				if (cc->getContainerRowStore_() == dst && cc->getContainerRow_() != 0)
-					dst->container_append_container_(prow, cc->getContainerRow_());
-			}
+			if (parent != 0 && child != 0) parent->mirrorAppendChild_(*child);
 		}
-
-		// O(degree): re-derive the parent's row child list from the CURRENT
-		// v0 order. Used by the (rare) positional inserts (prepend/
-		// insertBefore/insertAfter) so the mirror preserves v0 order. Not on
-		// the bulk-append path, so no O(n^2).
 		void mirrorRederiveParent_(Composite* parent)
 		{
-			AtomContainer* pac = dynamic_cast<AtomContainer*>(parent);
-			if (pac == 0) return;
-			MoleculeStore* dst = pac->getContainerRowStore_();
-			std::uint32_t  prow = pac->getContainerRow_();
-			if (dst == 0 || prow == 0) return;
-			dst->container_clear_children_(prow);
-			for (Position i = 0; i < pac->getDegree(); ++i)
-			{
-				Composite* child = pac->getChild(static_cast<Index>(i));
-				if (Atom* a = detail::compositeAsAtom_(child))
-				{
-					dst->container_append_atom_(prow, a->getStoreIndex());
-				}
-				else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
-				{
-					if (cc->getContainerRowStore_() == dst && cc->getContainerRow_() != 0)
-						dst->container_append_container_(prow, cc->getContainerRow_());
-				}
-			}
+			if (parent != 0) parent->mirrorRederiveOwnRow_();
 		}
 	} // anonymous namespace
 

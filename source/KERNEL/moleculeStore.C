@@ -437,15 +437,21 @@ bool ContainerTable::remove_child(std::uint32_t parent_idx, ChildRef c)
 	return false;
 }
 
-// H2a: clear all child edges of a row (and their reverse edges).
+// H2a/H2b: clear a row's child VECTOR only -- does NOT touch the children's
+// reverse edges. This makes mirrorRederiveOwnRow_ order-INDEPENDENT for
+// multi-parent topology moves (swap/splice/insertParent): each affected
+// parent's re-append re-establishes the reverse edge of its CURRENT
+// children to itself, so a child moved A->B ends up with reverse==B
+// regardless of whether A or B is re-derived first. (If clear() cleared
+// reverse edges, re-deriving the source after the destination would clobber
+// the destination's freshly-set reverse edge.) Children genuinely removed
+// from the tree get their reverse cleared by remove_child (the removeChild
+// mirror); a child orphaned by the live-clear() direct-detach branch becomes
+// unreachable, so its now-stale reverse edge does not affect reachable
+// parity.
 void ContainerTable::clear_children(std::uint32_t parent_idx)
 {
 	if (parent_idx == 0 || parent_idx >= rows_.size()) return;
-	// Copy out before clearing -- clear_reverse_edge_ touches other rows /
-	// the atom_parent_ map, not this row's children vector, so iterating
-	// the live vector is fine, but copy for clarity + safety.
-	const std::vector<ChildRef> kids = rows_[parent_idx].children;
-	for (const ChildRef& c : kids) clear_reverse_edge_(c);
 	rows_[parent_idx].children.clear();
 }
 

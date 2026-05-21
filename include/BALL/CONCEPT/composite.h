@@ -1711,6 +1711,19 @@ B		*/
 		// when this has no container row. Implementation in composite.C
 		// (needs moleculeStore.h for the write accessors).
 		void mirrorRemoveChild_(Composite& child);
+
+		// v2.2 H2b: unified container-table INSERT/topology mirror helpers
+		// (used by the AtomContainer insert methods + the Composite-level
+		// topology ops swap/clear/replace/insertParent/splice). Forward-only;
+		// each self-guards (no-op when being_destroyed_, or when this has no
+		// container row). Implementation in composite.C.
+		//   mirrorAppendChild_(c): O(1) -- append c's edge to THIS row
+		//     (idempotent re-append via append_child); for the append case.
+		//   mirrorRederiveOwnRow_(): O(degree) -- clear THIS row's children
+		//     and rebuild from the current v0 child order; for positional /
+		//     splice / swap / replace / insertParent / clear paths.
+		void mirrorAppendChild_(Composite& child);
+		void mirrorRederiveOwnRow_();
 	};
 
 	template <typename T>
