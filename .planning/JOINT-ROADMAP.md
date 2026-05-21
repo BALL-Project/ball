@@ -168,3 +168,40 @@ compatible with a later clean split.
   submodules/`FetchContent`/system-install.
 - Where the shared CMake package config + version files live.
 - Migration of the existing monorepo history (subtree split vs. fresh).
+
+---
+
+## 2.x roadmap addition — remove BALL::String, use std::string + helpers
+
+**Added:** 2026-05-21 (maintainer directive, during v2.2 H2b).
+**Status:** roadmap item (not yet scheduled).
+
+**Goal:** drop the bespoke `BALL::String` class and use `std::string`
+throughout libBALL, providing free helper functions for the BALL-specific
+conveniences `String` currently bundles (case conversion, trimming,
+`getField`/tokenising, number parsing/formatting, `toUpper`/`toLower`,
+substitution, etc.). `String` derives from `std::string` and adds a large
+member API; the modern direction is plain `std::string` + a small
+`BALL::StringUtils` (free functions) namespace.
+
+**Why:** removes a foundational bespoke type, simplifies the public API,
+eases the libBALL/pyBALL/BALLView separation (no custom string type to
+bind/marshal), and aligns with the 2.x "modernize off 1.x idioms" theme.
+
+**Scope / sequencing notes:**
+- `String` is pervasive (DATATYPE/String.h is included almost everywhere;
+  signatures, persistence, FORMAT parsers, property names). This is a
+  large mechanical-but-wide migration -- treat as its own milestone phase.
+- Interacts with the v2.2 handle work: the container-table string pool
+  and the `container_*_` accessors already use `std::string` internally;
+  `Atom`/container name/id getters still return `String`. Sequence AFTER
+  the v2.2 handle redesign (or fold the getter signature changes into the
+  H4 API-break ledger so they land with the other breaks).
+- Persistence: `String` has its own serialization; the JSON path already
+  uses `std::string`. Audit the binary/persistent IO for `String` assumptions.
+- Likely a one-shot signature break -> record in V22-API-BREAK-LEDGER.md
+  (or a dedicated ledger) since it changes many public return/param types.
+
+**Open question:** the maintainer said "2.0" -- interpreting as the 2.x
+line (2.0 is already released/tagged); confirm target milestone (likely a
+post-v2.2 2.x phase) at scheduling time.
