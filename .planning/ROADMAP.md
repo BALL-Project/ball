@@ -27,7 +27,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] **Phase 999.52: Inspector material transparency control (#527) (v1.7.x)** - Add the missing transparency control to the Inspector materialSection, superseding the broken legacy MaterialSettings slider.
 - [ ] **Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (v1.7.x)** - Delete the 9 superseded legacy VIEW dialog files (commit 7f56f80d89 breadcrumb), one atomic commit each, CI green between. *Depends on 999.51 + 999.52.*
 - [ ] **Phase 999.54: BALLView startup warning when no renderer plugins found (#501) (v1.7.x)** - Emit a Log/status-bar warning on empty renderer-plugin discovery.
-- [ ] **Phase 999.55: Build acceleration — PCH across BALL + VIEW (v1.7.x)** - Land the never-shipped precompiled-headers work (was 999.16; PCH half of v1.7.x-09) over an auditable Qt/Boost/STL header set.
+- [x] **Phase 999.55: Build acceleration — PCH across BALL + VIEW (v1.7.x)** - Land the never-shipped precompiled-headers work (was 999.16; PCH half of v1.7.x-09) over an auditable Qt/Boost/STL header set. (completed 2026-05-21)
 - [ ] **Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (v1.7.x)** - Update tutorial content/screenshots/URLs/build flow to v1.7.x.
 
 ## Phase Details
@@ -2499,7 +2499,7 @@ Plans:
 **Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-09 (PCH half); original [Phase 999.16](#) scope.
 **Requirements:** `BUILD-ACCEL-08`.
 **Depends on:** none. **Effort:** ~1 day. Pure build-config; per-TU profiling data already exists (999.19).
-**Plans:** 1 plan (999.55-01-PLAN.md — test-suite REUSE_FROM PCH + records reconciliation).
+**Plans:** 1/1 plans complete
 
 ### Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (TARGETED FOR v1.7.x)
 

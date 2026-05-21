@@ -4,14 +4,14 @@ milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: verifying
 stopped_at: Completed 999.50-02-PLAN.md
-last_updated: "2026-05-21T12:32:09.909Z"
+last_updated: "2026-05-21T14:38:17.549Z"
 last_activity: 2026-05-21
 progress:
-  total_phases: 65
-  completed_phases: 27
-  total_plans: 73
-  completed_plans: 73
-  percent: 42
+  total_phases: 71
+  completed_phases: 28
+  total_plans: 78
+  completed_plans: 74
+  percent: 39
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,14 +20,14 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.50 — ward-serializer-deboost
+**Current Focus:** Phase 999.55 — pch-build-accel
 
 ## Current Position
 
-Phase: 999.50
-Plan: Not started
+Phase: 999.55 (pch-build-accel) — COMPLETE (ready for verification)
+Plan: 1 of 1 complete
 Status: Phase complete — ready for verification
-Last activity: 2026-05-21
+Last activity: 2026-05-21 — Completed 999.55-01-PLAN.md (test-suite REUSE_FROM PCH + records reconciliation)
 
 ## Performance Metrics
 
@@ -88,11 +88,15 @@ Last activity: 2026-05-21
 | Phase 999.49 P01 | 15 | 5 tasks | 8 files |
 | Phase 999.50 P01 | 18min | 3 tasks | 4 files |
 | Phase 999.50-ward-serializer-deboost P02 | ~12min | 2 tasks | 1 files |
+| Phase 999.55-pch-build-accel P01 | ~16min | 2 tasks | 5 files (test/CMakeLists.txt REUSE_FROM PCH + cmake/PCH.md §999.55 + PATCH-QUEUE/ROADMAP/REQUIREMENTS reconciliation; CMakeLists.txt/ci.yml untouched; locally validated on AppleClang guard-OFF path — Vector3_test + tabOrder_test build clean, no cmake_pch artifacts; PCH-active path is CI-gated on Linux/Windows) |
 
 ## Accumulated Context
 
 ### Decisions
 
+- [Phase 999.55-pch-build-accel]: Extend PCH to the 298 `*_test.C` executables via `target_precompile_headers(<test> REUSE_FROM BALL)` (class tests) / `REUSE_FROM VIEW` (VIEW tests, the larger GUI superset) in test/CMakeLists.txt, each PIC-matched (`POSITION_INDEPENDENT_CODE ON`) to the SHARED-lib PCH and gated under the same `IF(NOT ... AppleClang)` guard as the 999.16 library wiring. Reused the 999.16 audited 21/23-header sets verbatim — no new audit. CMakeLists.txt and ci.yml untouched (the library PCH + CCACHE_SLOPPINESS contract already shipped in 999.16 and already cover the REUSE_FROM objects).
+- [Phase 999.55-pch-build-accel]: Library PCH demonstrably shipped in 999.16 (BUILD-ACCEL-01) — corrected the stale "PCH never landed" wording in v1.7.x-PATCH-QUEUE.md, ROADMAP.md (Phase 999.55 Goal), and REQUIREMENTS.md (BUILD-ACCEL-08 reworded to the test-suite REUSE_FROM scope; BUILD-ACCEL-01 left Complete).
+- [Phase 999.55-pch-build-accel]: Post-PCH measurement left as "pending CI run" in cmake/PCH.md rather than fabricated — the test-build PCH path is guarded OFF on local macOS (AppleClang) and exercised only by Linux/Windows CI.
 - [Phase 999.22-warning-census]: Tier-C surface dramatically reduced by parallel-session (10 commits pre-census): ~3,716 pre-fix estimate → 200 remaining Linux -Wdeprecated-copy (95% reduction). 999.22a/b/c stubs reflect the actual post-fix scope: (a) ~226 mechanical, (b) ~125 VIEW/RENDERING PixelFormat (blocked-by-999.6), (c) ~111 per-site review.
 - [Phase 999.22-warning-census]: renderTarget.h PixelFormat -Wdeprecated-copy cluster (123 warnings, 41 TUs) categorized (b) — deferred to v2.0 after Phase 999.6 PIPE-01 renderer rewrite. Executing in v1.6.x or v1.7 is wasted work.
 - Abandon `ball_contrib`; build against Homebrew/system deps (macOS/Linux) and vcpkg (Windows). Already proven on macOS Tahoe.
