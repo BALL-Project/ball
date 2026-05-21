@@ -18,10 +18,12 @@
 #include <BALL/VIEW/WIDGETS/inspector/sections/coloringSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/materialSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/clippingSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/labelSection.h>
 #include <BALL/VIEW/KERNEL/controllers/modelController.h>
 #include <BALL/VIEW/KERNEL/controllers/coloringController.h>
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
 #include <BALL/VIEW/KERNEL/controllers/clippingController.h>
+#include <BALL/VIEW/KERNEL/controllers/labelController.h>
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 #include <BALL/VIEW/KERNEL/controllers/lightController.h>
@@ -74,10 +76,12 @@ namespace BALL
 				coloring_section_(nullptr),
 				material_section_(nullptr),
 				clipping_section_(nullptr),
+				label_section_(nullptr),
 				model_controller_(nullptr),
 				coloring_controller_(nullptr),
 				material_controller_(nullptr),
 				clipping_controller_(nullptr),
+				label_controller_(nullptr),
 				representation_sections_added_(false),
 				stage_controller_(nullptr),
 				camera_controller_(nullptr),
@@ -254,6 +258,7 @@ namespace BALL
 				if (coloring_controller_) coloring_controller_->revert();
 				if (material_controller_) material_controller_->revert();
 				if (clipping_controller_) clipping_controller_->revert();
+				if (label_controller_)    label_controller_->revert();
 			}
 
 			scheduleStateWrite();
@@ -365,12 +370,17 @@ namespace BALL
 			// Representation. Mirror how the Scene-tab controllers reach the
 			// live Scene via Scene::getInstance(0), guarded for null.
 			clipping_controller_ = new ClippingController(Scene::getInstance(0), this);
+			// Phase 999.51-02 — LabelController takes a Representation* (like
+			// Material) for binding/revert, but its apply() targets the current
+			// molecular SELECTION, not rep_; setRepresentation is the resync hook.
+			label_controller_ = new LabelController(nullptr, this);
 
 			rep_header_       = new RepHeaderSection(body_);
 			model_section_    = new ModelSection(model_controller_, body_);
 			coloring_section_ = new ColoringSection(coloring_controller_, body_);
 			material_section_ = new MaterialSection(material_controller_, body_);
 			clipping_section_ = new ClippingSection(clipping_controller_, body_);
+			label_section_ = new LabelSection(label_controller_, body_);
 			// UFG-22 (rc5 follow-up) — sections must be hidden until
 			// the Representation tab actually gets a non-empty list of
 			// reps (`representation_sections_added_` becomes true via
@@ -382,6 +392,7 @@ namespace BALL
 			coloring_section_->hide();
 			material_section_->hide();
 			clipping_section_->hide();
+			label_section_->hide();
 
 			// The header's picker drives setActiveRepresentation.
 			connect(rep_header_, &RepHeaderSection::representationPicked,
@@ -412,6 +423,7 @@ namespace BALL
 				addSection(InspectorTabs::TabIndex::Representation, coloring_section_);
 				addSection(InspectorTabs::TabIndex::Representation, material_section_);
 				addSection(InspectorTabs::TabIndex::Representation, clipping_section_);
+				addSection(InspectorTabs::TabIndex::Representation, label_section_);
 				representation_sections_added_ = true;
 			}
 
@@ -428,6 +440,9 @@ namespace BALL
 			// it has no setRepresentation. Resync it from the live clipping
 			// plane state instead so the section mirrors the current planes.
 			if (clipping_controller_) clipping_controller_->revert();
+			// LabelController binds to the Representation (for revert) but
+			// apply() acts on the current molecular selection.
+			if (label_controller_)    label_controller_->setRepresentation(rep);
 		}
 
 		void InspectorView::attachSceneTab(Stage* stage, Scene* scene)

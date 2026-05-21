@@ -49,10 +49,12 @@ namespace BALL
 		class ColoringSection;
 		class MaterialSection;
 		class ClippingSection;
+		class LabelSection;
 		class ModelController;
 		class ColoringController;
 		class MaterialController;
 		class ClippingController;
+		class LabelController;
 		class Stage;
 		class Scene;
 		class StageSection;
@@ -184,10 +186,12 @@ namespace BALL
 				ColoringSection*         coloring_section_;
 				MaterialSection*         material_section_;
 				ClippingSection*         clipping_section_;
+				LabelSection*            label_section_;
 				ModelController*         model_controller_;
 				ColoringController*      coloring_controller_;
 				MaterialController*      material_controller_;
 				ClippingController*      clipping_controller_;
+				LabelController*         label_controller_;
 				bool                     representation_sections_added_;
 
 				// Phase 999.44 Plan 05 — Scene-tab Controllers +

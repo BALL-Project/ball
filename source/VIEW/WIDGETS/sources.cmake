@@ -42,14 +42,15 @@ SET(SOURCES_LIST
 	inspector/sections/propertiesSection.C
 	inspector/sections/quickActionsSection.C
 	# Phase 999.44 Plan 04 — Representation tab (Model/Coloring/Material).
-	# Phase 999.51 — Clipping section now live (cut over from the 999.44
-	# deferral); Label section still pending its own cut-over plan.
+	# Phase 999.51 — Clipping (Plan 01) and Label (Plan 02) sections now
+	# live (cut over from the 999.44 deferral).
 	inspector/representationAdapter.C
 	inspector/sections/repHeaderSection.C
 	inspector/sections/modelSection.C
 	inspector/sections/coloringSection.C
 	inspector/sections/materialSection.C
 	inspector/sections/clippingSection.C
+	inspector/sections/labelSection.C
 	# Phase 999.44 Plan 05 — Scene tab remainder.
 	inspector/sections/cameraSection.C
 	inspector/sections/lightsSection.C
