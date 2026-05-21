@@ -1,7 +1,9 @@
 # BALLView v1.7 — BALLView Refresh
 
-**Status:** v1.7.0 shipped 2026-05-19 (commit `97d4c4d62d`). v1.7.1 patch
-cycle in progress (see "v1.7.1 patch cycle" below).
+**Status:** v1.7.0 shipped 2026-05-19 (commit `97d4c4d62d`). **v1.7.1**
+(2026-05-21) is the first **signed + notarized macOS** release — Developer
+ID + Apple notarization went live (Phase 8a). See "v1.7.1 patch cycle" below;
+rc1 (`v1.7.1-rc1`) validated, final tag follows.
 
 **v1.7 is the "BALLView Refresh" milestone.** It re-skins, re-arranges, and modernizes the BALLView GUI on top of the v1.6 rendering + build foundation, without changing the underlying molecular-modelling library surface. Net visual + UX changes are substantial; net behavioral changes to scripted/non-GUI workflows are zero.
 
