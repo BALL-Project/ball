@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: verifying
-stopped_at: Completed 999.50-02-PLAN.md
-last_updated: "2026-05-21T14:38:17.549Z"
+stopped_at: Completed 999.54-01-PLAN.md
+last_updated: "2026-05-21T14:51:08.590Z"
 last_activity: 2026-05-21
 progress:
   total_phases: 71
-  completed_phases: 28
+  completed_phases: 29
   total_plans: 78
-  completed_plans: 74
-  percent: 39
+  completed_plans: 75
+  percent: 41
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,14 +20,14 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.55 — pch-build-accel
+**Current Focus:** Phase 999.54 — renderer-plugin-warning
 
 ## Current Position
 
-Phase: 999.55 (pch-build-accel) — COMPLETE (ready for verification)
-Plan: 1 of 1 complete
+Phase: 999.54 (renderer-plugin-warning) — EXECUTING
+Plan: 1 of 1
 Status: Phase complete — ready for verification
-Last activity: 2026-05-21 — Completed 999.55-01-PLAN.md (test-suite REUSE_FROM PCH + records reconciliation)
+Last activity: 2026-05-21
 
 ## Performance Metrics
 
@@ -89,6 +89,7 @@ Last activity: 2026-05-21 — Completed 999.55-01-PLAN.md (test-suite REUSE_FROM
 | Phase 999.50 P01 | 18min | 3 tasks | 4 files |
 | Phase 999.50-ward-serializer-deboost P02 | ~12min | 2 tasks | 1 files |
 | Phase 999.55-pch-build-accel P01 | ~16min | 2 tasks | 5 files (test/CMakeLists.txt REUSE_FROM PCH + cmake/PCH.md §999.55 + PATCH-QUEUE/ROADMAP/REQUIREMENTS reconciliation; CMakeLists.txt/ci.yml untouched; locally validated on AppleClang guard-OFF path — Vector3_test + tabOrder_test build clean, no cmake_pch artifacts; PCH-active path is CI-gated on Linux/Windows) |
+| Phase 999.54-renderer-plugin-warning P01 | 12min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -167,6 +168,7 @@ Last activity: 2026-05-21 — Completed 999.55-01-PLAN.md (test-suite REUSE_FROM
 - [Phase ?]: 999.50-01: Replaced boost::serialization in the Ward cluster-tree serializer with a hand-rolled BALLWARD magic+version format (binary+text); single-TU compile dropped from tens of minutes to ~4s. Old boost trees now fail loudly — format break documented under v1.7.2 Breaking changes.
 - [Phase ?]: 999.50-02: release.yml now restores/saves a per-OS ccache build cache keyed to ci.yml's ccache-<os>-pch-v2- lineage, so release tags of CI-built commits warm from CI's compiler cache (BUILD-ACCEL-07).
 - [Phase ?]: 999.50-02: MSVC /O1 escape hatch (item 3) skipped as moot — Plan 01's boost elimination dropped poseClusteringSerialization.C to ~3.9s; no /O1 override committed, default build unchanged.
+- [Phase 999.54-renderer-plugin-warning]: Two-phase startup diagnostic for #501: flag + Log.warn in registerRenderers_(), surface to status bar in initializeWidget() where MainControl is valid
 
 ### Roadmap Evolution
 
@@ -209,7 +211,7 @@ Last activity: 2026-05-21 — Completed 999.55-01-PLAN.md (test-suite REUSE_FROM
 
 **Previous last action:** Phase 5 Plan 05 (GL-core spike + Qt 6 link bring-up) executed — 7 commits, 74 files. New files: `include/BALL/VIEW/RENDERING/RENDERERS/coreGLRenderer.h` + `source/VIEW/RENDERING/RENDERERS/coreGLRenderer.C` (both carry the THROWAWAY-SPIKE provenance header). SPIKE-01 (GL-core arm) deliverable met: CoreGLRenderer overrides Renderer::renderRepresentations_() + capabilities() + pickObjects() (R32UI color-buffer FBO + glReadPixels readback) + does NOT implement per-primitive immediate-mode virtuals. CMakeLists.txt new BALL_SPIKE_BACKEND option (OFF | GLCore | QRhi, default OFF) + rendererFactory.h Kind::OpenGL_Core under #ifdef BALL_SPIKE_BACKEND_GLCORE + rendererFactory.C env-var BALLVIEW_USE_SPIKE_BACKEND=1 runtime gate + makeRenderer/makeSurface OpenGL_Core arms. sources.cmake compiles coreGLRenderer.C only under the spike option. .github/workflows/ci.yml: non-blocking macOS-only "Spike smoke check (macOS — GLCore backend)" step + actions/upload-artifact for the captured log (Plan 08 SPIKE-02 reference artifact). MAJOR DEVIATION / BLOCKER cascade required to ship Qt 6 link-green BALLView — first time since Plan 05-02: BLOCKER-B (mutex.h: template QMutexLocker<QMutex> + Qt 6 QMutex no-recursive, commit 204de36), BLOCKER-A (dockResultFile QtXml SAX stub under #if QT_VERSION<6,0,0 — full QXmlStreamReader port deferred as BLOCKER-A2, commit 3691232), BLOCKER-D widened (28 sites of Qt::WindowFlags=0, commit d33f58d), BLOCKER-E new (14-bucket Qt 6 API surface sweep across 37 files: QString::null, Qt::MidButton, QtWidgets/QAction header, QOpenGLFramebufferObject module move, QWebEnginePage module move, QTableWidgetItem::setBackgroundColor, QList/Tree::setItem{Selected,Expanded}, QWheelEvent::delta/pos, QString::sprintf, QFontMetrics::width, QLineF::intersect, QPalette::foreground/background, QStyleOption::init, QApplication::globalStrut, QLayout::setMargin, QPainter::setRedirected, qVariantFromValue, QSpontaneKeyEvent::setSpontaneous, HTMLPage::certificateError signal-conversion, rotateMode.C QFlags ambiguous operator, labelDialog.ui autoCompletion, downloadElectronDensity.C QFile incomplete-type, commit a0c28bc). Default-build BALLView runs and emits a valid BALLVIEW_GL_DIAG line (gl_version="2.1 Metal - 90.5"); gl_profile=none rather than =compatibility because Apple's GL 2.1 implementation does not expose Core/Compat distinction at v2.1 (NOT a regression — Plan 05-04 grep may need to relax on Apple Silicon). Spike-build runs the factory env-var gate correctly (CoreGLRenderer constructed, confirmed by stdout marker) but BALLView crashes early before initializeGL — expected throwaway-spike limitation: downstream pipeline calls GLRenderer-specific virtuals the bare-bones spike does not implement; PIPE-01 scope. scene.C touched in 2 mechanical setMargin->setContentsMargins lines (Qt 6 API sweep) — Phase 02.1 boundary preserved (no renderer-wiring change). Commits: 204de36, 3691232, d33f58d, a0c28bc, 93a59cd, de96561, c47bf43.
 
-**Stopped at:** Completed 999.50-02-PLAN.md
+**Stopped at:** Completed 999.54-01-PLAN.md
 
 **Previous stopped at:** Phase 05.1 Plan 05 complete (Task A5 -Wformat-overflow fix — d46b942; 20 sprintf → snprintf swaps in source/FORMAT/CIFParserParser.y using sizeof($$) which yields CIFPARSER_LINE_LENGTH=2550 via the Bison %union; libBALL build green on macos-arm64 / Qt 6.11; zero -Wformat-overflow on the regenerated CIFParserParser.C; tri-OS CI verification follows on push)
 

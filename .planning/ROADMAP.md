@@ -2490,7 +2490,7 @@ Plans:
 **Requirements:** `VIEW-UX-01`.
 **Depends on:** none. **Effort:** small (~20–40 LOC).
 **Plans:** 1 plan
-- [ ] 999.54-01-PLAN.md — non-fatal zero-renderer startup guard (Log.warn + status bar) closing #501.
+- [x] 999.54-01-PLAN.md — non-fatal zero-renderer startup guard (Log.warn + status bar) closing #501.
 
 ### Phase 999.55: Build acceleration — precompiled headers across BALL + VIEW (TARGETED FOR v1.7.x)
 
