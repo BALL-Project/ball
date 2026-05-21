@@ -2,10 +2,18 @@
 // vi: set ts=2:
 //
 // Phase 999.44 Plan 04 — ColoringController implementation.
-// UFG-03 cut-over (v1.7-modernization) — apply() now mutates the
-// attached Representation through DisplayProperties' owned
-// ColoringSettingsDialog (for the per-ColoringMethod processor
-// factory) and the Representation's own setters.
+// UFG-03 cut-over (v1.7-modernization) — apply() mutates the attached
+// Representation through the per-ColoringMethod processor factory and
+// the Representation's own setters.
+//
+// Phase 999.57 Plan 03 (VIEW-CLEAN-02 render-path cut-over): apply()
+// no longer reaches through DisplayProperties' owned
+// ColoringSettingsDialog for the processor factory. It now constructs
+// the color processor via the relocated ColorProcessorFactory::create
+// with EMPTY ColoringOverrides (compiled defaults — the controller does
+// not expose per-element/residue color overrides), then applies
+// value_min_/value_max_ to the InterpolateColorProcessor exactly as
+// before — making the controller fully dialog-independent.
 //
 
 #include <BALL/VIEW/KERNEL/controllers/coloringController.h>
@@ -14,9 +22,8 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
-#include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
+#include <BALL/VIEW/MODELS/colorProcessorFactory.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
@@ -93,18 +100,18 @@ namespace BALL
 
 			if (method_changed || rep_->getColorProcessor() == nullptr)
 			{
-				DisplayProperties* dp = DisplayProperties::getInstance(0);
-				ColorProcessor* cp = nullptr;
-				if (dp != nullptr && dp->getColoringSettingsDialog() != nullptr)
-				{
-					cp = dp->getColoringSettingsDialog()->createColorProcessor(new_method);
-				}
+				// Phase 999.57 Plan 03: build the color processor through the
+				// headless ColorProcessorFactory with EMPTY ColoringOverrides.
+				// An empty override set means "keep the processor's compiled
+				// defaults" (CONFIG-01), which is exactly what this controller
+				// wants — it exposes only coloring_method_ + value_min_/value_max_
+				// and never carried per-element/residue color overrides. The
+				// value range is applied below, unchanged.
+				ColorProcessor* cp = ColorProcessorFactory::create(new_method);
 				if (cp == nullptr)
 				{
-					// Fallback when DisplayProperties hasn't been
-					// initialised (no preferences tab yet) — at least
-					// install a baseline processor so the renderer
-					// has something to invoke.
+					// Defensive fallback — install a baseline processor so the
+					// renderer always has something to invoke.
 					cp = new ColorProcessor();
 				}
 				rep_->setColorProcessor(cp);

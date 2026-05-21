@@ -2,13 +2,20 @@
 // vi: set ts=2:
 //
 // Phase 999.44 Plan 04 — ModelController implementation.
-// UFG-03 cut-over (v1.7-modernization) — apply() now mutates the
-// attached Representation through DisplayProperties' owned
-// ModelSettingsDialog (for the per-ModelType processor factory) and
-// the Representation's own setters. The legacy ModelSettingsDialog
-// continues to *also* mutate via DisplayProperties::applyTo_ when the
-// user opens the legacy modal; the Inspector path now writes through
-// the same processor-factory so both UIs stay consistent.
+// UFG-03 cut-over (v1.7-modernization) — apply() mutates the attached
+// Representation through the Representation's own setters and the
+// per-ModelType processor factory.
+//
+// Phase 999.57 Plan 03 (VIEW-CLEAN-02 render-path cut-over): apply()
+// and revert() no longer reach through DisplayProperties' owned
+// ModelSettingsDialog for the processor factory. apply() now builds a
+// headless ModelProcessorParams from the controller's own mirrored
+// member fields and constructs the processor via the relocated
+// ModelProcessorFactory::create — making the controller fully
+// dialog-independent. revert() now mirrors from the controller's own
+// last-known values (the controller is the source of truth for its
+// mirrored params), with model/drawing state still pulled from the
+// Representation.
 //
 
 #include <BALL/VIEW/KERNEL/controllers/modelController.h>
@@ -17,8 +24,7 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
-#include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
+#include <BALL/VIEW/MODELS/modelProcessorFactory.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 
@@ -67,26 +73,14 @@ namespace BALL
 			int tr = static_cast<int>(rep_->getTransparency());
 			if (tr != transparency_) { transparency_ = tr; Q_EMIT transparencyChanged(tr); }
 
-			// Per-type parameters mirror the advanced-options state owned
-			// by DisplayProperties' ModelSettingsDialog (the same state the
-			// legacy modal mutates). Guard the dialog null.
-			DisplayProperties* disp = DisplayProperties::getInstance(0);
-			if (disp != nullptr && disp->getModelSettingsDialog() != nullptr)
-			{
-				ModelSettingsDialog* msd = disp->getModelSettingsDialog();
-				float br = msd->getBallRadius();
-				if (br != ball_radius_) { ball_radius_ = br; Q_EMIT ballRadiusChanged(br); }
-				float bsr = msd->getBallAndStickStickRadius();
-				if (bsr != ball_stick_bond_radius_) { ball_stick_bond_radius_ = bsr; Q_EMIT ballStickBondRadiusChanged(bsr); }
-				bool db = msd->ballAndStickDashedBondsEnabled();
-				if (db != dashed_bonds_) { dashed_bonds_ = db; Q_EMIT dashedBondsChanged(db); }
-				float sr = msd->getStickStickRadius();
-				if (sr != stick_radius_) { stick_radius_ = sr; Q_EMIT stickRadiusChanged(sr); }
-				float spr = msd->getSurfaceProbeRadius();
-				if (spr != surface_probe_radius_) { surface_probe_radius_ = spr; Q_EMIT surfaceProbeRadiusChanged(spr); }
-				float ctr = msd->getCartoonTubeRadius();
-				if (ctr != cartoon_tube_radius_) { cartoon_tube_radius_ = ctr; Q_EMIT cartoonTubeRadiusChanged(ctr); }
-			}
+			// Phase 999.57 Plan 03: the per-type advanced parameters
+			// (ball_radius_, stick radii, dashed bonds, surface probe radius,
+			// cartoon tube radius) are now owned by the controller itself —
+			// they are no longer mirrored from DisplayProperties'
+			// ModelSettingsDialog. revert() therefore re-syncs only the
+			// Representation-derived model/drawing/transparency state above and
+			// leaves the controller's own mirrored params untouched (they are
+			// the source of truth for the headless ModelProcessorFactory path).
 
 			params_dirty_ = false;
 		}
@@ -129,38 +123,35 @@ namespace BALL
 				(rep_->getDrawingPrecision() != new_precision) ||
 				params_dirty_;
 
-			// If DisplayProperties is in the tree, reuse its
-			// ModelSettingsDialog so per-model parameters (stick radius,
-			// surface probe radius, ribbon mode, etc.) flow through the
-			// same advanced-options state the legacy modal mutates.
-			// Otherwise fall back to a stub processor swap; the renderer
-			// will still pick up the model-type change.
+			// Phase 999.57 Plan 03: construct the model processor through the
+			// headless ModelProcessorFactory, parameterized by the controller's
+			// own mirrored fields — no longer reaching through DisplayProperties'
+			// ModelSettingsDialog. ModelProcessorFactory::create bakes the params
+			// into the processor at creation time, so a per-type PARAM change
+			// (params_dirty_) with the same model type also requires recreating
+			// the processor.
 			//
-			// createModelProcessor() bakes the dialog's CURRENT slider
-			// values into the processor at creation time, so a per-type
-			// PARAM change (params_dirty_) with the same model type also
-			// requires recreating the processor — push our params to the
-			// dialog first, then recreate.
+			// The params the controller does NOT mirror (cartoon helix/arrow/
+			// strand, DNA radii, force params, HBond radius, VDW factor, backbone
+			// tube) fall back to ModelProcessorParams' struct defaults, which
+			// equal the legacy dialog defaults (Plan 01) — so this is behavior-
+			// preserving for every knob the controller never exposed.
 			if (model_type_changed ||
 			    rep_->getModelProcessor() == nullptr ||
 			    params_dirty_)
 			{
-				DisplayProperties* dp = DisplayProperties::getInstance(0);
-				if (dp != nullptr && dp->getModelSettingsDialog() != nullptr)
-				{
-					ModelSettingsDialog* msd = dp->getModelSettingsDialog();
-					msd->setBallRadius(ball_radius_);
-					msd->setBallAndStickStickRadius(ball_stick_bond_radius_);
-					msd->setBallAndStickStickDashedBondsEnabled(dashed_bonds_);
-					msd->setStickStickRadius(stick_radius_);
-					msd->setSurfaceProbeRadius(surface_probe_radius_);
-					msd->setCartoonTubeRadius(cartoon_tube_radius_);
+				ModelProcessorParams params;
+				params.ball_radius                 = ball_radius_;
+				params.ball_and_stick_stick_radius = ball_stick_bond_radius_;
+				params.ball_and_stick_dashed_bonds_enabled = dashed_bonds_;
+				params.stick_stick_radius          = stick_radius_;
+				params.surface_probe_radius        = surface_probe_radius_;
+				params.cartoon_tube_radius         = cartoon_tube_radius_;
 
-					ModelProcessor* mp = msd->createModelProcessor(new_type);
-					if (mp != nullptr)
-					{
-						rep_->setModelProcessor(mp);
-					}
+				ModelProcessor* mp = ModelProcessorFactory::create(new_type, params);
+				if (mp != nullptr)
+				{
+					rep_->setModelProcessor(mp);
 				}
 				rep_->setModelType(new_type);
 			}
