@@ -61,6 +61,20 @@ repos / remove `String` / rebuild pyBALL against the stable surface.
 
 ## 2. v2.2 — the handle redesign (IN PROGRESS)
 
+> **Pending design gate `H1b′` (hierarchy collapse, HC1→HC1b):** the
+> maintainer directed collapsing the molecular class hierarchy to four node
+> kinds — **System / Molecule / Fragment / Atom** (+ Bond) — with
+> Protein/NucleicAcid/Chain/Residue/Nucleotide/SecondaryStructure/PDBAtom/
+> AtomContainer captured as **roles + properties**, not C++ subclasses.
+> Codex HC1 = collapse-YES conditional on a short design-lock gate (role
+> taxonomy + canonical PDB depth + SS-as-span + PDB round-trip test) that
+> **closes BEFORE H3**; else stage to v2.3. See
+> `V2X-HIERARCHY-COLLAPSE.md`. If the gate passes: `ContainerKind`
+> shrinks + the 8 typed handles (H1b) collapse to `Molecule`/`Fragment`
+> role-aware handles; H1a table + H2 mirror survive (kind-agnostic); H3
+> migrates consumers to the collapsed API once (avoids a double migration);
+> H8 adds a **PDB/structural round-trip fidelity gate** alongside D13.
+
 **Decision D55 = A2:** the *entire* molecular hierarchy
 (Molecule/Chain/Residue/Protein/SecondaryStructure/Nucleotide/
 NucleicAcid/Fragment) becomes store-backed value handles over a flat

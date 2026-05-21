@@ -7,6 +7,15 @@
 **Phase:** H2 — "handle-yielding iterators + `apply` over `ChildRef`
 edges + the full mutation-mirror set + `HierarchyParity_test` green."
 
+> **NOTE (2026-05-21, HC1 hierarchy collapse):** the mutation-mirror
+> machinery here is **kind-agnostic** (row/edge ops over `ChildRef`) and
+> SURVIVES the proposed System/Molecule/Fragment/Atom collapse unchanged.
+> The only collapse impact on H2 is that the **handle-yielding traversal
+> (H2c) filters by ROLE** instead of by the 8 `ContainerKind`s, and the v0
+> `AtomContainer` binding used by the insert mirror is **transitional**
+> (it dies at H4 with the v0 classes; it is not an enduring AtomContainer
+> concept). See `V2X-HIERARCHY-COLLAPSE.md`.
+
 H2 is the **crux execution risk** (D60): through H1–H3 the v0 object
 tree is the source of truth and the container table is a *verified
 mirror*. H2 wires every forward v0 mutation to mirror into the table and

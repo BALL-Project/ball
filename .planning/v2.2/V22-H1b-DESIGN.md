@@ -8,6 +8,15 @@
 store, alongside v0 objects (dual existence; v0 = source of truth per
 D60)."
 
+> **SUPERSESSION NOTICE (2026-05-21, HC1):** the maintainer's
+> hierarchy-collapse directive (`V2X-HIERARCHY-COLLAPSE.md`) — if its
+> `H1b′` design-lock gate passes — **supersedes the 8 typed handles below**
+> with two role-aware handles (`Molecule`, `Fragment`) + `Atom`, and
+> shrinks `ContainerKind` + the D58 payload to a role + role-payload model.
+> The handle SHAPE / validity / encapsulation contracts (D64/D65/D66a)
+> still hold; only the *number* of typed handles and the per-kind getters
+> change. Treat the per-kind handles below as the pre-collapse design.
+
 H1a delivered the store-side `ContainerTable` (rows + `ChildRef` edges +
 orphan migration + parity skeleton), exercised only by tests; nothing in
 the v0 path reads it. H1b introduces the **value-handle TYPES** for the
