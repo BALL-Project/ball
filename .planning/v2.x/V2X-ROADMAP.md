@@ -61,8 +61,10 @@ repos / remove `String` / rebuild pyBALL against the stable surface.
 
 ## 2. v2.2 — the handle redesign (IN PROGRESS)
 
-> **Design gate `H1b′` (hierarchy collapse) — CONVERGED PLAN (HC1→HC1b AGREE;
-> HCP1→HCP1b AGREE).** The maintainer directed collapsing the molecular class
+> **Design gate `H1b′` (hierarchy collapse) — 🔒 CLOSED (HC1→HC1b AGREE;
+> HCP1→HCP1b AGREE; design-lock H1bP→H1bPb AGREE + maintainer sign-off of
+> D-HC1…D-HC7, 2026-05-21 — see `V22-H1bPRIME-DESIGN.md`). Collapse folds into
+> v2.2.** The maintainer directed collapsing the molecular class
 > hierarchy to four node kinds — **System / Molecule / Fragment / Atom**
 > (+ Bond) — with Protein/NucleicAcid/Chain/Residue/Nucleotide/
 > SecondaryStructure/PDBAtom/AtomContainer captured as **roles + properties**,
@@ -88,8 +90,12 @@ repos / remove `String` / rebuild pyBALL against the stable surface.
 >
 > H1a table + H2 mirror machinery SURVIVE (kind-agnostic); doing the collapse
 > here migrates consumers to the collapsed API ONCE (avoids a double
-> migration). Sequencing constraint: **H2b (topology, DONE) → H2c → HCP-1
-> scalar+role mirror → H2d (randomized sweep) → H3.**
+> migration). Sequence (revised now the gate is closed): **H2b (topology,
+> DONE) → HCP-1 (restore KERNEL-only build + role model + scalar+role mirror)
+> → HCP-2 (collapsed handle API — SUBSUMES H2c's container iterators as
+> role-filtered, so they are built once, not as typed-then-collapsed) → H2d
+> (randomized sweep) → H3.** H2c's kind-agnostic atom-yielding iteration folds
+> into HCP-2.
 
 **Decision D55 = A2:** the *entire* molecular hierarchy
 (Molecule/Chain/Residue/Protein/SecondaryStructure/Nucleotide/

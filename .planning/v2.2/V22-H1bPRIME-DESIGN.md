@@ -382,12 +382,22 @@ no-`dynamic_cast<PDBAtom*>` regression grep + the wrong-role assertion test.
 - The JSON `kind`+`role` schema is sketched here but **frozen at H6b** (not
   this gate) — must stay forward-compatible with the role model.
 
-## 12. Status — CONVERGED (Codex H1bP→H1bPb AGREE); awaiting maintainer sign-off
+## 12. Status — 🔒 LOCKED (Codex H1bP→H1bPb AGREE + maintainer sign-off 2026-05-21)
 
-**H1bP = NEEDS-REVISION → revised → H1bPb = AGREE (2026-05-21).** The design is
-Codex-converged; the `H1b′` gate closes on **maintainer sign-off** of
-D-HC1…D-HC7 (below). On sign-off, HCP-1 implementation begins; until then this
-is a locked-pending-approval design. (D-HC4 already maintainer-confirmed.)
+**The `H1b′` gate is CLOSED.** Codex converged (H1bP→H1bPb AGREE) and the
+maintainer signed off **all of D-HC1…D-HC7** (2026-05-21):
+- D-HC1/2/3/4/6 ✅ as recommended (D-HC4 was already maintainer-confirmed).
+- **D-HC5 ✅** = hard type break + migration guide + the deprecated
+  container-scoped role-iterator alias **only**; type-facade wrapper classes
+  are **NOT** shipped (may be reconsidered if downstream migration pain
+  appears).
+- **D-HC7 ✅** = reuse `BALL_CORE_ONLY` (restore the extension-module guards);
+  HCP-1 task 0 asserts the excluded module set + updates the CMake docs.
+
+HCP-1 implementation is unblocked. The collapse folds into v2.2 (not staged to
+v2.3). Sequence: H2b ✅ → **HCP-1** (restore KERNEL-only build + role model +
+scalar+role mirror) → HCP-2 (collapsed handle API, subsumes the container
+iterators) → H2d → H3.
 
 **H1bP applied (NEEDS-REVISION → revised, 2026-05-21).** Fixes: (1) het bit
 exists but is normalized away to `ResidueKind` (was wrongly "no HETATM
