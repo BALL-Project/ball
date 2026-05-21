@@ -6,6 +6,7 @@ SET(SOURCES_LIST
 	cartoonModel.C
 	colorByGridProcessor.C
 	colorProcessor.C
+	colorProcessorFactory.C
 	fieldLineCreator.C
 	forceModel.C
 	HBondModel.C
