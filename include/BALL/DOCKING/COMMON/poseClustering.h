@@ -236,11 +236,6 @@ namespace BALL
 						ClusterProperties(ClusterProperties&&) BALL_NOEXCEPT;
 						ClusterProperties& operator=(ClusterProperties&&) BALL_NOEXCEPT;
 
-					/** Serialization method
-					 */
-					template <class Archive>
-					void serialize(Archive& ar, const unsigned int version);
-
 					/** The poses contained in this cluster.
 					 */
 					std::set<Index> poses;
