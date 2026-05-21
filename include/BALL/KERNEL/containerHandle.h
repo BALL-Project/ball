@@ -142,9 +142,10 @@ namespace BALL
 		}
 
 		/// Number of selected atoms in this container's subtree. Computed on
-		/// read from the store's atom-selection bitmap + the subtree edges
-		/// (HCP-1R): correct for every mutation path (select/deselect AND
-		/// topology moves) regardless of how the selection was set. O(subtree).
+		/// read by walking the subtree edges + reading the v0 atom selection
+		/// (back_ptr->isSelected(), the Selectable::selected_ truth) -- HCP-1R.
+		/// Correct for every mutation path (select/deselect AND topology moves)
+		/// regardless of how the selection was set. O(subtree).
 		std::uint32_t getSelectionCount() const
 		{ assertValid_(); return store_->container_selection_count_(idx_); }
 

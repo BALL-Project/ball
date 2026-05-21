@@ -120,3 +120,14 @@ The upcoming randomized parity sweep will fail if it mutates row-bound objects t
 Confirmed-sound items from KR1R stand (payload 8 B, shared scalar dispatch,
 explicit setters wired, clear/swap most-derived-wins, materialise idempotence,
 ResidueKind priority).
+
+## HCP1Rb confirmation
+
+Verdict: GO — HCP-1 is ready for H2d + HCP-2.
+
+- **ADDRESSED: CRITICAL selection drift across topology + HIGH setSelected bypass.** `container_selection_count_` now derives the selected-atom cardinality by walking the container-table subtree edges and reading v0 atom truth through `back_ptr_[atom_idx]->isSelected()`, which is the `Selectable::selected_` state written by atom `select()` and by `setSelected()`. The former incremental mirror hooks are gone (`Composite::mirrorAtomSelection_`, select_/deselect_ row bumps, `container_bump_selection_`, materialise selection seed), so the prior event-log drift no longer applies. Freed/root-invalid rows return 0, atom back-pointers are null/bounds guarded, and O(subtree) read cost is acceptable during dual existence.
+- **ADDRESSED: MEDIUM MoleculeRole solvent.** Plain `Molecule` now returns `MoleculeRole::UNKNOWN`; this is acceptable as a non-lying placeholder until the HCP-2 property/role mirror can distinguish small molecule, solvent, water, ion, and ligand.
+- **ADDRESSED: LOW SecondaryStructure::set type_.** `SecondaryStructure::set()` now copies `type_`, fixing the v0 assignment bug; rooted-row resync for assignment remains covered by the carry-over below.
+- **ACCEPTED-DEFERRAL: HIGH set()/operator=/persistentRead on rooted objects.** Deferring these as full-subtree-replacement-on-rooted is sound for HCP-1: the operations are deep replacement surfaces, scalar-only resync would be partial, and the common build-then-root path is still correct because materialisation captures final state. H2d should keep rooted assignment/persistentRead out of randomized parity until the full replacement mirror lands.
+- **ADDRESSED: HCP-1b.3 selection check.** The parity test now exercises derived selection counts across atom select/deselect and subtree select/deselect, and `HierarchyParity_test` passes in both `build-core` and `build`.
+- **No new blocker found.** The only note is editorial: the derived-count comments/docs still mention the atom-selection bitmap in one sentence, but the implementation and nearby comments correctly use v0 `back_ptr_->isSelected()` as the current source of truth; this is not a behavioral issue.
