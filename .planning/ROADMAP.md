@@ -2435,7 +2435,11 @@ Plans:
 
 **Estimated effort:** ~40–80 LOC + fixture regen + 1 CI yaml change. Low-medium. Risk: format break (handled via regen + magic header).
 
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.50`).
+**Plans:** 2 plans
+
+Plans:
+- [ ] 999.50-01-PLAN.md — BUILD-ACCEL-06: hand-rolled boost-free Ward-tree serializer (magic+version header) + new-format fixture regen + RELEASE-NOTES break note; callers + PoseClustering_test3/test1 green
+- [ ] 999.50-02-PLAN.md — BUILD-ACCEL-07: release.yml ccache restore/save (key aligned with ci.yml) + optional disabled MSVC /O1 fallback (item ③)
 
 ---
 *Roadmap created: 2026-05-14*
