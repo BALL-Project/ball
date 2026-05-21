@@ -1309,6 +1309,16 @@ namespace BALL
 		{
 			setMinimumSize(10, 10);
 
+			// Issue #501: surface the zero-renderer condition flagged by registerRenderers_()
+			// on the status bar. main_control is a valid reference here (this runs after
+			// registerWidget()), unlike during construction. important=true so the message is
+			// not instantly overwritten by routine status text. Non-fatal: on a normal build
+			// renderers_ is non-empty, the flag stays false, and nothing fires (no false positive).
+			if (no_renderers_warning_)
+			{
+				main_control.setStatusbarText((String)tr("No renderers available — the 3D scene cannot be displayed (no renderer backend was found). BALLView is running, but molecules will not be visible."), true);
+			}
+
 			main_control.initPopupMenu(MainControl::DISPLAY);
 
 			ShortcutRegistry* shortcut_registry = ShortcutRegistry::getInstance(0);
