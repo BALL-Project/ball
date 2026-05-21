@@ -426,6 +426,7 @@ namespace BALL
 	void Residue::setID(const String &id)
 	{
 		id_ = id;
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	const String &Residue::getID() const
@@ -444,10 +445,12 @@ namespace BALL
 		}
 
 		insertion_code_ = insertion_code;
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	void Residue::unsetInsertionCode() {
 		insertion_code_ = ' ';
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	char Residue::getInsertionCode() const

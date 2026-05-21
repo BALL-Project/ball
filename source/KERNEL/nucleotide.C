@@ -128,6 +128,7 @@ namespace BALL
 	void Nucleotide::setID(const String &id)
 	{
 		id_ = id;
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	const String &Nucleotide::getID() const
@@ -146,10 +147,12 @@ namespace BALL
 		}
 
 		insertion_code_ = insertion_code;
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	void Nucleotide::unsetInsertionCode() {
 		insertion_code_ = ' ';
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	char Nucleotide::getInsertionCode() const

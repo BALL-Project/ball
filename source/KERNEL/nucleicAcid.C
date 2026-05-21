@@ -129,6 +129,7 @@ namespace BALL
 	void NucleicAcid::setID(const String& id)
 	{
 		id_ = id;
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2
 	}
 
 	const String& NucleicAcid::getID() const

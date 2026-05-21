@@ -980,4 +980,28 @@ CHECK(HCP-1a -- nucleotide + secondary-structure roles)
 	TEST_EQUAL(store2->container_ss_kind_(ss.getContainerRow_()) == SSKind::HELIX, true)
 RESULT
 
+CHECK(HCP-1b.2 -- post-root scalar setters mirror to the row)
+	System sys; Protein prot; prot.setName("P"); prot.setID("1");
+	Chain ch; ch.setName("A");
+	Residue r; r.setName("ALA"); r.setID("1");
+	PDBAtom a; a.setName("N");
+	r.insert(a); ch.insert(r); prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	// Mutate scalar identity AFTER the tree is rooted/materialised.
+	prot.setName("PROT2"); prot.setID("X");
+	r.setName("GLY"); r.setID("42"); r.setInsertionCode('B');
+
+	// Full name-bearing parity must hold -- the setters mirrored each change.
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+	// Spot-check the row scalars directly.
+	TEST_EQUAL(store->container_name_(prot.getContainerRow_()), std::string("PROT2"))
+	TEST_EQUAL(store->container_id_(r.getContainerRow_()), std::string("42"))
+	TEST_EQUAL(store->container_insertion_code_(r.getContainerRow_()), 'B')
+RESULT
+
 END_TEST

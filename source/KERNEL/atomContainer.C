@@ -229,6 +229,7 @@ namespace BALL
 	void AtomContainer::setName(const String& name)
 	{
 		name_ = name;
+		mirrorResyncScalars_();   // v2.2 HCP-1b.2: post-root scalar setter
 	}
 
 	const String& AtomContainer::getName() const

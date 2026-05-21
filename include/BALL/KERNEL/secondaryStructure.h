@@ -150,7 +150,8 @@ namespace BALL
 		Type getType() const { return type_; }
 
 		/// Set the type of secondary structure
-		void setType(Type type) { type_ = type; }
+		// v2.2 HCP-1b.2: mirror the ss_type change to the container row.
+		void setType(Type type) { type_ = type; mirrorResyncScalars_(); }
 			
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
