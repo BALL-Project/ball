@@ -2470,7 +2470,7 @@ Plans:
 **Plans:** 1 plan.
 
 Plans:
-- [ ] 999.52-01-PLAN.md — Add a working Transparency control to the Inspector materialSection, driving Stage::Material.transparency through Scene::updateMaterialForRepresentation (the legacy MaterialSettings backend), superseding the broken #527 path. Legacy dialog untouched.
+- [~] 999.52-01-PLAN.md — Add a working 0-255 Transparency control to the Inspector materialSection, driving **Representation::setTransparency() + Representation::update()** (the per-vertex alpha path the interactive GLRenderer actually honors — NOT the dead Stage::Material.transparency field, which was the #527 bug), sharing Representation transparency state with the existing Model-section slider. Legacy dialog untouched. **Code + build complete (2 task commits `ce4061a93d`, `7374d42ae8`; libVIEW + BALLView.app green under BALL_UI_V2=ON); PAUSED at the BLOCKING GUI human-verify (Task 3) — drag the Material-tab slider, confirm visible transparency + Model-section cross-check + reset.** VIEW-INSP-03 implementation-complete / awaiting GUI verify; closes #527 once confirmed.
 
 ### Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (TARGETED FOR v1.7.x)
 
