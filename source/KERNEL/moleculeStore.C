@@ -627,6 +627,57 @@ std::uint8_t MoleculeStore::container_ss_type_(std::uint32_t idx) const
 	return t.row(idx).payload.ss_type;
 }
 
+// v2.2 HCP-1a (D-HC1): collapse role accessors. During dual existence the v0
+// ContainerKind still encodes the Molecule/Fragment role + SS sub-kind, so
+// these DERIVE from kind (+ ss_type). ResidueKind is the one identity that is
+// NOT encoded by kind (it is the former Residue::Property bits), so it is
+// stored in the payload. At HCP-2 the kind shrinks to {MOLECULE,FRAGMENT} and
+// the role becomes the stored identity these read.
+MoleculeRole MoleculeStore::container_molecule_role_(std::uint32_t idx) const
+{
+	switch (container_kind_(idx))
+	{
+		case ContainerKind::PROTEIN:      return MoleculeRole::PROTEIN;
+		case ContainerKind::NUCLEIC_ACID: return MoleculeRole::NUCLEIC_ACID;
+		case ContainerKind::MOLECULE:     return MoleculeRole::SMALL_MOLECULE;
+		default:                          return MoleculeRole::UNKNOWN;
+	}
+}
+
+FragmentRole MoleculeStore::container_fragment_role_(std::uint32_t idx) const
+{
+	switch (container_kind_(idx))
+	{
+		case ContainerKind::CHAIN:               return FragmentRole::CHAIN;
+		case ContainerKind::RESIDUE:             return FragmentRole::RESIDUE;
+		case ContainerKind::NUCLEOTIDE:          return FragmentRole::RESIDUE;
+		case ContainerKind::SECONDARY_STRUCTURE: return FragmentRole::SECONDARY_STRUCTURE;
+		case ContainerKind::FRAGMENT:            return FragmentRole::ARBITRARY;
+		default:                                 return FragmentRole::UNKNOWN;
+	}
+}
+
+ResidueKind MoleculeStore::container_residue_kind_(std::uint32_t idx) const
+{
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return ResidueKind::UNKNOWN;
+	return t.row(idx).payload.residue_kind;
+}
+
+SSKind MoleculeStore::container_ss_kind_(std::uint32_t idx) const
+{
+	// Map the legacy SecondaryStructure::Type (HELIX=0,COIL=1,STRAND=2,
+	// TURN=3,UNKNOWN=4) to the collapse SSKind enum.
+	switch (container_ss_type_(idx))
+	{
+		case 0:  return SSKind::HELIX;
+		case 1:  return SSKind::COIL;
+		case 2:  return SSKind::STRAND;
+		case 3:  return SSKind::TURN;
+		default: return SSKind::UNKNOWN;
+	}
+}
+
 std::uint32_t MoleculeStore::container_parent_(std::uint32_t idx) const
 {
 	const ContainerTable& t = side_tables_->container_table_;
@@ -711,6 +762,13 @@ void MoleculeStore::container_set_ss_type_(std::uint32_t idx, std::uint8_t ty)
 	ContainerTable& t = side_tables_->container_table_;
 	if (idx == 0 || idx >= t.size()) return;
 	t.row(idx).payload.ss_type = ty;
+}
+
+void MoleculeStore::container_set_residue_kind_(std::uint32_t idx, ResidueKind rk)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return;
+	t.row(idx).payload.residue_kind = rk;
 }
 
 void MoleculeStore::container_append_atom_(std::uint32_t row, std::uint32_t atom_idx)

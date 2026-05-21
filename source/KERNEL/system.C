@@ -280,11 +280,21 @@ namespace BALL
 			{
 				dst->container_set_id_(row, r->getID());
 				dst->container_set_insertion_code_(row, r->getInsertionCode());
+				// v2.2 HCP-1a (D-HC1): absorb the Residue::Property IDENTITY
+				// bits into the typed ResidueKind payload field.
+				ResidueKind rk = ResidueKind::UNKNOWN;
+				if (r->hasProperty(Residue::PROPERTY__WATER))            rk = ResidueKind::WATER;
+				else if (r->hasProperty(Residue::PROPERTY__AMINO_ACID))  rk = ResidueKind::AMINO_ACID;
+				else if (r->hasProperty(Residue::PROPERTY__NON_STANDARD)) rk = ResidueKind::NONSTANDARD;
+				dst->container_set_residue_kind_(row, rk);
 			}
 			else if (const Nucleotide* nt = dynamic_cast<const Nucleotide*>(&c))
 			{
 				dst->container_set_id_(row, nt->getID());
 				dst->container_set_insertion_code_(row, nt->getInsertionCode());
+				// v2.2 HCP-1a: a Nucleotide is a role=RESIDUE fragment of
+				// ResidueKind::NUCLEOTIDE.
+				dst->container_set_residue_kind_(row, ResidueKind::NUCLEOTIDE);
 			}
 			else if (const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(&c))
 				dst->container_set_ss_type_(row, static_cast<std::uint8_t>(ss->getType()));

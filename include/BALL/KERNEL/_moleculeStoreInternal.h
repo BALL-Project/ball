@@ -30,6 +30,7 @@
 // v2.2 H1b (D66a): ContainerKind lives in this PUBLIC header (single
 // definition shared with the container-handle layer).
 #include <BALL/KERNEL/containerKind.h>
+#include <BALL/KERNEL/containerRole.h>   // v2.2 HCP-1a: role taxonomy (D-HC1)
 
 #include <atomic>
 #include <cstdint>
@@ -486,8 +487,18 @@ namespace BALL
 		std::uint32_t id_offset      = 0;
 		// Residue/Nucleotide insertion code (default ' ').
 		char          insertion_code = ' ';
-		// SecondaryStructure::Type, cast to u8 (HELIX/STRAND/...).
+		// SecondaryStructure::Type, cast to u8 (HELIX/STRAND/...). The
+		// collapse SSKind is DERIVED from this (ssKindFromType), not stored
+		// separately. Legacy SecondaryStructureHandle reads it raw.
 		std::uint8_t  ss_type        = 0;
+		// v2.2 HCP-1a (D-HC1): ResidueKind for a role=RESIDUE fragment.
+		// Absorbs the v0 Residue::Property IDENTITY bits (AMINO_ACID / WATER /
+		// NON_STANDARD) + Nucleotide into one typed field -- NOT derivable
+		// from ContainerKind, so stored here. MoleculeRole / FragmentRole /
+		// SSKind ARE derivable from ContainerKind+ss_type during dual
+		// existence, so they are NOT stored (see MoleculeStore role
+		// accessors). Keeps the payload at 8 B (no regression).
+		ResidueKind   residue_kind   = ResidueKind::UNKNOWN;
 	};
 
 	// D58: one container metadata row. parent == NONE means a detached

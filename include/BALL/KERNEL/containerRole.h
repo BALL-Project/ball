@@ -69,7 +69,9 @@ namespace BALL
 		CHAIN               = 1,   ///< former Chain
 		RESIDUE             = 2,   ///< former Residue / Nucleotide (see ResidueKind)
 		SECONDARY_STRUCTURE = 3,   ///< former SecondaryStructure (annotation, D-HC4)
-		DOMAIN              = 4,
+		// NOTE: not `DOMAIN` -- that name is a macro in <math.h> on several
+		// platforms (matherr) and breaks the enum. Use STRUCTURAL_DOMAIN.
+		STRUCTURAL_DOMAIN   = 4,
 		FUNCTIONAL_GROUP    = 5,
 		ARBITRARY           = 6    ///< former generic Fragment
 	};

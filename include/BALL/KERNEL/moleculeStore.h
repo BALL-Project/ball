@@ -27,6 +27,10 @@
 #ifndef BALL_KERNEL_CONTAINERKIND_H
 # include <BALL/KERNEL/containerKind.h>
 #endif
+// v2.2 HCP-1a: collapse role taxonomy (D-HC1) for the role accessors below.
+#ifndef BALL_KERNEL_CONTAINERROLE_H
+# include <BALL/KERNEL/containerRole.h>
+#endif
 
 #include <cassert>
 #include <cstdint>
@@ -443,6 +447,16 @@ namespace BALL
 		std::string        container_id_(std::uint32_t idx) const;
 		char               container_insertion_code_(std::uint32_t idx) const;
 		std::uint8_t       container_ss_type_(std::uint32_t idx) const;
+		// v2.2 HCP-1a (D-HC1): collapse role accessors. MoleculeRole /
+		// FragmentRole / SSKind are DERIVED from container_kind_ (+ ss_type)
+		// during dual existence (the v0 kind still encodes them); ResidueKind
+		// is STORED in the payload (absorbs the Residue::Property identity
+		// bits). At HCP-2 the kind shrinks to {MOLECULE,FRAGMENT} and the
+		// role becomes the stored identity.
+		MoleculeRole       container_molecule_role_(std::uint32_t idx) const;
+		FragmentRole       container_fragment_role_(std::uint32_t idx) const;
+		ResidueKind        container_residue_kind_(std::uint32_t idx) const;
+		SSKind             container_ss_kind_(std::uint32_t idx) const;
 		std::uint32_t      container_parent_(std::uint32_t idx) const;
 		std::size_t        container_child_count_(std::uint32_t idx) const;
 		ContainerChildRef  container_child_(std::uint32_t idx, std::size_t i) const;
@@ -469,6 +483,8 @@ namespace BALL
 		void container_set_id_(std::uint32_t idx, const String& s);
 		void container_set_insertion_code_(std::uint32_t idx, char c);
 		void container_set_ss_type_(std::uint32_t idx, std::uint8_t t);
+		// v2.2 HCP-1a: set the stored ResidueKind (role=RESIDUE fragments).
+		void container_set_residue_kind_(std::uint32_t idx, ResidueKind rk);
 		void container_append_atom_(std::uint32_t row, std::uint32_t atom_idx);
 		void container_append_container_(std::uint32_t parent_row, std::uint32_t child_row);
 		void container_remove_atom_(std::uint32_t row, std::uint32_t atom_idx);

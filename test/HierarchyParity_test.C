@@ -915,4 +915,66 @@ CHECK(H2b -- replace a rooted child with another rooted child preserves parity)
 	TEST_EQUAL(descTable(t, root), d)
 RESULT
 
+// ===== HCP-1a: collapse role taxonomy mirrored into the container table.
+// Roles (MoleculeRole/FragmentRole/SSKind) are DERIVED from ContainerKind
+// (+ ss_type) during dual existence; ResidueKind is STORED in the payload
+// (absorbs the Residue::Property identity bits, set at materialise). =====
+CHECK(HCP-1a -- container roles mirror the v0 typed hierarchy)
+	System sys;
+	Protein prot; prot.setName("P");
+	Chain   ch;   ch.setName("A");
+	Residue ala;  ala.setName("ALA"); ala.setID("1"); ala.setProperty(Residue::PROPERTY__AMINO_ACID);
+	Residue hoh;  hoh.setName("HOH"); hoh.setID("2"); hoh.setProperty(Residue::PROPERTY__WATER);
+	Residue lig;  lig.setName("LIG"); lig.setID("3"); lig.setProperty(Residue::PROPERTY__NON_STANDARD);
+	PDBAtom n;    n.setName("N");
+	PDBAtom o;    o.setName("O");
+	PDBAtom x;    x.setName("X");
+	ala.insert(n); hoh.insert(o); lig.insert(x);
+	ch.insert(ala); ch.insert(hoh); ch.insert(lig);
+	prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	TEST_NOT_EQUAL(store, 0)
+
+	// Molecule role: a Protein materialises as MoleculeRole::PROTEIN.
+	TEST_EQUAL(store->container_molecule_role_(prot.getContainerRow_()) == MoleculeRole::PROTEIN, true)
+	// Fragment roles: chain -> CHAIN; residues -> RESIDUE.
+	TEST_EQUAL(store->container_fragment_role_(ch.getContainerRow_()) == FragmentRole::CHAIN, true)
+	TEST_EQUAL(store->container_fragment_role_(ala.getContainerRow_()) == FragmentRole::RESIDUE, true)
+	// ResidueKind absorbs the Residue::Property identity bits.
+	TEST_EQUAL(store->container_residue_kind_(ala.getContainerRow_()) == ResidueKind::AMINO_ACID, true)
+	TEST_EQUAL(store->container_residue_kind_(hoh.getContainerRow_()) == ResidueKind::WATER, true)
+	TEST_EQUAL(store->container_residue_kind_(lig.getContainerRow_()) == ResidueKind::NONSTANDARD, true)
+RESULT
+
+CHECK(HCP-1a -- nucleotide + secondary-structure roles)
+	System sys;
+	NucleicAcid na; na.setName("N");
+	Nucleotide  nt; nt.setName("DA"); nt.setID("1");
+	PDBAtom     p;  p.setName("P");
+	nt.insert(p);
+	na.insert(nt);
+	sys.insert(na);
+
+	MoleculeStore* store = na.getContainerRowStore_();
+	TEST_NOT_EQUAL(store, 0)
+	// A NucleicAcid -> MoleculeRole::NUCLEIC_ACID.
+	TEST_EQUAL(store->container_molecule_role_(na.getContainerRow_()) == MoleculeRole::NUCLEIC_ACID, true)
+	// A Nucleotide -> role=RESIDUE, ResidueKind::NUCLEOTIDE.
+	TEST_EQUAL(store->container_fragment_role_(nt.getContainerRow_()) == FragmentRole::RESIDUE, true)
+	TEST_EQUAL(store->container_residue_kind_(nt.getContainerRow_()) == ResidueKind::NUCLEOTIDE, true)
+
+	// Secondary structure: type maps to SSKind (HELIX=0 in v0 -> SSKind::HELIX).
+	System sys2;
+	Protein prot2; Chain ch2;
+	SecondaryStructure ss; ss.setType(SecondaryStructure::HELIX);
+	Residue res; res.setName("ALA"); res.setProperty(Residue::PROPERTY__AMINO_ACID);
+	PDBAtom ca; ca.setName("CA");
+	res.insert(ca); ss.insert(res); ch2.insert(ss); prot2.insert(ch2); sys2.insert(prot2);
+	MoleculeStore* store2 = ss.getContainerRowStore_();
+	TEST_NOT_EQUAL(store2, 0)
+	TEST_EQUAL(store2->container_fragment_role_(ss.getContainerRow_()) == FragmentRole::SECONDARY_STRUCTURE, true)
+	TEST_EQUAL(store2->container_ss_kind_(ss.getContainerRow_()) == SSKind::HELIX, true)
+RESULT
+
 END_TEST
