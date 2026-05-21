@@ -4,6 +4,7 @@
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/MODELS/colorProcessorFactory.h>
 #include <BALL/KERNEL/PTE.h>
 
 #include <QtWidgets>
@@ -666,71 +667,95 @@ namespace BALL
 		}
 
 
-		ColorProcessor* ColoringSettingsDialog::createColorProcessor(ColoringMethod method) const
+		ColoringOverrides ColoringSettingsDialog::buildColoringOverrides_() const
 		{
-			ColorProcessor* color_processor = 0;
+			// Pack the dialog's current table/color-button/slider state into a
+			// headless ColoringOverrides value object. Reads here mirror exactly the
+			// widget reads that ColoringSettingsDialog::applySettingsTo performs, so
+			// ColorProcessorFactory::create(method, overrides) reproduces the legacy
+			// behavior byte-for-byte. Every group is reported as "present", matching
+			// the legacy applySettingsTo which always wrote its color-button/slider
+			// values onto the processor (the table-based groups are empty-when-empty).
+			ColoringOverrides overrides;
 
-			switch(method)
+			// COLORING_ELEMENT: per-index element colors (getColors layout).
+			overrides.element_colors = getColors(COLORING_ELEMENT);
+
+			// COLORING_RESIDUE_NAME: residue name -> color, from residue_table_.
+			for (Position p = 0; p < (Position)residue_table_->rowCount(); p++)
 			{
-				case COLORING_ELEMENT:
-					color_processor = new ElementColorProcessor;
-					break;
-
-				case COLORING_RESIDUE_NAME:
-					color_processor = new ResidueNameColorProcessor;
-					break;
-
-				case COLORING_RESIDUE_INDEX:
-					color_processor = new ResidueNumberColorProcessor;
-					break;
-
-				case COLORING_SECONDARY_STRUCTURE:
-					color_processor = new SecondaryStructureColorProcessor;
-					break;
-
-				case COLORING_ATOM_CHARGE:
-					color_processor = new AtomChargeColorProcessor;
-					break;
-
-				case COLORING_CUSTOM:
-					color_processor = new CustomColorProcessor;
-					break;
-
-				case COLORING_DISTANCE:
-					color_processor = new AtomDistanceColorProcessor;
-					break;
-
-				case COLORING_TEMPERATURE_FACTOR:
-					color_processor = new TemperatureFactorColorProcessor;
-					break;
-
-				case COLORING_OCCUPANCY:
-					color_processor = new OccupancyColorProcessor;
-					break;
-
-				case COLORING_FORCES:
-					color_processor = new ForceColorProcessor;
-					break;
-
-				case COLORING_RESIDUE_TYPE:
-					color_processor = new ResidueTypeColorProcessor;
-					break;
-
-				case COLORING_CHAIN:
-					color_processor = new ChainColorProcessor;
-					break;
-
-				case COLORING_MOLECULE:
-					color_processor = new MoleculeColorProcessor;
-					break;
-
-				default:
-					throw(Exception::InvalidOption(__FILE__, __LINE__, method));
+				overrides.residue_name_colors[ascii(residue_table_->item(p, 0)->text())] =
+					residue_table_->item(p, 1)->background().color();
 			}
 
-			applySettingsTo(*color_processor);
+			// COLORING_RESIDUE_INDEX: first/middle/last residue colors.
+			overrides.has_residue_number_colors = true;
+			overrides.residue_number_first_color  = first_residue_button->getColor();
+			overrides.residue_number_middle_color = middle_residue_button->getColor();
+			overrides.residue_number_last_color   = last_residue_button->getColor();
 
-			return color_processor;
+			// COLORING_ATOM_CHARGE: negative/neutral/positive charge colors.
+			overrides.has_atom_charge_colors = true;
+			overrides.atom_charge_negative_color = negative_charge_button->getColor();
+			overrides.atom_charge_neutral_color  = neutral_charge_button->getColor();
+			overrides.atom_charge_positive_color = positive_charge_button->getColor();
+
+			// COLORING_DISTANCE: null/max colors + distance slider + show-selected.
+			overrides.has_atom_distance_settings = true;
+			overrides.atom_distance_null_color = null_distance_button->getColor();
+			overrides.atom_distance_max_color  = max_distance_button->getColor();
+			overrides.atom_distance_distance   = ((float)max_distance_slider->value()) / 10.0;
+			overrides.atom_distance_show_selected = distance_show_selected->isChecked();
+
+			// COLORING_OCCUPANCY: minimum/maximum occupancy colors.
+			overrides.has_occupancy_colors = true;
+			overrides.occupancy_minimum_color = minimum_o_button->getColor();
+			overrides.occupancy_maximum_color = maximum_o_button->getColor();
+
+			// COLORING_SECONDARY_STRUCTURE: helix/coil/strand/turn colors.
+			overrides.has_secondary_structure_colors = true;
+			overrides.secondary_structure_helix_color  = helix_color_button->getColor();
+			overrides.secondary_structure_coil_color   = coil_color_button->getColor();
+			overrides.secondary_structure_strand_color = strand_color_button->getColor();
+			overrides.secondary_structure_turn_color   = turn_color_button->getColor();
+
+			// COLORING_TEMPERATURE_FACTOR: unassigned/min/max colors + max slider.
+			overrides.has_temperature_factor_settings = true;
+			overrides.temperature_factor_unassigned_color = unassigned_tf_button->getColor();
+			overrides.temperature_factor_minimum_color    = minimum_tf_button->getColor();
+			overrides.temperature_factor_maximum_color    = maximum_tf_button->getColor();
+			overrides.temperature_factor_max_value        = ((float)max_tf_slider->value()) / 10.0;
+
+			// COLORING_FORCES: min/max colors + min/max value sliders.
+			overrides.has_force_settings = true;
+			overrides.force_min_color = force_min_color_button->getColor();
+			overrides.force_max_color = force_max_color_button->getColor();
+			overrides.force_max_value = ((float)force_max_value_slider->value()) / 10.0;
+			overrides.force_min_value = ((float)force_min_value_slider->value()) / 10.0;
+
+			// COLORING_RESIDUE_TYPE: residue-type category colors.
+			overrides.has_residue_type_colors = true;
+			overrides.residue_type_basic_color       = basic_color_button->getColor();
+			overrides.residue_type_acidic_color      = acidic_color_button->getColor();
+			overrides.residue_type_aromatic_color    = aromatic_color_button->getColor();
+			overrides.residue_type_polar_color       = polar_color_button->getColor();
+			overrides.residue_type_hydrophobic_color = hydrophobic_color_button->getColor();
+			overrides.residue_type_other_color       = other_color_button->getColor();
+
+			// COLORING_CHAIN / COLORING_MOLECULE: per-chain / per-molecule colors.
+			overrides.chain_colors    = getColors(COLORING_CHAIN);
+			overrides.molecule_colors = getColors(COLORING_MOLECULE);
+
+			return overrides;
+		}
+
+		ColorProcessor* ColoringSettingsDialog::createColorProcessor(ColoringMethod method) const
+		{
+			// Behavior-preserving delegation: pack the dialog's current widget state
+			// into a headless ColoringOverrides and hand construction off to the
+			// relocated ColorProcessorFactory. The color-processor construction logic
+			// now lives in the MODELS layer; the dialog stays fully operational.
+			return ColorProcessorFactory::create(method, buildColoringOverrides_());
 		}
 
 		void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)

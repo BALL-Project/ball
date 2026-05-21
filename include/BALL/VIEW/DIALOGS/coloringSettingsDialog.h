@@ -32,6 +32,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColorProcessor;
+		struct ColoringOverrides;
 
 
 		/** Dialog for the molecular model coloring settings.
@@ -85,6 +86,9 @@ namespace BALL
 			protected:
 
 			virtual void setDefaultValues_();
+
+			/// Pack the dialog's current table/color-button/slider state into a headless ColoringOverrides for ColorProcessorFactory::create.
+			ColoringOverrides buildColoringOverrides_() const;
 		};
 
 } }
