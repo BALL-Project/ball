@@ -1736,6 +1736,13 @@ B		*/
 		// it, dispatching to its subtypes via detail::writeContainerScalars_.
 		// Self-guards: no-op when being_destroyed_ or unbound.
 		virtual void mirrorResyncScalars_();
+
+		// v2.2 HCP-1b.3 (KR1 HIGH-3): if THIS node is an Atom leaf with a
+		// rooted (materialised) parent container, bump that container row's
+		// selection_count by `delta` (propagating up the parent chain).
+		// No-op for non-atoms, unrooted atoms, or during destruction. Called
+		// from select_/deselect_ on the false<->true transition.
+		void mirrorAtomSelection_(int delta);
 	};
 
 	template <typename T>

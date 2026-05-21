@@ -283,6 +283,11 @@ namespace BALL
 				if (Atom* a = detail::compositeAsAtom_(child))
 				{
 					dst->container_append_atom_(row, a->getStoreIndex());
+					// v2.2 HCP-1b.3: seed selection_count for atoms selected
+					// BEFORE rooting (post-root select/deselect bump via
+					// Composite::mirrorAtomSelection_; this covers the initial
+					// materialise of an already-selected subtree).
+					if (a->isSelected()) dst->container_bump_selection_(row, +1);
 				}
 				else if (AtomContainer* cc = dynamic_cast<AtomContainer*>(child))
 				{

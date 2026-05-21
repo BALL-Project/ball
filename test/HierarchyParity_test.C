@@ -1004,4 +1004,46 @@ CHECK(HCP-1b.2 -- post-root scalar setters mirror to the row)
 	TEST_EQUAL(store->container_insertion_code_(r.getContainerRow_()), 'B')
 RESULT
 
+CHECK(HCP-1b.3 -- selection counters mirror up the parent chain)
+	System sys; Protein prot; Chain ch;
+	Residue r1; r1.setName("ALA"); Residue r2; r2.setName("GLY");
+	PDBAtom a1; a1.setName("N"); PDBAtom a2; a2.setName("CA"); PDBAtom a3; a3.setName("C");
+	r1.insert(a1); r1.insert(a2);   // r1: 2 atoms
+	r2.insert(a3);                  // r2: 1 atom
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch); sys.insert(prot);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t pr = prot.getContainerRow_(), cr = ch.getContainerRow_();
+	std::uint32_t r1r = r1.getContainerRow_(), r2r = r2.getContainerRow_();
+	TEST_EQUAL(store->container_selection_count_(pr), 0u)   // nothing selected yet
+
+	a1.select();
+	TEST_EQUAL(store->container_selection_count_(r1r), 1u)
+	TEST_EQUAL(store->container_selection_count_(cr), 1u)
+	TEST_EQUAL(store->container_selection_count_(pr), 1u)
+
+	a2.select();
+	TEST_EQUAL(store->container_selection_count_(r1r), 2u)
+	TEST_EQUAL(store->container_selection_count_(pr), 2u)
+
+	a1.deselect();
+	TEST_EQUAL(store->container_selection_count_(r1r), 1u)
+	TEST_EQUAL(store->container_selection_count_(pr), 1u)
+
+	// Container subtree select: r2.select() selects its atom a3 (only the
+	// atom leaf bumps -> no double count).
+	r2.select();
+	TEST_EQUAL(store->container_selection_count_(r2r), 1u)
+	TEST_EQUAL(store->container_selection_count_(cr), 2u)   // a2 + a3
+	TEST_EQUAL(store->container_selection_count_(pr), 2u)
+
+	// Deselect the whole protein subtree -> all counts drop to 0.
+	prot.deselect();
+	TEST_EQUAL(store->container_selection_count_(r1r), 0u)
+	TEST_EQUAL(store->container_selection_count_(r2r), 0u)
+	TEST_EQUAL(store->container_selection_count_(cr), 0u)
+	TEST_EQUAL(store->container_selection_count_(pr), 0u)
+RESULT
+
 END_TEST

@@ -485,6 +485,13 @@ namespace BALL
 		void container_set_ss_type_(std::uint32_t idx, std::uint8_t t);
 		// v2.2 HCP-1a: set the stored ResidueKind (role=RESIDUE fragments).
 		void container_set_residue_kind_(std::uint32_t idx, ResidueKind rk);
+		// v2.2 HCP-1b.3 (KR1 HIGH-3): selection-counter mirror. Adds `delta`
+		// to `start_row`'s selection_count and propagates up the parent chain
+		// (saturating at 0 on decrement). Called ONCE per atom-leaf
+		// select/deselect transition (selection_count = selected-atom count
+		// in the subtree); container subtree select/deselect recurse to the
+		// atoms, so only the atom leaves bump (no double count).
+		void container_bump_selection_(std::uint32_t start_row, int delta);
 		void container_append_atom_(std::uint32_t row, std::uint32_t atom_idx);
 		void container_append_container_(std::uint32_t parent_row, std::uint32_t child_row);
 		void container_remove_atom_(std::uint32_t row, std::uint32_t atom_idx);

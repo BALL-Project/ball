@@ -771,6 +771,12 @@ void MoleculeStore::container_set_residue_kind_(std::uint32_t idx, ResidueKind r
 	t.row(idx).payload.residue_kind = rk;
 }
 
+void MoleculeStore::container_bump_selection_(std::uint32_t start_row, int delta)
+{
+	if (start_row == 0 || delta == 0) return;
+	side_tables_->container_table_.bump_selection_up(start_row, delta);
+}
+
 void MoleculeStore::container_append_atom_(std::uint32_t row, std::uint32_t atom_idx)
 {
 	ContainerTable& t = side_tables_->container_table_;
