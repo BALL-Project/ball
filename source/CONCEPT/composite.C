@@ -1040,6 +1040,30 @@ namespace BALL
 		// update all selection fields recursively
 		parent.determineSelection_();
 
+		// v2.2 H2b (KR1 MEDIUM): mirror the topology change. insertParent
+		// rewires a sibling range [first..last] under `parent`, which becomes
+		// a new child of parent_ptr.
+		//  - If `parent` is ALREADY materialised (rooted-tree case): re-derive
+		//    `parent` (now owns first..last) and parent_ptr (parent replaces
+		//    the range) from v0. Both self-guard on no-row.
+		//  - If `parent` is a NEW, unmaterialised container (the dominant
+		//    case: the PDB reader's SS-grouping builds it on the orphan tree
+		//    BEFORE adoption, so materialise-at-adoption captures the final
+		//    nesting -- no mirror needed here): we deliberately do NOT
+		//    re-derive parent_ptr, because that would DROP the first..last
+		//    edges (parent has no row to re-home them under) -- a worse
+		//    desync than leaving the as-yet-unrooted rows untouched. The
+		//    "materialise-the-new-member into an already-rooted tree" path is
+		//    the deferred carry-over (see V2X-ROADMAP H2b carry-overs). NOTE:
+		//    insertParent's sole production caller is the PDB SS-grouping,
+		//    which the collapse (D-HC4: SS becomes a non-owning annotation)
+		//    removes outright at H3c.
+		if (parent.getContainerRowStore_() != 0 && parent.getContainerRow_() != 0)
+		{
+			parent.mirrorRederiveOwnRow_();
+			if (parent_ptr != 0) parent_ptr->mirrorRederiveOwnRow_();
+		}
+
 		// update the modification time stamps
 		first.stamp(MODIFICATION);
 		last.stamp(MODIFICATION);

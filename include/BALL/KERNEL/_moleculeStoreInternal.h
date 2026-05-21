@@ -492,22 +492,34 @@ namespace BALL
 
 	// D58: one container metadata row. parent == NONE means a detached
 	// container (orphan store) or a direct child of the System root.
+	//
+	// Field order (KR1 LOW, compactness): 8-byte-aligned members first
+	// (children vector, generation), then the 4-byte indices, then the
+	// payload, then the 1-byte kind last. This packs the row to 56 B on a
+	// 64-bit ABI instead of 64 B (the prior u8-kind-first ordering wasted
+	// padding before the vector and before generation). Per-container, not
+	// per-atom, but free to reclaim.
 	struct ContainerRow
 	{
 		static constexpr std::uint32_t NONE = 0xFFFFFFFFu;
 
-		ContainerKind         kind                 = ContainerKind::NONE;
-		std::uint32_t         parent_container_idx = NONE;
-		std::uint32_t         name_offset          = 0;   // common name
 		std::vector<ChildRef> children;                   // D57 source of truth
-		std::uint32_t         selection_count      = 0;   // D59 / D46
 		// D65: monotonic per-slot generation (u64 -> no wrap concern).
 		// Bumped on release, preserved on free-list reuse; a container
 		// handle validates against this. Distinct from the Atom handle's
 		// coarse whole-store generation.
 		std::uint64_t         generation           = 0;
+		std::uint32_t         parent_container_idx = NONE;
+		std::uint32_t         name_offset          = 0;   // common name
+		std::uint32_t         selection_count      = 0;   // D59 / D46
 		ContainerPayload      payload;
+		ContainerKind         kind                 = ContainerKind::NONE;
 	};
+
+	// Compactness pins (KR1 LOW): keep the per-row / per-edge shapes small.
+	static_assert(sizeof(ChildRef)        == 8, "ChildRef must stay 8 B (u8 kind + u32 idx)");
+	static_assert(sizeof(ContainerPayload) == 8, "ContainerPayload must stay 8 B");
+	static_assert(sizeof(ContainerRow)    <= 56, "ContainerRow should pack to <= 56 B");
 
 	// v2.2 D55/D56/D57/D58/D59: the container metadata table. Owned by
 	// every MoleculeStore's side tables (so the process-global orphan

@@ -976,6 +976,16 @@ void MoleculeStore::clear()
 
 	free_list_.clear();
 
+	// v2.2 H2b (KR1 HIGH-2): a full store reset must also drop the container
+	// mirror. Previously side_tables_ (container_table_ rows + ChildRef edges
+	// + atom_parent_ map + property columns + composite nodes) survived
+	// clear(), leaving the container table describing the WIPED molecule -- a
+	// topology desync, and container handles stayed isValid() across the
+	// reset. Replace with a fresh instance (matches the ctor: a fresh
+	// ContainerTable re-seeds sentinel slot 0); the old rows are gone, so any
+	// held container handle now fails its freed/generation check.
+	side_tables_ = std::make_unique<MoleculeStoreSideTables>();
+
 	// Generation advances unconditionally — any held column reference is
 	// now invalid.
 	++generation_;

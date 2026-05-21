@@ -142,6 +142,13 @@ namespace BALL
 		}
 
 		/// D59 selection counter for this container's subtree.
+		/// \warning NOT YET MAINTAINED (KR1 HIGH-3): the v0 select()/deselect()
+		/// paths do not yet mirror into ContainerRow::selection_count, so this
+		/// returns the materialise-time value (currently 0). The selection
+		/// mirror is deferred to HCP-1 (built once against the collapsed
+		/// role model, alongside the scalar/role mirror -- see V2X-ROADMAP H2b
+		/// carry-overs). No production consumer reads it yet (dual existence);
+		/// it becomes live when the role-aware handles are consumed (HCP-2/H3).
 		std::uint32_t getSelectionCount() const
 		{ assertValid_(); return store_->container_selection_count_(idx_); }
 

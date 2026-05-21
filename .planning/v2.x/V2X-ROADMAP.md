@@ -130,6 +130,22 @@ distinct from re-derive; the container-property migration in
 deliberately deferred from H2b → **HCP-1** (built once against the collapsed
 role+payload columns, not twice) and **blocks H2d**.
 
+**KR1 (kernel adversarial review, 2026-05-21) — `V22-KERNEL-REVIEW-KR1.md`.**
+FIXED in H2b: `MoleculeStore::clear()` now resets the container mirror
+(HIGH-2); `insertParent` mirrors the already-materialised case + documents the
+new-member carry-over (MEDIUM); `ContainerRow` packed 64→56 B + size pins
+(LOW). DEFERRED → **HCP-1** (latent — no production consumer of container
+handles/selection yet, and the collapse reworks both, so build once):
+**(KR1 HIGH-3) selection-counter mirror** — v0 `select()`/`deselect()` do not
+yet bump `ContainerRow::selection_count`, so `getSelectionCount()` returns 0;
+wire alongside the scalar/role mirror; **blocks H2d**. **(KR1 HIGH-1)
+cross-store container move** — `adoptSubtree` does not release the SOURCE
+container rows / clear source `atom_parent_` when a materialised subtree moves
+between Systems (stale-but-valid old handles); fold into the
+materialise-new-member path. Both confirmed sound by KR1 otherwise (swap
+relink, vector-only `clear_children`, `being_destroyed_` guard, handle
+compactness).
+
 ---
 
 ## 3. v2.1 backlog → placement
