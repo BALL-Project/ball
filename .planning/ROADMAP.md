@@ -2484,7 +2484,8 @@ Plans:
 **Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-31; GitHub #501.
 **Requirements:** `VIEW-UX-01`.
 **Depends on:** none. **Effort:** small (~20–40 LOC).
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.54`).
+**Plans:** 1 plan
+- [ ] 999.54-01-PLAN.md — non-fatal zero-renderer startup guard (Log.warn + status bar) closing #501.
 
 ### Phase 999.55: Build acceleration — precompiled headers across BALL + VIEW (TARGETED FOR v1.7.x)
 
