@@ -199,7 +199,10 @@ namespace BALL
 			// then update() so GLRenderer's transparent pass — which keys off
 			// rep.getTransparency() — picks it up.
 			rep_->setTransparency(static_cast<Size>(transparency_));
-			rep_->update();
+			// rebuild=false: transparency-only refresh rebuilds the per-vertex
+			// alpha / color processor without re-walking the composites
+			// (mirrors ModelController's cheap transparency path).
+			rep_->update(false);
 
 			Q_EMIT appliedStub();
 		}

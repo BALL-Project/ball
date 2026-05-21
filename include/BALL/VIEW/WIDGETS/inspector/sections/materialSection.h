@@ -38,10 +38,14 @@ namespace BALL
 				void onDiffuseChanged_(int v);
 				void onSpecularChanged_(int v);
 				void onShininessChanged_(int v);
+				void onTransparencyChanged_(int v);
 				void onControllerAmbientChanged_(float v);
 				void onControllerDiffuseChanged_(float v);
 				void onControllerSpecularChanged_(float v);
 				void onControllerShininessChanged_(float v);
+				// Controller-side transparency is INT (0–255), unlike the
+				// float ambient/diffuse/specular/shininess slots.
+				void onControllerTransparencyChanged_(int v);
 				void onDebounceFire_();
 
 			private:
@@ -51,6 +55,7 @@ namespace BALL
 				LabeledSlider*      diffuse_;
 				LabeledSlider*      specular_;
 				LabeledSlider*      shininess_;
+				LabeledSlider*      transparency_;  // 0–255, raw (NOT percent).
 		};
 
 	} // namespace VIEW

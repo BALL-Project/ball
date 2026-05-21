@@ -36,7 +36,8 @@ namespace BALL
 			                   parent),
 				controller_(controller),
 				ambient_(nullptr), diffuse_(nullptr),
-				specular_(nullptr), shininess_(nullptr)
+				specular_(nullptr), shininess_(nullptr),
+				transparency_(nullptr)
 		{
 			QWidget* content = new QWidget(this);
 			QVBoxLayout* col = new QVBoxLayout(content);
@@ -52,11 +53,21 @@ namespace BALL
 			shininess_ = new LabeledSlider(0, 128,
 				controller_ ? static_cast<int>(controller_->shininess()) : 30,
 				QStringLiteral(""), content);
+			// Raw 0–255 slider (NOT a percent slider): matches the
+			// Representation::setTransparency 0–255 scale and the Model
+			// section's transparency control. This drives the per-vertex
+			// alpha path the interactive GLRenderer honors, superseding the
+			// broken #527 material-tab slider, and shares the same
+			// Representation transparency state as the Model section.
+			transparency_ = new LabeledSlider(0, 255,
+				controller_ ? controller_->transparency() : 0,
+				QStringLiteral(""), content);
 
-			col->addWidget(new FormRow(tr("Ambient"),   ambient_,   content));
-			col->addWidget(new FormRow(tr("Diffuse"),   diffuse_,   content));
-			col->addWidget(new FormRow(tr("Specular"),  specular_,  content));
-			col->addWidget(new FormRow(tr("Shininess"), shininess_, content));
+			col->addWidget(new FormRow(tr("Ambient"),      ambient_,      content));
+			col->addWidget(new FormRow(tr("Diffuse"),      diffuse_,      content));
+			col->addWidget(new FormRow(tr("Specular"),     specular_,     content));
+			col->addWidget(new FormRow(tr("Shininess"),    shininess_,    content));
+			col->addWidget(new FormRow(tr("Transparency"), transparency_, content));
 
 			setContent(content);
 
@@ -68,6 +79,7 @@ namespace BALL
 			connect(diffuse_,   &LabeledSlider::valueChanged, this, &MaterialSection::onDiffuseChanged_);
 			connect(specular_,  &LabeledSlider::valueChanged, this, &MaterialSection::onSpecularChanged_);
 			connect(shininess_, &LabeledSlider::valueChanged, this, &MaterialSection::onShininessChanged_);
+			connect(transparency_, &LabeledSlider::valueChanged, this, &MaterialSection::onTransparencyChanged_);
 
 			if (controller_)
 			{
@@ -79,6 +91,8 @@ namespace BALL
 				        this, &MaterialSection::onControllerSpecularChanged_);
 				connect(controller_, &MaterialController::shininessChanged,
 				        this, &MaterialSection::onControllerShininessChanged_);
+				connect(controller_, &MaterialController::transparencyChanged,
+				        this, &MaterialSection::onControllerTransparencyChanged_);
 
 				// v1.7.x-18 — per-section reset. revert() re-reads the
 				// live Representation material into the controller (which
@@ -122,6 +136,13 @@ namespace BALL
 			if (controller_) controller_->setShininess(static_cast<float>(v));
 			debounce_.start();
 		}
+		void MaterialSection::onTransparencyChanged_(int v)
+		{
+			// Already on the 0–255 scale: pass through WITHOUT /100 (unlike
+			// the ambient/diffuse/specular slots whose factors are 0–1).
+			if (controller_) controller_->setTransparency(v);
+			debounce_.start();
+		}
 
 		void MaterialSection::onControllerAmbientChanged_(float v)
 		{
@@ -142,6 +163,10 @@ namespace BALL
 		{
 			int iv = static_cast<int>(v);
 			if (shininess_->value() != iv) shininess_->setValue(iv);
+		}
+		void MaterialSection::onControllerTransparencyChanged_(int v)
+		{
+			if (transparency_->value() != v) transparency_->setValue(v);
 		}
 
 		void MaterialSection::onDebounceFire_()
