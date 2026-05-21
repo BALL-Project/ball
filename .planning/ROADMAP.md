@@ -2467,7 +2467,10 @@ Plans:
 **Scope:** `source/VIEW/WIDGETS/inspector/sections/materialSection.{h,C}` (+ the material apply path).
 **Requirements:** `VIEW-INSP-03`.
 **Depends on:** none (additive to materialSection). **Effort:** small–medium.
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.52`).
+**Plans:** 1 plan.
+
+Plans:
+- [ ] 999.52-01-PLAN.md — Add a working Transparency control to the Inspector materialSection, driving Stage::Material.transparency through Scene::updateMaterialForRepresentation (the legacy MaterialSettings backend), superseding the broken #527 path. Legacy dialog untouched.
 
 ### Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (TARGETED FOR v1.7.x)
 
