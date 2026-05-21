@@ -49,14 +49,14 @@ FOREACH(group ${BALL_TESTS})
 		TARGET_LINK_LIBRARIES(${test} BALL ${BALLTEST_SUPPORT_LIBRARIES})
 		SET_PROPERTY(TARGET ${test} PROPERTY FOLDER ${group})
 		SET_TARGET_PROPERTIES(${test} PROPERTIES COMPILE_FLAGS "${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
-		# Phase 999.55 (BUILD-ACCEL-08): test-suite PCH via REUSE_FROM — reuses the
-		# libBALL PCH audited in 999.16; POSITION_INDEPENDENT_CODE matches the
-		# SHARED-lib PCH flags; AppleClang skipped per the same ccache incompatibility
-		# as the library targets.
-		IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-			TARGET_PRECOMPILE_HEADERS(${test} REUSE_FROM BALL)
-			SET_TARGET_PROPERTIES(${test} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-		ENDIF()
+		# Phase 999.55 NOTE: test-suite PCH via REUSE_FROM BALL was tried and REVERTED.
+		# REUSE_FROM forces test TUs to inherit the library PCH's compile-definitions
+		# (the SHARED lib is built with NDEBUG etc.), which flipped Debug_test's
+		# debug-macro behavior under GCC → runtime failure on Linux (CI run 26233705613).
+		# macOS never caught it (AppleClang has PCH guarded off). The library PCH
+		# (999.16) already delivers the build-time win; test-suite PCH is not worth the
+		# cross-platform fragility. Do not re-add REUSE_FROM here without per-test
+		# define isolation.
 		IF (NOT BALL_TEST_VERBOSE)
 			ADD_TEST(${test} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${test})
 		ELSE()
@@ -153,15 +153,10 @@ IF (BALL_HAS_VIEW)
 		TARGET_LINK_LIBRARIES(${test} BALL VIEW ${BALLTEST_SUPPORT_LIBRARIES})
 		SET_TARGET_PROPERTIES(${test} PROPERTIES COMPILE_FLAGS "${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
 		SET_PROPERTY(TARGET ${test} PROPERTY FOLDER BALL_VIEW_TESTS)
-		# Phase 999.55 (BUILD-ACCEL-08): test-suite PCH via REUSE_FROM — reuses the
-		# libVIEW PCH audited in 999.16 (VIEW tests link both BALL and VIEW; the VIEW
-		# PCH is the larger superset for the GUI TUs); POSITION_INDEPENDENT_CODE
-		# matches the SHARED-lib PCH flags; AppleClang skipped per the same ccache
-		# incompatibility as the library targets.
-		IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
-			TARGET_PRECOMPILE_HEADERS(${test} REUSE_FROM VIEW)
-			SET_TARGET_PROPERTIES(${test} PROPERTIES POSITION_INDEPENDENT_CODE ON)
-		ENDIF()
+		# Phase 999.55 NOTE: test-suite PCH via REUSE_FROM VIEW was tried and REVERTED
+		# alongside the BALL-test REUSE_FROM above — same root cause (REUSE_FROM injects
+		# the library's compile-definitions into the test TUs; broke Debug_test on GCC,
+		# CI run 26233705613). The library PCH (999.16) already delivers the win.
 		IF (NOT BALL_TEST_VERBOSE)
 			ADD_TEST(${test} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${test})
 		ELSE()

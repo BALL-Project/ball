@@ -413,9 +413,18 @@ level rather than removing PCH entirely from the codebase.
 
 ---
 
-## Phase 999.55 — Test-suite PCH (REUSE_FROM)
+## Phase 999.55 — Test-suite PCH (REUSE_FROM) — ❌ REVERTED
 
-**Phase:** 999.55 (BUILD-ACCEL-08)
+> **REVERTED 2026-05-21 (CI run 26233705613).** `REUSE_FROM` makes each test TU
+> inherit the SHARED library PCH's compile-definitions — including `NDEBUG` from the
+> Release library build. That flipped `Debug_test`'s debug-macro expectations under
+> GCC, failing the test at runtime on Linux (macOS never caught it: AppleClang has PCH
+> guarded off). The test-suite PCH was removed from `test/CMakeLists.txt`. The
+> **library** PCH below (Phase 999.16) is the real, shipped build-time win and is
+> untouched. Do not re-introduce test-suite `REUSE_FROM` without per-test define
+> isolation. The section below is retained for the historical rationale only.
+
+**Phase:** 999.55 (BUILD-ACCEL-08) — reverted
 **Date:** 2026-05-21
 **Targets:** the 298 `*_test.C` executables in `test/CMakeLists.txt` (BALL class tests + VIEW tests)
 

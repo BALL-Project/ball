@@ -27,7 +27,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] **Phase 999.52: Inspector material transparency control (#527) (v1.7.x)** - Add the missing transparency control to the Inspector materialSection, superseding the broken legacy MaterialSettings slider.
 - [ ] **Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (v1.7.x)** - Delete the 9 superseded legacy VIEW dialog files (commit 7f56f80d89 breadcrumb), one atomic commit each, CI green between. *Depends on 999.51 + 999.52.*
 - [ ] **Phase 999.54: BALLView startup warning when no renderer plugins found (#501) (v1.7.x)** - Emit a Log/status-bar warning on empty renderer-plugin discovery.
-- [x] **Phase 999.55: Build acceleration — PCH across BALL + VIEW (v1.7.x)** - Land the never-shipped precompiled-headers work (was 999.16; PCH half of v1.7.x-09) over an auditable Qt/Boost/STL header set. (completed 2026-05-21)
+- [x] **Phase 999.55: Build acceleration — PCH across BALL + VIEW (v1.7.x)** - Investigated extending PCH to the test build; the library PCH (the real win) already shipped in 999.16. Test-suite `REUSE_FROM` PCH was tried and **reverted** (it injects the library's `NDEBUG` into tests, broke `Debug_test` on GCC). Net outcome: doc reconciliation + dropped the fragile test-PCH. (closed 2026-05-21)
 - [ ] **Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (v1.7.x)** - Update tutorial content/screenshots/URLs/build flow to v1.7.x.
 
 ## Phase Details
