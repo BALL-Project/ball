@@ -17,9 +17,11 @@
 #include <BALL/VIEW/WIDGETS/inspector/sections/modelSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/coloringSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/materialSection.h>
+#include <BALL/VIEW/WIDGETS/inspector/sections/clippingSection.h>
 #include <BALL/VIEW/KERNEL/controllers/modelController.h>
 #include <BALL/VIEW/KERNEL/controllers/coloringController.h>
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
+#include <BALL/VIEW/KERNEL/controllers/clippingController.h>
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 #include <BALL/VIEW/KERNEL/controllers/lightController.h>
@@ -29,6 +31,7 @@
 #include <BALL/VIEW/WIDGETS/inspector/sections/lightsSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/stereoSection.h>
 #include <BALL/VIEW/WIDGETS/inspector/sections/backgroundSection.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
@@ -70,9 +73,11 @@ namespace BALL
 				model_section_(nullptr),
 				coloring_section_(nullptr),
 				material_section_(nullptr),
+				clipping_section_(nullptr),
 				model_controller_(nullptr),
 				coloring_controller_(nullptr),
 				material_controller_(nullptr),
+				clipping_controller_(nullptr),
 				representation_sections_added_(false),
 				stage_controller_(nullptr),
 				camera_controller_(nullptr),
@@ -248,6 +253,7 @@ namespace BALL
 				if (model_controller_)    model_controller_->revert();
 				if (coloring_controller_) coloring_controller_->revert();
 				if (material_controller_) material_controller_->revert();
+				if (clipping_controller_) clipping_controller_->revert();
 			}
 
 			scheduleStateWrite();
@@ -354,11 +360,17 @@ namespace BALL
 			model_controller_    = new ModelController(nullptr, this);
 			coloring_controller_ = new ColoringController(nullptr, this);
 			material_controller_ = new MaterialController(nullptr, this);
+			// Phase 999.51 — ClippingController binds to the Scene (it owns
+			// the clipping planes via the RepresentationManager), NOT a
+			// Representation. Mirror how the Scene-tab controllers reach the
+			// live Scene via Scene::getInstance(0), guarded for null.
+			clipping_controller_ = new ClippingController(Scene::getInstance(0), this);
 
 			rep_header_       = new RepHeaderSection(body_);
 			model_section_    = new ModelSection(model_controller_, body_);
 			coloring_section_ = new ColoringSection(coloring_controller_, body_);
 			material_section_ = new MaterialSection(material_controller_, body_);
+			clipping_section_ = new ClippingSection(clipping_controller_, body_);
 			// UFG-22 (rc5 follow-up) — sections must be hidden until
 			// the Representation tab actually gets a non-empty list of
 			// reps (`representation_sections_added_` becomes true via
@@ -369,6 +381,7 @@ namespace BALL
 			model_section_->hide();
 			coloring_section_->hide();
 			material_section_->hide();
+			clipping_section_->hide();
 
 			// The header's picker drives setActiveRepresentation.
 			connect(rep_header_, &RepHeaderSection::representationPicked,
@@ -398,6 +411,7 @@ namespace BALL
 				addSection(InspectorTabs::TabIndex::Representation, model_section_);
 				addSection(InspectorTabs::TabIndex::Representation, coloring_section_);
 				addSection(InspectorTabs::TabIndex::Representation, material_section_);
+				addSection(InspectorTabs::TabIndex::Representation, clipping_section_);
 				representation_sections_added_ = true;
 			}
 
@@ -410,6 +424,10 @@ namespace BALL
 			if (model_controller_)    model_controller_->setRepresentation(rep);
 			if (coloring_controller_) coloring_controller_->setRepresentation(rep);
 			if (material_controller_) material_controller_->setRepresentation(rep);
+			// ClippingController is Scene-bound (not Representation-bound):
+			// it has no setRepresentation. Resync it from the live clipping
+			// plane state instead so the section mirrors the current planes.
+			if (clipping_controller_) clipping_controller_->revert();
 		}
 
 		void InspectorView::attachSceneTab(Stage* stage, Scene* scene)
