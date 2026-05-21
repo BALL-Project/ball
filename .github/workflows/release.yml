@@ -35,6 +35,17 @@ jobs:
   package:
     name: Package (${{ matrix.os }})
     runs-on: ${{ matrix.runner }}
+    # Phase 999.50 (BUILD-ACCEL-07, plan item ②): NEW job-level env block — none
+    # existed on this job before. Carries the same ccache+PCH sloppiness contract
+    # ci.yml's build job uses (ci.yml ~line 218) so the ccache cache restored below
+    # actually lands hits instead of silently busting them. Without these keys,
+    # PCH-enabled builds bust ccache; CCACHE_EXTRAFILES pins the generated config.h
+    # so PROJECT VERSION bumps properly invalidate cached compilations. The values
+    # are copied verbatim from ci.yml so a release tag of an already-CI-built commit
+    # reuses CI's warmed object cache (key lineage aligned in the ccache steps below).
+    env:
+      CCACHE_SLOPPINESS: "pch_defines,time_macros,include_file_mtime"
+      CCACHE_EXTRAFILES: "${{ github.workspace }}/include/BALL/CONFIG/config.h.in"
     strategy:
       fail-fast: false
       matrix:
@@ -164,6 +175,24 @@ jobs:
           # Phase 8a (PKG-MAC-03): + create-dmg for the signed .dmg artifact.
           brew install qt boost eigen fftw tbb glew open-babel lp_solve libsvm flex bison ccache create-dmg
 
+      # Phase 999.50 (BUILD-ACCEL-07, plan item ②): restore the ccache object cache
+      # BEFORE configure so a release tag of an already-CI-built commit warms from
+      # CI's compiler cache. Split restore/save mirrors the vcpkg cache pattern in
+      # this file (Windows block below). Key is IDENTICAL to ci.yml's lineage
+      # (ccache-<os>-pch-v2-<sha> + restore-keys ccache-<os>-pch-v2- / ccache-<os>-)
+      # so the same-SHA or most-recent CI ccache is reusable. The ci-macos preset
+      # already wires CMAKE_<LANG>_COMPILER_LAUNCHER=ccache — no launcher wiring here.
+      - name: Restore ccache (macOS)
+        id: ccache-mac
+        if: matrix.os == 'macos-arm64'
+        uses: actions/cache/restore@v5
+        with:
+          path: ~/Library/Caches/ccache
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-pch-v2-
+            ccache-${{ matrix.os }}-
+
       - name: Configure (macOS)
         if: matrix.os == 'macos-arm64'
         run: |
@@ -173,6 +202,16 @@ jobs:
         if: matrix.os == 'macos-arm64'
         run: |
           cmake --build --preset ci-macos --target BALL VIEW BALLView -j$(sysctl -n hw.ncpu)
+
+      # Phase 999.50 (BUILD-ACCEL-07, plan item ②): save the warmed ccache AFTER the
+      # build. Gated `cache-hit != 'true'` (mirroring the vcpkg save gate) so an
+      # exact-key hit doesn't redundantly re-upload an unchanged cache.
+      - name: Save ccache (macOS)
+        if: always() && matrix.os == 'macos-arm64' && steps.ccache-mac.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ~/Library/Caches/ccache
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (BLOCKING — TEST-CLOSE-02) — mirrors the ci.yml
@@ -520,6 +559,20 @@ jobs:
           modules: 'qtimageformats'
           cache: true
 
+      # Phase 999.50 (BUILD-ACCEL-07, plan item ②): restore ccache BEFORE configure
+      # (key aligned with ci.yml's ccache-<os>-pch-v2- lineage — see the macOS block
+      # above for the full rationale). ci-linux preset wires the compiler launcher.
+      - name: Restore ccache (Linux)
+        id: ccache-linux
+        if: startsWith(matrix.os, 'linux-')
+        uses: actions/cache/restore@v5
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-pch-v2-
+            ccache-${{ matrix.os }}-
+
       - name: Configure (Linux)
         if: startsWith(matrix.os, 'linux-')
         run: |
@@ -537,6 +590,15 @@ jobs:
       - name: Build (Linux)
         if: startsWith(matrix.os, 'linux-')
         run: cmake --build --preset ci-linux --target BALL VIEW BALLView
+
+      # Phase 999.50 (BUILD-ACCEL-07, plan item ②): save the warmed ccache AFTER the
+      # build, gated `cache-hit != 'true'` (mirroring the vcpkg save gate).
+      - name: Save ccache (Linux)
+        if: always() && startsWith(matrix.os, 'linux-') && steps.ccache-linux.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: ~/.cache/ccache
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
 
       # ---------------------------------------------------------------------
       # Phase 8c part-2 (PKG-LINUX-02 + PKG-LINUX-03): install additional
@@ -869,6 +931,20 @@ jobs:
           $after = (Get-PSDrive C).Free / 1GB
           Write-Host ("Free space after cleanup:  {0:N1} GB (gained {1:N1} GB)" -f $after, ($after - $before))
 
+      # Phase 999.50 (BUILD-ACCEL-07, plan item ②): restore ccache BEFORE configure
+      # (key aligned with ci.yml's ccache-<os>-pch-v2- lineage — see the macOS block
+      # above for the full rationale). ci-windows preset wires the compiler launcher.
+      - name: Restore ccache (Windows)
+        id: ccache-win
+        if: matrix.os == 'windows-x64'
+        uses: actions/cache/restore@v5
+        with:
+          path: C:\Users\runneradmin\AppData\Local\ccache
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
+          restore-keys: |
+            ccache-${{ matrix.os }}-pch-v2-
+            ccache-${{ matrix.os }}-
+
       - name: Configure (Windows)
         if: matrix.os == 'windows-x64'
         shell: pwsh
@@ -922,6 +998,15 @@ jobs:
           # See ci.yml's matching Build step for the full rationale. The flag's
           # cap was actively reducing concurrency vs Ninja's default.
           cmake --build --preset ci-windows --config Release --target BALL VIEW BALLView
+
+      # Phase 999.50 (BUILD-ACCEL-07, plan item ②): save the warmed ccache AFTER the
+      # build, gated `cache-hit != 'true'` (mirroring the vcpkg save gate).
+      - name: Save ccache (Windows)
+        if: always() && matrix.os == 'windows-x64' && steps.ccache-win.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v5
+        with:
+          path: C:\Users\runneradmin\AppData\Local\ccache
+          key: ccache-${{ matrix.os }}-pch-v2-${{ github.sha }}
 
       # ----------------------------------------------------------------------
       # Phase 9 gatekeeper (BLOCKING — Phase 999.34, 2026-05-17) — Windows
