@@ -102,6 +102,46 @@ acceptance testing. Full per-item detail: `.planning/v1.7.x-PATCH-QUEUE.md`.
 
 ---
 
+## v1.7.2 patch cycle
+
+v1.7.2 is a build-acceleration cycle (the `poseClustering.C` boost
+template-metaprogramming cost that dominated the Windows release build).
+Full per-item detail: `.planning/v1.7.2-BUILD-ACCEL-PLAN.md`.
+
+### Breaking changes
+
+#### PoseClustering Ward cluster-tree on-disk format changed (BUILD-ACCEL-06)
+
+The Ward cluster-tree serializer no longer uses `boost::serialization`
+archives. `boost::serialization` was the single heaviest Boost component to
+compile and dominated the multi-minute build of `poseClustering.C`; the data
+the tree actually holds is trivial. It is now written with a hand-rolled,
+magic+version-headed format — the literal magic string `"BALLWARD"` followed
+by a format version — in both a binary and a text variant (the `bool binary`
+flag still selects between them). This drops that translation unit's compile
+from tens of minutes to a few seconds and removes the `boost::serialization`
+dependency from the tree entirely.
+
+**Impact — old trees will NOT load.** Ward cluster-tree files
+(`.ward`/`.dat`) serialized by **v1.7.1 and earlier** were boost archives and
+**will not deserialize** under v1.7.2. They now **fail loudly** via a
+`BALL::Exception::InvalidFormat` magic/version mismatch (with `__FILE__` /
+`__LINE__`) rather than silently mis-parsing. This is a niche docking-research
+format, so the impact is minimal:
+
+- `DockPoseClustering` (which **writes** the tree) and
+  `ExtractClustersFromWardTree` (which **reads** it) interoperate on the new
+  `"BALLWARD"` format — regenerate any persisted tree by re-running
+  `DockPoseClustering`.
+- The public API is unchanged: `serializeWardClusterTree(std::ostream&, bool binary)`
+  and `deserializeWardClusterTree(std::istream&, bool binary)` signatures and
+  the `bool binary` flag are byte-identical to v1.7.1.
+- The committed test fixture `test/data/PoseClustering_wardtree.dat` was
+  regenerated in the new TEXT format and still deserializes to 6 clusters at
+  `extractClustersForThreshold(0.5)`.
+
+---
+
 ## Known issues (v1.7.1)
 
 See `.planning/v1.7-USER-FEEDBACK-GATE.md` for status and investigation
