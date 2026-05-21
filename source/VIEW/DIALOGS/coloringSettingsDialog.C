@@ -667,7 +667,7 @@ namespace BALL
 		}
 
 
-		ColoringOverrides ColoringSettingsDialog::buildColoringOverrides_() const
+		ColoringOverrides ColoringSettingsDialog::buildColoringOverrides() const
 		{
 			// Pack the dialog's current table/color-button/slider state into a
 			// headless ColoringOverrides value object. Reads here mirror exactly the
@@ -755,7 +755,7 @@ namespace BALL
 			// into a headless ColoringOverrides and hand construction off to the
 			// relocated ColorProcessorFactory. The color-processor construction logic
 			// now lives in the MODELS layer; the dialog stays fully operational.
-			return ColorProcessorFactory::create(method, buildColoringOverrides_());
+			return ColorProcessorFactory::create(method, buildColoringOverrides());
 		}
 
 		void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)

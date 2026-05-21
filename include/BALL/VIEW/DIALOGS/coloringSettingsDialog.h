@@ -69,6 +69,13 @@ namespace BALL
 			///
 			virtual vector<ColorRGBA> getColors(ColoringMethod method) const;
 
+			/** Pack the dialog's current table/color-button/slider state into a
+					headless ColoringOverrides for ColorProcessorFactory::create.
+					Public so the render path (DisplayProperties::applyColoringSettings_)
+					can build the same overrides the dialog uses and call the relocated
+					factory directly (Phase 999.57 Plan 03, VIEW-CLEAN-02). */
+			ColoringOverrides buildColoringOverrides() const;
+
 			///
 			virtual void writePreferenceEntries(INIFile& inifile) override;
 
@@ -86,9 +93,6 @@ namespace BALL
 			protected:
 
 			virtual void setDefaultValues_();
-
-			/// Pack the dialog's current table/color-button/slider state into a headless ColoringOverrides for ColorProcessorFactory::create.
-			ColoringOverrides buildColoringOverrides_() const;
 		};
 
 } }

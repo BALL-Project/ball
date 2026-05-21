@@ -27,6 +27,8 @@
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/MODELS/modelProcessorFactory.h>
+#include <BALL/VIEW/MODELS/colorProcessorFactory.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
@@ -448,7 +450,35 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 			rep.getModelType() != current_type ||
 			!rep.modelUpdateEnabled())
 	{
-		rep.setModelProcessor(model_settings_->createModelProcessor(current_type));
+		// Phase 999.57 Plan 03 (VIEW-CLEAN-02): construct the model
+		// processor through the headless ModelProcessorFactory instead of
+		// reaching through the legacy dialog's createModelProcessor. The
+		// params packed here mirror exactly the mapping
+		// ModelSettingsDialog::createModelProcessor uses, so the rendered
+		// model is byte-identical.
+		ModelProcessorParams params;
+		params.stick_stick_radius                   = model_settings_->getStickStickRadius();
+		params.ball_and_stick_stick_radius          = model_settings_->getBallAndStickStickRadius();
+		params.ball_radius                          = model_settings_->getBallRadius();
+		params.ball_and_stick_dashed_bonds_enabled  = model_settings_->ballAndStickDashedBondsEnabled();
+		params.surface_probe_radius                 = model_settings_->getSurfaceProbeRadius();
+		params.vdw_radius_factor                    = model_settings_->getVDWRadiusFactor();
+		params.tube_radius                          = model_settings_->getTubeRadius();
+		params.cartoon_tube_radius                  = model_settings_->getCartoonTubeRadius();
+		params.cartoon_helix_radius                 = model_settings_->getCartoonHelixRadius();
+		params.cartoon_arrow_width                  = model_settings_->getCartoonArrowWidth();
+		params.cartoon_strand_height                = model_settings_->getCartoonStrandHeight();
+		params.cartoon_strand_width                 = model_settings_->getCartoonStrandWidth();
+		params.dna_ladder_radius                    = model_settings_->getDNALadderRadius();
+		params.dna_base_radius                      = model_settings_->getDNABaseRadius();
+		params.dna_helix_radius                     = model_settings_->getDNAHelixRadius();
+		params.hbonds_radius                        = model_settings_->getHBondsRadius();
+		params.force_max_length                     = model_settings_->getForceMaxLength();
+		params.force_scaling                        = model_settings_->getForceScaling();
+		params.force_offset                         = model_settings_->getForceOffset();
+		params.force_base                           = model_settings_->getForceBase();
+
+		rep.setModelProcessor(ModelProcessorFactory::create(current_type, params));
 		rep.setModelType((ModelType)model_type_combobox->currentIndex());
 	}
 
@@ -468,6 +498,14 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 		}
 	}
 
+	// Phase 999.57 Plan 03: applySettingsTo is KEPT (not removed as
+	// redundant) for two reasons: (1) it runs on the precision-only branch
+	// where the processor is NOT recreated above, re-pushing the dialog's
+	// current widget state onto the existing processor; (2) it covers the
+	// two checkbox knobs (cartoon DNA-ladder, ribbons-enabled) that have no
+	// public getter to feed into ModelProcessorParams above — applySettingsTo
+	// applies them from the live widgets. Re-applying the same params the
+	// factory already baked in is idempotent, so this stays behavior-identical.
 	model_settings_->applySettingsTo(*rep.getModelProcessor());
 }
 
@@ -484,7 +522,13 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 	{
 		if (coloring_settings_ != 0)
 		{
-			rep.setColorProcessor(coloring_settings_->createColorProcessor(current_coloring));
+			// Phase 999.57 Plan 03 (VIEW-CLEAN-02): construct the color
+			// processor through the headless ColorProcessorFactory instead of
+			// the legacy dialog's createColorProcessor. The overrides built
+			// here are the exact same set the dialog packs, so the rendered
+			// colors are byte-identical.
+			rep.setColorProcessor(
+				ColorProcessorFactory::create(current_coloring, coloring_settings_->buildColoringOverrides()));
 		}
 		else
 		{
@@ -499,6 +543,11 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 	rep.setTransparency(transparency);
 
 	ColorProcessor* cp = rep.getColorProcessor();
+	// Phase 999.57 Plan 03: applySettingsTo is KEPT (not removed as
+	// redundant). It runs on the not-recreated branch (method unchanged but
+	// coloringUpdateEnabled toggled) re-pushing the dialog's current overrides
+	// onto the existing processor. Re-applying the same overrides the factory
+	// already layered above is idempotent, so this stays behavior-identical.
 	coloring_settings_->applySettingsTo(*cp);
 	float min_spacing = 2.;
 	if (rep.getModelType() == MODEL_SE_SURFACE)
