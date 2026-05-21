@@ -61,19 +61,35 @@ repos / remove `String` / rebuild pyBALL against the stable surface.
 
 ## 2. v2.2 — the handle redesign (IN PROGRESS)
 
-> **Pending design gate `H1b′` (hierarchy collapse, HC1→HC1b):** the
-> maintainer directed collapsing the molecular class hierarchy to four node
-> kinds — **System / Molecule / Fragment / Atom** (+ Bond) — with
-> Protein/NucleicAcid/Chain/Residue/Nucleotide/SecondaryStructure/PDBAtom/
-> AtomContainer captured as **roles + properties**, not C++ subclasses.
-> Codex HC1 = collapse-YES conditional on a short design-lock gate (role
-> taxonomy + canonical PDB depth + SS-as-span + PDB round-trip test) that
-> **closes BEFORE H3**; else stage to v2.3. See
-> `V2X-HIERARCHY-COLLAPSE.md`. If the gate passes: `ContainerKind`
-> shrinks + the 8 typed handles (H1b) collapse to `Molecule`/`Fragment`
-> role-aware handles; H1a table + H2 mirror survive (kind-agnostic); H3
-> migrates consumers to the collapsed API once (avoids a double migration);
-> H8 adds a **PDB/structural round-trip fidelity gate** alongside D13.
+> **Design gate `H1b′` (hierarchy collapse) — CONVERGED PLAN (HC1→HC1b AGREE;
+> HCP1→HCP1b AGREE).** The maintainer directed collapsing the molecular class
+> hierarchy to four node kinds — **System / Molecule / Fragment / Atom**
+> (+ Bond) — with Protein/NucleicAcid/Chain/Residue/Nucleotide/
+> SecondaryStructure/PDBAtom/AtomContainer captured as **roles + properties**,
+> not C++ subclasses. The *what* is locked in `V2X-HIERARCHY-COLLAPSE.md`
+> (§2a); the *how/order* is the **KERNEL-first / local-build-first** plan in
+> `V2X-HIERARCHY-COLLAPSE-PLAN.md`, sliced HCP-0…HCP-5:
+> - **HCP-0 = the `H1b′` gate itself** (revises landed H1b): lock role enums +
+>   atom PDB-field storage + collapsed handle API + an **audited consumer
+>   matrix** + method-relocation map + SS-span model + PDB-corpus spec +
+>   migration-guide skeleton. **Closes BEFORE H3; else stage the collapse out
+>   of v2.2** (see §5 of the plan — String keeps v2.3 by default).
+> - **HCP-1/HCP-2 (within H1b′/H2, under a restored KERNEL-only build):** shrink
+>   `ContainerKind` + add role columns/payload + the **scalar+role mutation
+>   mirror (blocks H2d)**; collapse the 8 typed handles → `Molecule`/`Fragment`
+>   (+`Atom`) role-aware + a `StructureQuery` namespace. NOTE: `BALL_CORE_ONLY`
+>   today gates PYTHON only (`BALLIncludes.cmake:145`); HCP-1 task 0 restores a
+>   real KERNEL-only partition.
+> - **HCP-3 = H3a→H3b→H3c:** re-open modules cluster-by-cluster onto the role
+>   API; **H3c (FORMAT) acceptance includes the PDB golden-corpus parse→write→
+>   parse smoke.**
+> - **HCP-4 = H4** (delete v0 typed classes); **HCP-5 = H8** PDB/structural
+>   fidelity gate alongside D13.
+>
+> H1a table + H2 mirror machinery SURVIVE (kind-agnostic); doing the collapse
+> here migrates consumers to the collapsed API ONCE (avoids a double
+> migration). Sequencing constraint: **H2b (topology, DONE) → H2c → HCP-1
+> scalar+role mirror → H2d (randomized sweep) → H3.**
 
 **Decision D55 = A2:** the *entire* molecular hierarchy
 (Molecule/Chain/Residue/Protein/SecondaryStructure/Nucleotide/
@@ -89,7 +105,7 @@ and the store table is a *verified mirror*; the flip (H4) inverts that.
 | **H0** design lock | ✅ R29→R36d | D45–D74; arch model; API-break ledger seeded; container schema (D58), ChildRef edges (D57), orphan store (D56), dual-existence rule (D60), pointer→handle break policy (D61), JSON `containers` schema bump (D62), naming (D63), handle shape (D64), per-slot generation (D65), encapsulation boundary (D66a), mutation-mirror + destruction guard (D67–D70/D73/D74). |
 | **H1a** container table | ✅ R32b GO | `ContainerTable` (rows + per-kind payload + `ChildRef` ordered edges + selection counters), orphan-store container rows + subtree migration, `HierarchyParity_test` skeleton. Store-side only. |
 | **H1b** handle types | ✅ R34 GO | public `containerKind.h` (`ContainerKind` + `ContainerChildRef`); `MoleculeStore` scalar container accessors; per-slot u64 generation; `containerHandle.h` = 24 B `ContainerHandleBase` + 8 typed `*Handle` + `as<>()` narrow + debug/Python validity. Reads the table; dual existence. |
-| **H2** mutation-mirror + traversal | 🚧 in progress | **H2a ✅ R36d GO**: forward-only v0→table mirror for insert (adoption materialisation) + remove, with the `being_destroyed_` destruction guard (defuses the P2.1.1 heap-corruption trap). **H2b 🚧**: splice/swap/clear/replace mirrored (done), `insertParent` + container `setProperty` + atom `select` + container-property migration (remaining). **H2c**: handle-yielding `AtomIterator`/container iterators/`apply` over `ChildRef`. **H2d**: randomized full-surface parity sweep + H2 close review. |
+| **H2** mutation-mirror + traversal | 🚧 in progress | **H2a ✅ R36d GO**: forward-only v0→table mirror for insert (adoption materialisation) + remove, with the `being_destroyed_` destruction guard (defuses the P2.1.1 heap-corruption trap). **H2b ✅ (topology)** `103994a26`: splice/swap/clear/replace **topology** mirror DONE + **fixed a latent legacy `Composite::swap` sibling infinite loop** (snapshot relink); 286/286. **SCALAR-field mirroring (name/id/insertion/SS-type) DEFERRED to HCP-1** (built once against the collapsed role+payload model — see `H1b′`); remaining for H2b/H2c: `insertParent`, container `setProperty`, atom `select`. **H2c**: handle-yielding `AtomIterator`/container iterators/`apply` over `ChildRef`. **H2d**: randomized full-surface parity sweep + H2 close review — **gated on the HCP-1 scalar+role mirror** (else scalar-mutating ops stay red). |
 | **H3** consumer migration | ⏳ | Move modules to the handle API in dependency clusters: **H3a** KERNEL+STRUCTURE → **H3b** MOLMEC/QSAR/SCORING/DOCKING → **H3c** FORMAT (PDB/naming/residue — heaviest) + NMR/ENERGY/SOLVATION. Each cluster its own commit + review. Processors take `Atom` by value (the single largest consumer break). |
 | **H4** the flip | ⏳ | Delete `Atom : Composite` + the molecular container objects' inline tree state; store table becomes sole source of truth; retire the parity test + dual existence; **`sizeof(Atom)` drops** (D13 path). Per-kind canonical-name migration (delete v0 class + fwd-decls/friends, rename `*Handle`→canonical, reverse-alias) per D63. |
 | **H5** Bond unify | ⏳ | `Bond` fully a handle; remove `Atom::bond_[]`; bond properties → store columns; bond iterators redesigned (D51). Atom `sizeof` closure includes removing `number_of_bonds_`/`bond_[]` (R29 P29-6). |
@@ -100,10 +116,13 @@ and the store table is a *verified mirror*; the flip (H4) inverts that.
 
 **v2.2 standing invariants (every phase):** (a) SIP/Python stays OFF and CI proves it is not built (D52.3-7/D54) — wrappers return only with pyBALL v2 after the handle API stabilises; (b) the D31b/D66a encapsulation gate (`_moleculeStoreInternal.h` + `composite_nodes_`/`CompositeNode*` out of public/iterator headers; `containerHandle.h` off the internal header) is enforced by a **maintained script** with comment/prose false-positive handling (not ad-hoc grep) and is part of H2–H4/H8 acceptance; (c) every landed break is enumerated in `V22-API-BREAK-LEDGER.md` with a migration note + Codex sign-off (D50/D61); (d) a **mutation/import perf budget** (PDB load / JSON / build benchmarks) holds through the H2–H3 dual-existence window so the forward-only mirror never makes import paths unusable. |
 
-**H2b carry-overs surfaced this session (place in H2b/H2d):** `insertParent`
-+ free-standing `replace` need a *materialise-the-new-member* path (like
-`adoptSubtree`), distinct from re-derive; the container-property migration
-in `materialiseContainer_` (R32 carry-over).
+**H2b carry-overs (place in H2b/H2c/HCP-1):** `insertParent` + free-standing
+`replace` need a *materialise-the-new-member* path (like `adoptSubtree`),
+distinct from re-derive; the container-property migration in
+`materialiseContainer_` (R32 carry-over). **Scalar-field mutation mirror**
+(name/id/insertion-code/SS-type on clear/swap/post-root setters) was
+deliberately deferred from H2b → **HCP-1** (built once against the collapsed
+role+payload columns, not twice) and **blocks H2d**.
 
 ---
 
