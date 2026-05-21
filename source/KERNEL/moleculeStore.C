@@ -639,7 +639,14 @@ MoleculeRole MoleculeStore::container_molecule_role_(std::uint32_t idx) const
 	{
 		case ContainerKind::PROTEIN:      return MoleculeRole::PROTEIN;
 		case ContainerKind::NUCLEIC_ACID: return MoleculeRole::NUCLEIC_ACID;
-		case ContainerKind::MOLECULE:     return MoleculeRole::SMALL_MOLECULE;
+		// HCP-1R MEDIUM: a plain Molecule is NOT necessarily a small molecule
+		// -- it may be solvent/water/ion (the v0 Molecule::IS_SOLVENT bit).
+		// That bit is a container property whose mirror is deferred, so the
+		// row cannot distinguish them yet. Return UNKNOWN rather than assert
+		// SMALL_MOLECULE (which would contradict the v0 source of truth for
+		// solvated systems). The precise SMALL_MOLECULE/SOLVENT/WATER/LIGAND/
+		// ION role lands with the container-property mirror (HCP-2).
+		case ContainerKind::MOLECULE:     return MoleculeRole::UNKNOWN;
 		default:                          return MoleculeRole::UNKNOWN;
 	}
 }
@@ -704,9 +711,32 @@ ContainerChildRef MoleculeStore::container_child_(std::uint32_t idx, std::size_t
 
 std::uint32_t MoleculeStore::container_selection_count_(std::uint32_t idx) const
 {
+	// v2.2 HCP-1R (CRITICAL fix): DERIVE the subtree selected-atom count on
+	// read by walking the row's subtree edges and querying the store's atom
+	// selection bitmap. Previously this returned an incrementally-maintained
+	// counter that drifted when selected atoms were moved/removed/cleared
+	// (the bumps only fired on select/deselect transitions, not on topology
+	// mutation) and that was bypassed by Selectable::setSelected(). Computing
+	// from the authoritative selection_ column + the edge structure is
+	// correct-by-construction for every mutation path (selection OR topology),
+	// at O(subtree) read cost -- acceptable: no production consumer reads it
+	// yet (dual existence), and the collapse reworks selection at HCP-2.
 	const ContainerTable& t = side_tables_->container_table_;
-	if (idx == 0 || idx >= t.size()) return 0;
-	return t.row(idx).selection_count;
+	if (idx == 0 || idx >= t.size() || t.is_freed(idx)) return 0;
+	std::uint32_t count = 0;
+	t.preorder(idx,
+		[](std::uint32_t /*cidx*/) {},
+		[&](std::uint32_t atom_idx)
+		{
+			// Read the v0 selection truth (Selectable::selected_, what
+			// atom.select()/isSelected() use) via the store's atom back
+			// pointer -- this is the dual-existence source of truth. (The SoA
+			// selection_ column is a separate v2.0 bitmap not synced by the
+			// Composite select() path.) Post-flip this reads the SoA directly.
+			Atom* a = (atom_idx < back_ptr_.size()) ? back_ptr_[atom_idx] : 0;
+			if (a != 0 && a->isSelected()) ++count;
+		});
+	return count;
 }
 
 std::uint64_t MoleculeStore::container_generation_(std::uint32_t idx) const
@@ -769,12 +799,6 @@ void MoleculeStore::container_set_residue_kind_(std::uint32_t idx, ResidueKind r
 	ContainerTable& t = side_tables_->container_table_;
 	if (idx == 0 || idx >= t.size()) return;
 	t.row(idx).payload.residue_kind = rk;
-}
-
-void MoleculeStore::container_bump_selection_(std::uint32_t start_row, int delta)
-{
-	if (start_row == 0 || delta == 0) return;
-	side_tables_->container_table_.bump_selection_up(start_row, delta);
 }
 
 void MoleculeStore::container_append_atom_(std::uint32_t row, std::uint32_t atom_idx)

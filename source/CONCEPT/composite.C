@@ -298,18 +298,6 @@ namespace BALL
 	{
 	}
 
-	// v2.2 HCP-1b.3 (KR1 HIGH-3): mirror an atom-leaf select/deselect into
-	// the container table's selection_count.
-	void Composite::mirrorAtomSelection_(int delta)
-	{
-		if (being_destroyed_) return;
-		if (detail::compositeAsAtom_(this) == 0) return;   // only atom leaves count
-		if (parent_ == 0) return;
-		MoleculeStore* store = parent_->getContainerRowStore_();
-		std::uint32_t  prow  = parent_->getContainerRow_();
-		if (store != 0 && prow != 0) store->container_bump_selection_(prow, delta);
-	}
-
 	// default ctor
 	Composite::Composite()
 		:	PersistentObject(),
@@ -662,13 +650,6 @@ namespace BALL
 			number_of_children_containing_selection_ = number_of_children_;
 			selected_ = true;
 
-			// v2.2 HCP-1b.3 (KR1 HIGH-3): mirror an ATOM-leaf selection into
-			// the container table. Only atom leaves bump (containers recurse
-			// into their atoms, which each bump once) -> selection_count =
-			// selected-atom count, no double counting. Fires once per
-			// false->true transition (the `if (!selected_)` guard above).
-			mirrorAtomSelection_(+1);
-
 			// update the time stamp
 			selection_stamp_.stamp();
 
@@ -718,11 +699,6 @@ namespace BALL
 			selected_ = false;
 			number_of_selected_children_ = 0;
 			number_of_children_containing_selection_ = 0;
-
-			// v2.2 HCP-1b.3: mirror an atom-leaf DEselection (-1; symmetric
-			// with select_). Only entered when this node was selected (the
-			// guard above), so an atom bumps exactly once per true->false.
-			mirrorAtomSelection_(-1);
 
 			// update the time stamp
 			selection_stamp_.stamp();

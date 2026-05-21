@@ -69,6 +69,12 @@ namespace BALL
 	void SecondaryStructure::set(const SecondaryStructure& secondary_structure, bool deep)
 	{
 		AtomContainer::set(secondary_structure, deep);
+		// HCP-1R LOW: copy the SS type too -- assignment previously dropped it
+		// (a pre-existing v0 bug; SSKind derives from it). (The container-row
+		// mirror for assignment-onto-a-ROOTED object is the deferred
+		// full-subtree-replacement carry-over -- see V2X-ROADMAP H2b
+		// carry-overs -- so no resync is claimed here.)
+		type_ = secondary_structure.type_;
 	}
 			
 	SecondaryStructure& SecondaryStructure::operator = (const SecondaryStructure& secondary_structure)

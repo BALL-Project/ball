@@ -1004,7 +1004,10 @@ CHECK(HCP-1b.2 -- post-root scalar setters mirror to the row)
 	TEST_EQUAL(store->container_insertion_code_(r.getContainerRow_()), 'B')
 RESULT
 
-CHECK(HCP-1b.3 -- selection counters mirror up the parent chain)
+CHECK(HCP-1b.3 -- container_selection_count_ derives subtree selected-atom count)
+	// HCP-1R: selection_count is COMPUTED on read (walk the subtree edges +
+	// the v0 atom selection via back_ptr) -- correct for select/deselect and
+	// (unlike the prior incremental counter) for topology moves too.
 	System sys; Protein prot; Chain ch;
 	Residue r1; r1.setName("ALA"); Residue r2; r2.setName("GLY");
 	PDBAtom a1; a1.setName("N"); PDBAtom a2; a2.setName("CA"); PDBAtom a3; a3.setName("C");
@@ -1031,8 +1034,8 @@ CHECK(HCP-1b.3 -- selection counters mirror up the parent chain)
 	TEST_EQUAL(store->container_selection_count_(r1r), 1u)
 	TEST_EQUAL(store->container_selection_count_(pr), 1u)
 
-	// Container subtree select: r2.select() selects its atom a3 (only the
-	// atom leaf bumps -> no double count).
+	// Container subtree select: r2.select() selects its atom a3; the derived
+	// count walks the subtree, so r2=1, ch=2 (a2+a3) -- no double counting.
 	r2.select();
 	TEST_EQUAL(store->container_selection_count_(r2r), 1u)
 	TEST_EQUAL(store->container_selection_count_(cr), 2u)   // a2 + a3
