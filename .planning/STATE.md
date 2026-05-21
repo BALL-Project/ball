@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
-status: planning
+status: executing
 stopped_at: Completed 09-test-suite-triage 09-01-PLAN.md
-last_updated: "2026-05-17T21:35:00Z"
-last_activity: 2026-05-17 — Phase 999.49 COMPLETE (LAST UI phase of v1.7 Wave 4 — Classic 5-dock workspace preset DELETED per maintainer-Q2 commitment). 7 commits + ~30min wall-clock. 8/8 sub-deliverables landed (enum value deleted + apply()/presetDisplayName/builtInPresetPath switches + .layout file + Window + View menus + 1-button informational notice + auto-migration + RELEASE-NOTES-v1.7 draft). 1 Rule-3 hotfix (test/CMakeLists.txt SET_TESTS_PROPERTIES QT_QPA_PLATFORM=offscreen for all VIEW tests) absorbed a linux-x64 tabOrder_test display-server failure surfaced by CI run 26002675865 (xcb-cursor0 missing). 2 OOS maintainer commits observed mid-execution (f846562eea — 999.48 BALL_UI_V2 #ifdef scrub of 3 missed sites; 8485636bc7 — concurrent in-test tabOrder_test offscreen-platform fix mirroring my CMake-level fix); both kept, surfaced. CI run 26002905171 on HEAD 7f965a0cf3 = GREEN (macos-arm64 + Phase-9 BALL test suite + lint + coverage all success); linux-x64 + windows-x64 + linux-arm64 NOT re-validated post-hotfix (detect-platforms narrowed to macOS-only because test/CMakeLists.txt doesn't match high-risk path regex — flagged as action item: extend regex to include ^test/ OR land full-matrix-triggering commit at RC1 tag time). **Wave 4 of v1.7 COMPLETE; v1.7-RC1 ready to tag** modulo one cross-platform CI validation pass + pre-existing 999.48 deferred-items + v1.6.2 pre-tag regression follow-ups.
+last_updated: "2026-05-21T11:04:24.943Z"
+last_activity: 2026-05-21 -- Phase 999.50 planning complete
 progress:
-  total_phases: 64
+  total_phases: 65
   completed_phases: 26
-  total_plans: 71
+  total_plans: 73
   completed_plans: 71
   percent: 40
 ---
@@ -26,8 +26,8 @@ progress:
 
 Phase: v1.7 Wave 4 — BALLView Refresh — **COMPLETE; v1.7-RC1 ready to tag**
 Plan: 999.49 COMPLETE — single-plan phase landing 8/8 sub-deliverables (Classic preset enum + apply() switch branches + .layout file + Window + View menu wirings deleted; first-run prompt simplified to one-button notice; auto-migration of legacy currentPreset=Classic→Default INI string; RELEASE-NOTES-v1.7 draft populated). 5 commits + ~15min wall-clock.
-Status: v1.7 Wave 4 COMPLETE — all UI phases (999.40-999.49) landed. Pre-existing deferrals carry to v1.7 RC patch cycle: 999.44-04b RC patch (Label + Clipping sections), 8 Controller cut-over plans (mechanical), 9-file legacy DELETION (999.48 scope-trim; breadcrumb in .planning/phases/999.48-a11y-flag-flip-removal/deferred-items.md), Tools › Legacy Settings retirement, Plan 07 pixel-diff tests. None block RC1 tag. **v1.7-RC1 tag ready pending CI run 26002675865 cross-platform green.**
-Last activity: 2026-05-17 — Phase 999.49 COMPLETE (LAST UI phase of v1.7 Wave 4 — Classic 5-dock workspace preset DELETED per maintainer-Q2 commitment). Migration-before-deletion ordering: commit-01 lands the auto-remap, commit-02 lands the breaking API deletion, commit-03 lands the call-site cleanup atomically so CI never sees an intermediate failing state. Local macOS-arm64 build green; CI run 26002675865 dispatched on a32de26f3f.
+Status: Ready to execute
+Last activity: 2026-05-21 -- Phase 999.50 planning complete
 
 ## Performance Metrics
 
