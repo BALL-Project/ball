@@ -23,10 +23,10 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
 - [x] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)* (completed 2026-05-16)
 - [x] **Phase 999.50: v1.7.2 build acceleration — Ward serializer de-boost** - Hand-roll a compact reader/writer for `poseClusteringSerialization.C` to drop the heaviest Boost compile-time component (v1.7.1 quarantined it; v1.7.2 eliminates it); regenerate the `.dat` fixture in the new format; add release.yml ccache reuse. Canonical plan: [`v1.7.2-BUILD-ACCEL-PLAN.md`](v1.7.2-BUILD-ACCEL-PLAN.md) (completed 2026-05-21)
-- [ ] **Phase 999.51: Inspector controller cut-overs — Clipping + Label (v1.7.x)** - Wire the latent ClippingController/LabelController to functional apply() + add their Inspector sections (mirror Model/Coloring/Material). Reuses the legacy Clipping/Label dialogs.
-- [ ] **Phase 999.52: Inspector material transparency control (#527) (v1.7.x)** - Add the missing transparency control to the Inspector materialSection, superseding the broken legacy MaterialSettings slider.
+- [x] **Phase 999.51: Inspector controller cut-overs — Clipping + Label (v1.7.x)** - Wire the latent ClippingController/LabelController to functional apply() + add their Inspector sections (mirror Model/Coloring/Material). Reuses the legacy Clipping/Label dialogs. (completed 2026-05-21)
+- [x] **Phase 999.52: Inspector material transparency control (#527) (v1.7.x)** - Add the missing transparency control to the Inspector materialSection, superseding the broken legacy MaterialSettings slider. (completed 2026-05-21)
 - [ ] **Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (v1.7.x)** - Delete the 9 superseded legacy VIEW dialog files (commit 7f56f80d89 breadcrumb), one atomic commit each, CI green between. *Depends on 999.51 + 999.52.*
-- [ ] **Phase 999.54: BALLView startup warning when no renderer plugins found (#501) (v1.7.x)** - Emit a Log/status-bar warning on empty renderer-plugin discovery.
+- [x] **Phase 999.54: BALLView startup warning when no renderer plugins found (#501) (v1.7.x)** - Emit a Log/status-bar warning on empty renderer-plugin discovery. (completed 2026-05-21)
 - [x] **Phase 999.55: Build acceleration — PCH across BALL + VIEW (v1.7.x)** - Investigated extending PCH to the test build; the library PCH (the real win) already shipped in 999.16. Test-suite `REUSE_FROM` PCH was tried and **reverted** (it injects the library's `NDEBUG` into tests, broke `Debug_test` on GCC). Net outcome: doc reconciliation + dropped the fragile test-PCH. (closed 2026-05-21)
 - [ ] **Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (v1.7.x)** - Update tutorial content/screenshots/URLs/build flow to v1.7.x.
 
@@ -2455,7 +2455,7 @@ Plans:
 **Scope:** `clippingController.{h,C}`, `labelController.{h,C}`, `inspectorView.C`, new `sections/clippingSection.{h,C}` + `sections/labelSection.{h,C}`. **Important:** these REUSE the legacy Clipping/Label dialogs — those dialogs must NOT be deleted by Phase 999.53 until this lands.
 **Requirements:** `VIEW-INSP-01`, `VIEW-INSP-02`.
 **Depends on:** none. **Effort:** ~200 LOC per controller.
-**Plans:** 2 plans (wave 1 → wave 2; serialized on the shared `inspectorView.{h,C}` + `sources.cmake` registration).
+**Plans:** 2/2 plans complete
 - [~] 999.51-01-PLAN.md — Clipping cut-over: ClippingSection + functional ClippingController::apply() (VIEW-INSP-01). Code+build COMPLETE (3 task commits, VIEW build green BALL_UI_V2=ON); PAUSED at blocking GUI human-verify (Task 4 — confirm section renders + visibly clips in running BALLView). Legacy ClippingDialog untouched.
 - [~] 999.51-02-PLAN.md — Label cut-over: LabelSection + functional LabelController::apply() (VIEW-INSP-02). Code+build COMPLETE (3 task commits `3d2102a5b2`/`8ad9fc6076`/`590d7d6b9e`, VIEW build green BALL_UI_V2=ON); PAUSED at blocking GUI human-verify (Task 4 — confirm section renders + a label visibly appears in running BALLView). Legacy LabelDialog (Display > Create > Label) untouched.
 
@@ -2467,7 +2467,7 @@ Plans:
 **Scope:** `source/VIEW/WIDGETS/inspector/sections/materialSection.{h,C}` (+ the material apply path).
 **Requirements:** `VIEW-INSP-03`.
 **Depends on:** none (additive to materialSection). **Effort:** small–medium.
-**Plans:** 1 plan.
+**Plans:** 1/1 plans complete
 
 Plans:
 - [~] 999.52-01-PLAN.md — Add a working 0-255 Transparency control to the Inspector materialSection, driving **Representation::setTransparency() + Representation::update()** (the per-vertex alpha path the interactive GLRenderer actually honors — NOT the dead Stage::Material.transparency field, which was the #527 bug), sharing Representation transparency state with the existing Model-section slider. Legacy dialog untouched. **Code + build complete (2 task commits `ce4061a93d`, `7374d42ae8`; libVIEW + BALLView.app green under BALL_UI_V2=ON); PAUSED at the BLOCKING GUI human-verify (Task 3) — drag the Material-tab slider, confirm visible transparency + Model-section cross-check + reset.** VIEW-INSP-03 implementation-complete / awaiting GUI verify; closes #527 once confirmed.
@@ -2489,7 +2489,7 @@ Plans:
 **Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-31; GitHub #501.
 **Requirements:** `VIEW-UX-01`.
 **Depends on:** none. **Effort:** small (~20–40 LOC).
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 - [x] 999.54-01-PLAN.md — non-fatal zero-renderer startup guard (Log.warn + status bar) closing #501.
 
 ### Phase 999.55: Build acceleration — precompiled headers across BALL + VIEW (TARGETED FOR v1.7.x)
