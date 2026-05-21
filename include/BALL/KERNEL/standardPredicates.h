@@ -23,19 +23,23 @@
 #	include <BALL/KERNEL/expression.h>
 #endif
 
-// Cluster B step 1 (2026-05-19): SMARTSPredicate needs SmartsMatcher
-// (STRUCTURE) + AromaticityProcessor + RingPerceptionProcessor (QSAR).
-// All three are now in CORE_ONLY (CB-1 + STRUCTURE restore).
-#ifndef BALL_STRUCTURE_SMARTSMATCHER_H
-# include <BALL/STRUCTURE/smartsMatcher.h>
-#endif
+// SMARTSPredicate needs SmartsMatcher (STRUCTURE) + AromaticityProcessor +
+// RingPerceptionProcessor (QSAR). v2.2 HCP-1 task 0: re-gated under
+// BALL_COLLAPSE_KERNEL_ONLY (Track-B Cluster-B-step-1 had lifted the gate; restored for
+// the hierarchy-collapse KERNEL-only build -- the gate lifts again when
+// STRUCTURE/QSAR re-open at HCP-3).
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
+# ifndef BALL_STRUCTURE_SMARTSMATCHER_H
+#  include <BALL/STRUCTURE/smartsMatcher.h>
+# endif
 
-#ifndef BALL_QSAR_AROMATICITYPROCESSOR_H
-# include <BALL/QSAR/aromaticityProcessor.h>
-#endif
+# ifndef BALL_QSAR_AROMATICITYPROCESSOR_H
+#  include <BALL/QSAR/aromaticityProcessor.h>
+# endif
 
-#ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
-# include <BALL/QSAR/ringPerceptionProcessor.h>
+# ifndef BALL_QSAR_RINGPERCEPTIONPROCESSOR_H
+#  include <BALL/QSAR/ringPerceptionProcessor.h>
+# endif
 #endif
 
 namespace BALL 
@@ -896,9 +900,11 @@ namespace BALL
 
 	};
 
-	// Cluster B step 1 (2026-05-19): SMARTSPredicate gate lifted —
-	// SmartsMatcher (STRUCTURE) + AromaticityProcessor +
-	// RingPerceptionProcessor (QSAR) are all in CORE_ONLY now.
+	// SMARTSPredicate holds SmartsMatcher (STRUCTURE) + AromaticityProcessor +
+	// RingPerceptionProcessor (QSAR) BY VALUE, so the whole class is gated
+	// under BALL_COLLAPSE_KERNEL_ONLY (v2.2 HCP-1 task 0; restored from Track-B's lifted
+	// gate -- returns when STRUCTURE/QSAR re-open at HCP-3).
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 	/** Predicate for using smarts
 	 */
 	class BALL_EXPORT SMARTSPredicate
@@ -932,6 +938,7 @@ namespace BALL
 		static Molecule dummy_molecule_;
 		mutable HashSet<Atom*> matches_;
 	};
+#endif // BALL_COLLAPSE_KERNEL_ONLY
 
 
 	//@}	

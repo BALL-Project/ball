@@ -92,6 +92,25 @@ IF(BALL_CORE_ONLY)
 	MESSAGE(STATUS "BALL_CORE_ONLY=ON: extension modules disabled")
 ENDIF()
 
+# v2.2 hierarchy-collapse (HCP-1 task 0, D-HC7): a DEDICATED KERNEL-only
+# narrowing flag for the collapse work. Unlike BALL_CORE_ONLY (which Track-B
+# turned into the de-facto "build everything" switch), this flag genuinely
+# narrows the build to the core foundation + KERNEL (extension modules + VIEW +
+# Python excluded via cmake/BALLIncludes.cmake). The collapse role model +
+# handle API land here; modules re-open cluster-by-cluster at HCP-3. Leaving
+# BALL_CORE_ONLY untouched keeps the existing full build + CI working.
+OPTION(BALL_COLLAPSE_KERNEL_ONLY "v2.2 hierarchy-collapse: build core + KERNEL only" OFF)
+IF(BALL_COLLAPSE_KERNEL_ONLY)
+	SET(BALL_HAS_VIEW OFF CACHE BOOL "" FORCE)
+	SET(BALL_PYTHON_SUPPORT OFF CACHE BOOL "" FORCE)
+	SET(BALL_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+	SET(BALL_BUILD_BALLAXY OFF CACHE BOOL "" FORCE)
+	SET(BALL_BUILD_CWL OFF CACHE BOOL "" FORCE)
+	SET(BALL_BUILD_MMFF94 OFF CACHE BOOL "" FORCE)
+	ADD_COMPILE_DEFINITIONS(BALL_COLLAPSE_KERNEL_ONLY)
+	MESSAGE(STATUS "BALL_COLLAPSE_KERNEL_ONLY=ON: KERNEL-only build (collapse HCP-1)")
+ENDIF()
+
 # License choice: LGPL or GPL build
 SET(BALL_LICENSE "LGPL" CACHE STRING "BALL licensing model: LGPL (default) or GPL")
 

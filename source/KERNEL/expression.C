@@ -300,11 +300,13 @@ namespace BALL
 		create_methods_.insert("charge", (PersistenceManager::CreateMethod)Factory<ChargePredicate>::createVoid);
 		create_methods_.insert("isAxial", (PersistenceManager::CreateMethod)Factory<AxialPredicate>::createVoid);
 		create_methods_.insert("is4C1", (PersistenceManager::CreateMethod)Factory<Conformation4C1Predicate>::createVoid);
-		// Cluster B step 1 (2026-05-19): SMARTS predicate registration
-		// no longer gated by BALL_CORE_ONLY. SMARTSPredicate's link
-		// dependency (STRUCTURE/SmartsMatcher → QSAR/RingPerception) is
-		// now satisfied in both CORE_ONLY (Cluster B) and full builds.
+		// SMARTS predicate registration: gated under BALL_COLLAPSE_KERNEL_ONLY (its link
+		// dependency STRUCTURE/SmartsMatcher → QSAR/RingPerception is excluded
+		// in the KERNEL-only build). v2.2 HCP-1 task 0 -- restored from
+		// Track-B's lifted gate; returns at HCP-3 module re-open.
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 		create_methods_.insert("SMARTS", (PersistenceManager::CreateMethod)Factory<SMARTSPredicate>::createVoid);
+#endif
 	}
 
 }

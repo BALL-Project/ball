@@ -24,6 +24,18 @@ INCLUDE(include/BALL/MATHS/sources.cmake)
 INCLUDE(source/SYSTEM/sources.cmake)
 INCLUDE(include/BALL/SYSTEM/sources.cmake)
 
+# ===== v2.2 HCP-1 task 0 (D-HC7): KERNEL-only build partition for the =====
+# hierarchy-collapse KERNEL-first work. Everything below (PLUGIN + the
+# extension modules + PYTHON) is gated behind the DEDICATED flag
+# BALL_COLLAPSE_KERNEL_ONLY. With BALL_COLLAPSE_KERNEL_ONLY=ON the build is
+# core foundation + KERNEL only; the cluster re-open (HCP-3) removes this guard
+# module-by-module in dependency order. NOTE: a dedicated flag (NOT
+# BALL_CORE_ONLY) is used deliberately — Track-B turned BALL_CORE_ONLY=ON into
+# the de-facto "build everything" config, so reusing it would break the full
+# build/CI; this leaves BALL_CORE_ONLY untouched (see V22-H1bPRIME-DESIGN.md
+# §10, D-HC7 dedicated-flag resolution).
+IF(NOT BALL_COLLAPSE_KERNEL_ONLY)
+
 # B0.1 (Track B Wave 0, 2026-05-18): PLUGIN re-enabled unconditionally.
 # Has zero deps on other disabled modules (per MODULE-REENABLE-PLAN.md
 # audit) so the toggle is safe even with BALL_CORE_ONLY=ON. Smoke-tests
@@ -142,7 +154,15 @@ INCLUDE(include/BALL/SOLVATION/sources.cmake)
 INCLUDE(source/DOCKING/sources.cmake)
 INCLUDE(include/BALL/DOCKING/sources.cmake)
 
-IF(NOT BALL_CORE_ONLY)
+	# PYTHON (always core-only-gated; now inside the outer guard).
 	INCLUDE(source/PYTHON/sources.cmake)
 	INCLUDE(include/BALL/PYTHON/sources.cmake)
+
+ELSE()
+	# BALL_COLLAPSE_KERNEL_ONLY=ON: assert exactly which modules are excluded
+	# so the narrowed build is auditable (H1bP-7).
+	MESSAGE(STATUS "BALL_COLLAPSE_KERNEL_ONLY=ON: KERNEL-only build. EXCLUDED "
+		"modules: PLUGIN FORMAT STRUCTURE XRAY NMR ENERGY SCORING MOLMEC QSAR "
+		"SOLVATION DOCKING PYTHON. (v2.2 hierarchy-collapse HCP-1; re-opened "
+		"cluster-by-cluster at HCP-3.)")
 ENDIF()

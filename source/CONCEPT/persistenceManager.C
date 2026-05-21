@@ -9,12 +9,15 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
-// B2.1+ (Track B Waves 1a/2a, 2026-05-18): FORMAT (B1.1) and XRAY
-// (B2.1) are now in unconditionally, so the PDB/Crystal headers can
-// be included without a CORE_ONLY gate.
-#include <BALL/XRAY/crystalInfo.h>
-#include <BALL/FORMAT/PDBRecords.h>
-#include <BALL/FORMAT/PDBInfo.h>
+// FORMAT (PDBRecords/PDBInfo) + XRAY (CrystalInfo) persistent-type
+// registrations. v2.2 HCP-1 task 0: re-gated under BALL_COLLAPSE_KERNEL_ONLY (Track-B
+// Waves 1a/2a had made these unconditional; restored for the KERNEL-only
+// build -- the registrations return when FORMAT/XRAY re-open at HCP-3).
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
+# include <BALL/XRAY/crystalInfo.h>
+# include <BALL/FORMAT/PDBRecords.h>
+# include <BALL/FORMAT/PDBInfo.h>
+#endif
 
 // #define BALL_DEBUG_PERSISTENCE
 
@@ -125,22 +128,24 @@ namespace BALL
 		REGISTER_CLASS(System)
 		REGISTER_CLASS(Molecule)
 		REGISTER_CLASS(PDBAtom)
-		// B2.1+ (Track B Waves 1a/2a, 2026-05-18): PDBRecords + PDBInfo
-		// come from FORMAT (B1.1 subset, in) and CrystalInfo from XRAY
-		// (B2.1, in). These are now available unconditionally in
-		// CORE_ONLY builds too, so the persistence-manager class table
-		// can register them. Closes TEST-PM-CLASS-COUNT (expected 18
-		// got 15) and TEST-TPM-PDBINFO ("Cannot create object of
-		// unregistered class BALL::PDBInfo!" → segfault) in one stroke.
+		// PDBRecords/PDBInfo (FORMAT) + CrystalInfo (XRAY) registrations are
+		// gated under BALL_COLLAPSE_KERNEL_ONLY (v2.2 HCP-1 task 0; Track-B Waves 1a/2a
+		// had made them unconditional). They return -- closing
+		// TEST-PM-CLASS-COUNT + TEST-TPM-PDBINFO -- when FORMAT/XRAY re-open at
+		// HCP-3. The remaining classes below are KERNEL (present in CORE_ONLY).
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 		REGISTER_CLASS(PDBRecords)
 		REGISTER_CLASS(PDBInfo)
+#endif
 		REGISTER_CLASS(Residue)
 		REGISTER_CLASS(Chain)
 		REGISTER_CLASS(Protein)
 		REGISTER_CLASS(SecondaryStructure)
 		REGISTER_CLASS(NucleicAcid)
 		REGISTER_CLASS(Nucleotide)
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 		REGISTER_CLASS(CrystalInfo)
+#endif
 		#undef REGISTER_CLASS
 	}
 

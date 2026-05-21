@@ -5,7 +5,11 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
-#ifndef BALL_CORE_ONLY
+// v2.2 HCP-1: honour BOTH narrowing flags (BALL_CORE_ONLY and the dedicated
+// hierarchy-collapse BALL_COLLAPSE_KERNEL_ONLY) -- include STRUCTURE's
+// calculateTorsionAngle only in a genuinely-full build; otherwise use the
+// local fallback below so KERNEL does not link into STRUCTURE.
+#if !defined(BALL_CORE_ONLY) && !defined(BALL_COLLAPSE_KERNEL_ONLY)
 #include <BALL/STRUCTURE/geometricProperties.h>
 #endif
 #include <BALL/KERNEL/atom.h>
@@ -19,10 +23,11 @@ using namespace::std;
 namespace BALL
 {
 
-#ifdef BALL_CORE_ONLY
+#if defined(BALL_CORE_ONLY) || defined(BALL_COLLAPSE_KERNEL_ONLY)
 	// BALL 2.0 KERNEL replacement, K0.1: inline copy of
 	// STRUCTURE::calculateTorsionAngle so KERNEL doesn't link into
-	// STRUCTURE under BALL_CORE_ONLY. Original at
+	// STRUCTURE under a narrowed build (BALL_CORE_ONLY or, v2.2 HCP-1, the
+	// dedicated BALL_COLLAPSE_KERNEL_ONLY). Original at
 	// source/STRUCTURE/geometricProperties.C; verbatim port.
 	static Angle calculateTorsionAngle(const Atom& a1, const Atom& a2,
 	                                   const Atom& a3, const Atom& a4)

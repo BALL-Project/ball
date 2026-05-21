@@ -1721,8 +1721,11 @@ namespace BALL
 		return ring_atoms_;
 	}
 
-	// Cluster B step 1 (2026-05-19): SMARTSPredicate gate lifted.
+	// SMARTSPredicate impl: gated under BALL_COLLAPSE_KERNEL_ONLY (depends on STRUCTURE
+	// SmartsMatcher + QSAR Aromaticity/RingPerception). v2.2 HCP-1 task 0 --
+	// restored from Track-B's lifted gate; returns at HCP-3 module re-open.
 	/////////////////////////////////////////////////////////////////
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 
 	HashMap<Molecule*, TimeStamp> SMARTSPredicate::call_time_map_;
 	Molecule SMARTSPredicate::dummy_molecule_;
@@ -1790,5 +1793,6 @@ namespace BALL
 		return matches_.has((Atom*)&atom);
 	}
 
+#endif // BALL_COLLAPSE_KERNEL_ONLY
 
 } // namespace BALL

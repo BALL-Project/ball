@@ -11,8 +11,11 @@
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/secondaryStructure.h>
+// v2.2 HCP-1: FORMAT excluded from the KERNEL-only collapse build.
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 #include <BALL/FORMAT/PDBRecords.h>
 #include <BALL/FORMAT/PDBInfo.h>
+#endif
 ///////////////////////////
 
 template <typename T>
@@ -253,8 +256,10 @@ CHECK(getStreamName<>())
 	TEST_EQUAL(getStreamName<Molecule>(), String("BALL::Molecule"))
 	TEST_EQUAL(getStreamName<AtomContainer>(), String("BALL::AtomContainer"))
 	TEST_EQUAL(getStreamName<Fragment>(), String("BALL::Fragment"))
+#ifndef BALL_COLLAPSE_KERNEL_ONLY
 	TEST_EQUAL(getStreamName<PDBInfo>(), String("BALL::PDBInfo"))
 	TEST_EQUAL(getStreamName<PDBRecords>(), String("BALL::PDBRecords"))
+#endif
 RESULT
 
 CHECK(castTo<>())

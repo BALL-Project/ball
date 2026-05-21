@@ -25,7 +25,63 @@ INCLUDE(cmake/VIEWTestExecutables.cmake)
 # BALL_CONCEPTS_TESTS for now and get pruned in K0.2-K0.6 as their
 # subject classes are removed.
 # See .planning/v2.x/KERNEL-V2-DECISIONS.md §6.
-IF(BALL_CORE_ONLY)
+# v2.2 hierarchy-collapse HCP-1 (D-HC7): the genuine KERNEL-only test subset
+# for the narrowed BALL_COLLAPSE_KERNEL_ONLY build. Excludes the
+# FORMAT/STRUCTURE/module-dependent tests (they return at HCP-3 module
+# re-open). Distinct from the BALL_CORE_ONLY branch below, which Track-B turned
+# into a FULL build (all modules re-enabled under CORE_ONLY).
+IF(BALL_COLLAPSE_KERNEL_ONLY)
+	SET(BALL_COLLAPSE_KERNEL_TESTS
+		PTE_test
+		Atom_test1
+		Atom_test2
+		Bond_test
+		AtomContainer_test1
+		AtomContainer_test2
+		Fragment_test
+		Chain_test
+		Molecule_test
+		SecondaryStructure_test
+		System_test
+		Protein_test
+		PDBAtom_test
+		NucleicAcid_test
+		Nucleotide_test
+		ExpressionPredicate_test
+		ExpressionTree_test
+		KernelPredicate_test
+		ForEach_test
+		GlobalKernel_test
+		AtomIterator_test
+		AtomBondIteratorTraits_test
+		Extractors_test
+		MoleculeStore_test
+		MoleculeStoreJson_test
+		SystemJson_test
+		Sizeof_test
+		MemoryBudget_test
+		JsonBench_test
+		V1ToV2JsonConverter_test
+		CompiledExpression_test
+		SideTableParity_test
+		HierarchyParity_test
+		ContainerHandle_test
+		CompositeIteratorStability_test
+		# (SelectorBench_test excluded: it loads a PDB via FORMAT.)
+	)
+	# Drop the FORMAT-pulling tests that live in the wholesale foundation
+	# groups (they #include <BALL/FORMAT/...>; FORMAT is excluded from the
+	# KERNEL-only build). RTTI_test stays -- its FORMAT checks are #ifdef'd.
+	LIST(REMOVE_ITEM BALL_CONCEPTS_TESTS TextPersistenceManager_test)
+	SET(BALL_TESTS
+		BALL_BASIC_TESTS
+		BALL_MATHS_TESTS
+		BALL_SYSTEM_TESTS
+		BALL_DATATYPE_TESTS
+		BALL_CONCEPTS_TESTS
+		BALL_COLLAPSE_KERNEL_TESTS
+	)
+ELSEIF(BALL_CORE_ONLY)
 	SET(BALL_CORE_KERNEL_TESTS
 		PTE_test
 		Atom_test1
@@ -198,8 +254,9 @@ ENDFOREACH()
 # Set the timeout of some tests to 2h
 # This is needed for the memcheck running on the CI server
 # which takes _very_ long
-# (Skipped under BALL_CORE_ONLY — these tests are in SCORING/STRUCTURE.)
-IF(NOT BALL_CORE_ONLY)
+# (Skipped under BALL_CORE_ONLY / BALL_COLLAPSE_KERNEL_ONLY — these tests are
+# in SCORING/STRUCTURE, absent from the narrowed build.)
+IF(NOT BALL_CORE_ONLY AND NOT BALL_COLLAPSE_KERNEL_ONLY)
 SET_TESTS_PROPERTIES (
 	ScoringFunction_test
 	AssignBondOrderProcessor_test1
@@ -231,7 +288,7 @@ ENDIF()
 # AssignBondOrderProcessor is now built in CORE_ONLY too (Cluster B
 # restored it), and the fine-penalty bug is the same on Apple Silicon
 # regardless of build mode.
-IF (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64")
+IF (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64|aarch64" AND NOT BALL_COLLAPSE_KERNEL_ONLY)
 	SET_TESTS_PROPERTIES (
 		AssignBondOrderProcessor_test2
 		PROPERTIES WILL_FAIL TRUE

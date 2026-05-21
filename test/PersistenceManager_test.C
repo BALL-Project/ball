@@ -318,7 +318,14 @@ RESULT
 CHECK(Size getNumberOfClasses() const throw())
 	PersistenceTest tpm;
 	Size noc = tpm.getNumberOfClasses();
+	// v2.2 HCP-1: the KERNEL-only collapse build gates out the 3 FORMAT/XRAY
+	// registrations (PDBRecords/PDBInfo/CrystalInfo), so 15 classes register
+	// instead of 18. They return at HCP-3 module re-open.
+#ifdef BALL_COLLAPSE_KERNEL_ONLY
+	TEST_EQUAL(noc, 15);
+#else
 	TEST_EQUAL(noc, 18);
+#endif
 RESULT
 
 
