@@ -1,6 +1,7 @@
 # BALL 2.x — Unified Roadmap (kernel modernization track)
 
-**Status:** RR1 NEEDS-REVISION applied (all 10 required changes); RR1b pending.
+**Status:** LOCKED — canonical BALL 2.x kernel roadmap (Codex RR1
+NEEDS-REVISION → revised → RR1b AGREE-LOCKABLE, 2026-05-21).
 **Authored:** 2026-05-21, mid-v2.2-H2.
 **Scope:** the libBALL kernel modernization line (v2.0 → v2.x). Integrates
 the v2.2 handle redesign, the v2.1 backlog, the maintainer's new
@@ -114,8 +115,11 @@ in `materialiseContainer_` (R32 carry-over).
 
 ## 4. Post-v2.2 milestones (the new directives + pyBALL)
 
-Sequenced AFTER v2.2 because each consumes the *stabilised* libBALL handle
-surface; doing them earlier would churn against the in-flight flip.
+Default sequencing is AFTER v2.2 because each consumes the *stabilised*
+libBALL handle surface; doing them earlier would churn against the
+in-flight flip. The one exception is `BALL::String` removal, which **may**
+fold into the v2.2 break wave **iff** it lands before v2.2-rc1 with no
+schedule risk to H4/H6/H8 (see §4a); otherwise it is v2.3.
 
 ### v2.3 — `BALL::String` → `std::string` (kernel API modernization)
 - Delete the bespoke `BALL::String`; use `std::string` + a small
@@ -241,10 +245,8 @@ Remaining notes (not blockers):
 
 ---
 
-## 7. Status
+## 7. Status — LOCKED
 
-RR1 = NEEDS-REVISION → this revision applies all 10 required changes
-(backlog cleanup; H5→H6b dependency + H6 split; v2.4a package workstream;
-pyBALL rebaseline; gate-maintenance script; migration docs; mirror perf
-gates; D13 numbers; staged-version plan; stale-label note). Codex **RR1b**
-re-reviews for lock.
+RR1 = NEEDS-REVISION → all 10 required changes applied → **RR1b =
+AGREE-LOCKABLE**. This is the canonical BALL 2.x kernel roadmap. Reviews:
+`V2X-ROADMAP-RR1.md`, `V2X-ROADMAP-RR1B.md`.
