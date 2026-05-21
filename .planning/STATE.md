@@ -4,14 +4,14 @@ milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: executing
 stopped_at: "Plan 999.52-01 code/build complete — PAUSED at blocking checkpoint:human-verify (Task 3 GUI: drag the Material-tab Transparency slider in a running BALLView, confirm the representation visibly becomes transparent, the Model-section slider reflects the same value, and reset works). VIEW-INSP-03 implementation-complete / awaiting-verify; closes #527 once GUI-confirmed. (999.51-01 Clipping + 999.51-02 Label also still awaiting their GUI verifies — three Inspector cut-overs pending one running-BALLView pass.)"
-last_updated: "2026-05-21T19:00:45.846Z"
+last_updated: "2026-05-21T19:43:21.441Z"
 last_activity: 2026-05-21
 progress:
-  total_phases: 71
+  total_phases: 72
   completed_phases: 31
-  total_plans: 78
-  completed_plans: 78
-  percent: 44
+  total_plans: 81
+  completed_plans: 79
+  percent: 43
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.52 — inspector-transparency
+**Current Focus:** Phase 999.57 — inspector-controller-cutover-displayproperties
 
 ## Current Position
 
-Phase: 999.52
-Plan: Not started
-Status: Executing Phase 999.52 — Plan 01 implementation-complete, awaiting GUI verify
+Phase: 999.57 (inspector-controller-cutover-displayproperties) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
 Last activity: 2026-05-21
 
 ## Performance Metrics
@@ -92,6 +92,7 @@ Last activity: 2026-05-21
 | Phase 999.54-renderer-plugin-warning P01 | 12min | 2 tasks | 2 files |
 | Phase 999.51-inspector-clipping-label-cutover P02 | ~10min | 3 of 4 tasks (Task 4 blocking GUI human-verify) | 6 files (2 new: labelSection.{h,C}) |
 | Phase 999.52-inspector-transparency P01 | ~25min | 2 of 3 tasks (Task 3 blocking GUI human-verify) | 4 files |
+| Phase 999.57 P01 | ~10min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
