@@ -1,66 +1,86 @@
-===============================================
-==  BALL  -  Biochemical ALgorithms Library  ==
-===============================================
+# BALL — Biochemical Algorithms Library
 
+[![Latest release](https://img.shields.io/github/v/release/BALL-Project/ball?sort=semver&label=release)](https://github.com/BALL-Project/ball/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/BALL-Project/ball/total?label=downloads)](https://github.com/BALL-Project/ball/releases)
+[![CI](https://github.com/BALL-Project/ball/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/BALL-Project/ball/actions/workflows/ci.yml)
+[![License: LGPL v2.1](https://img.shields.io/badge/license-LGPL%20v2.1-blue.svg)](LICENSE)
 
-BUILD BALL
-----------
-  To install BALL, use the CMake build system.
+**BALL** is a C++ framework for molecular modelling and computational structural
+bioinformatics. **BALLView** is its OpenGL-based molecular-visualization GUI
+application.
 
-  * Enter the toplevel directory of BALL (the one containing the
-    CMakeLists.txt file and the source and include folders)
+## Download
 
-  * Then create a folder "build" and change into it
+Pre-built, ready-to-run **BALLView** packages for macOS, Windows, and Linux are
+published on the **[latest release](https://github.com/BALL-Project/ball/releases/latest)**
+page. macOS builds are signed + notarized (as of v1.7.1) and Windows installers
+are code-signed.
 
-  * Call "cmake .." (if you have a contrib directory for BALL, use
-	  "cmake .. -DBALL_CONTRIB_PATH=path_to_your_contrib")
+| Platform | Download |
+|----------|----------|
+| **macOS** (Apple Silicon) | `BALLView-<version>-macos-arm64.dmg` |
+| **Windows** (x64) | `BALLView-<version>-windows-x64-installer.exe` (installer) or `BALLView-<version>-windows-x64.zip` (portable) |
+| **Linux** (x64 / arm64) | `.deb`, `.rpm`, `.AppImage`, or `.tar.gz` |
 
-  * Type "make"
+→ See **[all releases](https://github.com/BALL-Project/ball/releases)** for older
+versions and release notes.
 
-  If you want to build packages (currently mostly interesting on MacOS and
-  Windows), add the flag "-DBALL_ENABLE_PACKAGING=true" to the cmake command
-  line and run "make package" instead of a plain make.
+## Build from source
 
-  On Windows, make sure to run the commands in a Visual Studio command shell.
+BALL uses the CMake build system. Dependencies come from system/Homebrew packages
+on macOS/Linux and from vcpkg on Windows. Per-platform, step-by-step instructions
+live in:
 
-  For further details of the build process, please refer to our Wiki on
-  https://github.com/BALL-Project/ball/wiki/DevelopmentEnvironment
+- **macOS:** [`BUILD-macos.md`](BUILD-macos.md)
+- **Linux:** [`BUILD-linux.md`](BUILD-linux.md)
+- **Windows / general:** the [Development Environment wiki](https://github.com/BALL-Project/ball/wiki/DevelopmentEnvironment)
 
-  To build the documentation, run "make doc". Alternatively, you can refer
-  to the online documentation:
+The generic flow, once the dependencies are in place:
 
-    https://ball-project.org/documentation/
+```sh
+# From the top-level directory (the one with CMakeLists.txt):
+cmake -B build -S .
+cmake --build build
+```
 
+To produce installable packages (macOS/Windows/Linux), configure with
+`-DBALL_ENABLE_PACKAGING=ON` and build the `package` target:
 
-FEEDBACK and CONTACT
---------------------
-  Please help us to improve the quality of this project by reporting all
-  problems you ran into, all criticism, encouragements, improvements,
-  bug reports, and wishes for further functionality either using the
-  GitHub issue tracker or by contacting us via our mailing lists:
+```sh
+cmake -B build -S . -DBALL_ENABLE_PACKAGING=ON
+cmake --build build --target package
+```
 
-    https://github.com/BALL-Project/ball/issues
-    https://groups.google.com/forum/#!forum/ball-user-list
-    https://groups.google.com/forum/#!forum/ball-developer-list
+On Windows, run the commands from a Visual Studio command shell.
 
-  Please have a look at our website as well:
+## Documentation
 
-    https://ball-project.org
+- API documentation can be built locally with `cmake --build build --target doc`
+  (requires Doxygen).
+- Developer and build documentation: the
+  [project wiki](https://github.com/BALL-Project/ball/wiki).
 
+## Feedback and contact
 
-CITE BALL
----------
-  If you use BALL, please cite our recent publication
-  (DOI: 10.1186/1471-2105-11-531):
+Please help us improve BALL by reporting problems, bugs, criticism, and feature
+requests — either via the GitHub issue tracker or the mailing lists:
 
-    Andreas Hildebrandt, Anna Katharina Dehof, Alexander Rurainski,
-    Andreas Bertsch, Marcel Schumann, Nora C Toussaint, Andreas Moll,
-    Daniel Stockel, Stefan Nickels, Sabine C Mueller, Hans-Peter Lenhof,
-    Oliver Kohlbacher:
+- Issues: <https://github.com/BALL-Project/ball/issues>
+- User list: <https://groups.google.com/forum/#!forum/ball-user-list>
+- Developer list: <https://groups.google.com/forum/#!forum/ball-developer-list>
+- Project website: <https://ball-project.org>
 
-    'BALL - Biochemical Algorithms Library 1.3',
+## Citing BALL
 
-    2010, BMC Bioinformatics, 11:531
+If you use BALL, please cite (DOI:
+[10.1186/1471-2105-11-531](https://doi.org/10.1186/1471-2105-11-531)):
 
+> Andreas Hildebrandt, Anna Katharina Dehof, Alexander Rurainski, Andreas Bertsch,
+> Marcel Schumann, Nora C Toussaint, Andreas Moll, Daniel Stöckel, Stefan Nickels,
+> Sabine C Müller, Hans-Peter Lenhof, Oliver Kohlbacher:
+> *BALL — Biochemical Algorithms Library 1.3*, BMC Bioinformatics, 11:531 (2010).
 
-Have fun!
+## License
+
+BALL is distributed under the GNU Lesser General Public License v2.1
+([`LICENSE`](LICENSE)).
