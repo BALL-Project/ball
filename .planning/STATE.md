@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: executing
-stopped_at: Completed 09-test-suite-triage 09-01-PLAN.md
-last_updated: "2026-05-21T11:04:24.943Z"
-last_activity: 2026-05-21 -- Phase 999.50 planning complete
+stopped_at: Completed 999.50-01-PLAN.md
+last_updated: "2026-05-21T11:16:22.848Z"
+last_activity: 2026-05-21
 progress:
   total_phases: 65
   completed_phases: 26
   total_plans: 73
-  completed_plans: 71
+  completed_plans: 72
   percent: 40
 ---
 
@@ -20,14 +20,14 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** v1.6.2 pre-tag — content-complete (all 12 REQs) BUT caught a Windows link regression at the tag boundary: cb392cc4 removed BALL_EXPORT from vector3.C TVector3<float> instantiation (MSVC dllexport contract). ci.yml masked it via Phase 999.17 cmake-tree cache (key doesn't hash sources); release.yml exposed it (different cache scope). Fixed in 9042af07 + GCC -Wattributes pragma scope. Cache key bumped v1→v2 in c9d8de38 to force cold rebuild. Follow-up Phase 999.36 filed for source-aware cache key. RELEASE-NOTES-v1.6.2.md updated with full regression+fix narrative. Tag pending cold Windows green.
+**Current Focus:** Phase 999.50 — ward-serializer-deboost
 
 ## Current Position
 
-Phase: v1.7 Wave 4 — BALLView Refresh — **COMPLETE; v1.7-RC1 ready to tag**
-Plan: 999.49 COMPLETE — single-plan phase landing 8/8 sub-deliverables (Classic preset enum + apply() switch branches + .layout file + Window + View menu wirings deleted; first-run prompt simplified to one-button notice; auto-migration of legacy currentPreset=Classic→Default INI string; RELEASE-NOTES-v1.7 draft populated). 5 commits + ~15min wall-clock.
+Phase: 999.50 (ward-serializer-deboost) — EXECUTING
+Plan: 2 of 2
 Status: Ready to execute
-Last activity: 2026-05-21 -- Phase 999.50 planning complete
+Last activity: 2026-05-21
 
 ## Performance Metrics
 
@@ -86,6 +86,7 @@ Last activity: 2026-05-21 -- Phase 999.50 planning complete
 | Phase 999.44-unified-inspector P01 | ~17min (PARTIAL-COMPLETE: sub-PR 4.1 architecture [InspectorDock/View/Tabs/Body/Section + 160ms OutCubic collapse + [Inspector] INI schema + 3 empty-state factories] + sub-PR 4.5 prerequisite [StageController exemplar Q_PROPERTY mirror + PATTERN.md enumerating 8 deferred Controllers] + sub-PR 4.5 first section [StageSection with SwatchButton/QCheckBox/LabeledSlider + 100ms-debounced apply()] + sub-PR 4.6 static data [LegacySettingsHelper 12-stack table + migration-notice copy]; deferred to v1.7 RC patch cycle: mainframe wiring (parallel-agent 999.45 was actively editing mainframe.C/main.C; co-edit would clobber WIP — 999.45 has since landed so the deferred plan is unblocked), 12 sections (Selection 3 + Representation 5 + Scene remaining 4), 8 Controllers (Light/Camera/Stereo/Model/Coloring/Material/Label/Clipping), renderer-interface-boundary binding for Camera/Lights, StageController apply() cut-over, pixel-diff regression test. 4 Rule-1/3 deviations auto-fixed: header `#ifdef BALL_UI_V2` outer-wrap blocked AUTOMOC discovery [removed outer wrap, kept .C body wraps], `ADD_VIEW_HEADERS` flattens basenames [appended Inspector subtree headers to VIEW_headers directly + SOURCE_GROUP], `Icons::get(std::string)` ambiguity [`.toUtf8().constData()`], `ColorRGBA::getRed()` returns `ColorUnit` with operator* ambiguity [explicit `static_cast<float>()`]. Local libVIEW link green BALL_UI_V2=ON macOS-arm64 / Qt 6.11; CI run 25996552601 in flight at SUMMARY-time) | 6 commits (5 source + SUMMARY) | 23 files (19 created [10 Inspector header+impl pairs across {dock,view,tabs,body,section,emptyState,sections/stage}, 2 controller header+impl, PATTERN.md, 2 legacy-helper header+impl, PLAN, SUMMARY]; 4 modified [2 include/sources.cmake + 2 source/sources.cmake]) |
 | Phase 999.47-onboarding P01 | ~13min (8/8 sub-deliverables: WelcomeScreen widget [in-place panel, takeCentralWidget swap, 3 primary buttons + 6-card sample grid + 5-row recent + footer toggle, whole-TU BALL_UI_V2 gated mirroring commandPalette.C] + 6 sample structures [1bna real DNA excerpt, caffeine/dialanine real coords, 1ubq/1stp/1ymg BPTI-derived placeholders documented for 999.48 asset pipeline] + 6 generated 320x200 PNG thumbnails + mainframe wiring [QSettings-backed recent files, BALL_RELEASE_STRING version-bump → What's-new card with 2min QTimer auto-dismiss, QDesktopServices ballview:// handler, checkMenus hook for composite-count-based show/hide] + MarkdownHelpViewer [BALL_UI_V2-gated new class alongside legacy HelpViewer, Qt 6 doSetSource override for ballview:// interception] + ballview:// scheme cross-platform registration [macOS CFBundleURLSchemes plist + Linux .desktop x-scheme-handler + Windows NSIS HKCR\\ballview install+uninstall] + 6 tutorial Markdown files [frontmatter title/order/prev/next/prereq/expected-runtime + Try-this ballview:// links] + Welcome.rtf retirement → Welcome.txt + CPack repoint. Both macOS-arm64 cells green locally for VIEW+BALLView. CI run 26001813912 dispatched on c6472c8376. 4 Rule 1 fixes documented: BALL_PACKAGE_VERSION→BALL_RELEASE_STRING; openFile()→readFiles(); CommandRegistry::run→trigger-via-Command iteration; Qt 6 doSetSource not setSource override. Single threat-flag noted [url-handler new external-input surface, bounded by existing CommandRegistry+openFile validation; documented for 999.48 security pass]. 999.48 dispatch unblocked. | 7 commits (1 widget + 2 data + 1 mainframe + 1 helpViewer + 1 plumbing + 1 tutorials + 1 retire — final SUMMARY commit follows) | 33 files (25 created [welcomeScreen .h+.C, Welcome.txt, 6 sample files, 6 thumbnails, samples README, whatsnew/1.7.md, 6 tutorial .md, PLAN, SUMMARY]; 7 modified [mainframe .C+.h, helpViewer .C+.h, sources.cmake, MacOSXBundleInfo.plist.in, NSIS.template.in, BALLPackageConfig.cmake, BALLView.desktop]; 1 deleted [Welcome.rtf]) |
 | Phase 999.49 P01 | 15 | 5 tasks | 8 files |
+| Phase 999.50 P01 | 18min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -158,6 +159,7 @@ Last activity: 2026-05-21 -- Phase 999.50 planning complete
 - [Phase 999.34]: Windows test gatekeeper closed (2026-05-17). ci.yml + release.yml both have 3-step Windows test pattern (Build BALL test suite / Run BALL test suite / Upload test results) at parity with macOS + Linux. PATH double-extension (`build\ci-windows\bin` for BALL.dll+VIEW.dll PLUS `build\ci-windows\vcpkg_installed\x64-windows-release\bin` for Qt6+Boost) so test EXEs in `bin\TEST\` resolve all DLLs — without this every test exits STATUS_DLL_NOT_FOUND (0xc0000135). No Windows-specific WILL_FAIL gates needed: AssignBondOrderProcessor_test2 stays Apple-arm64-only (MSVC x64 = Intel-compatible FP path = passes like Linux); OOS PR-merge data regressions (PeptideCapProcessor/Peptides/RotamerLibrary) are already unconditional WILL_FAIL TRUE. Push-routed via temp branch to keep parallel-agent 999.42's locally-committed-but-unpushed work isolated; my SUMMARY commit dc66c91f5c landed on origin/v1.7-modernization without bundling 999.42's 3 in-flight commits. AssignBondOrderProcessor fine-penalty algorithmic fix decoupled from 999.34 (was incorrectly bundled in test/CMakeLists.txt comment; corrected to be a separate v1.7/v2.0 future task).
 - [Phase ?]: Phase 999.49 — preserve Preset enum numeric values across Classic deletion (Default=0, Focused=2, UserDefined=3); value 1 becomes a permanent hole.
 - [Phase ?]: Phase 999.49 — simplify Phase 999.45 first-run prompt to a one-button informational notice rather than rename the Keep-my-layout button; Mainframe::show() applies Default before the prompt opens so the legacy 5-dock layout is no longer restorable.
+- [Phase ?]: 999.50-01: Replaced boost::serialization in the Ward cluster-tree serializer with a hand-rolled BALLWARD magic+version format (binary+text); single-TU compile dropped from tens of minutes to ~4s. Old boost trees now fail loudly — format break documented under v1.7.2 Breaking changes.
 
 ### Roadmap Evolution
 
@@ -200,7 +202,7 @@ Last activity: 2026-05-21 -- Phase 999.50 planning complete
 
 **Previous last action:** Phase 5 Plan 05 (GL-core spike + Qt 6 link bring-up) executed — 7 commits, 74 files. New files: `include/BALL/VIEW/RENDERING/RENDERERS/coreGLRenderer.h` + `source/VIEW/RENDERING/RENDERERS/coreGLRenderer.C` (both carry the THROWAWAY-SPIKE provenance header). SPIKE-01 (GL-core arm) deliverable met: CoreGLRenderer overrides Renderer::renderRepresentations_() + capabilities() + pickObjects() (R32UI color-buffer FBO + glReadPixels readback) + does NOT implement per-primitive immediate-mode virtuals. CMakeLists.txt new BALL_SPIKE_BACKEND option (OFF | GLCore | QRhi, default OFF) + rendererFactory.h Kind::OpenGL_Core under #ifdef BALL_SPIKE_BACKEND_GLCORE + rendererFactory.C env-var BALLVIEW_USE_SPIKE_BACKEND=1 runtime gate + makeRenderer/makeSurface OpenGL_Core arms. sources.cmake compiles coreGLRenderer.C only under the spike option. .github/workflows/ci.yml: non-blocking macOS-only "Spike smoke check (macOS — GLCore backend)" step + actions/upload-artifact for the captured log (Plan 08 SPIKE-02 reference artifact). MAJOR DEVIATION / BLOCKER cascade required to ship Qt 6 link-green BALLView — first time since Plan 05-02: BLOCKER-B (mutex.h: template QMutexLocker<QMutex> + Qt 6 QMutex no-recursive, commit 204de36), BLOCKER-A (dockResultFile QtXml SAX stub under #if QT_VERSION<6,0,0 — full QXmlStreamReader port deferred as BLOCKER-A2, commit 3691232), BLOCKER-D widened (28 sites of Qt::WindowFlags=0, commit d33f58d), BLOCKER-E new (14-bucket Qt 6 API surface sweep across 37 files: QString::null, Qt::MidButton, QtWidgets/QAction header, QOpenGLFramebufferObject module move, QWebEnginePage module move, QTableWidgetItem::setBackgroundColor, QList/Tree::setItem{Selected,Expanded}, QWheelEvent::delta/pos, QString::sprintf, QFontMetrics::width, QLineF::intersect, QPalette::foreground/background, QStyleOption::init, QApplication::globalStrut, QLayout::setMargin, QPainter::setRedirected, qVariantFromValue, QSpontaneKeyEvent::setSpontaneous, HTMLPage::certificateError signal-conversion, rotateMode.C QFlags ambiguous operator, labelDialog.ui autoCompletion, downloadElectronDensity.C QFile incomplete-type, commit a0c28bc). Default-build BALLView runs and emits a valid BALLVIEW_GL_DIAG line (gl_version="2.1 Metal - 90.5"); gl_profile=none rather than =compatibility because Apple's GL 2.1 implementation does not expose Core/Compat distinction at v2.1 (NOT a regression — Plan 05-04 grep may need to relax on Apple Silicon). Spike-build runs the factory env-var gate correctly (CoreGLRenderer constructed, confirmed by stdout marker) but BALLView crashes early before initializeGL — expected throwaway-spike limitation: downstream pipeline calls GLRenderer-specific virtuals the bare-bones spike does not implement; PIPE-01 scope. scene.C touched in 2 mechanical setMargin->setContentsMargins lines (Qt 6 API sweep) — Phase 02.1 boundary preserved (no renderer-wiring change). Commits: 204de36, 3691232, d33f58d, a0c28bc, 93a59cd, de96561, c47bf43.
 
-**Stopped at:** Completed 09-test-suite-triage 09-01-PLAN.md
+**Stopped at:** Completed 999.50-01-PLAN.md
 
 **Previous stopped at:** Phase 05.1 Plan 05 complete (Task A5 -Wformat-overflow fix — d46b942; 20 sprintf → snprintf swaps in source/FORMAT/CIFParserParser.y using sizeof($$) which yields CIFPARSER_LINE_LENGTH=2550 via the Bison %union; libBALL build green on macos-arm64 / Qt 6.11; zero -Wformat-overflow on the regenerated CIFParserParser.C; tri-OS CI verification follows on push)
 
