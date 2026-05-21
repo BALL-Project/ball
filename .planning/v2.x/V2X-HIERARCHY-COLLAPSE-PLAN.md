@@ -104,16 +104,62 @@ HCP-3 (module re-open) per cluster.
 The collapse is NOT a new top-level milestone; it threads through the
 existing v2.2 H-phases. The plan slices it into HCP-0 … HCP-5:
 
-| HCP | Roadmap slot | Build mode | Gate |
-|---|---|---|---|
-| **HCP-0** design-lock | **= `H1b′`** (revises landed H1b) | n/a (docs) | role/depth/SS/PDB-field/API + consumer matrix (HCP1-2) LOCKED + Codex AGREE → else stage (§5) |
-| **HCP-1** store role model | within H1b′/H2 | restore + use narrowed build | task 0: restore KERNEL-only gating + baseline-green; then role enums/columns/payload + scalar+role mirror; **blocks H2d** (HCP1-3); KERNEL tests green |
-| **HCP-2** collapsed handle API | within H1b′ | narrowed build | 8 typed handles → `Molecule`/`Fragment`(+`Atom`) role-aware; `StructureQuery` free fns; KERNEL tests green |
-| **HCP-3** module re-open (= **H3a→H3b→H3c**) | H3 | remove guards cluster-by-cluster | each cluster migrated to role API, own commit + Codex review; **H3c (FORMAT) gate includes the PDB golden-corpus parse→write→parse smoke** (HCP1-4) |
-| **HCP-4** the flip (= **H4**) | H4 | full | delete v0 typed classes; store is sole truth; `sizeof(Atom)` drops |
-| **HCP-5** fidelity gate (= **H8** addition) | H8 | full + MSVC | full PDB/structural round-trip golden-corpus gate alongside D13 |
+| HCP | Roadmap slot | Build mode | Gate | Status |
+|---|---|---|---|---|
+| **HCP-0** design-lock | **= `H1b′`** (revises landed H1b) | n/a (docs) | role/depth/SS/PDB-field/API + consumer matrix (HCP1-2) LOCKED + Codex AGREE → else stage (§5) | ✅ H1bP→H1bPb AGREE + maintainer sign-off |
+| **HCP-1** store role model | within H1b′/H2 | restore + use narrowed build | task 0: restore KERNEL-only gating + baseline-green; then role enums/columns/payload + scalar+role mirror; **blocks H2d** (HCP1-3); KERNEL tests green | ✅ KR1 + HCP1R→HCP1Rb GO; 132/132 + 286/286 |
+| **HCP-2** collapsed handle API | within H1b′ | narrowed build | 8 typed handles → `Molecule`/`Fragment`(+`Atom`) role-aware; `StructureQuery` free fns; KERNEL tests green | ⏭ NEXT (after H2d) — see §6a |
+| **HCP-3** module re-open (= **H3a→H3b→H3c**) | H3 | remove guards cluster-by-cluster | each cluster migrated to role API, own commit + Codex review; **H3c (FORMAT) gate includes the PDB golden-corpus parse→write→parse smoke** (HCP1-4) | ⏳ |
+| **HCP-4** the flip (= **H4**) | H4 | full | delete v0 typed classes; store is sole truth; `sizeof(Atom)` drops | ⏳ |
+| **HCP-5** fidelity gate (= **H8** addition) | H8 | full + MSVC | full PDB/structural round-trip golden-corpus gate alongside D13 | ⏳ |
 
 JSON `kind`+`role` model freezes at **H6b** (unchanged dependency).
+
+### 6a. Course from HCP-1 → HCP-2 (next milestone)
+
+**Immediate — H2d (close the H2 mirror).** Randomized full-surface parity
+sweep: random sequences of insert/remove/reparent/splice/swap/clear/replace +
+select/deselect + post-root scalar setters, asserting `descTable == descV0`
+(name-bearing) + per-row derived selection parity after each step. SCOPE:
+exclude rooted-object `set()`/`operator=`/`persistentRead` (the documented
+full-replacement carry-over) until that mirror lands in HCP-2. Then a short
+Codex H2d close-review → H2 DONE.
+
+**Next milestone — HCP-2 (the collapsed handle API).** The user-visible heart
+of the collapse, still dual-existence (handles read the HCP-1 role columns;
+v0 classes remain until H4). Sub-steps, each green + committed:
+- **HCP-2a — role-aware value handles.** Add `Molecule` + `Fragment` (+ reuse
+  `Atom`) handles over `ContainerHandleBase`: `getMoleculeRole`/`getFragmentRole`
+  /`getResidueKind`/`getSSKind` + role-asserting `getID`/`getInsertionCode`
+  (debug/Python `BALL_CONTAINER_HANDLE_CHECKS`). Keep the 8 typed `*Handle`
+  as `[[deprecated]]` aliases for now.
+- **HCP-2b — `BALL::StructureQuery` namespace.** `residues`/`chains`/
+  `residueByID`/`nTerminal`/`cTerminal` (polymer-residue, H1bP-5)/
+  `secondaryStructureOf`/`secondaryStructuresOf`/`fragmentsByRole` +
+  canonical-depth-honouring iteration; ship the `[[deprecated]]`
+  role-filtered iterator alias (the 40-file `ResidueIterator` surface, D-HC5).
+- **HCP-2c — land the deferred mirrors (the role/property rework point).**
+  (i) container `setProperty`/`clearProperty` mirror incl. property-driven
+  `ResidueKind`/`IS_SOLVENT` → role refinement (so MoleculeRole stops
+  returning UNKNOWN for solvent/ligand/ion); (ii) full-subtree-replacement-on-
+  rooted mirror (`set`/`operator=`/`persistentRead` + cross-store move (KR1
+  HIGH-1) + insertParent/`replace` materialise-new-member) — re-materialise the
+  affected subtree. Lift the H2d scope restriction once landed.
+- **HCP-2d — SS-as-annotation (D-HC4).** Convert SecondaryStructure from an
+  owning Chain→SS→Residue layer to a non-owning annotation belonging to its
+  chain (start/end residue refs + sheet payload); rewrite the chain→SS→residue
+  traversals. (Heaviest structural item; may split into its own sub-phase.)
+- **HCP-2 close-review** (Codex) → GO.
+
+NOTE: `ContainerKind` shrink to `{MOLECULE,FRAGMENT}` is deferred to the H4
+flip (HCP-4) — during dual existence the v0 kind still drives role derivation
+(HCP-1a), so shrinking early would force premature consumer changes.
+
+**Then:** HCP-3 (= H3, module re-open + consumer migration onto the role API,
+FORMAT/PDB last with the corpus smoke) → HCP-4 (= H4 flip: delete v0 typed
+classes, `sizeof(Atom)` drops, retire dual existence) → H5 (Bond unify) →
+H6/H7 (JSON v2 + VIEW/MSVC) → H8 (= HCP-5, D13 + PDB-fidelity gate) →
+**v2.2.0**.
 
 ### HCP-0 — design-lock (this IS `H1b′`)
 Deliverable: a design doc (`V22-H1bPRIME-DESIGN.md`) + decisions appended to
