@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: executing
-stopped_at: "Plan 999.52-01 code/build complete — PAUSED at blocking checkpoint:human-verify (Task 3 GUI: drag the Material-tab Transparency slider in a running BALLView, confirm the representation visibly becomes transparent, the Model-section slider reflects the same value, and reset works). VIEW-INSP-03 implementation-complete / awaiting-verify; closes #527 once GUI-confirmed. (999.51-01 Clipping + 999.51-02 Label also still awaiting their GUI verifies — three Inspector cut-overs pending one running-BALLView pass.)"
-last_updated: "2026-05-21T19:51:05.037Z"
+stopped_at: "999.57-03 at BLOCKING checkpoint:human-verify (render UAT pending)"
+last_updated: "2026-05-21T20:03:37.926Z"
 last_activity: 2026-05-21
 progress:
   total_phases: 72
-  completed_phases: 31
+  completed_phases: 32
   total_plans: 81
-  completed_plans: 80
-  percent: 43
+  completed_plans: 81
+  percent: 44
 ---
 
 # STATE: BALLView 1.6 Modernization
@@ -26,7 +26,7 @@ progress:
 
 Phase: 999.57 (inspector-controller-cutover-displayproperties) — EXECUTING
 Plan: 3 of 3
-Status: Ready to execute
+Status: Plan 03 at BLOCKING checkpoint:human-verify — render-path repoint code+build+audit DONE (commits 2b87c689ea, 29d661fa8f, a44eef0ed6; BALLView.app links clean BALL_UI_V2=ON; render path grep-proven detached), running-BALLView render UAT PENDING. VIEW-CLEAN-02 stays PARTIAL (NOT complete).
 Last activity: 2026-05-21
 
 ## Performance Metrics
@@ -94,6 +94,7 @@ Last activity: 2026-05-21
 | Phase 999.52-inspector-transparency P01 | ~25min | 2 of 3 tasks (Task 3 blocking GUI human-verify) | 4 files |
 | Phase 999.57 P01 | ~10min | 3 tasks | 4 files |
 | Phase 999.57 P02 | ~4min | 3 tasks | 5 files (2 new: colorProcessorFactory.{h,C}) |
+| Phase 999.57 P03 | ~5min | 4 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -201,7 +202,9 @@ Last activity: 2026-05-21
 
 ### Blockers
 
-- None.
+-
+
+- 999.57-03 at checkpoint:human-verify — render UAT pending
 
 ## Session Continuity
 
@@ -229,7 +232,7 @@ Last activity: 2026-05-21
 
 **Previous last action:** Phase 5 Plan 05 (GL-core spike + Qt 6 link bring-up) executed — 7 commits, 74 files. New files: `include/BALL/VIEW/RENDERING/RENDERERS/coreGLRenderer.h` + `source/VIEW/RENDERING/RENDERERS/coreGLRenderer.C` (both carry the THROWAWAY-SPIKE provenance header). SPIKE-01 (GL-core arm) deliverable met: CoreGLRenderer overrides Renderer::renderRepresentations_() + capabilities() + pickObjects() (R32UI color-buffer FBO + glReadPixels readback) + does NOT implement per-primitive immediate-mode virtuals. CMakeLists.txt new BALL_SPIKE_BACKEND option (OFF | GLCore | QRhi, default OFF) + rendererFactory.h Kind::OpenGL_Core under #ifdef BALL_SPIKE_BACKEND_GLCORE + rendererFactory.C env-var BALLVIEW_USE_SPIKE_BACKEND=1 runtime gate + makeRenderer/makeSurface OpenGL_Core arms. sources.cmake compiles coreGLRenderer.C only under the spike option. .github/workflows/ci.yml: non-blocking macOS-only "Spike smoke check (macOS — GLCore backend)" step + actions/upload-artifact for the captured log (Plan 08 SPIKE-02 reference artifact). MAJOR DEVIATION / BLOCKER cascade required to ship Qt 6 link-green BALLView — first time since Plan 05-02: BLOCKER-B (mutex.h: template QMutexLocker<QMutex> + Qt 6 QMutex no-recursive, commit 204de36), BLOCKER-A (dockResultFile QtXml SAX stub under #if QT_VERSION<6,0,0 — full QXmlStreamReader port deferred as BLOCKER-A2, commit 3691232), BLOCKER-D widened (28 sites of Qt::WindowFlags=0, commit d33f58d), BLOCKER-E new (14-bucket Qt 6 API surface sweep across 37 files: QString::null, Qt::MidButton, QtWidgets/QAction header, QOpenGLFramebufferObject module move, QWebEnginePage module move, QTableWidgetItem::setBackgroundColor, QList/Tree::setItem{Selected,Expanded}, QWheelEvent::delta/pos, QString::sprintf, QFontMetrics::width, QLineF::intersect, QPalette::foreground/background, QStyleOption::init, QApplication::globalStrut, QLayout::setMargin, QPainter::setRedirected, qVariantFromValue, QSpontaneKeyEvent::setSpontaneous, HTMLPage::certificateError signal-conversion, rotateMode.C QFlags ambiguous operator, labelDialog.ui autoCompletion, downloadElectronDensity.C QFile incomplete-type, commit a0c28bc). Default-build BALLView runs and emits a valid BALLVIEW_GL_DIAG line (gl_version="2.1 Metal - 90.5"); gl_profile=none rather than =compatibility because Apple's GL 2.1 implementation does not expose Core/Compat distinction at v2.1 (NOT a regression — Plan 05-04 grep may need to relax on Apple Silicon). Spike-build runs the factory env-var gate correctly (CoreGLRenderer constructed, confirmed by stdout marker) but BALLView crashes early before initializeGL — expected throwaway-spike limitation: downstream pipeline calls GLRenderer-specific virtuals the bare-bones spike does not implement; PIPE-01 scope. scene.C touched in 2 mechanical setMargin->setContentsMargins lines (Qt 6 API sweep) — Phase 02.1 boundary preserved (no renderer-wiring change). Commits: 204de36, 3691232, d33f58d, a0c28bc, 93a59cd, de96561, c47bf43.
 
-**Stopped at:** Plan 999.52-01 code/build complete — PAUSED at blocking checkpoint:human-verify (Task 3 GUI: drag the Material-tab Transparency slider in a running BALLView, confirm the representation visibly becomes transparent, the Model-section slider reflects the same value, and reset works). VIEW-INSP-03 implementation-complete / awaiting-verify; closes #527 once GUI-confirmed. (999.51-01 Clipping + 999.51-02 Label also still awaiting their GUI verifies — three Inspector cut-overs pending one running-BALLView pass.)
+**Stopped at:** 999.57-03 at BLOCKING checkpoint:human-verify (render UAT pending)
 
 **Previous stopped at:** Plan 999.51-02 code/build complete — PAUSED at blocking checkpoint:human-verify (Task 4 GUI: confirm Label section renders + a label visibly appears in running BALLView). VIEW-INSP-02 implementation-complete / awaiting-verify. (Plan 999.51-01 Clipping also still awaiting GUI verify — both Inspector cut-overs pending one running-BALLView pass.)
 
