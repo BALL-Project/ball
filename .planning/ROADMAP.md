@@ -2455,7 +2455,9 @@ Plans:
 **Scope:** `clippingController.{h,C}`, `labelController.{h,C}`, `inspectorView.C`, new `sections/clippingSection.{h,C}` + `sections/labelSection.{h,C}`. **Important:** these REUSE the legacy Clipping/Label dialogs — those dialogs must NOT be deleted by Phase 999.53 until this lands.
 **Requirements:** `VIEW-INSP-01`, `VIEW-INSP-02`.
 **Depends on:** none. **Effort:** ~200 LOC per controller.
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.51`).
+**Plans:** 2 plans (wave 1 → wave 2; serialized on the shared `inspectorView.{h,C}` + `sources.cmake` registration).
+- [ ] 999.51-01-PLAN.md — Clipping cut-over: ClippingSection + functional ClippingController::apply() (VIEW-INSP-01).
+- [ ] 999.51-02-PLAN.md — Label cut-over: LabelSection + functional LabelController::apply() (VIEW-INSP-02).
 
 ### Phase 999.52: Inspector material transparency control (#527) (TARGETED FOR v1.7.x)
 
