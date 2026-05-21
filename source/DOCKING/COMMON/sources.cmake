@@ -12,6 +12,8 @@ SET(SOURCES_LIST
 	flexibleMolecule.C
 	gridAnalysis.C
 	poseClustering.C
+	poseClusteringSerialization.C
+	poseClusteringGraphViz.C
 	receptor.C
 	result.C
 	sideChainOptimizer.C

@@ -18,17 +18,13 @@
 #include <boost/version.hpp>
 
 #include <boost/graph/iteration_macros.hpp>
-#include <boost/graph/graphviz.hpp>
-#include <boost/graph/adj_list_serialize.hpp>
-
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
-
-#include <boost/archive/text_oarchive.hpp>
-#include <boost/archive/text_iarchive.hpp>
-
-#include <boost/serialization/set.hpp>
-#include <boost/serialization/variant.hpp>
+// v1.7.2 build-accel: the dominant compile-time cost of this TU —
+// boost::serialization (adj_list_serialize + 4 archive flavors + serialization/set)
+// and boost::graph/graphviz (write_graphviz) — has been MOVED OUT to
+// poseClusteringSerialization.C and poseClusteringGraphViz.C so the bulk of the
+// clustering code here no longer pays for those template instantiations.
+// (boost/serialization/variant.hpp was dead — ClusterProperties::center is not
+// serialized.) Behaviour + on-disk/DOT formats are unchanged.
 
 using namespace std;
 using namespace Eigen;
@@ -1589,10 +1585,7 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		} //next cluster
 	}
 
-	void PoseClustering::exportWardClusterTreeToGraphViz(std::ostream& out)
-	{
-		boost::write_graphviz(out, cluster_tree_, ClusterTreeWriter_(&cluster_tree_));
-	}
+	// exportWardClusterTreeToGraphViz moved to poseClusteringGraphViz.C (v1.7.2 build-accel).
 
 	void PoseClustering::exportToJSONDFS_(ClusterTreeNode const& current, String& result)
 	{
@@ -1628,69 +1621,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 		out << result;
 	}
 
-	void PoseClustering::serializeWardClusterTree(std::ostream& out, bool binary)
-	{
-		if (binary)
-		{
-			boost::archive::binary_oarchive oa(out);
-			oa << cluster_tree_;
-		}
-		else
-		{
-			boost::archive::text_oarchive oa(out);
-			oa << cluster_tree_;
-		}
-	}
-
-	void PoseClustering::deserializeWardClusterTree(std::istream& in, bool binary)
-	{
-		if (binary)
-		{
-			boost::archive::binary_iarchive ia(in);
-			ia >> cluster_tree_;
-		}
-		else
-		{
-			boost::archive::text_iarchive ia(in);
-			ia >> cluster_tree_;
-		}
-
-		// unfortunately, old versions of boost don't serialize / deserialize graph_bundle properties... *sigh*
-		// so, be nice to them...
-#if BOOST_VERSION < 105100
-		// iterate over all nodes in the graph and find the one which has no in_edges
-		// this would be much simpler if boost would store in_degrees for directed graphs... we don't want a bidirectional graph, though
-		HashMap<ClusterTreeNode, Size> in_degrees;
-		BGL_FORALL_VERTICES(current_vertex, cluster_tree_, ClusterTree)
-		{
-			boost::graph_traits<ClusterTree>::out_edge_iterator e, e_end;
-
-			for (boost::tie(e, e_end) = boost::out_edges(current_vertex, cluster_tree_); e != e_end; ++e)
-			{
-				ClusterTreeNode target = boost::target(*e, cluster_tree_);
-				if (in_degrees.find(target) == in_degrees.end())
-				{
-					in_degrees[target] = 1;
-				}
-				else
-				{
-					in_degrees[target]++;
-				}
-			}
-		}
-
-		// now, iterate over the tree again to find the one node without a parent
-		BGL_FORALL_VERTICES(current_vertex, cluster_tree_, ClusterTree)
-		{
-			if (in_degrees[current_vertex] == 0)
-			{
-				cluster_tree_[boost::graph_bundle] = current_vertex;
-				break;
-			}
-		}
-#endif
-
-	}
+	// serializeWardClusterTree / deserializeWardClusterTree moved to
+	// poseClusteringSerialization.C (v1.7.2 build-accel — quarantines the
+	// boost::serialization archive instantiations, the dominant compile cost).
 
 
 #ifdef BALL_HAS_TBB
@@ -1813,30 +1746,9 @@ std::cout << current_level << " " << num_poses << " " << percentage << std::endl
 				return *this;
 		}
 
-	template <class Archive>
-	void PoseClustering::ClusterProperties::serialize(Archive& ar, const unsigned int /*version*/)
-	{
-		ar & poses;
-		ar & size;
-		//		TODO: handle serialization of eigen matrix
-//		ar & center;
-		ar & merged_at;
-	}
-
-	void PoseClustering::ClusterTreeWriter_::operator() (std::ostream& out, const ClusterTreeNode& v) const
-	{
-		out << "[label=\"";
-		if ((*cluster_tree_)[v].poses.size() > 0)
-			out << *((*cluster_tree_)[v].poses.begin());
-		else
-		{
-			out << (*cluster_tree_)[v].merged_at;
-#ifdef POSECLUSTERING_DEBUG
-		  out	<< "\t" << (*cluster_tree_)[v].current_cluster_id;
-#endif
-		}
-		out << "\"]";
-	}
+	// ClusterProperties::serialize moved to poseClusteringSerialization.C;
+	// ClusterTreeWriter_::operator() moved to poseClusteringGraphViz.C
+	// (v1.7.2 build-accel).
 
 	const System& PoseClustering::getSystem() const
 	{
