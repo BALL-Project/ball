@@ -237,7 +237,7 @@ Added 2026-05-21 when the v1.7.x patch-cycle runway (Phases 999.51–999.56) was
 - [ ] **VIEW-INSP-03** (Phase 999.52 · v1.7.x-30 · GH #527): a working transparency control in the Inspector `materialSection`, superseding the broken legacy `MaterialSettings` transparency slider
 - [ ] **VIEW-CLEAN-01** (Phase 999.53 · v1.7.x-08): the 9 superseded legacy VIEW dialog files (commit `7f56f80d89` breadcrumb) deleted one atomic commit each, each confirmed unreferenced first, tri-OS CI green between deletions
 - [ ] **VIEW-UX-01** (Phase 999.54 · v1.7.x-31 · GH #501): BALLView emits a `Log`/status-bar warning at startup when zero renderer plugins are discovered
-- [ ] **BUILD-ACCEL-08** (Phase 999.55 · v1.7.x-09 PCH half / orig. 999.16): `target_precompile_headers` wired for BALL + VIEW over an auditable Qt/Boost/STL header set; ccache `sloppiness` configured so PCH caches on all 3 CI runners; cold-cache build time measurably reduced (target ≥15% on header-parse cost)
+- [ ] **BUILD-ACCEL-08** (Phase 999.55 · v1.7.x-09 PCH half): extend PCH to the test-suite build via `target_precompile_headers(<test> REUSE_FROM BALL)` / `REUSE_FROM VIEW` in `test/CMakeLists.txt` (PIC-matched to the SHARED-lib PCH, AppleClang-guarded), reusing the audited library header sets shipped under BUILD-ACCEL-01 in 999.16 (no new header audit); the existing `CCACHE_SLOPPINESS` contract covers the REUSE_FROM objects on all 3 CI runners; cold-cache test-build header-parse cost measurably reduced (target ≥15%)
 - [ ] **DOCS-01** (Phase 999.56 · v1.7.x-32 · GH #560): the PDF tutorial refreshed against v1.7.x — build system (Homebrew/vcpkg), screenshots, URLs, developer list, and the GitHub Releases download path
 
 ---

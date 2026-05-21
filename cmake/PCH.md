@@ -413,9 +413,80 @@ level rather than removing PCH entirely from the codebase.
 
 ---
 
+## Phase 999.55 — Test-suite PCH (REUSE_FROM)
+
+**Phase:** 999.55 (BUILD-ACCEL-08)
+**Date:** 2026-05-21
+**Targets:** the 298 `*_test.C` executables in `test/CMakeLists.txt` (BALL class tests + VIEW tests)
+
+The BALL + VIEW **library-target** PCH shipped in Phase 999.16 (BUILD-ACCEL-01,
+commits `d83c937`, `9c713fd`, `5e04578`) — `target_precompile_headers(BALL PRIVATE …)`
+and `target_precompile_headers(VIEW PRIVATE …)` are wired in `CMakeLists.txt`. Because
+that PCH is `PRIVATE`, downstream consumers — including the test executables — do **not**
+inherit it (see §"Why PRIVATE"). Phase 999.55 closes the remaining live half of the
+canonical v1.7.x-09 PCH scope (the "test-suite build also gets PCH" deliverable, called
+out as "the second-biggest win — test-build is ~half the size of the main build") by
+extending the library PCH to every test executable via:
+
+```cmake
+# test/CMakeLists.txt — inside each test FOREACH, under the AppleClang guard
+IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")
+    TARGET_PRECOMPILE_HEADERS(${test} REUSE_FROM BALL)   # VIEW tests: REUSE_FROM VIEW
+    SET_TARGET_PROPERTIES(${test} PROPERTIES POSITION_INDEPENDENT_CODE ON)
+ENDIF()
+```
+
+`REUSE_FROM` reuses the already-audited 21-header (BALL) / 23-header (VIEW) sets
+**verbatim** — no new header audit is performed. BALL class tests reuse libBALL's PCH;
+VIEW tests (which link both BALL and VIEW) reuse libVIEW's PCH, the larger superset for
+the GUI TUs. `CMAKE_MINIMUM_REQUIRED` is 3.21 and `REUSE_FROM` needs ≥3.16, so the
+feature is available.
+
+### Engineering constraints
+
+1. **`POSITION_INDEPENDENT_CODE ON` (mandatory).** `libBALL`/`libVIEW` are
+   `ADD_LIBRARY(... SHARED ...)`, compiled position-independent (`-fPIC` on GCC/Clang).
+   A target reusing their PCH must compile with compatible flags or GCC/Clang abort the
+   build with **"PCH file was compiled with different flags"**. Setting
+   `POSITION_INDEPENDENT_CODE ON` on each PCH-reusing test executable matches the
+   SHARED-library PCH flags. This is a no-op / harmless on MSVC (no `-fPIC` concept).
+2. **Same `IF(NOT … AppleClang)` guard as the library wiring.** The same Apple-Clang
+   ccache non-determinism that forced the library-target exclusion in 999.16 (0.81% hit
+   rate, ~10× build regression — see §"macOS Apple Clang PCH + ccache Incompatibility")
+   applies identically to the reused PCH on the test build. The guard string is mirrored
+   exactly so the library build and the test build skip PCH on the same platform (macOS).
+3. **No ci.yml change.** The job-level `CCACHE_SLOPPINESS:
+   "pch_defines,time_macros,include_file_mtime"` shipped in 999.16 already covers the
+   `REUSE_FROM`-produced PCH objects for the test build on all three runners.
+   `CMakeLists.txt` and `.github/workflows/ci.yml` are unchanged by 999.55.
+
+### Test-build measurement
+
+The acceptance threshold for BUILD-ACCEL-08 is a **≥15% reduction on the per-TU
+header-parse cost** of the 298-TU test build, measured against the 999.19 profiling
+baseline. The local executor runs on macOS (AppleClang) where the guard skips PCH, so
+the test-build PCH path is **not** exercisable locally — it is validated by the Linux /
+Windows CI runners (the cross-platform oracle). Per the "do NOT invent numbers" rule,
+the post-PCH column is left pending the first non-AppleClang CI run.
+
+| Build | Baseline (pre-test-PCH) | Post-test-PCH | Source |
+|---|---|---|---|
+| Windows-x64 cold test build | per 999.19 baseline (CI run [26088173685](https://github.com/BALL-Project/ball/actions/runs/26088173685), `.ninja_log`) | pending CI run `<id>` | Linux/Windows CI on push |
+| Linux-x64 warm test build | per 999.16 Linux baseline (29s lib warm-ccache + PCH) | pending CI run `<id>` | Linux CI on push |
+| macOS-arm64 | n/a — PCH guarded off (AppleClang) | n/a | excluded (same as library targets) |
+
+**Threshold:** ≥15% on the per-TU header-parse cost (BUILD-ACCEL-08). Note that PCH does
+**not** help template-metaprogramming-bound TUs (e.g. `poseClustering.C`); the gain is
+on the Qt/Boost/STL/KERNEL header-parse cost that every test TU re-incurs without PCH.
+Link the CI run id into the table above once the first non-AppleClang run with the
+test-suite PCH lands.
+
+---
+
 ## References
 
 - `CMakeLists.txt` — `target_precompile_headers` wiring inside `IF(NOT CMAKE_CXX_COMPILER_ID STREQUAL "AppleClang")` guard (after the CUDA/non-CUDA block)
+- `test/CMakeLists.txt` — Phase 999.55 `target_precompile_headers(<test> REUSE_FROM BALL/VIEW)` + `POSITION_INDEPENDENT_CODE ON` under the same AppleClang guard
 - `.github/workflows/ci.yml` — `CCACHE_SLOPPINESS` environment variable (no-op on macOS since PCH is skipped, but kept for consistency and Linux benefit)
 - Phase 999.2 SUMMARY (`.planning/phases/999.2-ninja-generator-switch/999.2-SUMMARY.md`)
   — the cold/warm Build baseline used as the measurement reference
