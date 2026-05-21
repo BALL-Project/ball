@@ -104,9 +104,29 @@ acceptance testing. Full per-item detail: `.planning/v1.7.x-PATCH-QUEUE.md`.
 
 ## v1.7.2 patch cycle
 
-v1.7.2 is a build-acceleration cycle (the `poseClustering.C` boost
-template-metaprogramming cost that dominated the Windows release build).
-Full per-item detail: `.planning/v1.7.2-BUILD-ACCEL-PLAN.md`.
+v1.7.2 is the BALLView **Inspector/UX patch cycle** — it finishes wiring the
+v1.7 Inspector and lands the UX polish deferred during the v1.7.0 RC cycle:
+
+- **Inspector Clipping + Label sections** — the `ClippingController` /
+  `LabelController` cut-overs (Phase 999.51) — the Inspector now drives clipping
+  planes and labels directly, not just the legacy dialogs.
+- **Inspector material Transparency control** (Phase 999.52, closes GitHub #527)
+  — a working transparency slider on the Material section, on the GL-honored
+  `Representation::setTransparency()` path.
+- **Startup warning when no renderer is available** (Phase 999.54, closes #501).
+- **Legacy dialog cleanup** (Phase 999.53) + **PDF tutorial refresh** (Phase
+  999.56).
+
+A small **build-acceleration pre-phase** (Phase 999.50) opened the cycle: it
+eliminated the `poseClustering.C` boost template-metaprogramming cost that
+dominated the Windows build (~58 min → ~14 min) and added `release.yml` ccache
+reuse. That's a self-contained internal win, not the headline of v1.7.2. Full
+detail: `.planning/v1.7.2-BUILD-ACCEL-PLAN.md` (build pre-phase) +
+`.planning/v1.7.x-PATCH-QUEUE.md` (Inspector/UX items).
+
+> **v1.7.2 does not tag until the Inspector/UX phases above land and pass UAT.**
+> The build pre-phase is already tri-OS-green but ships *as part of* v1.7.2, not
+> as a separate lean tag.
 
 ### Breaking changes
 
