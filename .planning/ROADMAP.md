@@ -22,7 +22,7 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] ~~**Phase 7: Networking Rework**~~ - **Deferred to backlog 999.3** — not core value, the Asio code already compiles (Phase 1); the proper rework + test is 1.6.x polish
 - [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
 - [x] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)* (completed 2026-05-16)
-- [ ] **Phase 999.50: v1.7.2 build acceleration — Ward serializer de-boost** - Hand-roll a compact reader/writer for `poseClusteringSerialization.C` to drop the heaviest Boost compile-time component (v1.7.1 quarantined it; v1.7.2 eliminates it); regenerate the `.dat` fixture in the new format; add release.yml ccache reuse. Canonical plan: [`v1.7.2-BUILD-ACCEL-PLAN.md`](v1.7.2-BUILD-ACCEL-PLAN.md)
+- [x] **Phase 999.50: v1.7.2 build acceleration — Ward serializer de-boost** - Hand-roll a compact reader/writer for `poseClusteringSerialization.C` to drop the heaviest Boost compile-time component (v1.7.1 quarantined it; v1.7.2 eliminates it); regenerate the `.dat` fixture in the new format; add release.yml ccache reuse. Canonical plan: [`v1.7.2-BUILD-ACCEL-PLAN.md`](v1.7.2-BUILD-ACCEL-PLAN.md) (completed 2026-05-21)
 
 ## Phase Details
 
@@ -2435,11 +2435,11 @@ Plans:
 
 **Estimated effort:** ~40–80 LOC + fixture regen + 1 CI yaml change. Low-medium. Risk: format break (handled via regen + magic header).
 
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 999.50-01-PLAN.md — BUILD-ACCEL-06: hand-rolled boost-free Ward-tree serializer (magic+version header) + new-format fixture regen + RELEASE-NOTES break note; callers + PoseClustering_test3/test1 green
-- [ ] 999.50-02-PLAN.md — BUILD-ACCEL-07: release.yml ccache restore/save (key aligned with ci.yml) + optional disabled MSVC /O1 fallback (item ③)
+- [x] 999.50-02-PLAN.md — BUILD-ACCEL-07: release.yml ccache restore/save (key aligned with ci.yml) + optional disabled MSVC /O1 fallback (item ③)
 
 ---
 *Roadmap created: 2026-05-14*
