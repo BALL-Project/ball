@@ -4,13 +4,13 @@ milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: executing
 stopped_at: "Plan 999.52-01 code/build complete — PAUSED at blocking checkpoint:human-verify (Task 3 GUI: drag the Material-tab Transparency slider in a running BALLView, confirm the representation visibly becomes transparent, the Model-section slider reflects the same value, and reset works). VIEW-INSP-03 implementation-complete / awaiting-verify; closes #527 once GUI-confirmed. (999.51-01 Clipping + 999.51-02 Label also still awaiting their GUI verifies — three Inspector cut-overs pending one running-BALLView pass.)"
-last_updated: "2026-05-21T19:43:21.441Z"
+last_updated: "2026-05-21T19:51:05.037Z"
 last_activity: 2026-05-21
 progress:
   total_phases: 72
   completed_phases: 31
   total_plans: 81
-  completed_plans: 79
+  completed_plans: 80
   percent: 43
 ---
 
@@ -25,7 +25,7 @@ progress:
 ## Current Position
 
 Phase: 999.57 (inspector-controller-cutover-displayproperties) — EXECUTING
-Plan: 2 of 3
+Plan: 3 of 3
 Status: Ready to execute
 Last activity: 2026-05-21
 
@@ -93,11 +93,13 @@ Last activity: 2026-05-21
 | Phase 999.51-inspector-clipping-label-cutover P02 | ~10min | 3 of 4 tasks (Task 4 blocking GUI human-verify) | 6 files (2 new: labelSection.{h,C}) |
 | Phase 999.52-inspector-transparency P01 | ~25min | 2 of 3 tasks (Task 3 blocking GUI human-verify) | 4 files |
 | Phase 999.57 P01 | ~10min | 3 tasks | 4 files |
+| Phase 999.57 P02 | ~4min | 3 tasks | 5 files (2 new: colorProcessorFactory.{h,C}) |
 
 ## Accumulated Context
 
 ### Decisions
 
+- [Phase 999.57-inspector-controller-cutover Plan 02]: Relocated `createColorProcessor` + its `applySettingsTo` override-application out of `ColoringSettingsDialog` into a headless `ColorProcessorFactory` (`include/BALL/VIEW/MODELS/colorProcessorFactory.{h,C}`), mirroring Plan 01's ModelProcessorFactory. `ColorProcessorFactory::create(ColoringMethod, const ColoringOverrides&)` constructs the per-method processor (which already loads its compiled default color map) then layers an explicit `ColoringOverrides` value object — zero Qt-widget dependency. `ColoringOverrides` carries the dialog's color tables (element/residue-name/chain/molecule as empty==no-override containers) + color-button/slider groups (residue-number/charge/distance/occupancy/secondary-structure/temperature-factor/force/residue-type, each gated by a `has_*` presence flag). CONFIG-01 invariant preserved: a default-constructed `ColoringOverrides` layers nothing → compiled-default processor, byte-equivalent to the molecule-load default-rep render. `ColoringSettingsDialog::createColorProcessor` thinned to `ColorProcessorFactory::create(method, buildColoringOverrides_())`; `applySettingsTo` kept INTACT (displayProperties.C:502 still calls it on the render path — Plan 03 repoints it). Render path (displayProperties.C:487 + coloringController.C:100) UNCHANGED this plan (verified via `git diff --name-only HEAD`). libVIEW builds clean (BALL_UI_V2=ON). Task commits `f414c3d572` (header), `d47e98f554` (impl+cmake), `fadbc571f9` (dialog delegation). **VIEW-CLEAN-02 remains PARTIAL** (phase-spanning; finishes in Plan 03 + GUI verify — NOT marked complete).
 - [Phase 999.52-inspector-transparency Plan 01]: The Inspector Material-tab Transparency control drives the **working** interactive-GL path — `Representation::setTransparency()` (0-255 per-vertex alpha) + `rep_->update(false)` — NOT `Stage::Material.transparency`, which only POVRay/RTfact read (RTfact disabled) and which GLRenderer::setMaterial_ never consumes. Writing the dead field is exactly the #527 bug; the negative-grep acceptance criterion (`material.transparency =` must NOT appear) enforces this. The Material control shares the SAME Representation transparency state as the existing Model-section slider (`revert()` reads `rep_->getTransparency()`), so they stay mutually consistent — a deliberate second entry point onto one backend, not a divergent duplicate. `rep_->update(false)` (cheap, no composite re-walk) chosen because the material intensities flow through the separate scene-material path; this is the Rule 3 build fix for the plan's argument-less `rep_->update()` (Representation::update(bool) has no default). MaterialController int `transparency` property mirrors ModelController exactly (Q_PROPERTY/getter/setTransparency slot/transparencyChanged signal/transparency_ member; setter guards-on-equal + emits). Legacy MaterialSettings dialog left untouched (Phase 999.53 deletes it). VIEW-INSP-03 implementation-complete; **BLOCKING GUI human-verify pending** (compile is necessary-but-not-sufficient for a GUI control). Task commits `ce4061a93d` (controller), `7374d42ae8` (section + build fix). libVIEW + BALLView.app built clean under BALL_UI_V2=ON (build-ui-on).
 - [Phase 999.51-inspector-clipping-label-cutover Plan 01]: ClippingController is **Scene-bound** (Scene owns the clipping planes via RepresentationManager), NOT Representation-bound — so it has no `setRepresentation`. The Inspector resyncs it via `revert()` in `setActiveRepresentation` and the Representation branch of `onTabChanged_` (new pattern: Scene-bound Inspector controller resync). Constructed with `Scene::getInstance(0)` in `attachRepresentationTab()`.
 - [Phase 999.51 Plan 01]: ClippingController owns a **single** clipping plane = `front()` of `RepresentationManager::getClippingPlanes()`. Created on first enable (mirrors scene.C:3448 setupViewVolume: point=camera look-at, normal=−viewVector); disabled via `setActive(false)` rather than removed, to keep the reused-plane lifecycle simple. Offset is a percent slider (0..100 → float 0..1) that shifts the plane point along its normal by `offset_ * 20.0` from the camera look-at (reuses legacy SetClippingPlane point/normal idiom).

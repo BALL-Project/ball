@@ -2520,11 +2520,11 @@ Plans:
 **Requirements:** `VIEW-CLEAN-02`.
 **Risk:** HIGHEST — touches the threaded rendering pipeline (CLAUDE.md). Must be incremental + verifiable against a running GUI; a prior naive deletion broke the build (commit `7f56f80d89`). Likely multi-plan with GUI UAT per domain (Model/Coloring/Stage/Light render end-to-end).
 **Depends on:** none (builds on 999.51/52 Inspector sections). **Blocks:** 999.53.
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
 - [x] 999.57-01-PLAN.md — Relocate `createModelProcessor` → headless `ModelProcessorFactory` (param struct); delegate the legacy dialog to it (Wave 1)
-- [ ] 999.57-02-PLAN.md — Relocate `createColorProcessor` → headless `ColorProcessorFactory` (overrides struct, compiled-defaults invariant); delegate the legacy dialog (Wave 1)
+- [x] 999.57-02-PLAN.md — Relocate `createColorProcessor` → headless `ColorProcessorFactory` (overrides struct, compiled-defaults invariant); delegate the legacy dialog (Wave 1)
 - [ ] 999.57-03-PLAN.md — Repoint `displayProperties.C:451/487` + `modelController`/`coloringController` onto the factories; blocking running-BALLView render UAT (default-rep + Model + Coloring sections); CONSUMER-AUDIT classifying every remaining reference for 999.53 (Wave 2)
 
 > **SCOPE SPLIT (planner, 2026-05-21):** This phase delivers Stream A only — relocating the two render-path factories (`createModelProcessor`/`createColorProcessor`) off `displayProperties.C`, which unblocks 999.53's deletion of the **modelSettingsDialog + coloringSettingsDialog + displayProperties** triples. The `scene.C` `MaterialSettings`/`LightSettings`/`StageSettings` constructions (orchestrator Stream B) are NOT dead code — they are load-bearing for the Preferences-dialog stack (`scene.C:1104-1130`), `applyPreferences()` (`1142-1178`), and the entire **stereo rendering path** (screen geometry / renderer types / stereo modes at `scene.C:2664-3165`). Relocating those out of the dialogs (into Inspector Stage/Light coverage + a Scene-owned stereo-screen config) is an independent high-risk threaded-renderer migration comparable in size to this whole phase, with its own GUI UAT (lights / materials / stereo must still drive the scene). Recommended as a sibling phase **999.57b**, gated BEFORE 999.53 deletes the 3 scene.C dialog triples. The orchestrator's `representationManager.C:336` / `molecularControl.C:446,460` references are **false positives** (`modelMuteableByDisplayProperties`/`coloringMuteableByDisplayProperties` are `ModelInformation` methods, a name collision — not the dialog). See `999.57-03-PLAN.md` Task 4 / CONSUMER-AUDIT.md.
