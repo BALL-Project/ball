@@ -2457,7 +2457,7 @@ Plans:
 **Depends on:** none. **Effort:** ~200 LOC per controller.
 **Plans:** 2 plans (wave 1 → wave 2; serialized on the shared `inspectorView.{h,C}` + `sources.cmake` registration).
 - [~] 999.51-01-PLAN.md — Clipping cut-over: ClippingSection + functional ClippingController::apply() (VIEW-INSP-01). Code+build COMPLETE (3 task commits, VIEW build green BALL_UI_V2=ON); PAUSED at blocking GUI human-verify (Task 4 — confirm section renders + visibly clips in running BALLView). Legacy ClippingDialog untouched.
-- [ ] 999.51-02-PLAN.md — Label cut-over: LabelSection + functional LabelController::apply() (VIEW-INSP-02).
+- [~] 999.51-02-PLAN.md — Label cut-over: LabelSection + functional LabelController::apply() (VIEW-INSP-02). Code+build COMPLETE (3 task commits `3d2102a5b2`/`8ad9fc6076`/`590d7d6b9e`, VIEW build green BALL_UI_V2=ON); PAUSED at blocking GUI human-verify (Task 4 — confirm section renders + a label visibly appears in running BALLView). Legacy LabelDialog (Display > Create > Label) untouched.
 
 ### Phase 999.52: Inspector material transparency control (#527) (TARGETED FOR v1.7.x)
 
