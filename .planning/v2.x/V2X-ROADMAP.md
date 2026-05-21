@@ -1,6 +1,6 @@
 # BALL 2.x — Unified Roadmap (kernel modernization track)
 
-**Status:** DRAFT for adversarial review (RR1 pending).
+**Status:** RR1 NEEDS-REVISION applied (all 10 required changes); RR1b pending.
 **Authored:** 2026-05-21, mid-v2.2-H2.
 **Scope:** the libBALL kernel modernization line (v2.0 → v2.x). Integrates
 the v2.2 handle redesign, the v2.1 backlog, the maintainer's new
@@ -77,10 +77,13 @@ and the store table is a *verified mirror*; the flip (H4) inverts that.
 | **H2** mutation-mirror + traversal | 🚧 in progress | **H2a ✅ R36d GO**: forward-only v0→table mirror for insert (adoption materialisation) + remove, with the `being_destroyed_` destruction guard (defuses the P2.1.1 heap-corruption trap). **H2b 🚧**: splice/swap/clear/replace mirrored (done), `insertParent` + container `setProperty` + atom `select` + container-property migration (remaining). **H2c**: handle-yielding `AtomIterator`/container iterators/`apply` over `ChildRef`. **H2d**: randomized full-surface parity sweep + H2 close review. |
 | **H3** consumer migration | ⏳ | Move modules to the handle API in dependency clusters: **H3a** KERNEL+STRUCTURE → **H3b** MOLMEC/QSAR/SCORING/DOCKING → **H3c** FORMAT (PDB/naming/residue — heaviest) + NMR/ENERGY/SOLVATION. Each cluster its own commit + review. Processors take `Atom` by value (the single largest consumer break). |
 | **H4** the flip | ⏳ | Delete `Atom : Composite` + the molecular container objects' inline tree state; store table becomes sole source of truth; retire the parity test + dual existence; **`sizeof(Atom)` drops** (D13 path). Per-kind canonical-name migration (delete v0 class + fwd-decls/friends, rename `*Handle`→canonical, reverse-alias) per D63. |
-| **H5** Bond unify | ⏳ | `Bond` fully a handle; remove `Atom::bond_[]`; bond properties → store columns; bond iterators redesigned (D51). |
-| **H6** property break + guards + JSON v2 | ⏳ | Property mutable-reference surface break (`NamedProperty&`/`BitVector&` → visitor/value accessors, D49); slot-generation stale-handle detection in `BALL_DEBUG`+`BALL_PYTHON_WRAPPER` (D54/D65); JSON schema **MAJOR bump to 2** (`containers` section, D62) + validation (no cycles/orphans). |
-| **H7** VIEW + MSVC | ⏳ | The **54 VIEW/APPLICATIONS Atom-RTTI sites** (V21-VIEW-RTTI/D37) → handle kind tag; **MSVC + vcpkg CI** (V21-MSVC-CI) for EBO/`sizeof` verification on Windows. |
-| **H8** D13 verify + release | ⏳ | Assert `sizeof(Atom)` ≤ target (≤32 B handle goal; ≤160 B/atom total budget); pinned-baseline perf gates (V21-CI-PERF-GATES); v2.2.0-rc1 → v2.2.0. |
+| **H5** Bond unify | ⏳ | `Bond` fully a handle; remove `Atom::bond_[]`; bond properties → store columns; bond iterators redesigned (D51). Atom `sizeof` closure includes removing `number_of_bonds_`/`bond_[]` (R29 P29-6). |
+| **H6a** property break + Atom/Bond guard + container/property JSON | ⏳ | Property mutable-reference break (`NamedProperty&`/`BitVector&` → visitor/value accessors, D49); Atom/Bond + Python-wrapper slot-generation stale-handle guard (D54/D65; containers already done H1b). JSON `containers`/topology/property sections. **Runs after H4.** |
+| **H6b** final JSON schema v2 + converter | ⏳ | Freeze the JSON schema **MAJOR bump to 2** (D62) — **depends on H5** (the final bond representation must be known before the bond JSON is frozen) + validation (no cycles/orphans) + a **v2.1-JSON → v2.2-JSON-v2 topology converter** (NOT the already-shipped K0.6.4 v1→v2). |
+| **H7** VIEW + MSVC | ⏳ | The **54 VIEW/APPLICATIONS Atom-RTTI sites** (V21-VIEW-RTTI/D37) + `compositeAsAtom_` removal in VIEW (V21-COMPOSITEASATOM-REMOVAL) → handle kind tag; the **VIEW redraw/stamp contract** (D59 per-container `selection_stamp` decision — feeds the store/JSON schema, so resolve BEFORE H6b freeze); **MSVC + vcpkg CI** (V21-MSVC-CI) for EBO/`sizeof` verification — **bring-up may start in parallel after H2** once the build shape is stable; the H7 gate is its acceptance. |
+| **H8** D13 verify + release | ⏳ | **D13 acceptance (the headline gate):** (1) at H4 `Atom`/`Bond` are non-polymorphic value handles with no `Composite`/`PropertyManager`/`Selectable` base and no inline tree/property/bond state; (2) CI asserts `sizeof(BALL::Atom) ≤ 32 B` and `sizeof(BALL::Bond) ≤ 32 B` **on every supported compiler incl. MSVC**; (3) a 100k-atom memory-accounting test asserts total live store footprint ≤ 160 B/atom (mandatory columns + parent/container indices + selection bits + bond-CSR baseline + side-table overhead; excluding JSON text + optional user properties); (4) release notes state handle size AND per-atom budget **separately** (neither is a proxy for the other). Pinned-baseline perf gates (V21-CI-PERF-GATES); v2.2.0-rc1 → v2.2.0 + downstream migration guide.
+
+**v2.2 standing invariants (every phase):** (a) SIP/Python stays OFF and CI proves it is not built (D52.3-7/D54) — wrappers return only with pyBALL v2 after the handle API stabilises; (b) the D31b/D66a encapsulation gate (`_moleculeStoreInternal.h` + `composite_nodes_`/`CompositeNode*` out of public/iterator headers; `containerHandle.h` off the internal header) is enforced by a **maintained script** with comment/prose false-positive handling (not ad-hoc grep) and is part of H2–H4/H8 acceptance; (c) every landed break is enumerated in `V22-API-BREAK-LEDGER.md` with a migration note + Codex sign-off (D50/D61); (d) a **mutation/import perf budget** (PDB load / JSON / build benchmarks) holds through the H2–H3 dual-existence window so the forward-only mirror never makes import paths unusable. |
 
 **H2b carry-overs surfaced this session (place in H2b/H2d):** `insertParent`
 + free-standing `replace` need a *materialise-the-new-member* path (like
@@ -93,18 +96,19 @@ in `materialiseContainer_` (R32 carry-over).
 
 | Backlog item | Placed in |
 |---|---|
-| V21-MSVC-CI-PORTABILITY | **H7** (also unblocks the Windows leg of the repo split) |
+| V21-MSVC-CI-PORTABILITY | **H7** gate; bring-up may start in parallel after H2; reused by v2.4 |
 | V21-VIEW-RTTI (54 sites) | **H7** |
+| V21-COMPOSITEASATOM-REMOVAL (P3 R-P3.A) | **H4/H7** — the helper's premise dissolves at the flip; VIEW sites at H7 |
 | V21-MUTATION-WIRING (D39) | **H2** (now active — H2a/H2b) |
 | V21-STORE-ITER-API (public `iterAtoms/iterBonds`) | **H2c** (handle iterators) / **H3** |
-| V21-GENERATION-GUARD (atom handle staleness) | **H6** (containers already done in H1b/D65) |
-| V21-BIT-PROPERTY-COLUMN (packed-bool cols) | **H6** *if* profiling shows the sparse path is hot; else backlog |
+| V21-GENERATION-GUARD | **H6a** — Atom/Bond + Python-wrapper guard completion (containers already done H1b/D65) |
+| V21-BIT-PROPERTY-COLUMN (packed-bool cols) | **H6a** *if* profiling shows the sparse path is hot; else backlog |
 | V21-CI-PERF-GATES (pinned-baseline comparator) | **H8** |
-| JSON load batching (close save/load ~15× gap) | **H6** (alongside the JSON v2 schema work) or v2.2.x |
-| AndNode tmp-bitmap reuse (selection perf) | v2.2.x perf backlog (small, isolated) |
-| Element-instance-id-table (custom-Element JSON round-trip) | **H6** (JSON v2) or v2.2.x |
-| Track B FORMAT/STRUCTURE full `Expression_test`/`Selector_test` surface | audit in **H3c** (FORMAT cluster) |
-| K0.6.4 v1→v2 JSON converter | **H6** (the schema MAJOR bump makes a converter a release item) |
+| Track B FORMAT/STRUCTURE `Expression_test`/`Selector_test` surface | **H3a** (Selector is KERNEL-facing) + **H3c** (FORMAT supplies the corpus) |
+| ~~JSON load batching~~ | **DONE in v2.1** (load 7–14× faster, save/load near parity) — drop. Re-open only if an H2/H3 mirror perf regression appears. |
+| ~~AndNode tmp-bitmap reuse~~ | **DONE in v2.0** (delivered) — drop. |
+| ~~K0.6.4 v1→v2 JSON converter~~ | **DONE in v2.0** (Track B B0.2) — drop. (H6b adds a *new* v2.1→v2.2 topology converter.) |
+| ~~Element-instance-id-table~~ | **Declined** (P4.3: the store's atomic-number-only model is intentional; not a JSON bug). Re-open only as a conscious kernel element-registry decision. |
 
 ---
 
@@ -124,21 +128,47 @@ surface; doing them earlier would churn against the in-flight flip.
   confirm whether this rides the v2.2 break wave or is a separate v2.3.
 
 ### v2.4 — repo / build / test separation (3-way)
-- Split into independent repos + CMake builds + CI + versioning:
-  **libBALL** (kernel, no Qt/Python), **libVIEW + BALLView** (consumes
-  installed libBALL via `find_package`), **pyBALL** (consumes libBALL /
-  libVIEW). Compatibility matrix; no in-tree source coupling.
-- **Hard dependency:** must follow v2.2 (handle API stable) AND ideally
-  v2.3 (no `String` to marshal). Needs VIEW off the molecular `Composite`
-  tree first (H4/H7) — so VIEW can build against handle-libBALL.
+Two work packages, in order:
+1. **v2.4a — installed-package contract (in the monorepo first).** Before
+   any physical split: exported CMake targets + `find_package(BALL)`
+   config package, **install-tree** tests (build a consumer against the
+   *installed* libBALL, not the source tree), an ABI/version policy +
+   compatibility matrix, and release-artifact flow. This is real work, not
+   a file move.
+2. **v2.4b — physical split** into independent repos + CI + versioning:
+   **libBALL** (kernel, no Qt/Python), **libVIEW + BALLView** (consumes
+   installed libBALL), **pyBALL** (consumes libBALL/libVIEW). No in-tree
+   source coupling.
+- **Hard dependencies:** v2.2 (handle API stable) + VIEW off the molecular
+  `Composite` tree (H7) + the MSVC/Linux/macOS CI legs (H7) reused per-repo;
+  ideally v2.3 (no `BALL::String` to marshal across the boundary).
 
-### pyBALL v2 (binding rewrite) — cross-cuts v2.x
-- Phase 6 bake-off (autowrap+Cython vs nanobind vs SIP6) on a hard-pattern
-  BALL slice → tool decision; then 999.15 bulk wrap. Detailed in
-  `PYBALLV2.md`. **Gap:** currently parked on the BALLView track but
-  depends on the libBALL handle surface — should be re-anchored to **after
-  H4** (handle API final) and ideally the repo split (v2.4), since the
-  bindings wrap the handle types, not the v0 `Composite` API.
+### pyBALL v2 (binding rewrite) — REBASELINE required, anchor after H4
+- **Not just "moved" — must be REVISED.** `PYBALLV2.md`'s Phase 6 bake-off
+  slice is **Composite-era** (`Atom (Composite+iterators+ownership)`,
+  `HBondProcessor Composite/apply`); those cases change shape under the
+  handle API. The bake-off slice must be re-cut against the **handle**
+  surface (value `Atom`, `apply` over `ChildRef`, container value handles)
+  before tool selection.
+- SIP stays OFF through v2.2 (CI proves it). Wrappers return only after the
+  handle API stabilises (≥ H4, preferably v2.2.0), compiled with
+  `BALL_PYTHON_WRAPPER` so handle-validity checks are always on in scripting
+  (D54). Best aligned with the v2.4 packaging (it consumes installed
+  libBALL).
+
+## 4a. Concrete version plan (RR1-5)
+
+Staged minors by default — one clearly-documented break per release beats
+an unbounded "everything modern" tag (D53: stay in the 2.x band; do **not**
+rename the flip to v3.0 — these are "semver-major-sized breaks inside the
+2.x modernization band").
+
+| Release | Contents |
+|---|---|
+| **v2.2.0** | the handle hierarchy flip (H2→H8), JSON schema v2, D13 verified, API-break ledger closed + migration guide. |
+| **v2.3.0** | `BALL::String` → `std::string` (+ `StringUtils`). Fold into v2.2 ONLY if it lands before v2.2-rc1 with no schedule risk to H4/H6/H8; otherwise its own ledger + migration guide. |
+| **v2.4.0** | installed libBALL package contract (v2.4a) + 3-way repo split (v2.4b). |
+| **pyBALL v2** | after H4 (min); preferably after v2.2.0, aligned with v2.4 packaging. Rebaselined bake-off → bulk wrap. |
 
 ---
 
@@ -146,50 +176,75 @@ surface; doing them earlier would churn against the in-flight flip.
 
 ```
 v2.2: H2 (mirror) → H3 (consumers) → H4 (FLIP: delete Composite tree, sizeof drops)
-                                        │
-                 ┌──────────────────────┼───────────────────────────┐
-                 ▼                      ▼                            ▼
-            H5 Bond unify        H6 property break + JSON v2     H7 VIEW-RTTI + MSVC CI
-                 └──────────────┬───────┘                            │
-                                ▼                                    │
-                          H8 D13 verify + v2.2.0 ◄───────────────────┘
-                                │
-                                ▼
-              v2.3 String→std::string  ──►  v2.4 repo split  ◄── pyBALL v2 (after H4, ideally v2.4)
+   │  (MSVC CI bring-up may start here, in parallel; H7 is its gate)
+   │                                    │
+   │              ┌─────────────────────┼───────────────┬───────────────┐
+   │              ▼                     ▼               ▼               │
+   │         H5 Bond unify        H6a property break   H7 VIEW-RTTI +    │
+   │              │               + container/prop      VIEW stamp/      │
+   │              │                 JSON                selection (D59)  │
+   │              ▼                     │               + MSVC CI gate   │
+   │         H6b final JSON v2 ◄────────┘◄──────────────┘ (stamp decision
+   │         (needs final bond rep         feeds the schema BEFORE freeze)
+   │          from H5 + VIEW stamp)
+   │              │
+   └──────────────┴────────────► H8 D13 verify (sizeof≤32B incl. MSVC; ≤160B/atom)
+                                     + perf gates + migration guide → v2.2.0
+                                     │
+                                     ▼
+   v2.3.0 String→std::string  ──►  v2.4a installed-package contract ──► v2.4b repo split
+                                     ▲                                       ▲
+                                     └──────── pyBALL v2 (rebaselined; after H4, ideally here) ┘
 ```
+Key edges (RR1-2): **H6b (final JSON schema freeze) depends on H5** (bond
+representation) **and the H7 VIEW stamp/selection decision** (D59) — both
+must land before the schema is frozen. H6a (property break + container/
+property JSON, no bond-final) can proceed right after H4. v2.4b (physical
+split) depends on v2.4a (the installed-package contract), not just on H7.
 
 D13 (the original memory goal) is **MET at H4 and CONFIRMED at H8** — this
 is the milestone's headline success gate.
 
 ---
 
-## 6. Gaps / open questions for the review (RR1)
+## 6. Gaps — dispositions (post-RR1)
 
-1. **D13 closure is implicit, not a phase.** The roadmap must name H4
-   (flip removes inheritance → sizeof drops) + H8 (assert) as the explicit
-   D13 success gate, and state the numeric target (≤32 B handle? ≤160 B
-   total?) — D40 dropped the ≤32 B v2.1 target; re-affirm for v2.2.
-2. **Version strategy for the breaks.** v2.2 carries the handle break; v2.3
-   carries `String`. Are these one break wave (v2.2.0) or staged minor
-   versions? A single loud break is easier for downstreams than two.
-3. **pyBALL anchoring.** PyBALL v2 currently sits on the BALLView track but
-   semantically belongs after H4 (it wraps the handle API). Re-anchor.
-4. **VIEW timing.** VIEW must move off the `Composite` tree (H7) before the
-   repo split (v2.4) can give libVIEW an independent build against
-   handle-libBALL. Confirm H7 ⟶ v2.4 ordering.
-5. **MSVC CI is needed twice:** for H8 EBO/sizeof verification AND for the
-   repo split's Windows leg. Single H7 deliverable, consumed by both.
-6. **Is "stay v2.2" still right** given the flip + String + split are all
-   breaking? Or should the flip be v3.0 with 2.x as the pre-flip band?
-   (D53 said stay; revisit now that the full post-flip scope is visible.)
-7. **Track-B test surface gap** (Expression/Selector) — is it a real
-   regression risk for H3c, or already covered?
+Resolved into the plan above by the RR1 revision:
+- **D13 closure** → explicit H8 acceptance (sizeof ≤32 B Atom/Bond incl.
+  MSVC + ≤160 B/atom total store footprint, stated separately) (§2 H8).
+- **Version strategy** → staged minors v2.2/v2.3/v2.4; stay in the 2.x band
+  (D53), not v3.0 (§4a).
+- **pyBALL anchoring** → REBASELINE the Phase-6 slice against the handle
+  surface; anchor ≥ H4, align with v2.4 (§4).
+- **VIEW timing / MSVC twice** → H7 (VIEW off Composite + stamp contract +
+  MSVC) before v2.4; MSVC bring-up may start after H2; reused per-repo.
+- **SIP/Python-off invariant** → v2.2 standing invariant (a) (§2).
+- **D31b/D66a gate upkeep + the pre-existing prose-comment false-positive**
+  → maintained-script invariant (b) (§2); supersedes the spawned
+  ad-hoc-grep-fix task.
+- **H4/H6 migration guide + break-ledger close** → invariant (c) + H8 (§2).
+- **H2–H3 mirror perf budget** → invariant (d) (§2).
+- **v2.4 installed-package work** → explicit v2.4a workstream (§4).
+- **H3 processor-by-value shim lifetime** → the dual `Composite&`/handle API
+  is deleted at H4; H4 requires zero consumers needing the v0 object form
+  (`V22-ARCH-HANDLE-MODEL.md` open-sub-questions) (§2 H3/H4).
+- **Track-B Expression/Selector surface** → H3a (Selector is KERNEL-facing)
+  + H3c (FORMAT corpus) (§3).
+
+Remaining notes (not blockers):
+- **Stale source-doc label:** `V22-ARCH-HANDLE-MODEL.md` still titles itself
+  "BALL v3.0 (on the v2.2 branch)"; **D53 overrides** — the canonical
+  milestone is **v2.2**. Historical text left as-is; this roadmap is
+  authoritative on versioning. Do not reopen the v3.0 debate.
+- **"2.0" wording in the maintainer's `String` directive** = the 2.x line
+  (2.0 is shipped); scheduled as v2.3 (§4) — confirm at scheduling.
 
 ---
 
-## 7. Next action
+## 7. Status
 
-Codex **RR1** adversarial review of this unified roadmap: integration
-coherence, the critical-path ordering, backlog placement, the 7 gaps, and
-the version strategy. Iterate to agreement, then lock as the canonical 2.x
-roadmap.
+RR1 = NEEDS-REVISION → this revision applies all 10 required changes
+(backlog cleanup; H5→H6b dependency + H6 split; v2.4a package workstream;
+pyBALL rebaseline; gate-maintenance script; migration docs; mirror perf
+gates; D13 numbers; staged-version plan; stale-label note). Codex **RR1b**
+re-reviews for lock.
