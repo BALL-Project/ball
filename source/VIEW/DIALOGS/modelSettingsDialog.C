@@ -14,6 +14,7 @@
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/MODELS/modelProcessorFactory.h>
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -188,70 +189,36 @@ namespace BALL
 
 		ModelProcessor* ModelSettingsDialog::createModelProcessor(ModelType type) const
 		{
-			ModelProcessor* model_processor = 0;
+			// Behavior-preserving relocation (Phase 999.57 Plan 01): the
+			// model-processor construction logic now lives in the headless
+			// ModelProcessorFactory. Here we only pack the dialog's current widget
+			// state into a ModelProcessorParams and delegate. Same params in, same
+			// processor out.
+			ModelProcessorParams params;
+			params.stick_stick_radius              = getStickStickRadius();
+			params.ball_and_stick_stick_radius     = getBallAndStickStickRadius();
+			params.ball_radius                     = getBallRadius();
+			params.ball_and_stick_dashed_bonds_enabled = ballAndStickDashedBondsEnabled();
+			params.surface_probe_radius            = getSurfaceProbeRadius();
+			params.vdw_radius_factor               = getVDWRadiusFactor();
+			params.tube_radius                     = getTubeRadius();
+			params.cartoon_tube_radius             = getCartoonTubeRadius();
+			params.cartoon_helix_radius            = getCartoonHelixRadius();
+			params.cartoon_arrow_width             = getCartoonArrowWidth();
+			params.cartoon_strand_height           = getCartoonStrandHeight();
+			params.cartoon_strand_width            = getCartoonStrandWidth();
+			params.cartoon_dna_ladder_enabled      = cartoon_dna_ladder->isChecked();
+			params.dna_ladder_radius               = getDNALadderRadius();
+			params.dna_base_radius                 = getDNABaseRadius();
+			params.dna_helix_radius                = getDNAHelixRadius();
+			params.ribbons_enabled                 = ribbons_enabled->isChecked();
+			params.hbonds_radius                   = getHBondsRadius();
+			params.force_max_length                = getForceMaxLength();
+			params.force_scaling                   = getForceScaling();
+			params.force_offset                    = getForceOffset();
+			params.force_base                      = getForceBase();
 
-			switch (type)
-			{
-				case MODEL_LINES:
-					model_processor = new AddLineModel;
-					break;
-					
-				case MODEL_STICK:
-					model_processor = new AddBallAndStickModel;
-					((AddBallAndStickModel*)model_processor)->enableStickModel();
-					break;
-					
-				case MODEL_BALL_AND_STICK:
-					model_processor = new AddBallAndStickModel;
-					((AddBallAndStickModel*)model_processor)->enableBallAndStickModel();
-					break;
-					
-				case MODEL_SE_SURFACE:
-					model_processor = new AddSurfaceModel;
-					((AddSurfaceModel*)model_processor)->setType(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE);	
-					break;
-					
-				case MODEL_SA_SURFACE:
-					model_processor = new AddSurfaceModel;
-					((AddSurfaceModel*)model_processor)->setType(SurfaceProcessor::SOLVENT_ACCESSIBLE_SURFACE);	
-					break;
-					
-				case MODEL_VDW:
-					model_processor = new AddVanDerWaalsModel;
-					((AddVanDerWaalsModel*) model_processor)->setVDWRadiusFactor(getVDWRadiusFactor());
-					break;
-
-				case MODEL_BACKBONE:
-					model_processor = new AddBackboneModel;
-					((AddBackboneModel*) model_processor)->setTubeRadius(getTubeRadius());
-					break;
-
-				case MODEL_RIBBON:
-					model_processor = new AddBackboneModel;
-					((AddBackboneModel*) model_processor)->setRibbonMode(true);
-					break;
-
-				case MODEL_CARTOON:
-					model_processor = new AddCartoonModel;
-					break;
-					
-				case MODEL_HBONDS:
-					model_processor = new HBondModelProcessor;
-					break;
-
-				case MODEL_FORCES:
-					model_processor = new ForceModel;
-					break;
-					
-				default:
-					BALLVIEW_DEBUG
-					Log.error() << "Type: " << type << std::endl;
-					return NULL;
-			}
-
-			applySettingsTo(*model_processor);
-
-			return model_processor;
+			return ModelProcessorFactory::create(type, params);
 		}
 
 
