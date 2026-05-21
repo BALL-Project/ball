@@ -475,12 +475,39 @@ namespace BALL
 			 */
 			std::vector<std::set<Index> > filterClusters(Size min_size = 1);
 
-			/** Export the cluster tree to boost::serialize format.
- 			*/
+			/** Export the cluster tree in the hand-rolled "BALLWARD" format.
+			 *
+			 *  The tree is written with an 8-byte "BALLWARD" magic + version header
+			 *  followed by the graph order, root, per-vertex payload (pose set, size,
+			 *  merged_at) and the edge list. This replaces the former
+			 *  boost::serialization archive (the boost dependency was removed).
+			 *
+			 *  @param out    destination stream.
+			 *  @param binary if true, writes the raw binary variant (native width,
+			 *                native byte order — little-endian-only and width-specific,
+			 *                NOT portable across architectures; the header records the
+			 *                assumed widths + a byte-order marker so a mismatch is
+			 *                rejected on read). If false (the default), writes the
+			 *                portable ASCII text variant with floats at full
+			 *                round-trip precision.
+			 *  @see   deserializeWardClusterTree
+			 */
 			void serializeWardClusterTree(std::ostream& out, bool binary = false);
 
-			/** Import the cluster tree from boost::serialize format.
- 			*/
+			/** Import the cluster tree from the hand-rolled "BALLWARD" format.
+			 *
+			 *  Validates the magic + version header and the stream state and bounds
+			 *  after every read; a truncated, malformed, or out-of-range stream is
+			 *  rejected loudly. Old boost-serialized trees no longer load.
+			 *
+			 *  @param in     source stream.
+			 *  @param binary must match the variant the stream was written with
+			 *                (true = raw binary, false = ASCII text; default false).
+			 *  @throw Exception::InvalidFormat on a non-BALLWARD magic, an
+			 *         unsupported/parse-failed version, a binary width/byte-order
+			 *         mismatch, a truncated stream, or an out-of-range count/index.
+			 *  @see   serializeWardClusterTree
+			 */
 			void deserializeWardClusterTree(std::istream& in, bool binary = false);
 
 			/** Export the cluster tree in graphviz format.
