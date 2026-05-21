@@ -936,6 +936,11 @@ namespace BALL
 				std::vector<boost::shared_ptr<RenderSetup> > renderers_;
 				GLRenderer* gl_renderer_;
 
+				/// Set true in registerRenderers_() when renderers_ ends up empty (issue #501:
+				/// no renderer backend/plugin found, the 3D scene cannot display molecules).
+				/// Consumed once by initializeWidget() to surface a non-fatal status-bar warning.
+				bool no_renderers_warning_;
+
 #ifdef BALL_HAS_RTFACT
 				RaytracingRenderer* rt_renderer_;
 				RaytracingWindowPtr rt_window_;

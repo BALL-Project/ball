@@ -135,6 +135,7 @@ namespace BALL
 				stage_(new Stage),
 				renderers_(),
 				gl_renderer_(static_cast<GLRenderer*>(RendererFactory::makeRenderer(RendererFactory::Kind::OpenGL_Fixed))),
+				no_renderers_warning_(false),
 #ifdef BALL_HAS_RTFACT
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
@@ -210,6 +211,19 @@ namespace BALL
 #else
 			renderers_.push_back(boost::shared_ptr<RenderSetup>(new RenderSetup(rt_renderer_, main_display_, this, stage_)));
 #endif
+
+			// Issue #501: if renderer registration produced no renderers, the 3D scene has
+			// nothing to render into and molecules will silently not be displayed. Record the
+			// condition and emit a clear, non-fatal warning. We do NOT touch the status bar
+			// here: registerRenderers_() runs in the ctor BEFORE registerWidget(this), so
+			// getMainControl() is not yet valid. The status-bar surfacing happens later in
+			// initializeWidget(), gated on no_renderers_warning_. This is intentionally
+			// non-fatal -- control falls through and the ctor completes normally.
+			if (renderers_.empty())
+			{
+				no_renderers_warning_ = true;
+				Log.warn() << "[Scene] No renderers were registered — the 3D scene cannot be displayed. This usually means no renderer backend/plugin was found. BALLView will continue to run, but molecules will not be visible." << std::endl;
+			}
 		}
 
 		void Scene::clear()
