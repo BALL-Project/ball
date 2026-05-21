@@ -1,9 +1,10 @@
 # BALL 2.x — Composite-hierarchy collapse assessment
 
-**Status:** HC1 NEEDS-REVISION applied (field-survey corrected, role/depth/
-SS/PDB locked, slotting = explicit pre-H3 gate); HC1b pending.
-**Verdict so far:** COLLAPSE = YES (4 kinds: System/Molecule/Fragment/Atom
-+ Bond), conditional on the `H1b′` design-lock gate closing before H3.
+**Status:** CONVERGED — Codex HC1 NEEDS-REVISION → revised → **HC1b AGREE**
+(2026-05-21). Assessment is the agreed plan.
+**Verdict:** COLLAPSE = YES (4 kinds: System/Molecule/Fragment/Atom +
+Bond), conditional on the `H1b′` design-lock gate closing before H3
+(else stage to v2.3). Folded into `V2X-ROADMAP.md`.
 **Authored:** 2026-05-21 (maintainer directive, during v2.2 H2).
 **Question:** collapse the molecular class hierarchy to fundamentally
 **System / Molecule / Fragment / Atom** (+ Bond), capturing residue /

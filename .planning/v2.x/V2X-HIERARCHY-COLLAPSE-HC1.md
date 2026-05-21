@@ -154,3 +154,47 @@ Recommended decision:
 8. Amend `V22-H2-DESIGN.md`: traversal filters by role; mutation mirror remains row/edge based; v0 `AtomContainer` binding is transitional only.
 9. Add a PDB/structural fidelity gate to H8 alongside D13, with the corpus listed in HC1-5.
 10. Add migration-guide examples for `Residue`, `Chain`, `PDBAtom`, `SecondaryStructure`, terminal/torsion queries, and typed iterators.
+
+## HC1b confirmation
+
+**Verdict: AGREE.** The collapse plan is sound and ready to fold into the
+2.x plan with the `H1b'` gate. This is planning convergence, not code.
+
+1. **ADDRESSED** — field survey overclaim removed; CDK added as a real
+   counterexample; OpenBabel/MDAnalysis wording corrected
+   (`V2X-HIERARCHY-COLLAPSE.md` §2).
+2. **ADDRESSED** — PDB fidelity promise is normalized structural equivalence
+   plus exact raw preservation only where BALL explicitly stores raw records
+   (`V2X-HIERARCHY-COLLAPSE.md` §4, §6).
+3. **ADDRESSED** — role taxonomy is locked, including Molecule/Fragment/
+   Residue/SecondaryStructure roles and PDB atom fields, with typed-column vs
+   sparse-property guidance (`V2X-HIERARCHY-COLLAPSE.md` §2a).
+4. **ADDRESSED** — secondary structure is decided as a span/annotation
+   `Fragment`, not deferred to FORMAT migration
+   (`V2X-HIERARCHY-COLLAPSE.md` §2a, §6).
+5. **ADDRESSED** — `Molecule` remains a distinct kind with System-child and
+   import/export invariants preserved (`V2X-HIERARCHY-COLLAPSE.md` §2a, §4).
+6. **ADDRESSED** — roadmap has an explicit pre-H3 `H1b'` collapse design
+   gate, with v2.3 staging if the gate slips (`V2X-ROADMAP.md` §2;
+   `V2X-HIERARCHY-COLLAPSE.md` §5).
+7. **ADDRESSED** — H1b design now notes the 8 typed handles are superseded
+   by `Molecule`/`Fragment` role-aware handles if `H1b'` passes
+   (`V22-H1b-DESIGN.md` supersession notice).
+8. **ADDRESSED** — H2 design now states traversal filters by role, mirror
+   machinery remains row/edge-based, and the v0 `AtomContainer` binding is
+   transitional (`V22-H2-DESIGN.md` HC1 note).
+9. **ADDRESSED** — H8 has a PDB/structural fidelity gate alongside D13, with
+   the corpus and checks called out (`V2X-ROADMAP.md` §2;
+   `V2X-HIERARCHY-COLLAPSE.md` §6).
+10. **ADDRESSED** — migration-guide coverage is called for across the
+    affected legacy surfaces: `Residue`, `Chain`, `PDBAtom`,
+    `SecondaryStructure`, terminal/torsion queries, and typed iterators
+    (`V2X-HIERARCHY-COLLAPSE.md` §4, §5; `V2X-ROADMAP.md` §2 H8).
+
+**New issue:** none. No new internal contradiction found between the
+assessment, the roadmap `H1b'` gate, and the H1b/H2 design-doc notices. The
+fallback to stage to v2.3 if the gate slips is coherent with the locked
+v2.2/v2.3/v2.4 plan, and the revision does not overstate what H1a/H1b/H2a
+can keep: it preserves H1a/H2 machinery while explicitly redoing
+`ContainerKind`, the typed-handle surface, D58 role payload, and H2c
+typed iterators.
