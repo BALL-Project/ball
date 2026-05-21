@@ -37,6 +37,10 @@ namespace BALL
 			Q_PROPERTY(float diffuseFactor READ diffuseFactor WRITE setDiffuseFactor NOTIFY diffuseFactorChanged)
 			Q_PROPERTY(float specularFactor READ specularFactor WRITE setSpecularFactor NOTIFY specularFactorChanged)
 			Q_PROPERTY(float shininess READ shininess WRITE setShininess NOTIFY shininessChanged)
+			// 0–255 per-representation alpha (0 = opaque). Drives the WORKING
+			// interactive-GL path (Representation::setTransparency), NOT the dead
+			// Stage::Material.transparency field. Shared with the Model section.
+			Q_PROPERTY(int transparency READ transparency WRITE setTransparency NOTIFY transparencyChanged)
 
 			public:
 				explicit MaterialController(Representation* rep = nullptr,
@@ -50,6 +54,7 @@ namespace BALL
 				float diffuseFactor() const  { return diffuse_; }
 				float specularFactor() const { return specular_; }
 				float shininess() const      { return shininess_; }
+				int   transparency() const   { return transparency_; }
 				bool isApplying() const      { return applying_; }
 
 			public Q_SLOTS:
@@ -60,12 +65,14 @@ namespace BALL
 				void setDiffuseFactor(float v);
 				void setSpecularFactor(float v);
 				void setShininess(float v);
+				void setTransparency(int v);
 
 			Q_SIGNALS:
 				void ambientFactorChanged(float v);
 				void diffuseFactorChanged(float v);
 				void specularFactorChanged(float v);
 				void shininessChanged(float v);
+				void transparencyChanged(int v);
 				void appliedStub();
 
 			private:
@@ -74,6 +81,7 @@ namespace BALL
 				float diffuse_;
 				float specular_;
 				float shininess_;
+				int   transparency_;  // 0–255 per-rep alpha (Representation::setTransparency path).
 				bool applying_;  // v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
 		};
 

@@ -32,6 +32,7 @@ namespace BALL
 				rep_(rep),
 				ambient_(0.3f), diffuse_(0.7f),
 				specular_(0.2f), shininess_(30.0f),
+				transparency_(0),  // 0 = opaque, matching Representation/ModelController default.
 				applying_(false)
 		{
 			revert();
@@ -107,6 +108,21 @@ namespace BALL
 				shininess_ = material.shininess;
 				Q_EMIT shininessChanged(shininess_);
 			}
+
+			// Transparency mirrors the LIVE Representation, not the
+			// Stage::Material — the interactive GLRenderer keys its
+			// transparent pass off rep_->getTransparency() (0–255), so
+			// that is the value we read back. Same shared state the Model
+			// section reads, keeping the two controls consistent.
+			if (rep_ != nullptr)
+			{
+				int tr = static_cast<int>(rep_->getTransparency());
+				if (tr != transparency_)
+				{
+					transparency_ = tr;
+					Q_EMIT transparencyChanged(tr);
+				}
+			}
 		}
 
 		void MaterialController::apply()
@@ -166,11 +182,24 @@ namespace BALL
 			material.reflective_intensity = diffuse_;
 			material.specular_intensity   = specular_;
 			material.shininess            = std::max(shininess_, 0.1f);
-			// transparency stays as-is; per-rep transparency is owned
-			// by the ModelController (transparency_slider on the
-			// legacy modal mirrors to Representation::setTransparency).
+			// material.transparency is intentionally NOT written: the
+			// interactive GLRenderer never reads it (POVRay/RTfact-only,
+			// and RTfact is disabled), so writing it would produce NO
+			// visible change — that dead field is the cause of #527.
+			// Per-rep transparency is driven below through the WORKING
+			// Representation::setTransparency() path. MaterialController now
+			// ALSO drives that path (in addition to the Model section),
+			// sharing the same Representation transparency state so both
+			// controls stay consistent.
 
 			scene->updateMaterialForRepresentation(rep_, material);
+
+			// Working interactive-GL transparency: push the 0–255 alpha onto
+			// the Representation (rebuilds per-vertex alpha / color processor),
+			// then update() so GLRenderer's transparent pass — which keys off
+			// rep.getTransparency() — picks it up.
+			rep_->setTransparency(static_cast<Size>(transparency_));
+			rep_->update();
 
 			Q_EMIT appliedStub();
 		}
@@ -201,6 +230,14 @@ namespace BALL
 			if (v == shininess_) return;
 			shininess_ = v;
 			Q_EMIT shininessChanged(v);
+		}
+
+		void MaterialController::setTransparency(int v)
+		{
+			// 0–255 per-rep alpha; mirrors ModelController::setTransparency.
+			if (v == transparency_) return;
+			transparency_ = v;
+			Q_EMIT transparencyChanged(v);
 		}
 
 	} // namespace VIEW
