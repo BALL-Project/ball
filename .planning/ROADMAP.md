@@ -23,6 +23,12 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [ ] **Phase 8: Packaging & Distribution (TARGETED FOR v1.7)** - Notarizable macOS bundle (`data/` embedded, `macdeployqt`); signed Windows installer (SignPath Foundation); documented build-from-source for Linux/Windows; license/distribution review. Stays whole — no v1.6.2 carve-out per 2026-05-16 user direction. Blocks Phase 999.8 (auto-update).
 - [x] **Phase 9: Test Suite Triage** - Wire the `test/` tree into `ctest` and triage failures *(the build matrix moved to Phase 02.2)* (completed 2026-05-16)
 - [x] **Phase 999.50: v1.7.2 build acceleration — Ward serializer de-boost** - Hand-roll a compact reader/writer for `poseClusteringSerialization.C` to drop the heaviest Boost compile-time component (v1.7.1 quarantined it; v1.7.2 eliminates it); regenerate the `.dat` fixture in the new format; add release.yml ccache reuse. Canonical plan: [`v1.7.2-BUILD-ACCEL-PLAN.md`](v1.7.2-BUILD-ACCEL-PLAN.md) (completed 2026-05-21)
+- [ ] **Phase 999.51: Inspector controller cut-overs — Clipping + Label (v1.7.x)** - Wire the latent ClippingController/LabelController to functional apply() + add their Inspector sections (mirror Model/Coloring/Material). Reuses the legacy Clipping/Label dialogs.
+- [ ] **Phase 999.52: Inspector material transparency control (#527) (v1.7.x)** - Add the missing transparency control to the Inspector materialSection, superseding the broken legacy MaterialSettings slider.
+- [ ] **Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (v1.7.x)** - Delete the 9 superseded legacy VIEW dialog files (commit 7f56f80d89 breadcrumb), one atomic commit each, CI green between. *Depends on 999.51 + 999.52.*
+- [ ] **Phase 999.54: BALLView startup warning when no renderer plugins found (#501) (v1.7.x)** - Emit a Log/status-bar warning on empty renderer-plugin discovery.
+- [ ] **Phase 999.55: Build acceleration — PCH across BALL + VIEW (v1.7.x)** - Land the never-shipped precompiled-headers work (was 999.16; PCH half of v1.7.x-09) over an auditable Qt/Boost/STL header set.
+- [ ] **Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (v1.7.x)** - Update tutorial content/screenshots/URLs/build flow to v1.7.x.
 
 ## Phase Details
 
@@ -2440,6 +2446,65 @@ Plans:
 Plans:
 - [x] 999.50-01-PLAN.md — BUILD-ACCEL-06: hand-rolled boost-free Ward-tree serializer (magic+version header) + new-format fixture regen + RELEASE-NOTES break note; callers + PoseClustering_test3/test1 green
 - [x] 999.50-02-PLAN.md — BUILD-ACCEL-07: release.yml ccache restore/save (key aligned with ci.yml) + optional disabled MSVC /O1 fallback (item ③)
+
+### Phase 999.51: Inspector controller cut-overs — Clipping + Label (TARGETED FOR v1.7.x)
+
+**Goal:** Wire the two latent Inspector controllers that ship reachable-via-API but UI-dead in v1.7.x. Add a `ClippingSection` and a `LabelSection` to `inspectorView.C`'s Representation-tab section list (mirroring the shipped `Model`/`Coloring`/`Material` section pattern), and cut `ClippingController::apply()` + `LabelController::apply()` over from log-only stubs to functional apply — reusing the existing legacy Clipping/Label dialogs' parameter parsing (the `ModelController` → `DisplayProperties::getModelSettingsDialog()` pattern). Remove the `STUB` log markers + deferral comments.
+
+**Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) items v1.7.x-01, v1.7.x-02.
+**Scope:** `clippingController.{h,C}`, `labelController.{h,C}`, `inspectorView.C`, new `sections/clippingSection.{h,C}` + `sections/labelSection.{h,C}`. **Important:** these REUSE the legacy Clipping/Label dialogs — those dialogs must NOT be deleted by Phase 999.53 until this lands.
+**Requirements:** `VIEW-INSP-01`, `VIEW-INSP-02`.
+**Depends on:** none. **Effort:** ~200 LOC per controller.
+**Plans:** 0 (to be created by `/gsd-plan-phase 999.51`).
+
+### Phase 999.52: Inspector material transparency control (#527) (TARGETED FOR v1.7.x)
+
+**Goal:** Close GitHub [#527](https://github.com/BALL-Project/ball/issues/527). The Refresh's Inspector `materialSection` ships ambient/diffuse/specular/shininess sliders but **no transparency control**, while the legacy `MaterialSettings` slider (the one #527 reports broken) is still compiled and reachable. Add a working transparency control to the Inspector `materialSection` so the broken legacy path is superseded (and can later be deleted in 999.53).
+
+**Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-30; GitHub #527.
+**Scope:** `source/VIEW/WIDGETS/inspector/sections/materialSection.{h,C}` (+ the material apply path).
+**Requirements:** `VIEW-INSP-03`.
+**Depends on:** none (additive to materialSection). **Effort:** small–medium.
+**Plans:** 0 (to be created by `/gsd-plan-phase 999.52`).
+
+### Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (TARGETED FOR v1.7.x)
+
+**Goal:** Delete the 9 legacy VIEW dialog files whose Inspector replacements have shipped (deferred from Wave 4 Phase 999.48 §10, breadcrumb commit `7f56f80d89`), one atomic commit per file, keeping the tri-OS CI matrix green between deletions.
+
+**Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-08.
+**Scope:** the 9-file list from commit `7f56f80d89` — but each file must be confirmed UNREFERENCED before deletion. **Critical reconciliation:** Phases 999.51 (Clipping/Label cut-overs reuse the legacy Clipping/Label dialogs) and 999.52 (transparency supersedes the legacy Material dialog) change what is still in use, so this phase must run AFTER them and re-verify the reuse state per file.
+**Requirements:** `VIEW-CLEAN-01`.
+**Depends on:** Phase 999.51, Phase 999.52. **Effort:** small (deletions + CI validation). **Plan just-in-time** after 51/52 land so the reuse audit is accurate.
+**Plans:** 0.
+
+### Phase 999.54: BALLView startup warning when no renderer plugins found (#501) (TARGETED FOR v1.7.x)
+
+**Goal:** Close GitHub [#501](https://github.com/BALL-Project/ball/issues/501). Today BALLView gives no feedback when renderer-plugin discovery returns empty. Add a startup check that emits a `Log`/status-bar warning (and ideally surfaces via the onboarding/notice path) when zero renderer plugins are discovered. Aligns with the Refresh's first-run/accessibility passes.
+
+**Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-31; GitHub #501.
+**Requirements:** `VIEW-UX-01`.
+**Depends on:** none. **Effort:** small (~20–40 LOC).
+**Plans:** 0 (to be created by `/gsd-plan-phase 999.54`).
+
+### Phase 999.55: Build acceleration — precompiled headers across BALL + VIEW (TARGETED FOR v1.7.x)
+
+**Goal:** Land the never-shipped PCH work (originally backlog Phase 999.16) — the remaining live half of patch item v1.7.x-09 after the `poseClustering.C` dominator was eliminated by v1.7.2/999.50 and the "drop debug builds" half proved a no-op (already Release). Wire `target_precompile_headers(BALL PRIVATE …)` + `target_precompile_headers(VIEW PRIVATE …)` over an auditable Qt/Boost/STL header set; configure ccache `sloppiness` so PCH caches correctly on all 3 runners; measurably reduce cold-cache build time (target ≥15% on the per-TU header-parse cost; PCH does not help the template-metaprogramming TUs, which 999.50 already handled).
+
+**Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-09 (PCH half); original [Phase 999.16](#) scope.
+**Requirements:** `BUILD-ACCEL-08`.
+**Depends on:** none. **Effort:** ~1 day. Pure build-config; per-TU profiling data already exists (999.19).
+**Plans:** 0 (to be created by `/gsd-plan-phase 999.55`).
+
+### Phase 999.56: Refresh the PDF tutorial for the modernized stack (#560) (TARGETED FOR v1.7.x)
+
+**Goal:** Close GitHub [#560](https://github.com/BALL-Project/ball/issues/560). The PDF tutorial is outdated on build system, screenshots, URLs, and developer list — exactly what the v1.6/v1.7 modernization changed. Refresh content + screenshots against v1.7.x BALLView; update build instructions to the documented Homebrew/vcpkg flow and the GitHub Releases download path. Docs deliverable.
+
+**Canonical source:** [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) item v1.7.x-32; GitHub #560.
+**Requirements:** `DOCS-01`.
+**Depends on:** none (best after the UI phases so screenshots reflect final state). **Effort:** medium–large (content, not code).
+**Plans:** 0.
+
+> **Deferred / blocked v1.7.x items (NOT promoted to phases):** v1.7.x-03 (Stereo checkbox) is **blocked** on the SEED-001 step-5 Renderer/RenderSurface stereo-mode boundary; v1.7.x-04 (Geometric/Dataset highlight) and v1.7.x-05 (macOS QSS overlay) are **dormant** pending a user re-file / concrete trigger. They stay in [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) with their gating conditions. v1.7.x-34 (www.ball-project.org outage) is external/Tübingen-side infra, not a code phase.
 
 ---
 *Roadmap created: 2026-05-14*

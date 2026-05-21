@@ -228,6 +228,18 @@ GSD phase numbers are the canonical scheme used everywhere. The original human-a
 - Unmapped: 0
 - v2: PIPE-01 (full pipeline rewrite — now de-risked by the Phase 5 backend spike)
 
+## v1.7.x patch-cycle requirements
+
+Added 2026-05-21 when the v1.7.x patch-cycle runway (Phases 999.51–999.56) was registered from [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md). Each REQ maps to one phase.
+
+- [ ] **VIEW-INSP-01** (Phase 999.51 · v1.7.x-01): `ClippingController::apply()` cut over from log-only stub to functional apply (reusing the legacy Clipping dialog's parameter parsing); a `ClippingSection` added to the Inspector Representation tab mirroring the Model/Coloring/Material section pattern; `STUB` marker removed
+- [ ] **VIEW-INSP-02** (Phase 999.51 · v1.7.x-02): same shape for `LabelController::apply()` + a `LabelSection` in the Inspector
+- [ ] **VIEW-INSP-03** (Phase 999.52 · v1.7.x-30 · GH #527): a working transparency control in the Inspector `materialSection`, superseding the broken legacy `MaterialSettings` transparency slider
+- [ ] **VIEW-CLEAN-01** (Phase 999.53 · v1.7.x-08): the 9 superseded legacy VIEW dialog files (commit `7f56f80d89` breadcrumb) deleted one atomic commit each, each confirmed unreferenced first, tri-OS CI green between deletions
+- [ ] **VIEW-UX-01** (Phase 999.54 · v1.7.x-31 · GH #501): BALLView emits a `Log`/status-bar warning at startup when zero renderer plugins are discovered
+- [ ] **BUILD-ACCEL-08** (Phase 999.55 · v1.7.x-09 PCH half / orig. 999.16): `target_precompile_headers` wired for BALL + VIEW over an auditable Qt/Boost/STL header set; ccache `sloppiness` configured so PCH caches on all 3 CI runners; cold-cache build time measurably reduced (target ≥15% on header-parse cost)
+- [ ] **DOCS-01** (Phase 999.56 · v1.7.x-32 · GH #560): the PDF tutorial refreshed against v1.7.x — build system (Homebrew/vcpkg), screenshots, URLs, developer list, and the GitHub Releases download path
+
 ---
 *Requirements defined: 2026-05-14*
 *Last updated: 2026-05-14 — Codex structural changes applied: Phase 02.2 (CI) + Phase 05.1 (backend spike) inserted; Phase 5 split (Qt6-only); Phase 6 restructured (decision+slice); Phase 8 scope clarified; DEPS-05/FEAT-01/DIAG-01/SPIKE/PY-02/PKG-03 added; feature matrix added.*
