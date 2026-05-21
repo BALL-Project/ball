@@ -409,6 +409,11 @@ namespace BALL
 		void setContainerRowBinding_(MoleculeStore* store, std::uint32_t row) override
 		{ container_row_store_ = store; container_row_idx_ = row; }
 
+		// v2.2 HCP-1b: re-push this container's scalar identity (name + the
+		// subtype id/insertion-code/SS-type/ResidueKind) to its row. Defined
+		// in atomContainer.C; dispatches via detail::writeContainerScalars_.
+		void mirrorResyncScalars_() override;
+
 		private:
 
 		/*_ The name of this container
@@ -422,6 +427,20 @@ namespace BALL
 		std::uint32_t  container_row_idx_   = 0;
 
 	};
+
+	namespace detail
+	{
+		// v2.2 HCP-1b: write a container's SCALAR identity fields (name + the
+		// per-subtype id/insertion-code/SS-type/ResidueKind) to its
+		// ContainerTable row. The single source of the materialise-time
+		// scalar dispatch -- shared by System::materialiseContainer_ (initial
+		// population) and AtomContainer::mirrorResyncScalars_ (re-sync after
+		// clear/swap/setters). Defined in atomContainer.C (which has the
+		// subtype headers). No-op if `row` is 0.
+		BALL_EXPORT void writeContainerScalars_(const AtomContainer& c,
+		                                        MoleculeStore& store,
+		                                        std::uint32_t row);
+	} // namespace detail
 
 } // namespace BALL
 

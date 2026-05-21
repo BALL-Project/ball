@@ -91,6 +91,7 @@ namespace BALL
 		Fragment::clear();
 		id_ = BALL_RESIDUE_DEFAULT_ID;
 		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;
+		mirrorResyncScalars_();   // v2.2 HCP-1b: id/insertion reset -> re-sync row
 	}
 		
 	void Residue::destroy()
@@ -148,6 +149,9 @@ namespace BALL
 		char temp_insertion_code = insertion_code_;
 		insertion_code_ = residue.insertion_code_;
 		residue.insertion_code_ = temp_insertion_code;
+
+		mirrorResyncScalars_();          // v2.2 HCP-1b
+		residue.mirrorResyncScalars_();
 	}
 
 	bool Residue::hasTorsionPsi() const

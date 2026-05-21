@@ -10,10 +10,71 @@
 #include <BALL/KERNEL/moleculeStore.h>   // v2.2 H2a: container write accessors
 #include <BALL/CONCEPT/composite.h>      // ancestor lookup
 #include <BALL/COMMON/rtti.h>            // RTTI::getDefault<System>
+// v2.2 HCP-1b: subtype headers for the scalar-resync RTTI dispatch
+// (detail::writeContainerScalars_). These are KERNEL siblings (no cycle at
+// the .C level); the gate lifts nothing -- always-on in any build.
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/nucleicAcid.h>
+#include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/nucleotide.h>
+#include <BALL/KERNEL/secondaryStructure.h>
 
 using namespace::std;
 namespace BALL
 {
+	// v2.2 HCP-1b: the single source of the container scalar-write dispatch.
+	// Shared by System::materialiseContainer_ (initial population) and
+	// AtomContainer::mirrorResyncScalars_ (re-sync after clear/swap/setters),
+	// so the two can never drift. Mirrors the v0 typed object's scalar
+	// identity into its ContainerTable row: common name + per-subtype
+	// id / insertion-code / SS-type / ResidueKind (the latter absorbs the
+	// Residue::Property identity bits, D-HC1).
+	namespace detail
+	{
+		void writeContainerScalars_(const AtomContainer& c, MoleculeStore& store,
+		                            std::uint32_t row)
+		{
+			if (row == 0) return;
+			store.container_set_name_(row, c.getName());
+			if (const Protein* p = dynamic_cast<const Protein*>(&c))
+			{
+				store.container_set_id_(row, p->getID());
+			}
+			else if (const NucleicAcid* na = dynamic_cast<const NucleicAcid*>(&c))
+			{
+				store.container_set_id_(row, na->getID());
+			}
+			else if (const Residue* r = dynamic_cast<const Residue*>(&c))
+			{
+				store.container_set_id_(row, r->getID());
+				store.container_set_insertion_code_(row, r->getInsertionCode());
+				ResidueKind rk = ResidueKind::UNKNOWN;
+				if (r->hasProperty(Residue::PROPERTY__WATER))             rk = ResidueKind::WATER;
+				else if (r->hasProperty(Residue::PROPERTY__AMINO_ACID))   rk = ResidueKind::AMINO_ACID;
+				else if (r->hasProperty(Residue::PROPERTY__NON_STANDARD)) rk = ResidueKind::NONSTANDARD;
+				store.container_set_residue_kind_(row, rk);
+			}
+			else if (const Nucleotide* nt = dynamic_cast<const Nucleotide*>(&c))
+			{
+				store.container_set_id_(row, nt->getID());
+				store.container_set_insertion_code_(row, nt->getInsertionCode());
+				store.container_set_residue_kind_(row, ResidueKind::NUCLEOTIDE);
+			}
+			else if (const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(&c))
+			{
+				store.container_set_ss_type_(row, static_cast<std::uint8_t>(ss->getType()));
+			}
+		}
+	} // namespace detail
+
+	// v2.2 HCP-1b: re-sync THIS container's scalar identity to its row.
+	// Self-guards: no-op when being destroyed or unbound.
+	void AtomContainer::mirrorResyncScalars_()
+	{
+		if (isBeingDestroyed_()) return;
+		if (container_row_store_ == 0 || container_row_idx_ == 0) return;
+		detail::writeContainerScalars_(*this, *container_row_store_, container_row_idx_);
+	}
 	// v2.2 H2a (R36b fix): the container-table mutation mirror for INSERTS
 	// lives here in the AtomContainer insert methods (NOT in adopt()/
 	// adoptSubtree()), so it fires regardless of whether adopt early-returns
@@ -88,6 +149,9 @@ namespace BALL
 		PropertyManager::clear();
 
 		name_ = BALL_ATOMCONTAINER_DEFAULT_NAME;
+		// v2.2 HCP-1b: name (+ subtype id/etc, reset by the most-derived
+		// clear() which calls this base first) changed -> re-sync the row.
+		mirrorResyncScalars_();
 	}
 
 	void AtomContainer::destroy()
@@ -155,6 +219,11 @@ namespace BALL
 		Composite::swap(atom_container);
 		PropertyManager::swap(atom_container);
 		name_.swap(atom_container.name_);
+		// v2.2 HCP-1b: scalars were exchanged between two row-bound nodes ->
+		// re-sync both rows (the most-derived swap() runs this last, after its
+		// own id/etc swap).
+		mirrorResyncScalars_();
+		atom_container.mirrorResyncScalars_();
 	}
 
 	void AtomContainer::setName(const String& name)

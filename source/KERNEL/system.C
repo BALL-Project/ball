@@ -271,33 +271,11 @@ namespace BALL
 			std::uint32_t row = dst->container_create_(kindOfContainer_(c));
 			c.setContainerRowBinding_(dst, row);
 
-			dst->container_set_name_(row, c.getName());
-			if (const Protein* p = dynamic_cast<const Protein*>(&c))
-				dst->container_set_id_(row, p->getID());
-			else if (const NucleicAcid* na = dynamic_cast<const NucleicAcid*>(&c))
-				dst->container_set_id_(row, na->getID());
-			else if (const Residue* r = dynamic_cast<const Residue*>(&c))
-			{
-				dst->container_set_id_(row, r->getID());
-				dst->container_set_insertion_code_(row, r->getInsertionCode());
-				// v2.2 HCP-1a (D-HC1): absorb the Residue::Property IDENTITY
-				// bits into the typed ResidueKind payload field.
-				ResidueKind rk = ResidueKind::UNKNOWN;
-				if (r->hasProperty(Residue::PROPERTY__WATER))            rk = ResidueKind::WATER;
-				else if (r->hasProperty(Residue::PROPERTY__AMINO_ACID))  rk = ResidueKind::AMINO_ACID;
-				else if (r->hasProperty(Residue::PROPERTY__NON_STANDARD)) rk = ResidueKind::NONSTANDARD;
-				dst->container_set_residue_kind_(row, rk);
-			}
-			else if (const Nucleotide* nt = dynamic_cast<const Nucleotide*>(&c))
-			{
-				dst->container_set_id_(row, nt->getID());
-				dst->container_set_insertion_code_(row, nt->getInsertionCode());
-				// v2.2 HCP-1a: a Nucleotide is a role=RESIDUE fragment of
-				// ResidueKind::NUCLEOTIDE.
-				dst->container_set_residue_kind_(row, ResidueKind::NUCLEOTIDE);
-			}
-			else if (const SecondaryStructure* ss = dynamic_cast<const SecondaryStructure*>(&c))
-				dst->container_set_ss_type_(row, static_cast<std::uint8_t>(ss->getType()));
+			// v2.2 HCP-1b: scalar identity (name + id/insertion/SS-type/
+			// ResidueKind) goes through the shared dispatch, the same path the
+			// mutation resync uses -- so initial population + re-sync can never
+			// drift.
+			detail::writeContainerScalars_(c, *dst, row);
 
 			for (Position i = 0; i < c.getDegree(); ++i)
 			{

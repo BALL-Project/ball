@@ -822,8 +822,8 @@ CHECK(H2b -- swap two sibling containers: terminates + topology stays faithful)
 	// must TERMINATE. A sibling full-swap exchanges BOTH position AND children,
 	// so it is observationally topology-invariant -- the value here is that the
 	// swap mirror re-derives all four affected rows WITHOUT duplicating/losing
-	// edges (corruption would make table != v0). Scalar (name/id) exchange is
-	// NOT mirrored (tracked H2b carry-over), so compare topology only.
+	// edges (corruption would make table != v0). HCP-1b: scalar (name/id)
+	// exchange IS now mirrored, so we also assert NAME-BEARING parity.
 	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
 	Residue r1; r1.setName("ALA"); r1.setID("ALA");
 	Residue r2; r2.setName("GLY"); r2.setID("GLY");
@@ -845,6 +845,9 @@ CHECK(H2b -- swap two sibling containers: terminates + topology stays faithful)
 	std::string after; descV0Topo(prot, after);
 	TEST_EQUAL(descTableTopo(t, root), after)   // mirror re-derived, no corruption
 	TEST_EQUAL(before, after)               // sibling full-swap is topo-invariant
+	// HCP-1b: scalar identity (name/id) now mirrored -> full name-bearing parity.
+	std::string nb; descV0(prot, nb);
+	TEST_EQUAL(descTable(t, root), nb)
 RESULT
 
 CHECK(H2b -- splice relocates children + preserves parity)
@@ -889,11 +892,11 @@ CHECK(H2b -- live clear() empties the row (incl. the re-derive path))
 
 	r.clear();                              // r survives, emptied
 	TEST_EQUAL(store->container_child_count_(r_row), 0u)
-	// topology parity: r still in the tree under ch, now childless. (clear()
-	// ALSO resets r's scalar name/id to defaults; that scalar reset is NOT
-	// mirrored -- tracked H2b carry-over -- so compare topology only.)
-	std::string d; descV0Topo(prot, d);
-	TEST_EQUAL(descTableTopo(t, root), d)
+	// HCP-1b: clear() resets r's scalar name/id to defaults AND that reset is
+	// now mirrored, so full NAME-BEARING parity holds (r appears childless +
+	// with default name/id in both the v0 tree and the table).
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
 RESULT
 
 CHECK(H2b -- replace a rooted child with another rooted child preserves parity)

@@ -37,6 +37,7 @@ namespace BALL
 	{
 		Molecule::clear();
 		id_ = BALL_PROTEIN_DEFAULT_ID;
+		mirrorResyncScalars_();   // v2.2 HCP-1b
 	}
 		
 	void Protein::destroy()
@@ -82,6 +83,8 @@ namespace BALL
 	{
 		Molecule::swap(protein);
 		id_.swap(protein.id_);
+		mirrorResyncScalars_();          // v2.2 HCP-1b
+		protein.mirrorResyncScalars_();
 	}
 		
 	Chain* Protein::getChain(Position position)

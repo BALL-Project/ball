@@ -37,6 +37,7 @@ namespace BALL
 	{
 		Molecule::clear();
 		id_ = BALL_NUCLEICACID_DEFAULT_ID;
+		mirrorResyncScalars_();   // v2.2 HCP-1b
 	}
 		
 	void NucleicAcid::destroy()
@@ -82,6 +83,8 @@ namespace BALL
 	{
 		Molecule::swap(nucleic_acid);
 		id_.swap(nucleic_acid.id_);
+		mirrorResyncScalars_();              // v2.2 HCP-1b
+		nucleic_acid.mirrorResyncScalars_();
 	}
 
 	Nucleotide* NucleicAcid::getNucleotide(Position position)

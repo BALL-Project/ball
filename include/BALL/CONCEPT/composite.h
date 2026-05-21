@@ -1724,6 +1724,18 @@ B		*/
 		//     splice / swap / replace / insertParent / clear paths.
 		void mirrorAppendChild_(Composite& child);
 		void mirrorRederiveOwnRow_();
+
+		// v2.2 HCP-1b: re-push THIS node's SCALAR identity fields (name / id /
+		// insertion-code / SS-type / ResidueKind) to its container row.
+		// mirrorRederiveOwnRow_ mirrors only child topology; ops that mutate
+		// scalar metadata -- clear() (resets name/id), swap() (exchanges them
+		// between two row-bound nodes), and the post-root scalar setters --
+		// must call this so the table stays faithful (the deferred scalar
+		// mirror, built once here against the role columns). Default = no-op
+		// (a bare Composite has no scalar identity); AtomContainer overrides
+		// it, dispatching to its subtypes via detail::writeContainerScalars_.
+		// Self-guards: no-op when being_destroyed_ or unbound.
+		virtual void mirrorResyncScalars_();
 	};
 
 	template <typename T>

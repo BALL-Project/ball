@@ -39,6 +39,7 @@ namespace BALL
 	{
 		AtomContainer::clear();
 		type_ = UNKNOWN;
+		mirrorResyncScalars_();   // v2.2 HCP-1b: ss_type reset -> re-sync row
 	}
 		
 	void SecondaryStructure::destroy()

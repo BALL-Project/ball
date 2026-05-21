@@ -291,6 +291,13 @@ namespace BALL
 		}
 	}
 
+	// v2.2 HCP-1b: default no-op -- a bare Composite has no scalar identity.
+	// AtomContainer overrides this to re-push name/id/insertion-code/SS-type/
+	// ResidueKind to its row (see composite.h).
+	void Composite::mirrorResyncScalars_()
+	{
+	}
+
 	// default ctor
 	Composite::Composite()
 		:	PersistentObject(),

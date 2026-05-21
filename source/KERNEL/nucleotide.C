@@ -44,6 +44,7 @@ namespace BALL
 		Fragment::clear();
 		id_ = BALL_NUCLEOTIDE_DEFAULT_ID;
 		insertion_code_ = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE;
+		mirrorResyncScalars_();   // v2.2 HCP-1b
 	}
 		
 	void Nucleotide::destroy()
@@ -99,6 +100,9 @@ namespace BALL
 		char temp_insertion_code = insertion_code_;
 		insertion_code_ = nucleotide.insertion_code_;
 		nucleotide.insertion_code_ = temp_insertion_code;
+
+		mirrorResyncScalars_();             // v2.2 HCP-1b
+		nucleotide.mirrorResyncScalars_();
 	}
 
 	NucleicAcid* Nucleotide::getNucleicAcid()
