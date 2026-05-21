@@ -28,9 +28,14 @@ between accounts).
 | **Organization** (Project / University) | Org name in signed bundle metadata; survives maintainer turnover; D-U-N-S identity matches the institution users expect | Requires D-U-N-S number; legal-entity verification (days–weeks); needs institutional sponsor / billing approval |
 | **Individual** | Fast (~1 day enrollment); only needs Apple ID + payment | Bundle signed by an individual's name; cert transfer on maintainer change requires full re-enrollment of successor |
 
-**Decision:** `[ ] Organization` / `[ ] Individual` — _to be filled in by
-the enrollment holder_
-**Rationale:** _to be filled in_
+**Decision:** `[ ] Organization` / `[x] Individual` — Oliver Kohlbacher
+(Apple ID `okohlbacher@me.com`, Team ID `9WF4NVY9MY`).
+**Rationale:** Individual enrollment was already active and is ~1-day vs the
+days–weeks D-U-N-S path for org; chosen to unblock v1.7.1 signing now. The
+signed bundle's developer name shows "Oliver Kohlbacher" rather than the
+institution. The bundle ID stays `de.uni-tuebingen.ball.ballview` (bundle ID
+need not match the cert org). Revisit org enrollment for a later milestone
+if institutional identity in the signature becomes a requirement.
 
 ---
 
@@ -215,8 +220,8 @@ state — recoverable via `git revert` of the signing commits).
 | Date | Event | Action |
 |---|---|---|
 | 2026-05-17 | 8a-01 runbook drafted; enrollment pending | None — waiting on human-driven enrollment |
-| _TBD_ | Enrollment complete | Secrets uploaded, priming submission queued |
-| _TBD_ | First successful notarized release | Priming complete; CI steady-state |
+| 2026-05-21 | Individual enrollment confirmed; Developer ID Application cert issued (`469F50AE…`, valid → 2031-05-22); all 7 `MACOS_*` secrets uploaded to `BALL-Project/ball` | Local notarized build produced |
+| 2026-05-21 | **First notarization Accepted** — submission `082e2f2c-ef0a-47e7-b506-37cb1130c549`, processed in minutes (not the feared 8–12h). Bundle ID `de.uni-tuebingen.ball.ballview` is now primed. `spctl --assess` → `source=Notarized Developer ID`. | Priming complete; CI steady-state. Next tagged release should sign+notarize+staple automatically. |
 
 ---
 
