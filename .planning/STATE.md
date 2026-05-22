@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
-status: executing
-stopped_at: "999.65-01 complete (headless RepresentationBuilder added; no consumer repointed) — ready for 999.65-02"
-last_updated: "2026-05-22T10:25:07.523Z"
+status: paused
+stopped_at: "999.57-03 at BLOCKING checkpoint:human-verify (render UAT pending)"
+last_updated: "2026-05-22T10:32:31.492Z"
 last_activity: 2026-05-22
 progress:
   total_phases: 74
   completed_phases: 33
   total_plans: 89
-  completed_plans: 85
+  completed_plans: 86
   percent: 45
 ---
 
@@ -26,7 +26,7 @@ progress:
 
 Phase: 999.65 (representation-builder-extraction) — EXECUTING
 Plan: 2 of 3
-Status: Ready to execute
+Status: PAUSED at blocking GUI UAT (999.65-02 Task 3) — code done + BALLView links clean BALL_UI_V2=ON; awaiting human molecule-load render confirmation
 Last activity: 2026-05-22
 
 ## Performance Metrics
@@ -99,6 +99,7 @@ Last activity: 2026-05-22
 | Phase 999.58 P02 | ~22min | 2 of 3 tasks (Task 3 blocking GUI human-verify) | 3 files |
 | Phase 999.58 P03 | ~25min | 3 of 4 tasks (Task 4 blocking GUI human-verify) | 3 files |
 | Phase 999.65 P01 | ~15min | 2 tasks | 3 files |
+| Phase 999.65 PP02 | ~12min | 2 tasks (3rd = blocking GUI UAT, pending) tasks | 2 files files |
 
 ## Accumulated Context
 
@@ -190,6 +191,8 @@ Last activity: 2026-05-22
 - [Phase 999.54-renderer-plugin-warning]: Two-phase startup diagnostic for #501: flag + Log.warn in registerRenderers_(), surface to status bar in initializeWidget() where MainControl is valid
 - [Phase ?]: 999.65-01: RepresentationBuilder uses a Notifier callback (not ConnectionObject&) because notify_ is protected; access-adapted Strategy A
 - [Phase ?]: 999.65-01: legacy applySettingsTo re-applies dropped in the builder — knobs are explicit ModelProcessorParams/ColoringOverrides fields, no dialog
+- [Phase 999.65]: 999.65-02: NEW_MOLECULE auto-rep repointed onto RepresentationBuilder via DisplayProperties::buildCurrentSpec() (live-widget snapshot) + a nested Notifier_ adapter forwarding to the dialog's protected notify_; createRepresentationMode() kept in front so update-enable flags are true
+- [Phase 999.65]: 999.65-02: buildCurrentSpec packs the RAW custom-color (no alpha) because RepresentationBuilder applies the (255 - transparency) alpha itself; null model_settings_/coloring_settings_ -> compiled-default params/overrides, mirroring the legacy apply* early-outs
 
 ### Roadmap Evolution
 
