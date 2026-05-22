@@ -2539,7 +2539,7 @@ Plans:
 **Depends on:** 999.57 (builds on the detached render path). **Blocks:** 999.53.
 **Plans:** 3 plans (sequential; render-touching, each with a blocking GUI human-verify).
 Plans:
-- [ ] 999.58-01-PLAN.md — Material + Light config relocation onto the Inspector MaterialController/LightController; route applyPreferences material+light + the light-refresh sites off the dialogs (wave 1).
+- [~] 999.58-01-PLAN.md — Material + Light config relocation onto the Inspector MaterialController/LightController; route applyPreferences material+light + the light-refresh sites off the dialogs (wave 1). **Code+build COMPLETE 2026-05-22** (MaterialController owns the full default-material field set incl. the 3 colors + `applyDefaultMaterial()`; LightController owns the full per-light list + `syncFromStage()`; scene.C `applyPreferences` + all 5 light-refresh sites routed through the controllers; no live MaterialSettings/LightSettings reach-throughs remain on Scene's render path; BALLView.app links clean BALL_UI_V2=ON). **BLOCKING running-BALLView render UAT PENDING** (lights + materials must still visibly drive the scene) — VIEW-CLEAN-03 stays incomplete (phase-spanning).
 - [ ] 999.58-02-PLAN.md — Full non-stereo Stage render config relocation onto StageController (vertex buffers, downsampling, projection, FPS, preview, offscreen, renderer switch, etc.); route applyPreferences stage branch + getGLSettings off stage_settings_ (wave 2).
 - [ ] 999.58-03-PLAN.md — Remove the 3 dialog constructions (scene.C:142/143/162) + Preferences-stack rewire; Scene-owned stereo-screen config for the deferred stereo bodies; in-Scene applyStereoDefaults; demoTutorial repoint; grep proof scene.C is dialog-free (wave 3).
 

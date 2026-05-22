@@ -2,14 +2,14 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
-status: verifying
-stopped_at: "999.57-03 at BLOCKING checkpoint:human-verify (render UAT pending)"
-last_updated: "2026-05-22T05:04:16.814Z"
-last_activity: 2026-05-22
+status: executing
+stopped_at: "999.58-01 at BLOCKING checkpoint:human-verify (lights+materials render UAT pending)"
+last_updated: "2026-05-22T08:10:00.000Z"
+last_activity: 2026-05-22 -- 999.58-01 code+build complete (Material/Light controller cut-over, BALLView links clean BALL_UI_V2=ON); GUI render UAT pending
 progress:
-  total_phases: 72
+  total_phases: 73
   completed_phases: 32
-  total_plans: 81
+  total_plans: 84
   completed_plans: 81
   percent: 44
 ---
@@ -20,14 +20,14 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.57 — inspector-controller-cutover-displayproperties
+**Current Focus:** Phase 999.58 — scene-settings-stereo-cutover
 
 ## Current Position
 
-Phase: 999.57
-Plan: Not started
-Status: Plan 03 at BLOCKING checkpoint:human-verify — render-path repoint code+build+audit DONE (commits 2b87c689ea, 29d661fa8f, a44eef0ed6; BALLView.app links clean BALL_UI_V2=ON; render path grep-proven detached), running-BALLView render UAT PENDING. VIEW-CLEAN-02 stays PARTIAL (NOT complete).
-Last activity: 2026-05-22
+Phase: 999.58 (scene-settings-stereo-cutover) — EXECUTING
+Plan: 1 of 3 (code+build done; BLOCKING GUI render UAT pending)
+Status: Executing Phase 999.58 — 999.58-01 paused at blocking checkpoint:human-verify
+Last activity: 2026-05-22 -- 999.58-01 Material/Light controller cut-over landed; BALLView.app links clean (BALL_UI_V2=ON); awaiting lights+materials render verification
 
 ## Performance Metrics
 
