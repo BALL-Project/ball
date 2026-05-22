@@ -14,6 +14,7 @@ SET(SOURCES_LIST
 	lineModel.C
 	modelProcessor.C
 	modelProcessorFactory.C
+	representationBuilder.C
 	standardColorProcessor.C
 	surfaceModel.C
 	vanDerWaalsModel.C
