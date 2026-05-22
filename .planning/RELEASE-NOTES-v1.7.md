@@ -162,6 +162,21 @@ format, so the impact is minimal:
 
 ---
 
+## Known issues (v1.7.2)
+
+- **Transparent surfaces render with faceted / see-through-triangle
+  artifacts.** When a surface (e.g. SE Surface) is made transparent, its own
+  triangles blend in arbitrary order and back faces show through, producing a
+  hatched/faceted look. This is a fundamental limitation of the Qt5
+  compatibility-profile fixed-function renderer: it does unsorted alpha
+  blending with backface culling disabled and no depth-sorting / order-
+  independent transparency. The transparency control itself works correctly
+  (the representation does become transparent); only the blended rendering
+  quality is affected. A correct fix (order-independent transparency / depth
+  peeling) requires the modern GL-core/QRhi renderer and is scoped to **v2
+  (PIPE-01)** per the Phase 5 SPIKE-02 decision. Not a v1.7.x regression —
+  pre-existing in the fixed-function path.
+
 ## Known issues (v1.7.1)
 
 See `.planning/v1.7-USER-FEEDBACK-GATE.md` for status and investigation
