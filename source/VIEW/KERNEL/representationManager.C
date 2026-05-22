@@ -8,7 +8,10 @@
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/modelInformation.h>
-#include <BALL/VIEW/DIALOGS/displayProperties.h>
+#include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
+#include <BALL/CONCEPT/property.h>
 #include <BALL/FORMAT/INIFile.h>
 
 #include <QtWidgets/QApplication>
@@ -420,13 +423,40 @@ void RepresentationManager::storeRepresentations(INIFile& out)
 }
 			
 
+void RepresentationManager::notifyMessage_(Message* message)
+{
+	// ConnectionObject::notify_ is protected, but RepresentationManager is a
+	// declared friend of ConnectionObject (connectionObject.h:61), so this member
+	// can route the message through main_control_'s notify_ (ownership transferred),
+	// exactly as this manager already does for ADD/REMOVE/UPDATE notifications.
+	main_control_->notify_(message);
+}
+
+// One-method RepresentationBuilder::Notifier adapter routing the builder's
+// ADD_TO_GEOMETRIC_CONTROL / CENTER_CAMERA messages through the manager's
+// notifyMessage_ -> MainControl::notify_ (ownership transfer), exactly as the
+// legacy restore path did via the dialog's own notify_ and as this manager
+// already does at insert()/notify_ (lines 79/652).
+namespace
+{
+	class RestoreNotifier : public RepresentationBuilder::Notifier
+	{
+		public:
+		RestoreNotifier(RepresentationManager& rm) : rm_(rm) {}
+		void notify(Message* message) override { rm_.notifyMessage_(message); }
+
+		private:
+		RepresentationManager& rm_;
+	};
+}
+
 void RepresentationManager::restoreRepresentations(const INIFile& in, const vector<const Composite*>& new_systems)
 {
- 	DisplayProperties* dp = DisplayProperties::getInstance(0);
-
-	if (dp == 0) return;
+	if (main_control_ == 0) return;
 
 	no_update_ = true;
+
+	RestoreNotifier notifier(*this);
 
 	for (Position p = 0; p < 9999999; p++)
 	{
@@ -435,7 +465,73 @@ void RepresentationManager::restoreRepresentations(const INIFile& in, const vect
 
 		String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
 
-		dp->createRepresentation(data_string, new_systems);
+		// Parse the project data-string headlessly into a spec + restore set
+		// (mirrors the legacy malformed-input skip: parse failure => continue).
+		RepresentationBuilder::ParsedRepresentation parsed;
+		if (!RepresentationBuilder::parseDataString(data_string, parsed,
+																								main_control_->getModelInformation()))
+		{
+			continue;
+		}
+
+		// Resolve the system (legacy displayProperties.C:987-991 guard).
+		if (parsed.system_index >= new_systems.size())
+		{
+			Log.error() << (String)qApp->tr("Error while reading project file, invalid structure for Representation! Aborting...") << std::endl;
+			continue;
+		}
+
+		// Collect the composites whose running tree index is in the parsed id set
+		// (legacy displayProperties.C:1003-1012 CompositeIterator walk).
+		Composite* composite = (Composite*) new_systems[parsed.system_index];
+
+		Position current = 0;
+		list<Composite*> c_list;
+		Composite::CompositeIterator ccit = composite->beginComposite();
+		for (; +ccit; ++ccit)
+		{
+			if (parsed.composite_indices.has(current)) c_list.push_back(&*ccit);
+			current++;
+		}
+
+		// Build the representation via the headless engine (parsed.spec already
+		// carries the 6 parsed fields + the custom color from the "|color|" block).
+		Representation* rep = RepresentationBuilder::createRepresentation(parsed.spec, c_list,
+																																			*main_control_, notifier,
+																																			main_control_->getModelInformation(),
+																																			parsed.hidden);
+		if (rep == 0) continue;
+
+		// Replay the named-property base64 blocks (legacy displayProperties.C:1023-1055):
+		// TextPersistenceManager decode + the RTFact::Material -> Rendering::Material
+		// compat shim + setProperty, then a single UPDATE_PROPERTIES message. This stays
+		// in the restore path because it needs the persistence manager and notify_.
+		if (parsed.named_property_blocks.size() > 0)
+		{
+			for (Position i = 0; i < parsed.named_property_blocks.size(); ++i)
+			{
+				std::istringstream is(parsed.named_property_blocks[i].decodeBase64());
+
+				TextPersistenceManager tmp(is);
+				tmp.registerClass(RTTI::getStreamName<Stage::Material>(), Stage::Material::createDefault);
+				tmp.registerClass(RTTI::getStreamName<Stage::RaytracingMaterial>(), Stage::RaytracingMaterial::createDefault);
+
+				NamedProperty* prop = (NamedProperty*) tmp.readObject();
+
+				// needed for compatibility with older versions
+				if (prop->getName() == "RTFact::Material")
+				{
+					boost::shared_ptr<PersistentObject> pp(new Stage::Material(*reinterpret_cast<Stage::RaytracingMaterial*>(prop->getSmartObject().get())));
+					NamedProperty* prop_tmp = new NamedProperty("Rendering::Material", pp);
+					delete (prop);
+					prop = prop_tmp;
+				}
+
+				rep->setProperty(*prop);
+			}
+
+			main_control_->notify_(new RepresentationMessage(*rep, RepresentationMessage::UPDATE_PROPERTIES));
+		}
 	}
 
 	rebuildAllRepresentations();

@@ -31,6 +31,7 @@ namespace BALL
 		class MainControl;
 		class UpdateRepresentationThread;
 		class ClippingPlane;
+		class Message;
 
 		/** RepresentationManager manages the graphical Representation objects and all GeometricObject.
 		 		All Representation objects which shall be inserted should be created using createRepresentation().
@@ -53,6 +54,15 @@ namespace BALL
 			public:
 
 			BALL_CREATE(RepresentationManager)
+
+			/*_ Forward a builder-emitted message through MainControl::notify_
+					(ConnectionObject::notify_ is protected; RepresentationManager is a
+					declared friend of ConnectionObject, so this member can reach it on
+					main_control_). Used by the restoreRepresentations RepresentationBuilder
+					path's Notifier adapter, mirroring how this manager already sends
+					ADD/REMOVE/UPDATE notifications. Internal use (Phase 999.65 Plan 03,
+					VIEW-CLEAN-04). */
+			void notifyMessage_(Message* message);
 
 			/**	@name Type definitions
 			*/
