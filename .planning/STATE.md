@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
 status: paused
-stopped_at: "999.58-03 at BLOCKING checkpoint:human-verify (FINAL scene.C dialog cut-over render UAT pending; 999.58-01/02 UATs also pending)"
-last_updated: "2026-05-22T00:00:00.000Z"
-last_activity: 2026-05-22 -- 999.58-03 FINAL scene.C dialog cut-over landed (scene.C constructs none of LightSettings/MaterialSettings/StageSettings; Preferences stack registers none of them; deferred stereo bodies read a Scene-owned StereoScreenConfig; applyStereoDefaults computes in-Scene; demoTutorialDialog repointed); BALLView.app links clean (BALL_UI_V2=ON); VIEW-CLEAN-03 construction grep proof passes; GUI render UAT pending — 999.53 unblocked to delete the dialog triples
+stopped_at: "999.57-03 at BLOCKING checkpoint:human-verify (render UAT pending)"
+last_updated: "2026-05-22T09:27:38.420Z"
+last_activity: 2026-05-22
 progress:
   total_phases: 73
   completed_phases: 33
@@ -24,10 +24,10 @@ progress:
 
 ## Current Position
 
-Phase: 999.58 (scene-settings-stereo-cutover) — EXECUTING (all 3 plans code+build complete; phase-level GUI render UAT pending)
-Plan: 3 of 3 (FINAL — code+build done; BLOCKING GUI render UAT pending — 999.58-01/02 UATs also pending)
+Phase: 999.58
+Plan: Not started
 Status: Executing Phase 999.58 — 999.58-03 paused at blocking checkpoint:human-verify
-Last activity: 2026-05-22 -- 999.58-03 FINAL scene.C dialog cut-over landed (scene.C constructs/registers none of LightSettings/MaterialSettings/StageSettings; deferred stereo bodies read a Scene-owned StereoScreenConfig; applyStereoDefaults computes in-Scene; demoTutorialDialog repointed; unused dialog includes dropped); BALLView.app links clean (BALL_UI_V2=ON); VIEW-CLEAN-03 construction grep proof passes; 999.53 unblocked
+Last activity: 2026-05-22
 
 ## Performance Metrics
 
