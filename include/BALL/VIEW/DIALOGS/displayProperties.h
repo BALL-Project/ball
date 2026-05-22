@@ -135,12 +135,6 @@ namespace BALL
 
 			/// Switch to the mode, that an existing Representation will be modified
 			void modifyRepresentationMode(Representation* rep);
-	
-			/// Settings from String
-			bool getSettingsFromString(const String& data);
-
-			///
-			void createRepresentation(String data_string, const vector<const Composite*>& new_systems);
 
 			/// Set if Representations are automaticaly created for new Molecules
 			void enableCreationForNewMolecules(bool state) 
