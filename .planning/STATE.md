@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.6.2
 milestone_name: · 2026-05-16)
-status: paused
-stopped_at: "999.57-03 at BLOCKING checkpoint:human-verify (render UAT pending)"
-last_updated: "2026-05-22T09:27:38.420Z"
+status: executing
+stopped_at: "999.65-01 complete (headless RepresentationBuilder added; no consumer repointed) — ready for 999.65-02"
+last_updated: "2026-05-22T10:25:07.523Z"
 last_activity: 2026-05-22
 progress:
-  total_phases: 73
+  total_phases: 74
   completed_phases: 33
-  total_plans: 84
-  completed_plans: 84
+  total_plans: 89
+  completed_plans: 85
   percent: 45
 ---
 
@@ -20,13 +20,13 @@ progress:
 
 **Core Value:** BALLView must build and visibly render molecules on macOS, Linux, and Windows from current, supported dependencies — the 3D scene working cross-platform is the non-negotiable outcome.
 
-**Current Focus:** Phase 999.58 — scene-settings-stereo-cutover
+**Current Focus:** Phase 999.65 — representation-builder-extraction
 
 ## Current Position
 
-Phase: 999.58
-Plan: Not started
-Status: Executing Phase 999.58 — 999.58-03 paused at blocking checkpoint:human-verify
+Phase: 999.65 (representation-builder-extraction) — EXECUTING
+Plan: 2 of 3
+Status: Ready to execute
 Last activity: 2026-05-22
 
 ## Performance Metrics
@@ -98,6 +98,7 @@ Last activity: 2026-05-22
 | Phase 999.58 P01 | ~18min | 3 of 4 tasks (Task 4 blocking GUI human-verify) | 5 files |
 | Phase 999.58 P02 | ~22min | 2 of 3 tasks (Task 3 blocking GUI human-verify) | 3 files |
 | Phase 999.58 P03 | ~25min | 3 of 4 tasks (Task 4 blocking GUI human-verify) | 3 files |
+| Phase 999.65 P01 | ~15min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -187,6 +188,8 @@ Last activity: 2026-05-22
 - [Phase ?]: 999.50-02: release.yml now restores/saves a per-OS ccache build cache keyed to ci.yml's ccache-<os>-pch-v2- lineage, so release tags of CI-built commits warm from CI's compiler cache (BUILD-ACCEL-07).
 - [Phase ?]: 999.50-02: MSVC /O1 escape hatch (item 3) skipped as moot — Plan 01's boost elimination dropped poseClusteringSerialization.C to ~3.9s; no /O1 override committed, default build unchanged.
 - [Phase 999.54-renderer-plugin-warning]: Two-phase startup diagnostic for #501: flag + Log.warn in registerRenderers_(), surface to status bar in initializeWidget() where MainControl is valid
+- [Phase ?]: 999.65-01: RepresentationBuilder uses a Notifier callback (not ConnectionObject&) because notify_ is protected; access-adapted Strategy A
+- [Phase ?]: 999.65-01: legacy applySettingsTo re-applies dropped in the builder — knobs are explicit ModelProcessorParams/ColoringOverrides fields, no dialog
 
 ### Roadmap Evolution
 
