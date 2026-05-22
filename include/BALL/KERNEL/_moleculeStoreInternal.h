@@ -320,16 +320,16 @@ namespace BALL
 		std::unordered_map<std::string, std::uint32_t> intern_map_;
 	};
 
-	// Registry: name -> column. Predeclares 10 well-known force-field
-	// columns at construction so they bypass the dynamic-cap accounting
-	// per D23b.
+	// Registry: name -> column. 10 well-known force-field column names live in
+	// a shared immutable schema (wellKnownSchema_); they materialise LAZILY on
+	// first write and bypass the dynamic-cap accounting per D23b.
+	// HCP-1P.C: construction allocates NOTHING (was: eager predeclare of 10
+	// heap-allocated columns x 2 registries per store -- the dominant
+	// per-System creation cost). An empty store/System pays zero column cost.
 	class PropertyColumnRegistry
 	{
 		public:
-		PropertyColumnRegistry()
-		{
-			predeclareWellKnown_();
-		}
+		PropertyColumnRegistry() = default;
 
 		PropertyColumnRegistry(const PropertyColumnRegistry&)            = delete;
 		PropertyColumnRegistry& operator=(const PropertyColumnRegistry&) = delete;
@@ -347,15 +347,26 @@ namespace BALL
 			return it == columns_.end() ? nullptr : it->second.get();
 		}
 
-		// Register a new dynamic column of the given type. Returns
-		// nullptr and DOES NOT register if the cap is hit. Well-known
-		// names use registerWellKnown_ during predeclareWellKnown_ and
-		// don't count toward the cap.
+		// Register a column of the given type, returning it (idempotent).
+		// Returns nullptr and DOES NOT register a DYNAMIC name if the cap is
+		// hit. HCP-1P.C: a well-known name (wellKnownSchema_) materialises
+		// lazily here with its canonical schema type and does NOT count toward
+		// the dynamic-name cap.
 		PropertyColumnBase* registerColumn(const std::string& name,
 		                                   PropertyColumnType t)
 		{
-			// Already registered? Return existing (don't double-count).
+			// Already registered (materialised)? Return existing (no double-count).
 			if (auto* existing = findColumn(name)) return existing;
+			// HCP-1P.C: a well-known name materialises lazily here with its
+			// canonical schema type and is EXEMPT from the dynamic-cap accounting
+			// (same semantics as the old eager predeclare, just deferred to first use).
+			auto wk = wellKnownSchema_().find(name);
+			if (wk != wellKnownSchema_().end())
+			{
+				auto* col = makeColumn_(name, wk->second);
+				columns_.emplace(name, std::unique_ptr<PropertyColumnBase>(col));
+				return col;
+			}
 			if (dynamic_count_ >= max_dynamic_) return nullptr;
 			++dynamic_count_;
 			auto* col = makeColumn_(name, t);
@@ -369,7 +380,9 @@ namespace BALL
 
 		bool isWellKnown(const std::string& name) const
 		{
-			return well_known_.count(name) > 0;
+			// HCP-1P.C: well-known membership is the immutable shared schema,
+			// independent of whether the column has been materialised yet.
+			return wellKnownSchema_().count(name) > 0;
 		}
 
 		std::size_t columnCount() const          { return columns_.size(); }
@@ -397,33 +410,32 @@ namespace BALL
 			}
 		}
 
-		void registerWellKnown_(const char* name, PropertyColumnType t)
+		// D23b / HCP-1P.C: the 10 force-field-frequent column names + their
+		// canonical types. Built ONCE (function-local static) and shared across
+		// EVERY registry -- schema only; per-store row data lives in the
+		// per-store `columns_`. They materialise lazily on first write
+		// (registerColumn) and bypass the dynamic-cap accounting. Anything
+		// touched by AmberFF / MMFF94 / charge-assignment passes belongs here so
+		// the bulk-assign hot path skips the cap accounting.
+		static const std::unordered_map<std::string, PropertyColumnType>&
+		wellKnownSchema_()
 		{
-			auto* col = makeColumn_(name, t);
-			columns_.emplace(name, std::unique_ptr<PropertyColumnBase>(col));
-			well_known_.insert(name);
-		}
-
-		// D23b: 10 force-field-frequent columns predeclared. Anything
-		// touched by AmberFF / MMFF94 / charge-assignment passes goes
-		// here so the bulk-assign hot path skips registry lookup
-		// overhead and the dynamic-cap accounting.
-		void predeclareWellKnown_()
-		{
-			registerWellKnown_("PARTIAL_CHARGE",       PropertyColumnType::FLOAT);
-			registerWellKnown_("FORMAL_CHARGE",        PropertyColumnType::INT);
-			registerWellKnown_("MMFF94_TYPE",          PropertyColumnType::INT);
-			registerWellKnown_("AMBER_TYPE",           PropertyColumnType::STRING);
-			registerWellKnown_("RADIUS",               PropertyColumnType::FLOAT);
-			registerWellKnown_("EPSILON",              PropertyColumnType::FLOAT);
-			registerWellKnown_("HYBRIDIZATION",        PropertyColumnType::INT);
-			registerWellKnown_("IS_AROMATIC",          PropertyColumnType::BOOL);
-			registerWellKnown_("ATOM_TYPE_NAME",       PropertyColumnType::STRING);
-			registerWellKnown_("STEREO_DESCRIPTOR",    PropertyColumnType::INT);
+			static const std::unordered_map<std::string, PropertyColumnType> schema = {
+				{"PARTIAL_CHARGE",    PropertyColumnType::FLOAT},
+				{"FORMAL_CHARGE",     PropertyColumnType::INT},
+				{"MMFF94_TYPE",       PropertyColumnType::INT},
+				{"AMBER_TYPE",        PropertyColumnType::STRING},
+				{"RADIUS",            PropertyColumnType::FLOAT},
+				{"EPSILON",           PropertyColumnType::FLOAT},
+				{"HYBRIDIZATION",     PropertyColumnType::INT},
+				{"IS_AROMATIC",       PropertyColumnType::BOOL},
+				{"ATOM_TYPE_NAME",    PropertyColumnType::STRING},
+				{"STEREO_DESCRIPTOR", PropertyColumnType::INT},
+			};
+			return schema;
 		}
 
 		std::unordered_map<std::string, std::unique_ptr<PropertyColumnBase>> columns_;
-		std::unordered_set<std::string> well_known_;
 		std::size_t                     dynamic_count_ = 0;
 		std::size_t                     max_dynamic_   = 65536;
 	};
@@ -737,10 +749,11 @@ namespace BALL
 		ContainerTable               container_table_;
 
 		// v2.1 P1.4 (D23b): typed property column registry. Well-known
-		// force-field columns are predeclared at construction (PARTIAL_
-		// CHARGE, FORMAL_CHARGE, MMFF94_TYPE, AMBER_TYPE, RADIUS,
-		// EPSILON, HYBRIDIZATION, IS_AROMATIC, ATOM_TYPE_NAME,
-		// STEREO_DESCRIPTOR) and don't count against the dynamic-name
+		// force-field columns (PARTIAL_CHARGE, FORMAL_CHARGE, MMFF94_TYPE,
+		// AMBER_TYPE, RADIUS, EPSILON, HYBRIDIZATION, IS_AROMATIC,
+		// ATOM_TYPE_NAME, STEREO_DESCRIPTOR) live in a shared schema and
+		// (HCP-1P.C) materialise LAZILY on first write -- construction
+		// allocates nothing -- and don't count against the dynamic-name
 		// cap. P1.5 adds the sparse fallback bag for unregistered
 		// names. P2 wires PropertyManager mutations to maintain the
 		// columns alongside the v0 inline bag.

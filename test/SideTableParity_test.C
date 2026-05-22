@@ -151,17 +151,19 @@ CHECK(Composite::getNode_ reflects v0 inline topology)
 	TEST_EQUAL(mol_view.child_count, 1u)
 RESULT
 
-CHECK(PropertyColumnRegistry -- 10 well-known FF columns predeclared)
+CHECK(PropertyColumnRegistry -- well-known FF columns lazily materialise and stay cap-exempt)
 	MoleculeStore store;
 	MoleculeStoreSideTables& s = store.sideTables_();
 	PropertyColumnRegistry& reg = s.property_columns_;
 
-	// 10 well-known columns are present at construction.
-	TEST_EQUAL(reg.columnCount(), 10u)
+	// HCP-1P.C: construction allocates NOTHING -- the 10 well-known columns
+	// materialise lazily on first write (was: 10 eager columns at ctor).
+	TEST_EQUAL(reg.columnCount(), 0u)
 	TEST_EQUAL(reg.dynamicCount(), 0u)
 	TEST_EQUAL(reg.maxDynamic(), 65536u)
 
-	// Well-known names are flagged.
+	// Well-known names are flagged via the shared schema (independent of
+	// whether the column has been materialised yet).
 	TEST_EQUAL(reg.isWellKnown("PARTIAL_CHARGE"), true)
 	TEST_EQUAL(reg.isWellKnown("FORMAL_CHARGE"), true)
 	TEST_EQUAL(reg.isWellKnown("MMFF94_TYPE"), true)
@@ -173,11 +175,36 @@ CHECK(PropertyColumnRegistry -- 10 well-known FF columns predeclared)
 	TEST_EQUAL(reg.isWellKnown("ATOM_TYPE_NAME"), true)
 	TEST_EQUAL(reg.isWellKnown("STEREO_DESCRIPTOR"), true)
 	TEST_EQUAL(reg.isWellKnown("not_a_real_property"), false)
+
+	// Materialising a well-known column on first registerColumn increments the
+	// materialised count but is EXEMPT from the dynamic-cap accounting; the
+	// canonical schema type is used regardless of the type passed in.
+	PropertyColumnBase* pc = reg.registerColumn("PARTIAL_CHARGE", PropertyColumnType::FLOAT);
+	TEST_NOT_EQUAL(pc, (PropertyColumnBase*)nullptr)
+	TEST_EQUAL(pc->type() == PropertyColumnType::FLOAT, true)
+	TEST_EQUAL(reg.columnCount(), 1u)
+	TEST_EQUAL(reg.dynamicCount(), 0u)        // well-known: not counted against cap
+	// Idempotent: second register returns the same materialised column.
+	TEST_EQUAL(reg.registerColumn("PARTIAL_CHARGE", PropertyColumnType::FLOAT), pc)
+	TEST_EQUAL(reg.columnCount(), 1u)
+	// A second well-known materialises too, still cap-exempt.
+	reg.registerColumn("AMBER_TYPE", PropertyColumnType::STRING);
+	TEST_EQUAL(reg.columnCount(), 2u)
+	TEST_EQUAL(reg.dynamicCount(), 0u)
+
+	// HCP-1P.C: a well-known name always materialises with its CANONICAL
+	// schema type, ignoring a mismatched caller type (fresh registry).
+	MoleculeStore store_mt;
+	auto* mt = store_mt.sideTables_().property_columns_.registerColumn("PARTIAL_CHARGE", PropertyColumnType::INT);
+	TEST_NOT_EQUAL(mt, (PropertyColumnBase*)nullptr)
+	TEST_EQUAL(mt->type() == PropertyColumnType::FLOAT, true)
 RESULT
 
 CHECK(PropertyColumn<float> -- set / get / clear / presence)
 	MoleculeStore store;
-	auto* col = store.sideTables_().property_columns_.findColumn("PARTIAL_CHARGE");
+	// HCP-1P.C: well-known columns materialise on first registerColumn (lazy);
+	// findColumn before any write now returns nullptr (deliberate).
+	auto* col = store.sideTables_().property_columns_.registerColumn("PARTIAL_CHARGE", PropertyColumnType::FLOAT);
 	TEST_NOT_EQUAL(col, (PropertyColumnBase*)nullptr)
 	TEST_EQUAL(col->type() == PropertyColumnType::FLOAT, true)
 
@@ -202,7 +229,8 @@ RESULT
 
 CHECK(StringPropertyColumn -- intern pool dedups repeated strings)
 	MoleculeStore store;
-	auto* col = store.sideTables_().property_columns_.findColumn("AMBER_TYPE");
+	// HCP-1P.C: lazy materialise on first registerColumn.
+	auto* col = store.sideTables_().property_columns_.registerColumn("AMBER_TYPE", PropertyColumnType::STRING);
 	TEST_NOT_EQUAL(col, (PropertyColumnBase*)nullptr)
 	auto* str_col = static_cast<StringPropertyColumn*>(col);
 

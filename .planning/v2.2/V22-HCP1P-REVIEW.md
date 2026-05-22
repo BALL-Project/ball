@@ -64,3 +64,16 @@ Verdict: **GO** - the .B patch is a performance-only change for valid atom name/
 3. **SOUND** - For valid inputs, stored live strings, offsets, intern-table hits, and pool contents are unchanged versus the old path: the same `std::string` value is looked up/appended, and only redundant `c_str()` reconstruction is removed.
 4. **SOUND** - The `MoleculeStore::set_name(Index, const std::string&)` and `set_type_name` signatures remain unchanged; `BALL::String` has an unambiguous `operator string const&() const`, so existing callers see no API break or overload ambiguity.
 5. **SOUND** - No new blocking issue found; the HINFile `CHECK(...)` comma fix is compile-only and does not alter the .A round-trip semantics.
+
+## HCP-1P-C-CR code review
+
+Verdict: **GO** - the lazy well-known registry patch is sound; no production missed-consumer or blocking test gap found.
+
+1. **SOUND** - Consumer safety holds: the only production `property_columns_` consumer is `MoleculeStoreSideTables::promote_sparse_`, which does `findColumn` null-check -> `registerColumn` -> type guard before use. Broad source/include grep found no production direct `findColumn(well_known)` dereference or pre-materialized column assumption.
+2. **SOUND** - Cap exemption is preserved: `registerColumn` returns existing first, then takes the well-known schema branch before dynamic accounting, so well-known materialization never increments `dynamic_count_`; dynamic names still increment once and honor `max_dynamic_`; re-registration is idempotent for both.
+3. **SOUND** - Type correctness is equivalent to the old eager path: well-known names materialize with canonical schema type, ignoring caller `t`, just as old predeclared columns already fixed the type before `promote_sparse_` checked `col->type() != t`.
+4. **SOUND** - JSON/persistence/compact are unaffected: Store/System JSON serialize core store columns plus `PropertyManager` named properties through `propertyJson`, not registry column iteration; `compact()` shrinks core vectors/rebuilds string pools and does not inspect `PropertyColumnRegistry`. An unwritten well-known property still reads as absent/default.
+5. **SOUND** - Thread-safety contract is unchanged: the shared schema is a C++11 function-local static and immutable after initialization; all mutable `columns_` state remains per-store. Lazy materialization is covered by the same exclusive store/orphan-mutex discipline as prior side-table mutation.
+6. **WEAK** - Tests cover lazy count, schema membership, cap exemption, dynamic cap, and idempotence, but do not directly assert the mismatched-caller invariant (`registerColumn("PARTIAL_CHARGE", INT)` returns a FLOAT schema column). Also, `include/BALL/KERNEL/_moleculeStoreInternal.h` still has a lower stale comment saying force-field columns are predeclared at construction. Neither is a blocker.
+
+Missed-consumer list: none found.
