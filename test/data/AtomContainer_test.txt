@@ -52,7 +52,7 @@
           formal charge: 0
           charge: 0
           name: A1
-          type name: ?
+          type name: 
           position: (0 0 0)
           radius: 0
           type: -1

@@ -189,6 +189,34 @@ CHECK(bool write(const Molecule& molecule))
 	TEST_NOT_EQUAL(f.getSize(), 0)
 RESULT
 
+CHECK([HCP-1P.A] HIN missing-type "**" round-trips to default type-name "", not "?")
+	// A default/untyped atom (type-name "") writes its HIN type field as "**";
+	// reading "**" back must canonicalise to BALL_ATOM_DEFAULT_TYPE_NAME ("")
+	// -- NOT the legacy "?" -- so the type-assignment sentinel checks (which
+	// compare against the macro) still treat the round-tripped atom as untyped.
+	String rt_filename;
+	NEW_TMP_FILE(rt_filename)
+	System out_sys;
+	Molecule* rt_m = new Molecule;
+	Atom* rt_a = new Atom;
+	rt_a->setElement(PTE[Element::CARBON]);
+	rt_a->setName("C1");
+	rt_m->insert(*rt_a);
+	out_sys.insert(*rt_m);
+	TEST_EQUAL(rt_a->getTypeName(), BALL_ATOM_DEFAULT_TYPE_NAME)   // born default ""
+	HINFile rt_wf(rt_filename, std::ios::out);
+	rt_wf.write(out_sys);
+	rt_wf.close();
+
+	System in_sys;
+	HINFile rt_rf(rt_filename);
+	rt_rf.read(in_sys);
+	rt_rf.close();
+	TEST_EQUAL(in_sys.countAtoms(), 1)
+	AtomIterator rt_it = in_sys.beginAtom();
+	TEST_EQUAL(rt_it->getTypeName(), BALL_ATOM_DEFAULT_TYPE_NAME) // "" round-trips, not "?"
+RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 

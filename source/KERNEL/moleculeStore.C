@@ -907,12 +907,12 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 		forces_[idx]          = Vector3(0.f, 0.f, 0.f);
 		charges_[idx]         = 0.f;
 		radii_[idx]           = 0.f;
-		atom_types_[idx]      = 0;
+		atom_types_[idx]      = -1;  // HCP-1P.A: Atom::UNKNOWN_TYPE (born default)
 		formal_charges_[idx]  = 0;
 		element_indices_[idx] = 0;
 		selection_[idx]       = 0;
 		name_offsets_[idx]    = 0;
-		type_name_offsets_[idx] = 0;
+		type_name_offsets_[idx] = 0;  // HCP-1P.A: born default type-name "" (offset 0)
 		name_strings_[idx].clear();
 		type_name_strings_[idx].clear();
 		stable_ids_[idx]      = new_sid;
@@ -937,14 +937,14 @@ MoleculeStore::Index MoleculeStore::allocate_atom_with_back_ptr_(Atom* back_ptr)
 	forces_.emplace_back(Vector3(0.f, 0.f, 0.f));
 	charges_.emplace_back(0.f);
 	radii_.emplace_back(0.f);
-	atom_types_.emplace_back(0);
+	atom_types_.emplace_back(static_cast<short>(-1));  // HCP-1P.A: Atom::UNKNOWN_TYPE
 	formal_charges_.emplace_back(0);
 	element_indices_.emplace_back(0);
 	selection_.emplace_back(0);
 	name_offsets_.emplace_back(0);          // 0 = empty (string_pool_[0] = '\0')
-	type_name_offsets_.emplace_back(0);
+	type_name_offsets_.emplace_back(0);     // HCP-1P.A: born default type-name "" (offset 0)
 	name_strings_.emplace_back();           // K0.3b.LATER.5: default empty String
-	type_name_strings_.emplace_back();      // K0.3b.LATER.6
+	type_name_strings_.emplace_back();      // HCP-1P.A: born default "" (empty)
 	stable_ids_.emplace_back(new_sid);      // R13.4: pre-allocated above
 	// K0.4.6: write back_ptr BEFORE marking the slot live (is_freed_=0).
 	// A concurrent reader sequenced after the is_freed_ store will see a

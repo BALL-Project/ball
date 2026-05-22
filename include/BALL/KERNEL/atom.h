@@ -34,7 +34,12 @@
 #define BALL_ATOM_DEFAULT_CHARGE     0
 #define BALL_ATOM_DEFAULT_FORMAL_CHARGE     0
 #define BALL_ATOM_DEFAULT_NAME       ""
-#define BALL_ATOM_DEFAULT_TYPE_NAME  "?"
+// HCP-1P.A: the default/unknown atom type-name is the EMPTY string (was "?").
+// Empty interns to the reserved string-pool offset 0, so a born-default atom
+// slot needs no per-atom string interning at all. The type-assignment sentinel
+// checks (assignTypes/templates/atomTyper) compare against this macro, so they
+// stay consistent; FORMAT readers that emit "?" still set it explicitly.
+#define BALL_ATOM_DEFAULT_TYPE_NAME  ""
 #define BALL_ATOM_DEFAULT_POSITION   0,0,0
 #define BALL_ATOM_DEFAULT_RADIUS     0
 #define BALL_ATOM_DEFAULT_TYPE       Atom::UNKNOWN_TYPE

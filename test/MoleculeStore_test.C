@@ -667,6 +667,7 @@ CHECK(K0.3c.9 string-pool intern dedupe -- repeated set_name reuses offset)
 	}
 	// Pool grew by at most 5 bytes: initial '\0' (if not already there)
 	// + "ABC\0" appended ONCE. Tight upper bound = pool_before + 5.
+	// (HCP-1P.A born-default type-name is "" = offset 0, so it adds nothing.)
 	TEST_EQUAL(store.string_pool().size() <= pool_before + 5, true)
 	// Round-trip: every atom reads back "ABC".
 	for (int n = 0; n < 100; ++n)
@@ -693,7 +694,8 @@ CHECK(K0.3c.9 string-pool intern preserves distinct strings)
 		for (int m = n + 1; m < 10; ++m)
 			TEST_NOT_EQUAL(offsets[n], offsets[m])
 	// Pool grew by exactly 10 * 2 bytes (each "X\0"), plus possibly the
-	// initial '\0' if pool was empty.
+	// initial '\0' if pool was empty. (HCP-1P.A born-default type-name is
+	// "" = offset 0, so it adds nothing.)
 	const std::size_t grew = store.string_pool().size() - pool_before;
 	TEST_EQUAL(grew >= 20u && grew <= 21u, true)
 	// Round-trip.
@@ -994,6 +996,53 @@ CHECK(V21-STRING-POOL-COMPACT: compact reclaims pool from freed slots)
 	// Expected: ~25 chars for one name + null sentinel + offset 0.
 	TEST_EQUAL(pool_compact < 100, true)
 	TEST_EQUAL(atoms[0]->getName(), String("unique_atom_name_0"))
+RESULT
+
+CHECK(HCP-1P.A: default Atom is born with UNKNOWN_TYPE + empty type-name)
+	// The slot is born default inside allocate_atom; the Atom() ctor no
+	// longer re-initialises it. The default type-name is "" (HCP-1P.A: was
+	// "?"), which is the reserved string-pool offset 0 -- no per-atom intern.
+	Atom a;
+	TEST_EQUAL(a.getType(), Atom::UNKNOWN_TYPE)
+	TEST_EQUAL(a.getTypeName(), String(""))
+	TEST_EQUAL(a.getName(), String(""))
+RESULT
+
+CHECK(HCP-1P.A: free-list slot reuse resets to born defaults)
+	// Set non-default values, free the slot, allocate again -- the reused
+	// slot must be reset to the born defaults (atom_type -1 / type-name ""),
+	// never carry stale type / type-name from the previous occupant.
+	Atom* a1 = new Atom;
+	a1->setType(7);
+	a1->setTypeName("ZZ");
+	delete a1;                 // frees the orphan slot -> free list
+	Atom* a2 = new Atom;       // fresh OR reused slot; either way born-default
+	TEST_EQUAL(a2->getType(), Atom::UNKNOWN_TYPE)
+	TEST_EQUAL(a2->getTypeName(), String(""))
+	delete a2;
+RESULT
+
+CHECK(HCP-1P.A: born-default type-name + atom_type round-trip via the offset/pool path across compact + clear)
+	// Read the OFFSET path (get_type_name -> string_pool_), the persistence
+	// truth, not just the String column. Born default type-name "" = offset 0
+	// (always valid); atom_type = UNKNOWN_TYPE = -1.
+	MoleculeStore store;
+	MoleculeStore::Index i1 = store.allocate_atom();
+	TEST_EQUAL(store.get_type_name(i1), std::string(""))
+	TEST_EQUAL(store.atom_type(i1), (short)Atom::UNKNOWN_TYPE)
+
+	// compact() rebuilds the pool; offset 0 stays the reserved empty string.
+	store.compact();
+	TEST_EQUAL(store.get_type_name(i1), std::string(""))
+	MoleculeStore::Index i2 = store.allocate_atom();
+	TEST_EQUAL(store.get_type_name(i2), std::string(""))
+
+	// clear() drops the pool entirely; born-default after clear still resolves
+	// "" via offset 0 (no stale offset, since born-default never caches one).
+	store.clear();
+	MoleculeStore::Index i3 = store.allocate_atom();
+	TEST_EQUAL(store.get_type_name(i3), std::string(""))
+	TEST_EQUAL(store.atom_type(i3), (short)Atom::UNKNOWN_TYPE)
 RESULT
 
 END_TEST

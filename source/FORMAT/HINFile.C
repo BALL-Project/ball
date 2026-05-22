@@ -507,8 +507,12 @@ namespace BALL
 
 						if (getLine().getField(4) == "**")
 						{
-							atom->setTypeName("?");
-						} 
+							// HCP-1P.A: HIN's missing-type token "**" canonicalises to the
+							// default/unknown type-name (BALL_ATOM_DEFAULT_TYPE_NAME = "")
+							// so a HIN-read untyped atom is treated as untyped by the
+							// type-assignment sentinel checks (which compare the macro).
+							atom->setTypeName(BALL_ATOM_DEFAULT_TYPE_NAME);
+						}
 						else	
 						{
 							atom->setTypeName(getLine().getField(4));

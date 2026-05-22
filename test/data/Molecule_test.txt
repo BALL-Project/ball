@@ -35,7 +35,7 @@
       formal charge: 0
       charge: 0
       name: atom1
-      type name: ?
+      type name: 
       position: (0 0 0)
       radius: 0
       type: -1
@@ -65,7 +65,7 @@
       formal charge: 0
       charge: 0
       name: atom2
-      type name: ?
+      type name: 
       position: (0 0 0)
       radius: 0
       type: -1

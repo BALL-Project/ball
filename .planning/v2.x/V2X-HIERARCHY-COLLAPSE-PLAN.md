@@ -125,6 +125,115 @@ exclude rooted-object `set()`/`operator=`/`persistentRead` (the documented
 full-replacement carry-over) until that mirror lands in HCP-2. Then a short
 Codex H2d close-review → H2 DONE.
 
+**HCP-1P — KERNEL object-creation fast path (perf sibling of HCP-1).**
+KERNEL-only, collapse-narrowed build, no handle-API change; closes the v2.0→2.x
+**create/clone regression** (System ≈2.6 µs/op, Atom ≈780 ns/op — sample-profiled
+to redundant ctor re-init + default-name interning + per-System well-known column
+predeclare). Runs next, in parallel with / ahead of HCP-2 (independent surface).
+Each step atomic + green ctest + benchmark re-measure:
+- **HCP-1P.A — born-default atom slot.** Align `MoleculeStore::allocate_atom`'s
+  fresh-slot defaults to `BALL_ATOM_DEFAULT_*`, then **delete** the redundant
+  `Atom::Atom()` (default ctor only) `BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_` block.
+  Biggest single win — every atom hits the ctor.
+  **Verified design (pre-implementation):**
+  - Only **2 columns** mismatch the born-default zeros: `atom_types_` (born `0`,
+    must be `Atom::UNKNOWN_TYPE = -1`) and type_name (born `""`, must be `"?"`).
+    Element already matches — `BALL_ATOM_DEFAULT_ELEMENT = &Element::UNKNOWN` →
+    atomic number 0 = the born `element_indices_` default. name/charge/pos/vel/
+    force/radius/formal_charge already match.
+  - **Concurrency: deleting the default-ctor block is a net WIN, not just perf.**
+    `bindToStore_` already holds `orphanMutex` across `allocate_atom` (atom.C:43);
+    the `INITIAL_WRITES_LOCK_` block exists *only* because the post-bind default
+    writes re-evaluate `store_->position(idx)` against a base pointer a concurrent
+    reallocation could stale (the R11 race, atom.C:192-200). Born-default writes
+    happen *inside* the mutex-protected `allocate_atom`, so the default ctor needs
+    **zero** post-bind writes → the R11 stale-base window is *eliminated* for
+    default construction (it was only guarded before). The copy ctor + the 3rd
+    ctor keep their blocks (they write source values, not defaults).
+  - **The `"?"` offset subtlety:** type_name has two representations — the live
+    `type_name_strings_` String column (read-truth for `getTypeName`) AND the
+    `type_name_offsets_`→`string_pool_` path (persistence-truth, StoreFormat).
+    Born-default must set BOTH consistently. Naively calling `set_type_name(idx,"?")`
+    per atom re-does a hash probe (the cost .D attacks). Instead: cache
+    `default_type_name_offset_` (lazily interned on first `allocate_atom` via
+    `intern_name("?")`; `0` sentinel = not-yet-computed since `"?"`≠empty → offset
+    ≥1), set `type_name_offsets_[idx] = default_type_name_offset_` +
+    `type_name_strings_[idx] = "?"` — BOTH set in the SAME `allocate_atom` write so
+    no serialization-observable point sees string/offset drift (a freshly created-
+    then-serialized atom with no explicit `setTypeName` must round-trip `"?"` through
+    the offset→pool path, not `""`). **Lazy, not eager in the ctor** — eager would
+    re-add a per-System cost, the very thing .C removes.
+  - **`default_type_name_offset_` MUST reset to `0` on EVERY pool-reset path**
+    (R1 FLAW #3): `compact()`/`rebuild_string_pool_` (which re-intern every atom's
+    `type_name_strings_`) AND **`MoleculeStore::clear()`** — `clear()` drops
+    `string_pool_`+`string_intern_` (moleculeStore.C ~1048-1050), so a stale cached
+    offset would otherwise be written into a fresh pool by the next `allocate_atom`.
+    Recompute lazily on next use (avoids the R13.2-class stale-offset trap).
+    Per-System stores are single-threaded (D7); the orphan store serialises the lazy
+    init via orphanMutex.
+  - Touch points: `allocate_atom` (both fresh + free-list-reuse paths),
+    `rebuild_string_pool_` + `compact()` + **`clear()`** (reset cache), one new private
+    member, and delete the `atom.C` default-ctor block.
+  - Verify: full ctest + 100-run MoleculeStore stress (orphan path) + benchmark +
+    Codex review. New regression tests (R1 nice-to-haves): (1) default Atom create →
+    serialize without `setTypeName`, assert `"?"` round-trips via the offset path;
+    (2) free-list reuse — release then reallocate, assert type/type-name; (3) compact
+    AND clear — default atom → compact-or-clear → reallocate, assert
+    `type_name_offsets_` point into the CURRENT pool.
+  - **Land .A and .C as SEPARATE atomic patches** (R1) so the benchmark delta shows
+    which hotspot moved. **Code lands via the GSD execution flow (not direct edit).**
+- **HCP-1P.B — kill the `std::string(s.c_str())` round-trip.** `Atom::writeStoreName_`/
+  `writeStoreTypeName_` (and the 3 other call sites in `atom.C`) build a throwaway
+  `std::string` from `String::c_str()` (forces strlen + alloc + copy). `BALL::String`
+  **encapsulates** a `std::string` and exposes `operator const std::string&() const`
+  (string.h:255) → pass the `String` straight into `set_name(idx, const std::string&)`
+  for a **zero-copy reference bind**; `intern_name` then allocates only when the name
+  is not already pooled. This is the **down-payment slice of v2.3** (`BALL::String`→
+  `std::string`, roadmap §4) taken in the hot path now, no signature change.
+  **(R1 WEAK #4) Scope must ALSO reach inside the store:** `set_name`/`set_type_name`
+  themselves still do `name_strings_[i] = String(s.c_str())` (moleculeStore.C:1189,
+  1208) — a *second* redundant reconstruction. .B removes that too (assign from `s`
+  directly). Note: once .A deletes the default-name writes, the remaining hot caller
+  is the PDB/parser `setName` path — so .B's payoff is mostly there, not in the ctor.
+- **HCP-1P.C — lazy well-known property columns.** `PropertyColumnRegistry`'s ctor
+  eagerly `predeclareWellKnown_()` (10 heap-allocated columns × 2 registries per
+  store) — the dominant **System-creation** cost with no atoms present. Predeclare
+  lazily (materialise the column object on first write to a well-known name) and/or
+  share ONE immutable well-known *schema* across stores (schema shared, per-store row
+  data NOT shared), so an empty System pays ~nothing.
+  **(R1 FLAW #5) Lazy changes observable registry behaviour — lock the contract:**
+  today `columnCount()==10` and `findColumn("PARTIAL_CHARGE")!=nullptr` immediately
+  after construction; lazy makes those reflect only materialised columns. Define the
+  lazy semantics precisely: well-known names stay **exempt from the dynamic-cap
+  accounting** (`max_dynamic_`), a write to a well-known name materialises it AS
+  well-known (not as a dynamic column), and any changed `columnCount`/`findColumn`
+  behaviour is deliberate **with the affected tests updated**. Verify property parity
+  + JSON column-set round-trip determinism.
+- **HCP-1P.D — predefined canonical-name pre-intern (CONDITIONAL / measure-first).**
+  The string pool already **dedups** repeated names (offset reuse, D20), so storage is
+  solved; the residual cost is the per-name **hash+probe** in `intern_name`. **(R1 WEAK
+  #7) DEMOTED to measure-first:** with .A's default-name writes gone and dedup already
+  installed, .D only saves the hash on *real* import names — run AFTER .A+.B and only
+  if a profile of the PDB/import path shows `intern_name` hashing is still a hot spot.
+  **(R1 FLAW #6) Layering — KERNEL must NOT know FragmentDB.** FragmentDB is STRUCTURE;
+  `MoleculeStore` is KERNEL and cannot include/depend on it. So the seeding is **driven
+  from the STRUCTURE/FORMAT import path** (which already loads FragmentDB) calling the
+  generic KERNEL API `store.intern_name(name)` for the canonical residue/atom names —
+  the store stays ignorant of FragmentDB. (Optionally a tiny KERNEL-side
+  direct/perfect-hash table keyed on a STRUCTURE-supplied name list; still no
+  STRUCTURE include in KERNEL.) Note: pre-interned offsets are NOT permanent — `compact()`
+  rebuilds from live columns, so unused predefined names don't survive; the win is
+  per-import-session hash avoidance, not fixed offsets. Verify: PDB golden-corpus parse
+  offsets stable + intern determinism (I11).
+- **HCP-1P gate.** Re-run the v2.0 baseline benchmarks (CompositeCreation/Clone,
+  KernelCreation/Clone/Iteration). **(R1 WEAK #9) The BALLStones coarse 0.01s timer at
+  N=40000 is too blunt for sub-µs/op claims** — strengthen to **repeated runs (report
+  median + spread) with larger N and/or a higher-resolution timer**, and treat the
+  pulled-forward V21-CI-PERF-GATES (@H8) comparator as an **interim measurement-only
+  sanity gate, NOT a sole definitive GO** (guard against a false GO on timer noise).
+  Confirm create/clone return to ≤ v2.0 baseline and iteration is unregressed. Codex
+  close-review → GO.
+
 **Next milestone — HCP-2 (the collapsed handle API).** The user-visible heart
 of the collapse, still dual-existence (handles read the HCP-1 role columns;
 v0 classes remain until H4). Sub-steps, each green + committed:

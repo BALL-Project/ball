@@ -134,6 +134,21 @@ role+payload columns, not twice) and **blocks H2d**.
 selection mirror (HCP-1b.3 → reworked to compute-on-read in HCP1R). The
 scalar+role+selection mirror is built. Reviews KR1 + HCP1R applied.
 
+**HCP-1P (KERNEL object-creation fast path — NEXT, runs with/ahead of HCP-2):**
+KERNEL-only perf mini-phase closing the v2.0→2.x create/clone regression
+(see collapse-plan §6a). Four steps: **.A** born-default atom slot + delete the
+redundant `Atom::Atom()` re-init; **.B** zero-copy `String`→`set_name` (drops the
+`std::string(s.c_str())` round-trip — the down-payment slice of the v2.3
+`BALL::String`→`std::string` work, §4 — also fixes the internal `set_name` reconstruction); **.C**
+lazy well-known property columns (System-creation cost); **.D** *(conditional /
+measure-first)* predefined canonical-name pre-intern, seeded from STRUCTURE/FORMAT
+via `intern_name` (KERNEL stays ignorant of FragmentDB — layering). Gate = repeated
+v2.0 benchmark baseline (create/clone back to ≤ baseline, iteration unregressed) —
+pulls the **measurement-only** comparator forward from V21-CI-PERF-GATES (@H8) as an
+interim sanity gate + Codex review. Serves standing invariant (d). **Plan reviewed:
+Codex HCP-1P-R1 = GO-WITH-CHANGES** (6 mandatory edits folded in; see
+`.planning/v2.2/V22-HCP1P-REVIEW.md`); .A and .C land as separate atomic patches.
+
 **Remaining carry-overs (→ HCP-2 / dedicated steps; all LATENT — no production
 consumer of container handles yet, collapse reworks them):**
 - **Full-subtree-replacement on an already-ROOTED object** — `set()`/
@@ -163,7 +178,7 @@ materialise idempotence).
 | V21-STORE-ITER-API (public `iterAtoms/iterBonds`) | **H2c** (handle iterators) / **H3** |
 | V21-GENERATION-GUARD | **H6a** — Atom/Bond + Python-wrapper guard completion (containers already done H1b/D65) |
 | V21-BIT-PROPERTY-COLUMN (packed-bool cols) | **H6a** *if* profiling shows the sparse path is hot; else backlog |
-| V21-CI-PERF-GATES (pinned-baseline comparator) | **H8** |
+| V21-CI-PERF-GATES (pinned-baseline comparator) | **H8** (full CI gate); **measurement-only one-shot pulled forward to HCP-1P** to verify the create/clone regression fix |
 | Track B FORMAT/STRUCTURE `Expression_test`/`Selector_test` surface | **H3a** (Selector is KERNEL-facing) + **H3c** (FORMAT supplies the corpus) |
 | ~~JSON load batching~~ | **DONE in v2.1** (load 7–14× faster, save/load near parity) — drop. Re-open only if an H2/H3 mirror perf regression appears. |
 | ~~AndNode tmp-bitmap reuse~~ | **DONE in v2.0** (delivered) — drop. |
@@ -189,6 +204,41 @@ schedule risk to H4/H6/H8 (see §4a); otherwise it is v2.3.
   close, else a clean v2.3.
 - **Gap/decision:** maintainer said "2.0" — interpret as the 2.x line;
   confirm whether this rides the v2.2 break wave or is a separate v2.3.
+- **Down-payment already taken (HCP-1P.B):** the KERNEL hot path no longer
+  builds throwaway `std::string`s from `String::c_str()` — it binds `String`
+  to `set_name(const std::string&)` via the existing `operator const string&`.
+  No signature break; just removes the v2.2-era conversion churn on the
+  create path ahead of the full type removal here.
+
+### Kernel persistence removal — rip out PersistenceManager (NEW directive)
+**Directive (maintainer):** "rip out the entire PersistenceManager and related
+functionality — we do not need full persistence for the kernel anymore."
+- **Scope (definite):** delete the legacy object-graph persistence framework —
+  `PersistenceManager` (base), `TextPersistenceManager`, `XDRPersistenceManager`,
+  `PersistentObject` (base) — and the `persistentRead()`/`persistentWrite()`
+  virtuals + `BALL_{CREATE,DEFINE}_PERSISTENT*`/RTTI persistence registration
+  threaded through **~97 files** (CONCEPT + nearly every persistable KERNEL/domain
+  class). Tests removed: `PersistenceManager_test`, `TextPersistenceManager_test`,
+  `XDRPersistenceManager_test`.
+- **OPEN DECISION (scope boundary):** does the v2.x **JSON `StoreFormat`**
+  (`MoleculeStoreJson`/`SystemJson`, schema D62) ALSO go, or stay as the kernel's
+  lightweight store (de)serialization? "full persistence" reads broad, but the
+  JSON store format is a *different, newer* mechanism than `PersistenceManager`.
+  **Default reading:** remove `PersistenceManager` (Text/XDR object graph); KEEP
+  the JSON `StoreFormat` as the one supported persistence path — confirm with
+  maintainer before executing.
+- **Why it helps the collapse (big simplification, do EARLY — before/with H4):**
+  - removes `PersistentObject` from the Atom/Bond/Composite **base hierarchy** →
+    directly serves the H4 flip goal (strip Atom/Bond bases to a value handle) and
+    the H6a property break;
+  - **shrinks the H2c deferred mirror carry-over** — `persistentRead()` is one of
+    the three deep "full-subtree-replacement-on-rooted" ops (`set`/`operator=`/
+    `persistentRead`); deleting it removes that branch from the mirror entirely;
+  - removes a whole persistence axis from the **H6b JSON schema freeze** scope.
+- **Cost/risk:** wide breaking removal (97 files) → its own `V22-API-BREAK-LEDGER`
+  slice + migration note (downstream consumers of `*PersistenceManager`) + Codex
+  review. Sequence as a dedicated cleanup phase **ahead of H4** (it reduces flip
+  surface) — slot in the §2 phase table once the JSON-scope decision is locked.
 
 ### v2.4 — repo / build / test separation (3-way)
 Two work packages, in order:

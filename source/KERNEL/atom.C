@@ -216,22 +216,17 @@ namespace BALL
 		  store_interactions_disabled_(0),
 		  number_of_bonds_(0)
 	{
+		// HCP-1P.A: allocate_atom births the slot at the BALL_ATOM_DEFAULT_*
+		// values already (position/charge/velocity/force = 0, radius = 0,
+		// name = "", element = UNKNOWN -> atomic# 0, formal_charge = 0,
+		// atom_type = UNKNOWN_TYPE = -1, type_name = "" = offset 0), so the former
+		// per-atom default re-init block is gone. This is also a concurrency
+		// WIN: with no post-bind orphan writes, the R11 stale-base-pointer
+		// window (a concurrent ctor's allocate_atom reallocating the columns
+		// between bindToStore_ releasing the mutex and these writes) cannot
+		// occur for default construction -- the born-default writes happen
+		// INSIDE allocate_atom under the same orphan mutex bindToStore_ holds.
 		bindToStore_(globalOrphanStore_());
-		// K0.3b.LATER.1-10: all atom-payload fields are now store-backed;
-		// write defaults straight through. Under orphan-store binding, the
-		// writes are serialised via the orphan mutex (R11 fix A).
-		BALL_ATOM_ORPHAN_INITIAL_WRITES_LOCK_({
-			store_->position(store_idx_) = Vector3(BALL_ATOM_DEFAULT_POSITION);
-			store_->charge(store_idx_) = BALL_ATOM_DEFAULT_CHARGE;
-			store_->velocity(store_idx_) = Vector3(BALL_ATOM_DEFAULT_VELOCITY);
-			store_->force(store_idx_) = Vector3(BALL_ATOM_DEFAULT_FORCE);
-			store_->set_name(store_idx_, std::string(BALL_ATOM_DEFAULT_NAME));
-			store_->set_type_name(store_idx_, std::string(BALL_ATOM_DEFAULT_TYPE_NAME));
-			writeStoreRadius_(BALL_ATOM_DEFAULT_RADIUS);
-			writeStoreAtomType_(static_cast<short>(BALL_ATOM_DEFAULT_TYPE));
-			writeStoreFormalCharge_(static_cast<short>(BALL_ATOM_DEFAULT_FORMAL_CHARGE));
-			writeStoreElement_(BALL_ATOM_DEFAULT_ELEMENT);
-		});
 	}
 
 	Atom::Atom(const Atom& atom, bool deep)

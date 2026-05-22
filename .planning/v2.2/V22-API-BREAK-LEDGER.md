@@ -138,6 +138,33 @@ inline state.
 | `Composite*` implicit upcast from `Atom`/container | gone (no inheritance) | H4 | PLANNED |
 | `Element` pointer identity (already lost in v2.0) | value/index identity | — | LANDED (v2.0) |
 
+## Class J — default-value change: atom type-name "?" → "" (HCP-1P.A)
+
+A **behavioral / output** break (not structural), landed in the HCP-1P kernel
+object-creation fast-path. `BALL_ATOM_DEFAULT_TYPE_NAME` changed `"?"` → `""`, so a
+default/unassigned atom's type-name is now the empty string (= reserved string-pool
+offset 0, no per-atom interning). Maintainer-directed (perf/storage + simpler
+"unset = empty" semantics).
+
+| Symbol | Old | New | Phase | Status |
+|---|---|---|---|---|
+| `BALL_ATOM_DEFAULT_TYPE_NAME` | `"?"` | `""` | HCP-1P.A | LANDED |
+| `Atom().getTypeName()` (fresh/default atom) | `"?"` | `""` | HCP-1P.A | LANDED |
+| text/persistence dump `type name:` field for untyped atoms | `?` | (empty) | HCP-1P.A | LANDED |
+| Antechamber `.ac` type column (`%10s`) for untyped atoms | `         ?` | `          ` (10 spaces) | HCP-1P.A | LANDED |
+
+**Consistency preserved:** the type-assignment sentinel checks
+(`MOLMEC/COMMON/assignTypes.C`, `MOLMEC/PARAMETER/templates.C`,
+`STRUCTURE/atomTyper.C`) compare against the `BALL_ATOM_DEFAULT_TYPE_NAME` *macro*,
+not a literal `"?"`, so "is this atom untyped?" logic is unchanged. FORMAT readers
+that explicitly emit `"?"` (e.g. `HINFile`) still do; `HINFile` already treats `""`
+and `"?"` identically on the unset path.
+
+**Migration note:** downstream code/tooling that parsed BALL text/Antechamber output
+expecting the literal `"?"` placeholder for untyped atoms must accept an empty field.
+Reference test data updated: `AtomContainer_test.txt`, `Molecule_test.txt`,
+`Nucleotide_test.txt`, `Residue_test.txt`, `Fragment_test.txt`, `AntechamberFile_test3.ac`.
+
 ---
 
 ## Sign-off log
