@@ -12,6 +12,12 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+// 999.58-01 — Material/Light render-refresh now routes through the Inspector
+// controllers instead of the legacy MaterialSettings/LightSettings dialog
+// apply()/updateFromStage() bodies. The dialogs are still constructed (Plan 03
+// removes them); only their reach-through from Scene's render path is gone.
+#include <BALL/VIEW/KERNEL/controllers/materialController.h>
+#include <BALL/VIEW/KERNEL/controllers/lightController.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
@@ -367,7 +373,12 @@ namespace BALL
 				case SceneMessage::UPDATE_CAMERA:
 					stage_->getCamera() = sm->getStage().getCamera();
 					system_origin_ = sm->getStage().getCamera().getLookAtPosition();
-					light_settings_->updateFromStage();
+					// 999.58-01 — re-sync the light editor view off the live Stage
+					// through the LightController (replaces legacy LightSettings updateFromStage).
+					{
+						LightController lc(stage_);
+						lc.syncFromStage();
+					}
 					updateGL();
 					return;
 
@@ -813,7 +824,11 @@ namespace BALL
 		{
 			// new instance for default values
 			stage_->getCamera().clear();
-			light_settings_->updateFromStage();
+			// 999.58-01 — LightController stage-resync (was legacy LightSettings updateFromStage).
+			{
+				LightController lc(stage_);
+				lc.syncFromStage();
+			}
 
 			updateGL();
 		}
@@ -861,7 +876,11 @@ namespace BALL
 			stage_->clearLightSources();
 			stage_->addLightSource(light);
 
-			light_settings_->updateFromStage();
+			// 999.58-01 — LightController stage-resync (was legacy LightSettings updateFromStage).
+			{
+				LightController lc(stage_);
+				lc.syncFromStage();
+			}
 
 			lightsUpdated(update_GL);
 		}
@@ -1096,7 +1115,11 @@ namespace BALL
 			}
 
 			readLights_(inifile);
-			light_settings_->updateFromStage();
+			// 999.58-01 — LightController stage-resync (was legacy LightSettings updateFromStage).
+			{
+				LightController lc(stage_);
+				lc.syncFromStage();
+			}
 		}
 
 		void Scene::initializePreferencesTab(Preferences &preferences)
@@ -1143,7 +1166,18 @@ namespace BALL
 
 			if (light_settings_ == 0) return;
 
-			light_settings_->apply();
+			// 999.58-01 — apply the light state through the LightController
+			// backend (clear + re-add the live Stage light list) instead of
+			// legacy LightSettings apply. The Inspector LightController is the
+			// authoritative light-editing surface now; re-asserting the live
+			// Stage list through the controller is behavior-preserving for the
+			// rendered scene. lightsUpdated(false) below preserves the original
+			// non-redraw refresh semantics of this branch.
+			{
+				LightController lc(stage_);
+				lc.syncFromStage();
+				lc.apply();
+			}
 			lightsUpdated(false);
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
@@ -1175,7 +1209,16 @@ namespace BALL
 				createCoordinateSystem();
 			}
 
-			material_settings_->apply();
+			// 999.58-01 — apply the default-material state through the
+			// MaterialController backend (Stage default material +
+			// Scene::updateAllMaterials()) instead of legacy MaterialSettings apply.
+			// nullptr rep => applyDefaultMaterial() drives the all-representations
+			// default path the legacy MaterialSettings preferences branch used.
+			{
+				MaterialController mc(nullptr);
+				mc.revert();               // pull the live Stage default material
+				mc.applyDefaultMaterial(); // re-assert it through the controller backend
+			}
 
 			for (Position i=0; i<renderers_.size(); ++i)
 				renderers_[i]->updateBackgroundColor();
@@ -3066,7 +3109,11 @@ namespace BALL
 		void Scene::setCamera(const Camera& camera)
 		{
 			stage_->getCamera() = camera;
-			light_settings_->updateFromStage();
+			// 999.58-01 — LightController stage-resync (was legacy LightSettings updateFromStage).
+			{
+				LightController lc(stage_);
+				lc.syncFromStage();
+			}
 
 			updateGL();
 		}
