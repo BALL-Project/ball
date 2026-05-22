@@ -49,7 +49,19 @@ namespace BALL
 		void LightController::revert()
 		{
 			if (stage_ == nullptr) return;
+
+			// 999.58-01 — pull the FULL live light list into the
+			// controller's authoritative lights_ vector (mirrors
+			// LightSettings::updateFromStage, lightSettings.C:69-86).
+			// The controller now owns every light, not just ambient.
 			const std::list<LightSource>& lights = stage_->getLightSources();
+			lights_.clear();
+			for (std::list<LightSource>::const_iterator it = lights.begin();
+			     it != lights.end(); ++it)
+			{
+				lights_.push_back(*it);
+			}
+
 			int n = static_cast<int>(lights.size());
 			if (n != light_count_)
 			{
@@ -76,15 +88,40 @@ namespace BALL
 			}
 		}
 
+		void LightController::syncFromStage()
+		{
+			// Public stage-resync entry point for the Scene render-refresh /
+			// camera-move call sites (replaces light_settings_->updateFromStage()
+			// in scene.C). Re-reading the full Stage light list IS what revert()
+			// does, so this is a thin, intention-revealing alias.
+			revert();
+		}
+
+		void LightController::setLightSources(const std::vector<LightSource>& lights)
+		{
+			lights_ = lights;
+			int n = static_cast<int>(lights_.size());
+			if (n != light_count_)
+			{
+				light_count_ = n;
+				Q_EMIT lightCountChanged(n);
+			}
+		}
+
 		void LightController::apply()
 		{
-			// UFG-11 cut-over — push ambient_intensity_ to the Stage by
-			// upserting a single AMBIENT-type LightSource. Non-ambient
-			// lights (POSITIONAL / DIRECTIONAL) are preserved verbatim;
-			// per-light editing stays in the legacy LightSettings dialog
-			// during the migration window. After mutation we call
-			// Scene::lightsUpdated(true) — same redraw path the legacy
-			// dialog uses (LightSettings.C:150, 162, 263, 279, 403).
+			// 999.58-01 cut-over — the controller now owns the COMPLETE
+			// light list (lights_). apply() mirrors LightSettings::apply()
+			// (lightSettings.C:384-393): clear the Stage light sources and
+			// re-add the controller's authoritative list, then
+			// Scene::lightsUpdated(true) — same redraw path the legacy dialog
+			// uses (LightSettings.C:150, 162, 263, 279, 403).
+			//
+			// The aggregate ambient-intensity slider (Inspector LightsSection)
+			// stays meaningful: the AMBIENT light in lights_ is kept in sync
+			// with ambient_intensity_, and an AMBIENT default is injected for
+			// an empty list so existing rendered scenes are unchanged
+			// (mirrors defaultsPressed()).
 			if (stage_ == nullptr)
 			{
 				Log.warn() << "[LightController::apply] no Stage attached — skipping." << std::endl;
@@ -106,31 +143,50 @@ namespace BALL
 			if (applying_) return;
 			ControllerApplyGuard apply_guard(applying_);
 
-			// Snapshot non-ambient lights, clear, re-add them, then
-			// append one ambient at ambient_intensity_. This is the
-			// same idiom as LightSettings::apply() — clear + re-add
-			// the controller's authoritative list.
-			std::list<LightSource> preserved;
-			for (std::list<LightSource>::const_iterator it = stage_->getLightSources().begin();
-			     it != stage_->getLightSources().end(); ++it)
+			// Re-add every non-ambient light the controller owns, then append
+			// exactly one AMBIENT light at the aggregate ambient_intensity_.
+			// If lights_ already carries an AMBIENT entry, its intensity is
+			// driven by the slider value (ambient_intensity_) so the two stay
+			// consistent; non-ambient AMBIENT duplicates are collapsed.
+			stage_->clearLightSources();
+
+			bool wrote_any_non_ambient = false;
+			for (std::vector<LightSource>::const_iterator it = lights_.begin();
+			     it != lights_.end(); ++it)
 			{
 				if (it->getType() != LightSource::AMBIENT)
-					preserved.push_back(*it);
+				{
+					stage_->addLightSource(*it);
+					wrote_any_non_ambient = true;
+				}
 			}
 
-			stage_->clearLightSources();
-			for (std::list<LightSource>::const_iterator it = preserved.begin();
-			     it != preserved.end(); ++it)
+			// Locate the controller-owned AMBIENT entry (if any) so we
+			// preserve its color while honoring the slider intensity.
+			ColorRGBA ambient_color(255, 255, 255, 255);
+			for (std::vector<LightSource>::const_iterator it = lights_.begin();
+			     it != lights_.end(); ++it)
 			{
-				stage_->addLightSource(*it);
+				if (it->getType() == LightSource::AMBIENT)
+				{
+					ambient_color = it->getColor();
+					break;
+				}
 			}
 
 			LightSource amb;
 			amb.setType(LightSource::AMBIENT);
 			amb.setIntensity(ambient_intensity_);
-			amb.setColor(ColorRGBA(255, 255, 255, 255));
+			amb.setColor(ambient_color);
 			amb.setRelativeToCamera(false);
 			stage_->addLightSource(amb);
+
+			(void)wrote_any_non_ambient;
+
+			// Keep the controller's authoritative list in sync with what we
+			// just pushed to the Stage so subsequent revert()/reads agree.
+			const std::list<LightSource>& applied = stage_->getLightSources();
+			lights_.assign(applied.begin(), applied.end());
 
 			// Update controller-side count so subsequent revert() / UI
 			// reads see the new count.
