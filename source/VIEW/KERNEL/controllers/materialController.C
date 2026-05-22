@@ -18,6 +18,7 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/CONCEPT/property.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
@@ -32,6 +33,12 @@ namespace BALL
 				rep_(rep),
 				ambient_(0.3f), diffuse_(0.7f),
 				specular_(0.2f), shininess_(30.0f),
+				// Colors default to white, matching the MaterialSettings dialog's
+				// initial color labels (materialSettings.C:30-32). revert() pulls
+				// the live values when a Stage/rep material is available.
+				ambient_color_(255, 255, 255),
+				specular_color_(255, 255, 255),
+				reflective_color_(255, 255, 255),
 				transparency_(0),  // 0 = opaque, matching Representation/ModelController default.
 				applying_(false)
 		{
@@ -51,16 +58,19 @@ namespace BALL
 		{
 			// Pull per-rep material if present, else fall back to the
 			// Stage's default material so the inspector mirrors what the
-			// scene will actually render. Colors (ambient/specular/
-			// reflective) are not part of the v1.7 controller's
-			// Q_PROPERTY surface — preserved on apply() by reading
-			// existing values.
-			if (rep_ == nullptr) return;
-
+			// scene will actually render. The controller now owns the
+			// COMPLETE Stage::Material field set the legacy dialog wrote
+			// (intensities + shininess + the three colors), so revert()
+			// mirrors the colors too (999.58-01).
+			//
+			// rep_ == nullptr is the all-representations / default-material
+			// case (the path applyDefaultMaterial() drives): fall back to
+			// the Stage default material rather than bailing, so the
+			// controller mirrors the live default the preferences path used.
 			Stage::Material material;
 			bool have_material = false;
 
-			if (rep_->hasProperty("Rendering::Material"))
+			if (rep_ != nullptr && rep_->hasProperty("Rendering::Material"))
 			{
 				NamedProperty mat_property = rep_->getProperty("Rendering::Material");
 				boost::shared_ptr<PersistentObject> mat_ptr = mat_property.getSmartObject();
@@ -83,6 +93,26 @@ namespace BALL
 			}
 
 			if (!have_material) return;
+
+			// Mirror the three material colors (ColorRGBA -> QColor).
+			QColor amb_c = material.ambient_color.getQColor();
+			if (amb_c != ambient_color_)
+			{
+				ambient_color_ = amb_c;
+				Q_EMIT ambientColorChanged(amb_c);
+			}
+			QColor spec_c = material.specular_color.getQColor();
+			if (spec_c != specular_color_)
+			{
+				specular_color_ = spec_c;
+				Q_EMIT specularColorChanged(spec_c);
+			}
+			QColor refl_c = material.reflective_color.getQColor();
+			if (refl_c != reflective_color_)
+			{
+				reflective_color_ = refl_c;
+				Q_EMIT reflectiveColorChanged(refl_c);
+			}
 
 			if (ambient_ != material.ambient_intensity)
 			{
@@ -182,6 +212,11 @@ namespace BALL
 			material.reflective_intensity = diffuse_;
 			material.specular_intensity   = specular_;
 			material.shininess            = std::max(shininess_, 0.1f);
+			// The controller now owns the three colors too (999.58-01),
+			// matching the legacy MaterialSettings::apply() field set.
+			material.ambient_color.set(ambient_color_);
+			material.specular_color.set(specular_color_);
+			material.reflective_color.set(reflective_color_);
 			// material.transparency is intentionally NOT written: the
 			// interactive GLRenderer never reads it (POVRay/RTfact-only,
 			// and RTfact is disabled), so writing it would produce NO
@@ -203,6 +238,59 @@ namespace BALL
 			// alpha / color processor without re-walking the composites
 			// (mirrors ModelController's cheap transparency path).
 			rep_->update(false);
+
+			Q_EMIT appliedStub();
+		}
+
+		void MaterialController::applyDefaultMaterial()
+		{
+			// 999.58-01 cut-over — the all-representations default-material
+			// path the legacy MaterialSettings::apply() preferences branch
+			// drove (materialSettings.C:85-90): write the mirrored material
+			// fields onto the Stage default material, then refresh every
+			// representation via Scene::updateAllMaterials(). This is what
+			// Scene::applyPreferences() now calls in place of
+			// material_settings_->apply(). No Representation is required
+			// (this is the default, not a per-rep edit), so rep_ is ignored.
+			MainControl* mc = MainControl::getInstance(0);
+			if (mc != nullptr && mc->isBusy())
+			{
+				Log.info() << "[MaterialController::applyDefaultMaterial] MainControl busy — deferring." << std::endl;
+				return;
+			}
+
+			Scene* scene = Scene::getInstance(0);
+			if (scene == nullptr || scene->getStage() == nullptr)
+			{
+				Log.warn() << "[MaterialController::applyDefaultMaterial] no Scene/Stage available — skipping." << std::endl;
+				return;
+			}
+
+			// v1.7.x-24 — re-entrancy shield. The updateAllMaterials() refresh
+			// below can notify back into the controllers; bail rather than
+			// re-running the mutation. RAII guard clears the flag on every exit.
+			if (applying_) return;
+			ControllerApplyGuard apply_guard(applying_);
+
+			// Seed from the current Stage default so any field the controller
+			// does not mirror is preserved, then overwrite the mirrored set —
+			// exactly the Stage::Material the legacy preferences branch built.
+			Stage::Material material = scene->getStage()->getMaterial();
+
+			material.ambient_intensity    = ambient_;
+			material.reflective_intensity = diffuse_;
+			material.specular_intensity   = specular_;
+			material.shininess            = std::max(shininess_, 0.1f);
+			material.ambient_color.set(ambient_color_);
+			material.specular_color.set(specular_color_);
+			material.reflective_color.set(reflective_color_);
+			// material.transparency intentionally NOT written — see apply()
+			// (dead Stage::Material.transparency field, the cause of #527).
+
+			// The legacy preferences branch: set the Stage default + refresh
+			// ALL representations (materialSettings.C:88-89).
+			scene->getStage()->getMaterial() = material;
+			scene->updateAllMaterials();
 
 			Q_EMIT appliedStub();
 		}
@@ -233,6 +321,27 @@ namespace BALL
 			if (v == shininess_) return;
 			shininess_ = v;
 			Q_EMIT shininessChanged(v);
+		}
+
+		void MaterialController::setAmbientColor(const QColor& c)
+		{
+			if (c == ambient_color_) return;
+			ambient_color_ = c;
+			Q_EMIT ambientColorChanged(c);
+		}
+
+		void MaterialController::setSpecularColor(const QColor& c)
+		{
+			if (c == specular_color_) return;
+			specular_color_ = c;
+			Q_EMIT specularColorChanged(c);
+		}
+
+		void MaterialController::setReflectiveColor(const QColor& c)
+		{
+			if (c == reflective_color_) return;
+			reflective_color_ = c;
+			Q_EMIT reflectiveColorChanged(c);
 		}
 
 		void MaterialController::setTransparency(int v)
