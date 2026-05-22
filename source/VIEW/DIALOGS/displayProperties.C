@@ -327,10 +327,25 @@ void DisplayProperties::onNotify(Message *message)
 		}
 
 		// generate graphical representation
+		//
+		// Phase 999.65 Plan 02 (VIEW-CLEAN-04): the molecule-load default-rep
+		// path is repointed off the dialog's own createRepresentation
+		// orchestration and onto the headless RepresentationBuilder. The dialog
+		// stays the SOURCE of the default settings — createRepresentationMode()
+		// still resets rep_=0 and forces both update-enable checkboxes true, and
+		// buildCurrentSpec() then snapshots that live widget state — only the
+		// ORCHESTRATION moves to the builder. Because RepresentationBuilder is
+		// pure logic and ConnectionObject::notify_ is protected, the builder
+		// fires its messages through a one-method Notifier adapter that forwards
+		// to this dialog's own notify_ (Strategy A, access-adapted; see Plan 01).
 		createRepresentationMode();
 		list<Composite*> clist;
 		clist.push_back(composite_message->getComposite());
-		createRepresentation(clist);
+
+		Notifier_ notifier(*this);
+		RepresentationBuilder::createRepresentation(buildCurrentSpec(), clist,
+		                                            *getMainControl(), notifier,
+		                                            *model_information_);
 		return;
 	}
 

@@ -301,6 +301,26 @@ namespace BALL
 			
 			void applyTo_(Representation* rep);
 
+			/** One-method RepresentationBuilder::Notifier adapter that forwards the
+					builder's messages into this dialog's own protected notify_().
+
+					RepresentationBuilder is pure logic and cannot reach
+					ConnectionObject::notify_ on a foreign object (it is protected), so
+					the builder takes a Notifier callback (Strategy A, access-adapted;
+					see Plan 01). As a nested class, Notifier_ may call the enclosing
+					DisplayProperties' protected notify_, forwarding the same
+					ADD_TO_GEOMETRIC_CONTROL / CENTER_CAMERA sequence the legacy
+					createRepresentation fired (Phase 999.65 Plan 02, VIEW-CLEAN-04). */
+			class Notifier_ : public RepresentationBuilder::Notifier
+			{
+				public:
+				Notifier_(DisplayProperties& owner) : owner_(owner) {}
+				void notify(Message* message) override { owner_.notify_(message); }
+
+				private:
+				DisplayProperties& owner_;
+			};
+
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
