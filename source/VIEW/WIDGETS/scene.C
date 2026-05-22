@@ -2725,8 +2725,12 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
-			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
-			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
+			// 999.58-03 — read the stereo screen/geometry/mode/renderer-type config
+			// from the Scene-owned stereo_screen_config_ instead of the (removed)
+			// stage_settings_ dialog. This entire body is dead (returned-early above)
+			// and kept only for the Phase 5 stereo re-enablement.
+			int left_screen_index = stereo_screen_config_.left_eye_screen_number;
+			int right_screen_index = stereo_screen_config_.right_eye_screen_number;
 
 			if (left_screen_index == -1 || right_screen_index == -1)
 			{
@@ -2745,11 +2749,11 @@ namespace BALL
 			QScreen* left_screen  = QGuiApplication::screens().value(left_screen_index);
 			QScreen* right_screen = QGuiApplication::screens().value(right_screen_index);
 
-			QRect left_geometry  = stage_settings_->getLeftEyeGeometry();
-			QRect right_geometry = stage_settings_->getRightEyeGeometry();
+			QRect left_geometry  = stereo_screen_config_.left_eye_geometry;
+			QRect right_geometry = stereo_screen_config_.right_eye_geometry;
 
-			RenderSetup::RendererType control_renderer_type = stage_settings_->getControlScreenRendererType();
-			RenderSetup::RendererType stereo_renderer_type = stage_settings_->getStereoScreensRendererType();
+			RenderSetup::RendererType control_renderer_type = stereo_screen_config_.control_screen_renderer_type;
+			RenderSetup::RendererType stereo_renderer_type = stereo_screen_config_.stereo_screens_renderer_type;
 
 #ifndef BALL_HAS_RTFACT
 			if (control_renderer_type == RenderSetup::RTFACT_RENDERER || stereo_renderer_type == RenderSetup::RTFACT_RENDERER)
@@ -2762,7 +2766,7 @@ namespace BALL
 				return;
 			}
 #endif
-			Renderer::StereoMode mode = stage_settings_->getStereoMode();
+			Renderer::StereoMode mode = stereo_screen_config_.stereo_mode;
 
 			if (mode == Renderer::DUAL_VIEW_STEREO || mode == Renderer::TOP_BOTTOM_STEREO)
 			{
@@ -2921,8 +2925,10 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
-			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
-			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
+			// 999.58-03 — read screen indices from the Scene-owned stereo config
+			// (dead body, deferred to Phase 5; see stereo_screen_config_).
+			int left_screen_index = stereo_screen_config_.left_eye_screen_number;
+			int right_screen_index = stereo_screen_config_.right_eye_screen_number;
 
 			if (left_screen_index == -1 || right_screen_index == -1)
 			{
@@ -3038,8 +3044,10 @@ namespace BALL
 
 			// get the correct screens for control, left, and right eye
 			// TODO: handle the control screen! currently, we just leave it alone
-			int left_screen_index = stage_settings_->getLeftEyeScreenNumber();
-			int right_screen_index = stage_settings_->getRightEyeScreenNumber();
+			// 999.58-03 — read screen indices from the Scene-owned stereo config
+			// (dead body, deferred to Phase 5; see stereo_screen_config_).
+			int left_screen_index = stereo_screen_config_.left_eye_screen_number;
+			int right_screen_index = stereo_screen_config_.right_eye_screen_number;
 
 			if (left_screen_index == -1 || right_screen_index == -1)
 			{
@@ -3230,7 +3238,57 @@ namespace BALL
 
 		void Scene::applyStereoDefaults()
 		{
-			stage_settings_->computeDefaultPressed();
+			// 999.58-03 — compute sensible stereo eye-separation + focal distance
+			// from the scene geometry in-Scene, relocated verbatim from the legacy
+			// StageSettings::computeDefaultPressed() (stageSettings.C:122-169). The
+			// user-distance inputs (screen distance, eye distance) were dialog
+			// line-edits with fixed .ui defaults (150 cm / 6 cm) that the dialog
+			// never reprogrammed; those defaults are inlined here as constants. The
+			// dialog-only slider->setValue refreshes are dropped (no dialog now).
+			Camera& camera = stage_->getCamera();
+			Vector3 view_vector = camera.getViewVector();
+			view_vector.normalize();
+			const Vector3& view_point = camera.getViewPoint();
+
+			RepresentationManager& r = getMainControl()->getRepresentationManager();
+			RepresentationList::const_iterator rit = r.getRepresentations().begin();
+
+			float min_separation = 600;
+			float max_separation = 1.5;
+
+			for (; rit != r.getRepresentations().end(); ++rit)
+			{
+				list<GeometricObject*>::const_iterator it = (*rit)->getGeometricObjects().begin();
+
+				vector<Vector3> positions;
+				for (; it != (*rit)->getGeometricObjects().end(); ++it)
+				{
+					(*it)->getVertices(positions);
+					// iterate over them and find the closest point along the view vector
+					for (Position i=0; i<positions.size(); i++)
+					{
+						float separation = (positions[i] - view_point)*view_vector;
+						min_separation = std::min(std::max(separation, 0.f), min_separation);
+						max_separation = std::max(std::max(separation, 0.f), max_separation);
+					}
+					positions.clear();
+				}
+			}
+
+			// User-to-screen distance (150 cm) + user eye distance (6 cm): the legacy
+			// stage dialog's fixed .ui line-edit defaults (stageSettings.ui).
+			const float user_to_screen_distance = 150.0f;
+			const float user_eye_distance        = 6.0f;
+
+			float focal_distance = (max_separation - min_separation)/3 + min_separation;
+			float real2intern = focal_distance / user_to_screen_distance;
+
+			float eye_separation = real2intern * user_eye_distance;
+
+			stage_->setEyeDistance(eye_separation);
+			stage_->setFocalDistance(focal_distance);
+
+			setDownsamplingFactor(downsampling_factor_);
 		}
 
 		void Scene::animate_()

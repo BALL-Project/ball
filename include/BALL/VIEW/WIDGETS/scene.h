@@ -43,6 +43,7 @@
 
 #include <QtCore/QThread>
 #include <QtCore/QTimer>
+#include <QtCore/QRect>
 #include <QtGui/QDragEnterEvent>
 #include <QtGui/QDropEvent>
 #include <QtWidgets/QToolBar>
@@ -953,6 +954,29 @@ namespace BALL
 				LightSettings* light_settings_;
 				StageSettings* stage_settings_;
 				MaterialSettings* material_settings_;
+
+				// 999.58-03 — Scene-owned stereo-screen config. These nine fields are
+				// the screen-assignment / geometry / stereo-mode / renderer-type
+				// settings the legacy StageSettings stereo accessors returned. They
+				// have NO live render consumer: every reader sits below an
+				// unconditional return in the guard-and-deferred enter*Stereo bodies
+				// (deferred to Phase 5 — 02-RESEARCH.md Pitfall 6). They are kept here,
+				// default-initialized to the "disabled / NO_STEREO / OpenGL" state, so
+				// those deferred bodies still compile now that scene.C no longer
+				// constructs StageSettings. Eye/focal distance + swap-side-by-side are
+				// NOT mirrored here — those are Stage-owned and StereoController-driven.
+				struct StereoScreenConfig
+				{
+					int left_eye_screen_number  = -1;   // -1 == disabled
+					int right_eye_screen_number = -1;   // -1 == disabled
+					int control_screen_number   = -1;   // -1 == disabled
+					QRect left_eye_geometry;            // empty by default
+					QRect right_eye_geometry;           // empty by default
+					RenderSetup::RendererType control_screen_renderer_type = RenderSetup::OPENGL_RENDERER;
+					RenderSetup::RendererType stereo_screens_renderer_type  = RenderSetup::OPENGL_RENDERER;
+					Renderer::StereoMode stereo_mode = Renderer::NO_STEREO;
+				};
+				StereoScreenConfig stereo_screen_config_;
 
 				// nr of last png file export
 				static Position screenshot_nr_;
