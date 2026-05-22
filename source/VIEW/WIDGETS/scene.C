@@ -27,9 +27,10 @@
 
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
-#include <BALL/VIEW/DIALOGS/lightSettings.h>
-#include <BALL/VIEW/DIALOGS/stageSettings.h>
-#include <BALL/VIEW/DIALOGS/materialSettings.h>
+// 999.58-03 — lightSettings.h / stageSettings.h / materialSettings.h are no longer
+// included: Scene no longer constructs those dialogs (the Inspector controllers are
+// authoritative; 999.58-01/02). The dialog files still exist on disk until 999.53
+// deletes them; dropping the includes lets scene.C compile after that deletion.
 #include <BALL/VIEW/DIALOGS/exportGeometryDialog.h>
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
@@ -146,8 +147,6 @@ namespace BALL
 #ifdef BALL_HAS_RTFACT
 				rt_renderer_(new t_RaytracingRenderer()),
 #endif
-				light_settings_(new LightSettings(this)),
-				material_settings_(new MaterialSettings(this)),
 				animation_thread_(0),
 				stop_animation_(false),
 #ifdef BALL_HAS_RTFACT
@@ -166,7 +165,11 @@ namespace BALL
 			{
 				initializeMembers_();
 
-				stage_settings_=new StageSettings(this);
+				// 999.58-03 — Scene no longer constructs LightSettings/MaterialSettings/
+				// StageSettings. The Inspector controllers (Material/Light/Stage) are the
+				// authoritative editing surfaces (cut over in 999.58-01/02); the legacy
+				// dialog triples are deleted in 999.53. The deferred stereo bodies now
+				// read the Scene-owned stereo_screen_config_ instead of StageSettings.
 #ifdef BALL_VIEW_DEBUG
 				Log.error() << "new Scene (2) " << this << std::endl;
 #endif
@@ -385,7 +388,12 @@ namespace BALL
 
 				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
 					stage_->showCoordinateSystem(false);
-					stage_settings_->updateFromStage();
+					// 999.58-03 — the legacy stage_settings_->updateFromStage() here was a
+					// one-way readback that only repopulated the stage DIALOG widgets
+					// (setColor/setValue/setChecked on dialog controls, stageSettings.C
+					// :205-230); it mutated NO render state. With StageSettings no longer
+					// constructed by Scene, the readback has no target and is dropped. The
+					// Inspector StageController mirrors the live Stage state instead.
 					return;
 
 				case SceneMessage::EXPORT_PNG:
@@ -1125,40 +1133,17 @@ namespace BALL
 
 		void Scene::initializePreferencesTab(Preferences &preferences)
 		{
-			preferences.insertEntry(light_settings_);
-
-			// 999.58-02 — the legacy getGLSettings() readback only populated the
-			// stage DIALOG widgets (vendor/version/extension labels + vertex-buffer
-			// / smooth-lines widget enablement, stageSettings.C:689-717) and mutated
-			// NO render state, so dropping it from the render path has no render
-			// effect. The Inspector reads GL caps directly from the GLRenderer when
-			// it needs the caps display; this init readback is non-load-bearing.
-			preferences.insertEntry(stage_settings_);
-
-			preferences.insertEntry(material_settings_);
-
+			// 999.58-03 — the LightSettings/StageSettings/MaterialSettings pages are
+			// no longer registered in the Preferences stack: Scene no longer
+			// constructs those dialogs, and the Inspector Light/Stage/Material
+			// controllers are the authoritative editing surfaces (cut over in
+			// 999.58-01/02). EditSettings stays — it is out of scope for this phase.
 			edit_settings_ = new EditSettings(this);
 			preferences.insertEntry(edit_settings_);
 		}
 
 		void Scene::finalizePreferencesTab(Preferences &preferences)
 		{
-			if (light_settings_)
-			{
-				preferences.removeEntry(light_settings_);
-				light_settings_ = 0;
-			}
-			if (stage_settings_)
-			{
-				preferences.removeEntry(stage_settings_);
-				stage_settings_= 0;
-			}
-			if (material_settings_)
-			{
-				preferences.removeEntry(material_settings_);
-				material_settings_= 0;
-			}
-
 			if (edit_settings_)
 			{
 				preferences.removeEntry(edit_settings_);
@@ -1185,7 +1170,11 @@ namespace BALL
 				sc.apply();
 			}
 
-			if (light_settings_ == 0) return;
+			// 999.58-03 — the historical `if (light_settings_ == 0) return;` guard
+			// short-circuited the rest of applyPreferences only during Preferences
+			// teardown (light_settings_ was non-null from construction until
+			// finalizePreferencesTab nulled it). With the dialog members removed, the
+			// light/material apply now always runs through the Inspector controllers.
 
 			// 999.58-01 — apply the light state through the LightController
 			// backend (clear + re-add the live Stage light list) instead of

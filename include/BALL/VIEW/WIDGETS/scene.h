@@ -79,9 +79,6 @@ namespace BALL
 		class ColorMap;
 		class InteractionMode;
 		class Preferences;
-		class LightSettings;
-		class StageSettings;
-		class MaterialSettings;
 		class AnimationThread;
 		class ClippingPlane;
 		class CompositeMessage;
@@ -317,22 +314,6 @@ namespace BALL
 				///
 				const Stage* getStage() const
 				{ return stage_;}
-
-				///
-				StageSettings* getStageSettings()
-				{ return stage_settings_; }
-
-				///
-				const StageSettings* getStageSettings() const
-				{ return stage_settings_; }
-
-				///
-				MaterialSettings* getMaterialSettings()
-				{ return material_settings_; }
-
-				///
-				const MaterialSettings* getMaterialSettings() const
-				{ return material_settings_; }
 
 				///
 				void setCamera(const Camera& camera);
@@ -950,10 +931,6 @@ namespace BALL
 				static bool show_light_sources_;
 				static float animation_smoothness_;
 				static float downsampling_factor_;
-
-				LightSettings* light_settings_;
-				StageSettings* stage_settings_;
-				MaterialSettings* material_settings_;
 
 				// 999.58-03 — Scene-owned stereo-screen config. These nine fields are
 				// the screen-assignment / geometry / stereo-mode / renderer-type
