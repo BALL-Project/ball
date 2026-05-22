@@ -57,23 +57,39 @@ H6a + VIEW will redesign. §1–§7 below are the original (pre-R1) analysis; wh
 say "delete PersistentObject" / "remove the Composite base", read §0 instead.
 Full R1 findings: the "## PR-REMOVAL-R1 design review" section at the end.
 
-**R1b ADDENDUM (additional stream consumers to fold into the removal order — Codex
-PR-REMOVAL-R1b).** The stream framework has more tendrils than the 76 virtuals; the
-removal order MUST also cover (else dangling refs after the framework delete):
-- **`ObjectCreator` / `MoleculeObjectCreator`** — hard `TextPersistenceManager`
-  consumers (the object-factory used by `readObject`). Remove or re-home.
-- **VIEW server/client path** (deprecated VIEW client/server) — hard
-  `TextPersistenceManager` consumers. Remove/stub with the VIEW port.
-- **Non-virtual `read/write(PersistenceManager&)` APIs** (distinct from the 76
-  virtuals) on `PropertyManager`, `Selectable`, `PreciseTime`/`TimeStamp` — must be
-  removed/re-homed too, plus their tests.
-- **`Options::read/write(PersistenceManager&)`** — re-home (used by `MPISupport`;
-  StoreFormat doesn't cover Options → give Options a minimal value (de)serialise for
-  the MPI port, or stub MPI).
-R1b verdict: the re-scoped design (retain `PersistentObject`-type, defer erasure to
-H6a/D49+VIEW, keep JSON, port VIEW/MPI) is SOUND in shape; reaching AGREE requires
-folding the above missed consumers into §5's order. **One more design pass enumerates
-these precisely → AGREE → execute.** (See "## PR-REMOVAL-R1b confirmation" at the end.)
+**R1b ADDENDUM — EXHAUSTIVE consumer enumeration (folds R1b gaps; breaks the
+incremental-discovery cycle).** A full sweep finds **65 files** referencing
+`PersistenceManager` (excl. the 4 framework files). The complete stream-removal
+surface beyond the 76 virtuals:
+- **`ObjectCreator` / `MoleculeObjectCreator`** (`source/CONCEPT/{objectCreator,
+  moleculeObjectCreator}.C` + headers + `sources.cmake`) — the object-factory used
+  by `readObject`. Consumers: **`source/VIEW/KERNEL/serverWidget.C`** (VIEW server)
+  + **`source/APPLICATIONS/BALLVIEW/mainframe.C`**. Remove the factory; the VIEW
+  server/client object exchange goes with the VIEW port (or stub-with-ledger).
+- **Non-virtual `read/write(PersistenceManager&)`** (distinct from the 76 virtuals):
+  `PropertyManager` (`property.h:619,622`), `Selectable` (`selectable.h:159,168`),
+  `Options` (`options.C:433,456` / `options.h:353,361`), `TimeStamp`/`PreciseTime`,
+  **`BitVector` (`bitVector.h`/`.C`) + `TVector3` (`vector3.h`) + `TVector2`
+  (`vector2.h`)** (R1c). Remove/re-home + their tests (`BitVector_test`,
+  `Vector3_test`, `Options_test`, `PropertyManager_test`, `Selectable_test` lose
+  their persistence CHECKs).
+- **`Options`** — `MPISupport` broadcasts it; StoreFormat doesn't cover Options →
+  give Options a minimal value (de)serialise for the MPI port (or stub MPI).
+- **2 `operator>>/<<(PersistenceManager&)`** stream ops; persistence registration is
+  self-contained in `persistenceManager.{h,C}`.
+This is now the COMPLETE surface (65 files): framework(4) + ObjectCreator(2) +
+virtuals(76 decls across the layers in §1) + the 4 non-virtual read/write APIs +
+2 stream ops + VIEW serverWidget/mainframe + the consumer ports (VIEW mainControl,
+MPISupport) + the non-virtual `read/write(PM&)` set (PropertyManager/Selectable/
+Options/TimeStamp/BitVector/TVector3/TVector2).
+
+**DESIGN LOCKED (R1 → R1c).** R1c verdict: AGREE conditional on folding
+`BitVector`/`TVector3`/`TVector2` `read/write(PM&)` into the list — **done above**, so
+the stated AGREE condition is met. ObjectCreator scope, `PersistentObject`-as-type
+retention, and the VIEW handling were confirmed SOUND. The design is ready for
+**phased execution** (best as a focused fresh session — ~65-file surface, base-class-
+adjacent care, VIEW/MPI ports). Execution order = §5 (with §0 overriding the PersistentObject-
+erasure parts). (Full R1/R1b/R1c trail at the end of this doc.)
 
 ---
 
@@ -292,3 +308,30 @@ stubbed along with `Options`.
 4. **NOT** — Remaining blocker: fold those missed non-virtual and client/server
 stream consumers into the phase order; after that, the revised “remove stream
 framework, retain `PersistentObject` type, keep JSON StoreFormat” design can proceed.
+
+## PR-REMOVAL-R1c confirmation
+
+**Verdict: NEEDS-REVISION.** The corrected architecture is coherent, but the
+claimed exhaustive stream-removal surface still misses two live
+`PersistenceManager` read/write API families; deleting the framework after only
+the listed work would leave dangling references.
+
+1. **PARTIAL** — `ObjectCreator`/`MoleculeObjectCreator` now appear fully scoped
+to `serverWidget` + `BALLVIEW mainframe`, and the named
+`PropertyManager`/`Selectable` callers are test-only; however the non-virtual
+surface is still not complete because `BitVector::read/write(PersistenceManager&)`
+and `TVector3::read/write(PersistenceManager&)` remain live declarations,
+definitions, and tests (`BitVector_test2.C`, `Vector3_test.C`).
+2. **ADDRESSED** — Retaining `PersistentObject` as a minimal type while removing
+`PropertyManager`/`Selectable` PM read/write is coherent: those classes can keep
+the base/value-type contract for object properties while dropping only the stream
+serialization methods.
+3. **ADDRESSED** — VIEW handling is sound in shape: `mainControl`/MPI must be
+ported to JSON/value serialization, while `serverWidget` object exchange and VIEW
+view-state stream virtuals are either ported or stubbed with a ledger as a VIEW
+slice, so the kernel stream framework is not intrinsically blocked by VIEW once
+that slice is explicit.
+
+Remaining blocker: fold `DATATYPE/bitVector` and `MATHS/vector3` PM
+`read/write` APIs and tests into the exhaustive removal list/phase plan. With that
+addition, this would move to AGREE.
