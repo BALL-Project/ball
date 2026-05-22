@@ -31,6 +31,16 @@
 #include <QtCore/QObject>
 #include <QtGui/QColor>
 
+// Phase 999.58-02 — RenderSetup::RendererType is the renderer-switch
+// field the extended apply() now owns (OPENGL_RENDERER / RTFACT_RENDERER);
+// Camera::ProjectionMode is the projection field (perspective/orthographic).
+#ifndef BALL_VIEW_RENDERING_RENDERSETUP_H
+# include <BALL/VIEW/RENDERING/renderSetup.h>
+#endif
+#ifndef BALL_VIEW_RENDERING_CAMERA_H
+# include <BALL/VIEW/RENDERING/camera.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -68,6 +78,27 @@ namespace BALL
 			Q_PROPERTY(float eyeDistance READ eyeDistance WRITE setEyeDistance NOTIFY eyeDistanceChanged)
 			Q_PROPERTY(float focalDistance READ focalDistance WRITE setFocalDistance NOTIFY focalDistanceChanged)
 
+			// Phase 999.58-02 — the remaining non-stereo render-config field
+			// set the legacy StageSettings::apply() owned (stageSettings.C:233-309).
+			Q_PROPERTY(bool perspectiveProjection READ perspectiveProjection WRITE setPerspectiveProjection NOTIFY perspectiveProjectionChanged)
+			Q_PROPERTY(bool showLightSources READ showLightSources WRITE setShowLightSources NOTIFY showLightSourcesChanged)
+			Q_PROPERTY(float animationSmoothness READ animationSmoothness WRITE setAnimationSmoothness NOTIFY animationSmoothnessChanged)
+			Q_PROPERTY(bool offScreenRendering READ offScreenRendering WRITE setOffScreenRendering NOTIFY offScreenRenderingChanged)
+			Q_PROPERTY(int offScreenFactor READ offScreenFactor WRITE setOffScreenFactor NOTIFY offScreenFactorChanged)
+			Q_PROPERTY(QColor cappingColor READ cappingColor WRITE setCappingColor NOTIFY cappingColorChanged)
+			Q_PROPERTY(bool fpsEnabled READ fpsEnabled WRITE setFPSEnabled NOTIFY fpsEnabledChanged)
+			Q_PROPERTY(bool preview READ preview WRITE setPreview NOTIFY previewChanged)
+			Q_PROPERTY(bool vertexBuffersEnabled READ vertexBuffersEnabled WRITE setVertexBuffersEnabled NOTIFY vertexBuffersEnabledChanged)
+			Q_PROPERTY(bool smoothLines READ smoothLines WRITE setSmoothLines NOTIFY smoothLinesChanged)
+			Q_PROPERTY(float downsamplingFactor READ downsamplingFactor WRITE setDownsamplingFactor NOTIFY downsamplingFactorChanged)
+			Q_PROPERTY(int rendererType READ rendererType WRITE setRendererType NOTIFY rendererTypeChanged)
+			// Mouse / wheel sensitivity have no backend readback (the
+			// InteractionModeManager exposes setters only), so they are
+			// write-only mirrors driven by the Inspector; apply() pushes them
+			// only when explicitly set (sentinel < 0 means "leave live value").
+			Q_PROPERTY(float mouseSensitivity READ mouseSensitivity WRITE setMouseSensitivity NOTIFY mouseSensitivityChanged)
+			Q_PROPERTY(float mouseWheelSensitivity READ mouseWheelSensitivity WRITE setMouseWheelSensitivity NOTIFY mouseWheelSensitivityChanged)
+
 			public:
 				/**
 				 * Construct against a Stage + Scene. Both pointers may be
@@ -90,6 +121,22 @@ namespace BALL
 				float eyeDistance() const { return eye_distance_; }
 				float focalDistance() const { return focal_distance_; }
 
+				// Phase 999.58-02 — extended non-stereo render-config getters.
+				bool perspectiveProjection() const { return perspective_projection_; }
+				bool showLightSources() const { return show_light_sources_; }
+				float animationSmoothness() const { return animation_smoothness_; }
+				bool offScreenRendering() const { return offscreen_rendering_; }
+				int offScreenFactor() const { return offscreen_factor_; }
+				QColor cappingColor() const { return capping_color_; }
+				bool fpsEnabled() const { return fps_enabled_; }
+				bool preview() const { return preview_; }
+				bool vertexBuffersEnabled() const { return vertex_buffers_enabled_; }
+				bool smoothLines() const { return smooth_lines_; }
+				float downsamplingFactor() const { return downsampling_factor_; }
+				int rendererType() const { return renderer_type_; }
+				float mouseSensitivity() const { return mouse_sensitivity_; }
+				float mouseWheelSensitivity() const { return mouse_wheel_sensitivity_; }
+
 				/// v1.7.x-24 — true while apply() is mutating the Stage.
 				/// Notification slots that could re-trigger apply() must
 				/// early-return on this to break the re-entrancy cascade.
@@ -108,12 +155,44 @@ namespace BALL
 				void setEyeDistance(float v);
 				void setFocalDistance(float v);
 
+				// Phase 999.58-02 — extended non-stereo render-config setters.
+				void setPerspectiveProjection(bool b);
+				void setShowLightSources(bool b);
+				void setAnimationSmoothness(float v);
+				void setOffScreenRendering(bool b);
+				void setOffScreenFactor(int factor);
+				void setCappingColor(const QColor& c);
+				void setFPSEnabled(bool b);
+				void setPreview(bool b);
+				void setVertexBuffersEnabled(bool b);
+				void setSmoothLines(bool b);
+				void setDownsamplingFactor(float v);
+				void setRendererType(int type);
+				void setMouseSensitivity(float v);
+				void setMouseWheelSensitivity(float v);
+
 			Q_SIGNALS:
 				void backgroundColorChanged(const QColor& c);
 				void showCoordinateSystemChanged(bool b);
 				void fogIntensityChanged(float v);
 				void eyeDistanceChanged(float v);
 				void focalDistanceChanged(float v);
+
+				// Phase 999.58-02 — extended non-stereo render-config signals.
+				void perspectiveProjectionChanged(bool b);
+				void showLightSourcesChanged(bool b);
+				void animationSmoothnessChanged(float v);
+				void offScreenRenderingChanged(bool b);
+				void offScreenFactorChanged(int factor);
+				void cappingColorChanged(const QColor& c);
+				void fpsEnabledChanged(bool b);
+				void previewChanged(bool b);
+				void vertexBuffersEnabledChanged(bool b);
+				void smoothLinesChanged(bool b);
+				void downsamplingFactorChanged(float v);
+				void rendererTypeChanged(int type);
+				void mouseSensitivityChanged(float v);
+				void mouseWheelSensitivityChanged(float v);
 
 				/**
 				 * Emitted by apply() during the migration window — the
@@ -133,6 +212,26 @@ namespace BALL
 				float  fog_intensity_;
 				float  eye_distance_;
 				float  focal_distance_;
+
+				// Phase 999.58-02 — the rest of the non-stereo render config
+				// the legacy StageSettings::apply() owned.
+				bool   perspective_projection_;
+				bool   show_light_sources_;
+				float  animation_smoothness_;
+				bool   offscreen_rendering_;
+				int    offscreen_factor_;
+				QColor capping_color_;
+				bool   fps_enabled_;
+				bool   preview_;
+				bool   vertex_buffers_enabled_;
+				bool   smooth_lines_;
+				float  downsampling_factor_;
+				int    renderer_type_;          // RenderSetup::RendererType as int
+				// Mouse / wheel sensitivity have no backend readback; a sentinel
+				// < 0 means "unset — leave the live InteractionModeManager value
+				// untouched in apply()".
+				float  mouse_sensitivity_;
+				float  mouse_wheel_sensitivity_;
 
 				// v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
 				bool   applying_;
