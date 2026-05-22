@@ -18,6 +18,7 @@
 // removes them); only their reach-through from Scene's render path is gone.
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
 #include <BALL/VIEW/KERNEL/controllers/lightController.h>
+#include <BALL/VIEW/KERNEL/controllers/stageController.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
@@ -1126,7 +1127,12 @@ namespace BALL
 		{
 			preferences.insertEntry(light_settings_);
 
-			stage_settings_->getGLSettings();
+			// 999.58-02 — the legacy getGLSettings() readback only populated the
+			// stage DIALOG widgets (vendor/version/extension labels + vertex-buffer
+			// / smooth-lines widget enablement, stageSettings.C:689-717) and mutated
+			// NO render state, so dropping it from the render path has no render
+			// effect. The Inspector reads GL caps directly from the GLRenderer when
+			// it needs the caps display; this init readback is non-load-bearing.
 			preferences.insertEntry(stage_settings_);
 
 			preferences.insertEntry(material_settings_);
@@ -1162,7 +1168,22 @@ namespace BALL
 
 		void Scene::applyPreferences()
 		{
-			stage_settings_->apply();
+			// 999.58-02 — apply the full non-stereo stage render config through
+			// the StageController backend (projection, downsampling, FPS,
+			// preview, offscreen, capping color, vertex buffers + smooth lines,
+			// show-light-sources, animation smoothness, renderer switch, plus the
+			// already-migrated background/coordinate-system/fog/eye/focal) instead
+			// of the legacy stage dialog apply path. The Inspector StageController
+			// is the authoritative stage-editing surface now; re-asserting the
+			// live Stage/Scene state through the controller (revert + apply) is
+			// behavior-preserving for the rendered scene. swap-side-by-side stays
+			// owned by StereoController (no double-write). The transient stack-local
+			// controller mirrors the 999.58-01 Material/Light cut-over pattern.
+			{
+				StageController sc(stage_, this);
+				sc.revert();
+				sc.apply();
+			}
 
 			if (light_settings_ == 0) return;
 
