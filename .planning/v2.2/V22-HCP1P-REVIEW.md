@@ -77,3 +77,48 @@ Verdict: **GO** - the lazy well-known registry patch is sound; no production mis
 6. **WEAK** - Tests cover lazy count, schema membership, cap exemption, dynamic cap, and idempotence, but do not directly assert the mismatched-caller invariant (`registerColumn("PARTIAL_CHARGE", INT)` returns a FLOAT schema column). Also, `include/BALL/KERNEL/_moleculeStoreInternal.h` still has a lower stale comment saying force-field columns are predeclared at construction. Neither is a blocker.
 
 Missed-consumer list: none found.
+
+## HCP-1P.D measurement (measure-first) + HCP-1P close-out
+
+**HCP-1P.D = NOT JUSTIFIED (measured, skipped).** Profiled PDB import
+(`test/data/2ptc_H.pdb`, 4587 atoms, 50 loads = 7.07 ms/load = 1.54 us/atom;
+6000-load `sample`). The import hot spots are NOT the store's name interning:
+1. `boost::unordered` maps keyed on `Quadruple<String,char,long,char>` — the PDB
+   parser's OWN residue-indexing (dominant hashing);
+2. `BALL::String::String(const char*)` / `validateCharPtrRange_` — String
+   construction during line parsing;
+3. the orphan mutex on per-atom creation.
+`MoleculeStore::set_name`'s intern (`__hash_table::find` + murmur) appears only as
+a MINORITY of samples. A predefined-name pre-intern would shave a small slice of a
+minor cost while adding cross-layer complexity (STRUCTURE/FORMAT seeding the KERNEL
+store) — not worth it. Future import-path optimisation, if pursued, should target
+the parser's Quadruple residue-maps + String construction + the orphan-mutex, NOT
+the intern. (Recorded as out-of-scope opportunities, not HCP-1P work.)
+
+**HCP-1P final gate (honest).**
+- Composite create/clone + Kernel iteration: at v2.0 parity.
+- The IDENTIFIED v2.0->2.x regression sources are CLOSED: redundant atom-ctor
+  re-init (.A; Atom creation ~250 ns), String->std::string round-trips (.B), and the
+  dominant per-System `PropertyColumnRegistry` eager predeclare (.C; KernelCreation
+  "System creation" section 0.07 s -> 0.010 s, 7x; "System destruction" 0.06->0.01).
+- Kernel create/clone TOTAL remains above v2.0 (KernelCreation ~0.13 vs 0.08;
+  KernelClone ~0.37 vs 0.19). The RESIDUAL is INHERENT v2.x SoA per-object lifecycle
+  cost (every Atom/Molecule/Fragment/Residue/System binds to a store + allocates a
+  slot; v2.0 had near-free plain C++ objects). This is ARCHITECTURE, not a regression
+  to patch within HCP-1P — and the v2.2 hierarchy collapse (HCP-2 -> H4: containers
+  become store-backed VALUE HANDLES, not heap objects) reshapes exactly this cost
+  profile, so it is correctly DEFERRED to the collapse rather than chased pre-collapse.
+- Verdict: **HCP-1P CLOSED.** It removed the excess regression it set out to; the
+  remaining create/clone delta is the store-backed architecture's inherent cost,
+  addressed structurally by the collapse. (Pinned-baseline CI perf gates land at H8;
+  V21-CI-PERF-GATES.)
+
+## HCP-1P-CLOSE review
+
+Verdict: **CLOSE-OK**.
+
+1. **Landed scope.** .A `a40b493fe`, .B `094bfcaec`, and .C `c695ff419` are committed on `v2.2` and pushed to `origin/v2.2`; the scope matches born-default atom slot + `?`->`""` + HINFile canonicalize, zero-copy `String`->`set_name` plus internal reconstruction removal, and lazy well-known `PropertyColumnRegistry`; R1->R1b and A-CR/B-CR/C-CR are GO.
+2. **.D disposition.** Skipping .D is sound: the measured PDB-import hot spots are parser `Quadruple` residue maps, `String` construction, and orphan mutex cost, while `set_name` interning is a minority slice; record + revisit only if import later proves slow is the right call.
+3. **Honest gate framing.** The gate is honestly framed: the identified regressions are closed, Kernel create/clone TOTAL remains above v2.0 for inherent SoA per-object lifecycle cost, and deferring that architectural residual to HCP-2->H4 collapse is the right engineering call rather than chasing it pre-collapse.
+4. **Loose ends.** No blocker remains after fixing the stale public `Atom` default-type-name doc and the Class J HINFile ledger wording; plan/roadmap status consistently mark HCP-1P closed, and no live source dangling reference to the removed `default_type_name_offset_`/`well_known_`/`predeclareWellKnown_` machinery blocks close.
+5. **Next.** HCP-1P is correctly positioned as done; the next milestone is HCP-2, the collapsed handle API, with no HCP-1P work required first.

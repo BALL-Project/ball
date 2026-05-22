@@ -134,7 +134,15 @@ role+payload columns, not twice) and **blocks H2d**.
 selection mirror (HCP-1b.3 → reworked to compute-on-read in HCP1R). The
 scalar+role+selection mirror is built. Reviews KR1 + HCP1R applied.
 
-**HCP-1P (KERNEL object-creation fast path — NEXT, runs with/ahead of HCP-2):**
+**HCP-1P (KERNEL object-creation fast path — ✅ CLOSED):** .A `a40b493fe` + .B
+`094bfcaec` + .C `c695ff419` landed+pushed; .D measured = NOT-JUSTIFIED (PDB-import
+hot spots are the parser's Quadruple residue-maps + String construction + orphan
+mutex, NOT name interning). The identified regression sources are closed (.C dropped
+KernelCreation *System creation* 0.07s→0.010s, 7×); Composite create/clone +
+iteration at v2.0 parity. The residual Kernel create/clone delta (≈0.13 vs 0.08) is
+**inherent SoA per-object lifecycle cost** — deferred to the collapse (HCP-2→H4
+makes containers store-backed value handles). Full gate + Codex reviews (R1→R1b GO;
+A-CR/B-CR/C-CR GO) + .D evidence: `.planning/v2.2/V22-HCP1P-REVIEW.md`.
 KERNEL-only perf mini-phase closing the v2.0→2.x create/clone regression
 (see collapse-plan §6a). Four steps: **.A** born-default atom slot + delete the
 redundant `Atom::Atom()` re-init; **.B** zero-copy `String`→`set_name` (drops the

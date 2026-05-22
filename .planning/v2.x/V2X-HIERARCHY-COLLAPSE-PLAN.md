@@ -125,7 +125,18 @@ exclude rooted-object `set()`/`operator=`/`persistentRead` (the documented
 full-replacement carry-over) until that mirror lands in HCP-2. Then a short
 Codex H2d close-review → H2 DONE.
 
-**HCP-1P — KERNEL object-creation fast path (perf sibling of HCP-1).**
+**HCP-1P — KERNEL object-creation fast path (perf sibling of HCP-1). ✅ CLOSED.**
+.A `a40b493fe` + .B `094bfcaec` + .C `c695ff419` landed+pushed; .D measured =
+NOT-JUSTIFIED (skipped). **Honest gate:** the IDENTIFIED v2.0→2.x regression sources
+are closed — redundant atom-ctor re-init (.A), `String`→`std::string` round-trips
+(.B), and the dominant per-System `PropertyColumnRegistry` eager predeclare
+(.C: KernelCreation *System creation* 0.07s→0.010s, 7×). Composite create/clone +
+iteration at v2.0 parity. Kernel create/clone TOTAL stays above v2.0 (≈0.13 vs 0.08)
+— that residual is **inherent SoA per-object lifecycle cost** (store-binding per
+Atom/Molecule/Fragment/Residue/System), ARCHITECTURE not a regression, **deferred to
+the collapse** (HCP-2→H4 makes containers store-backed value handles, reshaping this
+cost). Full assessment + .D profile evidence: `.planning/v2.2/V22-HCP1P-REVIEW.md`.
+
 KERNEL-only, collapse-narrowed build, no handle-API change; closes the v2.0→2.x
 **create/clone regression** (System ≈2.6 µs/op, Atom ≈780 ns/op — sample-profiled
 to redundant ctor re-init + default-name interning + per-System well-known column

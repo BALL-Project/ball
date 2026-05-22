@@ -177,7 +177,7 @@ namespace BALL
 						- formal charge is 0
 						- charge is 0
 						- name is empty string
-						- type name is "?"
+						- type name is empty string
 						- position is  \link Vector3 Vector3 \endlink (0,0,0)
 						- radius is 0
 						- type  \link INVALID_TYPE INVALID_TYPE \endlink 

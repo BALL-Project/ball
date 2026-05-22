@@ -157,8 +157,9 @@ offset 0, no per-atom interning). Maintainer-directed (perf/storage + simpler
 (`MOLMEC/COMMON/assignTypes.C`, `MOLMEC/PARAMETER/templates.C`,
 `STRUCTURE/atomTyper.C`) compare against the `BALL_ATOM_DEFAULT_TYPE_NAME` *macro*,
 not a literal `"?"`, so "is this atom untyped?" logic is unchanged. FORMAT readers
-that explicitly emit `"?"` (e.g. `HINFile`) still do; `HINFile` already treats `""`
-and `"?"` identically on the unset path.
+that historically used `"?"` have been audited; `HINFile` canonicalises the missing
+`**` token to `BALL_ATOM_DEFAULT_TYPE_NAME` and still treats `""`/`"?"` identically
+on the write-side unset path.
 
 **Migration note:** downstream code/tooling that parsed BALL text/Antechamber output
 expecting the literal `"?"` placeholder for untyped atoms must accept an empty field.
