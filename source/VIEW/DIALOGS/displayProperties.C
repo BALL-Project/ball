@@ -439,6 +439,90 @@ void DisplayProperties::editSelectionColor(QColor color)
 }
 
 // ------------------------------------------------------------------------
+// Headless spec snapshot (Phase 999.65 Plan 02, VIEW-CLEAN-04)
+// ------------------------------------------------------------------------
+RepresentationSpec DisplayProperties::buildCurrentSpec() const
+{
+	// Snapshot the dialog's CURRENT widget state into a headless
+	// RepresentationSpec: the same values applyModelSettings_ (engine 444-510)
+	// and applyColoringSettings_ (engine 513-563) read today. The null-dialog
+	// guards mirror those helpers' `if (… == 0) return;` early-outs — a null
+	// settings dialog means "use the compiled defaults", which here are the
+	// default-constructed ModelProcessorParams / ColoringOverrides.
+	RepresentationSpec spec;
+
+	// Model type + the ModelProcessorParams packing (engine 459-479).
+	spec.model_type = (ModelType) model_type_combobox->currentIndex();
+	if (model_settings_ != 0)
+	{
+		ModelProcessorParams params;
+		params.stick_stick_radius                   = model_settings_->getStickStickRadius();
+		params.ball_and_stick_stick_radius          = model_settings_->getBallAndStickStickRadius();
+		params.ball_radius                          = model_settings_->getBallRadius();
+		params.ball_and_stick_dashed_bonds_enabled  = model_settings_->ballAndStickDashedBondsEnabled();
+		params.surface_probe_radius                 = model_settings_->getSurfaceProbeRadius();
+		params.vdw_radius_factor                    = model_settings_->getVDWRadiusFactor();
+		params.tube_radius                          = model_settings_->getTubeRadius();
+		params.cartoon_tube_radius                  = model_settings_->getCartoonTubeRadius();
+		params.cartoon_helix_radius                 = model_settings_->getCartoonHelixRadius();
+		params.cartoon_arrow_width                  = model_settings_->getCartoonArrowWidth();
+		params.cartoon_strand_height                = model_settings_->getCartoonStrandHeight();
+		params.cartoon_strand_width                 = model_settings_->getCartoonStrandWidth();
+		params.dna_ladder_radius                    = model_settings_->getDNALadderRadius();
+		params.dna_base_radius                      = model_settings_->getDNABaseRadius();
+		params.dna_helix_radius                     = model_settings_->getDNAHelixRadius();
+		params.hbonds_radius                        = model_settings_->getHBondsRadius();
+		params.force_max_length                     = model_settings_->getForceMaxLength();
+		params.force_scaling                        = model_settings_->getForceScaling();
+		params.force_offset                         = model_settings_->getForceOffset();
+		params.force_base                           = model_settings_->getForceBase();
+		spec.model_params = params;
+	}
+	// else: leave the default-constructed ModelProcessorParams (compiled defaults).
+
+	// Coloring method + the ColoringOverrides (engine 517 + 531).
+	spec.coloring_method = (ColoringMethod) coloring_method_combobox->currentIndex();
+	if (coloring_settings_ != 0)
+	{
+		spec.coloring_overrides = coloring_settings_->buildColoringOverrides();
+	}
+	// else: leave the default-constructed ColoringOverrides (compiled defaults).
+
+	// Drawing mode (engine 485).
+	spec.drawing_mode = (DrawingMode) mode_combobox->currentIndex();
+
+	// Custom-vs-presets surface-precision branch (engine 487-499).
+	spec.use_custom_surface_precision = custom_precision_button->isChecked();
+	if (spec.use_custom_surface_precision)
+	{
+		spec.surface_drawing_precision = ((float) precision_slider->value()) / 10.0;
+	}
+	else
+	{
+		spec.drawing_precision = (DrawingPrecision) precision_combobox->currentIndex();
+		if (model_information_->isSurfaceModel(spec.model_type))
+		{
+			spec.surface_drawing_precision = SurfaceDrawingPrecisions[precision_combobox->currentIndex()];
+		}
+	}
+
+	// Transparency + custom color (engine 540-541). The builder applies the
+	// (255 - transparency) alpha itself, so pack the raw button color here.
+	spec.transparency = transparency_slider->value();
+	spec.custom_color = ColorRGBA(custom_color_button->getColor());
+
+	// Update-enable flags (the recreate-branch guards, engine 451 / 521).
+	// createRepresentationMode() sets both checkboxes true just before the
+	// NEW_MOLECULE auto-rep build, preserving "auto-rep is always built with
+	// updates enabled".
+	spec.model_update_enabled    = model_updates_enabled->isChecked();
+	spec.coloring_update_enabled = coloring_updates_enabled->isChecked();
+
+	return spec;
+}
+
+
+// ------------------------------------------------------------------------
 // Model Processor methods
 // ------------------------------------------------------------------------
 void DisplayProperties::applyModelSettings_(Representation& rep)

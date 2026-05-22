@@ -23,6 +23,10 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#ifndef BALL_VIEW_MODELS_REPRESENTATIONBUILDER_H
+# include <BALL/VIEW/MODELS/representationBuilder.h>
+#endif
+
 #include <BALL/VIEW/UIC/ui_displayProperties.h>
 
 namespace BALL
@@ -32,7 +36,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class Representation;
-		
+
 		class ColoringSettingsDialog;
 		class ModelSettingsDialog;
 		class Preferences;
@@ -143,8 +147,27 @@ namespace BALL
 				{ create_representations_for_new_molecules_ = state;}
 
 			/// Get the Representation on which DisplayProperties is working on
-			Representation* getRepresentation() 
+			Representation* getRepresentation()
 				{ return rep_;}
+
+			/** Snapshot the dialog's CURRENT widget state into a headless
+					RepresentationSpec for RepresentationBuilder::createRepresentation.
+
+					This is the headless analog of "what applyModelSettings_ +
+					applyColoringSettings_ would read right now": it packs the model-type
+					/ coloring-method comboboxes, the mode combobox, the custom-vs-presets
+					precision branch (custom_precision_button + precision_slider +
+					precision_combobox), the transparency slider, the custom-color button
+					and the two update-enable checkboxes, plus the ModelProcessorParams the
+					ModelSettingsDialog getters supply and the ColoringOverrides the
+					ColoringSettingsDialog packs. When model_settings_ / coloring_settings_
+					are still null (initializePreferencesTab() not yet run) it falls back to
+					default-constructed ModelProcessorParams / ColoringOverrides, matching
+					the legacy applyModelSettings_/applyColoringSettings_ `if (… == 0)
+					return;` early-outs (Phase 999.65 Plan 02, VIEW-CLEAN-04).
+					@return a RepresentationSpec mirroring the dialog's live widget state
+			*/
+			RepresentationSpec buildCurrentSpec() const;
 
 			/* 	Create the new representation for the selection in the MolecularControl or for a given List of Composites.
 					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by apply().
