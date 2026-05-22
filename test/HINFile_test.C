@@ -189,7 +189,7 @@ CHECK(bool write(const Molecule& molecule))
 	TEST_NOT_EQUAL(f.getSize(), 0)
 RESULT
 
-CHECK([HCP-1P.A] HIN missing-type "**" round-trips to default type-name "", not "?")
+CHECK([HCP-1P.A] HIN missing-type token reads back as the default empty type-name not legacy question-mark)
 	// A default/untyped atom (type-name "") writes its HIN type field as "**";
 	// reading "**" back must canonicalise to BALL_ATOM_DEFAULT_TYPE_NAME ("")
 	// -- NOT the legacy "?" -- so the type-assignment sentinel checks (which

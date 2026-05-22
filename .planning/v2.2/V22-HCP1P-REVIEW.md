@@ -54,3 +54,13 @@ Verdict: **GO-WITH-FIXES** - the born-default atom-slot patch is safe, but one s
 
 Missed-call-site list:
 - `source/FORMAT/HINFile.C:510` - `atom->setTypeName("?")` should use `BALL_ATOM_DEFAULT_TYPE_NAME`/empty for the missing HIN type token `**`.
+
+## HCP-1P-B-CR code review
+
+Verdict: **GO** - the .B patch is a performance-only change for valid atom name/type-name data, with no required fixes.
+
+1. **SOUND** - Temporary `String` lifetime is safe: `atom.getName()`/`getTypeName()` temporaries live through the full `set_name`/`set_type_name` call, and the copy ctor writes this atom's newly allocated slot while reading a different source atom, so the referenced `std::string` does not alias the destination column entry being overwritten.
+2. **SOUND** - `static_cast<std::string&>(name_strings_[i]) = s` and the type-name twin correctly update the only encapsulated state in `BALL::String` (`str_`); embedded-NUL input would now be preserved in the live column where `String(s.c_str())` truncated, but atom names/type-names are not NUL-bearing data, so this is not a practical regression for this path.
+3. **SOUND** - For valid inputs, stored live strings, offsets, intern-table hits, and pool contents are unchanged versus the old path: the same `std::string` value is looked up/appended, and only redundant `c_str()` reconstruction is removed.
+4. **SOUND** - The `MoleculeStore::set_name(Index, const std::string&)` and `set_type_name` signatures remain unchanged; `BALL::String` has an unambiguous `operator string const&() const`, so existing callers see no API break or overload ambiguity.
+5. **SOUND** - No new blocking issue found; the HINFile `CHECK(...)` comma fix is compile-only and does not alter the .A round-trip semantics.

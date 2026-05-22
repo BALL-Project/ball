@@ -1186,7 +1186,9 @@ void MoleculeStore::set_name(Index i, const std::string& s)
 {
 	// K0.3b.LATER.5: mirror into live String column (sole authority for
 	// Atom::getName reads). Pool path stays for persistence.
-	name_strings_[i] = String(s.c_str());
+	// HCP-1P.B: assign the encapsulated std::string directly (no String(c_str)
+	// strlen+realloc round-trip); BALL::String wraps a std::string.
+	static_cast<std::string&>(name_strings_[i]) = s;
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 	if (s.empty()) { name_offsets_[i] = 0; return; }
 	auto it = string_intern_.find(s);
@@ -1205,7 +1207,8 @@ void MoleculeStore::set_name(Index i, const std::string& s)
 void MoleculeStore::set_type_name(Index i, const std::string& s)
 {
 	// K0.3b.LATER.6: mirror into live String column.
-	type_name_strings_[i] = String(s.c_str());
+	// HCP-1P.B: assign the encapsulated std::string directly (no round-trip).
+	static_cast<std::string&>(type_name_strings_[i]) = s;
 	if (string_pool_.empty()) string_pool_.push_back('\0');
 	if (s.empty()) { type_name_offsets_[i] = 0; return; }
 	auto it = string_intern_.find(s);

@@ -137,16 +137,18 @@ namespace BALL
 	void Atom::writeStoreName_(const String& s)
 	{
 		ensureStoreBinding_();
-		// MoleculeStore::set_name takes std::string.
+		// HCP-1P.B: bind the String straight to set_name(const std::string&) via
+		// String::operator const string& -- zero-copy, no c_str()+strlen+alloc.
 		BALL_ATOM_ORPHAN_WRITE_LOCK_(
-			store_->set_name(store_idx_, std::string(s.c_str()))
+			store_->set_name(store_idx_, s)
 		);
 	}
 	void Atom::writeStoreTypeName_(const String& s)
 	{
 		ensureStoreBinding_();
+		// HCP-1P.B: zero-copy String -> set_type_name(const std::string&).
 		BALL_ATOM_ORPHAN_WRITE_LOCK_(
-			store_->set_type_name(store_idx_, std::string(s.c_str()))
+			store_->set_type_name(store_idx_, s)
 		);
 	}
 	void Atom::writeStoreElement_(const Element* e)
@@ -243,8 +245,8 @@ namespace BALL
 			store_->charge(store_idx_) = atom.getCharge();
 			store_->velocity(store_idx_) = atom.getVelocity();
 			store_->force(store_idx_) = atom.getForce();
-			store_->set_name(store_idx_, std::string(atom.getName().c_str()));
-			store_->set_type_name(store_idx_, std::string(atom.getTypeName().c_str()));
+			store_->set_name(store_idx_, atom.getName());          // HCP-1P.B zero-copy
+			store_->set_type_name(store_idx_, atom.getTypeName()); // HCP-1P.B zero-copy
 			writeStoreRadius_(atom.getRadius());
 			writeStoreAtomType_(static_cast<short>(atom.getType()));
 			writeStoreFormalCharge_(static_cast<short>(atom.getFormalCharge()));
@@ -270,8 +272,8 @@ namespace BALL
 			store_->charge(store_idx_) = charge;
 			store_->velocity(store_idx_) = velocity;
 			store_->force(store_idx_) = force;
-			store_->set_name(store_idx_, std::string(name.c_str()));
-			store_->set_type_name(store_idx_, std::string(type_name.c_str()));
+			store_->set_name(store_idx_, name);           // HCP-1P.B zero-copy
+			store_->set_type_name(store_idx_, type_name); // HCP-1P.B zero-copy
 			writeStoreRadius_(radius);
 			writeStoreAtomType_(static_cast<short>(type));
 			writeStoreFormalCharge_(static_cast<short>(formal_charge));
