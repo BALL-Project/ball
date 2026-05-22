@@ -2492,7 +2492,10 @@ Plans:
 **Requirements:** `VIEW-CLEAN-04`.
 **Risk:** HIGHEST — the core load→render path. Incremental + GUI-verified (load a molecule → default rep renders; open a project → reps restore). 
 **Depends on:** 999.57 (factories). **Blocks:** the final-3 deletion in 999.53 (999.53-03).
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.65`).
+**Plans:** 3 plans, 3 waves.
+- [ ] 999.65-01-PLAN.md — Build the headless `RepresentationBuilder` + `RepresentationSpec` in the MODELS layer (consumes the 999.57 ModelProcessorFactory/ColorProcessorFactory; mirrors `DisplayProperties::createRepresentation` orchestration; static project-restore data-string parse helper). Pure addition, links clean. (VIEW-CLEAN-04, wave 1)
+- [ ] 999.65-02-PLAN.md — Repoint the `onNotify(NEW_MOLECULE)` default-rep path onto the builder via a new `DisplayProperties::buildCurrentSpec()` snapshot; blocking GUI UAT (molecule load auto-renders the default rep identically). (VIEW-CLEAN-04, wave 2)
+- [ ] 999.65-03-PLAN.md — Repoint `RepresentationManager::restoreRepresentations` onto the builder (parse+create+named-property replay), confirm `enableCreationForNewMolecules` still gates the builder-backed auto-rep, retire the dead String overload; grep-prove `DisplayProperties::createRepresentation` has no live external caller; blocking GUI UAT (project restore renders identically + auto-rep suppression intact). Unblocks the 999.53 final-3 deletion. (VIEW-CLEAN-04, wave 3)
 
 ### Phase 999.53: Legacy dialog deletion (Wave-4 cleanup tail) (TARGETED FOR v1.7.x)
 
