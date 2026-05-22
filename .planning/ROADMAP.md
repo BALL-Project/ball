@@ -2537,7 +2537,11 @@ Plans:
 **Requirements:** `VIEW-CLEAN-03`.
 **Risk:** HIGHEST — independent threaded-renderer migration comparable in size to 999.57, touching the stereo path. Incremental + verifiable against a running GUI (lights/materials/stereo render end-to-end); own GUI UAT.
 **Depends on:** 999.57 (builds on the detached render path). **Blocks:** 999.53.
-**Plans:** 0 (to be created by `/gsd-plan-phase 999.58`).
+**Plans:** 3 plans (sequential; render-touching, each with a blocking GUI human-verify).
+Plans:
+- [ ] 999.58-01-PLAN.md — Material + Light config relocation onto the Inspector MaterialController/LightController; route applyPreferences material+light + the light-refresh sites off the dialogs (wave 1).
+- [ ] 999.58-02-PLAN.md — Full non-stereo Stage render config relocation onto StageController (vertex buffers, downsampling, projection, FPS, preview, offscreen, renderer switch, etc.); route applyPreferences stage branch + getGLSettings off stage_settings_ (wave 2).
+- [ ] 999.58-03-PLAN.md — Remove the 3 dialog constructions (scene.C:142/143/162) + Preferences-stack rewire; Scene-owned stereo-screen config for the deferred stereo bodies; in-Scene applyStereoDefaults; demoTutorial repoint; grep proof scene.C is dialog-free (wave 3).
 
 > **Deferred / blocked v1.7.x items (NOT promoted to phases):** v1.7.x-03 (Stereo checkbox) is **blocked** on the SEED-001 step-5 Renderer/RenderSurface stereo-mode boundary; v1.7.x-04 (Geometric/Dataset highlight) and v1.7.x-05 (macOS QSS overlay) are **dormant** pending a user re-file / concrete trigger. They stay in [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) with their gating conditions. v1.7.x-34 (www.ball-project.org outage) is external/Tübingen-side infra, not a code phase.
 
