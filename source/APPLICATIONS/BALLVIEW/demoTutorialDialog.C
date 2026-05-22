@@ -11,8 +11,8 @@
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
-#include <BALL/VIEW/DIALOGS/lightSettings.h>
-#include <BALL/VIEW/DIALOGS/stageSettings.h>
+// 999.58-03 — lightSettings.h / stageSettings.h dropped: the tutorial no longer
+// reaches the scene dialog accessors (the dormant RTfact Stage-setup logic remains).
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
 
@@ -107,23 +107,24 @@ void DemoTutorialDialog::initDemo_()
 	Stage* stage = Scene::getInstance(0)->getStage();
 		
 	stage->setBackgroundColor(color);
-	StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-	stage_settings->updateFromStage();
+	// 999.58-03 — the legacy stage_settings->updateFromStage() / LightSettings
+	// updateFromStage() dialog-widget refreshes are dropped: Scene no longer owns
+	// those dialogs. The Stage mutations below + applyPreferences() (which now
+	// applies through the Inspector controllers) carry the actual render effect.
 
-	//TODO: get rid of this hack. 
+	//TODO: get rid of this hack.
 	//TODO: BALLView should come up with good light settings by itself!
-	// set a good light source	
+	// set a good light source
 	stage->clearLightSources();
 
 	LightSource ls;
-		
+
 	ls.setPosition(Vector3(1, -2, -15));
 	ls.setAttenuation(Vector3(0., 0., 0.3));
 	ls.setType(LightSource::POSITIONAL);
 	ls.setColor(ColorRGBA(255, 255, 255, 255));
 	ls.setIntensity(500./100);
 	stage->addLightSource(ls);
-	LightSettings::getInstance(0)->updateFromStage();
 	// apply everything to the scene...
 	Scene::getInstance(0)->applyPreferences();
 #endif
@@ -168,14 +169,14 @@ void DemoTutorialDialog::initTutorials_()
 		
 	stage->setBackgroundColor(color);
 
-	StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-	stage_settings->updateFromStage();
+	// 999.58-03 — dialog-widget refresh calls dropped (Scene no longer owns the
+	// stage/light dialogs); the Stage mutations below are the live render effect.
 
 	// get one useable light source
 	stage->clearLightSources();
 
 	LightSource ls;
-		
+
 	ls.setPosition(Vector3(1, -2, -15));
 	ls.setAttenuation(Vector3(0., 0., 0.7));
 	ls.setType(LightSource::POSITIONAL);
@@ -183,7 +184,6 @@ void DemoTutorialDialog::initTutorials_()
 	ls.setIntensity(500./100);
 
 	stage->addLightSource(ls);
-	LightSettings::getInstance(0)->updateFromStage();
 #endif
 	if (tutorial_type_ == TUTORIAL)
 	{
@@ -208,7 +208,9 @@ void DemoTutorialDialog::initTutorials_()
 		rt_material.shininess = 75.031;
 		rt_material.transparency = 0;
 
-		Scene::getInstance(0)->getMaterialSettings()->updateDefaultMaterialsFromStage();
+		// 999.58-03 — the legacy getMaterialSettings()->updateDefaultMaterialsFromStage()
+		// dialog-widget refresh is dropped; the Stage::Material writes above + the
+		// applyPreferences() below carry the render effect via the MaterialController.
 
 		// set ball and stick as next model
 		DisplayProperties::getInstance(0)->selectModel(MODEL_BALL_AND_STICK);
@@ -363,8 +365,8 @@ void DemoTutorialDialog::nextStepClicked()
 				// prepare the background for the next step
 				ColorRGBA color(255, 255, 255, 255); // white
 				Scene::getInstance(0)->getStage()->setBackgroundColor(color);
-				StageSettings* stage_settings = Scene::getInstance(0)->getStageSettings();
-				stage_settings->updateFromStage();
+				// 999.58-03 — dialog-widget refresh dropped; applyPreferences() applies
+				// the live Stage background through the Inspector StageController.
 				Scene::getInstance(0)->applyPreferences();
 				break;
 			}
@@ -379,7 +381,8 @@ void DemoTutorialDialog::nextStepClicked()
 				ls.setType(LightSource::POSITIONAL);
 				ls.setColor(ColorRGBA(255, 255, 255, 255)); //ColorRGBA(255, 245, 208, 255));
 				ls.setIntensity(0.25f);
-				LightSettings::getInstance(0)->updateFromStage();
+				// 999.58-03 — dialog-widget refresh dropped; the live LightSource
+				// mutation above is applied via applyPreferences() below.
 
 				// then change the camera position
 				Camera& camera = Scene::getInstance(0)->getStage()->getCamera();
