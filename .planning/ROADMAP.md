@@ -32,6 +32,14 @@ This roadmap mirrors the human-authored `/Users/kohlbach/Claude/BALL/ROADMAP-1.6
 - [x] **Phase 999.57: Complete Inspector controller cut-over — unwire displayProperties.C from the rendering pipeline (v1.7.x) — PREREQUISITE FOR 999.53** - Relocate `createModelProcessor`/`createColorProcessor` (the rendering-path factories at displayProperties.C:451/487) out of the legacy Model/Coloring settings dialogs into the Inspector/Controller layer; and the displayProperties references in mainControl/mainframe. Highest-risk (touches the threaded renderer) — incremental + verifiable per CLAUDE.md. **Planner scope-corrected:** scene.C's MaterialSettings/LightSettings/StageSettings are NOT dead (load-bearing for the Preferences stack + the entire stereo render path) — split out as 999.58. 3 plans created; unblocks deleting the Model/Coloring/displayProperties triples. **Code+build+audit COMPLETE 2026-05-21** (all 3 plans landed; render path grep-proven detached; BALLView.app links clean BALL_UI_V2=ON) — **but Plan 03's BLOCKING running-BALLView render UAT is PENDING**, so VIEW-CLEAN-02 stays PARTIAL and the phase is not yet closed. (completed 2026-05-22)
 - [ ] **Phase 999.58: scene.C settings-dialog cut-over — Material/Light/Stage incl. the stereo render path (v1.7.x) — 2nd PREREQUISITE FOR 999.53** - Relocate scene.C's `MaterialSettings`/`LightSettings`/`StageSettings` (lines 141/142/161; load-bearing across ~15 sites incl. the Preferences stack, applyPreferences, and the full stereo rendering path scene.C:2664-3165) into Inspector Stage/Light/Material coverage. Independent high-risk threaded-renderer migration, comparable in size to 999.57; own GUI UAT (lights/materials/stereo must still render). Needed before 999.53 deletes those 3 dialog triples.
 
+<!-- v1.7.4 milestone — Inspector depth + the contract (ingested from design handover 2026-05-22; renumbered +1 from handover 999.58-999.63 to clear the 999.58 collision) -->
+- [ ] **Phase 999.59: Controller cut-over · command-shaped `apply()` (v1.7.4 · Wave A · GATING)** - Land the command-shaped `Controller::apply()` contract (validate → guard → mutate → notify → invalidate → record reversible payload) on all 8 mutating Controllers + `ApplyGuard`/`ApplyPayload` base types; narrow `Stage`/`Representation` setters to Controller-`friend` scope. Maps to v1.7.x-24. *Depends on 999.57.* See [Phase 999.59 detail](#phase-99959-controller-cut-over--command-shaped-apply-v174--wave-a--gating).
+- [ ] **Phase 999.60: Contract tests · cross-surface parity (v1.7.4 · Wave A)** - Stand up the contract-test harness proving the same operation via menu/toolbar/Inspector/Python reaches identical owner postconditions; selection-consumer agreement; re-entrancy; owner-narrowing compile-fail tests; new blocking Linux CI job. Maps to v1.7.x-25. *Depends on 999.59.* See [Phase 999.60 detail](#phase-99960-contract-tests--cross-surface-parity-v174--wave-a).
+- [ ] **Phase 999.61: Qt-lifetime audit + conventions doc (v1.7.4 · Wave A)** - Codify QObject-lifetime conventions (`.planning/codebase/QT-LIFETIME.md`), audit the 6 UFG-flagged sites, adopt `QPointer<T>`, ship a `lifetime-discipline` CI lint rejecting `deleteLater()` in dtors. Maps to v1.7.x-26. *Independent (no in-flight dep).* See [Phase 999.61 detail](#phase-99961-qt-lifetime-audit--conventions-doc-v174--wave-a).
+- [ ] **Phase 999.62: Opaque-paint contract codification (v1.7.4 · Wave A)** - Convert the UFG-05/09/10 opaque-paint lesson into a structural contract (`WA_OpaquePaintEvent` on every animated-child container, theme token, `THEME.md`, `opaque-paint-lint` CI job). Maps to v1.7.x-35 (new; handover proposed -30, re-minted). *Depends on 999.43.* See [Phase 999.62 detail](#phase-99962-opaque-paint-contract-codification-v174--wave-a).
+- [ ] **Phase 999.63: Coloring · value-range histogram (v1.7.4 · Wave B)** - First visible Inspector-depth win: replace the v1.7.x-17 min/max text inputs with a histogram of the active selection's value distribution + 2 draggable handles + 4 presets, bound through `ColoringController::setRange()` → the command-shaped `apply()`. Maps to v1.7.x-17b. *Depends on 999.59.* See [Phase 999.63 detail](#phase-99963-coloring--value-range-histogram-v174--wave-b).
+- [ ] **Phase 999.64: Per-section "Reset section" affordance (v1.7.4 · Wave B)** - Add a section-level Reset glyph to every Inspector section header that reverts that section's Controller to method-defaults through the contract (one `ApplyPayload`). Maps to v1.7.x-36 (new; handover proposed -31, re-minted). *Depends on 999.59.* See [Phase 999.64 detail](#phase-99964-per-section-reset-section-affordance-v174--wave-b).
+
 ## Phase Details
 
 ### Phase 1: Build Baseline
@@ -2544,6 +2552,66 @@ Plans:
 - [ ] 999.58-03-PLAN.md — Remove the 3 dialog constructions (scene.C:142/143/162) + Preferences-stack rewire; Scene-owned stereo-screen config for the deferred stereo bodies; in-Scene applyStereoDefaults; demoTutorial repoint; grep proof scene.C is dialog-free (wave 3).
 
 > **Deferred / blocked v1.7.x items (NOT promoted to phases):** v1.7.x-03 (Stereo checkbox) is **blocked** on the SEED-001 step-5 Renderer/RenderSurface stereo-mode boundary; v1.7.x-04 (Geometric/Dataset highlight) and v1.7.x-05 (macOS QSS overlay) are **dormant** pending a user re-file / concrete trigger. They stay in [`v1.7.x-PATCH-QUEUE.md`](v1.7.x-PATCH-QUEUE.md) with their gating conditions. v1.7.x-34 (www.ball-project.org outage) is external/Tübingen-side infra, not a code phase.
+
+---
+
+## v1.7.4 milestone — Inspector depth + the contract
+
+> **Ingested from the v1.7.4 design handover (2026-05-22).** Six GSD-shaped phases in two waves. **Sequences AFTER v1.7.2 + v1.7.3** — v1.7.4 is cut from `v1.7-modernization` post-`v1.7.3` tag. None complete.
+>
+> **Renumber provenance.** The handover numbered these `999.58–999.63`, colliding with the in-flight `999.58-scene-settings-stereo-cutover`. The entire set was renumbered **+1** at ingest → `999.59–999.64` (contiguous + ordered). The two new patch-queue IDs the handover minted (`v1.7.x-30/-31`) collided with this repo's existing -30 (#527) / -31 (#501), so they were re-minted to **v1.7.x-35 / v1.7.x-36**.
+>
+> **Wave A · the contract (architecture, gating):** 999.59 (apply() cut-over), 999.60 (contract tests), 999.61 (Qt-lifetime), 999.62 (opaque-paint). **Wave B · Inspector depth (visible):** 999.63 (value-range histogram), 999.64 (per-section reset). Wave A gates Wave B (999.63/999.64 consume the command-shaped `apply()` from 999.59).
+>
+> **Supporting docs (ingested into `.planning/`):** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) (the gating contract — read end-to-end), [`v1.7.4-ACCEPTANCE.md`](v1.7.4-ACCEPTANCE.md) (cross-phase release gates), [`RELEASE-NOTES-v1.7.4.md`](RELEASE-NOTES-v1.7.4.md) (draft). REQs: `ARCH-CONTRACT-01..04`, `TEST-CONTRACT-01`, `LIFETIME-DOC-01`, `OPAQUE-PAINT-01`, `INSP-COLORING-VALUE-RANGE-01`, `INSP-RESET-01` (see [`REQUIREMENTS.md`](REQUIREMENTS.md) §v1.7.4).
+
+### Phase 999.59: Controller cut-over · command-shaped `apply()` (v1.7.4 · Wave A · GATING)
+
+**Goal:** Land the command-shaped `Controller::apply()` contract on every mutating Controller in the VIEW layer — the §2 shape from the architecture contract (preconditions → re-entrancy guard → capture-for-reversibility → mutate the single owner → emit ONE typed event → soft render-invalidate → record reversible intent). Ship the `ApplyGuard` RAII + `ApplyPayload` base types, migrate the 3 already-mutating Controllers (Model/Coloring/Material), cut over the 5 read-only mirrors (Camera/Light/Stereo + Clipping/Label tails), and narrow `Stage`/`Representation` setters to Controller-`friend` scope so external mutation does not compile. The gating phase — 999.60/999.63/999.64 all consume the contract.
+
+**Plan doc:** [`phases/999.59-controller-cutover-command-shape/999.59-01-PLAN.md`](phases/999.59-controller-cutover-command-shape/999.59-01-PLAN.md) (carries the 5-plan internal breakdown 999.59-01..05; the planner/executor may decompose). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §2 / §13.
+**v1.7.x mapping:** v1.7.x-24 (FOUNDATIONAL apply() cut-over). **Wave:** A (gating). **Requirements:** `ARCH-CONTRACT-01`.
+**Depends on:** 999.57 (the displayProperties cut-over the command-shape builds on). **Blocks:** 999.60, 999.63, 999.64. **Status:** not started.
+
+### Phase 999.60: Contract tests · cross-surface parity (v1.7.4 · Wave A)
+
+**Goal:** Stand up the contract tests that enforce the apply() contract by behavior, not grep. A `ContractTestHarness` boots BALLView headlessly and runs the same operation through all four surfaces (Inspector / toolbar / menu / Python), asserting bit-equal owner postconditions; per-Controller parity tests for the 8 mutating Controllers; the four-way selection-consumer agreement test (tree / scene picker / mainControl / action enable-gate); a re-entrancy test (second apply during own emission is dropped, not stacked); and owner-narrowing compile-fail tests. New blocking Linux-only `contract-tests` CI job.
+
+**Plan doc:** [`phases/999.60-contract-tests/999.60-01-PLAN.md`](phases/999.60-contract-tests/999.60-01-PLAN.md). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §11 / §7.
+**v1.7.x mapping:** v1.7.x-25 (contract tests — the real enforcement). **Wave:** A. **Requirements:** `ARCH-CONTRACT-02`, `TEST-CONTRACT-01`.
+**Depends on:** 999.59 (tests need a Controller that already carries the contract). **Status:** not started.
+
+### Phase 999.61: Qt-lifetime audit + conventions doc (v1.7.4 · Wave A)
+
+**Goal:** Codify the QObject-lifetime conventions that emerged from the UFG-30/32/18/26 cycle into a canonical `.planning/codebase/QT-LIFETIME.md` (5 rules + 4 case studies + cookbook), audit the 6 known leak-class sites, adopt `QPointer<T>` for cross-owner references (~12 sites), and ship a small blocking `lifetime-discipline` CI lint that rejects `deleteLater()` inside QObject destructors. Write-once discipline artifact; no behavior change intended.
+
+**Plan doc:** [`phases/999.61-qt-lifetime-audit/999.61-01-PLAN.md`](phases/999.61-qt-lifetime-audit/999.61-01-PLAN.md). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §9.
+**v1.7.x mapping:** v1.7.x-26 (Qt-lifetime ownership audit + conventions). **Wave:** A. **Requirements:** `ARCH-CONTRACT-03`, `LIFETIME-DOC-01`.
+**Depends on:** none (independent audit; runs in parallel with 999.60 once 999.59 clears the Controller dtors). **Status:** not started.
+
+### Phase 999.62: Opaque-paint contract codification (v1.7.4 · Wave A)
+
+**Goal:** Convert the UFG-05/09/10 opaque-paint lessons from per-site fixes into a structural contract: every container that hosts an animated child (a `QPropertyAnimation` target) carries `WA_OpaquePaintEvent` + `setAutoFillBackground(true)` within 3 ancestor hops, factored into the `InspectorSection` base + a shared mixin; a centralized theme token in `theme-neutral.qss`; a new design-system doc `data/BALLView/theme/THEME.md`; and a CI `opaque-paint-lint` job (STATUS → BLOCKING after a clean week). Prerequisite for dark mode (v1.8).
+
+**Plan doc:** [`phases/999.62-opaque-paint-contract/999.62-01-PLAN.md`](phases/999.62-opaque-paint-contract/999.62-01-PLAN.md). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §10.
+**v1.7.x mapping:** v1.7.x-35 (new — handover minted -30, re-minted at ingest because -30 was taken by #527/Phase 999.52). **Wave:** A. **Requirements:** `ARCH-CONTRACT-04`, `OPAQUE-PAINT-01`.
+**Depends on:** 999.43 (shared widgets, already shipped). **Status:** not started.
+
+### Phase 999.63: Coloring · value-range histogram (v1.7.4 · Wave B)
+
+**Goal:** The first visible Inspector-depth win on the v1.7.4 contract. Replace the basic min/max text inputs that shipped in v1.7.x-17 with a `ValueRangeWidget` rendering a histogram of the active selection's scalar value (B-factor / Occupancy / Charge / Distance / Custom) for value-based coloring methods, two draggable handles (live preview during drag, commit on release), and four presets (Auto-fit / Full range / Robust 5–95% / Reset). The Controller owns the binning via a cached `ColoringController::distribution()` read-model; the widget never walks the Composite tree. Commit goes through `ColoringController::setRange(min,max)` → the command-shaped `apply()`. Perf: 50k-atom selection re-bin <50 ms.
+
+**Plan doc:** [`phases/999.63-coloring-value-range-histogram/999.63-01-PLAN.md`](phases/999.63-coloring-value-range-histogram/999.63-01-PLAN.md). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §5 (view = pure presentation). Visual target: `revitalization/mockups.html` board 05.
+**v1.7.x mapping:** v1.7.x-17b (upgrade of the v1.7.x-17 value-range slice). **Wave:** B. **Requirements:** `INSP-COLORING-VALUE-RANGE-01`.
+**Depends on:** 999.59 (ColoringController carrying the apply() contract) + 999.60 tests. **Status:** not started.
+
+### Phase 999.64: Per-section "Reset section" affordance (v1.7.4 · Wave B)
+
+**Goal:** Add one section-level Reset affordance to every Inspector section header (a Reset glyph on hover, tooltip "Reset section to defaults"). Clicking invokes the bound Controller's `reset()`, which captures-current → invokes method-defined defaults → emits exactly ONE event through the §2 contract (one `ApplyPayload`, undoable in v2.0). Every Controller implements `reset()` (read-only sections as a documented no-op). Codifies a missing affordance across all 14 sections.
+
+**Plan doc:** [`phases/999.64-per-section-reset/999.64-01-PLAN.md`](phases/999.64-per-section-reset/999.64-01-PLAN.md). **Architecture contract:** [`v1.7.4-ARCHITECTURE-CONTRACT.md`](v1.7.4-ARCHITECTURE-CONTRACT.md) §2.
+**v1.7.x mapping:** v1.7.x-36 (new — handover minted -31, re-minted at ingest because -31 was taken by #501/Phase 999.54). **Wave:** B. **Requirements:** `INSP-RESET-01`.
+**Depends on:** 999.59 (`Controller::reset()` in the base). **Status:** not started.
 
 ---
 *Roadmap created: 2026-05-14*
