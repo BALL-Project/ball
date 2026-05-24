@@ -214,3 +214,151 @@ the agreed R1b design; no blocking correctness, ABI, or compatibility issue foun
 6. **SOUND.** No new missed handle name, include cycle, vtable/slicing concern, or
    production `as<>()` caller issue found; `build-core` `ctest -R ContainerHandle_test
    --output-on-failure` passed.
+
+---
+
+## HCP-2b — `BALL::StructureQuery` free-function namespace (step-by-step: 2b.1)
+
+### Goal
+A `namespace BALL::StructureQuery` of free functions that answer the polymer-structure
+questions the v0 typed containers answered via member functions + typed iterators
+(`Protein::residues()`/`chains()`/`getResidueByID`/`getNTerminal`/`getCTerminal`,
+`Chain::getNTerminal`/`getCTerminal`, etc.), but over the **role-aware handles**
+(HCP-2a) + the HCP-1a role columns. Canonical-depth-honouring (Molecule → Chain →
+[SecondaryStructure] → Residue → Atom), so a query finds RESIDUE-role fragments whether
+they sit directly under a chain or under a chain→SS layer (SS is still an owning layer
+during dual existence; becomes a non-owning annotation at HCP-2d — the query is written
+against the ROLE, so it survives that change unchanged).
+
+### Scope split (step-by-step)
+- **HCP-2b.1 (THIS step):** the StructureQuery free functions, READ-only, returning
+  value-handle vectors. Header-only over the existing `ContainerHandleBase` navigation
+  (`countChildren`/`getChildContainer`) + role accessors. New `structureQuery.h` + test.
+- **HCP-2b.2 (DEFERRED):** the `[[deprecated]]` role-filtered iterator alias for the
+  ~40-file v0 `ResidueIterator`/`ChainIterator` consumer surface (D-HC5). That's a
+  consumer-compat layer (closer to HCP-3 migration); not needed to establish the query
+  API and would blur this step's gate.
+
+### API (D-2b.1) — entry point is a `MoleculeHandle` (no SYSTEM row exists)
+```
+namespace BALL { namespace StructureQuery {
+  // direct CHAIN-role children of a molecule
+  std::vector<FragmentHandle> chains(const MoleculeHandle&);
+  // all RESIDUE-role fragments in a molecule's (or chain's) subtree, canonical-depth
+  std::vector<FragmentHandle> residues(const MoleculeHandle&);
+  std::vector<FragmentHandle> residues(const FragmentHandle&);          // chain/SS subtree
+  // all SECONDARY_STRUCTURE-role fragments in a molecule's (or chain's) subtree
+  std::vector<FragmentHandle> secondaryStructures(const MoleculeHandle&);
+  std::vector<FragmentHandle> secondaryStructures(const FragmentHandle&);
+  // generic role filter over a subtree (the building block; the above are sugar)
+  std::vector<FragmentHandle> fragmentsByRole(const ContainerHandleBase&, FragmentRole);
+  // generic first/last RESIDUE-role fragment in preorder (no kind filter) -- building block
+  FragmentHandle firstResidue(const ContainerHandleBase&);   // molecule or chain
+  FragmentHandle lastResidue(const ContainerHandleBase&);
+  // v0-compatible polymer N-/C-terminus: first/last RESIDUE-role fragment that is an
+  // AMINO_ACID (matches v0 getNTerminal/getCTerminal, which filter via isAminoAcid())
+  FragmentHandle nTerminal(const ContainerHandleBase&);   // molecule or chain
+  FragmentHandle cTerminal(const ContainerHandleBase&);
+  // first RESIDUE-role fragment whose getID() == id (preorder); null handle if none
+  FragmentHandle residueByID(const MoleculeHandle&, const String& id);
+  // the enclosing SECONDARY_STRUCTURE-role fragment of a residue (walk parents); null if none
+  FragmentHandle secondaryStructureOf(const FragmentHandle& residue);
+}}
+```
+
+### Decisions to lock
+- **D-2b.1 return type = `std::vector<Handle>` (this step).** Simplest correct
+  value-semantics API; handles are 24 B values. A lazy range / callback form is a later
+  optimization (note it; not now) — avoids premature iterator design while the deferred
+  HCP-2b.2 alias + HCP-2c mirrors are still pending.
+- **D-2b.2 role-based, not kind-based.** Filtering uses `getFragmentRole()`/
+  `getMoleculeRole()` (derived), NOT `getKind()` — so the queries are correct after the
+  H4 `ContainerKind` shrink + the HCP-2d SS-as-annotation change. Canonical depth is
+  honoured by recursing the whole subtree and filtering by role (not by fixed depth).
+- **D-2b.3 null-handle idiom.** Single-result queries (`nTerminal`/`residueByID`/
+  `secondaryStructureOf`) return a null `FragmentHandle` (`operator bool` false) when
+  absent — consistent with the D61 null-handle pointer-return replacement.
+- **D-2b.4 traversal source.** Walk via `ContainerHandleBase::countChildren()` +
+  `getChildContainer(i)` (containers) ; atoms are leaves (skipped for fragment queries).
+  Read-only; no store mutation; no new store state.
+- **D-2b.5 v0-compatible terminal semantics (R1->R1b fix).** v0 `getNTerminal`/
+  `getCTerminal` (residue.h:460-489) iterate `beginResidue()`/`rbeginResidue()` and return
+  the FIRST/LAST residue with `isAminoAcid() == true` (= `hasProperty(PROPERTY__AMINO_ACID)`,
+  which materialises to `ResidueKind::AMINO_ACID` per atomContainer.C:53). So `nTerminal`/
+  `cTerminal` filter RESIDUE-role fragments to `getResidueKind() == ResidueKind::AMINO_ACID`
+  — NOT the first/last arbitrary RESIDUE-role fragment. The generic first/last-RESIDUE
+  building block is exposed separately as `firstResidue`/`lastResidue` (no kind filter), so
+  callers that want the unfiltered terminus (or a nucleotide analog via the generic helper +
+  a `ResidueKind` test) are served without polluting the v0-faithful terminal API. Both
+  terminal functions return a null `FragmentHandle` when the subtree has no amino-acid
+  residue, exactly as v0 returns `0`.
+
+### Scope / non-goals
+- READ-only; dual existence; no consumer migration; no SYSTEM handle (entry is a
+  MoleculeHandle the caller obtains from the v0 Molecule's container row).
+- No deprecated iterator alias (HCP-2b.2).
+
+### Touch points
+- NEW `include/BALL/KERNEL/structureQuery.h` (header-only, over containerHandle.h).
+- NEW `test/StructureQuery_test.C` (+ test CMake registration) — build a Protein→Chain→
+  [SS]→Residue→Atom table, assert chains/residues/residueByID/firstResidue/lastResidue/
+  nTerminal/cTerminal/secondaryStructures/secondaryStructureOf/fragmentsByRole over it.
+  MUST include a chain with a leading/trailing NON-amino residue (e.g. a HOH water or a
+  hetero group) so the test pins that `nTerminal`/`cTerminal` skip it (matching v0
+  `isAminoAcid()`) while `firstResidue`/`lastResidue` return it.
+- D31b/D66a: structureQuery.h includes only public headers (containerHandle.h).
+
+### Gate
+Codex **HCP-2b.1 design AGREE** before code; then implement + rc-gated build + ctest +
+Codex code-review + commit.
+
+## HCP-2b1-R1 design review
+Verdict: **NEEDS-REVISION**. The subtree/role-query design is sound, but `nTerminal`/
+`cTerminal` must not be specified as first/last arbitrary RESIDUE-role fragment: v0
+`getNTerminal`/`getCTerminal` search the first/last amino-acid residue (`isAminoAcid()`),
+so HCP-2b.1 should filter `FragmentRole::RESIDUE` plus `ResidueKind::AMINO_ACID` (or
+explicitly split a generic first/last-residue helper from the v0-compatible terminal API).
+
+1. **SOUND**: Full-subtree recursion plus derived `FragmentRole` correctly covers direct Chain→Residue and Chain→SecondaryStructure→Residue shapes; nested domain/group RESIDUE descendants should be collected by role, not excluded by fixed depth.
+2. **FLAW**: `countChildren()`/`getChildContainer(i)` traversal is complete, skips atoms correctly, and has no tree-edge revisit risk, but first/last RESIDUE-role preorder does not match v0 terminal semantics because v0 skips non-amino residues.
+3. **SOUND**: `std::vector<FragmentHandle>` by value is acceptable for HCP-2b.1; 24 B handles are cheap enough, and a callback/range layer can be added later without invalidating the simple query API.
+4. **WEAK**: `MoleculeHandle` is the right entry with no SYSTEM row, and first-preorder `residueByID` matches v0, but the replacement surface remains weak until terminal semantics are fixed.
+5. **SOUND**: Deferring the deprecated iterator alias to HCP-2b.2 is the right cut; it is consumer-compat work, while HCP-2b.1 can stay header-only with no store state or `.C`.
+6. **SOUND**: No blocking encapsulation/naming risk found; public-header-only `structureQuery.h` and `FragmentHandle` returns for chain/SS/residue are consistent because roles disambiguate them.
+
+## HCP-2b1-R1b design review
+Verdict: **AGREE**. The R1 blocker is resolved; implementation may proceed.
+
+A. **SOUND**: `nTerminal`/`cTerminal` now match v0 by selecting the first/last RESIDUE-role fragment whose `getResidueKind() == ResidueKind::AMINO_ACID`; this is the correct table mapping for v0 `Residue::isAminoAcid()` (`hasProperty(PROPERTY__AMINO_ACID)`).
+B. **SOUND**: Splitting `firstResidue`/`lastResidue` introduces no naming/overload collision found, and reverse traversal over the same preorder child tree can correctly implement "last" by scanning children in reverse and returning the deepest/rightmost RESIDUE-role match.
+C. **SOUND**: The required leading/trailing non-amino residue test is adequate because it distinguishes v0-compatible terminal selection from the unfiltered `firstResidue`/`lastResidue` helpers on both ends.
+
+## HCP-2b1-CR code review
+Verdict: **GO**. No blocking correctness, encapsulation, or v0-compatibility issue found
+in the implemented HCP-2b.1 patch; `build-core` `StructureQuery_test` builds and passes.
+
+1. **SOUND**: `nTerminal`/`cTerminal` filter RESIDUE-role fragments to
+   `ResidueKind::AMINO_ACID`, matching v0 `getNTerminal`/`getCTerminal`
+   `isAminoAcid()` semantics. Keeping the last amino-acid residue while walking forward
+   preorder is equivalent to v0 `rbeginResidue()` over the same bidirectional residue
+   order.
+2. **SOUND**: `visitFragments_` walks every ordered child container via
+   `countChildren()`/`getChildContainer(i)`, skips atom leaves through the null-container
+   result, visits fragment containers once in preorder, and recurses through SS layers so
+   direct chain residues and chain->SS residues are both found.
+3. **SOUND**: Narrowing each child with `as<FragmentHandle>()` is correct for
+   CHAIN/FRAGMENT/RESIDUE/NUCLEOTIDE/SECONDARY_STRUCTURE rows, and role filtering keeps
+   the API H4-ready. A molecule-level child would not be visited as a fragment, but its
+   subtree would still be traversed; no silent result corruption found.
+4. **SOUND**: `residueByID` calls the role-asserting `getID()` only after
+   `getFragmentRole() == FragmentRole::RESIDUE`; no query path calls a role-asserting
+   getter on the wrong role.
+5. **SOUND**: `structureQuery.h` includes only `containerHandle.h` plus `<vector>` and
+   does not cross the `_moleculeStoreInternal.h` boundary; names and header-only inline
+   definitions are consistent with the intended public API.
+6. **SOUND**: `StructureQuery_test` pins both residue depths, ordered 5-residue preorder,
+   terminal skipping of leading/trailing water, generic first/last returning water,
+   `residueByID` hit/miss, `secondaryStructureOf` hit/miss, and empty/amino-free null
+   terminals.
+7. **SOUND**: No new lambda lifetime, handle-copy, missing-inline, recursion, or overload
+   ambiguity issue found.
