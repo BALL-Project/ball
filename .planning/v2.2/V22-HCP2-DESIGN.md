@@ -991,3 +991,23 @@ B. **SOUND** — The unbind mutates only v0 row bindings; it does not touch `thi
 C. **SOUND** — The helper recurses through deeper descendants, atoms are harmless no-op leaves through the virtual default, no normal-path rebind can occur between unbind and clone, and `this` is intentionally not unbound.
 D. **SOUND** — The `!container_is_freed_` idempotent guard remains correct defense-in-depth for any stale binding that still points at a freed row, while normal adoption of unbound survivors now takes the rebuild path.
 E. **WEAK** — No new normal-path issue found with external references or mirror suppression; the only residual weakness is exception safety after descendants are unbound but before rebuild completes, which can leave a materialised v0 subtree with cleared descendant bindings if clone/rebuild throws.
+
+## HCP-2c4-CR + HCP-2 close-review
+
+### PART 1: HCP-2c.4 cross-store-LIVE release
+
+Verdict: **GO**. No blocking correctness issue found in the uncommitted HCP-2c.4 diff.
+
+1. **SOUND.** Capturing `{store,row}` at the top of `detail::adoptSubtreeInto_` is the right point because `materialiseContainer_` overwrites the binding; `src != dst && row != 0` correctly excludes same-store reparent, unmaterialised/orphan new-member adoption, and the 2c.3 rooted replacement path where `this` remains bound to `dst`.
+2. **SOUND.** Releasing after destination materialisation is the right sequencing: the old source parent edge has already been detached by the v0 move mirror, but the moved subtree's internal source rows are still linked under `src_row_idx`; `release_container_subtree_` frees only container rows and atom reverse edges, so it does not double-release the already migrated atom slots.
+3. **SOUND.** The same predicate subsumes replace-with-foreign-orphan routed through `Composite::replace` + `mirrorAdoptSubtreeInto_`; it does not fire for same-store replacement/reparent or the 2c.3 `set`/`operator=` rebuild because those calls either have no source row or keep `src_row_store == dst`.
+4. **SOUND.** Old source handles into the moved-away subtree now go stale via source-row release generation bumps, while the moved v0 subtree is rebound to fresh live rows in the destination store and validates there; the new parity test exercises root and descendant old-handle invalidation plus destination parity.
+
+### PART 2: HCP-2 close-review
+
+Verdict: **HCP-2c CLOSEABLE**. With 2c.4 landed, the deferred-mirror milestone can be marked DONE; both PART-1 and PART-2 are GO/CLOSEABLE.
+
+5. **SOUND.** Mirror faithfulness now covers the H2a/H2b topology surface (`insert`/`remove`/`append`/`splice`/`swap`/`clear`), role refinement, materialise-the-new-member (`insertParent`/`replace`), rooted full replacement (`set`/`operator=`), and cross-store live move; no additional v0 mutation path was found that silently desyncs the container table within the accepted dual-existence contract.
+6. **SOUND.** The accepted deferrals are not hidden HCP-2c correctness holes: the general property bag has no store-side reader before H4, the stream `persistentRead` hook remains tied to the task #61 removal/fresh-object-only contract rather than a live dual-store consumer path, and targeted coverage for `set`/`operator=` plus replace-with-orphan is acceptable because those cases have non-composable detach/rebuild semantics not well represented by the current randomized sweep.
+7. **WEAK.** The known residual risks remain acceptable but real: OOM/throw between descendant unbind/release and rebuild can leave a partially rematerialised mirror, and the static mirror-suppression flag assumes the same single-threaded mutation model as `clone_bonds`.
+8. **SOUND.** No cross-cutting blocker found across 2c.1-2c.4: the suppression guard is scoped to bulk clone/rebuild, the cross-store release runs after destination rebind and only for true source-store moves, the idempotent live-row guard plus descendant unbind prevents the 2c.3 ABA stale-binding failure, and role payload migration/refinement remains orthogonal to topology release/rebuild.

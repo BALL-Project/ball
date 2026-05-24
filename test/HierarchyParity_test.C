@@ -470,6 +470,15 @@ CHECK(D56 -- detached subtree migrates orphan->System table)
 	std::size_t src_live_before = src.live_count();   // chain + 2 residues = 3
 	TEST_EQUAL(src_live_before, 3u)
 
+	// HCP-2c.4 (2c1-CR item7 / FIX-3): stamp ResidueKind on the source residue
+	// rows so we can verify migrate_one_ COPIES the stored role (it was previously
+	// dropped on migration). descTable does not encode residue_kind, so this does
+	// not perturb the parity check below.
+	std::uint32_t src_r1 = src.row(src_root).children[0].idx;
+	std::uint32_t src_r2 = src.row(src_root).children[1].idx;
+	src_store.container_set_residue_kind_(src_r1, ResidueKind::AMINO_ACID);
+	src_store.container_set_residue_kind_(src_r2, ResidueKind::WATER);
+
 	// Migrate into a destination table with a COMPLETE atom remap (here an
 	// identity map -- the explicit same-index/test mode; the real
 	// System::adoptSubtree supplies the actual atom-slot remap). Build it
@@ -493,6 +502,11 @@ CHECK(D56 -- detached subtree migrates orphan->System table)
 	TEST_EQUAL(dst.row(dst_r1).parent_container_idx, dst_root)
 	const ChildRef dst_atom = dst.row(dst_r1).children[0];
 	TEST_EQUAL(dst.atom_parent(dst_atom.idx), dst_r1)
+
+	// FIX-3: the stored ResidueKind survived the migration (migrate_one_ copies it).
+	std::uint32_t dst_r2 = dst.row(dst_root).children[1].idx;
+	TEST_EQUAL(dst_store.container_residue_kind_(dst_r1) == ResidueKind::AMINO_ACID, true)
+	TEST_EQUAL(dst_store.container_residue_kind_(dst_r2) == ResidueKind::WATER, true)
 
 	// R32 HIGH: it is a true MOVE -- the source subtree is released. All
 	// source rows freed and source atom reverse edges cleared.
@@ -1026,6 +1040,51 @@ CHECK(HCP-2c.3 -- deep set() on a materialised container re-materialises (rooted
 	std::string d2; descV0(m2, d2);
 	TEST_EQUAL(descTable(m2.getContainerRowStore_()->sideTables_().container_table_,
 	                     m2.getContainerRow_()), d2)
+RESULT
+
+CHECK(HCP-2c.4 -- cross-store-LIVE move releases the source rows + invalidates stale handles)
+	// System A with a materialised chain c1 -> r1 -> a1.
+	System sys1; Protein p1; p1.setName("P1"); Chain c1; c1.setName("X");
+	Residue r1; r1.setName("ALA"); r1.setID("1"); PDBAtom a1; a1.setName("N");
+	r1.insert(a1); c1.insert(r1); p1.insert(c1); sys1.insert(p1);
+
+	MoleculeStore* store1 = c1.getContainerRowStore_();
+	TEST_NOT_EQUAL(store1, 0)
+	std::uint32_t c1_old_row = c1.getContainerRow_();
+	std::uint32_t r1_old_row = r1.getContainerRow_();
+	TEST_NOT_EQUAL(c1_old_row, 0u)
+	TEST_NOT_EQUAL(r1_old_row, 0u)
+	ContainerHandleBase c1_handle(*store1, c1_old_row);
+	ContainerHandleBase r1_handle(*store1, r1_old_row);
+	TEST_EQUAL(c1_handle.isValid(), true)
+	TEST_EQUAL(r1_handle.isValid(), true)
+
+	// A DIFFERENT live System B.
+	System sys2; Protein p2; p2.setName("P2"); PDBAtom a2; a2.setName("CA");
+	p2.insert(a2); sys2.insert(p2);
+	MoleculeStore* store2 = p2.getContainerRowStore_();
+	TEST_NOT_EQUAL(store2, 0)
+	TEST_EQUAL((bool)(store2 != store1), true)          // distinct live stores
+
+	// Cross-store move: relocate c1 (in A) under p2 (in B).
+	p2.append(c1);
+
+	// c1's subtree is now materialised in store2 + its atom migrated there.
+	TEST_EQUAL(c1.getContainerRowStore_() == store2, true)
+	TEST_NOT_EQUAL(c1.getContainerRow_(), 0u)
+	TEST_EQUAL(a1.getStore() == store2, true)
+	std::string d2b; descV0(p2, d2b);
+	TEST_EQUAL(descTable(store2->sideTables_().container_table_, p2.getContainerRow_()), d2b)
+
+	// HCP-2c.4: c1's + r1's OLD rows in store1 were RELEASED (no leak) -> the
+	// captured handles into them go STALE.
+	TEST_EQUAL(store1->container_is_freed_(c1_old_row), true)
+	TEST_EQUAL(store1->container_is_freed_(r1_old_row), true)
+	TEST_EQUAL(c1_handle.isValid(), false)
+	TEST_EQUAL(r1_handle.isValid(), false)
+	// store1's tree (p1) no longer references c1; mirror matches v0.
+	std::string d1b; descV0(p1, d1b);
+	TEST_EQUAL(descTable(store1->sideTables_().container_table_, p1.getContainerRow_()), d1b)
 RESULT
 
 // ===== HCP-1a: collapse role taxonomy mirrored into the container table.

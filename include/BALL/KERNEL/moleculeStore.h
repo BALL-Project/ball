@@ -498,6 +498,10 @@ namespace BALL
 		// rooted-full-replacement primitive) -- frees descendant container rows
 		// (generation bump -> stale handles), keeps `row` itself.
 		void container_release_children_(std::uint32_t row);
+		// v2.2 HCP-2c.4 (D-2c.7): recursively FREE `row` AND its whole subtree --
+		// the cross-store-move source-release primitive (free the moved subtree's
+		// OLD rows in its OLD store after it is re-materialised in the new store).
+		void container_release_subtree_(std::uint32_t row);
 
 		//@}
 		/**	@name Live-reference enforcement (D7 amendment, K0.2c, audited K0.4.7)

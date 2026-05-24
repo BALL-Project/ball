@@ -894,6 +894,14 @@ void MoleculeStore::container_release_children_(std::uint32_t row)
 	side_tables_->container_table_.release_children_(row);
 }
 
+// v2.2 HCP-2c.4 (D-2c.7): free `row` AND its whole subtree (the cross-store-move
+// source-release). Freed rows bump their generation, so stale handles into the
+// moved-away subtree's OLD store rows correctly invalidate.
+void MoleculeStore::container_release_subtree_(std::uint32_t row)
+{
+	side_tables_->container_table_.release_container_subtree_(row);
+}
+
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give
 // thread-safe lazy init (C++17 [stmt.dcl] p4).
 //

@@ -310,6 +310,17 @@ namespace BALL
 	// releases the source slots, then materialises the container rows + edges.
 	void detail::adoptSubtreeInto_(AtomContainer& container, MoleculeStore* dst)
 	{
+		// v2.2 HCP-2c.4 (D-2c.7): capture `container`'s CURRENT container-row
+		// binding BEFORE materialiseContainer_ rebinds it. If it is bound to a
+		// DIFFERENT live store (a true cross-store move, A -> dst), its OLD subtree
+		// rows in store A must be released after re-materialisation, else they leak
+		// AND stale handles into the moved-away subtree never invalidate. Unbound
+		// (orphan/new member) or same-store (dst) -> no source rows to release.
+		MoleculeStore* const src_row_store = container.getContainerRowStore_();
+		const std::uint32_t src_row_idx    = container.getContainerRow_();
+		const bool cross_store_move = (src_row_store != 0 && src_row_store != dst
+		                               && src_row_idx != 0);
+
 		// Collect atoms + their old (src, src_idx) before we mutate.
 		struct AtomEntry { Atom* atom; MoleculeStore* src; std::uint32_t src_idx; };
 		std::vector<AtomEntry> entries;
@@ -424,6 +435,17 @@ namespace BALL
 		// AtomContainer insert method that called adoptSubtree (R36b) -- not
 		// here -- so it honours the insert position and same-store reparent.
 		materialiseContainer_(container, dst);
+
+		// v2.2 HCP-2c.4 (D-2c.7): cross-store move -- materialiseContainer_ has now
+		// rebound `container`'s subtree to `dst` (fresh rows). Release the OLD
+		// subtree rows from the source store A (still intact: the insert detached
+		// only the A-parent -> container edge, leaving container's internal A rows
+		// linked). This frees A's orphaned rows AND bumps their generation so any
+		// stale handle into the moved-away subtree's A rows invalidates.
+		if (cross_store_move && !src_row_store->container_is_freed_(src_row_idx))
+		{
+			src_row_store->container_release_subtree_(src_row_idx);
+		}
 	}
 
 	void System::adoptSubtree(AtomContainer& container)
