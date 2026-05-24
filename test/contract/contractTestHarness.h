@@ -36,6 +36,15 @@
 
 #include <BALL/COMMON/global.h>
 
+// Phase 999.59-01 — the base Controller defines the feature macro
+// BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL. Including it here makes the
+// macro visible to the CONTRACT_FIXTURE_DISABLED switch at the bottom of
+// this header, so every contract-test TU that includes the harness flips
+// its per-controller parity fixtures from STATUS-skip to live the moment
+// the base lands. Before 999.59-01 this header is absent and the switch
+// defaults to disabled.
+#include <BALL/VIEW/KERNEL/controllers/controller.h>
+
 #include <QtCore/QString>
 
 #include <string>
