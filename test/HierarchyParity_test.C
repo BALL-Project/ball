@@ -40,9 +40,13 @@
 #include <BALL/KERNEL/nucleotide.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/CONCEPT/composite.h>
+#include <BALL/CONCEPT/selectable.h>   // H2d: production select()/deselect()
+#include <BALL/KERNEL/PDBAtom.h>       // H2d: PDBAtom pool nodes
 #include <BALL/COMMON/rtti.h>
 #include <sstream>
 #include <string>
+#include <random>                       // H2d: deterministic mt19937 sweep
+#include <vector>                       // H2d: node pools
 ///////////////////////////
 
 using namespace BALL;
@@ -1047,6 +1051,156 @@ CHECK(HCP-1b.3 -- container_selection_count_ derives subtree selected-atom count
 	TEST_EQUAL(store->container_selection_count_(r2r), 0u)
 	TEST_EQUAL(store->container_selection_count_(cr), 0u)
 	TEST_EQUAL(store->container_selection_count_(pr), 0u)
+RESULT
+
+CHECK(H2d -- randomized full-surface parity sweep (topology + scalars + selection))
+	// Deterministic randomized sweep over the full mutation surface
+	// (append/prepend/insertBefore move, swap, clear, removeChild, replace,
+	// select/deselect, post-root setName/setID/setInsertionCode), asserting the
+	// FULL scalar-bearing descriptor parity (descTable == descV0) AND root
+	// selection-count parity after EVERY step. Pool nodes are NON-autodeletable,
+	// so every op (incl. clear/replace) DETACHES-without-deleting -> lifetime-safe;
+	// the test owns + frees the pool at the end. Strict 3-level hierarchy
+	// (Protein > Chain > Residue > Atom) keeps inserts valid + cycle-free. SCOPE
+	// excludes rooted set()/operator=/persistentRead (the deferred full-subtree-
+	// replacement mirror -> HCP-2c).
+	System sys;
+	Protein* prot = new Protein;
+	prot->setAutoDeletable(false);
+	prot->setName("P"); prot->setID("ROOT");
+	sys.insert(*prot);
+
+	MoleculeStore* store = prot->getContainerRowStore_();
+	TEST_NOT_EQUAL(store, (MoleculeStore*)nullptr)
+	const std::uint32_t root = prot->getContainerRow_();
+	TEST_NOT_EQUAL(root, 0u)
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	std::vector<Chain*>   chains;
+	std::vector<Residue*> residues;
+	std::vector<PDBAtom*> atoms;
+	for (int i = 0; i < 6; ++i)
+	{ Chain* c = new Chain; c->setAutoDeletable(false);
+	  std::ostringstream n; n << "CH" << i; c->setName(n.str()); chains.push_back(c); }
+	for (int i = 0; i < 14; ++i)
+	{ Residue* r = new Residue; r->setAutoDeletable(false);
+	  std::ostringstream n; n << "R" << i; r->setName(n.str()); r->setID(n.str()); residues.push_back(r); }
+	for (int i = 0; i < 28; ++i)
+	{ PDBAtom* a = new PDBAtom; a->setAutoDeletable(false);
+	  std::ostringstream n; n << "AT" << i; a->setName(n.str()); atoms.push_back(a); }
+
+	// detach c from its current parent (whatever it is) -- safe for pool nodes.
+	auto detach = [&](Composite* c) { if (Composite* p = c->getParent()) p->removeChild(*c); };
+
+	std::mt19937 rng(0xB0A1u);
+	bool ok = true;
+	std::string fail;
+	int steps_done = 0;
+
+	int last_op = -1;
+	for (int step = 0; step < 300 && ok; ++step)
+	{
+		// Genuine subtree members: descend the ACTUAL child lists from the root
+		// (getChild walks first_child_/next_), so every operand is list-consistent
+		// -- a parent_-chain guess could mark a half-detached node "in-tree".
+		std::vector<Chain*>   liveCh;
+		std::vector<Residue*> liveRes;
+		std::vector<PDBAtom*> liveAt;
+		{
+			std::vector<Composite*> st; st.push_back(prot);
+			while (!st.empty())
+			{
+				Composite* c = st.back(); st.pop_back();
+				if (c != prot)
+				{
+					if (RTTI::isKindOf<PDBAtom>(c))      liveAt.push_back(static_cast<PDBAtom*>(c));
+					else if (RTTI::isKindOf<Residue>(c)) liveRes.push_back(static_cast<Residue*>(c));
+					else if (RTTI::isKindOf<Chain>(c))   liveCh.push_back(static_cast<Chain*>(c));
+				}
+				for (Position i = 0; i < c->getDegree(); ++i) st.push_back(c->getChild((Index)i));
+			}
+		}
+
+		const int op = static_cast<int>(rng() % 10u);
+		last_op = op;
+		switch (op)
+		{
+			case 0: { Chain* c = chains[rng() % chains.size()]; detach(c); prot->insert(*c); break; }
+			case 1: { if (!liveCh.empty()) { Residue* r = residues[rng()%residues.size()]; detach(r);
+			            liveCh[rng()%liveCh.size()]->insert(*r); } break; }
+			case 2: { if (!liveRes.empty()) { PDBAtom* a = atoms[rng()%atoms.size()]; detach(a);
+			            liveRes[rng()%liveRes.size()]->insert(*a); } break; }
+			case 3: { // positional prepend / insertBefore a pool residue into a non-empty live chain
+			          std::vector<Chain*> nz; for (Chain* c : liveCh) if (c->getDegree() > 0) nz.push_back(c);
+			          if (!nz.empty()) { Chain* c = nz[rng()%nz.size()]; Residue* r = residues[rng()%residues.size()];
+			            if (r->getParent() != c) { detach(r);
+			              if (rng() & 1u) c->prepend(*r);
+			              else { Composite* ref = c->getChild(static_cast<Index>(rng() % c->getDegree()));
+			                     if (ref != 0 && ref != r) c->insertBefore(*r, *ref); else c->prepend(*r); } } }
+			          break; }
+			case 4: { // swap two SAME-KIND children of a live container (>= 2 children)
+			          std::vector<Composite*> cand; if (prot->getDegree() >= 2) cand.push_back(prot);
+			          for (Chain* c : liveCh)    if (c->getDegree() >= 2) cand.push_back(c);
+			          for (Residue* r : liveRes) if (r->getDegree() >= 2) cand.push_back(r);
+			          if (!cand.empty()) { Composite* p = cand[rng()%cand.size()];
+			            Position i = rng() % p->getDegree(), j = rng() % p->getDegree();
+			            if (i != j) { Composite* ci = p->getChild((Index)i), * cj = p->getChild((Index)j);
+			              if (ci && cj && RTTI::isKindOf<Atom>(ci) == RTTI::isKindOf<Atom>(cj)) ci->swap(*cj); } }
+			          break; }
+			case 5: { std::vector<Composite*> cand;  // clear a live container with children
+			          for (Chain* c : liveCh)    if (c->getDegree() > 0) cand.push_back(c);
+			          for (Residue* r : liveRes) if (r->getDegree() > 0) cand.push_back(r);
+			          if (!cand.empty()) cand[rng()%cand.size()]->clear(); break; }
+			case 6: { std::vector<Composite*> cand;  // removeChild (detach) a live non-root node
+			          for (Chain* c : liveCh)    cand.push_back(c);
+			          for (Residue* r : liveRes) cand.push_back(r);
+			          for (PDBAtom* a : liveAt)  cand.push_back(a);
+			          if (!cand.empty()) detach(cand[rng()%cand.size()]); break; }
+			case 7: { // replace one LIVE residue with ANOTHER live residue (rooted->rooted,
+			          // the H2b-mirrored case). Replace-with-a-DETACHED/orphan member needs the
+			          // materialise-the-new-member mirror -> deferred to HCP-2c, OUT of H2d scope.
+			          if (liveRes.size() >= 2) { Residue* x = liveRes[rng()%liveRes.size()];
+			            Residue* y = liveRes[rng()%liveRes.size()]; if (x != y) x->replace(*y); } break; }
+			case 8: { PDBAtom* a = atoms[rng()%atoms.size()]; a->setSelected((rng() & 1u) != 0u); break; }
+			case 9: { std::vector<Composite*> cand;  // post-root scalar setters on live containers
+			          for (Chain* c : liveCh)    cand.push_back(c);
+			          for (Residue* r : liveRes) cand.push_back(r);
+			          if (!cand.empty()) { Composite* p = cand[rng()%cand.size()]; std::ostringstream n; n << "x" << step;
+			            if (AtomContainer* ac = dynamic_cast<AtomContainer*>(p)) ac->setName(n.str());
+			            if (Residue* r = dynamic_cast<Residue*>(p)) { r->setID(n.str()); r->setInsertionCode(static_cast<char>('A' + step % 26)); } }
+			          break; }
+		}
+		steps_done = step + 1;
+
+		// (1) FULL topology + scalar parity vs the v0 tree.
+		std::string v0; descV0(*prot, v0);
+		std::string tab = descTable(t, root);
+		if (tab != v0)
+		{ ok = false; std::ostringstream e; e << "parity mismatch @step " << step << " op " << last_op
+		    << "\n  V0   =" << v0 << "\n  TABLE=" << tab; fail = e.str(); break; }
+
+		// (2) Root selection-count parity: independently count selected atoms in
+		// prot's subtree and compare to the compute-on-read container count.
+		std::uint32_t sel = 0;
+		{ std::vector<const Composite*> st; st.push_back(prot);
+		  while (!st.empty()) { const Composite* c = st.back(); st.pop_back();
+		    if (const Atom* a = dynamic_cast<const Atom*>(c)) { if (a->isSelected()) ++sel; }
+		    for (Position i = 0; i < c->getDegree(); ++i) st.push_back(c->getChild((Index)i)); } }
+		if (store->container_selection_count_(root) != sel)
+		{ ok = false; std::ostringstream e; e << "selection mismatch @step " << step
+		    << " got " << store->container_selection_count_(root) << " exp " << sel; fail = e.str(); break; }
+	}
+
+	// On failure, surface the step/detail; on success this passes silently.
+	TEST_EQUAL(ok ? std::string("ok") : fail, std::string("ok"))
+	TEST_EQUAL(steps_done, 300)
+
+	// Cleanup: non-autodeletable -> ~Composite detaches from parent (no double
+	// free); leaves first, root last.
+	for (PDBAtom* a : atoms)   delete a;
+	for (Residue* r : residues) delete r;
+	for (Chain* c : chains)    delete c;
+	delete prot;
 RESULT
 
 END_TEST

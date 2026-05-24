@@ -1,0 +1,11 @@
+# BALL v2.2 H2d Review
+
+## H2d-R1 close-review
+
+**Verdict: GO = H2 closeable.** The H2 forward-only v0->ContainerTable mutation mirror is sound to mark DONE with the documented HCP-2c carry-overs explicitly deferred: replace/insertParent materialise-new-member, rooted full-replacement via set/operator=/persistentRead, and container setProperty role-refinement. No H2 blocker found.
+
+1. **SOUND - Test soundness / no UB.** The non-autodeletable pool model is lifetime-safe: `clear()` detaches and recursively clears pool children without deleting them, `removeChild`/`replace` detach live objects, and final deletion is leaf-first then root, so I do not see a use-after-free, double-free, or cycle path; operand selection is from actual in-tree walks, with same-kind swap, `x != y`, and positional self/ref guards.
+2. **SOUND - Coverage adequacy.** The sweep meaningfully exercises the H2d surface under live tree churn: append/move, positional insert, swap, clear, remove, rooted->rooted replace, scalar setters, and selection all remain reachable with the fixed pools and strict Protein>Chain>Residue>Atom discipline; 300 deterministic steps with one seed is a reasonable close given the targeted H2a/H2b/HCP-1 tests already covering the individual paths.
+3. **SOUND - Scope correctness.** Excluding replace-with-orphan and rooted set/operator=/persistentRead is the right H2d boundary: those require materialising or replacing a full row-bound subtree, which is the HCP-2c class of work, not a hidden H2 forward-mirror bug.
+4. **SOUND - Assertion strength.** Full scalar-bearing preorder parity plus independently counted root selected-atom parity is strong enough for this close: it verifies reachable child order, container kinds, atom refs, names, IDs, insertion codes, SS type, and selected atom cardinality after every mutation; explicit per-row parent_container_idx or non-root selection-count assertions would be useful hardening, but not a blocker because existing targeted tests already cover non-root counts and reachable descriptor parity catches row child-order drift.
+5. **SOUND - H2 close verdict.** With this sweep green, the existing targeted checks, 286/286 ctest, and 100/100 stress, H2 is closeable as the forward-only mutation mirror milestone, provided the HCP-2c carry-overs remain documented and are not claimed as closed.
