@@ -27,14 +27,34 @@
 #include <BALL/VIEW/MODELS/modelProcessorFactory.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <sstream>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		namespace
+		{
+			// Compact owner-state snapshot for the ApplyPayload before/after
+			// blobs (§2 step 3). Cheap String form, matching the harness
+			// OwnerSnapshot discipline.
+			String snapshotModelState_(const Representation* rep)
+			{
+				if (rep == nullptr) return String("model{null}");
+				std::ostringstream s;
+				s << "model=" << static_cast<int>(rep->getModelType())
+				  << ";mode=" << static_cast<int>(rep->getDrawingMode())
+				  << ";precision=" << static_cast<int>(rep->getDrawingPrecision())
+				  << ";transparency=" << static_cast<int>(rep->getTransparency());
+				return String(s.str());
+			}
+		}
+
 		ModelController::ModelController(Representation* rep, QObject* parent)
-			: QObject(parent),
+			: Controller(parent),
 				rep_(rep),
 				model_type_(0),
 				drawing_mode_(0),
@@ -46,8 +66,7 @@ namespace BALL
 				stick_radius_(0.2f),
 				surface_probe_radius_(1.5f),
 				cartoon_tube_radius_(0.4f),
-				params_dirty_(false),
-				applying_(false)
+				params_dirty_(false)
 		{
 			revert();
 		}
@@ -85,43 +104,78 @@ namespace BALL
 			params_dirty_ = false;
 		}
 
-		void ModelController::apply()
+		void ModelController::reset()
 		{
+			// §2 reset path (999.64 consumes) — re-sync the mirror from the
+			// owner in a single pass. revert() already does exactly this.
+			revert();
+		}
+
+		bool ModelController::apply()
+		{
+			// ── 1. Preconditions (§2 step 1) — fail-fast, return false ───────
 			if (rep_ == nullptr)
 			{
 				Log.warn() << "[ModelController::apply] no Representation attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			// Busy guard — mirrors the legacy modal's "disable Apply
 			// while busy" pattern (see MainControl::isBusy). If the
 			// renderer or another modal is doing work, defer rather
-			// than racing the scene mutation.
+			// than racing the scene mutation. Treated as a soft rejection.
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[ModelController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the Representation::update() refresh below)
-			// synchronously re-enters apply(), bail rather than re-running the
-			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
-			// The RAII guard clears the flag on every exit path.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) ───────────────────────
+			// If a notification triggered by this apply() (the §2a
+			// invalidation refresh below) synchronously re-enters apply(),
+			// DROP it rather than re-running the mutation — this is the cascade
+			// class behind the v1.7.x-13 freeze. Nest-aware: depth > 0 ⇒ drop.
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "model.setType";
+			payload.before     = snapshotModelState_(rep_);
+			payload.target     = rep_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotModelState_(rep_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			// Model declares a display-list REBUILD — see invalidateDeclared_().
+			invalidateDeclared_();
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+			// guard destructor releases the re-entrancy block on scope exit
+		}
+
+		bool ModelController::applyInternal_()
+		{
+			// §13 cookbook step 2 — the existing mutation body, moved here
+			// from apply(). Precondition (rep_ != nullptr) is guaranteed by
+			// apply(). Does NOT request invalidation; that is the declared
+			// §2a hook invalidateDeclared_(), called by apply() after this.
 			ModelType new_type = static_cast<ModelType>(model_type_);
 			DrawingMode new_mode = static_cast<DrawingMode>(drawing_mode_);
 			DrawingPrecision new_precision = static_cast<DrawingPrecision>(drawing_precision_);
 
 			bool model_type_changed = (rep_->getModelType() != new_type);
-			bool rebuild =
-				model_type_changed ||
-				(rep_->getModelProcessor() == nullptr) ||
-				(rep_->getDrawingPrecision() != new_precision) ||
-				params_dirty_;
 
 			// Phase 999.57 Plan 03: construct the model processor through the
 			// headless ModelProcessorFactory, parameterized by the controller's
@@ -172,14 +226,27 @@ namespace BALL
 
 			rep_->setTransparency(static_cast<Size>(transparency_));
 
-			// Push to the scene. rebuild=true forces the model
-			// processor to re-walk the composites; rebuild=false is the
-			// cheap path for transparency/drawing-mode-only changes.
-			rep_->update(rebuild);
-
 			params_dirty_ = false;
+			return true;
+		}
 
-			Q_EMIT appliedStub();
+		void ModelController::invalidateDeclared_()
+		{
+			// §2a Model row — display-list REBUILD. Model is the ONE
+			// Representation-domain controller that rebuilds: swapping the
+			// model processor (e.g. Stick → Surface) changes the primitive set
+			// itself, so a soft refresh (update(false)) would re-draw stale
+			// geometry. update(true) re-walks the composites through the model
+			// processor. NEVER a blanket full-scene rebuild (the v1.7.x-13
+			// freeze) — this is scoped to the one Representation we mutated.
+			if (rep_ != nullptr) rep_->update(true);
+		}
+
+		void ModelController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7). Store the
+			// last payload so a future v2.0 UndoStack can consume it.
+			last_payload_ = payload;
 		}
 
 		void ModelController::setModelType(int t)
