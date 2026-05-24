@@ -834,3 +834,109 @@ code issue found in the uncommitted diff. Targeted verification: `git diff --che
 8. **SOUND** — no new missed caller/include-cycle issue found. The new virtual does add a
    `Composite` vtable slot, but this codebase is in an uncommitted internal ABI-breaking
    development patch series, so that is acceptable here.
+
+## HCP-2c.3 implementation finding — D-2c.6 collides with clone()'s own destroy-mirror (pre-code)
+
+Discovered while prepping HCP-2c.3. D-2c.6 says "on set/operator= of a materialised
+container, release the old child subtree rows then re-materialise the clone." But the deep
+path is `AtomContainer::set(src, deep=true)` -> `Composite::set` -> `composite.clone(*this)`
+(composite.C:359-364, 572-607), and `clone` FIRST calls `root.destroy()` which runs
+`destroyChildren_()` (composite.C:730-749):
+- **AutoDeletable** old children: `delete child` -> the child's ~Composite calls
+  `parent_->removeChild(*this)` -> `this` is NOT being_destroyed_ (it is being SET), so the
+  per-child remove-mirror FIRES -> removes that child's edge from `this`'s row, but does NOT
+  free the child's row (rows are freed only at ~System / migration) -> the old child rows are
+  ORPHANED (leak), and `this`'s row edges are partially cleared.
+- **non-AutoDeletable** old children: direct-detach (composite.C:742, bypasses removeChild)
+  -> NO mirror -> `this`'s row edge to that child STAYS (stale).
+Then `clone_` rebuilds `this`'s v0 children as fresh UNMATERIALISED clones (no rows; their
+atoms in the orphan store). Net post-`set(deep)` state: `this` keeps its row; its row edges
+are a partial/stale mix; old child rows leaked; new children unmaterialised. The naive
+"release old child rows then re-materialise" can't cleanly reach the orphaned old rows AND
+races the clone-destroy mirror (which manipulates rows mid-clone, incl. rows we'd free ->
+use-after-free risk).
+
+### Proposed safe approach (D-2c.6 revised) — suppress the mirror across the bulk replace, then ONE clean rebuild
+Add a transient "bulk-replace in progress" guard on the container being set (checked by
+mirrorRemoveChild_/mirrorAppendChild_/mirrorRederiveOwnRow_ ALONGSIDE being_destroyed_), so
+the clone's per-child destroy does NOT touch `this`'s row (edges stay INTACT = the old
+edges). Then, after the clone completes, if `this` was materialised + deep:
+1. `release_container_subtree_(this_row)` (NEW recursive store helper): walk `this`'s row's
+   still-intact OLD child edges, recursively FREE each child container row (generation bump
+   -> stale aliases per moleculeStore.C:331), and clear `this`'s edge vector. (Old child
+   v0 objects are already gone; we operate purely on the store table, so no stale-v0 access.)
+2. Re-materialise the NEW clone children: migrate the new subtree's atoms into the store
+   (the migrateAtoms part of detail::adoptSubtreeInto_) + materialiseContainer_ each direct
+   child container + rebuild `this`'s row edges (mirrorRederiveOwnRow_). NB:
+   materialiseContainer_(this) is idempotent-skipped for the bound `this`, so we must
+   re-materialise the CHILDREN + rederive `this`, NOT call it on `this`.
+This keeps `this`'s row + generation stable (handle to `this` stays valid) while old-subtree
+handles correctly go stale, and avoids the clone-destroy mirror racing the row frees.
+
+Open question for review: is a transient suppress-flag the cleanest, or is there a safer
+scoped mechanism (e.g. unbind `this`'s old children's row pointers up front, or a
+RAII guard)? Same hook applies to `operator=` and (until task #61 removes it) `persistentRead`.
+
+[Codex HCP-2c3-RA: validate the gap + the suppress-then-rebuild approach, or propose a
+simpler/safer mechanism. Confirm the release_container_subtree_ generation-bump staleness +
+the materialiseContainer_ idempotent-skip handling.]
+
+## HCP-2c3-RA design check
+
+Verdict: **AGREE-WITH-CHANGES**. The real bug is present, but the finding should be tightened:
+`clone()` calls `root.destroy()` (source/CONCEPT/composite.C:572-583), which reaches
+`Composite::clear()` (source/CONCEPT/composite.C:1683-1690), not the destructor-only
+`destroyChildren_()` path (source/CONCEPT/composite.C:730-749). That still deletes
+AutoDeletable children and can fire `parent_->removeChild(*this)` from `~Composite`
+(source/CONCEPT/composite.C:344-356), but `clear()` also finishes with
+`mirrorRederiveOwnRow_()` (source/CONCEPT/composite.C:1629-1670).
+
+- A. **WEAK** — AutoDeletable part is sound: the child destructor calls
+  `parent_->removeChild(*this)` (source/CONCEPT/composite.C:344-354), and because the set
+  target is live, `mirrorRemoveChild_()` does not hit `being_destroyed_` and removes only the
+  parent edge, not the child row (source/CONCEPT/composite.C:216-243, 1473-1560). Old
+  container rows can therefore be orphaned. The non-AutoDeletable claim needs correction:
+  direct detach bypasses `removeChild`, but in the clone/set path `Composite::clear()` then
+  calls `mirrorRederiveOwnRow_()` and clears `this` row's children (source/CONCEPT/composite.C:1641-1670);
+  the "stale edge stays" statement applies to raw `destroyChildren_()`, not to
+  `root.destroy()`/`clear()`.
+- B. **WEAK** — A transient guard checked in `mirrorRemoveChild_()`,
+  `mirrorAppendChild_()`, and `mirrorRederiveOwnRow_()` is sufficient to protect the set
+  target's row from the clone-destroy mirror (source/CONCEPT/composite.C:216-292). It is not
+  sufficient for all old subtree rows if any direct old child is non-AutoDeletable:
+  `clear()` calls `composite_ptr->clear()` on that child (source/CONCEPT/composite.C:1639-1643),
+  and the child's own `mirrorRederiveOwnRow_()` can clear its row before
+  `release_container_subtree_(this_row)` walks downward. Either scope the guard across the
+  old subtree, or snapshot/release the old row subtree before any child-row clear can erase
+  descendant edges.
+- C. **SOUND** — A store-level recursive release that walks `ChildRef` edges and frees
+  container rows is the right primitive, provided it snapshots children before release like
+  `release_source_subtree_()` does (source/KERNEL/moleculeStore.C:562-575). Freed container
+  rows bump per-slot generation, so old handles stale correctly (source/KERNEL/moleculeStore.C:331-340).
+  Do not release atom slots from this helper: AutoDeletable old atoms are freed by
+  `Atom::~Atom()` via `release_atom()` (source/KERNEL/atom.C:286-309). The helper should only
+  erase atom-parent/reverse edges for atom `ChildRef`s, not double-free atom slots. No atom-slot
+  leak is visible for deleted old atoms; non-AutoDeletable survivors are a semantic edge case,
+  not an atom-slot leak.
+- D. **SOUND** — Rebuild must not call `materialiseContainer_(this)`, because it returns
+  early for an already-bound row (source/KERNEL/system.C:257-269). The new subtree atoms must
+  be migrated first, and that migration must include direct atom children of `this`; the
+  existing adoption body iterates `container.beginAtom()` over the whole subtree
+  (source/KERNEL/system.C:304-318) before materialisation (source/KERNEL/system.C:408-420).
+  After direct atoms have valid store indices, `mirrorRederiveOwnRow_()` will append direct
+  atom children as well as direct child-container rows (source/CONCEPT/composite.C:271-290).
+- E. **WEAK** — Prefer an RAII scoped bulk-replace guard so exceptions cannot leave
+  suppression enabled. A target-only guard is the narrowest acceptable scope only if the
+  implementation explicitly documents/tests that materialised set/operator= old children are
+  all AutoDeletable, or otherwise snapshots/releases descendant rows before non-AutoDeletable
+  child `clear()` can mutate them. Unbinding old child row pointers up front is riskier unless
+  combined with suppressing mirrors, because destructors can still call into parent detach
+  paths.
+- F. **WEAK** — `operator=` routes through `AtomContainer::set()` and `Composite::set()`, so
+  the hook location covers the set/operator= entry (source/KERNEL/atomContainer.C:233-245;
+  source/CONCEPT/composite.C:359-365). `clear()`/`destroy()` must remain unguarded except for
+  the scoped set/clone window, because live explicit clear is currently mirrored to empty the
+  row (source/CONCEPT/composite.C:1629-1670). Adding a transient bool to public
+  `Composite`/`AtomContainer` state is a layout/ABI concern; if this patch series accepts ABI
+  churn it is fine, otherwise pack it beside `being_destroyed_` and verify `sizeof` or use a
+  bit/side guard.
