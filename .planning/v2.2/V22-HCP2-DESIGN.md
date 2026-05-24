@@ -721,3 +721,68 @@ Verdict: **GO** — no implementation blocker found in the uncommitted HCP-2c.1 
    issue found: `ContainerPayload` remains 8 B under the existing static assert, the field is
    not part of external JSON, KERNEL includes stay TU-local, and `mirrorResyncScalars_` already
    guards destruction/unbound rows.
+
+## HCP-2c.2 implementation finding — D-2c.5 atom-migration gap (pre-code)
+
+Discovered while prepping HCP-2c.2: D-2c.5 (+ FIX-5) say "materialise-the-new-member via
+the recursive idempotent `materialiseContainer_`". But `materialiseContainer_`
+(system.C:257) appends ATOM child edges by `atom->getStoreIndex()` — it ASSUMES the atoms
+are already in the destination store (true at adoption, because System::adoptSubtree runs
+its atom-migration passes 1-3 FIRST). The new-member cases differ:
+
+- **insertParent** (composite.C:977): the new parent's children are the existing
+  `first..last` containers, already materialised, atoms already in the store. So
+  `materialiseContainer_` ALONE is correct here (no atom migration needed).
+- **replace-with-orphan** (composite.C:1201, `insertBefore`+`removeChild`, NO AtomContainer
+  wrapper → never triggers adoption): if the orphan owns UNMATERIALISED atoms (in the
+  orphan store / unbound), `materialiseContainer_` would append the orphan's atom edges by
+  their orphan-store indices — WRONG indices in the target store — and nothing adopts the
+  orphan later, so it is a PERMANENT desync. This case needs the full **atom-migration**
+  path (System::adoptSubtree's passes 1-4), not bare `materialiseContainer_`.
+
+### Proposed refinement (FIX-5 revised) — extract the adoptSubtree BODY, not just materialiseContainer_
+Extract System::adoptSubtree's store-level body (atom snapshot/allocate/migrate + bond
+migration + src release + `materialiseContainer_`) into a shared
+`detail::adoptSubtreeInto_(AtomContainer& root, MoleculeStore* dst)` that operates purely on
+the destination STORE (it already does — adoptSubtree uses `dst`, not `System` state).
+`System::adoptSubtree` becomes a thin caller (`detail::adoptSubtreeInto_(c, store_.get())`).
+The new-member hook (a `Composite` virtual `mirrorAdoptSubtreeInto_(MoleculeStore*)`
+overridden by AtomContainer) routes through the SAME `detail::adoptSubtreeInto_`, so
+insertParent (no atoms to migrate) AND replace-with-orphan-with-atoms are both correct via
+one path. This supersedes "use materialiseContainer_" in D-2c.5.
+
+[Codex HCP-2c2-RA: confirm this refinement is correct + the right layering, or flag a
+simpler correct alternative.]
+
+## HCP-2c2-RA design check
+
+Verdict: **AGREE**. HCP-2c.2 implementation should proceed with this refinement: extract
+the full `System::adoptSubtree` store-level body and route the new-member hook through that
+same path, not through bare `materialiseContainer_`.
+
+- A. **SOUND** — the gap is real. `materialiseContainer_` appends atom children by the
+  atom's current `getStoreIndex()`, which is only correct after `System::adoptSubtree`
+  passes 1-3 have migrated atoms into `dst`. `Composite::replace` is only
+  `insertBefore(composite)` + `removeChild(*this)` + parent rederive; it bypasses the
+  `AtomContainer` insert wrappers, so an orphan replacement owning atoms is not adopted
+  later and would remain permanently desynchronised.
+- B. **SOUND** — `System::adoptSubtree`'s body uses `store_.get()` only to obtain `dst`;
+  the migration, bond copy/removal, orphan release, and final materialisation operate on
+  `AtomContainer& root`, atom source stores, and the destination `MoleculeStore*`. No other
+  `System` state blocks extraction into `detail::adoptSubtreeInto_(root, dst)`.
+- C. **SOUND** — the layering is acceptable. `Composite` already names `MoleculeStore*` in
+  the container-row/store hooks, so adding a virtual `mirrorAdoptSubtreeInto_(MoleculeStore*)`
+  keeps CONCEPT dependent only on the store pointer type. `AtomContainer` can override and
+  call the shared KERNEL/detail adoption helper without creating a CONCEPT-to-AtomContainer
+  dependency or a new include cycle.
+- D. **SOUND** — wiring both `insertParent` and `replace` through one hook is the right
+  HCP-2c.2 scope. `insertParent` becomes the no-migration case through the same idempotent
+  path; `replace-with-orphan` needs atom migration now. A guard-and-defer alternative is
+  incorrect here because `replace` has no later adoption trigger; deferring would preserve
+  the current permanent-desync failure.
+- E. **SOUND** — no new reentrancy, double-materialise, generation, or destruction hazard
+  is visible, provided the hook is called during the live mutation path before the affected
+  parent row is rederived. `adoptSubtreeInto_` does not mutate v0 topology, atom migration
+  runs before container materialisation, and `materialiseContainer_` is already idempotent
+  for rows bound to `dst`; existing `being_destroyed_` guards remain on the row-mirror
+  callers.
