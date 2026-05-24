@@ -114,19 +114,25 @@ v1.7 Inspector and lands the UX polish deferred during the v1.7.0 RC cycle:
   — a working transparency slider on the Material section, on the GL-honored
   `Representation::setTransparency()` path.
 - **Startup warning when no renderer is available** (Phase 999.54, closes #501).
-- **Legacy dialog cleanup** (Phase 999.53) + **PDF tutorial refresh** (Phase
-  999.56).
+- **Inspector ↔ rendering-pipeline cut-over (the structural work):** the legacy
+  Display/Material/Light/Stage/Coloring/Model settings dialogs no longer sit on
+  the production render path. Model/Coloring processor factories moved to a
+  headless MODELS layer (999.57); `scene.C` no longer constructs the
+  Material/Light/Stage dialogs (999.58); and representation creation
+  (molecule-load default rep + project restore) moved off `DisplayProperties`
+  onto a headless `RepresentationBuilder` (999.65). The Inspector now drives the
+  scene end-to-end; the legacy dialogs remain present but dormant.
 
-A small **build-acceleration pre-phase** (Phase 999.50) opened the cycle: it
-eliminated the `poseClustering.C` boost template-metaprogramming cost that
-dominated the Windows build (~58 min → ~14 min) and added `release.yml` ccache
-reuse. That's a self-contained internal win, not the headline of v1.7.2. Full
-detail: `.planning/v1.7.2-BUILD-ACCEL-PLAN.md` (build pre-phase) +
-`.planning/v1.7.x-PATCH-QUEUE.md` (Inspector/UX items).
+A **build-acceleration pre-phase** (Phase 999.50) opened the cycle: it eliminated
+the `poseClustering.C` boost template-metaprogramming cost that dominated the
+Windows build (**~58 min → ~14 min**) and added `release.yml` ccache reuse.
 
-> **v1.7.2 does not tag until the Inspector/UX phases above land and pass UAT.**
-> The build pre-phase is already tri-OS-green but ships *as part of* v1.7.2, not
-> as a separate lean tag.
+**Deferred to v1.7.3** (work-in-progress on the `v1.7.3-legacy-deletion` branch):
+the actual **deletion of the 9 legacy dialog files + the Tools → Legacy Settings
+menu** (Phase 999.53) — the render pipeline is now detached from them, but their
+removal is a self-contained cleanup that ships as its own validated unit. The
+**PDF tutorial refresh** (Phase 999.56) also defers. Full detail:
+`.planning/v1.7.2-BUILD-ACCEL-PLAN.md` + `.planning/v1.7.x-PATCH-QUEUE.md`.
 
 ### Breaking changes
 

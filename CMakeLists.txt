@@ -20,7 +20,7 @@ IF(POLICY CMP0167)
 ENDIF()
 
 
-PROJECT("BALL" VERSION 1.7.1) # 1.7.1 — BALLView Refresh patch cycle
+PROJECT("BALL" VERSION 1.7.2) # 1.7.2 — Inspector cut-over + build accel (legacy-dialog deletion deferred to v1.7.3)
 
 
 ########################################################
