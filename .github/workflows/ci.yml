@@ -594,6 +594,51 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
+      # ----------------------------------------------------------------------
+      # Phase 999.60 (v1.7.x-25) — contract-tests gate (BLOCKING, Linux-only).
+      #
+      # The cross-surface contract-test harness + compile-fail infra
+      # (.planning/v1.7.4-ARCHITECTURE-CONTRACT.md §11; test/contract/).
+      # Runs as an ISOLATED, named, blocking gate via `ctest -L contract` so
+      # a future dual-path bypass fails CI on its own line — distinct from the
+      # general test-suite gate above. Reuses this job's ccache / Qt / preset
+      # lineage (the plan's "same ccache lineage as the existing test job").
+      #
+      # Linux-only at v1.7.4 (matches tabOrder_test discipline — headless
+      # BALLView is brittle on macOS; macOS/Windows coverage is v1.7.5).
+      #
+      # HARNESS-FIRST: the per-controller parity / bool-apply / re-entrancy
+      # fixtures ship DISABLED and report STATUS-skips today; they flip green
+      # as 999.59 cuts each controller over. The harness MUST compile + run.
+      # ----------------------------------------------------------------------
+      - name: Build contract tests (Linux — 999.60 gate, blocking)
+        if: startsWith(matrix.os, 'linux-')
+        continue-on-error: false
+        timeout-minutes: 30
+        run: |
+          cmake --build build/ci-linux --target contract_tests -j$(nproc)
+
+      - name: Run contract tests (Linux — 999.60 gate, blocking)
+        if: startsWith(matrix.os, 'linux-')
+        continue-on-error: false
+        timeout-minutes: 15
+        run: |
+          cd build/ci-linux
+          # BALL_DATA_PATH lets the selection-consumer fixture load 1BNA.pdb;
+          # fixtures that need the sample skip cleanly if it is absent.
+          export BALL_DATA_PATH="${{ github.workspace }}/data"
+          ctest -L contract --output-on-failure --timeout 120 \
+                --output-junit ${{ github.workspace }}/contract-tests-linux.xml
+
+      - name: Upload contract-test results (Linux)
+        if: always() && startsWith(matrix.os, 'linux-')
+        uses: actions/upload-artifact@v6
+        with:
+          name: contract-tests-linux-${{ github.run_id }}
+          path: contract-tests-linux.xml
+          if-no-files-found: warn
+          retention-days: 30
+
       # ======================================================================
       # Windows — real vcpkg + choco provisioning (Phase 4 / Plan 04-04).
       #
