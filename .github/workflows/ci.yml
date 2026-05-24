@@ -1272,3 +1272,25 @@ jobs:
           check_name: "BALL test suite (Phase 9 gatekeeper)"
           fail_on: "nothing"
           report_individual_runs: true
+
+  # --------------------------------------------------------------------------
+  # lifetime-discipline — phase 999.61 (v1.7.x-26) Qt-lifetime lint.
+  #
+  # Enforces rule 5 of .planning/codebase/QT-LIFETIME.md: no deleteLater()
+  # inside a destructor body (the dtor-order foot-gun behind UFG-30/32). This
+  # is a blocking, pure-bash grep-class check — no compiler, no matrix, fast
+  # (~seconds). It runs independent of the build matrix so a lifetime
+  # regression fails fast even if the slow 3-OS build is still in flight.
+  #
+  # Lightweight by design; the full clang-tidy custom check
+  # (ball-no-raw-deletelater) is deferred to v1.7.5.
+  # --------------------------------------------------------------------------
+  lifetime-discipline:
+    name: lifetime-discipline (Qt dtor deleteLater lint)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Reject deleteLater() inside destructors (QT-LIFETIME.md rule 5)
+        run: bash cmake/scripts/check-deletelater-discipline.sh
