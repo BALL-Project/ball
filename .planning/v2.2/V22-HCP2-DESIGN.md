@@ -631,13 +631,15 @@ Addressing HCP-2c-R1 (AGREE-WITH-FIXES). The four required fixes + the two WEAKs
   store routes through the FIX-2 cross-store release/rebind.
 
 ### Revised step-by-step (supersedes the earlier list)
-> STATUS: **2c.1 DONE** (73212d856, GO) · **2c.2 DONE** (eb23fe4d1, Codex
-> HCP-2c2-CR GO -- shared detail::adoptSubtreeInto_ + mirrorAdoptSubtreeInto_
-> virtual + insertParent/replace materialise-the-new-member). **2c.3 NEXT.**
+> STATUS: **2c.1 DONE** (73212d856) · **2c.2 DONE** (eb23fe4d1) · **2c.3 DONE**
+> (c5da70304, Codex HCP-2c3-CRb GO -- mirror-suppress guard + release_container_
+> subtree_ + set/operator= rematerialise + ABA-fix descendant unbind). **2c.4
+> NEXT (final HCP-2c step).**
 > Carry-overs to 2c.4: (a) `migrate_one_` molecule_role + residue_kind parity
 > assertion [2c1-CR item7]; (b) replace-with-already-rooted + insertParent-with-
 > unmaterialised-grandparent direct asserts [2c2-CR item7]; (c) cross-store-LIVE
-> source-row release [FIX-2]; (d) lift the H2d replace-with-orphan exclusion.
+> source-row release [FIX-2/D-2c.7]; (d) lift the H2d replace-with-orphan + set/
+> operator= sweep exclusions; (e) HCP-2 close-review (Codex).
 - **HCP-2c.1** — D-2c.1/.2/.3(revised): `molecule_role` payload + `migrate_one_` copy
   (FIX-3) + materialisation derivation + `mirrorRefineRole_` from the AtomContainer property
   API + post-JSON-restore resync (FIX-1) + `container_molecule_role_` reads payload.
