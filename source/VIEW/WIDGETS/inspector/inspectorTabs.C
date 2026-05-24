@@ -8,6 +8,7 @@
 
 
 #include <QtCore/QObject>
+#include <QtCore/QVariant>   // Phase 999.62 — setProperty("opaqueContainer", …)
 
 namespace BALL
 {
