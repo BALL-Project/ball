@@ -14,6 +14,8 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -47,7 +49,7 @@ RESULT
 // Stage declares heavy invalidation (rep-delete + renderer switch, §2a);
 // the snapshot must remain bit-equal across surfaces regardless.
 CHECK(DISABLED_stage_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_STAGE
 	STATUS("DISABLED: awaits 999.59 StageController cut-over to bool apply() + "
 	       "§8 command-body migration. Flip green by defining "
 	       "BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL.")

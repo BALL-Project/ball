@@ -16,6 +16,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/controllers/modelController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -49,7 +51,7 @@ RESULT
 // Model declares update(true) (display-list rebuild, §2a) — the parity
 // snapshot must remain bit-equal across surfaces despite the rebuild.
 CHECK(DISABLED_model_type_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_MODEL
 	STATUS("DISABLED: awaits 999.59 ModelController cut-over to bool apply(). "
 	       "Flip green by defining BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL + "
 	       "wiring the toolbar/menu/python surfaces.")

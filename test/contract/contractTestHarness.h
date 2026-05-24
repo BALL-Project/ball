@@ -206,21 +206,32 @@ namespace BALL
 // Fixture enable/disable switch (harness-first sequencing).
 //
 // CONTRACT_FIXTURE_DISABLED expands to 1 while the 999.59 `bool apply()`
-// command contract has NOT landed, so the per-controller parity fixtures
-// and the bool-apply re-entrancy assertions ship as documented skips
-// (they compile, register, and run, but report STATUS-skip instead of
-// failing). Each 999.59-NN cut-over flips its controller's fixture green
-// by removing the guard / changing this to 0 once `bool apply()` exists.
+// command contract has NOT landed for the fixture's controller, so a
+// parity / bool-apply / re-entrancy assertion ships as a documented skip
+// (it compiles, registers, and runs, but reports STATUS-skip instead of
+// failing).
 //
-// Detection: 999.59-01 introduces a feature macro the controllers define
-// once apply() returns bool. Until that macro exists, fixtures are
-// disabled. The macro name is fixed here so 999.59-01 only has to define
-// it.
+// PER-CONTROLLER ACTIVATION (999.59-02, Codex MEDIUM #7 — incremental green).
+// The original 999.59-01 design flipped THIS single global macro to 0 the
+// moment the base Controller header defined
+// BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL — which activated the parity block
+// of ALL 9 fixtures at once. But 999.59 cuts controllers over INCREMENTALLY:
+// a fixture whose controller still returns `void` cannot compile
+// `bool mutated = c.apply();`, so a single global flip breaks the whole
+// contract_tests target. The activation is therefore now PER-CONTROLLER:
+// each parity fixture gates on CONTRACT_FIXTURE_DISABLED_<DOMAIN> from
+// contractFixtureActivation.h, which is 0 only when that specific
+// controller defines its BALL_VIEW_<DOMAIN>_APPLY_BOOL symbol (i.e. is cut
+// over). See contractFixtureActivation.h.
+//
+// This global CONTRACT_FIXTURE_DISABLED is retained for the NON-controller
+// fixtures (selection_consumer_test §7, and the StageController bool-drop
+// block in reentrancy_test) whose gating is NOT a per-domain controller
+// cut-over. It must stay 1 (disabled) until the matching wiring lands — it
+// deliberately does NOT track the base feature macro, so defining the base
+// no longer auto-activates blocks whose dependency is more than "apply()
+// returns bool" (e.g. Stage cut-over in 999.59-03, full selection plumbing).
 // ---------------------------------------------------------------------------
-#if defined(BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL)
-#	define CONTRACT_FIXTURE_DISABLED 0
-#else
-#	define CONTRACT_FIXTURE_DISABLED 1
-#endif
+#define CONTRACT_FIXTURE_DISABLED 1
 
 #endif // BALL_TEST_CONTRACT_CONTRACTTESTHARNESS_H

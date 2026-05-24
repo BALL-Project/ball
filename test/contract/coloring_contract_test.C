@@ -26,6 +26,8 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/controllers/coloringController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -62,7 +64,7 @@ RESULT
 // mutated==true on each.
 // ---------------------------------------------------------------------------
 CHECK(DISABLED_coloring_method_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_COLORING
 	STATUS("DISABLED: awaits 999.59 ColoringController cut-over to bool apply() "
 	       "+ §8 command-body migration. Flip green by defining "
 	       "BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL and wiring the toolbar/menu/"

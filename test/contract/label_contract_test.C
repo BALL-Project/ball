@@ -18,6 +18,8 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/controllers/labelController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -46,7 +48,7 @@ RESULT
 
 // DISABLED until 999.51/999.59 give LabelController a real bool apply().
 CHECK(DISABLED_label_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_LABEL
 	STATUS("DISABLED: LabelController is still a Log.info stub (§1). Flip green "
 	       "once 999.51/999.59 give it a real bool apply() + the Scene-backed "
 	       "surfaces.")

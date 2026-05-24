@@ -14,6 +14,8 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/controllers/stereoController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -44,7 +46,7 @@ RESULT
 
 // DISABLED until 999.59 cuts StereoController over — cross-surface parity.
 CHECK(DISABLED_stereo_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_STEREO
 	STATUS("DISABLED: awaits 999.59 StereoController cut-over to bool apply(). "
 	       "Flip green by defining BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL.")
 	break;

@@ -14,6 +14,8 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/controllers/lightController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -40,7 +42,7 @@ RESULT
 
 // DISABLED until 999.59 cuts LightController over — cross-surface parity.
 CHECK(DISABLED_light_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_LIGHT
 	STATUS("DISABLED: awaits 999.59 LightController cut-over to bool apply(). "
 	       "Flip green by defining BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL.")
 	break;

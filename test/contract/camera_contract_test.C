@@ -14,6 +14,8 @@
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 #include <QtGui/QVector3D>
 
@@ -45,7 +47,7 @@ RESULT
 
 // DISABLED until 999.59 cuts CameraController over — cross-surface parity.
 CHECK(DISABLED_camera_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_CAMERA
 	STATUS("DISABLED: awaits 999.59 CameraController cut-over to bool apply(). "
 	       "Flip green by defining BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL.")
 	break;

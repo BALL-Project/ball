@@ -71,13 +71,18 @@ CHECK(re-entrant apply during own emission is dropped by the guard)
 	TEST_REAL_EQUAL(stage.getFogIntensity(), 0.99f)
 RESULT
 
-// DISABLED until 999.59-01 makes apply() return bool — the re-entry must
-// report false (dropped), the outer apply() must report true (mutated).
+// DISABLED until 999.59-03 cuts StageController over to bool apply() — the
+// re-entry must report false (dropped), the outer apply() must report true
+// (mutated). This block exercises StageController, which is NOT cut over in
+// 999.59-02 (that plan harmonises Model/Coloring/Material only), so it stays
+// on the global CONTRACT_FIXTURE_DISABLED (pinned to 1) rather than a
+// per-domain switch. 999.59-03's Stage cut-over flips it green.
 CHECK(DISABLED_second_apply_returns_false_on_reentry)
 #if CONTRACT_FIXTURE_DISABLED
-	STATUS("DISABLED: apply() returns void today; the bool drop-signal lands in "
-	       "999.59-01. Flip green by defining BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL "
-	       "and asserting: outer apply()==true, re-entrant apply()==false.")
+	STATUS("DISABLED: StageController::apply() returns void until 999.59-03 cuts "
+	       "it over (999.59-02 harmonises Model/Coloring/Material only). Flip green "
+	       "when StageController returns bool and assert: outer apply()==true, "
+	       "re-entrant apply()==false.")
 	break;
 #else
 	Stage stage;

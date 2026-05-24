@@ -21,6 +21,8 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -47,7 +49,7 @@ RESULT
 
 // DISABLED until 999.59 cuts MaterialController over — cross-surface parity.
 CHECK(DISABLED_material_transparency_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_MATERIAL
 	STATUS("DISABLED: awaits 999.59 MaterialController cut-over to bool apply() "
 	       "+ Scene-backed surface wiring. Flip green by defining "
 	       "BALL_VIEW_CONTROLLER_APPLY_RETURNS_BOOL.")

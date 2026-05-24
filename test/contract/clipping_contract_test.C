@@ -19,6 +19,8 @@
 
 #include <BALL/VIEW/KERNEL/controllers/clippingController.h>
 
+#include "contractFixtureActivation.h"
+
 #include <QtWidgets/QApplication>
 
 using namespace BALL;
@@ -47,7 +49,7 @@ RESULT
 // DISABLED until 999.51/999.59 give ClippingController a real apply() body
 // + the §2 re-entrancy guard (it currently omits the guard, Codex HIGH #6).
 CHECK(DISABLED_clipping_parity_across_surfaces)
-#if CONTRACT_FIXTURE_DISABLED
+#if CONTRACT_FIXTURE_DISABLED_CLIPPING
 	STATUS("DISABLED: ClippingController is still a Log.info stub (omits the "
 	       "§2 guard, Codex HIGH #6). Flip green once 999.51/999.59 give it a "
 	       "real bool apply() body + the Scene-backed surfaces.")
