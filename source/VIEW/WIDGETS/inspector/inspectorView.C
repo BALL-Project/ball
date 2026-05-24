@@ -108,6 +108,8 @@ namespace BALL
 			// container level so every paint pass clears the entire
 			// Inspector area before children re-paint on top.
 			setAutoFillBackground(true);
+			// Phase 999.62 — uniform opaque-paint contract marker.
+			setProperty("opaqueContainer", true);
 
 			QVBoxLayout* root = new QVBoxLayout(this);
 			root->setContentsMargins(0, 0, 0, 0);

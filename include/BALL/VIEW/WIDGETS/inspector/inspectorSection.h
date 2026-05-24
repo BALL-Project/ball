@@ -35,6 +35,7 @@
 
 class QVBoxLayout;
 class QPropertyAnimation;
+class QPaintEvent;
 
 namespace BALL
 {
@@ -53,6 +54,24 @@ namespace BALL
 		 * and writes the [Inspector] group on construction / change.
 		 *
 		 * QSS objectName: `inspectorSection` (root).
+		 *
+		 * Opaque-paint contract (Phase 999.62, ARCHITECTURE-CONTRACT §10).
+		 * InspectorSection drives a QPropertyAnimation on its content
+		 * widget's `maximumHeight` (the 160ms collapse/expand). Any
+		 * container that hosts such an animated child MUST paint an
+		 * opaque background, otherwise sibling sections sliding through
+		 * its region leave transient text/glyph ghosts (the UFG-05 /
+		 * UFG-09 / UFG-10 family of defects). Rather than fix this
+		 * per-subclass, the contract is satisfied ONCE here in the base:
+		 *   - Qt::WA_OpaquePaintEvent is set,
+		 *   - setAutoFillBackground(true) is set,
+		 *   - the dynamic property `opaqueContainer == true` is set (the
+		 *     single machine-detectable marker the opaque-paint lint and
+		 *     the centralized theme token key off), and
+		 *   - paintEvent() fills the whole rect with the Window colour.
+		 * Every InspectorSection subclass (StageSection, ModelSection,
+		 * …) inherits this automatically — no subclass opaque setup is
+		 * required.
 		 */
 		class BALL_VIEW_EXPORT InspectorSection : public QWidget
 		{
@@ -122,6 +141,15 @@ namespace BALL
 				 * the section content widget. Takes ownership.
 				 */
 				void setContent(QWidget* content);
+
+				/**
+				 * Opaque-paint contract (Phase 999.62). With WA_OpaquePaintEvent
+				 * set in the ctor, Qt expects us to cover the whole widget rect
+				 * ourselves. Fill it with the Window palette colour so a sibling
+				 * section sliding through this section's region during the
+				 * collapse/expand animation can never leave stale pixels.
+				 */
+				void paintEvent(QPaintEvent* event) override;
 
 			private Q_SLOTS:
 				void onHeaderToggled_(bool expanded);
