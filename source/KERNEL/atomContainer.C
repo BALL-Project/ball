@@ -39,10 +39,12 @@ namespace BALL
 			if (const Protein* p = dynamic_cast<const Protein*>(&c))
 			{
 				store.container_set_id_(row, p->getID());
+				store.container_set_molecule_role_(row, MoleculeRole::PROTEIN);
 			}
 			else if (const NucleicAcid* na = dynamic_cast<const NucleicAcid*>(&c))
 			{
 				store.container_set_id_(row, na->getID());
+				store.container_set_molecule_role_(row, MoleculeRole::NUCLEIC_ACID);
 			}
 			else if (const Residue* r = dynamic_cast<const Residue*>(&c))
 			{
@@ -64,6 +66,17 @@ namespace BALL
 			{
 				store.container_set_ss_type_(row, static_cast<std::uint8_t>(ss->getType()));
 			}
+			else if (const Molecule* m = dynamic_cast<const Molecule*>(&c))
+			{
+				// HCP-2c.1 (D-2c.1/.2): a plain Molecule (NOT Protein/NucleicAcid,
+				// caught above) is SOLVENT iff the v0 Molecule::IS_SOLVENT bit is
+				// set, else SMALL_MOLECULE. v0 carries NO molecule-level WATER/
+				// LIGAND/ION distinction, so the role set is exactly {PROTEIN,
+				// NUCLEIC_ACID, SOLVENT, SMALL_MOLECULE} (D-2c.2 honest taxonomy).
+				store.container_set_molecule_role_(row,
+					m->hasProperty(Molecule::IS_SOLVENT) ? MoleculeRole::SOLVENT
+					                                     : MoleculeRole::SMALL_MOLECULE);
+			}
 		}
 	} // namespace detail
 
@@ -74,6 +87,28 @@ namespace BALL
 		if (isBeingDestroyed_()) return;
 		if (container_row_store_ == 0 || container_row_idx_ == 0) return;
 		detail::writeContainerScalars_(*this, *container_row_store_, container_row_idx_);
+	}
+
+	// v2.2 HCP-2c.1 (D-2c.3): refine the mirrored container role after a v0
+	// identity-bit flip. writeContainerScalars_ (via mirrorResyncScalars_)
+	// re-derives molecule_role / residue_kind from the live v0 object, so a
+	// container whose IS_SOLVENT (or residue identity) bit changes after
+	// materialisation keeps its stored role in sync. Forward-only; no-op when
+	// unbound (the common pre-adoption parse path) or being destroyed.
+	void AtomContainer::setProperty(BALL::Property property)
+	{
+		PropertyManager::setProperty(property);
+		mirrorResyncScalars_();
+	}
+	void AtomContainer::clearProperty(BALL::Property property)
+	{
+		PropertyManager::clearProperty(property);
+		mirrorResyncScalars_();
+	}
+	void AtomContainer::toggleProperty(BALL::Property property)
+	{
+		PropertyManager::toggleProperty(property);
+		mirrorResyncScalars_();
 	}
 	// v2.2 H2a (R36b fix): the container-table mutation mirror for INSERTS
 	// lives here in the AtomContainer insert methods (NOT in adopt()/

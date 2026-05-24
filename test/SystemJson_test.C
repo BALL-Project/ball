@@ -688,4 +688,33 @@ CHECK(K0.6.5 atom_index out-of-range rejected)
 	TEST_EQUAL(threw, true)
 RESULT
 
+CHECK(HCP-2c.1 -- IS_SOLVENT molecule role round-trips through JSON (post-restore resync))
+	// json_to_properties restores the unnamed IS_SOLVENT bit via a
+	// PropertyManager& (bypassing AtomContainer::setProperty), AFTER sys.insert
+	// materialised the molecule -- so the stored molecule_role would be stale
+	// SMALL_MOLECULE without the explicit post-restore resync (D-2c.3 FIX-1c).
+	System src;
+	Molecule* solv = new Molecule; solv->setName("HOH");
+	solv->setProperty(Molecule::IS_SOLVENT);
+	Atom* ao = new Atom; ao->setName("O"); solv->insert(*ao);
+	Molecule* lig = new Molecule; lig->setName("LIG");
+	Atom* ac = new Atom; ac->setName("C"); lig->insert(*ac);
+	src.insert(*solv); src.insert(*lig);
+
+	std::ostringstream os; saveSystemJSON(src, os);
+	System dst; std::istringstream is(os.str()); loadSystemJSON(dst, is);
+
+	TEST_EQUAL(dst.countMolecules(), 2u)
+	Molecule* m0 = dst.getMolecule(0);   // solvent
+	Molecule* m1 = dst.getMolecule(1);   // ligand
+	TEST_NOT_EQUAL(m0, (Molecule*)nullptr)
+	TEST_NOT_EQUAL(m1, (Molecule*)nullptr)
+	TEST_EQUAL(m0->hasProperty(Molecule::IS_SOLVENT), true)   // v0 bit restored
+	MoleculeStore* store = m0->getContainerRowStore_();
+	TEST_NOT_EQUAL(store, (MoleculeStore*)nullptr)
+	// The stored container role reflects the restored IS_SOLVENT bit.
+	TEST_EQUAL(store->container_molecule_role_(m0->getContainerRow_()) == MoleculeRole::SOLVENT, true)
+	TEST_EQUAL(store->container_molecule_role_(m1->getContainerRow_()) == MoleculeRole::SMALL_MOLECULE, true)
+RESULT
+
 END_TEST

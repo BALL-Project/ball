@@ -681,3 +681,40 @@ helpers before replace/set, then cross-store release before lifting H2d restrict
 F. **SOUND.** No new design blocker introduced by the fixes themselves; implementation
 should preserve the full `PropertyManager::setProperty/clearProperty` overload surface when
 adding AtomContainer property wrappers.
+
+## HCP-2c1-CR code review
+
+Verdict: **GO** — no implementation blocker found in the uncommitted HCP-2c.1 diff.
+
+1. **SOUND.** `BALL::Property` is the right parameter type for the bit-property hook:
+   it matches `PropertyManager::setProperty(Property)` (`BALL_SIZE_TYPE`) instead of
+   accidentally binding to `AtomContainer::Property`; the `using` declarations keep the
+   named/string overloads visible, and `Molecule::IS_SOLVENT` / residue enum callers still
+   resolve to the bit overload without ambiguity. Caveat: these base methods are non-virtual,
+   so this is static overload replacement for typed `AtomContainer`/derived calls, not
+   polymorphic dispatch through `PropertyManager&`.
+2. **SOUND.** FIX-1 coverage is complete for HCP-2c.1: materialisation derives the initial
+   role, typed `AtomContainer::{set,clear,toggle}Property` calls resync after bit flips, and
+   `loadSystemJSON` explicitly resyncs after `json_to_properties`; production grep found no
+   bound identity-bit mutation through `getBitVector()` / `operator BitVector&`, so raw bit
+   pokes remain acceptably out of contract.
+3. **SOUND.** The resync cost is limited to already-bound containers; parse/build paths that
+   stamp identity bits before `System::insert` hit the unbound no-op, atom-level hot loops are
+   unaffected, and the few bound molecule/residue identity flips found are not tight loops.
+4. **SOUND.** `container_molecule_role_` correctly prefers the stored payload and falls back
+   only for legacy/hand-built PROTEIN and NUCLEIC_ACID rows; materialised plain `Molecule`
+   rows now get SMALL_MOLECULE/SOLVENT, so real rows should not read UNKNOWN unless they were
+   directly allocated and never scalar-synced.
+5. **SOUND.** `migrate_one_` now copies both `molecule_role` and `residue_kind`; copying
+   `residue_kind` fixes an existing field-wise migration drop and does not conflict with later
+   derivation because migration is preserving source row state, not re-materialising from v0.
+6. **SOUND.** The taxonomy is honest for v0: PROTEIN/NUCLEIC_ACID come from concrete types,
+   SOLVENT comes only from `Molecule::IS_SOLVENT`, and the remaining plain `Molecule` case is
+   SMALL_MOLECULE; no WATER/LIGAND/ION role is synthesized without v0 evidence.
+7. **WEAK.** The new tests pin materialisation derivation, set/clear/toggle refinement,
+   `MoleculeHandle` surfacing, and JSON post-restore resync; they do not directly pin
+   `migrate_one_` role/residue-kind parity, so FIX-3 is code-reviewed rather than test-locked.
+8. **SOUND.** No new ABI/layout, serialization, include-cycle, overload, or destruction-time
+   issue found: `ContainerPayload` remains 8 B under the existing static assert, the field is
+   not part of external JSON, KERNEL includes stay TU-local, and `mirrorResyncScalars_` already
+   guards destruction/unbound rows.

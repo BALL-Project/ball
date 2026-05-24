@@ -511,6 +511,13 @@ namespace BALL
 		// existence, so they are NOT stored (see MoleculeStore role
 		// accessors). Keeps the payload at 8 B (no regression).
 		ResidueKind   residue_kind   = ResidueKind::UNKNOWN;
+		// v2.2 HCP-2c.1 (D-2c.1): MoleculeRole for a molecule-level row.
+		// Derived at materialisation from the v0 type + Molecule::IS_SOLVENT
+		// (PROTEIN/NUCLEIC_ACID/SOLVENT/SMALL_MOLECULE) and refined when an
+		// identity bit flips (mirrorRefineRole_). Stored because the v0
+		// IS_SOLVENT bit is NOT encoded by ContainerKind. Fills the former
+		// pad byte -- payload stays 8 B (static_assert below still holds).
+		MoleculeRole  molecule_role  = MoleculeRole::UNKNOWN;
 	};
 
 	// D58: one container metadata row. parent == NONE means a detached

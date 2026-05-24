@@ -39,6 +39,7 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/nucleotide.h>
 #include <BALL/KERNEL/secondaryStructure.h>
+#include <BALL/KERNEL/containerHandle.h>   // HCP-2c.1: MoleculeHandle role read
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/selectable.h>   // H2d: production select()/deselect()
 #include <BALL/KERNEL/PDBAtom.h>       // H2d: PDBAtom pool nodes
@@ -982,6 +983,43 @@ CHECK(HCP-1a -- nucleotide + secondary-structure roles)
 	TEST_NOT_EQUAL(store2, 0)
 	TEST_EQUAL(store2->container_fragment_role_(ss.getContainerRow_()) == FragmentRole::SECONDARY_STRUCTURE, true)
 	TEST_EQUAL(store2->container_ss_kind_(ss.getContainerRow_()) == SSKind::HELIX, true)
+RESULT
+
+CHECK(HCP-2c.1 -- molecule_role derived at materialisation + refined on identity flip)
+	System sys;
+	Protein     prot; prot.setName("P");
+	NucleicAcid na;   na.setName("D");
+	Molecule    small; small.setName("LIG");
+	Molecule    solv;  solv.setName("HOH"); solv.setProperty(Molecule::IS_SOLVENT);
+	// One atom each so the molecules are non-trivial subtrees.
+	Atom ap; ap.setName("Xp"); prot.insert(ap);
+	Atom an; an.setName("Xn"); na.insert(an);
+	Atom as_; as_.setName("Xs"); small.insert(as_);
+	Atom aw; aw.setName("Xw"); solv.insert(aw);
+	sys.insert(prot); sys.insert(na); sys.insert(small); sys.insert(solv);
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	TEST_NOT_EQUAL(store, 0)
+
+	// D-2c.1/.2: roles derived at materialisation. Protein/NucleicAcid from the
+	// v0 type; a plain Molecule is SMALL_MOLECULE; IS_SOLVENT -> SOLVENT.
+	TEST_EQUAL(store->container_molecule_role_(prot.getContainerRow_())  == MoleculeRole::PROTEIN, true)
+	TEST_EQUAL(store->container_molecule_role_(na.getContainerRow_())    == MoleculeRole::NUCLEIC_ACID, true)
+	TEST_EQUAL(store->container_molecule_role_(small.getContainerRow_()) == MoleculeRole::SMALL_MOLECULE, true)
+	TEST_EQUAL(store->container_molecule_role_(solv.getContainerRow_())  == MoleculeRole::SOLVENT, true)
+
+	// D-2c.3: flipping the IS_SOLVENT identity bit AFTER materialisation, via the
+	// AtomContainer property API, refines the stored role.
+	small.setProperty(Molecule::IS_SOLVENT);
+	TEST_EQUAL(store->container_molecule_role_(small.getContainerRow_()) == MoleculeRole::SOLVENT, true)
+	small.clearProperty(Molecule::IS_SOLVENT);
+	TEST_EQUAL(store->container_molecule_role_(small.getContainerRow_()) == MoleculeRole::SMALL_MOLECULE, true)
+	small.toggleProperty(Molecule::IS_SOLVENT);
+	TEST_EQUAL(store->container_molecule_role_(small.getContainerRow_()) == MoleculeRole::SOLVENT, true)
+
+	// The role surfaces through the role-aware MoleculeHandle too.
+	MoleculeHandle solv_h(*store, solv.getContainerRow_());
+	TEST_EQUAL(solv_h.getMoleculeRole() == MoleculeRole::SOLVENT, true)
 RESULT
 
 CHECK(HCP-1b.2 -- post-root scalar setters mirror to the row)

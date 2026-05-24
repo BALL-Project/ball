@@ -424,7 +424,15 @@ void loadSystemJSON(System& sys, std::istream& is)
 
 			// K0.6.5b: per-molecule PropertyManager bag.
 			if (mol_obj.contains("properties"))
+			{
 				detail::json_to_properties(*m, &mol_obj["properties"]);
+				// v2.2 HCP-2c.1 (D-2c.3 FIX-1): json_to_properties writes bits via
+				// a PropertyManager& (bypassing AtomContainer::setProperty), so an
+				// IS_SOLVENT bit restored AFTER the molecule was materialised at
+				// sys.insert(*m) would not refine the stored molecule_role. Resync
+				// the role explicitly here (no-op if the molecule has no row).
+				m->mirrorResyncScalars_();
+			}
 
 			for (const auto& idx_json : mol_obj["atom_indices"])
 			{

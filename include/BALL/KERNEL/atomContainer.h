@@ -159,6 +159,25 @@ namespace BALL
 		*/
 		const String& getName() const;
 
+		// v2.2 HCP-2c.1 (D-2c.3): the v0 IDENTITY bits (Molecule::IS_SOLVENT,
+		// Residue::PROPERTY__AMINO_ACID/__WATER/__NON_STANDARD) feed the stored
+		// container role columns (molecule_role / residue_kind). Override the BIT
+		// property mutators to refine the mirrored role after the base op
+		// (forward-only; a no-op when unbound or being destroyed). The named /
+		// string property overloads carry no identity bit, so they are inherited
+		// unchanged via the using-declarations -- preserving the full
+		// PropertyManager overload surface (Codex HCP-2c-R1 caveat).
+		// NB: the parameter type MUST be the global BALL::Property (= BALL_SIZE_TYPE)
+		// to match PropertyManager::setProperty -- an unqualified `Property` here
+		// would bind to AtomContainer::Property (the local enum above) and define a
+		// DIFFERENT, non-overriding overload that the bit-write calls never reach.
+		using PropertyManager::setProperty;
+		using PropertyManager::clearProperty;
+		using PropertyManager::toggleProperty;
+		void setProperty(BALL::Property property);
+		void clearProperty(BALL::Property property);
+		void toggleProperty(BALL::Property property);
+
 		/** Get a mutable pointer to the parent AtomContainer.
 				The pointer is 0 if this instance does not have a parent AtomContainer.
 				@return  AtomContainer* - mutable pointer to the parent AtomContainer

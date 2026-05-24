@@ -485,6 +485,8 @@ namespace BALL
 		void container_set_ss_type_(std::uint32_t idx, std::uint8_t t);
 		// v2.2 HCP-1a: set the stored ResidueKind (role=RESIDUE fragments).
 		void container_set_residue_kind_(std::uint32_t idx, ResidueKind rk);
+		// v2.2 HCP-2c.1 (D-2c.1): set the stored MoleculeRole (molecule rows).
+		void container_set_molecule_role_(std::uint32_t idx, MoleculeRole mr);
 		void container_append_atom_(std::uint32_t row, std::uint32_t atom_idx);
 		void container_append_container_(std::uint32_t parent_row, std::uint32_t child_row);
 		void container_remove_atom_(std::uint32_t row, std::uint32_t atom_idx);

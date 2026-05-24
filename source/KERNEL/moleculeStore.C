@@ -505,6 +505,8 @@ std::uint32_t ContainerTable::migrate_one_(
 	const std::string  id_str   = src.str(srow.payload.id_offset);
 	const char         ins_code = srow.payload.insertion_code;
 	const std::uint8_t ss_type  = srow.payload.ss_type;
+	const ResidueKind  res_kind = srow.payload.residue_kind;
+	const MoleculeRole mol_role = srow.payload.molecule_role;   // HCP-2c.1 FIX-3
 	const std::uint32_t sel_cnt = srow.selection_count;
 	// Copy the child list out before recursion (recursion mutates rows_).
 	const std::vector<ChildRef> src_children = srow.children;
@@ -516,6 +518,10 @@ std::uint32_t ContainerTable::migrate_one_(
 		nrow.payload.id_offset     = intern(id_str);
 		nrow.payload.insertion_code = ins_code;
 		nrow.payload.ss_type       = ss_type;
+		// HCP-2c.1 FIX-3: migrate the stored role identities too (residue_kind
+		// was previously dropped on migration; molecule_role is new in 2c.1).
+		nrow.payload.residue_kind  = res_kind;
+		nrow.payload.molecule_role = mol_role;
 		nrow.selection_count       = sel_cnt;
 		// D65: the destination row keeps the generation that allocate()
 		// assigned to its slot -- the source's generation is NOT copied
@@ -633,20 +639,22 @@ std::uint8_t MoleculeStore::container_ss_type_(std::uint32_t idx) const
 // NOT encoded by kind (it is the former Residue::Property bits), so it is
 // stored in the payload. At HCP-2 the kind shrinks to {MOLECULE,FRAGMENT} and
 // the role becomes the stored identity these read.
+// v2.2 HCP-2c.1 (D-2c.1): the molecule role is now STORED in the payload,
+// derived at materialisation from the v0 type + Molecule::IS_SOLVENT and
+// refined on identity-bit flips (so a SOLVENT molecule no longer reports
+// UNKNOWN). Read the stored value; fall back to kind-derivation for rows that
+// were allocated directly (e.g. hand-built test rows) without going through
+// writeContainerScalars_ -- those keep the old PROTEIN/NUCLEIC_ACID behaviour.
 MoleculeRole MoleculeStore::container_molecule_role_(std::uint32_t idx) const
 {
+	const ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return MoleculeRole::UNKNOWN;
+	MoleculeRole stored = t.row(idx).payload.molecule_role;
+	if (stored != MoleculeRole::UNKNOWN) return stored;
 	switch (container_kind_(idx))
 	{
 		case ContainerKind::PROTEIN:      return MoleculeRole::PROTEIN;
 		case ContainerKind::NUCLEIC_ACID: return MoleculeRole::NUCLEIC_ACID;
-		// HCP-1R MEDIUM: a plain Molecule is NOT necessarily a small molecule
-		// -- it may be solvent/water/ion (the v0 Molecule::IS_SOLVENT bit).
-		// That bit is a container property whose mirror is deferred, so the
-		// row cannot distinguish them yet. Return UNKNOWN rather than assert
-		// SMALL_MOLECULE (which would contradict the v0 source of truth for
-		// solvated systems). The precise SMALL_MOLECULE/SOLVENT/WATER/LIGAND/
-		// ION role lands with the container-property mirror (HCP-2).
-		case ContainerKind::MOLECULE:     return MoleculeRole::UNKNOWN;
 		default:                          return MoleculeRole::UNKNOWN;
 	}
 }
@@ -799,6 +807,14 @@ void MoleculeStore::container_set_residue_kind_(std::uint32_t idx, ResidueKind r
 	ContainerTable& t = side_tables_->container_table_;
 	if (idx == 0 || idx >= t.size()) return;
 	t.row(idx).payload.residue_kind = rk;
+}
+
+// v2.2 HCP-2c.1 (D-2c.1): set the stored MoleculeRole (molecule-level rows).
+void MoleculeStore::container_set_molecule_role_(std::uint32_t idx, MoleculeRole mr)
+{
+	ContainerTable& t = side_tables_->container_table_;
+	if (idx == 0 || idx >= t.size()) return;
+	t.row(idx).payload.molecule_role = mr;
 }
 
 void MoleculeStore::container_append_atom_(std::uint32_t row, std::uint32_t atom_idx)
