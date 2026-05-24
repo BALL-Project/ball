@@ -61,28 +61,62 @@ namespace BALL
 		 *
 		 * Header-only; no QObject dependency so Controllers stay headless-
 		 * testable (see test/ControllerContract_test.C and test/contract/).
+		 *
+		 * <b>Transitional bool& overload.</b> A second constructor preserves
+		 * the legacy one-shot <tt>bool&</tt> semantics for the nine
+		 * controllers not yet migrated to the depth counter (999.59-02/03).
+		 * It is a compatibility shim — the canonical, nest-aware path is the
+		 * <tt>int&</tt> constructor; the bool overload is removed once the
+		 * last controller is cut over.
 		 */
 		class ControllerApplyGuard
 		{
 			public:
 				/// Enter an apply() scope: increment the depth counter.
+				/// The canonical nest-aware constructor (§2 / §4).
 				explicit ControllerApplyGuard(int& depth)
-					: depth_(depth)
+					: depth_(&depth), legacy_flag_(nullptr)
 				{
-					++depth_;
+					++(*depth_);
 				}
 
-				/// Leave the apply() scope: decrement the depth counter (RAII).
+				/**
+				 * Transitional one-shot constructor for the nine controllers
+				 * not yet cut over to the depth-counter form (999.59-02/03).
+				 *
+				 * 999.59-01 lands the nest-aware guard but does NOT touch the
+				 * existing controllers (their <tt>bool applying_</tt> members
+				 * and <tt>if (applying_) return;</tt> bodies are harmonised in
+				 * 999.59-02/03). To keep libVIEW compiling clean in this
+				 * foundation phase with zero controller behaviour change, this
+				 * overload preserves the legacy <tt>bool&</tt> set/clear
+				 * semantics. It is a one-shot flag, NOT nest-aware — a callsite
+				 * gains nesting only once 999.59-02/03 migrates it to the
+				 * <tt>int&</tt> depth constructor. REMOVE this overload after
+				 * the last controller is cut over.
+				 *
+				 * @deprecated transitional; migrate callers to the int& form.
+				 */
+				explicit ControllerApplyGuard(bool& flag)
+					: depth_(nullptr), legacy_flag_(&flag)
+				{
+					*legacy_flag_ = true;
+				}
+
+				/// Leave the apply() scope: decrement the depth counter (RAII),
+				/// or clear the legacy one-shot flag.
 				~ControllerApplyGuard()
 				{
-					--depth_;
+					if (depth_ != nullptr)        --(*depth_);
+					else if (legacy_flag_ != nullptr) *legacy_flag_ = false;
 				}
 
 				ControllerApplyGuard(const ControllerApplyGuard&) = delete;
 				ControllerApplyGuard& operator=(const ControllerApplyGuard&) = delete;
 
 			private:
-				int& depth_;
+				int*  depth_;        ///< Nest-aware depth counter (canonical), or nullptr.
+				bool* legacy_flag_;  ///< Transitional one-shot flag, or nullptr.
 		};
 
 	} // namespace VIEW
