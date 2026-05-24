@@ -430,45 +430,7 @@ namespace BALL
 		return true;
 	}
 
-	void Options::write(PersistenceManager& pm) const
-	{
-		std::list<String>		entry_list;
-		String							entry;
-
-		pm.writePrimitive(name_, "name_");
-		pm.writePrimitive(size(), "size");
-
-		StringHashMap<String>::ConstIterator it(begin());
-		for (; it != end(); ++it)
-		{
-			entry = it->first + ' ' + it->second;
-			entry_list.push_back(entry);
-		}
-
-		entry_list.sort();
-		std::list<String>::iterator	list_it = entry_list.begin();
-		for (; list_it != entry_list.end(); ++list_it) 
-		{
-	  	pm.writePrimitive(*list_it, "key/value");
-		}
-	}
 	
-	bool Options::read(PersistenceManager& pm)
-	{
-		clear();
-		bool success = pm.readPrimitive(name_, "name_");
-		Size size;
-		success &= pm.readPrimitive(size, "size");
-
-		String line;
-		for (Size i=0; (i<size) && success; i++)
-		{
-			success &= pm.readPrimitive(line, "key/value");
-			set(line.getField(0, " "), line.after(" "));
-		}	
-
-		return success;
-	}
 
 	void Options::dump(ostream& stream, Size /* depth */) const
 	{

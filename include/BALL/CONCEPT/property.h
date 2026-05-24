@@ -15,6 +15,14 @@
 #	include <BALL/DATATYPE/bitVector.h>
 #endif
 
+// v2.2 (PR-removal phase 6): NamedProperty's inline String handling in
+// property.iC uses the complete String type, previously visible transitively
+// via the now-removed persistenceManager.h include chain (stringHashMap.h ->
+// string.h). Include it directly so this header is self-contained.
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
+#endif
+
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #	include <BALL/CONCEPT/persistentObject.h>
 #endif
@@ -208,12 +216,10 @@ namespace BALL
 		/**	Write a persistent copy of the object.
 				\throws Exception::GeneralException
 		*/
-    virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const;
 
 		/**	Retrieve a persistent copy of the object
 			  \throws Exception::GeneralException
 		*/
-    virtual void persistentRead(PersistenceManager& pm);
 		
 		//@}
 		/**	@name	 Accessors 
@@ -616,10 +622,8 @@ namespace BALL
 		*/
 		//@{
 		///	Persistent stream writing.
-		void write(PersistenceManager& pm) const;
 
 		///	Persistent stream reading.
-		bool read(PersistenceManager& pm);
 		//@}
 
 		/**	@name	Debugging and Diagnostics 

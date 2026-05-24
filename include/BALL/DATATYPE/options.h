@@ -345,21 +345,6 @@ namespace BALL
 		*/		
 		bool writeOptionFile(const String& filename) const;
 
-		/**	Persistent stream writing.
-				This method writes the strings using the <tt>writePrimitive</tt> method
-				of the PersistenceManager.
-				@param pm the persistence manager
-		*/
-		void write(PersistenceManager& pm) const;
-
-		/** Persistent stream reading.
-				This method reads from the
-				persistent stream using the <tt>readPrimitive</tt> method
-				of the PersistenceManager.
-				@param pm the persistence manager
-		*/
-		bool read(PersistenceManager& pm);
-
 		/// Equality operator
 		bool operator == (const Options& option) const;
 

@@ -7,7 +7,6 @@
 
 ///////////////////////////
 #include <BALL/CONCEPT/composite.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/chain.h>

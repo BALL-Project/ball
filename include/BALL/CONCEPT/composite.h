@@ -15,6 +15,14 @@
 #	include <BALL/CONCEPT/persistentObject.h>
 #endif
 
+// v2.2 (PR-removal phase 6): UnaryPredicate<Composite> (KernelPredicateType,
+// below) was previously made visible transitively via the now-removed
+// persistenceManager.h include chain (hashSet.h -> predicate.h). Include it
+// directly so this header is self-contained.
+#ifndef BALL_CONCEPT_PREDICATE_H
+#	include <BALL/CONCEPT/predicate.h>
+#endif
+
 #ifndef BALL_CONCEPT_COMPARATOR_H
 #	include <BALL/CONCEPT/comparator.h>
 #endif

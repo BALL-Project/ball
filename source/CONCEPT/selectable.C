@@ -4,7 +4,6 @@
 // $Id: selectable.C,v 1.7 2002/12/12 10:05:40 oliver Exp $
 
 #include <BALL/CONCEPT/selectable.h>
-#include <BALL/CONCEPT/persistenceManager.h>
 
 using namespace std;
 
@@ -42,17 +41,7 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}  
 
-  void Selectable::write(PersistenceManager& pm) const
-		
-  {
-		pm.writePrimitive(selected_, "selected_");
-	}
 
-  bool Selectable::read(PersistenceManager& pm)
-		
-  {
-		return pm.readPrimitive(selected_, "selected_");
-	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/CONCEPT/selectable.iC>

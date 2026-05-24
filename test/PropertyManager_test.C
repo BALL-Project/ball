@@ -7,8 +7,6 @@
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
-#include <BALL/CONCEPT/persistenceManager.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/protein.h>
 #include <fstream>
 
@@ -295,58 +293,25 @@ CHECK(bool hasProperty(const string& name) const throw())
 RESULT
 
 String filename;
-TextPersistenceManager pm;
 
-CHECK(void write(PersistenceManager& pm) const throw())
-	NEW_TMP_FILE(filename)
-	String str("test");
-	PersistentObject ob;
-	m.setProperty("PROP1", true);
-  m.setProperty("PROP2", -12345);
-  m.setProperty("PROP3", (unsigned int)12345);
-  m.setProperty("PROP4", (float)1.2345);
-  m.setProperty("PROP5", (double) 2.345);
-  m.setProperty("PROP6", str);
-  m.setProperty("PROP7", ob);
-  m.setProperty("PROP8");
-  m.setProperty(0);
-  m.setProperty(2);
-	ofstream  ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	m.write(pm);
-	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/PropertyManager_test_write.txt))
-RESULT
-
-
-CHECK(bool read(PersistenceManager& pm) throw())
-	PropertyManager m;
-	ifstream  ifile(BALL_TEST_DATA_PATH(PropertyManager_test/PropertyManager_test_read.txt));
-	pm.setIstream(ifile);
-	TEST_EQUAL(m.read(pm), true)
-	TEST_EQUAL(m.hasProperty("PROP1"), true)
-	TEST_EQUAL(m.hasProperty("PROP2"), true)
-	TEST_EQUAL(m.hasProperty("PROP3"), true)
-	TEST_EQUAL(m.hasProperty("PROP4"), true)
-	TEST_EQUAL(m.hasProperty("PROP5"), true)
-	TEST_EQUAL(m.hasProperty("PROP6"), true)
-	TEST_EQUAL(m.hasProperty("PROP7"), true)
-	TEST_EQUAL(m.hasProperty("PROP8"), true)
-	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-	TEST_EQUAL(m.getProperty("PROP1").getBool(), true)	
-	TEST_EQUAL(m.getProperty("PROP2").getInt(), -12345)
-	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
-	TEST_REAL_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
-	TEST_REAL_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
-	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
-	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0)
-	TEST_EQUAL(m.countNamedProperties(), 8);
-	TEST_EQUAL(m.getBitVector().getBit(0), true)
-	TEST_EQUAL(m.getBitVector().getBit(1), false)
-	TEST_EQUAL(m.getBitVector().getBit(2), true)
-	ifile.close();
-RESULT
-
+// v2.2 (PR-removal phase 6): the persistence write CHECK that populated the
+// file-scope PropertyManager `m` (PROP1..PROP8 + flag bits 0,2) was removed
+// together with the persistence-stream framework. Re-create that exact state
+// here (data setup only, no stream I/O) so the dump() CHECK below still
+// exercises a fully populated manager and matches PropertyManager_test_dump.txt.
+String pm_dump_str("test");
+PersistentObject pm_dump_obj;
+m.clear();
+m.setProperty("PROP1", true);
+m.setProperty("PROP2", -12345);
+m.setProperty("PROP3", (unsigned int)12345);
+m.setProperty("PROP4", (float)1.2345);
+m.setProperty("PROP5", (double) 2.345);
+m.setProperty("PROP6", pm_dump_str);
+m.setProperty("PROP7", pm_dump_obj);
+m.setProperty("PROP8");
+m.setProperty(0);
+m.setProperty(2);
 
 CHECK(bool isValid() const throw())
 	TEST_EQUAL(m.isValid(), true)
@@ -355,7 +320,7 @@ RESULT
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
-	m.dump(outstr); 
+	m.dump(outstr);
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(PropertyManager_test/PropertyManager_test_dump.txt))
 RESULT
 

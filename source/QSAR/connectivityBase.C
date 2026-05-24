@@ -4,6 +4,8 @@
 //
 
 #include <BALL/QSAR/connectivityBase.h>
+// v2.2 (PR-removal phase 6): formerly visible via the removed persistenceManager.h include chain
+#include <BALL/DATATYPE/hashMap.h>
 #include <BALL/QSAR/simpleDescriptors.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>

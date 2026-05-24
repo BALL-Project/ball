@@ -5,6 +5,12 @@
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 
+// v2.2 (PR-removal phase 6): HashSet was previously visible transitively via
+// the now-removed persistenceManager.h include chain.
+#ifndef BALL_DATATYPE_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
+#endif
+
 #include <list>
 
 #ifndef BALL_COMMON_H

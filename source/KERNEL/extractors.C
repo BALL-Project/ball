@@ -9,6 +9,10 @@
 
 #include <BALL/KERNEL/extractors.h>
 
+// v2.2 (PR-removal phase 6): HashSet was previously visible transitively via
+// the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/hashSet.h>
+
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/residue.h>

@@ -7,10 +7,6 @@
 #ifndef BALL_CONCEPT_H
 #define BALL_CONCEPT_H
 
-#ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/XDRPersistenceManager.h>
-#endif
-
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #	include <BALL/CONCEPT/autoDeletable.h>
 #endif
@@ -35,10 +31,6 @@
 #	include <BALL/CONCEPT/forwardIterator.h>
 #endif
 
-#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/persistenceManager.h>
-#endif
-
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #	include <BALL/CONCEPT/randomAccessIterator.h>
 #endif
@@ -49,10 +41,6 @@
 
 #ifndef BALL_CONCEPT_SINGLETON_H
 #	include <BALL/CONCEPT/singleton.h>
-#endif
-
-#ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/textPersistenceManager.h>
 #endif
 
 #endif // BALL_CONCEPT_H

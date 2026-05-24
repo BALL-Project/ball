@@ -6,7 +6,6 @@
 
 ///////////////////////////
 #include <BALL/CONCEPT/composite.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/CONCEPT/visitor.h>
 ///////////////////////////
 

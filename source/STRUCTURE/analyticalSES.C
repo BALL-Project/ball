@@ -3,6 +3,8 @@
 //
 
 #include <BALL/STRUCTURE/analyticalSES.h>
+// v2.2 (PR-removal phase 6): formerly visible via the removed persistenceManager.h include chain
+#include <BALL/DATATYPE/hashMap.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
 

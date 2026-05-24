@@ -6,6 +6,10 @@
 #ifndef BALL_DOCKING_COMMON_FLEXIBLEMOLECULE_H
 #define BALL_DOCKING_COMMON_FLEXIBLEMOLECULE_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/hashSet.h>
+
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/DATATYPE/hashMap.h>

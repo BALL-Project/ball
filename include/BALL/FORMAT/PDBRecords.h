@@ -5,6 +5,10 @@
 #ifndef BALL_FORMAT_PDBRECORDS_H
 #define BALL_FORMAT_PDBRECORDS_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <BALL/CONCEPT/persistentObject.h>
+
 #include <vector>
 #include <stdexcept>
 
@@ -13,7 +17,6 @@
 #endif
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/persistenceManager.h>
 #endif
 
 namespace BALL 

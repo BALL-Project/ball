@@ -8,8 +8,6 @@
 ///////////////////////////
 
 #include <BALL/CONCEPT/selectable.h>
-#include <BALL/CONCEPT/persistenceManager.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 ///////////////////////////
 
@@ -90,30 +88,6 @@ CHECK(bool isSelected() const throw())
 	TEST_EQUAL(se2.isSelected(), true)
   se2.deselect();
 	TEST_EQUAL(se2.isSelected(), false)
-RESULT
-
-String filename;
-using std::ofstream;
-using std::ios;
-using namespace RTTI;
-TextPersistenceManager pm;
-
-CHECK(bool read(PersistenceManager& pm) throw())
-	ifstream ifile(BALL_TEST_DATA_PATH(Selectable_test2.txt));
-	pm.setIstream(ifile);
-	se2.clear();
-	TEST_EQUAL(se2.read(pm), true)
-	TEST_EQUAL(se2.isSelected(), true)
-	ifile.close();
-RESULT
-
-CHECK(void write(PersistenceManager& pm) const throw())
-	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	se.write(pm);
-	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Selectable_test2.txt))
 RESULT
 
 CHECK(void dump(::std::ostream& s = std::cout, Size depth = 0) const throw())

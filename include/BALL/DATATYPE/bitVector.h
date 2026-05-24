@@ -9,8 +9,11 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/persistenceManager.h>
+// v2.2 (PR-removal phase 6): the complete String type was previously visible
+// transitively via the now-removed persistenceManager.h include chain
+// (stringHashMap.h -> string.h). Include it directly.
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -548,12 +551,10 @@ namespace BALL
 
 		/**	Storable write method.
 		*/
-		virtual void write(PersistenceManager& pm) const;
 
 		/**	Storable read method.
 		 *	@exception Exception::OutOfMemory if a BitVector with the appropriate size could not be allocated
 		*/
-		virtual bool read(PersistenceManager& pm);
 
 		//@}
 

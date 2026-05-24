@@ -5,6 +5,10 @@
 #ifndef BALL_STRUCTURE_SECONDARYSTRUCTUREPROCESSOR_H
 #define BALL_STRUCTURE_SECONDARYSTRUCTUREPROCESSOR_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/string.h>
+
 #ifndef  BALL_COMMON_H
 #include <BALL/common.h>
 #endif

@@ -25,7 +25,11 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#ifndef BALL_DATATYPE_HASHSET_H
+// v2.2 (PR-removal phase 6): the hashMap.h include below was guarded with the
+// wrong macro (BALL_DATATYPE_HASHSET_H), so it was skipped whenever hashSet.h
+// had already been included. This was latent because HashMap was previously
+// pulled in transitively via the now-removed persistenceManager.h chain.
+#ifndef BALL_DATATYPE_HASHMAP_H
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
@@ -53,6 +57,11 @@
 #include <list>
 #include <deque>
 #include <vector>
+// v2.2 (PR-removal phase 6): the std::hash specializations below use
+// std::hash and boost::hash_combine, previously visible transitively via the
+// now-removed persistenceManager.h include chain.
+#include <functional>
+#include <boost/functional/hash.hpp>
 
 namespace BALL
 {

@@ -9,19 +9,17 @@
 #	include <BALL/CONCEPT/object.h>
 #endif
 
-namespace BALL 
+namespace BALL
 {
 
-	class PersistenceManager;
-
 	/**	The persistent object.
-			Each object that needs persistence, has to be derived from
-			PersistentObject to define an interface to the
-			 \link PersistenceManager PersistenceManager \endlink .
-			 \par
-			The class itself has no functionality except for the <tt>operator >></tt>.
-			 \par
-			
+			v2.2 (PR-removal phase 6): the persistence STREAM framework
+			(PersistenceManager + the persistentRead/Write virtuals + operator>>)
+			has been removed. PersistentObject is RETAINED as a near-empty base
+			TYPE for object-valued NamedProperty values, VIEW Stage::Material, and
+			PDB/crystal smart-properties (its base-erasure is deferred to H6a/D49 +
+			VIEW). The only remaining hook is finalize().
+
 	 	 \ingroup  Persistence
 	*/
 	class BALL_EXPORT PersistentObject
@@ -49,48 +47,9 @@ namespace BALL
 		}
 		//@}
 
-		/**	@name	Persistent Writing and Reading 
+		/**	@name	Finalization
 		*/
 		//@{
-			
-		/**	Stream operator.
-				This operator is used to serialize an instance of PersistentObject.
-				The method first calls <tt>pm.startOutput()</tt> to write the necessary
-				headers. Then, <tt>persistentWrite(pm)</tt> is called to serialize
-				the object. Finally, a call to <tt>pm.stopOutput()</tt> writes all
-				dependend objects and the end marker to the persistent stream.
-				@param	pm	the persistence manager
-				\throws Exception::GeneralException
-				@return the persistence manager (for chaining multiple output 
-								operations)
-		*/
-		PersistenceManager& operator >> (PersistenceManager& pm) const;
-
-		/**	Serialize the object.
-				This method serializes the object by calls to Layer 1 methods of 
-				 \link PersistenceManager PersistenceManager \endlink .  The first method in the implementation
-				of persistentRead should be a call to 
-				<tt>pm.writeObjectHeader(*this, name)</tt>. Likewise the last method in
-				this method should be <tt>pm.writeObjectTrailer(name)</tt>.
-				@param	pm the persistence manager
-				@param	name the name of the object (0 for writing base classes)
-				\throws Exception::GeneralException
-		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const;
-
-		/**	Deserialize the object.
-				This method reads the contents of an persistent object into an
-				(already existing!) object. It is implemented using Layer 1
-				commands of PersistenceManager.  To each <b>write</b> command used
-				in persistentWrite, there should be exactly the same call to a read
-				command in persistentRead. Only the header and trailer
-				(writeObjectHeader/writeObjectTrailer calls) have to be omitted, as
-				the header is read before this method is called (the object type
-				has to be known in advance to dynamically create the object).
-				@param pm the PersistenceManager
-				\throws Exception::GeneralException
-		*/
-		virtual void persistentRead(PersistenceManager& pm);
 
 		/**	Finalize the deserialization.
 				This method is called for all objects after their pointers have

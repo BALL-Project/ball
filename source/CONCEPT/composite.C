@@ -5,7 +5,6 @@
 //
 
 #include <BALL/CONCEPT/composite.h>
-#include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/DATATYPE/listSort.mac>
 #include <BALL/KERNEL/predicate.h>
 

@@ -5,12 +5,15 @@
 #ifndef BALL_MATHS_VECTOR2_H
 #define BALL_MATHS_VECTOR2_H
 
-#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/persistenceManager.h>
-#endif
-
 #ifndef BALL_COMMON_EXCEPTION_H
 #	include <BALL/COMMON/exception.h>
+#endif
+
+// v2.2 (PR-removal phase 6): TVector2 derives from PersistentObject (retained
+// as a near-empty base type). Its declaration was previously visible
+// transitively via the now-removed persistenceManager.h include chain.
+#ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
+#	include <BALL/CONCEPT/persistentObject.h>
 #endif
 
 #ifndef BALL_MATHS_COMMON_H

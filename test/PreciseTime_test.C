@@ -8,7 +8,6 @@
 ///////////////////////////
 
 #include <BALL/CONCEPT/timeStamp.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <fstream>
 
 ///////////////////////////
@@ -160,29 +159,6 @@ CHECK(PreciseTime::now())
 	STATUS(t2.getSeconds() << "/" << t2.getMicroSeconds())
 	TEST_EQUAL((t1 < t2), true)
 	TEST_EQUAL((t1 == t2), false)
-RESULT
-
-TextPersistenceManager pm;
-CHECK(PreciseTime::write(PersistenceManager& pm) const )
-	PreciseTime t(12345678, 456789);
-	String filename;
-	NEW_TMP_FILE(filename)
-	std::ofstream of(filename.c_str(), std::ios::out);
-	pm.setOstream(of);
-	t.write(pm);
-	of.close();
-	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(PreciseTime_test2.txt))
-RESULT
-
-
-CHECK(PreciseTime::read(PersistenceManager& pm))
-	PreciseTime t;
-	std::ifstream inf(BALL_TEST_DATA_PATH(PreciseTime_test2.txt));
-	pm.setIstream(inf);
-	t.read(pm);
-	inf.close();
-	TEST_EQUAL(t.getSeconds(), 12345678)
-	TEST_EQUAL(t.getMicroSeconds(), 456789)
 RESULT
 
 CHECK(ostream& operator << (ostream& os, const PreciseTime& time))

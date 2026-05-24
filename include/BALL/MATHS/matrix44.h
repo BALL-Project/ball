@@ -7,6 +7,10 @@
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <iomanip>
+
 #ifndef BALL_COMMON_EXCEPTION_H
 # include <BALL/COMMON/exception.h>
 #endif

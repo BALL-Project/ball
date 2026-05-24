@@ -8,7 +8,6 @@
 ///////////////////////////
 
 #include <BALL/DATATYPE/bitVector.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 ///////////////////////////
 
@@ -299,8 +298,6 @@ RESULT
 using std::ofstream;
 using std::ios;
 String filename;
-TextPersistenceManager	pm;
-using namespace RTTI;
 BitVector bv4(4);
 bv4.setBit(2, true);
 
@@ -343,30 +340,6 @@ CHECK(void write(std::ostream& s) const throw())
 	bv4.write(outstr);
 	outstr.close();
 	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(BitVector_test2.txt))
-RESULT
-
-CHECK(bool read(PersistenceManager& pm))
-	ifstream	ifile(BALL_TEST_DATA_PATH(BitVector_test3.txt));
-	pm.setIstream(ifile);
-	BitVector bv;
-	TEST_NOT_EQUAL(bv.read(pm), false);
-	ifile.close();
-	TEST_EQUAL(bv.getSize(), 4)
-	TEST_EQUAL(bv.getBit(0), false)
-	TEST_EQUAL(bv.getBit(1), false)
-	TEST_EQUAL(bv.getBit(2), true)
-	TEST_EQUAL(bv.getBit(3), false)
-RESULT
-
-CHECK(void write(PersistenceManager& pm) const throw())
-	NEW_TMP_FILE(filename)
-	ofstream	ofile(filename.c_str(), ios::out);
-	pm.setOstream(ofile);
-	using namespace RTTI;
-	pm.registerClass(getStreamName<BitVector>(), BitVector::createDefault);
-	bv4.write(pm);
-	ofile.close();
-	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(BitVector_test3.txt))
 RESULT
 
 END_TEST

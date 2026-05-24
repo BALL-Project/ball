@@ -9,7 +9,6 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/molecule.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 #include <algorithm>

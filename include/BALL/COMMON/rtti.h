@@ -80,8 +80,6 @@ namespace BALL
 
 		/**	Return a void pointer to a new instance of the class.
 				Use this method to provide an easy factory for objects of a certain class.
-				The main use of this function lies in object persistence. The  \link PersistenceManager PersistenceManager \endlink 
-				needs a function for the dynamic creation of objects.
 		*/
 		template <typename T>
 		void* getNew()

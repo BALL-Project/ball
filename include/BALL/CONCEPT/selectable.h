@@ -146,30 +146,7 @@ namespace BALL
 
 		//@}
 
-		/**	@name Storable interface.
-		*/
-		//@{
-
-		/**	Persistent stream writing.
-				This method writes a boolean variable to the
-				persistent stream using the <tt>writePrimitive</tt> method
-				of the PersistenceManager.
-				@param pm the persistence manager
-		*/
-		void write(PersistenceManager& pm) const
-			;
-
-		/** Persistent stream reading.
-				This method reads a boolean variable from the
-				persistent stream using the <tt>readPrimitive</tt> method
-				of the PersistenceManager.
-				@param pm the persistence manager
-		*/
-		bool read(PersistenceManager& pm)
-			;
-
-		//@}
-		/**	@name Debugging and Diagnostics 
+		/**	@name Debugging and Diagnostics
 		*/
 		//@{
 		

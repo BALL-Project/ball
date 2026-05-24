@@ -17,6 +17,16 @@
 	#include <BALL/MATHS/vector3.h>
 #endif
 
+// v2.2 (PR-removal phase 6): HashSet/StringHashMap definitions were previously
+// visible transitively via the now-removed persistenceManager.h include chain.
+#ifndef BALL_DATATYPE_HASHSET_H
+	#include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRINGHASHMAP_H
+	#include <BALL/DATATYPE/stringHashMap.h>
+#endif
+
 namespace BALL
 {
 	/// forward declarations

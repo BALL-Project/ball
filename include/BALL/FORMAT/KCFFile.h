@@ -5,6 +5,10 @@
 #ifndef BALL_FORMAT_KCFFILE_H
 #define BALL_FORMAT_KCFFILE_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/hashMap.h>
+
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #	include <BALL/FORMAT/genericMolFile.h>
 #endif

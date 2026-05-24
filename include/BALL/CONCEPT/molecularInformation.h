@@ -9,6 +9,13 @@
 #	include <BALL/CONCEPT/composite.h>
 #endif
 
+// v2.2 (PR-removal phase 6): the name_/type_name_ String members use the
+// complete String type, previously visible transitively via the now-removed
+// persistenceManager.h include chain (stringHashMap.h -> string.h).
+#ifndef BALL_DATATYPE_STRING_H
+#	include <BALL/DATATYPE/string.h>
+#endif
+
 namespace BALL
 {
 	class Atom;

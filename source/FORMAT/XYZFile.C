@@ -3,6 +3,8 @@
 //
 
 #include <BALL/FORMAT/XYZFile.h>
+// v2.2 (PR-removal phase 6): formerly visible via the removed persistenceManager.h include chain
+#include <BALL/DATATYPE/hashMap.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/system.h>

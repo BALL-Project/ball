@@ -5,6 +5,10 @@
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/hashSet.h>
+
 #ifndef BALL_STRUCTURE_GRAPHFACE_H
 #	include <BALL/STRUCTURE/graphFace.h>
 #endif

@@ -5,8 +5,6 @@
 //
 
 #include <BALL/CONCEPT/property.h>
-#include <BALL/CONCEPT/persistenceManager.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 using namespace std;
 
@@ -50,28 +48,6 @@ namespace BALL
 		}
 	}
  
-	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			pm.writePrimitive((int)type_, "type_");
-			pm.writePrimitive(String(name_), "name_");
-			
-			switch (type_)
-			{
-				case	INT:					pm.writePrimitive(boost::any_cast<int>(data_), "data_.i");		break;
-				case	FLOAT:				pm.writePrimitive(boost::any_cast<float>(data_), "data_.f");		break;
-				case	DOUBLE:				pm.writePrimitive(boost::any_cast<double>(data_), "data_.d");		break;
-				case	UNSIGNED_INT:	pm.writePrimitive(boost::any_cast<unsigned int>(data_), "data_.ui"); break;
-				case	BOOL:					pm.writePrimitive(boost::any_cast<bool>(data_), "data_.b");		break;
-				case	OBJECT:				pm.writeObjectPointer(boost::any_cast<PersistentObject*>(data_), "data_.object"); break;
-				case	SMART_OBJECT:	pm.writeObjectPointer(boost::any_cast<boost::shared_ptr<PersistentObject> >(data_).get(), "data_.smart_object"); break;
-				case	NONE:					break;
-				case	STRING:				pm.writePrimitive(String(*boost::any_cast<string*>(data_)), "data_.s");	break;
-				default:
-					Log.error() << "cannot write unknown property type: " << (int)type_ << endl;
-			}
-		pm.writeObjectTrailer(name);
-	}
 
 
 	void NamedProperty::operator = (const NamedProperty& np)
@@ -88,101 +64,8 @@ namespace BALL
 		else data_ = np.data_;
 	}
 	
-	void NamedProperty::persistentRead(PersistenceManager& pm)
-	{
-		// Clear potentially allocated strings.
-		if (type_ == STRING)
-		{
-			delete boost::any_cast<string*>(data_);
-		}
 
-		int type;
-		pm.readPrimitive(type, "type_");
-		type_ = (Type)type;
-		String s;
-		pm.readPrimitive(s, "name_");
-		name_ = s;
 
-		switch (type_)
-		{
-			case	INT:					int i;
-													pm.readPrimitive(i, "data_.i");		
-													data_ = i;
-													break;
-			case	FLOAT:				float f;
-													pm.readPrimitive(f, "data_.f");		
-													data_ = f;
-													break;
-			case	DOUBLE:				double d;
-			                    pm.readPrimitive(d, "data_.d");
-													data_ = d;
-													break;
-			case	UNSIGNED_INT:	unsigned int ui;
-			                    pm.readPrimitive(ui, "data_.ui");  
-													data_ = ui;
-													break;
-			case	BOOL:					bool b;
-			                    pm.readPrimitive(b, "data_.b");		
-													data_ = b;
-													break;
-			case	NONE:	break;
-
-			case	STRING:				
-				// we have to create a new string
-				pm.readPrimitive(s, "data_.s");	
-				data_ = new string(s);
-				break;
-
-			case	OBJECT:				
-				// the persistence manager will take care of
-				// reading the object and will set this pointer afterwards 
-				data_ = (PersistentObject*)0;
-				pm.readObjectPointer(*(boost::any_cast<PersistentObject*>(&data_)), "data_.object"); 
-				break;
-
-			case	SMART_OBJECT:				
-				// the persistence manager will take care of
-				// reading the object and will set this pointer afterwards
-				data_ = boost::shared_ptr<PersistentObject>();
-				pm.readObjectSmartPointer(*(boost::any_cast<boost::shared_ptr<PersistentObject> >(&data_)), "data_.smart_object");
-				break;
-
-			default:
-				Log.error() << "Unknown type while reading NamedProperty: " << (int)type_ << endl;
-		}
-	}
-
-  void PropertyManager::write(PersistenceManager& pm) const
-  {
-		pm.writeStorableObject(bitvector_, "bitvector_");
-		Size size = (Size)named_properties_.size();
-		pm.writePrimitive(size, "size");
-		for (Size i = 0; i < size; i++)
-		{
-			named_properties_[i].persistentWrite(pm, "");
-		}
-	}
-
-  bool PropertyManager::read(PersistenceManager& pm)
-  {
-		if (!pm.readStorableObject(bitvector_, "bitvector_"))
-		{
-			return false;
-		}
-		
-		Size size = 0;
-		pm.readPrimitive(size, "size");
-		named_properties_.resize(size);
-		for (Size i = 0; i < size; i++)
-		{
-			NamedProperty& property = named_properties_[i];
-			pm.checkObjectHeader(property, "");
-				property.persistentRead(pm);
-			pm.checkObjectTrailer("");
-		}
-
-		return true;
-	}
   
 	void PropertyManager::set(const PropertyManager& property_manager)
 	{

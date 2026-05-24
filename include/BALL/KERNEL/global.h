@@ -7,6 +7,13 @@
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
 
+// v2.2 (PR-removal phase 6): the HashMap template (used below) was previously
+// visible transitively via the now-removed persistenceManager.h include chain
+// (hashMap.h). Include it directly.
+#ifndef BALL_DATATYPE_HASHMAP_H
+#	include <BALL/DATATYPE/hashMap.h>
+#endif
+
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
 #endif

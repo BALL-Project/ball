@@ -8,7 +8,6 @@
 ///////////////////////////
 
 #include <BALL/CONCEPT/timeStamp.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <fstream>
 
 ///////////////////////////
@@ -138,33 +137,6 @@ CHECK(TimeStamp::stamp(const Time& time = ZERO) throw())
 	TEST_EQUAL(ts2->isNewerThan(*ts2), false)
 	delete ts1;
 	delete ts2;
-RESULT
-
-TextPersistenceManager pm;
-CHECK(TimeStamp::write(PersistenceManager& pm) const )
-	TimeStamp t;
-	// a very nasty way to break the encapsulation, but simplifies
-	// things a great deal....!
-	PreciseTime& t_ref = const_cast<PreciseTime&>(t.getTime());
-	t_ref.set(12345678, 456789);
-	String filename;
-	NEW_TMP_FILE(filename)
-	std::ofstream of(filename.c_str(), std::ios::out);
-	pm.setOstream(of);
-	t.write(pm);
-	of.close();
-	TEST_FILE(filename.c_str(), BALL_TEST_DATA_PATH(TimeStamp_test2.txt))
-RESULT
-
-
-CHECK(TimeStamp::read(PersistenceManager& pm))
-	TimeStamp t;
-	std::ifstream inf(BALL_TEST_DATA_PATH(TimeStamp_test2.txt));
-	pm.setIstream(inf);
-	t.read(pm);
-	inf.close();
-	TEST_EQUAL(t.getTime().getSeconds(), 12345678)
-	TEST_EQUAL(t.getTime().getMicroSeconds(), 456789)
 RESULT
 
 CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))

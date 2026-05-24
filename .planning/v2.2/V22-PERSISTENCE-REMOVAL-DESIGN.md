@@ -406,3 +406,42 @@ still provide `PersistentObject` transitively but can be replaced with
 related and necessary: it removes the persistence-stream test for the stripped
 `TVector2` overrides while preserving the later temporary filename used by the
 normal iostream test.
+
+## PR6-CR code review
+
+**Verdict: GO-WITH-FIXES.** The phase-6 persistence STREAM framework teardown is
+architecturally sound and the `BALL` target rebuilds, but two cleanup fixes should
+land before commit: remove the orphaned `BALL_INLINE` tokens in `timeStamp.iC`
+(currently emit duplicate-`inline` warnings from common include paths) and add the
+missed Python `client.sip` deferred surface to the Class K ledger. Also clean the
+empty `BALL_CONCEPT_PERSISTENCEMANAGER_H` guard shell in `vector3.h` while touching
+the same patch.
+
+1. **SOUND** — The 13 staged deletions match the requested framework/client removal,
+`source/CONCEPT/sources.cmake` no longer builds the removed sources, and no kernel
+build TU still references `Client`/`DEFAULT_PORT`; removing `Client` is correct
+because its only behavior was persistence-stream transport.
+2. **SOUND** — `PersistentObject` is reduced to ctor/dtor/`finalize()` only, with
+the PM forward declaration/operator/virtuals removed; this is safe because the
+removed virtuals were non-pure and `Composite : PersistentObject` is retained.
+3. **SOUND** — `expression.C` now casts to `Expression::CreationMethod`, the same
+`void* (*)()` factory type previously borrowed from `PersistenceManager`.
+4. **WEAK** — The function declaration/definition strips are semantically correct,
+but `include/BALL/CONCEPT/timeStamp.iC:151`/`:153` leave orphan `BALL_INLINE`
+tokens that compile as duplicate `inline` specifiers; `vector3.h` also retains an
+empty removed-include guard shell.
+5. **SOUND** — The persistence test trims do not orphan shared state: the
+`PropertyManager_test` pre-dump state is faithfully recreated after `m.clear()`
+(`PROP1..PROP8`, bits 0 and 2, with `pm_dump_obj` outliving the dump), `Vector3`'s
+file-scope `filename` remains needed later, and no removed PM variable is reused.
+6. **WEAK** — Include hygiene is broadly correct and self-contained, with no
+`composite.h`/`predicate.h` cycle found and the `reducedSurface.h` wrong-guard fix
+valid; the only required cleanup from this area is the empty `vector3.h` guard shell.
+7. **WEAK** — The listed VIEW/SYSTEM/APPLICATIONS deferrals are out of the
+`BALL_CORE_ONLY` build path and accurately described, but
+`source/PYTHON/EXTENSIONS/BALL/client.sip` still references deleted
+`CONCEPT/client.h`/`Client` and is omitted from the Class K ledger
+(`BALL_PYTHON_SUPPORT` is off in this build, but it is still a deferred break).
+8. **SOUND** — No additional ABI/behavioral blocker found for the agreed scope;
+JSON `StoreFormat` paths are untouched, and a local `cmake --build . --target BALL
+-j2` completed successfully aside from the new `timeStamp.iC` warnings above.

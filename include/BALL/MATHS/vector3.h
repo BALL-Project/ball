@@ -9,10 +9,6 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
-#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
-#	include <BALL/CONCEPT/persistenceManager.h>
-#endif
-
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
 #endif
@@ -442,20 +438,6 @@ namespace BALL
 
 		//@}
 
-
-    /** @name Storable Interface
-    */
-    //@{
-
-    /** Persistent stream writing.
-    */
-    void write(PersistenceManager& pm) const;
-
-    /** Persistent stream reading.
-    */
-		bool read(PersistenceManager& pm);
-
-    //@}
 
 		/**	@name	Debugging and Diagnostics
 		*/
@@ -1098,26 +1080,7 @@ namespace BALL
 	}
 
 	template <typename T>
-  void TVector3<T>::write(PersistenceManager& pm) const
-  {
-    pm.writePrimitive(x, "x");
-    pm.writePrimitive(y, "y");
-    pm.writePrimitive(z, "z");
-	}
-
-	template <typename T>			
-  bool TVector3<T>::read(PersistenceManager& pm)
-  {
-    pm.readPrimitive(x, "x");
-    pm.readPrimitive(y, "y");
-    pm.readPrimitive(z, "z");
-
-    return true;
-	}
-
-
-	template <typename T>
-	BALL_INLINE 
+	BALL_INLINE
 	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector)
 	{
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);

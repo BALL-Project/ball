@@ -5,6 +5,11 @@
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <fstream>
+#include <BALL/DATATYPE/string.h>
+
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif

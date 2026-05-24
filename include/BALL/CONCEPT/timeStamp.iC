@@ -149,21 +149,7 @@ const PreciseTime& TimeStamp::getTime() const
 }
 
 BALL_INLINE
-void TimeStamp::write(PersistenceManager& pm) const
-	
-{
-	pm.writeStorableObject(time_, "time_");
-}
-
-BALL_INLINE
-bool TimeStamp::read(PersistenceManager& pm)
-	
-{
-	return pm.readStorableObject(time_, "time_");
-}
-
-BALL_INLINE
-bool TimeStamp::operator == (const TimeStamp& stamp) const 
+bool TimeStamp::operator == (const TimeStamp& stamp) const
 	
 {
 	return time_ == stamp.time_;

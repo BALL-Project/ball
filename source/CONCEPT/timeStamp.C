@@ -4,6 +4,9 @@
 // $Id: timeStamp.C,v 1.21 2005/12/23 17:02:33 amoll Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
+// v2.2 (PR-removal phase 6): String was previously visible transitively via
+// the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/string.h>
 
 #ifdef BALL_HAS_SYS_TIME_H
 #	include <sys/time.h>
@@ -56,27 +59,7 @@ namespace BALL
 	}
 
 
-	void PreciseTime::write(PersistenceManager& pm) const
-		
-  {
-		Size tmp = (Size)secs_;
-		pm.writePrimitive(tmp, "secs_");
-		tmp = (Size)usecs_;
-		pm.writePrimitive(tmp, "usecs_");
-	}
 
-	bool PreciseTime::read(PersistenceManager& pm)
-		
-	{
-	  Size tmp;
-		bool result = pm.readPrimitive(tmp, "secs_");
-		secs_ = (long)tmp;
-
-		result &= pm.readPrimitive(tmp, "usecs_");
-		usecs_ = (long)tmp;
-
-		return result;
-	}
 	
 	PreciseTime PreciseTime::now() 
 		

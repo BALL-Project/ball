@@ -499,37 +499,7 @@ namespace BALL
 		s << ' ';
 	}
 
-	bool BitVector::read(PersistenceManager& pm)
-	{
-		Size size = 0;
-		
-		if (!pm.readPrimitive(size, "size"))
-		{
-			return false;
-		}
-			
-		setSize(size, false);
-		size--;
-		bool bit;
-		for (Index i = (Index)size; i >= 0 && pm.readPrimitive(bit, ""); i--) 
-		{
-			setBit(i, bit);
-		}
 
-		return true;
-	}
-
-	void BitVector::write(PersistenceManager& pm) const
-	{
-		Size size = getSize();
-		pm.writePrimitive(size, "size");
-
-		for (Index i = (Index)size_ - 1; i >= 0; i--) 
-		{
-			bool bit = getBit(i);
-			pm.writePrimitive(bit, "");
-		}
-	}
 
 	Index BitVector::block_(Index index)
 	{

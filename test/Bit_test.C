@@ -7,7 +7,6 @@
 ///////////////////////////
 
 #include <BALL/DATATYPE/bitVector.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 ///////////////////////////
 

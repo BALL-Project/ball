@@ -10,7 +10,6 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 START_TEST(Atom)

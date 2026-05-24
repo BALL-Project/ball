@@ -17,8 +17,10 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
-# include <BALL/CONCEPT/persistenceManager.h>
+// v2.2 (PR-removal phase 6): BALL_EXPORT was previously visible transitively
+// via the now-removed persistenceManager.h include chain (global.h).
+#ifndef BALL_COMMON_GLOBAL_H
+#	include <BALL/COMMON/global.h>
 #endif
 
 #include <iostream>
@@ -130,28 +132,6 @@ namespace BALL
 
 		//@}
 
-    /** @name Storable interface.
-    */
-    //@{
-
-    /** Persistent stream writing.
-        This method writes the contents of the  \link PreciseTime PreciseTime \endlink  objects to the
-        persistent stream using the <tt>writePrimitive</tt> method
-        of the PersistenceManager.
-        @param pm the persistence manager
-    */
-    void write(PersistenceManager& pm) const;
-
-    /** Persistent stream reading.
-        This method reads the contents of a  \link PreciseTime PreciseTime \endlink  object from the
-        persistent stream using the <tt>readPrimitive</tt> method
-        of the PersistenceManager.
-        @param pm the persistence manager
-    */
-    bool read(PersistenceManager& pm);
-
-		//@}
- 
 		protected:
 
 		long secs_;
@@ -241,27 +221,6 @@ namespace BALL
 		/**	Clear method
 		*/
 		virtual void clear();
-
-		//@}
-    /** @name Storable interface.
-    */
-    //@{
-
-    /** Persistent stream writing.
-        This method writes the contents of the  \link TimeStamp TimeStamp \endlink  objects to the
-        persistent stream using the <tt>writePrimitive</tt> method
-        of the PersistenceManager.
-        @param pm the persistence manager
-    */
-    void write(PersistenceManager& pm) const;
-
-    /** Persistent stream reading.
-        This method reads the contents of a  \link TimeStamp TimeStamp \endlink  object from the
-        persistent stream using the <tt>readPrimitive</tt> method
-        of the PersistenceManager.
-        @param pm the persistence manager
-    */
-    bool read(PersistenceManager& pm);
 
 		//@}
 

@@ -8,8 +8,6 @@
 ///////////////////////////
 #include <BALL/MATHS/vector3.h>
 #include <cmath>
-#include <BALL/CONCEPT/persistenceManager.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
@@ -101,29 +99,6 @@ String filename;
 using std::ofstream;
 using std::ios;
 using namespace RTTI;
-TextPersistenceManager pm;
-CHECK(void write(PersistenceManager& pm) const throw())
-	Vector3 v(1.0, 2.0, 3.0);
-	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	pm.writeStorableObject(v, "testname");
-	ofile.close();	
-RESULT
-
-using std::ifstream;
-using std::cout;
-CHECK(bool read(PersistenceManager& pm) throw())
-	ifstream ifile(filename.c_str());
-	pm.setIstream(ifile);
-	Vector3 v;
-	bool result = pm.readStorableObject(v, "testname");
-	ifile.close();
-	TEST_EQUAL(result, true)
-	TEST_REAL_EQUAL(v.x, 1.0)
-	TEST_REAL_EQUAL(v.y, 2.0)
-	TEST_REAL_EQUAL(v.z, 3.0)
-RESULT
 
 CHECK(void set(const T* ptr))
 	float arr[3];

@@ -8,13 +8,11 @@
 ///////////////////////////
 
 #include <BALL/DATATYPE/options.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 START_TEST(Options)
 
 using BALL::Options;
 using BALL::Vector3;
-using BALL::TextPersistenceManager;
 using std::ofstream;
 using std::ifstream;
 
@@ -205,38 +203,6 @@ CHECK(bool writeOptionFile(const String& filename) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(OptionsFile2.txt))
 RESULT
 
-
-TextPersistenceManager pm;
-Options o2;
-CHECK(bool read(PersistenceManager& pm) throw())
-	ifstream ifile(BALL_TEST_DATA_PATH(OptionsFile3.txt));
-	pm.setIstream(ifile);
-
-	bool success = o2.read(pm);
-	ifile.close();
-	TEST_EQUAL(success, true)
-	TEST_EQUAL(o2.get("ABC"), "DEF")
-	TEST_EQUAL(o2.getBool("BOOL"), false)
-	TEST_EQUAL(o2.get("DEF"), "default")
-	TEST_EQUAL(o2.getBool("DEFBOOL"), true)
-	TEST_EQUAL(o2.getInteger("DEFINT"), 123456)
-	TEST_REAL_EQUAL(o2.getReal("DEFREAL"), 1.234560)
-	TEST_EQUAL(o2.getInteger("INT"), 1234567890)
-	TEST_REAL_EQUAL(o2.getReal("REAL"), 1.234560)
-	Vector3 v(0.0, 1.0, 2.0);
-	TEST_EQUAL(o2.getVector("SVECTOR"), v)
-	TEST_EQUAL(o2.getVector("VECTOR"), vector)
-RESULT
-
-String tmpname;
-CHECK(void write(PersistenceManager& pm) const throw())
-	NEW_TMP_FILE(tmpname)
-	ofstream  ofile(tmpname.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	o2.write(pm);
-	ofile.close();	
-	TEST_FILE_REGEXP(tmpname.c_str(), BALL_TEST_DATA_PATH(OptionsFile3.txt))
-RESULT
 
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	using std::ofstream;

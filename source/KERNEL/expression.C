@@ -274,38 +274,38 @@ namespace BALL
 
 	void Expression::registerStandardPredicates_()
 	{
-		create_methods_.insert("true", (PersistenceManager::CreateMethod)Factory<TruePredicate>::createVoid);
-		create_methods_.insert("false", (PersistenceManager::CreateMethod)Factory<FalsePredicate>::createVoid);
-		create_methods_.insert("selected", (PersistenceManager::CreateMethod)Factory<SelectedPredicate>::createVoid);
-		create_methods_.insert("name", (PersistenceManager::CreateMethod)Factory<AtomNamePredicate>::createVoid);
-		create_methods_.insert("type", (PersistenceManager::CreateMethod)Factory<AtomTypePredicate>::createVoid);
-		create_methods_.insert("element", (PersistenceManager::CreateMethod)Factory<ElementPredicate>::createVoid);
-		create_methods_.insert("residue", (PersistenceManager::CreateMethod)Factory<ResiduePredicate>::createVoid);
-		create_methods_.insert("residueID", (PersistenceManager::CreateMethod)Factory<ResidueIDPredicate>::createVoid);
-		create_methods_.insert("protein", (PersistenceManager::CreateMethod)Factory<ProteinPredicate>::createVoid);
-		create_methods_.insert("secondaryStruct", (PersistenceManager::CreateMethod)Factory<SecondaryStructurePredicate>::createVoid);
-		create_methods_.insert("solvent", (PersistenceManager::CreateMethod)Factory<SolventPredicate>::createVoid);
-		create_methods_.insert("backbone", (PersistenceManager::CreateMethod)Factory<BackBonePredicate>::createVoid);
-		create_methods_.insert("chain", (PersistenceManager::CreateMethod)Factory<ChainPredicate>::createVoid);
-		create_methods_.insert("nucleotide", (PersistenceManager::CreateMethod)Factory<NucleotidePredicate>::createVoid);
-		create_methods_.insert("inRing", (PersistenceManager::CreateMethod)Factory<InRingPredicate>::createVoid);
-		create_methods_.insert("doubleBonds", (PersistenceManager::CreateMethod)Factory<DoubleBondsPredicate>::createVoid);
-		create_methods_.insert("tripleBonds", (PersistenceManager::CreateMethod)Factory<TripleBondsPredicate>::createVoid);
-		create_methods_.insert("aromaticBonds", (PersistenceManager::CreateMethod)Factory<AromaticBondsPredicate>::createVoid);
-		create_methods_.insert("numberOfBonds", (PersistenceManager::CreateMethod)Factory<NumberOfBondsPredicate>::createVoid);
-		create_methods_.insert("connectedTo", (PersistenceManager::CreateMethod)Factory<ConnectedToPredicate>::createVoid);
-		create_methods_.insert("sp3Hybridized", (PersistenceManager::CreateMethod)Factory<Sp3HybridizedPredicate>::createVoid);
-		create_methods_.insert("sp2Hybridized", (PersistenceManager::CreateMethod)Factory<Sp2HybridizedPredicate>::createVoid);
-		create_methods_.insert("spHybridized", (PersistenceManager::CreateMethod)Factory<SpHybridizedPredicate>::createVoid);
-		create_methods_.insert("charge", (PersistenceManager::CreateMethod)Factory<ChargePredicate>::createVoid);
-		create_methods_.insert("isAxial", (PersistenceManager::CreateMethod)Factory<AxialPredicate>::createVoid);
-		create_methods_.insert("is4C1", (PersistenceManager::CreateMethod)Factory<Conformation4C1Predicate>::createVoid);
+		create_methods_.insert("true", (CreationMethod)Factory<TruePredicate>::createVoid);
+		create_methods_.insert("false", (CreationMethod)Factory<FalsePredicate>::createVoid);
+		create_methods_.insert("selected", (CreationMethod)Factory<SelectedPredicate>::createVoid);
+		create_methods_.insert("name", (CreationMethod)Factory<AtomNamePredicate>::createVoid);
+		create_methods_.insert("type", (CreationMethod)Factory<AtomTypePredicate>::createVoid);
+		create_methods_.insert("element", (CreationMethod)Factory<ElementPredicate>::createVoid);
+		create_methods_.insert("residue", (CreationMethod)Factory<ResiduePredicate>::createVoid);
+		create_methods_.insert("residueID", (CreationMethod)Factory<ResidueIDPredicate>::createVoid);
+		create_methods_.insert("protein", (CreationMethod)Factory<ProteinPredicate>::createVoid);
+		create_methods_.insert("secondaryStruct", (CreationMethod)Factory<SecondaryStructurePredicate>::createVoid);
+		create_methods_.insert("solvent", (CreationMethod)Factory<SolventPredicate>::createVoid);
+		create_methods_.insert("backbone", (CreationMethod)Factory<BackBonePredicate>::createVoid);
+		create_methods_.insert("chain", (CreationMethod)Factory<ChainPredicate>::createVoid);
+		create_methods_.insert("nucleotide", (CreationMethod)Factory<NucleotidePredicate>::createVoid);
+		create_methods_.insert("inRing", (CreationMethod)Factory<InRingPredicate>::createVoid);
+		create_methods_.insert("doubleBonds", (CreationMethod)Factory<DoubleBondsPredicate>::createVoid);
+		create_methods_.insert("tripleBonds", (CreationMethod)Factory<TripleBondsPredicate>::createVoid);
+		create_methods_.insert("aromaticBonds", (CreationMethod)Factory<AromaticBondsPredicate>::createVoid);
+		create_methods_.insert("numberOfBonds", (CreationMethod)Factory<NumberOfBondsPredicate>::createVoid);
+		create_methods_.insert("connectedTo", (CreationMethod)Factory<ConnectedToPredicate>::createVoid);
+		create_methods_.insert("sp3Hybridized", (CreationMethod)Factory<Sp3HybridizedPredicate>::createVoid);
+		create_methods_.insert("sp2Hybridized", (CreationMethod)Factory<Sp2HybridizedPredicate>::createVoid);
+		create_methods_.insert("spHybridized", (CreationMethod)Factory<SpHybridizedPredicate>::createVoid);
+		create_methods_.insert("charge", (CreationMethod)Factory<ChargePredicate>::createVoid);
+		create_methods_.insert("isAxial", (CreationMethod)Factory<AxialPredicate>::createVoid);
+		create_methods_.insert("is4C1", (CreationMethod)Factory<Conformation4C1Predicate>::createVoid);
 		// SMARTS predicate registration: gated under BALL_COLLAPSE_KERNEL_ONLY (its link
 		// dependency STRUCTURE/SmartsMatcher → QSAR/RingPerception is excluded
 		// in the KERNEL-only build). v2.2 HCP-1 task 0 -- restored from
 		// Track-B's lifted gate; returns at HCP-3 module re-open.
 #ifndef BALL_COLLAPSE_KERNEL_ONLY
-		create_methods_.insert("SMARTS", (PersistenceManager::CreateMethod)Factory<SMARTSPredicate>::createVoid);
+		create_methods_.insert("SMARTS", (CreationMethod)Factory<SMARTSPredicate>::createVoid);
 #endif
 	}
 

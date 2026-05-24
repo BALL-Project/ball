@@ -14,7 +14,6 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/chain.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 #include "ItemCollector.h"
 ///////////////////////////

@@ -7,6 +7,9 @@
 ///////////////////////////
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/fragment.h>
+// v2.2 (PR-removal phase 6): HashMap was previously visible transitively via
+// the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/hashMap.h>
 ///////////////////////////
 
 START_TEST(AnalyticalSES)

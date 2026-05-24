@@ -5,6 +5,10 @@
 #ifndef BALL_STRUCTURE_RINGANALYSER_H
 #define BALL_STRUCTURE_RINGANALYSER_H
 
+// v2.2 (PR-removal phase 6): the following were previously visible transitively
+// via the now-removed persistenceManager.h include chain.
+#include <BALL/DATATYPE/hashMap.h>
+
 #ifndef BALL_COMMON_GLOBAL_H
 # include <BALL/common.h>
 #endif

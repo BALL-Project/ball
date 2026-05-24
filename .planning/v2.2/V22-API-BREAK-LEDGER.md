@@ -168,6 +168,59 @@ Reference test data updated: `AtomContainer_test.txt`, `Molecule_test.txt`,
 
 ---
 
+## Class K — persistence STREAM framework removal (PR-removal milestone)
+
+The legacy object-stream persistence framework is **removed**. The JSON
+`StoreFormat` (`systemJson`/`propertyJson`) is **retained** and unaffected.
+`PersistentObject` is **retained** as a near-empty base TYPE (ctor/dtor/`finalize()`);
+`Composite : public PersistentObject` inheritance is **kept** (base-erasure deferred
+to H6a/D49 + VIEW). This phase removed the framework files + all `persistentRead/Write`
+virtuals + the `read/write(PersistenceManager&)` family + `operator>>/<<(PersistentObject&, PM&)`.
+
+**Removed headers/sources (13):**
+`CONCEPT/{persistenceManager.h,.iC, textPersistenceManager.h, XDRPersistenceManager.h,
+objectCreator.h, moleculeObjectCreator.h}` + matching `.C`; plus **`CONCEPT/client.{h,C}`**
+(see below).
+
+| Symbol / API | Old | New | Status |
+|---|---|---|---|
+| `PersistenceManager`, `TextPersistenceManager`, `XDRPersistenceManager` | classes | **removed** | LANDED |
+| `ObjectCreator`, `MoleculeObjectCreator` | classes | **removed** | LANDED |
+| `*::persistentRead/persistentWrite(PersistenceManager&)` (76 virtuals) | virtual | **removed** | LANDED |
+| `*::read/write(PersistenceManager&)` (BitVector/Options/TVector2/TVector3/TimeStamp/PreciseTime/PropertyManager/Selectable/NamedProperty/PDBInfo/PDBRecords/crystalInfo) | non-virtual | **removed** | LANDED |
+| `operator>>/<<(PersistentObject&, PersistenceManager&)` | global | **removed** | LANDED |
+| `PersistentObject` persistence virtuals | virtual | reduced to `finalize()` only | LANDED |
+
+**Class K-CS — client-server-over-persistence-stream feature (collateral, deferred):**
+`CONCEPT/Client` (libBALL) serialised a `Composite` through a `TextPersistenceManager`
+member (`composite >> pm_`) onto a socket; it cannot survive stream removal. `Client`
+had **no kernel-build consumers and no test**; its only users are
+`VIEW/KERNEL/serverWidget.{h,C}` (the receiving `Server`, already out of the kernel-only
+build) and the `APPLICATIONS/UTILITIES/BALLVIEWClient` utility. `client.{h,C}` are
+therefore **removed from libBALL**; the "push molecule to a running BALLView over TCP"
+feature is **dormant** and slated for rework over a current transport (JSON `StoreFormat`
+or a new protocol) in the VIEW / networking phase (Phase 4a+).
+
+**Out-of-kernel-build breaks deferred to the VIEW phase (do NOT compile in `BALL_CORE_ONLY`):**
+`SYSTEM/MPISupport.C` (`BALL_HAS_MPI`; used XDR/Text PM + `Options::read/write(PM&)`),
+`VIEW/KERNEL/serverWidget.C`, `VIEW/KERNEL/stage.C`/`mainControl.C`/`representation.C`,
+`VIEW/DIALOGS/displayProperties.C`, `APPLICATIONS/BALLVIEW/mainframe.C`,
+`APPLICATIONS/UTILITIES/BALLVIEWClient.C`, and the Python binding
+`PYTHON/EXTENSIONS/BALL/client.sip` (wraps the removed `Client` class; gated off by
+`BALL_PYTHON_SUPPORT`, which is disabled in this build) — all reference removed
+PM/ObjectCreator/Client symbols and must be reworked or excised when VIEW / the Python
+bindings are reactivated.
+
+**Include-hygiene fallout (self-containment, no API change):** `persistenceManager.h` was
+a transitive-include hub that silently provided `<iomanip>`, `<fstream>`, `String`,
+`HashMap`, `HashSet`, `StringHashMap`, `<BALL/COMMON/global.h>` (`BALL_EXPORT`) and
+`PersistentObject` to a large swath of CONCEPT/MATHS/FORMAT/STRUCTURE/DOCKING/QSAR
+headers. Its removal exposed ~40 latent missing-include bugs (incl. a pre-existing
+wrong-macro guard on `STRUCTURE/reducedSurface.h`'s `hashMap.h` include); all fixed by
+adding the genuinely-used includes directly. No public symbol changed.
+
+---
+
 ## Sign-off log
 
 | Commit | Break classes landed | Codex round | Verdict |
