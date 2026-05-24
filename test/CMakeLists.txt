@@ -73,7 +73,8 @@ IF(BALL_COLLAPSE_KERNEL_ONLY)
 	# Drop the FORMAT-pulling tests that live in the wholesale foundation
 	# groups (they #include <BALL/FORMAT/...>; FORMAT is excluded from the
 	# KERNEL-only build). RTTI_test stays -- its FORMAT checks are #ifdef'd.
-	LIST(REMOVE_ITEM BALL_CONCEPTS_TESTS TextPersistenceManager_test)
+	# (v2.2 PR-removal phase 1: the TextPersistenceManager_test REMOVE_ITEM is gone
+	# -- the test was deleted with the persistence stream framework.)
 	SET(BALL_TESTS
 		BALL_BASIC_TESTS
 		BALL_MATHS_TESTS

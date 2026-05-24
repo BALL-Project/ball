@@ -85,9 +85,10 @@ SET(BALL_CONCEPTS_TESTS
 	AutoDeletable_test
 	Factory_test
 	Object_test
-	PersistentObject_test
-	PersistenceManager_test
-	TextPersistenceManager_test
+	# v2.2 PR-removal phase 1: PersistentObject_test / PersistenceManager_test /
+	# TextPersistenceManager_test deleted -- they test the persistence STREAM
+	# framework being removed (PersistenceManager + read/write(PM&) virtuals).
+	# The retained minimal PersistentObject type needs no framework test.
 	Selectable_test
 	NamedProperty_test
 	PropertyManager_test
@@ -357,7 +358,7 @@ SET(BALL_QSAR_TESTS
 )
 
 SET(BALL_XDR_TESTS
-	XDRPersistenceManager_test
+	# v2.2 PR-removal phase 1: XDRPersistenceManager_test deleted (stream framework).
 )
 
 SET(BALL_ASIO_TESTS
