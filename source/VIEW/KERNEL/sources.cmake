@@ -30,6 +30,13 @@ SET(SOURCES_LIST
 	# Mainframe only wires them in under the BALL_UI_V2 ifdef.
 	workspaceManager.C
 	configMigration.C
+	# Phase 999.59-01 — base Controller class (NEW) for the command
+	# contract (ARCHITECTURE-CONTRACT.md §2). Q_OBJECT header with a
+	# paired controller.C of the same name → CMAKE_AUTOMOC scans it
+	# automatically (no MOC_SOURCES_LIST entry needed). The companion
+	# headers controller.h / applyPayload.h / controllerApplyGuard.h are
+	# picked up by the FILE(GLOB ...) in include/BALL/VIEW/KERNEL/sources.cmake.
+	controllers/controller.C
 	# Phase 999.44 — BALLView Refresh: *Controller extraction subtree.
 	# The exemplar StageController landed in Plan 01; Plan 04 adds 5
 	# more read-only mirror Controllers for the Representation tab
