@@ -35,6 +35,10 @@
 # include <BALL/KERNEL/containerKind.h>
 #endif
 
+#ifndef BALL_KERNEL_CONTAINERROLE_H
+# include <BALL/KERNEL/containerRole.h>   // HCP-2a: MoleculeRole/FragmentRole/ResidueKind/SSKind
+#endif
+
 #ifndef BALL_COMMON_EXCEPTION_H
 # include <BALL/COMMON/exception.h>
 #endif
@@ -166,8 +170,12 @@ namespace BALL
 		template <typename T>
 		T as() const
 		{
+			// HCP-2a: the role-aware handles accept a SET of kinds, so narrow via
+			// the static T::acceptsKind() predicate (the legacy single-kind wrappers
+			// define it as a one-kind check, preserving their old narrow). Still a
+			// tag compare -- no RTTI.
 			if (store_ != nullptr && isValid()
-				&& store_->container_kind_(idx_) == T::KIND)
+				&& T::acceptsKind(store_->container_kind_(idx_)))
 			{
 				return T(*store_, idx_);
 			}
@@ -196,74 +204,155 @@ namespace BALL
 	static_assert(sizeof(ContainerHandleBase) == 24,
 		"ContainerHandleBase must be 24 B: {store* 8, u32 idx (+4 pad), u64 gen 8}");
 
-// D64: a raw typed ctor on a wrong-kind row is debug-caught (the safe,
-// release-checked path is ContainerHandleBase::as<T>()). Release C++
-// elides the check (documented UB on misuse).
+// HCP-2a: debug/Python-checked role/kind assertion (BALL_CONTAINER_HANDLE_CHECKS
+// = BALL_DEBUG || BALL_PYTHON_WRAPPER). Release C++ elides it -- documented UB on
+// misuse, the same contract class as the H1b kind-checked ctor.
 #ifdef BALL_CONTAINER_HANDLE_CHECKS
-# define BALL_CONTAINER_HANDLE_ASSERT_KIND_(EXPECTED)                         \
-	do {                                                                         \
-		if (store_ != nullptr && store_->container_kind_(idx_) != (EXPECTED))      \
-		{                                                                          \
-			throw Exception::InvalidArgument(__FILE__, __LINE__,                     \
-				"typed container handle constructed on a row of the wrong kind");      \
-		}                                                                          \
-	} while (0)
+# define BALL_CONTAINER_HANDLE_REQUIRE_(cond, msg)                            \
+	do { if (!(cond)) { throw Exception::InvalidArgument(__FILE__, __LINE__, msg); } } while (0)
 #else
-# define BALL_CONTAINER_HANDLE_ASSERT_KIND_(EXPECTED) ((void)0)
+# define BALL_CONTAINER_HANDLE_REQUIRE_(cond, msg) ((void)0)
 #endif
 
-// Typed handle boilerplate: a thin wrapper adding ONLY a KIND tag, the
-// kind-checked ctor, and (optionally) kind-specific getters. No data
-// members -> size identical to the base (pinned below).
-#define BALL_DECLARE_CONTAINER_HANDLE(NAME, KIND_ENUM, EXTRA)                 \
-	class BALL_EXPORT NAME : public ContainerHandleBase                          \
+	/** Role-aware molecule-level value handle (HCP-2a). Binds any molecule row
+			-- v0 kinds MOLECULE/PROTEIN/NUCLEIC_ACID during dual existence -- and
+			exposes the derived `MoleculeRole`. Replaces the H1b single-kind
+			`MoleculeHandle`/`ProteinHandle`/`NucleicAcidHandle`; at H4 it is renamed
+			to the canonical `Molecule` (D63). NON-polymorphic, 24 B (no data members).
+			\ingroup KernelContainers
+	*/
+	class BALL_EXPORT MoleculeHandle : public ContainerHandleBase
+	{
+		public:
+		/// The molecule-level kinds this handle binds (HCP-2a multi-kind narrow).
+		static bool acceptsKind(ContainerKind k)
+		{
+			return k == ContainerKind::MOLECULE
+				|| k == ContainerKind::PROTEIN
+				|| k == ContainerKind::NUCLEIC_ACID;
+		}
+
+		MoleculeHandle() = default;
+		MoleculeHandle(MoleculeStore& store, std::uint32_t idx)
+			: ContainerHandleBase(store, idx)
+		{
+			BALL_CONTAINER_HANDLE_REQUIRE_(store_ == nullptr || acceptsKind(store_->container_kind_(idx_)),
+				"MoleculeHandle constructed on a non-molecule-level row");
+		}
+
+		/// Derived molecule role (D-HC1: PROTEIN / NUCLEIC_ACID / SMALL_MOLECULE / ...).
+		MoleculeRole getMoleculeRole() const
+		{ assertValid_(); return store_->container_molecule_role_(idx_); }
+
+		/// Identifier -- role-asserting: only PROTEIN/NUCLEIC_ACID molecules carry one.
+		String getID() const
+		{
+			assertValid_();
+			BALL_CONTAINER_HANDLE_REQUIRE_(
+				getMoleculeRole() == MoleculeRole::PROTEIN || getMoleculeRole() == MoleculeRole::NUCLEIC_ACID,
+				"MoleculeHandle::getID() on a molecule whose role carries no id");
+			return String(store_->container_id_(idx_));
+		}
+	};
+	static_assert(sizeof(MoleculeHandle) == sizeof(ContainerHandleBase),
+		"MoleculeHandle must add no data members (stays 24 B)");
+
+	/** Role-aware fragment-level value handle (HCP-2a). Binds any fragment row
+			-- v0 kinds CHAIN/FRAGMENT/RESIDUE/NUCLEOTIDE/SECONDARY_STRUCTURE -- and
+			exposes the derived `FragmentRole`/`ResidueKind`/`SSKind` plus role-asserting
+			id / insertion-code / SS-type. Replaces the H1b single-kind `FragmentHandle`/
+			`ChainHandle`/`ResidueHandle`/`NucleotideHandle`/`SecondaryStructureHandle`;
+			at H4 -> canonical `Fragment` (D63). 24 B.
+			\ingroup KernelContainers
+	*/
+	class BALL_EXPORT FragmentHandle : public ContainerHandleBase
+	{
+		public:
+		static bool acceptsKind(ContainerKind k)
+		{
+			return k == ContainerKind::CHAIN
+				|| k == ContainerKind::FRAGMENT
+				|| k == ContainerKind::RESIDUE
+				|| k == ContainerKind::NUCLEOTIDE
+				|| k == ContainerKind::SECONDARY_STRUCTURE;
+		}
+
+		FragmentHandle() = default;
+		FragmentHandle(MoleculeStore& store, std::uint32_t idx)
+			: ContainerHandleBase(store, idx)
+		{
+			BALL_CONTAINER_HANDLE_REQUIRE_(store_ == nullptr || acceptsKind(store_->container_kind_(idx_)),
+				"FragmentHandle constructed on a non-fragment-level row");
+		}
+
+		/// Derived fragment role (CHAIN / RESIDUE / SECONDARY_STRUCTURE / ...).
+		FragmentRole getFragmentRole() const
+		{ assertValid_(); return store_->container_fragment_role_(idx_); }
+		/// Derived residue kind (AMINO_ACID / NUCLEOTIDE / WATER / ...) for RESIDUE-role.
+		ResidueKind getResidueKind() const
+		{ assertValid_(); return store_->container_residue_kind_(idx_); }
+		/// Derived secondary-structure kind (HELIX / STRAND / ...) for SS-role.
+		SSKind getSSKind() const
+		{ assertValid_(); return store_->container_ss_kind_(idx_); }
+
+		/// Identifier -- role-asserting: RESIDUE-role fragments (former Residue/
+		/// Nucleotide) carry an id.
+		String getID() const
+		{
+			assertValid_();
+			BALL_CONTAINER_HANDLE_REQUIRE_(getFragmentRole() == FragmentRole::RESIDUE,
+				"FragmentHandle::getID() on a non-RESIDUE fragment");
+			return String(store_->container_id_(idx_));
+		}
+		/// Insertion code -- role-asserting (RESIDUE-role fragments).
+		char getInsertionCode() const
+		{
+			assertValid_();
+			BALL_CONTAINER_HANDLE_REQUIRE_(getFragmentRole() == FragmentRole::RESIDUE,
+				"FragmentHandle::getInsertionCode() on a non-RESIDUE fragment");
+			return store_->container_insertion_code_(idx_);
+		}
+		/// Raw SS type code (legacy spelling) -- role-asserting (SECONDARY_STRUCTURE).
+		std::uint8_t getTypeCode() const
+		{
+			assertValid_();
+			BALL_CONTAINER_HANDLE_REQUIRE_(getFragmentRole() == FragmentRole::SECONDARY_STRUCTURE,
+				"FragmentHandle::getTypeCode() on a non-secondary-structure fragment");
+			return store_->container_ss_type_(idx_);
+		}
+	};
+	static_assert(sizeof(FragmentHandle) == sizeof(ContainerHandleBase),
+		"FragmentHandle must add no data members (stays 24 B)");
+
+// HCP-2a (D-2a.3): the 6 former typed handles are `[[deprecated]]` single-kind
+// no-data subclass wrappers. They PRESERVE the old single-kind narrow
+// (`as<OldHandle>()` + `OldHandle::KIND`) + the inherited kind-specific getters,
+// while warning callers to migrate to the role-aware handle + getRole(). Deleted at
+// H4 (canonical rename, D63). Defining them does not warn (only USE does); they add
+// no data members -> 24 B (structurally guaranteed by the empty body + 24 B base).
+#define BALL_DECLARE_LEGACY_HANDLE(NAME, BASE, KIND_ENUM)                     \
+	class BALL_DEPRECATED BALL_EXPORT NAME : public BASE                         \
 	{                                                                            \
 		public:                                                                    \
 		static constexpr ContainerKind KIND = ContainerKind::KIND_ENUM;            \
+		static bool acceptsKind(ContainerKind k) { return k == ContainerKind::KIND_ENUM; } \
 		NAME() = default;                                                          \
-		NAME(MoleculeStore& store, std::uint32_t idx)                              \
-			: ContainerHandleBase(store, idx) { assertKind_(); }                     \
-		EXTRA                                                                      \
-		private:                                                                   \
-		void assertKind_() const                                                   \
+		NAME(MoleculeStore& store, std::uint32_t idx) : BASE(store, idx)           \
 		{                                                                          \
-			BALL_CONTAINER_HANDLE_ASSERT_KIND_(KIND);                                \
+			BALL_CONTAINER_HANDLE_REQUIRE_(store_ == nullptr || acceptsKind(store_->container_kind_(idx_)), \
+				#NAME " constructed on a row of the wrong kind");                      \
 		}                                                                          \
-	};                                                                           \
-	static_assert(sizeof(NAME) == sizeof(ContainerHandleBase),                   \
-		#NAME " must add no data members (stays 24 B)");
+	};
 
-	// Plain container kinds (no kind-specific scalar payload beyond name).
-	BALL_DECLARE_CONTAINER_HANDLE(MoleculeHandle, MOLECULE, )
-	BALL_DECLARE_CONTAINER_HANDLE(ChainHandle,    CHAIN,    )
-	BALL_DECLARE_CONTAINER_HANDLE(FragmentHandle, FRAGMENT, )
+	BALL_DECLARE_LEGACY_HANDLE(ProteinHandle,            MoleculeHandle, PROTEIN)
+	BALL_DECLARE_LEGACY_HANDLE(NucleicAcidHandle,        MoleculeHandle, NUCLEIC_ACID)
+	BALL_DECLARE_LEGACY_HANDLE(ChainHandle,              FragmentHandle, CHAIN)
+	BALL_DECLARE_LEGACY_HANDLE(ResidueHandle,            FragmentHandle, RESIDUE)
+	BALL_DECLARE_LEGACY_HANDLE(NucleotideHandle,         FragmentHandle, NUCLEOTIDE)
+	BALL_DECLARE_LEGACY_HANDLE(SecondaryStructureHandle, FragmentHandle, SECONDARY_STRUCTURE)
 
-	// Kinds with an `id` string payload.
-	BALL_DECLARE_CONTAINER_HANDLE(ProteinHandle, PROTEIN,
-		String getID() const { assertValid_(); return String(store_->container_id_(idx_)); }
-	)
-	BALL_DECLARE_CONTAINER_HANDLE(NucleicAcidHandle, NUCLEIC_ACID,
-		String getID() const { assertValid_(); return String(store_->container_id_(idx_)); }
-	)
-
-	// Kinds with id + insertion code.
-	BALL_DECLARE_CONTAINER_HANDLE(ResidueHandle, RESIDUE,
-		String getID() const { assertValid_(); return String(store_->container_id_(idx_)); }
-		char   getInsertionCode() const { assertValid_(); return store_->container_insertion_code_(idx_); }
-	)
-	BALL_DECLARE_CONTAINER_HANDLE(NucleotideHandle, NUCLEOTIDE,
-		String getID() const { assertValid_(); return String(store_->container_id_(idx_)); }
-		char   getInsertionCode() const { assertValid_(); return store_->container_insertion_code_(idx_); }
-	)
-
-	// Secondary structure: a numeric type code (maps to the v0
-	// SecondaryStructure::Type enum; kept as a raw u8 in H1b).
-	BALL_DECLARE_CONTAINER_HANDLE(SecondaryStructureHandle, SECONDARY_STRUCTURE,
-		std::uint8_t getTypeCode() const { assertValid_(); return store_->container_ss_type_(idx_); }
-	)
-
-#undef BALL_DECLARE_CONTAINER_HANDLE
-#undef BALL_CONTAINER_HANDLE_ASSERT_KIND_
+#undef BALL_DECLARE_LEGACY_HANDLE
+#undef BALL_CONTAINER_HANDLE_REQUIRE_
 
 } // namespace BALL
 

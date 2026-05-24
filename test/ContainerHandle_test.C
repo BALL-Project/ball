@@ -25,6 +25,15 @@
 #include <BALL/KERNEL/containerKind.h>
 #include <BALL/KERNEL/containerHandle.h>
 #include <unordered_map>
+
+// HCP-2a: this test intentionally exercises the [[deprecated]] legacy single-kind
+// handle wrappers (ProteinHandle/ChainHandle/ResidueHandle/NucleotideHandle/
+// NucleicAcidHandle/SecondaryStructureHandle -- backward-compat single-kind narrow)
+// ALONGSIDE the new role-aware MoleculeHandle/FragmentHandle. Silence the expected
+// deprecation warnings for the legacy spellings.
+#if defined(__GNUC__) || defined(__clang__)
+#	pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
 ///////////////////////////
 
 using namespace BALL;
@@ -182,6 +191,72 @@ CHECK(D56/D65 detached-alias staleness across migration)
 	ChainHandle dst_handle(dst_store, dst_root);
 	TEST_EQUAL(dst_handle.isValid(), true)
 	TEST_EQUAL(dst_handle.getName(), "A")
+RESULT
+
+CHECK(HCP-2a -- role-aware MoleculeHandle / FragmentHandle over the role columns)
+	MoleculeStore store;
+	ContainerTable& t = store.sideTables_().container_table_;
+
+	std::uint32_t prot  = t.allocate(ContainerKind::PROTEIN);
+	t.row(prot).payload.id_offset = t.intern("1ABC");
+	std::uint32_t na    = t.allocate(ContainerKind::NUCLEIC_ACID);
+	t.row(na).payload.id_offset   = t.intern("DNA1");
+	std::uint32_t chain = t.allocate(ContainerKind::CHAIN);
+	std::uint32_t res   = t.allocate(ContainerKind::RESIDUE);
+	t.row(res).payload.id_offset       = t.intern("GLY");
+	t.row(res).payload.insertion_code  = 'B';
+	store.container_set_residue_kind_(res, ResidueKind::AMINO_ACID);
+	std::uint32_t ss    = t.allocate(ContainerKind::SECONDARY_STRUCTURE);
+	t.row(ss).payload.ss_type = (std::uint8_t)1;
+
+	// MoleculeHandle is role-aware: a SET of molecule-level kinds (multi-kind narrow).
+	TEST_EQUAL(MoleculeHandle::acceptsKind(ContainerKind::MOLECULE), true)
+	TEST_EQUAL(MoleculeHandle::acceptsKind(ContainerKind::PROTEIN), true)
+	TEST_EQUAL(MoleculeHandle::acceptsKind(ContainerKind::NUCLEIC_ACID), true)
+	TEST_EQUAL(MoleculeHandle::acceptsKind(ContainerKind::RESIDUE), false)
+
+	MoleculeHandle mh(store, prot);
+	TEST_EQUAL(mh.getMoleculeRole() == MoleculeRole::PROTEIN, true)
+	TEST_EQUAL(mh.getID(), "1ABC")                         // role-asserting: PROTEIN carries id
+	MoleculeHandle mh_na(store, na);
+	TEST_EQUAL(mh_na.getMoleculeRole() == MoleculeRole::NUCLEIC_ACID, true)
+	TEST_EQUAL(mh_na.getID(), "DNA1")
+
+	// FragmentHandle is role-aware: a SET of fragment-level kinds.
+	TEST_EQUAL(FragmentHandle::acceptsKind(ContainerKind::CHAIN), true)
+	TEST_EQUAL(FragmentHandle::acceptsKind(ContainerKind::RESIDUE), true)
+	TEST_EQUAL(FragmentHandle::acceptsKind(ContainerKind::SECONDARY_STRUCTURE), true)
+	TEST_EQUAL(FragmentHandle::acceptsKind(ContainerKind::PROTEIN), false)
+
+	FragmentHandle fh_ch(store, chain);
+	TEST_EQUAL(fh_ch.getFragmentRole() == FragmentRole::CHAIN, true)
+	FragmentHandle fh_res(store, res);
+	TEST_EQUAL(fh_res.getFragmentRole() == FragmentRole::RESIDUE, true)
+	TEST_EQUAL(fh_res.getResidueKind() == ResidueKind::AMINO_ACID, true)
+	TEST_EQUAL(fh_res.getID(), "GLY")                      // role-asserting: RESIDUE carries id
+	TEST_EQUAL(fh_res.getInsertionCode(), 'B')
+	FragmentHandle fh_ss(store, ss);
+	TEST_EQUAL(fh_ss.getFragmentRole() == FragmentRole::SECONDARY_STRUCTURE, true)
+	TEST_EQUAL((int)fh_ss.getTypeCode(), 1)                // role-asserting: SS carries type code
+	TEST_EQUAL(fh_ss.getSSKind() == store.container_ss_kind_(ss), true)  // handle forwards the derived kind
+
+	// as<>() multi-kind narrow: a PROTEIN row narrows to the role-aware MoleculeHandle.
+	ContainerHandleBase base_prot(store, prot);
+	MoleculeHandle as_mh = base_prot.as<MoleculeHandle>();
+	TEST_EQUAL((bool)as_mh, true)
+	TEST_EQUAL(as_mh.getMoleculeRole() == MoleculeRole::PROTEIN, true)
+	// a RESIDUE row does NOT narrow to MoleculeHandle, but DOES to FragmentHandle.
+	ContainerHandleBase base_res(store, res);
+	TEST_EQUAL((bool)base_res.as<MoleculeHandle>(), false)
+	TEST_EQUAL((bool)base_res.as<FragmentHandle>(), true)
+
+	// The [[deprecated]] legacy wrappers STILL narrow single-kind (preserved):
+	// ProteinHandle binds only PROTEIN, so as<ProteinHandle>() on a NUCLEIC_ACID
+	// row is null, while as<NucleicAcidHandle>() is not.
+	ContainerHandleBase base_na(store, na);
+	TEST_EQUAL((bool)base_na.as<ProteinHandle>(), false)
+	TEST_EQUAL((bool)base_na.as<NucleicAcidHandle>(), true)
+	TEST_EQUAL(ProteinHandle::KIND == ContainerKind::PROTEIN, true)   // legacy KIND preserved
 RESULT
 
 END_TEST

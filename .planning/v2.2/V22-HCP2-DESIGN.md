@@ -185,3 +185,32 @@ Verdict: **AGREE** — implement HCP-2a as designed.
 4. **ADDRESSED.** No remaining design blocker found for HCP-2a; keep
    `SecondaryStructureHandle::getTypeCode()` as the compatibility spelling during dual
    existence and delete it with the wrapper at H4.
+
+## HCP-2a-CR code review
+
+Verdict: **GO** — the implemented HCP-2a role-aware container-handle patch matches
+the agreed R1b design; no blocking correctness, ABI, or compatibility issue found.
+
+1. **SOUND.** `as<T>()` now dispatches through `T::acceptsKind(kind)`, which is correct
+   for the multi-kind `MoleculeHandle` / `FragmentHandle` primaries and for the
+   deprecated single-kind wrappers; grep found no repo caller using `as<>()` with a
+   type lacking `acceptsKind`.
+2. **SOUND.** The role-asserting getters check the derived role, not the transient v0
+   kind: molecule `getID()` requires `PROTEIN` / `NUCLEIC_ACID`, fragment `getID()` /
+   `getInsertionCode()` require `RESIDUE`, and `getTypeCode()` requires
+   `SECONDARY_STRUCTURE`; this is the H4-ready contract and keeps the same
+   debug/Python-only check, release-UB misuse model as the prior typed constructors.
+3. **SOUND.** The deprecated wrappers preserve legacy `KIND`, single-kind
+   `acceptsKind`, inherited getters, and no-data layout; the base constructor may accept
+   the broader primary set, but the wrapper constructor then enforces the legacy
+   single-kind in checked builds.
+4. **SOUND.** Size / ABI pins hold for the primaries and the test covers all wrapper
+   sizes at 24 B; adding `containerRole.h` stays inside the public D66a boundary and
+   does not pull private store internals into `containerHandle.h`.
+5. **SOUND.** The retained legacy checks plus the new HCP-2a CHECK cover role-aware
+   acceptance, role accessors, happy-path role-asserting getters, multi-kind `as<>()`,
+   and preserved single-kind wrapper narrowing; negative debug exception tests would
+   be additive, not a blocker.
+6. **SOUND.** No new missed handle name, include cycle, vtable/slicing concern, or
+   production `as<>()` caller issue found; `build-core` `ctest -R ContainerHandle_test
+   --output-on-failure` passed.
