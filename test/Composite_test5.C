@@ -6,7 +6,6 @@
 
 ///////////////////////////
 #include <BALL/CONCEPT/composite.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/CONCEPT/visitor.h>
 ///////////////////////////
 
@@ -164,40 +163,6 @@ CHECK([EXTRA] ChildComposite backward reverse const iteration)
 	TEST_EQUAL(sub_it == const_cast<const Composite&>(a).rbeginChildComposite(), true)
 RESULT
 
-TextPersistenceManager  pm;
-Composite composite;
-composite.select();
-String filename;
-
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	NEW_TMP_FILE(filename)
-	std::ofstream  ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	using namespace RTTI;
-	pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
-	composite >> pm;
-	ofile.close();
-RESULT
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	using namespace RTTI;
-	std::ifstream  ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject* ptr;
-	ptr = pm.readObject();
-	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<Composite>(ptr), true)
-        if (isKindOf<Composite>(ptr))
-		{
-			Composite* pers_a = castTo<Composite>(*ptr);
-			TEST_EQUAL(pers_a->isSelected(), true)
-		}
-		delete ptr;
-	}
-RESULT
 
 CHECK(bool containsSelection() const throw())
 	Composite a, b, c, d, e;

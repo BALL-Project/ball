@@ -205,24 +205,6 @@ namespace BALL
 
 		//@}		
 
-		/**	@name	Persistence 
-		*/
-		//@{
-		
-		/** Write a persistent copy of the object.
-				@param	pm the persistence manager
-				@param	name the object name
-				\throws Exception::GeneralException
-		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/** Read a persistent object.
-				@param	pm the persistence manager
-				\throws Exception::GeneralException
-		*/
-		virtual void persistentRead(PersistenceManager& pm);
-
-		//@}
 
 		/**	@name	Modifying and Accessing the Tree 
 		*/

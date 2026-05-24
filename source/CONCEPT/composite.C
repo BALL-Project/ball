@@ -385,43 +385,6 @@ namespace BALL
 		}
 	}
 
-  void Composite::persistentWrite(PersistenceManager& pm, const char* name) const
-  {
-		pm.writeObjectHeader(this, name);
-			pm.writeStorableObject(dynamic_cast<const Selectable&>(*this), "Selectable");
-
-			pm.writePrimitive(number_of_children_, "number_of_children_");
-			pm.writeObjectPointer(parent_, "parent_");
-			pm.writeObjectPointer(previous_, "previous_");
-			pm.writeObjectPointer(next_, "next_");
-			pm.writeObjectPointer(first_child_, "first_child_");
-			pm.writeObjectPointer(last_child_, "last_child_");
-			pm.writePrimitive(properties_, "properties_");
-			pm.writePrimitive(contains_selection_, "contains_selection_");
-			pm.writePrimitive(number_of_selected_children_, "number_of_selected_children_");
-			pm.writePrimitive(number_of_children_containing_selection_, "number_of_children_containing_selection_");
-			pm.writeStorableObject(selection_stamp_, "selection_stamp_");
-			pm.writeStorableObject(modification_stamp_, "modification_stamp_");
-		pm.writeObjectTrailer(name);
-	}
-
-  void Composite::persistentRead(PersistenceManager& pm)
-  {
-		pm.readStorableObject(dynamic_cast<Selectable&>(*this), "Selectable");
-
-		pm.readPrimitive(number_of_children_, "number_of_children_");
-		pm.readObjectPointer(parent_, "parent_");
-		pm.readObjectPointer(previous_, "previous_");
-		pm.readObjectPointer(next_, "next_");
-		pm.readObjectPointer(first_child_, "first_child_");
-		pm.readObjectPointer(last_child_, "last_child_");
-		pm.readPrimitive(properties_, "properties_");
-		pm.readPrimitive(contains_selection_, "contains_selection_");
-		pm.readPrimitive(number_of_selected_children_, "number_of_selected_children_");
-		pm.readPrimitive(number_of_children_containing_selection_, "number_of_children_containing_selection_");
-		pm.readStorableObject(selection_stamp_, "selection_stamp_");
-		pm.readStorableObject(modification_stamp_, "modification_stamp_");
-	}
  
 	Size Composite::getPathLength(const Composite& composite) const
 	{
