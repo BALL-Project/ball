@@ -14,8 +14,28 @@
 # include <BALL/COMMON/global.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_CONTROLLERS_CONTROLLER_H
+# include <BALL/VIEW/KERNEL/controllers/controller.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_CONTROLLERS_APPLYPAYLOAD_H
+# include <BALL/VIEW/KERNEL/controllers/applyPayload.h>
+#endif
+
 #include <QtCore/QObject>
 #include <QtGui/QColor>
+
+// ---------------------------------------------------------------------------
+// 999.59-02 (v1.7.x-24) — cut over to the §2 `bool apply()` command contract
+// (ARCHITECTURE-CONTRACT.md §2 / §2a / §13). MaterialController inherits the
+// base Controller and overrides bool apply() in the §2 shape; its §2a
+// declared invalidation is a SOFT refresh (representation_->update(false)) —
+// a material change leaves the primitive set intact. The per-controller
+// fixture-activation symbol below flips material_contract_test's parity block
+// live (test/contract/contractFixtureActivation.h). Defined ONLY because
+// apply() returns bool.
+// ---------------------------------------------------------------------------
+#define BALL_VIEW_MATERIAL_APPLY_BOOL 1
 
 namespace BALL
 {
@@ -42,7 +62,7 @@ namespace BALL
 		 *     Scene::applyPreferences() now drives (999.58-01 cut-over)
 		 *     in place of MaterialSettings::apply().
 		 */
-		class BALL_VIEW_EXPORT MaterialController : public QObject
+		class BALL_VIEW_EXPORT MaterialController : public Controller
 		{
 			Q_OBJECT
 
@@ -78,10 +98,31 @@ namespace BALL
 				QColor specularColor() const   { return specular_color_; }
 				QColor reflectiveColor() const { return reflective_color_; }
 				int   transparency() const   { return transparency_; }
-				bool isApplying() const      { return applying_; }
+				// 999.59-02 — re-entrancy state now lives in the base depth
+				// counter (applying_depth_).
+				bool isApplying() const      { return applying_depth_ > 0; }
+
+				/**
+				 * Apply the staged material to the attached Representation,
+				 * command-shaped per §2. Returns true when the Representation
+				 * was mutated, false when dropped (re-entry) or rejected (no
+				 * Representation / busy). Overrides Controller::apply(). The
+				 * owner mutation (the per-rep Rendering::Material property +
+				 * transparency) is Scene-independent and therefore
+				 * headless-testable; the Scene/renderer refresh is the §2a
+				 * declared invalidation. Called directly by the Inspector
+				 * section, not as a string-based Qt slot.
+				 * @return true if the owner was mutated, false otherwise.
+				 */
+				bool apply() override;
+
+				/**
+				 * Reset the mirror to the owner's current state (999.64 reset
+				 * path). Overrides Controller::reset(); delegates to revert().
+				 */
+				void reset() override;
 
 			public Q_SLOTS:
-				void apply();
 				/**
 				 * All-representations default-material apply path. Writes the
 				 * mirrored material fields (colors + intensities + shininess)
@@ -113,7 +154,33 @@ namespace BALL
 				void transparencyChanged(int v);
 				void appliedStub();
 
+			protected:
+				/**
+				 * §2a declared invalidation — SOFT refresh
+				 * (representation_->update(false) + Scene/renderer material
+				 * refresh when a Scene exists). A material / transparency
+				 * change leaves the primitive set intact, so no display-list
+				 * rebuild is required. Overrides Controller::invalidateDeclared_().
+				 */
+				void invalidateDeclared_() override;
+
 			private:
+				/**
+				 * §13-cookbook mutation body, moved out of apply(): builds the
+				 * Stage::Material from the mirrored fields, stores it as the
+				 * per-rep Rendering::Material property (the owner state — same
+				 * property Scene::updateMaterialForRepresentation writes), and
+				 * pushes the 0–255 transparency onto the Representation. This
+				 * is Scene-INDEPENDENT so it is headless-testable; the
+				 * Scene/renderer refresh is invalidateDeclared_(). Precondition
+				 * rep_ != nullptr guaranteed by apply().
+				 * @return true (it always installs the staged material).
+				 */
+				bool applyInternal_();
+
+				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
+				void recordIntent_(const ApplyPayload& payload);
+
 				Representation* rep_;
 				float ambient_;
 				float diffuse_;
@@ -123,7 +190,7 @@ namespace BALL
 				QColor specular_color_;    // mirrors Stage::Material.specular_color
 				QColor reflective_color_;  // mirrors Stage::Material.reflective_color
 				int   transparency_;  // 0–255 per-rep alpha (Representation::setTransparency path).
-				bool applying_;  // v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
+				ApplyPayload last_payload_;  // 999.59-02 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW

@@ -26,16 +26,38 @@
 #include <BALL/VIEW/MODELS/colorProcessorFactory.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <sstream>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		namespace
+		{
+			// Compact owner-state snapshot for the ApplyPayload before/after
+			// blobs (§2 step 3).
+			String snapshotColoringState_(Representation* rep)
+			{
+				if (rep == nullptr) return String("coloring{null}");
+				std::ostringstream s;
+				s << "coloring=" << static_cast<int>(rep->getColoringMethod());
+				InterpolateColorProcessor* icp =
+					dynamic_cast<InterpolateColorProcessor*>(rep->getColorProcessor());
+				if (icp != nullptr)
+				{
+					s << ";min=" << icp->getMinValue()
+					  << ";max=" << icp->getMaxValue();
+				}
+				return String(s.str());
+			}
+		}
+
 		ColoringController::ColoringController(Representation* rep, QObject* parent)
-			: QObject(parent), rep_(rep), coloring_method_(0),
-				value_min_(0.0f), value_max_(100.0f),
-				applying_(false)
+			: Controller(parent), rep_(rep), coloring_method_(0),
+				value_min_(0.0f), value_max_(100.0f)
 		{
 			revert();
 		}
@@ -72,29 +94,61 @@ namespace BALL
 			}
 		}
 
-		void ColoringController::apply()
+		void ColoringController::reset()
 		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		bool ColoringController::apply()
+		{
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
 			if (rep_ == nullptr)
 			{
 				Log.warn() << "[ColoringController::apply] no Representation attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[ColoringController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the Representation::update() refresh below)
-			// synchronously re-enters apply(), bail rather than re-running the
-			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
-			// The RAII guard clears the flag on every exit path.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — nest-aware drop ─────
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "coloring.setMethod";
+			payload.before     = snapshotColoringState_(rep_);
+			payload.target     = rep_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotColoringState_(rep_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			invalidateDeclared_();               // soft refresh
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool ColoringController::applyInternal_()
+		{
+			// §13 cookbook step 2 — existing mutation body, moved out of
+			// apply(). Precondition (rep_ != nullptr) guaranteed by apply().
+			// Does NOT invalidate (that is invalidateDeclared_()).
 			ColoringMethod new_method = static_cast<ColoringMethod>(coloring_method_);
 			bool method_changed = (rep_->getColoringMethod() != new_method);
 
@@ -130,13 +184,23 @@ namespace BALL
 				icp->setMaxValue(value_max_);
 			}
 
-			// Color-only update: pass rebuild=false so the model
-			// processor isn't re-run. Representation::update with
-			// rebuild=false still re-walks the color processor over
-			// the existing geometry.
-			rep_->update(false);
+			return true;
+		}
 
-			Q_EMIT appliedStub();
+		void ColoringController::invalidateDeclared_()
+		{
+			// §2a Coloring row — SOFT refresh. A coloring-method / value-range
+			// change re-walks the color processor over the EXISTING geometry;
+			// the primitive set is unchanged, so update(false) (no display-list
+			// rebuild) is correct. Contrast ModelController, which rebuilds
+			// because a model-processor swap changes the primitives.
+			if (rep_ != nullptr) rep_->update(false);
+		}
+
+		void ColoringController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void ColoringController::setColoringMethod(int m)

@@ -22,14 +22,33 @@
 #include <BALL/CONCEPT/property.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <sstream>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		namespace
+		{
+			// Compact owner-state snapshot for the ApplyPayload before/after
+			// blobs (§2 step 3). The headless-observable per-rep state is the
+			// transparency (the harness OwnerSnapshot also reads only that for
+			// material); the material colors live in the Rendering::Material
+			// property, summarised here for the capture record.
+			String snapshotMaterialState_(Representation* rep)
+			{
+				if (rep == nullptr) return String("material{null}");
+				std::ostringstream s;
+				s << "transparency=" << static_cast<int>(rep->getTransparency());
+				return String(s.str());
+			}
+		}
+
 		MaterialController::MaterialController(Representation* rep, QObject* parent)
-			: QObject(parent),
+			: Controller(parent),
 				rep_(rep),
 				ambient_(0.3f), diffuse_(0.7f),
 				specular_(0.2f), shininess_(30.0f),
@@ -39,8 +58,7 @@ namespace BALL
 				ambient_color_(255, 255, 255),
 				specular_color_(255, 255, 255),
 				reflective_color_(255, 255, 255),
-				transparency_(0),  // 0 = opaque, matching Representation/ModelController default.
-				applying_(false)
+				transparency_(0)  // 0 = opaque, matching Representation/ModelController default.
 		{
 			revert();
 		}
@@ -155,40 +173,76 @@ namespace BALL
 			}
 		}
 
-		void MaterialController::apply()
+		void MaterialController::reset()
 		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		bool MaterialController::apply()
+		{
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
 			if (rep_ == nullptr)
 			{
 				Log.warn() << "[MaterialController::apply] no Representation attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[MaterialController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			Scene* scene = Scene::getInstance(0);
-			if (scene == nullptr || scene->getStage() == nullptr)
-			{
-				Log.warn() << "[MaterialController::apply] no Scene/Stage available — skipping." << std::endl;
-				return;
-			}
+			// NOTE (999.59-02): the prior implementation bailed when
+			// Scene::getInstance(0) was null — but the per-rep material is
+			// OWNER state on the Representation (the Rendering::Material
+			// property), not Scene state; the Scene is only the renderer-side
+			// refresh. The owner mutation is therefore Scene-INDEPENDENT and
+			// runs even headless (so the 999.60 material parity fixture, which
+			// has no Scene, can assert apply()==true). The Scene/renderer
+			// refresh moves to invalidateDeclared_() (§2a), guarded on a live
+			// Scene there.
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the scene material refresh below)
-			// synchronously re-enters apply(), bail rather than re-running the
-			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
-			// The RAII guard clears the flag on every exit path.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — nest-aware drop ─────
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
-			// Seed from existing per-rep material (if any) so we keep
-			// any color the user picked through the legacy dialog;
-			// only overwrite the intensity / shininess fields that
-			// the inspector controller mirrors.
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "material.setMaterial";
+			payload.before     = snapshotMaterialState_(rep_);
+			payload.target     = rep_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotMaterialState_(rep_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			invalidateDeclared_();               // soft refresh + Scene refresh
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool MaterialController::applyInternal_()
+		{
+			// §13 cookbook step 2 — Scene-INDEPENDENT owner mutation, moved
+			// out of apply(). Precondition (rep_ != nullptr) guaranteed by
+			// apply(). Does NOT notify the Scene/renderer or call update();
+			// that is invalidateDeclared_() (§2a).
+
+			// Seed from existing per-rep material (if any) so we keep any color
+			// the user picked through the legacy dialog; else fall back to the
+			// Stage default material when a Scene exists; else struct defaults.
 			Stage::Material material;
 			bool seeded = false;
 
@@ -205,41 +259,82 @@ namespace BALL
 			}
 			if (!seeded)
 			{
-				material = scene->getStage()->getMaterial();
+				Scene* scene = Scene::getInstance(0);
+				if (scene != nullptr && scene->getStage() != nullptr)
+				{
+					material = scene->getStage()->getMaterial();
+				}
+				// else: keep Stage::Material struct defaults (headless path).
 			}
 
 			material.ambient_intensity    = ambient_;
 			material.reflective_intensity = diffuse_;
 			material.specular_intensity   = specular_;
 			material.shininess            = std::max(shininess_, 0.1f);
-			// The controller now owns the three colors too (999.58-01),
-			// matching the legacy MaterialSettings::apply() field set.
+			// The controller owns the three colors too (999.58-01), matching
+			// the legacy MaterialSettings::apply() field set.
 			material.ambient_color.set(ambient_color_);
 			material.specular_color.set(specular_color_);
 			material.reflective_color.set(reflective_color_);
 			// material.transparency is intentionally NOT written: the
-			// interactive GLRenderer never reads it (POVRay/RTfact-only,
-			// and RTfact is disabled), so writing it would produce NO
-			// visible change — that dead field is the cause of #527.
-			// Per-rep transparency is driven below through the WORKING
-			// Representation::setTransparency() path. MaterialController now
-			// ALSO drives that path (in addition to the Model section),
-			// sharing the same Representation transparency state so both
-			// controls stay consistent.
+			// interactive GLRenderer never reads it (POVRay/RTfact-only, and
+			// RTfact is disabled), so writing it would produce NO visible
+			// change — that dead field is the cause of #527. Per-rep
+			// transparency is driven through Representation::setTransparency()
+			// below.
 
-			scene->updateMaterialForRepresentation(rep_, material);
+			// Store the material as the per-rep Rendering::Material property —
+			// the SAME owner state Scene::updateMaterialForRepresentation
+			// writes (scene.C:3483-3487). Doing it here makes the owner
+			// mutation Scene-independent; the renderer notify is the §2a
+			// invalidation.
+			rep_->clearProperty("Rendering::Material");
+			boost::shared_ptr<PersistentObject> p(new Stage::Material(material));
+			NamedProperty rt_mat_property("Rendering::Material", p);
+			rep_->setProperty(rt_mat_property);
 
 			// Working interactive-GL transparency: push the 0–255 alpha onto
-			// the Representation (rebuilds per-vertex alpha / color processor),
-			// then update() so GLRenderer's transparent pass — which keys off
-			// rep.getTransparency() — picks it up.
+			// the Representation. MaterialController shares this Representation
+			// transparency state with the Model section so both stay consistent.
 			rep_->setTransparency(static_cast<Size>(transparency_));
-			// rebuild=false: transparency-only refresh rebuilds the per-vertex
-			// alpha / color processor without re-walking the composites
-			// (mirrors ModelController's cheap transparency path).
-			rep_->update(false);
 
-			Q_EMIT appliedStub();
+			return true;
+		}
+
+		void MaterialController::invalidateDeclared_()
+		{
+			// §2a Material row — SOFT refresh. A material / transparency change
+			// leaves the primitive set intact; update(false) re-draws the
+			// existing geometry without a display-list rebuild. When a Scene is
+			// live, also notify the renderers so GLRenderer's transparent pass
+			// (which keys off rep.getTransparency()) and the material cache pick
+			// up the new property. Headless (no Scene), the update(false) is the
+			// whole invalidation.
+			if (rep_ == nullptr) return;
+
+			Scene* scene = Scene::getInstance(0);
+			if (scene != nullptr && scene->getStage() != nullptr
+			    && rep_->hasProperty("Rendering::Material"))
+			{
+				NamedProperty mat_property = rep_->getProperty("Rendering::Material");
+				boost::shared_ptr<PersistentObject> mat_ptr = mat_property.getSmartObject();
+				Stage::Material* mat_cast = dynamic_cast<Stage::Material*>(mat_ptr.get());
+				if (mat_cast != nullptr)
+				{
+					// Re-uses the existing Scene path so renderer-side material
+					// caches + updateGL fire exactly as before; the property is
+					// already set, so this is idempotent on the owner state.
+					scene->updateMaterialForRepresentation(rep_, *mat_cast);
+				}
+			}
+
+			rep_->update(false);
+		}
+
+		void MaterialController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void MaterialController::applyDefaultMaterial()
@@ -266,11 +361,12 @@ namespace BALL
 				return;
 			}
 
-			// v1.7.x-24 — re-entrancy shield. The updateAllMaterials() refresh
-			// below can notify back into the controllers; bail rather than
-			// re-running the mutation. RAII guard clears the flag on every exit.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// v1.7.x-24 / 999.59-02 — re-entrancy shield, now nest-aware on the
+			// base depth counter. The updateAllMaterials() refresh below can
+			// notify back into the controllers; drop rather than re-running the
+			// mutation. RAII guard decrements on every exit.
+			if (applying_depth_ > 0) return;
+			ControllerApplyGuard apply_guard(applying_depth_);
 
 			// Seed from the current Stage default so any field the controller
 			// does not mirror is preserved, then overwrite the mirrored set —
