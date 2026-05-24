@@ -49,6 +49,8 @@ namespace BALL
 			// + custom `paintEvent` below force an explicit fillRect
 			// across the entire body bounding rect on every paint pass.
 			setAttribute(Qt::WA_OpaquePaintEvent, true);
+			// Phase 999.62 — uniform opaque-paint contract marker.
+			setProperty("opaqueContainer", true);
 
 			QVBoxLayout* outer = new QVBoxLayout(this);
 			outer->setContentsMargins(0, 0, 0, 0);

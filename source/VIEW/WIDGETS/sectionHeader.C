@@ -51,6 +51,8 @@ namespace BALL
 			// of the parent's animation state.
 			setAttribute(Qt::WA_OpaquePaintEvent, true);
 			setAutoFillBackground(true);
+			// Phase 999.62 — uniform opaque-paint contract marker.
+			setProperty("opaqueContainer", true);
 
 			chevron_ = new QToolButton(this);
 			chevron_->setObjectName(QStringLiteral("sectionHeaderChevron"));

@@ -33,6 +33,8 @@ namespace BALL
 			// draws its own tabs opaquely via the style; we only need
 			// to fill the inter-tab gaps and the right margin.
 			setAutoFillBackground(true);
+			// Phase 999.62 — uniform opaque-paint contract marker.
+			setProperty("opaqueContainer", true);
 			// v1.7.0-rc2 UFG-04 — label elision fix.
 			//
 			// rc1 painted the tab strip with setExpanding(true) +

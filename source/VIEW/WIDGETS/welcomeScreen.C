@@ -106,6 +106,11 @@ namespace BALL
 			// as SectionHeader's UFG-05 fix.
 			setAttribute(Qt::WA_OpaquePaintEvent, true);
 			setAutoFillBackground(true);
+			// Phase 999.62 — uniform opaque-paint contract marker. The
+			// dynamic property is the single machine-detectable signal
+			// the opaque-paint lint and the centralized theme token key
+			// off; no behaviour change beyond carrying the marker.
+			setProperty("opaqueContainer", true);
 
 			// Outer layout: vertically centered 720px-max content
 			// column. We nest a fixed-width inner widget inside an
