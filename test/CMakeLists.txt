@@ -184,6 +184,134 @@ IF (BALL_HAS_VIEW)
 	LIST(APPEND ALL_TESTS ${VIEW_TESTS})
 ENDIF()
 
+# ============================================================================
+# Phase 999.60 (v1.7.x-25) — cross-surface contract tests.
+#
+# The contract-test harness + per-controller parity fixtures + re-entrancy
+# + selection-consumer tests + owner-narrowing compile-fail infra. See
+# test/contract/README.md and .planning/v1.7.4-ARCHITECTURE-CONTRACT.md §11.
+#
+# All runtime contract tests carry the ctest LABEL "contract" (the CI
+# `contract-tests` job runs `ctest -L contract`). They link BALL + VIEW and
+# share the offscreen-QPA discipline of the VIEW tests above.
+#
+# HARNESS-FIRST: the per-controller parity / bool-apply / re-entrancy
+# assertions ship DISABLED (see CONTRACT_FIXTURE_DISABLED in
+# test/contract/contractTestHarness.h); they flip green as 999.59 cuts each
+# controller over. The harness itself MUST compile + run today.
+# ============================================================================
+SET(CONTRACT_TESTS "")
+IF (BALL_HAS_VIEW)
+	# The harness translation unit, compiled once and linked into each
+	# contract-test executable (the ClassTest framework gives every *_test.C
+	# its own main(), so each fixture is a standalone executable).
+	SET(CONTRACT_HARNESS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/contract/contractTestHarness.C)
+
+	# Runtime contract-test fixtures (each is a ClassTest with its own main).
+	SET(CONTRACT_TEST_FILES
+		harness_selftest
+		model_contract_test
+		coloring_contract_test
+		material_contract_test
+		clipping_contract_test
+		label_contract_test
+		stage_contract_test
+		camera_contract_test
+		light_contract_test
+		stereo_contract_test
+		selection_consumer_test
+		reentrancy_test
+	)
+
+	FOREACH(test ${CONTRACT_TEST_FILES})
+		ADD_EXECUTABLE(${test} contract/${test}.C ${CONTRACT_HARNESS_SRC})
+		TARGET_LINK_LIBRARIES(${test} BALL VIEW ${BALLTEST_SUPPORT_LIBRARIES})
+		TARGET_INCLUDE_DIRECTORIES(${test} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/contract)
+		SET_TARGET_PROPERTIES(${test} PROPERTIES COMPILE_FLAGS "${Qt5Core_EXECUTABLE_COMPILE_FLAGS}")
+		SET_PROPERTY(TARGET ${test} PROPERTY FOLDER BALL_CONTRACT_TESTS)
+		ADD_TEST(NAME ${test} COMMAND ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${test} "-v")
+		# offscreen QPA — same reason as the VIEW tests (headless CI runners).
+		SET_TESTS_PROPERTIES(${test} PROPERTIES
+			ENVIRONMENT "QT_QPA_PLATFORM=offscreen"
+			LABELS "contract"
+		)
+		LIST(APPEND CONTRACT_TESTS ${test})
+		LIST(APPEND ALL_TESTS ${test})
+	ENDFOREACH()
+
+	# ------------------------------------------------------------------------
+	# Owner-narrowing compile-fail tests (§11c). ctest-driven syntax-only
+	# compile checks: each asserts a TU's compile OUTCOME matches the
+	# per-phase expectation. Negative tests EXPECT "pass" today (owner
+	# setters still public) and flip to "fail" + DIAG_MATCH after 999.59-04
+	# privatises the setters. The positive test EXPECTs "pass" every phase.
+	# ------------------------------------------------------------------------
+	SET(CONTRACT_COMPILE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contract/compilefail)
+	SET(CONTRACT_COMPILE_INCLUDES
+		"${PROJECT_SOURCE_DIR}/include"
+		"${PROJECT_BINARY_DIR}/include"
+		"${CMAKE_BINARY_DIR}/include"
+	)
+	# Pull Qt + the configured BALL include dirs in so the headers parse.
+	GET_DIRECTORY_PROPERTY(_contract_inc INCLUDE_DIRECTORIES)
+	LIST(APPEND CONTRACT_COMPILE_INCLUDES ${_contract_inc})
+
+	# Framework search dirs — macOS Homebrew Qt ships as frameworks, so the
+	# syntax-only compile needs -F<qt>/lib (QtCore/QEvent etc. don't resolve
+	# via -I alone on Apple). Harmless / empty on Linux + Windows.
+	SET(CONTRACT_COMPILE_FRAMEWORKS "")
+	IF (APPLE)
+		IF (DEFINED Qt5Core_DIR AND Qt5Core_DIR)
+			GET_FILENAME_COMPONENT(_qt_lib "${Qt5Core_DIR}/../.." ABSOLUTE)
+			LIST(APPEND CONTRACT_COMPILE_FRAMEWORKS "${_qt_lib}")
+		ENDIF()
+		IF (DEFINED Qt6Core_DIR AND Qt6Core_DIR)
+			GET_FILENAME_COMPONENT(_qt6_lib "${Qt6Core_DIR}/../.." ABSOLUTE)
+			LIST(APPEND CONTRACT_COMPILE_FRAMEWORKS "${_qt6_lib}")
+		ENDIF()
+		IF (CMAKE_OSX_SYSROOT)
+			LIST(APPEND CONTRACT_COMPILE_FRAMEWORKS "${CMAKE_OSX_SYSROOT}/System/Library/Frameworks")
+		ENDIF()
+	ENDIF()
+
+	SET(_is_msvc OFF)
+	IF (MSVC)
+		SET(_is_msvc ON)
+	ENDIF()
+
+	# (source-stem  EXPECT  DIAG_MATCH) triples. DIAG_MATCH unused while
+	# EXPECT=pass; populated when these flip to fail in 999.59-04.
+	FUNCTION(ADD_CONTRACT_COMPILE_CHECK name source expect diag)
+		ADD_TEST(NAME ${name}
+			COMMAND ${CMAKE_COMMAND}
+				-DSOURCE=${CONTRACT_COMPILE_DIR}/${source}
+				-DEXPECT=${expect}
+				-DDIAG_MATCH=${diag}
+				-DCXX=${CMAKE_CXX_COMPILER}
+				-DCXX_STANDARD=${CMAKE_CXX_STANDARD}
+				-DCXX_IS_MSVC=${_is_msvc}
+				"-DINCLUDE_DIRS=${CONTRACT_COMPILE_INCLUDES}"
+				"-DFRAMEWORK_DIRS=${CONTRACT_COMPILE_FRAMEWORKS}"
+				-DWORKDIR=${CMAKE_CURRENT_BINARY_DIR}/contract-compilecheck
+				-P ${CONTRACT_COMPILE_DIR}/run_compile_check.cmake
+		)
+		SET_TESTS_PROPERTIES(${name} PROPERTIES LABELS "contract")
+	ENDFUNCTION()
+
+	# Negative: must-not-compile AFTER 999.59-04. EXPECT=pass today.
+	ADD_CONTRACT_COMPILE_CHECK(owner_narrowing_negative_stage
+		owner_narrowing_negative_stage.C pass "")
+	ADD_CONTRACT_COMPILE_CHECK(owner_narrowing_negative_representation
+		owner_narrowing_negative_representation.C pass "")
+	# Positive: legal mutation surface — must compile every phase.
+	ADD_CONTRACT_COMPILE_CHECK(owner_narrowing_positive
+		owner_narrowing_positive.C pass "")
+
+	# Aggregate build target the CI job builds before running ctest -L contract.
+	ADD_CUSTOM_TARGET(contract_tests)
+	ADD_DEPENDENCIES(contract_tests ${CONTRACT_TESTS})
+ENDIF()
+
 # Create a suitable target
 ADD_CUSTOM_TARGET(build_tests)
 ADD_DEPENDENCIES(build_tests ${ALL_TESTS})
