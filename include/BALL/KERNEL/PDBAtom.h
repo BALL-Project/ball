@@ -136,22 +136,6 @@ namespace BALL
 		bool operator != (const PDBAtom& pdb_atom) const;
 
 		//@}
-		/** @name Persistence 
-		*/
-		//@{
-
-		/**	Writes a PDBAtom object to a persistent stream.
-		 *	@param pm the persistence manager
-		 *	@param name the instance name
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Reads a PDBAtom object from a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
-
-		//@}
 		/**	@name	Assignment
 		*/
 		//@{

@@ -11,7 +11,6 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/PTE.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 using namespace BALL;
 
@@ -59,7 +58,6 @@ Vector3 position(0.1, 1.1, 2.1);
 Vector3 velocity(3.1, 4.1, 5.1);
 Vector3 force(6.1, 7.1, 8.1);
 String filename;
-TextPersistenceManager  pm;
 using std::ofstream;
 using std::ifstream;
 using std::ios;
@@ -96,34 +94,6 @@ CHECK(bool operator != (const PDBAtom& pdb_atom) const throw())
 RESULT
 
 
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	NEW_TMP_FILE(filename)
-	ofstream ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	pm.registerClass(getStreamName<PDBAtom>(), PDBAtom::createDefault);
-	pdba >> pm;
-	ofile.close();
-RESULT
-
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	ifstream  ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject* ptr;
-	ptr = pm.readObject();
-	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<PDBAtom>(ptr), true)
-        if (isKindOf<PDBAtom>(ptr))
-		{
-			PDBAtom* p2 = castTo<PDBAtom>(*ptr);
-			TEST_EQUAL(testEqual(*p2, pdba), true)
-		}
-		delete ptr;
-	}
-RESULT
 
 
 CHECK(void set(const PDBAtom& pdb_atom, bool deep = true) throw())

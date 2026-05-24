@@ -9,7 +9,6 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 START_TEST(System)
@@ -481,42 +480,6 @@ CHECK([EXTRA]destroyBonds())
 	TEST_EQUAL(a3.countBonds(), 1)
 RESULT
 
-TextPersistenceManager pm;
-using namespace RTTI;
-pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
-pm.registerClass(getStreamName<System>(), System::createDefault);
-pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
-NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	System* f1 = new System("name1");
-	Molecule* f2 = new Molecule("name2");
-	f1->insert(*f2);
-	pm.setOstream(ofile);
-	*f1 >> pm;
-	ofile.close();
-	delete f1;
-RESULT
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	std::ifstream	ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject*	ptr = pm.readObject();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<System>(ptr), true)
-		System*	f1 = castTo<System>(*ptr);
-		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countMolecules(), 1)
-		TEST_EQUAL(f1->getMolecule(0)->getName(), "name2")
-		delete f1;
-	} 
-	else 
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-RESULT
 
 CHECK(bool operator == (const System& system) const throw())
 	System c1, c2;

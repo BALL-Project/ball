@@ -63,21 +63,6 @@ namespace BALL
 		virtual ~System();
 
 		//@}
-		/** @name Persistence 
-		*/
-		//@{
-
-		/**	Writes a System object to a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Reads a System object from a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
-
-		//@}
 		/**	@name	Assignment 
 		*/
 		//@{

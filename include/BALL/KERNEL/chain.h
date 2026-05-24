@@ -63,21 +63,6 @@ namespace BALL
 		virtual ~Chain();
 
 		//@}
-		/** @name Persistence 
-		*/
-		//@{
-
-		/**	Writes a Chain object to a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Reads a Chain object from a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
-
-		//@}
 		/**	@name Assignment 
 		*/
 		//@{

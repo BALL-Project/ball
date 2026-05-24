@@ -9,7 +9,6 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/molecule.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 #include <algorithm>
@@ -244,43 +243,6 @@ CHECK([EXTRA] void* clone(bool deep = true))
 	delete ac1;
 RESULT
 
-TextPersistenceManager pm;
-using namespace RTTI;
-pm.registerClass(getStreamName<AtomContainer>(), AtomContainer::createDefault);
-NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	AtomContainer* f1 = new AtomContainer("name1");
-	AtomContainer* f2 = new AtomContainer("name2");
-	AtomContainer* f3 = new AtomContainer("name3");
-	f1->insert(*f2);
-	f1->insert(*f3);
-	pm.setOstream(ofile);
-	*f1 >> pm;
-	ofile.close();
-	delete f1;
-RESULT
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	std::ifstream	ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject*	ptr = pm.readObject();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<AtomContainer>(ptr), true)
-		AtomContainer*	f1 = castTo<AtomContainer>(*ptr);
-		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countAtomContainers(), 2)
-		TEST_EQUAL(f1->getAtomContainer(0)->getName(), "name2")
-		TEST_EQUAL(f1->getAtomContainer(1)->getName(), "name3")
-		delete f1;
-	} 
-	else 
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-RESULT
 
 CHECK(void set(const AtomContainer& atom_container, bool deep = true))
 	AtomContainer ac1("name1");

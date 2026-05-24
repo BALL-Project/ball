@@ -102,24 +102,6 @@ namespace BALL
 
 	}
 
-	void Residue::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			Fragment::persistentWrite(pm);
-			pm.writePrimitive(id_, "id_");
-			pm.writePrimitive(insertion_code_, "insertion_code_");
-		pm.writeObjectTrailer(name);
-	}
-
-	void Residue::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
-			Fragment::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-
-		pm.readPrimitive(id_, "id_");
-		pm.readPrimitive(insertion_code_, "insertion_code_");
-	}
 		
 	void Residue::set(const Residue& residue, bool deep)
 	{

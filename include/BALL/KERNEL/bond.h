@@ -223,19 +223,9 @@ namespace BALL
 		virtual void destroy();
 		//@}
 
-		/**	@name Persistence 
+		/**	@name Miscellaneous
 		*/
 		//@{
-
-		/**	Write a bond to a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Read a bond from a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
 
 		/**	Finalize the deserialization.
 		 *	Bond might have to swap <tt>first_</tt> and <tt>second_</tt> to ensure

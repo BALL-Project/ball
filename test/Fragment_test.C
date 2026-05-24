@@ -8,7 +8,6 @@
 ///////////////////////////
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 START_TEST(Fragment)
@@ -96,44 +95,6 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Fragment_test.txt))
 RESULT
 
-TextPersistenceManager pm;
-using namespace RTTI;
-pm.registerClass(getStreamName<Fragment>(), Fragment::createDefault);
-pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
-NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	Fragment* f1 = new Fragment("name1");
-	Atom* f2 = new Atom();
-	Atom* f3 = new Atom();
-	f2->setName("name2");
-	f3->setName("name3");
-	f1->insert(*f2);
-	f1->insert(*f3);
-	pm.setOstream(ofile);
-	*f1 >> pm;
-	ofile.close();
-	delete f1;
-RESULT
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	std::ifstream	ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject*	ptr = pm.readObject();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<Fragment>(ptr), true)
-		Fragment*	f1 = castTo<Fragment>(*ptr);
-		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countAtoms(), 2)
-		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
-		TEST_EQUAL(f1->getAtom(1)->getName(), "name3")
-		delete f1;
-	} else {
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-RESULT
 
 CHECK(bool operator == (const Fragment& fragment) const throw())
 	Fragment b1;

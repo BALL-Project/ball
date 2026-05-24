@@ -9,7 +9,6 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/COMMON/exception.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -417,53 +416,6 @@ CHECK(void finalize())
 	b1.setSecondAtom(0);
 RESULT
 
-TextPersistenceManager pm;
-using namespace RTTI;
-pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
-pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
-NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	Atom a1;
-	a1.setName("a1");
-	Atom a2;
-	a2.setName("a2");
-	Bond f1("name1", a1, a2);
-	pm.setOstream(ofile);
-	f1 >> pm;
-	ofile.close();
-RESULT
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	std::ifstream	ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject*	ptr = pm.readObject();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<Bond>(ptr), true)
-		Bond*	f1 = castTo<Bond>(*ptr);
-		if (f1->getFirstAtom()->getName() == "a1")
-		{
-			TEST_EQUAL(f1->getFirstAtom()->getName(), "a1")
-			TEST_EQUAL(f1->getSecondAtom()->getName(), "a2")
-		}
-		else
-		{
-			TEST_EQUAL(f1->getFirstAtom()->getName(), "a2")
-			TEST_EQUAL(f1->getSecondAtom()->getName(), "a1")
-		}
-		TEST_EQUAL(f1->getName(), "name1")
-		const Atom* a1 = f1->getFirstAtom();
-		const Atom* a2 = f1->getSecondAtom();
-		const_cast<Atom*>(a1)->destroyBonds();
-		delete a1;
-		delete a2;
-		// delete f1;
-		ptr = 0;
-		f1 = 0;
-	} 
-RESULT
 
 CHECK(bool operator == (const Bond& bond) const throw())
 	Atom a1, a2, a3;

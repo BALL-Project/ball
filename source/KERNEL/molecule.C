@@ -35,19 +35,6 @@ namespace BALL
 		destroy();
 	}
 		
-	void Molecule::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			AtomContainer::persistentWrite(pm);
-		pm.writeObjectTrailer(name);
-	}
-
-	void Molecule::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
-			AtomContainer::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-	}
 
 	void Molecule::set(const Molecule& molecule, bool deep)
 	{

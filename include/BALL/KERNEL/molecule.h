@@ -71,21 +71,6 @@ namespace BALL
 		virtual ~Molecule();
 		
 		//@}
-		/** @name Persistence 
-		*/
-		//@{
-
-		/**	Writes a Molecule object to a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Reads a Molecule object from a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
-
-		//@}
 		/**	@name	Assignment 
 		*/
 		//@{

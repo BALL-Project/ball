@@ -46,21 +46,6 @@ namespace BALL
 		id_ = BALL_NUCLEICACID_DEFAULT_ID;
 	}
 		
-	void NucleicAcid::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			Molecule::persistentWrite(pm);
-			pm.writePrimitive(id_, "id_");
-		pm.writeObjectTrailer(name);
-	}
-
-	void NucleicAcid::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
-			Molecule::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-		pm.readPrimitive(id_, "id_");
-	}
 
 	void NucleicAcid::set(const NucleicAcid& nucleic_acid, bool deep)
 	{

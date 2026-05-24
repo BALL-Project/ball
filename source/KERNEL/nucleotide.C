@@ -54,24 +54,6 @@ namespace BALL
 		insertion_code_ = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE;
 	}
 
-	void Nucleotide::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			Fragment::persistentWrite(pm);
-			pm.writePrimitive(id_, "id_");
-			pm.writePrimitive(insertion_code_, "insertion_code_");
-		pm.writeObjectTrailer(name);
-	}
-
-	void Nucleotide::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
-			Fragment::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-
-		pm.readPrimitive(id_, "id_");
-		pm.readPrimitive(insertion_code_, "insertion_code_");
-	}
 		
 	void Nucleotide::set(const Nucleotide& nucleotide, bool deep)
 	{

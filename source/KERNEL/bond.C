@@ -139,39 +139,6 @@ namespace BALL
 		arrangeBonds_();
 	}
 
- void Bond::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-
-			Composite::persistentWrite(pm);
-
-      pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), "PropertyManager");
-
-			pm.writeObjectPointer(first_, "first_");
-			pm.writeObjectPointer(second_, "second_");
-			pm.writePrimitive(name_, "name_");
-			pm.writePrimitive((Index)bond_order_, "bond_order_");
-			pm.writePrimitive((Index)bond_type_, "bond_type_");
-		pm.writeObjectTrailer(name);
-	}
-
-  void Bond::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
-			Composite::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-
-		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), "PropertyManager");
-
-		pm.readObjectPointer(first_, "first_");
-		pm.readObjectPointer(second_, "second_");
-		pm.readPrimitive(name_, "name_");
-		Index tmp;
-		pm.readPrimitive(tmp, "bond_order_");
-		bond_order_ = (BondType)tmp;
-		pm.readPrimitive(tmp, "bond_type_");
-		bond_type_ = (Bond::Order)tmp;
-	}
 
 	Bond& Bond::operator = (const Bond& bond)
 	{

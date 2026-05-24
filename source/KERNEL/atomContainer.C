@@ -228,36 +228,6 @@ namespace BALL
 		name_ = BALL_ATOMCONTAINER_DEFAULT_NAME;
 	}
 
-	void AtomContainer::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			Composite::persistentWrite(pm);
-
-			pm.writeStorableObject(dynamic_cast<const PropertyManager&>(*this), "PropertyManager");
-
-			pm.writePrimitive(name_, "name_");
-		pm.writeObjectTrailer(name);
-	}
-
-	void AtomContainer::persistentRead(PersistenceManager& pm)
-	{
-		// v2.2 HCP-2c.3 (D-2c.6): persistentRead is the same rooted-full-
-		// replacement class as set/operator= (it reconstructs this's subtree from
-		// a stream). Its container-table mirror is intentionally NOT hooked here:
-		// the stream PersistenceManager framework is removed wholesale by the
-		// AGREED PR-removal milestone (task #61), and persistentRead is used to
-		// build FRESH objects, not to overwrite an already-materialised container
-		// (the kept JSON StoreFormat round-trips via systemJson, not this path).
-		// If #61 is dropped, apply the same release_children_ + re-materialise
-		// hook used in AtomContainer::set.
-		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
-			Composite::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-
-		pm.readStorableObject(dynamic_cast<PropertyManager&>(*this), "PropertyManager");
-
-		pm.readPrimitive(name_, "name_");
-	}
 
 	void AtomContainer::set(const AtomContainer& atom_container, bool deep)
 	{

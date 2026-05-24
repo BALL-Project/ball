@@ -118,21 +118,6 @@ namespace BALL
 		virtual void destroy();
 	
 		//@}
-		/** @name Persistence 
-		*/
-		//@{
-
-		/**	Writes a Residue object to a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Reads a Residue object from a persistent stream.
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
-
-		//@}
 		/**	@name	Assignment 
     */
 		//@{

@@ -84,30 +84,6 @@ namespace BALL
 		clear_();
 	}
 
-	void PDBAtom::persistentWrite(PersistenceManager& pm, const char* name) const	
-	{
-		pm.writeObjectHeader(this, name);
-			Atom::persistentWrite(pm);
-			pm.writePrimitive(branch_designator_, "branch_designator_");
-			pm.writePrimitive(remoteness_indicator_, "remoteness_indicator_");
-			pm.writePrimitive(alternate_location_indicator_, "alternate_location_indicator_");
-			pm.writePrimitive(occupancy_, "occupancy_");
-			pm.writePrimitive(temperature_factor_, "temperature_factor_");		
-		pm.writeObjectTrailer(name);
-	}
-
-	void PDBAtom::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<Atom>());
-			Atom::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-
-		pm.readPrimitive(branch_designator_, "branch_designator_");
-		pm.readPrimitive(remoteness_indicator_, "remoteness_indicator_");
-		pm.readPrimitive(alternate_location_indicator_, "alternate_location_indicator_");
-		pm.readPrimitive(occupancy_, "occupancy_");
-		pm.readPrimitive(temperature_factor_, "temperature_factor_");		
-	}
 
   void PDBAtom::set(const PDBAtom& pdb_atom, bool deep)
   {

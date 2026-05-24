@@ -14,7 +14,6 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/chain.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 
 #include "ItemCollector.h"
 ///////////////////////////
@@ -113,59 +112,6 @@ CHECK(bool isValid() const throw())
 	TEST_EQUAL(atom->isValid(), true)
 RESULT
 
-TextPersistenceManager pm;
-atom->setForce(Vector3(1.0, 2.0, 3.0));
-atom->setPosition(Vector3(2.0, 3.0, 4.0));
-atom->setVelocity(Vector3(3.0, 4.0, 5.0));
-atom->setName("TESTNAME");
-atom->setCharge(1.23456);
-atom->setRadius(2.34567);
-String filename;
-using std::ofstream;
-using std::ios;
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	NEW_TMP_FILE(filename)
-	ofstream	ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	using namespace RTTI;
-	*atom >> pm;
-	ofile.close();
-RESULT
-
-using std::ifstream;
-using std::cout;
-using namespace RTTI;
-CHECK(void persistentRead(PersistenceManager& pm))
-	ifstream	ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject*	ptr = 0;
-	ptr = pm.readObject();
-	ifile.close();
-	STATUS("PO ptr = " << (void*)ptr)
-
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<Atom>(ptr), true)
-        if (isKindOf<Atom>(ptr))
-		{
-			Atom* pers_atom = castTo<Atom>(*ptr);
-			TEST_EQUAL(pers_atom->getName(), atom->getName())
-			TEST_REAL_EQUAL(pers_atom->getCharge(), atom->getCharge())
-			TEST_REAL_EQUAL(pers_atom->getRadius(), atom->getRadius())
-			TEST_EQUAL(pers_atom->getPosition(), atom->getPosition())
-			TEST_EQUAL(pers_atom->getVelocity(), atom->getVelocity())
-			TEST_EQUAL(pers_atom->getForce(), atom->getForce())
-			TEST_EQUAL(pers_atom->getType(), atom->getType())
-			TEST_EQUAL(pers_atom->countBonds(), atom->countBonds())
-			TEST_NOT_EQUAL(pers_atom->getHandle(), atom->getHandle())
-			delete pers_atom->getBond(0)->getPartner(*pers_atom);
-		}
-		delete ptr;
-		ptr = 0;
-	}
-	ptr = 0;
-RESULT
 delete atom;
 delete atom3;
 delete atom4;

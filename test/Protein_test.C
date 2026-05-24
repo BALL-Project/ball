@@ -7,7 +7,6 @@
 
 ///////////////////////////
 #include <BALL/KERNEL/residue.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
@@ -411,44 +410,6 @@ CHECK([EXTRA]Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE_REGEXP(filename.c_str(), BALL_TEST_DATA_PATH(Protein_test.txt))
 RESULT
 
-TextPersistenceManager pm;
-using namespace RTTI;
-pm.registerClass(getStreamName<Protein>(), Protein::createDefault);
-pm.registerClass(getStreamName<Chain>(), Chain::createDefault);
-NEW_TMP_FILE(filename)
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	Protein* f1= new Protein("name1");
-	Chain* f2 = new Chain("name2");
-	f1->insert(*f2);
-	Chain* f3 = new Chain("name3");
-	f1->insert(*f3);
-	pm.setOstream(ofile);
-	*f1 >> pm;
-	ofile.close();
-	delete f1;
-RESULT
-
-CHECK(void persistentRead(PersistenceManager& pm))
-	std::ifstream	ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject*	ptr = pm.readObject();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<Protein>(ptr), true)
-		Protein*	f1 = castTo<Protein>(*ptr);
-		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countChains(), 2)
-		TEST_EQUAL(f1->getChain(0)->getName(), "name2")
-		TEST_EQUAL(f1->getChain(1)->getName(), "name3")
-		delete f1;
-	} 
-	else 
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-RESULT
 
 CHECK(bool operator == (const Protein& protein) const throw())
 	Protein b1;

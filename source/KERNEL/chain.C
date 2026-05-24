@@ -30,19 +30,6 @@ namespace BALL
 		destroy();
 	}
 
-  void Chain::persistentWrite(PersistenceManager& pm, const char* name) const
-  {
-    pm.writeObjectHeader(this, name);
-      AtomContainer::persistentWrite(pm);
-    pm.writeObjectTrailer(name);
-	}
-
-  void Chain::persistentRead(PersistenceManager& pm)
-  {
-    pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
-			AtomContainer::persistentRead(pm);
-    pm.checkObjectTrailer(0);
-	}
 
 	void Chain::set(const Chain& chain, bool deep)
 	{

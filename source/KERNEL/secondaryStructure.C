@@ -48,23 +48,6 @@ namespace BALL
 		type_ = UNKNOWN;
 	}
 		
-  void SecondaryStructure::persistentWrite(PersistenceManager& pm, const char* name) const
-  {
-    pm.writeObjectHeader(this, name);
-      AtomContainer::persistentWrite(pm);
-			pm.writePrimitive((Index)type_, "type_");
-    pm.writeObjectTrailer(name);
-	}
-
-  void SecondaryStructure::persistentRead(PersistenceManager& pm)
-  {
-    pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
-			AtomContainer::persistentRead(pm);
-    pm.checkObjectTrailer(0);
-		Index type;
- 		pm.readPrimitive(type, "type_");
-		type_ = (Type)type;
-	}
  
 	void SecondaryStructure::set(const SecondaryStructure& secondary_structure, bool deep)
 	{

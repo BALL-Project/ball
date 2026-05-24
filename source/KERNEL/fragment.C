@@ -29,19 +29,6 @@ namespace BALL
 		destroy();
 	}
 
-	void Fragment::persistentWrite(PersistenceManager& pm, const char* name) const
-  {
-    pm.writeObjectHeader(this, name);
-      AtomContainer::persistentWrite(pm);
-		pm.writeObjectTrailer(name);
-	}
-
-  void Fragment::persistentRead(PersistenceManager& pm)
-  {    
-		pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
-			AtomContainer::persistentRead(pm);
-    pm.checkObjectTrailer(0);
-	}
 	
 	Fragment& Fragment::operator = (const Fragment& fragment)
 	{

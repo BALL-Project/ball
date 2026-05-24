@@ -261,21 +261,6 @@ namespace BALL
 			virtual void destroy();
 
 			//@}
-			/**	@name	Persistence 
-			*/
-			//@{
-
-			/**	Write an Atom to a persistent stream.
-			 *	@param pm the persistence manager
-			 */
-			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-			/**	Read an Atom from a persistent stream.
-			 *	@param pm the persistence manager
-			 */
-			virtual void persistentRead(PersistenceManager& pm);
-
-			//@}
 			/** @name Assignment methods 
 			*/
 			//@{

@@ -46,21 +46,6 @@ namespace BALL
 		id_ = BALL_PROTEIN_DEFAULT_ID;
 	}
 		
-	void Protein::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			Molecule::persistentWrite(pm);
-			pm.writePrimitive(id_, "id_");
-		pm.writeObjectTrailer(name);
-	}
-
-	void Protein::persistentRead(PersistenceManager& pm)
-	{
-		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
-			Molecule::persistentRead(pm);
-		pm.checkObjectTrailer(0);
-		pm.readPrimitive(id_, "id_");
-	}
 
 	void Protein::set(const Protein& protein, bool deep)
 	{

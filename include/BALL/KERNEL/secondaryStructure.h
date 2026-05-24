@@ -96,20 +96,6 @@ namespace BALL
 		bool operator != (const SecondaryStructure& secondary_structure) const;
 		//@}
 
-		/** @name Persistence 
-		*/
-		//@{
-
-		/**	Write a SecondaryStructure object to a persistent stream
-		 *	@param pm the persistence manager
-		 */
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-
-		/**	Read a SecondaryStructure object from a persistent stream
-		 *	@param pm the persistence manager
-		 */
-		void persistentRead(PersistenceManager& pm);
-		//@}
 
 		/**	@name	Assignment 
 		*/

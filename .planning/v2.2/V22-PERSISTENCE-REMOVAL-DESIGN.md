@@ -335,3 +335,40 @@ that slice is explicit.
 Remaining blocker: fold `DATATYPE/bitVector` and `MATHS/vector3` PM
 `read/write` APIs and tests into the exhaustive removal list/phase plan. With that
 addition, this would move to AGREE.
+
+## PR3a-CR code review
+
+**Verdict: GO.** The phase-3a kernel leaf virtual strip is clean: no leaf
+`persistentRead`/`persistentWrite` declaration/definition mismatch remains, no brace
+imbalance was introduced in the touched KERNEL sources, `Bond::finalize()` and its
+store-mirror helper remain intact, and the retained phase-3b/3c/5/6 persistence
+surfaces still exist.
+
+1. **SOUND** — Header/source removal took the intended leaf persistence virtuals:
+the 13 KERNEL leaf/header pairs plus `Bond` no longer declare or define
+`persistentRead`/`persistentWrite`; no adjacent non-persistence functions were
+removed and `git diff --check` is clean.
+2. **SOUND** — `Bond::finalize()` is still declared in `bond.h`, defined inline in
+`bond.iC`, and still calls `finalize_storeMirror_()`; no remaining source/test call
+to `Bond::persistentRead` was found.
+3. **SOUND** — `Composite`/`PropertyManager`/`Selectable`/`PersistentObject`, FORMAT
+`PDBInfo`/`PDBRecords`, XRAY `CrystalInfo`, MATHS `TVector2`, and the
+`read/write(PersistenceManager&)` family are untouched; `PDBInfo.C` still calls the
+kept `PDBRecords::persistentRead/Write` pair.
+4. **WEAK** — The stripped KERNEL test sections are structurally clean
+(`START_TEST`/`END_TEST` and `CHECK`/`RESULT` counts balance, no dangling persistence
+manager references remain), but `test/NamedProperty_test.C` is also changed even
+though it is outside the stated 13 kernel-test list. This is non-blocking because the
+rebuilt test passes and `PropertyManager_test.C` still covers the retained
+NamedProperty/PropertyManager stream path, but the phase note should explicitly
+account for it.
+5. **SOUND** — Compile behavior is safe for this phase: the leaf classes now inherit
+the still-present base virtuals until phase 5/6, so there is no ODR/vtable hole from
+removing the overrides. Verified `cmake --build build-core -j2` and rebuilt the
+affected `build-core` test binaries.
+6. **SOUND** — No new dangling include/use site was found in the touched KERNEL
+files or stripped tests; rebuilt affected `build-core` tests
+`NamedProperty_test`, `Atom_test2`, `Bond_test`, `AtomContainer_test1`,
+`Fragment_test`, `Chain_test`, `Molecule_test`, `SecondaryStructure_test`,
+`System_test`, `Protein_test`, `PDBAtom_test`, `NucleicAcid_test`, and
+`Nucleotide_test` all pass; full-build `Residue_test2` also passes.
