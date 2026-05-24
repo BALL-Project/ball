@@ -265,10 +265,15 @@ v0 classes remain until H4). Sub-steps, each green + committed:
   rooted mirror (`set`/`operator=`/`persistentRead` + cross-store move (KR1
   HIGH-1) + insertParent/`replace` materialise-new-member) — re-materialise the
   affected subtree. Lift the H2d scope restriction once landed.
-- **HCP-2d — SS-as-annotation (D-HC4).** Convert SecondaryStructure from an
-  owning Chain→SS→Residue layer to a non-owning annotation belonging to its
-  chain (start/end residue refs + sheet payload); rewrite the chain→SS→residue
-  traversals. (Heaviest structural item; may split into its own sub-phase.)
+- **HCP-2d — SS-as-annotation (D-HC4). ⏸ DEFERRED TO H4** (user decision +
+  Codex HCP-2d-R0, 2026-05-24; see .planning/v2.2/V22-HCP2D-DESIGN.md). Convert
+  SecondaryStructure from an owning Chain→SS→Residue layer to a non-owning
+  annotation. Investigation + adversarial review found this is NOT forced by the
+  collapse before H4 (role-aware handles + StructureQuery are already role-based +
+  depth-agnostic), and that doing the ~58-consumer v0 change — touching VIEW + PDB
+  round-trip — during dual existence would abandon the parity-mirror discipline.
+  Folds into H4's consumer migration (v0 classes deleted; parity no longer pins
+  store topology to v0; VIEW migrated). (Heaviest structural item.)
 - **HCP-2 close-review** (Codex) → GO.
 
 NOTE: `ContainerKind` shrink to `{MOLECULE,FRAGMENT}` is deferred to the H4

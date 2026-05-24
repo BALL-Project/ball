@@ -1,10 +1,15 @@
 # V22 HCP-2d — SecondaryStructure-as-annotation (D-HC4): design investigation + scoping fork
 
-**Status:** INVESTIGATION (pre-design-lock). HCP-2d is the FINAL HCP-2 sub-step and, per the
-collapse plan, "the heaviest structural item; may split into its own sub-phase." This doc
-captures the codebase investigation + the strategic scoping fork that must be resolved BEFORE
-a design-lock, because HCP-2d differs in KIND from 2a/2b/2c (which were kernel-internal,
-dual-existence-safe, well-tested store/handle work).
+**Status:** ⏸ **DEFERRED TO H4** (user decision 2026-05-24 + Codex HCP-2d-R0, commit
+1ffaa01ed). The SS owning→annotation flip is NOT forced by the collapse before the H4
+source-of-truth flip; it folds into H4's consumer migration (when v0 classes are deleted +
+VIEW is migrated). Do NOT do the ~58-file v0+VIEW change during dual existence. This doc
+remains the investigation of record; re-open at H4. Next milestone: PR-removal (task #61).
+
+HCP-2d is the FINAL HCP-2 sub-step and, per the collapse plan, "the heaviest structural item;
+may split into its own sub-phase." This doc captures the codebase investigation + the strategic
+scoping fork, because HCP-2d differs in KIND from 2a/2b/2c (kernel-internal, dual-existence-safe,
+well-tested store/handle work).
 
 ## Goal (D-HC4)
 Convert `SecondaryStructure` from an OWNING hierarchy layer (Chain → SS → Residue) into a
