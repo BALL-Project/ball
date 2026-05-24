@@ -2,10 +2,13 @@
 
 **Status:** IN PROGRESS. The user-visible heart of the collapse; still
 **dual existence** (handles READ the HCP-1 role columns; v0 classes remain until H4).
-Sub-steps (plan §6a): **HCP-2a** role-aware handles ✅ DONE (commit 2177ec59b) →
-**HCP-2b** `StructureQuery` — **2b.1 ✅ DONE (commit 5c7c2ff4f)**, 2b.2 deprecated
-iterator alias DEFERRED to HCP-3 migration → **HCP-2c** deferred mirrors (NEXT) →
-**HCP-2d** SS-as-annotation. Each sub-step gets its own design-lock when reached.
+Sub-steps (plan §6a): **HCP-2a** role-aware handles ✅ DONE (2177ec59b) →
+**HCP-2b** `StructureQuery` — **2b.1 ✅ DONE (5c7c2ff4f)**, 2b.2 deprecated iterator
+alias DEFERRED to HCP-3 migration → **HCP-2c** deferred mirrors + role/property
+refinement ✅ **DONE** (2c.1 73212d856 · 2c.2 eb23fe4d1 · 2c.3 c5da70304 · 2c.4
+74a3605be; Codex HCP-2 close-review CLOSEABLE) → **HCP-2d** SS-as-annotation (NEXT —
+the heaviest item; gets its own design-lock). The forward v0→table mirror is now
+faithful across the full mutation surface under dual existence.
 
 ---
 
