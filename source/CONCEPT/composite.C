@@ -213,12 +213,19 @@ namespace BALL
 	}
 
 	// v2.2 H2a (D69/D70): mirror a child detach into the container table.
+	// v2.2 HCP-2c.3 (D-2c.6): suppresses the container-table mirror across a bulk
+	// replace (set/operator= -> clone). Default false; toggled by
+	// MirrorSuppressionGuard_ around the clone window only.
+	bool Composite::mirror_suppressed_ = false;
+
 	void Composite::mirrorRemoveChild_(Composite& child)
 	{
 		// FORWARD-ONLY: never mirror while THIS (the parent) is being
 		// destroyed (the P2.1.1 cascade trap). The dying parent's rows are
 		// freed wholesale at ~System; v0 remains the source of truth.
-		if (being_destroyed_) return;
+		// HCP-2c.3: also suppressed across a bulk set/clone replace (the row is
+		// rebuilt in one pass afterwards).
+		if (being_destroyed_ || mirror_suppressed_) return;
 
 		// Resolve this parent's container row in its bound store. No row =>
 		// free-standing / not yet materialised => nothing to mirror (the
@@ -248,7 +255,7 @@ namespace BALL
 	// append_child is itself idempotent against re-appending the last child.
 	void Composite::mirrorAppendChild_(Composite& child)
 	{
-		if (being_destroyed_) return;
+		if (being_destroyed_ || mirror_suppressed_) return;
 		MoleculeStore* store = getContainerRowStore_();
 		std::uint32_t  row   = getContainerRow_();
 		if (store == 0 || row == 0) return;
@@ -270,7 +277,7 @@ namespace BALL
 	// table are skipped (materialised later at adoption).
 	void Composite::mirrorRederiveOwnRow_()
 	{
-		if (being_destroyed_) return;
+		if (being_destroyed_ || mirror_suppressed_) return;
 		MoleculeStore* store = getContainerRowStore_();
 		std::uint32_t  row   = getContainerRow_();
 		if (store == 0 || row == 0) return;

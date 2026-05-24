@@ -494,6 +494,10 @@ namespace BALL
 		// Clear a row's child list (+ reverse edges) so the insert mirror can
 		// re-derive it from the v0 child order in one idempotent pass.
 		void container_clear_children_(std::uint32_t row);
+		// v2.2 HCP-2c.3 (D-2c.6): recursively FREE a row's child subtrees (the
+		// rooted-full-replacement primitive) -- frees descendant container rows
+		// (generation bump -> stale handles), keeps `row` itself.
+		void container_release_children_(std::uint32_t row);
 
 		//@}
 		/**	@name Live-reference enforcement (D7 amendment, K0.2c, audited K0.4.7)

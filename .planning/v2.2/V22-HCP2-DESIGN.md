@@ -940,3 +940,52 @@ AutoDeletable children and can fire `parent_->removeChild(*this)` from `~Composi
   `Composite`/`AtomContainer` state is a layout/ABI concern; if this patch series accepts ABI
   churn it is fine, otherwise pack it beside `being_destroyed_` and verify `sizeof` or use a
   bit/side guard.
+
+## HCP-2c3-CR code review
+
+Verdict: **NEEDS-REVISION**. The suppress-then-rebuild shape is mostly right, but the patch
+has a real ABA/stale-binding flaw: released child container rows can be immediately reused for
+the new clone subtree, while detached non-AutoDeletable old child v0 objects still store only
+`{store,row}` with no generation. After reuse, `container_is_freed_(row)` is false, so
+`materialiseContainer_()` can idempotent-skip the stale survivor into the wrong live row, and
+later scalar/topology mirrors on that survivor can corrupt the recycled row. Handle staleness
+is correct; v0 binding staleness is not. Fix by clearing/invalidation-marking container-row
+bindings for every old child subtree object before/while releasing, or by storing/checking the
+container row generation in v0 bindings and treating generation mismatch as unbound/stale.
+
+1. **SOUND** — Suppressing `mirrorRemoveChild_`, `mirrorAppendChild_`, and
+   `mirrorRederiveOwnRow_` across clone is correct and sufficient for the clone topology
+   mirror; the static RAII save/restore handles nesting/exceptions, and the broader global
+   scope also suppresses non-AutoDeletable child `clear()` rederive calls.
+2. **FLAW** — `release_container_subtree_` / `release_children_` snapshot-before-free and do
+   not release atom slots, but they leave detached old container objects bound to freed/reused
+   row indices; generation stales handles, not the v0 object's own row binding.
+3. **FLAW** — The hardened idempotent guard is safe only while the stale row is still freed;
+   once the free-list reuses that row, `!container_is_freed_(row)` is true and stale survivors
+   incorrectly idempotent-skip as if their old row were still theirs.
+4. **SOUND** — `adoptSubtreeInto_(*this)` plus per-direct-child adoption is complete for the
+   new clone: whole-subtree atoms, including direct atom children, migrate once; child
+   container rows are built by the per-child pass; Residue/direct-atom-only works.
+5. **SOUND** — Capturing `old_parent` before clone and re-deriving it after `getParent()==0`
+   correctly mirrors the v0 detach; keeping `this`'s own row as a detached live subtree is
+   consistent and supports later re-adoption of `this`.
+6. **FLAW** — Handle staleness is correct for old child rows and `this` keeps its row, but
+   old child v0 objects can retain stale row bindings that ABA-alias recycled rows, so not all
+   stale references are safely rejected.
+7. **SOUND** — Unmaterialised deep `set()` has `was_materialised == false`, so the new release
+   / rematerialise path does not run; the guard is effectively a no-op for store state.
+   PersistentRead-not-hooked matches the stated task #61 scope.
+8. **WEAK** — The static suppression flag has the same single-threaded assumption as
+   `clone_bonds`, and exception safety for the flag itself is fine; however an exception after
+   `release_children_` but before rebuild can leave a partially cleared row, and the existing
+   non-RAII `clone_bonds` restoration remains a pre-existing exception-safety weakness.
+
+## HCP-2c3-CRb re-review
+
+Verdict: **GO**. The ABA stale-binding blocker from HCP-2c3-CR items 2/3/6 is fixed on the normal path.
+
+A. **SOUND** — `unbindContainerRowsBelow_(*this)` runs while the old descendants are still reachable below `this`, before `Composite::set`/`clone` destroys or detaches them; clearing each descendant container's `{store,row}` to `{0,0}` removes the stale v0 binding that could ABA-alias a recycled live row.
+B. **SOUND** — The unbind mutates only v0 row bindings; it does not touch `this`'s row or the store's child edges, so `container_release_children_(row)` still sees and frees the old child rows after the suppressed clone.
+C. **SOUND** — The helper recurses through deeper descendants, atoms are harmless no-op leaves through the virtual default, no normal-path rebind can occur between unbind and clone, and `this` is intentionally not unbound.
+D. **SOUND** — The `!container_is_freed_` idempotent guard remains correct defense-in-depth for any stale binding that still points at a freed row, while normal adoption of unbound survivors now takes the rebuild path.
+E. **WEAK** — No new normal-path issue found with external references or mirror suppression; the only residual weakness is exception safety after descendants are unbound but before rebuild completes, which can leave a materialised v0 subtree with cleared descendant bindings if clone/rebuild throws.

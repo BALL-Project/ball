@@ -584,6 +584,21 @@ namespace BALL
 		// from its parent's child list. Idempotent on NONE / slot 0.
 		void release(std::uint32_t idx);
 
+		// v2.2 HCP-2c.3 (D-2c.6): post-order recursive release of the subtree
+		// rooted at `idx` (this table). Frees every descendant CONTAINER row and
+		// `idx` itself (generation bump -> stale handles), erasing migrated-atom
+		// reverse edges WITHOUT releasing atom slots (atoms are owned by their v0
+		// Atom objects, freed via Atom::~Atom/release_atom). Snapshots children
+		// before freeing (release_source_subtree_ pattern). Same-table analog of
+		// release_source_subtree_.
+		void release_container_subtree_(std::uint32_t idx);
+
+		// v2.2 HCP-2c.3 (D-2c.6): free `row`'s CHILD subtrees (each child
+		// container row + descendants, atom reverse edges erased) but KEEP `row`
+		// itself, clearing its child-edge vector. The rooted-full-replacement
+		// primitive: `this` keeps its row + generation while its old contents go.
+		void release_children_(std::uint32_t row);
+
 		ContainerRow&       row(std::uint32_t idx)       { return rows_[idx]; }
 		const ContainerRow& row(std::uint32_t idx) const { return rows_[idx]; }
 

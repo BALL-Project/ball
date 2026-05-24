@@ -575,6 +575,41 @@ void ContainerTable::release_source_subtree_(ContainerTable& src, std::uint32_t 
 	src.release(src_idx);
 }
 
+// v2.2 HCP-2c.3 (D-2c.6): same-table post-order subtree release. Mirrors
+// release_source_subtree_ but on `*this` (snapshot children before freeing).
+// Frees container rows + erases atom reverse edges; does NOT release atom slots
+// (the v0 Atom objects own them, freed via Atom::~Atom/release_atom).
+void ContainerTable::release_container_subtree_(std::uint32_t idx)
+{
+	if (idx == NONE || idx == 0 || idx >= rows_.size()) return;
+	if (rows_[idx].kind == ContainerKind::NONE) return;   // already freed
+	const std::vector<ChildRef> children = rows_[idx].children;   // snapshot
+	for (const ChildRef& c : children)
+	{
+		if (c.kind == ChildRef::CONTAINER)
+			release_container_subtree_(c.idx);
+		else
+			atom_parent_.erase(c.idx);
+	}
+	release(idx);
+}
+
+// v2.2 HCP-2c.3 (D-2c.6): free `row`'s child subtrees but KEEP `row` itself.
+void ContainerTable::release_children_(std::uint32_t row)
+{
+	if (row == NONE || row == 0 || row >= rows_.size()) return;
+	if (rows_[row].kind == ContainerKind::NONE) return;
+	const std::vector<ChildRef> children = rows_[row].children;   // snapshot
+	for (const ChildRef& c : children)
+	{
+		if (c.kind == ChildRef::CONTAINER)
+			release_container_subtree_(c.idx);
+		else
+			atom_parent_.erase(c.idx);
+	}
+	rows_[row].children.clear();
+}
+
 std::uint32_t ContainerTable::migrate_subtree_from(
 	ContainerTable& src, std::uint32_t src_root,
 	const std::unordered_map<std::uint32_t, std::uint32_t>& atom_remap)
@@ -849,6 +884,14 @@ void MoleculeStore::container_remove_container_(std::uint32_t parent_row, std::u
 void MoleculeStore::container_clear_children_(std::uint32_t row)
 {
 	side_tables_->container_table_.clear_children(row);
+}
+
+// v2.2 HCP-2c.3 (D-2c.6): free `row`'s child subtrees (recursively) but keep
+// `row` -- the rooted-full-replacement (set/operator=) primitive. Freed child
+// rows bump their generation, so handles into the replaced subtree go stale.
+void MoleculeStore::container_release_children_(std::uint32_t row)
+{
+	side_tables_->container_table_.release_children_(row);
 }
 
 // K0.4.6: orphan-store singleton + mutex. Function-local statics give

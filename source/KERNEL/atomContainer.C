@@ -144,6 +144,26 @@ namespace BALL
 		{
 			if (parent != 0) parent->mirrorRederiveOwnRow_();
 		}
+
+		// v2.2 HCP-2c.3 (D-2c.6, HCP-2c3-CR ABA fix): unbind every DESCENDANT
+		// container's store-row binding (NOT `node` itself), depth-first. Used
+		// before a rooted-replace clone: the clone detaches/destroys the old
+		// subtree, and the rebuild immediately recycles the freed row slots, so a
+		// detached non-AutoDeletable survivor that still held its old {store,row}
+		// would ABA-alias a recycled live row (container_is_freed_ no longer
+		// catches it). Clearing the binding up front makes such survivors read as
+		// unbound (row 0) -> a clean rebuild on any later re-adoption. Atoms are
+		// leaves with no container-row binding (setContainerRowBinding_ no-op).
+		void unbindContainerRowsBelow_(Composite& node)
+		{
+			for (Position i = 0; i < node.getDegree(); ++i)
+			{
+				Composite* c = node.getChild(static_cast<Index>(i));
+				if (c == 0) continue;
+				unbindContainerRowsBelow_(*c);
+				c->setContainerRowBinding_(0, 0);
+			}
+		}
 	} // anonymous namespace
 
 
@@ -221,6 +241,15 @@ namespace BALL
 
 	void AtomContainer::persistentRead(PersistenceManager& pm)
 	{
+		// v2.2 HCP-2c.3 (D-2c.6): persistentRead is the same rooted-full-
+		// replacement class as set/operator= (it reconstructs this's subtree from
+		// a stream). Its container-table mirror is intentionally NOT hooked here:
+		// the stream PersistenceManager framework is removed wholesale by the
+		// AGREED PR-removal milestone (task #61), and persistentRead is used to
+		// build FRESH objects, not to overwrite an already-materialised container
+		// (the kept JSON StoreFormat round-trips via systemJson, not this path).
+		// If #61 is dropped, apply the same release_children_ + re-materialise
+		// hook used in AtomContainer::set.
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
 		pm.checkObjectTrailer(0);
@@ -235,18 +264,88 @@ namespace BALL
     bool clone_them = clone_bonds;
     clone_bonds = false;
 
-		Composite::set(atom_container, deep);
-		PropertyManager::set(atom_container);
-		name_ = atom_container.name_;
+		// v2.2 HCP-2c.3 (D-2c.6): capture this's materialisation BEFORE the clone.
+		// A deep set replaces this's ENTIRE child subtree (clone() destroys the old
+		// children, builds fresh unmaterialised clones), so a materialised `this`
+		// needs its old child rows freed + the new clone re-materialised.
+		const bool was_materialised = (deep && !isBeingDestroyed_()
+			&& container_row_store_ != 0 && container_row_idx_ != 0);
+		MoleculeStore* const store = container_row_store_;
+		const std::uint32_t row = container_row_idx_;
+		// clone()'s root.destroy() ALSO detaches `this` from its parent
+		// (Composite::destroy -> parent_->removeChild). Capture the parent now so
+		// we can mirror that detach (drop `this` from the parent's row) afterwards.
+		Composite* const old_parent = getParent();
 
-		// clone the bonds only of we are the outmost set method
-		// involved!
-    if (clone_them && deep)
-    {
-			BALL::cloneBonds(atom_container, *this);
+		// HCP-2c3-CR ABA fix: unbind this's DESCENDANT container rows BEFORE the
+		// clone. The rebuild below frees the old child rows and immediately
+		// recycles those slots; a detached non-AutoDeletable survivor still
+		// holding its old {store,row} would then alias a recycled live row. Wiping
+		// the bindings up front makes any survivor read as unbound -> clean rebuild
+		// on re-adoption. (this's OWN row is intentionally kept.)
+		if (was_materialised)
+		{
+			unbindContainerRowsBelow_(*this);
+		}
+
+		{
+			// Suppress the container-table mirror across the clone: clone() runs
+			// root.destroy() first, which would otherwise fire the per-child mirror
+			// MID-CLONE (orphaning rows + racing the release). With it suppressed,
+			// this's row + the old child rows stay INTACT for one clean rebuild.
+			Composite::MirrorSuppressionGuard_ mirror_guard;
+			Composite::set(atom_container, deep);
+			PropertyManager::set(atom_container);
+			name_ = atom_container.name_;
+
+			// clone the bonds only of we are the outmost set method
+			// involved!
+			if (clone_them && deep)
+			{
+				BALL::cloneBonds(atom_container, *this);
+			}
 		}
 
     clone_bonds = clone_them;
+
+		// v2.2 HCP-2c.3 (D-2c.6): rooted full-replacement. Free the OLD child
+		// subtree rows (intact, since the mirror was suppressed) -- handles into
+		// the replaced subtree go stale via the freed rows' generation bump --
+		// then re-materialise the new clone: migrate ALL its atoms (incl. this's
+		// DIRECT atom children) via adoptSubtreeInto_(*this) (this's own row is
+		// idempotent-kept), build each direct child container's rows, then rebuild
+		// this's row edges. `this` keeps its OWN row + generation.
+		if (was_materialised && container_row_store_ == store && container_row_idx_ == row)
+		{
+			store->container_release_children_(row);
+			detail::adoptSubtreeInto_(*this, store);
+			for (Position i = 0; i < getDegree(); ++i)
+			{
+				Composite* ch = getChild(static_cast<Index>(i));
+				if (ch == 0) continue;
+				if (AtomContainer* cc = dynamic_cast<AtomContainer*>(ch))
+				{
+					detail::adoptSubtreeInto_(*cc, store);
+				}
+			}
+			// `this`'s OWN row is idempotent-kept (adoptSubtreeInto_ above did not
+			// re-run writeContainerScalars_ for it), so re-sync this's scalar
+			// identity (the clone copied src's name/id) before rebuilding edges.
+			mirrorResyncScalars_();
+			mirrorRederiveOwnRow_();
+
+			// clone() detached `this` from its old parent (Composite::destroy);
+			// mirror that on the old parent's row (drop `this`'s edge). `this`
+			// keeps its own row -> it becomes a detached subtree in the store,
+			// matching the detached-but-live v0 object. No-op if `this` is still
+			// parented (it never is after clone) or the old parent isn't in store.
+			if (old_parent != 0 && getParent() == 0
+			    && old_parent->getContainerRowStore_() == store
+			    && old_parent->getContainerRow_() != 0)
+			{
+				old_parent->mirrorRederiveOwnRow_();
+			}
+		}
 	}
 
 	AtomContainer& AtomContainer::operator = (const AtomContainer& atom_container)

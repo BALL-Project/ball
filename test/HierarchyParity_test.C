@@ -974,6 +974,60 @@ CHECK(HCP-2c.2 -- replace a rooted child with an UNMATERIALISED orphan (atom mig
 	TEST_EQUAL(descTable(t, root), d)                   // full parity (incl. the migrated atom edge)
 RESULT
 
+CHECK(HCP-2c.3 -- deep set() on a materialised container re-materialises (rooted replace))
+	System sys; Protein prot; prot.setName("P");
+	Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("1");
+	PDBAtom a1; a1.setName("N");
+	r1.insert(a1);
+	ch.insert(r1); prot.insert(ch); sys.insert(prot);   // materialised: prot->ch->r1->a1
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	// Capture a handle into the OLD child residue's row (to verify staleness).
+	std::uint32_t r1_old_row = r1.getContainerRow_();
+	TEST_NOT_EQUAL(r1_old_row, 0u)
+	ContainerHandleBase r1_handle(*store, r1_old_row);
+	TEST_EQUAL(r1_handle.isValid(), true)
+	std::uint32_t ch_row = ch.getContainerRow_();
+
+	// A SOURCE chain with DIFFERENT residues (its own atoms).
+	Chain src; src.setName("B");
+	Residue s1; s1.setName("GLY"); s1.setID("7"); PDBAtom sa; sa.setName("CA"); s1.insert(sa);
+	Residue s2; s2.setName("SER"); s2.setID("8"); PDBAtom sb; sb.setName("CB"); s2.insert(sb);
+	src.insert(s1); src.insert(s2);
+
+	// Deep-set the MATERIALISED chain from src. NB v0 semantics: clone() runs
+	// Composite::destroy first, which DETACHES ch from prot AND replaces ch's
+	// children with clones of src's. So after this: prot is empty, ch is a
+	// detached-but-live Chain("B") owning clones of GLY/SER.
+	ch.set(src, true);
+
+	// prot is now empty in BOTH v0 and the store mirror (ch detached).
+	std::string dprot; descV0(prot, dprot);
+	TEST_EQUAL(descTable(t, root), dprot)
+	TEST_EQUAL((bool)(ch.getParent() == 0), true)       // ch detached from prot
+	// ch kept its OWN row + the new subtree is mirrored (per-subtree parity).
+	TEST_EQUAL(ch.getContainerRow_(), ch_row)
+	TEST_EQUAL(ch.getName(), "B")
+	std::string dch; descV0(ch, dch);
+	TEST_EQUAL(descTable(t, ch_row), dch)               // ch -> {GLY, SER} mirrored
+	// The OLD child residue row was FREED -> the captured handle is now STALE.
+	TEST_EQUAL(r1_handle.isValid(), false)
+	// HCP-2c3-CR ABA fix: the detached survivor r1 was UNBOUND before the clone,
+	// so it holds no stale {store,row} aliasing the recycled slot. Re-adopting it
+	// into a fresh System rebuilds it cleanly (new live row in the new store).
+	TEST_EQUAL(r1.getContainerRow_(), 0u)
+	System sys2; Molecule m2; m2.insert(r1); sys2.insert(m2);
+	TEST_NOT_EQUAL(r1.getContainerRow_(), 0u)
+	TEST_NOT_EQUAL(r1.getContainerRowStore_(), (MoleculeStore*)0)
+	std::string d2; descV0(m2, d2);
+	TEST_EQUAL(descTable(m2.getContainerRowStore_()->sideTables_().container_table_,
+	                     m2.getContainerRow_()), d2)
+RESULT
+
 // ===== HCP-1a: collapse role taxonomy mirrored into the container table.
 // Roles (MoleculeRole/FragmentRole/SSKind) are DERIVED from ContainerKind
 // (+ ss_type) during dual existence; ResidueKind is STORED in the payload

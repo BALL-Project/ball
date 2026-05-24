@@ -263,7 +263,14 @@ namespace BALL
 			// the children would be appended a second time (duplicate edges).
 			// The PARENT edge is (re)derived by rebuildParentRowFromV0_ in the
 			// insert path, not here.
-			if (c.getContainerRowStore_() == dst && c.getContainerRow_() != 0)
+			// HCP-2c.3: also require the bound row to be LIVE -- a rooted
+			// full-replacement (set/operator=) frees a container's old child
+			// subtree rows, so a detached non-autodeletable survivor can hold a
+			// binding to a now-FREED row. Such a stale binding must NOT
+			// idempotent-skip (it would leave the survivor unmaterialised on
+			// re-adoption); the freed-row check forces a clean rebuild.
+			if (c.getContainerRowStore_() == dst && c.getContainerRow_() != 0
+			    && !dst->container_is_freed_(c.getContainerRow_()))
 			{
 				return c.getContainerRow_();
 			}

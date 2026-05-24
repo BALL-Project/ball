@@ -1744,6 +1744,24 @@ B		*/
 		// has no store identity); AtomContainer overrides it, routing through the
 		// shared detail::adoptSubtreeInto_. Self-guards: no-op when being_destroyed_.
 		virtual void mirrorAdoptSubtreeInto_(MoleculeStore* /*dst*/) {}
+
+		// v2.2 HCP-2c.3 (D-2c.6): transient guard suppressing the container-table
+		// mirror across a BULK replace (AtomContainer::set/operator= -> clone).
+		// clone() runs root.destroy() first, which deletes/clears the old children
+		// and would otherwise fire the per-child mirror MID-CLONE (orphaning rows
+		// + racing the row release). With this flag set, the 3 mirror helpers
+		// no-op, so `this`'s row + the old child rows stay INTACT for one clean
+		// release + re-materialise AFTER the clone. Set via the RAII
+		// MirrorSuppressionGuard_ (exception-safe). Not thread-safe -- matches the
+		// existing non-thread-safe `clone_bonds` set/clone toggle.
+		static bool mirror_suppressed_;
+		struct BALL_EXPORT MirrorSuppressionGuard_
+		{
+			bool prev_;
+			MirrorSuppressionGuard_() : prev_(Composite::mirror_suppressed_)
+			{ Composite::mirror_suppressed_ = true; }
+			~MirrorSuppressionGuard_() { Composite::mirror_suppressed_ = prev_; }
+		};
 	};
 
 	template <typename T>
