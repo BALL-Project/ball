@@ -631,6 +631,9 @@ Addressing HCP-2c-R1 (AGREE-WITH-FIXES). The four required fixes + the two WEAKs
   store routes through the FIX-2 cross-store release/rebind.
 
 ### Revised step-by-step (supersedes the earlier list)
+> STATUS: **2c.1 DONE** (commit 73212d856, Codex HCP-2c1-CR GO). **2c.2 NEXT.**
+> Carry-over from 2c1-CR item 7 (WEAK): add a `migrate_one_` molecule_role +
+> residue_kind parity assertion in 2c.4 (where cross-store migration is the focus).
 - **HCP-2c.1** — D-2c.1/.2/.3(revised): `molecule_role` payload + `migrate_one_` copy
   (FIX-3) + materialisation derivation + `mirrorRefineRole_` from the AtomContainer property
   API + post-JSON-restore resync (FIX-1) + `container_molecule_role_` reads payload.
