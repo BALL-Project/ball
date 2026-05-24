@@ -433,6 +433,11 @@ namespace BALL
 		// in atomContainer.C; dispatches via detail::writeContainerScalars_.
 		void mirrorResyncScalars_() override;
 
+		// v2.2 HCP-2c.2 (D-2c.5 refined): materialise-the-new-member -- route to
+		// detail::adoptSubtreeInto_ (atom migration + container materialisation).
+		// No-op when being destroyed or dst is null. Defined in atomContainer.C.
+		void mirrorAdoptSubtreeInto_(MoleculeStore* dst) override;
+
 		private:
 
 		/*_ The name of this container
@@ -459,6 +464,16 @@ namespace BALL
 		BALL_EXPORT void writeContainerScalars_(const AtomContainer& c,
 		                                        MoleculeStore& store,
 		                                        std::uint32_t row);
+
+		// v2.2 HCP-2c.2 (D-2c.5 refined, Codex HCP-2c2-RA): the store-level
+		// adoption body extracted from System::adoptSubtree -- atom migration
+		// (snapshot/allocate/migrate + bond migration + src release) followed by
+		// container-row materialisation -- operating purely on the destination
+		// store `dst`. Shared by System::adoptSubtree AND
+		// AtomContainer::mirrorAdoptSubtreeInto_ (materialise-the-new-member),
+		// so insertParent (no new atoms) and replace-with-orphan (atoms migrated)
+		// take ONE correct path. Defined in system.C (has the migration machinery).
+		BALL_EXPORT void adoptSubtreeInto_(AtomContainer& root, MoleculeStore* dst);
 	} // namespace detail
 
 } // namespace BALL

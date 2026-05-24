@@ -1065,10 +1065,30 @@ namespace BALL
 		//    insertParent's sole production caller is the PDB SS-grouping,
 		//    which the collapse (D-HC4: SS becomes a non-owning annotation)
 		//    removes outright at H3c.
-		if (parent.getContainerRowStore_() != 0 && parent.getContainerRow_() != 0)
+		// v2.2 HCP-2c.2 (D-2c.5 refined, Codex HCP-2c2-RA): if the new parent's
+		// parent (parent_ptr) is materialised, the new parent must appear in the
+		// table too. If the new parent is not yet rooted in that store (the
+		// materialise-the-new-member case -- e.g. PDB SS-grouping), adopt its
+		// subtree FIRST (atom migration + container rows), THEN re-derive both
+		// affected rows (adopt BEFORE rederive). This supersedes the earlier
+		// "deliberately skip" of the unmaterialised-new-parent path.
+		if (parent_ptr != 0
+		    && parent_ptr->getContainerRowStore_() != 0
+		    && parent_ptr->getContainerRow_() != 0)
 		{
+			MoleculeStore* gp_store = parent_ptr->getContainerRowStore_();
+			if (parent.getContainerRowStore_() != gp_store || parent.getContainerRow_() == 0)
+			{
+				parent.mirrorAdoptSubtreeInto_(gp_store);
+			}
 			parent.mirrorRederiveOwnRow_();
-			if (parent_ptr != 0) parent_ptr->mirrorRederiveOwnRow_();
+			parent_ptr->mirrorRederiveOwnRow_();
+		}
+		else if (parent.getContainerRowStore_() != 0 && parent.getContainerRow_() != 0)
+		{
+			// Grandparent not materialised but the new parent is (unusual):
+			// keep the original behaviour -- re-derive the new parent's own row.
+			parent.mirrorRederiveOwnRow_();
 		}
 
 		// update the modification time stamps
@@ -1208,7 +1228,25 @@ namespace BALL
 			// Composite::insertBefore above is NOT mirrored (only the
 			// AtomContainer wrapper is) and removeChild only removed `this`,
 			// so re-derive the affected parent from v0.
-			if (Composite* p = composite.getParent()) p->mirrorRederiveOwnRow_();
+			// v2.2 HCP-2c.2 (D-2c.5 refined): if the replacement `composite` is an
+			// as-yet-UNMATERIALISED subtree (e.g. an orphan that may own its own
+			// unmigrated atoms) and the new parent `p` is materialised, adopt
+			// `composite`'s subtree (atom migration + rows) BEFORE re-deriving `p`
+			// (Codex HCP-2c2-RA constraint). replace() has no AtomContainer wrapper,
+			// so without this the orphan would never be adopted -> permanent desync.
+			if (Composite* p = composite.getParent())
+			{
+				MoleculeStore* p_store = p->getContainerRowStore_();
+				if (p_store != 0 && p->getContainerRow_() != 0)
+				{
+					if (composite.getContainerRowStore_() != p_store
+					    || composite.getContainerRow_() == 0)
+					{
+						composite.mirrorAdoptSubtreeInto_(p_store);
+					}
+					p->mirrorRederiveOwnRow_();
+				}
+			}
 		}
 	}
 

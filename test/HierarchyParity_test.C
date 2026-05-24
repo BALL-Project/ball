@@ -923,6 +923,57 @@ CHECK(H2b -- replace a rooted child with another rooted child preserves parity)
 	TEST_EQUAL(descTable(t, root), d)
 RESULT
 
+CHECK(HCP-2c.2 -- insertParent materialises a NEW parent under a rooted tree)
+	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("1"); r1.setProperty(Residue::PROPERTY__AMINO_ACID);
+	Residue r2; r2.setName("GLY"); r2.setID("2"); r2.setProperty(Residue::PROPERTY__AMINO_ACID);
+	PDBAtom a1; a1.setName("N"); PDBAtom a2; a2.setName("CA");
+	r1.insert(a1); r2.insert(a2);
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch); sys.insert(prot);      // materialised: prot->ch->{r1,r2}
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	// Group r1..r2 under a NEW, as-yet-unmaterialised SecondaryStructure. Before
+	// HCP-2c.2 the mirror deliberately skipped this (parent has no row); now the
+	// new parent is materialised-in-place + parity holds.
+	SecondaryStructure ss; ss.setName("H1"); ss.setType(SecondaryStructure::HELIX);
+	ch.insertParent(ss, r1, r2, false);
+	TEST_NOT_EQUAL(ss.getContainerRow_(), 0u)
+	TEST_EQUAL(ss.getContainerRowStore_() == store, true)
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)
+RESULT
+
+CHECK(HCP-2c.2 -- replace a rooted child with an UNMATERIALISED orphan (atom migration))
+	System sys; Protein prot; prot.setName("P"); Chain ch; ch.setName("A");
+	Residue r1; r1.setName("ALA"); r1.setID("1");
+	PDBAtom a1; a1.setName("N");
+	r1.insert(a1);
+	ch.insert(r1); prot.insert(ch); sys.insert(prot);   // materialised
+
+	MoleculeStore* store = prot.getContainerRowStore_();
+	std::uint32_t root = prot.getContainerRow_();
+	const ContainerTable& t = store->sideTables_().container_table_;
+
+	// An ORPHAN residue owning its own (unmigrated) atom -- NOT in `store`.
+	Residue orphan; orphan.setName("VAL"); orphan.setID("9");
+	PDBAtom ao; ao.setName("CB");
+	orphan.insert(ao);
+	TEST_NOT_EQUAL(ao.getStore() == store, true)        // not yet in the System store
+
+	// replace() = insertBefore + removeChild with NO AtomContainer wrapper, so
+	// without HCP-2c.2 the orphan (and its atom) would never be adopted.
+	r1.replace(orphan);
+	TEST_NOT_EQUAL(orphan.getContainerRow_(), 0u)
+	TEST_EQUAL(orphan.getContainerRowStore_() == store, true)
+	TEST_EQUAL(ao.getStore() == store, true)            // the orphan's atom migrated
+	std::string d; descV0(prot, d);
+	TEST_EQUAL(descTable(t, root), d)                   // full parity (incl. the migrated atom edge)
+RESULT
+
 // ===== HCP-1a: collapse role taxonomy mirrored into the container table.
 // Roles (MoleculeRole/FragmentRole/SSKind) are DERIVED from ContainerKind
 // (+ ss_type) during dual existence; ResidueKind is STORED in the payload

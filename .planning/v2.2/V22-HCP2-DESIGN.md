@@ -786,3 +786,47 @@ same path, not through bare `materialiseContainer_`.
   runs before container materialisation, and `materialiseContainer_` is already idempotent
   for rows bound to `dst`; existing `being_destroyed_` guards remain on the row-mirror
   callers.
+
+## HCP-2c2-CR code review
+
+Verdict: **GO**. The implemented HCP-2c.2 patch matches the agreed RA design; no blocking
+code issue found in the uncommitted diff. Targeted verification: `git diff --check`,
+`cmake --build build --target HierarchyParity_test -j2`, and
+`./build/bin/TEST/HierarchyParity_test` all pass.
+
+1. **SOUND** — extraction fidelity holds. `detail::adoptSubtreeInto_` is the old
+   `System::adoptSubtree` body with only `MoleculeStore* dst = store_.get();` replaced by
+   the `dst` parameter, and `System::adoptSubtree` remains a thin caller over
+   `store_.get()`. The body depends on the destination store plus the live root/subtree, not
+   other `System` state.
+2. **SOUND** — linkage/layering is valid. The externally linked `BALL::detail` function is
+   defined in `system.C` and can use that TU's anonymous-namespace helpers normally; the
+   `BALL_EXPORT` declaration follows the existing `writeContainerScalars_` pattern; the
+   `Composite` virtual only needs the existing `MoleculeStore` forward declaration.
+3. **SOUND** — `insertParent` wiring is correct. The deciding fact is the materialised
+   grandparent row, because that row must now point at the new parent row; adopting the new
+   parent before rederiving parent and grandparent satisfies the RA order constraint and
+   subsumes the old "parent already materialised" case. The non-materialised-grandparent
+   else path preserves the old effective behaviour.
+4. **SOUND** — `replace` wiring is correct. Once `replace` has inserted the replacement and
+   detached `this`, a materialised new parent needs the replacement materialised into the same
+   store before the parent row is rederived. Already-rooted replacements skip adoption and
+   retain the old rederive behaviour; the detached old subtree row state is an existing
+   forward-only mirror limitation, not a new corruption in this patch.
+5. **SOUND** — atom migration through the shared path is correct for both intended cases.
+   `insertParent` sees existing child atoms already in `dst` and only creates the new
+   container row/edges; replace-with-orphan migrates orphan-store atoms before atom child
+   refs are written. Cross-live-store adoption remains the known later cleanup scope, but
+   this path does not mis-index or corrupt the destination store.
+6. **SOUND** — reentrancy/guard risk is controlled. `mirrorAdoptSubtreeInto_` no-ops for
+   destruction/null destination, `adoptSubtreeInto_` does not mutate v0 topology, and
+   `materialiseContainer_` is idempotent for rows already bound to `dst`; no recursive
+   adoption loop is introduced.
+7. **WEAK** — tests pin the two HCP-2c.2 regressions that matter: new-parent materialisation
+   under a rooted tree, and replace-with-unmaterialised-orphan atom migration plus parity.
+   Coverage is still narrow: replace-with-already-rooted and insertParent-with-unmaterialised
+   grandparent are not directly asserted, though inspection says those paths keep old
+   behaviour. Lifting the H2d replace-with-orphan exclusion remains HCP-2c.4 scope.
+8. **SOUND** — no new missed caller/include-cycle issue found. The new virtual does add a
+   `Composite` vtable slot, but this codebase is in an uncommitted internal ABI-breaking
+   development patch series, so that is acceptable here.

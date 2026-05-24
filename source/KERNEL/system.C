@@ -295,10 +295,14 @@ namespace BALL
 
 	} // anonymous namespace
 
-	void System::adoptSubtree(AtomContainer& container)
+	// v2.2 HCP-2c.2 (D-2c.5 refined, Codex HCP-2c2-RA): the store-level adoption
+	// body, extracted from System::adoptSubtree so the materialise-the-new-member
+	// hook (AtomContainer::mirrorAdoptSubtreeInto_) reuses the SAME atom-migration +
+	// container-materialisation path. Operates purely on `dst` (no System state):
+	// migrates every subtree atom whose store != dst, migrates incident bonds,
+	// releases the source slots, then materialises the container rows + edges.
+	void detail::adoptSubtreeInto_(AtomContainer& container, MoleculeStore* dst)
 	{
-		MoleculeStore* dst = store_.get();
-
 		// Collect atoms + their old (src, src_idx) before we mutate.
 		struct AtomEntry { Atom* atom; MoleculeStore* src; std::uint32_t src_idx; };
 		std::vector<AtomEntry> entries;
@@ -413,6 +417,12 @@ namespace BALL
 		// AtomContainer insert method that called adoptSubtree (R36b) -- not
 		// here -- so it honours the insert position and same-store reparent.
 		materialiseContainer_(container, dst);
+	}
+
+	void System::adoptSubtree(AtomContainer& container)
+	{
+		// v2.2 HCP-2c.2: thin caller over the extracted store-level body.
+		detail::adoptSubtreeInto_(container, store_.get());
 	}
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const

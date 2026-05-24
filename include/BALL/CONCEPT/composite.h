@@ -1736,6 +1736,14 @@ B		*/
 		// it, dispatching to its subtypes via detail::writeContainerScalars_.
 		// Self-guards: no-op when being_destroyed_ or unbound.
 		virtual void mirrorResyncScalars_();
+
+		// v2.2 HCP-2c.2 (D-2c.5 refined): adopt THIS node's subtree into the
+		// store `dst` -- atom migration + container-row materialisation -- when a
+		// mutation (insertParent / replace) roots an as-yet-UNMATERIALISED subtree
+		// under an already-materialised parent. Default = no-op (a bare Composite
+		// has no store identity); AtomContainer overrides it, routing through the
+		// shared detail::adoptSubtreeInto_. Self-guards: no-op when being_destroyed_.
+		virtual void mirrorAdoptSubtreeInto_(MoleculeStore* /*dst*/) {}
 	};
 
 	template <typename T>

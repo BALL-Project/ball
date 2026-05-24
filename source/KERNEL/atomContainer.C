@@ -89,6 +89,17 @@ namespace BALL
 		detail::writeContainerScalars_(*this, *container_row_store_, container_row_idx_);
 	}
 
+	// v2.2 HCP-2c.2 (D-2c.5 refined): materialise-the-new-member. Routes through
+	// the shared store-level adoption body (atom migration + container
+	// materialisation), so an UNMATERIALISED subtree rooted under an already-
+	// materialised parent (insertParent / replace-with-orphan) gets correct rows.
+	// No-op when being destroyed or dst is null.
+	void AtomContainer::mirrorAdoptSubtreeInto_(MoleculeStore* dst)
+	{
+		if (isBeingDestroyed_() || dst == 0) return;
+		detail::adoptSubtreeInto_(*this, dst);
+	}
+
 	// v2.2 HCP-2c.1 (D-2c.3): refine the mirrored container role after a v0
 	// identity-bit flip. writeContainerScalars_ (via mirrorResyncScalars_)
 	// re-derives molecule_role / residue_kind from the live v0 object, so a
