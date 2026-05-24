@@ -163,21 +163,6 @@ namespace BALL
 
 			//@}
 
-			/** @name Storable Interface
-			*/
-			//@{
-
-			/** Persistent stream writing.
-			*/
-			//void write(PersistenceManager& pm) const;
-			void persistentWrite(PersistenceManager& pm, const char* name) const;
-
-			/** Persistent stream reading.
-			*/
-			//bool read(PersistenceManager& pm);
-			void persistentRead(PersistenceManager& pm);
-
-			//@}
 
 
 		protected:

@@ -117,25 +117,6 @@ namespace BALL
 
 		//@}
 
-		/**	@name Persistence 
-		*/
-		//@{
-
-		/**	Persistent writing.
-				Writes a TVector2 object to a persistent stream.
-				@param pm the persistence manager
-		*/
-		virtual void persistentWrite(PersistenceManager& pm,
-				const char* name = 0) const;
-
-		/**	Persistent reading.
-				Reads a TVector2 object from a persistent stream.
-				@param pm the persistence manager
-				@exception Exception::GeneralException
-		*/
-		virtual void persistentRead(PersistenceManager& pm);
-
-		//@}
 
 		/**	@name	Assignment 
 		*/
@@ -438,22 +419,6 @@ namespace BALL
 		x = y = (T)0;
 	}
 
-	template <typename T>
-  void TVector2<T>::persistentWrite(PersistenceManager& pm, const char* name) const
-	{
-		pm.writeObjectHeader(this, name);
-			pm.writePrimitive(x, "x");
-			pm.writePrimitive(y, "y");
-		pm.writeObjectTrailer(name);
-	}
-
-	template <typename T>
-	void TVector2<T>::persistentRead(PersistenceManager& pm)
-	{
-		pm.readPrimitive(x, "x");
-		pm.readPrimitive(y, "y");
-	}
- 
 	template <typename T>
 	BALL_INLINE 
 	void TVector2<T>::set(const T& value)

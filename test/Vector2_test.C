@@ -8,8 +8,6 @@
 ///////////////////////////
 #include <BALL/MATHS/vector2.h>
 #include <cmath>
-#include <BALL/CONCEPT/persistenceManager.h>
-#include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
 START_TEST(TVector2)
@@ -82,42 +80,6 @@ CHECK(TVector2(const TVector2& vector) throw())
 	TEST_REAL_EQUAL(v[1], 2.0)
 RESULT
 
-String filename;
-using std::ofstream;
-using std::ios;
-using namespace RTTI;
-TextPersistenceManager pm;
-CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const)
-	Vector2 v(1.0, 2.0);
-	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	pm.registerClass(getStreamName<Vector2>(), Vector2::createDefault);
-	v >> pm;
-	ofile.close();	
-RESULT
-
-using std::ifstream;
-using std::cout;
-CHECK(void persistentRead(PersistenceManager& pm))
-	ifstream  ifile(filename.c_str());
-	pm.setIstream(ifile);
-	PersistentObject* ptr;
-	ptr = pm.readObject();
-	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-        TEST_EQUAL(isKindOf<Vector2>(ptr), true)
-        if (isKindOf<Vector2>(ptr))
-		{
-			Vector2* v_ptr = castTo<Vector2>(*ptr);
-			TEST_REAL_EQUAL(v_ptr->x, 1.0)
-			TEST_REAL_EQUAL(v_ptr->y, 2.0)
-		}
-		delete ptr;
-	}
-RESULT
 
 CHECK(void set(const T& value) throw())
 	v.set(1.0);
@@ -375,6 +337,7 @@ CHECK(std::istream& operator >> (std::istream& s, TVector2<T>& vector))
 	TEST_REAL_EQUAL(v.y, 2.3)
 RESULT
 
+String filename;
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector2<T>& vector))
 	Vector2 v(1.2, 2.3);

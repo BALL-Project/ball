@@ -372,3 +372,37 @@ files or stripped tests; rebuilt affected `build-core` tests
 `Fragment_test`, `Chain_test`, `Molecule_test`, `SecondaryStructure_test`,
 `System_test`, `Protein_test`, `PDBAtom_test`, `NucleicAcid_test`, and
 `Nucleotide_test` all pass; full-build `Residue_test2` also passes.
+
+## PR3b-CR code review
+
+**Verdict: GO.** The phase-3b FORMAT/XRAY/MATHS leaf persistence strip is clean:
+the intended declarations and definitions are removed as pairs, no remaining caller
+targets the stripped leaf overrides, and PDB read/write still uses the normal PDBFile
+record path rather than these persistence virtuals.
+
+1. **SOUND** — Header removal is limited to the `Storable Interface`/`Persistence`
+blocks, including the commented-out `read/write(PersistenceManager&)` lines; the
+source removal is exactly the two `persistentRead`/`persistentWrite` definitions
+each for `PDBInfo`, `PDBRecords`, and `CrystalInfo`, with no brace bleed and
+`git diff --check` clean.
+2. **SOUND** — The `PDBInfo` to `PDBRecords` pair was removed consistently:
+`PDBInfo::persistentRead/Write` and `PDBRecords::persistentRead/Write` are both
+gone, so the former no longer contains calls to removed member methods; no other
+`PDBInfo`/`PDBRecords` persistence caller was found.
+3. **SOUND** — `TVector2` has no orphaned template line or dangling out-of-class
+definition after the inline persistence methods were removed; inheriting the still
+present `PersistentObject` base virtuals is ABI/ODR-coherent for this phase.
+4. **SOUND** — PDB round-trip behavior should not change: `PDBFile` accesses
+`PDBInfo`/`PDBRecords` through their normal record/container APIs, not through
+`persistentRead/Write`, and the stripped methods were only persistence-stream
+virtual implementations.
+5. **SOUND** — No stray `persistentRead/Write` references remain in the touched
+headers/sources or `Vector2_test.C`; the only leftovers are now-unused
+`#include <BALL/CONCEPT/persistenceManager.h>` lines in `PDBInfo.h`,
+`PDBRecords.h`, `crystalInfo.h`, and `vector2.h`, which are harmless because they
+still provide `PersistentObject` transitively but can be replaced with
+`persistentObject.h` in a cleanup.
+6. **SOUND** — No new issue found. The uncommitted `Vector2_test.C` change is
+related and necessary: it removes the persistence-stream test for the stripped
+`TVector2` overrides while preserving the later temporary filename used by the
+normal iostream test.
