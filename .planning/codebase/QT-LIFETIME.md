@@ -16,6 +16,88 @@ command/transaction contract, Qt-lifetime as its own concern).
 
 ---
 
+## The 5 rules (canonical summary)
+
+The detailed sections below expand each rule with the shipped bugs that
+motivated it. New VIEW code only needs these five:
+
+1. **Owner-rooted parentage.** Every `QObject*` you `new` has a Qt parent
+   **or** a documented C++ owner (`shared_ptr`/`unique_ptr`/explicit
+   `delete`) — never both. Raw pointers are observers, never owners.
+   *(detail: §1)*
+2. **`QPointer<T>` for cross-owner references.** When a holder points at an
+   object it does not own and whose lifetime can run shorter, use
+   `QPointer<T>` so the dtor-order race becomes a `if (ptr)` null check. This
+   is the same `QPointer<Representation>` the `999.59` base `Controller`
+   caches its target through. *(detail: §3)*
+3. **Direct connections by default; queued only for cross-thread, and
+   explicit when chosen.** A `connect()` with no `Qt::ConnectionType` resolves
+   to `Qt::AutoConnection`, which is a *direct* call when emitter and receiver
+   share a thread (the case for essentially all VIEW signal/slot wiring). Pass
+   `Qt::QueuedConnection` explicitly **only** when crossing a thread boundary,
+   and never rely on `AutoConnection` to silently pick queued for you. The
+   single cross-thread path in v1.7.4 is `ControllerJob`'s worker-thread →
+   GUI-thread result hand-off (`999.59-05`); that — and only that — connection
+   is `Qt::QueuedConnection`. ARCHITECTURE-CONTRACT.md §4/§6 rely on this being
+   the one place. *(detail: §3a)*
+4. **GL-context ownership stays with the `QOpenGLWidget`.** The OpenGL context
+   belongs to `GLRenderWindow`; Controllers and Sections never touch it. GL
+   mutations outside `paintGL()` bracket `makeCurrent()`; repaint via
+   `update()`, not a direct `paintGL()`. *(detail: §6)*
+5. **No `deleteLater()` inside destructors.** Qt's parent walk already deletes
+   parented children; a `deleteLater()` posted during teardown races dtor
+   order (UFG-30/32). If you need ordered destruction, do it *before* the
+   parent dtor runs. The `lifetime-discipline` CI job
+   (`cmake/scripts/check-deletelater-discipline.sh`) enforces this. *(detail:
+   §2, §4)*
+
+## Case studies (the four shipped bugs)
+
+Each rule above is a scar. The four that drove this doc:
+
+- **UFG-30 — `~WorkspaceStatusLabel` dtor `removeEventFilter` on a dead child.**
+  `label_` (a child `QLabel` of the same `QMainWindow`) was torn down before
+  the dtor ran → `KERN_INVALID_ADDRESS`. Fix: `label_` is now
+  `QPointer<QLabel>` (rule 2) and the dtor null-checks before
+  `removeEventFilter` (rules 2 + 5; §2/§5). `workspaceManager.{h,C}`.
+- **UFG-32 — `InspectorBody::clearSections` `deleteLater()` on reused
+  sections.** `InspectorView` owns the sections as raw members and reuses
+  them; `clearSections` `deleteLater()`-ing them turned the next `addSection`
+  into a dangling-pointer crash at `QLayout::addChildWidget`. Fix:
+  `clearSections` only detaches from the layout and `hide()`s — single owner,
+  no deferred delete (rules 1 + 5; §2). `inspectorBody.C`.
+- **UFG-18 — `GLRenderWindow::initializeGL` ordering.** GL state touched before
+  the context was guaranteed current. Fix: context-current discipline (rule 4;
+  §6).
+- **UFG-26 — `Scene::paintEvent` `QPainter` off the paint cycle.** Beginning a
+  `QPainter` on the `QOpenGLWidget` target outside its paint cycle threw ~50
+  `QPainter::begin` failures. Fix: the overlay/text `QPainter` block only runs
+  while the widget is in its paint cycle (rule 4; §6). `scene.C:1785`.
+
+## Audit cookbook
+
+For each lifetime-suspect site:
+
+1. **Identify the owner.** Find the single QObject (or C++ owner) responsible
+   for deleting the referent. If you cannot name it, that is the bug.
+2. **Guard cross-owner pointers.** Where the referent's lifetime can run
+   shorter than the holder, switch the raw pointer to `QPointer<T>` and
+   null-check at every dereference (rule 2).
+3. **Pull `deleteLater()` out of destructors.** If a dtor calls
+   `deleteLater()`, restructure: Qt's parent walk handles parented children;
+   for explicit destruction order, destroy *before* the parent dtor runs
+   (rule 5). The CI lint blocks new violations.
+4. **Pin connection direction.** Confirm the connection is same-thread (direct
+   `AutoConnection` is fine) or cross-thread (must be explicit
+   `Qt::QueuedConnection`). The only cross-thread case is `ControllerJob`
+   (rule 3).
+5. **Comment the rule.** Add a one-line in-source comment naming the rule and
+   the originating ticket (e.g. `// UFG-30 / rule 2 — QPointer guards the
+   dtor-order race`). The comment is the institutional memory; folklore is
+   what this doc exists to kill.
+
+---
+
 ## 1. The one rule: every QObject has exactly one owner
 
 A `QObject*` is owned by **either**:
@@ -102,6 +184,48 @@ survive only because of incidental ordering):
 
 **Rule:** if you cannot point at the line that guarantees the referent
 outlives the reference, use `QPointer` and null-check.
+
+---
+
+## 3a. Connection direction — direct by default, queued only cross-thread
+
+`QObject::connect()` called without an explicit `Qt::ConnectionType` uses
+`Qt::AutoConnection`. `AutoConnection` is resolved **at emit time**:
+
+- emitter and receiver on the **same thread** → behaves as
+  `Qt::DirectConnection` — the slot runs synchronously, in the emitter's stack
+  frame, before `emit` returns.
+- emitter and receiver on **different threads** → behaves as
+  `Qt::QueuedConnection` — the slot is posted to the receiver's event loop and
+  runs later, on the receiver's thread.
+
+Essentially every signal/slot in VIEW/BALLView is same-thread (the GUI
+thread), so the default is — and should stay — a direct call. Two rules keep
+this honest:
+
+1. **Do not rely on `AutoConnection` to silently switch to queued.** If a
+   connection genuinely crosses threads, pass `Qt::QueuedConnection`
+   *explicitly* at the `connect()` site, with a comment. An implicit
+   thread-affinity change (e.g. an object later `moveToThread`'d) would
+   otherwise flip a direct connection to queued without any code change —
+   exactly the kind of invisible behavioural shift this doc exists to prevent.
+2. **Queued connections require queued-safe argument types.** A queued slot
+   marshals its arguments across the thread boundary; non-trivial types must be
+   registered with `qRegisterMetaType<T>()`. Direct connections do not — a
+   second reason to be explicit about which kind you are wiring.
+
+**The single cross-thread connection in v1.7.4** is `ControllerJob`'s
+worker-thread → GUI-thread result hand-off (`999.59-05`): the background job
+finishes off the GUI thread and signals its result back to the GUI thread via
+an explicit `Qt::QueuedConnection`. That is the one place. Every other
+`connect()` in the VIEW tree is same-thread and direct.
+`ARCHITECTURE-CONTRACT.md` §4/§6 depend on `ControllerJob` being the sole
+cross-thread path; if a second one appears, it must be added here and to that
+contract, never wired silently through `AutoConnection`.
+
+**Rule:** same-thread connections stay direct (the `AutoConnection` default is
+correct, no annotation needed). Cross-thread connections are
+`Qt::QueuedConnection`, written explicitly, commented, and accounted for here.
 
 ---
 
@@ -222,6 +346,11 @@ in v1.7.x-18.
 - [ ] Cross-owner pointer with independent lifetimes → `QPointer` + null
       check.
 - [ ] No `removeEventFilter` on a child/sibling in a destructor.
+- [ ] No `deleteLater()` anywhere inside a destructor body (the
+      `lifetime-discipline` CI job blocks this — rule 5).
+- [ ] Connections are direct by default; any `Qt::QueuedConnection` is
+      explicit, commented, and genuinely cross-thread (rule 3 — the only
+      cross-thread path is `ControllerJob`).
 - [ ] GL calls outside `paintGL()` bracket `makeCurrent()`; repaint via
       `update()`, not direct `paintGL()`.
 - [ ] No modal `exec()` reachable on the startup path without a headless
@@ -229,15 +358,35 @@ in v1.7.x-18.
 
 ---
 
-## 9. Highest-risk remaining sites (for v1.7.x follow-up)
+## 9. Audit status — flagged sites (phase 999.61)
+
+**Resolved in v1.7.x-26 (this audit):**
+
+- ✅ **UFG-30 — `WorkspaceStatusLabel::label_`** is now `QPointer<QLabel>`
+   (`workspaceManager.h`), and the dtor null-checks before `removeEventFilter`
+   (`workspaceManager.C`). The UFG-30 contract is now enforced by the type, not
+   a comment (§2/§3).
+- ✅ **UFG-32 — `InspectorBody::clearSections`** no longer `deleteLater()`s
+   sections owned and reused by `InspectorView`; it detaches from the layout
+   and `hide()`s (`inspectorBody.C`). Single owner, no deferred delete (§2).
+- ✅ **UFG-18 / UFG-26 — `Scene` GL/`QPainter` ordering** — the `QPainter`
+   overlay block runs only inside the widget's paint cycle (`scene.C:1785`);
+   context-current discipline holds (§6).
+- ✅ **No `deleteLater()` in any destructor** across `source/VIEW/**` and
+   `source/APPLICATIONS/BALLVIEW/**` — now enforced by the `lifetime-discipline`
+   CI job (`cmake/scripts/check-deletelater-discipline.sh`, rule 5).
+
+**Remaining follow-up (deferred):**
 
 1. **`welcomeScreen.C:392`** — latent dangling `whats_new_card_` on the
-   markdown-open-failure early-return path (§4). 1-line fix.
-2. **`WorkspaceStatusLabel::label_`** — should become `QPointer<QLabel>` to
-   make the UFG-30 contract enforceable rather than commented (§3).
-3. **`scene.C` `updateGL()→paintGL()` direct call** — context-bookkeeping
+   markdown-open-failure early-return path (§4). 1-line fix; owned by the
+   welcome-screen phase (999.62), out of this phase's file scope.
+2. **`scene.C` `updateGL()→paintGL()` direct call** — context-bookkeeping
    debt; resolve in the Renderer/RenderSurface cut-over (§6).
-4. **Controller↔Section back-references (v1.7.x-24)** — when Controllers
-   become command handlers, audit every Controller/Section pointer pair for
-   the outlives-guarantee; default to `QPointer` on the shorter-lived side
-   (§3).
+3. **Controller↔Section back-references (999.59 base Controller)** — the base
+   `Controller` caches its target through `QPointer<Representation>` per rule 2
+   from day one; audit each Controller/Section pointer pair for the
+   outlives-guarantee as Controllers land, defaulting to `QPointer` on the
+   shorter-lived side (§3).
+4. **Full clang-tidy `ball-no-raw-deletelater` check** — the grep-class CI lint
+   shipped here is the v1.7.4 guard; the AST-precise custom check is v1.7.5.
