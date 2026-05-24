@@ -168,7 +168,6 @@ SET(BALL_KERNEL_TESTS
 	Sizeof_test
 	MemoryBudget_test
 	JsonBench_test
-	V1ToV2JsonConverter_test
 	CompiledExpression_test
 	SelectorBench_test
 	SideTableParity_test

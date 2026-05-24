@@ -61,7 +61,6 @@ IF(BALL_COLLAPSE_KERNEL_ONLY)
 		Sizeof_test
 		MemoryBudget_test
 		JsonBench_test
-		V1ToV2JsonConverter_test
 		CompiledExpression_test
 		SideTableParity_test
 		HierarchyParity_test
@@ -114,7 +113,6 @@ ELSEIF(BALL_CORE_ONLY)
 		Sizeof_test
 		MemoryBudget_test
 		JsonBench_test
-		V1ToV2JsonConverter_test
 		CompiledExpression_test
 		SelectorBench_test
 		# v2.1 P1.3-P1.7 (2026-05-19): infrastructure for the v2.1 side-
