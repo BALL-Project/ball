@@ -1,10 +1,11 @@
 # V22 HCP-2 — collapsed handle API (design-lock, step-by-step)
 
-**Status:** DESIGN-LOCK in progress. The user-visible heart of the collapse; still
+**Status:** IN PROGRESS. The user-visible heart of the collapse; still
 **dual existence** (handles READ the HCP-1 role columns; v0 classes remain until H4).
-Sub-steps (plan §6a): **HCP-2a** role-aware handles → **HCP-2b** `StructureQuery` →
-**HCP-2c** deferred mirrors → **HCP-2d** SS-as-annotation. This doc locks **HCP-2a**
-first (step-by-step); 2b–2d get their own lock when reached.
+Sub-steps (plan §6a): **HCP-2a** role-aware handles ✅ DONE (commit 2177ec59b) →
+**HCP-2b** `StructureQuery` — **2b.1 ✅ DONE (commit 5c7c2ff4f)**, 2b.2 deprecated
+iterator alias DEFERRED to HCP-3 migration → **HCP-2c** deferred mirrors (NEXT) →
+**HCP-2d** SS-as-annotation. Each sub-step gets its own design-lock when reached.
 
 ---
 
@@ -362,3 +363,321 @@ in the implemented HCP-2b.1 patch; `build-core` `StructureQuery_test` builds and
    terminals.
 7. **SOUND**: No new lambda lifetime, handle-copy, missing-inline, recursion, or overload
    ambiguity issue found.
+
+---
+
+## HCP-2c — deferred mutation mirrors + role/property refinement (design-lock)
+
+### Goal
+Land the three H2 carry-overs the H2d review explicitly deferred (V22-H2D-REVIEW.md):
+**(1)** container `setProperty`/`clearProperty` **role-refinement** (so
+`MoleculeRole` stops returning `UNKNOWN` for non-protein/NA molecules); **(2)** the
+`replace`/`insertParent` **materialise-the-new-member** mirror (rooting an *unmaterialised*
+subtree into an already-materialised tree); **(3)** the **rooted full-subtree-replacement**
+mirror (`set`/`operator=`). Still **dual existence** — v0 is the source of truth (D60);
+these extend the forward-only v0 → ContainerTable mirror so the mirror stays faithful under
+the remaining mutation surface. Lifts the H2d sweep scope restriction once landed.
+
+### Current gap (verified surface map, 2026-05-24)
+- `MoleculeStore::container_molecule_role_` (moleculeStore.C:636) switches on
+  `ContainerKind`: PROTEIN→PROTEIN, NUCLEIC_ACID→NUCLEIC_ACID, **MOLECULE→UNKNOWN**
+  (can't distinguish solvent/small-molecule — the v0 `Molecule::IS_SOLVENT` bit is a
+  container property, unmirrored). `residue_kind` IS stored in payload (set at
+  materialisation, atomContainer.C:51-61) and read by the handle.
+- `ContainerPayload` (= 8 B, `static_assert`-pinned) has `id_offset`(4) +
+  `insertion_code`(1) + `ss_type`(1) + `residue_kind`(1) + **1 free pad byte**.
+- `replace` (composite.C:1201) mirrors via `mirrorRederiveOwnRow_()` on the new slot's
+  parent — correct for an already-rooted member, **NOT** for an unmaterialised one.
+- `insertParent` (composite.C:977, used by PDBFileDetails SS grouping) mirrors ONLY when
+  the new parent is already materialised; the unmaterialised case is deliberately skipped
+  (design note 1050-1067) → the deferred materialise-the-new-member.
+- `Composite::set`/`AtomContainer::set`/`operator=` (composite.C:359, atomContainer.C:187/206)
+  deep-clone or shallow-copy and **never touch the container row store**.
+- Container `setProperty`/`clearProperty`: **no store mirror at all** (D59 unimplemented).
+- `migrate_subtree_from` (moleculeStore.C:572) migrates topology + payload + names +
+  selection; container properties not migrated (none stored yet).
+
+### Decisions to lock
+
+- **D-2c.1 — `molecule_role` stored in the payload pad byte.** Add
+  `MoleculeRole molecule_role = MoleculeRole::UNKNOWN;` to `ContainerPayload` (fills the
+  free pad byte → payload stays 8 B, the existing `static_assert` still holds). Set it at
+  materialisation in `writeContainerScalars_`: `Protein`→PROTEIN, `NucleicAcid`→NUCLEIC_ACID,
+  plain `Molecule` with `IS_SOLVENT`→SOLVENT else SMALL_MOLECULE. `container_molecule_role_`
+  reads `payload.molecule_role` (drop the kind switch), mirroring exactly how `residue_kind`
+  is stored + read. This is the visible win: `getMoleculeRole()` stops returning UNKNOWN.
+- **D-2c.2 — honest role taxonomy (no over-claiming).** v0 `Molecule` carries ONLY the
+  `IS_SOLVENT` identity bit (molecule.h:44) — there is NO molecule-level WATER/LIGAND/ION
+  distinction in v0. So the refined molecule role is exactly {PROTEIN, NUCLEIC_ACID,
+  SOLVENT, SMALL_MOLECULE}; WATER/LIGAND/ION stay residue-level (`ResidueKind`, already
+  mirrored). Do NOT synthesise molecule-level WATER/LIGAND/ION the v0 tree can't justify.
+- **D-2c.3 — identity-bit role-refinement mirror.** `AtomContainer::setProperty(NamedProperty)`
+  / `setProperty(Property)` / `clearProperty(Property)` gain a guarded forward hook
+  (`mirrorRefineRole_`): when the touched bit is an IDENTITY bit it re-derives + writes the
+  payload role — `Molecule::IS_SOLVENT` → `molecule_role`; `Residue::PROPERTY__AMINO_ACID/
+  __WATER/__NON_STANDARD` → `residue_kind`. No-op when unbound / being-destroyed (the same
+  guard class as the existing scalar mirror). Non-identity properties are NOT mirrored
+  (D-2c.4). Forward-only; v0 stays source of truth.
+- **D-2c.4 — the GENERAL container-property bag is DEFERRED to H4 (the flip), not HCP-2c.**
+  Rationale: through dual existence NO consumer reads arbitrary container properties from
+  the store — the read-only handles expose only scalar identity + role + navigation, and v0
+  `PropertyManager` remains the property source of truth (D60). A full per-row NamedProperty
+  bag is parity substrate needed only when the store BECOMES the source of truth (H4). The
+  H2d carry-over the review named is the *role-refinement* (D-2c.3), which D-2c.1/.3 deliver
+  WITHOUT a general bag (role lives in the payload, derived at materialisation + refined on
+  identity-bit change). Building the general bag now is speculative store state. **[Codex:
+  challenge this descope — is any HCP-2/HCP-3 consumer going to need store-side container
+  properties before H4?]**
+- **D-2c.5 — materialise-the-new-member (`insertParent` / `replace`).** When a mutation
+  roots a NEW container subtree that has no rows yet INTO an already-materialised parent,
+  materialise that subtree via the existing recursive idempotent `materialiseContainer_`
+  (system.C:257) and splice its root edge into the parent's child list (re-derive the
+  parent's row from v0 order). Covers (a) `insertParent` with an unmaterialised new parent
+  rooted under a materialised tree (the PDB SS-grouping case), and (b) `replace` where the
+  replacement is an unmaterialised orphan. Guarded: only fires when the parent IS
+  materialised (else the whole subtree materialises later at adoption, unchanged).
+- **D-2c.6 — rooted full-subtree replacement (`set` / `operator=`).** When `set(deep)` /
+  `operator=` overwrites a MATERIALISED container's content (clone replaces children), the
+  old child rows must be released and the cloned subtree re-materialised under the same row.
+  Hook in `AtomContainer::set` after the clone/copy: if `this` is materialised, clear the
+  row's children (release the old child subtree rows, NOT the row itself — the handle to
+  `this` stays valid, generation preserved), then materialise the new children + re-derive.
+  **`persistentRead` is NOT separately hooked**: it is the same replacement class, but the
+  AGREED PR-removal milestone (task #61) deletes the persistence stream framework, so
+  `persistentRead` ceases to exist — building a hook for it would be throwaway work. (If
+  task #61 is reordered after HCP-2c, the same D-2c.6 hook would serve it.)
+- **D-2c.7 — cross-store move.** A move of a materialised subtree between two distinct live
+  System stores is the materialise-into-dst (D-2c.5) + release-from-src (the existing
+  `mirrorRemoveChild_` / `release_source_subtree_`) composition; no NEW mechanism. Audit
+  whether any v0 API actually moves a materialised container across stores during dual
+  existence (orphan→System adoption already works via `migrate_subtree_from`); if none does,
+  note it covered-by-composition and add a targeted parity case rather than new code.
+  **[Codex: is there a live cross-store-move path I'm missing?]**
+
+### Step-by-step (each green + committed; rc-gated build + full ctest + Codex CR)
+- **HCP-2c.1** — D-2c.1/.2/.3: `molecule_role` payload + materialisation derivation +
+  `container_molecule_role_` reader + identity-bit role-refinement mirror. Extend
+  `ContainerHandle_test` (a solvent Molecule → SOLVENT; flipping IS_SOLVENT refines the
+  role) + `HierarchyParity_test` (role parity after a property flip). Self-contained,
+  highest-value, lowest-risk → first.
+- **HCP-2c.2** — D-2c.5: materialise-the-new-member for `insertParent`/`replace`. Parity:
+  add the rooted-replace-with-orphan op the H2d sweep excluded (HierarchyParity_test:1161).
+- **HCP-2c.3** — D-2c.6: rooted full-replacement (`set`/`operator=`) re-materialise. Parity:
+  add the `set`/`operator=` op the H2d sweep excluded (HierarchyParity_test:1065).
+- **HCP-2c.4** — D-2c.7: cross-store-move audit + parity case (code only if a live path
+  needs it). Then lift the H2d scope-restriction comments + HCP-2 close-review (Codex).
+
+### Scope / non-goals
+- Still READ-only handles; no consumer migration; `ContainerKind` does NOT shrink (H4).
+- General container-property bag deferred to H4 (D-2c.4); persistentRead hook not built
+  (D-2c.6); SS-as-annotation is HCP-2d.
+
+### Touch points
+- `include/BALL/KERNEL/_moleculeStoreInternal.h` (payload `molecule_role`),
+  `source/KERNEL/moleculeStore.C` (`container_molecule_role_` reader + setter),
+  `source/KERNEL/atomContainer.C` (`writeContainerScalars_` role derivation +
+  `mirrorRefineRole_` + `set` re-materialise hook),
+  `source/CONCEPT/composite.C` (`insertParent`/`replace` materialise-new-member),
+  `test/ContainerHandle_test.C` + `test/HierarchyParity_test.C` (+ lift sweep restrictions).
+- ABI change (payload field) → FULL rebuild (libBALL + all test bins) before ctest.
+
+### Gate
+Codex **HCP-2c design AGREE** (challenge D-2c.4 descope + D-2c.7 cross-store) BEFORE code;
+then implement 2c.1 → 2c.4 step-by-step, each rc-gated green + Codex code-review + commit.
+
+## HCP-2c-R1 design review
+
+Verdict: **AGREE-WITH-FIXES**. The payload role and HCP-2c scope are directionally right,
+but code must not proceed with the current "AtomContainer setProperty hook covers identity
+bits" and "cross-store move needs no new mechanism" claims. Required fixes before coding:
+(1) make identity-bit role refinement fire from every real bit-write path, including JSON
+property restore and mutable BitVector bypasses, or explicitly close those bypasses; (2)
+add an owned release/rebind mechanism for cross-store materialised container moves; (3)
+when copying/migrating rows, copy the new `payload.molecule_role`; (4) make `persistentRead`
+sequencing explicit: either #61 lands first, or HCP-2c hooks persistentRead too.
+
+1. **D-2c.1 payload byte: SOUND.** `ContainerPayload` is currently 7 bytes of fields plus
+   one pad byte (`id_offset` + `insertion_code` + `ss_type` + `residue_kind`,
+   `include/BALL/KERNEL/_moleculeStoreInternal.h:494`), and the role enums are u8-backed
+   (`include/BALL/KERNEL/containerRole.h:42`), so adding `molecule_role` should keep the
+   `sizeof(ContainerPayload) == 8` pin (`include/BALL/KERNEL/_moleculeStoreInternal.h:544`).
+   No endianness concern exists for live memory, and JSON StoreFormat does not serialize
+   `ContainerPayload` bytes; it serializes v0 molecule/property state separately
+   (`source/KERNEL/systemJson.C:139`). Reading `payload.molecule_role` for PROTEIN/NA is
+   sound only if materialisation writes it for every molecule-level kind and
+   `ContainerTable::migrate_one_` copies it alongside id/insertion/ss/selection
+   (`source/KERNEL/moleculeStore.C:504`).
+
+2. **D-2c.2 honest taxonomy: SOUND.** v0 `Molecule` exposes only `IS_SOLVENT` as a
+   molecule property (`include/BALL/KERNEL/molecule.h:42`); the solvent predicate also
+   tests only that bit (`source/KERNEL/standardPredicates.C:151`). I found no v0
+   molecule-level WATER/LIGAND/ION classifier. The honest mirrored set for HCP-2c is
+   therefore PROTEIN, NUCLEIC_ACID, SOLVENT, SMALL_MOLECULE; WATER/LIGAND/ION remain
+   unsupported at molecule role until a real source of truth exists.
+
+3. **D-2c.3 identity-bit refinement mirror: FLAW.** Hooking only `AtomContainer`
+   `setProperty`/`clearProperty` cannot cover all v0 bit writes because `PropertyManager`
+   methods are non-virtual inline functions (`include/BALL/CONCEPT/property.h:444`,
+   `include/BALL/CONCEPT/property.iC:304`), JSON restore takes a `PropertyManager&` and
+   calls `pm.setProperty(bit)` (`source/KERNEL/propertyJson.C:100`,
+   `source/KERNEL/propertyJson.C:147`), and callers can mutate the exposed BitVector
+   directly (`include/BALL/CONCEPT/property.h:411`). This misses a real dual-existence path:
+   `loadSystemJSON` inserts/materialises a `Molecule`, then restores its properties
+   (`source/KERNEL/systemJson.C:423`, `source/KERNEL/systemJson.C:426`), so an
+   `IS_SOLVENT` bit loaded from JSON would not refine the already-materialised row. Fix by
+   moving the hook to the actual bit-write substrate, adding explicit post-restore
+   resync/refinement for container PropertyManagers, and covering `toggleProperty` /
+   `getBitVector()` bypass policy.
+
+4. **D-2c.4 general property bag descope: SOUND.** I do not see an HCP-2/HCP-3 consumer
+   that reads arbitrary container properties from the store table: handles expose roles and
+   scalar payload only, `StructureQuery` reads role/residue kind (`include/BALL/KERNEL/structureQuery.h:141`),
+   and JSON StoreFormat reads/writes v0 `PropertyManager` bags directly
+   (`source/KERNEL/systemJson.C:139`, `source/KERNEL/systemJson.C:425`). Deferring the
+   general NamedProperty container bag is deferred parity substrate, not a correctness
+   blocker before H4, as long as D-2c.3 mirrors the identity bits that feed role columns.
+
+5. **D-2c.5 materialise-the-new-member: WEAK.** The recursive materialiser is idempotent
+   for same-store already-bound rows (`source/KERNEL/system.C:257`,
+   `source/KERNEL/system.C:266`), and re-deriving the affected parent after
+   `insertParent`/`replace` matches the current mirror design (`source/CONCEPT/composite.C:1068`,
+   `source/CONCEPT/composite.C:1211`). The weak point is implementation plumbing and stale
+   bindings: `materialiseContainer_` is file-local in `system.C`, while the new callers are
+   in `composite.C`; make it a single shared helper, not a duplicate. Also ensure
+   replace-with-orphan into a materialised parent releases/rebinds any source rows if the
+   "orphan" is actually bound to another store; otherwise this collapses into D-2c.7's
+   cross-store leak.
+
+6. **D-2c.6 set/operator= re-materialise + persistentRead: WEAK.** The replacement shape
+   is right: keep this row/generation, release old child subtree rows so aliases stale via
+   generation bump (`source/KERNEL/moleculeStore.C:331`), then rebuild children from the
+   cloned v0 tree. It needs an explicit recursive release helper for child container rows;
+   `container_clear_children_` only clears a vector and does not free child rows
+   (`source/KERNEL/moleculeStore.C:452`). Do not leave `persistentRead` as an implicit
+   maybe: the stream path still exists today (`source/KERNEL/atomContainer.C:176`,
+   `source/KERNEL/system.C:425`). Either require task #61 to land before HCP-2c, or add the
+   same full-subtree replacement hook to `persistentRead` and delete it with #61.
+
+7. **D-2c.7 cross-store move: FLAW.** There is a live v0 API path: appending/inserting a
+   materialised subtree from one rooted `System` under another rooted container calls
+   `Composite::appendChild`, which removes it from the old parent (`source/CONCEPT/composite.C:928`),
+   then `System::adoptSubtree` materialises it into the destination store
+   (`source/KERNEL/atomContainer.C:538`, `source/KERNEL/atomContainer.C:541`,
+   `source/KERNEL/system.C:415`). That allocates/rebinds destination rows when
+   `getContainerRowStore_() != dst`, but it does not release the source container subtree;
+   `mirrorRemoveChild_` removes only the old parent edge (`source/CONCEPT/composite.C:216`),
+   and `release_source_subtree_` is private to `migrate_subtree_from`
+   (`source/KERNEL/moleculeStore.C:559`). Cross-store move therefore needs dedicated
+   source-row release/rebind handling, plus a parity/stale-handle test.
+
+8. **Sequencing / step-by-step: WEAK.** Start with the payload field, but 2c.1 must include
+   a full rebuild and all row-copy/migration updates for the new byte. Then fix identity-bit
+   refinement before relying on role tests, land materialise/release helpers before
+   `replace`/`set`, and do the cross-store move fix before lifting H2d restrictions. The
+   H2d carry-overs are otherwise all represented: role refinement, materialise-new-member,
+   and rooted full replacement (`.planning/v2.2/V22-H2D-REVIEW.md:5`).
+
+## HCP-2c-R1 fixes (design revision → supersedes the noted decisions)
+
+Addressing HCP-2c-R1 (AGREE-WITH-FIXES). The four required fixes + the two WEAKs:
+
+- **FIX-1 (D-2c.3 FLAW → revised) — role refinement fires at every REAL v0 path, raw poke
+  documented out-of-contract.** v0 `PropertyManager::setProperty/clearProperty/toggleProperty`
+  are non-virtual inline (property.h:444) and JSON restore writes bits via a
+  `PropertyManager&` (propertyJson.C:100/147) after the container is already materialised
+  (systemJson.C:423-426). So a single `AtomContainer::setProperty` override is insufficient.
+  Revised mechanism — a `mirrorRefineRole_()` (re-derives `molecule_role`/`residue_kind`
+  from the live v0 object) called from THREE sites:
+  (a) materialisation (`writeContainerScalars_`) — captures the state at adoption;
+  (b) the `AtomContainer` property API — override `setProperty(Property)`,
+      `clearProperty(Property)`, `setProperty(const NamedProperty&)` AND `toggleProperty`
+      to refine after the base call (the common runtime path);
+  (c) an explicit **post-restore resync** at the JSON load site (systemJson.C ~426): after
+      `restoreProperties(mol)` on a materialised container, call `mirrorRefineRole_()`.
+  Direct `getBitVector()` mutation (property.h:411) is documented OUT of the mirror
+  contract — identical to D60 (the mirror tracks the v0 API, not raw-memory pokes); no
+  dual-existence consumer reads `molecule_role` as authoritative for a raw-poked molecule,
+  and H4 recomputes it. (If a raw-poke path is later found in production code, it gets an
+  explicit resync call — none exists today per the R1 grep.)
+- **FIX-2 (D-2c.7 FLAW → real code item, NOT composition).** There IS a live cross-store
+  move: rooted `appendChild`/insert of a materialised subtree from System A under System B
+  → `adoptSubtree` materialises into B's store (atomContainer.C:538-541, system.C:415) but
+  NEVER releases A's source rows (`mirrorRemoveChild_` removes only the old parent edge;
+  `release_source_subtree_` is private to `migrate_subtree_from`). HCP-2c.4 adds a
+  **dedicated cross-store release/rebind**: when adoption rebinds a subtree whose
+  `getContainerRowStore_()` is a DIFFERENT live store, release the source subtree rows
+  (expose a `release_container_subtree_(root)` on the table; reuse the
+  `release_source_subtree_` logic) so source handles go stale (generation bump) and A's
+  table doesn't leak. Add a stale-source-handle parity/`ContainerHandle`-style test.
+- **FIX-3 (D-2c.1) — migrate copies `molecule_role`.** `ContainerTable::migrate_one_`
+  (moleculeStore.C:504) must copy `payload.molecule_role` alongside id/insertion/ss/
+  residue_kind/selection. If it copies the whole `ContainerPayload` by value this is
+  automatic; verify and, if field-wise, add the field. Same for any row-copy in
+  orphan→System migration.
+- **FIX-4 (D-2c.6) — persistentRead IS hooked now, deleted with #61 (no sequencing dep).**
+  Choose Codex option B: HCP-2c.3 applies the SAME full-subtree-replacement hook to
+  `persistentRead` (atomContainer.C:176, system.C:425) so the mirror is faithful TODAY,
+  with NO ordering dependency on task #61; #61 later deletes `persistentRead` + its hook
+  along with the persistence framework. Add a recursive **`release_container_subtree_`**
+  helper (the existing `container_clear_children_`, moleculeStore.C:452, only clears the
+  edge vector — it does NOT free child rows); the re-materialise path must release the old
+  child subtree rows (generation bump → stale aliases, moleculeStore.C:331) before
+  rebuilding from the clone.
+- **FIX-5 (D-2c.5 WEAK) — single shared materialiser, no duplicate.** Promote
+  `materialiseContainer_` (file-local in system.C:257) to a shared internal entry (e.g. a
+  `MoleculeStore::materialiseSubtree_(AtomContainer&)` or a shared `detail::` in a common
+  TU) callable from BOTH system.C and composite.C, so `insertParent`/`replace`/`set`/cross-
+  store all use ONE materialiser. A replace-with-orphan whose orphan is bound to ANOTHER
+  store routes through the FIX-2 cross-store release/rebind.
+
+### Revised step-by-step (supersedes the earlier list)
+- **HCP-2c.1** — D-2c.1/.2/.3(revised): `molecule_role` payload + `migrate_one_` copy
+  (FIX-3) + materialisation derivation + `mirrorRefineRole_` from the AtomContainer property
+  API + post-JSON-restore resync (FIX-1) + `container_molecule_role_` reads payload.
+  ABI change → FULL rebuild. Tests: solvent-Molecule→SOLVENT, IS_SOLVENT flip refines,
+  JSON-load solvent round-trip refines, parity after a property flip.
+- **HCP-2c.2** — FIX-5 shared materialiser + D-2c.5 materialise-the-new-member
+  (`insertParent`/`replace`, same-store). Parity: the rooted replace-with-(same-store-)orphan
+  op H2d excluded.
+- **HCP-2c.3** — `release_container_subtree_` helper (FIX-4) + D-2c.6 rooted full-replacement
+  (`set`/`operator=` AND `persistentRead`) re-materialise. Parity: the `set`/`operator=` op
+  H2d excluded; assert replaced-subtree handles go stale.
+- **HCP-2c.4** — FIX-2 cross-store release/rebind + stale-source test; THEN lift the H2d
+  sweep scope restrictions (HierarchyParity_test:1065/1161) + HCP-2 close-review (Codex).
+
+### Gate (revised)
+Codex **HCP-2c-R1b** tight confirmation that FIX-1..FIX-5 resolve the R1 FLAW/WEAK items →
+AGREE before code.
+
+## HCP-2c-R1b design review
+
+Verdict: **AGREE** — the revised FIX-1..FIX-5 close the R1 FLAW/WEAK findings; implementation
+of HCP-2c.1 proceeds.
+
+A. **SOUND.** FIX-1 closes D-2c.3: materialisation covers initial identity bits,
+AtomContainer-level property wrappers cover the real typed v0 mutation path, and the
+post-JSON resync belongs immediately after `sys.insert(*m)` + `json_to_properties(*m, ...)`
+at `source/KERNEL/systemJson.C:423-427`; no remaining production path was found that
+materialises a container and then changes molecule/residue identity bits except raw
+`getBitVector()` / `operator BitVector&` pokes, which are correctly out of the mirror
+contract (D60).
+B. **SOUND.** FIX-2 closes D-2c.7: live cross-store rooted adoption needs a dedicated
+release/rebind, and exposing/reusing the `release_source_subtree_` post-order logic from
+`source/KERNEL/moleculeStore.C:559` is the right primitive because it frees container rows,
+clears migrated atom reverse edges, and makes source handles stale through release
+generation bumps.
+C. **SOUND.** FIX-4 closes D-2c.6: `container_clear_children_` only clears an edge vector
+(`source/KERNEL/moleculeStore.C:452`), so full replacement needs a recursive
+`release_container_subtree_`; routing `set`/`operator=` and current `persistentRead`
+through it is correct, and released child rows go stale via `ContainerTable::release`
+generation bump at `source/KERNEL/moleculeStore.C:331`.
+D. **SOUND.** FIX-5 closes D-2c.5: one shared internal materialiser callable from
+`system.C` and `composite.C` avoids duplicate adoption semantics, and replace-with-foreign-
+orphan correctly routes through FIX-2 rather than a same-store rederive.
+E. **SOUND.** FIX-3 and sequencing are sound: `migrate_one_` is field-wise today
+(`source/KERNEL/moleculeStore.C:504`), so `payload.molecule_role` must be copied or the
+whole payload copied; the revised 2c.1 -> 2c.4 order puts ABI/full rebuild first, then
+helpers before replace/set, then cross-store release before lifting H2d restrictions.
+F. **SOUND.** No new design blocker introduced by the fixes themselves; implementation
+should preserve the full `PropertyManager::setProperty/clearProperty` overload surface when
+adding AtomContainer property wrappers.
