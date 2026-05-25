@@ -1,6 +1,8 @@
 #include <BALL/VIEW/KERNEL/MODES/interactionModeManager.h>
 
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/controllers/stereoController.h>
 
 #include <BALL/VIEW/KERNEL/MODES/editMode.h>
 #include <BALL/VIEW/KERNEL/MODES/moveMode.h>
@@ -170,7 +172,15 @@ namespace BALL
 					new_distance = 4;
 				}
 
-				scene_->getStage()->setEyeDistance(new_distance);
+				// 999.59-03 §3a interactive cut-over — the keyboard eye-distance
+				// adjust no longer touches the Stage setter directly. It routes
+				// through StereoController (constructed against the live Stage,
+				// so its mirror already carries the current focal/swap; only
+				// eye distance changes), the SAME command path an Inspector
+				// stereo section would use (§5).
+				StereoController controller(scene_->getStage());
+				controller.setEyeDistance(new_distance);
+				controller.apply();
 			}
 			// setting of focal distance
 			else
@@ -207,7 +217,13 @@ namespace BALL
 					new_focal_distance = 1000;
 				}
 
-				scene_->getStage()->setFocalDistance(new_focal_distance);
+				// 999.59-03 §3a interactive cut-over — the keyboard focal-
+				// distance adjust routes through StereoController (mirror
+				// carries the current eye/swap; only focal changes), the SAME
+				// command path an Inspector stereo section would use (§5).
+				StereoController controller(scene_->getStage());
+				controller.setFocalDistance(new_focal_distance);
+				controller.apply();
 			}
 
 			//TODO: readd this

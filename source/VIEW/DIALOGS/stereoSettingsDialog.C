@@ -5,6 +5,7 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/controllers/stereoController.h>
 
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
@@ -108,10 +109,16 @@ void StereoSettingsDialog::computeSettingsFromModelDistance()
 	
 void StereoSettingsDialog::apply()
 {
+	// 999.59-03 §3a interactive cut-over — this legacy dialog no longer
+	// touches the Stage setters directly. It delegates to StereoController
+	// (controller_->setX(v); controller_->apply()), the SAME command path an
+	// Inspector section would use (§5 identical-code-path requirement). The
+	// controller owns the eye/focal-distance mutation + the §2a soft refresh.
 	Stage* stage = Scene::getInstance(0)->getStage();
-	stage->setFocalDistance((focal_distance->text()).toFloat());
-	stage->setEyeDistance((eye_separation->text()).toFloat());
-	Scene::getInstance(0)->update();
+	StereoController controller(stage);
+	controller.setFocalDistance((focal_distance->text()).toFloat());
+	controller.setEyeDistance((eye_separation->text()).toFloat());
+	controller.apply();
 }
 
 void StereoSettingsDialog::okPressed()

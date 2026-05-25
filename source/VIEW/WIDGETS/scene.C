@@ -19,6 +19,7 @@
 #include <BALL/VIEW/KERNEL/controllers/materialController.h>
 #include <BALL/VIEW/KERNEL/controllers/lightController.h>
 #include <BALL/VIEW/KERNEL/controllers/stageController.h>
+#include <BALL/VIEW/KERNEL/controllers/cameraController.h>
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/shortcutRegistry.h>
@@ -3597,7 +3598,21 @@ namespace BALL
 
 		void Scene::restoreViewPoint()
 		{
-			getStage()->setCamera(stored_camera_);
+			// 999.59-03 §3a interactive cut-over — restoring a stored viewpoint
+			// no longer calls getStage()->setCamera() directly. The camera
+			// transform (viewPoint + lookAt) is routed through CameraController
+			// (the SAME command path an Inspector camera section would use, §5);
+			// the controller mutates the Stage camera and drives the §2a soft
+			// refresh. The stored look-up vector is restored on the camera
+			// object afterwards (a camera-internal field the controller does not
+			// own; not an owner setter).
+			CameraController controller(getStage());
+			const Vector3& vp = stored_camera_.getViewPoint();
+			const Vector3& la = stored_camera_.getLookAtPosition();
+			controller.setPosition(QVector3D((float)vp.x, (float)vp.y, (float)vp.z));
+			controller.setLookAt(QVector3D((float)la.x, (float)la.y, (float)la.z));
+			controller.apply();
+			getStage()->getCamera().setLookUpVector(stored_camera_.getLookUpVector());
 			updateGL();
 		}
 
