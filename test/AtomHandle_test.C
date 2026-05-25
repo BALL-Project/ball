@@ -5,7 +5,9 @@
 
 ///////////////////////////
 #include <BALL/KERNEL/atomHandle.h>
+#include <BALL/KERNEL/bondHandle.h>
 #include <BALL/KERNEL/structureQuery.h>
+#include <unordered_set>
 #include <BALL/KERNEL/containerHandle.h>
 #include <BALL/KERNEL/moleculeStore.h>
 #include <BALL/KERNEL/system.h>
@@ -191,6 +193,48 @@ CHECK(StructureQuery::apply() preorder visits all containers + atoms)
 	TEST_EQUAL(counter.containers, 4)
 	TEST_EQUAL(counter.atoms, 3)
 	TEST_EQUAL(counter.first_is_root, true)
+RESULT
+
+/////////////////////////////////////////////////////////////
+// H3a.3: AtomHandle migration shim (scalar / selection / bonds / key)
+/////////////////////////////////////////////////////////////
+
+CHECK(AtomHandle shim - scalar forwarding + selection + bonds + stable-id key)
+	MoleculeStore store;
+	MoleculeStore::Index a0 = store.allocate_atom();
+	MoleculeStore::Index a1 = store.allocate_atom();
+	AtomHandle h0(store, a0), h1(store, a1);
+
+	// scalar round-trips through the shared store columns
+	h0.setPosition(Vector3(1.0f, 2.0f, 3.0f));
+	TEST_REAL_EQUAL(h0.getPosition().x, 1.0)
+	TEST_REAL_EQUAL(h0.getPosition().z, 3.0)
+	h0.setCharge(-0.5f);    TEST_REAL_EQUAL(h0.getCharge(), -0.5)
+	h0.setRadius(1.7f);     TEST_REAL_EQUAL(h0.getRadius(), 1.7)
+	h0.setType(6);          TEST_EQUAL(h0.getType(), 6)
+	h0.setFormalCharge(-1); TEST_EQUAL(h0.getFormalCharge(), -1)
+	h0.setName("CA");       TEST_EQUAL(h0.getName(), String("CA"))
+	h0.setTypeName("C.3");  TEST_EQUAL(h0.getTypeName(), String("C.3"))
+
+	// selection bit
+	TEST_EQUAL(h0.isSelected(), false)
+	h0.select();   TEST_EQUAL(h0.isSelected(), true)
+	h0.deselect(); TEST_EQUAL(h0.isSelected(), false)
+
+	// bonds via the store CSR (getBond -> BondHandle, bonds() range)
+	TEST_EQUAL(h0.countBonds(), 0)
+	store.add_bond(a0, a1, 1, 1);
+	TEST_EQUAL(h0.countBonds(), 1)
+	BondHandle bh = h0.getBond(0);
+	TEST_EQUAL((bool)bh, true)
+	TEST_EQUAL(bh.getPartner(h0).getStoreIndex(), a1)   // bond connects a0--a1
+	TEST_EQUAL(h0.bonds().size(), 1)
+	TEST_EQUAL((bool)h0.getBond(1), false)              // out of range -> null
+
+	// D-H3.8 stable-id key: AtomHandle is a drop-in hash/set key.
+	std::unordered_set<AtomHandle> seen;
+	seen.insert(h0); seen.insert(AtomHandle(store, a0)); seen.insert(h1);
+	TEST_EQUAL(seen.size(), 2)                          // h0 == AtomHandle(store,a0)
 RESULT
 
 /////////////////////////////////////////////////////////////

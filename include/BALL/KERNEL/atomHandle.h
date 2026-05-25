@@ -30,10 +30,14 @@
 #endif
 
 #include <cstdint>
+#include <vector>
+#include <functional>
 
 namespace BALL
 {
 	class Atom;
+	class BondHandle;   // H3a (D-H3.2): getBond()/bonds() return BondHandle;
+	                    // defined out-of-line in bondHandle.h to break the cycle.
 
 	/** Atom value handle (D71a) -- the atom analog of ContainerHandleBase.
 
@@ -102,12 +106,58 @@ namespace BALL
 			return isValid() ? store_->back_ptr(idx_) : nullptr;
 		}
 
+		// --- v2.2 H3a (D-H3.2): migration shim — the Atom consumer surface,
+		// forwarding to the same MoleculeStore SoA columns the v0 Atom reads /
+		// writes (zero-copy; the column is the single source of truth). Read/
+		// write on a VALID handle; UB-on-misuse, the same contract class as the
+		// MoleculeStore reference getters and the other v2.2 handles. (element
+		// getters, hierarchy nav, and the property-visitor surface land in a
+		// follow-on H3a.3b — they need PTE / role-walk / property-column infra.)
+		const Vector3& getPosition() const          { return store_->position(idx_); }
+		void           setPosition(const Vector3& v) { store_->position(idx_) = v; }
+		const Vector3& getForce() const              { return store_->force(idx_); }
+		void           setForce(const Vector3& f)    { store_->force(idx_) = f; }
+		const Vector3& getVelocity() const           { return store_->velocity(idx_); }
+		void           setVelocity(const Vector3& v) { store_->velocity(idx_) = v; }
+		float          getCharge() const             { return store_->charge(idx_); }
+		void           setCharge(float c)            { store_->charge(idx_) = c; }
+		float          getRadius() const             { return store_->radius(idx_); }
+		void           setRadius(float r)            { store_->radius(idx_) = r; }
+		short          getType() const               { return store_->atom_type(idx_); }
+		void           setType(short t)              { store_->atom_type(idx_) = t; }
+		short          getFormalCharge() const       { return store_->formal_charge(idx_); }
+		void           setFormalCharge(short fc)     { store_->formal_charge(idx_) = fc; }
+		String         getName() const               { return store_->name(idx_); }
+		void           setName(const String& s)      { store_->set_name(idx_, s); }
+		String         getTypeName() const           { return store_->type_name(idx_); }
+		void           setTypeName(const String& s)  { store_->set_type_name(idx_, s); }
+
+		// Selection (per-atom bit; container subtree counters are mirrored by
+		// the v0 select/deselect path during dual existence).
+		bool isSelected() const { return store_->selected(idx_); }
+		void select()           { store_->set_selected(idx_, true); }
+		void deselect()         { store_->set_selected(idx_, false); }
+
+		// Bonds (D-H3.3): degree via the store CSR; the BondHandle-yielding
+		// getBond(i) / bonds() are defined out-of-line in bondHandle.h (which
+		// has both AtomHandle and BondHandle complete).
+		Size countBonds() const { return static_cast<Size>(store_->bond_degree(idx_)); }
+		BondHandle getBond(Size i) const;
+		std::vector<BondHandle> bonds() const;
+
 		/// Identity equality (same store, slot, and captured stable id).
 		bool operator == (const AtomHandle& o) const
 		{
 			return store_ == o.store_ && idx_ == o.idx_ && stable_id_ == o.stable_id_;
 		}
 		bool operator != (const AtomHandle& o) const { return !(*this == o); }
+
+		/// Stable-id key ordering (D-H3.8): deterministic across runs.
+		bool operator < (const AtomHandle& o) const
+		{
+			if (store_ != o.store_) return store_ < o.store_;
+			return stable_id_ < o.stable_id_;
+		}
 
 		private:
 
@@ -117,5 +167,19 @@ namespace BALL
 	};
 
 } // namespace BALL
+
+// v2.2 H3a (D-H3.8): AtomHandle is a drop-in stable-id key for the pointer-
+// identity containers re-keyed from Atom* (Selector/MolecularGraph/SMARTS/...).
+namespace std
+{
+	template <> struct hash<BALL::AtomHandle>
+	{
+		std::size_t operator () (const BALL::AtomHandle& h) const noexcept
+		{
+			return std::hash<BALL::MoleculeStore::StableId>()(h.getStableId())
+			     ^ (std::hash<const void*>()(h.getStore()) << 1);
+		}
+	};
+}
 
 #endif // BALL_KERNEL_ATOMHANDLE_H

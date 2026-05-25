@@ -133,6 +133,30 @@ namespace BALL
 		MoleculeStore::StableId  stable_id_ = 0;
 	};
 
+	// --- v2.2 H3a (D-H3.2/D-H3.3): AtomHandle's BondHandle-yielding accessors,
+	// defined here where both AtomHandle and BondHandle are complete (this
+	// breaks the atomHandle.h <-> bondHandle.h include cycle). Uses only the
+	// public AtomHandle surface (getStore/getStoreIndex). ---
+	inline BondHandle AtomHandle::getBond(Size i) const
+	{
+		MoleculeStore* s = getStore();
+		if (s == nullptr) return BondHandle();
+		std::vector<std::uint32_t> bl = s->bonds_of(getStoreIndex());
+		if (i >= bl.size()) return BondHandle();
+		return BondHandle(*s, bl[i]);
+	}
+
+	inline std::vector<BondHandle> AtomHandle::bonds() const
+	{
+		std::vector<BondHandle> out;
+		MoleculeStore* s = getStore();
+		if (s == nullptr) return out;
+		std::vector<std::uint32_t> bl = s->bonds_of(getStoreIndex());
+		out.reserve(bl.size());
+		for (std::uint32_t bi : bl) out.emplace_back(*s, bi);
+		return out;
+	}
+
 } // namespace BALL
 
 // v2.2 H3a (D-H3.8): BondHandle is a drop-in stable-id key for the pointer-
