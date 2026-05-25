@@ -83,7 +83,7 @@ namespace BALL
 			};
 
 			/** Human-readable surface name (for STATUS/diagnostic output). */
-			BALL_VIEW_EXPORT const char* surfaceName(SurfaceKind kind);
+			const char* surfaceName(SurfaceKind kind);
 
 			/**
 			 * Whether a surface can actually be exercised in the current
@@ -103,7 +103,7 @@ namespace BALL
 			 * the corresponding surface flips to available and the fixture
 			 * is enabled.
 			 */
-			BALL_VIEW_EXPORT bool surfaceAvailable(SurfaceKind kind);
+			bool surfaceAvailable(SurfaceKind kind);
 
 			/**
 			 * A diff-friendly POD snapshot of the owner state, per
@@ -117,7 +117,7 @@ namespace BALL
 			 * set). String form keeps it cheap to EXPECT_EQ and to print on
 			 * mismatch without a bespoke diff routine.
 			 */
-			struct BALL_VIEW_EXPORT OwnerSnapshot
+			struct OwnerSnapshot
 			{
 				std::string stage_blob;       ///< Stage::serialize()-equivalent (bg/fog/camera/eye/focal/...).
 				std::string representation_blob; ///< Representation per-rep state (model/coloring/material/...).
@@ -157,7 +157,7 @@ namespace BALL
 			 * postcondition assertions; the full Inspector/Scene wiring is a
 			 * v1.7.5 concern (per the plan's "Out" list).
 			 */
-			class BALL_VIEW_EXPORT ContractTestHarness
+			class ContractTestHarness
 			{
 				public:
 					ContractTestHarness();

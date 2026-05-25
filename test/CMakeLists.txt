@@ -256,6 +256,20 @@ IF (BALL_HAS_VIEW)
 	GET_DIRECTORY_PROPERTY(_contract_inc INCLUDE_DIRECTORIES)
 	LIST(APPEND CONTRACT_COMPILE_INCLUDES ${_contract_inc})
 
+	# Eigen3 ships its include dir via the Eigen3::Eigen INTERFACE target, not
+	# the directory INCLUDE_DIRECTORIES the harvest above sees — so the
+	# syntax-only compile-check misses <Eigen/Geometry> (pulled in transitively
+	# by VIEW/KERNEL headers). Add it explicitly. (999.59-03 CI fix: macOS.)
+	IF (TARGET Eigen3::Eigen)
+		GET_TARGET_PROPERTY(_eigen_inc Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+		IF (_eigen_inc)
+			LIST(APPEND CONTRACT_COMPILE_INCLUDES ${_eigen_inc})
+		ENDIF()
+	ENDIF()
+	IF (DEFINED EIGEN3_INCLUDE_DIR AND EIGEN3_INCLUDE_DIR)
+		LIST(APPEND CONTRACT_COMPILE_INCLUDES ${EIGEN3_INCLUDE_DIR})
+	ENDIF()
+
 	# Framework search dirs — macOS Homebrew Qt ships as frameworks, so the
 	# syntax-only compile needs -F<qt>/lib (QtCore/QEvent etc. don't resolve
 	# via -I alone on Apple). Harmless / empty on Linux + Windows.
