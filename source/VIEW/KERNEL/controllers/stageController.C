@@ -19,9 +19,11 @@
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
 
 // std::clamp is used by colorRGBAToQColor_ below.
 #include <algorithm>
+#include <sstream>
 
 namespace BALL
 {
@@ -48,10 +50,27 @@ namespace BALL
 				              std::clamp(bi, 0, 255),
 				              std::clamp(ai, 0, 255));
 			}
+
+			// Compact owner-state snapshot for the ApplyPayload before/after
+			// blobs (§2 step 3). Mirrors the harness OwnerSnapshot stage fields
+			// (bg / fog / eye / focal).
+			String snapshotStageState_(Stage* stage)
+			{
+				if (stage == nullptr) return String("stage{null}");
+				std::ostringstream s;
+				const ColorRGBA& bg = stage->getBackgroundColor();
+				s << "bg=" << static_cast<float>(bg.getRed())
+				  << ',' << static_cast<float>(bg.getGreen())
+				  << ',' << static_cast<float>(bg.getBlue())
+				  << ";fog=" << stage->getFogIntensity()
+				  << ";eye=" << stage->getEyeDistance()
+				  << ";focal=" << stage->getFocalDistance();
+				return String(s.str());
+			}
 		}
 
 		StageController::StageController(Stage* stage, Scene* scene, QObject* parent)
-			: QObject(parent),
+			: Controller(parent),
 				stage_(stage),
 				scene_(scene),
 				background_color_(Qt::black),
@@ -73,8 +92,7 @@ namespace BALL
 				downsampling_factor_(1.0f),
 				renderer_type_(static_cast<int>(RenderSetup::OPENGL_RENDERER)),
 				mouse_sensitivity_(-1.0f),        // sentinel: unset
-				mouse_wheel_sensitivity_(-1.0f),  // sentinel: unset
-				applying_(false)
+				mouse_wheel_sensitivity_(-1.0f)   // sentinel: unset
 		{
 			revert();
 		}
@@ -194,24 +212,26 @@ namespace BALL
 			}
 		}
 
-		void StageController::apply()
+		bool StageController::apply()
 		{
-			// Phase 999.58-02 — non-stereo stage render-config cut-over
-			// COMPLETE. This controller now owns the full field set the
+			// Phase 999.59-03 — cut over to the §2 `bool apply()` command
+			// contract (ARCHITECTURE-CONTRACT.md §2 / §2a / §13). This
+			// controller owns the full non-stereo render-config field set the
 			// legacy StageSettings::apply() (stageSettings.C:233-309) wrote:
 			// background + coordinate-system + fog + eye/focal (since 999.44),
 			// plus mouse/wheel sensitivity, projection mode, show-light-sources,
 			// animation smoothness, offscreen rendering, capping color,
 			// FPS-enabled, preview, vertex buffers (incl. the rep-delete-on-
-			// toggle side effect), smooth lines, downsampling, and the
-			// OpenGL/RTfact renderer switch. swap-side-by-side is deliberately
-			// NOT written here — StereoController owns it (avoids a double-write
-			// race; see stereoController.C). Scene::applyPreferences() now drives
-			// the stage through this method instead of stage_settings_->apply().
+			// toggle side effect, now §2a-declared in invalidateDeclared_()),
+			// smooth lines, downsampling, and the OpenGL/RTfact renderer switch.
+			// swap-side-by-side is deliberately NOT written here — StereoController
+			// owns it (avoids a double-write race; see stereoController.C).
+
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
 			if (stage_ == nullptr)
 			{
 				Log.warn() << "[StageController::apply] no Stage attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			// Phase 999.58-02 — defer while MainControl is busy (mirrors
@@ -222,17 +242,54 @@ namespace BALL
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[StageController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the scene refresh below) synchronously
-			// re-enters apply(), bail rather than re-running the mutation —
-			// this is the cascade class behind the v1.7.x-13 freeze. The RAII
-			// guard clears the flag on every exit path. The vertex-buffer
-			// rep-delete side effect runs INSIDE this guard (T-99858-04).
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — nest-aware drop ─────
+			// If a notification triggered by this apply() (e.g. the scene
+			// refresh in invalidateDeclared_()) synchronously re-enters apply(),
+			// drop rather than re-running the mutation — this is the cascade
+			// class behind the v1.7.x-13 freeze. The scene-structural side
+			// effects in invalidateDeclared_() run INSIDE this guard (T-99858-04).
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
+
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "stage.apply";
+			payload.before     = snapshotStageState_(stage_);
+			payload.target     = stage_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotStageState_(stage_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			// StageController declares scene-structural side effects (NOT a soft
+			// refresh): the vertex-buffer rep-delete + renderer switch +
+			// redrawAllRepresentations, plus the render-state refresh.
+			invalidateDeclared_();
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool StageController::applyInternal_()
+		{
+			// §13 cookbook step 2 — the field-push mutation body, moved out of
+			// apply(). Precondition (stage_ != nullptr) guaranteed by apply().
+			// Each call routes through the SAME backend the legacy
+			// StageSettings::apply() used (stageSettings.C:238-308). The
+			// scene-structural side effects (vertex-buffer rep-delete, renderer
+			// switch, render-state refresh) are NOT here — they are the §2a
+			// declared invalidation (invalidateDeclared_()).
 
 			// background_color_ is QColor; Stage stores ColorRGBA.
 			// ColorRGBA::set(const QColor&) handles the 0..255 →
@@ -245,10 +302,6 @@ namespace BALL
 			stage_->setFogIntensity(fog_intensity_);
 			stage_->setEyeDistance(eye_distance_);
 			stage_->setFocalDistance(focal_distance_);
-
-			// --- Phase 999.58-02: the extended non-stereo render config ---
-			// Each call routes through the SAME backend the legacy
-			// StageSettings::apply() used (stageSettings.C:238-308).
 
 			// Mouse / wheel sensitivity: push only when explicitly set
 			// (sentinel < 0 means "unset" — leave the live value untouched so
@@ -285,11 +338,36 @@ namespace BALL
 				scene_->setFPSEnabled(fps_enabled_);
 				scene_->setPreview(preview_);
 
+				// Smooth lines + downsampling are simple renderer-flag pushes.
+				GLRenderer& renderer = scene_->getGLRenderer();
+				renderer.setSmoothLines(smooth_lines_);
+				scene_->setDownsamplingFactor(downsampling_factor_);
+			}
+
+			return true;
+		}
+
+		void StageController::invalidateDeclared_()
+		{
+			// §2a Stage row — controller-declared SCENE-STRUCTURAL side effects,
+			// NOT a soft refresh and NOT a blanket rebuild. This is the ONE place
+			// StageController declares its heavy invalidation (§2a): a
+			// vertex-buffer-mode toggle or renderer switch deletes/rebuilds the
+			// affected representations, then redrawAllRepresentations() runs;
+			// the background/fog render state is refreshed afterwards.
+			if (stage_ == nullptr) return;
+
+			MainControl* mc = MainControl::getInstance(0);
+
+			if (scene_ != nullptr)
+			{
+				GLRenderer& renderer = scene_->getGLRenderer();
+
 				// Vertex buffers — with the documented rep-delete-on-toggle side
 				// effect: when the buffer mode changes AND representations exist,
 				// every representation is removed before the renderer flag flips
-				// (mirrors stageSettings.C:285-298). Runs inside the apply guard.
-				GLRenderer& renderer = scene_->getGLRenderer();
+				// (mirrors stageSettings.C:285-298). Runs inside the apply guard
+				// (apply() holds it across invalidateDeclared_()).
 				if (mc != nullptr &&
 				    vertex_buffers_enabled_ != renderer.vertexBuffersEnabled() &&
 				    mc->getRepresentationManager().getNumberOfRepresentations() > 0)
@@ -306,39 +384,37 @@ namespace BALL
 				}
 
 				renderer.enableVertexBuffers(vertex_buffers_enabled_);
-				renderer.setSmoothLines(smooth_lines_);
 
-				// Downsampling factor.
-				scene_->setDownsamplingFactor(downsampling_factor_);
-
-				// Renderer switch (OpenGL / RTfact).
+				// Renderer switch (OpenGL / RTfact) — a scene-wide structural
+				// change.
 				scene_->switchRenderer(renderer_type_ == static_cast<int>(RenderSetup::RTFACT_RENDERER)
 				                       ? RenderSetup::RTFACT_RENDERER
 				                       : RenderSetup::OPENGL_RENDERER);
+
+				// UFG-25 — refresh the per-renderer glClearColor + fog (the
+				// renderers loop + updateGL the legacy applyPreferences path
+				// did; just calling updateGL() repaints with the OLD cached
+				// glClearColor). Covers background + fog.
+				scene_->refreshSceneRenderState();
 			}
 
-			// UFG-25 (rc4 → rc5 → rc5-followup) — Stage::setBackgroundColor()
-			// only stores the new value in the Stage struct. The
-			// actual `glClearColor()` requires a separate call to
-			// `RenderSetup::updateBackgroundColor()` per renderer,
-			// and the fog intensity needs `setFogIntensity()` on the
-			// GL renderer (these are what the legacy Stage Preferences
-			// dialog does in `Scene::applyPreferences` lines
-			// 1142-1155). Just calling `updateGL()` repaints with the
-			// OLD glClearColor cached on the renderer.
-			//
-			// `Scene::refreshSceneRenderState()` is the new public
-			// helper that does the renderers loop + updateGL — mirroring
-			// the applyPreferences path. Covers background + fog;
-			// coordinate-system toggle propagates via the existing
-			// stage_->showCoordinateSystem() above.
-			if (scene_ != nullptr)
-				scene_->refreshSceneRenderState();
+			// redrawAllRepresentations() is the StageController-declared
+			// scene-structural refresh (§2a Stage row) after a structural
+			// change; harmless when nothing structural changed.
+			if (mc != nullptr)
+				mc->redrawAllRepresentations();
+		}
 
-			// Emit appliedStub so callers wired during the migration
-			// window keep observing the apply signal. (Renamed in the
-			// 999.48 cleanup to applied().)
-			Q_EMIT appliedStub();
+		void StageController::reset()
+		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		void StageController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void StageController::setBackgroundColor(const QColor& c)

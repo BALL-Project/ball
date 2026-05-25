@@ -28,6 +28,14 @@
 # include <BALL/COMMON/global.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_CONTROLLERS_CONTROLLER_H
+# include <BALL/VIEW/KERNEL/controllers/controller.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_CONTROLLERS_APPLYPAYLOAD_H
+# include <BALL/VIEW/KERNEL/controllers/applyPayload.h>
+#endif
+
 #include <QtCore/QObject>
 #include <QtGui/QColor>
 
@@ -40,6 +48,17 @@
 #ifndef BALL_VIEW_RENDERING_CAMERA_H
 # include <BALL/VIEW/RENDERING/camera.h>
 #endif
+
+// ---------------------------------------------------------------------------
+// 999.59-03 per-controller contract-fixture activation symbol (Codex MEDIUM
+// #7) — flips stage_contract_test's parity block live (see
+// test/contract/contractFixtureActivation.h). Defined ONLY because apply()
+// below returns bool. StageController is the one scene-domain controller whose
+// §2a declared invalidation is NOT a soft refresh: it carries the documented
+// scene-structural side effects (rep-delete on vertex-buffer-mode toggle +
+// renderer switch, then mc->redrawAllRepresentations()).
+// ---------------------------------------------------------------------------
+#define BALL_VIEW_STAGE_APPLY_BOOL 1
 
 namespace BALL
 {
@@ -68,7 +87,7 @@ namespace BALL
 		 * against a Stage* and verify property reads in a unit test
 		 * without spawning a QApplication.
 		 */
-		class BALL_VIEW_EXPORT StageController : public QObject
+		class BALL_VIEW_EXPORT StageController : public Controller
 		{
 			Q_OBJECT
 
@@ -140,12 +159,29 @@ namespace BALL
 				/// v1.7.x-24 — true while apply() is mutating the Stage.
 				/// Notification slots that could re-trigger apply() must
 				/// early-return on this to break the re-entrancy cascade.
-				bool isApplying() const { return applying_; }
+				/// 999.59-03 — re-entrancy state now lives in the base depth
+				/// counter (applying_depth_).
+				bool isApplying() const { return applying_depth_ > 0; }
+
+				/**
+				 * Push the controller's mirrored state to the Stage/Scene,
+				 * command-shaped per §2. Returns true when the Stage/Scene was
+				 * mutated, false when dropped (re-entry) or rejected (no Stage /
+				 * MainControl busy). Overrides Controller::apply(). Not a
+				 * string-based Qt slot — callers invoke controller_->apply()
+				 * directly, so the bool return is binding-surface-compatible
+				 * with the prior void apply().
+				 * @return true if the owner was mutated, false otherwise.
+				 */
+				bool apply() override;
+
+				/**
+				 * Reset the mirror to the owner's current state (999.64 reset
+				 * path). Overrides Controller::reset(); delegates to revert().
+				 */
+				void reset() override;
 
 			public Q_SLOTS:
-				/** Push the controller's mirrored state to the Stage/Scene. */
-				void apply();
-
 				/** Pull state from the Stage/Scene into the controller, emitting xxxChanged signals. */
 				void revert();
 
@@ -202,7 +238,34 @@ namespace BALL
 				 */
 				void appliedStub();
 
+			protected:
+				/**
+				 * §2a declared invalidation — StageController's documented
+				 * scene-structural side effects, NOT a soft refresh and NOT a
+				 * blanket rebuild. On a vertex-buffer-mode toggle or renderer
+				 * switch the affected representations are deleted/rebuilt and
+				 * mc->redrawAllRepresentations() is called; the background/fog
+				 * render state is refreshed via Scene::refreshSceneRenderState().
+				 * Kept in this ONE place per §2a. Overrides
+				 * Controller::invalidateDeclared_().
+				 */
+				void invalidateDeclared_() override;
+
 			private:
+				/**
+				 * §13-cookbook mutation body, moved out of apply(): pushes the
+				 * mirrored field set onto the Stage / Scene / renderer (the full
+				 * non-stereo render config the legacy StageSettings::apply()
+				 * owned), INCLUDING the rep-delete-on-vertex-buffer-toggle side
+				 * effect. Precondition stage_ != nullptr guaranteed by apply().
+				 * Does NOT itself drive the final refresh (that is
+				 * invalidateDeclared_()). @return true (always installs state).
+				 */
+				bool applyInternal_();
+
+				/// Capture-only reversible intent (§2 step 7; v2.0 UndoStack).
+				void recordIntent_(const ApplyPayload& payload);
+
 				Stage* stage_;
 				Scene* scene_;
 
@@ -233,8 +296,10 @@ namespace BALL
 				float  mouse_sensitivity_;
 				float  mouse_wheel_sensitivity_;
 
-				// v1.7.x-24 — re-entrancy shield (see ControllerApplyGuard).
-				bool   applying_;
+				// 999.59-03 — re-entrancy state now lives in the base depth
+				// counter (applying_depth_); see ControllerApplyGuard.
+
+				ApplyPayload last_payload_;  // 999.59-03 — capture-only reversible intent.
 		};
 
 	} // namespace VIEW

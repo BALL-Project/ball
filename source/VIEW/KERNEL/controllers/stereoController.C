@@ -24,19 +24,35 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <sstream>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		namespace
+		{
+			// Compact owner-state snapshot for the ApplyPayload (§2 step 3).
+			String snapshotStereoState_(Stage* stage)
+			{
+				if (stage == nullptr) return String("stereo{null}");
+				std::ostringstream s;
+				s << "eye=" << stage->getEyeDistance()
+				  << ";focal=" << stage->getFocalDistance()
+				  << ";swap=" << (stage->swapSideBySideStereo() ? 1 : 0);
+				return String(s.str());
+			}
+		}
+
 		StereoController::StereoController(Stage* stage, QObject* parent)
-			: QObject(parent), stage_(stage),
+			: Controller(parent), stage_(stage),
 				enabled_(false),
 				eye_distance_(0.0f),
 				focal_distance_(0.0f),
-				swap_sbs_(false),
-				applying_(false)
+				swap_sbs_(false)
 		{
 			revert();
 		}
@@ -61,48 +77,92 @@ namespace BALL
 			if (swap != swap_sbs_) { swap_sbs_ = swap; Q_EMIT swapSideBySideChanged(swap); }
 		}
 
-		void StereoController::apply()
+		bool StereoController::apply()
 		{
-			// UFG-11 cut-over — push mirrored eye/focal distance +
-			// swap-side-by-side flag to the attached Stage. Mirrors the
-			// legacy StereoSettingsDialog::apply() backend
-			// (stereoSettingsDialog.C:109-115) and StageSettings::apply()
-			// stereo-swap mutation (stageSettings.C:254). enabled_ is
+			// 999.59-03 cut-over to the §2 `bool apply()` command contract.
+			// Push mirrored eye/focal distance + swap-side-by-side flag to the
+			// attached Stage. Mirrors the legacy StereoSettingsDialog::apply()
+			// backend (stereoSettingsDialog.C:109-115) — the §3a interactive
+			// sites (stereoSettingsDialog + interactionModeManager eye/focal
+			// adjust) now route through this controller. enabled_ is
 			// renderer-mode state — stays a controller-side mirror until
 			// SEED-001 step 5 wires StereoController through the
 			// Renderer / RenderSurface boundary.
+
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
 			if (stage_ == nullptr)
 			{
 				Log.warn() << "[StereoController::apply] no Stage attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[StereoController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the scene update below) synchronously
-			// re-enters apply(), bail rather than re-running the mutation —
-			// this is the cascade class behind the v1.7.x-13 freeze. The RAII
-			// guard clears the flag on every exit path.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — nest-aware drop ─────
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "stereo.setEyeDistance";
+			payload.before     = snapshotStereoState_(stage_);
+			payload.target     = stage_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotStereoState_(stage_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			invalidateDeclared_();               // soft refresh
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool StereoController::applyInternal_()
+		{
+			// §13 cookbook step 2 — mutation body, moved out of apply().
+			// Precondition (stage_ != nullptr) guaranteed by apply().
 			stage_->setEyeDistance(eye_distance_);
 			stage_->setFocalDistance(focal_distance_);
 			stage_->setSwapSideBySideStereo(swap_sbs_);
+			return true;
+		}
 
+		void StereoController::invalidateDeclared_()
+		{
+			// §2a Stereo row — SOFT refresh. An eye/focal/swap change
+			// re-projects the EXISTING geometry via Scene::update(); the
+			// primitive set is unchanged, so no display-list rebuild is needed.
 			Scene* scene = Scene::getInstance(0);
 			if (scene != nullptr)
 			{
 				scene->update();
 			}
+		}
 
-			Q_EMIT appliedStub();
+		void StereoController::reset()
+		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		void StereoController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void StereoController::setStereoEnabled(bool b)

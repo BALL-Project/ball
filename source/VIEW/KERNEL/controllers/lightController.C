@@ -21,18 +21,31 @@
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
 
 #include <list>
+#include <sstream>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		namespace
+		{
+			// Compact owner-state snapshot for the ApplyPayload (§2 step 3).
+			String snapshotLightState_(Stage* stage)
+			{
+				if (stage == nullptr) return String("light{null}");
+				std::ostringstream s;
+				s << "lights=" << stage->getLightSources().size();
+				return String(s.str());
+			}
+		}
+
 		LightController::LightController(Stage* stage, QObject* parent)
-			: QObject(parent), stage_(stage),
-				light_count_(0), ambient_intensity_(0.3f),
-				applying_(false)
+			: Controller(parent), stage_(stage),
+				light_count_(0), ambient_intensity_(0.3f)
 		{
 			revert();
 		}
@@ -108,41 +121,61 @@ namespace BALL
 			}
 		}
 
-		void LightController::apply()
+		bool LightController::apply()
 		{
-			// 999.58-01 cut-over — the controller now owns the COMPLETE
-			// light list (lights_). apply() mirrors LightSettings::apply()
-			// (lightSettings.C:384-393): clear the Stage light sources and
-			// re-add the controller's authoritative list, then
-			// Scene::lightsUpdated(true) — same redraw path the legacy dialog
-			// uses (LightSettings.C:150, 162, 263, 279, 403).
-			//
-			// The aggregate ambient-intensity slider (Inspector LightsSection)
-			// stays meaningful: the AMBIENT light in lights_ is kept in sync
-			// with ambient_intensity_, and an AMBIENT default is injected for
-			// an empty list so existing rendered scenes are unchanged
-			// (mirrors defaultsPressed()).
+			// 999.59-03 cut-over to the §2 `bool apply()` command contract.
+			// The controller owns the COMPLETE light list (lights_); apply()
+			// mirrors LightSettings::apply() (lightSettings.C:384-393): clear
+			// the Stage light sources and re-add the controller's authoritative
+			// list, then Scene::lightsUpdated(true) as the §2a soft refresh.
+
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
 			if (stage_ == nullptr)
 			{
 				Log.warn() << "[LightController::apply] no Stage attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[LightController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the lightsUpdated() refresh below)
-			// synchronously re-enters apply(), bail rather than re-running the
-			// mutation — this is the cascade class behind the v1.7.x-13 freeze.
-			// The RAII guard clears the flag on every exit path.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — nest-aware drop ─────
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "light.setLights";
+			payload.before     = snapshotLightState_(stage_);
+			payload.target     = stage_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotLightState_(stage_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			invalidateDeclared_();               // soft refresh (re-light)
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool LightController::applyInternal_()
+		{
+			// §13 cookbook step 2 — mutation body, moved out of apply().
+			// Precondition (stage_ != nullptr) guaranteed by apply().
+			//
 			// Re-add every non-ambient light the controller owns, then append
 			// exactly one AMBIENT light at the aggregate ambient_intensity_.
 			// If lights_ already carries an AMBIENT entry, its intensity is
@@ -197,14 +230,31 @@ namespace BALL
 				Q_EMIT lightCountChanged(new_count);
 			}
 
-			// Trigger GL re-light + redraw via Scene.
+			return true;
+		}
+
+		void LightController::invalidateDeclared_()
+		{
+			// §2a Light row — SOFT refresh. A light-list change re-lights the
+			// EXISTING geometry via Scene::lightsUpdated(true); the primitive
+			// set is unchanged, so no display-list rebuild is required.
 			Scene* scene = Scene::getInstance(0);
 			if (scene != nullptr)
 			{
 				scene->lightsUpdated(true);
 			}
+		}
 
-			Q_EMIT appliedStub();
+		void LightController::reset()
+		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		void LightController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void LightController::setAmbientIntensity(float v)

@@ -17,6 +17,9 @@
 #include <BALL/VIEW/RENDERING/camera.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <sstream>
 
 namespace BALL
 {
@@ -38,11 +41,22 @@ namespace BALL
 				               static_cast<float>(v.y()),
 				               static_cast<float>(v.z()));
 			}
+
+			// Compact owner-state snapshot for the ApplyPayload (§2 step 3).
+			String snapshotCameraState_(Stage* stage)
+			{
+				if (stage == nullptr) return String("camera{null}");
+				std::ostringstream s;
+				const Vector3& vp = stage->getCamera().getViewPoint();
+				const Vector3& la = stage->getCamera().getLookAtPosition();
+				s << "vp=" << vp.x << ',' << vp.y << ',' << vp.z
+				  << ";la=" << la.x << ',' << la.y << ',' << la.z;
+				return String(s.str());
+			}
 		}
 
 		CameraController::CameraController(Stage* stage, QObject* parent)
-			: QObject(parent), stage_(stage),
-				applying_(false)
+			: Controller(parent), stage_(stage)
 		{
 			revert();
 		}
@@ -65,25 +79,26 @@ namespace BALL
 			if (l != look_at_)  { look_at_  = l; Q_EMIT lookAtChanged(l); }
 		}
 
-		void CameraController::apply()
+		bool CameraController::apply()
 		{
-			// UFG-11 cut-over — push mirrored viewPoint + lookAt to the
-			// attached Stage's Camera. Same backend the legacy SetCamera
-			// modal mutates (see source/VIEW/DIALOGS/setCamera.C:87-89).
-			// Inspector's CameraSection in v1.7 is read-only display, but
-			// apply() is wired for future write paths and for programmatic
-			// callers (scripts, tests).
+			// 999.59-03 cut-over to the §2 `bool apply()` command contract.
+			// Push mirrored viewPoint + lookAt to the attached Stage's Camera.
+			// Same backend the legacy SetCamera modal mutates (see
+			// source/VIEW/DIALOGS/setCamera.C:87-89) and the §3a interactive
+			// site scene.C::restoreViewPoint() now routes through.
+
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
 			if (stage_ == nullptr)
 			{
 				Log.warn() << "[CameraController::apply] no Stage attached — skipping." << std::endl;
-				return;
+				return false;                    // rejected — nothing to mutate
 			}
 
 			MainControl* mc = MainControl::getInstance(0);
 			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[CameraController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
 			// Reject degenerate camera state (viewpoint == lookAt) — would
@@ -93,31 +108,72 @@ namespace BALL
 			if (vp == lp)
 			{
 				Log.error() << "[CameraController::apply] viewPoint == lookAt — refusing to apply." << std::endl;
-				return;
+				return false;                    // rejected — validation
 			}
 
-			// v1.7.x-24 — re-entrancy shield. If a notification triggered by
-			// this apply() (e.g. the scene update below) synchronously
-			// re-enters apply(), bail rather than re-running the mutation —
-			// this is the cascade class behind the v1.7.x-13 freeze. The RAII
-			// guard clears the flag on every exit path.
-			if (applying_) return;
-			ControllerApplyGuard apply_guard(applying_);
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — nest-aware drop ─────
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "camera.setCamera";
+			payload.before     = snapshotCameraState_(stage_);
+			payload.target     = stage_;
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotCameraState_(stage_);
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT appliedStub();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			invalidateDeclared_();               // soft refresh
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool CameraController::applyInternal_()
+		{
+			// §13 cookbook step 2 — mutation body, moved out of apply().
+			// Precondition (stage_ != nullptr, non-degenerate) guaranteed by
+			// apply().
 			Camera& cam = stage_->getCamera();
-			cam.setViewPoint(vp);
-			cam.setLookAtPosition(lp);
+			cam.setViewPoint(fromQ_(position_));
+			cam.setLookAtPosition(fromQ_(look_at_));
+			return true;
+		}
 
-			// Trigger a redraw through the live Scene. Materials/Stage
-			// controllers route through Scene::getInstance(0); same hook
-			// here keeps the cut-over consistent.
+		void CameraController::invalidateDeclared_()
+		{
+			// §2a Camera row — SOFT refresh. A camera transform change re-reads
+			// the view through the live Scene without rebuilding display lists
+			// (the primitive set is unchanged). Materials/Stage controllers
+			// route through Scene::getInstance(0); same hook here keeps the
+			// cut-over consistent.
 			Scene* scene = Scene::getInstance(0);
 			if (scene != nullptr)
 			{
 				scene->update();
 			}
+		}
 
-			Q_EMIT appliedStub();
+		void CameraController::reset()
+		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		void CameraController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void CameraController::setPosition(const QVector3D& p)
