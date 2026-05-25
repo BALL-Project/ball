@@ -1,8 +1,6 @@
 # BALL v2.2 — H3 Design: consumer migration (clustered)
 
-**Status:** 🟡 DESIGN LOCK — revised (R2) after Codex **H3-DR** NEEDS-REVISION +
-maintainer decisions (2026-05-25); re-review **H3-DR2** pending. See "## H3
-revision R2" at the end (it supersedes the relevant decisions above).
+**Status:** ✅ DESIGN LOCKED (R3) — Codex H3-DR3 GO (2026-05-25). H3-DR + H3-DR2 (NEEDS-REVISION) resolved via R2 (stable-id keys; PDBAtom subtype eliminated) + R3 (bond stable-ids 1a; topology-mutating processors two-pass in H3c 2b). The "## H3 revision R3" section supersedes all prior conflicting decisions; H3-DR3 GO at end. Implementing H3a.
 **Phase:** H3 — move consumers off the v0 `Composite&`/`Atom&`/`dynamic_cast`
 surface onto the handle API (H1b `ContainerHandle*` + H2c `AtomHandle` +
 `StructureQuery`), in dependency clusters.
@@ -365,3 +363,90 @@ during v0 `apply` is already forbidden/equivalent.
    Fix D-H3.8 with bond stable ids (or an explicitly non-reused bond identity)
    and fix D-H3.4 to classify mutating processors into snapshot/collect-first/
    specialized traversal paths before declaring design lock.
+
+---
+
+## H3 revision R3 — H3-DR2 resolutions + maintainer decisions (2026-05-25)
+
+Closes the two H3-DR2 FLAWs + the WEAKs. Maintainer decisions: **(1a) add bond
+stable-ids**; **(2b) two-pass-rewrite the topology-mutating processors in H3**
+(NOT deferred to H4). SUPERSEDES the same-numbered items where in conflict.
+
+### D-H3.8 (REVISED R3) — identity = atom AND bond stable-ids [closes H3-DR2 FLAW item 1/8]
+- **Bond stable-ids added (H3a):** mirror the atom `StableId` machinery on the
+  bond table — a `bond_stable_ids_` column, a fresh id drawn on every bond
+  creation (incl. free-list slot reuse, so a recycled bond slot gets a NEW id =
+  ABA-safe), preserved across `compact()`, uniqueness validated on JSON restore.
+  `BondHandle` validity/identity use bond `StableId` (the H2c `AtomHandle`
+  pattern). This is foundational H3a store work, symmetric to atoms.
+- `Atom*`/`Bond*`-identity containers (`Selector::selected_atoms_`,
+  `MolecularGraph`, `MolecularInteractions`, SMARTS/ring/kekulizer/`sdGenerator`/
+  `atomBijection`) re-key on `StableId`. `AtomHandle`/`BondHandle` get
+  `std::hash` + `operator<` on `{store, stable_id}` so they are drop-in keys; an
+  algorithm that used pointer order only as an arbitrary tie-break gets the same
+  determinism from stable-id order.
+- **Check gate (CI, D31b-style):** a grep gate REJECTS a stored `getAtom()` /
+  `getBond()` result used as a map/set/vector key (transition shim only, never a
+  stored key). Added with the H3a infra; enforced per cluster.
+
+### D-H3.4 (REVISED R3) — handle apply forbids mid-walk topology mutation; mutating processors are two-pass-rewritten in H3c [closes H3-DR2 FLAW item 2]
+- The handle `apply` (D-H3.4 R2 contract: `Processor::Result` CONTINUE/BREAK/
+  ABORT, `bool` return, `start()/finish()`, pre/postorder + child/level variants)
+  **forbids topology mutation during the walk** — correct for the read-only
+  majority.
+- The bounded set of processors that mutate topology *during* application —
+  STRUCTURE: `addHydrogenProcessor`, `buildBondsProcessor`,
+  `assignBondOrderProcessor`, `HBondProcessor`, `disulfidBondProcessor`,
+  `peptideCapProcessor`, `secondaryStructureProcessor`,
+  `sideChainPlacementProcessor`, `fragmentDB`, `BONDORDERS/FPTBondOrderStrategy`
+  (the H3c cluster; confirmed by the D-H3.2 grep gate) — are **two-pass
+  rewritten**: pass 1 walks read-only collecting the `AtomHandle`/`BondHandle`
+  work set (+ stable-id keys); pass 2 mutates via the store/container mutators
+  (`createBond`/`destroyBond`, container insert/remove) AFTER the walk completes.
+  This is part of each one's H3c migration, not a blanket claim. Where a
+  processor's mutation is inherently interleaved (must read freshly-created atoms
+  mid-walk), it stays on the v0 `Composite::apply` path with an explicit ledger
+  note and migrates at H4 — but the default + expectation is two-pass.
+
+### D-H3.6 (REVISED R3) — PDBAtom origin predicate replaces the type test [closes H3-DR2 WEAK item 3]
+PDBAtom-elimination (R2) stands. To replace `PDBAtom` *type identity*
+(`dynamic_cast<const PDBAtom*>`, `getPDBAtom`, PDB iterators, extractors): add an
+explicit **origin attribute** on the atom (e.g. `AtomHandle::isFromPDB()` backed
+by an origin enum/flag column, set when a PDB source materialises the atom),
+since the PDBAtom fields (branch designator, remoteness indicator, alt-location,
+occupancy, B-factor, `PROPERTY__HETATM`) are per-atom scalars and do not
+themselves prove PDB origin. Type-identity consumers re-express as
+origin-filtered `AtomHandle` queries; any residual pure type-test that the origin
+predicate cannot reproduce is **ledgered** as an intentional break.
+
+### D-H3.2 (R3) — consumed-surface grep gate [closes H3-DR2 WEAK item 4]
+Each cluster begins with a mandated grep enumerating its `Atom*`/`Bond*`/
+`Composite*`/`dynamic_cast`/`BALL_FOREACH_BOND`/`getBond(Atom&)`/`Bond::getFirst
+Atom/getSecondAtom/getPartner`/`AtomBondIterator`/pointer-list-returning sites;
+each site is converted to the handle/stable-id surface or ledgered. The gate is
+the cluster's migration checklist + its commit's verification evidence.
+
+### D-H3.7 (R3) — per-cluster mirror-freshness enumeration [closes H3-DR2 WEAK item 5]
+The sequencing invariant (R2) stands; additionally each cluster's commit
+**enumerates the v0 mutators it still invokes** and includes a read-test proving
+synchronous mirror freshness for them. Known bridge reads
+(`container_selection_count_`, `back_ptr`, `bond_back_ptr`) are documented and
+converted to store reads as their cluster migrates.
+
+### Build gate (R3, confirmed SOUND in H3-DR2)
+Full non-VIEW `libBALL` (`BALL_HAS_VIEW=OFF`) + all `bin/TEST/` + full `ctest`
+(284/284 baseline), per cluster. VIEW deferred (Class K).
+
+**Re-review:** Codex **H3-DR3** verifies R3 closes both FLAWs; on GO the design is
+locked and H3a (atom+bond stable-id-keyed handle shim + handle-processor contract
++ check gate) starts.
+
+## H3-DR3 re-review
+
+Verdict: **GO**. R3 closes both H3-DR2 blocking flaws; design locked, H3a starts.
+
+1. **SOUND** — D-H3.8 is feasible and ABA-safe: the current bond table has one allocation choke point (`add_bond`), tombstone/free-list reuse, lazy CSR row-index rebuild, and no bond-row movement in `compact()`, so a parallel `bond_stable_ids_` column can allocate fresh ids on every create/reuse, preserve ids across `compact()`, validate restore uniqueness, and survive clone/new-bond paths with intentionally new ids.
+2. **SOUND** — D-H3.4 is correct for the named mutating processors: `addHydrogenProcessor` can snapshot original targets and add per-target hydrogens sequentially in pass 2, `buildBondsProcessor` already separates candidate discovery from bond/order mutation, and the other STRUCTURE mutators are collect-delete/create/update cases rather than inherently traversal-interleaved; the v0+ledger escape is scoped to a proven exception, not a default hole.
+3. **SOUND** — D-H3.6's origin flag plus PDB attribute columns faithfully replaces `PDBAtom` type identity for `getPDBAtom`, PDB iterators, extractors, and FORMAT dispatch; remaining `PDBAtom*` APIs become origin-filtered `AtomHandle` queries or ledgered API breaks, not a semantic blocker.
+4. **SOUND** — D-H3.2 and D-H3.7 are sufficient per-cluster process gates: grep cannot prove arbitrary C++ alias/dataflow, but the mandated enumeration of pointer/bond/type-test surfaces plus per-cluster mirror-mutator freshness tests is realistic and enforceable as migration evidence.
+5. **SOUND** — No residual H3a blocker remains; the remaining risks are implementation checklist items for H3a/H3c, not design flaws requiring another revision.
