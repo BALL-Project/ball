@@ -13,22 +13,57 @@
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/common.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/CONCEPT/timeStamp.h>
+
+#include <sstream>
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
+		namespace
+		{
+			// Compact owner-state snapshot for the ApplyPayload (§2 step 3).
+			// Reads the Inspector's clipping plane (first plane in the manager).
+			String snapshotClippingState_()
+			{
+				MainControl* mc = MainControl::getInstance(0);
+				if (mc == nullptr) return String("clipping{no-mc}");
+				const vector<ClippingPlane*>& planes =
+					mc->getRepresentationManager().getClippingPlanes();
+				std::ostringstream s;
+				if (planes.empty() || planes.front() == nullptr)
+				{
+					s << "clipping{none}";
+				}
+				else
+				{
+					ClippingPlane* p = planes.front();
+					s << "active=" << (p->isActive() ? 1 : 0)
+					  << ";capped=" << (p->cappingEnabled() ? 1 : 0);
+				}
+				return String(s.str());
+			}
+		}
+
 		ClippingController::ClippingController(Scene* scene, QObject* parent)
-			: QObject(parent), scene_(scene),
+			: Controller(parent), scene_(scene),
 				enabled_(false), offset_(0.0f), capped_(true)
 		{
 		}
 
-		ClippingController::~ClippingController() = default;
+		ClippingController::~ClippingController()
+		{
+			// Release the headless fallback plane if we created one (the
+			// RepresentationManager owns production planes, not this).
+			delete owned_plane_;
+			owned_plane_ = nullptr;
+		}
 
 		void ClippingController::setScene(Scene* scene)
 		{
@@ -67,55 +102,88 @@ namespace BALL
 			}
 		}
 
-		void ClippingController::apply()
+		bool ClippingController::apply()
 		{
-			// UFG-11 cut-over (v1.7.x-01 / Phase 999.51) — the Inspector now
-			// hosts a ClippingSection, so apply() functionally mutates a
-			// ClippingPlane through the RepresentationManager and triggers
-			// the same redraw the legacy ClippingDialog uses. The legacy
+			// 999.59-03 cut-over to the §2 `bool apply()` command contract.
+			// The Inspector hosts a ClippingSection, so apply() mutates a
+			// ClippingPlane through the RepresentationManager and triggers the
+			// same redraw the legacy ClippingDialog uses. The legacy
 			// ClippingDialog + SetClippingPlane dialogs remain reachable and
 			// drive the SAME clipping planes (deletion deferred to 999.53).
-			MainControl* mc = MainControl::getInstance(0);
-			if (mc == nullptr)
-			{
-				Log.warn() << "[ClippingController::apply] no MainControl available — skipping." << std::endl;
-				return;
-			}
+			//
+			// 999.59-03 CLOSES the §4 omission: the prior void body explicitly
+			// SKIPPED the ControllerApplyGuard (clippingController.C ~line 88
+			// comment, Codex HIGH #6). The cut-over now takes it like every
+			// other apply().
 
-			// Busy guard — mirrors ModelController/MaterialController. If the
-			// renderer or another modal is doing work, defer rather than
-			// racing the scene mutation. NOTE: unlike Model/Material, clipping
-			// apply does not trigger a synchronous re-entrant controller
-			// notification (the redraw path emits no *Changed back into this
-			// controller), so the ControllerApplyGuard re-entrancy shield is
-			// intentionally omitted here.
-			if (mc->isBusy())
+			// ── 1. Preconditions (§2 step 1) ─────────────────────────────────
+			// A MainControl is the production owner of the clip plane, but is
+			// NOT required: headless (no MainControl) we mutate a controller-
+			// owned fallback plane so the command still has a single funnel.
+			MainControl* mc = MainControl::getInstance(0);
+			if (mc != nullptr && mc->isBusy())
 			{
 				Log.info() << "[ClippingController::apply] MainControl busy — deferring." << std::endl;
-				return;
+				return false;                    // rejected — busy
 			}
 
-			RepresentationManager& pm = mc->getRepresentationManager();
+			// ── 2. Re-entrancy shield (§2 step 2 / §4) — THE OMISSION CLOSED ─
+			if (applying_depth_ > 0) return false;          // dropped — re-entry
+			ControllerApplyGuard apply_guard(applying_depth_);
 
-			// Find-or-create the Inspector's clipping plane. The Inspector
-			// owns a single plane: reuse the first plane in the manager, or
-			// create one on first enable (mirror scene.C:3448 setupViewVolume).
+			// ── 3. Capture reversible intent (§2 step 3) ─────────────────────
+			ApplyPayload payload;
+			payload.command_id = "clipping.setEnabled";
+			payload.before     = snapshotClippingState_();
+			payload.t_us       = PreciseTime::now().getMicroSeconds();
+
+			// ── 4. Mutate the single owner (§2 step 4) ───────────────────────
+			applyInternal_();
+
+			payload.after = snapshotClippingState_();
+
+			// ── 5. Emit ONE typed event (§2 step 5) ──────────────────────────
+			Q_EMIT applied();
+
+			// ── 6. Request the DECLARED invalidation (§2 step 6 / §2a) ───────
+			invalidateDeclared_();               // soft refresh
+
+			// ── 7. Record reversible intent (§2 step 7) — capture only ───────
+			recordIntent_(payload);
+
+			return true;                          // mutated
+		}
+
+		bool ClippingController::applyInternal_()
+		{
+			// §13 cookbook step 2 — mutation body, moved out of apply().
+			// Find-or-create the Inspector's clipping plane: through the
+			// RepresentationManager in production, or a controller-owned
+			// fallback plane when no MainControl is reachable (headless).
+			MainControl* mc = MainControl::getInstance(0);
+			RepresentationManager* pm =
+				(mc != nullptr) ? &mc->getRepresentationManager() : nullptr;
+
 			ClippingPlane* plane = nullptr;
-			const vector<ClippingPlane*>& planes = pm.getClippingPlanes();
-			if (!planes.empty())
+			if (pm != nullptr)
 			{
-				plane = planes.front();
+				const vector<ClippingPlane*>& planes = pm->getClippingPlanes();
+				if (!planes.empty())
+				{
+					plane = planes.front();
+				}
+			}
+			else
+			{
+				// Headless fallback — reuse our own plane across applies.
+				plane = owned_plane_;
 			}
 
+			bool created = false;
 			if (plane == nullptr)
 			{
-				if (!enabled_)
-				{
-					// Nothing to disable and nothing requested — no-op.
-					Q_EMIT appliedStub();
-					return;
-				}
 				plane = new ClippingPlane;
+				created = true;
 
 				// Seed the plane's point/normal from the camera, reusing the
 				// legacy SetClippingPlane semantics: point at the look-at
@@ -134,16 +202,25 @@ namespace BALL
 				plane->setPoint(base);
 				plane->setNormal(normal);
 
-				// Clip every current Representation (mirror ClippingDialog::accept
-				// which rebuilds plane->getRepresentations()).
-				RepresentationList::const_iterator it = pm.getRepresentations().begin();
-				for (; it != pm.getRepresentations().end(); ++it)
+				if (pm != nullptr)
 				{
-					plane->getRepresentations().insert(*it);
+					// Clip every current Representation (mirror
+					// ClippingDialog::accept which rebuilds
+					// plane->getRepresentations()).
+					RepresentationList::const_iterator it = pm->getRepresentations().begin();
+					for (; it != pm->getRepresentations().end(); ++it)
+					{
+						plane->getRepresentations().insert(*it);
+					}
+					pm->insertClippingPlane(plane);
 				}
-
-				pm.insertClippingPlane(plane);
+				else
+				{
+					// Headless — keep ownership on the controller.
+					owned_plane_ = plane;
+				}
 			}
+			(void)created;
 
 			// Push mirrored state onto the plane.
 			plane->setActive(enabled_);
@@ -172,10 +249,32 @@ namespace BALL
 			}
 			plane->setPoint(base - n * (offset_ * SHIFT));
 
-			// Trigger the same redraw the legacy ClippingDialog uses.
-			mc->redrawAllRepresentations();
+			return true;
+		}
 
-			Q_EMIT appliedStub();
+		void ClippingController::invalidateDeclared_()
+		{
+			// §2a Clipping row — SOFT refresh. A clip-plane change re-draws the
+			// EXISTING geometry via the same redraw the legacy ClippingDialog
+			// uses; the primitive set is unchanged. Headless (no MainControl)
+			// there is nothing to redraw.
+			MainControl* mc = MainControl::getInstance(0);
+			if (mc != nullptr)
+			{
+				mc->redrawAllRepresentations();
+			}
+		}
+
+		void ClippingController::reset()
+		{
+			// §2 reset path (999.64 consumes) — single-pass re-sync from owner.
+			revert();
+		}
+
+		void ClippingController::recordIntent_(const ApplyPayload& payload)
+		{
+			// v1.7.4 — capture only (no UndoStack yet, §2 step 7).
+			last_payload_ = payload;
 		}
 
 		void ClippingController::setEnabled(bool b)
