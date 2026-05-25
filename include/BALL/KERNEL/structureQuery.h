@@ -32,6 +32,10 @@
 # include <BALL/KERNEL/containerHandle.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOMHANDLE_H
+# include <BALL/KERNEL/atomHandle.h>   // H2c (D71a): handle-yielding atom traversal
+#endif
+
 #include <vector>
 
 namespace BALL
@@ -62,6 +66,31 @@ namespace BALL
 					FragmentHandle f = c.as<FragmentHandle>();
 					if (f) visit(f);                         // preorder: parent first
 					visitFragments_(c, visit);               // then its subtree
+				}
+			}
+
+			/** Visit every ATOM in `node`'s subtree in the ordered-`ChildRef`
+					preorder (D57 ordered edges -> reproduces the v0 `Composite` atom
+					preorder). `visit` is called once per atom child with a bound
+					AtomHandle; container children are descended into. (D71a / H2c.)
+			*/
+			template <typename Visitor>
+			inline void visitAtoms_(const ContainerHandleBase& node, Visitor&& visit)
+			{
+				MoleculeStore* store = node.getStore();
+				std::size_t n = node.countChildren();
+				for (std::size_t i = 0; i < n; ++i)
+				{
+					ContainerChildRef c = node.getChild(i);
+					if (c.is_atom)
+					{
+						if (store) visit(AtomHandle(*store, c.idx));  // atom leaf
+					}
+					else
+					{
+						ContainerHandleBase cc = node.getChildContainer(i);
+						if (cc) visitAtoms_(cc, visit);               // descend (preorder)
+					}
 				}
 			}
 		} // namespace detail
@@ -188,6 +217,45 @@ namespace BALL
 				p = p.getParent();
 			}
 			return FragmentHandle();
+		}
+
+		/** All atoms in `root`'s subtree as AtomHandles, in the ordered-`ChildRef`
+				preorder. This is the handle-yielding re-expression of the v0
+				`Composite`-backed AtomIterator (D71/D71a, H2c); the order matches the
+				v0 atom preorder over the same tree. Read-only; consumers migrate in H3.
+		*/
+		inline std::vector<AtomHandle> atoms(const ContainerHandleBase& root)
+		{
+			std::vector<AtomHandle> out;
+			detail::visitAtoms_(root, [&](const AtomHandle& a){ out.push_back(a); });
+			return out;
+		}
+
+		/** Preorder walk of `root`'s subtree dispatching to a processor's
+				`operator()(const ContainerHandleBase&)` (each container, parent
+				first) and `operator()(const AtomHandle&)` (each atom leaf). The
+				table-side re-expression of `Composite::apply<T>` (D71/D71a, H2c).
+				Consumer processors migrate to handle-by-value signatures in H3.
+		*/
+		template <typename Proc>
+		inline void apply(const ContainerHandleBase& root, Proc&& proc)
+		{
+			proc(root);                                       // preorder: container first
+			MoleculeStore* store = root.getStore();
+			std::size_t n = root.countChildren();
+			for (std::size_t i = 0; i < n; ++i)
+			{
+				ContainerChildRef c = root.getChild(i);
+				if (c.is_atom)
+				{
+					if (store) proc(AtomHandle(*store, c.idx));   // atom leaf
+				}
+				else
+				{
+					ContainerHandleBase cc = root.getChildContainer(i);
+					if (cc) apply(cc, proc);                      // recurse (preorder)
+				}
+			}
 		}
 
 	} // namespace StructureQuery

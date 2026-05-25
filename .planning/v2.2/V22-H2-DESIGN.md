@@ -353,3 +353,88 @@ binding lifecycle, `destroy()`-on-live flag). This revision: D69 moves the
 flag to the DESTRUCTORS (explicit `destroy()`/`clear()` on a live object
 mirrors correctly); D74 adds the `{store,idx}` binding + self-healing
 re-materialize. Codex **R35c** re-reviews; on GO, implement H2a.
+
+---
+
+## D71a. H2c addendum — `AtomHandle` yield type (maintainer decision: Option A)
+
+D71 said the handle-yielding `AtomIterator` "yields `Atom` by value" but the
+yield type was underspecified (no atom value-handle existed; in dual existence
+`Atom` is still the heavy v0 `Composite`-derived object). Maintainer chose
+**Option A (2026-05-25):** introduce a dedicated `AtomHandle` value type now,
+the atom analog of `ContainerHandleBase`.
+
+**`AtomHandle` (`include/BALL/KERNEL/atomHandle.h`)** — `{ MoleculeStore*,
+u32 atom_idx, StableId stable_id }`:
+- **Identity / validity uses `stable_id`, NOT a generation counter.** Unlike
+  container rows (per-slot `generation`, D65), atom slots have only the
+  store-wide `generation()` (D7) — and `release_atom()` does **not** bump it,
+  so a coarse generation check would ABA-alias a recycled slot. Each *live*
+  atom has a unique `StableId` (a reallocated slot draws a fresh one from
+  `next_stable_id_alloc_`), so capturing `stable_id` at bind and comparing on
+  `isValid()` is the ABA-safe identity. `isValid()` = `store && idx < size() &&
+  !is_freed(idx) && stable_id(idx) == captured`.
+- **Dual-existence bridge:** `getAtom() -> Atom*` via `MoleculeStore::back_ptr`
+  (null if freed / after the H4 flip). Lets H3 consumers reach the v0 object
+  during migration; at H4 the handle *is* the atom.
+- **Size:** `{8 + 4 + 8}` → 24 B (padded). The D13 "16 B atom handle target"
+  is the H4 *flipped-`Atom`* layout concern; this transient traversal handle is
+  not stored per-atom in bulk, so 24 B is fine. Documented for the H4 audit.
+
+**Traversal (`StructureQuery::atoms` / `apply`, header-only):**
+- `atoms(const ContainerHandleBase& root) -> std::vector<AtomHandle>` — preorder
+  walk of the ordered `ChildRef` edges (`getChild(i)`), emitting an `AtomHandle`
+  for each atom child at the leaves, recursing into container children. The
+  ordered edges (D57) make this reproduce the v0 `Composite` atom preorder.
+- `apply(root, proc)` — preorder walk dispatching to `proc(AtomHandle)` /
+  `proc(const ContainerHandleBase&)` (the table-side re-expression of
+  `Composite::apply<T>`). Predicate/processor handle-by-value signatures (D61
+  Class-E) are exercised here; consumers migrate in H3.
+
+**Guardrail:** `AtomHandle_test` (identity/validity/ABA via release+realloc,
+`getAtom` bridge, 24 B size assert) + an order-parity test asserting
+`StructureQuery::atoms(rootHandle)` store-index sequence == the v0
+`AtomIterator` preorder over the same built `System`.
+
+Additive / dual-existence: the v0 `Composite&` traversal is untouched (deleted
+at H4), no consumer is migrated (H3). Tree stays green. Codex **H2c-CR** close-
+reviews design + implementation.
+
+---
+
+## H2c-CR code review
+
+Verdict: **GO-WITH-FIXES**. The traversal layer is additive and the ordered-edge
+walk looks correct, but `AtomHandle::getAtom()` must be made identity-aware
+before H2c closes: after `release_atom(idx)` + slot reuse, an old handle is
+invalid by `stable_id`, yet `getAtom()` currently checks only null / OOB /
+freed and can return the *new* atom's `back_ptr` for the recycled slot. Required
+fix: make `getAtom()` require the captured `stable_id` to match (or call
+`isValid()` before returning `back_ptr`) and add an ABA regression asserting the
+old handle's `getAtom()` stays null after reuse while the fresh handle bridges.
+
+1. **AtomHandle:** **FLAW** — `isValid()` is ABA-safe and short-circuits
+   `idx < size()` before `stable_id(idx)`, and the dangling-store contract
+   matches the other handles, but `getAtom()` has an ABA false-positive because
+   it does not check `stable_id_`.
+2. **Traversal:** **SOUND** — `visitAtoms_` / `atoms(root)` and `apply(root,
+   proc)` walk the public ordered `ContainerChildRef` edges in preorder; atom
+   child `idx` is the atom-store index, container and atom children stay
+   interleaved in the v0 child order, empty containers naturally contribute no
+   atoms, and recursive `apply(cc, proc)` keeps the processor as an lvalue
+   rather than repeatedly moving it.
+3. **Encapsulation:** **SOUND** — the new headers include only public
+   `moleculeStore.h`, `containerHandle.h`, and `atomHandle.h`; no private
+   `ContainerRow`, `ChildRef`, `ContainerTable`, or `_moleculeStoreInternal.h`
+   types leak through the API.
+4. **Additive / no regression:** **SOUND** — no v0 traversal code or consumers
+   are changed; the new API is header-only and currently reached only through
+   the new test / explicit `StructureQuery` include path.
+5. **Test adequacy:** **WEAK** — coverage exercises null/bind/equality/ABA
+   validity, size, SS-layer atom preorder parity, fresh `getAtom()` bridging,
+   and basic `apply` counts, but it misses the required ABA bridge assertion for
+   stale `getAtom()`; postorder is out of scope, and multi-molecule/detached
+   atom cases are optional for H2c.
+6. **Other ABI/ODR/correctness:** **SOUND** — `BALL_EXPORT` on the inline 24 B
+   value type matches the existing handle style, the 24 B size is acceptable for
+   a transient traversal yield, and no additional ODR or ABI issue was found.
