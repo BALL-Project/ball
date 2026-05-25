@@ -40,6 +40,15 @@ MoleculeStore::StableId MoleculeStore::next_stable_id_alloc_()
 	return next_stable_id_++;
 }
 
+// v2.2 H3a (D-H3.8): bond analog of next_stable_id_alloc_ (same UINT64_MAX
+// overflow guard). Called from add_bond under bond_mutex_.
+MoleculeStore::StableId MoleculeStore::next_bond_stable_id_alloc_()
+{
+	if (next_bond_stable_id_ == std::numeric_limits<StableId>::max())
+		throw Exception::OutOfMemory(__FILE__, __LINE__, 0);
+	return next_bond_stable_id_++;
+}
+
 // K0.6.3b: checked bulk restore. Called only by loadStoreJSON via the
 // friend declaration in moleculeStore.h. Throws if the caller violates
 // the stable_id uniqueness invariant.
@@ -1124,6 +1133,7 @@ void MoleculeStore::clear()
 
 	bonds_.clear();
 	bond_back_ptr_.clear();
+	bond_stable_ids_.clear();        // v2.2 H3a (D-H3.8)
 	bond_free_list_.clear();
 	bond_csr_off_.clear();
 	bond_csr_idx_.clear();
@@ -1146,6 +1156,7 @@ void MoleculeStore::clear()
 	++generation_;
 	++selection_generation_;
 	next_stable_id_ = 1;
+	next_bond_stable_id_ = 1;        // v2.2 H3a (D-H3.8)
 }
 
 void MoleculeStore::compact()
@@ -1345,6 +1356,9 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 		r.type = type;
 		r.flags = 0;        // clear FLAG_BOND_DEAD on reuse
 		bond_back_ptr_[idx] = nullptr;
+		// v2.2 H3a (D-H3.8): a recycled bond slot draws a FRESH stable id so a
+		// stale BondHandle into the old occupant goes stale (ABA-safe).
+		bond_stable_ids_[idx] = next_bond_stable_id_alloc_();
 		csr_dirty_ = true;
 		return idx;
 	}
@@ -1357,6 +1371,7 @@ std::uint32_t MoleculeStore::add_bond(Index a, Index b,
 	r.flags = 0;
 	bonds_.push_back(r);
 	bond_back_ptr_.push_back(nullptr);
+	bond_stable_ids_.push_back(next_bond_stable_id_alloc_());   // v2.2 H3a (D-H3.8)
 	csr_dirty_ = true;
 	return static_cast<std::uint32_t>(bonds_.size() - 1);
 }

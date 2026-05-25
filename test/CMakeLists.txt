@@ -67,6 +67,7 @@ IF(BALL_COLLAPSE_KERNEL_ONLY)
 		ContainerHandle_test
 		StructureQuery_test
 		AtomHandle_test
+		BondHandle_test
 		CompositeIteratorStability_test
 		# (SelectorBench_test excluded: it loads a PDB via FORMAT.)
 	)
@@ -138,6 +139,7 @@ ELSEIF(BALL_CORE_ONLY)
 		# the role-aware handles -- chains/residues/terminal/SS queries by role.
 		StructureQuery_test
 		AtomHandle_test
+		BondHandle_test
 		CompositeIteratorStability_test
 		# B1.1 (Track B Wave 1a, 2026-05-18): tests re-enabled once
 		# FORMAT (subset) compiled into libBALL. These were deferred

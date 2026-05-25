@@ -359,6 +359,13 @@ namespace BALL
 		Bond*       bond_back_ptr(std::uint32_t i) const   { return bond_back_ptr_[i]; }
 		void        set_bond_back_ptr(std::uint32_t i, Bond* p) { bond_back_ptr_[i] = p; }
 
+		// v2.2 H3a (D-H3.8): per-bond stable id — the ABA-safe identity for
+		// BondHandle (bond analog of stable_id(Index) for atoms). A fresh id is
+		// drawn on every add_bond (incl. free-list slot reuse), so a recycled
+		// bond slot gets a NEW id; preserved across compact() (no bond-row
+		// movement). Parallel to bonds_.
+		StableId    bond_stable_id(std::uint32_t i) const  { return bond_stable_ids_[i]; }
+
 		// K0.3c.4: rewrite every live BondRecord so .a/.b reference
 		// indices are swapped (i↔j). Matches v1.x Atom::swap semantics
 		// of "atom1 now has atom2's bond connectivity, in-place." Self-
@@ -610,6 +617,7 @@ namespace BALL
 		// Bond table.
 		std::vector<BondRecord>   bonds_;
 		std::vector<Bond*>        bond_back_ptr_;
+		std::vector<StableId>     bond_stable_ids_;   // v2.2 H3a (D-H3.8): parallel to bonds_
 
 		// CSR adjacency: bond_csr_off_[i] = first bond-list index for atom i;
 		// bond_csr_off_[i+1] - bond_csr_off_[i] = degree of atom i.
@@ -648,9 +656,14 @@ namespace BALL
 		// rather than silently re-issuing 0. Called from allocate_atom paths.
 		StableId next_stable_id_alloc_();
 
+		// v2.2 H3a (D-H3.8): bond analog of next_stable_id_alloc_ (same
+		// UINT64_MAX overflow guard). Called from add_bond.
+		StableId next_bond_stable_id_alloc_();
+
 		Generation generation_           = 0;
 		Generation selection_generation_ = 0;
 		StableId   next_stable_id_       = 1;
+		StableId   next_bond_stable_id_  = 1;   // v2.2 H3a (D-H3.8)
 
 		// K0.3c.1: free-list of slot indices released by release_atom().
 		// allocate_atom() pops from here before extending the columns.
