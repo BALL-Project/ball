@@ -58,7 +58,10 @@ set(_obj "${WORKDIR}/${_src_name}.compilecheck.o")
 # Syntax-only compile (-fsyntax-only is GCC/Clang; MSVC uses /Zs). We pick
 # the flag from the compiler id passed in, defaulting to -fsyntax-only.
 if(DEFINED CXX_IS_MSVC AND CXX_IS_MSVC)
-	set(_compile_cmd "${CXX}" "/std:c++${CXX_STANDARD}" ${INCLUDE_FLAGS} "/Zs" "${SOURCE}")
+	# /TP forces C++ compilation: BALL sources use the .C extension, which MSVC
+	# treats as C on the case-insensitive Windows filesystem (.C == .c) → the STL
+	# headers reject it with C1189/STL1003. /TP makes cl compile it as C++.
+	set(_compile_cmd "${CXX}" "/TP" "/std:c++${CXX_STANDARD}" ${INCLUDE_FLAGS} "/Zs" "${SOURCE}")
 else()
 	set(_compile_cmd "${CXX}" "-std=c++${CXX_STANDARD}" ${INCLUDE_FLAGS} "-fsyntax-only" "${SOURCE}")
 endif()
