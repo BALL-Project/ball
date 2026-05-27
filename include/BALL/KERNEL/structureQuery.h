@@ -36,6 +36,10 @@
 # include <BALL/KERNEL/atomHandle.h>   // H2c (D71a): handle-yielding atom traversal
 #endif
 
+#ifndef BALL_CONCEPT_PROCESSOR_H
+# include <BALL/CONCEPT/processor.h>   // H3a.4 (D-H3.4): Processor::Result contract
+#endif
+
 #include <vector>
 
 namespace BALL
@@ -92,6 +96,43 @@ namespace BALL
 						if (cc) visitAtoms_(cc, visit);               // descend (preorder)
 					}
 				}
+			}
+
+			/** Preorder atom walk threading a Processor::Result (H3a.4 / D-H3.4):
+					calls `proc(AtomHandle&)` per atom; a result <= Processor::BREAK
+					(i.e. BREAK or ABORT) stops the walk and is propagated up so the
+					whole traversal halts. Returns the controlling result (CONTINUE if
+					the subtree completed). The faithful table-side equivalent of the
+					v0 `Composite::applyAtom_` recursion.
+			*/
+			template <typename P>
+			inline Processor::Result applyAtoms_(const ContainerHandleBase& node, P& proc)
+			{
+				MoleculeStore* store = node.getStore();
+				std::size_t n = node.countChildren();
+				for (std::size_t i = 0; i < n; ++i)
+				{
+					ContainerChildRef c = node.getChild(i);
+					if (c.is_atom)
+					{
+						if (store)
+						{
+							AtomHandle a(*store, c.idx);
+							Processor::Result r = proc(a);
+							if (r <= Processor::BREAK) return r;      // BREAK/ABORT halt
+						}
+					}
+					else
+					{
+						ContainerHandleBase cc = node.getChildContainer(i);
+						if (cc)
+						{
+							Processor::Result r = applyAtoms_(cc, proc);
+							if (r <= Processor::BREAK) return r;
+						}
+					}
+				}
+				return Processor::CONTINUE;
 			}
 		} // namespace detail
 
@@ -256,6 +297,30 @@ namespace BALL
 					if (cc) apply(cc, proc);                      // recurse (preorder)
 				}
 			}
+		}
+
+		/** Apply a handle atom-processor over all atoms in `root`'s subtree in
+				preorder — the faithful table-side replacement for
+				`Composite::apply(UnaryProcessor<Atom>&)` (D-H3.4, H3a.4).
+
+				`proc` mirrors the v0 UnaryProcessor<Atom> contract:
+				`bool start()`, `Processor::Result operator()(AtomHandle&)`
+				(CONTINUE / BREAK / ABORT), `bool finish()`. Semantics match v0:
+				`start()` gates the walk; ABORT halts and makes the call fail (and,
+				as in v0's `start() && walk && finish()`, skips finish()); BREAK is a
+				successful early stop; finish() runs on BREAK/CONTINUE. Returns the
+				overall success bool.
+
+				The handle is passed by mutable lvalue so processors that mutate atom
+				scalar columns (via the shim setters) work; topology-mutating
+				processors are two-pass (D-H3.4): collect handles here, mutate after.
+		*/
+		template <typename P>
+		inline bool applyAtomProcessor(const ContainerHandleBase& root, P& proc)
+		{
+			return proc.start()
+			    && (detail::applyAtoms_(root, proc) != Processor::ABORT)
+			    && proc.finish();
 		}
 
 	} // namespace StructureQuery

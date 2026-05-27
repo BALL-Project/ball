@@ -238,4 +238,72 @@ CHECK(AtomHandle shim - scalar forwarding + selection + bonds + stable-id key)
 RESULT
 
 /////////////////////////////////////////////////////////////
+// H3a.4: handle atom-processor (Processor::Result contract)
+/////////////////////////////////////////////////////////////
+
+CHECK(StructureQuery::applyAtomProcessor - start/finish + CONTINUE/BREAK/ABORT)
+	System sys;
+	Protein prot;  prot.setName("P");
+	Chain   ch;    ch.setName("A");
+	Residue r1;    r1.setName("ALA");
+	Residue r2;    r2.setName("GLY");
+	PDBAtom a1; a1.setName("N");
+	PDBAtom a2; a2.setName("CA");
+	PDBAtom a3; a3.setName("C");
+	PDBAtom a4; a4.setName("O");
+	r1.insert(a1); r1.insert(a2);
+	r2.insert(a3); r2.insert(a4);
+	ch.insert(r1); ch.insert(r2);
+	prot.insert(ch);
+	sys.insert(prot);
+	MoleculeStore* store = prot.getContainerRowStore_();
+	ContainerHandleBase root(*store, prot.getContainerRow_());
+
+	// CONTINUE on every atom: visits all 4, succeeds, start()+finish() run.
+	struct CountProc {
+		Size n = 0; bool started = false, finished = false;
+		bool start()  { started = true;  return true; }
+		bool finish() { finished = true; return true; }
+		Processor::Result operator () (AtomHandle&) { ++n; return Processor::CONTINUE; }
+	} cp;
+	TEST_EQUAL(StructureQuery::applyAtomProcessor(root, cp), true)
+	TEST_EQUAL(cp.n, 4)
+	TEST_EQUAL(cp.started && cp.finished, true)
+
+	// BREAK after the 2nd atom: successful early stop; finish() runs.
+	struct BreakProc {
+		Size n = 0; bool finished = false;
+		bool start()  { return true; }
+		bool finish() { finished = true; return true; }
+		Processor::Result operator () (AtomHandle&)
+		{ ++n; return (n >= 2) ? Processor::BREAK : Processor::CONTINUE; }
+	} bp;
+	TEST_EQUAL(StructureQuery::applyAtomProcessor(root, bp), true)
+	TEST_EQUAL(bp.n, 2)
+	TEST_EQUAL(bp.finished, true)
+
+	// ABORT after the 2nd atom: failure; finish() skipped (v0 && semantics).
+	struct AbortProc {
+		Size n = 0; bool finished = false;
+		bool start()  { return true; }
+		bool finish() { finished = true; return true; }
+		Processor::Result operator () (AtomHandle&)
+		{ ++n; return (n >= 2) ? Processor::ABORT : Processor::CONTINUE; }
+	} ap;
+	TEST_EQUAL(StructureQuery::applyAtomProcessor(root, ap), false)
+	TEST_EQUAL(ap.n, 2)
+	TEST_EQUAL(ap.finished, false)
+
+	// start() == false: the walk never runs.
+	struct NoStartProc {
+		Size n = 0;
+		bool start()  { return false; }
+		bool finish() { return true; }
+		Processor::Result operator () (AtomHandle&) { ++n; return Processor::CONTINUE; }
+	} np;
+	TEST_EQUAL(StructureQuery::applyAtomProcessor(root, np), false)
+	TEST_EQUAL(np.n, 0)
+RESULT
+
+/////////////////////////////////////////////////////////////
 END_TEST
