@@ -947,7 +947,13 @@ jobs:
           # non-zero if any non-WILL_FAIL test fails. ui_v2 in JUnit filename
           # so ON + OFF cells don't clobber each other's output at the
           # test-report merge step (same rationale as macOS sibling).
-          ctest --output-on-failure --timeout 120 `
+          # Contract tests are Linux-only by design — they have a dedicated
+          # `ctest -L contract` gate (Linux job above). The offscreen-Qt harness
+          # hangs on the Windows runner (12 fixtures timed out) and the §11
+          # compile-checks are Linux-targeted; macOS/Windows contract coverage is
+          # a v1.7.5 concern. Exclude the `contract` label so the general Windows
+          # gatekeeper doesn't sweep them in. They still BUILD here (compile cover).
+          ctest --output-on-failure --timeout 120 -LE contract `
                 --output-junit "${{ github.workspace }}\ball-tests-windows.xml"
 
       - name: Upload test results (Windows)
