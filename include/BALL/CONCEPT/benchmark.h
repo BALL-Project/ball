@@ -10,6 +10,14 @@
 # include <BALL/SYSTEM/timer.h>
 #endif
 
+// v2.2 (PR-removal include hygiene): the END_BENCHMARK macro streams
+// Exception::GeneralException::getFilename() which returns BALL::String; the
+// complete String type was previously visible transitively via the now-removed
+// persistenceManager.h include chain.
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
 #include <string>
 
 /**	Start a new benchmark section.
