@@ -270,6 +270,27 @@ IF (BALL_HAS_VIEW)
 		LIST(APPEND CONTRACT_COMPILE_INCLUDES ${EIGEN3_INCLUDE_DIR})
 	ENDIF()
 
+	# Qt (like Eigen) exposes its headers via the QtN::<Module> INTERFACE
+	# targets, not directory INCLUDE_DIRECTORIES — so the compile-check missed
+	# <QtCore/QEvent> (VIEW/KERNEL/common.h:26) on Linux + Windows. macOS resolved
+	# it through the -F framework flags; Linux/Windows need explicit -I. Pull the
+	# module include dirs for whichever Qt major is active. (999.59-03 CI fix.)
+	FOREACH (_qtmod Core Gui Widgets OpenGL OpenGLWidgets Network Xml PrintSupport)
+		IF (TARGET Qt6::${_qtmod})
+			GET_TARGET_PROPERTY(_qt_inc Qt6::${_qtmod} INTERFACE_INCLUDE_DIRECTORIES)
+			IF (_qt_inc)
+				LIST(APPEND CONTRACT_COMPILE_INCLUDES ${_qt_inc})
+			ENDIF()
+		ENDIF()
+		IF (TARGET Qt5::${_qtmod})
+			GET_TARGET_PROPERTY(_qt5_inc Qt5::${_qtmod} INTERFACE_INCLUDE_DIRECTORIES)
+			IF (_qt5_inc)
+				LIST(APPEND CONTRACT_COMPILE_INCLUDES ${_qt5_inc})
+			ENDIF()
+		ENDIF()
+	ENDFOREACH()
+	LIST(REMOVE_DUPLICATES CONTRACT_COMPILE_INCLUDES)
+
 	# Framework search dirs — macOS Homebrew Qt ships as frameworks, so the
 	# syntax-only compile needs -F<qt>/lib (QtCore/QEvent etc. don't resolve
 	# via -I alone on Apple). Harmless / empty on Linux + Windows.
