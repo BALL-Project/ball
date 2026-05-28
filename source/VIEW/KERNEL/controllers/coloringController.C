@@ -20,6 +20,7 @@
 
 
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -168,8 +169,9 @@ namespace BALL
 					// renderer always has something to invoke.
 					cp = new ColorProcessor();
 				}
-				rep_->setColorProcessor(cp);
-				rep_->setColoringMethod(new_method);
+				// §3c — Representation mutation flows through RepresentationBuilder.
+				RepresentationBuilder::setColorProcessor(*rep_, cp);
+				RepresentationBuilder::setColoringMethod(*rep_, new_method);
 			}
 
 			// Value-range parameters are live setters on the processor,

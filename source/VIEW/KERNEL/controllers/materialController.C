@@ -15,6 +15,7 @@
 
 
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -296,7 +297,8 @@ namespace BALL
 			// Working interactive-GL transparency: push the 0–255 alpha onto
 			// the Representation. MaterialController shares this Representation
 			// transparency state with the Model section so both stay consistent.
-			rep_->setTransparency(static_cast<Size>(transparency_));
+			// §3c — Representation mutation flows through RepresentationBuilder.
+			RepresentationBuilder::setTransparency(*rep_, static_cast<Size>(transparency_));
 
 			return true;
 		}

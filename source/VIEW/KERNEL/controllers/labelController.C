@@ -8,6 +8,7 @@
 
 
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/MODELS/labelModel.h>
@@ -159,8 +160,9 @@ namespace BALL
 				// Per-Representation path: write the label model onto the
 				// attached rep directly. Headless-testable (no MainControl).
 				rep_->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
-				rep_->setModelType(MODEL_LABEL);
-				rep_->setModelProcessor(buildLabelModel_(label_text_, label_type_, font_size_));
+				// §3c — Representation mutation flows through RepresentationBuilder.
+				RepresentationBuilder::setModelType(*rep_, MODEL_LABEL);
+				RepresentationBuilder::setModelProcessor(*rep_, buildLabelModel_(label_text_, label_type_, font_size_));
 				last_built_rep_ = rep_;
 				return true;
 			}
@@ -172,8 +174,9 @@ namespace BALL
 
 			Representation* rep = new Representation;
 			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
-			rep->setModelType(MODEL_LABEL);
-			rep->setModelProcessor(buildLabelModel_(label_text_, label_type_, font_size_));
+			// §3c — Representation mutation flows through RepresentationBuilder.
+			RepresentationBuilder::setModelType(*rep, MODEL_LABEL);
+			RepresentationBuilder::setModelProcessor(*rep, buildLabelModel_(label_text_, label_type_, font_size_));
 
 			// Process all objects in the selection list (mirror
 			// LabelDialog::accept lines 162-170).
@@ -183,7 +186,7 @@ namespace BALL
 			{
 				composites.push_back(*list_it);
 			}
-			rep->setComposites(composites);
+			RepresentationBuilder::setComposites(*rep, composites);
 
 			mc->insert(*rep);
 			last_built_rep_ = rep;

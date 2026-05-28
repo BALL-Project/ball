@@ -25,6 +25,7 @@
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/MODELS/modelProcessorFactory.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/timeStamp.h>
@@ -203,15 +204,16 @@ namespace BALL
 				params.cartoon_tube_radius         = cartoon_tube_radius_;
 
 				ModelProcessor* mp = ModelProcessorFactory::create(new_type, params);
+				// §3c — Representation mutation flows through RepresentationBuilder.
 				if (mp != nullptr)
 				{
-					rep_->setModelProcessor(mp);
+					RepresentationBuilder::setModelProcessor(*rep_, mp);
 				}
-				rep_->setModelType(new_type);
+				RepresentationBuilder::setModelType(*rep_, new_type);
 			}
 
-			rep_->setDrawingMode(new_mode);
-			rep_->setDrawingPrecision(new_precision);
+			RepresentationBuilder::setDrawingMode(*rep_, new_mode);
+			RepresentationBuilder::setDrawingPrecision(*rep_, new_precision);
 
 			// Surface models use a continuous precision; mirror the
 			// legacy applyModelSettings_() mapping via the public
@@ -221,10 +223,10 @@ namespace BALL
 				int idx = drawing_precision_;
 				if (idx < 0) idx = 0;
 				if (idx > 3) idx = 3;
-				rep_->setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[idx]);
+				RepresentationBuilder::setSurfaceDrawingPrecision(*rep_, SurfaceDrawingPrecisions[idx]);
 			}
 
-			rep_->setTransparency(static_cast<Size>(transparency_));
+			RepresentationBuilder::setTransparency(*rep_, static_cast<Size>(transparency_));
 
 			params_dirty_ = false;
 			return true;
