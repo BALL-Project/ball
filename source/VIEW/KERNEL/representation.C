@@ -464,8 +464,8 @@ namespace BALL
 			return prop;
 		}
 
-		void Representation::setModelProcessor(ModelProcessor* processor)
-		{ 
+		void Representation::setModelProcessor_(ModelProcessor* processor)
+		{
 			clearGeometricObjects();
 
 			if (model_processor_ != 0) delete model_processor_;
@@ -482,8 +482,8 @@ namespace BALL
 		}
 
 
-		void Representation::setColorProcessor(ColorProcessor* processor)
-		{ 
+		void Representation::setColorProcessor_(ColorProcessor* processor)
+		{
 			if (color_processor_ != 0)
 			{
 				delete color_processor_;
@@ -500,7 +500,7 @@ namespace BALL
 		}
 
 		
-		void Representation::setTransparency(Size value)
+		void Representation::setTransparency_(Size value)
 		{
 			transparency_ = value;
 			if (transparency_ > 255)
@@ -697,13 +697,13 @@ namespace BALL
 			return composite_name;
 		}
 
-		void Representation::setComposites(const list<const Composite*>& composites)
+		void Representation::setComposites_(const list<const Composite*>& composites)
 		{
 			composites_ = composites;
 			needs_update_ = true;
 		}
 
-		void Representation::setComposite(const Composite* composite)
+		void Representation::setComposite_(const Composite* composite)
 		{
 			composites_.clear();
 			composites_.push_back(composite);

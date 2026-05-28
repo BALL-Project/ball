@@ -59,6 +59,16 @@ namespace BALL
 		{
 			friend class UpdateRepresentationThread;
 			friend class RepresentationManager;
+			// ARCHITECTURE-CONTRACT.md §3c — the single builder mutation friend.
+			// RepresentationBuilder is the only legal surface for the narrowed
+			// setters; builder/file-IO call sites mutate through it. Declared
+			// INSIDE the class body for MSVC's strict friend lookup (§3b Windows).
+			friend class RepresentationBuilder;
+			// §3a render-side disposition: GLRenderer's draw-time
+			// setDrawingPrecision_ is a renderer concern, not a user mutation —
+			// granted a named per-setter friend rather than routed through the
+			// builder.
+			friend class GLRenderer;
 			public:
 
 			BALL_CREATE(Representation)
@@ -111,13 +121,7 @@ namespace BALL
 			void clear();
 
 			///
-			void setHidden(bool state) ;
-
-			///
 			bool isHidden() const;
-
-			///
-			void setDrawingPrecision(DrawingPrecision precision);
 
 			///
 			DrawingPrecision getDrawingPrecision() const;
@@ -126,20 +130,11 @@ namespace BALL
 			float getSurfaceDrawingPrecision() const;
 
 			///
-			void setSurfaceDrawingPrecision(float precision);
-
-			///
-			void setDrawingMode(DrawingMode mode);
-
-			///
 			DrawingMode getDrawingMode() const;
-			
+
 			/// get transparency (0 - 255)
 			Size getTransparency() const;
 
-			/// set transparency (0 - 255)
-			void setTransparency(Size value);
-			
 			///
 			const GeometricObjectList& getGeometricObjects() const;
 
@@ -147,7 +142,7 @@ namespace BALL
 			GeometricObjectList& getGeometricObjects();
 
 			///
-			void setGeometricObjects(GeometricObjectList& gol) 
+			void setGeometricObjects(GeometricObjectList& gol)
 				{ geometric_objects_ = gol;}
 
 			///
@@ -158,28 +153,13 @@ namespace BALL
 				{ return composites_;}
 
 			///
-			void setComposites(const std::list<const Composite*>& composites);
-
-			///
-			void setComposite(const Composite* composite);
-
-			///
 			const ModelProcessor* getModelProcessor() const;
 
 			///
 			ModelProcessor* getModelProcessor();
 
 			///
-			void setModelProcessor(ModelProcessor* processor);
-			
-			///
 			ColorProcessor* getColorProcessor();
-
-			///
-			void setColorProcessor(ColorProcessor* processor);
-
-			///
-			void setModelType(ModelType type);
 
 			///
 			ModelType getModelType() const;
@@ -192,9 +172,6 @@ namespace BALL
 
 			/// Returns a human-readable, potentially abbreviated string describing the molecular entity this representation belongs to
 			String getCompositeName() const;
-
-			///
-			void setColoringMethod(ColoringMethod type);
 
 			///
 			ColoringMethod getColoringMethod() const;
@@ -264,10 +241,52 @@ namespace BALL
 
 			//@}
 
+			private:
+
+			// ARCHITECTURE-CONTRACT.md §3c — the narrowed mutation surface.
+			// These render/build setters are reachable ONLY through the single
+			// friend RepresentationBuilder (and the named GLRenderer grant for
+			// setDrawingPrecision_). Direct external mutation no longer compiles;
+			// builder/file-IO sites construct a RepresentationBuilder bound to
+			// the representation and call its typed mutators.
+
+			//_ §3c — via RepresentationBuilder only.
+			void setHidden_(bool state);
+
+			//_ §3a render-side — via RepresentationBuilder or the GLRenderer friend.
+			void setDrawingPrecision_(DrawingPrecision precision);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setSurfaceDrawingPrecision_(float precision);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setDrawingMode_(DrawingMode mode);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setTransparency_(Size value);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setComposites_(const std::list<const Composite*>& composites);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setComposite_(const Composite* composite);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setModelProcessor_(ModelProcessor* processor);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setColorProcessor_(ColorProcessor* processor);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setModelType_(ModelType type);
+
+			//_ §3c — via RepresentationBuilder only.
+			void setColoringMethod_(ColoringMethod type);
+
 			protected:
 
 			/** Wrapper method for multithreading.
-			 		Can be called by update() directly, or by the RepresentationManager' s 
+			 		Can be called by update() directly, or by the RepresentationManager' s
 					UpdateRepresentationThread.
 			*/
 			void update_();

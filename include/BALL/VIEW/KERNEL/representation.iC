@@ -4,9 +4,9 @@ const PreciseTime& Representation::getModelBuildTime() const
 	return model_build_time_;
 }
 
-BALL_INLINE 
-void Representation::setModelType(ModelType type)
-{ 
+BALL_INLINE
+void Representation::setModelType_(ModelType type)
+{
 	model_type_ = type;
 }
 
@@ -16,9 +16,9 @@ ModelType  Representation::getModelType() const
 	return model_type_;
 }
 
-BALL_INLINE 
-void Representation::setColoringMethod(ColoringMethod type)
-{ 
+BALL_INLINE
+void Representation::setColoringMethod_(ColoringMethod type)
+{
 	coloring_method_= type;
 }
 
@@ -52,8 +52,8 @@ ColorProcessor* Representation::getColorProcessor()
 	return color_processor_;
 }
 
-BALL_INLINE 
-void Representation::setHidden(bool state) 
+BALL_INLINE
+void Representation::setHidden_(bool state)
 {
 	hidden_ = state;
 }
@@ -76,14 +76,14 @@ float Representation::getSurfaceDrawingPrecision() const
 	return surface_drawing_precision_;
 }
 
-BALL_INLINE 
-void Representation::setDrawingMode(DrawingMode mode)
+BALL_INLINE
+void Representation::setDrawingMode_(DrawingMode mode)
 {
 	drawing_mode_ = mode;
 }
 
-BALL_INLINE 
-void Representation::setDrawingPrecision(DrawingPrecision precision)
+BALL_INLINE
+void Representation::setDrawingPrecision_(DrawingPrecision precision)
 {
 	drawing_precision_ = precision;
 	if (model_processor_ != 0) 
@@ -92,8 +92,8 @@ void Representation::setDrawingPrecision(DrawingPrecision precision)
 	}
 }
 
-BALL_INLINE 
-void Representation::setSurfaceDrawingPrecision(float precision)
+BALL_INLINE
+void Representation::setSurfaceDrawingPrecision_(float precision)
 {
 	if (precision < 0.1)
 	{

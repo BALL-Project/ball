@@ -38,23 +38,23 @@ namespace BALL
 				// (999.57). The params carried by the spec mirror exactly the mapping the
 				// legacy ModelSettingsDialog::createModelProcessor used, so the rendered
 				// model is byte-identical.
-				rep.setModelProcessor(ModelProcessorFactory::create(spec.model_type, spec.model_params));
-				rep.setModelType(spec.model_type);
+				rep.setModelProcessor_(ModelProcessorFactory::create(spec.model_type, spec.model_params));
+				rep.setModelType_(spec.model_type);
 			}
 
-			rep.setDrawingMode(spec.drawing_mode);
+			rep.setDrawingMode_(spec.drawing_mode);
 
 			if (spec.use_custom_surface_precision)
 			{
-				rep.setSurfaceDrawingPrecision(spec.surface_drawing_precision);
+				rep.setSurfaceDrawingPrecision_(spec.surface_drawing_precision);
 			}
 			else
 			{
-				rep.setDrawingPrecision(spec.drawing_precision);
+				rep.setDrawingPrecision_(spec.drawing_precision);
 
 				if (model_information.isSurfaceModel(spec.model_type))
 				{
-					rep.setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[spec.drawing_precision]);
+					rep.setSurfaceDrawingPrecision_(SurfaceDrawingPrecisions[spec.drawing_precision]);
 				}
 			}
 

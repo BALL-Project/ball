@@ -351,19 +351,10 @@ namespace BALL
 			virtual const Camera& getCamera() const
 				{ return camera_;}
 
-			/** Set the camera of the stage
-			 */
-			virtual void setCamera(const Camera& camera)
-				{ camera_ = camera;}
-
 			/// Get the background color
 			virtual const ColorRGBA& getBackgroundColor() const
 				{ return background_color_;}
 
-			/// Set the background color
-			virtual void setBackgroundColor(const ColorRGBA& color)
-				{ background_color_ = color;}
-			
 			/// Get the background color
 			virtual const ColorRGBA& getInfoColor() const
 				{ return info_color_;}
@@ -380,17 +371,9 @@ namespace BALL
 			bool coordinateSystemEnabled() const
 				{ return show_coordinate_system_;}
 
-			/// Set the eye distance for the stereo view
-			void setEyeDistance(float value) 
-				{ eye_distance_ = value;}
-
 			/// Get the eye distance for the stereo view
 			float getEyeDistance() const
 				{ return eye_distance_;}
-				
-			/// Set the focal distance for the stereo view
-			void setFocalDistance(float value) 
-				{ focal_distance_ = value;}
 
 			/// Get the focal distance for the stereo view
 			float getFocalDistance() const
@@ -407,10 +390,6 @@ namespace BALL
 			///
 			float getFogIntensity() const
 				{ return fog_intensity_;}
-
-			///
-			void setFogIntensity(float value)
-				{ fog_intensity_ = value;}
 
 			//@}
 			/**	@name Predicates
@@ -449,6 +428,38 @@ namespace BALL
 
 			/// Gives access to the default material parameters, const version
 			const Material& getMaterial() const { return material_; }
+
+			private:
+
+			// ARCHITECTURE-CONTRACT.md §3b — the narrowed mutation surface.
+			// These setters are reachable ONLY through the single friend
+			// StageMutation; direct external mutation no longer compiles.
+			// setCamera_/setBackgroundColor_ stay virtual (subclass override
+			// points preserved). The friend is declared INSIDE the class
+			// definition for MSVC's strict friend lookup (§3b Windows note).
+
+			//_ Set the camera of the stage (§3b; via StageMutation only).
+			virtual void setCamera_(const Camera& camera)
+				{ camera_ = camera;}
+
+			//_ Set the background color (§3b; via StageMutation only).
+			virtual void setBackgroundColor_(const ColorRGBA& color)
+				{ background_color_ = color;}
+
+			//_ Set the stereo eye distance (§3b; via StageMutation only).
+			void setEyeDistance_(float value)
+				{ eye_distance_ = value;}
+
+			//_ Set the stereo focal distance (§3b; via StageMutation only).
+			void setFocalDistance_(float value)
+				{ focal_distance_ = value;}
+
+			//_ Set the fog intensity (§3b; via StageMutation only).
+			void setFogIntensity_(float value)
+				{ fog_intensity_ = value;}
+
+			//_ THE single owner-side mutation friend (§3b — one friend, not five).
+			friend class StageMutation;
 
 			protected:
 
