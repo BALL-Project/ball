@@ -3,6 +3,7 @@
 //
 
 #include <BALL/VIEW/KERNEL/representationManager.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/KERNEL/threads.h>
@@ -217,7 +218,8 @@ RepresentationList RepresentationManager::removedComposite(const Composite& comp
 		}
 	
 
-		rep.setComposites(composites);
+		// §3c — builder/management site: mutate through the RepresentationBuilder friend.
+		RepresentationBuilder::setComposites(rep, composites);
 
 		// if we have no more Composites in the Representation, it is to be deleted
 		if (rep.getComposites().size() == 0) 

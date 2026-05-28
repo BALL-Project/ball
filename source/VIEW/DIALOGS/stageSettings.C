@@ -5,6 +5,7 @@
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/stageMutation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
 #include <BALL/VIEW/RENDERING/renderSetup.h>
@@ -157,8 +158,10 @@ namespace BALL
 
 			float eye_separation = real2intern * getUserEyeDistance_();
 			
-			stage_->setEyeDistance(eye_separation);
-			stage_->setFocalDistance(focal_distance);
+			// §3b — Stage mutation flows through the single StageMutation friend.
+			StageMutation(*stage_)
+				.eyeDistance(eye_separation)
+				.focalDistance(focal_distance);
 			eye_distance_slider->setValue((int) ((eye_separation) * 10.));
 			focal_distance_slider->setValue((int) ((focal_distance) * 10.));
 			eyeDistanceChanged();
@@ -233,14 +236,16 @@ namespace BALL
 		void StageSettings::apply()
 		{
 			if (stage_ == 0) return;
-			stage_->setBackgroundColor(color_button->getColor());
+			// §3b — Stage mutation flows through the single StageMutation friend.
+			StageMutation(*stage_).backgroundColor(color_button->getColor());
 
 			auto& mode_manager = Scene::getInstance(0)->getInteractionModeManager();
 			mode_manager.setMouseSensitivity(slider_->value() + 1);
 			mode_manager.setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
-			stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
-			stage_->setFocalDistance((float)(focal_distance_slider->value() / 10.));
+			StageMutation(*stage_)
+				.eyeDistance((float)(eye_distance_slider->value() / 10.0))
+				.focalDistance((float)(focal_distance_slider->value() / 10.));
 			
 			//TODO integration of textures
 			//if (environement_map->isChecked())
@@ -255,11 +260,11 @@ namespace BALL
 
 			if (fog_box->isChecked())
 			{
-				stage_->setFogIntensity(fog_slider->value());
+				StageMutation(*stage_).fogIntensity(fog_slider->value());
 			}
 			else
 			{
-				stage_->setFogIntensity(0);
+				StageMutation(*stage_).fogIntensity(0);
 			}
 
 			Camera::ProjectionMode projection_mode = radioButton_perspectiveProjection->isChecked() ? Camera::PERSPECTIVE

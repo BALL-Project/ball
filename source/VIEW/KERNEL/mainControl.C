@@ -8,6 +8,7 @@
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/stageMutation.h>
 #include <BALL/VIEW/KERNEL/modelInformation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/theme/iconRegistry.h>  // Phase 999.42: Icons::get façade
@@ -2197,7 +2198,8 @@ namespace BALL
 				setStatusbarText((String)tr("Could not read Camera position from project."), true);
 				return;
 			}
-			stage.setCamera(c);
+			// §3b — Stage mutation flows through the single StageMutation friend.
+			StageMutation(stage).camera(c);
 			SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 			msg->setStage(stage);
 			notify_(msg);

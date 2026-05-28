@@ -3,6 +3,7 @@
 //
 
 #include <BALL/VIEW/DIALOGS/exportGeometryDialog.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -127,7 +128,8 @@ void ExportGeometryDialog::accept()
 		if(!((*rit)->isHidden()))
 		{
 			basestats[count]=true;
-			(*rit)->setHidden(true);
+			// §3c — export-time visibility via the RepresentationBuilder friend.
+			RepresentationBuilder::setHidden(**rit, true);
 		}
 		else
 		{
