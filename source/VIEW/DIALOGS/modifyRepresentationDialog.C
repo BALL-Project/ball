@@ -3,6 +3,7 @@
 //
 
 #include <BALL/VIEW/DIALOGS/modifyRepresentationDialog.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -293,14 +294,15 @@ namespace BALL
 			QColor qcolor = pal.color(custom_color_label->backgroundRole());
 			ColorRGBA col(qcolor);
 
+			// §3c — legacy modify dialog mutates the rep through the RepresentationBuilder friend.
 			if (transparency_slider->value() == 0)
 			{
 				col.setAlpha(255);
-				rep_->setTransparency(0);
+				RepresentationBuilder::setTransparency(*rep_, 0);
 			}
 			else
 			{
-				rep_->setTransparency((Size)((float)transparency_slider->value() * 2.55));
+				RepresentationBuilder::setTransparency(*rep_, (Size)((float)transparency_slider->value() * 2.55));
 				col.setAlpha(255 - rep_->getTransparency());
 			}
 
@@ -312,8 +314,8 @@ namespace BALL
 				if (   (rep_->getColorProcessor() == 0) 
                         || (!RTTI::isKindOf<CustomColorProcessor>((rep_->getColorProcessor()))))
 				{
-					rep_->setColorProcessor(new CustomColorProcessor);
-					rep_->setColoringMethod(COLORING_CUSTOM);
+					RepresentationBuilder::setColorProcessor(*rep_, new CustomColorProcessor);
+					RepresentationBuilder::setColoringMethod(*rep_, COLORING_CUSTOM);
 					rep_->getColorProcessor()->createAtomGrid();
 				}
 				ColorProcessor* cp = rep_->getColorProcessor();
@@ -325,10 +327,10 @@ namespace BALL
 
 				// if the current representation already has a coloring processor we won't 
 				// change it; we only want to color a certain selected patch
-				if (rep_->getColorProcessor() == 0) 
+				if (rep_->getColorProcessor() == 0)
 				{
-					rep_->setColorProcessor(new CustomColorProcessor);
-					rep_->setColoringMethod(COLORING_CUSTOM);
+					RepresentationBuilder::setColorProcessor(*rep_, new CustomColorProcessor);
+					RepresentationBuilder::setColoringMethod(*rep_, COLORING_CUSTOM);
 					rep_->getColorProcessor()->createAtomGrid();
 				}
 				BALL_SELECTED_COLOR = col;
@@ -344,7 +346,7 @@ namespace BALL
 			}
 
 			ColorByGridProcessor* grid_processor = new ColorByGridProcessor(grid_, gridColorWidget);
-			rep_->setColorProcessor(grid_processor);
+			RepresentationBuilder::setColorProcessor(*rep_, grid_processor);
 
 			return true;
 		}
@@ -507,9 +509,10 @@ namespace BALL
 
 			// create a new representation with the subset of the original mesh
 			Representation* new_rep = (Representation*) rep_->create();
-			new_rep->setComposites(rep_->getComposites());
-			new_rep->setModelType(rep_->getModelType());
-			new_rep->setColoringMethod(rep_->getColoringMethod());
+			// §3c — builder site: mutate the new rep through the RepresentationBuilder friend.
+			RepresentationBuilder::setComposites(*new_rep, rep_->getComposites());
+			RepresentationBuilder::setModelType(*new_rep, rep_->getModelType());
+			RepresentationBuilder::setColoringMethod(*new_rep, rep_->getColoringMethod());
 			new_rep->enableModelUpdate(false);
 
 			new_rep->clearGeometricObjects();
@@ -517,7 +520,7 @@ namespace BALL
 			// make sure we have a colorProcessor
 			if (rep_->getColorProcessor() == 0)
 			{
-				new_rep->setColorProcessor(new ColorProcessor());
+				RepresentationBuilder::setColorProcessor(*new_rep, new ColorProcessor());
 				new_rep->enableColoringUpdate(false);
 				rep_->enableColoringUpdate(false);
 			}
@@ -817,11 +820,12 @@ namespace BALL
 		{
 			if (rep_ == 0) return;
 
-			rep_->setDrawingMode((DrawingMode)mode_combobox->currentIndex());
+			// §3c — legacy modify dialog mutates the rep through the RepresentationBuilder friend.
+			RepresentationBuilder::setDrawingMode(*rep_, (DrawingMode)mode_combobox->currentIndex());
 
 			Size transparency = (Size)((float)transparency_slider_2->value() * 2.55);
 
-			rep_->setTransparency(transparency);
+			RepresentationBuilder::setTransparency(*rep_, transparency);
 
 			/*
 			GeometricObjectList::iterator it = rep_->getGeometricObjects().begin();
