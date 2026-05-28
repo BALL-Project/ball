@@ -3,6 +3,7 @@
 //
 
 #include <BALL/VIEW/DIALOGS/gridVisualizationDialog.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -233,15 +234,16 @@ namespace BALL
 
 			Representation* rep = new Representation;
 			rep->insert(vol);
-			rep->setTransparency(trans);
-			rep->setModelType(MODEL_GRID_VOLUME);
+			// §3c — builder site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setTransparency(*rep, trans);
+			RepresentationBuilder::setModelType(*rep, MODEL_GRID_VOLUME);
 
 			if (mode_box->currentIndex() == 0)
 			{
-				vol.type = GridVisualisation::PLANE; 
+				vol.type = GridVisualisation::PLANE;
 				Vector3 point = origin + (vol.x + vol.y + vol.z) / 2.0;
 				vol.setPoint(point);
-				rep->setModelType(MODEL_GRID_SLICE);
+				RepresentationBuilder::setModelType(*rep, MODEL_GRID_SLICE);
   			rep->setProperty("RENDER_DIRECT");
 				Vector3 normal = Scene::getInstance(0)->getStage()->getCamera().getViewVector();
 		    normal.normalize();

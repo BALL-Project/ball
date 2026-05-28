@@ -10,6 +10,7 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
 #include <BALL/VIEW/MODELS/labelModel.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
@@ -144,7 +145,8 @@ namespace BALL
 
 			Representation* rep = new Representation;
 			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
-			rep->setModelType(MODEL_LABEL);
+			// §3c — builder site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setModelType(*rep, MODEL_LABEL);
 
 			LabelModel* model = new LabelModel;
 			model->setText(ascii(text_box->currentText()));
@@ -156,7 +158,7 @@ namespace BALL
 			else if (every_residue->isChecked()) model->setMode(LabelModel::ALL_RESIDUES);
 			else if (	  every_item->isChecked()) model->setMode(LabelModel::ALL_ITEMS);
 
-			rep->setModelProcessor(model);
+			RepresentationBuilder::setModelProcessor(*rep, model);
 
 			// process all objects in the selection list
 			list<Composite*>::const_iterator list_it = selection.begin();
@@ -167,7 +169,7 @@ namespace BALL
 				composites.push_back(*list_it);
 			}
 
-			rep->setComposites(composites);
+			RepresentationBuilder::setComposites(*rep, composites);
 
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);
