@@ -8,6 +8,7 @@
 
 
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/stageMutation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/representationManager.h>
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -296,12 +297,14 @@ namespace BALL
 			// 0..1 (ColorUnit) conversion + alpha.
 			ColorRGBA c;
 			c.set(background_color_);
-			stage_->setBackgroundColor(c);
+			// §3b — Stage mutation flows through the single StageMutation friend.
+			StageMutation(*stage_)
+				.backgroundColor(c)
+				.fogIntensity(fog_intensity_)
+				.eyeDistance(eye_distance_)
+				.focalDistance(focal_distance_);
 
 			stage_->showCoordinateSystem(show_coordinate_system_);
-			stage_->setFogIntensity(fog_intensity_);
-			stage_->setEyeDistance(eye_distance_);
-			stage_->setFocalDistance(focal_distance_);
 
 			// Mouse / wheel sensitivity: push only when explicitly set
 			// (sentinel < 0 means "unset" — leave the live value untouched so

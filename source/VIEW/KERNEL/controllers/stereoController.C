@@ -20,6 +20,7 @@
 
 
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/stageMutation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/controllers/controllerApplyGuard.h>
@@ -135,8 +136,10 @@ namespace BALL
 		{
 			// §13 cookbook step 2 — mutation body, moved out of apply().
 			// Precondition (stage_ != nullptr) guaranteed by apply().
-			stage_->setEyeDistance(eye_distance_);
-			stage_->setFocalDistance(focal_distance_);
+			// §3b — Stage mutation flows through the single StageMutation friend.
+			StageMutation(*stage_)
+				.eyeDistance(eye_distance_)
+				.focalDistance(focal_distance_);
 			stage_->setSwapSideBySideStereo(swap_sbs_);
 			return true;
 		}
