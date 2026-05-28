@@ -42,6 +42,8 @@ namespace BALL
 		class MainControl;
 		class ModelInformation;
 		class Message;
+		class ModelProcessor;
+		class ColorProcessor;
 
 		/** Plain-data specification for RepresentationBuilder::createRepresentation.
 
@@ -270,6 +272,57 @@ namespace BALL
 			static bool parseDataString(const String& data_string,
 																	ParsedRepresentation& out,
 																	const ModelInformation& model_information);
+
+			/** @name Owner-narrowing mutation surface (ARCHITECTURE-CONTRACT.md §3c)
+
+					RepresentationBuilder is the SINGLE builder friend of Representation;
+					its private setters (setX_) are reachable only here. The builder/file-IO
+					call sites enumerated in §3a (gridVisualizationDialog, labelDialog,
+					standardDatasets, geometricControl, displayProperties residual,
+					molecularControl, fieldLineCreator, scene.C raytracer-material, plus the
+					RepresentationManager / scene picking-rep construction paths and the
+					ModelController/ColoringController/MaterialController/LabelController
+					owner-mutation steps) call these thin static forwarders rather than the
+					now-private Representation setters directly. Each forwards verbatim to
+					the matching private Representation::setX_(), so behaviour is unchanged —
+					the only change is that the mutation now flows through the one legal
+					friend instead of a public setter. */
+			//@{
+
+			/// §3c — forward to the private Representation::setModelType_.
+			static void setModelType(Representation& rep, ModelType type);
+
+			/// §3c — forward to the private Representation::setColoringMethod_.
+			static void setColoringMethod(Representation& rep, ColoringMethod method);
+
+			/// §3c — forward to the private Representation::setDrawingMode_.
+			static void setDrawingMode(Representation& rep, DrawingMode mode);
+
+			/// §3c — forward to the private Representation::setDrawingPrecision_.
+			static void setDrawingPrecision(Representation& rep, DrawingPrecision precision);
+
+			/// §3c — forward to the private Representation::setSurfaceDrawingPrecision_.
+			static void setSurfaceDrawingPrecision(Representation& rep, float precision);
+
+			/// §3c — forward to the private Representation::setTransparency_.
+			static void setTransparency(Representation& rep, Size value);
+
+			/// §3c — forward to the private Representation::setModelProcessor_.
+			static void setModelProcessor(Representation& rep, ModelProcessor* processor);
+
+			/// §3c — forward to the private Representation::setColorProcessor_.
+			static void setColorProcessor(Representation& rep, ColorProcessor* processor);
+
+			/// §3c — forward to the private Representation::setComposites_.
+			static void setComposites(Representation& rep, const std::list<const Composite*>& composites);
+
+			/// §3c — forward to the private Representation::setComposite_.
+			static void setComposite(Representation& rep, const Composite* composite);
+
+			/// §3c — forward to the private Representation::setHidden_.
+			static void setHidden(Representation& rep, bool state);
+
+			//@}
 		};
 
 	} // namespace VIEW

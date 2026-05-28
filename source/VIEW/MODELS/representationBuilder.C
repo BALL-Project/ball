@@ -82,16 +82,16 @@ namespace BALL
 				// Construct the color processor through the headless ColorProcessorFactory
 				// (999.57). The overrides carried by the spec are the exact set the legacy
 				// dialog packed, so the rendered colors are byte-identical.
-				rep.setColorProcessor(
+				rep.setColorProcessor_(
 					ColorProcessorFactory::create(spec.coloring_method, spec.coloring_overrides));
-				rep.setColoringMethod(spec.coloring_method);
+				rep.setColoringMethod_(spec.coloring_method);
 			}
 
 			Size transparency = spec.transparency;
 			ColorRGBA custom_color = spec.custom_color;
 			// custom_color alpha = 255 - transparency (legacy DIALOGS engine line 542).
 			custom_color.setAlpha((unsigned char)(255 - transparency));
-			rep.setTransparency(transparency);
+			rep.setTransparency_(transparency);
 
 			ColorProcessor* cp = rep.getColorProcessor();
 
@@ -152,8 +152,8 @@ namespace BALL
 			{
 				temp_composites.push_back(*it);
 			}
-			rep->setComposites(temp_composites);
-			if (hidden) rep->setHidden(true);
+			rep->setComposites_(temp_composites);
+			if (hidden) rep->setHidden_(true);
 
 			// this is not straight forward, but we have to prevent a second rendering run
 			// in the Scene... the insertion into the RepresentationManager is needed to
@@ -287,6 +287,67 @@ namespace BALL
 			}
 
 			return false;
+		}
+
+		// ARCHITECTURE-CONTRACT.md §3c — owner-narrowing mutation forwarders.
+		// RepresentationBuilder is the single builder friend of Representation, so
+		// these are the only translation point that can reach the private setX_().
+		// Each forwards verbatim to the matching private setter; behaviour is
+		// unchanged — the narrowing is purely about who is allowed to call them.
+
+		void RepresentationBuilder::setModelType(Representation& rep, ModelType type)
+		{
+			rep.setModelType_(type);
+		}
+
+		void RepresentationBuilder::setColoringMethod(Representation& rep, ColoringMethod method)
+		{
+			rep.setColoringMethod_(method);
+		}
+
+		void RepresentationBuilder::setDrawingMode(Representation& rep, DrawingMode mode)
+		{
+			rep.setDrawingMode_(mode);
+		}
+
+		void RepresentationBuilder::setDrawingPrecision(Representation& rep, DrawingPrecision precision)
+		{
+			rep.setDrawingPrecision_(precision);
+		}
+
+		void RepresentationBuilder::setSurfaceDrawingPrecision(Representation& rep, float precision)
+		{
+			rep.setSurfaceDrawingPrecision_(precision);
+		}
+
+		void RepresentationBuilder::setTransparency(Representation& rep, Size value)
+		{
+			rep.setTransparency_(value);
+		}
+
+		void RepresentationBuilder::setModelProcessor(Representation& rep, ModelProcessor* processor)
+		{
+			rep.setModelProcessor_(processor);
+		}
+
+		void RepresentationBuilder::setColorProcessor(Representation& rep, ColorProcessor* processor)
+		{
+			rep.setColorProcessor_(processor);
+		}
+
+		void RepresentationBuilder::setComposites(Representation& rep, const std::list<const Composite*>& composites)
+		{
+			rep.setComposites_(composites);
+		}
+
+		void RepresentationBuilder::setComposite(Representation& rep, const Composite* composite)
+		{
+			rep.setComposite_(composite);
+		}
+
+		void RepresentationBuilder::setHidden(Representation& rep, bool state)
+		{
+			rep.setHidden_(state);
 		}
 
 	} // namespace VIEW
