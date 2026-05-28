@@ -12,6 +12,8 @@
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/stageMutation.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 // 999.58-01 — Material/Light render-refresh now routes through the Inspector
 // controllers instead of the legacy MaterialSettings/LightSettings dialog
 // apply()/updateFromStage() bodies. The dialogs are still constructed (Plan 03
@@ -910,7 +912,8 @@ namespace BALL
 			RepresentationManager& pm = getMainControl()->getRepresentationManager();
 
 			Representation* rp = pm.createRepresentation();
-			rp->setTransparency(90);
+			// §3c — builder site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setTransparency(*rp, 90);
 
 			const Camera& s = getStage()->getCamera();
 
@@ -1004,8 +1007,8 @@ namespace BALL
 				}
 			}
 
-			rp->setModelType(MODEL_COORDINATE_SYSTEM);
-			rp->setColoringMethod(COLORING_CUSTOM);
+			RepresentationBuilder::setModelType(*rp, MODEL_COORDINATE_SYSTEM);
+			RepresentationBuilder::setColoringMethod(*rp, COLORING_CUSTOM);
 
 			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
 
@@ -2201,7 +2204,8 @@ namespace BALL
 					if(checked[count])
 					{
 						//show one, print all (meaning just the one)
-						(*rit)->setHidden(false);
+						// §3c — export-time visibility via the RepresentationBuilder friend.
+						RepresentationBuilder::setHidden(**rit, false);
 
 						QString vtemp = filename;
 
@@ -2216,7 +2220,7 @@ namespace BALL
 						}
 
 						//hide again (for all other reps)
-						(*rit)->setHidden(true);
+						RepresentationBuilder::setHidden(**rit, true);
 						partCounter++;
 					}
 					count++;
@@ -2233,7 +2237,7 @@ namespace BALL
 				{
 					if(checked[count])
 					{
-						(*rit)->setHidden(false);
+						RepresentationBuilder::setHidden(**rit, false);
 					}
 					count++;
 				}
@@ -2264,11 +2268,11 @@ namespace BALL
 				{
 					if(base[count])
 					{
-						(*rit)->setHidden(false);
+						RepresentationBuilder::setHidden(**rit, false);
 					}
 					else
 					{
-						(*rit)->setHidden(true);
+						RepresentationBuilder::setHidden(**rit, true);
 					}
 					count ++;
 				}
@@ -3275,8 +3279,10 @@ namespace BALL
 
 			float eye_separation = real2intern * user_eye_distance;
 
-			stage_->setEyeDistance(eye_separation);
-			stage_->setFocalDistance(focal_distance);
+			// §3b — Stage mutation flows through the single StageMutation friend.
+			StageMutation(*stage_)
+				.eyeDistance(eye_separation)
+				.focalDistance(focal_distance);
 
 			setDownsamplingFactor(downsampling_factor_);
 		}
@@ -3323,7 +3329,8 @@ namespace BALL
 
 						SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 						Stage stage(*getStage());
-						stage.setCamera(camera);
+						// §3b — Stage mutation flows through the single StageMutation friend.
+						StageMutation(stage).camera(camera);
 						msg->setStage(stage);
 						qApp->postEvent(getMainControl(), new MessageEvent(msg));
 
