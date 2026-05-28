@@ -29,6 +29,7 @@
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/MODELS/modelProcessorFactory.h>
 #include <BALL/VIEW/MODELS/colorProcessorFactory.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
@@ -577,23 +578,24 @@ void DisplayProperties::applyModelSettings_(Representation& rep)
 		params.force_offset                         = model_settings_->getForceOffset();
 		params.force_base                           = model_settings_->getForceBase();
 
-		rep.setModelProcessor(ModelProcessorFactory::create(current_type, params));
-		rep.setModelType((ModelType)model_type_combobox->currentIndex());
+		// §3c — builder/file-IO site: mutate through the RepresentationBuilder friend.
+		RepresentationBuilder::setModelProcessor(rep, ModelProcessorFactory::create(current_type, params));
+		RepresentationBuilder::setModelType(rep, (ModelType)model_type_combobox->currentIndex());
 	}
 
-	rep.setDrawingMode((DrawingMode)mode_combobox->currentIndex());
+	RepresentationBuilder::setDrawingMode(rep, (DrawingMode)mode_combobox->currentIndex());
 
 	if (custom_precision_button->isChecked())
 	{
-		rep.setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
+		RepresentationBuilder::setSurfaceDrawingPrecision(rep, ((float)precision_slider->value()) / 10.0);
 	}
 	else
 	{
-		rep.setDrawingPrecision((DrawingPrecision) precision_combobox->currentIndex());
+		RepresentationBuilder::setDrawingPrecision(rep, (DrawingPrecision) precision_combobox->currentIndex());
 
 		if (model_information_->isSurfaceModel(current_type))
 		{
-			rep.setSurfaceDrawingPrecision(SurfaceDrawingPrecisions[precision_combobox->currentIndex()]);
+			RepresentationBuilder::setSurfaceDrawingPrecision(rep, SurfaceDrawingPrecisions[precision_combobox->currentIndex()]);
 		}
 	}
 
@@ -626,20 +628,21 @@ void DisplayProperties::applyColoringSettings_(Representation& rep)
 			// the legacy dialog's createColorProcessor. The overrides built
 			// here are the exact same set the dialog packs, so the rendered
 			// colors are byte-identical.
-			rep.setColorProcessor(
+			// §3c — builder/file-IO site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setColorProcessor(rep,
 				ColorProcessorFactory::create(current_coloring, coloring_settings_->buildColoringOverrides()));
 		}
 		else
 		{
-			rep.setColorProcessor(new ColorProcessor());
+			RepresentationBuilder::setColorProcessor(rep, new ColorProcessor());
 		}
-		rep.setColoringMethod(current_coloring);
+		RepresentationBuilder::setColoringMethod(rep, current_coloring);
 	}
 
 	Size transparency = transparency_slider->value();
 	QColor custom_color = custom_color_button->getColor();
 	custom_color.setAlpha(255 - transparency);
-	rep.setTransparency(transparency);
+	RepresentationBuilder::setTransparency(rep, transparency);
 
 	ColorProcessor* cp = rep.getColorProcessor();
 	// Phase 999.57 Plan 03: applySettingsTo is KEPT (not removed as
@@ -682,8 +685,9 @@ Representation* DisplayProperties::createRepresentation(const list<Composite*>& 
 	{
 		temp_composites.push_back(*it);
 	}
-	rep_->setComposites(temp_composites);
-	if (hidden) rep_->setHidden(true);
+	// §3c — builder/file-IO site: mutate through the RepresentationBuilder friend.
+	RepresentationBuilder::setComposites(*rep_, temp_composites);
+	if (hidden) RepresentationBuilder::setHidden(*rep_, true);
 
 	// this is not straight forward, but we have to prevent a second rendering run in the Scene...
 	// the insertion into the RepresentationManager is needed to allow the Representation::update
