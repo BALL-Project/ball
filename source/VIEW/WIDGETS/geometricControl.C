@@ -11,6 +11,7 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/clippingPlane.h>
@@ -371,7 +372,8 @@ namespace BALL
 		{
 			if (state != representation.isHidden()) return;
 
-			representation.setHidden(!state);
+			// §3c — builder/control site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setHidden(representation, !state);
 			if (!representation.isHidden())
 			{
 				representation.update(false);
@@ -920,7 +922,8 @@ namespace BALL
 			}
 //   			rep->setComposites(ccl);
 			rep->insert(*mesh);
-			rep->setModelType(MODEL_SE_SURFACE);
+			// §3c — builder site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setModelType(*rep, MODEL_SE_SURFACE);
 			mesh->binaryRead(result);
 			getMainControl()->insert(*rep);
 			getMainControl()->update(*rep);

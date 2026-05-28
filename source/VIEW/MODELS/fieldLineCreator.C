@@ -4,6 +4,7 @@
 // $Id: fieldLineCreator.C,v 1.1.4.2 2007/04/11 11:55:53 amoll Exp $
 
 #include <BALL/VIEW/MODELS/fieldLineCreator.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/atom.h>
 
@@ -82,7 +83,8 @@ namespace BALL
 			}
 
 			Representation* rep = new Representation();
-			rep->setModelType(MODEL_FIELD_LINES);
+			// §3c — builder site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setModelType(*rep, MODEL_FIELD_LINES);
 
 			if (use_atoms_)
 			{

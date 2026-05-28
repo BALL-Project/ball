@@ -3,6 +3,7 @@
 //
 
 #include <BALL/VIEW/DATATYPE/standardDatasets.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -624,11 +625,12 @@ namespace BALL
 			// Create a new representation containing the contour surface.
 			Representation* rep = new Representation();
 			rep->insert(*mesh);
-			rep->setModelType(MODEL_CONTOUR_SURFACE); 
+			// §3c — builder site: mutate through the RepresentationBuilder friend.
+			RepresentationBuilder::setModelType(*rep, MODEL_CONTOUR_SURFACE);
 
 			list<const Composite*> composites;
 			if (data.getComposite() != 0) composites.push_back(data.getComposite());
-			rep->setComposites(composites);
+			RepresentationBuilder::setComposites(*rep, composites);
 
 			// Make sure BALLView knows about the new representation.
 			getMainControl()->insert(*rep);
