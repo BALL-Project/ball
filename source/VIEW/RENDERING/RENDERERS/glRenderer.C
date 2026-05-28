@@ -781,7 +781,9 @@ namespace BALL
 						repr.getModelType() <= MODEL_VDW &&
 						pm.startRendering(rep))
 				{
-					rep->setDrawingPrecision(DRAWING_PRECISION_LOW);
+					// §3a render-side: GLRenderer is the named per-setter friend, so
+					// the draw-time precision tweak reaches the private setter directly.
+					rep->setDrawingPrecision_(DRAWING_PRECISION_LOW);
 					mode = DIRECT_RENDERING;
 				}
 			}
@@ -829,7 +831,8 @@ namespace BALL
 					if (repr.getDrawingPrecision() != pbak)
 					{
 						// if previewing mode was used: reset the drawing precision
-						(*(Representation*)&repr).setDrawingPrecision(pbak);
+						// §3a render-side: GLRenderer named friend reaches the private setter.
+						(*(Representation*)&repr).setDrawingPrecision_(pbak);
 					}
 				}
 			}
