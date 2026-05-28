@@ -6,6 +6,8 @@
 #include "mainframe.h"
 
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/stageMutation.h>
+#include <BALL/VIEW/MODELS/representationBuilder.h>
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -106,7 +108,8 @@ void DemoTutorialDialog::initDemo_()
 	ColorRGBA color(0, 0, 0, 255);
 	Stage* stage = Scene::getInstance(0)->getStage();
 		
-	stage->setBackgroundColor(color);
+	// §3b — Stage mutation flows through the single StageMutation friend.
+	StageMutation(*stage).backgroundColor(color);
 	// 999.58-03 — the legacy stage_settings->updateFromStage() / LightSettings
 	// updateFromStage() dialog-widget refreshes are dropped: Scene no longer owns
 	// those dialogs. The Stage mutations below + applyPreferences() (which now
@@ -167,7 +170,8 @@ void DemoTutorialDialog::initTutorials_()
 	ColorRGBA color(0, 0, 0, 255);
 	Stage* stage = Scene::getInstance(0)->getStage();
 		
-	stage->setBackgroundColor(color);
+	// §3b — Stage mutation flows through the single StageMutation friend.
+	StageMutation(*stage).backgroundColor(color);
 
 	// 999.58-03 — dialog-widget refresh calls dropped (Scene no longer owns the
 	// stage/light dialogs); the Stage mutations below are the live render effect.
@@ -364,7 +368,8 @@ void DemoTutorialDialog::nextStepClicked()
 			{
 				// prepare the background for the next step
 				ColorRGBA color(255, 255, 255, 255); // white
-				Scene::getInstance(0)->getStage()->setBackgroundColor(color);
+				// §3b — Stage mutation flows through the single StageMutation friend.
+				StageMutation(*Scene::getInstance(0)->getStage()).backgroundColor(color);
 				// 999.58-03 — dialog-widget refresh dropped; applyPreferences() applies
 				// the live Stage background through the Inspector StageController.
 				Scene::getInstance(0)->applyPreferences();
@@ -724,7 +729,8 @@ void DemoTutorialDialog::nextStepDemo_()
 	{
 		// Create a new representation containing the contour surface.
 		Representation* rep = getMainControl()->getRepresentationManager().createRepresentation();
-		rep->setModelType(MODEL_SE_SURFACE); 
+		// §3c — Representation mutation flows through RepresentationBuilder.
+		RepresentationBuilder::setModelType(*rep, MODEL_SE_SURFACE);
 		rep->insert(*new Mesh(*surface_));
 		getMainControl()->insert(*rep);
 
