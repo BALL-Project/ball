@@ -55,6 +55,17 @@ Transparent to non-GUI `libBALL`/`libVIEW` consumers: same APIs, same SONAMEs.
 - Opaque-paint lint found + fixed a real flicker gap in the bottom log drawer.
 - Verified green on all 4 platforms (linux-x64/arm64, windows-x64, macos-arm64).
 
+## Known issues
+
+- **Inspector right-edge clipping when scrolled (cosmetic).** When an Inspector
+  tab scrolls, the right-aligned per-section Reset glyph (and some row spinners)
+  can be partially clipped at the dock's right edge on macOS. Functionality is
+  unaffected (controls still work; the horizontal scrollbar makes them
+  reachable). UAT-accepted as a minor cosmetic issue for v1.7.4 →
+  **deferred to v1.7.5** (needs a live layout pass). Mitigations already in:
+  wider scroll gutter, non-zero section-header right margin, AsNeeded horizontal
+  scrollbar.
+
 ## Deferred / known
 
 - **v1.7.3 legacy-dialog deletion** — separate, still on its branch.

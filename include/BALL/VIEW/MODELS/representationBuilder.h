@@ -322,6 +322,18 @@ namespace BALL
 			/// §3c — forward to the private Representation::setHidden_.
 			static void setHidden(Representation& rep, bool state);
 
+			/**
+			 * Mark the color processor dirty so the next update(false) re-walks
+			 * it WITHOUT a geometry rebuild (999.63 fix). A value-range-only
+			 * change (ColoringController::setRange) mutates the live
+			 * InterpolateColorProcessor's min/max but swaps no processor, so
+			 * Representation's changed_color_processor_ gate stays false and the
+			 * recolor is skipped. This friend flips that gate — a cheap recolor,
+			 * not the heavy rebuild update(true) would force (critical for the
+			 * SE-surface <50ms target). §3c friend access.
+			 */
+			static void markColorProcessorChanged(Representation& rep);
+
 			//@}
 		};
 

@@ -350,5 +350,13 @@ namespace BALL
 			rep.setHidden_(state);
 		}
 
+		void RepresentationBuilder::markColorProcessorChanged(Representation& rep)
+		{
+			// §3c friend access — flip the recolor gate so update(false) re-walks
+			// the (unchanged-pointer) color processor. Used for value-range-only
+			// coloring changes where no processor swap occurs (999.63).
+			rep.changed_color_processor_ = true;
+		}
+
 	} // namespace VIEW
 } // namespace BALL

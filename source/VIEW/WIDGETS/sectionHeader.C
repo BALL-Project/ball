@@ -100,7 +100,10 @@ namespace BALL
 			connect(reset_btn_, &QToolButton::clicked, this, &SectionHeader::resetRequested);
 
 			QHBoxLayout* layout = new QHBoxLayout(this);
-			layout->setContentsMargins(0, 4, 0, 4);
+			// UAT (v1.7.4): non-zero RIGHT margin so the right-aligned reset_btn_
+			// is not flush against the section's right edge (where the scroll
+			// gutter / overlay scrollbar clipped it). 6 px keeps it clear.
+			layout->setContentsMargins(0, 4, 6, 4);
 			layout->setSpacing(8);
 			layout->addWidget(chevron_);
 			layout->addWidget(title_label_);

@@ -281,13 +281,19 @@ namespace BALL
 
 		void ColoringSection::onWidgetReset_()
 		{
-			// 999.64 — the ValueRangeWidget's own reset button. Controller::reset()
-			// is now the SINGLE-call reset: it sets the method-defined coloring
-			// defaults AND runs ONE §2 apply() itself, so we must NOT call apply()
-			// again here (that would emit a second event / second payload, the very
-			// dual-path the contract closes). Just refresh the histogram afterwards.
+			// UAT (v1.7.4) — the ValueRangeWidget's OWN reset button resets the
+			// VALUE RANGE only, back to the current method's full-range limits. It
+			// must NOT touch the coloring METHOD: calling Controller::reset() here
+			// reverted the whole section to its default method (e.g. Element),
+			// which is the section-header Reset glyph's job, not the histogram's.
+			// The method is owned by the Method combo; the histogram owns only the
+			// range. setRange().apply() is the single §2 mutation path (and now
+			// recolors live via markColorProcessorChanged()).
 			if (!controller_) return;
-			controller_->reset();
+			float lo = 0.0f, hi = 100.0f;
+			fullRangeLimitsForMethod_(controller_->coloringMethod(), lo, hi);
+			controller_->setRange(lo, hi);
+			controller_->apply();
 			refreshDistribution_();
 		}
 

@@ -396,6 +396,14 @@ namespace BALL
 				icp->setMaxValue(value_max_);
 			}
 
+			// 999.63 fix — a value-range-only change swaps no processor, so
+			// Representation's changed_color_processor_ gate would stay false and
+			// the declared soft update(false) would SKIP the recolor (the
+			// histogram drag then had no visible effect). Mark the processor dirty
+			// so the soft refresh re-walks colors over the existing geometry —
+			// cheap, no SE-surface rebuild (preserves the <50ms target).
+			RepresentationBuilder::markColorProcessorChanged(*rep_);
+
 			return true;
 		}
 

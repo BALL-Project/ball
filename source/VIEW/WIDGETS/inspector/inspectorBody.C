@@ -85,7 +85,11 @@ namespace BALL
 			QScrollArea* scroll = new QScrollArea(this);
 			scroll->setWidgetResizable(true);
 			scroll->setFrameShape(QFrame::NoFrame);
-			scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+			// UAT (v1.7.4): AsNeeded (not AlwaysOff) so that if a section row is
+			// ever wider than the narrow dock, its right-edge controls (reset
+			// glyph / spinners) stay REACHABLE via a transient horizontal bar
+			// instead of being silently clipped with no way to get to them.
+			scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 			// v1.7.0-rc2 UFG-10 — opaque scroll-area viewport.
 			// QScrollArea defaults to a transparent viewport on macOS;
 			// without this fill, the per-tab content area's 8-px outer
@@ -98,7 +102,14 @@ namespace BALL
 
 			QWidget* contents = new QWidget(scroll);
 			QVBoxLayout* lay = new QVBoxLayout(contents);
-			lay->setContentsMargins(8, 8, 8, 8);
+			// UAT (v1.7.4) — wider RIGHT gutter so the right-edge section controls
+			// (per-section Reset glyph, value spinners, unit labels) clear the
+			// vertical scrollbar when the content scrolls. On macOS the scrollbar
+			// is an OVERLAY that floats over the content without reflowing the
+			// layout, so an 8-px right margin left those controls partially hidden
+			// under the scrollbar track. 18 px clears the overlay gutter; the
+			// horizontal bar stays off so nothing is reachable-but-clipped.
+			lay->setContentsMargins(8, 8, 18, 8);
 			lay->setSpacing(8);
 			lay->addStretch(1);
 			// v1.7.0-rc2 UFG-10 — opaque inner contents widget. Same
